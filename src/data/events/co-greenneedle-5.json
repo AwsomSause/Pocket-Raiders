@@ -6038,29 +6038,8 @@
     {
      "label": "Fight beside them.",
      "success": {
-      "text": "The pack comes in low, two at a time. The Zangoose takes the place beside you. The Seviper is right behind it.",
-      "effects": [
-       {
-        "kind": "join",
-        "shadow": false,
-        "species": [
-         "seviper"
-        ],
-        "types": [],
-        "levelBonus": 0,
-        "shinyMultiplier": 1,
-        "asIs": true,
-        "direct": true
-       },
-       {
-        "kind": "gn",
-        "op": "markLast",
-        "key": "truce-guest",
-        "species": [
-         "seviper"
-        ]
-       }
-      ],
+      "text": "The pack comes in low, three at a time. The Zangoose takes the place beside you, and the Seviper the place beside it. They fight their own fight; you fight yours.",
+      "effects": [],
       "battle": {
        "kind": "trainer",
        "friendly": true,
@@ -6089,9 +6068,7 @@
         "mightyena",
         "mightyena"
        ],
-       "format": "doubles",
        "name": "The Pack",
-       "ally": "zangoose",
        "size": 6,
        "types": [],
        "levelBonus": 0,
@@ -6106,6 +6083,10 @@
          "op": "scene",
          "key": "gn-25-after"
         }
+       ],
+       "allies": [
+        "zangoose",
+        "seviper"
        ],
        "rule": {
         "gn": "truce"

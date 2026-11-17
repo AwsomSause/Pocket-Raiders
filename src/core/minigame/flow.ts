@@ -1,6 +1,8 @@
 // Running a minigame from a map stop: start (limited attempts), act/tick, and one reward payout when it ends. The
 // reward is applied the moment the game finishes and the finished outcome is stored, so a reload never pays twice.
 
+import { bumpTrack, guestId, onMinigameQuit, trackOf } from '../instrumentality/promises';
+import { emit } from '../story/record';
 import { addItem } from '../items';
 import { hashSeed, Rng } from '../rng';
 import { maxHp } from '../pokemon';
@@ -11,12 +13,16 @@ import { gameModule, type MinigameView } from './games';
 import type { Medal, MinigameDef } from './schema';
 import { SAFARI_ID, type SafariState } from '../greenneedle/safari';
 import { pausedPark, safariBegin, safariFinish, safariStepBack, safariStepOut } from '../greenneedle/safariEnd';
+import { isZone, type ZoneState } from '../greenneedle/zone';
+import { zoneBegin, zoneStepBack, zoneStepOut } from '../greenneedle/zoneEnd';
 import { SNAKE_ID, type SnakeState } from '../greenneedle/snake';
 import { psyduckBegin, psyduckFinish } from '../greenneedle/snakeEnd';
 import { ARCADE_ID, type ArcadeState } from '../greenneedle/arcade';
 import { arcadeFinish, arcadeLeave } from '../greenneedle/arcadeEnd';
 import { JIGSAW_ID, type JigsawState } from '../greenneedle/jigsaw';
 import { jigsawBegin, jigsawFinish } from '../greenneedle/jigsawEnd';
+import { MARKET_ID, type MarketState } from '../greenneedle/spiritMarket';
+import { marketFinish, marketLeave, marketSync } from '../greenneedle/spiritMarketEnd';
 
 export function getMinigame(content: Content, id: string): MinigameDef {
   const g = content.minigames.games.find((m) => m.id === id);
@@ -66,14 +72,21 @@ export function startMinigame(content: Content, run: RunState, sideId: string, t
   if (!Number.isInteger(tier) || tier < 0 || tier >= def.difficultyTiers.length) throw new Error('Unknown difficulty');
   const used = run.minigames.attempts[sideId] ?? 0;
   if (side.used || used >= def.attemptLimit) throw new Error('No attempts left at this stop');
-  run.minigames.attempts[sideId] = used + 1;
-  if (used + 1 >= def.attemptLimit) findStop(run, sideId).used = true;
+  // Meloetta's Wonder: the first try at every stop is free (it does not count against the attempts).
+  const free = guestId(run) === 'meloetta' && trackOf(run, `retry:${sideId}`) === 0;
+  if (free) bumpTrack(run, `retry:${sideId}`, 1);
+  else {
+    run.minigames.attempts[sideId] = used + 1;
+    if (used + 1 >= def.attemptLimit) findStop(run, sideId).used = true;
+  }
   const stage = requireStage(run);
   const rs = new Rng(hashSeed(`${run.seed}::minigame::${stage.index}:${sideId}:${used}:${tier}`)).state;
   run.minigame = { id: def.id, sideId, tier, state: gameModule(def.id).start(content, { ...def.difficultyTiers[tier]!.params, ...conditionParams(run) }, rs), outcome: null };
   if (def.id === SAFARI_ID) safariBegin(content, run, run.minigame.state as SafariState);
+  if (isZone(def.id)) zoneBegin(content, run, run.minigame.state as ZoneState, def.id);
   if (def.id === SNAKE_ID) psyduckBegin(run, run.minigame.state as SnakeState);
   if (def.id === JIGSAW_ID) jigsawBegin(run, run.minigame.state as JigsawState);
+  if (def.id === MARKET_ID) marketSync(content, run, run.minigame.state as MarketState);
   run.phase = 'minigame';
 }
 
@@ -114,6 +127,10 @@ export function minigameAct(content: Content, current: RunState, cellId: string)
   mod.act(content, s.state as never, cellId);
   // gn.18: an event inside the park (Kanto's Stampede and Gold Teeth) plays on the map phase; the visit waits for it.
   if (s.id === SAFARI_ID && safariStepOut(content, run, s.state as SafariState)) return run;
+  // gn.new.11: a trade agreed at a stall is done on the run at once, and the stalls look at the run again.
+  if (s.id === MARKET_ID) marketSync(content, run, s.state as MarketState);
+  // gn.19, gn.20: a room of the zone opens where you walked to (the walk waits for it).
+  if (isZone(s.id) && zoneStepOut(run, s.state as ZoneState)) return run;
   return settle(content, run);
 }
 
@@ -129,6 +146,11 @@ export function continuePark(content: Content, current: RunState): { run: RunSta
   const run = structuredClone(current);
   const m = run.minigame!;
   const node = requireStage(run).map.nodes.find((n) => n.id === run.stage!.current);
+  if (isZone(m.id)) {
+    // gn.19, gn.20: the next room of the same place, or back on the tile; when no room is left the zone is over (the run is on the map).
+    if (!node) return { run: { ...run, minigame: null }, sideId: null };
+    return { run, sideId: zoneStepBack(run, m.id) };
+  }
   if (!node?.sides.some((x) => x.id === m.sideId)) {
     const s = m.state as SafariState;
     s.away = null;
@@ -173,6 +195,8 @@ function settle(content: Content, run: RunState): RunState {
     s.outcome.lines.push(...jigsawFinish(content, run, s.state as JigsawState));
     s.outcome.money += run.money - had;
   }
+  // gn.new.11: the market pays no medal; its lines are how the night ended.
+  if (s.id === MARKET_ID) s.outcome.lines = marketFinish(content, run, s.state as MarketState);
   if (s.id === 'berry-blending') {
     const line = poffinConditions(run, s.state as never, s.outcome.medal);
     if (line) s.outcome.lines.push(line);
@@ -253,10 +277,13 @@ function applyEffect(content: Content, run: RunState, kind: 'heal' | 'research' 
 }
 
 /** Back to the map. Leaving before the end forfeits the attempt (it was already counted) and pays nothing. */
-export function leaveMinigame(current: RunState): RunState {
+export function leaveMinigame(current: RunState, content?: Content): RunState {
   const run = structuredClone(current);
   const s = session(run);
+  // Meloetta's Promise: finish the song. Leaving a game that is not over breaks it.
+  if (content && !s.outcome) for (const text of onMinigameQuit(content, run)) emit(content, run, 'storyMoment', { data: { promise: true }, importance: 60, text });
   if (s.id === ARCADE_ID && !s.outcome) arcadeLeave(run, s.state as ArcadeState);
+  if (s.id === MARKET_ID && !s.outcome) marketLeave(run, s.state as MarketState);
   run.minigame = null;
   run.phase = 'map';
   return run;

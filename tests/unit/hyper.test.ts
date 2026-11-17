@@ -101,12 +101,12 @@ describe('Toughened It Out', () => {
     expect(checked).toBeGreaterThan(0);
   });
 
-  it('rolls 15% at Love 0 and at most double, half as often once it has happened this run ("again")', () => {
+  it('rolls 25% at Love 0 and up to 35% at Love 100, half as often once it has happened this run ("again")', () => {
     const rule = def('toughenedItOut').chance!;
-    expect(hyperChance(rule, zeroAttributes(), false)).toBeCloseTo(0.15);
-    expect(hyperChance(rule, { ...zeroAttributes(), love: 100 }, false)).toBeCloseTo(0.25);
-    expect(hyperChance(rule, { ...zeroAttributes(), love: 50 }, true)).toBeCloseTo(0.125);
-    expect(hyperChance(rule, { ...zeroAttributes(), love: 100 }, true)).toBeCloseTo(0.15);
+    expect(hyperChance(rule, zeroAttributes(), false)).toBeCloseTo(0.25);
+    expect(hyperChance(rule, { ...zeroAttributes(), love: 100 }, false)).toBeCloseTo(0.35);
+    expect(hyperChance(rule, { ...zeroAttributes(), love: 50 }, true)).toBeCloseTo(0.175);
+    expect(hyperChance(rule, { ...zeroAttributes(), love: 100 }, true)).toBeCloseTo(0.225);
     let fired = 0;
     for (let i = 0; i < 400; i++) {
       const ctx = battleCtx(pidgey(), machamp(), { ...certain([]), rng: new Rng(hashSeed(`roll-${i}`)), eligibility: (t) => (t === 'toughenedItOut' ? { def: def(t), chance: 0.15, variant: null } : null) });
@@ -138,7 +138,7 @@ describe('Felt a Bond', () => {
     run.party[0]!.friendship = 230;
     expect(eligible()).toBeNull();
     run.story.histories[mon.uid]!.closeCalls = 1;
-    expect(eligible()?.chance).toBeCloseTo(0.1 * content.story.rarity.hyperScale);
+    expect(eligible()?.chance).toBeCloseTo(0.22 * content.story.rarity.hyperScale);
   });
 
   it('shakes off a status at the end of the turn', () => {
@@ -179,7 +179,7 @@ describe('Pushed Itself Back Up', () => {
     expect(ctx().eligibility('pushedBackUp', run.party[0]!)).toBeNull();
     run = structuredClone(run);
     run.story.histories[run.party[0]!.uid]!.hyper['felt-a-bond'] = 1;
-    expect(ctx().eligibility('pushedBackUp', run.party[0]!)?.chance).toBeCloseTo(0.03 * content.story.rarity.hyperScale);
+    expect(ctx().eligibility('pushedBackUp', run.party[0]!)?.chance).toBeCloseTo(0.22 * content.story.rarity.hyperScale);
   });
 });
 
@@ -263,7 +263,7 @@ describe('Hyper moments in a run', () => {
       // Later in the run it is "again", at half the chance.
       const again = buildHyperContext(content, result.run, new Rng(hashSeed('x'))).eligibility('toughenedItOut', result.run.party[0]!)!;
       expect(again.variant).toBe('again');
-      expect(again.chance).toBeCloseTo(0.075 * content.story.rarity.hyperScale);
+      expect(again.chance).toBeCloseTo(0.125 * content.story.rarity.hyperScale);
     }
     expect(found).toBe(2);
   });

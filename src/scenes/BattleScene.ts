@@ -41,6 +41,7 @@ import { signatureDisplay } from '../core/story2/signature';
 import { introForBattle, introText, trainerIntro } from '../core/story2/cutscene';
 import { forcedMoveId, forcedMoveIndex, itemProblem, switchProblem, telegraphedAttack, type PlayerAction, type Side, type SlotCommand } from '../core/battle/engine';
 import { doublesSwitchProblem, indexAt, monAt, needsTarget, primarySpot, spotsOf, type Spot } from '../core/battle/doubles';
+import { isGuest } from '../core/battle/guests';
 import { commandPlan, shiftOptionProblem, targetChoices } from '../core/battle/fieldMenu';
 /** This screen draws double battles: spot 0 left, 1 right (triple battles get their own layout in Beta 0.6 T2). */
 import { canDynamax, maxMoveOptions, megaOption, ownedZCrystal, permanentForm, stoneForms, teraOption, zMoveFor, zMoveOptions, type TransformRequest } from '../core/battle/transform';
@@ -1670,6 +1671,10 @@ export class BattleScene extends Phaser.Scene {
       const role = raidRole(content, mon);
       const look = { tank: { text: 'TANK', color: 0x2c8ad8 }, striker: { text: 'STRIKER', color: 0xc8303c }, support: { text: 'SUPPORT', color: 0x1f9a52 } }[role];
       box.roleBadge = badge(this, box.statusAt.x + (box.statusBadge ? 76 : 0) + (box.teraBadge ? 120 : 0), box.statusAt.y + 22, look.text + (this.run.battle.raid.coop ? ` P${coopOwner(this.run.battle.raid, mon.uid) + 1}` : ''), look.color, 14);
+      box.container.add(box.roleBadge);
+    } else if (box.isPlayer && isGuest(this.run.battle, mon.uid)) {
+      // An ally the game plays (core/battle/guests.ts): its box says so, in both looks.
+      box.roleBadge = badge(this, box.statusAt.x + (box.statusBadge ? 76 : 0) + (box.teraBadge ? 120 : 0), box.statusAt.y + 22, 'ALLY', 0x1f9a52, 14);
       box.container.add(box.roleBadge);
     }
     this.dangerGlow(box, mon.hp / max);
@@ -4404,7 +4409,7 @@ export class BattleScene extends Phaser.Scene {
         window: this.rxWindow(),
         columns: 3,
         rowHeight: 70,
-        rows: partyRows(content, run.party, (i) => doublesSwitchProblem(view, i, taken), (i) => (onField.includes(i) ? 'IN BATTLE' : undefined)),
+        rows: partyRows(content, run.party, (i) => doublesSwitchProblem(view, i, taken), (i) => (onField.includes(i) ? 'IN BATTLE' : isGuest(view.battle, run.party[i]?.uid) ? 'ALLY' : undefined)),
         onSelect: (i) => (forced ? void this.act({ kind: 'switch', partyIndex: i }) : this.submit({ kind: 'switch', partyIndex: i })),
         onBack: forced ? undefined : () => this.showRootMenu(),
       });
@@ -4576,6 +4581,13 @@ export class BattleScene extends Phaser.Scene {
       this.scene.start(sceneForRun(result.run));
       return;
     }
+    // Allies the game controls walked onto the field or left it (core/battle/guests.ts): the field has more or fewer places now,
+    // so the screen is laid out again from the battle as it stands (the same way a reloaded battle opens).
+    const places = !result.run.battle.doubles ? 1 : result.run.battle.doubles.trio ? 3 : 2;
+    if (places !== (this.duo?.size ?? 1)) {
+      this.scene.start(sceneForRun(result.run));
+      return;
+    }
     this.busy = false;
     this.nextPrompt();
   }
@@ -4590,7 +4602,8 @@ export class BattleScene extends Phaser.Scene {
     if (end.outcome === 'win') void this.trainerIn().then((a) => a?.play('win'));
     if (end.outcome === 'win' && this.playerSprite) {
       if (services().session.settings.victoryPoses) {
-        const sp = getSpecies(content, this.activeMon().speciesId);
+        // The battle is already cleared from the run here, so activeMon() would read null: use the Pokémon the screen shows.
+        const sp = getSpecies(content, (this.run.party.find((m) => m.uid === this.shown.player.uid) ?? this.shown.player).speciesId);
         void victoryPose(this, this.playerSprite, victoryPoseFor(sp.types, sp.weight), this.motion);
       } else void hop(this, this.playerSprite, this.motion);
     }

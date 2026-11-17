@@ -24,6 +24,7 @@ import { grownSince, speciesRivalry } from './rivalryKinds';
 import { friendlyRivalsOf } from './hyper';
 import { forgetMorality, nemesisById, rememberedMorality, rivalryBothWays } from './nemesis';
 import type { StoryEffectSpec, StoryTriggerKind } from './schema';
+import { momentCapped } from './momentCaps';
 
 /** The one effect each moment trigger may carry (checked when content loads). */
 export const MOMENT_EFFECTS: Partial<Record<StoryTriggerKind, StoryEffectSpec['kind']>> = {
@@ -174,6 +175,7 @@ export function detectMoments(content: Content, before: RunState, run: RunState,
   const rarity = content.story.rarity;
   const fire = (trigger: StoryTriggerKind, side: Side, uid: string, at: number, names: Record<string, string>) => {
     if (!content.story.definitions.some((d) => d.triggerConditions.trigger === trigger) || !once(trigger, uid)) return;
+    if (momentCapped(content, run, trigger)) return;
     // Rarity: a moment that helps your side must be earned by a seeded roll, and only so many per battle, spaced apart.
     if (side === 'player' && !rarity.exempt.includes(trigger)) {
       const helps = MOMENT_EFFECTS[trigger] !== 'flair';
@@ -191,7 +193,7 @@ export function detectMoments(content: Content, before: RunState, run: RunState,
     out.push({ trigger, side, uid, at, names });
   };
   // The newer enemy moments that change a stat pass the same seeded rarity roll as yours.
-  const rareFoe = (trigger: StoryTriggerKind, uid: string) => (fnv1a(`${run.seed}:rare:${trigger}:${uid}:${run.encountersCompleted}`) % 1000) / 1000 < rarity.momentChance;
+  const rareFoe = (trigger: StoryTriggerKind, uid: string) => !momentCapped(content, run, trigger) && (fnv1a(`${run.seed}:rare:${trigger}:${uid}:${run.encountersCompleted}`) % 1000) / 1000 < rarity.momentChance;
   const lead = run.party[battle.activeIndex];
   const leadBefore = before.party[prior.activeIndex];
   const foe = currentEnemy(battle);

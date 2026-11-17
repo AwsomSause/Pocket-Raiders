@@ -723,9 +723,9 @@ export const ArchetypeModifierSchema = z.discriminatedUnion('kind', [
   /** The map shows what waits at nodes, like the preview items: wild Pokémon, trainers' teams, or the gym leader's team. */
   z.object({ kind: z.literal('preview'), what: z.enum(['wild', 'trainers', 'gymTeam']) }),
   /** Damage dealt by your Pokémon, filtered by their type and/or the move's category (Trainers.md perks). */
-  z.object({ kind: z.literal('damageMultiplier'), type: TypeNameSchema.optional(), types: z.array(TypeNameSchema).min(1).optional(), category: z.enum(['physical', 'special']).optional(), speed: z.enum(['fast', 'slow']).optional(), legendary: z.boolean().optional(), ultraBeast: z.boolean().optional(), value: z.number().positive() }),
+  z.object({ kind: z.literal('damageMultiplier'), type: TypeNameSchema.optional(), types: z.array(TypeNameSchema).min(1).optional(), category: z.enum(['physical', 'special']).optional(), speed: z.enum(['fast', 'slow']).optional(), legendary: z.boolean().optional(), ultraBeast: z.boolean().optional(), /** Legendary Blessings: the move's own type; the lead (party slot 1) or the rest; the user's HP share at least; the battle turn at most / at least. */ moveType: TypeNameSchema.optional(), slot: z.enum(['lead', 'rest']).optional(), hpAtLeast: z.number().min(0).max(1).optional(), turnAtMost: z.number().int().min(1).optional(), turnAtLeast: z.number().int().min(1).optional(), value: z.number().positive() }),
   /** Damage taken by your Pokémon: those of `type`, from moves of `moveType`, or from Legendary/Mythical/Ultra Beast attackers. */
-  z.object({ kind: z.literal('damageTakenMultiplier'), type: TypeNameSchema.optional(), moveType: TypeNameSchema.optional(), fromLegendary: z.boolean().optional(), value: z.number().positive() }),
+  z.object({ kind: z.literal('damageTakenMultiplier'), type: TypeNameSchema.optional(), moveType: TypeNameSchema.optional(), fromLegendary: z.boolean().optional(), /** Legendary Blessings: physical or special hits only; the lead (party slot 1) or the rest; the target at full HP. */ category: z.enum(['physical', 'special']).optional(), slot: z.enum(['lead', 'rest']).optional(), fullHp: z.boolean().optional(), value: z.number().positive() }),
   /** A battle stat (or max HP) of your Pokémon, optionally only those of one type. */
   z.object({ kind: z.literal('statMultiplier'), stat: z.enum(['hp', 'atk', 'def', 'spa', 'spd', 'spe']), type: TypeNameSchema.optional(), value: z.number().positive() }),
   /** Experience for a group of Pokémon: of a type, not of a type, fast (base Speed 90+) or slow (base Speed 60-), or the starter. */
@@ -867,7 +867,7 @@ export const ArchetypeModifierSchema = z.discriminatedUnion('kind', [
   /** Event toolkit: while counter `counter` is at least `atLeast`, your Pokémon (of `type`, if given) deal `base + perPoint × count` times damage (count = the counter, capped at its max). */
   z.object({ kind: z.literal('counterDamage'), counter: z.string(), atLeast: z.number().int().min(0).default(0), type: TypeNameSchema.optional(), base: z.number().positive().default(1), perPoint: z.number().min(0) }),
   /** Event toolkit: a rule that holds at the start of every battle: a weather, a field (Gravity, Trick Room) or Tailwind for you (for `turns` turns). */
-  z.object({ kind: z.literal('battleStart'), weather: WeatherSchema.optional(), field: z.enum(['gravity', 'trickRoom']).optional(), tailwind: z.boolean().optional(), turns: z.number().int().positive().default(5) }),
+  z.object({ kind: z.literal('battleStart'), weather: WeatherSchema.optional(), field: z.enum(['gravity', 'trickRoom']).optional(), tailwind: z.boolean().optional(), terrain: TerrainSchema.optional(), /** Only battles against a trainer, or a boss. */ against: z.enum(['trainer', 'boss']).optional(), turns: z.number().int().positive().default(5) }),
   /** Pokémon of a type recover this share of max HP at the end of every turn. */
   z.object({ kind: z.literal('turnHeal'), type: TypeNameSchema, percent: z.number().positive() }),
   /** HP restored by healing moves your Pokémon use. */
@@ -1007,6 +1007,22 @@ export const ArchetypeModifierSchema = z.discriminatedUnion('kind', [
   /** Heatran's Rite, erupt: the next boss battle starts with every hazard, weather and terrain cleared from the arena. */
   z.object({ kind: z.literal('eruptArena') }),
   /** The next battle you lose without ending the run gives `value`× experience (1.5 = +50%); used up after one loss. */
+  /** Legendary Blessings: your Pokémon cannot be given a status (or this one) in the first `turns` turns of a battle. */
+  z.object({ kind: z.literal('statusImmuneTurns'), status: StatusIdSchema.optional(), turns: z.number().int().min(1) }),
+  /** Legendary Blessings: the added effects (status, flinch, stat drops) of foes' moves on your side happen this much as often. */
+  z.object({ kind: z.literal('foeSecondaryChance'), value: z.number().min(0) }),
+  /** Legendary Blessings: a foe's stat drop on your Pokémon fails (only this stat; with `first`, only the first per Pokémon each battle). */
+  z.object({ kind: z.literal('statDropGuard'), stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe', 'acc', 'eva']).optional(), first: z.boolean().optional() }),
+  /** Legendary Blessings: a Pokémon you switch out below `below` of its HP recovers `percent`, once per Pokémon per battle. */
+  z.object({ kind: z.literal('switchOutHeal'), below: z.number().positive().max(1), percent: z.number().positive() }),
+  /** Legendary Blessings: when one of your Pokémon is knocked out, the foe that did it is burned (up to `times` per battle). */
+  z.object({ kind: z.literal('koBurn'), times: z.number().int().min(1) }),
+  /** Legendary Blessings: your Pokémon that knocks out a foe recovers `percent` of its HP. */
+  z.object({ kind: z.literal('koHeal'), percent: z.number().positive() }),
+  /** Legendary Blessings: on the first turn of a battle your move goes before the foe's move of the same priority (only in this weather, if set). */
+  z.object({ kind: z.literal('leadFirst'), weather: WeatherSchema.optional() }),
+  /** Legendary Blessings (Eternatus, Terapagos): your Pokémon may Dynamax / Terastallize without the key item (once per battle, as usual). */
+  z.object({ kind: z.literal('grantMechanic'), mechanic: z.enum(['dynamax', 'tera']) }),
   z.object({ kind: z.literal('lostBattleXp'), value: z.number().positive() }),
 ]);
 export type ArchetypeModifier = z.infer<typeof ArchetypeModifierSchema>;
@@ -2006,6 +2022,8 @@ export const TrainerAiSchema = z.object({
   healFraction: z.number().positive().max(1),
   /** Potions a smart trainer may use in one battle. */
   maxItems: z.number().int().min(0),
+  /** Kice 2026-11-17: healing items per fight by trainer class (the sim saw a Stage 1 leader drink 8 Hyper Potions). Rivals and Champions keep the player's budget (boss gear rule). `perLevels`: one more item per this many levels on the team's top Pokémon. */
+  healCaps: z.object({ ordinary: z.number().int().min(0), gym: z.number().int().min(0), elite: z.number().int().min(0), perLevels: z.number().int().min(1) }).default({ ordinary: 1, gym: 2, elite: 2, perLevels: 150 }),
   /** S271: every trainer (not only smart ones) drinks a potion when low; only smart trainers swap on purpose. */
   allTrainersUseItems: z.boolean().default(false),
   /** Times a smart trainer may swap its Pokémon out on purpose in one battle. */
@@ -2182,7 +2200,7 @@ export const BalanceSchema = z.object({
   lateBoss: z.object({ fromLevel: z.number().int().min(0), damagePerLevel: z.number().min(0), minDamageScale: z.number().min(0.1).max(1), maxBoostStage: z.number().int().min(0).max(6) }).default({ fromLevel: 100, damagePerLevel: 0, minDamageScale: 1, maxBoostStage: 6 }),
   /** Beta 0.6: Pokémon-specific moments (core/moments); off = the rules before them (old-seed tests). */
   pokemonMoments: z.boolean().default(true),
-  sos: z.object({ enabled: z.boolean() }).default({ enabled: true }),
+  sos: z.object({ enabled: z.boolean(), callScale: z.number().min(0).max(1).default(1) }).default({ enabled: true, callScale: 1 }),
   /** Battle Drama spectacle (APPROVED §7): Last Stand, Perfect Counter, Momentum, Guard Break, Revenge Moment, boss phases, Boss Revenge Rematch (core/battle/spectacle.ts). */
   spectacle: SpectacleConfigSchema,
   /** Ideas W1 rules: Type Resonance, Bleed, Curse Tags, Hazard burst, Underdog XP (core/battle/w1Rules.ts). */
@@ -3910,6 +3928,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     rival: z.boolean().default(false),
     /** A species that fights beside you as a temporary ally (a double battle; needs two or more foes). `rival`: the rival's; `fellow`: the apprentice's; `past` (batch 5, A Familiar Face Steps In): the ace of the trainer you beat in this run's newest big battle won. */
     ally: z.string().optional(),
+    /** One or two species that fight beside you and are played by the game (core/battle/guests.ts): a triple battle with your lead on the left and the allies in the centre and on the right. They can be hit, can faint, and go home when the fight ends. Needs two or more foes. */
+    allies: z.array(z.string()).min(1).max(2).optional(),
     /** Evil Teams: a member of the run's team at this rank (their Pokémon, name and battle rule; core/evil). */
     evil: z.enum(['grunt', 'specialist', 'executive', 'leader']).optional(),
     /** Grand Arc: with `evil`, fight this roaming team (cipher, rocket-remnants, snagem) instead of the run's own team. */
@@ -4046,6 +4066,8 @@ export const GameEventSchema = z.object({
     z.object({ kind: z.literal('weeklyRotation') }),
     z.object({ kind: z.literal('yearly'), start: MonthDaySchema, end: MonthDaySchema }),
     /** On for whole days picked by a rule of the (UTC) date: a Friday the 13th, a new or full moon, every Friday or Tuesday, a palindrome date (11/11). */
+    /** One dated window (UTC, `YYYY-MM-DD`, both inclusive): on from the start's first moment to the end's last, then off for good. */
+    z.object({ kind: z.literal('dated'), start: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), end: z.string().regex(/^\d{4}-\d{2}-\d{2}$/) }),
     z.object({ kind: z.literal('daily'), rule: z.enum(['friday13', 'newMoon', 'fullMoon', 'friday', 'tuesday', 'palindrome']) }),
   ]),
   /** What makes an edition: the ISO week ("2026-W44") or the year ("2026"). */
@@ -4062,6 +4084,8 @@ export const GameEventSchema = z.object({
   optIn: z.boolean().default(false),
   /** Map events (events.json) it features: they turn up more often. */
   mapEvents: z.array(z.string()).default([]),
+  /** Regions that are likelier to be a run's first (each counts `weight` times in the draw; see core/regions.ts). */
+  firstRegionBoost: z.object({ regions: z.array(z.string()).min(1), weight: z.number().min(1).max(20) }).optional(),
   objectives: z.array(GameEventObjectiveSchema).min(3).max(5),
   /** For finishing every objective, the first time ever; after that, `fallbackReward` instead. */
   reward: QuestRewardSchema,

@@ -6,7 +6,7 @@
 // It also keeps a few read-only mirror flags current, so events of every category can read the run's blessing, Guest and Promise with a
 // plain `flag` condition. Pure rules, no Phaser, no RNG. Shared contract: /mnt/project-files/plans/catalog-overhaul/LEGENDS_PIECES.md.
 
-import { fillVessel, getBlessing } from '../blessings';
+import { fillVessel, getBlessing, noteSign } from '../blessings';
 import { hashSeed, Rng } from '../rng';
 import { MYTHICALS } from '../instrumentality/promisesData';
 import { BEAST_BY_ID } from '../ultra/beasts';
@@ -121,6 +121,7 @@ export function syncLegendFlags(run: Pick<RunState, 'story' | 'expansion' | 'reg
 export function addSign(run: RunState, who: string, amount: number): string[] {
   const legend = blessingLegend(run);
   const state = run.expansion?.blessing;
+  if (amount > 0 && who !== 'own') noteSign(run, SIGN_GROUPS[who] ?? [who]);
   // Kyurem, The Empty Vessel: the first Sign of another Legendary with a blessing fills it.
   const filled = legend && amount > 0 && who !== 'own' && !signMatches(who, legend) ? fillVessel(run, who, SIGN_GROUPS) : null;
   if (filled) syncLegendFlags(run);
@@ -151,6 +152,8 @@ export function makeVow(run: RunState, mythical: string): string | null {
   if (!def || def.status === 'disabled' || !run.expansion?.promises) return null;
   const p = run.expansion.promise ?? { tellings: {}, visited: null, guest: null, kept: [], left: [] };
   if (p.guest || (p.visited && p.visited !== mythical)) return null;
+  // Same-run chains: Manaphy only after Phione's Promise was kept, Melmetal only after eight Meltan merged.
+  if ((mythical === 'manaphy' && !p.kept.includes('phione')) || (mythical === 'melmetal' && !p.kept.includes('meltan'))) return null;
   run.expansion = { ...run.expansion, promise: { ...p, visited: mythical, guest: { id: mythical, forgiven: false } } };
   syncLegendFlags(run);
   return `${def.title} walks beside you now. ${def.promise}`;
@@ -165,7 +168,7 @@ export function tellAny(run: RunState): string | null {
   if (!run.expansion?.promises) return null;
   const p = run.expansion.promise ?? { tellings: {}, visited: null, guest: null, kept: [], left: [] };
   if (p.visited || p.guest) return null;
-  const open = MYTHICALS.filter((m) => m.status !== 'disabled' && (p.tellings[m.id] ?? 0) < 3);
+  const open = MYTHICALS.filter((m) => m.status !== 'disabled' && m.id !== 'melmetal' && m.id !== 'manaphy' && (p.tellings[m.id] ?? 0) < 3);
   if (open.length === 0) return null;
   const started = open.filter((m) => (p.tellings[m.id] ?? 0) > 0);
   const pool = started.length > 0 ? started : open;

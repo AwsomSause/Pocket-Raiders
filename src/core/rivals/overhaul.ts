@@ -155,8 +155,16 @@ const pickBy = (list: readonly string[], seed: string): string => list[fnv1a(see
  */
 export function registerFromRival(run: RunState, rival: Pick<Rival, 'id' | 'archetype' | 'style' | 'arc'>, role: RivalRole): RivalOverhaulState {
   const keys = Object.keys(OVERHAUL.personalities);
-  const personality = keys.find((k) => OVERHAUL.personalities[k] === rival.archetype) ?? pickBy(keys, `${rival.id}:personality`);
-  const style = OVERHAUL.styles.includes(rival.style) ? rival.style : pickBy(OVERHAUL.styles, `${rival.id}:style`);
-  const arc = rival.arc && OVERHAUL.arcs.includes(rival.arc.id) ? rival.arc.id : pickBy(OVERHAUL.arcs, `${rival.id}:arc`);
+  // Kice 2026-11-17: the main rival's personality is an even, seed-stable pick across all keys (the old archetype match
+  // plus a constant fallback id sent ~60% of runs to bitter-challenger). Other rivals still follow their archetype.
+  const personality = role === 'main'
+    ? pickBy(keys, `${run.seed}:main-rival-personality`)
+    : keys.find((k) => OVERHAUL.personalities[k] === rival.archetype) ?? pickBy(keys, `${rival.id}:personality`);
+  // Same fix for the battle style: the old fallback hashed the constant id ("rival-major"), so ~everyone got one style (blitz).
+  // Main and friend rivals now draw it evenly from the run seed; the arc keeps the rival's own when it fits.
+  const style = pickBy(OVERHAUL.styles, `${run.seed}:${rival.id}:style`);
+  // Kice 2026-11-17: the main rival's arc is an even seed pick across the seven non-friend arcs (the old fallback hashed the constant id).
+  const arcs = OVERHAUL.arcs.filter((a) => a !== 'rivals-become-friends');
+  const arc = pickBy(arcs, `${run.seed}:${rival.id}:arc`);
   return registerRival(run, { id: rival.id, role, personality, style, arc });
 }

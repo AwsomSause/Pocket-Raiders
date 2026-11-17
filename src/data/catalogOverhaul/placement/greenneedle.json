@@ -6106,7 +6106,7 @@
    "kanto": "The Night Parade",
    "elsewhere": "The Night Parade"
   },
-  "note": "Badge: a lantern. Once per region, at night (the placer tries step 15, then 16–17, then 14 down to 10, the doc fallback; a stage that is not at night skips it, and it stays owed until the first night stage that fits, because its once-per-region stamp is set only when it is played). Joining opens the Spirit Market (six lanterns); the last region opens the palanquin for a player who joined every parade.",
+  "note": "Badge: a lantern. Once per region, at night (the placer tries step 15, then 16–17, then 14 down to 10, the doc fallback; a stage that is not at night skips it, and it stays owed until the first night stage that fits, because its once-per-region stamp is set only when it is played). Joining opens the Spirit Market screen (six lanterns, four stalls, a trade is one action, the bell at the fifth, stay past the sixth and one item is swapped); the last region opens the palanquin for a player who joined every parade.",
   "kinds": [
    "World Event"
   ],

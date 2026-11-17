@@ -82,7 +82,10 @@ const where = (w: Where) => `${w.region}.${w.stage ?? 0}`;
 export function createMajorRival(run: RunState, input: { classId: string; name: string; team: string[]; ended: DomainEvent; where: Where; result: 'win' | 'lose'; hpLeftShare: number; turns: number; foes: string[] }, content: Content): Rival | null {
   if (majorRival(run) || input.team.length === 0) return null;
   const { id: canon, data } = characterOf(input.name);
-  const personality = RIVAL_PROFILES.personalities[data.personality];
+  // Kice 2026-11-17: every rival archetype has exactly equal odds: a seed-stable uniform pick over all of them (the character only gives the name, look, team and style).
+  const archetypes = Object.keys(RIVAL_PROFILES.personalities).sort();
+  const chosen = archetypes[new Rng(hashSeed(`${run.seed}::major-archetype`)).int(0, archetypes.length - 1)]!;
+  const personality = RIVAL_PROFILES.personalities[chosen];
   // Its own seeded stream: never touches the gameplay streams.
   const rng = new Rng(hashSeed(`${run.seed}::major-rival`));
   const spread = RIVAL_CONFIG.traitSpread;
@@ -91,14 +94,14 @@ export function createMajorRival(run: RunState, input: { classId: string; name: 
     id: 'rival-major',
     classId: input.classId,
     name: input.name,
-    archetype: personality ? data.personality : Object.keys(RIVAL_PROFILES.personalities).sort()[0]!,
+    archetype: chosen,
     style: data.style,
     traits,
     rivalPotential: RIVAL_CONFIG.states.recurringAt,
     state: 'recurring',
     arc: null,
     away: 0,
-    faction: factionFor(data.personality),
+    faction: factionFor(chosen),
     cooldown: 0,
     progress: 0,
     encounters: 1,
