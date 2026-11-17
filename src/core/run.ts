@@ -47,8 +47,8 @@ import { farFromHome, smuggleRest, smuggleStage } from './greenneedle/smuggling'
 import { standingWelcome } from './greenneedle/welcome';
 import { ranchRest } from './greenneedle/ranch';
 import { pinLine } from './greenneedle/weather';
-import { CENTER_SHUT, SHOP_SHUT, sgCenterLine, sgCenterShut, sgHealShare, sgPriceFactor, sgRest } from './greenneedle/citysiege';
-import { taRoomsAfraid } from './greenneedle/teamauction';
+import { CENTER_SHUT, SHOP_SHUT, sgCenterLine, sgCenterShut, sgHealShare, sgPriceFactor, sgRest, sgStage } from './greenneedle/citysiege';
+import { taRoomsAfraid, taShopLine } from './greenneedle/teamauction';
 import { endSwap, noteSwapFaint, swapRunning } from './co/swap';
 import { BRAVE_COUNT, BRAVE_HIT, MOMENT_EVOLVE_AFTER } from './battle/pokemonMoments';
 import { revivalFee } from './battle/revivalStatus';
@@ -841,10 +841,12 @@ function enterStage(content: Content, run: RunState, index: number): void {
   placeServiceStop(run);
   placePlaza(run);
   placeStoryStops(content, run); // Story Run: last, so it can adopt the evil beat's stop
+  // Greenneedle gn.53: the siege's header from step 1; afterwards, fallen districts' stops are gone and an occupied city is patrols, not battles.
+  const siegeLines = sgStage(content, run, stageNumber(content, run));
   // Beta 0.7 M1: one Telling of a Mythical per new stage (in-run only; never on a run's very first stage, which keeps its plan empty), and a Visit offer at the first stage of a region.
   const telling = run.regionIndex === 0 && index === 0 ? null : hearTelling(run, run.regionIndex * 100 + index);
   syncLegendFlags(run); // Catalog Overhaul (legends): read-only mirror flags of the blessing, Guest and Promise for event conditions
-  const planLines = [themeLine, ...tailorStage(content, run, signals), telling].filter((l): l is string => !!l);
+  const planLines = [...siegeLines, themeLine, ...tailorStage(content, run, signals), telling].filter((l): l is string => !!l);
   snapshotStagePlan(run, planLines);
   run.battle = null;
   run.phase = 'map';
@@ -2825,7 +2827,7 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     count(run, 'moneyEarned', voucher.refund);
     return { run, message: `Welcome to the shop! You already have a ${entry.name}, so the voucher was worth ₽${voucher.refund}.` };
   }
-  const shopNotice = followedShop(content, run);
+  const shopNotice = [followedShop(content, run), taShopLine(content, run, stageNumber(content, run))].filter(Boolean).join(' ');
   return { run, message: `Welcome to the shop!${shopNotice ? ` ${shopNotice}` : ''}` };
 }
 

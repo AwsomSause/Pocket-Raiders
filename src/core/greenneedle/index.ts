@@ -31,10 +31,10 @@ import { draftAldhelm, draftBattleStart, draftEnd, draftFriend, draftLetter, dra
 import { exBack, exDraw, exKnown, nextMatchup, exResult, exStart, exTokens, exWatch } from './exhibition';
 import { defectorBossStart, defectorClimax, defectorEnd, defectorMeet, defectorReturn, defectorShare, defectorStart, defectorTokens, defectorTrust, guestOf, ROUTE_LINE } from './defector';
 import { rivalBeatenOnce } from './missingAce';
-import { taEnd, taLot, taRare, taStart } from './teamauction';
+import { taEnd, taLot, taRare, taStart, EARLY, taBid, taCanBid, taRounds, taTokens } from './teamauction';
 import { stAssign, stEnd, stStart, strandingTokens } from './stranding';
 import { insideTeam, prDo, prEnd, prEnter, prFree, prNext, prStart, prStep, prStranger, prCaught, prWardenStart, prisonTokens } from './prison';
-import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
+import { type DistrictId, sgEarly, sgOccupied, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
 import { duelDue, duelEnd, duelEnter, duelName, duelWorthy, duelistStart, worthyStart } from './duelist';
 import { lanternArrive, lanternHasStory, lanternLetGo, lanternLost, lanternPearl, lanternTokens } from './lantern';
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
@@ -106,6 +106,7 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   if (text.includes('{defector:')) text = defectorTokens(content, run, text);
   // gn.51: the Smuggling Ring.
   if (text.includes('{smuggle:')) text = smuggleTokens(content, run, text);
+  if (text.includes('{ta:')) text = taTokens(run, text);
   if (text.includes('{stranding:')) text = strandingTokens(content, run, text);
   if (text.includes('{siege:')) text = siegeTokens(content, run, text);
   if (text.includes('{prison:')) text = prisonTokens(content, run, text);
@@ -301,6 +302,11 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'kcRegular') return regularRises(run);
   if (c.test === 'sgWaiting') return waiting(run) >= 0;
   if (c.test === 'sgOrdered') return waiting(run) < 0;
+  if (c.test === 'taCanBid') return taCanBid(run, c.n ?? 1);
+  if (c.test === 'taEarly') return taRounds(run, 2) <= EARLY;
+  if (c.test === 'taLate') return taRounds(run, 2) > EARLY;
+  if (c.test === 'sgEarly') return sgEarly(run);
+  if (c.test === 'sgOccupied') return sgOccupied(run, stage);
   if (c.test === 'rehabWaiting') return gnFlag(run, 'smuggle-rehab') > 0 && gnFlag(run, 'smuggle-rehab') < restsNeeded(run);
   if (c.test === 'rivalAhead') return run.story.rivals.some((r) => (r.world?.lead ?? 0) >= 2);
   if (c.test === 'eggMoveKnown') return run.party.some((m) => { const egg = new Set(eggMoveOptions(content, familyId(content, m.speciesId)).map((o) => o.id)); return m.moves.some((mv) => egg.has(mv.id)); });
@@ -757,6 +763,8 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return taStart(content, run, e.n ?? 1, host.float);
     case 'taLot':
       return taLot(run, e.n ?? 0);
+    case 'taBid':
+      return taBid(run, e.n ?? 1, host);
     case 'taRare':
       return taRare(run, e.n ?? 1, host.stage, host);
     case 'taEnd':

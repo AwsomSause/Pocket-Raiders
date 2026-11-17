@@ -657,6 +657,26 @@
   ],
   "tags": []
  },
+ "gn-53-patrol": {
+  "gn": "gn.53",
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 8,
+  "window": [
+   1,
+   18
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "level": "A+0 if seen; A+1 if taken on",
+  "often": "run",
+  "badge": "own",
+  "note": "Only in the occupied city (the stage after a lost siege): it takes the place of every trainer battle there (citysiege.ts sgStage puts it on the nodes).",
+  "kinds": [
+   "Evil Team"
+  ],
+  "tags": []
+ },
  "gn-53-plaque": {
   "gn": "gn.53",
   "shape": "Single",

@@ -1143,6 +1143,12 @@ const settle = (run: RunState): RunState => {
   for (let i = 0; i < 5 && r.phase === 'decision'; i += 1) r = step(content, r).run;
   return r;
 };
+/** Raises on lot `n` until the gavel falls (the room moves on). */
+const bid = (run: RunState, n: number, label: string): RunState => {
+  let r = run;
+  for (let i = 0; i < 8 && opened(r, `gn-52-lot-${n}`) && scene(r, `gn-52-lot-${n}`).labels.includes(label); i += 1) r = choose(r, `gn-52-lot-${n}`, label).run;
+  return r;
+};
 const rareOf = (run: RunState) => [...run.party, ...run.box].find((m) => m.gn?.some((t) => t.startsWith('afraid-rooms:')));
 
 describe('gn.52 The Evil Team\'s Pokémon Auction', () => {
@@ -1161,14 +1167,21 @@ describe('gn.52 The Evil Team\'s Pokémon Auction', () => {
   it('the bidder keeps cover by winning three lots and dodging both traps: the ledger (a File), and the lieutenant wonders later', () => {
     let run = choose(choose(manor('t52-buyer'), 'gn-52-manor', 'Go as a rich buyer.').run, 'gn-52-viewing', 'Go to the floor.').run;
     expect(scene(run, 'gn-52-lot-1').intro).toContain('fox mask');
-    run = choose(run, 'gn-52-lot-1', 'Bid to its fair value.').run;
+    // Real bidding: the room tops each bid until the lot's worth is reached (three raises to ₽1,200).
+    const m1 = run.money;
+    const once = choose(run, 'gn-52-lot-1', 'Raise your paddle.');
+    expect(opened(once.run, 'gn-52-lot-1')).toBe(true);
+    expect(once.run.money).toBe(m1);
+    expect(scene(once.run, 'gn-52-lot-1').intro).toContain('The bid stands at ₽600');
+    run = bid(run, 1, 'Raise your paddle.');
+    expect(run.money).toBe(m1 - 1200);
     run = choose(run, 'gn-52-lot-2', 'Drop out early.').run;
-    run = settle(choose(run, 'gn-52-lot-3', 'Bid.').run);
+    run = settle(bid(run, 3, 'Bid.'));
     run = choose(run, 'gn-52-lot-4', 'Let it go.').run;
-    run = choose(run, 'gn-52-lot-5', 'Bid low, like everyone.').run;
+    run = bid(run, 5, 'Bid low, like everyone.');
     expect(flagOf(run, 'ta-lots')).toBe(3);
     const before = run.money;
-    run = choose(run, 'gn-52-lot-6', 'Bid it home.').run;
+    run = bid(run, 6, 'Bid it home.');
     expect(run.money).toBe(before - 4500);
     expect(rareOf(run)).toBeDefined();
     run = choose(run, 'gn-52-out', 'Walk home.').run;
@@ -1187,7 +1200,13 @@ describe('gn.52 The Evil Team\'s Pokémon Auction', () => {
     run = choose(r.run, 'gn-52-lot-4', 'Let it go.').run;
     run = choose(run, 'gn-52-lot-5', 'Let it go.').run;
     expect(scene(run, 'gn-52-lot-6').labels).toEqual(['Raise the alarm.']);
-    const after = win(choose(run, 'gn-52-lot-6', 'Raise the alarm.').run);
+    // The alarm: two guards, then the lieutenant.
+    let after = win(choose(run, 'gn-52-lot-6', 'Raise the alarm.').run);
+    expect(flagOf(after, 'ta-rare')).toBe(0);
+    after = win(choose(after, 'gn-52-alarm-2', 'Battle.').run);
+    const lt = choose(after, 'gn-52-alarm-lt', 'Battle.').run;
+    expect(lt.battle!.enemyTeam.length).toBeGreaterThan(0);
+    after = win(lt);
     expect(flagOf(after, 'ta-rare')).toBe(3);
     const out = choose(after, 'gn-52-out', 'Walk home.').run;
     expect(flagOf(out, 'ta-cover')).toBe(0);
@@ -1198,7 +1217,7 @@ describe('gn.52 The Evil Team\'s Pokémon Auction', () => {
     run = choose(run, 'gn-52-office', 'Read the ledger.').run;
     run = choose(run, 'gn-52-lot-1', 'Let it go.').run;
     run = choose(run, 'gn-52-lot-2', 'Drop out early.').run;
-    run = settle(choose(run, 'gn-52-lot-3', 'Bid.').run);
+    run = settle(bid(run, 3, 'Bid.'));
     expect(scene(run, 'gn-52-question').intro).toContain('settled in Rare Candy');
     expect(flagOf(choose(run, 'gn-52-question', '"Cash, as always."').run, 'ta-blown')).toBe(1);
     run = choose(run, 'gn-52-question', '"In Rare Candy."').run;
@@ -1210,7 +1229,7 @@ describe('gn.52 The Evil Team\'s Pokémon Auction', () => {
     u = choose(u, 'gn-52-office', 'Go to the floor.').run;
     u = choose(u, 'gn-52-lot-1', 'Let it go.').run;
     u = choose(u, 'gn-52-lot-2', 'Drop out early.').run;
-    u = settle(choose(u, 'gn-52-lot-3', 'Bid.').run);
+    u = settle(bid(u, 3, 'Bid.'));
     expect(opened(u, 'gn-52-lot-4')).toBe(true);
   });
 
@@ -1263,13 +1282,14 @@ const muster = (run: RunState, to = 'The Gate.'): RunState => {
   let r = choose(run, 'gn-53-alarm', 'Answer the alarm.').run;
   for (let i = 0; i < 12 && scene(r, 'gn-53-muster').labels.includes('Give orders.'); i += 1) {
     r = choose(r, 'gn-53-muster', 'Give orders.').run;
-    r = choose(r, 'gn-53-orders', to).run;
+    r = choose(r, 'gn-53-orders', to === 'The Gate.' ? scene(r, 'gn-53-orders').labels[2]! : to).run;
   }
   return choose(r, 'gn-53-muster', 'Into the city.').run;
 };
 /** One turn: a district, one action (a fight is won). */
 const go = (run: RunState, where: string, action: string): RunState => {
-  const d = choose(run, 'gn-53-turn', `The ${where}.`).run;
+  let d = choose(run, 'gn-53-turn', where === 'Gate' ? scene(run, 'gn-53-turn').labels[2]! : `The ${where}.`).run;
+  if (opened(d, 'gn-53-roof')) d = choose(d, 'gn-53-roof', 'Stay with the Hall.').run;
   const r = choose(d, `gn-53-${where.toLowerCase()}`, action);
   return r.battle ? win(r.run) : r.run;
 };
@@ -1293,7 +1313,7 @@ describe('gn.53 The Region Under Siege', () => {
     expect(names).toEqual(expect.arrayContaining(['Damian', 'The Squirtle Squad', 'The fourteen ex-Grunts']));
     expect(names).not.toContain('The Samurai');
     expect(scene(r, 'gn-53-muster').labels).toEqual(['Give orders.']);
-    expect(scene(r, 'gn-53-orders').labels).toEqual(['The Market.', 'The Homes.', 'The Gate.', 'The Hall.']);
+    expect(scene(r, 'gn-53-orders').labels).toEqual(['The Market.', 'The Homes.', expect.stringMatching(/^The (Gate|Harbour)\.$/), 'The Hall.']);
     const done = muster(run, 'The Hall.');
     expect(alliesOf(done).filter((a) => names.includes(a.n) && a.d === '')).toHaveLength(0);
     expect(scene(done, 'gn-53-turn').intro).toContain('Turn 1 of 8');

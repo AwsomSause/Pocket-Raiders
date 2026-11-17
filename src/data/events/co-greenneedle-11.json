@@ -7786,7 +7786,7 @@
        "atMost": 99
       }
      ],
-     "notice": "Then Jenny steps aside, and it's Corin behind her, hat low. \"I left the corridor door on the latch. Behind the stage. You're welcome.\""
+     "notice": "Then they step aside, and it's Corin behind them, hat low. \"I left the corridor door on the latch. Behind the stage. You're welcome.\""
     }
    ],
    "scene": {
@@ -7794,7 +7794,7 @@
     "tint": "#3a1f2b",
     "effect": "none"
    },
-   "intro": "*A manor with every window lit and no cars outside. Guests arriving on foot, in masks.*\n\n**Officer Jenny, in the hedge:** \"It's tonight. Everything they've taken this season, sold in one room.\"\n\n\"One lot's alive, and rare, and frightened. You'll need to be somebody else to get in.\"",
+   "intro": "*A manor with every window lit and no cars outside. Guests arriving on foot, in masks.*\n\n**{ta:contact}, in the hedge:** \"It's tonight. Everything they've taken this season, sold in one room.\"\n\n\"One lot's alive, and rare, and frightened. You'll need to be somebody else to get in.\"",
    "choices": [
     {
      "label": "Go as a rich buyer.",
@@ -7990,8 +7990,62 @@
     "tint": "#3a1f2b",
     "effect": "none"
    },
-   "intro": "Glass cases under soft lights. A held item. A case of Balls. A fossil. An egg in straw. An antique vase.\n\nA steward hovers, in case you'd like anything up close.",
+   "intro": "Glass cases under soft lights. A held item. A case of Balls. A fossil. An egg in straw. An antique vase.\n\n{ta:viewed}",
    "choices": [
+    {
+     "label": "Look closely at the held item and the Balls.",
+     "success": {
+      "text": "The steward lifts the glass. You turn the held item over: honest. Then the case of Balls: under the lid, very small, the house's own seal.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ta-viewed-near",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-viewing"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ta-viewed-near",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Look closely at the fossil and the egg.",
+     "success": {
+      "text": "The fossil is the real thing, still dusty. The egg is warm through the straw. It's much heavier than its little card says it should be.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ta-viewed-far",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-viewing"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ta-viewed-far",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
     {
      "label": "Look closely at the antique.",
      "success": {
@@ -8006,10 +8060,18 @@
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-52-lot-1"
+        "key": "gn-52-viewing"
        }
       ]
-     }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ta-viewed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
     },
     {
      "label": "Go to the floor.",
@@ -8110,44 +8172,70 @@
     "tint": "#3a1f2b",
     "effect": "none"
    },
-   "intro": "Lot 1: a held item, stolen from a trainer two towns over. Its fair value's on your screen: ₽1,200.\n\nA woman in a fox mask bids on everything, early and high. A man by the pillar never bids at all. He just watches who does.\n\nAnd a caterer with a tray of small pastries, who is {rival}. Out of the side of their mouth: \"Don't. Say. Anything.\"",
+   "intro": "Lot 1: a held item, stolen from a trainer two towns over. Its fair value's on your screen: ₽1,200.\n\nThe bid stands at ₽{ta:price:1}. Your next bid would be ₽{ta:next:1}.\n\nA woman in a fox mask bids on everything, early and high. A man by the pillar never bids at all. He just watches who does.\n\nAnd a caterer with a tray of small pastries, who is {rival}. Out of the side of their mouth: {ta:hush}",
    "choices": [
     {
-     "label": "Bid to its fair value.",
-     "requires": [
-      {
-       "kind": "money",
-       "atLeast": 1200
-      }
-     ],
+     "label": "Raise your paddle.",
      "success": {
-      "text": "Your paddle goes up, once, twice. The fox mask lets you have it. Fair's fair.",
+      "text": "Your paddle goes up.",
       "effects": [
        {
-        "kind": "money",
-        "amount": -1200
-       },
-       {
-        "kind": "itemFrom",
-        "ids": [
-         "quick-claw",
-         "kings-rock",
-         "scope-lens",
-         "razor-claw"
-        ]
-       },
-       {
         "kind": "gn",
-        "op": "taLot",
+        "op": "taBid",
         "n": 1
        },
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-52-lot-2"
+        "op": "when",
+        "key": "ta-won",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "quick-claw",
+           "kings-rock",
+           "scope-lens",
+           "razor-claw"
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "taLot",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-52-lot-2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ta-won",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-52-lot-1"
+         }
+        ]
        }
       ]
-     }
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "taCanBid",
+       "key": "lot",
+       "n": 1
+      }
+     ]
     },
     {
      "label": "Let it go.",
@@ -8183,40 +8271,66 @@
     "tint": "#3a1f2b",
     "effect": "none"
    },
-   "intro": "Lot 2: a case of rare Balls. The bidding climbs, and climbs. Soon there's only you and one other paddle, by the stage.\n\nThe other paddle belongs to the house. The auctioneer doesn't look away from you. He's waiting to see how deep your pockets go.",
+   "intro": "Lot 2: a case of rare Balls. The bidding climbs, and climbs. Soon there's only you and one other paddle, by the stage.\n\nThe other paddle belongs to the house. The auctioneer doesn't look away from you. He's waiting to see how deep your pockets go.\n\nThe bid stands at ₽{ta:price:2}. Your next bid would be ₽{ta:next:2}.",
    "choices": [
     {
      "label": "Keep bidding.",
-     "requires": [
-      {
-       "kind": "money",
-       "atLeast": 3000
-      }
-     ],
      "success": {
-      "text": "You win. Everyone in the room now knows exactly how much money you have. Including the man by the pillar.",
+      "text": "Your paddle goes up.",
       "effects": [
        {
-        "kind": "money",
-        "amount": -3000
-       },
-       {
-        "kind": "item",
-        "id": "ultra-ball",
-        "count": 5
+        "kind": "gn",
+        "op": "taBid",
+        "n": 2
        },
        {
         "kind": "gn",
-        "op": "taLot",
-        "n": 1
+        "op": "when",
+        "key": "ta-won",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "item",
+          "id": "ultra-ball",
+          "count": 5
+         },
+         {
+          "kind": "gn",
+          "op": "taLot",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-52-lot-3"
+         }
+        ]
        },
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-52-lot-3"
+        "op": "when",
+        "key": "ta-won",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-52-lot-2"
+         }
+        ]
        }
       ]
-     }
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "taCanBid",
+       "key": "lot",
+       "n": 2
+      }
+     ]
     },
     {
      "label": "Drop out early.",
@@ -8240,7 +8354,39 @@
         "key": "gn-52-lot-3"
        }
       ]
-     }
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "taEarly",
+       "key": "lot"
+      }
+     ]
+    },
+    {
+     "label": "Drop out.",
+     "success": {
+      "text": "You lower your paddle, at last. The house bidder stops too, at once. Too late: the man by the pillar has already written down how far you went.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "taLot",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-lot-3"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "taLate",
+       "key": "lot"
+      }
+     ]
     }
    ]
   },
@@ -8258,50 +8404,76 @@
     "tint": "#3a1f2b",
     "effect": "none"
    },
-   "intro": "Lot 3: a fossil, honest, in a velvet box. The fox mask doesn't bother with this one.",
+   "intro": "Lot 3: a fossil, honest, in a velvet box. The fox mask doesn't bother with this one.\n\nThe bid stands at ₽{ta:price:3}. Your next bid would be ₽{ta:next:3}.",
    "choices": [
     {
      "label": "Bid.",
-     "requires": [
-      {
-       "kind": "money",
-       "atLeast": 1500
-      }
-     ],
      "success": {
-      "text": "Yours, at a fair price. It's heavier than it looks.",
+      "text": "Your paddle goes up.",
       "effects": [
        {
-        "kind": "money",
-        "amount": -1500
+        "kind": "gn",
+        "op": "taBid",
+        "n": 3
        },
        {
-        "kind": "itemFrom",
-        "ids": [
-         "old-amber",
-         "helix-fossil",
-         "dome-fossil"
+        "kind": "gn",
+        "op": "when",
+        "key": "ta-won",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "old-amber",
+           "helix-fossil",
+           "dome-fossil"
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "taLot",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "route",
+          "key": "ta-ask",
+          "to": {
+           "kind": "addEventFrom",
+           "ids": [
+            "gn-52-lot-4",
+            "gn-52-question"
+           ]
+          }
+         }
         ]
        },
        {
         "kind": "gn",
-        "op": "taLot",
-        "n": 1
-       },
-       {
-        "kind": "gn",
-        "op": "route",
-        "key": "ta-ask",
-        "to": {
-         "kind": "addEventFrom",
-         "ids": [
-          "gn-52-lot-4",
-          "gn-52-question"
-         ]
-        }
+        "op": "when",
+        "key": "ta-won",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-52-lot-3"
+         }
+        ]
        }
       ]
-     }
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "taCanBid",
+       "key": "lot",
+       "n": 3
+      }
+     ]
     },
     {
      "label": "Let it go.",
@@ -8441,35 +8613,61 @@
     "tint": "#3a1f2b",
     "effect": "none"
    },
-   "intro": "Lot 4: \"An antique.\" A vase, very old, the auctioneer says. The fox mask bids on it as if she knows something.",
+   "intro": "Lot 4: \"An antique.\" A vase, very old, the auctioneer says. The fox mask bids on it as if she knows something.\n\nThe bid stands at ₽{ta:price:4}. Your next bid would be ₽{ta:next:4}.",
    "choices": [
     {
      "label": "Bid.",
-     "requires": [
-      {
-       "kind": "money",
-       "atLeast": 1000
-      }
-     ],
      "success": {
-      "text": "You win it. The vase is warm from the lights. You carry it carefully, the way people carry things they paid for.",
+      "text": "Your paddle goes up.",
       "effects": [
        {
-        "kind": "money",
-        "amount": -1000
+        "kind": "gn",
+        "op": "taBid",
+        "n": 4
        },
        {
         "kind": "gn",
-        "op": "taLot",
-        "n": 1
+        "op": "when",
+        "key": "ta-won",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "taLot",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-52-lot-5"
+         }
+        ]
        },
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-52-lot-5"
+        "op": "when",
+        "key": "ta-won",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-52-lot-4"
+         }
+        ]
        }
       ]
-     }
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "taCanBid",
+       "key": "lot",
+       "n": 4
+      }
+     ]
     },
     {
      "label": "Let it go.",
@@ -8505,50 +8703,76 @@
     "tint": "#3a1f2b",
     "effect": "none"
    },
-   "intro": "Lot 5: an egg, in straw. The bidding's slow, and cheap. Too cheap. Nobody wants to look like they know what it is.\n\nIt's worth more. Knowing that is the dangerous part.",
+   "intro": "Lot 5: an egg, in straw. The bidding's slow, and cheap. Too cheap. Nobody wants to look like they know what it is.\n\nIt's worth more. Knowing that is the dangerous part.\n\nThe bid stands at ₽{ta:price:5}. Your next bid would be ₽{ta:next:5}.",
    "choices": [
     {
      "label": "Bid low, like everyone.",
-     "requires": [
-      {
-       "kind": "money",
-       "atLeast": 600
-      }
-     ],
      "success": {
-      "text": "You bid like you're bored. It's yours for almost nothing. The man by the pillar doesn't look up.",
+      "text": "Your paddle goes up.",
       "effects": [
        {
-        "kind": "money",
-        "amount": -600
-       },
-       {
-        "kind": "egg",
-        "species": [],
-        "types": [],
-        "levelBonus": 0,
-        "shinyMultiplier": 1,
-        "left": 3,
-        "unit": "battle"
+        "kind": "gn",
+        "op": "taBid",
+        "n": 5
        },
        {
         "kind": "gn",
-        "op": "setFlag",
-        "key": "ta-trap-egg",
-        "n": 1
+        "op": "when",
+        "key": "ta-won",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "egg",
+          "species": [],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "left": 3,
+          "unit": "battle"
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ta-trap-egg",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "taLot",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-52-lot-6"
+         }
+        ]
        },
        {
         "kind": "gn",
-        "op": "taLot",
-        "n": 1
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-52-lot-6"
+        "op": "when",
+        "key": "ta-won",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-52-lot-5"
+         }
+        ]
        }
       ]
-     }
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "taCanBid",
+       "key": "lot",
+       "n": 5
+      }
+     ]
     },
     {
      "label": "Bid what it's really worth.",
@@ -8647,37 +8871,55 @@
     "tint": "#3a1f2b",
     "effect": "none"
    },
-   "intro": "*The last lot. A cage under a cloth. The cloth comes off.*\n\n*It's small. It's a {cast:ta-rare}, a kind the region hardly sees. It's looking at the room the way something looks at weather.*",
+   "intro": "*The last lot. A cage under a cloth. The cloth comes off.*\n\n*It's small. It's a {cast:ta-rare}, a kind the region hardly sees. It's looking at the room the way something looks at weather.*\n\nThe bid stands at ₽{ta:price:6}. Your next bid would be ₽{ta:next:6}.",
    "choices": [
     {
      "label": "Bid it home.",
-     "requires": [
-      {
-       "kind": "money",
-       "atLeast": 4500
-      }
-     ],
      "success": {
-      "text": "The fox mask pushes the price high, and higher. You go higher. It's handed to you in its cage. Nobody's the wiser. The team has your money.",
+      "text": "The fox mask pushes the price high, and higher. You go higher.",
       "effects": [
        {
-        "kind": "money",
-        "amount": -4500
+        "kind": "gn",
+        "op": "taBid",
+        "n": 6
        },
        {
         "kind": "gn",
-        "op": "taRare",
-        "n": 1
+        "op": "when",
+        "key": "ta-won",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "taRare",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "taLot",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-52-out"
+         }
+        ]
        },
        {
         "kind": "gn",
-        "op": "taLot",
-        "n": 1
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-52-out"
+        "op": "when",
+        "key": "ta-won",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-52-lot-6"
+         }
+        ]
        }
       ]
      },
@@ -8687,6 +8929,12 @@
        "key": "ta-blown",
        "atLeast": 0,
        "atMost": 0
+      },
+      {
+       "kind": "gn",
+       "test": "taCanBid",
+       "key": "lot",
+       "n": 6
       }
      ]
     },
@@ -8772,6 +9020,102 @@
       ],
       "battle": {
        "kind": "trainer",
+       "evil": "grunt",
+       "name": "Manor Guard",
+       "size": 2,
+       "levelBonus": 1,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-52-alarm-2"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-52-out"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-52-alarm-2",
+   "name": "The Evil Auction: The Second Guard",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a1f2b",
+    "effect": "none"
+   },
+   "intro": "The first guard is down. The second one comes over the chairs, knocking masks off as he goes.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "He doesn't bother with a speech. He was hired not to.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Manor Guard",
+       "size": 2,
+       "levelBonus": 1,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-52-alarm-lt"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-52-out"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-52-alarm-lt",
+   "name": "The Evil Auction: The Lieutenant",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a1f2b",
+    "effect": "none"
+   },
+   "intro": "Two guards on the carpet. The room's nearly empty now: overturned chairs, a dropped fox mask, the cage on the stage.\n\nThe man who never bid folds his own mask into his pocket. \"I did wonder about you.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The lieutenant fights the way he watched: patiently.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
        "evil": "executive",
        "name": "The Lieutenant",
        "size": 3,
@@ -8816,7 +9160,7 @@
     "tint": "#3a1f2b",
     "effect": "none"
    },
-   "intro": "Steam and shouting. A chef throws a tray at you and points at a door. You go through the door.\n\nAnother caterer is already there, hiding behind a tray of small pastries. It's {rival}. \"Don't. Say. Anything.\"",
+   "intro": "Steam and shouting. A chef throws a tray at you and points at a door. You go through the door.\n\nAnother caterer is already there, hiding behind a tray of small pastries. It's {rival}. {ta:hush}",
    "choices": [
     {
      "label": "Say nothing.",
@@ -8967,21 +9311,16 @@
       ],
       "battle": {
        "kind": "trainer",
-       "evil": "executive",
-       "name": "The Lieutenant",
-       "size": 3,
+       "evil": "grunt",
+       "name": "Manor Guard",
+       "size": 2,
        "levelBonus": 1,
        "chain": 1,
        "win": [
         {
          "kind": "gn",
-         "op": "taRare",
-         "n": 3
-        },
-        {
-         "kind": "gn",
          "op": "scene",
-         "key": "gn-52-out"
+         "key": "gn-52-alarm-2"
         }
        ],
        "friendly": true,
@@ -9193,7 +9532,7 @@
     "cast": [],
     "effect": "none"
    },
-   "intro": "*Smoke over the city. A siren, on and on. The evil team's banners on the Hall.*\n\nFour districts: the Market, the Homes, the Gate, the Hall. One of you. A clock of eight turns.\n\nYou can't be everywhere. You'll have to choose. Everyone you've helped this run is already on their way.",
+   "intro": "*{siege:map}. Smoke over {siege:city}. A siren, on and on. The evil team's banners on the Hall.*\n\nFour districts: the Market, the Homes, {siege:gate}, the Hall. One of you. A clock of eight turns.\n\nYou can't be everywhere. You'll have to choose. Everyone you've helped this run is already on their way.",
    "choices": [
     {
      "label": "Answer the alarm.",
@@ -9331,9 +9670,9 @@
      }
     },
     {
-     "label": "The Gate.",
+     "label": "{siege:Gate}.",
      "success": {
-      "text": "They nod, and run for the Gate.",
+      "text": "They nod, and run for {siege:gate}.",
       "effects": [
        {
         "kind": "gn",
@@ -9436,9 +9775,9 @@
      }
     },
     {
-     "label": "The Gate.",
+     "label": "{siege:Gate}.",
      "success": {
-      "text": "The Gate: the only road in. Hold it, and their reinforcements don't come.",
+      "text": "{siege:Gate}: {siege:way}. Hold it, and their reinforcements don't come.",
       "effects": [
        {
         "kind": "gn",
@@ -9451,7 +9790,73 @@
     {
      "label": "The Hall.",
      "success": {
-      "text": "The Hall: the mayor, and the radio mast. Hold it, and the city can call for help.",
+      "text": "The Hall: the mayor, and the radio mast. Hold it, and the city can call for help, and you can get at the commander early.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-early",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-roof"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-early",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-hall"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-53-roof",
+   "name": "The Region Under Siege: The Hall's Back Stairs",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "The Hall still stands. One of the mayor's people catches your sleeve. \"The back stairs go up to the roof. The roof looks down on their commander. You could end this now.\"\n\nTurn {siege:turn} of 8. Whatever the other districts are holding, they'd be holding it as they are.",
+   "choices": [
+    {
+     "label": "Go for the commander, now.",
+     "success": {
+      "text": "You take the stairs two at a time. You don't wait for the clock.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-53-commander"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay with the Hall.",
+     "success": {
+      "text": "\"Not yet,\" you say. There are people still out there.",
       "effects": [
        {
         "kind": "gn",
@@ -9476,7 +9881,7 @@
     "cast": [],
     "effect": "none"
    },
-   "intro": "Stalls on their sides. The Center's doors chained from the outside. Behind them, someone's knocking.\n\nThe shopkeeper who gave you a discount, once. Trapped under the awning of her own shop.",
+   "intro": "Stalls on their sides. The Center's doors chained from the outside. Behind them, someone's knocking.\n\n{siege:civ-market}",
    "choices": [
     {
      "label": "Fight.",
@@ -9785,7 +10190,7 @@
     {
      "label": "Rescue.",
      "success": {
-      "text": "You lift the awning. She crawls out, coughing, and grips your hand far too hard. \"I knew it'd be you.\"",
+      "text": "You lift the awning. She crawls out, coughing, and grips your hand far too hard. \"{siege:thanks-market}\"",
       "effects": [
        {
         "kind": "gn",
@@ -9944,7 +10349,7 @@
     "cast": [],
     "effect": "none"
    },
-   "intro": "Washing still on the lines. Doors left open. A dog barking in a yard, and nobody calling it in.\n\nThe child you helped, earlier this region, crouched behind a bin. They're holding very still.",
+   "intro": "Washing still on the lines. Doors left open. A dog barking in a yard, and nobody calling it in.\n\n{siege:civ-homes}",
    "choices": [
     {
      "label": "Fight.",
@@ -10253,7 +10658,7 @@
     {
      "label": "Rescue.",
      "success": {
-      "text": "You crouch down. \"It's me.\" They come out, and hold on to your sleeve, and don't let go for three streets.",
+      "text": "You crouch down. \"{siege:thanks-homes}\" They come out, and hold on to your sleeve, and don't let go for three streets.",
       "effects": [
        {
         "kind": "gn",
@@ -10412,7 +10817,7 @@
     "cast": [],
     "effect": "none"
    },
-   "intro": "The gatehouse, the barrier, a queue of abandoned cars. The team's lorries park here.\n\nUnder a car, a Pokémon, wedged in tight. It was somebody's. It isn't sure whose any more.",
+   "intro": "{siege:gate-intro}\n\nUnder a car, a Pokémon, wedged in tight. It was somebody's. It isn't sure whose any more.",
    "choices": [
     {
      "label": "Fight.",
@@ -10880,7 +11285,7 @@
     "cast": [],
     "effect": "none"
    },
-   "intro": "The mayor's office, a radio mast, a staircase full of smoke.\n\n{rival}'s mum, of all people, in the records room. She came to pay a parking fine.",
+   "intro": "The mayor's office, a radio mast, a staircase full of smoke.\n\n{siege:civ-hall}",
    "choices": [
     {
      "label": "Fight.",
@@ -11189,7 +11594,7 @@
     {
      "label": "Rescue.",
      "success": {
-      "text": "You get her down the back stairs. \"You're the one my child won't stop talking about,\" she says. \"Hm. Taller.\"",
+      "text": "You get her down the back stairs. \"{siege:thanks-hall}\"",
       "effects": [
        {
         "kind": "gn",
@@ -11867,6 +12272,108 @@
         "importance": 70
        }
       ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-53-patrol",
+   "name": "The Occupied City: A Patrol",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Exploration"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "sgOccupied",
+     "key": "sg-result"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "*A street with the shutters down. The evil team's banner on a lamp post. Two Grunts walking it, end to end, in step.*\n\nThey turn at the corner, every time, and for a moment neither of them is looking this way.",
+   "choices": [
+    {
+     "label": "Wait for the gap, and go.",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "They turn. You go. Twelve quiet steps, and a doorway, and you're through. Behind a shutter, somebody breathes out.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "A bin lid. Of all things. Both Grunts spin round. \"Oi! Papers!\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Patrol",
+       "size": 2,
+       "levelBonus": 0,
+       "chain": 1,
+       "win": [],
+       "friendly": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Knock on a shutter.",
+     "success": {
+      "text": "You knock, twice, softly. A shutter lifts a hand's width. A face; then a door, a kitchen, a back yard, another street.\n\nOn the way through, someone presses a bread roll into your hand, and doesn't say a word.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 1
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the patrol on.",
+     "success": {
+      "text": "You step out into the middle of the street. They look almost relieved. The whole city will know about this by lunch.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 2
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Patrol",
+       "size": 3,
+       "levelBonus": 1,
+       "chain": 1,
+       "win": [],
+       "friendly": true,
+       "lose": []
+      }
      }
     }
    ]
