@@ -43,15 +43,9 @@ describe('gn.new.02 The Dog at the Station', () => {
     expect(flagOf(led.run, 'dog-station-sat')).toBe(0);
   });
 
-  it('fed or led only: the last visit gives each its own ending and a Growlithe with Vigil', () => {
-    for (const [flagKey, label] of [['dog-fed', 'Do it once more.'], ['dog-led', 'Do it once more.']] as const) {
-      const run = at(`dog-end-${flagKey}`, 'gn-new-02-last', { 'dog-open': 1, [flagKey]: 1 });
-      expect(scene(run, 'gn-new-02-last').labels).toEqual([label]);
-      const r = choose(run, 'gn-new-02-last', label);
-      const mon = [...r.run.party, ...r.run.pending.flatMap((p) => (p.kind === 'caught' ? [p.mon] : []))].find((m) => m.speciesId === 'growlithe');
-      expect(mon?.fixedAbility).toBe('vigil');
-      expect(flagOf(r.run, 'dog-done')).toBe(1);
-    }
+  it('fed or led only: no ending (the doc gives them none)', () => {
+    expect(JSON.stringify(content.events.get('gn-new-02-last'))).not.toMatch(/Do it once more/);
+    expect(JSON.stringify(content.events.get('gn-new-02-last-sit')!.requires)).toMatch(/dog-fed.*dog-led/);
   });
 
   it('ask around: the three errands open', () => {
@@ -89,9 +83,9 @@ describe('gn.new.02 The Dog at the Station', () => {
   });
 
   it('only ever sat: "Sit one more time." and a Growlithe with Vigil joins', () => {
-    const run = at('dog-chose', 'gn-new-02-last', { 'dog-open': 1, [`dog-station-sat`]: 1 });
-    expect(scene(run, 'gn-new-02-last').labels).toEqual(['Sit one more time.']);
-    const r = choose(run, 'gn-new-02-last', 'Sit one more time.');
+    const run = at('dog-chose', 'gn-new-02-last-sit', { 'dog-open': 1, [`dog-station-sat`]: 1 });
+    expect(scene(run, 'gn-new-02-last-sit').labels).toEqual(['Sit one more time.']);
+    const r = choose(run, 'gn-new-02-last-sit', 'Sit one more time.');
     const mon = [...r.run.party, ...r.run.pending.flatMap((p) => (p.kind === 'caught' ? [p.mon] : []))].find((m) => m.speciesId === 'growlithe');
     expect(mon?.fixedAbility).toBe('vigil');
     expect(flagOf(r.run, 'dog-chose-player')).toBe(1);
@@ -99,7 +93,7 @@ describe('gn.new.02 The Dog at the Station', () => {
   });
 
   it('the clerk on holiday remembers the dog', () => {
-    const r = choose(at('dog-holiday', 'gn-new-02-holiday', { 'dog-done': 1 }), 'gn-new-02-holiday', 'Sit with him.');
+    const r = choose(at('dog-holiday', 'gn-new-02-holiday', { 'dog-reunited': 1 }), 'gn-new-02-holiday', 'Sit with him.');
     expect(said(r)).toMatch(/Habit/);
     expect(flagOf(r.run, 'dog-holiday')).toBe(1);
   });
@@ -108,7 +102,7 @@ describe('gn.new.02 The Dog at the Station', () => {
     const e = (id: string) => content.events.get(id)!;
     expect(e('gn-new-02-last').choices.length).toBeGreaterThan(0);
     expect(JSON.stringify(e('gn-new-02-porter').requires)).toMatch(/sameStage/);
-    expect(JSON.stringify(e('gn-new-02-last').requires)).toMatch(/dog-open/);
+    expect(JSON.stringify(e('gn-new-02-last').requires)).toMatch(/dog-asking/);
   });
 });
 

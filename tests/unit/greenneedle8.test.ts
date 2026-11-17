@@ -4,10 +4,13 @@ import type { PokemonInstance, RunState } from '../../src/core/state';
 import { content } from './helpers';
 import { calcStats, createPokemon, getSpecies, maxHp } from '../../src/core/pokemon';
 import { takeTurn } from '../../src/core/run';
-import { chooseEvent } from '../../src/core/events';
+import { chooseEvent, giveItem } from '../../src/core/events';
 import { createBattle, resolveTurn, type BattleContext } from '../../src/core/battle/engine';
 import { moveBlockReason } from '../../src/core/battle/moveBlock';
 import { hashSeed, Rng } from '../../src/core/rng';
+import { foggedAt } from '../../src/core/world';
+import { ownTypes } from '../../src/core/co/typeShift';
+import { PEOPLE } from '../../src/core/greenneedle/reunion';
 import { earthLine, lightning, ridgeCatch } from '../../src/core/greenneedle/ridge';
 import { LAB_BASE } from '../../src/core/greenneedle/lab';
 import { choose, flagOf, gnRun, open, openSide, scene, setFlag, win } from './helpers/gnPlay';
@@ -18,6 +21,12 @@ const graded = (run: RunState, eventId: string, label: string, grade: 'miss' | '
   const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
   const side = here.sides.find((x) => x.kind === 'event' && !x.used && x.eventId === eventId)!;
   return chooseEvent(content, run, side.id, scene(run, eventId).labels.indexOf(label), undefined, grade);
+};
+/** A choice that asks for a Pokémon (`pick`), given `uid`. */
+const picked = (run: RunState, eventId: string, label: string, uid: string): ReturnType<typeof chooseEvent> => {
+  const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
+  const side = here.sides.find((x) => x.kind === 'event' && !x.used && x.eventId === eventId)!;
+  return chooseEvent(content, run, side.id, scene(run, eventId).labels.indexOf(label), uid);
 };
 const withMoves = (species: string, level: number, uid: string, ...moves: string[]): PokemonInstance => {
   const m = createPokemon(content, species, level, uid);
@@ -53,7 +62,7 @@ describe('gn.35 Thunderstorm Ridge: the lightning', () => {
     expect(rod.run.party[0]!.status).toBeFalsy();
   });
 
-  it('Volt Absorb drinks it (heals); Lightning Rod holds it (+1 Sp. Atk next battle); an Electric-type isn\'t paralysed', () => {
+  it('Volt Absorb drinks it (heals); Lightning Rod holds it (+1 Sp. Atk next battle); an Electric-type lead gets no pass', () => {
     const volt = struck((m) => {
       m.fixedAbility = 'volt-absorb';
       m.hp = 1;
@@ -61,7 +70,9 @@ describe('gn.35 Thunderstorm Ridge: the lightning', () => {
     expect(volt.run.party[0]!.hp).toBeGreaterThan(1);
     const rod = struck((m) => (m.fixedAbility = 'lightning-rod'));
     expect(rod.run.party[0]!.boosts).toContainEqual({ kind: 'stage', stat: 'spa', stages: 1, turns: 99 });
-    expect(struck(() => {}, 'pikachu').run.party[0]!.status).toBeFalsy();
+    const pika = struck((m) => (m.fixedAbility = 'static'), 'pikachu');
+    expect(pika.run.party[0]!.status).toEqual({ id: 'par' });
+    expect(flagOf(pika.run, 'ridge-struck')).toBe(1);
   });
 
   it('the hilltop event\'s "Wait for the strike." keeps a length of the rod', () => {
@@ -166,10 +177,12 @@ describe('gn.35 Thunderstorm Ridge: the climb', () => {
     expect(fight.battle!.eventRule).toMatchObject({ gn: 'overcharged', noCatch: true });
     const after = win(fight);
     expect(flagOf(after, 'ridge-end')).toBe(1);
-    // A catalog item for a Pokémon is used at once on the first one it fits (or sold when none fits).
-    const taken = choose(after, 'gn-35-glass', 'Take the capsule.');
+    // The player picks who takes the capsule (the first Pokémon it fits if the picked one can't; sold when none fits).
+    const last = after.party[after.party.length - 1]!;
+    const taken = picked(after, 'gn-35-glass', 'Take the capsule, for one of mine.', last.uid);
     expect(said(taken)).toMatch(/Summit Ability Capsule/);
     expect(flagOf(taken.run, 'ridge-done')).toBe(1);
+    if (/Summit Ability Capsule for/.test(said(taken))) expect(said(taken)).toMatch(new RegExp(`Summit Ability Capsule for ${getSpecies(content, last.speciesId).name}`));
   });
 
   it('earthing: the Ground-type leads and stands three turns; then it follows you down with Grounded Heart, and the Ground-type gains Bond', () => {
@@ -184,7 +197,7 @@ describe('gn.35 Thunderstorm Ridge: the climb', () => {
     expect(JSON.stringify(t1.events)).toMatch(/bolts bend away from it/);
     const after = win(t1.run);
     expect(flagOf(after, 'ridge-end')).toBe(2);
-    const done = choose(after, 'gn-35-earthed', 'Take the capsule, and go down.').run;
+    const done = picked(after, 'gn-35-earthed', 'Take the capsule, for one of mine, and go down.', after.party[0]!.uid).run;
     const one = [...done.party, ...done.pending.flatMap((p) => (p.kind === 'caught' ? [p.mon] : []))].find((m) => m.fixedAbility === 'grounded-heart');
     expect(one).toBeTruthy();
     expect(done.party.find((m) => m.uid === 'p-ground')!.friendship).toBeGreaterThan(bond);
@@ -200,9 +213,42 @@ describe('gn.35 Thunderstorm Ridge: the climb', () => {
     expect(earthLine(3, 3)).toMatch(/sits down, hard/);
   });
 
-  it('afterstory: Ada and Kip\'s forecast, a later stage', () => {
+  it('afterstory: Ada and Kip\'s forecast, a later stage, only if the storm ended (not if you were driven down)', () => {
     const ev = content.events.get('gn-35-forecast')!;
     expect(ev.intro).toMatch(/Clear over the ridge\. First time in a month\. Don't know why\./);
+    expect(ev.requires).toContainEqual(expect.objectContaining({ kind: 'flag', key: 'ridge-end', atLeast: 1 }));
+    // Driven down: the run leaves the ridge with `ridge-end` still 0.
+    const driven = summit('t35-driven');
+    setFlag(driven, 'ridge-end', 0);
+    open(driven, 'gn-35-driven');
+    const out = choose(driven, 'gn-35-driven', 'Go down.').run;
+    expect(flagOf(out, 'ridge-done')).toBe(1);
+    expect(flagOf(out, 'ridge-end')).toBe(0);
+  });
+
+  it('the capsule goes to the Pokémon you pick, when it can take it; else to the first that can', () => {
+    const run = gnRun('t35-capsule');
+    run.party = [createPokemon(content, 'rattata', 10, 'p-a'), createPokemon(content, 'pidgey', 10, 'p-b')];
+    const give = (uid?: string): string => giveItem(content, structuredClone(run), 'summit-ability-capsule', 1, new Rng(hashSeed('t35-capsule')), uid);
+    expect(give('p-b')).toBe('Summit Ability Capsule for Pidgey');
+    expect(give()).toBe('Summit Ability Capsule for Rattata');
+    // Failure: a uid that isn't in the party falls back to the first that fits.
+    expect(give('nobody')).toBe('Summit Ability Capsule for Rattata');
+    expect(content.events.get('gn-35-glass')!.choices[0]!.pick).toBeTruthy();
+  });
+
+  it('crystals draw followers at every node after the field, the Summit too', () => {
+    let run = choose(toField(climb('t35-per-node')), 'gn-35-field', 'Take one.').run;
+    run = win(choose(choose(run, 'gn-35-bridge', 'Face what\'s following you.').run, 'gn-35-follower', 'Turn and face it.').run);
+    run = graded(run, 'gn-35-bridge', 'Cross when it\'s dark.', 'good').run;
+    run = win(choose(choose(run, 'gn-35-shelter', 'Face what\'s following you.').run, 'gn-35-follower', 'Turn and face it.').run);
+    run = choose(run, 'gn-35-shelter', 'Rest, then climb.').run;
+    // One crystal still carried: one more follower at the Summit, faced before the overcharged one.
+    expect(flagOf(run, 'ridge-followers')).toBe(1);
+    expect(scene(run, 'gn-35-summit').labels).toEqual(['Face what\'s following you.']);
+    run = win(choose(choose(run, 'gn-35-summit', 'Face what\'s following you.').run, 'gn-35-follower', 'Turn and face it.').run);
+    expect(openSide(run)!.eventId).toBe('gn-35-summit');
+    expect(scene(run, 'gn-35-summit').labels).toEqual(['Defeat it.']);
   });
 });
 
@@ -223,11 +269,18 @@ describe('gn.35 battle rules and Grounded Heart', () => {
     expect(foe.hp).toBe(maxHp(content, foe) - Math.floor(maxHp(content, foe) / 16));
   });
 
-  it('earthing: an attack is greyed while a status move is left', () => {
+  it('earthing: every attack is greyed, with or without a status move left', () => {
     const me = withMoves('sandslash', 30, 'p', 'protect', 'earthquake');
     const ctx = duel(me, withMoves('manectric', 30, 'e', 'thunder-shock'), 't35-grey', 'earthing');
     expect(moveBlockReason(content, ctx.battle, me, 1)).toBe('It needs you to stand there');
     expect(moveBlockReason(content, ctx.battle, me, 0)).toBeNull();
+    // Boundary: only attacking moves. They are all greyed (chosen anyway, it simply stands).
+    const hitter = withMoves('sandslash', 30, 'p2', 'earthquake', 'slash');
+    const ctx2 = duel(hitter, withMoves('manectric', 30, 'e2', 'thunder-shock'), 't35-grey2', 'earthing');
+    expect([0, 1].map((i) => moveBlockReason(content, ctx2.battle, hitter, i))).toEqual(['It needs you to stand there', 'It needs you to stand there']);
+    // Outside the earthing, nothing is greyed.
+    const plain = duel(hitter, withMoves('manectric', 30, 'e3', 'thunder-shock'), 't35-grey3', 'overcharged');
+    expect(moveBlockReason(content, plain.battle, hitter, 0)).toBeNull();
   });
 
   it('Grounded Heart: the first paralysis of the battle doesn\'t land, and it gains +1 Speed', () => {
@@ -242,7 +295,7 @@ describe('gn.35 battle rules and Grounded Heart', () => {
   });
 });
 
-describe('gn.36 The Great Desert', () => {
+describe('gn.36 The Endless Desert', () => {
   const enter = (seed: string, setup: (run: RunState) => void = () => {}): RunState => {
     const run = gnRun(seed);
     setup(run);
@@ -266,6 +319,13 @@ describe('gn.36 The Great Desert', () => {
     const r = choose(run, 'gn-36-well', 'Fill the flasks, and go.');
     expect(flagOf(r.run, 'desert-water')).toBe(3);
     expect(said(r)).toMatch(/Water: 3 left\./);
+    // The doc's name, and the count always on screen: every node's text opens with it.
+    expect(content.events.get('gn-36-door')!.name).toBe('The Endless Desert');
+    expect(JSON.stringify([...content.events.values()].filter((e) => e.id.startsWith('gn-36-')))).not.toMatch(/Great Desert/);
+    expect(scene(run, 'gn-36-well').intro).toMatch(/^Water: 4\./);
+    expect(scene(r.run, 'gn-36-dunes').intro).toMatch(/^Water: 3\./);
+    setFlag(r.run, 'desert-water', 0);
+    expect(scene(r.run, 'gn-36-dunes').intro).toMatch(/^Water: 0\.[\s\S]*90% HP/);
   });
 
   it('at no water, each fight starts at 90% HP', () => {
@@ -299,6 +359,25 @@ describe('gn.36 The Great Desert', () => {
     expect(choose(mirage(dunes, 3, false), 'gn-36-figure', 'Go to it.').run.battle!.enemyTeam[0]!.speciesId).toBe('sigilyph');
   });
 
+  it('a figure that stops waving and sits down is the traveller', () => {
+    const dunes = toDunes(enter('t36-figure'));
+    const real = mirage(dunes, 3, true);
+    expect(said(choose(real, 'gn-36-figure', 'Look closer.'))).toMatch(/A person\. Tired\./);
+    const met = choose(real, 'gn-36-figure', 'Go to it.');
+    expect(met.battle).toBe(false);
+    expect(said(met)).toMatch(/The traveller: "Oh, good\. A person\./);
+    expect(flagOf(met.run, 'desert-saw-idris')).toBe(1);
+    // At the first oasis they are remembered.
+    const oasis = win(choose(met.run, 'gn-36-dunes', 'Walk on.').run);
+    expect(scene(oasis, 'gn-36-oasis-1').intro).toMatch(/The one who waved to you from the dune/);
+    // At the Storm (after the first oasis) it is Idris by name.
+    const storm = choose(toOasis1('t36-figure-2'), 'gn-36-oasis-1', 'Walk with me.').run;
+    setFlag(storm, 'desert-seen', 3);
+    setFlag(storm, 'desert-real', 1);
+    const again = choose(choose(storm, 'gn-36-storm', 'Look at the shimmer.').run, 'gn-36-figure', 'Go to it.');
+    expect(said(again)).toMatch(/Idris: "You again!/);
+  });
+
   it('the first oasis: Idris, lost; the doc\'s three choices; water given is one less (free if you helped the savanna herd)', () => {
     const run = toOasis1('t36-oasis');
     expect(scene(run, 'gn-36-oasis-1').labels).toEqual(['Where are you going?', 'Walk with me.', 'Here, take some water.']);
@@ -306,6 +385,9 @@ describe('gn.36 The Great Desert', () => {
     const gave = choose(run, 'gn-36-oasis-1', 'Here, take some water.').run;
     expect(flagOf(gave, 'desert-water')).toBe(before - 1);
     expect(flagOf(gave, 'desert-gave-water')).toBe(1);
+    // The flasks were filled on arriving (4), so the gift is really one less on the road: 3 here, 2 at the Storm.
+    expect(before).toBe(4);
+    expect(flagOf(choose(gave, 'gn-36-oasis-1', 'Walk with me.').run, 'desert-water')).toBe(2);
     const herd = toOasis1('t36-herd', (r) => setFlag(r, 'savanna-helped'));
     expect(scene(herd, 'gn-36-oasis-1').intro).toMatch(/Everyone's heard/);
     expect(flagOf(choose(herd, 'gn-36-oasis-1', 'Here, take some water.').run, 'desert-water')).toBe(flagOf(herd, 'desert-water'));
@@ -317,6 +399,24 @@ describe('gn.36 The Great Desert', () => {
     expect(scene(storm, 'gn-36-storm').intro).not.toMatch(/A second oasis/);
     const goggled = toOasis1('t36-goggles', (r) => (r.party[0]!.held = { 'safety-goggles': 1 }));
     expect(scene(choose(goggled, 'gn-36-oasis-1', 'Walk with me.').run, 'gn-36-storm').intro).toMatch(/A second oasis/);
+  });
+
+  it('the sandstorm hides the next node on the map (no badge) until a Flying-type, Goggles or walking in shows it', () => {
+    const storm = choose(toOasis1('t36-map'), 'gn-36-oasis-1', 'Walk with me.').run;
+    const ahead = storm.stage!.map.nodes.find((n) => n.roomEvent === 'gn-36-oasis-2')!;
+    const ruin = storm.stage!.map.nodes.find((n) => n.roomEvent === 'gn-36-ruin')!;
+    expect(foggedAt(storm.stage!, 99, ahead)).toBe(true);
+    expect(foggedAt(storm.stage!, 99, ruin)).toBe(false);
+    // A Flying-type sent up.
+    storm.party.push(createPokemon(content, 'pidgey', 10, 'p-bird'));
+    const up = choose(storm, 'gn-36-storm', 'Send a Flying-type up.').run;
+    expect(foggedAt(up.stage!, 99, up.stage!.map.nodes.find((n) => n.roomEvent === 'gn-36-oasis-2')!)).toBe(false);
+    // Safety Goggles: shown before the storm is reached.
+    const goggled = choose(toOasis1('t36-map-g', (r) => (r.party[0]!.held = { 'safety-goggles': 1 })), 'gn-36-oasis-1', 'Walk with me.').run;
+    expect(foggedAt(goggled.stage!, 99, goggled.stage!.map.nodes.find((n) => n.roomEvent === 'gn-36-oasis-2')!)).toBe(false);
+    // Neither: walking in draws it.
+    const walked = choose(choose(toOasis1('t36-map-w'), 'gn-36-oasis-1', 'Walk with me.').run, 'gn-36-storm', 'Walk on.').run;
+    expect(foggedAt(walked.stage!, 99, walked.stage!.map.nodes.find((n) => n.roomEvent === 'gn-36-oasis-2')!)).toBe(false);
   });
 
   /** On to the third oasis by the robbed traveller's choice. */
@@ -356,8 +456,14 @@ describe('gn.36 The Great Desert', () => {
   });
 
   it('with the drawing, no battle; with neither, the Flygon fights from its rock with the doc\'s four moves and can\'t be caught', () => {
-    const drawing = choose(toOasis3('t36-draw', 'Take my spare.'), 'gn-36-oasis-3', 'I\'ll tell it for you.').run;
+    const drawing = choose(toOasis3('t36-draw', 'I\'ll get your things back.'), 'gn-36-oasis-3', 'I\'ll tell it for you.').run;
+    expect(flagOf(drawing, 'desert-drawing')).toBe(1);
     expect(scene(drawing, 'gn-36-hidden').labels).toEqual(['Hold out the drawing.']);
+    // The drawing was in the stolen pack: without the pack, Idris has none to give, and the Flygon fights.
+    const noPack = choose(toOasis3('t36-draw-n', 'Take my spare.'), 'gn-36-oasis-3', 'I\'ll tell it for you.');
+    expect(said(noPack)).toMatch(/The Sandile have it now/);
+    expect(flagOf(noPack.run, 'desert-drawing')).toBe(0);
+    expect(scene(noPack.run, 'gn-36-hidden').labels).toEqual(['Battle the Flygon.']);
     const neither = choose(toOasis3('t36-none', 'You should turn back.'), 'gn-36-oasis-3', 'Good luck.').run;
     const fight = choose(neither, 'gn-36-hidden', 'Battle the Flygon.').run;
     expect(fight.battle!.enemyTeam[0]!.moves.map((m) => m.id)).toEqual(['earthquake', 'dragon-claw', 'sandstorm', 'roost']);
@@ -367,8 +473,12 @@ describe('gn.36 The Great Desert', () => {
     expect(scene(after, 'gn-36-after').intro).toMatch(/nothing on the rock/);
   });
 
-  it('afterstory: a postcard a region later, only if Idris reached the Flygon', () => {
-    expect(content.events.get('gn-36-postcard')!.intro).toMatch(/a pair of boots, side by side/);
+  it('afterstory: a postcard a region later, whoever walked with you, unless the Flygon was beaten', () => {
+    const card = content.events.get('gn-36-postcard')!;
+    expect(card.intro).toMatch(/a pair of boots, side by side/);
+    expect(JSON.stringify(card.requires)).not.toMatch(/desert-traveller-with/);
+    expect(card.requires).toContainEqual(expect.objectContaining({ kind: 'flag', key: 'desert-flygon', atLeast: 0, atMost: 1 }));
+    expect(card.requires).toContainEqual(expect.objectContaining({ kind: 'flag', key: 'desert-done', atLeast: 1 }));
   });
 });
 
@@ -402,14 +512,31 @@ describe('gn.37 The Haunted Mansion', () => {
   };
 
   it('a side branch at step 14 needing eerie or night, A6; the hall\'s portrait changes between visits', () => {
-    expect(content.coPlacement!.get('gn-37-door')).toMatchObject({ home: 14, window: [12, 17], sits: 'optional', attaches: 'instead', earliest: 6, tags: ['eerie|night'] });
+    expect(content.coPlacement!.get('gn-37-door')).toMatchObject({ home: 14, window: [12, 17], sits: 'side-branch', attaches: 'instead', earliest: 6, tags: ['eerie|night'] });
     let run = inside_('t37-hall');
     expect(scene(run, 'gn-37-hall').intro).toMatch(/stern/);
     run = choose(run, 'gn-37-hall', 'Scream back at the portrait.').run;
-    expect(scene(run, 'gn-37-hall').intro).toMatch(/looking at something to your left/);
     expect(flagOf(run, 'mansion-humoured')).toBe(1);
+    // Still the same visit (the kitchen is on the hall's floor): the portrait hasn't changed.
     run = choose(choose(run, 'gn-37-hall', 'Go into the kitchen.').run, 'gn-37-kitchen', 'Leave it hungry.').run;
+    expect(scene(run, 'gn-37-hall').intro).toMatch(/stern/);
+    expect(scene(run, 'gn-37-hall').intro).not.toMatch(/looking at something to your left/);
+    // Between visits: up to the library and back down, twice.
+    run = choose(choose(run, 'gn-37-hall', 'Go upstairs.').run, 'gn-37-library', 'Go back down to the hall.').run;
+    expect(scene(run, 'gn-37-hall').intro).toMatch(/looking at something to your left/);
+    run = choose(choose(run, 'gn-37-hall', 'Go upstairs.').run, 'gn-37-library', 'Go back down to the hall.').run;
     expect(scene(run, 'gn-37-hall').intro).toMatch(/asleep/);
+    expect(scene(run, 'gn-37-gallery').labels).toContain('Go back down to the hall.');
+  });
+
+  it('the Final Reunion: the mansion\'s windows are all lit; if it joined after the tea, the coat is still on the chair', () => {
+    const who = PEOPLE.find((x) => x.id === 'mimikyu')!;
+    expect(who.flags).toContain('mansion-done');
+    expect(who.good).toEqual(['mansion-end-waited']);
+    expect(who.line[0]).toMatch(/coat is folded, on a chair/);
+    const lit = PEOPLE.find((x) => x.id === 'windows')!;
+    expect(lit.flags).toContain('mansion-done');
+    expect(lit.line[0]).toMatch(/windows are all lit/);
   });
 
   it('a Berry lights the first lamp; the last page lights the second; the far door opens onto the room you just left, then leads on', () => {
@@ -447,6 +574,12 @@ describe('gn.37 The Haunted Mansion', () => {
     const uid = run.party[0]!.uid;
     const r = chooseEvent(content, run, side.id, 0, uid);
     expect(r.run.party.find((m) => m.uid === uid)!.moves.map((m) => m.id)).toContain('welcome-home');
+    // "The house is a rest node": the house is once a run, so the rest is taken now.
+    const hurt = structuredClone(run);
+    for (const m of hurt.party) m.hp = 1;
+    const rested = chooseEvent(content, hurt, side.id, 0, uid);
+    expect([rested.text, ...rested.changes].join(' ')).toMatch(/a place to rest/);
+    for (const m of rested.run.party) expect(m.hp).toBe(maxHp(content, m));
   });
 
   it('every Ghost-type you battled joins the owner\'s side, one at a time; won, it brings the coat', () => {
@@ -519,7 +652,7 @@ describe('gn.38 The Overgrown Laboratory', () => {
   const subject = (run: RunState): PokemonInstance | undefined => [...run.party, ...run.box].find((m) => m.gn?.includes('lab-subject'));
 
   it('a side branch at step 13, A9; a note at each node, less sure each time, counted once each', () => {
-    expect(content.coPlacement!.get('gn-38-door')).toMatchObject({ home: 13, window: [11, 16], sits: 'optional', attaches: 'instead', earliest: 9 });
+    expect(content.coPlacement!.get('gn-38-door')).toMatchObject({ home: 13, window: [11, 16], sits: 'side-branch', attaches: 'instead', earliest: 9 });
     const run = lab('t38-note');
     const r = choose(run, 'gn-38-reception', 'Read the note on the wall.');
     expect(said(r)).toMatch(/Project Lodestar\. Objective: the strongest Pokémon ever made/);
@@ -562,6 +695,15 @@ describe('gn.38 The Overgrown Laboratory', () => {
     expect(mon.eventBoosts?.atk).toBe(10);
     expect(mon.eventBoostsRegion?.atk).toBe(5);
     expect(flagOf(run, 'lab-end')).toBe(1);
+    // A regional variant: it takes a second type from the land outside the door (the stage's theme), for good.
+    const land = content.themes.get(run.stage!.themeId)!.types;
+    const own = getSpecies(content, mon.speciesId).types;
+    const gained = land.find((t) => !own.includes(t));
+    expect(gained).toBeTruthy();
+    expect(mon.shiftType).toBe(gained);
+    expect(ownTypes(content, mon)).toContain(gained);
+    // The other forms keep their own types.
+    expect(subject(ending('t38-leave-f', 'Help Dr. Marchetti-Ibe.'))!.shiftType).toBeUndefined();
   });
 
   it('the work finished: Specification, its highest stat 20% up and its lowest 10% down', () => {
@@ -581,10 +723,36 @@ describe('gn.38 The Overgrown Laboratory', () => {
     const her = ending('t38-sorry', 'Help Dr. Oyelaran-Shaw.');
     expect(subject(her)).toBeUndefined();
     expect(JSON.stringify(her)).toMatch(/card-key/);
+    expect(flagOf(her, 'lab-with-her')).toBe(1);
     const shut = ending('t38-shut', 'Shut the facility down.');
     expect(subject(shut)).toBeUndefined();
     expect(flagOf(shut, 'lab-end')).toBe(4);
     expect(content.events.get('gn-38-wild')!.intro).toMatch(/one you know/);
+  });
+
+  it('what you told it matters: it is said back when you step in, and "I\'ll stay with you a while" means it may not go with her', () => {
+    const last = toLast(lab('t38-answer'));
+    const stay = choose(last, 'gn-38-last', 'Stay here. I\'ll stay with you a while.').run;
+    const step = choose(stay, 'gn-38-researchers', 'Step in.');
+    expect(said(step)).toMatch(/You said you'd stay a while/);
+    const her = choose(step.run, 'gn-38-endings', 'Help Dr. Oyelaran-Shaw.');
+    expect(said(her)).toMatch(/it doesn't follow/);
+    expect(said(her)).not.toMatch(/it goes with her/);
+    expect(flagOf(her.run, 'lab-with-her')).toBe(0);
+    expect(JSON.stringify(her.run)).toMatch(/card-key/);
+    // Any other answer: it goes with her.
+    const dunno = choose(choose(toLast(lab('t38-answer-2')), 'gn-38-last', 'I don\'t know.').run, 'gn-38-researchers', 'Step in.');
+    expect(said(dunno)).toMatch(/You said you didn't know/);
+    expect(said(choose(dunno.run, 'gn-38-endings', 'Help Dr. Oyelaran-Shaw.'))).toMatch(/it goes with her/);
+  });
+
+  it('the map shows all five nodes', () => {
+    const run = lab('t38-map');
+    expect(run.stage!.pseudo?.id).toBe('ps_gn_lab');
+    expect(run.stage!.map.columns).toBe(5);
+    expect(run.stage!.map.nodes.map((n) => n.roomEvent)).toEqual(['gn-38-reception', 'gn-38-cells', 'gn-38-greenhouse', 'gn-38-control', 'gn-38-last']);
+    const control = toLast(run);
+    expect(control.stage!.map.nodes.find((n) => n.id === control.stage!.current)!.roomEvent).toBe('gn-38-last');
   });
 
   it('stay with it until it decides: two nodes pass, and it evolves by itself, Self-Made', () => {

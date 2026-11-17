@@ -113,6 +113,8 @@ export const PLACEMENT: Record<string, Placement> = {
   'gn-new-01-open': { ...BASE, beat: 1, attaches: 'after', beats: BEATS, note: 'Badge: a small brown paw. After the run\'s first encounter, so the first battle still starts. Once a run (the doc says once per save; no memory across runs). Best in a run\'s first or second region.' },
   ...Object.fromEntries(ADMIRERS.map((a, i) => [`gn-new-01-b${i + 1}`, { ...BASE, beat: i + 2, stages: [stageNo(a.stage)], beats: BEATS, ...(i === 0 ? { sits: 'must-see' as const } : { sits: 'optional' as const }) }])),
   'gn-new-01-end': { ...BASE, beat: 9, attaches: 'before', beats: BEATS, note: 'S8 step 19, at a + node if one is near.' },
+  // Afterstory: each admirer turned down is met once in a later region, at a step 5 town.
+  ...Object.fromEntries(ADMIRERS.map((x) => [`gn-new-01-after-${x.id}`, { gn: 'gn.new.01', shape: 'Single', earliest: 'A2', home: 5, window: [3, 8] as [number, number], sits: 'optional' as const, attaches: 'town' as const, tags: ['Reunion Episode'], level: 'None', often: 'run' as const, badge: 'own', note: 'Afterstory: met once in a later region, at a step 5 town.' }])),
 };
 
 export const CHAINS: Json[] = [];

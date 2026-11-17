@@ -5187,7 +5187,7 @@
     "tint": "#2a2418",
     "effect": "none"
    },
-   "intro": "The road you came by, walked the other way. Everything is smaller than it was.\n\nEach region goes by in a line. The bridge that sings. The pond shaped like a foot. A shed by the road with a sign on it.\nPeople you helped stand at the places where you met them, and wave.\n\nThen a gate, and a lane, and your house. There is a light on.",
+   "intro": "The road you came by, walked the other way. Everything is smaller than it was.\n\nEach region goes by in a line. The bridge that sings. The pond shaped like a foot. A shed by the road with a sign on it.\nPeople you helped stand at the places where you met them, and wave.\n\nThen a gate, and a lane, and your house. There is a light on.{followed:step}",
    "choices": [
     {
      "label": "Again.",

@@ -11,7 +11,7 @@ import { maxHp } from '../pokemon';
 import { newMon } from '../run';
 import type { PokemonInstance, RunState } from '../state';
 import { addItem } from '../items';
-import { SKY_BALANCE, SKY_FLY_ITEM, fearowLevel, fearowMoves, pidgeotLevel, pushRoom, skyOf, sparBoost } from './story';
+import { SKY_BALANCE, SKY_FLY_ITEM, fearowLevel, fearowMoves, pidgeotLevel, pushRoom, scheduleLevel, skyOf, sparBoost } from './story';
 import type { SkyState } from './state';
 import { DUEL_HEADER, duelResult, endingLine, finaleEnd } from './text';
 
@@ -47,7 +47,7 @@ export function prepareSpectate(content: Content, run: RunState, eventId: string
   if (!sky || !SPECTATE_EVENTS.has(eventId) || sky.stash) return;
   sky.stash = { party: structuredClone(run.party), inventory: structuredClone(run.inventory) };
   const finale = eventId === 'sky.finale';
-  const mon = newMon(content, run, finale ? 'pidgeot' : 'pidgey', finale ? pidgeotLevel(content, run, sky) : SKY_BALANCE.duelLevel, 'p');
+  const mon = newMon(content, run, finale ? 'pidgeot' : 'pidgey', finale ? pidgeotLevel(content, run, sky) : scheduleLevel(content, run), 'p');
   if (finale) {
     mon.fixedAbility = 'scrappy';
     mon.held = heldOf(sky.gifts);
@@ -66,7 +66,7 @@ export function shapeSpectateFoe(content: Content, run: RunState, sky: SkyState,
   const battle = run.battle;
   if (!battle) return;
   const finale = eventId === 'sky.finale';
-  const level = finale ? fearowLevel(content, run, sky) : SKY_BALANCE.duelLevel;
+  const level = finale ? fearowLevel(content, run, sky) : scheduleLevel(content, run);
   const foe = newMon(content, run, finale ? 'fearow' : 'spearow', level, 'e');
   if (finale) setMoves(content, foe, fearowMoves((run.stage?.index ?? 0) + 1));
   foe.hp = maxHp(content, foe);
@@ -86,12 +86,12 @@ export function endOwnWatch(run: RunState): void {
   delete sky.stash;
 }
 
-/** True when the scene must ask the player who to cheer for now: the finale, not asked yet, and Pidgeot is under the threshold. */
+/** True when the scene must ask the player who to cheer for now: the finale, not asked yet, and Pidgeot is at or under the threshold (1: always, before the first turn). */
 export function cheerDue(content: Content, run: RunState): boolean {
   const spec = run.battle?.spectate;
   if (!spec || spec.cheerAt === undefined || spec.cheered !== undefined || run.battle!.outcome) return false;
   const mon = run.party[run.battle!.activeIndex];
-  return !!mon && mon.hp > 0 && mon.hp / maxHp(content, mon) < spec.cheerAt;
+  return !!mon && mon.hp > 0 && mon.hp / maxHp(content, mon) <= spec.cheerAt;
 }
 
 /** The player's cheer: Pidgeot Mega Evolves from resolve alone, or Pidgeot is furious (Attack +2). */

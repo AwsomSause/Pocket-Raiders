@@ -5,7 +5,8 @@ import { createBattle, resolveTurn, startBattle, type BattleContext } from '../.
 import { createPokemon } from '../../src/core/pokemon';
 import { hashSeed, Rng } from '../../src/core/rng';
 import { content } from './helpers';
-import { choose, flagOf, gnRun, open, openSide, scene, setFlag, win } from './helpers/gnPlay';
+import { choose, flagOf, gnRun, lose, open, openSide, scene, setFlag, win } from './helpers/gnPlay';
+import { impAce } from '../../src/core/greenneedle/impersonator';
 
 const tell = (run: RunState, id: string, label: string): RunState => choose(run, id, label).run;
 /** The crowd, through the advice, to the first tell. */
@@ -51,11 +52,30 @@ describe('gn.57 The Pokémon Impersonator', () => {
     expect(flagOf(caught, 'impersonator-joined')).toBe(1);
   });
 
-  it('expose and beat it without a catch: the story ends and no Zoroark joins', () => {
+  it('expose and beat it without a catch: "It\'ll come." It joins all the same, once, with Many Faces', () => {
     const run = tell(tell(toVerdict('t57-beat'), 'gn-57-verdict', 'You\'re not the Champion.'), 'gn-57-fight', 'Battle.');
     const won = win(run);
-    expect([...won.party, ...won.box].some((m) => m.speciesId === 'zoroark')).toBe(false);
-    expect(flagOf(won, 'impersonator-joined')).toBe(0);
+    const joined = [...won.party, ...won.box].filter((m) => m.speciesId === 'zoroark');
+    expect(joined).toHaveLength(1);
+    expect(joined[0]!.fixedAbility).toBe('many-faces');
+    expect(flagOf(won, 'impersonator-joined')).toBe(1);
+  });
+
+  it('expose and lose: it gets away, and nothing joins', () => {
+    const run = tell(tell(toVerdict('t57-lost'), 'gn-57-verdict', 'You\'re not the Champion.'), 'gn-57-fight', 'Battle.');
+    const lost = lose(run);
+    expect([...lost.party, ...lost.box].some((m) => m.speciesId === 'zoroark')).toBe(false);
+    expect(flagOf(lost, 'impersonator-joined')).toBe(0);
+  });
+
+  it('the slip names a species this region\'s Champion never used, then the real ace', () => {
+    const run = toVerdict('t57-ace');
+    const { ace, wrong } = impAce(content, run);
+    expect(ace).not.toBe(wrong);
+    const text = scene(run, 'gn-57-tell-1').intro;
+    expect(text).toContain(`A ${wrong}, since you ask`);
+    expect(text).toContain(`A ${ace}.`);
+    expect(text).not.toContain('{imp:');
   });
 
   it('"Can I ask you something...": it guesses, then Expose or Play along', () => {

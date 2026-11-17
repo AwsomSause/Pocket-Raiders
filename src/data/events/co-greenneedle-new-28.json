@@ -223,7 +223,12 @@
       "effects": [
        {
         "kind": "money",
-        "amount": 300
+        "amount": 1200
+       },
+       {
+        "kind": "flag",
+        "key": "ring-done",
+        "amount": 1
        },
        {
         "kind": "moment",
@@ -322,12 +327,8 @@
         "types": [],
         "levelBonus": 0,
         "shinyMultiplier": 1,
-        "direct": true
-       },
-       {
-        "kind": "teachMove",
-        "move": "counter",
-        "species": "scrafty"
+        "direct": true,
+        "ability": "rope-a-dope"
        },
        {
         "kind": "flag",
@@ -415,6 +416,11 @@
         "kind": "flag",
         "key": "ring-done",
         "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "ring-freed-at"
        }
       ]
      }
@@ -443,6 +449,10 @@
       "text": "One lock. Another. The Machoke reaches the third one before you do and bends the bars apart with a grunt. The main bout reaches its roar, and the roar turns into something else. Chaos: crates over, lamps out, Lazenby shouting, the crowd running the wrong way. You run the other.",
       "effects": [
        {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
         "kind": "gn",
         "op": "scene",
         "key": "gn-new-28-chase"
@@ -454,7 +464,13 @@
      "label": "Leave them.",
      "success": {
       "text": "You can't. You know you can't. You walk back round the bridge with your hands empty and your stomach heavy.",
-      "effects": []
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ring-done",
+        "amount": 1
+       }
+      ]
      }
     }
    ]
@@ -489,12 +505,8 @@
         "types": [],
         "levelBonus": 0,
         "shinyMultiplier": 1,
-        "direct": true
-       },
-       {
-        "kind": "teachMove",
-        "move": "counter",
-        "species": "scrafty"
+        "direct": true,
+        "ability": "rope-a-dope"
        },
        {
         "kind": "flag",
@@ -520,6 +532,11 @@
         "kind": "gn",
         "op": "stampStage",
         "key": "ring-freed-at"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "ring-freed-region"
        },
        {
         "kind": "moment",
@@ -584,7 +601,7 @@
          "amount": 1
         }
        ],
-       "name": "Recruiter Lazenby",
+       "name": "The Recruiter",
        "classId": "roughneck",
        "size": 2,
        "types": [],
@@ -602,6 +619,91 @@
         }
        ]
       }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-28-owner",
+   "name": "A Face From Under the Bridge",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ring-knows-owner",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ring-freed",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "ring-freed-at"
+    },
+    {
+     "kind": "flag",
+     "key": "ring-owner-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3446",
+    "effect": "none"
+   },
+   "intro": "A man in an evil team's coat is talking to two tired trainers at the roadside, kindly, the way a man talks to a meter.\n\nA sandy moustache. A signet ring on the wrong hand. You sat ten feet from him, under a bridge, and he never once looked at you.\n\n*He is recruiting. He does not know your face. You know his.*",
+   "choices": [
+    {
+     "label": "Tell the two trainers who he is.",
+     "success": {
+      "text": "You say it plainly: the bridge, the cages, the shipment. The two trainers look at him, and then at their own Pokémon, and walk away. He watches you a long time. Now he knows your face too.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ring-owner-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Knew the owner of the ring under the bridge when he came recruiting",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep walking, and keep the face.",
+     "success": {
+      "text": "You walk by. He nods at you, politely, as at a stranger. You write down the coat, the road, and the hour.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ring-owner-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       }
+      ]
      }
     }
    ]
@@ -625,8 +727,8 @@
     },
     {
      "kind": "gn",
-     "test": "laterStage",
-     "key": "ring-freed-at"
+     "test": "regionChanged",
+     "key": "ring-freed-region"
     },
     {
      "kind": "flag",

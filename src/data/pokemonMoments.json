@@ -3522,6 +3522,10 @@
    },
    "trigger": "low",
    "chance": 0.5,
+   "chanceMark": {
+    "mark": "psyduck-headache",
+    "times": 2
+   },
    "hpBelow": 50,
    "effectText": "Below 50% HP: its next Psychic move does double damage.",
    "presentation": "Ring | \"It clutches its head.\"",

@@ -758,6 +758,10 @@
         },
         {
          "kind": "gn",
+         "op": "shutMarket"
+        },
+        {
+         "kind": "gn",
          "op": "scene",
          "key": "gn-11-retreat"
         }
@@ -807,6 +811,10 @@
          "kind": "flag",
          "key": "kaiju-lost",
          "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "shutMarket"
         },
         {
          "kind": "gn",
@@ -956,63 +964,81 @@
     {
      "label": "Cut the net.",
      "success": {
-      "text": "One of your Pokémon goes for the net. The rest stand between it and the Kaiju, which panics, swinging blind, because something is near its little one.\n\nTwo turns. The cords part. The net falls away.",
+      "text": "One of your Pokémon goes for the net. The rest stand between it and the Kaiju, which panics, swinging blind, because something is near its little one.\n\nTwo turns. That is how long the cords will take. Hold it off for two turns.",
       "effects": [
        {
-        "kind": "damage",
-        "share": 0.15
-       },
-       {
         "kind": "gn",
-        "op": "when",
-        "key": "kaiju-pylons",
-        "min": 1,
-        "then": [
-         {
-          "kind": "damage",
-          "share": 0.05
-         }
-        ],
-        "text": "It is angry from the pylons. Its swings land harder."
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "kaiju-pylons",
-        "min": 3,
-        "then": [
-         {
-          "kind": "damage",
-          "share": 0.05
-         }
-        ]
-       },
-       {
-        "kind": "flag",
-        "key": "kaiju-freed",
-        "amount": 1
-       },
-       {
-        "kind": "flag",
-        "key": "kanto-kaiju-won",
-        "amount": 1
-       },
-       {
-        "kind": "flag",
-        "key": "kaiju-done",
-        "amount": 1
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-11-freed"
+        "op": "kaijuCut"
        }
-      ]
+      ],
+      "battle": {
+       "kind": "raid",
+       "raidId": "kaiju-tentacruel",
+       "name": "Kaiju Tentacruel",
+       "levelBonus": -1,
+       "rule": {
+        "surviveTurns": 2
+       },
+       "flagMods": [
+        {
+         "flag": "kaiju-pylons",
+         "foeStages": {
+          "atk": 1
+         }
+        }
+       ],
+       "win": [
+        {
+         "kind": "gn",
+         "op": "kaijuBack"
+        },
+        {
+         "kind": "flag",
+         "key": "kaiju-freed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-kaiju-won",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kaiju-done",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-11-freed"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "kaijuBack"
+        },
+        {
+         "kind": "flag",
+         "key": "kaiju-lost",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "shutMarket"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-11-retreat"
+        }
+       ]
+      }
      },
      "showIf": [
       {
        "kind": "gn",
-       "test": "cutter"
+       "test": "netCutter"
       }
      ]
     },
@@ -1077,6 +1103,10 @@
         },
         {
          "kind": "gn",
+         "op": "shutMarket"
+        },
+        {
+         "kind": "gn",
          "op": "scene",
          "key": "gn-11-retreat"
         }
@@ -1133,7 +1163,7 @@
     {
      "label": "Hold out a hand.",
      "success": {
-      "text": "The small Tentacool drifts to you. Behind it, the Kaiju lowers itself, slowly, into the bay, watching the whole way down.\n\nIt is the one from the net. It stays.",
+      "text": "The cords part. The net falls away. The small Tentacool drifts to you. Behind it, the Kaiju lowers itself, slowly, into the bay, watching the whole way down.\n\nIt is the one from the net. It stays.",
       "effects": [
        {
         "kind": "gn",
@@ -1142,30 +1172,6 @@
         "min": 1,
         "then": [],
         "text": "**The girl with the Psyduck:** \"I said. I said it was looking.\""
-       },
-       {
-        "kind": "join",
-        "shadow": false,
-        "species": [
-         "tentacool"
-        ],
-        "types": [],
-        "levelBonus": -6,
-        "shinyMultiplier": 1,
-        "ability": "huge-power",
-        "moves": [
-         "liquidation"
-        ]
-       },
-       {
-        "kind": "item",
-        "id": "poison-barb",
-        "count": 1
-       },
-       {
-        "kind": "item",
-        "id": "mystic-water",
-        "count": 1
        },
        {
         "kind": "flag",
@@ -1435,6 +1441,137 @@
    ]
   },
   {
+   "id": "gn-11-anger",
+   "name": "The Harbour, Again",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Story",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "types": [
+    "water",
+    "poison"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kaiju-freed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "factory-left-running",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "kaiju-anger-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "kaiju-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "tentacruel",
+    "tint": "#23465a",
+    "effect": "none"
+   },
+   "intro": "The bay runs the colour of the factory's last night. A harbour bell is ringing, and this time nobody stops to look.\n\n*Out past the breakwater, something rises. You know its shape. It does not look at the reef. It does not look at anything.*\n\nIt let you take its little one, and then the water went bad again. It has come back to the harbour, and this time it isn't looking for anything.",
+   "choices": [
+    {
+     "label": "Stand on the sea wall.",
+     "success": {
+      "text": "You stand on the sea wall. It sees you. For a moment it stops, and you think it remembers.\n\nThen it comes on.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "tentacruel"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kaiju-anger-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kaiju-anger-held",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "The Kaiju came back angry, because the factory was still running. You held the sea wall.",
+         "importance": 70
+        }
+       ],
+       "rule": {
+        "giant": true,
+        "noCatch": true,
+        "foeStages": {
+         "atk": 1
+        }
+       },
+       "foeMoves": [
+        "wrap",
+        "acid-armor",
+        "hydro-pump",
+        "tidal-surge"
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "kaiju-anger-done",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "shutMarket"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Get people off the quay instead.",
+     "success": {
+      "text": "You do not fight it. You run along the quay shouting, and people run, and the stalls go over behind them.\n\nIt takes the pier again, and a warehouse, and goes. Nobody is hurt. The market will not open today.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kaiju-anger-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "shutMarket"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
    "id": "cs-kanto-vermilion-kaiju",
    "name": "Kaiju Tentacruel",
    "group": "Greenneedle",
@@ -1579,6 +1716,36 @@
         "kind": "flag",
         "key": "maiden-entered",
         "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "maiden-swap-1",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "maiden-swap-2",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "maiden-swap-3",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "maiden-tutor",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "maiden-roux-told",
+        "n": 0
        },
        {
         "kind": "gn",
@@ -1879,62 +2046,40 @@
    "intro": "Poké Balls, status cures, out-of-battle supplies. Prices are ten per cent higher than anywhere else; nobody minds.\n\nAt the end of the row, a veil turns a corner.",
    "choices": [
     {
-     "label": "Poké Balls ×5 (₽1,100)",
-     "requires": [
-      {
-       "kind": "money",
-       "atLeast": 1100
-      }
-     ],
+     "label": "The Poké Ball shelf.",
      "success": {
-      "text": "Five Poké Balls, wrapped in festival paper.",
+      "text": "Balls in paper cones, like sweets.",
       "effects": [
-       {
-        "kind": "money",
-        "amount": -1100
-       },
-       {
-        "kind": "item",
-        "id": "poke-ball",
-        "count": 5
-       },
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-12-lantern"
+        "key": "gn-12-lantern-balls"
        }
       ]
      }
     },
     {
-     "label": "Full Heal ×2 and Super Potion ×2 (₽1,540)",
-     "requires": [
-      {
-       "kind": "money",
-       "atLeast": 1540
-      }
-     ],
+     "label": "The status cures.",
      "success": {
-      "text": "The stallholder adds a lantern-shaped sweet for free.",
+      "text": "Brown bottles, each with a hand-written label.",
       "effects": [
-       {
-        "kind": "money",
-        "amount": -1540
-       },
-       {
-        "kind": "item",
-        "id": "full-heal",
-        "count": 2
-       },
-       {
-        "kind": "item",
-        "id": "super-potion",
-        "count": 2
-       },
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-12-lantern"
+        "key": "gn-12-lantern-cures"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The out-of-battle supplies.",
+     "success": {
+      "text": "Everything a trainer runs out of on the road.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-lantern-supplies"
        }
       ]
      }
@@ -1948,6 +2093,354 @@
         "kind": "gn",
         "op": "scene",
         "key": "gn-12-square"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-lantern-balls",
+   "name": "Lantern Row: The Poké Ball shelf",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "Every price card has the festival mark on it: ten per cent on top.",
+   "choices": [
+    {
+     "label": "A Poké Ball (₽220)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 220
+      }
+     ],
+     "success": {
+      "text": "Wrapped in festival paper, with a lantern-shaped sweet for free.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -220
+       },
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-lantern-balls"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Great Ball (₽660)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 660
+      }
+     ],
+     "success": {
+      "text": "Wrapped in festival paper, with a lantern-shaped sweet for free.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -660
+       },
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-lantern-balls"
+       }
+      ]
+     }
+    },
+    {
+     "label": "An Ultra Ball (₽880)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 880
+      }
+     ],
+     "success": {
+      "text": "Wrapped in festival paper, with a lantern-shaped sweet for free.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -880
+       },
+       {
+        "kind": "item",
+        "id": "ultra-ball",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-lantern-balls"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back along the row.",
+     "success": {
+      "text": "You step back under the lanterns.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-lantern"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-lantern-cures",
+   "name": "Lantern Row: The status cures",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "Every price card has the festival mark on it: ten per cent on top.",
+   "choices": [
+    {
+     "label": "A Full Heal (₽440)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 440
+      }
+     ],
+     "success": {
+      "text": "Wrapped in festival paper, with a lantern-shaped sweet for free.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -440
+       },
+       {
+        "kind": "item",
+        "id": "full-heal",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-lantern-cures"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Full Restore (₽3,300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 3300
+      }
+     ],
+     "success": {
+      "text": "Wrapped in festival paper, with a lantern-shaped sweet for free.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -3300
+       },
+       {
+        "kind": "item",
+        "id": "full-restore",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-lantern-cures"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Revive (₽2,200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2200
+      }
+     ],
+     "success": {
+      "text": "Wrapped in festival paper, with a lantern-shaped sweet for free.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2200
+       },
+       {
+        "kind": "item",
+        "id": "revive",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-lantern-cures"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back along the row.",
+     "success": {
+      "text": "You step back under the lanterns.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-lantern"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-lantern-supplies",
+   "name": "Lantern Row: The out-of-battle supplies",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "Every price card has the festival mark on it: ten per cent on top.",
+   "choices": [
+    {
+     "label": "A Potion (₽220)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 220
+      }
+     ],
+     "success": {
+      "text": "Wrapped in festival paper, with a lantern-shaped sweet for free.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -220
+       },
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-lantern-supplies"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Super Potion (₽770)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 770
+      }
+     ],
+     "success": {
+      "text": "Wrapped in festival paper, with a lantern-shaped sweet for free.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -770
+       },
+       {
+        "kind": "item",
+        "id": "super-potion",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-lantern-supplies"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Hyper Potion (₽2,750)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2750
+      }
+     ],
+     "success": {
+      "text": "Wrapped in festival paper, with a lantern-shaped sweet for free.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2750
+       },
+       {
+        "kind": "item",
+        "id": "hyper-potion",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-lantern-supplies"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back along the row.",
+     "success": {
+      "text": "You step back under the lanterns.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-lantern"
        }
       ]
      }
@@ -4271,12 +4764,25 @@
         "honest": true
        },
        {
+        "kind": "flag",
+        "key": "maiden-swap-1",
+        "amount": 1
+       },
+       {
         "kind": "gn",
         "op": "scene",
         "key": "gn-12-nature"
        }
       ]
-     }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "maiden-swap-1",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
     },
     {
      "label": "The second card: a little further off.",
@@ -4295,12 +4801,25 @@
         "honest": true
        },
        {
+        "kind": "flag",
+        "key": "maiden-swap-2",
+        "amount": 1
+       },
+       {
         "kind": "gn",
         "op": "scene",
         "key": "gn-12-nature"
        }
       ]
-     }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "maiden-swap-2",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
     },
     {
      "label": "The third card: anything goes.",
@@ -4319,12 +4838,25 @@
         "honest": true
        },
        {
+        "kind": "flag",
+        "key": "maiden-swap-3",
+        "amount": 1
+       },
+       {
         "kind": "gn",
         "op": "scene",
         "key": "gn-12-nature"
        }
       ]
-     }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "maiden-swap-3",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
     },
     {
      "label": "Back to the square.",
@@ -4360,9 +4892,153 @@
    "intro": "The trader's apprentice looks your new Pokémon over. \"First day with you. It could go a few ways. Which way do you want it to go?\"",
    "choices": [
     {
-     "label": "Bold and steady (Adamant).",
+     "label": "Stronger (Attack).",
+     "success": {
+      "text": "It flexes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-nature-atk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cleverer (Sp. Atk).",
+     "success": {
+      "text": "It sits down and thinks about it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-nature-spa"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Some other way.",
+     "success": {
+      "text": "\"There are other ways,\" says the apprentice.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-nature-more"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it as it is.",
+     "success": {
+      "text": "\"Good answer,\" says the apprentice.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-nature-more",
+   "name": "Swap Alley: A Choice of Nature",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "\"Quick, tough, or calm?\"",
+   "choices": [
+    {
+     "label": "Quicker (Speed).",
+     "success": {
+      "text": "It bounces, twice.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-nature-spe"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tougher (Defence).",
      "success": {
       "text": "It squares its shoulders.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-nature-def"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Calmer (Sp. Def).",
+     "success": {
+      "text": "It breathes out.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-nature-spd"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back.",
+     "success": {
+      "text": "\"Take your time. It will.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-nature"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-nature-atk",
+   "name": "Swap Alley: A Choice of Nature",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "\"And what does it give up for that? Everything gives up something.\"",
+   "choices": [
+    {
+     "label": "Adamant (less Sp. Atk).",
+     "success": {
+      "text": "The apprentice nods. \"That one. Yes. It was nearly that already.\"",
       "effects": [
        {
         "kind": "gn",
@@ -4378,14 +5054,14 @@
      }
     },
     {
-     "label": "Quick on its feet (Jolly).",
+     "label": "Brave (less Speed).",
      "success": {
-      "text": "It bounces, twice.",
+      "text": "The apprentice nods. \"That one. Yes. It was nearly that already.\"",
       "effects": [
        {
         "kind": "gn",
         "op": "natureLast",
-        "key": "jolly"
+        "key": "brave"
        },
        {
         "kind": "gn",
@@ -4396,9 +5072,65 @@
      }
     },
     {
-     "label": "Clever and careful (Modest).",
+     "label": "Lonely (less Defence).",
      "success": {
-      "text": "It sits down and thinks about it.",
+      "text": "The apprentice nods. \"That one. Yes. It was nearly that already.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "natureLast",
+        "key": "lonely"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Naughty (less Sp. Def).",
+     "success": {
+      "text": "The apprentice nods. \"That one. Yes. It was nearly that already.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "natureLast",
+        "key": "naughty"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-nature-spa",
+   "name": "Swap Alley: A Choice of Nature",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "\"And what does it give up for that? Everything gives up something.\"",
+   "choices": [
+    {
+     "label": "Modest (less Attack).",
+     "success": {
+      "text": "The apprentice nods. \"That one. Yes. It was nearly that already.\"",
       "effects": [
        {
         "kind": "gn",
@@ -4414,10 +5146,327 @@
      }
     },
     {
-     "label": "Leave it as it is.",
+     "label": "Quiet (less Speed).",
      "success": {
-      "text": "\"Good answer,\" says the apprentice.",
+      "text": "The apprentice nods. \"That one. Yes. It was nearly that already.\"",
       "effects": [
+       {
+        "kind": "gn",
+        "op": "natureLast",
+        "key": "quiet"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Mild (less Defence).",
+     "success": {
+      "text": "The apprentice nods. \"That one. Yes. It was nearly that already.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "natureLast",
+        "key": "mild"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rash (less Sp. Def).",
+     "success": {
+      "text": "The apprentice nods. \"That one. Yes. It was nearly that already.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "natureLast",
+        "key": "rash"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-nature-spe",
+   "name": "Swap Alley: A Choice of Nature",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "\"And what does it give up for that? Everything gives up something.\"",
+   "choices": [
+    {
+     "label": "Jolly (less Sp. Atk).",
+     "success": {
+      "text": "The apprentice nods. \"That one. Yes. It was nearly that already.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "natureLast",
+        "key": "jolly"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Timid (less Attack).",
+     "success": {
+      "text": "The apprentice nods. \"That one. Yes. It was nearly that already.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "natureLast",
+        "key": "timid"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hasty (less Defence).",
+     "success": {
+      "text": "The apprentice nods. \"That one. Yes. It was nearly that already.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "natureLast",
+        "key": "hasty"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Naive (less Sp. Def).",
+     "success": {
+      "text": "The apprentice nods. \"That one. Yes. It was nearly that already.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "natureLast",
+        "key": "naive"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-nature-def",
+   "name": "Swap Alley: A Choice of Nature",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "\"And what does it give up for that? Everything gives up something.\"",
+   "choices": [
+    {
+     "label": "Impish (less Sp. Atk).",
+     "success": {
+      "text": "The apprentice nods. \"That one. Yes. It was nearly that already.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "natureLast",
+        "key": "impish"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bold (less Attack).",
+     "success": {
+      "text": "The apprentice nods. \"That one. Yes. It was nearly that already.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "natureLast",
+        "key": "bold"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Relaxed (less Speed).",
+     "success": {
+      "text": "The apprentice nods. \"That one. Yes. It was nearly that already.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "natureLast",
+        "key": "relaxed"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lax (less Sp. Def).",
+     "success": {
+      "text": "The apprentice nods. \"That one. Yes. It was nearly that already.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "natureLast",
+        "key": "lax"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-nature-spd",
+   "name": "Swap Alley: A Choice of Nature",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "\"And what does it give up for that? Everything gives up something.\"",
+   "choices": [
+    {
+     "label": "Careful (less Sp. Atk).",
+     "success": {
+      "text": "The apprentice nods. \"That one. Yes. It was nearly that already.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "natureLast",
+        "key": "careful"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Calm (less Attack).",
+     "success": {
+      "text": "The apprentice nods. \"That one. Yes. It was nearly that already.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "natureLast",
+        "key": "calm"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sassy (less Speed).",
+     "success": {
+      "text": "The apprentice nods. \"That one. Yes. It was nearly that already.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "natureLast",
+        "key": "sassy"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Gentle (less Defence).",
+     "success": {
+      "text": "The apprentice nods. \"That one. Yes. It was nearly that already.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "natureLast",
+        "key": "gentle"
+       },
        {
         "kind": "gn",
         "op": "scene",
@@ -4507,27 +5556,14 @@
      }
     },
     {
-     "label": "The Egg Move Tutor (₽1,000)",
-     "requires": [
-      {
-       "kind": "money",
-       "atLeast": 1000
-      }
-     ],
+     "label": "The Egg Move Tutor.",
      "success": {
-      "text": "The old man whispers a secret to your lead. It looks at you, startled, as if it had always known.",
+      "text": "The old man looks your lead over, and names his price. \"The rarer it is, the older the secret.\"",
       "effects": [
-       {
-        "kind": "money",
-        "amount": -1000
-       },
-       {
-        "kind": "eggMove"
-       },
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-12-eggs"
+        "key": "gn-12-tutor"
        }
       ]
      }
@@ -4541,6 +5577,182 @@
         "kind": "gn",
         "op": "scene",
         "key": "gn-12-square-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tutor",
+   "name": "Egg Row: The Egg Move Tutor",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "togepi",
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "One egg move a visit, for your lead. He charges by how rare the Pokémon is: ₽600 for a common one, ₽1,200 for an uncommon or rare one, ₽2,400 for anything rarer.",
+   "choices": [
+    {
+     "label": "Pay him (₽600).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 600
+      }
+     ],
+     "success": {
+      "text": "The old man whispers a secret to your lead. It looks at you, startled, as if it had always known.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -600
+       },
+       {
+        "kind": "eggMove"
+       },
+       {
+        "kind": "flag",
+        "key": "maiden-tutor",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-eggs"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "maiden-tutor",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "gn",
+       "test": "leadRarity",
+       "types": [
+        "common"
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Pay him (₽1,200).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "The old man whispers a secret to your lead. It looks at you, startled, as if it had always known.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "eggMove"
+       },
+       {
+        "kind": "flag",
+        "key": "maiden-tutor",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-eggs"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "maiden-tutor",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "gn",
+       "test": "leadRarity",
+       "types": [
+        "uncommon",
+        "rare"
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Pay him (₽2,400).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2400
+      }
+     ],
+     "success": {
+      "text": "The old man whispers a secret to your lead. It looks at you, startled, as if it had always known.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2400
+       },
+       {
+        "kind": "eggMove"
+       },
+       {
+        "kind": "flag",
+        "key": "maiden-tutor",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-eggs"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "maiden-tutor",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "gn",
+       "test": "leadRarity",
+       "types": [
+        "veryRare",
+        "epic",
+        "legendary",
+        "mythical",
+        "special"
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Back to the row.",
+     "success": {
+      "text": "\"One a visit,\" he says. \"It's a lot to carry.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-eggs"
        }
       ]
      }
@@ -4898,20 +6110,10 @@
    "intro": "**Madame Roux**, in a different shawl. She does not look up from the cards.\n\n\"One true thing about where you're going next. Only one. The rest you can find out like everybody else.\"",
    "choices": [
     {
-     "label": "Cross her palm (₽600)",
-     "requires": [
-      {
-       "kind": "money",
-       "atLeast": 600
-      }
-     ],
+     "label": "Ask for the one true thing.",
      "success": {
       "text": "She turns one card, and tells you a true thing. You will remember it on the next stage.",
       "effects": [
-       {
-        "kind": "money",
-        "amount": -600
-       },
        {
         "kind": "gn",
         "op": "pick",
@@ -4965,12 +6167,25 @@
         ]
        },
        {
+        "kind": "flag",
+        "key": "maiden-roux-told",
+        "amount": 1
+       },
+       {
         "kind": "gn",
         "op": "scene",
         "key": "gn-12-roux"
        }
       ]
-     }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "maiden-roux-told",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
     },
     {
      "label": "Back to the square.",
@@ -5683,6 +6898,11 @@
        },
        {
         "kind": "gn",
+        "op": "stampStage",
+        "key": "maiden-hms-at"
+       },
+       {
+        "kind": "gn",
         "op": "when",
         "key": "maiden-right",
         "min": 2,
@@ -5726,6 +6946,111 @@
        "id": "fairium-z"
       }
      ]
+    }
+   ]
+  },
+  {
+   "id": "gn-12-hms",
+   "name": "The Lady's HMs",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "callback": true,
+   "types": [
+    "fairy"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kanto-maiden-hms",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "notThisStage",
+     "key": "maiden-hms-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "Three discs, pale pink, that never seem to wear out: HM Dazzling Gleam, HM Play Rough, HM Moonblast.\n\nEach can be used again and again, on any Pokémon that can learn the move.",
+   "choices": [
+    {
+     "label": "Use HM Dazzling Gleam.",
+     "success": {
+      "text": "The disc hums. It is not used up.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "hm-dazzling-gleam",
+        "count": 1
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "gn-12-hms"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use HM Play Rough.",
+     "success": {
+      "text": "The disc hums. It is not used up.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "hm-play-rough",
+        "count": 1
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "gn-12-hms"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use HM Moonblast.",
+     "success": {
+      "text": "The disc hums. It is not used up.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "hm-moonblast",
+        "count": 1
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "gn-12-hms"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put them away.",
+     "success": {
+      "text": "You put the three discs back in their case. They will be there.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "maiden-hms-at"
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "gn-12-hms"
+       }
+      ]
+     }
     }
    ]
   },
@@ -5907,6 +7232,36 @@
         "kind": "flag",
         "key": "maiden-entered",
         "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "maiden-swap-1",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "maiden-swap-2",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "maiden-swap-3",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "maiden-tutor",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "maiden-roux-told",
+        "n": 0
        },
        {
         "kind": "gn",
@@ -6897,13 +8252,27 @@
     "Pokémon",
     "Evil Team"
    ],
+   "remembers": [
+    {
+     "id": "two",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flight-shiny-came",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "**Meowth:** \"Dere's TWO of 'em?!\"\n\n**All three:** \"We're blasting off agaaaain!\"\n\nYou open the cage. Your team pours out, every one of them talking at once, and every one of them at full strength.\n\n*The shiny one's waiting, on a branch, looking north.*"
+    }
+   ],
    "room": true,
    "scene": {
     "cast": [],
     "tint": "#2f5d73",
     "effect": "none"
    },
-   "intro": "**Meowth:** \"Dere's TWO of 'em?!\"\n\n**All three:** \"We're blasting off agaaaain!\"\n\nYou open the cage. Your team pours out, every one of them talking at once, and every one of them at full strength.\n\n*The shiny one's waiting, on a branch, looking north.*",
+   "intro": "**All three:** \"We're blasting off agaaaain!\"\n\nYou open the cage. Your team pours out, every one of them talking at once, and every one of them at full strength.\n\n*The shiny one's waiting, on a branch, looking north.*",
    "choices": [
     {
      "label": "Say goodbye.",
@@ -6939,6 +8308,56 @@
        },
        {
         "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-13-sky",
+   "name": "A Shape in the Sky",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Evil Team"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "forced": true,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "flightReleased"
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "flight-sky-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "High above, a small winged shape crosses the sky from south to north and does not stop.\n\nTwo rising notes come down on the wind, very faint. You would know them anywhere.",
+   "choices": [
+    {
+     "label": "Watch it go.",
+     "success": {
+      "text": "You watch until it is too small to see. Then you watch a little longer.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "flight-sky-at"
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "gn-13-sky"
        }
       ]
      }
@@ -7395,6 +8814,10 @@
     },
     {
      "label": "Walk to your left.",
+     "prompt": {
+      "id": "mirror-walk",
+      "needs": "ok"
+     },
      "success": {
       "text": "Your reflection walks the other way, right up to the lantern, and puts its hand on it.\n\nThe glass lets go of the light. One of the waving shapes at the end of the corridor stops waving and comes to you.",
       "effects": [
@@ -7422,6 +8845,20 @@
        {
         "kind": "addEvent",
         "eventId": "gn-14-n3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You start the right way, and drift. Your reflection stops a pace short of the lantern. The glass ripples like a laugh, and something cold shoves the ghost back to the start.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-14-n2"
        }
       ]
      }
@@ -7940,6 +9377,10 @@
    "choices": [
     {
      "label": "Step where it steps.",
+     "prompt": {
+      "id": "floating-tiles",
+      "needs": "ok"
+     },
      "success": {
       "text": "You put your feet exactly where it floats. Not one tile tips.\n\nAt the far side, it stops under the drawing of itself. It looks at the gold star for a long time.",
       "effects": [
@@ -7967,6 +9408,20 @@
        {
         "kind": "addEvent",
         "eventId": "gn-14-n6"
+       }
+      ]
+     },
+     "failure": {
+      "text": "One foot lands a hand's width off. The tile tips. You fall a long way, slowly, and land at the start. The ghost comes down after you, holding your sleeve.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-14-n5"
        }
       ]
      }
@@ -8036,7 +9491,7 @@
         "key": "lost-mon",
         "min": 1,
         "then": [],
-        "text": "The grave has a name on it. You know the name. The ghost floats over and stays by it, very still, for as long as you need."
+        "text": "The grave has a name on it. {lost:name} The ghost floats over and stays by it, very still, for as long as you need."
        },
        {
         "kind": "gn",
@@ -8699,7 +10154,8 @@
         "noCatch": true,
         "myStages": {
          "def": -2
-        }
+        },
+        "foeOpensLine": "Mankey opens with Screech! Your lead flinches; its guard drops."
        }
       }
      }
@@ -8924,16 +10380,10 @@
    "intro": "The four crawl back behind it. The fifth hasn't moved since the start.\n\n*It stands in front of them, with its arms out.*\n\nIt doesn't attack. It's waiting to see what you do.",
    "choices": [
     {
-     "label": "Attack it.",
+     "label": "Step up to it.",
      "success": {
-      "text": "It doesn't move out of the way. When it does fight back, it fights like a Primeape, and it's furious.",
-      "effects": [
-       {
-        "kind": "flag",
-        "key": "mankey-hit-fifth",
-        "amount": 1
-       }
-      ],
+      "text": "It doesn't move out of the way. It doesn't attack. It stands in front of the others with its arms out, and waits to see what you do.",
+      "effects": [],
       "battle": {
        "kind": "wild",
        "species": [
@@ -8944,13 +10394,49 @@
        "shinyMultiplier": 1,
        "win": [
         {
-         "kind": "flag",
-         "key": "mankey-fifth-beaten",
-         "amount": 1
+         "kind": "gn",
+         "op": "when",
+         "key": "mankey-waited-out",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "mankey-waited",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "mankey-fifth-earned",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-15-reward"
+          }
+         ]
         },
         {
-         "kind": "addEvent",
-         "eventId": "gn-15-reward"
+         "kind": "gn",
+         "op": "when",
+         "key": "mankey-waited-out",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "mankey-fifth-beaten",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "mankey-hit-fifth",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-15-reward"
+          }
+         ]
         }
        ],
        "friendly": true,
@@ -8965,7 +10451,7 @@
        ],
        "rule": {
         "noCatch": true,
-        "foeStands": 1,
+        "waits": 2,
         "foeStages": {
          "atk": 1,
          "def": 1,
@@ -8973,129 +10459,27 @@
         }
        }
       }
-     }
-    },
-    {
-     "label": "Wait.",
-     "branches": [
+     },
+     "showIf": [
       {
-       "when": [
-        {
-         "kind": "flag",
-         "key": "fed-poochyena",
-         "atLeast": 1,
-         "atMost": 99
-        }
-       ],
-       "text": "*It looks at you. It looks at the bag.*\n\nThen it looks at your face, for a long time. It's seen that look before. You gave a starving Poochyena your lunch once, and it shows.\n\n*It lowers its arms.*\n\nIt doesn't trust you. It watches every step you take. But it lets you pass, and it lets the four crawl back behind it.",
-       "effects": [
-        {
-         "kind": "flag",
-         "key": "mankey-waited",
-         "amount": 1
-        },
-        {
-         "kind": "flag",
-         "key": "mankey-fifth-earned",
-         "amount": 1
-        },
-        {
-         "kind": "addEvent",
-         "eventId": "gn-15-reward"
-        }
-       ]
+       "kind": "flag",
+       "key": "fed-poochyena",
+       "atLeast": 0,
+       "atMost": 0
       },
       {
-       "when": [
-        {
-         "kind": "flag",
-         "key": "egg-returned",
-         "atLeast": 1,
-         "atMost": 99
-        }
-       ],
-       "text": "*It looks at you. It looks at the bag.*\n\nThen it looks at your face, for a long time. It's seen that look before. You rolled a stolen Egg back to its parents once, and it shows.\n\n*It lowers its arms.*\n\nIt doesn't trust you. It watches every step you take. But it lets you pass, and it lets the four crawl back behind it.",
-       "effects": [
-        {
-         "kind": "flag",
-         "key": "mankey-waited",
-         "amount": 1
-        },
-        {
-         "kind": "flag",
-         "key": "mankey-fifth-earned",
-         "amount": 1
-        },
-        {
-         "kind": "addEvent",
-         "eventId": "gn-15-reward"
-        }
-       ]
+       "kind": "flag",
+       "key": "egg-returned",
+       "atLeast": 0,
+       "atMost": 0
       }
-     ],
-     "success": {
-      "text": "*It looks at you. It looks at the bag. It makes a small, tired sound.*\n\n*The other four are thin. You can see that now.*",
-      "effects": [
-       {
-        "kind": "addEvent",
-        "eventId": "gn-15-fifth-2"
-       }
-      ]
-     }
-    }
-   ]
-  },
-  {
-   "id": "gn-15-fifth-2",
-   "name": "Route 25: The Fifth",
-   "group": "Greenneedle",
-   "tags": [
-    "Combat",
-    "Pokémon",
-    "Story"
-   ],
-   "room": true,
-   "scene": {
-    "cast": [],
-    "pokemon": "mankey",
-    "tint": "#6b4a3a",
-    "effect": "none"
-   },
-   "intro": "It still has its arms out. They're shaking now. It's been holding them up for a long time.",
-   "choices": [
-    {
-     "label": "Wait.",
-     "success": {
-      "text": "*It lowers its arms.*\n\nIt doesn't trust you. It watches every step you take. But it lets you pass, and it lets the four crawl back behind it.",
-      "effects": [
-       {
-        "kind": "flag",
-        "key": "mankey-waited",
-        "amount": 1
-       },
-       {
-        "kind": "flag",
-        "key": "mankey-fifth-earned",
-        "amount": 1
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "gn-15-reward"
-       }
-      ]
-     }
+     ]
     },
     {
-     "label": "Attack it.",
+     "label": "Step up to it.",
      "success": {
-      "text": "It doesn't move out of the way. When it does fight back, it fights like a Primeape, and it's furious.",
-      "effects": [
-       {
-        "kind": "flag",
-        "key": "mankey-hit-fifth",
-        "amount": 1
-       }
-      ],
+      "text": "It doesn't move out of the way. It doesn't attack. It stands in front of the others with its arms out, and waits to see what you do.\n\nIt looks at your face, for a long time. It's seen that look before. You gave a starving Poochyena your lunch once, and it shows.",
+      "effects": [],
       "battle": {
        "kind": "wild",
        "species": [
@@ -9106,13 +10490,49 @@
        "shinyMultiplier": 1,
        "win": [
         {
-         "kind": "flag",
-         "key": "mankey-fifth-beaten",
-         "amount": 1
+         "kind": "gn",
+         "op": "when",
+         "key": "mankey-waited-out",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "mankey-waited",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "mankey-fifth-earned",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-15-reward"
+          }
+         ]
         },
         {
-         "kind": "addEvent",
-         "eventId": "gn-15-reward"
+         "kind": "gn",
+         "op": "when",
+         "key": "mankey-waited-out",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "mankey-fifth-beaten",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "mankey-hit-fifth",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-15-reward"
+          }
+         ]
         }
        ],
        "friendly": true,
@@ -9127,7 +10547,7 @@
        ],
        "rule": {
         "noCatch": true,
-        "foeStands": 1,
+        "waits": 1,
         "foeStages": {
          "atk": 1,
          "def": 1,
@@ -9135,7 +10555,111 @@
         }
        }
       }
-     }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "fed-poochyena",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Step up to it.",
+     "success": {
+      "text": "It doesn't move out of the way. It doesn't attack. It stands in front of the others with its arms out, and waits to see what you do.\n\nIt looks at your face, for a long time. It's seen that look before. You rolled a stolen Egg back to its parents once, and it shows.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "mankey"
+       ],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "mankey-waited-out",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "mankey-waited",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "mankey-fifth-earned",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-15-reward"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "mankey-waited-out",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "mankey-fifth-beaten",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "mankey-hit-fifth",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-15-reward"
+          }
+         ]
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-15-driven"
+        }
+       ],
+       "foeMoves": [
+        "rage"
+       ],
+       "rule": {
+        "noCatch": true,
+        "waits": 1,
+        "foeStages": {
+         "atk": 1,
+         "def": 1,
+         "spe": 1
+        }
+       }
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "fed-poochyena",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "egg-returned",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
     }
    ]
   },

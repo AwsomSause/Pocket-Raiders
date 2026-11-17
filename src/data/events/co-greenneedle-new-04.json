@@ -140,45 +140,7 @@
    "intro": "*At the roadside, a figure in a dojo coat is waiting with their arms folded. Sensei Oyelowo, who has been following you for a mile, pretending not to.*\n\n**Sensei Oyelowo:** \"That was a kick. That was MY kick.\"\n\nThe Tyrogue looks from the master to you, and waits to be told what it did.",
    "choices": [
     {
-     "label": "Take the lesson.",
-     "success": {
-      "text": "He shows it one low kick, slowly, three times, with his whole face. It copies him exactly, down to the face. He weeps a little.",
-      "effects": [
-       {
-        "kind": "teachMove",
-        "move": "low-kick",
-        "mark": "tyrogue-three"
-       },
-       {
-        "kind": "gn",
-        "op": "tyrTally",
-        "key": "kick",
-        "n": 1
-       }
-      ]
-     }
-    },
-    {
-     "label": "Tell him he's right.",
-     "success": {
-      "text": "He turns to the road, arms wide, and tells it. The Tyrogue looks very pleased, and slightly embarrassed on his behalf.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "tyrTally",
-        "key": "kick",
-        "n": 2
-       },
-       {
-        "kind": "friendship",
-        "amount": 5,
-        "who": "lead"
-       }
-      ]
-     }
-    },
-    {
-     "label": "Stay out of it.",
+     "label": "Leave them to it.",
      "success": {
       "text": "You step back and let them have it out. The master explains his kick to the Tyrogue, and the Tyrogue nods, as if it has heard.",
       "effects": []
@@ -252,45 +214,7 @@
    "intro": "*At the roadside, a figure in a dojo coat is waiting with their arms folded. Sensei Brannigan, who has been following you for a mile, pretending not to.*\n\n**Sensei Brannigan:** \"He's lying. It punched.\"\n\nThe Tyrogue looks from the master to you, and waits to be told what it did.",
    "choices": [
     {
-     "label": "Take the lesson.",
-     "success": {
-      "text": "He throws one punch so fast the air snaps. The Tyrogue blinks, throws one back, and nearly falls over. He claps, once.",
-      "effects": [
-       {
-        "kind": "teachMove",
-        "move": "mach-punch",
-        "mark": "tyrogue-three"
-       },
-       {
-        "kind": "gn",
-        "op": "tyrTally",
-        "key": "punch",
-        "n": 1
-       }
-      ]
-     }
-    },
-    {
-     "label": "Tell him he's right.",
-     "success": {
-      "text": "He folds his arms, nods, and tells the road he never doubted it. He has doubted it for four hours. He tells no one.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "tyrTally",
-        "key": "punch",
-        "n": 2
-       },
-       {
-        "kind": "friendship",
-        "amount": 5,
-        "who": "lead"
-       }
-      ]
-     }
-    },
-    {
-     "label": "Stay out of it.",
+     "label": "Leave them to it.",
      "success": {
       "text": "You take a step back. Brannigan says \"it punched\" three more times, to three different Pokémon, none of whom asked.",
       "effects": []
@@ -364,45 +288,7 @@
    "intro": "*At the roadside, a figure in a dojo coat is waiting with their arms folded. Sensei Tachibana, who has been following you for a mile, pretending not to.*\n\n**Sensei Tachibana:** \"It didn't fall over. That's mine.\"\n\nThe Tyrogue looks from the master to you, and waits to be told what it did.",
    "choices": [
     {
-     "label": "Take the lesson.",
-     "success": {
-      "text": "She spins once on one heel, and sets down again exactly where she began. The Tyrogue tries. It lands a foot to the left, delighted.",
-      "effects": [
-       {
-        "kind": "teachMove",
-        "move": "rapid-spin",
-        "mark": "tyrogue-three"
-       },
-       {
-        "kind": "gn",
-        "op": "tyrTally",
-        "key": "stand",
-        "n": 1
-       }
-      ]
-     }
-    },
-    {
-     "label": "Tell him he's right.",
-     "success": {
-      "text": "She turns a full circle, very slowly, so everyone can see how right she is. A man on a bicycle slows down to watch.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "tyrTally",
-        "key": "stand",
-        "n": 2
-       },
-       {
-        "kind": "friendship",
-        "amount": 5,
-        "who": "lead"
-       }
-      ]
-     }
-    },
-    {
-     "label": "Stay out of it.",
+     "label": "Leave them to it.",
      "success": {
       "text": "You let her have the road. She spins quietly in the middle of it, and the Tyrogue spins beside her, a little behind.",
       "effects": []

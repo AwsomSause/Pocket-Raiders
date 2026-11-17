@@ -57,6 +57,20 @@ const FALL_RESET: Json[] = [
   setTo('village-standing', 0), setTo('gn-st-trust', 0), setTo('gn-st-chose', 0), setTo('gn-st-failed', 0),
   setTo('gn-st-water', 0), setTo('gn-st-snivy-miss', 0), setTo('gn-st-chiko-thanked', 0),
 ];
+const VILLAGE_RESET: Json[] = [setTo('gn-village-sat', 0), ...['pool', 'shrine', 'legend', 'mill', 'hat', 'food'].map((k) => setTo(`gn-village-went-${k}`, 0))];
+/** Where you can walk to in the village, each once a visit (the hub's choices): key, label, room, the walk there. */
+const VILLAGE_PLACES: [string, string, string, string][] = [
+  ['pool', 'Go to the Healing Pool.', 'gn-06-pool', 'You follow the steam, down between the houses.'],
+  ['shrine', 'Go to the Berry Shrine.', 'gn-06-shrine', 'You walk out to the edge of the orchard.'],
+  ['legend', "Sit by Granny Tamsel's fire.", 'gn-06-legend', 'You find a place by the fire.'],
+  ['mill', 'Go to the mill.', 'gn-06-task-mill', 'You walk down to the stopped wheel.'],
+  ['hat', 'Talk to the small boy.', 'gn-06-task-hat', 'A small boy is standing very still in the lane, looking at nothing.'],
+  ['food', 'Go to the long table.', 'gn-06-task-food', 'Under the trees, they are laying the long table.'],
+];
+/** Back to the village square (the hub). */
+const BACK: Json = scene('gn-06-village');
+/** A Berry in the bag, or held by one of the team (gn op `payBerry` takes it). */
+const HAS_BERRY: Json = { kind: 'gn', test: 'holdsBerry' };
 const FALL: Json[] = [
   flag('kanto-bridge-fell'), flag('gn-bridge-fell-count'),
   pick('gn-village-starter', 1, 1, 1, 1, 1, 1, 1, 1, 1),
@@ -71,6 +85,7 @@ const CROSS = (): Json => ch('Step onto the bridge.', out(
   when('gn-bridge-held', { min: 0, max: 0 }, [roll('gn-bridge-fall', 50)]),
   when('gn-bridge-held', { min: 1 }, [roll('gn-bridge-fall', 75)]),
   when('gn-bridge-fall', { min: 1 }, FALL_RESET),
+  when('gn-bridge-fall', { min: 1 }, VILLAGE_RESET),
   when('gn-bridge-fall', { min: 1 }, FALL, 'A plank goes. Then the rope. The river comes up fast. Dark. Then birdsong, and the smell of woodsmoke, and your lead licking your face.'),
   when('gn-bridge-fall', { min: 0, max: 0 }, HOLD, 'It holds. The ropes are older than they look. Next time, perhaps not.'),
 ));
@@ -158,10 +173,7 @@ const gn06: Json[] = [
     'Stone steps, worn into dips, and nobody has swept them for a very long time. Moss in every crack.',
     'At the top of the first flight, a carved post. A leaf. And under the leaf, a hand, held up, palm out. Not *stop*, exactly. More like *wait*.',
   ), [
-    ch('Climb the steps.', fight(
-      'You climb. Something that lives on the steps does not like being climbed past.',
-      inside(eitherWay(wild({ types: ['grass', 'bug'], lv: 0, win: [room('gn-06-mill')] }))),
-    )),
+    ch('Climb the steps.', out('You climb. The steps go on a long way. Nothing stops you. At the top, the smell of woodsmoke.', room('gn-06-mill'))),
   ]),
   rm('gn-06-mill', 'The Mill', gorge({ effect: 'none' }), say(
     'Smoke, first. Then a waterwheel, stopped, with river weed wound through its paddles. Then roofs: low, mossy, close together, like people keeping warm.',
@@ -176,57 +188,67 @@ const gn06: Json[] = [
     'A few houses, a mill, a pool that steams in the cool air. People who are not on any map, and would like to keep it that way.',
     '**Granny Tamsel:** "You fell. Everyone who comes here fell. Sit. Eat. Then we\'ll see about a rope."',
   ), [
-    ch('Sit, and eat.', out(
+    chIf([not('gn-village-sat')], 'Sit, and eat.', out(
       'You sit. Somebody puts a bowl in your hands. It is hot, and plain, and the best thing you have eaten in weeks. Around you the village goes back to its day, and lets you be part of it.',
+      flag('gn-village-sat'),
       ...STARTERS.map((s) => when('gn-village-starter', { min: s.n, max: s.n }, [partyHas('gn-st-family', ...s.family), when(`gn-st-${s.id}-joined`, { min: 0, max: 0 }, [scene(s.first)])])),
-      scene('gn-06-pool'), scene('gn-06-shrine'), scene('gn-06-legend'),
-      scene('gn-06-task-mill'), scene('gn-06-task-hat'), scene('gn-06-task-food'),
-      scene('gn-06-rope'),
+      BACK,
     )),
+    chIf([is('gn-village-sat')], 'Walk round the village.', out('You get up and walk. Nobody minds where you go.', scene('gn-06-walk'))),
+    chIf([is('gn-village-sat')], 'See who needs a hand.', out('There is always something that needs doing, in a place this small.', scene('gn-06-tasks'))),
+    chIf([is('gn-village-sat')], 'Go to the rope.', out('Granny Tamsel walks you to the foot of the cliff, where the rope hangs down.', scene('gn-06-rope'))),
+  ]),
+  rm('gn-06-walk', 'The Hidden Village: Round the Houses', gorge({ effect: 'none' }), 'A pool that steams. A little roofed shelf at the edge of the orchard. A fire, with an old woman beside it.', [
+    ...VILLAGE_PLACES.slice(0, 3).map(([key, label, to, text]) => chIf([not(`gn-village-went-${key}`)], label, out(text, flag(`gn-village-went-${key}`), scene(to)))),
+    ch('Back to the square.', out('You walk back to the middle of the village.', BACK)),
+  ]),
+  rm('gn-06-tasks', 'The Hidden Village: A Hand', gorge({ effect: 'none' }), 'A stopped waterwheel. A small boy standing very still in the lane. A long table being laid under the trees.', [
+    ...VILLAGE_PLACES.slice(3).map(([key, label, to, text]) => chIf([not(`gn-village-went-${key}`)], label, out(text, flag(`gn-village-went-${key}`), scene(to)))),
+    ch('Back to the square.', out('You walk back to the middle of the village.', BACK)),
   ]),
   rm('gn-06-pool', 'The Healing Pool', gorge({ effect: 'sparkle' }), say(
     'A pool in a ring of flat stones, steaming. The water is the colour of weak tea and smells of moss. A child is sitting with her feet in it.',
     '**Child:** "It fixes things. Not everything. Most things."',
-  ), [ch('Let your team rest in it.', out('One by one they wade in, and one by one their shoulders come down. When they climb out, every scrape is gone. The pool is a little cloudier. It will clear by morning.', heal(1)))]),
+  ), [ch('Let your team rest in it.', out('One by one they wade in, and one by one their shoulders come down. When they climb out, every scrape is gone. The pool is a little cloudier. It will clear by morning.', heal(1), BACK))]),
   rm('gn-06-shrine', 'The Berry Shrine', gorge({ effect: 'none' }), say(
     'A little roofed shelf at the edge of the orchard, with a bowl on it. In the bowl, Berries. Next to the bowl, a carved hand, palm up.',
     'There is no one watching it. There does not need to be.',
-  ), [ch('Take one for each of your team.', out('One each. You count twice, to be sure. The carved hand does not mind.', itemEach('oran-berry')))]),
+  ), [ch('Take one for each of your team.', out('One each. You count twice, to be sure. The carved hand does not mind.', itemEach('oran-berry'), BACK))]),
   rm('gn-06-legend', "Granny Tamsel's Legend", gorge({ cast: [], effect: 'none' }), say(
     'In the evening, by the fire, Granny Tamsel tells the story the village always tells.',
     '**Granny Tamsel:** "Nine little green ones, from nine far places. Each one fell, the way you did. Each one stayed."',
     '**Granny Tamsel:** "They don\'t belong to us. We belong to them, a bit. One lives here now. It will look at you."',
     '**Granny Tamsel:** "If it likes what it sees, it goes with you. We never give them. They go."',
-  ), [ch('Listen until the fire is low.', out('By the time she stops, half the village is asleep where they sit. You are not. You are thinking about being looked at.', intel(1)))]),
+  ), [ch('Listen until the fire is low.', out('By the time she stops, half the village is asleep where they sit. You are not. You are thinking about being looked at.', intel(1), BACK))]),
   rm('gn-06-task-mill', 'Mend the Mill', gorge({ effect: 'none' }), say(
     'The waterwheel has stopped. River weed has wound itself through the paddles, thick as rope, and the miller stands looking at it with his hands on his hips.',
     '**The miller:** "Every spring. Every single spring."',
   ), [
-    chIf([{ kind: 'partyTypes', types: ['water', 'grass', 'fighting'] }], 'Send a Pokémon in to clear it.', out('Your Pokémon goes at the weed like it has a grudge. In a few minutes the wheel shudders, and turns, and the whole village looks up at the sound.', ...STANDING('gn-village-mill'))),
-    ch('Clear it yourself, by hand.', out('It takes the whole afternoon. Your hands are green to the wrist. When the wheel finally turns, the miller shakes one of them anyway.', ...STANDING('gn-village-mill'))),
+    chIf([{ kind: 'partyTypes', types: ['water', 'grass', 'fighting'] }], 'Send a Pokémon in to clear it.', out('Your Pokémon goes at the weed like it has a grudge. In a few minutes the wheel shudders, and turns, and the whole village looks up at the sound.', ...STANDING('gn-village-mill'), BACK)),
+    ch('Clear it yourself, by hand.', out('It takes the whole afternoon. Your hands are green to the wrist. When the wheel finally turns, the miller shakes one of them anyway.', ...STANDING('gn-village-mill'), BACK)),
   ]),
   rm('gn-06-task-hat', 'Find the Hat', gorge({ effect: 'none' }), say(
     'A small boy, Pip-Tamsel, has lost his straw hat. He is not crying. He is very nearly crying, and he would like you to know that he is not.',
     '**Pip:** "It was my grandad\'s. It\'s too big. I was growing into it."',
   ), [ch('Help him look.', out('You look in the stream, on the mill roof, and under every bush he points at.', pick('gn-village-hat', 1, 1, 1),
-    when('gn-village-hat', { min: 1, max: 1 }, [...STANDING('gn-village-hat')], 'It is in the stream, caught on a stone. You fish it out. Pip puts it on wet, and it comes down over his eyes, and he does not care.'),
-    when('gn-village-hat', { min: 2, max: 2 }, [...STANDING('gn-village-hat')], 'It is on the mill roof. You climb. You do not look down. Pip claps when you hand it over.'),
+    when('gn-village-hat', { min: 1, max: 1 }, [...STANDING('gn-village-hat'), BACK], 'It is in the stream, caught on a stone. You fish it out. Pip puts it on wet, and it comes down over his eyes, and he does not care.'),
+    when('gn-village-hat', { min: 2, max: 2 }, [...STANDING('gn-village-hat'), BACK], 'It is on the mill roof. You climb. You do not look down. Pip claps when you hand it over.'),
     when('gn-village-hat', { min: 3, max: 3 }, [scene('gn-06-task-lotad')], 'It is on the head of a wild Lotad, sitting in the shallows, looking extremely pleased with itself.'),
   ))]),
   rm('gn-06-task-lotad', 'The Lotad in the Hat', gorge({ pokemon: 'lotad', effect: 'none' }), say(
     'The Lotad wears the hat the way a king wears a crown. It has never owned anything before. You can tell.',
     'Pip looks at the Lotad. The Lotad looks at Pip.',
   ), [
-    ch('Trade it a Berry.', out('You hold out a Berry. The Lotad thinks about it for a long time, then tips its head, and the hat slides off into Pip\'s arms. It eats the Berry like it has won.', ...STANDING('gn-village-hat'))),
-    ch('Let it keep it; weave him a new one.', out('You sit with Pip by the water and weave reeds until your fingers ache. The new hat is lopsided. He loves it more than the old one, and will not say so.', ...STANDING('gn-village-hat'))),
+    chIf([HAS_BERRY], 'Trade it a Berry.', out('You hold out a Berry. The Lotad thinks about it for a long time, then tips its head, and the hat slides off into Pip\'s arms. It eats the Berry like it has won.', gn('payBerry'), ...STANDING('gn-village-hat'), BACK)),
+    ch('Let it keep it; weave him a new one.', out('You sit with Pip by the water and weave reeds until your fingers ache. The new hat is lopsided. He loves it more than the old one, and will not say so.', ...STANDING('gn-village-hat'), BACK)),
   ]),
   rm('gn-06-task-food', 'Share Food', gorge({ effect: 'none' }), say(
     'At dusk the village eats together, at one long table under the trees. Everybody brings something. Nobody checks.',
     '**Granny Tamsel:** "Sit down, then. You\'re making the place look untidy."',
   ), [
-    ch('Put in a Berry.', out('You put a Berry in the big bowl in the middle. Somebody cuts it into enough pieces for everyone, somehow.', ...STANDING('gn-village-food'))),
-    ch('Cook something.', out('You cook. It is not very good. Everybody eats it anyway, and the miller asks for more, which is either kindness or a very strange palate.', ...STANDING('gn-village-food'))),
-    ch('Just sit down when asked.', out('You sit. You eat what you are given. You laugh when the others laugh. That, it turns out, was the task.', ...STANDING('gn-village-food'))),
+    chIf([HAS_BERRY], 'Put in a Berry.', out('You put a Berry in the big bowl in the middle. Somebody cuts it into enough pieces for everyone, somehow.', gn('payBerry'), ...STANDING('gn-village-food'), BACK)),
+    ch('Cook something.', out('You cook. It is not very good. Everybody eats it anyway, and the miller asks for more, which is either kindness or a very strange palate.', ...STANDING('gn-village-food'), BACK)),
+    ch('Just sit down when asked.', out('You sit. You eat what you are given. You laugh when the others laugh. That, it turns out, was the task.', ...STANDING('gn-village-food'), BACK)),
   ]),
 
   // ---- leaving ----
@@ -245,6 +267,7 @@ const gn06: Json[] = [
       ], `Halfway up, the weight on your bag shifts, and something small and green settles against your neck. At the top, the ${s.name} looks back down the gorge once. Then it looks at you, and that is that.`)])),
       flag('kanto-hidden-done'), setTo('gn-village-afterstory', 1), leavePseudo(),
     )),
+    ch('Not yet.', out('You let go of the rope. The village is still there behind you.', BACK)),
   ]),
 
   // ---- afterstory: the traveller with a notebook (later in the same region) ----
@@ -319,23 +342,20 @@ const starterEpisodes: Json[] = [
     ['Look at the cork.', false, 'It is a cork. The Chikorita had already seen it. It waits for you to catch up, and you do not.'],
   ])),
 
-  // Treecko: a three-tap rooftop race against the elder, then "Plant a cutting."
+  // Treecko: a three-tap timing run across the rooftops against the elder (prompt roof-leap, one tap a roof), then "Plant a cutting."
   st(tre, '', 'The Dying Tree', say(
     'A Treecko will not leave an old tree at the edge of the village. The tree is nearly gone: grey bark, three green leaves.',
     'To speak to it, says the village, you must first beat the Treecko elder across the rooftops. The elder is already waiting on the first roof.',
   ), [ch('Climb up and race.', out('The elder flicks its tail: go.', scene('gn-06-st-treecko-2')))]),
-  st(tre, '-2', 'The Rooftops: First Gap', say('The first gap. The roof on the far side is lower, and wet.'), quiz([scene('gn-06-st-treecko-3')], FAILED(tre), [
-    ['Jump now.', true, 'You land, skid, keep going. The elder glances back, surprised.'],
-    ['Wait a beat.', false, 'The elder is already two roofs on. You will not catch it now.'],
-  ])),
-  st(tre, '-3', 'The Rooftops: The Long Roof', say('A long roof, a loose tile halfway along, and the elder going straight over it without slowing.'), quiz([scene('gn-06-st-treecko-4')], FAILED(tre), [
-    ['Go round the loose tile.', true, 'Round it, and on. You lose a step. You keep your feet.'],
-    ['Follow the elder straight over.', false, 'The tile goes. So do you, very nearly. By the time you are up, the race is over.'],
-  ])),
-  st(tre, '-4', 'The Rooftops: The Last Leap', say('The last roof, and the old tree beyond it. The elder is beside you, neck and neck.'), quiz([scene('gn-06-st-treecko-5')], FAILED(tre), [
-    ['Wait a beat, then jump.', true, 'The elder jumps first, too early, and has to scramble. You land clean. It looks at you a long time, then steps aside.'],
-    ['Jump now.', false, 'Too early. You catch the edge, and hang there, and the elder looks down at you, not unkindly.'],
-  ])),
+  st(tre, '-2', 'The Rooftops: First Gap', say('The first gap. The roof on the far side is lower, and wet. The elder is already in the air.'), [
+    ch('Jump.', out('You land, skid, keep going. The elder glances back, surprised.', scene('gn-06-st-treecko-3')), { prompt: { id: 'roof-leap', needs: 'ok' }, fail: out('A beat late. The elder is already two roofs on. You will not catch it now.', ...FAILED(tre)) }),
+  ]),
+  st(tre, '-3', 'The Rooftops: The Long Roof', say('A long roof, a loose tile halfway along, and the elder going straight over it without slowing.'), [
+    ch('Jump the loose tile.', out('Over it, and on. You lose a step. You keep your feet.', scene('gn-06-st-treecko-4')), { prompt: { id: 'roof-leap', needs: 'ok' }, fail: out('The tile goes. So do you, very nearly. By the time you are up, the race is over.', ...FAILED(tre)) }),
+  ]),
+  st(tre, '-4', 'The Rooftops: The Last Leap', say('The last roof, and the old tree beyond it. The elder is beside you, neck and neck.'), [
+    ch('Jump.', out('The elder jumps first, too early, and has to scramble. You land clean. It looks at you a long time, then steps aside.', scene('gn-06-st-treecko-5')), { prompt: { id: 'roof-leap', needs: 'ok' }, fail: out('Too early. You catch the edge, and hang there, and the elder looks down at you, not unkindly.', ...FAILED(tre)) }),
+  ]),
   st(tre, '-5', 'The Old Tree', say(
     'The Treecko sits in the last fork of the old tree, among the three green leaves. It lets you come close.',
     'You can see, now, that it is not guarding the tree. It is keeping it company.',
@@ -402,23 +422,20 @@ const starterEpisodes: Json[] = [
     ['Pecha and Tamato.', false, 'Its quills go up all at once. Nobody eats that.'],
   ])),
 
-  // Rowlet: a night patrol past three sleepers without waking the village, then lift it out of the chimney.
+  // Rowlet: a night patrol past three sleepers without waking the village (prompt night-tiptoe at each), then lift it out of the chimney.
   st(row, '', 'The Rescue', say(
     'A Rowlet is stuck in a chimney. It is asleep. It has been asleep, the village thinks, for two days.',
     'The chimney is on the far side of the village. To get there at night, you must pass three sleeping Pokémon without waking anyone.',
   ), [ch('Go at midnight.', out('The moon is thin. Everything is very quiet, and very close.', scene('gn-06-st-rowlet-2')))]),
-  st(row, '-2', 'The Night Patrol: the Snorlax', say('A Snorlax across the path, snoring like a bellows.'), quiz([scene('gn-06-st-rowlet-3')], FAILED(row), [
-    ['Climb over it, softly.', false, 'Its eyes open. It sits up. So does every light in the village.'],
-    ['Go round by the fence.', true, 'Round by the fence, between the posts. It snores on.'],
-  ])),
-  st(row, '-3', 'The Night Patrol: the Growlithe', say('A Growlithe asleep on a step, one ear twitching.'), quiz([scene('gn-06-st-rowlet-4')], FAILED(row), [
-    ['Walk past downwind.', true, 'The wind takes your smell away. The ear stops twitching.'],
-    ['Walk past quickly.', false, 'It wakes, and barks, and barks.'],
-  ])),
-  st(row, '-4', 'The Night Patrol: the Hoothoot', say('A Hoothoot on the chimney\'s own roof, eyes shut, one foot tucked up.'), quiz([scene('gn-06-st-rowlet-5')], FAILED(row), [
-    ['Wait for it to turn its head.', true, 'It turns its head, all the way round, the other way. You climb.'],
-    ['Climb while it sleeps.', false, 'Hoothoot never fully sleep. It hoots. Lights come on.'],
-  ])),
+  st(row, '-2', 'The Night Patrol: the Snorlax', say('A Snorlax across the path, snoring like a bellows. The only way is round by the fence, between the posts, slowly.'), [
+    ch('Creep round by the fence.', out('Round by the fence, between the posts. It snores on.', scene('gn-06-st-rowlet-3')), { prompt: { id: 'night-tiptoe', needs: 'ok' }, fail: out('Your foot finds the one dry stick. Its eyes open. It sits up. So does every light in the village.', ...FAILED(row)) }),
+  ]),
+  st(row, '-3', 'The Night Patrol: the Growlithe', say('A Growlithe asleep on a step, one ear twitching. You are downwind. You only have to be slow.'), [
+    ch('Walk past, downwind.', out('The wind takes your smell away. The ear stops twitching.', scene('gn-06-st-rowlet-4')), { prompt: { id: 'night-tiptoe', needs: 'ok' }, fail: out('Too quick. It wakes, and barks, and barks.', ...FAILED(row)) }),
+  ]),
+  st(row, '-4', 'The Night Patrol: the Hoothoot', say('A Hoothoot on the chimney\'s own roof, eyes shut, one foot tucked up. Hoothoot never fully sleep. You wait for it to turn its head.'), [
+    ch('Climb while its head is turned.', out('It turns its head, all the way round, the other way. You climb.', scene('gn-06-st-rowlet-5')), { prompt: { id: 'night-tiptoe', needs: 'ok' }, fail: out('You move a breath too soon. It hoots. Lights come on.', ...FAILED(row)) }),
+  ]),
   st(row, '-5', 'The Chimney', say('You reach down into the chimney. Feathers. Warm. Still asleep.'), [
     ch('Lift it out.', out('You lift it out. It does not wake. You carry it home and put it on your bag, and go to sleep. In the morning it is on your head, awake, looking around as if it has always lived there.', ...TRUSTED(row))),
   ]),
@@ -432,11 +449,9 @@ const starterEpisodes: Json[] = [
   ]),
   st(gro, '-3', 'The Drum Pattern', say(
     'It plays a pattern on the stumps, and holds the stick out to you. *Long. Short. Short. Long.* Your turn.',
-  ), quiz(TRUSTED(gro), FAILED(gro), [
-    ['Long, short, short, long.', true, 'You play it back. It plays it again, louder, faster, and the whole village starts clapping along. It finds the beat. It keeps it. It keeps you.'],
-    ['Short, long, long, short.', false, 'It stops. It looks at the stick. The beat falls apart again.'],
-    ['Long, long, short, short.', false, 'Close. Not close enough. It sits back down on its stump.'],
-  ])),
+  ), [
+    ch('Play it back.', out('You play it back. It plays it again, louder, faster, and the whole village starts clapping along. It finds the beat. It keeps it. It keeps you.', ...TRUSTED(gro)), { prompt: { id: 'stump-drum', needs: 'ok' }, fail: out('Close. Not close enough. It stops. It looks at the stick. The beat falls apart again.', ...FAILED(gro)) }),
+  ]),
 
   // Sprigatito: it steals your Berry. A three-node chase; catching it isn't the win, sitting down and ignoring it is.
   st(spr, '', 'The Thief', say(
@@ -626,7 +641,7 @@ const HOSE_LINE = '*The Squad opens with the hose!* A jet of cold water hits you
 const lesser = (win: Json[]): Json => ({ ...inside(eitherWay({ ...wild({ species: ['squirtle'], lv: -1, win }), look: 'squad-lesser' })), rule: HOSE, pseudo: false, friendly: true });
 const squadFight = (n: number, next: string, label = 'Take on the next one.'): Json =>
   rm(`gn-08-fight-${n}`, `The Squad: Fight ${n}`, squad({ cast: [] }), say(
-    n === 1 ? 'One of them hops down off the wall, pushes its shades up its nose, and points at you. A challenge. The others cheer.' : 'Another one hops down. The others cheer exactly as loudly as last time.',
+    n === 1 ? 'One of them steps out in front of the others, pushes its shades up its nose, and points at you. A challenge. The others cheer.' : 'Another one steps out. The others cheer exactly as loudly as last time.',
   ), [ch(label, fight(HOSE_LINE, lesser([scene(next)])))]);
 
 const gn08: Json[] = [
@@ -647,23 +662,23 @@ const gn08: Json[] = [
     'Officer Jenny has already rounded up the Lesser members. They sit in a row on the kerb, shades off, sulking.',
     'Only the Leader is left: a Wartortle, on the roof of the fire station, arms folded. It is not coming down.',
     '**Officer Jenny:** "It won\'t come down for me. Maybe it\'ll come down for a trainer."',
-  ), [ch('Sit down with the Lesser members first.', out('You sit on the kerb. They shuffle along to make room, suspicious.', setTo('squad-standoff-talk', 1), scene('gn-08-specs')))]),
+  ), [ch('Sit down with the Lesser members first.', out('You sit on the kerb. They shuffle along to make room, suspicious. Then one of them stands up, and Officer Jenny lets it.', scene('gn-08-fight-1')))]),
 
   squadFight(1, 'gn-08-specs'),
   rm('gn-08-specs', 'Specs', squad(), say(
     'One of them is patting its face, looking for its shades. They are on the back of its head.',
     'The others are trying very hard not to laugh.',
   ), [
-    ch('Tell it where they are.', out('It reaches round, finds them, and goes very red. The others laugh after all. It does not look at you again.', when('squad-standoff-talk', { min: 1 }, [scene('gn-08-tank')]), when('squad-standoff-talk', { min: 0, max: 0 }, [scene('gn-08-fight-2')]))),
-    ch('Hand it a spare pair.', out('You hand it a spare pair of sunglasses, and say nothing. It puts them on. Now it has two. It looks extremely cool. It knows.', ...RESPECT, when('squad-standoff-talk', { min: 1 }, [scene('gn-08-tank')]), when('squad-standoff-talk', { min: 0, max: 0 }, [scene('gn-08-fight-2')]))),
+    ch('Tell it where they are.', out('It reaches round, finds them, and goes very red. The others laugh after all. It does not look at you again.', scene('gn-08-fight-2'))),
+    ch('Hand it a spare pair.', out('You hand it a spare pair of sunglasses, and say nothing. It puts them on. Now it has two. It looks extremely cool. It knows.', ...RESPECT, scene('gn-08-fight-2'))),
   ]),
   squadFight(2, 'gn-08-tank'),
   rm('gn-08-tank', 'Tank', squad(), say(
     'The biggest one plants its elbow on an upturned crate and looks at you. An arm-wrestle. It is very sure it is the strongest.',
     'It isn\'t.',
   ), [
-    ch('Lose, on purpose, with a straight face.', out('You strain. You grit your teeth. You lose. *(It flexes. It looks at the others. They\'re impressed. It looks at you, and, very slightly, nods.)*', ...RESPECT, when('squad-standoff-talk', { min: 1 }, [scene('gn-08-smoulder')]), when('squad-standoff-talk', { min: 0, max: 0 }, [scene('gn-08-fight-3')]))),
-    ch('Win.', out('You win, easily. It stares at its own arm as if it has betrayed it. Nobody says anything for a while.', when('squad-standoff-talk', { min: 1 }, [scene('gn-08-smoulder')]), when('squad-standoff-talk', { min: 0, max: 0 }, [scene('gn-08-fight-3')]))),
+    ch('Lose, on purpose, with a straight face.', out('You strain. You grit your teeth. You lose. *(It flexes. It looks at the others. They\'re impressed. It looks at you, and, very slightly, nods.)*', ...RESPECT, scene('gn-08-fight-3'))),
+    ch('Win.', out('You win, easily. It stares at its own arm as if it has betrayed it. Nobody says anything for a while.', scene('gn-08-fight-3'))),
   ]),
   squadFight(3, 'gn-08-smoulder'),
   rm('gn-08-smoulder', 'Smoulder', squad(), say(
@@ -677,8 +692,7 @@ const gn08: Json[] = [
     'One of them has climbed onto a crate. It clears its throat. It has a routine.',
     'It is not ready. You can tell from the first spin.',
   ), [
-    ch('Watch all of it. Clap.', out('You watch every second of it. You clap at the end. *(It bows too low and falls off the crate. It gets up as if that was the ending.)*', ...RESPECT,
-      when('squad-standoff-talk', { min: 1 }, [scene('gn-08-leader')]), when('squad-standoff-talk', { min: 0, max: 0 }, [scene('gn-08-leader')]))),
+    ch('Watch all of it. Clap.', out('You watch every second of it. You clap at the end. *(It bows too low and falls off the crate. It gets up as if that was the ending.)*', ...RESPECT, scene('gn-08-leader'))),
     ch('Look away halfway through.', out('You look away at the wrong moment. When you look back it is sitting on the crate, very still, and the routine is over.', scene('gn-08-leader'))),
   ]),
   rm('gn-08-leader', 'The Leader', squad({ pokemon: 'wartortle' }), say(
@@ -703,7 +717,7 @@ const gn08: Json[] = [
     '*The Squad looks at the smoke. They look at the Leader. Smoulder\'s shaking.*',
   ), [
     ch("You're the fire brigade, aren't you?", out('The Leader salutes. They put it out in a line, passing water hand to hand, as if they have always known how. One by one, the town opens its shutters.', flag('squad-fire-brigade'), scene('gn-08-recruit'))),
-    ch("I'll handle it.", out('Your Water-types do it. The Squad stands in the street and watches. They are quieter, after.', flag('squad-fire-player'), scene('gn-08-recruit'))),
+    chIf([{ kind: 'partyType', type: 'water' }], "I'll handle it.", out('Your Water-types do it. The Squad stands in the street and watches. They are quieter, after.', flag('squad-fire-player'), scene('gn-08-recruit'))),
     ch('Smoulder, with me.', out('It goes, behind your leg, the whole way. And at the end, when there is one flame left, it steps out and puts it out itself.', flag('squad-fire-smoulder'), ...RESPECT, scene('gn-08-recruit'))),
   ]),
   rm('gn-08-recruit', 'One of the Squad', squad(), say(
@@ -747,7 +761,7 @@ const BILL_DOOR_CHOICES: Json[] = [
   ch('Look for the lighthouse.', out('You wait for dark. The beacon is only visible at night, and even then only from the right places.', flag('bill-done'), room('gn-09-search'))),
   ch('Not tonight.', leave('You leave the cape behind you. Out at sea, the blinking goes on without you.')),
 ];
-/** The search: five signs, three right readings find the beacon; a wrong one costs a node of walking. */
+/** The search: five signs, three right readings find the beacon; a wrong one costs a node of walking (never a fight, and the night never ends early). */
 const CLUES: [string, string, string, string, string][] = [
   ['A Light on the Sea', 'A light out on the sea, blinking. It looks like a ship. It looks like it is the beacon.', 'Follow the gaps, not the flashes.', 'Follow the flashes.', 'It is a reflection. The gaps between the flashes line up with something on land, further round the cape.'],
   ["A Ship's Horn", "A ship's horn, out in the dark. Long, and low.", 'Turn round.', 'Walk towards the horn.', 'It is answering something behind you. You turn round, and there, faint on the headland, is a blink of light.'],
@@ -759,7 +773,7 @@ const clueRoom = (n: number): Json => {
   const [name, intro, right, wrong, rightText] = CLUES[n - 1]!;
   return rm(`gn-09-clue-${n}`, `The Search: ${name}`, cape(), intro, [
     ch(right, out(rightText, flag('bill-clues'), flag('bill-read'), scene('gn-09-search'))),
-    ch(wrong, out('You go the wrong way, and you only know it after an hour of walking.', flag('bill-read'), scene('gn-09-walk'))),
+    ch(wrong, out('You go the wrong way, and you only know it after an hour of walking.', flag('bill-read'), flag('bill-wrong'), scene('gn-09-walk'))),
   ]);
 };
 const SIGNAL_CRIES = ['A low call, like a horn.', 'A rising song.', "Something that isn't in the Pokédex."];
@@ -770,7 +784,7 @@ const signalRoom = (n: number, pattern: string, next: Json[]): Json => rm(`gn-09
   ? out('You play the cry out to sea. Far off, something answers in the same voice, and goes quiet, satisfied. Bill writes it down.', flag('bill-matched'), ...next)
   : out('The wrong cry goes out over the water. The thing answers anyway, puzzled, a little slower. Bill writes that down too.', ...next))));
 const BILL_REWARD: Json[] = [
-  flag('kanto-bill-pc'), flag('kanto-ssanne-ticket'), item('bills-pc'), item('ss-ticket'), item('bills-recorder'), { kind: 'eggMove' },
+  flag('kanto-bill-pc'), flag('kanto-ssanne-ticket'), item('bills-pc'), item('ss-ticket'), item('bills-recorder'), gn('eggNotes'),
   stampRegion('bill-region'), moment("You saw what answers Bill's lighthouse.", 70), leavePseudo(),
 ];
 const SURFACED = [
@@ -788,12 +802,12 @@ const gn09: Json[] = [
   ), [
     chIf([is('bill-clues', 3)], 'Follow the beacon.', out('There it is: the lamp, on the point, blinking. You can see the path up to it now.', room('gn-09-shore'))),
     chIf([is('bill-clues', 0, 2), is('bill-read', 0, 4)], 'Read the next sign.', out('You look for the next sign.', ...CLUES.map((_, i) => when('bill-read', { min: i, max: i }, [scene(`gn-09-clue-${i + 1}`)])))),
-    chIf([is('bill-clues', 0, 2), is('bill-read', 5)], 'Give up for tonight.', out('The sky goes grey before you find it. The beacon fades into the morning, and the cape is just a cape again.', leavePseudo())),
+    chIf([is('bill-clues', 0, 2), is('bill-read', 5)], 'Walk back to the first sign.', out('Five signs, and not enough of them read right. The night is long. You walk back along the shore to where you started, and look again.', setTo('bill-read', 0), setTo('bill-clues', 0), scene('gn-09-search'))),
   ]),
   ...[1, 2, 3, 4, 5].map(clueRoom),
   rm('gn-09-walk', 'The Long Way Round', cape(), say(
-    'The wrong way is a long way. The shore goes on in the dark, and something on it does not want you there.',
-  ), [ch('Push on.', fight('A wild Pokémon comes up out of the surf at you.', inside(eitherWay(wild({ types: ['water'], lv: -1, win: [scene('gn-09-search')] })))))]),
+    'The wrong way is a long way. The shore goes on in the dark, and the beacon is no nearer.',
+  ), [ch('Walk back.', out('It costs you the walk, and nothing else. You come back to the signs with sand in your shoes.', scene('gn-09-search')))]),
   rm('gn-09-shore', 'The Shore', cape(), say(
     '*Thirty wild Pokémon on the sand, facing the sea. None of them looks round.*',
     '*Under the surface, something passes. It takes a long time to finish passing.*',
@@ -857,6 +871,7 @@ const KANTO_BILL: Json = { ...gev('cs-kanto-cerulean-bill', "Bill's Lighthouse",
 const SHIP_TINT = '#2f5d73';
 const ship = (o: Json = {}): Json => ({ tint: SHIP_TINT, tags: ['Dungeon', 'Story', 'Trainer'], effect: 'none', ...o });
 const DECKS = ['Lower', 'Main', 'Upper'] as const;
+const RQ = (o: Json): Json => ({ kind: 'rivalQuest', ...o });
 /** Who you fight at each node (Sailor Dobbs-Leary takes the last node of every deck). */
 const DECK_TRAINERS: { name: string; cls?: string; types: string[]; line: string }[] = [
   { name: 'Sailor', types: ['water', 'fighting'], line: 'A sailor coiling rope looks up and grins. "Passenger! Fancy a scrap before supper?"' },
@@ -872,10 +887,11 @@ const DECK_TRAINERS: { name: string; cls?: string; types: string[]; line: string
   { name: 'Veteran', cls: 'veteran', types: ['fighting', 'steel'], line: 'In the captain\'s corridor, a veteran stands guard. "The captain is resting. You\'ll have to get past me."' },
   { name: 'Officer', types: ['water', 'flying'], line: 'The first officer straightens his cap. "Last cabin before the bridge. Let\'s do this properly."' },
 ];
-const DOBBS = [
+/** `learned`: he's learned from what beat him. If your party has a `sees`-type, he brings `types` built against it. */
+const DOBBS: { lv: number; size: number; types: string[]; line: string; after: string; learned?: { sees: string; types: string[] } }[] = [
   { lv: -1, size: 2, types: ['water'], line: '**Sailor Dobbs-Leary:** "Dobbs-Leary, able seaman! Fancy a battle? Course you do."', after: '**Dobbs-Leary:** "Ha! Lost. Right. See you upstairs."' },
-  { lv: 0, size: 3, types: ['water', 'grass'], line: '**Dobbs-Leary:** "I\'ve been thinking about that Water move of yours."', after: '**Dobbs-Leary:** "Still not enough. Still! Upstairs, then."' },
-  { lv: 1, size: 3, types: ['water', 'dragon'], line: '**Dobbs-Leary:** "Third time. I\'ve a new friend. Meet the new friend."', after: '**Dobbs-Leary:** "Three times. Fair\'s fair." He presses something warm into your hand. "My lucky coin. Hasn\'t been lucky for me."' },
+  { lv: 0, size: 3, types: ['water', 'grass'], learned: { sees: 'water', types: ['grass', 'electric'] }, line: '**Dobbs-Leary:** "I\'ve been thinking about that Water move of yours."', after: '**Dobbs-Leary:** "Still not enough. Still! Upstairs, then."' },
+  { lv: 1, size: 3, types: ['water', 'dragon'], learned: { sees: 'grass', types: ['dragon', 'flying'] }, line: '**Dobbs-Leary:** "Third time. I\'ve a new friend. Meet the new friend."', after: '**Dobbs-Leary:** "Three times. Fair\'s fair." He presses something warm into your hand. "My lucky coin. Hasn\'t been lucky for me."' },
 ];
 const REGION_TABLE: Record<string, string> = {
   pikachu: 'raichu-alola', raichu: 'raichu-alola', rattata: 'rattata-alola', raticate: 'raticate-alola', sandshrew: 'sandshrew-alola', sandslash: 'sandslash-alola',
@@ -885,17 +901,28 @@ const REGION_TABLE: Record<string, string> = {
   farfetchd: 'farfetchd-galar', koffing: 'weezing-galar', weezing: 'weezing-galar', 'mr-mime': 'mr-mime-galar', growlithe: 'growlithe-hisui', arcanine: 'arcanine-hisui',
   voltorb: 'voltorb-hisui', electrode: 'electrode-hisui', qwilfish: 'qwilfish-hisui',
 };
-const REGIONALS = [...new Set(Object.values(REGION_TABLE))];
+const REGIONALS = [...new Set([...Object.values(REGION_TABLE), 'meowth-galar'])];
 /** Delta forms (customSpecies.json): any Pokémon with one can be traded for it, once per ship. */
 const DELTA_TABLE: Record<string, string> = Object.fromEntries((customSpecies as { id: string }[]).map((x) => x.id).filter((id) => id.endsWith('-delta')).map((id) => [id.slice(0, -'-delta'.length), id]));
-const SSANNE_ASHORE: Json[] = [flag('ssanne-ashore'), leavePseudo()];
+/** A blackout aboard: put ashore with no loss except the trades not yet taken (the captain's gift follows you down the gangway). */
+const SSANNE_ASHORE: Json[] = [
+  flag('ssanne-ashore'),
+  when('ssanne-ashore', { min: 1 }, [], 'You wake on the harbour wall with your bag beside you. Nothing is missing. The passengers and their trades have sailed on. A steward has left a parcel: "From the captain. The Network Machine, and his compass."'),
+  item('network-machine'), item('captains-compass'), flag('kanto-ssanne-done'), flag('kanto-ssanne-machine'), gn('stampRegion', { key: 'ssanne-region' }), leavePseudo(),
+];
 const deckRoom = (k: number): string => (k <= 12 ? `gn-10-deck-${k}` : 'gn-10-captain');
 /** Optional rooms offered after a node's battle (up to four per voyage). */
 const ROOM_AFTER: Record<number, Json[]> = {
-  1: [scene('gn-10-galley')], 2: [scene('gn-10-engine')], 3: [roll('ssanne-stow-roll', 20), when('ssanne-stow-roll', { min: 1 }, [scene('gn-10-stowaways')])],
+  1: [scene('gn-10-galley'), scene('gn-10-secret')], 2: [scene('gn-10-engine')], 3: [roll('ssanne-stow-roll', 20), when('ssanne-stow-roll', { min: 1 }, [scene('gn-10-stowaways')])],
   5: [scene('gn-10-seasick')], 6: [scene('gn-10-dining')], 7: [scene('gn-10-games')], 8: [scene('gn-10-contest')],
   9: [scene('gn-10-collector')], 10: [roll('ssanne-cup-roll', 15), when('ssanne-cup-roll', { min: 1 }, [scene('gn-10-cup')])], 11: [roll('ssanne-duel-roll', 30), when('ssanne-duel-roll', { min: 1 }, [scene('gn-10-duel')])],
 };
+/** The secret trades, each stranger than the last: how many taken so far (from, to), the line, how far the swap may stray. */
+const SECRET_TRADES: [number, number, string, Json][] = [
+  [0, 0, 'Someone takes your Pokémon, and hands back something a little odd: from this region, but not what you would have picked.', { region: true, bst: 80 }],
+  [1, 1, 'The second trader does not look at your Pokémon at all. What comes back is stranger than the last one.', { region: true, bst: 200 }],
+  [2, 99, 'The third trader smiles. What comes back is not from this region, and nobody says where it is from.', { pool: REGIONALS, bst: 200 }],
+];
 const RESET_TRADES: Json[] = [setTo('ssanne-took-a', 0), setTo('ssanne-took-b', 0), setTo('ssanne-took-c', 0)];
 const deckNode = (k: number): Json[] => {
   const deck = DECKS[Math.floor((k - 1) / 4)]!;
@@ -903,8 +930,9 @@ const deckNode = (k: number): Json[] => {
   const t = DECK_TRAINERS[k - 1]!;
   const here = deckRoom(k);
   const won = (extra: Json[]): Json[] => [setTo('ssanne-at', k), ...RESET_TRADES, ...extra, ...(ROOM_AFTER[k] ?? []), scene(here)];
+  const dobbsFight = (types: string[]): Json => trainer('Sailor Dobbs-Leary', { size: dobbs!.size, types, lv: dobbs!.lv, win: won([flag('ssanne-dobbs'), ...(k === 12 ? [when('ssanne-dobbs', { min: 3 }, [item('amulet-coin')], DOBBS[2]!.after), when('ssanne-dobbs', { min: 0, max: 2 }, [], '**Dobbs-Leary:** "Well. That\'s that, then."')] : [when('ssanne-dobbs', { min: 1 }, [], dobbs!.after)])]), lose: SSANNE_ASHORE, friendly: true });
   const battle = dobbs
-    ? trainer('Sailor Dobbs-Leary', { size: dobbs.size, types: dobbs.types, lv: dobbs.lv, win: won([flag('ssanne-dobbs'), ...(k === 12 ? [when('ssanne-dobbs', { min: 3 }, [item('amulet-coin')], DOBBS[2]!.after)] : [])]), lose: SSANNE_ASHORE, friendly: true })
+    ? dobbsFight(dobbs.types)
     : trainer(t.name, { ...(t.cls ? { cls: t.cls } : {}), size: 2, types: t.types, lv: 1, win: won([]), lose: SSANNE_ASHORE, friendly: true });
   const trades = `gn-10-trades-${k}`;
   const tradeB = `gn-10-tradeb-${k}`;
@@ -914,18 +942,27 @@ const deckNode = (k: number): Json[] => {
       k === 1 ? '**Boarding. Purser, Mr. Ashworth:** "Ticket. Thank you. Trainers aft, traders everywhere, the captain\'s unwell and would rather you didn\'t knock."' : `The ${deck.toLowerCase()} deck. The ship rolls, gently, under your feet.`,
       dobbs ? dobbs.line : t.line,
     ), [
-      chIf([is('ssanne-at', k - 1, k - 1)], 'Battle.', fight(dobbs && k < 12 ? `${dobbs.after}` : 'Battle on the open deck.', battle)),
+      ...(dobbs?.learned
+        ? [
+          chIf([is('ssanne-at', k - 1, k - 1), { kind: 'partyType', type: dobbs.learned.sees }], 'Battle.', fight('He has learned from what beat him: his team is built for yours this time.', dobbsFight(dobbs.learned.types))),
+          chIf([is('ssanne-at', k - 1, k - 1), { kind: 'partyType', type: dobbs.learned.sees, absent: true }], 'Battle.', fight('Battle on the open deck.', battle)),
+        ]
+        : [chIf([is('ssanne-at', k - 1, k - 1)], 'Battle.', fight('Battle on the open deck.', battle))]),
       chIf([AT], 'Trade with the passengers.', out('Two passengers are waiting with Poké Balls in their hands.', scene(trades))),
       chIf([AT], k === 12 ? 'Go to the captain\'s cabin.' : 'Move on.', out(k === 12 ? 'A steward finds you. "The captain is asking for you. He\'s, ah. Not well."' : 'You walk on along the deck.', ...RESET_TRADES, room(deckRoom(k + 1)))),
     ]),
     rm(trades, `S.S. Anne: Trades, Cabin ${k}`, ship(), say('Two trade offers. Each passenger shows you their card, honestly: what they give, and what they want.'), [
       chIf([not('ssanne-took-a')], 'Trade A: any Pokémon for one of similar strength.', out('A passenger trades with you: same level, much the same strength, from this region.', { kind: 'tradeFor', want: { label: 'a Pokémon of yours' }, similar: { region: true, bst: 40 }, honest: true }, flag('ssanne-took-a'), scene(trades))),
       chIf([not('ssanne-took-b')], 'Trade B: the region trade.', out('The second passenger opens a case of Poké Balls.', scene(tradeB))),
-      chIf([is('ssanne-secret'), not('ssanne-took-c')], 'The secret trade.', out('Behind the kitchen, someone takes your Pokémon, and hands back something stranger than the last one.', { kind: 'tradeFor', want: { label: 'a Pokémon of yours' }, similar: { region: true, bst: 200 }, honest: true }, flag('ssanne-took-c'), scene(trades))),
+      chIf([is('ssanne-secret'), not('ssanne-took-c')], 'The secret trade.', out('Behind the kitchen, the traders look up from their cards.', scene(`gn-10-secret-${k}`))),
       ch('Back.', out('You leave the passengers to it.', scene(here))),
     ]),
+    rm(`gn-10-secret-${k}`, `S.S. Anne: The Secret Trade, Cabin ${k}`, ship(), say('A card table, a lamp, and a Poké Ball pushed across the felt. Each trade in this room is stranger than the last.'), [
+      ...SECRET_TRADES.map(([min, max, text, similar]) => chIf([is('ssanne-secret-n', min, max)], 'Trade.', out(text, { kind: 'tradeFor', want: { label: 'a Pokémon of yours' }, similar, honest: true }, flag('ssanne-took-c'), flag('ssanne-secret-n'), scene(trades)))),
+      ch('Back.', out('"Suit yourself."', scene(trades))),
+    ]),
     rm(tradeB, `S.S. Anne: The Region Trade, Cabin ${k}`, ship(), say('**Passenger:** "Anything with a regional cousin? I trade like for like: same level, and it keeps what it is holding."'), [
-      ch('Trade for its regional form.', out('"Oh, a lovely one! I have just the thing."', { kind: 'tradeFor', want: { label: 'a Pokémon with a regional form', species: Object.keys(REGION_TABLE) }, table: REGION_TABLE, honest: 'region' }, flag('ssanne-took-b'), scene(trades))),
+      ch('Trade for its regional form.', out('"Oh, a lovely one! I have just the thing."', { kind: 'tradeFor', want: { label: 'a Pokémon with a regional form', species: Object.keys(REGION_TABLE) }, table: k % 2 === 0 ? { ...REGION_TABLE, meowth: 'meowth-galar' } : REGION_TABLE, honest: 'region' }, flag('ssanne-took-b'), scene(trades))),
       ch('None of those: any Pokémon for a regional one.', out('"Never mind. Anything will do. Here, take this one."', { kind: 'tradeFor', want: { label: 'a Pokémon of yours' }, similar: { pool: REGIONALS, bst: 200 }, honest: 'region' }, flag('ssanne-took-b'), scene(trades))),
       chIf([not('ssanne-delta-done')], 'Trade for its Delta form.', out('A passenger in dark glasses looks at your Pokémon a long moment. "I know what that one could be." Same level. Something different looks back at you.', { kind: 'tradeFor', want: { label: 'a Pokémon with a Delta form', species: Object.keys(DELTA_TABLE) }, table: DELTA_TABLE, honest: 'region' }, flag('ssanne-took-b'), flag('ssanne-delta-done'), scene(trades))),
       ch('Back.', out('"Another time."', scene(trades))),
@@ -953,8 +990,14 @@ const gn10: Json[] = [
   // ---- the optional rooms ----
   rm('gn-10-galley', 'The Galley', ship({ effect: 'none' }), say('**Chef, Madame Brioche:** "Sit. You\'re thin."'), [
     enter('Sit down and eat.', out('She feeds your whole team, and you. A full meal: everyone is fully healed, and something on the plate stays with you.', { kind: 'heal', share: 1 }, pick('ssanne-meal', 1, 1, 1, 1, 1), ...MEALS.map(([name, fx], i) => when('ssanne-meal', { min: i + 1, max: i + 1 }, [{ kind: 'tempEffect', label: name, effects: [fx], battles: 1, until: 'battle' }], `${name}: for your next battle.`)))),
-    enter('Ask what is behind the kitchen.', out('She looks at you for a long moment, then jerks her head at a door behind the stoves. "Traders. The odd kind. Don\'t tell the purser." For the rest of the voyage, there is a third trade at every cabin.', flag('ssanne-secret'))),
     pass(),
+  ]),
+  rm('gn-10-secret', 'The Secret Trade Room', ship({ effect: 'none' }), say(
+    'Behind the kitchen, past the stoves, a door with no handle on the outside. Somebody has wedged it open with a ladle.',
+    'Inside: a card table, a lamp, and people who do not give their names.',
+  ), [
+    enter('Go in.', out('Madame Brioche watches you go, and says nothing. "Traders. The odd kind. Don\'t tell the purser." For the rest of the voyage, there is a third trade at every cabin, each stranger than the last.', flag('ssanne-secret'))),
+    pass('You leave the door as it is. Whatever is traded in there, it is not for you.'),
   ]),
   rm('gn-10-engine', 'The Engine Room', ship(), say(
     'Below the waterline, in the heat and the noise, a team is loading crates that aren\'t on the manifest.',
@@ -985,7 +1028,7 @@ const gn10: Json[] = [
     pass('You watch a few hands, and keep your money.'),
   ]),
   rm('gn-10-contest', 'The Beauty Contest', ship({ effect: 'sparkle' }), say('A beauty contest in the ballroom. One entrant each. The judges look at condition, and at how much the Pokémon trusts its trainer.'), [
-    { ...enter('Enter your lead.', out('A polite round of applause, and second place. The judges liked it, but they could tell it was nervous.', { kind: 'money', amount: 300 })), branches: [{ when: [{ kind: 'bondLevel', atLeast: 3, who: 'lead' }], text: 'It walks out like it owns the ballroom, and looks back at you once, at the end. First place. The judges stand up.', effects: [flag('ssanne-rooms'), { kind: 'money', amount: 1500 }, bond(1)] }] },
+    { ...enter('Enter your lead.', out('A polite round of applause, and second place. The judges liked it, but they could tell: its condition, or how far it trusts you, was not quite there.')), branches: [{ when: [{ kind: 'bondLevel', atLeast: 3, who: 'lead' }, { kind: 'gn', test: 'leadFit' }], text: 'It walks out like it owns the ballroom, in perfect condition, and looks back at you once, at the end. First place. The judges stand up.', effects: [flag('ssanne-rooms'), flag('ssanne-contest-won'), bond(1)] }] },
     pass(),
   ]),
   rm('gn-10-collector', 'The Collector', ship(), say(
@@ -1000,7 +1043,7 @@ const gn10: Json[] = [
     ch('Yes.', out('"Three thousand. A pleasure."', { kind: 'tradeAway', want: { label: 'the Pokémon he points at' } }, { kind: 'money', amount: 3000 }, flag('ssanne-collector-sold'))),
   ]),
   rm('gn-10-collector-3', 'The Collector', ship(), say('**Quayle:** "Five thousand. You will not see an offer like it again on this sea."'), [
-    ch('No.', out('He sighs, very deeply, and gives you his card. *Cornelius Quayle. Collector. Always buying.* "You\'ll hear from me."', flag('ssanne-collector-refused'))),
+    ch('No.', out('He sighs, very deeply, and gives you his card. *Cornelius Quayle. Collector. Always buying.* "You\'ll hear from me."', setTo('ssanne-collector-refused', 3))),
     ch('Yes.', out('"Five thousand. A pleasure, finally."', { kind: 'tradeAway', want: { label: 'the Pokémon he points at' } }, { kind: 'money', amount: 5000 }, flag('ssanne-collector-sold'))),
   ]),
   rm('gn-10-cup', 'The Deck Cup', ship(), say('The sun deck has been cleared for a tournament: three rounds, one winner, and a Rare Candy on a velvet cushion.'), [
@@ -1021,21 +1064,35 @@ const gn10: Json[] = [
     ch('Let a Pokémon sing to him.', out('One of your team sings, quietly. The captain closes his eyes. When it finishes, he sits up.', room('gn-10-rival'))),
   ]),
   rm('gn-10-rival', 'The Top Deck', ship({
-    remembers: [{ id: 'engine', when: [is('ssanne-engine-opened')], notice: '**Rival:** "And I saw you go down to the engine room. What was in those crates?"' }],
+    remembers: [
+      { id: 'show', when: [RQ({ personality: ['prodigy', 'enthusiast'] })], notice: '**Rival:** "Front row for my next win. You\'re welcome."' },
+      { id: 'plan', when: [RQ({ personality: ['strategist'] })], notice: '**Rival:** "Twelve cabins, one captain, one top deck. I worked out you\'d end up here before I boarded."' },
+      { id: 'gentle', when: [RQ({ personality: ['protector', 'idealist'] })], notice: '**Rival:** "Did you see the seasick one on the main deck? I hope somebody sat with it."' },
+    ],
   }), say(
     'On the top deck, in the wind, someone you know is leaning on the rail.',
     '**Rival:** "Of course you\'re on this boat."',
-  ), [ch('Battle.', fight('A full battle on the top deck, the sea all round.', trainer('Rival', { rival: true, size: 4, lv: 1, win: [scene('gn-10-gift')], lose: SSANNE_ASHORE, friendly: true })))]),
+  ), [ch('Battle.', fight('A full battle on the top deck, the sea all round.', trainer('Rival', { rival: true, size: 4, lv: 1, win: [scene('gn-10-gift')], lose: SSANNE_ASHORE, friendly: true }),
+    gn('check', { key: 'ssanne-rv-ahead', if: [{ kind: 'gn', test: 'rivalAhead' }] }), gn('check', { key: 'ssanne-rv-won', if: [{ kind: 'rivalLast', result: 'win' }] }), gn('check', { key: 'ssanne-rv-lost', if: [{ kind: 'rivalLast', result: 'lose' }] }),
+    when('ssanne-rv-ahead', { min: 1 }, [], '**Rival:** "I\'m ahead, you know. I counted on the way up the stairs."'),
+    when('ssanne-rv-ahead', { min: 0, max: 0 }, [], '**Rival:** "You\'re ahead. For now. Boats are good for catching up."'),
+    when('ssanne-rv-won', { min: 1 }, [], '**Rival:** "Last time you beat me. I\'ve thought about it every day since."'),
+    when('ssanne-rv-lost', { min: 1 }, [], '**Rival:** "Last time I beat you. Don\'t let the sea air fool you: I can do it again."'),
+    when('ssanne-engine-opened', { min: 1 }, [], '**Rival:** "And I saw you go down to the engine room. What was in those crates?"'),
+  ))]),
   rm('gn-10-gift', "The Captain's Gift", ship({ effect: 'sparkle' }), say(
     'The captain is on his feet at the top of the gangway when the ship comes in. He presses two things into your hands.',
     '**Captain Winslow:** "The Network Machine. And my compass. It has never once pointed north."',
   ), [ch('Take them, and go ashore.', out('You go down the gangway with the Network Machine and the Captain\'s Compass. Behind you the S.S. Anne sounds its horn.', item('network-machine'), item('captains-compass'), flag('kanto-ssanne-done'), flag('kanto-ssanne-machine'), stampRegion('ssanne-region'), moment('You sailed on the S.S. Anne, and the captain gave you his compass.', 70), leavePseudo()))]),
   // ---- afterstory: passengers from the voyage across the region; the Collector's still asking ----
-  gev('gn-10-passengers', 'A Familiar Face', ship({ stop: 'event', rarity: 'uncommon', callback: true, requires: [is('kanto-ssanne-done'), not('ssanne-after'), regionChanged('ssanne-region')],
-    remembers: [{ id: 'collector', when: [is('ssanne-collector-refused')], notice: 'Across the street, a velvet coat and a monocle. Mr. Quayle raises his hat to you, and then, unmistakably, looks at the same Pokémon as before.' }],
+  gev('gn-10-passengers', 'A Familiar Face', ship({ stop: 'event', rarity: 'uncommon', callback: true, requires: [is('kanto-ssanne-done'), is('ssanne-after', 0, 2), { kind: 'gn', test: 'notThisStage', key: 'ssanne-after-stage' }],
+    remembers: [
+      { id: 'seasick', when: [is('ssanne-seasick'), not('ssanne-after')], notice: 'It is the owner of the seasick Pokémon. It is not green any more. It sees you first, and pulls its trainer across the road by the sleeve. **The owner:** "You! It remembers you. So do I."' },
+      { id: 'collector', when: [is('ssanne-collector-refused')], notice: 'Across the street, a velvet coat and a monocle. Mr. Quayle raises his hat to you, and then, unmistakably, looks at the same Pokémon as before. **Quayle:** "Still not for sale? I\'m still asking."' },
+    ],
   }), say(
-    'A face you know from the ship: the seasick passenger, or someone from the dining room. They wave. "The S.S. Anne! You were on her too!"',
-  ), [ch('Wave back.', out('You talk about the voyage for a while, the way people do.', flag('ssanne-after')))]),
+    'A face you know from the ship: someone from the dining room, or the card tables, or the rail. They wave. "The S.S. Anne! You were on her too!"',
+  ), [ch('Wave back.', out('You talk about the voyage for a while, the way people do. The passengers got off at every port along this coast; you will see more of them.', flag('ssanne-after'), gn('stampStage', { key: 'ssanne-after-stage' })))]),
 ];
 
 // ---- Kanto: the canon space at Vermilion harbour (cs.kanto.vermilion.ssanne) ----

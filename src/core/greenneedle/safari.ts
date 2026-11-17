@@ -1,13 +1,17 @@
 // Greenneedle gn.18, Safari Land: a walkable zone played as a minigame (the map stop `gn-safari`). 30 Safari Balls, 500 steps, no
-// battles. Four areas, the Quiet meter (0 to 10), the families, the herds at the waterhole, the migration, a rare Dragonair at high Quiet,
-// and three small games inside it: photography, tracking and feeding. Every roll is the game's own seeded stream (minigame state `rs`),
-// so a reload or a replay lands the same. What was caught, the nest egg, the photo money and the warden's verdict apply once, when it ends.
+// battles. Four areas, each a small grid you walk tile by tile (one step a tile), the Quiet meter (0 to 10), the families, the herds at
+// the waterhole, the migration, a rare Dragonair at high Quiet, and three small games inside it: photography, tracking and feeding.
+// Every roll is the game's own seeded stream (minigame state `rs`), so a reload or a replay lands the same. What was caught, the nest
+// egg, the photo money and the warden's verdict apply once, when it ends. In Kanto the Tauros Stampede and the Warden's Gold Teeth are
+// spots inside the park (the visit steps out to the event and comes back: core/minigame/flow.ts); the far gate opens gn.19 and gn.20.
 
 import type { Content } from '../contentSchema';
 import { Rng } from '../rng';
 import type { RunState } from '../state';
 import { isNative, typesPool } from '../themes';
 import type { BaseState, MinigameModule, MinigameView, Cell } from '../minigame/games';
+import { STEP } from '../hubTown/world';
+import type { Facing } from '../hubTown/schema';
 
 export const SAFARI_ID = 'gn-safari';
 
@@ -36,7 +40,65 @@ const PRINTS = ['Three-toed prints', 'Round pads', 'Drag marks'] as const;
 /** The nest at the end of the tracks, by area (the Long Grass and the Far Marsh). */
 const NEST: Record<number, string> = { 2: 'exeggcute', 3: 'dratini' };
 
-const STEPS = { walk: 10, run: 5, wait: 3, look: 5, move: 20, act: 2, track: 5, lost: 15 } as const;
+/** Steps: a tile walked or run is one step; standing still is three; the binoculars five; each throw two. */
+const STEPS = { tile: 1, wait: 3, look: 5, act: 2, track: 5, lost: 15 } as const;
+/** Walking: Quiet +1 for every `quietEvery` tiles walked; something comes out of tall grass on `grass` of the tiles; a run moves `runTiles`. */
+const WALK = { quietEvery: 8, grass: 0.18, runGrass: 0.4, waitGrass: 0.3, runTiles: 2, familyAfter: 10 } as const;
+
+/** The Kanto spaces that happen inside the park, and the doors beyond the far gate. */
+export const PARK_STAMPEDE = 'cs-kanto-fuchsia-tauros';
+export const PARK_TEETH = 'cs-kanto-fuchsia-warden';
+export const PARK_DOORS = ['gn-19-far', 'gn-20-far'] as const;
+
+export const PARK_W = 15;
+export const PARK_H = 7;
+/**
+ * The four areas as tiles. `.` short grass, `,` tall grass (where Pokémon come out), `T` tree, `R` rock, `~` water, `D` the rock in the marsh
+ * (all four solid). `<` `>` the paths to the areas beside it. `G` the gatehouse door, `C` the camera hut, `B` the gatehouse wall,
+ * `P` prints in the mud, `F` the far gate, `S` the Stampede (Kanto), `W` the Warden's teeth (Kanto).
+ */
+const MAPS: readonly (readonly string[])[] = [
+  [
+    'TTTTTTTTTTTTTTT',
+    'TB.C....,,,,..T',
+    'T.....,,,,,,..T',
+    'G......,,,S...>',
+    'T...,,,,......T',
+    'T..,,,,,,.....T',
+    'TTTTTTTTTTTTTTT',
+  ],
+  [
+    'TTTTTTTTTTTTTTT',
+    'T..,,.....,,..T',
+    'T.,,.~~~~~.,,.T',
+    '<....~~~~~....>',
+    'T.,,.~~~~~.,,.T',
+    'T..,,.....,,..T',
+    'TTTTTTTTTTTTTTT',
+  ],
+  [
+    'TTTTTTTTTTTTTTT',
+    'T,,,,,,.,,,,,,T',
+    'T,,R,,,.,,,P,,T',
+    '<.............>',
+    'T,,,,,,.,,R,,,T',
+    'T,,,,,,.,,,,,,T',
+    'TTTTTTTTTTTTTTT',
+  ],
+  [
+    'TTTTTTTTTTTTTTT',
+    'T,,~~..,,,..W.T',
+    'T,,~~.,,D,....T',
+    '<.............F',
+    'T..,,,.~~.,,P.T',
+    'T.,,,,.~~.,,,.T',
+    'TTTTTTTTTTTTTTT',
+  ],
+];
+const SOLID = 'TR~D';
+const FACINGS: readonly Facing[] = ['up', 'left', 'right', 'down'];
+const COMPASS: Record<Facing, string> = { up: 'north', left: 'west', right: 'east', down: 'south' };
+export type ParkSpot = 'gate' | 'camera' | 'prints' | 'far' | 'stampede' | 'teeth';
 
 interface Encounter {
   species: string;
@@ -49,6 +111,17 @@ interface Encounter {
   hungry: number | null;
   fed: boolean;
   dragonair: boolean;
+  /** How many tiles off it is (1 to 3): a photograph scores on distance. */
+  dist?: number;
+  /** Bait is down: leaving it and stepping back raises Quiet. */
+  baited?: boolean;
+}
+
+/** A photograph: who, what it was doing ('family' and 'migration' are the two set pieces), and its score. */
+export interface ParkPhoto {
+  species: string;
+  kind: string;
+  score: number;
 }
 
 export interface SafariState extends BaseState {
@@ -58,7 +131,32 @@ export interface SafariState extends BaseState {
   quiet: number;
   walks: number;
   waits: number;
-  mode: 'walk' | 'meet' | 'family' | 'herd' | 'migration' | 'track' | 'nest';
+  mode: 'walk' | 'meet' | 'family' | 'herd' | 'migration' | 'track' | 'nest' | 'spot';
+  /** Where you stand in the area's grid, and which way you face. */
+  x: number;
+  y: number;
+  facing: Facing;
+  /** Tiles walked (not run) this visit. */
+  walked: number;
+  /** What you are standing at, while it asks (`mode` 'spot'). */
+  spot: ParkSpot | null;
+  /** Where the Kangaskhan and its young are, while they cross. */
+  fam: { x: number; y: number } | null;
+  /** The Kanto spaces inside the park this visit, and the ones already played. */
+  kanto: string[];
+  seen: string[];
+  /** The doors beyond the far gate that are open to you; the one you took. */
+  doors: string[];
+  door: string | null;
+  /** The side stop of the door you took (set when the visit ends; the screen opens it next). */
+  doorSide: string | null;
+  /** Stepped out to an event inside the park: its id, where its stop sits on the node, the stops already opened, the Safari Balls you owned yourself. */
+  away: { eventId: string; from: number; opened: string[]; own: number } | null;
+  /** The best photograph of this visit, and the one from an earlier visit that hangs in the gatehouse. */
+  photo: ParkPhoto | null;
+  wall: ParkPhoto | null;
+  /** The last photograph taken (the screen shows it as a picture until you move on). */
+  shot: ParkPhoto | null;
   mon: Encounter | null;
   caught: string[];
   /** The region's own residents of each area (set when the game starts; empty in a test without a run). */
@@ -103,6 +201,41 @@ function setWarden(s: SafariState, line: string): void {
   s.warden = `Warden: "${line}"`;
 }
 
+/** A visit saved before the park had a grid: fill in what it lacks, at the area's way in. */
+export function parkState(s: SafariState): SafariState {
+  if (s.x === undefined) Object.assign(s, { x: 1, y: 3, facing: 'right', walked: 0, spot: null, fam: null, kanto: [], seen: [], doors: [], door: null, doorSide: null, away: null, photo: null, wall: null, shot: null });
+  return s;
+}
+
+/** The tile at a place as the visit sees it (a spot that is gone reads as the grass around it). Off the grid is a tree. */
+export function parkTile(s: SafariState, x: number, y: number, area = s.area): string {
+  const ch = MAPS[area]?.[y]?.[x] ?? 'T';
+  if (ch === 'S') return s.kanto.includes(PARK_STAMPEDE) && !s.seen.includes(PARK_STAMPEDE) ? 'S' : ',';
+  if (ch === 'W') return s.kanto.includes(PARK_TEETH) && !s.seen.includes(PARK_TEETH) ? 'W' : '.';
+  if (ch === 'P') return s.tracked ? '.' : 'P';
+  return ch;
+}
+
+export const parkSolid = (s: SafariState, x: number, y: number): boolean => SOLID.includes(parkTile(s, x, y));
+
+/** The area as rows of tiles, for the screen. */
+export function parkRows(s: SafariState): string[] {
+  return Array.from({ length: PARK_H }, (_, y) => Array.from({ length: PARK_W }, (_, x) => parkTile(s, x, y)).join(''));
+}
+
+/** Where the Pokémon you met stands: `dist` tiles ahead of you, stopping short of a tree, a rock, the water or the fence. */
+export function parkMonAt(s: SafariState): { x: number; y: number } | null {
+  if (s.mode !== 'meet' || !s.mon) return null;
+  const d = STEP[s.facing];
+  let at = { x: s.x, y: s.y };
+  for (let i = 1; i <= (s.mon.dist ?? 1); i++) {
+    const nx = s.x + d.dx * i, ny = s.y + d.dy * i;
+    if (nx < 1 || ny < 1 || nx > PARK_W - 2 || ny > PARK_H - 2) break;
+    at = { x: nx, y: ny };
+  }
+  return at;
+}
+
 function poolOf(content: Content, s: SafariState): string[] {
   let own = RESIDENTS[s.area]!.filter((id) => content.species.has(id));
   if (s.area === 1 && s.herd === 'rhyhorn') own = [...own.filter((id) => id !== 'tauros'), 'rhyhorn', 'rhyhorn'];
@@ -144,6 +277,7 @@ function meet(content: Content, s: SafariState, r: Rng, unnoticed: boolean): voi
     hungry: !star && !dragonair && r.chance(0.125) ? r.int(0, HUNGER.length - 1) : null,
     fed: false,
     dragonair,
+    dist: dragonair ? 2 : r.int(1, 3),
   };
   s.feedingNext = false;
   // Quiet 0 to 3: Pokémon bolt on sight.
@@ -170,16 +304,24 @@ function maybeFlee(content: Content, s: SafariState, r: Rng): void {
 function photoScore(s: SafariState): number {
   const m = s.mon!;
   const behaviour = m.behaviour === 'grazing' ? 1 : 2;
-  return Math.max(1, behaviour + (m.noticed ? 0 : 2) + (s.quiet >= 8 ? 1 : 0) + (m.star || m.dragonair ? 2 : 0));
+  // Distance: right beside it +2, a tile off +1, from far away nothing.
+  const distance = Math.max(0, 3 - (m.dist ?? 3));
+  return Math.max(1, behaviour + distance + (m.noticed ? 0 : 2) + (s.quiet >= 8 ? 1 : 0) + (m.star || m.dragonair ? 2 : 0));
 }
 
-function sellShot(s: SafariState, score: number): void {
+function sellShot(s: SafariState, score: number, species: string, kind: string): void {
   s.shots += 1;
+  s.shot = { species, kind, score };
+  if (!s.photo || score > s.photo.score) s.photo = { species, kind, score };
   s.photoBest = Math.max(s.photoBest, score);
   if (score >= 3) s.photoMoney += score * 80;
 }
 
 function enterArea(s: SafariState, area: number): void {
+  // You come in by the path you took: from the west at the left edge, from the east at the right.
+  s.x = area > s.area ? 1 : PARK_W - 2;
+  s.y = 3;
+  s.facing = area > s.area ? 'right' : 'left';
   s.area = area;
   s.mon = null;
   s.mode = 'walk';
@@ -200,10 +342,87 @@ function finish(s: SafariState): void {
   s.mon = null;
 }
 
+const PHOTO_WORDS: Record<string, string> = { grazing: 'grazing', feeding: 'feeding', playing: 'playing', sleeping: 'asleep', family: 'with its young out of the pouch', migration: 'on the move with the whole herd' };
+
+/** A photograph in words (the brass plate under it). */
+export function photoWords(content: Content, p: ParkPhoto): string {
+  return `${nameOf(content, p.species)}, ${PHOTO_WORDS[p.kind] ?? p.kind}`;
+}
+
+/** One walk (a tile) or one run (up to two) the way you face. Turning into something solid costs nothing. */
+function move(content: Content, s: SafariState, r: Rng, facing: Facing, running: boolean): void {
+  s.facing = facing;
+  const d = STEP[facing];
+  let moved = 0;
+  for (let i = 0; i < (running ? WALK.runTiles : 1); i++) {
+    if (parkSolid(s, s.x + d.dx, s.y + d.dy)) break;
+    s.x += d.dx;
+    s.y += d.dy;
+    moved += 1;
+    // A spot or a path stops you on it.
+    if (!'.,'.includes(parkTile(s, s.x, s.y))) break;
+  }
+  if (moved === 0) {
+    const ahead = parkTile(s, s.x + d.dx, s.y + d.dy);
+    s.msg = ahead === '~' ? 'Water. Too deep to wade.' : ahead === 'T' ? 'The trees are too thick that way.' : 'A rock in the way.';
+    return;
+  }
+  s.steps -= moved * STEPS.tile;
+  if (running) {
+    s.quiet = clampQ(s.quiet - 1);
+    setWarden(s, WARDEN_RUN);
+  } else {
+    s.walked += moved;
+    s.walks += 1;
+    if (s.walked % WALK.quietEvery === 0) s.quiet = clampQ(s.quiet + 1);
+    if (s.walked % 4 === 0) setWarden(s, WARDEN_WALK[(s.walked / 4) % WARDEN_WALK.length]!);
+    if (s.area === 0) s.plainWalks += 1;
+  }
+  const tile = parkTile(s, s.x, s.y);
+  const ask = (spot: ParkSpot): void => {
+    s.mode = 'spot';
+    s.spot = spot;
+    s.msg = '';
+  };
+  s.msg = '';
+  if (tile === '>') return enterArea(s, Math.min(3, s.area + 1));
+  if (tile === '<') return enterArea(s, Math.max(0, s.area - 1));
+  if (tile === 'G') return ask('gate');
+  if (tile === 'P') return ask('prints');
+  if (tile === 'F') return ask('far');
+  if (tile === 'S') return ask('stampede');
+  if (tile === 'W') return ask('teeth');
+  if (tile === 'C') {
+    if (!s.camera) return ask('camera');
+    s.msg = 'The camera\'s hook is empty. It is round your neck.';
+    return;
+  }
+  if (tile === 'B') {
+    s.msg = s.wall
+      ? `On the gatehouse wall, in a frame: your photograph. A small brass plate under it: "${photoWords(content, s.wall)}. ${s.wall.score} points."`
+      : 'The gatehouse wall. An empty frame, and a small brass plate with nothing on it yet.';
+    return;
+  }
+  // A Kangaskhan and its young cross the plain once a visit, once you have walked a little way into it.
+  if (s.area === 0 && !s.familySeen && s.plainWalks >= WALK.familyAfter && content.species.has('kangaskhan')) {
+    s.familySeen = true;
+    s.mode = 'family';
+    const at = [3, -3, 2, -2].map((dx) => s.x + dx).find((x) => x >= 1 && x <= PARK_W - 2 && !parkSolid(s, x, s.y)) ?? s.x;
+    s.fam = { x: at, y: s.y };
+    s.msg = 'A Kangaskhan and its young are crossing the plain.';
+    return;
+  }
+  if (tile === ',') {
+    if (r.chance(running ? WALK.runGrass : WALK.grass)) meet(content, s, r, false);
+    else s.msg = 'Nothing. Long grass, moving in the wind.';
+  }
+}
+
 const safari: MinigameModule<SafariState> = {
   start(_c, p, rs) {
     return {
       rs, done: false, msg: 'The Gatehouse Plain. The grass is long and the sky is very big.', tick: 0,
+      x: 1, y: 3, facing: 'right', walked: 0, spot: null, fam: null, kanto: [], seen: [], doors: [], door: null, doorSide: null, away: null, photo: null, wall: null, shot: null,
       area: 0, steps: p.steps ?? 500, balls: p.balls ?? 30, quiet: clampQ(p.quiet ?? 0), walks: 0, waits: 0, mode: 'walk', mon: null, caught: [], local: [[], [], [], []],
       camera: false, shots: 0, photoBest: 0, photoMoney: 0, familySeen: false, plainWalks: 0, herd: null, herdWaits: 0, migration: 0, migrationSeen: false,
       dragonairSeen: false, feedingNext: false, tracked: false, track: null, egg: null, nestLeft: false, farGate: false,
@@ -211,6 +430,7 @@ const safari: MinigameModule<SafariState> = {
     };
   },
   view(content, s) {
+    parkState(s);
     const hud = [`${AREAS[s.area]}`, `Steps: ${s.steps}`, `Safari Balls: ${s.balls}`, `Quiet: ${s.quiet}/10`, `Caught: ${s.caught.length}`, s.msg, s.warden];
     const cells: Cell[] = [];
     const c = (id: string, label: string, detail: string, tone: Cell['tone'] = 'info', disabled = false) => cells.push({ id, label, detail, tone, disabled: s.done || disabled });
@@ -221,8 +441,9 @@ const safari: MinigameModule<SafariState> = {
       c('ball', 'Throw a Ball', `catch ${pct(m.catchP)}`, 'hot', s.balls <= 0);
       c('bait', 'Throw bait', 'easier to catch, likelier to wander off');
       c('rock', 'Throw a rock', 'harder to catch, less likely to leave', 'bad');
-      c('leave', 'Leave', 'let it be', 'dim');
-      if (s.camera) c('photo', 'Take a photo', m.noticed ? 'it has seen you' : 'it hasn\'t seen you', 'good');
+      c('leave', 'Leave', m.baited ? 'leave the bait and step back: Quiet +1' : 'let it be', 'dim');
+      if ((m.dist ?? 1) > 1) c('closer', 'Step closer', `${m.dist! - 1} ${m.dist === 2 ? 'tile' : 'tiles'} off after; it may look up`, 'info');
+      if (s.camera) c('photo', 'Take a photo', `${m.noticed ? 'it has seen you' : 'it hasn\'t seen you'}; ${photoScore(s)} points from here`, 'good');
       if (m.hungry !== null && !m.fed) for (const food of ['roots', 'fruit', 'weed']) c(`feed:${food}`, `Offer ${food}`, 'pick from how it behaves', 'good');
       return { hud, prompt, cols: 3, cells, done: s.done };
     }
@@ -260,24 +481,51 @@ const safari: MinigameModule<SafariState> = {
       c('leaveNest', 'Leave it', 'Quiet +2; the warden notices', 'good');
       return { hud, prompt, cols: 2, cells, done: s.done };
     }
-    c('walk', 'Walk', `${STEPS.walk} steps; Quiet rises`, 'good');
-    c('run', 'Run', `${STEPS.run} steps; Quiet -1`, 'bad');
+    if (s.mode === 'spot' && s.spot) {
+      const stay = (label = 'Not now') => c('stay', label, 'carry on round the park', 'dim');
+      if (s.spot === 'gate') {
+        prompt = 'The gatehouse door. The warden is on the other side of it, pretending not to count.';
+        c('exit', 'Leave the park', 'end the visit', 'hot');
+        stay('Stay a while');
+      } else if (s.spot === 'camera') {
+        prompt = 'The gatehouse camera, on a hook by the door. The warden buys good shots: distance, behaviour, and whether it saw you.';
+        c('camera', 'Borrow the camera', 'the warden buys good shots', 'hot');
+        stay();
+      } else if (s.spot === 'prints') {
+        prompt = 'Prints in the mud, going off into the grass.';
+        c('track', 'Follow the prints', 'to a nest, across two forks', 'info');
+        stay('Leave them');
+      } else if (s.spot === 'far') {
+        prompt = 'At the far gate. Warden: "Beyond here, it isn\'t a park. Nobody\'s counting your steps. Nobody\'s coming to fetch you, either."';
+        for (const id of s.doors) c(`door:${id}`, content.events.get(id)?.name ?? id, 'the visit ends; you go through', 'hot');
+        stay('Turn back');
+      } else if (s.spot === 'stampede') {
+        prompt = 'The ground hums. Out on the plain, the horizon is the wrong colour, and it is getting closer.';
+        c('see', 'Stand and watch it come', 'the Tauros Stampede', 'hot');
+        stay('Step out of the way');
+      } else {
+        prompt = 'The warden is here, off his usual path, talking. Nobody could understand a word of it.';
+        c('see', 'Hear him out', 'the Warden\'s Gold Teeth', 'hot');
+        stay('Leave him to it');
+      }
+      return { hud, prompt, cols: 3, cells, done: s.done };
+    }
+    prompt = 'Walk the park a tile at a time. Tall grass is where they are. Quiet rises when you are careful.';
+    for (const f of FACINGS) c(`go:${f}`, `Walk ${COMPASS[f]}`, parkSolid(s, s.x + STEP[f].dx, s.y + STEP[f].dy) ? 'something in the way' : `${STEPS.tile} step`, 'good');
+    c(`run:${s.facing}`, `Run ${COMPASS[s.facing]}`, `${WALK.runTiles} tiles; Quiet -1`, 'bad');
     c('wait', 'Wait', `${STEPS.wait} steps; Quiet +1`, 'good');
     c('look', 'Use the binoculars', `${STEPS.look} steps; Quiet +1`, 'info');
-    if (s.area === 0 && !s.camera) c('camera', 'Borrow the camera', 'the warden buys good shots', 'hot');
-    if ((s.area === 2 || s.area === 3) && !s.tracked) c('track', 'Follow the prints', 'to a nest, across two forks', 'info');
-    if (s.area < 3) c('next', `On to ${AREAS[s.area + 1]}`, `${STEPS.move} steps`, 'info');
-    if (s.area > 0) c('back', `Back to ${AREAS[s.area - 1]}`, `${STEPS.move} steps`, 'dim');
-    if (s.area === 3) c('far', 'Go through the far gate', 'the wild beyond the park', 'hot');
-    c('exit', 'Leave the park', 'end the visit', 'dim');
-    return { hud, prompt, cols: 3, cells, done: s.done } satisfies MinigameView;
+    c('exit', 'Head for the gate', 'end the visit', 'dim');
+    return { hud, prompt, cols: 4, cells, done: s.done } satisfies MinigameView;
   },
   act(content, s, id) {
-    if (s.done) return;
+    parkState(s);
+    if (s.done || s.away) return;
     const r = rng(s);
+    s.shot = null;
     if (s.mode === 'meet' && s.mon) {
       const m = s.mon;
-      s.steps -= STEPS.act;
+      s.steps -= id === 'closer' ? STEPS.tile : STEPS.act;
       if (id === 'ball' && s.balls > 0) {
         s.balls -= 1;
         if (r.chance(m.catchP)) {
@@ -294,6 +542,7 @@ const safari: MinigameModule<SafariState> = {
       } else if (id === 'bait') {
         m.catchP = Math.min(0.95, m.catchP + 0.15);
         m.fleeP = Math.min(0.9, m.fleeP + 0.1);
+        m.baited = true;
         s.msg = 'It eats the bait, and looks about for more.';
         maybeFlee(content, s, r);
       } else if (id === 'rock') {
@@ -305,7 +554,7 @@ const safari: MinigameModule<SafariState> = {
         maybeFlee(content, s, r);
       } else if (id === 'photo' && s.camera) {
         const score = photoScore(s);
-        sellShot(s, score);
+        sellShot(s, score, m.species, m.behaviour);
         s.msg = `Click. A ${score}-point shot${score >= 3 ? ' the warden will buy' : ''}.`;
         m.noticed = true;
         m.fleeP = Math.min(0.9, m.fleeP + 0.05);
@@ -326,8 +575,18 @@ const safari: MinigameModule<SafariState> = {
           s.msg = 'It turns its nose up.';
           maybeFlee(content, s, r);
         }
+      } else if (id === 'closer' && (m.dist ?? 1) > 1) {
+        m.dist = m.dist! - 1;
+        // Coming closer: it may look up (less often when the park has forgotten you).
+        if (!m.noticed && !m.dragonair && r.chance(s.quiet >= 8 ? 0.2 : 0.5)) {
+          m.noticed = true;
+          s.msg = 'You step closer. It looks up.';
+        } else s.msg = m.noticed ? 'You step closer. It watches you come.' : 'You step closer. It hasn\'t seen you.';
       } else if (id === 'leave') {
-        s.msg = 'You leave it be.';
+        if (m.baited) {
+          s.quiet = clampQ(s.quiet + 1);
+          s.msg = 'You leave the bait where it is and step back.';
+        } else s.msg = 'You leave it be.';
         s.mon = null;
         s.mode = 'walk';
       }
@@ -339,15 +598,25 @@ const safari: MinigameModule<SafariState> = {
         setWarden(s, 'Nobody throws anything at a family. Not in my park.');
       } else if (id === 'closer') {
         s.quiet = clampQ(s.quiet - 2);
+        // Within one tile of the family.
+        if (s.fam) {
+          const dx = Math.sign(s.fam.x - s.x), dy = dx === 0 ? Math.sign(s.fam.y - s.y) : 0;
+          while (Math.abs(s.fam.x - s.x) + Math.abs(s.fam.y - s.y) > 1 && !parkSolid(s, s.x + dx, s.y + dy)) {
+            s.x += dx;
+            s.y += dy;
+          }
+        }
         s.msg = 'The mother turns and stares you down. They hurry on.';
         s.mode = 'walk';
+        s.fam = null;
       } else if (id === 'photo' && s.camera) {
-        sellShot(s, 10);
+        sellShot(s, 10, 'kangaskhan', 'family');
         s.msg = 'Click. The young one, out of the pouch, looking straight at its mother. A 10-point shot.';
         setWarden(s, 'That one goes on the wall.');
       } else if (id === 'leave') {
         s.msg = 'They pass. The grass closes behind them.';
         s.mode = 'walk';
+        s.fam = null;
       }
     } else if (s.mode === 'herd') {
       s.steps -= STEPS.wait;
@@ -373,7 +642,7 @@ const safari: MinigameModule<SafariState> = {
         s.quiet = clampQ(s.quiet + 1);
         s.msg = 'They go past for a long time. You stop counting.';
       } else if (id === 'photo' && s.camera) {
-        sellShot(s, 6);
+        sellShot(s, 6, RESIDENTS[3]!.find((x) => content.species.has(x)) ?? 'dratini', 'migration');
         s.msg = 'Click. The whole herd, on the move. A 6-point shot.';
       } else s.msg = 'You walk on. Behind you, the marsh is emptying.';
       s.mode = 'walk';
@@ -405,35 +674,47 @@ const safari: MinigameModule<SafariState> = {
         setWarden(s, 'I saw that. I won\'t say anything. I saw it, though.');
       }
       s.mode = 'walk';
+    } else if (s.mode === 'spot' && s.spot) {
+      const spot = s.spot;
+      s.spot = null;
+      s.mode = 'walk';
+      if (id === 'exit' && spot === 'gate') {
+        s.steps -= 1;
+        finish(s);
+      } else if (id === 'camera' && spot === 'camera') {
+        s.camera = true;
+        s.steps -= 1;
+        s.msg = 'The gatehouse camera. The warden buys good shots: distance, behaviour, and whether it saw you.';
+      } else if (id === 'track' && spot === 'prints') {
+        s.steps -= STEPS.track;
+        s.tracked = true;
+        s.mode = 'track';
+        s.track = { print: r.int(0, PRINTS.length - 1), fork: 0, right: [] };
+        // The trail you started on is the trail that goes on.
+        s.track.right = [s.track.print, s.track.print];
+        s.msg = `You find ${PRINTS[s.track.print]!.toLowerCase()} in the mud and follow them.`;
+      } else if (id.startsWith('door:') && spot === 'far' && s.doors.includes(id.slice(5))) {
+        s.door = id.slice(5);
+        s.farGate = true;
+        s.msg = 'At the far gate.';
+        setWarden(s, 'Beyond here, it isn\'t a park. Nobody\'s counting your steps. Nobody\'s coming to fetch you, either.');
+        finish(s);
+      } else if (id === 'see' && (spot === 'stampede' || spot === 'teeth')) {
+        // The visit steps out to the event (core/minigame/flow.ts) and comes back to this tile.
+        s.away = { eventId: spot === 'stampede' ? PARK_STAMPEDE : PARK_TEETH, from: -1, opened: [], own: 0 };
+        s.msg = '';
+      } else s.msg = spot === 'far' ? 'You turn back from the gate.' : 'You walk on.';
+    } else if (id.startsWith('go:') || id.startsWith('run:')) {
+      const facing = id.slice(id.indexOf(':') + 1) as Facing;
+      if (FACINGS.includes(facing)) move(content, s, r, facing, id.startsWith('run:'));
     } else {
       switch (id) {
-        case 'walk': {
-          s.steps -= STEPS.walk;
-          s.walks += 1;
-          if (s.walks % 2 === 0) s.quiet = clampQ(s.quiet + 1);
-          setWarden(s, WARDEN_WALK[s.walks % WARDEN_WALK.length]!);
-          if (s.area === 0) s.plainWalks += 1;
-          // A Kangaskhan and its young cross the plain once a visit, on the second walk there.
-          if (s.area === 0 && !s.familySeen && s.plainWalks >= 2 && content.species.has('kangaskhan')) {
-            s.familySeen = true;
-            s.mode = 'family';
-            s.msg = 'A Kangaskhan and its young are crossing the plain.';
-          } else if (r.chance(0.6)) meet(content, s, r, false);
-          else s.msg = 'Nothing. Long grass, moving in the wind.';
-          break;
-        }
-        case 'run':
-          s.steps -= STEPS.run;
-          s.quiet = clampQ(s.quiet - 1);
-          setWarden(s, WARDEN_RUN);
-          if (r.chance(0.9)) meet(content, s, r, false);
-          break;
         case 'wait':
           s.steps -= STEPS.wait;
           s.waits += 1;
           s.quiet = clampQ(s.quiet + 1);
           setWarden(s, WARDEN_WAIT);
-          if (r.chance(0.3)) meet(content, s, r, true);
+          if (parkTile(s, s.x, s.y) === ',' && r.chance(WALK.waitGrass)) meet(content, s, r, true);
           else s.msg = 'You stand still. The park forgets you\'re there.';
           break;
         case 'look':
@@ -445,34 +726,6 @@ const safari: MinigameModule<SafariState> = {
           } else if (s.area === 3) s.msg = 'Through the binoculars: reeds pressed flat in a ring. A nest, somewhere in there.';
           else if (s.area === 1) s.msg = 'Through the binoculars: a Psyduck holding its head, at the edge of the water.';
           else s.msg = 'Through the binoculars: grazers, all facing the same way, into the wind.';
-          break;
-        case 'camera':
-          s.camera = true;
-          s.steps -= 1;
-          s.msg = 'The gatehouse camera. The warden buys good shots: distance, behaviour, and whether it saw you.';
-          break;
-        case 'track':
-          s.steps -= STEPS.track;
-          s.tracked = true;
-          s.mode = 'track';
-          s.track = { print: r.int(0, PRINTS.length - 1), fork: 0, right: [] };
-          // The trail you started on is the trail that goes on.
-          s.track.right = [s.track.print, s.track.print];
-          s.msg = `You find ${PRINTS[s.track.print]!.toLowerCase()} in the mud and follow them.`;
-          break;
-        case 'next':
-          s.steps -= STEPS.move;
-          enterArea(s, Math.min(3, s.area + 1));
-          break;
-        case 'back':
-          s.steps -= STEPS.move;
-          enterArea(s, Math.max(0, s.area - 1));
-          break;
-        case 'far':
-          s.farGate = true;
-          s.msg = 'At the far gate.';
-          setWarden(s, 'Beyond here, it isn\'t a park. Nobody\'s counting your steps. Nobody\'s coming to fetch you, either.');
-          finish(s);
           break;
         case 'exit':
           s.steps -= 1;

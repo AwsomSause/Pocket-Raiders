@@ -6,6 +6,7 @@
 import type { Content } from '../contentSchema';
 import type { BattleState, PokemonInstance, RunState } from '../state';
 import { bondLevelFriendship } from '../co/who';
+import { hashSeed, Rng } from '../rng';
 
 const f = (run: Pick<RunState, 'story'>, k: string): number => Number(run.story.flags[`ev:${k}`] ?? 0);
 const set = (run: Pick<RunState, 'story'>, k: string, n: number): void => {
@@ -298,6 +299,19 @@ export function prisonTokens(content: Content, run: RunState, text: string): str
 /** The player works for a team: any run flag `team-<id>-inside` is set (the Evil Team inside route; true or false whether or not it has merged). */
 export function insideTeam(run: Pick<RunState, 'story'>): boolean {
   return Object.keys(run.story.flags).some((k) => /^ev:team-[a-z0-9-]+-inside$/.test(k) && Number(run.story.flags[k]) > 0);
+}
+
+/** The doc's other way in: "at a 10% chance, as an ambush at any team node". One roll a stage, from the run seed (its own stream). */
+export const PRISON_AMBUSH_PCT = 10;
+export function prisonAmbush(run: Pick<RunState, 'seed' | 'regionIndex' | 'stage'>): boolean {
+  return new Rng(hashSeed(`${run.seed}::prison-ambush::${run.regionIndex}:${run.stage?.index ?? 0}`)).chance(PRISON_AMBUSH_PCT / 100);
+}
+
+/** Would a loss to this rank open the cell now? Pure: `prisonOnLoss` without the opening. */
+export function prisonWouldOpen(content: Content, run: RunState, rank: string | undefined): boolean {
+  if (rank !== 'executive' && rank !== 'leader') return false;
+  if (f(run, 'prison-seen') > 0 || f(run, 'prison-offered') > 0 || f(run, 'pr-in') > 0 || f(run, 'kanto-flight-stolen') > 0 || insideTeam(run)) return false;
+  return content.events.has('gn-62-cell') && !!here(run);
 }
 
 /**

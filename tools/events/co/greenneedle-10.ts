@@ -1,7 +1,7 @@
 // Greenneedle, part 10: gn.42 The Battle Frontier, gn.43 The Pokémon Auction (doc GREENNEEDLE_REWORKED_PLACED_9.md).
 // Build: npm run co:build -- greenneedle-10   then   npm run co:gn
 import { $, br, ch, fight, flag, heal, hurt, item, join, money, out, trainer, type Json } from '../dsl.ts';
-import { rep } from './_ne.ts';
+import { anyFlag, rep } from './_ne.ts';
 import { chIf, exactly, gev, gn, is, kindness, moment, not, notThisRegion, pick, rm, roll, say, scene, setTo, stampRegion, teach, when, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
@@ -61,8 +61,8 @@ function brainRoom(b: B, intro: string, text: string, remembers: Json[] = []): J
   return rm(`gn-42-${b}-brain`, `${br0.building}: ${who}`, hall({ remembers }), intro, RANKS.map((r) => chIf([is('frontier-rank', r.lo, r.hi)], 'Battle.', fight(text, {
     ...trainer(`Frontier Brain ${br0.name}`, { cls: br0.cls, size: r.size, lv: r.lv, team: br0.team.slice(0, r.size), friendly: true, rule: BRAIN_RULE(b), win, lose }),
   }), { branches: [
-    br([exactly(`brain-${b}-won`, 1)], say(`**${br0.name}:** "I've thought about you every day since. Unhealthily."`, text)),
-    br([exactly(`brain-${b}-won`, 2)], say(`**${br0.name}:** "Back. Good."`, text)),
+    br([exactly(`brain-${b}-won`, 1)], say(`**${br0.name}:** "I've thought about you every day since. Unhealthily." *They count your last team off on their fingers: {brainteam:${b}}.*`, text)),
+    br([exactly(`brain-${b}-won`, 2)], say(`**${br0.name}:** "Back. Good." *They count your last team off on their fingers: {brainteam:${b}}.*`, text)),
   ] })));
 }
 
@@ -131,13 +131,13 @@ const rack = (k: number, half: 1 | 2): Json => {
   ]);
 };
 const swap = (i: number): Json => {
-  const theirs = FACTORY_FOES[i - 1]!.team[2]!;
-  const name = `${theirs[0]!.toUpperCase()}${theirs.slice(1)}`;
+  const team = FACTORY_FOES[i - 1]!.team;
+  const name = (sp: string): string => `${sp[0]!.toUpperCase()}${sp.slice(1)}`;
   const next = scene(`gn-42-factory-${i + 1}`);
-  return rm(`gn-42-factory-swap-${i}`, 'The Factory: The Swap', hall({ pokemon: theirs }), say(
-    `The attendant holds out the loser's ${name} on a lead. "Swap one? It's the rules. Well. It's allowed."`,
+  return rm(`gn-42-factory-swap-${i}`, 'The Factory: The Swap', hall({ pokemon: team[2]! }), say(
+    `The attendant lines up the loser's three: ${team.map(name).join(', ')}. "Swap one of yours for one of these? It's the rules. Well. It's allowed."`,
   ), [
-    ch(`Trade one of yours for their ${name}.`, out('The attendant takes yours back to the rack.', gn('swapIn', { key: theirs }), next), { pick: {} }),
+    ...team.map((theirs) => ch(`Trade one of yours for their ${name(theirs)}.`, out('The attendant takes yours back to the rack.', gn('swapIn', { key: theirs }), next), { pick: {} })),
     ch('Keep your three.', out('You keep them. The one you nearly gave back leans on your leg.', next)),
   ]);
 };
@@ -146,7 +146,7 @@ const factory: Json[] = [
     'A warehouse with a rack of Pokémon along one wall, each with a name tag. Rentals only. Pick three of six. After each win, you may swap one for the loser\'s.',
     '**Foreman Kestrin Adebayo:** "Your own team waits in the back room. They\'ll get tea. These ones are mine. Well. Everyone\'s."',
   ), [gn('stash'), setTo('factory-rented', 0), pick('factory-rack', 1, 1, 1), ...[1, 2, 3].map((k) => when('factory-rack', { min: k, max: k }, [scene(`gn-42-factory-rack-${k}-1`)]))], {
-    remembers: [{ id: 'swapped', when: [is('x-rival-swapped-teams')], notice: '**The Foreman** has heard. "You swapped teams with your rival. You\'ve handled other people\'s Pokémon. You\'ll be fine here."' }],
+    remembers: [{ id: 'swapped', when: [anyFlag('x-rival-swapped-teams', 'borrow-result')], notice: '**The Foreman** has heard. "You swapped teams with your rival. You\'ve handled other people\'s Pokémon. You\'ll be fine here."' }],
   }),
   ...[1, 2, 3].flatMap((k) => [rack(k, 1), rack(k, 2)]),
   ...FACTORY_FOES.map((f, k) => bout('factory', k + 1, f.foe, f.cls, say(`Battle ${k + 1} of seven. ${f.line}`), 'The rentals step up. Yours look back at you, once, to check.',
@@ -381,7 +381,8 @@ const gn42: Json[] = [...plaza, ...tower, ...factory, ...arena, ...pike, ...dome
 // =====================================================================================================================
 // gn.43  THE POKÉMON AUCTION  (Single at a Town node; until towns exist, step 15, optional; once per region, from A5).
 // Six lots, read in the catalogue first (what it is, the fair value, where it came from), then bid on live: "Bid." / "Hold." / "Out."
-// Four bidders with rules you can read (core/greenneedle/auction.ts). One lot is stolen; the clues are in the catalogue.
+// Four bidders with rules you can read (core/greenneedle/auction.ts). One lot is stolen; the clues are in the catalogue, and the three
+// choices come up with the lot, whichever clue the player went by.
 // =====================================================================================================================
 const AUCTION_TINT = '#5b3a29';
 const salon = (o: Json = {}): Json => ({ tint: AUCTION_TINT, tags: ['Shop', 'Mystery', 'Story'], effect: 'none', ...o });
@@ -402,12 +403,16 @@ const photoPick = (n: number, back: string): Json => ch(`Lot ${LOT_WORD[n - 1]}.
   when('auction-stolen', { min: 0, max: n - 1 }, [scene(back)], 'Nothing. It\'s just a very good photograph.'),
   when('auction-stolen', { min: n + 1, max: 9 }, [scene(back)], 'Nothing. It\'s just a very good photograph.'),
 ));
+const EYES = 'In the third row, a young woman in grey gloves sits up for the first time. She checks a note inside her glove, and looks at the lot, and nothing else.';
 const gn43: Json[] = [
   gev('gn-43-door', 'The Pokémon Auction', salon({ stop: 'event', rarity: 'common', requires: [once('auction-at')] }), say(
     '*A hall. Rows of chairs. Numbered paddles. A catalogue on every seat.*',
     '**Auctioneer, Mr. Octavian Pryde:** "Six lots. Bidding in hundreds. A nod is a bid; a sneeze, regrettably, is also a bid. Catalogues are accurate to the best of my knowledge, which is considerable."',
   ), [
-    ch('Take a seat.', out('Paddle forty-one. The chair creaks. Three rows ahead, a man is already holding his paddle up, and the auction hasn\'t started.', stampRegion('auction-at'), gn('auctionArrive'), scene('gn-43-catalogue'))),
+    ch('Take a seat.', out('Paddle forty-one. The chair creaks. Three rows ahead, a man is already holding his paddle up, and the auction hasn\'t started.', stampRegion('auction-at'),
+      // "Say nothing": it's seen later, in the wrong hands (once, on the way in to the next auction).
+      when('auction-silent', { min: 1 }, [when('auction-seen-later', { min: 0, max: 0 }, [setTo('auction-seen-later', 1)], 'On the steps outside, two grunts of the team that works this region were passing something between them, and laughing. You knew it at once. It was the lot you kept your paddle in your lap for.')]),
+      gn('auctionArrive'), scene('gn-43-catalogue'))),
     ch('Walk on.', out('Through the doors, as they close: "Lot one, ladies and gentlemen—"')),
   ]),
   rm('gn-43-catalogue', 'The Auction: The Catalogue', salon(), say(
@@ -433,7 +438,8 @@ const gn43: Json[] = [
   ), [photoPick(4, 'gn-43-catalogue-2'), photoPick(5, 'gn-43-catalogue-2'), photoPick(6, 'gn-43-catalogue-2'), ch('Back to the first three.', out('You turn back.', scene('gn-43-photos')))]),
   ...[1, 2, 3, 4, 5, 6].flatMap((n) => [
     rm(`gn-43-lot-${n}`, `The Auction: Lot ${n}`, salon({ remembers: [
-      { id: 'eyes', when: [exactly('auction-stolen', n)], notice: 'In the third row, a young woman in grey gloves sits up for the first time. She checks a note inside her glove, and looks at the lot, and nothing else.' },
+      { id: 'seen', when: [exactly('auction-stolen', n), is('museum-visits')], notice: `${EYES} And you have seen the shape of this lot before, this run: an empty case in a museum, a card where the thing should be, and dust the size of it.` },
+      { id: 'eyes', when: [exactly('auction-stolen', n)], notice: EYES },
       { id: 'collector', when: [exactly('auction-quayle', n)], notice: 'Mr. Quayle, the Collector, who hasn\'t moved all morning, uncrosses his legs. It is the lot that would suit your lead best.' },
     ] }), say(
       `**Pryde:** "Lot ${LOT_WORD[n - 1]}." A porter carries it out on a velvet tray.`,

@@ -175,11 +175,11 @@ describe('gn.27 The Pokémon Circus', () => {
   it('an attraction costs a ticket; more are ₽100', () => {
     let run = choose(gate('t27-ticket'), 'gn-27-top', 'See the attractions.').run;
     run = choose(run, 'gn-27-acts', 'Mr. Mime\'s Illusions.').run;
-    run = choose(run, 'gn-27-mime', 'Lean on a wall.').run;
+    run = choose(run, 'gn-27-mime', 'Step up to the walls.').run;
     expect(flagOf(run, 'circus-tickets')).toBe(2);
-    expect(scene(run, 'gn-27-mime-lean').labels).toEqual(['The left one.', 'The middle one.', 'The right one.']);
+    expect(scene(run, 'gn-27-mime-lean').labels).toEqual(['Lean on the left one.', 'Lean on the middle one.', 'Lean on the right one.', 'Watch them first.']);
     const real = flagOf(run, 'circus-mime');
-    const leaned = choose(run, 'gn-27-mime-lean', ['The left one.', 'The middle one.', 'The right one.'][real - 1]!);
+    const leaned = choose(run, 'gn-27-mime-lean', ['Lean on the left one.', 'Lean on the middle one.', 'Lean on the right one.'][real - 1]!);
     expect(said(leaned)).toMatch(/It holds/);
     const money = leaned.run.money;
     const bought = choose(leaned.run, 'gn-27-mime', 'Buy a ticket (₽100).').run;
@@ -358,8 +358,20 @@ describe('gn.28 The Team Rocket Hideout', () => {
   it('the Executive at A+2; at Alert 10 two Grunts stand with them', () => {
     const quiet = choose(toVault('t28-exec', 3), 'gn-28-vault', 'Fight.').run;
     expect(quiet.battle!.kind).toBe('trainer');
-    const loud = win(choose(toVault('t28-exec10', 10), 'gn-28-vault', 'Fight.').run);
-    expect(next(loud)).toBe('gn-28-vault-2');
+    expect(quiet.battle!.doubles).toBeFalsy();
+    // Alert 10: the two Grunts stand WITH the Executive: one fight, two at a time, with one more Pokémon from each Grunt.
+    const two = toVault('t28-exec10', 10);
+    two.party.push(createPokemon(content, 'pidgey', two.party[0]!.level, 'p-two'));
+    const stood = choose(two, 'gn-28-vault', 'Fight.');
+    // With one Pokémon left you still face all five, one at a time.
+    const alone = choose(toVault('t28-exec10-alone', 10), 'gn-28-vault', 'Fight.').run;
+    expect(alone.battle!.doubles).toBeFalsy();
+    expect(alone.battle!.enemyTeam.length).toBe(quiet.battle!.enemyTeam.length + 2);
+    expect(stood.text).toMatch(/stand with them/);
+    expect(stood.run.battle!.doubles).toBeTruthy();
+    expect(stood.run.battle!.enemyTeam.length).toBe(quiet.battle!.enemyTeam.length + 2);
+    expect(next(win(stood.run))).toBe('gn-28-reward');
+    expect(content.events.has('gn-28-vault-2')).toBe(false);
   });
 
   it('beating the Executive: choose one of four rewards; the black-market pass lasts the region', () => {

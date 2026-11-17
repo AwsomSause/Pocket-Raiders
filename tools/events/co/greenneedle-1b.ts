@@ -9,7 +9,7 @@ export { CATEGORY } from './_gn.ts';
 const POND = '#1f4a63';
 const pond = (action: string, o: Json = {}): Json => ({ kind: 'pond', action, ...o });
 const poli = (o: Json = {}): Json => ({ tags: ['Story', 'Pokémon', 'Relationship'], tint: POND, pokemon: 'poliwag', ...o });
-/** The lessons: at the rests of the stage the Poliwag joined; one that is missed is missed (Burl's trick stays). */
+/** The lessons: on the stage the Poliwag joined, at Steps 7, 11 and 17 (PLACEMENT below; every route passes them). One left unplayed is missed (Burl's trick stays). */
 const LESSON_REQ = (lesson: string): Json[] => [is('pp-begun'), sameStage('pp-stage'), not(`pp-lesson-${lesson}`), not('pp-ending-done')];
 /** One lesson's three responses: patient (learned on the first retry), kind (second retry, Bond +1), shortcut (learned, weaker). */
 const lesson = (id: string, name: string, which: string, intro: string, r: { patient: [string, string]; kind: [string, string]; shortcut: [string, string] }, patientFirst = false): Json => {
@@ -28,6 +28,18 @@ const BURL = (exceptional: boolean): Json => ({
   rule: { pondDuel: true, noSwitch: true, matchLead: true, ...(exceptional ? { evolveMid: true } : {}) },
   lose: [heal(0.5), stampStage('pp-lost-stage'), room('pp-rematch-lost')],
 });
+
+/** The rematch scene. `pp-rematch` is the first one (the stage after the Poliwag joined); `pp-rematch-again` is the retry after a loss. */
+const rematch = (id: string, requires: Json[], remembers: Json[]): Json => gev(id, 'The Rematch at the Pond', poli({
+  stop: 'event', rarity: 'rare', callback: true, minStage: 3, pokemon: 'poliwhirl', effect: 'rain', types: ['water'], requires, ...(remembers.length ? { remembers } : {}),
+}), say(
+  'Back at the pond. The five are waiting in a half circle, and Burl steps out of the reeds with his arms folded. Burl is two levels above the Poliwag. He always has been.',
+  'One on one. The Poliwag against Burl. He has three tricks. You taught it three things.',
+  'The Poliwag is shaking. It steps out in front of you anyway.',
+), [
+  chIf([not('pp-exceptional')], 'Let it step forward.', fight('You step back. It is the hardest thing you have done all stage.', BURL(false))),
+  chIf([is('pp-exceptional')], 'Let it step forward.', fight('You step back. The Poliwag doesn\'t look at you for permission. It looks at Burl.', BURL(true))),
+]);
 
 const EVENTS_1B: Json[] = [
   // ---- cold open (S(n), step 3) ----
@@ -113,18 +125,10 @@ const EVENTS_1B: Json[] = [
   ]),
 
   // ---- the rematch (next stage, Step 2): one on one, it wins by lessons, not by level ----
-  gev('pp-rematch', 'The Rematch at the Pond', poli({
-    stop: 'event', rarity: 'rare', forced: true, callback: true, minStage: 3, pokemon: 'poliwhirl', effect: 'rain', types: ['water'],
-    requires: [is('pp-begun'), laterStage('pp-stage'), notThisStage('pp-lost-stage'), not('pp-ending-done'), not('pp-rematch-won')],
-    remembers: [{ id: 'again', when: [is('pp-lost-stage')], notice: 'Burl is waiting again, arms folded. The Poliwag looks at him. Then it looks at you, and walks out to the water by itself.' }],
-  }), say(
-    'Back at the pond. The five are waiting in a half circle, and Burl steps out of the reeds with his arms folded. Burl is two levels above the Poliwag. He always has been.',
-    'One on one. The Poliwag against Burl. He has three tricks. You taught it three things.',
-    'The Poliwag is shaking. It steps out in front of you anyway.',
-  ), [
-    chIf([not('pp-exceptional')], 'Let it step forward.', fight('You step back. It is the hardest thing you have done all stage.', BURL(false))),
-    chIf([is('pp-exceptional')], 'Let it step forward.', fight('You step back. The Poliwag doesn\'t look at you for permission. It looks at Burl.', BURL(true))),
-  ]),
+  rematch('pp-rematch', [is('pp-begun'), laterStage('pp-stage'), not('pp-lost-stage'), not('pp-ending-done'), not('pp-rematch-won')], []),
+  // ---- after a loss: "It can retry at the next `water` stage" ----
+  rematch('pp-rematch-again', [is('pp-begun'), is('pp-lost-stage'), notThisStage('pp-lost-stage'), { kind: 'stageTypes', types: ['water'] }, not('pp-ending-done'), not('pp-rematch-won')],
+    [{ id: 'again', when: [is('pp-lost-stage')], notice: 'Burl is waiting again, arms folded. The Poliwag looks at him. Then it looks at you, and walks out to the water by itself.' }]),
   rm('pp-rematch-lost', 'It Gets Up', poli({ effect: 'rain' }), say(
     'It gets up.',
     'It bows to Burl. Then it turns and walks back to you, and stands by your boot, and looks at the pond.',
@@ -176,9 +180,9 @@ const EVENTS_SKY: Json[] = [
     ch('Back the Spearow.', WATCHED('You say it plainly, because it is the bigger bird and the louder. The Pidgey hears that too. The branch shakes. It begins.', [act('duel', { side: 'spearow' })])),
   ]),
 
-  // ---- one beat per stage (S2 to S7, Step 8, optional) ----
+  // ---- one beat per stage (S2 to S7, Step 8, optional: one node, not every route; PLACEMENT below) ----
   skyEv('sky.meet', 'A Shape on a Fence Post', {
-    stop: 'event', rarity: 'rare', forced: true, minStage: 1, pokemon: 'pidgey', tint: '#2a3b52', effect: 'glint', requires: [{ kind: 'xevents' }, sky('meet')],
+    stop: 'event', rarity: 'rare', minStage: 1, pokemon: 'pidgey', tint: '#2a3b52', effect: 'glint', requires: [{ kind: 'xevents' }, sky('meet')],
     remembers: [{ id: 'nest', when: [sky('nest')], notice: 'Behind it, in the fork of the fence, is its nest. It is lined with everything you ever gave it: every one, kept, tucked in, the way you keep letters.' }],
   }, say(
     '*A shape on a fence post. It\'s bigger than last time.*',
@@ -195,7 +199,7 @@ const EVENTS_SKY: Json[] = [
   ]),
 
   // ---- found training alone (S3 and S6, Step 16) ----
-  skyEv('sky.alone', 'Training Alone', { stop: 'event', rarity: 'rare', forced: true, minStage: 1, pokemon: 'pidgey', tint: '#27384a', effect: 'glint', requires: [{ kind: 'xevents' }, sky('alone')] }, say(
+  skyEv('sky.alone', 'Training Alone', { stop: 'event', rarity: 'rare', minStage: 1, pokemon: 'pidgey', tint: '#27384a', effect: 'glint', requires: [{ kind: 'xevents' }, sky('alone')] }, say(
     '*It\'s diving at a rock, pulling up, diving again. It doesn\'t notice you.*',
     '*There\'s a Fearow feather stuck in the rock. It\'s been aiming at that.*',
     'The grass is flattened in a ring where it has fallen a hundred times. Nobody watching. Nobody keeping score.',
@@ -206,16 +210,16 @@ const EVENTS_SKY: Json[] = [
 
   // ---- the finale (S8, Step 18, must-see) ----
   skyEv('sky.finale', 'The Cliff in High Wind', {
-    stop: 'event', rarity: 'epic', forced: true, minStage: 1, pokemon: 'pidgeot', tint: '#1d2a3d', effect: 'glint', requires: [{ kind: 'xevents' }, sky('finale')],
+    stop: 'event', rarity: 'epic', minStage: 1, pokemon: 'pidgeot', tint: '#1d2a3d', effect: 'glint', requires: [{ kind: 'xevents' }, sky('finale')],
     remembers: [{ id: 'backed-spearow', when: [is('pidgey-backed-spearow')], notice: 'Before it begins, Pidgeot looks at you. Then it looks away. It has not forgotten which bird you backed, on the first day, at the branch.' }],
   }, say(
     'A cliff. High wind. Wild Pokémon on every ledge, watching: they felt it coming, the way a field feels rain.',
     'Pidgeot on the high rock with its crest into the gale. Across the gap, Fearow lands with its wings half-folded, and says nothing.',
     '*They circle once. Neither is the bird from the branch.*',
   ), [
-    ch('Climb to the ridge and watch.', FINALE_FIGHT('You climb to the ridge above them, and the wind takes your breath, and you do not look away.')),
-    ch('Give Pidgeot a last Berry before it begins.', FINALE_FIGHT('You hold it up. Pidgeot lowers its great head and takes it, and does not need to say anything. Then you climb the ridge.', [act('finaleGiftBerry')]), { requires: [sky('giftBerry')] }),
-    ch('Give Pidgeot something to hold before it begins.', FINALE_FIGHT('You press it into its claws and step back. It will carry it into the wind. It will keep it to the end.', [act('finaleGiftItem')]), { requires: [sky('giftItem')] }),
+    ch('Climb to the ridge and watch.', FINALE_FIGHT('You climb to the ridge above them, and the wind takes your breath, and you do not look away.', [act('finaleShow')])),
+    ch('Give Pidgeot a last Berry before it begins.', FINALE_FIGHT('You hold it up. Pidgeot lowers its great head and takes it, and does not need to say anything. Then you climb the ridge.', [act('finaleGiftBerry'), act('finaleShow')]), { requires: [sky('giftBerry')] }),
+    ch('Give Pidgeot something to hold before it begins.', FINALE_FIGHT('You press it into its claws and step back. It will carry it into the wind. It will keep it to the end.', [act('finaleGiftItem'), act('finaleShow')]), { requires: [sky('giftItem')] }),
   ]),
 
   // ---- after "Fearow!": met in the next region for one more fight, at A+1. Win that, and it'll listen ----
@@ -248,9 +252,20 @@ export const PLACEMENT: Record<string, Placement> = {
       { beat: 'The rematch (must-see)', event: 'pp-rematch', stage: 'S(n+1)', home: 2, window: [1, 4] },
       { beat: 'The return', stage: 'any later evil-team climax or Champion battle' },
     ],
-    note: 'Stages S1-S6. The cold open places the lessons and the pond visit on later nodes of its stage (core/events.ts pond begin).',
+    note: 'Stages S1-S6. The lessons, the pond visit and the rematch have entries of their own below.',
   },
 };
+/** gn.01's same-stage beats. The cold open places them itself (core/events.ts pond begin, steps in core/episodes/poliPond.ts POND_STEPS), so the placer leaves them alone (`own`). */
+const pondBeat = (home: number, window: [number, number], sits: 'must-see' | 'optional'): Placement => ({
+  gn: 'gn.01', shape: 'Chain', earliest: 'A2', home, window, sits, tags: ['Companion Story'], often: 'run', own: true,
+});
+PLACEMENT['pp-lesson-aim'] = pondBeat(7, [6, 9], 'must-see');
+PLACEMENT['pp-lesson-footing'] = pondBeat(11, [10, 13], 'must-see');
+PLACEMENT['pp-pond-visit'] = pondBeat(14, [12, 16], 'optional');
+PLACEMENT['pp-lesson-stand'] = pondBeat(17, [15, 19], 'must-see');
+/** The rematch: next stage, Step 2, must-see (an owed Companion beat is never dropped). Burl is at A+0. The retry waits for a water stage. */
+PLACEMENT['pp-rematch'] = { gn: 'gn.01', shape: 'Companion', chain: 'pp', beat: 6, earliest: 'A2', home: 2, window: [1, 4], sits: 'must-see', tags: ['Companion Story'], level: 'A+0', often: 'run' };
+PLACEMENT['pp-rematch-again'] = { ...PLACEMENT['pp-rematch']!, needs: ['water'], note: 'A lost rematch: "It can retry at the next water stage."' };
 PLACEMENT['sky.opening'] = {
   gn: 'gn.02', shape: 'Region-wide', earliest: 'A1', sits: 'must-see', tags: ['Region-Wide Story', 'Rival Episode'], level: 'Pidgey and Spearow match each other at A-1, rising each stage', often: 'run',
   beats: [
@@ -261,4 +276,9 @@ PLACEMENT['sky.opening'] = {
   ],
   note: 'Best in a run\'s first region. Once per run.',
 };
+// gn.02's later beats: the stage beats are optional (one node, so a route can pass them by), the finale is must-see. Both birds are at A-1.
+// They are owed Companion beats (beat 2+), so a full stage never drops them.
+PLACEMENT['sky.meet'] = { gn: 'gn.02', shape: 'Companion', chain: 'sky', beat: 2, earliest: 'A1', home: 8, window: [6, 12], sits: 'optional', tags: ['Rival Episode'], level: 'A-1', often: 'run' };
+PLACEMENT['sky.alone'] = { gn: 'gn.02', shape: 'Companion', chain: 'sky', beat: 3, earliest: 'A1', home: 16, window: [14, 18], sits: 'optional', tags: ['Rival Episode'], level: 'A-1', often: 'run' };
+PLACEMENT['sky.finale'] = { gn: 'gn.02', shape: 'Companion', chain: 'sky', beat: 4, earliest: 'A1', home: 18, window: [16, 19], sits: 'must-see', tags: ['Rival Episode'], level: 'A-1', often: 'run' };
 export const CHAINS: Json[] = [];

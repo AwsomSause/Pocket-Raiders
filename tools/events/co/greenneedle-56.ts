@@ -346,7 +346,7 @@ const CASES: Case[] = [
 /** Reward tier by clues read right (of the three real): 3 = the rare Pokémon comes with a held item (doc table) and Hartigan's line; 0 = "one of them". */
 const tier = (): Json[] => [
   when('slowpoke-read', { min: 3 }, [], '**Miss Hartigan:** "You\'d be wasted here."'),
-  when('slowpoke-read', { min: 0, max: 0 }, [bond(1)], 'The Chief looks at you, nods slowly, and moves its hat a little to make room. The Slowpoke consider you one of them.'),
+  when('slowpoke-read', { min: 0, max: 0 }, [], 'The Chief looks at you, nods slowly, and moves its hat a little to make room. The Slowpoke consider you one of them.'),
 ];
 /** The rare Pokémon at the end of a case: with every real clue read right it comes holding `held` (doc: "comes with a held item"). */
 const rareJoin = (species: string, held: string): Json[] => [
@@ -354,6 +354,12 @@ const rareJoin = (species: string, held: string): Json[] => [
   when('slowpoke-read', { min: 0, max: 2 }, [join({ species: [species], lv: 0 })]),
 ];
 const HELD_BY: Record<string, string> = { murkrow: 'scope-lens', dratini: 'dragon-fang', ursaring: 'quick-claw' };
+/** Case 3's badge (doc "and a badge: Honorary Slowpoke Detective"): pinned on in front of everyone, and kept in the album. */
+const BADGE: Json[] = [
+  when('slowpoke-honorary', { min: 0, max: 0 }, [], 'The Chief gets down off its chair. This takes some time. It pins something to your coat, crooked: a tin badge, hand-lettered. **HONORARY SLOWPOKE DETECTIVE.** Sergeant Farrow salutes it before she can stop herself.'),
+  setTo('slowpoke-honorary', 1),
+  moment('Found a missing grandfather by walking the wrong way, and was made an Honorary Slowpoke Detective.', 70),
+];
 const done = (n: number): Json[] => [flag('slowpoke-case'), setTo(`slowpoke-case-${n}`, 1), ...tier()];
 
 function clueRoom(c: number, place: Place, k: Clue, pokemon?: string): Json {
@@ -391,13 +397,12 @@ function truthChoices(c: Case): Json[] {
     return [
       ch('Take the Dratini.', out('You hold out a hand. The Dratini looks at the stones, at the crate, and at you. Then it winds round your arm, cold and smooth and certain. It has been very lonely under these docks.', ...rareJoin('dratini', HELD_BY['dratini']!), ...d)),
       ch('Take the Dragon Scale, and leave it be.', out('Behind the stones, polished and cold: a Dragon Scale the Dratini shed. It lets you take it, but watches. You leave the crate for the aquarium, and the Dratini lets you leave.', item('dragon-scale'), kindness(1), ...d)),
-      ch('Ask the Sleeper how it knew.', out('The Sleeper opens one eye. Closes it. A smile, you think, at the corner of its mouth. The Dratini has gone shy, but when you offer a hand it comes anyway, curious, and wraps round your wrist.', ...rareJoin('dratini', HELD_BY['dratini']!), intel(1), ...d)),
     ];
   }
   return [
-    ch('Thank the Ursaring.', out('You thank it, properly, with a bow. It nods once and looks at the old man. It follows him home, slowly, and then, at the gate, turns round and follows you.', ...rareJoin('ursaring', HELD_BY['ursaring']!), kindness(1), setTo('slowpoke-honorary', 1), moment('Found a missing grandfather by walking the wrong way with the Slowpoke Detective Agency.', 70), ...d)),
-    ch('Carry him home.', out('You take the old man\'s weight on your shoulder, and the Ursaring takes the other. Between you, you carry him home. The Ursaring stays at the gate all night, to see he\'s fed, and leaves a gift on the step.', any(...RARE_HELD), kindness(1), setTo('slowpoke-honorary', 1), moment('Found a missing grandfather by walking the wrong way with the Slowpoke Detective Agency.', 70), ...d)),
-    ch('Ask the Slowpoke how they knew.', out('The Chief looks at you. Four minutes pass. It yawns. Miss Hartigan, arriving late, translates: "It says it didn\'t. It says it wasn\'t sure it should." The Ursaring, listening, decides to follow you home.', ...rareJoin('ursaring', HELD_BY['ursaring']!), intel(1), setTo('slowpoke-honorary', 1), moment('Found a missing grandfather by walking the wrong way with the Slowpoke Detective Agency.', 70), ...d)),
+    ch('Thank the Ursaring.', out('You thank it, properly, with a bow. It nods once and looks at the old man. It follows him home, slowly, and then, at the gate, turns round and follows you.', ...rareJoin('ursaring', HELD_BY['ursaring']!), kindness(1), ...BADGE, ...d)),
+    ch('Carry him home.', out('You take the old man\'s weight on your shoulder, and the Ursaring takes the other. Between you, you carry him home. The Ursaring stays at the gate all night, to see he\'s fed, and leaves a gift on the step.', any(...RARE_HELD), kindness(1), ...BADGE, ...d)),
+    ch('Ask the Slowpoke how they knew.', out('*The Chief looks at you. Four minutes pass. It yawns.* That is the whole of the answer. The Ursaring sees the old man to his gate, and then turns round, and follows you.', ...rareJoin('ursaring', HELD_BY['ursaring']!), intel(1), ...BADGE, ...d)),
   ];
 }
 

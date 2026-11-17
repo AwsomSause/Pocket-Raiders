@@ -70,8 +70,8 @@ export function auctionOpen(run: RunState, n: number): string {
   set(run, `auction-in-${DABB}`, 1);
   set(run, `auction-in-${QUAYLE}`, f(run, 'auction-quayle') === n ? 1 : 0);
   set(run, `auction-in-${ODALIE}`, f(run, 'auction-stolen') === n ? 1 : 0);
-  // The stolen lot, and you've spotted it: the three choices.
-  set(run, 'auction-suspect', f(run, 'auction-stolen') === n && f(run, 'auction-spotted') > 0 ? 1 : 0);
+  // The stolen lot comes up: the three choices, whichever clue the player went by (the provenance, the photograph, her eyes).
+  set(run, 'auction-suspect', f(run, 'auction-stolen') === n ? 1 : 0);
   return '';
 }
 

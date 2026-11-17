@@ -13,7 +13,8 @@ const many: Json = { kind: 'gn', test: 'ofMany' };
 // What it does, by why it was let go (of-why: 1 happier, 2 no room, 3 not strong enough, 4 no reason).
 const DO: Json[] = [
   when('of-why', { min: 3, max: 3 }, [scene('gn-58-weak')]),
-  when('of-why', { min: 1, max: 2 }, [scene('gn-58-help')]),
+  when('of-why', { min: 1, max: 1 }, [scene('gn-58-help')]),
+  when('of-why', { min: 2, max: 2 }, [scene('gn-58-room')]),
   when('of-why', { min: 4, max: 4 }, [scene('gn-58-none')]),
 ];
 /** "Come with me?": it decides by its old Bond. Above Friendly: yes. Below: it walks a little way, and stops. That is its answer. */
@@ -66,12 +67,21 @@ export const EVENTS: Json[] = [
     '*It is done. It was always only this.*',
   ), [ch('Nod back.', out('It goes on down the road. You watch it as far as the bend. It does not look back, because it does not need to.', bond(1), moment('An old friend came back to be seen. It was seen.', 70)))]),
   rm('gn-58-help', 'Old Friend Returns: A Good Turn', friend(), say(
-    '*It does not fight you. It sits in the road, and looks up at you, content. It is warm, and fed, and well.*',
+    '*It does not fight you. It comes straight to you, warmly, and sits on your feet, and looks up at you, content. It is warm, and fed, and well. It was happier here. It wants you to know you were right.*',
     '*It is going the same way you are, for a little while. It means to be there for the hard part.*',
     '*Come the next hard fight, it will find you. It said so, in its own way.*',
   ), [
     chIf([is('of-free')], 'Come with me?', COME()),
     ch('Wave it on.', out('You wave. It waves back, the only way it can, with its whole body. Somewhere ahead, in the next hard fight, it will be there.')),
+  ]),
+  // "I've no room.": it greets the player carefully. It knows. (The warm greeting is gn-58-help: "It'll be happier here." It was.)
+  rm('gn-58-room', 'Old Friend Returns: A Good Turn', friend(), say(
+    '*It comes carefully. It stops a little short of your hand, and looks at your team, and counts them. It knows.*',
+    '*There was no room. It has not forgotten being the one there was no room for. It does not hold it against you, either.*',
+    '*It is going the same way you are, for a little while. Come the next hard fight, it will find you. It said so, in its own way.*',
+  ), [
+    chIf([is('of-free')], 'Come with me?', COME()),
+    ch('Wave it on.', out('You wave. It dips its head, once, carefully, and goes on ahead. Somewhere in the next hard fight, it will be there.')),
   ]),
   rm('gn-58-none', 'Old Friend Returns: Unsaid', friend(), say(
     '*It looks at you for a long time before it moves. There is a question in it, and it is not asking it out loud.*',
@@ -146,7 +156,7 @@ export const PLACEMENT: Record<string, Placement> = {
   'gn-58-friend': {
     gn: 'gn.58', shape: 'Single', earliest: 'A3', home: 13, window: [11, 16], sits: 'must-see', attaches: 'before', tags: ['Reunion Episode'],
     level: 'A+0, wherever it is met', often: 'region', badge: 'own',
-    note: 'Badge: a pawprint. Two or more stages after a Pokémon was let go at the catch screen, in the same kind of place if the stage fits (any place after four stages). One friend an event; others follow if many were let go. Sets gn mark `came-back` on one that rejoins. Within one run.',
+    note: 'Badge: a pawprint. Two or more stages after a Pokémon was let go at the catch screen, in the same kind of place if the stage fits (any place after four stages). One friend an event, one event a region; when many were let go the others follow at a distance and each gets its own meeting later. Sets gn mark `came-back` on one that rejoins. Within one run.',
   },
   'gn-58-bug': { gn: 'gn.58', shape: 'Single', earliest: 'A3', home: 1, window: [1, 3], sits: 'optional', attaches: 'before', tags: ['Reunion Episode'], level: 'None', often: 'run', badge: 'own', note: 'The Flight North bug (gn.13), let go: its silhouette at step 1, two or more stages later. Looking up gives the two-note cry. Once.' },
   'gn-58-cubone': { gn: 'gn.58', shape: 'Single', earliest: 'A3', home: 9, window: [6, 12], sits: 'optional', attaches: 'before', tags: ['Reunion Episode'], level: 'None', often: 'run', badge: 'own', note: 'The Cubone (gn.22), left at the grave: at a graveyard (ghost theme) it sets a flat stone on a mound that is not its mother\'s.' },

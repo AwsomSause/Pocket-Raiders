@@ -3,6 +3,11 @@
  "_note": "Run flags families-c sets that other families (or later systems) read. Same run only. key = the `ev:<key>` run flag.",
  "flags": [
   {
+   "key": "trubbish-kept",
+   "setBy": "trash-to-treasure (Clean the heap)",
+   "readBy": "Greenneedle gn.17 The Polluted Factory (the Trubbish remembers)"
+  },
+  {
    "key": "saved-trainer",
    "setBy": "stranded-trainer",
    "readBy": "registry (Final Reunion, people)"
@@ -96,6 +101,11 @@
    "key": "valley-relocated",
    "setBy": "valley-rangers-grudge",
    "readBy": "Final Reunion (Ivy)"
+  },
+  {
+   "key": "abandoned-mon",
+   "setBy": "trubbish heap (Clean the heap)",
+   "readBy": "Greenneedle gn.08 (the rain shelter notice), gn.61, gn-new-36"
   },
   {
    "key": "took-egg",

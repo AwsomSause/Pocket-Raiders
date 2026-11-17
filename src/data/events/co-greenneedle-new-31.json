@@ -318,7 +318,7 @@
     "tint": "#c98a4b",
     "effect": "none"
    },
-   "intro": "The third lantern's task: *Forgive a debt someone owes you.*\n\nA trainer is waiting on the path, a long way short of whatever they came here to do. They owe you six hundred and an apology.\n\n**The trainer:** \"I know what I owe. I haven't got it. I'm sorry. I'll find a way, I will.\"",
+   "intro": "The third lantern's task: *Forgive a debt someone owes you.*\n\nA trainer is waiting on the path. You beat them on the road, days back, and they never paid the prize money. They owe you six hundred and an apology.\n\n**The trainer:** \"I know what I owe. I sold my bike to get it. It's here, all of it, counted twice. I'm sorry it took so long.\"\n\n*They hold the money out. Their hand is not quite steady.*",
    "choices": [
     {
      "label": "Do it.",
@@ -367,12 +367,16 @@
     {
      "label": "Refuse.",
      "success": {
-      "text": "The Ninetales nods once. It does not seem angry. It seems to have expected it.\n\n*The third lantern stays dark.*",
+      "text": "You take the six hundred. It is yours; nobody could say otherwise. The trainer thanks you for waiting, and walks home.\n\nThe Ninetales nods once. It does not seem angry. It seems to have expected it.\n\n*The third lantern stays dark.*",
       "effects": [
        {
         "kind": "flag",
         "key": "fox-r3",
         "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 600
        }
       ]
      }
@@ -427,12 +431,16 @@
      "label": "Do it.",
      "requires": [],
      "success": {
-      "text": "You close your mouth, and you leave it closed. The road goes on, and so do you.",
+      "text": "You close your mouth, and you leave it closed.\n\n*For the rest of this step, whatever anyone asks you, your answer is \"…\".*",
       "effects": [
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-31-quiet-1"
+        "op": "foxSilence"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "gn-31-quiet-2",
+        "nodes": 1
        }
       ]
      }
@@ -446,39 +454,6 @@
         "kind": "flag",
         "key": "fox-r4",
         "amount": 1
-       }
-      ]
-     }
-    }
-   ]
-  },
-  {
-   "id": "gn-31-quiet-1",
-   "name": "The Fox at the Shrine: Silence",
-   "group": "Greenneedle",
-   "tags": [
-    "Pokémon",
-    "Story",
-    "Mystery"
-   ],
-   "room": true,
-   "scene": {
-    "cast": [],
-    "pokemon": "ninetales",
-    "tint": "#c98a4b",
-    "effect": "none"
-   },
-   "intro": "Someone you pass says good morning. It is a perfectly ordinary greeting.\n\nThe silence is not a rule you keep. It is a thing you hold, like water in a cupped hand.",
-   "choices": [
-    {
-     "label": "…",
-     "success": {
-      "text": "You nod. You say nothing. The person goes by, a little puzzled, and not unkind.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-31-quiet-2"
        }
       ]
      }
@@ -501,12 +476,12 @@
     "tint": "#c98a4b",
     "effect": "none"
    },
-   "intro": "A bird starts up in the hedge. A cart goes by. The wind moves the grass in long waves.\n\nYou can hear everything. You are not part of it. You are only listening, which is its own kind of company.",
+   "intro": "A bird starts up in the hedge. A cart goes by. The wind moves the grass in long waves.\n\nYou can hear everything. For a whole step you were not part of it. You were only listening, which is its own kind of company.",
    "choices": [
     {
      "label": "…",
      "success": {
-      "text": "For a whole step the world has your whole attention, and you ask it for nothing.\n\n*Somewhere behind you, a lantern catches without a spark.*",
+      "text": "For a whole step the world had your whole attention, and you asked it for nothing.\n\n*Somewhere behind you, a lantern catches without a spark.*",
       "effects": [
        {
         "kind": "flag",

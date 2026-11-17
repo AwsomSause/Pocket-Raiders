@@ -67,14 +67,13 @@
        },
        {
         "kind": "gn",
-        "op": "roll",
-        "key": "gn-forest-fog",
-        "n": 10
+        "op": "markParty",
+        "key": "pre-forest"
        },
        {
         "kind": "gn",
         "op": "roll",
-        "key": "gn-forest-trap",
+        "key": "gn-forest-fog",
         "n": 10
        },
        {
@@ -143,32 +142,47 @@
        "win": [
         {
          "kind": "gn",
-         "op": "duelist",
-         "type": "bug"
-        },
-        {
-         "kind": "gn",
          "op": "when",
-         "key": "gn-forest-trap",
+         "key": "gn-forest-trapped",
+         "min": 0,
+         "max": 0,
          "then": [
           {
            "kind": "gn",
-           "op": "setFlag",
+           "op": "roll",
            "key": "gn-forest-trap",
-           "n": 0
+           "n": 10
           },
           {
-           "kind": "flag",
-           "key": "flight-sighting",
-           "amount": 1
-          },
-          {
-           "kind": "moment",
-           "text": "A net dropped on the party in the forest. Far above the leaves: a balloon with a cat's face.",
-           "importance": 55
+           "kind": "gn",
+           "op": "when",
+           "key": "gn-forest-trap",
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "gn-forest-trap",
+             "n": 0
+            },
+            {
+             "kind": "flag",
+             "key": "gn-forest-trapped",
+             "amount": 1
+            },
+            {
+             "kind": "flag",
+             "key": "flight-sighting",
+             "amount": 1
+            },
+            {
+             "kind": "moment",
+             "text": "A net dropped on the party in the forest. Far above the leaves: a balloon with a cat's face.",
+             "importance": 55
+            }
+           ],
+           "text": "A net drops out of the branches onto your whole party! By the time you have fought free of it, there is only a shape far above the leaves: a balloon, with a cat's face, drifting away as if it had somewhere better to be."
           }
-         ],
-         "text": "A net drops out of the branches onto your whole party! By the time you have fought free of it, there is only a shape far above the leaves: a balloon, with a cat's face, drifting away as if it had somewhere better to be."
+         ]
         },
         {
          "kind": "addEvent",
@@ -220,6 +234,50 @@
          "type": "bug"
         },
         {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-forest-trapped",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "roll",
+           "key": "gn-forest-trap",
+           "n": 10
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "gn-forest-trap",
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "gn-forest-trap",
+             "n": 0
+            },
+            {
+             "kind": "flag",
+             "key": "gn-forest-trapped",
+             "amount": 1
+            },
+            {
+             "kind": "flag",
+             "key": "flight-sighting",
+             "amount": 1
+            },
+            {
+             "kind": "moment",
+             "text": "A net dropped on the party in the forest. Far above the leaves: a balloon with a cat's face.",
+             "importance": 55
+            }
+           ],
+           "text": "A net drops out of the branches onto your whole party! By the time you have fought free of it, there is only a shape far above the leaves: a balloon, with a cat's face, drifting away as if it had somewhere better to be."
+          }
+         ]
+        },
+        {
          "kind": "addEvent",
          "eventId": "gn-03-oak"
         }
@@ -229,6 +287,50 @@
          "kind": "gn",
          "op": "duelist",
          "type": "bug"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-forest-trapped",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "roll",
+           "key": "gn-forest-trap",
+           "n": 10
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "gn-forest-trap",
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "gn-forest-trap",
+             "n": 0
+            },
+            {
+             "kind": "flag",
+             "key": "gn-forest-trapped",
+             "amount": 1
+            },
+            {
+             "kind": "flag",
+             "key": "flight-sighting",
+             "amount": 1
+            },
+            {
+             "kind": "moment",
+             "text": "A net dropped on the party in the forest. Far above the leaves: a balloon with a cat's face.",
+             "importance": 55
+            }
+           ],
+           "text": "A net drops out of the branches onto your whole party! By the time you have fought free of it, there is only a shape far above the leaves: a balloon, with a cat's face, drifting away as if it had somewhere better to be."
+          }
+         ]
         },
         {
          "kind": "addEvent",
@@ -375,6 +477,50 @@
          "amount": 1
         },
         {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-forest-trapped",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "roll",
+           "key": "gn-forest-trap",
+           "n": 10
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "gn-forest-trap",
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "gn-forest-trap",
+             "n": 0
+            },
+            {
+             "kind": "flag",
+             "key": "gn-forest-trapped",
+             "amount": 1
+            },
+            {
+             "kind": "flag",
+             "key": "flight-sighting",
+             "amount": 1
+            },
+            {
+             "kind": "moment",
+             "text": "A net dropped on the party in the forest. Far above the leaves: a balloon with a cat's face.",
+             "importance": 55
+            }
+           ],
+           "text": "A net drops out of the branches onto your whole party! By the time you have fought free of it, there is only a shape far above the leaves: a balloon, with a cat's face, drifting away as if it had somewhere better to be."
+          }
+         ]
+        },
+        {
          "kind": "addEvent",
          "eventId": "gn-03-oak"
         }
@@ -425,6 +571,15 @@
          "eventId": "gn-03-oak"
         }
        ],
+       "rare": [
+        {
+         "species": [
+          "shedinja"
+         ],
+         "chance": 0.01,
+         "flag": "gn-forest-fog"
+        }
+       ],
        "pseudo": true
       }
      },
@@ -463,6 +618,28 @@
       "text": "You step through the split in the oak. For one stride there is a tree on either side of you, and both of them are the same tree.",
       "effects": [
        {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-forest-duelist",
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-forest-big",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "setFlag",
+            "key": "gn-03-cat",
+            "n": 1
+           }
+          ]
+         }
+        ]
+       },
+       {
         "kind": "addEvent",
         "eventId": "gn-03-hollow"
        }
@@ -493,9 +670,10 @@
      "id": "weedle",
      "when": [
       {
-       "kind": "partyType",
-       "type": "bug",
-       "absent": true
+       "kind": "flag",
+       "key": "gn-forest-duelist",
+       "atLeast": 0,
+       "atMost": 0
       }
      ],
      "notice": "And in the middle of the path, exactly where you would have to step, sits a Weedle. It is not blocking the way. It is sitting the way someone sits who was told to wait here, and has, for longer than was reasonable.",
@@ -526,6 +704,190 @@
           "eventId": "gn-03-hollow"
          }
         ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "crowd",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-03-cat",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-caterpie",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Wild Caterpie are coming down the trunks and out of the ferns, a dozen of them, and they are not coming for you. They crowd round your Caterpie, feelers going, as if it had brought news from town. They will let you both through without a fight, if you would rather.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Battle the wild Caterpie on the path.",
+       "success": {
+        "text": "It rears up as tall as it goes, which is not very. It means it, though.",
+        "effects": [],
+        "battle": {
+         "kind": "wild",
+         "species": [
+          "caterpie"
+         ],
+         "types": [],
+         "levelBonus": -1,
+         "shinyMultiplier": 1,
+         "win": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "gn-03-cat",
+           "n": 0
+          },
+          {
+           "kind": "gn",
+           "op": "duelist",
+           "type": "bug"
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-03-hollow"
+          }
+         ],
+         "caught": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "gn-03-cat",
+           "n": 0
+          },
+          {
+           "kind": "gn",
+           "op": "duelist",
+           "type": "bug"
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-03-hollow"
+          }
+         ],
+         "rare": [
+          {
+           "species": [
+            "shedinja"
+           ],
+           "chance": 0.01,
+           "flag": "gn-forest-fog"
+          }
+         ],
+         "pseudo": true
+        }
+       }
+      },
+      {
+       "label": "Let them crowd round it, and walk on through.",
+       "success": {
+        "text": "Your Caterpie goes down the dip in the middle of a slow green parade. They touch feelers with it, one after another, and then they part, and the path is clear. Yours looks back at them twice.",
+        "effects": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-03-cat",
+          "n": 0
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-03-hollow"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "caterpie",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-03-cat",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-caterpie",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "A wild Caterpie has planted itself in the dip, between you and the Bug Catcher, and reared up as tall as it goes. It does not know what to make of the Bug-type beside you, and it is not moving until it does.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Battle the wild Caterpie on the path.",
+       "success": {
+        "text": "It rears up as tall as it goes, which is not very. It means it, though.",
+        "effects": [],
+        "battle": {
+         "kind": "wild",
+         "species": [
+          "caterpie"
+         ],
+         "types": [],
+         "levelBonus": -1,
+         "shinyMultiplier": 1,
+         "win": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "gn-03-cat",
+           "n": 0
+          },
+          {
+           "kind": "gn",
+           "op": "duelist",
+           "type": "bug"
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-03-hollow"
+          }
+         ],
+         "caught": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "gn-03-cat",
+           "n": 0
+          },
+          {
+           "kind": "gn",
+           "op": "duelist",
+           "type": "bug"
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-03-hollow"
+          }
+         ],
+         "rare": [
+          {
+           "species": [
+            "shedinja"
+           ],
+           "chance": 0.01,
+           "flag": "gn-forest-fog"
+          }
+         ],
+         "pseudo": true
+        }
        }
       }
      ]
@@ -560,13 +922,65 @@
          "type": "bug"
         },
         {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-forest-trapped",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "roll",
+           "key": "gn-forest-trap",
+           "n": 10
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "gn-forest-trap",
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "gn-forest-trap",
+             "n": 0
+            },
+            {
+             "kind": "flag",
+             "key": "gn-forest-trapped",
+             "amount": 1
+            },
+            {
+             "kind": "flag",
+             "key": "flight-sighting",
+             "amount": 1
+            },
+            {
+             "kind": "moment",
+             "text": "A net dropped on the party in the forest. Far above the leaves: a balloon with a cat's face.",
+             "importance": 55
+            }
+           ],
+           "text": "A net drops out of the branches onto your whole party! By the time you have fought free of it, there is only a shape far above the leaves: a balloon, with a cat's face, drifting away as if it had somewhere better to be."
+          }
+         ]
+        },
+        {
          "kind": "addEvent",
          "eventId": "gn-03-clearing"
         }
        ],
        "pseudo": true
       }
-     }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-03-cat",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
     },
     {
      "label": "Look inside the sweet-smelling tree.",
@@ -663,6 +1077,15 @@
         {
          "kind": "addEvent",
          "eventId": "gn-03-hollow"
+        }
+       ],
+       "rare": [
+        {
+         "species": [
+          "shedinja"
+         ],
+         "chance": 0.01,
+         "flag": "gn-forest-fog"
         }
        ],
        "pseudo": true
@@ -815,6 +1238,15 @@
          "rule": {
           "leadMark": "duelist"
          },
+         "rare": [
+          {
+           "species": [
+            "shedinja"
+           ],
+           "chance": 0.01,
+           "flag": "gn-forest-fog"
+          }
+         ],
          "pseudo": true
         }
        }
@@ -839,6 +1271,11 @@
           "kind": "gn",
           "op": "unmark",
           "key": "duelist"
+         },
+         {
+          "kind": "gn",
+          "op": "unmark",
+          "key": "pre-forest"
          },
          {
           "kind": "leavePseudo"
@@ -876,6 +1313,16 @@
         "n": 0
        },
        {
+        "kind": "gn",
+        "op": "unmark",
+        "key": "duelist"
+       },
+       {
+        "kind": "gn",
+        "op": "unmark",
+        "key": "pre-forest"
+       },
+       {
         "kind": "leavePseudo"
        }
       ]
@@ -904,6 +1351,16 @@
         "op": "setFlag",
         "key": "gn-forest-in",
         "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "unmark",
+        "key": "duelist"
+       },
+       {
+        "kind": "gn",
+        "op": "unmark",
+        "key": "pre-forest"
        },
        {
         "kind": "leavePseudo"
@@ -989,6 +1446,11 @@
           "key": "duelist"
          },
          {
+          "kind": "gn",
+          "op": "unmark",
+          "key": "pre-forest"
+         },
+         {
           "kind": "leavePseudo"
          }
         ]
@@ -1033,6 +1495,11 @@
           "kind": "gn",
           "op": "unmark",
           "key": "duelist"
+         },
+         {
+          "kind": "gn",
+          "op": "unmark",
+          "key": "pre-forest"
          },
          {
           "kind": "leavePseudo"
@@ -1125,6 +1592,11 @@
          "n": 0
         },
         {
+         "kind": "gn",
+         "op": "unmark",
+         "key": "pre-forest"
+        },
+        {
          "kind": "moment",
          "text": "The Samurai bowed. \"Next forest. I'll be at the far side.\"",
          "importance": 60
@@ -1176,6 +1648,14 @@
     {
      "kind": "partyType",
      "type": "bug"
+    },
+    {
+     "kind": "stageTypes",
+     "types": [
+      "grass",
+      "bug",
+      "fairy"
+     ]
     }
    ],
    "scene": {
@@ -1212,6 +1692,27 @@
          "kind": "teachMove",
          "move": "samurai-slash",
          "type": "bug"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-forest-evolved",
+         "then": [
+          {
+           "kind": "egg",
+           "species": [
+            "scyther",
+            "pinsir",
+            "heracross"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "left": 3,
+           "unit": "battle"
+          }
+         ],
+         "text": "**The Samurai:** \"It became itself in front of me. I've an egg that deserves that.\""
         },
         {
          "kind": "flag",
@@ -1416,6 +1917,26 @@
           "n": 4
          },
          {
+          "kind": "gn",
+          "op": "moonRaid"
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "team-raid-moon-lost",
+          "then": [
+           {
+            "kind": "gn",
+            "op": "pick",
+            "key": "gn-moon-payroll",
+            "weights": [
+             1,
+             1
+            ]
+           }
+          ]
+         },
+         {
           "kind": "addEvent",
           "eventId": "gn-04-mouth"
          }
@@ -1453,6 +1974,26 @@
         "op": "stageMod",
         "key": "gn-moon-phase",
         "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "moonRaid"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "team-raid-moon-lost",
+        "then": [
+         {
+          "kind": "gn",
+          "op": "pick",
+          "key": "gn-moon-payroll",
+          "weights": [
+           1,
+           1
+          ]
+         }
+        ]
        },
        {
         "kind": "addEvent",
@@ -2546,6 +3087,12 @@
        "key": "team-raid-moon-lost",
        "atLeast": 1,
        "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-moon-payroll",
+       "atLeast": 0,
+       "atMost": 1
       }
      ],
      "notice": "Dr. Crowe's coat is new. Very new. There is a badge on the lining you are not supposed to see, and he keeps glancing at the tunnel the raiders went down. He is on their payroll now, and he fights like it.",
@@ -2567,6 +3114,79 @@
          ],
          "name": "Dr. Ansel Crowe",
          "classId": "worker",
+         "size": 3,
+         "types": [],
+         "levelBonus": 1,
+         "win": [
+          {
+           "kind": "gn",
+           "op": "fossil",
+           "key": "local"
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "team-raid-moon-won",
+           "then": [
+            {
+             "kind": "gn",
+             "op": "fossil",
+             "key": "local"
+            }
+           ],
+           "text": "The other one presses a second fossil into your hands. \"For the raid. We remember who stood in the door.\""
+          },
+          {
+           "kind": "flag",
+           "key": "kanto-moon-fossil",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-04-mine"
+          }
+         ],
+         "pseudo": true
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "payroll-larkin",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "team-raid-moon-lost",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-moon-payroll",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "Dr. Larkin's boots are new. Very new. There is a badge inside her field bag you are not supposed to see, and she keeps glancing at the tunnel the raiders went down. She is on their payroll now, and she fights like it.",
+     "hide": [
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Battle Dr. Larkin.",
+       "success": {
+        "text": "**Dr. Mirabel Larkin:** \"Nothing personal. They fund digs. The university funds meetings.\"",
+        "effects": [],
+        "battle": {
+         "kind": "trainer",
+         "team": [
+          "magnemite",
+          "voltorb",
+          "koffing"
+         ],
+         "name": "Dr. Mirabel Larkin",
+         "classId": "aroma-lady",
          "size": 3,
          "types": [],
          "levelBonus": 1,
@@ -3889,34 +4509,6 @@
    "intro": "A market stall with one table and two chairs and two researchers, and a sign that has been crossed out and rewritten so many times the price is just a smudge.\n\n**Dr. Ansel Crowe:** \"Fifteen hundred.\"\n\n**Dr. Mirabel Larkin:** \"Five hundred. It's a pebble.\"\n\n**Dr. Ansel Crowe:** \"It's YOUR pebble.\"",
    "choices": [
     {
-     "label": "Pay the price in the middle. (₽1000)",
-     "requires": [
-      {
-       "kind": "money",
-       "atLeast": 1000
-      }
-     ],
-     "success": {
-      "text": "You put a thousand on the table. They both open their mouths to object, then both close them, because neither of them can say the other was right. **Dr. Mirabel Larkin:** \"Fine. Fine.\"",
-      "effects": [
-       {
-        "kind": "money",
-        "amount": -1000
-       },
-       {
-        "kind": "gn",
-        "op": "fossil",
-        "key": "local"
-       },
-       {
-        "kind": "flag",
-        "key": "gn-04-after-done",
-        "amount": 1
-       }
-      ]
-     }
-    },
-    {
      "label": "Leave them to it.",
      "success": {
       "text": "You leave them to it. Halfway down the street you hear them both laugh, at the same moment, which still surprises them.",
@@ -3997,12 +4589,21 @@
       "effects": [
        {
         "kind": "gn",
-        "op": "pick",
+        "op": "when",
         "key": "damian-theme",
-        "weights": [
-         1,
-         1,
-         1
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "pick",
+          "key": "damian-theme",
+          "weights": [
+           1,
+           1,
+           1
+          ]
+         }
         ]
        },
        {
@@ -4113,6 +4714,12 @@
           "kind": "gn",
           "op": "stampRegion",
           "key": "damian-passed"
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "damian-theme",
+          "n": 0
          }
         ],
         "text": "Whatever he is thinking about, he is thinking about it hard. You have a feeling you will find out next region."
@@ -4448,6 +5055,12 @@
         "kind": "gn",
         "op": "stampRegion",
         "key": "damian-passed"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "damian-theme",
+        "n": 0
        }
       ]
      }
@@ -4670,6 +5283,52 @@
       "text": "**Hired Gym Trainer:** \"I'm just here for the afternoon. Let's get this over with.\" Behind them, Damian is mouthing the words along, proudly.",
       "effects": [
        {
+        "kind": "gn",
+        "op": "when",
+        "key": "damian-theme",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "pick",
+          "key": "damian-theme",
+          "weights": [
+           1,
+           1,
+           1
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "damian-theme",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "This week is fire: paper flames taped to every pillar, and a bucket of sand by the door, just in case."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "damian-theme",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "This week is water: blue streamers, a paddling pool in the corner, and a Magikarp drawn on the wall with a crown on."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "damian-theme",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "This week is \"strong ones\": a punching bag made of a feed sack, and the word STRONG painted on it, twice."
+       },
+       {
         "kind": "addEvent",
         "eventId": "gn-05-hall-hired"
        }
@@ -4764,16 +5423,68 @@
    "intro": "Tully and Bex, side by side, three Poké Balls each. Tully has a wristband. Bex has a list of the buttons written on one hand.\n\n**Bex:** \"Top left is the attack one. We checked.\"\n\n**Tully:** \"Twice!\"",
    "choices": [
     {
-     "label": "Battle Tully and Bex.",
+     "label": "Battle Tully.",
      "success": {
-      "text": "They throw at the same moment, which they have clearly practised, and are clearly delighted about.",
+      "text": "**Tully:** \"Three of them now! Three! And I know what they all do!\" He does not Splash once.",
       "effects": [],
       "battle": {
        "kind": "trainer",
-       "format": "doubles",
-       "name": "Tully and Bex",
+       "name": "Gym Trainer Tully",
        "classId": "swimmer",
-       "size": 6,
+       "size": 3,
+       "types": [],
+       "levelBonus": -2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-hall-bex"
+        }
+       ],
+       "pseudo": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "damian-lost-once",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-lost"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-05-hall-bex",
+   "name": "Gym Trainer Bex",
+   "group": "Greenneedle",
+   "tags": [
+    "Trainer",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.camper"
+    ],
+    "effect": "none"
+   },
+   "intro": "Bex steps up as Tully steps back, and they slap hands on the way past, which they have clearly practised, and are clearly delighted about.\n\nBex looks at the list on one hand, once, and then puts the hand away.",
+   "choices": [
+    {
+     "label": "Battle Bex.",
+     "success": {
+      "text": "**Bex:** \"Top left. I don't even have to look.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Gym Trainer Bex",
+       "classId": "camper",
+       "size": 3,
        "types": [],
        "levelBonus": -2,
        "win": [
@@ -4815,7 +5526,7 @@
     ],
     "effect": "shake"
    },
-   "intro": "Damian on the stage, under a light somebody is holding for him. Four of his, and then the one he trained.\n\n**Damian:** \"I got better. I want you to see. That's all. That's the whole reason.\"",
+   "intro": "Damian on the stage, under a light somebody is holding for him. Four of his, and the last of them is the one he trained.\n\n**Damian:** \"I got better. I want you to see. That's all. That's the whole reason.\"",
    "choices": [
     {
      "label": "Battle Damian.",
@@ -4826,7 +5537,7 @@
        "kind": "trainer",
        "name": "Damian",
        "classId": "ace-trainer",
-       "size": 5,
+       "size": 4,
        "types": [
         "fire"
        ],
@@ -4873,7 +5584,7 @@
        "kind": "trainer",
        "name": "Damian",
        "classId": "ace-trainer",
-       "size": 5,
+       "size": 4,
        "types": [
         "water"
        ],
@@ -4920,7 +5631,7 @@
        "kind": "trainer",
        "name": "Damian",
        "classId": "ace-trainer",
-       "size": 5,
+       "size": 4,
        "types": [
         "fighting",
         "rock"
@@ -5004,6 +5715,12 @@
         "kind": "gn",
         "op": "stampRegion",
         "key": "damian-passed"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "damian-theme",
+        "n": 0
        }
       ]
      }
@@ -5052,13 +5769,104 @@
     {
      "label": "Challenge Damian.",
      "success": {
-      "text": "He does not shout. He does not need to. He just nods, once, and throws.",
+      "text": "He does not shout. He does not need to. He just nods, once, and walks to his end of the floor.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "damian-theme",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "pick",
+          "key": "damian-theme",
+          "weights": [
+           1,
+           1,
+           1
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "damian-theme",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "This week is fire: paper flames taped to every pillar, and a bucket of sand by the door, just in case."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "damian-theme",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "This week is water: blue streamers, a paddling pool in the corner, and a Magikarp drawn on the wall with a crown on."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "damian-theme",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "This week is \"strong ones\": a punching bag made of a feed sack, and the word STRONG painted on it, twice."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-05-gym-damian"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. He does not wave this time. He nods, the way the real Gym Leaders do, and goes back inside to wait.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "damian-passed"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-05-gym-damian",
+   "name": "Leader Damian",
+   "group": "Greenneedle",
+   "tags": [
+    "Trainer",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.damian"
+    ],
+    "effect": "glint"
+   },
+   "intro": "Stone pillars. A marked floor. Five Poké Balls on his belt, and he does not touch the last one yet.\n\n**Damian:** \"I'm not going to go easy on you.\"",
+   "choices": [
+    {
+     "label": "Battle Damian.",
+     "success": {
+      "text": "He just nods, once, and throws.",
       "effects": [],
       "battle": {
        "kind": "trainer",
        "name": "Damian",
        "classId": "ace-trainer",
-       "size": 6,
+       "size": 5,
        "types": [
         "fire"
        ],
@@ -5097,15 +5905,15 @@
      ]
     },
     {
-     "label": "Challenge Damian.",
+     "label": "Battle Damian.",
      "success": {
-      "text": "He does not shout. He does not need to. He just nods, once, and throws.",
+      "text": "He just nods, once, and throws.",
       "effects": [],
       "battle": {
        "kind": "trainer",
        "name": "Damian",
        "classId": "ace-trainer",
-       "size": 6,
+       "size": 5,
        "types": [
         "water"
        ],
@@ -5144,15 +5952,15 @@
      ]
     },
     {
-     "label": "Challenge Damian.",
+     "label": "Battle Damian.",
      "success": {
-      "text": "He does not shout. He does not need to. He just nods, once, and throws.",
+      "text": "He just nods, once, and throws.",
       "effects": [],
       "battle": {
        "kind": "trainer",
        "name": "Damian",
        "classId": "ace-trainer",
-       "size": 6,
+       "size": 5,
        "types": [
         "fighting",
         "rock"
@@ -5190,19 +5998,6 @@
        "atMost": 3
       }
      ]
-    },
-    {
-     "label": "Walk on.",
-     "success": {
-      "text": "You walk on. He does not wave this time. He nods, the way the real Gym Leaders do, and goes back inside to wait.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "stampRegion",
-        "key": "damian-passed"
-       }
-      ]
-     }
     }
    ]
   },
@@ -5236,62 +6031,68 @@
        },
        {
         "kind": "gn",
-        "op": "when",
-        "key": "damian-theme",
-        "min": 1,
-        "max": 1,
+        "op": "damianEgg",
         "then": [
          {
-          "kind": "egg",
-          "species": [],
-          "types": [
-           "fire"
-          ],
-          "levelBonus": 0,
-          "shinyMultiplier": 1,
-          "left": 3,
-          "unit": "battle"
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "damian-theme",
-        "min": 2,
-        "max": 2,
-        "then": [
+          "kind": "gn",
+          "op": "when",
+          "key": "damian-theme",
+          "min": 1,
+          "max": 1,
+          "then": [
+           {
+            "kind": "egg",
+            "species": [],
+            "types": [
+             "fire"
+            ],
+            "levelBonus": 0,
+            "shinyMultiplier": 1,
+            "left": 3,
+            "unit": "battle"
+           }
+          ]
+         },
          {
-          "kind": "egg",
-          "species": [],
-          "types": [
-           "water"
-          ],
-          "levelBonus": 0,
-          "shinyMultiplier": 1,
-          "left": 3,
-          "unit": "battle"
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "damian-theme",
-        "min": 3,
-        "max": 3,
-        "then": [
+          "kind": "gn",
+          "op": "when",
+          "key": "damian-theme",
+          "min": 2,
+          "max": 2,
+          "then": [
+           {
+            "kind": "egg",
+            "species": [],
+            "types": [
+             "water"
+            ],
+            "levelBonus": 0,
+            "shinyMultiplier": 1,
+            "left": 3,
+            "unit": "battle"
+           }
+          ]
+         },
          {
-          "kind": "egg",
-          "species": [],
-          "types": [
-           "fighting",
-           "rock"
-          ],
-          "levelBonus": 0,
-          "shinyMultiplier": 1,
-          "left": 3,
-          "unit": "battle"
+          "kind": "gn",
+          "op": "when",
+          "key": "damian-theme",
+          "min": 3,
+          "max": 3,
+          "then": [
+           {
+            "kind": "egg",
+            "species": [],
+            "types": [
+             "fighting",
+             "rock"
+            ],
+            "levelBonus": 0,
+            "shinyMultiplier": 1,
+            "left": 3,
+            "unit": "battle"
+           }
+          ]
          }
         ]
        },
@@ -5310,6 +6111,12 @@
         "kind": "gn",
         "op": "stampRegion",
         "key": "damian-passed"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "damian-theme",
+        "n": 0
        },
        {
         "kind": "moment",

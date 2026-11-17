@@ -27,11 +27,27 @@ export function daycareLeave(content: Content, run: RunState, uid: string | unde
   const i = run.party.findIndex((m) => m.uid === uid);
   if (i < 0 || run.party.length <= 1 || atDaycare(run).length >= 2) return '';
   const [mon] = run.party.splice(i, 1);
-  mon!.gn = [...(mon!.gn ?? []).filter((t) => t !== DAYCARE_MARK), DAYCARE_MARK];
+  mon!.gn = [...(mon!.gn ?? []).filter((t) => t !== DAYCARE_MARK && t !== DAYCARE_LED), DAYCARE_MARK, ...(i === 0 ? [DAYCARE_LED] : [])];
   run.box = [...run.box, mon!];
   run.story.flags[flagKey(DAYCARE_AT)] = stage;
   run.story.flags[flagKey('daycare-held')] = atDaycare(run).length;
   return `${content.species.get(mon!.speciesId)?.name ?? mon!.speciesId} stays at the village.`;
+}
+
+/** gn mark: it was leading the party when it was left at the village (an inherited habit reads it). */
+export const DAYCARE_LED = 'daycare-led';
+/** "Over and over": a move used at least this often, and more than every other move together. */
+const STANCE_USES = 10;
+/**
+ * The habit a day-care egg's hatchling inherits, by what its parent did most: fought with one move over and over (its stance),
+ * led the party, or, failing both, was left at the day-care. (Rests slept near you and switches aren't counted by the run.)
+ */
+export function inheritedHabit(run: Pick<RunState, 'story'>, parent: PokemonInstance): { shape: 'habit-stance' | 'habit-lead' | 'habit-daycare'; move?: string } {
+  const uses = Object.entries(run.story.histories[parent.uid]?.moves ?? {}).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  const total = uses.reduce((n, [, u]) => n + u, 0);
+  if (uses[0] && uses[0][1] >= STANCE_USES && uses[0][1] * 2 > total) return { shape: 'habit-stance', move: uses[0][0] };
+  if (parent.gn?.includes(DAYCARE_LED)) return { shape: 'habit-lead' };
+  return { shape: 'habit-daycare' };
 }
 
 /** Whether two Pokémon could make an egg: a shared egg group (Ditto goes with anyone), never the Undiscovered group. */
@@ -49,12 +65,15 @@ export function compatible(content: Content, a: PokemonInstance, b: PokemonInsta
  * Brings the pair home. `addLevels` and `layEgg` come from the caller (the gn op), so this file stays free of run/eggs imports.
  * Returns the line, and the parent the egg should come from (null: no egg).
  */
-export function daycareReturn(content: Content, run: RunState, stage: number, addLevels: (mon: PokemonInstance, n: number) => void): { line: string; eggOf: PokemonInstance | null; parents: string[] } {
+export function daycareReturn(content: Content, run: RunState, stage: number, addLevels: (mon: PokemonInstance, n: number) => void): { line: string; eggOf: PokemonInstance | null; parents: string[]; habit?: ReturnType<typeof inheritedHabit> } {
   const back = atDaycare(run);
   if (back.length === 0) return { line: '', eggOf: null, parents: [] };
   const levels = Math.max(0, stage - Number(run.story.flags[flagKey(DAYCARE_AT)] ?? stage));
+  // The egg comes from the one that isn't a Ditto (else the first); its habit is read before the village's marks come off.
+  const eggParent = back.length === 2 ? (back[0]!.speciesId === 'ditto' ? back[1]! : back[0]!) : null;
+  const habit = eggParent ? inheritedHabit(run, eggParent) : undefined;
   for (const mon of back) {
-    mon.gn = (mon.gn ?? []).filter((t) => t !== DAYCARE_MARK);
+    mon.gn = (mon.gn ?? []).filter((t) => t !== DAYCARE_MARK && t !== DAYCARE_LED);
     if (levels > 0) addLevels(mon, levels);
     mon.marks = [...(mon.marks ?? []), 'raised for a while at the Day-Care Village'].slice(-8);
     if (run.party.length < 6) {
@@ -71,8 +90,7 @@ export function daycareReturn(content: Content, run: RunState, stage: number, ad
   run.itemCounters = { ...run.itemCounters, [key]: Math.max(run.itemCounters?.[key] ?? 0, PAIR_WINS) };
   line += ' They know each other now. In battle together, it shows.';
   if (!compatible(content, a, b)) return { line, eggOf: null, parents: [a.uid, b.uid] };
-  // The egg comes from the one that isn't a Ditto (else the first).
-  return { line: `${line} And there's an egg waiting.`, eggOf: a.speciesId === 'ditto' ? b : a, parents: [a.uid, b.uid] };
+  return { line: `${line} And there's an egg waiting.`, eggOf: eggParent ?? a, parents: [a.uid, b.uid], habit };
 }
 
 // ---------- Egg shapes ----------
@@ -80,18 +98,19 @@ export const EGG_SHAPES = [
   // The adoptions: found in a storm, left on a doorstep, the last of a clutch.
   'storm-hold', 'storm-brave', 'storm-front', 'door-yes', 'door-no', 'door-safe', 'clutch-no', 'clutch-bit', 'clutch-slow',
   // Bronwen's pairs, and a day-care egg's inherited habit.
-  'nidoran-best', 'bronwen-best', 'habit-daycare',
+  'nidoran-best', 'bronwen-best', 'habit-daycare', 'habit-lead', 'habit-stance',
   // gn.new.33 The Old Courier: the Dratini egg from the lighthouse (Extreme Speed, Tailwind Heart).
   'tailwind-heart',
 ] as const;
 export type EggShape = (typeof EGG_SHAPES)[number];
 
 /** Tags the newest egg with a shape (and a parent, for a day-care egg). "Hatches sooner": one step left. */
-export function eggShape(run: RunState, shape: string, parents: string[] = []): string {
+export function eggShape(run: RunState, shape: string, parents: string[] = [], move?: string): string {
   const egg = run.eggs[run.eggs.length - 1];
   if (!egg || !(EGG_SHAPES as readonly string[]).includes(shape)) return '';
   run.story.flags[`${shapeKey(egg.uid)}${shape}`] = 1;
   for (const p of parents) run.story.flags[`ev:egg-parent:${egg.uid}:${p}`] = 1;
+  if (move) run.story.flags[`ev:egg-habit-move:${egg.uid}:${move}`] = 1;
   if (shape === 'clutch-bit') {
     egg.left = 1;
     egg.total = Math.min(egg.total ?? 1, 2);
@@ -139,6 +158,12 @@ export function shapeHatchling(content: Content, run: RunState, egg: Egg, mon: P
       mark('Tailwind Heart: carried a parcel to a lighthouse before it was born');
     }
     if (s === 'habit-daycare') mark('looks for the Old Dog in every town');
+    if (s === 'habit-lead') mark('walks one step ahead, and keeps looking back');
+    if (s === 'habit-stance') {
+      const movePrefix = `ev:egg-habit-move:${egg.uid}:`;
+      const id = Object.keys(run.story.flags).find((k) => k.startsWith(movePrefix))?.slice(movePrefix.length);
+      mark(`practises the ${content.moves.get(id ?? '')?.name ?? 'same move'} stance, wrongly`);
+    }
   }
   // A day-care egg remembers who it came from (Bronwen's "any Pokémon and its own parent").
   const parentPrefix = `ev:egg-parent:${egg.uid}:`;

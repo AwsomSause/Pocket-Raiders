@@ -1156,6 +1156,8 @@ export const StageStateSchema = z.object({
   scoutedTo: z.number().int().min(0).default(0),
   /** gn.new.12: while set, the whole map is on show for a few seconds (the Xatu's map); `scoutedTo` drops back to this value when it blurs. */
   peekFrom: z.number().int().min(0).optional(),
+  /** Chain pseudo-stages (gn.31, gn.36): node ids the map keeps blank (no badge, no battle type) until the player walks in or something shows them. Optional: no save bump. */
+  hidden: z.array(z.string()).optional(),
   /** Weather Prophet (S124): extra columns the weather forecast reaches this stage (an event's `foresight` effect). */
   foresight: z.number().int().min(0).default(0),
   /** Fronts that rolled in during the stage (an event's `front` effect); the stage's own come from its seed (core/world.ts). */

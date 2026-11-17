@@ -20,7 +20,7 @@ export const FERRIS_FIVE = ['arcanine', 'noctowl', 'tyranitar', 'lanturn', 'clef
 export const FIRST_CATCH: Record<string, string> = { kanto: 'rattata', johto: 'sentret', hoenn: 'zigzagoon', sinnoh: 'bidoof', unova: 'lillipup', kalos: 'bunnelby', alola: 'yungoos', galar: 'skwovet', paldea: 'lechonk' };
 /** A tutor move from each of the five (the prize for beating them), and the old move one of them brings when it goes on travelling. */
 export const TUTOR_MOVES = { arcanine: 'flare-blitz', noctowl: 'air-slash', tyranitar: 'rock-slide', lanturn: 'surf', clefable: 'moonblast' } as const;
-export const OLD_MOVES = { arcanine: 'extreme-speed', noctowl: 'sky-attack', tyranitar: 'ancient-power', lanturn: 'supersonic', clefable: 'metronome' } as const;
+export const OLD_MOVES = { arcanine: 'inferno', noctowl: 'razor-wind', tyranitar: 'submission', lanturn: 'zap-cannon', clefable: 'teeter-dance' } as const;
 
 /** Which region of the run this is (1 = the first), and the story for it (the sixth and on share the last). */
 export const regionNo = (run: Pick<RunState, 'regionIndex'>): number => run.regionIndex + 1;
@@ -92,7 +92,8 @@ export function ferrisFreeEnd(run: RunState): void {
 
 /** 3rd region: "The ones that bite are the ones that stay." A wild Pokémon that attacks first (it outruns your lead) is caught at double the chance. */
 export function ferrisCatch(content: Content, run: RunState, battle: BattleState): number {
-  if (regionNo(run) !== 3 || f(run, 'ferris-advice-3') === 0 || battle.kind !== 'wild' || battle.trainer) return 1;
+  // One Pokémon, once: the advice is spent when the first of them is caught.
+  if (regionNo(run) !== 3 || f(run, 'ferris-advice-3') === 0 || f(run, 'ferris-advice-3-used') > 0 || battle.kind !== 'wild' || battle.trainer) return 1;
   const foe = battle.enemyTeam[battle.enemyIndex];
   const lead = run.party[battle.activeIndex];
   if (!foe || !lead) return 1;

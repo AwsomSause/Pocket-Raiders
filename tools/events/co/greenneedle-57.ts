@@ -35,10 +35,10 @@ const gn57: Json[] = [
     '"And when you\'re cornered, make yourself look bigger. Puff up! Like so!" The crowd laughs, and claps, and it all sounds nearly right.',
   ), [ch57('Keep listening.', out('Nearly right. Everything it says is nearly right. You can\'t quite say why that bothers you.', scene('gn-57-tell-1')))]),
   rm('gn-57-tell-1', 'The Pokémon Impersonator: The Ace', crowd(), say(
-    '**"The Champion":** "My ace, now. Everyone asks about my ace. Marvellous creature. A Poochyena, since you ask. Oh, no. No, of course not. A Garchomp. I\'ve said Poochyena all my life, it\'s a nervous habit."',
+    '**"The Champion":** "My ace, now. Everyone asks about my ace. Marvellous creature. A {imp:wrong}, since you ask. Oh, no. No, of course not. A {imp:ace}. I\'ve said {imp:wrong} all my life, it\'s a nervous habit."',
     'It does not blink. It does not stumble. The correction comes out smooth as oil.',
   ), [
-    ch57('…wait.', out('The real Champion has never kept anything called a Poochyena. You\'d have heard. Everybody would have heard.', noticed(), scene('gn-57-tell-2'))),
+    ch57('…wait.', out('The real Champion has never kept anything called a {imp:wrong}. You\'d have heard. Everybody would have heard.', noticed(), scene('gn-57-tell-2'))),
     ch57('Nod along.', out('You nod. A slip of the tongue, that\'s all. Everybody has them.', scene('gn-57-tell-2'))),
   ]),
   rm('gn-57-tell-2', 'The Pokémon Impersonator: The Sun', crowd(), say(
@@ -83,7 +83,7 @@ const gn57: Json[] = [
   rm('gn-57-beaten', 'The Pokémon Impersonator: Beaten', reveal(), say(
     'The crowd is gone before the dust is. Whatever was the Champion looks at you, hunted and furious, and a little relieved.',
     'It has been careful for a very long time. It has been so tired.',
-  ), [ch57('Go on.', out('You hold out your hand, and it takes it, because nobody has done that without wanting something.', moment('Caught the Impersonator, who had been the Champion all along.', 80)))]),
+  ), [ch57('Go on.', out('You hold out your hand, and it takes it, because nobody has done that without wanting something.', moment('The Impersonator, who had been the Champion all along, came with you.', 80)))]),
   rm('gn-57-walk', 'The Pokémon Impersonator: Walking Together', crowd(), say(
     'It walks with you a while, still as the Champion, getting things a little more wrong. It sniffs a signpost, thoughtfully.',
     'It is startled by a door that opens by itself. It tries to look dignified about it.',
@@ -115,7 +115,7 @@ const gn57: Json[] = [
   rm('gn-57-champion', 'The Pokémon Impersonator: A Surprise Visit', crowd({ remembers: [
     { id: 'lesson', when: [is('champ-lesson')], notice: '**The Champion:** "It did me? The Zoroark? Was it *good?* Was the *hair* right?" The real one, hearing about it later, was delighted.' },
   ] }), say(
-    '**The Champion:** "A surprise visit! My ace, a Garchomp. I got it right this time. I\'ve been practising."',
+    '**The Champion:** "A surprise visit! My ace, a {imp:ace}. I got it right this time. I\'ve been practising."',
     'The sun comes out. The shadow is missing again. It is the only thing it has not practised.',
   ), [
     ch57('That\'s you, isn\'t it.', out('The face drops, delighted to be caught. "Oh, you\'re *good*," says the Zoroark, and means it.', bond(1), flag('impersonator-caught-out', 1))),

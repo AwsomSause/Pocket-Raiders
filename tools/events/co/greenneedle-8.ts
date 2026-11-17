@@ -1,4 +1,4 @@
-// Greenneedle, part 8: gn.35 Thunderstorm Ridge, gn.36 The Great Desert, gn.37 The Haunted Mansion, gn.38 The Overgrown Laboratory (doc GREENNEEDLE_REWORKED_PLACED_8.md).
+// Greenneedle, part 8: gn.35 Thunderstorm Ridge, gn.36 The Endless Desert, gn.37 The Haunted Mansion, gn.38 The Overgrown Laboratory (doc GREENNEEDLE_REWORKED_PLACED_8.md).
 // Build: npm run co:build -- greenneedle-8   then   npm run co:gn
 import { any, anyType, ch, fight, flag, heal, item, join, out, takeNode, wild, type Json } from '../dsl.ts';
 import { anyFlag } from './_ne.ts';
@@ -28,7 +28,7 @@ const FOLLOW: Json[] = [setTo('ridge-followers', 0), ...[1, 2, 3].map((n) => whe
 const ONE_LESS: Json[] = [1, 2, 3].map((n) => when('ridge-followers', { min: n, max: n }, [setTo('ridge-followers', n - 1)]));
 const ONE_CRYSTAL_LESS: Json[] = [1, 2, 3].map((n) => when('ridge-crystals', { min: n, max: n }, [setTo('ridge-crystals', n - 1)]));
 /** Back to the node the follower caught up with you at. */
-const BACK: Json[] = [...ONE_LESS, when('ridge-back', { min: 4, max: 4 }, [scene('gn-35-bridge')]), when('ridge-back', { min: 5, max: 5 }, [scene('gn-35-shelter')])];
+const BACK: Json[] = [...ONE_LESS, when('ridge-back', { min: 4, max: 4 }, [scene('gn-35-bridge')]), when('ridge-back', { min: 5, max: 5 }, [scene('gn-35-shelter')]), when('ridge-back', { min: 6, max: 6 }, [scene('gn-35-summit')])];
 const FOLLOWED = { id: 'followed', when: [is('ridge-followers')], notice: '*Something is following the crystal\'s hum. You can hear it in the rocks behind you, keeping pace.*' };
 const CLEAR_PATH = [is('ridge-followers', 0, 0)];
 
@@ -48,21 +48,25 @@ const followFight = (local: boolean): Json => inside({
 // The summit's two answers, shared by the Summit and (three crystals) the Shelter.
 const DOWN: Json[] = [setTo('ridge-end', 1), flag('ridge-defeated'), scene('gn-35-glass')];
 const DRIVEN: Json[] = [scene('gn-35-driven')];
-const defeatIt = ch('Defeat it.', fight('It doesn\'t want this. Every bolt on the ridge does.',
+/** `gate`: at the Summit the followers come first (one per crystal, per node). */
+const gated = (gate: Json[], label: string, success: Json): Json => (gate.length ? chIf(gate, label, success) : ch(label, success));
+const defeat = (gate: Json[] = []): Json => gated(gate, 'Defeat it.', fight('It doesn\'t want this. Every bolt on the ridge does.',
   inside({ ...wild({ species: ['@ridge-one'], lv: 2, win: DOWN }), exact: true, rule: { gn: 'overcharged', noCatch: true }, lose: DRIVEN })));
 const earthFight = (turns: number): Json => inside({
   ...wild({ species: ['@ridge-one'], lv: 2, win: [setTo('ridge-end', 2), flag('ridge-earthed'), scene('gn-35-earthed')] }),
   exact: true, rule: { gn: 'earthing', leadType: 'ground', noSwitch: true, surviveTurns: turns, noCatch: true }, lose: DRIVEN,
 });
 const EARTH_TEXT = 'Your Ground-type walks out onto the glass, and plants its feet beside it, and doesn\'t move.';
-const earthIt: Json[] = [
-  chIf([anyType('ground'), not('mega-grounded')], 'Earth it.', fight(EARTH_TEXT, earthFight(3))),
+const earth = (gate: Json[] = []): Json[] => [
+  chIf([...gate, anyType('ground'), not('mega-grounded')], 'Earth it.', fight(EARTH_TEXT, earthFight(3))),
   // NE9: the player grounded the stuck Mega Manectric before. Two turns.
-  chIf([anyType('ground'), is('mega-grounded')], 'Earth it.', fight(`${EARTH_TEXT} You've done this before. So has it, maybe.`, earthFight(2))),
+  chIf([...gate, anyType('ground'), is('mega-grounded')], 'Earth it.', fight(`${EARTH_TEXT} You've done this before. So has it, maybe.`, earthFight(2))),
 ];
 const ADA_AGAIN = { id: 'again', when: [is('mega-grounded')], notice: 'Ada, leaning out of the cab: "You again. You know what to do, then."' };
 const RIDGE_DONE: Json[] = [flag('ridge-done'), stampStage('ridge-at'), leavePseudo()];
-const CAPSULE = item('summit-ability-capsule');
+/** The capsule goes to the Pokémon the player picks (if it can take it; else the first that can). */
+const CAPSULE = { ...item('summit-ability-capsule'), who: 'picked' };
+const FOR_ONE = { pick: { types: [] } };
 
 const gn35: Json[] = [
   gev('gn-35-door', 'Thunderstorm Ridge', storm({ stop: 'event', rarity: 'rare', types: ['electric'], pokemon: 'manectric', requires: [not('ridge-done'), not('ridge-entered')] }), say(
@@ -70,7 +74,7 @@ const gn35: Json[] = [
     'One peak takes more strikes than the rest. All of them, nearly.',
   ), [
     ch('Climb toward the storm.', out('The air tastes of metal. Your Pokémon\'s fur lifts, and settles, and lifts.',
-      flag('ridge-entered'), setTo('ridge-crystals', 0), setTo('ridge-followers', 0), setTo('ridge-struck', 0),
+      flag('ridge-entered'), setTo('ridge-crystals', 0), setTo('ridge-followers', 0), setTo('ridge-struck', 0), setTo('ridge-end', 0),
       gn('cast', { key: 'ridge-one', species: OVERCHARGED }), next('gn-35-gate'))),
     ch('Walk on.', out('You keep low and walk on. Behind you the same peak is hit, and hit, and hit again.')),
   ]),
@@ -144,7 +148,7 @@ const gn35: Json[] = [
       'Forty. Each one deep, and scored hard. The last few are shakier.',
       'Not a person\'s marks. Claws. Something counted every strike it took, until it couldn\'t hold still enough to scratch.',
     ), flag('ridge-counted'), scene('gn-35-shelter'))),
-    chIf(CLEAR_PATH, 'Rest, then climb.', out('You rest as long as you dare. Outside, every strike bends toward the summit.', heal(0.5), STRIKE, next('gn-35-summit'))),
+    chIf(CLEAR_PATH, 'Rest, then climb.', out('You rest as long as you dare. Outside, every strike bends toward the summit.', heal(0.5), STRIKE, ...FOLLOW, next('gn-35-summit'))),
     drop('gn-35-shelter'),
   ]),
   // ---- Node 5, three crystals: it came to find you ----
@@ -152,35 +156,35 @@ const gn35: Json[] = [
     'A cave out of the rain. On the wall, forty tally marks, in fives. The newest are still bright.',
     '*It\'s in here. In the back, as far from the mouth as it can get, hiding from itself.*',
     '*The tally marks are its own. Your three crystals sing, and it flinches, and sparks fall off it like water.*',
-  ), [defeatIt, ...earthIt]),
+  ), [defeat(), ...earth()]),
   // ---- Node 6. The Summit ----
-  node('gn-35-summit', 'Thunderstorm Ridge: The Summit', { pokemon: 'manectric', effect: 'shake', remembers: [ADA_AGAIN] }, say(
+  node('gn-35-summit', 'Thunderstorm Ridge: The Summit', { pokemon: 'manectric', effect: 'shake', remembers: [FOLLOWED, ADA_AGAIN] }, say(
     '*It\'s standing on the highest rock. Every strike on the ridge bends toward it.*',
     '*It\'s shaking. Sparks fall off it like water off a dog. Where they land, the stone goes to glass.*',
     '*It sees you. It tries to back away. A bolt hits it. It screams, and the scream\'s a Thunder.*',
-  ), [defeatIt, ...earthIt]),
+  ), [face(6), defeat(CLEAR_PATH), ...earth(CLEAR_PATH)]),
   // ---- Endings ----
   node('gn-35-glass', 'Thunderstorm Ridge: Quiet', { pokemon: 'manectric' }, say(
     'It goes down. The sparks stop falling. For the first time in a month, nothing on the ridge is shaking.',
     'It lies on its side in the glass it made, breathing. When the next bolt comes, it goes somewhere else.',
     'Something glints in the glass: a capsule, fused in, still warm.',
-  ), [ch('Take the capsule.', out('It comes free with a crack. Behind you, slowly, it gets up, and limps away down the far side.', CAPSULE, ...RIDGE_DONE))]),
+  ), [ch('Take the capsule, for one of mine.', out('It comes free with a crack. Behind you, slowly, it gets up, and limps away down the far side.', CAPSULE, ...RIDGE_DONE), FOR_ONE)]),
   node('gn-35-earthed', 'Thunderstorm Ridge: The Clear Circle', { pokemon: 'manectric' }, say(
     '*It looks at your Ground-type. It walks over, slowly, and leans its whole weight against it.*',
     'The sky over the summit has cleared, in a circle. Stars, in the middle of a storm.',
     'Something glints in the glass where it stood: a capsule, fused in, still warm.',
-  ), [ch('Take the capsule, and go down.', out(say(
+  ), [ch('Take the capsule, for one of mine, and go down.', out(say(
     'The capsule comes free with a crack. You start down the mountain.',
     'It follows you. All the way down. At the bottom, you hold out a Ball, and it steps into it, on its own.',
   ), CAPSULE, { kind: 'friendship', bond: 2, who: { types: ['ground'] } }, flag('sign-raikou'), { kind: 'clearSky' },
   moment('On Thunderstorm Ridge, a Ground-type stood in the lightning for three turns, so something else didn\'t have to.', 85),
-  { ...join({ species: ['@ridge-one'], lv: 2 }), ability: 'grounded-heart' }, ...RIDGE_DONE))]),
+  { ...join({ species: ['@ridge-one'], lv: 2 }), ability: 'grounded-heart' }, ...RIDGE_DONE), FOR_ONE)]),
   node('gn-35-driven', 'Thunderstorm Ridge: Driven Down', { pokemon: 'manectric' }, say(
     'Too much. The storm drives you off the summit, and down, and you don\'t stop till the trees.',
     'Behind you, the peak takes another strike. And another.',
   ), [ch('Go down.', out('You don\'t look back. You can hear it anyway.', ...RIDGE_DONE))]),
   // ---- Afterstory: Ada and Kip's forecast, the next stage ----
-  gev('gn-35-forecast', 'The Storm Chasers\' Forecast', storm({ stop: 'event', rarity: 'uncommon', callback: true, cast: ['trainer.lacey'], effect: 'none', requires: [is('ridge-done'), laterStage('ridge-at'), not('ridge-forecast')] }), say(
+  gev('gn-35-forecast', 'The Storm Chasers\' Forecast', storm({ stop: 'event', rarity: 'uncommon', callback: true, cast: ['trainer.lacey'], effect: 'none', requires: [is('ridge-done'), is('ridge-end'), laterStage('ridge-at'), not('ridge-forecast')] }), say(
     'A pickup truck at the roadside, radio on. Ada\'s pinned the forecast to the windscreen for anyone passing.',
     '*Clear over the ridge. First time in a month. Don\'t know why.*',
   ), [
@@ -190,27 +194,29 @@ const gn35: Json[] = [
 ];
 
 // =====================================================================================================================
-// gn.36  THE GREAT DESERT  (a door at step 10 needing heat, then a Pseudo Stage of eight nodes with three oases; A8; once a run).
+// gn.36  THE ENDLESS DESERT  (a door at step 10 needing heat, then a Pseudo Stage of eight nodes with three oases; A8; once a run).
 // Water: 4 at the Last Well, one less each node, refilled at the oases; at none, each fight starts at 90% HP (battle rule `desert`).
 // Mirages: each has a tell for players who look ("Look closer."). The traveller, Idris Calloway, is met at all three oases: lost,
 // robbed, laughing. At the hidden fourth oasis, an ancient Flygon. With Idris there, no battle. With the drawing, no battle.
 // =====================================================================================================================
 const DESERT_TINT = '#c79a52';
 const dune = (o: Json = {}): Json => ({ tint: DESERT_TINT, tags: ['Pokémon', 'Exploration', 'Survival'], effect: 'none', ...o });
-const sands = (id: string, name: string, o: Json, intro: string, choices: Json[]): Json => rm(id, name, dune({ remembers: WATER_LEFT, ...o }), intro, choices);
 const DESERT_DONE: Json[] = [flag('desert-done'), leavePseudo()];
 const DESERT_POOL = ['sandile', 'cacnea', 'trapinch', 'vibrava', 'hippopotas', 'numel', 'baltoy', 'dwebble', 'silicobra', 'sandshrew', 'larvesta'];
 const WATER = 'desert-water';
-/** The count's always on screen: a notice on every node, and a line every time it changes. */
+/** The count's always on screen: every node's text opens with it ({flag:...} is filled in by core/greenneedle gnTokens). */
+const sands = (id: string, name: string, o: Json, intro: string, choices: Json[]): Json => rm(id, name, dune({ remembers: WATER_LEFT, ...o }), `Water: {flag:${WATER}}.\n\n${intro}`, choices);
+/** At none, a notice on every node; and a line every time the count changes. */
 const WATER_LEFT: Json[] = [
-  { id: 'water-0', when: [is(WATER, 0, 0)], notice: 'Water: none. Your party starts each fight at 90% HP.' },
-  { id: 'water-n', when: [is(WATER, 1)], notice: 'Water: you check the flasks. Enough, for now.' },
+  { id: 'water-0', when: [is(WATER, 0, 0)], notice: 'No water left. Your party starts each fight at 90% HP.' },
 ];
 const WATER_SAYS: Json[] = [0, 1, 2, 3, 4, 5].map((n) => when(WATER, { min: n, max: n }, [], n === 0 ? 'Water: none left. Your party starts each fight at 90% HP.' : `Water: ${n} left.`));
 /** A node walked: one less (never below none). */
 const DRINK: Json[] = [...[1, 2, 3, 4, 5].map((n) => when(WATER, { min: n, max: n }, [setTo(WATER, n - 1)])), ...WATER_SAYS];
 const REFILL: Json[] = [setTo(WATER, 4), when(WATER, { min: 4, max: 4 }, [], 'You fill every flask to the brim. Water: 4.')];
 const ON = (id: string): Json[] => [...DRINK, next(id)];
+/** Walking into an oasis: the node's water is drunk, then every flask is filled. Water given away after that is really gone. */
+const TO_OASIS = (id: string): Json[] => [...DRINK, ...REFILL, next(id)];
 const desertFight = (species: string[], win: Json[], lose: Json[] = win, lv = 1): Json => inside({ ...wild({ species, lv, win }), caught: win, ...(species.length === 1 ? { exact: true } : {}), lose, rule: { gn: 'desert' } });
 
 /** Mirages: what's seen (1 a pool, 2 a chest, 3 a figure), and whether it's real. The tell is there for anyone who looks. */
@@ -222,25 +228,28 @@ const SHIMMER = chIf([is('desert-mirage-done', 0, 0)], 'Look at the shimmer.', o
 const look = (self: string, real: string, fake: string): Json => chIf([is('desert-looked', 0, 0)], 'Look closer.', out('You stand still, and make yourself really look.',
   when('desert-real', { min: 1 }, [], real), when('desert-real', { min: 0, max: 0 }, [], fake), setTo('desert-looked', 1), flag('desert-mirages-read'), scene(self)));
 const leaveIt = ch('Leave it.', out('You turn away. When you look back, it\'s still there. Or it isn\'t.', ...MIRAGE_DONE));
+/** The sandstorm hides the next node on the map (no badge, no battle type) until something shows it. */
+const SHOW_AHEAD = gn('mapShow', { key: 'gn-36-oasis-2' });
 /** A sandstorm hides the next stretch, unless you can see through it: Safety Goggles held, or Desert Guide in the party (or a Flying-type sent up). */
 const SIGHT: Json[] = [
   setTo('desert-sight', 0),
   gn('check', { key: 'desert-goggles', if: [{ kind: 'gn', test: 'holds', key: 'safety-goggles' }] }), when('desert-goggles', { min: 1 }, [setTo('desert-sight', 1)]),
   gn('check', { key: 'desert-guided', if: [{ kind: 'gn', test: 'hasAbility', key: 'desert-guide' }] }), when('desert-guided', { min: 1 }, [setTo('desert-sight', 1)]),
+  when('desert-sight', { min: 1 }, [SHOW_AHEAD]),
 ];
 const RUIN_ITEMS = ['relic-copper', 'relic-silver', 'rare-bone', 'light-clay', 'sun-stone'];
 
 const gn36: Json[] = [
-  gev('gn-36-door', 'The Great Desert', dune({ stop: 'event', rarity: 'rare', types: ['ground'], pokemon: 'trapinch', requires: [not('desert-done'), not('desert-entered')] }), say(
+  gev('gn-36-door', 'The Endless Desert', dune({ stop: 'event', rarity: 'rare', types: ['ground'], pokemon: 'trapinch', requires: [not('desert-done'), not('desert-entered')] }), say(
     'The road ends where the sand begins. Past it, dunes, and heat that bends the air like water.',
     'A sign, half buried: LAST WELL. An arrow points in.',
   ), [
     ch('Walk into the desert.', out('The sand takes your footprints, and smooths them, and forgets you were there.',
-      flag('desert-entered'), setTo(WATER, 4), setTo('desert-gave-water', 0), stampRegion('desert-region'), next('gn-36-well'))),
+      flag('desert-entered'), setTo(WATER, 4), setTo('desert-gave-water', 0), setTo('desert-flygon', 0), setTo('desert-pack', 0), setTo('desert-idris-dunes', 0), stampRegion('desert-region'), next('gn-36-well'))),
     ch('Walk on.', out('You keep to the road. The heat follows you for a while, and gives up.')),
   ]),
   // ---- Node 1. The Last Well ----
-  sands('gn-36-well', 'The Great Desert: The Last Well', { cast: ['trainer.lady'], pokemon: 'hippopotas' }, say(
+  sands('gn-36-well', 'The Endless Desert: The Last Well', { cast: ['trainer.lady'], pokemon: 'hippopotas' }, say(
     'A village at the desert\'s edge: six houses, a well, a goat that judges you.',
     'A guide sits by the well, very old, with eyes like she\'s still looking at the horizon. Old Hadiza-Nour.',
     'Hadiza-Nour: "Three oases. Count them. If you see a fourth, it isn\'t."',
@@ -252,38 +261,43 @@ const gn36: Json[] = [
     ch('Fill the flasks, and go.', out('The well water\'s cold enough to hurt your teeth.', setTo(WATER, 4), ...MIRAGE_AT(2), ...ON('gn-36-dunes'))),
   ]),
   // ---- Node 2. The First Dunes: wild battles, and a mirage ----
-  sands('gn-36-dunes', 'The Great Desert: The First Dunes', { pokemon: 'sandile' }, say(
+  sands('gn-36-dunes', 'The Endless Desert: The First Dunes', { pokemon: 'sandile' }, say(
     'Dunes like slow waves. Things move under the sand, and stop when you stop.',
     'On the far side of the next dune, something shimmers.',
   ), [
     SHIMMER,
-    ch('Walk on.', fight('The sand ahead bulges, and bursts.', desertFight(DESERT_POOL, ON('gn-36-oasis-1')))),
+    ch('Walk on.', fight('The sand ahead bulges, and bursts.', desertFight(DESERT_POOL, TO_OASIS('gn-36-oasis-1')))),
   ]),
   // ---- The mirages (scenes of the node they appear at) ----
-  sands('gn-36-pool', 'The Great Desert: A Pool with Palm Trees', { pokemon: 'cacnea' }, 'A pool, blue as glass, with palm trees leaning over it. It looks cool. It looks close.', [
+  sands('gn-36-pool', 'The Endless Desert: A Pool with Palm Trees', { pokemon: 'cacnea' }, 'A pool, blue as glass, with palm trees leaning over it. It looks cool. It looks close.', [
     look('gn-36-pool', 'The palms have shadows. A bird is drinking at the edge, and the water ripples where it drinks.', 'Look at the palms. The sun is high and hard, and they cast no shadows at all.'),
     chIf([is('desert-real')], 'Go to it.', out('It\'s real. Cool, and sweet, and real. Not an oasis, but enough. Water +1 (flasks hold four).', ...[3, 2, 1, 0].map((n) => when(WATER, { min: n, max: n }, [setTo(WATER, n + 1)])), ...WATER_SAYS, ...MIRAGE_DONE)),
     chIf([not('desert-real')], 'Go to it.', fight('The palms turn round. They have faces.', desertFight(['cacturne'], MIRAGE_DONE))),
     leaveIt,
   ]),
-  sands('gn-36-chest', 'The Great Desert: A Chest on a Dune', { pokemon: 'sandile' }, 'A chest, half out of the sand on the crest of a dune, its lock rusted open.', [
+  sands('gn-36-chest', 'The Endless Desert: A Chest on a Dune', { pokemon: 'sandile' }, 'A chest, half out of the sand on the crest of a dune, its lock rusted open.', [
     look('gn-36-chest', 'The sand round it\'s smooth. Nobody\'s been near it in years. The wind has.', 'Footprints lead up to it. None lead away.'),
     chIf([is('desert-real')], 'Go to it.', out('It\'s old, and real, and full of sand, and at the bottom something the sand kept safe.', any(...RUIN_ITEMS), ...MIRAGE_DONE)),
     chIf([not('desert-real')], 'Go to it.', fight('The dune gives way. It was a pit all along, and the Sandile at the bottom have been waiting.', inside({ ...wild({ species: ['sandile', 'krokorok'], lv: 1, chain: 2, win: MIRAGE_DONE }), caught: MIRAGE_DONE, lose: MIRAGE_DONE, rule: { gn: 'desert' } }))),
     leaveIt,
   ]),
-  sands('gn-36-figure', 'The Great Desert: A Figure, Waving', { pokemon: 'sigilyph' }, 'A figure on a far dune, waving to you. Both arms, over its head. Waving.', [
+  sands('gn-36-figure', 'The Endless Desert: A Figure, Waving', { pokemon: 'sigilyph' }, 'A figure on a far dune, waving to you. Both arms, over its head. Waving.', [
     look('gn-36-figure', 'It stops waving, and sits down in the sand, and puts its head in its hands. A person. Tired.', 'It waves exactly the same way. And again. The same way, to the inch.'),
-    chIf([is('desert-real')], 'Go to it.', out(say(
-      'By the time you get there, they\'ve gone on ahead. Only a dip in the sand where somebody sat, and a dropped map, upside down.',
-    ), flag('desert-saw-idris'), ...MIRAGE_DONE)),
+    chIf([is('desert-real')], 'Go to it.', out('A person, sitting in the sand, with a map held upside down.',
+      when('desert-at', { min: 2, max: 2 }, [setTo('desert-idris-dunes', 1)], 'The traveller: "Oh, good. A person. I waved at a cactus for an hour. It didn\'t wave back." They get up, and set off ahead of you: the wrong way, and then the right way.'),
+      when('desert-at', { min: 4, max: 4 }, [], 'Idris: "You again! I waved. You saw. That\'s twice you\'ve found me, and I\'m the one who\'s been here before." They wave you on ahead. "I walk slow."'),
+      flag('desert-saw-idris'), ...MIRAGE_DONE)),
     chIf([not('desert-real')], 'Go to it.', fight('The figure folds its arms into wings. It was never waving. It was guarding: behind it, the top of a buried ruin.', desertFight(['sigilyph'], [any(...RUIN_ITEMS), flag('desert-sigilyph-ruin'), ...MIRAGE_DONE]))),
     leaveIt,
   ]),
   // ---- Node 3. The First Oasis: the traveller, lost ----
-  sands('gn-36-oasis-1', 'The Great Desert: The First Oasis', {
+  sands('gn-36-oasis-1', 'The Endless Desert: The First Oasis', {
     cast: ['trainer.hiker'], pokemon: 'cacnea',
-    remembers: [{ id: 'herd', when: [is('savanna-helped')], notice: 'Idris: "Wait. The Deep Savanna, the Donphan? That was you? Everyone\'s heard. Keep your water. I\'ve got some."' }, ...WATER_LEFT],
+    remembers: [
+      { id: 'herd', when: [is('savanna-helped')], notice: 'Idris: "Wait. The Deep Savanna, the Donphan? That was you? Everyone\'s heard. Keep your water. I\'ve got some."' },
+      { id: 'waved', when: [is('desert-idris-dunes')], notice: '*The one who waved to you from the dune. They got here first, somehow.*' },
+      ...WATER_LEFT,
+    ],
   }, say(
     'Water. Real water, and real palms, and real shade. You\'ve never been so glad of shade.',
     '*Someone\'s sitting under a palm with a map held upside down.*',
@@ -291,12 +305,12 @@ const gn36: Json[] = [
     'Idris: "I\'ve been here before. Thirty years ago. You\'d think I\'d remember a thing like a desert."',
   ), [
     chIf([not('desert-where')], 'Where are you going?', out('Idris: "To see someone. If they\'re still there. They might not remember me either."', flag('desert-where'), scene('gn-36-oasis-1'))),
-    ch('Walk with me.', out('Idris folds the map the right way up, and walks with you to the edge of the shade. "I walk slow. Go on. I\'ll catch you up."', ...REFILL, ...SIGHT, ...MIRAGE_AT(4), ...ON('gn-36-storm'))),
+    ch('Walk with me.', out('Idris folds the map the right way up, and walks with you to the edge of the shade. "I walk slow. Go on. I\'ll catch you up."', ...SIGHT, ...MIRAGE_AT(4), ...ON('gn-36-storm'))),
     chIf([not('desert-gave-water'), not('savanna-helped'), is(WATER)], 'Here, take some water.', out('Idris drinks like someone who\'d stopped hoping. "Thank you. I mean it."', ...DRINK, setTo('desert-gave-water', 1), scene('gn-36-oasis-1'))),
     chIf([not('desert-gave-water'), is('savanna-helped')], 'Here, take some water.', out('Idris waves it away, then takes a sip anyway, to be polite. It costs you nothing.', setTo('desert-gave-water', 1), scene('gn-36-oasis-1'))),
   ]),
   // ---- Node 4. The Storm: the next node's hidden; a mirage ----
-  sands('gn-36-storm', 'The Great Desert: The Storm', {
+  sands('gn-36-storm', 'The Endless Desert: The Storm', {
     effect: 'fog', pokemon: 'hippowdon',
     remembers: [
       { id: 'sight', when: [is('desert-sight')], notice: '*Through the sand, you can make out what\'s ahead: palms. A second oasis.*' },
@@ -307,57 +321,59 @@ const gn36: Json[] = [
     'The next stretch is gone: no shape, no sound, nothing you could put a name to.',
   ), [
     SHIMMER,
-    chIf([anyType('flying'), not('desert-sight')], 'Send a Flying-type up.', out('Your Flying-type climbs out of the storm, and circles, and comes back down to the left. Palms, that way. Water.', setTo('desert-sight', 1), scene('gn-36-storm'))),
-    ch('Walk on.', out('Head down, one foot in front of the other.', ...ON('gn-36-oasis-2'))),
+    chIf([anyType('flying'), not('desert-sight')], 'Send a Flying-type up.', out('Your Flying-type climbs out of the storm, and circles, and comes back down to the left. Palms, that way. Water.', setTo('desert-sight', 1), SHOW_AHEAD, scene('gn-36-storm'))),
+    ch('Walk on.', out('Head down, one foot in front of the other.', ...TO_OASIS('gn-36-oasis-2'))),
   ]),
   // ---- Node 5. The Second Oasis: the traveller, robbed ----
-  sands('gn-36-oasis-2', 'The Great Desert: The Second Oasis', { cast: ['trainer.hiker'], pokemon: 'sandile' }, say(
+  sands('gn-36-oasis-2', 'The Endless Desert: The Second Oasis', { cast: ['trainer.hiker'], pokemon: 'sandile' }, say(
     'The second oasis. Smaller, muddier, and yours.',
     '*Idris, sitting in the same way, with no pack, no boots and no map.*',
     'Idris: "Sandile. A whole family. Very organised. They took the boots *first.* I respect that."',
   ), [
-    ch('I\'ll get your things back.', out('Idris points, with a bare foot, at a line of very small, very proud tracks. "That way. Mind the little one. It bites."', ...REFILL, ...ON('gn-36-den'))),
-    ch('Take my spare.', out('You hand over your spare pair of socks and your second flask. It isn\'t boots. Idris treats it like it\'s more than boots.', ...REFILL, flag('desert-spare'), ...ON('gn-36-ruin'))),
-    ch('You should turn back.', out(say('Idris: "No. I\'ve turned back from this four times in thirty years. Not again."', 'They say it gently, and they don\'t look at you while they say it.'), ...REFILL, ...ON('gn-36-ruin'))),
+    ch('I\'ll get your things back.', out('Idris points, with a bare foot, at a line of very small, very proud tracks. "That way. Mind the little one. It bites."', ...ON('gn-36-den'))),
+    ch('Take my spare.', out('You hand over your spare pair of socks and your second flask. It isn\'t boots. Idris treats it like it\'s more than boots.', flag('desert-spare'), ...ON('gn-36-ruin'))),
+    ch('You should turn back.', out(say('Idris: "No. I\'ve turned back from this four times in thirty years. Not again."', 'They say it gently, and they don\'t look at you while they say it.'), ...ON('gn-36-ruin'))),
   ]),
   // ---- One node off the path: the Sandile den ----
-  sands('gn-36-den', 'The Great Desert: The Sandile Den', { pokemon: 'krookodile' }, say(
+  sands('gn-36-den', 'The Endless Desert: The Sandile Den', { pokemon: 'krookodile' }, say(
     'A hollow in the dune, very tidy. A pair of boots, side by side, the way you\'d leave them at a door.',
     'A family of Sandile is sitting on the pack. The biggest one looks at you over sunglasses it can\'t possibly own.',
   ), [
     ch('Battle them for it.', fight('The family rises as one. Very organised.', inside({ ...wild({ species: ['sandile', 'krokorok', 'krookodile'], lv: 1, chain: 3, win: [scene('gn-36-pack')] }), caught: [scene('gn-36-pack')], lose: [scene('gn-36-pack-lost')], rule: { gn: 'desert' } }))),
     chIf([is(WATER)], 'Trade them some water.', out('You pour a flask into a hollow in the rock. They consider it. Then they get off the pack, one by one, and drink.', ...DRINK, scene('gn-36-pack'))),
   ]),
-  sands('gn-36-pack', 'The Great Desert: The Pack', { pokemon: 'sandile' }, say(
+  sands('gn-36-pack', 'The Endless Desert: The Pack', { pokemon: 'sandile' }, say(
     'The pack, the boots, the map. At the bottom of the pack, folded small, a child\'s drawing, very old.',
     'A small figure on the back of something with wings.',
-  ), [ch('Take them back to Idris.', out('Idris puts the boots on first. Then they see the drawing\'s been looked at, and go quiet, and fold it away.', flag('desert-pack'), ...ON('gn-36-ruin')))]),
-  sands('gn-36-pack-lost', 'The Great Desert: Very Organised', { pokemon: 'sandile' }, 'The Sandile family sits back down on the pack. You were outnumbered, and they were organised.', [
+  ), [ch('Take them back to Idris.', out('Idris puts the boots on first. Then they see the drawing\'s been looked at, and go quiet, and fold it away.', setTo('desert-pack', 1), ...ON('gn-36-ruin')))]),
+  sands('gn-36-pack-lost', 'The Endless Desert: Very Organised', { pokemon: 'sandile' }, 'The Sandile family sits back down on the pack. You were outnumbered, and they were organised.', [
     ch('Go back without it.', out('Idris laughs when they see your face. "I told you. Very organised."', ...ON('gn-36-ruin'))),
   ]),
   // ---- Node 6. The Buried Ruin: three places to dig ----
-  sands('gn-36-ruin', 'The Great Desert: The Buried Ruin', { pokemon: 'baltoy' }, say(
+  sands('gn-36-ruin', 'The Endless Desert: The Buried Ruin', { pokemon: 'baltoy' }, say(
     'Pillars in the sand, tops only, like the masts of a buried ship. Baltoy turn slowly between them, humming.',
     'Three places look dug-at: by the leaning pillar, by the broken arch, by the step that goes down into nothing.',
   ), [
     chIf([is('desert-dug', 0, 2), { kind: 'gn', test: 'moveType', types: ['ground'] }], 'Dig with a Ground move.', out('Your Pokémon digs like it was made for it, and it was. Something old comes up with the sand.', any(...RUIN_ITEMS), flag('desert-dug'), scene('gn-36-ruin'))),
     chIf([is('desert-dug', 0, 2)], 'Dig by hand.', out('It takes a long time. The sun moves. Your flasks get lighter. Then: something old, in your hands.', any(...RUIN_ITEMS), flag('desert-dug'), takeNode(1), ...DRINK, scene('gn-36-ruin'))),
-    ch('Walk on.', out('The Baltoy watch you go. One of them stops turning, for a moment.', ...ON('gn-36-oasis-3'))),
+    ch('Walk on.', out('The Baltoy watch you go. One of them stops turning, for a moment.', ...TO_OASIS('gn-36-oasis-3'))),
   ]),
   // ---- Node 7. The Third Oasis: the traveller, laughing ----
-  sands('gn-36-oasis-3', 'The Great Desert: The Third Oasis', { cast: ['trainer.hiker'], pokemon: 'vibrava' }, say(
+  sands('gn-36-oasis-3', 'The Endless Desert: The Third Oasis', { cast: ['trainer.hiker'], pokemon: 'vibrava' }, say(
     '*Idris is lying on their back in the shallows, laughing at the sky.*',
     'Idris: "I remembered. I remembered which way. It was never on the map. It\'s where the wind *stops.*"',
     'Idris: "I was six. I wandered off from the caravan. Two days. I don\'t remember being frightened; I remember being tired."',
     'Idris: "And then something landed. It didn\'t ask me anything. It let me climb on. It flew me to the Last Well and it left before anyone came out."',
     'Idris: "I never said thank you. I was six. I\'ve been trying to get back and say it ever since."',
   ), [
-    ch('Come with me. We\'ll find it.', out('Idris gets up, dripping, and laughs again. "We. All right. We." They carry their own water.', ...REFILL, flag('desert-traveller-with'), ...ON('gn-36-hidden'))),
-    ch('I\'ll tell it for you.', out(say('Idris looks at you for a long moment. Then they unfold the drawing and put it in your hands.', '"Tell it I got lost. Tell it I was trying."'), ...REFILL, flag('desert-drawing'), ...ON('gn-36-hidden'))),
-    ch('Good luck.', out('Idris raises a hand from the water. "You too." When you look back, they\'re still lying there, looking at the sky.', ...REFILL, ...ON('gn-36-hidden'))),
+    ch('Come with me. We\'ll find it.', out('Idris gets up, dripping, and laughs again. "We. All right. We." They carry their own water.', flag('desert-traveller-with'), ...ON('gn-36-hidden'))),
+    chIf([is('desert-pack')], 'I\'ll tell it for you.', out(say('Idris looks at you for a long moment. Then they unfold the drawing and put it in your hands.', '"Tell it I got lost. Tell it I was trying."'), flag('desert-drawing'), ...ON('gn-36-hidden'))),
+    // The drawing was in the stolen pack: without the pack there is nothing to carry.
+    chIf([not('desert-pack')], 'I\'ll tell it for you.', out(say('Idris looks at you for a long moment. "There was a drawing, in the pack. I\'d have given you that. The Sandile have it now."', '"Tell it I got lost. Tell it I was trying."'), ...ON('gn-36-hidden'))),
+    ch('Good luck.', out('Idris raises a hand from the water. "You too." When you look back, they\'re still lying there, looking at the sky.', ...ON('gn-36-hidden'))),
   ]),
   // ---- Node 8. The Hidden Oasis ----
-  sands('gn-36-hidden', 'The Great Desert: The Hidden Oasis', {
+  sands('gn-36-hidden', 'The Endless Desert: The Hidden Oasis', {
     pokemon: 'flygon',
     remembers: [
       { id: 'idris', when: [is('desert-traveller-with')], notice: '*Idris stops beside you. Their hand is shaking.*' },
@@ -382,7 +398,7 @@ const gn36: Json[] = [
       exact: true, foeMoves: ['earthquake', 'dragon-claw', 'sandstorm', 'roost'], rule: { gn: 'desert', noCatch: true }, lose: [scene('gn-36-turned')],
     }))),
   ]),
-  sands('gn-36-after', 'The Great Desert: Where the Wind Stops', {
+  sands('gn-36-after', 'The Endless Desert: Where the Wind Stops', {
     pokemon: 'trapinch',
     remembers: [
       { id: 'together', when: [is('desert-traveller-with')], notice: '*They sit together by the water. Idris is talking. The Flygon\'s eyes are closed. You\'re not needed.*' },
@@ -395,11 +411,11 @@ const gn36: Json[] = [
     ), { ...join({ species: ['trapinch'], lv: 1 }), ability: 'desert-guide' }, item('soft-sand'), ...DESERT_DONE)),
     chIf([not('desert-traveller-with')], 'Take a Trapinch from the oasis.', out('One Trapinch follows you to the edge of the green, and over it, and keeps following.', join({ species: ['trapinch'], lv: 1 }), item('soft-sand'), ...DESERT_DONE)),
   ]),
-  sands('gn-36-turned', 'The Great Desert: Turned Away', { pokemon: 'flygon' }, 'Its wings beat once, and the sand stands up, and you\'re walking back the way you came with your eyes shut.', [
+  sands('gn-36-turned', 'The Endless Desert: Turned Away', { pokemon: 'flygon' }, 'Its wings beat once, and the sand stands up, and you\'re walking back the way you came with your eyes shut.', [
     ch('Walk back.', out('When the sand settles, there\'s no oasis behind you. There never was, the sand says.', item('soft-sand'), ...DESERT_DONE)),
   ]),
   // ---- Afterstory: a postcard, a region later ----
-  gev('gn-36-postcard', 'A Postcard', dune({ stop: 'event', rarity: 'uncommon', callback: true, requires: [is('desert-flygon', 1, 1), is('desert-traveller-with'), regionChanged('desert-region'), not('desert-postcard')] }), say(
+  gev('gn-36-postcard', 'A Postcard', dune({ stop: 'event', rarity: 'uncommon', callback: true, requires: [is('desert-done'), is('desert-flygon', 0, 1), regionChanged('desert-region'), not('desert-postcard')] }), say(
     'A postcard, waiting for you, sent care of the Pokémon Center. No message. Just a photograph.',
     'An old Flygon, asleep in the shade of a palm. Beside it, a pair of boots, side by side, the way you\'d leave them at a door.',
   ), [ch('Keep it.', out('You put it somewhere you\'ll see it.', flag('desert-postcard')))]),
@@ -420,8 +436,11 @@ const HUMOUR = (sp: string): Json[] => [flag('mansion-humoured'), setTo(`mansion
 const BATTLED = (sp: string): Json[] => [flag('mansion-battled'), setTo(`mansion-fought-${sp}`, 1)];
 const ghostFight = (sp: string, back: string): Json => inside({ ...wild({ species: [sp], lv: 0, win: [...BATTLED(sp), scene(back)] }), caught: [...BATTLED(sp), scene(back)], exact: true, lose: [...BATTLED(sp), scene(back)] });
 const LAMP: Json[] = [flag('mansion-lamps'), when('mansion-lamps', { min: 3, max: 3 }, [], '*Somewhere below, a heavy door unlocks, all by itself.*')];
-/** The hall's portrait changes between visits: stern, then looking to your left, then asleep. */
+/** The hall's portrait changes between visits (coming back down from an upper floor): stern, then looking to your left, then asleep. */
 const HALL_AGAIN: Json[] = [flag('mansion-hall-seen'), scene('gn-37-hall')];
+/** Still on the hall's floor (the kitchen, the Gastly): not a new visit. */
+const HALL: Json[] = [scene('gn-37-hall')];
+const DOWN_TO_HALL: Json = ch('Go back down to the hall.', out('Down the stairs. They creak in different places going down.', ...HALL_AGAIN));
 const MANSION_DONE: Json[] = [flag('mansion-done'), leavePseudo()];
 /** Leaving: the vault first, if all three lamps are lit. */
 const MANSION_LEAVE: Json[] = [when('mansion-lamps', { min: 3 }, [scene('gn-37-vault')]), when('mansion-lamps', { min: 0, max: 2 }, MANSION_DONE)];
@@ -448,8 +467,8 @@ const gn37: Json[] = [
     'A portrait at the foot of the stairs: a man in a long coat, stern, as if you\'re late.',
     '*The music stops. Just for a few seconds. Your footsteps are very loud. Then it starts again, mid-bar.*',
   ), [
-    chIf([not('mansion-ghost-1')], 'Scream back at the portrait.', out(say('The portrait screams at you. You scream back, louder.', 'A Gastly falls out of the frame laughing, and rolls about on the rug, and can\'t stop.'), ...HUMOUR('gastly'), setTo('mansion-ghost-1', 1), ...HALL_AGAIN)),
-    chIf([not('mansion-ghost-1')], 'Battle the Gastly.', fight('The pots rattle. The portraits\' eyes light up. Something comes out of all of them at once.', inside({ ...ghostFight('gastly', 'gn-37-hall'), win: [...BATTLED('gastly'), setTo('mansion-ghost-1', 1), ...HALL_AGAIN], caught: [...BATTLED('gastly'), setTo('mansion-ghost-1', 1), ...HALL_AGAIN] }))),
+    chIf([not('mansion-ghost-1')], 'Scream back at the portrait.', out(say('The portrait screams at you. You scream back, louder.', 'A Gastly falls out of the frame laughing, and rolls about on the rug, and can\'t stop.'), ...HUMOUR('gastly'), setTo('mansion-ghost-1', 1), ...HALL)),
+    chIf([not('mansion-ghost-1')], 'Battle the Gastly.', fight('The pots rattle. The portraits\' eyes light up. Something comes out of all of them at once.', inside({ ...ghostFight('gastly', 'gn-37-hall'), win: [...BATTLED('gastly'), setTo('mansion-ghost-1', 1), ...HALL], caught: [...BATTLED('gastly'), setTo('mansion-ghost-1', 1), ...HALL] }))),
     chIf([not('mansion-lamp-1')], 'Go into the kitchen.', out('A cold stove with a lamp on top. Pots, clattering by themselves.', scene('gn-37-kitchen'))),
     ch('Go upstairs.', out('The stairs creak in the right places. Like someone showing you which ones.', next('gn-37-library'))),
   ]),
@@ -457,8 +476,8 @@ const gn37: Json[] = [
     'A kitchen, spotless, cold. On the stove, the first lamp. A pot lid lifts, and drops, and lifts.',
     'Something in here wants feeding.',
   ), [
-    chIf([{ kind: 'gn', test: 'holdsBerry' }], 'Leave a Berry.', out('You put a Berry on the stove. It\'s gone when you look back. The first lamp lights, small and gold.', gn('payBerry'), setTo('mansion-lamp-1', 1), ...LAMP, ...HALL_AGAIN)),
-    ch('Leave it hungry.', out('You back out. The pot lid drops, disappointed.', ...HALL_AGAIN)),
+    chIf([{ kind: 'gn', test: 'holdsBerry' }], 'Leave a Berry.', out('You put a Berry on the stove. It\'s gone when you look back. The first lamp lights, small and gold.', gn('payBerry'), setTo('mansion-lamp-1', 1), ...LAMP, ...HALL)),
+    ch('Leave it hungry.', out('You back out. The pot lid drops, disappointed.', ...HALL)),
   ]),
   // ---- Floor 2. The Library and Bedrooms (Shuppet, under the beds) ----
   floor('gn-37-library', 'The Haunted Mansion: The Library', { pokemon: 'shuppet', remembers: [MOVED('a book you didn\'t touch is open on the reading desk, at the last page.')] }, say(
@@ -472,6 +491,7 @@ const gn37: Json[] = [
       when('mansion-door-once', { min: 0, max: 0 }, [setTo('mansion-door-once', 1), scene('gn-37-library')], '*It opens onto the library. The room you just left. The books turn to look at you.*'),
       when('mansion-door-once', { min: 2 }, [next('gn-37-gallery')], 'Through it again, and this time it leads on: a narrow stair, going up.'),
       flag('mansion-door-once'))),
+    DOWN_TO_HALL,
   ]),
   floor('gn-37-riddle', 'The Haunted Mansion: The Riddle Shelf', { pokemon: 'shuppet' }, 'WHICH NUMBER COMES AFTER ALL THE OTHERS?', [
     ch('Infinity.', out('The books flap, unimpressed. The lamp stays cold.', scene('gn-37-library'))),
@@ -500,6 +520,7 @@ const gn37: Json[] = [
     chIf([not('mansion-ghost-3')], 'Climb to the attic.', out('A chest, and something sitting on it, waiting. A Banette. Once a doll.', flag('mansion-mirror'), scene('gn-37-attic'))),
     chIf([not('mansion-lamp-3')], 'Send the dumb waiter down.', out('It goes down, creaking, to the cellar stair. You can see the third lamp, behind loose boards.', flag('mansion-mirror'), scene('gn-37-cellar'))),
     ch('Go up to the study.', out('One more stair. Under the door at the top, firelight.', flag('mansion-mirror'), next('gn-37-study'))),
+    DOWN_TO_HALL,
   ]),
   floor('gn-37-attic', 'The Haunted Mansion: The Attic', { pokemon: 'banette' }, 'The Banette doesn\'t move. Its zipper mouth twitches.', [
     ch('Ask it who threw it away.', out('Its zipper mouth moves. "She threw me away."', scene('gn-37-doll'))),
@@ -573,7 +594,10 @@ const gn37: Json[] = [
     'It goes back to the window. Then it comes to you, and takes your Pokémon\'s paw, or hand, or fin, and holds on.',
     'The way the house holds on.',
   ), [
-    ch('Let it teach one of yours.', out('It shows your Pokémon how to hold on to someone at the door. Welcome Home.', teach('welcome-home', { who: 'picked' }), gn('ofSpecial', { key: 'mimikyu' }), ...MANSION_LEAVE), { pick: { types: [] } }),
+    ch('Let it teach one of yours.', out(say(
+      'It shows your Pokémon how to hold on to someone at the door. Welcome Home.',
+      'Then it turns down the beds, the way it has every night for forty years. Tonight, somebody sleeps in them. The house is a place to rest.',
+    ), teach('welcome-home', { who: 'picked' }), heal(1), gn('ofSpecial', { key: 'mimikyu' }), ...MANSION_LEAVE), { pick: { types: [] } }),
   ]),
   floor('gn-37-won', 'The Haunted Mansion: The Coat', { pokemon: 'mimikyu' }, say(
     'It goes down, and gets up, and goes to the coat on the floor, and puts it back on.',
@@ -639,7 +663,7 @@ const gn38: Json[] = [
     'Off the path, a building that was white once. Ivy through the vents. A tree growing up through the roof.',
     'A sign on the fence, under the moss: PROJECT LODESTAR. AUTHORISED STAFF ONLY.',
   ), [
-    ch('Go in.', out('The doors aren\'t locked. The lock\'s been grown over.', flag('lab-entered'), gn('labCast'), next('gn-38-reception'))),
+    ch('Go in.', out('The doors aren\'t locked. The lock\'s been grown over.', flag('lab-entered'), setTo('lab-stays', 0), setTo('lab-answer', 0), gn('labCast'), next('gn-38-reception'))),
     ch('Walk on.', out('A leaf taps on a window as you pass, like someone knocking.')),
   ]),
   // ---- Node 1. Reception ----
@@ -680,12 +704,12 @@ const gn38: Json[] = [
     ch('Whatever you want.', out('It tilts its head. Nobody has ever said that to it.', gn('check', { key: 'lab-heard', if: [HEARD] }),
       when('lab-heard', { min: 1 }, [], '*It answers at once: it straightens, and nods, as if it\'s been waiting for someone to say exactly that.*'), setTo('lab-answer', 1), scene('gn-38-researchers'))),
     ch('Come with me.', out('It looks at the door. It\'s never been through it the right way.', setTo('lab-answer', 2), scene('gn-38-researchers'))),
-    ch('Stay here. I\'ll stay with you a while.', out('You sit down under the tree. After a while, so does it.', setTo('lab-answer', 3), scene('gn-38-researchers'))),
+    ch('Stay here. I\'ll stay with you a while.', out('You sit down under the tree. After a while, so does it.', setTo('lab-answer', 3), setTo('lab-stays', 1), scene('gn-38-researchers'))),
     ch('I don\'t know.', out('It nods, slowly. That, at least, is honest.', setTo('lab-answer', 4), scene('gn-38-researchers'))),
   ]),
   wing('gn-38-researchers', 'The Overgrown Laboratory: Footsteps', {
     pokemon: 'dragonite', cast: ['trainer.scientist'],
-    remembers: [{ id: 'recognised', when: [anyFlag('hoenn-took-all', 'called-it-for-us')], notice: 'Marchetti-Ibe looks at you, and smiles. "You understand. You know what it is to have something like this and not *use* it."' }],
+    remembers: [{ id: 'recognised', when: [anyFlag('hoenn-took-all', 'hoenn-final-all', 'called-it-for-us')], notice: 'Marchetti-Ibe looks at you, and smiles. "You understand. You know what it is to have something like this and not *use* it."' }],
   }, say(
     'Footsteps. Two people in the doorway.',
     'Dr. Teodor Marchetti-Ibe: "It\'s alive. Twelve years and it\'s *alive.* Do you know what that means for the data? We can finish. We can finally—"',
@@ -693,7 +717,13 @@ const gn38: Json[] = [
     'Dr. Oyelaran-Shaw, to it: "I locked the door. That was me. I\'m sorry. I\'ve been sorry every day."',
     '*One wants to finish the work. One wants to apologise.*',
   ), [
-    ch('Step in.', out('They both turn to you. So does it.', scene('gn-38-endings'))),
+    ch('Step in.', out('They both turn to you. So does it.',
+      // What the player told it, when it asked what it was supposed to do now.
+      when('lab-answer', { min: 1, max: 1 }, [], '*It looks at you, not at them. You said: whatever you want. It\'s waiting to see if you meant it.*'),
+      when('lab-answer', { min: 2, max: 2 }, [], '*It comes to stand beside you. You said: come with me.*'),
+      when('lab-answer', { min: 3, max: 3 }, [], '*It doesn\'t get up from under the tree. You said you\'d stay a while.*'),
+      when('lab-answer', { min: 4, max: 4 }, [], '*It watches you the way you watched it. You said you didn\'t know. Neither does it.*'),
+      scene('gn-38-endings'))),
     ch('Stay, and do nothing yet.', out(say(
       'You sit down under the tree. A node passes. Then another. It sits too. It watches the nest.',
       'The researchers stop arguing, after a while. Then they stop talking.',
@@ -711,9 +741,14 @@ const gn38: Json[] = [
     ), setTo('lab-end', 2), flag('lab-end-finish'), SUBJECT, gn('labForm', { key: 'specification' }), ...LAB_DONE)),
     ch('Help Dr. Oyelaran-Shaw.', out(say(
       'She sits on the floor. She tells it everything: who ordered it, who refused, what its name was going to be. Lodestar. It listens to all of it.',
-      'It keeps its shape, and gains a name. When she leaves, it goes with her.',
+      'It keeps its shape, and gains a name.',
       'She gives you her old key card. "It opens one door. I never used it for the right one."',
-    ), setTo('lab-end', 3), flag('lab-end-apologise'), item('card-key'),
+    ),
+      // "It may go with her": it does, unless the player said they'd stay with it a while. Then it stays under the tree, and she's the one who comes back.
+      gn('check', { key: 'lab-with-her', if: [not('lab-stays')] }),
+      when('lab-with-her', { min: 1 }, [], 'When she leaves, it goes with her.'),
+      when('lab-with-her', { min: 0, max: 0 }, [], 'When she leaves, it doesn\'t follow. You told it you\'d stay a while, and it has decided that staying is allowed. She says she\'ll come back tomorrow. This time she will.'),
+      setTo('lab-end', 3), flag('lab-end-apologise'), item('card-key'),
       when('lab-escaped-left', { min: 1 }, [], '*At the gate, the greenhouse ones you left alone come out of the leaves to see you off.*'), ...LAB_DONE)),
     ch('Shut the facility down.', out(say(
       'Power off. Every door opens at once. The escaped ones in the greenhouse go out through the walls, into the green.',
@@ -739,24 +774,26 @@ export const PLACEMENT: Record<string, Placement> = {
   },
   'gn-36-door': {
     gn: 'gn.36', shape: 'Door', earliest: 'A8', home: 10, window: [8, 13], sits: 'optional', attaches: 'instead', tags: ['Pseudo Stage'], needs: ['hot'],
-    level: 'A+1; the Flygon A+2', often: 'run', badge: 'own', dressing: { kanto: 'The Great Desert', elsewhere: 'The Great Desert' },
+    level: 'A+1; the Flygon A+2', often: 'run', badge: 'own', dressing: { kanto: 'The Endless Desert', elsewhere: 'The Endless Desert' },
     note: 'Badge: a dune. Eight nodes, three oases, and the traveller\'s story through it. Water 4, one less a node, refilled at oases; at none, fights start at 90% HP.',
   },
   'gn-37-door': {
-    gn: 'gn.37', shape: 'Door', earliest: 'A6', home: 14, window: [12, 17], sits: 'optional', attaches: 'instead', tags: ['Pseudo Stage', 'Mystery'], needs: ['eerie', 'night'],
+    gn: 'gn.37', shape: 'Door', earliest: 'A6', home: 14, window: [12, 17], sits: 'side-branch', attaches: 'instead', tags: ['Pseudo Stage', 'Mystery'], needs: ['eerie', 'night'],
     level: 'A+0; the owner A+1', often: 'run', badge: 'own', dressing: { kanto: 'The Haunted Mansion', elsewhere: 'The Haunted Mansion' },
     note: 'Badge: a lit window. A side branch: four floors. SF118\'s rooms are on these floors. "Once per save" is once per run (no memory across runs).',
   },
   'gn-38-door': {
-    gn: 'gn.38', shape: 'Door', earliest: 'A9', home: 13, window: [11, 16], sits: 'optional', attaches: 'instead', tags: ['Pseudo Stage', 'Mystery'],
+    gn: 'gn.38', shape: 'Door', earliest: 'A9', home: 13, window: [11, 16], sits: 'side-branch', attaches: 'instead', tags: ['Pseudo Stage', 'Mystery'],
     level: 'A+1', often: 'run', badge: 'own', dressing: { kanto: 'The Overgrown Laboratory', elsewhere: 'The Overgrown Laboratory' },
     note: 'Badge: a leaf growing through a window. A side branch: five nodes. SF124\'s Annex scenes are its front rooms (built by the places row). "Once per save" is once per run.',
   },
 };
 
 export const CHAINS: Json[] = [
-  { id: 'ps_gn_lab', name: 'The Overgrown Laboratory', entry: 'gn-38-door', themeId: 'grass-steel', tint: LAB_TINT, mood: 'overgrown lab', start: 'opened' },
+  // The five nodes by column (the greenhouse's escaped ones are scenes of their node, so the events' own links stop there).
+  { id: 'ps_gn_lab', name: 'The Overgrown Laboratory', entry: 'gn-38-door', themeId: 'grass-steel', tint: LAB_TINT, mood: 'overgrown lab', start: 'opened',
+    layout: [['gn-38-reception'], ['gn-38-cells'], ['gn-38-greenhouse'], ['gn-38-control'], ['gn-38-last']] },
   { id: 'ps_gn_mansion', name: 'The Haunted Mansion', entry: 'gn-37-door', themeId: 'normal-ghost', tint: MANSION_TINT, mood: 'haunted house', start: 'opened' },
-  { id: 'ps_gn_desert', name: 'The Great Desert', entry: 'gn-36-door', themeId: 'fire-ground', tint: DESERT_TINT, mood: 'desert', start: 'opened' },
+  { id: 'ps_gn_desert', name: 'The Endless Desert', entry: 'gn-36-door', themeId: 'fire-ground', tint: DESERT_TINT, mood: 'desert', start: 'opened', hidden: ['gn-36-oasis-2'] },
   { id: 'ps_gn_ridge', name: 'Thunderstorm Ridge', entry: 'gn-35-door', themeId: 'electric-flying', tint: RIDGE_TINT, mood: 'thunderstorm ridge', start: 'opened' },
 ];

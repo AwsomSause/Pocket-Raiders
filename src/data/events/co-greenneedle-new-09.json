@@ -121,6 +121,22 @@
        }
       ]
      }
+    },
+    {
+     "label": "Get off early.",
+     "success": {
+      "text": "You pull the cord. The train stops without a sound, at a platform with no name. The doors open on the road you left.\n\nWhen you turn round, the train is not there. The ticket in your pocket is blank. Nothing follows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "last-stop-off-early",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
     }
    ]
   },
@@ -277,6 +293,22 @@
        {
         "kind": "addEvent",
         "eventId": "gn-new-09-mail"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Get off early.",
+     "success": {
+      "text": "You pull the cord. The train stops without a sound, at a platform with no name. The doors open on the road you left.\n\nWhen you turn round, the train is not there. The ticket in your pocket is blank. Nothing follows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "last-stop-off-early",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
        }
       ]
      }
@@ -508,6 +540,22 @@
        }
       ]
      }
+    },
+    {
+     "label": "Get off early.",
+     "success": {
+      "text": "You pull the cord. The train stops without a sound, at a platform with no name. The doors open on the road you left.\n\nWhen you turn round, the train is not there. The ticket in your pocket is blank. Nothing follows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "last-stop-off-early",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
     }
    ]
   },
@@ -588,6 +636,12 @@
      "key": "last-stop-boarded",
      "atLeast": 1,
      "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "last-stop-off-early",
+     "atLeast": 0,
+     "atMost": 0
     },
     {
      "kind": "gn",

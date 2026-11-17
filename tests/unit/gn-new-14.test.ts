@@ -9,10 +9,10 @@ const door = (seed: string): RunState => {
   open(run, 'gn-new-14-cabinet');
   return run;
 };
-/** Plays all three games the patient way, ready at the clear room. */
+/** All three games cleared (played in gnscreen-arcade.test.ts): standing at the clear room. */
 function clearAll(seed: string): RunState {
-  let run = choose(door(seed), 'gn-new-14-cabinet', 'Play.').run;
-  for (const g of ['maze', 'stacker', 'shooter']) run = choose(run, `gn-new-14-${g}`, 'Give it time.').run;
+  const run = choose(door(seed), 'gn-new-14-cabinet', 'Play.').run;
+  open(run, 'gn-new-14-clear');
   return run;
 }
 
@@ -37,28 +37,24 @@ describe('gn.new.14 The Arcade Cabinet', () => {
     expect(mon?.gn).toContain('arcade-porygon');
   });
 
-  it('rushing a game: it panics and bumps walls, then pushes its last life back across the screen and waits', () => {
-    for (const g of ['maze', 'stacker', 'shooter']) {
-      let run = choose(door(`t14-rush-${g}`), 'gn-new-14-cabinet', 'Play.').run;
-      for (const earlier of ['maze', 'stacker', 'shooter']) {
-        if (earlier === g) break;
-        run = choose(run, `gn-new-14-${earlier}`, 'Give it time.').run;
-      }
-      const r = choose(run, `gn-new-14-${g}`, 'Mash the buttons.');
-      expect(scene(r.run, `gn-new-14-${g}-lost`).labels).toEqual(['Take the life.', 'Walk away.']);
-      expect(scene(r.run, `gn-new-14-${g}-lost`).intro).toMatch(/last life/);
-      // Taking the life starts the same game again, and patience clears it.
-      const again = choose(r.run, `gn-new-14-${g}-lost`, 'Take the life.').run;
-      expect(scene(again, `gn-new-14-${g}`).labels).toEqual(['Mash the buttons.', 'Give it time.']);
+  it('"Play." opens the cabinet\'s three games beside the node (minigame gn-arcade), not a two-choice scene', () => {
+    const run = choose(door('t14-play'), 'gn-new-14-cabinet', 'Play.').run;
+    const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
+    expect(here.sides.filter((x) => x.kind === 'minigame' && x.minigameId === 'gn-arcade')).toHaveLength(1);
+    expect(flagOf(run, 'arcade-played')).toBe(1);
+  });
+
+  it('a run saved in a room of the old two-choice version walks back to the glass and gets the real games', () => {
+    for (const id of ['maze', 'stacker', 'shooter', 'maze-lost', 'stacker-lost', 'shooter-lost']) {
+      const run = gnRun(`t14-old-${id}`);
+      open(run, `gn-new-14-${id}`);
+      expect(scene(run, `gn-new-14-${id}`).labels).toEqual(['Step up to the glass.']);
+      const r = choose(run, `gn-new-14-${id}`, 'Step up to the glass.').run;
+      expect(r.stage!.map.nodes.find((n) => n.id === r.stage!.current)!.sides.some((x) => x.minigameId === 'gn-arcade')).toBe(true);
     }
   });
 
-  it('walking away from a lost game ends it with no Porygon; walking on is final too', () => {
-    const run = choose(door('t14-walk'), 'gn-new-14-cabinet', 'Play.').run;
-    const lost = choose(run, 'gn-new-14-maze', 'Mash the buttons.').run;
-    const out = choose(lost, 'gn-new-14-maze-lost', 'Walk away.').run;
-    expect(flagOf(out, 'arcade-walked')).toBe(1);
-    expect(out.party.some((m) => m.speciesId === 'porygon')).toBe(false);
+  it('walking on is final', () => {
     const on = choose(door('t14-on'), 'gn-new-14-cabinet', 'Walk on.').run;
     expect(flagOf(on, 'arcade-walked')).toBe(1);
   });

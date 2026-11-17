@@ -40,6 +40,7 @@
     "cast": [
      "trainer.youngster_m"
     ],
+    "pokemon": "@wontevolve",
     "tint": "#8a8f6a",
     "effect": "none"
    },
@@ -177,6 +178,7 @@
     "cast": [
      "trainer.youngster_m"
     ],
+    "pokemon": "@wontevolve",
     "tint": "#8a8f6a",
     "effect": "none"
    },
@@ -228,7 +230,8 @@
         "noCatch": true,
         "foeStages": {
          "spe": 1
-        }
+        },
+        "holdOn": "you"
        },
        "lose": [
         {
@@ -266,6 +269,7 @@
     "cast": [
      "trainer.youngster_m"
     ],
+    "pokemon": "@wontevolve",
     "tint": "#8a8f6a",
     "effect": "none"
    },
@@ -294,6 +298,7 @@
     "cast": [
      "trainer.youngster_m"
     ],
+    "pokemon": "@wontevolve",
     "tint": "#8a8f6a",
     "effect": "none"
    },
@@ -354,6 +359,7 @@
    ],
    "scene": {
     "cast": [],
+    "pokemon": "@wontevolve",
     "tint": "#8a8f6a",
     "effect": "none"
    },
@@ -427,6 +433,7 @@
    "room": true,
    "scene": {
     "cast": [],
+    "pokemon": "@wontevolve",
     "tint": "#8a8f6a",
     "effect": "none"
    },
@@ -474,7 +481,8 @@
         "foeStages": {
          "atk": 2,
          "spe": 2
-        }
+        },
+        "holdOn": "foe"
        },
        "lose": [
         {
@@ -510,6 +518,7 @@
    "room": true,
    "scene": {
     "cast": [],
+    "pokemon": "@wontevolve",
     "tint": "#8a8f6a",
     "effect": "none"
    },
@@ -536,6 +545,7 @@
    "room": true,
    "scene": {
     "cast": [],
+    "pokemon": "@wontevolve",
     "tint": "#8a8f6a",
     "effect": "none"
    },
@@ -584,6 +594,7 @@
     "cast": [
      "trainer.youngster_m"
     ],
+    "pokemon": "@wontevolve",
     "tint": "#8a8f6a",
     "effect": "none"
    },
@@ -686,6 +697,11 @@
         "key": "wontevolve-end-at"
        },
        {
+        "kind": "flag",
+        "key": "wontevolve-stayed",
+        "amount": 1
+       },
+       {
         "kind": "teachMove",
         "move": "proof",
         "unevolved": true
@@ -714,6 +730,7 @@
     "cast": [
      "trainer.youngster_m"
     ],
+    "pokemon": "@wontevolve",
     "tint": "#8a8f6a",
     "effect": "none"
    },
@@ -841,6 +858,7 @@
     "cast": [
      "trainer.youngster_m"
     ],
+    "pokemon": "@wontevolve",
     "tint": "#8a8f6a",
     "effect": "none"
    },
@@ -915,6 +933,7 @@
     "cast": [
      "trainer.youngster_m"
     ],
+    "pokemon": "@wontevolve",
     "tint": "#8a8f6a",
     "effect": "none"
    },
@@ -965,6 +984,7 @@
     "cast": [
      "trainer.youngster_m"
     ],
+    "pokemon": "@wontevolve",
     "tint": "#8a8f6a",
     "effect": "none"
    },
@@ -1022,6 +1042,7 @@
     "cast": [
      "trainer.youngster_m"
     ],
+    "pokemon": "@wontevolve",
     "tint": "#8a8f6a",
     "effect": "none"
    },
@@ -1110,6 +1131,7 @@
    ],
    "scene": {
     "cast": [],
+    "pokemon": "@wontevolve",
     "tint": "#8a8f6a",
     "effect": "none"
    },
@@ -1177,6 +1199,7 @@
     "cast": [
      "trainer.youngster_m"
     ],
+    "pokemon": "@wontevolve",
     "tint": "#8a8f6a",
     "effect": "none"
    },
@@ -1298,6 +1321,11 @@
         "amount": 1
        },
        {
+        "kind": "flag",
+        "key": "kind-walked-past",
+        "amount": 1
+       },
+       {
         "kind": "gn",
         "op": "stampStage",
         "key": "cubone-walked-at"
@@ -1380,6 +1408,11 @@
        {
         "kind": "flag",
         "key": "cubone-walked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-walked-past",
         "amount": 1
        },
        {
@@ -1887,7 +1920,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "dog-sat",
+       "key": "dog-station-sat",
        "atLeast": 1,
        "atMost": 99
       }
@@ -2037,7 +2070,7 @@
         }
        ],
        "rule": {
-        "foeStands": 3
+        "foeStands": 99
        },
        "caught": [
         {
@@ -2454,7 +2487,8 @@
        "rule": {
         "leadMark": "cubone-guest",
         "aimMark": "cubone-guest",
-        "noCatch": true
+        "noCatch": true,
+        "beside": true
        },
        "lose": [
         {
@@ -3226,6 +3260,11 @@
         "kind": "gn",
         "op": "stampRegion",
         "key": "karp-at"
+       },
+       {
+        "kind": "gn",
+        "op": "stampLevel",
+        "key": "karp-level"
        }
       ]
      }
@@ -3244,6 +3283,11 @@
         "kind": "gn",
         "op": "stampRegion",
         "key": "karp-at"
+       },
+       {
+        "kind": "gn",
+        "op": "stampLevel",
+        "key": "karp-level"
        },
        {
         "kind": "gn",
@@ -3281,6 +3325,11 @@
         "kind": "gn",
         "op": "stampRegion",
         "key": "karp-at"
+       },
+       {
+        "kind": "gn",
+        "op": "stampLevel",
+        "key": "karp-level"
        }
       ]
      },
@@ -3306,6 +3355,11 @@
         "kind": "gn",
         "op": "stampRegion",
         "key": "karp-at"
+       },
+       {
+        "kind": "gn",
+        "op": "stampLevel",
+        "key": "karp-level"
        }
       ]
      }
@@ -3329,6 +3383,11 @@
         "kind": "gn",
         "op": "stampRegion",
         "key": "karp-at"
+       },
+       {
+        "kind": "gn",
+        "op": "stampLevel",
+        "key": "karp-level"
        }
       ]
      }
@@ -3405,6 +3464,11 @@
         "kind": "flag",
         "key": "karp-2",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-level",
+        "amount": 4
        }
       ]
      }
@@ -3418,6 +3482,11 @@
         "kind": "flag",
         "key": "karp-2",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-level",
+        "amount": 4
        },
        {
         "kind": "gn",
@@ -3450,6 +3519,11 @@
         "kind": "flag",
         "key": "karp-2",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-level",
+        "amount": 4
        }
       ]
      },
@@ -3470,6 +3544,11 @@
         "kind": "flag",
         "key": "karp-2",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-level",
+        "amount": 4
        }
       ]
      }
@@ -3488,6 +3567,11 @@
         "kind": "flag",
         "key": "karp-2",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-level",
+        "amount": 4
        }
       ]
      }
@@ -3564,6 +3648,11 @@
         "kind": "flag",
         "key": "karp-3",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-level",
+        "amount": 4
        }
       ]
      }
@@ -3577,6 +3666,11 @@
         "kind": "flag",
         "key": "karp-3",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-level",
+        "amount": 4
        },
        {
         "kind": "gn",
@@ -3609,6 +3703,11 @@
         "kind": "flag",
         "key": "karp-3",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-level",
+        "amount": 4
        }
       ]
      },
@@ -3629,6 +3728,11 @@
         "kind": "flag",
         "key": "karp-3",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-level",
+        "amount": 4
        }
       ]
      }
@@ -3647,6 +3751,11 @@
         "kind": "flag",
         "key": "karp-3",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-level",
+        "amount": 4
        }
       ]
      }
@@ -3723,6 +3832,11 @@
         "kind": "flag",
         "key": "karp-4",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-level",
+        "amount": 4
        }
       ]
      }
@@ -3736,6 +3850,11 @@
         "kind": "flag",
         "key": "karp-4",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-level",
+        "amount": 4
        },
        {
         "kind": "gn",
@@ -3768,6 +3887,11 @@
         "kind": "flag",
         "key": "karp-4",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-level",
+        "amount": 4
        }
       ]
      },
@@ -3788,6 +3912,11 @@
         "kind": "flag",
         "key": "karp-4",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-level",
+        "amount": 4
        }
       ]
      }
@@ -3806,6 +3935,11 @@
         "kind": "flag",
         "key": "karp-4",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-level",
+        "amount": 4
        }
       ]
      }
@@ -3864,7 +3998,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "little-league-losing",
+       "key": "little-league-coached",
        "atLeast": 1,
        "atMost": 99
       }
@@ -3894,6 +4028,11 @@
         "kind": "flag",
         "key": "karp-5",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-level",
+        "amount": 4
        }
       ]
      }
@@ -3907,6 +4046,11 @@
         "kind": "flag",
         "key": "karp-5",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-level",
+        "amount": 4
        },
        {
         "kind": "gn",
@@ -3939,6 +4083,11 @@
         "kind": "flag",
         "key": "karp-5",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-level",
+        "amount": 4
        }
       ]
      },
@@ -3959,6 +4108,11 @@
         "kind": "flag",
         "key": "karp-5",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-level",
+        "amount": 4
        }
       ]
      }
@@ -3977,6 +4131,11 @@
         "kind": "flag",
         "key": "karp-5",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-level",
+        "amount": 4
        }
       ]
      }
@@ -4112,6 +4271,11 @@
         "kind": "flag",
         "key": "karp-falls",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-level",
+        "amount": 4
        },
        {
         "kind": "gn",
@@ -4279,6 +4443,12 @@
        },
        {
         "kind": "gn",
+        "op": "raiseMarked",
+        "key": "karp-notch",
+        "type": "karp-level"
+       },
+       {
+        "kind": "gn",
         "op": "setFlag",
         "key": "karp-end",
         "n": 4
@@ -4368,6 +4538,12 @@
        },
        {
         "kind": "gn",
+        "op": "raiseMarked",
+        "key": "karp-notch",
+        "type": "karp-level"
+       },
+       {
+        "kind": "gn",
         "op": "setFlag",
         "key": "karp-end",
         "n": 1
@@ -4427,7 +4603,14 @@
         "types": [],
         "levelBonus": 0,
         "shinyMultiplier": 1,
+        "asIs": true,
         "mark": "karp-notch"
+       },
+       {
+        "kind": "gn",
+        "op": "raiseMarked",
+        "key": "karp-notch",
+        "type": "karp-level"
        },
        {
         "kind": "gn",
@@ -5850,17 +6033,43 @@
     "tint": "#7a6b8f",
     "effect": "none"
    },
-   "intro": "*A pack comes out of the grass. Mightyena, six, and they've done this before.*\n\nThe Zangoose and the Seviper are already back to back. There's room beside them. Just.",
+   "intro": "*A pack comes out of the grass. Mightyena, six, and they've done this before.*\n\nThe Zangoose and the Seviper are already back to back. There's room beside them. Just.\n\n*When one of them is hit hard, the other goes straight for whatever did it. When one is nearly down, the other stands in front.*",
    "choices": [
     {
      "label": "Fight beside them.",
      "success": {
-      "text": "The first three come in low. The Zangoose takes the place beside you.",
-      "effects": [],
+      "text": "The pack comes in low, two at a time. The Zangoose takes the place beside you. The Seviper is right behind it.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "seviper"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "asIs": true,
+        "direct": true
+       },
+       {
+        "kind": "gn",
+        "op": "markLast",
+        "key": "truce-guest",
+        "species": [
+         "seviper"
+        ]
+       }
+      ],
       "battle": {
        "kind": "trainer",
        "friendly": true,
        "lose": [
+        {
+         "kind": "gn",
+         "op": "dropMarked",
+         "key": "truce-guest"
+        },
         {
          "kind": "flag",
          "key": "truce-pack-lost",
@@ -5873,6 +6082,9 @@
         }
        ],
        "team": [
+        "mightyena",
+        "mightyena",
+        "mightyena",
         "mightyena",
         "mightyena",
         "mightyena"
@@ -5880,52 +6092,14 @@
        "format": "doubles",
        "name": "The Pack",
        "ally": "zangoose",
-       "size": 3,
+       "size": 6,
        "types": [],
        "levelBonus": 0,
        "win": [
         {
          "kind": "gn",
-         "op": "scene",
-         "key": "gn-25-pack-2"
-        }
-       ]
-      }
-     }
-    }
-   ]
-  },
-  {
-   "id": "gn-25-pack-2",
-   "name": "The Unlikely Friendship: The Pack",
-   "group": "Greenneedle",
-   "tags": [
-    "Pokémon",
-    "Story",
-    "Relationship"
-   ],
-   "room": true,
-   "scene": {
-    "cast": [],
-    "pokemon": "seviper",
-    "tint": "#7a6b8f",
-    "effect": "none"
-   },
-   "intro": "Three more. When the Zangoose is hit hard, the Seviper goes straight for whatever did it.\n\nNow the Seviper slides in beside you, and the Zangoose watches its back.",
-   "choices": [
-    {
-     "label": "Hold together.",
-     "success": {
-      "text": "The last of the pack circle, and come in.",
-      "effects": [],
-      "battle": {
-       "kind": "trainer",
-       "friendly": true,
-       "lose": [
-        {
-         "kind": "flag",
-         "key": "truce-pack-lost",
-         "amount": 1
+         "op": "dropMarked",
+         "key": "truce-guest"
         },
         {
          "kind": "gn",
@@ -5933,24 +6107,9 @@
          "key": "gn-25-after"
         }
        ],
-       "team": [
-        "mightyena",
-        "mightyena",
-        "mightyena"
-       ],
-       "format": "doubles",
-       "name": "The Pack",
-       "ally": "seviper",
-       "size": 3,
-       "types": [],
-       "levelBonus": 0,
-       "win": [
-        {
-         "kind": "gn",
-         "op": "scene",
-         "key": "gn-25-after"
-        }
-       ]
+       "rule": {
+        "gn": "truce"
+       }
       }
      }
     }
@@ -6030,12 +6189,17 @@
     {
      "label": "Stay together. Good luck.",
      "success": {
-      "text": "They go. The Zangoose looks back, and lifts a paw.\n\nOn the path where they slept: a Berry, split neatly in two.",
+      "text": "They go. The Zangoose looks back, and lifts a paw.\n\nOn the path where they slept: a Rare Berry, split neatly in two.",
       "effects": [
        {
-        "kind": "item",
-        "id": "sitrus-berry",
-        "count": 2
+        "kind": "itemFrom",
+        "ids": [
+         "liechi-berry",
+         "ganlon-berry",
+         "salac-berry",
+         "petaya-berry",
+         "apicot-berry"
+        ]
        },
        {
         "kind": "flag",

@@ -4,7 +4,7 @@
 // (flag gn18-mess +1) and adds one more patient after the sixth (gn18-left, at most four extra). Patient 5 is a pick: only the Pokémon with the most friendship is right (gn test pickedTopBond). 0-2 mistakes is a clean shift, 3 or more a messy one. Either way: Standing Welcome for the rest of the region
 // (core/greenneedle/welcome.ts), and a parcel in the next region.
 import { anyType, br, ch, flag, item, out, type Json } from '../dsl.ts';
-import { bond, cap, chIf, gev, gn, is, moment, regionChanged, rm, say, scene, setTo, stampRegion, not, when, type Placement } from './_gn.ts';
+import { bond, cap, chIf, gev, gn, is, moment, notThisRegion, regionChanged, rm, say, scene, setTo, stampRegion, not, when, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
 
@@ -93,13 +93,12 @@ const extra = (i: number): Json => rm(`gn-new-18-${EXTRAS[i]!.id}`, `The Day the
 const REWARD = (nurse: string): Json[] => [stampRegion('standing-welcome'), moment(nurse, 60), bond(1)];
 
 export const EVENTS: Json[] = [
-  gev('gn-new-18-door', 'The Day the Center Closed', room({ stop: 'event', rarity: 'rare', forced: true, requires: [not('gn18-done')] }), say(
+  gev('gn-new-18-door', 'The Day the Center Closed', room({ stop: 'event', rarity: 'rare', forced: true, requires: [notThisRegion('gn18-region')] }), say(
     '*The Pokémon Center\'s doors are locked from inside. Through the glass, a Chansey is running the desk, the phones and the healing machine, all at once.*',
     'It sees you. It does not stop what it is doing. It looks at you the way a person looks at a lifeboat.',
   ), [
     ch('Knock on the glass.', out(say('The Chansey unlocks the door with its foot, and hauls you in by the sleeve.', '*Behind the desk, the nurse is asleep sitting up, pen still in hand.*', 'Six patients on the bench. A clipboard with six names. The Chansey puts it in your hands.'),
-      setTo('gn18-mess', 0), setTo('gn18-left', 0), setTo('gn18-called', 0), setTo('gn18-done', 1), stampRegion('gn18-region'), scene('gn-new-18-warm'))),
-    ch('Walk on.', out('Through the glass, the Chansey watches you go. The phone rings. It answers with its other hand.')),
+      setTo('gn18-mess', 0), setTo('gn18-left', 0), setTo('gn18-called', 0), setTo('gn18-done', 1), setTo('gn18-parcel-done', 0), stampRegion('gn18-region'), scene('gn-new-18-warm'))),
   ]),
   ...PATIENTS.map((_, i) => patient(i)),
   rm('gn-new-18-queue', 'The Day the Center Closed: The Queue', room(), say(
@@ -130,7 +129,7 @@ export const EVENTS: Json[] = [
     'It is mostly bandages. Rolls and rolls of them. Tucked between two, a folded drawing.',
   ), [
     ch('Unfold the drawing.', out(say('A Chansey. A trainer. Six very small patients in a row, each with a helper beside it.', 'The trainer is smiling, and so is the Chansey. At the bottom, in careful crayon: *thank you for the shift.*'),
-      setTo('gn18-parcel-done', 1), item('potion', 2), bond(1), moment('A parcel of bandages arrived from a Chansey, with a drawing tucked inside.', 55))),
+      setTo('gn18-parcel-done', 1), item('potion', 2), moment('A parcel of bandages arrived from a Chansey, with a drawing tucked inside.', 55))),
   ]),
 ];
 export const REMOVE: string[] = [];

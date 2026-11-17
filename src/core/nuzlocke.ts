@@ -55,6 +55,8 @@ export function buryFallen(content: Content, run: RunState, cause: string): stri
   for (const m of fallen) {
     nz.memorial.push({ uid: m.uid, speciesId: m.speciesId, level: m.level, shiny: m.shiny, ace: m.uid === run.log.starterUid || m.level === top || m.care?.ace === true, area: areaKey(run), cause });
   }
+  // Events remember a Pokémon lost for good this run by run flag `lost-mon` (gn.14's grave, gn.59, the reunion).
+  run.story.flags['ev:lost-mon'] = 1;
   markLostVow(run, fallen);
   const gone = new Set(fallen.map((m) => m.uid));
   run.party = run.party.filter((m) => !gone.has(m.uid));

@@ -25,7 +25,7 @@ const hasWater = (n = 1): Json => is(WATER, n);
 const savFight = (pool: string[], win: Json[], rule = 'savanna'): Json => inside(eitherWay({ ...wild({ species: pool, lv: 1, win }), rule: { gn: rule } }));
 const night = (win: Json[]): Json => savFight(NIGHT_POOL, win);
 const WATER_LEFT: Json[] = [
-  { id: 'water-1', when: [is(WATER, 1, 1)], notice: 'Water: one flask left.' },
+  { id: 'water-1', when: [is(WATER, 1)], notice: 'Water: {count:savanna-water} of 3 flasks.' },
   { id: 'water-0', when: [is(WATER, 0, 0)], notice: 'Water: none. Your party starts each fight at 90% HP.' },
 ];
 const sroom = (id: string, name: string, o: Json, intro: string, choices: Json[]): Json => rm(id, name, sav({ remembers: WATER_LEFT, ...o }), intro, choices);
@@ -39,11 +39,20 @@ const WALK_IN: Json[] = [
   ch('Walk in.', out('You step past the last fence post. Nobody is counting your steps now.',
     flag('savanna-entered'), stampStage('savanna-at'), stampRegion('savanna-region'), setTo(WATER, 3), setTo('savanna-night', 0),
     when('crowned-calf-calmed', { min: 1 }, [setTo('savanna-hippo', 1)]), when('alphas-second-channel', { min: 1 }, [setTo('savanna-hippo', 1)]),
+    // The second channel dug at Two Alphas, One River sets `river-shared` (new-events-1.ts).
+    when('river-shared', { min: 1 }, [setTo('savanna-hippo', 1)]),
     scene('gn-19-thirsty'))),
   ch('Turn back.', leave('You turn back to the fence. The grass hisses behind you.')),
 ];
+/** Migrations: herds cross the map. 35% that one is on the way ahead (the stop's own seeded roll): the herd's scene opens, else the way on. */
+const MIGRATION = (herd: string, on: Json): Json[] => [roll('savanna-herd', 35), when('savanna-herd', { min: 1 }, [scene(herd)]), when('savanna-herd', { min: 0, max: 0 }, [on])];
+/** A herd on the node by day: it blocks it for a turn. Wait, or go round (one flask). */
+const herdByDay = (id: string, who: string, text: string, on: Json): Json => sroom(id, 'The Deep Savanna: A Herd Crossing', { pokemon: who }, say(text, 'The way ahead is blocked until they have gone by. You can wait, or go round them: the long way, in the sun, a flask\'s worth.'), [
+  ch('Wait for the herd to pass.', out('You sit down in what shade your own shadow makes. They go by for most of an hour, calves in the middle, and the dust they raise hangs a long time after. Then the way is clear.', on)),
+  chIf([hasWater()], 'Go round (one flask).', out('You go the long way round, with the herd a brown line on your left the whole time.', ...DRINK(), on)),
+]);
 /** A trade with a wild Pokémon: one flask. */
-const trade = (label: string, text: string, ...effects: Json[]): Json => chIf([hasWater()], label, out(text, ...DRINK(), ...effects, scene('gn-19-cross')));
+const trade = (label: string, text: string, ...effects: Json[]): Json => chIf([hasWater()], label, out(text, ...DRINK(), ...effects, ...MIGRATION('gn-19-herd-edge', scene('gn-19-cross'))));
 
 const gn19: Json[] = [
   gev('gn-19-door', 'The Deep Savanna', sav({ stop: 'event', rarity: 'rare', types: ['ground'], requires: [not('savanna-entered')] }), EDGE, WALK_IN),
@@ -58,19 +67,32 @@ const gn19: Json[] = [
     trade('Trade a flask for what it\'s carrying.', 'It drinks, and drops a smooth stone at your feet. It was carrying it in its mouth all this way.', item('smooth-rock')),
     trade('Trade a flask, and let it come along.', 'It drinks, then trots at your heel as if it always had.', join({ species: ['sandile'] })),
     trade('Trade a flask for the way.', 'It drinks, then leads you a little way and stops, nose pointing: round the dust, not through it.', setTo('savanna-path', 1)),
-    ch('Keep your water.', out('You keep your flask. The Sandile watches you go.', scene('gn-19-cross'))),
+    ch('Keep your water.', out('You keep your flask. The Sandile watches you go.', ...MIGRATION('gn-19-herd-edge', scene('gn-19-cross')))),
   ]),
   sroom('gn-19-cross', 'The Deep Savanna: The Edge', { pokemon: 'trapinch' }, say(
     'Dry ground between here and the first waterhole. The sun is a hand on the back of your neck.',
-  ), [ch('Cross (one flask).', fight('Halfway across, the sand opens.', savFight(DAY_POOL, [room('gn-19-waterhole')]), ...DRINK()))]),
+  ), [
+    ch('Cross (one flask).', fight('Halfway across, the sand opens.', savFight(DAY_POOL, [room('gn-19-waterhole')]), ...DRINK())),
+    // The water trade with a wild Pokémon, again: the thing in the pit will take a flask instead of a fight.
+    chIf([hasWater(2)], 'Cross, and pour a flask into the pit that opens (two flasks).', out(
+      'Halfway across, the sand opens. You pour before it can spring. A Trapinch drinks with its whole head under, and when it comes up it shoves a pouch of fine sand out of the pit toward you, and sinks, and lets you by.',
+      ...DRINK(2), item('soft-sand'), room('gn-19-waterhole'),
+    )),
+    chIf([hasWater(2)], 'Cross, pour it a flask, and wait by the pit (two flasks).', out(
+      'Halfway across, the sand opens. You pour, and you wait. A Trapinch drinks, and looks at the flask, and at you, and climbs out of its pit, and does not go back.',
+      ...DRINK(2), join({ species: ['trapinch'] }), room('gn-19-waterhole'),
+    )),
+  ]),
+  herdByDay('gn-19-herd-edge', 'tauros', 'Tauros. A hundred of them, crossing your path at a walk, heads down, following the smell of water somewhere you cannot see.', scene('gn-19-cross')),
+  herdByDay('gn-19-herd-ridge', 'rhyhorn', 'Rhyhorn, in a long grey file between the waterhole and the ridge, nose to tail, and not one of them looks at you.', room('gn-19-watch')),
   sroom('gn-19-waterhole', 'The Deep Savanna: The First Waterhole', { pokemon: 'hippowdon' }, say(
     'The first waterhole. A Hippowdon lies in the middle of it, and doesn\'t move.',
     'It isn\'t guarding the water from you. It\'s guarding it from the sun.',
   ), [
-    chIf([is('savanna-hippo')], 'Walk to the water.', out('The Hippowdon shifts over without being asked, as if it had heard about you.', ...REFILL, heal(0.3), room('gn-19-watch'))),
-    ch('Wait until it sleeps.', out('You wait. The sun moves. At last its eyes close, and you fill your flasks without a sound.', ...REFILL, heal(0.3), room('gn-19-watch'))),
-    { ...ch('Offer it shade (a large Pokémon stands by it).', out('Your biggest Pokémon stands between it and the sun. The Hippowdon sighs, a long, sandy sigh, and lets you drink.', ...REFILL, heal(0.3), kindness(1), room('gn-19-watch')), { requires: [{ kind: 'gn', test: 'heavy' }] }) },
-    ch('Battle.', fight('It heaves itself up, streaming water.', savFight(['hippowdon'], [...REFILL, room('gn-19-watch')]))),
+    chIf([is('savanna-hippo')], 'Walk to the water.', out('The Hippowdon shifts over without being asked, as if it had heard about you.', ...REFILL, heal(0.3), ...MIGRATION('gn-19-herd-ridge', room('gn-19-watch')))),
+    ch('Wait until it sleeps.', out('You wait. The sun moves. At last its eyes close, and you fill your flasks without a sound.', ...REFILL, heal(0.3), ...MIGRATION('gn-19-herd-ridge', room('gn-19-watch')))),
+    { ...ch('Offer it shade (a large Pokémon stands by it).', out('Your biggest Pokémon stands between it and the sun. The Hippowdon sighs, a long, sandy sigh, and lets you drink.', ...REFILL, heal(0.3), kindness(1), ...MIGRATION('gn-19-herd-ridge', room('gn-19-watch'))), { requires: [{ kind: 'gn', test: 'heavy' }] }) },
+    ch('Battle.', fight('It heaves itself up, streaming water.', savFight(['hippowdon'], [...REFILL, ...MIGRATION('gn-19-herd-ridge', room('gn-19-watch'))]))),
   ]),
   sroom('gn-19-watch', 'The Deep Savanna: The Watching Place', { pokemon: 'phanpy' }, say(
     'A ridge over a plain. Nothing attacks here.',
@@ -88,6 +110,10 @@ const gn19: Json[] = [
   ), [
     ch('Wait for the herd to pass.', fight('You wait in the dark. Something else is waiting too.', night([scene('gn-19-devil')]))),
     chIf([hasWater()], 'Go round (one flask).', out('You go the long way round the herd, in the dark.', ...DRINK(), scene('gn-19-devil'))),
+    chIf([hasWater(), not('savanna-path')], 'Hold a flask out to the eyes in the dark.', out(
+      'One pair of eyes comes closer. A Krokorok, alone, thinner than the others. It drinks. Then it walks you through the herd by a gap you would never have seen, and stops, and points with its snout at the dust ahead: round it, not through it.',
+      ...DRINK(), setTo('savanna-path', 1), scene('gn-19-devil'),
+    )),
   ]),
   sroom('gn-19-devil', 'The Deep Savanna: The Dust Devil', { pokemon: 'diglett' }, say(
     'A dust devil, spinning across the path. It doesn\'t go away. It doesn\'t go anywhere.',
@@ -193,6 +219,16 @@ const UNHARMED: Json[] = [
 const HARM: Json = when('jungle-harmed', { min: 1 }, [when('jungle-unharmed', { min: 1 }, [setTo('jungle-unharmed', 0)], '*Somewhere above, a ladder is pulled up.*'), setTo('jungle-harmed', 0)]);
 const jungleFight = (pool: string[], next: Json[], lv = 1): Json => inside(eitherWay({ ...wild({ species: pool, lv, win: [HARM, ...next] }), rule: { gn: 'jungle' } }));
 const jroom = (id: string, name: string, o: Json, intro: string, choices: Json[]): Json => rm(id, name, jun({ remembers: UNHARMED, ...o }), intro, choices);
+/** A pair that won't be separated: they fight together (a double battle). If one is caught, the flag is set and the other follows. */
+const pairFight = (species: string, caughtFlag: string, next: Json): Json => inside({
+  ...wild({ species: [species], format: 'doubles', lv: 1, win: [HARM, next] }), rule: { gn: 'jungle' }, caught: [HARM, flag(caughtFlag), next],
+});
+/** Nests in every tree: looking up shows them; disturbing one is a fight with a parent at A+1. */
+const nest = (id: string, back: Json, text: string): Json => jroom(id, 'The Lush Jungle: Nests', { pokemon: 'spinarak' }, text, [
+  ch('Disturb a nest.', fight('The parent comes back. Fast.', jungleFight(JUNGLE_POOL, [back]))),
+  ch('Leave them be.', out('You leave the nests to their owners.', back)),
+]);
+const LOOK_UP = (n: number): Json => chIf([not('jungle-watched'), not(`jungle-looked-${n}`)], 'Look up.', out('Nests in every tree, here too: woven, stuck, hung. One is close enough to touch.', flag(`jungle-looked-${n}`), scene(`gn-20-nest-${n}`)));
 /** A careless plant: push through (the lead is poisoned), go round, or send a Poison- or Grass-type first. */
 const plant = (id: string, next: Json, text: string): Json => jroom(id, 'The Lush Jungle: The Bright Path', { pokemon: 'oddish' }, text, [
   ch('Push through.', out('You push through. The bright leaves brush your lead, and it starts to shiver.', { kind: 'status', status: 'poison', who: 'lead', except: ['poison', 'steel'] }, next)),
@@ -255,13 +291,18 @@ const gn20: Json[] = [
   jroom('gn-20-vines', 'The Lush Jungle: The Vine Tangle', { pokemon: 'tangela' }, say(
     'A vine tangle across the path, waist-high, alive. It will catch your lead\'s legs in the next fight.',
     'A slicing move would clear it.',
-  ), [ch('Push on.', out('You push into the vines. They let you through, and follow.', setTo('jungle-vines', 1), room('gn-20-flooded')))]),
+  ), [
+    ch('Push on.', out('You push into the vines. They let you through, and follow.', setTo('jungle-vines', 1), room('gn-20-flooded'))),
+    LOOK_UP(2),
+  ]),
+  nest('gn-20-nest-2', scene('gn-20-vines'), 'Above the vine tangle, a nest of moss and spider-silk, slung between two creepers. Something small is breathing in it.'),
+  nest('gn-20-nest-4', scene('gn-20-hill'), 'In the tree that leans over the humming hill, a nest lined with shed wing-cases. The parent is down on the hill, with the others. For now.'),
   jroom('gn-20-flooded', 'The Lush Jungle: The Flooded Trail', { pokemon: 'ledian', effect: 'rain' }, say(
     'The first storm. Rain like a dropped bucket. The path is a river now.',
     'Under one big leaf, two Ledian are sheltering, pressed together. There is room for one more.',
   ), [
     ch('Share the shelter.', out('You duck in beside them. They shuffle over. When the rain stops, they lead you a little way, round a bright plant you would have walked into.', setTo('jungle-guided', 1), kindness(1), scene('gn-20-river'))),
-    ch('Catch one.', fight('They fight together, two against one.', { ...jungleFight(['ledian'], [scene('gn-20-river')]), caught: [HARM, flag('jungle-pair-caught'), scene('gn-20-river')] })),
+    ch('Catch one.', fight('They fight together, the two of them, side by side.', pairFight('ledian', 'jungle-pair-caught', scene('gn-20-river')))),
   ]),
   river('gn-20-river', room('gn-20-hill'), scene('gn-20-longway'), 'The river where the path was. It\'s fast and brown, and it wasn\'t here an hour ago.'),
   jroom('gn-20-longway', 'The Lush Jungle: The Long Way', { pokemon: 'oddish' }, say('The long way goes past another bright plant.'), [
@@ -274,6 +315,7 @@ const gn20: Json[] = [
     'A path of stepping stones crosses it. Listen to the hum before each step.',
   ), [
     ch('Start across.', out('You put one foot on the first stone.', scene('gn-20-stone1'))),
+    LOOK_UP(4),
     chIf([is('jungle-pair-caught'), not('jungle-pair-done')], 'Turn to the other Ledian.', out('The other Ledian has followed you all this way. It won\'t leave its pair.', scene('gn-20-pair'))),
   ]),
   jroom('gn-20-pair', 'The Lush Jungle: The Other One', { pokemon: 'ledian' }, say('It hovers at your shoulder, looking at the Ball its pair went into. It will follow you until it\'s caught too, or the first is let go.'), [
@@ -282,10 +324,23 @@ const gn20: Json[] = [
   ]),
   stone('gn-20-stone1', say('The first stone. The hum is rising, louder and louder.'), false, scene('gn-20-stone2')),
   stone('gn-20-stone2', say('The second stone. The hum drops away to almost nothing.'), true, scene('gn-20-stone3')),
-  stone('gn-20-stone3', say('The last stone. The hum is climbing again, fast.'), false, scene('gn-20-river2')),
+  stone('gn-20-stone3', say('The last stone. The hum is climbing again, fast.'), false, scene('gn-20-roses')),
   wave('gn-20-wave1', 1, [scene('gn-20-wave2')]),
   wave('gn-20-wave2', 2, [scene('gn-20-wave3')]),
-  wave('gn-20-wave3', 3, [scene('gn-20-river2')]),
+  wave('gn-20-wave3', 3, [scene('gn-20-roses')]),
+  // The second pair: two Roselia, on the far side of the hill.
+  jroom('gn-20-roses', 'The Lush Jungle: Two Roselia', { pokemon: 'roselia' }, say(
+    'On the far side of the hill, two Roselia are standing in the one patch of light, turned toward each other, a rose of each touching.',
+    'They come in twos here. They will fight as two. And whatever happens to one of them, the other will not be left behind.',
+  ), [
+    ch('Walk round them.', out('You go round the patch of light. Neither of them looks up.', scene('gn-20-river2'))),
+    ch('Catch one.', fight('They turn together, the two of them, side by side.', pairFight('roselia', 'jungle-rose-caught', scene('gn-20-rose-pair')))),
+  ]),
+  jroom('gn-20-rose-pair', 'The Lush Jungle: The Other One', { pokemon: 'roselia' }, say('The other Roselia has not run. It stands at your boot, looking at the Ball its pair went into. It will follow you until it\'s caught too, or the first is let go.'), [
+    chIf([is('jungle-rose-caught')], 'Catch it too.', out('It goes into a Ball of its own without a fight. The two Balls click together in your bag.', join({ species: ['roselia'] }), setTo('jungle-rose-caught', 0), scene('gn-20-river2'))),
+    chIf([is('jungle-rose-caught')], 'Let the first one go.', out('You open the first Ball. They find each other\'s roses again, and walk back into the patch of light.', gn('releaseLast', { species: ['roselia'] }), setTo('jungle-rose-caught', 0), scene('gn-20-river2'))),
+    chIf([not('jungle-rose-caught')], 'Walk on.', out('The patch of light is empty. You walk on.', scene('gn-20-river2'))),
+  ]),
   river('gn-20-river2', room('gn-20-clearing'), room('gn-20-clearing'), 'The second storm. The stream below the hill has burst its banks.'),
   jroom('gn-20-clearing', 'The Lush Jungle: The Clearing', { pokemon: 'tsareena' }, say(
     '*A clearing. In the middle, a Bounsweet, fast asleep in a patch of sun.*',
@@ -343,11 +398,23 @@ const gn20: Json[] = [
     ch('A Foongus with Regenerator', out('A Foongus that was pretending to be a Poké Ball follows you out.', { ...join({ species: ['foongus'] }), ability: 'regenerator' }, ...OUT20())),
   ]),
 ];
+/** Afterstory: "A gourd lantern is in the player's bag at the next rest. Nobody put it there." */
+const LANTERN: Json = gev('gn-20-lantern', 'A Gourd Lantern', jun({
+  stop: 'event', rarity: 'uncommon', pokemon: 'bounsweet', effect: 'glint', tags: ['Story'],
+  requires: [is('jungle-lantern'), not('jungle-lantern-found'), { kind: 'gn', test: 'laterStage', key: 'jungle-at' }],
+}), say(
+  'You stop to rest, and go through your bag for something to eat, and your hand closes on a thing that was not there this morning.',
+  'A gourd lantern. Dried, hollowed, cut with a pattern of leaves. There is a stub of candle in it, never lit.',
+  'Nobody put it there.',
+), [
+  ch('Light it.', out('It burns green at the edges, the way light looks under leaves. Your Pokémon come and sit round it without being called. Somewhere a long way behind you, you are fairly sure, somebody who has never seen the ground is pleased.', item('gourd-lantern'), bond(1), flag('jungle-lantern-found'), moment('A gourd lantern from the Lush Jungle turned up in your bag. Nobody put it there.', 55))),
+  ch('Put it back, carefully.', out('You put it back where it was not, and it sits among your things as if it always had.', item('gourd-lantern'), flag('jungle-lantern-found'))),
+]);
 function OUT20(): Json[] {
   return [flag('jungle-lantern'), leavePseudo()];
 }
 
-export const EVENTS: Json[] = [...gn19, ...gn20];
+export const EVENTS: Json[] = [...gn19, ...gn20, LANTERN];
 
 export const REMOVE: string[] = [];
 
@@ -358,6 +425,7 @@ export const PLACEMENT: Record<string, Placement> = {
     note: 'Badge: a sun. Six nodes. Also opened from Safari Land\'s far gate (gn-19-far).',
   },
   'gn-19-lone': { gn: 'gn.19', shape: 'Single', earliest: 'A6', home: 8, window: [1, 20], sits: 'optional', tags: ['Afterstory'], level: 'A+0', often: 'run', note: 'A later region, after the herd was led on without its leader.' },
+  'gn-20-lantern': { gn: 'gn.20', shape: 'Single', earliest: 'A7', home: 4, window: [1, 12], sits: 'optional', attaches: 'rest', tags: ['Afterstory'], level: 'None', often: 'run', note: 'At the next rest after the jungle: a gourd lantern is in the bag. Nobody put it there.' },
   'gn-20-door': {
     gn: 'gn.20', shape: 'Door', earliest: 'A6', home: 14, window: [12, 17], sits: 'optional', attaches: 'instead', tags: ['Pseudo Stage'], needs: ['forest'],
     level: 'A+1; the Tsareena at A+2', often: 'run', badge: 'own', dressing: { kanto: 'The Lush Jungle', kantoStage: 'Beyond Safari Land\'s far gate', elsewhere: 'The Lush Jungle' },

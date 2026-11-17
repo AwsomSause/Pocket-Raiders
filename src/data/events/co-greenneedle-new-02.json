@@ -230,8 +230,9 @@
     },
     {
      "kind": "gn",
-     "test": "laterStage",
-     "key": "dog-at"
+     "test": "stageGap",
+     "key": "dog-at",
+     "n": 1
     }
    ],
    "scene": {
@@ -284,9 +285,16 @@
      "atMost": 0
     },
     {
+     "kind": "flag",
+     "key": "dog-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
      "kind": "gn",
-     "test": "laterStage",
-     "key": "dog-at"
+     "test": "stageGap",
+     "key": "dog-at",
+     "n": 2
     }
    ],
    "scene": {
@@ -306,11 +314,6 @@
         "kind": "flag",
         "key": "dog-clinic",
         "amount": 1
-       },
-       {
-        "kind": "gn",
-        "op": "stampStage",
-        "key": "dog-e3-at"
        }
       ]
      }
@@ -334,7 +337,7 @@
    "requires": [
     {
      "kind": "flag",
-     "key": "dog-open",
+     "key": "dog-asking",
      "atLeast": 1,
      "atMost": 99
     },
@@ -346,8 +349,23 @@
     },
     {
      "kind": "gn",
-     "test": "laterStage",
-     "key": "dog-e3-at"
+     "test": "stageGapMin",
+     "key": "dog-at",
+     "n": 2
+    }
+   ],
+   "remembers": [
+    {
+     "id": "no-clinic",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "dog-clinic",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "You never reached the clinic at the end of the long garden. A nurse finds you on the road instead. **Clinic nurse:** \"He's in ward two. He's been ill a long time. He won't send for it. He says it deserves better than a sick man.\""
     }
    ],
    "scene": {
@@ -384,15 +402,7 @@
         "importance": 85
        }
       ]
-     },
-     "showIf": [
-      {
-       "kind": "flag",
-       "key": "dog-clinic",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ]
+     }
     },
     {
      "label": "Carry the Growlithe.",
@@ -420,16 +430,70 @@
         "importance": 90
        }
       ]
-     },
-     "showIf": [
-      {
-       "kind": "flag",
-       "key": "dog-clinic",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-02-last-sit",
+   "name": "The Dog at the Station: The Last Visit",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "dog-station-sat",
+     "atLeast": 1,
+     "atMost": 99
     },
+    {
+     "kind": "flag",
+     "key": "dog-asking",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "dog-fed",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "dog-led",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "dog-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "stageGapMin",
+     "key": "dog-at",
+     "n": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "growlithe",
+    "tint": "#6b6558",
+    "effect": "none"
+   },
+   "intro": "*The line has followed your road. The same small station, the same worn bowl, and the Growlithe on the platform, sitting very straight, facing the tracks.*\n\n**Mr. Halloran:** \"Still meets every one. I still don't tell it.\"\n\n*A train is due.*",
+   "choices": [
     {
      "label": "Sit one more time.",
      "success": {
@@ -468,103 +532,7 @@
         "importance": 90
        }
       ]
-     },
-     "showIf": [
-      {
-       "kind": "flag",
-       "key": "dog-station-sat",
-       "atLeast": 1,
-       "atMost": 99
-      },
-      {
-       "kind": "flag",
-       "key": "dog-clinic",
-       "atLeast": 0,
-       "atMost": 0
-      }
-     ]
-    },
-    {
-     "label": "Do it once more.",
-     "success": {
-      "text": "You go back to the platform, and you do what you did the first time. It knows. Its ears come up.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "dog-fed",
-        "min": 1,
-        "then": [],
-        "text": "You set the bowl down. It eats, eyes on the track. Then it stops, halfway, and looks up at you. Not at the rails. At you."
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "dog-led",
-        "min": 1,
-        "then": [],
-        "text": "You offer the lead. It follows you one node, then two. At the third it stops, turns, and looks back once. It does not run."
-       },
-       {
-        "kind": "join",
-        "shadow": false,
-        "species": [
-         "growlithe"
-        ],
-        "types": [],
-        "levelBonus": 0,
-        "shinyMultiplier": 1,
-        "ability": "vigil",
-        "mark": "dog-vigil"
-       },
-       {
-        "kind": "flag",
-        "key": "dog-chose-player",
-        "amount": 1
-       },
-       {
-        "kind": "flag",
-        "key": "dog-done",
-        "amount": 1
-       },
-       {
-        "kind": "friendship",
-        "amount": 5,
-        "who": "lead"
-       },
-       {
-        "kind": "moment",
-        "text": "A Growlithe stopped waiting for the train, and chose you.",
-        "importance": 85
-       }
-      ]
-     },
-     "showIf": [
-      {
-       "kind": "flag",
-       "key": "dog-open",
-       "atLeast": 1,
-       "atMost": 99
-      },
-      {
-       "kind": "flag",
-       "key": "dog-clinic",
-       "atLeast": 0,
-       "atMost": 0
-      },
-      {
-       "kind": "flag",
-       "key": "dog-station-sat",
-       "atLeast": 0,
-       "atMost": 0
-      },
-      {
-       "kind": "flag",
-       "key": "dog-asking",
-       "atLeast": 0,
-       "atMost": 0
-      }
-     ]
+     }
     }
    ]
   },
@@ -584,7 +552,7 @@
    "requires": [
     {
      "kind": "flag",
-     "key": "dog-done",
+     "key": "dog-reunited",
      "atLeast": 1,
      "atMost": 99
     },
@@ -606,7 +574,7 @@
     "tint": "#6b6558",
     "effect": "none"
    },
-   "intro": "*A town square, a long way from the last station. A man in a straw hat, on a bench, with an ice cream.*\n\nIt takes you a moment. It is Mr. Halloran, the clerk. He is out of uniform, and he looks ten years younger.\n\n**Halloran:** \"Holiday. First in six years. I didn't know what to do with my hands.\"",
+   "intro": "*A town square, a long way from the last station. A man in a straw hat, on a bench, with an ice cream.*\n\nIt takes you a moment. It is Mr. Halloran, the clerk. He is out of uniform, and he looks ten years younger.\n\n**Halloran:** \"Holiday. First in six years. I didn't know what to do with my hands.\"\n\nHe has been telling the story to strangers all week, and telling it badly. In today's version there were five years, and two dogs.",
    "choices": [
     {
      "label": "Sit with him.",

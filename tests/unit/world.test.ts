@@ -393,10 +393,15 @@ describe('landmarks and dungeons', () => {
     // gn.51: the rescued Pokémon's scene opens beside a rest stop (core/greenneedle/smuggling.ts smuggleRest); gn.53: the siege's rescued Pokémon (citysiege.ts sgRest).
     opened.add('gn-51-rest');
     opened.add('gn-53-waiting');
+    // gn.49: the following Snorlax's scene at a rest stop (snorlax.ts snorlaxAsk).
+    opened.add('gn-49-follower');
     // gn.62: the prison moves you between its rooms from code (core/greenneedle/prison.ts prNext).
     // gn.new.03: the Poké Ball's rest and hatch scenes open beside a rest from code (core/greenneedle/ball.ts).
     opened.add('gn-new-03-rest');
     opened.add('gn-new-03-hatch');
+    // gn.new.14: the cabinet's games are a minigame now. Clearing all three opens the last room from code
+    // (core/greenneedle/arcadeEnd.ts); the six rooms of the earlier version stay only for runs saved inside one.
+    for (const id of ['clear', 'maze', 'stacker', 'shooter', 'maze-lost', 'stacker-lost', 'shooter-lost']) opened.add(`gn-new-14-${id}`);
     for (const id of ['gn-62-hub', 'gn-62-warden', 'gn-62-warden-bare', 'gn-62-caught', 'gn-62-wing', 'gn-62-cell-room']) opened.add(id);
     // Damian's "Go again." (gn.05) opens his next meeting, an ordinary drawn event, at once; anything else opened must be a room.
     const drawnToo = new Set(['gn-05-barn', 'gn-05-hall', 'gn-05-gym']);

@@ -19,15 +19,16 @@ const light = (n: number): Json[] => [
   when('fox-lit', { min: 4, max: 4 }, [item('fox-charm')], 'A small paper lantern lifts from the fifth stone and floats into your hands. It is warm. **Fox Lantern Charm:** curse and burn do half damage.'),
 ];
 /** One lantern's scene: a task, "Do it." or "Refuse." */
-const task = (n: number, name: string, stop: Json, intro: string, doIt: Json, doReq: Json[] = []): Json[] => [
+const task = (n: number, name: string, stop: Json, intro: string, doIt: Json, doReq: Json[] = [], refuse: { text: string; fx: Json[] } | null = null): Json[] => [
   gev(`gn-31-l${n}`, `The Fox at the Shrine: ${name}`, base({
     stop: 'event', rarity: 'rare', requires: [is('fox-met'), here, not(`fox-l${n}`), not(`fox-r${n}`)], ...stop,
   }), intro, [
     ch('Do it.', doIt, { requires: doReq }),
     ch('Refuse.', out(say(
+      ...(refuse ? [refuse.text] : []),
       'The Ninetales nods once. It does not seem angry. It seems to have expected it.',
       `*The ${['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth'][n - 1]} lantern stays dark.*`,
-    ), flag(`fox-r${n}`))),
+    ), flag(`fox-r${n}`), ...(refuse?.fx ?? []))),
   ]),
 ];
 const wroom = (id: string, name: string, intro: string, choices: Json[]): Json => rm(id, `The Fox at the Shrine: ${name}`, base(), intro, choices);
@@ -68,29 +69,30 @@ const gn31: Json[] = [
   // ---- Lantern 3 (S3, step 8, optional): forgive a debt ----
   ...task(3, 'A Debt', {}, say(
     'The third lantern\'s task: *Forgive a debt someone owes you.*',
-    'A trainer is waiting on the path, a long way short of whatever they came here to do. They owe you six hundred and an apology.',
-    '**The trainer:** "I know what I owe. I haven\'t got it. I\'m sorry. I\'ll find a way, I will."',
+    'A trainer is waiting on the path. You beat them on the road, days back, and they never paid the prize money. They owe you six hundred and an apology.',
+    '**The trainer:** "I know what I owe. I sold my bike to get it. It\'s here, all of it, counted twice. I\'m sorry it took so long."',
+    '*They hold the money out. Their hand is not quite steady.*',
   ), out(say(
     'You hold up one hand. **You:** "Keep it. We\'re even."',
     'The trainer stares, and then sits down on the path, all at once, like someone cut a string. They are laughing and crying together.',
     '**The trainer:** "I\'ll remember you did that. I won\'t forget."',
-  ), ...light(3), bond(1), good(1))),
+  ), ...light(3), bond(1), good(1)), [], { text: 'You take the six hundred. It is yours; nobody could say otherwise. The trainer thanks you for waiting, and walks home.', fx: [$(600)] }),
 
   // ---- Lantern 4 (S4, steps 6-7, any lane): keep silent for a step ----
   ...task(4, 'Silence', { requires: [is('fox-met'), here, not('fox-l4'), not('fox-r4')] }, say(
     'The fourth lantern\'s task: *Keep silent for a step.*',
     'Nothing else is written. The stone around the lantern is worn smooth, as if people have run their thumbs over it for centuries, waiting.',
     'It will be hard. Everything on the road wants an answer.',
-  ), out(say('You close your mouth, and you leave it closed. The road goes on, and so do you.'), scene('gn-31-quiet-1'))),
-  wroom('gn-31-quiet-1', 'Silence', say(
-    'Someone you pass says good morning. It is a perfectly ordinary greeting.',
-    'The silence is not a rule you keep. It is a thing you hold, like water in a cupped hand.',
-  ), [ch('…', out('You nod. You say nothing. The person goes by, a little puzzled, and not unkind.', scene('gn-31-quiet-2')))]),
+  ), out(say(
+    'You close your mouth, and you leave it closed.',
+    '*For the rest of this step, whatever anyone asks you, your answer is "…".*',
+  ), gn('foxSilence'), { kind: 'laterEvent', eventId: 'gn-31-quiet-2', nodes: 1 })),
+  // The step after: the silence is over, and the lantern lights.
   wroom('gn-31-quiet-2', 'Silence', say(
     'A bird starts up in the hedge. A cart goes by. The wind moves the grass in long waves.',
-    'You can hear everything. You are not part of it. You are only listening, which is its own kind of company.',
+    'You can hear everything. For a whole step you were not part of it. You were only listening, which is its own kind of company.',
   ), [ch('…', out(say(
-    'For a whole step the world has your whole attention, and you ask it for nothing.',
+    'For a whole step the world had your whole attention, and you asked it for nothing.',
     '*Somewhere behind you, a lantern catches without a spark.*',
   ), ...light(4), intel(1)))]),
 
@@ -184,7 +186,7 @@ export const PLACEMENT: Record<string, Placement> = {
   'gn-31-l1': L(1, 1, 4, [3, 6], 'optional'),
   'gn-31-l2': L(2, 2, 5, [4, 7], 'must-see'),
   'gn-31-l3': L(3, 3, 8, [6, 10], 'optional'),
-  'gn-31-l4': { ...L(4, 4, 6, [6, 7], 'must-see'), note: 'Steps 6 to 7, any lane. The step is a run of rooms whose only choice is "…".' },
+  'gn-31-l4': { ...L(4, 4, 6, [6, 7], 'must-see'), note: 'Steps 6 to 7, any lane. For the rest of that step every choice of every event reads "…" (core/greenneedle/fox.ts foxSilent); the lantern lights one node on.' },
   'gn-31-l5': L(5, 5, 15, [13, 17], 'must-see'),
   'gn-31-l6': L(6, 6, 3, [2, 5], 'optional'),
   'gn-31-l7': L(7, 7, 12, [10, 14], 'optional'),

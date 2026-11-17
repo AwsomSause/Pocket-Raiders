@@ -126,7 +126,7 @@ const gn26: Json[] = [
       'You walk into the clearing, and call out your whole party, and stand them in it.',
       'It\'s full. Six small Pokémon, and there\'s no more room.',
       'The giants look. They look at each other. They leave, in opposite directions.',
-    ), ...solve('giants-quarrel'), ...onward('gn-26-high'))),
+    ), ...solve('giants-quarrel'), ...onward('gn-26-high')), { requires: [{ kind: 'partySize', atLeast: 6 }] }),
     ch('Side with the Kabutops.', out('The Tangela sulks. It will sulk in the clearing for a week.', flag('giants-sided'), ...onward('gn-26-high'))),
     ch('Side with the Tangela.', out('The Kabutops sulks. It will sulk in the clearing for a week.', flag('giants-sided'), ...onward('gn-26-high'))),
     ch('Leave them to it.', out('You leave them. Neither notices.', ...onward('gn-26-high'))),
@@ -198,6 +198,18 @@ const MYSTERY: string[][] = [
   ['dratini', 'larvitar', 'bagon', 'gible', 'beldum', 'riolu', 'scyther', 'togepi'],
   ['lapras', 'snorlax', 'chansey', 'aerodactyl', 'porygon', 'kangaskhan'],
 ];
+/** After the first curtain: from the second visit on there is a second one (a new card, a new silhouette), once a visit. */
+const SECOND_CURTAIN: Json[] = [
+  gn('check', { key: 'circus-second', if: [is(VISIT, 2), not('circus-curtain')] }),
+  when('circus-second', { min: 1 }, [setTo('circus-curtain', 1), pick('circus-tier', 3, 2, 1), scene('gn-27-mystery-offer-2')], '*Behind it, a second curtain.*'),
+  when('circus-second', { min: 0, max: 0 }, [scene('gn-27-top')]),
+];
+/** One curtain: the tier is shown, the species isn't. Pay, or walk on; `next` is what follows either way. */
+const mysteryOffer = (id: string, intro: string, next: Json[]): Json => croom(id, 'The Mystery Tent', {}, intro, [
+  ...([['Common', 500], ['Rare', 1500], ['Very rare', 4000]] as [string, number][]).map(([tier, price], i) =>
+    chIf([is('circus-tier', i + 1, i + 1)], `Pay ₽${price.toLocaleString('en-US')} (${tier}).`, out('The curtain goes back.', $(-price), join({ species: MYSTERY[i]! }), flag('circus-mystery-bought'), ...next), { requires: [{ kind: 'money', atLeast: price }] })),
+  ch('Walk on.', out('The silhouette sits down. You will never know.', ...next)),
+]);
 const SHY_CHOICES: Json[] = [
   chIf([not('circus-rehearsed')], 'Rehearse with it, in the empty tent.', out(say(
     'You sit in the front row of the empty tent. Then your lead sits beside you. Then the whole party.',
@@ -213,18 +225,24 @@ const SHY_CHOICES: Json[] = [
   ), flag('circus-on-stage'), flag('rep'), ...helpedCheck, scene('gn-27-top'))),
   ch('Leave it be.', out('It isn\'t on the bill tonight.', scene('gn-27-top'))),
 ];
+/** After the show, in a later region's circus, the helped one may ask to join (once). */
+const ASKS: Json = gn('check', { key: 'circus-asks', if: [is('circus-shy-helped'), is(VISIT, 2), not('circus-shy-joined')] });
 /** The circus owner's company: the performers, and the shy one last if it was helped. */
 const OWNER = (team: string[]): Json => trainer('Signor Fontaine', {
   team, lv: 0, friendly: true, sprite: 'gentleman',
   win: [
     flag('circus-season'), flag('circus-owner-beaten'), any(...RARE_PRIZES),
     when('circus-owner-beaten', { min: 1 }, [], 'Fontaine sweeps off his hat. **Signor Fontaine:** "Bravo! A season ticket: every circus after this is free. And a little something from the prop box."'),
-    gn('check', { key: 'circus-asks', if: [is('circus-shy-helped'), is(VISIT, 2)] }),
+    ASKS,
     when('circus-asks', { min: 1 }, [{ kind: 'addEvent', eventId: 'gn-27-after' }]),
   ],
-  lose: [setTo('circus-owner-lost', 1), when('circus-owner-lost', { min: 1 }, [], '**Signor Fontaine:** "Marvellous! They *nearly!* Again tomorrow!"'), scene('gn-27-top')],
+  // "After the show it may ask to join": the show is over whoever won it.
+  lose: [setTo('circus-owner-lost', 1), when('circus-owner-lost', { min: 1 }, [], '**Signor Fontaine:** "Marvellous! They *nearly!* Again tomorrow!"'), ASKS,
+    when('circus-asks', { min: 1 }, [scene('gn-27-after')]), when('circus-asks', { min: 0, max: 0 }, [scene('gn-27-top')])],
 });
 const ARENA_TMS = ['body-slam', 'brick-break', 'shadow-ball', 'ice-beam'];
+const MIME_SIDES = ['left', 'middle', 'right'];
+const VITAMIN_PRIZES = ['protein', 'calcium', 'carbos', 'hp-up', 'iron', 'zinc'];
 
 const gn27: Json[] = [
   gev('gn-27-gate', 'The Pokémon Circus', tent({
@@ -239,13 +257,13 @@ const gn27: Json[] = [
   ), [
     ch('Step up.', out('Three tickets, free at the gate. More are ₽100 at the booth inside.',
       flag(VISIT), stampRegion('circus-at'), setTo(TICKETS, 3), when('circus-season', { min: 1 }, [setTo(TICKETS, 99)]),
-      SHY, setTo('circus-shy-today', 0), scene('gn-27-top'))),
+      SHY, setTo('circus-shy-today', 0), setTo('circus-curtain', 0), scene('gn-27-top'))),
     ch('Walk on.', out('The band follows you down the road for a while, then gives up.', stampRegion('circus-at'))),
   ]),
   croom('gn-27-top', 'The Pokémon Circus: The Big Top', {
     remembers: [
       { id: 'star', when: [is('circus-shy-helped'), is(VISIT, 2)], notice: '*Top of the bill on every poster: Tumble, by name. Mid-routine, it stops. It has seen someone in row four. It finishes the routine facing that way.*' },
-      { id: 'bill', when: [is('roux-met')], notice: '*Lower down the bill, in smaller letters: Madame Roux, Fortunes.*' },
+      { id: 'bill', when: [{ kind: 'eventSeen', id: 'festival-day' }], notice: '*Lower down the bill, in smaller letters: Madame Roux, Fortunes.*' },
       { id: 'magician', when: [is('magician-met')], notice: '*And: The Magician. Somebody has drawn a rabbit on the poster.*' },
     ],
   }, say('Sawdust, lanterns, a ring in the middle and booths all round it.', 'A board by the entrance: Illusions. Strength. The Track. The Jugglers. The Arena. The Mystery Tent.'), [
@@ -272,17 +290,27 @@ const gn27: Json[] = [
     chIf([is(VISIT, 3)], 'The water show.', out('A Dewgong and three Lumineon in a glass tank, turning in slow rings. The crowd goes quiet.', heal(0.25))),
     toTop(),
   ]),
-  // ---- 1. Mr. Mime's Illusions: lean on each; the real one's wall holds ----
-  croom('gn-27-mime', 'Mr. Mime\'s Illusions', { pokemon: 'mr-mime' }, say('Three Mr. Mime. Two are illusions. Only the real one\'s wall will hold your weight.', 'One ticket, and you may lean once.'), [
-    play('Lean on a wall.', out('You pick one.', pick('circus-mime', 1, 1, 1), scene('gn-27-mime-lean'))),
+  // ---- 1. Mr. Mime's Illusions: spot which is real. Lean on each; the real one's wall holds your weight. ----
+  // A ticket buys the booth: you may watch them first (the sawdust gives the real wall away), then lean on each in turn. Two
+  // falls and the last one standing is the real one, and bows, but the prize is for spotting it.
+  croom('gn-27-mime', 'Mr. Mime\'s Illusions', { pokemon: 'mr-mime' }, say('Three Mr. Mime. Two are illusions. Only the real one\'s wall will hold your weight.', 'One ticket. Spot the real one: lean on each, if you must.'), [
+    play('Step up to the walls.', out('The three of them press their palms flat against nothing at all.', pick('circus-mime', 1, 1, 1), setTo('circus-mime-falls', 0), ...MIME_SIDES.map((_, i) => setTo(`circus-mime-tried-${i + 1}`, 0)), scene('gn-27-mime-lean'))),
     buyTicket('gn-27-mime'),
     toTop(),
   ]),
-  croom('gn-27-mime-lean', 'Mr. Mime\'s Illusions', { pokemon: 'mr-mime' }, 'Left, middle or right?', ['left', 'middle', 'right'].map((side, i) => ch(`The ${side} one.`, out(`You lean on the ${side} one.`,
-    when('circus-mime', { min: i + 1, max: i + 1 }, [any(...RARE_PRIZES), flag('circus-mime-won'), scene('gn-27-mime')], 'It holds. The real Mr. Mime bows, and hands you a prize from behind its back.'),
-    when('circus-mime', { min: 0, max: i }, [scene('gn-27-mime')], 'You fall straight through it into the sawdust. The crowd loves it.'),
-    when('circus-mime', { min: i + 2 }, [scene('gn-27-mime')], 'You fall straight through it into the sawdust. The crowd loves it.'),
-  )))),
+  croom('gn-27-mime-lean', 'Mr. Mime\'s Illusions', { pokemon: 'mr-mime' }, 'Left, middle or right?', [
+    ...MIME_SIDES.map((side, i) => chIf([not(`circus-mime-tried-${i + 1}`)], `Lean on the ${side} one.`, out(`You lean on the ${side} one.`,
+      setTo(`circus-mime-tried-${i + 1}`, 1),
+      when('circus-mime', { min: i + 1, max: i + 1 }, [any(...RARE_PRIZES), flag('circus-mime-won'), scene('gn-27-mime')], 'It holds. The real Mr. Mime bows, and hands you a prize from behind its back.'),
+      ...[...MIME_SIDES.keys()].filter((k) => k !== i).map((k) => when('circus-mime', { min: k + 1, max: k + 1 }, [flag('circus-mime-falls'),
+        when('circus-mime-falls', { min: 0, max: 1 }, [scene('gn-27-mime-lean')], 'You fall straight through it into the sawdust. The crowd loves it. An illusion. Two left.'),
+        when('circus-mime-falls', { min: 2 }, [scene('gn-27-mime')], 'You fall straight through that one too. The last Mr. Mime, the real one, bows very low. No prize for the last wall standing.'),
+      ])),
+    ))),
+    ch('Watch them first.', out('You stand back and watch the floor, not the hands.',
+      ...MIME_SIDES.map((side, i) => when('circus-mime', { min: i + 1, max: i + 1 }, [], `*Sawdust drifts across the ring. It blows straight through two of the walls. At the foot of the ${side} one, it piles up.*`)),
+      scene('gn-27-mime-lean'))),
+  ]),
   // ---- 2. Machamp's Strength Contest: Attack decides; it uses two of its four arms ----
   croom('gn-27-machamp', 'Machamp\'s Strength Contest', { pokemon: 'machamp' }, say('Enter one Pokémon. Attack decides.', 'The Machamp uses only two of its four arms, to be fair.'), [
     play('Enter your strongest.', out('Your strongest steps up and takes the Machamp\'s two hands.',
@@ -291,6 +319,18 @@ const gn27: Json[] = [
       when('circus-strong', { min: 0, max: 0 }, [], 'The Machamp holds it there, politely, with two arms. It doesn\'t even need the other two.'),
       scene('gn-27-machamp'))),
     buyTicket('gn-27-machamp'),
+    // The one after next (third visit on): the strongman's rematch.
+    chIf([is(VISIT, 3)], 'The strongman\'s rematch.', out('The Machamp has seen you. It unfolds the other two arms.', scene('gn-27-rematch'))),
+    toTop(),
+  ]),
+  // The one after next (third visit): the strongman's rematch. All four arms this time; two stat items for a win.
+  croom('gn-27-rematch', 'The Strongman\'s Rematch', { pokemon: 'machamp' }, say('Enter one Pokémon. Attack decides.', 'This time the Machamp uses all four arms. It says that is only fair too.'), [
+    play('Enter your strongest.', out('Your strongest steps up. The Machamp takes hold with all four hands.',
+      gn('check', { key: 'circus-strong', if: [{ kind: 'gn', test: 'strength', key: 'machamp', n: 100 }] }),
+      when('circus-strong', { min: 1 }, [any(...VITAMIN_PRIZES), any(...VITAMIN_PRIZES), flag('circus-rematch-won')], 'Four arms go down, one at a time. The Machamp stares at its hands. Then it roars with laughter, and presses two bottles on you.'),
+      when('circus-strong', { min: 0, max: 0 }, [], 'Four arms. It was never going to be close. The Machamp pats your Pokémon on the head, very gently, with the fourth.'),
+      scene('gn-27-rematch'))),
+    buyTicket('gn-27-rematch'),
     toTop(),
   ]),
   // ---- 3. Rapidash's Track: three jumps ----
@@ -331,12 +371,9 @@ const gn27: Json[] = [
     buyTicket('gn-27-mystery'),
     toTop(),
   ]),
-  croom('gn-27-mystery-offer', 'The Mystery Tent', {}, 'Behind the curtain, something shifts its weight.', [
-    chIf([is('circus-tier', 1, 1)], 'Pay ₽500 (Common).', out('The curtain goes back.', $(-500), join({ species: MYSTERY[0]! }), flag('circus-mystery-bought'), scene('gn-27-top')), { requires: [{ kind: 'money', atLeast: 500 }] }),
-    chIf([is('circus-tier', 2, 2)], 'Pay ₽1,500 (Rare).', out('The curtain goes back.', $(-1500), join({ species: MYSTERY[1]! }), flag('circus-mystery-bought'), scene('gn-27-top')), { requires: [{ kind: 'money', atLeast: 1500 }] }),
-    chIf([is('circus-tier', 3, 3)], 'Pay ₽4,000 (Very rare).', out('The curtain goes back.', $(-4000), join({ species: MYSTERY[2]! }), flag('circus-mystery-bought'), scene('gn-27-top')), { requires: [{ kind: 'money', atLeast: 4000 }] }),
-    ch('Walk on.', out('The silhouette sits down. You will never know.', scene('gn-27-top'))),
-  ]),
+  mysteryOffer('gn-27-mystery-offer', 'Behind the curtain, something shifts its weight.', SECOND_CURTAIN),
+  // Next region on: "the Mystery Tent has a second curtain". A second unknown Pokémon, offered once, after the first.
+  mysteryOffer('gn-27-mystery-offer-2', 'The second curtain. A different silhouette. A different card.', [scene('gn-27-top')]),
   // ---- The shy one ----
   croom('gn-27-shy', 'The Pokémon Circus: The Practice Ring', {
     remembers: [{ id: 'understudy', when: [is('understudy-went-on')], notice: '*The Mime Jr. from the Understudy is here too, practising beside it. They seem to be friends.*' }],
@@ -363,8 +400,8 @@ const gn27: Json[] = [
     'It\'s holding the end of a ribbon from its act. It holds it out.',
   ), [
     ch('Come with us.', out('It takes the ribbon in its teeth, and comes. It brings a move from its act.', pick('circus-act', 1, 1, 1),
-      ...ACTS_MOVES.map((m, i) => when('circus-act', { min: i + 1, max: i + 1 }, [{ ...join({ species: ['@circus-shy'] }), moves: [m] }])), flag('circus-shy-joined'))),
-    ch('Stay. They need you here.', out('It nods. It goes back to the ring and does the whole routine again, just for you.')),
+      ...ACTS_MOVES.map((m, i) => when('circus-act', { min: i + 1, max: i + 1 }, [{ ...join({ species: ['@circus-shy'] }), moves: [m] }])), flag('circus-shy-joined'), scene('gn-27-top'))),
+    ch('Stay. They need you here.', out('It nods. It goes back to the ring and does the whole routine again, just for you.', scene('gn-27-top'))),
   ]),
 ];
 
@@ -379,19 +416,29 @@ const floor = (id: string, name: string, o: Json, intro: string, choices: Json[]
 const ALERT = 'hideout-alert';
 const LOOP = 'hideout-loop';
 /** A camera on the floor you've just reached: +2, unless the tapes are looping. */
+const INSIDE = 'hideout-inside';
+/** Whether anyone can be talked past: at Alert 0 to 4; inside the team, a colleague still can up to 9. */
+const canTalk: Json = { kind: 'gn', test: 'canTalkPast', key: 'hideout-alert' };
+const noTalk: Json = { kind: 'gn', test: 'noTalkPast', key: 'hideout-alert' };
+const insideTeam: Json = { kind: 'gn', test: 'insideTeam' };
 const camera: Json[] = [
   gn('check', { key: 'hideout-looped', if: [is(LOOP)] }),
   when('hideout-looped', { min: 1 }, [flag(LOOP, -1)], 'The camera\'s red light stays off. The loop is still running.'),
-  when('hideout-looped', { min: 0, max: 0 }, [flag(ALERT, 2), cap(ALERT, 10)], 'A camera turns, slowly, to follow you. (Alert +2)'),
+  when('hideout-looped', { min: 0, max: 0 }, [flag(ALERT, 2), cap(ALERT, 10),
+    when(INSIDE, { min: 0, max: 0 }, [], 'A camera turns, slowly, to follow you. (Alert +2)'),
+    // Inside the team the floors are your workplace, and the meter is Suspicion.
+    when(INSIDE, { min: 1 }, [], 'A camera turns, slowly, to follow you. You are staff. Staff don\'t usually come down here. (Suspicion +2)'),
+  ]),
 ];
 const alarm: Json[] = [flag(ALERT, 3), cap(ALERT, 10)];
 /** On to the next floor, past its camera. */
 const down = (next: string): Json[] => [...camera, { kind: 'addEvent', eventId: next }];
 /** How awake the floor is: bored (0 to 4), patrols (5 to 9), everyone (10). Three lines, one shows. */
 const MOOD = (where: string): Json[] => [
-  { id: 'bored', when: [is(ALERT, 0, 4)], notice: `*Alert low: the ${where} is bored. Some of them could be talked past.*` },
-  { id: 'patrol', when: [is(ALERT, 5, 9)], notice: `*Alert: patrols. Torches sweep the ${where}. Nobody's talking their way past anyone now.*` },
-  { id: 'full', when: [is(ALERT, 10)], notice: '*Alert 10. Every alarm in the building is going. Every Grunt left has called up one more Pokémon.*' },
+  // {hideout:meter} is "Alert", or "Suspicion" inside the team (where the floors are your workplace); {hideout:patrol} says who can still talk.
+  { id: 'bored', when: [is(ALERT, 0, 4)], notice: `*{hideout:meter} low: the ${where} is bored. Some of them could be talked past.*` },
+  { id: 'patrol', when: [is(ALERT, 5, 9)], notice: `*{hideout:meter}: patrols. Torches sweep the ${where}. {hideout:patrol}*` },
+  { id: 'full', when: [is(ALERT, 10)], notice: '*{hideout:meter} 10. Every alarm in the building is going. Every Grunt left has called up one more Pokémon.*' },
 ];
 /** A Grunt fight inside the Hideout (A+0): at Alert 10 each one has one more Pokémon. */
 const grunts = (n: number, win: Json[]): Json => ({ ...foe('grunt', '{grunt}', 2, { pseudo: true, lv: 0, chain: n, win }), moreIf: { key: ALERT, at: 10 } });
@@ -407,7 +454,8 @@ const gn28: Json[] = [
     'A shuttered {front} building on the edge of town. No sign on the door.',
     'A {grunt} is smoking by the bins. He doesn\'t see you. Behind him, the door is propped open with a fire extinguisher.',
   ), [
-    ch('Go in.', out('You step over the extinguisher. Inside it smells of floor polish and burnt coffee.', flag('hideout-entered'), setTo(ALERT, 0), setTo(LOOP, 0), ...camera, { kind: 'addEvent', eventId: 'gn-28-offices' })),
+    ch('Go in.', out('You step over the extinguisher. Inside it smells of floor polish and burnt coffee.', flag('hideout-entered'), setTo(ALERT, 0), setTo(LOOP, 0),
+      gn('check', { key: INSIDE, if: [insideTeam] }), when(INSIDE, { min: 1 }, [], '*You know the smell. You work here. Today you are not here to work.*'), ...camera, { kind: 'addEvent', eventId: 'gn-28-offices' })),
     ch('Walk on.', out('You walk on. Behind you the {grunt} finishes his cigarette, kicks the extinguisher, and the door swings shut.')),
   ]),
   // ---- Floor 1. Offices ----
@@ -420,7 +468,10 @@ const gn28: Json[] = [
       'You fold it into your jacket. The drawer squeaks shut.',
     ), flag('hideout-file'), { kind: 'evil', mark: 'files' }, ...alarmIfSeen(), scene('gn-28-offices'))),
     ch('Slip behind the canteen.', out('Past the fridge, a door marked STAFF ONLY. Somebody has written *REALLY* under it.', scene('gn-28-back'))),
-    chIf([is(ALERT, 0, 4)], 'Talk your way past.', out('"New starter," you say. "They sent me down to Labs." The {grunt}s shrug. Neither of them wants the stapler that much.', ...down('gn-28-labs'))),
+    chIf([canTalk], 'Talk your way past.', out('You walk up to them as if you had every right to.',
+      when(INSIDE, { min: 0, max: 0 }, [], '"New starter," you say. "They sent me down to Labs." The {grunt}s shrug. Neither of them wants the stapler that much.'),
+      when(INSIDE, { min: 1 }, [], '"Audit," you say, and hold up a clipboard from the nearest desk. They know your face. They don\'t like it, but they know it. They let you by.'),
+      ...down('gn-28-labs'))),
     ch('Fight your way through.', fight('The stapler goes flying. Both of them reach for their Balls.', grunts(2, down('gn-28-labs')))),
   ]),
   floor('gn-28-back', '{team} Hideout: Behind the Canteen', { pokemon: 'meowth' }, say(
@@ -444,7 +495,8 @@ const gn28: Json[] = [
     'At the end of the floor, one laboratory is locked. Beside it, one scientist is standing at a window, not working.',
   ), [
     chIf([not('hideout-scientist')], 'Talk to the scientist at the window.', out('He doesn\'t turn round. He\'s been waiting for somebody, and it might as well be you.', scene('gn-28-scientist'))),
-    chIf([is('hideout-lab-key'), not('hideout-lab-open')], 'Unlock the laboratory.', out('The key turns. The door hisses.', flag('hideout-lab-open'), scene('gn-28-lab'))),
+    // The scientist's key, or Osei Tarrant's (gn.62, the Pokémon Prison: "a key that opens one locked room in the team's Hideout").
+    chIf([{ kind: 'anyFlag', keys: ['hideout-lab-key', 'prison-trench-key'] }, not('hideout-lab-open')], 'Unlock the laboratory.', out('The key turns. The door hisses.', flag('hideout-lab-open'), scene('gn-28-lab'))),
     ch('Take the stairs down.', out('The stairs go down to a floor that smells of straw.', ...down('gn-28-holding'))),
     chIf([is(ALERT, 5)], 'Fight the patrol.', fight('A patrol comes round the corner. They\'ve been looking for you.', grunts(1, [scene('gn-28-labs')]))),
   ]),
@@ -488,11 +540,12 @@ const gn28: Json[] = [
     'The pen keeper, a tired {grunt} with a bucket of feed, steps in front of them. "Don\'t. I just feed them. Don\'t."',
   ), [
     ch('Open every cage.', fight('You open every cage. She drops the bucket and reaches for a Ball.', grunts(1, [...FREED, ...down('gn-28-vault')]), flag('hideout-pen-fought'))),
-    chIf([is(ALERT, 0, 4)], 'Ask the keeper to help.', out(say(
-      'She looks at you for a long time. "...They bite the boss. They never bite me."',
-      'She hands you the keys, folds her jacket on the bucket, and helps you open every cage. Then she walks out with them.',
-    ), flag('hideout-keeper-quit'), ...FREED, ...down('gn-28-vault'))),
-    chIf([is(ALERT, 5)], 'Ask the keeper to help.', fight('"Not with the alarms going," she says. "They\'ll know it was me." She puts the bucket down, and reaches for a Ball.', grunts(1, [...FREED, ...down('gn-28-vault')]))),
+    chIf([canTalk], 'Ask the keeper to help.', out('You ask her, quietly, the way you would ask for the salt.',
+      when(INSIDE, { min: 0, max: 0 }, [], 'She looks at you for a long time. "...They bite the boss. They never bite me."'),
+      when(INSIDE, { min: 1 }, [], '"You\'re from upstairs," she says. "I\'ve seen you in the canteen." She looks at the cages, and at you. "...Go on, then. Before I think about it."'),
+      when('hideout-entered', { min: 1 }, [], 'She hands you the keys, folds her jacket on the bucket, and helps you open every cage. Then she walks out with them.'),
+      flag('hideout-keeper-quit'), ...FREED, ...down('gn-28-vault'))),
+    chIf([noTalk], 'Ask the keeper to help.', fight('"Not with the alarms going," she says. "They\'ll know it was me." She puts the bucket down, and reaches for a Ball.', grunts(1, [...FREED, ...down('gn-28-vault')]))),
   ]),
   // ---- Floor 4. The Vault ----
   floor('gn-28-vault', '{team} Hideout: The Vault', { pokemon: 'persian', effect: 'shake' }, say(
@@ -500,17 +553,15 @@ const gn28: Json[] = [
     '**{lt}:** "You\'ve cost us a floor of salaries. Do you know what a {grunt} *costs?* The hats alone."',
   ), [
     chIf([is(ALERT, 0, 9)], 'Fight.', fight('{lt} stands, and straightens their cuffs.', exec([]), flag('hideout-exec'))),
-    chIf([is(ALERT, 10)], 'Fight.', fight('{lt} snaps their fingers. Two {grunt}s step out from behind the shelves.', grunts(2, [{ kind: 'addEvent', eventId: 'gn-28-vault-2' }]), flag('hideout-exec'))),
+    // Alert 10: "two Grunts stand with them". One fight: the Executive's own team and one Pokémon from each Grunt, two at a time.
+    chIf([is(ALERT, 10)], 'Fight.', fight('{lt} snaps their fingers. Two {grunt}s step out from behind the shelves, and stand with them.', exec([], true), flag('hideout-exec'))),
   ]),
-  floor('gn-28-vault-2', '{team} Hideout: The Vault', { pokemon: 'persian', effect: 'shake' }, say(
-    'The two {grunt}s are down. {lt} hasn\'t moved from behind the desk.',
-    '**{lt}:** "Fine. I\'ll do it myself. I always do."',
-  ), [ch('Fight.', fight('{lt} stands.', exec([])))]),
   floor('gn-28-reward', '{team} Hideout: The Vault Shelves', { pokemon: 'persian' }, say(
     '{lt} is gone, out a back door you didn\'t see. The shelves are full of things the team took.',
     'You can carry one. Anything more and you won\'t make the stairs.',
   ), [
-    ch('A Shadow Pokémon.', REWARD('shadow', 'A Poké Ball in a velvet box, cold to the touch. It never asked to be like this. It comes with you.', { ...join({ shadow: true }) })),
+    // The Shadow Pokémon is the one from the locked lab: if you opened its tank upstairs, it is already with you.
+    chIf([not('hideout-shadow-freed')], 'A Shadow Pokémon.', REWARD('shadow', 'A Poké Ball in a velvet box, cold to the touch. It never asked to be like this. It comes with you.', { ...join({ shadow: true }) })),
     ch('A stolen evolution item.', out('A stone with a luggage label tied to it. A name and an address, in a child\'s writing.', scene('gn-28-stone'))),
     ch('A rare egg.', REWARD('egg', 'An Egg in a padded crate stamped FRAGILE. Nobody has written what it is.', egg({ species: RARE_EGGS }))),
     ch('A pass to the black market.', REWARD('pass', 'A plastic card with a red R on it. For the rest of the region, the night market will treat you as one of theirs.', stampRegion('hideout-pass'))),
@@ -530,13 +581,14 @@ const gn28: Json[] = [
     'One of the Pokémon from the Hideout cages has been following you for a whole stage.',
     'It finally comes close enough to touch. It sits down at your feet and waits.',
   ), [
-    ch('Come with us.', out('It comes. It already knows your voice. (Bond +1)', { ...join({}), friendship: 50 }, stampRegion('hideout-asked'))),
+    // "A few ask to join, at normal catch odds, with Bond +1 already": it never attacks; a Ball decides, at the usual odds.
+    ch('Come with us.', fight('It waits. It won\'t raise a paw against you. Whether it stays is up to the Ball.', { ...wild({ lv: 0, win: [stampRegion('hideout-asked')] }), friendly: true, rule: { foeStands: 99 }, caught: [gn('bondNewest', { n: 50 }), stampRegion('hideout-asked')], lose: [stampRegion('hideout-asked')] })),
     ch('Go on. You\'re free.', out('It stays a moment longer. Then it goes, light-footed, the way free things go.', stampRegion('hideout-asked'))),
   ]),
   gev('gn-28-centre', 'The Rescue Centre', base({ stop: 'event', rarity: 'common', callback: true, tags: ['Recovery', 'Pokémon'], pokemon: 'chansey', requires: [is('freed-caged'), notThisRegion('hideout-region'), not('hideout-centre')] }), say(
     'A hand-painted sign by the road: *RESCUE CENTRE. ALL WELCOME. NO TEAMS.*',
     'The nurse is a Chansey. You know her. She was in the nearest cage, looking after everyone through the bars.',
-  ), [ch('Go in.', out('She looks after your whole team, and won\'t take a thing for it. The ones you freed built the place themselves.', heal(1), flag('hideout-centre')))]),
+  ), [ch('Go in.', out('She looks after your whole team, and won\'t take a thing for it. The ones you freed built the place themselves. The door stays open: a place to rest, here, for as long as you are on this road.', heal(1), { kind: 'addStop', stop: 'heal' }, flag('hideout-centre')))]),
   gev('gn-28-note', 'A Note Under a Rock', base({ stop: 'event', rarity: 'common', callback: true, tags: ['Evil Team', 'Story'], requires: [is('hideout-scientist-turned'), notThisRegion('hideout-turned-region'), not('hideout-note'), { kind: 'evil', ends: ['none'] }] }), say(
     'A flat stone on a fence post, with a corner of paper sticking out from under it.',
   ), [ch('Read it.', out('Folded small. It\'s signed E.A.', gn('nextOp', {}), flag('hideout-note')))]),
@@ -545,8 +597,8 @@ const gn28: Json[] = [
 /** The cabinet: a camera in the corner sees you unless the tape's looping. */
 function alarmIfSeen(): Json[] { return camera; }
 /** {lt} at A+2. Winning opens the shelves; losing throws you out, and nothing else. */
-function exec(extra: Json[]): Json {
-  return { ...foe('executive', '{lt}', 3, { pseudo: true, lv: 2, win: [flag('hideout-exec-beaten'), ...extra, { kind: 'addEvent', eventId: 'gn-28-reward' }] }), lose: THROWN_OUT };
+function exec(extra: Json[], withGrunts = false): Json {
+  return { ...foe('executive', '{lt}', withGrunts ? 5 : 3, { pseudo: true, lv: 2, ...(withGrunts ? { format: 'doubles' as const } : {}), win: [flag('hideout-exec-beaten'), ...extra, { kind: 'addEvent', eventId: 'gn-28-reward' }] }), lose: THROWN_OUT };
 }
 
 // =====================================================================================================================
@@ -624,7 +676,10 @@ const question = (n: number, q: string, right: string, wrong: [string, string], 
     ch(wrong[0], out('It writes something on its shell, slowly, and then crosses it out.', next)),
     ch(wrong[1], out('It looks at you for some time. Then it writes something down.', next)),
   ]);
-const PINK_DONE: Json[] = [flag('pink-done'), stampRegion('pink-at'), leavePseudo()];
+const PINK_DONE: Json[] = [flag('pink-done'), stampRegion('pink-at'), stampRegion('pink-shade-at'), leavePseudo()];
+const hasPink: Json = { kind: 'gn', test: 'hasPink', key: 'pink' };
+/** A region of mainland food with no fruit: a shade paler. */
+const FADES: Json[] = [gn('pinkFade'), flag('pink-shade'), stampRegion('pink-shade-at')];
 const PINK_ISLANDERS = ['rhyhorn', 'nidoran-f', 'nidoran-m', 'paras', 'mareep', 'slowpoke', 'exeggcute'];
 
 const gn30: Json[] = [
@@ -706,7 +761,30 @@ const gn30: Json[] = [
     'The boat is where you left it. The islanders have come down to the beach to watch you go.',
   ), [
     ch('A pink islander comes with you.', out('One of them walks down the sand and gets into the boat, and that is that.', { ...join({ species: PINK_ISLANDERS }), marks: ['pink from the island fruit'] }, setTo('pink-reward', 1), ...PINK_DONE)),
-    ch('Let your lead try the fruit.', out('It eats the fruit for a day. By evening it\'s a very pale pink, and very pleased with itself.', gn('markLead', { text: 'pink from the island fruit' }), setTo('pink-reward', 2), ...PINK_DONE)),
+    ch('Let one of yours try the fruit.', out('It eats the fruit for a day. By evening it\'s a very pale pink, and very pleased with itself.', gn('markPink'), setTo('pink-reward', 2), ...PINK_DONE), { pick: {} }),
+  ]),
+  // ---- Afterstory: mainland food. A shade paler at each region's end, unless you kept some fruit. ----
+  gev('gn-30-fade', 'The Colour', pinkOpts({ stop: 'event', rarity: 'uncommon', callback: true, minStage: 2, pokemon: 'mareep', requires: [is('pink-done'), hasPink, regionChanged('pink-shade-at')] }), say(
+    'A whole region of mainland food. Your pink one has been looking at its own feet a good deal lately.',
+    '*The colour is going. Not fast. But it is going.*',
+  ), [
+    chIf([is('pink-fruit')], 'Give it a Pink Fruit.', out(say(
+      'It eats the fruit in three bites, and sits with the stone in its mouth for a while, like a sweet.',
+      'The colour holds. One more region.',
+    ), flag('pink-fruit', -1), stampRegion('pink-shade-at'),
+      gn('check', { key: 'pink-last', if: [not('pink-fruit')] }), when('pink-last', { min: 1 }, [scene('gn-30-stone')]))),
+    chIf([is('pink-fruit')], 'Keep the fruit for later.', out('You keep the fruit in the bag. It is a shade paler than it was. It doesn\'t seem to mind.', ...FADES)),
+    chIf([not('pink-fruit')], 'There is no fruit.', out('There is nothing to give it but what the mainland grows. It is a shade paler than it was. It doesn\'t seem to mind.', ...FADES)),
+  ]),
+  isle5('gn-30-stone', 'The Colour: The Last Stone', { pokemon: 'mareep' }, say(
+    'That was the last of the fruit. What is left is its stone, the size of a thumbnail, pink all the way through.',
+    '*Plant the stone?*',
+  ), [
+    ch('Plant it.', out(say(
+      'You press it into the soft ground at the edge of the camp, and pour a little water over it.',
+      'One day, a small pink tree. You won\'t pass this way again to see it. Somebody will.',
+    ), flag('pink-stone-planted'), moment('Planted the last Pink Fruit\'s stone by a camp, for whoever comes next.', 70))),
+    ch('Keep it.', out('You put it in your pocket. It weighs nothing at all.', flag('pink-stone-kept'))),
   ]),
 ];
 
@@ -727,11 +805,11 @@ export const PLACEMENT: Record<string, Placement> = {
     note: 'Badge: a red R (a "?" until the team is known). Four floors: Offices, Labs, Holding, the Vault. The Hideout of the evil-team story (step 7), written out as a stage of its own.',
   },
   'gn-29-town': {
-    gn: 'gn.29', shape: 'Single', earliest: 'A2', home: 5, window: [3, 8], sits: 'optional', attaches: 'instead', tags: ['Hub Destination', 'Minigame'], level: 'No battle', often: 'region', badge: 'own',
+    gn: 'gn.29', shape: 'Single', earliest: 'A2', home: 5, window: [3, 8], sits: 'optional', attaches: 'instead', tags: ['Miniature Episode', 'Snake minigame'], level: 'No battle', often: 'region', badge: 'own',
     note: 'Badge: a small duck. At the town; until towns exist, step 5. Snake in three rounds (core/greenneedle/snake.ts).',
   },
   'gn-30-door': {
-    gn: 'gn.30', shape: 'Door', earliest: 'A6', home: 11, window: [9, 14], sits: 'optional', attaches: 'instead', tags: ['Pseudo Stage'], needs: ['water'],
+    gn: 'gn.30', shape: 'Door', earliest: 'A6', home: 11, window: [9, 14], sits: 'side-branch', attaches: 'instead', tags: ['Pseudo Stage'], needs: ['water'],
     level: 'A+0; the grove\'s guards A+1; the Slowking A+1', often: 'run', badge: 'own', dressing: { kanto: 'Off the coast: the Island of Pink Pokémon', elsewhere: 'The Island of Pink Pokémon' },
     note: 'Badge: a pink dot. Five nodes. A side branch from step 11.',
   },

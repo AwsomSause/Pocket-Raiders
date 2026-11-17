@@ -50,6 +50,23 @@ describe('rollSos', () => {
     expect(rollSos({ ...input, battle: { ...battle, sos: undefined }, caller: mew }).kind).toBe('none');
   });
 
+  it("never calls in a watched story duel (Pidgey's Resolve: one bird against one bird)", () => {
+    const calls = (watched: boolean) => {
+      let n = 0;
+      for (let t = 1; t <= 200; t++) {
+        const { foe, battle } = wild('spearow', 4);
+        foe.uid = `w${t}`;
+        foe.hp = 1;
+        battle.turn = 5;
+        if (watched) battle.spectate = { kind: 'duel' };
+        if (rollSos({ battle, caller: foe, maxHp: maxHp(content, foe), scary: false }).kind !== 'none') n += 1;
+      }
+      return n;
+    };
+    expect(calls(false)).toBeGreaterThan(0);
+    expect(calls(true)).toBe(0);
+  });
+
   it('is deterministic per caller and turn, and hurt callers call more often', () => {
     const rate = (hpShare: number) => {
       let calls = 0;

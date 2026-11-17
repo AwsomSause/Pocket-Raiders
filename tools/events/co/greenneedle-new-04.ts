@@ -65,9 +65,8 @@ const road = (m: Master): Json => {
     `**${m.name}:** ${m.line}`,
     'The Tyrogue looks from the master to you, and waits to be told what it did.',
   ), [
-    ch('Take the lesson.', out(m.lesson, teach(m.move, { mark: MARK }), gn('tyrTally', { key: m.style, n: 1 }))),
-    ch('Tell him he\'s right.', out(m.right, gn('tyrTally', { key: m.style, n: 2 }), bond(1))),
-    ch('Stay out of it.', out(m.stay)),
+    // The masters only speak (the doc): the count comes from how it wins its battles, never from what is said here.
+    ch('Leave them to it.', out(m.stay)),
   ]);
 };
 
@@ -124,7 +123,7 @@ export const CHAINS: Json[] = [];
 const base = { gn: 'gn.new.04', shape: 'Stage-Three', earliest: 'A3', level: 'A-1 for its battles', often: 'run' as const, badge: 'own', chain: 'gn.new.04', tags: ['Pokémon'] };
 export const PLACEMENT: Record<string, Placement> = {
   'gn-new-04-door': { ...base, home: 5, window: [4, 6], sits: 'must-see', attaches: 'after', beat: 1, dressing: { kanto: 'The Tyrogue Who Wanted All Three', elsewhere: 'The Tyrogue Who Wanted All Three' }, note: 'Chain inside one stage: it travels with the player to Step 19. Fallback: Step 15 of the previous stage\'s town, one stage later.' },
-  ...Object.fromEntries(MASTERS.map((m, i) => [`gn-new-04-road-${m.n}`, { ...base, home: STEP[i]!, window: [STEP[i]! - 1, STEP[i]! + 1] as [number, number], sits: 'optional' as const, attaches: 'after' as const, beat: 2 + i, note: `One master at the roadside (${m.name}), any lane.` }])),
+  ...Object.fromEntries(MASTERS.map((m, i) => [`gn-new-04-road-${m.n}`, { ...base, home: STEP[i]!, window: [STEP[i]! - 1, STEP[i]! + 1] as [number, number], sits: 'must-see' as const, attaches: 'after' as const, beat: 2 + i, note: `One master at the roadside (${m.name}), any lane: on every node of the step.` }])),
   'gn-new-04-end': { ...base, home: 19, window: [18, 19], sits: 'must-see', attaches: 'after', beat: 5, note: 'The ending: a clear lead evolves it; an even split leaves it a Tyrogue with Three Schools.' },
   'gn-new-04-sign': { gn: 'gn.new.04', shape: 'Single', earliest: 'A4', home: 8, window: [2, 16], sits: 'optional', attaches: 'after', level: 'None', often: 'run', badge: 'own', note: 'Afterstory: the three dojos merge; the sign is repainted every time a master wins an argument.' },
 };

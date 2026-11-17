@@ -32,7 +32,7 @@
        "atMost": 99
       }
      ],
-     "notice": "He looks at you over the kettle. \"You've been taught by a Champion. I can tell by how you stand.\" He won't say which of them was his pupil."
+     "notice": "They look at you over the kettle. \"You've been taught by a Champion. I can tell by how you stand.\" They won't say which of them was their pupil."
     },
     {
      "id": "exhibition",
@@ -44,7 +44,7 @@
        "atMost": 99
       }
      ],
-     "notice": "He watches your hands. \"You watched a League match closely. Someone I taught is in that stadium.\" He won't say who."
+     "notice": "They watch your hands. \"You watched a League match closely. Someone I taught is in that stadium.\" They won't say who."
     },
     {
      "id": "plums",
@@ -56,7 +56,7 @@
        "atMost": 99
       }
      ],
-     "notice": "\"A plum tree,\" he says, to himself, and smiles. \"One of mine, that. I taught them to sit under it.\" He won't say which of them."
+     "notice": "\"A plum tree,\" they say, to nobody, and smile. \"One of mine, that. I taught them to sit under it.\" They won't say which of them."
     }
    ],
    "scene": {
@@ -65,12 +65,12 @@
     "tint": "#6b4a2b",
     "effect": "none"
    },
-   "intro": "*A fire by the road, and the kettle already on. An old man in a coat with a great many pockets, and a stick that isn't for walking.*\n\nBehind him, a grey-muzzled Arcanine lies on its side, one eye open. A Tyranitar sits farther off, scarred and enormous, and perfectly gentle.\n\n**Old Ferris Hawthorne:** \"Sit. You look like someone who's been doing it properly. Properly's tiring.\"",
+   "intro": "*A fire by the road, and the kettle already on. Somebody seventy-something, in a coat with a great many pockets, and a stick that isn't for walking.*\n\nBehind them, a grey-muzzled Arcanine lies on its side, one eye open. A Tyranitar sits farther off, scarred and enormous, and perfectly gentle.\n\n**Old Ferris Hawthorne:** \"Sit. You look like someone who's been doing it properly. Properly's tiring.\"",
    "choices": [
     {
      "label": "Sit.",
      "success": {
-      "text": "You sit. He hands you a cup before you've agreed. His hands shake very slightly, and he pretends not to notice them.",
+      "text": "You sit. They hand you a cup before you've agreed. Their hands shake very slightly, and they pretend not to notice.",
       "effects": [
        {
         "kind": "gn",
@@ -103,7 +103,7 @@
     {
      "label": "Walk on.",
      "success": {
-      "text": "He raises the stick, as if to wave, and decides it's not worth the effort. \"Another time,\" he says. He sounds like he's said it before.",
+      "text": "They raise the stick, as if to wave, and decide it's not worth the effort. \"Another time,\" they say. It sounds like something they've said before.",
       "effects": []
      }
     }
@@ -123,7 +123,7 @@
     "tint": "#6b4a2b",
     "effect": "none"
    },
-   "intro": "**Ferris:** \"My first badge. I cried. Right there on the gym floor, in front of everyone. The Leader pretended not to see.\"\n\n\"That was kind. I didn't know it was kind until I was old enough to do it for someone else.\"\n\nHe points with the stick, at nothing, at everything. **\"Look at their feet, not their face.\"**",
+   "intro": "**Ferris:** \"My first badge. I cried. Right there on the gym floor, in front of everyone. The Leader pretended not to see.\"\n\n\"That was kind. I didn't know it was kind until I was old enough to do it for someone else.\"\n\nThey point with the stick, at nothing, at everything. **\"Look at their feet, not their face.\"**",
    "choices": [
     {
      "label": "Listen.",
@@ -160,7 +160,7 @@
     "tint": "#6b4a2b",
     "effect": "none"
    },
-   "intro": "**Ferris:** \"A storm at sea. That Lanturn was a Chinchou then, no bigger than a loaf of bread.\"\n\n\"Three ships followed its light home. It was frightened the whole way. It did it anyway.\"\n\nHe points with the stick, at nothing, at everything. **\"When you can't see, stop. Don't guess.\"**",
+   "intro": "**Ferris:** \"A storm at sea. That Lanturn was a Chinchou then, no bigger than a loaf of bread.\"\n\n\"Three ships followed its light home. It was frightened the whole way. It did it anyway.\"\n\nThey point with the stick, at nothing, at everything. **\"When you can't see, stop. Don't guess.\"**",
    "choices": [
     {
      "label": "Listen.",
@@ -197,7 +197,7 @@
     "tint": "#6b4a2b",
     "effect": "none"
    },
-   "intro": "**Ferris:** \"That Tyranitar was a Larvitar that bit everybody. Everybody. I let it. I have the scars, look.\"\n\n\"Now children climb it. It lies very still for them. It has never once bitten a child.\"\n\nHe points with the stick, at nothing, at everything. **\"The ones that bite are the ones that stay.\"**",
+   "intro": "**Ferris:** \"That Tyranitar was a Larvitar that bit everybody. Everybody. I let it. I have the scars, look.\"\n\n\"Now children climb it. It lies very still for them. It has never once bitten a child.\"\n\nThey point with the stick, at nothing, at everything. **\"The ones that bite are the ones that stay.\"**",
    "choices": [
     {
      "label": "Listen.",
@@ -234,7 +234,7 @@
     "tint": "#6b4a2b",
     "effect": "none"
    },
-   "intro": "**Ferris:** \"The League. I won on a Tuesday. Nobody came, because it was raining.\"\n\n\"I sat in the empty stands afterward with my team. It was the best day of my life. I mean that.\"\n\nHe points with the stick, at nothing, at everything. **\"Win as if nobody's watching. Lose the same way.\"**",
+   "intro": "**Ferris:** \"The League. I won on a Tuesday. Nobody came, because it was raining.\"\n\n\"I sat in the empty stands afterward with my team. It was the best day of my life. I mean that.\"\n\nThey point with the stick, at nothing, at everything. **\"Win as if nobody's watching. Lose the same way.\"**",
    "choices": [
     {
      "label": "Listen.",
@@ -271,7 +271,7 @@
     "tint": "#6b4a2b",
     "effect": "none"
    },
-   "intro": "**Ferris:** \"I retired the day the Noctowl's eye went. It wasn't that it couldn't. It was that it *would* have.\"\n\n\"It would have gone on, for me, until it dropped. That is exactly why I stopped.\"\n\nHe points with the stick, at nothing, at everything. **\"Know when it's asking you to stop.\"**",
+   "intro": "**Ferris:** \"I retired the day the Noctowl's eye went. It wasn't that it couldn't. It was that it *would* have.\"\n\n\"It would have gone on, for me, until it dropped. That is exactly why I stopped.\"\n\nThey point with the stick, at nothing, at everything. **\"Know when it's asking you to stop.\"**",
    "choices": [
     {
      "label": "Listen.",
@@ -308,7 +308,7 @@
     "tint": "#6b4a2b",
     "effect": "none"
    },
-   "intro": "**Ferris:** \"You'll have noticed the belt. Six clips. Five Balls. I've been looking at that empty clip for sixty years.\"\n\n\"Don't pity it. It's the most honest thing I own.\"\n\nHe points with the stick, at nothing, at everything. **\"Go back for it. Even late.\"**",
+   "intro": "**Ferris:** \"You'll have noticed the belt. Six clips. Five Balls. I've been looking at that empty clip for sixty years.\"\n\n\"Don't pity it. It's the most honest thing I own.\"\n\nThey point with the stick, at nothing, at everything. **\"Go back for it. Even late.\"**",
    "choices": [
     {
      "label": "Listen.",
@@ -345,7 +345,7 @@
     "tint": "#6b4a2b",
     "effect": "none"
    },
-   "intro": "The fire settles. Ferris leans back, and looks at the five Balls on his belt, one at a time, the way you'd count children.\n\n**Ferris:** \"I talk more than I battle. But they've been sitting a while, and they'd like the exercise.\"",
+   "intro": "The fire settles. Ferris leans back, and looks at the five Balls on the belt, one at a time, the way you'd count children.\n\n**Ferris:** \"I talk more than I battle. But they've been sitting a while, and they'd like the exercise.\"",
    "choices": [
     {
      "label": "Would you battle me?",
@@ -356,6 +356,16 @@
        "kind": "trainer",
        "friendly": true,
        "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ferris-battled",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "ferrisBest"
+        },
         {
          "kind": "gn",
          "op": "scene",
@@ -400,7 +410,7 @@
     {
      "label": "Just the tea, thanks.",
      "success": {
-      "text": "**Ferris:** \"Wise. The tea's the better half.\" He pours. It is, in fact, very good tea.",
+      "text": "**Ferris:** \"Wise. The tea's the better half.\" They pour. It is, in fact, very good tea.",
       "effects": [
        {
         "kind": "gn",
@@ -420,7 +430,7 @@
     {
      "label": "What's the empty clip?",
      "success": {
-      "text": "**Ferris:** \"That's a long one. Not tonight.\" He taps the belt twice with the stick, gently, like knocking on a door.",
+      "text": "**Ferris:** \"That's a long one. Not tonight.\" They tap the belt twice with the stick, gently, like knocking on a door.",
       "effects": [
        {
         "kind": "gn",
@@ -428,7 +438,15 @@
         "key": "gn-59-after-2"
        }
       ]
-     }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ferris-last",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
     }
    ]
   },
@@ -446,7 +464,7 @@
     "tint": "#6b4a2b",
     "effect": "none"
    },
-   "intro": "The empty clip swings a little on his belt. He doesn't look at it. Everyone else does.\n\n**Ferris:** \"Well? Battle, or tea?\"",
+   "intro": "The empty clip swings a little on the belt. Ferris doesn't look at it. Everyone else does.\n\n**Ferris:** \"Well? Battle, or tea?\"",
    "choices": [
     {
      "label": "Would you battle me?",
@@ -457,6 +475,16 @@
        "kind": "trainer",
        "friendly": true,
        "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ferris-battled",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "ferrisBest"
+        },
         {
          "kind": "gn",
          "op": "scene",
@@ -501,7 +529,7 @@
     {
      "label": "Just the tea, thanks.",
      "success": {
-      "text": "**Ferris:** \"Wise. The tea's the better half.\" He pours. It is, in fact, very good tea.",
+      "text": "**Ferris:** \"Wise. The tea's the better half.\" They pour. It is, in fact, very good tea.",
       "effects": [
        {
         "kind": "gn",
@@ -534,7 +562,7 @@
     "tint": "#6b4a2b",
     "effect": "none"
    },
-   "intro": "The last of his five goes back into its Ball. Ferris sits down hard, delighted, and out of breath.\n\n**Ferris:** \"*Ha.* That was unfair to you. Now. One of mine will teach one of yours a trick. I won't say which was my favourite.\"",
+   "intro": "The last of the five goes back into its Ball. Ferris sits down hard, delighted, and out of breath.\n\n**Ferris:** \"*Ha.* That was unfair to you. Now. One of mine will teach one of yours a trick. I won't say which was my favourite.\"",
    "choices": [
     {
      "label": "Arcanine: Flare Blitz.",
@@ -617,7 +645,7 @@
     {
      "label": "The other two.",
      "success": {
-      "text": "He grins, and holds the Balls out. \"Greedy. Good.\"",
+      "text": "Ferris grins, and holds the Balls out. \"Greedy. Good.\"",
       "effects": [
        {
         "kind": "gn",
@@ -712,12 +740,12 @@
     "tint": "#6b4a2b",
     "effect": "none"
    },
-   "intro": "**Ferris:** \"Good. You learn nothing winning.\" He says it warmly, and refills your cup. Nothing is taken from you but the afternoon.",
+   "intro": "**Ferris:** \"Good. You learn nothing winning.\" It is said warmly, over a cup being refilled. Nothing is taken from you but the afternoon.",
    "choices": [
     {
      "label": "Drink the tea.",
      "success": {
-      "text": "It is still very good tea. You are still, a little, annoyed. He seems to approve of both.",
+      "text": "It is still very good tea. You are still, a little, annoyed. Ferris seems to approve of both.",
       "effects": [
        {
         "kind": "gn",
@@ -749,12 +777,12 @@
     "tint": "#6b4a2b",
     "effect": "none"
    },
-   "intro": "He puts out the fire with the toe of his boot, and with a little sigh, as if putting out a candle.\n\n**Ferris:** \"Go on. The road's better with company, but it's better still when it's moving.\"",
+   "intro": "Ferris puts out the fire with the toe of a boot, and with a little sigh, as if putting out a candle.\n\n**Ferris:** \"Go on. The road's better with company, but it's better still when it's moving.\"",
    "choices": [
     {
      "label": "Go.",
      "success": {
-      "text": "You look back once. He's already telling the Clefable something, with the stick. It is not listening.",
+      "text": "You look back once. Ferris is already telling the Clefable something, with the stick. It is not listening.",
       "effects": []
      }
     }
@@ -774,12 +802,12 @@
     "tint": "#6b4a2b",
     "effect": "none"
    },
-   "intro": "**Ferris:** \"I'm not going round again. This is my last walk. There's one thing I want before I sit down for good.\"\n\n\"Not a rare one. You'll laugh.\"\n\n*He takes a Ball out of an inside pocket. It's old. The paint's worn off where a thumb would go.*\n\n**Ferris:** \"My first. A {cast:ferris-first}. Caught it with my own two hands, behind my mother's house. I was eight.\"\n\n\"I lost it. Not a battle. A river in flood, and I was showing off. I never caught another of its kind. Couldn't.\"\n\n\"I'd like to. Now. One of them. Not to replace it. Just so the belt's full when I hang it up.\"",
+   "intro": "**Ferris:** \"I'm not going round again. This is my last walk. There's one thing I want before I sit down for good.\"\n\n\"Not a rare one. You'll laugh.\"\n\n*They take a Ball out of an inside pocket. It's old. The paint's worn off where a thumb would go.*\n\n**Ferris:** \"My first. A {cast:ferris-first}. Caught it with my own two hands, behind my mother's house. I was eight.\"\n\n\"I lost it. Not a battle. A river in flood, and I was showing off. I never caught another of its kind. Couldn't.\"\n\n\"I'd like to. Now. One of them. Not to replace it. Just so the belt's full when I hang it up.\"",
    "choices": [
     {
      "label": "Find one with me.",
      "success": {
-      "text": "He's on his feet before you finish. \"Not a rare one,\" he says again, as if you might have forgotten how to laugh. There's a patch of ordinary grass nearby.",
+      "text": "Ferris is standing before you finish. \"Not a rare one,\" they say again, as if you might have forgotten how to laugh. There's a patch of ordinary grass nearby.",
       "effects": [
        {
         "kind": "gn",
@@ -792,7 +820,7 @@
     {
      "label": "I can't. I'm sorry.",
      "success": {
-      "text": "**Ferris:** \"No one's to blame for a long walk.\" He sits back down. His hand goes to the empty clip, and stays there.",
+      "text": "**Ferris:** \"No one's to blame for a long walk.\" They sit back down. One hand goes to the empty clip, and stays there.",
       "effects": []
      }
     }
@@ -816,7 +844,7 @@
     {
      "label": "I'll catch it for you.",
      "success": {
-      "text": "You go into the grass alone. He stays where he is, holding the old Ball in both hands, and doesn't say a word.",
+      "text": "You go into the grass alone. Ferris stays behind, holding the old Ball in both hands, and doesn't say a word.",
       "effects": [],
       "battle": {
        "kind": "wild",
@@ -896,7 +924,7 @@
       "needs": "ok"
      },
      "success": {
-      "text": "You stand behind him, a hand under his elbow. He is so light. He is shaking. He throws. It goes in, first try. Ferris laughs so hard he has to sit down.",
+      "text": "You stand behind them, a hand under one elbow. Ferris is so light. Ferris is shaking. They throw. It goes in, first try. Ferris laughs so hard they have to sit down.",
       "effects": [
        {
         "kind": "gn",
@@ -918,7 +946,7 @@
       ]
      },
      "failure": {
-      "text": "It goes wide, and wider, and in on the third try. Ferris laughs so hard he has to sit down, and you do too.",
+      "text": "It goes wide, and wider, and in on the third try. Ferris laughs so hard they have to sit down, and you do too.",
       "effects": [
        {
         "kind": "gn",
@@ -943,7 +971,7 @@
     {
      "label": "Let it come to you.",
      "success": {
-      "text": "Ferris sits in the grass, and holds out a hand, and waits. A long time. One comes. It sniffs the old Ball. It climbs into his lap. No throw at all.",
+      "text": "Ferris sits in the grass, and holds out a hand, and waits. A long time. One comes. It sniffs the old Ball. It climbs into Ferris's lap. No throw at all.",
       "effects": [
        {
         "kind": "gn",
@@ -986,7 +1014,7 @@
        "atMost": 1
       }
      ],
-     "notice": "He takes the Ball from you in both hands. \"...It's lighter than I remember,\" he says. \"Everything is.\""
+     "notice": "Ferris takes the Ball from you in both hands. \"...It's lighter than I remember,\" they say. \"Everything is.\""
     },
     {
      "id": "lost",
@@ -998,7 +1026,7 @@
        "atMost": 99
       }
      ],
-     "notice": "He looks at you for a while. Somehow, he knows. \"You too. You'll want to go back for it. Even late.\""
+     "notice": "Ferris looks at you for a while. Somehow, they know. \"You too. You'll want to go back for it. Even late.\""
     }
    ],
    "room": true,
@@ -1007,7 +1035,7 @@
     "tint": "#6b4a2b",
     "effect": "none"
    },
-   "intro": "*Ferris clips the Ball on. Six.*\n\n**Ferris:** \"There. Sixty years. That's better.\"\n\nHe takes off his hat, and looks inside it, as if checking for something, and holds it out.\n\n**Ferris:** \"Worn thin at the brim. It'll make anything wearing it grow faster. Go on. I won't be needing it where I'm sitting.\"",
+   "intro": "*Ferris clips the Ball on. Six.*\n\n**Ferris:** \"There. Sixty years. That's better.\"\n\nFerris takes off the hat, and looks inside it, as if checking for something, and holds it out.\n\n**Ferris:** \"Worn thin at the brim. It'll make anything wearing it grow faster. Go on. I won't be needing it where I'm sitting.\"",
    "choices": [
     {
      "label": "Take the hat.",
@@ -1025,7 +1053,7 @@
     {
      "label": "Take the hat. Ask {cast:ferris-best} to come.",
      "success": {
-      "text": "One of his five gets up, stiffly, and looks at you for a long moment. Then at him. He nods. It comes with you, old, and not done yet.",
+      "text": "One of the five gets up, stiffly, and looks at you for a long moment. Then at Ferris. Ferris nods. It comes with you, old, and not done yet.",
       "effects": [
        {
         "kind": "item",
@@ -1051,7 +1079,7 @@
          },
          {
           "kind": "teachMove",
-          "move": "extreme-speed",
+          "move": "inferno",
           "species": "arcanine"
          }
         ]
@@ -1075,7 +1103,7 @@
          },
          {
           "kind": "teachMove",
-          "move": "sky-attack",
+          "move": "razor-wind",
           "species": "noctowl"
          }
         ]
@@ -1099,7 +1127,7 @@
          },
          {
           "kind": "teachMove",
-          "move": "ancient-power",
+          "move": "submission",
           "species": "tyranitar"
          }
         ]
@@ -1123,7 +1151,7 @@
          },
          {
           "kind": "teachMove",
-          "move": "supersonic",
+          "move": "zap-cannon",
           "species": "lanturn"
          }
         ]
@@ -1147,7 +1175,7 @@
          },
          {
           "kind": "teachMove",
-          "move": "metronome",
+          "move": "teeter-dance",
           "species": "clefable"
          }
         ]

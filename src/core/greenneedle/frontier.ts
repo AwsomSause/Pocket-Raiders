@@ -133,11 +133,25 @@ export function brainRecord(run: RunState, b: string, result: number): string {
   const ace = aceOf(run);
   for (const k of Object.keys(run.story.flags)) if (k.startsWith(`ev:cast-brain-ace-${b}:`)) delete run.story.flags[k];
   if (ace) run.story.flags[`ev:cast-brain-ace-${b}:${ace.speciesId}`] = 1;
+  // The last team, by species (the Brain names it next time).
+  for (const k of Object.keys(run.story.flags)) if (k.startsWith(`ev:brain-team-${b}:`)) delete run.story.flags[k];
+  run.party.forEach((m, i) => {
+    run.story.flags[`ev:brain-team-${b}:${i}:${m.speciesId}`] = 1;
+  });
   set(run, `brain-${b}-met`, 1);
   set(run, `brain-${b}-won`, result);
   // The Arena's judge remembers the marks she gave you (out of thirty), to quote them next time.
   if (b === 'arena' && run.battle?.storyEffects.some((s) => s.startsWith(`${TALLY}player:`))) set(run, 'brain-arena-marks', arenaMarks(run.battle, 'player').total);
   return '';
+}
+/** The team you brought to this Brain last time, by species, in the order you brought it. */
+export const lastTeam = (run: Pick<RunState, 'story'>, b: string): string[] =>
+  Object.keys(run.story.flags).filter((k) => k.startsWith(`ev:brain-team-${b}:`)).map((k) => k.slice(`ev:brain-team-${b}:`.length).split(':')).sort((x, y) => Number(x[0]) - Number(y[0])).map((x) => x[1]!);
+/** Text token `{brainteam:<building>}`: "the Arcanine, the Lapras and the Gengar". */
+export function lastTeamToken(content: Content, run: Pick<RunState, 'story'>, b: string): string {
+  const names = lastTeam(run, b).map((id) => `the ${content.species.get(id)?.name ?? id}`);
+  if (names.length === 0) return 'your team';
+  return names.length === 1 ? names[0]! : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
 }
 /** Whether last time's ace is in the party now (the Brain's answer has something to answer). */
 export const aceHere = (run: Pick<RunState, 'story' | 'party'>, b: string): boolean => {

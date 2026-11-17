@@ -1,6 +1,6 @@
 // Greenneedle, gn.new.38 The Long Table (doc GREENNEEDLE_PLACED_2.md lines 634–667). Rules: core/greenneedle/longtable.ts.
 // Build: npm run co:build -- greenneedle-new-38   then   npm run co:gn
-import { ch, item, out, type Json } from '../dsl.ts';
+import { ch, out, type Json } from '../dsl.ts';
 import { chIf, gev, gn, is, not, rm, say, scene, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
@@ -12,7 +12,7 @@ const last = (): Json => ({ kind: 'gn', test: 'lastStage' });
 const seat = (k: number): Json => chIf([is(`lt-slot-${k}`)], `Sit by {lt:name:${k}}.`, out('You pull out the chair. It scrapes, loudly, on the grass. Nobody minds.', gn('ltSit', { n: k }), scene('gn-lt-talk-1')));
 
 export const EVENTS: Json[] = [
-  gev('gn-lt-door', 'The Long Table', field({ stop: 'event', rarity: 'rare', forced: true, requires: [last(), not('lt-done')] }), say(
+  gev('gn-lt-door', 'The Long Table', field({ stop: 'event', rarity: 'rare', forced: true, requires: [last(), not('lt-done')], remembers: [{ id: 'trophy', when: [is('allstar-champion')], notice: 'In the middle of the table, as a centrepiece: the All-Star trophy, every name on it and yours last. Somebody\'s put flowers in it.' }] }), say(
     'The night before the last battle. In a field, a table, far too long, is being laid.',
     '*A place setting for each event that ended well, with a name card. An empty chair for each that didn\'t. At the far end, a small pile of stones: one for everything walked past.*',
     '*Everyone who was helped is carrying a dish.*',
@@ -43,7 +43,7 @@ export const EVENTS: Json[] = [
     '*The table\'s cleared. Whatever was on your plate is in the bag: {lt:plate}.*',
     'The field is only a field again. Somewhere ahead, the last battle is waiting.',
   ), [
-    ch('Pick up your bag, and go.', out('The grass is wet. Your Pokémon walk a little closer than usual. {lt:count} chairs, and one pile of stones, behind you.', item('oran-berry'), gn('ltDawn'))),
+    ch('Pick up your bag, and go.', out('The grass is wet. Your Pokémon walk a little closer than usual. {lt:count} chairs, and one pile of stones, behind you.', gn('ltDawn'))),
   ]),
 ];
 export const REMOVE: string[] = [];

@@ -3,13 +3,20 @@ import { describe, expect, it } from 'vitest';
 import { chainRooms, PSEUDO_CHAINS } from '../../src/core/dungeon/pseudo';
 import type { RunState } from '../../src/core/state';
 import { content } from './helpers';
-import { conditionMet, stopIsHidden } from '../../src/core/events';
+import { chooseEvent, conditionMet, stopIsHidden } from '../../src/core/events';
+import type { Grade } from '../../src/core/interaction/prompt';
 import { runPerks } from '../../src/core/archetypes';
 import { boxCapacity } from '../../src/core/trainerPerks';
 import { createBattle, itemProblem, resolveTurn, type BattleEvent } from '../../src/core/battle/engine';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { Rng, hashSeed } from '../../src/core/rng';
 import { choose, flagOf, gnRun, lose, open, openSide, scene, setFlag, win } from './helpers/gnPlay';
+
+/** Plays the first choice of an open skill-prompt scene with this grade. */
+const playPrompt = (run: RunState, eventId: string, grade: Grade) => {
+  const side = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!.sides.find((x) => x.kind === 'event' && !x.used && x.eventId === eventId)!;
+  return chooseEvent(content, run, side.id, 0, undefined, grade);
+};
 
 describe('gn.06 Bridge Crossing and the Hidden Village', () => {
   const cross = (seed: string, held = 0) => {
@@ -29,10 +36,89 @@ describe('gn.06 Bridge Crossing and the Hidden Village', () => {
     setFlag(run, 'gn-village-starter', starter);
     run = win(choose(run, 'gn-06-bank', 'Get up and keep moving.').run);
     run = choose(run, 'gn-06-narrows', 'Wade across.').run;
-    run = win(choose(run, 'gn-06-path', 'Climb the steps.').run);
-    run = choose(run, 'gn-06-mill', 'Walk into the village.').run;
+    const steps = choose(run, 'gn-06-path', 'Climb the steps.');
+    expect(steps.battle).toBe(false); // the doc only puts wild battles on the Bank
+    run = choose(steps.run, 'gn-06-mill', 'Walk into the village.').run;
     return choose(run, 'gn-06-village', 'Sit, and eat.').run;
   };
+  const PLACE: Record<string, [string, string, string]> = {
+    pool: ['Walk round the village.', 'gn-06-walk', 'Go to the Healing Pool.'], shrine: ['Walk round the village.', 'gn-06-walk', 'Go to the Berry Shrine.'], legend: ['Walk round the village.', 'gn-06-walk', "Sit by Granny Tamsel's fire."],
+    mill: ['See who needs a hand.', 'gn-06-tasks', 'Go to the mill.'], hat: ['See who needs a hand.', 'gn-06-tasks', 'Talk to the small boy.'], food: ['See who needs a hand.', 'gn-06-tasks', 'Go to the long table.'],
+  };
+  /** Walks from the village square to one of its places. */
+  const go = (run: RunState, key: string): RunState => {
+    const [menu, room, label] = PLACE[key]!;
+    return choose(choose(run, 'gn-06-village', menu).run, room, label).run;
+  };
+  const toRope = (run: RunState): RunState => choose(run, 'gn-06-village', 'Go to the rope.').run;
+
+  it('the village is a place you walk round: each spot is your choice, once a visit, in any order', () => {
+    let run = toVillage(9);
+    expect(scene(run, 'gn-06-village').labels).toEqual(['Walk round the village.', 'See who needs a hand.', 'Go to the rope.']);
+    run = go(run, 'legend'); // the legend first, not the pool: the order is the player's
+    run = choose(run, 'gn-06-legend', 'Listen until the fire is low.').run;
+    expect(openSide(run)!.eventId).toBe('gn-06-village');
+    run = choose(run, 'gn-06-village', 'Walk round the village.').run;
+    expect(scene(run, 'gn-06-walk').labels).toEqual(['Go to the Healing Pool.', 'Go to the Berry Shrine.', 'Back to the square.']);
+    run = choose(run, 'gn-06-walk', 'Back to the square.').run;
+    // The rope can be left again; nothing is forced.
+    run = choose(toRope(run), 'gn-06-rope', 'Not yet.').run;
+    expect(openSide(run)!.eventId).toBe('gn-06-village');
+    expect(run.stage!.pseudo?.id).toBe('ps_gn_gorge');
+  });
+
+  it('a Berry is really paid: the Lotad trade and the shared bowl need one, and take it (bag first, then held)', () => {
+    let run = toVillage(9);
+    for (const id of Object.keys(run.inventory)) if (id.endsWith('-berry')) delete run.inventory[id];
+    run.party.forEach((m) => { m.held = {}; });
+    run = go(run, 'food');
+    expect(scene(run, 'gn-06-task-food').labels).toEqual(['Cook something.', 'Just sit down when asked.']);
+    expect(scene(run, 'gn-06-task-lotad').labels).toEqual(['Let it keep it; weave him a new one.']);
+    run.inventory['oran-berry'] = 1;
+    expect(scene(run, 'gn-06-task-food').labels[0]).toBe('Put in a Berry.');
+    const paid = choose(run, 'gn-06-task-food', 'Put in a Berry.').run;
+    expect(paid.inventory['oran-berry'] ?? 0).toBe(0);
+    expect(flagOf(paid, 'village-standing')).toBe(1);
+    // No Berry in the bag: a held one is taken.
+    delete run.inventory['oran-berry'];
+    run.party[0]!.held = { 'sitrus-berry': 1 };
+    const held = choose(run, 'gn-06-task-food', 'Put in a Berry.').run;
+    expect(held.party[0]!.held?.['sitrus-berry'] ?? 0).toBe(0);
+  });
+
+  it('Treecko: the rooftop race is three timed taps; a miss fails the episode', () => {
+    let run = toVillage(3);
+    run = choose(run, 'gn-06-st-treecko', 'Climb up and race.').run;
+    for (const n of [2, 3, 4]) {
+      expect(content.events.get(`gn-06-st-treecko-${n}`)!.choices[0]!.prompt).toEqual({ id: 'roof-leap', needs: 'ok' });
+      const r = playPrompt(run, `gn-06-st-treecko-${n}`, 'ok');
+      expect(r.success).toBe(true);
+      run = r.run;
+    }
+    run = choose(run, 'gn-06-st-treecko-5', 'Plant a cutting.').run;
+    expect(flagOf(run, 'gn-st-trust')).toBe(1);
+    let miss = choose(toVillage(3), 'gn-06-st-treecko', 'Climb up and race.').run;
+    const fell = playPrompt(miss, 'gn-06-st-treecko-2', 'miss');
+    expect(fell.success).toBe(false);
+    miss = win(fell.run);
+    expect(flagOf(miss, 'gn-st-failed')).toBe(1);
+    expect(flagOf(miss, 'gn-st-trust')).toBe(0);
+  });
+
+  it('Grookey matches a four-beat drum pattern; Rowlet tiptoes past three sleepers', () => {
+    expect(content.events.get('gn-06-st-grookey-3')!.choices.map((c) => c.prompt?.id)).toEqual(['stump-drum']);
+    let run = toVillage(8);
+    run = choose(run, 'gn-06-st-grookey', 'Find it a stick.').run;
+    run = choose(run, 'gn-06-st-grookey-2', 'Find a third.').run;
+    expect(flagOf(playPrompt(run, 'gn-06-st-grookey-3', 'good').run, 'gn-st-trust')).toBe(1);
+    expect(flagOf(win(playPrompt(run, 'gn-06-st-grookey-3', 'miss').run), 'gn-st-trust')).toBe(0);
+    let owl = choose(toVillage(7), 'gn-06-st-rowlet', 'Go at midnight.').run;
+    for (const n of [2, 3, 4]) {
+      expect(content.events.get(`gn-06-st-rowlet-${n}`)!.choices[0]!.prompt?.id).toBe('night-tiptoe');
+      owl = playPrompt(owl, `gn-06-st-rowlet-${n}`, 'ok').run;
+    }
+    expect(flagOf(choose(owl, 'gn-06-st-rowlet-5', 'Lift it out.').run, 'gn-st-trust')).toBe(1);
+  });
 
   it('is one check, can not be skipped, and the gorge is five nodes', () => {
     expect(content.events.get('gn-06-bridge')!.choices.map((c) => c.label)).toEqual(['Step onto the bridge.']);
@@ -78,11 +164,12 @@ describe('gn.06 Bridge Crossing and the Hidden Village', () => {
   it('three tasks raise Standing; Sprigatito chooses you when you sit and ignore it, and joins with Sucker Punch', () => {
     let run = toVillage(9);
     const before = run.party.length;
-    run = choose(run, 'gn-06-task-mill', 'Clear it yourself, by hand.').run;
-    run = choose(run, 'gn-06-task-food', 'Just sit down when asked.').run;
+    run = choose(go(run, 'mill'), 'gn-06-task-mill', 'Clear it yourself, by hand.').run;
+    run = choose(go(run, 'food'), 'gn-06-task-food', 'Just sit down when asked.').run;
     expect(flagOf(run, 'village-standing')).toBe(2);
     run = choose(run, 'gn-06-st-sprigatito', 'Sit down, and ignore it.').run;
     expect(flagOf(run, 'gn-st-chose')).toBe(1);
+    run = toRope(run);
     expect(scene(run, 'gn-06-rope').intro).toContain('Something is sitting on your bag');
     run = win(choose(run, 'gn-06-rope', 'Climb.').run); // the join prompt is accepted
     const joined = [...run.party, ...(run.box ?? [])].find((m) => m.speciesId === 'sprigatito');
@@ -101,7 +188,7 @@ describe('gn.06 Bridge Crossing and the Hidden Village', () => {
     run = choose(run, 'gn-06-st-sprigatito', 'Sit down, and ignore it.').run;
     expect(flagOf(run, 'gn-st-trust')).toBe(1);
     expect(flagOf(run, 'gn-st-chose')).toBe(0); // Standing 0
-    const left = win(choose(run, 'gn-06-rope', 'Climb.').run);
+    const left = win(choose(toRope(run), 'gn-06-rope', 'Climb.').run);
     expect(left.party.some((m) => m.speciesId === 'sprigatito')).toBe(false);
   });
 
@@ -109,11 +196,11 @@ describe('gn.06 Bridge Crossing and the Hidden Village', () => {
     let run = toVillage(1);
     expect(flagOf(run, 'gn-st-family')).toBe(0);
     setFlag(run, 'gn-st-family', 1);
-    run = choose(run, 'gn-06-task-mill', 'Clear it yourself, by hand.').run;
-    run = choose(run, 'gn-06-task-food', 'Cook something.').run;
+    run = choose(go(run, 'mill'), 'gn-06-task-mill', 'Clear it yourself, by hand.').run;
+    run = choose(go(run, 'food'), 'gn-06-task-food', 'Cook something.').run;
     setFlag(run, 'gn-st-trust', 1);
-    run = choose(run, 'gn-06-task-hat', 'Help him look.').run;
-    if (openSide(run)?.eventId === 'gn-06-task-lotad') run = choose(run, 'gn-06-task-lotad', 'Trade it a Berry.').run;
+    run = choose(go(run, 'hat'), 'gn-06-task-hat', 'Help him look.').run;
+    if (openSide(run)?.eventId === 'gn-06-task-lotad') run = choose(run, 'gn-06-task-lotad', 'Let it keep it; weave him a new one.').run;
     expect(flagOf(run, 'village-standing')).toBe(3);
     expect(flagOf(run, 'gn-st-chose')).toBe(1);
   });
@@ -320,6 +407,7 @@ describe('gn.08 The Squirtle Squad', () => {
     run = choose(run, 'gn-08-salute', right ? 'Salute back.' : 'Wave.').run;
     run.party.forEach((m) => { m.level = level; });
     run = choose(run, 'gn-08-after', 'It was only the wind.').run;
+    if (fire === "I'll handle it.") run.party.push(createPokemon(content, 'psyduck', 1, 'water'));
     return choose(run, 'gn-08-fire', fire).run;
   };
   const recruit = (run: RunState) => {
@@ -356,17 +444,31 @@ describe('gn.08 The Squirtle Squad', () => {
     expect(itemProblem({ content, battle: fight.run.battle!, party: fight.run.party, inventory: { 'poke-ball': 1 } }, 'poke-ball')).toContain("won't be caught");
   });
 
-  it('the standoff skips the Lesser fights: you talk with Specs, Tank, Smoulder and Star, then the Leader', () => {
+  it('the standoff (Jenny has the Lesser members on the kerb) still has its three fights, each followed by its exchange', () => {
     let run = choose(town(1), 'gn-08-standoff', 'Sit down with the Lesser members first.').run;
-    expect(openSide(run)!.eventId).toBe('gn-08-specs');
+    expect(openSide(run)!.eventId).toBe('gn-08-fight-1');
+    run = win(choose(run, 'gn-08-fight-1', 'Take on the next one.').run);
     run = choose(run, 'gn-08-specs', 'Hand it a spare pair.').run;
-    expect(openSide(run)!.eventId).toBe('gn-08-tank');
+    expect(openSide(run)!.eventId).toBe('gn-08-fight-2');
+    run = win(choose(run, 'gn-08-fight-2', 'Take on the next one.').run);
     run = choose(run, 'gn-08-tank', 'Win.').run;
-    expect(openSide(run)!.eventId).toBe('gn-08-smoulder');
+    expect(openSide(run)!.eventId).toBe('gn-08-fight-3');
+    run = win(choose(run, 'gn-08-fight-3', 'Take on the next one.').run);
     run = choose(run, 'gn-08-smoulder', 'Let your team go where they like.').run;
     run = choose(run, 'gn-08-star', 'Watch all of it. Clap.').run;
     expect(openSide(run)!.eventId).toBe('gn-08-leader');
-    expect(run.battle).toBeFalsy();
+  });
+
+  it('"I\'ll handle it." is only offered with a Water-type: the player\'s Water-types put the fire out', () => {
+    let run = win(choose(toLeader(false), 'gn-08-leader', 'Fight the Leader.').run);
+    run = choose(run, 'gn-08-salute', 'Wave.').run;
+    run.party.forEach((m) => { m.level = 1; });
+    run = choose(run, 'gn-08-after', 'It was only the wind.').run;
+    run.party = run.party.filter((m) => !content.species.get(m.speciesId)!.types.includes('water'));
+    if (run.party.length === 0) run.party.push(createPokemon(content, 'rattata', 5, 'no-water'));
+    expect(scene(run, 'gn-08-fire').labels).toEqual(["You're the fire brigade, aren't you?", 'Smoulder, with me.']);
+    run.party.push(createPokemon(content, 'psyduck', 5, 'water'));
+    expect(scene(run, 'gn-08-fire').labels).toContain("I'll handle it.");
   });
 
   it('each right response is 1 Respect; the Fire-type can only be kept back when there is one', () => {
@@ -479,7 +581,11 @@ describe("gn.09 Bill's Lighthouse", () => {
       run = choose(run, 'gn-09-search', 'Read the next sign.').run;
       const labels = scene(run, `gn-09-clue-${i + 1}`).labels;
       run = choose(run, `gn-09-clue-${i + 1}`, labels[r ? 0 : 1]!).run;
-      if (!r) run = win(choose(run, 'gn-09-walk', 'Push on.').run);
+      if (!r) {
+        const walk = choose(run, 'gn-09-walk', 'Walk back.');
+        expect(walk.battle).toBe(false); // a wrong reading costs a walk, never a fight
+        run = walk.run;
+      }
     }
     return run;
   };
@@ -507,14 +613,16 @@ describe("gn.09 Bill's Lighthouse", () => {
     expect(enter('gn09-in').stage!.pseudo?.id).toBe('ps_gn_lighthouse');
   });
 
-  it('three right readings find the beacon; a wrong one costs a walk (a fight); too many wrong and the night is lost', () => {
+  it('three right readings find the beacon; a wrong one costs a walk (no fight); the night is never lost', () => {
     const found = search(enter('gn09-s1'), [true, false, true, true]);
     expect(flagOf(found, 'bill-clues')).toBe(3);
     expect(scene(found, 'gn-09-search').labels).toEqual(['Follow the beacon.']);
     const lost = search(enter('gn09-s2'), [false, false, false, true, true]);
-    expect(scene(lost, 'gn-09-search').labels).toEqual(['Give up for tonight.']);
-    const gone = choose(lost, 'gn-09-search', 'Give up for tonight.').run;
-    expect(gone.stage!.pseudo).toBeFalsy();
+    expect(scene(lost, 'gn-09-search').labels).toEqual(['Walk back to the first sign.']);
+    let again = choose(lost, 'gn-09-search', 'Walk back to the first sign.').run;
+    expect(again.stage!.pseudo?.id).toBe('ps_gn_lighthouse'); // still on the cape
+    again = search(again, [true, true, true]);
+    expect(scene(again, 'gn-09-search').labels).toEqual(['Follow the beacon.']);
     expect(choose(enter('gn09-s3'), 'gn-09-search', 'Read the next sign.').run.stage!.map.nodes.flatMap((n) => n.sides).some((x) => x.eventId === 'gn-09-clue-1' && !x.used)).toBe(true);
   });
 
@@ -570,7 +678,11 @@ describe("gn.09 Bill's Lighthouse", () => {
     const run = toDawn('gn09-end');
     expect(scene(run, 'gn-09-dawn').labels).toEqual(['Answer it, one more time.', 'Turn the lamp off.', 'Leave it on. Let it keep coming.']);
     for (const [label, key] of [['Answer it, one more time.', 'bill-answered'], ['Turn the lamp off.', 'bill-lamp-off'], ['Leave it on. Let it keep coming.', 'bill-kept-on']] as const) {
+      const moves = run.party.map((m) => m.moves.map((x) => x.id).join());
       const done = choose(run, 'gn-09-dawn', label);
+      // Bill's Egg Notes are information for the whole party: nothing is taught.
+      expect([done.text, ...done.changes].join(' ')).toContain("Bill's Egg Notes");
+      expect(done.run.party.map((m) => m.moves.map((x) => x.id).join())).toEqual(moves);
       const after = win(done.run);
       expect(flagOf(after, key)).toBe(1);
       expect(flagOf(after, 'kanto-bill-pc')).toBe(1);
@@ -699,8 +811,18 @@ describe('gn.10 The S.S. Anne', () => {
     const fed = choose(run, 'gn-10-galley', 'Sit down and eat.');
     expect(fed.run.party[0]!.hp).toBe(maxHp(content, fed.run.party[0]!));
     expect(flagOf(fed.run, 'ssanne-rooms')).toBe(1);
-    const secret = choose(run, 'gn-10-galley', 'Ask what is behind the kitchen.').run;
+    // The Secret Trade Room is its own room, behind the kitchen: the meal and the room can both be had.
+    expect(scene(fed.run, 'gn-10-secret').labels).toEqual(['Go in.', 'Walk past.']);
+    let secret = choose(fed.run, 'gn-10-secret', 'Go in.').run;
+    expect(flagOf(secret, 'ssanne-rooms')).toBe(2);
+    secret = choose(secret, 'gn-10-deck-1', 'Trade with the passengers.').run;
     expect(scene(secret, 'gn-10-trades-1').labels).toContain('The secret trade.');
+    secret = choose(secret, 'gn-10-trades-1', 'The secret trade.').run;
+    // Each one is stranger than the last: the swap strays further every time.
+    const strays = content.events.get('gn-10-secret-1')!.choices.slice(0, 3).map((c) => (c.success.effects[0] as { similar: { bst: number; region?: boolean } }).similar);
+    expect(strays.map((x) => x.bst)).toEqual([80, 200, 200]);
+    expect(strays.map((x) => !!x.region)).toEqual([true, true, false]);
+    expect(scene(secret, 'gn-10-secret-1').labels).toEqual(['Trade.', 'Back.']);
     setFlag(run, 'ssanne-rooms', 4);
     expect(scene(run, 'gn-10-galley').labels).toEqual(['Walk past.']);
   });
@@ -712,7 +834,7 @@ describe('gn.10 The S.S. Anne', () => {
     let r = choose(run, 'gn-10-collector', 'No.').run;
     r = choose(r, 'gn-10-collector-2', 'No.').run;
     r = choose(r, 'gn-10-collector-3', 'No.').run;
-    expect(flagOf(r, 'ssanne-collector-refused')).toBe(1);
+    expect(flagOf(r, 'ssanne-collector-refused')).toBe(3); // three refusals: the auctions read 3 or more
     const size = run.party.length;
     run.party.push(createPokemon(content, 'rattata', 10, 'x'));
     const money = run.money;
@@ -727,6 +849,80 @@ describe('gn.10 The S.S. Anne', () => {
     expect(lost.phase).not.toBe('over');
     expect(lost.stage!.pseudo).toBeFalsy();
     expect(flagOf(lost, 'ssanne-ashore')).toBe(1);
+    // Only the trades not yet taken are lost: the captain's gift still comes.
+    expect(JSON.stringify(lost.pending ?? [])).toContain('Network Machine'); // offered at once, like at the gangway
+    expect(lost.mapEffects?.some((e) => e.itemId === 'captains-compass')).toBe(true);
+    expect(flagOf(lost, 'kanto-ssanne-done')).toBe(1);
+  });
+
+  it('Dobbs-Leary has learned from what beat him: with a Water-type in the party his main-deck team is built against it; his losing line comes after the fight', () => {
+    const room = content.events.get('gn-10-deck-8')!;
+    const types = (i: number) => (room.choices[i]!.success.battle as { types: string[] }).types;
+    expect(types(0)).toEqual(['grass', 'electric']);
+    expect(types(1)).toEqual(['water', 'grass']);
+    let run = board('gn10-learn');
+    for (let k = 1; k <= 7; k++) run = sail(run, k);
+    run.party = [createPokemon(content, 'psyduck', 30, 'w')];
+    expect(scene(run, 'gn-10-deck-8').labels.filter((l) => l === 'Battle.').length).toBe(1);
+    expect(conditionMet(content, run, room.choices[0]!.showIf![1]!)).toBe(true);
+    run.party = [createPokemon(content, 'rattata', 30, 'n')];
+    expect(conditionMet(content, run, room.choices[0]!.showIf![1]!)).toBe(false);
+    expect(conditionMet(content, run, room.choices[1]!.showIf![1]!)).toBe(true);
+    // "Ha! Lost." is said after he has lost, not on the way in.
+    const first = content.events.get('gn-10-deck-4')!.choices[0]!;
+    expect(first.success.text).not.toContain('Ha! Lost');
+    expect(JSON.stringify((first.success.battle as { win: unknown[] }).win)).toContain('Ha! Lost');
+  });
+
+  it('the rival: a greeting by personality, and lines from the run so far (who is ahead, last time, the engine room)', () => {
+    let run = board('gn10-rival');
+    for (let k = 1; k <= 12; k++) run = sail(run, k);
+    run = choose(run, 'gn-10-captain', 'Rub his back.').run;
+    setFlag(run, 'ssanne-engine-opened');
+    const fought = choose(run, 'gn-10-rival', 'Battle.');
+    const said = [fought.text, ...fought.changes].join(' ');
+    expect(said).toMatch(/I'm ahead|You're ahead/);
+    expect(said).toContain('engine room');
+    expect(content.events.get('gn-10-rival')!.remembers.map((v) => v.id)).toEqual(['show', 'plan', 'gentle']);
+  });
+
+  it('the Beauty Contest judges condition and Bond, and pays no money; a Meowth can also come back Galarian', () => {
+    let run = board('gn10-contest');
+    for (let k = 1; k <= 7; k++) run = sail(run, k);
+    run = win(choose(run, 'gn-10-deck-8', 'Battle.').run);
+    const lead = run.party[0]!;
+    lead.friendship = 255;
+    lead.hp = maxHp(content, lead);
+    lead.status = null;
+    const money = run.money;
+    const won = choose(run, 'gn-10-contest', 'Enter your lead.');
+    expect(flagOf(won.run, 'ssanne-contest-won')).toBe(1);
+    expect(won.run.money).toBe(money);
+    lead.hp = 1; // out of condition
+    const second = choose(run, 'gn-10-contest', 'Enter your lead.');
+    expect(flagOf(second.run, 'ssanne-contest-won')).toBe(0);
+    expect(second.run.money).toBe(money);
+    const table = (k: number) => (content.events.get(`gn-10-tradeb-${k}`)!.choices[0]!.success.effects[0] as { table: Record<string, string> }).table;
+    expect(table(1).meowth).toBe('meowth-alola');
+    expect(table(2).meowth).toBe('meowth-galar');
+  });
+
+  it('afterstory: passengers turn up across the region (up to three times, never twice on a stage); the seasick one\'s owner remembers', () => {
+    const run = gnRun('gn10-after');
+    const e = content.events.get('gn-10-passengers')!;
+    const ok = (r: RunState) => e.requires.every((c) => conditionMet(content, r, c));
+    expect(ok(run)).toBe(false);
+    setFlag(run, 'kanto-ssanne-done');
+    expect(ok(run)).toBe(true); // the same region is enough
+    setFlag(run, 'ssanne-seasick');
+    expect(scene(run, 'gn-10-passengers').intro).toContain('It remembers you');
+    open(run, 'gn-10-passengers');
+    const seen = choose(run, 'gn-10-passengers', 'Wave back.').run;
+    expect(ok(seen)).toBe(false); // not again on this stage
+    setFlag(seen, 'ssanne-after-stage', 0);
+    expect(ok(seen)).toBe(true);
+    setFlag(seen, 'ssanne-after', 3);
+    expect(ok(seen)).toBe(false);
   });
 
   it('the captain: any of the three helps; then the rival; then the Network Machine and the Captain\'s Compass', () => {
@@ -748,5 +944,13 @@ describe('gn.10 The S.S. Anne', () => {
     expect(content.events.get('cs-kanto-vermilion-ssanne')!.canon).toBe('cs.kanto.vermilion.ssanne');
     expect(content.events.get('cs-kanto-vermilion-ssanne-n1')!.disabled).toBe(true);
     expect(content.events.get('cs-kanto-vermilion-ssanne-reward')!.disabled).toBe(true);
+  });
+});
+
+describe('gn.08 reads abandoned-mon: the Trubbish heap sets it', () => {
+  it('cleaning the heap (the Trubbish left behind) sets abandoned-mon; no other choice there does', () => {
+    const heap = [...content.events.values()].find((e) => e.choices.some((c) => c.label === 'Clean the heap (two nodes).'))!;
+    const sets = (c: (typeof heap.choices)[number]) => c.success.effects.some((f) => f.kind === 'flag' && f.key === 'abandoned-mon');
+    expect(heap.choices.filter(sets).map((c) => c.label)).toEqual(['Clean the heap (two nodes).']);
   });
 });

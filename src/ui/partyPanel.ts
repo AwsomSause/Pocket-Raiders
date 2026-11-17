@@ -601,7 +601,9 @@ export function partyRow(content: Content, mon: PokemonInstance, problem: string
         box.add(scene.add.text(tagEnd + (scene.textures.exists('ui.party.icon_item') ? 20 : 0), low, scene.textures.exists('ui.party.icon_item') ? `${count} held` : `◆ ${count} held`, textStyle(16, '#8fb8e0')));
       }
       const abilityId = abilityOf(content, mon);
-      const abilityName = abilityId ? content.abilities.get(abilityId)?.name : undefined;
+      const abilityBase = abilityId ? content.abilities.get(abilityId)?.name : undefined;
+      // gn.44: the 1v1 Championship's champion has a small star beside its ability's name.
+      const abilityName = abilityBase && mon.gn?.includes('ability-star') ? `${abilityBase} ★` : abilityBase;
       if (opts.preview) {
         const color = ({ good: '#60d080', fainted: '#d06060', already: '#e0b040', blocked: '#a0a0b0' })[opts.preview.mark];
         const mark = ({ good: '✔', fainted: '✖', already: '●', blocked: '✖' })[opts.preview.mark];

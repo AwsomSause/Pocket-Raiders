@@ -77,7 +77,52 @@ export function factoryTurnEnd(content: Content, battle: BattleState, mine: Poke
  * Poison-types are a step rarer (half as likely) and Water-types a step more common (half as likely again). 1 everywhere else.
  */
 export function factoryWildWeight(content: Content, run: Pick<RunState, 'story' | 'regionIndex'>, themeTypes: readonly string[], speciesId: string): number {
-  if (Number(run.story.flags['ev:factory-shutdown'] ?? 0) !== run.regionIndex + 1 || !themeTypes.includes('water')) return 1;
+  if (!themeTypes.includes('water')) return 1;
   const types = content.species.get(speciesId)?.types ?? [];
+  // The research was sold and the buyer built another factory (the flag holds that region, plus one): the other way round, in that region.
+  if (Number(run.story.flags['ev:factory-second'] ?? 0) === run.regionIndex + 1) return (types.includes('poison') ? 1.5 : 1) * (types.includes('water') ? 0.5 : 1);
+  if (Number(run.story.flags['ev:factory-shutdown'] ?? 0) !== run.regionIndex + 1) return 1;
   return (types.includes('poison') ? 0.5 : 1) * (types.includes('water') ? 1.5 : 1);
 }
+
+/** The Sludge Pits (rule `pits`): one of these tokens is one Pokémon still stuck. Each costs one of your Pokémon its move (it is pulling), and frees one. */
+export const PIT_PULL = 'gn-you-wait:It turns its back on the Grimer, wades in, and hauls one of the stuck Pokémon out of the pit.';
+/** Six Pokémon are stuck in the pits. */
+export const PIT_STUCK = 6;
+
+/** The fight at the pits begins: `pulls` of your Pokémon's moves will go on pulling (at most the six that are stuck, less those already out). */
+export function pitsStart(battle: BattleState, pulls: number, alreadyFreed: number): void {
+  const n = Math.max(0, Math.min(pulls, PIT_STUCK - alreadyFreed));
+  for (let i = 0; i < n; i++) battle.storyEffects.push(PIT_PULL);
+  battle.storyEffects.push(`gn-pits:${n}:${alreadyFreed}`);
+}
+
+/**
+ * "Pull them out." asked in the fight itself (core/greenneedle/ask.ts): each of your Pokémon able to stand pulls one out this turn
+ * (at most three stand in the pit fight, and no more than are still stuck), giving up its move. Returns the line.
+ */
+export function pitsPull(content: Content, run: Pick<RunState, 'party'>, battle: BattleState): string {
+  const at = battle.storyEffects.findIndex((t) => t.startsWith('gn-pits:'));
+  if (at < 0) return '';
+  const [, pulls, before] = battle.storyEffects[at]!.split(':').map(Number);
+  const queued = battle.storyEffects.filter((t) => t === PIT_PULL).length;
+  const stuck = PIT_STUCK - (before ?? 0) - (pulls ?? 0);
+  const hands = Math.min(battle.doubles ? (battle.doubles.trio ? 3 : 2) : 1, run.party.filter((m) => m.hp > 0).length);
+  const n = Math.max(0, Math.min(hands - queued, stuck));
+  for (let i = 0; i < n; i++) battle.storyEffects.push(PIT_PULL);
+  battle.storyEffects[at] = `gn-pits:${(pulls ?? 0) + n}:${before ?? 0}`;
+  return n > 0 ? 'Your team turns from the Grimer and wades into the pit.' : 'There is nobody left to pull out.';
+}
+
+/** How many are out of the pits now: those out before the fight, plus one for every pull made so far. Undefined outside the pits fight. */
+export function pitsFreed(battle: Pick<BattleState, 'storyEffects'>): number | undefined {
+  const note = battle.storyEffects.find((t) => t.startsWith('gn-pits:'));
+  if (!note) return undefined;
+  const [, pulls, before] = note.split(':').map(Number);
+  const left = battle.storyEffects.filter((t) => t === PIT_PULL).length;
+  return Math.min(PIT_STUCK, (before ?? 0) + (pulls ?? 0) - left);
+}
+
+/** Dr. Stroud's research, handed to a professor: this Ball is on sale in every shop for the rest of the run, whatever the badge count. */
+export const PROFESSOR_BALL = 'dream-ball';
+export const professorBall = (story: Pick<RunState, 'story'>['story'] | undefined, itemId: string): boolean => itemId === PROFESSOR_BALL && Number(story?.flags['ev:factory-research-given'] ?? 0) > 0;

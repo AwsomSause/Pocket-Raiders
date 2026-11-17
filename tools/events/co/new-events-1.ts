@@ -170,7 +170,7 @@ const NE4: Json[] = [
     ch('Calm her with Moomoo Milk.', out(P(
       'She drinks the whole bottle, hiccups, and falls asleep standing up. The oldest bull looks at her, and then at the herd, and quietly takes the lead while she grows.',
       'Ximena fills your arms with more Moomoo Milk than you gave. A young Tauros, bored of circles, decides to follow you.',
-    ), lose('moomoo-milk'), calmed(), item('moomoo-milk', 3), join({ species: ['tauros'] })), { requires: [has('moomoo-milk')] }),
+    ), lose('moomoo-milk'), calmed(), flag('crowned-calf-calmed'), item('moomoo-milk', 3), join({ species: ['tauros'] })), { requires: [has('moomoo-milk')] }),
     ch('Battle the herd\'s champion for the lead.', fight('The biggest bull steps out of the ring and lowers his horns. The calf watches with enormous interest.', wild({ species: ['tauros'], lv: 1, win: [flag('herd-led'), quiet('stage', ['normal', 'ground', 'grass']), item('moomoo-milk', 3), join({ species: ['tauros'] })] }))),
   ], [
     variant('little-league', [flagIs('little-league-look-after')], {

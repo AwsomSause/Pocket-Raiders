@@ -1,7 +1,8 @@
 // Greenneedle gn.38, the Overgrown Laboratory: the subject that was made to be strong, and the form each ending gives it.
 // The subject is cast from this region's pseudo-legendary line (a Pokémon of the region with a pseudo-legendary's bulk). It joins
 // carrying the gn mark `lab-subject`; gn op `labForm` then gives it the ending's form:
-//  - `belonging` (helped it leave): Belonging, +10% to every stat in this region and +5% everywhere after (5% for the run, 5% that
+//  - `belonging` (helped it leave): a regional variant. It takes a second type from the land outside the door (the stage's theme:
+//    `shiftType`, for good) and has Belonging, +10% to every stat in this region and +5% everywhere after (5% for the run, 5% that
 //    ends with the region: catalog overhaul `eventBoostsRegion`).
 //  - `specification` (the work finished): Specification, its highest stat 20% higher, its lowest 10% lower (pokemon.ts calcStats).
 //  - `self-made` (you stayed until it decided): it evolves by itself, and has Self-Made (battle/engine.ts).
@@ -39,9 +40,15 @@ export function labForm(content: Content, run: RunState, form: string, region: s
       mon.eventBoosts = { ...mon.eventBoosts, [s]: (mon.eventBoosts?.[s] ?? 0) + 10 };
       mon.eventBoostsRegion = { ...mon.eventBoostsRegion, [s]: (mon.eventBoostsRegion?.[s] ?? 0) + 5 };
     }
+    // A regional variant: its second type becomes one the land outside has (the stage the laboratory stands in), for good.
+    const own = getSpecies(content, mon.speciesId).types;
+    const land = content.themes.get((run.pseudoParent ?? run.stage)?.themeId ?? '')?.types ?? [];
+    const type = land.find((t) => !own.includes(t));
+    if (type) mon.shiftType = type;
     mon.marks = [...(mon.marks ?? []), `took its form in ${REGION_NAME(region)}`].slice(-8);
     mon.hp = maxHp(content, mon);
-    return `${getSpecies(content, mon.speciesId).name} belongs to ${REGION_NAME(region)} now, as if it always had.`;
+    const name = getSpecies(content, mon.speciesId).name;
+    return type ? `${name} belongs to ${REGION_NAME(region)} now, as if it always had: a ${REGION_NAME(region)} form, part ${type[0]!.toUpperCase()}${type.slice(1)}, like the land outside.` : `${name} belongs to ${REGION_NAME(region)} now, as if it always had.`;
   }
   if (form === 'specification') {
     mon.fixedAbility = 'specification';
