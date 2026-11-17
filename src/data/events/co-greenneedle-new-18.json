@@ -16,10 +16,9 @@
    "forced": true,
    "requires": [
     {
-     "kind": "flag",
-     "key": "gn18-done",
-     "atLeast": 0,
-     "atMost": 0
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "gn18-region"
     }
    ],
    "scene": {
@@ -63,6 +62,12 @@
        },
        {
         "kind": "gn",
+        "op": "setFlag",
+        "key": "gn18-parcel-done",
+        "n": 0
+       },
+       {
+        "kind": "gn",
         "op": "stampRegion",
         "key": "gn18-region"
        },
@@ -72,13 +77,6 @@
         "key": "gn-new-18-warm"
        }
       ]
-     }
-    },
-    {
-     "label": "Walk on.",
-     "success": {
-      "text": "Through the glass, the Chansey watches you go. The phone rings. It answers with its other hand.",
-      "effects": []
      }
     }
    ]
@@ -1626,11 +1624,6 @@
         "kind": "item",
         "id": "potion",
         "count": 2
-       },
-       {
-        "kind": "friendship",
-        "amount": 5,
-        "who": "lead"
        },
        {
         "kind": "moment",

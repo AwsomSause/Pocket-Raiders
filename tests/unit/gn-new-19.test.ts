@@ -60,8 +60,10 @@ describe('gn.new.19 The Snowbound Village', () => {
     run = r.run;
     expect([...run.party, ...run.box, ...run.pending.flatMap((p) => (p.kind === 'caught' ? [p.mon] : []))].some((m) => m.speciesId === 'delibird')).toBe(true);
     expect(flagOf(run, 'sv-done')).toBe(1);
-    expect(relicIds(run)).toContain('sv-warm-clothes');
-    expect(relicIds(run)).not.toContain('sv-herd-bell');
+    // Warm Clothes: no hail or snow damage for the rest of this region (a region stamp, not a run-long relic). No bell below five.
+    expect(flagOf(run, 'sv-warm-region')).toBe(run.regionIndex + 1);
+    expect(relicIds(run)).toEqual([]);
+    expect(run.party.some((m) => (m.held?.['herd-bell'] ?? 0) > 0)).toBe(false);
   });
   it('four crates in the wind: a Pokémon holding the crate keeps all four; the ropes lose one', () => {
     const held = ride(loaded('t19-w1', 4), { hold: true });
@@ -76,7 +78,8 @@ describe('gn.new.19 The Snowbound Village', () => {
     run = choose(run, 'gn-n19-arrive', 'Hand over the crates.').run;
     expect(scene(run, 'gn-n19-end-5').intro).toMatch(/Five\. Five houses/);
     run = choose(run, 'gn-n19-end-5', 'Take the village\'s thanks.').run;
-    expect(relicIds(run)).toEqual(expect.arrayContaining(['sv-warm-clothes', 'sv-herd-bell']));
+    expect(flagOf(run, 'sv-warm-region')).toBe(run.regionIndex + 1);
+    expect(run.party.some((m) => (m.held?.['herd-bell'] ?? 0) > 0)).toBe(true); // the lead Stantler's bell, a held item
     expect(run.stage!.map.nodes.some((n) => n.sides.some((s) => s.eventId === 'gn-n19-grown'))).toBe(false);
   });
   it('the brake needs a Rock- or Ground-type; skipping it is a fight', () => {

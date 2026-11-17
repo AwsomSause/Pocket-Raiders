@@ -526,5 +526,26 @@
                                                                 }
                                                 ]
                                 }
+                },
+                {
+                                "id": "herd-bell",
+                                "name": "Herd Bell",
+                                "family": "Battle held items",
+                                "description": "The lead Stantler's bell. When the holder leaves the field, allies switching in take no damage from entry hazards until the end of the next turn",
+                                "rarity": "rare",
+                                "stacksOn": "pokemon",
+                                "max": 1,
+                                "how": "held",
+                                "icon": "soothe-bell",
+                                "status": "supported",
+                                "giftOnly": true,
+                                "effect": {
+                                                "kind": "held",
+                                                "hooks": [
+                                                                {
+                                                                                "hook": "herdBell"
+                                                                }
+                                                ]
+                                }
                 }
 ]

@@ -5775,7 +5775,7 @@
    "kanto": "The Ones You Left",
    "elsewhere": "The Ones You Left"
   },
-  "note": "Needs Pokémon left earlier in THIS run (released catches, the Nuzlocke fallen, boxed ones; run memory only, no earlier runs). Once per run. Step 13, fallback step 17. The other Pokémon decide by a seeded shuffle: one walks into the woods, the rest split between a passing trainer and the camp (run flag `left:fates`, read by gn.61). Boxed ones keep their nickname.",
+  "note": "Needs Pokémon left earlier in THIS run (released catches, the Nuzlocke fallen, boxed ones; run memory only, no earlier runs). Once per run. Step 13, fallback step 17. The others decide by a seeded shuffle: of the released and the fallen, one walks into the woods and the rest split between a passing trainer and the camp; a boxed one is still yours and waits (run flag `left:fates`). The script is written from the count (one to six Balls). Boxed ones keep their nickname.",
   "kinds": [
    "Reunion"
   ],
@@ -5813,9 +5813,9 @@
   "sits": "optional",
   "attaches": "town",
   "level": "None",
-  "often": "run",
+  "often": "region",
   "badge": "own",
-  "note": "Afterstory: every later arcade in the same run (first place THX, your initials second; or HELP, still, if sold).",
+  "note": "Afterstory: every later arcade in the same run, one a region (first place THX, your initials second; or HELP, still, if sold).",
   "kinds": [
    "Miniature Episode"
   ],
@@ -5854,15 +5854,15 @@
   "earliest": "A2",
   "home": 5,
   "window": [
-   3,
-   8
+   5,
+   15
   ],
   "sits": "must-see",
   "attaches": "before",
   "level": "no battles",
   "often": "run",
   "badge": "none",
-  "note": "Home step 5; the fallback is step 15 (the window's reach). Once per run: well-done. Afterstory for the Final Reunion: it reads well-done (the well is in use, a pebble on the rim).",
+  "note": "Home step 5; the fallback is step 15 (the window's end). Once per run: well-done. Afterstory for the Final Reunion: it reads well-done (the well is in use, a pebble on the rim).",
   "kinds": [
    "Miniature Episode",
    "Companion Story"
@@ -5978,7 +5978,7 @@
   "earliest": "A8",
   "home": 11,
   "window": [
-   9,
+   11,
    16
   ],
   "sits": "optional",
@@ -6009,9 +6009,6 @@
   ],
   "sits": "optional",
   "attaches": "town",
-  "stages": [
-   5
-  ],
   "level": "None",
   "often": "run",
   "badge": "own",

@@ -3,7 +3,7 @@
 // An unplugged arcade machine that is still running. The Porygon is the character in three games (a maze, a block-stacker, a
 // one-screen shooter). Rushed inputs make it panic; time lets it find shortcuts; a failed game ends with it pushing the last life back.
 import { ch, out, type Json } from '../dsl.ts';
-import { gev, is, laterStage, moment, not, rm, say, setTo, stampStage, scene, type Placement } from './_gn.ts';
+import { gev, is, laterStage, moment, not, notThisRegion, rm, say, setTo, stampRegion, stampStage, scene, type Placement } from './_gn.ts';
 import { $, item, join } from '../dsl.ts';
 
 export { CATEGORY } from './_gn.ts';
@@ -64,13 +64,13 @@ const EVENTS: Json[] = [
     '**Mr. Vandersloot:** "Well. I\'ve had that thing a decade. Nobody mentioned it did that."',
   ), [ch('Say hello.', out('It is a Porygon. It looks at its own feet, then at yours, and decides it is going with you. On the cabinet, the high score reads HELP. Then it reads nothing at all.',
     { ...join({ species: ['porygon'] }), asIs: true, ability: 'debug', mark: 'arcade-porygon' }, setTo('arcade-cleared', 1), moment('Cleared three games, and a Porygon stepped out of the screen.', 85)))]),
-  gev('gn-new-14-board', 'The Arcade Cabinet: The Score Table', arcade({ stop: 'event', rarity: 'uncommon', requires: [laterStage('arcade-stage'), not('arcade-board')], remembers: [
+  gev('gn-new-14-board', 'The Arcade Cabinet: The Score Table', arcade({ stop: 'event', rarity: 'uncommon', requires: [laterStage('arcade-stage'), notThisRegion('arcade-board-region')], remembers: [
     { id: 'sold', when: [is('arcade-sold')], notice: 'The high-score table reads HELP. Still. It is exactly as you remember it, and it is looking at you.' },
     { id: 'cleared', when: [is('arcade-cleared')], notice: 'First place: THX. Second place: your initials. A small blocky bird is on the cabinet, in the corner of the screen, waving.' },
   ] }), say(
     '*Another arcade, in another back room. A row of machines, humming, with a score table glowing on each of them.*',
     'You read the nearest table before you can stop yourself.',
-  ), [ch('Read it.', out('You stand there a moment, and then you go on.', setTo('arcade-board', 1)))]),
+  ), [ch('Read it.', out('You stand there a moment, and then you go on.', setTo('arcade-board', 1), stampRegion('arcade-board-region')))]),
 ];
 const EVENTS_LIST = EVENTS;
 export { EVENTS_LIST as EVENTS };
@@ -82,6 +82,6 @@ export const PLACEMENT: Record<string, Placement> = {
     level: 'No battles', often: 'run', badge: 'own',
     note: 'Badge: an arcade cabinet. In the back of a shop (a Town stop once towns exist); fallback step 5 of the next stage. Once a run. The three games are choices (mash the buttons panics, time finds shortcuts); the Porygon joins with Debug when all three are cleared. Sold as is: arcade-sold.',
   },
-  'gn-new-14-board': { gn: 'gn.new.14', shape: 'Single', earliest: 'A4', home: 5, window: [2, 10], sits: 'optional', attaches: 'town', tags: ['Miniature Episode'], level: 'None', often: 'run', badge: 'own', note: 'Afterstory: every later arcade in the same run (first place THX, your initials second; or HELP, still, if sold).' },
+  'gn-new-14-board': { gn: 'gn.new.14', shape: 'Single', earliest: 'A4', home: 5, window: [2, 10], sits: 'optional', attaches: 'town', tags: ['Miniature Episode'], level: 'None', often: 'region', badge: 'own', note: 'Afterstory: every later arcade in the same run, one a region (first place THX, your initials second; or HELP, still, if sold).' },
 };
 export const CHAINS: Json[] = [];

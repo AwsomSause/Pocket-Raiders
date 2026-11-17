@@ -493,10 +493,9 @@
      "key": "arcade-stage"
     },
     {
-     "kind": "flag",
-     "key": "arcade-board",
-     "atLeast": 0,
-     "atMost": 0
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "arcade-board-region"
     }
    ],
    "remembers": [
@@ -545,6 +544,11 @@
         "op": "setFlag",
         "key": "arcade-board",
         "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "arcade-board-region"
        }
       ]
      }

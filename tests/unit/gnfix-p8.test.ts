@@ -403,3 +403,111 @@ describe('gn.new.13 The Ones You Left (fixes): the script fits the Pokémon left
     expect(morning).not.toMatch(/woods|passing trainer/);
   });
 });
+
+describe('gn.new.14 The Arcade Cabinet (fixes): the score table', () => {
+  it('shows again in every later region, not once a run', () => {
+    const board = content.events.get('gn-new-14-board')!;
+    const run = atStage('arcadefix', 5);
+    setFlag(run, 'arcade-stage', 2); setFlag(run, 'arcade-cleared', 1);
+    const fits = (): boolean => board.requires.every((c) => conditionMet(content, run, c));
+    expect(fits()).toBe(true);
+    open(run, 'gn-new-14-board');
+    const after = choose(run, 'gn-new-14-board', 'Read it.').run;
+    expect(board.requires.every((c) => conditionMet(content, after, c))).toBe(false); // read in this region
+    after.regionIndex += 1;
+    expect(board.requires.every((c) => conditionMet(content, after, c))).toBe(true); // the next region's arcade
+    expect(placement('gn-new-14-board').often).toBe('region');
+  });
+});
+
+describe('gn.new.16 The Thing in the Well (fixes)', () => {
+  it('"Leave it its bucket.": the best pebble comes up, and the Feebas stays in its well', () => {
+    const r = choose(at('wellfix', 'gn-new-16-choose', { 'well-seen': 1 }), 'gn-new-16-choose', 'Leave it its bucket.');
+    expect(joined(r.run, 'feebas')).toBeUndefined();
+    expect(said(r)).toMatch(/Smooth Rock/); // a held item goes straight onto a Pokémon
+    expect(r.run.party.some((m) => (m.held?.['smooth-rock'] ?? 0) > 0)).toBe(true);
+    expect(flagOf(r.run, 'well-left')).toBe(1);
+    expect(flagOf(r.run, 'well-lifted')).toBe(0);
+    const lifted = choose(at('wellfix-lift', 'gn-new-16-choose', { 'well-seen': 1 }), 'gn-new-16-choose', 'Lift it out.');
+    expect(joined(lifted.run, 'feebas')?.fixedAbility).toBe('unlooked-for');
+    expect(placement('gn-new-16-well').window).toEqual([5, 15]);
+  });
+});
+
+describe('gn.new.18 The Day the Center Closed (fixes)', () => {
+  it('once per region: taken in one region, it is offered again in the next (and not twice in the same one)', () => {
+    const door = content.events.get('gn-new-18-door')!;
+    expect(door.choices.map((c) => c.label)).toEqual(['Knock on the glass.']);
+    const run = at('centerfix', 'gn-new-18-door');
+    const fits = (r: RunState): boolean => door.requires.every((c) => conditionMet(content, r, c));
+    expect(fits(run)).toBe(true);
+    const after = choose(run, 'gn-new-18-door', 'Knock on the glass.').run;
+    expect(fits(after)).toBe(false);
+    after.regionIndex += 1;
+    expect(fits(after)).toBe(true);
+    expect(placement('gn-new-18-door').often).toBe('region');
+  });
+  it('the parcel is bandages and a drawing: no Bond', () => {
+    expect(JSON.stringify(content.events.get('gn-new-18-parcel'))).not.toMatch(/friendship/);
+  });
+});
+
+describe('gn.new.19 The Snowbound Village (fixes)', () => {
+  it('the grown child is met at step 5 of any stage, not only in-region stage 5', () => {
+    const p = placement('gn-n19-grown');
+    expect(p.stages).toEqual([]);
+    expect([p.home, p.attaches]).toEqual([5, 'town']);
+    expect(placement('gn-n19-door').window).toEqual([11, 16]);
+  });
+  const hailTurn = (warm: boolean): { mine: number; theirs: number } => {
+    const me = mon('rattata', 50, 'p-hail', 'splash');
+    const foe = mon('pidgey', 50, 'e-hail', 'splash');
+    const ctx = fightCtx([me], [foe], 'warm-clothes');
+    ctx.battle.weather = { id: 'hail', turns: 5 } as never;
+    if (warm) ctx.battle.storyEffects.push('warm-clothes');
+    const [a, b] = [me.hp, foe.hp];
+    resolveTurn(ctx, { kind: 'move', index: 0 });
+    return { mine: a - me.hp, theirs: b - foe.hp };
+  };
+  it('Warm Clothes: the party takes no hail damage; the foe still does; without them hail hurts', () => {
+    expect(hailTurn(false).mine).toBeGreaterThan(0);
+    const warm = hailTurn(true);
+    expect(warm.mine).toBe(0);
+    expect(warm.theirs).toBeGreaterThan(0);
+  });
+  it('Warm Clothes last for the region the village is in, and no longer', async () => {
+    const { gnBattleStart } = await import('../../src/core/greenneedle');
+    const start = (stamp: number): string[] => {
+      const run = gnRun('warmfix');
+      setFlag(run, 'sv-warm-region', stamp);
+      const lead = run.party[0]!;
+      run.battle = createBattle('wild', [mon('pidgey', 5, 'e-wr', 'splash')], 0, lead.uid);
+      gnBattleStart(content, run);
+      return run.battle.storyEffects;
+    };
+    expect(start(1)).toContain('warm-clothes'); // this region
+    expect(start(2)).not.toContain('warm-clothes'); // another region's stamp
+    expect(start(0)).not.toContain('warm-clothes');
+  });
+  const herd = (bell: boolean) => {
+    const holder = mon('stantler', 50, 'p-bell', 'splash');
+    if (bell) holder.held = { 'herd-bell': 1 };
+    const ally = mon('rattata', 50, 'p-ally', 'splash');
+    const third = mon('pidgey', 50, 'p-third', 'splash');
+    const ctx = fightCtx([holder, ally, third], [mon('snorlax', 50, 'e-bell', 'splash')], 'herd-bell');
+    ctx.battle.sideEffects.player.stealthRock = true;
+    const swap = (i: number, m: PokemonInstance): number => { const before = m.hp; resolveTurn(ctx, { kind: 'switch', partyIndex: i }); return before - m.hp; };
+    return { ctx, holder, ally, third, swap };
+  };
+  it('Herd Bell: the ally switching in as the holder leaves takes no hazard damage, nor the one the turn after; later ones do', () => {
+    const b = herd(true);
+    expect(b.swap(1, b.ally)).toBe(0); // the holder leaves: the bell rings
+    expect(b.swap(2, b.third)).toBe(0); // the turn after
+    expect(b.swap(1, b.ally)).toBeGreaterThan(0); // two turns on: the bell has stopped
+    expect(content.catalog.get('herd-bell')!.giftOnly).toBe(true);
+  });
+  it('without the bell the hazards hurt every switch-in', () => {
+    const b = herd(false);
+    expect(b.swap(1, b.ally)).toBeGreaterThan(0);
+  });
+});
