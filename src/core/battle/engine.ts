@@ -402,6 +402,8 @@ export interface BattleContext {
   galar?: 'gym' | 'tournament' | 'champion';
   /** Region number of this battle: picks which potion enemy trainers drink (balance trainerAi.healTiers). */
   foeHealTier?: number;
+  /** Difficulty's enemyHeal multiplier on the potion's share of max HP (default 1). */
+  foeHealMult?: number;
   /** Set during a double battle's turn (battle/doubles.ts). */
   doublesTurn?: DoublesTurn;
   /** S7 Impossible Feats: the Story Run partner and the Feats it may fire this turn (core/story2/feats.ts). `fired` is set by the engine. */
@@ -5973,7 +5975,7 @@ function trainerAiTurn(ctx: BattleContext, enemy: Combatant, events: BattleEvent
   const roomLeft = battle.enemyItemsUsed < cfg.maxHealItems;
   if (roomLeft && battle.enemyItemsUsed < kit && mon.hp / max < cfg.healBelow) {
     const tier = cfg.healTiers[Math.min(ctx.foeHealTier ?? 0, cfg.healTiers.length - 1)]!;
-    const gain = Math.min(max - mon.hp, Math.floor(max * tier.fraction));
+    const gain = Math.min(max - mon.hp, Math.floor(max * Math.min(1, tier.fraction * (ctx.foeHealMult ?? 1))));
     if (gain > 0) {
       battle.enemyItemsUsed += 1;
       mon.hp += gain;

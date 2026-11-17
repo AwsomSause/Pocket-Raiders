@@ -309,7 +309,7 @@ import { roleOrder } from './battle/opponentAi';
 import { beginRivalBrain } from './rivals/brainSetup';
 import { friendFinaleAssist, friendStageBeat, rivalBattleLines } from './rivals/live';
 import { markStepIn } from './rivals/presence';
-import { winHealFraction, openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, triplesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
+import { winHealFraction, openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, triplesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsTypeLock, getMode, getDifficulty, RUN_RULES, type RulesChoice } from './rules';
 import { shopTierAllowed } from './rarity';
 import { campMoment, campQuirkLine } from './overhaul/quirkTimes';
 import { noteBountyKills } from './bounties';
@@ -3222,6 +3222,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     lastStand: () => galarLastStandMon(content, run),
     galar: galarScope(content, run) ?? undefined,
     foeHealTier: run.regionIndex,
+    foeHealMult: getDifficulty(run.rules.difficultyId)?.enemyHeal ?? 1,
     starterUid: run.log.starterUid,
     attributes,
     disabledMechanics: run.disabledMechanics,
