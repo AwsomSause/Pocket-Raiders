@@ -51,6 +51,18 @@ export function crystalOp(content: Content, run: RunState, op: 'crystal' | 'crys
     setFlag(run, 'crystal-bag', bagCount(run));
     return `You set the ${colour} crystal down on the cave floor.`;
   }
+  if (colour === 'green' && type === 'use') {
+    // A Green crystal that was carried, used later: it leaves the bag only if the Pokémon can change.
+    if (!picked || flagOf(run, 'crystal-green') <= 0) return '';
+    const sp = getSpecies(content, picked.speciesId);
+    const to = sp.evolutions.map((e) => e.to).find((id) => content.species.has(id));
+    if (!to) return `${sp.name} holds the crystal, and nothing happens. It goes back in the bag.`;
+    evolve(content, picked, to);
+    setFlag(run, 'crystal-green', flagOf(run, 'crystal-green') - 1);
+    setFlag(run, 'crystal-bag', bagCount(run));
+    setFlag(run, 'crystal-green-used', 1);
+    return `${sp.name} evolved into ${getSpecies(content, to).name}! The crystal goes dark.`;
+  }
   if (bagCount(run) >= BAG_MAX) return 'Your bag is full. Six is all it holds.';
   if (colour === 'green' && picked) {
     // Green: the evolution is for good, and the crystal is used up.
@@ -98,6 +110,32 @@ export function golemStart(run: RunState, battle: BattleState): void {
   battle.enemyVolatile.typeList = ['rock', GOLEM_TYPE[colour]];
   // Red: burns on contact.
   if (colour === 'red') golem.fixedAbility = 'flame-body';
+}
+
+/** What the Golem shows when it reads the bag. */
+const GOLEM_READ: Record<Colour | 'none', string> = {
+  red: '*Red light runs through it like heat through iron. It is Rock and Fire now.*',
+  blue: '*Blue light pools in its joints. It is Rock and Water now, and the water keeps changing its mind.*',
+  green: '*Green light, and moss, and something growing. It is Rock and Grass now. Cracks close as you watch.*',
+  white: '*White light, everywhere at once. It is Rock and Fairy now. It sees exactly where you are.*',
+  black: "*It goes dark. Rock and Dark. Your Pokémon don't want to go near it.*",
+  none: '*Nothing in your bag wins. It stays plain grey rock, and seems almost disappointed.*',
+};
+
+/** A new phase of the one fight: the Golem reads the bag again and takes the type of the colour carried most now. Returns the line. */
+export function golemRead(run: RunState, battle: BattleState): string {
+  const most = mostCarried(run);
+  setFlag(run, 'crystal-most', most);
+  const colour = COLOURS[most - 1];
+  const golem = battle.enemyTeam[0];
+  battle.storyEffects = battle.storyEffects.filter((t) => !t.startsWith('golem:'));
+  battle.storyEffects.push(`golem:${colour ?? 'none'}`);
+  battle.enemyVolatile.typeList = colour ? ['rock', GOLEM_TYPE[colour]] : ['rock'];
+  if (golem) {
+    if (colour === 'red') golem.fixedAbility = 'flame-body';
+    else if (golem.fixedAbility === 'flame-body') delete golem.fixedAbility;
+  }
+  return GOLEM_READ[colour ?? 'none'];
 }
 
 /** The colour the Golem took this phase, or null. */

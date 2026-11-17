@@ -17,18 +17,22 @@ import { regionGifts, regionInterest } from './flagPerks';
 import { noteBattle } from './expansion/fieldNotes';
 import { settleSky } from './sky/story';
 import { endOwnWatch, finishSpectate, ownWatching } from './sky/spectate';
+import { exWatchEnd, exWatching } from './greenneedle/exhibition';
 import { settleRivalRecruits } from './rivals/eventRecruit';
 import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
-import { FOE_WAITS, gnAfterTurn, gnShape } from './greenneedle';
+import { FOE_WAITS, gnAfterTurn, gnShape, gnShapeDouble } from './greenneedle';
+import { answerAsk } from './greenneedle/ask';
 import { bidoofPeace } from './greenneedle/bidoof';
 import { aceBows } from './greenneedle/missingAce';
 import { ofAssist, ofGuestLeaves, ofShadow, recordRelease } from './greenneedle/oldfriend';
+import { prisonWouldOpen } from './greenneedle/prison';
 import { ferrisBossMark, ferrisCatch, ferrisFree, ferrisFreeEnd } from './greenneedle/ferris';
 import { noteFinalLoss } from './co/roadHome';
 import { followedRest, followedRival, followedRoad, followedShop, followedStage, followedStep, longJourney } from './greenneedle/followed';
 import { ballBattle, ballRest } from './greenneedle/ball';
+import { FIFTH_HIT, FIFTH_WAITED } from './greenneedle/fifth';
 import { ridgeCatch } from './greenneedle/ridge';
 import { noteLeft } from './greenneedle/left';
 import { unflinchingStart } from './greenneedle/daycare';
@@ -41,20 +45,20 @@ import { duelAfterstory, duelistMark } from './greenneedle/duelist';
 import { tyrogueTurn } from './greenneedle/tyrogue';
 import { mirrorRecord } from './greenneedle/mirror';
 import { eeveeHealed, eeveeTurn } from './greenneedle/eevee';
-import { draftRecord } from './greenneedle/draft';
-import { exRipple } from './greenneedle/exhibition';
-import { snorlaxForgives, snorlaxGym, snorlaxRest } from './greenneedle/snorlax';
-import { farFromHome, smuggleRest } from './greenneedle/smuggling';
+import { draftGoesHome, draftRecord } from './greenneedle/draft';
+import { exPoster, exRipple } from './greenneedle/exhibition';
+import { snorlaxForgives, snorlaxGym, snorlaxRest, snorlaxAsk } from './greenneedle/snorlax';
+import { farFromHome, smuggleRest, smuggleStage } from './greenneedle/smuggling';
 import { standingWelcome } from './greenneedle/welcome';
 import { ranchRest } from './greenneedle/ranch';
 import { pinLine } from './greenneedle/weather';
-import { CENTER_SHUT, SHOP_SHUT, sgCenterLine, sgCenterShut, sgHealShare, sgPriceFactor, sgRest } from './greenneedle/citysiege';
-import { taRoomsAfraid } from './greenneedle/teamauction';
+import { CENTER_SHUT, SHOP_SHUT, sgCenterLine, sgCenterShut, sgHealShare, sgPriceFactor, sgRest, sgStage } from './greenneedle/citysiege';
+import { taRoomsAfraid, taShopLine } from './greenneedle/teamauction';
 import { endSwap, noteSwapFaint, swapRunning } from './co/swap';
 import { BRAVE_COUNT, BRAVE_HIT, MOMENT_EVOLVE_AFTER } from './battle/pokemonMoments';
 import { revivalFee } from './battle/revivalStatus';
 import { bondFriendship } from './co/who';
-import { applyFlightNorthReturn, flightNorthReady, markDecided, markOffered, refusesToLeave, returnedBug } from './instrumentality/flightNorth';
+import { applyFlightNorthReturn, flightNorthReady, markDecided, markOffered, refusesToLeave, returnedBug, refillNorthsWind } from './instrumentality/flightNorth';
 import { applySecondChance, secondChanceOpen, secondChanceRolls } from './instrumentality/secondChance';
 import { syncLegendFlags, weekInfluence } from './legends/signs';
 import { noteSpirits, syncLegendKeys } from './legends/keys';
@@ -93,7 +97,7 @@ import { catchable, forcedStepInRival, legendKind, planStepIn, rivalAce, recordR
 import { captureMultiplier, getArchetype, runArchetype, runPerks, badgeTypesOf, healingMultiplier, moneyMultiplier, priceMultiplier, shopUnlockOffset, trainerPreviews, typeModifiers, xpMultiplier } from './archetypes';
 import { chooseSignatureOption, signatureDecisions } from './signature';
 import { boxCapacity, catchLevelOffset, encounterWeightPerk, partyLimit, postBattleHealShare, hasStarterSignature, releaseLimit, signatureMoveFor, evolutionLevelOffset, isBossClass, regionLevelOffset, startingAttributes, startingLevelOffset, syncHpPerks, xpPerk, bossMoneyPerk, championMoneyPerk, ordinaryMoneyPerk, catchMoneyPerk, doubleBattleRewardPerk, singleBattleXpPerk, shopEarlyStockPerk, shopEarlyRareStockPerk, shopRefreshPerk, thirdBossLevels, isUltraBeast, fishingRareTriesPerk, bonusRewardChancePerk } from './trainerPerks';
-import { createBattle, itemProblem, resolveTurn, startBattle, type BattleContext, type BattleEvent, type PlayerAction } from './battle/engine';
+import { createBattle, itemProblem, resolveAnswer, resolveTurn, startBattle, type BattleContext, type BattleEvent, type PlayerAction } from './battle/engine';
 import { autoCommands, canBeDoubles, makeDoubles, primarySpot, resolveDoublesTurn, startDoubles } from './battle/doubles';
 import { canBeTriples, makeTriples } from './battle/triples';
 import { endBattle as endHeldBattle, expLevelShift, expMultiplier, giveBossItems, growthOnLevelUp } from './battle/held';
@@ -150,8 +154,9 @@ import { partnerOwed, quietWildWeight, spendPartner } from './co/neRules';
 import { clearTagPartner, tagPartnerOf, tagPartnerRegion } from './co/pastAllies';
 import { quirkBadgeBond } from './co/quirks';
 import { attachBlocker, holdNodeBattle, releaseNodeBattle, takeNodeLevelShift } from './co/attach';
-import { addEventStops, boostStat, placeEarnedCoBeats, stageNumber, BETRAYAL_FLAG, continueEventChain, eventBattleCaught, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, endRegionStatBoosts, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
-import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
+import { addEventStops, boostStat, placeEarnedCoBeats, stageNumber, BETRAYAL_FLAG, continueEventChain, eventBattleCaught, eventBattleEvilRank, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, endRegionStatBoosts, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
+import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, scoutAhead, spawnRoamers } from './world';
+import { defectorShare, ROUTE_LEFT } from './greenneedle/defector';
 import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
 import { pickPlannedTheme, snapshotStagePlan, stageSignals, tailorStage } from './stagePlan';
@@ -162,7 +167,7 @@ import { count, countShiny, discover } from './progress';
 import { effectiveMax, passivePercent, teachableMoves, TM_CHOICES } from './catalog';
 import { rollField } from './overhaul/field';
 import { modifierBanner, modifierWildWeight } from './runModifiers';
-import { factoryWildWeight } from './greenneedle/factory';
+import { factoryWildWeight, professorBall } from './greenneedle/factory';
 import { xatuWildWeight } from './greenneedle/cartographer';
 import { quirkReaction } from './overhaul/personality';
 import { momentAllowed, noteMoments } from './story/momentDirector';
@@ -797,6 +802,8 @@ function enterStage(content: Content, run: RunState, index: number): void {
   startStageEffects(run);
   coStageStart(run);
   followedStage(content, run);
+  // Greenneedle gn.51: one more of the smuggled Pokémon is home (the Rangers' list ticks one a stage).
+  smuggleStage(run);
   clearRecentPurchases(run);
   applyWealthTax(content, run);
   hatchEggs(content, run);
@@ -839,10 +846,12 @@ function enterStage(content: Content, run: RunState, index: number): void {
   placeServiceStop(run);
   placePlaza(run);
   placeStoryStops(content, run); // Story Run: last, so it can adopt the evil beat's stop
+  // Greenneedle gn.53: the siege's header from step 1; afterwards, fallen districts' stops are gone and an occupied city is patrols, not battles.
+  const siegeLines = sgStage(content, run, stageNumber(content, run));
   // Beta 0.7 M1: one Telling of a Mythical per new stage (in-run only; never on a run's very first stage, which keeps its plan empty), and a Visit offer at the first stage of a region.
   const telling = run.regionIndex === 0 && index === 0 ? null : hearTelling(run, run.regionIndex * 100 + index);
   syncLegendFlags(run); // Catalog Overhaul (legends): read-only mirror flags of the blessing, Guest and Promise for event conditions
-  const planLines = [themeLine, ...tailorStage(content, run, signals), telling].filter((l): l is string => !!l);
+  const planLines = [...siegeLines, themeLine, ...tailorStage(content, run, signals), telling].filter((l): l is string => !!l);
   snapshotStagePlan(run, planLines);
   run.battle = null;
   run.phase = 'map';
@@ -2771,10 +2780,13 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     // gn.53: a city in repair heals half.
     const siegeShare = sgHealShare(run, stageNumber(content, run));
     if (siegeShare < 1) run.party.forEach((m, i) => { m.hp = Math.min(m.hp, Math.max(before[i] ?? 0, Math.ceil(maxHp(content, m) * siegeShare))); });
-    const siegeLine = sgCenterLine(run, stageNumber(content, run));
+    // gn.47: the poster of the Exhibition is in the next Center.
+    const siegeLine = [sgCenterLine(run, stageNumber(content, run)), exPoster(run)].filter(Boolean).join(' ');
     sgRest(content, run);
     careRest(run, content);
     const snorlaxLine = snorlaxRest(run, stageNumber(content, run));
+    // gn.49: the Snorlax that follows your bag can still be asked along, at any rest before the stage ends.
+    snorlaxAsk(content, run, stageNumber(content, run));
     // Greenneedle gn.52: the auction's rare Pokémon is afraid of rooms for a stage: it waits outside the Center.
     const afraidLine = taRoomsAfraid(content, run, before, stageNumber(content, run));
     // Greenneedle gn.51: the rescued Pokémon that won't go in a Ball comes a little closer at each rest.
@@ -2787,6 +2799,8 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     const followedLine = followedRest(content, run, before);
     // Greenneedle gn.new.03: the Ball that wouldn't open has a scene at every rest.
     ballRest(content, run);
+    // gn.13: North's Wind has one charge; only a rest refills it.
+    refillNorthsWind(run);
     partyLifeCamp(run);
     const comboLine = [partyLifeCombos(content, run), ...assignGrowthPaths(content, run.party, run.story.histories)].filter(Boolean).join(' ');
     runSide.used = true;
@@ -2832,7 +2846,7 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     count(run, 'moneyEarned', voucher.refund);
     return { run, message: `Welcome to the shop! You already have a ${entry.name}, so the voucher was worth ₽${voucher.refund}.` };
   }
-  const shopNotice = followedShop(content, run);
+  const shopNotice = [followedShop(content, run), taShopLine(content, run, stageNumber(content, run))].filter(Boolean).join(' ');
   return { run, message: `Welcome to the shop!${shopNotice ? ` ${shopNotice}` : ''}` };
 }
 
@@ -2906,7 +2920,9 @@ export function oneOnly(content: Content, itemId: string): boolean {
 }
 
 /** Badges needed before the shop sells an entry, after the trainer's shopUnlockOffset. */
-export function shopBadgesNeeded(content: Content, run: Pick<RunState, 'archetypeId'>, entry: Content['shop'][number]): number {
+export function shopBadgesNeeded(content: Content, run: Pick<RunState, 'archetypeId'> & Partial<Pick<RunState, 'story'>>, entry: Content['shop'][number]): number {
+  // gn.17: the professor's special Ball is unlocked for the run.
+  if (professorBall(run.story, entry.item)) return 0;
   return Math.max(0, entry.minBadges - shopUnlockOffset(runArchetype(content, run)));
 }
 
@@ -3250,6 +3266,8 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   const ripple = exRipple(content, run);
   // Greenneedle gn.49: the Snorlax that followed your bag sits down at the Gym door.
   const gymDoor = snorlaxGym(run, stageNumber(content, run));
+  // Greenneedle gn.50: at Trust 3 the defector shares a route once in every stage (if no meeting handed one over, it is left by the road).
+  const corinRoute = defectorShare(run, stageNumber(content, run)) ? (scoutAhead(content, run, 3), ROUTE_LEFT) : '';
   // Greenneedle gn.new.15: the Weather Station's hand-written forecast, pinned up at step 1 of each later stage.
   const pinned = pinLine(content, run);
   // Greenneedle gn.58: a friend let go for its own good steps in for one turn.
@@ -3264,6 +3282,7 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   if (ripple) events.push({ type: 'raid', tone: 'info', text: ripple });
   if (friendHelp) events.push({ type: 'raid', tone: 'info', text: friendHelp });
   if (gymDoor) events.push({ type: 'raid', tone: 'info', text: gymDoor });
+  if (corinRoute) events.push({ type: 'raid', tone: 'info', text: corinRoute });
   if (pinned) events.push({ type: 'raid', tone: 'info', text: pinned });
   if (rivalNotice) events.push({ type: 'raid', tone: 'info', text: rivalNotice });
   run.rng.battle = rng.state;
@@ -3370,7 +3389,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   const escapeItem = action.kind === 'item' ? content.items.get(action.itemId) : undefined;
   if (escapeItem?.effect.kind === 'escape') return escapeBattle(content, run, escapeItem.id, rng, captureRng, hyperRng);
   const bonded = shapeAction(content, run, action);
-  // Poli-Pond: the Poliwag's nerves (or the bully's tricks in the rematch) can change the command before it is played.
+  // Poli-Pond: the Poliwag is too shy to attack in its first battle, and the bully's tricks in the rematch can change the command before it is played.
   const nerves = pondShape(content, run, bonded.action);
   // Greenneedle events: a named fight rule may answer the command (the Samurai's Pinsir waits out a guard).
   const gn = gnShape(content, run, nerves.action);
@@ -3384,7 +3403,11 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   const turnCtx = battleContext(content, run, rng, captureRng, hyperRng);
   // S7: the Story Run partner's banked Impossible Feat (the engine checks the moment; no RNG).
   turnCtx.feat = featGate(content, run) ?? undefined;
-  const engineEvents: BattleEvent[] = [...shaped.events, ...(battle.doubles ? resolveDoublesTurn(turnCtx, doublesAction(turnCtx, action)) : resolveTurn(turnCtx, shaped.action))];
+  // gn.17, the Sludge Pits: in a double or triple fight the pulling answers the commands the turn really plays.
+  // A choice in the middle of the battle (core/greenneedle/ask.ts): the answer is applied here, uses no turn and rolls nothing.
+  const answered: BattleEvent[] | null = action.kind === 'answer' ? [...answerAsk(content, run, action.ask, action.option).map((text): BattleEvent => ({ type: 'raid', tone: 'info', text })), ...resolveAnswer(turnCtx)] : null;
+  const pits = battle.doubles && !answered ? gnShapeDouble(run, doublesAction(turnCtx, action)) : null;
+  const engineEvents: BattleEvent[] = answered ? [...shaped.events, ...answered] : [...shaped.events, ...(pits ? [...(pits.events as BattleEvent[]), ...resolveDoublesTurn(turnCtx, pits.action)] : resolveTurn(turnCtx, shaped.action))];
   const vowLine = noteFirstBlood(run, engineEvents); // Zekrom's vow: Strike no one first
   if (vowLine) engineEvents.push({ type: 'raid', tone: 'info', text: vowLine });
   // Beta 4.4: a Hyper moment unlocks a move in the Hyper slot for the rest of the battle.
@@ -3567,6 +3590,16 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, spectated: { kind: battle.spectate.kind, lines: [`${winner === 1 ? mainRival(run)?.name : secondRival(run)?.name} wins.`, ...lines] } };
   }
+  if (battle.spectate && (battle.outcome === 'win' || battle.outcome === 'lose') && exWatching(run)) {
+    // gn.47 the Exhibition, watched: your own team comes back untouched; whoever won on the field won; the event's outcome follows.
+    const head = exWatchEnd(content, run, battle.outcome);
+    const lines = battle.event ? eventBattleWon(content, run, battle.event, battle.turn - 1) : [];
+    run.battle = null;
+    run.afterDecisions = 'map';
+    continueAfterDecisions(content, run);
+    recordChanges(content, current, run, 'battle');
+    return { run, events, end: null, defeated: false, cues, drama, spectated: { kind: battle.spectate.kind, lines: [...head, ...lines] } };
+  }
   if (battle.spectate && (battle.outcome === 'win' || battle.outcome === 'lose') && ownWatching(run)) {
     // Pidgey's Resolve, the spar and the rematch: watched, not played. The real team comes back untouched; the scene's own outcome applies.
     endOwnWatch(run);
@@ -3650,6 +3683,13 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   // Greenneedle gn.59: Ferris's 4th-region advice: the region's hardest battle, lost, costs nothing.
   if (battle.outcome === 'lose' && ferrisFree(battle)) {
     ferrisFreeEnd(run);
+    softLossEnd(content, run, false);
+    recordChanges(content, current, run, 'battle');
+    return { run, events, end: null, defeated: false, cues, drama, storyLoss: true };
+  }
+  // Greenneedle gn.62: lost to a team's lieutenant or boss: the Pokémon Prison comes instead of the loss's usual cost (once a run).
+  if (battle.outcome === 'lose' && battle.event && prisonWouldOpen(content, run, eventBattleEvilRank(content, battle.event))) {
+    eventBattleLost(content, run, battle.event);
     softLossEnd(content, run, false);
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, storyLoss: true };
@@ -4307,6 +4347,13 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (returnOffer) run.pending.push({ kind: 'returnProtege', mon: returningPokemon(content, run, returnOffer, nextUid(run, 'p')), mentorUid: returnOffer.mentorUid, reason: returnOffer.reason });
   const leadAsk = !run.victory && battle.outcome === 'win' && !mentorOffer ? planAskLead(content, run) : null;
   if (leadAsk) run.pending.push({ kind: 'askLead', ...leadAsk });
+  // gn.13: whether the shiny one came down in Flight North's last fight (the goodbye only has Meowth count two of them if it did).
+  if (battle.event && battle.eventRule?.shinyRescue) run.story.flags['ev:flight-shiny-came'] = battle.storyEffects.includes('shiny-rescue') ? 1 : 0;
+  // gn.15: how the fifth Mankey's fight ended: it lowered its arms (you waited), and whether it was ever hit.
+  if (battle.event && battle.eventRule?.waits) {
+    run.story.flags['ev:mankey-waited-out'] = battle.storyEffects.includes(FIFTH_WAITED) ? 1 : 0;
+    run.story.flags['ev:mankey-struck'] = battle.storyEffects.includes(FIFTH_HIT) ? 1 : 0;
+  }
   // gn.16: the tournament final paused for the last exchange (the win effects read this flag).
   if (battle.event && battle.eventRule?.gn === 'final') run.story.flags['ev:tc-last-exchange'] = battle.storyEffects.includes('gn-last-exchange') ? 1 : 0;
   // The Lush Jungle (gn.20): a knockout on either side, the player's or the wild one's, and the canopy village pulls its ladder up.
@@ -4601,6 +4648,8 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
       recordReleased(content, run, caught);
       noteReleased(run, caught);
       noteLeft(run, caught);
+      // Greenneedle gn.48: a drafted Pokémon that stayed is no wandering Old Friend: it goes back to its first trainer.
+      draftGoesHome(content, run, caught);
       // Greenneedle gn.58: who, where and why; the friend turns up again two or more stages on.
       recordRelease(content, run, caught, choice.reason, stageNumber(content, run));
     } else {

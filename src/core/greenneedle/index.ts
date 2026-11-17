@@ -3,16 +3,24 @@
 // previews, saves and replays agree. State is run flags (`ev:gn-*`) plus the optional `gn` marks on a Pokémon: no save change.
 
 import type { Content } from '../contentSchema';
+import { kaijuBack, kaijuCut, netCutter, shutMarket } from './kaiju';
+import { rarityOf } from '../rarity';
+import { skySilhouette } from '../instrumentality/flightNorth';
 import type { PlayerAction } from '../battle/engine';
 import type { BattleState, PokemonInstance, RunState } from '../state';
 import type { GnCond, GnEffect } from './schema';
 import { abilityOf, addLevels, calcStats, createPokemon, getSpecies, isUsableMove, maxHp } from '../pokemon';
 import { levelScale } from '../encounters';
 import { getCampaign } from '../regions';
+import { makeDoubles } from '../battle/doubles';
+import { bondNewest, hasPink, markPink, oldEggMove, pinkFade, raiseMarked, truceAnswers } from './part3';
 import { addItem } from '../items';
 import { typeEffectiveness } from '../battle/damage';
 import type { TypeName } from '../contentSchema';
-import { SLUDGE_TURNS } from './factory';
+import { PIT_PULL, SLUDGE_TURNS, pitsFreed, pitsStart } from './factory';
+import { aceEggSpecies, rememberAce } from './damian';
+import { tourneyAfterTurn, tourneyShape, tourneyStart } from './tournament';
+import { MOON_RAID_LOST, MOON_RAID_WON, moonRaid } from './moon';
 import { bondLevel, firstCatch } from '../co/who';
 import { NATURE_IDS } from '../natures';
 import { fnv1a } from '../expansion/hash';
@@ -20,7 +28,7 @@ import { crystalOp, golemStart } from './crystals';
 import { tideOf } from '../clock';
 import { lightning } from './ridge';
 import { labCast, labForm } from './lab';
-import { marketArrive, marketBuy, marketOffer, marketUndercut } from './market';
+import { marketArrive, marketBuy, marketOffer, marketPriceToken, marketUndercut } from './market';
 import { museumArrive } from './museum';
 import { listenedHatch, listenedTake, listenedWord } from './listened';
 import { daycareLeave, daycareReturn, eggShape, parentAndChild } from './daycare';
@@ -28,46 +36,48 @@ import { eggMoveOptions, familyId } from '../mastery';
 import { pairBondLevel } from '../bond';
 import { borrowBattleStart, borrowEnd, borrowMeet, borrowStart, borrowTokens, rivalTrustAtLeast } from './borrowed';
 import { draftAldhelm, draftBattleStart, draftEnd, draftFriend, draftLetter, draftPick, draftRecruit, draftStart, draftTokens, draftWon } from './draft';
-import { exBack, exDraw, exKnown, nextMatchup, exResult, exStart, exTokens, exWatch } from './exhibition';
-import { defectorBossStart, defectorClimax, defectorEnd, defectorMeet, defectorReturn, defectorStart, defectorTokens, defectorTrust, guestOf } from './defector';
+import { startMinigame } from '../minigame/flow';
+import { exBack, exCalls, exDraw, exKnown, nextMatchup, exResult, exStart, exTokens, exWatch, exWatchStart } from './exhibition';
+import { defectorBossStart, defectorClimax, defectorEnd, defectorMeet, defectorReturn, defectorShare, defectorStart, defectorTokens, defectorTrust, guestOf, ROUTE_LINE } from './defector';
 import { rivalBeatenOnce } from './missingAce';
-import { taEnd, taLot, taRare, taStart } from './teamauction';
+import { taEnd, taLot, taRare, taStart, EARLY, taBid, taCanBid, taRounds, taTokens } from './teamauction';
 import { stAssign, stEnd, stStart, strandingTokens } from './stranding';
-import { insideTeam, prDo, prEnd, prEnter, prFree, prNext, prStart, prStep, prStranger, prCaught, prWardenStart, prisonTokens } from './prison';
-import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
+import { insideTeam, prDo, prEnd, prEnter, prFree, prNext, prStart, prStep, prStranger, prCaught, prWardenStart, prisonTokens, prisonAmbush } from './prison';
+import { type DistrictId, sgEarly, sgOccupied, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
 import { duelDue, duelEnd, duelEnter, duelName, duelWorthy, duelistStart, worthyStart } from './duelist';
 import { lanternArrive, lanternHasStory, lanternLetGo, lanternLost, lanternPearl, lanternTokens } from './lantern';
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
 import { applianceRepair } from './appliance';
+import { nsClear, nsPost, nsRaid } from './nightshift';
+import { foxSilence } from './fox';
 import { bidoofJoin, bidoofStart } from './bidoof';
-import { alleyStart } from './alley';
 import { leftFates, leftFreeze, leftHas, leftTake, leftTokens } from './left';
 import { isLastStage, ltArrive, ltDawn, ltPage, ltSit, ltTokens } from './longtable';
-import { impClaim, impJoin, impersonatorStart } from './impersonator';
+import { impClaim, impJoin, impersonatorStart, impTokens } from './impersonator';
 import { shedNinjask, shedRest } from './shedinja';
 import { lsAddress, lsDeal, lsTake, lsTicket } from './laststop';
 import { tyrEven, tyrEvolve, tyrLead, tyrResult, tyrTally, tyrogueJoin, tyrogueMon } from './tyrogue';
-import { muralJoin, muralPick } from './mural';
+import { muralJoin, muralPick, muralSketch, muralSketchOpen, muralSketchPage, muralTokens, muralWalkOn, muralWalkStart } from './mural';
 import { cheerJoin } from './cheer';
 import { mirrorReady, mirrorStart } from './mirror';
 import { dueFriend, MANY, ofGuest, ofJoin, ofPick, ofReplacer, ofSpecial, oldfriendTokens, releases, specialDue } from './oldfriend';
 import { ferrisArrive, ferrisBest, ferrisHand, ferrisShape, ferrisStart, ferrisTurn } from './ferris';
-import { followedJoin } from './followed';
-import { ballFind, ballForce, ballHatched, ballHold, ballKind, ballTokens } from './ball';
-import { reunionArrive, reunionFar, reunionTokens } from './reunion';
+import { followedJoin, followedTokens } from './followed';
+import { ballAnswer, ballFind, ballForce, ballHatched, ballHold, ballKind, ballTokens } from './ball';
+import { reunionArrive, reunionFar, reunionTokens, reunionWalk } from './reunion';
 import { giveDearest } from './fox';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
-import { paradeAll, paradeEgg, paradeEggReady, paradeForget, paradeMemory, paradeNickname, paradeSecret, paradeSwap, paradeWake } from './parade';
+import { paradeAll, paradeEgg, paradeEggReady, paradeForget, paradeMemory, paradeMoveReady, paradeNickname, paradeRare, paradeSecret, paradeSwap, paradeWake } from './parade';
 import { finalRest, xatuBlur, xatuDraw, xatuPeek, xatuTokens, xatuTrue } from './cartographer';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
 import { lessonArrive, lessonBonus, lessonChampion, lessonEnd, lessonStart, lessonTeach } from './champion';
 import { rememberedPick } from '../co/pickMemory';
 import { lcBring, lcEligible, lcEnd, lcEvolver, lcMany, lcStart, lcStartBattle, lcStay, lcWithdraw } from './littlecup';
-import { CHAMPION_NAME, onevoneChampion, onevoneEnd, onevoneEnter, onevoneStart, entrantOf } from './onevone';
+import { CHAMPION_NAME, onevoneChampion, onevoneEnd, onevoneEnter, onevoneStart, entrantOf, opponentsOf } from './onevone';
 import { eeveeEnd, eeveeStart } from './eevee';
 import { GAVEL, auctionArrive, auctionOpen, auctionReturn, auctionRound, lotToken } from './auction';
-import { aceHere, bagBack, bagLeave, bench, brainRecord, brainStart, bring, frontierClear, leadInitiative, palaceShape, rent, swapIn, unbench } from './frontier';
+import { aceHere, bagBack, bagLeave, bench, brainRecord, brainStart, bring, frontierClear, leadInitiative, palaceShape, rent, swapIn, unbench, lastTeamToken } from './frontier';
 
 type Cue = { type: 'spectacle'; kind: 'arena'; side: 'player' | 'enemy'; text: string; uid?: string };
 const cue = (side: 'player' | 'enemy', text: string, uid?: string): Cue => ({ type: 'spectacle', kind: 'arena', side, text, ...(uid ? { uid } : {}) });
@@ -90,28 +100,50 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
     const id = castOf(run, name) ?? '';
     return content.species.get(id)?.name ?? content.items.get(id)?.name ?? content.catalog.get(id)?.name ?? content.bosses.get(id)?.name ?? content.moves.get(id)?.name ?? 'that one';
   });
+  // gn.28 "Remembers": inside the team the Hideout is your workplace and the Alert meter is called Suspicion; a colleague can still talk past patrols.
+  if (text.includes('{hideout:')) {
+    const staff = insideTeam(run);
+    text = text.replaceAll('{hideout:meter}', staff ? 'Suspicion' : 'Alert').replaceAll('{hideout:patrol}', staff ? 'A colleague can still talk their way past. Just.' : "Nobody's talking their way past anyone now.");
+  }
   // gn.58: the returning friend.
   if (text.includes('{oldfriend:')) text = oldfriendTokens(content, run, text);
   // gn.43: the auction catalogue ({lot:<n>:prov}, {lot:<n>:photo}) and a sum of money ({money:<key>}).
   text = text.replace(/\{lot:([1-6]):([a-z]+)\}/g, (_, n: string, part: string) => lotToken(run, Number(n), part));
   text = text.replaceAll('{duelist}', duelName(content, run));
+  // gn.36: a count that is always on screen ({flag:desert-water}).
+  text = text.replace(/\{flag:([a-z0-9-]+)\}/g, (_, k: string) => String(gnFlag(run, k)));
   text = text.replace(/\{money:([a-z0-9-]+)\}/g, (_, k: string) => `₽${gnFlag(run, k).toLocaleString('en-GB')}`);
+  // gn.42: the team a Brain remembers you bringing last time ({brainteam:<building>}).
+  text = text.replace(/\{brainteam:([a-z]+)\}/g, (_, b: string) => lastTeamToken(content, run, b));
+  // gn.39: a market lot's price for this player, after the vendor's discounts ({market:<vendor>:<asking price>}).
+  text = text.replace(/\{market:([a-z]+):(\d+)\}/g, (_, v: string, n: string) => marketPriceToken(run, v, Number(n)));
+  // gn.19: a plain count kept in a run flag ({count:savanna-water}: the water flasks left).
+  text = text.replace(/\{count:([a-z0-9-]+)\}/g, (_, k: string) => String(gnFlag(run, k)));
   // gn.44: the reigning 1v1 champion, a different trainer each region.
   // gn.48: the Draft's table.
   if (text.includes('{xatu:')) text = xatuTokens(content, run, text);
   if (text.includes('{draft:')) text = draftTokens(content, run, text);
   if (text.includes('{borrow:')) text = borrowTokens(content, run, text);
   if (text.includes('{reunion:')) text = reunionTokens(run, text);
+  if (text.includes('{imp:')) text = impTokens(content, run, text);
+  if (text.includes('{followed:')) text = followedTokens(run, text);
   // gn.50: the defector.
   if (text.includes('{defector:')) text = defectorTokens(content, run, text);
   // gn.51: the Smuggling Ring.
   if (text.includes('{smuggle:')) text = smuggleTokens(content, run, text);
+  if (text.includes('{ta:')) text = taTokens(run, text);
   if (text.includes('{stranding:')) text = strandingTokens(content, run, text);
   if (text.includes('{siege:')) text = siegeTokens(content, run, text);
   if (text.includes('{prison:')) text = prisonTokens(content, run, text);
   if (text.includes('{karp:')) text = karpTokens(run, text);
   if (text.includes('{lt:')) text = ltTokens(run, text);
+  if (text.includes('{mural:')) text = muralTokens(content, run, text);
   if (text.includes('{ball:')) text = ballTokens(run, text);
+  // gn.14: the name on the small grave: the Pokémon lost for good most recently this run (the memorial), when there is one.
+  if (text.includes('{lost:name}')) {
+    const last = run.nuzlocke?.memorial[run.nuzlocke.memorial.length - 1];
+    text = text.replaceAll('{lost:name}', last ? `It says ${content.species.get(last.speciesId)?.name ?? 'a name you know'}.` : 'You know the name.');
+  }
   if (text.includes('{lsea:')) text = lanternTokens(run, text);
   // gn.47: the Exhibition.
   if (text.includes('{ex:')) text = exTokens(content, run, text);
@@ -122,6 +154,8 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   // gn.45: the region's Champion, off duty (cast when the lesson starts).
   if (text.includes('{lesson-champion}')) text = text.replaceAll('{lesson-champion}', content.bosses.get(castOf(run, 'lesson-champion') ?? lessonChampion(content, run, run.regionOrder[run.regionIndex] ?? 'kanto'))?.name ?? 'The Champion');
   text = text.replaceAll('{onevone-champion}', CHAMPION_NAME[run.regionOrder[run.regionIndex] ?? 'kanto'] ?? CHAMPION_NAME.kanto!);
+  // gn.44: who the drawn opponent of round <n> is this time.
+  if (text.includes('{onevone:who:')) text = text.replace(/\{onevone:who:([1-8])\}/g, (_, n: string) => opponentsOf(run)[Number(n) - 1]?.n ?? 'a trainer');
   // gn.44: what the next 1v1 opponent holds ({held:<n>}).
   text = text.replace(/\{held:([1-8])\}/g, (_, n: string) => {
     const id = castOf(run, `onevone-held-${n}`);
@@ -172,13 +206,18 @@ export const JUNGLE_DOWN = 'gn-jungle-down:';
 
 export const FOREST = { inside: 'gn-forest-in', battles: 'gn-forest-battles', fought: 'gn-forest-fought', rank: 'gn-forest-rank', evolved: 'gn-forest-evolved', fog: 'gn-forest-fog', duelist: 'gn-forest-duelist', big: 'gn-forest-big' } as const;
 
-/** The newest conscious party Pokémon of the type becomes the forest's duelist (once; later calls do nothing). */
+/** Mark on every Pokémon the player owned on walking into the forest: only a Bug-type caught inside can be the duelist. */
+export const PRE_FOREST = 'pre-forest';
+
+/** The first conscious party Pokémon of the type that was caught in the forest becomes its duelist (once; later calls do nothing). */
 export function markDuelist(content: Content, run: RunState, type: string): string {
   if (markedMon(run, 'duelist')) return '';
-  const fits = run.party.filter((m) => m.hp > 0 && (content.species.get(m.speciesId)?.types as string[] | undefined)?.includes(type));
-  const mon = fits[fits.length - 1];
+  const fits = run.party.filter((m) => m.hp > 0 && !m.gn?.includes(PRE_FOREST) && (content.species.get(m.speciesId)?.types as string[] | undefined)?.includes(type));
+  const mon = fits[0];
   if (!mon) return '';
   mon.gn = [...(mon.gn ?? []), `duelist:${mon.speciesId}`];
+  // A Caterpie duelist: the forest's other Caterpie crowd round it (wild Caterpie may be walked through).
+  setGnFlag(run, 'gn-forest-caterpie', mon.speciesId === 'caterpie' ? 1 : 0);
   for (const k of [FOREST.battles, FOREST.fought, FOREST.rank, FOREST.evolved]) setGnFlag(run, k, 0);
   setGnFlag(run, FOREST.duelist, 1);
   setGnFlag(run, FOREST.big, ['pinsir', 'scyther', 'heracross'].includes(mon.speciesId) ? 1 : 0);
@@ -206,9 +245,17 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   // gn.16: the fighter won from behind (the first Pokémon able to fight is at half its HP or less).
   // gn.33: the tide is low (the Sunken City's causeway is out of the water).
   if (c.test === 'lastStage') { const camp = getCampaign(content, run.campaignId); return isLastStage(content, run, camp.stagesPerRegion, camp.regularRegions); }
+  if (c.test === 'hasPink') return hasPink(run);
+  // gn.28: Alert 0 to 4, anyone can be talked past; inside the team the floors are your workplace, and a colleague still can up to 9.
+  if (c.test === 'canTalkPast' || c.test === 'noTalkPast') {
+    const alert = gnFlag(run, c.key!);
+    const can = alert <= 4 || (insideTeam(run) && alert <= 9);
+    return c.test === 'canTalkPast' ? can : !can;
+  }
   if (c.test === 'paradeMemory') return paradeMemory(run);
   if (c.test === 'paradeNickname') return paradeNickname(run);
   if (c.test === 'paradeEggReady') return paradeEggReady(content, run);
+  if (c.test === 'paradeMoveReady') return paradeMoveReady(run);
   if (c.test === 'paradeAll') return paradeAll(run, gnFlag(run, c.key!));
   // gn.new.12: the Xatu's image came true; the last rest of the run; the run's Blessing has answered (Communion).
   if (c.test === 'prophecyTrue') return xatuTrue(run);
@@ -219,7 +266,11 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'hurtLead') { const lead = run.party.find((m) => m.hp > 0); return !!lead && lead.hp * 2 <= maxHp(content, lead); }
   if (c.test === 'lookAtLevel') return run.party.some((m) => !!m.look && c.types!.includes(m.look) && m.level >= gnFlag(run, c.key!));
   if (c.test === 'notRegion') return !c.types!.includes(run.regionOrder[run.regionIndex] ?? '');
-  if (c.test === 'holdsBerry') return run.party.some((m) => Object.entries(m.held ?? {}).some(([id, n]) => n > 0 && id.endsWith('-berry')));
+  if (c.test === 'holdsBerry') return Object.entries(run.inventory).some(([id, n]) => n > 0 && id.endsWith('-berry')) || run.party.some((m) => Object.entries(m.held ?? {}).some(([id, n]) => n > 0 && id.endsWith('-berry')));
+  if (c.test === 'leadRarity') return !!run.party[0] && c.types!.includes(rarityOf(content, run.party[0].speciesId));
+  if (c.test === 'flightReleased') return skySilhouette(run) !== null;
+  if (c.test === 'netCutter') return netCutter(content, run) !== null;
+  if (c.test === 'leadFit') { const lead = run.party[0]; return !!lead && lead.hp >= maxHp(content, lead) && !lead.status; }
   // gn.19: a large Pokémon (100 kg or more) in the party, standing, to give the Hippowdon shade.
   if (c.test === 'heavy') return run.party.some((m) => m.hp > 0 && (content.species.get(m.speciesId)?.weight ?? 50) >= 100);
   if (c.test === 'cutter') return run.party.some((m) => m.hp > 0 && m.moves.some((s) => { const mv = content.moves.get(s.id); return !!mv && mv.category !== 'status' && (mv.flags.includes('slicing') || s.id.includes('claw')); }));
@@ -229,6 +280,9 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'duelistLeft') return gnFlag(run, 'duelist-left') > 0;
   const stamped = gnFlag(run, c.key!);
   if (c.test === 'laterStage') return stamped > 0 && stamped < stage;
+  // Exactly (`stageGap`) or at least (`stageGapMin`) `n` stages after the stamp (gn.new.02's S(n+1) and S(n+2); gn.new.03's 16 stages on).
+  if (c.test === 'stageGap') return stamped > 0 && stage - stamped === (c.n ?? 1);
+  if (c.test === 'stageGapMin') return stamped > 0 && stage - stamped >= (c.n ?? 1);
   if (c.test === 'sameStage') return stamped === stage;
   if (c.test === 'notThisStage') return stamped !== stage;
   if (c.test === 'notThisRegion') return stamped !== run.regionIndex + 1;
@@ -288,6 +342,7 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   // gn.62: the player is inside a team (the inside route's run flag `team-<id>-inside`, set by core/evil/inside.ts when it exists).
   if (c.test === 'insideTeam') return insideTeam(run);
   if (c.test === 'notInsideTeam') return !insideTeam(run);
+  if (c.test === 'prisonAmbush') return prisonAmbush(run);
   if (c.test === 'defectorGuest') return !!guestOf(run);
   // gn.51: rests of patience enough for it to climb in by itself.
   if (c.test === 'rehabDone') return gnFlag(run, 'smuggle-rehab') >= restsNeeded(run);
@@ -299,8 +354,15 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'kcRegular') return regularRises(run);
   if (c.test === 'sgWaiting') return waiting(run) >= 0;
   if (c.test === 'sgOrdered') return waiting(run) < 0;
+  if (c.test === 'taCanBid') return taCanBid(run, c.n ?? 1);
+  if (c.test === 'taEarly') return taRounds(run, 2) <= EARLY;
+  if (c.test === 'taLate') return taRounds(run, 2) > EARLY;
+  if (c.test === 'sgEarly') return sgEarly(run);
+  if (c.test === 'sgOccupied') return sgOccupied(run, stage);
   if (c.test === 'rehabWaiting') return gnFlag(run, 'smuggle-rehab') > 0 && gnFlag(run, 'smuggle-rehab') < restsNeeded(run);
   if (c.test === 'rivalAhead') return run.story.rivals.some((r) => (r.world?.lead ?? 0) >= 2);
+  // gn.40: Mrs. Holloway only takes the coins when the lead has an egg move still to learn (`key: 'to-learn'`; `'none-to-learn'` is its opposite).
+  if (c.test === 'eggMoveKnown' && (c.key === 'to-learn' || c.key === 'none-to-learn')) { const lead = run.party.find((m) => m.hp > 0); const can = !!lead && eggMoveOptions(content, familyId(content, lead.speciesId)).some((o) => o.active && !lead.moves.some((mv) => mv.id === o.id)); return c.key === 'to-learn' ? can : !can; }
   if (c.test === 'eggMoveKnown') return run.party.some((m) => { const egg = new Set(eggMoveOptions(content, familyId(content, m.speciesId)).map((o) => o.id)); return m.moves.some((mv) => egg.has(mv.id)); });
   if (c.test === 'natureIs') return run.party.some((m) => m.nature === c.key);
   if (c.test === 'pairGetsOn') return run.party.some((a, i) => run.party.some((b, j) => j > i && pairBondLevel(run, a.uid, b.uid) >= 1));
@@ -449,7 +511,13 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return '';
     }
     case 'payBerry': {
-      // gn.12: one held Berry is handed over (the first party Pokémon holding one, the first Berry by name).
+      // gn.12, gn.06: one Berry is handed over: from the bag first (the first by name), else the first party Pokémon holding one.
+      const bagged = Object.keys(run.inventory).sort().find((k) => k.endsWith('-berry') && (run.inventory[k] ?? 0) > 0);
+      if (bagged) {
+        addItem(run.inventory, bagged, -1);
+        if ((run.inventory[bagged] ?? 0) <= 0) delete run.inventory[bagged];
+        return `Paid a ${content.catalog.get(bagged)?.name ?? bagged}`;
+      }
       for (const m of run.party) {
         const id = Object.keys(m.held ?? {}).sort().find((k) => k.endsWith('-berry') && (m.held![k] ?? 0) > 0);
         if (!id) continue;
@@ -459,12 +527,29 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       }
       return '';
     }
+    // gn.11: the net cutter leaves for the two turns, and comes back; a lost raid shuts the stage's market.
+    case 'kaijuCut':
+      return kaijuCut(content, run);
+    case 'kaijuBack':
+      return kaijuBack(run);
+    case 'shutMarket':
+      return shutMarket(run) > 0 ? 'The market is shut for the stage' : '';
+    case 'eggNotes': {
+      // gn.09: Bill's Egg Notes are information: the egg moves each party Pokémon's family can learn (nothing is taught).
+      const lines = run.party.map((m) => {
+        const moves = eggMoveOptions(content, familyId(content, m.speciesId)).filter((o) => o.active).map((o) => content.moves.get(o.id)?.name ?? o.id);
+        return `${content.species.get(m.speciesId)?.name ?? m.speciesId}: ${moves.length ? moves.join(', ') : 'no egg moves'}`;
+      });
+      return `Bill's Egg Notes · ${lines.join(' · ')}`;
+    }
     case 'minigame': {
       const here = run.stage?.map.nodes.find((n) => n.id === run.stage!.current);
       if (!here || !content.minigames.games.some((g) => g.id === e.key)) return '';
       const id = `minigame-${e.key}-${here.sides.length + 1}`;
       here.sides.push({ id, kind: 'minigame', minigameId: e.key!, used: false });
       delete run.minigames.attempts[id];
+      // `n: 1`: the game opens at once, straight from the event (gn.41's jigsaw), instead of waiting as a stop beside the node.
+      if (e.n === 1) startMinigame(content, run, id, 0);
       return '';
     }
     case 'releaseLast': {
@@ -538,7 +623,8 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       const known = new Set(mon.moves.map((m) => m.id));
       const dropped = getSpecies(content, mon.speciesId).learnset.filter((x) => x.level <= mon.level && !known.has(x.move) && isUsableMove(content, x.move)).map((x) => x.move);
       // The oldest move it has dropped: the one it used back then.
-      const id = dropped[0];
+      // "...something its level-up list has dropped, or an egg move": the egg move when nothing was dropped.
+      const id = dropped[0] ?? oldEggMove(content, mon);
       if (!id) return '';
       const slot = { id, pp: content.moves.get(id)!.pp };
       // A full moveset gives up its last move, never Two Trainers (taught just before, at high Bond).
@@ -554,6 +640,13 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     case 'lightning':
       // gn.35: Thunderstorm Ridge's lightning, once per node.
       return lightning(content, run, e.n!, host.float());
+    case 'mapShow':
+      // gn.36: a room the pseudo-stage's map kept blank is drawn (a Flying-type sent up, Goggles, Desert Guide).
+      if (run.stage?.pseudo && run.stage.hidden) {
+        const shown = run.stage.map.nodes.find((n) => n.roomEvent === e.key);
+        if (shown) run.stage.hidden = run.stage.hidden.filter((id) => id !== shown.id);
+      }
+      return '';
     case 'labCast':
       // gn.38: the subject, from this region's pseudo-legendary line.
       labCast(content, run, host.region);
@@ -579,7 +672,7 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       const r = daycareReturn(content, run, host.stage, (mon, n) => void addLevels(content, mon, n));
       if (!r.eggOf) return r.line;
       const laid = host.apply({ kind: 'egg', species: [familyId(content, r.eggOf.speciesId)], types: [], levelBonus: 0, shinyMultiplier: 1, left: 3, unit: 'battle' });
-      eggShape(run, 'habit-daycare', r.parents);
+      eggShape(run, r.habit?.shape ?? 'habit-daycare', r.parents, r.habit?.move);
       return [r.line, laid].filter(Boolean).join(' · ');
     }
     case 'eggShape':
@@ -701,11 +794,13 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return draftLetter(content, run);
     // gn.new.11: the Night Parade's Spirit Market.
     case 'paradeSwap':
-      return paradeSwap(content, run, e.key!);
+      return paradeSwap(content, run, host.float);
     case 'paradeEgg':
       return paradeEgg(content, run);
     case 'paradeForget':
       return paradeForget(run);
+    case 'paradeRare':
+      return paradeRare(content, run, host.float());
     case 'paradeSecret':
       return paradeSecret(content, run);
     case 'paradeWake':
@@ -737,6 +832,12 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return defectorReturn(run, (e.n ?? 0) > 0);
     case 'defectorEnd':
       return defectorEnd(run);
+    case 'defectorShare': {
+      // Trust 3+: one free scouting a stage (here, handed over at a meeting).
+      if (!defectorShare(run, host.stage)) return '';
+      host.apply({ kind: 'scout', columns: 3 });
+      return ROUTE_LINE;
+    }
     case 'smuggleCages':
       return smuggleCages(content, run, host.float);
     case 'smuggleRehab':
@@ -749,6 +850,8 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return taStart(content, run, e.n ?? 1, host.float);
     case 'taLot':
       return taLot(run, e.n ?? 0);
+    case 'taBid':
+      return taBid(run, e.n ?? 1, host);
     case 'taRare':
       return taRare(run, e.n ?? 1, host.stage, host);
     case 'taEnd':
@@ -817,6 +920,15 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return tyrEvolve(content, run, e.key!);
     case 'applianceRepair':
       return applianceRepair(run, host.picked);
+    // gn.new.24 The Night Shift (nightshift.ts): the two sentries and the side each wave comes from.
+    case 'foxSilence':
+      return foxSilence(run);
+    case 'nsClear':
+      return nsClear(run);
+    case 'nsPost':
+      return nsPost(run, host.picked, e.n ?? 0, (id) => content.species.get(id)?.name ?? id);
+    case 'nsRaid':
+      return nsRaid(run, e.n ?? 1);
     case 'lsArrive':
       return lanternArrive(run);
     case 'lsPearl':
@@ -838,7 +950,8 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     case 'impJoin':
       return impJoin(run, host);
     case 'impClaim':
-      return impClaim(run);
+      // Beaten, it comes: caught in the fight, it takes Many Faces; knocked out, it joins all the same ("It'll come.").
+      return impClaim(run) || impJoin(run, host);
     case 'shedRest':
       return shedRest(content, run, host, e.key ?? '');
     case 'shedNinjask':
@@ -849,6 +962,16 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return '';
     case 'muralJoin':
       return muralJoin(content, run, host);
+    case 'muralWalkStart':
+      return muralWalkStart(run);
+    case 'muralWalkOn':
+      return muralWalkOn(run);
+    case 'muralSketchOpen':
+      return muralSketchOpen(content, run);
+    case 'muralSketchPage':
+      return muralSketchPage(content, run);
+    case 'muralSketch':
+      return muralSketch(content, run, e.n ?? 0);
     case 'cheerJoin':
       return cheerJoin(content, run, e.n ?? 3, host);
     case 'leftFreeze':
@@ -892,13 +1015,15 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return reunionArrive(content, run);
     case 'reunionFar':
       return reunionFar(run, e.n ?? 3);
+    case 'reunionWalk':
+      return reunionWalk(run, e.n ?? 0);
     // gn.new.31 The Fox at the Shrine (fox.ts).
     case 'giveDearest':
       return giveDearest(content, run, e.key!);
     case 'ofSpecial':
       return ofSpecial(run, e.key!, e.n === 1, host.stage);
     case 'exDraw':
-      return exDraw(run);
+      return exDraw(content, run);
     case 'exBack':
       return exBack(run, e.n ?? 0);
     case 'exWatch':
@@ -933,6 +1058,21 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     }
     case 'marketUndercut':
       return marketUndercut(run, e.key!, e.n!);
+    // gn.21–gn.30 fixes (part3.ts).
+    case 'stampLevel': {
+      const column = run.stage?.map.nodes.find((x) => x.id === run.stage!.current)?.column ?? 1;
+      const sc = levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, run.stage?.index ?? 0, column);
+      setGnFlag(run, e.key!, Math.max(1, Math.round(sc.start + (sc.end - sc.start) * sc.t)));
+      return '';
+    }
+    case 'raiseMarked':
+      return raiseMarked(content, run, e.key!, e.type!);
+    case 'markPink':
+      return markPink(content, run, host.picked);
+    case 'pinkFade':
+      return pinkFade(content, run);
+    case 'bondNewest':
+      return bondNewest(content, run, e.n ?? 0);
     case 'markLead': {
       // gn.30: a history mark on the lead (the pink one that ate the island fruit for a day).
       const lead = run.party.find((m) => m.hp > 0) ?? run.party[0];
@@ -997,6 +1137,19 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     case 'stageMod':
       setGnFlag(run, e.key!, host.stage % e.n!);
       return '';
+    case 'damianEgg': {
+      // The egg of the ace he last sent out; a run that never saw it (an old save) gets the fallback in `then`.
+      const species = aceEggSpecies(content, run);
+      if (!species) return (e.then ?? []).map((x) => host.apply(x)).filter(Boolean).join(' · ');
+      return host.apply({ kind: 'egg', species: [species], types: [], levelBonus: 0, shinyMultiplier: 1, left: 3, unit: 'battle' });
+    }
+    case 'moonRaid': {
+      // Only ever raises the flags (a test or another row may have set them already).
+      const raid = moonRaid(run);
+      if (raid === 'won') setGnFlag(run, MOON_RAID_WON, 1);
+      if (raid === 'lost') setGnFlag(run, MOON_RAID_LOST, 1);
+      return '';
+    }
     case 'fossil': {
       const far = e.key === 'far' || (e.key === 'local' && host.float() >= 0.7);
       const table = (far ? fossilsElsewhere(host.region) : fossilsOf(host.region)).filter((id) => content.catalog.has(id) || content.items.has(id));
@@ -1021,6 +1174,8 @@ export function gnBattleStart(content: Content, run: RunState): void {
   const battle = run.battle;
   if (!battle) return;
   if (gnFlag(run, FOREST.inside) > 0 && gnFlag(run, FOREST.fog) > 0) battle.accuracyMult = 0.9;
+  // gn.22 (the third wave): two of yours against one foe. The Cubone leads (`leadMark`), your next Pokémon stands beside it.
+  if (battle.eventRule?.beside && !battle.doubles && run.party.filter((m) => m.hp > 0).length >= 2) makeDoubles(battle, run.party);
   // gn.42: a Frontier Brain brings the answer to the ace you brought last time.
   const rule = battle.eventRule?.gn;
   if (rule?.startsWith('brain-')) brainStart(content, run, battle, rule.slice('brain-'.length), makeFull(content));
@@ -1033,6 +1188,8 @@ export function gnBattleStart(content: Content, run: RunState): void {
   if (rule === 'allstar-qf' || rule === 'allstar-sf') allstarStart(content, run, battle, rule === 'allstar-qf' ? 'qf' : 'sf', makeFull(content));
   // gn.47: the Exhibition's winner, with their own three.
   if (rule === 'exhibition') exStart(content, run, battle, makeFull(content));
+  // gn.47: the match itself, watched: both Champions' six take the field, the player's team waits (exhibition.ts).
+  if (rule === 'exhibition-watch') exWatchStart(content, run, battle, makeFull(content));
   // gn.48: a draft battle (n on n), or the bracket against one of the other drafters (`slot`).
   // gn.50: the defector as a boss (each of theirs answers one of yours); at the team's climax, Corin beside you and the corridor held.
   if (rule === 'defector') defectorBossStart(content, run, battle, makeFull(content));
@@ -1046,12 +1203,13 @@ export function gnBattleStart(content: Content, run: RunState): void {
   // gn.55: the Angry Bidoof, tripled.
   if (rule === 'bidoof') bidoofStart(content, run, battle);
   // gn.new.22: the Alley Court's challenge, with the player's three calls.
-  if (rule === 'alley') alleyStart(run, battle);
   // gn.57: the Impersonator's Illusion opens as the player's lead.
   if (rule === 'impersonator') impersonatorStart(run, battle);
   // gn.new.06: the Duelist, and the chosen one's Worthy Opponent.
   if (rule === 'duelist') duelistStart(content, run, battle, FOE_WAITS, makeFull(content));
-  worthyStart(run, battle);
+  worthyStart(content, run, battle);
+  // gn.new.19: Warm Clothes, for the rest of the region the Snowbound Village is in.
+  if (gnFlag(run, 'sv-warm-region') === run.regionIndex + 1 && !battle.storyEffects.includes('warm-clothes')) battle.storyEffects.push('warm-clothes');
   // gn.new.10: the Mirror Lake's reflections, the team from the battle the player would rather forget.
   if (rule === 'mirror') mirrorStart(content, run, battle, makeFull(content));
   // gn.59: Old Ferris's five: no items, no switching.
@@ -1078,6 +1236,7 @@ export function gnBattleStart(content: Content, run: RunState): void {
   if (battle.eventRule?.gn === 'slowking' && gnFlag(run, 'pink-quiz') >= 3) for (const foe of battle.enemyTeam) if (foe.speciesId === 'slowking') foe.moves = foe.moves.slice(0, Math.max(1, Math.ceil(foe.moves.length / 2)));
   if (battle.eventRule?.gn === 'bex') battle.storyEffects.push(`${FOE_WAITS}Bex is looking for the attack one. "TOP LEFT!" shouts Damian, from the back.`);
   if (battle.eventRule?.gn === 'damian') trainAce(content, battle.enemyTeam[battle.enemyTeam.length - 1], battle.eventRule.ace ?? 1);
+  if (battle.eventRule?.gn === 'damian') rememberAce(run, battle.enemyTeam[battle.enemyTeam.length - 1]?.speciesId);
   const lead = run.party[battle.activeIndex];
   // The Squirtle Squad (gn.08): the Leader's level is what a Lesser recruit has to reach before it may go back and challenge it.
   if (battle.event?.eventId === 'gn-08-leader' && battle.enemyTeam[0]) setGnFlag(run, 'squad-leader-level', battle.enemyTeam[0].level);
@@ -1103,7 +1262,7 @@ export function gnBattleStart(content: Content, run: RunState): void {
     if (gnFlag(run, 'savanna-water') <= 0) for (const m of run.party) if (m.hp > 0) m.hp = Math.min(m.hp, Math.max(1, Math.floor(maxHp(content, m) * 0.9)));
     if (rule === 'herd') battle.storyEffects.push(`${FOE_WAITS}A Donphan from the herd steps in front of your Pokémon and takes the blow meant for it.`);
   }
-  // The Great Desert (gn.36): with the water gone, the party enters each battle at 90% HP.
+  // The Endless Desert (gn.36): with the water gone, the party enters each battle at 90% HP.
   if (rule === 'desert' && gnFlag(run, 'desert-water') <= 0) for (const m of run.party) if (m.hp > 0) m.hp = Math.min(m.hp, Math.max(1, Math.floor(maxHp(content, m) * 0.9)));
   // The Haunted Mansion (gn.37): every Ghost-type you battled on the way up joins the owner's side, one at a time.
   if (rule === 'mansion' && battle.enemyTeam[0]) {
@@ -1126,8 +1285,11 @@ export function gnBattleStart(content: Content, run: RunState): void {
   if (battle.eventRule?.gn === 'lastExchange') {
     const foe = battle.enemyTeam[0];
     if (foe) foe.hp = Math.max(1, Math.floor(maxHp(content, foe) * 0.2));
-    if (lead && gnFlag(run, 'tc-you-choose') > 0 && lead.friendship >= BOND_THREE) battle.storyEffects.push(`kind:${lead.uid}`);
   }
+  // gn.17, the Sludge Pits: your Pokémon pull the stuck ones out while the Grimer horde goes on attacking.
+  if (battle.eventRule?.gn === 'pits') pitsStart(battle, gnFlag(run, 'factory-pulls'), gnFlag(run, 'factory-freed'));
+  // gn.16: the ring's own counts (first-turn hit, most-used move) and the last exchange's three calls.
+  tourneyStart(content, run, battle, lead, BOND_THREE);
 }
 
 /** gn.38's greenhouse: a Bellossom with Drought, a Raticate with Huge Power, a Pidgeotto that doesn't need to flap (Levitate). */
@@ -1210,6 +1372,24 @@ export function trainAce(content: Content, ace: PokemonInstance | undefined, plu
   ace.moves = [...kept, ...picked.map((id) => ({ id, pp: content.moves.get(id)!.pp }))];
 }
 
+/**
+ * gn.17, the Sludge Pits in a double or triple fight (called on the commands the turn will really play): each Pokémon told to attack pulls
+ * one out of the pit instead, while any are still stuck. In a single fight the engine's own `gn-you-wait` handling does the same.
+ */
+export function gnShapeDouble<T extends PlayerAction>(run: RunState, action: T): { action: T; events: Cue[] } {
+  const battle = run.battle;
+  if (!battle || battle.eventRule?.gn !== 'pits' || action.kind !== 'double') return { action, events: [] };
+  const events: Cue[] = [];
+  const commands = action.commands.map((cmd) => {
+    const at = battle.storyEffects.indexOf(PIT_PULL);
+    if (!cmd || cmd.action.kind !== 'move' || at < 0) return cmd;
+    battle.storyEffects.splice(at, 1);
+    events.push(cue('player', PIT_PULL.slice(YOU_WAIT.length)));
+    return { ...cmd, action: { kind: 'idle' as const } };
+  });
+  return { action: { ...action, commands }, events };
+}
+
 /** Before the player's command is played: a Greenneedle rule may answer it. Returns the action to play and lines to show first. */
 /** gn.59: the 5th region's look is answered before any rule applies. */
 export function gnShape(content: Content, run: RunState, action: PlayerAction): { action: PlayerAction; events: Cue[] } {
@@ -1221,8 +1401,16 @@ function gnShapeRule(content: Content, run: RunState, action: PlayerAction): { a
   const battle = run.battle;
   const rule = battle?.eventRule?.gn;
   const mon = battle ? run.party[battle.activeIndex] : undefined;
-  if (!battle || !rule || !mon || battle.needsSwitch) return { action, events: [] };
+  if (!battle || !rule || !mon || battle.needsSwitch) {
+    // gn.16 (bouts without a rule of their own still count the moves used).
+    if (battle && mon && !battle.needsSwitch && action.kind === 'move') tourneyShape(content, run, battle, mon, action.index, BOND_THREE);
+    return { action, events: [] };
+  }
   const foe = battle.enemyTeam[battle.enemyIndex];
+  if (action.kind === 'move') {
+    const t = tourneyShape(content, run, battle, mon, action.index, BOND_THREE);
+    if (t.index !== action.index) return { action: { ...action, index: t.index }, events: t.line ? [cue('player', t.line, mon.uid)] : [] };
+  }
   // gn.35: earthing the overcharged one. Your Ground-type won't strike it: it stands there, because it's needed there.
   if (rule === 'earthing' && action.kind === 'move' && action.index >= 0 && (content.moves.get(mon.moves[action.index]?.id ?? '')?.category ?? 'status') !== 'status') {
     return { action: { kind: 'idle' }, events: [cue('player', `${nameOf(content, mon)} doesn't strike. It plants its feet, and stands there. It's needed there.`, mon.uid)] };
@@ -1257,7 +1445,17 @@ function countForest(content: Content, run: RunState, battle: BattleState): void
 /** After a turn: once a fight is won, the stories that count fights take their count (once per fight). */
 export function gnAfterTurn(content: Content, run: RunState): Cue[] {
   const battle = run.battle;
-  const seen = ferrisTurn(content, run);
+  const seen = [...ferrisTurn(content, run)];
+  // gn.25: the pair answer for each other (part3.ts).
+  if (battle && !battle.outcome) for (const line of truceAnswers(content, battle, run.party)) seen.push(cue('player', line));
+  // gn.new.03: the Ball held through this battle answers as soon as it is decided.
+  const ball = battle ? ballAnswer(run, battle) : '';
+  if (ball) seen.push(cue('player', ball));
+  // gn.47: the commentary box calls each knockout of the watched match.
+  for (const line of exCalls(content, run)) seen.push(cue('player', line));
+  if (battle) tourneyAfterTurn(run, battle);
+  const out = battle ? pitsFreed(battle) : undefined;
+  if (out !== undefined && out > gnFlag(run, 'factory-freed')) setGnFlag(run, 'factory-freed', out);
   if (!battle || (battle.outcome !== 'win' && battle.outcome !== 'caught') || battle.storyEffects.includes('gn-counted')) return seen;
   battle.storyEffects.push('gn-counted');
   countForest(content, run, battle);

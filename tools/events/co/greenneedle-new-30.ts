@@ -51,14 +51,14 @@ export const REMOVE: string[] = [];
 
 export const PLACEMENT: Record<string, Placement> = {
   'gn-new-30-street': {
-    gn: 'gn.new.30', shape: 'Chain', earliest: 'A2', home: 2, window: [1, 4], sits: 'optional', tags: ['Companion Story'], level: 'No battles of their own', often: 'run',
+    gn: 'gn.new.30', shape: 'Chain', earliest: 'A2', home: 2, window: [1, 6], sits: 'optional', tags: ['Companion Story'], level: 'No battles of their own', often: 'run',
     beats: [
-      { beat: 'The street battle', event: 'gn-new-30-street', stage: 'S(n)', home: 2, window: [1, 4] },
+      { beat: 'The street battle', event: 'gn-new-30-street', stage: 'S(n)', home: 2, window: [1, 6] },
       { beat: 'The ending (stay to step 19)', event: 'gn-new-30-end', stage: 'S(n)', home: 19, window: [18, 19] },
     ],
-    note: 'Chain inside one stage. Fallback step 6, optional. Once per run (the doc says once per run). While they walk with you, in every battle: Plusle +5% Attack, Minun +5% Defence. Both together: Call and Response (core/greenneedle/cheer.ts).',
+    note: 'Chain inside one stage. Fallback step 6, optional (the end of the window). The ending at step 19 is must-see (every lane), so no path misses the question. Once per run (the doc says once per run). While they walk with you, in every battle: Plusle +5% Attack, Minun +5% Defence. Both together: Call and Response (core/greenneedle/cheer.ts).',
   },
-  'gn-new-30-end': { gn: 'gn.new.30', shape: 'Chain', earliest: 'A2', home: 19, window: [18, 19], sits: 'optional', tags: ['Companion Story'], level: 'No battles of their own', often: 'run', beat: 2, chain: 'gn.new.30' },
+  'gn-new-30-end': { gn: 'gn.new.30', shape: 'Chain', earliest: 'A2', home: 19, window: [18, 19], sits: 'must-see', tags: ['Companion Story'], level: 'No battles of their own', often: 'run', beat: 2, chain: 'gn.new.30' },
 };
 
 export const CHAINS: Json[] = [];

@@ -58,11 +58,19 @@ describe('gn.new.20 The Drought Ranch', () => {
     expect(flagOf(run, 'ranch-dug')).toBe(1);
     expect(content.catalog.has('fresh-milk') || content.items.has('fresh-milk')).toBe(true);
     expect(ranchRest(content, run)).toContain('Fresh Milk');
+    // once per rest: a can left unused is not doubled at the next rest
+    expect(ranchRest(content, run)).toBe('');
+    expect(run.inventory['fresh-milk']).toBe(1);
+    // used up: the next rest leaves a new one
+    run.inventory['fresh-milk'] = 0;
     expect(ranchRest(content, run)).toContain('Fresh Milk');
-    expect(run.inventory['fresh-milk']).toBe(2);
+    expect(run.inventory['fresh-milk']).toBe(1);
+    // the doc's Fresh Milk: an out-of-battle full heal for one Pokémon
+    expect(content.catalog.get('fresh-milk')!.effect).toEqual({ kind: 'care', heal: 9999 });
+    run.inventory['fresh-milk'] = 0;
     run.regionIndex += 1;
     expect(ranchRest(content, run)).toBe('');
-    expect(run.inventory['fresh-milk']).toBe(2);
+    expect(run.inventory['fresh-milk']).toBe(0);
   });
 
   it('Walk away: she starts choosing which three; nothing else happens', () => {
@@ -79,8 +87,12 @@ describe('gn.new.20 The Drought Ranch', () => {
   });
 
   it('afterstories: three thin Bidoof only after the dam, a later stage; the Bibarel by the road only in a later region', () => {
+    // "Three thin Bidoof are on the road at Step 9": the same stage, three nodes on from the ranch (step 6), queued by the dam fight's win.
     const e = content.events.get('gn-new-20-road')!;
-    expect(e.callback).toBe(true);
+    expect(e.room).toBe(true);
+    const dam = content.events.get('gn-new-20-dam')!;
+    expect(JSON.stringify(dam.choices[0]!.success.battle)).toContain('{"kind":"laterEvent","eventId":"gn-new-20-road","nodes":3}');
+    expect(JSON.stringify(content.events.get('gn-new-20-moved'))).not.toContain('laterEvent');
     const later = content.events.get('gn-new-20-later')!;
     expect(later.callback).toBe(true);
     expect(later.remembers?.map((m) => m.id)).toEqual(['broke', 'dug']);

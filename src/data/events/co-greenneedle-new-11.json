@@ -138,7 +138,7 @@
     {
      "label": "The Masked Banette.",
      "success": {
-      "text": "The Banette lays three moves on a cloth: Shadow Sneak, Night Slash, Will-O-Wisp. \"A move for a move,\" it says. \"Fair is fair.\"",
+      "text": "The Banette lays three moves on a cloth, face up. \"A move for a move,\" it says. \"Fair is fair.\"",
       "effects": [
        {
         "kind": "gn",
@@ -327,107 +327,22 @@
     "tint": "#2a2140",
     "effect": "none"
    },
-   "intro": "Three moves on a cloth. A tiny hand covers the one you are not looking at.\n\n**The Banette:** \"Your lead gives its last move to the cloth. Take one. Only one.\"\n\nLanterns left: **{flag:parade-lanterns}** of six.",
+   "intro": "Three moves on a cloth. A tiny hand covers the one you are not looking at.\n\n**The Banette:** \"Your lead puts one of its own on the cloth. Take one. Only one.\"\n\nLanterns left: **{flag:parade-lanterns}** of six.",
    "choices": [
     {
-     "label": "Shadow Sneak.",
+     "label": "Trade a move.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "paradeMoveReady"
+      }
+     ],
      "success": {
-      "text": "The cloth is empty again. Your lead moves quietly now, and a little faster than before.",
+      "text": "The Banette lifts its hand. Three moves, face up, and none of them hidden.",
       "effects": [
        {
         "kind": "gn",
-        "op": "paradeSwap",
-        "key": "shadow-sneak"
-       },
-       {
-        "kind": "flag",
-        "key": "parade-lanterns",
-        "amount": -1
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "parade-lanterns",
-        "min": 0,
-        "max": 0,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-new-11-dark"
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "parade-lanterns",
-        "min": 1,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-new-11-lane-a"
-         }
-        ]
-       }
-      ]
-     }
-    },
-    {
-     "label": "Night Slash.",
-     "success": {
-      "text": "The cloth is empty again. Your lead cuts the air once, to see. The air stays cut.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "paradeSwap",
-        "key": "night-slash"
-       },
-       {
-        "kind": "flag",
-        "key": "parade-lanterns",
-        "amount": -1
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "parade-lanterns",
-        "min": 0,
-        "max": 0,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-new-11-dark"
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "parade-lanterns",
-        "min": 1,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-new-11-lane-a"
-         }
-        ]
-       }
-      ]
-     }
-    },
-    {
-     "label": "Will-O-Wisp.",
-     "success": {
-      "text": "The cloth is empty again. A small blue flame is following your lead, shyly.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "paradeSwap",
-        "key": "will-o-wisp"
+        "op": "paradeSwap"
        },
        {
         "kind": "flag",
@@ -511,9 +426,8 @@
         "op": "paradeForget"
        },
        {
-        "kind": "item",
-        "id": "rare-candy",
-        "count": 1
+        "kind": "gn",
+        "op": "paradeRare"
        },
        {
         "kind": "flag",
@@ -671,7 +585,7 @@
       }
      ],
      "success": {
-      "text": "The lesson takes no time at all, and all night. Your lead steps away from the stall with something very old behind its eyes.",
+      "text": "The lesson takes no time at all, and all night. Every move its grandparents knew is laid out, and you may choose one.",
       "effects": [
        {
         "kind": "gn",

@@ -43,7 +43,10 @@ export function visibleColumn(content: Content, run: RunState): number {
 
 /** Whether a node is in the fog given the last visible column (see `visibleColumn`): beyond it and not visited. The gym leader and the League are never fogged. */
 export function foggedAt(stage: StageState, seen: number, node: MapNode): boolean {
-  if (stage.kind !== 'stage' || node.column >= stage.map.columns || stage.visited.includes(node.id)) return false;
+  if (stage.visited.includes(node.id)) return false;
+  // A pseudo-stage's blank spaces (gn.31's clearing, gn.36's sandstorm): not drawn until walked into, or shown.
+  if (stage.hidden?.includes(node.id)) return true;
+  if (stage.kind !== 'stage' || node.column >= stage.map.columns) return false;
   return node.column > seen;
 }
 

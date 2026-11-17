@@ -1,6 +1,6 @@
 // Greenneedle, part 11: gn.44 The 1v1 Championship (doc GREENNEEDLE_REWORKED_PLACED_10.md).
 // Build: npm run co:build -- greenneedle-11   then   npm run co:gn
-import { $, any, anyType, br, ch, egg, fight, flag, fr, heal, item, join, money, out, scout, takeNode, trainer, wild, type Json } from '../dsl.ts';
+import { $, any, anyType, at, br, ch, egg, fight, flag, fr, heal, item, join, money, out, takeNode, trainer, wild, type Json } from '../dsl.ts';
 import { bond, chIf, exactly, gev, gn, is, laterStage, moment, not, notThisRegion, rm, roll, route, say, scene, setTo, stampRegion, stampStage, teach, when, type Placement } from './_gn.ts';
 import { evil, foe, rivalTrust } from './_evil-story-kit.ts';
 
@@ -19,22 +19,24 @@ const met = (): Json => is('onevone-met');
 
 interface Round { name: string; cls: string; intro: string; text: string; remembers?: Json[] }
 const ROUNDS: Round[] = [
-  { name: 'Newcomer Pip', cls: 'youngster', intro: say('Round one. A newcomer, shaking so hard their Poké Ball rattles. Their first tournament.', '"I read the rules four times," they tell you. "I still don\'t know where to stand."', 'Their one: {cast:onevone-foe-1}.'), text: 'You show them where to stand. Then you go to yours.' },
-  { name: 'Road Trainer Halvard', cls: 'hiker', intro: say('Round two. A trainer off the road, boots still muddy.', '"We\'ve met. On the road, a while back. You won. I\'ve thought about it since." They say it like a fact, not a grudge.', 'Their one: {cast:onevone-foe-2}.'), text: '"Different this time," they say. "I hope."' },
+  { name: 'Newcomer', cls: 'youngster', intro: say('Round one. A newcomer, {onevone:who:1}, shaking so hard their Poké Ball rattles. Their first tournament.', '"I read the rules four times," they tell you. "I still don\'t know where to stand."', 'Their one: {cast:onevone-foe-1}.'), text: 'You show them where to stand. Then you go to yours.' },
+  { name: 'Road Trainer', cls: 'hiker', intro: say('Round two. {onevone:who:2}, a trainer off the road, boots still muddy.', 'Their one: {cast:onevone-foe-2}.'), text: '"Different this time," they say. "I hope."', remembers: [
+    { id: 'met', when: [is('onevone-road-met')], notice: '**{onevone:who:2}:** "We\'ve met. On the road, a while back. You won. I\'ve thought about it since." They say it like a fact, not a grudge.' },
+  ] },
   { name: 'Gideon Tolland', cls: 'worker', intro: say('Round three. A dock worker in a knitted hat, grinning, with a {cast:onevone-foe-3} beside him.', '**Gideon:** "Gideon. Don\'t mind me, I\'m scenery. Fourth round\'s my ceiling. I\'ve made my peace."'), text: 'He shakes your hand, then your Pokémon\'s, very seriously.', remembers: [
     { id: 'belts', when: [gnc('entrantChampion')], notice: 'Your entrant wears the Fighting Tournament\'s belt. Gideon sees it, takes off his hat, and bows.' },
     { id: 'same', when: [met(), is('onevone-same')], notice: '**Gideon:** "The {cast:onevone-entrant} again! Good. I\'ve had a year to think about that {cast:onevone-entrant}. I\'ve thought of nothing. Let\'s see."' },
     { id: 'different', when: [met()], notice: '**Gideon:** "New one this year? Smart. I was going to be *so* ready for the other."' },
   ] },
-  { name: 'Specialist Ingrid', cls: 'ace-trainer', intro: say('Round four. A specialist, and the draw isn\'t kind: their {cast:onevone-foe-4} is exactly what your entrant doesn\'t want to see.', 'They look almost apologetic about it. Almost.'), text: 'Your entrant looks at their Pokémon, then at you. You nod. It goes in anyway.' },
-  { name: 'Specialist Tobiah', cls: 'ace-trainer', intro: say('Round five. A specialist whose type your entrant beats, on paper. Their {cast:onevone-foe-5}.', '"I know," they say, before you can. "I\'ve planned for it. You\'ll see."'), text: 'They have planned for it. You can see it in how they stand.' },
+  { name: 'Specialist', cls: 'ace-trainer', intro: say('Round four. {onevone:who:4}, a specialist, and the draw isn\'t kind: their {cast:onevone-foe-4} is exactly what your entrant doesn\'t want to see.', 'They look almost apologetic about it. Almost.'), text: 'Your entrant looks at their Pokémon, then at you. You nod. It goes in anyway.' },
+  { name: 'Specialist', cls: 'ace-trainer', intro: say('Round five. {onevone:who:5}, a specialist whose type your entrant beats, on paper. Their {cast:onevone-foe-5}.', '"I know," they say, before you can. "I\'ve planned for it. You\'ll see."'), text: 'They have planned for it. You can see it in how they stand.' },
   { name: 'Señora Dolores Vantongeren', cls: 'veteran', intro: say('Round six. A woman of eighty, very upright, with a {cast:onevone-foe-6} that has been with her for fifty years. She has won this four times.', '**Dolores:** "Sit up straight. Not you. That one. Good. It listens. That\'s half of it."'), text: 'Her Xatu doesn\'t move until she does. She doesn\'t move until she\'s ready.', remembers: [
     { id: 'back', when: [gnc('entrantCameBack')], notice: 'Dolores looks at your entrant for a long time. "That one\'s been somewhere. Hasn\'t it."' },
     { id: 'same', when: [met(), is('onevone-same')], notice: '**Dolores:** "The same one. You came back with the same one. *Good.* Most of them swap, the minute it loses. You don\'t swap a friend."' },
     { id: 'different', when: [met()], notice: '**Dolores:** "A different one. Hm. And what did the last one think about that?"' },
   ] },
-  { name: 'Finalist Corwin', cls: 'ace-trainer', intro: say('Round seven. Last year\'s finalist, with a {cast:onevone-foe-7}. He isn\'t looking at you at all. He\'s looking past you, at the champion\'s chair.', '"Nothing personal," he says. "You\'re in my way, that\'s all."'), text: 'He bows to the chair before he bows to you.' },
-  { name: 'The Reigning Champion', cls: 'ace-trainer', intro: say('The final. The reigning champion, {onevone-champion}, comes down from the chair, with one Pokémon, a {cast:onevone-foe-8}, a little stronger than yours. It holds something that fits it.', '"Eight," she says. "You\'ve earned the eighth. Not many do."'), text: 'The hall goes quiet. One Pokémon each. It was always going to come to this.', remembers: [
+  { name: 'Finalist', cls: 'ace-trainer', intro: say('Round seven. Last year\'s finalist, {onevone:who:7}, with a {cast:onevone-foe-7}. They aren\'t looking at you at all. They\'re looking past you, at the champion\'s chair.', '"Nothing personal," they say. "You\'re in my way, that\'s all."'), text: 'They bow to the chair before they bow to you.' },
+  { name: 'The Reigning Champion', cls: 'ace-trainer', intro: say('The final. The reigning champion, {onevone-champion}, comes down from the chair, with one Pokémon, a {cast:onevone-foe-8}, a little stronger than yours. It holds something that fits it.', '"Eight," they say. "You\'ve earned the eighth. Not many do."'), text: 'The hall goes quiet. One Pokémon each. It was always going to come to this.', remembers: [
     { id: 'again', when: [met(), is('onevone-same')], notice: '**The champion:** "They said you\'d bring it again. Dolores said. She said you\'re the kind that does."' },
   ] },
 ];
@@ -116,10 +118,14 @@ const gn45: Json[] = [
   ), [
     ch('Battle.', fight('The Champion\'s Pokémon walks out like it\'s done this a thousand times. It has.', { ...trainer('The Champion', { cls: 'ace-trainer', size: 3, lv: -1, friendly: true, rule: { gn: 'champlesson' }, win: afterLesson, lose: afterLesson }) })),
   ]),
-  rm('gn-45-montage', 'The Champion\'s Training Session: This One', field({ tags: ['Story', 'Recovery'] }), say(
+  rm('gn-45-montage', 'The Champion\'s Training Session: This One', field({ tags: ['Story', 'Recovery'], remembers: [
+    // The Champion's line is true for the reason this one was picked (lesson-why: 1 liked and unused, 2 fainted most, 3 the newest).
+    { id: 'liked', when: [exactly('lesson-why', 1)], notice: '**{lesson-champion}:** "You like it. You don\'t use it. It knows both things."' },
+    { id: 'fallen', when: [exactly('lesson-why', 2)], notice: '**{lesson-champion}:** "It keeps going down. You keep sending it out. It knows both things."' },
+    { id: 'newest', when: [exactly('lesson-why', 3)], notice: '**{lesson-champion}:** "It\'s new. You haven\'t made up your mind about it. It has, about you."' },
+  ] }), say(
     'The Champion walks along your team, slowly, looking at each of them. They stop.',
     '**{lesson-champion}:** "This one." It\'s your {cast:lesson-pupil}. Not your strongest. Not even close.',
-    '"You like it. You don\'t use it. It knows both things."',
     '**Morning.** It does a move, badly. The Champion says nothing, and waits.',
     '**Noon.** It does the move again. The Champion moves its foot an inch with the toe of their boot.',
     '**Dusk.** It does the move. The Champion\'s own ace, watching from the grass, opens one eye.',
@@ -195,7 +201,7 @@ const gn46: Json[] = [
     'Between rounds. The crowd spills into the aisles. People you met for five minutes, months ago, want to shake your hand.',
     'Someone at the back is holding something out to you, and won\'t stop holding it out until you come over.',
   ), [
-    ch('Walk among them.', out('A traveller you once shared a fire with presses a held item into your palm. "For the next one. You\'ll need it more than me."', any('quick-claw', 'scope-lens', 'muscle-band', 'wise-glasses', 'shell-bell'), scene('gn-46-sf'))),
+    ch('Walk among them.', out('A traveller you once shared a fire with presses a held item into your palm. "For the next one. You\'ll need it more than me. They\'ve a new one, you know. A {cast:allstar-new-sf}."', any('quick-claw', 'scope-lens', 'muscle-band', 'wise-glasses', 'shell-bell'), scene('gn-46-sf'))),
     ch('Go to the ring.', out('You wave, and go. They wave back, still holding it out, smiling.', scene('gn-46-sf'))),
   ]),
   rm('gn-46-sf', 'The All-Star Tournament: Semi-Final', stars({ remembers: [
@@ -206,7 +212,7 @@ const gn46: Json[] = [
     'The semi-final. {allstar:sf}. They haven\'t changed at all, and they don\'t think they need to. Looking at them, you\'re not sure they\'re wrong.',
     '**{allstar:sf}:** "{allstar-line:sf}"',
   ), [
-    ch('Battle.', fight('Same team. Same stance. Same look in their eye, like they know something you don\'t.', { ...trainer('All-Star', { cls: 'ace-trainer', size: 6, lv: 1, friendly: true, rule: { gn: 'allstar-sf' },
+    ch('Battle.', fight('Same stance. Same look in their eye, like they know something you don\'t. The team behind them has grown up, all the same.', { ...trainer('All-Star', { cls: 'ace-trainer', size: 6, lv: 1, friendly: true, rule: { gn: 'allstar-sf' },
       win: [any(...RARE_ITEMS), setTo('allstar-round', 2), setTo('allstar-respect', 1), moment('Beat the All-Star semi-finalist, who shook your hand and promised to come to the Final Reunion.', 60), scene('gn-46-crowd-2')], lose: allstarOut }) })),
   ]),
   rm('gn-46-crowd-2', 'The All-Star Tournament: Before the Final', stars({ tags: ['Recovery', 'Story'] }), say(
@@ -222,7 +228,7 @@ const gn46: Json[] = [
     { id: 'ahead', when: [gnc('rivalAhead')], notice: '**{allstar-rival}:** "I\'m ahead, you know. Badges, wins, all of it. I\'ve kept count. This is the one that counts, though."' },
   ] }), say(
     'The final. {allstar-rival}, on the far side of the ring, exactly where the bracket said they\'d be.',
-    '**{allstar-rival}:** "Everyone you\'ve ever fought is in those stands. And it\'s still us two at the end. It\'s *always* us two."',
+    '**{allstar-rival}:** {allstar-open}',
   ), [
     chIf([gnc('rivalTrustMax')], 'Shake.', fight('You shake. Their grip is warm, and it holds a second longer than it needs to. Both teams stand a little taller.', { ...trainer('Rival', { rival: true, size: 6, lv: 2, friendly: true, rule: { gn: 'allstar-final' }, win: [gn('allstarChampion'), moment('Won the All-Star Tournament. Every name you met is on the trophy. Yours is last.', 85), scene('gn-46-champion')], lose: [scene('gn-46-runner-up')] }) }, setTo('allstar-shake', 1))),
     chIf([gnc('rivalTrustMax')], 'After.', fight('"After," you say. They grin, and put their hand away. "After, then. Promise."', { ...trainer('Rival', { rival: true, size: 6, lv: 2, friendly: true, rule: { gn: 'allstar-final' }, win: [gn('allstarChampion'), moment('Won the All-Star Tournament. Every name you met is on the trophy. Yours is last.', 85), scene('gn-46-champion')], lose: [scene('gn-46-runner-up')] }) })),
@@ -248,19 +254,14 @@ const gn46: Json[] = [
 
 // =====================================================================================================================
 // gn.47  THE POKÉMON LEAGUE EXHIBITION  (a Town or Hub event; until towns exist, step 15, optional, window 13–17; once per region,
-// from A8; each matchup once per run). Watch a famous match from the stands (core/greenneedle/exhibition.ts): back one side on air,
+// from A8; each matchup once per run). Watch a famous match from the stands (core/greenneedle/exhibition.ts; the match is a real
+// CPU-versus-CPU battle on the engine, watched on the battle screen with its commentary): back one side on air,
 // three moments while it runs, and the winner may reward you, or invite you down (25%, or always after watching closely three times).
 // =====================================================================================================================
 const EX_TINT = '#2f3f6b';
 const ex = (o: Json = {}): Json => ({ tint: EX_TINT, tags: ['Story'], effect: 'none', ...o });
 const EX_RARE = ['leftovers', 'expert-belt', 'shell-bell', 'scope-lens', 'quick-claw'];
 const EX_EPIC = ['life-orb', 'choice-band', 'choice-specs', 'choice-scarf', 'assault-vest', 'focus-sash'];
-/** One of the three moments while the match runs. */
-const exMoment = (i: number, next: Json[]): Json[] => [
-  ch('Cheer.', out('You cheer, loud enough to hear yourself on the big screen.', gn('exWatch', { n: i, key: 'cheer' }), ...next)),
-  ch('Watch closely.', out('You stop watching the Pokémon, and watch the hands.', gn('exWatch', { n: i, key: 'watch' }), ...next)),
-  ch('Look at the crowd.', out('You look away from the field, just for a second.', gn('exWatch', { n: i, key: 'crowd' }), ...next)),
-];
 const exEnd: Json[] = [
   gn('exResult'),
   when('ex-outcome', { min: 1, max: 1 }, [any(...EX_RARE)]),
@@ -288,7 +289,7 @@ const gn47: Json[] = [
     ch('"I don\'t mind who wins. I want to see it."', out('Marit laughs. "Diplomatic!" It\'s broadcast. On the big screen inside, both of them hear it.', gn('exBack', { n: 0 }), setTo('ex-reason', 4), scene('gn-47-match-1'))),
   ]),
   rm('gn-47-why', 'The Pokémon League Exhibition: On Air', ex({ remembers: [
-    { id: 'again', when: [is('ex-again')], notice: '**Marit:** "Wait. You again. You backed them last time too. You\'re loyal. Or stubborn. Which is it?"' },
+    { id: 'again', when: [is('ex-again')], notice: '**Marit:** "Wait. You again. You picked a side last time, too, and said so on air. You\'re loyal. Or stubborn. Which is it?"' },
   ] }), say(
     'The microphone hovers. Somewhere behind Marit, a camera light goes red. You are, apparently, live.',
   ), [
@@ -296,20 +297,15 @@ const gn47: Json[] = [
     ch('"They\'ve got more to prove."', out('"Ooh. Spicy." It\'s broadcast. Inside, on the big screen, both of them hear it.', setTo('ex-reason', 2), scene('gn-47-match-1'))),
     ch('"I like how they treat their Pokémon."', out('Marit lowers the microphone for a second. "That\'s a good reason," she says, off air. Then it\'s back up, and broadcast.', setTo('ex-reason', 3), scene('gn-47-match-1'))),
   ]),
-  rm('gn-47-match-1', 'The Pokémon League Exhibition: The Match', ex({ tags: ['Story', 'Combat'], remembers: [
-    { id: 'known', when: [gnc('exKnown')], notice: 'Before the first move, one of them scans the stands, row by row. They find you. They nod, just once, and turn back to the field.' },
-  ] }), say(
-    'Six on six. The stadium goes quiet in the way only a very big room can.',
-    '{ex:phase-1}',
-  ), exMoment(1, [scene('gn-47-match-2')])),
-  rm('gn-47-match-2', 'The Pokémon League Exhibition: The Match', ex({ tags: ['Story', 'Combat'] }), say(
-    'Halfway. Both of them are down to three.',
-    '{ex:phase-2}',
-  ), exMoment(2, [scene('gn-47-match-3')])),
-  rm('gn-47-match-3', 'The Pokémon League Exhibition: The Match', ex({ tags: ['Story', 'Combat'] }), say(
-    'The last of it. Nobody in the stadium is sitting down any more.',
-    '{ex:phase-3}',
-  ), exMoment(3, exEnd)),
+  // The match is watched on the battle screen (core/greenneedle/exhibition.ts, rule `exhibition-watch`): both Champions' six, played by
+  // the AI, with the commentary box; the three moments (Cheer / Watch closely / Look at the crowd) are asked there, while it runs.
+  // Whoever wins on the field won; `exEnd` then pays by who was backed and why, and opens the After room.
+  rm('gn-47-match-1', 'The Pokémon League Exhibition: The Match', ex({ tags: ['Story', 'Combat'] }), say(
+    'Row nine. The seat is still warm from whoever queued for it since morning.',
+    'Down on the field, **{ex:a}** and **{ex:b}** walk out from opposite tunnels. Six on six.',
+  ), [
+    ch('Watch the match.', fight('The lights go down everywhere except the field.', { ...trainer('Exhibition', { cls: 'ace-trainer', size: 6, lv: 0, friendly: true, rule: { gn: 'exhibition-watch' }, win: exEnd, lose: exEnd }) })),
+  ]),
   rm('gn-47-after', 'The Pokémon League Exhibition: After', ex({ remembers: [
     { id: 'invited', when: [is('ex-invite')], notice: '**{ex:winner}, into the microphone:** "There\'s a trainer in row nine who\'s been watching my hands for ten minutes. Come down. Let\'s see what you saw."' },
   ] }), say(
@@ -366,7 +362,7 @@ const gn48: Json[] = [
   rm('gn-48-table-a', 'The Pokémon Draft: The Table', hallD({ tags: ['Story'] }), say(
     'Pick {draft:round} of six. Five on the table. The other three drafters are watching your hand.',
     '1. {draft:card:1}', '2. {draft:card:2}', '3. {draft:card:3}',
-  ), [takeCard(1), takeCard(2), takeCard(3), ch('Further along the table.', out('You walk down to the other end of the table.', scene('gn-48-table-b')))]),
+  ), [takeCard(1), takeCard(2), takeCard(3), ch('Further along the table.', out('You walk down to the other end of the table.', setTo('draft-walked', 1), scene('gn-48-table-b')))]),
   rm('gn-48-table-b', 'The Pokémon Draft: The Table', hallD({ tags: ['Story'] }), say(
     'The far end of the table. Two more Balls, two more cards.',
     '4. {draft:card:4}', '5. {draft:card:5}',
@@ -401,6 +397,13 @@ const gn48: Json[] = [
   ), [
     ch('Write back.', out('You write two pages. {draft:friend} sits on the second page while you finish it.', stampRegion('draft-letter'), gn('draftLetter'))),
     ch('Don\'t.', out('You fold it into your bag. {draft:friend} watches you do it.', stampRegion('draft-letter'))),
+  ]),
+  // ---- Memory: released or traded away, it went back to its first trainer; it is met next at their side ----
+  gev('gn-48-home', 'The Pokémon Draft: It Went Home', hallD({ tags: ['Story'], stop: 'event', rarity: 'common', requires: [is('draft-returned'), not('draft-home-seen')] }), say(
+    'Two figures coming the other way on the road. You know the walk of one of them before you know the face.',
+    'It\'s {draft:home-by}. And beside them, where it always walked: {draft:home}. It went back. Of course it did.',
+  ), [
+    ch('Wave.', out('You wave. They both wave. {draft:home} looks at you a moment longer than its trainer does, and then they\'re past.', setTo('draft-home-seen', 1))),
   ]),
 ];
 
@@ -533,6 +536,15 @@ const gn49: Json[] = [
     'You come round on the verge. Somebody\'s put a coat under your head. The Snorlax has gone back to sleep, right where it was.',
     'But it rolled, a little, in the fight. There\'s a gap now, just wide enough. The queue squeezes through it, one at a time.',
   ), [ch('Squeeze past.', out('You squeeze past its belly. It snores at you. It sounds like a grudge.', setTo('snorlax-met', 1), item('leftovers'), stampRegion('snorlax-at')))]),
+  // ---- The food follower: at each rest before the stage ends it can still be asked along (the rest stop opens this beside it) ----
+  rm('gn-49-follower', 'The Sleeping Snorlax: One Step Back', hill({ tags: ['Story', 'Recovery'] }), say(
+    'The Snorlax from the road is still one step behind you. It sits when you sit. It watches your bag the way other Pokémon watch the sky.',
+    'It hasn\'t been asked. It would like to be.',
+  ), [
+    ch('Ask it to come with you.', out('It was coming anyway. Now it\'s official. It pats your bag, very gently, and keeps patting it.',
+      snorlaxJoin(), gn('snorlaxFond'), setTo('snorlax-joined', 1))),
+    ch('Not yet.', out('You say nothing. It doesn\'t mind. It has your bag to look at.')),
+  ]),
   // ---- Afterstory: a Snorlax that didn't join, asleep across the road in a later region ----
   gev('gn-49-later', 'The Sleeping Snorlax, Again', hill({ stop: 'event', rarity: 'rare', requires: [is('snorlax-met'), not('snorlax-joined'), not('snorlax-later'), notThisRegion('snorlax-at')] }), say(
     '*The road ends in a hill. The hill\'s breathing. You\'ve seen this hill before.*',
@@ -556,8 +568,9 @@ const note = (o: Json = {}): Json => ({ tint: NOTE_TINT, tags: ['Evil Team', 'St
 const here = gnc('thisRegion', { key: 'defector-at' });
 const helping = exactly('defector', 1);
 const trust = (n: number): Json => gn('defectorTrust', { n });
-/** Trust 3+: Corin shares a route (one free scouting of the team's nodes, each stage they meet you). */
-const SHARE = when('defector-trust', { min: 3 }, [scout(3)], 'Corin slips you a scrap of paper: a route, and where the patrols will be on it.');
+/** Trust 3+: Corin shares a route, one free scouting in every stage of the region (core/greenneedle/defector.ts defectorShare): handed over
+ *  here if this stage's hasn't been given yet; in a stage with no meeting it is left by the road before the first battle. */
+const SHARE = gn('defectorShare');
 /** After each meeting, Corin leaves the way they came. Following them is checking up on them. */
 const leaving = (id: string, name: string, line: string): Json => rm(id, name, note(), line, [
   ch('Let them go.', out('You let them go. You don\'t look where. Somehow that feels like the most useful thing you\'ve done all day.', SHARE)),
@@ -660,18 +673,25 @@ const gn50: Json[] = [
   ), [
     ch('Take them all.', fight('Fifteen folders don\'t fit in one jacket. A drawer bangs. Somewhere, an alarm. Someone\'s coming.', { ...foe('grunt', 'Night Patrol', 2, { lv: 1, win: [setTo('defector-files', 2), trust(1), scene('gn-50-out')] }), friendly: true, lose: [setTo('defector-files', 1), scene('gn-50-out')] })),
     ch('There\'s no time. Just yours.', out('Corin puts the fourteen folders back, one at a time, very carefully, as if they might wake. They don\'t speak on the way out.', setTo('defector-files', 1))),
-    ch('Take the boss\'s file too.', fight('The boss\'s drawer is locked. You open it anyway. The first alarm; then, as you run, a second.', { ...foe('specialist', 'Night Patrol', 3, { lv: 1, win: [setTo('defector-files', 3), evil({ mark: 'files' }), scene('gn-50-out')] }), friendly: true, lose: [setTo('defector-files', 1), scene('gn-50-out')] })),
+    // "Too": all fifteen folders and the boss's file. The first alarm is the same battle as "Take them all"; then a second alarm.
+    ch('Take the boss\'s file too.', fight('Fifteen folders, and then the boss\'s drawer. It\'s locked. You open it anyway. The first alarm. Someone\'s coming.', { ...foe('grunt', 'Night Patrol', 2, { lv: 1, win: [setTo('defector-files', 2), trust(1), scene('gn-50-second-alarm')] }), friendly: true, lose: [setTo('defector-files', 1), scene('gn-50-out')] })),
+  ]),
+  rm('gn-50-second-alarm', 'The Evil Team\'s Betrayal: The Second Alarm', note(), say(
+    'The fourteen folders are inside Corin\'s coat. The boss\'s file is inside yours. You\'re halfway down the corridor when a second alarm starts, louder than the first.',
+    'This patrol isn\'t Grunts. Somebody sent the people who are paid to be awake.',
+  ), [
+    ch('Battle.', fight('They come round the corner three abreast. Corin pushes the fourteen folders further down inside their coat, and stands behind you.', { ...foe('specialist', 'Second Patrol', 3, { lv: 1, win: [setTo('defector-files', 3), evil({ mark: 'files' }), scene('gn-50-out')] }), friendly: true, lose: [scene('gn-50-out')] })),
   ]),
   rm('gn-50-out', 'The Evil Team\'s Betrayal: Outside', note(), say(
     'Outside. Cold air. Running feet going the wrong way, behind you. Corin leans on a wall and laughs, once, like a cough.',
   ), [
     chIf([exactly('defector-files', 2)], 'Breathe.', out('Fourteen people you\'ll never meet will sleep tonight. Corin hands you nothing, says nothing. Doesn\'t need to.')),
-    chIf([exactly('defector-files', 3)], 'Breathe.', out('The boss\'s file is in your bag. Their Plan, in their own words, a stage early. Corin looks at it like it might bite.')),
+    chIf([exactly('defector-files', 3)], 'Breathe.', out('Fourteen people you\'ll never meet will sleep tonight. And the boss\'s file is in your bag: their Plan, in their own words, a stage early. Corin looks at it like it might bite.')),
     chIf([exactly('defector-files', 1)], 'Breathe.', out('One folder. Theirs. It\'s something. It isn\'t enough, and you both know which part isn\'t.')),
   ]),
   // ---- The ending, at the team's climax ----
   gev('gn-50-end', 'The Evil Team\'s Betrayal: The Climax', note({ stop: 'event', rarity: 'rare', requires: [here, is('defector'), not('defector-end'), { kind: 'evil', after: 6 }], remembers: [
-    { id: 'fourteen', when: [exactly('defector-files', 2)], notice: 'And somewhere behind the walls, a side door is standing open. You hear boots. A lot of boots. They\'re on your side.' },
+    { id: 'fourteen', when: [is('defector-files', 2)], notice: 'And somewhere behind the walls, a side door is standing open. You hear boots. A lot of boots. They\'re on your side.' },
   ] }), say(
     '*The {defector:team} site where it all ends. {defector:boss} is inside.*',
     '{defector:ending}',
@@ -688,7 +708,7 @@ const gn50: Json[] = [
 
 // =====================================================================================================================
 // gn.51  THE POKÉMON SMUGGLING RING  (step 14, side branch, window 12–17, better at night; instead of the battle; once per run, A6).
-// Four guards at A+1 (the last is the foreman); the roof skips two; the tyres cost a node; the Rangers do it for you. The cages,
+// Four guards at A+1, then the foreman (who gives up the keys); the roof skips two (at night the rafters are easy); the tyres cost a node; the Rangers do it for you. The cages,
 // the list of who goes home, and the one that stays: afraid of Balls, three rests of patience (core/greenneedle/smuggling.ts).
 // =====================================================================================================================
 const CRATE_TINT = '#232a33';
@@ -697,15 +717,16 @@ const GUARDS = [
   { name: 'Guard Hollis', line: 'The first guard looks up from a crossword. "You\'re not the lorry driver." He sighs, and stands.' },
   { name: 'Guard Pruett', line: 'The second guard was asleep on the cages. He\'s awake now, and embarrassed about it, which makes him angrier.' },
   { name: 'Guard Venn', line: 'The third guard doesn\'t say anything. He just takes off his watch, very carefully, and puts it in his pocket.' },
-  { name: 'Foreman Dace', line: '**Foreman Dace:** "Do you know what one of these fetches, three regions over? More than you\'ll see this year. Step away."' },
+  { name: 'Guard Ashdown', line: 'The fourth guard stands in front of the office door with her arms folded. "He\'s counting. He doesn\'t like to be interrupted when he\'s counting."' },
 ];
+/** The doc: four guard battles, one after another; then the foreman, who has a clipboard and no guards left. */
 const guardRoom = (i: number): Json => rm(`gn-51-guard-${i + 1}`, `The Smuggling Ring: ${GUARDS[i]!.name}`, crate(), say(
   i === 0 ? '*Inside, cages, stacked four high. Tags on each: a region, a number, a price.*' : 'Further in. The cages go on, row after row. Nothing in them makes a sound.',
   GUARDS[i]!.line,
 ), [
-  ch('Battle.', fight('His Pokémon are strong. Somebody pays for strong.', {
+  ch('Battle.', fight(i % 2 === 0 ? 'His Pokémon are strong. Somebody pays for strong.' : 'Strong Pokémon, well fed, badly loved. Somebody pays for strong.', {
     ...trainer(GUARDS[i]!.name, { cls: i === 3 ? 'veteran' : 'roughneck', size: i === 3 ? 4 : 3, lv: 1, friendly: true,
-      win: i === 3 ? [$(2500), any(...TREASURE_ITEMS), scene('gn-51-cages')] : [scene(`gn-51-guard-${i + 2}`)],
+      win: [scene(i === 3 ? 'gn-51-foreman' : `gn-51-guard-${i + 2}`)],
       lose: [scene('gn-51-lorries')] }) })),
 ]);
 const TREASURE_ITEMS = ['nugget', 'big-pearl', 'star-piece', 'comet-shard'];
@@ -718,12 +739,14 @@ const ENTRY = (o: { tyres?: boolean } = {}): Json[] => [
   ), takeNode(1), setTo('smuggle-tyres', 1), scene('gn-51-flat')))]),
   ch('Fetch the Rangers.', out(say(
     'You run for the Ranger post. They come, in a node, three jeeps with the lights off. The guards are theirs.',
-    'The head Ranger hands you a crowbar. "The cages are yours. You found them."',
-  ), takeNode(1), setTo('smuggle-entry', 4), flag('rep', 2), scene('gn-51-cages'))),
+    'The head Ranger hands you a crowbar, and a thin envelope: the finder\'s share, such as it is. "The cages are yours. You found them."',
+  ), takeNode(1), setTo('smuggle-entry', 4), flag('rep', 2), $(800), scene('gn-51-cages'))),
 ];
 
 const gn51: Json[] = [
-  gev('gn-51-yard', 'The Pokémon Smuggling Ring', crate({ stop: 'event', rarity: 'rare', requires: [not('smuggle-freed')] }), say(
+  gev('gn-51-yard', 'The Pokémon Smuggling Ring', crate({ stop: 'event', rarity: 'rare', requires: [not('smuggle-freed')], remembers: [
+    { id: 'night', when: [at('evening', 'night')], notice: 'It\'s dark. The guards\' torches don\'t reach the roof, and the yard lights are off so nobody sees the lorries. That cuts both ways.' },
+  ] }), say(
     '*A warehouse with its lights off and its doors open. Lorries, engines running.*',
     '*Inside, cages, stacked four high. Tags on each: a region, a number, a price.*',
     'Alolan, Galarian, Hisuian, Paldean: regional forms, taken from where they live, to be sold where they\'re rare.',
@@ -737,6 +760,8 @@ const gn51: Json[] = [
     'A beam as wide as your foot. Below, the cages, and the tops of the guards\' heads. One of them is humming.',
     'Halfway along, there\'s a gap where a beam has rotted out.',
   ), [
+    // Better at night: nobody looks up into the dark, and the gap is only a step.
+    chIf([at('evening', 'night')], 'Cross in the dark.', out('In the dark the gap is only a step, and nobody below can see the roof at all. Two guards never know you passed over their heads.', scene('gn-51-guard-3'))),
     chIf([anyType('flying', 'ghost')], 'Let your Pokémon carry you over.', out('It takes you across the gap without a sound. Two guards never see you pass over their heads.', scene('gn-51-guard-3'))),
     ch('Jump the gap.', out('You land soft. Two guards never see you pass over their heads.', scene('gn-51-guard-3')), {
       prompt: { id: 'brace-hold', needs: 'ok' },
@@ -744,6 +769,13 @@ const gn51: Json[] = [
     }),
   ]),
   ...GUARDS.map((_, i) => guardRoom(i)),
+  rm('gn-51-foreman', 'The Smuggling Ring: Foreman Dace', crate(), say(
+    'The office. A desk, a lamp, a clipboard. The foreman doesn\'t get up.',
+    '**Foreman Dace:** "Do you know what one of these fetches, three regions over? More than you\'ll see this year. Step away."',
+    'Then he looks past you, at four guards sitting on the floor, and at your Pokémon. He puts the clipboard down, very slowly, and the keys on top of it.',
+  ), [
+    ch('Take the keys.', out('You take the keys, and the clipboard, and the cash box he was counting into. He doesn\'t say another word.', $(2500), any(...TREASURE_ITEMS), scene('gn-51-cages'))),
+  ]),
   rm('gn-51-lorries', 'The Pokémon Smuggling Ring: The Lorries', crate({ remembers: [
     { id: 'tyres', when: [is('smuggle-tyres')], notice: 'Engines roar. Then they whine, and stop. Every lorry in the yard is sitting on its rims. Nobody\'s driving anywhere. By morning, the Rangers have the lot.' },
   ] }), say(
@@ -781,6 +813,8 @@ const gn51: Json[] = [
   ] }), say(
     'The {smuggle:rescue} from the warehouse is still with you. It takes no place in your team, and nothing can touch it: it stays back.',
     '{smuggle:rest}',
+    'The Rangers\' list, in your pocket, ticked as word comes of each one home:',
+    '{smuggle:list}',
   ), [
     chIf([not('smuggle-joined'), { kind: 'gn', test: 'rehabDone' }], 'Pick up the Ball.', out('It\'s in there. It climbed in by itself. Its Bond starts high. *It chose the door, this time.*', gn('smuggleJoin'))),
     chIf([{ kind: 'gn', test: 'rehabWaiting' }], 'Leave food where it can reach.', out('You put it down and walk away. In the morning the dish is clean, and it\'s a little closer.', gn('smuggleRehab', { n: 1 }))),
@@ -804,17 +838,25 @@ const lot = (won: boolean): Json => gn('taLot', { n: won ? 1 : 0 });
 const CORRIDOR_BY_TRUST = when('defector-trust', { min: 3 }, [setTo('ta-corridor', 1)]);
 const FLOOR_PEOPLE = say(
   'A woman in a fox mask bids on everything, early and high. A man by the pillar never bids at all. He just watches who does.',
-  'And a caterer with a tray of small pastries, who is {rival}. Out of the side of their mouth: "Don\'t. Say. Anything."',
+  'And a caterer with a tray of small pastries, who is {rival}. Out of the side of their mouth: {ta:hush}',
 );
 const lotRoom = (n: number, name: string, intro: string, choices: Json[], o: Json = {}): Json => rm(`gn-52-lot-${n}`, `The Evil Auction: Lot ${n}, ${name}`, mask(o), intro, choices);
+/** The standing price, and the two bidding choices of lot `n`: raise (while there's money for the next bid), or the lot's own way of letting go. */
+const standing = (n: number): string => 'The bid stands at ₽{ta:price:' + n + '}. Your next bid would be ₽{ta:next:' + n + '}.';
+const raise = (n: number, label: string, won: Json[]): Json => chIf([{ kind: 'gn', test: 'taCanBid', key: 'lot', n }], label, out('Your paddle goes up.', gn('taBid', { n }),
+  when('ta-won', { min: 1, max: 1 }, won), when('ta-won', { min: 0, max: 0 }, [scene(`gn-52-lot-${n}`)])));
 const nextLot = (n: number): Json => (n === 3 ? route('ta-ask', 'gn-52-lot-4', 'gn-52-question') : scene(`gn-52-lot-${n + 1}`));
 
+/** Raise the alarm: two guards and the lieutenant, one after another, at A+1. Everything's seized; the team knows the player's face. */
+const ALARM = (text: string): Json => ch('Raise the alarm.', fight(text, {
+  ...foe('grunt', 'Manor Guard', 2, { lv: 1, win: [scene('gn-52-alarm-2')] }), friendly: true, lose: [scene('gn-52-out')] },
+  setTo('ta-alarm', 1), evil({ heat: 2 })));
 const gn52: Json[] = [
   gev('gn-52-manor', 'The Evil Team\'s Pokémon Auction', mask({ stop: 'event', rarity: 'rare', requires: [{ kind: 'evil', after: 2 }, not('ta-done')], remembers: [
-    { id: 'corin', when: [exactly('defector', 1), is('defector-trust', 3)], notice: 'Then Jenny steps aside, and it\'s Corin behind her, hat low. "I left the corridor door on the latch. Behind the stage. You\'re welcome."' },
+    { id: 'corin', when: [exactly('defector', 1), is('defector-trust', 3)], notice: 'Then they step aside, and it\'s Corin behind them, hat low. "I left the corridor door on the latch. Behind the stage. You\'re welcome."' },
   ] }), say(
     '*A manor with every window lit and no cars outside. Guests arriving on foot, in masks.*',
-    '**Officer Jenny, in the hedge:** "It\'s tonight. Everything they\'ve taken this season, sold in one room."',
+    '**{ta:contact}, in the hedge:** "It\'s tonight. Everything they\'ve taken this season, sold in one room."',
     '"One lot\'s alive, and rare, and frightened. You\'ll need to be somebody else to get in."',
   ), [
     ch('Go as a rich buyer.', out('"Of the northern Vantongerens," you tell the door. "Distantly." The door bows. Money opens doors. Pretending to have it opens most.',
@@ -829,9 +871,11 @@ const gn52: Json[] = [
   // ---- The buyer: the viewing room ----
   rm('gn-52-viewing', 'The Evil Auction: The Viewing Room', mask(), say(
     'Glass cases under soft lights. A held item. A case of Balls. A fossil. An egg in straw. An antique vase.',
-    'A steward hovers, in case you\'d like anything up close.',
+    '{ta:viewed}',
   ), [
-    ch('Look closely at the antique.', out('You lean in. The glaze is still tacky. Somebody made this last week. It\'s a fake.', setTo('ta-viewed', 1), scene('gn-52-lot-1'))),
+    chIf([not('ta-viewed-near')], 'Look closely at the held item and the Balls.', out('The steward lifts the glass. You turn the held item over: honest. Then the case of Balls: under the lid, very small, the house\'s own seal.', setTo('ta-viewed-near', 1), scene('gn-52-viewing'))),
+    chIf([not('ta-viewed-far')], 'Look closely at the fossil and the egg.', out('The fossil is the real thing, still dusty. The egg is warm through the straw. It\'s much heavier than its little card says it should be.', setTo('ta-viewed-far', 1), scene('gn-52-viewing'))),
+    chIf([not('ta-viewed')], 'Look closely at the antique.', out('You lean in. The glaze is still tacky. Somebody made this last week. It\'s a fake.', setTo('ta-viewed', 1), scene('gn-52-viewing'))),
     ch('Go to the floor.', out('You take a paddle with a number on it, and a seat near the front.', scene('gn-52-lot-1'))),
   ]),
   // ---- The agent: the back office ----
@@ -846,9 +890,10 @@ const gn52: Json[] = [
   // ---- The floor: six lots ----
   lotRoom(1, 'A Held Item', say(
     'Lot 1: a held item, stolen from a trainer two towns over. Its fair value\'s on your screen: ₽1,200.',
+    standing(1),
     FLOOR_PEOPLE,
   ), [
-    ch('Bid to its fair value.', out('Your paddle goes up, once, twice. The fox mask lets you have it. Fair\'s fair.', $(-1200), any('quick-claw', 'kings-rock', 'scope-lens', 'razor-claw'), lot(true), nextLot(1)), { requires: [money(1200)] }),
+    raise(1, 'Raise your paddle.', [any('quick-claw', 'kings-rock', 'scope-lens', 'razor-claw'), lot(true), nextLot(1)]),
     ch('Let it go.', out('You let it go. It sells to someone in a rabbit mask, for too much.', lot(false), nextLot(1))),
   ], { remembers: [
     { id: 'pryde', when: [is('auction-exposed')], notice: 'In the third row, in a mask that fools nobody: Octavian Pryde, the honest auctioneer. He looks horrified. He\'s taking notes for the police.' },
@@ -856,12 +901,14 @@ const gn52: Json[] = [
   lotRoom(2, 'A Case of Rare Balls', say(
     'Lot 2: a case of rare Balls. The bidding climbs, and climbs. Soon there\'s only you and one other paddle, by the stage.',
     'The other paddle belongs to the house. The auctioneer doesn\'t look away from you. He\'s waiting to see how deep your pockets go.',
+    standing(2),
   ), [
-    ch('Keep bidding.', out('You win. Everyone in the room now knows exactly how much money you have. Including the man by the pillar.', $(-3000), item('ultra-ball', 5), lot(true), nextLot(2)), { requires: [money(3000)] }),
-    ch('Drop out early.', out('You lower your paddle. The house bidder stops too, at once. The auctioneer\'s smile goes thin. You saw it.', setTo('ta-trap-balls', 1), lot(false), nextLot(2))),
+    raise(2, 'Keep bidding.', [item('ultra-ball', 5), lot(true), nextLot(2)]),
+    chIf([{ kind: 'gn', test: 'taEarly', key: 'lot' }], 'Drop out early.', out('You lower your paddle. The house bidder stops too, at once. The auctioneer\'s smile goes thin. You saw it.', setTo('ta-trap-balls', 1), lot(false), nextLot(2))),
+    chIf([{ kind: 'gn', test: 'taLate', key: 'lot' }], 'Drop out.', out('You lower your paddle, at last. The house bidder stops too, at once. Too late: the man by the pillar has already written down how far you went.', lot(false), nextLot(2))),
   ]),
-  lotRoom(3, 'A Fossil', say('Lot 3: a fossil, honest, in a velvet box. The fox mask doesn\'t bother with this one.'), [
-    ch('Bid.', out('Yours, at a fair price. It\'s heavier than it looks.', $(-1500), any('old-amber', 'helix-fossil', 'dome-fossil'), lot(true), nextLot(3)), { requires: [money(1500)] }),
+  lotRoom(3, 'A Fossil', say('Lot 3: a fossil, honest, in a velvet box. The fox mask doesn\'t bother with this one.', standing(3)), [
+    raise(3, 'Bid.', [any('old-amber', 'helix-fossil', 'dome-fossil'), lot(true), nextLot(3)]),
     ch('Let it go.', out('It goes to a quiet man in a heron mask, who holds it like a baby.', lot(false), nextLot(3))),
   ]),
   rm('gn-52-question', 'The Evil Auction: A Question', mask({ remembers: [
@@ -874,8 +921,8 @@ const gn52: Json[] = [
     ch('"In Rare Candy."', out('"Ha. Course we did." He pats your knee and moves on. You breathe again.', scene('gn-52-lot-4'))),
     ch('"We didn\'t. He owed us."', out('"Did he." Not a question. He gets up, and goes to stand by the pillar. Your cover\'s gone.', setTo('ta-blown', 1), scene('gn-52-lot-4'))),
   ]),
-  lotRoom(4, 'An Antique', say('Lot 4: "An antique." A vase, very old, the auctioneer says. The fox mask bids on it as if she knows something.'), [
-    ch('Bid.', out('You win it. The vase is warm from the lights. You carry it carefully, the way people carry things they paid for.', $(-1000), lot(true), nextLot(4)), { requires: [money(1000)] }),
+  lotRoom(4, 'An Antique', say('Lot 4: "An antique." A vase, very old, the auctioneer says. The fox mask bids on it as if she knows something.', standing(4)), [
+    raise(4, 'Bid.', [lot(true), nextLot(4)]),
     ch('Let it go.', out('You let it go. Somebody always buys the vase.', lot(false), nextLot(4))),
   ], { remembers: [
     { id: 'fake', when: [is('ta-viewed')], notice: 'You saw it close up in the viewing room. The glaze was still tacky. It\'s a fake.' },
@@ -883,32 +930,43 @@ const gn52: Json[] = [
   lotRoom(5, 'An Egg', say(
     'Lot 5: an egg, in straw. The bidding\'s slow, and cheap. Too cheap. Nobody wants to look like they know what it is.',
     'It\'s worth more. Knowing that is the dangerous part.',
+    standing(5),
   ), [
-    ch('Bid low, like everyone.', out('You bid like you\'re bored. It\'s yours for almost nothing. The man by the pillar doesn\'t look up.', $(-600), egg(), setTo('ta-trap-egg', 1), lot(true), scene('gn-52-lot-6')), { requires: [money(600)] }),
+    raise(5, 'Bid low, like everyone.', [egg(), setTo('ta-trap-egg', 1), lot(true), scene('gn-52-lot-6')]),
     ch('Bid what it\'s really worth.', out('You bid its real price. The room goes quiet. The man by the pillar writes something down.', $(-1600), egg(), setTo('ta-noticed', 1), lot(true), scene('gn-52-lot-6')), { requires: [money(1600)] }),
     ch('Let it go.', out('You let it go. Someone else gets a bargain, and doesn\'t know it.', setTo('ta-trap-egg', 1), lot(false), scene('gn-52-lot-6'))),
   ]),
   lotRoom(6, 'The Rare Pokémon', say(
     '*The last lot. A cage under a cloth. The cloth comes off.*',
     '*It\'s small. It\'s a {cast:ta-rare}, a kind the region hardly sees. It\'s looking at the room the way something looks at weather.*',
+    standing(6),
   ), [
-    chIf([not('ta-blown')], 'Bid it home.', out('The fox mask pushes the price high, and higher. You go higher. It\'s handed to you in its cage. Nobody\'s the wiser. The team has your money.',
-      $(-4500), gn('taRare', { n: 1 }), lot(true), scene('gn-52-out')), { requires: [money(4500)] }),
+    chIf([not('ta-blown'), { kind: 'gn', test: 'taCanBid', key: 'lot', n: 6 }], 'Bid it home.', out('The fox mask pushes the price high, and higher. You go higher.', gn('taBid', { n: 6 }),
+      when('ta-won', { min: 1, max: 1 }, [gn('taRare', { n: 1 }), lot(true), scene('gn-52-out')]),
+      when('ta-won', { min: 0, max: 0 }, [scene('gn-52-lot-6')]))),
     chIf([not('ta-blown'), is('ta-corridor')], 'Bid, and send a Pokémon round the back.', out('You bid, and bid, holding the room. Then, from behind the stage, a signal: a tap, twice. You stop. The cage is already empty.',
       $(-500), gn('taRare', { n: 2 }), scene('gn-52-out')), {
       prompt: { id: 'echo-rhythm', needs: 'ok' },
       fail: out('The signal comes late. You\'re still bidding when the gavel falls, at its full price. It\'s yours, the expensive way.', $(-4500), gn('taRare', { n: 1 }), lot(true), scene('gn-52-out')),
     }),
-    ch('Raise the alarm.', fight('The fox mask\'s whistle, loud as a train. Guards from every door, and the man by the pillar, taking off his mask.', {
-      ...foe('executive', 'The Lieutenant', 3, { lv: 1, win: [gn('taRare', { n: 3 }), scene('gn-52-out')] }), friendly: true, lose: [scene('gn-52-out')] },
-      setTo('ta-alarm', 1), evil({ heat: 2 }))),
+    ALARM('The fox mask\'s whistle, loud as a train. Guards from every door, and the man by the pillar, taking off his mask.'),
   ], { remembers: [
     { id: 'blown', when: [is('ta-blown')], notice: 'The man by the pillar isn\'t watching the lot. He\'s watching you. Two guards drift closer.' },
   ] }),
+  // ---- The alarm: two guards, then the lieutenant (A+1) ----
+  rm('gn-52-alarm-2', 'The Evil Auction: The Second Guard', mask({ tags: ['Evil Team', 'Combat'] }), say(
+    'The first guard is down. The second one comes over the chairs, knocking masks off as he goes.',
+  ), [ch('Battle.', fight('He doesn\'t bother with a speech. He was hired not to.', {
+    ...foe('grunt', 'Manor Guard', 2, { lv: 1, win: [scene('gn-52-alarm-lt')] }), friendly: true, lose: [scene('gn-52-out')] }))]),
+  rm('gn-52-alarm-lt', 'The Evil Auction: The Lieutenant', mask({ tags: ['Evil Team', 'Combat'] }), say(
+    'Two guards on the carpet. The room\'s nearly empty now: overturned chairs, a dropped fox mask, the cage on the stage.',
+    'The man who never bid folds his own mask into his pocket. "I did wonder about you."',
+  ), [ch('Battle.', fight('The lieutenant fights the way he watched: patiently.', {
+    ...foe('executive', 'The Lieutenant', 3, { lv: 1, win: [gn('taRare', { n: 3 }), scene('gn-52-out')] }), friendly: true, lose: [scene('gn-52-out')] }))]),
   // ---- The caterer: kitchens, cellar, the service corridor ----
   rm('gn-52-kitchen', 'The Evil Auction: The Kitchens', mask(), say(
     'Steam and shouting. A chef throws a tray at you and points at a door. You go through the door.',
-    'Another caterer is already there, hiding behind a tray of small pastries. It\'s {rival}. "Don\'t. Say. Anything."',
+    'Another caterer is already there, hiding behind a tray of small pastries. It\'s {rival}. {ta:hush}',
   ), [ch('Say nothing.', out('You say nothing. {rival} nods once, the way people do in heist films, and points down the stairs.', scene('gn-52-cellar')))]),
   rm('gn-52-cellar', 'The Evil Auction: The Cellar', mask(), say(
     'Wine, and crates, and crates that aren\'t wine. At the far end, a door marked SERVICE.',
@@ -920,9 +978,7 @@ const gn52: Json[] = [
     ch('Take the key from the hook.', out('The key turns. The cage opens. It doesn\'t move. Then it does, straight into your jacket, shaking.', gn('taRare', { n: 2 }), scene('gn-52-out'))),
     chIf([anyType('ghost', 'steel')], 'Let your Pokémon pick the lock.', out('A click like a knuckle. The cage swings open. It looks at your Pokémon, and then at you, and comes.', gn('taRare', { n: 2 }), scene('gn-52-out'))),
     ch('Let your rival hold the door.', out('{rival} holds the door. You wheel the whole cage out into the night. "Never mention the tray," they say.', gn('taRare', { n: 2 }), scene('gn-52-out'))),
-    ch('Raise the alarm.', fight('You yank the fire bell. Guards from every door, and a man who never bids, taking off his mask.', {
-      ...foe('executive', 'The Lieutenant', 3, { lv: 1, win: [gn('taRare', { n: 3 }), scene('gn-52-out')] }), friendly: true, lose: [scene('gn-52-out')] },
-      setTo('ta-alarm', 1), evil({ heat: 2 }))),
+    ALARM('You yank the fire bell. Guards from every door, and a man who never bids, taking off his mask.'),
   ]),
   rm('gn-52-out', 'The Evil Auction: Outside', mask({ tags: ['Evil Team', 'Story'], remembers: [
     { id: 'alarm', when: [is('ta-alarm')], notice: 'Everything\'s seized: the lots, the ledgers, the guests\' coats. The team knows your face now.' },
@@ -954,7 +1010,7 @@ const nextTurn: Json[] = [
 ];
 const act = (d: string, n: number): Json[] => [gn('sgAct', { key: d, n }), ...nextTurn];
 /** A district's three actions: a fight (Grunts at A+0 early, the district's captain at A+1 from turn 4), a rescue, a repair. */
-function district(d: string, name: string, intro: string, rescue: Json): Json {
+function district(d: string, name: string, intro: string, rescue: Json, extra: Json[] = []): Json {
   return rm(`gn-53-${d}`, `The Region Under Siege: ${name}`, siege(), intro, [
     chIf([is('sg-turn', 1, 3)], 'Fight.', fight(`Grunts in ${name}, behind a barricade of whatever was nearest. They didn\'t expect anyone to come back.`, {
       ...foe('grunt', `${name}\'s Grunts`, 2, { lv: 0, win: act(d, 1) }), friendly: true, lose: act(d, 2) })),
@@ -962,14 +1018,15 @@ function district(d: string, name: string, intro: string, rescue: Json): Json {
       ...foe('specialist', `${name}\'s Captain`, 3, { lv: 1, win: act(d, 1) }), friendly: true, lose: act(d, 2) })),
     rescue,
     ch('Repair.', out('A party Pokémon puts its shoulder to the barricade. It holds. This district can stand a turn without you.', ...act(d, 4))),
+    ...extra,
   ]);
 }
 const gn53: Json[] = [
   gev('gn-53-alarm', 'The Region Under Siege', siege({ stop: 'event', rarity: 'rare', requires: [{ kind: 'evil', after: 5 }, notThisRegion('sg-at')], remembers: [
     { id: 'feared', when: [is('rep-lost')], notice: 'Some of those you call don\'t come. Of the ones who do, a few won\'t meet your eye. They\'ll fight. Just not for you.' },
   ] }), say(
-    '*Smoke over the city. A siren, on and on. The evil team\'s banners on the Hall.*',
-    'Four districts: the Market, the Homes, the Gate, the Hall. One of you. A clock of eight turns.',
+    '*{siege:map}. Smoke over {siege:city}. A siren, on and on. The evil team\'s banners on the Hall.*',
+    'Four districts: the Market, the Homes, {siege:gate}, the Hall. One of you. A clock of eight turns.',
     'You can\'t be everywhere. You\'ll have to choose. Everyone you\'ve helped this run is already on their way.',
   ), [
     ch('Answer the alarm.', out('You run toward the smoke. Behind you, footsteps: people you know, coming too.',
@@ -988,7 +1045,7 @@ const gn53: Json[] = [
   ), [
     ch('The Market.', out('They nod, and run for the Market.', gn('sgAssign', { n: 0 }), scene('gn-53-muster'))),
     ch('The Homes.', out('They nod, and run for the Homes.', gn('sgAssign', { n: 1 }), scene('gn-53-muster'))),
-    ch('The Gate.', out('They nod, and run for the Gate.', gn('sgAssign', { n: 2 }), scene('gn-53-muster'))),
+    ch('{siege:Gate}.', out('They nod, and run for {siege:gate}.', gn('sgAssign', { n: 2 }), scene('gn-53-muster'))),
     ch('The Hall.', out('They nod, and run for the Hall.', gn('sgAssign', { n: 3 }), scene('gn-53-muster'))),
   ]),
   rm('gn-53-turn', 'The Region Under Siege: The City', siege({ remembers: [
@@ -1000,25 +1057,34 @@ const gn53: Json[] = [
   ), [
     ch('The Market.', out('The Market: shops, and the Pokémon Center. If it falls, the city loses both.', scene('gn-53-market'))),
     ch('The Homes.', out('The Homes: streets, and a school. People who\'ll be in later scenes, or won\'t.', scene('gn-53-homes'))),
-    ch('The Gate.', out('The Gate: the only road in. Hold it, and their reinforcements don\'t come.', scene('gn-53-gate'))),
-    ch('The Hall.', out('The Hall: the mayor, and the radio mast. Hold it, and the city can call for help.', scene('gn-53-hall'))),
+    ch('{siege:Gate}.', out('{siege:Gate}: {siege:way}. Hold it, and their reinforcements don\'t come.', scene('gn-53-gate'))),
+    ch('The Hall.', out('The Hall: the mayor, and the radio mast. Hold it, and the city can call for help, and you can get at the commander early.',
+      when('sg-early', { min: 1, max: 1 }, [scene('gn-53-roof')]), when('sg-early', { min: 0, max: 0 }, [scene('gn-53-hall')]))),
+  ]),
+  // The Hall still stands, late in the clock: the commander can be reached before turn 8 (the clock stops where it is).
+  rm('gn-53-roof', 'The Region Under Siege: The Hall\'s Back Stairs', siege(), say(
+    'The Hall still stands. One of the mayor\'s people catches your sleeve. "The back stairs go up to the roof. The roof looks down on their commander. You could end this now."',
+    'Turn {siege:turn} of 8. Whatever the other districts are holding, they\'d be holding it as they are.',
+  ), [
+    ch('Go for the commander, now.', out('You take the stairs two at a time. You don\'t wait for the clock.', scene('gn-53-commander'))),
+    ch('Stay with the Hall.', out('"Not yet," you say. There are people still out there.', scene('gn-53-hall'))),
   ]),
   district('market', 'the Market', say(
     'Stalls on their sides. The Center\'s doors chained from the outside. Behind them, someone\'s knocking.',
-    'The shopkeeper who gave you a discount, once. Trapped under the awning of her own shop.',
-  ), chIf([not('sg-civ-market')], 'Rescue.', out('You lift the awning. She crawls out, coughing, and grips your hand far too hard. "I knew it\'d be you."', gn('sgRescue', { key: 'market' }), ...nextTurn))),
+    '{siege:civ-market}',
+  ), chIf([not('sg-civ-market')], 'Rescue.', out('You lift the awning. She crawls out, coughing, and grips your hand far too hard. "{siege:thanks-market}"', gn('sgRescue', { key: 'market' }), ...nextTurn))),
   district('homes', 'the Homes', say(
     'Washing still on the lines. Doors left open. A dog barking in a yard, and nobody calling it in.',
-    'The child you helped, earlier this region, crouched behind a bin. They\'re holding very still.',
-  ), chIf([not('sg-civ-homes')], 'Rescue.', out('You crouch down. "It\'s me." They come out, and hold on to your sleeve, and don\'t let go for three streets.', gn('sgRescue', { key: 'homes' }), ...nextTurn))),
+    '{siege:civ-homes}',
+  ), chIf([not('sg-civ-homes')], 'Rescue.', out('You crouch down. "{siege:thanks-homes}" They come out, and hold on to your sleeve, and don\'t let go for three streets.', gn('sgRescue', { key: 'homes' }), ...nextTurn))),
   district('gate', 'the Gate', say(
-    'The gatehouse, the barrier, a queue of abandoned cars. The team\'s lorries park here.',
+    '{siege:gate-intro}',
     'Under a car, a Pokémon, wedged in tight. It was somebody\'s. It isn\'t sure whose any more.',
   ), chIf([not('sg-pokemon')], 'Rescue.', out('You lie flat on the road, and reach, and wait. It comes out, slowly. It looks at you as if it\'s going to remember you.', gn('sgRescue', { key: 'gate' }), ...nextTurn))),
   district('hall', 'the Hall', say(
     'The mayor\'s office, a radio mast, a staircase full of smoke.',
-    '{rival}\'s mum, of all people, in the records room. She came to pay a parking fine.',
-  ), chIf([not('sg-civ-hall')], 'Rescue.', out('You get her down the back stairs. "You\'re the one my child won\'t stop talking about," she says. "Hm. Taller."', gn('sgRescue', { key: 'hall' }), ...nextTurn))),
+    '{siege:civ-hall}',
+  ), chIf([not('sg-civ-hall')], 'Rescue.', out('You get her down the back stairs. "{siege:thanks-hall}"', gn('sgRescue', { key: 'hall' }), ...nextTurn))),
   rm('gn-53-runner', 'The Region Under Siege: The Runner', siege(), say(
     '*Turn 6. A runner, out of breath, grabbing your arm.*',
     '"The school\'s cut off! And the hospital! We can\'t— which? *Which?*"',
@@ -1053,6 +1119,22 @@ const gn53: Json[] = [
     'The smoke thins. Districts held: {siege:held} of 4.',
   ), [
     ch('Walk on.', out('You walk on through the city you fought for. It\'s still here. So are you.', rivalTrust(1), moment('Defended a city under siege, district by district, for eight turns.', 70))),
+  ]),
+  // ---- A city under occupation (the next stage): every trainer battle is a patrol to get past instead ----
+  gev('gn-53-patrol', 'The Occupied City: A Patrol', siege({ stop: 'event', rarity: 'rare', tags: ['Evil Team', 'Exploration'], requires: [{ kind: 'gn', test: 'sgOccupied', key: 'sg-result' }] }), say(
+    '*A street with the shutters down. The evil team\'s banner on a lamp post. Two Grunts walking it, end to end, in step.*',
+    'They turn at the corner, every time, and for a moment neither of them is looking this way.',
+  ), [
+    ch('Wait for the gap, and go.', out('They turn. You go. Twelve quiet steps, and a doorway, and you\'re through. Behind a shutter, somebody breathes out.', item('oran-berry', 1)), {
+      prompt: { id: 'brace-hold', needs: 'ok' },
+      fail: fight('A bin lid. Of all things. Both Grunts spin round. "Oi! Papers!"', { ...foe('grunt', 'Patrol', 2, { lv: 0, win: [] }), friendly: true, lose: [] }, evil({ heat: 1 })),
+    }),
+    ch('Knock on a shutter.', out(say(
+      'You knock, twice, softly. A shutter lifts a hand\'s width. A face; then a door, a kitchen, a back yard, another street.',
+      'On the way through, someone presses a bread roll into your hand, and doesn\'t say a word.',
+    ), item('oran-berry', 1), takeNode(1))),
+    ch('Take the patrol on.', fight('You step out into the middle of the street. They look almost relieved. The whole city will know about this by lunch.', {
+      ...foe('grunt', 'Patrol', 3, { lv: 1, win: [] }), friendly: true, lose: [] }, evil({ heat: 2 }))),
   ]),
   rm('gn-53-waiting', 'The Region Under Siege: Waiting', siege({ tags: ['Pokémon'] }), say(
     'At the rest, by the door: the {cast:sg-pokemon} from under the car. It followed you. It\'s been waiting.',
@@ -1189,7 +1271,7 @@ const gn54: Json[] = [
     'The band plays the heroic thing again, slowly. The board, chalked up for this year:',
     '{karp:board}',
   ), [ch('Go home.', out('You go home with a paper flag, and a feeling you can\'t quite name. It might be hope. It smells of lake.', moment('Went to the Magikarp Convention. They tried.', 40)))]),
-  gev('gn-54-poster', 'The Magikarp Convention: The Poster', karpcon({ stop: 'event', rarity: 'uncommon', tags: ['Story'], requires: [is('kc-evolved'), notThisRegion('kc-at'), notThisRegion('kc-poster')] }), say(
+  gev('gn-54-poster', 'The Magikarp Convention: The Poster', karpcon({ stop: 'event', rarity: 'uncommon', tags: ['Story'], requires: [is('kc-visits'), notThisRegion('kc-at'), notThisRegion('kc-poster')] }), say(
     'A poster on a noticeboard: the Magikarp Convention, next year, all welcome.',
     'In one corner, in crayon, a small Gyarados. Drawn by a child. It\'s smiling.',
   ), [ch('Smile back.', out('You smile back at it. Nobody sees. That\'s fine.', stampRegion('kc-poster')))]),
@@ -1274,7 +1356,7 @@ export const PLACEMENT: Record<string, Placement> = {
     gn: 'gn.47', shape: 'Single', earliest: 'A8', home: 15, window: [13, 17], sits: 'optional', attaches: 'town', tags: ['Onlooker'],
     level: 'If invited: A+2, with no loss cost', often: 'region', badge: 'own',
     dressing: { kanto: 'The Pokémon League Exhibition', elsewhere: 'The Pokémon League Exhibition' },
-    note: 'Badge: a ticket. Once per region; each matchup once per run. Until towns exist it sits on step 15. The match is told in three parts (core/greenneedle/exhibition.ts); a move watched closely is free once at any move tutor; a trainer in a later stage copies a move from it.',
+    note: 'Badge: a ticket. Once per region; each matchup once per run. Until towns exist it sits on step 15. The match is a real CPU-versus-CPU battle, six on six, watched on the battle screen with commentary and three moments (core/greenneedle/exhibition.ts); a move watched closely is free once at any move tutor; a trainer in a later stage copies a move from it.',
   },
   'gn-48-door': {
     gn: 'gn.48', shape: 'Hub', earliest: 'A7', home: 14, window: [12, 17], sits: 'optional', attaches: 'town', tags: ['Tournament Episode'],
@@ -1287,6 +1369,12 @@ export const PLACEMENT: Record<string, Placement> = {
     level: 'None', often: 'region', badge: 'own',
     dressing: { kanto: 'A Letter', elsewhere: 'A Letter' },
     note: 'Once a region, while a drafted Pokémon that stayed is with you: its first trainer writes. "Write back." gives it Bond +1.',
+  },
+  'gn-48-home': {
+    gn: 'gn.48', shape: 'Single', earliest: 'A7', home: 5, window: [1, 12], sits: 'optional', attaches: 'after', tags: ['Tournament Episode'],
+    level: 'None', often: 'run', badge: 'own',
+    dressing: { kanto: 'It Went Home', elsewhere: 'It Went Home' },
+    note: 'Memory: a drafted Pokémon that stayed and was then traded away (or released) went back to its first trainer. It is met next at their side, and they both wave. The Honest Trade Card warns of it in advance.',
   },
   'gn-49-hill': {
     gn: 'gn.49', shape: 'Single', earliest: 'A3', home: 9, window: [7, 12], sits: 'must-see', attaches: 'before', tags: ['Interrupting Episode'],
@@ -1321,11 +1409,11 @@ export const PLACEMENT: Record<string, Placement> = {
     gn: 'gn.51', shape: 'Single', earliest: 'A6', home: 14, window: [12, 17], sits: 'side-branch', attaches: 'instead', tags: ['Evil Team'],
     level: 'Guards A+1', often: 'run', badge: 'own',
     dressing: { kanto: 'The Pokémon Smuggling Ring', elsewhere: 'The Pokémon Smuggling Ring' },
-    note: 'Badge: a crate. Better at night. The rescued Pokémon walks beside the player and opens its own scene at each rest stop (run.ts) until it climbs in. Postcards (gn-51-postcard) come one a region afterwards.',
+    note: 'Badge: a crate. Better at night: in the evening or at night the rafters can be crossed without the jump. The rescued Pokémon walks beside the player and opens its own scene at each rest stop (run.ts) until it climbs in. Postcards (gn-51-postcard) come one a region afterwards.',
   },
   'gn-51-postcard': { gn: 'gn.51', shape: 'Single', earliest: 'A7', home: 4, window: [1, 8], sits: 'optional', attaches: 'rest', tags: ['Evil Team'], level: 'None', often: 'region', badge: 'own', note: 'Afterstory: one postcard a region, until all four are home.' },
   'gn-52-manor': {
-    gn: 'gn.52', shape: 'Single', earliest: 'A8', home: 16, window: [14, 18], sits: 'side-branch', attaches: 'instead', tags: ['Evil Team'],
+    gn: 'gn.52', shape: 'Single', earliest: 'A8', home: 16, window: [14, 18], sits: 'side-branch', attaches: 'instead', tags: ['Evil Team'], needs: ['night'],
     level: 'If it comes to a fight: A+1', often: 'run', badge: 'own',
     dressing: { kanto: 'The Evil Team\'s Pokémon Auction', elsewhere: 'The Evil Team\'s Pokémon Auction' },
     note: 'Badge: a mask. At night. Only in a region with an evil-team story. SF125\'s pop-up black-market auction is a street-corner copy of this. gn-52-later (the lieutenant wonders, a later stage) and gn-52-sale (the manor for sale, a later region) are its afterstories.',
@@ -1338,6 +1426,7 @@ export const PLACEMENT: Record<string, Placement> = {
     dressing: { kanto: 'The Sealed City', elsewhere: 'The Region Under Siege' },
     note: 'Badge: a burning tower. Only at the evil team\'s climax, or the stage before. Eight turns in rooms; the result shapes the next stage\'s shops and Center (run.ts). The rescued Pokémon waits at the next rest (gn-53-waiting); gn-53-plaque is the afterstory in a later region.',
   },
+  'gn-53-patrol': { gn: 'gn.53', shape: 'Single', earliest: 'A6', home: 8, window: [1, 18], sits: 'optional', attaches: 'instead', tags: ['Evil Team'], level: 'A+0 if seen; A+1 if taken on', often: 'run', badge: 'own', note: 'Only in the occupied city (the stage after a lost siege): it takes the place of every trainer battle there (citysiege.ts sgStage puts it on the nodes).' },
   'gn-53-plaque': { gn: 'gn.53', shape: 'Single', earliest: 'A6', home: 6, window: [2, 12], sits: 'optional', attaches: 'after', tags: ['Evil Team'], level: 'None', often: 'run', badge: 'own', note: 'Afterstory: the plaque with the names of the allies who held (a later region of the same run).' },
   'gn-54-lake': {
     gn: 'gn.54', shape: 'Hub', earliest: 'A4', home: 10, window: [8, 13], sits: 'optional', attaches: 'town', tags: ['Community Episode'], needs: ['water'],

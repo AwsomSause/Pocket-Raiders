@@ -24,7 +24,7 @@ describe('gn.new.09 The Last Stop', () => {
     const cards = [1, 2, 3].map((i) => castOf(run, `ls-card-${i}`)!);
     expect(new Set(cards).size).toBe(3);
     for (const c of cards) { expect(content.moves.has(c)).toBe(true); expect(run.party[0]!.moves.some((m) => m.id === c)).toBe(false); }
-    expect(scene(run, 'gn-new-09-dining').labels).toEqual(['Bet the move.', 'Watch.']);
+    expect(scene(run, 'gn-new-09-dining').labels).toEqual(['Bet the move.', 'Watch.', 'Get off early.']);
   });
   it('staying on the platform ends it and it is once per run', () => {
     let run = gnRun('t-ls-b');

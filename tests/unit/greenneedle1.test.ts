@@ -3,6 +3,9 @@ import { chainRooms, PSEUDO_CHAINS } from '../../src/core/dungeon/pseudo';
 import { fitsStage, positioned } from '../../src/core/co/placement';
 import { RunStateSchema } from '../../src/core/state';
 import { conditionMet } from '../../src/core/events';
+import { freshEvil } from '../../src/core/evil/schema';
+import { aceEggSpecies } from '../../src/core/greenneedle/damian';
+import { moonRaid } from '../../src/core/greenneedle/moon';
 import { content } from './helpers';
 import { choose, flagOf, gnRun, lose, open, openSide, scene, setFlag, win } from './helpers/gnPlay';
 
@@ -35,6 +38,15 @@ describe('gn.03 Viridian Forest', () => {
     // The voice from the trees speaks from what was counted (the duelist sat out: "luggage").
     expect(scene(run, 'gn-03-oak').intro).toMatch(/A voice/);
     run = choose(run, 'gn-03-oak', 'Walk on, deeper in.').run;
+    // The forest reacts to the duelist: a wild Caterpie sits on the path, and only a Caterpie duelist may walk through.
+    expect(flagOf(run, 'gn-03-cat')).toBe(1);
+    expect(scene(run, 'gn-03-hollow').labels).not.toContain('Battle the Bug Catcher across the dip.');
+    const walk = scene(run, 'gn-03-hollow').labels.includes('Let them crowd round it, and walk on through.');
+    expect(walk).toBe(duelist!.speciesId === 'caterpie');
+    run = walk ? choose(run, 'gn-03-hollow', 'Let them crowd round it, and walk on through.').run : win(choose(run, 'gn-03-hollow', 'Battle the wild Caterpie on the path.').run);
+    setFlag(run, 'gn-forest-battles', 3);
+    setFlag(run, 'gn-forest-fought', 0);
+    setFlag(run, 'gn-forest-rank', 0);
     run = win(choose(run, 'gn-03-hollow', 'Battle the Bug Catcher across the dip.').run);
     expect(openSide(run)?.eventId).toBe('gn-03-clearing');
     expect(RunStateSchema.safeParse(run).success).toBe(true);
@@ -83,21 +95,114 @@ describe('gn.03 Viridian Forest', () => {
     expect(flagOf(lost, 'samurai-rematch-owed')).toBe(1);
     expect(content.events.get('gn-03-rematch')!.requires.length).toBeGreaterThan(0);
   });
-  it('the door rolls fog and the hunters\' trap once, and never appears again after it was entered', () => {
+  it('the door rolls the fog once, and never appears again after it was entered', () => {
     let fog = 0;
-    let trap = 0;
     for (let i = 0; i < 200; i++) {
       let run = gnRun(`gn03-roll-${i}`);
       open(run, 'gn-03-door');
       run = choose(run, 'gn-03-door', 'Step under the trees.').run;
       fog += flagOf(run, 'gn-forest-fog');
-      trap += flagOf(run, 'gn-forest-trap');
       if (i === 0) expect(flagOf(run, 'gn-03-entered')).toBe(1);
     }
     expect(fog).toBeGreaterThan(5);
     expect(fog).toBeLessThan(45);
-    expect(trap).toBeGreaterThan(5);
-    expect(trap).toBeLessThan(45);
+  });
+  it('a Bug-type brought into the forest is never the duelist; the first one caught inside is', () => {
+    let run = gnRun('gnfix03-a');
+    run.party[0]!.speciesId = 'weedle';
+    open(run, 'gn-03-door');
+    run = choose(run, 'gn-03-door', 'Step under the trees.').run;
+    expect(run.party[0]!.gn).toContain('pre-forest');
+    run = win(choose(run, 'gn-03-eaves', 'Battle Bug Catcher Arlo.').run);
+    // The fight at the eaves is over and a Bug-type is in the party: still nobody walks beside the player.
+    expect(flagOf(run, 'gn-forest-duelist')).toBe(0);
+    expect(run.party.some((m) => m.gn?.some((t) => t.startsWith('duelist')))).toBe(false);
+    // Beating the gift (not catching it) leaves no duelist either: at the Hollow the Weedle is waiting, though a Bug-type is in the party.
+    run = win(choose(run, 'gn-03-gift', 'Part the ferns.').run);
+    run.party = run.party.filter((m) => m.gn?.includes('pre-forest'));
+    expect(flagOf(run, 'gn-forest-duelist')).toBe(0);
+    run = win(choose(run, 'gn-03-oak', 'Battle the Bug Catcher in the fork.').run);
+    run = choose(run, 'gn-03-oak', 'Walk on, deeper in.').run;
+    expect(flagOf(run, 'gn-03-cat')).toBe(0);
+    expect(scene(run, 'gn-03-hollow').labels).toContain('Crouch, and let the Weedle climb on.');
+    run = choose(run, 'gn-03-hollow', 'Crouch, and let the Weedle climb on.').run;
+    const duelist = run.party.find((m) => m.gn?.some((t) => t.startsWith('duelist')));
+    expect(duelist).toBeTruthy();
+    expect(duelist).not.toBe(run.party[0]);
+    expect(duelist!.gn).not.toContain('pre-forest');
+    expect(scene(run, 'gn-03-hollow').labels).not.toContain('Crouch, and let the Weedle climb on.');
+  });
+  it('the forest reacts: Caterpie crowd round a Caterpie duelist (the wild fight can be skipped); a Pinsir keeps them away', () => {
+    const at = (species: string) => {
+      let run = gnRun(`gnfix03-${species}`);
+      open(run, 'gn-03-door');
+      run = choose(run, 'gn-03-door', 'Step under the trees.').run;
+      run = win(choose(run, 'gn-03-eaves', 'Battle Bug Catcher Arlo.').run);
+      run = win(choose(run, 'gn-03-gift', 'Part the ferns.').run, { catchIt: true });
+      const caught = run.party[run.party.length - 1]!;
+      // The catch is retold as the species under test before anyone is marked (the mark is made when the next fight ends).
+      for (const m of run.party) if (m.gn) m.gn = m.gn.filter((t) => !t.startsWith('duelist'));
+      setFlag(run, 'gn-forest-duelist', 0);
+      caught.speciesId = species;
+      run = win(choose(run, 'gn-03-oak', 'Battle the Bug Catcher in the fork.').run);
+      return choose(run, 'gn-03-oak', 'Walk on, deeper in.').run;
+    };
+    const cat = at('caterpie');
+    expect(flagOf(cat, 'gn-forest-caterpie')).toBe(1);
+    expect(scene(cat, 'gn-03-hollow').intro).toMatch(/crowd round your Caterpie/);
+    expect(scene(cat, 'gn-03-hollow').labels).toEqual(expect.arrayContaining(['Battle the wild Caterpie on the path.', 'Let them crowd round it, and walk on through.']));
+    const through = choose(cat, 'gn-03-hollow', 'Let them crowd round it, and walk on through.');
+    expect(through.battle).toBe(false);
+    expect(scene(through.run, 'gn-03-hollow').labels).toContain('Battle the Bug Catcher across the dip.');
+    const weedle = at('weedle');
+    expect(flagOf(weedle, 'gn-forest-caterpie')).toBe(0);
+    expect(scene(weedle, 'gn-03-hollow').labels).toContain('Battle the wild Caterpie on the path.');
+    expect(scene(weedle, 'gn-03-hollow').labels).not.toContain('Let them crowd round it, and walk on through.');
+    const fought = choose(weedle, 'gn-03-hollow', 'Battle the wild Caterpie on the path.').run;
+    expect(fought.battle!.enemyTeam[0]!.speciesId).toBe('caterpie');
+    const pinsir = at('pinsir');
+    expect(flagOf(pinsir, 'gn-03-cat')).toBe(0);
+    expect(scene(pinsir, 'gn-03-hollow').labels).toContain('Battle the Bug Catcher across the dip.');
+  });
+  it("the hunters' trap is rolled at every node's fight, springs once at most, and leaves a sighting", () => {
+    let sprung = 0;
+    for (let i = 0; i < 60; i++) {
+      let run = gnRun(`gnfix03-trap-${i}`);
+      open(run, 'gn-03-door');
+      run = choose(run, 'gn-03-door', 'Step under the trees.').run;
+      run = win(choose(run, 'gn-03-eaves', 'Battle Bug Catcher Arlo.').run);
+      run = win(choose(run, 'gn-03-gift', 'Part the ferns.').run);
+      run = win(choose(run, 'gn-03-oak', 'Battle the Bug Catcher in the fork.').run);
+      expect(flagOf(run, 'gn-forest-trapped')).toBeLessThanOrEqual(1);
+      expect(flagOf(run, 'flight-sighting')).toBe(flagOf(run, 'gn-forest-trapped'));
+      sprung += flagOf(run, 'gn-forest-trapped');
+    }
+    // Three nodes at 10% each: about 27% of forests by the Split Oak (more than the old single roll at the door could give after one node).
+    expect(sprung).toBeGreaterThan(5);
+    expect(sprung).toBeLessThan(32);
+  });
+  it('the rematch waits in a forest stage only, and a duelist that evolved in the forest still earns the egg there', () => {
+    const rematch = content.events.get('gn-03-rematch')!;
+    expect(rematch.requires).toContainEqual({ kind: 'stageTypes', types: ['grass', 'bug', 'fairy'] });
+    let run = gnRun('gnfix03-rematch');
+    run.party[0]!.speciesId = 'scyther';
+    run.party[0]!.gn = ['duelist:scyther'];
+    setFlag(run, 'samurai-rematch-owed', 1);
+    setFlag(run, 'gn-forest-evolved', 1);
+    const eggs = run.eggs?.length ?? 0;
+    open(run, 'gn-03-rematch');
+    run = win(choose(run, 'gn-03-rematch', 'Begin.').run);
+    expect(flagOf(run, 'kanto-forest-samurai-won')).toBe(1);
+    expect(run.eggs?.length ?? 0).toBe(eggs + 1);
+    // Not evolved: the move, no egg.
+    let plain = gnRun('gnfix03-rematch');
+    plain.party[0]!.speciesId = 'scyther';
+    plain.party[0]!.gn = ['duelist:scyther'];
+    setFlag(plain, 'samurai-rematch-owed', 1);
+    open(plain, 'gn-03-rematch');
+    plain = win(choose(plain, 'gn-03-rematch', 'Begin.').run);
+    expect(plain.eggs?.length ?? 0).toBe(eggs);
+    expect(plain.party[0]!.moves.some((m) => m.id === 'samurai-slash')).toBe(true);
   });
 });
 
@@ -242,6 +347,73 @@ describe('gn.04 Mt. Moon', () => {
   });
 });
 
+describe('gn.04 Mt. Moon: the evil-team raid (an Operation in this region)', () => {
+  const withOp = (seed: string, outcome: 'running' | 'foiled' | 'infiltrated' | 'succeeded' | 'joined', region = 0) => {
+    let run = gnRun(seed);
+    run.story.evil = freshEvil();
+    run.story.evil.ops.push({ id: 'pokemon-heist', region, outcome });
+    open(run, 'gn-04-door');
+    run = choose(run, 'gn-04-door', 'Go in.').run;
+    return run;
+  };
+  it('reads won, lost and none from the region\'s Operations', () => {
+    const base = gnRun('gnfix04-unit');
+    expect(moonRaid(base)).toBe('none');
+    base.story.evil = freshEvil();
+    base.story.evil.ops.push({ id: 'a', region: 0, outcome: 'running' }, { id: 'b', region: 1, outcome: 'foiled' });
+    expect(moonRaid(base)).toBe('none');
+    base.story.evil.ops.push({ id: 'c', region: 0, outcome: 'succeeded' });
+    expect(moonRaid(base)).toBe('lost');
+    base.story.evil.ops.push({ id: 'd', region: 0, outcome: 'infiltrated' });
+    expect(moonRaid(base)).toBe('won');
+  });
+  it('a raid won: the marks are ticked at the Mouth and the grateful researcher adds a second fossil', () => {
+    const run = withOp('gnfix04-won', 'foiled');
+    expect(flagOf(run, 'team-raid-moon-won')).toBe(1);
+    expect(flagOf(run, 'team-raid-moon-lost')).toBe(0);
+    expect(scene(run, 'gn-04-mouth').intro).toMatch(/That was you, wasn't it/);
+    expect(scene(run, 'gn-04-fossil').intro).toMatch(/You're the one who ran them off/);
+    open(run, 'gn-04-fossil');
+    const got = choose(structuredClone(run), 'gn-04-fossil', 'Can I have the third one?');
+    const plain = structuredClone(run);
+    setFlag(plain, 'team-raid-moon-won', 0);
+    const one = choose(plain, 'gn-04-fossil', 'Can I have the third one?');
+    expect([got.text, ...got.changes].join(' ')).toMatch(/For the raid/);
+    expect([one.text, ...one.changes].join(' ')).not.toMatch(/For the raid/);
+    expect(got.changes.length).toBeGreaterThan(one.changes.length);
+  });
+  it('a raid lost or left alone: fresh marks, and one researcher (either) is on the payroll at A+1', () => {
+    const seen = new Set<number>();
+    for (let i = 0; i < 12; i++) {
+      const run = withOp(`gnfix04-lost-${i}`, i % 2 ? 'succeeded' : 'joined');
+      expect(flagOf(run, 'team-raid-moon-lost')).toBe(1);
+      expect(scene(run, 'gn-04-mouth').intro).toMatch(/They've been through/);
+      const who = flagOf(run, 'gn-moon-payroll');
+      expect([1, 2]).toContain(who);
+      seen.add(who);
+      open(run, 'gn-04-fossil');
+      expect(scene(run, 'gn-04-fossil').intro).toMatch(who === 1 ? /Dr\. Crowe's coat is new/ : /Dr\. Larkin's boots are new/);
+      const plain = choose(structuredClone(run), 'gn-04-fossil', who === 1 ? 'Battle Dr. Larkin.' : 'Battle Dr. Crowe.').run;
+      const paid = choose(run, 'gn-04-fossil', who === 1 ? 'Battle Dr. Crowe.' : 'Battle Dr. Larkin.').run;
+      expect(paid.battle!.enemyTeam[0]!.level).toBe(plain.battle!.enemyTeam[0]!.level + 1);
+    }
+    expect(seen.size).toBe(2);
+  });
+  it('no Operation here (or only one still running): no marks, nobody on the payroll', () => {
+    for (const run of [withOp('gnfix04-none', 'running'), withOp('gnfix04-far', 'succeeded', 3)]) {
+      expect(flagOf(run, 'team-raid-moon-won') + flagOf(run, 'team-raid-moon-lost')).toBe(0);
+      expect(scene(run, 'gn-04-mouth').intro).not.toMatch(/marks the raiders left/);
+    }
+  });
+  it('the afterstory is the two of them arguing about the price: nothing is sold', () => {
+    const run = gnRun('gnfix04-after');
+    setFlag(run, 'kanto-moon-fossil', 1);
+    open(run, 'gn-04-after');
+    expect(scene(run, 'gn-04-after').intro).toMatch(/Fifteen hundred/);
+    expect(scene(run, 'gn-04-after').labels).toEqual(['Leave them to it.']);
+  });
+});
+
 describe("gn.05 Damian's Unofficial Gym", () => {
   const barn = (seed: string) => {
     const run = gnRun(seed);
@@ -307,6 +479,103 @@ describe("gn.05 Damian's Unofficial Gym", () => {
     const walked = choose(rain, 'gn-05-barn', 'Walk on.').run;
     expect(flagOf(walked, 'damian-closed-thinking')).toBe(1);
     expect(flagOf(walked, 'damian-meetings')).toBe(1);
+  });
+});
+
+describe("gn.05 Damian: back next region after 'Closed. Thinking.', a new theme each meeting, the ace's egg", () => {
+  const closedThenHall = (seed: string) => {
+    let run = gnRun(seed);
+    run.regionIndex = 0;
+    setFlag(run, 'rain-damian-beaten', 1);
+    open(run, 'gn-05-barn');
+    run = choose(run, 'gn-05-barn', 'Walk on.').run;
+    run.regionIndex = 1;
+    open(run, 'gn-05-hall');
+    return run;
+  };
+  it('the barn was shut and no theme was ever picked: the hall can still be played to the end', () => {
+    let run = closedThenHall('gnfix05-closed');
+    expect(flagOf(run, 'damian-theme')).toBe(0);
+    expect(content.events.get('gn-05-hall')!.requires.every((c) => conditionMet(content, run, c))).toBe(true);
+    expect(scene(run, 'gn-05-hall').intro).toMatch(/I did some thinking/);
+    run = choose(run, 'gn-05-hall', 'Challenge the Gym.').run;
+    expect([1, 2, 3]).toContain(flagOf(run, 'damian-theme'));
+    run = win(choose(run, 'gn-05-hall-hired', 'Battle the hired trainer.').run);
+    // Tully and Bex have three Pokémon each, one after the other, and know the buttons (no Splash, no hunting).
+    const tully = choose(run, 'gn-05-hall-friends', 'Battle Tully.').run;
+    expect(tully.battle!.enemyTeam).toHaveLength(3);
+    expect(tully.battle!.storyEffects.some((x) => x.includes('Splash'))).toBe(false);
+    run = win(tully);
+    const bex = choose(run, 'gn-05-hall-bex', 'Battle Bex.').run;
+    expect(bex.battle!.enemyTeam).toHaveLength(3);
+    expect(bex.battle!.storyEffects.some((x) => x.includes('TOP LEFT'))).toBe(false);
+    run = win(bex);
+    // The Leader's room always has its button now.
+    expect(scene(run, 'gn-05-hall-damian').labels).toEqual(['Battle Damian.']);
+    const damian = choose(run, 'gn-05-hall-damian', 'Battle Damian.').run;
+    const team = damian.battle!.enemyTeam;
+    expect(team).toHaveLength(4);
+    expect(team[3]!.level).toBeGreaterThan(Math.max(...team.slice(0, 3).map((m) => m.level)));
+    run = win(damian);
+    run = choose(run, 'gn-05-hall-won', 'Tell him it was closer.').run;
+    expect(flagOf(run, 'damian-meetings')).toBe(2);
+    // The week is over: the next meeting draws its own theme.
+    expect(flagOf(run, 'damian-theme')).toBe(0);
+  });
+  it('a retry the same day keeps the theme; a new meeting may draw a different one', () => {
+    let run = gnRun('gnfix05-theme');
+    run.regionIndex = 0;
+    open(run, 'gn-05-barn');
+    run = choose(run, 'gn-05-barn', 'Challenge the Gym.').run;
+    const first = flagOf(run, 'damian-theme');
+    run = lose(choose(run, 'gn-05-tully', 'Battle Tully.').run);
+    run = choose(run, 'gn-05-lost', 'Go again.').run;
+    run = choose(run, 'gn-05-barn', 'Challenge the Gym.').run;
+    expect(flagOf(run, 'damian-theme')).toBe(first);
+    const themes = new Set<number>();
+    for (let i = 0; i < 12; i++) {
+      const hall = closedThenHall(`gnfix05-week-${i}`);
+      themes.add(flagOf(choose(hall, 'gn-05-hall', 'Challenge the Gym.').run, 'damian-theme'));
+    }
+    expect(themes.size).toBeGreaterThan(1);
+  });
+  it('the real Gym: five Pokémon, the ace two levels up, and the egg is his ace\'s own kind', () => {
+    let run = gnRun('gnfix05-gym');
+    run.regionIndex = 2;
+    setFlag(run, 'damian-meetings', 2);
+    setFlag(run, 'damian-region', 2);
+    run.regionIndex = 3;
+    open(run, 'gn-05-gym');
+    expect(scene(run, 'gn-05-gym').labels).toEqual(['Challenge Damian.', 'Walk on.']);
+    run = choose(run, 'gn-05-gym', 'Challenge Damian.').run;
+    expect([1, 2, 3]).toContain(flagOf(run, 'damian-theme'));
+    const fight = choose(run, 'gn-05-gym-damian', 'Battle Damian.').run;
+    const team = fight.battle!.enemyTeam;
+    expect(team).toHaveLength(5);
+    const ace = team[4]!;
+    expect(aceEggSpecies(content, fight)).toBeTruthy();
+    const kin = aceEggSpecies(content, fight)!;
+    // The egg is the first stage of the ace's family.
+    let s = content.species.get(ace.speciesId)!;
+    while (s.evolutionStage > 1 && s.evolvesFrom && content.species.get(s.evolvesFrom)) s = content.species.get(s.evolvesFrom)!;
+    expect([s.id, s.form?.base]).toContain(kin);
+    run = win(fight);
+    const eggs = run.eggs?.length ?? 0;
+    run = choose(run, 'gn-05-gym-won', 'Take the badge, and the egg.').run;
+    expect(run.eggs).toHaveLength(eggs + 1);
+    expect(run.eggs![eggs]!.speciesId).toBe(kin);
+    expect(flagOf(run, 'damian-meetings')).toBe(3);
+    expect(RunStateSchema.safeParse(run).success).toBe(true);
+  });
+  it('an old save that never saw his ace still gets an egg (of the theme\'s type)', () => {
+    const run = gnRun('gnfix05-old');
+    expect(aceEggSpecies(content, run)).toBeUndefined();
+    setFlag(run, 'damian-meetings', 2);
+    setFlag(run, 'damian-theme', 1);
+    open(run, 'gn-05-gym-won');
+    const eggs = run.eggs?.length ?? 0;
+    const done = choose(run, 'gn-05-gym-won', 'Take the badge, and the egg.').run;
+    expect(done.eggs).toHaveLength(eggs + 1);
   });
 });
 

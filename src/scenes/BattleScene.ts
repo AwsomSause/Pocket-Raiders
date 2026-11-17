@@ -3,6 +3,8 @@
 // choice (Fight / Bag / Pokémon) and plays back the events each turn produces.
 
 import { falseSlotFor } from '../core/expansion/labyrinth';
+import { waitOffered } from '../core/greenneedle/fifth';
+import { askButtons, askDue, askOf, askPassing, type AskView } from '../core/greenneedle/ask';
 import { lastResortOffer, useLastResort } from '../core/battle/lastResort';
 import { mentorMoment } from '../core/story/mentorMoments';
 import { mentorScene } from '../ui/battleFx/mentorScene';
@@ -119,6 +121,7 @@ import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import { throwKind, throwTint } from '../core/archetypeTint';
+import { islanderTint, pinkTint } from '../core/greenneedle/part3';
 import { PlayerTrainerActor, playerLookForBattle, preloadPlayerTrainer } from '../ui/playerTrainer';
 import { addMarks } from '../ui/battleFx/markAura';
 import { itemVisual, pokemonIcon, pokemonVisual, trainerBackVisual, trainerVisual, type Visual } from '../ui/sprites';
@@ -217,6 +220,8 @@ const EXPLAIN_LOCK_MS = 1200;
 const COMMAND_X = 588;
 /** How long Auto-Battle's chosen action stays on screen before it is played (Back cancels). */
 const AUTO_PICK_MS = 1100;
+/** gn.47: the pause before each turn of the watched Exhibition match. */
+const EXHIBITION_PICK_MS = 300;
 /** Double battles: where each spot stands (left, right) and the databox spots. */
 const DUO_POS = {
   player: [
@@ -1315,6 +1320,11 @@ export class BattleScene extends Phaser.Scene {
     return visual;
   }
 
+  /** Greenneedle gn.30: a pink Pokémon (the island's fruit) is drawn pink; the colour is cosmetic and fades by shade. */
+  private wearPink(visual: Visual, tint: number | null): void {
+    if (tint !== null && visual instanceof Phaser.GameObjects.Sprite) visual.setTint(tint);
+  }
+
   private showSpriteBody(side: 'player' | 'enemy', mon: PokemonInstance, species: ReturnType<typeof getSpecies>, cry: boolean, grow: number): Visual {
     if (side === 'player') {
       this.dropSprite(this.playerSprite);
@@ -1326,6 +1336,7 @@ export class BattleScene extends Phaser.Scene {
       // never drawn over the bar, even a see-through one. Styles with no bar (Ring, Cinematic, Ink) show it whole.
       if (this.standClipped()) this.playerSprite.setMask(this.standMask());
       this.skin?.sprite?.(this.playerSprite);
+      this.wearPink(this.playerSprite, pinkTint(mon));
       this.prefetchMoves(mon);
       this.liven(this.playerSprite, cry);
       return this.playerSprite;
@@ -1339,6 +1350,7 @@ export class BattleScene extends Phaser.Scene {
     this.field.addAt(this.enemySprite, this.fieldBase);
     this.fitFoeInFrame(this.enemySprite);
     this.skin?.sprite?.(this.enemySprite);
+    this.wearPink(this.enemySprite, pinkTint(mon) ?? islanderTint(this.run.battle?.event?.eventId));
     // A boss's last Pokémon turns the arena light a warning red.
     const b = this.run.battle;
     if (b && this.boss() && b.enemyTeam.length > 1 && b.enemyIndex >= b.enemyTeam.length - 1) this.arenaLight?.set(Math.max(this.arenaPhase, 1), 0xff5030);
@@ -1620,7 +1632,10 @@ export class BattleScene extends Phaser.Scene {
     box.level.setText(this.foeHidden(mon) ? 'Lv?' : `Lv${mon.level}`);
     if (box === this.enemyBox && this.enemySprite instanceof Phaser.GameObjects.Sprite) {
       if (this.foeHidden(mon)) this.enemySprite.setTintFill(0x000000);
-      else this.enemySprite.clearTint();
+      else {
+        this.enemySprite.clearTint();
+        this.wearPink(this.enemySprite, pinkTint(mon) ?? islanderTint(this.run.battle?.event?.eventId));
+      }
     }
     // A long name stops short of the level and the form symbol instead of running under them.
     if (!spec || spec.level !== 'inline') fitLine(box.name, box.level.x - box.level.width - box.name.x - (spec ? 12 : 40));
@@ -2336,16 +2351,49 @@ export class BattleScene extends Phaser.Scene {
       this.showSkyCheerMenu();
       return;
     }
+    // gn.47 the Exhibition: three times in the match the player is asked what they do (cheer, watch closely, look at the crowd).
+    const moment = session.exhibitionMoment();
+    if (moment) {
+      this.showExhibitionMenu(moment);
+      return;
+    }
     this.autoRunning = true;
     this.clearMenus();
     this.tabs.show(false);
-    await new Promise<void>((done) => this.time.delayedCall(AUTO_PICK_MS, () => done()));
+    // (The Exhibition is a long match, six on six: a short breath between turns keeps it near the doc's minute; Battle speed shortens it further.)
+    await new Promise<void>((done) => this.time.delayedCall(session.exhibitionOn() ? EXHIBITION_PICK_MS : AUTO_PICK_MS, () => done()));
     this.autoRunning = false;
     const battle = this.run.battle;
     if (!battle) return;
     const forced = forcedMoveIndex(battle, this.run.party);
-    if (forced !== null) await this.act({ kind: 'move', index: forced });
+    if (forced !== null && !session.exhibitionOn()) await this.act({ kind: 'move', index: forced });
     else await this.act({ kind: 'move', index: 0 }, true);
+  }
+
+  /** gn.47: one of the Exhibition's three moments. The lines are read, then the three choices; the answer is read, and the match goes on. */
+  private showExhibitionMenu(moment: { lines: string[]; ask: string; choices: readonly { key: string; label: string }[] }): void {
+    this.clearMenus();
+    this.tabs.show(false);
+    void this.readAloud(moment.lines).then(() => {
+      this.commandWindow.setVisible(true);
+      this.message.setText(moment.ask);
+      this.menu = new Menu(this, {
+        x: COMMAND_X + 24,
+        y: MESSAGE_Y + 18,
+        options: moment.choices.map((c) => ({ label: c.label })),
+        columns: 1,
+        itemWidth: 300,
+        itemHeight: 36,
+        fontSize: 22,
+        color: this.btnText,
+        glass: { paint: this.skin?.pill, tints: [0x1f9a52, 0x2a6fc8, 0xc8303c], motion: this.motion },
+        onSelect: (i) => {
+          this.clearMenus();
+          const lines = services().session.exhibitionAnswer(moment.choices[i]!.key);
+          void this.readAloud(lines).then(() => this.nextPrompt());
+        },
+      });
+    });
   }
 
   /** The finale's one question: who to cheer for. Cheering is the only thing the player does in a watched fight. */
@@ -2373,6 +2421,41 @@ export class BattleScene extends Phaser.Scene {
         },
       });
     });
+  }
+
+  /**
+   * A choice in the middle of the battle (core/greenneedle/ask.ts): the question in the text box, its 2 to 4 answers as buttons.
+   * The answer is one action (no turn used); the fight goes on from there. `back`: opened from a menu button, so Back returns to the menu.
+   */
+  private showAskMenu(ask: AskView, back = false): void {
+    this.clearMenus();
+    this.tabs.show(false);
+    // A long question is read first, piece by piece; its short prompt stays beside the answers.
+    const pieces = ask.text === ask.prompt ? [] : chunkLines([ask.text]);
+    const last = ask.prompt;
+    const open = (): void => {
+      const n = ask.options.length;
+      this.commandWindow.setVisible(true);
+      this.message.setText(last);
+      this.menu = new Menu(this, {
+        x: COMMAND_X + 24,
+        y: MESSAGE_Y + (n >= 4 ? 8 : n === 3 ? 14 : 26),
+        options: ask.options.map((o) => ({ label: o.label })),
+        columns: 1,
+        itemWidth: 320,
+        itemHeight: n >= 4 ? 32 : n === 3 ? 38 : 50,
+        fontSize: n >= 4 ? 18 : n === 3 ? 20 : 22,
+        color: this.btnText,
+        glass: { paint: this.skin?.pill, tints: [0x1f9a52, 0x2c6ad8, 0xc08a10, 0xc8303c], motion: this.motion },
+        onSelect: (i) => {
+          this.commands = [];
+          void this.act({ kind: 'answer', ask: ask.id, option: ask.options[i]!.index });
+        },
+        onBack: back ? () => this.showRootMenu() : undefined,
+      });
+    };
+    if (pieces.length === 0) open();
+    else void (async () => { for (const piece of pieces) await this.say(piece); })().then(open);
   }
 
   /** Reads story lines in the message box, cut so each piece fits, one confirm press per piece (nothing disappears by itself). */
@@ -3235,6 +3318,17 @@ export class BattleScene extends Phaser.Scene {
       return;
     }
     if (!this.camBusy && !this.camPinned) this.restoreCamera(250); // a new turn always starts on the whole arena
+    // A choice in the middle of the battle (core/greenneedle/ask.ts): the question comes before any command, Auto-Battle or not.
+    const ask = askDue(services().session.content, this.run);
+    if (ask) {
+      this.showAskMenu(ask);
+      return;
+    }
+    // After "Stop attacking." the turns pass by themselves.
+    if (!this.duo && askPassing(this.run.battle)) {
+      void this.act({ kind: 'idle' });
+      return;
+    }
     if (this.duo) {
       if (this.autoOn && !autoBattleProblem(this.run)) void this.runAuto();
       else if (this.run.battle?.needsSwitch) this.openPartyPicker(true);
@@ -3675,7 +3769,7 @@ export class BattleScene extends Phaser.Scene {
     });
     this.openPanel(
       [
-        { head: `${species.name} Lv.${mon.level}`, text: `${species.types.join(' / ')}${mon.nature ? ` · ${mon.nature}` : ''}\nHP ${mon.hp}/${stats.hp}  Atk ${stats.atk}  Def ${stats.def}\nSpA ${stats.spa}  SpD ${stats.spd}  Spe ${stats.spe}\n${ability ? `Ability: ${content.abilities.get(ability)?.name ?? ability}` : ''}` },
+        { head: `${species.name} Lv.${mon.level}`, text: `${species.types.join(' / ')}${mon.nature ? ` · ${mon.nature}` : ''}\nHP ${mon.hp}/${stats.hp}  Atk ${stats.atk}  Def ${stats.def}\nSpA ${stats.spa}  SpD ${stats.spd}  Spe ${stats.spe}\n${ability ? `Ability: ${content.abilities.get(ability)?.name ?? ability}${mon.gn?.includes('ability-star') ? ' ★' : ''}` : ''}` },
         { head: 'Moves', text: moves.join('\n') },
         { head: 'How it fights', text: `${profile.style}\n${profile.notes.slice(0, 3).join('\n')}${held.length ? `\nHolding: ${held.join(', ')}` : ''}` },
       ],
@@ -3780,6 +3874,13 @@ export class BattleScene extends Phaser.Scene {
     const lastResortOffered = lastResortOffer(content, this.run, this.activeMon());
     const lastResortAt = lastResortOffered ? options.length : -1;
     if (lastResortAt >= 0) options.push({ label: "Mentor ♥" });
+    // Greenneedle gn.15: the fifth Mankey only stands there: "Wait." lets the turn pass without an attack.
+    const waitAt = !this.duo && waitOffered(this.run.battle) ? options.length : -1;
+    if (waitAt >= 0) options.push({ label: 'Wait.' });
+    // A new button an event fight adds ("Give it the crystals.", "Stop attacking."): core/greenneedle/ask.ts.
+    const askBtns = this.duo ? [] : askButtons(content, this.run);
+    const askAt = options.length;
+    for (const b of askBtns) options.push({ label: b.label });
     // Beta 0.7 L3: the Time Keeper's rewind (once per stage, up to 5 turns back).
     const rewindMax = this.duo ? 0 : rewindTurnsAvailable(content, this.run);
     const rewindAt = rewindMax > 0 ? options.length : -1;
@@ -3805,6 +3906,8 @@ export class BattleScene extends Phaser.Scene {
       itemHeight: options.length > 4 ? 36 : 50,
       fontSize: options.length > 4 ? 20 : 30,
       ...(this.skin ? this.menuSpec(this.skin.layout.root, options.length, k) : {}),
+      // An event's own button has a whole sentence on it ("Give it the crystals."): the canvas menu goes to one wide column so it is not cut short.
+      ...(askBtns.length > 0 && options.length <= 4 ? { columns: 1, itemWidth: 320, itemHeight: 32, fontSize: 18, y: MESSAGE_Y + 8 } : {}),
       color: this.btnText,
       // Wii-style glossy buttons: Fight red, Bag gold, Pokémon green, transformations neon.
       glass: { paint: this.skin?.pill, tints: k > 0 ? [...combined.map((m) => m.tint), ...(this.skin!.rootTints ?? []).slice(1)] : this.skin?.rootTints ?? [0xc8303c, 0xc08a10, 0x1f9a52, 0x9a2cc8, 0x2c8ad8, 0x2cb8c8, 0xd8a020], motion: this.motion },
@@ -3828,6 +3931,13 @@ export class BattleScene extends Phaser.Scene {
         } else if (i === smashAt) this.submit({ kind: 'arena' });
         else if (i === shiftAt) this.submit({ kind: 'shift' });
         else if (i === scanAt) void this.scanFoe();
+        else if (i === waitAt) this.submit({ kind: 'idle' });
+        else if (i >= askAt && i < askAt + askBtns.length) {
+          const view = askOf(content, this.run, askBtns[i - askAt]!.id);
+          if (!view) this.showRootMenu();
+          else if (askBtns[i - askAt]!.direct) void this.act({ kind: 'answer', ask: view.id, option: view.options[0]!.index });
+          else this.showAskMenu(view, true);
+        }
         else if (i === rewindAt) this.showRewindMenu(rewindMax);
         else if (i === reverseAt) void this.stepToReverseSide();
         else if (i === calmAt) void this.callCalm();
@@ -4340,9 +4450,11 @@ export class BattleScene extends Phaser.Scene {
     let result: TurnResult;
     try {
       if (auto) {
-        const taken = session.takeAutoTurn();
-        if (!taken) throw new Error('Auto-Battle could not choose an action.');
-        result = taken.result;
+        // gn.47: a watched Exhibition is played by its own AI for both sides (no setting of the player's is read).
+        const watched = session.exhibitionTurn();
+        const taken = watched ? null : session.takeAutoTurn();
+        if (!watched && !taken) throw new Error('Auto-Battle could not choose an action.');
+        result = watched ?? taken!.result;
       } else result = session.takeTurn(action);
     } catch (err) {
       // The menus only offer legal choices, so this means a bug; show it rather than freeze.

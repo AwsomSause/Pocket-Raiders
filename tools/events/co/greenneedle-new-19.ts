@@ -1,8 +1,9 @@
 // Greenneedle gn.new.19 The Snowbound Village (doc GREENNEEDLE_PLACED_1.md lines 692–724).
 // A four-leg sled run: pick 1–5 crates, cross the frozen lake, the pine wood, the pass and the descent, then arrive.
-// All of it is data (flags and wild fights); no new rules code. Build: npm run co:build -- greenneedle-new-19   then   npm run co:gn
-import { anyType, ch, fight, flag, flagAgo, flagAt, heal, hurtLead, join, out, relic, wild, type Json } from '../dsl.ts';
-import { chIf, gev, inside, is, kindness, leavePseudo, moment, not, rm, say, scene, setTo, when, type Placement } from './_gn.ts';
+// The run itself is data (flags and wild fights). Rewards as the old notes give them: Warm Clothes (no hail or snow damage this region)
+// and the Herd Bell (held: allies switching in take no hazard damage the turn after the holder leaves); both rules are in battle/engine.ts. Build: npm run co:build -- greenneedle-new-19   then   npm run co:gn
+import { anyType, ch, fight, flag, flagAgo, flagAt, heal, hurtLead, item, join, out, wild, type Json } from '../dsl.ts';
+import { chIf, gev, inside, is, kindness, leavePseudo, moment, not, rm, say, scene, setTo, stampRegion, when, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
 
@@ -103,10 +104,13 @@ const gn19: Json[] = [
   ), [ch(n >= 3 ? 'Take the village\'s thanks.' : 'Take the village\'s coats.', out(say(
     'A child presses something warm into your hands. The elder walks you to the edge of the square.',
     n >= 3 ? 'The Delibird has decided you are its Trainer, and has not asked.' : 'You walk back up the road in borrowed warmth, and it stays with you a long time.',
+    n >= 5 ? '**Warm Clothes:** your party ignores hail and snow damage for the rest of this region. Halden unhooks the lead Stantler\'s bell and puts it in your hand: the **Herd Bell**.' : '**Warm Clothes:** your party ignores hail and snow damage for the rest of this region.',
   ),
-  relic('sv-warm-clothes', 'Warm Clothes', [{ kind: 'damageTakenMultiplier', moveType: 'ice', value: 0.9 }]),
+  // Old notes: warm clothes = "the party ignores hail and snow damage this region" (stamp `sv-warm-region`, read at each battle's start);
+  // the lead Stantler's bell is a held item, the Herd Bell (src/data/itemCatalog/greenneedle.json).
+  stampRegion('sv-warm-region'),
   ...(n >= 3 ? [join({ species: ['delibird'] })] : []),
-  ...(n >= 5 ? [relic('sv-herd-bell', 'Herd Bell', [{ kind: 'friendshipMultiplier', value: 1.25 }])] : []),
+  ...(n >= 5 ? [item('herd-bell')] : []),
   ...(n < 5 ? [flagAt('sv-left')] : []),
   heal(), kindness(n), moment(n === 5 ? 'Brought every crate down the mountain: all five houses' : `Brought ${n} crate${n > 1 ? 's' : ''} down the mountain to a snowbound village`, 70),
   flag('sv-done'), leavePseudo()))])),
@@ -132,13 +136,13 @@ export const REMOVE: string[] = [];
 
 export const PLACEMENT: Record<string, Placement> = {
   'gn-n19-door': {
-    gn: 'gn.new.19', shape: 'Door', earliest: 'A8', home: 11, window: [9, 16], sits: 'optional', attaches: 'instead', tags: ['Pseudo Stage'], needs: ['snow'],
+    gn: 'gn.new.19', shape: 'Door', earliest: 'A8', home: 11, window: [11, 16], sits: 'optional', attaches: 'instead', tags: ['Pseudo Stage'], needs: ['snow'],
     level: 'A+0; each extra crate makes one wild encounter A+1', often: 'run', badge: 'own',
     dressing: { kanto: 'The Snowbound Village', elsewhere: 'The Snowbound Village' },
     note: 'Door at step 11, optional (the doc prefers a high stage there); fallback step 16, optional (the window runs to 16). Once per run. Four legs.',
   },
   'gn-n19-grown': {
-    gn: 'gn.new.19', shape: 'Single', earliest: 'A8', home: 5, window: [3, 8], sits: 'optional', attaches: 'town', tags: ['Pokémon', 'Story'], stages: [5],
+    gn: 'gn.new.19', shape: 'Single', earliest: 'A8', home: 5, window: [3, 8], sits: 'optional', attaches: 'town', tags: ['Pokémon', 'Story'],
     level: 'None', often: 'run', badge: 'own',
     dressing: { kanto: 'A Grown Child', elsewhere: 'A Grown Child' },
     note: 'Afterstory: if any crate was left behind, two regions later at a Step 5 town a grown child from that house finds the player.',

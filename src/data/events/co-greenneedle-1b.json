@@ -522,7 +522,6 @@
    ],
    "stop": "event",
    "rarity": "rare",
-   "forced": true,
    "callback": true,
    "minStage": 3,
    "types": [
@@ -541,9 +540,190 @@
      "key": "pp-stage"
     },
     {
+     "kind": "flag",
+     "key": "pp-lost-stage",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "pp-ending-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "pp-rematch-won",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "poliwhirl",
+    "tint": "#1f4a63",
+    "effect": "rain"
+   },
+   "intro": "Back at the pond. The five are waiting in a half circle, and Burl steps out of the reeds with his arms folded. Burl is two levels above the Poliwag. He always has been.\n\nOne on one. The Poliwag against Burl. He has three tricks. You taught it three things.\n\nThe Poliwag is shaking. It steps out in front of you anyway.",
+   "choices": [
+    {
+     "label": "Let it step forward.",
+     "success": {
+      "text": "You step back. It is the hardest thing you have done all stage.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "poliwhirl"
+       ],
+       "name": "Burl",
+       "classId": "roughneck",
+       "size": 1,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "pond",
+         "action": "rematchWon"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "pp-ending"
+        }
+       ],
+       "spritePokemon": "poliwhirl",
+       "pseudo": true,
+       "rule": {
+        "pondDuel": true,
+        "noSwitch": true,
+        "matchLead": true
+       },
+       "lose": [
+        {
+         "kind": "heal",
+         "share": 0.5
+        },
+        {
+         "kind": "gn",
+         "op": "stampStage",
+         "key": "pp-lost-stage"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "pp-rematch-lost"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pp-exceptional",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Let it step forward.",
+     "success": {
+      "text": "You step back. The Poliwag doesn't look at you for permission. It looks at Burl.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "poliwhirl"
+       ],
+       "name": "Burl",
+       "classId": "roughneck",
+       "size": 1,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "pond",
+         "action": "rematchWon"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "pp-ending"
+        }
+       ],
+       "spritePokemon": "poliwhirl",
+       "pseudo": true,
+       "rule": {
+        "pondDuel": true,
+        "noSwitch": true,
+        "matchLead": true,
+        "evolveMid": true
+       },
+       "lose": [
+        {
+         "kind": "heal",
+         "share": 0.5
+        },
+        {
+         "kind": "gn",
+         "op": "stampStage",
+         "key": "pp-lost-stage"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "pp-rematch-lost"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pp-exceptional",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "pp-rematch-again",
+   "name": "The Rematch at the Pond",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 3,
+   "types": [
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pp-begun",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "pp-lost-stage",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
      "kind": "gn",
      "test": "notThisStage",
      "key": "pp-lost-stage"
+    },
+    {
+     "kind": "stageTypes",
+     "types": [
+      "water"
+     ]
     },
     {
      "kind": "flag",
@@ -918,7 +1098,6 @@
    ],
    "stop": "event",
    "rarity": "rare",
-   "forced": true,
    "minStage": 1,
    "requires": [
     {
@@ -1027,7 +1206,6 @@
    ],
    "stop": "event",
    "rarity": "rare",
-   "forced": true,
    "minStage": 1,
    "requires": [
     {
@@ -1083,7 +1261,6 @@
    ],
    "stop": "event",
    "rarity": "epic",
-   "forced": true,
    "minStage": 1,
    "requires": [
     {
@@ -1120,7 +1297,12 @@
      "label": "Climb to the ridge and watch.",
      "success": {
       "text": "You climb to the ridge above them, and the wind takes your breath, and you do not look away.",
-      "effects": [],
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "finaleShow"
+       }
+      ],
       "battle": {
        "kind": "wild",
        "species": [
@@ -1147,6 +1329,10 @@
        {
         "kind": "sky",
         "act": "finaleGiftBerry"
+       },
+       {
+        "kind": "sky",
+        "act": "finaleShow"
        }
       ],
       "battle": {
@@ -1175,6 +1361,10 @@
        {
         "kind": "sky",
         "act": "finaleGiftItem"
+       },
+       {
+        "kind": "sky",
+        "act": "finaleShow"
        }
       ],
       "battle": {

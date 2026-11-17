@@ -2,7 +2,7 @@
 // Build: npm run co:build -- greenneedle-new-11   then   npm run co:gn
 // A step-15 must-see at night, once per region. Hide / Watch / Join. Joining opens the Spirit Market: six actions (the lanterns), four stalls on
 // two lanes (walking between lanes is free). The last region's curtain opens for a player who joined every parade.
-import { ch, flag, heal, item, join, out, type Json } from '../dsl.ts';
+import { ch, flag, heal, join, out, type Json } from '../dsl.ts';
 import { bond, chIf, gev, gn, is, moment, rm, say, scene, setTo, stampRegion, when, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
@@ -41,7 +41,7 @@ const EVENTS: Json[] = [
     'The Masked Banette keeps a stall of three moves. The Sableye with scales sits behind a pile of old pages.',
     lanterns(),
   ), [
-    ch('The Masked Banette.', out('The Banette lays three moves on a cloth: Shadow Sneak, Night Slash, Will-O-Wisp. "A move for a move," it says. "Fair is fair."', scene('gn-new-11-banette'))),
+    ch('The Masked Banette.', out('The Banette lays three moves on a cloth, face up. "A move for a move," it says. "Fair is fair."', scene('gn-new-11-banette'))),
     ch('The Sableye with scales.', out('It rubs a gem against its claws. "A memory," it says. "One line from your Notebook. I\'ll erase it. You\'ll never miss it. For something Rare."', scene('gn-new-11-sableye'))),
     ch('Walk on, down the lane.', out('The lantern light bends. The lane turns, and two more stalls wait there.', scene(LANE_B))),
     ch('Leave the market.', out('You turn your back on the lanterns. The line closes behind you without a sound. The market is gone before you reach the road.', ...closing())),
@@ -59,12 +59,11 @@ const EVENTS: Json[] = [
 
   rm('gn-new-11-banette', 'The Spirit Market: The Masked Banette', night(), say(
     'Three moves on a cloth. A tiny hand covers the one you are not looking at.',
-    '**The Banette:** "Your lead gives its last move to the cloth. Take one. Only one."',
+    '**The Banette:** "Your lead puts one of its own on the cloth. Take one. Only one."',
     lanterns(),
   ), [
-    ch('Shadow Sneak.', out('The cloth is empty again. Your lead moves quietly now, and a little faster than before.', gn('paradeSwap', { key: 'shadow-sneak' }), ...spend(LANE_A))),
-    ch('Night Slash.', out('The cloth is empty again. Your lead cuts the air once, to see. The air stays cut.', gn('paradeSwap', { key: 'night-slash' }), ...spend(LANE_A))),
-    ch('Will-O-Wisp.', out('The cloth is empty again. A small blue flame is following your lead, shyly.', gn('paradeSwap', { key: 'will-o-wisp' }), ...spend(LANE_A))),
+    // Three moves are shown (dealt by the stop's seed); the player takes one and picks which of the lead's four goes to the cloth.
+    ch('Trade a move.', out('The Banette lifts its hand. Three moves, face up, and none of them hidden.', gn('paradeSwap'), ...spend(LANE_A)), { requires: [gnc('paradeMoveReady')] }),
     ch('Back to the lane.', out('"Come back before the bell," says the Banette. "I do like a customer."', scene(LANE_A))),
   ]),
   rm('gn-new-11-sableye', 'The Spirit Market: The Sableye with Scales', night(), say(
@@ -72,7 +71,7 @@ const EVENTS: Json[] = [
     '**The Sableye:** "One line. The one you\'d miss least. Gone. And not a soul will remember it ever being there."',
     lanterns(),
   ), [
-    ch('Trade a memory.', out('A page curls and drops to ash. You try to remember what it said, and cannot, and the Sableye is already holding out something Rare, kind about it.', gn('paradeForget'), item('rare-candy'), ...spend(LANE_A)), { requires: [gnc('paradeMemory')] }),
+    ch('Trade a memory.', out('A page curls and drops to ash. You try to remember what it said, and cannot, and the Sableye is already holding out something Rare, kind about it.', gn('paradeForget'), gn('paradeRare'), ...spend(LANE_A)), { requires: [gnc('paradeMemory')] }),
     ch('Back to the lane.', out('"The pages keep," says the Sableye. "That is the trouble with them."', scene(LANE_A))),
   ]),
   rm('gn-new-11-mismagius', 'The Spirit Market: The Mismagius', night(), say(
@@ -88,7 +87,8 @@ const EVENTS: Json[] = [
     '**The Old Dusclops:** "Teach me what yours knows. I will teach it what its grandparents knew. Sit. It is a long lesson."',
     lanterns(),
   ), [
-    ch('Trade for an egg move.', out('The lesson takes no time at all, and all night. Your lead steps away from the stall with something very old behind its eyes.', gn('paradeEgg'), ...spend(LANE_B)), { requires: [gnc('paradeEggReady')] }),
+    // Any one egg move of its line, the player's choice, for one of the four moves it knows (also the player's choice).
+    ch('Trade for an egg move.', out('The lesson takes no time at all, and all night. Every move its grandparents knew is laid out, and you may choose one.', gn('paradeEgg'), ...spend(LANE_B)), { requires: [gnc('paradeEggReady')] }),
     ch('Back to the lane.', out('"Another time," says the Dusclops. It does not say when.', scene(LANE_B))),
   ]),
 

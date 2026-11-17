@@ -1,18 +1,19 @@
 // Greenneedle gn.new.37 The Second Nest (doc GREENNEEDLE_PLACED_2.md lines 606-633).
 // Build: npm run co:build -- greenneedle-new-37   then   npm run co:gn
-import { ch, fight, flag, join, out, wild, type Json } from '../dsl.ts';
-import { eitherWay, gev, is, moment, not, regionChanged, rm, say, scene, stampRegion, type Placement } from './_gn.ts';
+import { ch, fight, flag, join, out, trainer, type Json } from '../dsl.ts';
+import { gev, is, moment, not, regionChanged, rm, say, scene, stampRegion, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
 
 // A Fletchinder feeds a Rufflet chick that rolled into the wrong tree. The flock, the circling Braviary, and who is left alone.
-// Foster Wing (canonMoves.json): Flying, 65 power, drains half. The Braviary that sat low in a later region is the afterstory.
+// Foster Wing is an ability (engine.ts switchIn): sent in for an ally that left under half HP, its Defense rises a stage; once a battle. The Braviary that sat low in a later region is the afterstory.
 const TINT = '#32452d';
 const nest = (o: Json = {}): Json => ({ tint: TINT, tags: ['Pokémon', 'Story'], ...o });
-const FLOCK = ['fletchinder', 'staravia', 'pidgeotto', 'swellow'];
+/** The flock: the Fletchinder's own kind, three of them, one after another (A-1). */
+const FLOCK = ['fletchinder', 'fletchling', 'fletchinder'];
 
 /** Whoever is left alone may join: the Fletchinder, with Foster Wing. */
-const fletchinderJoins: Json = { ...join({ species: ['fletchinder'] }), moves: ['foster-wing'] };
+const fletchinderJoins: Json = { ...join({ species: ['fletchinder'] }), ability: 'foster-wing' };
 /** The Braviary came down: remember it (read by the afterstory) and the region it was seen in. */
 const braviaryLanded: Json[] = [flag('second-nest-braviary'), flag('second-nest-done'), stampRegion('second-nest-region')];
 
@@ -37,7 +38,7 @@ export const EVENTS: Json[] = [
   ), [
     ch('Drive off the flock.', fight(
       'The nearest bird cries out. Then the rest. They have been waiting for someone to hold the line against, and now there is a line.',
-      eitherWay(wild({ species: FLOCK, lv: -1, win: [flag('second-nest-done'), scene('gn-new-37-hush')] })),
+      trainer('The Flock', { team: FLOCK, lv: -1, friendly: true, sprite: 'fletchinder', win: [flag('second-nest-done'), scene('gn-new-37-hush')], lose: [scene('gn-new-37-fell')] }),
     )),
     ch('Carry the chick to the Braviary.', CARRIED),
     ch('Do nothing, and watch.', out(
@@ -58,10 +59,21 @@ export const EVENTS: Json[] = [
     'The Fletchinder settles over it. It does not thank you. It has no spare breath for it.',
     '*High above, the Braviary goes on circling. It has not stopped once.*',
   ), [
-    ch('Carry the chick to the Braviary.', CARRIED),
     ch('Leave them be.', out(
       'You leave the nest where it is. The Fletchinder keeps its place on the branch. Overhead, the circle goes on, wide and patient, and no one comes down.',
       flag('second-nest-left'), moment('You drove the flock off a Fletchinder\'s nest. The Braviary was still circling when you left.', 50),
+    )),
+  ]),
+  // ---- the flock was too many: it ends as it would have without you ----
+  rm('gn-new-37-fell', 'The Nest, Lost', nest({ effect: 'glint' }), say(
+    'The flock is too many. Your team is pushed back off the branch, and the birds close in on the nest behind you.',
+    'The Fletchinder stands in front of the chick against its own flock. It loses. It does not move aside until it cannot stand.',
+    'The Braviary comes down, then, all at once. The chick goes with it, and looks back.',
+  ), [
+    ch('Go to the Fletchinder.', out(
+      'It lies where it fell, watching the sky. When you kneel, it does not shy away. There is nowhere else left for it to go.',
+      ...braviaryLanded, flag('second-nest-watched'), fletchinderJoins,
+      moment('You fought a flock for a nest, and lost. The Fletchinder that raised the chick came with you after.', 60),
     )),
   ]),
 

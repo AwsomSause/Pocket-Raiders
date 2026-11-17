@@ -359,11 +359,6 @@
        },
        {
         "kind": "flag",
-        "key": "raikou-calm",
-        "amount": 1
-       },
-       {
-        "kind": "flag",
         "key": "raikou-sighting",
         "amount": 1
        },
@@ -654,23 +649,17 @@
     {
      "label": "Say hello.",
      "success": {
-      "text": "It runs along the fence and up your arm and sits on your shoulder, as if it had always done so.\n\nThe next thunderclap rattles the valley. It leans into your neck, laughing. It remembers who stood over it in the rain.",
+      "text": "It runs along the fence and up your arm and sits on your shoulder, as if it had always done so.\n\nThe next thunderclap rattles the valley. It leans into your neck, laughing. It remembers who stood over it in the rain.\n\nThen it hops back to its post, and turns its face to the storm again. It has thunder to watch.",
       "effects": [
-       {
-        "kind": "join",
-        "shadow": false,
-        "species": [
-         "pikachu"
-        ],
-        "types": [],
-        "levelBonus": 0,
-        "shinyMultiplier": 1,
-        "ability": "lightning-rod"
-       },
        {
         "kind": "flag",
         "key": "raikou-pika-met",
         "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Pichu you sheltered is a Pikachu now, and it is not afraid of thunder.",
+        "importance": 60
        }
       ]
      }

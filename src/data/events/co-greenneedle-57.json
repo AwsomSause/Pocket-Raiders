@@ -114,12 +114,12 @@
     "tint": "#6d3b4a",
     "effect": "none"
    },
-   "intro": "**\"The Champion\":** \"My ace, now. Everyone asks about my ace. Marvellous creature. A Poochyena, since you ask. Oh, no. No, of course not. A Garchomp. I've said Poochyena all my life, it's a nervous habit.\"\n\nIt does not blink. It does not stumble. The correction comes out smooth as oil.",
+   "intro": "**\"The Champion\":** \"My ace, now. Everyone asks about my ace. Marvellous creature. A {imp:wrong}, since you ask. Oh, no. No, of course not. A {imp:ace}. I've said {imp:wrong} all my life, it's a nervous habit.\"\n\nIt does not blink. It does not stumble. The correction comes out smooth as oil.",
    "choices": [
     {
      "label": "…wait.",
      "success": {
-      "text": "The real Champion has never kept anything called a Poochyena. You'd have heard. Everybody would have heard.",
+      "text": "The real Champion has never kept anything called a {imp:wrong}. You'd have heard. Everybody would have heard.",
       "effects": [
        {
         "kind": "flag",
@@ -552,7 +552,7 @@
       "effects": [
        {
         "kind": "moment",
-        "text": "Caught the Impersonator, who had been the Champion all along.",
+        "text": "The Impersonator, who had been the Champion all along, came with you.",
         "importance": 80
        }
       ]
@@ -874,7 +874,7 @@
     "tint": "#6d3b4a",
     "effect": "none"
    },
-   "intro": "**The Champion:** \"A surprise visit! My ace, a Garchomp. I got it right this time. I've been practising.\"\n\nThe sun comes out. The shadow is missing again. It is the only thing it has not practised.",
+   "intro": "**The Champion:** \"A surprise visit! My ace, a {imp:ace}. I got it right this time. I've been practising.\"\n\nThe sun comes out. The shadow is missing again. It is the only thing it has not practised.",
    "choices": [
     {
      "label": "That's you, isn't it.",

@@ -8,6 +8,7 @@ import { PreloadTracker } from '../core/tools/preload';
 import Phaser from 'phaser';
 import { buildCatalog, type AssetManifest } from '../assets/catalog';
 import { bossSpriteIds } from '../core/regions';
+import { CAST_SPRITES } from '../core/expansion/cast/sprites';
 import { animCatalogInputs } from '../core/presentation/moveAnims';
 import { scriptAssets } from '../core/presentation/scriptAnim';
 import { ebdxAnims, moveAnims } from '../data/presentation';
@@ -40,7 +41,7 @@ export class BootScene extends Phaser.Scene {
     const manifest = (this.cache.json.get('manifest') as AssetManifest | undefined) ?? null;
     const catalog = buildCatalog({
       pokemon: [...content.species.values()].map((s) => s.assets),
-      trainerAssetIds: [...content.archetypes.values(), ...content.trainers.values()].map((a) => a.spriteAssetId).concat(bossSpriteIds(content)),
+      trainerAssetIds: [...content.archetypes.values(), ...content.trainers.values()].map((a) => a.spriteAssetId).concat(bossSpriteIds(content), Object.values(CAST_SPRITES).flat().filter((id) => !id.startsWith('trainer.cipher/'))),
       itemAssetIds: [...content.rewards.values(), ...content.items.values()].map((r) => r.iconAssetId),
       backgroundAssetIds: Object.values(content.arenas).filter((id): id is string => Boolean(id)),
       battleAnims: animCatalogInputs(moveAnims()),

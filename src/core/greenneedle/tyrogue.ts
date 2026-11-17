@@ -20,6 +20,8 @@ export const STYLES = [
 ] as const;
 export const KICKS = new Set(['low-kick', 'double-kick', 'rolling-kick', 'mega-kick', 'jump-kick', 'high-jump-kick', 'triple-kick', 'blaze-kick', 'low-sweep', 'triple-axel', 'stomp', 'axe-kick', 'trop-kick', 'thunderous-kick', 'tripping-kick']);
 export const PUNCHES = new Set(['mach-punch', 'comet-punch', 'mega-punch', 'drain-punch', 'fire-punch', 'thunder-punch', 'ice-punch', 'bullet-punch', 'dynamic-punch', 'focus-punch', 'sky-uppercut', 'power-up-punch', 'meteor-mash', 'shadow-punch', 'hammer-arm', 'plasma-fists', 'jet-punch', 'surging-strikes', 'wicked-blow']);
+/** It trained at all three dojos: it arrives knowing one kick, one punch and one spin, so its battles can go any of the three ways. */
+export const TYROGUE_MOVES = ['low-kick', 'mach-punch', 'rapid-spin', 'fake-out'] as const;
 export const SPINS = new Set(['rapid-spin', 'gyro-ball', 'spin-out']);
 
 const everyone = (run: RunState): PokemonInstance[] => [...run.party, ...run.box];
@@ -39,7 +41,7 @@ export const tyrLead = (run: Pick<RunState, 'story'>, key: string): boolean => {
 };
 export const tyrEven = (run: Pick<RunState, 'story'>): boolean => leadOf(run) < 0;
 
-/** Adds `n` to a school's count (the lesson taken, the master agreed with). `key` is kick, punch or stand. */
+/** Adds `n` to a school's count. `key` is kick, punch or stand. */
 export function tyrTally(run: RunState, key: string, n: number): string {
   const s = STYLES.find((x) => x.id === key);
   if (s) set(run, s.flag, f(run, s.flag) + n);
@@ -48,11 +50,11 @@ export function tyrTally(run: RunState, key: string, n: number): string {
 
 /** It travels with you. `how` 1: "Travel with me for the stage." `how` 2: "Pick one, kid." (it picks a school, and starts three ahead in it). */
 export function tyrogueJoin(run: RunState, how: number, stage: number, host: { apply: (e: unknown) => string }): string {
-  for (const k of ['tyr-kick', 'tyr-punch', 'tyr-stand', 'tyr-picked', 'tyr-result']) delete run.story.flags[`ev:${k}`];
+  for (const k of ['tyr-kick', 'tyr-punch', 'tyr-stand', 'tyr-now-kick', 'tyr-now-punch', 'tyr-now-stand', 'tyr-picked', 'tyr-result']) delete run.story.flags[`ev:${k}`];
   set(run, 'tyr-on', 1);
   set(run, 'tyr-region', run.regionIndex + 1);
   set(run, 'tyr-stage', stage);
-  const words = host.apply({ kind: 'join', recall: false, species: ['tyrogue'], types: [], levelBonus: -1, shinyMultiplier: 1, shadow: false, blissful: false, hiddenAbility: false, moves: [], direct: true, alpha: false, starterType: false, asIs: true, mark: TYROGUE });
+  const words = host.apply({ kind: 'join', recall: false, species: ['tyrogue'], types: [], levelBonus: -1, shinyMultiplier: 1, shadow: false, blissful: false, hiddenAbility: false, moves: [...TYROGUE_MOVES], direct: true, alpha: false, starterType: false, asIs: true, mark: TYROGUE });
   if (how !== 2) return words;
   const pick = fnv1a(`${run.seed}:tyrogue-three`) % 3;
   set(run, 'tyr-picked', pick + 1);
@@ -66,17 +68,32 @@ export function tyrogueTurn(run: RunState, events: readonly { type: string; side
   if (f(run, 'tyr-on') !== 1 || !run.battle || !run.stage) return;
   if (f(run, 'tyr-region') !== run.regionIndex + 1 || f(run, 'tyr-stage') !== (run.stage.index ?? 0) + 1) return;
   const mon = run.party[run.battle.activeIndex];
-  if (!mon?.gn?.includes(TYROGUE) || mon.hp <= 0) return;
+  // A turn it did not fight (or fell in) adds nothing, but a battle decided on that turn is still settled.
+  if (!mon?.gn?.includes(TYROGUE) || mon.hp <= 0) return tyrogueSettle(run);
   let stood = false;
+  // "How it won": the count is kept for this battle only, and joins the tally when the battle is won (a lost battle counts for nothing).
+  const now = (key: string): void => set(run, `tyr-now-${key}`, f(run, `tyr-now-${key}`) + 1);
   for (const e of events) {
     if (e.type === 'move' && e.side === 'player' && e.moveId) {
-      if (KICKS.has(e.moveId)) tyrTally(run, 'kick', 1);
-      else if (PUNCHES.has(e.moveId)) tyrTally(run, 'punch', 1);
+      if (KICKS.has(e.moveId)) now('kick');
+      else if (PUNCHES.has(e.moveId)) now('punch');
       else if (SPINS.has(e.moveId)) stood = true;
     }
     if (e.type === 'damage' && e.side === 'player') stood = true;
   }
-  if (stood) tyrTally(run, 'stand', 1);
+  if (stood) now('stand');
+  tyrogueSettle(run);
+}
+
+/** The battle is decided: a win (or a catch) adds this battle's kicks, punches and stands to the tally; a loss drops them. */
+export function tyrogueSettle(run: RunState): void {
+  const outcome = run.battle?.outcome;
+  if (!outcome) return;
+  for (const st of STYLES) {
+    const n = f(run, `tyr-now-${st.id}`);
+    if (n > 0 && outcome !== 'lose') tyrTally(run, st.id, n);
+    delete run.story.flags[`ev:tyr-now-${st.id}`];
+  }
 }
 
 /** The ending (step 19): flag `tyr-result` becomes 0 (it's gone), 1 kick, 2 punch, 3 stand, 4 even. */

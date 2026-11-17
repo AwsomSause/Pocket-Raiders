@@ -6,7 +6,7 @@ import { evolvedBy, ofAssist, ofGuestLeaves, ofShadow, ofShadowMark, recordRelea
 import { createPokemon } from '../../src/core/pokemon';
 import type { RunState } from '../../src/core/state';
 import { content } from './helpers';
-import { choose, flagOf, gnRun, open, setFlag, win } from './helpers/gnPlay';
+import { choose, flagOf, gnRun, open, scene, setFlag, win } from './helpers/gnPlay';
 
 const opened = (run: RunState, id: string): boolean => !!run.stage!.map.nodes.find((n) => n.id === run.stage!.current)?.sides.some((x) => x.kind === 'event' && !x.used && x.eventId === id);
 const letGo = (run: RunState, species: string, why: 1 | 2 | 3 | 4, stage: number, friendship = 70): void => {
@@ -75,7 +75,9 @@ describe('gn.58 Old Friend Returns', () => {
     open(run, 'gn-58-friend');
     run = choose(run, 'gn-58-friend', 'Kneel down, and hold out a hand.').run;
     const n = run.party.length + run.box.length;
-    run = choose(run, 'gn-58-help', 'Come with me?').run;
+    // "I've no room.": it greets you carefully (its own scene), where "It'll be happier here." is greeted warmly.
+    expect(scene(run, 'gn-58-room').intro).toContain('It comes carefully');
+    run = choose(run, 'gn-58-room', 'Come with me?').run;
     expect(run.party.length + run.box.length).toBe(n);
     expect([...run.party, ...run.box].some((m) => m.gn?.includes('came-back'))).toBe(false);
   });
@@ -180,5 +182,64 @@ describe('gn.58 Old Friend Returns', () => {
     expect(has('gn-22-join', 'cubone')).toBe(true);
     expect(has('gn-37-told', 'mimikyu')).toBe(true);
     expect(has('gn-38-endings', 'made')).toBe(true);
+  });
+});
+
+describe('gn.58 fixes against the doc', () => {
+  it('many let go: the others follow at a distance, and each still gets its own meeting later', () => {
+    const run = gnRun('t58-many');
+    for (const [i, s] of ['rattata', 'pidgey', 'caterpie', 'weedle', 'spearow'].entries()) letGo(run, s, 1, -6 - i);
+    open(run, 'gn-58-friend');
+    const after = choose(run, 'gn-58-friend', 'Kneel down, and hold out a hand.').run;
+    expect(flagOf(after, 'of-many')).toBe(1);
+    expect(releases(after).filter((r) => r.m)).toHaveLength(1);
+    expect(flagOf(after, 'oldfriend-met')).toBe(1);
+    // The next one is still due.
+    expect(releases(after).some((r) => !r.m)).toBe(true);
+  });
+
+  it('"It\'ll be happier here." is greeted warmly; "I\'ve no room." carefully', () => {
+    const warm = gnRun('t58-warm');
+    letGo(warm, 'rattata', 1, -3);
+    open(warm, 'gn-58-friend');
+    const w = choose(warm, 'gn-58-friend', 'Kneel down, and hold out a hand.').run;
+    expect(scene(w, 'gn-58-help').intro).toContain('warmly');
+    expect(flagOf(w, 'of-help')).toBe(1);
+    const careful = gnRun('t58-careful');
+    letGo(careful, 'rattata', 2, -3);
+    open(careful, 'gn-58-friend');
+    const c = choose(careful, 'gn-58-friend', 'Kneel down, and hold out a hand.').run;
+    expect(scene(c, 'gn-58-room').intro).toContain('carefully');
+    expect(flagOf(c, 'of-help')).toBe(1);
+  });
+
+  it('floating a boat for one you let go at the Lantern Sea is what the paper-boat line reads', () => {
+    const e = content.events.get('gn-new-36-name')!;
+    const letGoChoice = e.choices.find((c) => c.label.includes('one you let go'))!;
+    expect(JSON.stringify(letGoChoice)).toContain('lantern-boat-floated');
+    expect(JSON.stringify(content.events.get('gn-58-friend'))).toContain('lantern-boat-floated');
+  });
+
+  it('the helping turn also comes in a battle with an evil team\'s lieutenant or boss (the stage\'s "boss battle")', () => {
+    const helped = (seed: string): RunState => {
+      const run = gnRun(seed);
+      letGo(run, 'rattata', 1, -3);
+      open(run, 'gn-58-friend');
+      return choose(run, 'gn-58-friend', 'Kneel down, and hold out a hand.').run;
+    };
+    const run = helped('t58-officer');
+    expect(flagOf(run, 'of-help')).toBe(1);
+    open(run, 'evil-rocket-rising-star');
+    const fight = choose(run, 'evil-rocket-rising-star', 'Battle.');
+    expect(fight.battle).toBe(true);
+    expect(ofAssist(content, fight.run, fight.run.battle!)).toContain('A shape crosses the field');
+    expect(flagOf(fight.run, 'of-help-used')).toBe(1);
+    // An ordinary event fight does not call it.
+    const plain = helped('t58-plain');
+    open(plain, 'gn-55-fight');
+    const other = choose(plain, 'gn-55-fight', 'Battle.');
+    expect(other.battle).toBe(true);
+    expect(ofAssist(content, other.run, other.run.battle!)).toBe('');
+    expect(flagOf(other.run, 'of-help-used')).toBe(0);
   });
 });

@@ -2,6 +2,7 @@
 // species, level, nature, all four moves, ability, quirk, history marks, why the trader lets it go, and a fair value.
 // What arrives is worked out from the run's seed and the Pokémon given, never from the event's roll, so the card
 // shows exactly what the trade does. Trade pools: src/data/catalogOverhaul/tradePools/<category>.json.
+import { draftTradeWarning } from '../greenneedle/draft';
 import { z } from 'zod';
 import { NATURE_IDS } from '../natures';
 import { TradeWantSchema, type Content, type EventEffect, type HonestGives, type Species, type TradeWant } from '../contentSchema';
@@ -209,7 +210,8 @@ export function yourSide(content: Content, mon: PokemonInstance): CardSide {
     ability: abilityName(content, mon.speciesId, hidden),
     hidden,
     quirk: quirkLine(mon.quirk),
-    marks: [...(mon.marks ?? [])],
+    // Greenneedle gn.48: a drafted Pokémon that stayed goes back to its first trainer if traded; the card says so in advance.
+    marks: [...(mon.marks ?? []), ...(draftTradeWarning(mon) ? [draftTradeWarning(mon)!] : [])],
     value: fairValue(content, mon.speciesId, mon.level, hidden),
     evolvesTo: null,
     held: held ?? null,

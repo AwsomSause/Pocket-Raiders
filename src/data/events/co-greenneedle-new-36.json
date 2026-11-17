@@ -628,6 +628,12 @@
       "effects": [
        {
         "kind": "gn",
+        "op": "setFlag",
+        "key": "lantern-boat-floated",
+        "n": 1
+       },
+       {
+        "kind": "gn",
         "op": "scene",
         "key": "gn-new-36-float"
        }

@@ -118,6 +118,17 @@ export function markDecided(run: RunState, mon: PokemonInstance, kept: boolean):
   return kept ? 'North\'s Wind is yours to carry now.' : 'It rises, turns once, and is gone into the north. Later you may see its shape cross the sky.';
 }
 
+/** North's Wind: one charge per battle, and the charge refills only at a rest. A used charge is a mark on the Pokémon (no save field). */
+export const WIND_SPENT = 'wind-spent';
+export const windSpent = (mon: Pick<PokemonInstance, 'gn'>): boolean => !!mon.gn?.includes(WIND_SPENT);
+export function spendWind(mon: PokemonInstance): void {
+  if (!windSpent(mon)) mon.gn = [...(mon.gn ?? []), WIND_SPENT];
+}
+/** A rest: every spent charge comes back. */
+export function refillNorthsWind(run: Pick<RunState, 'party' | 'box'>): void {
+  for (const mon of [...run.party, ...run.box]) if (windSpent(mon)) mon.gn = mon.gn!.filter((t) => t !== WIND_SPENT);
+}
+
 /** Released: its silhouette crosses the sky in later regions. A short line for the region's first stage, or null. */
 export function skySilhouette(run: Pick<RunState, 'expansion' | 'regionIndex'>): string | null {
   return run.expansion?.flightNorth?.state === 'released' && run.regionIndex > 0

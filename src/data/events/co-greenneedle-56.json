@@ -403,13 +403,7 @@
         "key": "slowpoke-read",
         "min": 0,
         "max": 0,
-        "then": [
-         {
-          "kind": "friendship",
-          "amount": 5,
-          "who": "lead"
-         }
-        ],
+        "then": [],
         "text": "The Chief looks at you, nods slowly, and moves its hat a little to make room. The Slowpoke consider you one of them."
        }
       ]
@@ -463,13 +457,7 @@
         "key": "slowpoke-read",
         "min": 0,
         "max": 0,
-        "then": [
-         {
-          "kind": "friendship",
-          "amount": 5,
-          "who": "lead"
-         }
-        ],
+        "then": [],
         "text": "The Chief looks at you, nods slowly, and moves its hat a little to make room. The Slowpoke consider you one of them."
        }
       ]
@@ -548,13 +536,7 @@
         "key": "slowpoke-read",
         "min": 0,
         "max": 0,
-        "then": [
-         {
-          "kind": "friendship",
-          "amount": 5,
-          "who": "lead"
-         }
-        ],
+        "then": [],
         "text": "The Chief looks at you, nods slowly, and moves its hat a little to make room. The Slowpoke consider you one of them."
        }
       ]
@@ -1496,13 +1478,7 @@
         "key": "slowpoke-read",
         "min": 0,
         "max": 0,
-        "then": [
-         {
-          "kind": "friendship",
-          "amount": 5,
-          "who": "lead"
-         }
-        ],
+        "then": [],
         "text": "The Chief looks at you, nods slowly, and moves its hat a little to make room. The Slowpoke consider you one of them."
        }
       ]
@@ -1548,98 +1524,7 @@
         "key": "slowpoke-read",
         "min": 0,
         "max": 0,
-        "then": [
-         {
-          "kind": "friendship",
-          "amount": 5,
-          "who": "lead"
-         }
-        ],
-        "text": "The Chief looks at you, nods slowly, and moves its hat a little to make room. The Slowpoke consider you one of them."
-       }
-      ]
-     }
-    },
-    {
-     "label": "Ask the Sleeper how it knew.",
-     "success": {
-      "text": "The Sleeper opens one eye. Closes it. A smile, you think, at the corner of its mouth.\n\nThe Dratini has gone shy, but when you offer a hand it comes anyway, curious, and wraps round your wrist.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "slowpoke-read",
-        "min": 3,
-        "then": [
-         {
-          "kind": "join",
-          "shadow": false,
-          "species": [
-           "dratini"
-          ],
-          "types": [],
-          "levelBonus": 0,
-          "shinyMultiplier": 1,
-          "held": "dragon-fang"
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "slowpoke-read",
-        "min": 0,
-        "max": 2,
-        "then": [
-         {
-          "kind": "join",
-          "shadow": false,
-          "species": [
-           "dratini"
-          ],
-          "types": [],
-          "levelBonus": 0,
-          "shinyMultiplier": 1
-         }
-        ]
-       },
-       {
-        "kind": "flag",
-        "key": "intel",
-        "amount": 1
-       },
-       {
-        "kind": "flag",
-        "key": "slowpoke-case",
-        "amount": 1
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "slowpoke-case-2",
-        "n": 1
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "slowpoke-read",
-        "min": 3,
         "then": [],
-        "text": "**Miss Hartigan:** \"You'd be wasted here.\""
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "slowpoke-read",
-        "min": 0,
-        "max": 0,
-        "then": [
-         {
-          "kind": "friendship",
-          "amount": 5,
-          "who": "lead"
-         }
-        ],
         "text": "The Chief looks at you, nods slowly, and moves its hat a little to make room. The Slowpoke consider you one of them."
        }
       ]
@@ -2569,13 +2454,22 @@
        },
        {
         "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-honorary",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "The Chief gets down off its chair. This takes some time. It pins something to your coat, crooked: a tin badge, hand-lettered. **HONORARY SLOWPOKE DETECTIVE.** Sergeant Farrow salutes it before she can stop herself."
+       },
+       {
+        "kind": "gn",
         "op": "setFlag",
         "key": "slowpoke-honorary",
         "n": 1
        },
        {
         "kind": "moment",
-        "text": "Found a missing grandfather by walking the wrong way with the Slowpoke Detective Agency.",
+        "text": "Found a missing grandfather by walking the wrong way, and was made an Honorary Slowpoke Detective.",
         "importance": 70
        },
        {
@@ -2603,13 +2497,7 @@
         "key": "slowpoke-read",
         "min": 0,
         "max": 0,
-        "then": [
-         {
-          "kind": "friendship",
-          "amount": 5,
-          "who": "lead"
-         }
-        ],
+        "then": [],
         "text": "The Chief looks at you, nods slowly, and moves its hat a little to make room. The Slowpoke consider you one of them."
        }
       ]
@@ -2640,13 +2528,22 @@
        },
        {
         "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-honorary",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "The Chief gets down off its chair. This takes some time. It pins something to your coat, crooked: a tin badge, hand-lettered. **HONORARY SLOWPOKE DETECTIVE.** Sergeant Farrow salutes it before she can stop herself."
+       },
+       {
+        "kind": "gn",
         "op": "setFlag",
         "key": "slowpoke-honorary",
         "n": 1
        },
        {
         "kind": "moment",
-        "text": "Found a missing grandfather by walking the wrong way with the Slowpoke Detective Agency.",
+        "text": "Found a missing grandfather by walking the wrong way, and was made an Honorary Slowpoke Detective.",
         "importance": 70
        },
        {
@@ -2674,13 +2571,7 @@
         "key": "slowpoke-read",
         "min": 0,
         "max": 0,
-        "then": [
-         {
-          "kind": "friendship",
-          "amount": 5,
-          "who": "lead"
-         }
-        ],
+        "then": [],
         "text": "The Chief looks at you, nods slowly, and moves its hat a little to make room. The Slowpoke consider you one of them."
        }
       ]
@@ -2689,7 +2580,7 @@
     {
      "label": "Ask the Slowpoke how they knew.",
      "success": {
-      "text": "The Chief looks at you. Four minutes pass. It yawns. Miss Hartigan, arriving late, translates: \"It says it didn't. It says it wasn't sure it should.\"\n\nThe Ursaring, listening, decides to follow you home.",
+      "text": "*The Chief looks at you. Four minutes pass. It yawns.* That is the whole of the answer.\n\nThe Ursaring sees the old man to his gate, and then turns round, and follows you.",
       "effects": [
        {
         "kind": "gn",
@@ -2736,13 +2627,22 @@
        },
        {
         "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-honorary",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "The Chief gets down off its chair. This takes some time. It pins something to your coat, crooked: a tin badge, hand-lettered. **HONORARY SLOWPOKE DETECTIVE.** Sergeant Farrow salutes it before she can stop herself."
+       },
+       {
+        "kind": "gn",
         "op": "setFlag",
         "key": "slowpoke-honorary",
         "n": 1
        },
        {
         "kind": "moment",
-        "text": "Found a missing grandfather by walking the wrong way with the Slowpoke Detective Agency.",
+        "text": "Found a missing grandfather by walking the wrong way, and was made an Honorary Slowpoke Detective.",
         "importance": 70
        },
        {
@@ -2770,13 +2670,7 @@
         "key": "slowpoke-read",
         "min": 0,
         "max": 0,
-        "then": [
-         {
-          "kind": "friendship",
-          "amount": 5,
-          "who": "lead"
-         }
-        ],
+        "then": [],
         "text": "The Chief looks at you, nods slowly, and moves its hat a little to make room. The Slowpoke consider you one of them."
        }
       ]

@@ -39,6 +39,7 @@ describe('gn.new.27 The Little Cup', () => {
       expect(run.battle!.enemyTeam.every((m) => m.level === 5)).toBe(true);
       if (i === 3) expect(run.battle!.enemyTeam).toHaveLength(3);
       if (i === 4) expect(run.battle!.enemyTeam[0]!.speciesId).toBe('sunkern');
+      if (i === 4) expect(run.battle!.enemyTeam[0]!.held?.['sun-specs']).toBe(1);
       const xp = run.party.map((m) => m.xp);
       run = win(run);
       if (i < 4) expect(run.party.map((m) => m.xp)).toEqual(xp);

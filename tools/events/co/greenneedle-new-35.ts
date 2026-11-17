@@ -51,7 +51,8 @@ const stageEvent = (n: number): Json => {
     stop: 'event', rarity: 'rare', callback: true, forced: true, requires: REQ_NEXT(n), remembers: memory(), cast: [], effect: 'sparkle',
   }), say(
     'An old woman at the rest, with a ring of children. A different ring; the same her.',
-    `"Last time I told you the trainer would **${PRED[n - 2]}**," she says. "Well? Did they?"`,
+    // gn.60: in one telling (the third), her story has a seventh in the trainer's team. She doesn't explain. Empty unless something is following.
+    `"Last time I told you the trainer would **${PRED[n - 2]}**," she says. "Well? Did they?"${n === 3 ? '{followed:seventh}' : ''}`,
   ), report(n, next));
 };
 
@@ -124,24 +125,25 @@ export const EVENTS: Json[] = [
     'You stop. There is a long silence. Then the old woman stands, with a hand on your shoulder, and says, "Hands. Whose was better? Mine, or theirs?"',
     '*The children go quiet to think. It is the most serious vote in the region.*',
   ), [
-    chIf([is('tale', 3)], 'Wait for the count.', out(say('They vote for yours. Not by a hair: by a wall of small hands, and the littlest one on her feet.', '"Well," says the Storyteller. "Well." She sits down very slowly. She is smiling the way people do when they are given back something they lost.', 'At the very back of the ring, something large and slow and patient stands up, shakes off its blanket of hay, and waddles toward you.', 'A Slowking. It has been sitting there the whole time. It has heard everything.'), { ...join({ species: ['slowking'] }), direct: true }, gn('markLast', { key: 'twice-told', species: ['slowking'] }), flag('sr-won'), flag('sr-told'), stampRegion('sr-region'), moment('The children voted for the story you told over the Storyteller\'s own. A Slowking that had been listening at the back got up and followed you.', 70))),
-    chIf([not('tale')], 'Wait for the count.', out(say('They vote for hers.', 'By a few hands. A child says, "It had a better fork." The others nod. It is, in fairness, a very good fork.', 'The old woman takes your hand in both of hers. "Mine was the better story," she says. "Yours was the truer. They\'re not the same, and you can tell them both."'), flag('sr-told'), stampRegion('sr-region'), bond(1))),
-    chIf([is('tale', 1, 2)], 'Wait for the count.', out(say('They vote for hers.', 'By one hand. A child says, "It had a better fork." Another says, "Theirs had the *quiet*." They argue. It is, in fairness, a good fork.', 'The old woman takes your hand in both of hers. "Mine was the better story," she says. "Yours was the truer. They\'re not the same, and you can tell them both."'), flag('sr-told'), stampRegion('sr-region'), bond(1))),
+    chIf([is('tale', 3)], 'Wait for the count.', out(say('They vote for yours. Not by a hair: by a wall of small hands, and the littlest one on her feet.', '"Well," says the Storyteller. "Well." She sits down very slowly. She is smiling the way people do when they are given back something they lost.', 'At the very back of the ring, something large and slow and patient stands up, shakes off its blanket of hay, and waddles toward you.', 'A Slowking. It has been sitting there the whole time. It has heard everything.'), { ...join({ species: ['slowking'] }), direct: true }, gn('markLast', { key: 'twice-told', species: ['slowking'] }), flag('sr-won'), flag('sr-own-tale'), flag('sr-told'), stampRegion('sr-region'), moment('The children voted for the story you told over the Storyteller\'s own. A Slowking that had been listening at the back got up and followed you.', 70))),
+    chIf([not('tale')], 'Wait for the count.', out(say('They vote for hers.', 'By a few hands. A child says, "It had a better fork." The others nod. It is, in fairness, a very good fork.', 'The old woman takes your hand in both of hers. "Mine was the better story," she says. "Yours was the truer. They\'re not the same, and you can tell them both."'), flag('sr-own-tale'), flag('sr-told'), stampRegion('sr-region'), bond(1))),
+    chIf([is('tale', 1, 2)], 'Wait for the count.', out(say('They vote for hers.', 'By one hand. A child says, "It had a better fork." Another says, "Theirs had the *quiet*." They argue. It is, in fairness, a good fork.', 'The old woman takes your hand in both of hers. "Mine was the better story," she says. "Yours was the truer. They\'re not the same, and you can tell them both."'), flag('sr-own-tale'), flag('sr-told'), stampRegion('sr-region'), bond(1))),
   ]),
 
   // ---- the afterstory: next region, a different old woman tells the player's story, wrongly ----
   gev('gn-new-35-after', 'A Different Old Woman', road({
     stop: 'event', rarity: 'rare', callback: true, requires: [is('sr-told'), regionChanged('sr-region'), not('sr-after')], effect: 'sparkle',
     remembers: [
-      { id: 'won', when: [is('sr-won')], notice: '*The children are asking for "the one where the Slowking stood up." Someone has put the Slowking in a different story. She hasn\'t noticed.*' },
+      { id: 'won', when: [is('sr-won')], intro: 'A different old woman, at a different rest, is telling a story to different children. It\'s about a trainer. It is about **you.** *It is the story you told at the last rest. She has it nearly right. She has the ending wrong. It makes a better ending, to be fair.*', notice: '*The children are asking for "the one where the Slowking stood up." Someone has put the Slowking in a different story. She hasn\'t noticed.*' },
+      { id: 'own', when: [is('sr-own-tale')], intro: 'A different old woman, at a different rest, is telling a story to different children. It\'s about a trainer. It is about **you.** *It is the story you told at the last rest. She has it nearly right. She has the ending wrong. It makes a better ending, to be fair.*' },
       { id: 'lost', when: [is('sr-asked'), not('sr-won')], notice: '*She tells the one about the grandmother\'s grandmother. She has the lies the wrong way round.*' },
     ],
   }), say(
     'A different old woman, at a different rest, is telling a story to different children. It\'s about a trainer. It is about **you.**',
-    '*It is the story you told at the last rest. She has it nearly right. She has the ending wrong. It makes a better ending, to be fair.*',
+    '*It is the story of your road, the one the Storyteller told a stage ahead of you. She has it nearly right. She has the ending wrong. It makes a better ending, to be fair.*',
   ), [
     ch('Correct her.', out(say('"It was the other way round," you say, as gently as you can. She stops. She looks at you. She laughs.', '"Is it? Then tell it right, and I\'ll tell it *your* way. That\'s how it gets so far."', 'By the end of the night the children can tell it both ways.'), flag('sr-after'), bond(1))),
-    ch('Let her tell it.', out(say('You let her. She gets the ending wrong, and the children love it, and it is *better.*', 'Somewhere down the road, a boy is already telling it the wrong way, to someone else.'), flag('sr-after'), moment('A different old woman, in a different region, was telling the story you told. She had the ending wrong. It was better.', 60))),
+    ch('Let her tell it.', out(say('You let her. She gets the ending wrong, and the children love it, and it is *better.*', 'Somewhere down the road, a boy is already telling it the wrong way, to someone else.'), flag('sr-after'), moment('A different old woman, in a different region, was telling your story. She had the ending wrong. It was better.', 60))),
   ]),
 ];
 
@@ -153,8 +155,8 @@ const P = (n: number, stage: number, home: number, w: [number, number], note: st
   level: 'No battles', often: 'run', badge: 'own', chain: 'gn-new-35', beat: n, note,
 });
 export const PLACEMENT: Record<string, Placement> = {
-  'gn-new-35-s1': P(1, 1, 10, [8, 12], 'S1, Step 10 (must-see; at a + node if one is near), fallback Step 19. Once a run, from A9. One rest per stage, S1–S7; the ending is S8, Step 19.'),
-  ...Object.fromEntries([2, 3, 4, 5, 6, 7].map((n) => [`gn-new-35-s${n}`, P(n, n, 10, [8, 12], `S${n}, Step 10 (must-see), fallback Step 19.`)])),
+  'gn-new-35-s1': P(1, 1, 10, [8, 19], 'S1, Step 10 (must-see; at a + node if one is near), fallback Step 19. Once a run, from A9. One rest per stage, S1–S7; the ending is S8, Step 19.'),
+  ...Object.fromEntries([2, 3, 4, 5, 6, 7].map((n) => [`gn-new-35-s${n}`, P(n, n, 10, [8, 19], `S${n}, Step 10 (must-see), fallback Step 19.`)])),
   'gn-new-35-end': { ...P(8, 8, 19, [17, 19], 'S8, Step 19.'), note: 'The ending, S8 Step 19.' },
   'gn-new-35-after': { gn: 'gn.new.35', shape: 'Single', earliest: 'A9', home: 10, window: [4, 16], sits: 'optional', attaches: 'rest', tags: ['Story'], level: 'None', often: 'run', badge: 'own', note: 'Afterstory: next region, a rest.' },
 };

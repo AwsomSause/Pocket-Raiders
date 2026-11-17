@@ -1,3 +1,4 @@
+import { parkWaiting } from '../core/minigame/flow';
 import type { RunState } from '../core/state';
 
 /** Which screen shows a run in its current phase. */
@@ -6,7 +7,8 @@ export function sceneForRun(run: RunState): string {
     case 'starter':
       return 'StarterSelect';
     case 'map':
-      return 'Map';
+      // gn.18: an event inside Safari Land has closed; the visit picks up where it stepped out.
+      return parkWaiting(run) ? 'Minigame' : 'Map';
     case 'shop':
       return 'Shop';
     case 'battle':

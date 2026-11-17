@@ -10,9 +10,13 @@ import type { RunState } from '../state';
 import { gameModule, type MinigameView } from './games';
 import type { Medal, MinigameDef } from './schema';
 import { SAFARI_ID, type SafariState } from '../greenneedle/safari';
-import { safariBegin, safariFinish } from '../greenneedle/safariEnd';
+import { pausedPark, safariBegin, safariFinish, safariStepBack, safariStepOut } from '../greenneedle/safariEnd';
 import { SNAKE_ID, type SnakeState } from '../greenneedle/snake';
 import { psyduckBegin, psyduckFinish } from '../greenneedle/snakeEnd';
+import { ARCADE_ID, type ArcadeState } from '../greenneedle/arcade';
+import { arcadeFinish, arcadeLeave } from '../greenneedle/arcadeEnd';
+import { JIGSAW_ID, type JigsawState } from '../greenneedle/jigsaw';
+import { jigsawBegin, jigsawFinish } from '../greenneedle/jigsawEnd';
 
 export function getMinigame(content: Content, id: string): MinigameDef {
   const g = content.minigames.games.find((m) => m.id === id);
@@ -50,12 +54,18 @@ function findStop(run: RunState, sideId: string) {
 /** Starts an attempt at difficulty tier (0 Easy to 2 Hard; 3 Master where the game has it). Walking away mid-game counts as an attempt and pays nothing. */
 export function beginMinigame(content: Content, current: RunState, sideId: string, tier: number): RunState {
   if (current.phase !== 'map') throw new Error('Minigames start from the map');
-  const side = findStop(current, sideId);
+  const run = structuredClone(current);
+  startMinigame(content, run, sideId, tier);
+  return run;
+}
+
+/** The same, on the run in hand: an event that opens its game at once (gn.41's jigsaw) starts it here. */
+export function startMinigame(content: Content, run: RunState, sideId: string, tier: number): void {
+  const side = findStop(run, sideId);
   const def = getMinigame(content, side.minigameId!);
   if (!Number.isInteger(tier) || tier < 0 || tier >= def.difficultyTiers.length) throw new Error('Unknown difficulty');
-  const used = current.minigames.attempts[sideId] ?? 0;
+  const used = run.minigames.attempts[sideId] ?? 0;
   if (side.used || used >= def.attemptLimit) throw new Error('No attempts left at this stop');
-  const run = structuredClone(current);
   run.minigames.attempts[sideId] = used + 1;
   if (used + 1 >= def.attemptLimit) findStop(run, sideId).used = true;
   const stage = requireStage(run);
@@ -63,8 +73,8 @@ export function beginMinigame(content: Content, current: RunState, sideId: strin
   run.minigame = { id: def.id, sideId, tier, state: gameModule(def.id).start(content, { ...def.difficultyTiers[tier]!.params, ...conditionParams(run) }, rs), outcome: null };
   if (def.id === SAFARI_ID) safariBegin(content, run, run.minigame.state as SafariState);
   if (def.id === SNAKE_ID) psyduckBegin(run, run.minigame.state as SnakeState);
+  if (def.id === JIGSAW_ID) jigsawBegin(run, run.minigame.state as JigsawState);
   run.phase = 'minigame';
-  return run;
 }
 
 /** The conditions of your lead Pokémon as game parameters c0..c4 (S487); every game ignores the ones it does not read. */
@@ -102,7 +112,40 @@ export function minigameAct(content: Content, current: RunState, cellId: string)
   if (s.outcome) return run;
   const mod = gameModule(s.id);
   mod.act(content, s.state as never, cellId);
+  // gn.18: an event inside the park (Kanto's Stampede and Gold Teeth) plays on the map phase; the visit waits for it.
+  if (s.id === SAFARI_ID && safariStepOut(content, run, s.state as SafariState)) return run;
   return settle(content, run);
+}
+
+/** gn.18: whether a Safari Land visit is waiting while an event inside the park plays (the run is on the map phase meanwhile). */
+export const parkWaiting = (run: RunState): boolean => pausedPark(run) !== null;
+
+/**
+ * gn.18: after an event inside the park closes. `sideId` is the next room that event opened (play it next), or null once the visit
+ * is back on (the minigame phase again). If the node no longer holds the park (the event led somewhere else), the visit ends there and pays out.
+ */
+export function continuePark(content: Content, current: RunState): { run: RunState; sideId: string | null } {
+  if (!pausedPark(current)) return { run: current, sideId: null };
+  const run = structuredClone(current);
+  const m = run.minigame!;
+  const node = requireStage(run).map.nodes.find((n) => n.id === run.stage!.current);
+  if (!node?.sides.some((x) => x.id === m.sideId)) {
+    const s = m.state as SafariState;
+    s.away = null;
+    s.done = true;
+    run.phase = 'minigame';
+    return { run: settle(content, run), sideId: null };
+  }
+  return { run, sideId: safariStepBack(run) };
+}
+
+/** gn.18: the stop of the event the waiting visit stepped out to (the screen opens it). */
+export const parkEventSide = (run: RunState): string | null => pausedPark(run)?.away?.opened.at(-1) ?? null;
+
+/** gn.18: the stop of the door taken at the far gate, once the visit has ended (the screen opens it after the outcome). */
+export function parkDoorSide(run: RunState): string | null {
+  const m = run.minigame;
+  return m?.id === SAFARI_ID && m.outcome ? ((m.state as SafariState).doorSide ?? null) : null;
 }
 
 export function minigameTick(content: Content, current: RunState): RunState {
@@ -122,6 +165,14 @@ function settle(content: Content, run: RunState): RunState {
   s.outcome = payout(content, run, getMinigame(content, s.id), s.tier, score, max);
   if (s.id === SAFARI_ID) s.outcome.lines.push(...safariFinish(content, run, s.state as SafariState));
   if (s.id === SNAKE_ID) s.outcome.lines.push(...psyduckFinish(content, run, s.state as SnakeState));
+  // gn.new.14: the cabinet pays no medal money; what it leaves behind is the story's (the Porygon, or the walk away).
+  if (s.id === ARCADE_ID) s.outcome.lines = arcadeFinish(content, run, s.state as ArcadeState);
+  if (s.id === JIGSAW_ID) {
+    // The museum's pay is the story's, not a medal's: it is paid in full (no stage cap) and shown in the outcome's money.
+    const had = run.money;
+    s.outcome.lines.push(...jigsawFinish(content, run, s.state as JigsawState));
+    s.outcome.money += run.money - had;
+  }
   if (s.id === 'berry-blending') {
     const line = poffinConditions(run, s.state as never, s.outcome.medal);
     if (line) s.outcome.lines.push(line);
@@ -205,6 +256,7 @@ function applyEffect(content: Content, run: RunState, kind: 'heal' | 'research' 
 export function leaveMinigame(current: RunState): RunState {
   const run = structuredClone(current);
   const s = session(run);
+  if (s.id === ARCADE_ID && !s.outcome) arcadeLeave(run, s.state as ArcadeState);
   run.minigame = null;
   run.phase = 'map';
   return run;

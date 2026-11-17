@@ -74,7 +74,7 @@ const flash: Json = { kind: 'partyMove', move: 'flash' };
       c('Put my own hands up, and step back.', marowak('You put your hands up, empty, and you step back. For a long moment nothing happens. Then it lowers the club. It doesn\'t let you past. The battle\'s still needed. But it isn\'t angry now: it only has to be sure of you.', true)),
       c('Let Cubone go to it.', o('Cubone stops. The skull rattles. You let it go. It walks across the cold floor on its own, small and upright, to the shape under the raised club, and the club comes down slowly, and rests, very gently, on top of the skull it once wore. The ghost fades, smiling. Cubone stands a long while. Then, at once, it grows: a Marowak, holding a Thick Club that was not in its hand before.', { kind: 'formChange', from: 'cubone', to: 'marowak' }, item('thick-club'), flag('kanto-tower-mother'), ...RELEASED),
         { requires: [{ kind: 'partySpecies', species: 'cubone' }] }),
-    ], { scene: { pokemon: 'marowak', effect: 'fog' } });
+    ], { scene: { pokemon: 'marowak', effect: 'fog' }, remembers: [{ id: 'lonely-cubone', when: [{ kind: 'gn', test: 'hasMark', key: 'cubone-friend' }], notice: 'The ghost sees your Cubone, the one from the woods. The club is already coming down, slowly. It doesn\'t need to be asked.' }] });
 
   // Floor 7: the top. Reward: the Silph Scope; a Cubone with Lightning Rod and Bone Rush if the Marowak was released; the Pokémon Tower Scroll.
   const SCROLL = relic('pokemon-tower-scroll', 'Pokémon Tower Scroll', [{ kind: 'statMultiplier', stat: 'atk', type: 'ghost', value: 1.1 }, { kind: 'statMultiplier', stat: 'spa', type: 'ghost', value: 1.1 }]);

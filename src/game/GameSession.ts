@@ -58,6 +58,7 @@ import { claim } from '../core/quests';
 import { claimCollectionMilestones } from '../core/collection';
 import * as Run from '../core/run';
 import { cheerSky } from '../core/sky/spectate';
+import { EX_MOMENT_CHOICES, exMomentAnswer, exMomentAsk, exMomentDue, exMomentLines, exWatchAction, exWatching } from '../core/greenneedle/exhibition';
 import { rewindBattle } from '../core/rewind';
 import { swearVow, useBlessingRite } from '../core/blessings';
 import { markRumorShown, nodeHint } from '../core/worldSim/tick';
@@ -506,6 +507,13 @@ export class GameSession {
     return this.setRun(Mini.minigameTick(this.content, this.requireRun()));
   }
 
+  /** gn.18: back from an event inside Safari Land. Returns the next room's stop id to play, or null once the visit is on again. */
+  continuePark(): string | null {
+    const next = Mini.continuePark(this.content, this.requireRun());
+    this.setRun(next.run);
+    return next.sideId;
+  }
+
   leaveMinigame(): RunState {
     return this.setRun(Mini.leaveMinigame(this.requireRun()));
   }
@@ -733,6 +741,42 @@ export class GameSession {
     this.run = run;
     this.persistRun();
     return text;
+  }
+
+  /** gn.47 the Exhibition, watched: the moment that is due now (what is read out, and the three choices), or null. */
+  exhibitionMoment(): { n: number; lines: string[]; ask: string; choices: readonly { key: string; label: string }[] } | null {
+    const run = this.run;
+    const n = run ? exMomentDue(run) : 0;
+    return run && n ? { n, lines: exMomentLines(this.content, run, n), ask: exMomentAsk(this.content, run), choices: EX_MOMENT_CHOICES } : null;
+  }
+
+  /** gn.47: true while the Exhibition's match is being watched. */
+  exhibitionOn(): boolean {
+    return !!this.run && exWatching(this.run);
+  }
+
+  /** gn.47: the player's answer to that moment. Returns the lines to show. */
+  exhibitionAnswer(key: string): string[] {
+    const run = structuredClone(this.requireRun());
+    const lines = exMomentAnswer(this.content, run, key);
+    this.run = run;
+    this.persistRun();
+    return lines;
+  }
+
+  /** gn.47: the next turn of the watched match, both sides played by the exhibition AI. Null when no Exhibition is being watched. */
+  exhibitionTurn(): Run.TurnResult | null {
+    const run = this.requireRun();
+    if (!exWatching(run)) return null;
+    const tries = exWatchAction(this.content, run);
+    for (const [n, action] of tries.entries()) {
+      try {
+        return this.takeTurn(action);
+      } catch (err) {
+        if (n === tries.length - 1) throw err;
+      }
+    }
+    return null;
   }
 
   takeTurn(action: PlayerAction): Run.TurnResult {

@@ -18,3 +18,21 @@ export function giveDearest(content: Content, run: RunState, key: string): strin
   consumeItem(run.inventory, give.itemId);
   return `Given away: ${give.name}`;
 }
+
+// ---- Lantern 4: "Keep silent for a step: every choice that step is '…'" ----
+/** The step the player stands on, as one number (region, stage and column); 0 off the stage map. */
+const stepKey = (run: Pick<RunState, 'stage' | 'regionIndex'>): number => {
+  const stage = run.stage;
+  const node = stage && stage.kind === 'stage' ? stage.map.nodes.find((n) => n.id === stage.current) : undefined;
+  return stage && node ? (run.regionIndex * 100 + stage.index) * 100 + node.column + 1 : 0;
+};
+/** gn op `foxSilence`: the silence is kept for the rest of this step (run flag `fox-silence` holds the step). */
+export function foxSilence(run: RunState): string {
+  run.story.flags['ev:fox-silence'] = stepKey(run);
+  return '';
+}
+/** Is the player keeping silent on the step they stand on? (Every event choice there reads "…".) */
+export function foxSilent(run: Pick<RunState, 'stage' | 'regionIndex' | 'story'>): boolean {
+  const kept = Number(run.story.flags['ev:fox-silence'] ?? 0);
+  return kept > 0 && kept === stepKey(run);
+}

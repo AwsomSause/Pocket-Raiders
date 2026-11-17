@@ -1,9 +1,9 @@
 // Greenneedle gn.new.32 The Storm Chaser (doc GREENNEEDLE_PLACED_2.md lines 422-459): three sightings and a fourth meeting.
 // Build: npm run co:build -- greenneedle-new-32   then   npm run co:gn
 // Memory (this run only): raikou-sighting counts the sightings; raikou-approached / -waited / -ball / -pichu count the choices;
-// raikou-ball and raikou-calm (Wait or Shelter) decide the fourth meeting: Balls all three times = a fair fight, calm all three = the night
+// raikou-ball and raikou-calm (Wait; sheltering the Pichu is its own memory, raikou-pichu) decide the fourth meeting: Balls all three times = a fair fight, calm all three = the night
 // at camp, anything else = the nod.
-import { ch, fight, flag, item, join, out, wild, type Json } from '../dsl.ts';
+import { ch, fight, flag, item, out, wild, type Json } from '../dsl.ts';
 import { exactly, gev, is, laterStage, moment, not, say, stampStage, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
@@ -47,7 +47,7 @@ export const EVENTS: Json[] = [
     ch('Shelter the Pichu.', out(say(
       'You kneel over it in the rain. Your coat is over its head. The thunder goes off like a drum, and the Pichu flinches into your arm.',
       'The beast watches. Then it steps back first, and the lightning, for a breath, stops landing on this hill.',
-    ), flag('raikou-pichu'), flag('raikou-calm'), ...AFTER())),
+    ), flag('raikou-pichu'), ...AFTER())),
   ]),
   gev('gn-32-meet-fight', 'The Storm Chaser: Fair Fight', storm({ stop: 'event', rarity: 'rare', callback: true, requires: [...SEEN(3), is('raikou-ball', 3)] }), say(
     '*Step 17, optional. The hill again. The storm has been following your Balls for three sightings, and it has stopped being patient.*',
@@ -85,7 +85,8 @@ export const EVENTS: Json[] = [
     ch('Say hello.', out(say(
       'It runs along the fence and up your arm and sits on your shoulder, as if it had always done so.',
       'The next thunderclap rattles the valley. It leans into your neck, laughing. It remembers who stood over it in the rain.',
-    ), { ...join({ species: ['pikachu'], lv: 0 }), ability: 'lightning-rod' }, flag('raikou-pika-met'))),
+      'Then it hops back to its post, and turns its face to the storm again. It has thunder to watch.',
+    ), flag('raikou-pika-met'), moment('The Pichu you sheltered is a Pikachu now, and it is not afraid of thunder.', 60))),
     ch('Let it be.', out('It watches you go, ears up, perfectly steady. Every time the thunder rolls, it salutes.', flag('raikou-pika-met'))),
   ]),
 ];
@@ -93,16 +94,16 @@ export const REMOVE: string[] = [];
 
 export const PLACEMENT: Record<string, Placement> = {
   'gn-32-pool': {
-    gn: 'gn.new.32', shape: 'Region-long', earliest: 'A9', home: 7, window: [5, 10], sits: 'optional', attaches: 'after', tags: ['Legendary'], stages: [2], needs: ['storm'],
+    gn: 'gn.new.32', shape: 'Region-long', earliest: 'A9', home: 7, window: [5, 12], sits: 'optional', attaches: 'after', tags: ['Legendary'], stages: [2], needs: ['storm'], needsAll: ['high'],
     level: 'The battle path: Raikou at A+2', often: 'run', badge: 'own',
     beats: [
-      { beat: 'Sighting 1: drinking at a pool (needs high; fallback step 12)', event: 'gn-32-pool', stage: 'S2', home: 7, window: [5, 10] },
-      { beat: 'Sighting 2: watching a town from a ridge (fallback step 17)', event: 'gn-32-ridge', stage: 'S4', home: 12, window: [10, 15] },
-      { beat: 'Sighting 3: standing over a Pichu (fallback step 12)', event: 'gn-32-pichu', stage: 'S6', home: 7, window: [5, 10] },
+      { beat: 'Sighting 1: drinking at a pool (needs high; fallback step 12)', event: 'gn-32-pool', stage: 'S2', home: 7, window: [5, 12] },
+      { beat: 'Sighting 2: watching a town from a ridge (fallback step 17)', event: 'gn-32-ridge', stage: 'S4', home: 12, window: [10, 17] },
+      { beat: 'Sighting 3: standing over a Pichu (fallback step 12)', event: 'gn-32-pichu', stage: 'S6', home: 7, window: [5, 12] },
       { beat: 'The fourth meeting: Balls only = fair fight (step 17); waited = the night walk (step 10, near a + node); mixed = the nod', event: 'gn-32-meet-night', stage: 'S7 or S8', home: 10, window: [8, 13] },
     ],
     dressing: { kanto: 'The Storm Chaser', elsewhere: 'The Storm Chaser' },
-    note: 'Badge: a bolt. Once per run (the doc says per save; no memory across runs). Raikou is the battle path (fair, A+2, catchable; it runs if it is losing); the patient path gives the Thundermark (held: Electric moves +20%, Speed +10%). A sheltered Pichu is met later as a Pikachu with Lightning Rod (gn-32-pikachu).',
+    note: 'Badge: a bolt. Once per run (the doc says per save; no memory across runs). Raikou is the battle path (fair, A+2, catchable; it runs if it is losing); the patient path (Wait at all three sightings) gives the Thundermark (a team charm: Electric-types in the party act first on turn one of a battle fought in rain). A sheltered Pichu is met later as a Pikachu that is not afraid of thunder (gn-32-pikachu; it does not join).',
   },
 };
 export const CHAINS: Json[] = [];

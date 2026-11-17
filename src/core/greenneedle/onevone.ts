@@ -15,6 +15,8 @@ import { PINCH } from '../battle/abilities';
 import { heldPick } from '../bossGear';
 import { fnv1a } from '../expansion/hash';
 import { BRING } from './frontier';
+import { trainerClassesFor } from '../themes';
+import { logOf } from './allstar';
 import { CareSchema } from '../care/mods';
 
 const f = (run: Pick<RunState, 'story'>, k: string): number => Number(run.story.flags[`ev:${k}`] ?? 0);
@@ -28,16 +30,35 @@ const cast = (run: RunState, name: string, id: string): void => {
 const castOf = (run: Pick<RunState, 'story'>, name: string): string | undefined =>
   Object.keys(run.story.flags).find((k) => k.startsWith(`ev:cast-${name}:`))?.slice(`ev:cast-${name}:`.length);
 
-const NEWCOMER = ['pidgey', 'rattata', 'sentret', 'zigzagoon', 'bidoof', 'patrat', 'bunnelby', 'yungoos', 'skwovet', 'lechonk'];
-const ROAD = ['raticate', 'fearow', 'arbok', 'primeape', 'sandslash', 'marowak', 'golbat'];
 /** Gideon Tolland, dock worker: a different Pokémon every year. */
 export const GIDEON = ['machoke', 'krabby', 'wingull', 'quagsire', 'pelipper', 'gurdurr', 'timburr', 'wailmer', 'kingler'];
 /** Señora Dolores Vantongeren: the same one for fifty years. */
 export const DOLORES = 'xatu';
-const FINALIST = ['heracross', 'tyranitar', 'salamence', 'garchomp', 'lucario', 'metagross', 'dragonite'];
-const SPECIALIST: Record<string, string> = {
-  normal: 'kangaskhan', fire: 'arcanine', water: 'gyarados', electric: 'electabuzz', grass: 'exeggutor', ice: 'cloyster', fighting: 'hitmonlee', poison: 'muk', ground: 'donphan',
-  flying: 'pidgeot', psychic: 'alakazam', bug: 'pinsir', rock: 'sudowoodo', ghost: 'dusknoir', dragon: 'haxorus', dark: 'umbreon', steel: 'klinklang', fairy: 'clefable',
+/** What the six fresh opponents may bring: for each type, a few Pokémon of different strengths. The one nearest the entrant's own strength is drawn. */
+export const BY_TYPE: Record<string, string[]> = {
+  normal: ['raticate', 'kangaskhan', 'snorlax'], fire: ['ponyta', 'magmar', 'arcanine'], water: ['seaking', 'starmie', 'gyarados'], electric: ['pikachu', 'electabuzz', 'jolteon'],
+  grass: ['ivysaur', 'tangela', 'exeggutor'], ice: ['seel', 'cloyster', 'lapras'], fighting: ['machop', 'hitmonlee', 'machamp'], poison: ['arbok', 'weezing', 'muk'],
+  ground: ['sandshrew', 'marowak', 'donphan'], flying: ['pidgeotto', 'fearow', 'pidgeot'], psychic: ['drowzee', 'hypno', 'alakazam'], bug: ['beedrill', 'pinsir', 'heracross'],
+  rock: ['geodude', 'sudowoodo', 'golem'], ghost: ['gastly', 'haunter', 'dusknoir'], dragon: ['dratini', 'dragonair', 'haxorus'], dark: ['houndour', 'umbreon', 'tyranitar'],
+  steel: ['magnemite', 'klinklang', 'metagross'], fairy: ['clefairy', 'granbull', 'clefable'],
+};
+const total = (content: Content, sp: string): number => Object.values(getSpecies(content, sp).baseStats).reduce((a, n) => a + n, 0);
+/** "A similar strength": of these, the few nearest the entrant's base stat total; `pick` chooses among them. */
+export function nearest(content: Content, pool: string[], entrant: string, pick: (n: number) => number): string | undefined {
+  const want = total(content, entrant);
+  const near = pool.filter((s) => content.species.has(s)).sort((a, b) => Math.abs(total(content, a) - want) - Math.abs(total(content, b) - want) || a.localeCompare(b)).slice(0, 3);
+  return near[pick(near.length)];
+}
+/** Who the eight are this time (name and trainer class), kept for the board and the battles. */
+export interface Opponent { n: string; c: string; met?: number }
+const WHO = 'onevone:who';
+export const opponentsOf = (run: Pick<RunState, 'story'>): Opponent[] => {
+  try {
+    const v = JSON.parse(String(run.story.flags[WHO] ?? '[]')) as unknown;
+    return Array.isArray(v) ? (v as Opponent[]) : [];
+  } catch {
+    return [];
+  }
 };
 /** The reigning champion's name, a different trainer each region (text token `{onevone-champion}`). */
 export const CHAMPION_NAME: Record<string, string> = { kanto: 'Mireille Okafor', johto: 'Tadeo Valcourt', hoenn: 'Kaimana Reyes', sinnoh: 'Ottoline Brandt', unova: 'Desmond Achterberg', kalos: 'Solenne Duval', alola: 'Keoni Makoa', galar: 'Harriet Pembury', paldea: 'Inés Albarrán' };
@@ -62,20 +83,57 @@ export function onevoneEnter(content: Content, run: RunState, uid: string | unde
   for (const m of run.party) m.gn = (m.gn ?? []).filter((t) => t !== ENTRANT && t !== BRING);
   mon.gn = [...(mon.gn ?? []), ENTRANT, BRING];
   set(run, 'onevone-talked', 0);
-  // The eight.
+  // The eight. Gideon (3) and Dolores (6) are always there; the other six are drawn fresh each time, from trainers met on the
+  // road this run and this region's trainer classes, each with one Pokémon of about the entrant's strength.
   const types = getSpecies(content, mon.speciesId).types as TypeName[];
   const all = Object.keys(content.typeChart) as TypeName[];
-  const h = (salt: string, n: number): number => fnv1a(`${run.seed}::onevone::${visits}::${salt}`) % n;
-  const beats = all.filter((t) => typeEffectiveness(content.typeChart, t, types) >= 2 && SPECIALIST[t]);
-  const beaten = all.filter((t) => typeEffectiveness(content.typeChart, types[0]!, [t]) >= 2 && SPECIALIST[t]);
+  const h = (salt: string, n: number): number => fnv1a(`${run.seed}::onevone::${visits}::${salt}`) % Math.max(1, n);
+  const theme = run.stage ? content.themes.get(run.stage.themeId) : undefined;
+  const local = (theme ? trainerClassesFor(content, theme) : [...content.trainers.values()]).filter((c) => c.names.length > 0);
+  const everyClass = [...content.trainers.values()].filter((c) => c.names.length > 0);
+  const taken = new Set<string>(['Gideon Tolland', 'Señora Dolores Vantongeren']);
+  const fresh = (slot: number, wantType?: TypeName): Opponent => {
+    const fit = wantType ? everyClass.filter((c) => c.types.includes(wantType)) : [];
+    const classes = fit.length ? fit : local.length ? local : everyClass;
+    for (let i = 0; i < 12; i++) {
+      const cls = classes[h(`${slot}:class:${i}`, classes.length)];
+      const name = cls ? `${cls.name} ${cls.names[h(`${slot}:name:${i}`, cls.names.length)]!}` : '';
+      if (cls && !taken.has(name)) {
+        taken.add(name);
+        return { n: name, c: cls.id };
+      }
+    }
+    return { n: `Trainer ${slot}`, c: classes[0]?.id ?? 'ace-trainer' };
+  };
+  const anyOf = (salt: string): string => nearest(content, Object.values(BY_TYPE).flat(), mon.speciesId, (n) => h(salt, n)) ?? 'kangaskhan';
+  const beats = all.filter((t) => typeEffectiveness(content.typeChart, t, types) >= 2 && BY_TYPE[t]);
+  const beaten = all.filter((t) => typeEffectiveness(content.typeChart, types[0]!, [t]) >= 2 && BY_TYPE[t]);
+  const t4 = beats.length ? beats[h('4', beats.length)]! : ('normal' as TypeName);
+  const t5 = beaten.length ? beaten[h('5', beaten.length)]! : ('normal' as TypeName);
+  // Round two: a trainer the player has met and beaten on the road this run, with one of the Pokémon they had then.
+  const roadMet = logOf(run).filter((m) => m.r === 'w' && m.t.some((s) => content.species.has(s)) && !m.n.includes('Gideon') && !m.n.includes('Dolores'));
+  const road = roadMet.length ? roadMet[h('2:met', roadMet.length)] : undefined;
+  if (road) taken.add(road.n);
+  set(run, 'onevone-road-met', road ? 1 : 0);
+  const who: Opponent[] = [
+    fresh(1),
+    road ? { n: road.n, c: road.c || 'hiker', met: 1 } : fresh(2),
+    { n: 'Gideon Tolland', c: 'worker' },
+    fresh(4, t4),
+    fresh(5, t5),
+    { n: 'Señora Dolores Vantongeren', c: 'veteran' },
+    fresh(7),
+    { n: CHAMPION_NAME[region] ?? CHAMPION_NAME.kanto!, c: 'ace-trainer' },
+  ];
+  run.story.flags[WHO] = JSON.stringify(who);
   const foes = [
-    NEWCOMER[h('1', NEWCOMER.length)]!,
-    ROAD[h('2', ROAD.length)]!,
+    anyOf('1'),
+    road ? (nearest(content, road.t, mon.speciesId, () => 0) ?? anyOf('2')) : anyOf('2'),
     GIDEON[(visits - 1) % GIDEON.length]!,
-    SPECIALIST[beats.length ? beats[h('4', beats.length)]! : 'normal']!,
-    SPECIALIST[beaten.length ? beaten[h('5', beaten.length)]! : 'normal']!,
+    nearest(content, BY_TYPE[t4] ?? [], mon.speciesId, () => 0) ?? 'kangaskhan',
+    nearest(content, BY_TYPE[t5] ?? [], mon.speciesId, () => 0) ?? 'kangaskhan',
     DOLORES,
-    FINALIST[h('7', FINALIST.length)]!,
+    anyOf('7'),
     CHAMPION[region] ?? CHAMPION.kanto!,
   ].map((sp) => (content.species.has(sp) ? sp : 'kangaskhan'));
   foes.forEach((sp, i) => {
@@ -98,6 +156,9 @@ export function onevoneStart(content: Content, run: RunState, battle: BattleStat
   if (held) mon.held = { [held]: 1 };
   battle.enemyTeam = [mon];
   battle.enemyIndex = 0;
+  // Who it is this time: the drawn name and trainer class.
+  const who = opponentsOf(run)[slot - 1];
+  if (who && battle.trainer) battle.trainer = { ...battle.trainer, name: who.n, classId: content.trainers.has(who.c) ? who.c : battle.trainer.classId };
 }
 
 /** It's over (lost, or won the final): the round reached, remembered. */

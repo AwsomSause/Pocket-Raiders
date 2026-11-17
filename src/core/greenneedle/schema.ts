@@ -30,7 +30,7 @@ export const bindGnEffects = (schema: z.ZodType, conditions?: z.ZodType): void =
  *  - `stampStage`: the run flag `key` remembers the stage number now (read with the `gn` conditions `laterStage`, `sameStage`, `notThisStage`).
  *  - `partyHas`: the run flag `key` becomes 1 when a party Pokémon is one of `species`, else 0 (a Clefairy or Clefable sees the secret dance).
  */
-export const GN_OPS = ['duelist', 'paradeSwap', 'paradeEgg', 'paradeForget', 'paradeSecret', 'paradeWake', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash', 'markLook', 'setLook', 'payBerry', 'ahead', 'check', 'addParty', 'markParty', 'dropUnmarked', 'minigame', 'releaseLast', 'cast', 'hpCap', 'castItem', 'markLast', 'dropMarked', 'lendHeld', 'returnLent', 'partner', 'oldMove', 'castBase', 'nextOp', 'natureLast', 'markLead', 'crystal', 'crystalDrop', 'crystalMost', 'lightning', 'labCast', 'labForm', 'marketArrive', 'marketBuy', 'marketOffer', 'marketUndercut', 'daycareLeave', 'daycareReturn', 'eggShape', 'eggTake', 'eggWord', 'eggHatch', 'museumArrive', 'frontierClear', 'brainRecord', 'swapIn', 'bench', 'unbench', 'bagLeave', 'bagBack', 'rent', 'bring', 'auctionArrive', 'auctionOpen', 'auctionRound', 'auctionWin', 'auctionReturn', 'gavel', 'onevoneEnter', 'onevoneEnd', 'onevoneChampion', 'onevonePrize', 'lessonArrive', 'lessonEnd', 'lessonBonus', 'lessonTeach', 'allstarDraw', 'allstarChampion', 'exDraw', 'exBack', 'exWatch', 'exResult', 'draftStart', 'draftPick', 'draftWon', 'draftRecruit', 'draftEnd', 'draftAldhelm', 'draftLetter', 'snorlaxFeed', 'snorlaxFond', 'snorlaxFollow', 'snorlaxCaught', 'defectorStart', 'defectorTrust', 'defectorMeet', 'defectorReturn', 'defectorEnd', 'smuggleCages', 'smuggleRehab', 'smuggleJoin', 'smugglePostcard', 'taStart', 'taLot', 'taRare', 'taEnd', 'sgStart', 'sgAssign', 'sgAct', 'sgRescue', 'sgHomes', 'sgHalf', 'sgWhole', 'sgEnd', 'sgJoin', 'kcArrive', 'kcJump', 'kcEvolve', 'bidoofJoin', 'leftTake', 'leftFates', 'ltArrive', 'ltPage', 'ltSit', 'ltDawn', 'impJoin', 'impClaim', 'shedRest', 'shedNinjask', 'duelEnter', 'duelWin', 'duelLoss', 'duelWorthy', 'duelPass', 'lsDeal', 'lsTake', 'lsTicket', 'lsAddress', 'stStart', 'stAssign', 'stEnd', 'tyrJoin', 'tyrTally', 'tyrResult', 'tyrEvolve', 'muralPick', 'muralJoin', 'cheerJoin', 'prison', 'applianceRepair', 'leftFreeze', 'ofPick', 'ofJoin', 'ofGuest', 'ofReplacer', 'ferrisArrive', 'ferrisBest', 'ferrisHand', 'eeveeStart', 'eeveeEnd', 'borrowStart', 'borrowEnd', 'followedJoin', 'xatuDraw', 'xatuRedraw', 'ballFind', 'ballKind', 'ballHold', 'ballHatched', 'ballForce', 'reunionArrive', 'reunionFar', 'lsArrive', 'lsPearl', 'giveDearest', 'xatuPeek', 'xatuBlur', 'ofSpecial', 'lcBring', 'lcStart', 'lcEnd', 'lcStay', 'lcWithdraw'] as const;
+export const GN_OPS = ['duelist', 'paradeSwap', 'paradeEgg', 'paradeForget', 'paradeRare', 'paradeSecret', 'paradeWake', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash', 'markLook', 'setLook', 'payBerry', 'ahead', 'check', 'addParty', 'markParty', 'dropUnmarked', 'minigame', 'releaseLast', 'cast', 'hpCap', 'castItem', 'markLast', 'dropMarked', 'lendHeld', 'returnLent', 'partner', 'oldMove', 'castBase', 'nextOp', 'natureLast', 'markLead', 'crystal', 'crystalDrop', 'crystalMost', 'lightning', 'mapShow', 'labCast', 'labForm', 'marketArrive', 'marketBuy', 'marketOffer', 'marketUndercut', 'daycareLeave', 'daycareReturn', 'eggShape', 'eggTake', 'eggWord', 'eggHatch', 'museumArrive', 'frontierClear', 'brainRecord', 'swapIn', 'bench', 'unbench', 'bagLeave', 'bagBack', 'rent', 'bring', 'auctionArrive', 'auctionOpen', 'auctionRound', 'auctionWin', 'auctionReturn', 'gavel', 'onevoneEnter', 'onevoneEnd', 'onevoneChampion', 'onevonePrize', 'lessonArrive', 'lessonEnd', 'lessonBonus', 'lessonTeach', 'allstarDraw', 'allstarChampion', 'exDraw', 'exBack', 'exWatch', 'exResult', 'draftStart', 'draftPick', 'draftWon', 'draftRecruit', 'draftEnd', 'draftAldhelm', 'draftLetter', 'snorlaxFeed', 'snorlaxFond', 'snorlaxFollow', 'snorlaxCaught', 'defectorStart', 'defectorTrust', 'defectorMeet', 'defectorReturn', 'defectorEnd', 'defectorShare', 'smuggleCages', 'smuggleRehab', 'smuggleJoin', 'smugglePostcard', 'taStart', 'taLot', 'taBid', 'taRare', 'taEnd', 'sgStart', 'sgAssign', 'sgAct', 'sgRescue', 'sgHomes', 'sgHalf', 'sgWhole', 'sgEnd', 'sgJoin', 'kcArrive', 'kcJump', 'kcEvolve', 'bidoofJoin', 'leftTake', 'leftFates', 'ltArrive', 'ltPage', 'ltSit', 'ltDawn', 'impJoin', 'impClaim', 'shedRest', 'shedNinjask', 'duelEnter', 'duelWin', 'duelLoss', 'duelWorthy', 'duelPass', 'lsDeal', 'lsTake', 'lsTicket', 'lsAddress', 'stStart', 'stAssign', 'stEnd', 'tyrJoin', 'tyrTally', 'tyrResult', 'tyrEvolve', 'muralPick', 'muralJoin', 'cheerJoin', 'prison', 'applianceRepair', 'leftFreeze', 'ofPick', 'ofJoin', 'ofGuest', 'ofReplacer', 'ferrisArrive', 'ferrisBest', 'ferrisHand', 'eeveeStart', 'eeveeEnd', 'borrowStart', 'borrowEnd', 'followedJoin', 'xatuDraw', 'xatuRedraw', 'ballFind', 'ballKind', 'ballHold', 'ballHatched', 'ballForce', 'reunionArrive', 'reunionFar', 'reunionWalk', 'lsArrive', 'lsPearl', 'giveDearest', 'xatuPeek', 'xatuBlur', 'ofSpecial', 'lcBring', 'lcStart', 'lcEnd', 'lcStay', 'lcWithdraw', /** gn.21–gn.30 fixes (core/greenneedle/part3.ts): stampLevel = flag `key` remembers the event level here; raiseMarked = the Pokémon carrying mark `key` is raised to the level in flag `type`; markPink = the picked Pokémon (else the lead) turns pink; pinkFade = every pink Pokémon loses a shade. */ 'stampLevel', 'raiseMarked', 'markPink', 'pinkFade', /** gn.28: the newest Pokémon gains `n` friendship ("with Bond +1 already"). */ 'bondNewest', 'moonRaid', 'damianEgg', 'eggNotes', 'kaijuCut', 'kaijuBack', 'shutMarket', 'nsClear', 'nsPost', 'nsRaid', 'muralWalkStart', 'muralWalkOn', 'muralSketchOpen', 'muralSketchPage', 'muralSketch', 'foxSilence'] as const;
 export const GnEffectSchema = z.object({
   kind: z.literal('gn'),
   op: z.enum(GN_OPS),
@@ -53,7 +53,7 @@ export const GnEffectSchema = z.object({
   .refine((e) => (e.op === 'when' ? !!e.key && (!!e.then?.length || !!e.text) : true), { message: 'a when needs `key` and `then` or `text`' })
   .refine((e) => (e.op === 'pick' ? !!e.key && !!e.weights : true), { message: 'a pick needs `key` and `weights`' })
   .refine((e) => (e.op === 'roll' || e.op === 'capFlag' || e.op === 'setFlag' || e.op === 'stageMod' ? !!e.key && e.n !== undefined : true), { message: 'needs `key` and `n`' })
-  .refine((e) => (e.op === 'scene' || e.op === 'giveDearest' || e.op === 'ahead' || e.op === 'fossil' || e.op === 'stampRegion' || e.op === 'stampStage' ? !!e.key : true), { message: 'needs `key`' })
+  .refine((e) => (e.op === 'scene' || e.op === 'mapShow' || e.op === 'giveDearest' || e.op === 'ahead' || e.op === 'fossil' || e.op === 'stampRegion' || e.op === 'stampStage' ? !!e.key : true), { message: 'needs `key`' })
   .refine((e) => (e.op === 'duelPass' || e.op === 'duelWin' || e.op === 'duelLoss' ? (e.n ?? 0) >= 1 && (e.n ?? 0) <= 5 : true), { message: 'a duel op needs `n` 1-5' })
   .refine((e) => (e.op === 'check' ? !!e.key && !!e.if : true), { message: 'a check needs `key` and `if`' })
   // gn.39: a market purchase, offer or undercut names the vendor (`key`) and the asking price (`n`); an offer gives its percent in `min`.
@@ -84,6 +84,7 @@ export const GnEffectSchema = z.object({
   .refine((e) => (e.op === 'castBase' ? !!e.key && !!e.type : true), { message: 'a castBase needs `key` (the cast) and `type` (the mark)' })
   // gn.58: the release hook of the stories that let a Pokémon go (`key` bug, cubone, mimikyu or made; `n` 1 = its return was seen).
   .refine((e) => (e.op === 'ofSpecial' ? !!e.key : true), { message: 'an ofSpecial needs `key`' })
+  .refine((e) => (e.op === 'stampLevel' ? !!e.key : e.op === 'raiseMarked' ? !!e.key && !!e.type : true), { message: 'a stampLevel needs `key`; a raiseMarked needs `key` (the mark) and `type` (the level flag)' })
   .refine((e) => (e.op === 'hpCap' ? e.n !== undefined && e.n >= 1 && e.n <= 100 : true), { message: 'an hpCap needs `n` (1 to 100)' })
   .refine((e) => (e.op === 'partyHas' ? !!e.key && !!e.species : true), { message: 'a partyHas needs `key` and `species`' })
   // leadBoost: the lead's next battle opens with stat `type` at `n` stages ("the lead starts its next battle at -1 Speed").
@@ -121,14 +122,18 @@ export type GnEffect = z.infer<typeof GnEffectSchema>;
  *  - `lookAtLevel`: a party Pokémon wearing anime look `types[0]` is at least the level stored in flag `key` (the Squad recruit has caught up with its Leader).
  *  - `thisRegion`: the run flag `key` was stamped in the region the player is in now ("later in the region").
  *  - `notRegion`: the run is in none of the regions listed in `types` (a Greenneedle event that Kanto shows through its own canon space).
- *  - `holdsBerry`: a party Pokémon holds a Berry (gn.12: the Dusk Vendors take payment in Berries; `payBerry` takes one).
+ *  - `holdsBerry`: a Berry in the bag, or held by a party Pokémon (gn.12: the Dusk Vendors take payment in Berries; `payBerry` takes one, the bag first).
+ *  - `leadRarity`: the lead's rarity tier (core/rarity.ts) is one of `types` (gn.12: the Egg Move Tutor charges by rarity).
+ *  - `netCutter`: a standing party Pokémon has a slicing or claw move, and another stands to protect it (gn.11: freeing the injured Tentacool).
+ *  - `flightReleased`: the returned Flight North Bug-type was released, and this is a later region (gn.13: its shape crosses the sky).
+ *  - `leadFit`: the lead is in condition: full HP and no status (gn.10: the Beauty Contest judges condition and Bond).
  *  - `cutter`: a conscious party Pokémon knows a slicing move or a claw move (gn.11: cut the net).
  *  - `moveType`: a conscious party Pokémon knows a damaging move of one of `types` (gn.11's pylons: a Fighting, Rock or Steel move).
  *  - `noMoveType`: no party Pokémon knows a move of any of `types` (the mine's pickaxe is for a party with no Fighting, Steel or Ground move).
  *  - `hurtLead`: the first party Pokémon able to fight is at half its HP or less (gn.16: a win from behind).
  */
-export const GnCondSchema = z.object({ kind: z.literal('gn'), test: z.enum(['paradeMemory', 'paradeNickname', 'paradeEggReady', 'paradeAll', 'regionChanged', 'notThisRegion', 'laterStage', 'sameStage', 'notThisStage', 'noMoveType', 'moveType', 'cutter', 'holdsBerry', 'notRegion', 'thisRegion', 'lookAtLevel', 'hurtLead', 'heavy', 'markDown', 'hasMark', 'holdsItem', 'oldCatch', 'strength', 'lowTide', 'highTide', 'holds', 'hasAbility', 'aceHere', 'leadInitiative', 'entrantChampion', 'entrantCameBack', 'rivalAhead', 'allstarReady', 'allstarUnbeaten', 'rivalTrustMax', 'rivalTrustBelow', 'exKnown', 'exLeft', 'draftFriend', 'fluteReady', 'foodReady', 'defectorGuest', 'insideTeam', 'notInsideTeam', 'rehabDone', 'rehabWaiting', 'sgWaiting', 'sgOrdered', 'kcNotch', 'lsLost', 'lsLetGo', 'lsStory', 'kcMine', 'kcRegular', 'parentAndChild', 'eggMoveKnown', 'natureIs', 'pairGetsOn', 'partyBond', 'leftHas', 'lastStage', 'pickedTopBond', 'duelDue', 'duelistLeft', 'tyrLead', 'tyrEven', 'tyrWith', 'rivalBeaten', 'mirrorReady', 'ofDue', 'ofMany', 'rivalTrust', 'prophecyTrue', 'finalRest', 'communion', 'ofSp', 'lcEligible', 'lcEvolver', 'lcMany', 'lcIdle', 'lcAlone']), key: Key.optional(), /** gn.27 strength: percent of the `key` Pokémon's Attack to beat. */ n: z.number().int().min(1).max(200).optional(), types: z.array(z.string().min(1)).min(1).max(6).optional() })
-  .refine((c) => (c.test === 'noMoveType' || c.test === 'moveType' || c.test === 'notRegion' ? !!c.types : c.test === 'lookAtLevel' ? !!c.types && !!c.key : c.test === 'cutter' || c.test === 'prophecyTrue' || c.test === 'finalRest' || c.test === 'communion' || c.test === 'paradeMemory' || c.test === 'paradeNickname' || c.test === 'paradeEggReady' || c.test === 'holdsBerry' || c.test === 'hurtLead' || c.test === 'heavy' || c.test === 'holdsItem' || c.test === 'oldCatch' || c.test === 'lowTide' || c.test === 'highTide' || c.test === 'parentAndChild' || c.test === 'pickedTopBond' || c.test === 'leadInitiative' || c.test === 'entrantChampion' || c.test === 'entrantCameBack' || c.test === 'rivalAhead' || c.test === 'allstarReady' || c.test === 'allstarUnbeaten' || c.test === 'rivalTrustMax' || c.test === 'rivalTrustBelow' || c.test === 'exKnown' || c.test === 'exLeft' || c.test === 'draftFriend' || c.test === 'fluteReady' || c.test === 'foodReady' || c.test === 'defectorGuest' || c.test === 'insideTeam' || c.test === 'notInsideTeam' || c.test === 'rehabDone' || c.test === 'rehabWaiting' || c.test === 'sgWaiting' || c.test === 'sgOrdered' || c.test === 'kcNotch' || c.test === 'lsLost' || c.test === 'lsLetGo' || c.test === 'lsStory' || c.test === 'kcMine' || c.test === 'kcRegular' || c.test === 'eggMoveKnown' || c.test === 'pairGetsOn' || c.test === 'partyBond' || c.test === 'leftHas' || c.test === 'lastStage' || c.test === 'duelDue' || c.test === 'duelistLeft' || c.test === 'tyrEven' || c.test === 'tyrWith' || c.test === 'rivalBeaten' || c.test === 'mirrorReady' || c.test === 'ofDue' || c.test === 'ofMany' || c.test === 'rivalTrust' || c.test === 'lcEligible' || c.test === 'lcEvolver' || c.test === 'lcMany' || c.test === 'lcIdle' || c.test === 'lcAlone' ? true : !!c.key), { message: 'noMoveType and notRegion need `types` (move types / region ids), the others need `key`' });
+export const GnCondSchema = z.object({ kind: z.literal('gn'), test: z.enum(['paradeMemory', 'paradeNickname', 'paradeEggReady', 'paradeMoveReady', 'paradeAll', 'regionChanged', 'notThisRegion', 'laterStage', 'stageGap', 'stageGapMin', 'sameStage', 'notThisStage', 'noMoveType', 'moveType', 'cutter', 'holdsBerry', 'notRegion', 'thisRegion', 'lookAtLevel', 'hurtLead', 'heavy', 'markDown', 'hasMark', 'holdsItem', 'oldCatch', 'strength', 'lowTide', 'highTide', 'holds', 'hasAbility', 'aceHere', 'leadInitiative', 'entrantChampion', 'entrantCameBack', 'rivalAhead', 'allstarReady', 'allstarUnbeaten', 'rivalTrustMax', 'rivalTrustBelow', 'exKnown', 'exLeft', 'draftFriend', 'fluteReady', 'foodReady', 'defectorGuest', 'insideTeam', 'notInsideTeam', 'prisonAmbush', 'rehabDone', 'rehabWaiting', 'sgWaiting', 'sgOrdered', 'sgEarly', 'sgOccupied', 'taCanBid', 'taEarly', 'taLate', 'kcNotch', 'lsLost', 'lsLetGo', 'lsStory', 'kcMine', 'kcRegular', 'parentAndChild', 'eggMoveKnown', 'natureIs', 'pairGetsOn', 'partyBond', 'leftHas', 'lastStage', 'pickedTopBond', 'duelDue', 'duelistLeft', 'tyrLead', 'tyrEven', 'tyrWith', 'rivalBeaten', 'mirrorReady', 'ofDue', 'ofMany', 'rivalTrust', 'prophecyTrue', 'finalRest', 'communion', 'ofSp', 'lcEligible', 'lcEvolver', 'lcMany', 'lcIdle', 'lcAlone', /** gn.30: the player owns a Pokémon that is still pink. */ 'hasPink', /** gn.28: someone can still be talked past (flag `key` is the Alert meter): at 0 to 4, or inside the team (a colleague) up to 9. `noTalkPast` is the opposite. */ 'canTalkPast', 'noTalkPast', 'leadFit', 'netCutter', 'leadRarity', 'flightReleased']), key: Key.optional(), /** gn.27 strength: percent of the `key` Pokémon's Attack to beat. */ n: z.number().int().min(1).max(200).optional(), types: z.array(z.string().min(1)).min(1).max(6).optional() })
+  .refine((c) => (c.test === 'noMoveType' || c.test === 'moveType' || c.test === 'notRegion' || c.test === 'leadRarity' ? !!c.types : c.test === 'lookAtLevel' ? !!c.types && !!c.key : c.test === 'cutter' || c.test === 'prophecyTrue' || c.test === 'finalRest' || c.test === 'communion' || c.test === 'paradeMemory' || c.test === 'paradeNickname' || c.test === 'paradeEggReady' || c.test === 'paradeMoveReady' || c.test === 'holdsBerry' || c.test === 'leadFit' || c.test === 'netCutter' || c.test === 'flightReleased' || c.test === 'hurtLead' || c.test === 'heavy' || c.test === 'holdsItem' || c.test === 'oldCatch' || c.test === 'lowTide' || c.test === 'highTide' || c.test === 'parentAndChild' || c.test === 'pickedTopBond' || c.test === 'leadInitiative' || c.test === 'entrantChampion' || c.test === 'entrantCameBack' || c.test === 'rivalAhead' || c.test === 'allstarReady' || c.test === 'allstarUnbeaten' || c.test === 'rivalTrustMax' || c.test === 'rivalTrustBelow' || c.test === 'exKnown' || c.test === 'exLeft' || c.test === 'draftFriend' || c.test === 'fluteReady' || c.test === 'foodReady' || c.test === 'defectorGuest' || c.test === 'insideTeam' || c.test === 'notInsideTeam' || c.test === 'prisonAmbush' || c.test === 'rehabDone' || c.test === 'rehabWaiting' || c.test === 'sgWaiting' || c.test === 'sgOrdered' || c.test === 'kcNotch' || c.test === 'lsLost' || c.test === 'lsLetGo' || c.test === 'lsStory' || c.test === 'kcMine' || c.test === 'kcRegular' || c.test === 'eggMoveKnown' || c.test === 'pairGetsOn' || c.test === 'partyBond' || c.test === 'leftHas' || c.test === 'lastStage' || c.test === 'duelDue' || c.test === 'duelistLeft' || c.test === 'tyrEven' || c.test === 'tyrWith' || c.test === 'rivalBeaten' || c.test === 'mirrorReady' || c.test === 'ofDue' || c.test === 'ofMany' || c.test === 'rivalTrust' || c.test === 'lcEligible' || c.test === 'lcEvolver' || c.test === 'lcMany' || c.test === 'lcIdle' || c.test === 'lcAlone' ? true : !!c.key), { message: 'noMoveType and notRegion need `types` (move types / region ids), the others need `key`' });
 export type GnCond = z.infer<typeof GnCondSchema>;
 
 /**
@@ -144,23 +149,103 @@ export type GnCond = z.infer<typeof GnCondSchema>;
  *    Arena Brains keep their building's rule.
  *  - `onevone` (gn.44, with `slot`): the 1v1 Championship's drawn opponent for that round, at the entrant's level (core/greenneedle/onevone.ts).
  */
-export const GN_RULES = ['samurai', 'tully', 'bex', 'damian', 'lastflame', 'hawlucha', 'final', 'lastExchange', 'pipes', 'sludge', 'furnace', 'core', 'savanna', 'herd', 'jungle', 'tsareena', 'slowking', 'forest', 'golem', 'ridge', 'overcharged', 'earthing', 'desert', 'mansion', 'lab', 'palace', 'arena', 'brain-tower', 'brain-factory', 'brain-arena', 'brain-pike', 'brain-dome', 'brain-palace', 'brain-pyramid', 'onevone', 'champlesson', 'champexam', 'allstar-qf', 'allstar-sf', 'allstar-final', 'exhibition', 'draft', 'snorlax', 'defector', 'siege-commander', 'quillfeather', 'bidoof', 'alley', 'impersonator', 'duelist', 'mirror', 'prison-warden', 'ferris', 'borrowed', 'ball', 'littlecup'] as const;
+export const GN_RULES = ['samurai', 'tully', 'bex', 'damian', 'lastflame', 'hawlucha', 'twin', 'final', 'lastExchange', 'pipes', 'pits', 'sludge', 'furnace', 'core', 'savanna', 'herd', 'jungle', 'tsareena', 'slowking', 'forest', 'golem', 'ridge', 'overcharged', 'earthing', 'desert', 'mansion', 'lab', 'palace', 'arena', 'brain-tower', 'brain-factory', 'brain-arena', 'brain-pike', 'brain-dome', 'brain-palace', 'brain-pyramid', 'onevone', 'champlesson', 'champexam', 'allstar-qf', 'allstar-sf', 'allstar-final', 'exhibition', 'exhibition-watch', 'draft', 'snorlax', 'defector', 'siege-commander', 'quillfeather', 'bidoof', 'alley', 'impersonator', 'duelist', 'mirror', 'prison-warden', 'ferris', 'borrowed', 'ball', 'littlecup', /** gn.25: the pack fight; the Zangoose and the Seviper cover each other (core/greenneedle/part3.ts). */ 'truce'] as const;
 export const GnRuleSchema = z.enum(GN_RULES);
 export type GnRule = z.infer<typeof GnRuleSchema>;
 
 const Stages = z.partialRecord(z.enum(['atk', 'def', 'spa', 'spd', 'spe']), z.number().int().min(-6).max(6));
+/** A run flag (`ev:<key>`) must be within `min`..`max` (defaults: at least 1). */
+const AskIf = z.object({ key: Key, min: z.number().int().optional(), max: z.number().int().optional() });
+/**
+ * What an answer to a question in the middle of a fight does (core/greenneedle/ask.ts). No random numbers.
+ *  - `flag`: the run flag `key` becomes `n`.  - `stages`: stat stages added on one side.  - `heal`: that side's Pokémon gets a share of its max HP back.
+ *  - `foeWaits` / `youWait`: that side gives up its next attack, with the line.  - `end`: the fight ends now.
+ *  - `pass`: the next `turns` turns pass by themselves (nobody attacks; one of `lines` each turn), then the fight ends as `outcome`.
+ *  - `form`: your Pokémon takes that form for the battle.  - `op`: a named step of one event (`crystalDrop` with `key`, `golemRead`, `pitsPull`).
+ */
+export const GnAskEffectSchema = z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('flag'), key: Key, n: z.number().int() }),
+  z.object({ kind: z.literal('stages'), side: z.enum(['you', 'foe']), stages: Stages }),
+  z.object({ kind: z.literal('heal'), side: z.enum(['you', 'foe']), share: z.number().gt(0).max(1) }),
+  z.object({ kind: z.literal('foeWaits'), line: z.string().min(1).max(200) }),
+  z.object({ kind: z.literal('youWait'), line: z.string().min(1).max(200) }),
+  z.object({ kind: z.literal('end'), outcome: z.enum(['win', 'lose']) }),
+  z.object({ kind: z.literal('pass'), turns: z.number().int().min(1).max(5), lines: z.array(z.string().min(1).max(200)).max(5), outcome: z.enum(['win', 'lose']) }),
+  z.object({ kind: z.literal('form'), species: z.string().min(1) }),
+  z.object({ kind: z.literal('op'), op: z.enum(['crystalDrop', 'golemRead', 'pitsPull']), key: Key.optional() }),
+]);
+export type GnAskEffect = z.infer<typeof GnAskEffectSchema>;
+/** One answer: its button, the lines shown after it, what it does, and (`then`) the next question it opens ("Drop a crystal." -> "Which one?"). */
+export const GnAskOptionSchema = z.object({
+  label: z.string().min(1).max(40),
+  if: z.array(AskIf).max(4).optional(),
+  text: z.string().min(1).max(400).optional(),
+  effects: z.array(GnAskEffectSchema).max(8).optional(),
+  then: Key.optional(),
+});
+/**
+ * A choice in the middle of a battle: the fight stops at a stated moment and asks one question with 2 to 4 answers.
+ * `at` says when: the start of turn `turn`; the foe's HP at or under `foeHp` (a share); your Pokémon's HP under `myHp`; the start of
+ * phase `phase`; `chained` (only opened by another answer's `then`); or `button`: a new button on the battle menu (from phase `phase`
+ * on, when given). A button with one option does it at once; with more, it opens the question. Asked once each (a chained one, each time it is opened).
+ */
+export const GnAskSchema = z.object({
+  id: Key,
+  at: z.object({
+    turn: z.number().int().min(1).max(99).optional(),
+    foeHp: z.number().gt(0).lt(1).optional(),
+    myHp: z.number().gt(0).lte(1).optional(),
+    phase: z.number().int().min(1).max(4).optional(),
+    chained: z.literal(true).optional(),
+    button: z.string().min(1).max(28).optional(),
+  }),
+  if: z.array(AskIf).max(4).optional(),
+  text: z.string().min(1).max(400),
+  /** The short line that stays in the text box beside the answers, when `text` is too long to (over 84 characters: it is read first, piece by piece). */
+  prompt: z.string().min(1).max(84).optional(),
+  options: z.array(GnAskOptionSchema).min(1).max(4),
+}).refine((a) => a.at.button !== undefined || a.options.length >= 2, { message: 'a question needs 2 to 4 answers' });
+export type GnAsk = z.infer<typeof GnAskSchema>;
+/** A later phase of a fight in phases: it begins when the foe's HP is at or under `at` (a share of its max; a hit never takes it past that line). */
+export const GnPhaseSchema = z.object({
+  at: z.number().gt(0).lt(1),
+  /** The named rule from this phase on. */
+  gn: GnRuleSchema.optional(),
+  /** Shown when the phase begins. */
+  line: z.string().min(1).max(300).optional(),
+  /** The foe's moves from this phase on. */
+  moves: z.array(z.string().min(1)).min(1).max(4).optional(),
+  foeStages: Stages.optional(),
+});
+export type GnPhase = z.infer<typeof GnPhaseSchema>;
+
 /** Extra fields of an event fight's rule that the Greenneedle events use. */
 export const GnRuleFields = {
+  /** One fight in phases: phases 2, 3... in order (phase 1 is the start). core/greenneedle/ask.ts. */
+  phases: z.array(GnPhaseSchema).min(1).max(3).optional(),
+  /** Choices in the middle of the fight (core/greenneedle/ask.ts): the battle screen stops and asks. */
+  asks: z.array(GnAskSchema).min(1).max(12).optional(),
   /** A named Greenneedle rule. */
   gn: GnRuleSchema.optional(),
   /** Your Pokémon carrying this Greenneedle mark leads (the forest duelist). */
   leadMark: Key.optional(),
   /** In a double battle the foes aim their single-target moves at your Pokémon carrying this mark (gn.22: the birds go for the Cubone). */
   aimMark: Key.optional(),
+  /** gn.22: your next Pokémon able to fight stands beside your lead even against a single foe (two on one: the Cubone and your lead against the large Mandibuzz). */
+  beside: z.literal(true).optional(),
   /** Stat stages your first Pokémon starts with (the Squad's hose: Speed -1). */
   myStages: Stages.optional(),
   /** Stat stages the foe's first Pokémon starts with. */
   foeStages: Stages.optional(),
+  /** gn.21: a scripted duel. That side's Pokémon is never knocked out by a move: a hit leaves it at 1 HP (`you`: yours holds on, so the foe loses, narrowly; `foe`: the foe holds on). */
+  holdOn: z.enum(['you', 'foe']).optional(),
+  /**
+   * gn.15 (Route 25, the fifth Mankey): the foe only stands there, and the battle screen shows a "Wait." button. After this many turns in which
+   * you gave no attack it lowers its arms: a win marked `gn-waited`. Hit it once and it fights for the rest of the battle (`gn-fifth-hit`).
+   */
+  waits: z.number().int().min(1).max(3).optional(),
+  /** gn.15: the foe spends its first turn on an opening move that is told, not rolled (the first Mankey's Screech; pair with `myStages`). */
+  foeOpensLine: z.string().min(1).max(160).optional(),
   /** The foe can't be caught (a Squad member fights for its Squad; one joins later, by choice). */
   noCatch: z.literal(true).optional(),
   /** Catching is this many times easier (gn.32: the Pokémon that followed you through the caverns). */

@@ -44,13 +44,6 @@
        }
       ]
      }
-    },
-    {
-     "label": "Leave it in the mud.",
-     "success": {
-      "text": "You leave it where it lies. The tape lifts in the wind for a moment, and settles again. It had waited a long time already.",
-      "effects": []
-     }
     }
    ]
   },
@@ -280,8 +273,9 @@
     },
     {
      "kind": "gn",
-     "test": "laterStage",
-     "key": "ball-bolt-stage"
+     "test": "stageGapMin",
+     "key": "ball-bolt-stage",
+     "n": 16
     },
     {
      "kind": "flag",
@@ -308,7 +302,7 @@
         "@ball-mon"
        ],
        "types": [],
-       "levelBonus": 16,
+       "levelBonus": 0,
        "shinyMultiplier": 1,
        "win": [
         {

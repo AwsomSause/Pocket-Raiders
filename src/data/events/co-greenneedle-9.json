@@ -337,30 +337,6 @@
       }
      ],
      "notice": "Your Farfetch'd is recognised. Three vendors come out from behind their stalls, wiping their hands, to say hello to it. \"Balthasar's,\" says one. \"He'd be glad.\""
-    },
-    {
-     "id": "took",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "honest-took",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "*Word has travelled from the shop with no shopkeeper. Every vendor here counts your change twice.*"
-    },
-    {
-     "id": "shop",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "honest-shop",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "*Word has travelled from the shop with no shopkeeper. People here smile at you a moment longer.*"
     }
    ],
    "room": true,
@@ -543,6 +519,32 @@
    "tags": [
     "Shop",
     "Story"
+   ],
+   "remembers": [
+    {
+     "id": "took",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "honest-took",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Word has travelled from the shop with no shopkeeper. Every vendor here counts your change twice.*"
+    },
+    {
+     "id": "shop",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "honest-shop",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Word has travelled from the shop with no shopkeeper. People here smile at you a moment longer.*"
+    }
    ],
    "room": true,
    "scene": {
@@ -742,7 +744,8 @@
        "keys": [
         "market-vet-1",
         "market-vet-2",
-        "market-vet-3"
+        "market-vet-3",
+        "hideout-reward"
        ]
       }
      ]
@@ -1082,7 +1085,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A green stone with a leaf inside, like a fly in amber. She weighs it in her palm first.\n\nThe asking price: **₽800**.",
+   "intro": "A green stone with a leaf inside, like a fly in amber. She weighs it in her palm first.\n\nThe asking price: **₽800**. Your price today: **{market:carmela:800}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -1185,7 +1188,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽720, nothing. At ₽624, a wince. At ₽560, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽720, nothing. At ₽640, a wince. At ₽600, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽720.",
@@ -1216,7 +1219,7 @@
      }
     },
     {
-     "label": "Offer ₽624.",
+     "label": "Offer ₽640.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -1225,7 +1228,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 800,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-carmela-1-leaf-stone",
         "then": [
          {
@@ -1244,7 +1247,7 @@
      }
     },
     {
-     "label": "Offer ₽560.",
+     "label": "Offer ₽600.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -1253,7 +1256,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 800,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-carmela-1-leaf-stone",
         "then": [
          {
@@ -1333,7 +1336,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "Warm, even in the shade. She weighs it and nods to herself.\n\nThe asking price: **₽800**.",
+   "intro": "Warm, even in the shade. She weighs it and nods to herself.\n\nThe asking price: **₽800**. Your price today: **{market:carmela:800}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -1436,7 +1439,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽720, nothing. At ₽624, a wince. At ₽560, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽720, nothing. At ₽640, a wince. At ₽600, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽720.",
@@ -1467,7 +1470,7 @@
      }
     },
     {
-     "label": "Offer ₽624.",
+     "label": "Offer ₽640.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -1476,7 +1479,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 800,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-carmela-1-fire-stone",
         "then": [
          {
@@ -1495,7 +1498,7 @@
      }
     },
     {
-     "label": "Offer ₽560.",
+     "label": "Offer ₽600.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -1504,7 +1507,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 800,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-carmela-1-fire-stone",
         "then": [
          {
@@ -1584,7 +1587,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "Dull by day. She cups it to show you the glow.\n\nThe asking price: **₽1,000**.",
+   "intro": "Dull by day. She cups it to show you the glow.\n\nThe asking price: **₽1,000**. Your price today: **{market:carmela:1000}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -1687,7 +1690,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽900, nothing. At ₽780, a wince. At ₽700, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽900, nothing. At ₽800, a wince. At ₽750, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽900.",
@@ -1718,7 +1721,7 @@
      }
     },
     {
-     "label": "Offer ₽780.",
+     "label": "Offer ₽800.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -1727,7 +1730,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 1000,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-carmela-1-moon-stone",
         "then": [
          {
@@ -1746,7 +1749,7 @@
      }
     },
     {
-     "label": "Offer ₽700.",
+     "label": "Offer ₽750.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -1755,7 +1758,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 1000,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-carmela-1-moon-stone",
         "then": [
          {
@@ -1835,7 +1838,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "Wrapped in a handkerchief. It makes the handkerchief look grey.\n\nThe asking price: **₽1,500**.",
+   "intro": "Wrapped in a handkerchief. It makes the handkerchief look grey.\n\nThe asking price: **₽1,500**. Your price today: **{market:carmela:1500}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -1938,7 +1941,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,350, nothing. At ₽1,170, a wince. At ₽1,050, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,350, nothing. At ₽1,200, a wince. At ₽1,125, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,350.",
@@ -1969,7 +1972,7 @@
      }
     },
     {
-     "label": "Offer ₽1,170.",
+     "label": "Offer ₽1,200.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -1978,7 +1981,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 1500,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-carmela-1-shiny-stone",
         "then": [
          {
@@ -1997,7 +2000,7 @@
      }
     },
     {
-     "label": "Offer ₽1,050.",
+     "label": "Offer ₽1,125.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -2006,7 +2009,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 1500,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-carmela-1-shiny-stone",
         "then": [
          {
@@ -2217,7 +2220,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "Blue all the way through, and cold. She weighs it twice.\n\nThe asking price: **₽800**.",
+   "intro": "Blue all the way through, and cold. She weighs it twice.\n\nThe asking price: **₽800**. Your price today: **{market:carmela:800}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -2320,7 +2323,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽720, nothing. At ₽624, a wince. At ₽560, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽720, nothing. At ₽640, a wince. At ₽600, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽720.",
@@ -2351,7 +2354,7 @@
      }
     },
     {
-     "label": "Offer ₽624.",
+     "label": "Offer ₽640.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -2360,7 +2363,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 800,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-carmela-2-water-stone",
         "then": [
          {
@@ -2379,7 +2382,7 @@
      }
     },
     {
-     "label": "Offer ₽560.",
+     "label": "Offer ₽600.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -2388,7 +2391,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 800,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-carmela-2-water-stone",
         "then": [
          {
@@ -2468,7 +2471,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "It makes the hair on your arm stand up. She holds it with gloves.\n\nThe asking price: **₽800**.",
+   "intro": "It makes the hair on your arm stand up. She holds it with gloves.\n\nThe asking price: **₽800**. Your price today: **{market:carmela:800}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -2571,7 +2574,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽720, nothing. At ₽624, a wince. At ₽560, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽720, nothing. At ₽640, a wince. At ₽600, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽720.",
@@ -2602,7 +2605,7 @@
      }
     },
     {
-     "label": "Offer ₽624.",
+     "label": "Offer ₽640.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -2611,7 +2614,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 800,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-carmela-2-thunder-stone",
         "then": [
          {
@@ -2630,7 +2633,7 @@
      }
     },
     {
-     "label": "Offer ₽560.",
+     "label": "Offer ₽600.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -2639,7 +2642,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 800,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-carmela-2-thunder-stone",
         "then": [
          {
@@ -2719,7 +2722,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "Darker than its own shadow. She weighs it and won't meet its eye.\n\nThe asking price: **₽1,200**.",
+   "intro": "Darker than its own shadow. She weighs it and won't meet its eye.\n\nThe asking price: **₽1,200**. Your price today: **{market:carmela:1200}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -2822,7 +2825,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,080, nothing. At ₽936, a wince. At ₽840, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,080, nothing. At ₽960, a wince. At ₽900, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,080.",
@@ -2853,7 +2856,7 @@
      }
     },
     {
-     "label": "Offer ₽936.",
+     "label": "Offer ₽960.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -2862,7 +2865,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 1200,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-carmela-2-dusk-stone",
         "then": [
          {
@@ -2881,7 +2884,7 @@
      }
     },
     {
-     "label": "Offer ₽840.",
+     "label": "Offer ₽900.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -2890,7 +2893,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 1200,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-carmela-2-dusk-stone",
         "then": [
          {
@@ -2970,7 +2973,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "It catches a light that isn't there yet.\n\nThe asking price: **₽1,500**.",
+   "intro": "It catches a light that isn't there yet.\n\nThe asking price: **₽1,500**. Your price today: **{market:carmela:1500}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -3073,7 +3076,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,350, nothing. At ₽1,170, a wince. At ₽1,050, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,350, nothing. At ₽1,200, a wince. At ₽1,125, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,350.",
@@ -3104,7 +3107,7 @@
      }
     },
     {
-     "label": "Offer ₽1,170.",
+     "label": "Offer ₽1,200.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -3113,7 +3116,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 1500,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-carmela-2-dawn-stone",
         "then": [
          {
@@ -3132,7 +3135,7 @@
      }
     },
     {
-     "label": "Offer ₽1,050.",
+     "label": "Offer ₽1,125.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -3141,7 +3144,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 1500,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-carmela-2-dawn-stone",
         "then": [
          {
@@ -3352,7 +3355,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "Orange, warm, and heavier than it looks. She weighs it like bread.\n\nThe asking price: **₽1,000**.",
+   "intro": "Orange, warm, and heavier than it looks. She weighs it like bread.\n\nThe asking price: **₽1,000**. Your price today: **{market:carmela:1000}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -3455,7 +3458,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽900, nothing. At ₽780, a wince. At ₽700, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽900, nothing. At ₽800, a wince. At ₽750, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽900.",
@@ -3486,7 +3489,7 @@
      }
     },
     {
-     "label": "Offer ₽780.",
+     "label": "Offer ₽800.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -3495,7 +3498,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 1000,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-carmela-3-sun-stone",
         "then": [
          {
@@ -3514,7 +3517,7 @@
      }
     },
     {
-     "label": "Offer ₽700.",
+     "label": "Offer ₽750.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -3523,7 +3526,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 1000,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-carmela-3-sun-stone",
         "then": [
          {
@@ -3603,7 +3606,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "It frosts her fingertips. She puts it down quickly.\n\nThe asking price: **₽900**.",
+   "intro": "It frosts her fingertips. She puts it down quickly.\n\nThe asking price: **₽900**. Your price today: **{market:carmela:900}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -3706,7 +3709,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽810, nothing. At ₽702, a wince. At ₽630, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽810, nothing. At ₽720, a wince. At ₽675, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽810.",
@@ -3737,7 +3740,7 @@
      }
     },
     {
-     "label": "Offer ₽702.",
+     "label": "Offer ₽720.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -3746,7 +3749,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 900,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-carmela-3-ice-stone",
         "then": [
          {
@@ -3765,7 +3768,7 @@
      }
     },
     {
-     "label": "Offer ₽630.",
+     "label": "Offer ₽675.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -3774,7 +3777,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 900,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-carmela-3-ice-stone",
         "then": [
          {
@@ -3854,7 +3857,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A green stone with a leaf in it. \"Last one this side of the river.\"\n\nThe asking price: **₽800**.",
+   "intro": "A green stone with a leaf in it. \"Last one this side of the river.\"\n\nThe asking price: **₽800**. Your price today: **{market:carmela:800}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -3957,7 +3960,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽720, nothing. At ₽624, a wince. At ₽560, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽720, nothing. At ₽640, a wince. At ₽600, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽720.",
@@ -3988,7 +3991,7 @@
      }
     },
     {
-     "label": "Offer ₽624.",
+     "label": "Offer ₽640.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -3997,7 +4000,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 800,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-carmela-3-leaf-stone",
         "then": [
          {
@@ -4016,7 +4019,7 @@
      }
     },
     {
-     "label": "Offer ₽560.",
+     "label": "Offer ₽600.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -4025,7 +4028,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 800,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-carmela-3-leaf-stone",
         "then": [
          {
@@ -4105,7 +4108,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "Wrapped in a handkerchief. It makes the handkerchief look grey.\n\nThe asking price: **₽1,500**.",
+   "intro": "Wrapped in a handkerchief. It makes the handkerchief look grey.\n\nThe asking price: **₽1,500**. Your price today: **{market:carmela:1500}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -4208,7 +4211,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,350, nothing. At ₽1,170, a wince. At ₽1,050, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,350, nothing. At ₽1,200, a wince. At ₽1,125, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,350.",
@@ -4239,7 +4242,7 @@
      }
     },
     {
-     "label": "Offer ₽1,170.",
+     "label": "Offer ₽1,200.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -4248,7 +4251,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 1500,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-carmela-3-shiny-stone",
         "then": [
          {
@@ -4267,7 +4270,7 @@
      }
     },
     {
-     "label": "Offer ₽1,050.",
+     "label": "Offer ₽1,125.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -4276,7 +4279,7 @@
         "op": "marketOffer",
         "key": "carmela",
         "n": 1500,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-carmela-3-shiny-stone",
         "then": [
          {
@@ -4487,7 +4490,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A curved claw on a cord. \"Fast. Not always. Mostly. Sometimes.\"\n\nThe asking price: **₽600**.",
+   "intro": "A curved claw on a cord. \"Fast. Not always. Mostly. Sometimes.\"\n\nThe asking price: **₽600**. Your price today: **{market:tanager:600}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -4598,7 +4601,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽540, nothing. At ₽468, a wince. At ₽420, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽540, nothing. At ₽480, a wince. At ₽450, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽540.",
@@ -4629,7 +4632,7 @@
      }
     },
     {
-     "label": "Offer ₽468.",
+     "label": "Offer ₽480.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -4638,7 +4641,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 600,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-tanager-1-quick-claw",
         "then": [
          {
@@ -4657,7 +4660,7 @@
      }
     },
     {
-     "label": "Offer ₽420.",
+     "label": "Offer ₽450.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -4666,7 +4669,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 600,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-tanager-1-quick-claw",
         "then": [
          {
@@ -4746,7 +4749,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A lens that makes everything look like a target. He talks about it for a long time.\n\nThe asking price: **₽900**.",
+   "intro": "A lens that makes everything look like a target. He talks about it for a long time.\n\nThe asking price: **₽900**. Your price today: **{market:tanager:900}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -4857,7 +4860,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽810, nothing. At ₽702, a wince. At ₽630, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽810, nothing. At ₽720, a wince. At ₽675, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽810.",
@@ -4888,7 +4891,7 @@
      }
     },
     {
-     "label": "Offer ₽702.",
+     "label": "Offer ₽720.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -4897,7 +4900,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 900,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-tanager-1-scope-lens",
         "then": [
          {
@@ -4916,7 +4919,7 @@
      }
     },
     {
-     "label": "Offer ₽630.",
+     "label": "Offer ₽675.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -4925,7 +4928,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 900,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-tanager-1-scope-lens",
         "then": [
          {
@@ -5005,7 +5008,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "Half an apple, kept fresh forever. He apologises for how it looks, then explains it, then apologises again.\n\nThe asking price: **₽1,800**.",
+   "intro": "Half an apple, kept fresh forever. He apologises for how it looks, then explains it, then apologises again.\n\nThe asking price: **₽1,800**. Your price today: **{market:tanager:1800}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -5116,7 +5119,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,620, nothing. At ₽1,404, a wince. At ₽1,260, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,620, nothing. At ₽1,440, a wince. At ₽1,350, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,620.",
@@ -5147,7 +5150,7 @@
      }
     },
     {
-     "label": "Offer ₽1,404.",
+     "label": "Offer ₽1,440.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -5156,7 +5159,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 1800,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-tanager-1-leftovers",
         "then": [
          {
@@ -5175,7 +5178,7 @@
      }
     },
     {
-     "label": "Offer ₽1,260.",
+     "label": "Offer ₽1,350.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -5184,7 +5187,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 1800,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-tanager-1-leftovers",
         "then": [
          {
@@ -5264,7 +5267,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A red orb that pulses like a heart. \"It hurts to hold. I'm told that's the point.\"\n\nThe asking price: **₽2,500**.",
+   "intro": "A red orb that pulses like a heart. \"It hurts to hold. I'm told that's the point.\"\n\nThe asking price: **₽2,500**. Your price today: **{market:tanager:2500}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -5375,7 +5378,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽2,250, nothing. At ₽1,950, a wince. At ₽1,750, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽2,250, nothing. At ₽2,000, a wince. At ₽1,875, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽2,250.",
@@ -5406,7 +5409,7 @@
      }
     },
     {
-     "label": "Offer ₽1,950.",
+     "label": "Offer ₽2,000.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -5415,7 +5418,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 2500,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-tanager-1-life-orb",
         "then": [
          {
@@ -5434,7 +5437,7 @@
      }
     },
     {
-     "label": "Offer ₽1,750.",
+     "label": "Offer ₽1,875.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -5443,7 +5446,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 2500,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-tanager-1-life-orb",
         "then": [
          {
@@ -5654,7 +5657,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A little crown of stone. \"Makes them flinch. Don't ask me how. People ask me how.\"\n\nThe asking price: **₽700**.",
+   "intro": "A little crown of stone. \"Makes them flinch. Don't ask me how. People ask me how.\"\n\nThe asking price: **₽700**. Your price today: **{market:tanager:700}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -5765,7 +5768,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽630, nothing. At ₽546, a wince. At ₽490, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽630, nothing. At ₽560, a wince. At ₽525, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽630.",
@@ -5796,7 +5799,7 @@
      }
     },
     {
-     "label": "Offer ₽546.",
+     "label": "Offer ₽560.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -5805,7 +5808,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 700,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-tanager-2-kings-rock",
         "then": [
          {
@@ -5824,7 +5827,7 @@
      }
     },
     {
-     "label": "Offer ₽490.",
+     "label": "Offer ₽525.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -5833,7 +5836,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 700,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-tanager-2-kings-rock",
         "then": [
          {
@@ -5913,7 +5916,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "It rings when it's hit. \"Heals a bit. Pretty sound, too, isn't it? Isn't it.\"\n\nThe asking price: **₽900**.",
+   "intro": "It rings when it's hit. \"Heals a bit. Pretty sound, too, isn't it? Isn't it.\"\n\nThe asking price: **₽900**. Your price today: **{market:tanager:900}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -6024,7 +6027,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽810, nothing. At ₽702, a wince. At ₽630, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽810, nothing. At ₽720, a wince. At ₽675, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽810.",
@@ -6055,7 +6058,7 @@
      }
     },
     {
-     "label": "Offer ₽702.",
+     "label": "Offer ₽720.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -6064,7 +6067,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 900,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-tanager-2-shell-bell",
         "then": [
          {
@@ -6083,7 +6086,7 @@
      }
     },
     {
-     "label": "Offer ₽630.",
+     "label": "Offer ₽675.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -6092,7 +6095,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 900,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-tanager-2-shell-bell",
         "then": [
          {
@@ -6172,7 +6175,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A worn belt. \"For hitting where it hurts. Belonged to an expert. Probably.\"\n\nThe asking price: **₽1,600**.",
+   "intro": "A worn belt. \"For hitting where it hurts. Belonged to an expert. Probably.\"\n\nThe asking price: **₽1,600**. Your price today: **{market:tanager:1600}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -6283,7 +6286,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,440, nothing. At ₽1,248, a wince. At ₽1,120, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,440, nothing. At ₽1,280, a wince. At ₽1,200, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,440.",
@@ -6314,7 +6317,7 @@
      }
     },
     {
-     "label": "Offer ₽1,248.",
+     "label": "Offer ₽1,280.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -6323,7 +6326,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 1600,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-tanager-2-expert-belt",
         "then": [
          {
@@ -6342,7 +6345,7 @@
      }
     },
     {
-     "label": "Offer ₽1,120.",
+     "label": "Offer ₽1,200.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -6351,7 +6354,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 1600,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-tanager-2-expert-belt",
         "then": [
          {
@@ -6431,7 +6434,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A long scarf. \"Fast. Very. One move only, though. People forget. Then they write to me.\"\n\nThe asking price: **₽2,800**.",
+   "intro": "A long scarf. \"Fast. Very. One move only, though. People forget. Then they write to me.\"\n\nThe asking price: **₽2,800**. Your price today: **{market:tanager:2800}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -6542,7 +6545,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽2,520, nothing. At ₽2,184, a wince. At ₽1,960, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽2,520, nothing. At ₽2,240, a wince. At ₽2,100, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽2,520.",
@@ -6573,7 +6576,7 @@
      }
     },
     {
-     "label": "Offer ₽2,184.",
+     "label": "Offer ₽2,240.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -6582,7 +6585,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 2800,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-tanager-2-choice-scarf",
         "then": [
          {
@@ -6601,7 +6604,7 @@
      }
     },
     {
-     "label": "Offer ₽1,960.",
+     "label": "Offer ₽2,100.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -6610,7 +6613,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 2800,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-tanager-2-choice-scarf",
         "then": [
          {
@@ -6821,7 +6824,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A twist of glittering powder. \"Hard to hit. Gets everywhere. Everywhere.\"\n\nThe asking price: **₽700**.",
+   "intro": "A twist of glittering powder. \"Hard to hit. Gets everywhere. Everywhere.\"\n\nThe asking price: **₽700**. Your price today: **{market:tanager:700}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -6932,7 +6935,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽630, nothing. At ₽546, a wince. At ₽490, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽630, nothing. At ₽560, a wince. At ₽525, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽630.",
@@ -6963,7 +6966,7 @@
      }
     },
     {
-     "label": "Offer ₽546.",
+     "label": "Offer ₽560.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -6972,7 +6975,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 700,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-tanager-3-bright-powder",
         "then": [
          {
@@ -6991,7 +6994,7 @@
      }
     },
     {
-     "label": "Offer ₽490.",
+     "label": "Offer ₽525.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -7000,7 +7003,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 700,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-tanager-3-bright-powder",
         "then": [
          {
@@ -7080,7 +7083,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A sweatband. \"Stronger hits. Washed. Mostly.\"\n\nThe asking price: **₽900**.",
+   "intro": "A sweatband. \"Stronger hits. Washed. Mostly.\"\n\nThe asking price: **₽900**. Your price today: **{market:tanager:900}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -7191,7 +7194,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽810, nothing. At ₽702, a wince. At ₽630, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽810, nothing. At ₽720, a wince. At ₽675, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽810.",
@@ -7222,7 +7225,7 @@
      }
     },
     {
-     "label": "Offer ₽702.",
+     "label": "Offer ₽720.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -7231,7 +7234,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 900,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-tanager-3-muscle-band",
         "then": [
          {
@@ -7250,7 +7253,7 @@
      }
     },
     {
-     "label": "Offer ₽630.",
+     "label": "Offer ₽675.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -7259,7 +7262,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 900,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-tanager-3-muscle-band",
         "then": [
          {
@@ -7339,7 +7342,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A white sash. \"One hit that should've finished them, doesn't. Once.\"\n\nThe asking price: **₽1,500**.",
+   "intro": "A white sash. \"One hit that should've finished them, doesn't. Once.\"\n\nThe asking price: **₽1,500**. Your price today: **{market:tanager:1500}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -7450,7 +7453,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,350, nothing. At ₽1,170, a wince. At ₽1,050, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,350, nothing. At ₽1,200, a wince. At ₽1,125, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,350.",
@@ -7481,7 +7484,7 @@
      }
     },
     {
-     "label": "Offer ₽1,170.",
+     "label": "Offer ₽1,200.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -7490,7 +7493,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 1500,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-tanager-3-focus-sash",
         "then": [
          {
@@ -7509,7 +7512,7 @@
      }
     },
     {
-     "label": "Offer ₽1,050.",
+     "label": "Offer ₽1,125.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -7518,7 +7521,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 1500,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-tanager-3-focus-sash",
         "then": [
          {
@@ -7598,7 +7601,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A padded vest. \"Takes special hits like nothing. No status moves in it. I tried.\"\n\nThe asking price: **₽2,800**.",
+   "intro": "A padded vest. \"Takes special hits like nothing. No status moves in it. I tried.\"\n\nThe asking price: **₽2,800**. Your price today: **{market:tanager:2800}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -7709,7 +7712,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽2,520, nothing. At ₽2,184, a wince. At ₽1,960, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽2,520, nothing. At ₽2,240, a wince. At ₽2,100, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽2,520.",
@@ -7740,7 +7743,7 @@
      }
     },
     {
-     "label": "Offer ₽2,184.",
+     "label": "Offer ₽2,240.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -7749,7 +7752,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 2800,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-tanager-3-assault-vest",
         "then": [
          {
@@ -7768,7 +7771,7 @@
      }
     },
     {
-     "label": "Offer ₽1,960.",
+     "label": "Offer ₽2,100.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -7777,7 +7780,7 @@
         "op": "marketOffer",
         "key": "tanager",
         "n": 2800,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-tanager-3-assault-vest",
         "then": [
          {
@@ -7971,7 +7974,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "Thunderbolt. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽1,800**.",
+   "intro": "Thunderbolt. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽1,800**. Your price today: **{market:dace:1800}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -8055,7 +8058,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,620, nothing. At ₽1,404, a wince. At ₽1,260, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,620, nothing. At ₽1,440, a wince. At ₽1,350, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,620.",
@@ -8086,7 +8089,7 @@
      }
     },
     {
-     "label": "Offer ₽1,404.",
+     "label": "Offer ₽1,440.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -8095,7 +8098,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 1800,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-dace-1-tm-thunderbolt",
         "then": [
          {
@@ -8114,7 +8117,7 @@
      }
     },
     {
-     "label": "Offer ₽1,260.",
+     "label": "Offer ₽1,350.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -8123,7 +8126,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 1800,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-dace-1-tm-thunderbolt",
         "then": [
          {
@@ -8187,7 +8190,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "Ice Beam. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽1,800**.",
+   "intro": "Ice Beam. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽1,800**. Your price today: **{market:dace:1800}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -8271,7 +8274,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,620, nothing. At ₽1,404, a wince. At ₽1,260, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,620, nothing. At ₽1,440, a wince. At ₽1,350, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,620.",
@@ -8302,7 +8305,7 @@
      }
     },
     {
-     "label": "Offer ₽1,404.",
+     "label": "Offer ₽1,440.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -8311,7 +8314,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 1800,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-dace-1-tm-ice-beam",
         "then": [
          {
@@ -8330,7 +8333,7 @@
      }
     },
     {
-     "label": "Offer ₽1,260.",
+     "label": "Offer ₽1,350.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -8339,7 +8342,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 1800,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-dace-1-tm-ice-beam",
         "then": [
          {
@@ -8403,7 +8406,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "Close Combat. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽2,400**.",
+   "intro": "Close Combat. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽2,400**. Your price today: **{market:dace:2400}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -8487,7 +8490,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽2,160, nothing. At ₽1,872, a wince. At ₽1,680, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽2,160, nothing. At ₽1,920, a wince. At ₽1,800, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽2,160.",
@@ -8518,7 +8521,7 @@
      }
     },
     {
-     "label": "Offer ₽1,872.",
+     "label": "Offer ₽1,920.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -8527,7 +8530,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 2400,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-dace-1-tm-close-combat",
         "then": [
          {
@@ -8546,7 +8549,7 @@
      }
     },
     {
-     "label": "Offer ₽1,680.",
+     "label": "Offer ₽1,800.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -8555,7 +8558,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 2400,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-dace-1-tm-close-combat",
         "then": [
          {
@@ -8694,7 +8697,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "Flamethrower. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽1,800**.",
+   "intro": "Flamethrower. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽1,800**. Your price today: **{market:dace:1800}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -8778,7 +8781,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,620, nothing. At ₽1,404, a wince. At ₽1,260, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,620, nothing. At ₽1,440, a wince. At ₽1,350, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,620.",
@@ -8809,7 +8812,7 @@
      }
     },
     {
-     "label": "Offer ₽1,404.",
+     "label": "Offer ₽1,440.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -8818,7 +8821,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 1800,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-dace-1-b-tm-flamethrower",
         "then": [
          {
@@ -8837,7 +8840,7 @@
      }
     },
     {
-     "label": "Offer ₽1,260.",
+     "label": "Offer ₽1,350.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -8846,7 +8849,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 1800,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-dace-1-b-tm-flamethrower",
         "then": [
          {
@@ -8910,7 +8913,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "Earthquake. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽2,000**.",
+   "intro": "Earthquake. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽2,000**. Your price today: **{market:dace:2000}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -8994,7 +8997,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,800, nothing. At ₽1,560, a wince. At ₽1,400, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,800, nothing. At ₽1,600, a wince. At ₽1,500, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,800.",
@@ -9025,7 +9028,7 @@
      }
     },
     {
-     "label": "Offer ₽1,560.",
+     "label": "Offer ₽1,600.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -9034,7 +9037,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 2000,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-dace-1-b-tm-earthquake",
         "then": [
          {
@@ -9053,7 +9056,7 @@
      }
     },
     {
-     "label": "Offer ₽1,400.",
+     "label": "Offer ₽1,500.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -9062,7 +9065,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 2000,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-dace-1-b-tm-earthquake",
         "then": [
          {
@@ -9256,7 +9259,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "Surf. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽1,800**.",
+   "intro": "Surf. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽1,800**. Your price today: **{market:dace:1800}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -9340,7 +9343,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,620, nothing. At ₽1,404, a wince. At ₽1,260, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,620, nothing. At ₽1,440, a wince. At ₽1,350, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,620.",
@@ -9371,7 +9374,7 @@
      }
     },
     {
-     "label": "Offer ₽1,404.",
+     "label": "Offer ₽1,440.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -9380,7 +9383,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 1800,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-dace-2-tm-surf",
         "then": [
          {
@@ -9399,7 +9402,7 @@
      }
     },
     {
-     "label": "Offer ₽1,260.",
+     "label": "Offer ₽1,350.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -9408,7 +9411,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 1800,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-dace-2-tm-surf",
         "then": [
          {
@@ -9472,7 +9475,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "Psychic. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽1,800**.",
+   "intro": "Psychic. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽1,800**. Your price today: **{market:dace:1800}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -9556,7 +9559,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,620, nothing. At ₽1,404, a wince. At ₽1,260, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,620, nothing. At ₽1,440, a wince. At ₽1,350, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,620.",
@@ -9587,7 +9590,7 @@
      }
     },
     {
-     "label": "Offer ₽1,404.",
+     "label": "Offer ₽1,440.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -9596,7 +9599,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 1800,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-dace-2-tm-psychic",
         "then": [
          {
@@ -9615,7 +9618,7 @@
      }
     },
     {
-     "label": "Offer ₽1,260.",
+     "label": "Offer ₽1,350.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -9624,7 +9627,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 1800,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-dace-2-tm-psychic",
         "then": [
          {
@@ -9688,7 +9691,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "Outrage. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽2,400**.",
+   "intro": "Outrage. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽2,400**. Your price today: **{market:dace:2400}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -9772,7 +9775,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽2,160, nothing. At ₽1,872, a wince. At ₽1,680, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽2,160, nothing. At ₽1,920, a wince. At ₽1,800, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽2,160.",
@@ -9803,7 +9806,7 @@
      }
     },
     {
-     "label": "Offer ₽1,872.",
+     "label": "Offer ₽1,920.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -9812,7 +9815,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 2400,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-dace-2-tm-outrage",
         "then": [
          {
@@ -9831,7 +9834,7 @@
      }
     },
     {
-     "label": "Offer ₽1,680.",
+     "label": "Offer ₽1,800.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -9840,7 +9843,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 2400,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-dace-2-tm-outrage",
         "then": [
          {
@@ -9979,7 +9982,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "Shadow Ball. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽1,600**.",
+   "intro": "Shadow Ball. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽1,600**. Your price today: **{market:dace:1600}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -10063,7 +10066,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,440, nothing. At ₽1,248, a wince. At ₽1,120, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,440, nothing. At ₽1,280, a wince. At ₽1,200, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,440.",
@@ -10094,7 +10097,7 @@
      }
     },
     {
-     "label": "Offer ₽1,248.",
+     "label": "Offer ₽1,280.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -10103,7 +10106,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 1600,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-dace-2-b-tm-shadow-ball",
         "then": [
          {
@@ -10122,7 +10125,7 @@
      }
     },
     {
-     "label": "Offer ₽1,120.",
+     "label": "Offer ₽1,200.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -10131,7 +10134,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 1600,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-dace-2-b-tm-shadow-ball",
         "then": [
          {
@@ -10195,7 +10198,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "Energy Ball. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽1,800**.",
+   "intro": "Energy Ball. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽1,800**. Your price today: **{market:dace:1800}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -10279,7 +10282,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,620, nothing. At ₽1,404, a wince. At ₽1,260, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,620, nothing. At ₽1,440, a wince. At ₽1,350, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,620.",
@@ -10310,7 +10313,7 @@
      }
     },
     {
-     "label": "Offer ₽1,404.",
+     "label": "Offer ₽1,440.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -10319,7 +10322,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 1800,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-dace-2-b-tm-energy-ball",
         "then": [
          {
@@ -10338,7 +10341,7 @@
      }
     },
     {
-     "label": "Offer ₽1,260.",
+     "label": "Offer ₽1,350.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -10347,7 +10350,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 1800,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-dace-2-b-tm-energy-ball",
         "then": [
          {
@@ -10541,7 +10544,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "Dark Pulse. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽1,600**.",
+   "intro": "Dark Pulse. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽1,600**. Your price today: **{market:dace:1600}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -10625,7 +10628,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,440, nothing. At ₽1,248, a wince. At ₽1,120, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,440, nothing. At ₽1,280, a wince. At ₽1,200, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,440.",
@@ -10656,7 +10659,7 @@
      }
     },
     {
-     "label": "Offer ₽1,248.",
+     "label": "Offer ₽1,280.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -10665,7 +10668,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 1600,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-dace-3-tm-dark-pulse",
         "then": [
          {
@@ -10684,7 +10687,7 @@
      }
     },
     {
-     "label": "Offer ₽1,120.",
+     "label": "Offer ₽1,200.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -10693,7 +10696,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 1600,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-dace-3-tm-dark-pulse",
         "then": [
          {
@@ -10757,7 +10760,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "Dragon Pulse. \"Three hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽1,700**.",
+   "intro": "Dragon Pulse. \"Three hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽1,700**. Your price today: **{market:dace:1700}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -10841,7 +10844,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,530, nothing. At ₽1,326, a wince. At ₽1,190, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,530, nothing. At ₽1,360, a wince. At ₽1,275, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,530.",
@@ -10872,7 +10875,7 @@
      }
     },
     {
-     "label": "Offer ₽1,326.",
+     "label": "Offer ₽1,360.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -10881,7 +10884,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 1700,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-dace-3-tm-dragon-pulse",
         "then": [
          {
@@ -10900,7 +10903,7 @@
      }
     },
     {
-     "label": "Offer ₽1,190.",
+     "label": "Offer ₽1,275.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -10909,7 +10912,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 1700,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-dace-3-tm-dragon-pulse",
         "then": [
          {
@@ -10973,7 +10976,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "Brave Bird. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽2,400**.",
+   "intro": "Brave Bird. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽2,400**. Your price today: **{market:dace:2400}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -11057,7 +11060,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽2,160, nothing. At ₽1,872, a wince. At ₽1,680, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽2,160, nothing. At ₽1,920, a wince. At ₽1,800, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽2,160.",
@@ -11088,7 +11091,7 @@
      }
     },
     {
-     "label": "Offer ₽1,872.",
+     "label": "Offer ₽1,920.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -11097,7 +11100,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 2400,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-dace-3-tm-brave-bird",
         "then": [
          {
@@ -11116,7 +11119,7 @@
      }
     },
     {
-     "label": "Offer ₽1,680.",
+     "label": "Offer ₽1,800.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -11125,7 +11128,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 2400,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-dace-3-tm-brave-bird",
         "then": [
          {
@@ -11264,7 +11267,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "Flash Cannon. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽1,600**.",
+   "intro": "Flash Cannon. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽1,600**. Your price today: **{market:dace:1600}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -11348,7 +11351,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,440, nothing. At ₽1,248, a wince. At ₽1,120, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,440, nothing. At ₽1,280, a wince. At ₽1,200, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,440.",
@@ -11379,7 +11382,7 @@
      }
     },
     {
-     "label": "Offer ₽1,248.",
+     "label": "Offer ₽1,280.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -11388,7 +11391,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 1600,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-dace-3-b-tm-flash-cannon",
         "then": [
          {
@@ -11407,7 +11410,7 @@
      }
     },
     {
-     "label": "Offer ₽1,120.",
+     "label": "Offer ₽1,200.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -11416,7 +11419,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 1600,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-dace-3-b-tm-flash-cannon",
         "then": [
          {
@@ -11480,7 +11483,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "Dazzling Gleam. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽1,600**.",
+   "intro": "Dazzling Gleam. \"Two hundred uses left,\" says one sister. \"At least,\" says the other.\n\nThe asking price: **₽1,600**. Your price today: **{market:dace:1600}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -11564,7 +11567,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,440, nothing. At ₽1,248, a wince. At ₽1,120, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,440, nothing. At ₽1,280, a wince. At ₽1,200, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,440.",
@@ -11595,7 +11598,7 @@
      }
     },
     {
-     "label": "Offer ₽1,248.",
+     "label": "Offer ₽1,280.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -11604,7 +11607,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 1600,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-dace-3-b-tm-dazzling-gleam",
         "then": [
          {
@@ -11623,7 +11626,7 @@
      }
     },
     {
-     "label": "Offer ₽1,120.",
+     "label": "Offer ₽1,200.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -11632,7 +11635,7 @@
         "op": "marketOffer",
         "key": "dace",
         "n": 1600,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-dace-3-b-tm-dazzling-gleam",
         "then": [
          {
@@ -11813,7 +11816,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A cream egg with brown spots. \"Eevee,\" says Nan. \"I'd stake my name on it.\"\n\nThe asking price: **₽1,200**.",
+   "intro": "A cream egg with brown spots. \"Eevee,\" says Nan. \"I'd stake my name on it.\"\n\nThe asking price: **₽1,200**. Your price today: **{market:nan:1200}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -11903,7 +11906,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,080, nothing. At ₽936, a wince. At ₽840, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,080, nothing. At ₽960, a wince. At ₽900, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,080.",
@@ -11940,7 +11943,7 @@
      }
     },
     {
-     "label": "Offer ₽936.",
+     "label": "Offer ₽960.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -11949,7 +11952,7 @@
         "op": "marketOffer",
         "key": "nan",
         "n": 1200,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-nan-1-egg-shown",
         "then": [
          {
@@ -11974,7 +11977,7 @@
      }
     },
     {
-     "label": "Offer ₽840.",
+     "label": "Offer ₽900.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -11983,7 +11986,7 @@
         "op": "marketOffer",
         "key": "nan",
         "n": 1200,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-nan-1-egg-shown",
         "then": [
          {
@@ -12053,7 +12056,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "An egg with no marks at all. \"No idea,\" says Nan, cheerfully. \"That's the fun.\"\n\nThe asking price: **₽800**.",
+   "intro": "An egg with no marks at all. \"No idea,\" says Nan, cheerfully. \"That's the fun.\"\n\nThe asking price: **₽800**. Your price today: **{market:nan:800}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -12141,7 +12144,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽720, nothing. At ₽624, a wince. At ₽560, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽720, nothing. At ₽640, a wince. At ₽600, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽720.",
@@ -12176,7 +12179,7 @@
      }
     },
     {
-     "label": "Offer ₽624.",
+     "label": "Offer ₽640.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -12185,7 +12188,7 @@
         "op": "marketOffer",
         "key": "nan",
         "n": 800,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-nan-1-egg-hidden",
         "then": [
          {
@@ -12208,7 +12211,7 @@
      }
     },
     {
-     "label": "Offer ₽560.",
+     "label": "Offer ₽600.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -12217,7 +12220,7 @@
         "op": "marketOffer",
         "key": "nan",
         "n": 800,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-nan-1-egg-hidden",
         "then": [
          {
@@ -12285,7 +12288,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "An egg the colour of deep water, in a nest of straw. \"I don't show this one to just anyone.\"\n\nThe asking price: **₽2,500**.",
+   "intro": "An egg the colour of deep water, in a nest of straw. \"I don't show this one to just anyone.\"\n\nThe asking price: **₽2,500**. Your price today: **{market:nan:2500}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -12375,7 +12378,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽2,250, nothing. At ₽1,950, a wince. At ₽1,750, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽2,250, nothing. At ₽2,000, a wince. At ₽1,875, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽2,250.",
@@ -12412,7 +12415,7 @@
      }
     },
     {
-     "label": "Offer ₽1,950.",
+     "label": "Offer ₽2,000.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -12421,7 +12424,7 @@
         "op": "marketOffer",
         "key": "nan",
         "n": 2500,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-nan-1-egg-dratini",
         "then": [
          {
@@ -12446,7 +12449,7 @@
      }
     },
     {
-     "label": "Offer ₽1,750.",
+     "label": "Offer ₽1,875.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -12455,7 +12458,7 @@
         "op": "marketOffer",
         "key": "nan",
         "n": 2500,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-nan-1-egg-dratini",
         "then": [
          {
@@ -12642,7 +12645,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "An egg with red and blue triangles. \"Togepi. You can tell by the triangles.\"\n\nThe asking price: **₽1,200**.",
+   "intro": "An egg with red and blue triangles. \"Togepi. You can tell by the triangles.\"\n\nThe asking price: **₽1,200**. Your price today: **{market:nan:1200}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -12732,7 +12735,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,080, nothing. At ₽936, a wince. At ₽840, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,080, nothing. At ₽960, a wince. At ₽900, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,080.",
@@ -12769,7 +12772,7 @@
      }
     },
     {
-     "label": "Offer ₽936.",
+     "label": "Offer ₽960.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -12778,7 +12781,7 @@
         "op": "marketOffer",
         "key": "nan",
         "n": 1200,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-nan-2-egg-shown",
         "then": [
          {
@@ -12803,7 +12806,7 @@
      }
     },
     {
-     "label": "Offer ₽840.",
+     "label": "Offer ₽900.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -12812,7 +12815,7 @@
         "op": "marketOffer",
         "key": "nan",
         "n": 1200,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-nan-2-egg-shown",
         "then": [
          {
@@ -12882,7 +12885,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A plain egg, very warm. \"Something lively,\" says Nan. \"Beyond that, your guess.\"\n\nThe asking price: **₽800**.",
+   "intro": "A plain egg, very warm. \"Something lively,\" says Nan. \"Beyond that, your guess.\"\n\nThe asking price: **₽800**. Your price today: **{market:nan:800}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -12970,7 +12973,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽720, nothing. At ₽624, a wince. At ₽560, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽720, nothing. At ₽640, a wince. At ₽600, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽720.",
@@ -13005,7 +13008,7 @@
      }
     },
     {
-     "label": "Offer ₽624.",
+     "label": "Offer ₽640.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -13014,7 +13017,7 @@
         "op": "marketOffer",
         "key": "nan",
         "n": 800,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-nan-2-egg-hidden",
         "then": [
          {
@@ -13037,7 +13040,7 @@
      }
     },
     {
-     "label": "Offer ₽560.",
+     "label": "Offer ₽600.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -13046,7 +13049,7 @@
         "op": "marketOffer",
         "key": "nan",
         "n": 800,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-nan-2-egg-hidden",
         "then": [
          {
@@ -13114,7 +13117,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "An egg as heavy as a stone. \"It eats rock when it hatches. Keep it off the floor.\"\n\nThe asking price: **₽2,500**.",
+   "intro": "An egg as heavy as a stone. \"It eats rock when it hatches. Keep it off the floor.\"\n\nThe asking price: **₽2,500**. Your price today: **{market:nan:2500}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -13204,7 +13207,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽2,250, nothing. At ₽1,950, a wince. At ₽1,750, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽2,250, nothing. At ₽2,000, a wince. At ₽1,875, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽2,250.",
@@ -13241,7 +13244,7 @@
      }
     },
     {
-     "label": "Offer ₽1,950.",
+     "label": "Offer ₽2,000.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -13250,7 +13253,7 @@
         "op": "marketOffer",
         "key": "nan",
         "n": 2500,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-nan-2-egg-larvitar",
         "then": [
          {
@@ -13275,7 +13278,7 @@
      }
     },
     {
-     "label": "Offer ₽1,750.",
+     "label": "Offer ₽1,875.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -13284,7 +13287,7 @@
         "op": "marketOffer",
         "key": "nan",
         "n": 2500,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-nan-2-egg-larvitar",
         "then": [
          {
@@ -13471,7 +13474,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A blue egg with a black ring. \"Riolu. It'll know how you feel before you do.\"\n\nThe asking price: **₽1,200**.",
+   "intro": "A blue egg with a black ring. \"Riolu. It'll know how you feel before you do.\"\n\nThe asking price: **₽1,200**. Your price today: **{market:nan:1200}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -13561,7 +13564,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,080, nothing. At ₽936, a wince. At ₽840, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,080, nothing. At ₽960, a wince. At ₽900, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,080.",
@@ -13598,7 +13601,7 @@
      }
     },
     {
-     "label": "Offer ₽936.",
+     "label": "Offer ₽960.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -13607,7 +13610,7 @@
         "op": "marketOffer",
         "key": "nan",
         "n": 1200,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-nan-3-egg-shown",
         "then": [
          {
@@ -13632,7 +13635,7 @@
      }
     },
     {
-     "label": "Offer ₽840.",
+     "label": "Offer ₽900.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -13641,7 +13644,7 @@
         "op": "marketOffer",
         "key": "nan",
         "n": 1200,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-nan-3-egg-shown",
         "then": [
          {
@@ -13711,7 +13714,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A speckled egg. \"Someone left it at my wagon. I don't ask.\"\n\nThe asking price: **₽800**.",
+   "intro": "A speckled egg. \"Someone left it at my wagon. I don't ask.\"\n\nThe asking price: **₽800**. Your price today: **{market:nan:800}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -13799,7 +13802,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽720, nothing. At ₽624, a wince. At ₽560, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽720, nothing. At ₽640, a wince. At ₽600, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽720.",
@@ -13834,7 +13837,7 @@
      }
     },
     {
-     "label": "Offer ₽624.",
+     "label": "Offer ₽640.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -13843,7 +13846,7 @@
         "op": "marketOffer",
         "key": "nan",
         "n": 800,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-nan-3-egg-hidden",
         "then": [
          {
@@ -13866,7 +13869,7 @@
      }
     },
     {
-     "label": "Offer ₽560.",
+     "label": "Offer ₽600.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -13875,7 +13878,7 @@
         "op": "marketOffer",
         "key": "nan",
         "n": 800,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-nan-3-egg-hidden",
         "then": [
          {
@@ -13943,7 +13946,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "An egg that rings faintly when you tap it. \"Don't tap it.\"\n\nThe asking price: **₽2,500**.",
+   "intro": "An egg that rings faintly when you tap it. \"Don't tap it.\"\n\nThe asking price: **₽2,500**. Your price today: **{market:nan:2500}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -14033,7 +14036,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽2,250, nothing. At ₽1,950, a wince. At ₽1,750, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽2,250, nothing. At ₽2,000, a wince. At ₽1,875, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽2,250.",
@@ -14070,7 +14073,7 @@
      }
     },
     {
-     "label": "Offer ₽1,950.",
+     "label": "Offer ₽2,000.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -14079,7 +14082,7 @@
         "op": "marketOffer",
         "key": "nan",
         "n": 2500,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-nan-3-egg-beldum",
         "then": [
          {
@@ -14104,7 +14107,7 @@
      }
     },
     {
-     "label": "Offer ₽1,750.",
+     "label": "Offer ₽1,875.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -14113,7 +14116,7 @@
         "op": "marketOffer",
         "key": "nan",
         "n": 2500,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-nan-3-egg-beldum",
         "then": [
          {
@@ -14314,7 +14317,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A Small Parcel, sealed. The card: Super Potion ×2, 50%. Great Ball ×3, 30%. Rare Candy, 15%. Star Piece, 5%.\n\nThe asking price: **₽400**.",
+   "intro": "A Small Parcel, sealed. The card: Super Potion ×2, 50%. Great Ball ×3, 30%. Rare Candy, 15%. Star Piece, 5%.\n\nThe asking price: **₽400**. Your price today: **{market:hooded:400}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -14460,7 +14463,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽360, nothing. At ₽312, a wince. At ₽280, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽360, nothing. At ₽320, a wince. At ₽300, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽360.",
@@ -14553,7 +14556,7 @@
      }
     },
     {
-     "label": "Offer ₽312.",
+     "label": "Offer ₽320.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -14562,7 +14565,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 400,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-hooded-1-small",
         "then": [
          {
@@ -14643,7 +14646,7 @@
      }
     },
     {
-     "label": "Offer ₽280.",
+     "label": "Offer ₽300.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -14652,7 +14655,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 400,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-hooded-1-small",
         "then": [
          {
@@ -14778,7 +14781,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A Large Parcel, sealed. The card: Hyper Potion ×2, 40%. Ultra Ball ×2, 30%. A held item, 20%. Rare Candy ×2, 10%.\n\nThe asking price: **₽900**.",
+   "intro": "A Large Parcel, sealed. The card: Hyper Potion ×2, 40%. Ultra Ball ×2, 30%. A held item, 20%. Rare Candy ×2, 10%.\n\nThe asking price: **₽900**. Your price today: **{market:hooded:900}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -14930,7 +14933,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽810, nothing. At ₽702, a wince. At ₽630, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽810, nothing. At ₽720, a wince. At ₽675, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽810.",
@@ -15029,7 +15032,7 @@
      }
     },
     {
-     "label": "Offer ₽702.",
+     "label": "Offer ₽720.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -15038,7 +15041,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 900,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-hooded-1-large",
         "then": [
          {
@@ -15125,7 +15128,7 @@
      }
     },
     {
-     "label": "Offer ₽630.",
+     "label": "Offer ₽675.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -15134,7 +15137,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 900,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-hooded-1-large",
         "then": [
          {
@@ -15266,7 +15269,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A Sealed Crate, sealed. The card: Rare Candy ×2, 50%. Ability Capsule, 30%. HP Up and Protein, 15%. Comet Shard, 5%.\n\nThe asking price: **₽2,000**.",
+   "intro": "A Sealed Crate, sealed. The card: Rare Candy ×2, 50%. Ability Capsule, 30%. HP Up and Protein, 15%. Comet Shard, 5%.\n\nThe asking price: **₽2,000**. Your price today: **{market:hooded:2000}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -15417,7 +15420,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,800, nothing. At ₽1,560, a wince. At ₽1,400, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,800, nothing. At ₽1,600, a wince. At ₽1,500, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,800.",
@@ -15515,7 +15518,7 @@
      }
     },
     {
-     "label": "Offer ₽1,560.",
+     "label": "Offer ₽1,600.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -15524,7 +15527,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 2000,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-hooded-1-crate",
         "then": [
          {
@@ -15610,7 +15613,7 @@
      }
     },
     {
-     "label": "Offer ₽1,400.",
+     "label": "Offer ₽1,500.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -15619,7 +15622,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 2000,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-hooded-1-crate",
         "then": [
          {
@@ -15750,7 +15753,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A Parcel With a Wax Seal, sealed. The card: Life Orb, Choice Band or Choice Specs, 60%. Ability Capsule, 40%.\n\nThe asking price: **₽1,500**.",
+   "intro": "A Parcel With a Wax Seal, sealed. The card: Life Orb, Choice Band or Choice Specs, 60%. Ability Capsule, 40%.\n\nThe asking price: **₽1,500**. Your price today: **{market:hooded:1500}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -15869,7 +15872,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,350, nothing. At ₽1,170, a wince. At ₽1,050, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,350, nothing. At ₽1,200, a wince. At ₽1,125, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,350.",
@@ -15935,7 +15938,7 @@
      }
     },
     {
-     "label": "Offer ₽1,170.",
+     "label": "Offer ₽1,200.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -15944,7 +15947,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 1500,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-hooded-1-sealed",
         "then": [
          {
@@ -15998,7 +16001,7 @@
      }
     },
     {
-     "label": "Offer ₽1,050.",
+     "label": "Offer ₽1,125.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -16007,7 +16010,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 1500,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-hooded-1-sealed",
         "then": [
          {
@@ -16237,7 +16240,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A Small Parcel, sealed. The card: Super Potion ×2, 50%. Great Ball ×3, 30%. Rare Candy, 15%. Star Piece, 5%.\n\nThe asking price: **₽400**.",
+   "intro": "A Small Parcel, sealed. The card: Super Potion ×2, 50%. Great Ball ×3, 30%. Rare Candy, 15%. Star Piece, 5%.\n\nThe asking price: **₽400**. Your price today: **{market:hooded:400}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -16383,7 +16386,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽360, nothing. At ₽312, a wince. At ₽280, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽360, nothing. At ₽320, a wince. At ₽300, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽360.",
@@ -16476,7 +16479,7 @@
      }
     },
     {
-     "label": "Offer ₽312.",
+     "label": "Offer ₽320.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -16485,7 +16488,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 400,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-hooded-2-small",
         "then": [
          {
@@ -16566,7 +16569,7 @@
      }
     },
     {
-     "label": "Offer ₽280.",
+     "label": "Offer ₽300.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -16575,7 +16578,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 400,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-hooded-2-small",
         "then": [
          {
@@ -16701,7 +16704,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A Large Parcel, sealed. The card: Hyper Potion ×2, 40%. Ultra Ball ×2, 30%. A held item, 20%. Rare Candy ×2, 10%.\n\nThe asking price: **₽900**.",
+   "intro": "A Large Parcel, sealed. The card: Hyper Potion ×2, 40%. Ultra Ball ×2, 30%. A held item, 20%. Rare Candy ×2, 10%.\n\nThe asking price: **₽900**. Your price today: **{market:hooded:900}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -16853,7 +16856,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽810, nothing. At ₽702, a wince. At ₽630, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽810, nothing. At ₽720, a wince. At ₽675, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽810.",
@@ -16952,7 +16955,7 @@
      }
     },
     {
-     "label": "Offer ₽702.",
+     "label": "Offer ₽720.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -16961,7 +16964,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 900,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-hooded-2-large",
         "then": [
          {
@@ -17048,7 +17051,7 @@
      }
     },
     {
-     "label": "Offer ₽630.",
+     "label": "Offer ₽675.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -17057,7 +17060,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 900,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-hooded-2-large",
         "then": [
          {
@@ -17189,7 +17192,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A Sealed Crate, sealed. The card: Rare Candy ×2, 50%. Ability Capsule, 30%. HP Up and Protein, 15%. Comet Shard, 5%.\n\nThe asking price: **₽2,000**.",
+   "intro": "A Sealed Crate, sealed. The card: Rare Candy ×2, 50%. Ability Capsule, 30%. HP Up and Protein, 15%. Comet Shard, 5%.\n\nThe asking price: **₽2,000**. Your price today: **{market:hooded:2000}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -17340,7 +17343,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,800, nothing. At ₽1,560, a wince. At ₽1,400, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,800, nothing. At ₽1,600, a wince. At ₽1,500, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,800.",
@@ -17438,7 +17441,7 @@
      }
     },
     {
-     "label": "Offer ₽1,560.",
+     "label": "Offer ₽1,600.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -17447,7 +17450,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 2000,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-hooded-2-crate",
         "then": [
          {
@@ -17533,7 +17536,7 @@
      }
     },
     {
-     "label": "Offer ₽1,400.",
+     "label": "Offer ₽1,500.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -17542,7 +17545,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 2000,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-hooded-2-crate",
         "then": [
          {
@@ -17673,7 +17676,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A Parcel With a Wax Seal, sealed. The card: Life Orb, Choice Band or Choice Specs, 60%. Ability Capsule, 40%.\n\nThe asking price: **₽1,500**.",
+   "intro": "A Parcel With a Wax Seal, sealed. The card: Life Orb, Choice Band or Choice Specs, 60%. Ability Capsule, 40%.\n\nThe asking price: **₽1,500**. Your price today: **{market:hooded:1500}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -17792,7 +17795,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,350, nothing. At ₽1,170, a wince. At ₽1,050, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,350, nothing. At ₽1,200, a wince. At ₽1,125, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,350.",
@@ -17858,7 +17861,7 @@
      }
     },
     {
-     "label": "Offer ₽1,170.",
+     "label": "Offer ₽1,200.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -17867,7 +17870,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 1500,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-hooded-2-sealed",
         "then": [
          {
@@ -17921,7 +17924,7 @@
      }
     },
     {
-     "label": "Offer ₽1,050.",
+     "label": "Offer ₽1,125.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -17930,7 +17933,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 1500,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-hooded-2-sealed",
         "then": [
          {
@@ -18160,7 +18163,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A Small Parcel, sealed. The card: Super Potion ×2, 50%. Great Ball ×3, 30%. Rare Candy, 15%. Star Piece, 5%.\n\nThe asking price: **₽400**.",
+   "intro": "A Small Parcel, sealed. The card: Super Potion ×2, 50%. Great Ball ×3, 30%. Rare Candy, 15%. Star Piece, 5%.\n\nThe asking price: **₽400**. Your price today: **{market:hooded:400}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -18306,7 +18309,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽360, nothing. At ₽312, a wince. At ₽280, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽360, nothing. At ₽320, a wince. At ₽300, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽360.",
@@ -18399,7 +18402,7 @@
      }
     },
     {
-     "label": "Offer ₽312.",
+     "label": "Offer ₽320.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -18408,7 +18411,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 400,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-hooded-3-small",
         "then": [
          {
@@ -18489,7 +18492,7 @@
      }
     },
     {
-     "label": "Offer ₽280.",
+     "label": "Offer ₽300.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -18498,7 +18501,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 400,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-hooded-3-small",
         "then": [
          {
@@ -18624,7 +18627,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A Large Parcel, sealed. The card: Hyper Potion ×2, 40%. Ultra Ball ×2, 30%. A held item, 20%. Rare Candy ×2, 10%.\n\nThe asking price: **₽900**.",
+   "intro": "A Large Parcel, sealed. The card: Hyper Potion ×2, 40%. Ultra Ball ×2, 30%. A held item, 20%. Rare Candy ×2, 10%.\n\nThe asking price: **₽900**. Your price today: **{market:hooded:900}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -18776,7 +18779,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽810, nothing. At ₽702, a wince. At ₽630, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽810, nothing. At ₽720, a wince. At ₽675, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽810.",
@@ -18875,7 +18878,7 @@
      }
     },
     {
-     "label": "Offer ₽702.",
+     "label": "Offer ₽720.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -18884,7 +18887,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 900,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-hooded-3-large",
         "then": [
          {
@@ -18971,7 +18974,7 @@
      }
     },
     {
-     "label": "Offer ₽630.",
+     "label": "Offer ₽675.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -18980,7 +18983,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 900,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-hooded-3-large",
         "then": [
          {
@@ -19112,7 +19115,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A Sealed Crate, sealed. The card: Rare Candy ×2, 50%. Ability Capsule, 30%. HP Up and Protein, 15%. Comet Shard, 5%.\n\nThe asking price: **₽2,000**.",
+   "intro": "A Sealed Crate, sealed. The card: Rare Candy ×2, 50%. Ability Capsule, 30%. HP Up and Protein, 15%. Comet Shard, 5%.\n\nThe asking price: **₽2,000**. Your price today: **{market:hooded:2000}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -19263,7 +19266,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,800, nothing. At ₽1,560, a wince. At ₽1,400, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,800, nothing. At ₽1,600, a wince. At ₽1,500, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,800.",
@@ -19361,7 +19364,7 @@
      }
     },
     {
-     "label": "Offer ₽1,560.",
+     "label": "Offer ₽1,600.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -19370,7 +19373,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 2000,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-hooded-3-crate",
         "then": [
          {
@@ -19456,7 +19459,7 @@
      }
     },
     {
-     "label": "Offer ₽1,400.",
+     "label": "Offer ₽1,500.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -19465,7 +19468,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 2000,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-hooded-3-crate",
         "then": [
          {
@@ -19596,7 +19599,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "A Parcel With a Wax Seal, sealed. The card: Life Orb, Choice Band or Choice Specs, 60%. Ability Capsule, 40%.\n\nThe asking price: **₽1,500**.",
+   "intro": "A Parcel With a Wax Seal, sealed. The card: Life Orb, Choice Band or Choice Specs, 60%. Ability Capsule, 40%.\n\nThe asking price: **₽1,500**. Your price today: **{market:hooded:1500}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -19715,7 +19718,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,350, nothing. At ₽1,170, a wince. At ₽1,050, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽1,350, nothing. At ₽1,200, a wince. At ₽1,125, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽1,350.",
@@ -19781,7 +19784,7 @@
      }
     },
     {
-     "label": "Offer ₽1,170.",
+     "label": "Offer ₽1,200.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -19790,7 +19793,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 1500,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-hooded-3-sealed",
         "then": [
          {
@@ -19844,7 +19847,7 @@
      }
     },
     {
-     "label": "Offer ₽1,050.",
+     "label": "Offer ₽1,125.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -19853,7 +19856,7 @@
         "op": "marketOffer",
         "key": "hooded",
         "n": 1500,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-hooded-3-sealed",
         "then": [
          {
@@ -20249,7 +20252,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "The pen. The Pokémon inside watches you over the rail.\n\nThe asking price: **₽600**.",
+   "intro": "The pen. The Pokémon inside watches you over the rail.\n\nThe asking price: **₽600**. Your price today: **{market:josune:600}**.",
    "choices": [
     {
      "label": "Pay the price.",
@@ -20333,7 +20336,7 @@
     "tint": "#5a4630",
     "effect": "none"
    },
-   "intro": "You think of a number. They watch your mouth.\n\nAt ₽540, nothing. At ₽468, a wince. At ₽420, they stop breathing.",
+   "intro": "You think of a number. They watch your mouth.\n\nAt ₽540, nothing. At ₽480, a wince. At ₽450, they stop breathing.",
    "choices": [
     {
      "label": "Offer ₽540.",
@@ -20364,7 +20367,7 @@
      }
     },
     {
-     "label": "Offer ₽468.",
+     "label": "Offer ₽480.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -20373,7 +20376,7 @@
         "op": "marketOffer",
         "key": "josune",
         "n": 600,
-        "min": 78,
+        "min": 80,
         "type": "gn-39-josune-pen",
         "then": [
          {
@@ -20392,7 +20395,7 @@
      }
     },
     {
-     "label": "Offer ₽420.",
+     "label": "Offer ₽450.",
      "success": {
       "text": "You name it.",
       "effects": [
@@ -20401,7 +20404,7 @@
         "op": "marketOffer",
         "key": "josune",
         "n": 600,
-        "min": 70,
+        "min": 75,
         "type": "gn-39-josune-pen",
         "then": [
          {
@@ -22371,6 +22374,19 @@
     "Relationship",
     "Story"
    ],
+   "remembers": [
+    {
+     "id": "nothing",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "eggMoveKnown",
+       "key": "none-to-learn"
+      }
+     ],
+     "notice": "She looks your lead over, and shakes her head. \"Nothing it could have hatched with that it doesn't know already. I won't take your money for that. Bring me another one at the front.\""
+    }
+   ],
    "room": true,
    "scene": {
     "cast": [],
@@ -22385,6 +22401,11 @@
       {
        "kind": "money",
        "atLeast": 1000
+      },
+      {
+       "kind": "gn",
+       "test": "eggMoveKnown",
+       "key": "to-learn"
       }
      ],
      "success": {
@@ -24422,6 +24443,44 @@
     "Treasure",
     "Story"
    ],
+   "remembers": [
+    {
+     "id": "plaques-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "museum-set",
+       "atLeast": 0,
+       "atMost": 1
+      }
+     ],
+     "notice": "The plaques under the smaller skeletons: *Omanyte, the shell coils right. Kabuto, a dome, two pits beneath. Aerodactyl, needle teeth, kept in amber. Anorith, a claw jointed three times. Cranidos, a skull as thick as a door.*"
+    },
+    {
+     "id": "plaques-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "museum-set",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "The plaques under the smaller skeletons: *Lileep, a stalk of rings, rooted. Shieldon, a face behind a plate. Tirtouga, a shell with flipper notches. Archen, feathers pressed in slate. Tyrunt, a jaw too big for its head.*"
+    },
+    {
+     "id": "plaques-3",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "museum-set",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ],
+     "notice": "The plaques under the smaller skeletons: *Amaura, a sail of thin bone along the neck. Omanyte, the shell coils right. Shieldon, a face behind a plate. Aerodactyl, needle teeth, kept in amber. Tyrunt, a jaw too big for its head.*"
+    }
+   ],
    "room": true,
    "scene": {
     "cast": [],
@@ -24429,7 +24488,7 @@
     "tint": "#6b6a75",
     "effect": "none"
    },
-   "intro": "Skeletons. A Tyrantrum that fills the room. Small plaques under the others: *Omanyte, the shell coils right. Kabuto, a dome, two pits beneath. Aerodactyl, needle teeth, kept in amber. Anorith, a claw jointed three times. Cranidos, a skull as thick as a door.*\n\nA case of small ones nobody's identified. And on the wall, a plaster footprint.",
+   "intro": "Skeletons. A Tyrantrum that fills the room. Smaller ones along the walls, each with a small plaque.\n\nA case of small ones nobody's identified. And on the wall, a plaster footprint.",
    "choices": [
     {
      "label": "Read the footprint's label.",
@@ -24451,8 +24510,45 @@
       "effects": [
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-41-hidden-case"
+        "op": "when",
+        "key": "museum-set",
+        "min": 0,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-hidden-case"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-set",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-hidden-case-s2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-set",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-hidden-case-s3"
+         }
+        ]
        }
       ]
      },
@@ -24471,8 +24567,45 @@
       "effects": [
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-41-hidden-tile"
+        "op": "when",
+        "key": "museum-set",
+        "min": 0,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-hidden-tile"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-set",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-hidden-tile-s2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-set",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-hidden-tile-s3"
+         }
+        ]
        }
       ]
      },
@@ -24620,8 +24753,45 @@
       "effects": [
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-41-hidden-painting"
+        "op": "when",
+        "key": "museum-set",
+        "min": 0,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-hidden-painting"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-set",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-hidden-painting-s2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-set",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-hidden-painting-s3"
+         }
+        ]
        }
       ]
      },
@@ -25631,6 +25801,396 @@
        {
         "kind": "item",
         "id": "relic-band",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-hidden-3"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-history"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the curator.",
+     "success": {
+      "text": "Dr. Winterbourne is delighted. She puts it in a case of its own, and writes the card herself, with your name on it: *Found by a visitor who told us.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-hidden-returned",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-hidden-3"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-history"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-hidden-case-s2",
+   "name": "Behind the Exhibit",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "The case of small fossils nobody's identified slides an inch when you lean on it. Behind it, standing on its edge: a silver coin, black with age.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "It goes in your bag. Nobody saw. The Tyrantrum's eye sockets look at you anyway.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "relic-silver",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-hidden-1"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-fossils"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the curator.",
+     "success": {
+      "text": "Dr. Winterbourne is delighted. She puts it in a case of its own, and writes the card herself, with your name on it: *Found by a visitor who told us.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-hidden-returned",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-hidden-1"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-fossils"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-hidden-tile-s2",
+   "name": "Behind the Exhibit",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A loose tile, by the Tyrantrum's foot. Under it, packed in straw: a small painted vase, not even chipped.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "It goes in your bag. Nobody saw. The Tyrantrum's eye sockets look at you anyway.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "relic-vase",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-hidden-2"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-fossils"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the curator.",
+     "success": {
+      "text": "Dr. Winterbourne is delighted. She puts it in a case of its own, and writes the card herself, with your name on it: *Found by a visitor who told us.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-hidden-returned",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-hidden-2"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-fossils"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-hidden-painting-s2",
+   "name": "Behind the Exhibit",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "The painting of the harbour swings out on a hinge. Behind it, on a nail: a thin crown of beaten metal, child-sized.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "It goes in your bag. Nobody saw. The Tyrantrum's eye sockets look at you anyway.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "relic-crown",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-hidden-3"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-history"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the curator.",
+     "success": {
+      "text": "Dr. Winterbourne is delighted. She puts it in a case of its own, and writes the card herself, with your name on it: *Found by a visitor who told us.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-hidden-returned",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-hidden-3"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-history"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-hidden-case-s3",
+   "name": "Behind the Exhibit",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "The case of small fossils nobody's identified slides an inch when you lean on it. Behind it, in a crack in the floor: a copper coin, green at the edges.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "It goes in your bag. Nobody saw. The Tyrantrum's eye sockets look at you anyway.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "relic-copper",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-hidden-1"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-fossils"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the curator.",
+     "success": {
+      "text": "Dr. Winterbourne is delighted. She puts it in a case of its own, and writes the card herself, with your name on it: *Found by a visitor who told us.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-hidden-returned",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-hidden-1"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-fossils"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-hidden-tile-s3",
+   "name": "Behind the Exhibit",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A loose tile, by the Tyrantrum's foot. Under it, in a tobacco tin: a band of worn metal, too small for any finger here.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "It goes in your bag. Nobody saw. The Tyrantrum's eye sockets look at you anyway.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "relic-band",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-hidden-2"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-fossils"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the curator.",
+     "success": {
+      "text": "Dr. Winterbourne is delighted. She puts it in a case of its own, and writes the card herself, with your name on it: *Found by a visitor who told us.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-hidden-returned",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-hidden-2"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-fossils"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-hidden-painting-s3",
+   "name": "Behind the Exhibit",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "The painting of the harbour swings out on a hinge. Behind it, in a niche in the wall: a stone figure of a Pokémon nobody has drawn since.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "It goes in your bag. Nobody saw. The Tyrantrum's eye sockets look at you anyway.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "relic-statue",
         "count": 1
        },
        {
@@ -27093,8 +27653,45 @@
       "effects": [
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-41-bone-1"
+        "op": "when",
+        "key": "museum-set",
+        "min": 0,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-bone-1"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-set",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-bone-1-s2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-set",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-bone-1-s3"
+         }
+        ]
        }
       ]
      },
@@ -27113,8 +27710,45 @@
       "effects": [
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-41-bone-2"
+        "op": "when",
+        "key": "museum-set",
+        "min": 0,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-bone-2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-set",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-bone-2-s2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-set",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-bone-2-s3"
+         }
+        ]
        }
       ]
      },
@@ -27133,8 +27767,45 @@
       "effects": [
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-41-bone-3"
+        "op": "when",
+        "key": "museum-set",
+        "min": 0,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-bone-3"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-set",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-bone-3-s2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-set",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-bone-3-s3"
+         }
+        ]
        }
       ]
      },
@@ -27185,8 +27856,45 @@
       "effects": [
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-41-bone-4"
+        "op": "when",
+        "key": "museum-set",
+        "min": 0,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-bone-4"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-set",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-bone-4-s2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-set",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-bone-4-s3"
+         }
+        ]
        }
       ]
      },
@@ -27205,8 +27913,45 @@
       "effects": [
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-41-bone-5"
+        "op": "when",
+        "key": "museum-set",
+        "min": 0,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-bone-5"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-set",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-bone-5-s2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-set",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-bone-5-s3"
+         }
+        ]
        }
       ]
      },
@@ -27689,6 +28434,916 @@
    ]
   },
   {
+   "id": "gn-41-bone-1-s2",
+   "name": "The Tray: Bone 1",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A stalk of stone rings, stacked like coins, with a root at one end.\n\n\"Which Pokémon?\" says the card. Three answers, in Dr. Winterbourne's hand.",
+   "choices": [
+    {
+     "label": "Omanyte.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-1"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lileep.",
+     "success": {
+      "text": "\"Lileep! Yes!\" She takes it to the back, and comes out with it revived, blinking.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "root-fossil",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-1"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Anorith.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-1"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back.",
+     "success": {
+      "text": "You put it back in the tray.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-bone-2-s2",
+   "name": "The Tray: Bone 2",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A flat plate of bone, wide as a tray, with two small eye-holes near the bottom edge.\n\n\"Which Pokémon?\" says the card. Three answers, in Dr. Winterbourne's hand.",
+   "choices": [
+    {
+     "label": "Shieldon.",
+     "success": {
+      "text": "\"Shieldon! Yes!\" She takes it to the back, and comes out with it revived, blinking.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "armor-fossil",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-2"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cranidos.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-2"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Kabuto.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-2"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back.",
+     "success": {
+      "text": "You put it back in the tray.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-bone-3-s2",
+   "name": "The Tray: Bone 3",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A curved slab of shell, with a notch on each side where a flipper went.\n\n\"Which Pokémon?\" says the card. Three answers, in Dr. Winterbourne's hand.",
+   "choices": [
+    {
+     "label": "Kabuto.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-3"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Omanyte.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-3"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tirtouga.",
+     "success": {
+      "text": "\"Tirtouga! Yes!\" She takes it to the back, and comes out with it revived, blinking.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "cover-fossil",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-3"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back.",
+     "success": {
+      "text": "You put it back in the tray.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-bone-4-s2",
+   "name": "The Tray: Bone 4",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A piece of slate. Pressed into it, a feather, every barb showing.\n\n\"Which Pokémon?\" says the card. Three answers, in Dr. Winterbourne's hand.",
+   "choices": [
+    {
+     "label": "Aerodactyl.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-4"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Archen.",
+     "success": {
+      "text": "\"Archen! Yes!\" She takes it to the back, and comes out with it revived, blinking.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "plume-fossil",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-4"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Amaura.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-4"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back.",
+     "success": {
+      "text": "You put it back in the tray.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-bone-5-s2",
+   "name": "The Tray: Bone 5",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A lower jaw, far too big for the skull it must have hung from, with teeth like tent pegs.\n\n\"Which Pokémon?\" says the card. Three answers, in Dr. Winterbourne's hand.",
+   "choices": [
+    {
+     "label": "Tyrunt.",
+     "success": {
+      "text": "\"Tyrunt! Yes!\" She takes it to the back, and comes out with it revived, blinking.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "jaw-fossil",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-5"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cranidos.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-5"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Aerodactyl.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-5"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back.",
+     "success": {
+      "text": "You put it back in the tray.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-bone-1-s3",
+   "name": "The Tray: Bone 1",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A fan of bone as thin as paper, ribbed like a sail.\n\n\"Which Pokémon?\" says the card. Three answers, in Dr. Winterbourne's hand.",
+   "choices": [
+    {
+     "label": "Archen.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-1"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Amaura.",
+     "success": {
+      "text": "\"Amaura! Yes!\" She takes it to the back, and comes out with it revived, blinking.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "sail-fossil",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-1"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lileep.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-1"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back.",
+     "success": {
+      "text": "You put it back in the tray.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-bone-2-s3",
+   "name": "The Tray: Bone 2",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "Half a shell, broken clean across. What is left of it coils to the right.\n\n\"Which Pokémon?\" says the card. Three answers, in Dr. Winterbourne's hand.",
+   "choices": [
+    {
+     "label": "Kabuto.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-2"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tirtouga.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-2"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Omanyte.",
+     "success": {
+      "text": "\"Omanyte! Yes!\" She takes it to the back, and comes out with it revived, blinking.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "helix-fossil",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-2"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back.",
+     "success": {
+      "text": "You put it back in the tray.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-bone-3-s3",
+   "name": "The Tray: Bone 3",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A chip of a flat bone plate, with one small eye-hole near its edge.\n\n\"Which Pokémon?\" says the card. Three answers, in Dr. Winterbourne's hand.",
+   "choices": [
+    {
+     "label": "Shieldon.",
+     "success": {
+      "text": "\"Shieldon! Yes!\" She takes it to the back, and comes out with it revived, blinking.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "armor-fossil",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-3"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tyrunt.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-3"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Anorith.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-3"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back.",
+     "success": {
+      "text": "You put it back in the tray.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-bone-4-s3",
+   "name": "The Tray: Bone 4",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A lump of amber the colour of tea. Inside it, one needle of a tooth.\n\n\"Which Pokémon?\" says the card. Three answers, in Dr. Winterbourne's hand.",
+   "choices": [
+    {
+     "label": "Tyrunt.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-4"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Aerodactyl.",
+     "success": {
+      "text": "\"Aerodactyl! Yes!\" She takes it to the back, and comes out with it revived, blinking.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "old-amber",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-4"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Amaura.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-4"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back.",
+     "success": {
+      "text": "You put it back in the tray.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-bone-5-s3",
+   "name": "The Tray: Bone 5",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A single tooth, as long as your hand, shaped like a tent peg.\n\n\"Which Pokémon?\" says the card. Three answers, in Dr. Winterbourne's hand.",
+   "choices": [
+    {
+     "label": "Cranidos.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-5"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Aerodactyl.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-5"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tyrunt.",
+     "success": {
+      "text": "\"Tyrunt! Yes!\" She takes it to the back, and comes out with it revived, blinking.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "jaw-fossil",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-5"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back.",
+     "success": {
+      "text": "You put it back in the tray.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
    "id": "gn-41-jigsaw",
    "name": "Fossil Restoration",
    "group": "Greenneedle",
@@ -27707,50 +29362,14 @@
    "choices": [
     {
      "label": "Fit the pieces.",
-     "prompt": {
-      "id": "museum-jigsaw",
-      "needs": "perfect"
-     },
      "success": {
-      "text": "Twelve pieces, and not one forced. Dr. Winterbourne holds it up to the light. \"*Perfect.*\" She pays you, and then, from a drawer, gives you a Rare Bone. \"For a good pair of hands.\"",
+      "text": "You kneel at the sandbox. Dr. Winterbourne moves the lamp closer, and then, with visible effort, stops helping.",
       "effects": [
        {
-        "kind": "money",
-        "amount": 800
-       },
-       {
-        "kind": "item",
-        "id": "rare-bone",
-        "count": 1
-       },
-       {
         "kind": "gn",
-        "op": "stampRegion",
-        "key": "museum-jigsaw-at"
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-41-desk"
-       }
-      ]
-     },
-     "failure": {
-      "text": "It's together. One piece went in with a crack you'll both pretend not to have heard. She pays you for the work, kindly.",
-      "effects": [
-       {
-        "kind": "money",
-        "amount": 800
-       },
-       {
-        "kind": "gn",
-        "op": "stampRegion",
-        "key": "museum-jigsaw-at"
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-41-desk"
+        "op": "minigame",
+        "key": "gn-jigsaw",
+        "n": 1
        }
       ]
      }

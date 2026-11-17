@@ -99,12 +99,26 @@
           "op": "when",
           "key": "of-why",
           "min": 1,
-          "max": 2,
+          "max": 1,
           "then": [
            {
             "kind": "gn",
             "op": "scene",
             "key": "gn-58-help"
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "of-why",
+          "min": 2,
+          "max": 2,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-58-room"
            }
           ]
          },
@@ -217,12 +231,26 @@
         "op": "when",
         "key": "of-why",
         "min": 1,
-        "max": 2,
+        "max": 1,
         "then": [
          {
           "kind": "gn",
           "op": "scene",
           "key": "gn-58-help"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-why",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-58-room"
          }
         ]
        },
@@ -279,12 +307,26 @@
         "op": "when",
         "key": "of-why",
         "min": 1,
-        "max": 2,
+        "max": 1,
         "then": [
          {
           "kind": "gn",
           "op": "scene",
           "key": "gn-58-help"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-why",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-58-room"
          }
         ]
        },
@@ -335,12 +377,26 @@
         "op": "when",
         "key": "of-why",
         "min": 1,
-        "max": 2,
+        "max": 1,
         "then": [
          {
           "kind": "gn",
           "op": "scene",
           "key": "gn-58-help"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-why",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-58-room"
          }
         ]
        },
@@ -483,7 +539,7 @@
     "tint": "#8a7a5a",
     "effect": "none"
    },
-   "intro": "*It does not fight you. It sits in the road, and looks up at you, content. It is warm, and fed, and well.*\n\n*It is going the same way you are, for a little while. It means to be there for the hard part.*\n\n*Come the next hard fight, it will find you. It said so, in its own way.*",
+   "intro": "*It does not fight you. It comes straight to you, warmly, and sits on your feet, and looks up at you, content. It is warm, and fed, and well. It was happier here. It wants you to know you were right.*\n\n*It is going the same way you are, for a little while. It means to be there for the hard part.*\n\n*Come the next hard fight, it will find you. It said so, in its own way.*",
    "choices": [
     {
      "label": "Come with me?",
@@ -538,6 +594,80 @@
      "label": "Wave it on.",
      "success": {
       "text": "You wave. It waves back, the only way it can, with its whole body. Somewhere ahead, in the next hard fight, it will be there.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-58-room",
+   "name": "Old Friend Returns: A Good Turn",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a7a5a",
+    "effect": "none"
+   },
+   "intro": "*It comes carefully. It stops a little short of your hand, and looks at your team, and counts them. It knows.*\n\n*There was no room. It has not forgotten being the one there was no room for. It does not hold it against you, either.*\n\n*It is going the same way you are, for a little while. Come the next hard fight, it will find you. It said so, in its own way.*",
+   "choices": [
+    {
+     "label": "Come with me?",
+     "success": {
+      "text": "It looks at you for a long moment. Then it looks at the road it was on.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-fond",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "ofJoin"
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "oldfriend-rejoined-now",
+          "n": 1
+         },
+         {
+          "kind": "moment",
+          "text": "An old friend came back, and chose to stay.",
+          "importance": 80
+         }
+        ],
+        "text": "It steps forward. Once. Then it leans its whole weight against your leg, the way it always did. It is yours, and it chose to be."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-fond",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "It walks beside you a little way. Then it stops, and looks back at where it came from, and does not follow. That is its answer. You do not ask again."
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "of-free",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Wave it on.",
+     "success": {
+      "text": "You wave. It dips its head, once, carefully, and goes on ahead. Somewhere in the next hard fight, it will be there.",
       "effects": []
      }
     }

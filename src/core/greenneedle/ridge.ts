@@ -39,7 +39,8 @@ export function lightning(content: Content, run: RunState, percent: number, roll
     lead.boosts = [...(lead.boosts ?? []), { kind: 'stage', stat: 'spa', stages: 1, turns: 99 }];
     return `${warn} ${name} pulls it in, and holds it. Its next battle starts charged (+1 Sp. Atk).`;
   }
-  if (lead.status || types.includes('electric')) return `${warn} It hits ${name}, hard. ${name} shakes it off.`;
+  // A lead that already has a status can't take a second one; the strike still lands and still counts.
+  if (lead.status) return `${warn} It hits ${name}, hard. ${name} shakes it off.`;
   lead.status = { id: 'par' };
   return `${warn} It hits ${name}. ${name} is paralysed.`;
 }
