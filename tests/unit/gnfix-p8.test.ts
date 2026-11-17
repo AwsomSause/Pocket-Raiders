@@ -260,14 +260,16 @@ describe('gn.new.14 The Arcade Cabinet (fixes): Debug', () => {
     pory.hp = 9999;
     const foe = mon('pikachu', 20, 'e-dbg', 'nuzzle');
     const ctx = fightCtx([pory], [foe], 'debug-same');
-    resolveTurn(ctx, { kind: 'move', index: 0 });
-    const first = pory.status?.id ?? null;
-    pory.status = null;
-    resolveTurn(ctx, { kind: 'move', index: 0 });
-    const second = pory.status?.id ?? null;
-    pory.status = null;
-    resolveTurn(ctx, { kind: 'move', index: 0 });
-    return { first, second, third: pory.status?.id ?? null, used: ctx.battle.storyEffects.includes('debug:p-dbg') };
+    // Reads the status and clears it, so each turn's hit is judged by itself.
+    const hit = (): string | null => {
+      resolveTurn(ctx, { kind: 'move', index: 0 });
+      const id = (pory as PokemonInstance).status?.id ?? null;
+      pory.status = null;
+      return id;
+    };
+    const first = hit();
+    const second = hit();
+    return { first, second, third: hit(), used: ctx.battle.storyEffects.includes('debug:p-dbg') };
   };
   it('the first hit lands its effect, the second hit by the same move does not, and it works once a battle', () => {
     expect(run('debug')).toEqual({ first: 'par', second: null, third: 'par', used: true });
