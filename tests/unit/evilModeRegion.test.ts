@@ -34,7 +34,7 @@ const OFF: EvilData = { ...EVIL_DATA, region: { ...EVIL_DATA.region, on: false }
 describe('founding: the Arrival, the Look, the Patron, the first region', () => {
   it('a new team begins at the Arrival in Pewter (stage 1, n 0), with the region state and the Patron on the Roster', () => {
     const b = found();
-    expect(b.v).toBe(8);
+    expect(b.v).toBe(9);
     expect(b.here).toMatchObject({ region: 0, stage: 1, day: 1, beat: 'morning' });
     expect(b.district).toMatchObject({ region: 0, n: 0 });
     expect(b.district!.holdings.find((h) => h.kind === 'town')!.ref).toBe('Pewter City');
@@ -314,7 +314,7 @@ describe('saves: block v8', () => {
     const { region: _r, ...rest } = r.block;
     const v7 = { ...rest, v: 7, here: { ...rest.here, stage: 1 }, district: (() => { const { from: _f, ...d } = rest.district!; return d; })() };
     const v8 = EvilModeBlockSchema.parse(v7);
-    expect(v8.v).toBe(8);
+    expect(v8.v).toBe(9);
     expect(v8.here.stage).toBe(2);
     expect(v8.region).toMatchObject({ id: 'kanto', phase: 'day', past: [], tallies: [] });
     expect(dayIn(v8)).toBe(v8.here.day);
