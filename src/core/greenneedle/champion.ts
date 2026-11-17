@@ -22,6 +22,8 @@ const castOf = (run: Pick<RunState, 'story'>, name: string): string | undefined 
 /** The four exclusive moves, one per Champion's style. */
 export const LESSON_MOVES = { power: 'summit', patience: 'the-long-game', trust: 'with-you', reading: 'seen-it' } as const;
 export type LessonMove = (typeof LESSON_MOVES)[keyof typeof LESSON_MOVES];
+/** Marks the Pokémon the Champion taught the move to (the real Champion battle opens with it against this one). */
+export const TAUGHT = 'lesson-taught';
 /** Marks the Pokémon the Champion singled out. */
 export const PUPIL = 'lesson-pupil';
 
@@ -62,13 +64,40 @@ type Ev = { type: string; side?: string; moveId?: string | null; amount?: number
 const has = (b: BattleState, s: string): boolean => b.storyEffects.includes(s);
 const count = (b: BattleState, prefix: string): number => b.storyEffects.filter((s) => s.startsWith(prefix)).length;
 
-/** End of each lesson turn: the Champion explains what they just did, and the lesson ends once all three of theirs have been out. */
-export function lessonTurn(content: Content, battle: BattleState, mine: PokemonInstance | undefined, events: Ev[], push: (text: string) => void, hpOf: (m: PokemonInstance) => number): void {
+/** How the player fights, answered while the lesson runs (each once). */
+const STYLE = {
+  careful: 'You\'re careful with them. Be careful you\'re not careful *at* them.',
+  trust: 'You trust it to stay standing. Does it know that\'s trust, and not forgetting?',
+  fast: 'Yes. You can do that. So can a rockslide.',
+} as const;
+/** Turns without a switch before the Champion remarks on it; a win this quick is "fast". */
+const NO_SWITCH_TURNS = 4;
+const FAST_TURNS = 6;
+
+/**
+ * Each lesson turn: before the Champion's move, a true line about what they are doing (it is put in front of their move in the
+ * turn's events; the same line is never said two turns running). The player's own style is answered as it shows. The lesson ends
+ * once all three of theirs have been out.
+ */
+export function lessonTurn(content: Content, battle: BattleState, mine: PokemonInstance | undefined, events: Ev[], push: (text: string, at?: number) => void, hpOf: (m: PokemonInstance) => number): void {
   const name = battle.trainer?.name ?? 'The Champion';
+  // Where the Champion's own action starts in this turn's events: their line goes just before it.
+  const before = (): number | undefined => {
+    const i = events.findIndex((e) => e.side === 'enemy' && (e.type === 'move' || e.type === 'switch'));
+    return i >= 0 ? i : undefined;
+  };
+  const last = battle.storyEffects.find((s) => s.startsWith('lesson-last:'))?.slice('lesson-last:'.length);
+  let saidNow = '';
   const say = (k: keyof typeof LINE): void => {
-    if (has(battle, `lesson-said:${k}`)) return;
-    battle.storyEffects.push(`lesson-said:${k}`);
-    push(`${name}: "${LINE[k]}"`);
+    if (saidNow || last === k) return;
+    saidNow = k;
+    if (!has(battle, `lesson-said:${k}`)) battle.storyEffects.push(`lesson-said:${k}`);
+    push(`${name}: "${LINE[k]}"`, before());
+  };
+  const style = (k: keyof typeof STYLE): void => {
+    if (battle.storyEffects.some((s) => s.startsWith('lesson-style:'))) return;
+    battle.storyEffects.push(`lesson-style:${k}`);
+    push(`${name}: "${STYLE[k]}"`);
   };
   const first = !has(battle, 'lesson-t1');
   if (first) battle.storyEffects.push('lesson-t1');
@@ -87,12 +116,19 @@ export function lessonTurn(content: Content, battle: BattleState, mine: PokemonI
     battle.storyEffects.push('lesson-pswitch');
     if (events.some((e) => e.type === 'damage' && e.side === 'player')) say('belt');
   }
-  battle.storyEffects = battle.storyEffects.filter((s) => !s.startsWith('lesson-me:'));
+  battle.storyEffects = battle.storyEffects.filter((s) => !s.startsWith('lesson-me:') && !s.startsWith('lesson-last:'));
   if (mine) battle.storyEffects.push(`lesson-me:${mine.uid}`);
   // A big hit, let through.
   if (foe && events.some((e) => e.type === 'damage' && e.side === 'enemy' && (e.amount ?? 0) * 5 >= hpOf(foe) * 2)) say('good');
   // Hurt, and left in anyway.
   if (foe && foe.hp > 0 && foe.hp * 2 < hpOf(foe) && has(battle, `lesson-out:${foe.uid}`) && events.some((e) => e.type === 'move' && e.side === 'enemy')) say('stay');
+  if (saidNow) battle.storyEffects.push(`lesson-last:${saidNow}`);
+  // The player's own choices are answered, too.
+  const switches = count(battle, 'lesson-pswitch');
+  const down = battle.enemyTeam.filter((m) => m.hp <= 0).length;
+  if (switches >= 3) style('careful');
+  else if (down >= 2 && battle.turn <= FAST_TURNS) style('fast');
+  else if (switches === 0 && battle.turn >= NO_SWITCH_TURNS) style('trust');
   // All three have been out: the turn after the last one came out, the lesson is over.
   const total = Math.min(3, battle.enemyTeam.length);
   if (has(battle, 'lesson-all')) {
@@ -107,12 +143,11 @@ export function lessonTurn(content: Content, battle: BattleState, mine: PokemonI
 /** After the lesson, win or lose: the Champion answers how you fought, and singles one of yours out. */
 export function lessonEnd(content: Content, run: RunState): string {
   const b = run.battle;
+  // The Champion answers how you fought during the lesson; if nothing was said then, it is said now.
+  const answered = !!b && b.storyEffects.some((s) => s.startsWith('lesson-style:'));
   const switches = b ? count(b, 'lesson-pswitch') : 0;
-  const fast = !!b && b.enemyTeam.every((m) => m.hp <= 0) && b.turn <= 6;
-  const line = fast ? 'Yes. You can do that. So can a rockslide.'
-    : switches >= 3 ? 'You\'re careful with them. Be careful you\'re not careful *at* them.'
-    : switches === 0 ? 'You trust it to stay standing. Does it know that\'s trust, and not forgetting?'
-    : '';
+  const fast = !!b && b.enemyTeam.every((m) => m.hp <= 0) && b.turn <= FAST_TURNS;
+  const line = answered ? '' : fast ? STYLE.fast : switches >= 3 ? STYLE.careful : switches === 0 ? STYLE.trust : '';
   const pupil = lessonPupil(content, run);
   for (const m of [...run.party, ...run.box]) m.gn = (m.gn ?? []).filter((t) => t !== PUPIL);
   if (pupil) {
@@ -178,6 +213,8 @@ export function lessonTeach(content: Content, run: RunState): string {
   set(run, 'champ-exam-passed', 1);
   cast(run, 'lesson-move', id);
   cast(run, 'lesson-ace', ace.speciesId);
+  for (const m of [...run.party, ...run.box]) m.gn = (m.gn ?? []).filter((t) => t !== TAUGHT);
+  ace.gn = [...(ace.gn ?? []), TAUGHT];
   if (!ace.moves.some((m) => m.id === id)) {
     const slot = { id, pp: move.pp };
     if (ace.moves.length < 4) ace.moves.push(slot);
@@ -200,12 +237,31 @@ export function lessonAfterstory(content: Content, run: RunState): string {
   if (run.stage?.kind !== 'league' || run.stage.leaderId !== battle.trainer.leaderId) return '';
   const move = content.moves.get(id);
   if (!move) return '';
-  if (!lead.moves.some((m) => m.id === id)) {
-    if (lead.moves.length < 4) lead.moves.push({ id, pp: move.pp });
-    else lead.moves[0] = { id, pp: move.pp };
-  }
-  (battle.lesson ??= {}).foeMove = id;
+  // Against the Pokémon they taught it to: if it is in the party, the Champion waits for it; if it isn't, whoever is out gets it.
+  const taught = run.party.find((m) => m.gn?.includes(TAUGHT) && m.hp > 0);
+  const out = run.party[battle.activeIndex];
+  if (!taught || taught === out) {
+    giveMove(lead, id, move.pp);
+    (battle.lesson ??= {}).foeMove = id;
+  } else battle.storyEffects.push(`${OPEN}${id}:${taught.uid}`);
   return `${battle.trainer.name}: "Let's see if it took."`;
+}
+const OPEN = 'lesson-open:';
+const giveMove = (mon: PokemonInstance, id: string, pp: number): void => {
+  if (mon.moves.some((m) => m.id === id)) return;
+  if (mon.moves.length < 4) mon.moves.push({ id, pp });
+  else mon.moves[0] = { id, pp };
+};
+/** The Champion was waiting for the Pokémon they taught: the first turn it is out, their Pokémon uses the move (its index), else -1. */
+export function lessonOpens(content: Content, battle: BattleState, enemy: PokemonInstance, mine: PokemonInstance | undefined): number {
+  const tag = battle.storyEffects.find((s) => s.startsWith(OPEN));
+  if (!tag || !mine || enemy.hp <= 0) return -1;
+  const [id, uid] = tag.slice(OPEN.length).split(':');
+  const move = content.moves.get(id ?? '');
+  if (!move || mine.uid !== uid) return -1;
+  battle.storyEffects = battle.storyEffects.filter((s) => s !== tag);
+  giveMove(enemy, move.id, move.pp);
+  return enemy.moves.findIndex((m) => m.id === move.id && m.pp > 0);
 }
 
 // ---------- The four moves (the engine calls these by the move's `champMove` effect) ----------

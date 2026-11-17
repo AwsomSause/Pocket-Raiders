@@ -107,6 +107,8 @@ import { currentRegion, getCampaign, levelCap, runLevelCap } from './regions';
 import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } from './encounterDirector';
 import { hashSeed, Rng } from './rng';
 import { continueAfterDecisions, healParty, newMon, partyCapacity, startRaidBattle } from './run';
+import { allstarDeclined } from './greenneedle/allstar';
+import { draftGoesHome } from './greenneedle/draft';
 import { prepareSpectate } from './sky/spectate';
 import { applySky, shapeSkyFoe, skyCondition, skyConditionText } from './sky/story';
 import { NATURE_IDS } from './natures';
@@ -1206,6 +1208,8 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   const base = success ? choice.success : choice.failure!;
   const branch = success ? choice.branches.find((b) => b.when.every((c) => conditionMet(content, run, c))) : undefined;
   const outcome = branch ? { ...base, text: branch.text, effects: branch.effects } : base;
+  // Greenneedle gn.46: a named trainer's offered battle, walked past, is remembered for the All-Star Tournament.
+  allstarDeclined(run, event.choices, outcome);
   const outcomeText = questText(content, run, event.id, gnTokens(content, current, fillCoText(content, current, fillEventText(content, current, outcome.text))));
   // The Event Director remembers important choices (and whether you took a risk).
   const risky = chance !== null || choice.prompt !== undefined;
@@ -1621,7 +1625,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const mon = fits.find((m) => m.uid === tradeUid) ?? fits[0];
       if (!mon || run.party.length < 2) return '';
       run.party.splice(run.party.indexOf(mon), 1);
-      return `Traded away ${content.species.get(mon.speciesId)?.name ?? mon.speciesId}`;
+      // gn.48: a drafted Pokémon that stayed goes back to its first trainer.
+      return [`Traded away ${content.species.get(mon.speciesId)?.name ?? mon.speciesId}`, draftGoesHome(content, run, mon)].filter(Boolean).join('. ');
     }
     case 'honestTrade':
       return applyHonestTrade(content, run, e, tradeUid);
@@ -2817,6 +2822,9 @@ function applyHonestTrade(content: Content, run: RunState, e: Extract<EventEffec
   flags['ev:trades-made'] = Number(flags['ev:trades-made'] ?? 0) + 1;
   if (mon) {
     if (bondLevel(content, mon) >= 4) flags['ev:traded-bond4'] = 1;
+    // gn.48: a drafted Pokémon that stayed goes back to its first trainer (the card said so).
+    const home = draftGoesHome(content, run, mon);
+    if (home) words += `. ${home}`;
     run.party.splice(run.party.indexOf(mon), 1, fresh);
   } else {
     run.pending.push({ kind: 'caught', mon: fresh });

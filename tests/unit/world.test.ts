@@ -393,6 +393,8 @@ describe('landmarks and dungeons', () => {
     // gn.51: the rescued Pokémon's scene opens beside a rest stop (core/greenneedle/smuggling.ts smuggleRest); gn.53: the siege's rescued Pokémon (citysiege.ts sgRest).
     opened.add('gn-51-rest');
     opened.add('gn-53-waiting');
+    // gn.49: the following Snorlax's scene at a rest stop (snorlax.ts snorlaxAsk).
+    opened.add('gn-49-follower');
     // gn.62: the prison moves you between its rooms from code (core/greenneedle/prison.ts prNext).
     // gn.new.03: the Poké Ball's rest and hatch scenes open beside a rest from code (core/greenneedle/ball.ts).
     opened.add('gn-new-03-rest');

@@ -100,6 +100,13 @@ export function snorlaxRest(run: RunState, stage: number): string {
   }
   return 'The Snorlax from the road is one step behind you, as ever. It sniffs your bag, finds nothing, and sighs like a bellows.';
 }
+/** While it follows, each rest stop opens its scene beside the stop: it can still be asked to join, any time before the stage ends. */
+export function snorlaxAsk(content: Content, run: RunState, stage: number): void {
+  if (!following(run, stage) || !content.events.has('gn-49-follower')) return;
+  const here = run.stage?.map.nodes.find((n) => n.id === run.stage!.current);
+  if (!here || here.sides.some((s) => s.kind === 'event' && !s.used && s.eventId === 'gn-49-follower')) return;
+  here.sides.push({ id: `gn-49-follower-${here.sides.length + 1}`, kind: 'event', used: false, eventId: 'gn-49-follower' });
+}
 /** It followed and wasn't asked to join: at the Gym door it sits down, and waves you in. Once. */
 export function snorlaxGym(run: RunState, stage: number): string {
   const battle = run.battle;

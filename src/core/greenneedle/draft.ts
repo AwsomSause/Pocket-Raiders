@@ -28,6 +28,15 @@ const LINES: Record<Trait, [string, string]> = {
   last: ['She\'s best when she\'s the last one standing. Don\'t ask me why.', 'Last one left, he\'s a different Pokémon.'],
   lazy: ['He won\'t really try until his second turn out. Then he really tries.', 'Give her a turn to wake up. Then stand back.'],
 };
+/** What each lender asks before they say yes: their own answer, from their card's line ("first" says no, kindly, and offers its egg). */
+export const ANSWERS: Record<Trait, string> = {
+  shy: 'Shy until it\'s hit. You\'ll remember that? ...You already knew. You read the card. All right. Go on, then.',
+  protect: 'No Protect. Not ever. Promise me. ...You read the card. Of course you did. All right. Go on, then.',
+  first: 'No. I\'m sorry. First one I ever caught. But there was an egg, last spring.',
+  leads: 'Out first, every time. It hates waiting. You\'ll remember that? ...You read the card. All right. Go on, then.',
+  last: 'Leave it till last, when it matters. It likes being the one that\'s left. ...You read the card. All right. Go on, then.',
+  lazy: 'Give it its one turn to wake up, and don\'t shout at it. Promise? ...You read the card. All right. Go on, then.',
+};
 /** The cards that made Wilf laugh. */
 const FUNNY: Trait[] = ['protect', 'lazy'];
 const LENDERS = ['Hesper Quill', 'Odo Marchetti', 'Rosalind Fenn', 'Tamsin Oyelaran', 'Bartholomew Pike', 'Yusuf Kettering', 'Anneliese Brandt', 'Corin Mbeki', 'Delphine Hartigan', 'Ivo Szabo',
@@ -128,11 +137,21 @@ export function draftPick(content: Content, run: RunState, n: number, make: Make
     else mon.moves[3] = { id: 'protect', pp: content.moves.get('protect')!.pp };
   }
   mon.nature = card.nature as PokemonInstance['nature'];
-  const warm = f(run, 'x-rival-swapped-teams') > 0 || f(run, 'rival-colours-kept') > 0;
+  // Swapped teams with the rival, or used a loan well this run (gave back a Pokémon lent to you without being asked): Bond 1.
+  const warm = f(run, 'x-rival-swapped-teams') > 0 || f(run, 'rival-colours-kept') > 0 || f(run, 'loan-used-well') > 0;
   mon.friendship = warm ? content.balance.co.bondLevelStep : 0;
   mon.gn = [DRAFTED, `draft-trait:${card.trait}`, `draft-by:${card.by}`];
   run.party = [...run.party, mon];
   d.picks.push(card);
+  // All six lenders are known once the sixth is picked: they are at the Final Reunion, each asking after theirs by name.
+  if (d.picks.length >= 6) {
+    run.story.flags['draft:lenders'] = d.picks.map((c) => `${c.by} (${content.species.get(c.sp)?.name ?? c.sp})`).join(', ');
+    set(run, 'draft-lent', 1);
+  }
+  // The far half of the table (cards 4 and 5) is only looked at if the player walked along it this pick.
+  const walked = f(run, 'draft-walked') > 0;
+  set(run, 'draft-walked', 0);
+  const unseen = new Set(d.cards.filter((c, i) => c !== card && i >= 3 && !walked));
   const rest = d.cards.filter((c) => c !== card);
   const take = (list: Card[], pick: (c: Card[]) => Card | undefined): void => {
     const c = pick(rest);
@@ -142,7 +161,8 @@ export function draftPick(content: Content, run: RunState, n: number, make: Make
   };
   take(d.cosima, (c) => [...c].sort((a, b) => bst(content, b.sp) - bst(content, a.sp))[0]);
   take(d.wilf, (c) => c.find((x) => FUNNY.includes(x.trait)) ?? c[c.length - 1]);
-  take(d.aldhelm, (c) => c[0]);
+  // Brother Aldhelm takes the one nobody else has looked at: a card the player never walked down to see, else the plainest left.
+  take(d.aldhelm, (c) => c.find((x) => unseen.has(x)) ?? [...c].sort((a, b) => bst(content, a.sp) - bst(content, b.sp))[0]);
   d.cards = [];
   save(run, d);
   return `${content.species.get(card.sp)?.name ?? card.sp}, lent by ${card.by}. Cosima takes the strongest left. Wilf takes the one that made him laugh. Brother Aldhelm takes what nobody looked at.`;
@@ -263,13 +283,13 @@ export function draftRecruit(content: Content, run: RunState, uid: string | unde
     if (traitOf(mon) === 'first') {
       set(run, 'draft-result', 2);
       const egg = host.apply({ kind: 'egg', species: [mon.speciesId], types: [], levelBonus: 0, shinyMultiplier: 1, left: 3, unit: 'battle' });
-      said = `${by}: "No. I'm sorry. She's my first. But she had an egg, last spring." ${egg}`;
+      said = `${by}: "${ANSWERS.first}" ${egg}`;
     } else if (Math.floor(mon.friendship / content.balance.co.bondLevelStep) >= 3) {
       set(run, 'draft-result', 1);
       mon.gn = (mon.gn ?? []).filter((t) => t !== DRAFTED);
       mon.gn.push(`draft-from:${by}`);
       mon.marks = [...(mon.marks ?? []), `lent by ${by} at the Pokémon Draft, and stayed`].slice(-8);
-      said = `${by}: "${LINES[traitOf(mon) ?? 'shy'][0]} You'll remember that? ...You already knew. You read the card. All right. Go on, then." ${name} comes with you.`;
+      said = `${by}: "${ANSWERS[traitOf(mon) ?? 'shy']}" ${name} comes with you.`;
     } else {
       set(run, 'draft-result', 3);
       said = `${by} says yes. ${name} doesn't. It goes back to ${by}, and looks over its shoulder once.`;
@@ -297,6 +317,31 @@ export function draftAldhelm(content: Content, run: RunState, host: { apply: (e:
   return host.apply({ kind: 'join', recall: false, species: [sp], types: [], levelBonus: 0, shinyMultiplier: 1, shadow: false, blissful: false, hiddenAbility: false, moves: [], direct: false, alpha: false, starterType: false, marks: ['Brother Aldhelm\'s own first pick at the Pokémon Draft'] });
 }
 
+// ---------- Memory: a drafted Pokémon that stayed remembers its first trainer ----------
+const fromOf = (mon: Pick<PokemonInstance, 'gn'>): string | undefined => mon.gn?.find((t) => t.startsWith('draft-from:'))?.slice('draft-from:'.length);
+/** The Honest Trade Card says so, in advance. */
+export const draftTradeWarning = (mon: Pick<PokemonInstance, 'gn'>): string | null => {
+  const by = fromOf(mon);
+  return by ? `This Pokémon will return to ${by} if traded. Trade anyway?` : null;
+};
+/** Released or traded away: it isn't an Old Friend who wanders. It goes back to its first trainer, and is met next at their side. */
+export function draftGoesHome(content: Content, run: RunState, mon: PokemonInstance): string {
+  const by = fromOf(mon);
+  if (!by) return '';
+  run.story.flags['draft:home'] = JSON.stringify({ s: mon.speciesId, by });
+  set(run, 'draft-returned', f(run, 'draft-returned') + 1);
+  set(run, 'draft-home-seen', 0);
+  return `${content.species.get(mon.speciesId)?.name ?? 'It'} goes back to ${by}.`;
+}
+const homeOf = (run: Pick<RunState, 'story'>): { s: string; by: string } | null => {
+  try {
+    const raw = run.story.flags['draft:home'];
+    return typeof raw === 'string' ? (JSON.parse(raw) as { s: string; by: string }) : null;
+  } catch {
+    return null;
+  }
+};
+
 /** A letter, once a region, from the trainer of a drafted Pokémon that stayed. */
 export const draftFriend = (run: Pick<RunState, 'party' | 'box'>): PokemonInstance | undefined => [...run.party, ...run.box].find((m) => m.gn?.some((t) => t.startsWith('draft-from:')));
 export function draftLetter(content: Content, run: RunState): string {
@@ -306,7 +351,7 @@ export function draftLetter(content: Content, run: RunState): string {
   return `You write back. Somehow, ${content.species.get(mon.speciesId)?.name ?? 'it'} knows. Bond +1.`;
 }
 
-/** Tokens: {draft:round}, {draft:card:<n>} (in full), {draft:label:<n>}, {draft:vs:<slot>}, {draft:friend}, {draft:from}. */
+/** Tokens: {draft:round}, {draft:card:<n>} (in full), {draft:label:<n>}, {draft:vs:<slot>}, {draft:friend}, {draft:from}, {draft:home}, {draft:home-by}. */
 export function draftTokens(content: Content, run: RunState, text: string): string {
   const d = draftOf(run);
   const sp = (s: string) => content.species.get(s)?.name ?? s;
@@ -325,6 +370,8 @@ export function draftTokens(content: Content, run: RunState, text: string): stri
       return c ? `${sp(c.sp)}, from ${c.by}.` : '—';
     })
     .replace(/\{draft:vs:([1-3])\}/g, (_, n: string) => (d ? DRAFTER_NAME[bracketOrder(content, d)[Number(n) - 1]!] : 'a drafter'))
+    .replaceAll('{draft:home-by}', homeOf(run)?.by ?? 'its first trainer')
+    .replaceAll('{draft:home}', homeOf(run) ? sp(homeOf(run)!.s) : 'it')
     .replaceAll('{draft:friend}', friend ? sp(friend.speciesId) : 'it')
     .replaceAll('{draft:from}', (friend && byOf(friend)) ?? 'its first trainer');
 }

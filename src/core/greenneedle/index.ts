@@ -34,12 +34,12 @@ import { pairBondLevel } from '../bond';
 import { borrowBattleStart, borrowEnd, borrowMeet, borrowStart, borrowTokens, rivalTrustAtLeast } from './borrowed';
 import { draftAldhelm, draftBattleStart, draftEnd, draftFriend, draftLetter, draftPick, draftRecruit, draftStart, draftTokens, draftWon } from './draft';
 import { exBack, exDraw, exKnown, nextMatchup, exResult, exStart, exTokens, exWatch } from './exhibition';
-import { defectorBossStart, defectorClimax, defectorEnd, defectorMeet, defectorReturn, defectorStart, defectorTokens, defectorTrust, guestOf } from './defector';
+import { defectorBossStart, defectorClimax, defectorEnd, defectorMeet, defectorReturn, defectorShare, defectorStart, defectorTokens, defectorTrust, guestOf, ROUTE_LINE } from './defector';
 import { rivalBeatenOnce } from './missingAce';
-import { taEnd, taLot, taRare, taStart } from './teamauction';
+import { taEnd, taLot, taRare, taStart, EARLY, taBid, taCanBid, taRounds, taTokens } from './teamauction';
 import { stAssign, stEnd, stStart, strandingTokens } from './stranding';
 import { insideTeam, prDo, prEnd, prEnter, prFree, prNext, prStart, prStep, prStranger, prCaught, prWardenStart, prisonTokens, prisonAmbush } from './prison';
-import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
+import { type DistrictId, sgEarly, sgOccupied, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
 import { duelDue, duelEnd, duelEnter, duelName, duelWorthy, duelistStart, worthyStart } from './duelist';
 import { lanternArrive, lanternHasStory, lanternLetGo, lanternLost, lanternPearl, lanternTokens } from './lantern';
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
@@ -69,7 +69,7 @@ import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens
 import { lessonArrive, lessonBonus, lessonChampion, lessonEnd, lessonStart, lessonTeach } from './champion';
 import { rememberedPick } from '../co/pickMemory';
 import { lcBring, lcEligible, lcEnd, lcEvolver, lcMany, lcStart, lcStartBattle, lcStay, lcWithdraw } from './littlecup';
-import { CHAMPION_NAME, onevoneChampion, onevoneEnd, onevoneEnter, onevoneStart, entrantOf } from './onevone';
+import { CHAMPION_NAME, onevoneChampion, onevoneEnd, onevoneEnter, onevoneStart, entrantOf, opponentsOf } from './onevone';
 import { eeveeEnd, eeveeStart } from './eevee';
 import { GAVEL, auctionArrive, auctionOpen, auctionReturn, auctionRound, lotToken } from './auction';
 import { aceHere, bagBack, bagLeave, bench, brainRecord, brainStart, bring, frontierClear, leadInitiative, palaceShape, rent, swapIn, unbench, lastTeamToken } from './frontier';
@@ -126,6 +126,7 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   if (text.includes('{defector:')) text = defectorTokens(content, run, text);
   // gn.51: the Smuggling Ring.
   if (text.includes('{smuggle:')) text = smuggleTokens(content, run, text);
+  if (text.includes('{ta:')) text = taTokens(run, text);
   if (text.includes('{stranding:')) text = strandingTokens(content, run, text);
   if (text.includes('{siege:')) text = siegeTokens(content, run, text);
   if (text.includes('{prison:')) text = prisonTokens(content, run, text);
@@ -142,6 +143,8 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   // gn.45: the region's Champion, off duty (cast when the lesson starts).
   if (text.includes('{lesson-champion}')) text = text.replaceAll('{lesson-champion}', content.bosses.get(castOf(run, 'lesson-champion') ?? lessonChampion(content, run, run.regionOrder[run.regionIndex] ?? 'kanto'))?.name ?? 'The Champion');
   text = text.replaceAll('{onevone-champion}', CHAMPION_NAME[run.regionOrder[run.regionIndex] ?? 'kanto'] ?? CHAMPION_NAME.kanto!);
+  // gn.44: who the drawn opponent of round <n> is this time.
+  if (text.includes('{onevone:who:')) text = text.replace(/\{onevone:who:([1-8])\}/g, (_, n: string) => opponentsOf(run)[Number(n) - 1]?.n ?? 'a trainer');
   // gn.44: what the next 1v1 opponent holds ({held:<n>}).
   text = text.replace(/\{held:([1-8])\}/g, (_, n: string) => {
     const id = castOf(run, `onevone-held-${n}`);
@@ -336,6 +339,11 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'kcRegular') return regularRises(run);
   if (c.test === 'sgWaiting') return waiting(run) >= 0;
   if (c.test === 'sgOrdered') return waiting(run) < 0;
+  if (c.test === 'taCanBid') return taCanBid(run, c.n ?? 1);
+  if (c.test === 'taEarly') return taRounds(run, 2) <= EARLY;
+  if (c.test === 'taLate') return taRounds(run, 2) > EARLY;
+  if (c.test === 'sgEarly') return sgEarly(run);
+  if (c.test === 'sgOccupied') return sgOccupied(run, stage);
   if (c.test === 'rehabWaiting') return gnFlag(run, 'smuggle-rehab') > 0 && gnFlag(run, 'smuggle-rehab') < restsNeeded(run);
   if (c.test === 'rivalAhead') return run.story.rivals.some((r) => (r.world?.lead ?? 0) >= 2);
   // gn.40: Mrs. Holloway only takes the coins when the lead has an egg move still to learn (`key: 'to-learn'`; `'none-to-learn'` is its opposite).
@@ -786,6 +794,12 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return defectorReturn(run, (e.n ?? 0) > 0);
     case 'defectorEnd':
       return defectorEnd(run);
+    case 'defectorShare': {
+      // Trust 3+: one free scouting a stage (here, handed over at a meeting).
+      if (!defectorShare(run, host.stage)) return '';
+      host.apply({ kind: 'scout', columns: 3 });
+      return ROUTE_LINE;
+    }
     case 'smuggleCages':
       return smuggleCages(content, run, host.float);
     case 'smuggleRehab':
@@ -798,6 +812,8 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return taStart(content, run, e.n ?? 1, host.float);
     case 'taLot':
       return taLot(run, e.n ?? 0);
+    case 'taBid':
+      return taBid(run, e.n ?? 1, host);
     case 'taRare':
       return taRare(run, e.n ?? 1, host.stage, host);
     case 'taEnd':
@@ -950,7 +966,7 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     case 'ofSpecial':
       return ofSpecial(run, e.key!, e.n === 1, host.stage);
     case 'exDraw':
-      return exDraw(run);
+      return exDraw(content, run);
     case 'exBack':
       return exBack(run, e.n ?? 0);
     case 'exWatch':

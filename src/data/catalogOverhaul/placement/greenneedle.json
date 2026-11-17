@@ -225,7 +225,7 @@
    "kanto": "The Pokémon League Exhibition",
    "elsewhere": "The Pokémon League Exhibition"
   },
-  "note": "Badge: a ticket. Once per region; each matchup once per run. Until towns exist it sits on step 15. The match is told in three parts (core/greenneedle/exhibition.ts); a move watched closely is free once at any move tutor; a trainer in a later stage copies a move from it.",
+  "note": "Badge: a ticket. Once per region; each matchup once per run. Until towns exist it sits on step 15. The match is a real CPU-versus-CPU battle, six on six, with commentary in three parts (core/greenneedle/exhibition.ts); a move watched closely is free once at any move tutor; a trainer in a later stage copies a move from it.",
   "kinds": [
    "Onlooker"
   ],
@@ -274,6 +274,30 @@
    "elsewhere": "A Letter"
   },
   "note": "Once a region, while a drafted Pokémon that stayed is with you: its first trainer writes. \"Write back.\" gives it Bond +1.",
+  "kinds": [
+   "Tournament Episode"
+  ],
+  "tags": []
+ },
+ "gn-48-home": {
+  "gn": "gn.48",
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 5,
+  "window": [
+   1,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "It Went Home",
+   "elsewhere": "It Went Home"
+  },
+  "note": "Memory: a drafted Pokémon that stayed and was then traded away (or released) went back to its first trainer. It is met next at their side, and they both wave. The Honest Trade Card warns of it in advance.",
   "kinds": [
    "Tournament Episode"
   ],
@@ -517,7 +541,7 @@
    "kanto": "The Pokémon Smuggling Ring",
    "elsewhere": "The Pokémon Smuggling Ring"
   },
-  "note": "Badge: a crate. Better at night. The rescued Pokémon walks beside the player and opens its own scene at each rest stop (run.ts) until it climbs in. Postcards (gn-51-postcard) come one a region afterwards.",
+  "note": "Badge: a crate. Better at night: in the evening or at night the rafters can be crossed without the jump. The rescued Pokémon walks beside the player and opens its own scene at each rest stop (run.ts) until it climbs in. Postcards (gn-51-postcard) come one a region afterwards.",
   "kinds": [
    "Evil Team"
   ],
@@ -565,7 +589,9 @@
   "kinds": [
    "Evil Team"
   ],
-  "tags": []
+  "tags": [
+   "night"
+  ]
  },
  "gn-52-later": {
   "gn": "gn.52",
@@ -626,6 +652,26 @@
    "elsewhere": "The Region Under Siege"
   },
   "note": "Badge: a burning tower. Only at the evil team's climax, or the stage before. Eight turns in rooms; the result shapes the next stage's shops and Center (run.ts). The rescued Pokémon waits at the next rest (gn-53-waiting); gn-53-plaque is the afterstory in a later region.",
+  "kinds": [
+   "Evil Team"
+  ],
+  "tags": []
+ },
+ "gn-53-patrol": {
+  "gn": "gn.53",
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 8,
+  "window": [
+   1,
+   18
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "level": "A+0 if seen; A+1 if taken on",
+  "often": "run",
+  "badge": "own",
+  "note": "Only in the occupied city (the stage after a lost siege): it takes the place of every trainer battle there (citysiege.ts sgStage puts it on the nodes).",
   "kinds": [
    "Evil Team"
   ],

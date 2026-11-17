@@ -3667,7 +3667,7 @@ export class BattleScene extends Phaser.Scene {
     });
     this.openPanel(
       [
-        { head: `${species.name} Lv.${mon.level}`, text: `${species.types.join(' / ')}${mon.nature ? ` · ${mon.nature}` : ''}\nHP ${mon.hp}/${stats.hp}  Atk ${stats.atk}  Def ${stats.def}\nSpA ${stats.spa}  SpD ${stats.spd}  Spe ${stats.spe}\n${ability ? `Ability: ${content.abilities.get(ability)?.name ?? ability}` : ''}` },
+        { head: `${species.name} Lv.${mon.level}`, text: `${species.types.join(' / ')}${mon.nature ? ` · ${mon.nature}` : ''}\nHP ${mon.hp}/${stats.hp}  Atk ${stats.atk}  Def ${stats.def}\nSpA ${stats.spa}  SpD ${stats.spd}  Spe ${stats.spe}\n${ability ? `Ability: ${content.abilities.get(ability)?.name ?? ability}${mon.gn?.includes('ability-star') ? ' ★' : ''}` : ''}` },
         { head: 'Moves', text: moves.join('\n') },
         { head: 'How it fights', text: `${profile.style}\n${profile.notes.slice(0, 3).join('\n')}${held.length ? `\nHolding: ${held.join(', ')}` : ''}` },
       ],
