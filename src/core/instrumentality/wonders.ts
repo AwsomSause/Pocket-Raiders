@@ -3,11 +3,14 @@
 
 import type { Content } from '../contentSchema';
 import type { PendingDecision, RunState } from '../state';
-import { bumpTrack, guestId, STANCE_NAME, trackOf } from './promises';
+import { addItem, consumeItem } from '../items';
+import { bumpTrack, guestId, itemValue, MELTAN_TO_MERGE, metalItems, promiseState, STANCE_NAME, stageKeyOf, trackOf } from './promises';
+import { MYTHICALS } from './promisesData';
 
 export interface WonderAction { id: string; title: string; text: string; problem: string | null }
 export type WonderDecision = Extract<PendingDecision, { kind: 'wonderChoice' }>;
 
+const _run_inv = (run: RunState): Record<string, number> => Object.fromEntries(Object.entries(run.inventory).filter(([, n]) => n > 0));
 const STANCES = ['atk', 'def', 'spe', 'norm'] as const;
 const STANCE_TEXT: Record<string, string> = { atk: '+15% damage dealt', def: '-15% damage taken', spe: 'acts first on turn one', norm: '+5% to everything' };
 
@@ -21,6 +24,18 @@ export function wonderActions(_content: Content, run: RunState): WonderAction[] 
     const now = ['none', 'Attack', 'Defense', 'Speed', 'Normal'][trackOf(run, 'stance')] ?? 'none';
     out.push({ id: 'stance', title: 'Deoxys: take a stance', text: `Pick a Forme for the party (now: ${now}). Once a rest.`, problem: ready ? null : 'Deoxys changes stance only after a rest.' });
   }
+  if (id === 'diancie') {
+    const have = Object.keys(run.inventory).filter((i) => (run.inventory[i] ?? 0) > 0);
+    out.push({ id: 'copy', title: 'Diancie: copy an item', text: 'She copies one item from your bag (once a region).', problem: trackOf(run, 'copyRegion') === run.regionIndex + 1 ? 'Already used this region.' : have.length === 0 ? 'Your bag is empty.' : null });
+  }
+  if (id === 'meltan') {
+    const fed = trackOf(run, 'fedKey') === stageKeyOf(run) + 1;
+    out.push({ id: 'feed', title: 'Meltan: feed it', text: `Give it one metal item (${trackOf(run, 'fed')}/${MELTAN_TO_MERGE} eaten). One a stage.`, problem: fed ? 'Meltan is full for this stage.' : metalItems(_content, run).length === 0 ? 'You carry nothing metal.' : null });
+  }
+  if (id === 'melmetal') {
+    const gave = trackOf(run, 'gaveRegion') === run.regionIndex + 1;
+    out.push({ id: 'give', title: 'Melmetal: forge, do not hoard', text: 'Give away your most valuable item (once a region).', problem: gave ? 'Already given this region.' : Object.keys(run.inventory).length === 0 ? 'Your bag is empty.' : null });
+  }
   return out;
 }
 
@@ -33,6 +48,21 @@ export function startWonder(_content: Content, run: RunState, wonderId: string):
       message: '',
     };
   }
+  if (wonderId === 'copy' && guest === 'diancie') {
+    const ids = Object.keys(_run_inv(run)).sort();
+    return { decision: { kind: 'wonderChoice', mythicalId: 'diancie', wonderId, title: 'Diancie: which item should she copy?', options: ids.slice(0, 12).map((i) => ({ label: _content.items.get(i)?.name ?? i, description: `You have ${run.inventory[i]}.`, value: i })) }, message: '' };
+  }
+  if (wonderId === 'feed' && guest === 'meltan') {
+    const ids = metalItems(_content, run);
+    return { decision: { kind: 'wonderChoice', mythicalId: 'meltan', wonderId, title: 'Meltan: what will it eat?', options: ids.slice(0, 12).map((i) => ({ label: _content.items.get(i)?.name ?? i, description: `You have ${run.inventory[i]}.`, value: i })) }, message: '' };
+  }
+  if (wonderId === 'give' && guest === 'melmetal') {
+    const ids = Object.keys(run.inventory).sort((a, b) => itemValue(_content, b) - itemValue(_content, a) || a.localeCompare(b));
+    const top = ids[0]!;
+    consumeItem(run.inventory, top);
+    bumpTrack(run, 'gaveRegion', run.regionIndex + 1);
+    return { decision: null, message: `Melmetal forges your ${_content.items.get(top)?.name ?? top} into something new. It is gone. (Forge; do not hoard.)` };
+  }
   throw new Error('That Wonder is not available');
 }
 
@@ -43,6 +73,24 @@ export function resolveWonder(_content: Content, run: RunState, decision: Wonder
     bumpTrack(run, 'stance', STANCES.indexOf(pick.value as (typeof STANCES)[number]) + 1);
     bumpTrack(run, 'stancesTaken', trackOf(run, 'restsUsed'));
     return `Deoxys takes the ${pick.label} stance: ${pick.description}.`;
+  }
+  if (decision.wonderId === 'copy' && guestId(run) === 'diancie') {
+    addItem(run.inventory, pick.value, 1);
+    bumpTrack(run, 'copyRegion', run.regionIndex + 1);
+    return `Diancie copies your ${pick.label}: you now have ${run.inventory[pick.value]}.`;
+  }
+  if (decision.wonderId === 'feed' && guestId(run) === 'meltan') {
+    if ((run.inventory[pick.value] ?? 0) <= 0) return 'You no longer have that.';
+    consumeItem(run.inventory, pick.value);
+    bumpTrack(run, 'fedKey', stageKeyOf(run) + 1);
+    const n = bumpTrack(run, 'fed', (x) => x + 1);
+    if (n >= MELTAN_TO_MERGE) {
+      const p = promiseState(run);
+      const def = MYTHICALS.find((m) => m.id === 'melmetal')!;
+      run.expansion = { ...run.expansion, promise: { ...p, guest: { id: 'melmetal', forgiven: false }, kept: [...p.kept, 'meltan'] } };
+      return `Eight Meltan merge into ${def.title}. ${def.promise}`;
+    }
+    return `Meltan eats your ${pick.label}: ${n}/${MELTAN_TO_MERGE}, +${n * 2}% Defense.`;
   }
   return '';
 }

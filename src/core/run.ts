@@ -65,7 +65,7 @@ import { noteSpirits, syncLegendKeys } from './legends/keys';
 import { weekFlags, weekLegends } from './co/weeks';
 import { drawWholeRun } from './legends/wholeRun';
 import { resolveWonder, startWonder, wonderActions } from './instrumentality/wonders';
-import { hearTelling, hoopaRing, hoopaStage, bumpTrack, wishesLeft, onLeadAtStage as promiseOnLeadStage, onLeadChanged as promiseOnLead, onAssistAccepted as promiseOnAssist, onBattleWon as promiseOnWin, onPlayerFaint as promiseOnFaint, noteEvent as notePromiseEvent, onCaught as promiseOnCaught, onPartyChanged as promiseOnPartyChanged, onRestUsed as promiseOnRest, onStageEntered as promiseOnStage, onTmUsed as promiseOnTm, resolveVisit, rollVisit, wonderAfterBattle, wonderAtBattleStart } from './instrumentality/promises';
+import { hearTelling, hoopaRing, hoopaStage, onRegionStarted as promiseOnRegion, onSold as promiseOnSold, onStageLeft as promiseOnLeft, stageKeyOf as promiseStageKey, bumpTrack, wishesLeft, onLeadAtStage as promiseOnLeadStage, onLeadChanged as promiseOnLead, onAssistAccepted as promiseOnAssist, onBattleWon as promiseOnWin, onPlayerFaint as promiseOnFaint, noteEvent as notePromiseEvent, onCaught as promiseOnCaught, onPartyChanged as promiseOnPartyChanged, onRestUsed as promiseOnRest, onStageEntered as promiseOnStage, onTmUsed as promiseOnTm, resolveVisit, rollVisit, wonderAfterBattle, wonderAtBattleStart } from './instrumentality/promises';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
 import { drawRemembranceStarters } from './story2/starterDraw';
 import { endBorrow, endFeudWatch, noteCalm, feudWatching, mainRival, notePlayerLoss, scoutedLead, secondRival } from './rivals/questlines';
@@ -780,6 +780,8 @@ function promiseSay(content: Content, run: RunState, lines: string[]): void {
 function enterStage(content: Content, run: RunState, index: number): void {
   const leftBehind = run.stage ? { heals: run.stage.map.nodes.flatMap((n) => n.sides).filter((x) => x.kind === 'heal').length, used: run.stage.map.nodes.flatMap((n) => n.sides).filter((x) => x.kind === 'heal' && x.used).length } : null;
   promiseOnStage(run, leftBehind);
+  if (run.stage) promiseSay(content, run, promiseOnLeft(content, run, promiseStageKey(run)));
+  if (index === 0) promiseSay(content, run, promiseOnRegion(content, run));
   promiseSay(content, run, hoopaStage(content, run, run.regionIndex * 100 + index));
   promiseSay(content, run, promiseOnLeadStage(content, run));
   ofGuestLeaves(content, run);
@@ -3007,6 +3009,7 @@ export function sellItem(content: Content, current: RunState, itemId: string): {
   consumeItem(run.inventory, itemId);
   run.money += price;
   count(run, 'moneyEarned', price);
+  promiseSay(content, run, promiseOnSold(content, run));
   return { run, message: `You sold a ${item.name} for ₽${price}.` };
 }
 
@@ -4915,6 +4918,7 @@ export function cashInItem(content: Content, current: RunState, itemId: string):
   if (!canCashIn(content, current, itemId)) throw new Error(`The ${item.name} can't be cashed in right now`);
   const run = structuredClone(current);
   consumeItem(run.inventory, itemId);
+  promiseSay(content, run, promiseOnSold(content, run));
   const parts = Object.entries(item.cashIn!).map(([key, amount]) => attributeText(key as AttributeKey, addRunAttribute(content, run, key as AttributeKey, amount)));
   return { run, message: `You cashed in the ${item.name}: ${parts.join(', ')}.` };
 }

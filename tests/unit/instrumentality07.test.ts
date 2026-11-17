@@ -4,7 +4,7 @@ import { createBattle } from '../../src/core/battle/engine';
 import { freshSos } from '../../src/core/battle/sos';
 import { ExpansionSettingsSchema } from '../../src/core/expansion/schema';
 import { HEATED, heatedConditions, heatedRoll, isBigBattle } from '../../src/core/instrumentality/heated';
-import { breaks, believed, hearTelling, noteEvent, bumpTrack, comesWhenMet, hoopaRing, hoopaStage, isRefusal, onEventChoice, wishesLeft, onLeadAtStage, onLeadChanged, onAssistAccepted, onBattleWon, onPlayerFaint, onCaught, onRestUsed, onStageEntered, onTmUsed, wonderAtBattleStart, trackOf, promiseState, promiseWarning, resolveVisit, rollVisit, visitChance, wonderAfterBattle, youngestUid, type PromiseEvent } from '../../src/core/instrumentality/promises';
+import { breaks, believed, hearTelling, noteEvent, bumpTrack, comesWhenMet, hoopaRing, hoopaStage, onSold, onStageLeft, onRegionStarted, stageKeyOf, metalItems, isRefusal, onEventChoice, wishesLeft, onLeadAtStage, onLeadChanged, onAssistAccepted, onBattleWon, onPlayerFaint, onCaught, onRestUsed, onStageEntered, onTmUsed, wonderAtBattleStart, trackOf, promiseState, promiseWarning, resolveVisit, rollVisit, visitChance, wonderAfterBattle, youngestUid, type PromiseEvent } from '../../src/core/instrumentality/promises';
 import { resolveWonder, startWonder, wonderActions } from '../../src/core/instrumentality/wonders';
 import { MYTHICALS } from '../../src/core/instrumentality/promisesData';
 import { pickRescue, secondChanceOpen, secondChanceRolls } from '../../src/core/instrumentality/secondChance';
@@ -105,7 +105,7 @@ describe('Mythical Promises (M1)', () => {
       expect(m.tellings).toHaveLength(3);
       if (m.status !== 'supported') expect(m.note).toBeTruthy();
     }
-    expect(MYTHICALS.filter((m) => m.status === 'supported').map((m) => m.id)).toEqual(['mew', 'jirachi', 'deoxys', 'darkrai', 'victini', 'keldeo', 'genesect', 'hoopa', 'zeraora', 'zarude']);
+    expect(MYTHICALS.filter((m) => m.status === 'supported').map((m) => m.id).sort()).toEqual(['darkrai', 'deoxys', 'diancie', 'genesect', 'hoopa', 'jirachi', 'keldeo', 'melmetal', 'meltan', 'mew', 'victini', 'zarude', 'zeraora']);
   });
   it('every Promise is a checkable rule: it breaks on its event and not on an unrelated one', () => {
     const run = base();
@@ -439,6 +439,69 @@ describe('Mythical Promises stage 2 (Jirachi)', () => {
     plain.expansion = { ...plain.expansion, promise: { tellings: {}, visited: null, guest: null, kept: [], left: [] } };
     expect(wishesLeft(plain)).toBe(0);
     expect(() => wishRedraw(content, plain)).toThrow();
+  });
+});
+
+describe('Mythical Promises stage 2 (Diancie, Meltan, Melmetal)', () => {
+  const guestRun = (id: string) => {
+    const run = structuredClone(toBattle(start({ mythicalPromises: true })));
+    run.expansion = { ...run.expansion, promise: { tellings: {}, visited: id, guest: { id, forgiven: false }, kept: [], left: [] } };
+    return run;
+  };
+  const metal = (run: RunState) => {
+    const id = [...content.items.values()].find((i) => /metal|iron|steel|magnet|coin|nugget/i.test(i.name))!.id;
+    run.inventory[id] = 20;
+    return id;
+  };
+  it('Diancie: she copies a bag item once a region; cashing in breaks her Promise (forgives once)', () => {
+    const run = guestRun('diancie');
+    run.inventory = { potion: 2 };
+    expect(wonderActions(content, run)[0]!.problem).toBeNull();
+    const { decision } = startWonder(content, run, 'copy');
+    expect(resolveWonder(content, run, decision!, 0)).toContain('copies');
+    expect(run.inventory.potion).toBe(3);
+    expect(wonderActions(content, run)[0]!.problem).toContain('Already');
+    expect(onSold(content, run)[0]).toContain('forgives');
+  });
+  it('Meltan: feed a metal item a stage; skipping a stage breaks the Promise; eight merge into Melmetal', () => {
+    const run = guestRun('meltan');
+    const id = metal(run);
+    expect(metalItems(content, run)).toContain(id);
+    expect(onStageLeft(content, run, stageKeyOf(run))[0]).toContain('forgives'); // not fed
+    for (let k = 1; k <= 8; k++) {
+      run.stage = { ...(run.stage ?? ({} as never)), index: k } as never;
+      const { decision } = startWonder(content, run, 'feed');
+      expect(wonderActions(content, run)[0]!.problem).toBeNull();
+      const msg = resolveWonder(content, run, decision!, 0);
+      if (k < 8) { expect(msg).toContain(`${k}/8`); expect(wonderActions(content, run)[0]!.problem).toContain('full'); }
+      else expect(msg).toContain('merge');
+    }
+    expect(promiseState(run).guest?.id).toBe('melmetal');
+  });
+  it("Melmetal: gives away the most valuable item once a region; a region without it breaks the Promise", () => {
+    const run = guestRun('melmetal');
+    run.inventory = { potion: 1, 'rare-candy': 1 };
+    const value = (id: string) => content.shop.find((e) => e.item === id)?.price ?? 0;
+    const top = Object.keys(run.inventory).sort((a, b) => value(b) - value(a) || a.localeCompare(b))[0]!;
+    expect(startWonder(content, run, 'give').message).toContain('gone');
+    expect(run.inventory[top]).toBeUndefined();
+    run.regionIndex += 1;
+    expect(onRegionStarted(content, run)).toEqual([]); // given in the region that just ended
+    run.regionIndex += 1;
+    expect(onRegionStarted(content, run)[0]).toContain('leaves'); // not forgiven: Melmetal does not forgive
+  });
+  it("Melmetal's first contact move strikes twice at 60%, once a battle; Meltan's riders cut damage taken", () => {
+    const run = guestRun('melmetal');
+    run.party[0]!.moves = [{ id: 'tackle', pp: 35 }];
+    run.battle = createBattle('wild', [createPokemon(content, 'rattata', 40, 'foe')], 0, run.party[0]!.uid);
+    expect(wonderAtBattleStart(content, run)[0]).toContain('strikes twice');
+    const res = takeTurn(content, run, { kind: 'move', index: 0 });
+    expect(res.run.battle!.storyEffects).toContain('promise:melmetal-used');
+    const m = guestRun('meltan');
+    bumpTrack(m, 'fed', 3);
+    m.battle = createBattle('wild', [createPokemon(content, 'rattata', 10, 'foe')], 0, m.party[0]!.uid);
+    expect(wonderAtBattleStart(content, m)[0]).toContain('+6% Defense');
+    expect(m.battle!.storyEffects).toContain('promise:meltan:3');
   });
 });
 

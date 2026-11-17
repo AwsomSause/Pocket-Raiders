@@ -4634,11 +4634,15 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   const hasExtra = Boolean(fx.status || fx.flinchChance || fx.confuse || fx.drowsy || changes.some((c) => c.target === 'enemy' || c.chance < 100));
   const sheerForce = userAbility === 'sheer-force' && hasExtra;
   const parental = userAbility === 'parental-bond' && !fx.hits && !fx.ohko && !fx.fixedDamage && !fx.counter && !fx.halveTarget && !fx.endeavor && !fx.userFaint;
+  // Melmetal's Wonder (Mythical Promises): the first contact move of each battle strikes twice, the second blow at 60% power.
+  const melmetalStrike = user.side === 'player' && move.flags.includes('contact') && !parental && !fx.hits && !fx.ohko && !fx.fixedDamage && !fx.counter && !fx.beatUp
+    && ctx.battle.storyEffects.includes('promise:melmetal') && !ctx.battle.storyEffects.includes('promise:melmetal-used');
+  if (melmetalStrike) ctx.battle.storyEffects.push('promise:melmetal-used');
   const beaters = fx.beatUp ? (user.side === 'player' ? ctx.party : ctx.battle.enemyTeam).filter((m) => m.hp > 0 && !m.status) : [];
   // Swarm (PA25): every damaging move hits twice, each at a share of its power.
   const twice = revivalTwice(user, move);
   const heads = jetThreeHeads(userAbility, move) && !parental;
-  const hits = twice ? 2 : heads ? THREE_HEADS.hits : fx.beatUp ? Math.max(1, beaters.length) : fx.hits ? (userAbility === 'skill-link' || (userAbility === 'starlight-knuckles' && move.flags.includes('punch')) ? fx.hits[1] : Held.loadedDiceHits(ctx, user, multiHitCount(fx.hits, rng), fx.hits[1])) : parental ? 2 : 1;
+  const hits = twice ? 2 : heads ? THREE_HEADS.hits : fx.beatUp ? Math.max(1, beaters.length) : fx.hits ? (userAbility === 'skill-link' || (userAbility === 'starlight-knuckles' && move.flags.includes('punch')) ? fx.hits[1] : Held.loadedDiceHits(ctx, user, multiHitCount(fx.hits, rng), fx.hits[1])) : (parental || melmetalStrike) ? 2 : 1;
   let dealt = 0;
   let landed = 0;
   let anyCrit = false;
@@ -4851,6 +4855,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (user.side === 'player') final *= shoutDamage(content, ctx.battle.skill, !!user.mon.awakened?.includes(move.id));
       if ((foeAbility === 'fluffy' || foeAbility === 'aura-guard') && contact) final *= 0.5;
       if (parental && hit === 1) final *= 0.25;
+      if (melmetalStrike && hit === 1) final *= 0.6;
       if (userAbility === 'stakeout' && target.vol.turnsOut === 0) final *= 2;
       if (foeAbility === 'tera-shell' && target.mon.hp >= targetStats.hp && effectiveness > 0) final *= 0.5 / effectiveness;
       if (foeAbility === 'fluffy' && moveType === 'fire') final *= 2;
@@ -4901,7 +4906,12 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
         const se = ctx.battle.storyEffects;
         let stance = 1;
         if (user.side === 'player') { if (se.includes('promise:stance-atk')) stance *= 1.15; if (se.includes('promise:stance-norm')) stance *= 1.05; }
-        else if (target.side === 'player') { if (se.includes('promise:stance-def')) stance *= 0.85; if (se.includes('promise:stance-norm')) stance *= 0.95; }
+        else if (target.side === 'player') {
+          if (se.includes('promise:stance-def')) stance *= 0.85;
+          if (se.includes('promise:stance-norm')) stance *= 0.95;
+          const meltan = se.find((e) => e.startsWith('promise:meltan:'));
+          if (meltan) stance *= Math.max(0.5, 1 - 0.02 * Number(meltan.slice('promise:meltan:'.length)));
+        }
         if (stance !== 1) damage = Math.max(1, Math.floor(damage * stance));
       }
       if (ctx.moments) { const boost = momentDamageMult(ctx, user, moveType, move.id); if (boost !== 1) damage = Math.max(1, Math.floor(damage * boost)); }

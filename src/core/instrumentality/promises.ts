@@ -29,16 +29,25 @@ export const believed = (run: Pick<RunState, 'expansion'>, id: string): boolean 
 /** Only supported Mythicals can visit at random (their Wonder is built). */
 const visitors = (): MythicalDef[] => MYTHICALS.filter((m) => m.status === 'supported');
 /** Every Mythical that is not disabled can be told of and believed: each has its own Visit scene (legends questlines), so the stage Telling no longer only ever names Zarude. */
-const tellable = (): MythicalDef[] => MYTHICALS.filter((m) => m.status !== 'disabled');
+const tellable = (): MythicalDef[] => MYTHICALS.filter((m) => m.status !== 'disabled' && m.id !== 'melmetal'); // Melmetal is only ever the eight Meltan merged
 
 /** Revived fossil Pokémon (and their evolutions): Genesect comes to those who have brought one back. */
 const FOSSILS = new Set(['omanyte', 'omastar', 'kabuto', 'kabutops', 'aerodactyl', 'lileep', 'cradily', 'anorith', 'armaldo', 'cranidos', 'rampardos', 'shieldon', 'bastiodon', 'tirtouga', 'carracosta', 'archen', 'archeops', 'tyrunt', 'tyrantrum', 'amaura', 'aurorus', 'dracozolt', 'arctozolt', 'dracovish', 'arctovish']);
+
+/** Items Meltan will eat (by name: metal, iron, steel, magnets and coins). Held items sit in the bag in this game. */
+export const metalItems = (content: Content, run: Pick<RunState, 'inventory'>): string[] =>
+  Object.keys(run.inventory).filter((id) => (run.inventory[id] ?? 0) > 0 && /metal|iron|steel|magnet|coin|nugget/i.test(content.items.get(id)?.name ?? '')).sort();
+export const MELTAN_TO_MERGE = 8;
+/** What an item is worth: its shop price (0 when no shop sells it). */
+export const itemValue = (content: Content, id: string): number => content.shop.find((e) => e.item === id)?.price ?? 0;
 
 /** What makes a visit possible this run ("Comes when"). Supported Mythicals only; the others have no trigger yet. */
 const COMES_WHEN: Record<string, (content: Content, run: RunState) => boolean> = {
   zarude: (_c, run) => [...run.party, ...run.box].some((m) => m.hatched === true),
   mew: (_c, run) => Object.keys(promiseState(run).track ?? {}).filter((k) => k.startsWith('caught:')).length >= 20,
   darkrai: (_c, run) => trackOf(run, 'restsPassed') >= 2,
+  meltan: (_c, run) => metalItems(_c, run).reduce((n, id) => n + (run.inventory[id] ?? 0), 0) >= 5,
+  melmetal: (_c, run) => trackOf(run, 'fed') >= MELTAN_TO_MERGE && guestId(run) === null && promiseState(run).visited === null,
   jirachi: (_c, run) => trackOf(run, 'declines') >= 3,
   deoxys: (_c, run) => trackOf(run, 'leadChanges') >= 4,
   victini: (_c, run) => trackOf(run, 'winStreak') >= 10,
@@ -286,6 +295,14 @@ export function wonderAtBattleStart(content: Content, run: RunState): string[] {
       lines.push(`Deoxys holds its ${STANCE_NAME[stance]} stance.`);
     }
   }
+  if (id === 'meltan' && trackOf(run, 'fed') > 0) {
+    battle.storyEffects.push(`promise:meltan:${trackOf(run, 'fed')}`);
+    lines.push(`${trackOf(run, 'fed')} Meltan ride behind you: +${trackOf(run, 'fed') * 2}% Defense.`);
+  }
+  if (id === 'melmetal') {
+    battle.storyEffects.push('promise:melmetal');
+    lines.push('Melmetal rumbles: your first contact move strikes twice (the second blow at 60%).');
+  }
   if (id === 'genesect') {
     const lead = run.party[battle.activeIndex];
     if (lead) {
@@ -362,3 +379,18 @@ export function onEventChoice(content: Content, run: RunState, label: string): s
   bumpTrack(run, 'declines', (n) => n + 1);
   return [...noteEvent(content, run, { kind: 'refuseRequest' }), ...noteEvent(content, run, { kind: 'declineGift' })];
 }
+
+/** Selling or cashing in an item (Diancie: Sell nothing). */
+export const onSold = (content: Content, run: RunState): string[] => (run.expansion?.promises ? noteEvent(content, run, { kind: 'sell' }) : []);
+
+/** A stage ends (the next one starts): Meltan wants one item a stage. `previousKey` is the stage just left. */
+export function onStageLeft(content: Content, run: RunState, previousKey: number | null): string[] {
+  if (!run.expansion?.promises || previousKey === null || guestId(run) !== 'meltan') return [];
+  return trackOf(run, 'fedKey') === previousKey + 1 ? [] : noteEvent(content, run, { kind: 'stageEndNotFed' });
+}
+/** A new region begins: Melmetal wants one item given away at the end of each region. */
+export function onRegionStarted(content: Content, run: RunState): string[] {
+  if (!run.expansion?.promises || run.regionIndex === 0 || guestId(run) !== 'melmetal') return [];
+  return trackOf(run, 'gaveRegion') === run.regionIndex ? [] : noteEvent(content, run, { kind: 'regionEndNotGiven' });
+}
+export const stageKeyOf = (run: Pick<RunState, 'regionIndex' | 'stage'>): number => run.regionIndex * 100 + (run.stage?.index ?? 0);
