@@ -12,7 +12,8 @@ import heroRaw from '../../data/evilMode/hero.json';
 import lineRaw from '../../data/evilMode/line.json';
 import gymRaw from '../../data/evilMode/gym.json';
 import regionRaw from '../../data/evilMode/region.json';
-import { CreedsFileSchema, DistrictFileSchema, DoctrinesFileSchema, FacesFileSchema, GymFileSchema, FoundingFileSchema, HeroFileSchema, LedgerFileSchema, LineFileSchema, MethodsFileSchema, PeopleFileSchema, RegionFileSchema } from './schema';
+import economyRaw from '../../data/evilMode/economy.json';
+import { CreedsFileSchema, DistrictFileSchema, DoctrinesFileSchema, FacesFileSchema, GymFileSchema, FoundingFileSchema, HeroFileSchema, LedgerFileSchema, LineFileSchema, MethodsFileSchema, PeopleFileSchema, RegionFileSchema, EconomyFileSchema } from './schema';
 
 export const EVIL_DATA = {
   creeds: CreedsFileSchema.parse(creedsRaw).creeds,
@@ -27,6 +28,7 @@ export const EVIL_DATA = {
   line: LineFileSchema.parse(lineRaw),
   gym: GymFileSchema.parse(gymRaw),
   region: RegionFileSchema.parse(regionRaw),
+  economy: EconomyFileSchema.parse(economyRaw),
 };
 export type EvilData = typeof EVIL_DATA;
 export type Creed = EvilData['creeds'][number];

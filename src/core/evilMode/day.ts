@@ -11,6 +11,7 @@ import { holdResult, post, takeBadge, unpost, walkHero } from './hero';
 import { heartsGo, moveLine } from './line';
 import { gymAct, gymEvening, gymResult } from './gym';
 import { recall, goOn, tallyOf, toRoad } from './region';
+import { bust, trade, ventureAct, type BustWay, type TradeReq, type VentureAct } from './economy';
 import { EVIL_DATA } from './data';
 import { BEATS, type Beat, type EvilModeBlock, type GymWay, type LineId, type Question } from './schema';
 
@@ -56,6 +57,10 @@ export type EvilAction =
   | { type: 'toRoad' }
   | { type: 'goOn'; stay: string | null }
   | { type: 'recall'; id: string }
+  /** Slice 11: a Racket, a Front or a Work from its Card (at Dispatch); the Boss's hand on something running; a way out of bankruptcy. */
+  | { type: 'trade'; req: TradeReq }
+  | { type: 'venture'; id: string; act: VentureAct }
+  | { type: 'bust'; way: BustWay; id?: string }
   | { type: 'dismissOvernight' }
   | { type: 'send' }
   | { type: 'stayIn' }
@@ -144,6 +149,12 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
     const r = gymAct(block, action.way);
     if (r.problem) return no(r.problem);
     return { block: r.block, cues: [...r.lines.map((line) => ({ id: 'said' as const, line })), ...(r.fight ? [{ id: 'fight' as const }] : [])], ok: true };
+  }
+  // Slice 11: trade. Refused here, not only on screen.
+  if (action.type === 'trade' || action.type === 'venture' || action.type === 'bust') {
+    if (block.refusal) return no('Somebody is waiting on an answer in the yard.');
+    const r = action.type === 'trade' ? trade(block, action.req) : action.type === 'venture' ? ventureAct(block, action.id, action.act) : bust(block, action.way, action.id ?? null);
+    return r.problem ? no(r.problem) : { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
   }
   // Slice 6: the Line moves at Night, once a region. Refused here, not only on screen.
   if (action.type === 'moveLine') {

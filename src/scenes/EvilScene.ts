@@ -32,6 +32,8 @@ import { fileView } from '../ui/redux/screens/evilFile';
 import { lineModel } from '../core/evilMode/lineScreens';
 import { gymView } from '../ui/redux/screens/evilGym';
 import { gymModel } from '../core/evilMode/gymScreens';
+import { newTrade, tradeModel, type TradeSel } from '../core/evilMode/tradeScreens';
+import { tradeView } from '../ui/redux/screens/evilTrade';
 import { lineView } from '../ui/redux/screens/evilLine';
 import { LINE_IDS } from '../core/evilMode/schema';
 import { crossers } from '../core/evilMode/people';
@@ -65,6 +67,8 @@ export class EvilScene extends Phaser.Scene {
   private lineTimer: Phaser.Time.TimerEvent | null = null;
   /** Slice 8: the Gym page's chosen door, or null when it's shut. */
   private gym: number | null = null;
+  /** Slice 11: the Trade page's tab, row and street/holding, or null when it's shut. */
+  private trade: TradeSel | null = null;
 
   constructor() {
     super('Evil');
@@ -86,6 +90,7 @@ export class EvilScene extends Phaser.Scene {
     this.lineHeldAt = null;
     this.lineTimer = null;
     this.gym = null;
+    this.trade = null;
     const { session } = services();
     if (!session.run) return void this.scene.start('MainMenu');
     session.evilEnsure();
@@ -114,12 +119,14 @@ export class EvilScene extends Phaser.Scene {
           const line = this.line !== null && !ledger && !roster && !file ? lineView(lineModel(block, this.line), this.lineHeldAt === null ? null : Math.min(1, (this.time.now - this.lineHeldAt) / 2000), this.notice) : undefined;
           const gm = this.gym !== null && !ledger && !roster && !file && !line ? gymModel(block, this.gym) : null;
           const gym = gm ? gymView(gm, this.notice) : undefined;
+          const tm = this.trade !== null && !ledger && !roster && !file && !line && !gym ? tradeModel(block, this.trade) : null;
+          const trade = tm ? tradeView(tm, this.notice) : undefined;
           if (block.fight) frame.button = 'Fight';
           // An order across a line is answered in the yard before anything else moves (Part 7 section 11.1).
           const yard = refusalModel(block);
           const over = yard ? refusalView(yard, this.refuseSel) : rm?.office ? officeView(rm.office) : '';
           const look = `<div style="--team-a:${block.team.look.a};--team-b:${block.team.look.b}">`;
-          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), ...(line ? { line } : {}), ...(gym ? { gym } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
+          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), ...(line ? { line } : {}), ...(gym ? { gym } : {}), ...(trade ? { trade } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
         }
         if (block) return frameView(c, frameModel(block, archetype.name), this.notice);
         return foundingView(c, foundingModel(this.draft, { bossName: archetype.name, bossFile, starter: species?.name ?? '—', starterFile, oldLook, length: services().session.settings.expansion.evilRunLength }));
@@ -162,6 +169,11 @@ export class EvilScene extends Phaser.Scene {
         gym: () => this.toggleGym(),
         gdoor: (i) => { if (this.gym !== null) { this.gym = Number(i); this.view?.refresh(); } },
         gdo: () => this.gymDo(),
+        trade: () => this.toggleTrade(),
+        ttab: (i) => { if (this.trade) { this.trade = newTrade(Number(i)); this.notice = null; } this.view?.refresh(); },
+        trow: (i) => { if (this.trade) this.trade = { ...this.trade, row: Number(i), pick: 0 }; this.view?.refresh(); },
+        tpick: () => { if (this.trade) this.trade = { ...this.trade, pick: this.trade.pick + 1 }; this.view?.refresh(); },
+        tbtn: (i) => this.tradeDo(Number(i)),
         lookPrev: (id) => { this.draft = turnLook(this.draft, id as LookRow, -1); this.view?.refresh(); },
         lookNext: (id) => { this.draft = turnLook(this.draft, id as LookRow, 1); this.view?.refresh(); },
         stay: (id) => this.evil({ type: 'goOn', stay: id || null }),
@@ -318,6 +330,7 @@ export class EvilScene extends Phaser.Scene {
     if (this.file !== null) return this.fileKey(a);
     if (this.line !== null) return this.lineKey(a);
     if (this.gym !== null) return this.gymKey(a);
+    if (this.trade !== null) return this.tradeKey(a);
     const block = this.block();
     if (!block?.district) return a === 'confirm' ? this.advance() : a === 'back' ? this.leave() : undefined;
     const d = this.disp;
@@ -480,6 +493,13 @@ export class EvilScene extends Phaser.Scene {
       if (type === 'up') return this.cancelLineHold();
       return;
     }
+    if (e.code === 'KeyT' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleTrade();
+    // Slice 11: the Trade page's letter keys (P the street or holding; V waive, E end, M make honest, B the back room).
+    if (this.trade && type === 'down' && !e.repeat && !this.card) {
+      if (e.code === 'KeyP') { this.trade = { ...this.trade, pick: this.trade.pick + 1 }; return void this.view?.refresh(); }
+      const by: Record<string, string> = { KeyV: 'Waive', KeyE: 'End', KeyM: 'Make it honest', KeyB: 'back room' };
+      if (by[e.code]) return this.tradeDo(-1, by[e.code]);
+    }
     if (e.code === 'KeyY' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleGym();
     if (e.code === 'KeyL' && type === 'down' && !e.repeat && !this.card && this.block()?.district) return this.toggleLedger();
     if (e.code === 'KeyR' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleRoster();
@@ -629,6 +649,49 @@ export class EvilScene extends Phaser.Scene {
     this.roster = null;
     this.file = null;
     this.cancelLineHold();
+    this.view?.refresh();
+  }
+
+  // ---- Slice 11: the Trade page ----
+
+  private toggleTrade(): void {
+    if (this.card) return;
+    const block = this.block();
+    if (this.trade === null && (!block || !tradeModel(block, newTrade()))) {
+      this.notice = 'There is no trade here yet.';
+      return void this.view?.refresh();
+    }
+    this.trade = this.trade === null ? newTrade() : null;
+    this.ledger = null;
+    this.roster = null;
+    this.file = null;
+    this.line = null;
+    this.gym = null;
+    this.notice = null;
+    this.cancelLineHold();
+    this.view?.refresh();
+  }
+
+  private tradeKey(a: InputAction): void {
+    const t = this.trade!;
+    if (a === 'back') { this.trade = null; this.notice = null; return void this.view?.refresh(); }
+    if (a === 'left' || a === 'right') { this.trade = newTrade((t.tab + (a === 'left' ? 3 : 1)) % 4); this.notice = null; return void this.view?.refresh(); }
+    if (a === 'up' || a === 'down') { this.trade = { ...t, row: Math.max(0, t.row + (a === 'up' ? -1 : 1)), pick: 0 }; return void this.view?.refresh(); }
+    if (a === 'confirm') this.tradeDo(0);
+  }
+
+  /** A button under the Card (by index, or by a word in its label for the letter keys). The step refuses anything the page wouldn't allow. */
+  private tradeDo(i: number, label?: string): void {
+    const block = this.block();
+    const m = block && this.trade ? tradeModel(block, this.trade) : null;
+    const b = m ? (label ? m.buttons.find((x) => x.label.includes(label)) : m.buttons[i]) : undefined;
+    if (!b) return;
+    const cues = services().session.evilStep(b.act);
+    const refused = cues.find((c) => c.id === 'refused') as { reason?: string } | undefined;
+    const said = cues.filter((c) => c.id === 'said').map((c) => (c as { line: string }).line);
+    this.notice = refused?.reason ?? (said.length ? said.join(' ') : null);
+    // A new thing running: show it on the Running tab.
+    if (!refused && b.act.type === 'trade') this.trade = newTrade(3);
     this.view?.refresh();
   }
 

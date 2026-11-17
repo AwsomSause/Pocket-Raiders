@@ -18,7 +18,7 @@ export const BeatSchema = z.enum(BEATS);
 export type Beat = z.infer<typeof BeatSchema>;
 
 /** The five gameplay streams (design Part 30 section 5). Slice 1 draws from none; counts start at 0. */
-export const STREAMS = ['evil-dispatch', 'evil-people', 'evil-mole', 'evil-gym', 'evil-neighbour', 'evil-line', 'evil-drift'] as const;
+export const STREAMS = ['evil-dispatch', 'evil-people', 'evil-mole', 'evil-gym', 'evil-neighbour', 'evil-line', 'evil-drift', 'evil-economy'] as const;
 
 const StartSchema = z.object({ funds: z.number().int().min(0), heat: z.number().int().min(0).max(10), loyalty: z.number().int().min(1).max(10), regard: z.number().int().min(0).max(10), dread: z.number().int().min(0).max(10), roster: z.number().int().min(0) });
 
@@ -324,7 +324,7 @@ export const StoredCardSchema = z.object({
 }).strict();
 export type StoredCard = z.infer<typeof StoredCardSchema>;
 
-export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym'] as const;
+export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym', 'econ'] as const;
 
 /** One line of the Log (Part 30 section 7.1, the kinds slice 3 writes). Never edited, never removed. */
 export const LogEntrySchema = z.object({
@@ -565,9 +565,110 @@ export const RegionStateSchema = z.object({
 }).strict();
 export type RegionState = z.infer<typeof RegionStateSchema>;
 
+// ---- Slice 11: the economy (design Part 12 sections 1 and 2, Part 13 sections 1 and 2, Part 5 sections 2.2 to 2.4) ----
+
+export const ECON_KINDS = ['racket', 'front', 'work'] as const;
+export const EconKindSchema = z.enum(ECON_KINDS);
+export type EconKind = z.infer<typeof EconKindSchema>;
+const ES = z.string().min(1);
+const EconTextSchema = z.object({ takes: ES, from: ES, gives: ES, moves: ES, holds: ES, hero: ES, written: ES, other: ES }).strict();
+export const EconCardDefSchema = z.object({
+  id: ES, kind: EconKindSchema, name: ES,
+  /** Districts (n) the Card is offered in; empty: every district after the Arrival. */
+  where: z.array(z.number().int().min(0)),
+  minLine: LineIdSchema, creeds: z.array(ES).optional(),
+  cost: z.number().int().min(0), daily: z.number().int(), days: z.number().int().min(0), needs: TalentSchema.nullable(),
+  /** Tags the Roster's lines read (people.json lines): whoever's line it crosses won't go. */
+  tags: z.array(ES),
+  /** The somebody field 3 names (Part 31: every Card names somebody). */
+  names: ES,
+  moves: z.object({ heat: z.number().int(), dread: z.number().int(), regard: z.number().int(), loyalty: z.number().int() }).strict(),
+  backRoom: z.boolean().optional(), running: z.boolean().optional(),
+  /** What moves every seventh day it runs (Part 12 section 2.3: "Regard −1 a week"). */
+  weekly: z.object({ dread: z.number().int().optional(), regard: z.number().int().optional() }).strict().optional(),
+  text: EconTextSchema,
+  honest: z.object({ name: ES, cost: z.number().int().min(0), daily: z.number().int().min(0), says: ES, written: ES }).strict().optional(),
+  status: EvilStatusSchema,
+}).strict();
+export type EconCardDef = z.infer<typeof EconCardDefSchema>;
+const EI = z.number().int();
+export const EconomyFileSchema = z.object({
+  note: z.string(),
+  /** The slice's undo: false and holdings pay flat takings, no Card is offered, and a short Evening works as before. */
+  on: z.boolean(),
+  rules: z.object({
+    racket: z.object({ patience: z.object({ easy: EI.min(1), wary: EI.min(1), sullen: EI.min(1) }).strict(), warnAt: EI.min(0), books: EI.min(0), profit: EI.min(0), startHeat: EI, startDread: EI, shutHeat: EI, waive: EI.min(0), leanOnStreet: EI, heroNear: EI, heroSteps: EI.min(0), dreadFreeze: EI.min(0).max(10), breakOneIn: EI.min(1), endEarlyLeft: EI.min(0), honestOff: EI.min(0).max(100), powerPatience: EI.min(0), wonderLoyalty: EI }).strict(),
+    front: z.object({ runWellLoyalty: EI.min(0).max(10), regardEach: EI.min(0), regardMost: EI.min(0), straightNeeds: EI.min(1) }).strict(),
+    work: z.object({ firstHeat: EI, loyalty: EI, kindFlaws: z.array(FlawSchema), kindTalents: z.array(TalentSchema), given: EI.min(0), feedWeek: EI.min(1) }).strict(),
+    bankrupt: z.object({ lowestFirst: EI, everyone: EI, lastJobFrom: EI.min(1), sellFrom: EI.min(1), whipFrom: EI.min(1), whipRegard: EI.min(0).max(10), whipLoyalty: EI, sellBack: EI.min(0).max(100) }).strict(),
+  }).strict(),
+  words: z.record(z.string(), z.union([ES, z.array(ES)])),
+  written: z.record(z.string(), ES),
+  cards: z.array(EconCardDefSchema).min(1),
+  bust: z.object({
+    lastJob: z.object({ name: ES, gives: EI.min(0), heat: EI, dread: EI, taken: EI.min(0), minLine: LineIdSchema, tags: z.array(ES), names: ES, text: EconTextSchema }).strict(),
+    sell: z.object({ name: ES, text: EconTextSchema }).strict(),
+    whip: z.object({ name: ES, names: ES, text: EconTextSchema }).strict(),
+  }).strict(),
+});
+
+/** Something the team runs: a racket on a street, a Front in a holding, or a Work being built or running (design Part 30 section 3). */
+export const VentureSchema = z.object({
+  id: z.string().min(1),
+  cardId: z.string().min(1),
+  kind: EconKindSchema,
+  region: z.number().int().min(0),
+  district: z.number().int().min(0),
+  /** A racket's street (index); null for a Front or a Work. */
+  street: z.number().int().min(0).nullable(),
+  /** A Front's holding. */
+  holdingId: z.string().min(1).nullable(),
+  /** Who runs a Front (they do nothing else). */
+  person: z.string().min(1).nullable(),
+  since: z.number().int().min(1),
+  /** A racket's days till the street's had enough; null when it doesn't run down (made honest, or the Tithe). */
+  patience: z.number().int().min(0).nullable(),
+  waivedOn: z.number().int().min(0).nullable(),
+  /** A racket made honest: it pays its honest figure and never turns. */
+  honest: z.boolean(),
+  /** A Books led the racket's squad: takings +25% (Part 12 section 2.1). */
+  books: z.boolean(),
+  /** A Front's back room: open, shut, or null (the Day-Care has none). */
+  backRoom: z.boolean().nullable(),
+  /** Districts ("region:n") a Front's back room was open in at any time. */
+  openIn: z.array(z.string()),
+  /** Districts ("region:n") a Front was in profit with the back room shut throughout (Going Straight, Part 13 section 1.3). */
+  straight: z.array(z.string()),
+  /** A Work: the day its last building day ends (Evening), and whether it's done. */
+  doneOn: z.number().int().min(0).nullable(),
+  done: z.boolean(),
+}).strict();
+export type Venture = z.infer<typeof VentureSchema>;
+
+/** A confirmed trade Card, kept with its day (like a job's Card). */
+export const EconCardSchema = z.object({ id: z.string().min(1), day: z.number().int().min(1), cardId: z.string().min(1), fields: z.array(CardFieldSchema).length(13) }).strict();
+
+export const EconomyStateSchema = z.object({
+  running: z.array(VentureSchema),
+  /** Who's out on trade today (a squad's day). */
+  busy: z.object({ day: z.number().int().min(0), ids: z.array(z.string()) }).strict(),
+  /** Heat a racket's start puts toward today's loudest. */
+  loud: z.object({ day: z.number().int().min(0), heat: z.number().int() }).strict().nullable(),
+  /** Evenings in a row that ended short (bankrupt: 1 Short, 2 Broke, 3+ Bust). */
+  broke: z.number().int().min(0),
+  /** One Last Job's been done in this bankruptcy; the regions the Whip-Round's been held in. */
+  lastJob: z.boolean(),
+  whip: z.array(z.number().int().min(0)),
+  /** Districts ("region:n") a Work's been finished in (the first one's Heat −2). */
+  worksIn: z.array(z.string()),
+  cards: z.array(EconCardSchema),
+}).strict();
+export type EconomyState = z.infer<typeof EconomyStateSchema>;
+export const emptyEconomy = (): EconomyState => ({ running: [], busy: { day: 0, ids: [] }, loud: null, broke: 0, lastJob: false, whip: [], worksIn: [], cards: [] });
+
 const BlockV7Schema = z.object({
   /** The block's own version, for its own migrations. 7: slice 8 added the Gyms. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a waiting fight, who's posted, and the day's in-person job. 6: slice 6 added proof held and the last move of the Line. */
-  v: z.literal(8),
+  v: z.literal(9),
   from: z.enum(['founding', 'charter', 'turn']),
   /** Copied from Settings at founding, so a setting changed mid-run never changes this run. */
   settings: z.object({ length: RunLengthSchema }),
@@ -608,6 +709,8 @@ const BlockV7Schema = z.object({
   gyms: z.array(GymStateSchema),
   /** Slice 9: the region being played (the Arrival, six districts, the Reckoning), the districts behind, and the tallies. */
   region: RegionStateSchema,
+  /** Slice 11: Rackets, Fronts and Works; the squads out on trade today; bankruptcy's days. */
+  economy: EconomyStateSchema,
 }).strict();
 
 /** A nameless Grunt (slices 2 and 3; a block migrated from v3 keeps its four). */
@@ -628,6 +731,8 @@ const startLoyalty = (creed: unknown): number => (creedsRaw.creeds.find((c) => c
  * v7 -> v8 (slice 8's block): a region. A run founded before slice 9 began in Kanto's District 1 (no Arrival): its stage
  * becomes 2 (District 1 is Stage 2 now), its district keeps its days from day 1, nothing is behind it, and the tally's
  * changes count from the numbers it has now. The Hero's Arrival Badge isn't owed: the Arrival never happened.
+ * v8 -> v9 (slice 9's block): nothing running (no racket, Front or Work), nobody out on trade, not bankrupt, and the
+ * `evil-economy` stream at 0. Funds, takings and everything played stay as they were.
  */
 export function migrateEvilBlock(raw: unknown): unknown {
   if (!raw || typeof raw !== 'object') return raw;
@@ -643,6 +748,7 @@ export function migrateEvilBlock(raw: unknown): unknown {
   if (b.v === 5) b = { ...b, v: 6, proof: [], lineMove: null };
   if (b.v === 6) b = { ...b, v: 7, gyms: [] };
   if (b.v === 7) b = migrateToV8(b);
+  if (b.v === 8) b = { ...b, v: 9, economy: emptyEconomy(), draws: { ...(b.draws as object), 'evil-economy': 0 } };
   return b;
 }
 

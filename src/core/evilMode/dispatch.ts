@@ -8,6 +8,7 @@ import { EVIL_DATA, type EvilData } from './data';
 import { oddsFor, type JobDraft } from './odds';
 import { cardFor, unknownCount } from './card';
 import { appendLog, fill, lineFor, money, takingsAt } from './ledger';
+import { econDistrictEnd, econEvening, econOn, shortLoyalty, tradeProblem } from './economy';
 import type { Crew, EvilModeBlock, Holding, Job, LogEntry, Sheet } from './schema';
 import { crossers, districtKey, inRoster, moveLoyalty, peopleText, talentDef, wageOf } from './people';
 import { gymHeatToday, inChair } from './gym';
@@ -34,7 +35,7 @@ export function crewProblem(block: EvilModeBlock, id: string, ignoreHolding?: st
   if (block.queue.some((j) => j.holdingId !== ignoreHolding && j.squad.includes(id))) return `${c.name} is already going somewhere today.`;
   if (block.posted.some((p) => p.id === id)) return `${c.name} is posted somewhere today.`;
   if (inChair(block, id)) return `${c.name} holds the Gym's chair.`;
-  return null;
+  return tradeProblem(block, id);
 }
 
 /** Why a job can't be queued, in plain words; null when it can. Checked by `step`, not only on screen. */
@@ -270,18 +271,33 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
   let district = settleTown({ ...d0, holdings, regardStreets }, day, data);
   // Slice 9: the districts behind pay too (full with an Officer there, half without; Part 2 section 4.1).
   const past = pastTakings(block, data);
-  const income = district.holdings.reduce((n, h) => n + takingsAt(h, block.rates, data), 0) + past.amount;
+  // Slice 11: Rackets and Fronts pay, Works finish, and upkeep's owed (Part 12, Part 13, Part 5 section 2.2).
+  const ec = econEvening({ ...block, team, crew, district }, data);
+  ({ team, crew, district } = { team: ec.block.team, crew: ec.block.crew, district: ec.block.district! });
+  let econ = ec.block.economy;
+  const holdingsIncome = district.holdings.reduce((n, h) => n + takingsAt(h, block.rates, data), 0) + past.amount;
+  const income = holdingsIncome + ec.income;
   const paid = crew.filter((c) => c.where === 'in');
   const wages = team.creed === 'belonging' ? Math.max(0, Math.floor(income / 2)) : paid.reduce((n, c) => n + wageOf({ ...block, team }, c, income, data), 0);
   const before = team.funds;
-  team = { ...team, funds: Math.max(0, team.funds + income - wages) };
-  evening.push(`Takings ₽${income.toLocaleString('en-GB')}.`, ...past.lines);
+  const out$ = wages + ec.upkeep;
+  team = { ...team, funds: Math.max(0, team.funds + income - out$) };
+  evening.push(`Takings ₽${holdingsIncome.toLocaleString('en-GB')}.`, ...past.lines, ...ec.lines);
   evening.push(team.creed === 'belonging' ? `Shares ₽${wages.toLocaleString('en-GB')}: half of today, split.` : `Wages ₽${wages.toLocaleString('en-GB')} for ${paid.length}.`);
-  if (before + income - wages < 0) {
-    evening.push(`Short ₽${(wages - before - income).toLocaleString('en-GB')}: they were paid what there was.`);
-    // Not paid: −1 each, a day (Part 5 section 5.2). Belonging's shares never fall short.
-    crew = crew.map((c) => (c.where === 'in' ? { ...moveLoyalty(c, P.loyalty.unpaid, data), unpaid: c.unpaid + 1 } : c));
-  }
+  if (before + income - out$ < 0) {
+    evening.push(`Short ₽${(out$ - before - income).toLocaleString('en-GB')}: they were paid what there was.`);
+    if (econOn(data)) {
+      // Bankrupt (Part 5 section 2.4): Short, Broke, Bust, a day each. None ends the run.
+      econ = { ...econ, broke: econ.broke + 1 };
+      const s = shortLoyalty({ ...block, team }, crew, Math.min(3, econ.broke), data);
+      crew = s.crew.map((c) => (c.where === 'in' ? { ...c, unpaid: c.unpaid + 1 } : c));
+      evening.push(s.line);
+    } else {
+      // Not paid: −1 each, a day (Part 5 section 5.2). Belonging's shares never fall short.
+      crew = crew.map((c) => (c.where === 'in' ? { ...moveLoyalty(c, P.loyalty.unpaid, data), unpaid: c.unpaid + 1 } : c));
+    }
+  } else if (econ.broke > 0) econ = { ...econ, broke: 0, lastJob: false };
+  if (ec.loud !== null) loudest = Math.max(loudest ?? -99, ec.loud);
   // Slice 8: what the Boss did at the Gym today counts toward the loudest (Part 8a section 12).
   const gymHeat = gymHeatToday(block);
   if (gymHeat !== null) loudest = Math.max(loudest ?? -99, gymHeat);
@@ -298,7 +314,8 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
       results.push({ kind: 'leave', who: [c.id], text: `Day ${day}. ${c.name} ${data.line.leave.arrested}` });
     }
   }
-  let out: EvilModeBlock = { ...block, team, crew, district, queue: [], sheets, evening, proof, draws: { ...block.draws, 'evil-dispatch': draws, 'evil-line': lineDraws }, applied: [...block.applied, key] };
+  let out: EvilModeBlock = { ...block, team, crew, district, queue: [], sheets, evening, proof, draws: { ...block.draws, 'evil-dispatch': draws, 'evil-line': lineDraws, 'evil-economy': ec.block.draws['evil-economy'] ?? 0 }, applied: [...block.applied, key], economy: econ };
+  for (const e of ec.block.log.slice(block.log.length)) out = appendLog(out, { kind: e.kind, who: e.who, text: e.text, ...(e.given ? { given: e.given } : {}) });
   for (const e of results) out = appendLog(out, e);
   // Wages paid: one to Given a head (Part 23 section 8.2), only when they were paid in full.
   if (wages > 0) {
@@ -328,6 +345,10 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
     evening.push(`Heat ${data.line.heat.districtEnd}: the district's done.${loud ? '' : ` Dread ${data.line.dread.fade}: nothing loud in it.`}`);
     // Paid on time a whole district: +1 each (Part 5 section 5.2). The count starts again with the next district.
     out = { ...out, crew: out.crew.map((c) => (c.where !== 'in' ? c : { ...(c.unpaid === 0 ? moveLoyalty(c, P.loyalty.paidDistrict, data) : c), unpaid: 0 })) };
+    // Slice 11: the district's rackets end with it; Fronts run well add Regard; Going Straight counts.
+    const de = econDistrictEnd(out, data);
+    out = de.block;
+    evening.push(...de.lines);
   }
   return { ...out, district, evening };
 }
