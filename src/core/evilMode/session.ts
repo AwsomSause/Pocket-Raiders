@@ -3,6 +3,7 @@
 
 import type { RunState } from '../state';
 import { step, type EvilAction, type EvilCue } from './day';
+import { layDistrict } from './board';
 import { foundTeam, type FoundingChoice } from './start';
 import type { EvilModeBlock, RunLength } from './schema';
 
@@ -16,16 +17,25 @@ export const evilBlock = (run: RunState | null | undefined): EvilModeBlock | und
 export function foundInRun(run: RunState, choice: FoundingChoice, length: RunLength): { run: RunState; problem: string | null } {
   if (!isEvilRun(run)) return { run, problem: 'This run is not an Evil Mode run.' };
   if (run.expansion?.evilMode) return { run, problem: null };
-  const out = foundTeam(choice, { boss: run.archetypeId, length });
+  const out = foundTeam(choice, { boss: run.archetypeId, length, seed: run.seed });
   if (!out.ok) return { run, problem: out.problem };
   return { run: { ...run, expansion: { ...(run.expansion ?? {}), evilMode: out.block } }, problem: null };
 }
 
-/** One action on the day. Without a team, nothing happens. */
-export function stepInRun(run: RunState, action: EvilAction): { run: RunState; cues: EvilCue[]; ok: boolean } {
+/** A block migrated from v1 has no district yet: lay it from the run's seed (the same seed lays the same district). */
+export function ensureDistrict(run: RunState): RunState {
   const block = run.expansion?.evilMode;
-  if (!block) return { run, cues: [], ok: false };
+  if (!block || block.district) return run;
+  const district = layDistrict(run.seed, block.here.region, block.here.stage, block.team);
+  return { ...run, expansion: { ...(run.expansion ?? {}), evilMode: { ...block, district } } };
+}
+
+/** One action on the day. Without a team, nothing happens. */
+export function stepInRun(run0: RunState, action: EvilAction): { run: RunState; cues: EvilCue[]; ok: boolean } {
+  const run = ensureDistrict(run0);
+  const block = run.expansion?.evilMode;
+  if (!block) return { run: run0, cues: [], ok: false };
   const r = step(block, action);
-  if (!r.ok) return { run, cues: r.cues, ok: false };
+  if (!r.ok) return { run: run0, cues: r.cues, ok: false };
   return { run: { ...run, expansion: { ...(run.expansion ?? {}), evilMode: r.block } }, cues: r.cues, ok: true };
 }

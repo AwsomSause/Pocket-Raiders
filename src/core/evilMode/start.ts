@@ -3,7 +3,8 @@
 // team is cream and green, has no Patron, and starts in Kanto.
 
 import { EVIL_DATA, type EvilData } from './data';
-import { LINE_IDS, STREAMS, type EvilModeBlock, EvilModeBlockSchema, type LineId, type RunLength } from './schema';
+import { layDistrict } from './board';
+import { firstCrew, LINE_IDS, STREAMS, type EvilModeBlock, EvilModeBlockSchema, type LineId, type RunLength } from './schema';
 
 export interface FoundingChoice {
   name: string;
@@ -60,14 +61,16 @@ export function foundingProblem(choice: FoundingChoice, data: EvilData = EVIL_DA
  * Founding to the first morning (design Part 3 section 11): Funds, Heat, Regard and Dread by Creed, then the Line's
  * changes (Whatever it takes: Heat +1; Clean hands: Regard +1). Day 1, Morning, Kanto District 1.
  */
-export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: RunLength }, data: EvilData = EVIL_DATA): { ok: true; block: EvilModeBlock } | { ok: false; problem: string } {
+export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: RunLength; seed?: string }, data: EvilData = EVIL_DATA): { ok: true; block: EvilModeBlock } | { ok: false; problem: string } {
   const problem = foundingProblem(choice, data);
   if (problem) return { ok: false, problem };
   const creed = data.creeds.find((c) => c.id === choice.creed)!;
   const line = data.founding.lines.find((l) => l.id === choice.line)!;
   const cap = (n: number): number => Math.min(10, n);
+  const regard = cap(creed.start.regard + line.regard);
+  const dread = cap(creed.start.dread);
   const block: EvilModeBlock = {
-    v: 1,
+    v: 2,
     from: 'founding',
     settings: { length: opts.length },
     team: {
@@ -82,13 +85,18 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
       patron: null,
       funds: creed.start.funds,
       heat: cap(creed.start.heat + line.heat),
-      regard: cap(creed.start.regard + line.regard),
-      dread: cap(creed.start.dread),
+      regard,
+      dread,
       corruption: 0,
     },
     here: { region: 0, stage: 1, day: 1, beat: 'morning' },
     draws: Object.fromEntries(STREAMS.map((s) => [s, 0])) as EvilModeBlock['draws'],
     applied: [],
+    district: layDistrict(opts.seed ?? opts.boss, 0, 1, { regard, dread }, data),
+    crew: firstCrew(data.district.rules.crew),
+    queue: [],
+    sheets: [],
+    evening: [],
   };
   return { ok: true, block: EvilModeBlockSchema.parse(block) };
 }
