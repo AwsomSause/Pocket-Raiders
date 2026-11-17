@@ -4602,7 +4602,8 @@ export class BattleScene extends Phaser.Scene {
     if (end.outcome === 'win') void this.trainerIn().then((a) => a?.play('win'));
     if (end.outcome === 'win' && this.playerSprite) {
       if (services().session.settings.victoryPoses) {
-        const sp = getSpecies(content, this.activeMon().speciesId);
+        // The battle is already cleared from the run here, so activeMon() would read null: use the Pokémon the screen shows.
+        const sp = getSpecies(content, (this.run.party.find((m) => m.uid === this.shown.player.uid) ?? this.shown.player).speciesId);
         void victoryPose(this, this.playerSprite, victoryPoseFor(sp.types, sp.weight), this.motion);
       } else void hop(this, this.playerSprite, this.motion);
     }
