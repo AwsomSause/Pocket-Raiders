@@ -1,5 +1,5 @@
 import { DEFAULT_SETTINGS } from '../../src/save/saveManager';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { finalizeRun } from '../../src/core/profile';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { GameSession } from '../../src/game/GameSession';
@@ -156,15 +156,22 @@ describe('game session save/load', () => {
   });
 
   it('continue resumes exactly where the player left off', () => {
-    const storage = new MemoryStorageProvider();
-    const a = new GameSession(content, storage);
-    a.newRun('blue', 'continue-seed');
-    a.chooseStarter(1);
-    enterBattle(a);
-    a.takeTurn({ kind: 'move', index: 0 });
-    const b = new GameSession(content, storage);
-    expect(b.canContinue).toBe(true);
-    expect(b.continueRun()).toEqual(a.run);
+    // A fixed day: live dated weeks (Homeland Week) change the region order, so the first node can differ by calendar date.
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date('2026-11-10T12:00:00Z'));
+    try {
+      const storage = new MemoryStorageProvider();
+      const a = new GameSession(content, storage);
+      a.newRun('blue', 'continue-seed');
+      a.chooseStarter(1);
+      enterBattle(a);
+      a.takeTurn({ kind: 'move', index: 0 });
+      const b = new GameSession(content, storage);
+      expect(b.canContinue).toBe(true);
+      expect(b.continueRun()).toEqual(a.run);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('reloading after choosing a reward does not grant it again', () => {
