@@ -26,6 +26,8 @@ import type { MinigameDef } from '../core/minigame/schema';
 import type { RunState } from '../core/state';
 import { jigsawView } from '../ui/redux/screens/jigsaw';
 import { JIGSAW_ID, type JigsawState } from '../core/greenneedle/jigsaw';
+import { spiritMarketView } from '../ui/redux/screens/spiritMarket';
+import { MARKET_ID, STALLS, STALL_NAME, STALL_TRADE, stallShut, type MarketState } from '../core/greenneedle/spiritMarket';
 
 /** gn.41: the fossil in the slab, by the museum's collection (the first the packs have a sprite for is used). */
 const JIGSAW_FOSSILS = ['rampardos', 'aerodactyl', 'tyrantrum'] as const;
@@ -112,9 +114,17 @@ export class MinigameScene extends Phaser.Scene {
         const inside = parkEventSide(after);
         if (inside) return void this.scene.start('Event', { sideId: inside });
         playSfx(this, MEDAL_SFX[after.minigame?.outcome?.medal ?? 'pending'] ?? 'se.exp', 0.7);
-        this.scene.restart({ focus: i, slow: this.slow, paused: this.paused });
+        // (The Spirit Market's answers change with every press: the cursor starts again at the first one.)
+        this.scene.restart({ focus: view.back !== undefined || run.minigame!.id === MARKET_ID ? undefined : i, slow: this.slow, paused: this.paused });
       },
-      onBack: () => this.leave(),
+      onBack: () => {
+        // A game that names a "back" choice (the Spirit Market) has Esc press it; in its last dark there is only the gate's question.
+        const at = outcome || view.back === undefined ? -1 : view.cells.findIndex((c) => c.id === view.back && !c.disabled);
+        if (at >= 0) {
+          this.menu.focus(at, false);
+          this.menu.confirm();
+        } else if (outcome || run.minigame!.id !== MARKET_ID) this.leave();
+      },
     });
     if (data?.focus !== undefined) this.menu.index = Math.min(data.focus, options.length - 1);
 
@@ -137,6 +147,27 @@ export class MinigameScene extends Phaser.Scene {
       if (def.accessibilityOptions.noTimerOption) this.scene.restart({ focus: this.menu.index, slow: this.slow, paused: !this.paused });
     });
     onInputAction(this, (a) => this.menu.handle(a));
+    // gn.new.11, the Spirit Market: its own screen (the lantern counter, the four stalls, the gate), the same in both UI styles.
+    if (run.minigame.id === MARKET_ID) {
+      const s = run.minigame.state as unknown as MarketState;
+      const file = (id: string): string | null => monFile(this, id, 'front');
+      const lanes = s.at === 'lanes';
+      const stall = mountRedux(this, {
+        render: (c) =>
+          spiritMarketView(c, {
+            title: def.name, lanterns: s.lanterns, max: s.max, bell: s.bell, at: s.at,
+            stalls: STALLS.map((id) => ({ id, name: STALL_NAME[id], trade: STALL_TRADE[id], shut: stallShut(s, id), used: s.used[id], file: file(id) })),
+            gate: file('misdreavus'), prompt: view0.prompt, cols, index: this.menu.index,
+            cells: outcome ? [] : view0.cells.map((x) => ({ label: x.label, detail: x.detail ?? '', off: Boolean(x.disabled) })),
+            outcome: outcome ? { lines: outcome.lines, log: s.log.filter((l) => !outcome.lines.includes(l)) } : null,
+            hints: outcome ? [['Enter', 'done']] : lanes ? [['Arrows', 'walk'], ['Enter', 'go to the stall'], ['Esc', 'the gate']] : s.at === 'dark' ? [['Arrows', 'choose'], ['Enter', 'decide']] : [['Arrows', 'choose'], ['Enter', 'answer'], ['Esc', 'back']],
+          }),
+        acts: { pick: (i) => { if (options[Number(i)]?.disabled) return; this.menu.focus(Number(i), false); this.menu.confirm(); } },
+        overs: { over: (i) => { if (!options[Number(i)]?.disabled) this.menu.focus(Number(i), false); } },
+      });
+      this.menu.onFocus = () => stall.refresh();
+      return;
+    }
     // gn.41, the Museum's jigsaw: its own screen (the sandbox and the tray), the same in both UI styles; the menu above keeps the input.
     if (run.minigame.id === JIGSAW_ID) {
       const s = run.minigame.state as unknown as JigsawState;

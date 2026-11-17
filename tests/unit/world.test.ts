@@ -402,6 +402,9 @@ describe('landmarks and dungeons', () => {
     // gn.new.14: the cabinet's games are a minigame now. Clearing all three opens the last room from code
     // (core/greenneedle/arcadeEnd.ts); the six rooms of the earlier version stay only for runs saved inside one.
     for (const id of ['clear', 'maze', 'stacker', 'shooter', 'maze-lost', 'stacker-lost', 'shooter-lost']) opened.add(`gn-new-14-${id}`);
+    // gn.new.11: the Spirit Market is a minigame now; the curtain's room opens from code when it closes
+    // (core/greenneedle/spiritMarketEnd.ts). The lane and stall rooms of the earlier version stay only for runs saved inside one.
+    for (const id of ['curtain', 'lane-a', 'lane-b', 'banette', 'sableye', 'mismagius', 'dusclops', 'dark']) opened.add(`gn-new-11-${id}`);
     for (const id of ['gn-62-hub', 'gn-62-warden', 'gn-62-warden-bare', 'gn-62-caught', 'gn-62-wing', 'gn-62-cell-room']) opened.add(id);
     // Damian's "Go again." (gn.05) opens his next meeting, an ordinary drawn event, at once; anything else opened must be a room.
     const drawnToo = new Set(['gn-05-barn', 'gn-05-hall', 'gn-05-gym']);

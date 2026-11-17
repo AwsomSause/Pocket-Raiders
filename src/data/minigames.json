@@ -3413,6 +3413,62 @@
         "noTimerOption": false
       },
       "eventOnly": true
+    },
+    {
+      "id": "gn-spirit-market",
+      "name": "The Spirit Market",
+      "category": "resource",
+      "blurb": "Stalls with no prices, at the end of the Night Parade. Six lanterns.",
+      "instructions": "Six actions before the lanterns burn down. A trade at a stall is one action; looking is free. The Misdreavus rings its bell at the fifth. Stay past the sixth and you wake at the next step with one item swapped for another of the same tier.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "night",
+          "label": "Six lanterns",
+          "params": {
+            "lanterns": 6
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 1,
+      "scoringRules": "Nothing is scored. Each trade spends one of six lanterns.",
+      "medals": {
+        "bronze": 0.05,
+        "silver": 0.75,
+        "gold": 1
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        },
+        "gold": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        }
+      },
+      "failureOutcome": "You traded nothing.",
+      "replayRules": "Once a region, when the Night Parade passes.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 0
+      },
+      "accessibilityOptions": {
+        "slowFactor": 1,
+        "noTimerOption": false
+      },
+      "eventOnly": true
     }
   ]
 }
