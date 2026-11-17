@@ -22,11 +22,13 @@ describe('gn.new.32 The Storm Chaser', () => {
     expect(flagOf(run, 'raikou-waited')).toBe(1);
     expect(flagOf(run, 'raikou-ball')).toBe(1);
   });
-  it('the third sighting offers Shelter the Pichu, and it counts as patience', () => {
+  it('the third sighting offers Shelter the Pichu; it is its own memory and does not count as waiting', () => {
     expect(scene(gnRun('t32-b'), 'gn-32-pichu').labels).toContain('Shelter the Pichu.');
     const run = sights('t32-b', ['Wait.', 'Wait.', 'Shelter the Pichu.']);
     expect(flagOf(run, 'raikou-pichu')).toBe(1);
-    expect(flagOf(run, 'raikou-calm')).toBe(3);
+    expect(flagOf(run, 'raikou-calm')).toBe(2);
+    // two waits and a shelter is a mixed record: the nod, not the night walk
+    expect(scene(run, 'gn-32-meet-nod').labels).toContain('Look back.');
   });
   it('patient all three times: the night walk gives the Thundermark', () => {
     let run = sights('t32-c', ['Wait.', 'Wait.', 'Wait.']);
@@ -58,13 +60,23 @@ describe('gn.new.32 The Storm Chaser', () => {
     expect(r.run.inventory['thundermark'] ?? 0).toBe(0);
     expect(r.battle).toBe(false);
   });
-  it('a sheltered Pichu comes back as a Pikachu with Lightning Rod', () => {
+  it('a sheltered Pichu is met again as a Pikachu that is not afraid of thunder; it does not join', () => {
     let run = sights('t32-g', ['Wait.', 'Wait.', 'Shelter the Pichu.']);
+    const party = run.party.length;
     open(run, 'gn-32-pikachu');
     run = choose(run, 'gn-32-pikachu', 'Say hello.').run;
-    const offer = run.pending.find((x) => x.kind === 'caught');
-    expect(offer && 'mon' in offer ? offer.mon.speciesId : '').toBe('pikachu');
-    expect(offer && 'mon' in offer ? offer.mon.fixedAbility : '').toBe('lightning-rod');
+    expect(flagOf(run, 'raikou-pika-met')).toBe(1);
+    expect(run.pending.some((x) => x.kind === 'caught')).toBe(false);
+    expect(run.party.length).toBe(party);
+  });
+  it('the Thundermark is a team charm, not a held item', () => {
+    let run = sights('t32-h', ['Wait.', 'Wait.', 'Wait.']);
+    open(run, 'gn-32-meet-night');
+    run = choose(run, 'gn-32-meet-night', 'Stay still.').run;
+    const item = content.catalog.get('thundermark')!;
+    expect(item.stacksOn).toBe('team');
+    expect(run.passives?.['thundermark'] ?? 0).toBe(1);
+    expect(run.inventory['thundermark'] ?? 0).toBe(0);
   });
   it('is built and placed', () => {
     for (const id of [...IDS, 'gn-32-meet-fight', 'gn-32-meet-night', 'gn-32-meet-nod', 'gn-32-pikachu']) expect(content.events.has(id)).toBe(true);

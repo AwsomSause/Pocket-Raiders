@@ -247,7 +247,13 @@ export function ltDawn(content: Content, run: RunState): string {
   set(run, 'lt-bonus', bonus);
   // "Whatever was on the player's plate is in the bag": the dishes of the two neighbours (filled places only).
   const plate = [f(run, 'lt-n1'), f(run, 'lt-n2')].map((i) => seats[i - 1]).filter((x): x is Seat => !!x?.guest && !x.empty);
-  for (const p of [...new Set(plate)]) addItem(run.inventory, giftOf(content, p.guest!), 1);
+  const packed: string[] = [];
+  for (const p of [...new Set(plate)]) {
+    const id = giftOf(content, p.guest!);
+    addItem(run.inventory, id, 1);
+    packed.push(content.items.get(id)?.name ?? content.catalog.get(id)?.name ?? id);
+  }
+  const bag = packed.length ? ` In your bag, from your plate: ${packed.join(', ')}.` : '';
   if (bonus > 0) {
     for (const mon of run.party) {
       mon.eventBoosts = { ...mon.eventBoosts, ...Object.fromEntries(STATS.map((s) => [s, (mon.eventBoosts?.[s] ?? 0) + bonus])) };
@@ -258,7 +264,7 @@ export function ltDawn(content: Content, run: RunState): string {
   const cap = filled.length > LT_CAP ? ` (${filled.length} places, held at the cap of ${LT_CAP}%)` : '';
   return bonus === 0
     ? 'No place was laid with a name card. The party stands alone at dawn: +0%.'
-    : `Every place laid is behind you: +${bonus}% to every stat, for the whole party, in the last battle${cap}. With you: ${names}.`;
+    : `Every place laid is behind you: +${bonus}% to every stat, for the whole party, in the last battle${cap}. With you: ${names}.${bag}`;
 }
 
 /** Is this the run's last stage (the last stage of the last regular region)? */

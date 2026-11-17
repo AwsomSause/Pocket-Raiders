@@ -26,9 +26,19 @@ describe('gn.new.34 The Warning', () => {
       expect(opened(run, `gn-new-34-b${t}`)).toBe(true);
       run = choose(run, `gn-new-34-b${t}`, 'Carry the children.').run;
     }
+    // the count: only the children were carried, so only the bakery was saved
+    expect(opened(run, 'gn-new-34-count')).toBe(true);
+    const count = choose(run, 'gn-new-34-count', 'Count what is standing.');
+    run = count.run;
+    expect(flagOf(run, 'warning-saved')).toBe(1);
+    const told = count.changes.join(' ');
+    expect(told).toContain('saved the bakery');
+    expect(told).toContain('The school is gone.');
+    expect(told).toContain('The houses on the low street are gone.');
     expect(opened(run, 'gn-new-34-end')).toBe(true);
     run = choose(run, 'gn-new-34-end', 'Walk up to the Absol.').run;
     expect(flagOf(run, 'warning-done')).toBe(1);
+    expect(flagOf(run, 'warning-kept')).toBe(1);
     expect(opened(run, 'gn-new-34-join')).toBe(true);
     run = choose(run, 'gn-new-34-join', 'Come with me.').run;
     for (let i = 0; i < 5 && run.pending.length; i++) run = { ...run, pending: [] };
@@ -53,16 +63,25 @@ describe('gn.new.34 The Warning', () => {
   it('driven off: a battle, then three turns, and it does not join', () => {
     let run = gnRun('t-n34-d');
     open(run, 'gn-new-34');
+    const money = run.money;
     run = win(choose(run, 'gn-new-34', 'Drive it off.').run);
+    // "The village pays."
+    expect(flagOf(run, 'absol-paid')).toBe(1);
+    expect(run.money).toBeGreaterThanOrEqual(money + 800);
     expect(flagOf(run, 'absol-driven')).toBe(1);
     expect(flagOf(run, 'warning-turns')).toBe(3);
     open(run, 'gn-new-34-slide-driven');
     run = choose(run, 'gn-new-34-slide-driven', 'Hold the school door.').run;
     run = choose(run, 'gn-new-34-d2', 'Carry the children.').run;
     run = choose(run, 'gn-new-34-d3', 'Hold the school door.').run;
+    expect(opened(run, 'gn-new-34-count')).toBe(true);
+    run = choose(run, 'gn-new-34-count', 'Count what is standing.').run;
+    // two different tasks in three turns: two buildings stand
+    expect(flagOf(run, 'warning-saved')).toBe(2);
     expect(opened(run, 'gn-new-34-end')).toBe(true);
     run = choose(run, 'gn-new-34-end', 'Watch it go.').run;
     expect(flagOf(run, 'warning-done')).toBe(1);
+    expect(flagOf(run, 'warning-kept')).toBe(0);
     expect(opened(run, 'gn-new-34-join')).toBe(false);
   });
 });
