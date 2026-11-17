@@ -1,0 +1,1 @@
+- **Galar dialogue and fade fix** (2026-11-17): in the New UI, Galar's reporter, crowd and host lines now use the normal story text box (mockup 5) instead of the event "Go on" talk page, and a steady dim sits under the gym entrance so the lit battle field no longer flashes between lines. Presentation only. Known: the stadium camera-cut cards are unchanged.
