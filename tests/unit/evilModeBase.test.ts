@@ -626,3 +626,53 @@ describe('saves: block v9', () => {
     expect(EvilModeBlockSchema.safeParse({ ...b, raid: { state: 'warned' } }).success).toBe(false);
   });
 });
+
+describe('the Base page model (New look): what the page shows comes from the rules', () => {
+  it('no base: the three sites, each with its pick action; a base: the grid, the tabs, the light', async () => {
+    const { baseModel, newBaseSel } = await import('../../src/core/evilMode/baseScreens');
+    const f = foundForPlay('page-1', choice());
+    const m0 = baseModel(f, newBaseSel());
+    expect(m0.mode).toBe('site');
+    expect(m0.sites.map((s) => s.action)).toEqual(siteOffer(f).map((site) => ({ type: 'pickSite', site })));
+    const b = based();
+    const m = baseModel(b, newBaseSel());
+    expect(m.mode).toBe('base');
+    expect(m.grid!.cells).toHaveLength(gridOf(b.base!.site).cells.size);
+    expect(m.fair.ok).toBe(true);
+    expect(m.night[0]!.problem).toBeNull();
+  });
+  it('Build lists rooms with their problems; Defend\'s refused piece names its failing square; nothing on the page changes the block', async () => {
+    const { baseModel } = await import('../../src/core/evilMode/baseScreens');
+    const b = onSite('ship');
+    const g = sq(b);
+    const before = JSON.stringify(b);
+    const build = baseModel(b, { tab: 0, at: g.slots[0]!, opt: 0, moving: null });
+    expect(build.options.some((o) => o.label === 'The Mess')).toBe(true);
+    expect(build.options.find((o) => o.label.includes('Lab'))).toBeUndefined();
+    const d = edgeKey(g.common, neighbours(g, g.common).find((n) => n !== g.door)!);
+    const defend = baseModel(b, { tab: 2, at: d, opt: 0, moving: null });
+    const i = defend.options.findIndex((o) => o.label.startsWith('A quiz') || o.label.includes('quiz'));
+    expect(i).toBeGreaterThanOrEqual(0);
+    const conv = baseModel(b, { tab: 2, at: g.slots[3]!, opt: 0, moving: null });
+    const j = conv.options.findIndex((o) => !!o.bad);
+    expect(j).toBeGreaterThanOrEqual(0);
+    const shown = baseModel(b, { tab: 2, at: g.slots[3]!, opt: j, moving: null });
+    expect(shown.grid!.cells.some((c) => c.bad) || shown.grid!.doors.some((x) => x.bad)).toBe(true);
+    expect(shown.options[j]!.problem).toBeTruthy();
+    expect(JSON.stringify(b)).toBe(before);
+  });
+  it('a lost Raid: the morning after still shows, with no base left', async () => {
+    const { baseModel, newBaseSel } = await import('../../src/core/evilMode/baseScreens');
+    let b = based();
+    b = raidEvening({ ...b, team: { ...b.team, heat: 9 }, here: { ...b.here, beat: 'evening' } });
+    b = raidEvening({ ...b, team: { ...b.team, heat: 10 }, here: { ...b.here, day: b.here.day + 1, beat: 'evening' } });
+    b = act(b, { type: 'raidDoor', open: true });
+    for (let i = 0; i < 12 && b.raid!.state === 'turns'; i++) b = act(b, { type: 'raidTurn' });
+    b = act(b, { type: 'raidOffice', choice: 'charge' });
+    expect(b.base).toBeNull();
+    const m = baseModel(b, newBaseSel());
+    expect(m.mode).toBe('raid');
+    expect(m.raid!.state).toBe('done');
+    expect(m.raid!.after.length).toBeGreaterThan(0);
+  });
+});

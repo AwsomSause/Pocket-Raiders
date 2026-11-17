@@ -33,6 +33,9 @@ import { lineModel } from '../core/evilMode/lineScreens';
 import { gymView } from '../ui/redux/screens/evilGym';
 import { gymModel } from '../core/evilMode/gymScreens';
 import { lineView } from '../ui/redux/screens/evilLine';
+import { baseView } from '../ui/redux/screens/evilBase';
+import { BASE_TABS, baseModel, newBaseSel, type BaseSel } from '../core/evilMode/baseScreens';
+import { raidOn } from '../core/evilMode/raid';
 import { LINE_IDS } from '../core/evilMode/schema';
 import { crossers } from '../core/evilMode/people';
 
@@ -65,6 +68,9 @@ export class EvilScene extends Phaser.Scene {
   private lineTimer: Phaser.Time.TimerEvent | null = null;
   /** Slice 8: the Gym page's chosen door, or null when it's shut. */
   private gym: number | null = null;
+  /** Slice 10: the Base page's tab, square and option, or null when it's shut (Walk it and a Raid hold it open). */
+  private base: BaseSel | null = null;
+  private bgOf: (id: string) => string | null = () => null;
 
   constructor() {
     super('Evil');
@@ -86,6 +92,7 @@ export class EvilScene extends Phaser.Scene {
     this.lineHeldAt = null;
     this.lineTimer = null;
     this.gym = null;
+    this.base = null;
     const { session } = services();
     if (!session.run) return void this.scene.start('MainMenu');
     session.evilEnsure();
@@ -97,6 +104,7 @@ export class EvilScene extends Phaser.Scene {
     const bossFile = rxFileOf(manifest, archetype.spriteAssetId)?.file ?? null;
     const starterFile = species ? rxFileOf(manifest, pokemonAssetIds(species.assets).front)?.file ?? null : null;
     const oldLook = !reduxOn();
+    this.bgOf = (id) => rxFileOf(manifest, id)?.file ?? null;
     this.view = mountRedux(this, {
       render: (c) => {
         const r = services().session.run;
@@ -114,12 +122,16 @@ export class EvilScene extends Phaser.Scene {
           const line = this.line !== null && !ledger && !roster && !file ? lineView(lineModel(block, this.line), this.lineHeldAt === null ? null : Math.min(1, (this.time.now - this.lineHeldAt) / 2000), this.notice) : undefined;
           const gm = this.gym !== null && !ledger && !roster && !file && !line ? gymModel(block, this.gym) : null;
           const gym = gm ? gymView(gm, this.notice) : undefined;
+          // Slice 10: the Base page. Walk it and a Raid hold it open over everything else.
+          const bsel = this.baseSel();
+          const bm = bsel && (this.baseForced() || (!ledger && !roster && !file && !line && !gym)) ? baseModel(block, bsel) : null;
+          const base = bm ? baseView(bm, this.notice, bm.bg ? this.bgOf(bm.bg) : null) : undefined;
           if (block.fight) frame.button = 'Fight';
           // An order across a line is answered in the yard before anything else moves (Part 7 section 11.1).
           const yard = refusalModel(block);
           const over = yard ? refusalView(yard, this.refuseSel) : rm?.office ? officeView(rm.office) : '';
           const look = `<div style="--team-a:${block.team.look.a};--team-b:${block.team.look.b}">`;
-          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), ...(line ? { line } : {}), ...(gym ? { gym } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
+          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), ...(line ? { line } : {}), ...(gym ? { gym } : {}), ...(base ? { base } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
         }
         if (block) return frameView(c, frameModel(block, archetype.name), this.notice);
         return foundingView(c, foundingModel(this.draft, { bossName: archetype.name, bossFile, starter: species?.name ?? '—', starterFile, oldLook, length: services().session.settings.expansion.evilRunLength }));
@@ -162,6 +174,24 @@ export class EvilScene extends Phaser.Scene {
         gym: () => this.toggleGym(),
         gdoor: (i) => { if (this.gym !== null) { this.gym = Number(i); this.view?.refresh(); } },
         gdo: () => this.gymDo(),
+        base: () => this.toggleBase(),
+        btab: (i) => { if (this.base) { this.base = { ...this.base, tab: Number(i), opt: 0 }; this.view?.refresh(); } },
+        bsq: (at) => this.baseSquare(at),
+        bopt: (i) => { const s = this.baseSel(); if (s) { this.base = { ...s, opt: Number(i) }; this.view?.refresh(); } },
+        bdo: () => this.baseDo(),
+        bsite: (id) => this.baseAct({ type: 'pickSite', site: id }),
+        bnight: (i) => { const b = this.block(); const n = b && this.base ? baseModel(b, this.base).night[Number(i)] : undefined; if (n) this.baseAct(n.action); },
+        bwalk: () => this.baseAct({ type: 'walkIt' }),
+        blatch: () => this.baseAct({ type: 'latch', on: !this.block()?.base?.latch }),
+        bwarn: (id) => this.baseAct({ type: 'warnChoice', choice: id as 'move' | 'empty' | 'hold' | 'station' }),
+        wclose: () => this.baseAct({ type: 'closeWalk' }),
+        wfight: () => this.startFight(),
+        rdoor: (o) => this.baseAct({ type: 'raidDoor', open: o === '1' }),
+        rorder: (arg) => { const [wing, order] = arg.split(':'); this.baseAct({ type: 'raidOrder', wing: wing as never, order: order as never }); },
+        rup: (id) => { const q = this.block()?.raid?.queue ?? []; const i = q.indexOf(id); if (i > 0) { const n = [...q]; [n[i - 1], n[i]] = [n[i]!, n[i - 1]!]; this.baseAct({ type: 'raidQueue', queue: n }); } },
+        rturn: () => this.baseAct({ type: 'raidTurn' }),
+        roffice: (id) => this.baseAct({ type: 'raidOffice', choice: id as 'battle' | 'charge' | 'pen' | 'window' }),
+        rdone: () => this.baseAct({ type: 'raidDone' }),
         lookPrev: (id) => { this.draft = turnLook(this.draft, id as LookRow, -1); this.view?.refresh(); },
         lookNext: (id) => { this.draft = turnLook(this.draft, id as LookRow, 1); this.view?.refresh(); },
         stay: (id) => this.evil({ type: 'goOn', stay: id || null }),
@@ -316,8 +346,10 @@ export class EvilScene extends Phaser.Scene {
     if (this.ledger) return this.ledgerKey(a);
     if (this.roster) return this.rosterKey(a);
     if (this.file !== null) return this.fileKey(a);
+    if (this.baseForced()) return this.baseKey(a);
     if (this.line !== null) return this.lineKey(a);
     if (this.gym !== null) return this.gymKey(a);
+    if (this.base !== null) return this.baseKey(a);
     const block = this.block();
     if (!block?.district) return a === 'confirm' ? this.advance() : a === 'back' ? this.leave() : undefined;
     const d = this.disp;
@@ -481,6 +513,8 @@ export class EvilScene extends Phaser.Scene {
       return;
     }
     if (e.code === 'KeyY' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleGym();
+    if (e.code === 'KeyB' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleBase();
+    if (e.code === 'KeyT' && type === 'down' && !e.repeat && !this.card && this.base) { this.base = { ...this.base, tab: (this.base.tab + 1) % BASE_TABS.length, opt: 0 }; return void this.view?.refresh(); }
     if (e.code === 'KeyL' && type === 'down' && !e.repeat && !this.card && this.block()?.district) return this.toggleLedger();
     if (e.code === 'KeyR' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleRoster();
     if (e.code === 'KeyF' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleFile();
@@ -630,6 +664,85 @@ export class EvilScene extends Phaser.Scene {
     this.file = null;
     this.cancelLineHold();
     this.view?.refresh();
+  }
+
+  // ---- Slice 10: the Base page, Walk it and the Raid ----
+
+  /** Walk it and a Raid can't be closed: the day waits on them. */
+  private baseForced(): boolean {
+    const b = this.block();
+    return !!b && (!!b.base?.walk || raidOn(b) || b.raid?.state === 'done');
+  }
+
+  private baseSel(): BaseSel | null {
+    return this.base ?? (this.baseForced() ? newBaseSel() : null);
+  }
+
+  private toggleBase(): void {
+    if (this.card) return;
+    if (this.baseForced()) return;
+    this.base = this.base === null ? newBaseSel() : null;
+    this.ledger = null;
+    this.roster = null;
+    this.file = null;
+    this.line = null;
+    this.gym = null;
+    this.notice = null;
+    this.cancelLineHold();
+    this.view?.refresh();
+  }
+
+  /** A square or a door pressed: chosen (while a room's being moved, an empty square is where it goes). */
+  private baseSquare(at: string): void {
+    const s = this.baseSel();
+    if (!s) return;
+    this.base = { ...s, at, opt: 0 };
+    this.view?.refresh();
+  }
+
+  /** The chosen option: its action through the step (which refuses what the page shouldn't allow), or Move's second step. */
+  private baseDo(): void {
+    const b = this.block();
+    const s = this.baseSel();
+    if (!b || !s) return;
+    const m = baseModel(b, s);
+    if (m.mode === 'walk') return m.walk?.end ? this.baseAct({ type: 'closeWalk' }) : m.walk?.fight ? this.startFight() : undefined;
+    if (m.mode === 'raid') return m.raid?.fight ? this.startFight() : m.raid?.state === 'turns' ? this.baseAct({ type: 'raidTurn' }) : m.raid?.state === 'done' ? this.baseAct({ type: 'raidDone' }) : undefined;
+    const o = m.options[m.opt];
+    if (!o) return;
+    if (o.move !== undefined) { this.base = { ...s, moving: o.move || null, opt: 0 }; this.notice = null; return void this.view?.refresh(); }
+    if (o.action) {
+      if (o.action.type === 'moveRoom') this.base = { ...s, moving: null };
+      this.baseAct(o.action);
+    }
+  }
+
+  private baseAct(action: EvilAction): void {
+    const cues = services().session.evilStep(action);
+    if (cues.some((c) => c.id === 'fight')) { this.notice = null; return this.startFight(); }
+    const refused = cues.find((c) => c.id === 'refused') as { reason?: string } | undefined;
+    const said = cues.filter((c) => c.id === 'said').map((c) => (c as { line: string }).line);
+    this.notice = refused?.reason ?? (said.length ? said.join(' ') : null);
+    if (action.type === 'closeWalk' || action.type === 'raidDone') this.base = this.base ?? newBaseSel();
+    this.view?.refresh();
+  }
+
+  /** Keys on the Base page: Left/Right the square (doors after squares), Up/Down the option, Enter does it, Esc closes. */
+  private baseKey(a: InputAction): void {
+    const b = this.block();
+    const s = this.baseSel();
+    if (!b || !s) return;
+    if (a === 'back') { if (s.moving) { this.base = { ...s, moving: null }; return void this.view?.refresh(); } if (!this.baseForced()) this.base = null; return void this.view?.refresh(); }
+    if (a === 'confirm') return this.baseDo();
+    const m = baseModel(b, s);
+    if (a === 'up' || a === 'down') { this.base = { ...s, opt: Math.max(0, Math.min(m.options.length - 1, m.opt + (a === 'up' ? -1 : 1))) }; return void this.view?.refresh(); }
+    if ((a === 'left' || a === 'right') && m.grid) {
+      const all = [...m.grid.cells.map((c) => c.at), ...m.grid.doors.map((d) => d.at)];
+      const i = s.at ? all.indexOf(s.at) : -1;
+      const n = (i + (a === 'left' ? -1 : 1) + all.length) % all.length;
+      this.base = { ...s, at: all[n] ?? null, opt: 0 };
+      this.view?.refresh();
+    }
   }
 
   // ---- Slice 8: the Gym page ----
