@@ -219,4 +219,27 @@ describe('gn.58 fixes against the doc', () => {
     expect(JSON.stringify(letGoChoice)).toContain('lantern-boat-floated');
     expect(JSON.stringify(content.events.get('gn-58-friend'))).toContain('lantern-boat-floated');
   });
+
+  it('the helping turn also comes in a battle with an evil team\'s lieutenant or boss (the stage\'s "boss battle")', () => {
+    const helped = (seed: string): RunState => {
+      const run = gnRun(seed);
+      letGo(run, 'rattata', 1, -3);
+      open(run, 'gn-58-friend');
+      return choose(run, 'gn-58-friend', 'Kneel down, and hold out a hand.').run;
+    };
+    const run = helped('t58-officer');
+    expect(flagOf(run, 'of-help')).toBe(1);
+    open(run, 'evil-rocket-rising-star');
+    const fight = choose(run, 'evil-rocket-rising-star', 'Battle.');
+    expect(fight.battle).toBe(true);
+    expect(ofAssist(content, fight.run, fight.run.battle!)).toContain('A shape crosses the field');
+    expect(flagOf(fight.run, 'of-help-used')).toBe(1);
+    // An ordinary event fight does not call it.
+    const plain = helped('t58-plain');
+    open(plain, 'gn-55-fight');
+    const other = choose(plain, 'gn-55-fight', 'Battle.');
+    expect(other.battle).toBe(true);
+    expect(ofAssist(content, other.run, other.run.battle!)).toBe('');
+    expect(flagOf(other.run, 'of-help-used')).toBe(0);
+  });
 });

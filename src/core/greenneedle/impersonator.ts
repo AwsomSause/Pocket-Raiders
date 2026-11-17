@@ -49,7 +49,7 @@ export function impJoin(run: RunState, host: { apply: (e: unknown) => string }):
 
 /** The real ace of this region's Champion, and a species that Champion has never used (the Zoroark's slip). */
 export function impAce(content: Content, run: RunState): { ace: string; wrong: string } {
-  const boss = content.bosses.get(lessonChampion(content, run, run.regionId ?? ''));
+  const boss = content.bosses.get(lessonChampion(content, run, run.regionOrder[run.regionIndex] ?? ''));
   const sig = boss?.signature ?? [];
   const ace = content.species.get(sig[0] ?? '')?.name ?? 'Garchomp';
   const wrong = ['poochyena', 'rattata', 'bidoof'].find((id) => !sig.includes(id)) ?? 'poochyena';
