@@ -170,7 +170,7 @@ describe('node menus: flow', () => {
 
   it('with the setting off, the same seed plays exactly as before', () => {
     const a = autoplay({ seed: 'same-old', steps: 250, smart: true, healOnMap: true });
-    const b = autoplay({ seed: 'same-old', steps: 250, smart: true, healOnMap: true, expansion: { nodeMenus: false } });
+    const b = autoplay({ seed: 'same-old', steps: 250, smart: true, healOnMap: true, expansion: { nodeMenus: false, stageLength: -10 } });
     expect(b).toEqual(a);
   });
 });

@@ -15,6 +15,40 @@ export function getCampaign(content: Content, id: string): Campaign {
   return campaign;
 }
 
+import { BASE_STAGE_COLUMNS } from './stageLength';
+export { BASE_STAGE_COLUMNS };
+/** Every full-size stage gets this many extra nodes by default (30 instead of 20). */
+export const STAGE_LENGTH_DEFAULT_BONUS = 10;
+/** The `stageLength` setting: how many nodes to take off (−10) or add (+20) on top of the default. */
+export const STAGE_LENGTH_RANGE = { min: -10, max: 20 } as const;
+
+/** How many nodes a stage has for a campaign and a stage-length setting. Short test campaigns (under 20) and Story campaigns are left alone. */
+export function stageColumnsFor(campaign: Pick<Campaign, 'columns'> & Partial<Pick<Campaign, 'mode'>>, stageLength = 0): number {
+  // Story campaigns place their stops by authored column, so they keep the old length.
+  if (campaign.columns < BASE_STAGE_COLUMNS || campaign.mode === 'story') return campaign.columns;
+  const offset = Math.max(STAGE_LENGTH_RANGE.min, Math.min(STAGE_LENGTH_RANGE.max, Math.round(stageLength)));
+  return campaign.columns + STAGE_LENGTH_DEFAULT_BONUS + offset;
+}
+
+/** A pacing column or step written for a 20-node stage, moved onto a stage of `columns` nodes (never the gym column). */
+export function scaleColumn(column: number, columns: number): number {
+  // Short test and Story campaigns keep their authored columns; only longer stages stretch.
+  if (columns <= BASE_STAGE_COLUMNS) return Math.max(1, Math.min(columns - 1, column));
+  return Math.max(1, Math.min(columns - 1, Math.round((column * columns) / BASE_STAGE_COLUMNS)));
+}
+
+/** The campaign as this run plays it: the same campaign with the run's own stage length (older runs keep their old one). */
+export function runCampaign(content: Content, run: Pick<RunState, 'campaignId'> & { expansion?: { stageCols?: number | undefined } | undefined }): Campaign {
+  return withStageColumns(getCampaign(content, run.campaignId), run.expansion?.stageCols);
+}
+
+/** A copy of the campaign with `cols` columns and its trainer-column ranges stretched to match. */
+export function withStageColumns(campaign: Campaign, cols: number | undefined): Campaign {
+  if (!cols || cols === campaign.columns) return campaign;
+  const scale = (n: number) => scaleColumn(n, cols);
+  return { ...campaign, columns: cols, trainerColumns: campaign.trainerColumns.map(([a, b]) => [scale(a), Math.max(scale(a), scale(b))] as [number, number]) };
+}
+
 export function getRegion(content: Content, id: string): Region {
   const region = content.regions.get(id);
   if (!region) throw new Error(`Unknown region "${id}"`);
@@ -74,7 +108,7 @@ export function runLevelCap(content: Content, run: Pick<RunState, 'regionIndex'>
   if (!run.stage || run.stage.kind !== 'stage' || !run.campaignId) return region;
   // Hardcore Nuzlocke: no margin over the stage's last enemy.
   const margin = run.rules && isHardcore(run.rules) ? content.balance.difficulty.stageCapMargin : 0;
-  return Math.min(region, stageLevelCap(content, getCampaign(content, run.campaignId), run.regionIndex, run.stage.index) - margin);
+  return Math.min(region, stageLevelCap(content, runCampaign(content, run as Pick<RunState, 'campaignId' | 'expansion'>), run.regionIndex, run.stage.index) - margin);
 }
 
 /** What the party may reach in a stage: the level of that stage's last wild enemy plus balance.difficulty.stageCapMargin. */

@@ -8,6 +8,7 @@
 // The run log it reads is the story layer's (run.story.events, run.encountersCompleted); its own
 // counters live in run.story.flags under "md:" keys, so it needs no save change. Pure: no RNG.
 
+import { scaledCap } from '../stageLength';
 import type { Content } from '../contentSchema';
 import type { RunState } from '../state';
 import { battleIndex } from './record';
@@ -26,7 +27,7 @@ export function momentsShown(run: RunState, tier: MomentTier): number {
 /** How many more moments of this tier may show right now (0 while cooling down or once the run's cap is reached). */
 export function momentsLeft(content: Content, run: RunState, tier: MomentTier): number {
   const rule = content.balance.moments[tier];
-  const left = rule.perRun === null ? Number.MAX_SAFE_INTEGER : Math.max(0, rule.perRun - momentsShown(run, tier));
+  const left = rule.perRun === null ? Number.MAX_SAFE_INTEGER : Math.max(0, scaledCap(rule.perRun, run) - momentsShown(run, tier));
   const last = run.story.flags[lastKey(tier)];
   // A cooldown of N battles: after a moment in battle b, the next may show from battle b + N (0 = no cooldown).
   if (typeof last === 'number' && rule.cooldownBattles > 0 && battleIndex(run) - last < rule.cooldownBattles) return 0;

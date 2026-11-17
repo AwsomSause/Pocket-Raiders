@@ -161,6 +161,7 @@ import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
 import { pickPlannedTheme, snapshotStagePlan, stageSignals, tailorStage } from './stagePlan';
 import { carryRewind, grantRewinds, rewindBattle, rewindTurnsAvailable, takeStageSnapshot, takeTurnSnapshot, withoutRewindSnapshots } from './rewind';
+import { BASE_STAGE_COLUMNS, scaleColumn, stageColumnsFor } from './regions';
 import { currentColumn, findNode, generateLeagueMap, generateStageMap, nextChoices, validateLeagueMap, validateStageMap } from './map';
 import { addItemAttribute, addRunAttribute, attributeText, effectiveAttributes, luckWeights, readAttributes, runAttributeEffects, zeroAttributes } from './attributes';
 import { count, countShiny, discover } from './progress';
@@ -182,7 +183,7 @@ import { kantoSweetAir } from './expansion/canonKantoRules';
 import { endHyperMoves, grantHyperMoves } from './battle/hyperMove';
 import { endLastResort } from './battle/lastResort';
 import { defaultPrep, startingResources } from './runPrep';
-import { currentRegion, generateRegionOrder, getCampaign, pickLeague, runLevelCap } from './regions';
+import { currentRegion, generateRegionOrder, getCampaign, pickLeague, runLevelCap, runCampaign } from './regions';
 import { wildLuck } from './wildLuck';
 import { arenaFor } from './battle/w1Play';
 import { underdogXpMultiplier } from './battle/w1Rules';
@@ -417,7 +418,7 @@ export interface NewRunOptions {
   /** Story Run: the player's name, pronouns and Look from the prologue (profile.story.protagonist). */
   protagonist?: { look: string; name: string; pronouns: string | PronounSet; backstory?: string };
   /** Beta 0.6: which expansion settings were on at run start (settings.expansion). Each flag is stored in `run.expansion` once and never changes. */
-  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; kantoCanon?: boolean; grandArc?: boolean; worldTracks?: boolean; ultraBeasts?: boolean; eventsDensity?: 'low' | 'normal' | 'full'; climaxCut?: 'standard' | 'extended'; storyTraits?: boolean; rewinds?: boolean; nodeMenus?: boolean; blessings?: boolean; secondChancePct?: number; heatedMoments?: boolean; mythicalPromises?: boolean; finale?: boolean; doomEpilogue?: boolean; labyrinthResume?: boolean; wholeRunEvents?: boolean };
+  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; kantoCanon?: boolean; grandArc?: boolean; worldTracks?: boolean; ultraBeasts?: boolean; eventsDensity?: 'low' | 'normal' | 'full'; stageLength?: number; climaxCut?: 'standard' | 'extended'; storyTraits?: boolean; rewinds?: boolean; nodeMenus?: boolean; blessings?: boolean; secondChancePct?: number; heatedMoments?: boolean; mythicalPromises?: boolean; finale?: boolean; doomEpilogue?: boolean; labyrinthResume?: boolean; wholeRunEvents?: boolean };
 }
 
 export function createRun(content: Content, opts: NewRunOptions): RunState {
@@ -521,7 +522,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
   weekFlags(run); // Catalog Overhaul (legends, row C): a calendar week's run flags (Rivalry weeks open the Rival Circuit)
   if (opts.expansion) {
     const e = opts.expansion;
-    const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.kantoCanon ? { canon: { flags: [], completed: [], menus: {}, ...(e.labyrinthResume ? { labResume: true } : {}) } } : {}), ...(e.worldTracks ? { tracks: true } : {}), ...(e.ultraBeasts ? { ultra: freshUltra() } : {}), ...(e.eventsDensity ? { density: e.eventsDensity } : {}), ...(e.climaxCut === 'extended' ? { climaxCut: 'extended' as const } : {}), ...(e.storyTraits ? { storyTraits: true } : {}) };
+    const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.kantoCanon ? { canon: { flags: [], completed: [], menus: {}, ...(e.labyrinthResume ? { labResume: true } : {}) } } : {}), ...(e.worldTracks ? { tracks: true } : {}), ...(e.ultraBeasts ? { ultra: freshUltra() } : {}), ...(e.eventsDensity ? { density: e.eventsDensity } : {}), ...(stageColumnsFor(campaign, e.stageLength ?? 0) !== campaign.columns ? { stageCols: stageColumnsFor(campaign, e.stageLength ?? 0) } : {}), ...(e.climaxCut === 'extended' ? { climaxCut: 'extended' as const } : {}), ...(e.storyTraits ? { storyTraits: true } : {}) };
     if (Object.keys(flags).length > 0) run.expansion = { ...run.expansion, ...flags };
     if (e.secondChancePct || e.heatedMoments || e.mythicalPromises) run.expansion = { ...run.expansion, ...(e.secondChancePct ? { secondChancePct: e.secondChancePct } : {}), ...(e.heatedMoments ? { heated: true } : {}), ...(e.mythicalPromises ? { promises: true } : {}) };
     if (e.blessings) assignBlessing(run);
@@ -664,7 +665,7 @@ export function chooseStarter(content: Content, current: RunState, choiceIndex: 
  */
 export function fillRegionOrder(content: Content, run: RunState): void {
   if (run.regionOrder.length > 0) return;
-  const campaign = getCampaign(content, run.campaignId);
+  const campaign = runCampaign(content, run);
   run.regionOrder = withStream(run.rng, 'map', (r) => generateRegionOrder(content, campaign, r, run.rules.regionId));
   run.regionIndex = Math.min(run.regionIndex, run.regionOrder.length - 1);
 }
@@ -737,7 +738,7 @@ export function hatchEggs(content: Content, run: RunState): void {
  * trainer, so every route meets it. Changes kinds only after the map is rolled, so no other roll moves.
  */
 function forceFirstRivalColumn(content: Content, run: RunState, index: number, map: StageMap): void {
-  const cfg = content.balance.rival;
+  const cfg = { ...content.balance.rival, column: scaleColumn(content.balance.rival.column, map.columns) };
   if (run.regionIndex !== 0 || index !== cfg.stage || run.story.flags[FIRST_RIVAL_FLAG] !== undefined || cfg.column >= map.columns) return;
   if (map.trainerColumns.includes(cfg.column)) return;
   // Stage pacing: a skippable trainer column becomes a full trainer column, so every route meets the rival.
@@ -778,7 +779,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   settleSky(content, run);
   fillRegionOrder(content, run);
   ensureStoryRun(content, run);
-  const campaign = getCampaign(content, run.campaignId);
+  const campaign = runCampaign(content, run);
   const region = currentRegion(content, run);
   // Beta 4.4: the stage is decided only now, from what the player did on the last one (core/stagePlan.ts).
   const signals = stageSignals(content, run);
@@ -870,7 +871,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
  * walking every earlier stage and League so the used leaders, themes and cast stay consistent. Returns the gym badges earned on the way.
  */
 export function fastForwardToStage(content: Content, run: RunState, regionIndex: number, stageIndex: number): string[] {
-  const campaign = getCampaign(content, run.campaignId);
+  const campaign = runCampaign(content, run);
   const badges: string[] = [];
   for (let r = 0; r <= regionIndex; r++) {
     run.regionIndex = r;
@@ -893,7 +894,7 @@ function enterLeague(content: Content, run: RunState): void {
   if (swapRunning(run)) endSwap(content, run, partyCapacity(content, run));
   fillRegionOrder(content, run);
   ensureStoryRun(content, run);
-  const campaign = getCampaign(content, run.campaignId);
+  const campaign = runCampaign(content, run);
   const region = currentRegion(content, run);
   withStream(run.rng, 'map', (r) => pickLeague(content, region, campaign, run.usedLeaders, r)); // rolled and dropped: keeps the 'map' stream where it was
   const league = isStoryCampaign(content, run.campaignId) ? castAuthoredLeague(content, run, run.regionIndex) : castLeague(content, run, campaign, run.regionIndex);
@@ -1009,7 +1010,7 @@ export function isFinalBoss(content: Content, run: Pick<RunState, 'regionOrder' 
 
 /** True when this gym is the region's last and no League follows it (the Orrery Circuit's first two regions): the region is cleared here. */
 function regionEndsAtGym(content: Content, run: RunState): boolean {
-  const campaign = getCampaign(content, run.campaignId);
+  const campaign = runCampaign(content, run);
   return !!run.stage && run.stage.kind === 'stage' && run.stage.index + 1 >= campaign.stagesPerRegion && !leagueAfterRegion(campaign, run.regionIndex);
 }
 
@@ -1563,7 +1564,7 @@ export function mapPreviews(content: Content, run: RunState): Record<string, Nod
   const teamItem = perks('gymTeam') ?? perks('gymAce');
   const teamFrom = teamItem ? source('gymTeam', teamItem) : (source('gymTeam', null) ?? (eventGymPreview(run) ? { itemId: null, source: 'Your scouting' } : null));
   if (gym && teamFrom) {
-    const campaign = getCampaign(content, run.campaignId);
+    const campaign = runCampaign(content, run);
     const species = bossTeamSpecies(content, 'gym', stage.leaderId, run.regionIndex * campaign.stagesPerRegion + stage.index, bossRemix(run.rules));
     const shown = perks('gymTeam') || !teamItem ? species : species.slice(-1);
     out[gym.id] = { ...teamFrom, team: shown.map((speciesId) => ({ speciesId, level: null })), trainerName: null };
@@ -1600,7 +1601,7 @@ function activePreviewItems(content: Content, run: RunState): string[] {
 export function nextGymLeaders(content: Content, run: RunState): { leaderId: string; types: TypeName[] }[] {
   const stage = run.stage;
   if (!stage || stage.kind !== 'stage' || !hasPerk(content, run, 'nextLeaders')) return [];
-  const campaign = getCampaign(content, run.campaignId);
+  const campaign = runCampaign(content, run);
   if (stage.index + 1 >= campaign.stagesPerRegion) return [];
   return currentRegion(content, run)
     .gymLeaders.filter((id) => !run.usedLeaders.includes(id) && content.bosses.has(id))
@@ -1631,7 +1632,7 @@ export function fishingOffer(content: Content, run: RunState, sideId: string): {
   const stage = run.stage!;
   const rod = fishingRod(content, run) ?? { choices: 1, rare: false };
   const rng = new Rng(hashSeed(`${run.seed}::fishing::${stageKey(run)}::${node.id}::${sideId}`));
-  const scale = levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, stage.index, node.column);
+  const scale = levelScale(content, runCampaign(content, run), run.regionIndex, stage.index, node.column);
   const pool = typesPool(content, ['water'], run.regionOrder[run.regionIndex], curveLevel(content, scale)).map((p) => ({ item: p.speciesId, weight: p.weight }));
   const bst = (id: string) => Object.values(getSpecies(content, id).baseStats).reduce((a, b) => a + b, 0);
   const archetype = runArchetype(content, run);
@@ -1716,7 +1717,7 @@ function raidDen(run: RunState, sideId: string): { node: MapNode; side: SideStop
 
 function raidBoss(content: Content, run: RunState, def: RaidDef, key: string): { speciesId: string; level: number } {
   const stage = requireStage(run);
-  const campaign = getCampaign(content, run.campaignId);
+  const campaign = runCampaign(content, run);
   const scale = levelScale(content, campaign, run.regionIndex, stage.index, campaign.columns);
   return { speciesId: raidSpecies(def, run, key), level: raidLevel(def, scale.end, scale.cap) };
 }
@@ -1894,7 +1895,7 @@ function totemDen(run: RunState, sideId: string): { node: MapNode; side: SideSto
 
 function totemBoss(content: Content, run: RunState, def: TotemDef, key: string): { speciesId: string; level: number } {
   const stage = requireStage(run);
-  const campaign = getCampaign(content, run.campaignId);
+  const campaign = runCampaign(content, run);
   const scale = levelScale(content, campaign, run.regionIndex, stage.index, campaign.columns);
   return { speciesId: totemSpecies(def, run, key), level: totemLevel(def, scale.end, scale.cap) };
 }
@@ -2166,7 +2167,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
   const stage = run.stage!;
   const archetype = runArchetype(content, run);
   const theme = getTheme(content, stage.themeId);
-  const campaign = getCampaign(content, run.campaignId);
+  const campaign = runCampaign(content, run);
   // Catalog Overhaul: an event that came first may have made this battle some stages easier or harder (read once).
   const shift = takeNodeLevelShift(run);
   const scale = withPartyStrength(content, stage.kind === 'league' ? leagueScale(content, run.regionIndex) : levelScale(content, campaign, run.regionIndex, Math.max(0, stage.index + shift), node.column), run.party.map((p) => p.level), node.kind === 'gym');
@@ -2338,7 +2339,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       markTakeover(run, takeover);
     }
     // The first rival: the first ordinary trainer of balance.rival.stage is scripted (one starter-line Pokémon).
-    const firstRival = node.kind === 'trainer' && !rematch && stageNumber === content.balance.rival.stage && node.column >= content.balance.rival.column && run.story.flags[FIRST_RIVAL_FLAG] === undefined;
+    const firstRival = node.kind === 'trainer' && !rematch && stageNumber === content.balance.rival.stage && node.column >= scaleColumn(content.balance.rival.column, run.stage?.map.columns ?? BASE_STAGE_COLUMNS) && run.story.flags[FIRST_RIVAL_FLAG] === undefined;
     if (firstRival) {
       plan = planFirstRival(content, run.seed, Math.min(runLevelCap(content, run), Math.max(content.balance.rival.level, ...run.party.map((m) => m.level))), rivalNamesExcluded(content, run.archetypeId));
       plan = storyFirstRivalPlan(content, run, plan) ?? plan;
@@ -2935,7 +2936,7 @@ export function shopSaleItem(content: Content, run: RunState): string | null {
   if (open.length === 0) return null;
   const sale = content.balance.shopSale;
   const every = Math.max(1, Math.ceil(sale.everyStages * shopRefreshPerk(runPerks(content, run))));
-  const stagesPer = getCampaign(content, run.campaignId).stagesPerRegion;
+  const stagesPer = runCampaign(content, run).stagesPerRegion;
   const window = Math.floor((run.regionIndex * stagesPer + (run.stage?.index ?? 0)) / every);
   return new Rng(hashSeed(`${run.seed}::shop-sale::${window}`)).pick(open).item;
 }
@@ -4470,7 +4471,7 @@ export function continueAfterDecisions(content: Content, run: RunState): void {
  * Classic runs just go to the next stage.
  */
 function advanceAfterGym(content: Content, run: RunState): void {
-  const campaign = getCampaign(content, run.campaignId);
+  const campaign = runCampaign(content, run);
   const stage = run.stage!;
   playStageEndStops(content, run);
   const story = isStoryCampaign(content, run.campaignId);

@@ -11,7 +11,7 @@ import type { BattleState, PokemonInstance, RunState } from '../state';
 import type { GnCond, GnEffect } from './schema';
 import { abilityOf, addLevels, calcStats, createPokemon, getSpecies, isUsableMove, maxHp } from '../pokemon';
 import { levelScale } from '../encounters';
-import { getCampaign } from '../regions';
+import { getCampaign, runCampaign } from '../regions';
 import { makeDoubles } from '../battle/doubles';
 import { bondNewest, hasPink, markPink, oldEggMove, pinkFade, raiseMarked, truceAnswers } from './part3';
 import { addItem } from '../items';
@@ -244,7 +244,7 @@ export interface GnHost {
 export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage: number): boolean {
   // gn.16: the fighter won from behind (the first Pokémon able to fight is at half its HP or less).
   // gn.33: the tide is low (the Sunken City's causeway is out of the water).
-  if (c.test === 'lastStage') { const camp = getCampaign(content, run.campaignId); return isLastStage(content, run, camp.stagesPerRegion, camp.regularRegions); }
+  if (c.test === 'lastStage') { const camp = runCampaign(content, run); return isLastStage(content, run, camp.stagesPerRegion, camp.regularRegions); }
   if (c.test === 'hasPink') return hasPink(run);
   // gn.28: Alert 0 to 4, anyone can be talked past; inside the team the floors are your workplace, and a colleague still can up to 9.
   if (c.test === 'canTalkPast' || c.test === 'noTalkPast') {
@@ -259,7 +259,7 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'paradeAll') return paradeAll(run, gnFlag(run, c.key!));
   // gn.new.12: the Xatu's image came true; the last rest of the run; the run's Blessing has answered (Communion).
   if (c.test === 'prophecyTrue') return xatuTrue(run);
-  if (c.test === 'finalRest') return finalRest(content, run, getCampaign(content, run.campaignId).stagesPerRegion);
+  if (c.test === 'finalRest') return finalRest(content, run, runCampaign(content, run).stagesPerRegion);
   if (c.test === 'communion') return !!run.expansion?.blessing?.communion;
   if (c.test === 'lowTide') return tideOf(content, run) === 'low';
   if (c.test === 'highTide') return tideOf(content, run) === 'high';
@@ -292,7 +292,7 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   // gn.27: the party's best Attack beats `n`% of a `key` Pokémon's at this point of the stage (the Machamp uses two of its four arms).
   if (c.test === 'strength') {
     const column = run.stage?.map.nodes.find((x) => x.id === run.stage!.current)?.column ?? 1;
-    const sc = levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, run.stage?.index ?? 0, column);
+    const sc = levelScale(content, runCampaign(content, run), run.regionIndex, run.stage?.index ?? 0, column);
     const level = Math.max(1, Math.round(sc.start + (sc.end - sc.start) * sc.t));
     const bar = (calcStats(content, createPokemon(content, c.key!, level, 'gn-bar')).atk * (c.n ?? 100)) / 100;
     return run.party.some((m) => m.hp > 0 && calcStats(content, m).atk > bar);
@@ -1061,7 +1061,7 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     // gn.21–gn.30 fixes (part3.ts).
     case 'stampLevel': {
       const column = run.stage?.map.nodes.find((x) => x.id === run.stage!.current)?.column ?? 1;
-      const sc = levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, run.stage?.index ?? 0, column);
+      const sc = levelScale(content, runCampaign(content, run), run.regionIndex, run.stage?.index ?? 0, column);
       setGnFlag(run, e.key!, Math.max(1, Math.round(sc.start + (sc.end - sc.start) * sc.t)));
       return '';
     }

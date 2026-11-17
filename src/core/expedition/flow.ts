@@ -12,7 +12,7 @@ import { createBattle } from '../battle/engine';
 import { addItem, consumeItem, itemCount } from '../items';
 import { discover } from '../progress';
 import { levelScale } from '../encounters';
-import { getCampaign } from '../regions';
+import { getCampaign, runCampaign } from '../regions';
 import { maxHp } from '../pokemon';
 import { hashSeed, Rng } from '../rng';
 import { getRaid } from '../raid/raid';
@@ -105,7 +105,7 @@ export function beginExpedition(content: Content, current: RunState, sideId: str
   const run = structuredClone(current);
   const stage = requireStage(run);
   stage.map.nodes.find((n) => n.id === stage.current)!.sides.find((s) => s.id === sideId)!.used = true;
-  const campaign = getCampaign(content, run.campaignId);
+  const campaign = runCampaign(content, run);
   const scale = levelScale(content, campaign, run.regionIndex, stage.index, campaign.columns);
   const level = Math.max(2, Math.min(scale.cap, Math.round(scale.end)));
   const rng = new Rng(hashSeed(`${run.seed}::expedition-route::${def.id}:${run.regionIndex}:${stage.index}`));
@@ -217,7 +217,7 @@ export function chooseExpeditionNode(content: Content, current: RunState, nodeId
     case 'wild':
     case 'trainer':
     case 'elite': {
-      const column = getCampaign(content, run.campaignId).columns;
+      const column = runCampaign(content, run).columns;
       if (def.legendary && target.kind === 'wild') {
         fight(() => startLegendWild(content, run, rng.pick(def.legendary!.wild), exp.level + def.legendary!.wildLevelBonus));
         break;

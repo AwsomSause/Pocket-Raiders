@@ -9,6 +9,7 @@
 // one seeded by the stop. No existing stream is touched, so adding events
 // changes no other roll, and choosing again after a reload gives the same result.
 
+import { scaledCap, stageLengthFactor } from './stageLength';
 import { lastReleased } from './co/familiesA';
 import { prisonOnLoss } from './greenneedle/prison';
 import { applyGnEffect, gnBattleStart, gnConditionMet, gnTokens, resolveCast } from './greenneedle';
@@ -103,7 +104,7 @@ import { scheduleStage, spacedColumns } from './expansion/scheduler';
 import { fnv1a } from './expansion/hash';
 import { typeEffectiveness } from './battle/damage';
 import { getSpecies } from './pokemon';
-import { currentRegion, getCampaign, levelCap, runLevelCap } from './regions';
+import { currentRegion, getCampaign, levelCap, runLevelCap, runCampaign } from './regions';
 import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } from './encounterDirector';
 import { hashSeed, Rng } from './rng';
 import { continueAfterDecisions, healParty, newMon, partyCapacity, startRaidBattle } from './run';
@@ -147,7 +148,7 @@ import { MAX_FOES, MAX_FOES_LISTED } from './bossLimits';
 
 /** The stage number counted from the start of the run (1 = the first stage). */
 export function stageNumber(content: Content, run: RunState): number {
-  return run.regionIndex * getCampaign(content, run.campaignId).stagesPerRegion + (run.stage?.index ?? 0) + 1;
+  return run.regionIndex * runCampaign(content, run).stagesPerRegion + (run.stage?.index ?? 0) + 1;
 }
 
 export function conditionMet(content: Content, run: RunState, c: EventCondition): boolean {
@@ -179,7 +180,7 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
     case 'storyRaid':
       return raidOffered(run, c.n);
     case 'partyLevelOver':
-      return (!!run.stage && run.party.some((m) => m.level >= curveLevel(content, levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, run.stage!.index, 1)) + c.over)) !== (c.absent === true);
+      return (!!run.stage && run.party.some((m) => m.level >= curveLevel(content, levelScale(content, runCampaign(content, run), run.regionIndex, run.stage!.index, 1)) + c.over)) !== (c.absent === true);
     case 'partyMoveType':
       return run.party.some((m) => m.hp > 0 && m.moves.some((s) => { const mv = content.moves.get(s.id); return mv?.type === c.type && mv.category !== 'status'; }));
     case 'leadType':
@@ -930,7 +931,7 @@ export function addEventStops(content: Content, run: RunState): void {
       node.sides.push({ id: `event-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId: e.id, ...(quotaRng.chance(cfg.hiddenShare) ? { hidden: true } : {}) });
     }
   }
-  const wantedStops = Math.round(rng.int(cfg.perStage[0], cfg.perStage[1]) * eventChanceScale(run.rules)) + (focusIs(content, run, run.regionIndex, 'mystery') ? MYSTERY_EXTRA_STOPS : 0);
+  const wantedStops = Math.round(rng.int(cfg.perStage[0], cfg.perStage[1]) * eventChanceScale(run.rules) * stageLengthFactor(run)) + (focusIs(content, run, run.regionIndex, 'mystery') ? MYSTERY_EXTRA_STOPS : 0);
   for (let i = 0; i < wantedStops && candidates.length > 0; i++) {
     const e = pickEvent(content, run, rng, taken);
     if (!e) break;
@@ -985,8 +986,8 @@ export function scheduleExpansionStops(content: Content, run: RunState, open: Re
   if (candidates.length === 0) return [];
   const regionId = currentRegion(content, run).id;
   const sched = scheduleStage({
-    candidates, quota: content.balance.expansionEvents.density[density], placedInRegion: run.expansion?.xe?.[regionId] ?? 0,
-    stagesLeft: getCampaign(content, run.campaignId).stagesPerRegion - stage.index, seed: run.seed, stageKey: stageKey(run) ?? '',
+    candidates, quota: scaledCap(content.balance.expansionEvents.density[density], run), placedInRegion: run.expansion?.xe?.[regionId] ?? 0,
+    stagesLeft: runCampaign(content, run).stagesPerRegion - stage.index, seed: run.seed, stageKey: stageKey(run) ?? '',
   });
   if (sched.ids.length === 0) return [];
   const cols = spacedColumns(stage.map.nodes.filter((n) => n.column < stage.map.columns).map((n) => n.column), sched.ids.length, xeColumns(run), `${run.seed}::${stageKey(run)}`);
@@ -2272,7 +2273,7 @@ type EventBattleRef = NonNullable<NonNullable<RunState['battle']>['event']>;
  */
 function pickSpecies(content: Content, run: RunState, species: string[], types: TypeName[], rng: Rng, source: EncounterSource = 'event', rarer = false): string {
   const node = run.stage!.map.nodes.find((n) => n.id === run.stage!.current);
-  const gate = node ? curveLevel(content, levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, run.stage!.index, node.column)) : 1;
+  const gate = node ? curveLevel(content, levelScale(content, runCampaign(content, run), run.regionIndex, run.stage!.index, node.column)) : 1;
   // Greenneedle: `@name` is a story Pokémon cast earlier in the run (gn op `cast`).
   const known = resolveCast(run, species).filter((id) => content.species.has(id));
   // Tidal Bell / Clear Bell: their legendary answers whenever it is one of the choices.
@@ -2292,7 +2293,7 @@ function pickSpecies(content: Content, run: RunState, species: string[], types: 
 /** `stageOffset`: a placed event's level line (A-2 to A+2): the game's own level for that many stages earlier or later. */
 export function eventLevel(content: Content, run: RunState, node: MapNode, rng: Rng, stageOffset = 0): number {
   const stage = run.stage!;
-  const scale = withPartyStrength(content, levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, Math.max(0, stage.index + stageOffset), node.column), run.party.map((p) => p.level));
+  const scale = withPartyStrength(content, levelScale(content, runCampaign(content, run), run.regionIndex, Math.max(0, stage.index + stageOffset), node.column), run.party.map((p) => p.level));
   return enemyLevel(content, getArchetype(content, run.archetypeId), scale, 0, rng).level;
 }
 
