@@ -3,7 +3,7 @@
 // (`ball-kind`) and it comes out by itself. A tinker can crack it for ₽200: it bolts, and is met again as a wild Pokémon that can't be caught.
 import type { Content, TypeName } from '../contentSchema';
 import { TYPE_NAMES } from '../contentSchema';
-import type { RunState } from '../state';
+import type { BattleState, RunState } from '../state';
 import { typesPool } from '../themes';
 
 const f = (run: Pick<RunState, 'story'>, k: string): number => Number(run.story.flags[`ev:${k}`] ?? 0);
@@ -54,6 +54,13 @@ export function ballBattle(run: RunState): void {
   set(run, 'ball-held-result', b.outcome === 'win' ? 1 : 2);
 }
 
+/** The held Ball answers the moment the battle is decided: warm after a win, one rock after a loss (said once a battle). */
+export function ballAnswer(run: RunState, battle: BattleState): string {
+  if (f(run, 'ball-held') === 0 || (battle.outcome !== 'win' && battle.outcome !== 'lose') || battle.storyEffects.includes('ball-answered')) return '';
+  battle.storyEffects.push('ball-answered');
+  return battle.outcome === 'win' ? 'The old Ball in your hand: warm.' : 'The old Ball in your hand: it rocks once.';
+}
+
 const carried = (run: Pick<RunState, 'story'>): boolean => f(run, 'ball-found') > 0 && f(run, 'ball-gone') === 0;
 
 /** At a rest stop while the Ball is in the bag: its scene opens beside the stop (at five kindnesses, the hatching instead). */
@@ -61,11 +68,15 @@ export function ballRest(content: Content, run: RunState): void {
   if (!carried(run)) return;
   const id = f(run, 'ball-kind') >= BALL_KINDS ? HATCH : REST;
   if (!content.events.has(id)) return;
+  // Its scene opens at one rest a stage (the doc: the + node nearest step 10); the coming-out opens at the very next rest.
+  const stage = run.regionIndex * 100 + (run.stage?.index ?? 0) + 1;
+  if (id === REST && f(run, 'ball-rest-stage') === stage) return;
   const here = run.stage?.map.nodes.find((n) => n.id === run.stage!.current);
   if (!here || here.sides.some((s) => s.kind === 'event' && !s.used && (s.eventId === REST || s.eventId === HATCH))) return;
   // What the battle it was held through said: shown at this rest only.
   set(run, 'ball-show', f(run, 'ball-held-result'));
   set(run, 'ball-held-result', 0);
+  set(run, 'ball-rest-stage', stage);
   here.sides.push({ id: `${id}-${here.sides.length + 1}`, kind: 'event', used: false, eventId: id });
 }
 

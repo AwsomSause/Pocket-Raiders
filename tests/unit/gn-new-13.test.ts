@@ -83,7 +83,7 @@ describe('gn.new.13 The Ones You Left', () => {
     let run = lostRun('n13-two', 'pidgey:12|rattata:11');
     open(run, 'gn-new-13-door');
     run = choose(run, 'gn-new-13-door', 'Take one.').run;
-    expect(scene(run, 'gn-new-13-pick-a').labels).toEqual(['The first Ball: Rattata (Lv 11).', 'The second Ball: Pidgey (Lv 12).', 'Look at the others.']);
+    expect(scene(run, 'gn-new-13-pick-a').labels).toEqual(['The first Ball: Rattata (Lv 11).', 'The second Ball: Pidgey (Lv 12).']);
   });
 
   it('a boxed Pokémon is a Ball too: it keeps its nickname and walks out of the PC into the party', () => {

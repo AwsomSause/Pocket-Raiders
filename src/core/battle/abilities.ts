@@ -101,8 +101,6 @@ export const DROP_GUARD: Record<string, BoostStat | 'all'> = {
   'big-pecks': 'def',
   // Greenneedle gn.55: the Angry Bidoof, once it's yours.
   unbothered: 'all',
-  // Greenneedle gn.new.14: the Arcade Cabinet's Porygon.
-  debug: 'all',
   'regal-poise': 'all',
   'living-hillside': 'all',
   'cotton-cloud': 'spe',

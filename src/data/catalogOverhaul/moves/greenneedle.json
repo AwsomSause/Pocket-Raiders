@@ -98,8 +98,8 @@
         "name": "Three Schools",
         "type": "fighting",
         "category": "physical",
-        "power": 30,
-        "accuracy": 95,
+        "power": 70,
+        "accuracy": 100,
         "pp": 10,
         "priority": 0,
         "critStage": 0,
@@ -108,11 +108,7 @@
             "contact"
         ],
         "effects": {
-            "hits": [
-                3,
-                3
-            ],
-            "powerRule": "perHit"
+            "attackFrom": "highest"
         }
     },
     {

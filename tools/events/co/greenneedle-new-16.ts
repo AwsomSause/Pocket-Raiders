@@ -74,11 +74,12 @@ const EVENTS: Json[] = [
       '**Old Tabor:** "A fish. A month of river water, for a fish."',
       'He says it twice, and the second time he does not mean it any more. The Feebas, in your arms, looks at the ground. You take it with you.',
     ), FEEBAS(), flag('well-done'), flag('well-told'), moment('You told a village there was a Feebas in their well. Half were ashamed. Half did not believe you.', 55))),
+    // The doc: "The bucket comes up once more, with the best pebble." It keeps its well and its bucket; it does not join.
     ch('Leave it its bucket.', out(say(
       'You do not lift it out. You tie the rope off and step back, and let it keep its bucket. The bucket goes down, and comes up once more, slowly.',
-      'There is one pebble in it, the best one: smooth, and warm, and set in the middle like a seed. Beside the pebble, the Feebas. It has climbed in by itself.',
-      'It looks at the well, and at you. Then it settles on the pebble, as if the bucket were going with it, and you carry it out into the light.',
-    ), FEEBAS(), flag('well-done'), flag('well-left'), moment('You left a Feebas its bucket, and it chose to come with you, riding on its best pebble.', 55))),
+      'There is one pebble in it, the best one: smooth, and warm, and set in the middle like a seed.',
+      'Far down, two wide eyes, and a small splash. You put the pebble in your pocket, and leave the rope where it can reach it.',
+    ), item('smooth-rock'), flag('well-done'), flag('well-left'), moment('You left a Feebas its well and its bucket. It sent up its best pebble.', 55))),
   ]),
   // ---- if it evolves: the villagers who did not believe it come to look ----
   gev('gn-new-16-look', 'The Villagers Come to Look', well({ stop: 'event', rarity: 'uncommon', callback: true, minStage: 2, requires: [{ kind: 'gn', test: 'hasMark', key: 'well-evolved' }, not('well-looked')] }), say(
@@ -95,8 +96,8 @@ export const REMOVE: string[] = [];
 
 export const PLACEMENT: Record<string, Placement> = {
   'gn-new-16-well': {
-    gn: 'gn.new.16', shape: 'Single', earliest: 'A2', home: 5, window: [3, 8], sits: 'must-see', attaches: 'before', tags: ['Miniature Episode', 'Companion Story'], level: 'no battles', often: 'run', badge: 'none',
-    note: 'Home step 5; the fallback is step 15 (the window\'s reach). Once per run: well-done. Afterstory for the Final Reunion: it reads well-done (the well is in use, a pebble on the rim).',
+    gn: 'gn.new.16', shape: 'Single', earliest: 'A2', home: 5, window: [5, 15], sits: 'must-see', attaches: 'before', tags: ['Miniature Episode', 'Companion Story'], level: 'no battles', often: 'run', badge: 'none',
+    note: 'Home step 5; the fallback is step 15 (the window\'s end). Once per run: well-done. Afterstory for the Final Reunion: it reads well-done (the well is in use, a pebble on the rim).',
   },
 };
 export const CHAINS: Json[] = [];

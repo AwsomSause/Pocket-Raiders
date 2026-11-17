@@ -25,12 +25,12 @@
     "tint": "#3b3a4e",
     "effect": "none"
    },
-   "intro": "A cold fire. A bedroll, still rolled. Poké Balls in a row on a log, and beside them, a notebook in your own handwriting.\n\nThe last page lists every Pokémon you let go, boxed or lost on this road, by name. Under it, in a hurry: \"Tomorrow, the Gym.\"\n\nThe Balls open by themselves. They have been waiting. They look at you the way a Pokémon looks at someone it remembers losing with.",
+   "intro": "A cold fire. A bedroll, still rolled. {left:row}, a notebook in your own handwriting.\n\nYou never made this camp. The last page is a list, the ones you left on this road, by name: {left:list}. Under it, in a hurry: \"Later. After the Gym.\"\n\n{left:open}",
    "choices": [
     {
      "label": "Take one.",
      "success": {
-      "text": "You kneel by the log. Nobody asks you to hurry. The Balls wait for you to choose, and they do not look away.",
+      "text": "You kneel by the log. Nobody asks you to hurry. Nobody looks away.",
       "effects": [
        {
         "kind": "gn",
@@ -92,12 +92,12 @@
     "tint": "#3b3a4e",
     "effect": "none"
    },
-   "intro": "The notebook says who they were. The Balls say who they still are.\n\nThe first three, on the left of the log: {left:1}, {left:2}, {left:3}.",
+   "intro": "The notebook says who they were. The Balls say who they still are.\n\n{left:first}",
    "choices": [
     {
      "label": "The first Ball: {left:1}.",
      "success": {
-      "text": "You lift the Ball. It is warm, as if someone has been holding it. It opens in your hand, and the one inside steps out and leans against you without a word. It remembers one thing it knew then, and shows you.",
+      "text": "You lift the Ball. It is warm, as if someone has been holding it. The one inside steps out and leans against you without a word. It remembers one thing it knew then, and shows you.",
       "effects": [
        {
         "kind": "gn",
@@ -126,7 +126,7 @@
     {
      "label": "The second Ball: {left:2}.",
      "success": {
-      "text": "You lift the Ball. It is warm, as if someone has been holding it. It opens in your hand, and the one inside steps out and leans against you without a word. It remembers one thing it knew then, and shows you.",
+      "text": "You lift the Ball. It is warm, as if someone has been holding it. The one inside steps out and leans against you without a word. It remembers one thing it knew then, and shows you.",
       "effects": [
        {
         "kind": "gn",
@@ -155,7 +155,7 @@
     {
      "label": "The third Ball: {left:3}.",
      "success": {
-      "text": "You lift the Ball. It is warm, as if someone has been holding it. It opens in your hand, and the one inside steps out and leans against you without a word. It remembers one thing it knew then, and shows you.",
+      "text": "You lift the Ball. It is warm, as if someone has been holding it. The one inside steps out and leans against you without a word. It remembers one thing it knew then, and shows you.",
       "effects": [
        {
         "kind": "gn",
@@ -192,7 +192,14 @@
         "key": "gn-new-13-pick-b"
        }
       ]
-     }
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "leftHas",
+       "n": 4
+      }
+     ]
     }
    ]
   },
@@ -210,12 +217,12 @@
     "tint": "#3b3a4e",
     "effect": "none"
    },
-   "intro": "The three on the right of the log. One of them is already looking toward the trees.\n\nThe last three: {left:4}, {left:5}, {left:6}.",
+   "intro": "Further down the log, past the cold fire.\n\n{left:others}",
    "choices": [
     {
      "label": "The fourth Ball: {left:4}.",
      "success": {
-      "text": "You lift the Ball. It is warm, as if someone has been holding it. It opens in your hand, and the one inside steps out and leans against you without a word. It remembers one thing it knew then, and shows you.",
+      "text": "You lift the Ball. It is warm, as if someone has been holding it. The one inside steps out and leans against you without a word. It remembers one thing it knew then, and shows you.",
       "effects": [
        {
         "kind": "gn",
@@ -244,7 +251,7 @@
     {
      "label": "The fifth Ball: {left:5}.",
      "success": {
-      "text": "You lift the Ball. It is warm, as if someone has been holding it. It opens in your hand, and the one inside steps out and leans against you without a word. It remembers one thing it knew then, and shows you.",
+      "text": "You lift the Ball. It is warm, as if someone has been holding it. The one inside steps out and leans against you without a word. It remembers one thing it knew then, and shows you.",
       "effects": [
        {
         "kind": "gn",
@@ -273,7 +280,7 @@
     {
      "label": "The sixth Ball: {left:6}.",
      "success": {
-      "text": "You lift the Ball. It is warm, as if someone has been holding it. It opens in your hand, and the one inside steps out and leans against you without a word. It remembers one thing it knew then, and shows you.",
+      "text": "You lift the Ball. It is warm, as if someone has been holding it. The one inside steps out and leans against you without a word. It remembers one thing it knew then, and shows you.",
       "effects": [
        {
         "kind": "gn",
@@ -333,7 +340,7 @@
        "atMost": 99
       }
      ],
-     "notice": "The one you took walks beside you, a little behind, the way it used to. It looks back once, at the rest, and then ahead."
+     "notice": "The one you took walks beside you, a little behind, the way it used to. It looks back once, at the camp, and then ahead."
     },
     {
      "id": "buried",
@@ -354,16 +361,16 @@
     "tint": "#3b3a4e",
     "effect": "none"
    },
-   "intro": "The others decide for themselves, and you do not get a vote. That is the whole of it.\n\nTwo go with a passing trainer, who calls out, \"Good ones, these. I'll look after them.\" Two stay at the camp. They will keep the fire going.\n\nOne walks into the woods, {left:woods}, and does not look back. You watch the trees until you cannot tell which one it was.",
+   "intro": "{left:morning}",
    "choices": [
     {
      "label": "Walk on.",
      "success": {
-      "text": "You put out the last of the fire. The camp stays where it is. You do not turn around, because the one in the woods would not want you to.",
+      "text": "You put out the last of the fire. The camp stays where it is. You do not turn around. Nobody there would want you to.",
       "effects": [
        {
         "kind": "moment",
-        "text": "Met the team I lost, and let them choose.",
+        "text": "Met the ones I left on this road, and let them choose.",
         "importance": 70
        }
       ]

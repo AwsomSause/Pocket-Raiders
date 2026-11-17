@@ -8,5 +8,5 @@
   "seen-it": "A Champion taught it this. Uses the user's better attacking stat. Once a battle, it goes first against a Pokémon that has only just come in.",
   "house-call": "A radio's crackle and a house's warmth, down the line. The user restores half its HP.",
   "encore-performance": "The last note, played again. Next turn the user repeats its own last move, and goes first. Fails if used twice in a row.",
-  "three-schools": "A kick, a punch and a spin, one from each dojo. The user strikes three times."
+  "three-schools": "A kick, a punch and a stance, one from each dojo. It hits with whichever of the user's Attack, Defense or Speed is highest right now."
 }

@@ -433,20 +433,12 @@
     {
      "label": "Leave it its bucket.",
      "success": {
-      "text": "You do not lift it out. You tie the rope off and step back, and let it keep its bucket. The bucket goes down, and comes up once more, slowly.\n\nThere is one pebble in it, the best one: smooth, and warm, and set in the middle like a seed. Beside the pebble, the Feebas. It has climbed in by itself.\n\nIt looks at the well, and at you. Then it settles on the pebble, as if the bucket were going with it, and you carry it out into the light.",
+      "text": "You do not lift it out. You tie the rope off and step back, and let it keep its bucket. The bucket goes down, and comes up once more, slowly.\n\nThere is one pebble in it, the best one: smooth, and warm, and set in the middle like a seed.\n\nFar down, two wide eyes, and a small splash. You put the pebble in your pocket, and leave the rope where it can reach it.",
       "effects": [
        {
-        "kind": "join",
-        "shadow": false,
-        "species": [
-         "feebas"
-        ],
-        "types": [],
-        "levelBonus": -1,
-        "shinyMultiplier": 1,
-        "asIs": true,
-        "ability": "unlooked-for",
-        "mark": "well-feebas"
+        "kind": "item",
+        "id": "smooth-rock",
+        "count": 1
        },
        {
         "kind": "flag",
@@ -460,7 +452,7 @@
        },
        {
         "kind": "moment",
-        "text": "You left a Feebas its bucket, and it chose to come with you, riding on its best pebble.",
+        "text": "You left a Feebas its well and its bucket. It sent up its best pebble.",
         "importance": 55
        }
       ]

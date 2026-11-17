@@ -55,11 +55,11 @@ import { mirrorReady, mirrorStart } from './mirror';
 import { dueFriend, MANY, ofGuest, ofJoin, ofPick, ofReplacer, ofSpecial, oldfriendTokens, releases, specialDue } from './oldfriend';
 import { ferrisArrive, ferrisBest, ferrisHand, ferrisShape, ferrisStart, ferrisTurn } from './ferris';
 import { followedJoin, followedTokens } from './followed';
-import { ballFind, ballForce, ballHatched, ballHold, ballKind, ballTokens } from './ball';
+import { ballAnswer, ballFind, ballForce, ballHatched, ballHold, ballKind, ballTokens } from './ball';
 import { reunionArrive, reunionFar, reunionTokens, reunionWalk } from './reunion';
 import { giveDearest } from './fox';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
-import { paradeAll, paradeEgg, paradeEggReady, paradeForget, paradeMemory, paradeNickname, paradeSecret, paradeSwap, paradeWake } from './parade';
+import { paradeAll, paradeEgg, paradeEggReady, paradeForget, paradeMemory, paradeMoveReady, paradeNickname, paradeRare, paradeSecret, paradeSwap, paradeWake } from './parade';
 import { finalRest, xatuBlur, xatuDraw, xatuPeek, xatuTokens, xatuTrue } from './cartographer';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -231,6 +231,7 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'paradeMemory') return paradeMemory(run);
   if (c.test === 'paradeNickname') return paradeNickname(run);
   if (c.test === 'paradeEggReady') return paradeEggReady(content, run);
+  if (c.test === 'paradeMoveReady') return paradeMoveReady(run);
   if (c.test === 'paradeAll') return paradeAll(run, gnFlag(run, c.key!));
   // gn.new.12: the Xatu's image came true; the last rest of the run; the run's Blessing has answered (Communion).
   if (c.test === 'prophecyTrue') return xatuTrue(run);
@@ -251,6 +252,9 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'duelistLeft') return gnFlag(run, 'duelist-left') > 0;
   const stamped = gnFlag(run, c.key!);
   if (c.test === 'laterStage') return stamped > 0 && stamped < stage;
+  // Exactly (`stageGap`) or at least (`stageGapMin`) `n` stages after the stamp (gn.new.02's S(n+1) and S(n+2); gn.new.03's 16 stages on).
+  if (c.test === 'stageGap') return stamped > 0 && stage - stamped === (c.n ?? 1);
+  if (c.test === 'stageGapMin') return stamped > 0 && stage - stamped >= (c.n ?? 1);
   if (c.test === 'sameStage') return stamped === stage;
   if (c.test === 'notThisStage') return stamped !== stage;
   if (c.test === 'notThisRegion') return stamped !== run.regionIndex + 1;
@@ -734,11 +738,13 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return draftLetter(content, run);
     // gn.new.11: the Night Parade's Spirit Market.
     case 'paradeSwap':
-      return paradeSwap(content, run, e.key!);
+      return paradeSwap(content, run, host.float);
     case 'paradeEgg':
       return paradeEgg(content, run);
     case 'paradeForget':
       return paradeForget(run);
+    case 'paradeRare':
+      return paradeRare(content, run, host.float());
     case 'paradeSecret':
       return paradeSecret(content, run);
     case 'paradeWake':
@@ -1104,7 +1110,9 @@ export function gnBattleStart(content: Content, run: RunState): void {
   if (rule === 'impersonator') impersonatorStart(run, battle);
   // gn.new.06: the Duelist, and the chosen one's Worthy Opponent.
   if (rule === 'duelist') duelistStart(content, run, battle, FOE_WAITS, makeFull(content));
-  worthyStart(run, battle);
+  worthyStart(content, run, battle);
+  // gn.new.19: Warm Clothes, for the rest of the region the Snowbound Village is in.
+  if (gnFlag(run, 'sv-warm-region') === run.regionIndex + 1 && !battle.storyEffects.includes('warm-clothes')) battle.storyEffects.push('warm-clothes');
   // gn.new.10: the Mirror Lake's reflections, the team from the battle the player would rather forget.
   if (rule === 'mirror') mirrorStart(content, run, battle, makeFull(content));
   // gn.59: Old Ferris's five: no items, no switching.
@@ -1310,9 +1318,12 @@ function countForest(content: Content, run: RunState, battle: BattleState): void
 /** After a turn: once a fight is won, the stories that count fights take their count (once per fight). */
 export function gnAfterTurn(content: Content, run: RunState): Cue[] {
   const battle = run.battle;
-  const seen = ferrisTurn(content, run);
+  const seen = [...ferrisTurn(content, run)];
   // gn.25: the pair answer for each other (part3.ts).
   if (battle && !battle.outcome) for (const line of truceAnswers(content, battle, run.party)) seen.push(cue('player', line));
+  // gn.new.03: the Ball held through this battle answers as soon as it is decided.
+  const ball = battle ? ballAnswer(run, battle) : '';
+  if (ball) seen.push(cue('player', ball));
   if (!battle || (battle.outcome !== 'win' && battle.outcome !== 'caught') || battle.storyEffects.includes('gn-counted')) return seen;
   battle.storyEffects.push('gn-counted');
   countForest(content, run, battle);
