@@ -190,6 +190,8 @@ export function shapeSkyFoe(content: Content, run: RunState, eventId: string): v
   mon.held = heldOf(sky.gifts);
   mon.hp = maxHp(content, mon);
   battle.enemyTeam[0] = mon;
+  // Watched, never played (spectate.ts prepareSpectate set the team aside): the scene shows no menu and plays every turn.
+  if (sky.stash?.own) battle.spectate = { kind: 'duel' };
 }
 
 // ---- effects ----

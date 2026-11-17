@@ -514,10 +514,10 @@ const gn13: Json[] = [
       ] }],
     }),
   ]),
-  rm('gn-13-meadow', 'Flight North: The Meadow', north({ pokemon: 'pidgey' }), say(
+  rm('gn-13-meadow', 'Flight North: The Meadow', north(), say(
     'It follows you into the long grass. Every few steps it rears up and looks round, checking you\'re still there.',
     'Two wild Pokémon are in the way. It is the only one of you that can fight. It knows it.',
-  ), [ch('Let it try.', fight('It squares up, trembling, and gives two rising notes: its cry. You will know it anywhere, later.', inFlight({ kind: 'wild', species: ['rattata', 'pidgey', 'nidoran-f', 'nidoran-m', 'oddish', 'bellsprout', 'sentret', 'zigzagoon'], types: [], level: 6, chain: 2, levelBonus: 0, shinyMultiplier: 1,
+  ), [ch('Let it try.', fight('It squares up, trembling, and gives two rising notes: its cry. You will know it anywhere, later.', inFlight({ kind: 'wild', species: ['rattata', 'nidoran-f', 'nidoran-m', 'oddish', 'bellsprout'], types: [], level: 6, chain: 2, levelBonus: 0, shinyMultiplier: 1,
     win: [{ kind: 'levels', amount: 2, who: 'lead' }, fn('trust'), FLOCK('High up, the Spearow flock passes over, once. It doesn\'t come down.'), room('gn-13-cocoon')] })))]),
   rm('gn-13-cocoon', 'Flight North: Cocoon Night', north(), say(
     '*It wins. It hops. It nearly falls over. It looks back to see if you saw.*',
@@ -527,17 +527,17 @@ const gn13: Json[] = [
     ch('Carry it inside my coat.', out('You carry it against your chest, out of the wind. Through the shell, very faintly, you can feel it settle.', ...EVOLVE_COCOON, heal(1), bond(1), fn('trust'), room('gn-13-stream'))),
     ch('Carry it where it can see.', out('You carry it in your hands, held up, so it can watch the stars go over. It doesn\'t move. You think it\'s looking.', ...EVOLVE_COCOON, heal(1), bond(1), fn('trust'), room('gn-13-stream'))),
   ]),
-  rm('gn-13-stream', 'Flight North: The Stream', north({ pokemon: 'poliwag' }), say(
+  rm('gn-13-stream', 'Flight North: The Stream', north(), say(
     'At the stream, something bigger comes out of the water. Your cocoon can\'t run. It can only Harden, and wait.',
   ), [ch('Stay with it.', fight('You put yourself beside it on the stones, close enough to feel the shell tick as it hardens.', inFlight({ kind: 'wild', species: ['poliwag', 'psyduck', 'tentacool', 'goldeen'], types: [], level: 9, levelBonus: 0, shinyMultiplier: 1, rule: { noAttacks: true, surviveTurns: 4 },
-    win: [{ kind: 'levels', amount: 1, who: 'lead' }, fn('trust'), room('gn-13-hatch')] })))]),
+    win: [{ kind: 'levels', amount: 2, who: 'lead' }, fn('trust'), room('gn-13-hatch')] })))]),
   rm('gn-13-hatch', 'Flight North: Hatching', north({ pokemon: 'pidgey' }), say(
     '*It takes every hit. It doesn\'t make a sound.*',
     'In the morning the shell splits. It comes out changed.',
     '*It\'s never had wings before. It flies into a tree. It tries again.*',
     'A flock of Pidgey lifts out of a dead oak, all at once, and turns on it.',
   ), [ch('Stand together.', fight('It doesn\'t look away from them. Neither do you.', { ...inFlight({ kind: 'wild', species: ['pidgey'], types: [], level: 10, chain: 2, levelBonus: 0, shinyMultiplier: 1,
-    win: [{ kind: 'levels', amount: 4, who: 'lead' }, heal(1), fn('trust'), FLOCK('The Spearow flock passes over again, higher. This time it keeps going.'), room('gn-13-camp')] }) }, ...EVOLVE_FINAL))]),
+    win: [{ kind: 'levels', amount: 4, who: 'lead' }, heal(1), fn('trust'), FLOCK('The Spearow flock passes over again, higher. This time it keeps going.'), room('gn-13-camp')] }) }, ...EVOLVE_FINAL, { kind: 'levels', amount: 1, who: 'lead' }))]),
   rm('gn-13-camp', "Flight North: The Trio's Camp", north({ pokemon: 'meowth' }), say(
     'A campfire, a balloon tethered to a tree, and by the fire, a cage. Your team is in it.',
     '*Your lead sees you through the bars. It doesn\'t make a sound either. It\'s learned that from somebody.*',

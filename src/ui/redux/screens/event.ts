@@ -8,6 +8,7 @@ import type { Burst, ChangeVisual, ChoiceIcon, ChoiceVisual, Mood, Shot, Stir, T
 import { changeVisual, choiceVisual, lineVisual, outcomeBurst } from '../../../core/presentation/eventVisuals';
 import { scenery, type SceneryLook } from '../eventScenery';
 import { partyStrip, type PartyChip } from '../game';
+import { rxAtlas } from '../assets';
 import { act, B, esc, foot, H, hpb, icon, mini, mon, TX, W } from '../kit';
 import type { ScriptLine } from '../script';
 import type { ReduxCtx } from '../stage';
@@ -32,6 +33,8 @@ export interface EventLook {
   speaking: number;
   /** Pokémon in the scene, as sprite files (at most two). */
   mons: string[];
+  /** Each Pokémon's drawn height as a share of the first one's (null or missing: the stage's own size). */
+  monSize?: (number | null)[];
   /** Things the text names, as picture files (at most three). */
   props: string[];
   /** A scene with nobody in it: the player's lead Pokémon looks on from the near corner (its back sprite), or null. */
@@ -158,7 +161,10 @@ function stage(L: EventLook, page: string, tone: Tone | null, focus: number): st
   }).join('');
   const mons = L.mons.map((file, i) => {
     const s = at.mons[i]!;
-    return `<div class="foot ev-fig${!L.cast.length && i === 0 ? lean : ''}" data-once="mon${i}:${tone ?? ''}:${focus}" style="left:${s.x}px;top:${FEET}px;z-index:3;--i:${i + 1}"><div class="ev-in ev-hop${stirOn(i, true)}" data-once="inm${i}">${mon(file, s.k, '', true)}</div></div>`;
+    // A set size is measured on what is drawn (the trimmed frame), against the first Pokémon.
+    const rel = L.monSize?.[i], h0 = rxAtlas(L.mons[0]!)?.f[0]?.[3], h = rxAtlas(file)?.f[0]?.[3];
+    const k = rel && h0 && h ? (at.mons[0]!.k * h0 * rel) / h : s.k;
+    return `<div class="foot ev-fig${!L.cast.length && i === 0 ? lean : ''}" data-once="mon${i}:${tone ?? ''}:${focus}" style="left:${s.x}px;top:${FEET}px;z-index:3;--i:${i + 1}"><div class="ev-in ev-hop${stirOn(i, true)}" data-once="inm${i}">${mon(file, k, '', true)}</div></div>`;
   }).join('');
   // Things the text names stand on the ground to the right of whoever is there, never under the choices.
   const right = Math.max(180, ...at.cast.map((s) => s.x + 70), ...at.mons.map((s) => s.x + 60));

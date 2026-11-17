@@ -7805,7 +7805,6 @@
    "room": true,
    "scene": {
     "cast": [],
-    "pokemon": "pidgey",
     "tint": "#2f5d73",
     "effect": "none"
    },
@@ -7820,13 +7819,10 @@
        "kind": "wild",
        "species": [
         "rattata",
-        "pidgey",
         "nidoran-f",
         "nidoran-m",
         "oddish",
-        "bellsprout",
-        "sentret",
-        "zigzagoon"
+        "bellsprout"
        ],
        "types": [],
        "level": 6,
@@ -7967,7 +7963,6 @@
    "room": true,
    "scene": {
     "cast": [],
-    "pokemon": "poliwag",
     "tint": "#2f5d73",
     "effect": "none"
    },
@@ -7999,7 +7994,7 @@
        "win": [
         {
          "kind": "levels",
-         "amount": 1,
+         "amount": 2,
          "who": "lead"
         },
         {
@@ -8059,6 +8054,11 @@
         "kind": "formChange",
         "from": "weedle",
         "to": "beedrill"
+       },
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
        }
       ],
       "battle": {

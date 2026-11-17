@@ -39,6 +39,7 @@ import { itemEvolutionTargets } from '../core/evolution';
 import { maxHp } from '../core/pokemon';
 import { pageSpeaker, scriptPages, type ScriptPage } from '../ui/redux/script';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { leadStarEvent, skyBirdStaging } from '../core/presentation/eventStars';
 import { tourneyHome, tourneyPage, tourneyRounds } from '../ui/redux/screens/bracket';
 import { eventView as rxEventView, type EventLook } from '../ui/redux/screens/event';
 import type { HonestModel, HonestSide } from '../ui/redux/screens/stops';
@@ -311,7 +312,14 @@ export class EventScene extends Phaser.Scene {
       const speciesByName = new Map<string, string>();
       for (const sp of content.species.values()) if (!speciesByName.has(sp.name.toLowerCase())) speciesByName.set(sp.name.toLowerCase(), sp.id);
       const starId = champion ?? ctx.species?.id ?? mine ?? null;
-      const monFiles = [star, ...namedInText(said, speciesByName, 3).filter((id) => id !== starId).map((id) => monFile(this, id))].filter((f): f is string => !!f).filter((f, i, all) => all.indexOf(f) === i).slice(0, 2);
+      // Flight North: the small Bug-type (the only Pokémon you have there) stands first in every room.
+      const bug = leadStarEvent(view.event.id) ? (run.party.find((m) => m.hp > 0) ?? run.party[0]) : undefined;
+      let onStage = [bug ? { id: bug.speciesId, file: monFile(this, bug.speciesId, 'front', !!bug.shiny) } : null, { id: starId ?? '', file: star }, ...namedInText(said, speciesByName, 3).filter((id) => id !== starId).map((id) => ({ id, file: monFile(this, id) }))]
+        .filter((x): x is { id: string; file: string } => !!x?.file).filter((x, i, all) => all.findIndex((y) => y.file === x.file) === i).slice(0, 2);
+      // Pidgey's Resolve: Pidgey's line first at its usual size, Spearow or Fearow a little taller.
+      const birds = skyBirdStaging(view.event.id, onStage.map((x) => x.id));
+      if (birds) onStage = birds.order.map((k) => onStage[k]!);
+      const monFiles = onStage.map((x) => x.file);
       const itemsByName = new Map<string, string>();
       for (const it of content.items.values()) if (it.name.length > 3) itemsByName.set(it.name.toLowerCase(), it.iconAssetId);
       for (const it of content.catalog.values()) if (it.name.length > 3 && !itemsByName.has(it.name.toLowerCase())) itemsByName.set(it.name.toLowerCase(), catalogIconId(it.icon));
@@ -322,7 +330,7 @@ export class EventScene extends Phaser.Scene {
       const buddy = !people.length && !monFiles.length && lead ? monFile(this, lead.speciesId, 'back', !!lead.shiny) : null;
       const eventLook: Omit<EventLook, 'speaking' | 'emote'> = {
         scene: { set: vis.set, place: vis.place, inside: vis.inside, time: vis.time, mood: vis.mood, weather: vis.weather, motes: vis.motes, seed: vis.seed, pic, tint: scene.tint ?? null, still: this.calm },
-        shot: shotOf(vis, people.length, monFiles.length > 0, kinds), stir: vis.stir, sigil: vis.sigil, cast: people.map((x) => x.art), mons: monFiles, props, buddy,
+        shot: shotOf(vis, people.length, monFiles.length > 0, kinds), stir: vis.stir, sigil: vis.sigil, cast: people.map((x) => x.art), mons: monFiles, ...(birds ? { monSize: birds.size } : {}), props, buddy,
         choices: view.choices.map((x) => choiceVisual({ label: x.label, kind: x.kind, locked: x.locked !== null, chance: x.chance })),
       };
       /** Which pictured person is speaking: matched by name, or the only one there. */
