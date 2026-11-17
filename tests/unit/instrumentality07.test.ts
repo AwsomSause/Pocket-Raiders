@@ -4,13 +4,14 @@ import { createBattle } from '../../src/core/battle/engine';
 import { freshSos } from '../../src/core/battle/sos';
 import { ExpansionSettingsSchema } from '../../src/core/expansion/schema';
 import { HEATED, heatedConditions, heatedRoll, isBigBattle } from '../../src/core/instrumentality/heated';
-import { breaks, believed, hearTelling, noteEvent, bumpTrack, comesWhenMet, hoopaRing, hoopaStage, mochiAlly, manaphyVisit, onReleased, magearnaOnFaint, bouquetHolder, onPartyChanged as onPartyChanged2, onSold, onStageLeft, onRegionStarted, stageKeyOf, metalItems, isRefusal, onEventChoice, wishesLeft, onLeadAtStage, onLeadChanged, onAssistAccepted, onBattleWon, onPlayerFaint, onCaught, onRestUsed, onStageEntered, onTmUsed, wonderAtBattleStart, trackOf, promiseState, promiseWarning, resolveVisit, rollVisit, visitChance, wonderAfterBattle, youngestUid, type PromiseEvent } from '../../src/core/instrumentality/promises';
+import { breaks, believed, hearTelling, noteEvent, bumpTrack, comesWhenMet, hoopaRing, hoopaStage, isGenerous, noteLostOpportunity, onWildKo, onRescueAbandoned, mochiAlly, manaphyVisit, onReleased, magearnaOnFaint, bouquetHolder, onPartyChanged as onPartyChanged2, onSold, onStageLeft, onRegionStarted, stageKeyOf, metalItems, isRefusal, onEventChoice, wishesLeft, onLeadAtStage, onLeadChanged, onAssistAccepted, onBattleWon, onPlayerFaint, onCaught, onRestUsed, onStageEntered, onTmUsed, wonderAtBattleStart, trackOf, promiseState, promiseWarning, resolveVisit, rollVisit, visitChance, wonderAfterBattle, youngestUid, type PromiseEvent } from '../../src/core/instrumentality/promises';
 import { resolveWonder, startWonder, wonderActions } from '../../src/core/instrumentality/wonders';
 import { MYTHICALS } from '../../src/core/instrumentality/promisesData';
 import { pickRescue, secondChanceOpen, secondChanceRolls } from '../../src/core/instrumentality/secondChance';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { beginMinigame, leaveMinigame } from '../../src/core/minigame/flow';
 import { wonderFollowUp } from '../../src/core/instrumentality/wonders';
+import { chooseReward, shayminReturn } from '../../src/core/run';
 import { chooseStarter, createRun, takeTurn, useDraftItem, wishCandidates, wishRedraw } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { content, toBattle } from './helpers';
@@ -107,7 +108,7 @@ describe('Mythical Promises (M1)', () => {
       expect(m.tellings).toHaveLength(3);
       if (m.status !== 'supported') expect(m.note).toBeTruthy();
     }
-    expect(MYTHICALS.filter((m) => m.status === 'supported').map((m) => m.id).sort()).toEqual(['darkrai', 'deoxys', 'diancie', 'genesect', 'hoopa', 'jirachi', 'keldeo', 'magearna', 'manaphy', 'melmetal', 'meloetta', 'meltan', 'mew', 'pecharunt', 'phione', 'victini', 'zarude', 'zeraora']);
+    expect(MYTHICALS.filter((m) => m.status === 'supported').map((m) => m.id).sort()).toEqual(['celebi', 'darkrai', 'deoxys', 'diancie', 'genesect', 'hoopa', 'jirachi', 'keldeo', 'magearna', 'manaphy', 'melmetal', 'meloetta', 'meltan', 'mew', 'pecharunt', 'phione', 'shaymin', 'victini', 'volcanion', 'zarude', 'zeraora']);
   });
   it('every Promise is a checkable rule: it breaks on its event and not on an unrelated one', () => {
     const run = base();
@@ -607,6 +608,85 @@ describe('Mythical Promises stage 2 (Pecharunt)', () => {
     expect(run.battle.enemyTeam[0]!.hp).toBeLessThan(hp);
     expect(mochiAlly(content, run)).toEqual([]); // once a region
     expect(onEventChoice(content, run, 'No, thanks.')[0]).toContain('leaves');
+  });
+});
+
+describe('Mythical Promises stage 2 (Volcanion)', () => {
+  const armed = () => {
+    const run = structuredClone(toBattle(start({ mythicalPromises: true })));
+    run.expansion = { ...run.expansion, promise: { tellings: {}, visited: 'volcanion', guest: { id: 'volcanion', forgiven: false }, kept: [], left: [] } };
+    run.party[0]!.moves = [{ id: 'water-gun', pp: 25 }];
+    run.battle = createBattle('wild', [createPokemon(content, 'rattata', 30, 'foe')], 0, run.party[0]!.uid);
+    return run;
+  };
+  it('a Water move burns the target once a battle; a lost rescue breaks the Promise', () => {
+    const run = armed();
+    expect(wonderAtBattleStart(content, run)[0]).toContain('steam');
+    let res = takeTurn(content, run, { kind: 'move', index: 0 });
+    expect(res.run.battle!.storyEffects).toContain('promise:volcanion-used');
+    expect(res.run.battle!.enemyTeam[0]!.status?.id).toBe('brn');
+    res = takeTurn(content, res.run, { kind: 'move', index: 0 });
+    expect(res.run.battle!.storyEffects.filter((e) => e === 'promise:volcanion-used')).toHaveLength(1);
+    expect(onRescueAbandoned(content, armed())[0]).toContain('leaves');
+  });
+});
+
+describe('Mythical Promises stage 2 (Shaymin, Celebi)', () => {
+  const guestRun = (id: string) => {
+    const run = structuredClone(toBattle(start({ mythicalPromises: true })));
+    run.expansion = { ...run.expansion, promise: { tellings: {}, visited: id, guest: { id, forgiven: false }, kept: [], left: [] } };
+    return run;
+  };
+  it('Shaymin: generous endings count (two bring it); passing one over when it is on offer breaks the Promise', () => {
+    for (const l of ['Give it a Berry.', 'Share your lunch.', 'Donate']) expect(isGenerous(l), l).toBe(true);
+    for (const l of ['Take the money.', 'Walk on.', 'Sell it.']) expect(isGenerous(l), l).toBe(false);
+    const fresh = start({ mythicalPromises: true });
+    onEventChoice(content, fresh, 'Give it a Berry.');
+    expect(comesWhenMet(content, fresh, 'shaymin')).toBe(false);
+    onEventChoice(content, fresh, 'Share your lunch.');
+    expect(comesWhenMet(content, fresh, 'shaymin')).toBe(true);
+    const run = guestRun('shaymin');
+    expect(onEventChoice(content, run, 'Give it a Berry.', { generousOffered: true })).toEqual([]);
+    expect(onEventChoice(content, run, 'Take the money.', { generousOffered: false })).toEqual([]);
+    expect(onEventChoice(content, run, 'Take the money.', { generousOffered: true })[0]).toContain('forgives');
+  });
+  it('Shaymin: the best reward passed over comes back in the next region with one more card', () => {
+    let run = structuredClone(toBattle(start({ mythicalPromises: true })));
+    run.expansion = { ...run.expansion, promise: { tellings: {}, visited: 'shaymin', guest: { id: 'shaymin', forgiven: false }, kept: [], left: [] } };
+    run.party[0]!.level = 80;
+    run.party[0]!.moves = [{ id: 'tackle', pp: 35 }];
+    run.battle = createBattle('wild', [createPokemon(content, 'rattata', 2, 'foe')], 0, run.party[0]!.uid);
+    let res = takeTurn(content, run, { kind: 'move', index: 0 });
+    for (let i = 0; i < 20 && res.run.phase === 'battle'; i++) res = takeTurn(content, res.run, { kind: 'move', index: 0 });
+    expect(res.run.phase).toBe('reward');
+    const draft = res.run.draft!;
+    run = chooseReward(content, res.run, 0).run;
+    const passed = Object.keys(run.itemCounters ?? {}).filter((k) => k.startsWith('shaymin-back:'));
+    expect(passed).toHaveLength(1);
+    expect(draft.slice(1)).toContain(passed[0]!.slice('shaymin-back:'.length));
+    run.regionIndex += 1;
+    expect(shayminReturn(content, run)[0]).toContain('comes back');
+    expect(run.draftCarry).toContain(passed[0]!.slice('shaymin-back:'.length));
+    expect(run.itemCounters!['draft-extra']).toBe(1);
+    expect(shayminReturn(content, run)).toEqual([]); // once
+  });
+  it('Celebi: a failed or refused event can be played again once a region; a wild Grass or Bug KO breaks the Promise', () => {
+    const run = guestRun('celebi');
+    const node = run.stage!.map.nodes.find((n) => n.column === 1)!;
+    const ev = [...content.events.values()][0]!;
+    node.sides = [{ id: 's9', kind: 'event', eventId: ev.id, used: true } as never];
+    run.stage!.current = node.id;
+    expect(wonderActions(content, run)[0]!.problem).toContain('Nothing was lost');
+    noteLostOpportunity(run, node.id, 's9', true, 'Accept'); // success and not a refusal: nothing lost
+    expect(wonderActions(content, run)[0]!.problem).toContain('Nothing was lost');
+    noteLostOpportunity(run, node.id, 's9', false, 'Try');
+    expect(wonderActions(content, run)[0]!.problem).toBeNull();
+    const { decision } = startWonder(content, run, 'recover');
+    expect(resolveWonder(content, run, decision!, 0)).toContain('played again');
+    expect(node.sides[0]!.used).toBe(false);
+    expect(wonderActions(content, run)[0]!.problem).toContain('Already');
+    expect(onWildKo(content, run, ['normal'])).toEqual([]);
+    expect(onWildKo(content, run, ['bug', 'flying'])[0]).toContain('forgives');
   });
 });
 

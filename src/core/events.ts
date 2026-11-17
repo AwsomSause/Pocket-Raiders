@@ -129,7 +129,7 @@ import type { MapNode, PokemonInstance, RunState, SideStop } from './state';
 import { applyReward, rewardTargetProblem } from './rewards';
 import { focusIs, MYSTERY_EXTRA_STOPS, regionFocus } from './campaign/focus';
 import { emit } from './story/record';
-import { onEventChoice as promiseOnChoice } from './instrumentality/promises';
+import { isGenerous, noteLostOpportunity, onEventChoice as promiseOnChoice } from './instrumentality/promises';
 import { calmDisturbance, hasDisturbance, noteDungeonEntered } from './worldSim/tick';
 import { recordBattleStarted } from './story/hooks';
 import { partyLifeBond } from './partyLife';
@@ -1189,7 +1189,8 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   if (noTrade) throw new Error(noTrade);
   if (tradeUid !== undefined && !tradePicksOf(content, current, choice)?.some((p) => p.uid === tradeUid)) throw new Error('That Pokémon does not fit the trade');
   const run = structuredClone(current);
-  for (const text of promiseOnChoice(content, run, choice.label)) emit(content, run, 'storyMoment', { data: { promise: true }, importance: 60, text });
+  const generousOffered = visibleChoices(content, current, event).some((v) => isGenerous(v.choice.label) && v.choice.requires.every((r) => conditionMet(content, current, r)));
+  for (const text of promiseOnChoice(content, run, choice.label, { generousOffered })) emit(content, run, 'storyMoment', { data: { promise: true }, importance: 60, text });
   const runSide = run.stage!.map.nodes.find((n) => n.id === node.id)!.sides.find((s) => s.id === sideId)!;
   runSide.used = true;
   delete runSide.hidden;
@@ -1220,6 +1221,7 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   run.story.flags[risky ? 'choices:risky' : 'choices:safe'] = Number(run.story.flags[risky ? 'choices:risky' : 'choices:safe'] ?? 0) + 1;
   emit(content, run, 'storyMoment', { actors: [], data: { def: 'event-choice', suppressed: false }, importance: risky ? 55 : 40, text: `${event.name}: ${choice.label}${risky ? (success ? ' (the gamble paid off)' : ' (the gamble failed)') : ''}` });
   emit(content, run, 'eventChoice', { data: { event: event.id, choice: choiceIndex, risky, success } });
+  noteLostOpportunity(run, node.id, sideId, success, choice.label);
   // Kindness and cruelty are remembered by the event's Pokémon types (It Hasn't Forgotten…).
   noteEventMorality(content, run, event.types ?? [], outcome.effects);
   noteChoice(content, run, event.name, outcome.effects, risky);

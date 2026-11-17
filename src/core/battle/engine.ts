@@ -4905,7 +4905,11 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
         // Deoxys's stances (Mythical Promises): Attack +15% dealt, Defense -15% taken, Normal +5% dealt and -5% taken.
         const se = ctx.battle.storyEffects;
         let stance = 1;
-        if (user.side === 'player') { if (se.includes('promise:stance-atk')) stance *= 1.15; if (se.includes('promise:stance-norm')) stance *= 1.05; }
+        if (user.side === 'player') {
+          if (se.includes('promise:stance-atk')) stance *= 1.15;
+          if (se.includes('promise:stance-norm')) stance *= 1.05;
+          if (moveType === 'fire' && ctx.battle.turn <= 1 && se.includes('promise:volcanion')) stance *= 0.5; // Volcanion: its own steam smothers Fire on the first turn
+        }
         else if (target.side === 'player') {
           if (se.includes('promise:stance-def')) stance *= 0.85;
           if (se.includes('promise:stance-norm')) stance *= 0.95;
@@ -5046,6 +5050,11 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     }
   }
   if (landed > 0) elementalReaction(ctx, user, target, moveType, events);
+  // Volcanion's Wonder (Mythical Promises): once a battle a Water move also burns what it hits.
+  if (landed > 0 && user.side === 'player' && moveType === 'water' && target.mon.hp > 0 && !target.mon.status && ctx.battle.storyEffects.includes('promise:volcanion') && !ctx.battle.storyEffects.includes('promise:volcanion-used')) {
+    ctx.battle.storyEffects.push('promise:volcanion-used');
+    if (canGetStatus(ctx, user, target, 'brn')) tryInflictStatus(ctx, user, target, 'brn', undefined, events, false);
+  }
   // S44: hits change the arena (Water floods the floor, Fire burns Grassy Terrain and may burn the target).
   const arena = landed > 0 ? arenaReaction(content, ctx.battle, moveType) : null;
   if (arena) {

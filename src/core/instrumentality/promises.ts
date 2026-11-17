@@ -50,6 +50,7 @@ const COMES_WHEN: Record<string, (content: Content, run: RunState) => boolean> =
   meltan: (_c, run) => metalItems(_c, run).reduce((n, id) => n + (run.inventory[id] ?? 0), 0) >= 5,
   melmetal: (_c, run) => trackOf(run, 'fed') >= MELTAN_TO_MERGE && guestId(run) === null && promiseState(run).visited === null,
   phione: (c, run) => [...run.party, ...run.box].some((m) => m.friendship >= 200 && getSpecies(c, m.speciesId).types.includes('water' as never)),
+  shaymin: (_c, run) => trackOf(run, 'generous') >= 2,
   jirachi: (_c, run) => trackOf(run, 'declines') >= 3,
   deoxys: (_c, run) => trackOf(run, 'leadChanges') >= 4,
   victini: (_c, run) => trackOf(run, 'winStreak') >= 10,
@@ -317,6 +318,10 @@ export function wonderAtBattleStart(content: Content, run: RunState): string[] {
     lines.push('Melmetal rumbles: your first contact move strikes twice (the second blow at 60%).');
   }
   if (id === 'pecharunt') lines.push(...mochiAlly(content, run));
+  if (id === 'volcanion') {
+    battle.storyEffects.push('promise:volcanion');
+    lines.push('Volcanion breathes steam: once this battle a Water move also burns; Fire moves on the first turn do half damage.');
+  }
   if (id === 'genesect') {
     const lead = run.party[battle.activeIndex];
     if (lead) {
@@ -388,11 +393,20 @@ export const wishesLeft = (run: RunState): number => (guestId(run) === 'jirachi'
 /** A choice made in an event. Plain refusals ("Decline", "Refuse", "No, thanks") count as declined requests and gifts: Jirachi's trigger and Promise, Pecharunt's Promise. Judged by the label's first words. */
 const REFUSAL = /^(decline|refuse|say no(?![a-z])|no\.?$|no,? thanks|turn (it|that|the offer|them|him|her) down|reject)/i;
 export const isRefusal = (label: string): boolean => REFUSAL.test(label.trim());
-export function onEventChoice(content: Content, run: RunState, label: string): string[] {
-  if (!run.expansion?.promises || !isRefusal(label)) return [];
+/** A generous ending: the choice begins by giving, sharing or donating (Shaymin's Promise and trigger). */
+export const isGenerous = (label: string): boolean => /^(give|share|donate|hand over|gift)\b/i.test(label.trim());
+export function onEventChoice(content: Content, run: RunState, label: string, offer: { generousOffered?: boolean } = {}): string[] {
+  if (!run.expansion?.promises) return [];
+  const lines: string[] = [];
+  if (isGenerous(label)) bumpTrack(run, 'generous', (n) => n + 1);
+  else if (offer.generousOffered) lines.push(...noteEvent(content, run, { kind: 'ungenerousEnding' })); // a generous ending was on offer and not taken
+  if (!isRefusal(label)) return lines;
   bumpTrack(run, 'declines', (n) => n + 1);
-  return [...noteEvent(content, run, { kind: 'refuseRequest' }), ...noteEvent(content, run, { kind: 'declineGift' })];
+  return [...lines, ...noteEvent(content, run, { kind: 'refuseRequest' }), ...noteEvent(content, run, { kind: 'declineGift' })];
 }
+
+/** A wild Pokémon was knocked out (Celebi: harm no wood). */
+export const onWildKo = (content: Content, run: RunState, types: readonly string[]): string[] => (run.expansion?.promises ? noteEvent(content, run, { kind: 'wildKo', types }) : []);
 
 /** Selling or cashing in an item (Diancie: Sell nothing). */
 export const onSold = (content: Content, run: RunState): string[] => (run.expansion?.promises ? noteEvent(content, run, { kind: 'sell' }) : []);
@@ -471,4 +485,14 @@ export function mochiAlly(content: Content, run: RunState): string[] {
   bumpTrack(run, 'mochiRegion', run.regionIndex + 1);
   foe.hp = Math.max(1, foe.hp - best.damage);
   return [`Pecharunt's mochi makes a friend: ${battle.trainer.name}'s ${getSpecies(content, friend.speciesId).name} turns on its own side and uses ${best.move.name}.`];
+}
+
+/** A rescue fight was lost and the plan wiped (Volcanion: finish what you started). */
+export const onRescueAbandoned = (content: Content, run: RunState): string[] => (run.expansion?.promises ? noteEvent(content, run, { kind: 'abandonRescued' }) : []);
+
+/** Celebi: an event that failed or was refused this stage is a lost opportunity it can bring back (once a region). Kept in the run's counters. */
+export const lostKey = (run: Pick<RunState, 'regionIndex' | 'stage'>, nodeId: string, sideId: string): string => `celebi-lost:${run.regionIndex * 100 + (run.stage?.index ?? 0)}:${nodeId}:${sideId}`;
+export function noteLostOpportunity(run: RunState, nodeId: string, sideId: string, success: boolean, label: string): void {
+  if (guestId(run) !== 'celebi' || (success && !isRefusal(label))) return;
+  run.itemCounters = { ...run.itemCounters, [lostKey(run, nodeId, sideId)]: run.regionIndex + 1 };
 }

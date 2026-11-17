@@ -6,13 +6,21 @@ import type { PendingDecision, RunState } from '../state';
 import { addItem, consumeItem } from '../items';
 import { hashSeed, Rng } from '../rng';
 import { natureName, NATURE_IDS, NATURES, effectiveNature, type NatureId } from '../natures';
-import { bouquetHolder, bumpTrack, guestId, itemValue, MELTAN_TO_MERGE, metalItems, promiseState, STANCE_NAME, stageKeyOf, trackOf } from './promises';
+import { bouquetHolder, bumpTrack, lostKey, guestId, itemValue, MELTAN_TO_MERGE, metalItems, promiseState, STANCE_NAME, stageKeyOf, trackOf } from './promises';
 import { MYTHICALS } from './promisesData';
 
 export interface WonderAction { id: string; title: string; text: string; problem: string | null }
 export type WonderDecision = Extract<PendingDecision, { kind: 'wonderChoice' }>;
 
 const _run_inv = (run: RunState): Record<string, number> => Object.fromEntries(Object.entries(run.inventory).filter(([, n]) => n > 0));
+/** Lost opportunities on this stage: [counter key, node id, side id]. */
+const lostHere = (run: RunState): [string, string, string][] => {
+  const prefix = lostKey(run, '', '').slice(0, -1); // 'celebi-lost:<stageKey>:'
+  return Object.entries(run.itemCounters ?? {})
+    .filter(([k, v]) => k.startsWith(prefix) && v === run.regionIndex + 1)
+    .map(([k]) => [k, k.slice(prefix.length).split(':')[0]!, k.slice(prefix.length).split(':')[1]!] as [string, string, string])
+    .filter(([, n, sd]) => run.stage?.map.nodes.find((x) => x.id === n)?.sides.some((y) => y.id === sd && y.used));
+};
 const STANCES = ['atk', 'def', 'spe', 'norm'] as const;
 const STANCE_TEXT: Record<string, string> = { atk: '+15% damage dealt', def: '-15% damage taken', spe: 'acts first on turn one', norm: '+5% to everything' };
 
@@ -32,6 +40,9 @@ export function wonderActions(_content: Content, run: RunState): WonderAction[] 
   if (id === 'magearna') {
     const holder = bouquetHolder(run);
     out.push({ id: 'bouquet', title: "Magearna: the bouquet", text: holder ? `${holder.speciesId} carries it. Choose another to hand it over.` : 'Choose who carries her bouquet to the last stage.', problem: run.party.length === 0 ? 'No one to carry it.' : null });
+  }
+  if (id === 'celebi') {
+    out.push({ id: 'recover', title: 'Celebi: bring back a lost chance', text: 'An event you failed or refused on this stage returns (once a region).', problem: trackOf(run, 'recoverRegion') === run.regionIndex + 1 ? 'Already used this region.' : lostHere(run).length === 0 ? 'Nothing was lost on this stage.' : null });
   }
   if (id === 'meloetta') {
     out.push({ id: 'retune', title: 'Meloetta: retune a Pokémon', text: "Change one Pokémon's nature to one of six she offers (once a region).", problem: trackOf(run, 'retuneRegion') === run.regionIndex + 1 ? 'Already used this region.' : run.party.length === 0 ? 'No one to retune.' : null });
@@ -68,6 +79,12 @@ export function startWonder(_content: Content, run: RunState, wonderId: string):
   if (wonderId === 'bouquet' && guest === 'magearna') {
     return { decision: { kind: 'wonderChoice', mythicalId: 'magearna', wonderId, title: 'Who carries the bouquet?', options: run.party.map((m) => ({ label: _content.species.get(m.speciesId)?.name ?? m.speciesId, description: `Lv${m.level}`, value: m.uid })) }, message: '' };
   }
+  if (wonderId === 'recover' && guest === 'celebi') {
+    return { decision: { kind: 'wonderChoice', mythicalId: 'celebi', wonderId, title: 'Celebi: which lost chance returns?', options: lostHere(run).slice(0, 8).map(([k, n, sd]) => {
+      const side = run.stage?.map.nodes.find((x) => x.id === n)?.sides.find((y) => y.id === sd);
+      return { label: (side?.eventId && _content.events.get(side.eventId)?.name) || 'An event', description: 'It can be played again.', value: k };
+    }) }, message: '' };
+  }
   if (wonderId === 'retune' && guest === 'meloetta') {
     return { decision: { kind: 'wonderChoice', mythicalId: 'meloetta', wonderId, title: 'Meloetta: who will she retune?', options: run.party.map((m) => ({ label: _content.species.get(m.speciesId)?.name ?? m.speciesId, description: `Lv${m.level}, ${natureName(effectiveNature(m) ?? 'hardy')}`, value: m.uid })) }, message: '' };
   }
@@ -100,6 +117,17 @@ export function resolveWonder(_content: Content, run: RunState, decision: Wonder
   if (decision.wonderId === 'bouquet' && guestId(run) === 'magearna') {
     bumpTrack(run, 'bouquet', Number(pick.value.replace(/\D/g, '')) || 0);
     return `${pick.label} carries Magearna's bouquet. Keep it in the party to the last stage.`;
+  }
+  if (decision.wonderId === 'recover' && guestId(run) === 'celebi') {
+    const hit = lostHere(run).find(([k]) => k === pick.value);
+    if (!hit) return 'The moment has passed.';
+    const side = run.stage!.map.nodes.find((x) => x.id === hit[1])!.sides.find((y) => y.id === hit[2])!;
+    side.used = false;
+    const left = { ...run.itemCounters };
+    delete left[hit[0]];
+    run.itemCounters = left;
+    bumpTrack(run, 'recoverRegion', run.regionIndex + 1);
+    return `Celebi turns back a moment: ${pick.label} can be played again.`;
   }
   if (decision.wonderId === 'retune' && guestId(run) === 'meloetta') return `Meloetta hums to ${pick.label}…`;
   if (decision.wonderId === 'retune2' && guestId(run) === 'meloetta') {

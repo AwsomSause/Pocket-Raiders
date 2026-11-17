@@ -65,7 +65,7 @@ import { noteSpirits, syncLegendKeys } from './legends/keys';
 import { weekFlags, weekLegends } from './co/weeks';
 import { drawWholeRun } from './legends/wholeRun';
 import { resolveWonder, startWonder, wonderActions, wonderFollowUp } from './instrumentality/wonders';
-import { hearTelling, hoopaRing, hoopaStage, magearnaOnFaint, manaphyVisit, onReleased as promiseOnReleased, onRegionStarted as promiseOnRegion, onSold as promiseOnSold, onStageLeft as promiseOnLeft, stageKeyOf as promiseStageKey, bumpTrack, wishesLeft, onLeadAtStage as promiseOnLeadStage, onLeadChanged as promiseOnLead, onAssistAccepted as promiseOnAssist, onBattleWon as promiseOnWin, onPlayerFaint as promiseOnFaint, noteEvent as notePromiseEvent, onCaught as promiseOnCaught, onPartyChanged as promiseOnPartyChanged, onRestUsed as promiseOnRest, onStageEntered as promiseOnStage, onTmUsed as promiseOnTm, resolveVisit, rollVisit, wonderAfterBattle, wonderAtBattleStart } from './instrumentality/promises';
+import { hearTelling, hoopaRing, hoopaStage, guestId as promiseGuest, onWildKo as promiseOnWildKo, onRescueAbandoned as promiseOnRescue, magearnaOnFaint, manaphyVisit, onReleased as promiseOnReleased, onRegionStarted as promiseOnRegion, onSold as promiseOnSold, onStageLeft as promiseOnLeft, stageKeyOf as promiseStageKey, bumpTrack, wishesLeft, onLeadAtStage as promiseOnLeadStage, onLeadChanged as promiseOnLead, onAssistAccepted as promiseOnAssist, onBattleWon as promiseOnWin, onPlayerFaint as promiseOnFaint, noteEvent as notePromiseEvent, onCaught as promiseOnCaught, onPartyChanged as promiseOnPartyChanged, onRestUsed as promiseOnRest, onStageEntered as promiseOnStage, onTmUsed as promiseOnTm, resolveVisit, rollVisit, wonderAfterBattle, wonderAtBattleStart } from './instrumentality/promises';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
 import { drawRemembranceStarters } from './story2/starterDraw';
 import { endBorrow, endFeudWatch, noteCalm, feudWatching, mainRival, notePlayerLoss, scoutedLead, secondRival } from './rivals/questlines';
@@ -777,6 +777,25 @@ function promiseSay(content: Content, run: RunState, lines: string[]): void {
   for (const text of lines) emit(content, run, 'storyMoment', { data: { promise: true }, importance: 60, text });
 }
 
+/** Shaymin: what was passed over in the last region comes back in the first draft of this one, with one more card to choose from. */
+export function shayminReturn(content: Content, run: RunState): string[] {
+  if (promiseGuest(run) !== 'shaymin' || run.regionIndex === 0) return [];
+  const back = Object.entries(run.itemCounters ?? {}).filter(([k, v]) => k.startsWith('shaymin-back:') && v === run.regionIndex);
+  if (back.length === 0) return [];
+  const names: string[] = [];
+  for (const [key] of back.slice(0, 2)) {
+    const id = key.slice('shaymin-back:'.length);
+    if (content.rewards.has(id)) {
+      carryReward(run, id);
+      names.push(content.rewards.get(id)!.name);
+    }
+  }
+  run.itemCounters = Object.fromEntries(Object.entries(run.itemCounters ?? {}).filter(([k]) => !k.startsWith('shaymin-back:')));
+  if (names.length === 0) return [];
+  run.itemCounters = { ...run.itemCounters, 'draft-extra': (run.itemCounters['draft-extra'] ?? 0) + 1 };
+  return [`Shaymin's flowers open: ${names.join(' and ')} comes back, and there is one more card to choose from.`];
+}
+
 function enterStage(content: Content, run: RunState, index: number): void {
   const leftBehind = run.stage ? (() => {
     const sides = run.stage.map.nodes.flatMap((n) => n.sides);
@@ -784,7 +803,10 @@ function enterStage(content: Content, run: RunState, index: number): void {
   })() : null;
   promiseSay(content, run, promiseOnStage(run, leftBehind, content));
   if (run.stage) promiseSay(content, run, promiseOnLeft(content, run, promiseStageKey(run)));
-  if (index === 0) promiseSay(content, run, promiseOnRegion(content, run));
+  if (index === 0) {
+    promiseSay(content, run, promiseOnRegion(content, run));
+    promiseSay(content, run, shayminReturn(content, run));
+  }
   promiseSay(content, run, hoopaStage(content, run, run.regionIndex * 100 + index));
   promiseSay(content, run, promiseOnLeadStage(content, run));
   ofGuestLeaves(content, run);
@@ -3492,6 +3514,10 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   applyHeldAttributes(content, run, engineEvents);
   const promiseLines: string[] = [];
   for (const e of engineEvents) {
+    if (e.type === 'faint' && e.side === 'enemy' && battle.kind === 'wild' && !battle.trainer) {
+      const foe = battle.enemyTeam.find((m) => m.uid === e.uid);
+      if (foe) promiseLines.push(...promiseOnWildKo(content, run, getSpecies(content, foe.speciesId).types));
+    }
     const fainted = e.type === 'faint' && e.side === 'player' ? run.party.find((p) => p.uid === e.uid) : undefined;
     if (fainted) {
       promiseLines.push(...notePromiseEvent(content, run, { kind: 'faint', uid: fainted.uid }));
@@ -3601,7 +3627,11 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   if (battle.outcome && (battle.event?.eventId === 'format:finale' || battle.event?.eventId === 'format:doom')) epilogueBattleEnded(run, battle.outcome === 'win' || battle.outcome === 'caught');
   if (battle.outcome && battle.event?.eventId.startsWith('format:')) formatBattleEnded({ content, run }, battle.outcome === 'win' || battle.outcome === 'caught');
   // PS-RESCUE (Beta 0.6 R9): a guard fight tells the running rescue plan how it ended.
-  if (battle.outcome && battle.event?.eventId.startsWith('rescue:')) rescueFightEnded(run, battle.outcome === 'win' || battle.outcome === 'caught');
+  if (battle.outcome && battle.event?.eventId.startsWith('rescue:')) {
+    const won = battle.outcome === 'win' || battle.outcome === 'caught';
+    rescueFightEnded(run, won);
+    if (!won) promiseSay(content, run, promiseOnRescue(content, run));
+  }
   // Mega Evolution and other transformations end with the battle, and so do "next battle" item effects.
   if (battle.outcome) {
     revertTransformations(content, battle, run.party, runArchetype(content, run).modifiers);
@@ -4866,6 +4896,11 @@ export function chooseReward(content: Content, current: RunState, draftIndex: nu
   const run = structuredClone(current);
   const reward = withStream(run.rng, 'reward', (r) => applyReward(content, run, runArchetype(content, run), rewardId, targetIndex, r));
   count(run, 'moneyEarned', run.money - current.money);
+  // Shaymin's Wonder: the best reward you passed over comes back a region later, improved.
+  if (promiseGuest(run) === 'shaymin') {
+    const passed = current.draft!.filter((_, i) => i !== draftIndex).sort((x, y) => RARITIES.indexOf(content.rewards.get(y)!.rarity) - RARITIES.indexOf(content.rewards.get(x)!.rarity))[0];
+    if (passed) run.itemCounters = { ...run.itemCounters, [`shaymin-back:${passed}`]: run.regionIndex + 1 };
+  }
   if (reward.reroll) {
     // A free re-roll: a fresh draft, still in the reward phase.
     const weights = luckWeights(rewardWeights(content, run), runAttributeEffects(content, run));
