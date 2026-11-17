@@ -166,7 +166,7 @@ test('keys: Walk it at the In person beat, into the battle screen against your o
   expect(errors).toEqual([]);
 });
 
-test('the Raid: the warning\'s four choices, the Siege Map, the door opened, a turn, the Office; never the run', async ({ page }, info) => {
+test('the Raid: the warning\'s four choices, the Siege Map, the door opened, a turn, the Office; with no back way it ends in Caught', async ({ page }, info) => {
   const errors = watch(page);
   await founded(page);
   await page.keyboard.press('KeyB');
@@ -203,9 +203,8 @@ test('the Raid: the warning\'s four choices, the Siege Map, the door opened, a t
   const after = await block(page);
   expect(after.raid.state).toBe('done');
   expect(after.base).toBeNull();
+  // Slice 15: a Raid at Heat 10 on a base with no back way takes the Boss: the run's ending is Caught (Part 23 section 7).
+  expect(after.ending).toMatchObject({ id: 'caught', via: 'raid' });
   await shots(page, info, 'base-raid-after');
-  await s.getByTestId('evil-raid-done').click();
-  expect((await block(page)).raid).toBeNull();
-  expect(await page.evaluate(() => (window as any).__pkr.session.run.phase)).toBe('map');
   expect(errors).toEqual([]);
 });
