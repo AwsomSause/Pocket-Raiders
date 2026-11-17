@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { counterView, ODDS_COLORS, SIEGE_COLORS, rescueView, siegeCost, siegeMapView, type CounterModel, type CounterMon, type RescueModel, type SiegeDistrict, type SiegeMapModel } from '../../src/ui/redux/screens/ops';
+import { counterView, ODDS_COLORS, SIEGE_COLORS, rescueView, siegeCost, siegeMapView, siegeSpots, type CounterModel, type CounterMon, type RescueModel, type SiegeDistrict, type SiegeMapModel } from '../../src/ui/redux/screens/ops';
 import type { ReduxCtx } from '../../src/ui/redux/stage';
 
 // New UI: the Rescue screen and the Siege map, drawn on the mock-ups' Beta 0.6 pages. Each is a pure function from a
@@ -7,6 +7,7 @@ import type { ReduxCtx } from '../../src/ui/redux/stage';
 
 const ctx = (layout: number): ReduxCtx => ({ k: layout, skin: {} as ReduxCtx['skin'], v: (n) => layout % n });
 const count = (html: string, bit: string): number => html.split(bit).length - 1;
+type Spot = { x: number; y: number; w: number; h: number };
 
 describe('Rescue screen', () => {
   const plan = (label: string, tag = '', locked = false) => ({ label, tag, locked });
@@ -132,12 +133,53 @@ describe('Siege map', () => {
   it('with no district lost, the page says so', () => {
     expect(siegeMapView(ctx(0), siege({ rows: [d('East Gate', 'held')], index: 0 }))).toContain('No district is lost.');
   });
-  it('more than six districts still fit the page: the cells get shorter', () => {
-    const many = siegeMapView(ctx(0), siege({ rows: Array.from({ length: 9 }, (_, k) => d(`D${k}`, 'held')) }));
-    const h = /height:(\d+)px;gap:6px/.exec(many);
-    expect(h).not.toBeNull();
-    expect(Number(h![1]) * 3 + 16).toBeLessThanOrEqual(340 - 32 - 36);
-    expect(siegeMapView(ctx(0), siege())).toContain('height:112px;gap:6px');
+  const BOARD = { w: 560, h: 340 };
+  const clear = (spots: { x: number; y: number; w: number; h: number }[]): boolean => spots.every((a, i) =>
+    a.x >= 0 && a.y >= 0 && a.x + a.w <= BOARD.w && a.y + a.h <= BOARD.h
+    && spots.every((b, j) => j <= i || a.x + a.w <= b.x || b.x + b.w <= a.x || a.y + a.h <= b.y || b.y + b.h <= a.y));
+  it('the war map puts each gate on its own side of the wall, and a district with no gate in the middle', () => {
+    const [north, east, south, centre] = siegeSpots(siege().rows) as [Spot, Spot, Spot, Spot];
+    const mid = (s: Spot) => ({ x: s.x + s.w / 2, y: s.y + s.h / 2 });
+    expect(mid(north).y).toBeLessThan(mid(centre).y);
+    expect(mid(south).y).toBeGreaterThan(mid(centre).y);
+    expect(mid(east).x).toBeGreaterThan(mid(centre).x);
+    expect(mid(north).x).toBe(mid(south).x);
+    expect(mid(centre)).toEqual({ x: 280, y: 186 });
+  });
+  it('gates with other names go round the wall in order, starting at the top', () => {
+    const spots = siegeSpots(['Dock', 'Mill', 'Vault'].map((n) => d(n, 'held')));
+    expect(spots[0]!.y).toBeLessThan(Math.min(spots[1]!.y, spots[2]!.y));
+    expect(spots[1]!.x).toBeGreaterThan(spots[2]!.x);
+  });
+  it('a gate named for a side sits on that side even when the others have no such name', () => {
+    const spots = siegeSpots([d('The Harbor Tunnel', 'held'), d('West Ledge', 'lost'), d('East Ledge', 'contested'), d('The White Rock', 'lost'), d('The Cave Mouth', 'held', { gate: false })]);
+    const [harbor, west, east, rock, cave] = spots as [Spot, Spot, Spot, Spot, Spot];
+    expect(west.x).toBeLessThan(cave.x);
+    expect(east.x).toBeGreaterThan(cave.x);
+    expect(harbor.y).toBeLessThan(cave.y);
+    expect(rock.y).toBeGreaterThan(cave.y);
+    expect(clear(spots)).toBe(true);
+  });
+  it('every district stays on the board and none sits on another, from one district to twelve', () => {
+    for (let n = 1; n <= 12; n++) {
+      expect(clear(siegeSpots(Array.from({ length: n }, (_, k) => d(`D${k}`, 'held')))), `${n} gates`).toBe(true);
+      expect(clear(siegeSpots(Array.from({ length: n }, (_, k) => d(`D${k}`, 'held', { gate: k > 0 })))), `${n} with a centre`).toBe(true);
+    }
+    expect(clear(siegeSpots(siege().rows))).toBe(true);
+    expect(clear(siegeSpots(['North', 'East', 'South', 'West'].map((n) => d(`${n} Gate`, 'lost')).concat([d('The Center', 'held', { gate: false }), d('The Vault', 'held', { gate: false })])))).toBe(true);
+  });
+  it('the war map draws what each district is: a flag when held, crossed swords when contested, fire when lost', () => {
+    const html = siegeMapView(ctx(0), siege());
+    expect(count(html, 'class="wr-flag"')).toBe(1);
+    expect(count(html, 'wr-clash')).toBe(2);
+    expect(count(html, 'class="wr-fire"')).toBe(3);
+    expect(html).toContain('1 held');
+    expect(html).toContain('2 contested');
+    expect(html).toContain('1 lost');
+  });
+  it('the road from the district under the cursor is the one that marches', () => {
+    expect(count(siegeMapView(ctx(0), siege()), 'class="wr-march"')).toBe(1);
+    expect(count(siegeMapView(ctx(0), siege({ index: 3 })), 'class="wr-march"')).toBe(0);
   });
   it('the list page marks the chosen gate', () => {
     expect(count(siegeMapView(ctx(1), siege()), 'Chosen gate')).toBe(1);
