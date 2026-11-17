@@ -1619,7 +1619,7 @@ function raidCallReinforcement(ctx: BattleContext, events: BattleEvent[]): void 
 /** Start of a turn: a wild Pokémon may call for help (core/battle/sos.ts); its friend takes the field in its place. */
 function sosCall(ctx: BattleContext, events: BattleEvent[]): void {
   const { battle, content } = ctx;
-  if (!content.balance.sos.enabled || battle.kind !== 'wild' || battle.raid || battle.totem || battle.doubles) return;
+  if (!content.balance.sos.enabled || battle.kind !== 'wild' || battle.raid || battle.totem || battle.doubles || battle.spectate) return;
   const caller = currentEnemy(battle);
   const { player } = activeCombatants(ctx);
   const scary = ['intimidate', 'unnerve', 'pressure'].includes(abilityIn(ctx, player) ?? '');

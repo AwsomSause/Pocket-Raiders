@@ -21,6 +21,8 @@ test('Essentials Kit battle UI shows plates, names, levels and the EXP strip', a
     await expect.poll(() => scene(page), { timeout: 20_000 }).toBe(next);
     await page.waitForTimeout(250);
   }
+  // A plain first fight: no event (a placed one, here The Mural) opens before it.
+  await page.evaluate(() => { for (const n of (window as any).__pkr.session.run.stage.map.nodes) if (n.column === 1) n.sides = []; });
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);
   await page.keyboard.press('Enter');
   await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('Battle');
