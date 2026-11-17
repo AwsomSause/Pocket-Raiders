@@ -170,9 +170,9 @@ describe('six of eight', () => {
 
 describe('on the map', () => {
   /** Heals and levels the lead, then clicks the gym node (answering the Fork Gate with `answer` when it shows). */
-  function toGym(run: RunState, answer: number | 'first'): RunState {
+  function toGym(run: RunState, answer: number | 'first', level = 400): RunState {
     let r = debugJumpToColumn(run, run.stage!.map.columns);
-    const mon = createPokemon(content, 'houndoom', 400, r.party[0]!.uid);
+    const mon = createPokemon(content, 'houndoom', level, r.party[0]!.uid);
     mon.moves = [{ id: 'flamethrower', pp: 64 }, { id: 'crunch', pp: 64 }];
     r.party[0] = mon;
     r = chooseNodeWithNotes(content, r, mapChoices(content, r)[0]!.id).run;
@@ -269,12 +269,14 @@ describe('on the map', () => {
     expect(r.stage!.leaderId).toBe(guest);
     expect(r.story.v2!.circuit!.guest['0']).toBe(guest);
     // A Guest Match is harder: the same gym without the Guest Match has lower enemy levels.
+    // Compared with a level-20 party: Gym Leaders now match the party (#1427), so the level-400 fighting party would put both
+    // gyms at the region's level cap, where no bonus can show.
     const plain = structuredClone(r);
     plain.story.v2!.circuit!.guest['0'] = 'someone-else';
     const top = (run: RunState): number => Math.max(...run.battle!.enemyTeam.map((m) => m.level));
-    const hard = toGym(structuredClone(r), 'first');
+    const hard = toGym(structuredClone(r), 'first', 20);
     expect(hard.battle).toBeTruthy();
-    expect(top(hard)).toBeGreaterThan(top(toGym(plain, 'first')));
+    expect(top(hard)).toBeGreaterThan(top(toGym(plain, 'first', 20)));
     r = fight(toGym(r, 'first'));
     const done = r.story.v2!.circuit!;
     expect(done.badges.find((b) => b.leaderId === guest)).toMatchObject({ counted: false, source: 'guest' });

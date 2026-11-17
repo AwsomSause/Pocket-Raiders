@@ -54,6 +54,8 @@ export interface EventModel {
   lines: ScriptLine[];
   speaker: string | null;
   page: { at: number; of: number };
+  /** Sabrina's Labyrinth: this page is a black screen ('dark'), or the first Pokémon's face filling it ('face'). */
+  scare?: 'dark' | 'face' | null;
   /** Backdrop file under assets/images, a tint ("#rrggbb") and the mock-ups' effect class (rain, snow, fog...). */
   art: string | null; tint: string | null; fx: string | null;
   cast: Art | null;
@@ -282,5 +284,10 @@ export function eventView(c: ReduxCtx, d: EventModel): string {
     + (d.timer !== null && !out ? `<div class="abs hp gold${d.timer < 0.25 ? ' ev-urgent' : ''}" style="left:64px;top:60px;width:200px;height:6px;z-index:7"><i style="width:${Math.round(d.timer * 100)}%"></i></div>` : '');
   const shout = d.lines.some((l) => lineVisual(l.text).voice === 'shout');
   const box = `<div class="abs txt ev-txt${shout ? ' ev-jolt' : ''}" data-once="txt:${pageKey}" style="left:20px;right:20px;bottom:16px;z-index:6">${d.speaker ? `<span class="nm">${esc(d.speaker)}</span>` : ''}${lineP}${mark('right:14px;bottom:2px')}</div>`;
+  if (d.scare && !out) {
+    // The black screen, then the face: nothing else is on show but the text box (and the page turn).
+    const face = d.scare === 'face' && L.mons[0] ? `<div class="foot${L.scene.still ? '' : ' ev-scare'}" data-once="scare:${pageKey}" style="left:480px;top:760px;z-index:5">${mon(L.mons[0], 11, '', true)}</div>` : '';
+    return `<div class="fill" style="background:#000;z-index:4"></div>${face}${box}${turn}`;
+  }
   return stage(L, pageKey, tone, out ? -1 : d.index) + lands + head + strip('left:20px;right:20px;top:70px') + title + standing(`position:absolute;left:20px;top:${d.rounds ? 122 : 74}px;width:250px;z-index:7`) + column + box + picker + turn;
 }

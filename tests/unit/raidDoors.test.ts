@@ -48,15 +48,15 @@ describe('shout prompt', () => {
 });
 
 describe('settings rows', () => {
-  it('Extended Cut is off by default and toggles; density cycles; Kanto toggles', () => {
-    expect(DEFAULT_SETTINGS.expansion.climaxCut).toBe('standard');
-    expect(settingById('climaxCut')!.show(DEFAULT_SETTINGS)).toBe('Off');
-    const on = changeSetting(DEFAULT_SETTINGS, 'climaxCut');
-    expect(on.expansion.climaxCut).toBe('extended');
-    expect(changeSetting(on, 'climaxCut').expansion.climaxCut).toBe('standard');
+  it('Extended Cut is on by default and toggles; density cycles; Kanto toggles', () => {
+    expect(DEFAULT_SETTINGS.expansion.climaxCut).toBe('extended');
+    expect(settingById('climaxCut')!.show(DEFAULT_SETTINGS)).toBe('On');
+    const off = changeSetting(DEFAULT_SETTINGS, 'climaxCut');
+    expect(off.expansion.climaxCut).toBe('standard');
+    expect(changeSetting(off, 'climaxCut').expansion.climaxCut).toBe('extended');
     const seen = [DEFAULT_SETTINGS];
     for (let i = 0; i < 3; i++) seen.push(changeSetting(seen[i]!, 'eventsDensity'));
-    expect(seen.map((s) => s.expansion.eventsDensity)).toEqual(['normal', 'full', 'low', 'normal']);
+    expect(seen.map((s) => s.expansion.eventsDensity)).toEqual(['full', 'low', 'normal', 'full']);
     expect(changeSetting(DEFAULT_SETTINGS, 'kantoSevii').expansion.kantoSevii).toBe(false);
   });
   it('an old settings block with the removed placeholder keys still loads', () => {

@@ -7,7 +7,7 @@ import { applyCatalog, getCatalogEntry, TM_CHOICES } from '../../src/core/catalo
 import { usesLeft } from '../../src/core/mapItems';
 import { createPokemon } from '../../src/core/pokemon';
 import { hashSeed, Rng } from '../../src/core/rng';
-import { chooseNode, chooseReward, chooseStarter, createRun, draftItemUses, takeTurn, useDraftItem, type TurnResult } from '../../src/core/run';
+import { chooseNode, chooseReward, chooseStarter, createRun, draftItemUses, resolveDecision, takeTurn, useDraftItem, type TurnResult } from '../../src/core/run';
 import { RunStateSchema, type RunState } from '../../src/core/state';
 import { content, takeAnyReward } from './helpers';
 
@@ -48,7 +48,10 @@ function winNode(run: RunState, kind: 'wild' | 'trainer'): RunState {
 function nextStage(run: RunState): RunState {
   const gym = run.stage!.map.nodes.find((n) => n.kind === 'gym')!;
   run.stage!.current = run.stage!.map.nodes.find((n) => n.next.includes(gym.id))!.id;
-  return takeAnyReward(win(chooseNode(content, run, gym.id)).run);
+  let after = win(chooseNode(content, run, gym.id)).run;
+  // Gym Leaders match the party now (#1427), so the win can level up into a new move first: keep the old moves.
+  while (after.phase === 'decision' && after.pending[0]?.kind === 'learnMove') after = resolveDecision(content, after, { kind: 'skipMove' }).run;
+  return takeAnyReward(after);
 }
 
 const size = content.balance.draftSize;

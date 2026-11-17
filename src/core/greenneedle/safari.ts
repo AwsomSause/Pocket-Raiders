@@ -12,6 +12,7 @@ import { isNative, typesPool } from '../themes';
 import type { BaseState, MinigameModule, MinigameView, Cell } from '../minigame/games';
 import { STEP } from '../hubTown/world';
 import type { Facing } from '../hubTown/schema';
+import { COMPASS, FACINGS, ZONE_H, ZONE_W, gridEnter, gridRows, gridStep, gridTile } from './zone';
 
 export const SAFARI_ID = 'gn-safari';
 
@@ -50,8 +51,8 @@ export const PARK_STAMPEDE = 'cs-kanto-fuchsia-tauros';
 export const PARK_TEETH = 'cs-kanto-fuchsia-warden';
 export const PARK_DOORS = ['gn-19-far', 'gn-20-far'] as const;
 
-export const PARK_W = 15;
-export const PARK_H = 7;
+export const PARK_W = ZONE_W;
+export const PARK_H = ZONE_H;
 /**
  * The four areas as tiles. `.` short grass, `,` tall grass (where Pokémon come out), `T` tree, `R` rock, `~` water, `D` the rock in the marsh
  * (all four solid). `<` `>` the paths to the areas beside it. `G` the gatehouse door, `C` the camera hut, `B` the gatehouse wall,
@@ -96,8 +97,6 @@ const MAPS: readonly (readonly string[])[] = [
   ],
 ];
 const SOLID = 'TR~D';
-const FACINGS: readonly Facing[] = ['up', 'left', 'right', 'down'];
-const COMPASS: Record<Facing, string> = { up: 'north', left: 'west', right: 'east', down: 'south' };
 export type ParkSpot = 'gate' | 'camera' | 'prints' | 'far' | 'stampede' | 'teeth';
 
 interface Encounter {
@@ -209,7 +208,7 @@ export function parkState(s: SafariState): SafariState {
 
 /** The tile at a place as the visit sees it (a spot that is gone reads as the grass around it). Off the grid is a tree. */
 export function parkTile(s: SafariState, x: number, y: number, area = s.area): string {
-  const ch = MAPS[area]?.[y]?.[x] ?? 'T';
+  const ch = gridTile(MAPS[area], x, y);
   if (ch === 'S') return s.kanto.includes(PARK_STAMPEDE) && !s.seen.includes(PARK_STAMPEDE) ? 'S' : ',';
   if (ch === 'W') return s.kanto.includes(PARK_TEETH) && !s.seen.includes(PARK_TEETH) ? 'W' : '.';
   if (ch === 'P') return s.tracked ? '.' : 'P';
@@ -220,7 +219,7 @@ export const parkSolid = (s: SafariState, x: number, y: number): boolean => SOLI
 
 /** The area as rows of tiles, for the screen. */
 export function parkRows(s: SafariState): string[] {
-  return Array.from({ length: PARK_H }, (_, y) => Array.from({ length: PARK_W }, (_, x) => parkTile(s, x, y)).join(''));
+  return gridRows((x, y) => parkTile(s, x, y));
 }
 
 /** Where the Pokémon you met stands: `dist` tiles ahead of you, stopping short of a tree, a rock, the water or the fence. */
@@ -319,10 +318,7 @@ function sellShot(s: SafariState, score: number, species: string, kind: string):
 
 function enterArea(s: SafariState, area: number): void {
   // You come in by the path you took: from the west at the left edge, from the east at the right.
-  s.x = area > s.area ? 1 : PARK_W - 2;
-  s.y = 3;
-  s.facing = area > s.area ? 'right' : 'left';
-  s.area = area;
+  gridEnter(s, area);
   s.mon = null;
   s.mode = 'walk';
   if (area === 1 && s.herd === null) {
@@ -351,17 +347,9 @@ export function photoWords(content: Content, p: ParkPhoto): string {
 
 /** One walk (a tile) or one run (up to two) the way you face. Turning into something solid costs nothing. */
 function move(content: Content, s: SafariState, r: Rng, facing: Facing, running: boolean): void {
-  s.facing = facing;
   const d = STEP[facing];
-  let moved = 0;
-  for (let i = 0; i < (running ? WALK.runTiles : 1); i++) {
-    if (parkSolid(s, s.x + d.dx, s.y + d.dy)) break;
-    s.x += d.dx;
-    s.y += d.dy;
-    moved += 1;
-    // A spot or a path stops you on it.
-    if (!'.,'.includes(parkTile(s, s.x, s.y))) break;
-  }
+  // A spot or a path stops you on it.
+  const moved = gridStep(s, facing, running ? WALK.runTiles : 1, (x, y) => parkSolid(s, x, y), (x, y) => !'.,'.includes(parkTile(s, x, y)));
   if (moved === 0) {
     const ahead = parkTile(s, s.x + d.dx, s.y + d.dy);
     s.msg = ahead === '~' ? 'Water. Too deep to wade.' : ahead === 'T' ? 'The trees are too thick that way.' : 'A rock in the way.';

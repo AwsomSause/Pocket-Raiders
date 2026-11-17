@@ -36,6 +36,7 @@ export function captureGenesis(run: RunState, opts: GenesisOptions, grants: RunG
     licenses: opts.licenses ?? [],
     candyPerks: opts.candyPerks ?? [],
     ownedTrainers: [...(opts.ownedTrainers ?? [])],
+    ...(opts.blessingDeck ? { blessingDeck: { found: [...opts.blessingDeck.found], dealt: [...opts.blessingDeck.dealt] } } : {}),
     ...(run.expansion && (run.expansion.pacing || run.expansion.evoEncounters || run.expansion.counterPick || run.expansion.canon || run.expansion.grandArc || run.expansion.tracks || run.expansion.ultra || run.expansion.density || run.expansion.climaxCut || run.expansion.storyTraits || run.expansion.rewind || run.expansion.secondChancePct || run.expansion.heated || run.expansion.promises || run.expansion.nodeMenus || run.expansion.epilogue || run.expansion.blessing || run.story.flags['ev:wre-on']) ? { expansion: { ...(run.expansion.pacing ? { stagePacing: true } : {}), ...(run.expansion.evoEncounters ? { evolutionEncounters: true } : {}), ...(run.expansion.counterPick ? { leagueCounterPick: true } : {}), ...(run.expansion.canon ? { kantoCanon: true } : {}), ...(run.expansion.grandArc ? { grandArc: true } : {}), ...(run.expansion.tracks ? { worldTracks: true } : {}), ...(run.expansion.ultra ? { ultraBeasts: true } : {}), ...(run.expansion.density ? { eventsDensity: run.expansion.density } : {}), ...(run.expansion.climaxCut ? { climaxCut: run.expansion.climaxCut } : {}), ...(run.expansion.storyTraits ? { storyTraits: true } : {}), ...(run.expansion.rewind?.source === 'setting' ? { rewinds: true } : {}), ...(run.expansion.secondChancePct ? { secondChancePct: run.expansion.secondChancePct } : {}), ...(run.expansion.heated ? { heatedMoments: true } : {}), ...(run.expansion.promises ? { mythicalPromises: true } : {}), ...(run.expansion.nodeMenus ? { nodeMenus: true } : {}), ...(run.expansion.blessing ? { blessings: true } : {}), ...(run.story.flags['ev:wre-on'] ? { wholeRunEvents: true } : {}), ...(run.expansion.epilogue?.finale ? { finale: true } : {}), ...(run.expansion.epilogue?.doom ? { doomEpilogue: true } : {}) } } : {}),
     legacyRival: run.legacyRival,
     reunion: run.reunion ?? null,
@@ -68,6 +69,7 @@ export function reconstructRun(content: Content, g: RunGenesis, replayId: string
     licenses: g.licenses,
     candyPerks: g.candyPerks,
     ownedTrainers: g.ownedTrainers,
+    ...(g.blessingDeck ? { blessingDeck: g.blessingDeck } : {}),
     ...(g.expansion ? { expansion: g.expansion } : {}),
   });
   run.legacyRival = structuredClone(g.legacyRival);

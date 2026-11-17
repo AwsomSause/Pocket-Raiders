@@ -178,6 +178,7 @@ export function askPassing(battle: Pick<BattleState, 'storyEffects' | 'outcome'>
 
 /** End of a passing turn: one fewer to go; after the last, the fight ends. Returns the line to show. */
 export function passTurnEnd(battle: BattleState): string | null {
+  if (!battle.storyEffects) return null; // a bare battle (unit tests, old states) has no story effects, so nothing is passing
   const at = battle.storyEffects.findIndex((t) => t.startsWith(ASK_PASS));
   if (at < 0 || battle.outcome) return null;
   const [left, outcome] = battle.storyEffects[at]!.slice(ASK_PASS.length).split(':');

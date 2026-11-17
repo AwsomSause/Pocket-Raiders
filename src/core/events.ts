@@ -47,7 +47,7 @@ import { applyCatalog, catalogTargetProblem, isFreeReroll } from './catalog';
 import { addItem } from './items';
 import { applyMarket, marketWords, noteSpend } from './market';
 import { evolve } from './evolution';
-import { canBeDoubles, makeDoubles } from './battle/doubles';
+import { canBeDoubles, makeDoubles, makeGuestTriples } from './battle/doubles';
 import { canBeTriples, makeTriples } from './battle/triples';
 import { championTeam, retiredTeam } from './story/championDefense';
 import { oldFoe } from './story/promises';
@@ -129,6 +129,7 @@ import type { MapNode, PokemonInstance, RunState, SideStop } from './state';
 import { applyReward, rewardTargetProblem } from './rewards';
 import { focusIs, MYSTERY_EXTRA_STOPS, regionFocus } from './campaign/focus';
 import { emit } from './story/record';
+import { isGenerous, noteLostOpportunity, onEventChoice as promiseOnChoice } from './instrumentality/promises';
 import { calmDisturbance, hasDisturbance, noteDungeonEntered } from './worldSim/tick';
 import { recordBattleStarted } from './story/hooks';
 import { partyLifeBond } from './partyLife';
@@ -139,6 +140,7 @@ import { beginRivalBrain } from './rivals/brainSetup';
 import { borrowTeamView, type TeamView } from './greenneedle/borrowed';
 import { applyQuestEffect, beginBorrow, beginFeudWatch, interleave, mainRival, secondRival, planRivalTeam, starterRivalryStages, shapeRivalMons, questConditionMet, questText, rivalAllySpecies, rivalStanding, RIVAL_QUEST_GROUP } from './rivals/questlines';
 import { getTheme, typesPool } from './themes';
+import { regionOneHeld, regionOneOwed } from './co/regionOneStory';
 import { fitsStage, nodesAhead, planCoStage, positioned, SAME_STAGE, stageTags, stepColumn, type CoEntry } from './co/placement';
 import { anyRoaming, endRoamer, healConvoy, startConvoy, partyHasAbility, placeCamp, scoutAhead, CAMP_EVENT_ID } from './world';
 import { MAX_FOES, MAX_FOES_LISTED } from './bossLimits';
@@ -702,7 +704,11 @@ function coSeen(content: Content, run: RunState, id: string): boolean {
 export function coFits(content: Content, run: RunState, id: string): boolean {
   const p = content.coPlacement?.get(id);
   if (!p || !run.stage) return true;
-  return fitsStage(p, stageNumber(content, run), run.stage.index + 1, stageTags(getTheme(content, run.stage.themeId).types, periodOf(run), tideOf(content, run)));
+  const tags = stageTags(getTheme(content, run.stage.themeId).types, periodOf(run), tideOf(content, run));
+  // The first region's story (co/regionOneStory.ts) must happen there: from the region's third stage it no longer waits for a stage
+  // of its own kind (Poli-Pond's water), only for its earliest stage and its in-region stages.
+  if (regionOneOwed(run, id) && run.stage.index >= 2) return fitsStage({ ...p, tags: [] }, stageNumber(content, run), run.stage.index + 1, tags);
+  return fitsStage(p, stageNumber(content, run), run.stage.index + 1, tags);
 }
 
 /** Is this event put on a chosen step by the placer (so it is never drawn at random)? */
@@ -816,6 +822,8 @@ export function eligibleEvents(content: Content, run: RunState): EventDef[] {
       (!e.mode || run.rules.modeId === e.mode) &&
       !coSeen(content, run, e.id) &&
       coFits(content, run, e.id) &&
+      // The first region shows one of three stories (co/regionOneStory.ts); the other two wait for the second region.
+      !regionOneHeld(run, e.id) &&
       !recruitsOwned(run, e) &&
       e.requires.every((c) => conditionMet(content, run, c)),
   );
@@ -886,7 +894,7 @@ export function addEventStops(content: Content, run: RunState): void {
     // A same-stage story's later beats are placed when they are earned (placeEarnedCoBeats), not at the start of the stage.
     const entries = coOpen.map((id) => ({ id, p: content.coPlacement!.get(id)!, door: content.events.get(id)!.pseudo })).filter((e) => !(SAME_STAGE.has(e.p.shape) && e.p.beat >= 2));
     // Calendar weeks (legends, row C): the week's questline openings (its `mapEvents`) get first claim on the stage's budget.
-    coPut(run, planCoStage(stage.map, entries, `${run.seed}::co-place::${stageKey(run)}`, undefined, featuredOpenings(run, featuredMapEvents(content, run))));
+    coPut(run, planCoStage(stage.map, entries, `${run.seed}::co-place::${stageKey(run)}`, undefined, featuredOpenings(run, featuredMapEvents(content, run)), new Set(coOpen.filter((id) => regionOneOwed(run, id)))));
     for (const id of coOpen) { taken.add(id); open.delete(id); }
   }
   // A run milestone (catalog 99) is offered at the middle stage of every region.
@@ -1193,6 +1201,8 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   if (noTrade) throw new Error(noTrade);
   if (tradeUid !== undefined && !tradePicksOf(content, current, choice)?.some((p) => p.uid === tradeUid)) throw new Error('That Pokémon does not fit the trade');
   const run = structuredClone(current);
+  const generousOffered = visibleChoices(content, current, event).some((v) => isGenerous(v.choice.label) && v.choice.requires.every((r) => conditionMet(content, current, r)));
+  for (const text of promiseOnChoice(content, run, choice.label, { generousOffered })) emit(content, run, 'storyMoment', { data: { promise: true }, importance: 60, text });
   const runSide = run.stage!.map.nodes.find((n) => n.id === node.id)!.sides.find((s) => s.id === sideId)!;
   runSide.used = true;
   delete runSide.hidden;
@@ -1223,6 +1233,7 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   run.story.flags[risky ? 'choices:risky' : 'choices:safe'] = Number(run.story.flags[risky ? 'choices:risky' : 'choices:safe'] ?? 0) + 1;
   emit(content, run, 'storyMoment', { actors: [], data: { def: 'event-choice', suppressed: false }, importance: risky ? 55 : 40, text: `${event.name}: ${choice.label}${risky ? (success ? ' (the gamble paid off)' : ' (the gamble failed)') : ''}` });
   emit(content, run, 'eventChoice', { data: { event: event.id, choice: choiceIndex, risky, success } });
+  noteLostOpportunity(run, node.id, sideId, success, choice.label);
   // Kindness and cruelty are remembered by the event's Pokémon types (It Hasn't Forgotten…).
   noteEventMorality(content, run, event.types ?? [], outcome.effects);
   noteChoice(content, run, event.name, outcome.effects, risky);
@@ -2531,6 +2542,13 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
       run.battle.doubles!.player.index = run.party.length - 1;
       run.battle.participants = [run.party[activeIndex]!.uid, ally.uid];
       run.battle.loaner = ally.uid;
+    }
+    // Allies the game controls (gn.25): a triple battle, your lead on the left and the allies beside it. They go home when it ends.
+    const guestIds = (b.allies ?? []).filter((id) => content.species.has(id));
+    if (guestIds.length > 0 && team.length >= 2 && !run.battle.doubles) {
+      const guests = guestIds.map((id) => newMon(content, run, id, Math.max(1, base), 'p'));
+      run.party.push(...guests);
+      makeGuestTriples(run.battle, run.party, guests.map((m) => m.uid));
     }
   }
   if (event.eventId.startsWith('sky.')) shapeSkyFoe(content, run, event.eventId);

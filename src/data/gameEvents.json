@@ -12995,8 +12995,8 @@
    "description": "The old home regions are calling. Kanto, Hoenn and Galar are three times as likely to be where your run begins.",
    "schedule": {
     "kind": "dated",
-    "start": "2026-11-18",
-    "end": "2026-11-24"
+    "start": "2026-11-17",
+    "end": "2026-11-23"
    },
    "seedRule": "year",
    "progressionEligibility": true,

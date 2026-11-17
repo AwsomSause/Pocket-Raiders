@@ -4,11 +4,12 @@ import { expect, test, type Page } from '@playwright/test';
 
 const scene = (page: Page) => page.evaluate(() => (window as any).__pkr?.activeScene() ?? null);
 
+// Seeds a current (v45) settings save: an older one would take v45's one-time reset of every look to Raiders and lose the theme under test.
 async function boot(page: Page, data: Record<string, unknown>) {
   await page.goto('/');
   await page.evaluate((s) => {
     localStorage.clear();
-    localStorage.setItem('pkr.settings', JSON.stringify({ format: 'pkmn-roguelike', record: 'settings', schemaVersion: 12, savedAt: '', data: { musicVolume: 0, sfxVolume: 0, muted: true, battleAnimations: 'full', effectIntensity: 1, battleSpeed: 'normal', dialogueFrequency: 'normal', ...s } }));
+    localStorage.setItem('pkr.settings', JSON.stringify({ format: 'pkmn-roguelike', record: 'settings', schemaVersion: 45, savedAt: '', data: { musicVolume: 0, sfxVolume: 0, muted: true, battleAnimations: 'full', effectIntensity: 1, battleSpeed: 'normal', dialogueFrequency: 'normal', ...s } }));
   }, data);
   await page.goto('/?seed=w11-e2e');
   await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('MainMenu');

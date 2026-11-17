@@ -6,6 +6,7 @@ import type { Content } from '../contentSchema';
 import { kaijuBack, kaijuCut, netCutter, shutMarket } from './kaiju';
 import { rarityOf } from '../rarity';
 import { skySilhouette } from '../instrumentality/flightNorth';
+import { flightNorthCertain } from '../co/regionOneStory';
 import type { PlayerAction } from '../battle/engine';
 import type { BattleState, PokemonInstance, RunState } from '../state';
 import type { GnCond, GnEffect } from './schema';
@@ -44,7 +45,7 @@ import { taEnd, taLot, taRare, taStart, EARLY, taBid, taCanBid, taRounds, taToke
 import { stAssign, stEnd, stStart, strandingTokens } from './stranding';
 import { insideTeam, prDo, prEnd, prEnter, prFree, prNext, prStart, prStep, prStranger, prCaught, prWardenStart, prisonTokens, prisonAmbush } from './prison';
 import { type DistrictId, sgEarly, sgOccupied, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
-import { duelDue, duelEnd, duelEnter, duelName, duelWorthy, duelistStart, worthyStart } from './duelist';
+import { duelDue, duelReady, duelEnd, duelEnter, duelName, duelWorthy, duelistStart, worthyStart } from './duelist';
 import { lanternArrive, lanternHasStory, lanternLetGo, lanternLost, lanternPearl, lanternTokens } from './lantern';
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
 import { applianceRepair } from './appliance';
@@ -277,6 +278,7 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'moveType') return run.party.some((m) => m.hp > 0 && m.moves.some((s) => { const mv = content.moves.get(s.id); return !!mv && mv.category !== 'status' && c.types!.includes(mv.type); }));
   if (c.test === 'noMoveType') return !run.party.some((m) => m.moves.some((s) => c.types!.includes(content.moves.get(s.id)?.type ?? '')));
   if (c.test === 'duelDue') return duelDue(run, c.n ?? 1, stage);
+  if (c.test === 'duelReady') return duelReady(run);
   if (c.test === 'duelistLeft') return gnFlag(run, 'duelist-left') > 0;
   const stamped = gnFlag(run, c.key!);
   if (c.test === 'laterStage') return stamped > 0 && stamped < stage;
@@ -426,7 +428,9 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return '';
     case 'roll': {
       const odds = e.n! + (e.mods ?? []).filter((m) => m.when.every((c) => host.met?.(c) ?? false)).reduce((sum, m) => sum + m.n, 0);
-      setGnFlag(run, e.key!, host.float() * 100 < odds ? 1 : 0);
+      // The roll is always taken (the stream stays in step); Flight North as the first region's story is then certain.
+      const hit = host.float() * 100 < odds;
+      setGnFlag(run, e.key!, hit || (e.key === 'flight-stolen' && flightNorthCertain(run)) ? 1 : 0);
       return '';
     }
     case 'pick': {

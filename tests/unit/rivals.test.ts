@@ -394,7 +394,9 @@ describe('the rivals\' world', () => {
 });
 
 describe('rival paths', () => {
-  const emptyRun = () => structuredClone(chooseStarter(content, createRun(content, { runId: 'pa', seed: 'pa', archetypeId: 'red' }), 0));
+  // Built once and copied: every call made the same run, and building it 300 times per check made these tests take minutes.
+  let baseRun: RunState | null = null;
+  const emptyRun = () => structuredClone((baseRun ??= chooseStarter(content, createRun(content, { runId: 'pa', seed: 'pa', archetypeId: 'red' }), 0)));
   const where = { region: 0, stage: 0, level: 1, node: null, battle: 3, turn: null };
   const input = (over: Partial<SparkInput> = {}): SparkInput => ({
     where,
@@ -433,8 +435,10 @@ describe('rival paths', () => {
 
   it('a rival who turns up in a later region is a world traveller; a second one in a region is an accidental competitor', () => {
     expect(pathsSeen({ where: { ...where, region: 2 }, hpLeftShare: 0.2 }).has('world-traveler')).toBe(true);
+    // One first rival, won once and copied into each seed's run (fighting the same battle 300 times made this test take over a minute).
+    const firstRivals = win(trainerBattle('pa-first')).story.rivals;
     const second = pathsSeen({}, (run) => {
-      run.story.rivals = structuredClone(win(trainerBattle('pa-first')).story.rivals);
+      run.story.rivals = structuredClone(firstRivals);
     });
     expect(second.has('accidental-competitor')).toBe(true);
   });

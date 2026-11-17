@@ -34,6 +34,10 @@ export const BlessingStateSchema = z.object({
   folds: z.array(z.string()).optional(),
   /** Rides and warps taken (one `region:stage` per use). */
   rides: z.array(z.string()).optional(),
+  /** Legendaries whose Signs the player found this run (they join the save's discovered blessings when the run ends). */
+  signs: z.array(z.string()).optional(),
+  /** The starter matched this blessing's starter note (LEGENDARY_BLESSINGS.md section 7). */
+  starterNote: z.boolean().optional(),
 });
 export type BlessingState = z.infer<typeof BlessingStateSchema>;
 

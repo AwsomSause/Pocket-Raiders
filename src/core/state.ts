@@ -908,6 +908,23 @@ export const BattleStateSchema = z.object({
   finaleAssist: z.object({ id: z.string(), name: z.string(), speciesId: z.string(), level: z.number().int().min(1), strikesLeft: z.number().int().min(0) }).optional(),
   /** A temporary ally (event battle): its uid. It fights beside you in a double battle and leaves the party when the battle ends. */
   loaner: z.string().optional(),
+  /**
+   * Allies the game controls (core/battle/guests.ts): temporary Pokémon at the end of the party that stand in your spots of a double
+   * or triple battle, pick their own moves, can be hit and can faint, and leave when the battle ends (or after `turns` full turns).
+   * `uids`: the allies still here, in the order they take the field. `rotate`: the ones waiting trade places with the ones out, a turn
+   * each. `anchor`: an ally that never rotates out. `closed`: spots added when a smaller battle grew to make room: the player's are for
+   * allies only and the foe's stay empty. `grown`: what the battle was before it grew (a single battle goes back when the allies leave).
+   */
+  guests: z
+    .object({
+      uids: z.array(z.string()),
+      turns: z.number().int().min(0).optional(),
+      rotate: z.boolean().optional(),
+      anchor: z.string().optional(),
+      closed: z.object({ player: z.array(z.number().int().min(0).max(2)), enemy: z.array(z.number().int().min(0).max(2)) }).optional(),
+      grown: z.enum(['single', 'double']).optional(),
+    })
+    .optional(),
   /** How each enemy's level was worked out (shown in the debug panel). */
   levelInfo: z.array(LevelBreakdownSchema).default([]),
   /** 0–1: the chance each turn that the enemy picks its best move (bosses), otherwise a random one. */
@@ -918,6 +935,8 @@ export const BattleStateSchema = z.object({
   mapItems: z.object({ freeTurns: z.number().int().min(0), thrown: z.number().int().min(0) }).optional(),
   /** Beta 0.6 B9: an evolution stone this wild Pokémon stands beside; win or catch the fight to take it. */
   evoStone: z.string().optional(),
+  /** Celebi's trip back to an earlier Gym: the leader is fought again, but no badge is won. */
+  revisit: z.boolean().optional(),
   /** A VS Seeker rematch: double prize money. */
   rematch: z.boolean().optional(),
   /** "This Trainer Will Return": the enemy profile id of a trainer back for its rematch. */
@@ -1211,6 +1230,8 @@ export const PendingDecisionSchema = z.discriminatedUnion('kind', [
   /** Beta 0.6 B7: the League door. Your party is registered; option 0 keeps it, option N swaps the Pokémon the League answers most for boxed Pokémon `swapIns[N-1]`. */
   z.object({ kind: z.literal('leagueDoor'), title: z.string(), outUid: z.string(), swapIns: z.array(z.string()), options: z.array(z.object({ label: z.string(), description: z.string() })).min(1) }),
   /** Beta 0.7 M1: a Mythical visits and offers a Promise. Option 0 accepts (it becomes the Guest), option 1 declines (core/instrumentality/promises.ts). */
+  /** Mythical Promises stage 2: a Guest's Wonder asks for a pick (a stance, a wish, a retune). `value` is what the pick means to the Wonder. */
+  z.object({ kind: z.literal('wonderChoice'), mythicalId: z.string(), wonderId: z.string(), title: z.string(), options: z.array(z.object({ label: z.string(), description: z.string(), value: z.string() })).min(1) }),
   z.object({ kind: z.literal('mythicalVisit'), mythicalId: z.string(), title: z.string(), options: z.array(z.object({ label: z.string(), description: z.string() })).min(2) }),
   /** A PP Up or PP Max: pick which move gets the extra PP. */
   z.object({ kind: z.literal('ppUp'), uid: z.string(), itemName: z.string(), ups: z.number().int().min(1).max(3) }),
@@ -1885,6 +1906,8 @@ export const ProfileSchema = z.object({
   /** Candy Shop perks bought with candies (balance.candyShop): they add to every run's starting Bag. */
   candyPerks: z.array(z.string()).default([]),
   runHistory: z.array(RunRecordSchema),
+  /** Legendary Blessings across runs: blessings found (Discovery) and dealt (the shuffled bag per tier). Ids only. */
+  blessings: z.object({ found: z.array(z.string()).default([]), dealt: z.array(z.string()).default([]) }).optional(),
   /** What the last finished run paid out (shown on the run-end screen and in the Bank). */
   lastPayout: PayoutSchema.nullable(),
   /** Bank licenses owned. */
