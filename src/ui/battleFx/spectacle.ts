@@ -386,8 +386,8 @@ export function phaseBanner(scene: Phaser.Scene, rule: string, rim: number, moti
 }
 
 /** S257: a one-line text recap banner at the bottom of the screen after a skipped cutscene. Fades itself. */
-export function showRecapBanner(scene: Phaser.Scene, text: string, ms = 2600): void {
-  const t = scene.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 30, text, textStyle(18, '#ffffff', { stroke: '#101830', strokeThickness: 4, backgroundColor: '#101830cc', padding: { x: 12, y: 6 }, wordWrap: { width: GAME_WIDTH - 180 }, align: 'center' })).setOrigin(0.5, 1).setDepth(26500).setScrollFactor(0).setData('noJuice', true).setName('skip-recap');
+export function showRecapBanner(scene: Phaser.Scene, text: string, ms = 2600, y = GAME_HEIGHT - 30): void {
+  const t = scene.add.text(GAME_WIDTH / 2, y, text, textStyle(18, '#ffffff', { stroke: '#101830', strokeThickness: 4, backgroundColor: '#101830cc', padding: { x: 12, y: 6 }, wordWrap: { width: GAME_WIDTH - 180 }, align: 'center' })).setOrigin(0.5, 1).setDepth(26500).setScrollFactor(0).setData('noJuice', true).setName('skip-recap');
   scene.tweens.add({ targets: t, alpha: { from: 0, to: 1 }, duration: 200 });
   scene.tweens.add({ targets: t, alpha: 0, delay: ms, duration: 360, onComplete: () => t.destroy() });
 }

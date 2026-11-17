@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import ebdx from '../../src/data/ebdxAnims.json';
 import moveAnims from '../../src/data/moveAnims.json';
-import { ease, lifeAlpha, parseEbdxAnims, scatter, scriptAssets } from '../../src/core/presentation/scriptAnim';
+import { ease, lifeAlpha, parseEbdxAnims, playableScript, scatter, scriptAssets } from '../../src/core/presentation/scriptAnim';
 import { existsSync } from 'node:fs';
 
 describe('scripted EBDX move animations', () => {
@@ -23,6 +23,18 @@ describe('scripted EBDX move animations', () => {
     for (const [name, s] of Object.entries(file.scripts)) {
       for (const l of s.layers) expect(l.start + l.stagger * (l.count - 1) + l.dur, name).toBeLessThanOrEqual(s.length);
     }
+  });
+
+  it('only hand-checked scripts play: an auto-drafted one, or a name with no script, gives nothing', () => {
+    // The nine hand-ported timelines (slices 1 and 2) are the only ones without the draft flag.
+    const hand = ['tackle', 'ember', 'water-gun', 'thunderbolt', 'absorb', 'mega-drain', 'giga-drain', 'growl', 'comet-punch'];
+    for (const name of hand) expect(playableScript(file, name)).toBe(file.scripts[name]);
+    expect(Object.keys(file.scripts).filter((k) => !file.scripts[k]!.draft).sort()).toEqual([...hand].sort());
+    // Flamethrower's draft drew a whole flame sheet as one particle (a wall of fire).
+    expect(file.scripts.flamethrower?.draft).toBe(true);
+    expect(playableScript(file, 'flamethrower')).toBeNull();
+    expect(playableScript(file, 'no-such-script')).toBeNull();
+    expect(playableScript(file, undefined)).toBeNull();
   });
 
   it('rejects a move that points at a missing script', () => {

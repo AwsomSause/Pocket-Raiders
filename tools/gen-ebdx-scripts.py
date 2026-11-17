@@ -126,7 +126,8 @@ for r in rank:
     except Exception as e:
         print('skip', r, e); continue
     if not script['layers'] and not script['sfx'] and not script.get('hit') and not script.get('userShake'): continue
-    file['scripts'][key] = script
+    # A draft stays off until someone has looked at it in the game (scriptAnim.ts `draft`).
+    file['scripts'][key] = {'v': script['v'], 'draft': True, **{k: v for k, v in script.items() if k != 'v'}}
     for m in cover[r]: file['moves'][m] = key
     made += 1
     print(key, cover[r][:6], len(script['layers']), 'layers', script['length'], 'ms')

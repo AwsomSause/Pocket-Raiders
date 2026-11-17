@@ -41,6 +41,7 @@ Frozen: do not add lines (merge conflicts). Use `npm run status:find -- word`; n
 - `e2e-reliability-2.md`: E2E reliability pass 2: every red main run failed a different spec because the 2 CI workers share one software
 - `e2e-reliability.md`: E2E reliability: the milestone10 trainer VS intro and gym ACE tests poll for the VS art, challenge line, title
 - `ebdx-scripted-anims-1.md`: EBDX writes its 442 move animations as Ruby scripts. We can't run Ruby, so each one is re-timed by hand into a
+- `battle-screen-fixes-nov16.md`: Kice 2026-11-16 battle fixes: drafted EBDX scripts disabled, New look text box reaches the sprite cut, speech above the HUD, stand-in Trainer pictures.
 - `economy-exp-charm.md`: Economy/items/risk slice 3, Exp. Charm (S432, first of the Charms): rare run-long item `exp-charm`, wild battl
 - `economy-insurance.md`: Economy/items/risk slice 2, Insurance Relic (S388): rare key item `insurance-relic` (perk `insurance`). A lost
 - `economy-safety-net.md`: Economy/items/risk slice 1, Safety Net (S382): new epic key item `safety-net` (perk `safetyNet`, icon reuses L
