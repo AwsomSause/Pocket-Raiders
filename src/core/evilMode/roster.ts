@@ -2,6 +2,7 @@
 // notice board, the one question, hiring and saying no, Grunt to Lead, letting go, and leaving at Loyalty 0.
 // Pure: new blocks are returned. Draws come only from `evil-people`, and its count is stored.
 
+import { fxTotal, rosterCap } from './baseFx';
 import { EVIL_DATA, type EvilData } from './data';
 import { appendLog, fill, money } from './ledger';
 import { bandOf, deckFor, deckPerson, drawOne, flawDef, inRoster, lineText, moveLoyalty, peopleText, personFrom, rankDef, saysName, talentDef, wageOf } from './people';
@@ -24,7 +25,7 @@ export function arriveApplicants(block: EvilModeBlock, data: EvilData = EVIL_DAT
   const R = data.people.rules;
   const stay = block.applicants.filter((a) => day < a.day + R.waitDays);
   const town = d.holdings.find((h) => h.kind === 'town');
-  const count = town?.owner === 'team' ? R.applicantsHeld : R.applicantsNotHeld;
+  const count = (town?.owner === 'team' ? R.applicantsHeld : R.applicantsNotHeld) + fxTotal(block, 'applicants', data);
   let draws = block.draws['evil-people'] ?? 0;
   const drawn = [...block.drawn];
   const fresh: EvilModeBlock['applicants'] = [];
@@ -56,7 +57,7 @@ export function hire(block: EvilModeBlock, ref: string, data: EvilData = EVIL_DA
   const a = block.applicants.find((x) => x.ref === ref);
   const d = deckPerson(ref, data);
   if (!a || !d) return no(block, "They're not at the notice board.");
-  const cap = data.people.rules.rosterCap;
+  const cap = rosterCap(block, data);
   if (inRoster(block).length >= cap) return no(block, fill(peopleText('noBunk', data), { cap }));
   const person = personFrom(d, startLoyalty(block, data), { line: a.q === 'wont' });
   const line = fill(peopleText('hired', data), { name: d.name, says: saysName(person, block.team.name, data) });

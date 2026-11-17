@@ -385,17 +385,25 @@ describe('the page and the save (block v9)', () => {
     expect(m.rows.find((r) => r.testid === 'evil-nb-sit')!.open).toBe(true);
     expect(m.rows.find((r) => r.testid === 'evil-nb-chair')!.open).toBe(false);
   });
-  it('v8 -> v9: no neighbour until the next step; then Giovanni at Wary, ticks already past counted as happened', () => {
+  it('v9 (slice 10) and v10 (slice 11) -> v11: no neighbour until the next step; then Giovanni at Wary, ticks already past counted as happened', () => {
     const b = toBeat(found(6, 'mig'), 'dispatch');
     const { neighbour, ...rest } = b;
     void neighbour;
-    const v9 = EvilModeBlockSchema.parse({ ...rest, v: 8 });
-    expect(v9).toMatchObject({ v: 9, neighbour: null });
-    const after = go(v9, { type: 'send' });
+    for (const v of [9, 10]) expect(EvilModeBlockSchema.parse({ ...rest, v })).toMatchObject({ v: 11, neighbour: null, base: rest.base });
+    const v11 = EvilModeBlockSchema.parse({ ...rest, v: 9 });
+    const after = go(v11, { type: 'send' });
     expect(nb(after).stance).toBe('wary');
     expect(nb(after).ticks.slice(0, 2).map((t) => t.state)).toEqual(['fired', 'fired']);
     expect(nb(after).ticks.slice(2).map((t) => t.state)).toEqual(['waiting', 'waiting', 'waiting']);
     expect(reload(after)).toEqual(after);
+  });
+  it('v8 -> v11 in one load: a base nobody picked, and no neighbour yet', () => {
+    const b = toBeat(found(6, 'mig8'), 'dispatch');
+    const { neighbour: _n, base: _b, raid: _r, law: _l, ...rest } = b;
+    expect(EvilModeBlockSchema.parse({ ...rest, v: 8 })).toMatchObject({ v: 11, base: null, raid: null, neighbour: null });
+  });
+  it('a v12 block (a newer save) is refused, not cut down', () => {
+    expect(() => EvilModeBlockSchema.parse({ ...toBeat(found(6, 'mig'), 'dispatch'), v: 12 })).toThrow();
   });
   it('a block with a Sit-Down going on and a fight waiting saves and reloads the same; a damaged neighbour is refused', () => {
     const b = go(toBeat(found(4, 'sv'), 'inPerson'), { type: 'sitDown' });

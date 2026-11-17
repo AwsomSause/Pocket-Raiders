@@ -2,6 +2,7 @@
 // Part 7 section 11). The scene keeps the cursor (`RosterDraft`); these work out what to draw and decide nothing.
 // No person's Loyalty is ever a figure here: a face and a word. The team's is never shown at all, only its band.
 
+import { rosterCap } from './baseFx';
 import { EVIL_DATA, type EvilData } from './data';
 import { severance, cardOf, promoteLine, promoteProblem } from './roster';
 import { realLine } from './line';
@@ -60,9 +61,9 @@ export function personActs(block: EvilModeBlock, id: string, data: EvilData = EV
 export function applicantActs(block: EvilModeBlock, ref: string, data: EvilData = EVIL_DATA): RosterAct[] {
   const a = block.applicants.find((x) => x.ref === ref);
   if (!a) return [];
-  const full = inRoster(block).length >= data.people.rules.rosterCap;
+  const full = inRoster(block).length >= rosterCap(block, data);
   return [
-    { id: 'hire', name: 'Hire', on: !full, why: full ? fill(peopleText('noBunk', data), { cap: data.people.rules.rosterCap }) : null },
+    { id: 'hire', name: 'Hire', on: !full, why: full ? fill(peopleText('noBunk', data), { cap: rosterCap(block, data) }) : null },
     ...data.people.questions.map((q) => ({ id: `q:${q.id}`, name: q.ask, on: !a.q, why: a.q ? 'One question each.' : null })),
     { id: 'turnKind', name: 'Say no', on: true, why: null },
     { id: 'turnRude', name: 'Say no, rudely', on: true, why: null },
