@@ -2,7 +2,7 @@
 // Rolls are stateless and seeded like the battle ones; a once-per-run moment is claimed only when it plays, so a failed roll
 // at one rest does not use up the chance at the next. No new RNG stream: nothing else's rolls move.
 
-import { displayName } from '../care';
+import { careOf, displayName } from '../care';
 import { TYPE_NAMES, type Content } from '../contentSchema';
 import { bondFriendship } from '../co/who';
 import { changeFriendship } from '../friendship';
@@ -164,7 +164,7 @@ export function joinMoments(content: Content, run: RunState, joined: PokemonInst
     if (fx.healTeam) healParty();
     if (fx.friendship) changeFriendship(content, joined, fx.friendship);
     if (fx.talentRoll) {
-      const care = (joined.care ??= {} as NonNullable<PokemonInstance['care']>);
+      const care = careOf(joined);
       care.talent = TALENT_STATS[Math.floor(new Rng(hashSeed(`${run.seed}:pmoment:${m.id}:${joined.uid}:talent`)).float() * TALENT_STATS.length)]!;
     }
     lines.push(`${nameOf(content, joined)}: ${m.name}. ${m.effectText}`);
