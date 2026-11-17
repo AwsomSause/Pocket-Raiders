@@ -2,6 +2,8 @@
 // Queueing checks a job can go; "Send them" fixes each job's odds; the Evening rolls each job once from the
 // `evil-dispatch` stream, in queue order, then pays takings and wages. Pure: new blocks are returned.
 
+import { questBusy } from './quest';
+import { moleStops } from './mole';
 import { hashSeed, Rng } from '../rng';
 import { countsFor, fairPrice, payAmount, heldCount, holdingName, kindDef, localOf, methodsFor, settleTown, shiftMood, streetName, streetOf } from './board';
 import { EVIL_DATA, type EvilData } from './data';
@@ -36,7 +38,7 @@ export function crewProblem(block: EvilModeBlock, id: string, ignoreHolding?: st
   if (block.queue.some((j) => j.holdingId !== ignoreHolding && j.squad.includes(id))) return `${c.name} is already going somewhere today.`;
   if (block.posted.some((p) => p.id === id)) return `${c.name} is posted somewhere today.`;
   if (inChair(block, id)) return `${c.name} holds the Gym's chair.`;
-  return tradeProblem(block, id) ?? schemeBusy(block, id);
+  return tradeProblem(block, id) ?? schemeBusy(block, id) ?? questBusy(block, id);
 }
 
 /** Why a job can't be queued, in plain words; null when it can. Checked by `step`, not only on screen. */
@@ -47,6 +49,9 @@ export function jobProblem(block: EvilModeBlock, job: JobDraft, data: EvilData =
   const h = d.holdings.find((x) => x.id === job.holdingId);
   if (!h) return 'Pick a holding.';
   const kind = kindDef(h.kind, data);
+  // Slice 17: a method the Boss promised the police's mole to stop, for the region.
+  const stop = moleStops(block, job.method);
+  if (stop) return stop;
   // Slice 6: the Line. A method darker than the team's Line is refused here, whatever the screen shows.
   if (!lineAllows(block, job.method, data)) return lineWhy(block, data);
   // Slice 9: the region's doors (the first Arrival: Persuade, Pay, Outplay and scouting only). Refused here too.

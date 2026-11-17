@@ -26,8 +26,10 @@ import type { JobDraft } from '../core/evilMode/odds';
 import type { StoredCard } from '../core/evilMode/schema';
 import { cardModel, LEDGER_ACTS, ledgerModel, newLedger, type LedgerDraft } from '../core/evilMode/ledgerScreens';
 import { cardView, filedCorner, ledgerView } from '../ui/redux/screens/evilLedger';
-import { applicantActs, isQuestionAct, newRoster, personActs, refusalModel, rosterModel, type RosterDraft } from '../core/evilMode/rosterScreens';
-import { officeView, refusalView, rosterView } from '../ui/redux/screens/evilRoster';
+import { applicantActs, faceOf, isQuestionAct, newRoster, personActs, refusalModel, rosterModel, type RosterDraft } from '../core/evilMode/rosterScreens';
+import { moleSceneView, officeView, refusalView, rosterView, suspicionsView } from '../ui/redux/screens/evilRoster';
+import { moleSceneModel, suspicionsModel, type MoleAnswer } from '../core/evilMode/mole';
+import type { StayReason } from '../core/evilMode/quest';
 import { fileModel } from '../core/evilMode/heroScreens';
 import { fileView } from '../ui/redux/screens/evilFile';
 import { lineModel } from '../core/evilMode/lineScreens';
@@ -68,6 +70,8 @@ export class EvilScene extends Phaser.Scene {
   private cardOpenedAt = 0;
   /** Slice 4: the Roster (and the Office inside it), and the cursor on the yard's three answers. */
   private roster: RosterDraft | null = null;
+  /** Slice 17: the Suspicions page's chosen card, or null when it's shut. */
+  private susp: number | null = null;
   private refuseSel = 0;
   /** Slice 5: the File's open tab, or null when it's shut. */
   private file: number | null = null;
@@ -105,6 +109,7 @@ export class EvilScene extends Phaser.Scene {
     this.ledger = null;
     this.filed = null;
     this.roster = null;
+    this.susp = null;
     this.refuseSel = 0;
     this.file = null;
     this.line = null;
@@ -160,6 +165,8 @@ export class EvilScene extends Phaser.Scene {
           // Slice 14: the Scheme page; a heist's rooms keep it open.
           const smod = (this.sc !== null || block.scheme?.heist?.stage === 'rooms') && !block.fight && !ledger && !roster && !file && !line && !gym && !trade && !nbPage ? schemeModel(block, this.sc ?? 0) : null;
           const scPage = smod ? schemeView(smod, this.notice) : undefined;
+          // Slice 17: the Suspicions page.
+          const suspicions = this.susp !== null && !ledger && !roster && !file && !line && !gym && !trade && !nbPage && !scPage ? suspicionsView(suspicionsModel(block, this.susp), this.notice) : undefined;
           // Slice 10: the Base page. Walk it and a Raid hold it open over everything else.
           const bsel = this.baseSel();
           const bm = bsel && (this.baseForced() || (!ledger && !roster && !file && !line && !gym && !trade && !nbPage && !scPage)) ? baseModel(block, bsel) : null;
@@ -173,9 +180,10 @@ export class EvilScene extends Phaser.Scene {
           if (forced && road) return frameView(c, frame, this.notice, `<div style="--team-a:${block.team.look.a};--team-b:${block.team.look.b}">${boardView(boardModel(block, this.disp), frame, this.notice, { road, filed: filedCorner(this.filed) })}</div>`);
           // An order across a line is answered in the yard before anything else moves (Part 7 section 11.1).
           const yard = refusalModel(block);
-          const over = yard ? refusalView(yard, this.refuseSel) : rm?.office ? officeView(rm.office) : '';
+          const ms = moleSceneModel(block);
+          const over = yard ? refusalView(yard, this.refuseSel) : ms ? moleSceneView(ms, faceOf(ms.ref)) : rm?.office ? officeView(rm.office) : '';
           const look = `<div style="--team-a:${block.team.look.a};--team-b:${block.team.look.b}">`;
-          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), ...(line ? { line } : {}), ...(gym ? { gym } : {}), ...(trade ? { trade } : {}), ...(nbPage ? { neighbour: nbPage } : {}), ...(scPage ? { scheme: scPage } : {}), ...(base ? { base } : {}), ...(road ? { road } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
+          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), ...(line ? { line } : {}), ...(gym ? { gym } : {}), ...(trade ? { trade } : {}), ...(nbPage ? { neighbour: nbPage } : {}), ...(scPage ? { scheme: scPage } : {}), ...(suspicions ? { suspicions } : {}), ...(base ? { base } : {}), ...(road ? { road } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
         }
         if (block) return frameView(c, frameModel(block, archetype.name), this.notice);
         return foundingView(c, foundingModel(this.draft, { bossName: archetype.name, bossFile, starter: species?.name ?? '—', starterFile, oldLook, length: services().session.settings.expansion.evilRunLength }));
@@ -201,6 +209,10 @@ export class EvilScene extends Phaser.Scene {
         lact: (arg) => { const [i, j] = arg.split(':').map(Number); if (this.ledger) { this.ledger = { ...this.ledger, row: i!, act: j! }; this.ledgerAct(); } },
         lcard: (id) => this.readCard(id),
         roster: () => this.toggleRoster(),
+        susp: () => this.toggleSuspicions(),
+        urow: (i) => { if (this.susp !== null) this.susp = Number(i); this.view?.refresh(); },
+        udo: (id) => this.suspicionsDo(id),
+        mans: (id) => this.evil({ type: 'moleAnswer', answer: id as MoleAnswer }),
         rtab: (i) => { if (this.roster) this.roster = newRoster(Number(i)); this.view?.refresh(); },
         rrow: (i) => { if (this.roster && !this.roster.office) this.roster = { ...this.roster, row: Number(i), act: this.roster.row === Number(i) && this.roster.act !== null ? this.roster.act : 0 }; this.view?.refresh(); },
         ract: (arg) => { const [i, j] = arg.split(':').map(Number); if (this.roster) { this.roster = { ...this.roster, row: i!, act: j! }; this.rosterAct(); } },
@@ -411,7 +423,18 @@ export class EvilScene extends Phaser.Scene {
     if (this.block()?.refusal) return this.refusalKey(a);
     if (this.roadOn() || this.road !== null) return this.roadKey(a);
     if (this.ledger) return this.ledgerKey(a);
+    // Slice 17: a scene in the Office takes Enter as its first answer.
+    const scene = this.block() ? moleSceneModel(this.block()!) : null;
+    if (scene && a === 'confirm') return this.evil({ type: 'moleAnswer', answer: scene.answers[0]!.id });
     if (this.roster) return this.rosterKey(a);
+    if (this.susp !== null) {
+      const b = this.block();
+      const n = b ? suspicionsModel(b, this.susp).people.length : 0;
+      if (a === 'back') this.susp = null;
+      else if ((a === 'up' || a === 'down' || a === 'left' || a === 'right') && n) this.susp = (this.susp + (a === 'up' || a === 'left' ? -1 : 1) + n) % n;
+      else if (a === 'confirm') return this.suspicionsDo(b?.here.beat === 'night' ? 'name' : 'feed');
+      return void this.view?.refresh();
+    }
     if (this.file !== null) return this.fileKey(a);
     if (this.baseForced()) return this.baseKey(a);
     if (this.line !== null) return this.lineKey(a);
@@ -596,6 +619,7 @@ export class EvilScene extends Phaser.Scene {
     if (e.code === 'KeyQ' && type === 'down' && !e.repeat && !this.card && this.base) { this.base = { ...this.base, tab: (this.base.tab + 1) % BASE_TABS.length, opt: 0 }; return void this.view?.refresh(); }
     if (e.code === 'KeyL' && type === 'down' && !e.repeat && !this.card && this.block()?.district) return this.toggleLedger();
     if (e.code === 'KeyR' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleRoster();
+    if (e.code === 'KeyU' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleSuspicions();
     if (e.code === 'KeyO' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleRoad();
     if (e.code === 'KeyF' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleFile();
     if (e.code === 'KeyH' && type === 'down' && !e.repeat && !this.card && this.block()?.here.beat === 'dispatch' && this.disp.step === 'how') return this.hold();
@@ -673,6 +697,7 @@ export class EvilScene extends Phaser.Scene {
     if (this.card) return;
     this.ledger = this.ledger ? null : newLedger();
     this.roster = null;
+    this.susp = null;
     this.file = null;
     this.notice = null;
     this.view?.refresh();
@@ -731,6 +756,7 @@ export class EvilScene extends Phaser.Scene {
     this.file = this.file === null ? 0 : null;
     this.ledger = null;
     this.roster = null;
+    this.susp = null;
     this.notice = null;
     this.view?.refresh();
   }
@@ -741,6 +767,7 @@ export class EvilScene extends Phaser.Scene {
     this.line = this.line === null ? Math.max(0, LINE_IDS.indexOf(block?.team.line ?? 'grey')) : null;
     this.ledger = null;
     this.roster = null;
+    this.susp = null;
     this.file = null;
     this.cancelLineHold();
     this.view?.refresh();
@@ -758,6 +785,7 @@ export class EvilScene extends Phaser.Scene {
     this.trade = this.trade === null ? newTrade() : null;
     this.ledger = null;
     this.roster = null;
+    this.susp = null;
     this.file = null;
     this.line = null;
     this.gym = null;
@@ -784,6 +812,7 @@ export class EvilScene extends Phaser.Scene {
     this.base = this.base === null ? newBaseSel() : null;
     this.ledger = null;
     this.roster = null;
+    this.susp = null;
     this.file = null;
     this.line = null;
     this.gym = null;
@@ -880,6 +909,7 @@ export class EvilScene extends Phaser.Scene {
     this.gym = this.gym === null ? 0 : null;
     this.ledger = null;
     this.roster = null;
+    this.susp = null;
     this.file = null;
     this.line = null;
     this.notice = null;
@@ -900,6 +930,7 @@ export class EvilScene extends Phaser.Scene {
     this.sc = this.sc === null ? 0 : null;
     this.ledger = null;
     this.roster = null;
+    this.susp = null;
     this.file = null;
     this.line = null;
     this.gym = null;
@@ -951,6 +982,7 @@ export class EvilScene extends Phaser.Scene {
     this.nb = this.nb === null ? 0 : null;
     this.ledger = null;
     this.roster = null;
+    this.susp = null;
     this.file = null;
     this.line = null;
     this.gym = null;
@@ -1085,6 +1117,7 @@ export class EvilScene extends Phaser.Scene {
     this.road = this.road === null ? 0 : null;
     this.ledger = null;
     this.roster = null;
+    this.susp = null;
     this.file = null;
     this.notice = null;
     this.redrawRoad();
@@ -1199,6 +1232,32 @@ export class EvilScene extends Phaser.Scene {
     this.view?.refresh();
   }
 
+  // ---- Slice 17: the Suspicions page ----
+
+  private toggleSuspicions(): void {
+    if (this.card) return;
+    const open = this.susp === null;
+    this.roster = null;
+    this.susp = open ? 0 : null;
+    this.ledger = null;
+    this.file = null;
+    this.notice = null;
+    this.view?.refresh();
+  }
+
+  /** Name them (at Night) or feed them a false job (at Dispatch), for the chosen card. */
+  private suspicionsDo(id: string): void {
+    const block = this.block();
+    if (!block || this.susp === null) return;
+    const m = suspicionsModel(block, this.susp);
+    const p = m.people.find((x) => x.sel);
+    const a = m.acts.find((x) => x.id === id);
+    if (!p || !a) return;
+    if (!a.on) { this.notice = a.why; return void this.view?.refresh(); }
+    this.said(services().session.evilStep(id === 'name' ? { type: 'nameThem', id: p.id } : { type: 'feed', id: p.id }));
+    this.view?.refresh();
+  }
+
   private said(cues: { id: string }[]): void {
     const refused = cues.find((c) => c.id === 'refused') as { reason?: string } | undefined;
     const said = cues.find((c) => c.id === 'said') as { line?: string } | undefined;
@@ -1217,7 +1276,10 @@ export class EvilScene extends Phaser.Scene {
       if (!p || !a) return;
       if (!a.on) { this.notice = a.why; return this.view?.refresh(); }
       if (a.id === 'promote') { this.roster = { ...R, office: p.id }; return this.view?.refresh(); }
-      this.said(services().session.evilStep({ type: 'letGo', id: p.id, kindly: a.id === 'letGoKind' }));
+      // Slice 17: a quest's step or ending; Ask them to stay.
+      if (a.id === 'qstep' || a.id.startsWith('qend:')) this.said(services().session.evilStep({ type: 'questStep', id: p.id, ...(a.id === 'qstep' ? {} : { ending: a.id.slice(5) }) }));
+      else if (a.id.startsWith('stay:')) this.said(services().session.evilStep({ type: 'askStay', id: p.id, reason: a.id === 'stay:none' ? null : (a.id.slice(5) as StayReason) }));
+      else this.said(services().session.evilStep({ type: 'letGo', id: p.id, kindly: a.id === 'letGoKind' }));
     } else {
       const ap = m.applicants?.[R.row];
       const a = ap ? applicantActs(block, ap.ref)[R.act] : undefined;

@@ -1,0 +1,240 @@
+{
+  "note": "Evil Mode slice 17 (design Part 10c): personal quests and Ask them to stay. A quest opens at Loyalty 7, or at hiring when the Boss asked \"Why us?\". It runs in steps, a district or more apart; each step is a squad's day for nothing the Board counts (Gives: Nothing). A step marked boss is the one where the Boss going is the whole point: it's taken at the In person beat. A quest left a whole region closes, with a line. Done: Loyalty 10 for good, the flaw greyed. An ending marked leaves means they go at the next Crossing, happily (the seventh way to leave); leavesNow means they go today. The sixteen Founders' quests and three regional ones (Ignatius, Sachiko, Imelda) are written through; every other person's is cut from their shape's three steps. Numbers are starting values, not playtested.",
+  "on": true,
+  "rules": { "openAt": 7, "gapDistricts": 1, "failLoyalty": -2, "failCap": 7, "done": 10 },
+  "text": {
+    "field": "Quest",
+    "gives": "Nothing.",
+    "card": "{name}'s own business. Step {n} of {of}: {text}",
+    "open": "{name}'s told you what they came for. It's on their card now.",
+    "stepDone": "{name}: step {n} done. {text}",
+    "busy": "{name} is seeing to their own business today.",
+    "notYet": "Not yet. A district or more between steps.",
+    "bossBeat": "This one needs the Boss there. Take it at In person.",
+    "notBossBeat": "Their own business goes at Dispatch, with the squads.",
+    "chooseEnd": "How it ends is up to you.",
+    "done": "{name}: \"{text}\"",
+    "doneCard": "Done. Loyalty can't fall.",
+    "failed": "{name}, at Night, without heat: \"It's all right. It was a long shot.\"",
+    "failedCard": "Closed: left a whole region.",
+    "leaves": "{name} goes at the next Crossing, to do what the quest made possible.",
+    "leftQuest": "{name} shakes hands at the quay. They're off to do the thing they came for. They'll send someone who says their name.",
+    "notEnough": "Not enough Funds for that: {amount}.",
+    "flawGrey": "still theirs; it doesn't fire"
+  },
+  "shapes": {
+    "owed": { "name": "Something owed", "boss": "Deciding whose money pays it", "steps": [
+      { "text": "They tell you who owes what. It isn't the team's debt. They'd like it settled anyway." },
+      { "text": "A scout finds who's holding it: comfortable, two streets off, wanting to be left alone." },
+      { "text": "The day it's settled. You go with them.", "boss": true } ],
+      "endings": [
+        { "id": "paid", "name": "Make them pay it", "text": "They paid. They didn't want to. That's the right way round.", "effect": { "heat": 1 } },
+        { "id": "float", "name": "Pay it from the float (₽1,000)", "text": "It wasn't ours to pay. You paid it. I've no word for that column.", "effect": { "funds": -1000, "regard": 1 } },
+        { "id": "left", "name": "Leave it", "text": "Some things stay owed. I'll carry it.", "effect": {} } ] },
+    "found": { "name": "Somebody found", "boss": "Arranging the meeting; not fixing how it goes", "steps": [
+      { "text": "A letter, or a rumour: where the one they lost has got to." },
+      { "text": "A scout finds them. Alive, cross, and busy." },
+      { "text": "The meeting. You arrange it and stand back.", "boss": true } ],
+      "endings": [
+        { "id": "brought", "name": "Bring them over", "text": "They're here. They argue at supper. It's the best noise in the base.", "effect": { "loyaltyAll": 1 } },
+        { "id": "write", "name": "Let them be, and write", "text": "We write. It's enough. It's more than we had.", "effect": {} },
+        { "id": "home", "name": "Go home with them", "text": "I'm going with them. Thank you for finding the road.", "effect": { "regard": 1 }, "leaves": true } ] },
+    "said": { "name": "Something said", "boss": "Being who it's said to; acting on it", "steps": [
+      { "text": "They've something they saw and couldn't say. They say they can't, yet." },
+      { "text": "They write it down. Somebody on the Roster witnesses it." },
+      { "text": "They say it, to you, in the Office. All of it.", "boss": true } ],
+      "endings": [
+        { "id": "acted", "name": "Act on it", "text": "You did something about it. Nobody ever has.", "effect": { "regard": 1 } },
+        { "id": "heard", "name": "Hear it, and do nothing yet", "text": "You heard it. That's half. I'll take half.", "effect": {} } ] },
+    "secondTry": { "name": "A second try", "boss": "Getting them the chance. Never the result", "steps": [
+      { "text": "They tell you about the one they lost. By one. It's always by one." },
+      { "text": "You find out when the next chance is, and who'll be judging." },
+      { "text": "The day. You're in the stands.", "boss": true } ],
+      "endings": [
+        { "id": "won", "name": "They win", "text": "…Is that it? I thought it'd feel like more. It's enough.", "effect": {} },
+        { "id": "lost", "name": "They lose, again", "text": "Again. All right. I'm the best in the region at that.", "effect": {} } ] },
+    "place": { "name": "A place of their own", "boss": "Building it; and letting them stay in it when the team moves on", "steps": [
+      { "text": "They pace out a corner and say \"It'll do.\"" },
+      { "text": "Materials, and a day's work nobody pays for." },
+      { "text": "It opens. You cut the string.", "boss": true } ],
+      "endings": [
+        { "id": "built", "name": "Build it properly (₽800)", "text": "It's mine. It'll still be here when you've gone.", "effect": { "funds": -800, "regard": 1 }, "leaves": true },
+        { "id": "small", "name": "A small one, in the base", "text": "It's small. It's mine. I'll stay with it while you're here.", "effect": {} } ] },
+    "door": { "name": "A door", "boss": "Letting them look; and what's done with what's seen", "steps": [
+      { "text": "They've found a door nobody else noticed." },
+      { "text": "The key, or the way round." },
+      { "text": "They open it. You're beside them.", "boss": true } ],
+      "endings": [
+        { "id": "shown", "name": "Tell the Roster what's there", "text": "Everyone's seen it now. I didn't expect that to be the good part.", "effect": { "loyaltyAll": 1 } },
+        { "id": "kept", "name": "Keep it between you", "text": "Just us, then. I can live with that.", "effect": {} } ] },
+    "home": { "name": "Going home", "boss": "Going with them", "steps": [
+      { "text": "They say where they're from, or half of it." },
+      { "text": "A scout of the place, by somebody else." },
+      { "text": "The road there. You walk them to the door.", "boss": true } ],
+      "endings": [
+        { "id": "home", "name": "Take them home", "text": "I'm home. My photograph's on your Wall. I'll write.", "effect": { "regard": 1 }, "leaves": true },
+        { "id": "stay", "name": "Let them stay, and write home", "text": "I'll stay. They know I'm safe. That was all it needed.", "effect": {} } ] },
+    "name": { "name": "A name", "boss": "Calling them it", "steps": [
+      { "text": "Somebody calls them by the wrong name. They flinch." },
+      { "text": "They tell you the name they'd like." },
+      { "text": "In front of everyone, you call them it.", "boss": true } ],
+      "endings": [
+        { "id": "called", "name": "Call them it", "text": "Say it again. …No. Once is right.", "effect": { "loyaltyAll": 1 } },
+        { "id": "theirs", "name": "Let them keep their own", "text": "Mine, then. Thank you for asking.", "effect": {} } ] }
+  },
+  "quests": {
+    "otis": { "thread": "Not my place, Boss.", "steps": [
+      { "text": "Ask Otis. In the yard, what he'd do about the district's Gym. He's got it worked out to the day." },
+      { "text": "You do it his way, or don't. If it works, he stands by the van smiling at nothing for an hour." },
+      { "text": "The man from the door, old now, in a Town. Otis tells him his name. That's all he came to do.", "boss": true } ],
+      "endings": [
+        { "id": "came", "name": "Go with him", "text": "Eleven years. You asked it first thing. I've wondered since if you'd any idea what that was worth.", "effect": { "rank": "officer" } },
+        { "id": "faye", "name": "Let him go alone", "text": "He said it to Faye on the walk back. Faye told you.", "effect": {} } ] },
+    "faye": { "thread": "Old Obadiah: \"I need a surname for the book.\" Faye: \"Put 'Faye.'\"", "steps": [
+      { "text": "A Card names her under \"Who won't\". She isn't surprised. Tobi asks who taught her. \"Nobody. That's the point.\"" },
+      { "text": "She scouts a children's home, alone. One line added in her hand: \"They're all right here. I checked.\"" },
+      { "text": "She carries something back. The child asks her name. \"Faye.\" \"Faye what?\" She looks at you.", "boss": true } ],
+      "endings": [
+        { "id": "nothing", "name": "Say nothing", "text": "Just Faye. It's enough.", "effect": {} },
+        { "id": "team", "name": "Offer the team's name", "text": "Faye, of the team. Old Obadiah writes it in and underlines it.", "effect": { "loyaltyAll": 1 } } ] },
+    "tobi": { "thread": "That was it? That's what's in a bank? It's just a room with money in it.", "steps": [
+      { "text": "He's found in the Mess at night, not eating. Hortense has stopped asking why." },
+      { "text": "He breaks into the Gym. Not to take anything. The caretaker finds him asleep in the stands and makes him breakfast." },
+      { "text": "He asks to be posted to the Mess. It's a waste of the best Hands on the Roster.", "boss": true } ],
+      "endings": [
+        { "id": "posted", "name": "Post him to the Mess", "text": "I'll run it. Nobody goes hungry on my watch. Not even you.", "effect": { "loyaltyAll": 1 } },
+        { "id": "refused", "name": "Keep him on jobs", "text": "Fair. I'll keep looking. I'm nineteen.", "effect": {} } ] },
+    "lux": { "thread": "I'd have seen that. If I'd been sent first. I'm not complaining. I'm mentioning.", "steps": [
+      { "text": "Lux mentions something: a holding about to turn. It's true." },
+      { "text": "Lux mentions two more. You act on all three. \"Nobody ever has.\"" },
+      { "text": "Lux mentions something about you, from the Ledger: the thing the team does most that its Creed says it doesn't.", "boss": true } ],
+      "endings": [
+        { "id": "acted", "name": "Act on that too", "text": "Then I'll run the Listening Post, and its morning line will always be true.", "effect": { "regard": 1 } },
+        { "id": "not", "name": "Don't", "text": "No. I thought not that one. Three out of four's more than anyone managed.", "effect": {} } ] },
+    "ngozi": { "thread": "A line nobody entered: \"Cannery, owed: ₽2,400.\" \"It's not ours. I can't leave a column open.\"", "steps": [
+      { "text": "The owner's found: a local, two districts off, comfortable. His want's \"Just to be left alone.\"" },
+      { "text": "You go and see him. He's better at cards than he looks." },
+      { "text": "Forty envelopes. She pays them out herself. One of them's Tomasz's mother.", "boss": true } ],
+      "endings": [
+        { "id": "owner", "name": "Make him pay", "text": "He paid. He didn't want to. That's the right way round.", "effect": { "heat": 1 } },
+        { "id": "float", "name": "Pay it from the float (₽2,400)", "text": "It wasn't ours to pay. You paid it. I've written it in as 'owed' and I've no word for the other column.", "effect": { "funds": -2400, "rank": "executive", "regard": 1 } },
+        { "id": "taken", "name": "Take it from him", "text": "The forty are paid. I'll not look at you quite the same, and I'll say so at the Crossing.", "effect": { "heat": 2, "dread": 1 } } ] },
+    "tomasz": { "thread": "He asks Old Obadiah about the dental. There isn't any. \"Then what's Marek in?\"", "steps": [
+      { "text": "A letter from Marek. Tomasz reads it out. A uniform, a \"site,\" a number, not a name." },
+      { "text": "A scout of the neighbour's holdings: Marek's with the neighbour. A Grunt." },
+      { "text": "The neighbour, at a table. Tomasz asks to be there.", "boss": true } ],
+      "endings": [
+        { "id": "over", "name": "Bring Marek over", "text": "We share a bunk now. He snores. I'd forgotten. I'd missed it.", "effect": { "loyaltyAll": 1 } },
+        { "id": "stays", "name": "Let Marek stay where he is", "text": "I'll write to him weekly. Whatever he knows, I'll read out in the Common Room.", "effect": {} } ] },
+    "hortense": { "thread": "\"This is no place for it. Have you a room?\"", "steps": [
+      { "text": "The Infirmary's hers. A rule on the door by morning: \"Anyone. No questions.\"" },
+      { "text": "She treats whoever's brought in. A constable. The kid. The room's rule is hers." },
+      { "text": "She asks for a Clinic in the Town, free to anyone.", "boss": true } ],
+      "endings": [
+        { "id": "clinic", "name": "Build the Clinic (₽4,000)", "text": "It's got my name on the door. I'll stay with it at the Crossing. It's listed.", "effect": { "funds": -4000, "regard": 2 }, "leaves": true },
+        { "id": "ward", "name": "Keep the Infirmary", "text": "I got my ward. I'd have liked the other. I'll say so once.", "effect": {} } ] },
+    "vikram": { "thread": "₽200 short. The next screen: it's his sister's school fees.", "steps": [
+      { "text": "You make it a wage, to the school. He stops skimming. \"I'd have asked. I didn't think you'd say yes.\"" },
+      { "text": "At Night he tells it: he opened the exam safe at sixteen, for a friend who'd have been thrown out." },
+      { "text": "The friend's a teacher now, in this district. Warm. She doesn't know who took the blame.", "boss": true } ],
+      "endings": [
+        { "id": "tells", "name": "He tells her", "text": "She's known for years. She's been paying the fees too. They've been paid twice the whole time.", "effect": {} },
+        { "id": "walks", "name": "He walks past", "text": "She's happy. That's what it was for.", "effect": {} } ] },
+    "sioned": { "thread": "\"Then what was docked, and from what?\"", "steps": [
+      { "text": "Four members and a demand: a kettle for the Garage. It's ₽40." },
+      { "text": "A draft. Six clauses. The last one binds the Boss too." },
+      { "text": "She puts it on the desk in the Office.", "boss": true } ],
+      "endings": [
+        { "id": "signed", "name": "Sign it, whole", "text": "Then it's real. For all of us. You as well.", "effect": { "loyaltyAll": 1 } },
+        { "id": "amended", "name": "Strike some clauses, sign the rest", "text": "I'll remember which. I'll sign what's left.", "effect": {} },
+        { "id": "not", "name": "Don't sign", "text": "Then I'll know where I stand.", "effect": { "loyaltyAll": -1 } } ] },
+    "kwabena": { "thread": "By one. It's always by one.", "steps": [
+      { "text": "The one who beat him four times is found: a Leader's first junior, three districts off." },
+      { "text": "A fair rematch, arranged. Not fixed." },
+      { "text": "The rematch. You watch from the stands.", "boss": true } ],
+      "endings": [
+        { "id": "won", "name": "He wins", "text": "…Is that it? I thought it'd feel like more. I'll train the kits now.", "effect": {} },
+        { "id": "lost", "name": "He loses, by one", "text": "Five. All right. I'm the best in the region at that.", "effect": {} } ] },
+    "beatriz": { "thread": "The age appears on her card. The Dispatch screen narrows. Old Obadiah opens an account.", "steps": [
+      { "text": "A local, mid-Persuade: \"You've a girl on your team. Small. Watches everything. She's from Linden Row, isn't she?\"" },
+      { "text": "A scout of Linden Row, by anyone but her: a mother who's put a card in every shop window in three towns." },
+      { "text": "At Night, with her. She didn't run to a team: she ran, and the team was hiring.", "boss": true } ],
+      "endings": [
+        { "id": "home", "name": "Take her home, in person", "text": "To her aunt's, not the house. You walk her to the door. Her photograph stays on the Wall.", "effect": { "regard": 1 }, "leavesNow": true },
+        { "id": "stay", "name": "Let her stay, and write to her mother", "text": "Scouting and the Mess, till she's eighteen. Her mother's told she's safe.", "effect": { "regard": 1 } },
+        { "id": "nothing", "name": "Do nothing", "text": "She stays. The cards stay in the shop windows. The kid sees one.", "effect": {} } ] },
+    "obadiah": { "thread": "The second Boss. I kept his books. I knew what the figures meant. I added them up anyway.", "steps": [
+      { "text": "He tells you about the first Boss: a fool, harmless, caught inside a year." },
+      { "text": "The second: clever, cold. A column headed \"Removals.\" He never asked what was removed." },
+      { "text": "The third: the worst, because he liked him. He signed a lease he didn't read." },
+      { "text": "Something needs signing. You ask him.", "boss": true } ],
+      "endings": [
+        { "id": "signs", "name": "Ask him to read it, and sign", "text": "Fourth Boss. First thing I've put my name to in fifty years. I'd like it noted I read it first.", "effect": {} },
+        { "id": "no", "name": "Ask him to sign something he shouldn't", "text": "No. I've done this one. He sits at the desk until it's withdrawn.", "effect": {} } ] },
+    "chidi": { "thread": "The cellar's got a door the plans don't show. Behind it: nothing. He's delighted.", "steps": [
+      { "text": "A door in a Dig. A sealed room with a mural. He sits in it for an afternoon." },
+      { "text": "A door in the neighbour's place. He comes out without a word and adds a line to his own card." },
+      { "text": "A door in the team's own base that he didn't know about.", "boss": true } ],
+      "endings": [
+        { "id": "vault", "name": "Let him count the Vault", "text": "Right to the coin. There's nothing behind any door here I'd be ashamed of. I didn't expect that.", "effect": { "loyaltyAll": 1 } },
+        { "id": "roster", "name": "Open it to the whole Roster", "text": "Everyone's seen it now. What they do is by their lines.", "effect": { "regard": 1 } } ] },
+    "rahel": { "thread": "Her \"why\" is on her card for anyone to read.", "steps": [
+      { "text": "Her father's shop. The Card for it carries her name under \"Who won't\" for anything but a kindness." },
+      { "text": "At Night: \"I've been here two months. I've seen it. I don't know what you are.\"" },
+      { "text": "The shop. Something's done about it, or isn't.", "boss": true },
+      { "text": "She goes home for a day." } ],
+      "endings": [
+        { "id": "right", "name": "Put the shop right, and let her tell him", "text": "He sent a jar. The one from the shelf. It's in the Common Room.", "effect": { "regard": 1 } },
+        { "id": "left", "name": "Leave it as it was", "text": "I'll stay. To go on seeing.", "effect": {} } ] },
+    "junseo": { "thread": "The seventh day. He's not there. The van's there. He went on foot.", "steps": [
+      { "text": "You ask him. It's his mother. The last lot know where she lives. They're owed ₽3,000, by their reckoning." },
+      { "text": "The debt's dealt with: paid, cancelled, or his mother's moved, and he drives." },
+      { "text": "The next Sunday. He asks if anyone wants to come. Three do. Hortense brings a pudding.", "boss": true } ],
+      "endings": [
+        { "id": "paid", "name": "Pay the last lot (₽3,000)", "text": "Done. I still won't work Sundays. Nobody here does now.", "effect": { "funds": -3000 } },
+        { "id": "moved", "name": "Move her, and drive", "text": "She's somewhere they don't know. I drove. I'd drive it again.", "effect": {} } ] },
+    "halima": { "thread": "She asks which bunk's her daughter's. Nobody's sure who she means.", "steps": [
+      { "text": "She's cooking, mending, asking everyone under twenty-five whether they're eating." },
+      { "text": "Her daughter: on the Roster under another name, or at the neighbour's door, or at home." },
+      { "text": "A Night with both. \"I'm not here for that any more. I've forty of you to keep an eye on now.\"", "boss": true } ],
+      "endings": [
+        { "id": "here", "name": "Let them share a room", "text": "We argue about the Line at supper. It's the best supper of the week.", "effect": { "loyaltyAll": 1 } },
+        { "id": "home", "name": "She goes home at the Crossing", "text": "I'll tell her what it was like. She'll apply, I expect.", "effect": {}, "leaves": true } ] },
+    "ignatius": { "thread": "He answers to \"Forty-one\" by accident, at roll, and goes white.", "steps": [
+      { "text": "He lists the numbers he bunked with: Thirty-eight to Forty-four." },
+      { "text": "Three are found, as locals: a baker, a man who won't open the door, a woman who's still in." },
+      { "text": "A supper in the Mess. You set the places, with names.", "boss": true } ],
+      "endings": [
+        { "id": "supper", "name": "Say every name at the table", "text": "Seven people say their own names round a table. The woman who's still in tells Giovanni she's leaving. \"Forty-three. I did know. Go on.\"", "effect": { "regard": 1 } },
+        { "id": "small", "name": "A small supper, just him", "text": "Forty-one ate with the Boss. It's a start. It's more than a number gets.", "effect": {} } ] },
+    "sachiko": { "thread": "I'm asking now.", "steps": [
+      { "text": "She gives you a key. She's had it thirty years." },
+      { "text": "The cellar. Nobody's defending it yet. A radio mast's being wired.", "boss": true },
+      { "text": "You tell her what's down there, or say \"Nothing.\"" } ],
+      "endings": [
+        { "id": "told", "name": "Tell her", "text": "She shuts the shop a day, nails the cellar door, and invites the constable's wife for tea.", "effect": { "regard": 1 } },
+        { "id": "nothing", "name": "Say \"Nothing\"", "text": "You're not as good a liar as the last ones. That's in your favour.", "effect": {} } ] },
+    "imelda": { "thread": "She orders a cake for three.", "steps": [
+      { "text": "Two letters, carried across both neighbours' lines." },
+      { "text": "Each nephew says he'll come if the other doesn't." },
+      { "text": "The day. You arrange a truce for one afternoon.", "boss": true } ],
+      "endings": [
+        { "id": "both", "name": "The truce holds", "text": "They both came. They didn't speak. They each carried a chair back in. Best birthday in ten years.", "effect": { "regard": 1 } },
+        { "id": "one", "name": "Only one comes", "text": "One came. One's more than last year.", "effect": {} } ] }
+  },
+  "stay": {
+    "button": "Ask them to stay",
+    "none": "You've no reason to give them.",
+    "asked": "Asked once already. Nobody's asked twice.",
+    "agreed": "{name}: \"…All right. I'll unpack.\" Was asked to stay. Stayed.",
+    "refused": "{name}: \"Thank you for asking. Nobody did, at the last place.\"",
+    "noneGo": "{name} looks at you, and goes.",
+    "reasons": [
+      { "id": "need", "say": "\"We need you.\"", "grey": "Their talent isn't the only one of its kind here.", "works": ["nerve", "books", "hands"], "chance": [2, 3], "else": [1, 3] },
+      { "id": "wrong", "say": "\"I was wrong.\"", "grey": "There's nothing logged that they objected to and you put right.", "works": [], "chance": [3, 4], "else": [3, 4] },
+      { "id": "miss", "say": "\"They'd miss you.\"", "grey": "They've nobody here from their own deck.", "works": ["heart", "wheels", "voice"], "chance": [2, 3], "else": [1, 3] },
+      { "id": "different", "say": "\"It'll be different.\"", "grey": "The Line hasn't been moved back since.", "works": ["doubts", "kind"], "chance": [1, 2], "else": [1, 3] },
+      { "id": "crossing", "say": "\"Stay till the Crossing.\"", "grey": "", "works": [], "chance": [1, 2], "else": [1, 2] }
+    ]
+  }
+}

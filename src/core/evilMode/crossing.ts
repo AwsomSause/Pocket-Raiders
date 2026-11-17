@@ -4,6 +4,7 @@
 // second clock (Part 26a sections 1.7 and 4.6). Pure: new blocks are returned. Nothing here draws from a gameplay stream:
 // the tickets, who stays and the reasons are hashed from the seed and the region, so they're the same on every reload.
 
+import { questsAtCrossing } from './quest';
 import { hashSeed, Rng } from '../rng';
 import { layDistrict, shiftMood } from './board';
 import { EVIL_DATA, type EvilData } from './data';
@@ -134,13 +135,16 @@ export function sellPrice(block: EvilModeBlock, data: EvilData = EVIL_DATA): num
  * the water; the base is handed, sold, left or burned; Heat halves; Regard and Dread halve unless the base says otherwise;
  * the neighbour's a new one; the Hero lands ahead, beside or behind. The next region's Arrival begins the next morning.
  */
-function leave(block: EvilModeBlock, x: CrossingState, data: EvilData): R {
-  const key = `crossing:${block.region.id}`;
-  if (block.applied.includes(key)) return no(block, 'The boats have gone.');
+function leave(block0: EvilModeBlock, x: CrossingState, data: EvilData): R {
+  const key = `crossing:${block0.region.id}`;
+  if (block0.applied.includes(key)) return no(block0, 'The boats have gone.');
+  // Slice 17: quests left a whole region close; those whose quest sent them off (or who agreed to stay till now) go.
+  const qa = questsAtCrossing(block0, data);
+  const block = qa.block;
   const def = data.region.regions.find((r) => r.id === x.pick)!;
   const B = C(data).base;
   const day = block.here.day + 1;
-  const lines: string[] = [C(data).boats.night];
+  const lines: string[] = [C(data).boats.night, ...qa.lines];
   let crew = block.crew.map((c): Crew => (x.staying.includes(c.id) && c.where === 'in' ? { ...c, where: 'left', left: { day: block.here.day, how: 'stayed', kindly: true } } : c));
   for (const id of x.staying) {
     const c = block.crew.find((p) => p.id === id);

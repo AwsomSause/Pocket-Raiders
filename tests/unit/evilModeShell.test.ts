@@ -48,7 +48,8 @@ describe('founding (start.ts)', () => {
       expect(b.team).toMatchObject({ creed: c.id, funds: c.start.funds, heat: c.start.heat, regard: c.start.regard, dread: c.start.dread, boss: 'red', patron: null, corruption: 0 });
       expect(b.here).toEqual({ region: 0, stage: 2, day: 1, beat: 'morning' });
       // Slice 4: founding draws the Roster and the first applicant from evil-people, and from no other stream.
-      expect(Object.entries(b.draws).every(([s, n]) => (s === 'evil-people' ? n === c.start.roster + b.applicants.length : n === 0))).toBe(true);
+      // Slice 17: and the mole's handler and street on evil-mole (Part 11 section 1: rolled at the run's start).
+      expect(Object.entries(b.draws).every(([s, n]) => (s === 'evil-people' ? n === c.start.roster + b.applicants.length : s === 'evil-mole' ? n === 2 : n === 0))).toBe(true);
       expect(b.applied).toEqual(['applicants:0:1:1']);
     }
   });

@@ -23,6 +23,8 @@ import { friendCheck, keepLetter, motherWrites, openLetter, roadDay, roadDo, wri
 import { lastDay, nightBefore, roomAct, roomResult, type LastDay, type RoomOption } from './reckoning';
 import { eveningTemper } from './temper';
 import { canDo } from './canDo';
+import { askStay, openQuests, pinLoyalty, questStep, type StayReason } from './quest';
+import { feed, moleAnswer, moleDistrictEnd, moleNight, nameThem, patronWarns, type MoleAnswer } from './mole';
 import { checkEndings, endAct, endBattle, pressEnding } from './endings';
 import { beginCrossing, carryLetter, clockMet, clockMorning, cross, keptWarmth, stopClock, type CrossAct } from './crossing';
 import { BEATS, type Beat, type EvilModeBlock, type GymWay, type LineId, type OrderId, type PartId, type Question, type RoomType, type TableThing, type WingId } from './schema';
@@ -143,7 +145,13 @@ export type EvilAction =
   | { type: 'watchRoad' }
   /** Slice 15: the endings (Part 23). One answer to the scene on screen, or a pressed ending. */
   | { type: 'endAct'; choice?: string | null; text?: string | null }
-  | { type: 'endPress'; what: 'straight' | 'handOff' | 'walkIn'; heir?: string; line?: string; ledger?: boolean };
+  | { type: 'endPress'; what: 'straight' | 'handOff' | 'walkIn'; heir?: string; line?: string; ledger?: boolean }
+  /** Slice 17: a quest's next step (the last one with its ending); Ask them to stay; the Office: name, feed, answer. */
+  | { type: 'questStep'; id: string; ending?: string }
+  | { type: 'askStay'; id: string; reason: StayReason | null }
+  | { type: 'nameThem'; id: string }
+  | { type: 'feed'; id: string }
+  | { type: 'moleAnswer'; answer: MoleAnswer };
 
 export type EvilCue = { id: 'beat'; beat: Beat } | { id: 'newDay'; day: number } | { id: 'refused'; reason: string } | { id: 'queued'; holdingId: string } | { id: 'districtEnd'; how: 'held' | 'taken' | 'arrival' | 'reckoning' } | { id: 'filed'; text: string } | { id: 'asked'; line: string } | { id: 'said'; line: string } | { id: 'refusal' } | { id: 'fight' } | { id: 'road'; lines: string[] } | { id: 'ending' };
 
@@ -161,11 +169,16 @@ export const nextBeat = (beat: Beat): Beat => BEATS[(BEATS.indexOf(beat) + 1) % 
 export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
   // Slice 15: once an ending has begun, only its scenes (and its battle) move anything.
   if (block0.ending) return stepEnding(block0, action);
-  const r = stepInner(block0, action);
+  let r = stepInner(block0, action);
   // Slice 13: the neighbour's Morning (messages, and each tick on its day) comes with every Morning, however it's reached.
   if (!r.ok) return r;
   // Slice 16: Hoenn's second clock (each Reckoning Morning; they meet if the Reckoning ends with it running).
-  let b = clockMorning(schemeMorning(neighbourMorning(settleRegion(clockMet(keptWarmth(neighbourDistrictEnd(r.block)))))));
+  // Slice 17: the mole's district end (report, tells, a poach) comes first, once.
+  const md = moleDistrictEnd(r.block);
+  let b = clockMorning(schemeMorning(neighbourMorning(settleRegion(clockMet(keptWarmth(neighbourDistrictEnd(md.block)))))));
+  // Slice 17: a finished quest pins Loyalty at 10; a failed one caps it at 7; two wrong accusations cap the Roster at 8.
+  b = pinLoyalty(b);
+  if (md.lines.length) r = { ...r, cues: [...r.cues, ...md.lines.map((line) => ({ id: 'said' as const, line }))] };
   // Slice 14: the Reckoning lost (the Hero reached the base) costs the Scheme groundwork, once a region.
   if (b.district?.end?.how === 'reckoning' && b.scheme) b = reckoningLost(b).block;
   // Slice 15: the endings are checked after every step, in their order (Part 23 section 1.1).
@@ -343,6 +356,16 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
     const r = moveLine(block, action.to);
     return r.problem ? no(r.problem) : { block: r.block, cues: [{ id: 'said', line: r.line }], ok: true };
   }
+  // Slice 17: quests (their own beats, checked in quest.ts), Ask them to stay (any beat), and the Office.
+  if (action.type === 'questStep' || action.type === 'askStay' || action.type === 'nameThem' || action.type === 'feed' || action.type === 'moleAnswer') {
+    if (block.refusal) return no('Somebody is waiting on an answer in the yard.');
+    const r = action.type === 'questStep' ? questStep(block, action.id, action.ending ?? null)
+      : action.type === 'askStay' ? askStay(block, action.id, action.reason)
+      : action.type === 'nameThem' ? nameThem(block, action.id)
+      : action.type === 'feed' ? feed(block, action.id)
+      : moleAnswer(block, action.answer);
+    return r.problem ? no(r.problem) : { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
+  }
   // Slice 4: the notice board and the Office, at any beat.
   if (action.type === 'hire' || action.type === 'question' || action.type === 'turnAway' || action.type === 'promote' || action.type === 'letGo') {
     const r = action.type === 'hire' ? hire(block, action.ref) : action.type === 'question' ? askQuestion(block, action.ref, action.q) : action.type === 'turnAway' ? turnAway(block, action.ref, action.rude) : action.type === 'promote' ? promote(block, action.id, action.answer) : letGo(block, action.id, action.kindly);
@@ -385,7 +408,7 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
   if (action.type === 'send') out = fixOdds(out);
   if (to === 'evening') out = friendCheck(eveningTemper(schemeEvening(neighbourEvening(raidEvening(baseEvening(gymEvening(resolveEvening(out))))))));
   // Slice 12: the night before the walk (Part 21 section 3.2).
-  if (to === 'night') out = nightBefore(out);
+  if (to === 'night') out = moleNight(nightBefore(out));
   const cues: EvilCue[] = [{ id: 'beat', beat: to }];
   // Slice 4: Morning. Anyone at Loyalty 0 is gone, with a note; then the notice board (Part 30 section 6.2).
   // Slice 5: nobody stays posted overnight. The road's lines are shown at the Morning.
@@ -400,7 +423,11 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
     // Slice 6: after a move to Whatever it takes, every Heart goes, together, at breakfast.
     const hg = heartsGo(z.block);
     out = arriveApplicants(hg.block);
-    for (const line of [...z.notes, ...hg.notes]) cues.push({ id: 'said', line });
+    // Slice 17: quests open at Loyalty 7; the Patron's one warning, at the first Arrival.
+    const oq = openQuests(out);
+    const pw = patronWarns(oq.block);
+    out = pw.block;
+    for (const line of [...z.notes, ...hg.notes, ...oq.lines, ...(pw.line ? [pw.line] : [])]) cues.push({ id: 'said', line });
   }
   if (to === 'morning') cues.push({ id: 'newDay', day });
   if (out.district?.end) cues.push({ id: 'districtEnd', how: out.district.end.how });

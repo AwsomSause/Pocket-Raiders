@@ -226,8 +226,15 @@ export const RankSchema = z.enum(RANKS);
 export type Rank = z.infer<typeof RankSchema>;
 /** Slice 6 adds three of the nine: the Line moved, with the Hero, arrested (Part 9 section 10). */
 /** Slice 16 adds 'stayed': stayed behind at a Crossing (kindly; Part 2 section 9.2). */
-export const LEAVE_WAYS = ['line', 'loyalty', 'letGo', 'lineMoved', 'hero', 'arrested', 'reckoning', 'stayed'] as const;
+/** Slice 17 adds the last three of the nine: poached by the neighbour, gone after a quest ended elsewhere, and a sent person let go (Part 9 section 10, Part 11 section 7.5). */
+export const LEAVE_WAYS = ['line', 'loyalty', 'letGo', 'lineMoved', 'hero', 'arrested', 'reckoning', 'stayed', 'poached', 'quest', 'sent'] as const;
 export const QUESTIONS = ['cant', 'wont', 'why', 'who'] as const;
+/** Slice 17: the decks (Part 10a, 10b). 'special' is the fourteen who come only when something's happened. */
+export const DECKS = ['founders', 'kanto', 'johto', 'hoenn', 'special'] as const;
+export const SPECIAL_WHEN = ['firstTake', 'leanFailed', 'raidSurvived', 'gaveBack', 'gymFriend', 'neighbourBeaten', 'regard8', 'dread8', 'broke3', 'workDone', 'heroBeaten', 'detectiveGone', 'sameSix'] as const;
+export const QUEST_SHAPES = ['owed', 'found', 'said', 'secondTry', 'place', 'door', 'home', 'name'] as const;
+export const QuestShapeSchema = z.enum(QUEST_SHAPES);
+export type QuestShape = z.infer<typeof QuestShapeSchema>;
 export const QuestionSchema = z.enum(QUESTIONS);
 export type Question = z.infer<typeof QuestionSchema>;
 
@@ -301,8 +308,12 @@ export const PeopleFileSchema = z.object({
   text: z.record(z.string(), z.union([T, z.array(T), z.record(z.string(), T)])),
   questions: z.array(z.object({ id: QuestionSchema, ask: T, answer: T }).strict()).length(QUESTIONS.length),
   people: z.array(z.object({
-    id: T, deck: z.enum(['founders', 'kanto']), name: T, age: z.number().int().min(1), why: T, talent: TalentSchema, flaw: FlawSchema,
+    id: T, deck: z.enum(DECKS), name: T, age: z.number().int().min(1), why: T, talent: TalentSchema,
+    /** Slice 17: one person who comes only when has no flaw listed (Part 10b section 6, the third). */
+    flaw: FlawSchema.nullable(),
     line: z.number().int().min(1).max(36), lineText: T.optional(), quest: T, minor: z.boolean().optional(), status: EvilStatusSchema,
+    /** Slice 17: the quest's shape (Part 10c section 4), and for those who come only when, what brings them (Part 10b section 6). */
+    shape: QuestShapeSchema, when: z.enum(SPECIAL_WHEN).optional(),
   }).strict()).min(1),
 });
 
@@ -338,7 +349,7 @@ export const StoredCardSchema = z.object({
 }).strict();
 export type StoredCard = z.infer<typeof StoredCardSchema>;
 
-export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym', 'econ', 'neighbour', 'scheme', 'base', 'raid', 'ending'] as const;
+export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym', 'econ', 'neighbour', 'scheme', 'base', 'raid', 'ending', 'quest', 'office'] as const;
 
 /** One line of the Log (Part 30 section 7.1, the kinds slice 3 writes). Never edited, never removed. */
 export const LogEntrySchema = z.object({
@@ -1224,9 +1235,109 @@ export const EndingsFileSchema = z.object({
   banned: z.array(ES15.min(1)).min(1),
 }).strict();
 
+// ---- Slice 17: the long cast (design Parts 10a, 10b, 10c, 11) ----
+
+/** One person's quest (Part 10c section 1): the steps done, where the last one was, and how it ended. */
+export const QuestStateSchema = z.object({
+  /** Steps done so far (0 when just opened). */
+  step: z.number().int().min(0),
+  /** The district ("runIndex:n") the last step (or the opening) was in: the next step needs another. */
+  at: z.string().min(1),
+  /** The run's region (runIndex) the last step or the opening was in: a whole region left closes it. */
+  run: z.number().int().min(0),
+  state: z.enum(['open', 'done', 'failed']),
+  ending: z.string().nullable(),
+  /** The day they're out on it (not on jobs that day). */
+  busy: z.number().int().min(0),
+  /** They go at the next Crossing (an ending that leaves). */
+  goes: z.boolean(),
+}).strict();
+export type QuestState = z.infer<typeof QuestStateSchema>;
+
+export const HANDLERS = ['police', 'neighbour', 'local', 'mother'] as const;
+export const HandlerSchema = z.enum(HANDLERS);
+export type Handler = z.infer<typeof HandlerSchema>;
+export const SlipSchema = z.object({ day: z.number().int().min(1), tell: z.number().int().min(1).max(6), about: z.string().min(1) }).strict();
+export type Slip = z.infer<typeof SlipSchema>;
+export const MOLE_SCENES = ['found', 'wrong', 'knock', 'turned', 'gone'] as const;
+
+/** The mole (Part 11): who sends; who's marked; who was hired; what's been found, fed and said. */
+export const MoleStateSchema = z.object({
+  handler: HandlerSchema.nullable(),
+  /** Applicants marked so far this run (three at most), and the one marked now (a deck ref), with the district it was marked in. */
+  marks: z.number().int().min(0).max(3),
+  marked: z.string().nullable(),
+  markedAt: z.string().nullable(),
+  /** The crew id of the mole once hired. */
+  who: z.string().nullable(),
+  /** reporting; quiet (a district, after being fed); stopped (their own Loyalty, or a quest done); turned; gone; outside (refused three times). */
+  state: z.enum(['none', 'reporting', 'quiet', 'stopped', 'turned', 'gone', 'outside']),
+  quietUntil: z.string().nullable(),
+  found: z.boolean(),
+  knocked: z.boolean(),
+  /** A local's mole: the street index (0..3) they're from. */
+  street: z.number().int().min(0).nullable(),
+  /** People wrongly named (crew ids). */
+  wrong: z.array(z.string()),
+  /** The region the Roster's ceiling is 8 in, after a second wrong guess. */
+  ceiling: z.number().int().nullable(),
+  slips: z.array(SlipSchema),
+  /** Reports found in the post (the Board's "Found in the post"), and how many have been written. */
+  post: z.array(z.object({ day: z.number().int().min(1), text: z.string().min(1) }).strict()),
+  reports: z.number().int().min(0),
+  /** The district a false job was last fed in, and the day the neighbour's people were elsewhere (the real jobs +20%), or 0. */
+  fedAt: z.string().nullable(),
+  boost: z.number().int().min(0),
+  /** The police mole's one thing, stopped for a region. */
+  stopped: z.object({ method: z.string().min(1), run: z.number().int().min(0) }).strict().nullable(),
+  /** A scene on screen: found, a wrong guess, the knock, turned, gone. */
+  scene: z.object({ kind: z.enum(MOLE_SCENES), about: z.string().min(1), lines: z.array(z.string().min(1)) }).strict().nullable(),
+}).strict();
+export type MoleState = z.infer<typeof MoleStateSchema>;
+export const emptyMole = (): MoleState => ({ handler: null, marks: 0, marked: null, markedAt: null, who: null, state: 'none', quietUntil: null, found: false, knocked: false, street: null, wrong: [], ceiling: null, slips: [], post: [], reports: 0, fedAt: null, boost: 0, stopped: null, scene: null });
+
+const T17 = z.string().min(1);
+const Effect = z.object({ loyaltyAll: z.number().int().optional(), regard: z.number().int().optional(), dread: z.number().int().optional(), heat: z.number().int().optional(), funds: z.number().int().max(0).optional(), rank: z.enum(['officer', 'executive']).optional() }).strict();
+const Ending = z.object({ id: T17, name: T17, text: T17, effect: Effect, leaves: z.boolean().optional(), leavesNow: z.boolean().optional() }).strict();
+const Steps = z.array(z.object({ text: T17, boss: z.boolean().optional() }).strict()).min(3).max(4);
+export const QuestsFileSchema = z.object({
+  note: z.string(), on: z.boolean(),
+  rules: z.object({ openAt: z.number().int().min(1).max(10), gapDistricts: z.number().int().min(1), failLoyalty: z.number().int(), failCap: z.number().int().min(1).max(10), done: z.number().int().min(1).max(10) }).strict(),
+  text: z.record(z.string(), T17),
+  shapes: z.record(QuestShapeSchema, z.object({ name: T17, boss: T17, steps: Steps, endings: z.array(Ending).min(2) }).strict()),
+  quests: z.record(z.string(), z.object({ thread: T17, steps: Steps, endings: z.array(Ending).min(2) }).strict()),
+  stay: z.object({ button: T17, none: T17, asked: T17, agreed: T17, refused: T17, noneGo: T17, reasons: z.array(z.object({ id: z.enum(['need', 'wrong', 'miss', 'different', 'crossing']), say: T17, grey: z.string(), works: z.array(z.string()), chance: z.tuple([z.number().int().min(1), z.number().int().min(1)]), else: z.tuple([z.number().int().min(1), z.number().int().min(1)]) }).strict()).length(5) }).strict(),
+}).strict();
+const Six = z.array(T17).length(6);
+const Frac = z.tuple([z.number().int().min(1), z.number().int().min(1)]);
+const ByFair = z.object({ fair: T17, mixed: T17, hard: T17 }).strict();
+export const MoleFileSchema = z.object({
+  note: z.string(), on: z.boolean(),
+  rules: z.object({
+    firstDistrict: z.number().int().min(1), weights: z.record(HandlerSchema, z.number().int().min(0)), policeHot: z.number().int().min(0), hotHeat: z.number().int(),
+    odds: z.number().int().multipleOf(5), policeHeat: z.number().int(), policeHeatSour: z.number().int(), sourBelow: z.number().int(), knockAt: z.number().int().min(1).max(10),
+    feedHits: Frac, feedHeat: z.number().int(), feedBoost: z.number().int().multipleOf(5), turnPay: z.number().int().min(0), rebuy: Frac, rebuyLoyalty: z.number().int(), turnHeatFloor: z.number().int(),
+    wrong: z.object({ loyalty: z.number().int(), floor: z.number().int().min(1), hearts: z.number().int(), ceiling: z.number().int().min(1).max(10) }).strict(),
+    poach: Frac, poachBelow: z.number().int(), postRoom: z.string(), postSize: z.number().int().min(1),
+  }).strict(),
+  patron: T17, reportLabel: T17,
+  reports: z.record(HandlerSchema, Six), leanReport: z.number().int().min(0).max(5),
+  heatLine: T17, knownLabel: T17, streetLabel: T17, fedLabel: T17,
+  tells: z.record(z.enum(['1', '2', '3', '4', '5', '6']), T17),
+  screen: z.record(z.string(), T17),
+  fed: z.object({ nothing: T17, police: T17, neighbour: T17, local: T17, mother: T17 }).strict(),
+  found: z.record(HandlerSchema, T17),
+  wrong: z.object({ scene: T17, history: T17, minor: T17, ceiling: T17 }).strict(),
+  acts: z.record(z.string(), T17),
+  turn: z.object({ police: z.record(z.string(), T17), neighbour: z.record(z.string(), T17), local: z.record(z.string(), T17), mother: z.record(z.string(), T17), rebought: T17, refusedOffer: T17 }).strict(),
+  letGo: z.record(HandlerSchema, ByFair),
+  knock: z.object({ lines: z.array(T17).min(1), stay: T17, tell: T17, go: T17, nothing: T17 }).strict(),
+  poached: T17, ran: T17, sentLeft: T17,
+}).strict();
+
 const BlockV7Schema = z.object({
   /** The block's own version, for its own migrations. 7: slice 8 added the Gyms. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a waiting fight, who's posted, and the day's in-person job. 6: slice 6 added proof held and the last move of the Line. */
-  v: z.literal(15),
+  v: z.literal(16),
   from: z.enum(['founding', 'charter', 'turn']),
   /** Copied from Settings at founding, so a setting changed mid-run never changes this run. */
   settings: z.object({ length: RunLengthSchema }),
@@ -1283,6 +1394,10 @@ const BlockV7Schema = z.object({
   law: LawSchema,
   /** Slice 15: the ending under way (one a run), or null. */
   ending: EndingStateSchema.nullable(),
+  /** Slice 17: each opened quest, by crew id (Part 10c). Nobody's is here until it opens. */
+  quests: z.record(z.string(), QuestStateSchema),
+  /** Slice 17: the mole (Part 11). Hidden state: no card, sort order or screen reads it before they're found. */
+  mole: MoleStateSchema,
 }).strict();
 
 /** What a Hero made before slice 12 starts with (and what `makeHero` gives a new one). */
@@ -1345,6 +1460,10 @@ export function migrateEvilBlock(raw: unknown): unknown {
   if (b.v === 13) b = { ...b, v: 14, ending: null };
   // 15: slice 16, the Crossing (the regions crossed, a Crossing under way, pay from abroad, the quay's answer, Hoenn's letters and second clock).
   if (b.v === 14) b = { ...b, v: 15, region: b.region && typeof b.region === 'object' ? { ...regionSlice16Start(), ...(b.region as object) } : b.region };
+  // 16: slice 17, the long cast. No quest open yet (each opens at the next Morning a person's at Loyalty 7), and no mole
+  // yet: the handler's rolled on the next step and the first applicant marked from the next notice board on. Nobody on
+  // the Roster already is the mole (Part 11 section 1: nobody on the starting Roster is).
+  if (b.v === 15) b = { ...b, v: 16, quests: {}, mole: emptyMole() };
   return b;
 }
 

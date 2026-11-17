@@ -10,7 +10,7 @@ import { arriveApplicants } from './roster';
 import { modify, PATRON_ID } from './regionRule';
 import { newRegion } from './region';
 import { newScheme } from './scheme';
-import { emptyEconomy, LINE_IDS, STREAMS, type Crew, type EvilModeBlock, EvilModeBlockSchema, type LineId, type RunLength } from './schema';
+import { emptyEconomy, emptyMole, LINE_IDS, STREAMS, type Crew, type EvilModeBlock, EvilModeBlockSchema, type LineId, type RunLength } from './schema';
 
 export interface FoundingChoice {
   name: string;
@@ -104,7 +104,7 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
   const seed = opts.seed ?? opts.boss;
   const funds = patron ? Math.floor(modify({ here: { region: first, stage, day: 1, beat: 'morning' }, team: { patron } as never, crew }, 'funds', {}, creed.start.funds, data)) : creed.start.funds;
   const block: EvilModeBlock = {
-    v: 15,
+    v: 16,
     from: 'founding',
     settings: { length: opts.length },
     team: {
@@ -157,6 +157,8 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
     raid: null,
     law: { hot: 0, raids: [], heatHeld: null },
     ending: null,
+    quests: {},
+    mole: emptyMole(),
   };
   block.region = newRegion(block, seed, data);
   block.neighbour = ensureNeighbour(block, data).neighbour;
