@@ -6,7 +6,8 @@
 
 import type { Content } from '../contentSchema';
 import { hashSeed, Rng } from '../rng';
-import { getSpecies, maxHp } from '../pokemon';
+import { calcStats, getSpecies, maxHp } from '../pokemon';
+import { calcDamage, typeEffectiveness } from '../battle/damage';
 import { teachableMoves } from '../catalog';
 import type { PendingDecision, RunState } from '../state';
 import { MYTHICALS, type MythicalDef, type PromiseRule } from './promisesData';
@@ -315,6 +316,7 @@ export function wonderAtBattleStart(content: Content, run: RunState): string[] {
     battle.storyEffects.push('promise:melmetal');
     lines.push('Melmetal rumbles: your first contact move strikes twice (the second blow at 60%).');
   }
+  if (id === 'pecharunt') lines.push(...mochiAlly(content, run));
   if (id === 'genesect') {
     const lead = run.party[battle.activeIndex];
     if (lead) {
@@ -444,3 +446,29 @@ export function magearnaOnFaint(run: RunState): string | null {
 
 /** Leaving a minigame that is not over (Meloetta: Finish the song). */
 export const onMinigameQuit = (content: Content, run: RunState): string[] => (run.expansion?.promises ? noteEvent(content, run, { kind: 'quitMinigame' }) : []);
+
+/** Pecharunt's mochi, once a region: the trainer you face is turned into an ally for this battle. Their strongest member (the last on their team) strikes the Pokémon in front, once, with its best move; nothing else about the battle changes. */
+export function mochiAlly(content: Content, run: RunState): string[] {
+  const battle = run.battle;
+  if (guestId(run) !== 'pecharunt' || !battle?.trainer || trackOf(run, 'mochiRegion') === run.regionIndex + 1) return [];
+  const foe = battle.enemyTeam[battle.enemyIndex];
+  const friend = battle.enemyTeam[battle.enemyTeam.length - 1];
+  if (!foe || !friend || battle.enemyTeam.length < 2 || friend.uid === foe.uid) return [];
+  const mine = calcStats(content, friend);
+  const theirs = calcStats(content, foe);
+  const foeTypes = getSpecies(content, foe.speciesId).types;
+  const best = friend.moves
+    .map((m) => content.moves.get(m.id))
+    .filter((m): m is NonNullable<typeof m> => !!m && m.category !== 'status' && (m.power ?? 0) > 0)
+    .map((move) => {
+      const physical = move.category === 'physical';
+      const effectiveness = typeEffectiveness(content.typeChart, move.type, foeTypes);
+      const damage = calcDamage(content.ruleset, { level: friend.level, power: move.power ?? 0, attack: physical ? mine.atk : mine.spa, defense: physical ? theirs.def : theirs.spd, attackStage: 0, defenseStage: 0, stab: getSpecies(content, friend.speciesId).types.includes(move.type), effectiveness, crit: false, randomFactor: 100, burned: false, physical });
+      return { move, damage };
+    })
+    .sort((a, b) => b.damage - a.damage || a.move.id.localeCompare(b.move.id))[0];
+  if (!best) return [];
+  bumpTrack(run, 'mochiRegion', run.regionIndex + 1);
+  foe.hp = Math.max(1, foe.hp - best.damage);
+  return [`Pecharunt's mochi makes a friend: ${battle.trainer.name}'s ${getSpecies(content, friend.speciesId).name} turns on its own side and uses ${best.move.name}.`];
+}

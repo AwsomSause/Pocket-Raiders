@@ -4,7 +4,7 @@ import { createBattle } from '../../src/core/battle/engine';
 import { freshSos } from '../../src/core/battle/sos';
 import { ExpansionSettingsSchema } from '../../src/core/expansion/schema';
 import { HEATED, heatedConditions, heatedRoll, isBigBattle } from '../../src/core/instrumentality/heated';
-import { breaks, believed, hearTelling, noteEvent, bumpTrack, comesWhenMet, hoopaRing, hoopaStage, manaphyVisit, onReleased, magearnaOnFaint, bouquetHolder, onPartyChanged as onPartyChanged2, onSold, onStageLeft, onRegionStarted, stageKeyOf, metalItems, isRefusal, onEventChoice, wishesLeft, onLeadAtStage, onLeadChanged, onAssistAccepted, onBattleWon, onPlayerFaint, onCaught, onRestUsed, onStageEntered, onTmUsed, wonderAtBattleStart, trackOf, promiseState, promiseWarning, resolveVisit, rollVisit, visitChance, wonderAfterBattle, youngestUid, type PromiseEvent } from '../../src/core/instrumentality/promises';
+import { breaks, believed, hearTelling, noteEvent, bumpTrack, comesWhenMet, hoopaRing, hoopaStage, mochiAlly, manaphyVisit, onReleased, magearnaOnFaint, bouquetHolder, onPartyChanged as onPartyChanged2, onSold, onStageLeft, onRegionStarted, stageKeyOf, metalItems, isRefusal, onEventChoice, wishesLeft, onLeadAtStage, onLeadChanged, onAssistAccepted, onBattleWon, onPlayerFaint, onCaught, onRestUsed, onStageEntered, onTmUsed, wonderAtBattleStart, trackOf, promiseState, promiseWarning, resolveVisit, rollVisit, visitChance, wonderAfterBattle, youngestUid, type PromiseEvent } from '../../src/core/instrumentality/promises';
 import { resolveWonder, startWonder, wonderActions } from '../../src/core/instrumentality/wonders';
 import { MYTHICALS } from '../../src/core/instrumentality/promisesData';
 import { pickRescue, secondChanceOpen, secondChanceRolls } from '../../src/core/instrumentality/secondChance';
@@ -107,7 +107,7 @@ describe('Mythical Promises (M1)', () => {
       expect(m.tellings).toHaveLength(3);
       if (m.status !== 'supported') expect(m.note).toBeTruthy();
     }
-    expect(MYTHICALS.filter((m) => m.status === 'supported').map((m) => m.id).sort()).toEqual(['darkrai', 'deoxys', 'diancie', 'genesect', 'hoopa', 'jirachi', 'keldeo', 'magearna', 'manaphy', 'melmetal', 'meloetta', 'meltan', 'mew', 'phione', 'victini', 'zarude', 'zeraora']);
+    expect(MYTHICALS.filter((m) => m.status === 'supported').map((m) => m.id).sort()).toEqual(['darkrai', 'deoxys', 'diancie', 'genesect', 'hoopa', 'jirachi', 'keldeo', 'magearna', 'manaphy', 'melmetal', 'meloetta', 'meltan', 'mew', 'pecharunt', 'phione', 'victini', 'zarude', 'zeraora']);
   });
   it('every Promise is a checkable rule: it breaks on its event and not on an unrelated one', () => {
     const run = base();
@@ -592,6 +592,21 @@ describe('Mythical Promises stage 2 (Meloetta)', () => {
     expect(msg).toContain('retuned');
     expect(run.party[0]!.nature).toBe(next.options[2]!.label.toLowerCase());
     expect(wonderActions(content, run)[0]!.problem).toContain('Already');
+  });
+});
+
+describe('Mythical Promises stage 2 (Pecharunt)', () => {
+  it('the mochi makes an ally of a trainer once a region; declining a gift breaks the Promise for good', () => {
+    const run = structuredClone(toBattle(start({ mythicalPromises: true })));
+    run.expansion = { ...run.expansion, promise: { tellings: {}, visited: 'pecharunt', guest: { id: 'pecharunt', forgiven: false }, kept: [], left: [] } };
+    run.battle = createBattle('wild', [createPokemon(content, 'rattata', 20, 'f1'), createPokemon(content, 'pikachu', 40, 'f2')], 0, run.party[0]!.uid);
+    expect(mochiAlly(content, run)).toEqual([]); // not a trainer
+    run.battle.trainer = { name: 'Joe', classId: 'youngster' } as never;
+    const hp = run.battle.enemyTeam[0]!.hp;
+    expect(mochiAlly(content, run)[0]).toContain('turns on its own side');
+    expect(run.battle.enemyTeam[0]!.hp).toBeLessThan(hp);
+    expect(mochiAlly(content, run)).toEqual([]); // once a region
+    expect(onEventChoice(content, run, 'No, thanks.')[0]).toContain('leaves');
   });
 });
 
