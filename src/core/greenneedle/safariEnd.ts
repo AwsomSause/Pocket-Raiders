@@ -18,7 +18,8 @@ const setFlag = (run: RunState, key: string, n: number): void => {
 /** When a visit starts: the region's own residents, and Quiet 3 instead of 0 when an Alpha was calmed this run. */
 export function safariBegin(content: Content, run: RunState, s: SafariState): void {
   s.local = safariLocal(content, run, new Rng(hashSeed(`${run.seed}::safari-local::${run.regionIndex}`)));
-  if (flag(run, 'alpha-calmed') > 0) s.quiet = Math.max(s.quiet, 3);
+  // "Calmed any Alpha this run": the new events' Alphas count it in `calmed-alpha` (tools/events/co/_ne.ts `calmed`).
+  if (flag(run, 'alpha-calmed') > 0 || flag(run, 'calmed-alpha') > 0) s.quiet = Math.max(s.quiet, 3);
 }
 
 /** When a visit ends: the catches join (at the stage's event level, as they were seen), the nest egg, the photo money, the flags, the warden. */

@@ -526,5 +526,23 @@
                                                                 }
                                                 ]
                                 }
+                },
+                {
+                                "id": "gourd-lantern",
+                                "name": "Gourd Lantern",
+                                "family": "Valuables",
+                                "description": "A lantern cut from a gourd, with a pattern of leaves. It was in your bag after the Lush Jungle. Nobody put it there. Sell for ₽300",
+                                "rarity": "uncommon",
+                                "stacksOn": "player",
+                                "max": null,
+                                "how": "use",
+                                "icon": "library/goldenlantern",
+                                "status": "supported",
+                                "giftOnly": true,
+                                "effect": {
+                                                "kind": "money",
+                                                "amount": 300,
+                                                "changes": {}
+                                }
                 }
 ]

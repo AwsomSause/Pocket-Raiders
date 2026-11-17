@@ -530,6 +530,8 @@ describe('gn.18 Safari Land', () => {
     expect([s.balls, s.steps, s.quiet]).toEqual([30, 500, 0]);
     expect(visit('t18-gate-b', (r) => setFlag(r, 'safari-fee-up')).money).toBe(1200);
     expect((visit('t18-alpha', (r) => setFlag(r, 'alpha-calmed')).minigame!.state as SafariState).quiet).toBe(3);
+    // The flag the Alpha event actually sets (families/new-events write `calmed-alpha`).
+    expect((visit('t18-alpha-b', (r) => setFlag(r, 'calmed-alpha')).minigame!.state as SafariState).quiet).toBe(3);
   });
 
   it('Quiet rises when you walk, wait and watch, and falls when you run or throw a rock; every chance is shown', () => {

@@ -1435,6 +1435,25 @@
   ],
   "tags": []
  },
+ "gn-20-lantern": {
+  "gn": "gn.20",
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 4,
+  "window": [
+   1,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "level": "None",
+  "often": "run",
+  "note": "At the next rest after the jungle: a gourd lantern is in the bag. Nobody put it there.",
+  "kinds": [
+   "Afterstory"
+  ],
+  "tags": []
+ },
  "gn-20-door": {
   "gn": "gn.20",
   "shape": "Door",

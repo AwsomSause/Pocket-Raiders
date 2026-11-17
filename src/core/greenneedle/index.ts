@@ -99,6 +99,8 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   text = text.replace(/\{lot:([1-6]):([a-z]+)\}/g, (_, n: string, part: string) => lotToken(run, Number(n), part));
   text = text.replaceAll('{duelist}', duelName(content, run));
   text = text.replace(/\{money:([a-z0-9-]+)\}/g, (_, k: string) => `₽${gnFlag(run, k).toLocaleString('en-GB')}`);
+  // gn.19: a plain count kept in a run flag ({count:savanna-water}: the water flasks left).
+  text = text.replace(/\{count:([a-z0-9-]+)\}/g, (_, k: string) => String(gnFlag(run, k)));
   // gn.44: the reigning 1v1 champion, a different trainer each region.
   // gn.48: the Draft's table.
   if (text.includes('{xatu:')) text = xatuTokens(content, run, text);
