@@ -72,7 +72,19 @@
         "kind": "shopDiscount"
       },
       "status": "limited",
-      "limits": "The extra charming event answer is not built. Communion: shops 20% cheaper. Its Rite (beguile a trainer) is not built."
+      "limits": "The extra charming event answer is not built. Communion: shops 20% cheaper. The Rite charms the next trainer's lead still instead of making a trainer step aside.",
+      "rite": {
+        "label": "Beguile",
+        "hint": "The lead of your next trainer battle starts paralysed (not a boss's last Pokémon, not an Electric-type). Once this run.",
+        "armedHint": "Armed: the lead of your next trainer battle is charmed still.",
+        "message": "A trill, very sweet. The next trainer's lead will forget to move.",
+        "on": "trainer",
+        "perks": [
+          {
+            "kind": "foeLeadParalysed"
+          }
+        ]
+      }
     },
     {
       "id": "ho-oh",
@@ -89,7 +101,15 @@
         "kind": "sacredAsh"
       },
       "status": "supported",
-      "limits": "Communion: the first fainted Pokémon (in party order) comes back at half HP after a boss battle. Its Rite (bring back a Pokémon lost for good) is not built."
+      "limits": "Communion: the first fainted Pokémon (in party order) comes back at half HP after a boss battle. The Rite restores the whole party (fainted ones too) instead of bringing back a Pokémon lost for good.",
+      "rite": {
+        "label": "Rebirth",
+        "hint": "Every Pokémon in your party, fainted ones too, is fully restored now. Once this run.",
+        "message": "One bell, and a golden feather falls. Everyone in your party rises, whole.",
+        "on": "any",
+        "perks": [],
+        "heal": true
+      }
     },
     {
       "id": "dialga",
@@ -118,12 +138,12 @@
       "objectText": "a pearl with a fold in it that the eye cannot follow",
       "passage": "It set the near beside the far and called it a road. Ask, and the mountain shall stand behind you that stood before.",
       "headline": "REARRANGE THE ROAD",
-      "summary": "Once per region, swap any two nodes of a stage before entering it.",
+      "summary": "Once per region, before you set out on a stage, rearrange it: any two nodes may change places, as often as you like (run menu, \"Rearrange the road\"). The paths stay; the final node stays last.",
       "effect": {
-        "kind": "none"
+        "kind": "fold"
       },
-      "status": "disabled",
-      "limits": "Needs a map-rearranging screen."
+      "status": "limited",
+      "limits": "Rite, Design the Road: rearrange the stage you are on, even after setting out (choosing every node's kind from a budget is not built). Rearranging is from a list on the run menu, not by dragging on the map."
     },
     {
       "id": "moltres",
@@ -147,7 +167,30 @@
       ],
       "firstBattleOfStage": false,
       "status": "limited",
-      "limits": "Only the half burn damage works. Burns are not removed after the battle and the first rest of a region does not give Bond."
+      "limits": "Burns are not removed after the battle and the first rest of a region does not give Bond. Communion: after a foe of yours falls your moves gain 10% (standing in for +1 Sp. Atk after a faint).",
+      "communionPerks": [
+        {
+          "kind": "burnDamageTakenMultiplier",
+          "value": 0.5
+        },
+        {
+          "kind": "afterKoDamageMultiplier",
+          "value": 1.1
+        }
+      ],
+      "rite": {
+        "label": "Early Spring",
+        "hint": "Your next boss battle starts with every hazard on your side, the weather and the terrain burned away, and the party fully healed now. Once this run.",
+        "armedHint": "Armed: your next boss battle starts with the arena burned clean.",
+        "message": "The ember flares. Your party is warmed through, and the next boss's arena will burn clean.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "eruptArena"
+          }
+        ],
+        "heal": true
+      }
     },
     {
       "id": "munkidori",
@@ -171,7 +214,26 @@
       ],
       "firstBattleOfStage": false,
       "status": "limited",
-      "limits": "The puzzle hint is not built."
+      "limits": "The puzzle hint is not built. Communion: status moves +25% accuracy. The Rite stands in for solving a puzzle.",
+      "communionPerks": [
+        {
+          "kind": "statusMoveAccuracy",
+          "value": 1.25
+        }
+      ],
+      "rite": {
+        "label": "Outwit",
+        "hint": "Your next boss battle: your status moves go first on the first two turns. Once this run.",
+        "armedHint": "Armed: against the next boss your status moves go first.",
+        "message": "A click of the tongue. The next boss is a step behind.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "statusPriorityTurns",
+            "turns": 2
+          }
+        ]
+      }
     },
     {
       "id": "tornadus",
@@ -195,8 +257,31 @@
         }
       ],
       "firstBattleOfStage": true,
-      "status": "supported",
-      "limits": "Communion and its Rite are not built."
+      "status": "limited",
+      "limits": "Communion: every trainer battle begins with the Tailwind (not only named opponents). The Rite stands in for moving two nodes forward.",
+      "communionAllBattles": true,
+      "communionPerks": [
+        {
+          "kind": "battleStart",
+          "tailwind": true,
+          "turns": 2,
+          "against": "trainer"
+        }
+      ],
+      "rite": {
+        "label": "Carried Off",
+        "hint": "Your next boss battle begins with a Tailwind on your side for five turns. Once this run.",
+        "armedHint": "Armed: Tornadus waits in the next boss's arena.",
+        "message": "Wind getting up. The next boss will face it.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "battleStart",
+            "tailwind": true,
+            "turns": 5
+          }
+        ]
+      }
     },
     {
       "id": "zacian",
@@ -220,8 +305,32 @@
         }
       ],
       "firstBattleOfStage": false,
-      "status": "supported",
-      "limits": "Communion and its Rite are not built."
+      "status": "limited",
+      "limits": "Communion: the first move bonus plus 5% for a Pokémon that stays in (not the first move of each of three Pokémon). The Rite raises damage instead of breaking a shield or skipping a raid phase.",
+      "communionPerks": [
+        {
+          "kind": "firstAttackDamage",
+          "first": 1.2,
+          "later": 1
+        },
+        {
+          "kind": "stayingDamageMultiplier",
+          "value": 1.05
+        }
+      ],
+      "rite": {
+        "label": "Break the Shield",
+        "hint": "Your next boss battle: you deal 25% more to the boss. Once this run.",
+        "armedHint": "Armed: the next boss's shield is cracked.",
+        "message": "A howl. The next boss's shield will not hold.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "bossDamageMultiplier",
+            "value": 1.25
+          }
+        ]
+      }
     },
     {
       "id": "regidrago",
@@ -233,20 +342,51 @@
       "objectText": "a red crystal shaped like half a jaw",
       "passage": "The maker had not crystal enough to finish it. It has only the head; and the head remembers the rest.",
       "headline": "AN UNFINISHED JAW",
-      "summary": "Dragon moves gain 15%.",
+      "summary": "Dragon moves gain 15%. Any move used by a Pokémon at full HP gains 10%.",
       "effect": {
         "kind": "perks"
       },
       "perks": [
         {
           "kind": "damageMultiplier",
-          "type": "dragon",
+          "moveType": "dragon",
           "value": 1.15
+        },
+        {
+          "kind": "damageMultiplier",
+          "hpAtLeast": 1,
+          "value": 1.1
         }
       ],
       "firstBattleOfStage": false,
-      "status": "limited",
-      "limits": "The +10% for any move used at full HP is not built. Communion and its Rite are not built."
+      "status": "supported",
+      "limits": "The Rite raises Dragon damage for one boss battle instead of giving a hidden ability.",
+      "communionPerks": [
+        {
+          "kind": "damageMultiplier",
+          "moveType": "dragon",
+          "value": 1.15
+        },
+        {
+          "kind": "damageMultiplier",
+          "hpAtLeast": 0.75,
+          "value": 1.1
+        }
+      ],
+      "rite": {
+        "label": "Finish It",
+        "hint": "Your next boss battle: Dragon moves gain 30%. Once this run.",
+        "armedHint": "Armed: the next boss hears the whole roar.",
+        "message": "A roar, finished at last. The next boss will hear all of it.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "damageMultiplier",
+            "moveType": "dragon",
+            "value": 1.3
+          }
+        ]
+      }
     },
     {
       "id": "giratina",
@@ -298,7 +438,15 @@
         "kind": "sight"
       },
       "status": "limited",
-      "limits": "Shown on the map before you pick the node (event battles are not shown). Rite, Shared Sight: for the rest of the stage every battle ahead shows its whole team, and the Gym Leader's team. The rival's map sharing is not built."
+      "limits": "Shown on the map before you pick the node (event battles are not shown). Rite, Shared Sight: for the rest of the stage every battle ahead shows its whole team, and the Gym Leader's team. The rival's map sharing is not built.",
+      "sight": {
+        "kinds": [
+          "wild",
+          "trainer"
+        ],
+        "word": "sight",
+        "communionTeam": true
+      }
     },
     {
       "id": "heatran",
@@ -436,12 +584,2675 @@
       "objectText": "a block of ice with a hollow in it",
       "passage": "When the two were divided, something was left over. It is cold, and it is hungry, and it is waiting to be made whole by whatever comes near.",
       "headline": "NOTHING, YET",
-      "summary": "None, yet. The first Sign you find of another Legendary fills the vessel: it becomes a weaker copy of that blessing (perk bonuses halved) for the rest of the run. Catching Kyurem gives the copy's Rite.",
+      "summary": "None, yet. The first Sign you find of another Legendary fills the vessel: it becomes a weaker copy of that blessing (perk bonuses halved) for the rest of the run. Catching Kyurem gives the copy's Rite. Price: until it is filled you have no blessing, and the copy never reaches its own Communion.",
       "effect": {
         "kind": "vessel"
       },
       "status": "limited",
       "limits": "The copy never reaches its own Communion form. It cannot copy Zekrom's vow or The Renegade. Kyurem in Communion with Zekrom or Reshiram earns the DNA Splicers fusion."
+    },
+    {
+      "id": "articuno",
+      "name": "The Still Wing",
+      "legendary": "Articuno",
+      "speciesId": "articuno",
+      "tier": "lesser",
+      "item": "item.legend/articuno",
+      "objectText": "a long blue feather rimed with frost",
+      "passage": "It comes to those who are lost upon the mountain; and in the morning they are found, or they are not, and either way it stayed.",
+      "headline": "THE COLD WILL NOT TAKE THEM",
+      "summary": "Your Pokémon cannot be frozen, and they cannot flinch on the first turn of a boss or rival battle.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "statusImmuneTurns",
+          "status": "frz",
+          "turns": 999
+        },
+        {
+          "kind": "noFlinchTurnOne"
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "statusImmuneTurns",
+          "status": "frz",
+          "turns": 999
+        },
+        {
+          "kind": "noFlinchTurnOne"
+        },
+        {
+          "kind": "foeSecondaryChance",
+          "value": 0.5
+        }
+      ],
+      "rite": {
+        "label": "Hold Still",
+        "hint": "Your next boss battle begins in snow for eight turns, and the foe's added effects land half as often. Once this run.",
+        "armedHint": "Armed: your next boss battle begins in Articuno's snow.",
+        "message": "Articuno settles on the wind. The next boss will fight in its snow.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "battleStart",
+            "weather": "snow",
+            "turns": 8
+          },
+          {
+            "kind": "foeSecondaryChance",
+            "value": 0.5
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Freezing is blocked every time, not once per stage; flinching is blocked only on turn one of boss and rival battles. Snow and hail still hurt. Communion (shown here): foes' added effects land half as often, standing in for \"hold still\". The Rite stands in for \"stop the clock\" (world-state tracks are not built for it)."
+    },
+    {
+      "id": "zapdos",
+      "name": "The Thundercloud",
+      "legendary": "Zapdos",
+      "speciesId": "zapdos",
+      "tier": "lesser",
+      "item": "item.legend/zapdos",
+      "objectText": "a yellow feather that snaps at the fingers",
+      "passage": "It sleeps inside the storm and the storm does not wake it. Pity whoever wakes it otherwise.",
+      "headline": "THE STORM DOES NOT WAKE IT",
+      "summary": "Your Pokémon cannot be paralysed in the first three turns of a battle. Electric moves gain 10% in rain.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "statusImmuneTurns",
+          "status": "par",
+          "turns": 3
+        },
+        {
+          "kind": "weatherDamageMultiplier",
+          "weather": "rain",
+          "side": "player",
+          "moveType": "electric",
+          "value": 1.1
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "statusImmuneTurns",
+          "status": "par",
+          "turns": 3
+        },
+        {
+          "kind": "weatherDamageMultiplier",
+          "weather": "rain",
+          "side": "player",
+          "moveType": "electric",
+          "value": 1.1
+        },
+        {
+          "kind": "battleStart",
+          "weather": "rain",
+          "turns": 3
+        }
+      ],
+      "rite": {
+        "label": "Bring the Power Back",
+        "hint": "Your next boss battle begins in rain, and your Electric moves gain 30% in it. Once this run.",
+        "armedHint": "Armed: your next boss battle begins in Zapdos's storm.",
+        "message": "Far off, the thunder answers. The next boss will fight under Zapdos's storm.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "battleStart",
+            "weather": "rain",
+            "turns": 8
+          },
+          {
+            "kind": "weatherDamageMultiplier",
+            "weather": "rain",
+            "side": "player",
+            "moveType": "electric",
+            "value": 1.3
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Communion here starts every battle in three turns of rain instead of the switch-in shock. The Rite stands in for \"bring the power back\" (locked places are not built)."
+    },
+    {
+      "id": "suicune",
+      "name": "The North Wind",
+      "legendary": "Suicune",
+      "speciesId": "suicune",
+      "tier": "lesser",
+      "item": "item.legend/suicune",
+      "objectText": "a bowl of water that will not cloud",
+      "passage": "It ran upon the water and the water was made clean; and it did not look back to be thanked.",
+      "headline": "THE WATER RUNS CLEAR",
+      "summary": "Your Pokémon cannot be poisoned in the first three turns of a battle.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "statusImmuneTurns",
+          "status": "psn",
+          "turns": 3
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "statusImmuneTurns",
+          "status": "psn",
+          "turns": 999
+        },
+        {
+          "kind": "eruptArena"
+        }
+      ],
+      "rite": {
+        "label": "Purify",
+        "hint": "The whole party is restored now: HP and every status. Once this run.",
+        "message": "The north wind passes over. Every wound and every poison is washed away.",
+        "on": "any",
+        "perks": [],
+        "heal": true
+      },
+      "status": "limited",
+      "limits": "Outside-battle hazards and polluted nodes are not built, so the blessing guards against poison in battle instead. Communion: no poison at all, and hazards are cleared from your side at the start of each battle. The Rite heals instead of purifying a Shadow Pokémon."
+    },
+    {
+      "id": "regirock",
+      "name": "The Sealed Stone",
+      "legendary": "Regirock",
+      "speciesId": "regirock",
+      "tier": "lesser",
+      "item": "item.legend/regirock",
+      "objectText": "a clay tablet marked with six dots",
+      "passage": "They were made of the land and they pulled it where they pleased; and men were afraid, and shut them in, and forgot that the key was a word.",
+      "headline": "IT DOES NOT MOVE",
+      "summary": "Foes cannot lower your Pokémon's Defense.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "statDropGuard",
+          "stat": "def"
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "statDropGuard",
+          "stat": "def"
+        },
+        {
+          "kind": "damageTakenMultiplier",
+          "category": "physical",
+          "value": 0.9
+        }
+      ],
+      "rite": {
+        "label": "Seal a Door",
+        "hint": "In your next boss battle your side takes 25% less from physical hits. Once this run.",
+        "armedHint": "Armed: your next boss battle meets Regirock's wall.",
+        "message": "Stone grinds on stone. The next boss will find a wall.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "damageTakenMultiplier",
+            "category": "physical",
+            "value": 0.75
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Being forced out or trapped is not blocked yet; the Defense guard (the doc's Communion) is the blessing here, and Communion adds 10% less physical damage taken. The Rite stands in for sealing a forced event."
+    },
+    {
+      "id": "regice",
+      "name": "The Sealed Ice",
+      "legendary": "Regice",
+      "speciesId": "regice",
+      "tier": "lesser",
+      "item": "item.legend/regice",
+      "objectText": "a shard that will not melt in the hand",
+      "passage": "It was born in an age of ice, and it has not let go of it.",
+      "headline": "A HELD BREATH",
+      "summary": "The added effects of foes' moves on your side (burn, paralysis, flinch, stat drops) happen half as often.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "foeSecondaryChance",
+          "value": 0.5
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "foeSecondaryChance",
+          "value": 0.5
+        },
+        {
+          "kind": "weatherTurnsBonus",
+          "turns": 3
+        }
+      ],
+      "rite": {
+        "label": "Preserve",
+        "hint": "Your next boss battle: foes' added effects never land on your side. Once this run.",
+        "armedHint": "Armed: in your next boss battle no added effect touches you.",
+        "message": "The cold closes round your party like glass.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "foeSecondaryChance",
+            "value": 0
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Communion makes the weather you set last three turns longer, standing in for \"weather cannot change\". The Rite stands in for \"preserve a single-use item\"."
+    },
+    {
+      "id": "registeel",
+      "name": "The Sealed Steel",
+      "legendary": "Registeel",
+      "speciesId": "registeel",
+      "tier": "lesser",
+      "item": "item.legend/registeel",
+      "objectText": "a bead of metal that is no known metal",
+      "passage": "It was tempered under the ground ten thousand years, and it does not consider itself finished.",
+      "headline": "NO KNOWN METAL",
+      "summary": "The first stat drop a foe puts on each of your Pokémon in a battle fails.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "statDropGuard",
+          "first": true
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "statDropGuard",
+          "first": true
+        },
+        {
+          "kind": "heldEffectMultiplier",
+          "value": 1.2
+        }
+      ],
+      "rite": {
+        "label": "Temper",
+        "hint": "Your next boss battle: every foe's stat drop on you fails, and your side takes 10% less. Once this run.",
+        "armedHint": "Armed: your next boss battle meets tempered steel.",
+        "message": "A ringing with no beginning. Your party is tempered for the next boss.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "statDropGuard"
+          },
+          {
+            "kind": "damageTakenMultiplier",
+            "value": 0.9
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Communion makes held items 20% stronger instead of unremovable. The Rite is for one battle, not a permanent +10%."
+    },
+    {
+      "id": "regieleki",
+      "name": "The Unbound Current",
+      "legendary": "Regieleki",
+      "speciesId": "regieleki",
+      "tier": "lesser",
+      "item": "item.legend/regieleki",
+      "objectText": "a loop of copper wire, live",
+      "passage": "They bound it in rings for fear of what it would do if it ran free; and it ran anyway, a little, through the gaps.",
+      "headline": "BEFORE THE THUNDER",
+      "summary": "On the first turn of every battle your Pokémon moves before a foe's move of the same priority, whatever the speeds.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "leadFirst"
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "leadFirst"
+        },
+        {
+          "kind": "turnOneKoSpeed",
+          "stages": 1
+        }
+      ],
+      "rite": {
+        "label": "Outrun",
+        "hint": "Your next boss battle begins with a Tailwind on your side for four turns. Once this run.",
+        "armedHint": "Armed: your next boss battle begins in Regieleki's tailwind.",
+        "message": "The hum rises. The next boss will be too slow.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "battleStart",
+            "tailwind": true,
+            "turns": 4
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Communion: a first-turn knockout gives your next Pokémon +1 Speed (not +1 Speed for the first Pokémon out). The Rite stands in for \"pass a node\"."
+    },
+    {
+      "id": "cresselia",
+      "name": "The Lunar Dream",
+      "legendary": "Cresselia",
+      "speciesId": "cresselia",
+      "tier": "lesser",
+      "item": "item.legend/cresselia",
+      "objectText": "a crescent feather",
+      "passage": "Sleep, and be shown the road. The moon has walked it already and returned to tell you.",
+      "headline": "DREAM THE ROAD",
+      "summary": "On the map, the trainers and wild Pokémon you can go to next show their lead before you choose.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "statusImmuneTurns",
+          "status": "slp",
+          "turns": 1
+        }
+      ],
+      "sight": {
+        "kinds": [
+          "wild",
+          "trainer"
+        ],
+        "word": "dream",
+        "communionTeam": true
+      },
+      "rite": {
+        "label": "Sleep On It",
+        "hint": "The party is fully restored now, as after a long night. Once this run.",
+        "message": "You sleep, and Cresselia keeps watch. Everyone wakes whole.",
+        "on": "any",
+        "perks": [],
+        "heal": true
+      },
+      "status": "limited",
+      "limits": "The dream shows the battles you can reach next (Communion: their whole team), not the next stage's first three nodes. Sleep is blocked on turn one instead of lasting a turn less. The Rite heals instead of retaking an event choice."
+    },
+    {
+      "id": "cobalion",
+      "name": "The Iron Will",
+      "legendary": "Cobalion",
+      "speciesId": "cobalion",
+      "tier": "lesser",
+      "item": "item.legend/cobalion",
+      "objectText": "the tip of a horn in blue steel",
+      "passage": "Three swore to stand between the small and the wars of men; and the first said: we do not strike first.",
+      "headline": "STAND TOGETHER",
+      "summary": "A Pokémon that has just come in takes 25% less damage that turn.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "switchGuard",
+          "value": 0.75
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "switchGuard",
+          "value": 0.6
+        }
+      ],
+      "rite": {
+        "label": "Stand Between",
+        "hint": "In your next boss battle, a fatal hit leaves your Pokémon at 1 HP half the time. Once this run.",
+        "armedHint": "Armed: in your next boss battle your Pokémon may endure.",
+        "message": "Hooves in step. The next boss will not find you alone.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "survivalChance",
+            "chance": 0.5
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "The guard covers every Pokémon that has just come in, not only after a knockout; Communion makes it 40% instead of two turns. The Rite stands in for \"a Pokémon an event would take is not taken\"."
+    },
+    {
+      "id": "terrakion",
+      "name": "The Cavern's Strength",
+      "legendary": "Terrakion",
+      "speciesId": "terrakion",
+      "tier": "lesser",
+      "item": "item.legend/terrakion",
+      "objectText": "a chip from a horn like a boulder",
+      "passage": "The second said: but when we strike, let it be the wall that falls and not the one behind it.",
+      "headline": "THE WALL COMES DOWN",
+      "summary": "Once a foe of yours has fallen in a battle, your moves gain 10%.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "afterKoDamageMultiplier",
+          "value": 1.1
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "afterKoDamageMultiplier",
+          "value": 1.1
+        },
+        {
+          "kind": "accuracyMultiplier",
+          "value": 1.1
+        }
+      ],
+      "rite": {
+        "label": "Break a Wall",
+        "hint": "Your next boss battle: your first damaging move gains 50%. Once this run.",
+        "armedHint": "Armed: your first strike against the next boss lands hard.",
+        "message": "A wall comes down somewhere. The next boss will feel it.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "firstAttackDamage",
+            "first": 1.5,
+            "later": 1
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Built as +10% after the first foe falls, not +25% to the next Pokémon's first move after one of yours faints. Communion adds 10% accuracy. The Rite stands in for opening a blocked path."
+    },
+    {
+      "id": "virizion",
+      "name": "The Grassland's Grace",
+      "legendary": "Virizion",
+      "speciesId": "virizion",
+      "tier": "lesser",
+      "item": "item.legend/virizion",
+      "objectText": "a leaf as sharp as a blade",
+      "passage": "And the third said: and when it is over, we lead them out, and we do not ask who they fought for.",
+      "headline": "THROUGH THE TALL GRASS",
+      "summary": "When you switch out a Pokémon below half HP, it recovers 10% of its HP. Once per Pokémon per battle.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "switchOutHeal",
+          "below": 0.5,
+          "percent": 10
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "switchOutHeal",
+          "below": 0.5,
+          "percent": 20
+        }
+      ],
+      "rite": {
+        "label": "Lead Them Out",
+        "hint": "The whole party is restored now. Once this run.",
+        "message": "The grass parts. Everyone walks out whole.",
+        "on": "any",
+        "perks": [],
+        "heal": true
+      },
+      "status": "limited",
+      "limits": "The Rite heals instead of freeing captives in a prison event."
+    },
+    {
+      "id": "type-null",
+      "name": "The Mask",
+      "legendary": "Type: Null",
+      "speciesId": "type-null",
+      "tier": "lesser",
+      "item": "item.legend/type-null",
+      "objectText": "a heavy helmet with a broken hinge",
+      "passage": "They made it to kill gods and were afraid of what they had made; and they put a mask on it and called the mask a mercy.",
+      "headline": "THE MASK HOLDS",
+      "summary": "The Mask: your party has 5% less Speed and 10% more Defense and Sp. Def.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 0.95
+        },
+        {
+          "kind": "statMultiplier",
+          "stat": "def",
+          "value": 1.1
+        },
+        {
+          "kind": "statMultiplier",
+          "stat": "spd",
+          "value": 1.1
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "value": 1.05
+        },
+        {
+          "kind": "statMultiplier",
+          "stat": "def",
+          "value": 1.05
+        },
+        {
+          "kind": "statMultiplier",
+          "stat": "spa",
+          "value": 1.05
+        },
+        {
+          "kind": "statMultiplier",
+          "stat": "spd",
+          "value": 1.05
+        },
+        {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 1.05
+        }
+      ],
+      "rite": {
+        "label": "Let It Choose",
+        "hint": "Your next boss battle: your party has 10% more of every stat. Once this run.",
+        "armedHint": "Armed: the next boss meets the unmasked.",
+        "message": "The hinge breaks. Whatever was inside fights the next boss as itself.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "statMultiplier",
+            "stat": "atk",
+            "value": 1.1
+          },
+          {
+            "kind": "statMultiplier",
+            "stat": "def",
+            "value": 1.1
+          },
+          {
+            "kind": "statMultiplier",
+            "stat": "spa",
+            "value": 1.1
+          },
+          {
+            "kind": "statMultiplier",
+            "stat": "spd",
+            "value": 1.1
+          },
+          {
+            "kind": "statMultiplier",
+            "stat": "spe",
+            "value": 1.1
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "The Mask is worn by the whole party, not one chosen Pokémon; Communion takes it off (+5% to everything) when Type: Null joins, not at High Bond. The Rite stands in for a forced evolution."
+    },
+    {
+      "id": "tapu-koko",
+      "name": "The Guardian of Conflict",
+      "legendary": "Tapu Koko",
+      "speciesId": "tapu-koko",
+      "tier": "lesser",
+      "item": "item.legend/tapu-koko",
+      "objectText": "a yellow shell mask split down the middle",
+      "passage": "It keeps the island and forgets why, and fights whoever comes, and is delighted to lose.",
+      "headline": "CHALLENGE ACCEPTED",
+      "summary": "The first battle of each stage begins on Electric Terrain for three turns.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "battleStart",
+          "terrain": "electric",
+          "turns": 3
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "battleStart",
+          "terrain": "electric",
+          "turns": 3,
+          "against": "trainer"
+        }
+      ],
+      "firstBattleOfStage": true,
+      "rite": {
+        "label": "Challenge Accepted",
+        "hint": "Your next boss battle begins on Electric Terrain for eight turns, and your Electric moves gain 20%. Once this run.",
+        "armedHint": "Armed: Tapu Koko waits in the next boss's arena.",
+        "message": "A rooster's cry, electrified. The next boss is challenged.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "battleStart",
+            "terrain": "electric",
+            "turns": 8
+          },
+          {
+            "kind": "damageMultiplier",
+            "moveType": "electric",
+            "value": 1.2
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Communion: every trainer battle begins on Electric Terrain (not only named opponents). The Rite stands in for replaying a lost event battle.",
+      "communionAllBattles": true
+    },
+    {
+      "id": "tapu-bulu",
+      "name": "The Guardian of Abundance",
+      "legendary": "Tapu Bulu",
+      "speciesId": "tapu-bulu",
+      "tier": "lesser",
+      "item": "item.legend/tapu-bulu",
+      "objectText": "a red shell with a wooden bell for a tail",
+      "passage": "It makes the fields heavy and then lies down in them. It dislikes a fuss.",
+      "headline": "THE BELL RINGS ONCE",
+      "summary": "Held items are 20% stronger (Berries included), and you find hidden items a little more often.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "heldEffectMultiplier",
+          "value": 1.2
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "heldEffectMultiplier",
+          "value": 1.2
+        },
+        {
+          "kind": "battleStart",
+          "terrain": "grassy",
+          "turns": 5
+        }
+      ],
+      "rite": {
+        "label": "Harvest",
+        "hint": "Take three Sitrus Berries and two Lum Berries now. Once this run.",
+        "message": "One low bell note. The trees give what they have.",
+        "on": "any",
+        "perks": [],
+        "items": [
+          {
+            "id": "sitrus-berry",
+            "count": 3
+          },
+          {
+            "id": "lum-berry",
+            "count": 2
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Extra Berry finds and the uneaten first Berry are not built; held items are 20% stronger instead, and the hidden-item bonus is not built either. Communion starts every battle (not only the first of a stage) on Grassy Terrain. The Rite gives Berries instead of a second reward choice."
+    },
+    {
+      "id": "tapu-fini",
+      "name": "The Guardian of Purification",
+      "legendary": "Tapu Fini",
+      "speciesId": "tapu-fini",
+      "tier": "lesser",
+      "item": "item.legend/tapu-fini",
+      "objectText": "a purple shell that closes like a fish",
+      "passage": "The water it makes will wash anything away. It asks first whether you can bear to be without it.",
+      "headline": "WASHED CLEAN",
+      "summary": "Your Pokémon cannot be given a status condition on the first turn of a battle.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "statusImmuneTurns",
+          "turns": 1
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "statusImmuneTurns",
+          "turns": 1
+        },
+        {
+          "kind": "battleStart",
+          "terrain": "misty",
+          "turns": 5,
+          "against": "boss"
+        }
+      ],
+      "rite": {
+        "label": "Wash Clean",
+        "hint": "The whole party is restored now: HP and every status. Once this run.",
+        "message": "Water over smooth stones. Everything that clung to you is gone.",
+        "on": "any",
+        "perks": [],
+        "heal": true
+      },
+      "status": "limited",
+      "limits": "The once-per-stage status wash outside battle is not built. The Rite heals instead of lifting a curse or a Mark."
+    },
+    {
+      "id": "cosmog",
+      "name": "The Child of the Stars",
+      "legendary": "Cosmog",
+      "speciesId": "cosmog",
+      "tier": "lesser",
+      "item": "item.legend/cosmog",
+      "objectText": "a small bag with something moving in it",
+      "passage": "It can do nothing at all but leave. Remember that, the next time something small will not stay where it was put.",
+      "headline": "WARP",
+      "summary": "Once per stage, on the map: warp, and your next move may go to any node of the next level, whatever the paths.",
+      "effect": {
+        "kind": "perks"
+      },
+      "ride": {
+        "label": "Warp",
+        "perStage": 1,
+        "communionPerStage": 1
+      },
+      "grows": [
+        {
+          "region": 1,
+          "into": "cosmoem"
+        }
+      ],
+      "rite": {
+        "label": "Escape",
+        "hint": "The whole party is restored now. Once this run.",
+        "message": "The little bag shudders, and you are somewhere safer. Everyone is whole.",
+        "on": "any",
+        "perks": [],
+        "heal": true
+      },
+      "status": "limited",
+      "limits": "In Communion it grows into The Sleeping Star from the second region; growing into The Sun or The Moon is not built yet. The Rite heals now instead of leaving a battle."
+    },
+    {
+      "id": "cosmoem",
+      "name": "The Sleeping Star",
+      "legendary": "Cosmoem",
+      "speciesId": "cosmoem",
+      "tier": "lesser",
+      "item": "item.legend/cosmoem",
+      "objectText": "a heavy gold-rimmed shell, warm",
+      "passage": "It does not move. It does not eat. It gathers. Do not mistake it for doing nothing.",
+      "headline": "THE WEIGHT OF A STAR",
+      "summary": "Nothing in battle at first. Each badge you win gives the party 2% to every stat, up to 12%.",
+      "effect": {
+        "kind": "perks"
+      },
+      "badgeGrowth": {
+        "step": 0.02,
+        "max": 0.12,
+        "communionMax": 0.2
+      },
+      "rite": {
+        "label": "Hatch",
+        "hint": "Your next boss battle: your party has 15% more of every stat. Once this run.",
+        "armedHint": "Armed: the next boss meets what hatched.",
+        "message": "The shell grows warm. Something inside is almost ready.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "statMultiplier",
+            "stat": "atk",
+            "value": 1.15
+          },
+          {
+            "kind": "statMultiplier",
+            "stat": "def",
+            "value": 1.15
+          },
+          {
+            "kind": "statMultiplier",
+            "stat": "spa",
+            "value": 1.15
+          },
+          {
+            "kind": "statMultiplier",
+            "stat": "spd",
+            "value": 1.15
+          },
+          {
+            "kind": "statMultiplier",
+            "stat": "spe",
+            "value": 1.15
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Communion raises the limit to 20%. The Rite stands in for choosing The Sun or The Moon."
+    },
+    {
+      "id": "kubfu",
+      "name": "The Little Fist",
+      "legendary": "Kubfu",
+      "speciesId": "kubfu",
+      "tier": "lesser",
+      "item": "item.legend/kubfu",
+      "objectText": "a child's training glove",
+      "passage": "It ran away from home to train, and trained until its master came and found it, and then it trained harder.",
+      "headline": "TRAIN HARD",
+      "summary": "Your Pokémon earn 10% more experience.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "groupXpMultiplier",
+          "value": 1.1
+        }
+      ],
+      "rite": {
+        "label": "Master a Move",
+        "hint": "Your next boss battle: your moves are 20% more accurate. Once this run.",
+        "armedHint": "Armed: against the next boss your moves fly true.",
+        "message": "A small shout, very serious. The next boss will not be missed.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "accuracyMultiplier",
+            "value": 1.2
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "The bonus is for the whole party, not only unevolved Pokémon, and the +5% stats is not built. In Communion it grows into The Two Towers from the second region (no choice of tower yet). The Rite stands in for \"one move can never miss\".",
+      "grows": [
+        {
+          "region": 1,
+          "into": "urshifu"
+        }
+      ]
+    },
+    {
+      "id": "glastrier",
+      "name": "The White Steed",
+      "legendary": "Glastrier",
+      "speciesId": "glastrier",
+      "tier": "lesser",
+      "item": "item.legend/glastrier",
+      "objectText": "a carrot cased in ice",
+      "passage": "It takes what it wants and does not look to see who had it. The snow does not ask either.",
+      "headline": "HOOVES ON PACKED SNOW",
+      "summary": "Your Pokémon with low base Speed deal 15% more physical damage.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "damageMultiplier",
+          "speed": "slow",
+          "category": "physical",
+          "value": 1.15
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "damageMultiplier",
+          "speed": "slow",
+          "category": "physical",
+          "value": 1.15
+        },
+        {
+          "kind": "afterKoDamageMultiplier",
+          "value": 1.1
+        }
+      ],
+      "rite": {
+        "label": "Take It",
+        "hint": "A Rare Candy and a Nugget, now. Once this run.",
+        "message": "Hooves on packed snow; when you look again, they are in your bag.",
+        "on": "any",
+        "perks": [],
+        "items": [
+          {
+            "id": "rare-candy",
+            "count": 1
+          },
+          {
+            "id": "nugget",
+            "count": 1
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Every slow Pokémon gets it, not only the slowest one, and as damage rather than Attack. Communion: +10% after a foe falls. The Rite gives items instead of a free shop item."
+    },
+    {
+      "id": "spectrier",
+      "name": "The Black Steed",
+      "legendary": "Spectrier",
+      "speciesId": "spectrier",
+      "tier": "lesser",
+      "item": "item.legend/spectrier",
+      "objectText": "a carrot gone grey",
+      "passage": "It runs at night, alone, and sees with every sense but the one it lacks; it had rather not be seen at all.",
+      "headline": "HOOVES WITH NO GROUND",
+      "summary": "Your Pokémon with high base Speed deal 15% more special damage.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "damageMultiplier",
+          "speed": "fast",
+          "category": "special",
+          "value": 1.15
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "damageMultiplier",
+          "speed": "fast",
+          "category": "special",
+          "value": 1.15
+        },
+        {
+          "kind": "afterKoDamageMultiplier",
+          "value": 1.1
+        }
+      ],
+      "rite": {
+        "label": "Ride by Night",
+        "hint": "Your next trainer battle begins with a Tailwind on your side for four turns. Once this run.",
+        "armedHint": "Armed: your next trainer battle begins in Spectrier's wind.",
+        "message": "A black steed with no ground under it. The next trainer will not see you coming.",
+        "on": "trainer",
+        "perks": [
+          {
+            "kind": "battleStart",
+            "tailwind": true,
+            "turns": 4
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Every fast Pokémon gets it, not only the fastest one, and as damage rather than Sp. Atk. Communion: +10% after a foe falls. The Rite stands in for walking past trainers."
+    },
+    {
+      "id": "okidogi",
+      "name": "The Strong Wish",
+      "legendary": "Okidogi",
+      "speciesId": "okidogi",
+      "tier": "lesser",
+      "item": "item.legend/okidogi",
+      "objectText": "a length of purple chain",
+      "passage": "It wished to be strong and was made strong, by one who wished only to be obeyed. Look to who is granting it.",
+      "headline": "STRONG AND PLEASED",
+      "summary": "Your lead (first in the party) deals 10% more physical damage, and your Poison moves poison more often.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "damageMultiplier",
+          "slot": "lead",
+          "category": "physical",
+          "value": 1.1
+        },
+        {
+          "kind": "statusChanceMultiplier",
+          "status": "psn",
+          "value": 1.5
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "damageMultiplier",
+          "slot": "lead",
+          "category": "physical",
+          "value": 1.1
+        },
+        {
+          "kind": "statusChanceMultiplier",
+          "status": "psn",
+          "value": 2
+        }
+      ],
+      "rite": {
+        "label": "Take What Was Refused",
+        "hint": "A Nugget and two Rare Candies, now. Once this run.",
+        "message": "The chain rattles. What was denied you is in your bag.",
+        "on": "any",
+        "perks": [],
+        "items": [
+          {
+            "id": "nugget",
+            "count": 1
+          },
+          {
+            "id": "rare-candy",
+            "count": 2
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Built as more poison from your moves' own poison chances (x1.5, Communion x2), not a 10% bad-poison chance on contact. The Rite gives items instead of an event reward."
+    },
+    {
+      "id": "raikou",
+      "name": "The Storm Chaser",
+      "legendary": "Raikou",
+      "speciesId": "raikou",
+      "tier": "greater",
+      "item": "item.legend/raikou",
+      "objectText": "a strip of bark split by lightning",
+      "passage": "It is the storm's own shadow, running before; and where it stops, there the sky has business.",
+      "headline": "THUNDER WITH NO RAIN",
+      "summary": "In rain, your Pokémon moves before a foe's move of the same priority on the first turn of a battle. Electric moves gain 10% in rain.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "leadFirst",
+          "weather": "rain"
+        },
+        {
+          "kind": "weatherDamageMultiplier",
+          "weather": "rain",
+          "side": "player",
+          "moveType": "electric",
+          "value": 1.1
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "leadFirst",
+          "weather": "rain"
+        },
+        {
+          "kind": "weatherDamageMultiplier",
+          "weather": "rain",
+          "side": "player",
+          "moveType": "electric",
+          "value": 1.1
+        },
+        {
+          "kind": "battleStart",
+          "weather": "rain",
+          "turns": 3
+        }
+      ],
+      "rite": {
+        "label": "Call the Storm",
+        "hint": "Your next boss battle is fought in rain for eight turns, and your Electric moves gain 30%. Once this run.",
+        "armedHint": "Armed: your next boss battle is fought in Raikou's storm.",
+        "message": "Thunder with no rain, then rain. The next boss will fight in Raikou's storm.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "battleStart",
+            "weather": "rain",
+            "turns": 8
+          },
+          {
+            "kind": "damageMultiplier",
+            "moveType": "electric",
+            "value": 1.3
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Storm nodes and hidden nodes are not built. Communion: every battle begins in three turns of rain (not node weather on the map). The Rite covers one boss battle, not a whole stage."
+    },
+    {
+      "id": "entei",
+      "name": "The Volcano's Voice",
+      "legendary": "Entei",
+      "speciesId": "entei",
+      "tier": "greater",
+      "item": "item.legend/entei",
+      "objectText": "an ember that will not go out",
+      "passage": "When it cries out, somewhere a mountain answers. It has learned to keep its mouth shut.",
+      "headline": "THE VOLCANO ANSWERS",
+      "summary": "When one of your Pokémon is knocked out, the foe that did it is burned. Once per battle.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "koBurn",
+          "times": 1
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "koBurn",
+          "times": 2
+        }
+      ],
+      "rite": {
+        "label": "A New Road",
+        "hint": "Your next boss battle begins in harsh sun for eight turns, and your Fire moves gain 20%. Once this run.",
+        "armedHint": "Armed: your next boss battle burns under Entei's sky.",
+        "message": "The ground splits and the sky goes orange. The next boss stands on Entei's ground.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "battleStart",
+            "weather": "sun",
+            "turns": 8
+          },
+          {
+            "kind": "damageMultiplier",
+            "moveType": "fire",
+            "value": 1.2
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "The Rite stands in for the eruption that opens a path."
+    },
+    {
+      "id": "latios",
+      "name": "The Blue Mind",
+      "legendary": "Latios",
+      "speciesId": "latios",
+      "tier": "greater",
+      "item": "item.legend/latios",
+      "objectText": "a drop of glass with something moving inside",
+      "passage": "He understood what the city needed before it asked, and gave it, and there is a jewel in the garden now.",
+      "headline": "A NOTE THAT IS FELT",
+      "summary": "On the first turn of every battle your Pokémon moves before a foe's move of the same priority.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "leadFirst"
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "leadFirst"
+        },
+        {
+          "kind": "damageTakenMultiplier",
+          "category": "special",
+          "slot": "lead",
+          "value": 0.9
+        }
+      ],
+      "rite": {
+        "label": "The Jewel",
+        "hint": "In your next boss battle, a fatal hit leaves your Pokémon at 1 HP half the time. Once this run.",
+        "armedHint": "Armed: Latios guards you in the next boss battle.",
+        "message": "A drop of glass, warm in your hand. The next boss will not finish you easily.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "survivalChance",
+            "chance": 0.5
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Built as moving first on turn one rather than +1 Speed when the foe is faster. Communion: your lead takes 10% less from special hits (standing in for +1 Sp. Def). The Rite gives a chance to endure in one boss battle instead of saving a wiped party."
+    },
+    {
+      "id": "uxie",
+      "name": "The Being of Knowledge",
+      "legendary": "Uxie",
+      "speciesId": "uxie",
+      "tier": "greater",
+      "item": "item.legend/uxie",
+      "objectText": "a yellow stone with a closed eye carved in it",
+      "passage": "When it flew, people learned to think. It keeps its eyes shut out of courtesy: to meet them is to forget.",
+      "headline": "THE PAGE TURNS",
+      "summary": "In events, the game shows what each choice will actually cause.",
+      "effect": {
+        "kind": "insight"
+      },
+      "communionPerks": [
+        {
+          "kind": "foeMovePreview"
+        }
+      ],
+      "rite": {
+        "label": "Forget",
+        "hint": "Your next boss battle: the foe's first moves are shown before you pick, and your status moves are 25% more accurate. Once this run.",
+        "armedHint": "Armed: the next boss has forgotten its plan.",
+        "message": "The yellow stone's eye closes. The next boss will forget its plan.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "foeMovePreview"
+          },
+          {
+            "kind": "statusMoveAccuracy",
+            "value": 1.25
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Every choice's outcome is shown from the start (the doc gives one per event until Communion), and Aligned choices are not marked. Communion shows the foe's first move in battle. The Rite stands in for wiping a rival's memory."
+    },
+    {
+      "id": "mesprit",
+      "name": "The Being of Emotion",
+      "legendary": "Mesprit",
+      "speciesId": "mesprit",
+      "tier": "greater",
+      "item": "item.legend/mesprit",
+      "objectText": "a pink stone that is warm on one side",
+      "passage": "When it flew, people learned to grieve and to be glad. Touch it and both leave you in three days.",
+      "headline": "FEEL IT",
+      "summary": "All Bond (friendship) gains are doubled.",
+      "effect": {
+        "kind": "perks"
+      },
+      "runPerks": [
+        {
+          "kind": "friendshipMultiplier",
+          "value": 2
+        }
+      ],
+      "communionRunPerks": [
+        {
+          "kind": "friendshipMultiplier",
+          "value": 2.5
+        }
+      ],
+      "rite": {
+        "label": "Feel It",
+        "hint": "The whole party is restored now. Once this run.",
+        "message": "A sob that turns into a laugh. Everyone feels better.",
+        "on": "any",
+        "perks": [],
+        "heal": true
+      },
+      "status": "limited",
+      "limits": "Communion makes Bond gains x2.5 instead of stopping Bond from falling. The Rite heals instead of restoring lost Bond or calming a hostile Pokémon."
+    },
+    {
+      "id": "azelf",
+      "name": "The Being of Willpower",
+      "legendary": "Azelf",
+      "speciesId": "azelf",
+      "tier": "greater",
+      "item": "item.legend/azelf",
+      "objectText": "a blue stone that cannot be scratched",
+      "passage": "When it flew, people learned to get up. Harm it, and in five days you will not be able to.",
+      "headline": "WILL NOT BREAK",
+      "summary": "When a hit would knock one of your Pokémon out, there is a 20% chance it hangs on at 1 HP.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "survivalChance",
+          "chance": 0.2
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "survivalChance",
+          "chance": 0.35
+        }
+      ],
+      "rite": {
+        "label": "Unbreakable",
+        "hint": "For your next boss battle your Pokémon cannot be given a status, cannot flinch on turn one, and foes' added effects never land. Once this run.",
+        "armedHint": "Armed: in the next boss battle your party is unbreakable.",
+        "message": "A breath drawn in. The next boss will not break you.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "statusImmuneTurns",
+            "turns": 999
+          },
+          {
+            "kind": "noFlinchTurnOne"
+          },
+          {
+            "kind": "foeSecondaryChance",
+            "value": 0
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "A chance on every fatal hit (20%, Communion 35%), not a sure save once per stage."
+    },
+    {
+      "id": "silvally",
+      "name": "The Memory",
+      "legendary": "Silvally",
+      "speciesId": "silvally",
+      "tier": "greater",
+      "item": "item.legend/silvally",
+      "objectText": "a disc that changes colour as it turns",
+      "passage": "It took the mask off itself in the end. Someone had been kind to it for long enough.",
+      "headline": "THE RIGHT MEMORY",
+      "summary": "Your starter deals 15% more damage.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "starterDamageMultiplier",
+          "starter": true,
+          "value": 1.15
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "starterDamageMultiplier",
+          "starter": true,
+          "value": 1.25
+        }
+      ],
+      "rite": {
+        "label": "The Right Memory",
+        "hint": "Your next boss battle: the foe's first moves are shown before you pick, and your starter deals 30% more. Once this run.",
+        "armedHint": "Armed: the next boss is remembered.",
+        "message": "The disc turns and stops on the right colour.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "foeMovePreview"
+          },
+          {
+            "kind": "starterDamageMultiplier",
+            "starter": true,
+            "value": 1.3
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Memories (changing the starter's first move type) are not built; the starter hits harder instead (Communion 25%). The Rite shows the foe's moves instead of its whole team before choosing."
+    },
+    {
+      "id": "zamazenta",
+      "name": "The Shield",
+      "legendary": "Zamazenta",
+      "speciesId": "zamazenta",
+      "tier": "greater",
+      "item": "item.legend/zamazenta",
+      "objectText": "the rusted boss of a shield",
+      "passage": "It slept beside its sibling and woke first, and stood in front.",
+      "headline": "THE SHIELD HOLDS",
+      "summary": "Your lead takes 20% less from hits while at full HP.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "damageTakenMultiplier",
+          "slot": "lead",
+          "fullHp": true,
+          "value": 0.8
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "damageTakenMultiplier",
+          "fullHp": true,
+          "value": 0.8
+        }
+      ],
+      "rite": {
+        "label": "Hold the Line",
+        "hint": "In your next boss battle, a fatal hit leaves your Pokémon at 1 HP most of the time (60%). Once this run.",
+        "armedHint": "Armed: Zamazenta holds the line in the next boss battle.",
+        "message": "A howl, answering. The line will hold against the next boss.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "survivalChance",
+            "chance": 0.6
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "The guard is on hits taken at full HP (your lead; Communion: every Pokémon) rather than exactly the first hit. The Rite is a chance to endure for the whole boss battle, not three sure turns."
+    },
+    {
+      "id": "urshifu",
+      "name": "The Two Towers",
+      "legendary": "Urshifu",
+      "speciesId": "urshifu",
+      "tier": "greater",
+      "item": "item.legend/urshifu",
+      "objectText": "a scroll, black on one face and blue on the other",
+      "passage": "One tower taught the blow that ends it, and one the blows that do not stop; and it climbed the one it was able to.",
+      "headline": "THE TWO TOWERS",
+      "summary": "Your first attack in each battle hits as hard as a critical hit (x1.5).",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "firstAttackDamage",
+          "first": 1.5,
+          "later": 1
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "firstAttackDamage",
+          "first": 1.5,
+          "later": 1
+        },
+        {
+          "kind": "afterKoDamageMultiplier",
+          "value": 1.1
+        }
+      ],
+      "rite": {
+        "label": "The Master's Lesson",
+        "hint": "Your next boss battle: your Pokémon land critical hits a quarter more often. Once this run.",
+        "armedHint": "Armed: the master watches your next boss battle.",
+        "message": "A single clap. The master is watching the next boss battle.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "critChanceBonus",
+            "value": 0.25
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "No choice of tower: the Darkness style is built (as x1.5, not a true critical hit); striking through protection is not built. Communion: +10% after the first knockout. The Rite stands in for teaching a move."
+    },
+    {
+      "id": "enamorus",
+      "name": "The Herald of Spring",
+      "legendary": "Enamorus",
+      "speciesId": "enamorus",
+      "tier": "greater",
+      "item": "item.legend/enamorus",
+      "objectText": "pink petals in a stoppered bottle",
+      "passage": "She comes over the sea when the cold breaks, and whatever she looks kindly on lives. Whatever she does not, she looks at also.",
+      "headline": "THE FIRST BIRD",
+      "summary": "Bond (friendship) gains are 50% larger.",
+      "effect": {
+        "kind": "perks"
+      },
+      "runPerks": [
+        {
+          "kind": "friendshipMultiplier",
+          "value": 1.5
+        }
+      ],
+      "communionRunPerks": [
+        {
+          "kind": "friendshipMultiplier",
+          "value": 2
+        }
+      ],
+      "rite": {
+        "label": "End a Winter",
+        "hint": "The whole party is restored now. Once this run.",
+        "message": "Pink petals, and the first bird. The winter is over.",
+        "on": "any",
+        "perks": [],
+        "heal": true
+      },
+      "status": "limited",
+      "limits": "Built as larger Bond gains for the whole party (Communion x2), not a gain for the lowest-Bond Pokémon each stage; charm immunity is not built. The Rite heals instead of reconciling an event's feud."
+    },
+    {
+      "id": "wo-chien",
+      "name": "The Tablets of Ruin",
+      "legendary": "Wo-Chien",
+      "speciesId": "wo-chien",
+      "tier": "greater",
+      "item": "item.legend/wo-chien",
+      "objectText": "wooden slips gone soft with mould",
+      "passage": "A man was condemned on what those tablets said, and his grudge went into them, and they got up.",
+      "headline": "TABLETS OF RUIN",
+      "summary": "Foes deal 10% less physical damage to you. Price: every Pokémon of yours except your lead deals 10% less physical damage.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "damageTakenMultiplier",
+          "category": "physical",
+          "value": 0.9
+        },
+        {
+          "kind": "damageMultiplier",
+          "category": "physical",
+          "slot": "rest",
+          "value": 0.9
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "damageTakenMultiplier",
+          "category": "physical",
+          "value": 0.9
+        }
+      ],
+      "rite": {
+        "label": "A Grudge Repaid",
+        "hint": "Your next boss battle: the foe's lead starts with -1 to Attack, Defense, Sp. Atk, Sp. Def and Speed. Once this run.",
+        "armedHint": "Armed: the next boss begins worn down.",
+        "message": "The wooden slips crumble. The next boss will begin already worn.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "foeLeadStages",
+            "stats": [
+              "atk",
+              "def",
+              "spa",
+              "spd",
+              "spe"
+            ],
+            "value": -1
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Built as damage (10% less from foes' physical/special hits, or 10% more to them) rather than a stat change. Price: the same 10% the other way for every Pokémon of yours except your lead (party slot 1); Communion ends it. The Rite works on the next boss, not a rematch."
+    },
+    {
+      "id": "chien-pao",
+      "name": "The Sword of Ruin",
+      "legendary": "Chien-Pao",
+      "speciesId": "chien-pao",
+      "tier": "greater",
+      "item": "item.legend/chien-pao",
+      "objectText": "two halves of a broken blade",
+      "passage": "The blade killed so many that their hatred froze upon it, and it walks on that hatred as upon a pond.",
+      "headline": "SWORD OF RUIN",
+      "summary": "Your physical hits deal 10% more. Price: every Pokémon of yours except your lead takes 10% more from physical hits.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "damageMultiplier",
+          "category": "physical",
+          "value": 1.1
+        },
+        {
+          "kind": "damageTakenMultiplier",
+          "category": "physical",
+          "slot": "rest",
+          "value": 1.1
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "damageMultiplier",
+          "category": "physical",
+          "value": 1.1
+        }
+      ],
+      "rite": {
+        "label": "Shatter",
+        "hint": "Your next boss battle: you deal 25% more to the boss. Once this run.",
+        "armedHint": "Armed: the next boss's guard is cracked.",
+        "message": "Ice cracks somewhere. The next boss's guard will shatter.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "bossDamageMultiplier",
+            "value": 1.25
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Built as damage (10% less from foes' physical/special hits, or 10% more to them) rather than a stat change. Price: the same 10% the other way for every Pokémon of yours except your lead (party slot 1); Communion ends it. The Rite raises damage instead of breaking held items."
+    },
+    {
+      "id": "ting-lu",
+      "name": "The Vessel of Ruin",
+      "legendary": "Ting-Lu",
+      "speciesId": "ting-lu",
+      "tier": "greater",
+      "item": "item.legend/ting-lu",
+      "objectText": "a bronze cauldron with a crack in the lip",
+      "passage": "The vessel stood before a king, and every fear that passed that throne settled in it like silt, and at length it rose.",
+      "headline": "VESSEL OF RUIN",
+      "summary": "Foes deal 10% less special damage to you. Price: every Pokémon of yours except your lead deals 10% less special damage.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "damageTakenMultiplier",
+          "category": "special",
+          "value": 0.9
+        },
+        {
+          "kind": "damageMultiplier",
+          "category": "special",
+          "slot": "rest",
+          "value": 0.9
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "damageTakenMultiplier",
+          "category": "special",
+          "value": 0.9
+        }
+      ],
+      "rite": {
+        "label": "Hold It",
+        "hint": "The whole party is restored now. Once this run.",
+        "message": "A struck bowl, very low. The vessel takes your hurt into itself.",
+        "on": "any",
+        "perks": [],
+        "heal": true
+      },
+      "status": "limited",
+      "limits": "Built as damage (10% less from foes' physical/special hits, or 10% more to them) rather than a stat change. Price: the same 10% the other way for every Pokémon of yours except your lead (party slot 1); Communion ends it. The Rite heals instead of taking a penalty."
+    },
+    {
+      "id": "chi-yu",
+      "name": "The Beads of Ruin",
+      "legendary": "Chi-Yu",
+      "speciesId": "chi-yu",
+      "tier": "greater",
+      "item": "item.legend/chi-yu",
+      "objectText": "blue-green beads, hot",
+      "passage": "The beads were so coveted that the coveting caught fire. It has been swimming in what it melted ever since.",
+      "headline": "BEADS OF RUIN",
+      "summary": "Your special hits deal 10% more. Price: every Pokémon of yours except your lead takes 10% more from special hits.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "damageMultiplier",
+          "category": "special",
+          "value": 1.1
+        },
+        {
+          "kind": "damageTakenMultiplier",
+          "category": "special",
+          "slot": "rest",
+          "value": 1.1
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "damageMultiplier",
+          "category": "special",
+          "value": 1.1
+        }
+      ],
+      "rite": {
+        "label": "Envy Answered",
+        "hint": "Two Rare Candies and a Nugget, now. Once this run.",
+        "message": "The beads hiss. What a rival took first is yours now too.",
+        "on": "any",
+        "perks": [],
+        "items": [
+          {
+            "id": "rare-candy",
+            "count": 2
+          },
+          {
+            "id": "nugget",
+            "count": 1
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Built as damage (10% less from foes' physical/special hits, or 10% more to them) rather than a stat change. Price: the same 10% the other way for every Pokémon of yours except your lead (party slot 1); Communion ends it. The Rite gives items instead of copying a rival's reward."
+    },
+    {
+      "id": "ogerpon",
+      "name": "The Masked Ogre",
+      "legendary": "Ogerpon",
+      "speciesId": "ogerpon",
+      "tier": "greater",
+      "item": "item.legend/ogerpon",
+      "objectText": "four masks on a string, one cracked",
+      "passage": "The village called her a monster four hundred years, on the word of the ones who robbed her. Ask who told you the story.",
+      "headline": "FOUR MASKS",
+      "summary": "The mask: your lead (party slot 1) deals 10% more and takes 10% less.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "damageMultiplier",
+          "slot": "lead",
+          "value": 1.1
+        },
+        {
+          "kind": "damageTakenMultiplier",
+          "slot": "lead",
+          "value": 0.9
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "damageMultiplier",
+          "slot": "lead",
+          "value": 1.15
+        },
+        {
+          "kind": "damageTakenMultiplier",
+          "slot": "lead",
+          "value": 0.85
+        }
+      ],
+      "rite": {
+        "label": "The Truth Told",
+        "hint": "The whole party is restored now. Once this run.",
+        "message": "A wooden clack, then a small voice. It was not your fault, and now everyone knows.",
+        "on": "any",
+        "perks": [],
+        "heal": true
+      },
+      "status": "limited",
+      "limits": "No choice of mask at a rest: the lead gets a mix of all four (+10% damage, -10% taken; Communion 15%). The Rite heals instead of overturning a false charge."
+    },
+    {
+      "id": "rayquaza",
+      "name": "The Sky High",
+      "legendary": "Rayquaza",
+      "speciesId": "rayquaza",
+      "tier": "divine",
+      "item": "item.legend/rayquaza",
+      "objectText": "a green scale the size of a hand",
+      "passage": "The sea and the land strove, and the world was nearly unmade; and it came down from above the weather and looked at them, and they were still.",
+      "headline": "THE SKY IS CLEAR",
+      "summary": "Every battle begins with the sky cleared: weather, terrain and the hazards on your side are swept away.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "eruptArena"
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "eruptArena"
+        },
+        {
+          "kind": "damageMultiplier",
+          "moveType": "dragon",
+          "value": 1.1
+        },
+        {
+          "kind": "damageMultiplier",
+          "moveType": "flying",
+          "value": 1.1
+        }
+      ],
+      "rite": {
+        "label": "End the Crisis",
+        "hint": "Your next boss battle: your side takes 20% less from the boss. Once this run.",
+        "armedHint": "Armed: Rayquaza holds the sky over your next boss battle.",
+        "message": "Wind at altitude. Whatever the next boss brings, the sky above you holds.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "bossDamageTakenMultiplier",
+            "value": 0.8
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "The sky is cleared once at the start of each battle; weather a foe sets later still takes hold, and world-state weather is not built. Communion adds 10% to Dragon and Flying moves. The Rite stands in for ending a world crisis."
+    },
+    {
+      "id": "kyogre",
+      "name": "The Sea's Half of the Quarrel",
+      "legendary": "Kyogre",
+      "speciesId": "kyogre",
+      "tier": "divine",
+      "item": "item.legend/kyogre",
+      "objectText": "the blue half of a cracked orb",
+      "passage": "One would have all the world a sea. It loved the world. That was the trouble.",
+      "headline": "THE SEA RISES",
+      "summary": "Water moves gain 20%. Price: Groudon is hostile, and foes' Ground moves do 15% more to you.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "damageMultiplier",
+          "moveType": "water",
+          "value": 1.2
+        },
+        {
+          "kind": "damageTakenMultiplier",
+          "moveType": "ground",
+          "value": 1.15
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "damageMultiplier",
+          "moveType": "water",
+          "value": 1.2
+        },
+        {
+          "kind": "damageTakenMultiplier",
+          "moveType": "ground",
+          "value": 1.15
+        },
+        {
+          "kind": "battleStart",
+          "weather": "rain",
+          "turns": 3
+        }
+      ],
+      "rite": {
+        "label": "Flood",
+        "hint": "Your next boss battle is fought in rain for eight turns, and Water moves gain a further 30%. Once this run.",
+        "armedHint": "Armed: the sea rises over the next boss battle.",
+        "message": "Surf, very close. The next boss stands in the sea.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "battleStart",
+            "weather": "rain",
+            "turns": 8
+          },
+          {
+            "kind": "damageMultiplier",
+            "moveType": "water",
+            "value": 1.3
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Sea-route shortcuts and Groudon's hazard nodes are not built; the Price is Ground moves hurting more. Communion: every battle begins in three turns of rain. The Rite floods one boss battle, not a stage."
+    },
+    {
+      "id": "groudon",
+      "name": "The Land's Half of the Quarrel",
+      "legendary": "Groudon",
+      "speciesId": "groudon",
+      "tier": "divine",
+      "item": "item.legend/groudon",
+      "objectText": "the red half of a cracked orb",
+      "passage": "And one would have it all shore. It loved the world also. They have never forgiven each other for that.",
+      "headline": "THE LAND RISES",
+      "summary": "Ground and Fire moves gain 10%. Price: Kyogre is hostile, and foes' Water moves do 15% more to you.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "damageMultiplier",
+          "moveType": "ground",
+          "value": 1.1
+        },
+        {
+          "kind": "damageMultiplier",
+          "moveType": "fire",
+          "value": 1.1
+        },
+        {
+          "kind": "damageTakenMultiplier",
+          "moveType": "water",
+          "value": 1.15
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "damageMultiplier",
+          "moveType": "ground",
+          "value": 1.1
+        },
+        {
+          "kind": "damageMultiplier",
+          "moveType": "fire",
+          "value": 1.1
+        },
+        {
+          "kind": "damageTakenMultiplier",
+          "moveType": "water",
+          "value": 1.15
+        },
+        {
+          "kind": "battleStart",
+          "weather": "sun",
+          "turns": 3
+        }
+      ],
+      "rite": {
+        "label": "Raise the Land",
+        "hint": "Your next boss battle is fought in harsh sun for eight turns, and Ground and Fire moves gain a further 20%. Once this run.",
+        "armedHint": "Armed: the land rises under the next boss battle.",
+        "message": "A low grinding. The next boss stands on Groudon's land.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "battleStart",
+            "weather": "sun",
+            "turns": 8
+          },
+          {
+            "kind": "damageMultiplier",
+            "moveType": "ground",
+            "value": 1.2
+          },
+          {
+            "kind": "damageMultiplier",
+            "moveType": "fire",
+            "value": 1.2
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "The extra land node and Kyogre's hazard nodes are not built; the Price is Water moves hurting more. Communion: every battle begins in three turns of harsh sun. The Rite raises one boss battle, not new nodes."
+    },
+    {
+      "id": "regigigas",
+      "name": "The Colossus",
+      "legendary": "Regigigas",
+      "speciesId": "regigigas",
+      "tier": "divine",
+      "item": "item.legend/regigigas",
+      "objectText": "a rope of woven stone",
+      "passage": "It dragged the lands to their places with ropes, and then it slept, having done enough; and it will not be hurried, having earned that.",
+      "headline": "THE SLOW START",
+      "summary": "In every battle your Pokémon deal 10% less for the first two turns, and 20% more after that.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "damageMultiplier",
+          "turnAtMost": 2,
+          "value": 0.9
+        },
+        {
+          "kind": "damageMultiplier",
+          "turnAtLeast": 3,
+          "value": 1.2
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "damageMultiplier",
+          "turnAtMost": 1,
+          "value": 0.9
+        },
+        {
+          "kind": "damageMultiplier",
+          "turnAtLeast": 2,
+          "value": 1.2
+        }
+      ],
+      "rite": {
+        "label": "Tow the Land",
+        "hint": "Your next boss battle: you deal 30% more to the boss. Once this run.",
+        "armedHint": "Armed: the colossus walks into your next boss battle.",
+        "message": "One heartbeat, very slow. The next boss will feel the weight.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "bossDamageMultiplier",
+            "value": 1.3
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "The Rite raises damage for one boss battle instead of swapping two stages."
+    },
+    {
+      "id": "xerneas",
+      "name": "The Tree",
+      "legendary": "Xerneas",
+      "speciesId": "xerneas",
+      "tier": "divine",
+      "item": "item.legend/xerneas",
+      "objectText": "an antler lit from within",
+      "passage": "It gives, and then sleeps a thousand years as a tree. Do not call it good. Call it the breath in.",
+      "headline": "THE TREE GROWS",
+      "summary": "Each badge you win gives the party 1% to every stat, up to 8%.",
+      "effect": {
+        "kind": "perks"
+      },
+      "badgeGrowth": {
+        "step": 0.01,
+        "max": 0.08,
+        "communionMax": 0.12
+      },
+      "rite": {
+        "label": "Every Branch",
+        "hint": "The whole party is restored now, and in your next boss battle every stat is 10% higher. Once this run.",
+        "armedHint": "Armed: the party grows for the next boss battle.",
+        "message": "Birdsong. Every Pokémon in the party grows a little.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "statMultiplier",
+            "stat": "atk",
+            "value": 1.1
+          },
+          {
+            "kind": "statMultiplier",
+            "stat": "def",
+            "value": 1.1
+          },
+          {
+            "kind": "statMultiplier",
+            "stat": "spa",
+            "value": 1.1
+          },
+          {
+            "kind": "statMultiplier",
+            "stat": "spd",
+            "value": 1.1
+          },
+          {
+            "kind": "statMultiplier",
+            "stat": "spe",
+            "value": 1.1
+          }
+        ],
+        "heal": true
+      },
+      "status": "limited",
+      "limits": "Growth goes to the whole party by badge (Communion limit 12%), not one Pokémon per region permanently. The Rite's growth lasts one boss battle."
+    },
+    {
+      "id": "yveltal",
+      "name": "The Cocoon",
+      "legendary": "Yveltal",
+      "speciesId": "yveltal",
+      "tier": "divine",
+      "item": "item.legend/yveltal",
+      "objectText": "a black cocoon, cold",
+      "passage": "It takes, and then sleeps a thousand years as a stone. Do not call it evil. Call it the breath out.",
+      "headline": "THE COCOON",
+      "summary": "Whenever one of your Pokémon knocks out a foe it recovers 10% HP. Price: bosses hit 10% harder.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "koHeal",
+          "percent": 10
+        },
+        {
+          "kind": "bossDamageTakenMultiplier",
+          "value": 1.1
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "koHeal",
+          "percent": 10
+        }
+      ],
+      "rite": {
+        "label": "Take One",
+        "hint": "Your next boss battle: the boss's lead begins with -2 to every stat. Once this run.",
+        "armedHint": "Armed: Yveltal has marked the next boss's lead.",
+        "message": "Birdsong stopping. The next boss's lead is already fading.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "foeLeadStages",
+            "stats": [
+              "atk",
+              "def",
+              "spa",
+              "spd",
+              "spe"
+            ],
+            "value": -2
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "The Price is bosses hitting 10% harder, not aces growing each region. The Rite weakens the boss's lead instead of removing it."
+    },
+    {
+      "id": "solgaleo",
+      "name": "The Sun",
+      "legendary": "Solgaleo",
+      "speciesId": "solgaleo",
+      "tier": "divine",
+      "item": "item.legend/solgaleo",
+      "objectText": "a flute carved with a sun",
+      "passage": "It is called the beast that devours the sun. It does not. It carries it, through the holes in the sky, to places that have none.",
+      "headline": "THE SUN DOES NOT BOW",
+      "summary": "Foes cannot lower your Pokémon's stats.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "statDropGuard"
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "statDropGuard"
+        },
+        {
+          "kind": "damageMultiplier",
+          "moveType": "steel",
+          "value": 1.1
+        },
+        {
+          "kind": "damageMultiplier",
+          "moveType": "psychic",
+          "value": 1.1
+        }
+      ],
+      "rite": {
+        "label": "Carry It Home",
+        "hint": "Your next boss battle: your party's Attack and Sp. Atk are 20% higher. Once this run.",
+        "armedHint": "Armed: Solgaleo shines on your next boss battle.",
+        "message": "One bright note, held. The next boss will face the sun.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "statMultiplier",
+            "stat": "atk",
+            "value": 1.2
+          },
+          {
+            "kind": "statMultiplier",
+            "stat": "spa",
+            "value": 1.2
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Wormholes and Ultra worlds are not part of this blessing yet. Communion adds 10% to Steel and Psychic moves. The Rite stands in for returning an Ultra Beast."
+    },
+    {
+      "id": "lunala",
+      "name": "The Moon",
+      "legendary": "Lunala",
+      "speciesId": "lunala",
+      "tier": "divine",
+      "item": "item.legend/lunala",
+      "objectText": "a flute carved with a moon",
+      "passage": "It is called the beast that calls the moon. It spreads its wings and there is a night sky inside them, with different stars.",
+      "headline": "THE MOON SEES THROUGH",
+      "summary": "Each of your Pokémon takes 25% less from hits while at full HP.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "damageTakenMultiplier",
+          "fullHp": true,
+          "value": 0.75
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "damageTakenMultiplier",
+          "fullHp": true,
+          "value": 0.75
+        },
+        {
+          "kind": "damageMultiplier",
+          "moveType": "ghost",
+          "value": 1.1
+        },
+        {
+          "kind": "damageMultiplier",
+          "moveType": "psychic",
+          "value": 1.1
+        }
+      ],
+      "rite": {
+        "label": "Call the Moon",
+        "hint": "Your next boss battle: your side takes 20% less from the boss. Once this run.",
+        "armedHint": "Armed: Lunala's moon is over your next boss battle.",
+        "message": "One low note, held. The next boss fights under the moon.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "bossDamageTakenMultiplier",
+            "value": 0.8
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "The guard is on every hit at full HP, which is usually the first. Seeing through Wormholes is not built. Communion adds 10% to Ghost and Psychic moves. The Rite stands in for night or ignoring an ability."
+    },
+    {
+      "id": "calyrex",
+      "name": "The Forgotten King",
+      "legendary": "Calyrex",
+      "speciesId": "calyrex",
+      "tier": "divine",
+      "item": "item.legend/calyrex",
+      "objectText": "a crown woven of buds",
+      "passage": "He was a king, and the people forgot him, and he grew small. He did not grow bitter. Consider how rare that is.",
+      "headline": "BELIEVED IN",
+      "summary": "Your starter deals 10% more damage.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "starterDamageMultiplier",
+          "starter": true,
+          "value": 1.1
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "starterDamageMultiplier",
+          "starter": true,
+          "value": 1.2
+        }
+      ],
+      "rite": {
+        "label": "A Royal Decree",
+        "hint": "Three Rare Candies, now. Once this run.",
+        "message": "A small, polite voice. The town gives what it is asked.",
+        "on": "any",
+        "perks": [],
+        "items": [
+          {
+            "id": "rare-candy",
+            "count": 3
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Growing with each person helped, and their second gifts, are not built; the starter hits 10% harder (Communion 20%), and the steeds are not counted. The Rite gives items instead of a decree."
+    },
+    {
+      "id": "koraidon",
+      "name": "The Winged King",
+      "legendary": "Koraidon",
+      "speciesId": "koraidon",
+      "tier": "divine",
+      "item": "item.legend/koraidon",
+      "objectText": "a scale as warm as skin, and very old",
+      "passage": "It came out of the deep of the past, where the strong ate and the rest were eaten; and it sat down by a child's sandwich, and waited to be asked.",
+      "headline": "RIDE",
+      "summary": "Once per stage, on the map: ride, and your next move may go to any node of the next level. The first battle of each stage begins in harsh sun.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "battleStart",
+          "weather": "sun",
+          "turns": 5
+        }
+      ],
+      "firstBattleOfStage": true,
+      "ride": {
+        "label": "Ride",
+        "perStage": 1,
+        "communionPerStage": 2
+      },
+      "rite": {
+        "label": "Call the Old World",
+        "hint": "Your next boss battle: Fire and Fighting moves gain 20%. Once this run.",
+        "armedHint": "Armed: the old world answers in your next boss battle.",
+        "message": "Drums, far off. The old world comes to the next boss battle.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "damageMultiplier",
+            "moveType": "fire",
+            "value": 1.2
+          },
+          {
+            "kind": "damageMultiplier",
+            "moveType": "fighting",
+            "value": 1.2
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "The Rite raises damage for one boss battle instead of filling a stage with ancient Pokémon."
+    },
+    {
+      "id": "miraidon",
+      "name": "The Iron Serpent",
+      "legendary": "Miraidon",
+      "speciesId": "miraidon",
+      "tier": "divine",
+      "item": "item.legend/miraidon",
+      "objectText": "a scale that is cold and hums",
+      "passage": "It came out of the deep of the future, where everything had been improved; and it sat down by a child's sandwich, and did not know what the feeling was.",
+      "headline": "GLIDE",
+      "summary": "On the map, the battles you can go to next show their lead. The first battle of each stage begins on Electric Terrain.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "battleStart",
+          "terrain": "electric",
+          "turns": 5
+        }
+      ],
+      "firstBattleOfStage": true,
+      "sight": {
+        "kinds": [
+          "wild",
+          "trainer"
+        ],
+        "word": "glide",
+        "communionTeam": true
+      },
+      "rite": {
+        "label": "Call the New World",
+        "hint": "Two Rare Candies and a Big Nugget, now. Once this run.",
+        "message": "A turbine winding up. Something from the future is in your bag.",
+        "on": "any",
+        "perks": [],
+        "items": [
+          {
+            "id": "rare-candy",
+            "count": 2
+          },
+          {
+            "id": "big-nugget",
+            "count": 1
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Glide shows the next level's battles (Communion: their whole team), not two rows of everything. The Rite gives items instead of one item two tiers up."
+    },
+    {
+      "id": "mewtwo",
+      "name": "The Made One",
+      "legendary": "Mewtwo",
+      "speciesId": "mewtwo",
+      "tier": "primordial",
+      "item": "item.legend/mewtwo",
+      "objectText": "a spoon bent back on itself",
+      "passage": "They made it to be the strongest and did not ask it whether it wished to be. It has been asking since.",
+      "headline": "MADE",
+      "summary": "Your starter is enhanced: it deals 15% more damage. Price: Bond grows half as fast.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "starterDamageMultiplier",
+          "starter": true,
+          "value": 1.15
+        }
+      ],
+      "runPerks": [
+        {
+          "kind": "friendshipMultiplier",
+          "value": 0.5
+        }
+      ],
+      "communionRunPerks": [],
+      "rite": {
+        "label": "Alone",
+        "hint": "Your next boss battle: your starter deals 50% more. Once this run.",
+        "armedHint": "Armed: what was made fights the next boss.",
+        "message": "A tank draining. It will fight the next boss as it was made to.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "starterDamageMultiplier",
+            "starter": true,
+            "value": 1.5
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "The starter is the enhanced Pokémon (no choice), as damage rather than +15% stats. The Price is slower Bond, not a cap until the honest answer; Communion ends it. The Rite boosts the starter for one boss battle instead of a solo fight."
+    },
+    {
+      "id": "zygarde",
+      "name": "The Order",
+      "legendary": "Zygarde",
+      "speciesId": "zygarde",
+      "tier": "primordial",
+      "item": "item.legend/zygarde",
+      "objectText": "a green cell in a glass vial, moving toward the player's hand",
+      "passage": "It is many and it watches. When the balance fails it will be one; and you will not want to be the reason.",
+      "headline": "THE ORDER",
+      "summary": "Each badge you win gives the party 2% to every stat, up to 10%. Price: your Pokémon have 5% less HP.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "statMultiplier",
+          "stat": "hp",
+          "value": 0.95
+        }
+      ],
+      "communionPerks": [],
+      "badgeGrowth": {
+        "step": 0.02,
+        "max": 0.1,
+        "communionMax": 0.15
+      },
+      "rite": {
+        "label": "Return to Order",
+        "hint": "The whole party is restored now. Once this run.",
+        "message": "A pulse. Everything goes back where it belongs.",
+        "on": "any",
+        "perks": [],
+        "heal": true
+      },
+      "status": "limited",
+      "limits": "Cells and world-state tracks are not built; the Order grows with badges instead (Communion limit 15%). The Price is 5% less HP, not locked habitat choices; Communion ends it. The Rite heals instead of resetting world tracks."
+    },
+    {
+      "id": "necrozma",
+      "name": "The Light Devourer",
+      "legendary": "Necrozma",
+      "speciesId": "necrozma",
+      "tier": "origin",
+      "item": "item.legend/necrozma",
+      "objectText": "a black prism that makes the screen around it dimmer",
+      "passage": "It gave light once, to everything, and was broken for it. Now it takes. Do not judge it until you have been that hungry.",
+      "headline": "TAKE THE LIGHT",
+      "summary": "Each badge you win takes a little of the boss's light: the party gains 2% to every stat, up to 14%. Price: your Pokémon have 10% less HP.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "statMultiplier",
+          "stat": "hp",
+          "value": 0.9
+        }
+      ],
+      "communionPerks": [],
+      "badgeGrowth": {
+        "step": 0.02,
+        "max": 0.14,
+        "communionMax": 0.2
+      },
+      "rite": {
+        "label": "Ultra Burst",
+        "hint": "Your next boss battle: your party's stats are 20% higher and your moves deal 20% more. Once this run.",
+        "armedHint": "Armed: the light bursts in your next boss battle.",
+        "message": "A high note that hurts slightly. All the light you took burns at once.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "statMultiplier",
+            "stat": "atk",
+            "value": 1.2
+          },
+          {
+            "kind": "statMultiplier",
+            "stat": "def",
+            "value": 1.2
+          },
+          {
+            "kind": "statMultiplier",
+            "stat": "spa",
+            "value": 1.2
+          },
+          {
+            "kind": "statMultiplier",
+            "stat": "spd",
+            "value": 1.2
+          },
+          {
+            "kind": "statMultiplier",
+            "stat": "spe",
+            "value": 1.2
+          },
+          {
+            "kind": "damageMultiplier",
+            "value": 1.2
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Taking a move or ability from each boss is not built; each badge gives stats instead (Communion limit 20%). The Price is 10% less HP, not one rest node fewer; Communion ends it."
+    },
+    {
+      "id": "eternatus",
+      "name": "The Darkest Day",
+      "legendary": "Eternatus",
+      "speciesId": "eternatus",
+      "tier": "origin",
+      "item": "item.legend/eternatus",
+      "objectText": "a shard of meteor with a red core",
+      "passage": "It fell out of the sky twenty thousand years ago and has been feeding since; and the bright things we do with its leavings, we call a sport.",
+      "headline": "THE DARKEST DAY",
+      "summary": "Once per battle one of your Pokémon may Dynamax, no Dynamax Band needed. Price: the night comes on, and bosses hit 10% harder.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "grantMechanic",
+          "mechanic": "dynamax"
+        },
+        {
+          "kind": "bossDamageTakenMultiplier",
+          "value": 1.1
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "grantMechanic",
+          "mechanic": "dynamax"
+        }
+      ],
+      "rite": {
+        "label": "Eternamax",
+        "hint": "Your next boss battle: your party's stats are 25% higher. Once this run.",
+        "armedHint": "Armed: Eternamax waits for your next boss battle.",
+        "message": "A pulse too slow to be a heart. The next boss meets the darkest day.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "statMultiplier",
+            "stat": "atk",
+            "value": 1.25
+          },
+          {
+            "kind": "statMultiplier",
+            "stat": "def",
+            "value": 1.25
+          },
+          {
+            "kind": "statMultiplier",
+            "stat": "spa",
+            "value": 1.25
+          },
+          {
+            "kind": "statMultiplier",
+            "stat": "spd",
+            "value": 1.25
+          },
+          {
+            "kind": "statMultiplier",
+            "stat": "spe",
+            "value": 1.25
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Eternal Night (wild Pokémon and aces Dynamaxing as it rises) is not built; the Price is bosses hitting 10% harder, and Communion ends it. The Rite raises stats instead of Dynamaxing the whole party. Dynamax must be on in the run's settings."
+    },
+    {
+      "id": "terapagos",
+      "name": "The Hidden Treasure",
+      "legendary": "Terapagos",
+      "speciesId": "terapagos",
+      "tier": "origin",
+      "item": "item.legend/terapagos",
+      "objectText": "a six-sided crystal shaped like a small shell",
+      "passage": "It dreamed at the bottom of the world, and its dreaming made the crystals, and the crystals made everything a little other than it was.",
+      "headline": "THE HIDDEN TREASURE",
+      "summary": "Once per battle one of your Pokémon may Terastallize to its Tera Type, no Tera Orb needed. Price: bosses hit 10% harder.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "grantMechanic",
+          "mechanic": "tera"
+        },
+        {
+          "kind": "bossDamageTakenMultiplier",
+          "value": 1.1
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "grantMechanic",
+          "mechanic": "tera"
+        }
+      ],
+      "rite": {
+        "label": "Stellar",
+        "hint": "Your next boss battle: every move you use deals 20% more. Once this run.",
+        "armedHint": "Armed: the next boss meets the Stellar form.",
+        "message": "A glass chime. For one battle, everything you know shines.",
+        "on": "boss",
+        "perks": [
+          {
+            "kind": "damageMultiplier",
+            "value": 1.2
+          }
+        ]
+      },
+      "status": "limited",
+      "limits": "Tera Types are each Pokémon's usual one, not random; the Price is bosses hitting 10% harder rather than every ace having a Tera Type; Communion ends it but does not let you set types at a rest. The Rite raises damage instead of same-type bonus on every move. Terastallization must be on in the run's settings."
     }
   ]
 }

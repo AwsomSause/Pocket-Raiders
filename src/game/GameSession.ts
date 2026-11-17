@@ -60,7 +60,7 @@ import * as Run from '../core/run';
 import { cheerSky } from '../core/sky/spectate';
 import { EX_MOMENT_CHOICES, exMomentAnswer, exMomentAsk, exMomentDue, exMomentLines, exWatchAction, exWatching } from '../core/greenneedle/exhibition';
 import { rewindBattle } from '../core/rewind';
-import { swearVow, useBlessingRite } from '../core/blessings';
+import { foldSwap, swearVow, takeRide, useBlessingRite } from '../core/blessings';
 import { markRumorShown, nodeHint } from '../core/worldSim/tick';
 import { applyNursery, type NurseryChoice } from '../core/nursery';
 import { applyFormShift } from '../core/formShift';
@@ -723,6 +723,20 @@ export class GameSession {
     const ok = swearVow(this.requireRun(), vow);
     if (ok) this.persistRun();
     return ok;
+  }
+
+  /** Koraidon's Ride / Cosmog's warp: the next move may go to any node of the next level. Returns the message, or null. */
+  blessingRide(): string | null {
+    const message = takeRide(this.requireRun());
+    if (message) this.persistRun();
+    return message;
+  }
+
+  /** Palkia's blessing: two nodes of the stage change places. Returns the message, or null when they can't. */
+  foldSwap(a: string, b: string): string | null {
+    const message = foldSwap(this.requireRun(), a, b);
+    if (message) this.persistRun();
+    return message;
   }
 
   /** Beta 0.7 Legendary Blessings: uses the run's Rite (Tapu Lele's heal, Dialga's stage rewind). Returns the message, or null when it can't be used. */
