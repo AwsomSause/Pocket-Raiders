@@ -51,7 +51,8 @@ export type SosOutcome = { kind: 'none' } | { kind: 'failed' } | { kind: 'answer
 export function rollSos(i: SosInput): SosOutcome {
   const { battle, caller } = i;
   const entry = sosEntry(caller.speciesId);
-  if (!entry || battle.kind !== 'wild' || battle.raid || battle.totem || battle.doubles) return { kind: 'none' };
+  // A watched story duel (Pidgey's Resolve) is one bird against one bird: nobody is called in.
+  if (!entry || battle.kind !== 'wild' || battle.raid || battle.totem || battle.doubles || battle.spectate) return { kind: 'none' };
   const sos = battle.sos ?? freshSos();
   if (sos.allyUid || sos.answered >= (i.orb ? ORB_MAX_ANSWERED : 1) || caller.hp <= 0 || caller.status) return { kind: 'none' };
   const rng = new Rng(hashSeed(`sos::${caller.uid}::${battle.turn}`));
