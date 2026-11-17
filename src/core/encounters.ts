@@ -460,7 +460,10 @@ function planBoss(content: Content, archetype: Archetype, role: BossRole, bossId
 
 /** The gym leader's team for the run's `stageNumber`-th stage (0-based). */
 export function planGymLeader(content: Content, archetype: Archetype, leaderId: string, stageNumber: number, scale: LevelScale, rng: Rng, remix = false, extraBonus = 0): TrainerPlan {
-  return planBoss(content, archetype, 'gym', leaderId, stageNumber, scale, content.balance.difficulty.gymBonus + extraBonus, GYM_LEADER_CLASS, rng, remix);
+  // A Guest Match's extra levels go above the party ceiling too: since Gym Leaders fight on par with the team (withPartyStrength),
+  // the ceiling would otherwise eat the bonus and the Guest Match would be no harder than the plain gym.
+  const lifted = extraBonus > 0 && scale.ceiling !== undefined ? { ...scale, ceiling: scale.ceiling + extraBonus } : scale;
+  return planBoss(content, archetype, 'gym', leaderId, stageNumber, lifted, content.balance.difficulty.gymBonus + extraBonus, GYM_LEADER_CLASS, rng, remix);
 }
 
 /** An Elite Four member's team for region `regionIndex` (0-based). Teams get harder every region. */
