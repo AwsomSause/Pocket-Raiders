@@ -214,6 +214,8 @@ function hookText(hook: HeldHook, copies: number): HookText {
       return { text: `Max HP +${hook.percent}%.` };
     case 'terrainSeed':
       return { text: `Under ${cap(hook.terrain)} Terrain, ${cap(statName(hook.stat))} +${hook.stages}. Used up.`, when: `${cap(hook.terrain)} Terrain`, once: true };
+    case 'rainFirst':
+      return { text: `${hook.types.map(cap).join(' and ')}-types act first on the first turn of a battle fought in rain.`, when: 'turn one, in rain' };
     default: {
       const never: never = hook;
       return { text: `Has an effect in battle (${(never as HeldHook).hook}).` };

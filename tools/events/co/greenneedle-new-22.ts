@@ -11,7 +11,8 @@ const aroom = (id: string, name: string, o: Json, intro: string, choices: Json[]
 
 const MEOWTH = 'alley-meowth';
 /** The young Meowth, with Fair Share. */
-const MEOWTH_JOINS: Json = { ...join({ species: ['meowth'], lv: -1 }), direct: true, ability: 'fair-share', mark: MEOWTH };
+// Fair Share works when it steals an item in battle, so it comes knowing Thief (it caught that fish somehow).
+const MEOWTH_JOINS: Json = { ...join({ species: ['meowth'], lv: -1 }), direct: true, ability: 'fair-share', moves: ['thief'], mark: MEOWTH };
 const SEEN: Json[] = [flag('court-done'), stampRegion('court-region'), stampStage('court-at')];
 const KEEP = (text: string, ...fx: Json[]): Json => out(text, MEOWTH_JOINS, ...fx, ...SEEN);
 

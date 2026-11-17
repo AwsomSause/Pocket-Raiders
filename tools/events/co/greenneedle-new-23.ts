@@ -51,7 +51,7 @@ const nameDirect = (i: number): Json => {
 };
 
 const PLAIN = out('It lets the shop be. It steps out of the tangle of wires, plain, one little light, with Mr. Dufresne\'s old radio carried under one arm. The radio crackles. Somewhere it is playing a song. It knows the words.',
-  join({ species: ['rotom'] }), teach('house-call', { species: 'rotom' }), setTo('appliance-done', 1), moment('A Rotom left an appliance shop plain, carrying a radio.', 60));
+  { ...join({ species: ['rotom'] }), ability: 'house-call' }, setTo('appliance-done', 1), moment('A Rotom left an appliance shop plain, carrying a radio.', 60));
 
 export const EVENTS: Json[] = [
   gev('gn-new-23-shop', 'The Appliance Shop', shop({ stop: 'event', rarity: 'rare', forced: true, requires: [not('appliance-done'), not('appliance-open')] }), say(
@@ -60,7 +60,6 @@ export const EVENTS: Json[] = [
     '**Dufresne:** "I\'m closing Friday. It has to pick. Or not."',
   ), [
     ch('Hear him out.', out('He gives you the first errand with a list, a pencil and a small, hopeful nod. "Go on. It will be watching."', setTo('appliance-open', 1), pick('appliance-hum', 1, 1, 1, 1, 1), scene('gn-new-23-errand-1'))),
-    ch('Walk on.', out('Behind you, the window argues on in static, a little quieter.')),
   ]),
   ...[1, 2, 3, 4, 5].map(errandRoom),
   rm('gn-new-23-after', 'The Appliance Shop: After the Errands', shop(), say(
@@ -88,10 +87,10 @@ export const REMOVE: string[] = [];
 
 export const PLACEMENT: Record<string, Placement> = {
   'gn-new-23-shop': {
-    gn: 'gn.new.23', shape: 'Hub', earliest: 'A6', home: 5, window: [3, 8], sits: 'must-see', attaches: 'town', tags: ['Hub Destination'],
+    gn: 'gn.new.23', shape: 'Hub', earliest: 'A6', home: 5, window: [3, 15], sits: 'must-see', attaches: 'town', tags: ['Hub Destination'],
     level: 'No battles', often: 'run', badge: 'own',
     dressing: { kanto: 'The Appliance Shop', elsewhere: 'The Appliance Shop' },
-    note: 'Fallback step 15. Five errands in a row inside the town node (no steps spent). The one it hummed through is a seeded roll at the door. Once per run (the doc\'s "once per save").',
+    note: 'Fallback step 15 (the end of the window). Plain Rotom: the ability House Call. Five errands in a row inside the town node (no steps spent). The one it hummed through is a seeded roll at the door. Once per run (the doc\'s "once per save").',
   },
   'gn-new-23-hub': {
     gn: 'gn.new.23', shape: 'Hub', earliest: 'A7', home: 14, window: [12, 17], sits: 'optional', attaches: 'town', tags: ['Hub Destination'],

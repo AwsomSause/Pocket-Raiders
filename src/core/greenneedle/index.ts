@@ -47,6 +47,8 @@ import { duelDue, duelEnd, duelEnter, duelName, duelWorthy, duelistStart, worthy
 import { lanternArrive, lanternHasStory, lanternLetGo, lanternLost, lanternPearl, lanternTokens } from './lantern';
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
 import { applianceRepair } from './appliance';
+import { nsClear, nsPost, nsRaid } from './nightshift';
+import { foxSilence } from './fox';
 import { bidoofJoin, bidoofStart } from './bidoof';
 import { alleyStart } from './alley';
 import { leftFates, leftFreeze, leftHas, leftTake, leftTokens } from './left';
@@ -55,7 +57,7 @@ import { impClaim, impJoin, impersonatorStart, impTokens } from './impersonator'
 import { shedNinjask, shedRest } from './shedinja';
 import { lsAddress, lsDeal, lsTake, lsTicket } from './laststop';
 import { tyrEven, tyrEvolve, tyrLead, tyrResult, tyrTally, tyrogueJoin, tyrogueMon } from './tyrogue';
-import { muralJoin, muralPick } from './mural';
+import { muralJoin, muralPick, muralSketch, muralSketchOpen, muralSketchPage, muralTokens, muralWalkOn, muralWalkStart } from './mural';
 import { cheerJoin } from './cheer';
 import { mirrorReady, mirrorStart } from './mirror';
 import { dueFriend, MANY, ofGuest, ofJoin, ofPick, ofReplacer, ofSpecial, oldfriendTokens, releases, specialDue } from './oldfriend';
@@ -135,6 +137,7 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   if (text.includes('{prison:')) text = prisonTokens(content, run, text);
   if (text.includes('{karp:')) text = karpTokens(run, text);
   if (text.includes('{lt:')) text = ltTokens(run, text);
+  if (text.includes('{mural:')) text = muralTokens(content, run, text);
   if (text.includes('{ball:')) text = ballTokens(run, text);
   // gn.14: the name on the small grave: the Pokémon lost for good most recently this run (the memorial), when there is one.
   if (text.includes('{lost:name}')) {
@@ -915,6 +918,15 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return tyrEvolve(content, run, e.key!);
     case 'applianceRepair':
       return applianceRepair(run, host.picked);
+    // gn.new.24 The Night Shift (nightshift.ts): the two sentries and the side each wave comes from.
+    case 'foxSilence':
+      return foxSilence(run);
+    case 'nsClear':
+      return nsClear(run);
+    case 'nsPost':
+      return nsPost(run, host.picked, e.n ?? 0, (id) => content.species.get(id)?.name ?? id);
+    case 'nsRaid':
+      return nsRaid(run, e.n ?? 1);
     case 'lsArrive':
       return lanternArrive(run);
     case 'lsPearl':
@@ -948,6 +960,16 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return '';
     case 'muralJoin':
       return muralJoin(content, run, host);
+    case 'muralWalkStart':
+      return muralWalkStart(run);
+    case 'muralWalkOn':
+      return muralWalkOn(run);
+    case 'muralSketchOpen':
+      return muralSketchOpen(content, run);
+    case 'muralSketchPage':
+      return muralSketchPage(content, run);
+    case 'muralSketch':
+      return muralSketch(content, run, e.n ?? 0);
     case 'cheerJoin':
       return cheerJoin(content, run, e.n ?? 3, host);
     case 'leftFreeze':

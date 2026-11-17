@@ -423,7 +423,7 @@
                                 "id": "fresh-milk",
                                 "name": "Fresh Milk",
                                 "family": "Healing and status items",
-                                "description": "Heals 60 HP, +1 Love. From the ranch you gave water to",
+                                "description": "Fully heals one Pokémon, out of battle. One can is left at each rest, from the ranch you gave water to",
                                 "rarity": "uncommon",
                                 "stacksOn": "pokemon",
                                 "max": null,
@@ -433,21 +433,18 @@
                                 "giftOnly": true,
                                 "effect": {
                                                 "kind": "care",
-                                                "heal": 60,
-                                                "changes": {
-                                                                "love": 1
-                                                }
+                                                "heal": 9999
                                 }
                 },
                 {
                                 "id": "thundermark",
                                 "name": "Thundermark",
-                                "family": "Held items",
-                                "description": "A paw print burned into a scrap of bark by something walking through your camp at night. The holder's Electric moves hit 20% harder, and its Speed is 10% higher.",
+                                "family": "Charms",
+                                "description": "A paw print burned into a scrap of bark by something walking through your camp at night. Electric-types in your party act first on the first turn of any battle fought in rain.",
                                 "rarity": "epic",
-                                "stacksOn": "pokemon",
+                                "stacksOn": "team",
                                 "max": 1,
-                                "how": "held",
+                                "how": "passive",
                                 "icon": "library/commonstone",
                                 "status": "supported",
                                 "giftOnly": true,
@@ -455,16 +452,10 @@
                                                 "kind": "held",
                                                 "hooks": [
                                                                 {
-                                                                                "hook": "typePower",
+                                                                                "hook": "rainFirst",
                                                                                 "types": [
                                                                                                 "electric"
-                                                                                ],
-                                                                                "percent": 20
-                                                                },
-                                                                {
-                                                                                "hook": "stat",
-                                                                                "stat": "spe",
-                                                                                "multiplier": 1.1
+                                                                                ]
                                                                 }
                                                 ]
                                 }
@@ -507,7 +498,7 @@
                                 "id": "little-cup",
                                 "name": "Little Cup",
                                 "family": "Held items",
-                                "description": "Won at the Little Cup. A small gold cup: every stat but HP up 10% while its holder can still evolve.",
+                                "description": "Won at the Little Cup. A small gold cup: a first-stage Pokémon holding it has its Defense and Sp. Def raised by 30%.",
                                 "rarity": "epic",
                                 "stacksOn": "pokemon",
                                 "max": 1,
@@ -520,9 +511,15 @@
                                                 "hooks": [
                                                                 {
                                                                                 "hook": "stat",
-                                                                                "stat": "all",
-                                                                                "multiplier": 1.1,
-                                                                                "canEvolve": true
+                                                                                "stat": "def",
+                                                                                "multiplier": 1.3,
+                                                                                "firstStage": true
+                                                                },
+                                                                {
+                                                                                "hook": "stat",
+                                                                                "stat": "spd",
+                                                                                "multiplier": 1.3,
+                                                                                "firstStage": true
                                                                 }
                                                 ]
                                 }
@@ -564,6 +561,29 @@
                                                 "kind": "money",
                                                 "amount": 300,
                                                 "changes": {}
+                                }
+                },
+                {
+                                "id": "sun-specs",
+                                "name": "Sun Specs",
+                                "family": "Held items",
+                                "description": "Tansy-Jane's Sunkern wears these at the Little Cup: its Sp. Atk is 50% higher, and it is not locked into one move.",
+                                "rarity": "epic",
+                                "stacksOn": "pokemon",
+                                "max": 1,
+                                "how": "held",
+                                "icon": "library/commonstone",
+                                "status": "supported",
+                                "giftOnly": true,
+                                "effect": {
+                                                "kind": "held",
+                                                "hooks": [
+                                                                {
+                                                                                "hook": "stat",
+                                                                                "stat": "spa",
+                                                                                "multiplier": 1.5
+                                                                }
+                                                ]
                                 }
                 }
 ]

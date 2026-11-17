@@ -300,11 +300,6 @@
       "text": "The grass is wet. Your Pokémon walk a little closer than usual. {lt:count} chairs, and one pile of stones, behind you.",
       "effects": [
        {
-        "kind": "item",
-        "id": "oran-berry",
-        "count": 1
-       },
-       {
         "kind": "gn",
         "op": "ltDawn"
        }

@@ -1,6 +1,9 @@
 // Greenneedle gn.new.23: The Appliance Shop (tools/events/co/greenneedle-new-23.ts; rules in src/core/greenneedle/appliance.ts).
 import { describe, expect, it } from 'vitest';
 import type { RunState } from '../../src/core/state';
+import { createBattle, resolveTurn, type BattleContext } from '../../src/core/battle/engine';
+import { createPokemon } from '../../src/core/pokemon';
+import { hashSeed, Rng } from '../../src/core/rng';
 import { content } from './helpers';
 import { choose, flagOf, gnRun, open, scene, setFlag } from './helpers/gnPlay';
 
@@ -66,8 +69,43 @@ describe('gn.new.23 The Appliance Shop', () => {
     run = choose(run, 'gn-new-23-after', '"You don\'t have to pick."').run;
     const rotom = run.pending.flatMap((p) => (p.kind === 'caught' ? [p.mon] : [])).find((m) => m.speciesId === 'rotom')!;
     expect(rotom).toBeDefined();
-    expect(rotom.moves.some((m) => m.id === 'house-call')).toBe(true);
-    expect(content.moves.get('house-call')!.type).toBe('electric');
+    expect(rotom.fixedAbility).toBe('house-call');
+    expect(rotom.moves.some((m) => m.id === 'house-call')).toBe(false);
+  });
+  it('House Call: once a battle, on entry, a plain Rotom takes the form that hits the foe hardest, and keeps it when it is withdrawn', () => {
+    const mk = (foeId: string, seed: string) => {
+      const rotom = createPokemon(content, 'rotom', 40, 'r1');
+      rotom.fixedAbility = 'house-call';
+      const ally = createPokemon(content, 'snorlax', 40, 'a1');
+      const foe = createPokemon(content, foeId, 40, 'e1');
+      foe.moves = [{ id: 'splash', pp: 40 }];
+      const battle = createBattle('wild', [foe], 0, rotom.uid);
+      const ctx: BattleContext = { content, battle, party: [rotom, ally], inventory: {}, rng: new Rng(hashSeed(seed)), captureRng: new Rng(hashSeed(`${seed}-c`)), catchMultiplier: 1 };
+      return { rotom, ctx, battle };
+    };
+    // Scizor (Bug/Steel): fire hits it four times as hard, so it is the oven.
+    const a = mk('scizor', 'hc-a');
+    resolveTurn(a.ctx, { kind: 'move', index: 0 });
+    expect(a.rotom.speciesId).toBe('rotom-heat');
+    expect(a.battle.storyEffects).toContain('house-call:r1');
+    // "stays that form until it faints": withdrawn and sent back, it is still the oven
+    resolveTurn(a.ctx, { kind: 'switch', partyIndex: 1 });
+    expect(a.rotom.speciesId).toBe('rotom-heat');
+    resolveTurn(a.ctx, { kind: 'switch', partyIndex: 0 });
+    expect(a.rotom.speciesId).toBe('rotom-heat');
+    // Garchomp (Dragon/Ground): water and grass hit it twice as hard, ice four times: the fridge.
+    const b = mk('garchomp', 'hc-b');
+    resolveTurn(b.ctx, { kind: 'move', index: 0 });
+    expect(b.rotom.speciesId).toBe('rotom-frost');
+    // Nothing an appliance does hits a Kingdra (Water/Dragon) hard: it stays plain.
+    const c = mk('kingdra', 'hc-c');
+    resolveTurn(c.ctx, { kind: 'move', index: 0 });
+    expect(c.rotom.speciesId).toBe('rotom');
+    // A Rotom without the ability never changes.
+    const d = mk('scizor', 'hc-d');
+    d.rotom.fixedAbility = undefined;
+    resolveTurn(d.ctx, { kind: 'move', index: 0 });
+    expect(d.rotom.speciesId).toBe('rotom');
   });
   it('the shop is once per run and does not come back once done', () => {
     let run = afterErrands('appl-once', 1);

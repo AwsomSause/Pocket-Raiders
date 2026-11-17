@@ -51,6 +51,9 @@
         "shinyMultiplier": 1,
         "direct": true,
         "ability": "fair-share",
+        "moves": [
+         "thief"
+        ],
         "mark": "alley-meowth"
        },
        {
@@ -106,6 +109,9 @@
         "shinyMultiplier": 1,
         "direct": true,
         "ability": "fair-share",
+        "moves": [
+         "thief"
+        ],
         "mark": "alley-meowth"
        },
        {
@@ -136,6 +142,9 @@
         "shinyMultiplier": 1,
         "direct": true,
         "ability": "fair-share",
+        "moves": [
+         "thief"
+        ],
         "mark": "alley-meowth"
        },
        {

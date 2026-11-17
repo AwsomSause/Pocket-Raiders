@@ -5,6 +5,7 @@
 import type { Content, EventChoice, EventDef, EventVariant } from './contentSchema';
 import { conditionMet } from './events';
 import { gnTokens } from './greenneedle';
+import { foxSilent } from './greenneedle/fox';
 import { fillEventText } from './evil/text';
 import type { RunState } from './state';
 
@@ -46,6 +47,12 @@ export function visibleChoices(content: Content, run: RunState, event: EventDef)
 
 /** The event as the player sees it now: remembered intro, hidden and added choices applied (indices are positions in the view), and the region's team named where a scene uses tokens (core/evil/text.ts). */
 export function effectiveEvent(content: Content, run: RunState, event: EventDef): EventDef {
+  const seen = spokenEvent(content, run, event);
+  // Greenneedle gn.new.31, the fourth lantern: while the player keeps silent for a step, every choice on that step reads "…" (the shrine's own scenes aside).
+  return foxSilent(run) && !event.id.startsWith('gn-31-') ? { ...seen, choices: seen.choices.map((c) => ({ ...c, label: '…' })) } : seen;
+}
+
+function spokenEvent(content: Content, run: RunState, event: EventDef): EventDef {
   const v = activeVariant(content, run, event);
   // Greenneedle gn.24: `{petname}` / `{partner}` name the partner Pokémon.
   const say = (text: string): string => gnTokens(content, run, fillEventText(content, run, text));

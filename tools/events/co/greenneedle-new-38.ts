@@ -1,6 +1,6 @@
 // Greenneedle, gn.new.38 The Long Table (doc GREENNEEDLE_PLACED_2.md lines 634–667). Rules: core/greenneedle/longtable.ts.
 // Build: npm run co:build -- greenneedle-new-38   then   npm run co:gn
-import { ch, item, out, type Json } from '../dsl.ts';
+import { ch, out, type Json } from '../dsl.ts';
 import { chIf, gev, gn, is, not, rm, say, scene, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
@@ -43,7 +43,7 @@ export const EVENTS: Json[] = [
     '*The table\'s cleared. Whatever was on your plate is in the bag: {lt:plate}.*',
     'The field is only a field again. Somewhere ahead, the last battle is waiting.',
   ), [
-    ch('Pick up your bag, and go.', out('The grass is wet. Your Pokémon walk a little closer than usual. {lt:count} chairs, and one pile of stones, behind you.', item('oran-berry'), gn('ltDawn'))),
+    ch('Pick up your bag, and go.', out('The grass is wet. Your Pokémon walk a little closer than usual. {lt:count} chairs, and one pile of stones, behind you.', gn('ltDawn'))),
   ]),
 ];
 export const REMOVE: string[] = [];
