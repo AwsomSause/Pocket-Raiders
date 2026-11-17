@@ -5,6 +5,7 @@
 
 import { clearJob, fixOdds, queueJob, resolveEvening } from './dispatch';
 import type { JobDraft } from './odds';
+import { askAbout, setRate } from './ledger';
 import { BEATS, type Beat, type EvilModeBlock } from './schema';
 
 /** The action that ends each beat in slice 1 (the empty day). Later slices add more actions inside a beat. */
@@ -21,6 +22,11 @@ export type BeatEndType = 'dismissOvernight' | 'send' | 'stayIn' | 'callItADay' 
 
 export type EvilAction =
   | { type: 'queueJob'; job: JobDraft }
+  /** Slice 3: CONFIRM on the Honest Card. The same as queueJob: every queued job files its Card. */
+  | { type: 'confirmCard'; job: JobDraft }
+  | { type: 'waive'; holdingId: string }
+  | { type: 'halve'; holdingId: string }
+  | { type: 'askAbout'; holdingId: string }
   | { type: 'clearJob'; holdingId: string }
   | { type: 'dismissOvernight' }
   | { type: 'send' }
@@ -29,7 +35,7 @@ export type EvilAction =
   | { type: 'lightsOut' }
   | { type: 'watchRoad' };
 
-export type EvilCue = { id: 'beat'; beat: Beat } | { id: 'newDay'; day: number } | { id: 'refused'; reason: string } | { id: 'queued'; holdingId: string } | { id: 'districtEnd'; how: 'held' | 'taken' };
+export type EvilCue = { id: 'beat'; beat: Beat } | { id: 'newDay'; day: number } | { id: 'refused'; reason: string } | { id: 'queued'; holdingId: string } | { id: 'districtEnd'; how: 'held' | 'taken' } | { id: 'filed'; text: string } | { id: 'asked'; line: string };
 
 export interface StepResult {
   block: EvilModeBlock;
@@ -47,12 +53,21 @@ export function step(block: EvilModeBlock, action: EvilAction): StepResult {
   const no = (reason: string): StepResult => ({ block, cues: [{ id: 'refused', reason }], ok: false });
   if (block.district?.end) return no("The district's over.");
   // Slice 2: inside Dispatch, jobs are queued and cleared. Checked here, not only on screen.
-  if (action.type === 'queueJob' || action.type === 'clearJob') {
+  if (action.type === 'queueJob' || action.type === 'confirmCard' || action.type === 'clearJob') {
     if (beat !== 'dispatch') return no(`${action.type} does nothing at ${beat}`);
     if (action.type === 'clearJob') return { block: clearJob(block, action.holdingId), cues: [], ok: true };
     const r = queueJob(block, action.job);
     if (r.problem) return no(r.problem);
-    return { block: r.block, cues: [{ id: 'queued', holdingId: action.job.holdingId }], ok: true };
+    return { block: r.block, cues: [{ id: 'queued', holdingId: action.job.holdingId }, { id: 'filed', text: r.block.log[r.block.log.length - 1]!.text }], ok: true };
+  }
+  // Slice 3: the Ledger's income lines can be pressed at any beat (from the next Evening on). The Log only grows.
+  if (action.type === 'waive' || action.type === 'halve') {
+    const r = setRate(block, action.holdingId, action.type);
+    return r.problem ? no(r.problem) : { block: r.block, cues: [], ok: true };
+  }
+  if (action.type === 'askAbout') {
+    const r = askAbout(block, action.holdingId);
+    return r.problem ? no(r.problem) : { block: r.block, cues: [{ id: 'asked', line: r.line }], ok: true };
   }
   if (BEAT_END[beat] !== action.type) return no(`${action.type} does nothing at ${beat}`);
   const to = nextBeat(beat);

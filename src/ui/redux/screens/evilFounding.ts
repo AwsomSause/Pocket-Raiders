@@ -66,9 +66,9 @@ const lamps = (n: number, on: (i: number) => string): string => Array.from({ len
 /** The day's frame. With `board` (slice 2: a district), the board fills the middle and the chip sits in its title row. */
 export function frameView(_c: ReduxCtx, f: FrameModel, notice: string | null, board?: string): string {
   const s = f.strip;
-  const slot = (label: string, body: string, tip: string, id: string): string => W(`<div class="sm" style="line-height:14px">${esc(label)}</div><div style="font-weight:700">${body}</div>`, 'padding:4px 10px', '', ` title="${esc(tip)}" data-testid="evil-${id}"`);
+  const slot = (label: string, body: string, tip: string, id: string): string => W(`<div class="sm" style="line-height:14px">${esc(label)}</div><div style="font-weight:700">${body}</div>`, `padding:4px 10px${id === 'funds' ? ';cursor:pointer' : ''}`, '', ` title="${esc(tip)}" data-testid="evil-${id}"${id === 'funds' ? act('ledger') : ''}`);
   const strip = `<div class="abs row" style="left:16px;right:16px;top:52px;gap:6px">
-    ${slot('Funds', `₽${s.funds.toLocaleString('en-GB')}`, `Funds ₽${s.funds}`, 'funds')}
+    ${slot('Funds', `₽${s.funds.toLocaleString('en-GB')}`, `Funds ₽${s.funds}. Opens the Ledger.`, 'funds')}
     ${slot('Heat', lamps(s.heat, (i) => (i < 5 ? '#e8a020' : '#d8483a')), `Heat ${s.heat}`, 'heat')}
     ${slot('Loyalty', esc(s.loyalty.name), `${s.loyalty.name}. ${s.loyalty.face}.`, 'loyalty')}
     ${slot('Regard', lamps(s.regard, () => '#6fb0e8'), `Regard ${s.regard}`, 'regard')}

@@ -70,7 +70,7 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
   const regard = cap(creed.start.regard + line.regard);
   const dread = cap(creed.start.dread);
   const block: EvilModeBlock = {
-    v: 2,
+    v: 3,
     from: 'founding',
     settings: { length: opts.length },
     team: {
@@ -97,6 +97,11 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
     queue: [],
     sheets: [],
     evening: [],
+    log: [],
+    cards: [],
+    given: 0,
+    taken: 0,
+    rates: {},
   };
   return { ok: true, block: EvilModeBlockSchema.parse(block) };
 }

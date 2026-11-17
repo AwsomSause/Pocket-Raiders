@@ -49,13 +49,16 @@ function dispatch(m: BoardModel, notice: string | null): string {
   const how = W(`<b class="sm">How</b>${methods}${offers}
     <div class="sm" style="line-height:16px;margin-top:4px" data-testid="evil-odds">${esc(d.oddsLine)}</div>
     ${d.problem ? sm(d.problem, 'color:#f08a7a') : ''}${notice ? sm(notice) : ''}
-    <div class="row" style="gap:6px;margin-top:4px">${B('Queue it', d.canQueue, `padding:2px 12px;${d.canQueue ? '' : 'opacity:.5'}`, '', `${act('queue')} data-testid="evil-queue"`)}</div>
+    <div class="row" style="gap:6px;margin-top:4px">${B('Read the Card', d.canQueue, `padding:2px 12px;${d.canQueue ? '' : 'opacity:.5'}`, '', `${act('queue')} data-testid="evil-queue"`)}</div>
     <div style="margin-top:4px">${queue}</div>`, 'position:absolute;left:152px;width:444px;top:252px;bottom:70px;padding:6px 8px;overflow:auto', d.step === 'how' ? 'sel' : '', ' data-testid="evil-how"');
   return list + crew + how;
 }
 
-export function boardView(m: BoardModel, f: FrameModel, notice: string | null): string {
-  const title = `<div class="abs row" style="left:16px;right:16px;top:100px;gap:8px;align-items:center"><b data-testid="evil-team-name">${esc(f.team.name)}</b><span class="tg">${esc(m.title)}</span><span class="tg" style="${m.warn ? 'background:var(--team-b);color:#fff' : ''}" data-testid="evil-day">${esc(m.day)}</span><span class="tg" data-testid="evil-count">${esc(m.count)}</span><div class="grow"></div>${f.chips.map((c) => `<span class="tg" data-testid="evil-chip">${esc(c)}</span>`).join('')}</div>`;
+export function boardView(m: BoardModel, f: FrameModel, notice: string | null, extra: { ledger?: string; filed?: string } = {}): string {
+  const book = `<span class="tg" style="cursor:pointer;${extra.ledger ? 'outline:2px solid var(--acc);' : ''}"${act('ledger')} data-testid="evil-ledger-open">Ledger (L)</span>`;
+  const title = `<div class="abs row" style="left:16px;right:16px;top:100px;gap:8px;align-items:center"><b data-testid="evil-team-name">${esc(f.team.name)}</b><span class="tg">${esc(m.title)}</span><span class="tg" style="${m.warn ? 'background:var(--team-b);color:#fff' : ''}" data-testid="evil-day">${esc(m.day)}</span><span class="tg" data-testid="evil-count">${esc(m.count)}</span><div class="grow"></div>${f.chips.map((c) => `<span class="tg" data-testid="evil-chip">${esc(c)}</span>`).join('')}${book}</div>`;
+  // The Ledger shares the frame and takes the board's place (slice 3); the last line filed sits in its corner.
+  if (extra.ledger) return `${title}${extra.ledger}${extra.filed ?? ''}`;
   const lower = m.end ? endView(m) + panel(m) : m.dispatch ? dispatch(m, notice) : texts(m, notice) + panel(m);
-  return `${title}${map(m)}${lower}`;
+  return `${title}${map(m)}${lower}${extra.filed ?? ''}`;
 }

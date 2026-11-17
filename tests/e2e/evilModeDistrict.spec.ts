@@ -59,7 +59,9 @@ test('queue one job with keys only and one with taps only; Send rolls them at th
   for (const k of ['Enter', 'Enter', 'ArrowDown', 'Enter', 'ArrowDown', 'ArrowDown', 'ArrowDown', 'Enter', 'ArrowLeft', 'ArrowLeft']) await page.keyboard.press(k);
   await expect(s.getByTestId('evil-how')).toHaveClass(/sel/);
   await expect(s.getByTestId('evil-odds')).toContainText('Certain');
-  await page.keyboard.press('Enter');
+  await page.keyboard.press('Enter'); // opens the Honest Card (slice 3)
+  await expect(s.getByTestId('evil-card-confirm')).toHaveAttribute('data-lit', 'true');
+  await page.keyboard.press('Enter'); // CONFIRM
   await expect(s.getByTestId('evil-queued')).toHaveCount(1);
   await expect(s.getByTestId('evil-queued').first()).toContainText('Grunt 1, Grunt 2 → step 1 · Scout');
 
@@ -73,6 +75,7 @@ test('queue one job with keys only and one with taps only; Send rolls them at th
   await expect(s.getByTestId('evil-odds')).toContainText('Base +50');
   await page.screenshot({ path: info.outputPath('dispatch.png') });
   await s.getByTestId('evil-queue').click();
+  await s.getByTestId('evil-card-confirm').click();
   await expect(s.getByTestId('evil-queued')).toHaveCount(2);
 
   // A dark method shows why and can't be queued.

@@ -284,10 +284,11 @@ describe('saves: block v2 and the migration from v1', () => {
     const run = chooseStarter(content, createRun(content, { runId: 'mig', seed: 'mig', archetypeId: 'red', rules: { ...STANDARD_CHOICE, modeId: EVIL_MODE_ID } }), 0);
     const v2 = foundInRun(run, { name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm' }, 'three').run;
     const b2 = v2.expansion!.evilMode!;
-    const { district: _d, crew: _c, queue: _q, sheets: _s, evening: _e, ...rest } = b2;
+    const { district: _d, crew: _c, queue: _q, sheets: _s, evening: _e, log: _l, cards: _k, given: _g, taken: _t, rates: _r, ...rest } = b2;
     const v1 = { ...rest, v: 1 };
     const parsed = EvilModeBlockSchema.parse(v1);
-    expect(parsed).toMatchObject({ v: 2, district: null, queue: [], sheets: [] });
+    // Slice 3 took the block to v3; a v1 block goes through v2 to v3 in one load.
+    expect(parsed).toMatchObject({ v: 3, district: null, queue: [], sheets: [], log: [], cards: [], given: 0, taken: 0, rates: {} });
     expect(parsed.crew.map((c) => c.name)).toEqual(['Grunt 1', 'Grunt 2', 'Grunt 3', 'Grunt 4']);
     expect(parsed.team).toEqual(b2.team);
     const storage = new MemoryStorageProvider();
