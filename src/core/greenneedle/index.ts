@@ -33,7 +33,7 @@ import { defectorBossStart, defectorClimax, defectorEnd, defectorMeet, defectorR
 import { rivalBeatenOnce } from './missingAce';
 import { taEnd, taLot, taRare, taStart } from './teamauction';
 import { stAssign, stEnd, stStart, strandingTokens } from './stranding';
-import { insideTeam, prDo, prEnd, prEnter, prFree, prNext, prStart, prStep, prStranger, prCaught, prWardenStart, prisonTokens } from './prison';
+import { insideTeam, prDo, prEnd, prEnter, prFree, prNext, prStart, prStep, prStranger, prCaught, prWardenStart, prisonTokens, prisonAmbush } from './prison';
 import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
 import { duelDue, duelEnd, duelEnter, duelName, duelWorthy, duelistStart, worthyStart } from './duelist';
 import { lanternArrive, lanternHasStory, lanternLetGo, lanternLost, lanternPearl, lanternTokens } from './lantern';
@@ -290,6 +290,7 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   // gn.62: the player is inside a team (the inside route's run flag `team-<id>-inside`, set by core/evil/inside.ts when it exists).
   if (c.test === 'insideTeam') return insideTeam(run);
   if (c.test === 'notInsideTeam') return !insideTeam(run);
+  if (c.test === 'prisonAmbush') return prisonAmbush(run);
   if (c.test === 'defectorGuest') return !!guestOf(run);
   // gn.51: rests of patience enough for it to climb in by itself.
   if (c.test === 'rehabDone') return gnFlag(run, 'smuggle-rehab') >= restsNeeded(run);

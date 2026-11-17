@@ -444,7 +444,8 @@ const gn28: Json[] = [
     'At the end of the floor, one laboratory is locked. Beside it, one scientist is standing at a window, not working.',
   ), [
     chIf([not('hideout-scientist')], 'Talk to the scientist at the window.', out('He doesn\'t turn round. He\'s been waiting for somebody, and it might as well be you.', scene('gn-28-scientist'))),
-    chIf([is('hideout-lab-key'), not('hideout-lab-open')], 'Unlock the laboratory.', out('The key turns. The door hisses.', flag('hideout-lab-open'), scene('gn-28-lab'))),
+    // The scientist's key, or Osei Tarrant's (gn.62, the Pokémon Prison: "a key that opens one locked room in the team's Hideout").
+    chIf([{ kind: 'anyFlag', keys: ['hideout-lab-key', 'prison-trench-key'] }, not('hideout-lab-open')], 'Unlock the laboratory.', out('The key turns. The door hisses.', flag('hideout-lab-open'), scene('gn-28-lab'))),
     ch('Take the stairs down.', out('The stairs go down to a floor that smells of straw.', ...down('gn-28-holding'))),
     chIf([is(ALERT, 5)], 'Fight the patrol.', fight('A patrol comes round the corner. They\'ve been looking for you.', grunts(1, [scene('gn-28-labs')]))),
   ]),

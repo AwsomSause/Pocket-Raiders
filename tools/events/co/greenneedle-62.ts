@@ -1,7 +1,7 @@
 // Greenneedle gn.62: The Pokémon Prison (doc GREENNEEDLE_REWORKED_PLACED_13.md lines 290–386; rules in src/core/greenneedle/prison.ts).
 // Build: npm run co:build -- greenneedle-62   then   npm run co:gn
 import { ch, fight, heal, join, party, type Json, out } from '../dsl.ts';
-import { chIf, exactly, gev, gn, is, kindness, leavePseudo, moment, not, rm, say, scene, setTo, when, type Placement } from './_gn.ts';
+import { chIf, exactly, gev, gn, is, kindness, laterStage, leavePseudo, moment, not, rm, say, scene, setTo, stampStage, when, type Placement } from './_gn.ts';
 import { evil, foe, rep } from './_evil-story-kit.ts';
 
 export { CATEGORY } from './_gn.ts';
@@ -19,7 +19,8 @@ const toHub = (...fx: Json[]): Json[] => [...fx, next];
 const ENTRY: Json[] = [
   gev('gn-62-cell', 'The Pokémon Prison', jail({
     stop: 'event', rarity: 'rare', forced: true,
-    requires: [{ kind: 'evil', after: 3 }, not('prison-seen'), not('kanto-flight-stolen'), gnc('notInsideTeam')],
+    // The ambush: a 10% roll a stage (gn test `prisonAmbush`, core/greenneedle/prison.ts). A loss to a lieutenant or boss opens the cell without it.
+    requires: [{ kind: 'evil', after: 3 }, not('prison-seen'), not('kanto-flight-stolen'), gnc('notInsideTeam'), gnc('prisonAmbush')],
     remembers: [
       { id: 'defector', when: [is('defector-trust', 3)], notice: 'The cell door is already unlatched. Someone left it that way. On the cot lies a guard\'s cap and jacket, folded, with a note that says only: "Sorry it\'s late."' },
     ],
@@ -242,17 +243,22 @@ const warden: Json[] = [
 // ---------------------------------------------------------------------------------------------------------------------
 // Afterstory: strangers' Pokémon the player freed are met again with their trainers, one per later stage.
 // ---------------------------------------------------------------------------------------------------------------------
-const after: Json[] = [
-  gev('gn-62-stranger', 'The Pokémon Prison: A Trainer on the Road', jail({
-    stop: 'event', rarity: 'rare', callback: true, requires: [is('prison-reunions')],
-  }), say(
-    '*A trainer on the road stops dead, and stares.*',
-    'Behind them, a Pokémon is already running. It knows you. It knows the Yard, the Tanks, the dark. It crosses the road in a streak.',
-    '**The trainer:** "You\'re the one. They said your name in the paper. They said you opened every door."',
-  ), [
-    ch('Kneel and let it come.', out('It crashes into you, and then, shaking, into its trainer. Neither of them has a word. Both of them have your name.', kindness(1), setTo('prison-reunions', 0), moment('A stranger\'s Pokémon you freed found its trainer on the road.', 60))),
-  ]),
+// Each meeting is its own event (the n-th needs n freed and the one before it done, on a later stage), so they come one per later stage.
+const MEETINGS: [string, string, string][] = [
+  ['*A trainer on the road stops dead, and stares.*', 'Behind them, a Pokémon is already running. It knows you. It knows the Yard, the Tanks, the dark. It crosses the road in a streak.', '**The trainer:** "You\'re the one. They said your name in the paper. They said you opened every door."'],
+  ['*A trainer on the road stops, and stares. You have never seen her before. Her Pokémon has seen you.*', 'It is already running. It was in the Kennels, in iron. It does not look like that now.', '**The trainer:** "So that\'s you. It jumps whenever it hears your name. I thought it was the name of a Pokémon it had lost."'],
+  ['*A boy with a rucksack too big for him stops in the middle of the road, and stares.*', 'The small one on his shoulder is off it before he can speak. It was in the Quiet Cells. It is not quiet now.', '**The boy:** "They told me somebody let them all out. They told me the name. I\'ve been saying it to everyone on this road, to see who turned round."'],
+  ['*Two trainers on the road stop talking, at the same moment, and stare.*', 'Both their Pokémon are already running. They were in the Tanks together, behind the same glass.', '**One of them:** "We know your name. We put it on the gate at home. You can see it from the road."'],
+  ['*An old woman with a walking stick stops, and stares, and then drops the stick.*', 'Her Pokémon gets to you first. It was tethered in the Yard, under a night sky. It has flown every day since.', '**The old woman:** "I know your name. I say it at night, with the others. I never thought I\'d need a face for it."'],
+  ['*A man mending a fence by the road looks up, and stops, and stares.*', 'His Pokémon is over the fence before he has put the hammer down. It was the last one out of its wing. It never forgot who held the door.', '**The man:** "I know who you are. Everyone round here knows your name. Come in. No, come in. It won\'t let you walk past."'],
+  ['*A trainer coming the other way stops dead, and stares.*', 'Their Pokémon is already running. Whichever wing it was in, it remembers the door opening, and who was standing there.', '**The trainer:** "You\'re the one. It knew you before I did. They all know your name, the ones from that place."'],
 ];
+const meeting = (n: number): Json => gev(n === 1 ? 'gn-62-stranger' : `gn-62-stranger-${n}`, 'The Pokémon Prison: A Trainer on the Road', jail({
+  stop: 'event', rarity: 'rare', callback: true, requires: [is('prison-reunions', n), exactly('prison-reunion-n', n - 1), ...(n > 1 ? [laterStage('prison-reunion-at')] : [])],
+}), say(...MEETINGS[n - 1]!), [
+  ch('Kneel and let it come.', out('It crashes into you, and then, shaking, into its trainer. Neither of them has a word. Both of them have your name.', kindness(1), setTo('prison-reunion-n', n), stampStage('prison-reunion-at'), moment('A stranger\'s Pokémon you freed found its trainer on the road.', 60))),
+]);
+const after: Json[] = MEETINGS.map((_, i) => meeting(i + 1));
 
 // ---------------------------------------------------------------------------------------------------------------------
 // The team's own, from inside: no escape. The player is posted here as a guard for one mission, and every cell is a choice.
@@ -292,14 +298,20 @@ export const PLACEMENT: Record<string, Placement> = {
     gn: 'gn.62', shape: 'Pseudo Stage', earliest: 'A7', home: 12, window: [9, 15], sits: 'must-see', attaches: 'instead', tags: ['Evil Team'],
     level: 'Guards A+0; the warden A+2', often: 'run', badge: 'None',
     dressing: { kanto: 'The Pokémon Prison', elsewhere: 'The Pokémon Prison' },
-    note: 'Only in a region with an evil-team story, as an ambush at a team node (the doc\'s 10%); not in a run where Flight North\'s theft happened. The doc\'s other trigger, a loss to a team\'s lieutenant or boss, opens the cell too (core/greenneedle/prison.ts prisonOnLoss, called from eventBattleLost). Four wings, a clock of six steps, the warden.',
+    note: 'Only in a region with an evil-team story, as an ambush: a 10% roll each stage (gn test prisonAmbush); not in a run where Flight North\'s theft happened. The doc\'s main trigger, a loss to a team\'s lieutenant or boss, opens the cell instead of the loss\'s usual cost (core/greenneedle/prison.ts prisonOnLoss; run.ts). Four wings, a clock of six steps, the warden.',
   },
   'gn-62-guard': {
     gn: 'gn.62', shape: 'Pseudo Stage', earliest: 'A7', home: 12, window: [9, 15], sits: 'must-see', attaches: 'instead', tags: ['Evil Team'],
     level: 'None', often: 'run', badge: 'None',
     note: 'The doc\'s "inside the team" version: posted here as a guard for one mission. Opens when the player is inside a team (any run flag team-<id>-inside, from the inside route in #1336 / #1339; works whether or not they have merged).',
   },
-  'gn-62-stranger': { gn: 'gn.62', shape: 'Single', earliest: 'A8', home: 6, window: [2, 16], sits: 'optional', attaches: 'after', tags: ['Evil Team'], level: 'None', often: 'run', badge: 'own', note: 'Afterstory: one per later stage, for as many strangers\' Pokémon as were freed.' },
+  'gn-62-stranger': { gn: 'gn.62', shape: 'Single', earliest: 'A8', home: 6, window: [2, 16], sits: 'optional', attaches: 'after', tags: ['Evil Team'], level: 'None', often: 'run', badge: 'own', note: 'Afterstory: one per later stage, for as many strangers\' Pokémon as were freed (seven strangers can be freed, so up to seven meetings).' },
+  'gn-62-stranger-2': { gn: 'gn.62', shape: 'Single', earliest: 'A8', home: 6, window: [2, 16], sits: 'optional', attaches: 'after', tags: ['Evil Team'], level: 'None', often: 'run', badge: 'own', note: 'Afterstory: one per later stage, for as many strangers\' Pokémon as were freed (seven strangers can be freed, so up to seven meetings).' },
+  'gn-62-stranger-3': { gn: 'gn.62', shape: 'Single', earliest: 'A8', home: 6, window: [2, 16], sits: 'optional', attaches: 'after', tags: ['Evil Team'], level: 'None', often: 'run', badge: 'own', note: 'Afterstory: one per later stage, for as many strangers\' Pokémon as were freed (seven strangers can be freed, so up to seven meetings).' },
+  'gn-62-stranger-4': { gn: 'gn.62', shape: 'Single', earliest: 'A8', home: 6, window: [2, 16], sits: 'optional', attaches: 'after', tags: ['Evil Team'], level: 'None', often: 'run', badge: 'own', note: 'Afterstory: one per later stage, for as many strangers\' Pokémon as were freed (seven strangers can be freed, so up to seven meetings).' },
+  'gn-62-stranger-5': { gn: 'gn.62', shape: 'Single', earliest: 'A8', home: 6, window: [2, 16], sits: 'optional', attaches: 'after', tags: ['Evil Team'], level: 'None', often: 'run', badge: 'own', note: 'Afterstory: one per later stage, for as many strangers\' Pokémon as were freed (seven strangers can be freed, so up to seven meetings).' },
+  'gn-62-stranger-6': { gn: 'gn.62', shape: 'Single', earliest: 'A8', home: 6, window: [2, 16], sits: 'optional', attaches: 'after', tags: ['Evil Team'], level: 'None', often: 'run', badge: 'own', note: 'Afterstory: one per later stage, for as many strangers\' Pokémon as were freed (seven strangers can be freed, so up to seven meetings).' },
+  'gn-62-stranger-7': { gn: 'gn.62', shape: 'Single', earliest: 'A8', home: 6, window: [2, 16], sits: 'optional', attaches: 'after', tags: ['Evil Team'], level: 'None', often: 'run', badge: 'own', note: 'Afterstory: one per later stage, for as many strangers\' Pokémon as were freed (seven strangers can be freed, so up to seven meetings).' },
 };
 
 export const CHAINS: Json[] = [];
