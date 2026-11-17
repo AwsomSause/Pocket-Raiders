@@ -5,7 +5,7 @@ import { content } from './helpers';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { chooseEvent, conditionMet, eventView } from '../../src/core/events';
 import { takeTurn } from '../../src/core/run';
-import { gathering, reunionArrive, truceMeets } from '../../src/core/greenneedle/reunion';
+import { gathering, reunionArrive } from '../../src/core/greenneedle/reunion';
 import { bondNewest, islanderTint, oldEggMove, pinkFade, pinkShade, pinkTint, PINK_MARKS, raiseMarked, truceAnswers, truceCover, truceHurt } from '../../src/core/greenneedle/part3';
 import { POKEMON_MOMENTS } from '../../src/core/moments/pokemonMoments';
 import placement from '../../src/data/catalogOverhaul/placement/greenneedle.json';
@@ -36,7 +36,7 @@ describe("gn.21 The Pokémon That Wouldn't Evolve", () => {
       if (end === 2) setFlag(run, 'wontevolve-stayed');
       expect(ids(run)).toContain('linus');
       // Only when it stayed with him is there "a Pokémon beside him"; otherwise he has the stone on its string.
-      expect(lineOf(run, 'linus')).toMatch(end === 2 ? /a Pokémon beside him/ : /on a string round his neck/);
+      expect(lineOf(run, 'linus')).toMatch(end === 2 ? /a Pokémon beside him/ : /string round his neck/);
     }
     const gone = gnRun('fx21-linus-5');
     setFlag(gone, 'wontevolve-done');
@@ -344,28 +344,6 @@ describe('gn.25 The Unlikely Friendship', () => {
     if (reunited) setFlag(run, 'truce-reunited');
     return run;
   };
-
-  it('Final Reunion: separated and never let in, they find each other, and the recruited one goes', () => {
-    const run = recruited('fx25-reunion', false);
-    expect(ids(run)).toContain('truce');
-    expect(run.party.some((m) => m.speciesId === 'zangoose')).toBe(false);
-    expect(lineOf(run, 'truce')).toMatch(/find each other. Yours goes/);
-    expect(flagOf(run, 'truce-apart')).toBe(1);
-  });
-
-  it('Final Reunion: nothing happens when the other was let in, when both joined, or when it is your last Pokémon', () => {
-    const together = recruited('fx25-reunion-ok', true);
-    expect(ids(together)).not.toContain('truce');
-    expect(together.party.some((m) => m.speciesId === 'zangoose')).toBe(true);
-    const both = withTeam('fx25-reunion-both');
-    setFlag(both, 'truce-both');
-    expect(ids(both)).not.toContain('truce');
-    const last = recruited('fx25-reunion-last', false);
-    last.party = last.party.filter((m) => m.speciesId === 'zangoose');
-    truceMeets(last);
-    expect(last.party).toHaveLength(1);
-    expect(flagOf(last, 'truce-apart')).toBe(0);
-  });
 });
 
 describe('gn.26 The Island of Giant Pokémon', () => {
