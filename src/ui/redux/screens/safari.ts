@@ -149,8 +149,8 @@ export function safariView(_c: ReduxCtx, d: ParkModel): string {
   const names = d.areaIndex === 0 ? '<span class="pk-tag" style="left:6px;top:86px">Gatehouse</span>' : '';
   const field = `<div class="abs pk-field" style="left:${FX}px;top:${FY}px;width:${T * 15}px;height:${T * 7}px">${tiles}${names}${d.sprites.map((s) => sprite(s)).join('')}${sprite(d.player, true)}${hit}<span class="pk-area">${esc(d.area)}</span></div>`;
 
-  const stat = (a: string, b: string | number): string => W(`<span class="sm" style="white-space:nowrap">${esc(a)}</span><b style="font-size:20px">${esc(b)}</b>`, 'flex:1 1 0;display:flex;flex-direction:column;gap:0;padding:5px 10px;min-width:0');
-  const stats = `<div class="abs row" style="left:640px;top:${FY}px;width:296px;gap:12px">${stat('Steps', d.steps)}${stat('Safari Balls', d.balls)}${stat('Caught', d.caught)}</div>`;
+  const stat = (a: string, b: string | number): string => W(`<span class="sm" style="white-space:nowrap;font-size:13px">${esc(a)}</span><b style="font-size:20px">${esc(b)}</b>`, 'flex:1 1 0;display:flex;flex-direction:column;gap:0;padding:5px 8px;min-width:0');
+  const stats = `<div class="abs row" style="left:640px;top:${FY}px;width:296px;gap:20px">${stat('Steps', d.steps)}${stat('Safari Balls', d.balls)}${stat('Caught', d.caught)}</div>`;
   const pips = Array.from({ length: 10 }, (_, i) => `<i class="pk-pip${i < d.quiet ? (d.quiet >= 8 ? ' hi' : d.quiet <= 3 ? ' lo' : ' on') : ''}"></i>`).join('');
   const quiet = W(`<div class="row" style="gap:8px"><span class="sm">Quiet</span><b>${d.quiet}/10</b><span class="grow"></span><span class="sm">${QUIET_WORD(d.quiet)}</span></div><div class="row" style="gap:4px;margin-top:5px">${pips}</div>`, 'left:640px;top:128px;width:296px;padding:7px 12px', 'abs');
 
