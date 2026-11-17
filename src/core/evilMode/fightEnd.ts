@@ -44,11 +44,12 @@ export function endEvilFight(content: Content, run: RunState, won: boolean, heal
     }
   }
   const fielded = f.kind === 'hold' ? [...new Set((run.battle?.enemyTeam ?? []).map((m) => m.speciesId))] : [];
+  const turns = run.battle?.turn ?? 1;
   giveBackParty(run, f.lent ?? []);
   heal(content, run);
   run.battle = null;
   run.phase = 'map';
-  const r = step(block, { type: 'battleResult', won, fielded, ...(caught ? { caught } : {}) });
+  const r = step(block, { type: 'battleResult', won, fielded, turns, ...(caught ? { caught } : {}) });
   let out = r.block;
   // The counter: caught after the third battle with the team (Part 18 section 6.1), by the team's Doctrine. In the record.
   const rival = heroRival(run, out);
