@@ -59,7 +59,7 @@ export function cardFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
   if (m === 'lean') f.push([blind ? L.gives.notKnown : fill(C.lean!.gives!, { amount: money(daily) }), blind]);
   else if (thing) f.push([fill(thing.gives, { amount: money(stock) }), false]);
   else if (m === 'expose') f.push([fill(C.expose!.gives!, { street }), false]);
-  else if (m === 'scout') f.push([fill(L.gives.scout, { step: h.step, reach: data.district.rules.scoutReach }), false]);
+  else if (m === 'scout') f.push([fill(L.gives.scout, { step: h.step, reach: modify(block, 'scoutReach', {}, data.district.rules.scoutReach, data) }), false]);
   else if (blind) f.push([L.gives.notKnown, true]);
   else if (h.kind === 'safehouse') f.push([fill(L.gives.rooms, { rent: money(data.district.rules.safehouseRent) }), false]);
   else if (daily > 0) f.push([fill(L.gives.money, { amount: money(daily) }), false]);

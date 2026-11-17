@@ -318,15 +318,19 @@ describe('bankrupt (Part 5 section 2.4): three days; none ends the run', () => {
 });
 
 describe('saves and determinism', () => {
-  it('v8 -> v9: nothing running, nobody out, not bankrupt, the new stream at 0; a running racket survives a reload', () => {
+  it('v9 -> v10: nothing running, nobody out, not bankrupt, the new stream at 0; the base kept; a running racket survives a reload', () => {
     const b = found();
     const { economy: _e, ...rest } = b;
     const { 'evil-economy': _s, ...draws } = b.draws;
-    const v8 = { ...rest, v: 8, draws };
-    const v9 = EvilModeBlockSchema.parse(v8);
-    expect(v9.v).toBe(9);
-    expect(v9.economy).toEqual({ running: [], busy: { day: 0, ids: [] }, loud: null, broke: 0, lastJob: false, whip: [], worksIn: [], cards: [] });
-    expect(v9.draws['evil-economy']).toBe(0);
+    const v9 = { ...rest, v: 9, draws };
+    const v10 = EvilModeBlockSchema.parse(v9);
+    expect(v10.v).toBe(10);
+    expect(v10.economy).toEqual({ running: [], busy: { day: 0, ids: [] }, loud: null, broke: 0, lastJob: false, whip: [], worksIn: [], cards: [] });
+    expect(v10.draws['evil-economy']).toBe(0);
+    expect(v10).toMatchObject({ base: b.base, raid: b.raid, law: b.law });
+    // A v8 block (before the base) goes all the way: base, Raid and law empty, then the economy.
+    const { base: _b, raid: _r, law: _l, ...older } = rest;
+    expect(EvilModeBlockSchema.parse({ ...older, v: 8, draws })).toMatchObject({ v: 10, base: null, raid: null, economy: { running: [], broke: 0 } });
     const ran = ok(hold(found(), [3]), { type: 'trade', req: { cardId: 'protection', street: 0 } });
     expect(EvilModeBlockSchema.parse(JSON.parse(JSON.stringify(ran)))).toEqual(ran);
     // A damaged venture is refused, not dropped silently.

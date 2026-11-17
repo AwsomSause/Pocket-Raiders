@@ -3,6 +3,7 @@
 // The Hero's road is a pure function of the block (the Log and the map): no roll anywhere on it. Their party isn't here:
 // it's the rival record's (`run.story.rivals`, id `hero.rivalId`), and the session reads it there.
 
+import { baseDelay } from './base';
 import { hashSeed, Rng } from '../rng';
 import starterTable from '../../data/rivalHome.json';
 import bankJson from '../../data/rivalBank.json';
@@ -350,6 +351,9 @@ function stageWalk(block: EvilModeBlock, data: EvilData): EvilModeBlock {
     return done(out, [...today, R.reckoning.badge]);
   }
   if (di === 2) return done(badge(block, R.reckoning.badge), [R.reckoning.outside]);
+  // Slice 10: the base can delay the Hero, at most two days a region (Part 17 section 3.3).
+  const late = baseDelay(block, data);
+  if (di < R.reckoning.days + late) return done(block, [R.reckoning.outside, fill(data.base.delay.word, { days: late, s: late === 1 ? '' : 's' })]);
   const out: EvilModeBlock = { ...block, district: { ...d, end: { how: 'reckoning', day, count: ownedCount(block) } }, evening: [...block.evening, R.reckoning.arrives, R.reckoning.end] };
   return done(out, [R.reckoning.arrives]);
 }
