@@ -4,7 +4,7 @@ import { createBattle, resolveTurn, startBattle, type BattleContext } from '../.
 import { restoreStash } from '../../src/core/expansion/canonRun';
 import { ExpansionSettingsSchema } from '../../src/core/expansion/schema';
 import { chooseEvent } from '../../src/core/events';
-import { RETURN_FORMS, flightNorthEffect, markDecided, refusesToLeave, returnedBug, skySilhouette } from '../../src/core/instrumentality/flightNorth';
+import { RETURN_FORMS, flightNorthEffect, markDecided, refusesToLeave, returnedBug, skySilhouette, refillNorthsWind, windSpent } from '../../src/core/instrumentality/flightNorth';
 import { secondChanceOpen } from '../../src/core/instrumentality/secondChance';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { chooseStarter, createRun, debugForceEvent, takeTurn } from '../../src/core/run';
@@ -149,7 +149,32 @@ describe("North's Wind", () => {
     expect(down.hp).toBe(Math.max(1, Math.floor(maxHp(content, down) / 2)));
     expect(battle.playerStages.spa).toBe(1);
     expect(battle.playerStages.spe).toBe(1);
-    expect(content.moves.get('norths-wind')!.pp).toBe(1); // one charge; rests refill it
+    expect(windSpent(hero)).toBe(true); // one charge; only a rest refills it
+  });
+  it('has one charge: a second use fails (even with PP left, even in a later battle) until a rest refills it', () => {
+    expect(content.moves.get('norths-wind')!.pp).toBe(5);
+    const hero = createPokemon(content, 'beedrill', 30, 'p1');
+    const down = createPokemon(content, 'pikachu', 30, 'p2');
+    hero.moves = [{ id: 'norths-wind', pp: 5 }];
+    const use = (seed: string) => {
+      down.hp = 0;
+      const foe = createPokemon(content, 'rattata', 5, 'e1');
+      foe.moves = [{ id: 'splash', pp: 40 }];
+      const battle = createBattle('wild', [foe], 0, hero.uid);
+      const ctx: BattleContext = { content, battle, party: [hero, down], inventory: {}, rng: new Rng(hashSeed(seed)), captureRng: new Rng(hashSeed(`${seed}-c`)), catchMultiplier: 1 };
+      startBattle(ctx);
+      resolveTurn(ctx, { kind: 'move', index: 0 });
+      return battle;
+    };
+    expect(use('nw3').playerStages.spa).toBe(1);
+    expect(down.hp).toBeGreaterThan(0);
+    const again = use('nw4'); // a new battle, the charge is still spent
+    expect(down.hp).toBe(0);
+    expect(again.playerStages.spa).toBe(0);
+    refillNorthsWind({ party: [hero, down], box: [] });
+    expect(windSpent(hero)).toBe(false);
+    expect(use('nw5').playerStages.spa).toBe(1);
+    expect(down.hp).toBeGreaterThan(0);
   });
   it('fails with nobody to revive', () => {
     const hero = createPokemon(content, 'beedrill', 30, 'p1');

@@ -17,6 +17,8 @@
 // when switching out (Regenerator).
 
 import { ownTypes } from '../co/typeShift';
+import { spendWind, windSpent } from '../instrumentality/flightNorth';
+import { FIFTH_HIT, FIFTH_LINES, FIFTH_WAITED } from '../greenneedle/fifth';
 import { golemBlueType, golemColour } from '../greenneedle/crystals';
 import { TAILWIND_HEART, unflinching } from '../greenneedle/daycare';
 import { arenaTurn, arenaVerdict } from '../greenneedle/frontier';
@@ -1308,6 +1310,19 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
     }
   }
   if (!battle.outcome && rule.surviveTurns && battle.turn > rule.surviveTurns) battle.outcome = 'win';
+  // gn.15 (Route 25): the fifth Mankey. A turn you give no attack (the "Wait." button) counts; hit it once and waiting is over.
+  if (!battle.outcome && rule.waits && !battle.storyEffects.includes(FIFTH_HIT)) {
+    if (events.some((e) => e.type === 'damage' && e.side === 'enemy')) battle.storyEffects.push(FIFTH_HIT);
+    else if (!events.some((e) => e.type === 'move' && e.side === 'player')) {
+      battle.storyEffects.push('gn-wait');
+      const done = battle.storyEffects.filter((s) => s === 'gn-wait').length >= rule.waits;
+      events.push({ type: 'raid', tone: done ? 'phase' : 'info', text: done ? FIFTH_LINES.lowers : FIFTH_LINES.looks });
+      if (done) {
+        battle.storyEffects.push(FIFTH_WAITED);
+        battle.outcome = 'win';
+      }
+    }
+  }
   if (!battle.outcome && rule.calm && !events.some((e) => e.type === 'damage' && e.side === 'enemy')) {
     // R16 Wants to Stop: a turn the foe is not hurt fills its meter; full, it sits down (`calm:done` tells the scene how it ended).
     battle.storyEffects.push('calm');
@@ -1898,8 +1913,10 @@ function gnYouWait(ctx: BattleContext, player: Combatant, events: BattleEvent[])
 
 /** Route 25: with the `foeStands` rule the foe holds its ground for the first turns and does not attack. */
 function foeStands(ctx: BattleContext, enemy: Combatant, events: BattleEvent[]): boolean {
+  // gn.15: with `waits` it stands for as long as nobody has hit it.
+  const waiting = !!ctx.battle.eventRule?.waits && !ctx.battle.storyEffects.includes(FIFTH_HIT);
   const turns = ctx.battle.eventRule?.foeStands;
-  if (!turns || ctx.battle.turn > turns || enemy.mon.hp <= 0) return false;
+  if ((!waiting && (!turns || ctx.battle.turn > turns)) || enemy.mon.hp <= 0) return false;
   events.push({ type: 'raid', tone: 'info', text: `${getSpecies(ctx.content, enemy.mon.speciesId).name} stands in front of the others, arms wide. It does not attack.` });
   return true;
 }
@@ -6797,7 +6814,9 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
   if (fx.northsWind) {
     const team = user.side === 'player' ? ctx.party : ctx.battle.enemyTeam;
     const down = team.find((m) => m.hp <= 0);
-    if (!down) return void events.push({ type: 'fail', side: user.side });
+    // One charge per battle; the charge refills only at a rest (a mark on the Pokémon: core/instrumentality/flightNorth.ts).
+    if (!down || windSpent(user.mon)) return void events.push({ type: 'fail', side: user.side });
+    spendWind(user.mon);
     down.hp = Math.max(1, Math.floor(calcStats(content, down).hp / 2));
     events.push({ type: 'selfState', side: user.side, state: 'revived' });
     changeStage(ctx, user, user, 'spa', 1, events);

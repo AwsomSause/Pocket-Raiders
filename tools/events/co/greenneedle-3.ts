@@ -546,8 +546,15 @@ const gn13: Json[] = [
     '**James:** "It\'s a *bug.* You\'ve come to rescue six Pokémon with a *bug.*"',
     '**Jessie:** "Venomoth, dear. Do tidy up."',
   ), [ch('Fight!', fight('It looks back at you once. Then it goes.', inFlight({ kind: 'trainer', name: 'Jessie & James', team: ['venomoth'], level: 20, size: 1, types: [], levelBonus: 0, rule: { shinyRescue: true, evolveMid: true }, win: [room('gn-13-goodbye')] }), ...EVOLVE_FINAL))]),
-  rm('gn-13-goodbye', 'Flight North: Goodbye', north(), say(
-    '**Meowth:** "Dere\'s TWO of \'em?!"',
+  // Meowth only counts two of them when the shiny one really came down (run flag flight-shiny-came, set at the end of the boss fight).
+  rm('gn-13-goodbye', 'Flight North: Goodbye', north({
+    remembers: [{ id: 'two', when: [is('flight-shiny-came')], intro: say(
+      '**Meowth:** "Dere\'s TWO of \'em?!"',
+      '**All three:** "We\'re blasting off agaaaain!"',
+      'You open the cage. Your team pours out, every one of them talking at once, and every one of them at full strength.',
+      '*The shiny one\'s waiting, on a branch, looking north.*',
+    ) }],
+  }), say(
     '**All three:** "We\'re blasting off agaaaain!"',
     'You open the cage. Your team pours out, every one of them talking at once, and every one of them at full strength.',
     '*The shiny one\'s waiting, on a branch, looking north.*',
@@ -556,6 +563,11 @@ const gn13: Json[] = [
     '*It does its victory hop, one more time. It doesn\'t fall over.*',
     '*They go.*',
   ), { kind: 'restoreParty' }, heal(1), flag('kanto-flight-gratitude'), flag('flight-done'), gn('ofSpecial', { key: 'bug' }), moment('A small Bug-type saved your whole team, then flew north.', 85), leavePseudo()))]),
+  // Release ending: its silhouette crosses the sky at Step 1 of later regions (core/instrumentality/flightNorth.ts skySilhouette).
+  gev('gn-13-sky', 'A Shape in the Sky', north({ stop: 'event', rarity: 'common', forced: true, callback: true, requires: [test('flightReleased'), notThisRegion('flight-sky-at')] }), say(
+    'High above, a small winged shape crosses the sky from south to north and does not stop.',
+    'Two rising notes come down on the wind, very faint. You would know them anywhere.',
+  ), [ch('Watch it go.', out('You watch until it is too small to see. Then you watch a little longer.', stampRegion('flight-sky-at'), again('gn-13-sky')))]),
 ];
 const KANTO_FLIGHT: Json = { ...gev('cs-kanto-vermilion-flight', 'Flight North', north({ stop: 'event', rarity: 'common', types: ['normal', 'flying'], pokemon: 'meowth', requires: [not('flight-checked')] }), (gn13[0] as { intro: string }).intro, FLIGHT_CHECK), canon: 'cs.kanto.vermilion.flightnorth' };
 
@@ -629,7 +641,7 @@ const gn14: Json[] = [
     ch('Walk to your left.', out(say(
       'Your reflection walks the other way, right up to the lantern, and puts its hand on it.',
       'The glass lets go of the light. One of the waving shapes at the end of the corridor stops waving and comes to you.',
-    ), ...lantern(2, 'gn-14-n3'))),
+    ), ...lantern(2, 'gn-14-n3')), { prompt: { id: 'mirror-walk', needs: 'ok' }, fail: shoved('gn-14-n2', 'You start the right way, and drift. Your reflection stops a pace short of the lantern. The glass ripples like a laugh, and something cold shoves the ghost back to the start.') }),
     ch('Walk into the mirror.', shoved('gn-14-n2', 'You walk into the glass. It is very much glass. The ghost winces for you, a moment late.')),
   ]),
   rm('gn-14-n3', "Sabrina's Labyrinth: Four Doors", lab({ pokemon: 'haunter' }), say(
@@ -671,7 +683,7 @@ const gn14: Json[] = [
     ch('Step where it steps.', out(say(
       'You put your feet exactly where it floats. Not one tile tips.',
       'At the far side, it stops under the drawing of itself. It looks at the gold star for a long time.',
-    ), ...lantern(5, 'gn-14-n6'))),
+    ), ...lantern(5, 'gn-14-n6')), { prompt: { id: 'floating-tiles', needs: 'ok' }, fail: shoved('gn-14-n5', 'One foot lands a hand\'s width off. The tile tips. You fall a long way, slowly, and land at the start. The ghost comes down after you, holding your sleeve.') }),
     ch('Run for the far side.', shoved('gn-14-n5', 'Three tiles in, the floor tips. You fall a long way, slowly, and land at the start. The ghost comes down after you, holding your sleeve.')),
     ch('Pick the steadiest tiles.', shoved('gn-14-n5', 'The steadiest tile is the one that flips. Of course it is. You land back at the start with a crayon in your hair.')),
   ]),
@@ -680,7 +692,7 @@ const gn14: Json[] = [
     '*"I\'m with you all your life and you\'ve never touched me."*',
   ), [
     ch('A shadow.', out('The chalk smudges, as if someone breathed on it. The last lantern opens.',
-      when('lost-mon', { min: 1 }, [], 'The grave has a name on it. You know the name. The ghost floats over and stays by it, very still, for as long as you need.'),
+      when('lost-mon', { min: 1 }, [], 'The grave has a name on it. {lost:name} The ghost floats over and stays by it, very still, for as long as you need.'),
       when('lost-mon', { min: 0, max: 0 }, [], 'The stone is blank. The ghost won\'t go near it. It waits by the lantern instead, with its back to the grave.'),
       when('shedinja-answered', { min: 1 }, [], 'The Shedinja is standing by the grave, a little apart. It doesn\'t move. You think it came to see you through.'),
       ...lantern(6, 'gn-14-sabrina'))),
@@ -745,6 +757,12 @@ const R25_DOOR: Json[] = [
 const SEEN_THE_LOOK: Json[] = [is('fed-poochyena')];
 const SEEN_THE_EGG: Json[] = [is('egg-returned')];
 const WAITED: Json[] = [flag('mankey-waited'), flag('mankey-fifth-earned'), room('gn-15-reward')];
+const FIFTH_OPENS = 'It doesn\'t move out of the way. It doesn\'t attack. It stands in front of the others with its arms out, and waits to see what you do.';
+/** The fifth's fight. Wait `waits` turns ("Wait." on the battle screen) and it lowers its arms; hit it and it fights like a Primeape, with Rage. */
+const fifthFight = (waits: number): Json => troopFight([
+  when('mankey-waited-out', { min: 1 }, WAITED),
+  when('mankey-waited-out', { min: 0, max: 0 }, [flag('mankey-fifth-beaten'), flag('mankey-hit-fifth'), room('gn-15-reward')]),
+], { levelBonus: 3, foeMoves: ['rage'], rule: { waits, foeStages: { atk: 1, def: 1, spe: 1 } } });
 const LOWERS = say(
   '*It lowers its arms.*',
   'It doesn\'t trust you. It watches every step you take. But it lets you pass, and it lets the four crawl back behind it.',
@@ -766,7 +784,7 @@ const gn15: Json[] = [
   rm('gn-15-m1', 'Route 25: The First', r25(), say(
     'The first Mankey comes in low and screaming. It opens its mouth wider than its face.',
     'There will be no healing between them. They won\'t give you time.',
-  ), [ch('Hold the line.', fight('It opens with a Screech. Your lead flinches; its guard drops.', troopFight([room('gn-15-m2')], { rule: { myStages: { def: -2 } } })))]),
+  ), [ch('Hold the line.', fight('It opens with a Screech. Your lead flinches; its guard drops.', troopFight([room('gn-15-m2')], { rule: { myStages: { def: -2 }, foeOpensLine: 'Mankey opens with Screech! Your lead flinches; its guard drops.' } })))]),
   rm('gn-15-m2', 'Route 25: The Second', r25(), say(
     'The second doesn\'t wait for the first to get up. It\'s all claws and noise.',
   ), [ch('Hold the line.', fight('It goes for you with Fury Swipes, over and over, like it\'s digging.', troopFight([room('gn-15-m3')], { foeMoves: ['fury-swipes'] })))]),
@@ -786,22 +804,10 @@ const gn15: Json[] = [
     '*It stands in front of them, with its arms out.*',
     'It doesn\'t attack. It\'s waiting to see what you do.',
   ), [
-    ch('Attack it.', fight('It doesn\'t move out of the way. When it does fight back, it fights like a Primeape, and it\'s furious.', troopFight([flag('mankey-fifth-beaten'), room('gn-15-reward')], { levelBonus: 3, foeMoves: ['rage'], rule: { foeStands: 1, foeStages: { atk: 1, def: 1, spe: 1 } } }), flag('mankey-hit-fifth'))),
-    ch('Wait.', out(say(
-      '*It looks at you. It looks at the bag. It makes a small, tired sound.*',
-      '*The other four are thin. You can see that now.*',
-    ), room('gn-15-fifth-2')), {
-      branches: [
-        { when: SEEN_THE_LOOK, text: say('*It looks at you. It looks at the bag.*', 'Then it looks at your face, for a long time. It\'s seen that look before. You gave a starving Poochyena your lunch once, and it shows.', LOWERS), effects: WAITED },
-        { when: SEEN_THE_EGG, text: say('*It looks at you. It looks at the bag.*', 'Then it looks at your face, for a long time. It\'s seen that look before. You rolled a stolen Egg back to its parents once, and it shows.', LOWERS), effects: WAITED },
-      ],
-    }),
-  ]),
-  rm('gn-15-fifth-2', 'Route 25: The Fifth', r25(), say(
-    'It still has its arms out. They\'re shaking now. It\'s been holding them up for a long time.',
-  ), [
-    ch('Wait.', out(LOWERS, ...WAITED)),
-    ch('Attack it.', fight('It doesn\'t move out of the way. When it does fight back, it fights like a Primeape, and it\'s furious.', troopFight([flag('mankey-fifth-beaten'), room('gn-15-reward')], { levelBonus: 3, foeMoves: ['rage'], rule: { foeStands: 1, foeStages: { atk: 1, def: 1, spe: 1 } } }), flag('mankey-hit-fifth'))),
+    // On its first turn a new button appears in the battle: "Wait." (rule `waits`: twice, or once if it has seen that look before).
+    chIf([not('fed-poochyena'), not('egg-returned')], 'Step up to it.', fight(FIFTH_OPENS, fifthFight(2))),
+    chIf(SEEN_THE_LOOK, 'Step up to it.', fight(say(FIFTH_OPENS, 'It looks at your face, for a long time. It\'s seen that look before. You gave a starving Poochyena your lunch once, and it shows.'), fifthFight(1))),
+    chIf([not('fed-poochyena'), ...SEEN_THE_EGG], 'Step up to it.', fight(say(FIFTH_OPENS, 'It looks at your face, for a long time. It\'s seen that look before. You rolled a stolen Egg back to its parents once, and it shows.'), fifthFight(1))),
   ]),
   rm('gn-15-bow', 'Route 25: The Fifth', r25(), say(
     'The gauntlet doesn\'t happen.',
@@ -853,6 +859,7 @@ export const PLACEMENT: Record<string, Placement> = {
   },
   'gn-11-anger': { gn: 'gn.11', shape: 'Single', earliest: 'A6', home: 14, window: [1, 20], sits: 'must-see', tags: ['Afterstory'], needs: ['water'], level: 'A+2', often: 'run', note: 'Only when the Kaiju was freed and the Polluted Factory was left running (flag factory-left-running).' },
   'gn-11-return': { gn: 'gn.11', shape: 'Single', earliest: 'A6', home: 8, window: [1, 20], sits: 'optional', tags: ['Afterstory'], needs: ['water'], level: 'A+1', often: 'run', note: 'Only when the Kaiju was freed.' },
+  'gn-13-sky': { gn: 'gn.13', shape: 'Single', earliest: 'A1', home: 1, window: [1, 3], sits: 'must-see', badge: 'none', tags: ['Afterstory'], level: 'A+0', often: 'region', note: 'Only after the returned Bug-type was released; once in each later region.' },
   'gn-13-check': {
     gn: 'gn.13', shape: 'Single', earliest: 'A4', home: 17, window: [15, 19], sits: 'must-see', attaches: 'before', tags: ['Interrupting Episode', 'Pseudo Stage', 'Companion Story', 'Finale'],
     level: 'Always levels 5 to 20 inside', often: 'run', dressing: { kanto: 'Flight North', kantoStage: 'The road north of Vermilion (the canon space)', elsewhere: 'Flight North' },

@@ -98,6 +98,11 @@
    "readBy": "Final Reunion (Ivy)"
   },
   {
+   "key": "abandoned-mon",
+   "setBy": "trubbish heap (Clean the heap)",
+   "readBy": "Greenneedle gn.08 (the rain shelter notice), gn.61, gn-new-36"
+  },
+  {
    "key": "took-egg",
    "setBy": "abandoned-nest",
    "readBy": "registry"

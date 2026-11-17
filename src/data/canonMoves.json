@@ -42,7 +42,7 @@
    "category": "status",
    "power": null,
    "accuracy": null,
-   "pp": 1,
+   "pp": 5,
    "priority": 0,
    "critStage": 0,
    "target": "self",

@@ -56,7 +56,9 @@ describe('Nuzlocke and Hardcore Nuzlocke', () => {
   it('fainted Pokémon are lost for good and listed on the memorial; a whole fainted party is left for the wipe', () => {
     const run = start('nuzlocke');
     run.party[1]!.hp = 0;
+    expect(run.story.flags['ev:lost-mon']).toBeUndefined();
     expect(buryFallen(content, run, 'lost to Brock')).toHaveLength(1);
+    expect(run.story.flags['ev:lost-mon']).toBe(1); // events read it (gn.14's grave names the lost one)
     expect(run.party).toHaveLength(1);
     expect(run.nuzlocke!.memorial[0]).toMatchObject({ uid: 'p-extra', cause: 'lost to Brock' });
     run.party[0]!.hp = 0;

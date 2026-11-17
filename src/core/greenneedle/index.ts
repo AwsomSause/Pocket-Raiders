@@ -5,6 +5,7 @@
 import type { Content } from '../contentSchema';
 import { kaijuBack, kaijuCut, netCutter, shutMarket } from './kaiju';
 import { rarityOf } from '../rarity';
+import { skySilhouette } from '../instrumentality/flightNorth';
 import type { PlayerAction } from '../battle/engine';
 import type { BattleState, PokemonInstance, RunState } from '../state';
 import type { GnCond, GnEffect } from './schema';
@@ -114,6 +115,11 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   if (text.includes('{karp:')) text = karpTokens(run, text);
   if (text.includes('{lt:')) text = ltTokens(run, text);
   if (text.includes('{ball:')) text = ballTokens(run, text);
+  // gn.14: the name on the small grave: the Pokémon lost for good most recently this run (the memorial), when there is one.
+  if (text.includes('{lost:name}')) {
+    const last = run.nuzlocke?.memorial[run.nuzlocke.memorial.length - 1];
+    text = text.replaceAll('{lost:name}', last ? `It says ${content.species.get(last.speciesId)?.name ?? 'a name you know'}.` : 'You know the name.');
+  }
   if (text.includes('{lsea:')) text = lanternTokens(run, text);
   // gn.47: the Exhibition.
   if (text.includes('{ex:')) text = exTokens(content, run, text);
@@ -223,6 +229,7 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'notRegion') return !c.types!.includes(run.regionOrder[run.regionIndex] ?? '');
   if (c.test === 'holdsBerry') return Object.entries(run.inventory).some(([id, n]) => n > 0 && id.endsWith('-berry')) || run.party.some((m) => Object.entries(m.held ?? {}).some(([id, n]) => n > 0 && id.endsWith('-berry')));
   if (c.test === 'leadRarity') return !!run.party[0] && c.types!.includes(rarityOf(content, run.party[0].speciesId));
+  if (c.test === 'flightReleased') return skySilhouette(run) !== null;
   if (c.test === 'netCutter') return netCutter(content, run) !== null;
   if (c.test === 'leadFit') { const lead = run.party[0]; return !!lead && lead.hp >= maxHp(content, lead) && !lead.status; }
   // gn.19: a large Pokémon (100 kg or more) in the party, standing, to give the Hippowdon shade.

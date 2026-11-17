@@ -3,12 +3,18 @@ import { describe, expect, it } from 'vitest';
 import { chainRooms, PSEUDO_CHAINS } from '../../src/core/dungeon/pseudo';
 import type { RunState } from '../../src/core/state';
 import { content } from './helpers';
-import { conditionMet } from '../../src/core/events';
+import { chooseEvent, conditionMet } from '../../src/core/events';
 import { takeTurn } from '../../src/core/run';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { reinforcementDue } from '../../src/core/raid/raid';
+import { FIFTH_HIT, FIFTH_LINES, FIFTH_WAITED, waitOffered } from '../../src/core/greenneedle/fifth';
 import { choose, flagOf, gnRun, lose, open, openSide, scene, setFlag, win } from './helpers/gnPlay';
 
+/** Picks a choice that has a skill prompt, with the given grade (the helper's `choose` plays it as a miss). */
+const graded = (run: RunState, eventId: string, label: string, grade: 'miss' | 'ok' | 'good' | 'perfect' = 'ok') => {
+  const side = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!.sides.find((x) => !x.used && x.eventId === eventId)!;
+  return chooseEvent(content, run, side.id, scene(run, eventId).labels.indexOf(label), undefined, grade);
+};
 const teach = (run: RunState, i: number, ...moves: string[]): void => {
   run.party[i]!.moves = moves.map((id) => ({ id, pp: content.moves.get(id)!.pp }));
 };
@@ -437,12 +443,38 @@ describe('gn.13 Flight North', () => {
     expect(boss.battle!.enemyTeam[0]!).toMatchObject({ speciesId: 'venomoth', level: 20 });
     expect(boss.battle!.eventRule).toMatchObject({ shinyRescue: true });
     run = win(boss);
+    expect([0, 1]).toContain(run.story.flags['ev:flight-shiny-came']); // the fight wrote down whether the shiny one came
     const bye = choose(run, 'gn-13-goodbye', 'Say goodbye.').run;
     expect(bye.party.map((m) => m.speciesId)).toEqual(team); // the team comes back; the bug flies north
     expect(bye.party.every((m) => m.hp === maxHp(content, m))).toBe(true);
     expect(flagOf(bye, 'kanto-flight-gratitude')).toBe(1);
     expect(bye.expansion?.flightNorth?.state).toBe('ready');
     expect(content.events.get('cs-kanto-vermilion-flight-c7')!.disabled).toBe(true);
+  });
+  it('Meowth only counts two when the shiny one really came down', () => {
+    const run = gnRun('fn-two');
+    expect(scene(run, 'gn-13-goodbye').intro).not.toMatch(/TWO/);
+    setFlag(run, 'flight-shiny-came');
+    expect(scene(run, 'gn-13-goodbye').intro).toMatch(/TWO/);
+  });
+
+  it('after you let it go, its shape crosses the sky once in each later region; never if you kept it', () => {
+    const sky = content.events.get('gn-13-sky')!;
+    const ok = (run: RunState) => sky.requires.every((c) => conditionMet(content, run, c));
+    const run = gnRun('fn-sky');
+    expect(ok(run)).toBe(false); // no Flight North
+    run.expansion = { ...(run.expansion ?? {}), flightNorth: { ...(run.expansion?.flightNorth ?? {}), state: 'released' } } as RunState['expansion'];
+    expect(ok(run)).toBe(false); // still the region it left in
+    run.regionIndex = 1;
+    expect(ok(run)).toBe(true);
+    open(run, 'gn-13-sky');
+    const seen = choose(run, 'gn-13-sky', 'Watch it go.').run;
+    expect(ok(seen)).toBe(false); // once per region
+    seen.regionIndex = 2;
+    expect(ok(seen)).toBe(true);
+    seen.expansion!.flightNorth!.state = 'kept';
+    expect(ok(seen)).toBe(false);
+    expect(content.coPlacement!.get('gn-13-sky')).toMatchObject({ sits: 'must-see', badge: 'none' });
   });
 });
 
@@ -498,13 +530,13 @@ describe("gn.14 Sabrina's Labyrinth", () => {
     const wrong = choose(run, 'gn-14-n2', 'Walk to your right.').run;
     expect(openSide(wrong)?.eventId).toBe('gn-14-n2');
     expect(wrong.party[0]!.hp).toBeLessThan(maxHp(content, wrong.party[0]!));
-    run = choose(wrong, 'gn-14-n2', 'Walk to your left.').run;
+    run = graded(wrong, 'gn-14-n2', 'Walk to your left.').run;
     run = choose(run, 'gn-14-n3', 'Watch the doors.').run;
     const order = ['Town, route, rest, harbour.', 'Route, harbour, town, rest.', 'Rest, town, harbour, route.'][flagOf(run, 'lab-doors') - 1]!;
     run = choose(run, 'gn-14-n3-doors', order).run;
     expect(lab(run).freed).toHaveLength(3);
     run = choose(run, 'gn-14-n4', 'Open the other one.').run;
-    run = choose(run, 'gn-14-n5', 'Step where it steps.').run;
+    run = graded(run, 'gn-14-n5', 'Step where it steps.').run;
     expect(run.party[0]!.level).toBe(37);
     const grave = choose(run, 'gn-14-n6', 'A shadow.');
     expect([grave.text, ...grave.changes].join(' ')).toMatch(/blank/);
@@ -523,7 +555,7 @@ describe("gn.14 Sabrina's Labyrinth", () => {
   it('a loss resets the stage: node 1 again, nobody freed', () => {
     let run = toNode1('lab-lose');
     run = win(choose(run, 'gn-14-n1', 'Wake them with a battle.').run);
-    run = choose(run, 'gn-14-n2', 'Walk to your left.').run;
+    run = graded(run, 'gn-14-n2', 'Walk to your left.').run;
     expect(lab(run).freed).toHaveLength(2);
     run = choose(run, 'gn-14-n3', 'Watch the doors.').run;
     run = choose(run, 'gn-14-n3-doors', 'Harbour, rest, route, town.').run; // never right: the doors start over
@@ -541,13 +573,45 @@ describe("gn.14 Sabrina's Labyrinth", () => {
     setFlag(run, 'lost-mon');
     setFlag(run, 'shedinja-answered');
     let r = win(choose(run, 'gn-14-n1', 'Wake them with a battle.').run);
-    r = choose(r, 'gn-14-n2', 'Walk to your left.').run;
+    r = graded(r, 'gn-14-n2', 'Walk to your left.').run;
     r = choose(r, 'gn-14-n3', 'Watch the doors.').run;
     r = choose(r, 'gn-14-n3-doors', ['Town, route, rest, harbour.', 'Route, harbour, town, rest.', 'Rest, town, harbour, route.'][flagOf(r, 'lab-doors') - 1]!).run;
-    r = choose(choose(r, 'gn-14-n4', 'Open the other one.').run, 'gn-14-n5', 'Step where it steps.').run;
+    r = graded(choose(r, 'gn-14-n4', 'Open the other one.').run, 'gn-14-n5', 'Step where it steps.').run;
     const words = (({ text, changes }) => [text, ...changes].join(' '))(choose(r, 'gn-14-n6', 'A shadow.'));
     expect(words).toMatch(/has a name on it/);
     expect(words).toMatch(/Shedinja/);
+  });
+
+  it('the mirror walk and the floating tiles are played: a miss shoves the ghost back and costs the lead', () => {
+    let run = win(choose(toNode1('lab-prompt'), 'gn-14-n1', 'Wake them with a battle.').run);
+    expect(content.events.get('gn-14-n2')!.choices.find((c) => c.label === 'Walk to your left.')!.prompt).toMatchObject({ id: 'mirror-walk', needs: 'ok' });
+    expect(content.events.get('gn-14-n5')!.choices.find((c) => c.label === 'Step where it steps.')!.prompt).toMatchObject({ id: 'floating-tiles', needs: 'ok' });
+    const miss = graded(run, 'gn-14-n2', 'Walk to your left.', 'miss');
+    expect(miss.success).toBe(false);
+    expect(openSide(miss.run)?.eventId).toBe('gn-14-n2');
+    expect(lab(miss.run).freed).toHaveLength(1);
+    expect(miss.run.party[0]!.hp).toBeLessThan(maxHp(content, miss.run.party[0]!));
+    run = graded(miss.run, 'gn-14-n2', 'Walk to your left.', 'ok').run;
+    expect(lab(run).freed).toHaveLength(2);
+  });
+
+  it('the small grave names the Pokémon lost for good this run, when there is one', () => {
+    const walk = (seed: string, setup: (run: RunState) => void) => {
+      const run = toNode1(seed);
+      setFlag(run, 'lost-mon');
+      setup(run);
+      let r = win(choose(run, 'gn-14-n1', 'Wake them with a battle.').run);
+      r = graded(r, 'gn-14-n2', 'Walk to your left.').run;
+      r = choose(r, 'gn-14-n3', 'Watch the doors.').run;
+      r = choose(r, 'gn-14-n3-doors', ['Town, route, rest, harbour.', 'Route, harbour, town, rest.', 'Rest, town, harbour, route.'][flagOf(r, 'lab-doors') - 1]!).run;
+      r = graded(choose(r, 'gn-14-n4', 'Open the other one.').run, 'gn-14-n5', 'Step where it steps.').run;
+      return (({ text, changes }) => [text, ...changes].join(' '))(choose(r, 'gn-14-n6', 'A shadow.'));
+    };
+    const named = walk('lab-name', (run) => {
+      run.nuzlocke = { ...(run.nuzlocke ?? {}), memorial: [{ uid: 'x', speciesId: 'pidgey', level: 9, shiny: false, ace: false, area: 'Route 1', cause: 'a Rattata' }] } as RunState['nuzlocke'];
+    });
+    expect(named).toMatch(/It says Pidgey\./);
+    expect(walk('lab-noname', () => {})).toMatch(/You know the name\./);
   });
 
   it('the return one region later is the one gn-14-return room', () => {
@@ -591,12 +655,26 @@ describe('gn.15 Route 25: The Angry Mankey', () => {
     expect(content.coPlacement!.get('gn-15-troop')).toMatchObject({ home: 6, window: [4, 9], sits: 'must-see', attaches: 'instead', badge: 'own' });
   });
 
-  it('four fights with no healing but one breath; waiting twice at the fifth lets you pass, and the fifth joins with Swords Dance and Mach Punch', () => {
+  const idle = (run: RunState): RunState => takeTurn(content, run, { kind: 'idle' }).run;
+
+  it('four fights with no healing but one breath; the fifth is a fight with a "Wait." button: waiting twice lets you pass, and the fifth joins with Swords Dance and Mach Punch', () => {
     let run = toFifth('r25-wait');
-    expect(scene(run, 'gn-15-fifth').labels).toEqual(['Attack it.', 'Wait.']);
-    run = choose(run, 'gn-15-fifth', 'Wait.').run;
-    run = choose(run, 'gn-15-fifth-2', 'Wait.').run;
+    expect(scene(run, 'gn-15-fifth').labels).toEqual(['Step up to it.']);
+    run = choose(run, 'gn-15-fifth', 'Step up to it.').run;
+    expect(run.battle!.eventRule).toMatchObject({ waits: 2, foeStages: { atk: 1, def: 1, spe: 1 } });
+    expect(waitOffered(run.battle)).toBe(true);
+    const hp = run.party[0]!.hp;
+    const first = takeTurn(content, run, { kind: 'idle' });
+    expect(first.events.some((e) => e.type === 'raid' && e.text === FIFTH_LINES.looks)).toBe(true);
+    expect(first.run.battle!.outcome).toBeFalsy();
+    expect(first.run.party[0]!.hp).toBe(hp); // it never attacks while you wait
+    const second = takeTurn(content, first.run, { kind: 'idle' });
+    expect(second.events.some((e) => e.type === 'raid' && e.text === FIFTH_LINES.lowers)).toBe(true);
+    run = win(second.run);
+    expect(flagOf(run, 'mankey-waited-out')).toBe(1);
+    expect(flagOf(run, 'mankey-struck')).toBe(0);
     expect(flagOf(run, 'mankey-waited')).toBe(1);
+    expect(flagOf(run, 'mankey-hit-fifth')).toBe(0);
     run = choose(run, 'gn-15-reward', 'Let it come.').run;
     expect(flagOf(run, 'mankey-fifth-joined')).toBe(1);
     const mon = recruit(run)!;
@@ -604,20 +682,46 @@ describe('gn.15 Route 25: The Angry Mankey', () => {
     expect(mon.moves.map((m) => m.id)).toEqual(expect.arrayContaining(['swords-dance', 'mach-punch']));
   });
 
-  it('attacking the fifth: it stands the first turn and uses Rage; one of the four joins, never the fifth; nobody fainted pays a Black Belt', () => {
-    const fight = choose(toFifth('r25-hit'), 'gn-15-fifth', 'Attack it.').run;
-    expect(fight.battle!.eventRule).toMatchObject({ foeStands: 1, foeStages: { atk: 1, def: 1, spe: 1 } });
+  it('attacking the fifth: the "Wait." button goes, it uses Rage; one of the four joins, never the fifth; nobody fainted pays a Black Belt', () => {
+    const fight = choose(toFifth('r25-hit'), 'gn-15-fifth', 'Step up to it.').run;
     expect(fight.battle!.enemyTeam[0]!.moves.map((m) => m.id)).toContain('rage');
-    const run = choose(win(fight), 'gn-15-reward', 'Let it come.');
+    // One wait, then a hit: the wait no longer counts and the button is gone.
+    let hit = structuredClone(idle(fight));
+    hit.battle!.enemyTeam[0]!.hp = maxHp(content, hit.battle!.enemyTeam[0]!);
+    teach(hit, 0, 'tackle');
+    for (let i = 0; i < 6 && !hit.battle!.storyEffects.includes(FIFTH_HIT) && hit.phase === 'battle'; i++) hit = takeTurn(content, hit, { kind: 'move', index: 0 }).run;
+    expect(hit.battle!.storyEffects).toContain(FIFTH_HIT);
+    expect(waitOffered(hit.battle)).toBe(false);
+    if (hit.phase === 'battle' && !hit.battle!.outcome) {
+      const after = idle(hit);
+      expect(after.battle?.storyEffects ?? []).not.toContain(FIFTH_WAITED);
+    }
+    const run = choose(win(hit), 'gn-15-reward', 'Let it come.');
+    expect(flagOf(run.run, 'mankey-waited-out')).toBe(0);
+    expect(flagOf(run.run, 'mankey-struck')).toBe(1);
+    expect(flagOf(run.run, 'mankey-hit-fifth')).toBe(1);
     expect(flagOf(run.run, 'mankey-fifth-joined')).toBe(0);
     expect([run.text, ...run.changes].join(' ')).toMatch(/one of the four/);
     expect(recruit(run.run)!.held).toEqual({ 'black-belt': 1 });
   });
 
-  it('fed the Poochyena once: the fifth lowers its arms one turn sooner', () => {
-    const run = choose(toFifth('r25-pooch', (r) => setFlag(r, 'fed-poochyena')), 'gn-15-fifth', 'Wait.');
+  it('fed the Poochyena once (or gave the Egg back): the fifth lowers its arms one turn sooner', () => {
+    const run = choose(toFifth('r25-pooch', (r) => setFlag(r, 'fed-poochyena')), 'gn-15-fifth', 'Step up to it.');
     expect(run.text).toMatch(/Poochyena/);
-    expect(run.run.stage!.map.nodes.find((n) => n.id === run.run.stage!.current)!.sides.some((x) => !x.used && x.eventId === 'gn-15-reward')).toBe(true);
+    expect(run.run.battle!.eventRule!.waits).toBe(1);
+    const done = win(idle(run.run));
+    expect(flagOf(done, 'mankey-waited-out')).toBe(1);
+    expect(openSide(done)?.eventId).toBe('gn-15-reward');
+    const egg = choose(toFifth('r25-egg', (r) => setFlag(r, 'egg-returned')), 'gn-15-fifth', 'Step up to it.');
+    expect(egg.text).toMatch(/Egg/);
+    expect(egg.run.battle!.eventRule!.waits).toBe(1);
+  });
+
+  it('the first Mankey opens with Screech: its first turn is the told line, not an attack', () => {
+    let run = choose(troop('r25-screech'), 'gn-15-troop', 'Face them.').run;
+    run = choose(run, 'gn-15-m1', 'Hold the line.').run;
+    expect(run.battle!.storyEffects.some((s) => s.startsWith('gn-foe-waits:Mankey opens with Screech!'))).toBe(true);
+    expect(waitOffered(run.battle)).toBe(false);
   });
 
   it("the thieves' camp first: buying the food back for ₽500 skips the gauntlet, the fifth bows and joins Bond +2; carrying it needs Reputation 3", () => {
@@ -638,7 +742,7 @@ describe('gn.15 Route 25: The Angry Mankey', () => {
   });
 
   it('the camp after the fight: the four eat, the fifth waits, and the Mankey with you grows fonder; sorry thieves guard a grove later', () => {
-    let run = choose(toFifth('r25-after'), 'gn-15-fifth', 'Attack it.').run;
+    let run = choose(toFifth('r25-after'), 'gn-15-fifth', 'Step up to it.').run;
     run = choose(win(run), 'gn-15-reward', 'Let it come.').run;
     const mon = recruit(run)!;
     run.pending = [];

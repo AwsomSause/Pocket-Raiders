@@ -28,6 +28,7 @@ import { ferrisBossMark, ferrisCatch, ferrisFree, ferrisFreeEnd } from './greenn
 import { noteFinalLoss } from './co/roadHome';
 import { followedRest, followedRival, followedRoad, followedShop, followedStage, followedStep, longJourney } from './greenneedle/followed';
 import { ballBattle, ballRest } from './greenneedle/ball';
+import { FIFTH_HIT, FIFTH_WAITED } from './greenneedle/fifth';
 import { ridgeCatch } from './greenneedle/ridge';
 import { noteLeft } from './greenneedle/left';
 import { unflinchingStart } from './greenneedle/daycare';
@@ -53,7 +54,7 @@ import { endSwap, noteSwapFaint, swapRunning } from './co/swap';
 import { BRAVE_COUNT, BRAVE_HIT, MOMENT_EVOLVE_AFTER } from './battle/pokemonMoments';
 import { revivalFee } from './battle/revivalStatus';
 import { bondFriendship } from './co/who';
-import { applyFlightNorthReturn, flightNorthReady, markDecided, markOffered, refusesToLeave, returnedBug } from './instrumentality/flightNorth';
+import { applyFlightNorthReturn, flightNorthReady, markDecided, markOffered, refusesToLeave, returnedBug, refillNorthsWind } from './instrumentality/flightNorth';
 import { applySecondChance, secondChanceOpen, secondChanceRolls } from './instrumentality/secondChance';
 import { syncLegendFlags, weekInfluence } from './legends/signs';
 import { noteSpirits, syncLegendKeys } from './legends/keys';
@@ -2774,6 +2775,8 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     const followedLine = followedRest(content, run, before);
     // Greenneedle gn.new.03: the Ball that wouldn't open has a scene at every rest.
     ballRest(content, run);
+    // gn.13: North's Wind has one charge; only a rest refills it.
+    refillNorthsWind(run);
     partyLifeCamp(run);
     const comboLine = [partyLifeCombos(content, run), ...assignGrowthPaths(content, run.party, run.story.histories)].filter(Boolean).join(' ');
     runSide.used = true;
@@ -4276,6 +4279,13 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (returnOffer) run.pending.push({ kind: 'returnProtege', mon: returningPokemon(content, run, returnOffer, nextUid(run, 'p')), mentorUid: returnOffer.mentorUid, reason: returnOffer.reason });
   const leadAsk = !run.victory && battle.outcome === 'win' && !mentorOffer ? planAskLead(content, run) : null;
   if (leadAsk) run.pending.push({ kind: 'askLead', ...leadAsk });
+  // gn.13: whether the shiny one came down in Flight North's last fight (the goodbye only has Meowth count two of them if it did).
+  if (battle.event && battle.eventRule?.shinyRescue) run.story.flags['ev:flight-shiny-came'] = battle.storyEffects.includes('shiny-rescue') ? 1 : 0;
+  // gn.15: how the fifth Mankey's fight ended: it lowered its arms (you waited), and whether it was ever hit.
+  if (battle.event && battle.eventRule?.waits) {
+    run.story.flags['ev:mankey-waited-out'] = battle.storyEffects.includes(FIFTH_WAITED) ? 1 : 0;
+    run.story.flags['ev:mankey-struck'] = battle.storyEffects.includes(FIFTH_HIT) ? 1 : 0;
+  }
   // gn.16: the tournament final paused for the last exchange (the win effects read this flag).
   if (battle.event && battle.eventRule?.gn === 'final') run.story.flags['ev:tc-last-exchange'] = battle.storyEffects.includes('gn-last-exchange') ? 1 : 0;
   // The Lush Jungle (gn.20): a knockout on either side, the player's or the wild one's, and the canopy village pulls its ladder up.

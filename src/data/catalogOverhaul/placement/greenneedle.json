@@ -1069,6 +1069,26 @@
    "water"
   ]
  },
+ "gn-11-anger": {
+  "gn": "gn.11",
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 14,
+  "window": [
+   1,
+   20
+  ],
+  "sits": "must-see",
+  "level": "A+2",
+  "often": "run",
+  "note": "Only when the Kaiju was freed and the Polluted Factory was left running (flag factory-left-running).",
+  "kinds": [
+   "Afterstory"
+  ],
+  "tags": [
+   "water"
+  ]
+ },
  "gn-11-return": {
   "gn": "gn.11",
   "shape": "Single",
@@ -1088,6 +1108,25 @@
   "tags": [
    "water"
   ]
+ },
+ "gn-13-sky": {
+  "gn": "gn.13",
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 1,
+  "window": [
+   1,
+   3
+  ],
+  "sits": "must-see",
+  "badge": "none",
+  "level": "A+0",
+  "often": "region",
+  "note": "Only after the returned Bug-type was released; once in each later region.",
+  "kinds": [
+   "Afterstory"
+  ],
+  "tags": []
  },
  "gn-13-check": {
   "gn": "gn.13",

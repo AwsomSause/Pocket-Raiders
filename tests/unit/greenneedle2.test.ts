@@ -946,3 +946,11 @@ describe('gn.10 The S.S. Anne', () => {
     expect(content.events.get('cs-kanto-vermilion-ssanne-reward')!.disabled).toBe(true);
   });
 });
+
+describe('gn.08 reads abandoned-mon: the Trubbish heap sets it', () => {
+  it('cleaning the heap (the Trubbish left behind) sets abandoned-mon; no other choice there does', () => {
+    const heap = [...content.events.values()].find((e) => e.choices.some((c) => c.label === 'Clean the heap (two nodes).'))!;
+    const sets = (c: (typeof heap.choices)[number]) => c.success.effects.some((f) => f.kind === 'flag' && f.key === 'abandoned-mon');
+    expect(heap.choices.filter(sets).map((c) => c.label)).toEqual(['Clean the heap (two nodes).']);
+  });
+});

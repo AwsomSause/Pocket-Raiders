@@ -8252,13 +8252,27 @@
     "Pokémon",
     "Evil Team"
    ],
+   "remembers": [
+    {
+     "id": "two",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flight-shiny-came",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "**Meowth:** \"Dere's TWO of 'em?!\"\n\n**All three:** \"We're blasting off agaaaain!\"\n\nYou open the cage. Your team pours out, every one of them talking at once, and every one of them at full strength.\n\n*The shiny one's waiting, on a branch, looking north.*"
+    }
+   ],
    "room": true,
    "scene": {
     "cast": [],
     "tint": "#2f5d73",
     "effect": "none"
    },
-   "intro": "**Meowth:** \"Dere's TWO of 'em?!\"\n\n**All three:** \"We're blasting off agaaaain!\"\n\nYou open the cage. Your team pours out, every one of them talking at once, and every one of them at full strength.\n\n*The shiny one's waiting, on a branch, looking north.*",
+   "intro": "**All three:** \"We're blasting off agaaaain!\"\n\nYou open the cage. Your team pours out, every one of them talking at once, and every one of them at full strength.\n\n*The shiny one's waiting, on a branch, looking north.*",
    "choices": [
     {
      "label": "Say goodbye.",
@@ -8294,6 +8308,56 @@
        },
        {
         "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-13-sky",
+   "name": "A Shape in the Sky",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Evil Team"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "forced": true,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "flightReleased"
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "flight-sky-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "High above, a small winged shape crosses the sky from south to north and does not stop.\n\nTwo rising notes come down on the wind, very faint. You would know them anywhere.",
+   "choices": [
+    {
+     "label": "Watch it go.",
+     "success": {
+      "text": "You watch until it is too small to see. Then you watch a little longer.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "flight-sky-at"
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "gn-13-sky"
        }
       ]
      }
@@ -8750,6 +8814,10 @@
     },
     {
      "label": "Walk to your left.",
+     "prompt": {
+      "id": "mirror-walk",
+      "needs": "ok"
+     },
      "success": {
       "text": "Your reflection walks the other way, right up to the lantern, and puts its hand on it.\n\nThe glass lets go of the light. One of the waving shapes at the end of the corridor stops waving and comes to you.",
       "effects": [
@@ -8777,6 +8845,20 @@
        {
         "kind": "addEvent",
         "eventId": "gn-14-n3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You start the right way, and drift. Your reflection stops a pace short of the lantern. The glass ripples like a laugh, and something cold shoves the ghost back to the start.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-14-n2"
        }
       ]
      }
@@ -9295,6 +9377,10 @@
    "choices": [
     {
      "label": "Step where it steps.",
+     "prompt": {
+      "id": "floating-tiles",
+      "needs": "ok"
+     },
      "success": {
       "text": "You put your feet exactly where it floats. Not one tile tips.\n\nAt the far side, it stops under the drawing of itself. It looks at the gold star for a long time.",
       "effects": [
@@ -9322,6 +9408,20 @@
        {
         "kind": "addEvent",
         "eventId": "gn-14-n6"
+       }
+      ]
+     },
+     "failure": {
+      "text": "One foot lands a hand's width off. The tile tips. You fall a long way, slowly, and land at the start. The ghost comes down after you, holding your sleeve.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-14-n5"
        }
       ]
      }
@@ -9391,7 +9491,7 @@
         "key": "lost-mon",
         "min": 1,
         "then": [],
-        "text": "The grave has a name on it. You know the name. The ghost floats over and stays by it, very still, for as long as you need."
+        "text": "The grave has a name on it. {lost:name} The ghost floats over and stays by it, very still, for as long as you need."
        },
        {
         "kind": "gn",
@@ -10054,7 +10154,8 @@
         "noCatch": true,
         "myStages": {
          "def": -2
-        }
+        },
+        "foeOpensLine": "Mankey opens with Screech! Your lead flinches; its guard drops."
        }
       }
      }
@@ -10279,16 +10380,10 @@
    "intro": "The four crawl back behind it. The fifth hasn't moved since the start.\n\n*It stands in front of them, with its arms out.*\n\nIt doesn't attack. It's waiting to see what you do.",
    "choices": [
     {
-     "label": "Attack it.",
+     "label": "Step up to it.",
      "success": {
-      "text": "It doesn't move out of the way. When it does fight back, it fights like a Primeape, and it's furious.",
-      "effects": [
-       {
-        "kind": "flag",
-        "key": "mankey-hit-fifth",
-        "amount": 1
-       }
-      ],
+      "text": "It doesn't move out of the way. It doesn't attack. It stands in front of the others with its arms out, and waits to see what you do.",
+      "effects": [],
       "battle": {
        "kind": "wild",
        "species": [
@@ -10299,13 +10394,49 @@
        "shinyMultiplier": 1,
        "win": [
         {
-         "kind": "flag",
-         "key": "mankey-fifth-beaten",
-         "amount": 1
+         "kind": "gn",
+         "op": "when",
+         "key": "mankey-waited-out",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "mankey-waited",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "mankey-fifth-earned",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-15-reward"
+          }
+         ]
         },
         {
-         "kind": "addEvent",
-         "eventId": "gn-15-reward"
+         "kind": "gn",
+         "op": "when",
+         "key": "mankey-waited-out",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "mankey-fifth-beaten",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "mankey-hit-fifth",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-15-reward"
+          }
+         ]
         }
        ],
        "friendly": true,
@@ -10320,7 +10451,7 @@
        ],
        "rule": {
         "noCatch": true,
-        "foeStands": 1,
+        "waits": 2,
         "foeStages": {
          "atk": 1,
          "def": 1,
@@ -10328,129 +10459,27 @@
         }
        }
       }
-     }
-    },
-    {
-     "label": "Wait.",
-     "branches": [
+     },
+     "showIf": [
       {
-       "when": [
-        {
-         "kind": "flag",
-         "key": "fed-poochyena",
-         "atLeast": 1,
-         "atMost": 99
-        }
-       ],
-       "text": "*It looks at you. It looks at the bag.*\n\nThen it looks at your face, for a long time. It's seen that look before. You gave a starving Poochyena your lunch once, and it shows.\n\n*It lowers its arms.*\n\nIt doesn't trust you. It watches every step you take. But it lets you pass, and it lets the four crawl back behind it.",
-       "effects": [
-        {
-         "kind": "flag",
-         "key": "mankey-waited",
-         "amount": 1
-        },
-        {
-         "kind": "flag",
-         "key": "mankey-fifth-earned",
-         "amount": 1
-        },
-        {
-         "kind": "addEvent",
-         "eventId": "gn-15-reward"
-        }
-       ]
+       "kind": "flag",
+       "key": "fed-poochyena",
+       "atLeast": 0,
+       "atMost": 0
       },
       {
-       "when": [
-        {
-         "kind": "flag",
-         "key": "egg-returned",
-         "atLeast": 1,
-         "atMost": 99
-        }
-       ],
-       "text": "*It looks at you. It looks at the bag.*\n\nThen it looks at your face, for a long time. It's seen that look before. You rolled a stolen Egg back to its parents once, and it shows.\n\n*It lowers its arms.*\n\nIt doesn't trust you. It watches every step you take. But it lets you pass, and it lets the four crawl back behind it.",
-       "effects": [
-        {
-         "kind": "flag",
-         "key": "mankey-waited",
-         "amount": 1
-        },
-        {
-         "kind": "flag",
-         "key": "mankey-fifth-earned",
-         "amount": 1
-        },
-        {
-         "kind": "addEvent",
-         "eventId": "gn-15-reward"
-        }
-       ]
+       "kind": "flag",
+       "key": "egg-returned",
+       "atLeast": 0,
+       "atMost": 0
       }
-     ],
-     "success": {
-      "text": "*It looks at you. It looks at the bag. It makes a small, tired sound.*\n\n*The other four are thin. You can see that now.*",
-      "effects": [
-       {
-        "kind": "addEvent",
-        "eventId": "gn-15-fifth-2"
-       }
-      ]
-     }
-    }
-   ]
-  },
-  {
-   "id": "gn-15-fifth-2",
-   "name": "Route 25: The Fifth",
-   "group": "Greenneedle",
-   "tags": [
-    "Combat",
-    "Pokémon",
-    "Story"
-   ],
-   "room": true,
-   "scene": {
-    "cast": [],
-    "pokemon": "mankey",
-    "tint": "#6b4a3a",
-    "effect": "none"
-   },
-   "intro": "It still has its arms out. They're shaking now. It's been holding them up for a long time.",
-   "choices": [
-    {
-     "label": "Wait.",
-     "success": {
-      "text": "*It lowers its arms.*\n\nIt doesn't trust you. It watches every step you take. But it lets you pass, and it lets the four crawl back behind it.",
-      "effects": [
-       {
-        "kind": "flag",
-        "key": "mankey-waited",
-        "amount": 1
-       },
-       {
-        "kind": "flag",
-        "key": "mankey-fifth-earned",
-        "amount": 1
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "gn-15-reward"
-       }
-      ]
-     }
+     ]
     },
     {
-     "label": "Attack it.",
+     "label": "Step up to it.",
      "success": {
-      "text": "It doesn't move out of the way. When it does fight back, it fights like a Primeape, and it's furious.",
-      "effects": [
-       {
-        "kind": "flag",
-        "key": "mankey-hit-fifth",
-        "amount": 1
-       }
-      ],
+      "text": "It doesn't move out of the way. It doesn't attack. It stands in front of the others with its arms out, and waits to see what you do.\n\nIt looks at your face, for a long time. It's seen that look before. You gave a starving Poochyena your lunch once, and it shows.",
+      "effects": [],
       "battle": {
        "kind": "wild",
        "species": [
@@ -10461,13 +10490,49 @@
        "shinyMultiplier": 1,
        "win": [
         {
-         "kind": "flag",
-         "key": "mankey-fifth-beaten",
-         "amount": 1
+         "kind": "gn",
+         "op": "when",
+         "key": "mankey-waited-out",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "mankey-waited",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "mankey-fifth-earned",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-15-reward"
+          }
+         ]
         },
         {
-         "kind": "addEvent",
-         "eventId": "gn-15-reward"
+         "kind": "gn",
+         "op": "when",
+         "key": "mankey-waited-out",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "mankey-fifth-beaten",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "mankey-hit-fifth",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-15-reward"
+          }
+         ]
         }
        ],
        "friendly": true,
@@ -10482,7 +10547,7 @@
        ],
        "rule": {
         "noCatch": true,
-        "foeStands": 1,
+        "waits": 1,
         "foeStages": {
          "atk": 1,
          "def": 1,
@@ -10490,7 +10555,111 @@
         }
        }
       }
-     }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "fed-poochyena",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Step up to it.",
+     "success": {
+      "text": "It doesn't move out of the way. It doesn't attack. It stands in front of the others with its arms out, and waits to see what you do.\n\nIt looks at your face, for a long time. It's seen that look before. You rolled a stolen Egg back to its parents once, and it shows.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "mankey"
+       ],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "mankey-waited-out",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "mankey-waited",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "mankey-fifth-earned",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-15-reward"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "mankey-waited-out",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "mankey-fifth-beaten",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "mankey-hit-fifth",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-15-reward"
+          }
+         ]
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-15-driven"
+        }
+       ],
+       "foeMoves": [
+        "rage"
+       ],
+       "rule": {
+        "noCatch": true,
+        "waits": 1,
+        "foeStages": {
+         "atk": 1,
+         "def": 1,
+         "spe": 1
+        }
+       }
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "fed-poochyena",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "egg-returned",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
     }
    ]
   },
