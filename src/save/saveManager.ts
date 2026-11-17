@@ -41,7 +41,7 @@ export const ACTIVE_SLOT_KEY = `${KEY_PREFIX}.slot`;
 export type RecordName = 'profile' | 'run' | 'settings' | 'meta' | 'timeline';
 
 /** Current schema version of each record. Bump when a record's shape changes and add a migration. */
-export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 20, run: 45, settings: 44, meta: 1, timeline: 1 };
+export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 20, run: 45, settings: 45, meta: 1, timeline: 1 };
 
 /** v41: walks a saved run and gives every Pokémon (anything with uid, speciesId, level and vitamins) IVs and empty EVs. */
 function withIvs(node: unknown): unknown {
@@ -482,6 +482,8 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
     42: (data) => ({ ...(data as Json), uiStyle: 'new', reduxSkin: 'raiders' }),
     // v44 (Catalog Overhaul legends, Kice 2026-11-15): Legendary Blessings and Ultra Beast Incursions are on by default, so they switch on once for everyone. Every other key is unchanged.
     43: (data) => { const d = data as Json & { expansion?: Json }; return { ...d, expansion: { ...(d.expansion ?? {}), blessingsEnabled: true, ultraBeastsEnabled: true } }; },
+    // v45 (Kice 2026-11-17): Rewinds and Second Chance settings are gone (off); Extended Cut and Story event density Full are on; every UI look goes back to the default Raiders look once. Other keys unchanged.
+    44: (data) => { const d = data as Json & { expansion?: Json; screenStyles?: Json }; return { ...d, uiStyle: 'new', reduxSkin: 'raiders', uiTheme: 'classic', eventStyle: 'diorama', screenStyles: {}, plazaStyle: 'aero', hubStyle: 'town', battleUi: 'aero', transitionStyle: 'fade', expansion: { ...(d.expansion ?? {}), climaxCut: 'extended', eventsDensity: 'full', rewinds: false, secondChancePct: 0 } }; },
   },
   meta: {},
   timeline: {},
