@@ -152,6 +152,8 @@ export function makeVow(run: RunState, mythical: string): string | null {
   if (!def || def.status === 'disabled' || !run.expansion?.promises) return null;
   const p = run.expansion.promise ?? { tellings: {}, visited: null, guest: null, kept: [], left: [] };
   if (p.guest || (p.visited && p.visited !== mythical)) return null;
+  // Same-run chains: Manaphy only after Phione's Promise was kept, Melmetal only after eight Meltan merged.
+  if ((mythical === 'manaphy' && !p.kept.includes('phione')) || (mythical === 'melmetal' && !p.kept.includes('meltan'))) return null;
   run.expansion = { ...run.expansion, promise: { ...p, visited: mythical, guest: { id: mythical, forgiven: false } } };
   syncLegendFlags(run);
   return `${def.title} walks beside you now. ${def.promise}`;
@@ -166,7 +168,7 @@ export function tellAny(run: RunState): string | null {
   if (!run.expansion?.promises) return null;
   const p = run.expansion.promise ?? { tellings: {}, visited: null, guest: null, kept: [], left: [] };
   if (p.visited || p.guest) return null;
-  const open = MYTHICALS.filter((m) => m.status !== 'disabled' && (p.tellings[m.id] ?? 0) < 3);
+  const open = MYTHICALS.filter((m) => m.status !== 'disabled' && m.id !== 'melmetal' && m.id !== 'manaphy' && (p.tellings[m.id] ?? 0) < 3);
   if (open.length === 0) return null;
   const started = open.filter((m) => (p.tellings[m.id] ?? 0) > 0);
   const pool = started.length > 0 ? started : open;

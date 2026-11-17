@@ -1,6 +1,8 @@
 // Running a minigame from a map stop: start (limited attempts), act/tick, and one reward payout when it ends. The
 // reward is applied the moment the game finishes and the finished outcome is stored, so a reload never pays twice.
 
+import { bumpTrack, guestId, onMinigameQuit, trackOf } from '../instrumentality/promises';
+import { emit } from '../story/record';
 import { addItem } from '../items';
 import { hashSeed, Rng } from '../rng';
 import { maxHp } from '../pokemon';
@@ -70,8 +72,13 @@ export function startMinigame(content: Content, run: RunState, sideId: string, t
   if (!Number.isInteger(tier) || tier < 0 || tier >= def.difficultyTiers.length) throw new Error('Unknown difficulty');
   const used = run.minigames.attempts[sideId] ?? 0;
   if (side.used || used >= def.attemptLimit) throw new Error('No attempts left at this stop');
-  run.minigames.attempts[sideId] = used + 1;
-  if (used + 1 >= def.attemptLimit) findStop(run, sideId).used = true;
+  // Meloetta's Wonder: the first try at every stop is free (it does not count against the attempts).
+  const free = guestId(run) === 'meloetta' && trackOf(run, `retry:${sideId}`) === 0;
+  if (free) bumpTrack(run, `retry:${sideId}`, 1);
+  else {
+    run.minigames.attempts[sideId] = used + 1;
+    if (used + 1 >= def.attemptLimit) findStop(run, sideId).used = true;
+  }
   const stage = requireStage(run);
   const rs = new Rng(hashSeed(`${run.seed}::minigame::${stage.index}:${sideId}:${used}:${tier}`)).state;
   run.minigame = { id: def.id, sideId, tier, state: gameModule(def.id).start(content, { ...def.difficultyTiers[tier]!.params, ...conditionParams(run) }, rs), outcome: null };
@@ -270,9 +277,11 @@ function applyEffect(content: Content, run: RunState, kind: 'heal' | 'research' 
 }
 
 /** Back to the map. Leaving before the end forfeits the attempt (it was already counted) and pays nothing. */
-export function leaveMinigame(current: RunState): RunState {
+export function leaveMinigame(current: RunState, content?: Content): RunState {
   const run = structuredClone(current);
   const s = session(run);
+  // Meloetta's Promise: finish the song. Leaving a game that is not over breaks it.
+  if (content && !s.outcome) for (const text of onMinigameQuit(content, run)) emit(content, run, 'storyMoment', { data: { promise: true }, importance: 60, text });
   if (s.id === ARCADE_ID && !s.outcome) arcadeLeave(run, s.state as ArcadeState);
   if (s.id === MARKET_ID && !s.outcome) marketLeave(run, s.state as MarketState);
   run.minigame = null;
