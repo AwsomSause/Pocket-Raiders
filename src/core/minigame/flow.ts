@@ -13,6 +13,8 @@ import { SAFARI_ID, type SafariState } from '../greenneedle/safari';
 import { safariBegin, safariFinish } from '../greenneedle/safariEnd';
 import { SNAKE_ID, type SnakeState } from '../greenneedle/snake';
 import { psyduckBegin, psyduckFinish } from '../greenneedle/snakeEnd';
+import { JIGSAW_ID, type JigsawState } from '../greenneedle/jigsaw';
+import { jigsawBegin, jigsawFinish } from '../greenneedle/jigsawEnd';
 
 export function getMinigame(content: Content, id: string): MinigameDef {
   const g = content.minigames.games.find((m) => m.id === id);
@@ -50,12 +52,18 @@ function findStop(run: RunState, sideId: string) {
 /** Starts an attempt at difficulty tier (0 Easy to 2 Hard; 3 Master where the game has it). Walking away mid-game counts as an attempt and pays nothing. */
 export function beginMinigame(content: Content, current: RunState, sideId: string, tier: number): RunState {
   if (current.phase !== 'map') throw new Error('Minigames start from the map');
-  const side = findStop(current, sideId);
+  const run = structuredClone(current);
+  startMinigame(content, run, sideId, tier);
+  return run;
+}
+
+/** The same, on the run in hand: an event that opens its game at once (gn.41's jigsaw) starts it here. */
+export function startMinigame(content: Content, run: RunState, sideId: string, tier: number): void {
+  const side = findStop(run, sideId);
   const def = getMinigame(content, side.minigameId!);
   if (!Number.isInteger(tier) || tier < 0 || tier >= def.difficultyTiers.length) throw new Error('Unknown difficulty');
-  const used = current.minigames.attempts[sideId] ?? 0;
+  const used = run.minigames.attempts[sideId] ?? 0;
   if (side.used || used >= def.attemptLimit) throw new Error('No attempts left at this stop');
-  const run = structuredClone(current);
   run.minigames.attempts[sideId] = used + 1;
   if (used + 1 >= def.attemptLimit) findStop(run, sideId).used = true;
   const stage = requireStage(run);
@@ -63,8 +71,8 @@ export function beginMinigame(content: Content, current: RunState, sideId: strin
   run.minigame = { id: def.id, sideId, tier, state: gameModule(def.id).start(content, { ...def.difficultyTiers[tier]!.params, ...conditionParams(run) }, rs), outcome: null };
   if (def.id === SAFARI_ID) safariBegin(content, run, run.minigame.state as SafariState);
   if (def.id === SNAKE_ID) psyduckBegin(run, run.minigame.state as SnakeState);
+  if (def.id === JIGSAW_ID) jigsawBegin(run, run.minigame.state as JigsawState);
   run.phase = 'minigame';
-  return run;
 }
 
 /** The conditions of your lead Pokémon as game parameters c0..c4 (S487); every game ignores the ones it does not read. */
@@ -122,6 +130,7 @@ function settle(content: Content, run: RunState): RunState {
   s.outcome = payout(content, run, getMinigame(content, s.id), s.tier, score, max);
   if (s.id === SAFARI_ID) s.outcome.lines.push(...safariFinish(content, run, s.state as SafariState));
   if (s.id === SNAKE_ID) s.outcome.lines.push(...psyduckFinish(content, run, s.state as SnakeState));
+  if (s.id === JIGSAW_ID) s.outcome.lines.push(...jigsawFinish(content, run, s.state as JigsawState));
   if (s.id === 'berry-blending') {
     const line = poffinConditions(run, s.state as never, s.outcome.medal);
     if (line) s.outcome.lines.push(line);

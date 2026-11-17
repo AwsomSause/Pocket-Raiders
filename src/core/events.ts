@@ -1243,7 +1243,8 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
     clearNodeHold(run);
     startEventBattle(content, run, node, outcome.battle, rng, { eventId: event.id, choiceIndex, sideId, success });
     battle = true;
-  } else {
+  } else if (run.phase !== 'minigame') {
+    // (An effect that opened a minigame at once, gn.41's jigsaw, keeps the run in it.)
     run.afterDecisions = 'map';
     continueAfterDecisions(content, run);
   }

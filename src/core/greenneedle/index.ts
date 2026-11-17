@@ -36,6 +36,7 @@ import { eggMoveOptions, familyId } from '../mastery';
 import { pairBondLevel } from '../bond';
 import { borrowBattleStart, borrowEnd, borrowMeet, borrowStart, borrowTokens, rivalTrustAtLeast } from './borrowed';
 import { draftAldhelm, draftBattleStart, draftEnd, draftFriend, draftLetter, draftPick, draftRecruit, draftStart, draftTokens, draftWon } from './draft';
+import { startMinigame } from '../minigame/flow';
 import { exBack, exDraw, exKnown, nextMatchup, exResult, exStart, exTokens, exWatch } from './exhibition';
 import { defectorBossStart, defectorClimax, defectorEnd, defectorMeet, defectorReturn, defectorShare, defectorStart, defectorTokens, defectorTrust, guestOf, ROUTE_LINE } from './defector';
 import { rivalBeatenOnce } from './missingAce';
@@ -548,6 +549,8 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       const id = `minigame-${e.key}-${here.sides.length + 1}`;
       here.sides.push({ id, kind: 'minigame', minigameId: e.key!, used: false });
       delete run.minigames.attempts[id];
+      // `n: 1`: the game opens at once, straight from the event (gn.41's jigsaw), instead of waiting as a stop beside the node.
+      if (e.n === 1) startMinigame(content, run, id, 0);
       return '';
     }
     case 'releaseLast': {

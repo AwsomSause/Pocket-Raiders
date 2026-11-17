@@ -447,17 +447,12 @@ describe('gn.41 The Pokémon Museum', () => {
     expect(right.run.pending.some((p) => 'mon' in p && p.mon.speciesId === 'omanyte')).toBe(true);
   });
 
-  it('the jigsaw: the museum pays; no piece forced, and a Rare Bone too', () => {
+  it('the jigsaw: "Fit the pieces." opens the twelve-piece jigsaw at once (played in gnscreen-jigsaw.test.ts)', () => {
     let run = choose(museum('t41-jigsaw'), 'gn-41-foyer', 'The activities desk.').run;
     run = choose(run, 'gn-41-desk', 'Fossil restoration.').run;
-    const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
-    const side = here.sides.find((x) => x.kind === 'event' && !x.used && x.eventId === 'gn-41-jigsaw')!;
-    const before = run.money;
-    const perfect = chooseEvent(content, structuredClone(run), side.id, 0, undefined, 'perfect');
-    expect(said(perfect)).toMatch(/Rare Bone/);
-    const forced = chooseEvent(content, run, side.id, 0, undefined, 'good');
-    expect(said(forced)).toMatch(/pretend not to have heard/);
-    expect(forced.run.money).toBe(before + 800);
+    run = choose(run, 'gn-41-jigsaw', 'Fit the pieces.').run;
+    expect(run.phase).toBe('minigame');
+    expect(run.minigame!.id).toBe('gn-jigsaw');
   });
 
   it('the Legendary hall: a Sign for the run\'s own Legendary when it is on display, once', () => {
