@@ -404,49 +404,6 @@ export class EvilScene extends Phaser.Scene {
     if (this.trade !== null) return this.tradeKey(a);
     if (this.nb !== null || this.block()?.neighbour?.sitting) return this.neighbourKey(a);
     if (this.sc !== null || this.block()?.scheme?.heist?.stage === 'rooms') return this.schemeKey(a);
-    const block = this.block();
-    if (!block?.district) return a === 'confirm' ? this.advance() : a === 'back' ? this.leave() : undefined;
-    const d = this.disp;
-    const dispatching = block.here.beat === 'dispatch' && !block.district.end;
-    if (!dispatching) {
-      if (a === 'confirm') return this.advance();
-      if (a === 'back') return this.leave();
-      const by = a === 'left' ? -1 : a === 'right' ? 1 : a === 'up' ? -10 : a === 'down' ? 10 : 0;
-      this.disp = { ...d, at: Math.max(0, Math.min(19, d.at + by)) };
-      return this.view?.refresh();
-    }
-    if (d.step === 'where') {
-      const rows = dispatchRows(block);
-      if (a === 'back') return this.leave();
-      if (a === 'confirm') return d.onSend ? this.advance() : this.cell(d.at);
-      const by = a === 'up' || a === 'left' ? -1 : a === 'down' || a === 'right' ? 1 : 0;
-      // The list's rows, then "Send them" as one more row.
-      const pos = d.onSend ? rows.length : Math.max(0, rows.indexOf(d.at));
-      const next = (pos + by + rows.length + 1) % (rows.length + 1);
-      this.disp = next === rows.length ? { ...d, onSend: true } : { ...d, onSend: false, at: rows[next]! };
-      return this.view?.refresh();
-    }
-    if (d.step === 'who') {
-      const n = block.crew.length + 1;
-      if (a === 'back') this.disp = { ...d, step: 'where' };
-      else if (a === 'up' || a === 'down') this.disp = { ...d, who: (d.who + (a === 'up' ? -1 : 1) + n) % n };
-      else if (a === 'confirm') return d.who === block.crew.length ? this.toHow() : this.toggleCrew(block.crew[d.who]!.id);
-      return this.view?.refresh();
-    }
-    // How: left/right the seven methods; up/down the Pay offer; Enter queues.
-    if (a === 'back') this.disp = { ...d, step: 'who' };
-    else if (a === 'left' || a === 'right') this.disp = { ...d, how: (d.how + (a === 'left' ? -1 : 1) + EVIL_DATA.methods.length) % EVIL_DATA.methods.length };
-    else if ((a === 'up' || a === 'down') && EVIL_DATA.methods[d.how]?.id === 'take') {
-      const things = EVIL_DATA.line.things.map((t) => t.id);
-      this.disp = { ...d, thing: things[(things.indexOf(d.thing) + (a === 'up' ? -1 : 1) + things.length) % things.length]! };
-    } else if (a === 'up' || a === 'down') {
-      const offers = EVIL_DATA.district.methods.pay.offers.map((o) => o.pct);
-      const i = offers.indexOf(d.offer);
-      this.disp = { ...d, offer: offers[(i + (a === 'up' ? -1 : 1) + offers.length) % offers.length]! };
-    } else if (a === 'confirm') return this.openCard(true);
-    this.view?.refresh();
-  }
-
     if (this.base !== null) return this.baseKey(a);
     const block = this.block();
     if (!block?.district) return a === 'confirm' ? this.advance() : a === 'back' ? this.leave() : undefined;
