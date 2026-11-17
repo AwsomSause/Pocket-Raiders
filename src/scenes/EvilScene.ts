@@ -132,6 +132,11 @@ export class EvilScene extends Phaser.Scene {
       render: (c) => {
         const r = services().session.run;
         const block = r?.expansion?.evilMode;
+        // Slice 15: an ending holds the screen even with no district laid.
+        if (block?.ending && !block.district) {
+          const em = roadModel(block);
+          return frameView(c, frameModel(block, archetype.name), null, em ? roadView(em, this.road ?? 0, this.notice) : '');
+        }
         if (block?.district) {
           const frame = frameModel(block, archetype.name);
           // The Card takes the whole stage; the frame falls away (design Part 29 section 3).
@@ -1058,7 +1063,7 @@ export class EvilScene extends Phaser.Scene {
   /** The fire, or a last room not yet seen out, holds the screen. */
   private roadOn(): boolean {
     const b = this.block();
-    return !!b?.district && roadForced(b, this.roomSeen === b.here.region);
+    return !!b && (!!b.ending || (!!b.district && roadForced(b, this.roomSeen === b.here.region)));
   }
 
   private toggleRoad(): void {
@@ -1079,6 +1084,13 @@ export class EvilScene extends Phaser.Scene {
     const b = this.block();
     if (!b) return;
     if (id === 'fight') return this.startFight();
+    // Slice 15: the ending's last page read; the run ends, and the run-end page follows.
+    if (id === 'endDone') {
+      if (!services().session.evilFinish()) { this.notice = 'Not yet.'; return this.redrawRoad(); }
+      this.leaving = true;
+      return void this.scene.start('GameOver');
+    }
+    if (id.startsWith('pr:handOff:')) text = this.own_?.value ?? '';
     if (id === 'roomDone') {
       this.roomSeen = b.here.region;
       this.road = null;
@@ -1091,7 +1103,7 @@ export class EvilScene extends Phaser.Scene {
     const refused = cues.find((c) => c.id === 'refused');
     const said = cues.find((c) => c.id === 'said');
     this.notice = refused && 'reason' in refused ? refused.reason : said && 'line' in said ? said.line : null;
-    if (!refused && this.own_ && (action.type === 'fireOwn' || action.type === 'writeNotebook')) this.own_.value = '';
+    if (!refused && this.own_ && (action.type === 'fireOwn' || action.type === 'writeNotebook' || action.type === 'endAct' || action.type === 'endPress')) this.own_.value = '';
     this.road = this.roadOn() || this.road !== null ? 0 : null;
     this.redrawRoad();
   }

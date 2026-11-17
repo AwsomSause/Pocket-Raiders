@@ -99,3 +99,16 @@ export function ensureRoad(run: RunState): RunState {
   const rivals = [...run.story.rivals.filter((r) => !ids.has(r.id)), ...recs];
   return { ...run, story: { ...run.story, rivals }, expansion: { ...(run.expansion ?? {}), evilMode: { ...b, road: made.road } } };
 }
+
+/**
+ * Slice 15: the run ends once its ending's last scene is read (Part 23 section 1.4). Every ending ends the run the same
+ * way (`victory` false for all six: no ending is ranked above another). Null when no ending is done.
+ */
+export function finishEvil(run: RunState): RunState | null {
+  const b = run.expansion?.evilMode;
+  if (!b?.ending?.done || run.phase === 'over' || run.battle) return null;
+  const out = structuredClone(run);
+  out.phase = 'over';
+  out.victory = false;
+  return out;
+}

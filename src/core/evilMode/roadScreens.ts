@@ -9,10 +9,30 @@ import { dayOfReck, reckOn, roomOptions, type LastDay, type RoomOption } from '.
 import { ROAD_WHATS, type RoadWhat } from './road';
 import type { EvilModeBlock } from './schema';
 import { temperDoes, temperWord } from './temper';
+import { currentScene, endingCards, endingsOn, heirs, ledgerPage, pressable } from './endings';
+
+/** Slice 15: the ending on screen (a scene, or once it's done, the Ledger's last page and the cards). */
+function endingModel(block: EvilModeBlock, data: EvilData): RoadModel {
+  const W = data.endings.words;
+  const e = block.ending!;
+  const base = { mode: 'ending' as const, forced: true, temper: null, own: null, sections: [] };
+  if (e.done) {
+    const cards = endingCards(block, data);
+    // The page, then the cards, then the one button under them (the body reads top-down, newest at the bottom).
+    return { ...base, title: W.page, lines: [...ledgerPage(block, data), `${W.cards}:`, ...cards.map((c) => `${c.title}: ${c.line}`)], choices: [{ id: 'endDone', say: W.theEnd }] };
+  }
+  const s = currentScene(block, data);
+  if (!s) return { ...base, title: data.endings.names[e.id], lines: [], choices: [{ id: 'end:', say: W.goOn }] };
+  const choices: RoadChoice[] = block.fight ? [{ id: 'fight', say: 'Fight' }]
+    : s.choices.length ? s.choices.map((c) => ({ id: `end:${c.id}`, say: c.label }))
+    : [{ id: 'end:', say: W.goOn }];
+  const own = s.typed && !block.fight ? { max: 120, help: s.typed, id: 'end:typed' } : null;
+  return { ...base, title: s.title, lines: s.lines, choices, own };
+}
 
 export interface RoadChoice { id: string; say: string; note?: string }
 export interface RoadModel {
-  mode: 'road' | 'fire' | 'room';
+  mode: 'road' | 'fire' | 'room' | 'ending';
   /** The fire and the room hold the screen until they're closed (text stays until the player's input). */
   forced: boolean;
   title: string;
@@ -27,9 +47,11 @@ export interface RoadModel {
 const roomOpen = (block: EvilModeBlock) => block.reck?.room && block.reck.region === block.here.region ? block.reck.room : null;
 
 /** True while the fire or the last room (not yet seen out) must stay on screen. */
-export const roadForced = (block: EvilModeBlock, roomSeen = false): boolean => !!block.fire || (!!roomOpen(block) && !roomSeen);
+export const roadForced = (block: EvilModeBlock, roomSeen = false): boolean => !!block.ending || !!block.fire || (!!roomOpen(block) && !roomSeen);
 
 export function roadModel(block: EvilModeBlock, roomSeen = false, data: EvilData = EVIL_DATA): RoadModel | null {
+  // Slice 15: an ending holds the screen to its last page (Part 23). Its scenes, then the Ledger's last page and the cards.
+  if (block.ending) return endingModel(block, data);
   const hero = block.hero;
   if (!hero) return null;
   const temper = `${temperWord(hero.temper, data)}. ${temperDoes(hero.temper, data)}`;
@@ -72,6 +94,13 @@ export function roadModel(block: EvilModeBlock, roomSeen = false, data: EvilData
   }
   const fireTonight = block.here.beat === 'night' && hero.fires.some((x) => !x.missed && x.day === block.here.day && x.region === block.here.region) && !block.applied.includes(`notebook:${block.here.region}:${block.here.day}`);
   if (fireTonight) lines.push(data.fires.flame.night!);
+  // Slice 15: the pressed endings (Part 23 section 1.1, row 3), each with why it isn't open yet.
+  if (endingsOn(data) && (block.here.beat === 'night' || block.team.heat >= data.endings.rules.walkInHeat)) {
+    for (const p of pressable(block, data)) {
+      if (p.what === 'handOff' && !p.problem) for (const h of heirs(block, data)) choices.push({ id: `pr:handOff:${h.id}`, say: `${p.label}: ${h.name}`, note: 'A line to them first, in the box (or none).' });
+      else choices.push({ id: `pr:${p.what}`, say: p.label, ...(p.problem ? { note: p.problem } : {}) });
+    }
+  }
   const sections = [
     { title: 'The other three', lines: block.road.map((t) => (t.state === 'home' ? `${t.name}: gone home.` : `${t.name}: ${t.today ?? data.road.approach[t.role]}`)), empty: 'Nobody else on the road.' },
     { title: "Their mother's letters", lines: [M.sealed.replace('{n}', String(hero.mother.letters.filter((l) => l.mood !== 'none').length))], empty: '' },
@@ -93,6 +122,8 @@ export function roadChoice(id: string, text = ''): EvilAction | null {
   if (k === 'lo') return { type: 'openLetter', id: id.slice(3) };
   if (k === 'keep') return { type: 'keepLetter' };
   if (k === 'wm') return { type: 'writeMother', opening: Number(a) };
+  if (k === 'end') return { type: 'endAct', choice: a || null, text: a === 'typed' ? text : null };
+  if (k === 'pr') return { type: 'endPress', what: a as 'straight' | 'handOff' | 'walkIn', ...(b ? { heir: b, line: text } : {}) };
   if (k === 'ra') return { type: 'roomAct', what: a as RoomOption['what'], ...(b ? { kind: b } : {}), ...(c ? { who: c } : {}) };
   return null;
 }

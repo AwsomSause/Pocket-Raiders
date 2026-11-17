@@ -102,7 +102,7 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
   const seed = opts.seed ?? opts.boss;
   const funds = patron ? Math.floor(modify({ here: { region: 0, stage, day: 1, beat: 'morning' }, team: { patron } as never, crew }, 'funds', {}, creed.start.funds, data)) : creed.start.funds;
   const block: EvilModeBlock = {
-    v: 13,
+    v: 14,
     from: 'founding',
     settings: { length: opts.length },
     team: {
@@ -154,6 +154,7 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
     base: null,
     raid: null,
     law: { hot: 0, raids: [], heatHeld: null },
+    ending: null,
   };
   block.region = newRegion(block, seed, data);
   block.neighbour = ensureNeighbour(block, data).neighbour;

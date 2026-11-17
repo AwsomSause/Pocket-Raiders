@@ -326,7 +326,7 @@ export const StoredCardSchema = z.object({
 }).strict();
 export type StoredCard = z.infer<typeof StoredCardSchema>;
 
-export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym', 'econ', 'neighbour', 'scheme', 'base', 'raid'] as const;
+export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym', 'econ', 'neighbour', 'scheme', 'base', 'raid', 'ending'] as const;
 
 /** One line of the Log (Part 30 section 7.1, the kinds slice 3 writes). Never edited, never removed. */
 export const LogEntrySchema = z.object({
@@ -437,7 +437,7 @@ export const FightSchema = z.object({
   /** Slice 13: 'chair' is the Boss against the neighbour's Boss for the Chair; 'legend' the catchable Legend after a Betrayal. */
   /** Slice 8: 'gym' is the Boss's Beat; 'challenge' an Officer's Replace challenge (their kit fights, the Boss's party waits in the box). */
   /** Slice 14: 'heist' is a room's battle inside a heist (a watchman, a dog, the other crew). */
-  kind: z.enum(['outplay', 'hold', 'gym', 'challenge', 'chair', 'legend', 'heist', 'walk', 'raid', 'room', 'practice']),
+  kind: z.enum(['outplay', 'hold', 'gym', 'challenge', 'chair', 'legend', 'heist', 'walk', 'raid', 'room', 'practice', 'ending']),
   holdingId: z.string().min(1),
   /** Hold: who's standing there. */
   personId: z.string().min(1).optional(),
@@ -1130,9 +1130,52 @@ export const ReckStateSchema = z.object({
 }).strict();
 export type ReckState = z.infer<typeof ReckStateSchema>;
 
+// ---- Slice 15: the endings (design Part 23; Part 22's Finales) ----
+
+export const ENDING_IDS = ['scheme', 'lastRoom', 'straight', 'handOff', 'recruit', 'caught'] as const;
+export const EndingIdSchema = z.enum(ENDING_IDS);
+export type EndingId = z.infer<typeof EndingIdSchema>;
+/** An ending under way. Its scenes are built from the block and the picks; only the step and the picks are stored. */
+export const EndingStateSchema = z.object({
+  id: EndingIdSchema,
+  /** The colour: "Out of the window.", "Walked in."... (a key of endings.json `subs`), or null. */
+  sub: z.string().min(1).nullable(),
+  /** What opened it (the trigger), the day and region it began. */
+  via: z.string().min(1),
+  day: z.number().int().min(1),
+  region: z.number().int().min(0),
+  /** The scene being shown (0 is the first), and each scene's answer by its key ("t:" before a typed line). */
+  step: z.number().int().min(0),
+  picks: z.record(z.string(), z.string().max(130)),
+  /** The heir (the Hand-Off), when there is one. */
+  heir: z.string().nullable(),
+  done: z.boolean(),
+}).strict();
+export type EndingState = z.infer<typeof EndingStateSchema>;
+const ES15 = z.string();
+const Rec15 = z.record(z.string(), z.unknown());
+/** endings.json: the structure the code reads is checked here; its lines are strings throughout. */
+export const EndingsFileSchema = z.object({
+  note: z.string(), on: z.boolean(),
+  names: z.object(Object.fromEntries(ENDING_IDS.map((id) => [id, ES15.min(1)])) as Record<EndingId, z.ZodString>).strict(),
+  subs: z.record(z.string(), ES15.min(1)),
+  asks: z.object(Object.fromEntries(ENDING_IDS.map((id) => [id, ES15.min(1)])) as Record<EndingId, z.ZodString>).strict(),
+  pay: z.object({ perRun: z.number().int().min(0), perDistrict: z.number().int().min(0), perHeld: z.number().int().min(0), perRegion: z.number().int().min(0), perBadge: z.number().int().min(0) }).strict(),
+  words: z.record(z.string(), ES15),
+  rules: z.record(z.string(), z.number().int()),
+  creedOf: z.record(z.string(), ES15.min(1)),
+  creedName: z.record(z.string(), ES15.min(1)),
+  tempers: z.array(ES15.min(1)).length(5),
+  scheme: z.object({ finales: z.record(z.string(), z.object({ title: ES15.min(1), room: ES15.min(1), intro: z.array(ES15.min(1)), dirtyIntro: z.array(ES15.min(1)), prompt: ES15.min(1), choices: z.array(Rec15).min(1), stamps: z.object({ means: ES15.min(1), place: ES15.min(1), key: ES15.min(1), moment: ES15.min(1) }).strict() }).passthrough()), room: Rec15, monday: Rec15, findsOut: z.record(z.string(), ES15.min(1)), late: Rec15, minute: Rec15 }).strict(),
+  lastRoom: Rec15, walkOut: Rec15, straight: Rec15, handOff: Rec15, recruit: Rec15, caught: Rec15, ledgerPage: Rec15, cards: Rec15,
+  league: z.object({ elite: z.array(z.object({ name: ES15.min(1), team: z.array(ES15.min(1)).min(1) }).strict()).length(4), champion: z.object({ name: ES15.min(1), team: z.array(ES15.min(1)).min(1) }).strict(), eliteOffset: z.number().int(), championOffset: z.number().int() }).strict(),
+  hall: z.object({ title: ES15.min(1), line: ES15.min(1) }).strict(),
+  banned: z.array(ES15.min(1)).min(1),
+}).strict();
+
 const BlockV7Schema = z.object({
   /** The block's own version, for its own migrations. 7: slice 8 added the Gyms. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a waiting fight, who's posted, and the day's in-person job. 6: slice 6 added proof held and the last move of the Line. */
-  v: z.literal(13),
+  v: z.literal(14),
   from: z.enum(['founding', 'charter', 'turn']),
   /** Copied from Settings at founding, so a setting changed mid-run never changes this run. */
   settings: z.object({ length: RunLengthSchema }),
@@ -1187,6 +1230,8 @@ const BlockV7Schema = z.object({
   base: BaseStateSchema.nullable(),
   raid: RaidStateSchema.nullable(),
   law: LawSchema,
+  /** Slice 15: the ending under way (one a run), or null. */
+  ending: EndingStateSchema.nullable(),
 }).strict();
 
 /** What a Hero made before slice 12 starts with (and what `makeHero` gives a new one). */
@@ -1220,6 +1265,8 @@ const startLoyalty = (creed: unknown): number => (creedsRaw.creeds.find((c) => c
  * v10 -> v11 (slice 14's block): an empty Scheme for the team's Creed (nothing in hand, no groundwork, nothing credited:
  * groundwork counts from the next Evening), and the `evil-scheme` stream at 0.
  * v11 -> v12 (slice 14's block): no base yet (a site's offered on the next screen), no Raid, never raided.
+ * v13 -> v14 (slice 12's block): no ending yet. A run saved before slice 15 goes on from where it was; its Reckoning in the
+ * last region begins the ending the next time it's reached.
  * v12 -> v13 (slice 10's block): the Hero starts Curious with no fires, no lies, nothing told and a mother at Wary who
  * hasn't written yet (her letters start with the next district); the other three are made on the next load (the
  * session needs the run's seed); no fire under way; no Reckoning yet. The starter's read back from the rival record.
@@ -1243,6 +1290,7 @@ export function migrateEvilBlock(raw: unknown): unknown {
   if (b.v === 10) b = { ...b, v: 11, scheme: emptyScheme(String((b.team as { creed?: unknown } | undefined)?.creed ?? 'profit')), draws: { ...(b.draws as object), 'evil-scheme': 0 } };
   if (b.v === 11) b = { ...b, v: 12, base: null, raid: null, law: { hot: 0, raids: [], heatHeld: null } };
   if (b.v === 12) b = { ...b, v: 13, hero: b.hero && typeof b.hero === 'object' ? { ...heroSlice12Start(), ...(b.hero as object) } : b.hero ?? null, road: [], fire: null, reck: null };
+  if (b.v === 13) b = { ...b, v: 14, ending: null };
   return b;
 }
 

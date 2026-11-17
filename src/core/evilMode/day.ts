@@ -23,6 +23,7 @@ import { friendCheck, keepLetter, motherWrites, openLetter, roadDay, roadDo, wri
 import { lastDay, nightBefore, roomAct, roomResult, type LastDay, type RoomOption } from './reckoning';
 import { eveningTemper } from './temper';
 import { canDo } from './canDo';
+import { checkEndings, endAct, endBattle, pressEnding } from './endings';
 import { BEATS, type Beat, type EvilModeBlock, type GymWay, type LineId, type OrderId, type PartId, type Question, type RoomType, type TableThing, type WingId } from './schema';
 
 /** The action that ends each beat in slice 1 (the empty day). Later slices add more actions inside a beat. */
@@ -134,9 +135,12 @@ export type EvilAction =
   | { type: 'stayIn' }
   | { type: 'callItADay' }
   | { type: 'lightsOut' }
-  | { type: 'watchRoad' };
+  | { type: 'watchRoad' }
+  /** Slice 15: the endings (Part 23). One answer to the scene on screen, or a pressed ending. */
+  | { type: 'endAct'; choice?: string | null; text?: string | null }
+  | { type: 'endPress'; what: 'straight' | 'handOff' | 'walkIn'; heir?: string; line?: string; ledger?: boolean };
 
-export type EvilCue = { id: 'beat'; beat: Beat } | { id: 'newDay'; day: number } | { id: 'refused'; reason: string } | { id: 'queued'; holdingId: string } | { id: 'districtEnd'; how: 'held' | 'taken' | 'arrival' | 'reckoning' } | { id: 'filed'; text: string } | { id: 'asked'; line: string } | { id: 'said'; line: string } | { id: 'refusal' } | { id: 'fight' } | { id: 'road'; lines: string[] };
+export type EvilCue = { id: 'beat'; beat: Beat } | { id: 'newDay'; day: number } | { id: 'refused'; reason: string } | { id: 'queued'; holdingId: string } | { id: 'districtEnd'; how: 'held' | 'taken' | 'arrival' | 'reckoning' } | { id: 'filed'; text: string } | { id: 'asked'; line: string } | { id: 'said'; line: string } | { id: 'refusal' } | { id: 'fight' } | { id: 'road'; lines: string[] } | { id: 'ending' };
 
 export interface StepResult {
   block: EvilModeBlock;
@@ -150,13 +154,27 @@ export const nextBeat = (beat: Beat): Beat => BEATS[(BEATS.indexOf(beat) + 1) % 
 
 /** One action. The input block is never changed; a new one is returned. */
 export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
+  // Slice 15: once an ending has begun, only its scenes (and its battle) move anything.
+  if (block0.ending) return stepEnding(block0, action);
   const r = stepInner(block0, action);
   // Slice 13: the neighbour's Morning (messages, and each tick on its day) comes with every Morning, however it's reached.
   if (!r.ok) return r;
   let b = schemeMorning(neighbourMorning(settleRegion(neighbourDistrictEnd(r.block))));
   // Slice 14: the Reckoning lost (the Hero reached the base) costs the Scheme groundwork, once a region.
   if (b.district?.end?.how === 'reckoning' && b.scheme) b = reckoningLost(b).block;
-  return { ...r, block: b };
+  // Slice 15: the endings are checked after every step, in their order (Part 23 section 1.1).
+  b = checkEndings(block0, b);
+  return { ...r, block: b, cues: b.ending && !block0.ending ? [...r.cues, { id: 'ending' as const }] : r.cues };
+}
+
+function stepEnding(block: EvilModeBlock, action: EvilAction): StepResult {
+  const no = (reason: string): StepResult => ({ block, cues: [{ id: 'refused', reason }], ok: false });
+  const r = action.type === 'endAct' ? endAct(block, action.choice ?? null, action.text ?? null)
+    : action.type === 'battleResult' && block.fight?.kind === 'ending' ? endBattle(block, action.won)
+    : null;
+  if (!r) return no(block.ending!.done ? "The run's over." : 'The ending is going on.');
+  if (r.problem) return no(r.problem);
+  return { block: r.block, cues: [...r.lines.map((line) => ({ id: 'said' as const, line })), ...(r.fight ? [{ id: 'fight' as const }] : [])], ok: true };
 }
 
 /** Slice 9: a district that's just ended is tallied once, and the region waits on the tally (Part 2 section 4.2). */
@@ -172,6 +190,13 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
   // Slice 12: one guard asked first for every action (design Part 30 section 10): nothing harms a child on the road.
   const guard = canDo(block, action);
   if (!guard.ok) return no(guard.why);
+  // Slice 15: the pressed endings, and "Walk into the station" at the warning (Part 23 section 7).
+  if (action.type === 'endPress' || (action.type === 'warnChoice' && action.choice === 'station')) {
+    if (action.type === 'warnChoice' && block.raid?.state !== 'warned') return no('Nobody has warned you of anything.');
+    const r = action.type === 'endPress' ? pressEnding(block, action.what, action) : pressEnding(block, 'walkIn', {});
+    return r.problem ? no(r.problem) : { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
+  }
+  if (action.type === 'endAct') return no('No ending has begun.');
   const said = (r: { block: EvilModeBlock; problem: string | null; line?: string; lines?: string[]; fight?: boolean }): StepResult =>
     (r.problem ? no(r.problem) : { block: r.block, cues: [...(r.lines ?? (r.line ? [r.line] : [])).map((line) => ({ id: 'said' as const, line })), ...(r.fight ? [{ id: 'fight' as const }] : [])], ok: true });
   // Slice 9: after a district, only the tally and the Road move anything.

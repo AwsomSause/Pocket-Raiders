@@ -488,9 +488,9 @@ describe('the warning and the Raid (Part 17 section 9): it costs what Part 17 sa
     b = { ...b, here: { ...b.here, day: b.here.day + 1 } };
     return evening(hot(b, 10));
   };
-  it('the four choices: Move loses the rooms, keeps the people, Heat −4; Walk into the station waits for the endings', () => {
+  it('the four choices: Move loses the rooms, keeps the people, Heat −4; Walk into the station begins the Caught ending', () => {
     let b = evening(hot(based(), 9));
-    expect(refused(b, { type: 'warnChoice', choice: 'station' })).toContain('slice 15');
+    expect(act(b, { type: 'warnChoice', choice: 'station' }).ending).toMatchObject({ id: 'caught', via: 'walkIn', done: false });
     const crew = b.crew;
     b = act(b, { type: 'warnChoice', choice: 'move' });
     expect(b.base).toBeNull();
@@ -557,6 +557,9 @@ describe('the warning and the Raid (Part 17 section 9): it costs what Part 17 sa
     for (let i = 0; i < 12 && b.raid!.state === 'turns'; i++) b = act(b, { type: 'raidTurn' });
     b = act(b, { type: 'raidOffice', choice: 'charge' });
     expect(b.team.funds).toBe(funds - Math.floor(funds / 10));
+    // Slice 15: no back way, so the Boss's charge begins Caught (Part 23 section 7); bail is checked with that ending set aside.
+    expect(b.ending).toMatchObject({ id: 'caught', via: 'raid' });
+    b = { ...b, ending: null };
     const caught = b.crew.find((c) => c.cell)!;
     expect(caught).toBeTruthy();
     const f = b.team.funds;
@@ -616,7 +619,7 @@ describe('saves: block v9', () => {
     const b = based();
     const { base: _b, raid: _r, law: _l, ...rest } = b;
     const v9 = EvilModeBlockSchema.parse({ ...rest, v: 11 });
-    expect(v9).toMatchObject({ v: 13, base: null, raid: null, law: { hot: 0, raids: [], heatHeld: null } });
+    expect(v9).toMatchObject({ v: 14, base: null, raid: null, law: { hot: 0, raids: [], heatHeld: null } });
     expect(EvilModeBlockSchema.parse(JSON.parse(JSON.stringify(b)))).toEqual(b);
   });
   it('a damaged base is refused: an unknown room, a size of four', () => {

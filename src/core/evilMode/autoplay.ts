@@ -2,6 +2,7 @@
 // `step` only, and records every action, so the same list replays to the same block. The simulator (tools/evil-sim.ts)
 // runs it over many seeds; the tests replay it. Pure: no Phaser, no gameplay RNG of its own (a policy reads the block).
 
+import { currentScene } from './endings';
 import { EVIL_DATA, type EvilData } from './data';
 import { BEAT_END, step, type EvilAction } from './day';
 import { jobProblem } from './dispatch';
@@ -120,6 +121,21 @@ export function playRegion(block0: EvilModeBlock, policy: Policy, data: EvilData
   };
   const done = (finished: boolean): PlayResult => ({ block, actions, districts, finished, brokeDays, lowest });
   for (let i = 0; i < budget; i++) {
+    // Slice 15: an ending plays to its last page: the first choice that moves it on (a typed line left empty; battles lost).
+    if (block.ending) {
+      if (block.ending.done) return done(true);
+      if (block.fight) { act({ type: 'battleResult', won: false }); continue; }
+      const s = currentScene(block, data);
+      if (!s) return done(false);
+      const tries: EvilAction[] = s.typed ? [{ type: 'endAct', text: '' }] : s.choices.length ? s.choices.map((c) => ({ type: 'endAct', choice: c.id })) : [{ type: 'endAct' }];
+      const before = block.ending;
+      const moved = tries.find((a) => {
+        const r = step(block, a);
+        return r.ok && (r.block.ending?.step !== before.step || r.block.ending?.done || !r.block.ending || !!r.block.fight);
+      });
+      if (!moved || !act(moved)) return done(false);
+      continue;
+    }
     const R = block.region;
     if (R.phase === 'over') return done(true);
     if (R.phase === 'tally') {

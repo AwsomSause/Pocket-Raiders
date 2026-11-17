@@ -93,7 +93,7 @@ export function beginEvilFight(content: Content, current: RunState): RunState | 
   const f = block?.fight;
   // Slice 10: Walk it (the player's own base, with a Hero-built party) and the Raid's Office battle (the detective's six).
   if (block && f && !f.begun && !current.battle && (f.kind === 'walk' || f.kind === 'raid')) return beginBaseFight(content, current, block);
-  if (block && f && !f.begun && !current.battle && (f.kind === 'room' || f.kind === 'practice')) return beginRoadFight(content, current, block);
+  if (block && f && !f.begun && !current.battle && (f.kind === 'room' || f.kind === 'practice' || f.kind === 'ending')) return beginRoadFight(content, current, block);
   const h = f ? block!.district?.holdings.find((x) => x.id === f.holdingId) : undefined;
   if (!block || !f || f.begun || !h || current.battle) return null;
   const run = structuredClone(current);
@@ -242,6 +242,8 @@ function beginBaseFight(content: Content, current: RunState, block: EvilModeBloc
  */
 function beginRoadFight(content: Content, current: RunState, block: EvilModeBlock): RunState | null {
   const f = block.fight!;
+  // Slice 15: an ending's battle. The Plateau's four and its Champion (the Recruit), or the Hero's six as in the last room.
+  if (f.kind === 'ending' && f.holdingId !== 'hero') return beginLeagueFight(content, current, block);
   const hero = block.hero;
   const rival = heroRival(current, block);
   if (!hero || !rival) return null;
@@ -266,8 +268,27 @@ function beginRoadFight(content: Content, current: RunState, block: EvilModeBloc
   const active = Math.max(0, run.party.findIndex((m) => m.hp > 0));
   if (!enemy.length || !run.party[active]) return null;
   run.battle = createBattle('trainer', enemy, active, run.party[active]!.uid, { classId: EVIL_DATA.hero.classes.hero, name: hero.name, leaderId: null });
-  if (f.kind === 'room') run.battle.ai = hero.marks >= 10 ? 1 : 0.5;
+  if (f.kind === 'room' || f.kind === 'ending') run.battle.ai = hero.marks >= 10 ? 1 : 0.5;
   run.phase = 'battle';
   run.expansion = { ...(run.expansion ?? {}), evilMode: { ...block, fight: { ...f, begun: true, ...(lent.length ? { lent } : {}) } } };
+  return run;
+}
+
+/** Slice 15: the Recruit's Plateau (Part 23 section 6): an Elite (`elite:0`..`elite:3`) or the Champion, at the stage's level plus an offset. */
+function beginLeagueFight(content: Content, current: RunState, block: EvilModeBlock): RunState | null {
+  const f = block.fight!;
+  const L = EVIL_DATA.endings.league;
+  const champ = f.holdingId === 'champion';
+  const who = champ ? L.champion : L.elite[Number(f.holdingId.split(':')[1] ?? 0)];
+  if (!who) return null;
+  const run = structuredClone(current);
+  const A = stageLevel(content, run, block);
+  const enemy = who.team.filter((s) => content.species.has(s)).map((s) => newMon(content, run, s, Math.max(1, A + (champ ? L.championOffset : L.eliteOffset)), 'e'));
+  const active = Math.max(0, run.party.findIndex((m) => m.hp > 0));
+  if (!enemy.length || !run.party[active]) return null;
+  run.battle = createBattle('trainer', enemy, active, run.party[active]!.uid, { classId: GYM_LEADER_CLASS, name: who.name, leaderId: null });
+  run.battle.ai = 1;
+  run.phase = 'battle';
+  run.expansion = { ...(run.expansion ?? {}), evilMode: { ...block, fight: { ...f, begun: true } } };
   return run;
 }

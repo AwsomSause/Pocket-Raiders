@@ -51,7 +51,7 @@ export function sentenceAt(block: EvilModeBlock, data: EvilData = EVIL_DATA): st
 // written (Kanto), the same order runs across its districts: the Means from District 1, the Place and Key from District 3,
 // the Moment in District 6.
 
-const regionsWritten = (data: EvilData): number => Math.max(1, data.region.regions.filter((r) => r.status === 'supported' || r.status === 'limited').length);
+export const regionsWritten = (data: EvilData): number => Math.max(1, data.region.regions.filter((r) => r.status === 'supported' || r.status === 'limited').length);
 export function paceProblem(block: EvilModeBlock, part: PartId, data: EvilData = EVIL_DATA): string | null {
   const d = block.district;
   if (!d) return 'Not in a district.';

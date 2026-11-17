@@ -20,7 +20,14 @@ import baseRaw from '../../data/evilMode/base.json';
 import firesRaw from '../../data/evilMode/fires.json';
 import roadRaw from '../../data/evilMode/road.json';
 import lastRoomRaw from '../../data/evilMode/lastRoom.json';
-import { FiresFileSchema, RoadFileSchema, LastRoomFileSchema } from './schema';
+import endingsRaw from '../../data/evilMode/endings.json';
+import { FiresFileSchema, RoadFileSchema, LastRoomFileSchema, EndingsFileSchema } from './schema';
+
+/** Parses `raw` (throws when it's wrong) and hands it back with the JSON's own types. */
+const checked = <T>(schema: { parse: (x: unknown) => unknown }, raw: T): T => {
+  schema.parse(raw);
+  return raw;
+};
 
 export const EVIL_DATA = {
   creeds: CreedsFileSchema.parse(creedsRaw).creeds,
@@ -42,6 +49,8 @@ export const EVIL_DATA = {
   fires: FiresFileSchema.parse(firesRaw),
   road: RoadFileSchema.parse(roadRaw),
   lastRoom: LastRoomFileSchema.parse(lastRoomRaw),
+  /** Slice 15: checked by its schema; read with the JSON's own types (its lines are many and plain). */
+  endings: checked(EndingsFileSchema, endingsRaw),
 };
 export type EvilData = typeof EVIL_DATA;
 export type Creed = EvilData['creeds'][number];
