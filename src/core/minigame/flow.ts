@@ -11,6 +11,8 @@ import { gameModule, type MinigameView } from './games';
 import type { Medal, MinigameDef } from './schema';
 import { SAFARI_ID, type SafariState } from '../greenneedle/safari';
 import { pausedPark, safariBegin, safariFinish, safariStepBack, safariStepOut } from '../greenneedle/safariEnd';
+import { isZone, type ZoneState } from '../greenneedle/zone';
+import { zoneBegin, zoneStepBack, zoneStepOut } from '../greenneedle/zoneEnd';
 import { SNAKE_ID, type SnakeState } from '../greenneedle/snake';
 import { psyduckBegin, psyduckFinish } from '../greenneedle/snakeEnd';
 import { ARCADE_ID, type ArcadeState } from '../greenneedle/arcade';
@@ -72,6 +74,7 @@ export function startMinigame(content: Content, run: RunState, sideId: string, t
   const rs = new Rng(hashSeed(`${run.seed}::minigame::${stage.index}:${sideId}:${used}:${tier}`)).state;
   run.minigame = { id: def.id, sideId, tier, state: gameModule(def.id).start(content, { ...def.difficultyTiers[tier]!.params, ...conditionParams(run) }, rs), outcome: null };
   if (def.id === SAFARI_ID) safariBegin(content, run, run.minigame.state as SafariState);
+  if (isZone(def.id)) zoneBegin(content, run, run.minigame.state as ZoneState, def.id);
   if (def.id === SNAKE_ID) psyduckBegin(run, run.minigame.state as SnakeState);
   if (def.id === JIGSAW_ID) jigsawBegin(run, run.minigame.state as JigsawState);
   run.phase = 'minigame';
@@ -114,6 +117,8 @@ export function minigameAct(content: Content, current: RunState, cellId: string)
   mod.act(content, s.state as never, cellId);
   // gn.18: an event inside the park (Kanto's Stampede and Gold Teeth) plays on the map phase; the visit waits for it.
   if (s.id === SAFARI_ID && safariStepOut(content, run, s.state as SafariState)) return run;
+  // gn.19, gn.20: a room of the zone opens where you walked to (the walk waits for it).
+  if (isZone(s.id) && zoneStepOut(run, s.state as ZoneState)) return run;
   return settle(content, run);
 }
 
@@ -129,6 +134,11 @@ export function continuePark(content: Content, current: RunState): { run: RunSta
   const run = structuredClone(current);
   const m = run.minigame!;
   const node = requireStage(run).map.nodes.find((n) => n.id === run.stage!.current);
+  if (isZone(m.id)) {
+    // gn.19, gn.20: the next room of the same place, or back on the tile; when no room is left the zone is over (the run is on the map).
+    if (!node) return { run: { ...run, minigame: null }, sideId: null };
+    return { run, sideId: zoneStepBack(run, m.id) };
+  }
   if (!node?.sides.some((x) => x.id === m.sideId)) {
     const s = m.state as SafariState;
     s.away = null;
