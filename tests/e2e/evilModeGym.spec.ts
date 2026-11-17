@@ -22,7 +22,7 @@ async function founded(page: Page, prep: string = '') {
   await waitForScene(page, 'Evil');
   await page.evaluate((prep) => {
     const p = (window as any).__pkr;
-    p.session.evilFound({ name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm' });
+    p.session.evilFound({ name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm' }, 2);
     const b = p.session.run.expansion.evilMode;
     for (const c of b.crew) c.line = null;
     if (prep === 'koga') { b.gyms = [{ leaderId: 'koga', region: 0, district: 1, way: null, standing: 'wary', moved: 'Never asked anything.', closed: [], tried: 0, bend: 0, officer: null, insults: 0, foundOut: false, loud: null, heroTries: 0, heroNeeds: null }]; b.team.funds = 50000; for (const h of b.district.holdings) if (h.kind === 'gym') h.scouted = 2; }

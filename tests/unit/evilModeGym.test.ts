@@ -24,7 +24,7 @@ import { getBoss } from '../../src/core/regions';
 import { content } from './helpers';
 
 const found = (line: LineId = 'grey', creed = 'profit', seed = 'gym1'): EvilModeBlock => {
-  const r = foundTeam({ name: 'Kettle', creed, line, doctrine: 'swarm' }, { boss: 'red', length: 'three', seed });
+  const r = foundTeam({ name: 'Kettle', creed, line, doctrine: 'swarm' }, { boss: 'red', length: 'three', seed, stage: 2 });
   if (!r.ok) throw new Error(r.problem);
   return { ...r.block, crew: firstCrew(6, 6), applicants: [] };
 };
@@ -273,7 +273,7 @@ describe('Bend, Befriend and the rest, in step (refused there, not only on scree
 
 describe('Beat: the battle engine, the Leader at A+2 (Part 8a section 2)', () => {
   const evilRun = (seed = 'gb1'): RunState => {
-    const r = foundInRun(chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', rules: { ...STANDARD_CHOICE, modeId: EVIL_MODE_ID } }), 0), { name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm' }, 'three');
+    const r = foundInRun(chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', rules: { ...STANDARD_CHOICE, modeId: EVIL_MODE_ID } }), 0), { name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm' }, 'three', 2);
     if (r.problem) throw new Error(r.problem);
     return r.run;
   };
@@ -352,7 +352,7 @@ describe('saves: block v7', () => {
   it('v6 -> v7: no Gym dealt with; save and reload the same', () => {
     const { gyms: _g, ...rest } = found();
     const v7 = EvilModeBlockSchema.parse({ ...rest, v: 6 });
-    expect(v7).toMatchObject({ v: 7, gyms: [] });
+    expect(v7).toMatchObject({ v: 8, gyms: [] });
     expect(gymOf(v7)).toMatchObject({ leaderId: 'misty', way: null, standing: 'wary' });
     expect(EvilModeBlockSchema.parse(JSON.parse(JSON.stringify(v7)))).toEqual(v7);
   });

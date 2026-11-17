@@ -20,7 +20,7 @@ import { MemoryStorageProvider } from '../../src/save/storage';
 import { content } from './helpers';
 
 const found = (seed = 'c1', creed = 'profit'): EvilModeBlock => {
-  const r = foundTeam({ name: 'Kettle', creed, line: 'grey', doctrine: 'swarm' }, { boss: 'red', length: 'three', seed });
+  const r = foundTeam({ name: 'Kettle', creed, line: 'grey', doctrine: 'swarm' }, { boss: 'red', length: 'three', seed, stage: 2 });
   if (!r.ok) throw new Error(r.problem);
   // These suites test the district and the Card with the four nameless Grunts of slices 2 and 3 (a migrated block's crew):
   // no talents, no lines. Named people are tested in evilModePeople.test.ts.
@@ -270,7 +270,7 @@ describe('Waive · Halve · Ask about, and Given and Taken', () => {
 describe('saves: block v3 and the migration from v2', () => {
   const run0 = () => chooseStarter(content, createRun(content, { runId: 'v3', seed: 'v3', archetypeId: 'red', rules: { ...STANDARD_CHOICE, modeId: EVIL_MODE_ID } }), 0);
   it('a slice-2 block (v2) migrates: nothing lost, an empty Log, no Cards, Given and Taken at 0; a job queued before slice 3 still rolls', () => {
-    let r = foundInRun(run0(), { name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm' }, 'three').run;
+    let r = foundInRun(run0(), { name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm' }, 'three', 2).run;
     r = stepInRun(r, { type: 'dismissOvernight' }).run;
     const b3 = r.expansion!.evilMode!;
     const h = first(b3, (x) => x.kind === 'local');
@@ -278,7 +278,7 @@ describe('saves: block v3 and the migration from v2', () => {
     const v2 = { ...rest, v: 2, crew: [1, 2, 3, 4].map((i) => ({ id: `g${i}`, name: `Grunt ${i}`, outOn: null })), queue: [{ holdingId: h.id, method: 'scout', squad: ['g1'], odds: null, certain: true, terms: [{ label: 'Scouting always works', value: 100 }] }] };
     const parsed = EvilModeBlockSchema.parse(v2);
     // Slice 4 took the block to v4; a v2 block goes through v3 to v4 in one load.
-    expect(parsed).toMatchObject({ v: 7, log: [], cards: [], given: 0, taken: 0, rates: {}, applicants: [], refusal: null });
+    expect(parsed).toMatchObject({ v: 8, log: [], cards: [], given: 0, taken: 0, rates: {}, applicants: [], refusal: null });
     expect(parsed.team).toEqual(b3.team);
     expect(parsed.district).toEqual(b3.district);
     const storage = new MemoryStorageProvider();
@@ -291,7 +291,7 @@ describe('saves: block v3 and the migration from v2', () => {
     expect(eve.log.filter((e) => e.kind === 'job')).toHaveLength(0);
   });
   it('a filed Card and the Log survive a save and reload unchanged', () => {
-    let r = foundInRun(run0(), { name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm' }, 'three').run;
+    let r = foundInRun(run0(), { name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm' }, 'three', 2).run;
     r = stepInRun(r, { type: 'dismissOvernight' }).run;
     const h = first(r.expansion!.evilMode!, (x) => x.kind === 'local');
     r = stepInRun(r, { type: 'confirmCard', job: { holdingId: h.id, method: 'persuade', squad: ['g1', 'g2'] } }).run;

@@ -7,7 +7,8 @@ import Phaser from 'phaser';
 import { getArchetype } from '../core/archetypes';
 import { BEAT_END } from '../core/evilMode/day';
 import { EVIL_DATA } from '../core/evilMode/data';
-import { allSuggestions, choiceOf, FOUNDING_PAGES, foundingModel, frameModel, moveLine, newDraft, pageReady, type FoundingDraft } from '../core/evilMode/screens';
+import { allSuggestions, choiceOf, FOUNDING_PAGES, foundingModel, frameModel, LOOK_ROWS, moveLine, newDraft, pageReady, turnLook, type FoundingDraft, type LookRow } from '../core/evilMode/screens';
+import type { EvilAction } from '../core/evilMode/day';
 import { pokemonAssetIds, type AssetManifest } from '../assets/catalog';
 import { services } from '../game/services';
 import { onInputAction, type InputAction } from '../ui/input';
@@ -104,7 +105,7 @@ export class EvilScene extends Phaser.Scene {
           const frame = frameModel(block, archetype.name);
           // The Card takes the whole stage; the frame falls away (design Part 29 section 3).
           if (this.card) return cardView(cardModel(block, this.card), block.team.look.a, block.team.look.b);
-          if (block.district.end) frame.button = 'Leave';
+          if (block.district.end) frame.button = EVIL_DATA.region.on && block.region.phase === 'tally' ? (block.here.stage >= 8 ? 'The end' : 'The Road') : EVIL_DATA.region.on && block.region.phase === 'road' ? 'Go on' : 'Leave';
           const ledger = this.ledger ? ledgerView(ledgerModel(block, this.ledger)) : undefined;
           const rm = this.roster ? rosterModel(block, this.roster) : null;
           const roster = rm ? rosterView(rm) : undefined;
@@ -161,6 +162,10 @@ export class EvilScene extends Phaser.Scene {
         gym: () => this.toggleGym(),
         gdoor: (i) => { if (this.gym !== null) { this.gym = Number(i); this.view?.refresh(); } },
         gdo: () => this.gymDo(),
+        lookPrev: (id) => { this.draft = turnLook(this.draft, id as LookRow, -1); this.view?.refresh(); },
+        lookNext: (id) => { this.draft = turnLook(this.draft, id as LookRow, 1); this.view?.refresh(); },
+        stay: (id) => this.evil({ type: 'goOn', stay: id || null }),
+        recall: (id) => this.evil({ type: 'recall', id }),
         lstop: (i) => { if (this.line !== null) { this.line = Number(i); this.cancelLineHold(); } },
       },
       overs: { over: (i) => { if (!this.founded()) { this.draft = { ...this.draft, at: Number(i) }; this.view?.refresh(); } } },
@@ -198,10 +203,16 @@ export class EvilScene extends Phaser.Scene {
     if (a === 'confirm') return this.next();
     if (a === 'back') return this.back();
     if (d.page === 'line' && (a === 'left' || a === 'right')) return this.pick(['clean', 'grey', 'whatever'].indexOf(moveLine(d.line, a === 'left' ? -1 : 1)));
-    const n = d.page === 'creed' ? EVIL_DATA.creeds.length : d.page === 'doctrine' ? EVIL_DATA.doctrines.length : d.page === 'name' ? allSuggestions().length : 0;
+    // Slice 9: the Look page: Up/Down picks a row, Left/Right changes it.
+    if (d.page === 'look') {
+      if (a === 'up' || a === 'down') this.draft = { ...d, at: (d.at + (a === 'up' ? -1 : 1) + LOOK_ROWS.length) % LOOK_ROWS.length };
+      if (a === 'left' || a === 'right') this.draft = turnLook(d, LOOK_ROWS[d.at]!, a === 'left' ? -1 : 1);
+      return this.view?.refresh();
+    }
+    const n = d.page === 'creed' ? EVIL_DATA.creeds.length : d.page === 'doctrine' ? EVIL_DATA.doctrines.length : d.page === 'name' ? allSuggestions().length : d.page === 'patron' ? EVIL_DATA.region.patrons.length : d.page === 'region' ? EVIL_DATA.region.regions.length : 0;
     if (!n) return;
-    // Cards sit in rows of three (Creeds) or four (Doctrines); suggestions are one list.
-    const row = d.page === 'creed' ? 3 : d.page === 'doctrine' ? 4 : 1;
+    // Cards sit in rows of three (Creeds, Patrons, tickets) or four (Doctrines); suggestions are one list.
+    const row = d.page === 'creed' || d.page === 'patron' || d.page === 'region' ? 3 : d.page === 'doctrine' ? 4 : 1;
     const step = a === 'up' ? -row : a === 'down' ? row : a === 'left' ? -1 : a === 'right' ? 1 : 0;
     if (!step) return;
     const at = (d.at + step + n) % n;
@@ -216,6 +227,13 @@ export class EvilScene extends Phaser.Scene {
     if (d.page === 'creed') this.draft = { ...d, at: i, creed: EVIL_DATA.creeds[i]?.id ?? d.creed };
     else if (d.page === 'doctrine') this.draft = { ...d, at: i, doctrine: EVIL_DATA.doctrines[i]?.id ?? d.doctrine };
     else if (d.page === 'line') this.draft = { ...d, at: i, line: (['clean', 'grey', 'whatever'] as const)[i] ?? d.line };
+    else if (d.page === 'look') this.draft = { ...d, at: i };
+    else if (d.page === 'patron') this.draft = { ...d, at: i, patron: EVIL_DATA.region.patrons[i]?.id ?? d.patron };
+    // A ticket that isn't open yet can be looked at but not chosen.
+    else if (d.page === 'region') {
+      const r = EVIL_DATA.region.regions[i];
+      this.draft = { ...d, at: i, region: r && r.status !== 'disabled' ? r.id : d.region };
+    }
     this.view?.refresh();
   }
 
@@ -240,7 +258,7 @@ export class EvilScene extends Phaser.Scene {
     }
     const i = FOUNDING_PAGES.indexOf(d.page);
     const page = FOUNDING_PAGES[i + 1]!;
-    const at = page === 'creed' ? Math.max(0, EVIL_DATA.creeds.findIndex((c) => c.id === d.creed)) : page === 'doctrine' ? Math.max(0, EVIL_DATA.doctrines.findIndex((x) => x.id === d.doctrine)) : page === 'line' ? ['clean', 'grey', 'whatever'].indexOf(d.line) : 0;
+    const at = page === 'creed' ? Math.max(0, EVIL_DATA.creeds.findIndex((c) => c.id === d.creed)) : page === 'doctrine' ? Math.max(0, EVIL_DATA.doctrines.findIndex((x) => x.id === d.doctrine)) : page === 'line' ? ['clean', 'grey', 'whatever'].indexOf(d.line) : page === 'patron' ? Math.max(0, EVIL_DATA.region.patrons.findIndex((x) => x.id === d.patron)) : page === 'region' ? Math.max(0, EVIL_DATA.region.regions.findIndex((x) => x.id === d.region)) : 0;
     this.draft = { ...d, page, at, confirming: false };
     this.syncInput();
     this.view?.refresh();
@@ -264,6 +282,9 @@ export class EvilScene extends Phaser.Scene {
   private advance(): void {
     const block = services().session.run?.expansion?.evilMode;
     if (!block) return;
+    // Slice 9: after a district, Enter reads on: the tally, then the Road (leaving nobody), then the region's end.
+    if (block.district?.end && EVIL_DATA.region.on && block.region.phase === 'tally') return this.evil({ type: 'toRoad' });
+    if (block.district?.end && EVIL_DATA.region.on && block.region.phase === 'road') return this.evil({ type: 'goOn', stay: null });
     if (block.district?.end) return this.leave();
     if (block.fight) return this.startFight();
     const cues = services().session.evilStep({ type: BEAT_END[block.here.beat] });
@@ -271,6 +292,16 @@ export class EvilScene extends Phaser.Scene {
     const refused = cues.find((c) => c.id === 'refused');
     this.notice = refused && 'reason' in refused ? refused.reason : null;
     this.disp = { ...newDispatch(), at: this.disp.at };
+    this.view?.refresh();
+  }
+
+  /** One region action (slice 9), then a redraw; a refusal shows as the notice. */
+  private evil(action: EvilAction): void {
+    const cues = services().session.evilStep(action);
+    const refused = cues.find((c) => c.id === 'refused');
+    const said = cues.find((c) => c.id === 'said');
+    this.notice = refused && 'reason' in refused ? refused.reason : said && 'line' in said ? said.line : null;
+    this.disp = newDispatch();
     this.view?.refresh();
   }
 

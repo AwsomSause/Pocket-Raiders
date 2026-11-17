@@ -63,8 +63,8 @@ export const ExpansionSettingsSchema = z.object({
   heatedMoments: z.boolean().default(true),
   /** Beta 0.7 M1 Mythical Promises (in-run only): Mythicals can be told of, visit and ask for a promise. Read when a run starts. */
   mythicalsEnabled: z.boolean().default(true),
-  /** Evil Mode (own mode on Run Setup; design plans/evil-mode). Off until the mode is whole enough to show (build plan slice 9). */
-  evilMode: z.boolean().default(false),
+  /** Evil Mode (own mode on Run Setup; design plans/evil-mode). On by default from build plan slice 9 (a whole region plays); the slice's undo is false. A saved setting keeps its value. */
+  evilMode: z.boolean().default(true),
   /** Evil Mode run length (Kice's answer 2): Three regions, or Six once six regions are built (slice 19). Read at founding. */
   evilRunLength: RunLengthSchema.default('three'),
 });

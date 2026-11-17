@@ -22,7 +22,7 @@ async function founded(page: Page) {
   await waitForScene(page, 'Evil');
   await page.evaluate(() => {
     const p = (window as any).__pkr;
-    p.session.evilFound({ name: 'Kettle', creed: 'profit', line: 'whatever', doctrine: 'swarm' });
+    p.session.evilFound({ name: 'Kettle', creed: 'profit', line: 'whatever', doctrine: 'swarm' }, 2);
     p.game.scene.getScenes(true).forEach((x: any) => p.game.scene.stop(x.scene.key));
     p.game.scene.start('Evil');
   });

@@ -47,6 +47,21 @@ function page(m: FoundingModel): string {
       return `<div style="${L}"><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">${m.doctrines.map((d, i) => W(`<b>${esc(d.name)}${d.chosen ? ' ✓' : ''}</b>${sm(`"${d.line}"`, 'font-style:italic;font-size:12px;line-height:15px')}`, 'padding:6px 8px;min-height:70px', i === m.at ? 'sel' : '', pick(i) + ` data-testid="evil-doctrine-${d.id}"`)).join('')}</div>
         ${W(`<b>${esc(sel.name)}</b>${sm(`Perk: ${sel.perk}`)}${sm(`Weakness the Hero learns: ${sel.weakness}`)}${sm(`Three example kits: ${sel.kits.join(' · ')}`)}`, 'padding:10px 12px;display:flex;flex-direction:column;gap:4px')}</div>`;
     }
+    case 'look': {
+      const k = m.look;
+      const sw = (c: string) => `<i style="display:inline-block;width:14px;height:14px;border:1px solid #0008;vertical-align:middle;background:${esc(c)}"></i>`;
+      return `<div style="${L}">${W(k.rows.map((r, i) => `<div class="row sm" style="line-height:24px;padding:0 6px;cursor:pointer;${r.sel ? 'outline:2px solid var(--acc);' : ''}"${pick(i)} data-testid="evil-look-${r.id}"><span style="width:120px">${esc(r.label)}</span><span${act('lookPrev', r.id)} style="padding:0 6px">◀</span><b class="grow">${r.id === 'a' ? sw(k.a) + ' ' : r.id === 'b' ? sw(k.b) + ' ' : ''}${esc(r.value)}</b><span${act('lookNext', r.id)} style="padding:0 6px">▶</span></div>`).join(''), 'padding:8px')}
+        ${W(`<b>The motto</b>${sm(`"${k.motto}"`, 'font-style:italic')}${k.notes.map((n) => sm(n, 'color:#f0c070')).join('')}`, 'padding:10px 12px', '', ' data-testid="evil-look-notes"')}
+        ${sm('Up/Down: pick a row. Left/Right: change it. The Look never dresses the Boss.')}</div>`;
+    }
+    case 'patron': {
+      const sel = m.patrons[m.at] ?? m.patrons[0]!;
+      return `<div style="${L}"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">${m.patrons.map((p, i) => W(`<b>${esc(p.name)}${p.chosen ? ' ✓' : ''}</b>${sm(p.who, 'font-size:12px')}`, 'padding:6px 8px;min-height:52px', i === m.at ? 'sel' : '', pick(i) + ` data-testid="evil-patron-${p.id}"`)).join('')}</div>
+        ${W(`<b>${esc(sel.name)}</b>${sm(`"${sel.line}"`, 'font-style:italic')}${sm(`Gives: ${sel.gives}`)}${sel.limited ? sm(`Not yet: ${sel.limited}`, 'opacity:.7') : ''}`, 'padding:10px 12px;display:flex;flex-direction:column;gap:4px')}</div>`;
+    }
+    case 'region':
+      return `<div style="${L}"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">${m.regions.map((r, i) => W(`<b>${esc(r.name)}${r.chosen ? ' ✓' : ''}</b>${r.open ? r.ticket.map((t) => sm(t, 'font-size:11px;line-height:13px')).join('') : sm(`Opens with ${r.waits ?? 'a later build'}.`, 'font-size:11px;opacity:.7')}`, `padding:5px 7px;min-height:58px;${r.open ? '' : 'opacity:.45'}`, i === m.at ? 'sel' : '', pick(i) + ` data-testid="evil-region-${r.id}"`)).join('')}</div>
+        ${sm('Each ticket is four honest lines: every one is a rule the region really has.')}</div>`;
     case 'summary':
       return `<div style="${L}">${W(m.summary.rows.map(([a, b]) => `<div class="row sm" style="line-height:24px"><span style="width:120px">${esc(a)}</span><b class="grow">${esc(b)}</b></div>`).join(''), 'padding:12px')}
         ${m.summary.problem ? sm(m.summary.problem, 'color:#f08a7a') : ''}

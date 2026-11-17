@@ -1063,8 +1063,8 @@ export class GameSession {
   }
 
   /** Evil Mode founding (core/evilMode): writes the team once and saves. Returns why it couldn't, or null. */
-  evilFound(choice: FoundingChoice): string | null {
-    const out = foundInRun(this.requireRun(), choice, this.settings.expansion.evilRunLength);
+  evilFound(choice: FoundingChoice, stage?: number): string | null {
+    const out = foundInRun(this.requireRun(), choice, this.settings.expansion.evilRunLength, stage);
     if (out.problem) return out.problem;
     this.run = out.run;
     this.persistRun();

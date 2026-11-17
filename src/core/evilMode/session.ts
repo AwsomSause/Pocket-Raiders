@@ -17,10 +17,10 @@ export const isEvilRun = (run: RunState | null | undefined): boolean => run?.rul
 export const evilBlock = (run: RunState | null | undefined): EvilModeBlock | undefined => run?.expansion?.evilMode;
 
 /** Founds the team once. A run that already has a team keeps it (a double press, a replayed action: nothing twice). */
-export function foundInRun(run: RunState, choice: FoundingChoice, length: RunLength): { run: RunState; problem: string | null } {
+export function foundInRun(run: RunState, choice: FoundingChoice, length: RunLength, stage?: number): { run: RunState; problem: string | null } {
   if (!isEvilRun(run)) return { run, problem: 'This run is not an Evil Mode run.' };
   if (run.expansion?.evilMode) return { run, problem: null };
-  const out = foundTeam(choice, { boss: run.archetypeId, length, seed: run.seed });
+  const out = foundTeam(choice, { boss: run.archetypeId, length, seed: run.seed, ...(stage ? { stage } : {}) });
   if (!out.ok) return { run, problem: out.problem };
   return { run: ensureHero({ ...run, expansion: { ...(run.expansion ?? {}), evilMode: out.block } }), problem: null };
 }
@@ -29,7 +29,7 @@ export function foundInRun(run: RunState, choice: FoundingChoice, length: RunLen
 export function ensureDistrict(run: RunState): RunState {
   const block = run.expansion?.evilMode;
   if (!block || block.district) return run;
-  const district = layDistrict(run.seed, block.here.region, block.here.stage, block.team);
+  const district = layDistrict(run.seed, block.here.region, Math.max(1, block.here.stage - 1), block.team);
   return { ...run, expansion: { ...(run.expansion ?? {}), evilMode: { ...block, district } } };
 }
 

@@ -41,7 +41,22 @@ function texts(m: BoardModel, notice: string | null): string {
 
 function endView(m: BoardModel): string {
   const e = m.end!;
-  return W(`<b style="font-size:20px" data-testid="evil-end" data-how="${e.how}">${e.how === 'held' ? 'Held' : 'Not held'}</b>${sm(e.text, 'margin:4px 0 8px')}${e.rows.map(([a, b]) => `<div class="row sm" style="line-height:20px"><span style="width:110px">${esc(a)}</span><b>${esc(b)}</b></div>`).join('')}${sm('The next district arrives with a later build. Leave saves the run.', 'margin-top:8px')}`, 'position:absolute;left:16px;width:580px;top:252px;bottom:70px;padding:10px 12px;overflow:auto');
+  const head = e.how === 'held' ? 'Held' : e.how === 'taken' ? 'Not held' : e.how === 'arrival' ? 'The Arrival is over' : 'The Hero is at the door';
+  const rows = e.rows.map(([a, b]) => `<div class="row sm" style="line-height:18px"><span style="width:110px;flex:none">${esc(a)}</span><b class="grow">${esc(b)}</b></div>`).join('');
+  const said = e.said ? sm(`One thing somebody said: ${e.said}`, 'font-style:italic;margin-top:4px') : '';
+  // Slice 9: the tally, then the Road (who stays), or the region's end. Every choice is a button and has a key (Enter).
+  let foot = sm('Enter: on to the Road.', 'margin-top:6px;opacity:.8');
+  if (e.phase === 'day') foot = sm('Leave saves the run.', 'margin-top:8px');
+  if (e.phase === 'tally' && e.how === 'reckoning') foot = sm('Enter: the end of the region.', 'margin-top:6px;opacity:.8');
+  if (e.phase === 'over') foot = W(`<b data-testid="evil-region-over">${esc(e.text)}</b>`, 'padding:6px 8px;margin-top:6px');
+  if (e.road) {
+    const r = e.road;
+    foot = `<div style="margin-top:6px" data-testid="evil-road-page"><b>${esc(r.title)}</b>${sm(r.heard, 'font-style:italic')}${sm(r.carried)}
+      ${r.stay.map((x) => `<div class="row sm" style="line-height:22px;cursor:pointer;padding:0 4px"${act('stay', x.id)} data-testid="evil-stay-${x.id}">☐ ${esc(x.text)}</div>`).join('')}
+      <div class="row sm" style="line-height:22px;cursor:pointer;padding:0 4px;font-weight:700"${act('stay', '')} data-testid="evil-stay-nobody">→ ${esc(r.nobody)} (Enter)</div>
+      ${r.away.map((x) => `<div class="row sm" style="line-height:20px;cursor:pointer;padding:0 4px;text-decoration:underline"${act('recall', x.id)} data-testid="evil-recall-${x.id}">${esc(x.text)}</div>`).join('')}</div>`;
+  }
+  return W(`<b style="font-size:20px" data-testid="evil-end" data-how="${e.how}" data-phase="${e.phase}">${esc(head)}</b>${sm(e.title, 'margin:2px 0')}${e.phase !== 'over' ? sm(e.text, 'margin:2px 0 6px') : ''}<div data-testid="evil-tally">${rows}</div>${said}${foot}`, 'position:absolute;left:16px;width:580px;top:252px;bottom:70px;padding:10px 12px;overflow:auto');
 }
 
 function dispatch(m: BoardModel, notice: string | null): string {

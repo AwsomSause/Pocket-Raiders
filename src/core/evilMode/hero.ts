@@ -6,7 +6,8 @@
 import { hashSeed, Rng } from '../rng';
 import starterTable from '../../data/rivalHome.json';
 import bankJson from '../../data/rivalBank.json';
-import { holdingName, localOf, streetOf, townStreet } from './board';
+import { holdingName, localOf, streetName, streetOf, townStreet } from './board';
+import { dayIn, stageKind } from './region';
 import { goWithHero } from './line';
 import { badgeHow, gymDealt, heroAtGym } from './gym';
 import { EVIL_DATA, type EvilData } from './data';
@@ -49,7 +50,7 @@ export function makeHero(seed: string, district: District, bossStarter: string |
   const given = rng.pick(offered);
   const opener = rng.pick(H.openers[H.homeRegion] ?? ['pidgey']);
   const town = district.holdings.find((h) => h.kind === 'town') ?? district.holdings[0]!;
-  const street = data.district.streets[streetOf(town.step, data)]?.name ?? town.ref;
+  const street = streetName(district, streetOf(town.step, data), data) || town.ref;
   const traits = {
     ambition: rng.int(20, 80), pride: rng.int(20, 80), empathy: rng.int(20, 80),
     adaptability: rng.int(20, 80), vindictiveness: rng.int(20, 80), resilience: rng.int(20, 80),
@@ -190,18 +191,20 @@ export function takeBadge(block: EvilModeBlock, how: 'gym' | 'day7', data: EvilD
  * turns; one that holds, a wave; one with somebody posted, a fight (the walk stops there and waits on it); the Gym, the
  * Badge. Once a day. Returns the same block when they've walked today.
  */
-export function walkHero(block: EvilModeBlock, data: EvilData = EVIL_DATA): EvilModeBlock {
+export function walkHero(block: EvilModeBlock, data: EvilData = EVIL_DATA, maxStep = 20): EvilModeBlock {
   const d0 = block.district;
   let hero = block.hero;
   const day = block.here.day;
   if (!d0 || d0.end || !hero || hero.walked === day || block.fight) return block;
+  // Slice 9: the Arrival and the Reckoning walk to their own days (Part 2 sections 2.1 and 2.3).
+  if (maxStep === 20 && data.region.on && stageKind(block.here.stage) !== 'district') return stageWalk(block, data);
   if (hero.restOn === day) return { ...block, hero: { ...hero, walked: day, today: [line('rest', data)] } };
   let out = block;
   const from = hero.at;
   const lines: string[] = [];
   let fight: Fight | null = null;
   const n = stepsOn(hero, day, data);
-  for (let i = 0; i < n && hero.at < 20; i++) {
+  for (let i = 0; i < n && hero.at < maxStep; i++) {
     const s: number = hero.at + 1;
     hero = { ...hero, at: s };
     const h = out.district!.holdings.find((x) => x.step === s)!;
@@ -305,3 +308,47 @@ export const counterDue = (hero: Hero, data: EvilData = EVIL_DATA): boolean => h
 
 /** The step on the road for a holding id. */
 export const stepOfHolding = (block: EvilModeBlock, id: string): number => block.district?.holdings.find((h) => h.id === id)?.step ?? 0;
+
+// ---- Slice 9: the Arrival's and the Reckoning's road (Part 2 sections 2.1 and 2.3) ----
+
+const ownedCount = (b: EvilModeBlock): number => b.district!.holdings.filter((h) => h.owner === 'team' && h.kind !== 'gym').length;
+
+/**
+ * The Arrival: day 1 the Hero's at home; from day 2 they walk (stopping short of the Gym); on the Badge day (3 or 4) they
+ * beat the first Leader and the Arrival ends. The Reckoning: day 1 they walk the district and win the eighth Badge without
+ * the team; day 2 they sit outside; day 3 they come to the door, and the region ends (soft: never the run).
+ */
+function stageWalk(block: EvilModeBlock, data: EvilData): EvilModeBlock {
+  const R = data.region;
+  const d = block.district!;
+  const day = block.here.day;
+  const di = dayIn(block);
+  const hero0 = block.hero!;
+  const done = (b: EvilModeBlock, today: string[]): EvilModeBlock => ({ ...b, hero: { ...b.hero!, walked: day, today } });
+  const badge = (b: EvilModeBlock, text: string): EvilModeBlock => {
+    const h = b.hero!;
+    if (h.badges.some((x) => x.region === d.region && x.district === d.n)) return b;
+    const out: EvilModeBlock = { ...b, hero: { ...h, at: 20, badges: [...h.badges, { region: d.region, district: d.n, how: 'full', day }] }, evening: [...b.evening, text] };
+    return appendLog(out, { kind: 'hero', who: [], to: d.holdings.find((x) => x.kind === 'gym')?.id, text: `Day ${day}. ${text}` });
+  };
+  if (stageKind(block.here.stage) === 'arrival') {
+    if (di <= 1) return done(block, [fill(R.arrival.home, { street: hero0.home.street })]);
+    let out = walkHero(block, data, 19);
+    if (out.fight) return out;
+    const today = [...(di === 2 ? [R.arrival.leaves] : []), ...out.hero!.today];
+    if (di < block.region.badgeDay) return done(out, today);
+    out = badge(out, R.arrival.badge);
+    out = { ...out, district: { ...out.district!, end: { how: 'arrival', day, count: ownedCount(out) } }, evening: [...out.evening, R.arrival.end] };
+    return done(out, [...today, R.arrival.badge]);
+  }
+  if (di <= 1) {
+    let out = walkHero(block, data, 19);
+    if (out.fight) return out;
+    const today = out.hero!.today;
+    out = badge(out, R.reckoning.badge);
+    return done(out, [...today, R.reckoning.badge]);
+  }
+  if (di === 2) return done(badge(block, R.reckoning.badge), [R.reckoning.outside]);
+  const out: EvilModeBlock = { ...block, district: { ...d, end: { how: 'reckoning', day, count: ownedCount(block) } }, evening: [...block.evening, R.reckoning.arrives, R.reckoning.end] };
+  return done(out, [R.reckoning.arrives]);
+}

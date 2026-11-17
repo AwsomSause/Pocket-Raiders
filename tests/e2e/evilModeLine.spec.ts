@@ -21,7 +21,7 @@ async function founded(page: Page) {
   await waitForScene(page, 'Evil');
   await page.evaluate(() => {
     const p = (window as any).__pkr;
-    p.session.evilFound({ name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm' });
+    p.session.evilFound({ name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm' }, 2);
     // Nobody's line crosses a Lean here, so the Card confirms plainly (asking anyway is slice 4's spec).
     for (const c of p.session.run.expansion.evilMode.crew) c.line = null;
     p.game.scene.getScenes(true).forEach((x: any) => p.game.scene.stop(x.scene.key));

@@ -10,6 +10,8 @@ import { askAbout, setRate } from './ledger';
 import { holdResult, post, takeBadge, unpost, walkHero } from './hero';
 import { heartsGo, moveLine } from './line';
 import { gymAct, gymEvening, gymResult } from './gym';
+import { recall, goOn, tallyOf, toRoad } from './region';
+import { EVIL_DATA } from './data';
 import { BEATS, type Beat, type EvilModeBlock, type GymWay, type LineId, type Question } from './schema';
 
 /** The action that ends each beat in slice 1 (the empty day). Later slices add more actions inside a beat. */
@@ -50,6 +52,10 @@ export type EvilAction =
   | { type: 'moveLine'; to: LineId }
   /** Slice 8: one of the Gym's five ways, at the In person beat (Part 8a). */
   | { type: 'gymWay'; way: GymWay }
+  /** Slice 9: after a district, the tally's read; on the Road, an Officer's left (or nobody) and the team goes on; or one's recalled. */
+  | { type: 'toRoad' }
+  | { type: 'goOn'; stay: string | null }
+  | { type: 'recall'; id: string }
   | { type: 'dismissOvernight' }
   | { type: 'send' }
   | { type: 'stayIn' }
@@ -57,7 +63,7 @@ export type EvilAction =
   | { type: 'lightsOut' }
   | { type: 'watchRoad' };
 
-export type EvilCue = { id: 'beat'; beat: Beat } | { id: 'newDay'; day: number } | { id: 'refused'; reason: string } | { id: 'queued'; holdingId: string } | { id: 'districtEnd'; how: 'held' | 'taken' } | { id: 'filed'; text: string } | { id: 'asked'; line: string } | { id: 'said'; line: string } | { id: 'refusal' } | { id: 'fight' } | { id: 'road'; lines: string[] };
+export type EvilCue = { id: 'beat'; beat: Beat } | { id: 'newDay'; day: number } | { id: 'refused'; reason: string } | { id: 'queued'; holdingId: string } | { id: 'districtEnd'; how: 'held' | 'taken' | 'arrival' | 'reckoning' } | { id: 'filed'; text: string } | { id: 'asked'; line: string } | { id: 'said'; line: string } | { id: 'refusal' } | { id: 'fight' } | { id: 'road'; lines: string[] };
 
 export interface StepResult {
   block: EvilModeBlock;
@@ -71,9 +77,30 @@ export const nextBeat = (beat: Beat): Beat => BEATS[(BEATS.indexOf(beat) + 1) % 
 
 /** One action. The input block is never changed; a new one is returned. */
 export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
+  const r = stepInner(block0, action);
+  return r.ok ? { ...r, block: settleRegion(r.block) } : r;
+}
+
+/** Slice 9: a district that's just ended is tallied once, and the region waits on the tally (Part 2 section 4.2). */
+function settleRegion(block: EvilModeBlock): EvilModeBlock {
+  if (!block.district?.end || block.region.phase !== 'day' || !EVIL_DATA.region.on) return block;
+  return { ...block, region: { ...block.region, phase: 'tally', tallies: [...block.region.tallies, tallyOf(block)] } };
+}
+
+function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
   let block = block0;
   const { beat } = block.here;
   const no = (reason: string): StepResult => ({ block: block0, cues: [{ id: 'refused', reason }], ok: false });
+  // Slice 9: after a district, only the tally and the Road move anything.
+  if (action.type === 'toRoad' || action.type === 'goOn' || action.type === 'recall') {
+    if (action.type === 'recall') {
+      const r = recall(block, action.id);
+      return r.problem ? no(r.problem) : { block: r.block, cues: [{ id: 'said', line: r.line }], ok: true };
+    }
+    const r = action.type === 'toRoad' ? toRoad(block) : goOn(block, action.stay);
+    if (r.problem) return no(r.problem);
+    return { block: r.block, cues: action.type === 'goOn' ? [{ id: 'beat', beat: 'morning' }, { id: 'newDay', day: r.block.here.day }] : [], ok: true };
+  }
   if (block.district?.end) return no("The district's over.");
   // Slice 5: a battle the day's waiting on comes first; only its result moves anything.
   if (action.type === 'battleResult') {
