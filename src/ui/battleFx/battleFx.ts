@@ -17,7 +17,7 @@ import type { Side } from '../../core/battle/engine';
 import { CompactAnimSchema, type CompactAnim } from '../../core/presentation/animFormat';
 import type { Cue } from '../../core/presentation/cues';
 import type { FamilyId } from '../../core/presentation/families';
-import { scriptAssets, type ScriptAnim } from '../../core/presentation/scriptAnim';
+import { playableScript, scriptAssets, type ScriptAnim } from '../../core/presentation/scriptAnim';
 import { ebdxAnims, moveAnims } from '../../data/presentation';
 import { services } from '../../game/services';
 import { typeSoundFor } from '../../core/presentation/typeSound';
@@ -275,7 +275,7 @@ export class BattleFx {
 
   /** Loads a scripted EBDX animation's pictures and sounds; null when it can't load in time. */
   private async readyScript(name: string): Promise<ScriptAnim | null> {
-    const script = ebdxAnims().scripts[name];
+    const script = playableScript(ebdxAnims(), name);
     if (!script) return null;
     const { images, sounds } = scriptAssets({ source: '', scripts: { [name]: script }, moves: {} });
     const ids = [...images.map(ebdxAssetIds.image), ...(this.settings.muted ? [] : sounds.map(ebdxAssetIds.sound))];

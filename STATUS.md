@@ -29,3 +29,4 @@ The long "Done" list (about 140 bullets) and the older known-limits notes moved 
 
 - Empty battle arena fix (W2): a failing battle opening now still shows both Pokémon and boxes (`BattleScene.intro` catch + `recoverIntro`). Root cause on Kice's save not reproduced; error logs to console as "Battle intro failed". Tests in `tests/e2e/battleStyles.spec.ts`.
 - Beta 4.4 Pokémon + Pocket Town starter scouts (17 species, Mega Alolan Flygon, 5 scouts each giving one new Story Run starter line): `docs/status/beta-4-4-pokemon.md`.
+- Battle screen fixes (Kice 2026-11-16): drafted EBDX move effects off (moves play their finished animation), New look text box reaches the sprite cut, Trainer speech above the HUD, stand-in picture for event Trainers with none: `docs/status/battle-screen-fixes-nov16.md`.

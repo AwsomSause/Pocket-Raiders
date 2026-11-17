@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BATTLE_LIST_ROWS, battleListView, battleView, evolveView, levelView, trayHeight, type BattleBox, type BattleListModel, type BattleListRow, type BattleModel, type BattleOption, panelOf, splitChoice, windowTitle } from '../../src/ui/redux/screens/battle';
+import { BATTLE_LIST_ROWS, FRONT_EDGE, battleListView, battleView, evolveView, levelView, trayHeight, type BattleBox, type BattleListModel, type BattleListRow, type BattleModel, type BattleOption, panelOf, splitChoice, windowTitle } from '../../src/ui/redux/screens/battle';
 import type { ReduxCtx } from '../../src/ui/redux/stage';
 
 // The New UI battle HUD is a pure function from what the battle shows to HTML, in four layouts.
@@ -112,6 +112,21 @@ describe('New UI battle HUD', () => {
       expect(trayHeight(v, 4)).toBeGreaterThanOrEqual(trayHeight(v, 0));
     }
     expect(trayHeight(2, 4)).toBe(trayHeight(2, 9));
+  });
+
+  it('the text box of the two bar layouts reaches up to where the canvas cuts your Pokémon, so the cut never shows', () => {
+    // Layout 1 is a full-width tray: its top edge is the cut line, with or without a short menu.
+    for (const n of [0, 2, 4]) expect(540 - trayHeight(1, n)).toBeLessThanOrEqual(FRONT_EDGE);
+    expect(battleView(ctx(1), model({ text: 'Hi' }))).toContain(`height:${540 - FRONT_EDGE}px`);
+    // Layout 0 is a framed box: the box starts 3 px under the line and its 9 px frame covers it.
+    const box = /class="abs txt" style="[^"]*bottom:16px;height:(\d+)px/.exec(battleView(ctx(0), model({ text: 'Hi' })));
+    expect(box).not.toBeNull();
+    const top = 540 - 16 - Number(box![1]);
+    expect(top).toBeGreaterThan(FRONT_EDGE);
+    expect(top - 9).toBeLessThanOrEqual(FRONT_EDGE);
+    // The open layouts (top bar, side menu) keep their small boxes: there the canvas does not cut the Pokémon.
+    expect(trayHeight(2, 0)).toBe(116);
+    expect(trayHeight(3, 0)).toBe(116);
   });
 });
 

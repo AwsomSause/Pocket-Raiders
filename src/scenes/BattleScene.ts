@@ -126,6 +126,8 @@ import { COLORS, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, STATUS_LABELS, TYPE_COLOR
 import { Bar, badge, drawPanel, Menu } from '../ui/widgets';
 import { sceneForRun } from './routing';
 import { battleSkinFor, type BattleFrameInfo, type BattleHud, type BattleSkin, type BoxSpec, type MenuLayout, type MenuSpec, type Rect } from '../ui/battleStyles';
+import { fallbackFoeArt } from '../core/presentation/foeArt';
+import { reduxLayout, reduxSkinIndex } from '../core/presentation/redux';
 import { useLookFont } from '../ui/redux/canvasFont';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { battleView, panelOf, splitChoice, type BattleBox, type BattleEvolve, type BattleLevel, type BattleModel, type BattlePanel } from '../ui/redux/screens/battle';
@@ -833,6 +835,15 @@ export class BattleScene extends Phaser.Scene {
 
   private frontEdgeMask?: Phaser.Display.Masks.GeometryMask;
 
+  /**
+   * Whether your Pokémon is cut at the arena's front edge. Only where a bar hides the cut: the Old bar, a battle style with a bar, and the
+   * New look's two layouts whose text box reaches up to that edge. The New look's top-bar and side-menu layouts leave the field open there.
+   */
+  private standClipped(): boolean {
+    if (this.skin) return Boolean(this.skin.layout.bar);
+    return !reduxOn() || reduxLayout(reduxSkinIndex(services().session.settings.reduxSkin), 4) < 2;
+  }
+
   /** Clips your Pokémon at the arena's front edge (the top of the message bar). Built once per battle. */
   private standMask(): Phaser.Display.Masks.GeometryMask {
     if (!this.frontEdgeMask?.geometryMask?.scene) {
@@ -1165,7 +1176,7 @@ export class BattleScene extends Phaser.Scene {
       actor.idle();
       // Off screen until it walks in for the throw (the reference: your trainer only appears on your side).
       actor.sprite.setVisible(false).setX(TRAINER_OFF_X);
-      if (!this.skin || this.skin.layout.bar) actor.sprite.setMask(this.standMask());
+      if (this.standClipped()) actor.sprite.setMask(this.standMask());
       this.trainerActor = actor;
     });
     const skip = (): void => this.trainerActor?.skip();
@@ -1260,7 +1271,13 @@ export class BattleScene extends Phaser.Scene {
     // A map event's trainer is drawn with the event's first cast member.
     const eventId = this.run.battle?.event?.eventId;
     const cast = eventId ? content.events.get(eventId)?.scene.cast[0] : undefined;
-    return cast ? { assetId: cast, label: trainer.name } : null;
+    if (cast && rxFileOf(this.cache.json.get('manifest') as AssetManifest | undefined, cast)) return { assetId: cast, label: trainer.name };
+    // An event that names nobody to draw (or names something that is not a picture): a stand-in read from the Trainer's name.
+    const stand = fallbackFoeArt(content, trainer.name, evilTeam(content, this.run)?.ranks.grunt.sprite);
+    if (!stand) return cast ? { assetId: cast, label: trainer.name } : null;
+    if ('assetId' in stand) return { assetId: stand.assetId, label: trainer.name };
+    const sp = content.species.get(stand.speciesId);
+    return sp ? { assetId: pokemonAssetIds(sp.assets).front, label: trainer.name } : null;
   }
 
   private names(trainer: string | null): Names {
@@ -1305,7 +1322,7 @@ export class BattleScene extends Phaser.Scene {
       this.field.add(this.playerSprite);
       // It stands in the foreground, so its lower part is hidden at the arena's front edge (where the message bar starts),
       // never drawn over the bar, even a see-through one. Styles with no bar (Ring, Cinematic, Ink) show it whole.
-      if (!this.skin || this.skin.layout.bar) this.playerSprite.setMask(this.standMask());
+      if (this.standClipped()) this.playerSprite.setMask(this.standMask());
       this.skin?.sprite?.(this.playerSprite);
       this.prefetchMoves(mon);
       this.liven(this.playerSprite, cry);
@@ -3151,7 +3168,7 @@ export class BattleScene extends Phaser.Scene {
     let over = false;
     this.time.delayedCall(150, () => {
       // S257: when the player skips and Skip recap is on, a text line says what the cutscene showed.
-      if (!over) this.advance = recap && services().session.settings.skipRecap ? () => { b.skip(); interactionLog.add(recap); showRecapBanner(this, recap); } : b.skip;
+      if (!over) this.advance = recap && services().session.settings.skipRecap ? () => { b.skip(); interactionLog.add(recap); showRecapBanner(this, recap, 2600, this.rx ? MESSAGE_Y - 34 : undefined); } : b.skip;
     });
     await b.done;
     over = true;
@@ -4837,6 +4854,8 @@ export class BattleScene extends Phaser.Scene {
     const look = artOverride?.look ?? (this.stadium && (isFoe ? boss?.role === 'champion' : Boolean(this.hostArtFor(speaker))) ? 'champion' : undefined);
     // New UI: a stadium broadcast line (the reporter, a guest in the stands, a round's opponent) is the mock-ups' talk page.
     if (this.rx && this.stadium && (artOverride?.look === 'crowd' || speaker === 'Reporter')) return this.rxBroadcast(speaker, plain, artOverride?.assetId ?? this.hostArtFor(speaker));
+    // New UI: the cut-in is drawn on the canvas, under the HUD layer; the HUD steps aside so nothing covers the words.
+    this.rx?.visible(false);
     const line = storyLine(this, {
       speaker,
       role,
@@ -4860,6 +4879,7 @@ export class BattleScene extends Phaser.Scene {
         auto?.remove(false);
         this.advance = null;
         if (this.message.active) this.message.setText(before);
+        this.rx?.visible(true);
         resolve();
       });
     });

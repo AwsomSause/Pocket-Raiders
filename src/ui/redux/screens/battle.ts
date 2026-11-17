@@ -210,12 +210,17 @@ function box(b: BattleBox, foe: boolean, st: string, small = false): string {
 }
 
 /** How tall the tray's choices stand over the bottom edge, so the player's box and the tabs can sit above them. */
+/** The stage row where the canvas cuts your Pokémon (BattleScene's MESSAGE_Y). */
+export const FRONT_EDGE = 396;
+
 export function trayHeight(v: number, n: number): number {
-  if (n === 0) return v === 1 ? 128 : 116;
-  if (v === 2) return 70;
-  if (v === 3) return 16 + n * (n > 4 ? 34 : 44) + (n - 1) * (n > 4 ? 6 : 8);
-  const rows = Math.ceil(n / 2), cell = rows > 2 ? 34 : 44, gap = rows > 2 ? 6 : v === 1 ? 8 : 12;
-  return Math.max(v === 1 ? 128 : 116, (v === 1 ? 28 : 16) + rows * cell + (rows - 1) * gap);
+  if (v === 2) return n ? 70 : 116;
+  if (v === 3) return n ? 16 + n * (n > 4 ? 34 : 44) + (n - 1) * (n > 4 ? 6 : 8) : 116;
+  // Layouts 0 and 1 hold the text box: it reaches up to the arena's front edge (FRONT_EDGE), where the canvas cuts your Pokémon, so the cut never shows.
+  const floor = 540 - FRONT_EDGE + (v === 1 ? 0 : -3);
+  if (n === 0) return floor;
+  const rows = Math.ceil(n / 2), cell = rows > 2 ? 34 : v === 1 ? 44 : 56, gap = rows > 2 ? 6 : v === 1 ? 8 : 12;
+  return Math.max(floor, (v === 1 ? 28 : 16) + rows * cell + (rows - 1) * gap);
 }
 
 export function battleView(c: ReduxCtx, d: BattleModel): string {
@@ -230,7 +235,7 @@ export function battleView(c: ReduxCtx, d: BattleModel): string {
     return `<div class="btn${k === on ? ' on' : ''}${tc ? ' mv' : ''}" style="${tc ? `--tc:${tc};` : ''}${o.off ? 'opacity:.5;' : ''}${many ? 'font-size:15px;' : ''}${fit}min-width:0;${st}"${act('pick', k)} data-over="over"${o.tip ? ` data-tip="${esc(o.tip)}"` : ''}><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">${esc(o.label)}</span>${o.sub ? `<small style="flex-shrink:0${fit ? ';font-size:11px' : ''}">${esc(o.sub)}</small>` : ''}</div>`;
   };
   const msg = esc(d.text).replace(/\n/g, '<br>');
-  const h = many ? 34 : 44;
+  const h = many ? 34 : v === 0 ? 56 : 44;
   let tray: string;
   if (v === 2) {
     tray = (d.text ? `<div class="abs txt" style="left:180px;right:180px;bottom:${n ? 84 : 20}px;text-align:center;padding:6px 16px">${msg}</div>` : '')
@@ -242,7 +247,7 @@ export function battleView(c: ReduxCtx, d: BattleModel): string {
     const tall = trayHeight(1, n);
     tray = `<div class="abs win" style="left:0;right:0;bottom:0;height:${tall}px;padding:0"><div class="abs" style="left:22px;top:18px;width:${n ? 470 : 900}px;font-size:20px;line-height:27px">${msg}</div>${n ? `<div class="abs" style="right:16px;top:14px;width:410px;display:grid;grid-template-columns:1fr 1fr;gap:${many ? 6 : 8}px">${opts.map((o, k) => cell(o, k, many ? `height:${h}px` : '')).join('')}</div>` : ''}</div>`;
   } else {
-    tray = (d.text || n ? `<div class="abs txt" style="left:20px;${n ? 'width:480px' : 'right:20px'};bottom:16px;height:100px">${msg}</div>` : '')
+    tray = (d.text || n ? `<div class="abs txt" style="left:20px;${n ? 'width:480px' : 'right:20px'};bottom:16px;height:${540 - 16 - FRONT_EDGE - 3}px">${msg}</div>` : '')
       + (n ? `<div class="abs" style="right:20px;bottom:16px;width:410px;display:grid;grid-template-columns:1fr 1fr;gap:${many ? '6px' : '12px 10px'}">${opts.map((o, k) => cell(o, k, `height:${h}px`)).join('')}</div>` : '');
   }
   const top = trayHeight(v, n);
