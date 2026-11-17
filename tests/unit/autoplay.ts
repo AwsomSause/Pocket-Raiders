@@ -11,6 +11,7 @@ import { evolvedFormAt } from '../../src/core/encounters';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { buyItem, chooseReward, chooseStarter, createRun, debugHealParty, leaveShop, partyCapacity, releaseLimitReached, resolveDecision, takeTurn, type NewRunOptions, type TurnResult } from '../../src/core/run';
 import { currentEnemy, type PokemonInstance, type RunState } from '../../src/core/state';
+import { leaveMinigame } from '../../src/core/minigame/flow';
 import { content as defaultContent, toBattle } from './helpers';
 
 export interface AutoplayOptions {
@@ -45,7 +46,8 @@ export function step(content: Content, run: RunState, smart = false, strong = fa
     case 'expedition':
       throw new Error('Autoplay does not enter expeditions');
     case 'minigame':
-      throw new Error('Autoplay does not enter minigames');
+      // A map stop can hold a minigame (longer stages reach more of them): the bot walks out, which forfeits it and pays nothing.
+      return { run: leaveMinigame(run, content), turn: null };
     case 'starter':
       return { run: chooseStarter(content, run, 0), turn: null };
     case 'map':
