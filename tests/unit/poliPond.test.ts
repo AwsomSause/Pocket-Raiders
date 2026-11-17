@@ -203,6 +203,7 @@ describe('Poli-Pond: the return', () => {
     expect(pondAfterTurn(content, run)).toEqual([]);
     expect(foe.hp).toBe(afterThree);
     expect(pondFlag(run, FLAGS.fired)).toBe(1);
+    expect(pondFlag(run, 'poli-returned')).toBe(1);
     foe.hp = 2;
     battle.storyEffects = [];
     expect(pondAfterTurn(content, run)).toEqual([]); // once only

@@ -181,6 +181,8 @@ export function pondAfterTurn(content: Content, run: RunState): Cue[] {
     if (pondFlag(run, FLAGS.fired) > 0 || !lead || lead.hp <= 0 || standing > POND_RETURN.losingAt || standing === run.party.length || !pondReturnPlace(content, run)) return out;
     battle.storyEffects.push(`pond-return:${cfg.turns}`);
     setPondFlag(run, FLAGS.fired, 1);
+    // The doc's name for it (`poli.returned`), for any other event that asks.
+    setPondFlag(run, 'poli-returned', 1);
     out.push(cue('player', 'A cry comes from somewhere off the field. Small. Familiar. It knows you before you know it.'));
     out.push(cue('player', `${cfg.poliwhirl + 1} shapes break the reeds of the arena: a Poliwrath, and ${cfg.poliwhirl} Poliwhirl behind it. They have come to stand with you.`));
   }
