@@ -514,7 +514,7 @@ export class EvilScene extends Phaser.Scene {
     }
     if (e.code === 'KeyY' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleGym();
     if (e.code === 'KeyB' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleBase();
-    if (e.code === 'KeyT' && type === 'down' && !e.repeat && !this.card && this.base) { this.base = { ...this.base, tab: (this.base.tab + 1) % BASE_TABS.length, opt: 0 }; return void this.view?.refresh(); }
+    if (e.code === 'KeyQ' && type === 'down' && !e.repeat && !this.card && this.base) { this.base = { ...this.base, tab: (this.base.tab + 1) % BASE_TABS.length, opt: 0 }; return void this.view?.refresh(); }
     if (e.code === 'KeyL' && type === 'down' && !e.repeat && !this.card && this.block()?.district) return this.toggleLedger();
     if (e.code === 'KeyR' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleRoster();
     if (e.code === 'KeyF' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleFile();

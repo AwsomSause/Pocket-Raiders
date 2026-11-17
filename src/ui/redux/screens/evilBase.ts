@@ -2,7 +2,7 @@
 // on offer. With one: the grid (rooms, posts, pieces, the intruder's route, the failing square in red), the tabs Build ·
 // Staff · Defend with what can be done at the chosen square, the fairness light and its sentence, the Night's base
 // actions, WALK IT and the latch. Walk it draws the route as stops over the site's background; the Raid draws the Siege
-// Map. Keys: Left/Right the square, Up/Down the option, T the tab, Enter does it, Esc closes.
+// Map. Keys: Left/Right the square, Up/Down the option, Q the tab, Enter does it, Esc closes.
 
 import type { BaseModel, RaidModel } from '../../../core/evilMode/baseScreens';
 import { BASE_TABS } from '../../../core/evilMode/baseScreens';
@@ -41,7 +41,7 @@ function warnView(m: BaseModel): string {
 }
 
 function panelView(m: BaseModel): string {
-  const tabs = `<div class="row" style="gap:4px">${BASE_TABS.map((t, i) => `<span class="tg" style="cursor:pointer;${i === m.tab ? 'outline:2px solid var(--acc);' : ''}"${act('btab', i)} data-testid="evil-base-tab-${t.toLowerCase()}">${t}</span>`).join('')}<span class="sm" style="opacity:.6;margin-left:4px">(T)</span></div>`;
+  const tabs = `<div class="row" style="gap:4px">${BASE_TABS.map((t, i) => `<span class="tg" style="cursor:pointer;${i === m.tab ? 'outline:2px solid var(--acc);' : ''}"${act('btab', i)} data-testid="evil-base-tab-${t.toLowerCase()}">${t}</span>`).join('')}<span class="sm" style="opacity:.6;margin-left:4px">(Q)</span></div>`;
   const light = `<div class="row sm" style="gap:6px;margin-top:6px;align-items:center" data-testid="evil-base-fair" data-ok="${m.fair.ok}"><span style="width:12px;height:12px;border-radius:50%;background:${m.fair.ok ? '#7fd18f' : '#f05a4a'};flex:none"></span><span>${esc(m.fair.ok ? 'Fair: the kid can get to the Office.' : m.fair.problem ?? '')}</span></div>`;
   const opts = m.options.length ? m.options.map((o, i) => `<div style="padding:3px 6px;cursor:pointer;${i === m.opt ? 'background:#ffffff18;outline:1px solid var(--acc);' : ''}${o.problem ? 'opacity:.7;' : ''}"${act('bopt', i)} data-testid="evil-base-opt"><b style="font-size:13px">${esc(o.label)}</b>${sm(o.sub, 'font-size:11px;opacity:.85')}${o.problem ? sm(o.problem, 'font-size:11px;color:#f08a7a') : ''}</div>`).join('') : sm('Pick a square, or a door between two squares.', 'opacity:.7;margin-top:6px');
   const chosen = m.options[m.opt];
