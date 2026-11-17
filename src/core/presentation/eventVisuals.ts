@@ -42,12 +42,12 @@ export const PLACES = {
   center: { words: 'nurse clinic hospital infirmary healing ward', pics: [], set: 'room', motes: 'dust', inside: true },
   shop: { words: 'shop store mart market stall stalls merchant vendor peddler pedlar bazaar counter department shopkeeper clerk salesman trader auction', pics: [], set: 'shop', motes: 'dust', inside: true },
   lab: { words: 'lab laboratory professor research researcher scientist experiment computer terminal', pics: ['lab'], set: 'room', motes: 'none', inside: true },
-  gym: { words: 'gym dojo stadium tournament league colosseum court ring referee exhibition match badge', pics: ['arena'], set: 'hall', motes: 'dust', inside: true },
+  gym: { words: 'gym dojo stadium arena dome tournament league colosseum court ring referee exhibition match badge', pics: ['arena'], set: 'hall', motes: 'dust', inside: true },
   factory: { words: 'factory plant generator warehouse pipeline conveyor reactor turbine machinery windworks depot silph', pics: ['industrial'], set: 'hall', motes: 'sparks', inside: true },
   fair: { words: 'festival fair fairground carnival circus parade contest stage show lantern lanterns fireworks celebration booth pageant', pics: [], set: 'fair', motes: 'confetti' },
-  hall: { words: 'tower castle palace hall throne mansion museum hideout base headquarters vault corridor elevator casino basement cell prison bunker office lobby gallery', pics: [], set: 'hall', motes: 'dust', inside: true },
+  hall: { words: 'tower castle palace pike hall throne mansion museum hideout base headquarters vault corridor elevator casino basement cell prison bunker office lobby gallery', pics: [], set: 'hall', motes: 'dust', inside: true },
   house: { words: 'house home kitchen inn hotel cabin cottage parlour parlor bedroom school classroom library cafe café restaurant daycare day-care attic cellar shed barn porch hearth', pics: [], set: 'room', motes: 'dust', inside: true },
-  ruins: { words: 'ruin ruins temple shrine altar ancient relic tablet statue monument unown pillar pillars inscription tomb crypt', pics: [], set: 'ruins', motes: 'dust' },
+  ruins: { words: 'ruin ruins pyramid temple shrine altar ancient relic tablet statue monument unown pillar pillars inscription tomb crypt', pics: [], set: 'ruins', motes: 'dust' },
   graveyard: { words: 'grave graves graveyard cemetery memorial ghost ghosts haunt* spirit spirits seance séance headstone mourning', pics: ['graveyard'], set: 'wilds', motes: 'wisps' },
   void: { words: 'dream void distortion wormhole dimension rift portal ultra anomaly unreal nightmare', pics: [], set: 'void', motes: 'stars' },
   space: { words: 'space meteor meteorite comet cosmic stars constellation observatory telescope', pics: ['starlight', 'newworld'], set: 'void', motes: 'stars' },
@@ -68,8 +68,8 @@ export const PLACES = {
   mountain: { words: 'mountain mountains peak summit cliff ridge ledge climb mt pass slope', pics: ['mountain'], set: 'wilds', motes: 'dust' },
   city: { words: 'city town street streets alley plaza square rooftop downtown village avenue sidewalk fountain', pics: [], set: 'skyline', motes: 'none' },
   garden: { words: 'garden gardens flower flowers park orchard berry berries courtyard hedge greenhouse', pics: ['flowergarden', 'courtyard'], set: 'wilds', motes: 'petals' },
-  forest: { words: 'forest wood woods grove tree trees canopy thicket undergrowth clearing', pics: ['woodland', 'forest3', 'autumn'], set: 'wilds', motes: 'leaves' },
-  meadow: { words: 'meadow field fields pasture farm ranch hill hills picnic grass grassland', pics: ['meadow', 'battleparadise'], set: 'wilds', motes: 'petals' },
+  forest: { words: 'forest wood woods grove tree trees branch branches nest canopy thicket undergrowth clearing', pics: ['woodland', 'forest3', 'autumn'], set: 'wilds', motes: 'leaves' },
+  meadow: { words: 'meadow field fields pasture farm ranch fence hill hills picnic grass grassland', pics: ['meadow', 'battleparadise'], set: 'wilds', motes: 'petals' },
   route: { words: 'route road path trail crossroads signpost gate roadside wayside', pics: ['route'], set: 'wilds', motes: 'leaves' },
 } as const satisfies Record<string, PlaceDef>;
 export type PlaceId = keyof typeof PLACES;
@@ -116,9 +116,23 @@ const NIGHT_WORDS = 'night midnight moon moonlight moonlit starlight dark';
 const EVE_WORDS = 'dusk evening sunset twilight dawn sunrise';
 const DAY_WORDS = 'noon morning midday afternoon sunny sunlight daylight';
 
-/** Whole words of a text, lower case. */
+/**
+ * Place words that usually mean something else ("put on a show", "the ring of dancers", "it is mine", Team Magma, an Ice
+ * Stone, TM Surf, a Ghost type, "looks at the sky"). One of these alone does not say where an event is, in its name or
+ * its text: it counts only beside a surer word for the same place or a second such word.
+ */
+const WEAK_WORDS = 'show stage contest booth fair ring match court badge exhibition league plant depot mine dig den pass falls ghost ghosts spirit spirits dream ultra space stars dive diving surf magma crater '
+  + 'ancient relic statue tablet monument pillar pillars research computer terminal experiment healing ward sleeping trader clerk captain anne sail climb slope passage delve gallery memorial mourning '
+  + 'ice icy frost frozen spring store counter base cell office berry berries park sky cloud clouds';
+
+/** Whole words of a text, lower case. A hyphenated word also counts as its parts ("Poli-Pond" names a pond). */
 export function wordsOf(text: string): string[] {
-  return text.toLowerCase().match(/[a-zà-ÿ]+(?:-[a-zà-ÿ]+)*/g) ?? [];
+  const out: string[] = [];
+  for (const w of text.toLowerCase().match(/[a-zà-ÿ]+(?:-[a-zà-ÿ]+)*/g) ?? []) {
+    out.push(w);
+    if (w.includes('-')) out.push(...w.split('-'));
+  }
+  return out;
 }
 const matchers = new Map<string, (w: string) => boolean>();
 /** A test for a word list ("ghost haunt*"): whole words, or any ending after a `*`. */
@@ -133,6 +147,76 @@ function matcher(list: string): (w: string) => boolean {
   return m;
 }
 const hits = (words: readonly string[], list: string): number => { const m = matcher(list); let n = 0; for (const w of words) if (m(w)) n += 1; return n; };
+const weak = matcher(WEAK_WORDS);
+/**
+ * How surely an event's own name and text put it in a place. A word counts 4 in the name and 1 in the text (3 at most).
+ * A weak word (half as much in the name) counts only beside a sure word or a second weak word.
+ */
+function placeScore(name: readonly string[], intro: readonly string[], list: string): { score: number; loose: number } {
+  const m = matcher(list), unsure = new Set<string>();
+  let sureName = 0, sureText = 0, unsureHits = 0;
+  for (const w of name) if (m(w)) { if (weak(w)) { unsure.add(w); unsureHits += 2; } else sureName += 1; }
+  for (const w of intro) if (m(w)) { if (weak(w)) { unsure.add(w); unsureHits += 1; } else sureText += 1; }
+  const backed = sureName > 0 || sureText > 0 || unsure.size > 1;
+  return { score: sureName * 4 + Math.min(3, sureText + (backed ? unsureHits : 0)), loose: backed ? 0 : unsureHits };
+}
+/**
+ * The place an event's own words name, and how surely (0: they name none). A tie goes to the earlier place. `hint` is
+ * the place of a lone weak word, when that is all there is: a last guess, better than nothing.
+ */
+function ownPlace(ev: Pick<VisualEvent, 'name' | 'intro'>): { place: PlaceId; score: number; hint: PlaceId | null } {
+  const name = wordsOf(ev.name), intro = wordsOf(ev.intro);
+  let place: PlaceId = 'route', score = 0, hint: PlaceId | null = null, loose = 0;
+  for (const id of PLACE_IDS) {
+    const n = placeScore(name, intro, PLACES[id].words);
+    if (n.score > score) { score = n.score; place = id; }
+    if (n.loose > loose) { loose = n.loose; hint = id; }
+  }
+  return { place, score, hint: score > 0 ? null : hint };
+}
+
+/** The last part of an id that opens a storyline ("gn-04-door", "sky.opening"). */
+const DOORS = new Set(['door', 'opening', 'open', 'intro', 'start', 'begin', 'arrive', 'arrival', 'entrance', 'gate']);
+/** More events than this under one start of an id is a whole pack of stories, not one storyline. */
+const FAMILY_MAX = 40;
+
+/**
+ * Where an event's storyline is set, for the events of it whose own words do not say. Events whose ids share a start
+ * ("gn-04-door", "gn-04-dance-1"; "sky.opening", "sky.finale"; not "sky.opening" with "sky-pillar") are one storyline: its place is where its opening event
+ * is clearly set (the event named by the shared start itself, or its "door"), else where more of its clearly set events
+ * are than anywhere else (two or more of them). The longest shared start wins.
+ */
+export function familyPlaces(events: readonly Pick<VisualEvent, 'id' | 'name' | 'intro'>[]): Map<string, PlaceId> {
+  const keys = (id: string): string[] => { const cut: string[] = []; for (let i = id.length - 1; i > 0; i--) if (id[i] === '-' || id[i] === '.') cut.push(id.slice(0, i + 1)); return cut; };
+  const families = new Map<string, { door: PlaceId | null; said: PlaceId | null; n: number; tally: Map<PlaceId, number> }>();
+  const family = (k: string) => { let f = families.get(k); if (!f) { f = { door: null, said: null, n: 0, tally: new Map() }; families.set(k, f); } return f; };
+  for (const ev of events) {
+    const own = ownPlace(ev), sure = own.score >= 2 ? own.place : null;
+    // An event whose id is the shared start itself opens its storyline ("ovc-memory-lane", then "ovc-memory-lane-s1").
+    if (sure) for (const sep of '-.') family(ev.id + sep).door ??= sure;
+    for (const k of keys(ev.id)) {
+      const f = family(k);
+      f.n += 1;
+      const opens = DOORS.has(ev.id.slice(k.length));
+      // The opening event's one word is a last guess for a storyline that agrees on nothing else.
+      if (opens && own.score > 0) f.said ??= own.place;
+      if (!sure) continue;
+      f.tally.set(sure, (f.tally.get(sure) ?? 0) + 1);
+      if (opens) f.door ??= sure;
+    }
+  }
+  const placeOf = (k: string): PlaceId | null => {
+    const f = families.get(k);
+    if (!f || f.n < 1 || f.n > FAMILY_MAX) return null;
+    if (f.door) return f.door;
+    let top: PlaceId | null = null, most = 0, next = 0;
+    for (const [p, n] of f.tally) { if (n > most) { next = most; most = n; top = p; } else if (n > next) next = n; }
+    return top && most >= 2 && most > next ? top : f.said;
+  };
+  const out = new Map<string, PlaceId>();
+  for (const ev of events) for (const k of keys(ev.id)) { const p = placeOf(k); if (p) { out.set(ev.id, p); break; } }
+  return out;
+}
 
 /** What the director reads of an event (an `EventDef` fits). */
 export interface VisualEvent {
@@ -152,11 +236,13 @@ export interface VisualContext {
   stageTypes: readonly string[];
   /** The kinds of the event's choices, as their cards show them. */
   kinds: readonly ChoiceKind[];
+  /** Where the event's storyline is set (`familyPlaces`), for an event whose own words do not say. */
+  family?: PlaceId | undefined;
 }
 export interface EventVisual {
   place: PlaceId;
-  /** Why this place: the event's own words, its map stop, its group, the stage's type, or nothing (the road). */
-  placedBy: 'words' | 'stop' | 'group' | 'stage' | 'default';
+  /** Why this place: the event's own words, its map stop, its group, its storyline, the stage's type, or nothing (the road). */
+  placedBy: 'words' | 'stop' | 'group' | 'family' | 'stage' | 'default';
   set: SetKind;
   inside: boolean;
   time: Daypart;
@@ -181,18 +267,17 @@ const WEATHERS: readonly string[] = ['rain', 'snow', 'fog', 'sparkle', 'glint', 
 export function eventVisual(ev: VisualEvent, ctx: VisualContext): EventVisual {
   const seed = fnv1a(ev.id) >>> 0;
   const name = wordsOf(ev.name), intro = wordsOf(ev.intro);
-  // Place: the event's name counts most, then its text, then its stop, its group, the stage.
-  let place: PlaceId = 'route', best = 0, placedBy: EventVisual['placedBy'] = 'default';
-  for (const id of PLACE_IDS) {
-    const score = hits(name, PLACES[id].words) * 4 + Math.min(3, hits(intro, PLACES[id].words));
-    if (score > best) { best = score; place = id; placedBy = 'words'; }
-  }
+  // Place: the event's name counts most, then its text, then its stop, its group, its storyline, the stage.
+  const own = ownPlace(ev), best = own.score;
+  let place: PlaceId = own.place, placedBy: EventVisual['placedBy'] = best > 0 ? 'words' : 'default';
   if (best < 2) {
     const byStop = ev.stop ? STOP_PLACE[ev.stop] : undefined, byGroup = GROUP_PLACE[ev.group];
     const byType = TYPE_PLACE[(ev.types?.[0] ?? ctx.stageTypes[0] ?? '').toLowerCase()];
-    // One stray word in the text loses to the stop or the group, and beats the stage.
+    // One word in the text loses to the stop or the group. With no word at all the storyline places the event, then a lone weak word, then the stage.
     if (byStop) { place = byStop; placedBy = 'stop'; }
     else if (byGroup) { place = byGroup; placedBy = 'group'; }
+    else if (best === 0 && ctx.family) { place = ctx.family; placedBy = 'family'; }
+    else if (best === 0 && own.hint) { place = own.hint; placedBy = 'words'; }
     else if (best === 0 && byType) { place = byType; placedBy = 'stage'; }
   }
   const def: PlaceDef = PLACES[place];

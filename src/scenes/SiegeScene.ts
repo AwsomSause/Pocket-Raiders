@@ -10,7 +10,7 @@ import { currentFormat } from '../core/formats/store';
 import { services } from '../game/services';
 import { onInputAction, type InputAction } from '../ui/input';
 import { fitBlock } from '../ui/fitText';
-import { siegeMapView, type SiegeMapModel } from '../ui/redux/screens/ops';
+import { siegeMapView, siegeSpots, type SiegeMapModel } from '../ui/redux/screens/ops';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { GAME_WIDTH, textStyle } from '../ui/theme';
 import { Menu } from '../ui/widgets';
@@ -130,6 +130,23 @@ export class SiegeScene extends Phaser.Scene {
     if (a === 'confirm') return this.enter();
     const step = a === 'left' ? -1 : a === 'right' ? 1 : a === 'up' ? -this.cols : a === 'down' ? this.cols : 0;
     if (!step) return;
+    if (this.cols !== 1) {
+      // The war map: an arrow goes to the nearest district that way. Left and right fall back to the list's order
+      // (round the wall) when nothing lies that way, so every district can be reached with two keys.
+      const spots = siegeSpots(this.model().rows), cur = spots[this.at];
+      if (!cur) return;
+      const dx = a === 'left' ? -1 : a === 'right' ? 1 : 0, dy = a === 'up' ? -1 : a === 'down' ? 1 : 0;
+      let best = -1, score = Infinity;
+      spots.forEach((p, k) => {
+        if (k === this.at) return;
+        const ox = p.x + p.w / 2 - (cur.x + cur.w / 2), oy = p.y + p.h / 2 - (cur.y + cur.h / 2);
+        const along = ox * dx + oy * dy, off = Math.abs(ox * dy) + Math.abs(oy * dx);
+        if (along > 8 && along + off * 2 < score) { best = k; score = along + off * 2; }
+      });
+      if (best >= 0) return this.focus(best);
+      if (dx) this.focus(this.at + dx);
+      return;
+    }
     const n = this.state()?.districts.length ?? 0, to = this.at + step;
     // Down from above a short last row lands on that row's last district.
     const short = a === 'down' && to >= n && Math.floor(this.at / this.cols) < Math.floor((n - 1) / this.cols);

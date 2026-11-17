@@ -26,7 +26,7 @@ import { onInputAction, type InputAction } from '../ui/input';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, textStyle } from '../ui/theme';
 import { AERO, paintGlass } from '../ui/aero';
 import { eventBackdrop, eventStyleOf } from '../core/presentation/eventStyles';
-import { castInText, choiceVisual, eventVisual, lineVisual, namedInText, shotOf } from '../core/presentation/eventVisuals';
+import { castInText, choiceVisual, eventVisual, familyPlaces, lineVisual, namedInText, shotOf, type PlaceId } from '../core/presentation/eventVisuals';
 import { catalogIconId } from '../core/contentSchema';
 import { layoutFor } from '../ui/eventStyles';
 import type { ChoiceWidget, EventCtx, EventLayoutHandles, Rect } from '../ui/eventStyles/types';
@@ -46,6 +46,13 @@ import type { TeamModel } from '../ui/redux/screens/team';
 import { briefingView, finalView, rankUpView, resultView, tableView } from '../ui/redux/screens/evilLooks';
 import { evilLook, rankUpLook, resultLook, type EvilLook } from '../core/evil/screens';
 
+
+/** Where each storyline is set (`familyPlaces`), worked out once for the game's events. Presentation only. */
+let storyPlaces: { of: object; places: Map<string, PlaceId> } | null = null;
+function storyPlace(events: ReadonlyMap<string, { id: string; name: string; intro: string }>, id: string): PlaceId | undefined {
+  if (storyPlaces?.of !== events) storyPlaces = { of: events, places: familyPlaces([...events.values()]) };
+  return storyPlaces.places.get(id);
+}
 
 const BOTTOM_H = 168;
 const PICK_W = 420;
@@ -302,7 +309,7 @@ export class EventScene extends Phaser.Scene {
       // The remade event screen: the event director reads this event's own words and data and decides its picture
       // (place, hour, mood, weather), and the screen stages whoever the event names. Presentation only.
       const kinds = view.choices.map((x) => x.kind);
-      const vis = eventVisual(view.event, { period: periodOf(run), stageTypes: (theme?.types ?? []).map((t) => t.toLowerCase()), kinds });
+      const vis = eventVisual(view.event, { period: periodOf(run), stageTypes: (theme?.types ?? []).map((t) => t.toLowerCase()), kinds, family: storyPlace(content.events, view.event.id) });
       const said = `${view.event.name}. ${view.event.intro}`;
       const listed = ctx.castIds.map((id) => ({ id, art: artOf(this, id) })).filter((x): x is { id: string; art: NonNullable<typeof cast> } => x.art !== null).slice(0, 3);
       // An event that pictures nobody still shows the people its text names by their trade ("a Hiker blocks the path").

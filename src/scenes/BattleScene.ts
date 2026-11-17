@@ -605,6 +605,7 @@ export class BattleScene extends Phaser.Scene {
       backgroundIndex: () => this.fieldBase,
       sprite: (side) => (side === 'player' ? this.playerSprite : this.enemySprite),
       mastery: (moveId) => moveRank(session.profile.moveUses?.[moveId] ?? 0),
+      fullScreen: (on) => this.rx?.visible(!on),
     });
 
     this.shown = { player: structuredClone(run.party[battle.activeIndex]!), enemy: structuredClone(currentEnemy(battle)) };

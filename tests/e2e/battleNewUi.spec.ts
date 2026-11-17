@@ -483,3 +483,29 @@ test('New UI on a phone held sideways: the on-screen pad lies over the screens a
   expect(errors).toEqual([]);
   await context.close();
 });
+
+test('New UI: a Pokémon Moment\'s full-screen scene clears the bars and the text box while it plays, then they come back', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'Battle');
+  const hud = view(page, 'Battle');
+  await toCommands(page);
+  await expect(hud).toBeVisible();
+  // The scene of "Failure Will (NOT) Be Tolerated", played the way the battle plays it (its cue through the battle's effects).
+  await page.evaluate(() => {
+    const s = (window as any).__pkr.game.scene.getScene('Battle');
+    (window as any).__momentDone = false;
+    void s.fx.play([{ kind: 'momentScene', id: 'e2e', speciesId: 'magnezone', fadeMs: 300, staticMs: 300, lines: ['Backup objective: engaged.'] }]).then(() => { (window as any).__momentDone = true; });
+  });
+  // While it plays, nothing of the New look sits over the canvas, and the scene's own line is on the canvas.
+  await expect(hud).toBeHidden();
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.list.some((o: any) => o.type === 'Text' && o.depth >= 5000 && o.text === 'Backup objective: engaged.')), { timeout: 15000 }).toBe(true);
+  expect(await page.evaluate(() => (window as any).__momentDone)).toBe(false);
+  // When it ends the battle's boxes and menu are back.
+  await expect.poll(() => page.evaluate(() => (window as any).__momentDone), { timeout: 30000 }).toBe(true);
+  await expect(hud).toBeVisible();
+  await expect(hud.locator('[data-act="pick"]', { hasText: 'Fight' })).toBeVisible();
+  expect(errors).toEqual([]);
+});
