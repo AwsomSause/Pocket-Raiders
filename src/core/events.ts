@@ -1225,7 +1225,8 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   for (const effect of outcome.effects) {
     const doubled = contest && effect.kind === 'attribute' && effect.key === 'charisma' ? { ...effect, amount: effect.amount * 2 } : effect;
     const words = applyEffect(content, run, doubled, rng, tradeUid);
-    if (words) changes.push(words);
+    // gn.14: a conditional line may name the Pokémon lost this run ({lost:name}).
+    if (words) changes.push(words.includes('{lost:name}') ? gnTokens(content, run, words) : words);
   }
   noteCanonEvent(run, event);
   meetFromEvent(run, event);
@@ -2318,6 +2319,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     startRaidBattle(content, run, def, rng.pick(def.species), level);
     if (b.spikesUnless && Number(run.story.flags[`ev:${b.spikesUnless.flag}`] ?? 0) < b.spikesUnless.atLeast) run.battle!.sideEffects.player.toxicSpikes = 1;
     raidFlagMods(content, run, b.flagMods);
+    if (b.rule) run.battle!.eventRule = b.rule;
     run.battle!.event = event;
     return;
   }
@@ -2362,6 +2364,8 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     if (b.weather) run.battle.weather = { id: b.weather, turns: 999 };
     if (b.rule) { run.battle.eventRule = b.rule; ruleStages(run.battle, b.rule); }
     if (b.rule?.giant) growGiants(content, run.battle.enemyTeam);
+    // gn.15: the foe's told opening move (the first Mankey's Screech) takes its first turn.
+    if (b.rule?.foeOpensLine) run.battle.storyEffects.push(`gn-foe-waits:${b.rule.foeOpensLine}`);
     if (b.alpha) run.battle.alpha = true;
     if (b.rule?.calmBar) run.battle.calm = startCalm(b.rule.calmBar, Number(run.story.flags['ev:warden-sash'] ?? 0) >= 1);
     if (b.aura) for (const s of ['atk', 'def', 'spa', 'spd', 'spe'] as const) run.battle.enemyStages[s] = 1;

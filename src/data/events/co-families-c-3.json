@@ -1229,6 +1229,11 @@
         "shinyMultiplier": 1
        },
        {
+        "kind": "flag",
+        "key": "abandoned-mon",
+        "amount": 1
+       },
+       {
         "kind": "boxBond",
         "key": "trubbish"
        },

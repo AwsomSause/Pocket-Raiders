@@ -3,6 +3,7 @@
 // choice (Fight / Bag / Pokémon) and plays back the events each turn produces.
 
 import { falseSlotFor } from '../core/expansion/labyrinth';
+import { waitOffered } from '../core/greenneedle/fifth';
 import { lastResortOffer, useLastResort } from '../core/battle/lastResort';
 import { mentorMoment } from '../core/story/mentorMoments';
 import { mentorScene } from '../ui/battleFx/mentorScene';
@@ -3772,6 +3773,9 @@ export class BattleScene extends Phaser.Scene {
     const lastResortOffered = lastResortOffer(content, this.run, this.activeMon());
     const lastResortAt = lastResortOffered ? options.length : -1;
     if (lastResortAt >= 0) options.push({ label: "Mentor ♥" });
+    // Greenneedle gn.15: the fifth Mankey only stands there: "Wait." lets the turn pass without an attack.
+    const waitAt = !this.duo && waitOffered(this.run.battle) ? options.length : -1;
+    if (waitAt >= 0) options.push({ label: 'Wait.' });
     // Beta 0.7 L3: the Time Keeper's rewind (once per stage, up to 5 turns back).
     const rewindMax = this.duo ? 0 : rewindTurnsAvailable(content, this.run);
     const rewindAt = rewindMax > 0 ? options.length : -1;
@@ -3817,6 +3821,7 @@ export class BattleScene extends Phaser.Scene {
         } else if (i === smashAt) this.submit({ kind: 'arena' });
         else if (i === shiftAt) this.submit({ kind: 'shift' });
         else if (i === scanAt) void this.scanFoe();
+        else if (i === waitAt) this.submit({ kind: 'idle' });
         else if (i === rewindAt) this.showRewindMenu(rewindMax);
         else if (i === reverseAt) void this.stepToReverseSide();
         else if (i === lastResortAt) {
