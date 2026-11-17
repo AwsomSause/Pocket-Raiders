@@ -84,7 +84,7 @@ test('the healing spot and the shop work from the map', async ({ page }) => {
   // Jump next to the gym (the column before it always has a healing spot), hurt the party, add a shop.
   await page.evaluate(() => {
     const { session } = (window as any).__pkr;
-    session.debugJumpToColumn(20);
+    session.debugJumpToColumn(session.run.stage.map.columns);
     session.run.party[0].hp = 1;
     session.run.money = 500;
     // Node Event Menus (on by default since beta 0.7) put Heal and Shop inside the "Here" menu; this test covers
@@ -139,7 +139,7 @@ test('the gym leader introduces themselves in the themed arena', async ({ page }
   page.on('pageerror', (e) => errors.push(e.message));
   await startRun(page, 'e2e-gym');
   await mapReady(page);
-  await page.evaluate(() => (window as any).__pkr.session.debugJumpToColumn(20));
+  await page.evaluate(() => (window as any).__pkr.session.debugJumpToColumn((window as any).__pkr.session.run.stage.map.columns));
   await reopenMap(page);
   await page.keyboard.press('Enter'); // the gym
   await waitForScene(page, 'Battle');

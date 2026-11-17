@@ -5,7 +5,7 @@
 
 import type { Content } from '../contentSchema';
 import { hashSeed, Rng } from '../rng';
-import { getCampaign } from '../regions';
+import { getCampaign, runCampaign } from '../regions';
 import type { PokemonInstance, RunState } from '../state';
 import { makeShadow, rollShadowHeart } from '../shadow';
 import type { Faction } from './schema';
@@ -25,7 +25,7 @@ export const totalActivity = (run: Pick<RunState, 'story'>) => flagOf(run, 'shad
 export const outbreakActive = (run: Pick<RunState, 'story'>) => flagOf(run, 'shadow-outbreak') > 0;
 
 const factionById = (content: Content, id: string): Faction | undefined => content.shadowWorld.factions.find((f) => f.id === id);
-const ordinal = (content: Content, run: RunState) => run.regionIndex * getCampaign(content, run.campaignId).stagesPerRegion + (run.stage?.index ?? 0) + 1;
+const ordinal = (content: Content, run: RunState) => run.regionIndex * runCampaign(content, run).stagesPerRegion + (run.stage?.index ?? 0) + 1;
 
 /**
  * Called when a stage starts, before its stops are chosen. Operations grow by one a stage for the faction the
