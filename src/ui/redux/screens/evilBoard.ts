@@ -93,7 +93,7 @@ export function boardView(m: BoardModel, f: FrameModel, notice: string | null, e
   const lineTag = m.lineFixed ? '' : `<span class="tg" style="cursor:pointer;${extra.line ? 'outline:2px solid var(--acc);' : ''}"${act('line')} data-testid="evil-line-open" title="Key N">Line</span>`;
   const gymTag = `<span class="tg" style="cursor:pointer;${extra.gym ? 'outline:2px solid var(--acc);' : ''}"${act('gym')} data-testid="evil-gym-open" title="Key Y">Gym</span>`;
   const tradeTag = `<span class="tg" style="cursor:pointer;${extra.trade ? 'outline:2px solid var(--acc);' : ''}"${act('trade')} data-testid="evil-trade-open" title="Key T">Trade</span>`;
-  const nbTag = m.neighbour ? `<span class="tg" style="cursor:pointer;${extra.neighbour ? 'outline:2px solid var(--acc);' : ''}"${act('nb')} data-testid="evil-nb-open" title="${esc(m.neighbour)} (key K)">${esc(m.neighbour.split(' · ')[0]!)}</span>` : '';
+  const nbTag = m.neighbour ? `<span class="tg" style="cursor:pointer;${extra.neighbour ? 'outline:2px solid var(--acc);' : ''}"${act('nb')} data-testid="evil-nb-open" title="${esc(m.neighbour)}">${esc(m.neighbour.split(' · ')[0]!)}</span>` : '';
   const scTag = `<span class="tg" style="cursor:pointer;${extra.scheme ? 'outline:2px solid var(--acc);' : ''}"${act('scheme')} data-testid="evil-sc-open" title="Key C">Scheme</span>`;
   const baseTag = `<span class="tg" style="cursor:pointer;${extra.base ? 'outline:2px solid var(--acc);' : ''}"${act('base')} data-testid="evil-base-open" title="Key B">Base</span>`;
   const roadTag = `<span class="tg" style="cursor:pointer;${extra.road ? 'outline:2px solid var(--acc);' : ''}"${act('road')} data-testid="evil-road-open" title="Key O">Road</span>`;

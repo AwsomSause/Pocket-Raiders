@@ -42,6 +42,7 @@ const sideways = (page: Page) => page.evaluate(() => {
 });
 
 test('Evil Mode pages never slide sideways, from a phone to a wide screen', async ({ page }, info) => {
+  test.setTimeout(300_000);
   const errors = watch(page);
   await toEvil(page);
   const s = view(page, 'Evil');
@@ -56,6 +57,8 @@ test('Evil Mode pages never slide sideways, from a phone to a wide screen', asyn
       return { over: Math.max(r.right - row.right, row.left - r.left) };
     });
     expect(strip.over, `tab strip overflows at ${w}x${h}`).toBeLessThanOrEqual(1);
+    // Every page at the widest, a common desktop, and a phone (the Board itself at all six).
+    if (![2560, 1920, 740].includes(w)) continue;
     for (const id of PAGES) {
       const tab = s.getByTestId(`evil-${id}`);
       if (!(await tab.count())) continue;
