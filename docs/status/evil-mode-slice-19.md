@@ -21,5 +21,5 @@
 - Not built: the region schemes (the Lights, the Speech's Sunday crowd by holding mood, the List), keeping a lake by a walk and the lake Signs, three held bridges delaying squads, a table lost by a Lean or held only out of uniform, the Pen battle and "Ask them if they want to go", the green cell, the castle's rampart (tick 5), Legends' Signs. The clocks' battle effects are lines on the Board only (as Hoenn's).
 - Castelia and Lumiose have twenty steps like every district (the doc's sixteen and twenty holdings don't fit the board).
 - Some Sit-Down lines are spoken by Saturn (Sinnoh) where the screen names the Boss; the engine still lets a Sit-Down call off a Kalos tick.
-- The six newer regions (Alola, Galar, Paldea) stay `disabled` (Kice: not in the first release).
+- Alola, Galar and Paldea waited for slice 20 (since built). Kice's "not in the first release" is about Part 27's six second-wave regions (Torren and the rest), not these.
 - Undo: set Sinnoh, Unova and Kalos to `"status": "disabled"` in `src/data/evilMode/region.json`; Six then can't be picked and runs are Three.

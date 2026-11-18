@@ -266,7 +266,7 @@ export class EvilScene extends Phaser.Scene {
         lookNext: (id) => { this.draft = turnLook(this.draft, id as LookRow, 1); this.view?.refresh(); },
         stay: (id) => this.evil({ type: 'goOn', stay: id || null }),
         cross: (code) => { const c = crossActOf(code); if (c) this.evil({ type: 'cross', ...c }); },
-        clock: (code) => this.evil(code === 'letter' ? { type: 'letter' } : { type: 'stopClock', how: code === 'stop:boss' ? 'boss' : 'hero' }),
+        clock: (code) => this.evil(code === 'letter' ? { type: 'letter' } : code.startsWith('stop:') ? { type: 'stopClock', how: code === 'stop:boss' ? 'boss' : 'hero' } : { type: 'regionAct', code }),
         recall: (id) => this.evil({ type: 'recall', id }),
         road: () => this.toggleRoad(),
         rpick: (id) => this.roadPick(id),
