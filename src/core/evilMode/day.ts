@@ -28,6 +28,7 @@ import { askStay, openQuests, pinLoyalty, questStep, type StayReason } from './q
 import { feed, moleAnswer, moleDistrictEnd, moleNight, nameThem, patronWarns, type MoleAnswer } from './mole';
 import { checkEndings, endAct, endBattle, pressEnding } from './endings';
 import { regionMoves } from './regionRule';
+import { afterGym, l3DistrictEnd, l3Evening, l3Morning, regionAct, starLocks } from './lastThree';
 import { beginCrossing, carryLetter, clockMet, clockMorning, cross, keptWarmth, stopClock, type CrossAct } from './crossing';
 import { BEATS, type Beat, type EvilModeBlock, type GymWay, type LineId, type OrderId, type PartId, type Question, type RoomType, type TableThing, type WingId } from './schema';
 
@@ -81,6 +82,8 @@ export type EvilAction =
   | ({ type: 'cross' } & CrossAct)
   | { type: 'letter' }
   | { type: 'stopClock'; how: 'boss' | 'hero' }
+  /** Slice 20: Alola, Galar and Paldea's In person acts (the loan, the handshake, Aether, the bag, a Star Visit), by code. */
+  | { type: 'regionAct'; code: string }
   /** Slice 11: a Racket, a Front or a Work from its Card (at Dispatch); the Boss's hand on something running; a way out of bankruptcy. */
   | { type: 'trade'; req: TradeReq }
   | { type: 'venture'; id: string; act: VentureAct }
@@ -181,7 +184,7 @@ export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
   // Slice 16: Hoenn's second clock (each Reckoning Morning; they meet if the Reckoning ends with it running).
   // Slice 17: the mole's district end (report, tells, a poach) comes first, once.
   const md = moleDistrictEnd(r.block);
-  let b = clockMorning(schemeMorning(neighbourMorning(settleRegion(clockMet(keptWarmth(neighbourDistrictEnd(md.block)))))));
+  let b = l3Morning(clockMorning(schemeMorning(neighbourMorning(settleRegion(clockMet(keptWarmth(l3DistrictEnd(neighbourDistrictEnd(md.block)))))))));
   // Slice 17: a finished quest pins Loyalty at 10; a failed one caps it at 7; two wrong accusations cap the Roster at 8.
   b = pinLoyalty(b);
   if (md.lines.length) r = { ...r, cues: [...r.cues, ...md.lines.map((line) => ({ id: 'said' as const, line }))] };
@@ -189,6 +192,8 @@ export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
   if (b.district?.end?.how === 'reckoning' && b.scheme) b = reckoningLost(b).block;
   // Slice 19: Sinnoh halves every Loyalty change; Unova doubles every Regard and Dread change (Part 26b sections 1.1, 2.1).
   b = regionMoves(block0, b);
+  // Slice 20: Team Star can't stand at War, Rivals, Front or Merger, whatever path tried (Part 15b section 5.1).
+  b = starLocks(b);
   // Slice 15: the endings are checked after every step, in their order (Part 23 section 1.1).
   b = checkEndings(block0, b);
   // Slice 16: a region that isn't the run's last ends at the Crossing.
@@ -275,7 +280,10 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
       return { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
     }
     if (f.kind === 'gym' || f.kind === 'challenge') {
-      const r = gymResult(block, action.won);
+      const r0 = gymResult(block, action.won);
+      // Slice 20 (Galar): the match was on television; a won Beat waits on the handshake.
+      const pitch = afterGym(block, r0.block, action.won);
+      const r = { block: pitch.block, lines: [...r0.lines, ...pitch.lines] };
       return { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
     }
     const queue = block.queue.map((j) => (j.holdingId === f.holdingId && j.method === 'outplay' ? { ...j, played: action.won ? ('won' as const) : ('lost' as const) } : j));
@@ -311,6 +319,10 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
     const r = action.type === 'sitDown' ? sitDown(block) : action.type === 'sitAnswer' ? sitAnswer(block, action.i) : action.type === 'table' ? putOnTable(block, action.thing, action.personId) : action.type === 'rise' ? rise(block) : action.type === 'chair' ? chairAct(block) : legendAct(block);
     if (r.problem) return no(r.problem);
     return { block: r.block, cues: [...r.lines.map((line) => ({ id: 'said' as const, line })), ...(r.block.fight && !block.fight ? [{ id: 'fight' as const }] : [])], ok: true };
+  }
+  if (action.type === 'regionAct') {
+    const r = regionAct(block, action.code);
+    return r.problem ? no(r.problem) : { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
   }
   if (action.type === 'letter' || action.type === 'stopClock') {
     const r = action.type === 'letter' ? carryLetter(block) : stopClock(block, action.how);
@@ -431,7 +443,7 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
   let out: EvilModeBlock = { ...pre, here: { ...pre.here, day, beat: to } };
   // "Send them" fixes the odds; going into the Evening rolls every job once (design Part 30 section 5.2).
   if (action.type === 'send') out = fixOdds(out);
-  if (to === 'evening') out = friendCheck(eveningTemper(schemeEvening(neighbourEvening(raidEvening(baseEvening(gymEvening(resolveEvening(out))))))));
+  if (to === 'evening') out = l3Evening(friendCheck(eveningTemper(schemeEvening(neighbourEvening(raidEvening(baseEvening(gymEvening(resolveEvening(out)))))))));
   // Slice 12: the night before the walk (Part 21 section 3.2).
   if (to === 'night') out = nightBefore(out);
   // Slice 7: the knock is drawn on the way into the Night (one `evil-people` draw, even when nobody comes).

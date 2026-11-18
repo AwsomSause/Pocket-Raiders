@@ -4,6 +4,7 @@
 // The `evil-gym` stream: Buy's found-out roll, a Beat's colder Town, Koga's seat, and how many tries a Bent Leader makes
 // the Hero take. Each number is counted, so a reload draws the same.
 
+import { regionShut } from './lastThree';
 import { hashSeed, Rng } from '../rng';
 import { shiftMood, townStreet } from './board';
 import { EVIL_DATA, type EvilData } from './data';
@@ -119,6 +120,9 @@ export function gymDoors(block: EvilModeBlock, data: EvilData = EVIL_DATA): GymD
       case 'beat':
         return open(T.beatOpen!);
       case 'buy': {
+        // Slice 20 (Alola): no Gyms, so nothing to buy; the door says who shut it (Part 8d section A.1).
+        const rs = regionShut(block, way, data);
+        if (rs) return shut(rs.by, rs.why);
         if (L.minor) return shut(S.age, say(L.buy?.why ?? S.age, L));
         // Slice 16: a Leader with a price asks the formula's, by the run's region and the district (Part 8a section 3).
         const price = L.buy?.price ? priceFor(runIndexOf(block), L.n, data) : null;
@@ -134,6 +138,8 @@ export function gymDoors(block: EvilModeBlock, data: EvilData = EVIL_DATA): GymD
         return open(fill(T.bendStep!, { n: g.bend + 1, of: n, text: L.bend.steps[Math.min(g.bend, n - 1)]! }));
       }
       case 'replace': {
+        const rr = regionShut(block, way, data);
+        if (rr) return shut(rr.by, rr.why);
         if (L.minor) return shut(S.age, T.replaceRefused!);
         if (!L.replace?.can) return shut(S.leader, L.replace?.goes ?? S.leader);
         if (line === 'clean') return shut(S.line, T.notClean!);

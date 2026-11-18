@@ -19,12 +19,13 @@ export function layDistrict(seed: string, region: number, n: number, team: LayTe
   const d = data.district;
   const row = stageRow(region, n, data);
   const rng = new Rng(hashSeed(`${seed}::evil-district::${region}::${n}`));
-  const L = row?.layout ? { ...row.layout, steps: d.layout.steps } : { ...d.layout, floor: 0, kept: 0, water: 0, lake: 0, bridge: 0, table: 0 };
+  const L = row?.layout ? { ...row.layout, steps: d.layout.steps } : { ...d.layout, floor: 0, kept: 0, water: 0, lake: 0, bridge: 0, table: 0, shrine: 0, awayEnd: 0, canteen: 0, starBase: 0 };
   const pool: HoldingKind[] = [
     ...Array<HoldingKind>(L.local).fill('local'), ...Array<HoldingKind>(L.wild).fill('wild'), ...Array<HoldingKind>(L.alpha).fill('alpha'),
     ...Array<HoldingKind>(L.safehouse).fill('safehouse'), ...Array<HoldingKind>(L.opportunity).fill('opportunity'), ...Array<HoldingKind>(L.floor).fill('floor'),
     ...Array<HoldingKind>(L.kept ?? 0).fill('kept'), ...Array<HoldingKind>(L.water ?? 0).fill('water'),
-    ...Array<HoldingKind>(L.lake ?? 0).fill('lake'), ...Array<HoldingKind>(L.bridge ?? 0).fill('bridge'), ...Array<HoldingKind>(L.table ?? 0).fill('table'), 'town',
+    ...Array<HoldingKind>(L.lake ?? 0).fill('lake'), ...Array<HoldingKind>(L.bridge ?? 0).fill('bridge'), ...Array<HoldingKind>(L.table ?? 0).fill('table'),
+    ...Array<HoldingKind>(L.shrine ?? 0).fill('shrine'), ...Array<HoldingKind>(L.awayEnd ?? 0).fill('awayEnd'), ...Array<HoldingKind>(L.canteen ?? 0).fill('canteen'), ...Array<HoldingKind>(L.starBase ?? 0).fill('starBase'), 'town',
   ];
   if (pool.length !== L.steps - 1) throw new Error(`Evil Mode district layout has ${pool.length} holdings before the Gym, not ${L.steps - 1}`);
   const kinds = rng.shuffle(pool);
@@ -198,6 +199,8 @@ export function takings(h: Holding, data: EvilData = EVIL_DATA): number {
   // Slice 19: a bridge pays its tolls; a lake and a table pay no Funds (Part 26b sections 1.3, 2.3, 3.3).
   if (h.kind === 'bridge') return kindDef('bridge', data).price ?? 0;
   if (h.kind === 'lake' || h.kind === 'table') return 0;
+  // Slice 20: a guardian's regard, an away end, a canteen table and a Star base pay no Funds (Part 26c sections 1.3, 2.3, 3.3).
+  if (h.kind === 'shrine' || h.kind === 'awayEnd' || h.kind === 'canteen' || h.kind === 'starBase') return 0;
   const t = localOf(h, data)?.take ?? 0;
   // Slice 6: a Leaned holding pays half as much again (Part 7 section 6).
   return h.method === 'lean' ? Math.floor((t * data.line.lean.takings) / 100) : t;
