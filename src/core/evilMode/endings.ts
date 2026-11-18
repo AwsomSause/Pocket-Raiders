@@ -3,6 +3,7 @@
 // far (nothing else is stored), so a save made on any scene reloads into it. Pure: no stream is drawn, no profile is read.
 // Every ending pays the same for the same distance (section 9.3): the pay reads the distance and never the ending.
 
+import { loanVested } from './lastThree';
 import { EVIL_DATA, type EvilData } from './data';
 import { appendLog, fill } from './ledger';
 import { inRoster, teamLoyalty } from './people';
@@ -83,6 +84,8 @@ export function straightProblem(block: EvilModeBlock, data: EvilData = EVIL_DATA
   const N = D(data).straight.not;
   if (block.team.line === 'whatever') return N.line;
   if (block.team.corruption > 0) return N.corruption;
+  // Slice 20 (Galar): the clause took the Fronts, and Going Straight with them (Part 15b section 4.3).
+  if (loanVested(block)) return data.region.lastThree?.loan.straightShut ?? N.line;
   const n = straightFronts(block).length;
   if (n < R.straightFronts) return fill(N.fronts, { n });
   if (block.team.regard < R.straightRegard) return N.regard;

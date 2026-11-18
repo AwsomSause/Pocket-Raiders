@@ -185,11 +185,11 @@ describe('the Run length setting: Six regions', () => {
     expect(r.ok && r.block.settings.length).toBe('three');
   });
 
-  it('is selectable now: six regions exist (the newer three stay switched off)', () => {
-    expect(regionsOpen()).toBe(6);
+  it('is selectable now: nine regions exist (slice 20 opened Alola, Galar and Paldea)', () => {
+    expect(regionsOpen()).toBe(9);
     expect(sixOpen()).toBe(true);
     expect(lengthFor('six')).toBe('six');
-    for (const id of ['alola', 'galar', 'paldea']) expect(EVIL_DATA.region.regions.find((r) => r.id === id)!.status).toBe('disabled');
+    for (const id of ['alola', 'galar', 'paldea']) expect(EVIL_DATA.region.regions.find((r) => r.id === id)!.status).toBe('supported');
     const def = SETTINGS.find((s) => s.id === 'evilRunLength')!;
     const s0 = DEFAULT_SETTINGS;
     expect(def.disabled?.(s0)).toBe(false);

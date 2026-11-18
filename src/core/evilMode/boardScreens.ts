@@ -15,6 +15,7 @@ import { heatForecast, lineWhy, thingProblem } from './line';
 import { wontText } from './people';
 import { currentLeader, gymDoors, gymOn, standingText } from './gym';
 import { clockActs, crossingModel, type CrossingModel } from './crossing';
+import { regionActs } from './lastThree';
 import { dayIn, heardOf, mayStay, morningNotes, regionText, stageDays, stageKind, stageName, tallyOf, waysForward } from './region';
 import { regionOf } from './regionRule';
 import { postAtNight, postNotes } from './base';
@@ -196,7 +197,7 @@ export function boardModel(block: EvilModeBlock, d: DispatchDraft, data: EvilDat
     const outplays = block.queue.filter((j) => j.method === 'outplay' && !j.played);
     const went = block.inPerson?.day === day ? name(block.inPerson.holdingId) : undefined;
     model.inPerson = {
-      clock: clockActs(block, data),
+      clock: [...clockActs(block, data), ...regionActs(block, data)],
       go: went ? [] : outplays.map((j) => ({ holdingId: j.holdingId, text: `Go yourself: Outplay at step ${name(j.holdingId)!.step} · ${holdingName({ ...name(j.holdingId)!, scouted: Math.max(1, name(j.holdingId)!.scouted) }, data)}`, sel: name(j.holdingId)!.step - 1 === d.at })),
       done: went ? `The Boss went to step ${went.step} today.` : outplays.length ? null : 'Nothing to go to in person. (In person, only an Outplay is played yet.)',
     };

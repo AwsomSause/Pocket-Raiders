@@ -67,7 +67,7 @@ describe('the Crossing', () => {
   });
 
   it('a third of the Roster stays, by name; "We need you." works at Loyalty 8 or more, once', () => {
-    let b = step(over, { type: 'cross', what: 'ticket', id: 'johto' }).block;
+    let b = step(over, { type: 'cross', what: 'ticket', id: over.region.crossing!.offer[0]! }).block;
     const staying = whoStays(b);
     expect(staying.length).toBe(Math.floor(b.crew.filter((c) => c.where === 'in').length / 3));
     expect(b.region.crossing!.staying).toEqual(staying.map((c) => c.id));
@@ -310,7 +310,10 @@ describe('the Road, and saves: block v15', () => {
   });
 
   it('a save made mid-Crossing reloads at the same step', () => {
-    const b = step(overRegion('cross-save'), { type: 'cross', what: 'ticket', id: 'hoenn' }).block;
+    const o = overRegion('cross-save');
+    const r = step(o, { type: 'cross', what: 'ticket', id: o.region.crossing!.offer[0]! });
+    expect(r.ok).toBe(true);
+    const b = r.block;
     const again = EvilModeBlockSchema.parse(JSON.parse(JSON.stringify(b)));
     expect(again.region.crossing).toEqual(b.region.crossing);
   });
