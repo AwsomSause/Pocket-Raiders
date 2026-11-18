@@ -79,14 +79,15 @@ function dispatch(m: BoardModel, notice: string | null): string {
   return list + crew + how;
 }
 
-export function boardView(m: BoardModel, f: FrameModel, notice: string | null, extra: { ledger?: string; roster?: string; file?: string; line?: string; gym?: string; base?: string; night?: string; filed?: string } = {}): string {
+export function boardView(m: BoardModel, f: FrameModel, notice: string | null, extra: { ledger?: string; roster?: string; file?: string; line?: string; gym?: string; trade?: string; base?: string; night?: string; filed?: string } = {}): string {
   const book = `<span class="tg" style="cursor:pointer;${extra.ledger ? 'outline:2px solid var(--acc);' : ''}"${act('ledger')} data-testid="evil-ledger-open">Ledger (L)</span>`;
   const people = `<span class="tg" style="cursor:pointer;${extra.roster ? 'outline:2px solid var(--acc);' : ''}"${act('roster')} data-testid="evil-roster-open">Roster (R)</span>`;
   const lineTag = `<span class="tg" style="cursor:pointer;${extra.line ? 'outline:2px solid var(--acc);' : ''}"${act('line')} data-testid="evil-line-open">Line (N)</span>`;
   const gymTag = `<span class="tg" style="cursor:pointer;${extra.gym ? 'outline:2px solid var(--acc);' : ''}"${act('gym')} data-testid="evil-gym-open">Gym (Y)</span>`;
+  const tradeTag = `<span class="tg" style="cursor:pointer;${extra.trade ? 'outline:2px solid var(--acc);' : ''}"${act('trade')} data-testid="evil-trade-open">Trade (T)</span>`;
   const baseTag = `<span class="tg" style="cursor:pointer;${extra.base ? 'outline:2px solid var(--acc);' : ''}"${act('base')} data-testid="evil-base-open">Base (B)</span>`;
   const fileTag = `<span class="tg" style="cursor:pointer;${extra.file ? 'outline:2px solid var(--acc);' : ''}"${act('file')} data-testid="evil-file-open">File (F)</span>`;
-  const title = `<div class="abs row" style="left:16px;right:16px;top:100px;gap:8px;align-items:center"><b data-testid="evil-team-name">${esc(f.team.name)}</b><span class="tg" style="min-width:0;flex:0 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(m.title)}</span><span class="tg" style="${m.warn ? 'background:var(--team-b);color:#fff' : ''}" data-testid="evil-day">${esc(m.day)}</span><span class="tg" data-testid="evil-count">${esc(m.count)}</span><div class="grow"></div>${f.chips.map((c) => `<span class="tg" style="min-width:0;flex:0 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" data-testid="evil-chip">${esc(c)}</span>`).join('')}${lineTag}${gymTag}${baseTag}${fileTag}${people}${book}</div>`;
+  const title = `<div class="abs row" style="left:16px;right:16px;top:100px;gap:8px;align-items:center"><b data-testid="evil-team-name">${esc(f.team.name)}</b><span class="tg" style="min-width:0;flex:0 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(m.title)}</span><span class="tg" style="${m.warn ? 'background:var(--team-b);color:#fff' : ''}" data-testid="evil-day">${esc(m.day)}</span><span class="tg" data-testid="evil-count">${esc(m.count)}</span><div class="grow"></div>${f.chips.map((c) => `<span class="tg" style="min-width:0;flex:0 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" data-testid="evil-chip">${esc(c)}</span>`).join('')}${lineTag}${gymTag}${tradeTag}${baseTag}${fileTag}${people}${book}</div>`;
   // The Ledger shares the frame and takes the board's place (slice 3); the last line filed sits in its corner.
   // The Base (slice 10) the same way; Walk it and a Raid hold it open over everything.
   if (extra.base) return `${title}${extra.base}${extra.filed ?? ''}`;
@@ -99,6 +100,8 @@ export function boardView(m: BoardModel, f: FrameModel, notice: string | null, e
   if (extra.line) return `${title}${extra.line}${extra.filed ?? ''}`;
   // The Gym (slice 8) the same way.
   if (extra.gym) return `${title}${extra.gym}${extra.filed ?? ''}`;
+  // The Trade page (slice 11) the same way.
+  if (extra.trade) return `${title}${extra.trade}${extra.filed ?? ''}`;
   // The Office at Night (slice 7) takes the board's place the same way.
   if (extra.night) return `${title}${extra.night}${extra.filed ?? ''}`;
   const lower = m.end ? endView(m) + panel(m) : m.dispatch ? dispatch(m, notice) : texts(m, notice) + panel(m);

@@ -1,0 +1,384 @@
+{
+  "note": "Evil Mode slice 11, the economy (design Part 12 sections 1 and 2, Part 13 sections 1 and 2, Part 5 sections 2.2 to 2.4). Kanto's hand-written Cards: six Rackets, five Fronts and four Works, each with the Honest Card's text (fields 2, 3, 4, 5, 9, 10, 12 and 13; the name, odds, who's going, who won't and not known are worked out from the block). `where` is the districts (n) a Card is offered in; empty is every district after the Arrival. `names` is the somebody field 3 names. `on: false` is the slice's undo: holdings pay flat takings, no Card is offered and a short Evening works as before. Upkeep lines come from running Works here; rooms add theirs when the base is built.",
+  "on": true,
+  "rules": {
+    "racket": { "patience": { "easy": 7, "wary": 5, "sullen": 3 }, "warnAt": 2, "books": 25, "profit": 10, "startHeat": 2, "startDread": 1, "shutHeat": 2, "waive": 1, "leanOnStreet": -1, "heroNear": -1, "heroSteps": 3, "dreadFreeze": 6, "breakOneIn": 10, "endEarlyLeft": 2, "honestOff": 10, "powerPatience": 2, "wonderLoyalty": -1 },
+    "front": { "runWellLoyalty": 5, "regardEach": 1, "regardMost": 2, "straightNeeds": 3 },
+    "work": { "firstHeat": -2, "loyalty": 1, "kindFlaws": ["doubts", "kind"], "kindTalents": ["heart"], "given": 1, "feedWeek": 7 },
+    "bankrupt": { "lowestFirst": -1, "everyone": -1, "lastJobFrom": 2, "sellFrom": 3, "whipFrom": 3, "whipRegard": 4, "whipLoyalty": 1, "sellBack": 50 }
+  },
+  "words": {
+    "title": "Trade",
+    "tabs": ["Rackets", "Fronts", "Works", "Running"],
+    "odds": "Certain.",
+    "oddsRacket": "Certain. Nobody's asked; they're told.",
+    "nobodyWont": "Nobody.",
+    "notKnownNone": "Nothing.",
+    "lead": "(lead)",
+    "street": "Street",
+    "noStreet": "No street the team holds a holding on.",
+    "warmStreet": "{street} is Warm. \"They'd not believe you meant it. Then they'd believe you. Don't.\"",
+    "notOnNeighbours": "Not on neighbours. (Belonging runs no racket but the Tithe.)",
+    "creedOnly": "Only a Cause or Belonging team keeps a Tithe.",
+    "line": "Shut by your Line: {line} doesn't work a racket.",
+    "arrival": "Nobody's earned anything yet. Rackets wait for the first district.",
+    "dispatchOnly": "Trade's done at Dispatch: a squad's day.",
+    "morningOnly": "Only at Morning.",
+    "already": "{street} already has a racket on it.",
+    "frontHere": "A Front's already open there.",
+    "noHolding": "A Front needs a holding the team has by deed, lease or share: one it Paid for or was given (Persuade).",
+    "needs": "Nobody free has {talent}. Every Front needs someone of the talent it's for.",
+    "noSquad": "Nobody free to go who'd go.",
+    "short": "Not enough Funds: {cost} needed, {funds} in hand.",
+    "notHere": "Not offered in {town}.",
+    "built": "{name} is built.",
+    "buildingDone": "{name} is finished: {gives}",
+    "started": "{name} is running on {street}. Dread +{dread}.",
+    "waived": "{name}: today's takings waived. The street's a day more patient.",
+    "ended": "{name} is ended.",
+    "endedEarly": "{name} is ended, early. {street}: \"They stopped. On their own.\" Each one warmer.",
+    "honest": "{name} is {honest} now. \"{says}\"",
+    "warn": "{street}'s Sullen.",
+    "shut": "{street}'s Shut. {name} is over. Heat +{heat}. What would turn there, turned.",
+    "broke": "Somebody on {street} has had enough alone: {act}",
+    "acts": ["somebody's painted a word on the safehouse door.", "the baker's shut. Not the shop: himself. He's gone to his sister's.", "Mr. Onuoha's sitting outside the constable's. He's not gone in. He's sitting."],
+    "frozen": "{street} pays. Nobody goes to the constable.",
+    "leftBehind": "{name} on {street} ends with the district: nobody's there to collect.",
+    "feedEnds": "Feed the District ends with the district.",
+    "upkeep": "Upkeep {amount}: {what}.",
+    "frontsPay": "Fronts {amount}, clean: {what}.",
+    "racketsPay": "Rackets {amount}: {what}.",
+    "backShut": "{name}'s back room is shut.",
+    "backOpen": "{name}'s back room is open.",
+    "noBackRoom": "There isn't one. Think about why.",
+    "runWell": "{name} was run well this district. Regard +{n}.",
+    "straight": "Going Straight: {n} of {of} Fronts in profit with the back room shut a whole district.",
+    "short1": "Short. Wages are paid late. Nothing falls yet. Everyone knows.",
+    "short2": "Broke. Wages aren't paid. Loyalty −1 for those paid least: {names}.",
+    "short3": "Bust. Loyalty −1 a day, everyone.",
+    "stages": ["Short", "Broke", "Bust"],
+    "bankrupt": "Bankrupt, day {n}: {stage}.",
+    "notBroke": "Only when the team's bankrupt.",
+    "lastJobOnce": "One Last Job's been done.",
+    "whipOnce": "The Whip-Round's been held this region.",
+    "whipRegard": "Only with Regard 4 or more: the district has to like you enough to put money in a tin.",
+    "noFront": "No Front to sell.",
+    "sold": "{name} is sold for {amount}. They were told the truth at Night.",
+    "whip": "The district pays the team's wages for a day: {amount}, in a tin. The Boss stands in the Mess and takes it. Loyalty +{n}, everyone.",
+    "lastJob": "One Last Job. {amount}. Heat +{heat}. Dread +{dread}.",
+    "doIt": "Do it",
+    "hint": "Up/Down picks a Card. Left/Right changes the tab. P changes the street or holding. Enter does it (the button is under field 13). V waives, E ends, M makes honest, B shuts or opens a back room. Esc closes."
+  },
+  "written": {
+    "racket": "Ran {name} on {street}: {written}",
+    "front": "Opened {name} at {holding}. {person} runs it.",
+    "work": "{written}",
+    "waive": "Waived a day of {name}.",
+    "end": "Ended {name} on {street}.",
+    "shut": "{street} shut on {name}.",
+    "honest": "{written}",
+    "backShut": "Shut {name}'s back room.",
+    "backOpen": "Opened {name}'s back room.",
+    "lastJob": "Robbed a payroll van. A week's wages, from forty people at the mill.",
+    "sell": "Sold {name}, and told them the truth.",
+    "whip": "The district paid the team's wages for a day. Line by line, with names: {names}."
+  },
+  "cards": [
+    {
+      "id": "dock", "kind": "racket", "name": "The Dock", "where": [2], "minLine": "grey", "cost": 0, "daily": 2400, "days": 0, "needs": null,
+      "tags": ["dock", "racketWork"], "names": "Mr. Rafael Zamora",
+      "moves": { "heat": 0, "dread": 1, "regard": 0, "loyalty": 0 },
+      "weekly": { "regard": -1 },
+      "text": {
+        "takes": "₽300 a day, each, from eight boats on {street}.",
+        "from": "Eight fishing families, Mr. Rafael Zamora's boat the eleventh in the row. They clear about ₽900 a day each.",
+        "gives": "₽2,400 a day.",
+        "moves": "Heat: stays while it's the day's loudest (a floor). Dread +1 at the start. Regard −1 a week. The fish market's prices rise: every local here pays more for supper.",
+        "holds": "Turns. The street goes with it.",
+        "hero": "Their uncle fishes from this dock.",
+        "written": "Took a third of eight families' living, daily, for nothing.",
+        "other": "Buy the cannery from Mr. Baumgartner (₽12,000; pays ₽3,000 a day, clean; it out-earns the racket inside five days). The boats sell to it gladly."
+      },
+      "honest": { "name": "The Cannery", "cost": 12000, "daily": 3000, "says": "They bought it. They pay what Harland paid, and on Fridays.", "written": "Bought the cannery. The boats sell to it." },
+      "status": "supported"
+    },
+    {
+      "id": "corner", "kind": "racket", "name": "The Corner", "where": [3], "minLine": "grey", "cost": 0, "daily": 4000, "days": 0, "needs": null,
+      "tags": ["rig"], "names": "Mr. Bartholomew Quaye",
+      "moves": { "heat": 1, "dread": 1, "regard": -1, "loyalty": 0 },
+      "text": {
+        "takes": "The Game Corner on {street}, with the odds leaned on.",
+        "from": "Whoever plays. Mr. Bartholomew Quaye, the mill foreman, loses more than he's got by the third night.",
+        "gives": "₽4,000 a day.",
+        "moves": "Heat +1 more at the start. Dread +1. Regard −1 with everyone who's lost.",
+        "holds": "Turns.",
+        "hero": "They'll win a Porygon here, fairly or not. They'll notice which.",
+        "written": "Leaned on the odds at the Game Corner. A man lost his wages to it.",
+        "other": "Run it straight: ₽1,800 a day, and it's a Front. Side by side: ₽4,000 crooked, ₽1,800 straight."
+      },
+      "honest": { "name": "The Corner, straight", "cost": 2000, "daily": 1800, "says": "I lost ₽40. Fairly. I'd forgotten what that was like.", "written": "Ran the Game Corner straight." },
+      "status": "supported"
+    },
+    {
+      "id": "protection", "kind": "racket", "name": "Protection", "where": [], "minLine": "grey", "cost": 0, "daily": 2000, "days": 0, "needs": null,
+      "tags": ["racketOld"], "names": "Mrs. Ifeoma Castellanos",
+      "moves": { "heat": 0, "dread": 1, "regard": 0, "loyalty": 0 },
+      "weekly": { "dread": 1 },
+      "text": {
+        "takes": "A street pays to be left alone, by the team: four or five businesses on {street}.",
+        "from": "Four or five businesses; Mrs. Ifeoma Castellanos of the Anchor pays first, so the others will.",
+        "gives": "₽2,000 a day.",
+        "moves": "Dread +1 at the start, and +1 a week.",
+        "holds": "Turns.",
+        "hero": "They'll ask who the street's paying. Somebody will tell them.",
+        "written": "Charged a street to be left alone by us.",
+        "other": "Actually protect it: from the neighbour, from the Alpha on the hill. Then it's a wage: ₽1,000 a day, the street's Easy, and it holds."
+      },
+      "honest": { "name": "The Watch", "cost": 1500, "daily": 1000, "says": "The other lot came on Tuesday. Ours saw them off. I've never said 'ours' about anyone before.", "written": "Kept the street's watch, for a wage." },
+      "status": "supported"
+    },
+    {
+      "id": "book", "kind": "racket", "name": "The Book", "where": [], "minLine": "grey", "cost": 0, "daily": 1200, "days": 0, "needs": null,
+      "tags": ["leanPoor"], "names": "Miss Marisela Oyelaran",
+      "moves": { "heat": 0, "dread": 1, "regard": 0, "loyalty": 0 },
+      "text": {
+        "takes": "Loans at a rate, to whoever's short on {street}: ₽300 a borrower, rising.",
+        "from": "Four borrowers. Miss Marisela Oyelaran, 19, who's running her dad's stall since he took ill, is the first.",
+        "gives": "₽1,200 a day.",
+        "moves": "Dread +1 at the start. Each borrower's fear becomes \"the team.\"",
+        "holds": "Turns.",
+        "hero": "One of the borrowers is the Hero's mother's friend.",
+        "written": "Lent to people who were short, at a rate they couldn't pay.",
+        "other": "Lend at cost: the Mutual (₽2,000 and a float of ₽3,000). ₽100 a borrower. They pay it back."
+      },
+      "honest": { "name": "The Mutual", "cost": 5000, "daily": 400, "says": "I paid it back in March. I've borrowed again. I'm not ashamed to.", "written": "Lent at cost. They paid it back." },
+      "status": "supported"
+    },
+    {
+      "id": "balls", "kind": "racket", "name": "The Ball Monopoly", "where": [1, 4], "minLine": "grey", "cost": 0, "daily": 2500, "days": 0, "needs": null,
+      "tags": ["racketWork"], "names": "Mrs. Wen Li-Hua",
+      "moves": { "heat": 0, "dread": 1, "regard": -2, "loyalty": 0 },
+      "text": {
+        "takes": "Every Poké Ball in {town} sold by one shop, at double.",
+        "from": "Every trainer in town. Mrs. Wen Li-Hua's bicycle shop stops stocking them.",
+        "gives": "₽2,500 a day.",
+        "moves": "Dread +1 at the start. Regard −2. Children can't start out.",
+        "holds": "Turns.",
+        "hero": "The Hero can't afford Balls here. Their team's a Pokémon short for the district.",
+        "written": "Bought up every Poké Ball in town and sold them at double.",
+        "other": "Open a second shop that undercuts. It's competition. It's allowed. ₽900 a day."
+      },
+      "honest": { "name": "Two shops", "cost": 3000, "daily": 900, "says": "The new place does a loyalty stamp.", "written": "Opened a second shop that undercuts the first." },
+      "status": "supported"
+    },
+    {
+      "id": "tithe", "kind": "racket", "name": "The Tithe", "where": [], "minLine": "clean", "creeds": ["cause", "belonging"], "cost": 0, "daily": 150, "days": 0, "needs": null,
+      "tags": [], "names": "everyone on the Roster",
+      "moves": { "heat": 0, "dread": 0, "regard": 0, "loyalty": 0 },
+      "text": {
+        "takes": "A tenth: ₽150 a head, from members and friendly locals on {street}.",
+        "from": "Everyone on the Roster, by name, and the locals who like the team.",
+        "gives": "₽150 a head a day.",
+        "moves": "Loyalty steady while they believe. It doesn't frighten anybody: no Dread, no Heat.",
+        "holds": "Holds.",
+        "hero": "The Hero hears it's a church. It isn't, quite.",
+        "written": "Took a tenth from our own.",
+        "other": "Tell them what it's spent on. In full. The Ledger, open, in the Hall. Then Loyalty +1, and it's a subscription."
+      },
+      "honest": { "name": "The Subscription", "cost": 0, "daily": 150, "says": "I read the whole Ledger. There's a line for the kettle.", "written": "Opened the Ledger in the Hall. Every line." },
+      "status": "supported"
+    },
+    {
+      "id": "cafe", "kind": "front", "name": "The Café", "where": [], "minLine": "clean", "cost": 2500, "daily": 800, "days": 0, "needs": "heart",
+      "tags": [], "names": "Miss Dilys Okpara",
+      "moves": { "heat": 0, "dread": 0, "regard": 1, "loyalty": 0 },
+      "backRoom": true,
+      "text": {
+        "takes": "₽2,500 to open, and {person} in the kitchen.",
+        "from": "The float. Miss Dilys Okpara sells it bread at cost; she likes to be asked.",
+        "gives": "₽800 a day, clean: logged as trade.",
+        "moves": "Regard +1. Heat: none; a Front's quiet.",
+        "holds": "Holds. Against the Hero, and against the team's own bankruptcy: a Front's the last thing sold.",
+        "hero": "The Hero eats there. Twice. They like the soup.",
+        "written": "Opened a café. It's a good café.",
+        "other": "The quicker way: a racket on the same street pays twice as much from day one, until the street's patience runs out."
+      },
+      "status": "supported"
+    },
+    {
+      "id": "daycare", "kind": "front", "name": "The Day-Care", "where": [], "minLine": "clean", "cost": 3000, "daily": 600, "days": 0, "needs": "heart",
+      "tags": [], "names": "Miss Juniper Achebe",
+      "moves": { "heat": 0, "dread": 0, "regard": 0, "loyalty": 0 },
+      "backRoom": false,
+      "text": {
+        "takes": "₽3,000 to open, and {person}.",
+        "from": "The float. Miss Juniper Achebe, the teacher, sends the first three children.",
+        "gives": "₽600 a day, clean. Applicants +1 a district.",
+        "moves": "Heat: none. The Holding Pen can't be in the same building, or anywhere in the district.",
+        "holds": "Holds.",
+        "hero": "The detective's niece is on the waiting list.",
+        "written": "Opened a day-care. It's clean.",
+        "other": "The quicker way: the Café opens for ₽500 less and pays ₽200 more."
+      },
+      "status": "supported"
+    },
+    {
+      "id": "charity", "kind": "front", "name": "The Charity", "where": [], "minLine": "clean", "cost": 1500, "daily": 0, "days": 0, "needs": "books",
+      "tags": [], "names": "Mr. Caspian Nwachukwu",
+      "moves": { "heat": 0, "dread": 0, "regard": 2, "loyalty": 0 },
+      "backRoom": true,
+      "text": {
+        "takes": "₽1,500 to open, and {person} on its books.",
+        "from": "The float. Mr. Caspian Nwachukwu at the bank holds its account.",
+        "gives": "Nothing a day. Regard +2.",
+        "moves": "Regard +2. Heat: none. Its back room moves Funds between districts without a van.",
+        "holds": "Holds. It's audited, and it passes, if it's run well.",
+        "hero": "Their mother gives to it.",
+        "written": "Opened a charity. The books balance.",
+        "other": "The quicker way: hand the ₽1,500 out at the Town tonight. Regard +1, once, and nothing after."
+      },
+      "status": "supported"
+    },
+    {
+      "id": "garage", "kind": "front", "name": "The Garage", "where": [], "minLine": "clean", "cost": 3000, "daily": 700, "days": 0, "needs": "hands",
+      "tags": [], "names": "Mr. Oswin Takahashi-Bello",
+      "moves": { "heat": 0, "dread": 0, "regard": 0, "loyalty": 0 },
+      "backRoom": true,
+      "text": {
+        "takes": "₽3,000 to open, and {person} under the cars.",
+        "from": "The float. Mr. Oswin Takahashi-Bello brings his carts on the first day.",
+        "gives": "₽700 a day, clean.",
+        "moves": "Heat: none. Its back room's plates and paint: a van's a different van by morning.",
+        "holds": "Holds.",
+        "hero": "An old man brings a bicycle every week that isn't broken. The Hero's seen him.",
+        "written": "Opened a garage. A real one.",
+        "other": "The quicker way: steal the vans you need. Heat +3 each."
+      },
+      "status": "supported"
+    },
+    {
+      "id": "allotments", "kind": "front", "name": "The Allotments", "where": [], "minLine": "clean", "cost": 1000, "daily": 200, "days": 0, "needs": null,
+      "tags": [], "names": "Mrs. Philippa Mwangi",
+      "moves": { "heat": 0, "dread": 0, "regard": 0, "loyalty": 0 },
+      "backRoom": true,
+      "text": {
+        "takes": "₽1,000 to open, and {person} with a hoe.",
+        "from": "The float. Mrs. Philippa Mwangi lends the ground behind her cottages.",
+        "gives": "₽200 a day, clean, and food.",
+        "moves": "Heat: none. Its back room's a shed.",
+        "holds": "Holds.",
+        "hero": "People who'd never speak to the team stand next to its Grunts with a hoe. The Hero's grandmother is one.",
+        "written": "Dug allotments and gave out the plots.",
+        "other": "The quicker way: buy the vegetables. ₽200 a day, and no shed."
+      },
+      "status": "supported"
+    },
+    {
+      "id": "bridge", "kind": "work", "name": "Mend the Bridge", "where": [1], "minLine": "clean", "cost": 4000, "daily": 0, "days": 2, "needs": null,
+      "tags": ["workCharges"], "names": "Mrs. Chiamaka Eze",
+      "moves": { "heat": -2, "dread": 0, "regard": 2, "loyalty": 1 },
+      "text": {
+        "takes": "₽4,000 of the team's, and two days.",
+        "from": "The float. Mrs. Chiamaka Eze has run the ferry under it since it fell.",
+        "gives": "Nothing a day. Nugget Bridge stands again.",
+        "moves": "Regard +2. Heat −2, once, for the first Work in a district. Loyalty +1, everyone with Heart, Doubts or Kind.",
+        "holds": "Holds, for good.",
+        "hero": "The Hero crosses it. Somebody's put a plaque on it by then. It doesn't say who paid.",
+        "written": "Mended a bridge.",
+        "other": "The quicker way: charge a toll on the bridge as it is. ₽1,500 a day, and the Hero finds the ford."
+      },
+      "status": "supported"
+    },
+    {
+      "id": "light", "kind": "work", "name": "Light the Town", "where": [], "minLine": "clean", "cost": 3000, "daily": 0, "days": 1, "needs": null,
+      "tags": [], "names": "Mr. Gaspard Okonjo",
+      "moves": { "heat": -2, "dread": 0, "regard": 2, "loyalty": 1 },
+      "text": {
+        "takes": "₽3,000 of the team's, and a day.",
+        "from": "The float. Mr. Gaspard Okonjo, the watchman, walks it with them.",
+        "gives": "Nothing a day. Lamps on every street in {town}.",
+        "moves": "Regard +2. Heat −2, once, for the first Work in a district. Loyalty +1, everyone with Heart, Doubts or Kind.",
+        "holds": "Holds, for good.",
+        "hero": "They walk home under it. Somebody asks why the team did it.",
+        "written": "Lit the town.",
+        "other": "The quicker way: light only the street the team works. ₽1,000, and nobody asks why."
+      },
+      "status": "supported"
+    },
+    {
+      "id": "feed", "kind": "work", "name": "Feed the District", "where": [], "minLine": "clean", "cost": 0, "daily": -500, "days": 0, "needs": null,
+      "tags": [], "names": "Mrs. Yewande Halloran",
+      "moves": { "heat": 0, "dread": 0, "regard": 0, "loyalty": 1 },
+      "running": true,
+      "weekly": { "regard": 1 },
+      "text": {
+        "takes": "₽500 a day, while it runs.",
+        "from": "The float. Mrs. Yewande Halloran lends the hall and her big pot.",
+        "gives": "Nothing a day. A queue.",
+        "moves": "Loyalty +1, everyone, at the start. Regard +1 a week.",
+        "holds": "Holds, for good.",
+        "hero": "Somebody in the queue's a Grunt's mother. The Hero's in it too, once.",
+        "written": "Fed the district.",
+        "other": "The quicker way: feed only the team. ₽150 a day, and no queue."
+      },
+      "status": "supported"
+    },
+    {
+      "id": "clinic", "kind": "work", "name": "The Clinic", "where": [], "minLine": "clean", "cost": 5000, "daily": 0, "days": 3, "needs": null,
+      "tags": [], "names": "Dr. Anselm Whitlock-Sato",
+      "moves": { "heat": -2, "dread": 0, "regard": 2, "loyalty": 1 },
+      "text": {
+        "takes": "₽5,000 of the team's, and three days.",
+        "from": "The float. Dr. Anselm Whitlock-Sato, the only doctor in three districts, takes the second room.",
+        "gives": "Nothing a day. Free healing, for anyone. Including the Hero.",
+        "moves": "Regard +2. Heat −2, once, for the first Work in a district. Loyalty +1, everyone with Heart, Doubts or Kind.",
+        "holds": "Holds, for good.",
+        "hero": "The detective comes in with a sick Growlithe. It's treated. They say thank you.",
+        "written": "Opened a clinic. Anyone can come.",
+        "other": "The quicker way: a racket on the district's medicine pays ₽2,000 a day. The Center runs short."
+      },
+      "status": "supported"
+    }
+  ],
+  "bust": {
+    "lastJob": {
+      "name": "One Last Job", "gives": 9000, "heat": 4, "dread": 2, "taken": 40, "minLine": "grey", "tags": ["racketWork", "lean"], "names": "Mr. Bartholomew Quaye",
+      "text": {
+        "takes": "One night. A payroll van.",
+        "from": "A week's wages, from forty people at the mill. Mr. Bartholomew Quaye, the foreman, signs for it.",
+        "gives": "₽9,000, once.",
+        "moves": "Heat +4. Dread +2.",
+        "holds": "—",
+        "hero": "Their friend's mother works the carding room. She won't be paid this week.",
+        "written": "Robbed a payroll van. A week's wages, from forty people at the mill.",
+        "other": "Sell a Front, and tell them the truth at Night. Or: ask the district (the Whip-Round, from Regard 4)."
+      }
+    },
+    "sell": {
+      "name": "Sell a Front",
+      "text": {
+        "takes": "{name}, the last thing a team sells.",
+        "from": "The team. {person} runs it, and will hear tonight.",
+        "gives": "{amount}, once, and no more takings from it.",
+        "moves": "Nothing moves but Funds.",
+        "holds": "It holds: it's somebody else's now.",
+        "hero": "They'll see a new name over the door.",
+        "written": "Sold {name}, and told them the truth.",
+        "other": "Ask the district (the Whip-Round, from Regard 4). Or One Last Job."
+      }
+    },
+    "whip": {
+      "name": "The Whip-Round", "names": "Miss Dilys Okpara",
+      "text": {
+        "takes": "A day's wages, from the district: {amount}.",
+        "from": "Locals who were helped, in person, with a tin: {names}. Most of the names are small amounts.",
+        "gives": "{amount}, once.",
+        "moves": "Loyalty +1, everyone. The Boss has to stand in the Mess and take it.",
+        "holds": "—",
+        "hero": "Somebody who put in tells the Hero. They don't know what to make of it.",
+        "written": "The district paid the team's wages for a day.",
+        "other": "One Last Job. Or sell a Front."
+      }
+    }
+  }
+}

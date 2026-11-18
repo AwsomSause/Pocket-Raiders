@@ -12,6 +12,7 @@ import { foundTeam, type FoundingChoice } from './start';
 import type { EvilModeBlock, Holding, JobMethod } from './schema';
 import type { JobDraft } from './odds';
 import { answerProblem, knockDef } from './night';
+import { bustProblem, cardDef, econOn, heldStreets, honestCost, offered, tradeReqProblem, ventureProblem } from './economy';
 
 /** always Persuade; the richest job first (Pay when it can, else Persuade); a mix (and an Officer left behind). */
 export type Policy = 'persuade' | 'richest' | 'mix';
@@ -23,6 +24,9 @@ export interface PlayResult {
   districts: DistrictStat[];
   /** True when the region reached its end (the Reckoning's over) within the action budget. */
   finished: boolean;
+  /** Slice 11: Evenings that ended bankrupt, and the lowest Funds after any Evening. */
+  brokeDays: number;
+  lowest: number;
 }
 
 /** A founded block at the region's first Morning, with the Hero made from the seed (as the session does). */
@@ -61,22 +65,60 @@ export function policyJobs(block: EvilModeBlock, policy: Policy, data: EvilData 
   return out;
 }
 
+/**
+ * Slice 11: the policy's trade for today, after its jobs: a way out if bankrupt (the Whip-Round, a sale, One Last Job), a
+ * Sullen racket made honest, a racket (not under `persuade`), a Front and a Work when there's money to spare. Reads the block only.
+ */
+export function policyTrade(block: EvilModeBlock, policy: Policy, data: EvilData = EVIL_DATA): EvilAction[] {
+  if (!econOn(data) || !block.district || block.here.beat !== 'dispatch') return [];
+  const out: EvilAction[] = [];
+  if (block.economy.broke > 0) {
+    for (const way of ['whip', 'sell', 'lastJob'] as const) {
+      if (way === 'lastJob' && policy === 'persuade') continue;
+      if (!bustProblem(block, way, null, data)) return [{ type: 'bust', way }];
+    }
+  }
+  const funds = block.team.funds;
+  for (const v of block.economy.running) {
+    const def = cardDef(v.cardId, data)!;
+    if (v.kind === 'racket' && !v.honest && (v.patience ?? 99) <= data.economy.rules.racket.warnAt && funds > honestCost(def, data) + 2000 && !ventureProblem(block, v.id, 'honest', data)) return [{ type: 'venture', id: v.id, act: 'honest' }];
+  }
+  const cards = offered(block, data);
+  if (policy !== 'persuade') {
+    const street = heldStreets(block, data)[0];
+    const c = cards.find((x) => x.kind === 'racket' && street !== undefined && !tradeReqProblem(block, { cardId: x.id, street }, data));
+    if (c) out.push({ type: 'trade', req: { cardId: c.id, street: street! } });
+  }
+  const f = cards.find((x) => x.kind === 'front' && funds > x.cost + 3000 && !tradeReqProblem(block, { cardId: x.id }, data));
+  if (f && !out.length) out.push({ type: 'trade', req: { cardId: f.id } });
+  const w = cards.find((x) => x.kind === 'work' && !x.running && funds > x.cost + 5000 && !tradeReqProblem(block, { cardId: x.id }, data));
+  if (w && !out.length) out.push({ type: 'trade', req: { cardId: w.id } });
+  return out;
+}
+
 /** Plays from `block` to the region's end (or the budget), recording each action that was accepted. */
 export function playRegion(block0: EvilModeBlock, policy: Policy, data: EvilData = EVIL_DATA, budget = 4000): PlayResult {
   let block = block0;
   const actions: EvilAction[] = [];
   const districts: DistrictStat[] = [];
+  let brokeDays = 0;
+  let lowest = block0.team.funds;
   const act = (a: EvilAction): boolean => {
     const r = step(block, a);
     if (r.ok) {
+      if (r.block.here.beat === 'evening' && block.here.beat !== 'evening') {
+        lowest = Math.min(lowest, r.block.team.funds);
+        if ((r.block.economy?.broke ?? 0) > 0) brokeDays += 1;
+      }
       block = r.block;
       actions.push(a);
     }
     return r.ok;
   };
+  const done = (finished: boolean): PlayResult => ({ block, actions, districts, finished, brokeDays, lowest });
   for (let i = 0; i < budget; i++) {
     const R = block.region;
-    if (R.phase === 'over') return { block, actions, districts, finished: true };
+    if (R.phase === 'over') return done(true);
     if (R.phase === 'tally') {
       const d = block.district!;
       districts.push({ n: d.n, how: d.end!.how, funds: block.team.funds, heat: block.team.heat, held: d.end!.count, day: block.here.day, left: block.crew.filter((c) => c.where === 'left').length, badges: block.hero?.badges.length ?? 0 });
@@ -99,16 +141,19 @@ export function playRegion(block0: EvilModeBlock, policy: Policy, data: EvilData
     }
     const beat = block.here.beat;
     if (beat === 'morning' && block.applicants.length && inRoster(block).length < 6 && block.team.funds > 1500) act({ type: 'hire', ref: block.applicants[0]!.ref });
-    if (beat === 'dispatch' && block.queue.length === 0) for (const job of policyJobs(block, policy, data)) act({ type: 'queueJob', job });
+    if (beat === 'dispatch' && block.queue.length === 0) {
+      for (const job of policyJobs(block, policy, data)) act({ type: 'queueJob', job });
+      for (const a of policyTrade(block, policy, data)) act(a);
+    }
     // Slice 7: someone at the door who can't be shut out (the summons) is answered: the first answer the team can give.
     const k = beat === 'night' ? block.night.knock : null;
     if (k && !knockDef(k.n, data)!.shut) {
       const i = [0, 1, 2].find((n) => !answerProblem(block, n, data));
       if (i !== undefined) act({ type: 'answerKnock', answer: i });
     }
-    if (!act({ type: BEAT_END[block.here.beat] })) return { block, actions, districts, finished: false };
+    if (!act({ type: BEAT_END[block.here.beat] })) return done(false);
   }
-  return { block, actions, districts, finished: false };
+  return done(false);
 }
 
 /** Replays a list of actions from a founded block; every one must be accepted again. */
