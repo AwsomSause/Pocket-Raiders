@@ -40,9 +40,9 @@ export interface FieldMenuHost {
   /** The screen shows this picker (null when it closes) and sends it keyboard input. */
   setPicker: (picker: PickerLike | null) => void;
   /** Called after something changed, with a message for the player. */
-  changed: (notice: string) => void;
+  changed: (notice: string, opts?: { reopenBag?: { pocket: number; row: number } }) => void;
   /** The map's item actions and intel; the Bag shows them and runs the action when one is picked. */
-  mapItems?: { rows: () => MapItemRow[]; use: (row: MapItemRow) => void };
+  mapItems?: { rows: () => MapItemRow[]; use: (row: MapItemRow, bag?: { pocket: number; row: number }) => void };
 }
 
 function close(host: FieldMenuHost, picker: Picker): void {
@@ -330,12 +330,15 @@ interface BagRowData {
 
 /** The pocket shown last, so coming back from a sub-menu lands on it (a fresh open starts on All). */
 let lastPocket = 0;
+/** The Bag row last chosen, so the Bag reopens with the cursor where it was after an item is used. */
+let lastRow = 0;
+const stayInBag = (): { reopenBag: { pocket: number; row: number } } => ({ reopenBag: { pocket: lastPocket, row: lastRow } });
 
 /**
  * The unified Bag (Major Update §4/§7): every item the run owns in pockets, held items too
  * (listed with their holders, never counted twice). The map adds its item actions and intel.
  */
-export function openBagMenu(host: FieldMenuHost, pocketIndex = 0): void {
+export function openBagMenu(host: FieldMenuHost, pocketIndex = 0, startRow?: number): void {
   const { session } = services();
   const run = session.run!;
   const content = session.content;
@@ -364,6 +367,7 @@ export function openBagMenu(host: FieldMenuHost, pocketIndex = 0): void {
     glass: true,
     skin: bagSkin,
     title: 'Bag',
+    start: startRow === undefined ? undefined : Math.min(startRow, Math.max(0, shown.length - 1)),
     badge: 'ui.bag.main',
     backdrop: 'ui.bag.bg',
     titleInArt: bagLook === 'original',
@@ -380,9 +384,10 @@ export function openBagMenu(host: FieldMenuHost, pocketIndex = 0): void {
     rows: shown.map((r) => bagEntryRow(content, run, r, problemFor(r), bagSkin?.layout?.cell === true)),
     onSelect: (i) => {
       const r = shown[i]!;
+      lastRow = i;
       if (r.map?.action) {
         close(host, picker);
-        host.mapItems!.use(r.map);
+        host.mapItems!.use(r.map, { pocket: lastPocket, row: i });
         return;
       }
       const e = r.entry;
@@ -399,7 +404,7 @@ export function openBagMenu(host: FieldMenuHost, pocketIndex = 0): void {
       }
       if (e.source !== 'bag') return;
       close(host, picker);
-      if (canCashIn(content, run, e.itemId)) host.changed(session.cashIn(e.itemId));
+      if (canCashIn(content, run, e.itemId)) host.changed(session.cashIn(e.itemId), stayInBag());
       else openItemTarget(host, e.itemId);
     },
     onBack: () => close(host, picker),
@@ -469,11 +474,11 @@ function openHolders(host: FieldMenuHost, e: BagEntry): void {
     rows: holders.map((h) => partyRows(content, [run.party[h.index]!], () => null, () => `×${h.copies}`, () => `${bagEntryText(e)} Choose to take it off (it waits in the Bag); Esc keeps it.`)[0]!),
     onSelect: (i) => {
       close(host, picker);
-      host.changed(session.takeOffHeld(holders[i]!.index, e.itemId));
+      host.changed(session.takeOffHeld(holders[i]!.index, e.itemId), stayInBag());
     },
     onBack: () => {
       close(host, picker);
-      openBagMenu(host, lastPocket);
+      openBagMenu(host, lastPocket, lastRow);
     },
   });
   host.setPicker(picker);
@@ -492,11 +497,11 @@ function openGiveHeld(host: FieldMenuHost, e: BagEntry): void {
     rows: partyRows(content, run.party, (i) => giveHeldProblem(content, run, e.itemId, i)),
     onSelect: (i) => {
       close(host, picker);
-      host.changed(session.giveHeld(e.itemId, i));
+      host.changed(session.giveHeld(e.itemId, i), stayInBag());
     },
     onBack: () => {
       close(host, picker);
-      openBagMenu(host, lastPocket);
+      openBagMenu(host, lastPocket, lastRow);
     },
   });
   host.setPicker(picker);
@@ -524,11 +529,11 @@ function openItemTarget(host: FieldMenuHost, itemId: string): void {
         openEvolutionChoice(host, itemId, i, targets);
         return;
       }
-      host.changed(session.useItem(itemId, i));
+      host.changed(session.useItem(itemId, i), stayInBag());
     },
     onBack: () => {
       close(host, picker);
-      openBagMenu(host, lastPocket);
+      openBagMenu(host, lastPocket, lastRow);
     },
   });
   host.setPicker(picker);
@@ -547,7 +552,7 @@ function openEvolutionChoice(host: FieldMenuHost, itemId: string, partyIndex: nu
     rows: targets.map((id) => speciesRow(content.species.get(id)!)),
     onSelect: (i) => {
       close(host, picker);
-      host.changed(session.useItem(itemId, partyIndex, targets[i]!));
+      host.changed(session.useItem(itemId, partyIndex, targets[i]!), stayInBag());
     },
     onBack: () => {
       close(host, picker);
