@@ -385,11 +385,11 @@ describe('the page and the save (block v9)', () => {
     expect(m.rows.find((r) => r.testid === 'evil-nb-sit')!.open).toBe(true);
     expect(m.rows.find((r) => r.testid === 'evil-nb-chair')!.open).toBe(false);
   });
-  it('v9 (slice 10) and v10 (slice 11) -> v11: no neighbour until the next step; then Giovanni at Wary, ticks already past counted as happened', () => {
+  it('v9 (slice 10, via slice 11 v10) and v10 (slice 11) -> v11: no neighbour until the next step; then Giovanni at Wary, ticks already past counted as happened', () => {
     const b = toBeat(found(6, 'mig'), 'dispatch');
     const { neighbour, ...rest } = b;
     void neighbour;
-    for (const v of [9, 10]) expect(EvilModeBlockSchema.parse({ ...rest, v })).toMatchObject({ v: 11, neighbour: null, base: rest.base });
+    for (const v of [9, 10]) expect(EvilModeBlockSchema.parse({ ...rest, v })).toMatchObject({ v: 11, neighbour: null, base: rest.base, economy: v === 9 ? { running: [], broke: 0 } : rest.economy });
     const v11 = EvilModeBlockSchema.parse({ ...rest, v: 9 });
     const after = go(v11, { type: 'send' });
     expect(nb(after).stance).toBe('wary');
@@ -399,8 +399,8 @@ describe('the page and the save (block v9)', () => {
   });
   it('v8 -> v11 in one load: a base nobody picked, and no neighbour yet', () => {
     const b = toBeat(found(6, 'mig8'), 'dispatch');
-    const { neighbour: _n, base: _b, raid: _r, law: _l, ...rest } = b;
-    expect(EvilModeBlockSchema.parse({ ...rest, v: 8 })).toMatchObject({ v: 11, base: null, raid: null, neighbour: null });
+    const { neighbour: _n, base: _b, raid: _r, law: _l, economy: _e, ...rest } = b;
+    expect(EvilModeBlockSchema.parse({ ...rest, v: 8 })).toMatchObject({ v: 11, base: null, raid: null, neighbour: null, economy: { running: [] } });
   });
   it('a v12 block (a newer save) is refused, not cut down', () => {
     expect(() => EvilModeBlockSchema.parse({ ...toBeat(found(6, 'mig'), 'dispatch'), v: 12 })).toThrow();
