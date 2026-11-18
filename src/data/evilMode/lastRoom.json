@@ -1,0 +1,209 @@
+{
+  "note": "Evil Mode slice 12, the Reckoning's rooms and the last room (design Part 21 sections 1 to 8). Day 1 the eighth Badge and what the eighth Leader says; day 2 the approach, one last day, and the night before; day 3 the gate, the walk (room by room, watched) and the last room. What the Hero says is assembled from the run: an opening by how they know the Boss, then what they've seen, what they came for, what you said at a fire, what they were told. Every part has a written fallback. In Regions 1 and 2 the last room ends the region, never the run. Text is data.",
+  "on": true,
+  "eighth": {
+    "giovanni": {
+      "regard": "There's a new outfit by the coast. People like them. I've met people people like. Look at their hands, not their faces.",
+      "dread": "There's a new outfit by the coast. I meant to have them looked at. I see I've left it to a child. Don't be brave. Be quick.",
+      "level": "I've heard both. I'm giving you both. People like them, and people are frightened of them. Usually it's the same people."
+    },
+    "answers": {
+      "protector": "\"I'll be careful. I mean with them. Not just with me.\"",
+      "champion-chaser": "\"Eight. Thanks. I've one more thing to do and then I'm coming back for the League.\"",
+      "strategist": "\"Can I ask what you'd have done? In my place? ...No. Don't tell me. I'll only write it down and then do something else.\"",
+      "bitter-challenger": "\"I know what they are. I've had a sandwich off one. I *know.*\"",
+      "enthusiast": "\"I've met loads of them! Most were nice! I'll tell you how it goes!\"",
+      "idealist": "\"They've a sentence on their door. I'm going to read it to them.\"",
+      "prodigy": "\"My father would thank you formally. I'm just going to say thanks.\"",
+      "underdog": "\"I didn't think I'd get this one. Sorry. I mean: thank you. I'm going now. Before I think about it.\""
+    },
+    "baker": "A local, wiping their hands at the door of {where}: \"You're going up to the building. ...They frightened me once. Then they tore up the book. I don't know what to tell you, love. I've had both.\""
+  },
+  "lastDay": {
+    "title": "One last day",
+    "help": "The Hero sits on the wall across the street. Use the in-person slot for one of these.",
+    "options": {
+      "go": { "name": "Tell them they can go", "does": "Anyone who wants to be somewhere else tomorrow goes tonight, paid. Those who stay chose to.", "said": "\"Anyone who wants to be somewhere else tomorrow, go tonight. No hard feelings. You'll be paid.\" By morning, {n} peg{s} empty." },
+      "soup": { "name": "Send soup across", "does": "The Hero takes it from the Friend. Not from a Grunt.", "said": "{who}", "taken": "The Friend carries it across. The Hero takes it. They eat it on the wall.", "left": "A Grunt carries it across. The Hero doesn't touch it. It goes cold on the wall." },
+      "chair": { "name": "Send a chair across", "does": "A small thing. Every Grunt at a window sees it.", "said": "A chair goes across the street. After a while the Hero sits on it. Every Grunt at a window sees." },
+      "leave": { "name": "Leave", "does": "Don't be there tomorrow. It's allowed. It's remembered.", "said": "The Boss leaves by the back way. Nobody's home tomorrow." }
+    },
+    "used": "The last day's already spent.",
+    "notNow": "Only on the Reckoning's second day, at the In person beat."
+  },
+  "night": {
+    "title": "The night before",
+    "bands": {
+      "Devoted": "{name} sits by the door they've been given. They've moved a chair to it.",
+      "Easy": "{name} plays cards, losing on purpose to somebody nervous.",
+      "Steady": "{name} writes a letter. Packs a bag and doesn't zip it.",
+      "Distant": "{name} stands near the back way. Not through it. Near it.",
+      "Leaving": "{name} isn't in the room."
+    },
+    "hot": "Somebody's got a pan on. \"Their mum said they'd not have eaten.\"",
+    "knock": "Then the knock. Old Obadiah, from the street: \"Three Bosses before you. None of them was here the night before. I thought I'd see what it looked like.\"",
+    "knockExec": "Then the knock. {name}, who could have just walked in: \"I'll take the last door. Don't argue.\""
+  },
+  "gate": {
+    "title": "The gate",
+    "bend": "{leader} is at the gate. Not to fight. To say one thing. \"{line}\"",
+    "bendNone": "{leader} is at the gate. Says one thing, to the Hero, quietly, and goes.",
+    "befriend": "A Gym trainer hands the Hero a note from {leader}. There's one on the Boss's desk too. The same note: \"Mind each other.\"",
+    "buy": "{leader} isn't there. They're at home with the curtains drawn. The Hero knows why.",
+    "beat": "{leader} is at the gate. For the Hero. \"I couldn't. You can.\"",
+    "replace": "{leader} is with the Rival, who's promised to get the Gym back.",
+    "warm": "Locals stand along the street. They don't block it. One takes their hat off. It isn't clear to whom.",
+    "shut": "Locals from shut holdings walk in behind the Hero. As far as the door.",
+    "detective": "{name} is across the road with the notebook. \"I'm not here in a professional capacity. I'd like to see how it comes out.\"",
+    "nobody": "Nobody's at the gate. Just the street."
+  },
+  "walk": {
+    "title": "The walk",
+    "start": "Morning. The Hero gets down off the wall and comes up the road to the door.",
+    "noBase": "There's no base to walk. One room. A door. The Hero knocks, which nobody expected.",
+    "fight": "{name} fights them at the door. It's a real fight.",
+    "won": "{name} sits down. They're beaten. The Hero steps round them.",
+    "again": "{name} gets up again. \"You'll have to go through me again.\" They do.",
+    "aside": "{name} steps aside. \"{says}\"",
+    "opened": "{name} had opened the door. They wouldn't look at the building.",
+    "kind": "{name} gives them a Potion first. \"It's not fair otherwise.\"",
+    "nobody": "Nobody stopped me. I don't know if that's because they couldn't or because they were told not to.",
+    "noPen": "I looked for the cages. Everyone has cages. There weren't any.",
+    "penOpen": "The door was open. Nothing was in it. There was a list on the wall of where each one went back to.",
+    "office": "The last door: the Office. It isn't locked. It can't be.",
+    "exec": {
+      "9": "{name}, at the Office door, fights properly. Then: \"Go in. Be decent. They've been decent to me.\"",
+      "7": "{name}, at the Office door, fights. Then steps aside.",
+      "0": "{name} steps aside from the Office door without a fight. \"I'd have held this door a region ago.\""
+    },
+    "priority": ["pen", "mess", "counting", "infirmary", "barracks", "listening", "vault", "workshop", "garage", "creed"]
+  },
+  "wall": {
+    "drawings": "The Wall: children's drawings. A van. A person in an armband holding a small Pokémon. \"THANK YOU.\" They touch one.",
+    "posters": "The Wall: wanted posters. Somebody's pinned them up like trophies. They read every one.",
+    "both": "The Wall: wanted posters, and children's drawings, pinned over each other. They look at which is higher.",
+    "bare": "The Wall's bare. A rota, and nothing else on it."
+  },
+  "open": {
+    "fire": "\"...It's *you.* From the fire.\"",
+    "knew": "\"I know. I've known since the fire. I wanted to hear you say it in here.\"",
+    "told": "\"You told me. You didn't have to tell me.\"",
+    "noFire": "\"So you're what one looks like.\"",
+    "lied": "\"You said you just worked there.\" Nothing else. They wait.",
+    "away": "The room. The Wall. They look at it for a long time. Then they leave something on the desk."
+  },
+  "awayLeaves": {
+    "protector": "A Berry, for your Pokémon. A note: \"I came. You didn't.\"",
+    "champion-chaser": "Their eighth Badge, face down. They come back for it an hour later.",
+    "strategist": "The notebook. The second column's still blank.",
+    "bitter-challenger": "Nothing. They turn the chair over.",
+    "enthusiast": "A bag of sweets, one for everyone on the Roster, with names on.",
+    "idealist": "The sentence, corrected, on a scrap of paper.",
+    "prodigy": "The speech. Unread. Folded into a boat.",
+    "underdog": "Their tally sheet. At the top: \"No. You get better.\""
+  },
+  "parts": {
+    "seen": "\"I walked through your building. {seen}\"",
+    "seenNone": "\"I walked straight in. There wasn't anything to see. That's what I'll remember.\"",
+    "came": "\"I came because of this. {reason}\"",
+    "cameNone": "\"I came because somebody had to.\"",
+    "told": "\"Somebody told me something on the way. {told}\"",
+    "toldNone": "\"Nobody told me anything on the way. I had to look.\"",
+    "letter": "\"My mum wrote: '{letter}'\"",
+    "ask": "\"So. What is it? I've come a long way. I'd like to hear it from you.\""
+  },
+  "creed": {
+    "profit": { "door": "\"The door says 'Everything costs. We'd like to be paid.' I read your books on the way in.\"", "first": "\"We started because nobody was paying the people who did the work. Then we wanted paying too.\"", "held": "\"...Yeah. I saw. Everyone in here gets paid.\"", "not": "\"That's what the door says. I asked what *you* say.\"" },
+    "cause": { "door": "\"The door says 'Something's wrong, and nobody's fixing it.'\"", "first": "\"We started because something was wrong and the League said it wasn't their job.\"", "held": "\"...Yeah. I saw. You're fixing it. Badly. But you are.\"", "not": "\"That's what the door says. I asked what *you* say.\"" },
+    "power": { "door": "\"The door says 'Somebody's going to be in charge.'\"", "first": "\"We started because I was tired of waiting to be let in.\"", "held": "\"...Yeah. You are. I can see that.\"", "not": "\"That's what the door says. I asked what *you* say.\"" },
+    "wonder": { "door": "\"The door says 'There's a door. We'd like to see behind it.'\"", "first": "\"We started because there was something under the ground and nobody would let us look.\"", "held": "\"...Yeah. I saw the maps. You really did just want to look.\"", "not": "\"That's what the door says. I asked what *you* say.\"" },
+    "belonging": { "door": "\"The door says 'Nobody else'd have us.'\"", "first": "\"We started because none of us had anywhere else to go.\"", "held": "\"...Yeah. I saw. The beds have names on.\"", "not": "\"That's what the door says. I asked what *you* say.\"" },
+    "spite": { "door": "\"The door says 'One person. That's all we want.'\"", "first": "\"We started because of one person, and what they did, and nobody stopping them.\"", "held": "\"...Yeah. I saw the string on the wall. It all goes to one place.\"", "not": "\"That's what the door says. I asked what *you* say.\"" }
+  },
+  "choices": {
+    "answer": "Answer",
+    "show": "Show them",
+    "battle": "(Battle.)",
+    "ask": "Ask them something",
+    "window": "(The window.)",
+    "offer": "Offer them a place",
+    "nothing": "(Say nothing.)"
+  },
+  "answers": {
+    "creed": { "name": "The Creed", "say": "You read the sentence on the door aloud." },
+    "first": { "name": "The first day", "say": "You tell them where the team came from.", "hero": "It's new to them. \"Nobody said. Not one of them. Did they not know?\"" },
+    "dontKnow": { "name": "\"I don't know any more.\"", "say": "\"I don't know any more.\"", "hero": "A long look. \"Then why's it still going?\" You say: \"Because of them.\" They look at the door they came through." },
+    "forThem": { "name": "\"For them.\"", "say": "\"For them.\"", "hero": "They look at the door they came through. \"The one on the second door gave me a Potion. ...Okay. That one I believe.\"" },
+    "scheme": { "name": "The Scheme", "say": "You tell them what it's for. All of it.", "hero": "They're the first outsider who knows." },
+    "lie": { "name": "A lie", "say": "\"They made me.\"", "hero": "They know. They've walked the base. It's the one place a lie can't work." }
+  },
+  "show": {
+    "ledger": { "name": "The Ledger", "hero": "Both books, on the desk, open. They read, the Hero's finger on each line. They stop at the ones from their street." },
+    "pen": { "name": "The Pen", "hero": "Each card's got an address. They read them. They ask for a pencil, and start writing down who takes which one home." },
+    "wall": { "name": "The Wall", "hero": "You stand aside." },
+    "window": { "name": "The window", "hero": "You stand at it. They come and stand at it too. The district's lights. \"That's my street.\" Nobody says anything for a while." },
+    "notebook": { "name": "Their notebook", "hero": "You take the notebook and write in the \"Why?\" column, one job at a time, and they read over your shoulder." },
+    "someone": { "name": "Someone", "hero": "{name} comes in, and says one thing about the Boss: \"{says}\"" },
+    "nothing": { "name": "Nothing", "hero": "They wait. Then: \"...Is that it? Is that all there is?\" And they answer their own question, from the walk." }
+  },
+  "someone": {
+    "Devoted": "I'd hold any door for them. I have.",
+    "Easy": "They're fair. Mostly. They listen, which is more than most.",
+    "Steady": "It's a job. They pay on time. I've had worse.",
+    "Distant": "Ask me next week. I don't know any more.",
+    "Leaving": "I'm going home tomorrow. Ask somebody who's staying."
+  },
+  "ask": {
+    "protector": "You ask what they'd do, if they were you. \"Give it back. All of it. And then stay, so they know you meant it.\"",
+    "champion-chaser": "You ask what's after the League. \"I don't know. I came here to find out what's after *this.*\"",
+    "strategist": "You ask what their total came to. \"Wrong. I know it's wrong. I don't know what labour costs.\"",
+    "bitter-challenger": "You ask if they're still angry. \"Yes. But not at the sandwich one.\"",
+    "enthusiast": "You ask which of the team they liked best. They tell you. It isn't who you'd guess.",
+    "idealist": "You ask what they'd write on the door. They show you their hand. It's still half washed off.",
+    "prodigy": "You ask what they want. Nobody's asked them in here. \"To go and look at the sea. And for that to be enough.\"",
+    "underdog": "You ask how many they've won now. \"I stopped counting. You told me to get better. I did.\""
+  },
+  "heroLine": "\"At the third fire I asked what I'd say to whoever wrote it. You told me to say: {line} So I'm saying it.\"",
+  "offerRefused": "They say no, kindly. \"Ask me again when I know more.\"",
+  "offerShut": "The offer isn't open: {why}",
+  "battleFirst": "They don't wait. Their {mon} is already out.",
+  "outcomes": {
+    "talked": { "hero": "\"I'm still going to the League. I'm still going to tell them. I just— I'm going to tell them *all* of it.\"", "page": "I didn't fight. I thought I would." },
+    "bossWon": { "hero": "They don't say anything. They heal their {mon} first, on the Office floor, with their back to you. Then: \"Next region.\"", "page": "We fought. I lost. I'm going to keep going." },
+    "heroWon": { "hero": "\"I'm not going to tell you to stop. You wouldn't. I'm going to keep being where you are.\"", "page": "We fought. I won. It didn't feel like I thought." },
+    "draw": { "hero": "To {name}, not the Boss: \"Thank you.\" To the Boss: \"One of yours did that. Not you. I'm going to remember which.\"", "stepIn": "{name} steps forward, between the two of you. \"That's enough. You've won. Look at them. That's enough.\"", "page": "Somebody stopped it. One of theirs." },
+    "window": { "hero": "They go to the window. They watch you go. \"...You *ran.*\"", "page": "They went out of the window. I watched." },
+    "away": { "hero": "They go. The building's quiet.", "page": "Nobody was home. I sat in their chair for a minute." }
+  },
+  "evening": "Whoever fought's being patched up. Somebody's cooking on something. The Wall's rolled up under somebody's arm. From whoever held the hardest door: \"Well. That's what one's like.\"",
+  "roster": {
+    "talked": "The Boss talked, and it held. Heart +1.",
+    "bossWon": "The Boss won the battle. Nerve +1, Proud +1, Kind −1.",
+    "heroWon": "The Hero won. The base is lost. Anyone under Loyalty 4 goes home.",
+    "draw": "{name} stepped in: Loyalty 10. The rest +1 or −1, by whether they've a line about the young.",
+    "away": "The Boss wasn't there. Everyone −1: they stood their doors for an empty room.",
+    "window": "The Boss went out of the window. Everyone −2; whoever held the last door −4.",
+    "ledger": "The Boss showed the Ledger. Books +1.",
+    "pen": "The Boss opened the Pen. Every Kind +2."
+  },
+  "page": {
+    "title": "The File's new page",
+    "fire": "I got there. It was them from the fire. I knew and I didn't know.",
+    "noFire": "I got there. I'd never seen them before. They looked ordinary.",
+    "asked": "I asked what it was for. {answer}",
+    "noAnswer": "I asked what it was for. They didn't say.",
+    "reason": "{reason}",
+    "close": {
+      "protector": "I'm going to keep going till it's put right.",
+      "champion-chaser": "Eight Badges. One more thing done. Now the League.",
+      "strategist": "I've started a third column.",
+      "bitter-challenger": "I'm still angry. Less.",
+      "enthusiast": "I said goodbye to all of them. Most said it back.",
+      "idealist": "I read them their sentence. I think they heard it.",
+      "prodigy": "I didn't use the speech. I'm glad.",
+      "underdog": "I'm coming back the day after. I said I would."
+    },
+    "soup": "The soup was good. I'm not telling Mum about the soup."
+  },
+  "regionOver": "The last room's over. {region}'s over. The Crossing comes in a later build; the run goes on."
+}

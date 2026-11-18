@@ -108,10 +108,10 @@ const choose = (c: Candidate[], roll: number): Candidate => {
 export function drawKnock(block: EvilModeBlock, data: EvilData = EVIL_DATA): EvilModeBlock {
   const d = block.district;
   const day = block.here.day;
-  const key = `night:${districtKey(block)}:${day}`;
-  if (!d || block.applied.includes(key)) return block;
+  const key = `${districtKey(block)}:${day}`;
+  if (!d || block.night.drawn === key) return block;
   const n = block.draws['evil-people'] ?? 0;
-  let b: EvilModeBlock = { ...block, draws: { ...block.draws, 'evil-people': n + 1 }, applied: [...block.applied, key] };
+  let b: EvilModeBlock = { ...block, draws: { ...block.draws, 'evil-people': n + 1 }, night: { ...block.night, drawn: key } };
   // Corruption 2 or more: one ☼ knock a district is taken out of the deck.
   const dk = districtKey(b);
   if (b.team.corruption >= data.night.rules.corruptionSun && !b.night.removed.some((r) => r.startsWith(`${dk}:`))) {
@@ -232,7 +232,7 @@ export function answerKnock(block: EvilModeBlock, i: number, data: EvilData = EV
   if (i === 3) {
     const count = (block.night.shut[String(k.n)] ?? 0) + 1;
     const gone = count > data.night.rules.shutReturns;
-    b = { ...b, night: { ...b.night, knock: null, last, sleptThrough: b.night.sleptThrough + 1, shut: { ...b.night.shut, [String(k.n)]: count }, had: gone ? [...b.night.had, k.n] : b.night.had, echoes: [...b.night.echoes, echo] } };
+    b = { ...b, night: { ...b.night, knock: null, last, sleptThrough: b.night.sleptThrough + 1, shut: { ...b.night.shut, [String(k.n)]: count }, had: gone ? [...b.night.had, k.n] : b.night.had, doorOn: block.here.day } };
     let moved = '';
     if (p && !def.report) {
       const r = applyEcho(b, { t: 'mood', by: -1 }, p.id, data);
@@ -243,7 +243,7 @@ export function answerKnock(block: EvilModeBlock, i: number, data: EvilData = EV
     return { block: b, problem: null, line: nightText('notTonightGone', data), moved };
   }
   const a = def.answers[i]!;
-  b = { ...b, night: { ...b.night, knock: null, last, had: [...b.night.had, k.n], echoes: [...b.night.echoes, echo] } };
+  b = { ...b, night: { ...b.night, knock: null, last, had: [...b.night.had, k.n], echoes: [...b.night.echoes, echo], doorOn: block.here.day } };
   const lines: string[] = [];
   for (const e of a.echo) {
     const r = applyEcho(b, e, k.who, data);

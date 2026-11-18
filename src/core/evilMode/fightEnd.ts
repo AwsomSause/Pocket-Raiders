@@ -32,12 +32,24 @@ export function giveBackParty(run: RunState, lent: readonly string[]): void {
 export function endEvilFight(content: Content, run: RunState, won: boolean, heal: (content: Content, run: RunState) => void): string[] {
   const block = run.expansion!.evilMode!;
   const f = block.fight!;
+  // Slice 13: a Legend caught joins the party (or the box when it's full), by the main game's rules: weakened, a ball thrown.
+  let caught: string | undefined;
+  if (f.kind === 'legend' && run.battle?.outcome === 'caught') {
+    const foe = run.battle.enemyTeam[run.battle.enemyIndex];
+    if (foe) {
+      const mon = { ...structuredClone(foe), hp: Math.max(1, foe.hp) };
+      if (run.party.length < 6) run.party = [...run.party, mon];
+      else run.box = [...(run.box ?? []), mon];
+      caught = mon.uid;
+    }
+  }
   const fielded = f.kind === 'hold' ? [...new Set((run.battle?.enemyTeam ?? []).map((m) => m.speciesId))] : [];
+  const turns = run.battle?.turn ?? 1;
   giveBackParty(run, f.lent ?? []);
   heal(content, run);
   run.battle = null;
   run.phase = 'map';
-  const r = step(block, { type: 'battleResult', won, fielded });
+  const r = step(block, { type: 'battleResult', won, fielded, turns, ...(caught ? { caught } : {}) });
   let out = r.block;
   // The counter: caught after the third battle with the team (Part 18 section 6.1), by the team's Doctrine. In the record.
   const rival = heroRival(run, out);

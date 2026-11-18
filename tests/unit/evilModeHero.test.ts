@@ -308,7 +308,7 @@ describe('Outplay in person (Part 7 section 5.3): played, not rolled', () => {
 });
 
 describe('the File (Part 18 section 11): blanks for what isn\'t known', () => {
-  it('a fresh Hero: personality, reason and every slot blank; the later builds\' sections say so', () => {
+  it('a fresh Hero: personality, reason and every slot blank; the slice-12 lists start empty', () => {
     const r = evilRun();
     const team = heroRival(r, B(r))!.memory!.lastBattle.team;
     const report = fileModel(B(r), 0, team, species)!;

@@ -13,11 +13,21 @@ import { heartsGo, moveLine } from './line';
 import { gymAct, gymEvening, gymResult } from './gym';
 import { recall, goOn, tallyOf, toRoad } from './region';
 import { bust, trade, ventureAct, type BustWay, type TradeReq, type VentureAct } from './economy';
+import { answerPost, chairAct, chairResult, legendAct, legendResult, neighbourDistrictEnd, neighbourEvening, neighbourMorning, putOnTable, rise, sitAnswer, sitDown } from './neighbour';
 import { EVIL_DATA } from './data';
+import { callOffHeist, endDig, giveBack, goHeist, heistBattle, heistRoom, ledgerStep, planHeist, reckoningLost, schemeEvening, schemeMorning, setPlan, startDig, takeUpScheme, takeWay, type PlanSlot, type RoomChoice, type WayKey } from './scheme';
 import { baseDistrict, baseEvening, build, enlarge, guard, moveRoom, pickSite, place, sellRoom, setLatch, staff, standAtWindow, unplace, walkBase, type PieceDraft } from './base';
 import { closeWalk, walkedLine, walkIt, walkResult } from './walk';
 import { bail, raidDone, raidDoor, raidEvening, raidOffice, raidOn, raidOrder, raidQueue, raidResult, raidTurn, visit, warnChoice } from './raid';
-import { BEATS, type Beat, type EvilModeBlock, type GymWay, type LineId, type OrderId, type Question, type RoomType, type WingId } from './schema';
+import { closeFire, fireAnswer, fireMissed, fireOwn, practiceResult, sitFire, writeNotebook } from './fires';
+import { friendCheck, keepLetter, motherWrites, openLetter, roadDay, roadDo, writeMother, type RoadWhat } from './road';
+import { lastDay, nightBefore, roomAct, roomResult, type LastDay, type RoomOption } from './reckoning';
+import { eveningTemper } from './temper';
+import { canDo } from './canDo';
+import { checkEndings, endAct, endBattle, pressEnding } from './endings';
+import { regionMoves } from './regionRule';
+import { beginCrossing, carryLetter, clockMet, clockMorning, cross, keptWarmth, stopClock, type CrossAct } from './crossing';
+import { BEATS, type Beat, type EvilModeBlock, type GymWay, type LineId, type OrderId, type PartId, type Question, type RoomType, type TableThing, type WingId } from './schema';
 
 /** The action that ends each beat in slice 1 (the empty day). Later slices add more actions inside a beat. */
 export const BEAT_END: Record<Beat, BeatEndType> = {
@@ -52,7 +62,7 @@ export type EvilAction =
   | { type: 'post'; holdingId: string; id: string }
   | { type: 'unpost'; holdingId: string }
   | { type: 'goYourself'; holdingId: string }
-  | { type: 'battleResult'; won: boolean; fielded?: string[] }
+  | { type: 'battleResult'; won: boolean; fielded?: string[]; caught?: string; turns?: number }
   /** Slice 7: the door (0..2 an answer, 3 "(Not tonight.)"), the Night's one action, and taking something off the Wall. */
   | { type: 'answerKnock'; answer: number }
   | { type: 'nightAction'; action: NightAction; id?: string }
@@ -65,10 +75,34 @@ export type EvilAction =
   | { type: 'toRoad' }
   | { type: 'goOn'; stay: string | null }
   | { type: 'recall'; id: string }
+  /** Slice 16: the Crossing's answers, in order; Hoenn's letters (In person) and stopping its second clock. */
+  | ({ type: 'cross' } & CrossAct)
+  | { type: 'letter' }
+  | { type: 'stopClock'; how: 'boss' | 'hero' }
   /** Slice 11: a Racket, a Front or a Work from its Card (at Dispatch); the Boss's hand on something running; a way out of bankruptcy. */
   | { type: 'trade'; req: TradeReq }
   | { type: 'venture'; id: string; act: VentureAct }
   | { type: 'bust'; way: BustWay; id?: string }
+  /** Slice 13: the neighbour. A Sit-Down (called at In person, three exchanges, then the table), the Chair, the cave, and answering a message. */
+  | { type: 'sitDown' }
+  | { type: 'sitAnswer'; i: number }
+  | { type: 'table'; thing: TableThing; personId?: string }
+  | { type: 'rise' }
+  | { type: 'chair' }
+  | { type: 'legend' }
+  | { type: 'answerPost'; id: string; i: number }
+  /** Slice 14: the Scheme. A part's way (from its Card); Kanto's Ledger, a step; a heist planned, filled, played room by room, called off; a Dig begun and ended; a take given back; a fallen team's Scheme taken up. */
+  | { type: 'schemeWay'; part: PartId; key: WayKey; holdingId?: string }
+  | { type: 'ledgerStep'; key: 'clean' | 'dirty' }
+  | { type: 'heist'; id: string }
+  | { type: 'heistPlan'; slot: PlanSlot; value: string | null }
+  | { type: 'heistGo' }
+  | { type: 'heistRoom'; choice: RoomChoice }
+  | { type: 'heistOff' }
+  | { type: 'dig'; id: string; holdingId?: string }
+  | { type: 'digEnd'; holdingId: string; back: boolean }
+  | { type: 'giveBack'; id: string }
+  | { type: 'takeUpScheme' }
   /** Slice 10: the base (Part 16): a site, rooms at Night, staffing, Defend's pieces and people, the latch, the Night's walk and window. */
   | { type: 'pickSite'; site: string }
   | { type: 'build'; room: RoomType; at: string }
@@ -95,14 +129,29 @@ export type EvilAction =
   | { type: 'raidDone' }
   | { type: 'bail'; id: string }
   | { type: 'visit'; id: string }
+  /** Slice 12: the fire (Part 19), the other three and the letters (Part 20), the last day and the last room (Part 21). */
+  | { type: 'sitFire' }
+  | { type: 'fireAnswer'; id: string }
+  | { type: 'fireOwn'; text?: string; pick?: number; silence?: boolean }
+  | { type: 'closeFire' }
+  | { type: 'writeNotebook'; text: string }
+  | { type: 'roadDo'; who: string; what: RoadWhat }
+  | { type: 'openLetter'; id: string }
+  | { type: 'keepLetter' }
+  | { type: 'writeMother'; opening: number }
+  | { type: 'lastDay'; what: LastDay }
+  | { type: 'roomAct'; what: RoomOption['what']; kind?: string; who?: string }
   | { type: 'dismissOvernight' }
   | { type: 'send' }
   | { type: 'stayIn' }
   | { type: 'callItADay' }
   | { type: 'lightsOut' }
-  | { type: 'watchRoad' };
+  | { type: 'watchRoad' }
+  /** Slice 15: the endings (Part 23). One answer to the scene on screen, or a pressed ending. */
+  | { type: 'endAct'; choice?: string | null; text?: string | null }
+  | { type: 'endPress'; what: 'straight' | 'handOff' | 'walkIn'; heir?: string; line?: string; ledger?: boolean };
 
-export type EvilCue = { id: 'beat'; beat: Beat } | { id: 'newDay'; day: number } | { id: 'refused'; reason: string } | { id: 'queued'; holdingId: string } | { id: 'districtEnd'; how: 'held' | 'taken' | 'arrival' | 'reckoning' } | { id: 'filed'; text: string } | { id: 'asked'; line: string } | { id: 'said'; line: string } | { id: 'refusal' } | { id: 'fight' } | { id: 'road'; lines: string[] } | { id: 'knock'; n: number } | { id: 'moved'; line: string };
+export type EvilCue = { id: 'beat'; beat: Beat } | { id: 'newDay'; day: number } | { id: 'refused'; reason: string } | { id: 'queued'; holdingId: string } | { id: 'districtEnd'; how: 'held' | 'taken' | 'arrival' | 'reckoning' } | { id: 'filed'; text: string } | { id: 'asked'; line: string } | { id: 'said'; line: string } | { id: 'refusal' } | { id: 'fight' } | { id: 'road'; lines: string[] } | { id: 'ending' } | { id: 'knock'; n: number } | { id: 'moved'; line: string };
 
 export interface StepResult {
   block: EvilModeBlock;
@@ -116,8 +165,32 @@ export const nextBeat = (beat: Beat): Beat => BEATS[(BEATS.indexOf(beat) + 1) % 
 
 /** One action. The input block is never changed; a new one is returned. */
 export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
+  // Slice 15: once an ending has begun, only its scenes (and its battle) move anything.
+  if (block0.ending) return stepEnding(block0, action);
   const r = stepInner(block0, action);
-  return r.ok ? { ...r, block: settleRegion(r.block) } : r;
+  // Slice 13: the neighbour's Morning (messages, and each tick on its day) comes with every Morning, however it's reached.
+  if (!r.ok) return r;
+  // Slice 16: Hoenn's second clock (each Reckoning Morning; they meet if the Reckoning ends with it running).
+  let b = clockMorning(schemeMorning(neighbourMorning(settleRegion(clockMet(keptWarmth(neighbourDistrictEnd(r.block)))))));
+  // Slice 14: the Reckoning lost (the Hero reached the base) costs the Scheme groundwork, once a region.
+  if (b.district?.end?.how === 'reckoning' && b.scheme) b = reckoningLost(b).block;
+  // Slice 19: Sinnoh halves every Loyalty change; Unova doubles every Regard and Dread change (Part 26b sections 1.1, 2.1).
+  b = regionMoves(block0, b);
+  // Slice 15: the endings are checked after every step, in their order (Part 23 section 1.1).
+  b = checkEndings(block0, b);
+  // Slice 16: a region that isn't the run's last ends at the Crossing.
+  b = beginCrossing(b);
+  return { ...r, block: b, cues: b.ending && !block0.ending ? [...r.cues, { id: 'ending' as const }] : r.cues };
+}
+
+function stepEnding(block: EvilModeBlock, action: EvilAction): StepResult {
+  const no = (reason: string): StepResult => ({ block, cues: [{ id: 'refused', reason }], ok: false });
+  const r = action.type === 'endAct' ? endAct(block, action.choice ?? null, action.text ?? null)
+    : action.type === 'battleResult' && block.fight?.kind === 'ending' ? endBattle(block, action.won)
+    : null;
+  if (!r) return no(block.ending!.done ? "The run's over." : 'The ending is going on.');
+  if (r.problem) return no(r.problem);
+  return { block: r.block, cues: [...r.lines.map((line) => ({ id: 'said' as const, line })), ...(r.fight ? [{ id: 'fight' as const }] : [])], ok: true };
 }
 
 /** Slice 9: a district that's just ended is tallied once, and the region waits on the tally (Part 2 section 4.2). */
@@ -130,13 +203,35 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
   let block = block0;
   const { beat } = block.here;
   const no = (reason: string): StepResult => ({ block: block0, cues: [{ id: 'refused', reason }], ok: false });
+  // Slice 12: one guard asked first for every action (design Part 30 section 10): nothing harms a child on the road.
+  const guard = canDo(block, action);
+  if (!guard.ok) return no(guard.why);
+  // Slice 15: the pressed endings, and "Walk into the station" at the warning (Part 23 section 7).
+  if (action.type === 'endPress' || (action.type === 'warnChoice' && action.choice === 'station')) {
+    if (action.type === 'warnChoice' && block.raid?.state !== 'warned') return no('Nobody has warned you of anything.');
+    const r = action.type === 'endPress' ? pressEnding(block, action.what, action) : pressEnding(block, 'walkIn', {});
+    return r.problem ? no(r.problem) : { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
+  }
+  if (action.type === 'endAct') return no('No ending has begun.');
+  const said = (r: { block: EvilModeBlock; problem: string | null; line?: string; lines?: string[]; fight?: boolean }): StepResult =>
+    (r.problem ? no(r.problem) : { block: r.block, cues: [...(r.lines ?? (r.line ? [r.line] : [])).map((line) => ({ id: 'said' as const, line })), ...(r.fight ? [{ id: 'fight' as const }] : [])], ok: true });
+  // Slice 16: the Crossing, once the region's over.
+  if (action.type === 'cross') {
+    const { type: _t, ...act } = action;
+    const r = cross(block, act as CrossAct);
+    if (r.problem) return no(r.problem);
+    const crossed = act.what === 'go';
+    return { block: r.block, cues: [...r.lines.map((line) => ({ id: 'said' as const, line })), ...(crossed ? [{ id: 'beat' as const, beat: 'morning' as const }, { id: 'newDay' as const, day: r.block.here.day }] : [])], ok: true };
+  }
   // Slice 9: after a district, only the tally and the Road move anything.
   if (action.type === 'toRoad' || action.type === 'goOn' || action.type === 'recall') {
     if (action.type === 'recall') {
       const r = recall(block, action.id);
       return r.problem ? no(r.problem) : { block: r.block, cues: [{ id: 'said', line: r.line }], ok: true };
     }
-    const r0 = action.type === 'toRoad' ? toRoad(block) : goOn(block, action.stay);
+    // Slice 12: leaving a district, the mother's letter for it is written, and a fire not sat at is gone.
+    const pre = action.type === 'goOn' && block.region.phase === 'road' && block.district ? fireMissed(motherWrites(block), block.district.n) : block;
+    const r0 = action.type === 'toRoad' ? toRoad(block) : goOn(pre, action.stay);
     const r = action.type === 'goOn' && !r0.problem ? { ...r0, block: baseDistrict(r0.block) } : r0;
     if (r.problem) return no(r.problem);
     return { block: r.block, cues: action.type === 'goOn' ? [{ id: 'beat', beat: 'morning' }, { id: 'newDay', day: r.block.here.day }] : [], ok: true };
@@ -150,9 +245,21 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
       const r = holdResult(block, action.won, action.fielded ?? []);
       return { block: endIfTaken(r.block), cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
     }
+    if (f.kind === 'chair' || f.kind === 'legend') {
+      const r = f.kind === 'chair' ? chairResult(block, action.won) : legendResult(block, action.won, action.caught ?? null);
+      return { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
+    }
+    if (f.kind === 'heist') {
+      const r = heistBattle(block, action.won, action.turns ?? 1);
+      return { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
+    }
     if (f.kind === 'walk' || f.kind === 'raid') {
       const r = f.kind === 'walk' ? walkResult(block, action.won) : raidResult(block, action.won);
       return r.problem ? no(r.problem) : { block: r.block, cues: [...r.lines.map((line) => ({ id: 'said' as const, line })), ...('fight' in r && r.fight ? [{ id: 'fight' as const }] : [])], ok: true };
+    }
+    if (f.kind === 'practice' || f.kind === 'room') {
+      const r = f.kind === 'practice' ? practiceResult(block) : roomResult(block, action.won);
+      return { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
     }
     if (f.kind === 'gym' || f.kind === 'challenge') {
       const r = gymResult(block, action.won);
@@ -162,6 +269,45 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
     return { block: { ...block, queue, fight: null }, cues: [{ id: 'said', line: action.won ? 'Won fairly. It holds, from this Evening.' : 'Lost. The party is healed; nothing ends.' }], ok: true };
   }
   if (block.fight) return no('A battle is waiting.');
+  // Slice 14: inside a heist's rooms, only the rooms move anything.
+  if (block.scheme?.heist?.stage === 'rooms' && action.type !== 'heistRoom') return no('The Boss is inside. Finish the rooms first.');
+  if (action.type === 'schemeWay' || action.type === 'ledgerStep' || action.type === 'heist' || action.type === 'heistPlan' || action.type === 'heistGo' || action.type === 'heistRoom' || action.type === 'heistOff' || action.type === 'dig' || action.type === 'digEnd' || action.type === 'giveBack' || action.type === 'takeUpScheme') {
+    if (block.refusal) return no('Somebody is waiting on an answer in the yard.');
+    if (block.neighbour?.sitting) return no('A Sit-Down is going on.');
+    const r = action.type === 'schemeWay' ? takeWay(block, action.part, action.key, action.holdingId)
+      : action.type === 'ledgerStep' ? ledgerStep(block, action.key)
+      : action.type === 'heist' ? planHeist(block, action.id, null, null, null)
+      : action.type === 'heistPlan' ? setPlan(block, action.slot, action.value)
+      : action.type === 'heistGo' ? goHeist(block)
+      : action.type === 'heistRoom' ? heistRoom(block, action.choice)
+      : action.type === 'heistOff' ? callOffHeist(block)
+      : action.type === 'dig' ? startDig(block, action.id, null, action.holdingId, null)
+      : action.type === 'digEnd' ? endDig(block, action.holdingId, action.back)
+      : action.type === 'giveBack' ? giveBack(block, action.id)
+      : takeUpScheme(block);
+    if (r.problem) return no(r.problem);
+    return { block: r.block, cues: [...r.lines.map((line) => ({ id: 'said' as const, line })), ...(r.block.fight && !block.fight ? [{ id: 'fight' as const }] : [])], ok: true };
+  }
+  // Slice 13: a message can be answered at any beat. A Sit-Down going on takes the whole In person beat.
+  if (action.type === 'answerPost') {
+    const r = answerPost(block, action.id, action.i);
+    return r.problem ? no(r.problem) : { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
+  }
+  if (block.neighbour?.sitting && action.type !== 'sitAnswer' && action.type !== 'table' && action.type !== 'rise') return no('A Sit-Down is going on.');
+  if (action.type === 'sitDown' || action.type === 'sitAnswer' || action.type === 'table' || action.type === 'rise' || action.type === 'chair' || action.type === 'legend') {
+    const r = action.type === 'sitDown' ? sitDown(block) : action.type === 'sitAnswer' ? sitAnswer(block, action.i) : action.type === 'table' ? putOnTable(block, action.thing, action.personId) : action.type === 'rise' ? rise(block) : action.type === 'chair' ? chairAct(block) : legendAct(block);
+    if (r.problem) return no(r.problem);
+    return { block: r.block, cues: [...r.lines.map((line) => ({ id: 'said' as const, line })), ...(r.block.fight && !block.fight ? [{ id: 'fight' as const }] : [])], ok: true };
+  }
+  if (action.type === 'letter' || action.type === 'stopClock') {
+    const r = action.type === 'letter' ? carryLetter(block) : stopClock(block, action.how);
+    return r.problem ? no(r.problem) : { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
+  }
+  // Slice 12: a fire and the last room hold the day until they're done.
+  const s12 = stepS12(block, action);
+  if (s12) return said(s12);
+  if (block.fire) return no("You're at the fire.");
+  if (block.reck?.room && !block.reck.room.outcome) return no("You're in the last room.");
   // Slice 10: the base, the walk and the Raid. Each refuses here what doesn't fit, not only on screen.
   const baseStep = stepBase(block, action);
   if (baseStep) return baseStep.problem ? no(baseStep.problem) : { block: baseStep.block, cues: [...baseStep.lines.map((line) => ({ id: 'said' as const, line })), ...(baseStep.fight ? [{ id: 'fight' as const }] : [])], ok: true };
@@ -181,9 +327,11 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
   }
   // Slice 5: watching the road walks the Hero first; a fight on the way stops the walk, and the beat waits on it.
   if (action.type === 'watchRoad' && beat === 'hero' && block.hero && block.hero.walked !== block.here.day) {
-    const walked = endIfTaken(walkHero(block));
+    const walked = endIfTaken(roadDay(walkHero(block)));
     if (walked.fight) return { block: walked, cues: [{ id: 'road', lines: walked.hero!.today }, { id: 'fight' }], ok: true };
     if (walked.district?.end) return { block: walked, cues: [{ id: 'road', lines: walked.hero!.today }, { id: 'districtEnd', how: walked.district.end.how }], ok: true };
+    // Slice 12: the last room holds the day until it's done.
+    if (walked.reck?.room && !walked.reck.room.outcome) return { block: walked, cues: [{ id: 'road', lines: walked.hero!.today }], ok: true };
     block = walked;
   }
   // Slice 8: the Gym's five ways, refused here unless the door's open (not only on screen).
@@ -260,7 +408,9 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
   let out: EvilModeBlock = { ...pre, here: { ...pre.here, day, beat: to } };
   // "Send them" fixes the odds; going into the Evening rolls every job once (design Part 30 section 5.2).
   if (action.type === 'send') out = fixOdds(out);
-  if (to === 'evening') out = raidEvening(baseEvening(gymEvening(resolveEvening(out))));
+  if (to === 'evening') out = friendCheck(eveningTemper(schemeEvening(neighbourEvening(raidEvening(baseEvening(gymEvening(resolveEvening(out))))))));
+  // Slice 12: the night before the walk (Part 21 section 3.2).
+  if (to === 'night') out = nightBefore(out);
   // Slice 7: the knock is drawn on the way into the Night (one `evil-people` draw, even when nobody comes).
   if (to === 'night' && !out.district?.end) out = drawKnock(out);
   const cues: EvilCue[] = [...preCues, { id: 'beat', beat: to }];
@@ -294,6 +444,24 @@ function endIfTaken(block: EvilModeBlock): EvilModeBlock {
 export function beatStrip(block: EvilModeBlock): { beat: Beat; state: 'done' | 'now' | 'later' }[] {
   const at = BEATS.indexOf(block.here.beat);
   return BEATS.map((beat, i) => ({ beat, state: i < at ? 'done' : i === at ? 'now' : 'later' }));
+}
+
+/** Slice 12's actions, or null when the action isn't one of them. */
+function stepS12(block: EvilModeBlock, a: EvilAction): { block: EvilModeBlock; problem: string | null; line?: string; lines?: string[]; fight?: boolean } | null {
+  switch (a.type) {
+    case 'sitFire': { const r = sitFire(block); return { ...r, lines: r.block.fire?.lines ?? [] }; }
+    case 'fireAnswer': return fireAnswer(block, a.id);
+    case 'fireOwn': return fireOwn(block, a);
+    case 'closeFire': return closeFire(block);
+    case 'writeNotebook': return writeNotebook(block, a.text);
+    case 'roadDo': return roadDo(block, a.who, a.what);
+    case 'openLetter': return openLetter(block, a.id);
+    case 'keepLetter': return keepLetter(block);
+    case 'writeMother': return writeMother(block, a.opening);
+    case 'lastDay': return lastDay(block, a.what);
+    case 'roomAct': return roomAct(block, a);
+    default: return null;
+  }
 }
 
 /** Slice 10's actions, or null when the action isn't one of them. */

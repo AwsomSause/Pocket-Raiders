@@ -25,7 +25,7 @@ const toNight = (b: EvilModeBlock): EvilModeBlock => {
   return b;
 };
 /** A block at Night on a given day, the knock not yet drawn. */
-const atNight = (b: EvilModeBlock, day: number, patch: Partial<EvilModeBlock['night']> = {}): EvilModeBlock => ({ ...b, here: { ...b.here, day, beat: 'night' }, applied: b.applied.filter((k) => !k.startsWith('night:')), night: { ...b.night, knock: null, ...patch } });
+const atNight = (b: EvilModeBlock, day: number, patch: Partial<EvilModeBlock['night']> = {}): EvilModeBlock => ({ ...b, here: { ...b.here, day, beat: 'night' }, night: { ...b.night, knock: null, drawn: null, ...patch } });
 const NUMBERS = ['regard', 'dread', 'heat', 'funds', 'corruption'] as const;
 
 describe('the forty knocks, as data', () => {
@@ -156,7 +156,8 @@ describe('a whole run of Nights', () => {
             b = r2.block;
           } else b = r.block;
           expect(b.log.length).toBe(logBefore + 1);
-          if (b.night.echoes.at(-1)!.answer !== 3) {
+          expect(b.night.doorOn).toBe(day);
+          if (b.night.had.includes(k.n) && b.night.shut[String(k.n)] === undefined) {
             expect(seen).not.toContain(k.n);
             seen.push(k.n);
           }
@@ -207,6 +208,9 @@ describe('answers, echoes and "(Not tonight.)"', () => {
     const mood = b.crew.find((c) => c.id === k.who)!.mood;
     b = answerKnock(b, 3).block;
     expect(b.night.sleptThrough).toBe(1);
+    // Not an answer: no echo, but the door's done for tonight.
+    expect(b.night.echoes).toHaveLength(0);
+    expect(b.night.doorOn).toBe(1);
     expect(b.night.had).not.toContain(k.n);
     expect(b.crew.find((c) => c.id === k.who)!.mood).toBe(MOODS[MOODS.indexOf(mood) + 1]);
     b = { ...b, night: { ...b.night, knock: { ...k, day: 2 } } };

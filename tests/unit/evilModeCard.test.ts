@@ -150,7 +150,7 @@ describe('the Ledger: the Log, its sentences, and the run', () => {
       expect(entry.kind).toBe('card');
       expect(entry.text).toBe(preview);
       const kept = r.block.cards.find((c) => c.id === entry.cardId)!;
-      expect(kept.fields[11]!.text).toBe(entry.text);
+      expect(kept.fields.map((f) => (typeof f === "string" ? f : f.text))[11]).toBe(entry.text);
       expect(kept.day).toBe(1);
       expect(r.block.queue.at(-1)!.cardId).toBe(kept.id);
       expect(r.cues).toContainEqual({ id: 'filed', text: preview });

@@ -60,7 +60,9 @@ test('keys only: a held Enter scrolls and never confirms; a press of its own doe
   await expect(s.getByTestId('evil-queued')).toHaveCount(1);
   const b = await block(page);
   expect(b.log.at(-1).text).toBe(written);
-  expect(b.cards[0].fields[11].text).toBe(written);
+  // Slice 16: a filed Card's fields are kept packed (the text alone) to fit the save budget.
+  const f11 = b.cards[0].fields[11];
+  expect(typeof f11 === 'string' ? f11 : f11.text).toBe(written);
   await expect(s.getByTestId('evil-filed')).toHaveText(written);
 
   // The Ledger with keys: L opens it, Right to The run, Enter opens the kept Card, Enter closes it, Esc closes the book.

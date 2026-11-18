@@ -74,7 +74,7 @@ export function nightModel(block: EvilModeBlock, d: NightDraft, lastWho: { name:
   return {
     title: nightText('officeTitle', data),
     door: d.reply ? null : door,
-    quiet: !k && !d.reply ? nightText(block.night.echoes.some((e) => e.day === block.here.day) ? 'doorDone' : 'doorQuiet', data) : null,
+    quiet: !k && !d.reply ? nightText(block.night.doorOn === block.here.day ? 'doorDone' : 'doorQuiet', data) : null,
     reply: d.reply ? { ...d.reply, who: lastWho?.name ?? '', face: faceOf(lastWho?.ref ?? null, data) } : null,
     desk, hear, wall, rows, row: d.row,
   };

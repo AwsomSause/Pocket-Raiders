@@ -192,11 +192,14 @@ describe('the setting and the mode gate', () => {
     expect(getMode(EVIL_MODE_ID)?.progressionEligible).toBe(false);
     expect(rulesProblem({ ...STANDARD_CHOICE, modeId: EVIL_MODE_ID })).toBeNull();
   });
-  it('the Settings row turns it on and off; Run length stays Three until six regions exist', () => {
+  it('the Settings row turns it on and off; Run length turns between Three and Six (six regions exist since slice 19)', () => {
     const off = changeSetting(DEFAULT_SETTINGS, 'evilMode');
     expect(off.expansion.evilMode).toBe(false);
     expect(changeSetting(off, 'evilMode').expansion.evilMode).toBe(true);
-    expect(changeSetting(DEFAULT_SETTINGS, 'evilRunLength')).toBe(DEFAULT_SETTINGS);
+    expect(DEFAULT_SETTINGS.expansion.evilRunLength).toBe('three');
+    const six = changeSetting(DEFAULT_SETTINGS, 'evilRunLength');
+    expect(six.expansion.evilRunLength).toBe('six');
+    expect(changeSetting(six, 'evilRunLength').expansion.evilRunLength).toBe('three');
   });
 });
 

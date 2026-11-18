@@ -39,6 +39,8 @@ import { glassPanel as drawPanel, slideIn } from '../ui/aero';
 import { partySpecies, preloadPokemon } from '../ui/lazyAssets';
 import { pokemonIcon } from '../ui/sprites';
 import { whatIf } from '../core/presentation/whatIf';
+import { EVIL_DATA } from '../core/evilMode/data';
+import { endingCards, endingPay, ledgerPage } from '../core/evilMode/endings';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { paintBackdrop, RUNEND_SKINS } from '../ui/dSkins';
 import { buildShowcase } from '../ui/runEndLooks';
@@ -55,6 +57,8 @@ interface WitnessBeat { name: string; role: string; line: string; cast: Art | nu
 /** Everything the New UI run end shows, gathered while the screen is built. */
 interface NewEnd {
   won: boolean;
+  /** Evil Mode slice 15: the ending's name, as the title and the run card's rank (never Win or Loss). */
+  title?: string;
   sub: string;
   facts: Fact[];
   payouts: Fact[];
@@ -107,7 +111,9 @@ export class GameOverScene extends Phaser.Scene {
       paintBackdrop(this, back, skin, session.settings.battleAnimations !== 'full');
       if (!won) back.add(this.add.rectangle(0, 0, GAME_WIDTH, 600, 0x000000, 0.25).setOrigin(0));
     }
-    const titleText = won ? 'You conquered every region!' : 'Your run has ended';
+    // Evil Mode slice 15: the ending's name is the title (never ranked), and its cards and pay lead the right panel.
+    const evil = run?.expansion?.evilMode?.ending?.done ? run.expansion.evilMode : null;
+    const titleText = evil ? EVIL_DATA.endings.names[evil.ending!.id] : won ? 'You conquered every region!' : 'Your run has ended';
     const title = this.add.text(GAME_WIDTH / 2, 38, titleText, textStyle(won ? 40 : 44, skin ? skin.title : won ? '#f0d060' : COLORS.textLight, skin ? { stroke: skin.stroke, strokeThickness: 6 } : {})).setOrigin(0.5);
     if (skin?.mark) this.add.text(GAME_WIDTH / 2, 66, skin.mark, textStyle(18, skin.title, { stroke: skin.stroke, strokeThickness: 4 })).setOrigin(0.5).setName('runend-mark');
     this.lineup(partySpecies(), title.width, won, session.settings.battleAnimations);
@@ -231,7 +237,11 @@ export class GameOverScene extends Phaser.Scene {
       const end = timelineOutcome(session.content, run);
       lines.push(`${TIMELINE.title}: ${end.name}`, `   ${end.text}`, `Revisited timeline (attempt ${run.timeline.attempt}): kept apart from your profile. The original run is untouched.`);
     }
-    if (run) lines.push(...rankLines(run), '');
+    if (run && !evil) lines.push(...rankLines(run), '');
+    if (evil) {
+      const pay = endingPay(evil);
+      lines.push(...ledgerPage(evil).slice(0, 3), '', `How far it got: ${pay.total}`, ...pay.rows.map(([k, n]) => `   ${k} ${n}`), '');
+    }
     if (summary) {
       const p = summary.payout;
       lines.push(`+${p.total} Bank Credits`, `   savings ${p.savings} · stipend ${p.stipend} · achievements ${p.achievements}`);
@@ -278,7 +288,8 @@ export class GameOverScene extends Phaser.Scene {
         witness.push({ name: c.title, role: c.kind === 'friend' ? 'Friend' : c.kind === 'rival' ? 'Rival' : '', line: c.body, cast: person ? rivalArt(this, rivalNamed(c.title)) : c.kind === 'champion' && !won ? rivalArt(this, rivalNamed(rivals.find((r) => r.rec.role === 'main')?.name ?? '')) : mine });
       }
     }
-    const reflection = run && !won ? whatIf(session.content, run) : null;
+    if (evil) for (const c of endingCards(evil)) witness.push({ name: c.title, role: '', line: c.line, cast: null });
+    const reflection = run && !won && !evil ? whatIf(session.content, run) : null;
     if (reflection) lines.unshift(reflection, '');
     // Long endings (a what-if, rewards, a letter) step down a size, then cut, so they never spill out of the panel.
     const endText = this.add.text(500, 84, lines.join('\n'), textStyle(18, COLORS.textLight, { lineSpacing: 3, wordWrap: { width: GAME_WIDTH - 540 } }));
@@ -355,6 +366,9 @@ export class GameOverScene extends Phaser.Scene {
         payouts.push(['Bank Credits', `+ ${summary.payout.total.toLocaleString('en-US')}`], ['Research', `+ ${research}`]);
         payouts.push(['Mastery', ups.length ? `${content.species.get(ups[0]!.speciesId)?.name ?? ups[0]!.speciesId} ${RANK_NAMES[ups[0]!.rank]}${ups.length > 1 ? ` +${ups.length - 1}` : ''}` : 'No new rank']);
         payouts.push(['Achievements', summary.achievements.length ? `${summary.achievements.length} earned` : 'None this run'], ['New species', `${summary.newSpeciesSeen.length} met · ${summary.newSpeciesCaught.length} caught`]);
+      } else if (evil) {
+        const pay = endingPay(evil);
+        payouts.push(['How far it got', `${pay.total}`], ...pay.rows.map(([k, n]) => [k, `${n}`] as Fact));
       } else if (summary) payouts.push(['Adventure run', 'Nothing is earned'], ['New species', `${summary.newSpeciesSeen.length} met · ${summary.newSpeciesCaught.length} caught`]);
       else payouts.push(['Profile', 'Already added']);
       const archetype = content.archetypes.get(run.archetypeId)?.name ?? run.archetypeId;
@@ -362,12 +376,13 @@ export class GameOverScene extends Phaser.Scene {
       const mvp = recap?.legend?.split(':')[0] ?? (lead ? content.species.get(lead.speciesId)?.name ?? lead.speciesId : 'Nobody');
       this.mountNew({
         won,
-        sub: won ? `${run.regionsCleared.length} of ${run.regionOrder.length} regions cleared · Day ${run.clock.day}` : `Fell in ${region}${by ? ` · ${by.trainer ?? content.species.get(by.speciesId)?.name ?? by.speciesId}` : ''}`,
+        ...(evil ? { title: EVIL_DATA.endings.names[evil.ending!.id] } : {}),
+        sub: evil ? `${evil.team.name} · Day ${evil.here.day}` : won ? `${run.regionsCleared.length} of ${run.regionOrder.length} regions cleared · Day ${run.clock.day}` : `Fell in ${region}${by ? ` · ${by.trainer ?? content.species.get(by.speciesId)?.name ?? by.speciesId}` : ''}`,
         facts,
         payouts,
         report: [...headLines, ...(momentLines.length ? ['', 'Run timeline:', ...momentLines] : []), '', 'What it earned:', ...lines],
         witness,
-        card: { name: session.profile.legacyRuns.length > 0 ? `Run ${session.profile.legacyRuns.length}` : 'This run', facts: [['Result', won ? 'Champion' : `Fell in ${region}`], ['Trainer', archetype], timeText ? ['Time', timeText] : ['Day', `${run.clock.day}`], ['Seed', run.seed], ['MVP', mvp]], badges: run.badges.length },
+        card: { name: session.profile.legacyRuns.length > 0 ? `Run ${session.profile.legacyRuns.length}` : 'This run', facts: [['Result', evil ? EVIL_DATA.endings.names[evil.ending!.id] : won ? 'Champion' : `Fell in ${region}`], ['Trainer', archetype], timeText ? ['Time', timeText] : ['Day', `${run.clock.day}`], ['Seed', run.seed], ['MVP', mvp]], badges: run.badges.length },
         save: saveCardNow,
         choose,
       });
@@ -438,12 +453,12 @@ export class GameOverScene extends Phaser.Scene {
     };
     const render = (c: ReduxCtx): string => {
       this.rxCols = partyCols(c);
-      const main = (): string => overView(c, { win: o.won, title: o.won ? 'CHAMPION!' : 'RUN OVER', sub: o.sub, facts: o.facts, payouts: o.payouts, team, buttons, index: this.rxIndex, extras, backdrop, poked: this.rxPoked });
+      const main = (): string => overView(c, { win: o.won, title: o.title ?? (o.won ? 'CHAMPION!' : 'RUN OVER'), sub: o.sub, facts: o.facts, payouts: o.payouts, team, buttons, index: this.rxIndex, extras, backdrop, poked: this.rxPoked });
       if (this.rxMode === 'witness') {
         const w = o.witness[this.rxPage]!;
         return cutView(c, { name: w.name, role: w.role, line: w.line, cast: w.cast, player, backdrop: stage, beat: cutBeat(this.rxPage, o.witness.length), skip: ['Esc', o.won ? 'credits' : 'skip'] });
       }
-      if (this.rxMode === 'card') return runCardView(c, { title: 'Run card', name: o.card.name, rank: o.won ? 'Win' : 'Loss', facts: o.card.facts, trainer: player, badges: o.card.badges, team: team.map((t) => t.file), hints: [['Enter', 'save'], ['Esc', 'back']], text: this.rxSaved === null ? 'Press Enter to save the card as a PNG you can share.' : this.rxSaved ? 'Saved as a PNG you can share.' : 'The card could not be saved.' });
+      if (this.rxMode === 'card') return runCardView(c, { title: 'Run card', name: o.card.name, rank: o.title ?? (o.won ? 'Win' : 'Loss'), facts: o.card.facts, trainer: player, badges: o.card.badges, team: team.map((t) => t.file), hints: [['Enter', 'save'], ['Esc', 'back']], text: this.rxSaved === null ? 'Press Enter to save the card as a PNG you can share.' : this.rxSaved ? 'Saved as a PNG you can share.' : 'The card could not be saved.' });
       if (this.rxMode === 'team') return partyView(c, { title: 'Final team', area: 'end', hints: [['Esc', 'back']], mons: cards, index: Math.min(this.rxPage, Math.max(0, cards.length - 1)), text: 'Your final team, as it stood at the end.' });
       return main() + (this.rxMode === 'report' ? reportView(c, { title: 'Full report', pages, page: this.rxPage }) : '');
     };

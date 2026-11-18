@@ -2,17 +2,19 @@
 // same order, and the gate that lights CONFIRM. Pure: no number is drawn; a Card is arithmetic over the block.
 // Field 12 is the Ledger's sentence, from ledger.ts, so the line filed is the line the player read.
 
-import { fairPrice, holdingName, localOf, payAmount, streetName, streetOf, takings } from './board';
+import { acrossLine } from './neighbour';
+import { fairPrice, holdingName, isSpeech, localOf, payAmount, streetName, streetOf, takings } from './board';
 import { heroField } from './hero';
 import { EVIL_DATA, type EvilData } from './data';
 import { crewNames, fill, holdingTo, money, sentenceFor } from './ledger';
 import { oddsFor, oddsText, type JobDraft } from './odds';
-import type { CardField, EvilModeBlock, StoredCard } from './schema';
+import { unpackField, type CardField, type EvilModeBlock, type StoredCard } from './schema';
 import { crossers, peopleText, wontText } from './people';
 import { heatIfSent, proofFor } from './line';
 import { modify } from './regionRule';
 
-export type CardDraft = Omit<StoredCard, 'id'>;
+/** A Card as it's made (every field whole); stored, a field may later be packed (slice 16). */
+export type CardDraft = Omit<StoredCard, 'id' | 'fields'> & { fields: CardField[] };
 
 /** The Card for a job. Callers check the job can be queued first (dispatch.ts `jobProblem`). */
 /** `asked`: the Boss is asking anyway, across a line; field 12 says who was asked (Part 29 section 5.4). */
@@ -91,7 +93,7 @@ export function cardFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
   const unknown = f.map(([, u], i) => (u ? data.ledger.fields[i]! : null)).filter((x): x is string => !!x);
   f.push([unknown.length ? unknown.map((n) => `${n}: not scouted.`).join(' ') : L.notKnownNone, unknown.length > 0]);
   // 12 How it's written down: the Ledger's sentence, exactly.
-  f.push([`${sentenceFor(block, job, data)}${asked && wont.length ? fill(peopleText('askedAnyway', data), { names: wont.map((p) => p.name).join(' and ') }) : ''}`, false]);
+  f.push([`${sentenceFor(block, job, data)}${acrossLine(block, h.id, data) ? ` ${data.neighbour.lines.broke}` : ''}${asked && wont.length ? fill(peopleText('askedAnyway', data), { names: wont.map((p) => p.name).join(' and ') }) : ''}`, false]);
   // 13 The other way: never empty.
   const fair = fairPrice(h, data);
   const persuadeOdds = () => oddsFor(block, { holdingId: h.id, method: 'persuade', squad: job.squad }, data);
@@ -101,11 +103,14 @@ export function cardFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
   else f.push([clean ? L.clean : fill(L.underPrice, { fair: money(fair ?? 0) }), false]);
 
   const fields: CardField[] = f.map(([text, u], i) => ({ label: data.ledger.fields[i]!, text, unknown: u }));
+  // 14 (slice 19, Unova's Speech only): what you're leaving out, filled in by the game from the Ledger (Part 26b section 2.4).
+  const sp = data.region.speech;
+  if (sp && isSpeech(h, m)) fields.push({ label: sp.label, text: leftOut(block, data) ?? sp.empty, unknown: false });
   return { day: block.here.day, region: d.region, district: d.n, holdingId: h.id, method: m, ...(m === 'pay' ? { offer: job.offer ?? 100 } : {}), ...(thing ? { thing: thing.id } : {}), clean, fields };
 }
 
 /** How many fields are still red ink (field 11's own count). */
-export const unknownCount = (c: Pick<StoredCard, 'fields'>): number => c.fields.slice(0, 10).filter((x) => x.unknown).length;
+export const unknownCount = (c: Pick<CardDraft, 'fields'>): number => c.fields.slice(0, 10).filter((x) => x.unknown).length;
 
 /** The job field 13's button swaps to, where there is one: a Pay under the price swaps to the fair price. */
 export function otherWay(job: JobDraft, data: EvilData = EVIL_DATA): JobDraft | null {
@@ -144,4 +149,13 @@ export function gateKey(g: CardGate, e: { type: 'down' | 'up'; repeat?: boolean 
   if (e.repeat || !g.seen) return { gate: g, act: 'scroll' };
   if (!g.released) return { gate: g, act: 'none' };
   return { gate: g, act: 'confirm' };
+}
+
+/**
+ * Slice 19: the Speech's fourteenth field (Part 26b section 2.4). The other half of the team's story in this region: the
+ * Ledger's own sentence for the last job here that wasn't clean. Null when there's nothing left out.
+ */
+export function leftOut(block: EvilModeBlock, data: EvilData = EVIL_DATA): string | null {
+  const last = [...block.cards].reverse().find((c) => c.region === block.here.region && !c.clean);
+  return last ? unpackField(last.fields[11]!, 11, data.ledger.fields).text : null;
 }

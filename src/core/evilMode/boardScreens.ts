@@ -2,6 +2,7 @@
 // The scene keeps the cursor and the job being built (`DispatchDraft`); these work out what to draw and decide nothing.
 // The odds shown are the ones `oddsFor` gives, the same function the Evening rolls against.
 
+import { defOf, isTheirs, neighbourNotes, stanceDef, unanswered } from './neighbour';
 import { districtDef, fairPrice, heldCount, holdingName, kindDef, localOf, methodsFor } from './board';
 import { EVIL_DATA, type EvilData } from './data';
 import { crewProblem, jobProblem, payAmount } from './dispatch';
@@ -13,7 +14,8 @@ import { JOB_METHODS, type EvilModeBlock, type Holding, type JobMethod, type Lin
 import { heatForecast, lineWhy, thingProblem } from './line';
 import { wontText } from './people';
 import { currentLeader, gymDoors, gymOn, standingText } from './gym';
-import { dayIn, heardOf, mayStay, morningNotes, stageDays, stageKind, stageName, tallyOf, waysForward } from './region';
+import { clockActs, crossingModel, type CrossingModel } from './crossing';
+import { dayIn, heardOf, mayStay, morningNotes, regionText, stageDays, stageKind, stageName, tallyOf, waysForward } from './region';
 import { regionOf } from './regionRule';
 import { postAtNight, postNotes } from './base';
 import { stageRow } from './board';
@@ -61,7 +63,11 @@ export interface BoardModel {
   evening: string[];
   /** Slice 9: a district that's over: its tally; then the Road (who stays); or, after the Reckoning, the region's end. */
   end: { how: 'held' | 'taken' | 'arrival' | 'reckoning'; phase: 'tally' | 'road' | 'over' | 'day'; title: string; text: string; rows: [string, string][]; said: string;
-    road: null | { title: string; stay: { id: string; text: string }[]; nobody: string; carried: string; heard: string; away: { id: string; text: string }[] } } | null;
+    road: null | { title: string; stay: { id: string; text: string }[]; nobody: string; carried: string; heard: string; away: { id: string; text: string }[] };
+    /** Slice 16: the Crossing, once the region's over and it isn't the run's last. */
+    crossing: CrossingModel | null } | null;
+  /** Slice 13: the neighbour's tag on the title row ("Rocket · Wary"), or null with no neighbour. */
+  neighbour: string | null;
   dispatch: null | {
     step: DispatchStep;
     rows: { at: number; name: string; mood: string; known: string; queued: string | null; sel: boolean }[];
@@ -86,7 +92,9 @@ export interface BoardModel {
     posted: { holdingId: string; text: string }[];
   };
   /** Slice 5: In person, the queued Outplays the Boss can go and play. */
-  inPerson: null | { go: { holdingId: string; text: string; sel: boolean }[]; done: string | null };
+  inPerson: null | { go: { holdingId: string; text: string; sel: boolean }[]; done: string | null;
+    /** Slice 16, Hoenn: carry a letter, or stop the second clock (act codes letter, stop:boss, stop:hero). */
+    clock: { code: string; text: string }[] };
   /** Slice 5: a battle the day's waiting on. */
   fight: string | null;
 }
@@ -138,9 +146,12 @@ export function boardModel(block: EvilModeBlock, d: DispatchDraft, data: EvilDat
   const known = sel.scouted;
   const price = fairPrice(sel, data);
   const methodWord = (m?: string) => data.methods.find((x) => x.id === m)?.name ?? '';
+  const nbDef = block.neighbour ? defOf(block.neighbour, data) : null;
+  const nbTeam = nbDef?.team ?? '';
+  const nbName = nbDef ? nbDef.teamName.replace('Team ', '') : '';
   const panel = {
     name: holdingName(sel, data),
-    kind: `Step ${sel.step} · ${kindDef(sel.kind, data).name}${sel.floor ? ` · floor ${sel.floor}` : ''}${sel.tags?.length ? ` · ${deedWord(block, data)}` : ''}`,
+    kind: `Step ${sel.step} · ${kindDef(sel.kind, data).name}${sel.floor ? ` · floor ${sel.floor}` : ''}${sel.tags?.some((t) => t !== nbTeam) ? ` · ${deedWord(block, data)}` : ''}${isTheirs(sel, block.neighbour, data) ? ` · ${nbName}'s` : ''}`,
     mood: sel.mood ? (known ? moodName(sel, data)! : '?') : '—',
     earns: l ? (known ? (l.take > 0 ? `${money(l.take)} a day to the team` : l.earns > 0 ? 'A favour, not money' : 'Nothing') : '—') : sel.kind === 'town' ? `${money(R.townTakings)} a day, held` : sel.kind === 'safehouse' ? `Rent ${money(R.safehouseRent)} a day, held` : '—',
     wants: l && known >= 2 ? l.want : '',
@@ -167,6 +178,7 @@ export function boardModel(block: EvilModeBlock, d: DispatchDraft, data: EvilDat
     overnight: block.here.beat === 'morning' ? [...regionBlocks(block, data), ...(sheetLines.length ? [...sheetLines, { title: 'The money', lines: block.evening }] : [{ title: 'Overnight', lines: [di === 1 ? `${def.grievance} Twenty steps to the Gym, and none of them ours.` : 'Nothing came in.'] }])] : [],
     evening: block.here.beat === 'evening' ? block.evening : [],
     end: dist.end ? endModel(block, data) : null,
+    neighbour: nbDef && block.neighbour ? `${nbName} · ${stanceDef(block.neighbour.stance, data).word}` : null,
     dispatch: null,
     inPerson: null,
     fight: null,
@@ -184,6 +196,7 @@ export function boardModel(block: EvilModeBlock, d: DispatchDraft, data: EvilDat
     const outplays = block.queue.filter((j) => j.method === 'outplay' && !j.played);
     const went = block.inPerson?.day === day ? name(block.inPerson.holdingId) : undefined;
     model.inPerson = {
+      clock: clockActs(block, data),
       go: went ? [] : outplays.map((j) => ({ holdingId: j.holdingId, text: `Go yourself: Outplay at step ${name(j.holdingId)!.step} · ${holdingName({ ...name(j.holdingId)!, scouted: Math.max(1, name(j.holdingId)!.scouted) }, data)}`, sel: name(j.holdingId)!.step - 1 === d.at })),
       done: went ? `The Boss went to step ${went.step} today.` : outplays.length ? null : 'Nothing to go to in person. (In person, only an Outplay is played yet.)',
     };
@@ -230,6 +243,12 @@ function regionBlocks(block: EvilModeBlock, data: EvilData): { title: string; li
   const out: { title: string; lines: string[] }[] = [];
   const notes = morningNotes(block, data);
   if (notes.length) out.push({ title: stageName(block.here.stage, data), lines: notes });
+  // Slice 13: the neighbour's messages and news today, and any waiting on an answer (answered on the neighbour page, K).
+  const nb = block.neighbour;
+  if (nb) {
+    const lines = [...neighbourNotes(block), ...unanswered(block).map((p) => `${p.text} (Answer on the ${defOf(nb, data).boss} page: K.)`)];
+    if (lines.length) out.push({ title: defOf(nb, data).boss, lines });
+  }
   const ways = waysForward(block, data);
   if (ways.length) out.push({ title: 'The way forward', lines: ways.map((w) => `${w.state}: ${w.way}${w.waits ? ` (${w.waits}.)` : ''}`) });
   // Slice 10: the Listening Post's report, at Morning (the same Night with a Post next to the Office).
@@ -243,7 +262,7 @@ function endModel(block: EvilModeBlock, data: EvilData): NonNullable<BoardModel[
   const d = block.district!;
   const e = d.end!;
   const t = data.region.on ? block.region.tallies.find((x) => x.n === d.n) ?? tallyOf(block, data) : null;
-  const text = e.how === 'held' || e.how === 'taken' ? data.district.ends[e.how] : e.how === 'arrival' ? data.region.arrival.end : data.region.reckoning.end;
+  const text = e.how === 'held' || e.how === 'taken' ? data.district.ends[e.how] : e.how === 'arrival' ? data.region.arrival.end : regionText(data.region.reckoning.end, block, data);
   const phase = data.region.on ? block.region.phase : 'day';
   const R = data.region.road;
   const road = phase === 'road' ? {
@@ -252,5 +271,5 @@ function endModel(block: EvilModeBlock, data: EvilData): NonNullable<BoardModel[
     nobody: R.nobody, carried: R.carried, heard: heardOf(block, data),
     away: block.crew.filter((c) => c.where === 'away').map((c) => ({ id: c.id, text: `Recall ${c.name}` })),
   } : null;
-  return { how: e.how, phase, title: t?.title ?? text, text: phase === 'over' ? data.region.reckoning.over : text, rows: t?.rows ?? [], said: t?.said ?? '', road };
+  return { how: e.how, phase, title: t?.title ?? text, text: phase === 'over' ? regionText(data.region.reckoning.over, block, data) : text, rows: t?.rows ?? [], said: t?.said ?? '', road, crossing: phase === 'over' ? crossingModel(block, data) : null };
 }

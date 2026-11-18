@@ -1840,6 +1840,19 @@ export const NpcMemorySchema = z.object({
 });
 export type NpcMemory = z.infer<typeof NpcMemorySchema>;
 
+/** Evil Mode slice 15 (profile v21): one finished Evil Mode run's Hall of Fame card. Never ranked; written once a run. */
+export const EvilHallCardSchema = z.object({
+  runId: z.string(),
+  date: z.string(),
+  team: z.string().max(40),
+  creed: z.string(),
+  ending: z.enum(['scheme', 'lastRoom', 'straight', 'handOff', 'recruit', 'caught']),
+  sub: z.string().nullable(),
+  day: z.number().int().min(1),
+  regions: z.number().int().min(1),
+}).strict();
+export type EvilHallCard = z.infer<typeof EvilHallCardSchema>;
+
 export const ProfileSchema = z.object({
   profileId: z.string(),
   unlockedArchetypes: z.array(z.string()),
@@ -1952,6 +1965,8 @@ export const ProfileSchema = z.object({
   treasureHunt: TreasureHuntSchema.default({ pieces: [], claimed: false }),
   /** Story Overhaul v2 (profile v20): the Look, name, prologue, Remembrance, lore and cast archives. A damaged object falls back to defaults. */
   story: ProfileStorySchema,
+  /** Evil Mode slice 15 (profile v21): the Hall of Fame cards of finished Evil Mode runs, newest last (core/evilMode/endings.ts hallCard). */
+  evilHall: z.array(EvilHallCardSchema).default([]),
 });
 export type Profile = z.infer<typeof ProfileSchema>;
 

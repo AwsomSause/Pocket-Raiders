@@ -4,10 +4,11 @@
 
 import { hashSeed, Rng } from '../rng';
 import { EVIL_DATA, type EvilData } from './data';
+import { neighbourDef, sideFor } from './neighbour';
 import type { District, EvilModeBlock, Holding, HoldingKind, JobMethod, LocalDef, Mood } from './schema';
 
 /** What laying a district needs to know about the team: Regard and Dread, and (slice 9) the Look. */
-export type LayTeam = { regard: number; dread: number; look?: { a: string; b: string; cut?: string } };
+export type LayTeam = { regard: number; dread: number; look?: { a: string; b: string; cut?: string }; doctrine?: string };
 
 /**
  * Lays District `n` of region `region`: step 20 the Gym; the rest shuffled from the stage's layout counts. Slice 9: a
@@ -18,10 +19,12 @@ export function layDistrict(seed: string, region: number, n: number, team: LayTe
   const d = data.district;
   const row = stageRow(region, n, data);
   const rng = new Rng(hashSeed(`${seed}::evil-district::${region}::${n}`));
-  const L = row?.layout ? { ...row.layout, steps: d.layout.steps } : { ...d.layout, floor: 0 };
+  const L = row?.layout ? { ...row.layout, steps: d.layout.steps } : { ...d.layout, floor: 0, kept: 0, water: 0, lake: 0, bridge: 0, table: 0 };
   const pool: HoldingKind[] = [
     ...Array<HoldingKind>(L.local).fill('local'), ...Array<HoldingKind>(L.wild).fill('wild'), ...Array<HoldingKind>(L.alpha).fill('alpha'),
-    ...Array<HoldingKind>(L.safehouse).fill('safehouse'), ...Array<HoldingKind>(L.opportunity).fill('opportunity'), ...Array<HoldingKind>(L.floor).fill('floor'), 'town',
+    ...Array<HoldingKind>(L.safehouse).fill('safehouse'), ...Array<HoldingKind>(L.opportunity).fill('opportunity'), ...Array<HoldingKind>(L.floor).fill('floor'),
+    ...Array<HoldingKind>(L.kept ?? 0).fill('kept'), ...Array<HoldingKind>(L.water ?? 0).fill('water'),
+    ...Array<HoldingKind>(L.lake ?? 0).fill('lake'), ...Array<HoldingKind>(L.bridge ?? 0).fill('bridge'), ...Array<HoldingKind>(L.table ?? 0).fill('table'), 'town',
   ];
   if (pool.length !== L.steps - 1) throw new Error(`Evil Mode district layout has ${pool.length} holdings before the Gym, not ${L.steps - 1}`);
   const kinds = rng.shuffle(pool);
@@ -36,6 +39,7 @@ export function layDistrict(seed: string, region: number, n: number, team: LayTe
   let li = 0;
   let floor = 0;
   const floors = row?.floors ?? [];
+  const square = data.region.on && !!data.region.regions.find((r) => r.index === region)?.square;
   const holdings: Holding[] = [...kinds, 'gym' as const].map((kind, i) => {
     const step = i + 1;
     let ref: string;
@@ -48,9 +52,11 @@ export function layDistrict(seed: string, region: number, n: number, team: LayTe
       ref = list[k % Math.max(1, list.length)] ?? kindDef(kind, data).name;
     }
     const h: Holding = { id: `s${step}`, step, kind, ref, mood: firstMood(kind, ref, team, data), scouted: 0, owner: 'nobody', holds: false, tried: [] };
+    // Slice 19 (Unova): the Town's a square, where the Speech is given (Part 26b section 2.4).
+    if (kind === 'town' && square) return { ...h, tags: ['square'] };
     return kind === 'floor' ? { ...h, floor } : h;
   });
-  return { region, n, seed, holdings: deeds(seed, region, n, holdings, data), regardStreets: [], ...(opts.from && opts.from > 1 ? { from: opts.from } : {}) };
+  return { region, n, seed, holdings: turf(seed, region, n, deeds(seed, region, n, holdings, data), data, team.doctrine), regardStreets: [], ...(opts.from && opts.from > 1 ? { from: opts.from } : {}) };
 }
 
 /** A region's stage row (district.json `districts`), or undefined for a stage this build hasn't written. */
@@ -61,7 +67,21 @@ function deeds(seed: string, region: number, n: number, holdings: Holding[], dat
   const def = data.region.on ? data.region.regions.find((r) => r.index === region)?.deeds : undefined;
   if (!def) return holdings;
   const rng = new Rng(hashSeed(`${seed}::evil-deeds::${region}::${n}`));
-  return holdings.map((h) => (def.kinds.includes(h.kind) && rng.int(1, 100) <= def.share ? { ...h, tags: [def.tag] } : h));
+  const tag = def.byStage?.[String(n)] ?? def.tag;
+  return holdings.map((h) => (def.kinds.includes(h.kind) && rng.int(1, 100) <= def.share ? { ...h, tags: [tag] } : h));
+}
+
+/**
+ * Slice 13: the neighbour's holdings in this district (design Part 15a sections 1.2 and 7.1), in their colour, drawn on
+ * their own generator from the seed (so no other roll moves). Tagged with their team's id; still nobody's to the team.
+ */
+function turf(seed: string, region: number, n: number, holdings: Holding[], data: EvilData, doctrine?: string): Holding[] {
+  const def = neighbourDef(region, data, sideFor(seed, doctrine));
+  const want = def?.holds[String(n)] ?? 0;
+  if (!def || !want) return holdings;
+  const rng = new Rng(hashSeed(`${seed}::evil-turf::${region}::${n}`));
+  const pick = new Set(rng.shuffle(holdings.filter((h) => def.kinds.includes(h.kind) && !(h.kind === 'local' && data.district.locals.find((l) => l.id === h.ref)?.minor)).map((h) => h.id)).slice(0, want));
+  return holdings.map((h) => (pick.has(h.id) ? { ...h, tags: [...(h.tags ?? []), def.team] } : h));
 }
 
 /** A floor's row in its district (a tower's floors, numbered from the bottom). */
@@ -150,6 +170,9 @@ export const heldCount = (block: EvilModeBlock): number => (block.district ? blo
 /** A local's fair price: six days of the team's share (or a third of what they earn, for a favour), a fifth lower if they fear the bank or the landlord. */
 export function fairPrice(h: Holding, data: EvilData = EVIL_DATA): number | null {
   if (h.kind === 'safehouse') return kindDef('safehouse', data).price ?? null;
+  // Slice 19: a bridge's toll-house is bought for six days' tolls; a table's seat for its bill (the kind's price).
+  if (h.kind === 'bridge') return Math.round(((kindDef('bridge', data).price ?? 0) * data.district.rules.fairDays) / 50) * 50;
+  if (h.kind === 'table') return kindDef('table', data).price ?? null;
   const l = localOf(h, data);
   if (!l || l.noPrice || l.earns <= 0) return null;
   const share = l.take > 0 ? l.take : Math.round(l.earns / 3);
@@ -169,6 +192,12 @@ export function takings(h: Holding, data: EvilData = EVIL_DATA): number {
   if (h.owner !== 'team') return 0;
   if (h.kind === 'town') return data.district.rules.townTakings;
   if (h.kind === 'safehouse') return -data.district.rules.safehouseRent;
+  // Slice 16: a kept place pays nothing (it pays in mood); a water route pays its fares (the kind's `price`, a day).
+  if (h.kind === 'kept') return 0;
+  if (h.kind === 'water') return kindDef('water', data).price ?? 0;
+  // Slice 19: a bridge pays its tolls; a lake and a table pay no Funds (Part 26b sections 1.3, 2.3, 3.3).
+  if (h.kind === 'bridge') return kindDef('bridge', data).price ?? 0;
+  if (h.kind === 'lake' || h.kind === 'table') return 0;
   const t = localOf(h, data)?.take ?? 0;
   // Slice 6: a Leaned holding pays half as much again (Part 7 section 6).
   return h.method === 'lean' ? Math.floor((t * data.line.lean.takings) / 100) : t;
@@ -181,4 +210,6 @@ export function holdingName(h: Holding, data: EvilData = EVIL_DATA): string {
   return h.ref;
 }
 
-export const methodsFor = (h: Holding, data: EvilData = EVIL_DATA): JobMethod[] => kindDef(h.kind, data).methods;
+/** Slice 19: the Speech is Persuade at a square (a Unova Town); its Card has a fourteenth field (Part 26b section 2.4). */
+export const isSpeech = (h: Pick<Holding, 'kind' | 'tags'>, method?: JobMethod): boolean => h.kind === 'town' && !!h.tags?.includes('square') && (method === undefined || method === 'persuade');
+export const methodsFor = (h: Holding, data: EvilData = EVIL_DATA): JobMethod[] => (isSpeech(h) ? [...kindDef(h.kind, data).methods, 'persuade'] : kindDef(h.kind, data).methods);
