@@ -1,0 +1,630 @@
+{
+  "note": "Evil Mode slice 12, the fires (design Part 19; Part 30 section 7 `fires`). Once a region the Boss can sit across a camp-fire from the Hero, out of uniform; the Hero doesn't know who they're talking to. Three exchanges, then one thing of the player's own, kept whole and quoted back in the last room. Every choice is a question or silence (listening) or a statement (talking); the screen doesn't say which. Slots in braces are read from the run; each has a written fallback. Text is data; the save keeps ids and the player's own words. Numbers are starting values; none are playtested.",
+  "on": true,
+  "rules": {
+    "district": 3,
+    "day": 3,
+    "noFlameAt": 4,
+    "ownMax": 120,
+    "noteMax": 120
+  },
+  "flame": {
+    "board": "A small flame at step {step}. The Hero's resting.",
+    "sit": "Sit at the fire",
+    "why": "Takes the day's in-person slot. That Night nobody knocks.",
+    "gone": "There was a fire on the road a night ago. It's out.",
+    "missed": "Thought somebody might turn up. There's usually somebody on this road. Nobody did.",
+    "pastTalking": "They don't make camp. They walk through the night.",
+    "had": "Sat at a fire with {name}. They don't know who you are.",
+    "night": "Nobody knocks. The Boss sits alone. There's a notebook on the Office desk.",
+    "kept": "Written in the Office notebook: \"{text}\"",
+    "noteNone": "Not tonight. The notebook's for the night after a fire."
+  },
+  "scene": {
+    "title": "A fire",
+    "set": "A fire. Somebody on the other side of it, with a {mon} asleep on their feet.",
+    "setAwake": "A fire. Somebody on the other side of it. Their {mon}'s awake, and watching you.",
+    "own": "Then: one thing of your own.",
+    "ownHelp": "Type it (up to 120 letters), or pick one. It's kept, word for word.",
+    "silence": "(Say nothing. Put another log on.)",
+    "end": "The fire burns down. In the morning they're gone up the road.",
+    "close": "Leave the fire"
+  },
+  "andYou": {
+    "ask": "\"What about you? What're you doing all the way out here?\"",
+    "answers": [
+      { "id": "look", "say": "\"I look after some people.\"", "kind": "talk", "reply": ["They nod. \"That sounds hard.\""] },
+      { "id": "business", "say": "\"Business.\"", "kind": "talk", "reply": ["\"My mum says that when she doesn't want to say.\"", "They let it go. They remember that they let it go."] },
+      { "id": "justWork", "say": "\"I just work there.\"", "kind": "talk", "lie": true, "reply": ["They believe it. \"Is it all right? Working there?\""] }
+    ],
+    "creed": {
+      "profit": { "say": "\"Making a living. Same as everyone.\"", "reply": ["\"Is it a good one?\""] },
+      "cause": { "say": "\"There's something that's wrong and I'm trying to put it right.\"", "reply": ["\"Me too!\" A pause. \"...It's probably not the same thing.\""] },
+      "power": { "say": "\"Finding out how far I can get.\"", "reply": ["\"Me too.\" No pause. They like you at once."] },
+      "wonder": { "say": "\"Looking for something old.\"", "reply": ["\"What'll you do when you find it?\""] },
+      "belonging": { "say": "\"I've a lot of people waiting for me to come back.\"", "reply": ["They look at the fire. \"That must be nice.\""] },
+      "spite": { "say": "\"There's somebody I need to find.\"", "reply": ["\"Me too.\" This time they look up."] }
+    },
+    "justWorkThen": [
+      { "id": "fine", "say": "\"It's fine.\"", "kind": "talk", "reply": ["\"Good.\" They don't sound sure it's good."] },
+      { "id": "notReally", "say": "\"Not really.\"", "kind": "talk", "reply": ["\"Then why d'you stay?\" They don't wait for an answer. They think they know it."] }
+    ]
+  },
+  "third": {
+    "answers": [
+      { "id": "road", "say": "\"I've been on this road a long time.\"", "kind": "talk", "reply": ["They accept it."] },
+      { "id": "dealings", "say": "\"I've had dealings with them.\"", "kind": "talk", "reply": ["Their eyes narrow."] },
+      { "id": "oneOf", "say": "\"I'm one of them.\"", "kind": "talk", "reply": ["They get up. They don't run. They stand on the far side of the fire with their {mon} awake in front of them."] },
+      { "id": "charge", "say": "\"I'm the one in charge.\"", "kind": "talk", "reply": ["The whole truth. They hear it out to the end.", "The last fire won't happen now. This was it."] }
+    ],
+    "sitBack": "Slowly, they sit back down.",
+    "leave": "They leave. The fire's over."
+  },
+  "slots": {
+    "reasonNone": "They've moved into my town.",
+    "ledgerNone": "It's all the same. That's what's odd. Nobody's all the same.",
+    "personNone": "Somebody",
+    "personLineNone": "She said she won't do the bad jobs. Why's she in it?"
+  },
+  "personalities": {
+    "protector": {
+      "first": {
+        "open": ["\"There's a team round here. {reason} I'm going to find whoever's in charge. I don't know what I'll do. I've only got a {mon}.\""],
+        "ex1": [
+          { "say": "\"What would you say to them?\"", "kind": "listen", "reply": ["\"I've been practising. 'Give it back.' That's as far as I've got. ...It's not very good, is it. I thought if I got there I'd know the rest.\""] },
+          { "say": "\"Maybe they'd a reason.\"", "kind": "talk", "reply": ["A long look at the fire. \"Maybe. I can't think of a reason that'd be good enough. But I'd want to hear it. I think I'd want to hear it more than I'd want it back.\""] },
+          { "say": "\"Your {mon}'s limping. Here.\"", "kind": "talk", "reply": ["A Potion. They take it. They use it at once, on the {mon}, before saying thank you.", "\"...Thanks. Sorry. He comes first. You'd be the same.\""], "file": "A stranger fixed his foot. Didn't want anything." }
+        ],
+        "ask": "\"Can I ask you something? You've got strong Pokémon. D'you ever *not* fight when you could? When you'd win?\"",
+        "ex3": [
+          { "say": "\"Most days.\"", "kind": "talk", "reply": ["\"Good. I thought it was just me being scared.\""] },
+          { "say": "\"Not often enough.\"", "kind": "talk", "reply": ["They look up. \"...That's honest.\""] },
+          { "say": "\"Why d'you ask?\"", "kind": "listen", "reply": ["\"There was one of them at a door. She was shaking. I could've won. I gave her a Berry and went round. I keep thinking I should've fought.\""] }
+        ]
+      },
+      "second": {
+        "open": ["\"It's you again. You're always on this road.\" They've a second Pokémon now, asleep against the first.", "\"I found out more. Somebody mended what they broke. My uncle says the team did it. I don't— can you make that make sense?\""],
+        "ex1": [
+          { "say": "\"No.\"", "kind": "talk", "reply": ["\"No. Me neither. I'm glad it's not just me.\""] },
+          { "say": "\"Maybe it's two different people giving the orders.\"", "kind": "talk", "reply": ["\"I thought that. Then I met one who'd done both. She couldn't explain it either. She said, 'Ask the Boss.'\""] },
+          { "say": "\"Does it have to?\"", "kind": "listen", "reply": ["A while. \"...I think it does. For me. I can't go home and say 'they're bad except when they're not.' My mum'll say 'Well, which?'\""] }
+        ],
+        "ask": "\"When you were my age. Did anyone ever tell you the truth about something big?\"",
+        "ex3": [
+          { "say": "\"Once.\"", "kind": "talk", "reply": ["\"Was it worse than not knowing?\" They don't wait. \"Don't say. I'll find out.\""] },
+          { "say": "\"I had to find it out.\"", "kind": "talk", "reply": ["\"Yeah.\" They poke the fire. \"That's what I'm doing.\""] },
+          { "say": "\"What would you want to be told?\"", "kind": "listen", "reply": ["\"Whether the people who did it are sorry. That's all. I could carry the rest.\""] }
+        ]
+      },
+      "third": {
+        "open": ["\"You know a lot about them. You always know where they've been.\" They aren't accusing. They've put a tin on to boil, for two.", "\"I'm not going to ask. I think if I ask you'll have to lie or I'll have to do something. I don't want either tonight.\""],
+        "told": "\"I know. I've known since the boat. I wanted one more fire first.\"",
+        "ex1": [
+          { "say": "\"Thank you.\"", "kind": "talk", "reply": ["\"Don't. It's not for you. It's for me.\" They pour the tea anyway. Two cups."] },
+          { "say": "(Drink the tea.)", "kind": "listen", "reply": ["It's too sweet. They watch you drink it and nod, as if that settled something."] },
+          { "say": "\"What would you do, if you asked?\"", "kind": "listen", "reply": ["\"I don't know. That's why I'm not asking.\""] }
+        ],
+        "ask": "\"If somebody's done bad things for a good reason. Do you still have to stop them?\"",
+        "ex3": [
+          { "say": "\"Yes.\"", "kind": "talk", "reply": ["\"Yeah. I thought you'd say that. I hoped you wouldn't.\""] },
+          { "say": "\"Depends who's paying for it.\"", "kind": "talk", "reply": ["\"The people in my street. That's who's paying.\""] },
+          { "say": "\"What do you think?\"", "kind": "listen", "reply": ["\"I think you stop them. And then you listen. In that order.\""] }
+        ]
+      },
+      "last": {
+        "open": ["\"I'm coming tomorrow. To the building. You know that.\"", "\"I'm not going to say anything clever. I'm going to walk in and look at everything and then I'm going to ask you one thing. So. Think about your answer. Please. I've come a long way and I'd like it to be a good one.\""],
+        "ex1": [
+          { "say": "\"I will.\"", "kind": "talk", "reply": ["\"Good.\""] },
+          { "say": "\"What's the one thing?\"", "kind": "listen", "reply": ["\"You know what it is.\""] },
+          { "say": "(Nod.)", "kind": "listen", "reply": ["They nod back. It's the most they've agreed on."] }
+        ],
+        "ask": "\"Is there anything you'd want me to see? Before I ask?\"",
+        "ex3": [
+          { "say": "\"The kitchen.\"", "kind": "talk", "reply": ["\"Okay. I'll look at the kitchen.\""] },
+          { "say": "\"All of it.\"", "kind": "talk", "reply": ["\"That's what I was going to do.\""] },
+          { "say": "\"What do you think's there?\"", "kind": "listen", "reply": ["\"People. That's what I keep forgetting. It's people.\""] }
+        ]
+      }
+    },
+    "champion-chaser": {
+      "first": {
+        "open": ["\"Eight Badges. That's all I want. There's some gang keeps putting people at doors. It's *slow.*\""],
+        "ex1": [
+          { "say": "\"What happens after eight?\"", "kind": "listen", "reply": ["\"The League. Then Champion.\" A pause. \"...Then I don't know. Nobody asks that. Then I'm Champion, I s'pose, for ever.\" They poke the fire. \"That's a long time.\""] },
+          { "say": "\"What if they held the Gyms?\"", "kind": "listen", "reply": ["\"Then I'd beat whoever they put in them. A Badge is a Badge.\" Then, slower: \"...Is it? If somebody's paid for the Leader to lose. Is that a Badge?\""], "file": "Will check every Gym from now on. \"If it's too easy I'm asking why.\"" },
+          { "say": "\"Why's it matter how fast?\"", "kind": "listen", "reply": ["\"Because there's three others started the same day and one of them's better than me.\" A beat. \"I didn't say that. Forget I said that.\""] }
+        ],
+        "ask": "\"You've done all this, right? Badges and that. Was it worth it?\"",
+        "ex3": [
+          { "say": "\"Yes.\"", "kind": "talk", "reply": ["\"Good.\" Relieved. Not convinced."] },
+          { "say": "\"It wasn't the Badges that were worth it.\"", "kind": "talk", "reply": ["\"Everyone old says that.\" They think about it for the rest of the region."] },
+          { "say": "\"I never finished.\"", "kind": "talk", "reply": ["They stare. \"Why *not?*\""], "file": "Met someone who didn't finish. They seemed all right." }
+        ]
+      },
+      "second": {
+        "open": ["\"It's you again. You're always on this road.\" They're not sitting. They're stretching.", "\"I've got five. The gang had two of the Gyms. One of them, they'd put their own person in. She was *good.* It was the best fight I've had. I don't know how I feel about that.\""],
+        "ex1": [
+          { "say": "\"How d'you want to feel?\"", "kind": "listen", "reply": ["\"Angry. It'd be simpler.\""] },
+          { "say": "\"A good fight's a good fight.\"", "kind": "talk", "reply": ["\"That's what she said! After. She shook my hand. She had the armband on and she shook my hand.\""] },
+          { "say": "\"What did the Badge look like?\"", "kind": "listen", "reply": ["They take it out. \"It's got their mark on. I'm going to have to explain that at the League.\" They put it back with the others. In order."] }
+        ],
+        "ask": "\"D'you think the League'll count it? A Badge off one of theirs?\"",
+        "ex3": [
+          { "say": "\"It's still a win.\"", "kind": "talk", "reply": ["\"Yeah. Yeah, it is.\" They sound like they're telling themselves."] },
+          { "say": "\"Does it matter, if you know?\"", "kind": "listen", "reply": ["\"...It matters to me. That's annoying.\""] },
+          { "say": "\"Ask them.\"", "kind": "talk", "reply": ["\"I'm not asking *them* anything. I'm beating them.\""] }
+        ]
+      },
+      "third": {
+        "open": ["\"You know a lot about them.\" Flat.", "\"I don't care who you are. I mean that nicely. I've got seven and there's one left and they're between me and it. If you're with them, tell them to put somebody good on the door.\""],
+        "told": "\"Yeah. I worked that out a while ago. Doesn't change the door.\"",
+        "ex1": [
+          { "say": "\"I'll tell them.\"", "kind": "talk", "reply": ["\"Good.\" Then, almost a smile: \"Somebody *really* good.\""] },
+          { "say": "\"Why d'you want them good?\"", "kind": "listen", "reply": ["\"Because if it's easy it doesn't count. I've had enough that didn't count.\""] },
+          { "say": "(Say nothing.)", "kind": "listen", "reply": ["They take that as a yes. They're probably right."] }
+        ],
+        "ask": "\"What do you do, after? When the thing you wanted's done?\"",
+        "ex3": [
+          { "say": "\"Find the next thing.\"", "kind": "talk", "reply": ["\"That's what I was afraid of.\""] },
+          { "say": "\"Rest.\"", "kind": "talk", "reply": ["They laugh. It's real. \"I don't know how.\""] },
+          { "say": "\"What do you want it to be?\"", "kind": "listen", "reply": ["\"...I don't know. I've never got that far. I've always been chasing.\""] }
+        ]
+      },
+      "last": {
+        "open": ["\"Eight.\" They hold them up to the firelight, fanned, like cards.", "\"It was meant to feel like something. It feels like I've got a thing to do tomorrow first. That's your fault. I wanted you to know I know that.\""],
+        "ex1": [
+          { "say": "\"I know.\"", "kind": "talk", "reply": ["\"Good. As long as we both know.\""] },
+          { "say": "\"What do you want it to feel like?\"", "kind": "listen", "reply": ["\"Finished.\""] },
+          { "say": "(Look at the Badges.)", "kind": "listen", "reply": ["They let you. They don't put them away till you've looked at each one."] }
+        ],
+        "ask": "\"If I win tomorrow. Will you still be on this road?\"",
+        "ex3": [
+          { "say": "\"Probably.\"", "kind": "talk", "reply": ["\"Huh. Okay.\""] },
+          { "say": "\"Do you want me to be?\"", "kind": "listen", "reply": ["They don't answer. They don't say no."] },
+          { "say": "\"You won't win.\"", "kind": "talk", "reply": ["\"Everyone's said that. All eight of them.\""] }
+        ]
+      }
+    },
+    "strategist": {
+      "first": {
+        "open": ["\"I've been writing down what they do. Look. {kind} {worst} It's the same people. I can't make it one thing.\""],
+        "openNo": ["\"I've been writing down what they do. Look.\" {ledger}"],
+        "ex1": [
+          { "say": "\"Maybe it isn't one thing.\"", "kind": "talk", "reply": ["\"Then it's two things with one name on, and that's worse, because which one answers when I knock?\" They write that down."] },
+          { "say": "\"Which d'you think's the real one?\"", "kind": "listen", "reply": ["\"The worst one. People are what they do when it costs them nothing to be worse.\" A pause. \"...But the good one cost them something. I priced it. So that isn't it either.\"", "They've priced it. The figure's low: they don't know what labour costs."] },
+          { "say": "(Read the notebook.)", "kind": "listen", "fx": "notebook", "reply": ["They hand it over."] }
+        ],
+        "ask": "\"If you wanted to know what somebody was *for.* Not what they said. How'd you find out?\"",
+        "ex3": [
+          { "say": "\"Watch what they do when nobody's looking.\"", "kind": "talk", "reply": ["\"I've been trying. They always seem to know when I'm looking.\""] },
+          { "say": "\"Ask the people who work for them.\"", "kind": "talk", "reply": ["\"I did. I got eleven different answers. I wrote them all down. One of them said 'dental.'\""] },
+          { "say": "\"Ask them.\"", "kind": "talk", "fx": "temperDown", "reply": ["They stop writing. \"...Just ask. Walk in and ask.\" They underline something."] }
+        ]
+      },
+      "second": {
+        "open": ["\"It's you again. You're always on this road.\" The notebook's a second notebook now.", "\"I've worked something out. They never take from the same person twice. Either that's a rule or it's a coincidence, and I don't believe in coincidences.\""],
+        "ex1": [
+          { "say": "\"Maybe it's a rule.\"", "kind": "talk", "reply": ["\"Then somebody made it. Somebody sat down and decided. I want to meet that person.\""] },
+          { "say": "\"What if you're wrong?\"", "kind": "listen", "reply": ["\"Then I cross out four pages. I've done it before.\" They show you. They have."] },
+          { "say": "\"Show me.\"", "kind": "listen", "reply": ["Two columns. Every name. A tick against each, once. They're right."] }
+        ],
+        "ask": "\"Do you keep books? Proper ones?\"",
+        "ex3": [
+          { "say": "\"Two.\"", "kind": "talk", "reply": ["They look at you for a long moment. \"...So do they.\""] },
+          { "say": "\"Somebody keeps them for me.\"", "kind": "talk", "reply": ["\"Do you read them?\" \"Every week.\" \"Good.\""] },
+          { "say": "\"Why d'you ask?\"", "kind": "listen", "reply": ["\"Because I can't make theirs add up and I think it's because there's a column I can't see.\""] }
+        ]
+      },
+      "third": {
+        "open": ["\"You know a lot about them.\" They've turned to a page near the front.", "\"First fire: you said, '{own}' I wrote it down. It's the only thing anyone's said to me that I couldn't file under anything. I've got a page that's just that.\""],
+        "openNo": ["\"You know a lot about them.\" They've turned to a page near the front.", "\"First fire, you didn't say anything. You put a log on. I wrote that down too. It's the only blank page in the book.\""],
+        "told": "\"I know. I had it in the second column for two regions. I just hadn't underlined it.\"",
+        "ex1": [
+          { "say": "\"Why keep it?\"", "kind": "listen", "reply": ["\"Because it doesn't fit. Things that don't fit are where the answer is.\""] },
+          { "say": "\"I meant it.\"", "kind": "talk", "reply": ["\"I know. That's why it's got its own page.\""] },
+          { "say": "(Look at the page.)", "kind": "listen", "reply": ["Your words, in a child's careful hand. Underlined twice."] }
+        ],
+        "ask": "\"What's the column I can't see? You know. I can tell you know.\"",
+        "ex3": [
+          { "say": "\"Why.\"", "kind": "talk", "reply": ["They write the word at the top of a fresh page. Nothing under it yet."] },
+          { "say": "\"Who it's for.\"", "kind": "talk", "reply": ["\"Who it's for.\" They write it down. \"That's going to take a region.\""] },
+          { "say": "\"What would you put in it?\"", "kind": "listen", "reply": ["\"That's the problem. I'd have to ask them. Every line.\""] }
+        ]
+      },
+      "last": {
+        "open": ["\"I've finished the notebook. There's two columns and I've added them up. D'you want to know which is longer?\"", "They don't say. They put the notebook on the ground between the two of you, closed, and leave it there when they go to bed."],
+        "ex1": [
+          { "say": "(Read it.)", "kind": "listen", "fx": "notebook", "reply": ["It's the Ledger's last page, a day early, in their hand. The totals are wrong in the team's favour: they still don't know what labour costs."] },
+          { "say": "(Leave it closed.)", "kind": "listen", "reply": ["It's still there in the morning. So are they. \"You didn't read it.\" \"No.\" \"Huh.\""] },
+          { "say": "\"I know which is longer.\"", "kind": "talk", "reply": ["\"Do you,\" they say, from inside the tent. It isn't a question."] }
+        ],
+        "ask": "\"Tomorrow I'm going to ask you to fill in the second column. Will you?\"",
+        "ex3": [
+          { "say": "\"Yes.\"", "kind": "talk", "reply": ["\"Bring a pen. I've only got the one.\""] },
+          { "say": "\"Some of it.\"", "kind": "talk", "reply": ["\"Some's more than anyone else has.\""] },
+          { "say": "\"What if you don't like it?\"", "kind": "listen", "reply": ["\"Then I'll know. That's the whole point of a book.\""] }
+        ]
+      }
+    },
+    "bitter-challenger": {
+      "first": {
+        "open": ["\"One of them beat me. {grunt}. Fair. I've not stopped thinking about it. Afterwards he gave me a *sandwich.*\""],
+        "openNo": ["\"I've beaten all of them that stood in front of me. Not one's said who's in charge. They just shrug. I want to hit something that knows why it's being hit.\""],
+        "ex1": [
+          { "say": "\"What was in it?\"", "kind": "listen", "reply": ["Thrown. \"...Cheese. And something. Pickle. Why does that matter?\" A pause. \"It was good. That's what's annoying.\""] },
+          { "say": "\"Did you want to beat him or be him?\"", "kind": "listen", "reply": ["They're on their feet. \"I—\" They sit down again. \"He wasn't angry. He won and he wasn't angry and he made a sandwich. I've never won and not been angry.\""] },
+          { "say": "\"Sit down. You're pacing.\"", "kind": "talk", "reply": ["They are. They sit. \"...Nobody tells me to sit down. They tell me to calm down. It's not the same.\""] }
+        ],
+        "ask": "\"How d'you stop being angry at somebody who's been decent to you?\"",
+        "ex3": [
+          { "say": "\"You don't have to.\"", "kind": "talk", "reply": ["\"Then what do I do with it?\""] },
+          { "say": "\"Who're you really angry at?\"", "kind": "listen", "reply": ["Nothing, for a while. \"...There was a kid at school. It doesn't matter.\""], "file": "Said something about school. Stopped." },
+          { "say": "\"Go and ask him for another sandwich.\"", "kind": "talk", "reply": ["A bark of a laugh. The first. \"I might.\""] }
+        ]
+      },
+      "second": {
+        "open": ["\"It's you again. You're always on this road.\" They don't look pleased. They've made room on the log anyway.", "\"I beat him. The sandwich one. Second go. He said 'Good. You'd been leaving your left side open.' He *coached* me. After *losing.* What is *wrong* with these people?\""],
+        "ex1": [
+          { "say": "\"Maybe nothing.\"", "kind": "talk", "reply": ["\"That's worse. That's so much worse.\""] },
+          { "say": "\"Were you leaving your left side open?\"", "kind": "listen", "reply": ["A long silence. \"...Yes.\""] },
+          { "say": "\"Did you thank him?\"", "kind": "listen", "reply": ["\"No.\" A pause. \"I'm going to have to, aren't I.\""] }
+        ],
+        "ask": "\"Is it stupid to want to fight the one in charge just to see if they're like him?\"",
+        "ex3": [
+          { "say": "\"No.\"", "kind": "talk", "reply": ["\"Good. Because I'm going to.\""] },
+          { "say": "\"What if they're not?\"", "kind": "listen", "reply": ["\"Then I'll know what to do with the anger.\""] },
+          { "say": "\"What if they are?\"", "kind": "listen", "reply": ["They don't answer that one. They put another log on, too hard."] }
+        ]
+      },
+      "third": {
+        "open": ["\"You know a lot about them. Don't. Don't say anything. If you're one of them I'll have to fight you and I'm *tired.*\"", "A long while.", "\"...Are they all right? The ones I've beaten. Do they get in trouble?\""],
+        "told": "\"Yeah. I know. I've known since the sandwich. Nobody else'd make one.\"",
+        "ex1": [
+          { "say": "\"No.\"", "kind": "talk", "reply": ["\"Good. I didn't— good.\""] },
+          { "say": "\"Some.\"", "kind": "talk", "reply": ["\"Which ones? ...No. Don't tell me. Tell whoever's in charge that if they dock the sandwich one I'll burn the place down.\" They mean it about one-third."] },
+          { "say": "\"Why d'you care?\"", "kind": "listen", "reply": ["\"Because I beat them. It's not their fault I beat them.\""] }
+        ],
+        "ask": "\"When you were angry, at my age. What did you do with it?\"",
+        "ex3": [
+          { "say": "\"Started something.\"", "kind": "talk", "reply": ["They look at you for a long time. \"...Yeah. I can see that.\""] },
+          { "say": "\"Nothing good.\"", "kind": "talk", "reply": ["\"Honest.\""] },
+          { "say": "\"What do you want to do with yours?\"", "kind": "listen", "reply": ["\"Put it somewhere it'll do some good. I just don't know where that is.\""] }
+        ]
+      },
+      "last": {
+        "open": ["\"I'm going to walk in there tomorrow and I'm going to be *so* angry. I've been saving it.\"", "\"I want you to know it's not about you. I mean it is. But it's not *only.*\""],
+        "ex1": [
+          { "say": "\"I know.\"", "kind": "talk", "reply": ["\"Good.\""] },
+          { "say": "\"Who's it about?\"", "kind": "listen", "reply": ["\"Everyone who ever made me sit in the corridor.\""] },
+          { "say": "\"Save some for after.\"", "kind": "talk", "reply": ["A short laugh. \"There'll be loads left. There always is.\""] }
+        ],
+        "ask": "\"If I lose tomorrow. Will they still feed me?\"",
+        "ex3": [
+          { "say": "\"Yes.\"", "kind": "talk", "reply": ["\"Okay.\" They lie down. They're asleep almost at once."] },
+          { "say": "\"If you win, too.\"", "kind": "talk", "reply": ["They don't answer. They don't stop smiling either."] },
+          { "say": "\"Why d'you ask?\"", "kind": "listen", "reply": ["\"Because I'm *tired.* I've been tired since the first region.\""] }
+        ]
+      }
+    },
+    "enthusiast": {
+      "first": {
+        "open": ["\"I met one! One of the team! {person}! They're *nice.* {personLine} Why are they in it?\""],
+        "ex1": [
+          { "say": "\"Ask them.\"", "kind": "talk", "reply": ["\"I did! They said 'It's a long story and you've got a Badge to get.' So I said I've got time and they said 'I haven't.' But they smiled.\""] },
+          { "say": "\"Why are you out here?\"", "kind": "listen", "reply": ["\"Everybody goes! You get your first one and you go. I didn't think about it. ...Should I have thought about it?\""] },
+          { "say": "\"Maybe it's the only place that'd have them.\"", "kind": "talk", "fx": "loyalty", "reply": ["They stop smiling. \"That's sad. That's really sad. Is that true? ...I'm going to ask them that.\""] }
+        ],
+        "ask": "\"D'you think people are mostly good? I do. Everyone says I'll grow out of it.\"",
+        "ex3": [
+          { "say": "\"Don't.\"", "kind": "talk", "reply": ["Delighted. \"I won't!\""] },
+          { "say": "\"Mostly. Not always when it counts.\"", "kind": "talk", "reply": ["\"When does it count?\""] },
+          { "say": "\"What'd you do if you met one who wasn't?\"", "kind": "listen", "reply": ["\"...I don't know. I've been trying to. I keep meeting your— I keep meeting *their* people and they keep being all right.\""] }
+        ]
+      },
+      "second": {
+        "open": ["\"It's you again! You're always on this road! Sit, sit. I've got loads to tell you.\"", "They've a list. It's names, each with a note. \"I'm trying to meet all of them. Then I'll know.\""],
+        "ex1": [
+          { "say": "\"Read me some.\"", "kind": "listen", "reply": ["They do. \"Funny.\" \"Scary then not.\" \"SOUP.\" Every one of them's somebody you know."] },
+          { "say": "\"What'll you know?\"", "kind": "listen", "reply": ["\"Whether it's a bad thing with good people in, or a good thing with bad people in. It's got to be one.\""] },
+          { "say": "\"Be careful.\"", "kind": "talk", "reply": ["\"Of them? They're *lovely.*\" A pause. \"Mostly.\""] }
+        ],
+        "ask": "\"Is it rude to ask somebody if they're happy?\"",
+        "ex3": [
+          { "say": "\"Depends who's asking.\"", "kind": "talk", "reply": ["\"Me. I'm asking.\" They grin."] },
+          { "say": "\"No.\"", "kind": "talk", "reply": ["\"Good. Because I've been asking everybody.\""] },
+          { "say": "\"What do they say?\"", "kind": "listen", "reply": ["\"Mostly 'fine.' One of them didn't say anything. I sat with him for a bit.\""] }
+        ]
+      },
+      "third": {
+        "open": ["\"You know a lot about them.\" Cheerfully.", "\"You're one of them, aren't you. It's fine! I've met loads. You're the oldest, though. Are you a— what's the one above Lead?\""],
+        "told": "The cheer goes out of them like a breath. Then: \"...Oh. Oh, that's— okay. Okay. Then I've got a lot of questions and you have to answer all of them because I've been *really nice* about this.\"",
+        "ex1": [
+          { "say": "\"Something like that.\"", "kind": "talk", "reply": ["\"I *knew* it.\" They're thrilled. They've got it wrong, and you can see they don't think so."] },
+          { "say": "\"Why d'you think so?\"", "kind": "listen", "reply": ["\"You talk about them like you know where they keep the spoons.\""] },
+          { "say": "(Smile.)", "kind": "listen", "reply": ["They smile back. They take it as a yes to whatever they thought."] }
+        ],
+        "ask": "\"Are *you* happy?\"",
+        "ex3": [
+          { "say": "\"Some days.\"", "kind": "talk", "reply": ["\"That's what everyone says. It's always 'some days.'\""] },
+          { "say": "\"No.\"", "kind": "talk", "reply": ["They go quiet. They sit closer. They don't say anything for the rest of the fire."] },
+          { "say": "\"Are you?\"", "kind": "listen", "reply": ["\"Yes! Mostly. Except about this.\""] }
+        ]
+      },
+      "last": {
+        "open": ["\"I've met {met} of them. Most were nice. Some were sad. One was horrible.\"", "\"So tomorrow I'm coming to find out which sort you are. I'm hoping. I want you to know I'm hoping.\""],
+        "ex1": [
+          { "say": "\"Which was horrible?\"", "kind": "listen", "reply": ["They tell you. You know the name."] },
+          { "say": "\"Keep hoping.\"", "kind": "talk", "reply": ["\"I always do. It's the one thing I'm good at.\""] },
+          { "say": "\"Which sort do you think?\"", "kind": "listen", "reply": ["\"I don't know! That's why I'm *coming.*\""] }
+        ],
+        "ask": "\"Will they all be there? Tomorrow? I want to say goodbye properly.\"",
+        "ex3": [
+          { "say": "\"Most of them.\"", "kind": "talk", "reply": ["\"Good. I've brought sweets.\""] },
+          { "say": "\"It might not be a goodbye.\"", "kind": "talk", "reply": ["They look up, very fast."] },
+          { "say": "\"Why goodbye?\"", "kind": "listen", "reply": ["\"Because after tomorrow it's different. Whatever happens.\""] }
+        ]
+      }
+    },
+    "idealist": {
+      "first": {
+        "open": ["\"They've got a sentence. On their door. I read it.\" They say it: \"'{sentence}'\"", "\"I've been thinking about it for three days. I don't think it's wrong. I think they're not doing it.\""],
+        "ex1": [
+          { "say": "\"What'd doing it look like?\"", "kind": "listen", "reply": ["At once, as if they'd been waiting for someone to ask: \"{doing}\""] },
+          { "say": "\"Sentences are easy.\"", "kind": "talk", "reply": ["\"No they're not. I've tried to write one. For me. For what I'm for. I've crossed out eleven.\" They show the page. \"They got theirs down to one line. That's hard. I just want them to *mean* it.\""] },
+          { "say": "\"Why d'you care if they mean it?\"", "kind": "listen", "reply": ["\"Because if they do, I'm fighting the wrong people.\" A pause. \"And if they don't, somebody should tell them what it says.\""] }
+        ],
+        "ask": "\"Have you ever said you'd do a thing, and then done a smaller thing, and told yourself it was the same?\"",
+        "ex3": [
+          { "say": "\"Yes.\"", "kind": "talk", "reply": ["They nod, slowly. \"What did you do after?\" You tell them you're still deciding. They accept that."] },
+          { "say": "\"Everyone has.\"", "kind": "talk", "reply": ["\"That's not an answer. That's a place to hide.\" Not unkindly."] },
+          { "say": "\"Have you?\"", "kind": "listen", "reply": ["\"...I told my mum I was going for Badges. I'm not. I've got three and I haven't looked at them. I'm going for the door with the sentence on.\""] }
+        ]
+      },
+      "second": {
+        "open": ["\"It's you again. You're always on this road.\" They've the sentence written on their hand, in ink, half washed off.", "{changed}"],
+        "ex1": [
+          { "say": "\"Maybe somebody did read it.\"", "kind": "talk", "reply": ["\"I hope so. I really hope so.\""] },
+          { "say": "\"What would you change first?\"", "kind": "listen", "reply": ["\"The door. Nobody should need a man on a door.\""] },
+          { "say": "\"Why's it on your hand?\"", "kind": "listen", "reply": ["\"So I don't forget what I'm holding them to.\""] }
+        ],
+        "ask": "\"Do you think a group can mean something? Or only people?\"",
+        "ex3": [
+          { "say": "\"Only people.\"", "kind": "talk", "reply": ["\"Then I'll need to find the person.\""] },
+          { "say": "\"A group can, if it's small enough.\"", "kind": "talk", "reply": ["\"How small?\" They look at you as if you'd know."] },
+          { "say": "\"What do you think?\"", "kind": "listen", "reply": ["\"I think a group means whatever the worst person in it'll do.\""] }
+        ]
+      },
+      "third": {
+        "open": ["\"You know a lot about them. You talk about them like— like they're yours to be disappointed in.\"", "They've got it. They don't say so."],
+        "told": "\"I know. I think I've known since the sentence. It sounded like you.\"",
+        "ex1": [
+          { "say": "\"I am disappointed.\"", "kind": "talk", "reply": ["\"Then do something about it. You can, can't you.\""] },
+          { "say": "\"What makes you say that?\"", "kind": "listen", "reply": ["\"The way you say 'them.' It's the way my mum says 'us.'\""] },
+          { "say": "(Say nothing.)", "kind": "listen", "reply": ["They let you. That's an answer too."] }
+        ],
+        "ask": "\"If I could say one thing to whoever wrote that sentence. Just one. What should it be?\"",
+        "ex3": [
+          { "say": "\"Ask if it's still true.\"", "kind": "talk", "fx": "heroLine", "reply": ["\"Okay. I'll ask.\""] },
+          { "say": "\"Tell them you read it.\"", "kind": "talk", "fx": "heroLine", "reply": ["\"I'll tell them. Out loud.\""] },
+          { "say": "\"Tell them it was a good sentence.\"", "kind": "talk", "fx": "heroLine", "reply": ["\"Was. Okay.\""] }
+        ]
+      },
+      "last": {
+        "open": ["\"I'm going to read it to you tomorrow. Your sentence. Out loud. In your own Office. And then I'm going to ask if it's still true.\"", "\"That's all. I'm not even bringing my best team. I don't think it's that kind of thing.\""],
+        "ex1": [
+          { "say": "\"It is.\"", "kind": "talk", "reply": ["\"Then you won't mind me asking.\""] },
+          { "say": "\"What if it isn't?\"", "kind": "listen", "reply": ["\"Then I'll write a better one on your wall. Under yours.\""] },
+          { "say": "\"Bring your best team anyway.\"", "kind": "talk", "reply": ["\"No.\" Gently. \"That's not what it's for.\""] }
+        ],
+        "ask": "\"What's yours? Not theirs. Yours. Your sentence.\"",
+        "ex3": [
+          { "say": "\"The same one.\"", "kind": "talk", "reply": ["\"Good. Then we'll see.\""] },
+          { "say": "\"I'm still writing it.\"", "kind": "talk", "reply": ["\"Me too.\" They show you their hand. Eleven crossings-out."] },
+          { "say": "\"Why does it matter?\"", "kind": "listen", "reply": ["\"Because you'll have to say it tomorrow, and I'd like it to be yours.\""] }
+        ]
+      }
+    },
+    "prodigy": {
+      "first": {
+        "open": ["\"My father'd know what to do. He'd have a speech. I've been trying to write one.\""],
+        "ex1": [
+          { "say": "\"Read me it.\"", "kind": "listen", "reply": ["They stand up to do it. They've a piece of paper. \"'Villains of— of this region. I am—' That's my name. '—and I have come to bring you to justice. Lay down your—' I don't know what they've got. '—your things.'\" They sit down. \"It's rubbish. His weren't rubbish.\""] },
+          { "say": "\"What would you do, if nobody'd know?\"", "kind": "listen", "reply": ["The longest silence of the night. \"...Go and look at the sea, I think. I've never just looked at it. We always had somewhere to be.\""] },
+          { "say": "\"What did he do, when it was him?\"", "kind": "listen", "reply": ["\"Won. He always just won. There's a photograph. He's holding a cup and he's not smiling.\" A pause. \"I asked him once what it was like. He said, 'It was what was expected.'\""] }
+        ],
+        "ask": "\"Were you good at this? When you were my age? I'm good at it. Everyone says. I don't know if I *like* it.\"",
+        "ex3": [
+          { "say": "\"I liked it. I wasn't good.\"", "kind": "talk", "reply": ["\"That sounds better.\""] },
+          { "say": "\"Does it matter if you like it?\"", "kind": "listen", "reply": ["\"It's meant not to.\" They don't sound sure."] },
+          { "say": "\"What do you like?\"", "kind": "listen", "reply": ["Nobody's asked. \"...Sandile. I like Sandile. They're not strong. I'm not allowed one on the team.\""], "file": "Likes Sandile. Isn't allowed one." }
+        ]
+      },
+      "second": {
+        "open": ["\"It's you again. You're always on this road.\" They're sitting differently. Looser.", "\"I looked at the sea. Somebody said, what would I do if nobody'd know. I looked at it for two hours. I missed a Gym slot. My father rang. I said I'd been training.\"", "\"That's the first time I've lied to him. It was *easy.* Is that bad?\""],
+        "ex1": [
+          { "say": "\"A bit.\"", "kind": "talk", "reply": ["\"Yeah.\" They seem relieved somebody said it."] },
+          { "say": "\"What did the sea look like?\"", "kind": "listen", "reply": ["\"Big. Grey. It didn't care who I was.\" They smile. \"I liked that best.\""] },
+          { "say": "\"Was it worth two hours?\"", "kind": "listen", "reply": ["\"Yes.\" No hesitation at all."] }
+        ],
+        "ask": "\"Do you ever do what you want instead of what you should?\"",
+        "ex3": [
+          { "say": "\"Every day.\"", "kind": "talk", "reply": ["\"Does it get easier?\" \"No.\" \"Oh.\""] },
+          { "say": "\"Not often enough.\"", "kind": "talk", "reply": ["\"I thought adults just did what they wanted.\""] },
+          { "say": "\"Do you know what you want?\"", "kind": "listen", "reply": ["\"...I'm starting to.\""] }
+        ]
+      },
+      "third": {
+        "open": ["\"You know a lot about them. I'm expected to do something about that.\" They don't move. \"I'm so tired of what's expected.\"", "\"If you are who I think you are, I'm supposed to fight you now. I've decided I'm going to do it tomorrow. In the proper place. Tonight I'd like to just sit. Is that allowed? I'm asking you. You're the only adult I know who doesn't answer for somebody else.\""],
+        "told": "\"Yes. I know. Thank you for saying it yourself. Nobody in my family ever does.\"",
+        "ex1": [
+          { "say": "\"It's allowed.\"", "kind": "talk", "reply": ["They let out a breath. They sit back. They look about eleven, for once."] },
+          { "say": "\"Who'd stop you?\"", "kind": "listen", "reply": ["\"Nobody. That's the strange part. Nobody's here.\""] },
+          { "say": "(Put another log on.)", "kind": "listen", "reply": ["They watch it catch. They don't say anything else for a long time, and it's fine."] }
+        ],
+        "ask": "\"When you started. Was it what you wanted? Or what was expected?\"",
+        "ex3": [
+          { "say": "\"What I wanted.\"", "kind": "talk", "reply": ["\"Then you're luckier than him.\""] },
+          { "say": "\"Nobody expected anything.\"", "kind": "talk", "reply": ["\"That sounds lonely. And nice.\""] },
+          { "say": "\"Ask me tomorrow.\"", "kind": "talk", "reply": ["\"I will.\" They mean it."] }
+        ]
+      },
+      "last": {
+        "open": ["\"I've written the speech. It's good now.\" They don't read it.", "\"I'm not going to use it. I'm going to ask you what you wanted. When you started. Before it was what was expected.\""],
+        "ex1": [
+          { "say": "\"I'll tell you.\"", "kind": "talk", "reply": ["\"Good. Tell me the true one. I've heard the other kind all my life.\""] },
+          { "say": "\"Read me the speech anyway.\"", "kind": "listen", "reply": ["They do. It's good. It's very good. Then they fold it into a boat and put it in the fire."] },
+          { "say": "\"What did you want?\"", "kind": "listen", "reply": ["\"To look at the sea. I've done that now. So I need a new one.\""] }
+        ],
+        "ask": "\"Will you be honest tomorrow? Even if it's worse?\"",
+        "ex3": [
+          { "say": "\"Yes.\"", "kind": "talk", "reply": ["\"Thank you.\""] },
+          { "say": "\"I'll try.\"", "kind": "talk", "reply": ["\"That's more than most.\""] },
+          { "say": "\"Will you?\"", "kind": "listen", "reply": ["\"...Yes. I think I'm going to be honest with everybody for a while. It's going to be very awkward.\""] }
+        ]
+      }
+    },
+    "underdog": {
+      "first": {
+        "open": ["\"Sorry. Is it all right if I sit here? I can go somewhere else. ...Thanks. Sorry.\"", "A while.", "\"I lost to one of them today. I lose to most people. She said sorry. *She* said sorry to *me.* I didn't know what to do so I said sorry back.\""],
+        "awake": true,
+        "ex1": [
+          { "say": "\"How many've you lost?\"", "kind": "listen", "reply": ["\"Eleven. I've won four. I write them down.\" They show a tally. It's very neat. \"My mum says it's the going that counts. She's being nice.\""] },
+          { "say": "\"Why d'you keep going?\"", "kind": "listen", "reply": ["\"...He won't let me stop.\" The {mon}. It's awake. It's watching you. \"Every time I say let's go home he walks the other way.\""] },
+          { "say": "\"Stop saying sorry.\"", "kind": "talk", "reply": ["\"Sor—\" They stop. They laugh, a bit. \"Okay.\""] }
+        ],
+        "ask": "\"Does it get easier? Don't say yes if it doesn't.\"",
+        "ex3": [
+          { "say": "\"No. You get better.\"", "kind": "talk", "reply": ["They write that on the tally sheet, at the top."] },
+          { "say": "\"Yes.\"", "kind": "talk", "reply": ["\"Okay.\" They don't believe it. They're grateful it was said."] },
+          { "say": "\"What'd make it easier tonight?\"", "kind": "listen", "fx": "practice", "reply": ["\"...Could you show me what I did wrong? She led with a bug thing and I didn't know what to do.\""] }
+        ]
+      },
+      "second": {
+        "open": ["\"It's you again. You're always on this road.\" They didn't ask if they could sit.", "\"I've won nine. I've stopped writing down the losses. I thought about what you said.\"", "\"One of the team's people asked me for advice. A Grunt. He'd lost four in a row. I told him what you told me. Is that— was that helping the enemy?\""],
+        "ex1": [
+          { "say": "\"No.\"", "kind": "talk", "reply": ["\"Good. He won his next one. He waved.\""] },
+          { "say": "\"Does it matter?\"", "kind": "listen", "reply": ["\"...No. He was sad. That's all that mattered.\""] },
+          { "say": "\"What did you tell him?\"", "kind": "listen", "reply": ["\"That you don't get easier. You get better.\" They look at you. \"Your words.\""] }
+        ],
+        "ask": "\"Can I show you something? I've been practising.\"",
+        "ex3": [
+          { "say": "\"Show me.\"", "kind": "listen", "reply": ["Their {mon} does a thing it couldn't do a region ago. They're trying very hard not to look proud."] },
+          { "say": "\"Tomorrow.\"", "kind": "talk", "reply": ["\"Okay. Tomorrow.\" They don't seem to mind."] },
+          { "say": "\"You don't need to show me.\"", "kind": "talk", "reply": ["\"I know. I want to.\""] }
+        ]
+      },
+      "third": {
+        "open": ["\"You know a lot about them.\" Quietly. Carefully.", "\"I think you're one. I think you might be the main one. I've thought so since the practice. Nobody who wasn't in charge'd have that many good Pokémon and use the worst.\"", "\"I'm not scared of you. I want you to know I've checked and I'm not.\""],
+        "told": "\"I know. I've known since the practice. I just wanted to hear you say it.\"",
+        "ex1": [
+          { "say": "\"Good.\"", "kind": "talk", "reply": ["\"Good,\" they agree. They sound surprised it's true."] },
+          { "say": "\"Why aren't you?\"", "kind": "listen", "reply": ["\"Because you showed me what I was doing wrong. People who are going to hurt you don't do that.\""] },
+          { "say": "(Say nothing.)", "kind": "listen", "reply": ["They nod, as if you'd said something."] }
+        ],
+        "ask": "\"If I come to the building. Will you fight me properly? Not easy. Properly.\"",
+        "ex3": [
+          { "say": "\"Properly.\"", "kind": "talk", "reply": ["\"Thank you.\" They mean it more than anything they've said."] },
+          { "say": "\"If you want.\"", "kind": "talk", "reply": ["\"I want.\""] },
+          { "say": "\"Why properly?\"", "kind": "listen", "reply": ["\"Because everyone's always let me off. I want to know if I'm actually good.\""] }
+        ]
+      },
+      "last": {
+        "open": ["\"I've got eight. Me. I counted them twice.\" They aren't apologising for anything.", "\"I'm coming tomorrow. I'm probably going to lose. I've lost to nearly everybody at least once and then I've come back. So if I lose tomorrow I want you to know I'm coming back the day after.\""],
+        "ex1": [
+          { "say": "\"I know you will.\"", "kind": "talk", "reply": ["\"Good.\" No sorry. Not once."] },
+          { "say": "\"What if you win?\"", "kind": "listen", "reply": ["\"...I hadn't thought about that.\" They think about it now. They smile, slowly."] },
+          { "say": "\"I'll be there.\"", "kind": "talk", "reply": ["\"I know. That's why I'm coming.\""] }
+        ],
+        "ask": "\"Do you think I'm good now? Honestly?\"",
+        "ex3": [
+          { "say": "\"Yes.\"", "kind": "talk", "reply": ["They don't say anything. They just hold their {mon} a bit tighter."] },
+          { "say": "\"Better.\"", "kind": "talk", "reply": ["\"Better's good. Better's what you said.\""] },
+          { "say": "\"Do you?\"", "kind": "listen", "reply": ["\"...Yeah. I think I do.\""] }
+        ]
+      }
+    }
+  },
+  "middle": [
+    { "open": "\"D'you want half of this?\" They hold out whatever they're eating.", "ex1": [
+      { "say": "\"Yes.\"", "kind": "talk", "reply": ["You eat. Nobody says anything. It's good."] },
+      { "say": "\"What is it?\"", "kind": "listen", "reply": ["\"No idea. A woman in the last town gave it me.\""] },
+      { "say": "(Shake your head.)", "kind": "listen", "reply": ["They eat it all. They don't mind."] } ] },
+    { "open": "\"Still here, then.\"", "ex1": [
+      { "say": "\"Still here.\"", "kind": "talk", "reply": ["\"Me too.\""] },
+      { "say": "\"Where else would I be?\"", "kind": "listen", "reply": ["\"Home. That's where I'd be.\""] },
+      { "say": "(Nod.)", "kind": "listen", "reply": ["They nod back."] } ] },
+    { "open": "They're asleep when you get there. The fire's still going. You sit anyway.", "ex1": [
+      { "say": "(Put a log on.)", "kind": "listen", "reply": ["They wake up enough to see who it is, and go back to sleep."] },
+      { "say": "(Wake them.)", "kind": "talk", "reply": ["\"Oh. It's you. Good.\""] },
+      { "say": "(Leave a Berry.)", "kind": "listen", "reply": ["In the morning it's gone, and so are they."] } ] },
+    { "open": "\"I had a letter from home. D'you want to hear it?\"", "ex1": [
+      { "say": "\"Yes.\"", "kind": "listen", "reply": ["They read it aloud. It's ordinary. It's the best thing you've heard all region."] },
+      { "say": "\"Keep it for you.\"", "kind": "talk", "reply": ["They fold it up again. \"Okay.\""] },
+      { "say": "\"Is everyone well?\"", "kind": "listen", "reply": ["\"Mostly.\""] } ] },
+    { "open": "\"My {mon}'s evolved. Look.\"", "ex1": [
+      { "say": "\"It's grown.\"", "kind": "talk", "reply": ["\"So have I. Apparently.\""] },
+      { "say": "\"When?\"", "kind": "listen", "reply": ["\"In a fight with one of theirs. Funny, that.\""] },
+      { "say": "(Look at it properly.)", "kind": "listen", "reply": ["It looks back at you. It remembers you."] } ] },
+    { "open": "\"I'm not going to ask you anything tonight.\"", "ex1": [
+      { "say": "\"Good.\"", "kind": "talk", "reply": ["\"Good,\" they agree."] },
+      { "say": "\"Why not?\"", "kind": "listen", "reply": ["\"Because I know most of it now. And the rest I want to hear somewhere else.\""] },
+      { "say": "(Say nothing.)", "kind": "listen", "reply": ["Neither of you does."] } ] },
+    { "open": "\"It's raining. Budge up.\"", "ex1": [
+      { "say": "(Budge up.)", "kind": "listen", "reply": ["Two people under one bit of tarp. The fire hisses."] },
+      { "say": "\"There's room.\"", "kind": "talk", "reply": ["\"There's never room. Budge up.\""] },
+      { "say": "\"Your {mon}'s getting wet.\"", "kind": "talk", "reply": ["\"It likes it. It's weird.\""] } ] },
+    { "open": "\"How many more regions, d'you think?\"", "ex1": [
+      { "say": "\"Not many.\"", "kind": "talk", "reply": ["\"Good. I miss my bed.\""] },
+      { "say": "\"Why?\"", "kind": "listen", "reply": ["\"Because I'm counting. Not down. Just counting.\""] },
+      { "say": "\"Enough.\"", "kind": "talk", "reply": ["\"That's what my mum says about pudding.\""] } ] }
+  ],
+  "idealistDoing": {
+    "profit": "Everybody paid. Not just them.",
+    "cause": "Nobody frightened. If it's *for* people you can't frighten people to get it.",
+    "power": "Somebody in charge who'd step down if they were wrong. I've never seen that.",
+    "wonder": "Looking, and leaving it there. You don't have to take a thing to see it.",
+    "belonging": "A door that's open. Theirs has a man on it.",
+    "spite": "Just the one person, then. Not everyone in the way."
+  },
+  "idealistChanged": {
+    "yes": "\"They've changed something. Nobody made them. D'you think somebody on the inside *read it?*\"",
+    "no": "\"Two regions. Same sentence. Same everything. I've stopped thinking they've forgotten. I think they know.\""
+  },
+  "own": {
+    "always": ["\"Look after that one.\"", "\"Go home.\""],
+    "creed": {
+      "profit": ["\"Nothing's free. Not even this fire.\"", "\"Count what it costs you. Not just the money.\"", "\"Everybody's paying for something.\"", "\"Get paid for what you're good at.\"", "\"Keep your own books.\"", "\"Somebody always pays. Try not to make it the small ones.\""],
+      "cause": ["\"Some things are worth getting in trouble for.\"", "\"Don't wait for somebody else to fix it.\"", "\"Be angry about the right things.\"", "\"Ask who it's for.\"", "\"The world's not fair. You don't have to be like it.\"", "\"Keep asking why.\""],
+      "power": ["\"Don't let anyone tell you how far to go.\"", "\"Be the one who decides.\"", "\"Strong's not the same as right. Be both.\"", "\"Nobody gives it to you. You take it.\"", "\"Win. Then be decent about it.\"", "\"Find out what you're for, before someone tells you.\""],
+      "wonder": ["\"Look at things. Properly.\"", "\"There's always more under the floor.\"", "\"Go and see for yourself.\"", "\"Don't take what you find. Just find it.\"", "\"The old places remember.\"", "\"Stay curious. It's harder than it sounds.\""],
+      "belonging": ["\"Find your people.\"", "\"Nobody gets anywhere alone.\"", "\"Look after whoever's next to you.\"", "\"Everyone's from somewhere. Don't forget yours.\"", "\"Somebody's always waiting for you to come back.\"", "\"Share the fire.\""],
+      "spite": ["\"Don't let one person decide who you are.\"", "\"Anger's a good fire. Don't sleep in it.\"", "\"Some people deserve what's coming. Most don't.\"", "\"Know who you're angry at.\"", "\"Don't spend your whole life chasing one person.\"", "\"Forgive the ones who didn't know better.\""]
+    },
+    "line": {
+      "clean": ["\"There's always a better way. Look for it.\"", "\"Don't hurt anybody you don't have to.\"", "\"Be kind when it costs you.\"", "\"Keep your hands clean.\"", "\"Be someone your mum'd recognise.\"", "\"Mean what you say.\""],
+      "grey": ["\"Nobody's all one thing.\"", "\"Pick your fights.\"", "\"Sometimes the right thing's the smaller thing.\"", "\"Don't believe everything people say about anyone.\"", "\"Everybody's got a reason.\"", "\"It's never as simple as it looks.\""],
+      "whatever": ["\"Don't come looking for them.\"", "\"Some doors you don't open.\"", "\"You won't like what you find.\"", "\"Stay off this road.\"", "\"Turn round. Go home.\"", "\"It's not your fight. It's mine.\""]
+    }
+  },
+  "quoted": {
+    "said": "\"You sat across a fire from me and said, {own}\"",
+    "silence": "\"You didn't say anything. You put a log on. I've thought about that more than anything anyone's told me.\"",
+    "none": "\"Nobody sat with me. Not once. There's usually somebody on that road.\""
+  },
+  "notebook": {
+    "title": "The notebook",
+    "intro": "It's the File, from the other side.",
+    "cols": ["What they did", "Why?"],
+    "why": "",
+    "none": "A page of headings. Nothing under them yet.",
+    "prices": "A list of prices, each a bit under what was paid.",
+    "total": "Total: more than they've taken? CHECK."
+  },
+  "practice": {
+    "begin": "A practice battle. No stakes: your weakest against their {mon}.",
+    "after": "They've watched every move. \"Oh. *Oh.* That's what I was doing.\"",
+    "mark": "One mark toward the Doctrine: you've just trained the Hero to beat the team, on purpose, because a child asked."
+  },
+  "loyalty": "{name}, that Evening: \"A kid asked me if this was the only place that'd have me. I said no. Then I thought about it. I said, it's the only place I'd have.\"",
+  "heroLine": "They'll say it to whoever wrote the sentence. In the last room. Word for word."
+}

@@ -9,7 +9,8 @@
 import { openRoadHome, roadHomeDue } from '../core/co/roadHome';
 import { applyEvilEffect, evilTeam } from '../core/evil/teams';
 import { skyAct, type SkyAction } from '../core/evil/teamSky';
-import { ensureEvil, foundInRun, stepInRun } from '../core/evilMode/session';
+import { charterInRun, ensureEvil, finishEvil, foundInRun, stepInRun } from '../core/evilMode/session';
+import { turnOffer, turnRun, walkAway, type TurnOffer } from '../core/evilMode/turn';
 import { beginEvilFight } from '../core/evilMode/fight';
 import type { FoundingChoice } from '../core/evilMode/start';
 import type { EvilAction, EvilCue } from '../core/evilMode/day';
@@ -1064,11 +1065,44 @@ export class GameSession {
 
   /** Evil Mode founding (core/evilMode): writes the team once and saves. Returns why it couldn't, or null. */
   evilFound(choice: FoundingChoice, stage?: number): string | null {
-    const out = foundInRun(this.requireRun(), choice, this.settings.expansion.evilRunLength, stage);
+    const out = foundInRun(this.requireRun(), choice, this.settings.expansion.evilRunLength, stage, { shadow: this.settings.expansion.evilShadow, incursions: this.settings.expansion.ultraBeastsEnabled });
     if (out.problem) return out.problem;
     this.run = out.run;
     this.persistRun();
     return null;
+  }
+
+  /** Evil Mode slice 22: takes a Charter (Part 28) and saves. Returns why it couldn't, or null. */
+  evilCharter(id: string): string | null {
+    const out = charterInRun(this.requireRun(), id, this.settings.expansion.evilRunLength);
+    if (out.problem) return out.problem;
+    this.run = out.run;
+    this.persistRun();
+    return null;
+  }
+
+  /** Evil Mode slice 22: the Turn's card, when this run has earned it (the takeover was won and a region remains). */
+  evilTurnOffer(): TurnOffer | null {
+    return this.run ? turnOffer(this.run, { evilOn: this.settings.expansion.evilMode }) : null;
+  }
+
+  /** Evil Mode slice 22: "Take the chair" (after its confirm). The rest of the run is an Evil Mode run. */
+  evilTurn(): boolean {
+    const run = this.run;
+    if (!run || !this.evilTurnOffer()) return false;
+    const out = turnRun(run);
+    if (!out) return false;
+    this.run = out;
+    this.persistRun();
+    return true;
+  }
+
+  /** Evil Mode slice 22: "Take it all, and walk away": the run goes on as it does today; the card won't come back. */
+  evilWalkAway(): void {
+    const run = this.run;
+    if (!run || !this.evilTurnOffer()) return;
+    this.run = walkAway(run);
+    this.persistRun();
   }
 
   /** Evil Mode: a block saved before slice 2 gets its district (laid from the run's seed) and is saved once. */
@@ -1097,6 +1131,16 @@ export class GameSession {
     this.run = out.run;
     this.persistRun();
     return out.cues;
+  }
+
+  /** Evil Mode slice 15: the ending's last scene is read; the run ends (the run-end page, the Hall of Fame card). */
+  evilFinish(): boolean {
+    const out = finishEvil(this.requireRun());
+    if (!out) return false;
+    this.run = out;
+    this.persistRun();
+    this.finishRun();
+    return true;
   }
 
   /** Team Sky's screens (core/evil/teamSky): one action, saved; the message says what happened. */

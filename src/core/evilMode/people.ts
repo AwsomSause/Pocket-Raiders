@@ -13,6 +13,8 @@ export type DeckPerson = EvilData['people']['people'][number];
 export const deckPerson = (ref: string | null, data: EvilData = EVIL_DATA): DeckPerson | undefined => (ref ? data.people.people.find((p) => p.id === ref) : undefined);
 export const talentDef = (t: Talent, data: EvilData = EVIL_DATA) => data.people.talents.find((x) => x.id === t)!;
 export const flawDef = (f: string, data: EvilData = EVIL_DATA) => data.people.flaws.find((x) => x.id === f)!;
+/** A flaw's name, or the word for none listed (Part 10b section 6: one person has none). */
+export const flawName = (f: string | null, data: EvilData = EVIL_DATA): string => (f ? flawDef(f, data).name : 'None listed');
 export const rankDef = (r: Rank, data: EvilData = EVIL_DATA) => data.people.ranks.find((x) => x.id === r)!;
 export const peopleText = (k: string, data: EvilData = EVIL_DATA): string => {
   const t = data.people.text[k];
@@ -20,10 +22,13 @@ export const peopleText = (k: string, data: EvilData = EVIL_DATA): string => {
 };
 
 /** A person's line, as they'd say it (their own wording where the deck has one). */
-export function lineText(p: Pick<Crew, 'line' | 'ref'>, data: EvilData = EVIL_DATA): string {
+/** Slice 21: given the block, line 7 doesn't name the Shadow branch when it's removed from the run. */
+export function lineText(p: Pick<Crew, 'line' | 'ref'>, data: EvilData = EVIL_DATA, block?: EvilModeBlock): string {
   if (p.line === null) return '';
-  return deckPerson(p.ref, data)?.lineText ?? data.people.lines.find((l) => l.n === p.line)!.text;
+  const t = deckPerson(p.ref, data)?.lineText ?? data.people.lines.find((l) => l.n === p.line)!.text;
+  return block && !(block.settings.shadow && block.edges.shadow) ? plainLine(p.line, t, data) : t;
 }
+const plainLine = (n: number, t: string, data: EvilData): string => (n === 7 && t === data.edges.shadow.lineSeven ? data.edges.shadow.lineSevenRemoved : t);
 
 /** Everyone still on the Roster. A person who left stays in the list (Part 30 section 3.3) but isn't "in". */
 export const inRoster = (block: EvilModeBlock): Crew[] => block.crew.filter((c) => c.where === 'in');
@@ -45,6 +50,12 @@ export function teamLoyalty(block: EvilModeBlock, data: EvilData = EVIL_DATA): n
   if (!ins.length) return data.creeds.find((c) => c.id === block.team.creed)?.start.loyalty ?? 5;
   // Slice 9: a Grunt who's seen three Bosses keeps team Loyalty at 2 or more (Part 3 section 9.5), on the rule hook.
   const floor = data.region.on && block.team.patron ? modify(block, 'loyaltyFloor', {}, 0, data) : 0;
+  // Slice 22: the Joint Command keeps Loyalty twice, red and blue, and the team's is the lower (Part 28 section 6.3).
+  if (block.charter?.rule === 'two-colours') {
+    const blue = new Set(block.charter.blue);
+    const mean = (xs: Crew[]) => (xs.length ? Math.floor(xs.reduce((n, c) => n + c.loyalty, 0) / xs.length) : 10);
+    return Math.max(floor, Math.min(mean(ins.filter((c) => !blue.has(c.id))), mean(ins.filter((c) => blue.has(c.id)))));
+  }
   return Math.max(floor, Math.floor(ins.reduce((n, c) => n + c.loyalty, 0) / ins.length));
 }
 
@@ -118,7 +129,7 @@ export function crossers(block: EvilModeBlock, job: { holdingId: string; method:
 export function wontText(block: EvilModeBlock, job: { holdingId: string; method: JobMethod; squad: readonly string[] }, data: EvilData = EVIL_DATA): string {
   const who = crossers(block, job, data);
   if (!who.length) return peopleText('wontNone', data);
-  const list = who.map((p) => `${p.name} ("${lineText(p, data).replace(/^Won't/, "won't").replace(/\.$/, '')}")`).join('. ');
+  const list = who.map((p) => `${p.name} ("${lineText(p, data, block).replace(/^Won't/, "won't").replace(/\.$/, '')}")`).join('. ');
   return peopleText('wontSome', data).replace('{list}', list);
 }
 
@@ -127,7 +138,7 @@ export function teamWont(block: EvilModeBlock, data: EvilData = EVIL_DATA): { li
   const by = new Map<string, string[]>();
   for (const p of inRoster(block)) {
     if (p.line === null || !p.lineHeard) continue;
-    const t = data.people.lines.find((l) => l.n === p.line)!.text;
+    const t = lineText({ line: p.line, ref: null }, data, block);
     by.set(t, [...(by.get(t) ?? []), p.name]);
   }
   return [...by.entries()].map(([line, who]) => ({ line, who }));
@@ -156,15 +167,20 @@ export const peopleRoll = (seed: string, n: number, max: number): number => new 
 export function weightOf(p: DeckPerson, creed: string, data: EvilData = EVIL_DATA): number {
   const W = data.people.rules.weights;
   const c = data.people.rules.creeds[creed];
-  const marks = [p.talent, p.flaw, ...(p.age < W.youngUnder ? ['young'] : []), ...(p.age > W.oldOver ? ['old'] : [])];
+  const marks: string[] = [p.talent, ...(p.flaw ? [p.flaw] : []), ...(p.age < W.youngUnder ? ['young'] : []), ...(p.age > W.oldOver ? ['old'] : [])];
   let w = W.base + W.more * (c?.more.filter((m) => marks.includes(m)).length ?? 0);
   if (c?.less.some((m) => marks.includes(m))) w = Math.max(1, Math.floor(w / W.lessDivide));
   return w;
 }
 
-/** The deck for a region: the Founders only in the first region, beside the region's own twelve. Nobody twice a run. */
-export function deckFor(region: number, drawn: readonly string[], data: EvilData = EVIL_DATA): DeckPerson[] {
-  const decks = region === 0 ? ['founders', 'kanto'] : [];
+/**
+ * The deck for a region (Part 10a section 1): the region's own twelve (by its id: Kanto, Johto, Hoenn so far), and the
+ * Founders beside them only in the run's first region (`run` is the region-of-run, 0 for the first). Nobody twice a run.
+ * Those who come only when (deck 'special') are never drawn: they arrive on their own (quest.ts `specialArrivals`).
+ */
+export function deckFor(region: number, drawn: readonly string[], data: EvilData = EVIL_DATA, run = 0): DeckPerson[] {
+  const id = data.region.regions.find((r) => r.index === region)?.id ?? (region === 0 ? 'kanto' : '');
+  const decks: string[] = [id, ...(run === 0 ? ['founders'] : [])];
   return data.people.people.filter((p) => decks.includes(p.deck) && !drawn.includes(p.id) && p.status !== 'disabled' && p.status !== 'invalid');
 }
 
@@ -182,7 +198,7 @@ export function drawOne(pool: readonly DeckPerson[], creed: string, seed: string
 
 /** A deck person made a Roster card: a Grunt, at the Creed's starting Loyalty. The flaw's shown at hiring (Part 9 section 3); the line only if they said it. */
 export function personFrom(d: DeckPerson, loyalty: number, known: { line?: boolean } = {}): Crew {
-  return { id: d.id, ref: d.id, name: d.name, age: d.age, minor: !!d.minor, talent: d.talent, flaw: d.flaw, flawFound: true, line: d.line, lineHeard: !!known.line, rank: 'grunt', loyalty, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null };
+  return { id: d.id, ref: d.id, name: d.name, age: d.age, minor: !!d.minor, talent: d.talent, flaw: d.flaw, flawFound: true, line: d.line, lineHeard: !!known.line, rank: 'grunt', loyalty, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null, mood: 'easy', knocks: 0 };
 }
 
 /**

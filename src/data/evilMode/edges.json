@@ -1,0 +1,161 @@
+{
+  "note": "Evil Mode slice 21, the edges (design Part 27 section 4: Incursions for a Boss; Part 5 section 8 and Part 16 section 6: the Shadow branch). Numbers are starting values, not playtested.",
+  "incursions": {
+    "on": true,
+    "numbers": { "tearDays": 3, "holdGrunts": 6, "regard": 1, "regardUnova": 2, "fundsSat": 20000, "lowOdds": 40, "loudHeat": 2, "squadDays": 3, "togetherTemper": 2, "beastOffset": 4, "homesickLeave": 10, "lookerFromRegion": 2 },
+    "appetites": {
+      "dependence": "Jobs the Boss went on in person because nobody else could be trusted with them.",
+      "strength": "Outplay wins, by anyone.",
+      "flawlessness": "Districts with no failed job.",
+      "charge": "Funds sat on: every Evening over ₽20,000.",
+      "patience": "Quiet days: an Evening with nothing sent.",
+      "precision": "Jobs that landed at under 40%.",
+      "consumption": "Takes. Each one.",
+      "formation": "Standing squads: the same squad out three times in a district.",
+      "spectacle": "Loud days: Heat +2 or more in a day.",
+      "longing": "People who left and weren't written to."
+    },
+    "static": {
+      "title": "Static",
+      "lead": "Nothing on the Board. Everything else is slightly off.",
+      "radio": "The Radio: the presenter reads the item, stops, and reads it again, word for word, and doesn't notice.",
+      "bark": "{name}, by the window: \"Did the light just— no. Never mind.\"",
+      "kit": "One of {name}'s Pokémon won't go back in its Ball today. Something's listening.",
+      "cat": "The cat is on top of the highest thing in the building.",
+      "knockKiele": "Kiele, at the door: \"I've logged three lights that weren't stars. This is a fourth. It's over us.\"",
+      "knock": "{name}, down from the roof: \"There's a light over us. It isn't a star.\"",
+      "hero": "Didn't sleep. Kept looking up."
+    },
+    "tear": {
+      "title": "A Tear",
+      "opens": "A Tear opens over {holding}. {who} is standing in the road looking at it.",
+      "chip": "A Tear: open, {n} day{s}",
+      "rule": "{rule} It's in every battle in the district: the team's and everybody else's.",
+      "pays": "{holding} pays nothing while it's open. Its street pays half.",
+      "unknown": "We don't know.",
+      "card": {
+        "name": "A TEAR · {holding} · THE DAY",
+        "from": "The sky over {holding}.",
+        "moves": "Regard or Dread, by {n}, by what's done in the next {days} days.",
+        "odds": "There aren't any.",
+        "going": "{going}",
+        "wont": "Nobody's said no. Nobody's said anything.",
+        "holds": "It holds for {days} days. Then something comes out.",
+        "hero": "The kid's here too. For three days you're in the same street for the same reason.",
+        "written": "Day {day}. {holding}. A hole in the sky. The team {did}.",
+        "other": "There isn't another way. There's what you do, and what comes out."
+      },
+      "who": {
+        "district": "The district asks the team what it's going to do. Whatever you've been to them, you're the nearest thing to somebody in charge.",
+        "detective": "The detective arrives without the list: \"I'm not here about you. For once.\" Heat can't rise while it's open.",
+        "neighbour": {
+          "giovanni": "Giovanni sends six men with rope and no questions.",
+          "archer": "Archer sends a note: \"The Boss would want to know what it is. So do I.\"",
+          "archie": "Archie comes down to the water to see it, and says it'd look better over the sea.",
+          "maxie": "Maxie sends a memo asking for measurements.",
+          "other": "The neighbour sends a message. It asks what you're going to do."
+        },
+        "hero": "The kid comes. Of course they do.",
+        "looker": "Looker. He's done this before. He doesn't ask who the Boss is. He asks who's the best door-holder you've got."
+      },
+      "choices": {
+        "through": { "label": "Go through", "sub": "In person: the Beast's home world, its law, a fight. It can be calmed, caught or left.", "did": "went through" },
+        "together": { "label": "(Go through together.)", "sub": "With the kid. Two parties, the Tear's law on both.", "did": "went through it with the kid" },
+        "hold": { "label": "Hold the street", "sub": "Six off every other job for three days. Nobody goes near; it comes out anyway, to an empty street.", "did": "held the street" },
+        "leave": { "label": "Leave it", "sub": "Nothing. The Beast takes the district's next battle, whoever's it was meant to be.", "did": "left it" }
+      },
+      "why": {
+        "inPerson": "Going through is In person: wait for the beat.",
+        "used": "The Boss has already been out today.",
+        "together": "Only when the kid's Set or worse.",
+        "chosen": "It's been decided.",
+        "six": "Six people need to be free to hold the street.",
+        "none": "There's no Tear open."
+      },
+      "holding": "{name} is holding the street by the Tear.",
+      "won": "It's gone back. The sky over {holding} closes like a door.",
+      "caught": "It's in a ball, and it's ours, and it doesn't want to be here.",
+      "lost": "It threw you out. The Tear's still open.",
+      "together": "We've fought something together. I've not forgotten.",
+      "togetherFile": "Fought the thing in the Tear beside the Boss. Hasn't said what it changes.",
+      "heldOut": "On the third day it comes out. The street's empty. Nobody's hurt, and the district saw the team stand there.",
+      "comesOut": "On the third day it comes out. It goes looking for a fight.",
+      "incursion": "Something from somewhere else is waiting at {holding}. The Card said \"We don't know.\"",
+      "metSquad": "{squad} met something from somewhere else at {holding}. Nobody won. It went back.",
+      "fought": "It's gone. Whatever it was, it's gone back."
+    },
+    "beast": {
+      "rooms": { "symbiont": "The Vault, with Otis.", "absorption": "The Garage roof.", "beauty": "The Common Room ceiling.", "lighting": "The Garage roof.", "blaster": "The Garage roof.", "blade": "The Vault, with Otis.", "glutton": "The Mess.", "assembly": "The Common Room ceiling.", "burst": "The Common Room ceiling." },
+      "flaws": {
+        "kind": "{name} leaves food out for it.",
+        "doubts": "{name}: \"Does it want to be here? Has anybody asked?\"",
+        "proud": "{name}: \"It's ours. It chose us.\" It didn't.",
+        "other": "{name} walks the long way round it."
+      },
+      "home": "{beast} is in the building: {room} Homesick {n} of 10.",
+      "falls": "It stays while the team does what drew it.",
+      "leaves": "{beast} left in the night: through the roof. There's a hole in the ceiling. Faye mends it and leaves a skylight.",
+      "poipole": "Poipole turned up in the Barracks this morning, asleep on an empty bed. It can't be sent on a job.",
+      "plate": "Give it a plate",
+      "plated": "Somebody's put a plate out for it. It ate everything, and the plate.",
+      "notScheme": "A Beast's never a Means, a Key or a part. It isn't from here. The stamps don't know what to call it."
+    }
+  },
+  "shadow": {
+    "on": true,
+    "numbers": { "rigHeat": 4, "rigDread": 2, "rigKits": 6, "rigFirst": 1, "labBuilt": 1, "labSize": 1, "labEvery": 6, "labPer": [1, 2, 4], "ordersFirst": 1, "purifyRegard": 1, "lineLoyalty": 2, "relieveTo": 5, "kitLevels": 2 },
+    "title": "The Shadow branch",
+    "never": "Corruption only rises. It's the only number in the mode that only goes one way.",
+    "allows": "Everything Grey allows, and the Shadow branch: Capture Rigs, the Shadow Lab, Shadow orders. Corruption only rises.",
+    "allowsRemoved": "Everything Grey allows.",
+    "lineSeven": "Won't be on anything Shadow.",
+    "lineSevenRemoved": "Won't be on anything that shuts a heart.",
+    "rig": {
+      "label": "Set a Capture Rig: {holding}",
+      "sub": "Kits for six Grunts, from one holding, in a day. The ground's empty for the rest of the region.",
+      "card": "Takes: every Pokémon on the hill. From: the hill.",
+      "said": "The Rig ran all night. In the morning there were six kits in the yard and nothing on the hill.",
+      "log": "Day {day}. {holding}. A Capture Rig. Every Pokémon on the hill, taken. Heat +4, Dread +2.",
+      "stripped": "Stripped. It supplies nothing for the rest of the region.",
+      "whatever": "Whatever it takes only.",
+      "wild": "Only on wild ground.",
+      "done": "Already stripped.",
+      "beat": "A Rig's set at Dispatch."
+    },
+    "lab": {
+      "assigned": "Nobody volunteers. {name}'s Loyalty is lowest. {name} runs the Lab.",
+      "knock": ["{name}, at the door: \"I didn't volunteer.\"", "{name}, at the door: \"I've stopped looking at the cards.\""],
+      "through": "{n} more through the Lab. Their hearts are shut. Kits at +2 levels, with Shadow moves.",
+      "shut": "Shut the Lab",
+      "shutSub": "No more goes in. The room's still there.",
+      "shutSaid": "No more goes in. A sheet's been hung over the door; nobody ordered that.",
+      "relieve": "Relieve {name}",
+      "relieveSub": "The Lab stands empty and does nothing. Corruption doesn't fall.",
+      "relieved": "{name} hands back the key. Their Loyalty rises to 5, and no further.",
+      "purify": "Purify one",
+      "purifySub": "In person, by the main game's means. Regard +1; a person's Bond comes back. The figure stays where it is.",
+      "purified": "One's itself again, and remembers. Corruption stays where it is.",
+      "noLab": "There's no Lab.",
+      "noneLeft": "Nothing's come out of the Lab that isn't itself already.",
+      "sealed": "The Lab's sealed for good.",
+      "card": "Takes: what it was. From: a Pokémon, by name."
+    },
+    "orders": {
+      "label": "(A Shadow order.)",
+      "sub": "The Pokémon goes without its person. A person's line doesn't bind their Pokémon.",
+      "said": "{name} doesn't go. Their Pokémon does. It does what it's told.",
+      "none": "Nothing from the Lab to send."
+    },
+    "ladder": [
+      { "at": 1, "text": "The figure appears. One person's left: they said why, in the doorway, to everyone." },
+      { "at": 2, "text": "Loyalty's ceiling: 8. Applicants with Heart stop coming. The Mess is quieter.", "ceiling": 8, "noHeart": true },
+      { "at": 4, "text": "Loyalty's ceiling: 6. The command party looks at the Boss differently.", "ceiling": 6 },
+      { "at": 6, "text": "Going Straight and The Recruit are closed. The detective stops asking questions." },
+      { "at": 8, "text": "Loyalty's ceiling: 4. The Patron leaves.", "ceiling": 4, "patronLeaves": true },
+      { "at": 10, "text": "The team's something else." }
+    ],
+    "doorway": "{name}, in the doorway, to everyone: \"I came for the work. Not for that.\"",
+    "figure": "Corruption {n}",
+    "lineLeave": "{name} won't stay for that. Their line was \"{line}\"."
+  }
+}

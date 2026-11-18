@@ -6,6 +6,8 @@ import type { EvilModeBlock, JobMethod, OddsTerm, TakeThing } from './schema';
 import { kindDef } from './board';
 import { darkTerms, lawTerms } from './line';
 import { ruleTerms } from './regionRule';
+import { moleTerms } from './mole';
+import { ASK_ROLLS_AS, unasked } from './charterRules';
 
 export interface JobDraft {
   holdingId: string;
@@ -38,13 +40,13 @@ export function oddsFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
   if (job.method === 'pay') {
     const offer = data.district.methods.pay.offers.find((o) => o.pct === (job.offer ?? 100)) ?? data.district.methods.pay.offers[0]!;
     if (offer.odds === null) return certain(`Offer: the fair price (${offer.pct}%)`);
-    const pt = [{ label: `Offer: ${offer.pct}% of the fair price`, value: offer.odds }, ...peopleTerms(block, job, data), ...lawTerms(block, job, data), ...ruleTerms(block, 'odds', { method: 'pay', tags: h.tags }, data)];
+    const pt = [{ label: `Offer: ${offer.pct}% of the fair price`, value: offer.odds }, ...peopleTerms(block, job, data), ...lawTerms(block, job, data), ...ruleTerms(block, 'odds', { method: 'pay', tags: h.tags }, data), ...moleTerms(block, h, 'pay', data)];
     const n = clamp(pt.reduce((a, t) => a + t.value, 0), data);
     return { odds: n, certain: false, terms: pt, lo: n, hi: n };
   }
   if (job.method === 'lean' || job.method === 'take' || job.method === 'expose') {
     const L = data.line;
-    const dt: OddsTerm[] = [{ label: 'Base', value: L[job.method].base }, ...darkTerms(block, h, job.method, job.squad, data), ...peopleTerms(block, job, data), ...lawTerms(block, job, data), ...ruleTerms(block, 'odds', { method: job.method, tags: h.tags }, data)];
+    const dt: OddsTerm[] = [{ label: 'Base', value: L[job.method].base }, ...darkTerms(block, h, job.method, job.squad, data), ...peopleTerms(block, job, data), ...lawTerms(block, job, data), ...ruleTerms(block, 'odds', { method: job.method, tags: h.tags }, data), ...moleTerms(block, h, job.method, data)];
     const n = clamp(dt.reduce((a, t) => a + t.value, 0), data);
     return { odds: n, certain: false, terms: dt, lo: n, hi: n };
   }
@@ -54,8 +56,12 @@ export function oddsFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
   let unknownMood = false;
   let hidden = 0;
   if (job.method === 'persuade') {
-    const mood = data.district.moods.find((m) => m.id === h.mood);
-    if (mood && h.scouted === 0) {
+    // Slice 22, Galactic (Part 28 section 7.3): nobody's asked, so the job rolls as if the mood were Easy. It isn't.
+    const asEasy = unasked(block, h.id);
+    const mood = data.district.moods.find((m) => m.id === (asEasy ? ASK_ROLLS_AS : h.mood));
+    if (asEasy) {
+      if (mood && mood.persuade !== 0) terms.push({ label: "Mood: ? (nobody's asked: it rolls as Easy)", value: mood.persuade });
+    } else if (mood && h.scouted === 0) {
       unknownMood = true;
       hidden = mood.persuade;
     } else if (mood && mood.persuade !== 0) terms.push({ label: `Mood: ${mood.name}`, value: mood.persuade });
@@ -71,7 +77,7 @@ export function oddsFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
   if (h.scouted > 0) terms.push({ label: 'Scouted: you know the ground', value: T.scouted });
   if (job.squad.length === 2) terms.push({ label: 'The squad is short: two people', value: T.short });
   // Slice 9: the region's rule and the Patron's, on one hook (Part 30 section 9).
-  terms.push(...peopleTerms(block, job, data), ...lawTerms(block, job, data), ...ruleTerms(block, 'odds', { method: job.method, tags: h.tags }, data));
+  terms.push(...peopleTerms(block, job, data), ...lawTerms(block, job, data), ...ruleTerms(block, 'odds', { method: job.method, tags: h.tags }, data), ...moleTerms(block, h, job.method, data));
   const sum = terms.reduce((n, t) => n + t.value, 0);
   const odds = clamp(sum + hidden, data);
   if (!unknownMood) return { odds, certain: false, terms, lo: odds, hi: odds };

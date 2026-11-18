@@ -4,12 +4,16 @@
 // The `evil-gym` stream: Buy's found-out roll, a Beat's colder Town, Koga's seat, and how many tries a Bent Leader makes
 // the Hero take. Each number is counted, so a reload draws the same.
 
+import { regionShut } from './lastThree';
 import { hashSeed, Rng } from '../rng';
 import { shiftMood, townStreet } from './board';
 import { EVIL_DATA, type EvilData } from './data';
 import { appendLog, fill, money } from './ledger';
 import { inRoster, moveLoyalty } from './people';
+/** Which region of the run this is (0 first); slice 16. Read here without importing region.ts. */
+const runIndexOf = (block: EvilModeBlock): number => block.region?.crossed?.length ?? 0;
 import type { EvilModeBlock, GymState, GymWay, Holding, LeaderDef, Standing } from './schema';
+import { logOf } from './pack';
 
 type G = EvilData['gym'];
 const lines = (data: EvilData) => data.gym.lines as Record<string, string> & { heroFight: Record<GymWay, string> };
@@ -116,8 +120,12 @@ export function gymDoors(block: EvilModeBlock, data: EvilData = EVIL_DATA): GymD
       case 'beat':
         return open(T.beatOpen!);
       case 'buy': {
+        // Slice 20 (Alola): no Gyms, so nothing to buy; the door says who shut it (Part 8d section A.1).
+        const rs = regionShut(block, way, data);
+        if (rs) return shut(rs.by, rs.why);
         if (L.minor) return shut(S.age, say(L.buy?.why ?? S.age, L));
-        const price = L.buy?.price ?? null;
+        // Slice 16: a Leader with a price asks the formula's, by the run's region and the district (Part 8a section 3).
+        const price = L.buy?.price ? priceFor(runIndexOf(block), L.n, data) : null;
         if (price === null) return shut(S.leader, L.buy?.why ?? S.leader);
         if (!scouted) return shut(S.scout, T.notScouted!);
         if (block.team.funds < price) return shut(S.number, fill(T.short!, { price: money(price), funds: money(block.team.funds) }));
@@ -130,6 +138,8 @@ export function gymDoors(block: EvilModeBlock, data: EvilData = EVIL_DATA): GymD
         return open(fill(T.bendStep!, { n: g.bend + 1, of: n, text: L.bend.steps[Math.min(g.bend, n - 1)]! }));
       }
       case 'replace': {
+        const rr = regionShut(block, way, data);
+        if (rr) return shut(rr.by, rr.why);
         if (L.minor) return shut(S.age, T.replaceRefused!);
         if (!L.replace?.can) return shut(S.leader, L.replace?.goes ?? S.leader);
         if (line === 'clean') return shut(S.line, T.notClean!);
@@ -200,7 +210,7 @@ export function gymAct(block: EvilModeBlock, way: GymWay, data: EvilData = EVIL_
     return { block: putGym({ ...out, fight: { kind: 'challenge', holdingId: h.id, personId: o.id, begun: false } }, g), problem: null, lines: [], fight: true };
   }
   if (way === 'buy') {
-    const price = L.buy!.price!;
+    const price = priceFor(runIndexOf(block), L.n, data);
     const text = say(T.bought!, L, { price: money(price) });
     out = { ...out, team: { ...out.team, funds: out.team.funds - price } };
     out = crewBy(out, (c) => (c.talent === 'heart' ? -1 : 0), data);
@@ -210,7 +220,7 @@ export function gymAct(block: EvilModeBlock, way: GymWay, data: EvilData = EVIL_
   if (way === 'bend') {
     const bend = L.bend!;
     // Something admitted: the Ledger's checked. A team that's Leaned or Taken in this district can't say it's what it's for.
-    if (bend.kind === 'admitted' && block.log.some((e) => e.kind === 'job' && e.result === 'went' && e.region === block.district!.region && e.district === block.district!.n && (e.method === 'lean' || e.method === 'take'))) {
+    if (bend.kind === 'admitted' && logOf(block).some((e) => e.kind === 'job' && e.result === 'went' && e.region === block.district!.region && e.district === block.district!.n && (e.method === 'lean' || e.method === 'take'))) {
       return no(T.admittedFails!);
     }
     const n = g.bend + 1;
@@ -315,7 +325,7 @@ export function gymEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA): Ev
   let g = g0;
   const said: string[] = [];
   const d = block.district;
-  const today = block.log.filter((e) => e.kind === 'job' && e.result === 'went' && e.day === block.here.day && e.region === d.region && e.district === d.n);
+  const today = logOf(block).filter((e) => e.kind === 'job' && e.result === 'went' && e.day === block.here.day && e.region === d.region && e.district === d.n);
   const street = new Set(townStreet(d, data).map((h) => h.id));
   const leanedStreet = today.some((e) => e.method === 'lean' && e.to && street.has(e.to));
   const tookHere = today.some((e) => e.method === 'take');

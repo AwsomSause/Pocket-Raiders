@@ -11,6 +11,7 @@ import { appendLog, fill, money } from './ledger';
 import { districtKey, inRoster, moveLoyalty } from './people';
 import { dayIn } from './region';
 import type { Crew, EvilModeBlock, Holding, NeighbourDef, NeighbourPost, NeighbourState, Stance, TableThing } from './schema';
+import { logOf } from './pack';
 
 type NB = NeighbourState;
 const cap10 = (n: number) => Math.max(0, Math.min(10, n));
@@ -28,8 +29,21 @@ function draw(block: EvilModeBlock, max: number): { block: EvilModeBlock; roll: 
 export const neighbourOn = (data: EvilData = EVIL_DATA): boolean => data.neighbour.on;
 
 /** The region's neighbour as written, or undefined (a region not written yet, or the setting's undo). */
-export const neighbourDef = (region: number, data: EvilData = EVIL_DATA): NeighbourDef | undefined =>
-  (neighbourOn(data) ? data.neighbour.neighbours.find((n) => n.region === region) : undefined);
+export const neighbourDef = (region: number, data: EvilData = EVIL_DATA, side?: 'shore' | 'inland'): NeighbourDef | undefined => {
+  if (!neighbourOn(data)) return undefined;
+  const here = data.neighbour.neighbours.filter((n) => n.region === region);
+  return here.find((n) => !n.side || !side || n.side === side) ?? here[0];
+};
+
+/**
+ * Slice 16: which of a two-neighbour region's teams is next door (Hoenn: Aqua by the shore, Magma inland; Part 26a section
+ * 4.1). A Tide team settles by the water and an Ember team inland; anyone else, by the seed (hashed, no stream).
+ */
+export function sideFor(seed: string, doctrine?: string): 'shore' | 'inland' {
+  if (doctrine === 'tide') return 'shore';
+  if (doctrine === 'ember') return 'inland';
+  return new Rng(hashSeed(`${seed}::evil-side`)).int(1, 2) === 1 ? 'shore' : 'inland';
+}
 
 export const defOf = (nb: NB, data: EvilData = EVIL_DATA): NeighbourDef => data.neighbour.neighbours.find((n) => n.id === nb.id)!;
 
@@ -54,7 +68,7 @@ export function freshNeighbour(block: Pick<EvilModeBlock, 'here' | 'district'>, 
 /** Made once, when the region has a neighbour and the block hasn't got one. */
 export function ensureNeighbour(block: EvilModeBlock, data: EvilData = EVIL_DATA): EvilModeBlock {
   if (block.neighbour || !block.district) return block;
-  const def = neighbourDef(block.here.region, data);
+  const def = neighbourDef(block.here.region, data, sideFor(block.district.seed, block.team.doctrine));
   return def ? { ...block, neighbour: freshNeighbour(block, def) } : block;
 }
 
@@ -223,7 +237,7 @@ export function neighbourEvening(block0: EvilModeBlock, data: EvilData = EVIL_DA
   const N = data.neighbour.numbers;
   let nb = nb0;
   const said: string[] = [];
-  const war = block.log.some((e) => e.kind === 'job' && e.day === block.here.day && e.region === d.region && e.district === d.n && wasTheirs(d.holdings.find((h) => h.id === e.to), nb, data));
+  const war = logOf(block).some((e) => e.kind === 'job' && e.day === block.here.day && e.region === d.region && e.district === d.n && wasTheirs(d.holdings.find((h) => h.id === e.to), nb, data));
   if (war) {
     nb = { ...nb, warIn: districtKey(block) };
     if (nb.stance === 'truce' || nb.stance === 'front') {
@@ -336,7 +350,7 @@ const holdingOfEntry = (block: EvilModeBlock, e: { district: number; to?: string
 
 /** A Lean that went (rule 1, and the first exchange's slot): the Ledger line it quotes, or null. Always something real. */
 export function messEntry(block: EvilModeBlock) {
-  return block.log.find((e) => e.kind === 'job' && e.result === 'went' && e.method === 'lean') ?? null;
+  return logOf(block).find((e) => e.kind === 'job' && e.result === 'went' && e.method === 'lean') ?? null;
 }
 
 /** His four rules against the team's Ledger (Part 15a section 7.2). Rule 4 is never said aloud. */
@@ -351,7 +365,7 @@ export function rulesBroken(block: EvilModeBlock, data: EvilData = EVIL_DATA): s
     out.push(fill(def.rules[0]!.broken, { holding: h ? holdingName(h, data) : 'a shop', who: l ? l.who.replace(/,.*$/, '') : 'The owner' }));
   }
   if (block.crew.some((c) => c.unpaid > 0 || c.left?.how === 'loyalty')) out.push(def.rules[1]!.broken);
-  const took = block.log.find((e) => e.kind === 'job' && e.result === 'went' && e.method === 'take' && holdingOfEntry(block, e)?.kind === 'local');
+  const took = logOf(block).find((e) => e.kind === 'job' && e.result === 'went' && e.method === 'take' && holdingOfEntry(block, e)?.kind === 'local');
   if (took) out.push(fill(def.rules[2]!.broken, { holding: holdingName(holdingOfEntry(block, took)!, data) }));
   return out;
 }
@@ -450,7 +464,8 @@ export function sitAnswer(block: EvilModeBlock, i: number, data: EvilData = EVIL
   } else if (s.ex === 0 && s.n === 1) {
     lines.push(`${def.boss}: ${F.answers[i]}`.replace(`${def.boss}: He`, 'He'));
     if (i === 0 || i === 1) ss = { ...ss, offered: true, ex: 1 };
-    else if (i === 2) { n = { ...n, stance: 'war' }; ss = { ...ss, ex: 2 }; }
+    // Slice 20: a team with no War (Star) hears the third answer as an offer of help: Service (Part 15b section 5.4).
+    else if (i === 2) { n = { ...n, stance: def.noWar ? 'service' : 'war' }; ss = { ...ss, ex: 2 }; }
     else { n = { ...n, opinion: capOp(n.opinion + 1) }; ss = { ...ss, offered: true, ex: 1 }; }
     if (ss.ex === 1) lines.push(`${def.boss}: ${F.offer}`);
     else lines.push(`${def.boss}: ${F.ask}`);
@@ -461,9 +476,13 @@ export function sitAnswer(block: EvilModeBlock, i: number, data: EvilData = EVIL
   } else if (s.ex === 1) {
     lines.push(F.frontSaid[i]!);
     if (i === 0) {
-      n = { ...n, stance: 'front', broke: null };
-      out = { ...out, crew: out.crew.map((c) => (c.where === 'in' && c.flaw === 'proud' ? moveLoyalty(c, data.neighbour.numbers.frontProud, data) : c)) };
-      out = log(out, '"Worked for Giovanni." A chapter of Team Rocket.');
+      // Slice 20: with Star it's Service, the Front that runs backwards: the team at their service (Part 15b section 5.4).
+      if (def.noWar) n = { ...n, stance: 'service', broke: null };
+      else {
+        n = { ...n, stance: 'front', broke: null };
+        out = { ...out, crew: out.crew.map((c) => (c.where === 'in' && c.flaw === 'proud' ? moveLoyalty(c, data.neighbour.numbers.frontProud, data) : c)) };
+      }
+      out = log(out, def.noWar ? `At ${def.teamName}'s service. Nothing on any Card.` : '"Worked for Giovanni." A chapter of Team Rocket.');
     }
     ss = { ...ss, ex: 2 };
     lines.push(`${def.boss}: ${F.ask}`);
@@ -484,7 +503,9 @@ export function tableThings(block: EvilModeBlock, data: EvilData = EVIL_DATA): {
   const full = s.table.length >= N.maxTable;
   const one = (thing: TableThing, why: string | null) => ({ thing, open: !why && !full && !s.table.includes(thing), why: s.table.includes(thing) ? 'Already on the table.' : full ? 'Three things each side.' : why });
   const tick2 = nb.ticks[1]!.state === 'waiting';
-  return [
+  // Slice 20 (Star): no person slot, and no Pen: they've none (Part 15b section 5.1). The rows aren't on the table at all.
+  const locked = defOf(nb, data).minors && !!defOf(nb, data).noWar;
+  const rows = [
     one('line', !s.offered || nb.stance === 'war' || nb.stance === 'front' || nb.stance === 'merger' ? 'He hasn\'t offered a line.' : null),
     one('person', inRoster(block).some((c) => !c.minor && c.id !== s.chair) ? null : 'Nobody to hand over.'),
     one('job', s.n === 1 && tick2 ? null : 'Only tick two, before it fires.'),
@@ -493,6 +514,7 @@ export function tableThings(block: EvilModeBlock, data: EvilData = EVIL_DATA): {
     one('promise', nb.sitDowns.some((x) => x.table.includes('promise')) ? 'Already agreed.' : null),
     one('pen', s.n >= 2 && nb.pen > 0 && !nb.sitDowns.some((x) => x.table.includes('pen')) ? null : 'Not till the second Sit-Down.'),
   ];
+  return locked ? rows.filter((r) => r.thing !== 'person' && r.thing !== 'pen') : rows;
 }
 
 /**
@@ -640,12 +662,12 @@ export function fallToTeam(block0: EvilModeBlock, data: EvilData = EVIL_DATA): {
   for (const a of F.admins) {
     lines.push(`${a.name}: ${a.says}`);
     if (a.joins && !a.never && beds() > 0 && !crew.some((c) => c.id === `nb-${a.id}`)) {
-      crew.push({ id: `nb-${a.id}`, ref: null, name: a.name, age: null, minor: false, talent: a.talent ?? null, flaw: a.flaw ?? null, flawFound: true, line: null, lineHeard: false, rank: 'officer', loyalty: N.joinLoyalty, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null });
+      crew.push({ id: `nb-${a.id}`, ref: null, name: a.name, age: null, minor: false, talent: a.talent ?? null, flaw: a.flaw ?? null, flawFound: true, line: null, lineHeard: false, rank: 'officer', loyalty: N.joinLoyalty, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null, mood: 'easy', knocks: 0 });
     }
   }
   let took = 0;
   for (let i = 1; i <= F.grunts && beds() > 0; i++) {
-    crew.push({ id: `nb-g${i}`, ref: null, name: `${def.teamName.replace('Team ', '')} Grunt ${i}`, age: null, minor: false, talent: null, flaw: null, flawFound: false, line: null, lineHeard: false, rank: 'grunt', loyalty: N.joinLoyalty, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null });
+    crew.push({ id: `nb-g${i}`, ref: null, name: `${def.teamName.replace('Team ', '')} Grunt ${i}`, age: null, minor: false, talent: null, flaw: null, flawFound: false, line: null, lineHeard: false, rank: 'grunt', loyalty: N.joinLoyalty, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null, mood: 'easy', knocks: 0 });
     took++;
   }
   lines.push(fill(F.gruntsSaid, { beds: took }));

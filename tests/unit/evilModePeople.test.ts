@@ -42,7 +42,7 @@ const deck = (id: string) => EVIL_DATA.people.people.find((p) => p.id === id)!;
 /** A person straight from the deck, put on the Roster (for scenes that need a particular someone). */
 const withPerson = (b: EvilModeBlock, id: string, patch: Partial<Crew> = {}): EvilModeBlock => {
   const d = deck(id);
-  const p: Crew = { id: d.id, ref: d.id, name: d.name, age: d.age, minor: !!d.minor, talent: d.talent, flaw: d.flaw, flawFound: true, line: d.line, lineHeard: false, rank: 'grunt', loyalty: 5, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null, ...patch };
+  const p: Crew = { id: d.id, ref: d.id, name: d.name, age: d.age, minor: !!d.minor, talent: d.talent, flaw: d.flaw, flawFound: true, line: d.line, lineHeard: false, rank: 'grunt', loyalty: 5, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null, mood: 'easy', knocks: 0, ...patch };
   return { ...b, crew: [...b.crew.filter((c) => c.id !== id), p] };
 };
 const local = (b: EvilModeBlock) => b.district!.holdings.find((h) => h.kind === 'local' && h.mood !== 'shut' && !EVIL_DATA.district.locals.find((l) => l.id === h.ref)?.minor && EVIL_DATA.district.locals.find((l) => l.id === h.ref)?.noPrice === undefined)!;
@@ -73,7 +73,7 @@ describe('the deck and the Founders (people.json, faces.json)', () => {
       // Grunt pictures are kept for the nameless: no named person is drawn as a Grunt.
       expect(f!.sprite).not.toMatch(/grunt/);
     }
-    expect(P.filter((p) => p.minor).map((p) => p.id).sort()).toEqual(['beatriz', 'sooah']);
+    expect(P.filter((p) => p.minor).map((p) => p.id).sort()).toEqual(['beatriz', 'miyu', 'sooah']);
   });
   it('thirty-six lines, numbered once each; every person\'s line exists', () => {
     expect(EVIL_DATA.people.lines.map((l) => l.n)).toEqual(Array.from({ length: 36 }, (_, i) => i + 1));
@@ -99,7 +99,9 @@ describe('founding a Roster', () => {
     expect(foundingRoster('s', 'profit').crew).toEqual(b.crew);
   });
   it('the Founders turn up only in the first region; an empty deck sends nobody', () => {
-    expect(deckFor(1, []).length).toBe(0);
+    // Slice 17: a later region's deck is its own twelve, with no Founders.
+    expect(deckFor(1, [], EVIL_DATA, 1).map((p) => p.deck)).toEqual(Array(12).fill('johto'));
+    expect(deckFor(1, [], EVIL_DATA, 0).filter((p) => p.deck === 'founders')).toHaveLength(16);
     expect(deckFor(0, EVIL_DATA.people.people.map((p) => p.id))).toHaveLength(0);
   });
 });
@@ -171,8 +173,8 @@ describe('the lines, and asking anyway', () => {
       expect(otis1.asked).toBe(1);
       expect(otis1.lineHeard).toBe(true);
       expect(b1.refusal?.who).toEqual(['otis']);
-      expect(b1.cards.at(-1)!.fields[11]!.text).toMatch(/Asked Otis Blackthorn anyway\.$/);
-      expect(b1.log.filter((e) => e.kind === 'card').at(-1)!.text).toBe(b1.cards.at(-1)!.fields[11]!.text);
+      expect(b1.cards.at(-1)!.fields.map((f) => (typeof f === "string" ? f : f.text))[11]).toMatch(/Asked Otis Blackthorn anyway\.$/);
+      expect(b1.log.filter((e) => e.kind === 'card').at(-1)!.text).toBe(b1.cards.at(-1)!.fields.map((f) => (typeof f === "string" ? f : f.text))[11]);
       expect(rosterModel(b1, newRoster(0)).wont.lines.join(' ')).toMatch(/fight anyone who's not ready/);
       expect(refusalModel(b1)!.people[0]!.name).toBe('Otis Blackthorn');
       // Nothing else in Dispatch moves until it's answered.
@@ -364,7 +366,7 @@ describe('saves', () => {
     const { applicants: _a, drawn: _d, refusal: _r, ...rest } = b;
     const v3 = { ...rest, v: 3, crew: [1, 2, 3, 4].map((i) => ({ id: `g${i}`, name: `Grunt ${i}`, outOn: null })) };
     const out = EvilModeBlockSchema.parse(v3);
-    expect(out.v).toBe(12);
+    expect(out.v).toBe(22);
     expect(out.crew.map((c) => [c.id, c.name, c.ref, c.loyalty])).toEqual([1, 2, 3, 4].map((i) => [`g${i}`, `Grunt ${i}`, null, 8]));
     expect(out.applicants).toEqual([]);
     expect(out.refusal).toBeNull();

@@ -14,6 +14,7 @@ import { bandOf } from './walk';
 import { appendLog, fill, money } from './ledger';
 import { inRoster } from './people';
 import { WING_IDS, type BaseState, type Crew, type EvilModeBlock, type OrderId, type RaidState, type WingId } from './schema';
+import { logOf } from './pack';
 
 export interface RaidOut { block: EvilModeBlock; problem: string | null; lines: string[]; fight?: boolean }
 const no = (block: EvilModeBlock, problem: string): RaidOut => ({ block, problem, lines: [] });
@@ -52,7 +53,7 @@ function startWing(block: EvilModeBlock, b: BaseState, c: Crew, data: EvilData):
   return activePairs(block, data).some((p) => p.fx.some((f) => f.k === 'frontWing')) ? 'front' : 'living';
 }
 
-const backWayWing = (b: BaseState, data: EvilData): WingId | null => {
+export const backWayWing = (b: BaseState, data: EvilData): WingId | null => {
   const p = b.pieces.find((x) => pieceDef(x.type, data).needs === 'outside');
   return p ? wingOf(b, p.at, data) : null;
 };
@@ -281,11 +282,11 @@ export function raidTurn(block: EvilModeBlock, data: EvilData = EVIL_DATA): Raid
 export function officeSpeech(block: EvilModeBlock, data: EvilData = EVIL_DATA): string[] {
   const O = R(data).office;
   const C = O.clauses as Record<string, string>;
-  const went = (m: string) => block.log.some((e) => e.kind === 'job' && e.result === 'went' && e.method === m);
+  const went = (m: string) => logOf(block).some((e) => e.kind === 'job' && e.result === 'went' && e.method === m);
   const out = [O.speech as string];
   if (went('persuade') || went('outplay')) out.push(C.work!);
   if (went('lean')) out.push(C.lean!);
-  if (block.log.some((e) => e.kind === 'waive')) out.push(C.waive!);
+  if (logOf(block).some((e) => e.kind === 'waive')) out.push(C.waive!);
   if (went('take')) out.push(C.take!);
   out.push(fill(O.never as string, { middle: detectiveOf(block, data).middle }));
   return out;
@@ -305,7 +306,7 @@ export function raidOffice(block: EvilModeBlock, choice: 'battle' | 'charge' | '
 
 /** The list, read aloud: what can be proved, from the Log. */
 function listOf(block: EvilModeBlock): string[] {
-  return block.log.filter((e) => e.kind === 'job' && e.result === 'went' && (e.method === 'lean' || e.method === 'take' || e.method === 'expose')).map((e) => e.text);
+  return logOf(block).filter((e) => e.kind === 'job' && e.result === 'went' && (e.method === 'lean' || e.method === 'take' || e.method === 'expose')).map((e) => e.text);
 }
 
 /** The Office battle's over. Won: they withdraw, the base is held, Heat's 8 for the region. Lost: the base is lost. */

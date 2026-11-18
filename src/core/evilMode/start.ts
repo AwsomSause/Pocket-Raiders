@@ -2,6 +2,7 @@
 // Slice 1 built pages 1 to 5 (Boss, name, Creed, Line, Doctrine); slice 9 adds the Look, the Patron and the first region
 // (Kanto is the only one open), and a team begins at the region's Arrival.
 
+import { lengthFor } from './runLength';
 import { ensureNeighbour } from './neighbour';
 import { EVIL_DATA, type EvilData } from './data';
 import { layDistrict } from './board';
@@ -10,7 +11,7 @@ import { arriveApplicants } from './roster';
 import { modify, PATRON_ID } from './regionRule';
 import { newRegion } from './region';
 import { newScheme } from './scheme';
-import { emptyEconomy, LINE_IDS, STREAMS, type Crew, type EvilModeBlock, EvilModeBlockSchema, type LineId, type RunLength } from './schema';
+import { emptyEconomy, emptyEdges, emptyMole, emptyNight, LINE_IDS, STREAMS, type Crew, type EvilModeBlock, EvilModeBlockSchema, type LineId, type RunLength } from './schema';
 
 export interface FoundingChoice {
   name: string;
@@ -76,20 +77,20 @@ export function foundingProblem(choice: FoundingChoice, data: EvilData = EVIL_DA
 export function patronCrew(patronId: string | undefined, data: EvilData = EVIL_DATA): Crew | null {
   const p = data.region.patrons.find((x) => x.id === patronId)?.person;
   if (!p) return null;
-  return { id: PATRON_ID, ref: null, name: p.name, age: p.age, minor: false, talent: p.talent, flaw: p.flaw, flawFound: true, line: null, lineHeard: false, rank: 'officer', loyalty: 7, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null };
+  return { id: PATRON_ID, ref: null, name: p.name, age: p.age, minor: false, talent: p.talent, flaw: p.flaw, flawFound: true, line: null, lineHeard: false, rank: 'officer', loyalty: 7, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null, mood: 'easy', knocks: 0 };
 }
 
 /**
  * Founding to the first morning (design Part 3 section 11): Funds, Heat, Regard and Dread by Creed, then the Line's
  * changes (Whatever it takes: Heat +1; Clean hands: Regard +1). Day 1, Morning, Kanto District 1.
  */
-export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: RunLength; seed?: string; stage?: number }, data: EvilData = EVIL_DATA): { ok: true; block: EvilModeBlock } | { ok: false; problem: string } {
+export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: RunLength; seed?: string; stage?: number; shadow?: boolean; incursions?: boolean }, data: EvilData = EVIL_DATA): { ok: true; block: EvilModeBlock } | { ok: false; problem: string } {
   const problem = foundingProblem(choice, data);
   if (problem) return { ok: false, problem };
   const creed = data.creeds.find((c) => c.id === choice.creed)!;
   const line = data.founding.lines.find((l) => l.id === choice.line)!;
   const cap = (n: number): number => Math.min(10, n);
-  const regard = cap(creed.start.regard + line.regard);
+  const regard0 = cap(creed.start.regard + line.regard);
   const dread = cap(creed.start.dread);
   // Slice 4: the starting Roster, drawn from the Founders on `evil-people` (design Part 10a section 2).
   const roster = foundingRoster(opts.seed ?? opts.boss, creed.id, data);
@@ -99,12 +100,18 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
   const crew = pc ? [pc, ...roster.crew] : roster.crew;
   const look = { ...data.founding.look, ...(choice.look ?? {}) };
   const stage = data.region.on ? opts.stage ?? 1 : 1;
+  // Slice 16: the first region's picked on its page (Kanto, Johto or Hoenn, whichever's open).
+  const first = data.region.on ? data.region.regions.find((r) => r.id === choice.region)?.index ?? 0 : 0;
   const seed = opts.seed ?? opts.boss;
-  const funds = patron ? Math.floor(modify({ here: { region: 0, stage, day: 1, beat: 'morning' }, team: { patron } as never, crew }, 'funds', {}, creed.start.funds, data)) : creed.start.funds;
+  // Slice 19 (Kalos): a coat with no symbol lands with Regard +1 (Part 26b section 3.1).
+  const plain = data.region.on && choice.look?.symbol === data.region.look.symbols[data.region.look.symbols.length - 1];
+  const regard = cap(regard0 + (plain ? (data.region.regions.find((r) => r.index === first)?.rule?.mods ?? []).filter((m) => m.kind === 'arrivalRegard').reduce((n, m) => n + (m.add ?? 0), 0) : 0));
+  const funds = patron ? Math.floor(modify({ here: { region: first, stage, day: 1, beat: 'morning' }, team: { patron } as never, crew }, 'funds', {}, creed.start.funds, data)) : creed.start.funds;
   const block: EvilModeBlock = {
-    v: 12,
+    v: 22,
     from: 'founding',
-    settings: { length: opts.length },
+    // Slice 19: "Six regions" only once six are written; otherwise the run is Three.
+    settings: { length: lengthFor(opts.length, data.region.regions), shadow: opts.shadow ?? true, incursions: opts.incursions ?? true },
     team: {
       name: checkName(choice.name, data).name,
       sayable: true,
@@ -121,10 +128,10 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
       dread,
       corruption: 0,
     },
-    here: { region: 0, stage, day: 1, beat: 'morning' },
+    here: { region: first, stage, day: 1, beat: 'morning' },
     draws: Object.fromEntries(STREAMS.map((s) => [s, 0])) as EvilModeBlock['draws'],
     applied: [],
-    district: layDistrict(seed, 0, data.region.on ? stage - 1 : 1, { regard, dread, look }, data),
+    district: layDistrict(seed, first, data.region.on ? stage - 1 : 1, { regard, dread, look, doctrine: choice.doctrine }, data),
     crew,
     queue: [],
     sheets: [],
@@ -138,9 +145,13 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
     drawn: roster.crew.map((c) => c.id),
     refusal: null,
     hero: null,
+    road: [],
+    fire: null,
+    reck: null,
     fight: null,
     posted: [],
     inPerson: null,
+    night: emptyNight(),
     proof: [],
     lineMove: null,
     gyms: [],
@@ -151,7 +162,15 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
     raid: null,
     law: { hot: 0, raids: [], heatHeld: null },
     scheme: newScheme(choice.creed, seed, data),
+    base: null,
+    raid: null,
+    law: { hot: 0, raids: [], heatHeld: null },
+    ending: null,
+    quests: {},
+    mole: emptyMole(),
+    edges: emptyEdges(opts.shadow ?? true),
   };
+  block.edges.heatAtMorning = block.team.heat;
   block.region = newRegion(block, seed, data);
   block.neighbour = ensureNeighbour(block, data).neighbour;
   block.draws['evil-people'] = roster.draws;

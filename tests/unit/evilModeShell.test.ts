@@ -48,7 +48,8 @@ describe('founding (start.ts)', () => {
       expect(b.team).toMatchObject({ creed: c.id, funds: c.start.funds, heat: c.start.heat, regard: c.start.regard, dread: c.start.dread, boss: 'red', patron: null, corruption: 0 });
       expect(b.here).toEqual({ region: 0, stage: 2, day: 1, beat: 'morning' });
       // Slice 4: founding draws the Roster and the first applicant from evil-people, and from no other stream.
-      expect(Object.entries(b.draws).every(([s, n]) => (s === 'evil-people' ? n === c.start.roster + b.applicants.length : n === 0))).toBe(true);
+      // Slice 17: and the mole's handler and street on evil-mole (Part 11 section 1: rolled at the run's start).
+      expect(Object.entries(b.draws).every(([s, n]) => (s === 'evil-people' ? n === c.start.roster + b.applicants.length : s === 'evil-mole' ? n === 2 : n === 0))).toBe(true);
       expect(b.applied).toEqual(['applicants:0:1:1']);
     }
   });
@@ -145,6 +146,8 @@ describe('Evil Mode on a run, and saves', () => {
     for (let i = 0; i < BEATS.length + 1; i++) {
       const sm = new SaveManager(storage, content);
       sm.saveRun(r);
+      // Written in its save form (saveForm.ts): the block's texts in one table, not loose.
+      expect(JSON.parse(storage.get('pkr.run')!).data.expansion.evilMode).toHaveProperty(['¤t']);
       const loaded = new SaveManager(storage, content).loadRun();
       expect(loaded.status).toBe('ok');
       if (loaded.status !== 'ok') return;
@@ -192,11 +195,14 @@ describe('the setting and the mode gate', () => {
     expect(getMode(EVIL_MODE_ID)?.progressionEligible).toBe(false);
     expect(rulesProblem({ ...STANDARD_CHOICE, modeId: EVIL_MODE_ID })).toBeNull();
   });
-  it('the Settings row turns it on and off; Run length stays Three until six regions exist', () => {
+  it('the Settings row turns it on and off; Run length turns between Three and Six (six regions exist since slice 19)', () => {
     const off = changeSetting(DEFAULT_SETTINGS, 'evilMode');
     expect(off.expansion.evilMode).toBe(false);
     expect(changeSetting(off, 'evilMode').expansion.evilMode).toBe(true);
-    expect(changeSetting(DEFAULT_SETTINGS, 'evilRunLength')).toBe(DEFAULT_SETTINGS);
+    expect(DEFAULT_SETTINGS.expansion.evilRunLength).toBe('three');
+    const six = changeSetting(DEFAULT_SETTINGS, 'evilRunLength');
+    expect(six.expansion.evilRunLength).toBe('six');
+    expect(changeSetting(six, 'evilRunLength').expansion.evilRunLength).toBe('three');
   });
 });
 

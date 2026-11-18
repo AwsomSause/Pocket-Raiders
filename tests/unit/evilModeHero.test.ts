@@ -76,7 +76,8 @@ describe('the Hero is made (Part 18 section 2)', () => {
     const base = chooseStarter(content, createRun(content, { runId: 'g', seed: 'g', archetypeId: 'red', rules: { ...STANDARD_CHOICE, modeId: EVIL_MODE_ID } }), 0);
     const r = foundInRun(base, choice, 'three', 2).run;
     expect(r.rng).toEqual(base.rng);
-    expect(B(r).draws).toEqual(Object.fromEntries(Object.keys(B(r).draws).map((k) => [k, k === 'evil-people' ? B(r).draws['evil-people'] : 0])));
+    // Slice 17: founding also rolls the mole's handler (and a local's street) on evil-mole, at the run's start (Part 11 section 1).
+    expect(B(r).draws).toEqual(Object.fromEntries(Object.keys(B(r).draws).map((k) => [k, k === 'evil-people' ? B(r).draws['evil-people'] : k === 'evil-mole' ? 2 : 0])));
   });
 });
 
@@ -308,7 +309,7 @@ describe('Outplay in person (Part 7 section 5.3): played, not rolled', () => {
 });
 
 describe('the File (Part 18 section 11): blanks for what isn\'t known', () => {
-  it('a fresh Hero: personality, reason and every slot blank; the later builds\' sections say so', () => {
+  it('a fresh Hero: personality, reason and every slot blank; the slice-12 lists start empty', () => {
     const r = evilRun();
     const team = heroRival(r, B(r))!.memory!.lastBattle.team;
     const report = fileModel(B(r), 0, team, species)!;
@@ -337,7 +338,7 @@ describe('saves', () => {
     const r = evilRun();
     const { hero: _h, fight: _f, posted: _p, inPerson: _i, ...rest } = B(r);
     const v4 = EvilModeBlockSchema.parse({ ...rest, v: 4 });
-    expect(v4).toMatchObject({ v: 12, hero: null, fight: null, posted: [], inPerson: null });
+    expect(v4).toMatchObject({ v: 22, hero: null, fight: null, posted: [], inPerson: null });
     const old: RunState = { ...r, story: { ...r.story, rivals: [] }, expansion: { ...r.expansion, evilMode: v4 } };
     const made = ensureEvil(old);
     expect(B(made).hero).toEqual(B(r).hero);

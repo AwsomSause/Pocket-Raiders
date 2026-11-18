@@ -1,0 +1,458 @@
+{
+  "note": "Evil Mode slice 15: the six endings (design Part 23) and the six Finales (Part 22 sections 2.2, 3.2, 4.2, 5.3, 6.3, 7.2). Lines are the design's, with {hero} for the Hero's name, {boss} for what the Roster calls the Boss, {team} for the name on the door, {name} for a person. No line here ranks an ending; every ending pays the same for the same distance (section 9.3).",
+  "on": true,
+  "names": { "scheme": "The Scheme", "lastRoom": "The Last Room", "straight": "Going Straight", "handOff": "The Hand-Off", "recruit": "The Recruit", "caught": "Caught" },
+  "subs": {
+    "window": "Out of the window.", "alone": "Alone.", "letPast": "Let past.", "postcard": "A postcard.", "walkedIn": "Walked in.", "walkedInLedger": "Walked in, with the Ledger.",
+    "raided": "Raided.", "draw": "Somebody stepped between.", "talked": "Nobody fights.", "bossWon": "They'll be back.", "heroWon": "The walk out.", "away": "Nobody was home.",
+    "plateau": "The Plateau.", "hall": "A seventh name.", "go": "The ferry.", "stay": "A bunk.", "find": "A fire, a region on."
+  },
+  "asks": {
+    "scheme": "What did you make?", "lastRoom": "What is it?", "straight": "Did you ever need the back room?",
+    "handOff": "What did they see you do?", "recruit": "Did you ever lie to them?", "caught": "What would they say about you, if somebody asked them all?"
+  },
+  "pay": { "perRun": 10, "perDistrict": 4, "perHeld": 2, "perRegion": 20, "perBadge": 0 },
+  "words": {
+    "goOn": "Go on", "theEnd": "The run-end page", "typedNone": "(Nothing typed.)", "typePrompt": "One line. Your own.", "skipType": "(Say nothing.)",
+    "page": "The Ledger's last page", "cards": "The cards", "open": "Open endings", "noneOpen": "Nothing's open yet.",
+    "notLast": "Not in this region: it needs the last one.", "pressed": "Another ending's already begun."
+  },
+  "rules": { "straightRegard": 7, "straightFronts": 3, "handOffLoyalty": 7, "heirLoyalty": 5, "recruitCorruption": 6, "walkInHeat": 6, "battleTemper": 3, "witnessFor": 7, "witnessAgainst": 3, "minorWeight": 2, "walkInOff": 2, "ledgerOff": 2, "talkerMin": 1 },
+  "creedOf": { "persuade": "belonging", "pay": "profit", "outplay": "power", "lean": "spite", "take": "profit", "expose": "cause", "scout": "wonder", "racket": "profit", "front": "profit", "work": "belonging", "heist": "power", "dig": "wonder" },
+  "creedName": { "profit": "Profit", "cause": "Cause", "power": "Power", "wonder": "Wonder", "belonging": "Belonging", "spite": "Spite" },
+  "tempers": ["Curious", "Uneasy", "Set", "Angry", "Past talking"],
+
+  "scheme": {
+    "finales": {
+      "profit": {
+        "title": "The First of the Month", "room": "The Ledger Hall",
+        "intro": ["Every shop in three regions opens, and there's one name on every box.", "Ngozi, at the ledger, reading the first day's figures: \"That's more than the League takes in a year. In a *day.*\" She turns the page. \"And that's the column for what they'll pay next month, when there's nobody else to buy from.\""],
+        "dirtyIntro": ["The slider's there. It only moves up. Ngozi's not at the ledger. There's a note on it: \"I've balanced it to yesterday. I'd rather not see today's.\""],
+        "prompt": "The player sets the price.",
+        "choices": [
+          { "id": "same", "label": "What it was", "kind": "clean", "says": "A company that makes the thing well. Nobody notices anything changed but the name. The Roster's got jobs with a pension." },
+          { "id": "more", "label": "A little more", "kind": "wrong", "says": "Rich. Disliked. Ordinary.", "detective": "It's a firm now. I can't arrest a firm for being a firm." },
+          { "id": "bear", "label": "Whatever they'll bear", "kind": "wrong", "says": "A Centre with a price list on the door." },
+          { "id": "less", "label": "Less", "kind": "clean", "says": "Ngozi: \"...You've done all this to make it *cheaper?*\" The team's Loyalty: 10." }
+        ],
+        "upOnly": ["more", "bear"],
+        "stamps": {
+          "means": "Two hundred people who used to make the thing are in the square with {hero}. Whatever the price.",
+          "place": "The other bidder's daughter's on the road with {hero}. She's got the ashes.",
+          "key": "The inventor's in the Ledger Hall's doorway. She reads the brass plate under her own line. \"You've spelled my name right. That's something.\"",
+          "moment": "The shop that ran out first is on {hero}'s home street."
+        }
+      },
+      "cause": {
+        "title": "The Speech", "room": "The Hall",
+        "intro": ["The Boss, at a microphone. Five lines, from the run's own Ledger.", "Sioned, in the wings: \"There's a line about the bakery. Are you saying the line about the bakery?\""],
+        "dirtyIntro": ["There's a speech. It's persuasive. It's got no line from the Ledger in it at all: the screen offers none. Five lines, pre-written, smooth."],
+        "prompt": "Which five are said?",
+        "choices": [
+          { "id": "good", "label": "Only the kind ones", "kind": "cracked", "says": "It works. The rule passes. And somebody in the crowd was there for the rest. The camera finds them. It's a baker. She's not clapping." },
+          { "id": "all", "label": "All of it", "kind": "clean", "says": "It's the worst speech ever given and the only honest one. The vote's close.", "passes": "It passes, by a little.", "fails": "It fails, by a little.", "sioned": "Sioned, from the wings: \"Well. That's the first true thing I've ever heard through one of those.\"" },
+          { "id": "bad", "label": "Mostly the rest", "kind": "wrong", "says": "The crowd's silent. Then one person laughs, not unkindly. \"So why should we listen to you?\"", "typed": true }
+        ],
+        "dirtyChoices": [{ "id": "smooth", "label": "Say it", "kind": "dirty", "says": "The old man in the front row lets his Pokémon go and stands looking at his empty hand." }],
+        "stamps": {
+          "means": "It cuts out at line four. The station's owner's got it back. The last line's said to a square, unamplified, and only the front rows hear.",
+          "place": "The stallholders are at the back with their arms folded. The vote's theirs to swing.",
+          "key": "{hero}'s on the stage by line three, with the real paper. They read it out. It says nearly the same thing. \"You didn't have to lie. It was true anyway. Why did you lie when it was true?\"",
+          "moment": "Half the crowd's holding children. Nobody's listening to the words."
+        }
+      },
+      "power": {
+        "title": "The Chair", "room": "A room with one seat",
+        "intro": ["The Champion's in it.", "The Champion: \"I know who you are. I've known for a region. I let you get here. I wanted to see what somebody does when they've taken four Gyms and the door's open.\""],
+        "dirtyIntro": ["The Champion isn't in the seat. Nobody is. It's a chair in an empty room. The League's moved to another building and left a note: \"Keep it.\""],
+        "prompt": "The choice is on the screen before the battle.",
+        "choices": [
+          { "id": "battle", "label": "(Battle.)", "kind": "clean", "fight": "champion" },
+          { "id": "dont", "label": "(Don't.)", "kind": "clean", "says": "\"I've seen it. I don't want it.\" The Champion: \"...Then what was it all for?\"", "typed": true }
+        ],
+        "dirtyChoices": [{ "id": "sit", "label": "(Sit in it.)", "kind": "dirty", "says": "The Boss sits. Nobody's there to see it." }],
+        "won": "The Champion's a team's Boss now. And governs. The Officers are sworn: each says what they'd do with it. The one who says \"Give it back\" is the one the Boss looks at.",
+        "wonDirty": "The Chair. Nobody salutes. The Hall of Fame's machine records the party. It prints the stamps beside it.",
+        "lost": "The Champion: \"Again next year. Earn the rest of it first.\"",
+        "stamps": {
+          "means": "The four Leaders are in the gallery. A Bought one won't meet anyone's eye. A Beaten one's looking straight at the Boss.",
+          "place": "The Hall of Fame's first line: \"Did not qualify.\"",
+          "key": "The Champion fights at A+3 and says nothing before or after.",
+          "moment": "The Rival's found out. They're in the doorway with the Book's ledger. \"I lost to you in the quarter-final. I've just learned I was always going to.\""
+        }
+      },
+      "wonder": {
+        "title": "The Hour", "room": "The Engine, or the Shrine",
+        "intro": ["It wakes.", "One screen. No music.", "\"It's looking at you. It's waiting to see what you called it for.\""],
+        "dirtyIntro": ["\"It doesn't want to wake. It's been telling you for two regions.\" It wakes, and leaves, through the roof, and doesn't look at anyone.", "Chidi: \"It didn't even— it didn't *look* at us.\" The Specialist's last note's one word: \"Gone.\""],
+        "prompt": "What did you call it for?",
+        "choices": [
+          { "id": "ask", "label": "Ask it something", "kind": "clean", "says": "It answers. One true thing about the world. The team knows a thing nobody else does. Chidi cries. The Patron writes the answer down, and doesn't publish it." },
+          { "id": "order", "label": "Give it an order", "kind": "wrong", "says": "It considers. It does one thing, once, of its own choosing, that's near what was asked.", "saysShut": "It doesn't. There's a Sign, as everywhere; and a district that's weather." },
+          { "id": "sorry", "label": "Say sorry for waking it", "kind": "clean", "says": "It goes back to sleep. It leaves the Sign anyway." },
+          { "id": "nothing", "label": "Say nothing", "kind": "clean", "says": "It waits. A long time. Then it looks at each person in the room, in turn." }
+        ],
+        "dirtyChoices": [{ "id": "gone", "label": "(Watch it go.)", "kind": "dirty", "says": "The roof's open. The sky's in it." }],
+        "looked": { "talks": "It knew what I'd say before I said it. I didn't say it.", "drinks": "I wanted a drink after. I didn't have one.", "doubts": "It knew. Everything I wasn't sure of. It knew and it didn't mind.", "skims": "It looked at my pockets. Then at me. Then away.", "freezes": "I couldn't move. It didn't mind that either.", "loves": "I thought of somebody. It looked like it knew who.", "proud": "It looked at me like I was small. I was.", "kind": "It looked at me like it was glad I'd come.", "none": "It looked. That's all. It was enough." },
+        "stamps": {
+          "means": "It wakes to a hum it doesn't like. It breaks the machine first. Gently. Then it looks at the Boss.",
+          "place": "The keepers are in the doorway. They've come to see. They don't speak. It looks at them before it looks at the Boss.",
+          "key": "It's got one question of its own, first: a picture of the shrine the Sign came from, empty.",
+          "moment": "It wakes badly. Half-awake. The district's weather for three days."
+        }
+      },
+      "belonging": {
+        "title": "The Notice", "room": "The Common Room",
+        "intro": ["A man in a suit, with a paper.", "\"By order: these premises are to be vacated.\"", "The kettle. The people. A wall of names."],
+        "dirtyIntro": ["A forged paper for a cleared ruin with a locked door and a list of strangers. The man in the suit doesn't come.", "Nobody wants it back. It's theirs. It's on every map. There's nobody in it but the Roster."],
+        "prompt": "There's no battle. It's a count.",
+        "choices": [{ "id": "count", "label": "(Watch the road.)", "kind": "clean" }],
+        "dirtyChoices": [{ "id": "count", "label": "(Watch the road.)", "kind": "dirty" }],
+        "count": { "arrive": "{n}. {name}", "who": "The man in the suit, looking at the road: \"...Who are all these people?\" Hortense: \"Ours.\"", "high": "The paper's withdrawn. The man in the suit has tea. He's the thousand-and-first.", "mid": "It's adjourned. A year. The town's on the map in pencil.", "low": "The paper stands. They leave together, carrying a kettle and a wall. Hortense: \"It was never the building.\"", "highAt": 1000, "midAt": 700 },
+        "stands": ["In the room. They count.", "In the room. They count.", "In the doorway. Neither side.", "Beside the man in the suit, with the notebook. They read from the other Ledger.", "Beside the man in the suit, with the notebook. They read from the other Ledger."],
+        "stamps": {
+          "means": "The man in the suit's got the real register. \"There's no application. There's a forgery of one. It's quite good.\" He writes down who forged it.",
+          "place": "The four or five who lived there first are in the road too. On the other side.",
+          "key": "The number on the screen's a thousand. The road's empty. Nobody comes.",
+          "moment": "The door's on. Whoever put it back's standing by it and won't look up."
+        }
+      },
+      "spite": {
+        "title": "Their Best Day", "room": "The Wall, then the Target's stage",
+        "intro": ["The Target, mid-speech, seeing who's in the crowd: \"...Ah.\"", "The proof's in the Boss's hand. And the microphone's near."],
+        "dirtyIntro": ["The Target falls. For something they didn't do, said by someone who was made to, in a hall the team took by force.", "The Wall, afterwards: every string's been taken down by someone on the Roster in the night. The photograph's still there."],
+        "prompt": "What's done with it?",
+        "choices": [
+          { "id": "read", "label": "Read it out", "kind": "clean", "says": "They fall. It's justice, and the team's got nothing left to be. Otis: \"So that's it, then. ...What d'we do Monday?\"" },
+          { "id": "hand", "label": "Hand it to someone else", "kind": "clean", "says": "The Witness takes the paper. Their hands shake. They read it. It takes four minutes and nobody leaves." },
+          { "id": "show", "label": "Show it to them, privately, and leave", "kind": "clean", "says": "\"You know. That's all I wanted. That you'd know somebody knows.\" The team goes home." },
+          { "id": "burn", "label": "Burn it", "kind": "clean", "says": "On the stage. In front of them. Nothing's said. The Target doesn't understand. {hero} does, and explains it to them afterwards." },
+          { "id": "ask", "label": "Ask them", "kind": "clean", "says": "\"Did you know? What it did to us?\" They answer: \"No. I never thought about you at all.\"" }
+        ],
+        "dirtyChoices": [{ "id": "read", "label": "(It's read.)", "kind": "dirty", "says": "The thing they did do's never mentioned by anyone again." }],
+        "stamps": {
+          "means": "Reading it works for a week. Then {hero}: \"The real one was bad enough. You didn't need to make him worse.\"",
+          "place": "The crowd's frightened, not shocked. Nobody hears the proof as proof.",
+          "key": "They're on the stage. They won't look at the Target. The Target looks at them, and says their name, and nothing else.",
+          "moment": "It's their happiest day, and everyone in the room will remember it as this one."
+        }
+      }
+    },
+    "room": {
+      "profit": { "room": "The Ledger Hall. The slider's where it was left, and it can't be moved again.", "who": "ngozi", "line": "Ngozi: \"I've closed the month. It balances. I'd like Monday off.\"", "dirty": "Ngozi's not there. There's a note on the ledger." },
+      "cause": { "room": "The Hall, chairs being stacked.", "who": "sioned", "line": "Sioned: \"Well. Somebody's got to take the bunting down.\"" },
+      "power": { "room": "The Chair's room.", "who": "otis", "line": "Otis: \"Sworn, and sat. I'll get the kettle.\"" },
+      "wonder": { "room": "The Engine, switched off; or the Shrine, swept.", "who": "chidi", "line": "Chidi: \"I'll write it up. Nobody will believe it. That's all right.\"", "dirty": "Nobody speaks." },
+      "belonging": { "room": "The Common Room. The kettle.", "who": "hortense", "line": "Hortense: \"Sit down, all of you. It's not getting any warmer.\"" },
+      "spite": { "room": "The Wall.", "who": "otis", "line": "Otis: \"So that's it, then. ...What d'we do Monday?\"" }
+    },
+    "monday": {
+      "prompt": "\"What do we do Monday?\" The last order, and it isn't an order.",
+      "choices": [
+        { "id": "same", "label": "\"The same as today.\"", "says": "The team goes on. The cards show it a year later, by its numbers." },
+        { "id": "paid", "label": "\"Whatever you like. You're paid up.\"", "says": "Everyone's paid a district's wages. Each leaves or stays by their own Loyalty. The cards show who was still there on Tuesday." },
+        { "id": "ask", "label": "\"I don't know. What d'you want to do?\"", "says": "The highest-rank person answers. It's their first day, shown as a single card." },
+        { "id": "stop", "label": "\"We stop.\"", "says": "The back rooms close in the epilogue, and the last card's the sign.", "needsFronts": true }
+      ]
+    },
+    "findsOut": {
+      "profit": "A shop. One name on every box.", "cause": "A wall with a new law on it, and people reading it aloud to each other.",
+      "power": "The League's board at the gate, with a new name at the top.", "wonder": "The sky, or the sea, or a silence where a hum's been all region.",
+      "belonging": "A map in a Centre, with a town on it that wasn't.", "spite": "A newspaper on a bench. The Target's face. They read all of it standing up."
+    },
+    "late": {
+      "doors": "Every door's open, and every Grunt at every door says the same thing in their own words: \"It's done. You may as well go up.\"",
+      "doorway": "{hero}, in the doorway: \"I was a day behind. I've been a day behind since the first Gym.\"",
+      "classes": {
+        "clean": { "hero": "\"I came to stop it. ...I'm not sure what I'd have stopped.\"", "boss": ["\"Sit down.\"", "\"You'd have been right to try.\"", "(Say nothing. Put the kettle on.)"] },
+        "cracked": { "hero": "\"It's nearly a good thing. You know which bit isn't.\"", "boss": ["\"I do.\"", "\"It was that or nothing.\"", "\"Tell me which bit.\""] },
+        "wrong": { "hero": "\"I don't know how to fight this. It's not a person. It's just how things are now.\"", "boss": ["\"Then don't.\"", "\"You'll think of something.\"", "\"I'm sorry.\""] },
+        "dirty": { "hero": "Nothing. They look at the room. Then: \"No. I'm not going to talk to you.\"", "boss": [] }
+      },
+      "battle": "(Battle.)", "battleWon": "{hero}: \"That didn't help.\"", "battleLost": "{hero}: \"That didn't help either.\"", "whichBit": "They tell them. It's the stamp's own line: {line}"
+    },
+    "minute": {
+      "places": {
+        "profit": { "clean": "A shop counter. A Potion, at the old price. {hero} buys one and doesn't look at the box.", "wrong": "A Centre with a price list on the door.", "dirty": "A Centre with a price list on the door, and a queue that doesn't move." },
+        "cause": { "clean": "The square. The law on the wall. A child reading it out slowly, getting a word wrong.", "wrong": "The same wall. Somebody's written under the law, small, in pencil: a name. The baker's.", "dirty": "The square, empty. A released Pokémon sitting where it was left." },
+        "power": { "clean": "The road to the Plateau, and a kid with a starter walking up it.", "wrong": "The Hall of Fame's screen, and the stamps printed beside the party.", "dirty": "A chair in an empty room." },
+        "wonder": { "clean": "A hill. Whatever the Legend did, far off and small.", "wrong": "Three days of weather, ending.", "dirty": "A hole in a roof, and sky." },
+        "belonging": { "clean": "The town's sign, new paint.", "wrong": "The road, with people still on it, a year on.", "dirty": "A town with the door shut." },
+        "spite": { "clean": "The Target's empty stage, chairs being stacked.", "wrong": "The forgery and the true record, side by side on a table.", "dirty": "The Wall, with the strings taken down." }
+      },
+      "hands": {
+        "protector": ["Checks on somebody. Knocks at a door, waits, is let in.", "Stands between a stranger and the thing. Doesn't know how. Stands there anyway."],
+        "champion-chaser": ["Doesn't stop. Walks through toward the Plateau, and glances at it once.", "Stops. It's the only time in the run they do."],
+        "strategist": ["Takes out the notebook, writes one line, shuts it, puts it away for good.", "Takes out the notebook and starts a new page."],
+        "bitter-challenger": ["Looks for the catch. Turns the box over. Reads the small print. Finds nothing. Sits down.", "Nods. They knew."],
+        "enthusiast": ["Lets {mon} out to see.", "Picks {mon} up and holds it."],
+        "idealist": ["Reads the thing on the wall twice, with a finger under the words.", "Takes the notice down, folds it, and puts it in a pocket."],
+        "prodigy": ["Looks at their own Badge case. Closes it. Goes and looks at the sea instead.", "Opens the Badge case and counts, as if one of them might be the one that was needed."],
+        "underdog": ["Finds the nearest Grunt and asks them something. The Grunt laughs.", "Finds the nearest Grunt and asks them something. The Grunt doesn't answer."]
+      },
+      "road": { "friend": "{name} arrives halfway through and stands beside {hero}.", "rival": "{name}'s at the edge of the frame, pretending not to have come.", "stray": "{name}'s found a cat." },
+      "mother": "Her letter, read aloud over it: \"...I've had to choose between the medicine and the rent this month. Don't worry. I chose the medicine.\"",
+      "last": "{hero}'s back, and the changed thing, and the day: Day {day}."
+    }
+  },
+
+  "lastRoom": {
+    "open": "{hero}: \"So. What is it? I've come a long way.\"",
+    "bossWon": {
+      "leaving": "{hero} heals {mon} first, on the Office floor, back turned. Then: \"I'm going home for a bit. I'll see you.\" It's the first time they've said where they're going.",
+      "tellings": ["{name}, to a table of new Grunts, a year on: \"{boss} and the kid. Day {day}. Six against six, and the kid's starter last.\"", "{name}, in a Centre, a year on: \"It went to the last one each. I was there. Well. Near.\"", "{name}, on the ferry, a year on: \"The kid nearly had it. Six-two. And at the end the kid shakes the Boss's hand and says—\" Somebody: \"Nobody shook anybody's hand.\" \"It's a better story with the hand.\""],
+      "calm": "{hero} writes, once. A postcard to the Office.",
+      "angry": "{hero} doesn't write. They train. The last card's them, not the new kid.",
+      "last": "A road, a year on. A kid with a starter, at the Arrival. The Board's first line of the day: \"Somebody new got off the ferry.\""
+    },
+    "heroWon": {
+      "door": "{hero}, at the door: \"I'm not going to call anyone. You can walk out when I have. I'd like you to watch me go first.\"",
+      "front": { "high": "Nobody's left. They're in the Common Room. {hero} looks back at the window, and goes.", "mid": "People leaving in twos, with bags.", "low": "The base, dark, and one window: the Office." },
+      "alone": "One more screen, alone, with whatever's on the wall.",
+      "sign": [{ "id": "down", "label": "(Take the sign down.)" }, { "id": "up", "label": "(Leave it up.)" }],
+      "signSaid": { "down": "The sign's down. The hooks are still in the wall.", "up": "The sign stays up. It's the only light on in the street." }
+    },
+    "talked": {
+      "sit": "They sit. It's the fire, with the lights on.",
+      "stay": "They stay the Evening. Hortense feeds them. The Roster comes in ones and twos to look at the person they've been hearing about for a region. Tobi asks for the story from the other side.",
+      "leave": "{hero}, in the morning: \"I'm still going to the League. I'm going to tell them all of it. The bridge too.\"",
+      "league": { "given": "The League reads a whole account instead of half of one. It reads the Given column first.", "taken": "The League reads a whole account instead of half of one. It reads the Taken column first." },
+      "letPast": ["The Champion-Chaser: \"Are you in my way?\"", "The Boss: \"No.\"", "The Champion-Chaser: \"Good. ...Were you ever?\"", "They go through. They're Champion by the epilogue. Every racket still runs, nobody's caught, nobody's seen."],
+      "letPastPage": "{hero} never knew what this was."
+    },
+    "draw": {
+      "why": "{hero}, to {name}: \"Why?\"",
+      "answers": { "kind": "\"Because you'd both have been sorry.\"", "proud": "\"Because I'm not having my Boss beaten by somebody who's not eaten.\"", "doubts": "\"I don't know. I'm still deciding.\"", "talks": "\"Because somebody had to say something, and it's always me.\"", "drinks": "\"Because I was sober for once and I could see it.\"", "skims": "\"Because I've taken enough. I wasn't taking that.\"", "freezes": "\"I don't know. My legs went before I did.\"", "loves": "\"Because somebody's waiting for each of you.\"", "none": "\"Because it was enough.\"" },
+      "last": "The three of them, and it's {name} in the middle."
+    },
+    "window": {
+      "ask": "{hero}, to each: \"Are you going after them?\"",
+      "yes": "{name}: \"Yes.\"", "no": "{name}: \"No.\"", "maybe": "{name}: \"...Yes. Don't ask me why.\"", "stay": "{name}: \"...No. I'll stay.\"",
+      "last": "The Boss, on a road, and behind them {n}.", "lastNone": "The Boss, on a road, alone.", "yesAt": 8, "noUnder": 5
+    },
+    "away": { "last": "{hero} sits in the Office chair for a minute. Then goes." },
+    "alone": {
+      "plates": "{hero}, reading the plates aloud as they pass: \"{names}.\"",
+      "office": "In the Office: \"They all went. I counted {n} names. What did you *do?*\"",
+      "worst": "The game answers for the Boss, from the Log: {line}",
+      "last": "The corridor of plates."
+    }
+  },
+
+  "walkOut": {
+    "crossed": "\"They told you to. I know. I read it.\"",
+    "door": "\"Thank you for the door.\"",
+    "loyal": "\"They'll need somebody. After.\"",
+    "low": "\"There's a ferry at six. I've left the fare on the step.\"",
+    "minor": "\"Go home. Your mum's been writing to mine.\"",
+    "talents": { "voice": "\"You're good. I listened to you for a whole street.\"", "hands": "\"You're good. That lock took me an hour.\"", "eyes": "\"You saw me coming every time, didn't you.\"", "nerve": "\"You held. I'd have run.\"", "books": "\"You kept the books straight. I could tell.\"", "wheels": "\"You were always a street ahead of me.\"", "heart": "\"They were lucky to have you.\"", "none": "\"Mind how you go.\"" },
+    "named": {
+      "tomasz": { "hero": "\"Is there really dental?\"", "yes": "Tomasz: \"...Yeah. There is, actually.\"", "no": "He looks at his shoes." },
+      "hortense": { "hero": "Doesn't speak. She hands them something wrapped in a cloth. \"For the road. Don't argue.\"" },
+      "otis": { "hero": "\"You didn't have to stand there the whole time.\"", "yes": "Otis: \"I did, though.\"" },
+      "faye": { "hero": "\"I saw the card. 'Faye refused.' I wanted to say I saw it.\"", "needs": "refused" },
+      "lux": { "hero": "\"You knew I was coming every day, didn't you.\"", "yes": "Lux: \"Forty minutes out. Every time. I never once said you were early.\"" },
+      "obadiah": { "hero": "\"They said downstairs you've worked for three before this one.\"", "yes": "\"Four, now.\"" },
+      "beatriz": { "hero": "\"I'm walking you to the ferry. Get your coat.\"", "yes": "She gets her coat." },
+      "halima": { "hero": "\"'Anyone. No questions.' You did mine. I never said thank you.\"", "needs": "infirmary" },
+      "sioned": { "hero": "\"You wrote the notices. They were good. I believed two of them.\"" }
+    },
+    "line": "{hero} to {name}: {says}"
+  },
+
+  "straight": {
+    "knock": ["A Night. The Office. Ngozi, with three sets of books.", "Ngozi: \"I've done the sums twice. {fronts}. We don't *need* the back room. We've not needed it for a district. I didn't want to say till I was sure.\""],
+    "answers": [
+      { "id": "show", "label": "\"Show me.\"", "says": "The three Ledger lines, side by side. And a fourth she's added without being asked: what the back rooms brought in, over the same district, and what they cost. It's smaller than the Boss thought." },
+      { "id": "who", "label": "\"Who else knows?\"", "says": "\"Hortense. She guessed from the shopping.\"" },
+      { "id": "close", "label": "Close the back rooms.", "says": "All of them. For good." },
+      { "id": "notYet", "label": "\"Not yet.\"", "says": "She nods. The button waits." }
+    ],
+    "day": [
+      "Morning. The Board. Every racket on it has a line through it. The rackets' people are standing in front of it.",
+      "Dispatch. One job, and it's the only one: \"Tell them.\" Each squad's sent to a racket, to close it. The Card's Takes field reads: \"Nothing.\""
+    ],
+    "racket": "{name}, at {place}: \"So that's it? You just— stop? ...D'you want the last month back? I've got it here.\"",
+    "noRackets": "There were no rackets to close. The day's quiet.",
+    "objections": {
+      "otis": "Otis: \"And what do I do, Boss? Wait tables?\" Hortense: \"You could do worse. I'll show you.\"",
+      "vikram": "Vikram: \"There's no skim in an honest till. I've looked.\"",
+      "kwabena": "Kwabena: \"I didn't sign on to drive a van.\" \"It's a good van,\" says Tomasz.",
+      "junseo": "Jun-seo says nothing. He's gone in the morning, with the Garage's best set of keys.",
+      "junseoStays": "Jun-seo says nothing. The keys are on the hook in the morning.",
+      "proud": "{name}: \"So we lost.\" They go. A handshake, if it's offered."
+    },
+    "staying": "Who's staying: {n} of {of}.",
+    "sign": { "prompt": "The name on the door, as tiles. One may be swapped.", "keep": "(Leave it exactly as it is.)", "type": "(Type the word.)" },
+    "words": { "profit": ["Syndicate", "& Co."], "cause": ["Front", "Society"], "power": ["Team", "Gym"], "wonder": ["Order", "Survey"], "belonging": ["", ""], "spite": ["", ""] },
+    "after": [
+      "Nobody's arrested. Half the Grunts keep the uniform, out of habit. The detective comes in for soup.",
+      "{hero} gets a letter: a job offer. \"Battling instructor. Dental.\""
+    ],
+    "detective": "The detective's last line: \"Closed. Not solved. Closed.\"",
+    "heroAnswers": { "protector": "{hero} comes to look first.", "champion-chaser": "{hero} doesn't reply, and sends a signed photograph a year later.", "strategist": "{hero} sends back the contract with three amendments, all fair.", "bitter-challenger": "{hero} writes: \"Is the dental real?\"", "enthusiast": "{hero} says yes.", "idealist": "{hero} says, \"Not for money.\" They come anyway.", "prodigy": "{hero} says no, kindly, and visits.", "underdog": "{hero} says yes." },
+    "mother": "The mother comes to the café. Sits at the table by the window. Orders the soup. Says to Hortense: \"You're the one who's been feeding mine.\"",
+    "basket": "Giovanni sends a fruit basket. The card's the same. \"Regards.\"",
+    "not": { "line": "Not on Whatever it takes.", "regard": "Ngozi: \"The sums are right. It's the town that isn't ready. Give it a district.\"", "fronts": "Three Fronts in profit with the back room shut: {n} so far.", "corruption": "Not with Corruption above 0.", "region": "Not yet: it's on the quay at the last Crossing." }
+  },
+
+  "handOff": {
+    "ask": "The Boss, to {name}, in the Office: {line}",
+    "heir": "{name}: \"...Me?\"",
+    "refuse": {
+      "otis": "Otis: \"I've been second for fourteen years. I'm good at it. Give it to someone who'll be bad at it and learn.\"",
+      "obadiah": "Old Obadiah laughs for a long time. Then: \"No. But ask me again tomorrow, I enjoyed that.\"",
+      "beatriz": "Beatriz: \"I'm sixteen. Ask me in ten years. Ask Hortense now.\""
+    },
+    "yes": { "doubts": "\"Ask me in the morning.\" In the morning: yes.", "freezes": "Yes. Immediately. Then sits down.", "crossed": "\"I'll take it. I'll not thank you for it.\"", "plain": "\"...All right. Yes.\"" },
+    "oath": { "read": "The Boss, reading their Oath back: \"Is it still true?\"", "yes": "\"Yes.\" The first day's built from the Oath.", "no": "\"No.\" The first day's built from what they saw." },
+    "beats": ["Morning", "Dispatch", "In person", "Evening", "Night", "The Hero"],
+    "day": {
+      "waived": "Reads the Ledger for names.", "wentBad": "Goes on the first job themselves.", "pen": "Takes the door off.",
+      "noCross": "Asks each squad for their line, again, in case it's changed.", "paid": "Pays first. Before the Board.",
+      "walked": "Walks the base. Changes one thing.", "window": "Stands at the window. Somebody else watches them do it, from the door, and goes away quietly.",
+      "wrote": "Finds the copy of the letter to the Hero's mother. Reads it. Writes.", "burned": "Counts the exits.", "none": "Does what they were shown.",
+      "readBoard": "Reads the Board.", "readLedger": "Reads the Ledger.", "goes": "Goes.", "stays": "Stays in the Office.", "eatsSquad": "Eats with the squad.", "eatsOffice": "Eats in the Office.", "opens": "Opens the door to the knock.", "sleeps": "Doesn't open the door."
+    },
+    "question": { "voice": "\"What do they want?\"", "hands": "\"What've they got?\"", "eyes": "\"Where are they now?\"", "nerve": "\"Are they any good?\"", "books": "\"What've they cost us?\"", "wheels": "\"How far behind are they?\"", "heart": "\"Are they all right?\"", "none": "\"Who are they?\"" },
+    "mistake": { "talks": "Tells the wrong person the Scheme.", "skims": "Doesn't skim, for the first time in their life, and can't sleep.", "kind": "Waives everything.", "proud": "Won't ask where the Boss kept the keys.", "drinks": "Doesn't.", "loves": "Sends a letter with the team's seal on it.", "doubts": "Changes the day's orders twice.", "freezes": "Is found at the window at noon, and somebody brings them a list.", "none": "Forgets where the kettle is." },
+    "where": { "prompt": "On the Office step.", "choices": [ { "id": "go", "label": "(Go.)", "says": "A road. The ferry, leaving. {name} is on the quay to see them off." }, { "id": "stay", "label": "(Stay. Take a bunk.)", "says": "The hundredth day, and the squad photograph. The player's in the second row. The game doesn't label them." }, { "id": "find", "label": "(Go and find the Hero.)", "says": "A fire. An ordinary one, on the road, a region on. \"I used to\" is offered." } ] },
+    "not": { "region": "Not in the first region.", "loyalty": "The team's Loyalty isn't there yet.", "officer": "Nobody's at Officer or above.", "heir": "Not them." }
+  },
+
+  "recruit": {
+    "file": ["Has been told the truth: every time.", "Has seen: {seen}.", "Temper: {temper}."],
+    "fire": "{hero}, at the last fire, having worked it out: \"It's you. It's been you every time. ...You never once told me you weren't.\"",
+    "room": "{hero}: \"I've {badges} Badges and nowhere to take them. The League's known about {three}. They did nothing.\"",
+    "offer": [{ "id": "offer", "label": "(Offer them a place.)" }, { "id": "dont", "label": "(Don't.)" }],
+    "dont": "{hero} nods. They leave in the morning, for the League, with all of it.",
+    "says": {
+      "protector": "\"Who looks after them when you're gone? ...I could do that. I'm quite good at it.\"",
+      "strategist": "\"I've been trying to work out your odds for a region. You *print* them. On the job. For your own people.\"",
+      "bitter-challenger": "\"Everyone who's ever beaten me's been pleased about it. You looked like you were *sorry.*\"",
+      "enthusiast": "\"Can I meet all of them? All the Pokémon. Before I say yes.\" They do. It takes the Evening.",
+      "idealist": "\"Then I've been walking toward this the whole time. I thought I was walking *at* it.\"",
+      "champion-chaser": "\"Are you in my way?\"",
+      "prodigy": "\"...Nobody's asked me that since I was nine.\"",
+      "underdog": "\"You're the only one who ever showed me what I was doing wrong. Can I— is there a bunk?\""
+    },
+    "prodigy": ["The Boss: \"What d'you actually want?\"", "{hero}: \"...Nobody's asked me that since I was nine. I want to see the sea. I've walked past it for a region.\"", "The Boss: \"Then go and do that.\"", "They go. A postcard of the sea, addressed to the Office, a district on. On the back: {line}"],
+    "underdog": [{ "id": "yes", "label": "\"Yes.\"" }, { "id": "no", "label": "\"No. Go and be Champion.\"" }],
+    "underdogNo": "They go. The Hall of Fame, and {hero}'s party, and a seventh name under the six, where the machine's got no slot for it: the trainer's thanks. It's the Boss's name.",
+    "plateau": {
+      "intro": "The two of them. Against the League. It isn't a war on the League. It's an audit. What they're taking is a hearing.",
+      "rooms": ["Lorelei", "Bruno", "Agatha", "Lance"],
+      "methods": [{ "id": "outplay", "label": "Outplay" }, { "id": "persuade", "label": "Persuade" }, { "id": "expose", "label": "Expose" }, { "id": "scout", "label": "Scout" }],
+      "together": "{name}: \"...Oh. You've *both* come.\"",
+      "signed": "{name} signs.", "unsigned": "{name} doesn't sign.",
+      "champion": ["The Champion: \"Eight Badges. And you've brought the reason the Badges were hard.\"", "{hero}: \"I've brought the person who mended what your Leader was told about in spring.\""],
+      "read": "(Read it.)", "battle": "(Battle.)",
+      "heard": "The League opens the file it's had for a region. The team's rackets are in it too. So's every one of the League's silences. The Champion: \"You'll be charged with some of this.\" {hero}: \"So will you.\"",
+      "won": "{hero}'s Champion. Their first act's printed on the Hall of Fame's screen, under the party: \"Leaders answer letters.\" The Boss isn't in the picture. They're holding the camera.",
+      "lost": "The Champion: \"Come back when there are more of you.\" {hero}, to the Boss, on the steps: \"So we get more of us.\"",
+      "corridor": "Three signatures, and the Champion hears it in the corridor, not the chamber."
+    },
+    "not": { "region": "\"Ask me again when I know more.\"", "line": "Clean hands or Grey only.", "corruption": "Corruption's too high.", "lied": "Lied to them.", "temper": "Past talking.", "three": "Not enough to say." }
+  },
+
+  "caught": {
+    "how": {
+      "raided": "Raided, with no way out. The Roster's charged with the Boss. Whoever got out by the back way is in the gallery.",
+      "walkedIn": "Walked in. The Roster's not charged. The list's whatever the detective had that morning. The judge takes two off before anyone speaks.",
+      "walkedInLedger": "Walked in, with the Ledger. Both columns. The court reads the Boss's own. Two more off."
+    },
+    "steps": {
+      "listItem": "The list: {line}", "noList": "The list: there's nothing on it the detective can prove.",
+      "column": "\"I'm required to say what I can prove. I'd like it noted what I couldn't help noticing.\"",
+      "walkIn": "The judge takes two off for walking in.", "ledger": "Two more off for the Ledger, in the Boss's own hand.",
+      "racket": "The Ledger: a racket, still running, at {place}.",
+      "work": "The defence: a Work. {name}.", "front": "The defence: a Front, run honestly for a district. {name}.", "dig": "The defence: a Dig, put back.",
+      "plates": "The bunk plates. The usher's counted them: {n} people lived in the place. The judge writes it down.",
+      "minorLetter": "{name} isn't called. A minor's never called."
+    },
+    "witness": {
+      "crossed": "{name}: \"I was asked across my line. {times} times. I'd like it written down.\" Against.",
+      "handshake": "{name}: \"They shook my hand when I went. Whatever else.\" For.",
+      "loyal": "{name}: \"{moment}\" For.",
+      "low": "{name}: \"{moment}\" Against.",
+      "heard": "{name}: \"I was asked a question at Night, and listened to.\" For.",
+      "unsure": "{name}: \"I don't know. I worked there.\"",
+      "cells": "{name}, from the cells: \"They left me.\" Against, twice.",
+      "otis": "Otis Blackthorn, last but one, the only witness who's testified at a Boss's trial before: \"Last time I stood here I said what I was told to. This time nobody's told me anything. So. They were fair. I didn't always like it.\"",
+      "otisAgainst": "Otis Blackthorn, last but one: \"Last time I stood here I said what I was told to. This time nobody's told me anything. So I'll say it plain: no.\""
+    },
+    "moments": { "job": "I went on {n} jobs. The first one's the one I remember.", "pay": "I was paid. Every turn I was there.", "none": "I was there. That's what I've got." },
+    "hero": {
+      "calm": "{hero}: \"I went to stop them. I'd like to say what I found.\" For.",
+      "set": "{hero}: \"I'll say what I saw. All of it. You can count it yourselves.\" Marks for, marks against: it comes to nothing.",
+      "angry": "{hero}, with the notebook. Against.",
+      "lied": "{hero}: \"They sat at my fire and told me they were somebody else.\" Against, twice.",
+      "never": "{hero} isn't there. Their mother is. She sits at the back and says nothing, and leaves a tin of something with the usher for whoever's youngest."
+    },
+    "obadiah": {
+      "paid": "Old Obadiah, last, with his hat in his hands: \"Three Bosses before this one. First one shouted. Second one cried. Third one left in the night with the float.\" A pause. \"This one paid my pension. Every turn. I'd like that written down.\"",
+      "missed": "Old Obadiah, last: \"This one missed a week. Came and told us to our faces. I've had worse from better.\"",
+      "sits": "Old Obadiah doesn't stand up."
+    },
+    "total": "The count: {n}.",
+    "bands": [
+      { "max": 0, "sentence": "Discharged. Conditions: no rackets; an address.", "after": "Outside, the steps. Whoever spoke for is on them. It's a bigger crowd than the Boss expected and nobody knows what to say." },
+      { "max": 3, "sentence": "Suspended, and an order: the Works, finished. Every bridge half-built's to be built.", "after": "A card for each Work, done. Tomasz drives the lorry." },
+      { "max": 7, "sentence": "A term. Eighteen months. Out in nine.", "after": "The visits. Hortense brings soup in a flask and the warder lets her." },
+      { "max": 12, "sentence": "A term. Five years.", "after": "The visits, fewer by the year. One person comes every month to the end: {name}." },
+      { "max": 999, "sentence": "The long one. The judge: \"I've listened to all of you. I counted with the rest of you.\"", "after": "A letter, a year on. One. From {name}." }
+    ],
+    "own": "{name}: {n}. {walks}",
+    "walksOut": "Walks out.", "stays": "Stays.",
+    "detective": "The detective visits once. Brings the notebook. \"I've a blank page at the back. I thought you might want to say what I got wrong.\"",
+    "nobodyHurt": "Nobody's hurt. It's a room, and a number, and visits."
+  },
+
+  "ledgerPage": {
+    "name": "{team}.", "signChanged": "{team}. (Sign changed, last day: '{to}'.)",
+    "creed": "{creed}. The Ledger says: {says}.",
+    "family": "{list}.", "familyNone": "Nothing run, nothing built.",
+    "totals": "Given: {given}. Taken: {taken}.",
+    "roster": "Hired: {hired}.{ways} Here: {here}.",
+    "lines": "Crossed: {crossed}.",
+    "wage": { "all": "Paid: every turn.", "missed": "Paid: missed {n}." },
+    "base": { "walked": "Walked their own base.", "not": "Didn't walk their own base." },
+    "hero": "Fires: {fires}. {truth}", "truth": "Told the truth: every time.", "lies": "Lied: {n}.",
+    "letters": "Letters: {n}. Read: {read}.",
+    "neighbour": "Neighbour: {stance}.",
+    "scheme": "Scheme: {pct}%. {stamps}.",
+    "detective": "The detective: \"{line}\"",
+    "typed": "\"{line}\""
+  },
+
+  "cards": {
+    "yearOn": {
+      "high": "{name}'s still there, a year on. Still {doing}.",
+      "mid": "{name}'s somewhere else, a year on. They write.",
+      "low": "{name} went. Nobody's heard.",
+      "left": "{name} left before the end. They're doing something else now.",
+      "minor": "{name}: Home. Took their exams. Did well in the one about maps.",
+      "cells": "{name}'s out, a year on. Doesn't talk about it."
+    },
+    "doing": { "voice": "talking people round", "hands": "fixing what's broken", "eyes": "watching the road", "nerve": "first through the door", "books": "keeping the books", "wheels": "driving", "heart": "keeping everyone fed", "none": "turning up" },
+    "hero": { "scheme": "{hero}'s minute. The last frame.", "lastRoom": "{hero}, leaving.", "straight": "{hero}'s answer to the letter.", "handOff": "{hero}, told about the new Boss. One question.", "recruit": "{hero}, beside the Boss.", "caught": "{hero}, in the courtroom." },
+    "road": "{names}. {stray}",
+    "strayFound": "The Stray's found what they were looking for.",
+    "neighbour": { "war": "Their empty chair.", "rivals": "A letter, short.", "wary": "A letter, polite.", "truce": "A fruit basket. \"Regards.\"", "front": "A fruit basket. \"Regards.\"", "merger": "Their chair, beside yours.", "understanding": "A fruit basket. \"Regards.\"" },
+    "detective": "\"{line}\"",
+    "detectiveLines": { "scheme": "It's a firm now. I can't arrest a firm for being a firm.", "lastRoom": "I've a blank page at the back.", "straight": "Closed. Not solved. Closed.", "handOff": "New name on the door. Same door.", "recruit": "The kid's with them now. I'll need a new notebook.", "caught": "I've a blank page at the back." }
+  },
+
+  "league": {
+    "elite": [
+      { "name": "Lorelei", "team": ["dewgong", "cloyster", "slowbro", "jynx", "lapras"] },
+      { "name": "Bruno", "team": ["onix", "hitmonchan", "hitmonlee", "onix", "machamp"] },
+      { "name": "Agatha", "team": ["gengar", "golbat", "haunter", "arbok", "gengar"] },
+      { "name": "Lance", "team": ["gyarados", "dragonair", "dragonair", "aerodactyl", "dragonite"] }
+    ],
+    "champion": { "name": "The Champion", "team": ["pidgeot", "alakazam", "rhydon", "exeggutor", "gyarados", "charizard"] },
+    "eliteOffset": 2, "championOffset": 3
+  },
+  "hall": { "title": "Hall of Fame", "line": "{team}. {ending}. Day {day}." },
+  "banned": ["win", "wins", "won", "lose", "lost", "good", "evil", "villain", "hero"]
+}

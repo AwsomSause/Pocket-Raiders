@@ -4,6 +4,7 @@
 // handed the key (the Lead-to-Specialist promotion). Defend places pieces, at most three a Night, and every change is
 // run through the fairness check first: a base is never saved unfair. Pure: `(block, ...) -> { block, problem, line }`.
 
+import { runRegions } from './runLength';
 import { EVIL_DATA, type EvilData } from './data';
 import { checkFair, delayOf, edgeKey, gridOf, isEdge, neighbours, roomName, type FairResult } from './baseGrid';
 import { activePairs, baseOn, fxTotal, hasFx, isDone, needsStaff, roomDef, roomOpen, sizeOf } from './baseFx';
@@ -11,6 +12,7 @@ import { appendLog, fill, money } from './ledger';
 import { inRoster, moveLoyalty, peopleRoll } from './people';
 import { hashSeed, Rng } from '../rng';
 import type { BaseState, Crew, EvilModeBlock, Piece, PieceId, Room, RoomType } from './schema';
+import { logOf } from './pack';
 
 export interface BaseOut { block: EvilModeBlock; problem: string | null; line: string }
 const no = (block: EvilModeBlock, problem: string): BaseOut => ({ block, problem, line: '' });
@@ -19,7 +21,9 @@ const ok = (block: EvilModeBlock, line = ''): BaseOut => ({ block, problem: null
 export const siteDef = (id: string, data: EvilData = EVIL_DATA) => data.base.sites.find((s) => s.id === id);
 export const pieceDef = (t: PieceId, data: EvilData = EVIL_DATA) => data.base.pieces.find((p) => p.id === t)!;
 const regionId = (block: EvilModeBlock, data: EvilData) => data.region.regions.find((r) => r.index === block.here.region)?.id ?? 'kanto';
-const lastRegion = (block: EvilModeBlock) => (block.settings.length === 'six' ? 5 : 2);
+const lastRegion = (block: EvilModeBlock) => runRegions(block) - 1;
+/** Slice 16: which region of the run (0 first), not the region's own index. */
+const runIdx = (block: EvilModeBlock) => block.region?.crossed?.length ?? 0;
 
 // ---- The site (Part 16 section 2) ----
 
@@ -112,9 +116,11 @@ export function buildProblem(block: EvilModeBlock, t: RoomType, data: EvilData =
   const b = block.base;
   if (!b) return 'There is no base yet.';
   if (def.status === 'disabled') return def.waits ?? 'Not yet.';
+  // Slice 21: with the Shadow branch removed there's no Lab to build (and the build list doesn't show one).
+  if (t === 'lab' && !(block.settings.shadow && block.edges.shadow && data.edges.shadow.on)) return 'Not in this run.';
   if (def.fixed) return `${def.name} is always there.`;
   if (def.line && !def.line.includes(block.team.line)) return `Shut by your Line. ${block.team.line === 'clean' ? "Clean hands can't build one. The button's not there." : ''}`.trim();
-  if (def.lastRegion && block.here.region !== lastRegion(block)) return def.sizes[0]!.waits ?? 'Built in the last region.';
+  if (def.lastRegion && runIdx(block) !== lastRegion(block)) return def.sizes[0]!.waits ?? 'Built in the last region.';
   if (b.rooms.some((r) => r.type === t)) return `There's ${def.name.startsWith('The') ? '' : 'a '}${def.name} already. Build on it to make it bigger.`;
   const cost = roomCost(block, t, 1, data);
   if (cost > block.team.funds) return `Not enough Funds for ${money(cost)}.`;
@@ -374,7 +380,7 @@ export function standAtWindow(block: EvilModeBlock, data: EvilData = EVIL_DATA):
 /** What the window says (Part 16 section 8): read from today's Log and the Hero's road. */
 export function windowLine(block: EvilModeBlock, data: EvilData = EVIL_DATA): string {
   const W = data.base.night.window;
-  const today = block.log.filter((e) => e.day === block.here.day);
+  const today = logOf(block).filter((e) => e.day === block.here.day);
   if (block.hero && block.hero.at >= 19) return W.hero!;
   if (today.some((e) => e.kind === 'leave')) return W.lost!;
   if (today.some((e) => e.kind === 'job' && e.result === 'went' && e.method === 'lean')) return W.leaned!;
