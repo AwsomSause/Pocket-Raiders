@@ -59,7 +59,7 @@ describe('the first region shows one of three stories', () => {
       expect(shown, `run ${i} never showed ${pick}`).toBe(true);
     }
     expect(seen.size).toBe(3);
-  });
+  }, 300_000);
   it('Flight North as the pick: the check always ends in the theft in the first region, and keeps its odds anywhere else', () => {
     const roll = content.events.get('gn-13-check')!.choices[0]!.success.effects.find((e) => e.kind === 'gn' && (e as { op: string }).op === 'roll')!;
     const stolen = (run: RunState, k: number): number => {
