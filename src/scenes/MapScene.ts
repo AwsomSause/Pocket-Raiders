@@ -577,7 +577,7 @@ export class MapScene extends Phaser.Scene {
     queueAssets(this, [...FRAME_ASSET_IDS, 'ui.party.icon_box', 'ui.party.icon_box_faint', 'ui.party.statuses', 'ui.party.icon_item', 'ui.bag.bg', ...(run?.eggs.length ? ['pack.ebdx.egg'] : [])]);
   }
 
-  create(data: { notice?: string; focus?: number } = {}): void {
+  create(data: { notice?: string; focus?: number; reopenBag?: { pocket: number; row: number } } = {}): void {
     this.endArmed = false;
     this.legend = null;
     void ensureNarration().catch(() => undefined);
@@ -1405,6 +1405,8 @@ export class MapScene extends Phaser.Scene {
     const first = room ? room.id : waitingStop(content, run);
     if (first) this.time.delayedCall(450, () => this.scene.start('Event', { sideId: first }));
     this.askRegionForm();
+    // Using an item keeps the Bag open (same pocket and row, fresh counts) until the player backs out.
+    if (data.reopenBag && !first && !this.busy) openBagMenu(this.fieldHost(), data.reopenBag.pocket, data.reopenBag.row);
   }
 
   /** A Pokémon that has a regional form of this region may take it: one free prompt per Pokémon per region. */
@@ -1669,8 +1671,8 @@ export class MapScene extends Phaser.Scene {
     return {
       scene: this,
       setPicker: (p) => (this.picker = p),
-      changed: (notice) => this.scene.restart({ notice, focus: this.index }),
-      mapItems: { rows: () => this.itemRows(), use: (row) => this.useMapItem(row.action as MapActionKind) },
+      changed: (notice, opts) => this.scene.restart({ notice, focus: this.index, reopenBag: opts?.reopenBag }),
+      mapItems: { rows: () => this.itemRows(), use: (row, bag) => this.useMapItem(row.action as MapActionKind, bag) },
     };
   }
 
@@ -2316,7 +2318,7 @@ export class MapScene extends Phaser.Scene {
   }
 
   /** Runs a map item action picked in the Bag (bike, Escape Rope, VS Seeker...). */
-  private useMapItem(action: MapActionKind): void {
+  private useMapItem(action: MapActionKind, bag?: { pocket: number; row: number }): void {
     const { session } = services();
     playSfx(this, 'ui.select');
     const notice = session.useMapAction(action);
@@ -2327,7 +2329,7 @@ export class MapScene extends Phaser.Scene {
       this.time.delayedCall(260, () => this.scene.start(sceneForRun(run)));
       return;
     }
-    this.scene.restart({ notice, focus: 0 });
+    this.scene.restart({ notice, focus: 0, reopenBag: bag });
   }
 
   private legend: Phaser.GameObjects.Container | null = null;
