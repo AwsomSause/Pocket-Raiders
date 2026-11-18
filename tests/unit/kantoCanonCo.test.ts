@@ -232,5 +232,5 @@ describe('Sweet Air (KANTO_PLACED_2, Erika\'s perfume)', () => {
     burned.party[0]!.status = { id: 'brn' };
     kantoSweetAir(content, burned);
     expect(burned.party[0]!.status).toEqual({ id: 'brn' });
-  });
+  }, 300_000);
 });

@@ -237,7 +237,7 @@ describe('Pidgey\'s Resolve: the cliff', () => {
     };
     const untrained = at(0);
     const base = scheduleLevel(content, untrained);
-    expect(fearowLevel(content, untrained, skyOf(untrained)!)).toBe(base);
+    expect(fearowLevel(content, untrained, skyOf(untrained)!)).toBe(base + 2); // Kice 2026-11-17: Spearow/Fearow two above Pidgey/Pidgeot
     expect(pidgeotLevel(content, untrained, skyOf(untrained)!)).toBe(base);
     // Asked twice at the same node: the same number (its own seeded stream).
     expect(scheduleLevel(content, untrained)).toBe(base);
@@ -249,7 +249,7 @@ describe('Pidgey\'s Resolve: the cliff', () => {
     for (const spars of [1, 3, 4, 5]) {
       const run = at(spars);
       expect(pidgeotLevel(content, run, skyOf(run)!)).toBe(base + spars);
-      expect(fearowLevel(content, run, skyOf(run)!)).toBe(base);
+      expect(fearowLevel(content, run, skyOf(run)!)).toBe(base + spars + 2);
     }
     // Gifts still add a level each, to three.
     const gifted = at(0);
@@ -257,7 +257,7 @@ describe('Pidgey\'s Resolve: the cliff', () => {
     expect(pidgeotLevel(content, gifted, skyOf(gifted)!)).toBe(base + 3);
   });
 
-  it('gn.02: at the branch the Pidgey and the Spearow are the same level, the schedule, not a fixed 5', () => {
+  it('at the branch the Spearow is two levels above the Pidgey (Pidgey on the schedule), not a fixed 5', () => {
     const run = newRun('sky-lv');
     run.party.forEach((m) => (m.level = 11));
     const side = sideOf(run, 'sky.opening')!;
@@ -265,7 +265,7 @@ describe('Pidgey\'s Resolve: the cliff', () => {
     const want = scheduleLevel(content, run);
     const started = chooseEvent(content, run, side.id, 0).run;
     expect(started.party[0]!.level).toBe(want);
-    expect(started.battle!.enemyTeam[0]!.level).toBe(want);
+    expect(started.battle!.enemyTeam[0]!.level).toBe(want + 2);
     // With the team set aside the schedule is still measured against the real team.
     expect(scheduleLevel(content, started)).toBe(want);
   });

@@ -36,6 +36,8 @@ export type SkyWhen = Extract<import('../contentSchema').EventCondition, { kind:
 export const SKY_BALANCE = {
   /** gn.02: "Pidgey and Spearow match each other, at A−1, rising each stage": both birds are at the game's own level for one stage back. */
   schedule: -1,
+  /** Kice (2026-11-17): Spearow (Fearow) is this many levels above Pidgey (Pidgeot) wherever they meet. */
+  spearowAbove: 2,
   /** Each spar puts Pidgey one level ahead of that schedule (no limit: one spar a stage is the limit). Each gift adds one too, to this cap. */
   giftLevelCap: 3,
   /** Kice (2026-11-16): the cheer question always comes before the finale's first turn, whatever happens. 1 = asked at full HP. */
@@ -155,9 +157,14 @@ export function pidgeotLevel(content: Content, run: RunState, sky: SkyState): nu
   return clampLevel(content, run, scheduleLevel(content, run) + sky.spars + Math.min(SKY_BALANCE.giftLevelCap, sky.gifts.length) + sky.wiser);
 }
 
-/** Fearow keeps the schedule: it matches the bird Pidgeot would be with no help at all. */
-export function fearowLevel(content: Content, run: RunState, _sky: SkyState): number {
-  return scheduleLevel(content, run);
+/** Spearow's level for the opening duel: two above Pidgey, who keeps the schedule. */
+export function spearowOpeningLevel(content: Content, run: RunState): number {
+  return clampLevel(content, run, scheduleLevel(content, run) + SKY_BALANCE.spearowAbove);
+}
+
+/** Fearow is always two levels above Pidgeot (Kice 2026-11-17), whatever Pidgeot gained from spars and gifts. */
+export function fearowLevel(content: Content, run: RunState, sky: SkyState): number {
+  return clampLevel(content, run, pidgeotLevel(content, run, sky) + SKY_BALANCE.spearowAbove);
 }
 
 /** The moves Fearow has learned by this stage of its region (gn.02: one per stage from S2), its four newest. */

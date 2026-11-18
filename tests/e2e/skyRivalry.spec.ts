@@ -6,6 +6,7 @@ import { expect, test } from '@playwright/test';
 const scene = (page: import('@playwright/test').Page) => page.evaluate(() => (window as any).__pkr?.activeScene() ?? null);
 
 test('the Pidgey and Spearow branch fight plays by itself on the battle scene', async ({ page }) => {
+  test.setTimeout(200_000); // a Spearow two levels up makes the duel a little longer
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
@@ -32,10 +33,11 @@ test('the Pidgey and Spearow branch fight plays by itself on the battle scene', 
   const seen = { menu: false, spectate: false };
   let shots = 0;
   const t0 = Date.now();
-  while ((await scene(page)) === 'Battle' && Date.now() - t0 < 100_000) {
+  while ((await scene(page)) === 'Battle' && Date.now() - t0 < 150_000) {
     // Enter only while a line is waiting to be read. A press made while the battle is closing is handled by no screen,
     // so an automated browser keeps it and replays it into the map, where Enter starts the next trip (a new battle).
-    const waiting = await page.evaluate(() => Boolean((window as any).__pkr.game.scene.getScene('Battle')?.advance));
+    const waiting = await page.evaluate(() => { const b = (window as any).__pkr.game.scene.getScene('Battle'); // a first-time Hyper explainer (Spearow is 2 levels up, so the duel can run long enough to trigger one) also waits for Enter
+      return Boolean(b?.advance || b?.children?.getByName?.('hyper-explain')); });
     if (waiting) await page.keyboard.press('Enter');
     await page.waitForTimeout(350);
     const state = await page.evaluate(() => {
