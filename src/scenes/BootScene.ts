@@ -18,6 +18,7 @@ import { queueAsset } from '../ui/lazyAssets';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { buildLoading, LOADING_LOOKS, type LoadingLook } from '../ui/loadingLooks';
 import { loadingTip, loadingTipFor } from '../core/presentation/uiPrefs';
+import { earlyAccessDue, readEarlyAccessEnv, showEarlyAccessNotice } from '../ui/earlyAccessNotice';
 import { playUpdateSplash, readSplashEnv, splashDue, type SplashHandle } from '../ui/updateSplash';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
@@ -143,9 +144,11 @@ export class BootScene extends Phaser.Scene {
       assets.markFailed(file.key);
     });
     this.load.once('complete', () => {
-      if (!this.splash) return this.scene.start('MainMenu');
+      // Evil Mode early-access notice: once per browser, shown over the game before anything else.
+      const notice = (): Promise<void> => (earlyAccessDue(readEarlyAccessEnv()) ? showEarlyAccessNotice() : Promise.resolve());
+      if (!this.splash) return void notice().then(() => this.scene.start('MainMenu'));
       // After the splash the main menu is skipped: straight into the saved run or the hub.
-      void this.splash.ended.then(() => this.scene.start('MainMenu', { afterSplash: true }));
+      void this.splash.ended.then(notice).then(() => this.scene.start('MainMenu', { afterSplash: true }));
     });
     this.load.start();
   }
