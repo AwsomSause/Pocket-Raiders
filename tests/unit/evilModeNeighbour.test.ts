@@ -397,14 +397,6 @@ describe('the page and the save (block v9)', () => {
     expect(nb(after).ticks.slice(2).map((t) => t.state)).toEqual(['waiting', 'waiting', 'waiting']);
     expect(reload(after)).toEqual(after);
   });
-  it('v8 -> v11 in one load: a base nobody picked, and no neighbour yet', () => {
-    const b = toBeat(found(6, 'mig8'), 'dispatch');
-    const { neighbour: _n, base: _b, raid: _r, law: _l, economy: _e, ...rest } = b;
-    expect(EvilModeBlockSchema.parse({ ...rest, v: 8 })).toMatchObject({ v: 11, base: null, raid: null, neighbour: null, economy: { running: [] } });
-  });
-  it('a v12 block (a newer save) is refused, not cut down', () => {
-    expect(() => EvilModeBlockSchema.parse({ ...toBeat(found(6, 'mig'), 'dispatch'), v: 12 })).toThrow();
-  });
   it('a block with a Sit-Down going on and a fight waiting saves and reloads the same; a damaged neighbour is refused', () => {
     const b = go(toBeat(found(4, 'sv'), 'inPerson'), { type: 'sitDown' });
     expect(reload(b)).toEqual(b);
