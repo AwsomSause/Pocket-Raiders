@@ -10,7 +10,7 @@ import { inChair } from './gym';
 import { appendLog, fill, money } from './ledger';
 import { districtKey, inRoster, moveLoyalty, wageOf } from './people';
 import { stageKind } from './region';
-import { LINE_IDS, RANKS, type CardField, type Crew, type EconCardDef, type EvilModeBlock, type Holding, type LogEntry, type Mood, type Venture } from './schema';
+import { packField, LINE_IDS, RANKS, type CardField, type Crew, type EconCardDef, type EvilModeBlock, type Holding, type LogEntry, type Mood, type Venture } from './schema';
 
 export const econOn = (data: EvilData = EVIL_DATA): boolean => data.economy.on;
 const word = (k: string, data: EvilData): string => {
@@ -176,7 +176,7 @@ export function tradeCard(block: EvilModeBlock, req: TradeReq, data: EvilData = 
 /** Files a Card (kept with its day) and its Ledger line. */
 function file(block: EvilModeBlock, cardId: string, fields: CardField[], who: string[], extra: Partial<LogEntry> = {}): EvilModeBlock {
   const id = `E${block.economy.cards.length + 1}`;
-  const b = { ...block, economy: { ...block.economy, cards: [...block.economy.cards, { id, day: block.here.day, cardId, fields }] } };
+  const b = { ...block, economy: { ...block.economy, cards: [...block.economy.cards, { id, day: block.here.day, cardId, fields: fields.map(packField) }] } };
   return appendLog(b, { kind: 'econ', who, cardId: id, text: `Day ${block.here.day}. ${fields[11]!.text}`, unknowns: fields.slice(0, 10).filter((x) => x.unknown).length, ...extra });
 }
 

@@ -3,6 +3,7 @@
 import { dreadWord, heatStep } from './line';
 import { EVIL_DATA, type EvilData } from './data';
 import { beatStrip } from './day';
+import { clockChip } from './crossing';
 import { dayIn, stageName } from './region';
 import { modify, regionOf } from './regionRule';
 import { lookMood, stageRow } from './board';
@@ -208,6 +209,8 @@ export function regionChips(block: EvilModeBlock, data: EvilData = EVIL_DATA): s
   const region = regionOf(block, data);
   const out = [`${region?.name ?? data.founding.region.name} · ${stageName(block.here.stage, data)} · Day ${dayIn(block)}`];
   if (region?.rule) out.push(`${region.name}: ${region.rule.name}`);
+  const clock = clockChip(block, data);
+  if (clock) out.push(clock);
   if (modify(block, 'heroGym', {}, 0, data) > 0 && block.hero && block.district) {
     const row = stageRow(block.district.region, block.district.n, data);
     const steps = Math.max(0, 20 - block.hero.at);

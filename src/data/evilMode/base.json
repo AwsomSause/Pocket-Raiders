@@ -1527,8 +1527,7 @@
         "is": "Caught, early, by choice",
         "costs": "The run's ending, chosen",
         "gives": "The courtroom's kinder to someone who came in. The Roster's not charged",
-        "status": "limited",
-        "waits": "Endings come with slice 15."
+        "status": "supported"
       }
     ],
     "wings": [

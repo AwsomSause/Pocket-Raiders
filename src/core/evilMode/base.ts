@@ -20,6 +20,8 @@ export const siteDef = (id: string, data: EvilData = EVIL_DATA) => data.base.sit
 export const pieceDef = (t: PieceId, data: EvilData = EVIL_DATA) => data.base.pieces.find((p) => p.id === t)!;
 const regionId = (block: EvilModeBlock, data: EvilData) => data.region.regions.find((r) => r.index === block.here.region)?.id ?? 'kanto';
 const lastRegion = (block: EvilModeBlock) => (block.settings.length === 'six' ? 5 : 2);
+/** Slice 16: which region of the run (0 first), not the region's own index. */
+const runIdx = (block: EvilModeBlock) => block.region?.crossed?.length ?? 0;
 
 // ---- The site (Part 16 section 2) ----
 
@@ -114,7 +116,7 @@ export function buildProblem(block: EvilModeBlock, t: RoomType, data: EvilData =
   if (def.status === 'disabled') return def.waits ?? 'Not yet.';
   if (def.fixed) return `${def.name} is always there.`;
   if (def.line && !def.line.includes(block.team.line)) return `Shut by your Line. ${block.team.line === 'clean' ? "Clean hands can't build one. The button's not there." : ''}`.trim();
-  if (def.lastRegion && block.here.region !== lastRegion(block)) return def.sizes[0]!.waits ?? 'Built in the last region.';
+  if (def.lastRegion && runIdx(block) !== lastRegion(block)) return def.sizes[0]!.waits ?? 'Built in the last region.';
   if (b.rooms.some((r) => r.type === t)) return `There's ${def.name.startsWith('The') ? '' : 'a '}${def.name} already. Build on it to make it bigger.`;
   const cost = roomCost(block, t, 1, data);
   if (cost > block.team.funds) return `Not enough Funds for ${money(cost)}.`;

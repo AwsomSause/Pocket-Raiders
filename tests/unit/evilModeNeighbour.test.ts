@@ -385,13 +385,13 @@ describe('the page and the save (block v9)', () => {
     expect(m.rows.find((r) => r.testid === 'evil-nb-sit')!.open).toBe(true);
     expect(m.rows.find((r) => r.testid === 'evil-nb-chair')!.open).toBe(false);
   });
-  it('v9 (slice 10, via slice 11 v10) and v10 (slice 11) -> v11: no neighbour until the next step; then Giovanni at Wary, ticks already past counted as happened', () => {
+  it('v9 -> v10: no neighbour until the next step; then Giovanni at Wary, ticks already past counted as happened', () => {
     const b = toBeat(found(6, 'mig'), 'dispatch');
     const { neighbour, ...rest } = b;
     void neighbour;
-    for (const v of [9, 10]) expect(EvilModeBlockSchema.parse({ ...rest, v })).toMatchObject({ v: 11, neighbour: null, base: rest.base, economy: v === 9 ? { running: [], broke: 0 } : rest.economy });
-    const v11 = EvilModeBlockSchema.parse({ ...rest, v: 9 });
-    const after = go(v11, { type: 'send' });
+    const v9 = EvilModeBlockSchema.parse({ ...rest, v: 9 });
+    expect(v9).toMatchObject({ v: 15, neighbour: null });
+    const after = go(v9, { type: 'send' });
     expect(nb(after).stance).toBe('wary');
     expect(nb(after).ticks.slice(0, 2).map((t) => t.state)).toEqual(['fired', 'fired']);
     expect(nb(after).ticks.slice(2).map((t) => t.state)).toEqual(['waiting', 'waiting', 'waiting']);

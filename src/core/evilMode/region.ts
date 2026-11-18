@@ -10,13 +10,34 @@ import { appendLog, fill, money } from './ledger';
 import { inRoster, teamLoyalty, wageOf } from './people';
 import { patronOf, PATRON_ID, regionOf } from './regionRule';
 import { arriveApplicants } from './roster';
-import type { Crew, District, EvilModeBlock, Holding, PastDistrict, RegionState } from './schema';
+import { regionSlice16Start, unpackField, type Crew, type District, type EvilModeBlock, type Holding, type PastDistrict, type RegionState } from './schema';
 
 export type StageKind = 'arrival' | 'district' | 'reckoning';
 
 /** Stage 1 is the Arrival, 8 the Reckoning, 2 to 7 the six districts (Part 2 section 2). The district's `n` is stage − 1. */
 export const stageKind = (stage: number): StageKind => (stage <= 1 ? 'arrival' : stage >= 8 ? 'reckoning' : 'district');
 export const regionOn = (data: EvilData = EVIL_DATA): boolean => data.region.on;
+
+/**
+ * Slice 16: which region of the run this is, from 0 (R − 1 in Part 2 section 1.1). `here.region` is the region's own index
+ * in region.json (Kanto 0, Johto 1, Hoenn 2), so Johto can be a run's third region; levels, the Arrival's lessons and how
+ * far a run's gone read this instead.
+ */
+export const runIndex = (block: { region?: { crossed?: readonly string[] } | null }): number => block.region?.crossed?.length ?? 0;
+/** The absolute stage A = (R − 1) × 8 + S (Part 2 section 1.1). */
+export const absStage = (block: Pick<EvilModeBlock, 'here'> & { region?: { crossed?: readonly string[] } | null }): number => runIndex(block) * 8 + block.here.stage;
+
+/** Slice 16: the names the Arrival and Reckoning texts use ({region}, {leader1}, {leader8}, {town8}), from this region's rows. */
+export function regionWords(block: Pick<EvilModeBlock, 'here'>, data: EvilData = EVIL_DATA): Record<string, string> {
+  const r = block.here.region;
+  const row = (n: number) => data.district.districts.find((x) => x.region === r && x.n === n);
+  return {
+    region: data.region.regions.find((x) => x.index === r)?.name ?? '',
+    leader1: row(0)?.leader ?? '', leader8: row(7)?.leader ?? '', town8: row(7)?.town ?? '',
+  };
+}
+/** Fills a region text with this region's names. */
+export const regionText = (t: string, block: Pick<EvilModeBlock, 'here'>, data: EvilData = EVIL_DATA): string => fill(t, regionWords(block, data));
 
 /** The day of this district (1 on its first Morning); days before slice 9 count from the run's first. */
 export const dayIn = (block: Pick<EvilModeBlock, 'here' | 'district'>): number => block.here.day - (block.district?.from ?? 1) + 1;
@@ -45,7 +66,9 @@ export function markOf(block: Pick<EvilModeBlock, 'team' | 'crew' | 'log' | 'her
 /** A new region's state (the first Morning of its Arrival). */
 export function newRegion(block: Pick<EvilModeBlock, 'team' | 'crew' | 'log' | 'here'>, seed: string, data: EvilData = EVIL_DATA): RegionState {
   const def = data.region.regions.find((r) => r.index === block.here.region);
-  return { id: def?.id ?? 'kanto', phase: 'day', past: [], mark: markOf(block, data), tallies: [], badgeDay: badgeDayFor(seed, data), doubledBack: false, notes: [] };
+  const crossed = (block as { region?: RegionState | null }).region?.crossed ?? [];
+  // Slice 16: a later region's Badge day is drawn from the seed and the region (the first keeps its old draw).
+  return { id: def?.id ?? 'kanto', phase: 'day', past: [], mark: markOf(block, data), tallies: [], badgeDay: badgeDayFor(crossed.length ? `${seed}::${def?.id}` : seed, data), doubledBack: false, notes: [], ...regionSlice16Start(), crossed: [...crossed] };
 }
 
 // ---- The districts behind (Part 2 section 4.1) ----
@@ -63,8 +86,12 @@ export function pastPays(block: EvilModeBlock, p: PastDistrict, data: EvilData =
 
 /** Tonight's takings from every district behind, and the line the Evening prints (none when there's nothing). */
 export function pastTakings(block: EvilModeBlock, data: EvilData = EVIL_DATA): { amount: number; lines: string[] } {
-  const amount = block.region.past.reduce((n, p) => n + pastPays(block, p, data), 0);
-  return { amount, lines: block.region.past.length ? [fill(data.region.drift.takings, { amount: money(amount).replace(/^₽/, '') })] : [] };
+  const behind = block.region.past.reduce((n, p) => n + pastPays(block, p, data), 0);
+  // Slice 16: and from across the water (garrisons in regions behind, an Officer left in an old base), at half.
+  const abroad = block.region.abroad ?? 0;
+  const lines = block.region.past.length ? [fill(data.region.drift.takings, { amount: money(behind).replace(/^₽/, '') })] : [];
+  if (abroad) lines.push(fill(data.region.crossing.abroad, { amount: money(abroad) }));
+  return { amount: behind + abroad, lines };
 }
 
 /** The roll for the n-th number `evil-drift` gives out: 1..max. The count is stored, so a reload drifts the same. */
@@ -117,9 +144,9 @@ export function tallyOf(block: EvilModeBlock, data: EvilData = EVIL_DATA): Regio
   const promoted = log.filter((e) => e.kind === 'promote').length;
   const cards = log.filter((e) => e.kind === 'card').length;
   const waived = log.filter((e) => e.kind === 'waive').length;
-  const crossed = log.filter((e) => e.kind === 'card' && block.cards.find((c) => c.id === e.cardId)?.fields[7]?.text.match(/won't|refus/i)).length;
+  const crossed = log.filter((e) => e.kind === 'card' && block.cards.find((c) => c.id === e.cardId)?.fields[7] ? unpackField(block.cards.find((c) => c.id === e.cardId)!.fields[7]!, 7, data.ledger.fields).text.match(/won't|refus/i) : null).length;
   const hero = block.hero;
-  const badges = hero ? hero.badges.length : 0;
+  const badges = hero ? hero.badges.filter((b) => b.region === block.here.region).length : 0;
   const heroLine = hero ? `${badges === 0 ? 'No Badges' : badges === 1 ? 'One Badge' : `${badges} Badges`}. Step ${hero.at} of 20.${hero.battlesWithTeam ? ` ${hero.battlesWithTeam} battle${hero.battlesWithTeam === 1 ? '' : 's'} with the team.` : ''}` : '—';
   const said = [...log].reverse().find((e) => /"[^"]{8,}"/.test(e.text))?.text.match(/"[^"]+"/)?.[0] ?? data.region.tally.said;
   const title = `${stageName(block.here.stage, data)}: ${town(d, data)}. ${d.end?.how === 'held' ? 'Held.' : d.end?.how === 'taken' ? 'Taken by the Hero.' : d.end?.how === 'arrival' ? 'The Arrival.' : 'The Reckoning.'}`;
@@ -167,7 +194,9 @@ export function goOn(block: EvilModeBlock, stay: string | null, data: EvilData =
   if (stay && !mayStay(block, data).some((c) => c.id === stay)) return { block, problem: 'Only an Officer can be left to hold a district.' };
   if (block.here.stage >= 8) return { block, problem: 'The region is over.' };
   const crew = block.crew.map((c) => (c.id === stay ? { ...c, where: 'away' as const } : c));
-  let past: PastDistrict[] = [...block.region.past, { district: d, leftWith: stay }];
+  // Slice 16: a kept place is kept up once a district and a water route by a boat a day: left with nobody, both lapse.
+  const left = stay ? d : { ...d, holdings: d.holdings.map((h) => (lapses(block, h) ? lapse(h) : h)) };
+  let past: PastDistrict[] = [...block.region.past, { district: left, leftWith: stay }];
   const notes = [heardOf(block, data)];
   let doubledBack = block.region.doubledBack;
   // The double-back: once a region, a district behind (not the one just left) that nobody holds.
@@ -199,6 +228,17 @@ export function goOn(block: EvilModeBlock, stay: string | null, data: EvilData =
   return { block: arriveApplicants(out, data), problem: null };
 }
 
+/** A kept place (Johto) or a water route (Hoenn) the team holds lapses when nobody's left to keep it (a Tide kit runs a route alone). */
+export function lapses(block: Pick<EvilModeBlock, 'team'>, h: Holding): boolean {
+  if (h.owner !== 'team') return false;
+  if (h.kind === 'kept') return true;
+  return h.kind === 'water' && block.team.doctrine !== 'tide';
+}
+const lapse = (h: Holding): Holding => {
+  const { method: _m, since: _s, ...rest } = h;
+  return { ...rest, owner: 'nobody', holds: false };
+};
+
 /** Bring an Officer back from a district behind (at the Road). The district's then held by nobody. */
 export function recall(block: EvilModeBlock, id: string, data: EvilData = EVIL_DATA): { block: EvilModeBlock; problem: string | null; line: string } {
   if (block.region.phase !== 'road') return { block, problem: 'Officers are recalled on the Road.', line: '' };
@@ -223,13 +263,13 @@ export function morningNotes(block: EvilModeBlock, data: EvilData = EVIL_DATA): 
   const out: string[] = [];
   const k = stageKind(block.here.stage);
   const di = dayIn(block);
-  if (k === 'arrival' && block.here.region === 0 && di <= 4) {
+  if (k === 'arrival' && runIndex(block) === 0 && di <= 4) {
     const patron = patronOf(block, data);
     const lessons = !patron || patron.id === 'nobody' ? data.region.arrival.lessons.nobody : data.region.arrival.lessons.patron;
     const who = patron && patron.id !== 'nobody' ? `${patron.who}: ` : '';
     out.push(`${who}${lessons[di - 1]}`);
   }
-  if (k === 'reckoning') out.push(data.region.reckoning.day[Math.min(2, di - 1)]!);
+  if (k === 'reckoning') out.push(regionText(data.region.reckoning.day[Math.min(2, di - 1)]!, block, data));
   if (di === 1) out.push(...block.region.notes);
   for (const p of block.region.past) {
     if (!p.leftWith || (block.here.day - (p.district.from ?? 1)) % 2 !== 0) continue;
@@ -251,7 +291,7 @@ export function waysForward(block: EvilModeBlock, data: EvilData = EVIL_DATA): W
   if (roster.some((c) => c.unpaid > 0)) out.push(W('bankrupt'));
   if (!roster.length) out.push(W('nobody'));
   if (!block.district?.holdings.some((h) => h.kind === 'safehouse' && h.owner === 'team') && stageKind(block.here.stage) !== 'arrival' && dayIn(block) >= 3) out.push(W('noBase'));
-  if (block.hero && block.hero.badges.length >= block.here.stage) out.push(W('heroAhead'));
+  if (block.hero && block.hero.badges.filter((b) => b.region === block.here.region).length >= block.here.stage) out.push(W('heroAhead'));
   const lost = block.region.past.filter((p) => p.district.end?.how === 'taken').length;
   if (block.region.past.length >= 2 && lost === block.region.past.length) out.push(W('everyLost'));
   return out;

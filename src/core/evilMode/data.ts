@@ -12,10 +12,22 @@ import heroRaw from '../../data/evilMode/hero.json';
 import lineRaw from '../../data/evilMode/line.json';
 import gymRaw from '../../data/evilMode/gym.json';
 import regionRaw from '../../data/evilMode/region.json';
-import neighbourRaw from '../../data/evilMode/neighbour.json';
 import economyRaw from '../../data/evilMode/economy.json';
+import neighbourRaw from '../../data/evilMode/neighbour.json';
+import schemeRaw from '../../data/evilMode/scheme.json';
+import { CreedsFileSchema, DistrictFileSchema, DoctrinesFileSchema, FacesFileSchema, GymFileSchema, FoundingFileSchema, HeroFileSchema, LedgerFileSchema, LineFileSchema, MethodsFileSchema, NeighbourFileSchema, PeopleFileSchema, RegionFileSchema, EconomyFileSchema, SchemeFileSchema, BaseFileSchema } from './schema';
 import baseRaw from '../../data/evilMode/base.json';
-import { CreedsFileSchema, DistrictFileSchema, DoctrinesFileSchema, FacesFileSchema, GymFileSchema, FoundingFileSchema, HeroFileSchema, LedgerFileSchema, BaseFileSchema, EconomyFileSchema, LineFileSchema, MethodsFileSchema, NeighbourFileSchema, PeopleFileSchema, RegionFileSchema } from './schema';
+import firesRaw from '../../data/evilMode/fires.json';
+import roadRaw from '../../data/evilMode/road.json';
+import lastRoomRaw from '../../data/evilMode/lastRoom.json';
+import endingsRaw from '../../data/evilMode/endings.json';
+import { FiresFileSchema, RoadFileSchema, LastRoomFileSchema, EndingsFileSchema } from './schema';
+
+/** Parses `raw` (throws when it's wrong) and hands it back with the JSON's own types. */
+const checked = <T>(schema: { parse: (x: unknown) => unknown }, raw: T): T => {
+  schema.parse(raw);
+  return raw;
+};
 
 export const EVIL_DATA = {
   creeds: CreedsFileSchema.parse(creedsRaw).creeds,
@@ -30,9 +42,15 @@ export const EVIL_DATA = {
   line: LineFileSchema.parse(lineRaw),
   gym: GymFileSchema.parse(gymRaw),
   region: RegionFileSchema.parse(regionRaw),
-  neighbour: NeighbourFileSchema.parse(neighbourRaw),
   economy: EconomyFileSchema.parse(economyRaw),
+  neighbour: NeighbourFileSchema.parse(neighbourRaw),
+  scheme: SchemeFileSchema.parse(schemeRaw),
   base: BaseFileSchema.parse(baseRaw),
+  fires: FiresFileSchema.parse(firesRaw),
+  road: RoadFileSchema.parse(roadRaw),
+  lastRoom: LastRoomFileSchema.parse(lastRoomRaw),
+  /** Slice 15: checked by its schema; read with the JSON's own types (its lines are many and plain). */
+  endings: checked(EndingsFileSchema, endingsRaw),
 };
 export type EvilData = typeof EVIL_DATA;
 export type Creed = EvilData['creeds'][number];

@@ -1,0 +1,20 @@
+- **Evil Mode slice 12, "the fires and the last room"** (2026-11-17, build plan `/mnt/project-files/plans/evil-mode/31_THE_BUILD_PLAN.md` section 3; design Part 18 section 5, Part 19, Part 20, Part 21, Part 29's New look): the player can sit across a fire from the kid, and be found.
+
+## What's built
+- Data (validated in `schema.ts`): `src/data/evilMode/fires.json` (the four fires for all eight personalities, eight middle fires, "And you?" and its answers by Creed, the third fire's extra choice, your own line's list by Creed and Line, the notebook), `road.json` (the other three: the Rival, the Friend, the Stray, with names, looks, reasons and a line a day; the mother's letters, moods, replies and the letter you write; the temper's five words), `lastRoom.json` (the eighth Leader, the last day, the night before, the gate, the walk, the Wall, the opening line, the speech by every Creed, Wall state and personality, the room's choices, outcomes, the Evening and the File's page).
+- Core: `temper.ts` (five steps, moved only by named things, never below Curious; three steps a day at Angry), `road.ts` (the other three as real rival records; help, talk, mislead; the Friend goes home when their family's shop is Leaned on; the letters, opened only with a Large Listening Post; keep one back; write to her once a region), `fires.ts` (when the flame's lit, the exchanges, the lie kept, practice, your own line typed or picked, the fire missed, the notebook, `liedToHero` read at the end), `reckoning.ts` (the last day, the night before, the gate, the walk, the opening line, the speech, the room's choices and outcomes, the File's page), `canDo.ts` (refuses every action that names a child on the road).
+- Battles: practice at the fire (one of yours against their starter, no stakes); the last room's battle against the Hero's six (four for a gentle Idealist).
+- Screens (New look): the **Road page (O)**: the flame and "Sit at the fire", the last day's four choices, the other three (help, talk, mislead), the letters (open one), and at Night: write to her, keep the next one back, a line in the notebook. **The fire** holds the screen until it's left: every exchange, then your own line typed (a real text box) or picked. **The last room** holds the screen the same way: everything said, the choices, the outcome, Close. The File shows the temper, what you said at each fire, the letters, the other three, the notebook and its new pages.
+
+## Saves
+The block's own version goes 9 to 10 here (renumbered to the next free number on rebase): the Hero's temper, fires, lies, letters and pages, and the block's `road`, `fire` and `reck`, all empty on old saves. Tested in `tests/unit/evilModeFires.test.ts`.
+
+## Tests
+`tests/unit/evilModeFires.test.ts` (32): the data for all eight and every Creed and Wall state; the other three as rival records, none discarded; a line a day with no stream moved; the fire's steps, the lie, practice, your own line, the fire missed and the last room's changed first line; letters; the last day, the walk, the room's choices and outcomes, a whole region replayed; canDo across every action and id; the save step; the page models. Browser `tests/e2e/evilModeFires.spec.ts` (keys: the Road page, sit, answer, type your own line, leave; taps: the last room, say nothing, close) at three sizes.
+
+## Limits
+- The last room ends the region, not yet the run (the Crossing is a later slice).
+- Limited: the Loner's and the Mirror's turns, stepping in elsewhere, the "scheme" answer, the Rival's and the Stray's discouragement, and the eighth Leader's special condition are in data but not yet played. Recruitment is always refused in Regions 1 and 2 (by design) and needs a later slice after that.
+- The Wall is read from Regard and Dread at 5 until its pin-board comes. The walk's door fights are told, not fought.
+- The flame shows on the Road page, not as a mark on the map.
+- Undo: switch `fires.on`, `road.on` and `lastRoom.on` off in their data files: the Reckoning goes back to slice 9's.

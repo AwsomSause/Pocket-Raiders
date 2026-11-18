@@ -13,7 +13,8 @@ import { crossers, peopleText, wontText } from './people';
 import { heatIfSent, proofFor } from './line';
 import { modify } from './regionRule';
 
-export type CardDraft = Omit<StoredCard, 'id'>;
+/** A Card as it's made (every field whole); stored, a field may later be packed (slice 16). */
+export type CardDraft = Omit<StoredCard, 'id' | 'fields'> & { fields: CardField[] };
 
 /** The Card for a job. Callers check the job can be queued first (dispatch.ts `jobProblem`). */
 /** `asked`: the Boss is asking anyway, across a line; field 12 says who was asked (Part 29 section 5.4). */
@@ -106,7 +107,7 @@ export function cardFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
 }
 
 /** How many fields are still red ink (field 11's own count). */
-export const unknownCount = (c: Pick<StoredCard, 'fields'>): number => c.fields.slice(0, 10).filter((x) => x.unknown).length;
+export const unknownCount = (c: Pick<CardDraft, 'fields'>): number => c.fields.slice(0, 10).filter((x) => x.unknown).length;
 
 /** The job field 13's button swaps to, where there is one: a Pay under the price swaps to the fair price. */
 export function otherWay(job: JobDraft, data: EvilData = EVIL_DATA): JobDraft | null {

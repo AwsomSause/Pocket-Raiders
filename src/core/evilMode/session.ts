@@ -6,6 +6,8 @@ import { step, type EvilAction, type EvilCue } from './day';
 import { layDistrict } from './board';
 import { EVIL_DATA } from './data';
 import { makeHero } from './hero';
+import { makeRoad } from './road';
+import { monName } from './temper';
 import { RivalSchema } from '../story/schema';
 import { foundTeam, type FoundingChoice } from './start';
 import type { EvilModeBlock, RunLength } from './schema';
@@ -51,7 +53,7 @@ export function stepInRun(run0: RunState, action: EvilAction): { run: RunState; 
 }
 
 /** Everything a block saved by an earlier slice is missing, made once: the district, then the Hero. */
-export const ensureEvil = (run: RunState): RunState => ensureHero(ensureDistrict(run));
+export const ensureEvil = (run: RunState): RunState => ensureRoad(ensureHero(ensureDistrict(run)));
 
 /**
  * The Hero's record in the rival system (design Part 18 section 2), made once from the run's seed. Its state is never
@@ -69,4 +71,44 @@ export function ensureHero(run: RunState, bossStarter: string | null = run.party
   });
   const rivals = [...run.story.rivals.filter((r) => r.id !== rival.id), rival];
   return { ...run, story: { ...run.story, rivals }, expansion: { ...(run.expansion ?? {}), evilMode: { ...block, hero: made.hero } } };
+}
+
+/**
+ * Slice 12: the other three on the road (design Part 20), made once from the run's seed after the Hero, each a record in
+ * the rival system like the Hero's (four, always: none is ever removed; going home is a state on the road, not a delete).
+ * A Hero made before slice 12 gets their starter's name read back from their record.
+ */
+export function ensureRoad(run: RunState): RunState {
+  const block = run.expansion?.evilMode;
+  if (!block?.hero || !block.district || !EVIL_DATA.road.on) return run;
+  let b = block;
+  if (!b.hero!.starter) {
+    const rec = run.story.rivals.find((r) => r.id === b.hero!.rivalId);
+    const starter = rec?.memory?.lastBattle?.team?.[0];
+    if (starter) b = { ...b, hero: { ...b.hero!, starter: monName(starter) } };
+  }
+  if (b.road.length) return b === block ? run : { ...run, expansion: { ...(run.expansion ?? {}), evilMode: b } };
+  const made = makeRoad(run.seed, b.hero!, b.district!, run.archetypeId);
+  const recs = made.road.map((t, i) => RivalSchema.parse({
+    id: t.id, classId: `evil-${t.role}`, name: t.name, archetype: t.personality, style: 'balanced',
+    traits: made.traits[i], rivalPotential: 60, state: 'recurring', voice: t.personality,
+    origin: { eventId: `evil-mode:${t.role}`, where: { region: b.here.region, stage: b.here.stage, level: 1, node: null, battle: null, turn: null }, path: `evil-${t.role}` },
+    memory: { lastBattle: { eventId: `evil-mode:${t.role}`, result: 'win', hpLeftShare: 1, turns: 0, team: [], foes: [] } },
+  }));
+  const ids = new Set(recs.map((r) => r.id));
+  const rivals = [...run.story.rivals.filter((r) => !ids.has(r.id)), ...recs];
+  return { ...run, story: { ...run.story, rivals }, expansion: { ...(run.expansion ?? {}), evilMode: { ...b, road: made.road } } };
+}
+
+/**
+ * Slice 15: the run ends once its ending's last scene is read (Part 23 section 1.4). Every ending ends the run the same
+ * way (`victory` false for all six: no ending is ranked above another). Null when no ending is done.
+ */
+export function finishEvil(run: RunState): RunState | null {
+  const b = run.expansion?.evilMode;
+  if (!b?.ending?.done || run.phase === 'over' || run.battle) return null;
+  const out = structuredClone(run);
+  out.phase = 'over';
+  out.victory = false;
+  return out;
 }

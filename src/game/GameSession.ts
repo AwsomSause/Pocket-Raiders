@@ -9,7 +9,7 @@
 import { openRoadHome, roadHomeDue } from '../core/co/roadHome';
 import { applyEvilEffect, evilTeam } from '../core/evil/teams';
 import { skyAct, type SkyAction } from '../core/evil/teamSky';
-import { ensureEvil, foundInRun, stepInRun } from '../core/evilMode/session';
+import { ensureEvil, finishEvil, foundInRun, stepInRun } from '../core/evilMode/session';
 import { beginEvilFight } from '../core/evilMode/fight';
 import type { FoundingChoice } from '../core/evilMode/start';
 import type { EvilAction, EvilCue } from '../core/evilMode/day';
@@ -1097,6 +1097,16 @@ export class GameSession {
     this.run = out.run;
     this.persistRun();
     return out.cues;
+  }
+
+  /** Evil Mode slice 15: the ending's last scene is read; the run ends (the run-end page, the Hall of Fame card). */
+  evilFinish(): boolean {
+    const out = finishEvil(this.requireRun());
+    if (!out) return false;
+    this.run = out;
+    this.persistRun();
+    this.finishRun();
+    return true;
   }
 
   /** Team Sky's screens (core/evil/teamSky): one action, saved; the message says what happened. */
