@@ -11,13 +11,13 @@ const block = (page: Page) => page.evaluate(() => (window as any).__pkr.session.
 const step = (page: Page, a: unknown) => page.evaluate((a) => (window as any).__pkr.session.evilStep(a), a);
 const END: Record<string, string> = { morning: 'dismissOvernight', dispatch: 'send', inPerson: 'stayIn', evening: 'callItADay', night: 'lightsOut', hero: 'watchRoad' };
 
-async function founded(page: Page) {
+async function founded(page: Page, seed: string | null = null) {
   await start(page, 'ui=new');
   await page.evaluate(() => {
     const s = (window as any).__pkr.session;
     s.saveSettings({ ...s.settings, expansion: { ...s.settings.expansion, evilMode: true } });
   });
-  await open(page, 'RunPrep', { archetypeId: 'red', modeId: 'evil-mode' });
+  await open(page, 'RunPrep', { archetypeId: 'red', modeId: 'evil-mode', ...(seed ? { seed } : {}) });
   await page.keyboard.press('Enter');
   await waitForScene(page, 'StarterSelect');
   await page.keyboard.press('Enter');
@@ -110,7 +110,8 @@ test('taps: pick a site, build a room at Night, a piece refused (red square, the
 
 test('keys: Walk it at the In person beat, into the battle screen against your own Grunt; lost; put away', async ({ page }, info) => {
   const errors = watch(page);
-  await founded(page);
+  // A fixed seed: on some random seeds the district is taken on day 1, before the walk.
+  await founded(page, 'GSBSHAT2B3');
   await page.keyboard.press('KeyB');
   const s = stage(page);
   await expect(s.getByTestId('evil-base-mode')).toHaveText('site');
@@ -166,9 +167,10 @@ test('keys: Walk it at the In person beat, into the battle screen against your o
   expect(errors).toEqual([]);
 });
 
-test('the Raid: the warning\'s four choices, the Siege Map, the door opened, a turn, the Office; never the run', async ({ page }, info) => {
+test('the Raid: the warning\'s four choices, the Siege Map, the door opened, a turn, the Office; with no back way, Caught begins', async ({ page }, info) => {
   const errors = watch(page);
-  await founded(page);
+  // A fixed seed: on some random seeds the district is taken on day 1, before the Raid can come.
+  await founded(page, 'GSBSHAT2B3');
   await page.keyboard.press('KeyB');
   const s = stage(page);
   await s.locator('[data-testid^="evil-base-site-"]').last().click();
@@ -204,8 +206,10 @@ test('the Raid: the warning\'s four choices, the Siege Map, the door opened, a t
   expect(after.raid.state).toBe('done');
   expect(after.base).toBeNull();
   await shots(page, info, 'base-raid-after');
-  await s.getByTestId('evil-raid-done').click();
-  expect((await block(page)).raid).toBeNull();
+  // Slice 15: Heat 10, a Raid and no back way: the Boss is charged and Caught begins. It holds the screen; the run goes on
+  // until its last page is read.
+  expect(after.ending).toMatchObject({ id: 'caught', via: 'raid' });
+  await expect(s.getByTestId('evil-roadpage')).toHaveAttribute('data-mode', 'ending');
   expect(await page.evaluate(() => (window as any).__pkr.session.run.phase)).toBe('map');
   expect(errors).toEqual([]);
 });
