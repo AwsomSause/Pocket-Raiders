@@ -757,6 +757,7 @@ export class EvilScene extends Phaser.Scene {
       this.notice = 'There is no trade here yet.';
       return void this.view?.refresh();
     }
+    if (block?.neighbour?.sitting) return;
     this.trade = this.trade === null ? newTrade() : null;
     this.ledger = null;
     this.roster = null;
@@ -950,7 +951,10 @@ export class EvilScene extends Phaser.Scene {
       this.notice = 'There is no neighbour here yet.';
       return void this.view?.refresh();
     }
+    if (this.baseForced()) return;
     this.nb = this.nb === null ? 0 : null;
+    this.base = null;
+    this.trade = null;
     this.ledger = null;
     this.roster = null;
     this.file = null;
