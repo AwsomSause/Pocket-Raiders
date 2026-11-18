@@ -82,7 +82,9 @@ test('keys only: Koga can\'t be bought; Misty beaten at, in the battle screen, a
     const run = (window as any).__pkr.session.run;
     run.party.forEach((m: any, i: number) => { m.hp = i === 0 ? 1 : 0; });
     run.party[0].moves = [{ ...run.party[0].moves[0], id: 'splash', pp: 40 }];
-    run.battle.enemyTeam.forEach((m: any) => { m.moves = [{ ...m.moves[0], id: 'tackle', pp: 35 }]; });
+    // Tackle can't touch a Ghost lead (the starter is random), so a Ghost lead is hit with Shadow Ball instead.
+    const ghost = (window as any).__pkr.session.content.species.get(run.party[0].speciesId)?.types.includes('ghost');
+    run.battle.enemyTeam.forEach((m: any) => { m.moves = [{ ...m.moves[0], id: ghost ? 'shadow-ball' : 'tackle', pp: 35 }]; });
   });
   const b = view(page, 'Battle');
   const atEvil = async () => (await scene(page)) === 'Evil';

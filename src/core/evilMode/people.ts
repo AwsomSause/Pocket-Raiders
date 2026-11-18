@@ -182,7 +182,7 @@ export function drawOne(pool: readonly DeckPerson[], creed: string, seed: string
 
 /** A deck person made a Roster card: a Grunt, at the Creed's starting Loyalty. The flaw's shown at hiring (Part 9 section 3); the line only if they said it. */
 export function personFrom(d: DeckPerson, loyalty: number, known: { line?: boolean } = {}): Crew {
-  return { id: d.id, ref: d.id, name: d.name, age: d.age, minor: !!d.minor, talent: d.talent, flaw: d.flaw, flawFound: true, line: d.line, lineHeard: !!known.line, rank: 'grunt', loyalty, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null };
+  return { id: d.id, ref: d.id, name: d.name, age: d.age, minor: !!d.minor, talent: d.talent, flaw: d.flaw, flawFound: true, line: d.line, lineHeard: !!known.line, rank: 'grunt', loyalty, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null, mood: 'easy', knocks: 0 };
 }
 
 /**
