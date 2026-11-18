@@ -3,6 +3,7 @@
 // rolls the jobs on the way into the Evening. An action that doesn't fit changes nothing.
 // Cues are what a screen may show (ids and values). Throwing them away leaves the state correct.
 
+import { charterAct, charterMoves, charterRefuses, meetHero, signatureHold, type CharterAct, type MeetAnswer } from './charters';
 import { answerRefusal, askAnyway, clearJob, fixOdds, queueJob, resolveEvening, type RefusalAnswer } from './dispatch';
 import { arriveApplicants, askQuestion, hire, leaveAtZero, letGo, promote, turnAway } from './roster';
 import type { JobDraft } from './odds';
@@ -152,7 +153,11 @@ export type EvilAction =
   | { type: 'watchRoad' }
   /** Slice 15: the endings (Part 23). One answer to the scene on screen, or a pressed ending. */
   | { type: 'endAct'; choice?: string | null; text?: string | null }
-  | { type: 'endPress'; what: 'straight' | 'handOff' | 'walkIn'; heir?: string; line?: string; ledger?: boolean };
+  | { type: 'endPress'; what: 'straight' | 'handOff' | 'walkIn'; heir?: string; line?: string; ledger?: boolean }
+  /** Slice 22: a Charter's house rule (return a thing, answer the roll, name the team). */
+  | { type: 'charterAct'; act: CharterAct }
+  /** Slice 22: the Turn's first meeting with the Hero (Part 28 section 15.2). */
+  | { type: 'turnMeet'; answer: MeetAnswer };
 
 export type EvilCue = { id: 'beat'; beat: Beat } | { id: 'newDay'; day: number } | { id: 'refused'; reason: string } | { id: 'queued'; holdingId: string } | { id: 'districtEnd'; how: 'held' | 'taken' | 'arrival' | 'reckoning' } | { id: 'filed'; text: string } | { id: 'asked'; line: string } | { id: 'said'; line: string } | { id: 'refusal' } | { id: 'fight' } | { id: 'road'; lines: string[] } | { id: 'ending' } | { id: 'knock'; n: number } | { id: 'moved'; line: string };
 
@@ -170,15 +175,23 @@ export const nextBeat = (beat: Beat): Beat => BEATS[(BEATS.indexOf(beat) + 1) % 
 export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
   // Slice 15: once an ending has begun, only its scenes (and its battle) move anything.
   if (block0.ending) return stepEnding(block0, action);
-  const r = stepInner(block0, action);
+  // Slice 22: a Charter's locks, and its house rule's own acts.
+  const locked = charterRefuses(block0, action as never);
+  if (locked) return { block: block0, cues: [{ id: 'refused', reason: locked }], ok: false };
+  const r = action.type === 'charterAct' ? charterStep(block0, action.act) : action.type === 'turnMeet' ? said(meetHero(block0, action.answer)) : stepInner(block0, action);
   // Slice 13: the neighbour's Morning (messages, and each tick on its day) comes with every Morning, however it's reached.
   if (!r.ok) return r;
+  // Slice 22, the Group (Part 28 section 11.3): a spend over the limit is held for the board (saved, so ok: the hold is kept).
+  const held = action.type === 'charterAct' || action.type === 'turnMeet' ? null : signatureHold(block0, action as never, r.block);
+  if (held) return { block: held.block, cues: [{ id: 'refused', reason: held.reason }], ok: true };
   // Slice 16: Hoenn's second clock (each Reckoning Morning; they meet if the Reckoning ends with it running).
   let b = l3Morning(clockMorning(schemeMorning(neighbourMorning(settleRegion(clockMet(keptWarmth(l3DistrictEnd(neighbourDistrictEnd(r.block)))))))));
   // Slice 14: the Reckoning lost (the Hero reached the base) costs the Scheme groundwork, once a region.
   if (b.district?.end?.how === 'reckoning' && b.scheme) b = reckoningLost(b).block;
   // Slice 19: Sinnoh halves every Loyalty change; Unova doubles every Regard and Dread change (Part 26b sections 1.1, 2.1).
   b = regionMoves(block0, b);
+  // Slice 22: a Charter's first week counts double; the Staff Room's Dread and Heat; the roll and the dues.
+  b = charterMoves(block0, b);
   // Slice 20: Team Star can't stand at War, Rivals, Front or Merger, whatever path tried (Part 15b section 5.1).
   b = starLocks(b);
   // Slice 15: the endings are checked after every step, in their order (Part 23 section 1.1).
@@ -186,6 +199,16 @@ export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
   // Slice 16: a region that isn't the run's last ends at the Crossing.
   b = beginCrossing(b);
   return { ...r, block: b, cues: b.ending && !block0.ending ? [...r.cues, { id: 'ending' as const }] : r.cues };
+}
+
+function charterStep(block: EvilModeBlock, act: CharterAct): StepResult {
+  return said(charterAct(block, act));
+}
+
+function said(r: { block: EvilModeBlock; problem: string | null; lines: string[] }): StepResult {
+  const block = r.block;
+  if (r.problem) return { block, cues: [{ id: 'refused', reason: r.problem }], ok: false };
+  return { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
 }
 
 function stepEnding(block: EvilModeBlock, action: EvilAction): StepResult {

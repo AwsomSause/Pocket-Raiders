@@ -4,6 +4,7 @@
 // second clock (Part 26a sections 1.7 and 4.6). Pure: new blocks are returned. Nothing here draws from a gameplay stream:
 // the tickets, who stays and the reasons are hashed from the seed and the region, so they're the same on every reload.
 
+import { runRegions } from './runLength';
 import { hashSeed, Rng } from '../rng';
 import { archiveOld } from './pack';
 import { layDistrict, shiftMood } from './board';
@@ -26,7 +27,7 @@ const ok = (block: EvilModeBlock, lines: string[] = []): R => ({ block, problem:
 /** The run's last region (its length, three or six, or the last one written), from 0. */
 export function lastRun(block: Pick<EvilModeBlock, 'settings'>, data: EvilData = EVIL_DATA): number {
   const written = data.region.regions.filter((r) => r.status === 'supported' || r.status === 'limited').length;
-  return Math.min(block.settings.length === 'six' ? 6 : 3, Math.max(1, written)) - 1;
+  return Math.min(runRegions(block), Math.max(1, written)) - 1;
 }
 
 /** Regions open for a ticket: written, and not played this run. */

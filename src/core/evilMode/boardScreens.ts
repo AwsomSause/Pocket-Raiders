@@ -2,6 +2,8 @@
 // The scene keeps the cursor and the job being built (`DispatchDraft`); these work out what to draw and decide nothing.
 // The odds shown are the ones `oddsFor` gives, the same function the Evening rolls against.
 
+import { unasked } from './charterRules';
+import { charterOf, houseActs, houseLine, meetingModel, methodsOff } from './charters';
 import { defOf, isTheirs, neighbourNotes, stanceDef, unanswered } from './neighbour';
 import { districtDef, fairPrice, heldCount, holdingName, kindDef, localOf, methodsFor } from './board';
 import { EVIL_DATA, type EvilData } from './data';
@@ -69,6 +71,12 @@ export interface BoardModel {
     crossing: CrossingModel | null } | null;
   /** Slice 13: the neighbour's tag on the title row ("Rocket · Wary"), or null with no neighbour. */
   neighbour: string | null;
+  /** Slice 22: a Charter's house rule (its name and figures), and its buttons this beat. */
+  house: { line: string; acts: { label: string; problem: string | null }[] } | null;
+  /** Slice 22: the Staff Room's Line can't be moved, and its control is absent, not greyed. */
+  lineFixed: boolean;
+  /** Slice 22: the Turn's first meeting with the Hero (day 2, In person), or null. */
+  meeting: ReturnType<typeof meetingModel>;
   dispatch: null | {
     step: DispatchStep;
     rows: { at: number; name: string; mood: string; known: string; queued: string | null; sel: boolean }[];
@@ -107,9 +115,15 @@ const moodName = (h: Holding, data: EvilData) => data.district.moods.find((m) =>
 export const dispatchRows = (block: EvilModeBlock, data: EvilData = EVIL_DATA): number[] => (block.district?.holdings ?? []).flatMap((h, i) => (methodsFor(h, data).length > 0 ? [i] : []));
 
 /** The seven method buttons, always in the same order (methods.json); the four built ones are lit by the holding. */
+/** Slice 22: the methods on Dispatch, in methods.json's order, without any a Charter never offered (absent, not dark). */
+export const methodsShown = (block: Pick<EvilModeBlock, 'charter'>, data: EvilData = EVIL_DATA): EvilData['methods'] => {
+  const off = methodsOff(block);
+  return off.length ? data.methods.filter((m) => !off.includes(m.id)) : data.methods;
+};
+
 function methodButtons(block: EvilModeBlock, h: Holding | undefined, d: DispatchDraft, data: EvilData): MethodButton[] {
   const line: LineId = block.team.line;
-  return data.methods.map((m, i) => {
+  return methodsShown(block, data).map((m, i) => {
     let dark: string | null = null;
     // Slice 6: refused by the Line, by name. Every method is built now.
     if (lineIndex(line) < lineIndex(m.minLine)) dark = lineWhy(block, data);
@@ -119,7 +133,7 @@ function methodButtons(block: EvilModeBlock, h: Holding | undefined, d: Dispatch
   });
 }
 
-export function boardModel(block: EvilModeBlock, d: DispatchDraft, data: EvilData = EVIL_DATA): BoardModel {
+export function boardModel(block: EvilModeBlock, d: DispatchDraft, data: EvilData = EVIL_DATA, opts: { seed?: boolean } = {}): BoardModel {
   const dist = block.district!;
   const def = districtDef(dist, data);
   const row = stageRow(dist.region, dist.n, data);
@@ -137,8 +151,8 @@ export function boardModel(block: EvilModeBlock, d: DispatchDraft, data: EvilDat
   const cells: CellModel[] = dist.holdings.map((h, i) => ({
     id: h.id, step: h.step, mark: kindDef(h.kind, data).mark, kind: kindDef(h.kind, data).name, name: holdingName(h, data),
     ring: h.owner === 'team' ? (h.holds ? 'holds' : 'turn') : h.scouted > 0 ? 'scouted' : 'none',
-    dot: h.scouted > 0 && h.mood ? data.district.moods.find((m) => m.id === h.mood)!.dot : null,
-    mood: h.scouted > 0 ? moodName(h, data) : null,
+    dot: h.scouted > 0 && h.mood && !unasked(block, h.id) ? data.district.moods.find((m) => m.id === h.mood)!.dot : null,
+    mood: h.scouted > 0 ? (unasked(block, h.id) ? '?' : moodName(h, data)) : null,
     queued: !!queuedOn(h), lit: !isDispatch || methodsFor(h, data).length > 0, sel: i === d.at,
     hero: block.hero?.at === h.step, road: road.includes(h.step), home: !!block.hero?.home.holdings.includes(h.id) && block.hero.home.district === dist.n,
     posted: block.posted.some((p) => p.holdingId === h.id),
@@ -153,7 +167,7 @@ export function boardModel(block: EvilModeBlock, d: DispatchDraft, data: EvilDat
   const panel = {
     name: holdingName(sel, data),
     kind: `Step ${sel.step} · ${kindDef(sel.kind, data).name}${sel.floor ? ` · floor ${sel.floor}` : ''}${sel.tags?.some((t) => t !== nbTeam) ? ` · ${deedWord(block, data)}` : ''}${isTheirs(sel, block.neighbour, data) ? ` · ${nbName}'s` : ''}`,
-    mood: sel.mood ? (known ? moodName(sel, data)! : '?') : '—',
+    mood: sel.mood ? (known && !unasked(block, sel.id) ? moodName(sel, data)! : '?') : '—',
     earns: l ? (known ? (l.take > 0 ? `${money(l.take)} a day to the team` : l.earns > 0 ? 'A favour, not money' : 'Nothing') : '—') : sel.kind === 'town' ? `${money(R.townTakings)} a day, held` : sel.kind === 'safehouse' ? `Rent ${money(R.safehouseRent)} a day, held` : '—',
     wants: l && known >= 2 ? l.want : '',
     fears: l && known >= 2 ? l.fear : '',
@@ -167,7 +181,7 @@ export function boardModel(block: EvilModeBlock, d: DispatchDraft, data: EvilDat
   const st = leader ? standingText(block, data) : null;
   if (leader && st) Object.assign(panel, { name: `${leader.town} Gym · ${leader.name}`, mood: st.word, held: st.moved, says: leader.says });
   const name = (id: string) => dist.holdings.find((h) => h.id === id);
-  const sheetLines = block.sheets.map((s) => ({ title: `Step ${name(s.holdingId)!.step} · ${holdingName({ ...name(s.holdingId)!, scouted: Math.max(1, name(s.holdingId)!.scouted) }, data)} · ${methodWord(s.method)} · ${s.won ? (s.method === 'scout' ? 'DONE' : 'WON') : 'LOST'}`, lines: [...s.lines, s.voice, s.played ? 'Played in person: not rolled.' : s.certain ? 'Certain.' : `Odds ${s.odds}%, rolled ${s.roll}.`] }));
+  const sheetLines = block.sheets.map((s) => ({ title: `Step ${name(s.holdingId)!.step} · ${holdingName({ ...name(s.holdingId)!, scouted: Math.max(1, name(s.holdingId)!.scouted) }, data)} · ${methodWord(s.method)} · ${s.won ? (s.method === 'scout' ? 'DONE' : 'WON') : 'LOST'}`, lines: [...s.lines, s.voice, s.played ? 'Played in person: not rolled.' : s.certain ? 'Certain.' : `Odds ${s.odds}%, rolled ${s.roll}.${opts.seed ? ` Seed ${dist.seed}.` : ''}`] }));
   const count = heldCount(block);
   const model: BoardModel = {
     title: `${data.region.on ? `${stageName(block.here.stage, data)}: ` : ''}${def.town} · ${def.leader}'s ${kind === 'district' ? 'district' : 'town'}${row?.tower ? ` · ${row.tower}` : ''}`,
@@ -179,6 +193,9 @@ export function boardModel(block: EvilModeBlock, d: DispatchDraft, data: EvilDat
     overnight: block.here.beat === 'morning' ? [...regionBlocks(block, data), ...(sheetLines.length ? [...sheetLines, { title: 'The money', lines: block.evening }] : [{ title: 'Overnight', lines: [di === 1 ? `${def.grievance} Twenty steps to the Gym, and none of them ours.` : 'Nothing came in.'] }])] : [],
     evening: block.here.beat === 'evening' ? block.evening : [],
     end: dist.end ? endModel(block, data) : null,
+    lineFixed: !!charterOf(block)?.lineFixed,
+    meeting: meetingModel(block),
+    house: houseLine(block) ? { line: houseLine(block)!, acts: houseActs(block, undefined, { at: sel.id }).map((a) => ({ label: a.label, problem: a.problem })) } : null,
     neighbour: nbDef && block.neighbour ? `${nbName} · ${stanceDef(block.neighbour.stance, data).word}` : null,
     dispatch: null,
     inPerson: null,
@@ -216,7 +233,7 @@ export function boardModel(block: EvilModeBlock, d: DispatchDraft, data: EvilDat
   }
   model.dispatch = {
     step: d.step,
-    rows: rows.map(({ h, i }) => ({ at: i, name: `${h.step}. ${holdingName(h, data)}`, mood: h.scouted && h.mood ? moodName(h, data)! : h.mood ? '?' : '', known: h.owner === 'team' ? 'Yours' : h.scouted >= 2 ? 'Scouted twice' : h.scouted ? 'Scouted' : 'Not scouted', queued: queuedOn(h) ? methodWord(queuedOn(h)!.method) : null, sel: i === d.at && !(d.step === 'where' && d.onSend) })),
+    rows: rows.map(({ h, i }) => ({ at: i, name: `${h.step}. ${holdingName(h, data)}`, mood: h.scouted && h.mood && !unasked(block, h.id) ? moodName(h, data)! : h.mood ? '?' : '', known: h.owner === 'team' ? 'Yours' : h.scouted >= 2 ? 'Scouted twice' : h.scouted ? 'Scouted' : 'Not scouted', queued: queuedOn(h) ? methodWord(queuedOn(h)!.method) : null, sel: i === d.at && !(d.step === 'where' && d.onSend) })),
     crew: block.crew.map((c, i) => ({ id: c.id, name: c.name, inSquad: d.squad.includes(c.id), why: crewProblem(block, c.id, sel.id), sel: d.step === 'who' && d.who === i })),
     nextSel: d.step === 'who' && d.who === block.crew.length,
     sendSel: d.step === 'where' && d.onSend,

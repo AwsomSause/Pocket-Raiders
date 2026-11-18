@@ -2,6 +2,7 @@
 // thing of the player's own, kept word for word. Pure. Nothing here draws from a stream: the player's typed words are
 // shown and stored and decide nothing. `liedToHero` is never a stored flag: it's read from the lies kept, at the end.
 
+import { runRegions } from './runLength';
 import { EVIL_DATA, type EvilData } from './data';
 import { appendLog, fill } from './ledger';
 import { heroReason } from './hero';
@@ -18,7 +19,7 @@ const bare = (t: string) => t.replace(/^Day \d+\. /, '');
 /** Which fire a region has (Part 19 section 2.4): first, second, third; the run's last region the last; between, middles. */
 export function fireN(block: Pick<EvilModeBlock, 'here' | 'settings'>): FireN {
   const r = block.here.region;
-  const last = (block.settings.length === 'six' ? 6 : 3) - 1;
+  const last = runRegions(block) - 1;
   if (r === 0) return 'first';
   if (r === 1) return 'second';
   if (r === last) return 'last';

@@ -1,5 +1,6 @@
 // Evil Mode view models (design Part 29): what each screen needs, as plain data. Screens draw these and decide nothing.
 
+import { CHARTERS, chartersOpen } from './charters';
 import { dreadWord, heatStep } from './line';
 import { EVIL_DATA, type EvilData } from './data';
 import { beatStrip } from './day';
@@ -82,6 +83,8 @@ export const choiceOf = (d: FoundingDraft, data: EvilData = EVIL_DATA): Founding
 
 export interface FoundingModel {
   page: FoundingPage;
+  /** Slice 22: the Charters tab's title, or null when Charters are off. */
+  charters: string | null;
   pages: { id: FoundingPage; title: string; on: boolean; done: boolean }[];
   at: number;
   ready: boolean;
@@ -112,6 +115,7 @@ export function foundingModel(d: FoundingDraft, ctx: { bossName: string; bossFil
   const sugg = allSuggestions(data);
   const patronDef = data.region.patrons.find((p) => p.id === d.patron);
   return {
+    charters: chartersOpen().length ? CHARTERS.tab : null,
     page: d.page,
     pages: FOUNDING_PAGES.map((id, k) => ({ id, title: PAGE_TITLE[id], on: k === i, done: k < i })),
     at: d.at,
