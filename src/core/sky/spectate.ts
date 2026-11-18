@@ -11,7 +11,7 @@ import { maxHp } from '../pokemon';
 import { newMon } from '../run';
 import type { PokemonInstance, RunState } from '../state';
 import { addItem } from '../items';
-import { SKY_BALANCE, SKY_FLY_ITEM, fearowLevel, fearowMoves, pidgeotLevel, pushRoom, scheduleLevel, skyOf, sparBoost } from './story';
+import { SKY_BALANCE, SKY_FLY_ITEM, fearowLevel, fearowMoves, pidgeotLevel, pushRoom, scheduleLevel, skyOf, sparBoost, spearowOpeningLevel } from './story';
 import type { SkyState } from './state';
 import { DUEL_HEADER, duelResult, endingLine, finaleEnd } from './text';
 
@@ -66,7 +66,7 @@ export function shapeSpectateFoe(content: Content, run: RunState, sky: SkyState,
   const battle = run.battle;
   if (!battle) return;
   const finale = eventId === 'sky.finale';
-  const level = finale ? fearowLevel(content, run, sky) : scheduleLevel(content, run);
+  const level = finale ? fearowLevel(content, run, sky) : spearowOpeningLevel(content, run);
   const foe = newMon(content, run, finale ? 'fearow' : 'spearow', level, 'e');
   if (finale) setMoves(content, foe, fearowMoves((run.stage?.index ?? 0) + 1));
   foe.hp = maxHp(content, foe);
