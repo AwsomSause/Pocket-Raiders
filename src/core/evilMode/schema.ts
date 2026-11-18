@@ -4,6 +4,7 @@
 
 import { fromSaveForm } from './saveForm';
 import { z } from 'zod';
+import { emptyVoice, VoiceStateSchema } from './voiceSchema';
 import creedsRaw from '../../data/evilMode/creeds.json';
 
 /** Content status (design Part 30 section 12): every entry has one. Passing the schema is not "supported". */
@@ -358,7 +359,7 @@ export const StoredCardSchema = z.object({
 }).strict();
 export type StoredCard = z.infer<typeof StoredCardSchema>;
 
-export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym', 'econ', 'neighbour', 'scheme', 'base', 'raid', 'ending', 'knock', 'heard', 'wall', 'charter', 'quest', 'office', 'tear', 'shadow'] as const;
+export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym', 'econ', 'neighbour', 'scheme', 'base', 'raid', 'ending', 'knock', 'heard', 'wall', 'charter', 'quest', 'office', 'tear', 'shadow', 'post'] as const;
 
 /** One line of the Log (Part 30 section 7.1, the kinds slice 3 writes). Never edited, never removed. */
 export const LogEntrySchema = z.object({
@@ -558,7 +559,7 @@ export const NightFileSchema = z.object({
   text: z.record(z.string(), NT),
   wallStates: z.object({ kept: NT, kind: NT, edited: NT, bare: NT }).strict(),
   hear: z.object({ warmExtra: z.record(TalentSchema, NT), byTalent: z.record(TalentSchema, NT), byPerson: z.record(z.string(), NT) }).strict(),
-  knocks: z.array(KnockDefSchema).length(40),
+  knocks: z.array(KnockDefSchema).length(130), // 1-40 in night.json (slice 7), 41-130 in knocks2.json (slice 18)
 });
 
 // ---- Slice 8: the Gym (design Part 8a, Part 8b, Part 30 section 3.4) ----
@@ -1554,8 +1555,8 @@ export const TurnStateSchema = z.object({
 export type TurnState = z.infer<typeof TurnStateSchema>;
 
 const BlockV7Schema = z.object({
-  /** The block's own version, for its own migrations. 7: slice 8 added the Gyms. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a waiting fight, who's posted, and the day's in-person job. 6: slice 6 added proof held and the last move of the Line. 20 (reserved for slice 7): the Night, and each person's mood and knocks. 21: slice 17, quests and the mole. 22: slice 21, the edges (a Tear, the Shadow branch; settings.shadow and settings.incursions). */
-  v: z.literal(22),
+  /** The block's own version, for its own migrations. 7: slice 8 added the Gyms. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a waiting fight, who's posted, and the day's in-person job. 6: slice 6 added proof held and the last move of the Line. 20 (reserved for slice 7): the Night, and each person's mood and knocks. 21: slice 17, quests and the mole. 22: slice 21, the edges (a Tear, the Shadow branch; settings.shadow and settings.incursions). 23: slice 18 added the voice (the Radio, the paper, the post). */
+  v: z.literal(23),
   from: z.enum(['founding', 'charter', 'turn']),
   /** Copied from Settings at founding, so a setting changed mid-run never changes this run. */
   /** Slice 21: the Shadow branch (Available, or removed from all screens) and Incursions, copied at founding too. */
@@ -1617,6 +1618,8 @@ const BlockV7Schema = z.object({
   law: LawSchema,
   /** Slice 15: the ending under way (one a run), or null. */
   ending: EndingStateSchema.nullable(),
+  /** Slice 18: the voice. The Radio and the paper each Morning, the post, and what was answered (Part 25a, Part 25b). */
+  voice: VoiceStateSchema,
   /** Slice 17: each opened quest, by crew id (Part 10c). Nobody's is here until it opens. */
   quests: z.record(z.string(), QuestStateSchema),
   /** Slice 17: the mole (Part 11). Hidden state: no card, sort order or screen reads it before they're found. */
@@ -1705,6 +1708,8 @@ export function migrateEvilBlock(raw: unknown): unknown {
   if (b.v === 20) b = { ...b, v: 21, quests: {}, mole: emptyMole() };
   // 22: slice 21, the edges (after slice 17's step to 21).
   if (b.v === 21) b = migrateToV22(b);
+  // 23: slice 18, the voice: nothing heard yet, no post, the set on. The Radio and the paper start with the next Morning.
+  if (b.v === 22) b = { voice: emptyVoice(), ...b, v: 23 };
   return b;
 }
 

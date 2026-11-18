@@ -22,6 +22,7 @@ import { dayIn, heardOf, mayStay, morningNotes, regionText, stageDays, stageKind
 import { regionOf } from './regionRule';
 import { postAtNight, postNotes } from './base';
 import { stageRow } from './board';
+import { voiceBlocks } from './voiceScreens';
 
 export type DispatchStep = 'where' | 'who' | 'how';
 
@@ -259,6 +260,8 @@ const deedWord = (block: EvilModeBlock, data: EvilData): string => regionOf(bloc
 /** The Morning's region blocks (slice 9): the lesson, letters and notes; and any way forward the team needs (Part 2 section 6). */
 function regionBlocks(block: EvilModeBlock, data: EvilData): { title: string; lines: string[] }[] {
   const out: { title: string; lines: string[] }[] = [];
+  // Slice 18: the Radio, the paper folded in the corner, and an envelope (Part 25a sections 2-3, Part 25b section 1).
+  out.push(...voiceBlocks(block, data));
   const notes = morningNotes(block, data);
   if (notes.length) out.push({ title: stageName(block.here.stage, data), lines: notes });
   // Slice 13: the neighbour's messages and news today, and any waiting on an answer (answered on the neighbour page, K).

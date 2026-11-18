@@ -10,6 +10,7 @@ import peopleRaw from '../../data/evilMode/people.json';
 import facesRaw from '../../data/evilMode/faces.json';
 import heroRaw from '../../data/evilMode/hero.json';
 import nightRaw from '../../data/evilMode/night.json';
+import knocks2Raw from '../../data/evilMode/knocks2.json';
 import lineRaw from '../../data/evilMode/line.json';
 import gymRaw from '../../data/evilMode/gym.json';
 import regionRaw from '../../data/evilMode/region.json';
@@ -43,7 +44,8 @@ export const EVIL_DATA = {
   people: PeopleFileSchema.parse(peopleRaw),
   faces: FacesFileSchema.parse(facesRaw).faces,
   hero: HeroFileSchema.parse(heroRaw),
-  night: NightFileSchema.parse(nightRaw),
+  // Slice 18 wrote knocks 41 to 130 (knocks2.json) in slice 7's shape; the Night reads both files as one.
+  night: NightFileSchema.parse({ ...nightRaw, needs: [...nightRaw.needs, ...knocks2Raw.needs], flags: [...nightRaw.flags, ...knocks2Raw.flags], knocks: [...nightRaw.knocks, ...knocks2Raw.knocks] }),
   line: LineFileSchema.parse(lineRaw),
   gym: GymFileSchema.parse(gymRaw),
   region: RegionFileSchema.parse(regionRaw),

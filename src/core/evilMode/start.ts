@@ -2,6 +2,8 @@
 // Slice 1 built pages 1 to 5 (Boss, name, Creed, Line, Doctrine); slice 9 adds the Look, the Patron and the first region
 // (Kanto is the only one open), and a team begins at the region's Arrival.
 
+import { emptyVoice } from './voiceSchema';
+import { markOf } from './voice';
 import { lengthFor } from './runLength';
 import { ensureNeighbour } from './neighbour';
 import { EVIL_DATA, type EvilData } from './data';
@@ -108,7 +110,7 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
   const regard = cap(regard0 + (plain ? (data.region.regions.find((r) => r.index === first)?.rule?.mods ?? []).filter((m) => m.kind === 'arrivalRegard').reduce((n, m) => n + (m.add ?? 0), 0) : 0));
   const funds = patron ? Math.floor(modify({ here: { region: first, stage, day: 1, beat: 'morning' }, team: { patron } as never, crew }, 'funds', {}, creed.start.funds, data)) : creed.start.funds;
   const block: EvilModeBlock = {
-    v: 22,
+    v: 23,
     from: 'founding',
     // Slice 19: "Six regions" only once six are written; otherwise the run is Three.
     settings: { length: lengthFor(opts.length, data.region.regions), shadow: opts.shadow ?? true, incursions: opts.incursions ?? true },
@@ -163,6 +165,7 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
     raid: null,
     law: { hot: 0, raids: [], heatHeld: null },
     ending: null,
+    voice: emptyVoice(),
     quests: {},
     mole: emptyMole(),
     edges: emptyEdges(opts.shadow ?? true),
@@ -171,6 +174,8 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
   block.region = newRegion(block, seed, data);
   block.neighbour = ensureNeighbour(block, data).neighbour;
   block.draws['evil-people'] = roster.draws;
+  // Slice 18: the numbers the second Morning's Radio compares with.
+  block.voice = { ...block.voice, mark: markOf(block) };
   return { ok: true, block: EvilModeBlockSchema.parse(arriveApplicants(block, data)) };
 }
 

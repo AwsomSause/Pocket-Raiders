@@ -3,6 +3,7 @@
 // far (nothing else is stored), so a save made on any scene reloads into it. Pure: no stream is drawn, no profile is read.
 // Every ending pays the same for the same distance (section 9.3): the pay reads the distance and never the ending.
 
+import { endingFront, notebookLine, VOICE } from './voice';
 import { runRegions } from './runLength';
 import { loanVested } from './lastThree';
 import { EVIL_DATA, type EvilData } from './data';
@@ -808,7 +809,12 @@ export function endingCards(block: EvilModeBlock, data: EvilData = EVIL_DATA): E
   const road = block.road;
   if (road.length) out.push({ title: road.map((r) => r.name).join(', '), line: fill(E.cards.road, { names: road.map((r) => `${r.name}: ${r.state === 'home' ? 'home' : 'still on the road'}`).join('. '), stray: E.cards.strayFound }), kind: 'road' });
   if (block.neighbour) out.push({ title: defOf(block.neighbour, data).boss, line: pick<string>(E.cards.neighbour, block.neighbour.stance) ?? '', kind: 'neighbour' });
-  out.push({ title: detectiveOf(block, data).name, line: fill(E.cards.detective, { line: pick<string>(E.cards.detectiveLines, e.id) ?? '' }), kind: 'detective' });
+  // Slice 18: the notebook's last line, by detective and by whether the team was caught (Part 25b section 10).
+  const nbk = VOICE.on ? notebookLine(block, data).line : pick<string>(E.cards.detectiveLines, e.id) ?? '';
+  out.push({ title: detectiveOf(block, data).name, line: fill(E.cards.detective, { line: nbk }), kind: 'detective' });
+  // Slice 18: the ending as a front page (Part 25a section 3.6).
+  const front = VOICE.on ? endingFront(block) : null;
+  if (front) out.push({ title: VOICE.words.paper as string, line: front, kind: 'scene' });
   out.push({ title: E.words.page, line: ledgerPage(block, data).join('\n'), kind: 'page' });
   const typed = lastTyped(block);
   if (typed) out.push({ title: block.team.name, line: typed, kind: 'typed' });

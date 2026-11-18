@@ -332,7 +332,7 @@ describe('the page and the save (block v11)', () => {
     const { scheme: _s, ...rest } = b;
     const { 'evil-scheme': _d, ...draws } = b.draws;
     const v11 = EvilModeBlockSchema.parse({ ...rest, v: 10, draws });
-    expect(v11.v).toBe(22);
+    expect(v11.v).toBe(23);
     expect(v11.scheme).toMatchObject({ family: 'spite', groundwork: 0, inherited: false, jobs: [], digs: [], eye: 'open' });
     for (const p of PARTS) expect(v11.scheme.parts[p].state).toBe('empty');
     expect(v11.draws['evil-scheme']).toBe(0);

@@ -1,6 +1,7 @@
 // Evil Mode view models for the Honest Card overlay and the Ledger (design Part 29 sections 6 and 8), as plain data.
 // The scene keeps the cursor (`LedgerDraft`) and the Card's gate; these work out what to draw and decide nothing.
 
+import { margin } from './voice';
 import { cardFor, confirmLit, otherWay, type CardGate } from './card';
 import { EVIL_DATA, type EvilData } from './data';
 import { byPerson, money, runLines, todayPages, type RunMark } from './ledger';
@@ -55,11 +56,14 @@ export interface LedgerModel {
   person: null | { name: string; lines: string[] }[];
   totals: null | { given: number; taken: number; note: string };
   rows: number;
+  /** Slice 18: a Books' pencil note in the margin (Part 25a section 5.4), or null. */
+  margin: string | null;
 }
 
 export function ledgerModel(block: EvilModeBlock, d: LedgerDraft, data: EvilData = EVIL_DATA): LedgerModel {
   const tabs = data.ledger.tabs.map((name, i) => ({ name, sel: i === d.tab }));
-  const m: LedgerModel = { tabs, tab: d.tab, today: null, run: null, person: null, totals: null, rows: 0 };
+  const mg = margin(block);
+  const m: LedgerModel = { tabs, tab: d.tab, today: null, run: null, person: null, totals: null, rows: 0, margin: mg ? `${mg.who}, in pencil: ${mg.text}` : null };
   if (d.tab === 0) {
     const t = todayPages(block, data);
     m.today = {

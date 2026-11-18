@@ -1,6 +1,7 @@
 // Evil Mode's File (design Part 18 section 11, Part 29): what the Boss knows about the Hero, as plain data in three
 // panels, the main game's Rival Report, Notebook and Dossier turned round. Never padded: what isn't known is shown blank.
 
+import { heroHeard } from './voice';
 import { EVIL_DATA, type EvilData } from './data';
 import { heroReason, likelyRoad, marksWord, personalityDef } from './hero';
 import type { EvilModeBlock } from './schema';
@@ -65,6 +66,9 @@ export function fileModel(block: EvilModeBlock, tab: number, party: readonly str
     m.lists.push({ title: 'The other three', lines: met.map((t) => (t.state === 'home' ? `${t.name}: gone home.` : `${t.name}: ${t.today ?? data.road.approach[t.role]}`)), empty: F.others });
     if (hero.notebook.length) m.lists.push({ title: 'The Office notebook', lines: hero.notebook.map((x) => `"${x}"`), empty: '' });
     for (const [i, page] of hero.pages.entries()) m.lists.push({ title: `Page ${i + 1}`, lines: page, empty: '' });
+    // Slice 18: what they heard at the Centre this Morning: the same Radio item the team heard.
+    const heard = heroHeard(block, data);
+    if (heard) m.lists.push({ title: 'On the Radio', lines: [heard], empty: '' });
   }
   return m;
 }

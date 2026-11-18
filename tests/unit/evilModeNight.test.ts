@@ -28,10 +28,10 @@ const toNight = (b: EvilModeBlock): EvilModeBlock => {
 const atNight = (b: EvilModeBlock, day: number, patch: Partial<EvilModeBlock['night']> = {}): EvilModeBlock => ({ ...b, here: { ...b.here, day, beat: 'night' }, night: { ...b.night, knock: null, drawn: null, ...patch } });
 const NUMBERS = ['regard', 'dread', 'heat', 'funds', 'corruption'] as const;
 
-describe('the forty knocks, as data', () => {
+describe('the knocks, as data (1-40 slice 7, 41-130 slice 18)', () => {
   const K = EVIL_DATA.night.knocks;
-  it('are numbered 1 to 40, three answers each, every one with a status', () => {
-    expect(K.map((k) => k.n)).toEqual(Array.from({ length: 40 }, (_, i) => i + 1));
+  it('are numbered 1 to 130, three answers each, every one with a status', () => {
+    expect(K.map((k) => k.n)).toEqual(Array.from({ length: 130 }, (_, i) => i + 1));
     for (const k of K) expect(k.answers).toHaveLength(3);
   });
   it("every echo's target exists: a Wall thing, a flag with somewhere it's read, a person for person echoes", () => {
@@ -66,10 +66,10 @@ describe('the forty knocks, as data', () => {
       const waits = k.needs.some((id) => !needs.get(id)!.live);
       expect(k.status === 'disabled', `knock ${k.n}`).toBe(waits);
     }
-    expect(K.filter((k) => k.status !== 'disabled').length).toBe(17);
+    expect(K.filter((k) => k.status !== 'disabled').length).toBe(21); // 17 of slice 7's, and 91, 92, 95, 115
   });
-  it('only the knocks the design says can be shut out can be: the summons (38), the mother (29), the mole found (34) cannot', () => {
-    expect(K.filter((k) => !k.shut).map((k) => k.n)).toEqual([29, 34, 38]);
+  it('only the knocks the design says can be shut out can be: the summons (38), the mother (29), the mole found (34), Plumeria (100), the Johto basement (123) cannot', () => {
+    expect(K.filter((k) => !k.shut).map((k) => k.n)).toEqual([29, 34, 38, 100, 123]);
   });
 });
 
@@ -341,7 +341,7 @@ describe('saves', () => {
     // v9 (slice 10's block, today's last before the Night) and v15 (a block saved by slices that land before this one).
     for (const v of [9, 15]) {
       const out = EvilModeBlockSchema.parse(JSON.parse(JSON.stringify({ ...rest, v, crew })));
-      expect(out.v).toBe(22);
+      expect(out.v).toBe(23);
       expect(out.night).toEqual(emptyNight());
       expect(out.crew.every((c) => c.mood === 'easy' && c.knocks === 0)).toBe(true);
     }
@@ -349,7 +349,7 @@ describe('saves', () => {
     expect(EvilModeBlockSchema.parse(JSON.parse(JSON.stringify({ ...b, v: 15 }))).night).toEqual(b.night);
     // An older block goes through every step to v20, then slice 17 (v21).
     const { base: _b, raid: _r, law: _l, ...older } = rest as typeof rest & { base?: unknown; raid?: unknown; law?: unknown };
-    expect(EvilModeBlockSchema.parse(JSON.parse(JSON.stringify({ ...older, v: 8, crew }))).v).toBe(22);
+    expect(EvilModeBlockSchema.parse(JSON.parse(JSON.stringify({ ...older, v: 8, crew }))).v).toBe(23);
     const again = EvilModeBlockSchema.parse(JSON.parse(JSON.stringify(b)));
     expect(again).toEqual(b);
   });

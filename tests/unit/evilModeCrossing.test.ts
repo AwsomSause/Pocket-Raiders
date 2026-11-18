@@ -306,7 +306,7 @@ describe('the Road, and saves: block v15', () => {
     const b = fresh();
     const { crossed: _c, crossing: _x, abroad: _a, forms: _f, letters: _l, clock: _k, ...region } = b.region;
     const out = EvilModeBlockSchema.parse(JSON.parse(JSON.stringify({ ...b, v: 14, region })));
-    expect(out).toMatchObject({ v: 22, region: { crossed: [], crossing: null, abroad: 0, forms: null, letters: 0, clock: null } });
+    expect(out).toMatchObject({ v: 23, region: { crossed: [], crossing: null, abroad: 0, forms: null, letters: 0, clock: null } });
   });
 
   it('a save made mid-Crossing reloads at the same step', () => {

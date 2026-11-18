@@ -56,6 +56,9 @@ import { LINE_IDS } from '../core/evilMode/schema';
 import { crossers } from '../core/evilMode/people';
 import { roadChoice, roadForced, roadModel } from '../core/evilMode/roadScreens';
 import { roadView } from '../ui/redux/screens/evilRoad';
+import { barkView, postView } from '../ui/redux/screens/evilPost';
+import { postAction, postModel } from '../core/evilMode/voiceScreens';
+import { bark, type BarkMoment } from '../core/evilMode/voice';
 import { cardsOf } from '../core/evilMode/pack';
 
 /** Keys that confirm (input.ts KEY_MAP), read raw on the Card so a held key can be told from a press. */
@@ -106,6 +109,12 @@ export class EvilScene extends Phaser.Scene {
   private base: BaseSel | null = null;
   /** Slice 12: the Road page's picked choice (null: closed), the typed line's box, and the region whose last room was seen out. */
   private road: number | null = null;
+  /** Slice 18: the post page's chosen button (null: closed); the beat's bark, and the lines already said this district (never saved). */
+  private post: number | null = null;
+  private barkAt = '';
+  private barked: { name: string; line: string } | null = null;
+  private barkSaid = new Set<string>();
+  private saidIn = '';
   private own_: HTMLInputElement | null = null;
   private roomSeen: number | null = null;
   private bgOf: (id: string) => string | null = () => null;
@@ -143,6 +152,11 @@ export class EvilScene extends Phaser.Scene {
     this.edge = null;
     this.base = null;
     this.road = null;
+    this.post = null;
+    this.barkAt = '';
+    this.barked = null;
+    this.barkSaid = new Set();
+    this.saidIn = '';
     this.roomSeen = null;
     this.charter = null;
     this.turnSel = 0;
@@ -202,6 +216,9 @@ export class EvilScene extends Phaser.Scene {
           const bsel = this.baseSel();
           const bm = bsel && (this.baseForced() || (!ledger && !roster && !file && !line && !gym && !trade && !nbPage && !scPage && !edPage)) ? baseModel(block, bsel) : null;
           const base = bm ? baseView(bm, this.notice, bm.bg ? this.bgOf(bm.bg) : null) : undefined;
+          // Slice 18: the post page (P), like the other pages.
+          const pm = this.post !== null && !ledger && !roster && !file && !line && !gym && !trade && !nbPage && !scPage && !base ? postModel(block) : null;
+          const postPage = pm ? postView(pm, Math.min(this.post ?? 0, pm.acts.length - 1), this.notice) : undefined;
           if (block.fight) frame.button = 'Fight';
           // Slice 12: the fire and the last room hold the screen; the Road page (O) takes the board's place like the File.
           const forced = this.roadOn();
@@ -215,8 +232,8 @@ export class EvilScene extends Phaser.Scene {
           const over = yard ? refusalView(yard, this.refuseSel) : ms ? moleSceneView(ms, faceOf(ms.ref)) : rm?.office ? officeView(rm.office) : '';
           const look = `<div style="--team-a:${block.team.look.a};--team-b:${block.team.look.b}">`;
           // Slice 7: at Night the Office takes the board's place (design Part 29 section 11).
-          const night = block.here.beat === 'night' && !block.district.end && !ledger && !roster && !file && !line && !gym && !base && !trade && !nbPage && !scPage && !road && !suspicions && !edPage ? nightView(nightModel(block, this.night, this.lastWho), this.notice) : undefined;
-          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp, EVIL_DATA, { seed: services().session.settings.expansion.evilRollSeed }), frame, this.notice, { rail: this.rail, ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), ...(line ? { line } : {}), ...(gym ? { gym } : {}), ...(trade ? { trade } : {}), ...(nbPage ? { neighbour: nbPage } : {}), ...(scPage ? { scheme: scPage } : {}), ...(suspicions ? { suspicions } : {}), ...(edPage ? { edges: edPage } : {}), ...(edTag ? { edgesTag: edTag } : {}), ...(base ? { base } : {}), ...(road ? { road } : {}), ...(night ? { night } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
+          const night = block.here.beat === 'night' && !block.district.end && !ledger && !roster && !file && !line && !gym && !base && !trade && !nbPage && !scPage && !road && !suspicions && !edPage && !postPage ? nightView(nightModel(block, this.night, this.lastWho), this.notice) : undefined;
+          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp, EVIL_DATA, { seed: services().session.settings.expansion.evilRollSeed }), frame, this.notice, { rail: this.rail, ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), ...(line ? { line } : {}), ...(gym ? { gym } : {}), ...(trade ? { trade } : {}), ...(nbPage ? { neighbour: nbPage } : {}), ...(scPage ? { scheme: scPage } : {}), ...(suspicions ? { suspicions } : {}), ...(edPage ? { edges: edPage } : {}), ...(edTag ? { edgesTag: edTag } : {}), ...(base ? { base } : {}), ...(road ? { road } : {}), ...(postPage && !road ? { post: postPage } : {}), ...(night ? { night } : {}), filed: filedCorner(this.filed) })}${over}${!night && !postPage && !road && !ledger && !roster && !file && !line && !gym && !trade && !nbPage && !scPage && !base && !yard && !suspicions && !edPage ? barkView(this.barkFor(block)) : ''}</div>`);
         }
         if (block) return frameView(c, frameModel(block, archetype.name), this.notice);
         // Slice 22: a main-game run that won its takeover sees the Turn's card here; a new team may take a Charter.
@@ -321,6 +338,8 @@ export class EvilScene extends Phaser.Scene {
         clock: (code) => this.evil(code === 'letter' ? { type: 'letter' } : code.startsWith('stop:') ? { type: 'stopClock', how: code === 'stop:boss' ? 'boss' : 'hero' } : { type: 'regionAct', code }),
         recall: (id) => this.evil({ type: 'recall', id }),
         road: () => this.toggleRoad(),
+        post: () => this.togglePost(),
+        pact: (code) => this.postDo(code),
         rpick: (id) => this.roadPick(id),
         rsay: (id) => this.roadPick(id, this.own_?.value ?? ''),
         lstop: (i) => { if (this.line !== null) { this.line = Number(i); this.cancelLineHold(); } },
@@ -569,6 +588,7 @@ export class EvilScene extends Phaser.Scene {
       return void this.view?.refresh();
     }
     if (this.file !== null) return this.fileKey(a);
+    if (this.post !== null) return this.postKey(a);
     if (this.baseForced()) return this.baseKey(a);
     if (this.line !== null) return this.lineKey(a);
     if (this.gym !== null) return this.gymKey(a);
@@ -756,6 +776,7 @@ export class EvilScene extends Phaser.Scene {
       const by: Record<string, string> = { KeyV: 'Waive', KeyE: 'End', KeyM: 'Make it honest', KeyB: 'back room' };
       if (by[e.code]) return this.tradeDo(-1, by[e.code]);
     }
+    if (e.code === 'KeyP' && type === 'down' && !e.repeat && !this.card && !this.trade && !this.block()?.refusal && this.block()?.district) return this.togglePost();
     if (e.code === 'KeyI' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleEdges();
     if (e.code === 'KeyC' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleScheme();
     if (e.code === 'KeyK' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleNeighbour();
@@ -1295,6 +1316,63 @@ export class EvilScene extends Phaser.Scene {
   // ---- Slice 12: the Road, the fire, the last room ----
 
   /** The fire, or a last room not yet seen out, holds the screen. */
+  /** Slice 18: the post page (P). */
+  private togglePost(): void {
+    if (this.card || this.roadOn()) return;
+    this.post = this.post === null ? 0 : null;
+    this.ledger = null;
+    this.roster = null;
+    this.file = null;
+    this.road = null;
+    this.notice = null;
+    this.view?.refresh();
+  }
+
+  private postDo(code: string): void {
+    const action = postAction(code);
+    if (!action) { this.post = null; this.notice = null; return void this.view?.refresh(); }
+    const cues = services().session.evilStep(action);
+    const refused = cues.find((c) => c.id === 'refused');
+    const said = cues.filter((c) => c.id === 'said').map((c) => ('line' in c ? c.line : ''));
+    this.notice = refused && 'reason' in refused ? refused.reason : action.type === 'postAct' && action.act.what === 'open' ? null : said.join(' ') || null;
+    this.post = 0;
+    this.view?.refresh();
+  }
+
+  private postKey(a: InputAction): void {
+    const b = this.block();
+    const m = b ? postModel(b) : null;
+    if (!m || a === 'back') { this.post = null; this.notice = null; return void this.view?.refresh(); }
+    const n = m.acts.length;
+    const at = Math.min(this.post ?? 0, n - 1);
+    if (a === 'up' || a === 'down' || a === 'left' || a === 'right') this.post = (at + (a === 'up' || a === 'left' ? -1 : 1) + n) % n;
+    else if (a === 'confirm' && m.acts[at]) return this.postDo(m.acts[at]!.code);
+    this.view?.refresh();
+  }
+
+  /** Slice 18: this beat's bark (one a beat at most). Presentation only: a hash of the seed picks it; nothing's saved. */
+  private barkFor(block: NonNullable<ReturnType<EvilScene['block']>>): { name: string; line: string } | null {
+    const d = block.district;
+    if (!d || d.end) return null;
+    const where = `${d.region}:${d.n}`;
+    if (where !== this.saidIn) { this.saidIn = where; this.barkSaid = new Set(); }
+    const at = `${block.here.day}|${block.here.beat}`;
+    if (at === this.barkAt) return this.barked;
+    this.barkAt = at;
+    const beat = block.here.beat;
+    const won = block.sheets.find((x) => x.won);
+    const moment: BarkMoment | null = block.team.heat >= 8 && beat !== 'morning' ? 'raidNear'
+      : beat === 'morning' ? 'board' : beat === 'dispatch' ? 'dispatchGo' : beat === 'evening' ? (block.sheets.length ? (won ? 'jobWon' : 'jobLost') : 'mess')
+      : beat === 'night' ? 'mess' : beat === 'hero' && block.hero ? 'heroNear' : null;
+    let b: { name: string; line: string } | null = null;
+    try {
+      b = moment ? bark(block, moment, this.barkSaid, { ...(won ? { method: won.method, who: won.squad } : {}) }) : null;
+    } catch { b = null; }
+    if (b) this.barkSaid.add(b.line);
+    this.barked = b;
+    return b;
+  }
+
   private roadOn(): boolean {
     const b = this.block();
     return !!b && (!!b.ending || (!!b.district && roadForced(b, this.roomSeen === b.here.region)));

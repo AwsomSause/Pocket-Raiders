@@ -31,6 +31,7 @@ import { checkEndings, endAct, endBattle, pressEnding } from './endings';
 import { regionMoves } from './regionRule';
 import { afterGym, l3DistrictEnd, l3Evening, l3Morning, regionAct, starLocks } from './lastThree';
 import { beginCrossing, carryLetter, clockMet, clockMorning, cross, keptWarmth, stopClock, type CrossAct } from './crossing';
+import { postAct, setRadio, voiceMorning, type PostAct } from './voice';
 import { edgesAct, edgesAfter, EDGE_ACTIONS, shadowOrderGiven, shadowOrderProblem, type EdgesAction } from './edges';
 import { tearResult } from './tear';
 import { queueOrdered } from './dispatch';
@@ -159,6 +160,9 @@ export type EvilAction =
   /** Slice 15: the endings (Part 23). One answer to the scene on screen, or a pressed ending. */
   | { type: 'endAct'; choice?: string | null; text?: string | null }
   | { type: 'endPress'; what: 'straight' | 'handOff' | 'walkIn'; heir?: string; line?: string; ledger?: boolean }
+  /** Slice 18: a piece of post opened, left, pinned or answered (any beat); the Radio switched off or on (at Night). */
+  | { type: 'postAct'; id: string; act: PostAct }
+  | { type: 'radio'; on: boolean }
   /** Slice 17: a quest's next step (the last one with its ending); Ask them to stay; the Office: name, feed, answer. */
   | { type: 'questStep'; id: string; ending?: string }
   | { type: 'askStay'; id: string; reason: StayReason | null }
@@ -193,6 +197,8 @@ export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
   // Slice 22: a Charter's locks, and its house rule's own acts.
   const locked = charterRefuses(block0, action as never);
   if (locked) return { block: block0, cues: [{ id: 'refused', reason: locked }], ok: false };
+  // Slice 18: the post and the set.
+  if (action.type === 'postAct' || action.type === 'radio') return stepVoice(block0, action);
   let r = action.type === 'charterAct' ? charterStep(block0, action.act) : action.type === 'turnMeet' ? said(meetHero(block0, action.answer)) : stepInner(block0, action);
   // Slice 13: the neighbour's Morning (messages, and each tick on its day) comes with every Morning, however it's reached.
   if (!r.ok) return r;
@@ -220,8 +226,20 @@ export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
   b = checkEndings(block0, b);
   // Slice 16: a region that isn't the run's last ends at the Crossing.
   b = beginCrossing(b);
+  // Slice 18: a new day's Morning: the Radio, the paper and the post (once a day, however the Morning's reached).
+  if (b.here.beat === 'morning' && b.here.day !== block0.here.day) b = voiceMorning(b);
   const cues = [...r.cues, ...ed.lines.map((line) => ({ id: 'said' as const, line }))];
   return { ...r, block: b, cues: b.ending && !block0.ending ? [...cues, { id: 'ending' as const }] : cues };
+}
+
+/** Slice 18: the post and the set. A letter can be read at any beat but not at a fire or in the last room. */
+function stepVoice(block: EvilModeBlock, action: Extract<EvilAction, { type: 'postAct' } | { type: 'radio' }>): StepResult {
+  const no = (reason: string): StepResult => ({ block, cues: [{ id: 'refused', reason }], ok: false });
+  if (block.fire) return no("You're at the fire.");
+  if (block.reck?.room && !block.reck.room.outcome) return no("You're in the last room.");
+  if (action.type === 'radio' && !action.on && block.here.beat !== 'night') return no('The set is switched off at Night.');
+  const r = action.type === 'radio' ? setRadio(block, action.on) : postAct(block, action.id, action.act);
+  return r.problem ? no(r.problem) : { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
 }
 
 function charterStep(block: EvilModeBlock, act: CharterAct): StepResult {
