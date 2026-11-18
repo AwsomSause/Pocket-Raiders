@@ -464,7 +464,8 @@ export function sitAnswer(block: EvilModeBlock, i: number, data: EvilData = EVIL
   } else if (s.ex === 0 && s.n === 1) {
     lines.push(`${def.boss}: ${F.answers[i]}`.replace(`${def.boss}: He`, 'He'));
     if (i === 0 || i === 1) ss = { ...ss, offered: true, ex: 1 };
-    else if (i === 2) { n = { ...n, stance: 'war' }; ss = { ...ss, ex: 2 }; }
+    // Slice 20: a team with no War (Star) hears the third answer as an offer of help: Service (Part 15b section 5.4).
+    else if (i === 2) { n = { ...n, stance: def.noWar ? 'service' : 'war' }; ss = { ...ss, ex: 2 }; }
     else { n = { ...n, opinion: capOp(n.opinion + 1) }; ss = { ...ss, offered: true, ex: 1 }; }
     if (ss.ex === 1) lines.push(`${def.boss}: ${F.offer}`);
     else lines.push(`${def.boss}: ${F.ask}`);
@@ -475,9 +476,13 @@ export function sitAnswer(block: EvilModeBlock, i: number, data: EvilData = EVIL
   } else if (s.ex === 1) {
     lines.push(F.frontSaid[i]!);
     if (i === 0) {
-      n = { ...n, stance: 'front', broke: null };
-      out = { ...out, crew: out.crew.map((c) => (c.where === 'in' && c.flaw === 'proud' ? moveLoyalty(c, data.neighbour.numbers.frontProud, data) : c)) };
-      out = log(out, '"Worked for Giovanni." A chapter of Team Rocket.');
+      // Slice 20: with Star it's Service, the Front that runs backwards: the team at their service (Part 15b section 5.4).
+      if (def.noWar) n = { ...n, stance: 'service', broke: null };
+      else {
+        n = { ...n, stance: 'front', broke: null };
+        out = { ...out, crew: out.crew.map((c) => (c.where === 'in' && c.flaw === 'proud' ? moveLoyalty(c, data.neighbour.numbers.frontProud, data) : c)) };
+      }
+      out = log(out, def.noWar ? `At ${def.teamName}'s service. Nothing on any Card.` : '"Worked for Giovanni." A chapter of Team Rocket.');
     }
     ss = { ...ss, ex: 2 };
     lines.push(`${def.boss}: ${F.ask}`);
@@ -498,7 +503,9 @@ export function tableThings(block: EvilModeBlock, data: EvilData = EVIL_DATA): {
   const full = s.table.length >= N.maxTable;
   const one = (thing: TableThing, why: string | null) => ({ thing, open: !why && !full && !s.table.includes(thing), why: s.table.includes(thing) ? 'Already on the table.' : full ? 'Three things each side.' : why });
   const tick2 = nb.ticks[1]!.state === 'waiting';
-  return [
+  // Slice 20 (Star): no person slot, and no Pen: they've none (Part 15b section 5.1). The rows aren't on the table at all.
+  const locked = defOf(nb, data).minors && !!defOf(nb, data).noWar;
+  const rows = [
     one('line', !s.offered || nb.stance === 'war' || nb.stance === 'front' || nb.stance === 'merger' ? 'He hasn\'t offered a line.' : null),
     one('person', inRoster(block).some((c) => !c.minor && c.id !== s.chair) ? null : 'Nobody to hand over.'),
     one('job', s.n === 1 && tick2 ? null : 'Only tick two, before it fires.'),
@@ -507,6 +514,7 @@ export function tableThings(block: EvilModeBlock, data: EvilData = EVIL_DATA): {
     one('promise', nb.sitDowns.some((x) => x.table.includes('promise')) ? 'Already agreed.' : null),
     one('pen', s.n >= 2 && nb.pen > 0 && !nb.sitDowns.some((x) => x.table.includes('pen')) ? null : 'Not till the second Sit-Down.'),
   ];
+  return locked ? rows.filter((r) => r.thing !== 'person' && r.thing !== 'pen') : rows;
 }
 
 /**
