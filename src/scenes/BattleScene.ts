@@ -135,6 +135,7 @@ import { fallbackFoeArt } from '../core/presentation/foeArt';
 import { reduxLayout, reduxSkinIndex } from '../core/presentation/redux';
 import { useLookFont } from '../ui/redux/canvasFont';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { playEvolution } from '../ui/evolutionScene';
 import { battleView, panelOf, splitChoice, type BattleBox, type BattleEvolve, type BattleLevel, type BattleModel, type BattlePanel } from '../ui/redux/screens/battle';
 import { artOf, monFile } from '../ui/redux/game';
 import { moveTipOf, ownAbilityCard, seenFact } from '../ui/redux/tips';
@@ -4688,32 +4689,14 @@ export class BattleScene extends Phaser.Scene {
     }
     this.updateHeader();
     for (const evo of end.evolutions) {
-      const fromName = getSpecies(content, evo.from).name;
-      const toName = getSpecies(content, evo.to).name;
       const real = result.run.party.find((m) => m.uid === evo.uid);
-      // New UI: the mock-ups' evolution picture takes the screen until this evolution's last line.
-      if (this.rx) this.rxEvolve = { from: monFile(this, evo.from, 'front', !!real?.shiny), to: monFile(this, evo.to, 'front', !!real?.shiny), done: false };
-      await this.say(`What? ${fromName} is evolving!`);
-      // The evolution sequence on the evolving Pokémon itself (shown in its old form first).
-      if (real) {
-        const shownMon = { ...structuredClone(real), speciesId: evo.from };
-        const sprite = this.showSprite('player', shownMon, false);
-        await this.playBeat(
-          cinematic(this, {
-            kind: 'evolve',
-            x: PLAYER_POS.x,
-            y: PLAYER_POS.y - 100,
-            sprite,
-            tint: 0x9fe8ff,
-            ...this.cineFeel('evolve'),
-            onSwap: () => this.showSprite('player', { ...shownMon, speciesId: evo.to }),
-          }),
-        );
-      } else await burstReveal(this, PLAYER_POS.x, PLAYER_POS.y - 100, 0x9fe8ff, this.motion).done;
-      playCue(this, 'st_evolution_moment', 'me.evo_success');
-      if (this.rxEvolve) this.rxEvolve = { ...this.rxEvolve, done: true };
-      await this.say(`Congratulations! Your ${fromName} evolved into ${toName}!`);
-      for (const m of evo.learnedMoves) await this.say(`${toName} learned ${content.moves.get(m)!.name}!`);
+      // New UI: the battle's own picture steps back (no boxes) while the evolution scene plays over it.
+      if (this.rx) {
+        this.rxEvolve = { from: monFile(this, evo.from, 'front', !!real?.shiny), to: monFile(this, evo.to, 'front', !!real?.shiny), done: false };
+        this.rx.refresh();
+      }
+      // The classic evolution scene (both looks): its lines wait for the player, the flicker, the new form.
+      await playEvolution(this, { from: evo.from, to: evo.to, shiny: !!real?.shiny, learned: evo.learnedMoves.map((m) => content.moves.get(m)!.name) });
       this.rxEvolve = null;
     }
     for (const t of end.bondTaught ?? []) {

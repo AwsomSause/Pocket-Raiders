@@ -318,3 +318,12 @@
 @keyframes wr-glow{from{filter:drop-shadow(0 0 0 #ffd84a00)}to{filter:drop-shadow(0 0 9px #ffd84a)}}
 @keyframes wr-lamp{from{opacity:.85}to{opacity:1}}
 @keyframes wr-mote{0%{opacity:0;translate:0 0}15%{opacity:.8}85%{opacity:.5}100%{opacity:0;translate:26px -90px}}
+/* The evolution scene (src/ui/evolutionScene.ts): white silhouette, its glow, the reveal flash, the "more" arrow. */
+.rx .evo-w{filter:brightness(0) invert(1) drop-shadow(0 0 14px #9fe8ff)}
+.rx .evo-glow{position:absolute;left:480px;top:250px;width:460px;height:460px;margin:-230px 0 0 -230px;border-radius:50%;background:radial-gradient(#e8fbff 0,#9fe8ff66 32%,#0000 70%)}
+.rx .evo-flash{background:#fff;pointer-events:none;animation:evo-flash var(--fm,.42s) ease-out both;animation-delay:var(--t0,0ms)}
+@keyframes evo-flash{from{opacity:var(--fl,1)}to{opacity:0}}
+.rx .evo-more{display:inline-block;margin-left:8px;font-size:.8em}
+@media (prefers-reduced-motion:no-preference){.rx .evo-more{animation:evo-bob .8s ease-in-out infinite alternate}.rx .evo-glow{animation:evo-pulse .5s ease-in-out infinite alternate}}
+@keyframes evo-bob{to{transform:translateY(4px)}}
+@keyframes evo-pulse{to{opacity:.6;transform:scale(1.08)}}
