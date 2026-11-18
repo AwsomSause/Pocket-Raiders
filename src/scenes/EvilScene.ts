@@ -32,6 +32,8 @@ import { fileView } from '../ui/redux/screens/evilFile';
 import { lineModel } from '../core/evilMode/lineScreens';
 import { gymView } from '../ui/redux/screens/evilGym';
 import { gymModel } from '../core/evilMode/gymScreens';
+import { newTrade, tradeModel, type TradeSel } from '../core/evilMode/tradeScreens';
+import { tradeView } from '../ui/redux/screens/evilTrade';
 import { lineView } from '../ui/redux/screens/evilLine';
 import { baseView } from '../ui/redux/screens/evilBase';
 import { BASE_TABS, baseModel, newBaseSel, type BaseSel } from '../core/evilMode/baseScreens';
@@ -70,6 +72,8 @@ export class EvilScene extends Phaser.Scene {
   private lineTimer: Phaser.Time.TimerEvent | null = null;
   /** Slice 8: the Gym page's chosen door, or null when it's shut. */
   private gym: number | null = null;
+  /** Slice 11: the Trade page's tab, row and street/holding, or null when it's shut. */
+  private trade: TradeSel | null = null;
   /** Slice 10: the Base page's tab, square and option, or null when it's shut (Walk it and a Raid hold it open). */
   private base: BaseSel | null = null;
   /** Slice 12: the Road page's picked choice (null: closed), the typed line's box, and the region whose last room was seen out. */
@@ -98,6 +102,7 @@ export class EvilScene extends Phaser.Scene {
     this.lineHeldAt = null;
     this.lineTimer = null;
     this.gym = null;
+    this.trade = null;
     this.base = null;
     this.road = null;
     this.roomSeen = null;
@@ -130,6 +135,8 @@ export class EvilScene extends Phaser.Scene {
           const line = this.line !== null && !ledger && !roster && !file ? lineView(lineModel(block, this.line), this.lineHeldAt === null ? null : Math.min(1, (this.time.now - this.lineHeldAt) / 2000), this.notice) : undefined;
           const gm = this.gym !== null && !ledger && !roster && !file && !line ? gymModel(block, this.gym) : null;
           const gym = gm ? gymView(gm, this.notice) : undefined;
+          const tm = this.trade !== null && !ledger && !roster && !file && !line && !gym ? tradeModel(block, this.trade) : null;
+          const trade = tm ? tradeView(tm, this.notice) : undefined;
           // Slice 10: the Base page. Walk it and a Raid hold it open over everything else.
           const bsel = this.baseSel();
           const bm = bsel && (this.baseForced() || (!ledger && !roster && !file && !line && !gym)) ? baseModel(block, bsel) : null;
@@ -145,7 +152,7 @@ export class EvilScene extends Phaser.Scene {
           const yard = refusalModel(block);
           const over = yard ? refusalView(yard, this.refuseSel) : rm?.office ? officeView(rm.office) : '';
           const look = `<div style="--team-a:${block.team.look.a};--team-b:${block.team.look.b}">`;
-          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), ...(line ? { line } : {}), ...(gym ? { gym } : {}), ...(base ? { base } : {}), ...(road ? { road } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
+          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), ...(line ? { line } : {}), ...(gym ? { gym } : {}), ...(trade ? { trade } : {}), ...(base ? { base } : {}), ...(road ? { road } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
         }
         if (block) return frameView(c, frameModel(block, archetype.name), this.notice);
         return foundingView(c, foundingModel(this.draft, { bossName: archetype.name, bossFile, starter: species?.name ?? '—', starterFile, oldLook, length: services().session.settings.expansion.evilRunLength }));
@@ -188,6 +195,11 @@ export class EvilScene extends Phaser.Scene {
         gym: () => this.toggleGym(),
         gdoor: (i) => { if (this.gym !== null) { this.gym = Number(i); this.view?.refresh(); } },
         gdo: () => this.gymDo(),
+        trade: () => this.toggleTrade(),
+        ttab: (i) => { if (this.trade) { this.trade = newTrade(Number(i)); this.notice = null; } this.view?.refresh(); },
+        trow: (i) => { if (this.trade) this.trade = { ...this.trade, row: Number(i), pick: 0 }; this.view?.refresh(); },
+        tpick: () => { if (this.trade) this.trade = { ...this.trade, pick: this.trade.pick + 1 }; this.view?.refresh(); },
+        tbtn: (i) => this.tradeDo(Number(i)),
         base: () => this.toggleBase(),
         btab: (i) => { if (this.base) { this.base = { ...this.base, tab: Number(i), opt: 0 }; this.view?.refresh(); } },
         bsq: (at) => this.baseSquare(at),
@@ -369,6 +381,7 @@ export class EvilScene extends Phaser.Scene {
     if (this.baseForced()) return this.baseKey(a);
     if (this.line !== null) return this.lineKey(a);
     if (this.gym !== null) return this.gymKey(a);
+    if (this.trade !== null) return this.tradeKey(a);
     if (this.base !== null) return this.baseKey(a);
     const block = this.block();
     if (!block?.district) return a === 'confirm' ? this.advance() : a === 'back' ? this.leave() : undefined;
@@ -532,6 +545,13 @@ export class EvilScene extends Phaser.Scene {
       if (type === 'up') return this.cancelLineHold();
       return;
     }
+    if (e.code === 'KeyT' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleTrade();
+    // Slice 11: the Trade page's letter keys (P the street or holding; V waive, E end, M make honest, B the back room).
+    if (this.trade && type === 'down' && !e.repeat && !this.card) {
+      if (e.code === 'KeyP') { this.trade = { ...this.trade, pick: this.trade.pick + 1 }; return void this.view?.refresh(); }
+      const by: Record<string, string> = { KeyV: 'Waive', KeyE: 'End', KeyM: 'Make it honest', KeyB: 'back room' };
+      if (by[e.code]) return this.tradeDo(-1, by[e.code]);
+    }
     if (e.code === 'KeyY' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleGym();
     if (e.code === 'KeyB' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleBase();
     if (e.code === 'KeyQ' && type === 'down' && !e.repeat && !this.card && this.base) { this.base = { ...this.base, tab: (this.base.tab + 1) % BASE_TABS.length, opt: 0 }; return void this.view?.refresh(); }
@@ -687,6 +707,27 @@ export class EvilScene extends Phaser.Scene {
     this.view?.refresh();
   }
 
+  // ---- Slice 11: the Trade page ----
+
+  private toggleTrade(): void {
+    if (this.card) return;
+    const block = this.block();
+    if (this.trade === null && (!block || !tradeModel(block, newTrade()))) {
+      this.notice = 'There is no trade here yet.';
+      return void this.view?.refresh();
+    }
+    this.trade = this.trade === null ? newTrade() : null;
+    this.base = null;
+    this.ledger = null;
+    this.roster = null;
+    this.file = null;
+    this.line = null;
+    this.gym = null;
+    this.notice = null;
+    this.cancelLineHold();
+    this.view?.refresh();
+  }
+
   // ---- Slice 10: the Base page, Walk it and the Raid ----
 
   /** Walk it and a Raid can't be closed: the day waits on them. */
@@ -703,6 +744,7 @@ export class EvilScene extends Phaser.Scene {
     if (this.card) return;
     if (this.baseForced()) return;
     this.base = this.base === null ? newBaseSel() : null;
+    this.trade = null;
     this.ledger = null;
     this.roster = null;
     this.file = null;
@@ -710,6 +752,29 @@ export class EvilScene extends Phaser.Scene {
     this.gym = null;
     this.notice = null;
     this.cancelLineHold();
+    this.view?.refresh();
+  }
+
+  private tradeKey(a: InputAction): void {
+    const t = this.trade!;
+    if (a === 'back') { this.trade = null; this.notice = null; return void this.view?.refresh(); }
+    if (a === 'left' || a === 'right') { this.trade = newTrade((t.tab + (a === 'left' ? 3 : 1)) % 4); this.notice = null; return void this.view?.refresh(); }
+    if (a === 'up' || a === 'down') { this.trade = { ...t, row: Math.max(0, t.row + (a === 'up' ? -1 : 1)), pick: 0 }; return void this.view?.refresh(); }
+    if (a === 'confirm') this.tradeDo(0);
+  }
+
+  /** A button under the Card (by index, or by a word in its label for the letter keys). The step refuses anything the page wouldn't allow. */
+  private tradeDo(i: number, label?: string): void {
+    const block = this.block();
+    const m = block && this.trade ? tradeModel(block, this.trade) : null;
+    const b = m ? (label ? m.buttons.find((x) => x.label.includes(label)) : m.buttons[i]) : undefined;
+    if (!b) return;
+    const cues = services().session.evilStep(b.act);
+    const refused = cues.find((c) => c.id === 'refused') as { reason?: string } | undefined;
+    const said = cues.filter((c) => c.id === 'said').map((c) => (c as { line: string }).line);
+    this.notice = refused?.reason ?? (said.length ? said.join(' ') : null);
+    // A new thing running: show it on the Running tab.
+    if (!refused && b.act.type === 'trade') this.trade = newTrade(3);
     this.view?.refresh();
   }
 
