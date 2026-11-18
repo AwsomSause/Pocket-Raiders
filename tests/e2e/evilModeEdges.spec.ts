@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { open, start, view, waitForScene, watch } from './helpers/newUi';
 
-// Evil Mode slice 21 ("the edges"), in the New look. A Tear is open over a held holding: J opens the Edges page; its Card
+// Evil Mode slice 21 ("the edges"), in the New look. A Tear is open over a held holding: I opens the Edges page; its Card
 // reads "We don't know." three times; "Leave it" is picked by tap and CONFIRMED, and the Card's kept. Keys: at Dispatch, a
 // Capture Rig is set on wild ground (Enter), and the Corruption figure appears. With the Shadow branch removed, the page
 // has no Rig and the frame no figure. Screens at three sizes.
@@ -52,13 +52,13 @@ const TEAR = `const h = b.district.holdings.find((x) => x.kind === 'local');
   b.edges.tear = { beastId: 'ub-absorption', rule: 'flex', holdingId: h.id, region: b.here.region, district: b.district.n, openedDay: b.here.day, choice: null, holdBy: [], cardId: null, over: null };
   b.edges.met = ['ub-absorption'];`;
 
-test('a Tear: J opens its Card ("We don\'t know." three times); Leave it, by tap, is confirmed and kept', async ({ page }, info) => {
+test('a Tear: I opens its Card ("We don\'t know." three times); Leave it, by tap, is confirmed and kept', async ({ page }, info) => {
   const errors = watch(page);
   await founded(page);
   await setUp(page, TEAR);
   const s = stage(page);
   await expect(s.getByTestId('evil-edge-open')).toContainText('A Tear: open, 3 days');
-  await page.keyboard.press('KeyJ');
+  await page.keyboard.press('KeyI');
   await expect(s.getByTestId('evil-edge')).toBeVisible();
   await expect(s.getByTestId('evil-edge-title')).toHaveText('A Tear');
   await s.getByTestId('evil-edge-leave').click();
@@ -80,7 +80,7 @@ test('the Shadow branch: a Capture Rig by keys at Dispatch; the Corruption figur
   await founded(page);
   await setUp(page, `b.here.beat = 'dispatch'; b.fight = null; b.refusal = null;`);
   const s = stage(page);
-  await page.keyboard.press('KeyJ');
+  await page.keyboard.press('KeyI');
   await expect(s.getByTestId('evil-edge')).toBeVisible();
   const rig = s.locator('[data-testid^="evil-edge-rig-"]').first();
   await expect(rig).toContainText('Set a Capture Rig');
@@ -97,7 +97,7 @@ test('the Shadow branch removed at founding: no Rig on the Edges page, no Corrup
   await founded(page2, false);
   await setUp(page2, `b.here.beat = 'dispatch'; b.fight = null; b.refusal = null;`);
   const s2 = stage(page2);
-  await page2.keyboard.press('KeyJ');
+  await page2.keyboard.press('KeyI');
   await expect(s2.getByTestId('evil-edge')).toBeVisible();
   await expect(s2.locator('[data-testid^="evil-edge-rig-"]')).toHaveCount(0);
   await expect(s2).not.toContainText('Corruption');

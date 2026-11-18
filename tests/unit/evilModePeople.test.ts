@@ -73,7 +73,7 @@ describe('the deck and the Founders (people.json, faces.json)', () => {
       // Grunt pictures are kept for the nameless: no named person is drawn as a Grunt.
       expect(f!.sprite).not.toMatch(/grunt/);
     }
-    expect(P.filter((p) => p.minor).map((p) => p.id).sort()).toEqual(['beatriz', 'sooah']);
+    expect(P.filter((p) => p.minor).map((p) => p.id).sort()).toEqual(['beatriz', 'miyu', 'sooah']);
   });
   it('thirty-six lines, numbered once each; every person\'s line exists', () => {
     expect(EVIL_DATA.people.lines.map((l) => l.n)).toEqual(Array.from({ length: 36 }, (_, i) => i + 1));
@@ -99,7 +99,9 @@ describe('founding a Roster', () => {
     expect(foundingRoster('s', 'profit').crew).toEqual(b.crew);
   });
   it('the Founders turn up only in the first region; an empty deck sends nobody', () => {
-    expect(deckFor(1, []).length).toBe(0);
+    // Slice 17: a later region's deck is its own twelve, with no Founders.
+    expect(deckFor(1, [], EVIL_DATA, 1).map((p) => p.deck)).toEqual(Array(12).fill('johto'));
+    expect(deckFor(1, [], EVIL_DATA, 0).filter((p) => p.deck === 'founders')).toHaveLength(16);
     expect(deckFor(0, EVIL_DATA.people.people.map((p) => p.id))).toHaveLength(0);
   });
 });
@@ -364,7 +366,7 @@ describe('saves', () => {
     const { applicants: _a, drawn: _d, refusal: _r, ...rest } = b;
     const v3 = { ...rest, v: 3, crew: [1, 2, 3, 4].map((i) => ({ id: `g${i}`, name: `Grunt ${i}`, outOn: null })) };
     const out = EvilModeBlockSchema.parse(v3);
-    expect(out.v).toBe(21);
+    expect(out.v).toBe(22);
     expect(out.crew.map((c) => [c.id, c.name, c.ref, c.loyalty])).toEqual([1, 2, 3, 4].map((i) => [`g${i}`, `Grunt ${i}`, null, 8]));
     expect(out.applicants).toEqual([]);
     expect(out.refusal).toBeNull();

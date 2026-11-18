@@ -13,6 +13,8 @@ export type DeckPerson = EvilData['people']['people'][number];
 export const deckPerson = (ref: string | null, data: EvilData = EVIL_DATA): DeckPerson | undefined => (ref ? data.people.people.find((p) => p.id === ref) : undefined);
 export const talentDef = (t: Talent, data: EvilData = EVIL_DATA) => data.people.talents.find((x) => x.id === t)!;
 export const flawDef = (f: string, data: EvilData = EVIL_DATA) => data.people.flaws.find((x) => x.id === f)!;
+/** A flaw's name, or the word for none listed (Part 10b section 6: one person has none). */
+export const flawName = (f: string | null, data: EvilData = EVIL_DATA): string => (f ? flawDef(f, data).name : 'None listed');
 export const rankDef = (r: Rank, data: EvilData = EVIL_DATA) => data.people.ranks.find((x) => x.id === r)!;
 export const peopleText = (k: string, data: EvilData = EVIL_DATA): string => {
   const t = data.people.text[k];
@@ -165,15 +167,20 @@ export const peopleRoll = (seed: string, n: number, max: number): number => new 
 export function weightOf(p: DeckPerson, creed: string, data: EvilData = EVIL_DATA): number {
   const W = data.people.rules.weights;
   const c = data.people.rules.creeds[creed];
-  const marks = [p.talent, p.flaw, ...(p.age < W.youngUnder ? ['young'] : []), ...(p.age > W.oldOver ? ['old'] : [])];
+  const marks: string[] = [p.talent, ...(p.flaw ? [p.flaw] : []), ...(p.age < W.youngUnder ? ['young'] : []), ...(p.age > W.oldOver ? ['old'] : [])];
   let w = W.base + W.more * (c?.more.filter((m) => marks.includes(m)).length ?? 0);
   if (c?.less.some((m) => marks.includes(m))) w = Math.max(1, Math.floor(w / W.lessDivide));
   return w;
 }
 
-/** The deck for a region: the Founders only in the first region, beside the region's own twelve. Nobody twice a run. */
-export function deckFor(region: number, drawn: readonly string[], data: EvilData = EVIL_DATA): DeckPerson[] {
-  const decks = region === 0 ? ['founders', 'kanto'] : [];
+/**
+ * The deck for a region (Part 10a section 1): the region's own twelve (by its id: Kanto, Johto, Hoenn so far), and the
+ * Founders beside them only in the run's first region (`run` is the region-of-run, 0 for the first). Nobody twice a run.
+ * Those who come only when (deck 'special') are never drawn: they arrive on their own (quest.ts `specialArrivals`).
+ */
+export function deckFor(region: number, drawn: readonly string[], data: EvilData = EVIL_DATA, run = 0): DeckPerson[] {
+  const id = data.region.regions.find((r) => r.index === region)?.id ?? (region === 0 ? 'kanto' : '');
+  const decks: string[] = [id, ...(run === 0 ? ['founders'] : [])];
   return data.people.people.filter((p) => decks.includes(p.deck) && !drawn.includes(p.id) && p.status !== 'disabled' && p.status !== 'invalid');
 }
 

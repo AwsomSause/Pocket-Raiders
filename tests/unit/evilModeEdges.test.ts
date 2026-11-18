@@ -15,7 +15,7 @@ import { BEAT_END, step, type EvilAction } from '../../src/core/evilMode/day';
 import { makeHero } from '../../src/core/evilMode/hero';
 import { crewProblem } from '../../src/core/evilMode/dispatch';
 import { freeSquares } from '../../src/core/evilMode/base';
-import { rigCard, shadowOn } from '../../src/core/evilMode/edges';
+import { edgesTabShown, rigCard, shadowOn } from '../../src/core/evilMode/edges';
 import { edgesModel } from '../../src/core/evilMode/edgesScreens';
 import { beginEvilFight } from '../../src/core/evilMode/fight';
 import { endEvilFight } from '../../src/core/evilMode/fightEnd';
@@ -67,32 +67,32 @@ const withTear = (b0: EvilModeBlock, beastId = 'ub-absorption'): EvilModeBlock =
 const removed = (b: EvilModeBlock): EvilModeBlock => ({ ...b, settings: { ...b.settings, shadow: false }, edges: { ...b.edges, shadow: null } });
 const wild = (b: EvilModeBlock) => b.district!.holdings.find((h) => h.kind === 'wild' || h.kind === 'alpha')!;
 
-describe('the data and the save (block v21)', () => {
+describe('the data and the save (block v22)', () => {
   it('edges.json is checked at load; both switches on by default (Kice: Shadow branch on, with a setting to remove it)', () => {
     expect(EVIL_DATA.edges.incursions.on).toBe(true);
     expect(EVIL_DATA.edges.shadow.on).toBe(true);
     const b = found();
-    expect(b.v).toBe(21);
+    expect(b.v).toBe(22);
     expect(b.settings).toMatchObject({ shadow: true, incursions: true });
     expect(b.edges.shadow).not.toBeNull();
     expect(removed(b).edges.shadow).toBeNull();
     expect(found('e', {}, { shadow: false }).edges.shadow).toBeNull();
     expect(found('e', {}, { shadow: false }).settings.shadow).toBe(false);
   });
-  it('v15 and v20 -> v21: the branch Available, Incursions on, nothing tallied, no Tear; save and reload the same', () => {
+  it('v15, v20 and v21 -> v22: the branch Available, Incursions on, nothing tallied, no Tear; save and reload the same', () => {
     const b = found();
     const { edges, ...rest } = b;
     void edges;
     const v15 = { ...rest, v: 15, settings: { length: 'three' } };
     const out = EvilModeBlockSchema.parse(v15);
-    expect(out.v).toBe(21);
+    expect(out.v).toBe(22);
     expect(out.settings).toEqual({ length: 'three', shadow: true, incursions: true });
     expect(out.edges).toMatchObject({ appetites: {}, static: null, tear: null, incursion: null, beast: null, met: [], heatAtMorning: b.team.heat });
     expect(out.edges.shadow).toMatchObject({ rigged: [], through: 0, rung: 0 });
     expect(reload(out)).toEqual(out);
-    // A v20 block (slice 7's Night, saved before this slice) gets the same edges.
+    // A v20 block (slice 7's Night) gets the same edges.
     const v20 = EvilModeBlockSchema.parse({ ...rest, v: 20, settings: { length: 'three' } });
-    expect(v20.v).toBe(21);
+    expect(v20.v).toBe(22);
     expect(v20.settings).toEqual({ length: 'three', shadow: true, incursions: true });
     expect(v20.edges.tear).toBeNull();
     // A block mid-Tear survives a reload unchanged.
@@ -412,3 +412,17 @@ describe('with the Shadow branch removed (Settings > Evil Mode > Shadow branch: 
 
 /** The first free square of the base's grid. */
 const firstFree = (b: EvilModeBlock): string => freeSquares(b.base!)[0]!;
+
+describe('the Edges tab in the board strip (the strip is full on a phone)', () => {
+  it('shows only while something is at the edges, or the Shadow branch can be used', () => {
+    const b = found();
+    const grey = { ...b, team: { ...b.team, line: 'grey' as const } };
+    expect(edgesTabShown(grey)).toBe(false);
+    expect(edgesTabShown(withTear(grey))).toBe(true);
+    expect(edgesTabShown({ ...grey, edges: { ...grey.edges, incursion: { beastId: 'ub-absorption', empty: false } } })).toBe(true);
+    const whatever = { ...b, team: { ...b.team, line: 'whatever' as const } };
+    expect(edgesTabShown(whatever)).toBe(true);
+    // Removed: Whatever it takes alone doesn't bring the tab back.
+    expect(edgesTabShown(removed(whatever))).toBe(false);
+  });
+});

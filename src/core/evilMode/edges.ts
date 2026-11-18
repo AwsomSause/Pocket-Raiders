@@ -111,3 +111,13 @@ export function tearChip(block: EvilModeBlock, data: EvilData = EVIL_DATA): stri
   const n = Math.max(0, t.openedDay + data.edges.incursions.numbers.tearDays - block.here.day);
   return fill(data.edges.incursions.tear.chip, { n, s: n === 1 ? '' : 's' });
 }
+
+/**
+ * Whether the Edges tab shows in the board's tab strip (the strip is full on a phone): only while something's at the edges
+ * (a Tear, an Incursion, a Beast or Poipole in the building) or the Shadow branch can be used (it's in, and the Line is
+ * Whatever it takes). Key I opens the page either way.
+ */
+export function edgesTabShown(block: EvilModeBlock): boolean {
+  const e = block.edges;
+  return !!(openTear(block) || e.incursion || e.beast || e.poipole || (shadowOn(block) && block.team.line === 'whatever'));
+}
