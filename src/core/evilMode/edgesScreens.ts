@@ -1,4 +1,4 @@
-// Evil Mode slice 21: the Edges page (U), in the New look (design Part 29 sections 6 and 16): a Tear's Honest Card ("We
+// Evil Mode slice 21: the Edges page (J), in the New look (design Part 29 sections 6 and 16): a Tear's Honest Card ("We
 // don't know." three times, CONFIRM still there) with its choices, Static's lines, a Beast in the building, Poipole's plate,
 // and, only with the Shadow branch in the run, Rigs, the Lab and the Corruption figure. Works out what to draw; decides nothing.
 

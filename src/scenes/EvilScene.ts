@@ -187,7 +187,7 @@ export class EvilScene extends Phaser.Scene {
           // Slice 14: the Scheme page; a heist's rooms keep it open.
           const smod = (this.sc !== null || block.scheme?.heist?.stage === 'rooms') && !block.fight && !ledger && !roster && !file && !line && !gym && !trade && !nbPage ? schemeModel(block, this.sc ?? 0) : null;
           const scPage = smod ? schemeView(smod, this.notice) : undefined;
-          // Slice 21: the Edges page (U).
+          // Slice 21: the Edges page (J; U is slice 22's house rule).
           const em = this.edge !== null && !block.fight && !ledger && !roster && !file && !line && !gym && !trade && !nbPage && !scPage ? edgesModel(block, this.edge) : null;
           const edPage = em ? edgesView(em, this.notice) : undefined;
           const edTag = tearChip(block) ?? 'Edges';
@@ -733,7 +733,7 @@ export class EvilScene extends Phaser.Scene {
       const by: Record<string, string> = { KeyV: 'Waive', KeyE: 'End', KeyM: 'Make it honest', KeyB: 'back room' };
       if (by[e.code]) return this.tradeDo(-1, by[e.code]);
     }
-    if (e.code === 'KeyU' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleEdges();
+    if (e.code === 'KeyJ' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleEdges();
     if (e.code === 'KeyC' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleScheme();
     if (e.code === 'KeyK' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleNeighbour();
     if (e.code === 'KeyY' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleGym();
