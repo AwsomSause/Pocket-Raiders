@@ -4,7 +4,7 @@
 // change nothing (a whole run hashes the same with every bark asked for); a Shut person never barks, nothing barks at a
 // fire, no line twice in a district; every letter fits one screen; replies move nothing by more than one, once each;
 // the empty envelope at most once and only at Dread 7; Giovanni's card by the region's number, none at War; the
-// notebook's last line never blank; a coldly let-go leaver never writes; the v15 and v20 -> v21 migration; the drawer keeps the save small.
+// notebook's last line never blank; a coldly let-go leaver never writes; the v15 and v22 -> v23 migration; the drawer keeps the save small.
 
 import { describe, expect, it } from 'vitest';
 import { foundForPlay, playRegion, playRun, replay } from '../../src/core/evilMode/autoplay';
@@ -289,15 +289,15 @@ describe('the notebook and the endings', () => {
 });
 
 describe('saves', () => {
-  it('a v15 block (slice 16) and a v20 block (slice 7) migrate to v21 with nothing heard and no post', () => {
+  it('a v15 block (slice 16) and a v22 block (slice 21) migrate to v23 with nothing heard and no post', () => {
     const b = fresh('voice-mig');
     const { voice: _v, ...rest } = b;
-    for (const v of [15, 20]) {
+    for (const v of [15, 22]) {
       const out0 = EvilModeBlockSchema.parse(JSON.parse(JSON.stringify({ ...rest, v })));
-      expect(out0).toMatchObject({ v: 21, voice: { mark: null, radio: [], paper: [], inbox: [], radioOff: false } });
+      expect(out0).toMatchObject({ v: 23, voice: { mark: null, radio: [], paper: [], inbox: [], radioOff: false } });
     }
     // A block that already has its voice keeps it.
-    expect(EvilModeBlockSchema.parse(JSON.parse(JSON.stringify({ ...b, v: 20 }))).voice).toEqual(b.voice);
+    expect(EvilModeBlockSchema.parse(JSON.parse(JSON.stringify({ ...b, v: 22 }))).voice).toEqual(b.voice);
     const out = EvilModeBlockSchema.parse(JSON.parse(JSON.stringify({ ...rest, v: 15 })));
     // The next Morning marks; the one after it speaks.
     const m1 = voiceMorning({ ...out, here: { ...out.here, day: out.here.day + 1 } });

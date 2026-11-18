@@ -355,7 +355,7 @@ describe('saves: block v7', () => {
   it('v6 -> v7: no Gym dealt with; save and reload the same', () => {
     const { gyms: _g, ...rest } = found();
     const v7 = EvilModeBlockSchema.parse({ ...rest, v: 6 });
-    expect(v7).toMatchObject({ v: 21, gyms: [] });
+    expect(v7).toMatchObject({ v: 23, gyms: [] });
     expect(gymOf(v7)).toMatchObject({ leaderId: 'misty', way: null, standing: 'wary' });
     expect(EvilModeBlockSchema.parse(JSON.parse(JSON.stringify(v7)))).toEqual(v7);
   });

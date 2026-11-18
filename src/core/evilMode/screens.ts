@@ -2,6 +2,7 @@
 
 import { CHARTERS, chartersOpen } from './charters';
 import { dreadWord, heatStep } from './line';
+import { shadowOn, tearChip } from './edges';
 import { EVIL_DATA, type EvilData } from './data';
 import { beatStrip } from './day';
 import { clockChip } from './crossing';
@@ -193,7 +194,7 @@ export function frameModel(block: EvilModeBlock, bossName: string, data: EvilDat
       b: t.look.b,
     },
     strip: {
-      funds: t.funds, heat: t.heat, loyalty: loyaltyBand(block, data), regard: t.regard, dread: t.dread, corruption: t.corruption > 0 ? t.corruption : null,
+      funds: t.funds, heat: t.heat, loyalty: loyaltyBand(block, data), regard: t.regard, dread: t.dread, corruption: t.corruption > 0 && shadowOn(block, data) ? t.corruption : null,
       heatTip: `Heat ${t.heat}. ${heatStep(t.heat, data).word}: ${heatStep(t.heat, data).doing}`, amberTo: data.line.heat.lamps.amberTo, rule: t.heat >= data.line.heat.lamps.rule,
       dreadTip: `Dread ${t.dread}. ${dreadWord(t.dread, data)}.`,
     },
@@ -215,6 +216,9 @@ export function regionChips(block: EvilModeBlock, data: EvilData = EVIL_DATA): s
   if (region?.rule) out.push(`${region.name}: ${region.rule.name}`);
   const clock = clockChip(block, data);
   if (clock) out.push(clock);
+  // Slice 21: a Tear open in the district (Part 29 section 3: "Open: 2 days").
+  const tear = tearChip(block, data);
+  if (tear) out.push(tear);
   if (modify(block, 'heroGym', {}, 0, data) > 0 && block.hero && block.district) {
     const row = stageRow(block.district.region, block.district.n, data);
     const steps = Math.max(0, 20 - block.hero.at);

@@ -2,8 +2,11 @@
 // Queueing checks a job can go; "Send them" fixes each job's odds; the Evening rolls each job once from the
 // `evil-dispatch` stream, in queue order, then pays takings and wages. Pure: new blocks are returned.
 
+import { questBusy } from './quest';
+import { moleStops } from './mole';
 import { takingsScale } from './charterRules';
 import { hashSeed, Rng } from '../rng';
+import { tearBusy, tearPay } from './tear';
 import { countsFor, fairPrice, payAmount, heldCount, holdingName, isSpeech, kindDef, localOf, methodsFor, settleTown, shiftMood, streetName, streetOf } from './board';
 import { EVIL_DATA, type EvilData } from './data';
 import { oddsFor, type JobDraft } from './odds';
@@ -38,7 +41,7 @@ export function crewProblem(block: EvilModeBlock, id: string, ignoreHolding?: st
   if (block.queue.some((j) => j.holdingId !== ignoreHolding && j.squad.includes(id))) return `${c.name} is already going somewhere today.`;
   if (block.posted.some((p) => p.id === id)) return `${c.name} is posted somewhere today.`;
   if (inChair(block, id)) return `${c.name} holds the Gym's chair.`;
-  return tradeProblem(block, id) ?? schemeBusy(block, id);
+  return tradeProblem(block, id) ?? schemeBusy(block, id) ?? questBusy(block, id) ?? tearBusy(block, id);
 }
 
 /** Why a job can't be queued, in plain words; null when it can. Checked by `step`, not only on screen. */
@@ -49,6 +52,9 @@ export function jobProblem(block: EvilModeBlock, job: JobDraft, data: EvilData =
   const h = d.holdings.find((x) => x.id === job.holdingId);
   if (!h) return 'Pick a holding.';
   const kind = kindDef(h.kind, data);
+  // Slice 17: a method the Boss promised the police's mole to stop, for the region.
+  const stop = moleStops(block, job.method);
+  if (stop) return stop;
   // Slice 6: the Line. A method darker than the team's Line is refused here, whatever the screen shows.
   if (!lineAllows(block, job.method, data)) return lineWhy(block, data);
   // Slice 9: the region's doors (the first Arrival: Persuade, Pay, Outplay and scouting only). Refused here too.
@@ -112,6 +118,13 @@ export function lineProblem(block: EvilModeBlock, job: JobDraft, data: EvilData 
 /** Adds a job (or replaces the one on that holding). The odds are worked out now for the screen and fixed at Send. */
 export function queueJob(block: EvilModeBlock, job: JobDraft, data: EvilData = EVIL_DATA): { block: EvilModeBlock; problem: string | null } {
   const problem = jobProblem(block, job, data) ?? lineProblem(block, job, data);
+  if (problem) return { block, problem };
+  return fileJob(block, job, data);
+}
+
+/** Slice 21: a Shadow order. The Pokémon go without their people: the job's checks, but not the squad's lines. */
+export function queueOrdered(block: EvilModeBlock, job: JobDraft, data: EvilData = EVIL_DATA): { block: EvilModeBlock; problem: string | null } {
+  const problem = jobProblem(block, job, data);
   if (problem) return { block, problem };
   return fileJob(block, job, data);
 }
@@ -294,8 +307,9 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
   const ec = econEvening({ ...block, team, crew, district }, data);
   ({ team, crew, district } = { team: ec.block.team, crew: ec.block.crew, district: ec.block.district! });
   let econ = ec.block.economy;
+  const pay = tearPay(block, data);
   // Slice 22, Plasma (Part 28 section 8.3): nothing until the sentence is whole, then double for the rest of that region.
-  const holdingsIncome = (district.holdings.reduce((n, h) => n + takingsAt(h, block.rates, data), 0) + past.amount) * takingsScale(block);
+  const holdingsIncome = (district.holdings.reduce((n, h) => n + takingsAt(h, block.rates, data, pay), 0) + past.amount) * takingsScale(block);
   const income = holdingsIncome + ec.income;
   const paid = crew.filter((c) => c.where === 'in');
   const wages = team.creed === 'belonging' ? Math.max(0, Math.floor(income / 2)) : paid.reduce((n, c) => n + wageOf({ ...block, team }, c, income, data), 0);

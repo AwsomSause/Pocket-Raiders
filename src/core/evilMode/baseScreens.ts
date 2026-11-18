@@ -105,6 +105,8 @@ function optionsAt(block: EvilModeBlock, g: Grid, sel: BaseSel, data: EvilData):
     if (!room && g.slots.includes(at)) {
       for (const def of data.base.rooms) {
         if (def.fixed) continue;
+        // Slice 21: the Shadow branch removed means removed: the Lab isn't on the list at all (dark methods are shown and refused only while it's in).
+        if (def.id === 'lab' && !(block.settings.shadow && block.edges.shadow && data.edges.shadow.on)) continue;
         const problem = buildProblem(block, def.id, data);
         if (def.status === 'disabled' || (problem && /Line|Creed|region|always/.test(problem) && def.status !== 'supported')) continue;
         const cost = roomCost(block, def.id, 1, data);

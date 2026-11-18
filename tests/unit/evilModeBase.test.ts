@@ -93,10 +93,11 @@ describe('the data: sites, rooms, pieces (Part 16 sections 2 and 4, Part 17 sect
       expect(Math.max(...d.values())).toBe(d.get(g.office));
     }
   });
-  it('twelve rooms at up to three sizes, Part 5\'s costs; the Lab is switched off with why; every limited size says what it waits on', () => {
+  it('twelve rooms at up to three sizes, Part 5\'s costs; the Lab (slice 21) is built at Whatever it takes; every limited size says what it waits on', () => {
     expect(EVIL_DATA.base.rooms.find((r) => r.id === 'barracks')!.sizes.map((s) => s.cost)).toEqual([2500, 3750, 5000]);
     expect(EVIL_DATA.base.rooms.find((r) => r.id === 'vault')!.sizes.map((s) => s.cost)).toEqual([5000, 7500, 10000]);
-    expect(EVIL_DATA.base.rooms.find((r) => r.id === 'lab')!.status).toBe('disabled');
+    expect(EVIL_DATA.base.rooms.find((r) => r.id === 'lab')!.status).toBe('supported');
+    expect(EVIL_DATA.base.rooms.find((r) => r.id === 'lab')!.line).toEqual(['whatever']);
     for (const r of EVIL_DATA.base.rooms) for (const s of r.sizes) if (s.status !== 'supported') expect(s.waits).toBeTruthy();
     for (const p of EVIL_DATA.base.adjacency) if (p.status !== 'supported') expect(p.waits).toBeTruthy();
   });
@@ -236,11 +237,14 @@ describe('building, sizes and staffing (Part 16 sections 3 and 4)', () => {
     expect(b.team.funds).toBe(f + Math.floor(2000 / 3));
     expect(b.crew[0]).toMatchObject({ where: 'in', rank: 'lead', loyalty: 5 });
   });
-  it('by Line and region: no Pen under Clean hands; no Lab at all; the Creed\'s room waits for the last region', () => {
+  it('by Line and region: no Pen under Clean hands; the Lab only at Whatever it takes, and never with the Shadow branch removed; the Creed\'s room waits for the last region', () => {
     const clean = based('lodge', { line: 'clean' });
     expect(buildProblem(clean, 'pen')).toContain('Line');
     expect(buildProblem(based('lodge', { line: 'whatever' }), 'pen')).toBeNull();
-    expect(buildProblem(based(), 'lab')).toContain('No Lab');
+    expect(buildProblem(based(), 'lab')).toContain('Line');
+    const w = based('lodge', { line: 'whatever' });
+    expect(buildProblem({ ...w, team: { ...w.team, funds: 50000 } }, 'lab')).toBeNull();
+    expect(buildProblem({ ...w, team: { ...w.team, funds: 50000 }, settings: { ...w.settings, shadow: false }, edges: { ...w.edges, shadow: null } }, 'lab')).toBe('Not in this run.');
     expect(buildProblem(based(), 'creed')).toContain('last region');
     expect(buildProblem(based(), 'office')).toContain('always there');
   });
@@ -621,7 +625,7 @@ describe('saves: block v9', () => {
     const { base: _b, raid: _r, law: _l, economy: _e, neighbour: _n, scheme: _s, road: _d, fire: _f, reck: _k, ending: _g, ...rest } = b;
     const { 'evil-economy': _de, 'evil-scheme': _ds, ...draws } = rest.draws as Record<string, number>;
     const v9 = EvilModeBlockSchema.parse(JSON.parse(JSON.stringify({ ...rest, draws, v: 8 })));
-    expect(v9).toMatchObject({ v: 21, base: null, raid: null, law: { hot: 0, raids: [], heatHeld: null } });
+    expect(v9).toMatchObject({ v: 23, base: null, raid: null, law: { hot: 0, raids: [], heatHeld: null } });
     expect(EvilModeBlockSchema.parse(JSON.parse(JSON.stringify(b)))).toEqual(b);
   });
   it('a damaged base is refused: an unknown room, a size of four', () => {
@@ -653,7 +657,10 @@ describe('the Base page model (New look): what the page shows comes from the rul
     const before = JSON.stringify(b);
     const build = baseModel(b, { tab: 0, at: g.slots[0]!, opt: 0, moving: null });
     expect(build.options.some((o) => o.label === 'The Mess')).toBe(true);
-    expect(build.options.find((o) => o.label.includes('Lab'))).toBeUndefined();
+    // Slice 21: dark methods are shown and refused; with the Shadow branch removed the Lab's absent, not dark.
+    expect(build.options.find((o) => o.label.includes('Lab'))!.problem).toContain('Line');
+    const off = baseModel({ ...b, settings: { ...b.settings, shadow: false }, edges: { ...b.edges, shadow: null } }, { tab: 0, at: g.slots[0]!, opt: 0, moving: null });
+    expect(off.options.find((o) => o.label.includes('Lab'))).toBeUndefined();
     const d = edgeKey(g.common, neighbours(g, g.common).find((n) => n !== g.door)!);
     const defend = baseModel(b, { tab: 2, at: d, opt: 0, moving: null });
     const i = defend.options.findIndex((o) => o.label.startsWith('A quiz') || o.label.includes('quiz'));

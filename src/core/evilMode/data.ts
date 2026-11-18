@@ -23,7 +23,10 @@ import firesRaw from '../../data/evilMode/fires.json';
 import roadRaw from '../../data/evilMode/road.json';
 import lastRoomRaw from '../../data/evilMode/lastRoom.json';
 import endingsRaw from '../../data/evilMode/endings.json';
-import { FiresFileSchema, RoadFileSchema, LastRoomFileSchema, EndingsFileSchema } from './schema';
+import { FiresFileSchema, RoadFileSchema, LastRoomFileSchema, EndingsFileSchema, QuestsFileSchema, MoleFileSchema, EdgesFileSchema } from './schema';
+import questsRaw from '../../data/evilMode/quests.json';
+import moleRaw from '../../data/evilMode/mole.json';
+import edgesRaw from '../../data/evilMode/edges.json';
 
 /** Parses `raw` (throws when it's wrong) and hands it back with the JSON's own types. */
 const checked = <T>(schema: { parse: (x: unknown) => unknown }, raw: T): T => {
@@ -55,6 +58,11 @@ export const EVIL_DATA = {
   lastRoom: LastRoomFileSchema.parse(lastRoomRaw),
   /** Slice 15: checked by its schema; read with the JSON's own types (its lines are many and plain). */
   endings: checked(EndingsFileSchema, endingsRaw),
+  /** Slice 17: personal quests and Ask them to stay (Part 10c); the mole (Part 11). */
+  quests: QuestsFileSchema.parse(questsRaw),
+  mole: MoleFileSchema.parse(moleRaw),
+  /** Slice 21: Incursions for a Boss and the Shadow branch. */
+  edges: EdgesFileSchema.parse(edgesRaw),
 };
 export type EvilData = typeof EVIL_DATA;
 export type Creed = EvilData['creeds'][number];

@@ -13,7 +13,7 @@ import { arriveApplicants } from './roster';
 import { modify, PATRON_ID } from './regionRule';
 import { newRegion } from './region';
 import { newScheme } from './scheme';
-import { emptyEconomy, emptyNight, LINE_IDS, STREAMS, type Crew, type EvilModeBlock, EvilModeBlockSchema, type LineId, type RunLength } from './schema';
+import { emptyEconomy, emptyEdges, emptyMole, emptyNight, LINE_IDS, STREAMS, type Crew, type EvilModeBlock, EvilModeBlockSchema, type LineId, type RunLength } from './schema';
 
 export interface FoundingChoice {
   name: string;
@@ -86,7 +86,7 @@ export function patronCrew(patronId: string | undefined, data: EvilData = EVIL_D
  * Founding to the first morning (design Part 3 section 11): Funds, Heat, Regard and Dread by Creed, then the Line's
  * changes (Whatever it takes: Heat +1; Clean hands: Regard +1). Day 1, Morning, Kanto District 1.
  */
-export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: RunLength; seed?: string; stage?: number }, data: EvilData = EVIL_DATA): { ok: true; block: EvilModeBlock } | { ok: false; problem: string } {
+export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: RunLength; seed?: string; stage?: number; shadow?: boolean; incursions?: boolean }, data: EvilData = EVIL_DATA): { ok: true; block: EvilModeBlock } | { ok: false; problem: string } {
   const problem = foundingProblem(choice, data);
   if (problem) return { ok: false, problem };
   const creed = data.creeds.find((c) => c.id === choice.creed)!;
@@ -110,10 +110,10 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
   const regard = cap(regard0 + (plain ? (data.region.regions.find((r) => r.index === first)?.rule?.mods ?? []).filter((m) => m.kind === 'arrivalRegard').reduce((n, m) => n + (m.add ?? 0), 0) : 0));
   const funds = patron ? Math.floor(modify({ here: { region: first, stage, day: 1, beat: 'morning' }, team: { patron } as never, crew }, 'funds', {}, creed.start.funds, data)) : creed.start.funds;
   const block: EvilModeBlock = {
-    v: 21,
+    v: 23,
     from: 'founding',
     // Slice 19: "Six regions" only once six are written; otherwise the run is Three.
-    settings: { length: lengthFor(opts.length, data.region.regions) },
+    settings: { length: lengthFor(opts.length, data.region.regions), shadow: opts.shadow ?? true, incursions: opts.incursions ?? true },
     team: {
       name: checkName(choice.name, data).name,
       sayable: true,
@@ -166,7 +166,11 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
     law: { hot: 0, raids: [], heatHeld: null },
     ending: null,
     voice: emptyVoice(),
+    quests: {},
+    mole: emptyMole(),
+    edges: emptyEdges(opts.shadow ?? true),
   };
+  block.edges.heatAtMorning = block.team.heat;
   block.region = newRegion(block, seed, data);
   block.neighbour = ensureNeighbour(block, data).neighbour;
   block.draws['evil-people'] = roster.draws;

@@ -116,6 +116,8 @@ export function buildProblem(block: EvilModeBlock, t: RoomType, data: EvilData =
   const b = block.base;
   if (!b) return 'There is no base yet.';
   if (def.status === 'disabled') return def.waits ?? 'Not yet.';
+  // Slice 21: with the Shadow branch removed there's no Lab to build (and the build list doesn't show one).
+  if (t === 'lab' && !(block.settings.shadow && block.edges.shadow && data.edges.shadow.on)) return 'Not in this run.';
   if (def.fixed) return `${def.name} is always there.`;
   if (def.line && !def.line.includes(block.team.line)) return `Shut by your Line. ${block.team.line === 'clean' ? "Clean hands can't build one. The button's not there." : ''}`.trim();
   if (def.lastRegion && runIdx(block) !== lastRegion(block)) return def.sizes[0]!.waits ?? 'Built in the last region.';

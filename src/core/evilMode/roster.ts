@@ -5,7 +5,9 @@
 import { fxTotal, rosterCap } from './baseFx';
 import { EVIL_DATA, type EvilData } from './data';
 import { appendLog, fill, money } from './ledger';
-import { bandOf, deckFor, deckPerson, drawOne, flawDef, inRoster, lineText, moveLoyalty, peopleText, personFrom, rankDef, saysName, talentDef, wageOf } from './people';
+import { markApplicant, onHire, onRefuse } from './mole';
+import { openQuest, runOf, specialArrivals } from './quest';
+import { bandOf, deckFor, deckPerson, drawOne, flawDef, flawName, inRoster, lineText, moveLoyalty, peopleText, personFrom, rankDef, saysName, talentDef, wageOf } from './people';
 import type { Crew, EvilModeBlock, Question } from './schema';
 
 type Out = { block: EvilModeBlock; problem: string | null; line: string };
@@ -24,19 +26,24 @@ export function arriveApplicants(block: EvilModeBlock, data: EvilData = EVIL_DAT
   if (!d || block.applied.includes(key)) return block;
   const R = data.people.rules;
   const stay = block.applicants.filter((a) => day < a.day + R.waitDays);
+  // Slice 17: a marked applicant who waited their two days and went is never the mole afterward.
+  let b0 = block;
+  for (const a of block.applicants) if (!stay.includes(a)) b0 = onRefuse(b0, a.ref);
   const town = d.holdings.find((h) => h.kind === 'town');
   const count = (town?.owner === 'team' ? R.applicantsHeld : R.applicantsNotHeld) + fxTotal(block, 'applicants', data);
   let draws = block.draws['evil-people'] ?? 0;
   const drawn = [...block.drawn];
   const fresh: EvilModeBlock['applicants'] = [];
   for (let i = 0; i < count; i++) {
-    const p = drawOne(deckFor(block.here.region, drawn, data), block.team.creed, d.seed, draws, data);
+    const p = drawOne(deckFor(block.here.region, drawn, data, runOf(block)), block.team.creed, d.seed, draws, data);
     if (!p) break;
     draws += 1;
     drawn.push(p.id);
     fresh.push({ ref: p.id, day, q: null });
   }
-  return { ...block, applicants: [...stay, ...fresh], drawn, draws: { ...block.draws, 'evil-people': draws }, applied: [...block.applied, key] };
+  // Slice 17: those who come only when (no draw), then one of today's may be marked, on `evil-mole` (Part 11 section 1).
+  const out = specialArrivals({ ...b0, applicants: [...stay, ...fresh], drawn, draws: { ...b0.draws, 'evil-people': draws }, applied: [...b0.applied, key] }, data);
+  return markApplicant(out, out.applicants.filter((a) => a.day === day).map((a) => a.ref), data);
 }
 
 /** The one question (Part 10a section 1.2). One per applicant; "Who sent you?" always gets "Nobody." */
@@ -46,7 +53,7 @@ export function askQuestion(block: EvilModeBlock, ref: string, q: Question, data
   if (!a || !p) return no(block, "They're not at the notice board.");
   if (a.q) return no(block, 'One question each. The rest the run tells you.');
   const def = data.people.questions.find((x) => x.id === q)!;
-  const line = `${p.name}: ${fill(def.answer, { flaw: flawDef(p.flaw, data).name, line: deckPerson(ref, data)?.lineText ?? data.people.lines.find((l) => l.n === p.line)!.text, why: p.why, quest: p.quest })}`;
+  const line = `${p.name}: ${fill(def.answer, { flaw: flawName(p.flaw, data), line: deckPerson(ref, data)?.lineText ?? data.people.lines.find((l) => l.n === p.line)!.text, why: p.why, quest: p.quest })}`;
   return { block: { ...block, applicants: block.applicants.map((x) => (x.ref === ref ? { ...x, q } : x)) }, problem: null, line };
 }
 
@@ -63,6 +70,9 @@ export function hire(block: EvilModeBlock, ref: string, data: EvilData = EVIL_DA
   const line = fill(peopleText('hired', data), { name: d.name, says: saysName(person, block.team.name, data) });
   let b: EvilModeBlock = { ...block, crew: [...block.crew, person], applicants: block.applicants.filter((x) => x.ref !== ref) };
   b = appendLog(b, { kind: 'hire', who: [person.id], text: `Day ${block.here.day}. Hired ${d.name}, ${d.age}.` });
+  // Slice 17: the marked applicant, hired, is the mole (nothing on the card says so); "Why us?" opened their quest.
+  b = onHire(b, ref, person.id);
+  if (a.q === 'why') b = openQuest(b, person.id, data).block;
   return { block: b, problem: null, line };
 }
 
@@ -73,7 +83,7 @@ export function turnAway(block: EvilModeBlock, ref: string, rude: boolean, data:
   const W = data.people.rules.weights;
   const kind = data.people.text.turnedKind as Record<string, string>;
   const line = fill(rude ? peopleText('turnedRude', data) : kind[d.age < W.youngUnder ? 'young' : d.age > W.oldOver ? 'old' : 'other']!, { name: d.name });
-  let b: EvilModeBlock = { ...block, applicants: block.applicants.filter((x) => x.ref !== ref) };
+  let b: EvilModeBlock = onRefuse({ ...block, applicants: block.applicants.filter((x) => x.ref !== ref) }, ref);
   if (rude) b = { ...b, team: { ...b.team, regard: Math.max(0, Math.min(10, b.team.regard + data.people.rules.rudeRegard)) } };
   b = appendLog(b, { kind: 'turned', who: [], text: `Day ${block.here.day}. Turned away ${d.name}, ${d.age}${rude ? ', rudely' : ''}.` });
   return { block: b, problem: null, line };
@@ -155,7 +165,7 @@ export function cardOf(block: EvilModeBlock, p: Crew, data: EvilData = EVIL_DATA
   return {
     talent: p.talent ? talentDef(p.talent, data) : null,
     flaw: p.flaw && p.flawFound ? flawDef(p.flaw, data).name : p.flaw ? '?' : null,
-    line: p.line !== null && p.lineHeard ? lineText(p, data) : p.line !== null ? peopleText('unheard', data) : null,
+    line: p.line !== null && p.lineHeard ? lineText(p, data, block) : p.line !== null ? peopleText('unheard', data) : null,
     rank: rankDef(p.rank, data).title,
     band,
   };

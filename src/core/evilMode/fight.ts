@@ -21,6 +21,8 @@ import { EVIL_DATA, type EvilData } from './data';
 import { heroRival } from './fightEnd';
 import { heroTier } from './hero';
 import type { EvilModeBlock, Holding } from './schema';
+import { beastOf, incursionsOn, openTear } from './tear';
+import type { UltraRuleId } from '../ultra/beasts';
 import { walkRound } from './walk';
 import { runIndex } from './region';
 import { detectiveOf } from './raid';
@@ -90,6 +92,44 @@ export function leaderTeam(content: Content, run: RunState, block: EvilModeBlock
  * however it ends (fightEnd.ts).
  */
 export function beginEvilFight(content: Content, current: RunState): RunState | null {
+  const block = current.expansion?.evilMode;
+  const f = block?.fight;
+  if (!block || !f || f.begun || current.battle) return beginEvilFightInner(content, current);
+  // Slice 21: going through a Tear, or an Incursion taking the district's next Outplay (Part 27 section 4.5).
+  if (f.kind === 'tear' || f.kind === 'incursion') return beginBeastFight(content, current, block);
+  if (f.kind === 'outplay' && block.edges.incursion && incursionsOn(block)) return beginBeastFight(content, current, { ...block, fight: { ...f, kind: 'incursion' } });
+  const run = beginEvilFightInner(content, current);
+  return run?.battle ? withTearRule(run) : run;
+}
+
+/** A Tear open in the district: its Ultra Rule leaks into every battle there, both sides alike (Part 27 section 4.4). */
+function withTearRule(run: RunState): RunState {
+  const b = run.expansion?.evilMode;
+  const t = b ? openTear(b) : null;
+  if (!t || !run.battle) return run;
+  run.battle.ultra = [...new Set([...(run.battle.ultra ?? []), t.rule as UltraRuleId])];
+  return run;
+}
+
+/** The Beast, wild, in its own rule: through the Tear (its home world) or come out of it. Caught by the main game's means. */
+function beginBeastFight(content: Content, current: RunState, block: EvilModeBlock): RunState | null {
+  const f = block.fight!;
+  const id = f.kind === 'incursion' ? block.edges.incursion?.beastId : block.edges.tear?.beastId;
+  const beast = id ? beastOf(id) : null;
+  if (!beast || !content.species.has(beast.speciesId)) return null;
+  const run = structuredClone(current);
+  const A = stageLevel(content, run, block);
+  const active = Math.max(0, run.party.findIndex((m) => m.hp > 0));
+  if (!run.party[active]) return null;
+  run.battle = createBattle('wild', [newMon(content, run, beast.speciesId, Math.max(1, A + EVIL_DATA.edges.incursions.numbers.beastOffset), 'e')], active, run.party[active]!.uid);
+  run.battle.ultra = [beast.ultraRule];
+  run.phase = 'battle';
+  const edges = f.kind === 'incursion' ? { ...block.edges, incursion: block.edges.incursion ? { ...block.edges.incursion, empty: false } : null } : block.edges;
+  run.expansion = { ...(run.expansion ?? {}), evilMode: { ...block, edges, fight: { ...f, begun: true } } };
+  return run;
+}
+
+function beginEvilFightInner(content: Content, current: RunState): RunState | null {
   const block = current.expansion?.evilMode;
   const f = block?.fight;
   // Slice 10: Walk it (the player's own base, with a Hero-built party) and the Raid's Office battle (the detective's six).
