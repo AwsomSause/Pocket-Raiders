@@ -6,6 +6,7 @@
 import { hashSeed, Rng } from '../rng';
 import { EVIL_DATA, type EvilData } from './data';
 import { appendLog, fill, money } from './ledger';
+import { logOf } from './pack';
 import { deckPerson, inRoster, moveLoyalty, type DeckPerson } from './people';
 import { LINE_IDS, type Crew, type EvilModeBlock, type QuestState } from './schema';
 
@@ -269,7 +270,7 @@ export function askStay(block: EvilModeBlock, id: string, reason: StayReason | n
 
 /** Whether what brings a person has happened (read from the block; never a roll). */
 export function hasHappened(block: EvilModeBlock, when: NonNullable<DeckPerson['when']>): boolean {
-  const jobs = block.log.filter((e) => e.kind === 'job');
+  const jobs = logOf(block).filter((e) => e.kind === 'job');
   switch (when) {
     case 'firstTake': return jobs.some((e) => e.method === 'take' && e.result === 'went');
     case 'leanFailed': return jobs.some((e) => e.method === 'lean' && e.result === 'didnt');

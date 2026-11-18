@@ -87,7 +87,7 @@ function dispatch(m: BoardModel, notice: string | null): string {
   return list + crew + how;
 }
 
-export function boardView(m: BoardModel, f: FrameModel, notice: string | null, extra: { ledger?: string; roster?: string; file?: string; line?: string; gym?: string; trade?: string; neighbour?: string; scheme?: string; base?: string; road?: string; suspicions?: string; filed?: string } = {}): string {
+export function boardView(m: BoardModel, f: FrameModel, notice: string | null, extra: { ledger?: string; roster?: string; file?: string; line?: string; gym?: string; trade?: string; neighbour?: string; scheme?: string; base?: string; road?: string; night?: string; suspicions?: string; filed?: string } = {}): string {
   const book = `<span class="tg" style="cursor:pointer;${extra.ledger ? 'outline:2px solid var(--acc);' : ''}"${act('ledger')} data-testid="evil-ledger-open">Ledger (L)</span>`;
   const people = `<span class="tg" style="cursor:pointer;${extra.roster ? 'outline:2px solid var(--acc);' : ''}"${act('roster')} data-testid="evil-roster-open">Roster (R)</span>`;
   const lineTag = `<span class="tg" style="cursor:pointer;${extra.line ? 'outline:2px solid var(--acc);' : ''}"${act('line')} data-testid="evil-line-open">Line (N)</span>`;
@@ -122,6 +122,8 @@ export function boardView(m: BoardModel, f: FrameModel, notice: string | null, e
   if (extra.suspicions) return `${title}${extra.suspicions}${extra.filed ?? ''}`;
   // The Scheme (slice 14) the same way.
   if (extra.scheme) return `${title}${extra.scheme}${extra.filed ?? ''}`;
+  // The Office at Night (slice 7) takes the board's place the same way.
+  if (extra.night) return `${title}${extra.night}${extra.filed ?? ''}`;
   const lower = m.end ? endView(m) + panel(m) : m.dispatch ? dispatch(m, notice) : texts(m, notice) + panel(m);
   return `${title}${map(m)}${lower}${extra.filed ?? ''}`;
 }

@@ -1,7 +1,7 @@
 // Evil Mode slice 17, "the long cast" (build plan section 3; design Parts 10a, 10b, 10c, 11). Proves: the Johto and
 // Hoenn decks and the specials; every quest can be finished, with a line for when it can't; Ask to stay; the mole's
 // draw, handler, tells, the Office and the four outcomes; with the mole Off the draw's taken and ignored and streets are
-// the same; the mole's never named on any screen model; the v15 -> v16 migration.
+// the same; the mole's never named on any screen model; the v20 -> v21 migration.
 
 import { afterEach, describe, expect, it } from 'vitest';
 import { foundForPlay, playRegion, replay } from '../../src/core/evilMode/autoplay';
@@ -250,16 +250,20 @@ describe('the mole (Part 11)', () => {
   });
 });
 
-describe('save v16', () => {
-  it('migrates a v15 block: no quests, no mole yet', () => {
+describe('save v21', () => {
+  it('migrates a v20 block: no quests, no mole yet', () => {
     const b = fresh('cast-mig');
     const { quests, mole, ...rest } = b;
     void quests; void mole;
-    const v15 = { ...rest, v: 15 };
-    const m = migrateEvilBlock(v15) as EvilModeBlock;
-    expect(EvilModeBlockSchema.parse(m).v).toBe(16);
+    const v20 = { ...rest, v: 20 };
+    const m = migrateEvilBlock(v20) as EvilModeBlock;
+    expect(EvilModeBlockSchema.parse(m).v).toBe(21);
     expect(m.quests).toEqual({});
     expect(m.mole).toEqual(emptyMole());
+    // An older block (v15) goes through slice 7's Night (v20) and then this one.
+    const old = migrateEvilBlock({ ...rest, v: 15 }) as EvilModeBlock;
+    expect(EvilModeBlockSchema.parse(old).v).toBe(21);
+    expect(old.quests).toEqual({});
   });
 
   it('a region with quests and a mole replays from its actions', () => {

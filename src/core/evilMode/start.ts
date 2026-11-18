@@ -11,7 +11,7 @@ import { arriveApplicants } from './roster';
 import { modify, PATRON_ID } from './regionRule';
 import { newRegion } from './region';
 import { newScheme } from './scheme';
-import { emptyEconomy, emptyMole, LINE_IDS, STREAMS, type Crew, type EvilModeBlock, EvilModeBlockSchema, type LineId, type RunLength } from './schema';
+import { emptyEconomy, emptyMole, emptyNight, LINE_IDS, STREAMS, type Crew, type EvilModeBlock, EvilModeBlockSchema, type LineId, type RunLength } from './schema';
 
 export interface FoundingChoice {
   name: string;
@@ -77,7 +77,7 @@ export function foundingProblem(choice: FoundingChoice, data: EvilData = EVIL_DA
 export function patronCrew(patronId: string | undefined, data: EvilData = EVIL_DATA): Crew | null {
   const p = data.region.patrons.find((x) => x.id === patronId)?.person;
   if (!p) return null;
-  return { id: PATRON_ID, ref: null, name: p.name, age: p.age, minor: false, talent: p.talent, flaw: p.flaw, flawFound: true, line: null, lineHeard: false, rank: 'officer', loyalty: 7, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null };
+  return { id: PATRON_ID, ref: null, name: p.name, age: p.age, minor: false, talent: p.talent, flaw: p.flaw, flawFound: true, line: null, lineHeard: false, rank: 'officer', loyalty: 7, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null, mood: 'easy', knocks: 0 };
 }
 
 /**
@@ -108,7 +108,7 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
   const regard = cap(regard0 + (plain ? (data.region.regions.find((r) => r.index === first)?.rule?.mods ?? []).filter((m) => m.kind === 'arrivalRegard').reduce((n, m) => n + (m.add ?? 0), 0) : 0));
   const funds = patron ? Math.floor(modify({ here: { region: first, stage, day: 1, beat: 'morning' }, team: { patron } as never, crew }, 'funds', {}, creed.start.funds, data)) : creed.start.funds;
   const block: EvilModeBlock = {
-    v: 16,
+    v: 21,
     from: 'founding',
     // Slice 19: "Six regions" only once six are written; otherwise the run is Three.
     settings: { length: lengthFor(opts.length, data.region.regions) },
@@ -151,6 +151,7 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
     fight: null,
     posted: [],
     inPerson: null,
+    night: emptyNight(),
     proof: [],
     lineMove: null,
     gyms: [],

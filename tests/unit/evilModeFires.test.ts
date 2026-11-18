@@ -372,7 +372,7 @@ describe('saves: block v10', () => {
     const { road: _r, fire: _x, reck: _k, ...rest } = b;
     const v9 = JSON.parse(JSON.stringify({ ...rest, v: 12, hero: old }));
     const out = EvilModeBlockSchema.parse(v9);
-    expect(out.v).toBe(16);
+    expect(out.v).toBe(21);
     expect(out.hero).toMatchObject({ temper: 0, fires: [], lies: [], told: false, starter: '', mother: { mood: 'wary', letters: [] } });
     expect(out).toMatchObject({ road: [], fire: null, reck: null });
     expect(() => EvilModeBlockSchema.parse({ ...v9, v: 13 })).toThrow();

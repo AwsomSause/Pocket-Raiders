@@ -654,12 +654,12 @@ export function fallToTeam(block0: EvilModeBlock, data: EvilData = EVIL_DATA): {
   for (const a of F.admins) {
     lines.push(`${a.name}: ${a.says}`);
     if (a.joins && !a.never && beds() > 0 && !crew.some((c) => c.id === `nb-${a.id}`)) {
-      crew.push({ id: `nb-${a.id}`, ref: null, name: a.name, age: null, minor: false, talent: a.talent ?? null, flaw: a.flaw ?? null, flawFound: true, line: null, lineHeard: false, rank: 'officer', loyalty: N.joinLoyalty, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null });
+      crew.push({ id: `nb-${a.id}`, ref: null, name: a.name, age: null, minor: false, talent: a.talent ?? null, flaw: a.flaw ?? null, flawFound: true, line: null, lineHeard: false, rank: 'officer', loyalty: N.joinLoyalty, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null, mood: 'easy', knocks: 0 });
     }
   }
   let took = 0;
   for (let i = 1; i <= F.grunts && beds() > 0; i++) {
-    crew.push({ id: `nb-g${i}`, ref: null, name: `${def.teamName.replace('Team ', '')} Grunt ${i}`, age: null, minor: false, talent: null, flaw: null, flawFound: false, line: null, lineHeard: false, rank: 'grunt', loyalty: N.joinLoyalty, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null });
+    crew.push({ id: `nb-g${i}`, ref: null, name: `${def.teamName.replace('Team ', '')} Grunt ${i}`, age: null, minor: false, talent: null, flaw: null, flawFound: false, line: null, lineHeard: false, rank: 'grunt', loyalty: N.joinLoyalty, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null, mood: 'easy', knocks: 0 });
     took++;
   }
   lines.push(fill(F.gruntsSaid, { beds: took }));

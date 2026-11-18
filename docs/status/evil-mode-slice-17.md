@@ -11,12 +11,14 @@
 - **Screens (New look)**: quest line and step/ending buttons on the Roster; Suspicions page (key J, or the tag on the board); the Office scene. No screen reads who the mole is.
 
 ## Saves
-- Evil block **15 -> 16**: adds `quests` (empty) and `mole` (empty). Test in `tests/unit/evilModeLongCast.test.ts`.
+- Evil block **20 -> 21** (slice 7 the Night took v16-v20; any older block passes through it first): adds `quests` (empty) and `mole` (empty). Test in `tests/unit/evilModeLongCast.test.ts`.
 
 ## Tests
-`tests/unit/evilModeLongCast.test.ts` (22): deck counts and faces; founders first region only; nobody twice; every quest finishable, steps a district apart, Loyalty pinned at 10; wrong beat has a line; failed at the Crossing caps 7; Ask to stay once; same seed same mark, never a minor, refused never the mole; mole Off: the draw's taken and ignored, odds and Heat untouched, streets the same; wrong name never changes the real mole; found, let go = sent; turned neighbour, mother never turns; knock once at 8; feed once a district; Suspicions page identical whoever the mole is; v15 -> v16; a region replays. All 16 Evil unit files pass (426). Browser `tests/e2e/evilModeLongCast.spec.ts` (3): quest step by tap; J opens Suspicions with no "mole" on it; the knock answered by tap; screenshots at three sizes.
+`tests/unit/evilModeLongCast.test.ts` (22): deck counts and faces; founders first region only; nobody twice; every quest finishable, steps a district apart, Loyalty pinned at 10; wrong beat has a line; failed at the Crossing caps 7; Ask to stay once; same seed same mark, never a minor, refused never the mole; mole Off: the draw's taken and ignored, odds and Heat untouched, streets the same; wrong name never changes the real mole; found, let go = sent; turned neighbour, mother never turns; knock once at 8; feed once a district; Suspicions page identical whoever the mole is; v20 -> v21 (and v15 -> v21); a region replays. All 16 Evil unit files pass (426). Browser `tests/e2e/evilModeLongCast.spec.ts` (3): quest step by tap; J opens Suspicions with no "mole" on it; the knock answered by tap; screenshots at three sizes.
 
 ## Limits
 - Applicants for three regions only, until slices 19/20 (the plan's limit).
 - The neighbour's mole expects Take jobs (war jobs aren't built). The detective special never arrives (no detective yet). The knock is its own Office scene. Not built: Sioned's contract rules, the Sunday custom, the rose garden, raids using what the mole reported, the Hero's mother's letters.
 - Undo: set `"on": false` in `src/data/evilMode/mole.json` (the mole); quests and new applicants stay.
+- Save budget: the new applicants roughly double the jobs a run files, so at each Crossing every earlier region's Log and Cards are now packed (slice 19 kept two regions loose). Readers go through `logOf`/`cardsOf`, so nothing reads differently; a six-region save stays under 300 KB.
+- Slice 7's Night (v20) and this slice share the Office: the Night's own knock and the mole's knock are separate scenes. The 37 new people have their own ordinary-day lines for "Hear someone out".

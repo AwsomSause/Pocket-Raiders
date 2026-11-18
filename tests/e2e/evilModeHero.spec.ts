@@ -106,7 +106,9 @@ test('Hold: the kid wins, the holding is gone and the run goes on; the File show
   await s.getByTestId('evil-send-row').click();
   for (const beat of ['inPerson', 'evening', 'night']) {
     expect((await block(page)).here.beat).toBe(beat);
-    await page.keyboard.press('Enter');
+    // At Night someone may be at the door (slice 7): Lights out leaves them with "(Not tonight.)".
+    if (beat === 'night') await s.getByTestId('evil-desk-lights').click();
+    else await page.keyboard.press('Enter');
     await page.waitForTimeout(200);
   }
   expect((await block(page)).here.beat).toBe('hero');
@@ -145,10 +147,13 @@ test('Outplay in person (G) is a real battle; the Evening takes its result witho
   await page.evaluate(() => {
     const p = (window as any).__pkr;
     const b = p.session.run.expansion.evilMode;
-    const h = b.district.holdings.find((x: any) => x.kind === 'local');
     b.crew.forEach((c: any) => { c.line = null; });
     const squad = b.crew.filter((c: any) => !c.minor).slice(0, 2).map((c: any) => c.id);
-    p.session.evilStep({ type: 'queueJob', job: { holdingId: h.id, method: 'outplay', squad } });
+    // The first local that takes the job (a child at her step can't be worked: "She's eleven").
+    for (const h of b.district.holdings.filter((x: any) => x.kind === 'local')) {
+      const cues = p.session.evilStep({ type: 'queueJob', job: { holdingId: h.id, method: 'outplay', squad } });
+      if (!cues.some((c: any) => c.id === 'refused')) break;
+    }
     p.session.evilStep({ type: 'send' });
     p.game.scene.getScenes(true).forEach((x: any) => p.game.scene.stop(x.scene.key));
     p.game.scene.start('Evil');

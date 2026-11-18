@@ -9,13 +9,14 @@ import ledgerRaw from '../../data/evilMode/ledger.json';
 import peopleRaw from '../../data/evilMode/people.json';
 import facesRaw from '../../data/evilMode/faces.json';
 import heroRaw from '../../data/evilMode/hero.json';
+import nightRaw from '../../data/evilMode/night.json';
 import lineRaw from '../../data/evilMode/line.json';
 import gymRaw from '../../data/evilMode/gym.json';
 import regionRaw from '../../data/evilMode/region.json';
 import economyRaw from '../../data/evilMode/economy.json';
 import neighbourRaw from '../../data/evilMode/neighbour.json';
 import schemeRaw from '../../data/evilMode/scheme.json';
-import { CreedsFileSchema, DistrictFileSchema, DoctrinesFileSchema, FacesFileSchema, GymFileSchema, FoundingFileSchema, HeroFileSchema, LedgerFileSchema, LineFileSchema, MethodsFileSchema, NeighbourFileSchema, PeopleFileSchema, RegionFileSchema, EconomyFileSchema, SchemeFileSchema, BaseFileSchema } from './schema';
+import { CreedsFileSchema, DistrictFileSchema, DoctrinesFileSchema, FacesFileSchema, GymFileSchema, FoundingFileSchema, HeroFileSchema, LedgerFileSchema, LineFileSchema, MethodsFileSchema, NeighbourFileSchema, NightFileSchema, PeopleFileSchema, RegionFileSchema, EconomyFileSchema, SchemeFileSchema, BaseFileSchema } from './schema';
 import baseRaw from '../../data/evilMode/base.json';
 import firesRaw from '../../data/evilMode/fires.json';
 import roadRaw from '../../data/evilMode/road.json';
@@ -41,6 +42,7 @@ export const EVIL_DATA = {
   people: PeopleFileSchema.parse(peopleRaw),
   faces: FacesFileSchema.parse(facesRaw).faces,
   hero: HeroFileSchema.parse(heroRaw),
+  night: NightFileSchema.parse(nightRaw),
   line: LineFileSchema.parse(lineRaw),
   gym: GymFileSchema.parse(gymRaw),
   region: RegionFileSchema.parse(regionRaw),

@@ -324,7 +324,7 @@ describe('saves and determinism', () => {
     const { 'evil-economy': _s, ...draws } = b.draws;
     const v8 = { ...rest, v: 8, draws };
     const v9 = EvilModeBlockSchema.parse(v8);
-    expect(v9.v).toBe(16);
+    expect(v9.v).toBe(21);
     expect(v9.economy).toEqual({ running: [], busy: { day: 0, ids: [] }, loud: null, broke: 0, lastJob: false, whip: [], worksIn: [], cards: [] });
     expect(v9.draws['evil-economy']).toBe(0);
     const ran = ok(hold(found(), [3]), { type: 'trade', req: { cardId: 'protection', street: 0 } });
