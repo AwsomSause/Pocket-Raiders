@@ -3,10 +3,13 @@
 // of the block (optional with a default, or a block `v` bump with a migration in migrate.ts and a test).
 
 import { z } from 'zod';
-import { PokemonInstanceSchema, type PokemonInstance } from '../state';
+import type { PokemonInstance } from '../state';
 
-/** Lazy both ways: state.ts imports this file through the expansion schema (which reads this block lazily too), so the Pokémon shape is read at parse time. */
-const MonSchema = z.lazy((): z.ZodType<PokemonInstance, unknown> => PokemonInstanceSchema);
+/**
+ * A crew member's Pokémon. state.ts imports this file (through the expansion schema), so this file must not import
+ * state.ts at run time: the key fields are checked here and the rest passes through as the Pokémon the run made.
+ */
+const MonSchema = z.object({ uid: z.string().min(1), speciesId: z.string().min(1), level: z.number().int().min(1) }).passthrough() as unknown as z.ZodType<PokemonInstance, unknown>;
 
 const S = z.string().min(1);
 const I = z.number().int();
