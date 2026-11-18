@@ -1,0 +1,1 @@
+- **Map party strip fit** (2026-11-17): New look map status chips now wrap so a full party plus eggs is never pushed off screen; test `tests/e2e/mapPartyStrip.spec.ts`.
