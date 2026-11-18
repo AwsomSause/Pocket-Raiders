@@ -25,6 +25,8 @@ import { friendCheck, keepLetter, motherWrites, openLetter, roadDay, roadDo, wri
 import { lastDay, nightBefore, roomAct, roomResult, type LastDay, type RoomOption } from './reckoning';
 import { eveningTemper } from './temper';
 import { canDo } from './canDo';
+import { askStay, openQuests, pinLoyalty, questStep, type StayReason } from './quest';
+import { feed, moleAnswer, moleDistrictEnd, moleNight, nameThem, patronWarns, type MoleAnswer } from './mole';
 import { checkEndings, endAct, endBattle, pressEnding } from './endings';
 import { regionMoves } from './regionRule';
 import { afterGym, l3DistrictEnd, l3Evening, l3Morning, regionAct, starLocks } from './lastThree';
@@ -154,6 +156,13 @@ export type EvilAction =
   /** Slice 15: the endings (Part 23). One answer to the scene on screen, or a pressed ending. */
   | { type: 'endAct'; choice?: string | null; text?: string | null }
   | { type: 'endPress'; what: 'straight' | 'handOff' | 'walkIn'; heir?: string; line?: string; ledger?: boolean }
+  /** Slice 17: a quest's next step (the last one with its ending); Ask them to stay; the Office: name, feed, answer. */
+  | { type: 'questStep'; id: string; ending?: string }
+  | { type: 'askStay'; id: string; reason: StayReason | null }
+  | { type: 'nameThem'; id: string }
+  | { type: 'feed'; id: string }
+  | { type: 'moleAnswer'; answer: MoleAnswer }
+
   /** Slice 22: a Charter's house rule (return a thing, answer the roll, name the team). */
   | { type: 'charterAct'; act: CharterAct }
   /** Slice 22: the Turn's first meeting with the Hero (Part 28 section 15.2). */
@@ -178,14 +187,19 @@ export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
   // Slice 22: a Charter's locks, and its house rule's own acts.
   const locked = charterRefuses(block0, action as never);
   if (locked) return { block: block0, cues: [{ id: 'refused', reason: locked }], ok: false };
-  const r = action.type === 'charterAct' ? charterStep(block0, action.act) : action.type === 'turnMeet' ? said(meetHero(block0, action.answer)) : stepInner(block0, action);
+  let r = action.type === 'charterAct' ? charterStep(block0, action.act) : action.type === 'turnMeet' ? said(meetHero(block0, action.answer)) : stepInner(block0, action);
   // Slice 13: the neighbour's Morning (messages, and each tick on its day) comes with every Morning, however it's reached.
   if (!r.ok) return r;
   // Slice 22, the Group (Part 28 section 11.3): a spend over the limit is held for the board (saved, so ok: the hold is kept).
   const held = action.type === 'charterAct' || action.type === 'turnMeet' ? null : signatureHold(block0, action as never, r.block);
   if (held) return { block: held.block, cues: [{ id: 'refused', reason: held.reason }], ok: true };
   // Slice 16: Hoenn's second clock (each Reckoning Morning; they meet if the Reckoning ends with it running).
-  let b = l3Morning(clockMorning(schemeMorning(neighbourMorning(settleRegion(clockMet(keptWarmth(l3DistrictEnd(neighbourDistrictEnd(r.block)))))))));
+  // Slice 17: the mole's district end (report, tells, a poach) comes first, once.
+  const md = moleDistrictEnd(r.block);
+  let b = l3Morning(clockMorning(schemeMorning(neighbourMorning(settleRegion(clockMet(keptWarmth(l3DistrictEnd(neighbourDistrictEnd(md.block)))))))));
+  // Slice 17: a finished quest pins Loyalty at 10; a failed one caps it at 7; two wrong accusations cap the Roster at 8.
+  b = pinLoyalty(b);
+  if (md.lines.length) r = { ...r, cues: [...r.cues, ...md.lines.map((line) => ({ id: 'said' as const, line }))] };
   // Slice 14: the Reckoning lost (the Hero reached the base) costs the Scheme groundwork, once a region.
   if (b.district?.end?.how === 'reckoning' && b.scheme) b = reckoningLost(b).block;
   // Slice 19: Sinnoh halves every Loyalty change; Unova doubles every Regard and Dread change (Part 26b sections 1.1, 2.1).
@@ -386,6 +400,16 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
     const r = moveLine(block, action.to);
     return r.problem ? no(r.problem) : { block: r.block, cues: [{ id: 'said', line: r.line }], ok: true };
   }
+  // Slice 17: quests (their own beats, checked in quest.ts), Ask them to stay (any beat), and the Office.
+  if (action.type === 'questStep' || action.type === 'askStay' || action.type === 'nameThem' || action.type === 'feed' || action.type === 'moleAnswer') {
+    if (block.refusal) return no('Somebody is waiting on an answer in the yard.');
+    const r = action.type === 'questStep' ? questStep(block, action.id, action.ending ?? null)
+      : action.type === 'askStay' ? askStay(block, action.id, action.reason)
+      : action.type === 'nameThem' ? nameThem(block, action.id)
+      : action.type === 'feed' ? feed(block, action.id)
+      : moleAnswer(block, action.answer);
+    return r.problem ? no(r.problem) : { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
+  }
   // Slice 4: the notice board and the Office, at any beat.
   if (action.type === 'hire' || action.type === 'question' || action.type === 'turnAway' || action.type === 'promote' || action.type === 'letGo') {
     const r = action.type === 'hire' ? hire(block, action.ref) : action.type === 'question' ? askQuestion(block, action.ref, action.q) : action.type === 'turnAway' ? turnAway(block, action.ref, action.rude) : action.type === 'promote' ? promote(block, action.id, action.answer) : letGo(block, action.id, action.kindly);
@@ -448,6 +472,8 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
   if (to === 'night') out = nightBefore(out);
   // Slice 7: the knock is drawn on the way into the Night (one `evil-people` draw, even when nobody comes).
   if (to === 'night' && !out.district?.end) out = drawKnock(out);
+  // Slice 17: a mole at Loyalty 8 or more comes to the Office on their own (no draw).
+  if (to === 'night') out = moleNight(out);
   const cues: EvilCue[] = [...preCues, { id: 'beat', beat: to }];
   if (to === 'night' && out.night.knock) cues.push({ id: 'knock', n: out.night.knock.n });
   // Slice 4: Morning. Anyone at Loyalty 0 is gone, with a note; then the notice board (Part 30 section 6.2).
@@ -463,7 +489,11 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
     // Slice 6: after a move to Whatever it takes, every Heart goes, together, at breakfast.
     const hg = heartsGo(z.block);
     out = arriveApplicants(hg.block);
-    for (const line of [...z.notes, ...hg.notes]) cues.push({ id: 'said', line });
+    // Slice 17: quests open at Loyalty 7; the Patron's one warning, at the first Arrival.
+    const oq = openQuests(out);
+    const pw = patronWarns(oq.block);
+    out = pw.block;
+    for (const line of [...z.notes, ...hg.notes, ...oq.lines, ...(pw.line ? [pw.line] : [])]) cues.push({ id: 'said', line });
   }
   if (to === 'morning') cues.push({ id: 'newDay', day });
   if (out.district?.end) cues.push({ id: 'districtEnd', how: out.district.end.how });
