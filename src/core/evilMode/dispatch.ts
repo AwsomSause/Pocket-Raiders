@@ -8,8 +8,9 @@ import { EVIL_DATA, type EvilData } from './data';
 import { oddsFor, type JobDraft } from './odds';
 import { cardFor, unknownCount } from './card';
 import { appendLog, fill, lineFor, money, takingsAt } from './ledger';
+import { schemeBusy } from './scheme';
 import { econDistrictEnd, econEvening, econOn, shortLoyalty, tradeProblem } from './economy';
-import type { Crew, EvilModeBlock, Holding, Job, LogEntry, Sheet } from './schema';
+import { packField, type Crew, type EvilModeBlock, type Holding, type Job, type LogEntry, type Sheet } from './schema';
 import { crossers, districtKey, inRoster, moveLoyalty, peopleText, talentDef, wageOf } from './people';
 import { gymHeatToday, inChair } from './gym';
 import { exposeProblem, heatFor, lineAllows, lineRoll, lineWhy, thingProblem } from './line';
@@ -35,7 +36,7 @@ export function crewProblem(block: EvilModeBlock, id: string, ignoreHolding?: st
   if (block.queue.some((j) => j.holdingId !== ignoreHolding && j.squad.includes(id))) return `${c.name} is already going somewhere today.`;
   if (block.posted.some((p) => p.id === id)) return `${c.name} is posted somewhere today.`;
   if (inChair(block, id)) return `${c.name} holds the Gym's chair.`;
-  return tradeProblem(block, id);
+  return tradeProblem(block, id) ?? schemeBusy(block, id);
 }
 
 /** Why a job can't be queued, in plain words; null when it can. Checked by `step`, not only on screen. */
@@ -53,6 +54,8 @@ export function jobProblem(block: EvilModeBlock, job: JobDraft, data: EvilData =
   if (!door.ok) return door.why ?? `Shut by ${door.shutBy}.`;
   if (!methodsFor(h, data).includes(job.method)) return kind.why ?? `Not by ${job.method} at ${kind.name.toLowerCase()}.`;
   if (h.owner === 'team' && job.method !== 'scout') return "It's already yours.";
+  // Slice 16: Hoenn's water route. The Slugma won't get in the boat (Part 26a section 4.3).
+  if (h.kind === 'water' && job.method !== 'scout' && block.team.doctrine === 'ember') return data.region.crossing.emberBoat;
   const local = localOf(h, data);
   // Slice 9: a canon face's locks (Mr. Fuji can't be Leaned on or Taken from) and the tower's stair rule (Part 26a 2.3).
   if (local?.locks?.includes(job.method as never)) return local.lockWhy ?? 'Not them.';
@@ -123,7 +126,8 @@ function fileJob(block: EvilModeBlock, job: JobDraft, data: EvilData): { block: 
   let b: EvilModeBlock = block;
   if (at >= 0) b = calledOff(b, block.queue[at]!, data);
   const queue = at < 0 ? [...block.queue, entry] : block.queue.map((j, i) => (i === at ? entry : j));
-  b = { ...b, queue, cards: [...b.cards, { ...card, id: cardId }] };
+  // Slice 16: kept packed (Part 30 section 7.4): a known field keeps its text; the label is the ledger's own, by place.
+  b = { ...b, queue, cards: [...b.cards, { ...card, fields: card.fields.map(packField), id: cardId }] };
   const unknowns = unknownCount(card);
   b = appendLog(b, { kind: 'card', who: [...job.squad], to: job.holdingId, method: job.method, cardId, text: card.fields[11]!.text, ...(unknowns ? { unknowns } : {}) });
   return { block: b, problem: null };
@@ -367,7 +371,7 @@ export function askAnyway(block: EvilModeBlock, job: JobDraft, data: EvilData = 
   if (!who.length) return { block, problem: 'Nobody on this squad has a line it crosses.' };
   const card = cardFor(block, job, data, true);
   const cardId = `C${block.cards.length + 1}`;
-  let b: EvilModeBlock = { ...block, cards: [...block.cards, { ...card, id: cardId }] };
+  let b: EvilModeBlock = { ...block, cards: [...block.cards, { ...card, fields: card.fields.map(packField), id: cardId }] };
   const unknowns = unknownCount(card);
   b = appendLog(b, { kind: 'card', who: [...job.squad], to: job.holdingId, method: job.method, cardId, text: card.fields[11]!.text, ...(unknowns ? { unknowns } : {}) });
   b = appendLog(b, { kind: 'asked', who: who.map((p) => p.id), to: job.holdingId, cardId, text: lineFor(b, who.map((p) => p.id), 'asked anyway, across their line. Refused, in the yard.') });
@@ -510,6 +514,6 @@ function darkResult(j: Job, h: Holding, won: boolean, s: { holdings: Holding[]; 
 
 /** Squads a day (Part 2 section 2.1): one in the first region's Arrival (a former Executive makes it two); otherwise no limit but the Roster. */
 export function squadLimit(block: EvilModeBlock, data: EvilData = EVIL_DATA): number {
-  if (!data.region.on || block.here.stage !== 1 || block.here.region !== 0) return Number.POSITIVE_INFINITY;
+  if (!data.region.on || block.here.stage !== 1 || (block.region?.crossed?.length ?? 0) !== 0) return Number.POSITIVE_INFINITY;
   return modify(block, 'squads', {}, data.region.arrival.squads, data);
 }

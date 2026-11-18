@@ -52,7 +52,7 @@ function startWing(block: EvilModeBlock, b: BaseState, c: Crew, data: EvilData):
   return activePairs(block, data).some((p) => p.fx.some((f) => f.k === 'frontWing')) ? 'front' : 'living';
 }
 
-const backWayWing = (b: BaseState, data: EvilData): WingId | null => {
+export const backWayWing = (b: BaseState, data: EvilData): WingId | null => {
   const p = b.pieces.find((x) => pieceDef(x.type, data).needs === 'outside');
   return p ? wingOf(b, p.at, data) : null;
 };

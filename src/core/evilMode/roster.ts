@@ -52,6 +52,8 @@ export function askQuestion(block: EvilModeBlock, ref: string, q: Question, data
 
 /** Hiring (Part 10a section 1): the armband goes on; they say the team's name their own way. The Roster's capped. */
 export function hire(block: EvilModeBlock, ref: string, data: EvilData = EVIL_DATA): Out {
+  // Slice 13: a fallen neighbour's betrayer can't be hired by any path: the slot refuses him (Part 15a section 7.9).
+  if (data.neighbour.neighbours.some((n) => n.fall.admins.some((a) => a.never && (a.id === ref || `nb-${a.id}` === ref)))) return no(block, 'The slot refuses him. His card has no line at all.');
   const a = block.applicants.find((x) => x.ref === ref);
   const d = deckPerson(ref, data);
   if (!a || !d) return no(block, "They're not at the notice board.");

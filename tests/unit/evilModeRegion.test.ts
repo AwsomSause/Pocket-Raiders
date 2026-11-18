@@ -34,7 +34,7 @@ const OFF: EvilData = { ...EVIL_DATA, region: { ...EVIL_DATA.region, on: false }
 describe('founding: the Arrival, the Look, the Patron, the first region', () => {
   it('a new team begins at the Arrival in Pewter (stage 1, n 0), with the region state and the Patron on the Roster', () => {
     const b = found();
-    expect(b.v).toBe(10);
+    expect(b.v).toBe(15);
     expect(b.here).toMatchObject({ region: 0, stage: 1, day: 1, beat: 'morning' });
     expect(b.district).toMatchObject({ region: 0, n: 0 });
     expect(b.district!.holdings.find((h) => h.kind === 'town')!.ref).toBe('Pewter City');
@@ -74,16 +74,18 @@ describe('founding: the Arrival, the Look, the Patron, the first region', () => 
       expect(order.indexOf(cold.holdings[i]!.mood!)).toBe(Math.max(0, order.indexOf(h.mood!) - 1));
     });
   });
-  it('the founding pages: Look rows turn and wrap; nine tickets, only Kanto open; Nobody gives +50% Funds', () => {
+  it('the founding pages: Look rows turn and wrap; nine tickets, Kanto, Johto and Hoenn open (slice 16); Nobody gives +50% Funds', () => {
     let d: FoundingDraft = { ...newDraft(), page: 'look' };
     d = turnLook(d, 'a', -1);
     expect(lookOf(d).a).toBe(EVIL_DATA.region.look.a[10]![1]);
     const m = foundingModel({ ...d, doctrine: 'tricksters', page: 'region' }, { bossName: 'Red', bossFile: null, starter: 'Bulbasaur', starterFile: null, oldLook: false, length: 'three' });
     expect(m.regions).toHaveLength(9);
-    expect(m.regions.filter((r) => r.open).map((r) => r.id)).toEqual(['kanto']);
+    expect(m.regions.filter((r) => r.open).map((r) => r.id)).toEqual(['kanto', 'johto', 'hoenn']);
     expect(m.regions[0]!.ticket[2]).toBe('Your Doctrine: at home in 2 of six.');
-    expect(pageReady({ ...d, page: 'region', region: 'johto' })).toBe(false);
-    expect(foundTeam(choice({ region: 'johto' }), { boss: 'red', length: 'three' }).ok).toBe(false);
+    expect(pageReady({ ...d, page: 'region', region: 'johto' })).toBe(true);
+    expect(foundTeam(choice({ region: 'johto' }), { boss: 'red', length: 'three' }).ok).toBe(true);
+    expect(pageReady({ ...d, page: 'region', region: 'sinnoh' })).toBe(false);
+    expect(foundTeam(choice({ region: 'sinnoh' }), { boss: 'red', length: 'three' }).ok).toBe(false);
     const nobody = foundTeam(choice({ patron: 'nobody' }), { boss: 'red', length: 'three' });
     const creed = EVIL_DATA.creeds.find((c) => c.id === 'profit')!;
     expect(nobody.ok && nobody.block.team.funds).toBe(Math.floor(creed.start.funds * 1.5));
@@ -314,7 +316,7 @@ describe('saves: block v8', () => {
     const { region: _r, ...rest } = r.block;
     const v7 = { ...rest, v: 7, here: { ...rest.here, stage: 1 }, district: (() => { const { from: _f, ...d } = rest.district!; return d; })() };
     const v8 = EvilModeBlockSchema.parse(v7);
-    expect(v8.v).toBe(10);
+    expect(v8.v).toBe(15);
     expect(v8.here.stage).toBe(2);
     expect(v8.region).toMatchObject({ id: 'kanto', phase: 'day', past: [], tallies: [] });
     expect(dayIn(v8)).toBe(v8.here.day);

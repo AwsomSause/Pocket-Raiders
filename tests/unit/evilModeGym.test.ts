@@ -56,7 +56,9 @@ describe('the Leaders (Part 8b, Kanto)', () => {
     expect(leaderOf(0, 4)!.heir).toBe('janine');
   });
   it('each district Leader has all five ways written (a rule, a Buy answer, a Bend, Creeds they respect, where they go)', () => {
+    // Minors (Bugsy; Tate and Liza) are locked: no Buy price, never Replaced (Part 8b).
     for (const l of EVIL_DATA.gym.leaders.filter((x) => x.role === 'district')) {
+      if (l.minor) { expect(l.buy?.price ?? null, l.id).toBeNull(); expect(l.replace, l.id).toBeNull(); continue; }
       expect(l.rule, l.id).not.toBeNull();
       expect(l.buy?.why, l.id).toBeTruthy();
       expect(l.bend?.steps.length, l.id).toBeGreaterThanOrEqual(1);
@@ -65,10 +67,11 @@ describe('the Leaders (Part 8b, Kanto)', () => {
       expect(l.beaten, l.id).toBeTruthy();
     }
   });
-  it('a price is never greed, and only Blaine has one in Kanto: ₽13,500, the formula for district 6', () => {
+  it('a price is never greed, and only Blaine has one in Kanto: ₽13,500, the formula for district 6 (slice 16: Pryce and Wattson too, by the same formula)', () => {
     const priced = EVIL_DATA.gym.leaders.filter((l) => l.buy?.price);
-    expect(priced.map((l) => l.id)).toEqual(['blaine']);
-    expect(priced[0]!.buy!.price).toBe(priceFor(0, 6));
+    expect(priced.filter((l) => l.region === 0).map((l) => l.id)).toEqual(['blaine']);
+    expect(priced.map((l) => l.id)).toEqual(['blaine', 'pryce', 'wattson']);
+    for (const l of priced) expect(l.buy!.price, l.id).toBe(priceFor(0, l.n));
     expect(priceFor(0, 1)).toBe(6000);
     expect(priced[0]!.buy!.other).toBeTruthy();
   });
@@ -352,7 +355,7 @@ describe('saves: block v7', () => {
   it('v6 -> v7: no Gym dealt with; save and reload the same', () => {
     const { gyms: _g, ...rest } = found();
     const v7 = EvilModeBlockSchema.parse({ ...rest, v: 6 });
-    expect(v7).toMatchObject({ v: 10, gyms: [] });
+    expect(v7).toMatchObject({ v: 15, gyms: [] });
     expect(gymOf(v7)).toMatchObject({ leaderId: 'misty', way: null, standing: 'wary' });
     expect(EvilModeBlockSchema.parse(JSON.parse(JSON.stringify(v7)))).toEqual(v7);
   });
