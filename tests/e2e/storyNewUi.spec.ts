@@ -218,7 +218,8 @@ test('New UI: the loading screen and the update splash are the mock-up page; so 
   await expect(welcome).toContainText('First launch');
   await read(welcome);
   await expect(welcome.locator('[data-act="pick"]')).toHaveText(['Next', 'Skip the update log']);
-  expect(await welcome.innerHTML()).toContain('bosses/anim/hilda');
+  // The picture's atlas loads on its own after the page is drawn (slower on a busy CI runner): wait for it.
+  await expect.poll(() => welcome.innerHTML(), { timeout: 15_000 }).toContain('bosses/anim/hilda');
   expect(await welcome.innerHTML()).not.toContain('₽');
   await welcome.locator('[data-act="pick"]').first().click();
   await expect(welcome).toContainText('Update log 1/');
