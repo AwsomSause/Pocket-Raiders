@@ -6,6 +6,7 @@
 import { EVIL_DATA, type EvilData } from './data';
 import type { EvilModeBlock, JobMethod, OddsTerm, RegionDef, RuleMod } from './schema';
 import { fxTotal } from './baseFx';
+import { shrineTerms } from './lastThree';
 
 export type ModKind = RuleMod['kind'];
 export interface RuleCtx {
@@ -36,6 +37,9 @@ export function activeMods(block: Pick<EvilModeBlock, 'here' | 'team' | 'crew'>,
     if (reach) out.push({ mod: { kind: 'scoutReach', add: reach, label: 'The Garage' }, from: 'The base' });
     if (squads) out.push({ mod: { kind: 'squads', add: squads, label: 'The Garage' }, from: 'The base' });
   }
+  // Slice 20 (Alola): an island's guardian at Sullen or Shut puts its weight on every job here (Part 26c section 1.3).
+  const district = (block as { district?: EvilModeBlock['district'] }).district;
+  for (const t of district ? shrineTerms({ district }, data) : []) out.push({ mod: { kind: 'odds', add: t.value, label: t.label }, from: 'The island' });
   return out;
 }
 

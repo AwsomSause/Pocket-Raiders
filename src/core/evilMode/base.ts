@@ -4,6 +4,7 @@
 // handed the key (the Lead-to-Specialist promotion). Defend places pieces, at most three a Night, and every change is
 // run through the fairness check first: a base is never saved unfair. Pure: `(block, ...) -> { block, problem, line }`.
 
+import { runRegions } from './runLength';
 import { EVIL_DATA, type EvilData } from './data';
 import { checkFair, delayOf, edgeKey, gridOf, isEdge, neighbours, roomName, type FairResult } from './baseGrid';
 import { activePairs, baseOn, fxTotal, hasFx, isDone, needsStaff, roomDef, roomOpen, sizeOf } from './baseFx';
@@ -20,7 +21,7 @@ const ok = (block: EvilModeBlock, line = ''): BaseOut => ({ block, problem: null
 export const siteDef = (id: string, data: EvilData = EVIL_DATA) => data.base.sites.find((s) => s.id === id);
 export const pieceDef = (t: PieceId, data: EvilData = EVIL_DATA) => data.base.pieces.find((p) => p.id === t)!;
 const regionId = (block: EvilModeBlock, data: EvilData) => data.region.regions.find((r) => r.index === block.here.region)?.id ?? 'kanto';
-const lastRegion = (block: EvilModeBlock) => (block.settings.length === 'six' ? 5 : 2);
+const lastRegion = (block: EvilModeBlock) => runRegions(block) - 1;
 /** Slice 16: which region of the run (0 first), not the region's own index. */
 const runIdx = (block: EvilModeBlock) => block.region?.crossed?.length ?? 0;
 

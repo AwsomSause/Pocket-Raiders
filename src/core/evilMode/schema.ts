@@ -2,6 +2,7 @@
 // Pure Zod, no Phaser. Slice 1 ("the shell") holds only what founding and an empty day need: the team, where the day is,
 // the stream counts and the applied set. Later slices add their fields to the block and bump its own `v`.
 
+import { fromSaveForm } from './saveForm';
 import { z } from 'zod';
 import creedsRaw from '../../data/evilMode/creeds.json';
 
@@ -90,7 +91,7 @@ export type Mood = z.infer<typeof MoodSchema>;
 
 /** Slice 9 adds Kanto's own holding, a floor of a building (Part 26a section 2.3). */
 /** Slice 16 adds Johto's kept place (held by upkeep, pays nothing) and Hoenn's water route (held by running the boats). */
-export const HOLDING_KINDS = ['local', 'wild', 'alpha', 'safehouse', 'opportunity', 'town', 'gym', 'floor', 'kept', 'water', 'lake', 'bridge', 'table'] as const;
+export const HOLDING_KINDS = ['local', 'wild', 'alpha', 'safehouse', 'opportunity', 'town', 'gym', 'floor', 'kept', 'water', 'lake', 'bridge', 'table', 'shrine', 'awayEnd', 'canteen', 'starBase'] as const;
 export const HoldingKindSchema = z.enum(HOLDING_KINDS);
 export type HoldingKind = z.infer<typeof HoldingKindSchema>;
 
@@ -126,7 +127,9 @@ export const DistrictFileSchema = z.object({
     places: z.partialRecord(HoldingKindSchema, z.array(z.string().min(1)).min(1)).optional(),
     layout: z.object({ local: z.number().int().min(0), wild: z.number().int().min(0), alpha: z.number().int().min(0), safehouse: z.number().int().min(0), opportunity: z.number().int().min(0), floor: z.number().int().min(0), kept: z.number().int().min(0).optional(), water: z.number().int().min(0).optional(),
       /** Slice 19: Sinnoh's lakes, Unova's bridges, Kalos's tables (Part 26b sections 1.3, 2.3, 3.3). */
-      lake: z.number().int().min(0).optional(), bridge: z.number().int().min(0).optional(), table: z.number().int().min(0).optional() }).strict().optional(),
+      lake: z.number().int().min(0).optional(), bridge: z.number().int().min(0).optional(), table: z.number().int().min(0).optional(),
+      /** Slice 20: Alola's shrines, Galar's away ends, Paldea's canteen tables and Star bases (Part 26c sections 1.3, 2.3, 3.3; Part 15b section 5). */
+      shrine: z.number().int().min(0).optional(), awayEnd: z.number().int().min(0).optional(), canteen: z.number().int().min(0).optional(), starBase: z.number().int().min(0).optional() }).strict().optional(),
     floors: z.array(z.object({ name: z.string().min(1), tenant: z.string().min(1), take: z.number().int().min(0), says: z.string().min(1) }).strict()).optional(),
     tower: z.string().min(1).optional(),
   }).strict()).min(1),
@@ -345,7 +348,7 @@ export const StoredCardSchema = z.object({
 }).strict();
 export type StoredCard = z.infer<typeof StoredCardSchema>;
 
-export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym', 'econ', 'neighbour', 'scheme', 'base', 'raid', 'ending', 'knock', 'heard', 'wall', 'tear', 'shadow'] as const;
+export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym', 'econ', 'neighbour', 'scheme', 'base', 'raid', 'ending', 'knock', 'heard', 'wall', 'charter', 'tear', 'shadow'] as const;
 
 /** One line of the Log (Part 30 section 7.1, the kinds slice 3 writes). Never edited, never removed. */
 export const LogEntrySchema = z.object({
@@ -597,7 +600,7 @@ export const LeaderDefSchema = z.object({
   minor: z.boolean(), age: z.number().int().min(1).optional(),
   type: GS, heir: GS.optional(),
   says: GS,
-  rule: z.object({ kind: z.enum(['field', 'weather', 'format', 'order', 'count', 'items', 'clock', 'gauntlet', 'room', 'condition']), text: GS, status: EvilStatusSchema, waits: z.string() }).strict().nullable(),
+  rule: z.object({ kind: z.enum(['field', 'weather', 'format', 'order', 'count', 'items', 'clock', 'gauntlet', 'room', 'condition', 'test']), text: GS, status: EvilStatusSchema, waits: z.string() }).strict().nullable(),
   buy: z.object({ price: z.number().int().min(0).nullable(), why: GS, other: GS.optional() }).strict().nullable(),
   bend: z.object({ kind: z.enum(['wrong', 'chance', 'found', 'protected', 'admitted', 'debt']), text: GS, steps: z.array(GS).min(1).max(4), scene: z.array(GS).min(1) }).strict().nullable(),
   respects: z.array(GS),
@@ -672,6 +675,23 @@ export const ClockSchema = z.object({
 }).strict();
 export type ClockState = z.infer<typeof ClockSchema>;
 
+/**
+ * Slice 20 (Part 26c; Part 15b sections 3 to 6). Galar's loan (owed, taken on day, the clause's state); the handshake
+ * waiting after a televised Beat; Aether's word (Against, Apart, Beside); the girl with the bag; the Star bases visited;
+ * each island guardian's visit (once an island).
+ */
+export const L3Schema = z.object({
+  loan: z.object({ owed: Int0, day: z.number().int().min(1), asked: z.boolean(), vested: z.boolean(), repaid: z.boolean() }).strict().nullable(),
+  offered: z.enum(['open', 'taken', 'declined']).nullable(),
+  shake: z.number().int().min(1).nullable(),
+  aether: z.enum(['against', 'apart', 'beside']).nullable(),
+  bag: z.enum(['nothing', 'bridge', 'told']).nullable(),
+  bagAsk: z.boolean(),
+  visited: z.array(z.string().min(1)),
+  guardian: z.array(z.number().int().min(0)),
+}).strict();
+export type L3State = z.infer<typeof L3Schema>;
+
 export const RegionStateSchema = z.object({
   /** The region's id in region.json (Kanto). */
   id: z.string().min(1),
@@ -699,6 +719,8 @@ export const RegionStateSchema = z.object({
   /** Slice 16 (Hoenn): the letters carried between the two Bosses (three stop tick 3), and the second clock at the Reckoning. */
   letters: Int0,
   clock: ClockSchema.nullable(),
+  /** Slice 20: Alola, Galar and Paldea's own state (lastThree.ts). Absent until one of them is played. */
+  l3: L3Schema.optional(),
 }).strict();
 export type RegionState = z.infer<typeof RegionStateSchema>;
 
@@ -804,7 +826,8 @@ export type EconomyState = z.infer<typeof EconomyStateSchema>;
 export const emptyEconomy = (): EconomyState => ({ running: [], busy: { day: 0, ids: [] }, loud: null, broke: 0, lastJob: false, whip: [], worksIn: [], cards: [] });
 // ---- Slice 13: a neighbour (design Part 15a sections 1 to 7; Part 30 section 3.9) ----
 
-export const STANCES = ['war', 'rivals', 'wary', 'truce', 'front', 'merger', 'understanding'] as const;
+/** Slice 20: 'service' is Star's own (Part 15b section 5.4): the Front that runs backwards. Last, so no older stance moves. */
+export const STANCES = ['war', 'rivals', 'wary', 'truce', 'front', 'merger', 'understanding', 'service'] as const;
 export const StanceSchema = z.enum(STANCES);
 export type Stance = z.infer<typeof StanceSchema>;
 const NI = z.number().int();
@@ -863,6 +886,10 @@ const NeighbourDefSchema = z.object({
   id: NS, team: NS, region: NI.min(0), boss: NS,
   /** Slice 16: a region with two neighbours (Hoenn) picks one by where the base stands: by the shore, or inland (Part 26a section 4.1). */
   side: z.enum(['shore', 'inland']).optional(), teamName: NS, sign: NS, colour: z.string().regex(/^#[0-9a-f]{6}$/i), minors: z.boolean(),
+  /** Slice 20 (Star): War, Rivals, Front and Merger never appear; the stance list is Wary, Truce, Service, Understanding (Part 15b section 5.1). */
+  noWar: z.boolean().optional(),
+  /** Slice 20 (Star): what's said at each base on a Visit, by district n (Part 15b sections 5.2 and 5.4). */
+  visits: z.record(z.string(), z.object({ crew: NS, says: NS }).strict()).optional(),
   dread: NI.min(0).max(10), pen: NI.min(0), penAfter: NI.min(0),
   holds: z.record(z.string(), NI.min(0)), kinds: z.array(HoldingKindSchema).min(1), base: NI.min(1).max(6),
   ground: NS, refuses: NS, does: NS,
@@ -1364,6 +1391,57 @@ export const EdgesStateSchema = z.object({
 export type EdgesState = z.infer<typeof EdgesStateSchema>;
 export const emptyShadow = (): ShadowState => ({ rigged: [], rigRegion: null, kits: 0, labBy: null, relieved: [], shut: false, sealed: false, through: 0, counted: 0, purified: 0, worked: [], knocks: 0, orders: 0, rung: 0 });
 export const emptyEdges = (shadow: boolean, heat = 0): EdgesState => ({ appetites: {}, heatAtMorning: heat, squads: {}, static: null, tear: null, incursion: null, met: [], beast: null, poipole: null, together: false, cards: [], shadow: shadow ? emptyShadow() : null });
+/** Slice 22 (Part 28): the Charter taken, its house rule's running figures. All plain counts; nothing here is rolled. */
+export const CharterStateSchema = z.object({
+  id: z.string().min(1),
+  rule: z.string().min(1),
+  /** Rocket: things returned from the Ledger, and the day of the last (one an Evening). */
+  returned: z.number().int().min(0),
+  returnedOn: z.number().int().min(0),
+  /** Rocket's Return: mornings answered, mornings read, the run of days answered, the day last answered, regions the +1 was paid in, and the roll's missed count. */
+  answered: z.number().int().min(0),
+  read: z.number().int().min(0),
+  streak: z.number().int().min(0),
+  answeredOn: z.number().int().min(0),
+  paidIn: z.array(z.number().int().min(0)),
+  missed: z.number().int().min(0),
+  /** The Joint Command: who's blue (everyone else is red), and whether the Hall has named the team. */
+  blue: z.array(z.string().min(1)),
+  named: z.boolean(),
+  /** Flare: dues paid, and the days they were paid on. */
+  dues: z.number().int().min(0),
+  duesOn: z.array(z.number().int().min(1)),
+  /** The day the Charter's first week ends (Loyalty moves count double before it). */
+  doubleTo: z.number().int().min(0),
+  /** Galactic (7.3): holdings whose local has been asked in person, and the day of the last ask (one a day). */
+  asked: z.array(z.string().min(1)).optional(),
+  askedOn: z.number().int().min(0).optional(),
+  /** Plasma (8.3): the Cause sentence's four parts as they're put forward; whether "what we do" is waiting on the Boss; the region it was whole in. */
+  sentence: z.object({ who: z.string().nullable(), wrong: z.string().nullable(), do: z.string().nullable(), wont: z.string().nullable() }).strict().optional(),
+  causeDue: z.boolean().optional(),
+  wholeIn: z.number().int().min(0).nullable().optional(),
+  /** Flare (9.3): members not laid for at the next dinner. */
+  unseated: z.array(z.string().min(1)).optional(),
+  /** The Two Boards (10.3): Aether's purse, and the day of the last form Faba signed (one a day). */
+  aether: z.number().int().min(0).optional(),
+  formOn: z.number().int().min(0).optional(),
+  /** The Group (11.3): a spend waiting on the board (the answer comes next Morning), what the board has said yes to, and the districts a memo was written in. */
+  pending: z.object({ key: z.string().min(1), what: z.string().min(1), amount: z.number().int().min(0), day: z.number().int().min(1) }).strict().nullable().optional(),
+  approved: z.array(z.string().min(1)).optional(),
+  memoIn: z.array(z.string().min(1)).optional(),
+}).strict();
+export type CharterState = z.infer<typeof CharterStateSchema>;
+export const TurnStateSchema = z.object({
+  /** The main-game team whose route was taken (its `evil-start-<team>` flag). */
+  team: z.string().min(1),
+  /** The run's own rivals, by record id, given the four roles (Part 28 section 15); null where the run had fewer than four. */
+  hero: z.string().nullable(), rival: z.string().nullable(), friend: z.string().nullable(), stray: z.string().nullable(),
+  /** The money above the cap, in the Boss's own pocket (lendable once). */
+  pocket: z.number().int().min(0),
+  /** The first meeting after (day 2 of the first district): answered or not, and the answer. */
+  met: z.enum(['lie', 'true', 'silent']).nullable(),
+}).strict();
+export type TurnState = z.infer<typeof TurnStateSchema>;
 
 const BlockV7Schema = z.object({
   /** The block's own version, for its own migrations. 7: slice 8 added the Gyms. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a waiting fight, who's posted, and the day's in-person job. 6: slice 6 added proof held and the last move of the Line. 20 (reserved for slice 7): the Night, and each person's mood and knocks. 21: slice 21, the edges (a Tear, the Shadow branch; settings.shadow and settings.incursions). */
@@ -1371,7 +1449,7 @@ const BlockV7Schema = z.object({
   from: z.enum(['founding', 'charter', 'turn']),
   /** Copied from Settings at founding, so a setting changed mid-run never changes this run. */
   /** Slice 21: the Shadow branch (Available, or removed from all screens) and Incursions, copied at founding too. */
-  settings: z.object({ length: RunLengthSchema, shadow: z.boolean(), incursions: z.boolean() }).strict(),
+  settings: z.object({ length: RunLengthSchema, shadow: z.boolean(), incursions: z.boolean(), /** Slice 22: a Turned run keeps the regions the main run had left (1 to 6); absent, the length's three or six. */ regions: z.number().int().min(1).max(9).optional() }),
   team: EvilTeamSchema,
   here: z.object({ region: z.number().int().min(0), stage: z.number().int().min(1).max(8), day: z.number().int().min(1), beat: BeatSchema }),
   /** How many numbers each stream has given out (design Part 30 section 5.1). */
@@ -1431,6 +1509,9 @@ const BlockV7Schema = z.object({
   ending: EndingStateSchema.nullable(),
   /** Slice 21: the edges: Appetites, Static, a Tear, a Beast in the building, and the Shadow branch. */
   edges: EdgesStateSchema,
+  /** Slice 22: a Charter's house (optional: a founded team has none) and, on a Turned run, which of the run's rivals took which role. */
+  charter: CharterStateSchema.optional(),
+  turn: TurnStateSchema.optional(),
 }).strict();
 
 /** What a Hero made before slice 12 starts with (and what `makeHero` gives a new one). */
@@ -1473,6 +1554,8 @@ const startLoyalty = (creed: unknown): number => (creedsRaw.creeds.find((c) => c
  * nothing on the Wall); everyone Easy, nobody's knocked yet. Keyed on the Night being missing, so it holds whichever slices land first.
  */
 export function migrateEvilBlock(raw: unknown): unknown {
+  // A block read from a save is in its save form (saveForm.ts); it's made whole first, then migrated as ever.
+  raw = fromSaveForm(raw);
   if (!raw || typeof raw !== 'object') return raw;
   let b = raw as Record<string, unknown>;
   if (b.v === 1) b = { ...b, v: 2, district: null, crew: firstCrew(), queue: [], sheets: [], evening: [] };
@@ -1596,6 +1679,8 @@ export const RegionDefSchema = z.object({
   eighth: RS.optional(),
   /** Slice 19 (Unova): the Town is a square, where the Speech is given (Persuade at the Town; Part 26b section 2.4). */
   square: z.boolean().optional(),
+  /** Slice 20 (Alola): Gym ways shut everywhere in the region, who shut them, and why (Part 8d section A.1). */
+  shut: z.object({ ways: z.array(z.enum(['buy', 'replace'])).min(1), by: RS, why: z.record(z.string(), RS) }).strict().optional(),
 }).strict();
 export type RegionDef = z.infer<typeof RegionDefSchema>;
 const PatronSchema = z.object({
@@ -1617,6 +1702,22 @@ const ClockDefSchema = z.object({
   starts: RS, days: z.array(RS).length(3),
   met: RS, scale: RS, stopBoss: RS, stopHero: RS, stopLetters: RS, together: RS, heroTemper: z.number().int(), bossWhy: RS, open: RS, notRegion: RS,
 }).strict();
+const Choices3 = z.array(RS).length(3);
+export const LastThreeSchema = z.object({
+  loan: z.object({
+    region: RS, amount: z.number().int().min(1), rate: z.number().int().min(0).max(100), heat: z.number().int().min(1).max(10), offerDay: z.number().int().min(1),
+    rings: RS, card: z.array(z.tuple([RS, RS])).length(13), takeAct: RS, take: RS, decline: RS, askAct: RS, ask: RS, repayAct: RS, repaid: RS, interest: RS, vested: RS, called: RS, noFronts: RS, short: RS, straightShut: RS,
+  }).strict(),
+  pitch: z.object({ region: RS, ask: RS, yes: RS, no: RS, acts: z.tuple([RS, RS]) }).strict(),
+  aether: z.object({ region: RS, stage: z.number().int().min(0).max(7), opens: RS, offer: z.array(z.tuple([RS, RS])).min(1), choices: Choices3, said: Choices3, words: Choices3 }).strict(),
+  bag: z.object({ region: RS, stage: z.number().int().min(0).max(7), text: RS, choices: Choices3, said: Choices3, sure: RS, sureAct: RS, kindLoss: z.number().int(), file: RS }).strict(),
+  shrine: z.object({ region: RS, islands: z.array(z.number().int().min(0)).length(8), warmAt: z.number().int().min(1), sullenOdds: z.number().int(), odds: RS, comes: RS, after: RS, rises: RS, falls: RS }).strict(),
+  awayEnd: z.object({ region: RS, regard: z.number().int(), full: RS }).strict(),
+  canteen: z.object({ region: RS, warm: RS }).strict(),
+  star: z.object({ region: RS, visitAct: RS, visited: RS, refused: RS, opinion: z.number().int() }).strict(),
+}).strict();
+export type LastThreeDef = z.infer<typeof LastThreeSchema>;
+
 export const RegionFileSchema = z.object({
   note: z.string(),
   /** The slice's undo: false and a run plays one district, as slice 8 left it. */
@@ -1656,6 +1757,8 @@ export const RegionFileSchema = z.object({
   speech: z.object({ label: RS, empty: RS, given: RS, honest: RS, otherHalf: RS }).strict().optional(),
   /** Slice 19: the other regions' second clocks: Sinnoh's mountain, Kalos's light (Part 26b sections 1.6 and 3.6). */
   clocks: z.array(ClockDefSchema).optional(),
+  /** Slice 20: Alola, Galar and Paldea's words and numbers (Part 26c; Part 8d; Part 15b sections 3 to 6; Part 5 section 2.6). */
+  lastThree: LastThreeSchema.optional(),
   look: z.object({
     a: z.array(Colour).length(12), b: z.array(Colour).length(12), symbols: z.array(RS).length(12), cuts: z.array(RS).length(8), heads: z.array(RS).length(8),
     motto: z.tuple([z.array(RS).min(1), z.array(RS).min(1), z.array(z.string()).min(1)]),

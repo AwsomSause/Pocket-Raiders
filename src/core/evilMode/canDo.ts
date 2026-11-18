@@ -6,6 +6,7 @@
 import type { EvilAction } from './day';
 import { ROAD_IDS, ROAD_WHATS } from './road';
 import type { EvilModeBlock } from './schema';
+import { starRefusal } from './lastThree';
 
 export type CanDo = { ok: true } | { ok: false; why: string };
 
@@ -27,5 +28,8 @@ export function canDo(block: EvilModeBlock, a: EvilAction): CanDo {
   const kids = new Set<string>([...ROAD_IDS, ...(block.hero ? [block.hero.rivalId] : []), ...block.road.map((t) => t.id)]);
   if (personIds(a).some((id) => kids.has(id))) return { ok: false, why: NOT_A_CHILD };
   if (a.type === 'roadDo' && (!ROAD_WHATS.includes(a.what) || !block.road.some((t) => t.id === a.who))) return { ok: false, why: NOT_A_CHILD };
+  // Slice 20: Team Star's locks. Nothing reaches a Star base but a Visit; no Chair, no Pen, no person slot (Part 15b section 5.1).
+  const star = starRefusal(block, a as unknown as { type: string } & Record<string, unknown>);
+  if (star) return { ok: false, why: star };
   return { ok: true };
 }
