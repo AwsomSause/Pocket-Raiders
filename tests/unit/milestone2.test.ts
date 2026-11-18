@@ -425,10 +425,19 @@ describe('save upgrades (v1 → v2)', () => {
     expect(profile.candies).toBe(0);
   });
 
-  it('rejects a save that refers to an item that no longer exists', () => {
+  it('drops an item that no longer exists instead of discarding the run (save safety, 2026-11-17)', () => {
     const storage = new MemoryStorageProvider();
     const saves = new SaveManager(storage, content);
     saves.saveRun({ ...newRun('bad-item'), inventory: { 'no-such-ball': 1 } });
+    const loaded = saves.loadRun();
+    expect(loaded).toMatchObject({ status: 'ok', repaired: ['item no-such-ball'] });
+    if (loaded.status === 'ok') expect(loaded.data.inventory['no-such-ball']).toBeUndefined();
+  });
+
+  it('still rejects a run whose trainer no longer exists (nothing safe to drop)', () => {
+    const storage = new MemoryStorageProvider();
+    const saves = new SaveManager(storage, content);
+    saves.saveRun({ ...newRun('bad-trainer'), archetypeId: 'no-such-trainer' });
     expect(saves.loadRun()).toMatchObject({ status: 'corrupt' });
   });
 });

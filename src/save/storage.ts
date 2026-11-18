@@ -8,6 +8,8 @@ export interface StorageProvider {
   /** Throws StorageUnavailableError if the write fails (e.g. storage full or blocked). */
   set(key: string, value: string): void;
   remove(key: string): void;
+  /** Every key in storage (used to prune old backups when space runs out). Optional for providers that can't list. */
+  keys?(): string[];
 }
 
 export class StorageUnavailableError extends Error {
@@ -46,6 +48,20 @@ export class LocalStorageProvider implements StorageProvider {
     } catch (err) {
       if (err instanceof StorageUnavailableError) throw err;
       throw new StorageUnavailableError(`Could not save "${key}" (browser storage may be full or blocked)`, err);
+    }
+  }
+
+  keys(): string[] {
+    try {
+      const s = this.storage;
+      const out: string[] = [];
+      for (let i = 0; i < s.length; i++) {
+        const k = s.key(i);
+        if (k !== null) out.push(k);
+      }
+      return out;
+    } catch {
+      return [];
     }
   }
 

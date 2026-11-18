@@ -82,7 +82,7 @@ import { clearNextRun, nextRunStart } from '../core/story2/intake';
 import { jetBlessing } from '../core/story2/jetBlessing';
 import { scoutGift } from '../core/story2/starterScouts';
 import type { LoadoutPreset, Profile, RunPrep, RunState, Settings } from '../core/state';
-import { SaveManager, SLOTS, readActiveSlot, writeActiveSlot, type LoadResult, type SlotNumber, type SlotPeek } from '../save/saveManager';
+import { recoveryNote, SaveManager, SLOTS, readActiveSlot, writeActiveSlot, type LoadResult, type SlotNumber, type SlotPeek } from '../save/saveManager';
 import type { StorageProvider } from '../save/storage';
 
 function randomId(prefix: string): string {
@@ -130,6 +130,8 @@ export class GameSession {
       this.settings = { ...this.settings, expansion: { ...this.settings.expansion, blessingsEnabled: false, ultraBeastsEnabled: false, wholeRunEvents: false } };
     }
     this.savedRun = this.saves.loadRun();
+    const runNote = recoveryNote('run', this.savedRun);
+    if (runNote) this.warnings.push(runNote);
     const timeline = this.saves.loadTimeline();
     this.timeline = timeline.store;
     if (timeline.warning) this.warnings.push(timeline.warning);
@@ -167,6 +169,8 @@ export class GameSession {
     this.profile = profile;
     if (warning) this.warnings.push(warning);
     this.savedRun = this.saves.loadRun();
+    const runNote = recoveryNote('run', this.savedRun);
+    if (runNote) this.warnings.push(runNote);
     const timeline = this.saves.loadTimeline();
     this.timeline = timeline.store;
     if (timeline.warning) this.warnings.push(timeline.warning);
@@ -348,6 +352,11 @@ export class GameSession {
   }
 
   /** Keeps a backup copy of a damaged run save, then removes it so a new run can start. */
+  /** The damaged run save's text exactly as stored (to download before discarding it), or null. */
+  damagedRunText(): string | null {
+    return this.saves.rawRecord('run');
+  }
+
   discardDamagedRun(): string | null {
     const backup = this.saves.backupCorrupt('run');
     this.refreshSavedRun();

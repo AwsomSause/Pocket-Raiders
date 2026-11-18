@@ -133,6 +133,14 @@ test('a damaged save is reported and can be discarded safely', async ({ page }) 
   await page.reload();
   await waitForScene(page, 'MainMenu');
   expect(await page.evaluate(() => (window as any).__pkr.session.savedRun.status)).toBe('corrupt');
+  // Save safety: the damaged save can be downloaded first, exactly as stored.
+  await page.waitForTimeout(250);
+  await page.keyboard.press('ArrowDown'); // "Export damaged save"
+  const download = page.waitForEvent('download');
+  await page.keyboard.press('Enter');
+  const file = await download;
+  expect(file.suggestedFilename()).toMatch(/^pkmn-damaged-run-/);
+  await page.keyboard.press('ArrowUp');
   await page.keyboard.press('Enter'); // "Discard damaged save"
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.session.savedRun.status)).toBe('none');
   const backups = await page.evaluate(() => Object.keys(localStorage).filter((k) => k.startsWith('pkr.run.corrupt.')));
