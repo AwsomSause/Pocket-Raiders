@@ -4680,17 +4680,7 @@ export class BattleScene extends Phaser.Scene {
       await this.say(end.victory ? 'You have conquered every region!' : 'A new region awaits…');
     }
     this.updateHeader();
-    for (const evo of end.evolutions) {
-      const real = result.run.party.find((m) => m.uid === evo.uid);
-      // New UI: the battle's own picture steps back (no boxes) while the evolution scene plays over it.
-      if (this.rx) {
-        this.rxEvolve = { from: monFile(this, evo.from, 'front', !!real?.shiny), to: monFile(this, evo.to, 'front', !!real?.shiny), done: false };
-        this.rx.refresh();
-      }
-      // The classic evolution scene (both looks): its lines wait for the player, the flicker, the new form.
-      await playEvolution(this, { from: evo.from, to: evo.to, shiny: !!real?.shiny, learned: evo.learnedMoves.map((m) => content.moves.get(m)!.name) });
-      this.rxEvolve = null;
-    }
+    // Evolutions this battle earned wait as decisions: the evolution scene plays on the next screen (B can stop it).
     for (const t of end.bondTaught ?? []) {
       const mon = result.run.party.find((m) => m.uid === t.uid);
       if (mon) await this.say(`Close to you, ${getSpecies(content, mon.speciesId).name} learned ${content.moves.get(t.moveId)!.name}!`);
@@ -5167,25 +5157,23 @@ export class BattleScene extends Phaser.Scene {
           break;
         }
         case 'evolved': {
-          // The Pokémon evolves between turns: flash, then the new form and its HP.
-          const at = this.spotXY(e.side);
-          await this.playBeat(
-            cinematic(this, {
-              kind: 'evolve',
-              x: at.x,
-              y: at.y - 80,
-              sprite: sprite ?? null,
-              tint: 0x9fe8ff,
-              ...this.cineFeel('evolve'),
-              onSwap: () => {
-                mon!.speciesId = e.to;
-                mon!.hp = e.hpAfter;
-                return this.showSprite(e.side, mon!);
-              },
-            }),
-          );
-          playSfx(this, 'se.level_up');
-          await this.refreshInfoBox(box, mon!, false);
+          // The Pokémon evolves between turns (a foe in a drama, or a story moment): the full evolution scene plays
+          // over the battle (the rules already decided it), then the battle shows the new form and its HP.
+          const shiny = !!mon?.shiny;
+          if (this.rx) {
+            this.rxEvolve = { from: monFile(this, e.from, 'front', shiny), to: monFile(this, e.to, 'front', shiny), done: false };
+            this.rx.refresh();
+          }
+          await playEvolution(this, { from: e.from, to: e.to, shiny, foe: e.side === 'enemy' });
+          this.rxEvolve = null;
+          if (mon) {
+            mon.speciesId = e.to;
+            mon.hp = e.hpAfter;
+            if (e.side === 'enemy') await this.ensureArt(e.to);
+            this.showSprite(e.side, mon);
+            this.rx?.refresh();
+            await this.refreshInfoBox(box, mon, false);
+          }
           break;
         }
         case 'switchIn': {

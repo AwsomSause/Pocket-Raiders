@@ -42,7 +42,7 @@ export const ACTIVE_SLOT_KEY = `${KEY_PREFIX}.slot`;
 export type RecordName = 'profile' | 'run' | 'settings' | 'meta' | 'timeline';
 
 /** Current schema version of each record. Bump when a record's shape changes and add a migration. */
-export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 20, run: 45, settings: 45, meta: 1, timeline: 1 };
+export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 20, run: 46, settings: 45, meta: 1, timeline: 1 };
 
 /** v41: walks a saved run and gives every Pokémon (anything with uid, speciesId, level and vitamins) IVs and empty EVs. */
 function withIvs(node: unknown): unknown {
@@ -392,6 +392,8 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
     43: (data) => data,
     // v45 (eight Legendary Blessings): optional blessing fields (calmStages, riteArmed, vow, vowBroken, copy). Old blessings have none, so nothing changes.
     44: (data) => data,
+    // v46 (evolution scene): a new pending decision, an evolution waiting for the player. Old runs have none, so nothing changes.
+    45: (data) => data,
   },
   settings: {
     // v2 (Milestone 9): battle animation settings.
@@ -916,6 +918,7 @@ export class SaveManager {
     for (const id of run.draft ?? []) if (!c.rewards.has(id)) return `Unknown reward "${id}" in save.`;
     for (const id of Object.keys(run.inventory)) if (!c.items.has(id)) return `Unknown item "${id}" in save.`;
     for (const d of run.pending) if (d.kind === 'learnMove' && !c.moves.has(d.moveId)) return `Unknown move "${d.moveId}" in save.`;
+    for (const d of run.pending) if (d.kind === 'evolve' && !c.species.has(d.to)) return `Unknown species "${d.to}" in save.`;
     if (run.battle) {
       if (!run.battle.enemyTeam[run.battle.enemyIndex]) return 'Battle data is damaged in the save.';
       const t = run.battle.trainer;

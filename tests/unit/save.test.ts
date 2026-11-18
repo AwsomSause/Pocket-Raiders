@@ -182,6 +182,8 @@ describe('game session save/load', () => {
     enterBattle(a);
     a.run!.party[0] = createPokemon(content, a.run!.party[0]!.speciesId, 40, a.run!.party[0]!.uid);
     while (a.run!.phase === 'battle') a.takeTurn({ kind: 'move', index: a.run!.party[0]!.moves.findIndex((m) => m.pp > 0) });
+    // A level-40 starter is ready to evolve: that waits as a decision first.
+    while (a.run!.phase === 'decision' && a.run!.pending[0]?.kind === 'evolve') a.resolveDecision({ kind: 'evolve', accept: true });
     expect(a.run!.phase).toBe('reward');
     a.chooseReward(0);
     const moneyAfter = a.run!.money;

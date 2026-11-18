@@ -79,14 +79,15 @@ describe('story foundation: random streams', () => {
   // Re-pinned STORY1 and 4 to 7 for Catalog Overhaul families-a (rebuilt story-family events in the draw pool; hazards answered by a Pokémon give a typed item).
   // Re-pinned (four STORY keys) for pick-spread: Gym Leaders level with the party (gymBonus 0), enemy heal caps, flatter event draws, SOS x0.3 (docs/status/pick-spread.md).
   // Re-pinned STORY1, 2, 5, 6 and 8 for the enemy heal cap (every trainer uses at most 4 healing items; the potion is weaker early and stronger by region and difficulty, docs/status/enemy-heal-cap.md). Cause: enemy heals changed, nothing else.
+  // Re-pinned STORY2, 5 and 8 for the evolution scene (an evolution earned in battle now waits as its own decision, one more autoplay step each, so 600 steps end a few actions earlier). Verified it is the only cause: playing each seed 600 + (its evolve decisions) steps gives exactly the old hashes.
   const BEFORE_STORY: Record<string, string> = {
     'STORY1/0': '814510fd7cfdc121',
-    'STORY2/0': '63dded7c6b1935bd', // STORY2, 5, 6 re-pinned after #1098 (Starter Sets removal); cause not isolated, see PR
+    'STORY2/0': '2504c1f0f641006a', // STORY2, 5, 6 re-pinned after #1098 (Starter Sets removal); cause not isolated, see PR
     'STORY4/0': 'ed7be324c68dd80c',
-    'STORY5/0': '7f66af06a7dd503f',
+    'STORY5/0': 'c360922d47f028cf',
     'STORY6/0': '4e72b6b12ff454c4', // re-pinned in the Lavender canon PR: new Flashlight (wild-preview key item) joins the item draws; earlier: new Silver Powder (Bug type booster) joins trainer held-item draws; proven by removing it (pin returns)
     'STORY7/0': '78130c8fd7e0f94a',
-    'STORY8/0': '41a3008c9951c3cb',
+    'STORY8/0': '51dd3d8995bb1f77',
   };
   // Hyper moments (M8.9 Phase 1) do change battles on purpose, so the check runs without their definitions:
   // what is left must still match main exactly, which proves the story and hyper streams moved no other roll.

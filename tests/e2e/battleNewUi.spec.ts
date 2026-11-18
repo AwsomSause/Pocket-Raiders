@@ -253,14 +253,29 @@ test('New UI: a win shows the Exp panel, the level-up window and the evolution p
   await expect(level).toContainText('Lv 5 →');
   for (const stat of ['HP', 'Attack', 'Defense', 'Sp. Atk', 'Sp. Def', 'Speed']) await expect(level).toContainText(stat);
   await page.screenshot({ path: 'test-results/newui-levelup.png' });
-  // The evolution takes the whole picture: no boxes, the words under it.
-  await confirmUntil(page, count('.burst'), 60_000);
-  await expect(stages.locator('.win.glass')).toHaveCount(0);
+  // The evolution waits as a decision: right after the battle its scene takes the whole picture, the words under it.
+  const evo = view(page, 'Decision');
+  // Moves it wanted on the way (four known already) come first: keep the four it knows.
+  const skipNewMove = async (): Promise<void> => {
+    if ((await page.evaluate(() => (window as any).__pkr.session.run.pending[0]?.kind)) !== 'learnMove') return;
+    const no = evo.first().locator('[data-act="pick"]', { hasText: /Do not learn/ }).first();
+    if (!(await no.count())) return;
+    await no.click();
+    // A confirm box may ask first ("Yes" is its first button); then the result line waits for its button.
+    const yes = page.locator('#rx [data-act="confirm"]').first();
+    if (await yes.isVisible().catch(() => false)) await yes.click();
+    const done = evo.first().locator('[data-act="done"]').first();
+    await done.waitFor({ timeout: 5_000 }).catch(() => undefined);
+    await page.waitForTimeout(400);
+    if (await done.isVisible().catch(() => false)) await done.click();
+  };
+  await confirmUntil(page, async () => (await evo.locator('.burst').count()) > 0 || (await skipNewMove(), false), 60_000);
+  await expect(evo.locator('.win.glass')).toHaveCount(0);
   // The evolution scene's own card: its line waits for a key.
-  await expect(stages.locator('.txt', { hasText: /evolving|evolved/ }).first()).toBeVisible();
+  await expect(evo.locator('.txt', { hasText: /evolving|evolved/ }).first()).toBeVisible();
   await page.screenshot({ path: 'test-results/newui-evolution.png' });
   // Then the run goes on, a new species in the party.
-  await confirmUntil(page, async () => (await page.evaluate(() => (window as any).__pkr.activeScene())) !== 'Battle', 60_000);
+  await confirmUntil(page, async () => (await skipNewMove(), page.evaluate(() => { const p = (window as any).__pkr; const at = p.activeScene(); return at !== 'Battle' && !(at === 'Decision' && p.session.run.pending.some((d: any) => d.kind === 'evolve')); })), 60_000);
   expect(await page.evaluate(() => (window as any).__pkr.session.run.party[0].speciesId)).not.toBe('caterpie');
   expect(errors).toEqual([]);
 });

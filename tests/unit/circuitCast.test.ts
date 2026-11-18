@@ -187,7 +187,7 @@ describe('on the map', () => {
       if (r.phase === 'battle') { for (const m of r.battle!.enemyTeam) m.hp = Math.min(m.hp, 1); r = takeTurn(content, r, { kind: 'move', index: 1 }).run; }
       else if (r.phase === 'reward') r = takeAnyReward(r);
       else if (r.phase === 'decision' && r.pending[0]!.kind === 'circuit') break;
-      else if (r.phase === 'decision') r = resolveDecision(content, r, r.pending[0]!.kind === 'caught' ? { kind: 'release' } : { kind: 'skipMove' }).run;
+      else if (r.phase === 'decision') r = resolveDecision(content, r, r.pending[0]!.kind === 'caught' ? { kind: 'release' } : r.pending[0]!.kind === 'evolve' ? { kind: 'evolve', accept: true } : { kind: 'skipMove' }).run;
       else break;
     }
     return r;

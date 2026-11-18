@@ -50,6 +50,7 @@ import { moveFullDescription } from '../core/battle/moveText';
 import { artOf, monFile, partyChips } from '../ui/redux/game';
 import { mountConfirm } from '../ui/redux/confirm';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { playEvolution } from '../ui/evolutionScene';
 import { decisionView, type DecisionModel, type DecisionOption } from '../ui/redux/screens/decision';
 import { counterView } from '../ui/redux/screens/ops';
 
@@ -101,7 +102,7 @@ export class DecisionScene extends Phaser.Scene {
 
   preload(): void {
     const { session } = services();
-    const caught = (session.run?.pending ?? []).flatMap((d) => (d.kind === 'caught' || d.kind === 'reunion' ? (session.content.species.get(d.mon.speciesId) ?? []) : []));
+    const caught = (session.run?.pending ?? []).flatMap((d) => (d.kind === 'caught' || d.kind === 'reunion' ? (session.content.species.get(d.mon.speciesId) ?? []) : d.kind === 'evolve' ? (session.content.species.get(d.to) ?? []) : []));
     preloadPokemon(this, [...partySpecies(), ...caught], { front: true, shiny: true, icon: true });
     if (session.run?.pending.some((d) => d.kind === 'caught' && d.mon.hatched)) queueAssets(this, HATCH_ASSETS);
     const tier = this.raidTier();
@@ -143,7 +144,34 @@ export class DecisionScene extends Phaser.Scene {
     else if (decision.kind === 'mentorship') this.buildMentorship(decision.mentorUid, decision.proteUid, decision.path, decision.types);
     else if (decision.kind === 'askLead') this.buildAskLead(decision.uid, decision.reason);
     else if (decision.kind === 'returnProtege') this.buildReturn(decision.mon, decision.mentorUid, decision.reason);
+    else if (decision.kind === 'evolve') this.playEvolve(decision.uid, decision.to);
     else this.buildPpUp(decision.uid, decision.itemName, decision.ups);
+  }
+
+  /**
+   * An evolution earned in battle: the evolution scene plays, and the rules evolve the Pokémon only when its flicker
+   * ends (B stops it). The scene shows the closing lines itself, then the run goes on.
+   */
+  private playEvolve(uid: string, to: string): void {
+    const { session } = services();
+    const mon = session.run?.party.find((m) => m.uid === uid);
+    this.done = true;
+    let message = '';
+    const decide = (accept: boolean): string[] => {
+      message = session.resolveDecision({ kind: 'evolve', accept }).message;
+      return message ? message.split('\n') : [];
+    };
+    if (!mon) {
+      decide(true);
+      this.scene.start(sceneForRun(session.run!));
+      return;
+    }
+    // After create() returns: the scene counts as running only then, and the evolution scene needs that.
+    this.time.delayedCall(1, () => {
+      void playEvolution(this, { from: mon.speciesId, to, shiny: !!mon.shiny, decide }).then(() => {
+        if (this.sys.isActive()) this.scene.start(sceneForRun(session.run!));
+      });
+    });
   }
 
   private dismiss: (() => void) | null = null;

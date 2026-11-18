@@ -22,7 +22,9 @@ export async function confirmUntil(page: Page, cond: () => Promise<boolean>, tim
     if (await cond()) return;
     const textUp = await page.evaluate(() => {
       const b = (window as any).__pkr.game.scene.getScene('Battle');
-      return Boolean(b?.scene?.isActive() && !b.menu && (b.advance || b.data?.get('evolutionScene')));
+      // An evolution earned in battle plays on the Decision screen right after it; its lines wait for Enter too.
+      const d = (window as any).__pkr.game.scene.getScene('Decision');
+      return Boolean((b?.scene?.isActive() && !b.menu && (b.advance || b.data?.get('evolutionScene'))) || (d?.scene?.isActive() && d.data?.get('evolutionScene')));
     });
     if (textUp) await page.keyboard.press('Enter');
     await page.waitForTimeout(150);

@@ -374,17 +374,15 @@ test('the Hall of Fame shows records, champion teams with epitaphs, shinies and 
   expect(errors).toEqual([]);
 });
 
-test('slice 10: a Pokémon evolves after battle with the light-pulse sequence', async ({ page }) => {
-  const errors: string[] = [];
-  page.on('pageerror', (e) => errors.push(e.message));
-  await page.goto('/?seed=m10-evolve&debug=1');
+/** A battle won with one hit by a Charmander one experience point short of level 16 (it evolves at 16), up to the evolution scene. */
+async function winToEvolution(page: Page, seed: string): Promise<void> {
+  await page.goto(`/?seed=${seed}&debug=1`);
   await waitForScene(page, 'MainMenu');
   for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Map']) {
     await page.keyboard.press('Enter');
     await waitForScene(page, next);
   }
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);
-  // Charmander one experience point short of level 16 (it evolves at 16), leading.
   await page.evaluate(() => {
     const { session } = (window as any).__pkr;
     session.debugAddToParty('charmander', 15);
@@ -404,7 +402,8 @@ test('slice 10: a Pokémon evolves after battle with the light-pulse sequence', 
     pkr.session.run.battle.enemyTeam[0].hp = 1;
     pkr.game.scene.getScene('Battle').scene.restart();
   });
-  const evolving = () => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle')?.children.list.some((c: any) => c.name === 'cine-evolve') ?? false);
+  // The evolution waits as a decision: its scene plays on the Decision screen right after the battle.
+  const evolving = () => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Decision')?.children.list.some((c: any) => c.name === 'cine-evolve') ?? false);
   let seen = false;
   for (let i = 0; i < 8 && !seen; i++) {
     await waitForMenu(page).catch(() => undefined);
@@ -420,9 +419,41 @@ test('slice 10: a Pokémon evolves after battle with the light-pulse sequence', 
     }
   }
   expect(seen).toBe(true);
+  // Still a Charmander while the scene asks: the rules wait for it.
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.party[0].speciesId)).toBe('charmander');
+}
+
+test('slice 10: a Pokémon evolves after battle with the evolution scene', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await winToEvolution(page, 'm10-evolve');
   await page.waitForTimeout(900);
   await page.screenshot({ path: 'test-results/m10-evolution.png' });
-  await expect.poll(() => page.evaluate(() => (window as any).__pkr.session.run.party[0].speciesId), { timeout: 10_000 }).toBe('charmeleon');
+  // Enter lets it through: the flicker, the reveal, then the lines wait for Enter.
+  for (let i = 0; i < 40 && (await page.evaluate(() => (window as any).__pkr.session.run.party[0].speciesId)) !== 'charmeleon'; i++) {
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(300);
+  }
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.party[0].speciesId)).toBe('charmeleon');
+  expect(errors).toEqual([]);
+});
+
+test('slice 10: B stops an evolution after battle; it stays a Charmander and the run goes on', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await winToEvolution(page, 'm10-evolve-stop');
+  await page.waitForTimeout(400);
+  // Enter past "What? Charmander is evolving!", then B during the flicker.
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(900);
+  await page.keyboard.press('Escape');
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.session.run.pending.some((d: any) => d.kind === 'evolve')), { timeout: 5_000 }).toBe(false);
+  const words = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Decision')?.children.list.find((c: any) => c.name === 'cine-evolve')?.list.map((o: any) => o.text ?? '').join(' ') ?? '');
+  expect(words).toContain('stopped evolving');
+  await page.screenshot({ path: 'test-results/m10-evolution-stopped.png' });
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.party[0].speciesId)).toBe('charmander');
+  await page.keyboard.press('Enter');
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.activeScene()), { timeout: 10_000 }).not.toBe('Decision');
   expect(errors).toEqual([]);
 });
 
