@@ -4,6 +4,7 @@ This ships to `main` as ONE PR from the shared branch `ui-mockups`. Each piece h
 
 ## Save versions
 - **Run 44** (Catalog Overhaul, new events): Pokémon can carry an optional quirk, marks, original trainer and quirk line. Old Pokémon have none, so nothing changes.
+- **Run 46** (evolution scene): an evolution earned in battle waits as a decision until its scene ends, so B can stop it. Old runs have none waiting, so nothing changes.
 - **Settings 43** (New UI): the New look becomes the default for everyone; "Old" in Settings brings the earlier look back.
 - **Settings 44** (Catalog Overhaul, legends): Legendary Blessings and Ultra Beast Incursions are on by default (Kice), so they switch on once for everyone.
 - Profile stays at 20. Each bump has its migration test.

@@ -57,13 +57,17 @@ export function evoFormAt(tl: EvoTimeline, ms: number): 'from' | 'to' {
   return show;
 }
 
-/** The words of the scene, in order: the opening line, then the closing line and one per move learned. */
-export function evolutionLines(fromName: string, toName: string, learned: readonly string[] = []): { intro: string; outro: string[] } {
+/** The words of the scene, in order: the opening line, then the closing line and one per move learned. A foe's evolution gets no congratulations. */
+export function evolutionLines(fromName: string, toName: string, learned: readonly string[] = [], foe = false): { intro: string; outro: string[] } {
+  if (foe) return { intro: `What? The foe's ${fromName} is evolving!`, outro: [`The foe's ${fromName} evolved into ${toName}!`] };
   return {
     intro: `What? ${fromName} is evolving!`,
     outro: [`Congratulations! Your ${fromName} evolved into ${toName}!`, ...learned.map((m) => `${toName} learned ${m}!`)],
   };
 }
+
+/** The line when the player stops an evolution with B. */
+export const evolutionStoppedLine = (fromName: string): string => `Huh? ${fromName} stopped evolving!`;
 
 export interface PartyLook {
   uid: string;

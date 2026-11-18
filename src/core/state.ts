@@ -1204,6 +1204,8 @@ export function currentEnemy(battle: BattleState): PokemonInstance {
 export const PendingDecisionSchema = z.discriminatedUnion('kind', [
   /** A Pokémon that knows four moves wants to learn another. */
   z.object({ kind: z.literal('learnMove'), uid: z.string(), moveId: z.string() }),
+  /** A Pokémon is ready to evolve after a battle (run v46). It evolves once the player lets the scene finish; B stops it (it tries again later). */
+  z.object({ kind: z.literal('evolve'), uid: z.string(), to: z.string() }),
   /** A caught Pokémon waiting to join the party (or be released for candies). */
   /** Modifier Run: pick 1 of 3 blessings/curses every few map stops (core/mutators.ts). */
   z.object({ kind: z.literal('mutator'), choices: z.array(z.string()).min(1) }),

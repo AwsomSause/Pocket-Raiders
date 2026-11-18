@@ -30,6 +30,12 @@ function doomed(run: RunState): ReturnType<typeof takeTurn> {
   return res;
 }
 
+/** A level-80 lead is ready to evolve after its win: that waits as a decision before the rewards. */
+const letEvolve = (run: RunState): RunState => {
+  while (run.phase === 'decision' && run.pending[0]?.kind === 'evolve') run = resolveDecision(content, run, { kind: 'evolve', accept: true }).run;
+  return run;
+};
+
 describe('Second Chance (S1)', () => {
   it('rescue order is rewind, jewel, Flight North, then Second Chance', () => {
     expect(pickRescue({ 'second-chance': true, 'flight-north': true })).toBe('flight-north');
@@ -407,7 +413,7 @@ describe('Mythical Promises stage 2 (Jirachi)', () => {
     run.battle = createBattle('wild', [createPokemon(content, 'rattata', 2, 'foe')], 0, run.party[0]!.uid);
     let res = takeTurn(content, run, { kind: 'move', index: 0 });
     for (let i = 0; i < 20 && res.run.phase === 'battle'; i++) res = takeTurn(content, res.run, { kind: 'move', index: 0 });
-    return res.run;
+    return letEvolve(res.run);
   };
   it('refusals are plain Decline/Refuse/No-thanks choices; three of them bring Jirachi, any of them breaks its Promise', () => {
     for (const l of ['Decline', 'Refuse the chair.', 'No, thanks.', 'Turn it down']) expect(isRefusal(l), l).toBe(true);
@@ -658,6 +664,7 @@ describe('Mythical Promises stage 2 (Shaymin, Celebi)', () => {
     run.battle = createBattle('wild', [createPokemon(content, 'rattata', 2, 'foe')], 0, run.party[0]!.uid);
     let res = takeTurn(content, run, { kind: 'move', index: 0 });
     for (let i = 0; i < 20 && res.run.phase === 'battle'; i++) res = takeTurn(content, res.run, { kind: 'move', index: 0 });
+    res = { ...res, run: letEvolve(res.run) };
     expect(res.run.phase).toBe('reward');
     const draft = res.run.draft!;
     run = chooseReward(content, res.run, 0).run;

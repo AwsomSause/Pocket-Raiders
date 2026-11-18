@@ -70,7 +70,7 @@ export function walkStoryRun(bot: BotKind, seed: string, archetypeId = 'red'): W
         for (const mv of active.moves) mv.pp = Math.max(mv.pp, 32);
         run = takeTurn(content, run, { kind: 'move', index: 1 }).run;
       } else if (run.phase === 'reward') run = takeAnyReward(run);
-      else if (run.phase === 'decision') run = resolveDecision(content, run, run.pending[0]!.kind === 'caught' ? { kind: 'release' } : { kind: 'skipMove' }).run;
+      else if (run.phase === 'decision') run = resolveDecision(content, run, run.pending[0]!.kind === 'caught' ? { kind: 'release' } : run.pending[0]!.kind === 'evolve' ? { kind: 'evolve', accept: true } : { kind: 'skipMove' }).run;
       else { error = `stuck in phase ${run.phase}`; break; }
     }
   } catch (e) {

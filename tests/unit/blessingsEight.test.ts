@@ -261,8 +261,8 @@ describe('the Rites built for the eight', () => {
 });
 
 describe('run save v45', () => {
-  it('is the current run version; v44 runs load untouched and the new blessing fields round-trip', () => {
-    expect(CURRENT_VERSIONS.run).toBe(45);
+  it('v44 runs load untouched and the new blessing fields round-trip', () => {
+    expect(CURRENT_VERSIONS.run).toBe(46);
     const r = withBlessing('zekrom');
     expect(MIGRATIONS.run[44]!(r)).toBe(r);
     const storage = new MemoryStorageProvider();

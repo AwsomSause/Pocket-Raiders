@@ -1,8 +1,10 @@
 // The evolution scene (both looks): "What? X is evolving!", the white silhouette flickering between the old and the
 // new form faster and faster, a flash, the new form in colour and its cry, then "Congratulations!". Played after the
-// rules have already evolved the Pokémon (a battle's end, an evolution item, a reward, a hub lesson), so it only
-// shows what happened. Every line stays until the player presses a key or clicks; a press during the flicker
-// jumps to the reveal. Old UI draws it in Phaser, New UI as a full-screen card. A drawing failure resolves quietly.
+// rules have evolved the Pokémon (an evolution item, a reward, a hub lesson, a foe in battle), or with `decide` for an
+// evolution still waiting (after a battle): then B on the opening line or during the flicker stops it, as in the
+// classic games, and the rules evolve the Pokémon only once the flicker ends. Every line stays until the player
+// presses a key or clicks; a confirm press during the flicker jumps to the reveal. Old UI draws it in Phaser, New UI
+// as a full-screen card. A drawing failure resolves quietly.
 
 import Phaser from 'phaser';
 import { animSettingsFrom, animationTimeScale } from '../core/accessibility';
@@ -25,9 +27,18 @@ export interface EvolutionShow {
   shiny?: boolean;
   /** Names of the moves learned on evolving, one line each. */
   learned?: readonly string[];
+  /**
+   * An evolution that is not decided yet: called once, with true when the flicker ends (the rules evolve it) or false
+   * when the player stops it. Returns the closing lines to show. Without it the scene only shows an evolution.
+   */
+  decide?: (accept: boolean) => readonly string[];
+  /** A foe evolving in battle (its own lines, no congratulations). */
+  foe?: boolean;
 }
 
-const CONFIRM = new Set(['Enter', ' ', 'z', 'Z', 'x', 'X', 'Escape', 'Backspace']);
+const CONFIRM = new Set(['Enter', ' ', 'z', 'Z']);
+/** B: stops an evolution that can still be stopped; otherwise it simply confirms. */
+const CANCEL = new Set(['x', 'X', 'Escape', 'Backspace']);
 /** A press this soon after a line shows is the press that opened it, not a new one. */
 const GUARD_MS = 220;
 
@@ -75,13 +86,27 @@ export async function playEvolutions(scene: Phaser.Scene, shows: readonly Evolut
   for (const s of shows) await playEvolution(scene, s);
 }
 
-/** Plays one evolution. Resolves once the last line is dismissed (at once if the scene is gone). */
+/**
+ * Plays one evolution. Resolves once the last line is dismissed (at once if the scene is gone). With `decide`, a
+ * drawing failure still lets the evolution through, so the rules never wait on the picture.
+ */
 export async function playEvolution(scene: Phaser.Scene, show: EvolutionShow): Promise<void> {
   const content = services().session.content;
   const fromSp = content.species.get(show.from);
   const toSp = content.species.get(show.to);
   if (!fromSp || !toSp || !scene.sys.isActive()) return;
-  const lines = evolutionLines(fromSp.name, toSp.name, show.learned);
+  let decided = false;
+  const decide = show.decide;
+  if (decide) {
+    show = {
+      ...show,
+      decide: (accept) => {
+        decided = true;
+        return decide(accept);
+      },
+    };
+  }
+  const lines = evolutionLines(fromSp.name, toSp.name, show.learned, !!show.foe);
   const feel = motionNow();
   const tl = evolutionTimeline(feel.motion, feel.speed);
   try {
@@ -95,6 +120,7 @@ export async function playEvolution(scene: Phaser.Scene, show: EvolutionShow): P
   } catch (e) {
     console.warn('Evolution scene failed', e);
   }
+  if (decide && !decided && scene.sys.isActive()) decide(true);
 }
 
 /** The shared driver: input, the flicker clock, the lines. The look draws through `draw`. */
@@ -113,8 +139,15 @@ function drive(scene: Phaser.Scene, show: EvolutionShow, lines: ReturnType<typeo
     let shownAt = 0;
     const timers: Phaser.Time.TimerEvent[] = [];
     let skipFlicker: (() => void) | null = null;
-    const press = (): void => {
+    // B before the new form shows stops an evolution that is still waiting.
+    let stoppable = !!show.decide;
+    let stopped = false;
+    const press = (stop = false): void => {
       if (performance.now() - shownAt < GUARD_MS) return;
+      if (stop && stoppable) {
+        stopped = true;
+        stoppable = false;
+      }
       if (waiting) {
         const w = waiting;
         waiting = null;
@@ -125,12 +158,12 @@ function drive(scene: Phaser.Scene, show: EvolutionShow, lines: ReturnType<typeo
     const onKey = (e: KeyboardEvent): void => {
       e.stopImmediatePropagation();
       e.preventDefault();
-      if (!e.repeat && CONFIRM.has(e.key)) press();
+      if (!e.repeat && (CONFIRM.has(e.key) || CANCEL.has(e.key))) press(CANCEL.has(e.key));
     };
     window.addEventListener('keydown', onKey, true);
     // Tests (and screens) can see a line of this scene is waiting for a press.
     scene.data?.set('evolutionScene', true);
-    const offPointer = pointer(press);
+    const offPointer = pointer(() => press());
     const finish = (): void => {
       if (over) return;
       over = true;
@@ -170,17 +203,29 @@ function drive(scene: Phaser.Scene, show: EvolutionShow, lines: ReturnType<typeo
       try {
         d.form('from', false);
         await say(lines.intro);
-        if (tl.revealAt > 0) d.form('from', true);
-        d.text('');
-        await flicker();
+        if (!stopped) {
+          if (tl.revealAt > 0) d.form('from', true);
+          d.text('');
+          await flicker();
+        }
         skipFlicker = null;
+        stoppable = false;
         if (over) return;
-        d.form('to', false);
-        d.reveal();
-        playCue(scene, 'st_evolution_moment', 'me.evo_success');
-        const sp = content.species.get(show.to);
-        if (sp) scene.time.delayedCall(500, () => !over && playCry(scene, sp));
-        for (const l of lines.outro) await say(l);
+        if (stopped) {
+          // Stopped: the old form comes back in colour and the evolution music is cut.
+          timers.forEach((t) => t.remove(false));
+          scene.sound.stopByKey('me.evo_start');
+          d.form('from', false);
+          for (const l of show.decide!(false)) await say(l);
+        } else {
+          const outro = show.decide ? show.decide(true) : lines.outro;
+          d.form('to', false);
+          d.reveal();
+          playCue(scene, 'st_evolution_moment', 'me.evo_success');
+          const sp = content.species.get(show.to);
+          if (sp) scene.time.delayedCall(500, () => !over && playCry(scene, sp));
+          for (const l of outro) await say(l);
+        }
       } catch {
         /* a presentation failure never blocks the game */
       }

@@ -112,6 +112,7 @@ export function step(content: Content, run: RunState, smart = false, strong = fa
     }
     case 'decision': {
       const d = run.pending[0]!;
+      if (d.kind === 'evolve') return { run: resolveDecision(content, run, { kind: 'evolve', accept: true }).run, turn: null };
       if (d.kind === 'learnMove') return { run: resolveDecision(content, run, { kind: 'forgetMove', moveIndex: 0 }).run, turn: null };
       if (d.kind === 'signature') return { run: resolveDecision(content, run, { kind: 'signature', optionIndex: 0 }).run, turn: null };
       if (d.kind === 'mutator') return { run: resolveDecision(content, run, { kind: 'mutator', optionIndex: 0 }).run, turn: null };

@@ -122,16 +122,26 @@ export function evolveFully(content: Content, mon: PokemonInstance, regionId?: s
   for (let guard = 0; guard < 3; guard++) {
     const to = evolutionTarget(content, mon, regionId, levelOffset, bondReady);
     if (!to) break;
-    // Evolving through a held item uses that item up (a level or friendship evolution keeps it).
-    const heldItem = getSpecies(content, mon.speciesId).evolutions.find((e) => e.to === to && heldReady(content, mon, e) && !(e.level !== undefined && mon.level >= e.level + levelOffset))?.item;
-    results.push(evolve(content, mon, to));
-    if (heldItem && mon.held) {
-      const left = (mon.held[heldItem] ?? 0) - 1;
-      if (left > 0) mon.held[heldItem] = left;
-      else delete mon.held[heldItem];
-    }
+    results.push(evolveStep(content, mon, to, levelOffset));
   }
   return results;
+}
+
+/** One evolution into `to`, as `evolveFully` does it: evolving through a held item uses that item up (a level or friendship evolution keeps it). */
+export function evolveStep(content: Content, mon: PokemonInstance, to: string, levelOffset = 0): EvolutionResult {
+  const heldItem = getSpecies(content, mon.speciesId).evolutions.find((e) => e.to === to && heldReady(content, mon, e) && !(e.level !== undefined && mon.level >= e.level + levelOffset))?.item;
+  const result = evolve(content, mon, to);
+  if (heldItem && mon.held) {
+    const left = (mon.held[heldItem] ?? 0) - 1;
+    if (left > 0) mon.held[heldItem] = left;
+    else delete mon.held[heldItem];
+  }
+  return result;
+}
+
+/** The species a Pokémon is ready to evolve into on its own after a battle (an Everstone stops it), if any. */
+export function readyEvolution(content: Content, mon: PokemonInstance, regionId?: string, levelOffset = 0, bondReady = false): string | null {
+  return blocksEvolution(content, mon) ? null : evolutionTarget(content, mon, regionId, levelOffset, bondReady);
 }
 
 /**

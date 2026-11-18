@@ -35,7 +35,7 @@ function settle(run: RunState): RunState {
       const any = mon.moves.findIndex((m) => m.pp > 0);
       run = takeTurn(content, run, { kind: 'move', index: idx >= 0 ? idx : any >= 0 ? any : -1 }).run;
     } else if (run.phase === 'decision') {
-      run = resolveDecision(content, run, run.pending[0]!.kind === 'caught' ? { kind: 'release' } : { kind: 'skipMove' }).run;
+      run = resolveDecision(content, run, run.pending[0]!.kind === 'caught' ? { kind: 'release' } : run.pending[0]!.kind === 'evolve' ? { kind: 'evolve', accept: true } : { kind: 'skipMove' }).run;
     } else if (run.phase === 'reward') {
       run = takeAnyReward(run);
     } else if (run.phase === 'shop') {

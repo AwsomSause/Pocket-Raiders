@@ -31,7 +31,7 @@ function playBattle(run: RunState): RunState {
 function skipDecisions(run: RunState): RunState {
   while (run.phase === 'decision') {
     const kind = run.pending[0]!.kind;
-    run = resolveDecision(content, run, kind === 'caught' ? { kind: 'release' } : { kind: 'skipMove' }).run;
+    run = resolveDecision(content, run, kind === 'caught' ? { kind: 'release' } : kind === 'evolve' ? { kind: 'evolve', accept: true } : { kind: 'skipMove' }).run;
   }
   return run;
 }

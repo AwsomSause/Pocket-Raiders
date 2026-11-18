@@ -131,7 +131,7 @@ import {
   rollLegendaryWild,
   withPartyStrength,
 } from './encounters';
-import { evolutionGift, evolve, evolveFully, type EvolutionResult } from './evolution';
+import { evolutionGift, evolveFully, evolveStep, readyEvolution, type EvolutionResult } from './evolution';
 import { noteDeclinedEvolution, pickShopDeal, shopDealPerk } from './mentorWorld';
 import { changeFriendship } from './friendship';
 import { joinMoments, restMoments } from './moments/runMoments';
@@ -309,6 +309,7 @@ import { claimArea, nuzlockeCatchProblem, buryFallen, isHardcore } from './nuzlo
 import { applyMutator, mutatorCatch, mutatorDue, mutatorMoney, mutatorOffer, mutatorXp, startRuleOffer } from './mutators';
 import { advanceStreak, applyPity } from './streaks';
 import { conditionEvolutionTarget, evoRunInfo } from './conditionEvolution';
+import { evolutionStoppedLine } from './presentation/evolutionScene';
 import { roleOrder } from './battle/opponentAi';
 import { beginRivalBrain } from './rivals/brainSetup';
 import { friendFinaleAssist, friendStageBeat, rivalBattleLines } from './rivals/live';
@@ -3176,7 +3177,6 @@ export interface BattleEndResult {
   rescued: string[];
   blissfulHealed: string[];
   aftermath: string[];
-  evolutions: (EvolutionResult & { uid: string })[];
   /** Moves devoted Pokémon learned from their bond after this win. */
   bondTaught?: { uid: string; moveId: string }[];
   /** Recap lines after a big trainer win (MVP, narrowest survival, turning point). */
@@ -4034,6 +4034,38 @@ function lostBattleXpBonus(content: Content, run: RunState): RunEvent[] {
 
 /** After a win or a catch: prize money, evolutions, then decisions or the reward draft. */
 /** The pack's party narration for what just happened after a battle: an evolution, an Egg hatching, a new team member. One line at most. */
+/** The species a party Pokémon is ready to evolve into on its own after a battle (level, friendship, held item), if any. */
+function levelEvolution(content: Content, run: RunState, mon: PokemonInstance): string | null {
+  return readyEvolution(content, mon, run.regionOrder[run.regionIndex], evolutionLevelOffset(runArchetype(content, run).modifiers), bondEvolves(content, run, mon));
+}
+
+/**
+ * An evolution the player let through: the Pokémon evolves, the Chronicle gets its diary line, moves it wants wait
+ * as decisions, a second Pokémon it leaves behind (Shedinja) asks to join, and a further level evolution (a Pokémon
+ * past two thresholds) waits as the next decision. Returns those follow-up decisions and the lines to show.
+ */
+function acceptEvolution(content: Content, run: RunState, mon: PokemonInstance, to: string): { follow: PendingDecision[]; lines: string[] } {
+  const evo = evolveStep(content, mon, to, evolutionLevelOffset(runArchetype(content, run).modifiers));
+  const fromName = speciesName(content, evo.from);
+  const toName = speciesName(content, evo.to);
+  // Ideas W5 (F171): a diary snippet in the Chronicle; text only, no state change.
+  emit(content, run, 'storyMoment', { actors: [], data: { def: 'evolution-diary', suppressed: false }, importance: 35, text: diaryLine(content, mon.uid, fromName, toName) });
+  count(run, 'evolutions');
+  const follow: PendingDecision[] = [];
+  const next = levelEvolution(content, run, mon);
+  if (next) follow.push({ kind: 'evolve', uid: mon.uid, to: next });
+  for (const moveId of evo.wantsToLearn) follow.push({ kind: 'learnMove', uid: mon.uid, moveId });
+  const gift = evolutionGift(content, run, mon, evo);
+  if (gift) {
+    discover(run, gift.speciesId, true);
+    count(run, 'pokemonCaught');
+    gift.hp = Math.min(gift.hp, maxHp(content, gift));
+    follow.push({ kind: 'caught', mon: gift });
+  }
+  const lines = [`Congratulations! Your ${fromName} evolved into ${toName}!`, ...evo.learnedMoves.map((m) => `${toName} learned ${content.moves.get(m)?.name ?? m}!`)];
+  return { follow, lines };
+}
+
 function momentNarration(content: Content, run: RunState, outcome: 'win' | 'caught', evolved: boolean, hatched: boolean): string[] {
   const when = evolved ? 'evolution' : hatched ? 'hatch' : outcome === 'caught' ? 'new_member' : null;
   if (!when) return [];
@@ -4257,41 +4289,28 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     blissfulHealed = blissfulAfterBattle(content, run);
   }
 
-  const evolutions: BattleEndResult['evolutions'] = [];
+  // The evolutions this battle earned wait as decisions: each plays the evolution scene, and the player may stop it
+  // with B (it tries again after a later battle). The rules change the Pokémon only once the scene is let through.
+  const evolving = new Set<string>();
+  const offerEvolution = (mon: PokemonInstance, to: string): void => {
+    run.pending.push({ kind: 'evolve', uid: mon.uid, to });
+    evolving.add(mon.uid);
+  };
   for (const mon of noEvolution(run.rules) ? [] : run.party.filter((m) => !boxedNoEvolve(run, m))) {
     // Fenwick's lesson: held back from an evolution it was ready for, it grows a little stronger instead.
     noteDeclinedEvolution(content, runPerks(content, run), mon, run.regionOrder[run.regionIndex], evolutionLevelOffset(runArchetype(content, run).modifiers), bondEvolves(content, run, mon));
-    for (const evo of evolveFully(content, mon, run.regionOrder[run.regionIndex], evolutionLevelOffset(runArchetype(content, run).modifiers), bondEvolves(content, run, mon))) {
-      evolutions.push({ ...evo, uid: mon.uid });
-      // Ideas W5 (F171): a diary snippet in the Chronicle; text only, no state change.
-      emit(content, run, 'storyMoment', { actors: [], data: { def: 'evolution-diary', suppressed: false }, importance: 35, text: diaryLine(content, mon.uid, content.species.get(evo.from)?.name ?? evo.from, content.species.get(evo.to)?.name ?? evo.to) });
-      for (const moveId of evo.wantsToLearn) run.pending.push({ kind: 'learnMove', uid: mon.uid, moveId });
-      const gift = evolutionGift(content, run, mon, evo);
-      if (gift) {
-        discover(run, gift.speciesId, true);
-        count(run, 'pokemonCaught');
-        caughtPending.push({ kind: 'caught', mon: gift });
-      }
-    }
+    const ready = levelEvolution(content, run, mon);
+    if (ready) offerEvolution(mon, ready);
     // S171: a route by weather, a known move or a move used often enough.
-    const special = battle.outcome === 'win' && !evolutions.some((e) => e.uid === mon.uid) ? conditionEvolutionTarget(content, mon, battle.weather?.id ?? null, evoRunInfo(run, mon)) : null;
-    if (special) {
-      const evo = evolve(content, mon, special);
-      evolutions.push({ ...evo, uid: mon.uid });
-      for (const moveId of evo.wantsToLearn) run.pending.push({ kind: 'learnMove', uid: mon.uid, moveId });
-    }
+    const special = battle.outcome === 'win' && !evolving.has(mon.uid) ? conditionEvolutionTarget(content, mon, battle.weather?.id ?? null, evoRunInfo(run, mon)) : null;
+    if (special) offerEvolution(mon, special);
     // Pokémon Moments (PS1 Magikarp, PS20 Bisharp, PS28 Farfetch'd): a moment promised it would evolve when the battle ends, if it is still standing.
     const owed = battle.storyEffects.find((t) => t.startsWith(`${MOMENT_EVOLVE_AFTER}${mon.uid}:`));
-    if (owed && mon.hp > 0 && !evolutions.some((e) => e.uid === mon.uid)) {
+    if (owed && mon.hp > 0 && !evolving.has(mon.uid)) {
       const [, , to, at] = owed.split(':') as [string, string, string, string];
-      if (battle.turn >= Number(at) && mon.speciesId !== to && content.species.has(to)) {
-        const evo = evolve(content, mon, to);
-        evolutions.push({ ...evo, uid: mon.uid });
-        for (const moveId of evo.wantsToLearn) run.pending.push({ kind: 'learnMove', uid: mon.uid, moveId });
-      }
+      if (battle.turn >= Number(at) && mon.speciesId !== to && content.species.has(to)) offerEvolution(mon, to);
     }
   }
-  count(run, 'evolutions', evolutions.length);
   settleMastery(run, battle.outcome === 'win');
   ultraSettle(content, run, battle.outcome === 'win');
   const bondTaught = battle.outcome === 'win' ? bondLessons(content, run, battle.participants) : [];
@@ -4498,7 +4517,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   run.afterDecisions = chained || betrayalNow ? 'eventChain' : battle.expedition ? 'expedition' : battle.fishing || battle.event ? 'map' : 'reward';
   continueAfterDecisions(content, run);
   syncCommunion(run); // a caught Legendary may be the run's own blessing
-  return { outcome, moneyGained, itemsFound, caughtSpeciesId, shadowPurified, shadowStages, rescued, blissfulHealed, aftermath: [...((raidWin as { notes?: string[] } | null)?.notes ?? []), ...momentNarration(content, run, outcome, evolutions.length > 0, hatchedNow.length > 0)], evolutions, bondTaught, recap, badge, regionCleared, finale, victory: run.victory, eventRewards, voiceJoined, materials: materialsGained };
+  return { outcome, moneyGained, itemsFound, caughtSpeciesId, shadowPurified, shadowStages, rescued, blissfulHealed, aftermath: [...((raidWin as { notes?: string[] } | null)?.notes ?? []), ...momentNarration(content, run, outcome, evolving.size > 0, hatchedNow.length > 0)], bondTaught, recap, badge, regionCleared, finale, victory: run.victory, eventRewards, voiceJoined, materials: materialsGained };
 }
 
 /**
@@ -4695,6 +4714,8 @@ export type DecisionChoice =
   | { kind: 'mutator'; optionIndex: number }
   | { kind: 'keepsake' }
   | { kind: 'teachMove'; moveIndex: number }
+  /** An evolution waiting after a battle: let it happen, or stop it (B). */
+  | { kind: 'evolve'; accept: boolean }
   | { kind: 'ppUpMove'; moveIndex: number }
   | { kind: 'mentor'; accept: boolean }
   | { kind: 'returnProtege' }
@@ -4736,6 +4757,23 @@ function resolveDecisionCore(content: Content, current: RunState, choice: Decisi
       run.afterDecisions = 'map';
     }
     continueAfterDecisions(content, run);
+    return { run, message };
+  }
+  if (decision.kind === 'evolve') {
+    if (choice.kind !== 'evolve') throw new Error('Let it evolve, or stop it');
+    run.pending.shift();
+    const mon = run.party.find((p) => p.uid === decision.uid);
+    let message = '';
+    // It may have left the party, or changed another way, while the decision waited.
+    if (mon && mon.hp > 0 && mon.speciesId !== decision.to && content.species.has(decision.to)) {
+      if (choice.accept) {
+        const out = acceptEvolution(content, run, mon, decision.to);
+        run.pending.unshift(...out.follow);
+        message = out.lines.join('\n');
+      } else message = evolutionStoppedLine(speciesName(content, mon.speciesId));
+    }
+    continueAfterDecisions(content, run);
+    recordChanges(content, current, run, 'battle');
     return { run, message };
   }
   if (decision.kind === 'mythicalVisit') {

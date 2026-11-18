@@ -70,7 +70,7 @@ function win(run: RunState, topUp = false): RunState {
 }
 
 function skipDecisions(run: RunState): RunState {
-  while (run.phase === 'decision') run = resolveDecision(content, run, run.pending[0]!.kind === 'caught' ? { kind: 'release' } : { kind: 'skipMove' }).run;
+  while (run.phase === 'decision') run = resolveDecision(content, run, run.pending[0]!.kind === 'caught' ? { kind: 'release' } : run.pending[0]!.kind === 'evolve' ? { kind: 'evolve', accept: true } : { kind: 'skipMove' }).run;
   return run;
 }
 

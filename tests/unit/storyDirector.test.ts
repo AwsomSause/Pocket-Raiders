@@ -37,7 +37,7 @@ function winGym(run: RunState): RunState {
       r = takeTurn(content, r, { kind: 'move', index: 1 }).run;
     }
     else if (r.phase === 'reward') r = takeAnyReward(r);
-    else if (r.phase === 'decision') r = resolveDecision(content, r, r.pending[0]!.kind === 'caught' ? { kind: 'release' } : { kind: 'skipMove' }).run;
+    else if (r.phase === 'decision') r = resolveDecision(content, r, r.pending[0]!.kind === 'caught' ? { kind: 'release' } : r.pending[0]!.kind === 'evolve' ? { kind: 'evolve', accept: true } : { kind: 'skipMove' }).run;
     else break;
   }
   return r;

@@ -55,7 +55,7 @@ describe('trainer unlock routes', () => {
       run = toBattle(run);
       let turns = 0;
       while (run.phase === 'battle' && turns++ < 300) run = takeTurn(content, run, { kind: 'move', index: 0 }).run;
-      while (run.phase === 'decision') run = resolveDecision(content, run, run.pending[0]!.kind === 'caught' ? { kind: 'release' } : { kind: 'skipMove' }).run;
+      while (run.phase === 'decision') run = resolveDecision(content, run, run.pending[0]!.kind === 'caught' ? { kind: 'release' } : run.pending[0]!.kind === 'evolve' ? { kind: 'evolve', accept: true } : { kind: 'skipMove' }).run;
       if (run.phase === 'reward') run = chooseReward(content, run, 0).run;
     }
     expect(run.log.counters.gymLeadersDefeated ?? 0).toBeGreaterThan(0);

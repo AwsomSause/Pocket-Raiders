@@ -8,9 +8,9 @@ import { evolutionTarget } from '../../src/core/evolution';
 import { changeFriendship, friendshipHearts } from '../../src/core/friendship';
 import { createPokemon } from '../../src/core/pokemon';
 import { applyReward } from '../../src/core/rewards';
-import { chooseStarter, createRun, debugReplaceEnemy, takeTurn } from '../../src/core/run';
+import { chooseStarter, createRun, debugReplaceEnemy, resolveDecision, takeTurn } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
-import { SaveManager } from '../../src/save/saveManager';
+import { CURRENT_VERSIONS, MIGRATIONS, SaveManager } from '../../src/save/saveManager';
 import { MemoryStorageProvider } from '../../src/save/storage';
 import { content, toBattle } from './helpers';
 
@@ -88,7 +88,42 @@ describe('friendship evolutions', () => {
     run = debugReplaceEnemy(content, run, 'magikarp', 2);
     const result = playOut(run);
     expect(result.end?.outcome).toBe('win');
-    expect(result.end?.evolutions).toContainEqual(expect.objectContaining({ uid, from: 'pichu', to: 'pikachu' }));
+    // It waits as a decision (the evolution scene plays it; B could stop it), still a Pichu until then.
+    expect(result.run.pending[0]).toEqual({ kind: 'evolve', uid, to: 'pikachu' });
+    expect(result.run.party[0]!.speciesId).toBe('pichu');
+    const after = resolveDecision(content, result.run, { kind: 'evolve', accept: true });
+    expect(after.run.party[0]!.speciesId).toBe('pikachu');
+    expect(after.message).toContain('Congratulations! Your Pichu evolved into Pikachu!');
+    expect(after.run.log.counters.evolutions).toBe((result.run.log.counters.evolutions ?? 0) + 1);
+    expect(after.run.pending.some((d) => d.kind === 'evolve')).toBe(false);
+  });
+
+  it('B stops the evolution: it stays a Pichu, and the next won battle offers it again', () => {
+    let run = toBattle(newRun('pichu-stop'));
+    const uid = run.party[0]!.uid;
+    run.party[0] = { ...createPokemon(content, 'pichu', 40, uid), friendship: f.evolveAt - f.perBattleWon };
+    run = debugReplaceEnemy(content, run, 'magikarp', 2);
+    const result = playOut(run);
+    const stopped = resolveDecision(content, result.run, { kind: 'evolve', accept: false });
+    expect(stopped.message).toBe('Huh? Pichu stopped evolving!');
+    expect(stopped.run.party[0]!.speciesId).toBe('pichu');
+    expect(stopped.run.log.counters.evolutions ?? 0).toBe(result.run.log.counters.evolutions ?? 0);
+    expect(stopped.run.pending.some((d) => d.kind === 'evolve')).toBe(false);
+    expect(evolutionTarget(content, stopped.run.party[0]!)).toBe('pikachu');
+    // Any other answer is refused: the decision needs a yes or a no.
+    expect(() => resolveDecision(content, result.run, { kind: 'skipMove' })).toThrow('Let it evolve, or stop it');
+  });
+
+  it('an evolution that can no longer happen is dropped quietly (the Pokémon left the party)', () => {
+    let run = toBattle(newRun('pichu-gone'));
+    const uid = run.party[0]!.uid;
+    run.party[0] = { ...createPokemon(content, 'pichu', 40, uid), friendship: f.evolveAt - f.perBattleWon };
+    run = debugReplaceEnemy(content, run, 'magikarp', 2);
+    const result = structuredClone(playOut(run).run);
+    result.pending = [{ kind: 'evolve', uid: 'nobody', to: 'pikachu' }];
+    const out = resolveDecision(content, result, { kind: 'evolve', accept: true });
+    expect(out.message).toBe('');
+    expect(out.run.party[0]!.speciesId).toBe('pichu');
   });
 });
 
@@ -151,5 +186,47 @@ describe('save upgrade', () => {
       expect(result.data.party[0]!.friendship).toBe(120);
       expect(result.data.battle!.enemyTeam[0]!.friendship).toBe(70);
     }
+  });
+});
+
+describe('run save v46 (an evolution waiting as a decision)', () => {
+  const won = (): RunState => {
+    let run = toBattle(newRun('pichu-save'));
+    const uid = run.party[0]!.uid;
+    run.party[0] = { ...createPokemon(content, 'pichu', 40, uid), friendship: f.evolveAt - f.perBattleWon };
+    run = debugReplaceEnemy(content, run, 'magikarp', 2);
+    return playOut(run).run;
+  };
+
+  it('is the current run version; v45 runs load untouched', () => {
+    expect(CURRENT_VERSIONS.run).toBe(46);
+    const r = toBattle(newRun('v45'));
+    expect(MIGRATIONS.run[45]!(r)).toBe(r);
+    const storage = new MemoryStorageProvider();
+    storage.set('pkr.run', JSON.stringify({ format: 'pkmn-roguelike', record: 'run', schemaVersion: 45, savedAt: '', data: r }));
+    const loaded = new SaveManager(storage, content).loadRun();
+    expect(loaded.status).toBe('ok');
+    if (loaded.status === 'ok') expect(loaded.migratedFrom).toBe(45);
+  });
+
+  it('a waiting evolution survives save and reload, and applies once', () => {
+    const run = won();
+    const storage = new MemoryStorageProvider();
+    new SaveManager(storage, content).saveRun(run);
+    const back = new SaveManager(storage, content).loadRun();
+    expect(back.status).toBe('ok');
+    if (back.status !== 'ok') return;
+    expect(back.data.pending[0]).toEqual(run.pending[0]);
+    const once = resolveDecision(content, back.data, { kind: 'evolve', accept: true }).run;
+    expect(once.party[0]!.speciesId).toBe('pikachu');
+    expect(once.pending.some((d) => d.kind === 'evolve')).toBe(false);
+  });
+
+  it('a save naming an unknown species to evolve into is refused, not loaded', () => {
+    const run = won();
+    run.pending[0] = { kind: 'evolve', uid: run.party[0]!.uid, to: 'not-a-pokemon' };
+    const storage = new MemoryStorageProvider();
+    storage.set('pkr.run', JSON.stringify({ format: 'pkmn-roguelike', record: 'run', schemaVersion: CURRENT_VERSIONS.run, savedAt: '', data: run }));
+    expect(new SaveManager(storage, content).loadRun().status).not.toBe('ok');
   });
 });
