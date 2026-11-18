@@ -338,7 +338,7 @@ describe('saves', () => {
     const r = evilRun();
     const { hero: _h, fight: _f, posted: _p, inPerson: _i, ...rest } = B(r);
     const v4 = EvilModeBlockSchema.parse({ ...rest, v: 4 });
-    expect(v4).toMatchObject({ v: 21, hero: null, fight: null, posted: [], inPerson: null });
+    expect(v4).toMatchObject({ v: 22, hero: null, fight: null, posted: [], inPerson: null });
     const old: RunState = { ...r, story: { ...r.story, rivals: [] }, expansion: { ...r.expansion, evilMode: v4 } };
     const made = ensureEvil(old);
     expect(B(made).hero).toEqual(B(r).hero);

@@ -165,7 +165,7 @@ export function cardOf(block: EvilModeBlock, p: Crew, data: EvilData = EVIL_DATA
   return {
     talent: p.talent ? talentDef(p.talent, data) : null,
     flaw: p.flaw && p.flawFound ? flawDef(p.flaw, data).name : p.flaw ? '?' : null,
-    line: p.line !== null && p.lineHeard ? lineText(p, data) : p.line !== null ? peopleText('unheard', data) : null,
+    line: p.line !== null && p.lineHeard ? lineText(p, data, block) : p.line !== null ? peopleText('unheard', data) : null,
     rank: rankDef(p.rank, data).title,
     band,
   };

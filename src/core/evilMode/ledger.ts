@@ -3,6 +3,7 @@
 // the Log, and a test checks the two agree. Pure: new blocks are returned. No number is drawn.
 
 import { holdingName, localOf, payAmount, streetName, streetOf, takings } from './board';
+import { tearPay } from './tear';
 import { EVIL_DATA, type EvilData } from './data';
 import type { JobDraft } from './odds';
 import type { EvilModeBlock, Holding, LogEntry } from './schema';
@@ -75,9 +76,11 @@ export const logSums = (block: EvilModeBlock): { given: number; taken: number } 
   logOf(block).reduce((s, e) => ({ given: s.given + (e.given ?? 0), taken: s.taken + (e.taken ?? 0) }), { given: 0, taken: 0 });
 
 /** What a holding pays this Evening, after a waive or a halve. A safehouse's rent is never waived (it isn't income). */
-export function takingsAt(h: Holding, rates: EvilModeBlock['rates'], data: EvilData = EVIL_DATA): number {
-  const t = takings(h, data);
-  if (t <= 0) return t;
+/** Slice 21: `pay` from tear.ts `tearPay`: a Tear's holding (and a Rig's stripped ground) pays nothing; the Tear's street half. */
+export function takingsAt(h: Holding, rates: EvilModeBlock['rates'], data: EvilData = EVIL_DATA, pay?: { zero: readonly string[]; half: readonly string[] }): number {
+  const t0 = takings(h, data);
+  if (t0 <= 0) return t0;
+  const t = pay?.zero.includes(h.id) ? 0 : pay?.half.includes(h.id) ? Math.floor(t0 / 2) : t0;
   const r = rates[h.id];
   return r === 'waived' ? 0 : r === 'halved' ? Math.floor(t / 2) : t;
 }
@@ -95,7 +98,7 @@ export function todayPages(block: EvilModeBlock, data: EvilData = EVIL_DATA): To
   const d = block.district;
   const open = !!d && !d.end;
   const inc = (d?.holdings ?? []).filter((h) => takings(h, data) > 0).map((h): InLine => {
-    const amount = takingsAt(h, block.rates, data);
+    const amount = takingsAt(h, block.rates, data, tearPay(block, data));
     const rate = block.rates[h.id] ?? null;
     return {
       holdingId: h.id,

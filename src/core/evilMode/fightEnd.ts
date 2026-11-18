@@ -34,7 +34,7 @@ export function endEvilFight(content: Content, run: RunState, won: boolean, heal
   const f = block.fight!;
   // Slice 13: a Legend caught joins the party (or the box when it's full), by the main game's rules: weakened, a ball thrown.
   let caught: string | undefined;
-  if (f.kind === 'legend' && run.battle?.outcome === 'caught') {
+  if ((f.kind === 'legend' || f.kind === 'tear' || f.kind === 'incursion') && run.battle?.outcome === 'caught') {
     const foe = run.battle.enemyTeam[run.battle.enemyIndex];
     if (foe) {
       const mon = { ...structuredClone(foe), hp: Math.max(1, foe.hp) };
