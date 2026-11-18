@@ -390,7 +390,7 @@ describe('the page and the save (block v9)', () => {
     const { neighbour, ...rest } = b;
     void neighbour;
     const v9 = EvilModeBlockSchema.parse({ ...rest, v: 9 });
-    expect(v9).toMatchObject({ v: 17, neighbour: null });
+    expect(v9).toMatchObject({ v: 21, neighbour: null });
     const after = go(v9, { type: 'send' });
     expect(nb(after).stance).toBe('wary');
     expect(nb(after).ticks.slice(0, 2).map((t) => t.state)).toEqual(['fired', 'fired']);

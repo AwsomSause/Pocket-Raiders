@@ -219,7 +219,7 @@ function queue(block: EvilModeBlock, what: string, who: string | null, args: Rec
   const v = voiceOf(block);
   if (v.sent.includes(onceKey)) return block;
   const steamed = block.team.heat >= VOICE.rules.steamHeat;
-  const p: Piece = { id: `P${v.inbox.length + 1}`, what, who, args, made: block.here.day, due: block.here.day + (steamed ? VOICE.rules.steamDelay : 0), day: null, opened: false, steamed, pinned: false, answer: null, left: false };
+  const p: Piece = { id: `P${v.inbox.reduce((n, x) => Math.max(n, Number(x.id.slice(1)) || 0), 0) + 1}`, what, who, args, made: block.here.day, due: block.here.day + (steamed ? VOICE.rules.steamDelay : 0), day: null, opened: false, steamed, pinned: false, answer: null, left: false };
   return setVoice(block, { ...v, inbox: [...v.inbox, p], sent: [...v.sent, onceKey] });
 }
 
@@ -492,7 +492,12 @@ export function voiceMorning(block0: EvilModeBlock, data: EvilData = EVIL_DATA):
     b = setVoice(b, { ...w, paper: [...w.paper, { day: b.here.day, id: 'coldly', args: {} }].slice(-KEEP), sent: [...w.sent, `coldly:${c.id}`] });
   }
   b = postMorning(b, data);
-  return setVoice(b, { ...voiceOf(b), mark: markOf(b) });
+  // The drawer keeps the last dozen letters (and any on the Wall); older ones are in the Log, so the save stays small. The
+  // newest piece is always kept, so the next id is still one more than the highest.
+  const w = voiceOf(b);
+  const got = w.inbox.filter((x) => x.day !== null && !x.pinned);
+  const drop = new Set(got.slice(0, Math.max(0, got.length - VOICE.rules.drawer)).map((x) => x.id));
+  return setVoice(b, { ...w, inbox: drop.size ? w.inbox.filter((x) => !drop.has(x.id)) : w.inbox, mark: markOf(b) });
 }
 
 /** The set switched off or on (a Night action; off once a run). Loyalty's unchanged. */

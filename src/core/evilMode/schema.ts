@@ -91,7 +91,7 @@ export type Mood = z.infer<typeof MoodSchema>;
 
 /** Slice 9 adds Kanto's own holding, a floor of a building (Part 26a section 2.3). */
 /** Slice 16 adds Johto's kept place (held by upkeep, pays nothing) and Hoenn's water route (held by running the boats). */
-export const HOLDING_KINDS = ['local', 'wild', 'alpha', 'safehouse', 'opportunity', 'town', 'gym', 'floor', 'kept', 'water'] as const;
+export const HOLDING_KINDS = ['local', 'wild', 'alpha', 'safehouse', 'opportunity', 'town', 'gym', 'floor', 'kept', 'water', 'lake', 'bridge', 'table'] as const;
 export const HoldingKindSchema = z.enum(HOLDING_KINDS);
 export type HoldingKind = z.infer<typeof HoldingKindSchema>;
 
@@ -125,7 +125,9 @@ export const DistrictFileSchema = z.object({
     kind: z.enum(['arrival', 'district', 'reckoning']).optional(),
     streets: z.array(z.string().min(1)).length(4).optional(),
     places: z.partialRecord(HoldingKindSchema, z.array(z.string().min(1)).min(1)).optional(),
-    layout: z.object({ local: z.number().int().min(0), wild: z.number().int().min(0), alpha: z.number().int().min(0), safehouse: z.number().int().min(0), opportunity: z.number().int().min(0), floor: z.number().int().min(0), kept: z.number().int().min(0).optional(), water: z.number().int().min(0).optional() }).strict().optional(),
+    layout: z.object({ local: z.number().int().min(0), wild: z.number().int().min(0), alpha: z.number().int().min(0), safehouse: z.number().int().min(0), opportunity: z.number().int().min(0), floor: z.number().int().min(0), kept: z.number().int().min(0).optional(), water: z.number().int().min(0).optional(),
+      /** Slice 19: Sinnoh's lakes, Unova's bridges, Kalos's tables (Part 26b sections 1.3, 2.3, 3.3). */
+      lake: z.number().int().min(0).optional(), bridge: z.number().int().min(0).optional(), table: z.number().int().min(0).optional() }).strict().optional(),
     floors: z.array(z.object({ name: z.string().min(1), tenant: z.string().min(1), take: z.number().int().min(0), says: z.string().min(1) }).strict()).optional(),
     tower: z.string().min(1).optional(),
   }).strict()).min(1),
@@ -227,7 +229,8 @@ export const RankSchema = z.enum(RANKS);
 export type Rank = z.infer<typeof RankSchema>;
 /** Slice 6 adds three of the nine: the Line moved, with the Hero, arrested (Part 9 section 10). */
 /** Slice 16 adds 'stayed': stayed behind at a Crossing (kindly; Part 2 section 9.2). */
-export const LEAVE_WAYS = ['line', 'loyalty', 'letGo', 'lineMoved', 'hero', 'arrested', 'reckoning', 'stayed'] as const;
+/** Slice 7 adds two: a handshake, the coat (knock 31). */
+export const LEAVE_WAYS = ['line', 'loyalty', 'letGo', 'lineMoved', 'hero', 'arrested', 'reckoning', 'stayed', 'handshake', 'coat'] as const;
 export const QUESTIONS = ['cant', 'wont', 'why', 'who'] as const;
 export const QuestionSchema = z.enum(QUESTIONS);
 export type Question = z.infer<typeof QuestionSchema>;
@@ -264,6 +267,9 @@ export const CrewSchema = z.object({
   unpaid: z.number().int().min(0),
   /** The district ("region:n") their talent last fitted a job in (+1 once a district). */
   fitIn: z.string().nullable(),
+  /** Slice 7: their mood (Part 9: Warm to Shut), moved a step by a knock's answer; and how often they've knocked (the quiet come first). */
+  mood: MoodSchema.default('easy'),
+  knocks: z.number().int().min(0).default(0),
   left: z.object({ day: z.number().int().min(1), how: z.enum(LEAVE_WAYS), kindly: z.boolean().optional() }).strict().optional(),
   /** Slice 6: the law knows their face (a failed Take they led without Hands). */
   known: z.boolean().optional(),
@@ -335,11 +341,12 @@ export const StoredCardSchema = z.object({
   offer: z.number().int().min(1).max(100).optional(),
   thing: TakeThingSchema.optional(),
   clean: z.boolean(),
-  fields: z.array(StoredFieldSchema).length(13),
+  /** Thirteen; fourteen for the Speech (slice 19: "What you're leaving out"). */
+  fields: z.array(StoredFieldSchema).min(13).max(14),
 }).strict();
 export type StoredCard = z.infer<typeof StoredCardSchema>;
 
-export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym', 'econ', 'neighbour', 'scheme', 'base', 'raid', 'ending', 'post'] as const;
+export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym', 'econ', 'neighbour', 'scheme', 'base', 'raid', 'ending', 'knock', 'heard', 'wall', 'post'] as const;
 
 /** One line of the Log (Part 30 section 7.1, the kinds slice 3 writes). Never edited, never removed. */
 export const LogEntrySchema = z.object({
@@ -464,6 +471,83 @@ export const PostSchema = z.object({ holdingId: z.string().min(1), id: z.string(
 
 export const RateSchema = z.enum(['halved', 'waived']);
 
+
+// ---- Slice 7: the Night (design Part 24a section 1, Part 24c section 7, Part 25a section 4, Part 30 section 3.10) ----
+
+/** Tonight's knock, drawn on the way into the Night. `who` is a crew id, or null for someone from outside (or nobody). */
+export const KnockSchema = z.object({ n: z.number().int().min(1), who: z.string().min(1).nullable(), day: z.number().int().min(1), rule: z.number().int().min(1).max(11) }).strict();
+export type Knock = z.infer<typeof KnockSchema>;
+
+export const NightStateSchema = z.object({
+  /** Knocks done this run (answered, or shut out twice). No knock twice. */
+  had: z.array(z.number().int().min(1)),
+  /** "(Not tonight.)" per knock: once returns it to the deck, twice and it's gone. */
+  shut: z.record(z.string(), z.number().int().min(0)),
+  /** Knocks slept through. On no screen (Part 24a section 1.5). */
+  sleptThrough: z.number().int().min(0),
+  /** Tonight's knock, waiting at the door; null once answered or when nobody came. */
+  knock: KnockSchema.nullable(),
+  /** Who knocked last, and on which day (nobody twice running). */
+  last: z.object({ who: z.string().min(1), day: z.number().int().min(1) }).strict().nullable(),
+  /** The day the Night's one action was taken (one a Night). */
+  actedOn: z.number().int().min(0),
+  /** Every answer (not a "(Not tonight.)": `shut` and `sleptThrough` count those), kept: the keyed store doors, the walk out and the courtroom read. */
+  echoes: z.array(z.object({ n: z.number().int().min(1), who: z.string().nullable(), answer: z.number().int().min(0).max(3), day: z.number().int().min(1) }).strict()),
+  /** Things said that come back (night.json `flags`). */
+  flags: z.array(z.string().min(1)),
+  /** People who won't knock again this region (by region index). */
+  hushed: z.record(z.string(), z.number().int().min(0)),
+  /** The Wall: what went up, when, and when (if ever) it came down. A thing taken down leaves its gap. */
+  wall: z.array(z.object({ item: z.string().min(1), day: z.number().int().min(1), down: z.number().int().min(1).nullable() }).strict()),
+  /** ☼ knocks taken out of the deck at Corruption 2 or more, one a district ("region:district:n"). */
+  removed: z.array(z.string().min(1)),
+  /** Passed over for promotion (rule 6 sends them the next Night). */
+  passed: z.array(z.object({ id: z.string().min(1), day: z.number().int().min(1) }).strict()),
+  /** The last Night drawn ("region:district:day"): the draw is taken once a Night, and one key keeps the save small. */
+  drawn: z.string().nullable(),
+  /** The day the door was last answered or shut (0: never), so the Office says it's done for tonight. */
+  doorOn: z.number().int().min(0),
+}).strict();
+export type NightState = z.infer<typeof NightStateSchema>;
+export const emptyNight = (): NightState => ({ had: [], shut: {}, sleptThrough: 0, knock: null, last: null, actedOn: 0, echoes: [], flags: [], hushed: {}, wall: [], removed: [], passed: [], drawn: null, doorOn: 0 });
+
+const NT = z.string().min(1);
+export const EchoSchema = z.discriminatedUnion('t', [
+  z.object({ t: z.literal('mood'), by: z.union([z.literal(1), z.literal(-1)]) }).strict(),
+  z.object({ t: z.literal('loyalty'), by: z.union([z.literal(1), z.literal(-1)]) }).strict(),
+  z.object({ t: z.literal('team'), stat: z.enum(['regard', 'dread', 'heat']), by: z.union([z.literal(1), z.literal(-1)]) }).strict(),
+  z.object({ t: z.literal('regardOrDread') }).strict(),
+  z.object({ t: z.literal('localMood'), by: z.literal(-1) }).strict(),
+  z.object({ t: z.literal('wall'), item: NT }).strict(),
+  z.object({ t: z.literal('flag'), id: NT }).strict(),
+  z.object({ t: z.literal('hush') }).strict(),
+  z.object({ t: z.literal('leave'), how: z.enum(['handshake', 'coat']) }).strict(),
+]);
+export type Echo = z.infer<typeof EchoSchema>;
+export const WhoSpecSchema = z.object({
+  first: z.boolean().optional(), oldest: z.boolean().optional(), talent: TalentSchema.optional(), flaw: FlawSchema.optional(), rank: RankSchema.optional(),
+  minLoyalty: z.number().int().min(0).max(10).optional(), maxLoyalty: z.number().int().min(0).max(10).optional(), maxAge: z.number().int().min(1).optional(), minor: z.boolean().optional(),
+  outside: NT.optional(), nobody: z.boolean().optional(),
+}).strict();
+export type WhoSpec = z.infer<typeof WhoSpecSchema>;
+export const KnockDefSchema = z.object({
+  n: z.number().int().min(1), title: NT, sun: z.boolean(), who: WhoSpecSchema, needs: z.array(NT), shut: z.boolean(), report: z.boolean(), status: EvilStatusSchema, says: NT,
+  answers: z.array(z.object({ say: NT, reply: NT, needs: z.array(NT).optional(), echo: z.array(EchoSchema) }).strict()).length(3),
+}).strict();
+export type KnockDef = z.infer<typeof KnockDefSchema>;
+export const WALL_KINDS = ['desk', 'thanks', 'threat', 'other'] as const;
+export const NightFileSchema = z.object({
+  note: z.string(),
+  rules: z.object({ firstNight: z.array(z.number().int().min(1)).min(1), quietWeight: z.number().int().min(1), sunday: z.number().int().min(1), corruptionSun: z.number().int().min(1), shutReturns: z.number().int().min(0), loyaltyBirthday: z.number().int().min(0) }).strict(),
+  needs: z.array(z.object({ id: NT, live: z.boolean(), says: NT, waits: NT.optional() }).strict()).min(1),
+  flags: z.array(z.object({ id: NT, shown: NT, readBy: NT }).strict()).min(1),
+  wall: z.array(z.object({ id: NT, what: NT, kind: z.enum(WALL_KINDS), from: NT }).strict()).min(1),
+  text: z.record(z.string(), NT),
+  wallStates: z.object({ kept: NT, kind: NT, edited: NT, bare: NT }).strict(),
+  hear: z.object({ warmExtra: z.record(TalentSchema, NT), byTalent: z.record(TalentSchema, NT), byPerson: z.record(z.string(), NT) }).strict(),
+  knocks: z.array(KnockDefSchema).length(130), // 1-40 in night.json (slice 7), 41-130 in knocks2.json (slice 18)
+});
+
 // ---- Slice 8: the Gym (design Part 8a, Part 8b, Part 30 section 3.4) ----
 
 export const GYM_WAYS = ['beat', 'buy', 'bend', 'replace', 'befriend'] as const;
@@ -584,7 +668,7 @@ export type CrossingState = z.infer<typeof CrossingSchema>;
 export const ClockSchema = z.object({
   left: z.number().int().min(0).max(3),
   day: z.number().int().min(1),
-  stopped: z.enum(['letters', 'boss', 'hero', 'together', 'met']).nullable(),
+  stopped: z.enum(['letters', 'before', 'boss', 'hero', 'together', 'met']).nullable(),
 }).strict();
 export type ClockState = z.infer<typeof ClockSchema>;
 
@@ -1226,8 +1310,8 @@ export const EndingsFileSchema = z.object({
 }).strict();
 
 const BlockV7Schema = z.object({
-  /** The block's own version, for its own migrations. 7: slice 8 added the Gyms. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a waiting fight, who's posted, and the day's in-person job. 6: slice 6 added proof held and the last move of the Line. */
-  v: z.literal(17),
+  /** The block's own version, for its own migrations. 7: slice 8 added the Gyms. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a waiting fight, who's posted, and the day's in-person job. 6: slice 6 added proof held and the last move of the Line. 20 (reserved for slice 7): the Night, and each person's mood and knocks. 21: slice 18 added the voice (the Radio, the paper, the post). */
+  v: z.literal(21),
   from: z.enum(['founding', 'charter', 'turn']),
   /** Copied from Settings at founding, so a setting changed mid-run never changes this run. */
   settings: z.object({ length: RunLengthSchema }),
@@ -1249,6 +1333,8 @@ const BlockV7Schema = z.object({
   /** Slice 3: the Log (append only), every confirmed Card, the two totals (kept as counters; a test checks they equal the Log's sums), and the lines waived or halved. */
   log: z.array(LogEntrySchema),
   cards: z.array(StoredCardSchema),
+  /** Slice 19: the Log and Cards from regions older than two, packed at a Crossing (Part 30 section 7.4; pack.ts). Absent until the fourth region. */
+  archive: z.object({ log: z.string(), cards: z.string(), nLog: z.number().int().min(0), nCards: z.number().int().min(0), /** Slice 18: the economy's Cards older than two regions, packed the same way. */ econ: z.string().optional(), nEcon: z.number().int().min(0).optional() }).strict().optional(),
   given: z.number().int().min(0),
   taken: z.number().int().min(0),
   rates: z.record(z.string(), RateSchema),
@@ -1265,6 +1351,8 @@ const BlockV7Schema = z.object({
   fight: FightSchema.nullable(),
   posted: z.array(PostSchema),
   inPerson: z.object({ day: z.number().int().min(1), holdingId: z.string().min(1) }).strict().nullable(),
+  /** Slice 7: the Night (Part 30 section 3.10). */
+  night: NightStateSchema,
   /** Slice 6: holdings the team holds proof about (a taken ledger), spent by an Expose; and the Line's last move (Hearts go within three days of a move to Whatever it takes). */
   proof: z.array(z.string().min(1)),
   lineMove: z.object({ day: z.number().int().min(1), region: z.number().int().min(0), from: LineIdSchema, to: LineIdSchema }).strict().nullable(),
@@ -1295,7 +1383,7 @@ export const heroSlice12Start = (starter = ''): z.infer<typeof HeroSlice12Schema
 });
 
 /** A nameless Grunt (slices 2 and 3; a block migrated from v3 keeps its four). */
-export const namelessGrunt = (i: number, loyalty: number): Crew => ({ id: `g${i}`, ref: null, name: `Grunt ${i}`, age: null, minor: false, talent: null, flaw: null, flawFound: false, line: null, lineHeard: false, rank: 'grunt', loyalty, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null });
+export const namelessGrunt = (i: number, loyalty: number): Crew => ({ id: `g${i}`, ref: null, name: `Grunt ${i}`, age: null, minor: false, talent: null, flaw: null, flawFound: false, line: null, lineHeard: false, rank: 'grunt', loyalty, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null, mood: 'easy', knocks: 0 });
 /** Four nameless Grunts at a Creed's starting Loyalty. */
 export const firstCrew = (n = 4, loyalty = 5): Crew[] => Array.from({ length: n }, (_, i) => namelessGrunt(i + 1, loyalty));
 /** A Creed's starting Loyalty, read raw here (the migration can't import data.ts, which imports this file). */
@@ -1324,6 +1412,8 @@ const startLoyalty = (creed: unknown): number => (creedsRaw.creeds.find((c) => c
  * v12 -> v13 (slice 10's block): the Hero starts Curious with no fires, no lies, nothing told and a mother at Wary who
  * hasn't written yet (her letters start with the next district); the other three are made on the next load (the
  * session needs the run's seed); no fire under way; no Reckoning yet. The starter's read back from the rival record.
+ * to v20 (slice 7, its reserved number; from v9 or any later block without it): an empty Night (no knocks had,
+ * nothing on the Wall); everyone Easy, nobody's knocked yet. Keyed on the Night being missing, so it holds whichever slices land first.
  */
 export function migrateEvilBlock(raw: unknown): unknown {
   if (!raw || typeof raw !== 'object') return raw;
@@ -1348,10 +1438,15 @@ export function migrateEvilBlock(raw: unknown): unknown {
   if (b.v === 13) b = { ...b, v: 14, ending: null };
   // 15: slice 16, the Crossing (the regions crossed, a Crossing under way, pay from abroad, the quay's answer, Hoenn's letters and second clock).
   if (b.v === 14) b = { ...b, v: 15, region: b.region && typeof b.region === 'object' ? { ...regionSlice16Start(), ...(b.region as object) } : b.region };
-  // 16: slice 17, the long cast. Until it lands on this branch the step adds nothing (its own migration replaces this line).
-  if (b.v === 15) b = { ...b, v: 16 };
-  // 17: slice 18, the voice: nothing heard yet, no post, the set on. The Radio and the paper start with the next Morning.
-  if (b.v === 16) b = { ...b, v: 17, voice: emptyVoice() };
+  if (typeof b.v === 'number' && b.v >= 9 && b.v < 20) {
+    if (!('night' in b)) {
+      const crew = Array.isArray(b.crew) ? (b.crew as Record<string, unknown>[]).map((c) => ({ mood: 'easy', knocks: 0, ...c })) : b.crew;
+      b = { ...b, crew, night: emptyNight() };
+    }
+    b = { ...b, v: 20 };
+  }
+  // 21: slice 18, the voice: nothing heard yet, no post, the set on. The Radio and the paper start with the next Morning.
+  if (b.v === 20) b = { voice: emptyVoice(), ...b, v: 21 };
   return b;
 }
 
@@ -1413,7 +1508,8 @@ function migrateToV8(b: Record<string, unknown>): Record<string, unknown> {
 const RS = z.string().min(1);
 /** One rule on the one hook (Part 30 section 9): adds before scales; `whileIn` only while the Patron's on the Roster. */
 export const RuleModSchema = z.object({
-  kind: z.enum(['odds', 'heat', 'squads', 'scoutReach', 'loyaltyFloor', 'funds', 'heroGym']),
+  /** Slice 19: loyaltyMove (Sinnoh: every Loyalty change scaled, toward nothing), standingMove (Unova: Regard and Dread changes scaled), frontPay (Kalos: Fronts' takings scaled), arrivalRegard (Kalos: added at Arrival when the coat has no symbol). */
+  kind: z.enum(['odds', 'heat', 'squads', 'scoutReach', 'loyaltyFloor', 'funds', 'heroGym', 'loyaltyMove', 'standingMove', 'frontPay', 'arrivalRegard']),
   method: JobMethodSchema.optional(), tag: RS.optional(),
   /** Slice 16 (Hoenn): only for a team of this Doctrine, or only for a team of any other. */
   doctrine: RS.optional(), notDoctrine: RS.optional(),
@@ -1430,6 +1526,8 @@ export const RegionDefSchema = z.object({
   deeds: z.object({ tag: RS, share: z.number().int().min(0).max(100), kinds: z.array(HoldingKindSchema).min(1), word: RS, byStage: z.record(z.string(), RS).optional(), words: z.record(z.string(), RS).optional() }).strict().optional(),
   homes: z.record(z.string(), z.array(z.number().int().min(0).max(7))).optional(),
   eighth: RS.optional(),
+  /** Slice 19 (Unova): the Town is a square, where the Speech is given (Persuade at the Town; Part 26b section 2.4). */
+  square: z.boolean().optional(),
 }).strict();
 export type RegionDef = z.infer<typeof RegionDefSchema>;
 const PatronSchema = z.object({
@@ -1440,6 +1538,17 @@ const PatronSchema = z.object({
 export type PatronDef = z.infer<typeof PatronSchema>;
 export const WAY_IDS = ['bankrupt', 'nobody', 'mutinyLost', 'mutinyWon', 'raided', 'noBase', 'fainted', 'schemeLost', 'heroAhead', 'corruption', 'everyLost', 'bossQuits'] as const;
 const Colour = z.tuple([RS, z.string().regex(/^#[0-9a-f]{6}$/i)]);
+/**
+ * A second clock (Part 26a section 1.7). Hoenn's has letters; slice 19's are stopped before the Reckoning when the
+ * neighbour's tick `before` was stopped (Sinnoh's bomb, Kalos's room). At nought, every other held holding goes Free
+ * (`freeTags`: only those tagged so). `stopLetters` is the line when it never starts; `acts` the In-person buttons.
+ */
+const ClockDefSchema = z.object({
+  region: RS, letters: z.number().int().min(1).optional(), letterLine: RS.optional(), letterDone: RS.optional(), letterWhy: RS.optional(),
+  before: z.number().int().min(1).max(5).optional(), freeTags: z.array(RS).optional(), acts: z.object({ boss: RS, hero: RS }).strict().optional(),
+  starts: RS, days: z.array(RS).length(3),
+  met: RS, scale: RS, stopBoss: RS, stopHero: RS, stopLetters: RS, together: RS, heroTemper: z.number().int(), bossWhy: RS, open: RS, notRegion: RS,
+}).strict();
 export const RegionFileSchema = z.object({
   note: z.string(),
   /** The slice's undo: false and a run plays one district, as slice 8 left it. */
@@ -1470,12 +1579,15 @@ export const RegionFileSchema = z.object({
     forms: z.object({ ask: RS, yes: RS, no: RS, none: RS }).strict(),
     boats: z.object({ ahead: RS, beside: RS, behind: RS, steps: z.object({ ahead: z.number().int().min(1), beside: z.number().int().min(1), behind: z.number().int().min(1) }).strict(), night: RS }).strict(),
     abroad: RS, leave: RS, last: RS, emberBoat: RS, keptWarm: RS,
+    /** Slice 19 (Kalos): the coat with no symbol, at the quay. */
+    noLogo: RS,
   }).strict(),
   /** Slice 16: Hoenn's letters and its second clock (Part 26a sections 1.7 and 4.6; Part 15a section 8.2). */
-  clock: z.object({
-    region: RS, letters: z.number().int().min(1), letterLine: RS, letterDone: RS, letterWhy: RS, starts: RS, days: z.array(RS).length(3),
-    met: RS, scale: RS, stopBoss: RS, stopHero: RS, stopLetters: RS, together: RS, heroTemper: z.number().int(), bossWhy: RS, open: RS, notRegion: RS,
-  }).strict(),
+  clock: ClockDefSchema.extend({ letters: z.number().int().min(1), letterLine: RS, letterDone: RS, letterWhy: RS }),
+  /** Slice 19 (Unova): the Speech (Part 26b section 2.4): the Card's fourteenth field, and what's said after. */
+  speech: z.object({ label: RS, empty: RS, given: RS, honest: RS, otherHalf: RS }).strict().optional(),
+  /** Slice 19: the other regions' second clocks: Sinnoh's mountain, Kalos's light (Part 26b sections 1.6 and 3.6). */
+  clocks: z.array(ClockDefSchema).optional(),
   look: z.object({
     a: z.array(Colour).length(12), b: z.array(Colour).length(12), symbols: z.array(RS).length(12), cuts: z.array(RS).length(8), heads: z.array(RS).length(8),
     motto: z.tuple([z.array(RS).min(1), z.array(RS).min(1), z.array(z.string()).min(1)]),

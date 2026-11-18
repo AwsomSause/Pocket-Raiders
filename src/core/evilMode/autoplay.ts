@@ -11,8 +11,9 @@ import { makeHero } from './hero';
 import { inRoster } from './people';
 import { mayStay } from './region';
 import { foundTeam, type FoundingChoice } from './start';
-import type { EvilModeBlock, Holding, JobMethod } from './schema';
+import type { EvilModeBlock, Holding, JobMethod, RunLength } from './schema';
 import type { JobDraft } from './odds';
+import { answerProblem, knockDef } from './night';
 import { bustProblem, cardDef, econOn, heldStreets, honestCost, offered, tradeReqProblem, ventureProblem } from './economy';
 
 /** always Persuade; the richest job first (Pay when it can, else Persuade); a mix (and an Officer left behind). */
@@ -31,8 +32,8 @@ export interface PlayResult {
 }
 
 /** A founded block at the region's first Morning, with the Hero made from the seed (as the session does). */
-export function foundForPlay(seed: string, choice: FoundingChoice, data: EvilData = EVIL_DATA): EvilModeBlock {
-  const r = foundTeam(choice, { boss: 'red', length: 'three', seed }, data);
+export function foundForPlay(seed: string, choice: FoundingChoice, data: EvilData = EVIL_DATA, length: RunLength = 'three'): EvilModeBlock {
+  const r = foundTeam(choice, { boss: 'red', length, seed }, data);
   if (!r.ok) throw new Error(r.problem);
   const b = r.block;
   if (!data.hero.on || !b.district) return b;
@@ -180,13 +181,19 @@ export function playRegion(block0: EvilModeBlock, policy: Policy, data: EvilData
       for (const job of policyJobs(block, policy, data)) act({ type: 'queueJob', job });
       for (const a of policyTrade(block, policy, data)) act(a);
     }
+    // Slice 7: someone at the door who can't be shut out (the summons) is answered: the first answer the team can give.
+    const k = beat === 'night' ? block.night.knock : null;
+    if (k && !knockDef(k.n, data)!.shut) {
+      const i = [0, 1, 2].find((n) => !answerProblem(block, n, data));
+      if (i !== undefined) act({ type: 'answerKnock', answer: i });
+    }
     if (!act({ type: BEAT_END[block.here.beat] })) return done(false);
   }
   return done(false);
 }
 
 /** Slice 16: plays a whole run, region after region across each Crossing, to its ending's last page (or the budget). */
-export function playRun(block0: EvilModeBlock, policy: Policy, data: EvilData = EVIL_DATA, budget = 20000): PlayResult {
+export function playRun(block0: EvilModeBlock, policy: Policy, data: EvilData = EVIL_DATA, budget = block0.settings.length === 'six' ? 40000 : 20000): PlayResult {
   return playRegion(block0, policy, data, budget, true);
 }
 

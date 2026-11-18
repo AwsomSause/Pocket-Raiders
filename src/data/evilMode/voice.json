@@ -23,7 +23,7 @@
     "fishLane": 200,
     "cannery": 1100,
     "dockers": 120,
-    "barkPerBeat": 1
+    "barkPerBeat": 1, "drawer": 12
   },
   "words": {
     "page": "The post",

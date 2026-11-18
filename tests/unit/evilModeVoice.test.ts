@@ -4,7 +4,7 @@
 // change nothing (a whole run hashes the same with every bark asked for); a Shut person never barks, nothing barks at a
 // fire, no line twice in a district; every letter fits one screen; replies move nothing by more than one, once each;
 // the empty envelope at most once and only at Dread 7; Giovanni's card by the region's number, none at War; the
-// notebook's last line never blank; a coldly let-go leaver never writes; the v15 -> v17 migration.
+// notebook's last line never blank; a coldly let-go leaver never writes; the v15 and v20 -> v21 migration; the drawer and old economy Cards keep the save small.
 
 import { describe, expect, it } from 'vitest';
 import { foundForPlay, playRegion, playRun, replay } from '../../src/core/evilMode/autoplay';
@@ -14,6 +14,7 @@ import type { FoundingChoice } from '../../src/core/evilMode/start';
 import { applyFx, bark, barkPool, heroHeard, notebookLine, officerLetter, paperText, pickPaper, pickRadio, pieceChoices, pieceText, postAct, postMorning, radioText, todaysPost, todaysRadio, VOICE, voiceMorning, yesterday } from '../../src/core/evilMode/voice';
 import { postAction, postModel, voiceBlocks } from '../../src/core/evilMode/voiceScreens';
 import { emptyVoice } from '../../src/core/evilMode/voiceSchema';
+import { archiveEcon, econCardsOf, econCount } from '../../src/core/evilMode/pack';
 
 const choice = (over: Partial<FoundingChoice> = {}): FoundingChoice => ({ name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm', patron: 'executive', region: 'kanto', ...over });
 const fresh = (seed = 'voice-1', over: Partial<FoundingChoice> = {}): EvilModeBlock => foundForPlay(seed, choice(over));
@@ -289,12 +290,16 @@ describe('the notebook and the endings', () => {
 });
 
 describe('saves', () => {
-  it('a v15 block (slice 16) migrates to v17 with nothing heard and no post', () => {
+  it('a v15 block (slice 16) and a v20 block (slice 7) migrate to v21 with nothing heard and no post', () => {
     const b = fresh('voice-mig');
     const { voice: _v, ...rest } = b;
-    const old = JSON.parse(JSON.stringify({ ...rest, v: 15 }));
-    const out = EvilModeBlockSchema.parse(old);
-    expect(out).toMatchObject({ v: 17, voice: { mark: null, radio: [], paper: [], inbox: [], radioOff: false } });
+    for (const v of [15, 20]) {
+      const out0 = EvilModeBlockSchema.parse(JSON.parse(JSON.stringify({ ...rest, v })));
+      expect(out0).toMatchObject({ v: 21, voice: { mark: null, radio: [], paper: [], inbox: [], radioOff: false } });
+    }
+    // A block that already has its voice keeps it.
+    expect(EvilModeBlockSchema.parse(JSON.parse(JSON.stringify({ ...b, v: 20 }))).voice).toEqual(b.voice);
+    const out = EvilModeBlockSchema.parse(JSON.parse(JSON.stringify({ ...rest, v: 15 })));
     // The next Morning marks; the one after it speaks.
     const m1 = voiceMorning({ ...out, here: { ...out.here, day: out.here.day + 1 } });
     expect(m1.voice.mark).not.toBeNull();
@@ -305,5 +310,35 @@ describe('saves', () => {
     const b = playRegion(fresh('voice-reload'), 'mix', undefined, 40).block;
     const json = JSON.stringify(b);
     expect(EvilModeBlockSchema.parse(JSON.parse(json))).toEqual(JSON.parse(json));
+  });
+});
+
+describe('the save stays small', () => {
+  it('the drawer keeps the last dozen letters and any on the Wall; ids never repeat', () => {
+    const b = fresh('voice-drawer');
+    const piece = (i: number, pinned = false) => ({ id: `P${i}`, what: 'town:quiet', who: null, args: {}, made: 1, due: 1, day: 1, opened: true, steamed: false, pinned, answer: null, left: false });
+    const inbox = [piece(1, true), ...Array.from({ length: 19 }, (_, i) => piece(i + 2))];
+    const out = voiceMorning({ ...b, voice: { ...b.voice, inbox }, here: { ...b.here, day: b.here.day + 1 } });
+    const kept = out.voice.inbox.filter((p) => p.day !== null);
+    expect(kept.filter((p) => !p.pinned)).toHaveLength(VOICE.rules.drawer);
+    expect(kept.some((p) => p.id === 'P1')).toBe(true);
+    expect(kept.at(-1)!.id).toBe(out.voice.inbox.filter((p) => p.day !== null).at(-1)!.id);
+    const ids = out.voice.inbox.map((p) => Number(p.id.slice(1)));
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(Math.max(...ids)).toBeGreaterThanOrEqual(20);
+  });
+  it("the economy's Cards older than the regions kept are packed at a Crossing: same Cards, same order, ids carry on", () => {
+    const b = fresh('voice-econ');
+    const card = (i: number, day: number) => ({ id: `E${i}`, day, cardId: 'charity', fields: [`field ${i}`] });
+    const cards = [card(1, 2), card(2, 5), card(3, 12), card(4, 15)];
+    const log = [{ ...b.log[0]!, day: 2, region: 0 }, { ...b.log[0]!, day: 12, region: 1 }];
+    const x = { ...b, log, economy: { ...b.economy, cards } } as EvilModeBlock;
+    const out = archiveEcon(x, new Set([1]));
+    expect(out.economy.cards.map((c) => c.id)).toEqual(['E3', 'E4']);
+    expect(econCardsOf(out)).toEqual(cards);
+    expect(econCount(out)).toBe(4);
+    expect(econCardsOf(JSON.parse(JSON.stringify(out)))).toEqual(cards);
+    // Nothing older: nothing changes.
+    expect(archiveEcon(x, new Set([0, 1]))).toBe(x);
   });
 });

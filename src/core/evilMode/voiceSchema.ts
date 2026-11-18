@@ -55,7 +55,7 @@ export const VoiceFileSchema = z.object({
   rules: z.object({
     postPerDay: z.literal(1), steamHeat: I, steamDelay: I.min(1), emptyDread: I, detectiveHeat: I, marginLoyalty: I, loudHeat: I, radioHeat: I,
     paperKnows: I, bothAt: I, wallStanding: I, postcardLoyalty: I, comeBackLoyalty: I, comeBackDistricts: I, basketStances: z.array(T).min(1),
-    planks: I, squadBack: I, boxGiven: I, fishLane: I, cannery: I, dockers: I, barkPerBeat: z.literal(1),
+    planks: I, squadBack: I, boxGiven: I, fishLane: I, cannery: I, dockers: I, barkPerBeat: z.literal(1), drawer: z.number().int().min(1),
   }).strict(),
   words: z.object({ fx: z.record(z.string(), T) }).catchall(z.union([T, z.record(z.string(), T)])),
   moments: z.array(T).length(14),
