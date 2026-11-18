@@ -49,7 +49,7 @@ test('the Charters tab: nine Charters, every page printed; the Staff Room is tak
   await s.getByTestId('evil-charter-take').click();
   await expect(s.getByTestId('evil-charter-confirm')).toBeVisible();
   await s.getByTestId('evil-charter-take').click();
-  await expect(s.getByTestId('evil-team-name')).toHaveText('Staff');
+  await expect(s.getByTestId('evil-team-name')).toHaveText('Team Staff');
   const b = (await run(page)).expansion.evilMode;
   expect(b.charter.id).toBe('staff-room');
   expect(b.team.dread).toBe(0);
@@ -87,7 +87,7 @@ test('the Turn: a won takeover offers the card; Take the chair (with its confirm
   await s.getByTestId('evil-turn-take').click();
   await expect(s.getByTestId('evil-turn-confirm')).toBeVisible();
   await s.getByTestId('evil-turn-take').click();
-  await expect(s.getByTestId('evil-team-name')).toHaveText('Galactic');
+  await expect(s.getByTestId('evil-team-name')).toHaveText('Team Galactic');
   const r = await run(page);
   expect(r.rules.modeId).toBe('evil-mode');
   expect(r.expansion.evilMode.from).toBe('turn');
@@ -102,7 +102,7 @@ test('the Turn: a won takeover offers the card; Take the chair (with its confirm
     p.game.scene.start('Evil');
   });
   await waitForScene(page, 'Evil');
-  await expect(stage(page).getByTestId('evil-team-name')).toHaveText('Galactic');
+  await expect(stage(page).getByTestId('evil-team-name')).toHaveText('Team Galactic');
   expect(errors).toEqual([]);
 });
 
@@ -140,7 +140,7 @@ test('a phone in landscape: a job is queued in four taps, with no drag', async (
   const local = b.district.holdings.find((h: any) => h.kind === 'local');
   await s.getByTestId(`evil-row-${local.step}`).click(); // 1. where
   await s.getByTestId(`evil-crew-${b.crew[0].id}`).click(); // 2. who
-  await s.getByTestId('evil-method-persuade').click(); // 3. how: the Card opens
+  await s.getByTestId('evil-method-scout').click(); // 3. how (one person can scout): the Card opens
   await expect(s.getByTestId('evil-card-confirm')).toHaveAttribute('data-lit', 'true');
   await page.screenshot({ path: info.outputPath('phone-card-740x360.png') });
   await s.getByTestId('evil-card-confirm').click(); // 4. confirm

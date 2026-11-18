@@ -104,7 +104,7 @@ export function frameView(_c: ReduxCtx, f: FrameModel, notice: string | null, bo
 /** Slice 22: the Charters tab (Part 29 section 3.2). Nine tabs down the left; the chosen Charter, every page printed. */
 export function charterView(_c: ReduxCtx, m: CharterTabModel): string {
   const s = m.sel;
-  const tabs = `<div class="abs col" style="left:16px;top:96px;bottom:70px;width:200px;gap:4px;overflow:auto" data-testid="evil-charter-tabs">${m.tabs.map((t, i) => W(`<b>${esc(t.name)}</b>${t.limited ? sm('Limited', 'font-size:11px;opacity:.7') : ''}`, 'padding:6px 8px;min-height:40px;cursor:pointer', t.sel ? 'sel' : '', `${act('charterPick', i)} data-testid="evil-charter-${t.id}"`)).join('')}</div>`;
+  const tabs = `<div class="abs col" style="left:16px;top:96px;bottom:70px;width:200px;gap:4px;overflow:auto" data-testid="evil-charter-tabs">${m.tabs.map((t, i) => W(`<b>${esc(t.name)}</b>${t.limited ? `<span class="sm" style="font-size:11px;opacity:.7"> · limited</span>` : ''}`, 'padding:6px 8px;cursor:pointer;flex:none', t.sel ? 'sel' : '', `${act('charterPick', i)} data-testid="evil-charter-${t.id}"`)).join('')}</div>`;
   const rows = s.rows.map(([a, b]) => `<div class="row sm" style="line-height:20px"><span style="width:110px;flex:none">${esc(a)}</span><b class="grow">${esc(b)}</b></div>`).join('');
   const body = `<div class="abs col" style="left:228px;right:16px;top:96px;bottom:70px;gap:6px;overflow:auto" data-testid="evil-charter-page">
     ${W(`<b style="font-size:20px">${esc(s.name)}</b>${sm(`"${s.question}"`, 'font-style:italic')}${rows}`, 'padding:8px 12px')}
