@@ -111,7 +111,7 @@ test('New UI: the map\'s Rival Report, Notebook, Dossier and Field Notes open as
   expect(errors).toEqual([]);
 });
 
-test('New UI: Galar\'s Champion Tournament bracket opens on the map as the mock-up tree; pages turn and a match can be watched', async ({ page }) => {
+test('New UI: Galar\'s Champion Tournament bracket opens on the map as the canvas five-card bracket (as before the New UI update); B closes it', async ({ page }) => {
   const errors = watch(page);
   await start(page, 'ui=new&seed=newui-e2e');
   await toMap(page);
@@ -130,37 +130,15 @@ test('New UI: Galar\'s Champion Tournament bracket opens on the map as the mock-
   const busy = () => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy as boolean);
   await expect.poll(busy, { timeout: 15_000 }).toBe(false);
   const map = view(page, 'Map').first();
+  const open = () => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').children.getByName('tournament-bracket') !== null);
   await page.keyboard.press('b');
-  await expect(map.locator('.hd')).toContainText('Champion Tournament');
-  await page.screenshot({ path: 'test-results/newui-bracket-galar.png' });
-  // Two rounds won: it opens on the finals page with the eight who are left, and nothing later is given away.
-  const chips = map.locator('[data-act="bracketPage"]');
-  await expect(chips).toHaveCount(5);
-  await expect(map.locator('[data-act="bracketPage"]:not(.no)')).toHaveText('Finals');
-  await expect(map.locator('.txt')).toContainText('8 of 32 still in. Next: Quarterfinal against');
-  await expect(map).toContainText('★ You');
-  await expect(map.locator('.win', { hasText: '?' })).toHaveCount(7);
-  await chips.first().click();
-  await expect(map.locator('[data-act="bracketPage"]:not(.no)')).toHaveText('Group A');
-  await page.keyboard.press('ArrowRight');
-  await expect(map.locator('[data-act="bracketPage"]:not(.no)')).toHaveText('Group B');
-  // Watching a match plays on the canvas: the layer steps aside and comes back when it ends.
-  const watching = () => page.evaluate(() => { const m = (window as any).__pkr.game.scene.getScene('Map'); return m.children.list.some((o: any) => o.name === 'match-watch'); });
-  await page.keyboard.press('w');
-  await expect.poll(watching).toBe(true);
+  await expect.poll(open).toBe(true);
+  // The canvas bracket is drawn; the New map layer steps aside while it is open and comes back when it closes.
   await expect(map).toBeHidden();
-  await page.waitForTimeout(300);
-  expect(await watching()).toBe(true);
-  await page.keyboard.press('Escape');
-  await expect.poll(watching).toBe(false);
-  await expect(map).toBeVisible();
-  await expect(map.locator('.hd')).toContainText('Champion Tournament');
-  await map.locator('[data-act="bracketWatch"]').click();
-  await expect.poll(watching).toBe(true);
-  await page.keyboard.press('Escape');
-  await expect.poll(watching).toBe(false);
+  await page.screenshot({ path: 'test-results/newui-bracket-galar.png' });
   await page.keyboard.press('b');
-  await expect(map.locator('.hd')).not.toContainText('Champion Tournament');
+  await expect.poll(open).toBe(false);
+  await expect(map).toBeVisible();
   expect(await busy()).toBe(false);
   expect(errors).toEqual([]);
 });

@@ -275,7 +275,7 @@ test('New UI: a Plaza district opens the mock-up district menu: each place with 
   expect(errors).toEqual([]);
 });
 
-test('New UI: a Galar gym battle opens on the versus card, and the stadium reporter and the interview are the mock-up talk page (name plate, the line, Go on); then the battle starts', async ({ page }) => {
+test('New UI: a Galar gym battle opens on the versus card, and the stadium reporter and interview use the story text box (as before the New UI update); then the battle starts', async ({ page }) => {
   const errors = watch(page);
   await start(page, 'ui=new&seed=galar-stadium-e2e');
   await toMap(page);
@@ -293,40 +293,19 @@ test('New UI: a Galar gym battle opens on the versus card, and the stadium repor
   await waitForScene(page, 'Battle');
   await expect.poll(() => page.evaluate(() => Boolean((window as any).__pkr.game.scene.getScene('Battle').stadium)), { timeout: 20_000 }).toBe(true);
 
-  // The opening cards play by themselves (the leader's card, then the versus card); then the reporter is on air.
+  // The opening cards play by themselves (the leader's card, then the versus card); then the reporter is on air in the canvas story box.
   const stages = page.locator('#rx .stage[data-scene="Battle"]');
   await expect(stages.locator('.vsx')).toHaveCount(1, { timeout: 20_000 });
-  const air = () => stages.filter({ has: page.locator('.txt .nm') });
-  await expect(air()).toHaveCount(1, { timeout: 20_000 });
-  const plate = () => air().locator('.txt .nm');
-  await expect(plate()).toHaveText('Reporter');
-  await expect(air().locator('.txt')).toContainText('Welcome, everyone, to gym match number 1 of the Gym Challenge!');
-  await expect(air().locator('.tg').first()).toHaveText('Live from the stadium');
-  await expect(air().locator('[data-act="pick"]')).toHaveText('Go on');
-  // The reporter's picture is on the page, and the old canvas speech box is not drawn under it.
-  await expect(air().locator('i.an, img, .im').first()).toBeVisible();
-  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.getByName('story-line'))).toBeNull();
+  const story = () => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.getByName('story-line') !== null);
+  await expect.poll(story, { timeout: 20_000 }).toBe(true);
+  // Galar keeps its pre-update look: no mock-up talk page (name plate and Go on) is drawn for the stadium lines.
+  await expect(stages.filter({ has: page.locator('.txt .nm') })).toHaveCount(0);
   await page.screenshot({ path: 'test-results/newui-galar-reporter.png' });
 
-  // Enter goes on to the interview: the reporter's question, then a guest from the stands answers.
-  await page.waitForTimeout(250);
-  await page.keyboard.press('Enter');
-  await expect(air().locator('.tg').first()).toHaveText('Pregame interview');
-  await expect(plate()).toHaveText('Reporter');
-  const question = (await air().locator('.txt').innerText()).trim();
-  expect(question.length).toBeGreaterThan(20);
-  await page.screenshot({ path: 'test-results/newui-galar-interview.png' });
-  await page.waitForTimeout(250);
-  await air().locator('[data-act="pick"]').click();
-  await expect(plate()).not.toHaveText('Reporter');
-  await expect(air().locator('.tg').first()).toHaveText('Pregame interview');
-  expect((await air().locator('.txt').innerText()).trim()).not.toBe(question);
-  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.getByName('story-line'))).toBeNull();
-
-  // The battle goes on to its first choice, and the broadcast page is gone.
+  // Enter goes on through the reporter, the interview and the host; the battle then reaches its first choice.
   await page.waitForTimeout(250);
   await toCommands(page);
-  await expect(air()).toHaveCount(0);
+  await expect(stages.filter({ has: page.locator('.txt .nm') })).toHaveCount(0);
   expect(errors).toEqual([]);
 });
 
