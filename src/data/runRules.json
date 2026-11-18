@@ -599,6 +599,15 @@
       "checkpoints": false,
       "gate": "evilMode",
       "blurb": "You run a team. You'll be told what everything costs. A kid's coming. Early build: found a team and play through an empty day."
+    },
+    {
+      "id": "dominion",
+      "name": "Dominion",
+      "status": "supported",
+      "progressionEligible": false,
+      "checkpoints": false,
+      "gate": "evilMode",
+      "blurb": "Evil Mode, reworked: one Grunt, one leaking warehouse, and a whole world to take. Early build: set up, then live day by day (Morning, Day, Evening, Night)."
     }
   ],
   "duplicateCompensation": {

@@ -1,0 +1,109 @@
+{
+  "_source": "Evil Mode rework (DOMINION) slice D1. Design: /mnt/project-files/plans/evil-mode-rework/ Part 1 sections 1-2, Part 6 sections 1-2, Part 7 section 1.1, Part 9 A1 and A15. Numbers are starting values; none are playtested.",
+  "start": {
+    "funds": 1000,
+    "heat": 5,
+    "hqLevel": 1,
+    "hqName": "THE WAREHOUSE",
+    "rosterCap": 3,
+    "levelCap": 15,
+    "region": "KANTO",
+    "inventory": { "poke-ball": 3, "potion": 2 },
+    "keyItems": ["crowbar"]
+  },
+  "clock": {
+    "dayActions": 3,
+    "nightActions": 1,
+    "restBonus": 1,
+    "exhaustedAfter": 3,
+    "oddJobPay": 50,
+    "heatCoolPerDay": 3,
+    "rent": 200,
+    "weekLength": 7,
+    "phases": [
+      { "id": "morning", "word": "MORNING", "colour": "#ffd23f" },
+      { "id": "day", "word": "DAY", "colour": "#ffffff" },
+      { "id": "evening", "word": "EVENING", "colour": "#b48cff" },
+      { "id": "night", "word": "NIGHT", "colour": "#6fa8ff" }
+    ]
+  },
+  "types": {
+    "allowed": ["normal", "fire", "water", "grass", "electric", "ice", "fighting", "poison", "ground", "flying", "psychic", "bug", "rock", "ghost", "dark", "steel"],
+    "banned": ["dragon", "fairy"],
+    "bannedLine": "Too proud to wear a uniform.",
+    "hint": ["Rocket ran Poison and Normal.", "Magma ran Fire and Ground.", "Aqua ran Water and Dark.", "Galactic ran Poison and Steel.", "Skull ran Poison and Dark."]
+  },
+  "members": {
+    "grunt": {
+      "name": "Rook",
+      "rank": "grunt",
+      "gender": "m",
+      "look": "dominion/c-rook0.png",
+      "traitPoints": 2,
+      "monLevel": 5,
+      "wage": 80,
+      "stats": { "brawn": 2, "nerve": 1, "wits": 1, "charm": 2, "stealth": 1 },
+      "loyalty": 60,
+      "morale": 40,
+      "pitch": "A Grunt is cheap and loyal and useless.",
+      "facts": ["Male, the Grunt picture", "Every skill POOR, 2 trait points", "A Lv 5 Pokémon of a Team Type", "Wage ₽80 a week, high Loyalty"]
+    },
+    "admin": {
+      "rank": "admin",
+      "traitPoints": 4,
+      "monLevel": 7,
+      "wage": 160,
+      "stats": { "brawn": 4, "nerve": 5, "wits": 5, "charm": 4, "stealth": 3 },
+      "loyalty": 30,
+      "morale": 50,
+      "pitch": "An Admin is capable and expensive and might not stay.",
+      "facts": ["Any gender, a trainer-class picture", "Capable, 4 trait points", "A Lv 7 Pokémon of a Team Type", "Wage ₽160 a week (double), low Loyalty"],
+      "looks": [
+        { "file": "trainer/pr/ace_trainer_f", "gender": "f", "name": "Vera", "cls": "Ace Trainer" },
+        { "file": "trainer/pr/ace_trainer_m", "gender": "m", "name": "Corbin", "cls": "Ace Trainer" },
+        { "file": "trainer/pr/scientist_f", "gender": "f", "name": "Ines", "cls": "Scientist" },
+        { "file": "trainer/pr/scientist_m", "gender": "m", "name": "Thaddeus", "cls": "Scientist" },
+        { "file": "trainer/pr/psychic_f", "gender": "f", "name": "Odette", "cls": "Psychic" },
+        { "file": "trainer/pr/beauty_2", "gender": "f", "name": "Lucia", "cls": "Beauty" }
+      ]
+    },
+    "monRules": { "maxGeneration": 1, "maxBst": 330 }
+  },
+  "opening": [
+    "The warehouse smells like wet cardboard and Grimer. Rain comes through the roof in three places. Your one Grunt is trying to catch the drips in a Poké Ball, which doesn't work.",
+    "\"Boss,\" he says. \"Boss, I've been thinking about the plan.\"",
+    "\"What plan?\"",
+    "\"...That's what I was thinking about.\""
+  ],
+  "adminOpening": [
+    "The warehouse smells like wet cardboard and Grimer. Rain comes through the roof in three places. Your one Admin has found the only dry crate and is sitting on it.",
+    "\"This is it?\" they say. \"You told me there was a building.\"",
+    "\"There is a building.\"",
+    "\"...You told me there was a roof.\""
+  ],
+  "orders": [
+    { "id": "scout-block", "label": "Scout the block", "phase": "day", "report": "You walk the block twice. The mart's back door sticks, and nobody watches the alley after dark.", "heat": 0, "funds": 0, "flag": "scouted-home" },
+    { "id": "find-recruit", "label": "Find a recruit", "phase": "day", "report": "A dockhand at the noodle stand says he knows a man who knows a man. You leave him your name. That's a contact.", "heat": 1, "funds": 0, "flag": "contact" },
+    { "id": "secure-warehouse", "label": "Secure the warehouse", "phase": "day", "report": "A chain, a padlock and a crate against the door. It won't stop anyone, but you'll hear them.", "heat": 0, "funds": -40, "flag": "secured" }
+  ],
+  "firstSteps": [
+    { "id": "earn-500", "label": "Earn your first ₽500", "reward": 100, "earned": 500 },
+    { "id": "contact", "label": "Find one useful contact", "reward": 100, "flag": "contact" }
+  ],
+  "firstStepsDays": 7,
+  "says": {
+    "grunt": ["We're short-staffed... You got any ideas?", "I put a bucket under the big drip. Progress!", "Boss, is the plan still the plan?", "Night shift? I'll stand by the door. Very scary."],
+    "admin": ["I've seen better hideouts in a Magikarp.", "Give me a real job and I'll do it.", "Pay day is Sunday. I'll remind you.", "The roof is not a metaphor. It's leaking."]
+  },
+  "report": {
+    "guard": "{name} guarded the warehouse. Nobody came.",
+    "rest": "You slept. Your Pokémon are rested. Well rested: +1 action today.",
+    "tired": "You didn't rest. {n} nights in a row now.",
+    "exhausted": "Exhausted: one action fewer until you rest.",
+    "cool": "The street forgets a little. Heat {heat}%.",
+    "week": "Week {week} bills: rent ₽{rent}, wages ₽{wages}.",
+    "broke": "Not enough to pay everyone. {name} went unpaid.",
+    "step": "First Step done: {label} (+₽{reward})."
+  },
+  "lockedTab": "Opens in a later part of the Dominion build."
+}

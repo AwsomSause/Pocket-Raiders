@@ -10,6 +10,8 @@ import { openRoadHome, roadHomeDue } from '../core/co/roadHome';
 import { applyEvilEffect, evilTeam } from '../core/evil/teams';
 import { skyAct, type SkyAction } from '../core/evil/teamSky';
 import { charterInRun, ensureEvil, finishEvil, foundInRun, stepInRun } from '../core/evilMode/session';
+import { startInRun as dominionStartInRun, stepInRun as dominionStepInRun } from '../core/dominion/session';
+import type { DominionAction, DominionSetup } from '../core/dominion/schema';
 import { turnOffer, turnRun, walkAway, type TurnOffer } from '../core/evilMode/turn';
 import { beginEvilFight } from '../core/evilMode/fight';
 import type { FoundingChoice } from '../core/evilMode/start';
@@ -1106,6 +1108,25 @@ export class GameSession {
   }
 
   /** Evil Mode: a block saved before slice 2 gets its district (laid from the run's seed) and is saved once. */
+  /** DOMINION (Evil Mode rework, D1): sets the run up from the setup pages and saves. Returns why it couldn't, or null. */
+  dominionStart(setup: DominionSetup): string | null {
+    const out = dominionStartInRun(this.content, this.requireRun(), setup);
+    if (out.problem) return out.problem;
+    this.run = out.run;
+    this.persistRun();
+    return null;
+  }
+
+  /** DOMINION: one clock step, saved when it happened. Returns whether it happened and the line to show. */
+  dominionStep(action: DominionAction): { ok: boolean; notice: string | null } {
+    const out = dominionStepInRun(this.content, this.requireRun(), action);
+    if (out.ok) {
+      this.run = out.run;
+      this.persistRun();
+    }
+    return { ok: out.ok, notice: out.notice };
+  }
+
   evilEnsure(): void {
     const run = this.run;
     if (!run) return;

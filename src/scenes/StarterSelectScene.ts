@@ -7,6 +7,7 @@ import { fitBlock } from '../ui/fitText';
 import { createPokemon, getSpecies } from '../core/pokemon';
 import { services } from '../game/services';
 import { EVIL_MODE_ID } from '../core/evilMode/session';
+import { DOMINION_MODE_ID } from '../core/dominion/session';
 import { onInputAction } from '../ui/input';
 import { fitHeight } from '../ui/showcase';
 import { pokemonVisual } from '../ui/sprites';
@@ -255,6 +256,7 @@ export class StarterSelectScene extends Phaser.Scene {
     const blessing = services().session.run?.expansion?.blessing;
     // Evil Mode goes straight on to Founding (its run has no campaign briefing).
     if (services().session.run?.rules.modeId === EVIL_MODE_ID) return void this.scene.start('Evil');
+    if (services().session.run?.rules.modeId === DOMINION_MODE_ID) return void this.scene.start('Dominion');
     this.scene.start(blessing && !blessing.seen ? 'Blessing' : 'Briefing');
   }
 }
