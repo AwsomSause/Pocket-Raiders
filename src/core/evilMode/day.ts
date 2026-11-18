@@ -31,6 +31,9 @@ import { checkEndings, endAct, endBattle, pressEnding } from './endings';
 import { regionMoves } from './regionRule';
 import { afterGym, l3DistrictEnd, l3Evening, l3Morning, regionAct, starLocks } from './lastThree';
 import { beginCrossing, carryLetter, clockMet, clockMorning, cross, keptWarmth, stopClock, type CrossAct } from './crossing';
+import { edgesAct, edgesAfter, EDGE_ACTIONS, shadowOrderGiven, shadowOrderProblem, type EdgesAction } from './edges';
+import { tearResult } from './tear';
+import { queueOrdered } from './dispatch';
 import { BEATS, type Beat, type EvilModeBlock, type GymWay, type LineId, type OrderId, type PartId, type Question, type RoomType, type TableThing, type WingId } from './schema';
 
 /** The action that ends each beat in slice 1 (the empty day). Later slices add more actions inside a beat. */
@@ -166,7 +169,10 @@ export type EvilAction =
   /** Slice 22: a Charter's house rule (return a thing, answer the roll, name the team). */
   | { type: 'charterAct'; act: CharterAct }
   /** Slice 22: the Turn's first meeting with the Hero (Part 28 section 15.2). */
-  | { type: 'turnMeet'; answer: MeetAnswer };
+  | { type: 'turnMeet'; answer: MeetAnswer }
+  /** Slice 21: the edges (a Tear's choice, Poipole's plate; the Shadow branch's Rig, Lab and Purify) and a Shadow order. */
+  | EdgesAction
+  | { type: 'shadowOrder' };
 
 export type EvilCue = { id: 'beat'; beat: Beat } | { id: 'newDay'; day: number } | { id: 'refused'; reason: string } | { id: 'queued'; holdingId: string } | { id: 'districtEnd'; how: 'held' | 'taken' | 'arrival' | 'reckoning' } | { id: 'filed'; text: string } | { id: 'asked'; line: string } | { id: 'said'; line: string } | { id: 'refusal' } | { id: 'fight' } | { id: 'road'; lines: string[] } | { id: 'ending' } | { id: 'knock'; n: number } | { id: 'moved'; line: string };
 
@@ -194,8 +200,10 @@ export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
   const held = action.type === 'charterAct' || action.type === 'turnMeet' ? null : signatureHold(block0, action as never, r.block);
   if (held) return { block: held.block, cues: [{ id: 'refused', reason: held.reason }], ok: true };
   // Slice 16: Hoenn's second clock (each Reckoning Morning; they meet if the Reckoning ends with it running).
+  // Slice 21: the edges after every step (Appetites, Static, a Tear, the Heat lock; the Lab and the ladder with the branch on).
   // Slice 17: the mole's district end (report, tells, a poach) comes first, once.
-  const md = moleDistrictEnd(r.block);
+  const ed = edgesAfter(block0, r.block);
+  const md = moleDistrictEnd(ed.block);
   let b = l3Morning(clockMorning(schemeMorning(neighbourMorning(settleRegion(clockMet(keptWarmth(l3DistrictEnd(neighbourDistrictEnd(md.block)))))))));
   // Slice 17: a finished quest pins Loyalty at 10; a failed one caps it at 7; two wrong accusations cap the Roster at 8.
   b = pinLoyalty(b);
@@ -212,7 +220,8 @@ export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
   b = checkEndings(block0, b);
   // Slice 16: a region that isn't the run's last ends at the Crossing.
   b = beginCrossing(b);
-  return { ...r, block: b, cues: b.ending && !block0.ending ? [...r.cues, { id: 'ending' as const }] : r.cues };
+  const cues = [...r.cues, ...ed.lines.map((line) => ({ id: 'said' as const, line }))];
+  return { ...r, block: b, cues: b.ending && !block0.ending ? [...cues, { id: 'ending' as const }] : cues };
 }
 
 function charterStep(block: EvilModeBlock, act: CharterAct): StepResult {
@@ -291,6 +300,10 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
       const r = f.kind === 'chair' ? chairResult(block, action.won) : legendResult(block, action.won, action.caught ?? null);
       return { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
     }
+    if (f.kind === 'tear' || f.kind === 'incursion') {
+      const r = tearResult(block, action.won, action.caught ?? null);
+      return { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
+    }
     if (f.kind === 'heist') {
       const r = heistBattle(block, action.won, action.turns ?? 1);
       return { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
@@ -332,6 +345,23 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
       : takeUpScheme(block);
     if (r.problem) return no(r.problem);
     return { block: r.block, cues: [...r.lines.map((line) => ({ id: 'said' as const, line })), ...(r.block.fight && !block.fight ? [{ id: 'fight' as const }] : [])], ok: true };
+  }
+  // Slice 21: the edges. Refused here, not only on screen; a Shadow action with the branch removed never reaches corruption.ts.
+  if (EDGE_ACTIONS.includes(action.type)) {
+    if (block.refusal) return no('Somebody is waiting on an answer in the yard.');
+    const r = edgesAct(block, action as EdgesAction);
+    if (r.problem) return no(r.problem);
+    return { block: r.block, cues: [...r.lines.map((line) => ({ id: 'said' as const, line })), ...(r.fight ? [{ id: 'fight' as const }] : [])], ok: true };
+  }
+  if (action.type === 'shadowOrder') {
+    const p = shadowOrderProblem(block);
+    if (p) return no(p);
+    const ref = block.refusal!;
+    const names = ref.who.map((id) => block.crew.find((c) => c.id === id)?.name ?? id).join(' and ');
+    const q = queueOrdered({ ...block, refusal: null }, ref.job);
+    if (q.problem) return no(q.problem);
+    const r = shadowOrderGiven(q.block, names);
+    return { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
   }
   // Slice 13: a message can be answered at any beat. A Sit-Down going on takes the whole In person beat.
   if (action.type === 'answerPost') {

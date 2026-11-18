@@ -358,7 +358,7 @@ export const StoredCardSchema = z.object({
 }).strict();
 export type StoredCard = z.infer<typeof StoredCardSchema>;
 
-export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym', 'econ', 'neighbour', 'scheme', 'base', 'raid', 'ending', 'knock', 'heard', 'wall', 'charter', 'quest', 'office'] as const;
+export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym', 'econ', 'neighbour', 'scheme', 'base', 'raid', 'ending', 'knock', 'heard', 'wall', 'charter', 'quest', 'office', 'tear', 'shadow'] as const;
 
 /** One line of the Log (Part 30 section 7.1, the kinds slice 3 writes). Never edited, never removed. */
 export const LogEntrySchema = z.object({
@@ -469,7 +469,8 @@ export const FightSchema = z.object({
   /** Slice 13: 'chair' is the Boss against the neighbour's Boss for the Chair; 'legend' the catchable Legend after a Betrayal. */
   /** Slice 8: 'gym' is the Boss's Beat; 'challenge' an Officer's Replace challenge (their kit fights, the Boss's party waits in the box). */
   /** Slice 14: 'heist' is a room's battle inside a heist (a watchman, a dog, the other crew). */
-  kind: z.enum(['outplay', 'hold', 'gym', 'challenge', 'chair', 'legend', 'heist', 'walk', 'raid', 'room', 'practice', 'ending']),
+  /** Slice 21: 'tear' is going through a Tear (its Beast in its home world); 'incursion' the Beast taking the district's next battle. */
+  kind: z.enum(['outplay', 'hold', 'gym', 'challenge', 'chair', 'legend', 'heist', 'walk', 'raid', 'room', 'practice', 'ending', 'tear', 'incursion']),
   holdingId: z.string().min(1),
   /** Hold: who's standing there. */
   personId: z.string().min(1).optional(),
@@ -1345,6 +1346,61 @@ export const EndingsFileSchema = z.object({
   banned: z.array(ES15.min(1)).min(1),
 }).strict();
 
+// ---- Slice 21: the edges (design Part 27 section 4; Part 5 section 8; Part 30 sections 3 and 10) ----
+
+export const TEAR_CHOICES = ['through', 'together', 'hold', 'leave'] as const;
+export const TearChoiceSchema = z.enum(TEAR_CHOICES);
+export type TearChoice = z.infer<typeof TearChoiceSchema>;
+const EI0 = z.number().int().min(0);
+const E21 = z.string().min(1);
+
+/** A Tear in a held district: where, whose Beast, its rule, when it opened, what the Boss chose, who's holding the street. */
+export const TearStateSchema = z.object({
+  beastId: E21, rule: E21, holdingId: E21, region: EI0, district: EI0, openedDay: z.number().int().min(1),
+  choice: TearChoiceSchema.nullable(), holdBy: z.array(E21), cardId: E21.nullable(),
+  /** Set once the Tear's gone: 'closed' (gone back through), 'out' (the Incursion), or the district ended with it open. */
+  over: z.enum(['closed', 'out', 'ended']).nullable(),
+}).strict();
+export type TearState = z.infer<typeof TearStateSchema>;
+
+export const EdgeCardSchema = z.object({ id: E21, day: z.number().int().min(1), kind: z.enum(['tear', 'rig', 'lab']), fields: z.array(StoredFieldSchema).length(13) }).strict();
+
+export const ShadowStateSchema = z.object({
+  /** Wild holdings a Rig has stripped (ids), for the rest of the region; and kits it made. */
+  rigged: z.array(E21), rigRegion: EI0.nullable(), kits: EI0,
+  /** The Lab's keeper (the lowest Loyalty when built), relieved or not; shut; sealed at a Crossing; how many went through; purified. */
+  labBy: E21.nullable(), relieved: z.array(E21), shut: z.boolean(), sealed: z.boolean(), through: EI0, counted: EI0, purified: EI0,
+  /** Districts ("region:n") the Lab has worked in and its keeper has knocked. */
+  worked: z.array(E21), knocks: EI0,
+  /** Shadow orders used to cross a line. The highest rung of the ladder already applied. */
+  orders: EI0, rung: EI0,
+}).strict();
+export type ShadowState = z.infer<typeof ShadowStateSchema>;
+
+export const EdgesStateSchema = z.object({
+  /** The ten hidden tallies, for the team's behaviour (never shown). */
+  appetites: z.record(z.string(), EI0),
+  /** Heat at the last Morning (a loud day is +2 over it); squads seen out this district. */
+  heatAtMorning: EI0, squads: z.record(z.string(), EI0),
+  /** A Static day (the day after a tally crosses): which Beast, and on what day. */
+  static: z.object({ beastId: E21, day: z.number().int().min(1) }).strict().nullable(),
+  tear: TearStateSchema.nullable(),
+  /** The Beast that will take the district's next battle (a Tear left, or held to the third day). */
+  incursion: z.object({ beastId: E21, empty: z.boolean() }).strict().nullable(),
+  /** Beasts met this run (one each). */
+  met: z.array(E21),
+  /** A caught Beast in the building. */
+  beast: z.object({ uid: E21, beastId: E21, homesick: z.number().int().min(0).max(10), lastTally: EI0 }).strict().nullable(),
+  /** Poipole: it follows; it doesn't invade. Plates put out. */
+  poipole: z.object({ day: z.number().int().min(1), plates: EI0 }).strict().nullable(),
+  together: z.boolean(),
+  cards: z.array(EdgeCardSchema),
+  /** Null with the Shadow branch removed: nothing of it is ever made. */
+  shadow: ShadowStateSchema.nullable(),
+}).strict();
+export type EdgesState = z.infer<typeof EdgesStateSchema>;
+export const emptyShadow = (): ShadowState => ({ rigged: [], rigRegion: null, kits: 0, labBy: null, relieved: [], shut: false, sealed: false, through: 0, counted: 0, purified: 0, worked: [], knocks: 0, orders: 0, rung: 0 });
+export const emptyEdges = (shadow: boolean, heat = 0): EdgesState => ({ appetites: {}, heatAtMorning: heat, squads: {}, static: null, tear: null, incursion: null, met: [], beast: null, poipole: null, together: false, cards: [], shadow: shadow ? emptyShadow() : null });
 // ---- Slice 17: the long cast (design Parts 10a, 10b, 10c, 11) ----
 
 /** One person's quest (Part 10c section 1): the steps done, where the last one was, and how it ended. */
@@ -1498,11 +1554,12 @@ export const TurnStateSchema = z.object({
 export type TurnState = z.infer<typeof TurnStateSchema>;
 
 const BlockV7Schema = z.object({
-  /** The block's own version, for its own migrations. 7: slice 8 added the Gyms. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a waiting fight, who's posted, and the day's in-person job. 6: slice 6 added proof held and the last move of the Line. 20 (reserved for slice 7): the Night, and each person's mood and knocks. */
-  v: z.literal(21),
+  /** The block's own version, for its own migrations. 7: slice 8 added the Gyms. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a waiting fight, who's posted, and the day's in-person job. 6: slice 6 added proof held and the last move of the Line. 20 (reserved for slice 7): the Night, and each person's mood and knocks. 21: slice 17, quests and the mole. 22: slice 21, the edges (a Tear, the Shadow branch; settings.shadow and settings.incursions). */
+  v: z.literal(22),
   from: z.enum(['founding', 'charter', 'turn']),
   /** Copied from Settings at founding, so a setting changed mid-run never changes this run. */
-  settings: z.object({ length: RunLengthSchema, /** Slice 22: a Turned run keeps the regions the main run had left (1 to 6); absent, the length's three or six. */ regions: z.number().int().min(1).max(9).optional() }),
+  /** Slice 21: the Shadow branch (Available, or removed from all screens) and Incursions, copied at founding too. */
+  settings: z.object({ length: RunLengthSchema, shadow: z.boolean(), incursions: z.boolean(), /** Slice 22: a Turned run keeps the regions the main run had left (1 to 6); absent, the length's three or six. */ regions: z.number().int().min(1).max(9).optional() }),
   team: EvilTeamSchema,
   here: z.object({ region: z.number().int().min(0), stage: z.number().int().min(1).max(8), day: z.number().int().min(1), beat: BeatSchema }),
   /** How many numbers each stream has given out (design Part 30 section 5.1). */
@@ -1564,6 +1621,8 @@ const BlockV7Schema = z.object({
   quests: z.record(z.string(), QuestStateSchema),
   /** Slice 17: the mole (Part 11). Hidden state: no card, sort order or screen reads it before they're found. */
   mole: MoleStateSchema,
+  /** Slice 21: the edges: Appetites, Static, a Tear, a Beast in the building, and the Shadow branch. */
+  edges: EdgesStateSchema,
   /** Slice 22: a Charter's house (optional: a founded team has none) and, on a Turned run, which of the run's rivals took which role. */
   charter: CharterStateSchema.optional(),
   turn: TurnStateSchema.optional(),
@@ -1644,7 +1703,20 @@ export function migrateEvilBlock(raw: unknown): unknown {
   // yet: the handler's rolled on the next step and the first applicant marked from the next notice board on. Nobody on
   // the Roster already is the mole (Part 11 section 1: nobody on the starting Roster is).
   if (b.v === 20) b = { ...b, v: 21, quests: {}, mole: emptyMole() };
+  // 22: slice 21, the edges (after slice 17's step to 21).
+  if (b.v === 21) b = migrateToV22(b);
   return b;
+}
+
+/**
+ * v21 -> v22 (slice 21, after slice 7 took v20 and slice 17 v21): the Shadow branch Available and Incursions on (Kice: both on by default); nothing tallied, no
+ * Tear, no Beast; the Shadow state empty. A team that somehow already has Corruption keeps it (it never falls).
+ */
+function migrateToV22(b: Record<string, unknown>): Record<string, unknown> {
+  if ('edges' in b) return { ...b, v: 22 };
+  const settings = { length: 'three', ...(b.settings as object | undefined), shadow: true, incursions: true };
+  const heat = Number((b.team as { heat?: unknown } | undefined)?.heat ?? 0) || 0;
+  return { ...b, v: 22, settings, edges: emptyEdges(true, heat) };
 }
 
 /** What a region made before slice 16 starts with (and what `newRegion` adds). */
@@ -1956,4 +2028,37 @@ export const LastRoomFileSchema = z.object({
   roster: z.record(z.string(), T12),
   page: z.object({ title: T12, fire: T12, noFire: T12, asked: T12, noAnswer: T12, reason: T12, close: PersonalityRec(T12), soup: T12 }).strict(),
   regionOver: T12,
+}).strict();
+
+// ---- Slice 21: edges.json ----
+const ET = z.string().min(1);
+const ETx = <K extends string>(keys: readonly K[]) => z.object(Object.fromEntries(keys.map((k) => [k, ET])) as Record<K, typeof ET>).strict();
+const ChoiceText = z.object({ label: ET, sub: ET, did: ET }).strict();
+export const EdgesFileSchema = z.object({
+  note: ET,
+  incursions: z.object({
+    on: z.boolean(),
+    numbers: z.object({ tearDays: z.number().int().min(1), holdGrunts: z.number().int().min(1), regard: z.number().int(), regardUnova: z.number().int(), fundsSat: z.number().int().min(0), lowOdds: z.number().int().min(1).max(100), loudHeat: z.number().int().min(1), squadDays: z.number().int().min(2), togetherTemper: z.number().int().min(0).max(4), beastOffset: z.number().int(), homesickLeave: z.number().int().min(1).max(10), lookerFromRegion: z.number().int().min(0) }).strict(),
+    appetites: z.record(z.enum(['dependence', 'strength', 'flawlessness', 'charge', 'patience', 'precision', 'consumption', 'formation', 'spectacle', 'longing']), ET),
+    static: ETx(['title', 'lead', 'radio', 'bark', 'kit', 'cat', 'knockKiele', 'knock', 'hero']),
+    tear: z.object({
+      title: ET, opens: ET, chip: ET, rule: ET, pays: ET, unknown: ET,
+      card: ETx(['name', 'from', 'moves', 'odds', 'going', 'wont', 'holds', 'hero', 'written', 'other']),
+      who: z.object({ district: ET, detective: ET, neighbour: z.record(z.string(), ET), hero: ET, looker: ET }).strict(),
+      choices: z.object({ through: ChoiceText, together: ChoiceText, hold: ChoiceText, leave: ChoiceText }).strict(),
+      why: ETx(['inPerson', 'used', 'together', 'chosen', 'six', 'none']),
+      holding: ET, won: ET, caught: ET, lost: ET, together: ET, togetherFile: ET, heldOut: ET, comesOut: ET, incursion: ET, metSquad: ET, fought: ET,
+    }).strict(),
+    beast: z.object({ rooms: z.record(z.string(), ET), flaws: z.record(z.string(), ET), home: ET, falls: ET, leaves: ET, poipole: ET, plate: ET, plated: ET, notScheme: ET }).strict(),
+  }).strict(),
+  shadow: z.object({
+    on: z.boolean(),
+    numbers: z.object({ rigHeat: z.number().int().min(0), rigDread: z.number().int().min(0), rigKits: z.number().int().min(1), rigFirst: z.number().int().min(0), labBuilt: z.number().int().min(0), labSize: z.number().int().min(0), labEvery: z.number().int().min(1), labPer: z.array(z.number().int().min(1)).length(3), ordersFirst: z.number().int().min(0), purifyRegard: z.number().int().min(0), lineLoyalty: z.number().int().min(0), relieveTo: z.number().int().min(0).max(10), kitLevels: z.number().int().min(0) }).strict(),
+    title: ET, never: ET, allows: ET, allowsRemoved: ET, lineSeven: ET, lineSevenRemoved: ET,
+    rig: ETx(['label', 'sub', 'card', 'said', 'log', 'stripped', 'whatever', 'wild', 'done', 'beat']),
+    lab: z.object({ assigned: ET, knock: z.array(ET).min(1), through: ET, shut: ET, shutSub: ET, shutSaid: ET, relieve: ET, relieveSub: ET, relieved: ET, purify: ET, purifySub: ET, purified: ET, noLab: ET, noneLeft: ET, sealed: ET, card: ET }).strict(),
+    orders: ETx(['label', 'sub', 'said', 'none']),
+    ladder: z.array(z.object({ at: z.number().int().min(1).max(10), text: ET, ceiling: z.number().int().min(1).max(10).optional(), noHeart: z.boolean().optional(), patronLeaves: z.boolean().optional() }).strict()).min(1),
+    doorway: ET, figure: ET, lineLeave: ET,
+  }).strict(),
 }).strict();

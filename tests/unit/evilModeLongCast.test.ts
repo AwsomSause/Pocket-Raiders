@@ -257,12 +257,12 @@ describe('save v21', () => {
     void quests; void mole;
     const v20 = { ...rest, v: 20 };
     const m = migrateEvilBlock(v20) as EvilModeBlock;
-    expect(EvilModeBlockSchema.parse(m).v).toBe(21);
+    expect(EvilModeBlockSchema.parse(m).v).toBe(22);
     expect(m.quests).toEqual({});
     expect(m.mole).toEqual(emptyMole());
     // An older block (v15) goes through slice 7's Night (v20) and then this one.
     const old = migrateEvilBlock({ ...rest, v: 15 }) as EvilModeBlock;
-    expect(EvilModeBlockSchema.parse(old).v).toBe(21);
+    expect(EvilModeBlockSchema.parse(old).v).toBe(22);
     expect(old.quests).toEqual({});
   });
 

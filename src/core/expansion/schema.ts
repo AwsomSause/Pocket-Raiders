@@ -68,6 +68,8 @@ export const ExpansionSettingsSchema = z.object({
   evilMode: z.boolean().default(true),
   /** Evil Mode run length (Kice's answer 2): Three regions, or Six once six regions are built (slice 19). Read at founding. */
   evilRunLength: RunLengthSchema.default('three'),
+  /** Evil Mode slice 21 (Kice's answer 8): the Shadow branch is Available by default; false removes it from all screens (no Lab, no Rig, no Corruption). Read at founding. */
+  evilShadow: z.boolean().default(true),
   /** Evil Mode slice 22 (Part 29 section 22): Dispatch rolls shown with the district's seed beside them (there's no "hidden"). */
   evilRollSeed: z.boolean().default(false),
   /** Evil Mode slice 22: a line at Morning while a fire's on the road (a fire missed is gone). */

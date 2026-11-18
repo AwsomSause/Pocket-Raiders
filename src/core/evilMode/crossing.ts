@@ -366,7 +366,7 @@ export function crossingModel(block: EvilModeBlock, data: EvilData = EVIL_DATA):
     }
     case 'base': {
       const officer = mayStay(block, data).some((p) => !x.staying.includes(p.id));
-      return { ...base, heading: c.base.title, info: c.carries.map(([a, b]) => `${a}: ${b}`), choices: c.base.choices.map((b) => ({
+      return { ...base, heading: c.base.title, info: c.carries.filter(([a]) => a !== 'Corruption' || (block.settings.shadow && !!block.edges.shadow)).map(([a, b]) => `${a}: ${b}`), choices: c.base.choices.map((b) => ({
         code: `base:${b.id}`, text: b.id === 'sell' ? `${b.name} (${money(sellPrice(block, data))})` : b.name, sub: `${b.gives} ${b.and}`, off: b.id === 'leave' && !officer,
       })) };
     }
