@@ -244,7 +244,7 @@ describe('saves: block v14', () => {
     const b = fresh();
     const { ending: _e, ...old } = b;
     const out = EvilModeBlockSchema.parse(JSON.parse(JSON.stringify({ ...old, v: 13 })));
-    expect(out).toMatchObject({ v: 15, ending: null });
+    expect(out).toMatchObject({ v: 20, ending: null });
     const mid = step(begun('caught'), { type: 'endAct' }).block;
     const again = EvilModeBlockSchema.parse(JSON.parse(JSON.stringify(mid)));
     expect(currentScene(again)).toEqual(currentScene(mid));

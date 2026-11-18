@@ -87,7 +87,7 @@ export function takeCharter(id: string, opts: { boss: string; length: RunLength;
   // The house is nearly full: the Charter's Patron, then the Founders drawn on `evil-people` (no minor: Part 28 12.2).
   const seats = Math.min(c.roster, data.people.rules.rosterCap) - 1;
   const roster = foundingRoster(seed, c.creed, { ...data, creeds: data.creeds.map((x) => (x.id === c.creed ? { ...x, start: { ...x.start, roster: seats } } : x)) });
-  const patron: Crew = { id: 'charter-patron', ref: null, name: c.patron.name, age: c.patron.age, minor: false, talent: c.patron.talent as Crew['talent'], flaw: c.patron.flaw as Crew['flaw'], flawFound: true, line: null, lineHeard: false, rank: 'officer', loyalty: c.start.loyalty, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null };
+  const patron: Crew = { id: 'charter-patron', ref: null, name: c.patron.name, age: c.patron.age, minor: false, talent: c.patron.talent as Crew['talent'], flaw: c.patron.flaw as Crew['flaw'], flawFound: true, line: null, lineHeard: false, rank: 'officer', loyalty: c.start.loyalty, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null, mood: 'easy', knocks: 0 };
   const crew = [patron, ...roster.crew.filter((p) => !(c.noMinors && p.minor)).map((p) => ({ ...p, loyalty: c.start.loyalty }))];
   const b0 = out.block;
   let block: EvilModeBlock = {

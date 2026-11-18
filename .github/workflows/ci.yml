@@ -65,8 +65,9 @@ jobs:
         env:
           NODE_OPTIONS: --max-old-space-size=6144
 
-  # Browser tests run in 8 parallel shards (the slowest part of CI used to be one long serial job). Six became too few on
+  # Browser tests run in 10 parallel shards (the slowest part of CI used to be one long serial job). Six became too few on
   # 2026-11-15: with the catalog overhaul's specs two shards ran out of their 30 minutes while every test was passing.
+  # Eight became too few on 2026-11-17: with Evil Mode's specs shard 2 ran out at 67 of 77 tests, every one passing.
   # A spec file runs in one worker from start to end, so a very long file cannot be shared out: split it instead.
   # Shards take the files in name order, so the New UI specs (*NewUi.spec.ts, the heaviest tests) have names spread over
   # the alphabet: four of them side by side in one shard ran two at a time and timed out on a slow runner.

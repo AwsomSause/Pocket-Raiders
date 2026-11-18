@@ -87,7 +87,7 @@ function dispatch(m: BoardModel, notice: string | null): string {
   return list + crew + how;
 }
 
-export function boardView(m: BoardModel, f: FrameModel, notice: string | null, extra: { ledger?: string; roster?: string; file?: string; line?: string; gym?: string; trade?: string; neighbour?: string; scheme?: string; base?: string; road?: string; filed?: string; rail?: string } = {}): string {
+export function boardView(m: BoardModel, f: FrameModel, notice: string | null, extra: { ledger?: string; roster?: string; file?: string; line?: string; gym?: string; trade?: string; neighbour?: string; scheme?: string; base?: string; road?: string; night?: string; filed?: string; rail?: string } = {}): string {
   const book = `<span class="tg" style="cursor:pointer;${extra.ledger ? 'outline:2px solid var(--acc);' : ''}"${act('ledger')} data-testid="evil-ledger-open" title="Key L">Ledger</span>`;
   const people = `<span class="tg" style="cursor:pointer;${extra.roster ? 'outline:2px solid var(--acc);' : ''}"${act('roster')} data-testid="evil-roster-open" title="Key R">Roster</span>`;
   const lineTag = m.lineFixed ? '' : `<span class="tg" style="cursor:pointer;${extra.line ? 'outline:2px solid var(--acc);' : ''}"${act('line')} data-testid="evil-line-open" title="Key N">Line</span>`;
@@ -120,6 +120,8 @@ export function boardView(m: BoardModel, f: FrameModel, notice: string | null, e
   if (extra.neighbour) return `${title}${extra.neighbour}${extra.filed ?? ''}`;
   // The Scheme (slice 14) the same way.
   if (extra.scheme) return `${title}${extra.scheme}${extra.filed ?? ''}`;
+  // The Office at Night (slice 7) takes the board's place the same way.
+  if (extra.night) return `${title}${extra.night}${extra.filed ?? ''}`;
   // Slice 22: the Turn's first meeting (Part 28 section 15.2): the Hero in the road, one line, three answers.
   if (m.meeting) {
     const g = m.meeting;
