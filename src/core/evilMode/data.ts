@@ -49,7 +49,6 @@ export const EVIL_DATA = {
   region: RegionFileSchema.parse(regionRaw),
   economy: EconomyFileSchema.parse(economyRaw),
   neighbour: NeighbourFileSchema.parse(neighbourRaw),
-  base: BaseFileSchema.parse(baseRaw),
   scheme: SchemeFileSchema.parse(schemeRaw),
   base: BaseFileSchema.parse(baseRaw),
   fires: FiresFileSchema.parse(firesRaw),

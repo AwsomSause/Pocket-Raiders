@@ -327,7 +327,7 @@ describe('the page and the save (block v11)', () => {
     expect(schemeModel(b, 0, OFF)).toBeNull();
     expect(wayProblem(b, 'means', 'clean', OFF)).toMatch(/switched off/);
   });
-  it('v11 -> v12: an empty Scheme for the team\'s Creed and the new stream at 0; a running Dig survives a reload', () => {
+  it('v10 -> v11: an empty Scheme for the team\'s Creed and the new stream at 0; a running Dig survives a reload', () => {
     const b = found({ creed: 'spite' });
     const { scheme: _s, ...rest } = b;
     const { 'evil-scheme': _d, ...draws } = b.draws;

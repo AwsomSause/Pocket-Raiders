@@ -98,9 +98,6 @@ export class EvilScene extends Phaser.Scene {
   private trade: TradeSel | null = null;
   /** Slice 13: the neighbour page's chosen row, or null when it's shut. */
   private nb: number | null = null;
-  /** Slice 10: the Base page's tab, square and option, or null when it's shut (Walk it and a Raid hold it open). */
-  private base: BaseSel | null = null;
-  private bgOf: (id: string) => string | null = () => null;
   /** Slice 14: the Scheme page's chosen row, or null when it's shut. */
   private sc: number | null = null;
   /** Slice 21: the Edges page's selected row, or null when closed. */
@@ -142,7 +139,6 @@ export class EvilScene extends Phaser.Scene {
     this.gym = null;
     this.trade = null;
     this.nb = null;
-    this.base = null;
     this.sc = null;
     this.edge = null;
     this.base = null;
@@ -191,7 +187,7 @@ export class EvilScene extends Phaser.Scene {
           const tm = this.trade !== null && !ledger && !roster && !file && !line && !gym ? tradeModel(block, this.trade) : null;
           const trade = tm ? tradeView(tm, this.notice) : undefined;
           // Slice 13: the neighbour page; a Sit-Down going on keeps it open.
-          const nm = (this.nb !== null || block.neighbour?.sitting) && !ledger && !roster && !file && !line && !gym ? neighbourModel(block, this.nb ?? 0) : null;
+          const nm = (this.nb !== null || block.neighbour?.sitting) && !ledger && !roster && !file && !line && !gym && !trade ? neighbourModel(block, this.nb ?? 0) : null;
           const nbPage = nm ? neighbourView(nm, this.notice) : undefined;
           // Slice 14: the Scheme page; a heist's rooms keep it open.
           const smod = (this.sc !== null || block.scheme?.heist?.stage === 'rooms') && !block.fight && !ledger && !roster && !file && !line && !gym && !trade && !nbPage ? schemeModel(block, this.sc ?? 0) : null;
@@ -1079,7 +1075,6 @@ export class EvilScene extends Phaser.Scene {
       return void this.view?.refresh();
     }
     this.sc = this.sc === null ? 0 : null;
-    if (!this.baseForced()) this.base = null;
     this.ledger = null;
     this.roster = null;
     this.susp = null;
