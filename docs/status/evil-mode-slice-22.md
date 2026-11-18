@@ -35,3 +35,7 @@ No block version bump: `charter`, `turn` and `settings.regions` are optional; a 
 - Phone: two Roster cards a row, the Ledger one page at a time, and the frame's numbers as icons are not built.
 - Settings not built here: the Hero's pace, the mole (slice 17), Letters (slice 18), Names, Shadow branch and Incursions (slice 21).
 - Undo: set `"on": false` in `src/data/evilMode/charters.json` (no tab, no Turn card).
+
+## Fixes found by the trailer (2026-11-18)
+- The last room's region-over line no longer says "The Crossing comes in a later build" (slice 16 built it).
+- Wide screens: the Board's title row was wider than the stage, so the stage could be scrolled sideways (by a wheel, focus, or a click on a tab past the edge). The page tabs now stay whole and shorter labels fit (their keys are in each tab's tooltip); the title and chips shorten instead. The stage is `overflow: clip`, so it can never be scrolled. Browser test `tests/e2e/evilModeWide.spec.ts`: the Board and nine pages at six sizes from 740x360 to 2560x1080.
