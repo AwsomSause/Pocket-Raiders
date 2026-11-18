@@ -187,7 +187,9 @@ describe('gn.45 The Champion\'s Training Session', () => {
     expect(opened(run, 'gn-45-montage')).toBe(true);
     const pupil = run.party.find((m) => m.gn?.includes(PUPIL))!;
     expect(pupil.uid).toBe('p-pidgey');
-    expect(scene(run, 'gn-45-montage').intro).toContain(`It's your ${content.species.get(pupil.speciesId)!.name}.`);
+    // The Champion names it as it was in the lesson: it evolves only afterwards (its evolution waits as a decision after the battle).
+    expect(pupil.speciesId).toBe('pidgeotto');
+    expect(scene(run, 'gn-45-montage').intro).toContain(`It's your Pidgey.`);
     const before = calcStats(content, pupil);
     const keys = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const;
     const low = keys.reduce((a, k) => (before[k] < before[a] ? k : a), 'hp' as (typeof keys)[number]);
