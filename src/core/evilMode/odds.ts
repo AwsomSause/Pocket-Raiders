@@ -6,6 +6,7 @@ import type { EvilModeBlock, JobMethod, OddsTerm, TakeThing } from './schema';
 import { kindDef } from './board';
 import { darkTerms, lawTerms } from './line';
 import { ruleTerms } from './regionRule';
+import { ASK_ROLLS_AS, unasked } from './charterRules';
 
 export interface JobDraft {
   holdingId: string;
@@ -54,8 +55,12 @@ export function oddsFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
   let unknownMood = false;
   let hidden = 0;
   if (job.method === 'persuade') {
-    const mood = data.district.moods.find((m) => m.id === h.mood);
-    if (mood && h.scouted === 0) {
+    // Slice 22, Galactic (Part 28 section 7.3): nobody's asked, so the job rolls as if the mood were Easy. It isn't.
+    const asEasy = unasked(block, h.id);
+    const mood = data.district.moods.find((m) => m.id === (asEasy ? ASK_ROLLS_AS : h.mood));
+    if (asEasy) {
+      if (mood && mood.persuade !== 0) terms.push({ label: "Mood: ? (nobody's asked: it rolls as Easy)", value: mood.persuade });
+    } else if (mood && h.scouted === 0) {
       unknownMood = true;
       hidden = mood.persuade;
     } else if (mood && mood.persuade !== 0) terms.push({ label: `Mood: ${mood.name}`, value: mood.persuade });

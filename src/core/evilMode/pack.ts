@@ -93,24 +93,3 @@ export function archiveOld<B extends Pick<EvilModeBlock, 'log' | 'cards' | 'arch
   const cards = [...opened<StoredCard>(a.cards), ...block.cards.slice(0, nC)];
   return { ...block, log: block.log.slice(nL), cards: block.cards.slice(nC), archive: { log: pack(JSON.stringify(log)), cards: pack(JSON.stringify(cards)), nLog: log.length, nCards: cards.length } };
 }
-
-type EconCard = EvilModeBlock['economy']['cards'][number];
-/** Every economy Card kept, in order (packed ones too). */
-export const econCardsOf = (block: Pick<EvilModeBlock, 'economy' | 'archive'>): EconCard[] => (block.archive?.econ ? [...opened<EconCard>(block.archive.econ), ...block.economy.cards] : block.economy.cards);
-/** How many economy Cards there have been, packed or not (the next id's number). */
-export const econCount = (block: Pick<EvilModeBlock, 'economy' | 'archive'>): number => block.economy.cards.length + (block.archive?.nEcon ?? 0);
-
-/**
- * Slice 18: the economy's Cards go the same way as the Log's at a Crossing. They carry the day, not the region, so the cut
- * is the first day the Log has in a region still kept loose. Same Cards, same order; nothing's dropped.
- */
-export function archiveEcon<B extends Pick<EvilModeBlock, 'log' | 'economy' | 'archive'>>(block: B, keep: ReadonlySet<number>): B {
-  const from = logOf(block).find((e) => keep.has(e.region))?.day;
-  if (from === undefined) return block;
-  const cut = block.economy.cards.findIndex((c) => c.day >= from);
-  const n = cut < 0 ? block.economy.cards.length : cut;
-  if (!n) return block;
-  const a: Archive = block.archive ?? { log: '', cards: '', nLog: 0, nCards: 0 };
-  const econ = [...opened<EconCard>(a.econ ?? ''), ...block.economy.cards.slice(0, n)];
-  return { ...block, economy: { ...block.economy, cards: block.economy.cards.slice(n) }, archive: { ...a, econ: pack(JSON.stringify(econ)), nEcon: econ.length } };
-}

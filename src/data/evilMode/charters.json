@@ -1,0 +1,248 @@
+{
+  "note": "Evil Mode slice 22: the nine Charters and the Turn (design Part 28). Text from Part 28 sections 4 to 15. A Charter reads nothing but this file; the Turn reads only the run it's in.",
+  "on": true,
+  "loyaltyDoubleDays": 7,
+  "returnCosts": [120, 300, 80, 450, 200, 60, 900, 150, 340, 75],
+  "rollPerDay": 7,
+  "staffHeatCeiling": 3,
+  "flareDues": 400,
+  "flareMembers": 6,
+  "jointName": { "atLeast": 6, "names": ["Team Tidewater", "Team Ridgeline", "Team Shoreline"] },
+  "tab": "Charters",
+  "tabLine": "Nine teams somebody else built. Every page is printed, the trouble on day three included. Nothing about a Charter is hidden, and none is better than founding a team.",
+  "lastPage": "{question} {figure}",
+  "turn": {
+    "title": "The Turn",
+    "fields": [
+      ["What it is", "Carry on as the Boss. From the next region, this run's an Evil Mode run."],
+      ["What changes", "Gyms, the League and your rivals will treat you as the Boss of this team. Stages become days. You'll send people, and go yourself."],
+      ["What stays", "Your party, your bag, your Blessings, your level cap, your four rivals, and how many regions this run has left."],
+      ["What can't be undone", "All of it, in this run. The next run's a new run."]
+    ],
+    "staffChanges": "You'll be a teacher.",
+    "take": "Take the chair.",
+    "walk": "Take it all, and walk away.",
+    "confirm": "Take the chair? The rest of this run is an Evil Mode run. Press again to take it.",
+    "oldLookLine": "Evil Mode is drawn in the New look. It's on for the rest of this run; your setting isn't changed.",
+    "fundsCap": 10000,
+    "regardPerBadges": 2,
+    "regardCeiling": 4,
+    "loyalty": 4,
+    "dread": 2,
+    "ledgerFirst": "The inside route, as a Boss would read it.",
+    "meetingDay": 2,
+    "route": { "kindFlag": "kind-total", "kindPer": 3, "evilAttribute": "goodEvil", "evilPer": 3, "swing": 2, "victims": ["front-exposed", "flare-pool-paid", "alola-beasts-loose", "team-files-sold"] },
+    "meeting": {
+      "title": "On the road",
+      "lines": {
+        "protector": "\"Tell me they made you.\"",
+        "champion-chaser": "\"We were going to do the League. We. I've still got the route planned.\"",
+        "strategist": "\"I've been trying to work out what you get. I can't make it add up. Show me the working.\"",
+        "bitter-challenger": "\"I knew. I knew. ...I didn't want to be right.\"",
+        "enthusiast": "\"Is it true? Somebody said, and I said no, and then I said I'd ask.\"",
+        "idealist": "\"People change. That's my whole thing. I didn't think I'd have to use it on you.\"",
+        "prodigy": "\"I'm faster than you now. I wanted you to see that when it was a good thing.\"",
+        "underdog": "\"You were the one who said I could.\""
+      },
+      "answers": { "lie": "\"It's not what it looks like.\"", "true": "\"It's exactly what it looks like.\"", "silent": "(Say nothing.)" },
+      "after": { "lie": "{hero} looks at you a long time. \"Okay.\" They don't believe it, and they go.", "true": "{hero} nods once, as if they'd been hit, and goes.", "silent": "{hero} waits. Then they go, and they don't look back until the corner." }
+    }
+  },
+  "houseRules": {
+    "ask": { "rollsAs": "easy", "line": "Asked, in person, at step {step}: {mood}. It's on the Board from now on." },
+    "plasma": {
+      "who": "Bronius: \"The ones in the cellar. Start there.\"",
+      "wrong": "{name}: \"Somebody took what wasn't theirs and wrote a name on it.\"",
+      "do": ["We give them back.", "We pay for every one.", "We make the ones who took them give them back.", "We keep them until it's safe, and we say so."],
+      "wont": "The Hall, aloud: \"We won't take anyone's again. Not for a cause. Not for this one.\"",
+      "before": 0, "after": 2,
+      "returnLine": "Returned from the cellar: one label, one Pokémon, one person at the gate. Regard +1."
+    },
+    "twoBoards": { "aether": 9000, "form": 1500, "regard": -1, "formLine": "Faba countersigns: ₽{amount} from Aether's purse to Skull's. His price isn't money: Regard {regard}." },
+    "group": {
+      "limit": 2000,
+      "spends": ["build", "enlarge", "hire", "trade", "venture", "dig", "heist", "heistGo", "gymWay", "regionAct", "table", "bail", "roomAct", "queueJob", "confirmCard", "askAnyway", "staff", "place"],
+      "makesMoney": ["trade", "venture", "dig", "heist", "heistGo", "build:counting", "build:vault"],
+      "held": "₽{amount} is over ₽2,000. It goes to the board; the answer comes next Morning.",
+      "yes": "The board: yes. It makes money. ({what})",
+      "no": "The board: no, with a memo. It doesn't make money. ({what})",
+      "memo": "{name} writes the memo. The board signs it as whatever the Boss needs it called. ({what})"
+    },
+    "flare": { "unseatedLoyalty": -2, "seat": "{name} is laid for at dinner.", "unseat": "{name} isn't laid for. They won't pay, and they'll mind." }
+  },
+  "teams": {
+    "rocket": "rocket", "rocket-return": "rocket-return", "hoenn": "joint", "galactic": "galactic", "plasma": "plasma",
+    "flare": "flare", "alola": "two-boards", "galar": "group", "paldea": "staff-room"
+  },
+  "charters": [
+    {
+      "id": "rocket", "name": "Rocket", "teamName": "Rocket", "question": "What's a ledger for?", "status": "supported",
+      "creed": "profit", "line": "whatever", "doctrine": "bruisers", "region": "kanto",
+      "look": { "a": "#1a1a1a", "b": "#c8282a", "motto": "Steal for profit." },
+      "patron": { "name": "Carrow", "age": 52, "talent": "books", "flaw": "proud", "note": "The clerk who kept the books and was never once in the room." },
+      "start": { "funds": 6000, "heat": 5, "loyalty": 4, "regard": 1, "dread": 6, "corruption": 2 },
+      "roster": 8, "rooms": ["Office", "Vault", "Dorm", "Garage"],
+      "morning": ["The Ledger's already open. Four thousand, one hundred and twelve names.", "A note from Faye, in biro, on a paper napkin: \"I copied these by hand. Which d'you want to start with?\""],
+      "desk": [
+        { "day": 5, "title": "Friday", "text": "The back pay. Giovanni left owing eight people three weeks: ₽600 each. The Roster's watching what happens to it." },
+        { "day": 3, "title": "The Game Corner", "text": "Still running. A Racket that pays ₽900 a day. Its Card's \"Who pays for it\" reads: \"Pensioners, mostly.\"" },
+        { "day": 1, "title": "The Pen", "text": "Forty-three Pokémon in the basement. Under Clean hands the doors are opened and the game doesn't ask." }
+      ],
+      "rule": { "id": "ledger-returns", "name": "The Ledger pays back", "text": "Any Evening, return one thing from the Ledger. It costs Carrow's valuation and pays Regard +1. It never pays Funds, and never cools Heat." },
+      "oldGuard": { "name": "Proton", "text": "He'll pay the back wages himself, ₽700 a head, to anyone who crosses by Friday.", "turnLine": "Proton: \"You fetched his coffee for a month. I watched you do it. I'm to call you what?\"" },
+      "dayThree": "The Game Corner's manager asks whether to carry on.",
+      "figure": "{taken}. Returned: {returned}."
+    },
+    {
+      "id": "rocket-return", "name": "Rocket's Return", "teamName": "Rocket", "question": "Who were they waiting for?", "status": "supported",
+      "creed": "belonging", "line": "grey", "doctrine": "swarm", "region": "johto",
+      "look": { "a": "#36393d", "b": "#c8282a", "motto": "He'll be back." },
+      "patron": { "name": "Sabela", "age": 47, "talent": "voice", "flaw": "loves", "note": "Called the roll for three years to an empty chair." },
+      "start": { "funds": 900, "heat": 3, "loyalty": 4, "regard": 2, "dread": 3, "corruption": 0 },
+      "roster": 9, "rooms": ["Office", "Dorm", "Radio Room"], "roll": 150,
+      "morning": ["A hundred and fifty people, at roll call. Sabela reads every name. Then: \"The Boss.\"", "A silence. It's three years long. Sabela, to you, not unkindly: \"...Present?\""],
+      "desk": [
+        { "day": 4, "title": "The transmitter", "text": "Mahogany. It's still on. Switching it off is free and takes a person a day. Nobody's been told they're allowed." },
+        { "day": 2, "title": "The Well", "text": "Azalea. A rope, a ladder, and a stock of tails in a cold room. Its Card's \"The other way\" reads: \"Don't.\"" },
+        { "day": 7, "title": "The broadcast", "text": "Archer booked the Radio Tower for the seventh day. Four minutes of air, and nobody to call home." }
+      ],
+      "rule": { "id": "roll-call", "name": "The roll's called", "text": "Every Morning the register's read, and the Boss answers it or doesn't. Seven days answered running: Loyalty +1, once a region. A missed day: the roll falls ten." },
+      "oldGuard": { "name": "Ariana", "text": "\"You're in his office. I'm not angry. I'd like you to leave it as you found it.\"", "turnLine": "Ariana: \"You answered the roll. I heard. You weren't on it.\"" },
+      "dayThree": "Tobi's told the whole Dorm the Boss said \"Present.\" Or that the Boss didn't.",
+      "figure": "The roll was answered {answered} mornings of {days}."
+    },
+    {
+      "id": "joint", "name": "The Joint Command", "teamName": "Joint Command", "question": "Can a house be two colours?", "status": "supported",
+      "creed": "power", "line": "grey", "doctrine": "tide", "region": "hoenn",
+      "look": { "a": "#1f2a4a", "b": "#c8282a", "motto": "Land and sea." },
+      "patron": { "name": "Ottoway", "age": 58, "talent": "heart", "flaw": "kind", "note": "Bunked with recruits and trained six cohorts for a flood." },
+      "start": { "funds": 2400, "heat": 4, "loyalty": 4, "regard": 3, "dread": 4, "corruption": 1 },
+      "roster": 10, "rooms": ["Office", "Dorm", "Dorm", "Dock"],
+      "morning": ["Two messages, an hour apart. The blue side: \"Don't trust the Magma lot. They'd have dried the sea.\" The red: \"Don't trust the Aqua lot. They'd have drowned the land.\"", "Ottoway: \"I've trained both. I'm on the side of whoever's turn it is to wash up.\""],
+      "desk": [
+        { "day": 1, "title": "The rota", "text": "Who cooks. Who's on the dock. It's been drawn up twice." },
+        { "day": 6, "title": "The Orbs", "text": "Both, in one safe. Mt. Pyre's old couple have written, politely, twice." },
+        { "day": 4, "title": "The submarine", "text": "Half-built. Greer has the plans. Lior has the keys. Neither's spoken to the other since the merger." }
+      ],
+      "rule": { "id": "two-colours", "name": "One of each", "text": "Everyone's red or blue. Loyalty's kept twice, and the team's is the lower. The name's put to the Hall once both reach 6." },
+      "oldGuard": { "name": "Shelly and Courtney", "text": "\"We're not your enemy. We're your future, if you do it right, or your warning, if you don't.\"", "turnLine": "Shelly: \"I told Archie you were trouble. I was right, and I backed the wrong trouble.\"" },
+      "dayThree": "A fight in the corridor, over the bare strip. It's about a mop.",
+      "figure": "Red {red}. Blue {blue}.",
+      "limits": "The Cause Creed is limited, so the Joint Command uses Power; Ember's half isn't drawn."
+    },
+    {
+      "id": "galactic", "name": "Galactic", "teamName": "Galactic", "question": "Has anybody asked?", "status": "limited",
+      "creed": "wonder", "line": "grey", "doctrine": "machines", "region": "sinnoh",
+      "look": { "a": "#4a5560", "b": "#b8bcc4", "motto": "" },
+      "patron": { "name": "Wren Halvard", "age": 31, "talent": "wheels", "flaw": "doubts", "note": "The technician who took her helmet off." },
+      "start": { "funds": 8000, "heat": 2, "loyalty": 4, "regard": 0, "dread": 5, "corruption": 0 },
+      "roster": 8, "rooms": ["Office", "Lab", "Dorm", "Canteen"], "roll": 200,
+      "morning": ["A clipboard. Saturn, who's stayed, because somebody had to hand over: \"I'll need a title for you. For the log.\"", "The Board's all green. Every job's on time. Nobody in Galactic ever asked."],
+      "desk": [
+        { "day": 5, "title": "The lakes", "text": "Three vans are booked. The signature's Cyrus's, and it's still valid." },
+        { "day": 2, "title": "Two hundred haircuts", "text": "The barber's on the payroll. Wren's asked whether it's still compulsory." },
+        { "day": 1, "title": "The Canteen", "text": "Everybody eats at once, in rows, in eleven minutes, in silence." }
+      ],
+      "rule": { "id": "ask-first", "name": "Nobody's ever asked", "text": "A local's mood is unknown until somebody goes and asks, in person." },
+      "oldGuard": { "name": "Charon", "text": "\"A new world. Honestly. Has anyone here asked what the old one's worth, per acre?\"", "turnLine": "Charon: \"The recruit! The one who asked questions. I said to Cyrus, that one'll cost us.\"" },
+      "dayThree": "A Grunt laughs in the Canteen. Once. The room stops.",
+      "figure": "{taken} taken.",
+      "limits": "Moods are '?' until asked and jobs roll as Easy before; the Roster's blank lines are as on any team."
+    },
+    {
+      "id": "plasma", "name": "Plasma", "teamName": "Plasma", "question": "What are we counting?", "status": "limited",
+      "creed": "belonging", "line": "clean", "doctrine": "ghosts", "region": "unova",
+      "look": { "a": "#f2f0ea", "b": "#1f2a4a", "motto": "Liberation." },
+      "patron": { "name": "Bronius", "age": 61, "talent": "eyes", "flaw": "skims", "note": "A Vigil Knight who counted candles." },
+      "start": { "funds": 1500, "heat": 2, "loyalty": 4, "regard": 5, "dread": 2, "corruption": 1 },
+      "roster": 9, "rooms": ["Office", "Hall", "Dorm"], "roll": 300,
+      "morning": ["Six hundred candles and three hundred people with their hands in their pockets.", "Bronius: \"I count. Six hundred, every night, for a king. What am I counting, under you?\""],
+      "desk": [
+        { "day": 2, "title": "The castle's rooms", "text": "The Pokémon that were \"freed\". Every label has a person's name on it." },
+        { "day": 6, "title": "The speech", "text": "Booked, in Accumula. Somebody has to say something, or cancel." },
+        { "day": 1, "title": "N's room", "text": "The door's shut. There's a train set. Nobody's been in." }
+      ],
+      "rule": { "id": "written-sentence", "name": "The sentence gets written", "text": "The Cause sentence is written in play, one part at a time, each put forward by somebody on the Roster." },
+      "oldGuard": { "name": "Ghetsis", "text": "N writes: \"You have my room. You may have it. Please don't move the trains.\"", "turnLine": "Ghetsis: \"You knelt. I remember everyone who knelt. I remember it differently now.\"" },
+      "dayThree": "The first person comes to the gate for their Pokémon, with a receipt.",
+      "figure": "{given} given.",
+      "limits": "The sentence is written in play and gates the takings; the Cause Creed itself is limited, so Plasma uses Belonging."
+    },
+    {
+      "id": "flare", "name": "Flare", "teamName": "Flare", "question": "Who's the table for?", "status": "limited",
+      "creed": "belonging", "line": "grey", "doctrine": "tricksters", "region": "kalos",
+      "look": { "a": "#5a1a1e", "b": "#e87a20", "motto": "A beautiful world." },
+      "patron": { "name": "Yarborough", "age": 66, "talent": "heart", "flaw": "proud", "note": "The concierge who laid the tables." },
+      "start": { "funds": 14000, "heat": 1, "loyalty": 4, "regard": 4, "dread": 2, "corruption": 1 },
+      "roster": 6, "rooms": ["Office", "Dining Room", "Lab"],
+      "morning": ["Yarborough, with a tray: \"Will there be a table, under the new management? I ask only to know how many to lay.\""],
+      "desk": [
+        { "day": 7, "title": "The dues", "text": "Six members' subscriptions fall due. They're the team's whole income." },
+        { "day": 3, "title": "The list", "text": "Who was to be saved. It's in the safe." },
+        { "day": 1, "title": "The café", "text": "A Front, lovely, and in profit." }
+      ],
+      "rule": { "id": "members", "name": "Members, not staff", "text": "Members pay ₽400 every seven days, at the Evening." },
+      "oldGuard": { "name": "Xerosic", "text": "\"The chief's finished? Then it's a free experiment.\"", "turnLine": "Xerosic: \"You were on the list! Did you know? Row nine. I'd have missed you.\"" },
+      "dayThree": "The list's found by a Grunt who isn't on it.",
+      "figure": "Dues paid: ₽{dues}.",
+      "limits": "Members can be seated or not; seats for guests, the table's length and member-or-staff hiring aren't played."
+    },
+    {
+      "id": "two-boards", "name": "The Two Boards", "teamName": "Skull", "question": "Who's doing the cooking?", "status": "limited",
+      "creed": "belonging", "line": "clean", "doctrine": "swarm", "region": "alola",
+      "look": { "a": "#1a1a1a", "b": "#f2f0ea", "motto": "Skull." },
+      "patron": { "name": "Iolana", "age": 54, "talent": "hands", "flaw": "kind", "note": "Tupp's aunt, who cooked for Skull before Plumeria did." },
+      "start": { "funds": 300, "heat": 3, "loyalty": 4, "regard": 4, "dread": 3, "corruption": 1 },
+      "roster": 9, "rooms": ["Office", "Kitchen", "Clinic"],
+      "morning": ["Two Boards. One's a glass wall with every figure in the right column. One's plywood, rained on, with a drawing of a Wimpod.", "Plumeria, with a ladle: \"Who's doin' the cookin'?\""],
+      "desk": [
+        { "day": 4, "title": "The lower floors", "text": "Aether's. Locked. Faba's got the card." },
+        { "day": 2, "title": "The roof", "text": "Po Town's. It leaks on eleven beds. Aether's got ₽9,000 and a form." },
+        { "day": 6, "title": "The Trials", "text": "Six of the house are of age and never took theirs." }
+      ],
+      "rule": { "id": "two-purses", "name": "Two purses", "text": "Skull's got ₽300. Aether's got ₽9,000, behind a form." },
+      "oldGuard": { "name": "Lusamine", "text": "\"You were never one of my treasures, dear. You were packaging.\"", "turnLine": "Lusamine: \"The little helper. You carried trays. One doesn't negotiate with the tray.\"" },
+      "dayThree": "Guzma's sent on his first job. Hala's on the route.",
+      "figure": "{taken} taken.",
+      "limits": "Aether's ₽9,000 is its own purse, moved by Faba's form; jobs and rooms spend Skull's, and the Kitchen vote isn't played."
+    },
+    {
+      "id": "group", "name": "The Group", "teamName": "Macro Cosmos", "question": "Who signed for this?", "status": "limited",
+      "creed": "power", "line": "grey", "doctrine": "machines", "region": "galar",
+      "look": { "a": "#1f2a4a", "b": "#d8a820", "motto": "A thousand years." },
+      "patron": { "name": "Mr. Pettigrew", "age": 59, "talent": "books", "flaw": "freezes", "note": "Twenty-two years in payroll." },
+      "start": { "funds": 20000, "heat": 2, "loyalty": 4, "regard": 6, "dread": 3, "corruption": 2 },
+      "roster": 8, "rooms": ["Office", "Boardroom", "Dorm"],
+      "morning": ["Eight subsidiaries, each a column. And one that's a single line with no name, and a very large number.", "A coach in the car park, engine running, twenty people in pink and black with horns."],
+      "desk": [
+        { "day": 5, "title": "The eighth column", "text": "The plant under Hammerlocke. Mr. Pettigrew's stopped sleeping." },
+        { "day": 1, "title": "The coach", "text": "Yell. They want a fixture list." },
+        { "day": 7, "title": "The gap", "text": "Spikemuth. No signal, no subsidiary, no column." }
+      ],
+      "rule": { "id": "signature", "name": "It needs a signature", "text": "The ₽20,000 is the Group's. A spend over ₽2,000 goes to the board." },
+      "oldGuard": { "name": "The Chairman", "text": "By courier, with a seed packet: \"I gather you've found the eighth column. Do water it.\"", "turnLine": "Oleana: \"He asked me to say he always thought you'd go far. He asked me not to say how far.\"" },
+      "dayThree": "Mr. Pettigrew puts the eighth column's file on the desk and doesn't sit down.",
+      "figure": "{taken} taken.",
+      "limits": "Spends over ₽2,000 go to the board and the Books memo works; dissolving columns isn't played."
+    },
+    {
+      "id": "staff-room", "name": "The Staff Room", "teamName": "Staff", "question": "Where were the adults?", "status": "supported",
+      "creed": "belonging", "line": "clean", "lineFixed": true, "doctrine": "tricksters", "region": "paldea",
+      "look": { "a": "#5a3a22", "b": "#efe6c8", "motto": "Third period." },
+      "patron": { "name": "Yusuf", "age": 71, "talent": "hands", "flaw": "kind", "note": "The retired caretaker who watched a team form." },
+      "start": { "funds": 450, "heat": 0, "loyalty": 6, "regard": 3, "dread": 0, "corruption": 0 },
+      "roster": 5, "rooms": ["Office", "Kitchen"],
+      "methodsOff": ["take", "lean"], "heatCeiling": 3, "dreadFixed": true, "noMinors": true,
+      "morning": ["A timetable, pinned to the Board. Third period: Battle Studies. Teacher: —", "Yusuf: \"They've asked for you. It came under the door, on squared paper. I'd go. I'd take chalk.\""],
+      "desk": [
+        { "day": 1, "title": "Third period", "text": "The lesson. A class of forty." },
+        { "day": 5, "title": "The folder", "text": "The record of what was done and who signed it off." },
+        { "day": 2, "title": "The cooking pot", "text": "Mela's crew haven't got a decent one. ₽180." }
+      ],
+      "rule": { "id": "register", "name": "The register", "text": "Take and Lean were never offered. Heat stops at 3. Dread stays 0. The Line can't be moved." },
+      "oldGuard": { "name": "Nobody", "text": "Nobody betrayed Star. Penny, with the voice changer off: \"So you're staff now. ...Mela says you can stay. I'm still deciding.\"", "turnLine": "Penny: \"So you're staff now. ...Mela says you can stay. I'm still deciding.\"" },
+      "dayThree": "Ortega's parents ring to complain that a member of staff's been seen carrying a car door.",
+      "figure": "Teacher: {boss}."
+    }
+  ]
+}

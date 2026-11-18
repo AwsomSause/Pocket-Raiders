@@ -25,6 +25,7 @@ import {
 import { emptyTimelineStore, TimelineStoreSchema, type TimelineStore } from '../core/timeline/schema';
 import { freshEvil } from '../core/evil/schema';
 import { EXPANSION_SETTINGS_DEFAULTS } from '../core/expansion/schema';
+import { runToSaveForm } from '../core/evilMode/saveForm';
 import { freshProfileStory, STORY_SETTINGS_DEFAULTS } from '../core/story2/schema';
 import { StorageUnavailableError, type StorageProvider } from './storage';
 
@@ -723,7 +724,8 @@ export class SaveManager {
   }
 
   saveRun(run: RunState): SaveResult {
-    return this.write('run', run);
+    // An Evil Mode block is written in its save form (core/evilMode/saveForm.ts); reading makes it whole again.
+    return this.write('run', runToSaveForm(run));
   }
 
   clearRun(): SaveResult {
@@ -752,7 +754,7 @@ export class SaveManager {
 
   saveReplay(run: RunState): SaveResult {
     if (!run.timeline) return { ok: false, reason: 'Only a timeline replay can be saved in the replay slot.' };
-    return this.write('run', run, this.replayKey);
+    return this.write('run', runToSaveForm(run), this.replayKey);
   }
 
   clearReplay(): SaveResult {

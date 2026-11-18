@@ -4,7 +4,7 @@
 // change nothing (a whole run hashes the same with every bark asked for); a Shut person never barks, nothing barks at a
 // fire, no line twice in a district; every letter fits one screen; replies move nothing by more than one, once each;
 // the empty envelope at most once and only at Dread 7; Giovanni's card by the region's number, none at War; the
-// notebook's last line never blank; a coldly let-go leaver never writes; the v15 and v20 -> v21 migration; the drawer and old economy Cards keep the save small.
+// notebook's last line never blank; a coldly let-go leaver never writes; the v15 and v20 -> v21 migration; the drawer keeps the save small.
 
 import { describe, expect, it } from 'vitest';
 import { foundForPlay, playRegion, playRun, replay } from '../../src/core/evilMode/autoplay';
@@ -14,7 +14,6 @@ import type { FoundingChoice } from '../../src/core/evilMode/start';
 import { applyFx, bark, barkPool, heroHeard, notebookLine, officerLetter, paperText, pickPaper, pickRadio, pieceChoices, pieceText, postAct, postMorning, radioText, todaysPost, todaysRadio, VOICE, voiceMorning, yesterday } from '../../src/core/evilMode/voice';
 import { postAction, postModel, voiceBlocks } from '../../src/core/evilMode/voiceScreens';
 import { emptyVoice } from '../../src/core/evilMode/voiceSchema';
-import { archiveEcon, econCardsOf, econCount } from '../../src/core/evilMode/pack';
 
 const choice = (over: Partial<FoundingChoice> = {}): FoundingChoice => ({ name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm', patron: 'executive', region: 'kanto', ...over });
 const fresh = (seed = 'voice-1', over: Partial<FoundingChoice> = {}): EvilModeBlock => foundForPlay(seed, choice(over));
@@ -326,19 +325,5 @@ describe('the save stays small', () => {
     const ids = out.voice.inbox.map((p) => Number(p.id.slice(1)));
     expect(new Set(ids).size).toBe(ids.length);
     expect(Math.max(...ids)).toBeGreaterThanOrEqual(20);
-  });
-  it("the economy's Cards older than the regions kept are packed at a Crossing: same Cards, same order, ids carry on", () => {
-    const b = fresh('voice-econ');
-    const card = (i: number, day: number) => ({ id: `E${i}`, day, cardId: 'charity', fields: [`field ${i}`] });
-    const cards = [card(1, 2), card(2, 5), card(3, 12), card(4, 15)];
-    const log = [{ ...b.log[0]!, day: 2, region: 0 }, { ...b.log[0]!, day: 12, region: 1 }];
-    const x = { ...b, log, economy: { ...b.economy, cards } } as EvilModeBlock;
-    const out = archiveEcon(x, new Set([1]));
-    expect(out.economy.cards.map((c) => c.id)).toEqual(['E3', 'E4']);
-    expect(econCardsOf(out)).toEqual(cards);
-    expect(econCount(out)).toBe(4);
-    expect(econCardsOf(JSON.parse(JSON.stringify(out)))).toEqual(cards);
-    // Nothing older: nothing changes.
-    expect(archiveEcon(x, new Set([0, 1]))).toBe(x);
   });
 });

@@ -7,6 +7,7 @@
 import { describe, expect, it } from 'vitest';
 import { foundForPlay, playRegion, playRun, replay } from '../../src/core/evilMode/autoplay';
 import { EVIL_DATA } from '../../src/core/evilMode/data';
+import { toSaveForm } from '../../src/core/evilMode/saveForm';
 import { step } from '../../src/core/evilMode/day';
 import { beginCrossing, carryLetter, clockActs, clockMet, crossActOf, crossingModel, clockMorning, cross, lastRun, openRegions, stopClock, ticketLines, ticketsFor, whoStays } from '../../src/core/evilMode/crossing';
 import { ensureNeighbour, neighbourDef, sideFor } from '../../src/core/evilMode/neighbour';
@@ -39,9 +40,10 @@ describe('a Standard run: three regions', () => {
   });
 
   it('a three-region save is under the 300 KB budget, and reloads whole', () => {
-    const json = JSON.stringify(run.block);
+    // What's measured is what's written: the block in its save form (saveForm.ts).
+    const json = JSON.stringify(toSaveForm(run.block));
     expect(json.length).toBeLessThan(300_000);
-    expect(EvilModeBlockSchema.parse(JSON.parse(json))).toEqual(JSON.parse(json));
+    expect(EvilModeBlockSchema.parse(JSON.parse(json))).toEqual(JSON.parse(JSON.stringify(run.block)));
   });
 
   it('levels go by the absolute stage: A = (R − 1) × 8 + S', () => {
@@ -65,7 +67,7 @@ describe('the Crossing', () => {
   });
 
   it('a third of the Roster stays, by name; "We need you." works at Loyalty 8 or more, once', () => {
-    let b = step(over, { type: 'cross', what: 'ticket', id: 'johto' }).block;
+    let b = step(over, { type: 'cross', what: 'ticket', id: over.region.crossing!.offer[0]! }).block;
     const staying = whoStays(b);
     expect(staying.length).toBe(Math.floor(b.crew.filter((c) => c.where === 'in').length / 3));
     expect(b.region.crossing!.staying).toEqual(staying.map((c) => c.id));
@@ -308,7 +310,10 @@ describe('the Road, and saves: block v15', () => {
   });
 
   it('a save made mid-Crossing reloads at the same step', () => {
-    const b = step(overRegion('cross-save'), { type: 'cross', what: 'ticket', id: 'hoenn' }).block;
+    const o = overRegion('cross-save');
+    const r = step(o, { type: 'cross', what: 'ticket', id: o.region.crossing!.offer[0]! });
+    expect(r.ok).toBe(true);
+    const b = r.block;
     const again = EvilModeBlockSchema.parse(JSON.parse(JSON.stringify(b)));
     expect(again.region.crossing).toEqual(b.region.crossing);
   });

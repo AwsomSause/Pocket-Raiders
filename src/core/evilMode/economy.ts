@@ -12,7 +12,7 @@ import { districtKey, inRoster, moveLoyalty, wageOf } from './people';
 import { stageKind } from './region';
 import { scaleOf } from './regionRule';
 import { packField, LINE_IDS, RANKS, type CardField, type Crew, type EconCardDef, type EvilModeBlock, type Holding, type LogEntry, type Mood, type Venture } from './schema';
-import { econCount, logOf } from './pack';
+import { logOf } from './pack';
 
 export const econOn = (data: EvilData = EVIL_DATA): boolean => data.economy.on;
 const word = (k: string, data: EvilData): string => {
@@ -179,7 +179,7 @@ export function tradeCard(block: EvilModeBlock, req: TradeReq, data: EvilData = 
 
 /** Files a Card (kept with its day) and its Ledger line. */
 function file(block: EvilModeBlock, cardId: string, fields: CardField[], who: string[], extra: Partial<LogEntry> = {}): EvilModeBlock {
-  const id = `E${econCount(block) + 1}`;
+  const id = `E${block.economy.cards.length + 1}`;
   const b = { ...block, economy: { ...block.economy, cards: [...block.economy.cards, { id, day: block.here.day, cardId, fields: fields.map(packField) }] } };
   return appendLog(b, { kind: 'econ', who, cardId: id, text: `Day ${block.here.day}. ${fields[11]!.text}`, unknowns: fields.slice(0, 10).filter((x) => x.unknown).length, ...extra });
 }
@@ -208,7 +208,7 @@ export function trade(block: EvilModeBlock, req: TradeReq, data: EvilData = EVIL
   let team = { ...b.team, funds: b.team.funds - def.cost, regard: def.kind === 'work' ? b.team.regard : cap(b.team.regard + def.moves.regard) };
   let crew = b.crew;
   const lines: string[] = [];
-  const base: Omit<Venture, 'kind' | 'street' | 'holdingId' | 'person' | 'patience' | 'backRoom' | 'openIn' | 'doneOn' | 'done' | 'books'> = { id: `V${econCount(b)}`, cardId: def.id, region: d.region, district: d.n, since: b.here.day, waivedOn: null, honest: false, straight: [] };
+  const base: Omit<Venture, 'kind' | 'street' | 'holdingId' | 'person' | 'patience' | 'backRoom' | 'openIn' | 'doneOn' | 'done' | 'books'> = { id: `V${b.economy.cards.length}`, cardId: def.id, region: d.region, district: d.n, since: b.here.day, waivedOn: null, honest: false, straight: [] };
   let v: Venture;
   if (def.kind === 'racket') {
     const street = req.street ?? heldStreets(block, data)[0]!;

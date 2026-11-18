@@ -4,8 +4,9 @@
 // second clock (Part 26a sections 1.7 and 4.6). Pure: new blocks are returned. Nothing here draws from a gameplay stream:
 // the tickets, who stays and the reasons are hashed from the seed and the region, so they're the same on every reload.
 
+import { runRegions } from './runLength';
 import { hashSeed, Rng } from '../rng';
-import { archiveEcon, archiveOld } from './pack';
+import { archiveOld } from './pack';
 import { layDistrict, shiftMood } from './board';
 import { EVIL_DATA, type EvilData } from './data';
 import { appendLog, fill, money } from './ledger';
@@ -26,7 +27,7 @@ const ok = (block: EvilModeBlock, lines: string[] = []): R => ({ block, problem:
 /** The run's last region (its length, three or six, or the last one written), from 0. */
 export function lastRun(block: Pick<EvilModeBlock, 'settings'>, data: EvilData = EVIL_DATA): number {
   const written = data.region.regions.filter((r) => r.status === 'supported' || r.status === 'limited').length;
-  return Math.min(block.settings.length === 'six' ? 6 : 3, Math.max(1, written)) - 1;
+  return Math.min(runRegions(block), Math.max(1, written)) - 1;
 }
 
 /** Regions open for a ticket: written, and not played this run. */
@@ -190,8 +191,7 @@ function leave(block: EvilModeBlock, x: CrossingState, data: EvilData): R {
   };
   // Slice 19: what's older than two regions is packed (Part 30 section 7.4): a six-region save stays under budget.
   const idx = (id: string) => data.region.regions.find((r) => r.id === id)?.index ?? -1;
-  const keep = new Set([def.index, ...crossed.slice(-2).map(idx)]);
-  out = archiveEcon(archiveOld(out, keep), keep);
+  out = archiveOld(out, new Set([def.index, ...crossed.slice(-2).map(idx)]));
   const region = newRegion({ ...out, region: { ...block.region, crossed } } as EvilModeBlock, seed, data);
   out = { ...out, region: { ...region, crossed, abroad, forms: x.forms, badgeDay, mark: markOf(out, data), notes: lines.slice(1).filter((l) => l !== C(data).boats[x.boats]) } };
   out = appendLog(out, { kind: 'line', who: [], text: `Day ${block.here.day}. ${fill(C(data).intro, { region: data.region.regions.find((r) => r.id === crossed[crossed.length - 1])?.name ?? '' })} The team crossed to ${def.name}.` });

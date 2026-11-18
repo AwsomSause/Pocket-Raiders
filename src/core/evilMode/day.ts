@@ -3,6 +3,7 @@
 // rolls the jobs on the way into the Evening. An action that doesn't fit changes nothing.
 // Cues are what a screen may show (ids and values). Throwing them away leaves the state correct.
 
+import { charterAct, charterMoves, charterRefuses, meetHero, signatureHold, type CharterAct, type MeetAnswer } from './charters';
 import { answerRefusal, askAnyway, clearJob, fixOdds, queueJob, resolveEvening, type RefusalAnswer } from './dispatch';
 import { arriveApplicants, askQuestion, hire, leaveAtZero, letGo, promote, turnAway } from './roster';
 import type { JobDraft } from './odds';
@@ -26,6 +27,7 @@ import { eveningTemper } from './temper';
 import { canDo } from './canDo';
 import { checkEndings, endAct, endBattle, pressEnding } from './endings';
 import { regionMoves } from './regionRule';
+import { afterGym, l3DistrictEnd, l3Evening, l3Morning, regionAct, starLocks } from './lastThree';
 import { beginCrossing, carryLetter, clockMet, clockMorning, cross, keptWarmth, stopClock, type CrossAct } from './crossing';
 import { postAct, setRadio, voiceMorning, type PostAct } from './voice';
 import { BEATS, type Beat, type EvilModeBlock, type GymWay, type LineId, type OrderId, type PartId, type Question, type RoomType, type TableThing, type WingId } from './schema';
@@ -80,6 +82,8 @@ export type EvilAction =
   | ({ type: 'cross' } & CrossAct)
   | { type: 'letter' }
   | { type: 'stopClock'; how: 'boss' | 'hero' }
+  /** Slice 20: Alola, Galar and Paldea's In person acts (the loan, the handshake, Aether, the bag, a Star Visit), by code. */
+  | { type: 'regionAct'; code: string }
   /** Slice 11: a Racket, a Front or a Work from its Card (at Dispatch); the Boss's hand on something running; a way out of bankruptcy. */
   | { type: 'trade'; req: TradeReq }
   | { type: 'venture'; id: string; act: VentureAct }
@@ -153,7 +157,12 @@ export type EvilAction =
   | { type: 'endPress'; what: 'straight' | 'handOff' | 'walkIn'; heir?: string; line?: string; ledger?: boolean }
   /** Slice 18: a piece of post opened, left, pinned or answered (any beat); the Radio switched off or on (at Night). */
   | { type: 'postAct'; id: string; act: PostAct }
-  | { type: 'radio'; on: boolean };
+  | { type: 'radio'; on: boolean }
+
+  /** Slice 22: a Charter's house rule (return a thing, answer the roll, name the team). */
+  | { type: 'charterAct'; act: CharterAct }
+  /** Slice 22: the Turn's first meeting with the Hero (Part 28 section 15.2). */
+  | { type: 'turnMeet'; answer: MeetAnswer };
 
 export type EvilCue = { id: 'beat'; beat: Beat } | { id: 'newDay'; day: number } | { id: 'refused'; reason: string } | { id: 'queued'; holdingId: string } | { id: 'districtEnd'; how: 'held' | 'taken' | 'arrival' | 'reckoning' } | { id: 'filed'; text: string } | { id: 'asked'; line: string } | { id: 'said'; line: string } | { id: 'refusal' } | { id: 'fight' } | { id: 'road'; lines: string[] } | { id: 'ending' } | { id: 'knock'; n: number } | { id: 'moved'; line: string };
 
@@ -171,17 +180,27 @@ export const nextBeat = (beat: Beat): Beat => BEATS[(BEATS.indexOf(beat) + 1) % 
 export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
   // Slice 15: once an ending has begun, only its scenes (and its battle) move anything.
   if (block0.ending) return stepEnding(block0, action);
+  // Slice 22: a Charter's locks, and its house rule's own acts.
+  const locked = charterRefuses(block0, action as never);
+  if (locked) return { block: block0, cues: [{ id: 'refused', reason: locked }], ok: false };
   // Slice 18: the post and the set.
   if (action.type === 'postAct' || action.type === 'radio') return stepVoice(block0, action);
-  const r = stepInner(block0, action);
+  const r = action.type === 'charterAct' ? charterStep(block0, action.act) : action.type === 'turnMeet' ? said(meetHero(block0, action.answer)) : stepInner(block0, action);
   // Slice 13: the neighbour's Morning (messages, and each tick on its day) comes with every Morning, however it's reached.
   if (!r.ok) return r;
+  // Slice 22, the Group (Part 28 section 11.3): a spend over the limit is held for the board (saved, so ok: the hold is kept).
+  const held = action.type === 'charterAct' || action.type === 'turnMeet' ? null : signatureHold(block0, action as never, r.block);
+  if (held) return { block: held.block, cues: [{ id: 'refused', reason: held.reason }], ok: true };
   // Slice 16: Hoenn's second clock (each Reckoning Morning; they meet if the Reckoning ends with it running).
-  let b = clockMorning(schemeMorning(neighbourMorning(settleRegion(clockMet(keptWarmth(neighbourDistrictEnd(r.block)))))));
+  let b = l3Morning(clockMorning(schemeMorning(neighbourMorning(settleRegion(clockMet(keptWarmth(l3DistrictEnd(neighbourDistrictEnd(r.block)))))))));
   // Slice 14: the Reckoning lost (the Hero reached the base) costs the Scheme groundwork, once a region.
   if (b.district?.end?.how === 'reckoning' && b.scheme) b = reckoningLost(b).block;
   // Slice 19: Sinnoh halves every Loyalty change; Unova doubles every Regard and Dread change (Part 26b sections 1.1, 2.1).
   b = regionMoves(block0, b);
+  // Slice 22: a Charter's first week counts double; the Staff Room's Dread and Heat; the roll and the dues.
+  b = charterMoves(block0, b);
+  // Slice 20: Team Star can't stand at War, Rivals, Front or Merger, whatever path tried (Part 15b section 5.1).
+  b = starLocks(b);
   // Slice 15: the endings are checked after every step, in their order (Part 23 section 1.1).
   b = checkEndings(block0, b);
   // Slice 16: a region that isn't the run's last ends at the Crossing.
@@ -199,6 +218,16 @@ function stepVoice(block: EvilModeBlock, action: Extract<EvilAction, { type: 'po
   if (action.type === 'radio' && !action.on && block.here.beat !== 'night') return no('The set is switched off at Night.');
   const r = action.type === 'radio' ? setRadio(block, action.on) : postAct(block, action.id, action.act);
   return r.problem ? no(r.problem) : { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
+}
+
+function charterStep(block: EvilModeBlock, act: CharterAct): StepResult {
+  return said(charterAct(block, act));
+}
+
+function said(r: { block: EvilModeBlock; problem: string | null; lines: string[] }): StepResult {
+  const block = r.block;
+  if (r.problem) return { block, cues: [{ id: 'refused', reason: r.problem }], ok: false };
+  return { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
 }
 
 function stepEnding(block: EvilModeBlock, action: EvilAction): StepResult {
@@ -280,7 +309,10 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
       return { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
     }
     if (f.kind === 'gym' || f.kind === 'challenge') {
-      const r = gymResult(block, action.won);
+      const r0 = gymResult(block, action.won);
+      // Slice 20 (Galar): the match was on television; a won Beat waits on the handshake.
+      const pitch = afterGym(block, r0.block, action.won);
+      const r = { block: pitch.block, lines: [...r0.lines, ...pitch.lines] };
       return { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
     }
     const queue = block.queue.map((j) => (j.holdingId === f.holdingId && j.method === 'outplay' ? { ...j, played: action.won ? ('won' as const) : ('lost' as const) } : j));
@@ -316,6 +348,10 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
     const r = action.type === 'sitDown' ? sitDown(block) : action.type === 'sitAnswer' ? sitAnswer(block, action.i) : action.type === 'table' ? putOnTable(block, action.thing, action.personId) : action.type === 'rise' ? rise(block) : action.type === 'chair' ? chairAct(block) : legendAct(block);
     if (r.problem) return no(r.problem);
     return { block: r.block, cues: [...r.lines.map((line) => ({ id: 'said' as const, line })), ...(r.block.fight && !block.fight ? [{ id: 'fight' as const }] : [])], ok: true };
+  }
+  if (action.type === 'regionAct') {
+    const r = regionAct(block, action.code);
+    return r.problem ? no(r.problem) : { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
   }
   if (action.type === 'letter' || action.type === 'stopClock') {
     const r = action.type === 'letter' ? carryLetter(block) : stopClock(block, action.how);
@@ -426,7 +462,7 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
   let out: EvilModeBlock = { ...pre, here: { ...pre.here, day, beat: to } };
   // "Send them" fixes the odds; going into the Evening rolls every job once (design Part 30 section 5.2).
   if (action.type === 'send') out = fixOdds(out);
-  if (to === 'evening') out = friendCheck(eveningTemper(schemeEvening(neighbourEvening(raidEvening(baseEvening(gymEvening(resolveEvening(out))))))));
+  if (to === 'evening') out = l3Evening(friendCheck(eveningTemper(schemeEvening(neighbourEvening(raidEvening(baseEvening(gymEvening(resolveEvening(out)))))))));
   // Slice 12: the night before the walk (Part 21 section 3.2).
   if (to === 'night') out = nightBefore(out);
   // Slice 7: the knock is drawn on the way into the Night (one `evil-people` draw, even when nobody comes).
