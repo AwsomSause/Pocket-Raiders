@@ -256,7 +256,8 @@ test('New UI: a win shows the Exp panel, the level-up window and the evolution p
   // The evolution takes the whole picture: no boxes, the words under it.
   await confirmUntil(page, count('.burst'), 60_000);
   await expect(stages.locator('.win.glass')).toHaveCount(0);
-  await expect(stages.locator('.txt')).toContainText(/evolving|evolved/);
+  // The evolution scene's own card: its line waits for a key.
+  await expect(stages.locator('.txt', { hasText: /evolving|evolved/ }).first()).toBeVisible();
   await page.screenshot({ path: 'test-results/newui-evolution.png' });
   // Then the run goes on, a new species in the party.
   await confirmUntil(page, async () => (await page.evaluate(() => (window as any).__pkr.activeScene())) !== 'Battle', 60_000);

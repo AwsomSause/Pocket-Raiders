@@ -10,6 +10,7 @@
 // (core choiceRisk), and an outcome that visibly lands: chips pop with a
 // burst and the money pill counts to the new total.
 
+import { evolutionsAfter, partyBefore, playEvolutions } from '../ui/evolutionScene';
 import { stopArtFor } from '../ui/stopArt';
 import Phaser from 'phaser';
 import { clockLabel, periodOf, PERIOD_LOOK, seasonOf, specialDateToday } from '../core/clock';
@@ -745,8 +746,17 @@ export class EventScene extends Phaser.Scene {
       }
       this.busy = false;
     }
+    const before = partyBefore();
     this.result = session.chooseEvent(this.sideId, this.index, tradeUid, grade);
     this.phase = 'outcome';
+    // A choice that evolved a party Pokémon plays the evolution scene before its outcome text.
+    const evolved = evolutionsAfter(before);
+    if (evolved.length) {
+      this.busy = true;
+      await playEvolutions(this, evolved);
+      this.busy = false;
+      if (!this.sys.isActive()) return;
+    }
     playSfx(this, 'ui.select', 0.6);
     const wait = this.layout?.picked(this.index) ?? 10;
     this.time.delayedCall(wait, () => this.showOutcome());
