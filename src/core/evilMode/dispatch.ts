@@ -4,6 +4,7 @@
 
 import { questBusy } from './quest';
 import { moleStops } from './mole';
+import { takingsScale } from './charterRules';
 import { hashSeed, Rng } from '../rng';
 import { countsFor, fairPrice, payAmount, heldCount, holdingName, isSpeech, kindDef, localOf, methodsFor, settleTown, shiftMood, streetName, streetOf } from './board';
 import { EVIL_DATA, type EvilData } from './data';
@@ -298,7 +299,8 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
   const ec = econEvening({ ...block, team, crew, district }, data);
   ({ team, crew, district } = { team: ec.block.team, crew: ec.block.crew, district: ec.block.district! });
   let econ = ec.block.economy;
-  const holdingsIncome = district.holdings.reduce((n, h) => n + takingsAt(h, block.rates, data), 0) + past.amount;
+  // Slice 22, Plasma (Part 28 section 8.3): nothing until the sentence is whole, then double for the rest of that region.
+  const holdingsIncome = (district.holdings.reduce((n, h) => n + takingsAt(h, block.rates, data), 0) + past.amount) * takingsScale(block);
   const income = holdingsIncome + ec.income;
   const paid = crew.filter((c) => c.where === 'in');
   const wages = team.creed === 'belonging' ? Math.max(0, Math.floor(income / 2)) : paid.reduce((n, c) => n + wageOf({ ...block, team }, c, income, data), 0);

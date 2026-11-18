@@ -10,6 +10,7 @@ import { makeRoad } from './road';
 import { monName } from './temper';
 import { RivalSchema } from '../story/schema';
 import { foundTeam, type FoundingChoice } from './start';
+import { takeCharter } from './charters';
 import type { EvilModeBlock, RunLength } from './schema';
 
 /** The Run Setup mode id (src/data/runRules.json). */
@@ -23,6 +24,15 @@ export function foundInRun(run: RunState, choice: FoundingChoice, length: RunLen
   if (!isEvilRun(run)) return { run, problem: 'This run is not an Evil Mode run.' };
   if (run.expansion?.evilMode) return { run, problem: null };
   const out = foundTeam(choice, { boss: run.archetypeId, length, seed: run.seed, ...(stage ? { stage } : {}) });
+  if (!out.ok) return { run, problem: out.problem };
+  return { run: ensureHero({ ...run, expansion: { ...(run.expansion ?? {}), evilMode: out.block } }), problem: null };
+}
+
+/** Slice 22: takes a Charter once (Part 28): pages 2 to 8 are the Charter's, the Boss and starter the player's. */
+export function charterInRun(run: RunState, id: string, length: RunLength): { run: RunState; problem: string | null } {
+  if (!isEvilRun(run)) return { run, problem: 'This run is not an Evil Mode run.' };
+  if (run.expansion?.evilMode) return { run, problem: null };
+  const out = takeCharter(id, { boss: run.archetypeId, length, seed: run.seed });
   if (!out.ok) return { run, problem: out.problem };
   return { run: ensureHero({ ...run, expansion: { ...(run.expansion ?? {}), evilMode: out.block } }), problem: null };
 }

@@ -14,10 +14,12 @@ import { services } from '../game/services';
 import { onInputAction, type InputAction } from '../ui/input';
 import { rxFileOf } from '../ui/redux/assets';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
-import { foundingView, frameView } from '../ui/redux/screens/evilFounding';
+import { charterView, foundingView, frameView, turnView } from '../ui/redux/screens/evilFounding';
+import { charterTabModel, chartersOpen, houseActs, meetingModel, type MeetAnswer } from '../core/evilMode/charters';
+import { flameAt } from '../core/evilMode/fires';
 import { boardView } from '../ui/redux/screens/evilBoard';
 import { crossActOf, crossingModel } from '../core/evilMode/crossing';
-import { boardModel, dispatchRows, newDispatch, type DispatchDraft } from '../core/evilMode/boardScreens';
+import { boardModel, dispatchRows, methodsShown, newDispatch, type DispatchDraft } from '../core/evilMode/boardScreens';
 import { JOB_METHODS, type JobMethod } from '../core/evilMode/schema';
 import { GAME_WIDTH } from '../ui/theme';
 import { gateKey, gateSeen, openGate, otherWay, type CardGate } from '../core/evilMode/card';
@@ -62,6 +64,8 @@ export class EvilScene extends Phaser.Scene {
   private view: ReduxView | null = null;
   private draft: FoundingDraft = newDraft();
   private disp: DispatchDraft = newDispatch();
+  /** Slice 22: on a phone, which edge tab is slid in (the day's text on the left, the holding on the right). */
+  private rail: '' | 'left' | 'right' = '';
   private notice: string | null = null;
   private input_: HTMLInputElement | null = null;
   private leaving = false;
@@ -100,6 +104,10 @@ export class EvilScene extends Phaser.Scene {
   private own_: HTMLInputElement | null = null;
   private roomSeen: number | null = null;
   private bgOf: (id: string) => string | null = () => null;
+  /** Slice 22: the Charters tab (its row and confirm), and the Turn card's button and confirm. */
+  private charter: { at: number; confirming: boolean } | null = null;
+  private turnSel = 0;
+  private turnConfirm = false;
 
   constructor() {
     super('Evil');
@@ -130,6 +138,9 @@ export class EvilScene extends Phaser.Scene {
     this.base = null;
     this.road = null;
     this.roomSeen = null;
+    this.charter = null;
+    this.turnSel = 0;
+    this.turnConfirm = false;
     const { session } = services();
     if (!session.run) return void this.scene.start('MainMenu');
     session.evilEnsure();
@@ -153,6 +164,8 @@ export class EvilScene extends Phaser.Scene {
         }
         if (block?.district) {
           const frame = frameModel(block, archetype.name);
+          // Slice 22: the fire reminder (Settings), a Morning line while the flame's on the road.
+          if (block.here.beat === 'morning' && services().session.settings.expansion.evilFireReminder && block.district && flameAt(block) !== null) frame.chips = [...frame.chips, `A fire's lit on the road, step ${flameAt(block)}. A fire missed is gone.`];
           // The Card takes the whole stage; the frame falls away (design Part 29 section 3).
           if (this.card) return cardView(cardModel(block, this.card), block.team.look.a, block.team.look.b);
           if (block.district.end && block.region.crossing) frame.button = 'The Crossing';
@@ -185,7 +198,7 @@ export class EvilScene extends Phaser.Scene {
           const rdm = forced || (this.road !== null && !ledger && !roster && !file && !line && !gym && !base) ? roadModel(block, this.roomSeen === block.here.region) : null;
           // The fire's and the room's own lines are already on the page: only a refusal is said again under them.
           const road = rdm ? roadView(rdm, this.road ?? 0, this.notice && !rdm.lines.includes(this.notice) ? this.notice : null) : undefined;
-          if (forced && road) return frameView(c, frame, this.notice, `<div style="--team-a:${block.team.look.a};--team-b:${block.team.look.b}">${boardView(boardModel(block, this.disp), frame, this.notice, { road, filed: filedCorner(this.filed) })}</div>`);
+          if (forced && road) return frameView(c, frame, this.notice, `<div style="--team-a:${block.team.look.a};--team-b:${block.team.look.b}">${boardView(boardModel(block, this.disp, EVIL_DATA, { seed: services().session.settings.expansion.evilRollSeed }), frame, this.notice, { road, filed: filedCorner(this.filed) })}</div>`);
           // An order across a line is answered in the yard before anything else moves (Part 7 section 11.1).
           const yard = refusalModel(block);
           const ms = moleSceneModel(block);
@@ -193,13 +206,26 @@ export class EvilScene extends Phaser.Scene {
           const look = `<div style="--team-a:${block.team.look.a};--team-b:${block.team.look.b}">`;
           // Slice 7: at Night the Office takes the board's place (design Part 29 section 11).
           const night = block.here.beat === 'night' && !block.district.end && !ledger && !roster && !file && !line && !gym && !base && !trade && !nbPage && !scPage && !road && !suspicions ? nightView(nightModel(block, this.night, this.lastWho), this.notice) : undefined;
-          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), ...(line ? { line } : {}), ...(gym ? { gym } : {}), ...(trade ? { trade } : {}), ...(nbPage ? { neighbour: nbPage } : {}), ...(scPage ? { scheme: scPage } : {}), ...(suspicions ? { suspicions } : {}), ...(base ? { base } : {}), ...(road ? { road } : {}), ...(night ? { night } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
+          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp, EVIL_DATA, { seed: services().session.settings.expansion.evilRollSeed }), frame, this.notice, { rail: this.rail, ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), ...(line ? { line } : {}), ...(gym ? { gym } : {}), ...(trade ? { trade } : {}), ...(nbPage ? { neighbour: nbPage } : {}), ...(scPage ? { scheme: scPage } : {}), ...(suspicions ? { suspicions } : {}), ...(base ? { base } : {}), ...(road ? { road } : {}), ...(night ? { night } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
         }
         if (block) return frameView(c, frameModel(block, archetype.name), this.notice);
+        // Slice 22: a main-game run that won its takeover sees the Turn's card here; a new team may take a Charter.
+        const offer = services().session.evilTurnOffer();
+        if (offer && r && r.rules.modeId !== 'evil-mode') return turnView(c, offer, this.turnConfirm, oldLook, this.turnSel);
+        if (this.charter) return charterView(c, charterTabModel(this.charter.at, this.charter.confirming));
         return foundingView(c, foundingModel(this.draft, { bossName: archetype.name, bossFile, starter: species?.name ?? '—', starterFile, oldLook, length: services().session.settings.expansion.evilRunLength }));
       },
       acts: {
         pick: (i) => this.pick(Number(i)),
+        charters: () => this.openCharters(),
+        charterPick: (i) => { if (this.charter) this.charter = { at: Number(i), confirming: false }; this.view?.refresh(); },
+        charterBack: () => { this.charter = null; this.syncInput(); this.view?.refresh(); },
+        charterTake: () => this.takeCharter(),
+        house: (i) => this.houseAct(Number(i)),
+        meet: (k) => this.meet(String(k) as MeetAnswer),
+        rail: (k) => { this.rail = this.rail === k ? '' : (String(k) as 'left' | 'right'); this.view?.refresh(); },
+        turnTake: () => { this.turnSel = 0; this.turnChoose(); },
+        turnWalk: () => { this.turnSel = 1; this.turnChoose(); },
         next: () => this.next(),
         back: () => this.back(),
         suggest: (n) => this.setName(n),
@@ -207,7 +233,8 @@ export class EvilScene extends Phaser.Scene {
         cell: (i) => this.cell(Number(i)),
         crew: (id) => this.toggleCrew(id),
         how: () => this.toHow(),
-        method: (i) => { this.disp = { ...this.disp, how: Number(i), step: 'how' }; this.view?.refresh(); },
+        // Slice 22: on a phone a method's tap opens the Card straight away once somebody's picked: where, who, how, confirm.
+        method: (i) => { this.disp = { ...this.disp, how: Number(i), step: 'how' }; if (document.body.classList.contains('rx-phone') && this.disp.squad.length) return this.openCard(false); this.view?.refresh(); },
         offer: (pct) => { this.disp = { ...this.disp, offer: Number(pct) }; this.view?.refresh(); },
         queue: () => this.openCard(false),
         cardConfirm: () => this.confirmCard(),
@@ -318,6 +345,8 @@ export class EvilScene extends Phaser.Scene {
   private key(a: InputAction): void {
     if (this.leaving) return;
     if (this.founded()) return this.dayKey(a);
+    if (services().session.evilTurnOffer()) return this.turnKey(a);
+    if (this.charter) return this.charterKey(a);
     const d = this.draft;
     if (a === 'confirm') return this.next();
     if (a === 'back') return this.back();
@@ -354,6 +383,79 @@ export class EvilScene extends Phaser.Scene {
       this.draft = { ...d, at: i, region: r && r.status !== 'disabled' ? r.id : d.region };
     }
     this.view?.refresh();
+  }
+
+  // ---- Slice 22: Charters, the house rule, the Turn ----
+
+  private openCharters(): void {
+    if (this.founded()) return;
+    this.charter = { at: 0, confirming: false };
+    this.syncInput();
+    this.view?.refresh();
+  }
+
+  private charterKey(a: InputAction): void {
+    const c = this.charter!;
+    const n = chartersOpen().length;
+    if (a === 'back') { if (c.confirming) this.charter = { ...c, confirming: false }; else this.charter = null; this.syncInput(); return void this.view?.refresh(); }
+    if (a === 'up' || a === 'down' || a === 'left' || a === 'right') this.charter = { at: (c.at + (a === 'up' || a === 'left' ? -1 : 1) + n) % n, confirming: false };
+    if (a === 'confirm') return this.takeCharter();
+    this.view?.refresh();
+  }
+
+  /** "Take it", then again to confirm (the same confirm as Found it). */
+  private takeCharter(): void {
+    const c = this.charter;
+    if (!c) return;
+    if (!c.confirming) { this.charter = { ...c, confirming: true }; return void this.view?.refresh(); }
+    const id = chartersOpen()[c.at]?.id;
+    const problem = id ? services().session.evilCharter(id) : 'Choose a Charter.';
+    this.notice = problem;
+    if (!problem) this.charter = null;
+    this.syncInput();
+    this.view?.refresh();
+  }
+
+  /** The Turn's first meeting: one of the three answers. */
+  private meet(answer: MeetAnswer): void {
+    const cues = services().session.evilStep({ type: 'turnMeet', answer });
+    const said = cues.filter((x) => x.id === 'said' || x.id === 'refused');
+    this.notice = said.length ? said.map((x) => (x.id === 'said' ? x.line : x.id === 'refused' ? x.reason : '')).join(' ') : null;
+    this.view?.refresh();
+  }
+
+  /** The house rule's button (i), or the first that can be pressed (-1, the U key). */
+  private houseAct(i: number): void {
+    const block = this.block();
+    if (!block) return;
+    const acts = houseActs(block, undefined, { at: block.district?.holdings[this.disp.at]?.id ?? '' });
+    const a = i < 0 ? acts.find((x) => !x.problem) : acts[i];
+    if (!a) return;
+    const cues = services().session.evilStep({ type: 'charterAct', act: a.act });
+    const said = cues.find((x) => x.id === 'said' || x.id === 'refused');
+    this.notice = said ? (said.id === 'said' ? said.line : said.id === 'refused' ? said.reason : null) : null;
+    this.view?.refresh();
+  }
+
+  private turnKey(a: InputAction): void {
+    if (a === 'left' || a === 'right' || a === 'up' || a === 'down') { this.turnSel = 1 - this.turnSel; this.turnConfirm = false; }
+    else if (a === 'back') this.turnConfirm = false;
+    else if (a === 'confirm') return this.turnChoose();
+    this.view?.refresh();
+  }
+
+  /** Take the chair (with its confirm), or walk away: today's ending, and the map again. */
+  private turnChoose(): void {
+    const { session } = services();
+    if (this.turnSel === 1) {
+      session.evilWalkAway();
+      this.leaving = true;
+      return void this.scene.start('Map');
+    }
+    if (!this.turnConfirm) { this.turnConfirm = true; return void this.view?.refresh(); }
+    this.turnConfirm = false;
+    if (session.evilTurn()) this.scene.restart();
+    else this.view?.refresh();
   }
 
   private setName(name: string): void {
@@ -494,8 +596,8 @@ export class EvilScene extends Phaser.Scene {
     }
     // How: left/right the seven methods; up/down the Pay offer; Enter queues.
     if (a === 'back') this.disp = { ...d, step: 'who' };
-    else if (a === 'left' || a === 'right') this.disp = { ...d, how: (d.how + (a === 'left' ? -1 : 1) + EVIL_DATA.methods.length) % EVIL_DATA.methods.length };
-    else if ((a === 'up' || a === 'down') && EVIL_DATA.methods[d.how]?.id === 'take') {
+    else if (a === 'left' || a === 'right') { const n = methodsShown(block).length; this.disp = { ...d, how: (d.how + (a === 'left' ? -1 : 1) + n) % n }; }
+    else if ((a === 'up' || a === 'down') && methodsShown(block)[d.how]?.id === 'take') {
       const things = EVIL_DATA.line.things.map((t) => t.id);
       this.disp = { ...d, thing: things[(things.indexOf(d.thing) + (a === 'up' ? -1 : 1) + things.length) % things.length]! };
     } else if (a === 'up' || a === 'down') {
@@ -528,7 +630,7 @@ export class EvilScene extends Phaser.Scene {
     if (!block) return;
     const d = this.disp;
     // Start on the first built method that this holding offers (the screen never recommends one; this is only the cursor).
-    const first = EVIL_DATA.methods.findIndex((m) => (JOB_METHODS as readonly string[]).includes(m.id));
+    const first = methodsShown(block).findIndex((m) => (JOB_METHODS as readonly string[]).includes(m.id));
     this.disp = { ...d, step: 'how', how: d.step === 'how' ? d.how : first };
     this.view?.refresh();
   }
@@ -536,8 +638,9 @@ export class EvilScene extends Phaser.Scene {
   /** The job being built in How, or null. */
   private draftJob(): JobDraft | null {
     const d = this.disp;
-    const h = this.block()?.district?.holdings[d.at];
-    const m = EVIL_DATA.methods[d.how];
+    const b = this.block();
+    const h = b?.district?.holdings[d.at];
+    const m = b ? methodsShown(b)[d.how] : undefined;
     if (!h || !m || !(JOB_METHODS as readonly string[]).includes(m.id)) return null;
     const method = m.id as JobMethod;
     return { holdingId: h.id, method, squad: d.squad, ...(method === 'pay' ? { offer: d.offer } : {}), ...(method === 'take' ? { thing: d.thing } : {}) };
@@ -618,6 +721,13 @@ export class EvilScene extends Phaser.Scene {
   }
 
   private rawKey(e: KeyboardEvent, type: 'down' | 'up'): void {
+    // Slice 22: C opens the Charters tab before a team exists (not on the name page, where C is a letter); U is the house rule's act.
+    if (e.code === 'KeyC' && type === 'down' && !e.repeat && !this.founded() && !this.charter && this.draft.page !== 'name' && !services().session.evilTurnOffer()) return this.openCharters();
+    if (e.code === 'KeyU' && type === 'down' && !e.repeat && !this.card && this.block()?.district) return this.houseAct(-1);
+    // The Turn's first meeting: 1, 2, 3 answer the Hero.
+    const mt = this.block() ? meetingModel(this.block()!) : null;
+    if (mt && type === 'down' && !e.repeat && /^(Digit|Numpad)[123]$/.test(e.code)) return this.meet(mt.answers[Number(e.code.slice(-1)) - 1]!.key);
+    if (e.code === 'KeyN' && this.block()?.charter?.id === 'staff-room') return;
     if (e.code === 'KeyN' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleLine();
     // The Line: Enter held two seconds moves it; letting go early cancels (Part 3 section 7.1).
     if (this.line !== null && !this.card && CONFIRM_CODES.has(e.code)) {
@@ -1459,7 +1569,7 @@ export class EvilScene extends Phaser.Scene {
 
   /** The name page's real text box (phones show their own keyboard), laid over the page's field. */
   private syncInput(): void {
-    const want = !this.founded() && this.draft.page === 'name';
+    const want = !this.founded() && !this.charter && !services().session.evilTurnOffer() && this.draft.page === 'name';
     if (!want) return this.dropInput();
     if (this.input_) return;
     const el = document.createElement('input');

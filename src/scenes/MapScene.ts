@@ -598,6 +598,11 @@ export class MapScene extends Phaser.Scene {
       this.scene.start('Story', { next: 'Map' });
       return;
     }
+    // Evil Mode slice 22: the takeover after "Take it all" was won and a region remains: the Turn's card comes first.
+    if (session.evilTurnOffer()) {
+      this.scene.start('Evil');
+      return;
+    }
     // R9: the rival's Rescue Plan offer, at a quiet moment, shown on top of the map (the screen resumes this scene).
     const running = runningRescue(session.content, run);
     const rescue = running ? null : pendingRescue(session.content, run);

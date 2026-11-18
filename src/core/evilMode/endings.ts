@@ -3,6 +3,7 @@
 // far (nothing else is stored), so a save made on any scene reloads into it. Pure: no stream is drawn, no profile is read.
 // Every ending pays the same for the same distance (section 9.3): the pay reads the distance and never the ending.
 
+import { runRegions } from './runLength';
 import { loanVested } from './lastThree';
 import { EVIL_DATA, type EvilData } from './data';
 import { appendLog, fill } from './ledger';
@@ -50,7 +51,7 @@ const NEXT: EndChoice[] = [];
 
 /** The last region this run can reach: its length (three or six), or the last one written, whichever's first. */
 export const lastRegion = (block: Pick<EvilModeBlock, 'settings'>, data: EvilData = EVIL_DATA): number =>
-  Math.min(block.settings.length === 'six' ? 6 : 3, regionsWritten(data)) - 1;
+  Math.min(runRegions(block), regionsWritten(data)) - 1;
 export const inLastRegion = (block: EvilModeBlock, data: EvilData = EVIL_DATA): boolean => runIndex(block) >= lastRegion(block, data);
 export const endingsOn = (data: EvilData = EVIL_DATA): boolean => D(data).on;
 

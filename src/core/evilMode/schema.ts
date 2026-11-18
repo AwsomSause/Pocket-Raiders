@@ -358,7 +358,7 @@ export const StoredCardSchema = z.object({
 }).strict();
 export type StoredCard = z.infer<typeof StoredCardSchema>;
 
-export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym', 'econ', 'neighbour', 'scheme', 'base', 'raid', 'ending', 'knock', 'heard', 'wall', 'quest', 'office'] as const;
+export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym', 'econ', 'neighbour', 'scheme', 'base', 'raid', 'ending', 'knock', 'heard', 'wall', 'charter', 'quest', 'office'] as const;
 
 /** One line of the Log (Part 30 section 7.1, the kinds slice 3 writes). Never edited, never removed. */
 export const LogEntrySchema = z.object({
@@ -1445,12 +1445,64 @@ export const MoleFileSchema = z.object({
   poached: T17, ran: T17, sentLeft: T17,
 }).strict();
 
+/** Slice 22 (Part 28): the Charter taken, its house rule's running figures. All plain counts; nothing here is rolled. */
+export const CharterStateSchema = z.object({
+  id: z.string().min(1),
+  rule: z.string().min(1),
+  /** Rocket: things returned from the Ledger, and the day of the last (one an Evening). */
+  returned: z.number().int().min(0),
+  returnedOn: z.number().int().min(0),
+  /** Rocket's Return: mornings answered, mornings read, the run of days answered, the day last answered, regions the +1 was paid in, and the roll's missed count. */
+  answered: z.number().int().min(0),
+  read: z.number().int().min(0),
+  streak: z.number().int().min(0),
+  answeredOn: z.number().int().min(0),
+  paidIn: z.array(z.number().int().min(0)),
+  missed: z.number().int().min(0),
+  /** The Joint Command: who's blue (everyone else is red), and whether the Hall has named the team. */
+  blue: z.array(z.string().min(1)),
+  named: z.boolean(),
+  /** Flare: dues paid, and the days they were paid on. */
+  dues: z.number().int().min(0),
+  duesOn: z.array(z.number().int().min(1)),
+  /** The day the Charter's first week ends (Loyalty moves count double before it). */
+  doubleTo: z.number().int().min(0),
+  /** Galactic (7.3): holdings whose local has been asked in person, and the day of the last ask (one a day). */
+  asked: z.array(z.string().min(1)).optional(),
+  askedOn: z.number().int().min(0).optional(),
+  /** Plasma (8.3): the Cause sentence's four parts as they're put forward; whether "what we do" is waiting on the Boss; the region it was whole in. */
+  sentence: z.object({ who: z.string().nullable(), wrong: z.string().nullable(), do: z.string().nullable(), wont: z.string().nullable() }).strict().optional(),
+  causeDue: z.boolean().optional(),
+  wholeIn: z.number().int().min(0).nullable().optional(),
+  /** Flare (9.3): members not laid for at the next dinner. */
+  unseated: z.array(z.string().min(1)).optional(),
+  /** The Two Boards (10.3): Aether's purse, and the day of the last form Faba signed (one a day). */
+  aether: z.number().int().min(0).optional(),
+  formOn: z.number().int().min(0).optional(),
+  /** The Group (11.3): a spend waiting on the board (the answer comes next Morning), what the board has said yes to, and the districts a memo was written in. */
+  pending: z.object({ key: z.string().min(1), what: z.string().min(1), amount: z.number().int().min(0), day: z.number().int().min(1) }).strict().nullable().optional(),
+  approved: z.array(z.string().min(1)).optional(),
+  memoIn: z.array(z.string().min(1)).optional(),
+}).strict();
+export type CharterState = z.infer<typeof CharterStateSchema>;
+export const TurnStateSchema = z.object({
+  /** The main-game team whose route was taken (its `evil-start-<team>` flag). */
+  team: z.string().min(1),
+  /** The run's own rivals, by record id, given the four roles (Part 28 section 15); null where the run had fewer than four. */
+  hero: z.string().nullable(), rival: z.string().nullable(), friend: z.string().nullable(), stray: z.string().nullable(),
+  /** The money above the cap, in the Boss's own pocket (lendable once). */
+  pocket: z.number().int().min(0),
+  /** The first meeting after (day 2 of the first district): answered or not, and the answer. */
+  met: z.enum(['lie', 'true', 'silent']).nullable(),
+}).strict();
+export type TurnState = z.infer<typeof TurnStateSchema>;
+
 const BlockV7Schema = z.object({
   /** The block's own version, for its own migrations. 7: slice 8 added the Gyms. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a waiting fight, who's posted, and the day's in-person job. 6: slice 6 added proof held and the last move of the Line. 20 (reserved for slice 7): the Night, and each person's mood and knocks. */
   v: z.literal(21),
   from: z.enum(['founding', 'charter', 'turn']),
   /** Copied from Settings at founding, so a setting changed mid-run never changes this run. */
-  settings: z.object({ length: RunLengthSchema }),
+  settings: z.object({ length: RunLengthSchema, /** Slice 22: a Turned run keeps the regions the main run had left (1 to 6); absent, the length's three or six. */ regions: z.number().int().min(1).max(9).optional() }),
   team: EvilTeamSchema,
   here: z.object({ region: z.number().int().min(0), stage: z.number().int().min(1).max(8), day: z.number().int().min(1), beat: BeatSchema }),
   /** How many numbers each stream has given out (design Part 30 section 5.1). */
@@ -1512,6 +1564,9 @@ const BlockV7Schema = z.object({
   quests: z.record(z.string(), QuestStateSchema),
   /** Slice 17: the mole (Part 11). Hidden state: no card, sort order or screen reads it before they're found. */
   mole: MoleStateSchema,
+  /** Slice 22: a Charter's house (optional: a founded team has none) and, on a Turned run, which of the run's rivals took which role. */
+  charter: CharterStateSchema.optional(),
+  turn: TurnStateSchema.optional(),
 }).strict();
 
 /** What a Hero made before slice 12 starts with (and what `makeHero` gives a new one). */

@@ -15,3 +15,6 @@ export const sixOpen = (regions?: readonly Row[]): boolean => regionsOpen(region
 
 /** The length a team's founded with: Six only when six regions exist; otherwise Three. */
 export const lengthFor = (asked: RunLength, regions?: readonly Row[]): RunLength => (asked === 'six' && sixOpen(regions) ? 'six' : 'three');
+
+/** Slice 22: how many regions this run plays: a Turned run's own count, else three or six. */
+export const runRegions = (block: { settings: { length: RunLength; regions?: number } }): number => block.settings.regions ?? (block.settings.length === 'six' ? 6 : 3);
