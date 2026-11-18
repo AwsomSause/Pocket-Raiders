@@ -1275,6 +1275,22 @@ export const CharterStateSchema = z.object({
   duesOn: z.array(z.number().int().min(1)),
   /** The day the Charter's first week ends (Loyalty moves count double before it). */
   doubleTo: z.number().int().min(0),
+  /** Galactic (7.3): holdings whose local has been asked in person, and the day of the last ask (one a day). */
+  asked: z.array(z.string().min(1)).optional(),
+  askedOn: z.number().int().min(0).optional(),
+  /** Plasma (8.3): the Cause sentence's four parts as they're put forward; whether "what we do" is waiting on the Boss; the region it was whole in. */
+  sentence: z.object({ who: z.string().nullable(), wrong: z.string().nullable(), do: z.string().nullable(), wont: z.string().nullable() }).strict().optional(),
+  causeDue: z.boolean().optional(),
+  wholeIn: z.number().int().min(0).nullable().optional(),
+  /** Flare (9.3): members not laid for at the next dinner. */
+  unseated: z.array(z.string().min(1)).optional(),
+  /** The Two Boards (10.3): Aether's purse, and the day of the last form Faba signed (one a day). */
+  aether: z.number().int().min(0).optional(),
+  formOn: z.number().int().min(0).optional(),
+  /** The Group (11.3): a spend waiting on the board (the answer comes next Morning), what the board has said yes to, and the districts a memo was written in. */
+  pending: z.object({ key: z.string().min(1), what: z.string().min(1), amount: z.number().int().min(0), day: z.number().int().min(1) }).strict().nullable().optional(),
+  approved: z.array(z.string().min(1)).optional(),
+  memoIn: z.array(z.string().min(1)).optional(),
 }).strict();
 export type CharterState = z.infer<typeof CharterStateSchema>;
 export const TurnStateSchema = z.object({

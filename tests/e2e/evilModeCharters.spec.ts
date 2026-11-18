@@ -134,7 +134,18 @@ test('a phone in landscape: a job is queued in four taps, with no drag', async (
   await page.waitForTimeout(400);
   expect(await page.evaluate(() => document.body.classList.contains('rx-phone'))).toBe(true);
   const s = stage(page);
+  // The Board on a phone: the map is the full width; the two rails are tabs at the edges that slide in.
+  const mapBox = (await s.getByTestId('evil-map').boundingBox())!;
+  const stageBox = (await s.boundingBox())!;
+  expect(mapBox.width).toBeGreaterThan(stageBox.width * 0.9);
+  await expect(s.getByTestId('evil-rail-right')).toBeVisible();
+  await expect(s.getByTestId('evil-panel')).not.toBeInViewport();
+  await s.getByTestId('evil-rail-right').click();
+  await expect(s.getByTestId('evil-panel')).toBeInViewport();
+  await page.screenshot({ path: info.outputPath('phone-board-740x360.png') });
+  await s.getByTestId('evil-rail-right').click();
   await s.getByTestId('evil-advance').click(); // Morning -> Dispatch
+  await expect(s.getByTestId('evil-who')).toBeHidden(); // one step at a time: where first
   await expect(s.getByTestId('evil-beat-dispatch')).toHaveAttribute('data-state', 'now');
   const b = (await run(page)).expansion.evilMode;
   const local = b.district.holdings.find((h: any) => h.kind === 'local');

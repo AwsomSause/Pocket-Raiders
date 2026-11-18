@@ -82,6 +82,22 @@ export function assignRoles(rivals: readonly RivalRecord[]): Pick<TurnState, 'he
   return { hero, rival, friend, stray };
 }
 
+/**
+ * How the inside route went (Part 28 section 14.3), read from the run's own flags, never rolled: Loyalty is 4, plus up to
+ * 2 for the kind choices made inside and minus up to 2 for the run's turn towards evil; Dread is 2, plus 1 for each thing
+ * done on the route that had a victim.
+ */
+export function routeMoods(run: Pick<RunState, 'story' | 'attributeModifiers'>, file: ChartersFile = CHARTERS): { loyalty: number; dread: number } {
+  const t = file.turn;
+  const R = t.route;
+  const flag = (k: string) => Number(run.story.flags[`ev:${k}`] ?? run.story.flags[k] ?? 0);
+  const up = Math.min(R.swing, Math.floor(Math.max(0, flag(R.kindFlag)) / R.kindPer));
+  const down = Math.min(R.swing, Math.floor(Math.max(0, -(run.attributeModifiers?.[R.evilAttribute] ?? 0)) / R.evilPer));
+  const loyalty = Math.max(0, Math.min(10, t.loyalty + Math.max(-R.swing, Math.min(R.swing, up - down))));
+  const dread = Math.min(10, t.dread + R.victims.filter((v) => flag(v) >= 1).length);
+  return { loyalty, dread };
+}
+
 /** The first Evil Mode region: the next on the main run's map if it's written, else the Charter's own. */
 function firstRegion(run: RunState, charterRegion: string, data: EvilData): string {
   const next = run.regionOrder[run.regionIndex + 1];
@@ -105,12 +121,13 @@ export function turnRun(run: RunState, data: EvilData = EVIL_DATA, file: Charter
   const funds = Math.min(run.money, t.fundsCap);
   const regard = Math.min(t.regardCeiling, Math.floor(run.badges.length / t.regardPerBadges));
   const roles = assignRoles(run.story.rivals);
+  const moods = routeMoods(run, file);
   let block: EvilModeBlock = {
     ...made.block,
     from: 'turn',
     settings: { ...made.block.settings, regions: Math.min(6, offer.regions) },
-    team: { ...made.block.team, funds, regard, dread: t.dread },
-    crew: made.block.crew.map((p) => ({ ...p, loyalty: t.loyalty, lineHeard: p.line !== null })),
+    team: { ...made.block.team, funds, regard, dread: c.dreadFixed ? 0 : moods.dread },
+    crew: made.block.crew.map((p) => ({ ...p, loyalty: moods.loyalty, lineHeard: p.line !== null })),
     turn: { team: offer.team, ...roles, pocket: Math.max(0, run.money - funds), met: null },
   };
   block = appendLog(block, { kind: 'charter', who: [], text: `Day 1. ${t.ledgerFirst}` });

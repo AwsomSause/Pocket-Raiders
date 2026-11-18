@@ -308,3 +308,33 @@
 .rx-phone [data-testid="evil-turn"] .btn[data-act] { min-height: 56px; }
 .rx-phone [data-testid="evil-charters"],
 .rx-phone [data-testid="evil-turn"] { overflow-x: hidden; }
+
+/* Evil Mode slice 22, the Board on a phone (Part 29 section 17). The wrapper is the stage's own size and lets clicks through. */
+.rx-board { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.rx-board > * { pointer-events: auto; }
+.rail-tab { display: none; }
+.rx-phone .rx-board[data-mode="day"] [data-testid="evil-map"],
+.rx-phone .rx-board[data-mode="dispatch"] [data-testid="evil-map"] { transform: scale(1.6); transform-origin: 0 0; }
+.rx-phone .rx-board[data-mode="day"] [data-testid="evil-panel"],
+.rx-phone .rx-board[data-mode="day"] [data-testid="evil-text"] { top: 130px !important; bottom: 70px !important; width: 62% !important; z-index: 5; }
+.rx-phone .rx-board[data-mode="day"] [data-testid="evil-panel"] { left: auto !important; right: 0 !important; transform: translateX(110%); }
+.rx-phone .rx-board[data-mode="day"] [data-testid="evil-text"] { left: 0 !important; transform: translateX(-110%); }
+.rx-phone .rx-board[data-rail="right"] [data-testid="evil-panel"],
+.rx-phone .rx-board[data-rail="left"] [data-testid="evil-text"] { transform: none; }
+.rx-phone .rail-tab { display: flex; align-items: center; justify-content: center; position: absolute; top: 330px; min-width: 96px; min-height: 64px; padding: 0 12px; z-index: 6; cursor: pointer; font-weight: 700; background: var(--team-b, #333); color: #fff; border-radius: 10px; }
+.rx-phone .rail-tab.left { left: 16px; }
+.rx-phone .rail-tab.right { right: 16px; }
+.rx-phone .rail-tab.left.on { left: calc(62% + 8px); }
+.rx-phone .rail-tab.right.on { right: calc(62% + 8px); }
+/* Dispatch: where, then who and how; the Card's the fourth tap. */
+.rx-phone .rx-board[data-mode="dispatch"] [data-testid="evil-where"],
+.rx-phone .rx-board[data-mode="dispatch"] [data-testid="evil-who"],
+.rx-phone .rx-board[data-mode="dispatch"] [data-testid="evil-how"] { top: 316px !important; bottom: 66px !important; }
+.rx-phone .rx-board[data-mode="dispatch"] [data-testid="evil-where"] { left: 16px !important; right: 16px !important; width: auto !important; }
+.rx-phone .rx-board[data-mode="dispatch"]:not([data-dstep="where"]) [data-testid="evil-where"] { display: none; }
+.rx-phone .rx-board[data-dstep="where"] [data-testid="evil-who"],
+.rx-phone .rx-board[data-dstep="where"] [data-testid="evil-how"] { display: none; }
+.rx-phone .rx-board[data-mode="dispatch"] [data-testid="evil-who"] { width: 220px !important; }
+.rx-phone .rx-board[data-mode="dispatch"] [data-testid="evil-how"] { left: 244px !important; right: 16px !important; width: auto !important; }
+.rx-phone .rx-board[data-mode="dispatch"] [data-testid="evil-where"] .row,
+.rx-phone .rx-board[data-mode="dispatch"] [data-testid="evil-who"] .row { line-height: 30px !important; }

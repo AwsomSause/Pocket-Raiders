@@ -30,7 +30,45 @@
     "loyalty": 4,
     "dread": 2,
     "ledgerFirst": "The inside route, as a Boss would read it.",
-    "meetingDay": 2
+    "meetingDay": 2,
+    "route": { "kindFlag": "kind-total", "kindPer": 3, "evilAttribute": "goodEvil", "evilPer": 3, "swing": 2, "victims": ["front-exposed", "flare-pool-paid", "alola-beasts-loose", "team-files-sold"] },
+    "meeting": {
+      "title": "On the road",
+      "lines": {
+        "protector": "\"Tell me they made you.\"",
+        "champion-chaser": "\"We were going to do the League. We. I've still got the route planned.\"",
+        "strategist": "\"I've been trying to work out what you get. I can't make it add up. Show me the working.\"",
+        "bitter-challenger": "\"I knew. I knew. ...I didn't want to be right.\"",
+        "enthusiast": "\"Is it true? Somebody said, and I said no, and then I said I'd ask.\"",
+        "idealist": "\"People change. That's my whole thing. I didn't think I'd have to use it on you.\"",
+        "prodigy": "\"I'm faster than you now. I wanted you to see that when it was a good thing.\"",
+        "underdog": "\"You were the one who said I could.\""
+      },
+      "answers": { "lie": "\"It's not what it looks like.\"", "true": "\"It's exactly what it looks like.\"", "silent": "(Say nothing.)" },
+      "after": { "lie": "{hero} looks at you a long time. \"Okay.\" They don't believe it, and they go.", "true": "{hero} nods once, as if they'd been hit, and goes.", "silent": "{hero} waits. Then they go, and they don't look back until the corner." }
+    }
+  },
+  "houseRules": {
+    "ask": { "rollsAs": "easy", "line": "Asked, in person, at step {step}: {mood}. It's on the Board from now on." },
+    "plasma": {
+      "who": "Bronius: \"The ones in the cellar. Start there.\"",
+      "wrong": "{name}: \"Somebody took what wasn't theirs and wrote a name on it.\"",
+      "do": ["We give them back.", "We pay for every one.", "We make the ones who took them give them back.", "We keep them until it's safe, and we say so."],
+      "wont": "The Hall, aloud: \"We won't take anyone's again. Not for a cause. Not for this one.\"",
+      "before": 0, "after": 2,
+      "returnLine": "Returned from the cellar: one label, one Pokémon, one person at the gate. Regard +1."
+    },
+    "twoBoards": { "aether": 9000, "form": 1500, "regard": -1, "formLine": "Faba countersigns: ₽{amount} from Aether's purse to Skull's. His price isn't money: Regard {regard}." },
+    "group": {
+      "limit": 2000,
+      "spends": ["build", "enlarge", "hire", "trade", "venture", "dig", "heist", "heistGo", "gymWay", "regionAct", "table", "bail", "roomAct", "queueJob", "confirmCard", "askAnyway", "staff", "place"],
+      "makesMoney": ["trade", "venture", "dig", "heist", "heistGo", "build:counting", "build:vault"],
+      "held": "₽{amount} is over ₽2,000. It goes to the board; the answer comes next Morning.",
+      "yes": "The board: yes. It makes money. ({what})",
+      "no": "The board: no, with a memo. It doesn't make money. ({what})",
+      "memo": "{name} writes the memo. The board signs it as whatever the Boss needs it called. ({what})"
+    },
+    "flare": { "unseatedLoyalty": -2, "seat": "{name} is laid for at dinner.", "unseat": "{name} isn't laid for. They won't pay, and they'll mind." }
   },
   "teams": {
     "rocket": "rocket", "rocket-return": "rocket-return", "hoenn": "joint", "galactic": "galactic", "plasma": "plasma",
@@ -109,7 +147,7 @@
       "oldGuard": { "name": "Charon", "text": "\"A new world. Honestly. Has anyone here asked what the old one's worth, per acre?\"", "turnLine": "Charon: \"The recruit! The one who asked questions. I said to Cyrus, that one'll cost us.\"" },
       "dayThree": "A Grunt laughs in the Canteen. Once. The room stops.",
       "figure": "{taken} taken.",
-      "limits": "The house rule is printed, not played: moods show as they do on any team."
+      "limits": "Moods are '?' until asked and jobs roll as Easy before; the Roster's blank lines are as on any team."
     },
     {
       "id": "plasma", "name": "Plasma", "teamName": "Plasma", "question": "What are we counting?", "status": "limited",
@@ -128,7 +166,7 @@
       "oldGuard": { "name": "Ghetsis", "text": "N writes: \"You have my room. You may have it. Please don't move the trains.\"", "turnLine": "Ghetsis: \"You knelt. I remember everyone who knelt. I remember it differently now.\"" },
       "dayThree": "The first person comes to the gate for their Pokémon, with a receipt.",
       "figure": "{given} given.",
-      "limits": "The Cause Creed is limited, so Plasma uses Belonging; the sentence is printed, not written in play."
+      "limits": "The sentence is written in play and gates the takings; the Cause Creed itself is limited, so Plasma uses Belonging."
     },
     {
       "id": "flare", "name": "Flare", "teamName": "Flare", "question": "Who's the table for?", "status": "limited",
@@ -147,7 +185,7 @@
       "oldGuard": { "name": "Xerosic", "text": "\"The chief's finished? Then it's a free experiment.\"", "turnLine": "Xerosic: \"You were on the list! Did you know? Row nine. I'd have missed you.\"" },
       "dayThree": "The list's found by a Grunt who isn't on it.",
       "figure": "Dues paid: ₽{dues}.",
-      "limits": "Every member is laid for; seats and the table's length aren't played."
+      "limits": "Members can be seated or not; seats for guests, the table's length and member-or-staff hiring aren't played."
     },
     {
       "id": "two-boards", "name": "The Two Boards", "teamName": "Skull", "question": "Who's doing the cooking?", "status": "limited",
@@ -166,7 +204,7 @@
       "oldGuard": { "name": "Lusamine", "text": "\"You were never one of my treasures, dear. You were packaging.\"", "turnLine": "Lusamine: \"The little helper. You carried trays. One doesn't negotiate with the tray.\"" },
       "dayThree": "Guzma's sent on his first job. Hala's on the route.",
       "figure": "{taken} taken.",
-      "limits": "Aether's ₽9,000 isn't drawn as a second purse yet; the team spends Skull's."
+      "limits": "Aether's ₽9,000 is its own purse, moved by Faba's form; jobs and rooms spend Skull's, and the Kitchen vote isn't played."
     },
     {
       "id": "group", "name": "The Group", "teamName": "Macro Cosmos", "question": "Who signed for this?", "status": "limited",
@@ -185,7 +223,7 @@
       "oldGuard": { "name": "The Chairman", "text": "By courier, with a seed packet: \"I gather you've found the eighth column. Do water it.\"", "turnLine": "Oleana: \"He asked me to say he always thought you'd go far. He asked me not to say how far.\"" },
       "dayThree": "Mr. Pettigrew puts the eighth column's file on the desk and doesn't sit down.",
       "figure": "{taken} taken.",
-      "limits": "Spends aren't held for the board yet; the ₽20,000 spends as any Funds."
+      "limits": "Spends over ₽2,000 go to the board and the Books memo works; dissolving columns isn't played."
     },
     {
       "id": "staff-room", "name": "The Staff Room", "teamName": "Staff", "question": "Where were the adults?", "status": "supported",

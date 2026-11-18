@@ -15,7 +15,7 @@ import { onInputAction, type InputAction } from '../ui/input';
 import { rxFileOf } from '../ui/redux/assets';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { charterView, foundingView, frameView, turnView } from '../ui/redux/screens/evilFounding';
-import { charterTabModel, chartersOpen, houseActs } from '../core/evilMode/charters';
+import { charterTabModel, chartersOpen, houseActs, meetingModel, type MeetAnswer } from '../core/evilMode/charters';
 import { flameAt } from '../core/evilMode/fires';
 import { boardView } from '../ui/redux/screens/evilBoard';
 import { crossActOf, crossingModel } from '../core/evilMode/crossing';
@@ -60,6 +60,8 @@ export class EvilScene extends Phaser.Scene {
   private view: ReduxView | null = null;
   private draft: FoundingDraft = newDraft();
   private disp: DispatchDraft = newDispatch();
+  /** Slice 22: on a phone, which edge tab is slid in (the day's text on the left, the holding on the right). */
+  private rail: '' | 'left' | 'right' = '';
   private notice: string | null = null;
   private input_: HTMLInputElement | null = null;
   private leaving = false;
@@ -187,7 +189,7 @@ export class EvilScene extends Phaser.Scene {
           const yard = refusalModel(block);
           const over = yard ? refusalView(yard, this.refuseSel) : rm?.office ? officeView(rm.office) : '';
           const look = `<div style="--team-a:${block.team.look.a};--team-b:${block.team.look.b}">`;
-          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp, EVIL_DATA, { seed: services().session.settings.expansion.evilRollSeed }), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), ...(line ? { line } : {}), ...(gym ? { gym } : {}), ...(trade ? { trade } : {}), ...(nbPage ? { neighbour: nbPage } : {}), ...(scPage ? { scheme: scPage } : {}), ...(base ? { base } : {}), ...(road ? { road } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
+          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp, EVIL_DATA, { seed: services().session.settings.expansion.evilRollSeed }), frame, this.notice, { rail: this.rail, ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), ...(line ? { line } : {}), ...(gym ? { gym } : {}), ...(trade ? { trade } : {}), ...(nbPage ? { neighbour: nbPage } : {}), ...(scPage ? { scheme: scPage } : {}), ...(base ? { base } : {}), ...(road ? { road } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
         }
         if (block) return frameView(c, frameModel(block, archetype.name), this.notice);
         // Slice 22: a main-game run that won its takeover sees the Turn's card here; a new team may take a Charter.
@@ -203,6 +205,8 @@ export class EvilScene extends Phaser.Scene {
         charterBack: () => { this.charter = null; this.syncInput(); this.view?.refresh(); },
         charterTake: () => this.takeCharter(),
         house: (i) => this.houseAct(Number(i)),
+        meet: (k) => this.meet(String(k) as MeetAnswer),
+        rail: (k) => { this.rail = this.rail === k ? '' : (String(k) as 'left' | 'right'); this.view?.refresh(); },
         turnTake: () => { this.turnSel = 0; this.turnChoose(); },
         turnWalk: () => { this.turnSel = 1; this.turnChoose(); },
         next: () => this.next(),
@@ -384,11 +388,19 @@ export class EvilScene extends Phaser.Scene {
     this.view?.refresh();
   }
 
+  /** The Turn's first meeting: one of the three answers. */
+  private meet(answer: MeetAnswer): void {
+    const cues = services().session.evilStep({ type: 'turnMeet', answer });
+    const said = cues.filter((x) => x.id === 'said' || x.id === 'refused');
+    this.notice = said.length ? said.map((x) => (x.id === 'said' ? x.line : x.id === 'refused' ? x.reason : '')).join(' ') : null;
+    this.view?.refresh();
+  }
+
   /** The house rule's button (i), or the first that can be pressed (-1, the U key). */
   private houseAct(i: number): void {
     const block = this.block();
     if (!block) return;
-    const acts = houseActs(block);
+    const acts = houseActs(block, undefined, { at: block.district?.holdings[this.disp.at]?.id ?? '' });
     const a = i < 0 ? acts.find((x) => !x.problem) : acts[i];
     if (!a) return;
     const cues = services().session.evilStep({ type: 'charterAct', act: a.act });
@@ -670,6 +682,9 @@ export class EvilScene extends Phaser.Scene {
     // Slice 22: C opens the Charters tab before a team exists (not on the name page, where C is a letter); U is the house rule's act.
     if (e.code === 'KeyC' && type === 'down' && !e.repeat && !this.founded() && !this.charter && this.draft.page !== 'name' && !services().session.evilTurnOffer()) return this.openCharters();
     if (e.code === 'KeyU' && type === 'down' && !e.repeat && !this.card && this.block()?.district) return this.houseAct(-1);
+    // The Turn's first meeting: 1, 2, 3 answer the Hero.
+    const mt = this.block() ? meetingModel(this.block()!) : null;
+    if (mt && type === 'down' && !e.repeat && /^(Digit|Numpad)[123]$/.test(e.code)) return this.meet(mt.answers[Number(e.code.slice(-1)) - 1]!.key);
     if (e.code === 'KeyN' && this.block()?.charter?.id === 'staff-room') return;
     if (e.code === 'KeyN' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleLine();
     // The Line: Enter held two seconds moves it; letting go early cancels (Part 3 section 7.1).
