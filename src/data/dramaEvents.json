@@ -6,8 +6,8 @@
    "name": "Last-Second Resolve",
    "status": "limited",
    "severity": "major",
-   "cooldownBattles": 2,
-   "chance": 100,
+   "cooldownBattles": 5,
+   "chance": 30,
    "records": true,
    "heated": true,
    "requires": "Enemy Pokémon has a Hyper moment (existing story rules apply the effect)",
@@ -95,7 +95,7 @@
    "cooldownBattles": 1,
    "chance": 100,
    "records": true,
-   "requires": "Final Pokémon of a team of 3+ is sent out",
+   "requires": "Final Pokémon of a team of 2+ is sent out",
    "lines": [
     "This is the one.",
     "This is the one. {name}, show them everything."
@@ -144,7 +144,7 @@
    "cooldownBattles": 2,
    "chance": 100,
    "records": true,
-   "requires": "A signature move of the enemy misses",
+   "requires": "A strong move of the enemy misses (60+ power)",
    "lines": [
     "That never misses!",
     "That never misses! That NEVER misses!"
@@ -259,13 +259,15 @@
    "cooldownBattles": 1,
    "chance": 100,
    "records": true,
-   "requires": "Kind trainer; your Pokémon is nearly down",
+   "requires": "Kind trainer; your Pokémon is nearly down (a quarter HP or less)",
    "lines": [
     "You can stop. I won't think less of you.",
     "Your {foe} has nothing left. You can stop. I won't think less of you."
    ],
    "voices": [
-    "gentle"
+    "gentle",
+    "calm",
+    "cheerful"
    ],
    "classes": [
     "rival",
@@ -364,11 +366,6 @@
     "...That was good. That was really good.",
     "...That was good. That was really good. Thank you, {foe}."
    ],
-   "voices": [
-    "gentle",
-    "calm",
-    "cheerful"
-   ],
    "remember": "I spent weeks figuring out how you broke through our defense with {foeMove}."
   },
   {
@@ -431,7 +428,9 @@
     "This is what all our training was for! Show them, {name}!"
    ],
    "classes": [
-    "rival"
+    "rival",
+    "gym",
+    "boss"
    ],
    "remember": "You remember the battle where {foeMove} evolved, don't you? It has only grown since.",
    "traitShift": {

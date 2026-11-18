@@ -25,6 +25,7 @@ import { worthyStat } from '../greenneedle/worthy';
 import { arenaTurn, arenaVerdict } from '../greenneedle/frontier';
 import { gavelFirst, gavelSpent } from '../greenneedle/auction';
 import { agencyArrives, callHelper, fieldOf, helperProblem, reunionTakeHit } from '../greenneedle/reunion';
+import { isTempAlly } from './guests';
 import { truceCover, truceHurt } from '../greenneedle/part3';
 import { ferrisPredicted } from '../greenneedle/ferris';
 import { starEntry, starGuard, starPinch } from '../greenneedle/onevone';
@@ -61,7 +62,7 @@ import { twiceToldPower } from '../greenneedle/twiceTold';
 import { KINDNESS_USES } from '../episodes/poliPond';
 import { HOUSE_WINS_STAGES, LIGHTS_OUT_ACCURACY, LIGHTS_OUT_TURNS, housePending, isHousePair, takeHousePending, traitDoubleEntry, traitDrill, traitFeedHeal, traitFoodKnocked, traitLightsOut, traitOverhears, traitPayout, traitSeatMessage, traitTakesBerry, GRID_TIE_SHARE, traitBloodScent, traitGridTie, traitLingering, traitOnSchedule, traitSubtraction, traitUndertow, traitUpdraft } from '../expansion/traits';
 import { ACCESSORY_TORN_MESSAGE, SPIRITLESS_MESSAGE, variantBlocksForcedSwitch, variantBlocksMind, variantBlocksStage, variantBlocksStatus, variantEndTurnLoss, variantAccessory, variantAccessoryTorn, variantCheer, variantEndTurnStages, variantGimmickTick, variantGadget, variantIncoming, variantItemMove, variantLosesTurn, variantNeverMisses, variantOnEntry, variantOutgoing, variantPriorityBonus, variantSnagRefuses, variantTagCall } from '../expansion/variantLines';
-import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, curseDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
+import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, curseDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules, statusImmuneNow, foeSecondaryPerk } from '../trainerPerks';
 import { deriveRng, type Rng } from '../rng';
 import { turnOneKoSpeedStages, noFlinchTurnOne, foeMissBoostStages, hasFoeMovePreview } from '../trainerPerks';
 import { fnv1a } from '../expansion/hash';
@@ -138,7 +139,7 @@ import { passTurnEnd, phaseFloor, phaseSync, takeAskForm } from '../greenneedle/
 import type { RaidPhase } from '../raid/schema';
 import { allyDue, allyLevel, getTotem } from '../totem/totem';
 import { enemyLastResort } from './lastResort';
-import { friendshipBond, WEALTH_HEAL, WEALTH_POTIONS } from '../trainerWorld/trainerWorld';
+import { friendshipBond, WEALTH_POTIONS } from '../trainerWorld/trainerWorld';
 import { specializationBonus, specializationPersonality } from '../trainerWorld/behavior';
 import { falseSlotFor } from '../expansion/labyrinth';
 import { addMomentum, cfgOf as spectacleCfg, duePhases, isBossFight, rallyProblem, rollLastStand, spectacleOf, spectacleRoll as spectacleRollExt, type SpectacleEvent } from './spectacle';
@@ -400,6 +401,10 @@ export interface BattleContext {
   lastStand?: () => PokemonInstance | null;
   /** Galar gym / tournament / Champion battles: the comeback moments below are on (set by run.ts, never in other regions). */
   galar?: 'gym' | 'tournament' | 'champion';
+  /** Region number of this battle: picks which potion enemy trainers drink (balance trainerAi.healTiers). */
+  foeHealTier?: number;
+  /** Difficulty's enemyHeal multiplier on the potion's share of max HP (default 1). */
+  foeHealMult?: number;
   /** Set during a double battle's turn (battle/doubles.ts). */
   doublesTurn?: DoublesTurn;
   /** S7 Impossible Feats: the Story Run partner and the Feats it may fire this turn (core/story2/feats.ts). `fired` is set by the engine. */
@@ -1625,7 +1630,7 @@ function sosCall(ctx: BattleContext, events: BattleEvent[]): void {
   const { player } = activeCombatants(ctx);
   const scary = ['intimidate', 'unnerve', 'pressure'].includes(abilityIn(ctx, player) ?? '');
   const orb = (ctx.party[battle.activeIndex]?.boosts ?? []).some((b) => b.kind === 'sos');
-  const result = rollSos({ battle, caller, maxHp: maxHp(content, caller), scary, orb });
+  const result = rollSos({ battle, caller, maxHp: maxHp(content, caller), scary, orb, scale: content.balance.sos.callScale });
   if (result.kind === 'none') return;
   const sos = (battle.sos ??= freshSos());
   sos.lastTurnCalled = battle.turn;
@@ -2112,6 +2117,7 @@ function switchIn(ctx: BattleContext, partyIndex: number, events: BattleEvent[])
   const outgoing = ctx.party[battle.activeIndex];
   if (outgoing) leaveField(ctx, outgoing);
   const mon = ctx.party[partyIndex]!;
+  if (outgoing && outgoing.hp > 0 && outgoing.uid !== mon.uid) switchOutHeal(ctx, outgoing, events);
   // Poli-Pond (Kindness): when its bearer steps out of the fight alive, whoever steps in gets +1 priority on its first move (twice a battle).
   battle.storyEffects = battle.storyEffects.filter((e) => !e.startsWith('kind:'));
   if (outgoing && outgoing.hp > 0 && outgoing.uid !== mon.uid && abilityOf(ctx.content, outgoing) === 'kindness' && battle.storyEffects.filter((e) => e === 'kind-used').length < KINDNESS_USES) {
@@ -3012,7 +3018,7 @@ function speedOf(ctx: BattleContext, c: Combatant): number {
 function priorityOf(ctx: BattleContext, c: Combatant, move: Move): number {
   // §29 enraged after a rival's sacrifice: its next moves go first.
   const rage = ctx.battle.enraged;
-  return basePriority(ctx, c, move) + variantPriorityBonus(ctx.battle.extra.variants, c.mon.uid) + (rage && rage.left > 0 && c.side === 'player' && rage.uid === c.mon.uid ? rage.priority : 0) + momentPriority(ctx, c) + (c.side === 'player' ? callPriority(ctx.battle, c.mon.uid) : 0) + (c.side === 'player' ? quirkPriority(c.mon, c.vol.turnsOut) : 0) + (c.side === 'player' ? boltPriority(ctx, move) : 0);
+  return basePriority(ctx, c, move) + (c.side === 'player' && ctx.battle.turn <= 1 && ctx.battle.storyEffects.includes('promise:stance-spe') ? 1 : 0) + variantPriorityBonus(ctx.battle.extra.variants, c.mon.uid) + (rage && rage.left > 0 && c.side === 'player' && rage.uid === c.mon.uid ? rage.priority : 0) + momentPriority(ctx, c) + (c.side === 'player' ? callPriority(ctx.battle, c.mon.uid) : 0) + (c.side === 'player' ? quirkPriority(c.mon, c.vol.turnsOut) : 0) + (c.side === 'player' ? boltPriority(ctx, move) + leadFirstPriority(ctx) : 0);
 }
 
 /** Legendary Blessing, The Bolt (Thundurus): your status moves go first on the battle's first turn (two in Communion). */
@@ -3020,6 +3026,13 @@ function boltPriority(ctx: BattleContext, move: Move): number {
   if (move.category !== 'status') return 0;
   const turns = Math.max(0, ...(ctx.perks ?? []).map((p) => (p.kind === 'statusPriorityTurns' ? p.turns : 0)));
   return ctx.battle.turn <= turns ? 1 : 0;
+}
+
+/** Legendary Blessings `leadFirst` (Regieleki, Raikou in rain): on turn one your move goes before same-priority moves. */
+function leadFirstPriority(ctx: BattleContext): number {
+  if (ctx.battle.turn !== 1) return 0;
+  const wx = weatherNow(ctx);
+  return (ctx.perks ?? []).some((p) => p.kind === 'leadFirst' && (!p.weather || p.weather === wx)) ? 0.5 : 0;
 }
 
 function basePriority(ctx: BattleContext, c: Combatant, move: Move): number {
@@ -3251,6 +3264,7 @@ function applyTypeModifiers(ctx: BattleContext, user: Combatant, target: Combata
       sameSpecies: user.mon.speciesId === target.mon.speciesId,
       moveStyle: moveStyleOf(move),
       enemiesDefeated: ctx.battle.kind === 'trainer' ? ctx.battle.enemyIndex : 0,
+      turn: ctx.battle.turn,
     });
   }
   if (target.side === 'player') {
@@ -3266,6 +3280,9 @@ function applyTypeModifiers(ctx: BattleContext, user: Combatant, target: Combata
       targetIsMega: getSpecies(ctx.content, target.mon.speciesId).form?.kind === 'mega',
       effectiveness,
       targetTurnsOut: target.vol.turnsOut,
+      physical,
+      targetPartyIndex: ctx.party.findIndex((p) => p.uid === target.mon.uid),
+      targetFullHp: target.mon.hp >= maxHp(ctx.content, target.mon),
     });
   }
   return multiplier === 1 ? damage : Math.max(1, Math.floor(damage * multiplier));
@@ -4064,7 +4081,7 @@ function powerFromRule(ctx: BattleContext, rule: PowerRule, base: number, user: 
 
 /** The player has beaten two or more of the foe's team without losing anyone, and has a spare Pokémon: a sweep in progress. */
 function galarSweeping(ctx: BattleContext): boolean {
-  const mine = ctx.party.filter((m) => m.uid !== ctx.battle.loaner);
+  const mine = ctx.party.filter((m) => !isTempAlly(ctx.battle, m.uid));
   return ctx.battle.enemyTeam.filter((m) => m.hp <= 0).length >= 2 && mine.length >= 2 && mine.every((m) => m.hp > 0);
 }
 
@@ -4385,7 +4402,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       return;
     }
     // Greenneedle gn.25 (the pack fight): one of the pair is below a third, so the other stands in front and takes this hit.
-    const cover = truceCover(ctx.content, ctx.battle, ctx.party, target.mon);
+    const cover = truceCover(ctx.content, ctx.battle, ctx.party, target.mon, { user: user.mon, moveId: move.id });
     if (cover) {
       events.push({ type: 'raid', tone: 'info', text: `${cover} stands in front of ${nameOf(ctx, target.mon)}, and takes the hit.` });
       return;
@@ -4494,7 +4511,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     }
     accuracy = Math.min(1, accuracy);
   }
-  if (noGuard || (userAbility === 'hoop-focus' && move.type === 'psychic') || jetSureHit(userAbility, move, jetMoveType(userAbility, move, move.type), weather) || ((target.vol.exposed || target.vol.telekinesis > 0) && !fx.ohko && targetsEnemy)) accuracy = 1;
+  if (noGuard || (userAbility === 'hoop-focus' && move.type === 'psychic') || jetSureHit(userAbility, move, jetMoveType(userAbility, move, move.type), weather) || (user.side === 'player' && ctx.battle.storyEffects.includes('promise:sure-hit')) || ((target.vol.exposed || target.vol.telekinesis > 0) && !fx.ohko && targetsEnemy)) accuracy = 1;
   if (ctx.battle.extra.darkTurns > 0) accuracy *= LIGHTS_OUT_ACCURACY;
   if (variantNeverMisses(ctx.battle.extra.variants, user.mon.uid, ctx.battle.weather?.id ?? null, move.type)) accuracy = 1;
   if (user.vol.sureHit && targetsEnemy) {
@@ -4534,7 +4551,10 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   const liquid = userAbility === 'liquid-voice' && move.flags.includes('sound') && !move.flags.includes('typeless');
   const normalized = userAbility === 'normalize' && baseType !== 'normal' && !move.flags.includes('typeless');
   const changedType = liquid || normalized || (typeChange !== undefined && baseType === 'normal' && !move.flags.includes('typeless'));
-  const moveType = liquid ? 'water' : normalized ? 'normal' : changedType ? typeChange! : jetMoveType(userAbility, move, baseType);
+  // Zeraora's Wonder (Mythical Promises): once a battle the next damaging move of the player's becomes Electric and gains 20%.
+  const zeraoraArc = user.side === 'player' && move.category !== 'status' && ctx.battle.storyEffects.includes('promise:zeraora') && !ctx.battle.storyEffects.includes('promise:zeraora-used');
+  if (zeraoraArc) ctx.battle.storyEffects.push('promise:zeraora-used');
+  const moveType = zeraoraArc ? 'electric' : liquid ? 'water' : normalized ? 'normal' : changedType ? typeChange! : jetMoveType(userAbility, move, baseType);
   const targetTypes = battleTypes(content, ctx.battle, target.mon);
   // Scrappy: Normal and Fighting moves hit Ghost types.
   const hitTypes = userAbility === 'scrappy' && (moveType === 'normal' || moveType === 'fighting') ? targetTypes.filter((t) => t !== 'ghost') : targetTypes;
@@ -4631,11 +4651,15 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   const hasExtra = Boolean(fx.status || fx.flinchChance || fx.confuse || fx.drowsy || changes.some((c) => c.target === 'enemy' || c.chance < 100));
   const sheerForce = userAbility === 'sheer-force' && hasExtra;
   const parental = userAbility === 'parental-bond' && !fx.hits && !fx.ohko && !fx.fixedDamage && !fx.counter && !fx.halveTarget && !fx.endeavor && !fx.userFaint;
+  // Melmetal's Wonder (Mythical Promises): the first contact move of each battle strikes twice, the second blow at 60% power.
+  const melmetalStrike = user.side === 'player' && move.flags.includes('contact') && !parental && !fx.hits && !fx.ohko && !fx.fixedDamage && !fx.counter && !fx.beatUp
+    && ctx.battle.storyEffects.includes('promise:melmetal') && !ctx.battle.storyEffects.includes('promise:melmetal-used');
+  if (melmetalStrike) ctx.battle.storyEffects.push('promise:melmetal-used');
   const beaters = fx.beatUp ? (user.side === 'player' ? ctx.party : ctx.battle.enemyTeam).filter((m) => m.hp > 0 && !m.status) : [];
   // Swarm (PA25): every damaging move hits twice, each at a share of its power.
   const twice = revivalTwice(user, move);
   const heads = jetThreeHeads(userAbility, move) && !parental;
-  const hits = twice ? 2 : heads ? THREE_HEADS.hits : fx.beatUp ? Math.max(1, beaters.length) : fx.hits ? (userAbility === 'skill-link' || (userAbility === 'starlight-knuckles' && move.flags.includes('punch')) ? fx.hits[1] : Held.loadedDiceHits(ctx, user, multiHitCount(fx.hits, rng), fx.hits[1])) : parental ? 2 : 1;
+  const hits = twice ? 2 : heads ? THREE_HEADS.hits : fx.beatUp ? Math.max(1, beaters.length) : fx.hits ? (userAbility === 'skill-link' || (userAbility === 'starlight-knuckles' && move.flags.includes('punch')) ? fx.hits[1] : Held.loadedDiceHits(ctx, user, multiHitCount(fx.hits, rng), fx.hits[1])) : (parental || melmetalStrike) ? 2 : 1;
   let dealt = 0;
   let landed = 0;
   let anyCrit = false;
@@ -4661,7 +4685,10 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       const targetStats = statsOf(ctx, target);
       const physical = fx.attackFrom === 'best' || fx.autoCategory || (fx.teraBlast && ctx.battle.transform.teraTypes[user.mon.uid]) ? userStats.atk >= userStats.spa : move.category === 'physical';
       // Constellation Fists: its punches hit whichever defense is weaker.
-      const weakerDef = userAbility === 'constellation-fists' && move.flags.includes('punch') ? targetStats.def <= targetStats.spd : null;
+      // Keldeo's Wonder (Mythical Promises): once a battle a move strikes the weaker of the foe's two defenses.
+      const keldeoSecret = user.side === 'player' && ctx.battle.storyEffects.includes('promise:keldeo') && !ctx.battle.storyEffects.includes('promise:keldeo-used');
+      if (keldeoSecret) ctx.battle.storyEffects.push('promise:keldeo-used');
+      const weakerDef = userAbility === 'constellation-fists' && move.flags.includes('punch') ? targetStats.def <= targetStats.spd : keldeoSecret ? targetStats.def <= targetStats.spd : null;
       const hitsDefense = weakerDef ?? (physical || fx.targetsDefense) !== (ctx.battle.extra.wonderRoom > 0);
       // Psyche Edge: its slicing moves use Sp. Atk when that is higher.
       const edgeSpa = userAbility === 'psyche-edge' && inGroup(move, 'slicing') && userStats.spa > userStats.atk;
@@ -4845,6 +4872,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (user.side === 'player') final *= shoutDamage(content, ctx.battle.skill, !!user.mon.awakened?.includes(move.id));
       if ((foeAbility === 'fluffy' || foeAbility === 'aura-guard') && contact) final *= 0.5;
       if (parental && hit === 1) final *= 0.25;
+      if (melmetalStrike && hit === 1) final *= 0.6;
       if (userAbility === 'stakeout' && target.vol.turnsOut === 0) final *= 2;
       if (foeAbility === 'tera-shell' && target.mon.hp >= targetStats.hp && effectiveness > 0) final *= 0.5 / effectiveness;
       if (foeAbility === 'fluffy' && moveType === 'fire') final *= 2;
@@ -4889,6 +4917,24 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
         final,
       });
       damage = applyTypeModifiers(ctx, user, target, effectiveness, damage, physical, moveType, move);
+      if (zeraoraArc) damage = Math.max(1, Math.floor(damage * 1.2));
+      {
+        // Deoxys's stances (Mythical Promises): Attack +15% dealt, Defense -15% taken, Normal +5% dealt and -5% taken.
+        const se = ctx.battle.storyEffects;
+        let stance = 1;
+        if (user.side === 'player') {
+          if (se.includes('promise:stance-atk')) stance *= 1.15;
+          if (se.includes('promise:stance-norm')) stance *= 1.05;
+          if (moveType === 'fire' && ctx.battle.turn <= 1 && se.includes('promise:volcanion')) stance *= 0.5; // Volcanion: its own steam smothers Fire on the first turn
+        }
+        else if (target.side === 'player') {
+          if (se.includes('promise:stance-def')) stance *= 0.85;
+          if (se.includes('promise:stance-norm')) stance *= 0.95;
+          const meltan = se.find((e) => e.startsWith('promise:meltan:'));
+          if (meltan) stance *= Math.max(0.5, 1 - 0.02 * Number(meltan.slice('promise:meltan:'.length)));
+        }
+        if (stance !== 1) damage = Math.max(1, Math.floor(damage * stance));
+      }
       if (ctx.moments) { const boost = momentDamageMult(ctx, user, moveType, move.id); if (boost !== 1) damage = Math.max(1, Math.floor(damage * boost)); }
       // Catalog Overhaul quirks (core/co/quirks.ts): a habit of this Pokémon changes its damage.
       if (user.side === 'player' && user.mon.quirk) { const q = quirkDamageMult(content, user.mon, { moveType, vsTrainer: ctx.battle.kind === 'trainer', atGym: Boolean(ctx.battle.trainer?.leaderId), firstMove: user.vol.turnsOut === 0 }); if (q !== 1) damage = Math.max(1, Math.floor(damage * q)); }
@@ -5021,6 +5067,11 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     }
   }
   if (landed > 0) elementalReaction(ctx, user, target, moveType, events);
+  // Volcanion's Wonder (Mythical Promises): once a battle a Water move also burns what it hits.
+  if (landed > 0 && user.side === 'player' && moveType === 'water' && target.mon.hp > 0 && !target.mon.status && ctx.battle.storyEffects.includes('promise:volcanion') && !ctx.battle.storyEffects.includes('promise:volcanion-used')) {
+    ctx.battle.storyEffects.push('promise:volcanion-used');
+    if (canGetStatus(ctx, user, target, 'brn')) tryInflictStatus(ctx, user, target, 'brn', undefined, events, false);
+  }
   // S44: hits change the arena (Water floods the floor, Fire burns Grassy Terrain and may burn the target).
   const arena = landed > 0 ? arenaReaction(content, ctx.battle, moveType) : null;
   if (arena) {
@@ -5209,7 +5260,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   }
   const shielded = debugged || foeAbility === 'shield-dust' || Held.hasHook(ctx, target.mon, target.side, 'covertCloak');
   const userTypes = getSpecies(ctx.content, user.mon.speciesId).types;
-  const roll = (percent: number, statusId?: string) => rng.chance(Math.min(100, percent * chanceMult * (user.side === 'player' ? statusChancePerk(ctx.perks, userTypes, statusId) : 1) + (user.side === 'player' ? growthStatusChance(ctx.content.balance.overhaulGrowth, user.mon, statusId) : 0)) / 100);
+  const roll = (percent: number, statusId?: string) => rng.chance(Math.min(100, percent * chanceMult * (user.side === 'player' ? statusChancePerk(ctx.perks, userTypes, statusId) : 1) + (user.side === 'player' ? growthStatusChance(ctx.content.balance.overhaulGrowth, user.mon, statusId) : 0)) * (user.side !== 'player' && target.side === 'player' ? foeSecondaryPerk(ctx.perks) : 1) / 100);
   if (target.mon.hp > 0 && !sheerForce && !shielded) {
     if (fx.randomStatus && roll(fx.randomStatus.chance)) {
       const id = fx.randomStatus.ids[rng.int(0, fx.randomStatus.ids.length - 1)]!;
@@ -5948,21 +5999,32 @@ function trainerAiTurn(ctx: BattleContext, enemy: Combatant, events: BattleEvent
   // Beta 0.6 B5: bosses, rivals, the Elite Four and Champions get the player's budget: 10 heals + 6 revives.
   const bossy = Boolean(battle.trainer?.leaderId || battle.rival);
   const caps = content.balance.itemCaps;
-  const kit = bossy ? Math.max(wealth === undefined ? cfg.maxItems : WEALTH_POTIONS[wealth]!, caps.healsPerBattle) : wealth === undefined ? cfg.maxItems : WEALTH_POTIONS[wealth]!;
-  if (battle.enemyItemsUsed < kit && mon.hp / max < cfg.healBelow) {
-    const gain = Math.min(max - mon.hp, Math.floor(max * (wealth === undefined ? cfg.healFraction : WEALTH_HEAL[wealth]!)));
+  const base = wealth === undefined ? cfg.maxItems : WEALTH_POTIONS[wealth]!;
+  // Gym Leaders, Elite Four and ordinary trainers are capped (a bit more as their Pokémon level up); Rivals and Champions keep the player's budget.
+  const classId = battle.trainer?.classId;
+  const topLevel = Math.max(1, ...battle.enemyTeam.map((m) => m.level));
+  const bonus = Math.floor(topLevel / cfg.healCaps.perLevels);
+  const classCap = battle.rival || classId === 'champion' ? null : classId === 'gym-leader' ? cfg.healCaps.gym + bonus : classId === 'elite-four' ? cfg.healCaps.elite + bonus : cfg.healCaps.ordinary + (battle.trainer?.leaderId ? bonus : 0);
+  const kit = classCap !== null ? Math.min(base, classCap) : bossy ? Math.max(base, caps.healsPerBattle) : base;
+  // Every enemy trainer: at most `maxHealItems` healing items (potions, Full Restores, Revives) per battle.
+  const roomLeft = battle.enemyItemsUsed < cfg.maxHealItems;
+  if (roomLeft && battle.enemyItemsUsed < kit && mon.hp / max < cfg.healBelow) {
+    const tier = cfg.healTiers[Math.min(ctx.foeHealTier ?? 0, cfg.healTiers.length - 1)]!;
+    const gain = Math.min(max - mon.hp, Math.floor(max * Math.min(1, tier.fraction * (ctx.foeHealMult ?? 1))));
     if (gain > 0) {
       battle.enemyItemsUsed += 1;
       mon.hp += gain;
-      events.push({ type: 'item', itemId: 'hyper-potion', targetUid: mon.uid, message: `The trainer used a Hyper Potion on ${getSpecies(content, mon.speciesId).name}!`, hpAfter: mon.hp });
+      const itemName = tier.item.split('-').map((w) => w[0]!.toUpperCase() + w.slice(1)).join(' ');
+      events.push({ type: 'item', itemId: tier.item, targetUid: mon.uid, message: `The trainer used a ${itemName} on ${getSpecies(content, mon.speciesId).name}!`, hpAfter: mon.hp });
       return true;
     }
   }
-  if (bossy && (battle.enemyRevivesUsed ?? 0) < caps.revivesPerBattle) {
+  if (roomLeft && bossy && (battle.enemyRevivesUsed ?? 0) < caps.revivesPerBattle) {
     // Revive the strongest fallen teammate once the team is down to its last two; never on a full team.
     const fallen = battle.enemyTeam.filter((m) => m.hp <= 0).sort((a, b) => b.level - a.level)[0];
     if (fallen && battle.enemyTeam.filter((m) => m.hp > 0).length <= 2) {
       battle.enemyRevivesUsed = (battle.enemyRevivesUsed ?? 0) + 1;
+      battle.enemyItemsUsed += 1;
       fallen.hp = Math.max(1, Math.floor(calcStats(content, fallen).hp * 0.5));
       events.push({ type: 'item', itemId: 'revive', targetUid: fallen.uid, message: `The trainer used a Revive on ${getSpecies(content, fallen.speciesId).name}!`, hpAfter: fallen.hp });
       return true;
@@ -6025,15 +6087,19 @@ function trainerKitTurn(ctx: BattleContext, enemy: Combatant, max: number, event
   if (!kit) return false;
   const name = getSpecies(content, mon.speciesId).name;
   const last = battle.enemyTeam.filter((m) => m.hp > 0).length <= 1;
-  if (kit.restore > 0 && mon.hp / max < 0.25 && (last || battle.enemyIndex === 0 || mon.level >= Math.max(...battle.enemyTeam.map((m) => m.level)))) {
+  const tai = content.balance.trainerAi;
+  const region = ctx.foeHealTier ?? 0;
+  if (kit.restore > 0 && region >= tai.fullRestoreFromRegion && battle.enemyItemsUsed < tai.maxHealItems && mon.hp / max < 0.25 && (last || battle.enemyIndex === 0 || mon.level >= Math.max(...battle.enemyTeam.map((m) => m.level)))) {
     kit.restore -= 1;
+    battle.enemyItemsUsed += 1;
     mon.hp = max;
     mon.status = null;
     events.push({ type: 'item', itemId: 'full-restore', targetUid: mon.uid, message: `The trainer used a Full Restore on ${name}!`, hpAfter: mon.hp });
     return true;
   }
-  if (kit.cure > 0 && mon.status) {
+  if (kit.cure > 0 && mon.status && region >= tai.fullHealFromRegion && battle.enemyItemsUsed < tai.maxHealItems) {
     kit.cure -= 1;
+    battle.enemyItemsUsed += 1;
     mon.status = null;
     events.push({ type: 'item', itemId: 'full-heal', targetUid: mon.uid, message: `The trainer used a Full Heal on ${name}!`, hpAfter: mon.hp });
     return true;
@@ -7432,6 +7498,7 @@ function canGetStatus(ctx: BattleContext, source: Combatant, target: Combatant, 
   if (Held.statusBlocked(ctx, target, status)) return false;
   if (terrainBlocksStatus(ctx, target, status)) return false;
   if (source !== target && source.side !== target.side && ctx.battle.sideEffects[target.side].safeguard > 0) return false;
+  if (target.side === 'player' && source.side !== 'player' && statusImmuneNow(ctx.perks, ctx.battle.turn, status)) return false;
   return statusAbilityBlock(ctx, source, target, status) === null;
 }
 
@@ -7550,7 +7617,7 @@ function tryInflictStatus(
   }
   const blocker = target.mon.status ? null : statusAbilityBlock(ctx, source, target, status);
   const corrosive = status === 'psn' && abilityIn(ctx, source) === 'corrosion' && source !== target;
-  if (target.mon.status || (!corrosive && isStatusImmune(status, types, abilityIn(ctx, source) === 'fungal-dominion' ? undefined : move)) || blocker || Held.statusBlocked(ctx, target, status) || terrainBlocksStatus(ctx, target, status) || (source.side !== target.side && ctx.battle.sideEffects[target.side].safeguard > 0)) {
+  if (target.mon.status || (!corrosive && isStatusImmune(status, types, abilityIn(ctx, source) === 'fungal-dominion' ? undefined : move)) || blocker || Held.statusBlocked(ctx, target, status) || terrainBlocksStatus(ctx, target, status) || (source.side !== target.side && ctx.battle.sideEffects[target.side].safeguard > 0) || (target.side === 'player' && source.side !== 'player' && statusImmuneNow(ctx.perks, ctx.battle.turn, status))) {
     if (announceFailure && blocker) announce(target, blocker, events);
     if (announceFailure) events.push({ type: 'fail', side: target.side });
     return false;
@@ -7608,6 +7675,10 @@ function applyStageChange(ctx: BattleContext, c: Combatant, stat: BoostStat, sta
     return false;
   }
   const ability = source ? targetAbility(ctx, source, c) : abilityIn(ctx, c);
+  if (source && stages < 0 && source.side !== c.side && c.side === 'player' && blessingStatGuard(ctx, c, stat)) {
+    events.push({ type: 'fail', side: c.side });
+    return false;
+  }
   if (source && stages < 0 && source.side !== c.side && Held.hasHook(ctx, c.mon, c.side, 'clearAmulet')) {
     events.push({ type: 'held', side: c.side, itemId: 'clear-amulet', what: 'guard' });
     return false;
@@ -7985,6 +8056,7 @@ function recordFaints(ctx: BattleContext, player: Combatant, enemy: Combatant, e
       }
     }
     events.push({ type: 'faint', side: c.side, uid: c.mon.uid, participants });
+    blessingKo(ctx, c, c.side === 'player' ? enemy : player, events);
     // Mentor lesson: a turn-one knockout readies a Speed boost for the next Pokémon you send in.
     if (c.side === 'enemy' && ctx.battle.turn === 1 && turnOneKoSpeedStages(ctx.perks) > 0) (ctx.battle.lesson ??= {}).koTurnOne = true;
     // Beta 0.6 traits: Lights Out darkens the field; the other of the House pair is lifted.
@@ -8168,6 +8240,12 @@ function trapBeforeBattle(ctx: BattleContext, events: BattleEvent[]): void {
 /** Event toolkit `battleStart` rules (Ice Week hail, Gravity Week...): set once at the start of each battle. */
 function eventStartRules(ctx: BattleContext, events: BattleEvent[]): void {
   for (const r of battleStartRules(ctx.perks)) {
+    if (r.against === 'trainer' && !ctx.battle.trainer) continue;
+    if (r.against === 'boss' && !isBossClass(ctx.battle.trainer?.classId)) continue;
+    if (r.terrain && !ctx.battle.terrain) {
+      ctx.battle.terrain = { id: r.terrain, turns: r.turns };
+      events.push({ type: 'terrain', terrain: r.terrain });
+    }
     if (r.weather && setWeather(ctx, r.weather, r.turns)) events.push({ type: 'weather', weather: r.weather });
     if (r.field && ctx.battle.field[r.field] === 0) {
       ctx.battle.field[r.field] = r.turns;
@@ -8748,4 +8826,47 @@ function quirkEntry(ctx: BattleContext, c: Omit<Combatant, 'protected'>, events:
   for (const [stat, n] of entries) c.stages[stat] = Math.max(-6, Math.min(6, (c.stages[stat] ?? 0) + n));
   const q = quirkOf(c.mon);
   events.push({ type: 'raid', tone: 'info', text: `${getSpecies(ctx.content, c.mon.speciesId).name}: ${q?.name ?? 'quirk'}. ${q?.line ?? ''}`.trim() });
+}
+
+/** Legendary Blessings `statDropGuard`: a foe's stat drop on this Pokémon fails (with `first`, once per Pokémon each battle). */
+function blessingStatGuard(ctx: BattleContext, c: Combatant, stat: BoostStat): boolean {
+  for (const m of (ctx.perks ?? []).filter((p) => p.kind === 'statDropGuard')) {
+    if (m.kind !== 'statDropGuard' || (m.stat && m.stat !== stat)) continue;
+    if (!m.first) return true;
+    const key = `stat-guard:${c.mon.uid}`;
+    if (ctx.battle.storyEffects.includes(key)) continue;
+    ctx.battle.storyEffects.push(key);
+    return true;
+  }
+  return false;
+}
+
+/** Legendary Blessings `switchOutHeal`: a hurt Pokémon stepping out recovers a little, once per Pokémon per battle. */
+function switchOutHeal(ctx: BattleContext, mon: PokemonInstance, events: BattleEvent[]): void {
+  const m = (ctx.perks ?? []).find((p) => p.kind === 'switchOutHeal');
+  if (!m || m.kind !== 'switchOutHeal' || !ctx.party.some((p) => p.uid === mon.uid)) return;
+  const max = maxHp(ctx.content, mon);
+  const key = `out-heal:${mon.uid}`;
+  if (mon.hp >= max * m.below || ctx.battle.storyEffects.includes(key)) return;
+  ctx.battle.storyEffects.push(key);
+  mon.hp = Math.min(max, mon.hp + Math.max(1, Math.floor(max * m.percent / 100)));
+  events.push({ type: 'raid', tone: 'info', text: `${nameOf(ctx, mon)} catches its breath as it steps back.` });
+}
+
+/** Legendary Blessings `koBurn` (your Pokémon falls: its foe is burned) and `koHeal` (your Pokémon knocks one out: it recovers). */
+function blessingKo(ctx: BattleContext, fallen: Combatant, other: Combatant, events: BattleEvent[]): void {
+  const perks = ctx.perks ?? [];
+  if (fallen.side === 'player' && other.mon.hp > 0) {
+    const times = perks.reduce((n, p) => (p.kind === 'koBurn' ? Math.max(n, p.times) : n), 0);
+    if (times > 0 && ctx.battle.storyEffects.filter((e) => e === 'ko-burn').length < times && tryInflictStatus(ctx, fallen, other, 'brn', undefined, events, false)) ctx.battle.storyEffects.push('ko-burn');
+  }
+  if (fallen.side === 'enemy' && other.mon.hp > 0) {
+    const pct = perks.reduce((n, p) => (p.kind === 'koHeal' ? n + p.percent : n), 0);
+    const max = maxHp(ctx.content, other.mon);
+    if (pct > 0 && other.mon.hp < max) {
+      const before = other.mon.hp;
+      other.mon.hp = Math.min(max, other.mon.hp + Math.max(1, Math.floor(max * pct / 100)));
+      events.push({ type: 'heal', side: other.side, amount: other.mon.hp - before, hpAfter: other.mon.hp });
+    }
+  }
 }

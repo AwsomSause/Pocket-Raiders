@@ -32,8 +32,11 @@ export function pokemonInfluence(run: RunState, a: Rival, b: Rival, stageKey: st
   ensureBonds(run, a);
   ensureBonds(run, b);
   const rng = new Rng(hashSeed(`${run.seed}::rival-influence::${stageKey}::${a.id}::${b.id}`));
-  const ma = a.bonds[rng.pick(Object.keys(a.bonds))];
-  const mb = b.bonds[rng.pick(Object.keys(b.bonds))];
+  const keysA = Object.keys(a.bonds);
+  const keysB = Object.keys(b.bonds);
+  if (keysA.length === 0 || keysB.length === 0) return null;
+  const ma = a.bonds[rng.pick(keysA)];
+  const mb = b.bonds[rng.pick(keysB)];
   if (!ma || !mb) return null;
   const score = (m: typeof ma) => m.synchronization + m.confidence + rng.int(0, 20);
   const aWins = score(ma) >= score(mb);

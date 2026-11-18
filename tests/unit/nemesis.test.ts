@@ -78,7 +78,8 @@ describe('Nemesis: the Incident', () => {
     const run = battleRun('wild', [weakFoe('e1')]);
     noteNemesisBreakFree(run, 'e1');
     expect(win(never, run).run.story.nemeses).toEqual([]);
-    expect(content.story.rarity.momentChance).toBe(0.3);
+    // Kice 2026-11-17: the rarity chance was raised from 0.3.
+    expect(content.story.rarity.momentChance).toBe(0.85);
   });
 
   it('an ordinary battle with no incident makes no nemesis', () => {
@@ -123,7 +124,13 @@ describe('Nemesis: the Incident', () => {
     run.battle.outcome = 'lose';
     noteNemesisFaint(run, 'player', 'x', 'e9');
     nemesisAfterBattle(always, run, { region: 0, stage: 1, level: 1, node: null, battle: 2, turn: 3 });
-    expect(run.story.nemeses).toHaveLength(1);
+    // perRegion is 2 now (was 1): a second forms in the same region, a third does not.
+    expect(run.story.nemeses).toHaveLength(content.story.nemesis.perRegion);
+    run.battle = createBattle('wild', [weakFoe('e10')], 0, run.party[0]!.uid);
+    run.battle.outcome = 'lose';
+    noteNemesisFaint(run, 'player', 'x', 'e10');
+    nemesisAfterBattle(always, run, { region: 0, stage: 2, level: 1, node: null, battle: 3, turn: 3 });
+    expect(run.story.nemeses).toHaveLength(content.story.nemesis.perRegion);
   });
 });
 
@@ -250,7 +257,8 @@ describe('The other Overdrive moments', () => {
       seen.push(...r.cues.map((c) => c.title));
       run = r.run;
     }
-    expect(seen).toContain('Its Anger Is Becoming Dangerous!');
+    // With the raised Hyper chance it can arrive merged with another cue ("A · B").
+    expect(seen.some((t) => t.split(' · ').includes('Its Anger Is Becoming Dangerous!'))).toBe(true);
   });
 
   it('The Enemy Is Fighting for Its Pride!: a boss down to its last of three Pokémon', () => {

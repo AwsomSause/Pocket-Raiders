@@ -8,6 +8,7 @@
 //   claim       — achievements are claimed automatically when a run ends;
 //                 trainers are claimed in the Trainer Archive (some cost Bank Credits)
 
+import { nextBlessingDeck } from './blessings';
 import { isAssisted } from './tools/assisted';
 import { applyDexTallies } from './dexResearch';
 import { directiveProgress, type DirectiveProgress } from './directive';
@@ -15,7 +16,7 @@ import { legacyCard, runEpitaph } from './story/legacy';
 import { getArchetype, researchMultiplier } from './archetypes';
 import { eventResearch } from './events';
 import { permanentAttributes, readAttributes, type Attributes } from './attributes';
-import { getCampaign } from './regions';
+import { getCampaign, runCampaign } from './regions';
 import { noteJournal } from './run';
 import { campaignCounts, researchScale, scaleReward } from './rules';
 import type { Achievement, Archetype, Content, LeafRequirement, Requirement, RunQuest, UnlockReward } from './contentSchema';
@@ -206,7 +207,7 @@ export function awardAchievements(content: Content, profile: Profile, now: strin
  * achievement is only ever earned once, so the run-end pass never pays it twice). Returns what was earned.
  */
 export function awardLiveAchievements(content: Content, profile: Profile, run: RunState, now: string): Achievement[] {
-  if (!(campaignCounts(getCampaign(content, run.campaignId), run.rules.modeId) && run.rules.progressionEligible)) return [];
+  if (!(campaignCounts(runCampaign(content, run), run.rules.modeId) && run.rules.progressionEligible)) return [];
   const probe: Profile = structuredClone(profile);
   const counters = { ...run.log.counters, ...relationshipCounters(content, run) };
   for (const [name, value] of Object.entries(counters)) {
@@ -289,7 +290,7 @@ function finalJournal(content: Content, run: RunState): string[] {
 
 export function applyRunToProfile(content: Content, profile: Profile, run: RunState, now: string): RunEndSummary {
   // Adventure earns nothing for the account; test campaigns count nothing either.
-  const counts = campaignCounts(getCampaign(content, run.campaignId), run.rules.modeId) && run.rules.progressionEligible;
+  const counts = campaignCounts(runCampaign(content, run), run.rules.modeId) && run.rules.progressionEligible;
   const ownedBefore = new Set([...content.archetypes.values()].filter((a) => trainerStatus(profile, a) === 'unlocked').map((a) => a.id));
   const research = content.balance.research;
   const attributesBefore = readAttributes(content, profile.attributes);
@@ -391,6 +392,8 @@ export function applyRunToProfile(content: Content, profile: Profile, run: RunSt
     },
     ...profile.runHistory,
   ];
+  // Legendary Blessings: the run's blessing is dealt, and the Legendaries whose Signs it found are discovered.
+  if (run.expansion?.blessing) profile.blessings = nextBlessingDeck(profile.blessings, run);
   // The newest runs, plus any older run holding a Legacy Record: those stay in the Hall of Fame for good.
   profile.runHistory = profile.runHistory.filter((r, i) => i < content.balance.runHistorySize || r.legacy.some((c) => (c.records ?? []).length > 0));
 

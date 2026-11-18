@@ -2,7 +2,7 @@
 // Conditions: stageTypes, runPlace, hasEgg, weather, anyFlag. Effects: quietWild, eggWarm, typeItem, tagPartner. Battle rule: foeNoFlag.
 import type { Content, TypeName } from '../contentSchema';
 import type { PokemonInstance, RunState } from '../state';
-import { getCampaign } from '../regions';
+import { getCampaign, runCampaign } from '../regions';
 import type { CO_MOVE_FLAGS } from './who';
 
 type CoMoveFlag = (typeof CO_MOVE_FLAGS)[number];
@@ -19,7 +19,7 @@ function placeNow(content: Content, run: RunState): { stage: number; region: num
   return {
     stage: (run.stage?.index ?? 0) + 1,
     region: run.regionIndex + 1,
-    perRegion: getCampaign(content, run.campaignId).stagesPerRegion,
+    perRegion: runCampaign(content, run).stagesPerRegion,
     regions: run.regionOrder.length,
   };
 }

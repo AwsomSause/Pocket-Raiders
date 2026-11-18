@@ -77,14 +77,16 @@ describe('story foundation: random streams', () => {
   // Re-pinned STORY6/0 for Shadow II (Shadow tiers replace the flat Shadow damage and the old Sealed ignore roll; a player Shadow fights in that seed). Re-pinned STORY1, 2, 4-8 for Catalog Overhaul places (new and rebuilt run events in the draw pool). Re-pinned STORY1, 2 and 4-8 again in the batch-2 combine (places and singles together; 7 and 8 equal the places pins). Re-pinned STORY5 and 6 in the batch-3 combine (families-b's rebuilt road events and Never-Melt Ice with batch 2); STORY4 to 7 again with families-a in.
   // Re-pinned STORY1, 2, 5 and 6 for the Catalog Overhaul singles row (SF155 fossil dig): Plume, Root and Claw Fossils are uncommon, as the doc's fossil dig names them the common fossils, so reward and shop draws that hold a fossil pick differently.
   // Re-pinned STORY1 and 4 to 7 for Catalog Overhaul families-a (rebuilt story-family events in the draw pool; hazards answered by a Pokémon give a typed item).
+  // Re-pinned (four STORY keys) for pick-spread: Gym Leaders level with the party (gymBonus 0), enemy heal caps, flatter event draws, SOS x0.3 (docs/status/pick-spread.md).
+  // Re-pinned STORY1, 2, 5, 6 and 8 for the enemy heal cap (every trainer uses at most 4 healing items; the potion is weaker early and stronger by region and difficulty, docs/status/enemy-heal-cap.md). Cause: enemy heals changed, nothing else.
   const BEFORE_STORY: Record<string, string> = {
-    'STORY1/0': 'f6d87023062d411e',
-    'STORY2/0': 'f1731ee4f116e125', // STORY2, 5, 6 re-pinned after #1098 (Starter Sets removal); cause not isolated, see PR
+    'STORY1/0': '814510fd7cfdc121',
+    'STORY2/0': '63dded7c6b1935bd', // STORY2, 5, 6 re-pinned after #1098 (Starter Sets removal); cause not isolated, see PR
     'STORY4/0': 'ed7be324c68dd80c',
-    'STORY5/0': '0695cbd39abf2c0e',
-    'STORY6/0': '320e09f757ac25a2', // re-pinned in the Lavender canon PR: new Flashlight (wild-preview key item) joins the item draws; earlier: new Silver Powder (Bug type booster) joins trainer held-item draws; proven by removing it (pin returns)
+    'STORY5/0': '7f66af06a7dd503f',
+    'STORY6/0': '4e72b6b12ff454c4', // re-pinned in the Lavender canon PR: new Flashlight (wild-preview key item) joins the item draws; earlier: new Silver Powder (Bug type booster) joins trainer held-item draws; proven by removing it (pin returns)
     'STORY7/0': '78130c8fd7e0f94a',
-    'STORY8/0': '53d45581a33a0825',
+    'STORY8/0': '41a3008c9951c3cb',
   };
   // Hyper moments (M8.9 Phase 1) do change battles on purpose, so the check runs without their definitions:
   // what is left must still match main exactly, which proves the story and hyper streams moved no other roll.

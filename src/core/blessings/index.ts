@@ -2,6 +2,7 @@
 // from its own hashed stream (`::blessing-tier::` / `::blessing-pick::`), so no existing roll changes. In-run only: nothing here
 // is saved to the profile. Pure rules + Zod, no Phaser. Data: src/data/blessings.json (hand-written; status per entry).
 
+import { isTempAlly } from '../battle/guests';
 import { z } from 'zod';
 import raw from '../../data/blessings.json';
 import { ArchetypeModifierSchema, type Content } from '../contentSchema';
@@ -11,7 +12,7 @@ import { hashSeed, Rng } from '../rng';
 import { maxHp } from '../pokemon';
 import { giveItem } from '../events';
 import { grantRewinds, jsonCopy, rewindStage, stageRewindReady } from '../rewind';
-import type { RunState } from '../state';
+import type { MapNode, RunState } from '../state';
 
 import { BLESSING_TIERS, BlessingStateSchema, type BlessingState, type BlessingTier } from './schema';
 export { BLESSING_TIERS, type BlessingTier };
@@ -20,21 +21,56 @@ const BlessingDefSchema = z.object({
   id: z.string().min(1), name: z.string().min(1), legendary: z.string().min(1), speciesId: z.string().min(1),
   tier: z.enum(BLESSING_TIERS), item: z.string().min(1), objectText: z.string().min(1), passage: z.string().min(1),
   headline: z.string().min(1), summary: z.string().min(1),
-  effect: z.object({ kind: z.enum(['none', 'healMostHurt', 'shopDiscount', 'sacredAsh', 'perks', 'rewinds', 'reverseSide', 'calm', 'sight', 'insight', 'vow', 'vessel', 'bolt']) }),
+  effect: z.object({ kind: z.enum(['none', 'healMostHurt', 'shopDiscount', 'sacredAsh', 'perks', 'rewinds', 'reverseSide', 'calm', 'sight', 'insight', 'vow', 'vessel', 'bolt', 'fold']) }),
   /** Perks used instead of `perks` once the blessing is in Communion (omitted: the same perks). */
   communionPerks: z.array(ArchetypeModifierSchema).optional(),
+  /** One of the blessings a new save can draw from (LEGENDARY_BLESSINGS.md section 3, Discovery). */
+  known: z.boolean().default(false),
+  /** A Price that stays on even in Communion (Kyogre and Groudon are hostile to each other). A matching starter may waive it for its first regions. */
+  pricePerks: z.array(ArchetypeModifierSchema).optional(),
+  /** Section 7: the starter that changes something, and what. */
+  starterNote: z.object({
+    types: z.array(z.string()).default([]), species: z.array(z.string()).default([]), line: z.string().min(1),
+    influence: z.number().int().min(0).optional(), perks: z.array(ArchetypeModifierSchema).optional(), noPriceRegions: z.number().int().min(1).optional(),
+  }).optional(),
   /** false: never rolled at run start; only an event offers it (`takeBlessing`), so adding it moves no seed's roll. */
   pool: z.boolean().default(true),
   /** Battle perks (the same rules trainers use) that this blessing adds. */
   perks: z.array(ArchetypeModifierSchema).default([]),
   /** The perks apply only to the first battle of each stage. */
   firstBattleOfStage: z.boolean().default(false),
+  /** In Communion the perks apply to every battle, not only the first of each stage. */
+  communionAllBattles: z.boolean().default(false),
+  /**
+   * A Rite written as data (once per run, after Communion). With perks it is armed and waits for the next battle of kind `on`,
+   * whose battle gets the perks; without perks it acts at once (heal the party, give items).
+   */
+  /** Run-level perks (Bond, experience, money, encounters): they act outside battle, through the run's perk list (see runPerks.ts). */
+  runPerks: z.array(ArchetypeModifierSchema).optional(),
+  communionRunPerks: z.array(ArchetypeModifierSchema).optional(),
+  /** On the map, battles ahead show their lead (or whole team) before the player picks them. */
+  sight: z.object({ kinds: z.array(z.enum(['wild', 'trainer'])).min(1), word: z.string().min(1), team: z.boolean().default(false), communionTeam: z.boolean().default(false) }).optional(),
+  /** Once (or more) per stage on the map: move to any node of the next level, whatever the paths. */
+  ride: z.object({ label: z.string().min(1), perStage: z.number().int().min(1), communionPerStage: z.number().int().min(1) }).optional(),
+  /** Every stat (not HP) of the party rises by `step` per badge, up to `max` (`communionMax` in Communion). */
+  badgeGrowth: z.object({ step: z.number().positive(), max: z.number().positive(), communionMax: z.number().positive() }).optional(),
+  /** In Communion the blessing grows into another from this region on (0-based region index). */
+  grows: z.array(z.object({ region: z.number().int().min(0), into: z.string().min(1) })).optional(),
+  rite: z.object({
+    label: z.string().min(1), hint: z.string().min(1), armedHint: z.string().optional(), message: z.string().min(1),
+    on: z.enum(['any', 'trainer', 'wild', 'boss']).default('any'),
+    perks: z.array(ArchetypeModifierSchema).default([]),
+    heal: z.boolean().optional(),
+    items: z.array(z.object({ id: z.string().min(1), count: z.number().int().positive() })).optional(),
+  }).optional(),
   status: z.enum(['supported', 'limited', 'disabled']), limits: z.string(),
 });
 export type BlessingDef = z.infer<typeof BlessingDefSchema>;
 
 const FileSchema = z.object({
   tiers: z.record(z.enum(BLESSING_TIERS), z.object({ chance: z.number().positive(), influence: z.number().int().min(0) })),
+  /** Discovery on: a save draws only from the blessings it knows (the `known` ones and those it found Signs of). */
+  discovery: z.boolean().default(true),
   balance: z.object({ lele: z.object({ healPercent: z.number(), communionPartyPercent: z.number() }), fezandipiti: z.object({ discountPercent: z.number(), communionDiscountPercent: z.number() }), renegade: z.object({ ghostEncounterWeight: z.number().positive() }), zekrom: z.object({ vowStatPercent: z.number(), communionVowStatPercent: z.number() }) }),
   blessings: z.array(BlessingDefSchema).min(1),
 });
@@ -48,31 +84,78 @@ export const getBlessing = (id: string): BlessingDef | undefined => BLESSINGS.fi
 const playable = (b: BlessingDef): boolean => b.status !== 'disabled';
 
 /**
- * Rolls the tier (45/30/17/6.5/1.5), then a blessing inside it. A tier with no playable blessing falls to the next lower tier
- * that has one, then upward, so a run always gets one while the roster is still growing. Pure: same seed, same answer.
+ * Rolls the tier (45/30/17/6.5/1.5), then a blessing inside it. A tier with no playable blessing is left out of the roll, so its
+ * share spreads over the other tiers in proportion (it never all lands on one neighbour). Pure: same seed, same answer.
  */
-export function rollBlessing(seed: string): BlessingState | null {
-  const pool = BLESSINGS.filter((b) => playable(b) && b.pool);
+export function rollBlessing(seed: string, deck?: BlessingDeck): BlessingState | null {
+  const pool = BLESSINGS.filter((b) => playable(b) && b.pool && (!deck || !data.discovery || b.known || deck.found.includes(b.id)));
   if (pool.length === 0) return null;
+  const tiers = BLESSING_TIERS.filter((t) => pool.some((b) => b.tier === t));
   const tierRng = new Rng(hashSeed(`${seed}::blessing-tier`));
-  const total = BLESSING_TIERS.reduce((s, t) => s + data.tiers[t]!.chance, 0);
+  const total = tiers.reduce((s, t) => s + data.tiers[t]!.chance, 0);
   let roll = tierRng.float() * total;
-  let tier: BlessingTier = BLESSING_TIERS[BLESSING_TIERS.length - 1]!;
-  for (const t of BLESSING_TIERS) {
+  let useTier: BlessingTier = tiers[tiers.length - 1]!;
+  for (const t of tiers) {
     roll -= data.tiers[t]!.chance;
-    if (roll < 0) { tier = t; break; }
+    if (roll < 0) { useTier = t; break; }
   }
-  const at = BLESSING_TIERS.indexOf(tier);
-  const order = [...BLESSING_TIERS.slice(0, at + 1).reverse(), ...BLESSING_TIERS.slice(at + 1)];
-  const useTier = order.find((t) => pool.some((b) => b.tier === t))!;
-  const inTier = pool.filter((b) => b.tier === useTier);
+  // Evenness: within a tier, blessings are dealt from a shuffled bag (the save remembers what it dealt), so each is seen before any repeats.
+  const tierAll = pool.filter((b) => b.tier === useTier);
+  const fresh = deck ? tierAll.filter((b) => !deck.dealt.includes(b.id)) : [];
+  const inTier = fresh.length > 0 ? fresh : tierAll;
   const pick = inTier[new Rng(hashSeed(`${seed}::blessing-pick`)).int(0, inTier.length - 1)]!;
   return { id: pick.id, tier: pick.tier, influence: data.tiers[pick.tier]!.influence, seen: false, ashRegions: [], communion: false, riteUsed: false, stagesDone: [] };
 }
 
+/** What the save remembers of blessings across runs: which it has found (Discovery) and which it has dealt (the shuffled bag). */
+export interface BlessingDeck { found: readonly string[]; dealt: readonly string[] }
+
+/** Run end: the save's deck after this run. The run's blessing is dealt (a tier's bag starts over once every blessing it holds was dealt), and every Legendary whose Sign was found, and the run's own, is found. */
+export function nextBlessingDeck(deck: BlessingDeck | undefined, run: RunState): { found: string[]; dealt: string[] } {
+  const state = run.expansion?.blessing;
+  const found = [...new Set([...(deck?.found ?? []), ...(state ? [state.id, ...(state.signs ?? [])] : [])])].filter((id) => getBlessing(id));
+  let dealt = [...(deck?.dealt ?? [])];
+  const def = state ? getBlessing(state.id) : undefined;
+  if (def?.pool) {
+    dealt = [...new Set([...dealt, def.id])];
+    const known = BLESSINGS.filter((b) => b.tier === def.tier && playable(b) && b.pool && (!data.discovery || b.known || found.includes(b.id)));
+    if (known.every((b) => dealt.includes(b.id))) dealt = dealt.filter((id) => getBlessing(id)?.tier !== def.tier);
+  }
+  return { found, dealt };
+}
+
+/** The hub's Reliquary: every playable blessing, tier by tier; the found ones (known from the start, or found in a run) show their words, the rest are blank plinths. */
+export function reliquary(deck: BlessingDeck | undefined): { id: string; found: boolean; name: string; legendary: string; tier: BlessingTier; text: string }[] {
+  return BLESSING_TIERS.flatMap((t) => BLESSINGS.filter((b) => b.tier === t && playable(b))).map((b) => ({
+    id: b.id, found: !data.discovery || !!b.known || !!deck?.found.includes(b.id), name: b.name, legendary: b.legendary, tier: b.tier, text: b.summary,
+  }));
+}
+
+/** A Sign of another Legendary was found this run (Discovery). */
+export function noteSign(run: RunState, ids: readonly string[]): void {
+  const state = run.expansion?.blessing;
+  if (!state) return;
+  const add = [...new Set(ids)].filter((id) => getBlessing(id) && !(state.signs ?? []).includes(id));
+  if (add.length > 0) state.signs = [...(state.signs ?? []), ...add];
+}
+
+/** Section 7: the starter changes something for a few blessings (Influence, a perk, a Price waived). Once, when the starter is chosen. Returns the line to show. */
+export function applyStarterNote(content: Content, run: RunState): string | null {
+  const state = run.expansion?.blessing;
+  const def = runBlessing(run);
+  const starter = run.party[0];
+  if (!state || !def?.starterNote || !starter || state.starterNote) return null;
+  const note = def.starterNote;
+  const types = content.species.get(starter.speciesId)?.types ?? [];
+  if (!note.species.includes(starter.speciesId) && !note.types.some((t) => types.includes(t as never))) return null;
+  state.starterNote = true;
+  if (note.influence) state.influence += note.influence;
+  return note.line;
+}
+
 /** Run start: gives the run its blessing when the setting was on (stored once; never changes). */
-export function assignBlessing(run: RunState): void {
-  const b = rollBlessing(run.seed);
+export function assignBlessing(run: RunState, deck?: BlessingDeck): void {
+  const b = rollBlessing(run.seed, deck);
   if (b) run.expansion = { ...run.expansion, blessing: b };
   // Dialga's blessing is the Rewinds system, switched on for this run.
   if (b && getBlessing(b.id)?.effect.kind === 'rewinds') grantRewinds(run, 'blessing');
@@ -125,6 +208,11 @@ export const vesselCanCopy = (def: BlessingDef): boolean => playable(def) && def
  */
 export function effectBlessing(run: RunState): BlessingDef | undefined {
   const def = runBlessing(run);
+  if (def?.grows && inCommunionForm(run)) {
+    const step = [...def.grows].reverse().find((g) => run.regionIndex >= g.region);
+    const grown = step ? getBlessing(step.into) : undefined;
+    if (grown && playable(grown)) return grown;
+  }
   if (def?.effect.kind !== 'vessel') return def;
   const copy = run.expansion?.blessing?.copy ? getBlessing(run.expansion.blessing.copy) : undefined;
   if (!copy || !vesselCanCopy(copy)) return undefined;
@@ -159,10 +247,28 @@ export function blessingPerks(run: RunState): Perks {
   if (state.riteArmed && def.effect.kind === 'bolt') extra.push({ kind: 'foeLeadParalysed' });
   if (state.riteArmed && def.effect.kind === 'calm') extra.push({ kind: 'peacefulWild' });
   if (state.riteArmed && def.id === 'heatran') extra.push({ kind: 'eruptArena' });
+  if (state.riteArmed && def.rite && riteBattle(def.rite.on, run)) extra.push(...def.rite.perks);
+  if (def.badgeGrowth) {
+    const g = def.badgeGrowth;
+    const pct = Math.min(inCommunionForm(run) ? g.communionMax : g.max, g.step * run.badges.length);
+    if (pct > 0) for (const stat of ['atk', 'def', 'spa', 'spd', 'spe'] as const) extra.push({ kind: 'statMultiplier', stat, value: Math.round((1 + pct) * 1000) / 1000 });
+  }
+  // A Price that stays (Kyogre, Groudon); a matching starter waives it for the first regions.
+  if (def.pricePerks && !(state.starterNote && def.starterNote?.noPriceRegions && run.regionIndex < def.starterNote.noPriceRegions)) extra.push(...def.pricePerks);
+  if (state.starterNote && def.starterNote?.perks) extra.push(...def.starterNote.perks);
   const own = inCommunionForm(run) && def.communionPerks ? def.communionPerks : def.perks;
   if (own.length === 0) return extra;
-  if (def.firstBattleOfStage && run.stage && state.stagesDone.includes(`${run.regionIndex}:${run.stage.index}`)) return extra;
+  if (def.firstBattleOfStage && !(def.communionAllBattles && inCommunionForm(run)) && run.stage && state.stagesDone.includes(`${run.regionIndex}:${run.stage.index}`)) return extra;
   return [...own, ...extra];
+}
+
+/** The battle running now is the kind a data Rite waits for. */
+function riteBattle(on: NonNullable<BlessingDef['rite']>['on'], run: RunState): boolean {
+  const b = run.battle;
+  if (!b) return false;
+  if (on === 'any') return true;
+  if (on === 'boss') return isBossClass(b.trainer?.classId);
+  return b.kind === on;
 }
 
 /** Communion: obtaining the blessing's own Legendary (party or PC) turns the blessing into its stronger form. Returns true the moment it happens. */
@@ -181,6 +287,8 @@ export function blessingRite(run: RunState): { label: string; hint: string; read
   const def = effectBlessing(run);
   const state = run.expansion?.blessing;
   if (!def || !state?.communion) return null;
+  // A Rite written in the data comes first (it may sit on a blessing whose effect has a built-in Rite, like Uxie's insight).
+  if (def.rite) return { label: def.rite.label, hint: state.riteArmed && def.rite.armedHint ? def.rite.armedHint : def.rite.hint, ready: !state.riteUsed };
   if (def.effect.kind === 'healMostHurt') return { label: 'Rite of Healing', hint: 'Restore the whole party fully, once this run.', ready: !state.riteUsed };
   if (def.effect.kind === 'rewinds') return { label: 'Rite of Time', hint: 'Go back to the start of this stage. Levels, moves and species are kept; items and events of the stage are not. Once this run, from the map.', ready: !state.riteUsed && run.phase === 'map' && stageRewindReady(run) };
   if (def.effect.kind === 'bolt') return { label: 'A Bolt on Request', hint: state.riteArmed ? 'Armed: the lead of your next trainer battle starts paralysed.' : 'The lead of your next trainer battle starts paralysed (not a boss\'s last Pokémon, not an Electric-type). Once this run.', ready: !state.riteUsed };
@@ -189,6 +297,7 @@ export function blessingRite(run: RunState): { label: string; hint: string; read
   if (def.effect.kind === 'sight') return { label: 'Shared Sight', hint: 'For the rest of this stage, see every battle ahead (the whole team) and the Gym Leader\'s team. Once this run, from the map.', ready: !state.riteUsed && run.phase === 'map' && !!run.stage };
   if (def.id === 'landorus') return { label: 'Fertile Ground', hint: 'Where you stand, a shop opens and a Berry grove gives three Sitrus Berries. Once this run, from the map.', ready: !state.riteUsed && run.phase === 'map' && run.stage?.current != null };
   if (def.effect.kind === 'insight') return { label: 'The Real Plan', hint: 'Your rival\'s plan is shown, and for the rest of this stage the Gym Leader\'s team. Once this run, from the map.', ready: !state.riteUsed && run.phase === 'map' && !!run.stage };
+  if (def.effect.kind === 'fold') return { label: 'Design the Road', hint: 'Rearrange this stage now, even after you have set out: any two nodes ahead of you may change places. Once this run, from the map.', ready: !state.riteUsed && run.phase === 'map' && run.stage?.kind === 'stage' };
   if (def.effect.kind === 'vow') return { label: 'The Vow Holds', hint: state.riteUsed ? 'Used: the vow held once when it would have broken.' : 'Once, when your vow would break, it holds instead. It works by itself.', ready: false };
   return null;
 }
@@ -197,6 +306,19 @@ export function blessingRite(run: RunState): { label: string; hint: string; read
 export function useBlessingRite(content: Content, run: RunState): { run: RunState; message: string } | null {
   const rite = blessingRite(run);
   if (!rite?.ready) return null;
+  const dataRite = effectBlessing(run)!.rite;
+  if (dataRite) {
+    const state = run.expansion!.blessing!;
+    state.riteUsed = true;
+    if (dataRite.perks.length > 0) state.riteArmed = true;
+    if (dataRite.heal) for (const m of run.party) { m.hp = maxHp(content, m); m.status = null; }
+    if (dataRite.items) {
+      const rng = new Rng(hashSeed(`${run.seed}::blessing-rite`));
+      for (const it of dataRite.items) giveItem(content, run, it.id, it.count, rng);
+    }
+    run.journal = [...(run.journal ?? []), dataRite.message];
+    return { run, message: dataRite.message };
+  }
   const kind = effectBlessing(run)!.effect.kind;
   if (kind === 'rewinds') {
     const back = rewindStage(content, run, { keepTeam: true });
@@ -214,6 +336,11 @@ export function useBlessingRite(content: Content, run: RunState): { run: RunStat
       : kind === 'calm' ? 'Lugia\'s song waits under the sea. The next wild Pokémon you meet will hear it.'
       : 'Deep below, the mountain gathers itself. The next boss\'s arena will burn clean.';
     return { run, message };
+  }
+  if (kind === 'fold') {
+    state.riteUsed = true;
+    state.folds = [...(state.folds ?? []), `rite:${run.regionIndex}:${run.stage!.index}`];
+    return { run, message: 'Palkia opens its hand: the road ahead is yours to arrange. Choose "Rearrange the road".' };
   }
   const stageKey = `${run.regionIndex ?? 0}:${run.stage!.kind}:${run.stage!.index}`;
   if (kind === 'sight') {
@@ -240,6 +367,68 @@ export function useBlessingRite(content: Content, run: RunState): { run: RunStat
   for (const m of run.party) { m.hp = maxHp(content, m); m.status = null; }
   run.expansion!.blessing!.riteUsed = true;
   return { run, message: 'Tapu Lele scatters its petals: the whole party is restored.' };
+}
+
+/** Ride (Koraidon) or warp (Cosmog): the map action is open now (uses left this stage, on the map, not already riding). */
+export function rideReady(run: RunState): { label: string; left: number } | null {
+  const def = effectBlessing(run);
+  const state = run.expansion?.blessing;
+  const stage = run.stage;
+  if (!def?.ride || !state || run.phase !== 'map' || !stage || stage.pseudo || run.moveMode) return null;
+  const key = `${run.regionIndex}:${stage.kind}:${stage.index}`;
+  const used = (state.rides ?? []).filter((r) => r === key).length;
+  const left = (inCommunionForm(run) ? def.ride.communionPerStage : def.ride.perStage) - used;
+  return left > 0 ? { label: def.ride.label, left } : null;
+}
+
+/** Takes the ride: the next move may go to any node of the next level, whatever the paths. Returns the message, or null. */
+export function takeRide(run: RunState): string | null {
+  const ready = rideReady(run);
+  if (!ready) return null;
+  const stage = run.stage!;
+  const state = run.expansion!.blessing!;
+  state.rides = [...(state.rides ?? []), `${run.regionIndex}:${stage.kind}:${stage.index}`];
+  run.moveMode = 'acroBike';
+  return `${ready.label}: pick any node of the next level, whatever the paths.`;
+}
+
+/**
+ * Palkia, The Space Traveller: the nodes of this stage that may change places now, or [] when folding is closed.
+ * Open once per region, on one stage, before its first node is entered (as often as the player likes until then); the Rite
+ * opens the current stage again even after setting out. Never the final node, nor one already reached.
+ */
+export function foldNodes(run: RunState): MapNode[] {
+  const def = effectBlessing(run);
+  const state = run.expansion?.blessing;
+  const stage = run.stage;
+  if (def?.effect.kind !== 'fold' || !state || run.phase !== 'map' || !stage || stage.kind !== 'stage') return [];
+  const key = `${run.regionIndex}:${stage.index}`;
+  const folds = state.folds ?? [];
+  const byRite = folds.includes(`rite:${key}`);
+  const thisRegion = folds.some((f) => !f.startsWith('rite:') && f.split(':')[0] === String(run.regionIndex));
+  if (!byRite && (stage.current !== null || (thisRegion && !folds.includes(key)))) return [];
+  const here = stage.current ? stage.map.nodes.find((n) => n.id === stage.current)?.column ?? 0 : 0;
+  return stage.map.nodes.filter((n) => n.column > here && n.column < stage.map.columns && !stage.visited.includes(n.id) && n.kind !== 'gym');
+}
+
+/** Palkia: two nodes change places. The paths stay where they are; what waits at each node moves. Returns the message, or null. */
+export function foldSwap(run: RunState, a: string, b: string): string | null {
+  const open = foldNodes(run);
+  const x = open.find((n) => n.id === a);
+  const y = open.find((n) => n.id === b);
+  if (!x || !y || a === b) return null;
+  const moved = ['kind', 'harder', 'sides', 'name', 'storyStops', 'ace', 'doubles', 'roomEvent', 'roomKind', 'note'] as const;
+  const xr = x as Record<string, unknown>;
+  const yr = y as Record<string, unknown>;
+  for (const f of moved) {
+    const keep = xr[f];
+    if (yr[f] === undefined) delete xr[f]; else xr[f] = yr[f];
+    if (keep === undefined) delete yr[f]; else yr[f] = keep;
+  }
+  const state = run.expansion!.blessing!;
+  const key = `${run.regionIndex}:${run.stage!.index}`;
+  if (!(state.folds ?? []).includes(key) && !(state.folds ?? []).includes(`rite:${key}`)) state.folds = [...(state.folds ?? []), key];
+  return `Palkia folds the road: level ${x.column} and level ${y.column} change places.`;
 }
 
 /**
@@ -344,13 +533,13 @@ export function blessingAfterBattle(content: Content, run: RunState): string[] {
   if (!def) return touched;
   // An armed Rite is spent by the battle it waited for.
   const fx = run.battle?.storyEffects ?? [];
-  if (state.riteArmed && ((def.effect.kind === 'bolt' && run.battle?.kind === 'trainer') || (def.effect.kind === 'calm' && fx.includes('song-of-peace')) || (def.id === 'heatran' && fx.includes('erupt')))) state.riteArmed = false;
+  if (state.riteArmed && ((def.effect.kind === 'bolt' && run.battle?.kind === 'trainer') || (def.effect.kind === 'calm' && fx.includes('song-of-peace')) || (def.id === 'heatran' && fx.includes('erupt')) || (def.rite && riteBattle(def.rite.on, run)))) state.riteArmed = false;
   if (def.firstBattleOfStage && run.stage) {
     const key = `${run.regionIndex}:${run.stage.index}`;
     if (!state.stagesDone.includes(key)) state.stagesDone = [...state.stagesDone, key];
   }
   if (def.effect.kind === 'sacredAsh' && !state.ashRegions.includes(run.regionIndex)) {
-    const fallen = run.party.filter((m) => m.hp <= 0 && m.uid !== run.battle?.loaner);
+    const fallen = run.party.filter((m) => m.hp <= 0 && !isTempAlly(run.battle, m.uid));
     if (fallen.length > 0) {
       for (const m of fallen) { m.hp = maxHp(content, m); m.status = null; touched.push(m.uid); }
       state.ashRegions = [...state.ashRegions, run.regionIndex];
@@ -359,7 +548,7 @@ export function blessingAfterBattle(content: Content, run: RunState): string[] {
   if (def.effect.kind === 'healMostHurt') {
     let worst: { uid: string; missing: number } | null = null;
     for (const m of run.party) {
-      if (m.hp <= 0 || m.uid === run.battle?.loaner) continue;
+      if (m.hp <= 0 || isTempAlly(run.battle, m.uid)) continue;
       const missing = maxHp(content, m) - m.hp;
       if (missing > 0 && (!worst || missing > worst.missing)) worst = { uid: m.uid, missing };
     }
@@ -371,14 +560,14 @@ export function blessingAfterBattle(content: Content, run: RunState): string[] {
     // Communion: the rest of the party recovers a little too.
     if (inCommunionForm(run)) {
       for (const m of run.party) {
-        if (m.hp <= 0 || m.uid === run.battle?.loaner || m.uid === worst?.uid) continue;
+        if (m.hp <= 0 || isTempAlly(run.battle, m.uid) || m.uid === worst?.uid) continue;
         m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * data.balance.lele.communionPartyPercent / 100));
       }
     }
   }
   // Ho-Oh in Communion: after a boss battle the first fainted Pokémon (party order) rises at half HP.
   if (def.effect.kind === 'sacredAsh' && inCommunionForm(run) && run.battle && isBossClass(run.battle.trainer?.classId)) {
-    const m = run.party.find((p) => p.hp <= 0 && p.uid !== run.battle?.loaner);
+    const m = run.party.find((p) => p.hp <= 0 && !isTempAlly(run.battle, p.uid));
     if (m) { m.hp = Math.max(1, Math.floor(maxHp(content, m) / 2)); touched.push(m.uid); }
   }
   return touched;

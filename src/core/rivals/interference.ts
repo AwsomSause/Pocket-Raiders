@@ -6,6 +6,7 @@
 // Caps: once per stage, twice per region, never in the League or on a boss node. Seeded per stop, so previews and
 // reloads agree. Flags only (`interfere:*`), so no save bump.
 
+import { scaledCap } from '../stageLength';
 import { hashSeed, Rng } from '../rng';
 import { addItem } from '../items';
 import { findNode } from '../map';
@@ -28,7 +29,7 @@ export function interferenceAt(run: RunState, side: SideStop): Interference | nu
   if (!stage || stage.current === null || stage.kind === 'league') return null;
   if (!INTERFERENCE.sideKinds.includes(side.kind) || side.used) return null;
   if (run.story.flags[stageFlag(run)] !== undefined) return null;
-  if (Number(run.story.flags[regionFlag(run)] ?? 0) >= INTERFERENCE.perRegion) return null;
+  if (Number(run.story.flags[regionFlag(run)] ?? 0) >= scaledCap(INTERFERENCE.perRegion, run)) return null;
   const node = findNode(stage.map, stage.current);
   if (node.kind === 'gym' || node.kind === 'elite' || node.kind === 'champion') return null;
   const rng = new Rng(hashSeed(`${run.seed}::interfere::${run.regionIndex}.${stage.index}::${side.id}`));

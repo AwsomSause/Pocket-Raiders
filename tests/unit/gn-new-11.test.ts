@@ -7,10 +7,13 @@ import type { RunState } from '../../src/core/state';
 const stops = (run: RunState): string[] => run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!.sides.filter((s) => s.kind === 'event' && !s.used).map((s) => s.eventId!);
 
 const D = 'gn-new-11-door';
+// The market is a screen of its own now (tests/unit/gnscreen-spirit-market.test.ts). The lane and stall rooms below are the earlier
+// version, kept for a run saved inside one: these tests stand in such a room, as that save would.
 const join = (seed: string) => {
-  let run = gnRun(seed);
-  open(run, D);
-  run = choose(run, D, 'Join the back of the line.').run;
+  const run = gnRun(seed);
+  setFlag(run, 'parade-joined', 1);
+  setFlag(run, 'parade-lanterns', 6);
+  open(run, 'gn-new-11-lane-a');
   return run;
 };
 
@@ -29,7 +32,18 @@ describe('gn.new.11 The Night Parade', () => {
     expect(run.party[0]!.friendship).toBeGreaterThan(before);
   });
 
-  it('Join opens the market with six lanterns; a stall spends one', () => {
+  it('Join opens the Spirit Market screen with six lanterns, not the old lane room', () => {
+    const run = gnRun('np-join-screen');
+    open(run, D);
+    const r = choose(run, D, 'Join the back of the line.').run;
+    expect(r.phase).toBe('minigame');
+    expect(r.minigame?.id).toBe('gn-spirit-market');
+    expect(flagOf(r, 'parade-joined')).toBe(1);
+    expect(flagOf(r, 'parade-lanterns')).toBe(6);
+    expect(stops(r)).not.toContain('gn-new-11-lane-a');
+  });
+
+  it('an old lane room: six lanterns; a stall spends one', () => {
     let run = join('np-join');
     expect(flagOf(run, 'parade-joined')).toBe(1);
     expect(flagOf(run, 'parade-lanterns')).toBe(6);

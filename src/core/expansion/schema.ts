@@ -25,6 +25,8 @@ export const ExpansionSettingsSchema = z.object({
   climaxCut: z.enum(['standard', 'extended']).default('extended'),
   /** How many quiet-node story events appear. */
   eventsDensity: z.enum(['low', 'normal', 'full']).default('full'),
+  /** Stage length: nodes added to (+) or taken off (−) the 30-node default, −10 to +20 (so 20 to 50). Read when a run starts. */
+  stageLength: z.number().int().min(-10).max(20).default(0),
   grandArcEnabled: z.boolean().default(true),
   /** Decision N: mic input, off until the player turns it on. A button always does the same thing. */
   micInput: z.boolean().default(false),
@@ -122,6 +124,8 @@ export const ExpansionRunSchema = z.object({
   counterPick: z.boolean().optional(),
   /** The story-event density this run started with (E3): how many quiet-node story events a region gets. Set once at run start. */
   density: z.enum(['low', 'normal', 'full']).optional(),
+  /** Nodes per stage this run plays (set once at run start from the `stageLength` setting). Absent = the old 20, so a run saved before this keeps its length. */
+  stageCols: z.number().int().min(3).optional(),
   /** The climax length the run started with (the `climaxCut` setting); run events that need the Extended Cut read it. */
   climaxCut: z.enum(['standard', 'extended']).optional(),
   /** The `storyTraits` setting the run started with. */
@@ -167,6 +171,8 @@ export const ExpansionRunSchema = z.object({
     guest: z.object({ id: z.string(), forgiven: z.boolean().default(false) }).nullable().default(null),
     kept: z.array(z.string()).default([]),
     left: z.array(z.string()).default([]),
+    /** Stage 2 (Mythical Promises): small in-run counters the Promises and Wonders read (rests passed, species caught, charges used). Optional, no save bump. */
+    track: z.record(z.string(), z.number()).optional(),
   }).optional(),
   /** Beta 0.7 workstream 13: in-run epilogue (Citadark finale, Region of Doom). */
   epilogue: EpilogueStateSchema.optional(),

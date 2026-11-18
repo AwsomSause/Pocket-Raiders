@@ -65,7 +65,7 @@ import * as Run from '../core/run';
 import { cheerSky } from '../core/sky/spectate';
 import { EX_MOMENT_CHOICES, exMomentAnswer, exMomentAsk, exMomentDue, exMomentLines, exWatchAction, exWatching } from '../core/greenneedle/exhibition';
 import { rewindBattle } from '../core/rewind';
-import { swearVow, useBlessingRite } from '../core/blessings';
+import { foldSwap, swearVow, takeRide, useBlessingRite } from '../core/blessings';
 import { markRumorShown, nodeHint } from '../core/worldSim/tick';
 import { applyNursery, type NurseryChoice } from '../core/nursery';
 import { applyFormShift } from '../core/formShift';
@@ -93,6 +93,14 @@ import type { StorageProvider } from '../save/storage';
 function randomId(prefix: string): string {
   const rand = Math.random().toString(36).slice(2, 10);
   return `${prefix}_${Date.now().toString(36)}${rand}`;
+}
+
+/**
+ * A `?seed=` link replays the same run on any day: one-off dated events (Homeland Week) reorder the regions,
+ * so they stay off for it. Weekly and holiday events still apply. Always false outside a browser.
+ */
+function seedLink(): boolean {
+  return typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('seed');
 }
 
 export class GameSession {
@@ -292,8 +300,8 @@ export class GameSession {
     const next = story ? nextRunStart(this.content.storyData, this.profile.story) : {};
     if (story && next.starter && !starterOverride?.length) starterOverride = [next.starter];
     if (story && (next.starter || next.backstory)) this.profile = { ...this.profile, story: clearNextRun(this.profile.story) };
-    const opts = { seed, archetypeId, campaignId, prep, rules, attributes: this.profile.attributes, mastery: this.profile.mastery, gameEvents: rules?.weeks === false ? [] : activeGameEvents(this.content, new Date()).map((a) => a.edition), raidTierUnlocked: this.profile.best.raidBestTier ?? 0, licenses: runBankFlags(this.profile), candyPerks: this.profile.candyPerks, ownedTrainers: this.profile.unlockedArchetypes, dexCaught: dexCaughtCount(this.profile), mentorBonds: this.profile.mentorBonds, npcMemory: this.profile.npcMemory, treasureHunt: this.profile.treasureHunt, ...(story ? { protagonist: { look: me.look, name: me.nameSet ? me.name : '', pronouns: me.pronouns, ...(next.backstory ? { backstory: next.backstory } : {}) } } : {}) };
-    this.run = Run.createRun(this.content, { ...opts, expansion: { finale: this.settings.expansion.finaleEnabled, doomEpilogue: this.settings.expansion.doomEpilogue, labyrinthResume: this.settings.expansion.labyrinthResume, stagePacing: this.settings.expansion.stagePacing, evolutionEncounters: this.settings.expansion.evolutionEncounters, leagueCounterPick: this.settings.expansion.leagueCounterPick, kantoCanon: this.settings.expansion.kantoSevii, grandArc: this.settings.expansion.grandArcEnabled, worldTracks: this.settings.expansion.worldTracks, eventsDensity: this.settings.expansion.eventsDensity, climaxCut: this.settings.expansion.climaxCut, storyTraits: this.settings.expansion.storyTraits, nodeMenus: this.settings.expansion.nodeMenus, blessings: this.settings.expansion.blessingsEnabled, ultraBeasts: this.settings.expansion.ultraBeastsEnabled, heatedMoments: this.settings.expansion.heatedMoments, mythicalPromises: this.settings.expansion.mythicalsEnabled, wholeRunEvents: this.settings.expansion.wholeRunEvents }, ...(story && starterOverride?.length ? { starterOverride } : {}), runId: randomId('run'), pastPokemon: this.profile.pastPokemon, rivalArchive: this.profile.rivalArchive, runHistory: this.profile.runHistory });
+    const opts = { seed, archetypeId, campaignId, prep, rules, attributes: this.profile.attributes, mastery: this.profile.mastery, gameEvents: rules?.weeks === false ? [] : activeGameEvents(this.content, new Date()).filter((a) => !(seedLink() && a.event.schedule.kind === 'dated')).map((a) => a.edition), raidTierUnlocked: this.profile.best.raidBestTier ?? 0, blessingDeck: this.profile.blessings ?? { found: [], dealt: [] }, licenses: runBankFlags(this.profile), candyPerks: this.profile.candyPerks, ownedTrainers: this.profile.unlockedArchetypes, dexCaught: dexCaughtCount(this.profile), mentorBonds: this.profile.mentorBonds, npcMemory: this.profile.npcMemory, treasureHunt: this.profile.treasureHunt, ...(story ? { protagonist: { look: me.look, name: me.nameSet ? me.name : '', pronouns: me.pronouns, ...(next.backstory ? { backstory: next.backstory } : {}) } } : {}) };
+    this.run = Run.createRun(this.content, { ...opts, expansion: { finale: this.settings.expansion.finaleEnabled, doomEpilogue: this.settings.expansion.doomEpilogue, labyrinthResume: this.settings.expansion.labyrinthResume, stagePacing: this.settings.expansion.stagePacing, evolutionEncounters: this.settings.expansion.evolutionEncounters, leagueCounterPick: this.settings.expansion.leagueCounterPick, kantoCanon: this.settings.expansion.kantoSevii, grandArc: this.settings.expansion.grandArcEnabled, worldTracks: this.settings.expansion.worldTracks, eventsDensity: this.settings.expansion.eventsDensity, stageLength: this.settings.expansion.stageLength, climaxCut: this.settings.expansion.climaxCut, storyTraits: this.settings.expansion.storyTraits, nodeMenus: this.settings.expansion.nodeMenus, blessings: this.settings.expansion.blessingsEnabled, ultraBeasts: this.settings.expansion.ultraBeastsEnabled, heatedMoments: this.settings.expansion.heatedMoments, mythicalPromises: this.settings.expansion.mythicalsEnabled, wholeRunEvents: this.settings.expansion.wholeRunEvents }, ...(story && starterOverride?.length ? { starterOverride } : {}), runId: randomId('run'), pastPokemon: this.profile.pastPokemon, rivalArchive: this.profile.rivalArchive, runHistory: this.profile.runHistory });
     const grants = startGrants(this.content, this.profile, archetypeId);
     applyStartGrants(this.content, this.run, this.profile);
     // Memories: what earlier runs left behind (ghosts, keepsakes, old friends, the chosen heirloom). Picked from the profile, not rolled.
@@ -520,7 +528,7 @@ export class GameSession {
   }
 
   leaveMinigame(): RunState {
-    return this.setRun(Mini.leaveMinigame(this.requireRun()));
+    return this.setRun(Mini.leaveMinigame(this.requireRun(), this.content));
   }
 
   private setRun(run: RunState): RunState {
@@ -730,6 +738,20 @@ export class GameSession {
     return ok;
   }
 
+  /** Koraidon's Ride / Cosmog's warp: the next move may go to any node of the next level. Returns the message, or null. */
+  blessingRide(): string | null {
+    const message = takeRide(this.requireRun());
+    if (message) this.persistRun();
+    return message;
+  }
+
+  /** Palkia's blessing: two nodes of the stage change places. Returns the message, or null when they can't. */
+  foldSwap(a: string, b: string): string | null {
+    const message = foldSwap(this.requireRun(), a, b);
+    if (message) this.persistRun();
+    return message;
+  }
+
   /** Beta 0.7 Legendary Blessings: uses the run's Rite (Tapu Lele's heal, Dialga's stage rewind). Returns the message, or null when it can't be used. */
   useBlessingRite(): string | null {
     const result = useBlessingRite(this.content, this.requireRun());
@@ -837,8 +859,15 @@ export class GameSession {
     return result;
   }
 
-  useDraftItem(kind: Run.DraftItemKind, index: number): { run: RunState; message: string } {
-    const result = Run.useDraftItem(this.content, this.requireRun(), kind, index);
+  wishRedraw(): { run: RunState; message: string } {
+    const result = Run.wishRedraw(this.content, this.requireRun());
+    this.run = result.run;
+    this.persistRun();
+    return result;
+  }
+
+  useDraftItem(kind: Run.DraftItemKind, index: number, namedReward?: string): { run: RunState; message: string } {
+    const result = Run.useDraftItem(this.content, this.requireRun(), kind, index, namedReward);
     this.run = result.run;
     this.persistRun();
     return result;
