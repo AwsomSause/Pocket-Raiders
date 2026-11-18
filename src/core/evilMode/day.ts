@@ -8,6 +8,7 @@ import { arriveApplicants, askQuestion, hire, leaveAtZero, letGo, promote, turnA
 import type { JobDraft } from './odds';
 import { askAbout, setRate } from './ledger';
 import { holdResult, post, takeBadge, unpost, walkHero } from './hero';
+import { answerKnock, drawKnock, nightAction, takeDown, type NightAction } from './night';
 import { heartsGo, moveLine } from './line';
 import { gymAct, gymEvening, gymResult } from './gym';
 import { recall, goOn, tallyOf, toRoad } from './region';
@@ -65,6 +66,10 @@ export type EvilAction =
   | { type: 'unpost'; holdingId: string }
   | { type: 'goYourself'; holdingId: string }
   | { type: 'battleResult'; won: boolean; fielded?: string[]; caught?: string; turns?: number }
+  /** Slice 7: the door (0..2 an answer, 3 "(Not tonight.)"), the Night's one action, and taking something off the Wall. */
+  | { type: 'answerKnock'; answer: number }
+  | { type: 'nightAction'; action: NightAction; id?: string }
+  | { type: 'takeDown'; index: number }
   /** Slice 6: move the Line, once a region, at Night (Part 3 section 7.1). */
   | { type: 'moveLine'; to: LineId }
   /** Slice 8: one of the Gym's five ways, at the In person beat (Part 8a). */
@@ -152,7 +157,7 @@ export type EvilAction =
   | EdgesAction
   | { type: 'shadowOrder' };
 
-export type EvilCue = { id: 'beat'; beat: Beat } | { id: 'newDay'; day: number } | { id: 'refused'; reason: string } | { id: 'queued'; holdingId: string } | { id: 'districtEnd'; how: 'held' | 'taken' | 'arrival' | 'reckoning' } | { id: 'filed'; text: string } | { id: 'asked'; line: string } | { id: 'said'; line: string } | { id: 'refusal' } | { id: 'fight' } | { id: 'road'; lines: string[] } | { id: 'ending' };
+export type EvilCue = { id: 'beat'; beat: Beat } | { id: 'newDay'; day: number } | { id: 'refused'; reason: string } | { id: 'queued'; holdingId: string } | { id: 'districtEnd'; how: 'held' | 'taken' | 'arrival' | 'reckoning' } | { id: 'filed'; text: string } | { id: 'asked'; line: string } | { id: 'said'; line: string } | { id: 'refusal' } | { id: 'fight' } | { id: 'road'; lines: string[] } | { id: 'ending' } | { id: 'knock'; n: number } | { id: 'moved'; line: string };
 
 export interface StepResult {
   block: EvilModeBlock;
@@ -409,17 +414,37 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
     const r = askAbout(block, action.holdingId);
     return r.problem ? no(r.problem) : { block: r.block, cues: [{ id: 'asked', line: r.line }], ok: true };
   }
+  // Slice 7: the Night. The door's answered first; then one action; the Wall at any beat.
+  if (action.type === 'answerKnock' || action.type === 'nightAction' || action.type === 'takeDown') {
+    const r = action.type === 'answerKnock' ? answerKnock(block, action.answer) : action.type === 'nightAction' ? nightAction(block, action.action, action.id ?? null) : takeDown(block, action.index);
+    if (r.problem) return no(r.problem);
+    const cues: EvilCue[] = [{ id: 'said', line: r.line }];
+    if (r.moved) cues.push({ id: 'moved', line: r.moved });
+    return { block: r.block, cues, ok: true };
+  }
   if (BEAT_END[beat] !== action.type) return no(`${action.type} does nothing at ${beat}`);
   if (raidOn(block)) return no("The Raid's on. Nothing else moves till it's over.");
+  // Lights out with somebody still at the door is "(Not tonight.)" (Part 24a section 1.5), unless they can't be shut out.
+  let pre = block;
+  const preCues: EvilCue[] = [];
+  if (action.type === 'lightsOut' && block.night.knock) {
+    const r = answerKnock(block, 3);
+    if (r.problem) return no(r.problem);
+    pre = r.block;
+    if (r.moved) preCues.push({ id: 'moved', line: r.moved });
+  }
   const to = nextBeat(beat);
-  const day = to === 'morning' ? block.here.day + 1 : block.here.day;
-  let out: EvilModeBlock = { ...block, here: { ...block.here, day, beat: to } };
+  const day = to === 'morning' ? pre.here.day + 1 : pre.here.day;
+  let out: EvilModeBlock = { ...pre, here: { ...pre.here, day, beat: to } };
   // "Send them" fixes the odds; going into the Evening rolls every job once (design Part 30 section 5.2).
   if (action.type === 'send') out = fixOdds(out);
   if (to === 'evening') out = friendCheck(eveningTemper(schemeEvening(neighbourEvening(raidEvening(baseEvening(gymEvening(resolveEvening(out))))))));
   // Slice 12: the night before the walk (Part 21 section 3.2).
   if (to === 'night') out = nightBefore(out);
-  const cues: EvilCue[] = [{ id: 'beat', beat: to }];
+  // Slice 7: the knock is drawn on the way into the Night (one `evil-people` draw, even when nobody comes).
+  if (to === 'night' && !out.district?.end) out = drawKnock(out);
+  const cues: EvilCue[] = [...preCues, { id: 'beat', beat: to }];
+  if (to === 'night' && out.night.knock) cues.push({ id: 'knock', n: out.night.knock.n });
   // Slice 4: Morning. Anyone at Loyalty 0 is gone, with a note; then the notice board (Part 30 section 6.2).
   // Slice 5: nobody stays posted overnight. The road's lines are shown at the Morning.
   if (to === 'morning') {

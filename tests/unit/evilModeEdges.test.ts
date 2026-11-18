@@ -67,29 +67,34 @@ const withTear = (b0: EvilModeBlock, beastId = 'ub-absorption'): EvilModeBlock =
 const removed = (b: EvilModeBlock): EvilModeBlock => ({ ...b, settings: { ...b.settings, shadow: false }, edges: { ...b.edges, shadow: null } });
 const wild = (b: EvilModeBlock) => b.district!.holdings.find((h) => h.kind === 'wild' || h.kind === 'alpha')!;
 
-describe('the data and the save (block v19)', () => {
+describe('the data and the save (block v21)', () => {
   it('edges.json is checked at load; both switches on by default (Kice: Shadow branch on, with a setting to remove it)', () => {
     expect(EVIL_DATA.edges.incursions.on).toBe(true);
     expect(EVIL_DATA.edges.shadow.on).toBe(true);
     const b = found();
-    expect(b.v).toBe(19);
+    expect(b.v).toBe(21);
     expect(b.settings).toMatchObject({ shadow: true, incursions: true });
     expect(b.edges.shadow).not.toBeNull();
     expect(removed(b).edges.shadow).toBeNull();
     expect(found('e', {}, { shadow: false }).edges.shadow).toBeNull();
     expect(found('e', {}, { shadow: false }).settings.shadow).toBe(false);
   });
-  it('v15 -> v19: the branch Available, Incursions on, nothing tallied, no Tear; save and reload the same', () => {
+  it('v15 and v20 -> v21: the branch Available, Incursions on, nothing tallied, no Tear; save and reload the same', () => {
     const b = found();
     const { edges, ...rest } = b;
     void edges;
     const v15 = { ...rest, v: 15, settings: { length: 'three' } };
     const out = EvilModeBlockSchema.parse(v15);
-    expect(out.v).toBe(19);
+    expect(out.v).toBe(21);
     expect(out.settings).toEqual({ length: 'three', shadow: true, incursions: true });
     expect(out.edges).toMatchObject({ appetites: {}, static: null, tear: null, incursion: null, beast: null, met: [], heatAtMorning: b.team.heat });
     expect(out.edges.shadow).toMatchObject({ rigged: [], through: 0, rung: 0 });
     expect(reload(out)).toEqual(out);
+    // A v20 block (slice 7's Night, saved before this slice) gets the same edges.
+    const v20 = EvilModeBlockSchema.parse({ ...rest, v: 20, settings: { length: 'three' } });
+    expect(v20.v).toBe(21);
+    expect(v20.settings).toEqual({ length: 'three', shadow: true, incursions: true });
+    expect(v20.edges.tear).toBeNull();
     // A block mid-Tear survives a reload unchanged.
     const t = withTear(b);
     expect(reload(t)).toEqual(t);

@@ -13,6 +13,7 @@ import { mayStay } from './region';
 import { foundTeam, type FoundingChoice } from './start';
 import type { EvilModeBlock, Holding, JobMethod, RunLength } from './schema';
 import type { JobDraft } from './odds';
+import { answerProblem, knockDef } from './night';
 import { bustProblem, cardDef, econOn, heldStreets, honestCost, offered, tradeReqProblem, ventureProblem } from './economy';
 
 /** always Persuade; the richest job first (Pay when it can, else Persuade); a mix (and an Officer left behind). */
@@ -179,6 +180,12 @@ export function playRegion(block0: EvilModeBlock, policy: Policy, data: EvilData
     if (beat === 'dispatch' && block.queue.length === 0) {
       for (const job of policyJobs(block, policy, data)) act({ type: 'queueJob', job });
       for (const a of policyTrade(block, policy, data)) act(a);
+    }
+    // Slice 7: someone at the door who can't be shut out (the summons) is answered: the first answer the team can give.
+    const k = beat === 'night' ? block.night.knock : null;
+    if (k && !knockDef(k.n, data)!.shut) {
+      const i = [0, 1, 2].find((n) => !answerProblem(block, n, data));
+      if (i !== undefined) act({ type: 'answerKnock', answer: i });
     }
     if (!act({ type: BEAT_END[block.here.beat] })) return done(false);
   }
