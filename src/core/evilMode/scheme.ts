@@ -13,6 +13,7 @@ import { inRoster, moveLoyalty } from './people';
 import { tradeProblem } from './economy';
 import { runIndex } from './region';
 import { packField, STANCES, type CardField, type Crew, type DigDef, type DigState, type EvilModeBlock, type HeistDef, type HeistState, type Holding, type PartId, type SchemeFamily, type SchemePart, type SchemeState, type SchemeWay, PARTS, emptyScheme } from './schema';
+import { logOf } from './pack';
 
 export type WayKey = 'clean' | 'dirty' | 'second';
 export interface Out { block: EvilModeBlock; problem: string | null; lines: string[] }
@@ -270,7 +271,7 @@ function sourceCount(block: EvilModeBlock, kind: string): number | null {
   switch (kind) {
     case 'honest': return e.running.filter((v) => v.kind === 'racket' && v.honest).length;
     case 'straight': return e.running.filter((v) => v.kind === 'front').reduce((n, v) => n + v.straight.length, 0);
-    case 'persuade': return block.log.filter((x) => x.kind === 'job' && x.result === 'went' && x.method === 'persuade').length;
+    case 'persuade': return logOf(block).filter((x) => x.kind === 'job' && x.result === 'went' && x.method === 'persuade').length;
     case 'gym': return gymsDealt(block).any;
     case 'work': return Math.max(e.worksIn.length, e.running.filter((v) => v.kind === 'work' && v.done).length);
     default: return null; // dig and truth are counted when they happen

@@ -11,7 +11,7 @@ import { makeHero } from './hero';
 import { inRoster } from './people';
 import { mayStay } from './region';
 import { foundTeam, type FoundingChoice } from './start';
-import type { EvilModeBlock, Holding, JobMethod } from './schema';
+import type { EvilModeBlock, Holding, JobMethod, RunLength } from './schema';
 import type { JobDraft } from './odds';
 import { bustProblem, cardDef, econOn, heldStreets, honestCost, offered, tradeReqProblem, ventureProblem } from './economy';
 
@@ -31,8 +31,8 @@ export interface PlayResult {
 }
 
 /** A founded block at the region's first Morning, with the Hero made from the seed (as the session does). */
-export function foundForPlay(seed: string, choice: FoundingChoice, data: EvilData = EVIL_DATA): EvilModeBlock {
-  const r = foundTeam(choice, { boss: 'red', length: 'three', seed }, data);
+export function foundForPlay(seed: string, choice: FoundingChoice, data: EvilData = EVIL_DATA, length: RunLength = 'three'): EvilModeBlock {
+  const r = foundTeam(choice, { boss: 'red', length, seed }, data);
   if (!r.ok) throw new Error(r.problem);
   const b = r.block;
   if (!data.hero.on || !b.district) return b;
@@ -186,7 +186,7 @@ export function playRegion(block0: EvilModeBlock, policy: Policy, data: EvilData
 }
 
 /** Slice 16: plays a whole run, region after region across each Crossing, to its ending's last page (or the budget). */
-export function playRun(block0: EvilModeBlock, policy: Policy, data: EvilData = EVIL_DATA, budget = 20000): PlayResult {
+export function playRun(block0: EvilModeBlock, policy: Policy, data: EvilData = EVIL_DATA, budget = block0.settings.length === 'six' ? 40000 : 20000): PlayResult {
   return playRegion(block0, policy, data, budget, true);
 }
 

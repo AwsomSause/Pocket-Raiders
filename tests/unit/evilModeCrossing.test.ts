@@ -86,6 +86,8 @@ describe('the Crossing', () => {
   it('Heat halves; Regard and Dread halve (Regard whole if the base was handed over); Funds carry; a new region and a new neighbour', () => {
     let b: EvilModeBlock = { ...over, team: { ...over.team, heat: 7, regard: 5, dread: 3, funds: 4321 } };
     b = beginCrossing({ ...b, region: { ...b.region, crossing: null } });
+    // Slice 19: six regions are open now, so the seed may offer others; this test crosses to Hoenn, offered beside Johto.
+    b = { ...b, region: { ...b.region, crossing: { ...b.region.crossing!, offer: ['hoenn', 'johto'] } } };
     b = step(b, { type: 'cross', what: 'ticket', id: 'hoenn' }).block;
     b = step(b, { type: 'cross', what: 'next' }).block;
     const hand = b.region.crossing!.step === 'base';
