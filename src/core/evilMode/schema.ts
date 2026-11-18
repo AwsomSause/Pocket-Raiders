@@ -2,6 +2,7 @@
 // Pure Zod, no Phaser. Slice 1 ("the shell") holds only what founding and an empty day need: the team, where the day is,
 // the stream counts and the applied set. Later slices add their fields to the block and bump its own `v`.
 
+import { fromSaveForm } from './saveForm';
 import { z } from 'zod';
 import creedsRaw from '../../data/evilMode/creeds.json';
 
@@ -1553,6 +1554,8 @@ const startLoyalty = (creed: unknown): number => (creedsRaw.creeds.find((c) => c
  * nothing on the Wall); everyone Easy, nobody's knocked yet. Keyed on the Night being missing, so it holds whichever slices land first.
  */
 export function migrateEvilBlock(raw: unknown): unknown {
+  // A block read from a save is in its save form (saveForm.ts); it's made whole first, then migrated as ever.
+  raw = fromSaveForm(raw);
   if (!raw || typeof raw !== 'object') return raw;
   let b = raw as Record<string, unknown>;
   if (b.v === 1) b = { ...b, v: 2, district: null, crew: firstCrew(), queue: [], sheets: [], evening: [] };

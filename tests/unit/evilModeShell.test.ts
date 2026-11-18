@@ -146,6 +146,8 @@ describe('Evil Mode on a run, and saves', () => {
     for (let i = 0; i < BEATS.length + 1; i++) {
       const sm = new SaveManager(storage, content);
       sm.saveRun(r);
+      // Written in its save form (saveForm.ts): the block's texts in one table, not loose.
+      expect(JSON.parse(storage.get('pkr.run')!).data.expansion.evilMode).toHaveProperty(['¤t']);
       const loaded = new SaveManager(storage, content).loadRun();
       expect(loaded.status).toBe('ok');
       if (loaded.status !== 'ok') return;

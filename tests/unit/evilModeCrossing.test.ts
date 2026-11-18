@@ -7,6 +7,7 @@
 import { describe, expect, it } from 'vitest';
 import { foundForPlay, playRegion, playRun, replay } from '../../src/core/evilMode/autoplay';
 import { EVIL_DATA } from '../../src/core/evilMode/data';
+import { toSaveForm } from '../../src/core/evilMode/saveForm';
 import { step } from '../../src/core/evilMode/day';
 import { beginCrossing, carryLetter, clockActs, clockMet, crossActOf, crossingModel, clockMorning, cross, lastRun, openRegions, stopClock, ticketLines, ticketsFor, whoStays } from '../../src/core/evilMode/crossing';
 import { ensureNeighbour, neighbourDef, sideFor } from '../../src/core/evilMode/neighbour';
@@ -39,9 +40,10 @@ describe('a Standard run: three regions', () => {
   });
 
   it('a three-region save is under the 300 KB budget, and reloads whole', () => {
-    const json = JSON.stringify(run.block);
+    // What's measured is what's written: the block in its save form (saveForm.ts).
+    const json = JSON.stringify(toSaveForm(run.block));
     expect(json.length).toBeLessThan(300_000);
-    expect(EvilModeBlockSchema.parse(JSON.parse(json))).toEqual(JSON.parse(json));
+    expect(EvilModeBlockSchema.parse(JSON.parse(json))).toEqual(JSON.parse(JSON.stringify(run.block)));
   });
 
   it('levels go by the absolute stage: A = (R − 1) × 8 + S', () => {
