@@ -8,6 +8,7 @@ import { heroReason } from './hero';
 import { dayIn, stageKind } from './region';
 import { monName, moveTemper } from './temper';
 import type { EvilModeBlock, FireN, FireState, Hero } from './schema';
+import { logOf } from './pack';
 
 type Choice = EvilData['fires']['andYou']['answers'][number];
 
@@ -65,12 +66,12 @@ export function slots(block: EvilModeBlock, data: EvilData = EVIL_DATA): Record<
   const hero = block.hero!;
   const reason = heroReason(block, data);
   const region = block.here.region;
-  const went = block.log.filter((e) => e.region === region && e.kind === 'job' && e.result === 'went');
-  const kindest = went.find((e) => e.method === 'pay' || e.method === 'persuade') ?? block.log.find((e) => e.region === region && e.kind === 'waive');
+  const went = logOf(block).filter((e) => e.region === region && e.kind === 'job' && e.result === 'went');
+  const kindest = went.find((e) => e.method === 'pay' || e.method === 'persuade') ?? logOf(block).find((e) => e.region === region && e.kind === 'waive');
   const worst = went.find((e) => e.method === 'lean' || e.method === 'take');
-  const held = block.log.find((e) => e.kind === 'hero' && e.who.length && block.district?.holdings.find((h) => h.id === e.to)?.owner === 'team');
+  const held = logOf(block).find((e) => e.kind === 'hero' && e.who.length && block.district?.holdings.find((h) => h.id === e.to)?.owner === 'team');
   const grunt = held ? block.crew.find((c) => c.id === held.who[0])?.name : undefined;
-  const met = block.crew.find((c) => c.ref && block.log.some((e) => e.kind === 'hero' && e.who.includes(c.id))) ?? block.crew.find((c) => c.ref && c.where === 'in');
+  const met = block.crew.find((c) => c.ref && logOf(block).some((e) => e.kind === 'hero' && e.who.includes(c.id))) ?? block.crew.find((c) => c.ref && c.where === 'in');
   const mline = met?.line ? data.people.lines.find((l) => l.n === met.line)?.text : undefined;
   const creed = data.creeds.find((c) => c.id === block.team.creed);
   const lastOwn = hero.fires.filter((f) => !f.missed && f.own).at(-1)?.own;
@@ -263,7 +264,7 @@ export function writeNotebook(block: EvilModeBlock, raw: string, data: EvilData 
 /** The Strategist's notebook: the File from the other side. What the team did on the road, a blank "Why?", the prices. */
 export function strategistNotebook(block: EvilModeBlock, data: EvilData = EVIL_DATA): { rows: [string, string][]; foot: string[] } {
   const N = data.fires.notebook as Record<string, string>;
-  const rows = block.log.filter((e) => e.kind === 'job' && e.result === 'went' && e.region === block.here.region).slice(-10).map((e): [string, string] => [bare(e.text), '']);
+  const rows = logOf(block).filter((e) => e.kind === 'job' && e.result === 'went' && e.region === block.here.region).slice(-10).map((e): [string, string] => [bare(e.text), '']);
   return { rows, foot: rows.length ? [N.prices!, N.total!] : [N.none!] };
 }
 

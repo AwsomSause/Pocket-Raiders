@@ -24,6 +24,7 @@ import { lastDay, nightBefore, roomAct, roomResult, type LastDay, type RoomOptio
 import { eveningTemper } from './temper';
 import { canDo } from './canDo';
 import { checkEndings, endAct, endBattle, pressEnding } from './endings';
+import { regionMoves } from './regionRule';
 import { beginCrossing, carryLetter, clockMet, clockMorning, cross, keptWarmth, stopClock, type CrossAct } from './crossing';
 import { BEATS, type Beat, type EvilModeBlock, type GymWay, type LineId, type OrderId, type PartId, type Question, type RoomType, type TableThing, type WingId } from './schema';
 
@@ -168,6 +169,8 @@ export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
   let b = clockMorning(schemeMorning(neighbourMorning(settleRegion(clockMet(keptWarmth(neighbourDistrictEnd(r.block)))))));
   // Slice 14: the Reckoning lost (the Hero reached the base) costs the Scheme groundwork, once a region.
   if (b.district?.end?.how === 'reckoning' && b.scheme) b = reckoningLost(b).block;
+  // Slice 19: Sinnoh halves every Loyalty change; Unova doubles every Regard and Dread change (Part 26b sections 1.1, 2.1).
+  b = regionMoves(block0, b);
   // Slice 15: the endings are checked after every step, in their order (Part 23 section 1.1).
   b = checkEndings(block0, b);
   // Slice 16: a region that isn't the run's last ends at the Crossing.
