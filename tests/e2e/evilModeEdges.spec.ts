@@ -75,7 +75,7 @@ test('a Tear: J opens its Card ("We don\'t know." three times); Leave it, by tap
   expect(errors).toEqual([]);
 });
 
-test('the Shadow branch: a Capture Rig by keys at Dispatch; the Corruption figure appears. Removed: no Rig, no figure', async ({ page }, info) => {
+test('the Shadow branch: a Capture Rig by keys at Dispatch; the Corruption figure appears', async ({ page }, info) => {
   const errors = watch(page);
   await founded(page);
   await setUp(page, `b.here.beat = 'dispatch'; b.fight = null; b.refusal = null;`);
@@ -89,9 +89,10 @@ test('the Shadow branch: a Capture Rig by keys at Dispatch; the Corruption figur
   await expect(s.getByTestId('evil-edge-lines')).toContainText('Corruption 1');
   await shots(page, info, 'rig');
   expect(errors).toEqual([]);
+});
 
-  // A second run, the branch removed at founding.
-  const page2 = await page.context().newPage();
+// Its own test (its own browser context): a second tab in the same context shares the first run's storage and can hold at Boot.
+test('the Shadow branch removed at founding: no Rig on the Edges page, no Corruption or Shadow anywhere', async ({ page: page2 }) => {
   const errors2 = watch(page2);
   await founded(page2, false);
   await setUp(page2, `b.here.beat = 'dispatch'; b.fight = null; b.refusal = null;`);
