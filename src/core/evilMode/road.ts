@@ -9,6 +9,7 @@ import { EVIL_DATA, type EvilData } from './data';
 import { fill } from './ledger';
 import { moveTemper } from './temper';
 import type { District, EvilModeBlock, Hero, Letter, Personality, RoadTrainer } from './schema';
+import { logOf } from './pack';
 
 const MOODS = ['warm', 'easy', 'wary', 'sullen', 'shut'] as const;
 type Mood = (typeof MOODS)[number];
@@ -48,7 +49,7 @@ function reasonOf(block: EvilModeBlock, t: RoadTrainer, data: EvilData): string 
     const way = block.gyms.find((g) => g.way)?.way;
     return (way && r[way]) || r.none!;
   }
-  if (t.role === 'stray') return block.log.some((e) => e.kind === 'job' && e.method === 'take' && e.result === 'went') ? r.take! : r.none!;
+  if (t.role === 'stray') return logOf(block).some((e) => e.kind === 'job' && e.method === 'take' && e.result === 'went') ? r.take! : r.none!;
   return block.crew.some((c) => c.ref) ? r.cousin! : r.none!;
 }
 
@@ -61,7 +62,7 @@ export function roadDay(block: EvilModeBlock, data: EvilData = EVIL_DATA): EvilM
     if (when === 'badge') return !!block.hero?.badges.length;
     if (when === 'replaced') return block.gyms.some((g) => g.way === 'replace');
     if (when === 'mess') return !!block.base?.rooms.some((r) => r.type === 'mess');
-    return block.log.some((e) => e.kind === 'job' && e.method === when && e.result === 'went');
+    return logOf(block).some((e) => e.kind === 'job' && e.method === when && e.result === 'went');
   };
   const road = block.road.map((t) => {
     if (t.state === 'home') return { ...t, today: data.road.roles[t.role].home };
@@ -75,7 +76,7 @@ export function roadDay(block: EvilModeBlock, data: EvilData = EVIL_DATA): EvilM
 /** A Lean that went on the Friend's family's holding sends them home; all four hear it (a temper step for the Hero). */
 export function friendCheck(block: EvilModeBlock, data: EvilData = EVIL_DATA): EvilModeBlock {
   const f = block.road.find((t) => t.role === 'friend' && t.state === 'on' && t.family);
-  if (!f || !block.log.some((e) => e.kind === 'job' && e.method === 'lean' && e.result === 'went' && e.to === f.family)) return block;
+  if (!f || !logOf(block).some((e) => e.kind === 'job' && e.method === 'lean' && e.result === 'went' && e.to === f.family)) return block;
   const road = block.road.map((t) => (t.id === f.id ? { ...t, state: 'home' as const, today: data.road.roles.friend.home } : t));
   return { ...block, road, hero: block.hero ? moveTemper(block.hero, 1, 'friendHome', data) : block.hero };
 }
@@ -110,10 +111,10 @@ function moodAfter(block: EvilModeBlock, region: number, n: number): { mood: Moo
   let news: string | null = null;
   if (hero.home.region !== region || hero.home.district !== n) {
     // She hears of the team's district, not her street's: the mood holds; the news is the district's loudest line.
-    const loud = block.log.filter((e) => e.region === region && e.district === n && e.kind === 'job' && e.result === 'went' && (e.method === 'lean' || e.method === 'take'));
+    const loud = logOf(block).filter((e) => e.region === region && e.district === n && e.kind === 'job' && e.result === 'went' && (e.method === 'lean' || e.method === 'take'));
     return { mood, news: loud.length ? 'I hear they were hard on people, where you are.' : null };
   }
-  for (const e of block.log) {
+  for (const e of logOf(block)) {
     if (e.region !== region || e.district !== n || !hero.home.holdings.includes(e.to ?? '')) continue;
     if (e.kind === 'job' && e.result === 'went' && (e.method === 'lean' || e.method === 'take' || e.method === 'expose')) { mood = shift(mood, 1); news = e.text.replace(/^Day \d+\. /, ''); }
     else if ((e.kind === 'job' && e.result === 'went' && (e.method === 'persuade' || e.method === 'pay')) || e.kind === 'waive') { mood = shift(mood, -1); news ??= e.text.replace(/^Day \d+\. /, ''); }

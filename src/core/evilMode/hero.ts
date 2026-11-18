@@ -17,6 +17,7 @@ import { tradeProblem } from './economy';
 import { heroSlice12Start, type District, type EvilModeBlock, type Fight, type Hero, type Holding, type LogEntry, type Personality } from './schema';
 import { angrySteps, monName, moveTemper } from './temper';
 import { approachLines, eighthLines, openLastRoom, reckOn } from './reckoning';
+import { cardsOf, logOf } from './pack';
 
 const STARTERS = starterTable.regionStarters as Record<string, string[]>;
 const BANK = bankJson.personalities as Record<string, { open: string[]; won: string[]; lost: string[] }>;
@@ -93,7 +94,7 @@ export const marksWord = (marks: number, data: EvilData = EVIL_DATA): string => 
 export function loudOf(block: EvilModeBlock, e: LogEntry, data: EvilData = EVIL_DATA): number {
   if (e.kind !== 'job' || !e.method) return 0;
   const L = data.hero.loud;
-  if (e.method === 'pay') return block.cards.find((c) => c.id === e.cardId)?.clean === false ? L.payUnder : L.pay;
+  if (e.method === 'pay') return cardsOf(block).find((c) => c.id === e.cardId)?.clean === false ? L.payUnder : L.pay;
   return L[e.method];
 }
 
@@ -104,7 +105,7 @@ export function heroReason(block: EvilModeBlock, data: EvilData = EVIL_DATA): { 
   const hero = block.hero;
   if (!hero) return null;
   const R = data.hero.reasons;
-  for (const e of block.log) {
+  for (const e of logOf(block)) {
     if (e.region !== hero.home.region || e.district !== hero.home.district) continue;
     if (loudOf(block, e, data) < 2) continue;
     const trigger = e.to && hero.home.holdings.includes(e.to) ? 'homeStreet' : 'quiet';

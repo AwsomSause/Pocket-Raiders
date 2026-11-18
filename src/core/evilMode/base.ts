@@ -11,6 +11,7 @@ import { appendLog, fill, money } from './ledger';
 import { inRoster, moveLoyalty, peopleRoll } from './people';
 import { hashSeed, Rng } from '../rng';
 import type { BaseState, Crew, EvilModeBlock, Piece, PieceId, Room, RoomType } from './schema';
+import { logOf } from './pack';
 
 export interface BaseOut { block: EvilModeBlock; problem: string | null; line: string }
 const no = (block: EvilModeBlock, problem: string): BaseOut => ({ block, problem, line: '' });
@@ -378,7 +379,7 @@ export function standAtWindow(block: EvilModeBlock, data: EvilData = EVIL_DATA):
 /** What the window says (Part 16 section 8): read from today's Log and the Hero's road. */
 export function windowLine(block: EvilModeBlock, data: EvilData = EVIL_DATA): string {
   const W = data.base.night.window;
-  const today = block.log.filter((e) => e.day === block.here.day);
+  const today = logOf(block).filter((e) => e.day === block.here.day);
   if (block.hero && block.hero.at >= 19) return W.hero!;
   if (today.some((e) => e.kind === 'leave')) return W.lost!;
   if (today.some((e) => e.kind === 'job' && e.result === 'went' && e.method === 'lean')) return W.leaned!;

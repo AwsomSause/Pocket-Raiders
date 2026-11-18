@@ -5,6 +5,7 @@
 // the tickets, who stays and the reasons are hashed from the seed and the region, so they're the same on every reload.
 
 import { hashSeed, Rng } from '../rng';
+import { archiveOld } from './pack';
 import { layDistrict, shiftMood } from './board';
 import { EVIL_DATA, type EvilData } from './data';
 import { appendLog, fill, money } from './ledger';
@@ -14,7 +15,10 @@ import { arriveApplicants } from './roster';
 import { packField, type ClockState, type CrossingState, type Crew, type EvilModeBlock, type Holding } from './schema';
 
 const C = (data: EvilData) => data.region.crossing;
-const K = (data: EvilData) => data.region.clock;
+/** Slice 19: the second clock written for the region being played (Hoenn's weather, Sinnoh's mountain, Kalos's light), or undefined. */
+export const clockOf = (block: Pick<EvilModeBlock, 'region'>, data: EvilData = EVIL_DATA) =>
+  data.region.on ? [data.region.clock, ...(data.region.clocks ?? [])].find((c) => c.region === block.region.id) : undefined;
+const K = (data: EvilData, block: Pick<EvilModeBlock, 'region'>) => clockOf(block, data) ?? data.region.clock;
 type R = { block: EvilModeBlock; problem: string | null; lines: string[] };
 const no = (block: EvilModeBlock, problem: string): R => ({ block, problem, lines: [] });
 const ok = (block: EvilModeBlock, lines: string[] = []): R => ({ block, problem: null, lines });
@@ -162,6 +166,10 @@ function leave(block: EvilModeBlock, x: CrossingState, data: EvilData): R {
     regard: x.base === 'hand' ? t.regard : Math.floor(t.regard / 2),
     dread: x.base === 'burn' ? t.dread : Math.floor(t.dread / 2),
   };
+  // Slice 19 (Kalos): nobody here trusts a logo. A coat with no symbol lands with Regard +1 (Part 26b section 3.1).
+  const plain = t.look?.symbol === data.region.look.symbols[data.region.look.symbols.length - 1];
+  const logo = plain ? (def.rule?.mods ?? []).filter((m) => m.kind === 'arrivalRegard').reduce((n, m) => n + (m.add ?? 0), 0) : 0;
+  if (logo) { t = { ...t, regard: Math.min(10, t.regard + logo) }; lines.push(fill(C(data).noLogo, { region: def.name })); }
   if (garrisons.length || x.base === 'leave') lines.push(C(data).garrisons);
   lines.push(C(data).boats[x.boats]);
   const steps = C(data).boats.steps[x.boats];
@@ -180,6 +188,9 @@ function leave(block: EvilModeBlock, x: CrossingState, data: EvilData): R {
     base: null, raid: null, neighbour: null, fire: null, reck: null,
     applied: [...block.applied, key],
   };
+  // Slice 19: what's older than two regions is packed (Part 30 section 7.4): a six-region save stays under budget.
+  const idx = (id: string) => data.region.regions.find((r) => r.id === id)?.index ?? -1;
+  out = archiveOld(out, new Set([def.index, ...crossed.slice(-2).map(idx)]));
   const region = newRegion({ ...out, region: { ...block.region, crossed } } as EvilModeBlock, seed, data);
   out = { ...out, region: { ...region, crossed, abroad, forms: x.forms, badgeDay, mark: markOf(out, data), notes: lines.slice(1).filter((l) => l !== C(data).boats[x.boats]) } };
   out = appendLog(out, { kind: 'line', who: [], text: `Day ${block.here.day}. ${fill(C(data).intro, { region: data.region.regions.find((r) => r.id === crossed[crossed.length - 1])?.name ?? '' })} The team crossed to ${def.name}.` });
@@ -196,23 +207,26 @@ export const badgesHere = (block: EvilModeBlock): number => (block.hero?.badges 
 
 // ---- Hoenn: the letters and the second clock (Part 26a sections 1.7 and 4.6; Part 15a section 8.2) ----
 
-export const clockRegion = (block: EvilModeBlock, data: EvilData = EVIL_DATA): boolean => data.region.on && block.region.id === K(data).region;
+/** The applied keys for a region's clock (Hoenn's keep slice 16's names, so a save made then reads the same). */
+const ck = (block: Pick<EvilModeBlock, 'region'>, what: 'start' | 'met'): string => (block.region.id === 'hoenn' ? `clock:${what}` : `clock:${what}:${block.region.id}`);
+
+export const clockRegion = (block: EvilModeBlock, data: EvilData = EVIL_DATA): boolean => !!clockOf(block, data);
 
 /** Carry a letter between the two Bosses (In person, once a day, before tick 3). Three stop tick 3: the Orbs stay on Mt. Pyre. */
 export function carryLetter(block: EvilModeBlock, data: EvilData = EVIL_DATA): R {
-  const k = K(data);
-  if (!clockRegion(block, data)) return no(block, k.notRegion);
-  if (block.here.beat !== 'inPerson') return no(block, k.letterWhy);
+  const k = K(data, block);
+  if (!clockRegion(block, data) || !k.letters) return no(block, data.region.clock.notRegion);
+  if (block.here.beat !== 'inPerson') return no(block, k.letterWhy!);
   if (block.inPerson?.day === block.here.day) return no(block, 'The Boss has already been out today.');
-  if (block.region.letters >= k.letters) return no(block, k.letterDone);
+  if (block.region.letters >= k.letters) return no(block, k.letterDone!);
   const t3 = block.neighbour?.ticks.find((t) => t.n === 3);
-  if (t3 && t3.state !== 'waiting') return no(block, k.letterWhy);
+  if (t3 && t3.state !== 'waiting') return no(block, k.letterWhy!);
   const letters = block.region.letters + 1;
   let out: EvilModeBlock = { ...block, region: { ...block.region, letters }, inPerson: { day: block.here.day, holdingId: 'letter' } };
-  const lines = [fill(k.letterLine, { n: letters, more: letters < k.letters ? '' : '' })];
+  const lines = [fill(k.letterLine!, { n: letters, more: letters < k.letters ? '' : '' })];
   if (letters >= k.letters) {
     if (out.neighbour) out = { ...out, neighbour: { ...out.neighbour, ticks: out.neighbour.ticks.map((t) => (t.n === 3 && t.state === 'waiting' ? { ...t, state: 'stopped' as const } : t)) } };
-    lines.push(k.letterDone);
+    lines.push(k.letterDone!);
   }
   out = appendLog(out, { kind: 'neighbour', who: [], text: `Day ${block.here.day}. ${lines.join(' ')}` });
   return ok(out, lines);
@@ -220,7 +234,10 @@ export function carryLetter(block: EvilModeBlock, data: EvilData = EVIL_DATA): R
 
 /** Whether someone stopped the neighbour before the Reckoning: the letters, an Understanding, or their fall before it began. */
 export function clockStoppedBefore(block: EvilModeBlock, data: EvilData = EVIL_DATA): boolean {
-  if (block.region.letters >= K(data).letters) return true;
+  const k = K(data, block);
+  if (k.letters && block.region.letters >= k.letters) return true;
+  // Slice 19: Sinnoh's bomb stopped by day 4, Kalos's room reached: the neighbour's tick never fired (Part 26b sections 1.6, 3.6).
+  if (k.before && block.neighbour?.ticks.some((t) => t.n === k.before && t.state === 'stopped')) return true;
   const nb = block.neighbour;
   if (!nb) return true;
   if (nb.understanding) return true;
@@ -233,13 +250,13 @@ export function clockStoppedBefore(block: EvilModeBlock, data: EvilData = EVIL_D
  */
 export function clockMorning(block: EvilModeBlock, data: EvilData = EVIL_DATA): EvilModeBlock {
   if (!clockRegion(block, data) || block.here.beat !== 'morning' || stageKind(block.here.stage) !== 'reckoning' || block.district?.end) return block;
-  const k = K(data);
+  const k = K(data, block);
   const di = dayIn(block);
   const c = block.region.clock;
   if (!c) {
-    if (di !== 1 || block.applied.includes('clock:start')) return block;
-    const applied = [...block.applied, 'clock:start'];
-    if (clockStoppedBefore(block, data)) return { ...block, applied, region: { ...block.region, clock: { left: 3, day: block.here.day, stopped: 'letters' }, notes: [...block.region.notes, k.stopLetters] } };
+    if (di !== 1 || block.applied.includes(ck(block, 'start'))) return block;
+    const applied = [...block.applied, ck(block, 'start')];
+    if (clockStoppedBefore(block, data)) return { ...block, applied, region: { ...block.region, clock: { left: 3, day: block.here.day, stopped: k.letters ? 'letters' : 'before' }, notes: [...block.region.notes, k.stopLetters] } };
     const clock: ClockState = { left: 3, day: block.here.day, stopped: null };
     return { ...block, applied, region: { ...block.region, clock, notes: [...block.region.notes, k.starts, k.days[0]!] } };
   }
@@ -252,22 +269,22 @@ export function clockMorning(block: EvilModeBlock, data: EvilData = EVIL_DATA): 
 /** The clock reaches nought (the Reckoning ended with it running): the Reckoning's interrupted where it is; half the tide and hot holdings go Free; a scale on the step. Soft: the run goes on. */
 export function clockMet(block: EvilModeBlock, data: EvilData = EVIL_DATA): EvilModeBlock {
   const c = block.region.clock;
-  if (!c || c.stopped || !block.district?.end || block.applied.includes('clock:met')) return block;
-  const k = K(data);
+  if (!c || c.stopped || !block.district?.end || block.applied.includes(ck(block, 'met'))) return block;
+  const k = K(data, block);
   let i = 0;
   const holdings = block.district.holdings.map((h): Holding => {
-    if (h.owner !== 'team' || !h.tags?.some((t) => t === 'tide' || t === 'hot')) return h;
+    if (h.owner !== 'team' || h.kind === 'gym' || (k.freeTags ? !h.tags?.some((t) => k.freeTags!.includes(t)) : false)) return h;
     if (i++ % 2 === 1) return h;
     const { method: _m, since: _s, ...rest } = h;
     return { ...rest, owner: 'nobody', holds: false };
   });
-  const out: EvilModeBlock = { ...block, applied: [...block.applied, 'clock:met'], district: { ...block.district, holdings }, region: { ...block.region, clock: { ...c, left: 0, stopped: 'met' }, notes: [...block.region.notes, k.met, k.scale] }, evening: [...block.evening, k.met] };
+  const out: EvilModeBlock = { ...block, applied: [...block.applied, ck(block, 'met')], district: { ...block.district, holdings }, region: { ...block.region, clock: { ...c, left: 0, stopped: 'met' }, notes: [...block.region.notes, k.met, k.scale] }, evening: [...block.evening, k.met] };
   return appendLog(out, { kind: 'law', who: [], text: `Day ${block.here.day}. ${k.met}` });
 }
 
 /** Stop the clock during the Reckoning: the Boss goes to the cave (In person; a Reckoning day; the Hero a step nearer), or the Hero turns at the gate (their temper moves by one). */
 export function stopClock(block: EvilModeBlock, how: 'boss' | 'hero', data: EvilData = EVIL_DATA): R {
-  const k = K(data);
+  const k = K(data, block);
   const c = block.region.clock;
   if (!clockRegion(block, data) || !c) return no(block, k.notRegion);
   if (c.stopped) return no(block, 'The clock\'s already stopped.');
@@ -288,8 +305,9 @@ export function stopClock(block: EvilModeBlock, how: 'boss' | 'hero', data: Evil
 export function clockChip(block: EvilModeBlock, data: EvilData = EVIL_DATA): string | null {
   const c = block.region.clock;
   if (!clockRegion(block, data)) return null;
-  if (!c) return stageKind(block.here.stage) !== 'reckoning' && block.region.letters < K(data).letters ? fill(K(data).letterLine, { n: block.region.letters, more: '' }) : null;
-  return c.stopped ? null : fill(K(data).open, { left: c.left });
+  const k = K(data, block);
+  if (!c) return k.letters && k.letterLine && stageKind(block.here.stage) !== 'reckoning' && block.region.letters < k.letters ? fill(k.letterLine, { n: block.region.letters, more: '' }) : null;
+  return c.stopped ? null : fill(k.open, { left: c.left });
 }
 
 // ---- Johto's kept places (Part 26a section 3.3) ----
@@ -368,9 +386,10 @@ export function crossActOf(code: string): CrossAct | null {
 /** Hoenn's In-person buttons: carry a letter (before the Reckoning), or stop the clock while it runs. */
 export function clockActs(block: EvilModeBlock, data: EvilData = EVIL_DATA): { code: string; text: string }[] {
   if (!clockRegion(block, data) || block.inPerson?.day === block.here.day) return [];
-  const k = K(data);
+  const k = K(data, block);
   const c = block.region.clock;
-  if (c) return c.stopped ? [] : [{ code: 'stop:boss', text: 'Go to the cave yourself (stops the clock; the kid gets a step)' }, { code: 'stop:hero', text: 'Let the kid turn back at the gate (stops the clock)' }];
+  if (c) return c.stopped ? [] : [{ code: 'stop:boss', text: k.acts?.boss ?? 'Go to the cave yourself (stops the clock; the kid gets a step)' }, { code: 'stop:hero', text: k.acts?.hero ?? 'Let the kid turn back at the gate (stops the clock)' }];
+  if (!k.letters) return [];
   const t3 = block.neighbour?.ticks.find((t) => t.n === 3);
   if (stageKind(block.here.stage) === 'reckoning' || block.region.letters >= k.letters || (t3 && t3.state !== 'waiting')) return [];
   return [{ code: 'letter', text: `Carry a letter between Archie and Maxie (${block.region.letters} of ${k.letters})` }];

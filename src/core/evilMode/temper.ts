@@ -3,6 +3,7 @@
 
 import { EVIL_DATA, type EvilData } from './data';
 import type { EvilModeBlock, Hero } from './schema';
+import { logOf } from './pack';
 
 /** A species id as the Hero says it ("mr-mime" -> "Mr Mime"); a name already said comes back the same. */
 export const monName = (id: string): string => (id ? id.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : 'starter');
@@ -32,7 +33,7 @@ export function eveningTemper(block: EvilModeBlock, data: EvilData = EVIL_DATA):
   const hero = block.hero;
   const d = block.district;
   if (!hero || !d) return block;
-  const today = block.log.filter((e) => e.kind === 'job' && e.day === block.here.day && e.region === d.region && e.district === d.n && e.result === 'went' && (e.method === 'lean' || e.method === 'take'));
+  const today = logOf(block).filter((e) => e.kind === 'job' && e.day === block.here.day && e.region === d.region && e.district === d.n && e.result === 'went' && (e.method === 'lean' || e.method === 'take'));
   let out = block;
   const key = `temper:turned:${d.region}:${d.n}`;
   if (today.some((e) => !hero.home.holdings.includes(e.to ?? '')) && !out.applied.includes(key)) out = { ...withTemper(out, 1, 'turned', data), applied: [...out.applied, key] };

@@ -4,10 +4,11 @@
 
 import { hashSeed, Rng } from '../rng';
 import { tearBusy, tearPay } from './tear';
-import { countsFor, fairPrice, payAmount, heldCount, holdingName, kindDef, localOf, methodsFor, settleTown, shiftMood, streetName, streetOf } from './board';
+import { countsFor, fairPrice, payAmount, heldCount, holdingName, isSpeech, kindDef, localOf, methodsFor, settleTown, shiftMood, streetName, streetOf } from './board';
 import { EVIL_DATA, type EvilData } from './data';
 import { oddsFor, type JobDraft } from './odds';
-import { cardFor, unknownCount } from './card';
+import { cardFor, leftOut, unknownCount } from './card';
+import { cardCount } from './pack';
 import { appendLog, fill, lineFor, money, takingsAt } from './ledger';
 import { schemeBusy } from './scheme';
 import { econDistrictEnd, econEvening, econOn, shortLoyalty, tradeProblem } from './economy';
@@ -128,7 +129,7 @@ function fileJob(block: EvilModeBlock, job: JobDraft, data: EvilData): { block: 
   // Slice 3: no job goes without its Honest Card. Confirming files the Card (kept with its day) and writes its twelfth
   // field into the Log as the line, character for character.
   const card = cardFor(block, job, data);
-  const cardId = `C${block.cards.length + 1}`;
+  const cardId = `C${cardCount(block) + 1}`;
   const entry: Job = { holdingId: job.holdingId, method: job.method, squad: [...job.squad], ...(job.method === 'pay' ? { offer: job.offer ?? 100 } : {}), ...(job.method === 'take' && job.thing ? { thing: job.thing } : {}), odds: null, certain: o.certain, terms: o.terms, cardId };
   const at = block.queue.findIndex((j) => j.holdingId === job.holdingId);
   let b: EvilModeBlock = block;
@@ -212,6 +213,19 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
       const reach = modify(block, 'scoutReach', {}, R.scoutReach, data) + (lead(j)?.talent === 'eyes' ? P.odds.eyesReach : 0);
       for (const n of holdings) if (n.id !== h.id && Math.abs(n.step - h.step) <= reach && n.scouted === 0) set(n.id, (x) => ({ ...x, scouted: 1 }));
       lines.push(`Scouted step ${h.step}, and what touches it within ${reach} steps.`);
+    } else if (j.method === 'persuade' && isSpeech(h) && data.region.speech) {
+      // Slice 19 (Unova): the Speech. It holds nothing; it warms the district's locals, and the square's next Sunday says
+      // the other half if anything was left out (Part 26b section 2.4). Regard here moves twice as far (the region's rule).
+      const sp = data.region.speech;
+      if (won) {
+        for (const x of holdings) if (x.kind === 'local') set(x.id, (y) => ({ ...y, mood: shiftMood(y.mood, 1) }));
+        const what = leftOut(block, data);
+        lines.push(sp.given);
+        if (what) { lines.push(fill(sp.otherHalf, { what })); team = { ...team, regard: cap(team.regard - 1) }; }
+        else { lines.push(sp.honest); team = { ...team, regard: cap(team.regard + 1) }; }
+      } else {
+        lines.push('Not today. The square listened politely and went home for lunch.');
+      }
     } else if (j.method === 'persuade') {
       if (won) {
         set(h.id, (x) => ({ ...x, owner: 'team', method: 'persuade', since: day, holds: true, mood: shiftMood(x.mood, 1), scouted: 2 }));
@@ -379,7 +393,7 @@ export function askAnyway(block: EvilModeBlock, job: JobDraft, data: EvilData = 
   const who = crossers(block, job, data);
   if (!who.length) return { block, problem: 'Nobody on this squad has a line it crosses.' };
   const card = cardFor(block, job, data, true);
-  const cardId = `C${block.cards.length + 1}`;
+  const cardId = `C${cardCount(block) + 1}`;
   let b: EvilModeBlock = { ...block, cards: [...block.cards, { ...card, fields: card.fields.map(packField), id: cardId }] };
   const unknowns = unknownCount(card);
   b = appendLog(b, { kind: 'card', who: [...job.squad], to: job.holdingId, method: job.method, cardId, text: card.fields[11]!.text, ...(unknowns ? { unknowns } : {}) });

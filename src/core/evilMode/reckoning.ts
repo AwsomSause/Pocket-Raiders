@@ -17,6 +17,7 @@ import { liedToHero, monName, strategistNotebook } from './fires';
 import { letterText, YOUNG } from './road';
 import { moveTemper } from './temper';
 import type { Crew, EvilModeBlock, Hero, ReckState, RoomType, WallState } from './schema';
+import { logOf } from './pack';
 
 type Out = { block: EvilModeBlock; problem: string | null; lines: string[]; fight?: boolean };
 const no = (block: EvilModeBlock, problem: string): Out => ({ block, problem, lines: [] });
@@ -43,7 +44,7 @@ export function eighthLines(block: EvilModeBlock, data: EvilData = EVIL_DATA): s
   const leader = t.regard > t.dread ? G.regard : t.dread > t.regard ? G.dread : G.level;
   const out = [`Giovanni, to the Hero: "${leader}"`, `${hero.name}: ${L(data).eighth.answers[hero.personality]}`];
   // The street: a holding Leaned on and then waived speaks as they pass (read from the Ledger; nobody, if none).
-  const lean = block.log.find((e) => e.kind === 'job' && e.method === 'lean' && e.result === 'went' && e.to && block.rates[e.to] === 'waived');
+  const lean = logOf(block).find((e) => e.kind === 'job' && e.method === 'lean' && e.result === 'went' && e.to && block.rates[e.to] === 'waived');
   const h = lean ? block.district?.holdings.find((x) => x.id === lean.to) : undefined;
   if (h) out.push(fill(L(data).eighth.baker, { where: h.ref }));
   return out;

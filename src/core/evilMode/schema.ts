@@ -90,7 +90,7 @@ export type Mood = z.infer<typeof MoodSchema>;
 
 /** Slice 9 adds Kanto's own holding, a floor of a building (Part 26a section 2.3). */
 /** Slice 16 adds Johto's kept place (held by upkeep, pays nothing) and Hoenn's water route (held by running the boats). */
-export const HOLDING_KINDS = ['local', 'wild', 'alpha', 'safehouse', 'opportunity', 'town', 'gym', 'floor', 'kept', 'water'] as const;
+export const HOLDING_KINDS = ['local', 'wild', 'alpha', 'safehouse', 'opportunity', 'town', 'gym', 'floor', 'kept', 'water', 'lake', 'bridge', 'table'] as const;
 export const HoldingKindSchema = z.enum(HOLDING_KINDS);
 export type HoldingKind = z.infer<typeof HoldingKindSchema>;
 
@@ -124,7 +124,9 @@ export const DistrictFileSchema = z.object({
     kind: z.enum(['arrival', 'district', 'reckoning']).optional(),
     streets: z.array(z.string().min(1)).length(4).optional(),
     places: z.partialRecord(HoldingKindSchema, z.array(z.string().min(1)).min(1)).optional(),
-    layout: z.object({ local: z.number().int().min(0), wild: z.number().int().min(0), alpha: z.number().int().min(0), safehouse: z.number().int().min(0), opportunity: z.number().int().min(0), floor: z.number().int().min(0), kept: z.number().int().min(0).optional(), water: z.number().int().min(0).optional() }).strict().optional(),
+    layout: z.object({ local: z.number().int().min(0), wild: z.number().int().min(0), alpha: z.number().int().min(0), safehouse: z.number().int().min(0), opportunity: z.number().int().min(0), floor: z.number().int().min(0), kept: z.number().int().min(0).optional(), water: z.number().int().min(0).optional(),
+      /** Slice 19: Sinnoh's lakes, Unova's bridges, Kalos's tables (Part 26b sections 1.3, 2.3, 3.3). */
+      lake: z.number().int().min(0).optional(), bridge: z.number().int().min(0).optional(), table: z.number().int().min(0).optional() }).strict().optional(),
     floors: z.array(z.object({ name: z.string().min(1), tenant: z.string().min(1), take: z.number().int().min(0), says: z.string().min(1) }).strict()).optional(),
     tower: z.string().min(1).optional(),
   }).strict()).min(1),
@@ -334,7 +336,8 @@ export const StoredCardSchema = z.object({
   offer: z.number().int().min(1).max(100).optional(),
   thing: TakeThingSchema.optional(),
   clean: z.boolean(),
-  fields: z.array(StoredFieldSchema).length(13),
+  /** Thirteen; fourteen for the Speech (slice 19: "What you're leaving out"). */
+  fields: z.array(StoredFieldSchema).min(13).max(14),
 }).strict();
 export type StoredCard = z.infer<typeof StoredCardSchema>;
 
@@ -584,7 +587,7 @@ export type CrossingState = z.infer<typeof CrossingSchema>;
 export const ClockSchema = z.object({
   left: z.number().int().min(0).max(3),
   day: z.number().int().min(1),
-  stopped: z.enum(['letters', 'boss', 'hero', 'together', 'met']).nullable(),
+  stopped: z.enum(['letters', 'before', 'boss', 'hero', 'together', 'met']).nullable(),
 }).strict();
 export type ClockState = z.infer<typeof ClockSchema>;
 
@@ -1306,6 +1309,8 @@ const BlockV7Schema = z.object({
   /** Slice 3: the Log (append only), every confirmed Card, the two totals (kept as counters; a test checks they equal the Log's sums), and the lines waived or halved. */
   log: z.array(LogEntrySchema),
   cards: z.array(StoredCardSchema),
+  /** Slice 19: the Log and Cards from regions older than two, packed at a Crossing (Part 30 section 7.4; pack.ts). Absent until the fourth region. */
+  archive: z.object({ log: z.string(), cards: z.string(), nLog: z.number().int().min(0), nCards: z.number().int().min(0) }).strict().optional(),
   given: z.number().int().min(0),
   taken: z.number().int().min(0),
   rates: z.record(z.string(), RateSchema),
@@ -1479,7 +1484,8 @@ function migrateToV8(b: Record<string, unknown>): Record<string, unknown> {
 const RS = z.string().min(1);
 /** One rule on the one hook (Part 30 section 9): adds before scales; `whileIn` only while the Patron's on the Roster. */
 export const RuleModSchema = z.object({
-  kind: z.enum(['odds', 'heat', 'squads', 'scoutReach', 'loyaltyFloor', 'funds', 'heroGym']),
+  /** Slice 19: loyaltyMove (Sinnoh: every Loyalty change scaled, toward nothing), standingMove (Unova: Regard and Dread changes scaled), frontPay (Kalos: Fronts' takings scaled), arrivalRegard (Kalos: added at Arrival when the coat has no symbol). */
+  kind: z.enum(['odds', 'heat', 'squads', 'scoutReach', 'loyaltyFloor', 'funds', 'heroGym', 'loyaltyMove', 'standingMove', 'frontPay', 'arrivalRegard']),
   method: JobMethodSchema.optional(), tag: RS.optional(),
   /** Slice 16 (Hoenn): only for a team of this Doctrine, or only for a team of any other. */
   doctrine: RS.optional(), notDoctrine: RS.optional(),
@@ -1496,6 +1502,8 @@ export const RegionDefSchema = z.object({
   deeds: z.object({ tag: RS, share: z.number().int().min(0).max(100), kinds: z.array(HoldingKindSchema).min(1), word: RS, byStage: z.record(z.string(), RS).optional(), words: z.record(z.string(), RS).optional() }).strict().optional(),
   homes: z.record(z.string(), z.array(z.number().int().min(0).max(7))).optional(),
   eighth: RS.optional(),
+  /** Slice 19 (Unova): the Town is a square, where the Speech is given (Persuade at the Town; Part 26b section 2.4). */
+  square: z.boolean().optional(),
 }).strict();
 export type RegionDef = z.infer<typeof RegionDefSchema>;
 const PatronSchema = z.object({
@@ -1506,6 +1514,17 @@ const PatronSchema = z.object({
 export type PatronDef = z.infer<typeof PatronSchema>;
 export const WAY_IDS = ['bankrupt', 'nobody', 'mutinyLost', 'mutinyWon', 'raided', 'noBase', 'fainted', 'schemeLost', 'heroAhead', 'corruption', 'everyLost', 'bossQuits'] as const;
 const Colour = z.tuple([RS, z.string().regex(/^#[0-9a-f]{6}$/i)]);
+/**
+ * A second clock (Part 26a section 1.7). Hoenn's has letters; slice 19's are stopped before the Reckoning when the
+ * neighbour's tick `before` was stopped (Sinnoh's bomb, Kalos's room). At nought, every other held holding goes Free
+ * (`freeTags`: only those tagged so). `stopLetters` is the line when it never starts; `acts` the In-person buttons.
+ */
+const ClockDefSchema = z.object({
+  region: RS, letters: z.number().int().min(1).optional(), letterLine: RS.optional(), letterDone: RS.optional(), letterWhy: RS.optional(),
+  before: z.number().int().min(1).max(5).optional(), freeTags: z.array(RS).optional(), acts: z.object({ boss: RS, hero: RS }).strict().optional(),
+  starts: RS, days: z.array(RS).length(3),
+  met: RS, scale: RS, stopBoss: RS, stopHero: RS, stopLetters: RS, together: RS, heroTemper: z.number().int(), bossWhy: RS, open: RS, notRegion: RS,
+}).strict();
 export const RegionFileSchema = z.object({
   note: z.string(),
   /** The slice's undo: false and a run plays one district, as slice 8 left it. */
@@ -1536,12 +1555,15 @@ export const RegionFileSchema = z.object({
     forms: z.object({ ask: RS, yes: RS, no: RS, none: RS }).strict(),
     boats: z.object({ ahead: RS, beside: RS, behind: RS, steps: z.object({ ahead: z.number().int().min(1), beside: z.number().int().min(1), behind: z.number().int().min(1) }).strict(), night: RS }).strict(),
     abroad: RS, leave: RS, last: RS, emberBoat: RS, keptWarm: RS,
+    /** Slice 19 (Kalos): the coat with no symbol, at the quay. */
+    noLogo: RS,
   }).strict(),
   /** Slice 16: Hoenn's letters and its second clock (Part 26a sections 1.7 and 4.6; Part 15a section 8.2). */
-  clock: z.object({
-    region: RS, letters: z.number().int().min(1), letterLine: RS, letterDone: RS, letterWhy: RS, starts: RS, days: z.array(RS).length(3),
-    met: RS, scale: RS, stopBoss: RS, stopHero: RS, stopLetters: RS, together: RS, heroTemper: z.number().int(), bossWhy: RS, open: RS, notRegion: RS,
-  }).strict(),
+  clock: ClockDefSchema.extend({ letters: z.number().int().min(1), letterLine: RS, letterDone: RS, letterWhy: RS }),
+  /** Slice 19 (Unova): the Speech (Part 26b section 2.4): the Card's fourteenth field, and what's said after. */
+  speech: z.object({ label: RS, empty: RS, given: RS, honest: RS, otherHalf: RS }).strict().optional(),
+  /** Slice 19: the other regions' second clocks: Sinnoh's mountain, Kalos's light (Part 26b sections 1.6 and 3.6). */
+  clocks: z.array(ClockDefSchema).optional(),
   look: z.object({
     a: z.array(Colour).length(12), b: z.array(Colour).length(12), symbols: z.array(RS).length(12), cuts: z.array(RS).length(8), heads: z.array(RS).length(8),
     motto: z.tuple([z.array(RS).min(1), z.array(RS).min(1), z.array(z.string()).min(1)]),

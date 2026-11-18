@@ -11,6 +11,7 @@ import { appendLog, fill, money } from './ledger';
 import { districtKey, inRoster, moveLoyalty } from './people';
 import { dayIn } from './region';
 import type { Crew, EvilModeBlock, Holding, NeighbourDef, NeighbourPost, NeighbourState, Stance, TableThing } from './schema';
+import { logOf } from './pack';
 
 type NB = NeighbourState;
 const cap10 = (n: number) => Math.max(0, Math.min(10, n));
@@ -236,7 +237,7 @@ export function neighbourEvening(block0: EvilModeBlock, data: EvilData = EVIL_DA
   const N = data.neighbour.numbers;
   let nb = nb0;
   const said: string[] = [];
-  const war = block.log.some((e) => e.kind === 'job' && e.day === block.here.day && e.region === d.region && e.district === d.n && wasTheirs(d.holdings.find((h) => h.id === e.to), nb, data));
+  const war = logOf(block).some((e) => e.kind === 'job' && e.day === block.here.day && e.region === d.region && e.district === d.n && wasTheirs(d.holdings.find((h) => h.id === e.to), nb, data));
   if (war) {
     nb = { ...nb, warIn: districtKey(block) };
     if (nb.stance === 'truce' || nb.stance === 'front') {
@@ -349,7 +350,7 @@ const holdingOfEntry = (block: EvilModeBlock, e: { district: number; to?: string
 
 /** A Lean that went (rule 1, and the first exchange's slot): the Ledger line it quotes, or null. Always something real. */
 export function messEntry(block: EvilModeBlock) {
-  return block.log.find((e) => e.kind === 'job' && e.result === 'went' && e.method === 'lean') ?? null;
+  return logOf(block).find((e) => e.kind === 'job' && e.result === 'went' && e.method === 'lean') ?? null;
 }
 
 /** His four rules against the team's Ledger (Part 15a section 7.2). Rule 4 is never said aloud. */
@@ -364,7 +365,7 @@ export function rulesBroken(block: EvilModeBlock, data: EvilData = EVIL_DATA): s
     out.push(fill(def.rules[0]!.broken, { holding: h ? holdingName(h, data) : 'a shop', who: l ? l.who.replace(/,.*$/, '') : 'The owner' }));
   }
   if (block.crew.some((c) => c.unpaid > 0 || c.left?.how === 'loyalty')) out.push(def.rules[1]!.broken);
-  const took = block.log.find((e) => e.kind === 'job' && e.result === 'went' && e.method === 'take' && holdingOfEntry(block, e)?.kind === 'local');
+  const took = logOf(block).find((e) => e.kind === 'job' && e.result === 'went' && e.method === 'take' && holdingOfEntry(block, e)?.kind === 'local');
   if (took) out.push(fill(def.rules[2]!.broken, { holding: holdingName(holdingOfEntry(block, took)!, data) }));
   return out;
 }

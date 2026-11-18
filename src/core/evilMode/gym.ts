@@ -12,6 +12,7 @@ import { inRoster, moveLoyalty } from './people';
 /** Which region of the run this is (0 first); slice 16. Read here without importing region.ts. */
 const runIndexOf = (block: EvilModeBlock): number => block.region?.crossed?.length ?? 0;
 import type { EvilModeBlock, GymState, GymWay, Holding, LeaderDef, Standing } from './schema';
+import { logOf } from './pack';
 
 type G = EvilData['gym'];
 const lines = (data: EvilData) => data.gym.lines as Record<string, string> & { heroFight: Record<GymWay, string> };
@@ -213,7 +214,7 @@ export function gymAct(block: EvilModeBlock, way: GymWay, data: EvilData = EVIL_
   if (way === 'bend') {
     const bend = L.bend!;
     // Something admitted: the Ledger's checked. A team that's Leaned or Taken in this district can't say it's what it's for.
-    if (bend.kind === 'admitted' && block.log.some((e) => e.kind === 'job' && e.result === 'went' && e.region === block.district!.region && e.district === block.district!.n && (e.method === 'lean' || e.method === 'take'))) {
+    if (bend.kind === 'admitted' && logOf(block).some((e) => e.kind === 'job' && e.result === 'went' && e.region === block.district!.region && e.district === block.district!.n && (e.method === 'lean' || e.method === 'take'))) {
       return no(T.admittedFails!);
     }
     const n = g.bend + 1;
@@ -318,7 +319,7 @@ export function gymEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA): Ev
   let g = g0;
   const said: string[] = [];
   const d = block.district;
-  const today = block.log.filter((e) => e.kind === 'job' && e.result === 'went' && e.day === block.here.day && e.region === d.region && e.district === d.n);
+  const today = logOf(block).filter((e) => e.kind === 'job' && e.result === 'went' && e.day === block.here.day && e.region === d.region && e.district === d.n);
   const street = new Set(townStreet(d, data).map((h) => h.id));
   const leanedStreet = today.some((e) => e.method === 'lean' && e.to && street.has(e.to));
   const tookHere = today.some((e) => e.method === 'take');
