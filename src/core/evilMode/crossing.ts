@@ -4,6 +4,7 @@
 // second clock (Part 26a sections 1.7 and 4.6). Pure: new blocks are returned. Nothing here draws from a gameplay stream:
 // the tickets, who stays and the reasons are hashed from the seed and the region, so they're the same on every reload.
 
+import { questsAtCrossing } from './quest';
 import { runRegions } from './runLength';
 import { hashSeed, Rng } from '../rng';
 import { archiveOld } from './pack';
@@ -139,13 +140,16 @@ export function sellPrice(block: EvilModeBlock, data: EvilData = EVIL_DATA): num
  * the water; the base is handed, sold, left or burned; Heat halves; Regard and Dread halve unless the base says otherwise;
  * the neighbour's a new one; the Hero lands ahead, beside or behind. The next region's Arrival begins the next morning.
  */
-function leave(block: EvilModeBlock, x: CrossingState, data: EvilData): R {
-  const key = `crossing:${block.region.id}`;
-  if (block.applied.includes(key)) return no(block, 'The boats have gone.');
+function leave(block0: EvilModeBlock, x: CrossingState, data: EvilData): R {
+  const key = `crossing:${block0.region.id}`;
+  if (block0.applied.includes(key)) return no(block0, 'The boats have gone.');
+  // Slice 17: quests left a whole region close; those whose quest sent them off (or who agreed to stay till now) go.
+  const qa = questsAtCrossing(block0, data);
+  const block = qa.block;
   const def = data.region.regions.find((r) => r.id === x.pick)!;
   const B = C(data).base;
   const day = block.here.day + 1;
-  const lines: string[] = [C(data).boats.night];
+  const lines: string[] = [C(data).boats.night, ...qa.lines];
   let crew = block.crew.map((c): Crew => (x.staying.includes(c.id) && c.where === 'in' ? { ...c, where: 'left', left: { day: block.here.day, how: 'stayed', kindly: true } } : c));
   for (const id of x.staying) {
     const c = block.crew.find((p) => p.id === id);
@@ -189,9 +193,10 @@ function leave(block: EvilModeBlock, x: CrossingState, data: EvilData): R {
     base: null, raid: null, neighbour: null, fire: null, reck: null,
     applied: [...block.applied, key],
   };
-  // Slice 19: what's older than two regions is packed (Part 30 section 7.4): a six-region save stays under budget.
-  const idx = (id: string) => data.region.regions.find((r) => r.id === id)?.index ?? -1;
-  out = archiveOld(out, new Set([def.index, ...crossed.slice(-2).map(idx)]));
+  // Slice 19: older regions are packed (Part 30 section 7.4): a six-region save stays under budget. Slice 17's applicants
+  // roughly double the jobs a run files, so every region before the one being entered is packed now (readers go through
+  // `logOf` / `cardsOf`, so nothing reads differently).
+  out = archiveOld(out, new Set([def.index]));
   const region = newRegion({ ...out, region: { ...block.region, crossed } } as EvilModeBlock, seed, data);
   out = { ...out, region: { ...region, crossed, abroad, forms: x.forms, badgeDay, mark: markOf(out, data), notes: lines.slice(1).filter((l) => l !== C(data).boats[x.boats]) } };
   out = appendLog(out, { kind: 'line', who: [], text: `Day ${block.here.day}. ${fill(C(data).intro, { region: data.region.regions.find((r) => r.id === crossed[crossed.length - 1])?.name ?? '' })} The team crossed to ${def.name}.` });

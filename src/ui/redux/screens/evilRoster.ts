@@ -28,9 +28,9 @@ export function rosterView(m: RosterModel): string {
   if (m.people) {
     body = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:6px">${m.people.map((p, i) => `<div style="padding:4px 6px;border:1px solid #8886;border-top:3px solid var(--team-a);cursor:pointer;opacity:${p.left ? 0.5 : 1};${p.sel ? 'outline:2px solid var(--team-b);' : ''}"${act('rrow', i)} data-testid="evil-person" data-id="${esc(p.id)}" data-left="${!!p.left}">
       <div class="row" style="gap:6px;align-items:flex-start">${face(p.face, null, 44, p.minor)}<div class="grow">
-        <b class="sm" data-testid="evil-person-name">${esc(p.name)}</b>${sm(`${p.rank} · ${p.talent} · ${p.flaw} · ${p.wage}`)}
+        <b class="sm" data-testid="evil-person-name">${esc(p.name)}</b>${sm(`${p.rank} · ${p.talent} · ${p.flaw}${p.flawGrey ? ' (still theirs; it doesn\'t fire)' : ''} · ${p.wage}`)}
         <div class="sm" style="line-height:16px" data-testid="evil-person-band">${esc(`${p.band.name} · ${p.band.face}`)}</div></div></div>
-      ${sm(`Line: ${p.line}`, 'font-style:italic')}${sm(p.why, 'opacity:.75')}${p.left ? sm(p.left, 'color:#f08a7a') : ''}${p.acts ? acts(p.acts, i) : ''}</div>`).join('')}</div>`;
+      ${sm(`Line: ${p.line}`, 'font-style:italic')}${p.quest ? sm(`Quest: ${p.quest}`, 'opacity:.85') : ''}${sm(p.why, 'opacity:.75')}${p.left ? sm(p.left, 'color:#f08a7a') : ''}${p.acts ? acts(p.acts, i) : ''}</div>`).join('')}</div>`;
   } else if (m.applicants) {
     body = m.empty ? sm(m.empty, 'margin-top:12px') : `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:6px">${m.applicants.map((a, i) => `<div style="padding:4px 6px;border:1px solid #8886;cursor:pointer;${a.sel ? 'outline:2px solid var(--team-b);' : ''}"${act('rrow', i)} data-testid="evil-applicant" data-ref="${esc(a.ref)}">
       <div class="row" style="gap:6px;align-items:flex-start">${face(a.face, null, 44, a.minor)}<div class="grow"><b class="sm">${esc(a.name)}</b>${sm(`${a.talent} · ${a.flaw}`)}${sm(a.waits, 'opacity:.7')}</div></div>
@@ -50,4 +50,24 @@ export function refusalView(m: RefusalModel, sel: number): string {
   const who = m.people.map((p) => `<div class="row" style="gap:10px;align-items:center;margin:6px 0">${face(p.face, null, 56)}<div><b>${esc(p.name)}</b>${sm(`"${p.line}"`, 'opacity:.75')}${sm(`"${p.says}"`, 'font-style:italic;margin-top:3px')}</div></div>`).join('');
   return `<div style="position:absolute;inset:0;background:#141414cc" data-testid="evil-refusal">${W(`${sm(m.title, 'opacity:.7')}${who}
     <div class="row" style="gap:6px;flex-wrap:wrap;margin-top:6px">${m.answers.map((a, i) => B(esc(a.name), i === sel, `padding:3px 12px;opacity:${a.on ? 1 : 0.4}`, '', `${act('refuse', a.id)} data-testid="evil-refuse-${a.id}" title="${esc(a.why ?? '')}"`)).join('')}</div>`, 'position:absolute;left:120px;right:120px;top:140px;padding:14px 16px')}</div>`;
+}
+
+/** Slice 17: the Suspicions page (design Part 11 section 6): the Roster, the pattern table, the slips, the post. */
+export function suspicionsView(m: import('../../../core/evilMode/mole').SuspicionsModel, notice: string | null): string {
+  const people = m.people.map((p, i) => `<div style="padding:3px 6px;border:1px solid #8886;cursor:pointer;${p.sel ? 'outline:2px solid var(--team-b);' : ''}"${act('urow', i)} data-testid="evil-suspect" data-id="${esc(p.id)}">
+    <b class="sm">${esc(p.name)}</b>${sm(`${p.talent} · jobs went ${p.went}, didn't ${p.didnt}`, 'opacity:.8')}${p.slips.map((s) => sm(s, 'font-style:italic;color:#e8c070')).join('')}</div>`).join('');
+  const acts = m.acts.map((a) => B(esc(a.name), false, `padding:2px 10px;font-size:12px;opacity:${a.on ? 1 : 0.4}`, '', `${act('udo', a.id)} data-testid="evil-suspect-${a.id}" title="${esc(a.why ?? '')}"`)).join('');
+  const post = m.post.length ? m.post.map((t) => sm(t, 'font-style:italic')).join('') : sm(m.noPost ?? '', 'opacity:.6');
+  return W(`<div class="row" style="gap:6px;margin-bottom:4px"><b>${esc(m.title)}</b><div class="grow"></div>${acts}${B('Close', false, 'padding:2px 10px;font-size:12px', '', `${act('susp')} data-testid="evil-suspicions-close"`)}</div>
+    ${sm(m.help, 'opacity:.7')}${notice ? sm(notice, 'color:#e8c070;margin-top:3px') : ''}
+    <div style="flex:1;min-height:0;margin-top:4px;overflow:auto">
+      <b class="sm">${esc(m.tableTitle)} · ${esc(m.slipsTitle)}</b>${m.noSlips ? sm(m.noSlips, 'opacity:.6') : ''}
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:5px;margin:4px 0">${people}</div>
+      <b class="sm">${esc(m.postTitle)}</b>${post}</div>`, 'position:absolute;left:16px;right:16px;top:130px;bottom:70px;padding:8px 10px;display:flex;flex-direction:column', '', ' data-testid="evil-suspicions"');
+}
+
+/** Slice 17: a scene in the Office (found, a wrong guess, the knock). */
+export function moleSceneView(m: import('../../../core/evilMode/mole').MoleSceneModel, face0: string | null): string {
+  return `<div style="position:absolute;inset:0;background:#141414cc" data-testid="evil-office-scene">${W(`<div class="row" style="gap:10px;align-items:flex-start;margin:4px 0">${face(face0, null, 56)}<div><b>${esc(m.name)}</b>${m.lines.map((l) => sm(l, 'margin-top:4px')).join('')}</div></div>
+    <div class="row" style="gap:6px;flex-wrap:wrap;margin-top:8px">${m.answers.map((a, i) => B(esc(a.name), i === 0, 'padding:3px 12px', '', `${act('mans', a.id)} data-testid="evil-mole-${a.id}"`)).join('')}</div>`, 'position:absolute;left:120px;right:120px;top:140px;padding:14px 16px')}</div>`;
 }
