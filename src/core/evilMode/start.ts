@@ -8,7 +8,7 @@ import { bandOf, foundingRoster, teamLoyalty } from './people';
 import { arriveApplicants } from './roster';
 import { modify, PATRON_ID } from './regionRule';
 import { newRegion } from './region';
-import { LINE_IDS, STREAMS, type Crew, type EvilModeBlock, EvilModeBlockSchema, type LineId, type RunLength } from './schema';
+import { emptyEconomy, LINE_IDS, STREAMS, type Crew, type EvilModeBlock, EvilModeBlockSchema, type LineId, type RunLength } from './schema';
 
 export interface FoundingChoice {
   name: string;
@@ -100,7 +100,7 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
   const seed = opts.seed ?? opts.boss;
   const funds = patron ? Math.floor(modify({ here: { region: 0, stage, day: 1, beat: 'morning' }, team: { patron } as never, crew }, 'funds', {}, creed.start.funds, data)) : creed.start.funds;
   const block: EvilModeBlock = {
-    v: 9,
+    v: 10,
     from: 'founding',
     settings: { length: opts.length },
     team: {
@@ -143,6 +143,7 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
     lineMove: null,
     gyms: [],
     region: null as never,
+    economy: emptyEconomy(),
     base: null,
     raid: null,
     law: { hot: 0, raids: [], heatHeld: null },

@@ -13,6 +13,7 @@ import { goWithHero } from './line';
 import { badgeHow, gymDealt, heroAtGym } from './gym';
 import { EVIL_DATA, type EvilData } from './data';
 import { appendLog, fill } from './ledger';
+import { tradeProblem } from './economy';
 import type { District, EvilModeBlock, Fight, Hero, Holding, LogEntry, Personality } from './schema';
 
 const STARTERS = starterTable.regionStarters as Record<string, string[]>;
@@ -139,7 +140,7 @@ export function postProblem(block: EvilModeBlock, holdingId: string, id: string)
   if (c.minor) return `${c.name} is ${c.age ?? 'young'}. Not against a child, and not in a fight.`;
   if (c.outOn === block.here.day) return `${c.name} is resting after yesterday's battle.`;
   if (block.queue.some((j) => j.squad.includes(id)) || block.posted.some((p) => p.id === id)) return `${c.name} is already going somewhere today.`;
-  return null;
+  return tradeProblem(block, id);
 }
 
 export function post(block: EvilModeBlock, holdingId: string, id: string): { block: EvilModeBlock; problem: string | null } {
