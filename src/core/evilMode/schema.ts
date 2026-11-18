@@ -343,7 +343,7 @@ export const StoredCardSchema = z.object({
 }).strict();
 export type StoredCard = z.infer<typeof StoredCardSchema>;
 
-export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym', 'econ', 'neighbour', 'scheme', 'base', 'raid', 'ending'] as const;
+export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym', 'econ', 'neighbour', 'scheme', 'base', 'raid', 'ending', 'charter'] as const;
 
 /** One line of the Log (Part 30 section 7.1, the kinds slice 3 writes). Never edited, never removed. */
 export const LogEntrySchema = z.object({
@@ -1253,12 +1253,48 @@ export const EndingsFileSchema = z.object({
   banned: z.array(ES15.min(1)).min(1),
 }).strict();
 
+/** Slice 22 (Part 28): the Charter taken, its house rule's running figures. All plain counts; nothing here is rolled. */
+export const CharterStateSchema = z.object({
+  id: z.string().min(1),
+  rule: z.string().min(1),
+  /** Rocket: things returned from the Ledger, and the day of the last (one an Evening). */
+  returned: z.number().int().min(0),
+  returnedOn: z.number().int().min(0),
+  /** Rocket's Return: mornings answered, mornings read, the run of days answered, the day last answered, regions the +1 was paid in, and the roll's missed count. */
+  answered: z.number().int().min(0),
+  read: z.number().int().min(0),
+  streak: z.number().int().min(0),
+  answeredOn: z.number().int().min(0),
+  paidIn: z.array(z.number().int().min(0)),
+  missed: z.number().int().min(0),
+  /** The Joint Command: who's blue (everyone else is red), and whether the Hall has named the team. */
+  blue: z.array(z.string().min(1)),
+  named: z.boolean(),
+  /** Flare: dues paid, and the days they were paid on. */
+  dues: z.number().int().min(0),
+  duesOn: z.array(z.number().int().min(1)),
+  /** The day the Charter's first week ends (Loyalty moves count double before it). */
+  doubleTo: z.number().int().min(0),
+}).strict();
+export type CharterState = z.infer<typeof CharterStateSchema>;
+export const TurnStateSchema = z.object({
+  /** The main-game team whose route was taken (its `evil-start-<team>` flag). */
+  team: z.string().min(1),
+  /** The run's own rivals, by record id, given the four roles (Part 28 section 15); null where the run had fewer than four. */
+  hero: z.string().nullable(), rival: z.string().nullable(), friend: z.string().nullable(), stray: z.string().nullable(),
+  /** The money above the cap, in the Boss's own pocket (lendable once). */
+  pocket: z.number().int().min(0),
+  /** The first meeting after (day 2 of the first district): answered or not, and the answer. */
+  met: z.enum(['lie', 'true', 'silent']).nullable(),
+}).strict();
+export type TurnState = z.infer<typeof TurnStateSchema>;
+
 const BlockV7Schema = z.object({
   /** The block's own version, for its own migrations. 7: slice 8 added the Gyms. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a waiting fight, who's posted, and the day's in-person job. 6: slice 6 added proof held and the last move of the Line. */
   v: z.literal(15),
   from: z.enum(['founding', 'charter', 'turn']),
   /** Copied from Settings at founding, so a setting changed mid-run never changes this run. */
-  settings: z.object({ length: RunLengthSchema }),
+  settings: z.object({ length: RunLengthSchema, /** Slice 22: a Turned run keeps the regions the main run had left (1 to 6); absent, the length's three or six. */ regions: z.number().int().min(1).max(9).optional() }),
   team: EvilTeamSchema,
   here: z.object({ region: z.number().int().min(0), stage: z.number().int().min(1).max(8), day: z.number().int().min(1), beat: BeatSchema }),
   /** How many numbers each stream has given out (design Part 30 section 5.1). */
@@ -1314,6 +1350,9 @@ const BlockV7Schema = z.object({
   law: LawSchema,
   /** Slice 15: the ending under way (one a run), or null. */
   ending: EndingStateSchema.nullable(),
+  /** Slice 22: a Charter's house (optional: a founded team has none) and, on a Turned run, which of the run's rivals took which role. */
+  charter: CharterStateSchema.optional(),
+  turn: TurnStateSchema.optional(),
 }).strict();
 
 /** What a Hero made before slice 12 starts with (and what `makeHero` gives a new one). */

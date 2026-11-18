@@ -300,3 +300,15 @@
 @keyframes wr-glow{from{filter:drop-shadow(0 0 0 #ffd84a00)}to{filter:drop-shadow(0 0 9px #ffd84a)}}
 @keyframes wr-lamp{from{opacity:.85}to{opacity:1}}
 @keyframes wr-mote{0%{opacity:0;translate:0 0}15%{opacity:.8}85%{opacity:.5}100%{opacity:0;translate:26px -90px}}
+
+/* Evil Mode slice 22 (design Part 29 section 17): on a phone in landscape every tap target in the mode's screens is
+   at least a thumb tall once scaled (about 40 CSS px at the phone's scale), and nothing scrolls sideways. */
+.rx-phone [data-testid="evil-frame"] .btn[data-act],
+.rx-phone [data-testid="evil-founding"] .btn[data-act],
+.rx-phone [data-testid="evil-charters"] .btn[data-act],
+.rx-phone [data-testid="evil-turn"] .btn[data-act] { min-height: 52px; }
+.rx-phone [data-testid="evil-frame"] .tg[data-act],
+.rx-phone [data-testid="evil-founding"] .tg[data-act] { min-height: 32px; padding-top: 6px; padding-bottom: 6px; }
+.rx-phone [data-testid="evil-frame"],
+.rx-phone [data-testid="evil-charters"],
+.rx-phone [data-testid="evil-turn"] { overflow-x: hidden; }

@@ -45,6 +45,12 @@ export function teamLoyalty(block: EvilModeBlock, data: EvilData = EVIL_DATA): n
   if (!ins.length) return data.creeds.find((c) => c.id === block.team.creed)?.start.loyalty ?? 5;
   // Slice 9: a Grunt who's seen three Bosses keeps team Loyalty at 2 or more (Part 3 section 9.5), on the rule hook.
   const floor = data.region.on && block.team.patron ? modify(block, 'loyaltyFloor', {}, 0, data) : 0;
+  // Slice 22: the Joint Command keeps Loyalty twice, red and blue, and the team's is the lower (Part 28 section 6.3).
+  if (block.charter?.rule === 'two-colours') {
+    const blue = new Set(block.charter.blue);
+    const mean = (xs: Crew[]) => (xs.length ? Math.floor(xs.reduce((n, c) => n + c.loyalty, 0) / xs.length) : 10);
+    return Math.max(floor, Math.min(mean(ins.filter((c) => !blue.has(c.id))), mean(ins.filter((c) => blue.has(c.id)))));
+  }
   return Math.max(floor, Math.floor(ins.reduce((n, c) => n + c.loyalty, 0) / ins.length));
 }
 

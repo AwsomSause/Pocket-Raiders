@@ -1852,6 +1852,11 @@
        },
        {
         "kind": "flag",
+        "key": "evil-start-rocket",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
         "key": "rocket-own-rule-back",
         "amount": 1
        }
@@ -1882,6 +1887,11 @@
        {
         "kind": "flag",
         "key": "rocket-ending-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-rocket",
         "amount": 1
        },
        {
@@ -1918,6 +1928,11 @@
        {
         "kind": "flag",
         "key": "rocket-ending-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-rocket",
         "amount": 1
        }
       ]

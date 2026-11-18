@@ -103,6 +103,8 @@ function place(): void {
   host.style.filter = canvas.style.filter;
   // The on-screen pad lies over the game on a phone held sideways; it must stay above the layer to be pressed.
   document.body.classList.toggle('rx-on', reduxOn());
+  // Evil Mode slice 22 (Part 29 section 17): a narrow window (a phone in landscape) gets thumb-sized tap targets.
+  document.body.classList.toggle('rx-phone', (turned ? r.height : r.width) < 820);
   document.body.style.setProperty('--rxs', String((turned ? r.height : r.width) / 960));
 }
 
