@@ -8,6 +8,7 @@
 import { describe, expect, it } from 'vitest';
 import { foundForPlay, playRun, replay } from '../../src/core/evilMode/autoplay';
 import { EVIL_DATA } from '../../src/core/evilMode/data';
+import { toSaveForm } from '../../src/core/evilMode/saveForm';
 import { cardFor, leftOut } from '../../src/core/evilMode/card';
 import { clockActs, clockMet, clockMorning, clockOf, lastRun, stopClock } from '../../src/core/evilMode/crossing';
 import { ensureNeighbour, neighbourDef } from '../../src/core/evilMode/neighbour';
@@ -231,10 +232,23 @@ describe('a six-region run', () => {
   });
 
   it('its save is under the 300 KB budget, and reloads whole', () => {
-    const json = JSON.stringify(run.block);
+    const json = JSON.stringify(toSaveForm(run.block));
     expect(json.length).toBeLessThan(300_000);
-    expect(EvilModeBlockSchema.parse(JSON.parse(json))).toEqual(JSON.parse(json));
+    expect(EvilModeBlockSchema.parse(JSON.parse(json))).toEqual(JSON.parse(JSON.stringify(run.block)));
   });
+
+  // Twelve seeds, not one: the budget has to hold for the long runs too, with room left for the slices still to land.
+  // Before the save form, five of ten seeds went over 300 KB (up to 367 KB); in save form the worst is about 200 KB.
+  it('twelve six-region saves are all under 300 KB, with room to spare (under 250 KB), and each reloads whole', () => {
+    const sizes: number[] = [];
+    for (const seed of ['six-run', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k']) {
+      const r = seed === 'six-run' ? run : playRun(foundForPlay(seed, choice(), EVIL_DATA, 'six'), 'mix');
+      const json = JSON.stringify(toSaveForm(r.block));
+      sizes.push(json.length);
+      expect(EvilModeBlockSchema.parse(JSON.parse(json))).toEqual(JSON.parse(JSON.stringify(r.block)));
+    }
+    expect(Math.max(...sizes)).toBeLessThan(250_000);
+  }, 300_000);
 });
 
 describe('the second clocks: the mountain and the light', () => {
