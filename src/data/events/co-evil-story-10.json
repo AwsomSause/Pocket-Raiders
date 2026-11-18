@@ -2207,6 +2207,11 @@
        },
        {
         "kind": "flag",
+        "key": "evil-start-rocket-return",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
         "key": "neo-own-call-ended",
         "amount": 1
        }
@@ -2229,6 +2234,11 @@
        {
         "kind": "flag",
         "key": "neo-ending-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-rocket-return",
         "amount": 1
        },
        {

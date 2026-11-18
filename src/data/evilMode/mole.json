@@ -1,0 +1,139 @@
+{
+  "note": "Evil Mode slice 17 (design Part 11): the mole. One of four handlers is rolled at the run's start on the stream evil-mole; from District 2 of the first region one applicant is marked (a second a district on if the first is turned away, a third a region on; refuse all three and there's no mole). The mole is a field in the block's hidden state, never on a card. Kice's answer 7: the mole is on. With \"on\" false, every evil-mole draw is still taken and nothing it decides is used: the streets are the same. Numbers are starting values, not playtested.",
+  "on": true,
+  "rules": {
+    "firstDistrict": 2,
+    "weights": { "police": 3, "neighbour": 3, "local": 2, "mother": 2 },
+    "policeHot": 5, "hotHeat": 7,
+    "odds": -20,
+    "policeHeat": 1, "policeHeatSour": 2, "sourBelow": 4,
+    "knockAt": 8,
+    "feedHits": [2, 3], "feedHeat": -3, "feedBoost": 20,
+    "turnPay": 300, "rebuy": [1, 3], "rebuyLoyalty": 7,
+    "turnHeatFloor": 3,
+    "wrong": { "loyalty": -4, "floor": 1, "hearts": -2, "ceiling": 8 },
+    "poach": [1, 3], "poachBelow": 3,
+    "postRoom": "listening", "postSize": 2
+  },
+  "patron": "The Patron, at the first Arrival: \"There's always somebody. In my day it was me.\"",
+  "reportLabel": "Found in the post",
+  "reports": {
+    "police": [
+      "Twelve on strength. Three squads daily. Vault is the second door past the kitchen. The kitchen is better run than the Vault.",
+      "Subject pays wages on the day. This is unusual and I am noting it because it will come up when you ask them to turn on each other. They won't.",
+      "They frightened a shopkeeper this week. The squad came back quiet. Noting it.",
+      "They have a Pen. It is empty. Somebody let everything out. Nobody has disciplined anyone for it.",
+      "You asked for the leader's weakness. I've been here a region. It's that they go themselves. Every time it matters, they go themselves.",
+      "I'd like to be relieved. Not because it's dangerous. Because I've started covering the late shift so the driver can see his mother, and I don't think that's in my brief."
+    ],
+    "neighbour": [
+      "Thursday, the quarry, two squads. The big one and the one who talks. Be ready or be elsewhere.",
+      "Funds about four thousand. They're broke more often than you'd think. They keep paying people.",
+      "They leaned on a street this week. Three of them went. Expect more of it.",
+      "You asked if they could be bought out. No. I offered the driver double, like you said. He told the cook. The cook gave me soup and said I looked tired.",
+      "Pay me. It's been two weeks. They pay on the day here. I'm just saying.",
+      "I'm not sending Friday's. Send somebody else if you want Friday's."
+    ],
+    "local": [
+      "They're coming Thursday. Three of them. One's all right.",
+      "Don't open the door to the tall one. He's not cruel. He just does what he's told.",
+      "They leaned on a man in a shop again, Dad. The same ones who came to you.",
+      "It's the same ones who came to you. They went back to Mrs. Eze's and mended her step. The same ones.",
+      "I've not got anything this week. They've not done anything this week I'd warn you about.",
+      "I think you'd like the old bookkeeper. Don't look at me like that."
+    ],
+    "mother": [
+      "Dear Mrs. —, I'm in. They're not what the paper says. They're not not what the paper says either. I'll write properly Sunday.",
+      "There's a woman here who was a ward sister. She treated a constable last week, on the kitchen table. Nobody stopped her.",
+      "They frightened a man in a shop on Tuesday. I was there. I'm not proud of it. I'm telling you because you asked for the truth and that's part of it.",
+      "Your one came through on the road today. Our lot were told to leave them be. I saw the order. It was underlined.",
+      "You asked what the Boss is like. Tired. Polite. Goes themselves when it's something bad. I don't know what that tells you. It tells me something.",
+      "I think when it comes to it they'll talk before they fight. I think. Tell them to listen, if it's offered."
+    ]
+  },
+  "leanReport": 2,
+  "heatLine": "Heat +1: reason not known.",
+  "knownLabel": "They seem to have known.",
+  "streetLabel": "The street seemed ready.",
+  "fedLabel": "The other lot were somewhere else.",
+  "tells": {
+    "1": "A job failed with them on it.",
+    "2": "Asked a question at Night they shouldn't have known to ask.",
+    "3": "Never the one who's hurt.",
+    "4": "Their wage isn't being spent.",
+    "5": "Asked for the Post.",
+    "6": "Too good. Nothing's gone wrong for them all region."
+  },
+  "screen": {
+    "title": "Suspicions",
+    "help": "Nothing here is proof. Slips are pinned by the date they were seen. Pick a card, then Name them or Feed them a false job.",
+    "roster": "The Roster",
+    "table": "Jobs, by who was on them",
+    "slips": "Slips",
+    "post": "Found in the post",
+    "noSlips": "Nothing pinned yet.",
+    "noPost": "Nothing found in the post.",
+    "name": "Name them",
+    "feed": "Feed them a false job",
+    "fedOnce": "One false job a district.",
+    "feedRefuses": "{name} won't be named on a job that's a lie to the Roster.",
+    "close": "Close"
+  },
+  "fed": {
+    "nothing": "The false job sat on the Board all day. Nobody came. Nothing moved.",
+    "police": "The law raided an empty warehouse at dawn. Heat −3. Somebody's been reprimanded.",
+    "neighbour": "The other lot were at the quarry all night, waiting. The next real job's easier.",
+    "local": "A street braced all day for a Lean that never came. It's an unkind thing to do to a frightened street.",
+    "mother": "Nothing happened. A false job isn't a thing the team did."
+  },
+  "found": {
+    "police": "\"Ask me about Looker.\" A breath. \"No? Then I'll save you the trouble. Yes. Since the second week. You're a tidier outfit than most I've been in, and tidy's what gets a case to court.\"",
+    "neighbour": "\"It was money. I'm not going to dress it. They pay ₽300 a day and you pay ₽150 and I've a mother. … You pay on the day, though. They don't.\"",
+    "local": "\"You sent people into my father's shop. He picked the jar up off the floor. I watched him pick it up. I wanted to see the face of whoever sent that. … I've seen it. I don't know what you are.\"",
+    "mother": "\"I'm not a spy. She asked me to look, so I'm looking. She's a mum. She can't sleep. I write to her on Sundays and tell her what you had for tea. You can read all of them.\""
+  },
+  "wrong": {
+    "scene": "{name} is called in. You say it. They deny it, truthfully, and it sounds the same as a lie would.",
+    "history": "Was called a spy. Wasn't.",
+    "minor": "{name} doesn't deny it. She doesn't say anything. She's gone by morning, without her pay. Hortense, at breakfast: \"What did you say to that child?\"",
+    "ceiling": "Nobody's sure they aren't next."
+  },
+  "acts": {
+    "turn": "Turn them",
+    "letGo": "Open the door",
+    "keep": "Say nothing, and let them stay",
+    "stay": "\"Stay.\"",
+    "tell": "\"Tell the Roster.\"",
+    "go": "\"Go.\"",
+    "nothing": "Say nothing"
+  },
+  "turn": {
+    "police": { "ask": "\"What's it for? Not the speech. What's it for.\"", "no": "\"Then I've nothing to work with. I'll be gone by morning.\"", "yes": "\"If I told you to stop one thing. One. {method}. Would you?\" You say yes. They stay police, and file what's true.", "stop": "Stopped, for the region, at the mole's asking." },
+    "neighbour": { "yes": "\"…And I just tell them what you say. I'd have done it for less. You pay on the day.\" ₽300 a day.", "no": "Not enough Funds to pay ₽300 a day.", "plasma": "\"They can't be bought.\"" },
+    "local": { "yes": "\"Don't tell me. Do it. Or don't. I'll know by Thursday which, because I'll hear it from him.\"" },
+    "mother": { "no": "\"I'm not spying. She asked me to look. I'm looking. You can't change what I write except by changing what there is to write about.\"" },
+    "rebought": "{name} took the other lot's better offer. The next job against them is expected again.",
+    "refusedOffer": "{name}, at Night: \"They said six hundred. I said I'd think. I've thought.\""
+  },
+  "letGo": {
+    "police": { "fair": "\"I'm going to file that I found nothing I could charge. It'll be nearly true. Don't make it less true after I've gone.\"", "mixed": "\"You're two outfits. One pays wages and mends steps. One stands in shops. I don't know which one I'm reporting on. Neither do you.\"", "hard": "\"I've been in six of these. You're not the worst. I want you to hear how little that is.\"" },
+    "neighbour": { "fair": "\"They're going to lose to you. I'll tell them why and they won't believe me. It's the soup.\"", "mixed": "\"You're the same as them with better manners. The manners are worth something. Not as much as you think.\"", "hard": "\"I took their money to watch you. I'd have done it free. I learned more about how not to.\"" },
+    "local": { "fair": "\"I came to see who'd send people to do that. I've seen. It was somebody who'd also send people to put it right. I'm going home to tell him both.\"", "mixed": "\"I still don't know what you are. I'm going home anyway.\"", "hard": "\"I watched you for two months waiting for the bit where it turned out you had a reason. Thank you for letting me go. That's the first thing.\"" },
+    "mother": { "fair": "\"I'll tell her you opened the door. She'll want to know that more than anything else I've written.\"", "mixed": "\"I'll tell her the truth. It's long. She'll read it twice.\"", "hard": "\"I'm going to tell her to tell them not to come. They'll come anyway. They're that sort. So were you, I think, once.\"" }
+  },
+  "knock": {
+    "lines": [
+      "A knock. It's somebody you've had no reason to think about.",
+      "\"Have you a minute? I've something to tell you and I'd like to get to the end of it before you say anything.\"",
+      "\"I was sent. I've been reporting since my second week. I stopped three weeks ago. I've decided stopping isn't enough, so here I am.\"",
+      "\"I'm not asking to stay. I'm telling you because people here have been saving me the end of the loaf, and I couldn't sit at that table another night with it not said.\""
+    ],
+    "stay": "They stay. They tell whoever sent them they're out.",
+    "tell": "They tell the Hall. Somebody says \"We knew,\" and nobody did.",
+    "go": "They go. The Roster's told they left.",
+    "nothing": "\"Right. I'll be in the Mess.\" It's never mentioned again."
+  },
+  "poached": "{name}'s gone over to the other lot. They offered double. They'll be on the other side of the next job, with the kit you gave them.",
+  "ran": "{name}'s bunk is empty. They knew they'd been made.",
+  "sentLeft": "{name} goes. On the way out, one thing:"
+}

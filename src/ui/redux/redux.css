@@ -5,7 +5,7 @@
 .rx .stage.clear{background:none;pointer-events:none}.rx .stage.clear .hit,.rx .stage.clear [data-act]{pointer-events:auto}
 .rx [data-act]{cursor:pointer}
 /* ---- the 960 x 540 game stage ---- */
-.rx .stage{position:absolute;left:0;top:0;width:960px;height:540px;transform-origin:0 0;transform:scale(var(--s,.35));overflow:hidden;line-height:1.15;background:var(--pat,var(--g));color:var(--ink);font-family:var(--font),"Pixelify Sans","PRMain",sans-serif;font-size:var(--fs);font-weight:var(--fw);user-select:none}
+.rx .stage{position:absolute;left:0;top:0;width:960px;height:540px;transform-origin:0 0;transform:scale(var(--s,.35));overflow:hidden;overflow:clip;line-height:1.15;background:var(--pat,var(--g));color:var(--ink);font-family:var(--font),"Pixelify Sans","PRMain",sans-serif;font-size:var(--fs);font-weight:var(--fw);user-select:none}
 .rx .stage *{box-sizing:border-box}
 .rx .stage b{font-weight:700}
 .rx .abs,.rx .win.abs,.rx .txt.abs,.rx .btn.abs{position:absolute}.rx .fill{position:absolute;inset:0}.rx .row{display:flex;align-items:center;gap:10px}.rx .col{display:flex;flex-direction:column;gap:8px}.rx .grow{flex:1;min-width:0}.rx .cen{align-items:center;justify-content:center;text-align:center}
@@ -318,3 +318,46 @@
 @keyframes wr-glow{from{filter:drop-shadow(0 0 0 #ffd84a00)}to{filter:drop-shadow(0 0 9px #ffd84a)}}
 @keyframes wr-lamp{from{opacity:.85}to{opacity:1}}
 @keyframes wr-mote{0%{opacity:0;translate:0 0}15%{opacity:.8}85%{opacity:.5}100%{opacity:0;translate:26px -90px}}
+
+/* Evil Mode slice 22 (design Part 29 section 17): on a phone in landscape the Founding, Charters and Turn buttons are
+   a thumb tall once scaled, and those screens never scroll sideways. The Board keeps its scaled layout. */
+.rx-phone [data-testid="evil-founding"] .btn[data-act],
+.rx-phone [data-testid="evil-charters"] .btn[data-act],
+.rx-phone [data-testid="evil-turn"] .btn[data-act] { min-height: 56px; }
+.rx-phone [data-testid="evil-charters"],
+.rx-phone [data-testid="evil-turn"] { overflow-x: hidden; }
+
+/* Evil Mode slice 22, the Board on a phone (Part 29 section 17). The wrapper is the stage's own size and lets clicks through. */
+.rx-board { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.rx-board > * { pointer-events: auto; }
+.rail-tab { display: none; }
+.rx-phone .rx-board[data-mode="day"] [data-testid="evil-map"],
+.rx-phone .rx-board[data-mode="dispatch"] [data-testid="evil-map"] { transform: scale(1.6); transform-origin: 0 0; }
+.rx-phone .rx-board[data-mode="day"] [data-testid="evil-panel"],
+.rx-phone .rx-board[data-mode="day"] [data-testid="evil-text"] { top: 130px !important; bottom: 70px !important; width: 62% !important; z-index: 5; }
+.rx-phone .rx-board[data-mode="day"] [data-testid="evil-panel"] { left: auto !important; right: 0 !important; transform: translateX(110%); }
+.rx-phone .rx-board[data-mode="day"] [data-testid="evil-text"] { left: 0 !important; transform: translateX(-110%); }
+.rx-phone .rx-board[data-rail="right"] [data-testid="evil-panel"],
+.rx-phone .rx-board[data-rail="left"] [data-testid="evil-text"] { transform: none; }
+.rx-phone .rail-tab { display: flex; align-items: center; justify-content: center; position: absolute; top: 330px; min-width: 96px; min-height: 64px; padding: 0 12px; z-index: 6; cursor: pointer; font-weight: 700; background: var(--team-b, #333); color: #fff; border-radius: 10px; }
+.rx-phone .rail-tab.left { left: 16px; }
+.rx-phone .rail-tab.right { right: 16px; }
+.rx-phone .rail-tab.left.on { left: calc(62% + 8px); }
+.rx-phone .rail-tab.right.on { right: calc(62% + 8px); }
+/* Dispatch: where, then who and how; the Card's the fourth tap. */
+.rx-phone .rx-board[data-mode="dispatch"] [data-testid="evil-where"],
+.rx-phone .rx-board[data-mode="dispatch"] [data-testid="evil-who"],
+.rx-phone .rx-board[data-mode="dispatch"] [data-testid="evil-how"] { top: 316px !important; bottom: 66px !important; }
+.rx-phone .rx-board[data-mode="dispatch"] [data-testid="evil-where"] { left: 16px !important; right: 16px !important; width: auto !important; }
+.rx-phone .rx-board[data-mode="dispatch"]:not([data-dstep="where"]) [data-testid="evil-where"] { display: none; }
+.rx-phone .rx-board[data-dstep="where"] [data-testid="evil-who"],
+.rx-phone .rx-board[data-dstep="where"] [data-testid="evil-how"] { display: none; }
+.rx-phone .rx-board[data-mode="dispatch"] [data-testid="evil-who"] { width: 220px !important; }
+.rx-phone .rx-board[data-mode="dispatch"] [data-testid="evil-how"] { left: 244px !important; right: 16px !important; width: auto !important; }
+.rx-phone .rx-board[data-mode="dispatch"] [data-testid="evil-where"] .row,
+.rx-phone .rx-board[data-mode="dispatch"] [data-testid="evil-who"] .row { line-height: 30px !important; }
+
+/* The Board's title row: page tabs a little smaller, chips and the title cut short, so every tab fits on one row (no sideways slide). */
+.rx [data-testid="evil-tabs"] > .tg { flex: 0 0 auto; font-size: 11px; padding: 3px 6px; }
+.rx [data-testid="evil-chip"] { max-width: 120px; }
+.rx [data-testid="evil-team-name"] + .tg { max-width: 150px; }

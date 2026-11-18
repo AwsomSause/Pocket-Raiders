@@ -6,6 +6,7 @@ import Phaser from 'phaser';
 import { fitBlock } from '../ui/fitText';
 import { createPokemon, getSpecies } from '../core/pokemon';
 import { services } from '../game/services';
+import { EVIL_MODE_ID } from '../core/evilMode/session';
 import { onInputAction } from '../ui/input';
 import { fitHeight } from '../ui/showcase';
 import { pokemonVisual } from '../ui/sprites';
@@ -252,6 +253,8 @@ export class StarterSelectScene extends Phaser.Scene {
     services().session.chooseStarter(i);
     // A run with a Legendary Blessing opens with its plinth screen first (once; a resumed run skips it).
     const blessing = services().session.run?.expansion?.blessing;
+    // Evil Mode goes straight on to Founding (its run has no campaign briefing).
+    if (services().session.run?.rules.modeId === EVIL_MODE_ID) return void this.scene.start('Evil');
     this.scene.start(blessing && !blessing.seen ? 'Blessing' : 'Briefing');
   }
 }

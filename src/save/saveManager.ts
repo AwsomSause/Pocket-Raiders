@@ -25,6 +25,7 @@ import {
 import { emptyTimelineStore, TimelineStoreSchema, type TimelineStore } from '../core/timeline/schema';
 import { freshEvil } from '../core/evil/schema';
 import { EXPANSION_SETTINGS_DEFAULTS } from '../core/expansion/schema';
+import { runToSaveForm } from '../core/evilMode/saveForm';
 import { freshProfileStory, STORY_SETTINGS_DEFAULTS } from '../core/story2/schema';
 import { StorageUnavailableError, type StorageProvider } from './storage';
 
@@ -41,7 +42,7 @@ export const ACTIVE_SLOT_KEY = `${KEY_PREFIX}.slot`;
 export type RecordName = 'profile' | 'run' | 'settings' | 'meta' | 'timeline';
 
 /** Current schema version of each record. Bump when a record's shape changes and add a migration. */
-export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 20, run: 45, settings: 45, meta: 1, timeline: 1 };
+export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 21, run: 45, settings: 45, meta: 1, timeline: 1 };
 
 /** v41: walks a saved run and gives every Pokémon (anything with uid, speciesId, level and vitamins) IVs and empty EVs. */
 function withIvs(node: unknown): unknown {
@@ -155,6 +156,8 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
       for (const id of lore) if (typeof id === 'string') story.lore[id] = { state: 'known', sources: [] };
       return { ...profile, story };
     },
+    // v21 (Evil Mode slice 15): no Evil Mode run has finished yet, so the Hall of Fame holds no cards.
+    20: (data) => ({ ...(data as Json), evilHall: [] }),
   },
   run: {
     // v2 (Milestone 2): Bag, candies, pending decisions, and battles against
@@ -721,7 +724,8 @@ export class SaveManager {
   }
 
   saveRun(run: RunState): SaveResult {
-    return this.write('run', run);
+    // An Evil Mode block is written in its save form (core/evilMode/saveForm.ts); reading makes it whole again.
+    return this.write('run', runToSaveForm(run));
   }
 
   clearRun(): SaveResult {
@@ -750,7 +754,7 @@ export class SaveManager {
 
   saveReplay(run: RunState): SaveResult {
     if (!run.timeline) return { ok: false, reason: 'Only a timeline replay can be saved in the replay slot.' };
-    return this.write('run', run, this.replayKey);
+    return this.write('run', runToSaveForm(run), this.replayKey);
   }
 
   clearReplay(): SaveResult {

@@ -1,0 +1,2088 @@
+{
+  "note": "Evil Mode slice 14: the Scheme (design Part 22 sections 1 to 7; Part 5 section 7; Part 12 section 3 heists; Part 13 section 3 Digs; Part 26a section 2.4 Kanto's own scheme, the Ledger; Part 29 section 10.2 the screen; Part 30 section 3.6). Six Grand Schemes, one a Creed, each of four parts with a clean way and a dirty way (and a dearer second source when a part's lost). Groundwork's the last 20%, from the Creed's ordinary work. The percentage is never stored. Numbers are the design's starting values; none are playtested. A way marked limited is written down in docs/status/evil-mode-slice-14.md. \"on\": false is the slice's undo: the Scheme screen's hidden and nothing is stamped.",
+  "on": true,
+  "rules": {
+    "part": 20,
+    "groundCap": 20,
+    "readyAt": 80,
+    "heroBadge": -5,
+    "reckoningLost": -10,
+    "pace": {
+      "one": {
+        "means": 1,
+        "place": 3,
+        "key": 3,
+        "moment": 6
+      },
+      "three": {
+        "means": [
+          0,
+          1
+        ],
+        "place": [
+          1,
+          1
+        ],
+        "key": [
+          1,
+          1
+        ],
+        "moment": [
+          2,
+          6
+        ]
+      }
+    },
+    "momentDay": 4,
+    "noticeFrom": 1,
+    "homeNeed": 1000,
+    "homeWeights": {
+      "warm": 40,
+      "handshake": 25,
+      "work": 60,
+      "feedDay": 20,
+      "fed": 10
+    },
+    "giveBackDays": 3,
+    "heistHeatBy": 1,
+    "crewPay": 50,
+      "insideCost": 500,
+      "waitOdds": 60
+  },
+  "words": {
+    "parts": "Means · Place · Key · Moment",
+    "empty": "Not yet.",
+    "inHand": "In hand",
+    "lost": "Lost",
+    "clean": "clean",
+    "notClean": "not clean",
+    "bar": "{pct}%",
+    "ready": "Ready: {pct}% on the Moment's morning.",
+    "notReady": "The Moment passes. {pct}%: under eighty. The Scheme stays where it is.",
+    "momentCame": "The Moment's come: {name}. The team's ready. (The Finale is next: nothing happens yet.)",
+    "momentSoon": "The Moment: {stage}, day {day}.",
+    "momentCaused": "It's been caused. The Moment comes tomorrow morning.",
+    "groundTick": "Groundwork +{n}%: {why}.",
+    "groundCut": "Groundwork {n}%: the Hero took a Badge where a Scheme job was running.",
+    "reckoningCut": "Groundwork {n}%: the Reckoning was lost.",
+    "partGot": "{part}: in hand, stamped {stamp}.",
+    "partLost": "{part}: lost. It has a second source, dearer.",
+    "eyeOpen": "Open: watching. Not unfriendly.",
+    "eyeNarrowed": "Narrowed: wary.",
+    "eyeShut": "Shut: turned away.",
+    "eyeMoved": "The eye: {word}",
+    "noScheme": "No Scheme is written for this Creed.",
+    "offPace": "Not yet: {part} comes in {when}.",
+    "inherit": "Take up {name}",
+    "inheritDone": "{name} is the team's now. Four parts, every one stamped not clean.",
+    "inheritOther": "Don't. It was never a good idea.",
+    "aside": "Set aside: {name} ({pct}%).",
+    "homeCount": "{n}. {names}",
+    "pick": "Up and Down pick a row. Enter does it. Esc closes.",
+    "card": "The Card"
+  },
+  "families": [
+    {
+      "id": "profit",
+      "name": "The Monopoly",
+      "says": "Own the one thing everybody needs.",
+      "pieces": {
+        "means": "a factory",
+        "place": "a port",
+        "key": "a patent",
+        "moment": "a calendar"
+      },
+      "faint": "A factory that hires the street, a port won on the best bid, a patent bought from the woman who wanted it used, and a calendar nobody's had to tear a page off early.",
+      "sentences": [
+        {
+          "at": 0,
+          "text": "We're going to sell something."
+        },
+        {
+          "at": 20,
+          "text": "We're going to make the thing everybody buys."
+        },
+        {
+          "at": 60,
+          "text": "We're going to be the only ones who make it."
+        },
+        {
+          "at": 80,
+          "text": "On the first of the month, everybody in the region pays us. Mr. Haskins wants to know what the price is."
+        }
+      ],
+      "ground": {
+        "text": "contracts: each racket made honest, each Front in profit with the back room shut",
+        "sources": [
+          {
+            "kind": "honest",
+            "pct": 2
+          },
+          {
+            "kind": "straight",
+            "pct": 2
+          }
+        ]
+      },
+      "parts": {
+        "means": {
+          "what": "A factory",
+          "clean": {
+            "id": "build",
+            "name": "Build one",
+            "how": "job",
+            "cost": 30000,
+            "days": 3,
+            "regard": 2,
+            "needs": {
+              "talents": [
+                "books",
+                "hands"
+              ]
+            },
+            "text": {
+              "takes": "₽30,000 and three days: a factory, built, with a Books and a Hands to run it.",
+              "from": "Nobody. The builders are paid. It hires forty locals at {town}.",
+              "gives": "The Means, stamped clean. A factory.",
+              "hero": "They'll walk past it. Somebody they know works there.",
+              "written": "Built a factory. Hired locals."
+            }
+          },
+          "dirty": {
+            "id": "take",
+            "name": "Take one",
+            "how": "heist",
+            "heist": "freight",
+            "cost": 6000,
+            "dread": 3,
+            "text": {
+              "takes": "Somebody else's factory, by a heist: ₽6,000 in costs.",
+              "from": "Two hundred people on its floor. The Card names them: Mrs. Ilse Varga on the line, thirty-one years.",
+              "gives": "The Means, stamped not clean.",
+              "hero": "Their aunt was on the floor that night.",
+              "written": "Took a factory from the two hundred who worked in it."
+            },
+            "tags": [
+              "take"
+            ]
+          },
+          "second": {
+            "id": "share",
+            "name": "Buy a share in someone else's",
+            "how": "job",
+            "cost": 40000,
+            "days": 1,
+            "text": {
+              "takes": "₽40,000: a share in someone else's factory.",
+              "from": "The Haskins family, who'd rather not, and take the money.",
+              "gives": "The Means, again. Dearer. Stamped clean.",
+              "hero": "Doesn't notice.",
+              "written": "Bought a share in a factory."
+            }
+          }
+        },
+        "place": {
+          "what": "A port",
+          "clean": {
+            "id": "bid",
+            "name": "Win its contract: the best bid",
+            "how": "job",
+            "cost": 12000,
+            "days": 2,
+            "status": "limited",
+            "text": {
+              "takes": "₽12,000 and two days: a Pay against two other bidders.",
+              "from": "Two other bidders, who lose fairly.",
+              "gives": "The Place, stamped clean. A port.",
+              "hero": "Reads about it in the paper.",
+              "written": "Won the port's contract with the best bid."
+            }
+          },
+          "dirty": {
+            "id": "burn",
+            "name": "Burn the other bidder's papers",
+            "how": "job",
+            "cost": 0,
+            "days": 1,
+            "heat": 3,
+            "needs": {
+              "line": "grey"
+            },
+            "text": {
+              "takes": "A night in an office: the other bidder's papers, burned.",
+              "from": "Ms. Petra Lindqvist, harbourmaster's clerk, who'd typed them for a week.",
+              "gives": "The Place, stamped not clean.",
+              "hero": "Their friend's mother typed those papers.",
+              "written": "Burned a rival's bid to win a port."
+            },
+            "tags": [
+              "fire",
+              "takeHouseNight"
+            ]
+          },
+          "second": {
+            "id": "smaller",
+            "name": "A smaller port, further off",
+            "how": "job",
+            "cost": 8000,
+            "days": 2,
+            "text": {
+              "takes": "₽8,000: a smaller port. Takings −a fifth, for good.",
+              "from": "Nobody much. It was for sale.",
+              "gives": "The Place, again, stamped clean.",
+              "hero": "Doesn't notice.",
+              "written": "Bought a small port further off."
+            }
+          }
+        },
+        "key": {
+          "what": "A patent",
+          "clean": {
+            "id": "buy",
+            "name": "Buy it from its inventor, fairly",
+            "how": "job",
+            "cost": 10000,
+            "days": 1,
+            "regard": 1,
+            "text": {
+              "takes": "₽10,000: the patent, bought.",
+              "from": "Dr. Amara Osei, the inventor. She wants it used.",
+              "gives": "The Key, stamped clean.",
+              "hero": "Meets her later. She's pleased.",
+              "written": "Bought a patent from its inventor, fairly."
+            }
+          },
+          "dirty": {
+            "id": "steal",
+            "name": "Take it",
+            "how": "heist",
+            "heist": "museum",
+            "dread": 1,
+            "text": {
+              "takes": "The patent, from her safe, by a heist.",
+              "from": "Dr. Amara Osei. She wanted it used, not owned. Her mood goes to Shut.",
+              "gives": "The Key, stamped not clean.",
+              "hero": "She's on their road. She tells them.",
+              "written": "Took a patent from the woman who made it."
+            },
+            "tags": [
+              "take"
+            ]
+          },
+          "second": {
+            "id": "license",
+            "name": "License it",
+            "how": "job",
+            "cost": 2000,
+            "days": 1,
+            "text": {
+              "takes": "A tenth of the takings, for ever.",
+              "from": "Dr. Osei gets her tenth.",
+              "gives": "The Key, again, stamped clean.",
+              "hero": "Doesn't notice.",
+              "written": "Licensed a patent."
+            }
+          },
+          "ledger": true
+        },
+        "moment": {
+          "what": "The day the old stock runs out",
+          "clean": {
+            "id": "wait",
+            "name": "Wait",
+            "how": "wait",
+            "text": {
+              "takes": "Nothing. The old stock runs out when it runs out.",
+              "from": "Nobody.",
+              "gives": "The Moment, stamped clean, on its day.",
+              "hero": "Notices the prices.",
+              "written": "Waited for the old stock to run out."
+            }
+          },
+          "dirty": {
+            "id": "cause",
+            "name": "Cause it",
+            "how": "cause",
+            "cost": 2000,
+            "heat": 3,
+            "dread": 2,
+            "needs": {
+              "line": "grey"
+            },
+            "text": {
+              "takes": "A fire at a warehouse; a rumour. ₽2,000.",
+              "from": "Somebody's shop's the one that runs out first: Mr. Tomas Rehn's, on the corner.",
+              "gives": "The Moment, tomorrow, stamped not clean.",
+              "hero": "Their mother's shop ran out first.",
+              "written": "Set a fire so the old stock ran out early."
+            },
+            "tags": [
+              "fire"
+            ]
+          }
+        }
+      },
+      "status": "supported"
+    },
+    {
+      "id": "cause",
+      "name": "The Law",
+      "says": "One rule of the world's changed. For everyone.",
+      "pieces": {
+        "means": "a microphone",
+        "place": "a square",
+        "key": "a file",
+        "moment": "a clock"
+      },
+      "faint": "A station that reports the team's own rackets too, an invitation to speak, a dull true file from an Archive, and a festival everyone was coming to anyway.",
+      "sentences": [
+        {
+          "at": 0,
+          "text": "We've got a sentence on the door."
+        },
+        {
+          "at": 20,
+          "text": "We're going to say it where people can hear."
+        },
+        {
+          "at": 60,
+          "text": "We're going to make it true."
+        },
+        {
+          "at": 80,
+          "text": "At the festival, the whole region's listening. Vera's checked the file twice."
+        }
+      ],
+      "ground": {
+        "text": "speeches: every Persuade that holds",
+        "sources": [
+          {
+            "kind": "persuade",
+            "pct": 1
+          }
+        ]
+      },
+      "parts": {
+        "means": {
+          "what": "A broadcast",
+          "clean": {
+            "id": "station",
+            "name": "A station of your own: a Front",
+            "how": "job",
+            "cost": 8000,
+            "days": 2,
+            "regard": 1,
+            "text": {
+              "takes": "₽8,000 and two districts' patience: a radio mast, a Front. It's got to actually run.",
+              "from": "Nobody. It reports the team's rackets too, if they're news.",
+              "gives": "The Means, stamped clean.",
+              "hero": "Listens to it.",
+              "written": "Started a station that reports on the team too."
+            }
+          },
+          "dirty": {
+            "id": "hijack",
+            "name": "Hijack one",
+            "how": "heist",
+            "heist": "freight",
+            "heat": 2,
+            "text": {
+              "takes": "Somebody's tower, for a night, by a heist.",
+              "from": "The station's night crew. Archer did this. The Card says so.",
+              "gives": "The Means, stamped not clean.",
+              "hero": "Was listening when it went off air.",
+              "written": "Hijacked a broadcast."
+            },
+            "tags": [
+              "take"
+            ]
+          },
+          "second": {
+            "id": "pamphlets",
+            "name": "Pamphlets",
+            "how": "job",
+            "cost": 1500,
+            "days": 3,
+            "text": {
+              "takes": "₽1,500 and three days of printing. Slower: the Moment needs a week, not a day.",
+              "from": "Nobody.",
+              "gives": "The Means, again, stamped clean.",
+              "hero": "Gets handed one.",
+              "written": "Printed pamphlets."
+            }
+          }
+        },
+        "place": {
+          "what": "A capital",
+          "clean": {
+            "id": "invited",
+            "name": "Be invited to speak",
+            "how": "job",
+            "days": 1,
+            "needs": {
+              "regard": 7,
+              "gymsClean": 1
+            },
+            "text": {
+              "takes": "Regard 7, and a Leader who'll vouch (a Bent or Befriended Gym).",
+              "from": "Nobody. The square's lent.",
+              "gives": "The Place, stamped clean.",
+              "hero": "Is in the crowd.",
+              "written": "Was invited to speak in the square."
+            }
+          },
+          "dirty": {
+            "id": "occupy",
+            "name": "Occupy the square",
+            "how": "job",
+            "days": 1,
+            "heat": 4,
+            "needs": {
+              "squads": 6
+            },
+            "text": {
+              "takes": "Six squads, a day. Heat +4.",
+              "from": "The square's market. The stallholders are named: Mrs. Ruth Abara, eggs; Mr. Ji-ho Park, knives.",
+              "gives": "The Place, stamped not clean.",
+              "hero": "Their friend sells eggs there.",
+              "written": "Occupied a market square."
+            },
+            "tags": [
+              "loudHome"
+            ]
+          },
+          "second": {
+            "id": "town",
+            "name": "A smaller town",
+            "how": "job",
+            "days": 1,
+            "text": {
+              "takes": "A day. The vote's local.",
+              "from": "Nobody.",
+              "gives": "The Place, again, stamped clean.",
+              "hero": "Doesn't notice.",
+              "written": "Spoke in a smaller town."
+            }
+          }
+        },
+        "key": {
+          "what": "A truth nobody can deny",
+          "clean": {
+            "id": "archive",
+            "name": "Find it: an Archive",
+            "how": "dig",
+            "dig": "archive",
+            "text": {
+              "takes": "A Dig of papers: what the League knew and when.",
+              "from": "Nobody. It's real, and it's dull, and it's enough.",
+              "gives": "The Key, stamped clean.",
+              "hero": "Reads it later and goes quiet.",
+              "written": "Found the truth in an Archive."
+            }
+          },
+          "dirty": {
+            "id": "forge",
+            "name": "Make one up",
+            "how": "job",
+            "cost": 1000,
+            "days": 1,
+            "needs": {
+              "line": "grey"
+            },
+            "text": {
+              "takes": "A forgery. Cheap, fast, vivid. ₽1,000.",
+              "from": "Everyone who believes it. It's found out in the Finale, live.",
+              "gives": "The Key, stamped not clean.",
+              "hero": "Believes it, for a week.",
+              "written": "Forged a truth."
+            },
+            "tags": [
+              "forgeryInPerson"
+            ]
+          },
+          "second": {
+            "id": "witness",
+            "name": "A witness",
+            "how": "job",
+            "days": 2,
+            "text": {
+              "takes": "A person, who has to be asked, and may say no.",
+              "from": "Mr. Abel Tanaka, a League clerk, retired.",
+              "gives": "The Key, again, stamped clean.",
+              "hero": "Doesn't notice.",
+              "written": "Asked a witness to speak."
+            }
+          },
+          "ledger": true
+        },
+        "moment": {
+          "what": "When the whole region's listening",
+          "clean": {
+            "id": "wait",
+            "name": "A festival; a final",
+            "how": "wait",
+            "text": {
+              "takes": "Nothing. It's on the calendar.",
+              "from": "Nobody.",
+              "gives": "The Moment, stamped clean, on its day.",
+              "hero": "Is going anyway.",
+              "written": "Waited for the festival."
+            }
+          },
+          "dirty": {
+            "id": "cause",
+            "name": "A scare",
+            "how": "cause",
+            "heat": 4,
+            "dread": 2,
+            "needs": {
+              "line": "grey"
+            },
+            "text": {
+              "takes": "Something frightening, arranged, so people gather.",
+              "from": "The whole town: a sentence on the door and a different one on the Ledger.",
+              "gives": "The Moment, tomorrow, stamped not clean.",
+              "hero": "Was frightened. Then wasn't.",
+              "written": "Frightened a region into listening."
+            },
+            "tags": [
+              "fire"
+            ]
+          }
+        }
+      },
+      "status": "supported"
+    },
+    {
+      "id": "power",
+      "name": "The Chair",
+      "says": "The League answers to you.",
+      "pieces": {
+        "means": "four Gyms",
+        "place": "the Plateau",
+        "key": "a Champion",
+        "moment": "the Cup"
+      },
+      "faint": "Four Leaders who'd vouch for the team, eight Badges earned in person, a tired Champion who says so, and a Cup the team simply enters.",
+      "sentences": [
+        {
+          "at": 0,
+          "text": "We'd like a say."
+        },
+        {
+          "at": 20,
+          "text": "The Gyms answer to us."
+        },
+        {
+          "at": 60,
+          "text": "The League's going to answer to us."
+        },
+        {
+          "at": 80,
+          "text": "At the Cup, it's the Boss in the bracket. Petra's ironed the jacket."
+        }
+      ],
+      "ground": {
+        "text": "every Gym dealt with, any way",
+        "sources": [
+          {
+            "kind": "gym",
+            "pct": 5
+          }
+        ]
+      },
+      "parts": {
+        "means": {
+          "what": "Four Gyms",
+          "clean": {
+            "id": "gymsClean",
+            "name": "Bend, Replace, Befriend",
+            "how": "gyms",
+            "text": {
+              "takes": "Four Gyms, dealt with by Bend, Replace or Befriend.",
+              "from": "Four Leaders, who agreed.",
+              "gives": "The Means, stamped clean, the Evening the fourth is dealt with.",
+              "hero": "Notices the Leaders are different.",
+              "written": "Four Gyms answer to the team, and agreed to."
+            }
+          },
+          "dirty": {
+            "id": "gymsDirty",
+            "name": "Buy, Beat",
+            "how": "gyms",
+            "text": {
+              "takes": "Four Gyms, with any one of them Bought or Beaten.",
+              "from": "The Leaders who were bought or beaten.",
+              "gives": "The Means, stamped not clean. They count. They're stamped.",
+              "hero": "Fought a Leader who'd been bought.",
+              "written": "Four Gyms answer to the team."
+            }
+          },
+          "second": {
+            "id": "fifth",
+            "name": "A fifth Gym",
+            "how": "gyms",
+            "text": {
+              "takes": "A fifth Gym, dealt with any way.",
+              "from": "Another Leader.",
+              "gives": "The Means, again, stamped by how.",
+              "hero": "Doesn't notice.",
+              "written": "A fifth Gym answers to the team."
+            }
+          }
+        },
+        "place": {
+          "what": "The Plateau",
+          "clean": {
+            "id": "qualify",
+            "name": "Qualify",
+            "how": "job",
+            "days": 2,
+            "needs": {
+              "gymsAny": 8
+            },
+            "status": "limited",
+            "text": {
+              "takes": "Eight Badges, earned like anyone: eight Gyms dealt with, in person.",
+              "from": "Nobody. The Leaders know who they're fighting. Most fight harder.",
+              "gives": "The Place, stamped clean.",
+              "hero": "Hears the Boss is qualifying. Laughs. Then doesn't.",
+              "written": "Qualified for the Plateau."
+            }
+          },
+          "dirty": {
+            "id": "sideDoor",
+            "name": "A side door",
+            "how": "job",
+            "cost": 15000,
+            "days": 1,
+            "heat": 1,
+            "text": {
+              "takes": "A steward, paid. ₽15,000.",
+              "from": "Mr. Desmond Achterberg, steward, who has a daughter at college.",
+              "gives": "The Place, stamped not clean.",
+              "hero": "Was turned away at the same door.",
+              "written": "Paid a steward for a way onto the Plateau."
+            },
+            "tags": [
+              "bribe"
+            ]
+          },
+          "second": {
+            "id": "nextCup",
+            "name": "The next year's Cup",
+            "how": "job",
+            "days": 1,
+            "text": {
+              "takes": "A year. An epilogue ending, not a Finale.",
+              "from": "Nobody.",
+              "gives": "The Place, again: next year.",
+              "hero": "Doesn't notice.",
+              "written": "Entered next year's Cup."
+            }
+          }
+        },
+        "key": {
+          "what": "A Champion who'll look away",
+          "clean": {
+            "id": "tired",
+            "name": "One who's tired, and says so",
+            "how": "job",
+            "days": 1,
+            "needs": {
+              "regard": 6
+            },
+            "text": {
+              "takes": "A Sit-Down with the Champion, at Regard 6.",
+              "from": "Nobody. They're tired. They say so.",
+              "gives": "The Key, stamped clean.",
+              "hero": "Can't believe it.",
+              "written": "Sat down with a Champion who was tired."
+            }
+          },
+          "dirty": {
+            "id": "leverage",
+            "name": "One who's got something to hide",
+            "how": "job",
+            "days": 1,
+            "dread": 2,
+            "needs": {
+              "line": "grey",
+              "proof": 1
+            },
+            "text": {
+              "takes": "An Expose, held back. Leverage: one proof the team holds.",
+              "from": "The Champion, and whoever the secret's about.",
+              "gives": "The Key, stamped not clean.",
+              "hero": "Senses something wrong with the Champion.",
+              "written": "Held a Champion's secret over them."
+            },
+            "tags": [
+              "exposePerson"
+            ]
+          },
+          "second": {
+            "id": "patron",
+            "name": "A Patron who was Champion",
+            "how": "job",
+            "days": 1,
+            "text": {
+              "takes": "They'll open it, once, and leave.",
+              "from": "Nobody.",
+              "gives": "The Key, again, stamped clean.",
+              "hero": "Doesn't notice.",
+              "written": "A former Champion opened the door, once."
+            }
+          }
+        },
+        "moment": {
+          "what": "The Cup",
+          "clean": {
+            "id": "wait",
+            "name": "Enter it",
+            "how": "wait",
+            "text": {
+              "takes": "Nothing but the bracket.",
+              "from": "Nobody.",
+              "gives": "The Moment, stamped clean, on its day.",
+              "hero": "Is in the bracket.",
+              "written": "Entered the Cup."
+            }
+          },
+          "dirty": {
+            "id": "cause",
+            "name": "Fix it",
+            "how": "cause",
+            "cost": 5000,
+            "heat": 3,
+            "dread": 1,
+            "needs": {
+              "line": "grey"
+            },
+            "text": {
+              "takes": "The Book racket, at scale: every match. ₽5,000.",
+              "from": "Every trainer in the bracket.",
+              "gives": "The Moment, tomorrow, stamped not clean.",
+              "hero": "Loses a match they should've won.",
+              "written": "Fixed the Cup."
+            },
+            "tags": [
+              "fire"
+            ]
+          }
+        }
+      },
+      "status": "supported"
+    },
+    {
+      "id": "wonder",
+      "name": "The Waking",
+      "says": "The run's own Legend, called.",
+      "pieces": {
+        "means": "a rite",
+        "place": "its site",
+        "key": "its Signs",
+        "moment": "its hour"
+      },
+      "faint": "A rite learned from the people who keep it, an invitation up the mountain, Signs earned one trial at a time, and an hour nobody forced.",
+      "sentences": [
+        {
+          "at": 0,
+          "text": "We're looking for something old."
+        },
+        {
+          "at": 20,
+          "text": "We know where it sleeps."
+        },
+        {
+          "at": 60,
+          "text": "We're going to wake it."
+        },
+        {
+          "at": 80,
+          "text": "We're going to wake it on Thursday. Chidi wants to know if you've decided what to say."
+        }
+      ],
+      "legends": [
+        "articuno",
+        "zapdos",
+        "moltres"
+      ],
+      "ground": {
+        "text": "Digs, doubled by the Creed",
+        "sources": [
+          {
+            "kind": "dig",
+            "pct": 0
+          }
+        ]
+      },
+      "parts": {
+        "means": {
+          "what": "A machine, or a rite",
+          "clean": {
+            "id": "rite",
+            "name": "A rite: learned",
+            "how": "job",
+            "days": 3,
+            "needs": {
+              "regard": 3
+            },
+            "text": {
+              "takes": "Three days of being a guest: a shrine's keepers, an old couple on a mountain.",
+              "from": "Nobody. They teach it, slowly.",
+              "gives": "The Means, stamped clean.",
+              "hero": "Meets the keepers too.",
+              "written": "Learned the rite from the people who keep it."
+            }
+          },
+          "dirty": {
+            "id": "machine",
+            "name": "A machine",
+            "how": "job",
+            "cost": 25000,
+            "days": 2,
+            "needs": {
+              "talents": [
+                "hands"
+              ]
+            },
+            "text": {
+              "takes": "₽25,000 and a Workshop. It hums. Then it doesn't.",
+              "from": "The Specialist, who sends shorter notes.",
+              "gives": "The Means, stamped not clean.",
+              "hero": "Hears it humming.",
+              "written": "Built a machine to call it."
+            }
+          },
+          "second": {
+            "id": "other",
+            "name": "The other one",
+            "how": "job",
+            "cost": 12000,
+            "days": 2,
+            "text": {
+              "takes": "Whichever wasn't lost, again. ₽12,000.",
+              "from": "Nobody.",
+              "gives": "The Means, again.",
+              "hero": "Doesn't notice.",
+              "written": "Made the Means a second time."
+            }
+          }
+        },
+        "place": {
+          "what": "Its site",
+          "clean": {
+            "id": "guest",
+            "name": "Go as a guest",
+            "how": "job",
+            "days": 1,
+            "needs": {
+              "regard": 5
+            },
+            "text": {
+              "takes": "Asked up, by the keepers or the Leader whose district it is.",
+              "from": "Nobody.",
+              "gives": "The Place, stamped clean.",
+              "hero": "Was asked up too, once.",
+              "written": "Went to the site as a guest."
+            }
+          },
+          "dirty": {
+            "id": "dig",
+            "name": "Dig",
+            "how": "dig",
+            "dig": "site",
+            "text": {
+              "takes": "A Dig at the Legend's own site. The game stops and asks if you're sure.",
+              "from": "{legend}, asleep.",
+              "gives": "The Place, stamped not clean.",
+              "hero": "Feels the ground shift.",
+              "written": "Dug into a Legend's sleeping place."
+            },
+            "tags": [
+              "dig",
+              "shrine"
+            ]
+          },
+          "second": {
+            "id": "secondSite",
+            "name": "A second site",
+            "how": "job",
+            "days": 2,
+            "text": {
+              "takes": "Every Legend has two. The weather's against the team there.",
+              "from": "Nobody.",
+              "gives": "The Place, again, stamped clean.",
+              "hero": "Doesn't notice.",
+              "written": "Went to the second site."
+            }
+          }
+        },
+        "key": {
+          "what": "Its Signs. All of them",
+          "clean": {
+            "id": "trial",
+            "name": "Earned: each has a trial",
+            "how": "job",
+            "days": 2,
+            "inPerson": true,
+            "status": "limited",
+            "text": {
+              "takes": "The Boss, in person: each Sign's trial.",
+              "from": "Nobody.",
+              "gives": "The Key, stamped clean.",
+              "hero": "Did the same trial last year.",
+              "written": "Earned the Signs, one trial at a time."
+            }
+          },
+          "dirty": {
+            "id": "taken",
+            "name": "Taken",
+            "how": "heist",
+            "heist": "sign",
+            "text": {
+              "takes": "A Sign, from where it's kept, by a heist. The Legend notices.",
+              "from": "A shrine, and its keeper, Ms. Haruko Ishida.",
+              "gives": "The Key, stamped not clean.",
+              "hero": "Visits the empty shrine.",
+              "written": "Took a Sign from a shrine."
+            },
+            "tags": [
+              "take",
+              "shrine",
+              "sign"
+            ]
+          },
+          "second": {
+            "id": "made",
+            "name": "Made: a Large Workshop",
+            "how": "job",
+            "cost": 15000,
+            "days": 3,
+            "text": {
+              "takes": "A copy, at a Workshop. Clean, and the Legend knows a copy from the thing.",
+              "from": "Nobody.",
+              "gives": "The Key, again, stamped clean.",
+              "hero": "Doesn't notice.",
+              "written": "Made a copy of the Signs."
+            }
+          }
+        },
+        "moment": {
+          "what": "Its hour",
+          "clean": {
+            "id": "wait",
+            "name": "Wait for it",
+            "how": "wait",
+            "text": {
+              "takes": "Nothing. It comes.",
+              "from": "Nobody.",
+              "gives": "The Moment, stamped clean, on its day.",
+              "hero": "Is watching the sky.",
+              "written": "Waited for its hour."
+            }
+          },
+          "dirty": {
+            "id": "cause",
+            "name": "Force it",
+            "how": "cause",
+            "cost": 3000,
+            "heat": 2,
+            "needs": {
+              "line": "grey"
+            },
+            "text": {
+              "takes": "A machine does this whether or not the Means was one. ₽3,000.",
+              "from": "{legend}, woken early.",
+              "gives": "The Moment, tomorrow, stamped not clean.",
+              "hero": "Feels it wake.",
+              "written": "Forced a Legend's hour."
+            },
+            "tags": [
+              "fire"
+            ]
+          }
+        }
+      },
+      "status": "supported"
+    },
+    {
+      "id": "belonging",
+      "name": "The Home",
+      "says": "A town that's yours. On every map. For good.",
+      "pieces": {
+        "means": "a charter",
+        "place": "a place nobody wanted",
+        "key": "a thousand names",
+        "moment": "a door"
+      },
+      "faint": "A charter that took all run, a place whose people said yes because they'd eaten in the Mess, a thousand names who came, and a door with nobody hiding behind it.",
+      "sentences": [
+        {
+          "at": 0,
+          "text": "We'd like somewhere."
+        },
+        {
+          "at": 20,
+          "text": "We're going to have somewhere."
+        },
+        {
+          "at": 60,
+          "text": "It's going to be on the map."
+        },
+        {
+          "at": 80,
+          "text": "When they come to take it back, we're going to stand in the door. Mrs. Adeyemi's baked."
+        }
+      ],
+      "ground": {
+        "text": "Works: each one done",
+        "sources": [
+          {
+            "kind": "work",
+            "pct": 2
+          }
+        ]
+      },
+      "parts": {
+        "means": {
+          "what": "A charter",
+          "clean": {
+            "id": "apply",
+            "name": "Apply for one",
+            "how": "job",
+            "cost": 2000,
+            "days": 3,
+            "status": "limited",
+            "text": {
+              "takes": "A form, a hearing in person, a signature. ₽2,000 in fees. It takes all run.",
+              "from": "Nobody. The clerk's a local with a want.",
+              "gives": "The Means, stamped clean.",
+              "hero": "Signs the petition.",
+              "written": "Applied for a charter, properly."
+            }
+          },
+          "dirty": {
+            "id": "forge",
+            "name": "Forge one",
+            "how": "job",
+            "cost": 1500,
+            "days": 1,
+            "needs": {
+              "line": "grey"
+            },
+            "text": {
+              "takes": "A day. ₽1,500. It'll hold till somebody checks.",
+              "from": "Somebody checks at the Moment.",
+              "gives": "The Means, stamped not clean.",
+              "hero": "Doesn't notice. Yet.",
+              "written": "Forged a charter."
+            },
+            "tags": [
+              "forgeryInPerson"
+            ]
+          },
+          "second": {
+            "id": "squat",
+            "name": "Squatter's rights",
+            "how": "job",
+            "days": 2,
+            "text": {
+              "takes": "Ten years. An epilogue.",
+              "from": "Nobody.",
+              "gives": "The Means, again.",
+              "hero": "Doesn't notice.",
+              "written": "Claimed squatter's rights."
+            }
+          }
+        },
+        "place": {
+          "what": "A place nobody wanted",
+          "clean": {
+            "id": "ask",
+            "name": "Ask who's already there",
+            "how": "job",
+            "days": 1,
+            "needs": {
+              "warm": 2
+            },
+            "text": {
+              "takes": "Four or five people, asked. They say yes if they've eaten with the team: two locals at Warm.",
+              "from": "Nobody. They said yes.",
+              "gives": "The Place, stamped clean.",
+              "hero": "Knows one of them.",
+              "written": "Asked the people already there, and they said yes."
+            }
+          },
+          "dirty": {
+            "id": "clear",
+            "name": "Clear them out",
+            "how": "job",
+            "days": 1,
+            "heat": 3,
+            "dread": 2,
+            "needs": {
+              "line": "grey"
+            },
+            "text": {
+              "takes": "A morning. Their things in the road.",
+              "from": "The same people the team's made of: Mr. Kwame Boateng and his sister.",
+              "gives": "The Place, stamped not clean.",
+              "hero": "Helps carry their things.",
+              "written": "Cleared people out of the place nobody wanted."
+            },
+            "tags": [
+              "takePoor",
+              "loudHome"
+            ]
+          },
+          "second": {
+            "id": "another",
+            "name": "Another",
+            "how": "job",
+            "days": 1,
+            "text": {
+              "takes": "There's always another.",
+              "from": "Nobody.",
+              "gives": "The Place, again.",
+              "hero": "Doesn't notice.",
+              "written": "Found another place."
+            }
+          }
+        },
+        "key": {
+          "what": "A thousand names",
+          "clean": {
+            "id": "earned",
+            "name": "Earned",
+            "how": "count",
+            "text": {
+              "takes": "Every local at Warm, every Grunt who left with a handshake, everyone fed. The game's been counting since day 1.",
+              "from": "Nobody. They came.",
+              "gives": "The Key, stamped clean, when the count reaches the need.",
+              "hero": "Is one of the names.",
+              "written": "A thousand names, every one of them real."
+            }
+          },
+          "dirty": {
+            "id": "list",
+            "name": "A list, bought",
+            "how": "job",
+            "cost": 5000,
+            "days": 1,
+            "text": {
+              "takes": "₽5,000. A thousand names. None of them come.",
+              "from": "A printer in {town}.",
+              "gives": "The Key, stamped not clean.",
+              "hero": "Looks for their name on it. It's there. They never signed.",
+              "written": "Bought a list of a thousand names."
+            },
+            "tags": [
+              "bribe"
+            ]
+          }
+        },
+        "moment": {
+          "what": "When they try to take it back",
+          "clean": {
+            "id": "wait",
+            "name": "Stand",
+            "how": "wait",
+            "text": {
+              "takes": "Nothing. The door's off.",
+              "from": "Nobody.",
+              "gives": "The Moment, stamped clean, on its day.",
+              "hero": "Stands with them.",
+              "written": "Stood in the door."
+            }
+          },
+          "dirty": {
+            "id": "cause",
+            "name": "Hide",
+            "how": "cause",
+            "dread": 1,
+            "text": {
+              "takes": "Lock the door. Somebody has to put it back on.",
+              "from": "Whoever's left outside.",
+              "gives": "The Moment, tomorrow, stamped not clean.",
+              "hero": "Knocks.",
+              "written": "Hid behind a locked door."
+            },
+            "tags": [
+              "fire"
+            ]
+          }
+        }
+      },
+      "status": "supported"
+    },
+    {
+      "id": "spite",
+      "name": "The Fall",
+      "says": "One person. Brought down. In public.",
+      "pieces": {
+        "means": "proof",
+        "place": "their stage",
+        "key": "someone they trusted",
+        "moment": "their best day"
+      },
+      "faint": "Dull true proof, an invitation onto their stage, a person who came forward by themselves, and the same best day either way.",
+      "sentences": [
+        {
+          "at": 0,
+          "text": "We remember what they did."
+        },
+        {
+          "at": 20,
+          "text": "We can prove what they did."
+        },
+        {
+          "at": 60,
+          "text": "Everyone's going to know what they did."
+        },
+        {
+          "at": 80,
+          "text": "On their best day. Kofi asks if anyone else is on the Wall."
+        }
+      ],
+      "ground": {
+        "text": "proof: each true thing found",
+        "sources": [
+          {
+            "kind": "truth",
+            "pct": 4
+          }
+        ]
+      },
+      "parts": {
+        "means": {
+          "what": "Proof",
+          "clean": {
+            "id": "true",
+            "name": "True",
+            "how": "dig",
+            "dig": "archive",
+            "text": {
+              "takes": "A Dig of papers. It's dull and it's unanswerable.",
+              "from": "Nobody who didn't do it.",
+              "gives": "The Means, stamped clean.",
+              "hero": "Reads it. Goes quiet.",
+              "written": "Found the truth."
+            }
+          },
+          "dirty": {
+            "id": "made",
+            "name": "Made",
+            "how": "job",
+            "cost": 2000,
+            "days": 2,
+            "needs": {
+              "line": "grey"
+            },
+            "text": {
+              "takes": "A forgery. It's better than the truth: it's got the Target saying the thing aloud.",
+              "from": "The Target, who didn't say it.",
+              "gives": "The Means, stamped not clean.",
+              "hero": "Believes it.",
+              "written": "Forged proof."
+            },
+            "tags": [
+              "forgeryInPerson"
+            ]
+          },
+          "second": {
+            "id": "witness",
+            "name": "The Witness, alone, on a stage",
+            "how": "job",
+            "days": 2,
+            "text": {
+              "takes": "Their word.",
+              "from": "The Witness.",
+              "gives": "The Means, again.",
+              "hero": "Listens.",
+              "written": "The Witness spoke."
+            }
+          },
+          "ledger": true
+        },
+        "place": {
+          "what": "Their stage",
+          "clean": {
+            "id": "invited",
+            "name": "Wait to be invited onto it",
+            "how": "job",
+            "days": 1,
+            "needs": {
+              "regard": 5
+            },
+            "text": {
+              "takes": "The Target invites the Boss. They think it's a reconciliation.",
+              "from": "Nobody.",
+              "gives": "The Place, stamped clean.",
+              "hero": "Is in the front row.",
+              "written": "Was invited onto their stage."
+            }
+          },
+          "dirty": {
+            "id": "take",
+            "name": "Take it",
+            "how": "job",
+            "days": 1,
+            "heat": 3,
+            "needs": {
+              "squads": 4
+            },
+            "text": {
+              "takes": "Squads at the doors.",
+              "from": "The audience.",
+              "gives": "The Place, stamped not clean.",
+              "hero": "Is stopped at the door.",
+              "written": "Took the stage by force."
+            },
+            "tags": [
+              "take"
+            ]
+          },
+          "second": {
+            "id": "street",
+            "name": "The street outside",
+            "how": "job",
+            "days": 1,
+            "text": {
+              "takes": "A crate and a crowd.",
+              "from": "Nobody.",
+              "gives": "The Place, again.",
+              "hero": "Doesn't notice.",
+              "written": "Spoke in the street outside."
+            }
+          }
+        },
+        "key": {
+          "what": "Somebody they trusted",
+          "clean": {
+            "id": "forward",
+            "name": "Who comes forward, themselves",
+            "how": "job",
+            "days": 2,
+            "needs": {
+              "regard": 4
+            },
+            "text": {
+              "takes": "They have to decide to. The Boss can ask once.",
+              "from": "Nobody. They decided.",
+              "gives": "The Key, stamped clean.",
+              "hero": "Can't forgive them. Then can.",
+              "written": "Somebody came forward."
+            }
+          },
+          "dirty": {
+            "id": "bought",
+            "name": "Who's bought, or frightened",
+            "how": "job",
+            "cost": 4000,
+            "days": 1,
+            "dread": 2,
+            "text": {
+              "takes": "A Pay; a Lean. ₽4,000.",
+              "from": "Their card's How it's written down: Made her betray him.",
+              "gives": "The Key, stamped not clean.",
+              "hero": "Knows her.",
+              "written": "Made her betray him."
+            },
+            "tags": [
+              "bribe",
+              "lean"
+            ]
+          }
+        },
+        "moment": {
+          "what": "Their best day",
+          "clean": {
+            "id": "wait",
+            "name": "Their best day",
+            "how": "wait",
+            "text": {
+              "takes": "It's the same either way: an award, a wedding, an opening.",
+              "from": "Them.",
+              "gives": "The Moment, on its day.",
+              "hero": "Was invited.",
+              "written": "Waited for their best day."
+            }
+          }
+        }
+      },
+      "status": "supported"
+    }
+  ],
+  "ledger": {
+    "id": "kanto-ledger",
+    "region": 0,
+    "from": 2,
+    "name": "The Ledger",
+    "says": "Take Rocket's books. Every name in Kanto's in them. So's what each owes.",
+    "supplies": {
+      "profit": "key",
+      "spite": "means",
+      "cause": "key"
+    },
+    "steps": [
+      {
+        "n": 1,
+        "name": "Learn there are books",
+        "clean": {
+          "name": "A Sit-Down",
+          "needs": {
+            "sitDown": 1
+          },
+          "text": "Giovanni mentions them himself: \"I keep a small book.\""
+        },
+        "dirty": {
+          "name": "Lux, at the Post",
+          "cost": 500,
+          "text": "A tip, bought at the Post office. ₽500."
+        }
+      },
+      {
+        "n": 2,
+        "name": "Find where",
+        "clean": {
+          "name": "Befriend a Rocket clerk",
+          "days": 4,
+          "text": "A clerk who's never been thanked. A Persuade, four days."
+        },
+        "dirty": {
+          "name": "Lean on the clerk",
+          "dread": 1,
+          "needs": {
+            "line": "grey"
+          },
+          "text": "He tells you. He doesn't sleep that night."
+        }
+      },
+      {
+        "n": 3,
+        "name": "Get them",
+        "clean": {
+          "name": "Ask him",
+          "needs": {
+            "truce": 1
+          },
+          "text": "At Truce or better. \"You want to read them? ...Sit there. Don't write anything down.\" An Evening in his office. Forty-three names."
+        },
+        "dirty": {
+          "name": "A heist on the Game Corner's back office",
+          "heist": "countRoom",
+          "heat": 3,
+          "war": 1,
+          "text": "Heat +3. Stance: War."
+        }
+      },
+      {
+        "n": 4,
+        "name": "Use them",
+        "clean": {
+          "name": "Forgive them",
+          "regard": 2,
+          "text": "Each name's a debt forgiven in the team's name. \"You've cost me a great deal of money and made me look generous. I don't know which annoys me more.\""
+        },
+        "dirty": {
+          "name": "Collect them",
+          "funds": 15000,
+          "dread": 1,
+          "text": "Each name's a debt collected: Funds, a great deal, and Dread +1."
+        }
+      }
+    ],
+    "status": "supported"
+  },
+  "heists": {
+    "plan": {
+      "in": [
+        {
+          "id": "hands",
+          "name": "Hands: a lock, a window, a duct",
+          "talent": "hands",
+          "odds": 80
+        },
+        {
+          "id": "guard",
+          "name": "A bought guard",
+          "cost": 2000,
+          "odds": 100,
+          "bribe": true
+        },
+        {
+          "id": "ticket",
+          "name": "A false ticket, a uniform, an invitation",
+          "talent": "voice",
+          "odds": 70
+        },
+        {
+          "id": "front",
+          "name": "The front, loudly",
+          "odds": 100,
+          "heat": 2,
+          "outBy": -20
+        }
+      ],
+      "out": [
+        {
+          "id": "wheels",
+          "name": "Wheels, at the kerb",
+          "talent": "wheels",
+          "odds": 80
+        },
+        {
+          "id": "safehouse",
+          "name": "A safehouse within two steps",
+          "safehouse": true,
+          "odds": 100
+        },
+        {
+          "id": "foot",
+          "name": "On foot",
+          "odds": 50
+        }
+      ],
+      "empty": {
+        "in": "No way in. You'll be going in by whatever's nearest.",
+        "out": "No way out. You'll be leaving by whatever's nearest."
+      }
+    },
+    "rooms": [
+      {
+        "id": "guard",
+        "name": "The guard",
+        "text": "A watchman with one Pokémon. A battle that mustn't be loud: win in three turns."
+      },
+      {
+        "id": "dog",
+        "name": "The dog",
+        "text": "Somebody's partner. It's got a name on its bowl: Biscuit."
+      },
+      {
+        "id": "lock",
+        "name": "The lock",
+        "text": "A door."
+      },
+      {
+        "id": "floor",
+        "name": "The floor",
+        "text": "Boards; tiles; a beam of light. One of three's quiet."
+      },
+      {
+        "id": "clerk",
+        "name": "The clerk",
+        "text": "Somebody working late who shouldn't be there. Not a battle."
+      },
+      {
+        "id": "crew",
+        "name": "The other crew",
+        "text": "The neighbour's, after the same thing."
+      }
+    ],
+    "thing": {
+      "name": "The thing",
+      "text": "The last room, and what's next to it: {beside}"
+    },
+    "noise": 3,
+    "guardTurns": 3,
+    "fail": {
+      "in": 2,
+      "early": 3
+    },
+    "list": [
+      {
+        "id": "museum",
+        "name": "The Museum",
+        "where": [
+          0,
+          1
+        ],
+        "takes": "A relic the Scheme needs",
+        "from": "A curator who's guarded it thirty years",
+        "gives": 10000,
+        "heat": 4,
+        "headline": "MUSEUM ROBBED: CURATOR'S THIRTY YEARS GONE IN A NIGHT",
+        "beside": "a photograph of the curator, younger, with the relic.",
+        "other": "Ask. She's wanted someone to care about it for thirty years. A Persuade, three days: and the Key's clean.",
+        "status": "supported",
+        "tags": [
+          "take"
+        ]
+      },
+      {
+        "id": "liner",
+        "name": "The Liner",
+        "where": [
+          2
+        ],
+        "takes": "A ship's strongroom, at sea",
+        "from": "Two hundred passengers",
+        "gives": 14000,
+        "heat": 5,
+        "headline": "LINER ROBBED AT SEA: 200 LOSE SAVINGS",
+        "beside": "a list of whose deposits these are.",
+        "other": "Buy a ticket. Win the tournament on B deck: ₽4,000.",
+        "status": "supported",
+        "tags": [
+          "take"
+        ]
+      },
+      {
+        "id": "lab",
+        "name": "The Lab",
+        "where": [
+          6
+        ],
+        "takes": "A Professor's prototype",
+        "from": "The region's Professor",
+        "gives": 0,
+        "ground": 5,
+        "heat": 3,
+        "headline": "LAB BREAK-IN: PROTOTYPE TAKEN",
+        "beside": "a note to a successor.",
+        "other": "Fund it. ₽6,000. The Professor names it after the team, and is mortified later.",
+        "status": "supported",
+        "tags": [
+          "take"
+        ]
+      },
+      {
+        "id": "vault",
+        "name": "The Vault",
+        "where": [],
+        "neighbour": true,
+        "takes": "The neighbour's own money",
+        "from": "Their Boss",
+        "gives": 12000,
+        "heat": 2,
+        "war": true,
+        "headline": "GANG FUNDS VANISH: POLICE SHRUG",
+        "beside": "a list headed \"Stock.\"",
+        "other": "A Truce. They pay to be left alone.",
+        "status": "limited",
+        "tags": [
+          "take"
+        ]
+      },
+      {
+        "id": "sign",
+        "name": "The Sign",
+        "where": [],
+        "creeds": [
+          "wonder"
+        ],
+        "takes": "A Legend's Sign, from where it's kept",
+        "from": "A shrine, and its keeper",
+        "gives": 0,
+        "heat": 3,
+        "notices": true,
+        "headline": "SHRINE ROBBED",
+        "beside": "the keeper's offering bowl, still warm.",
+        "other": "Earn it. Each Sign has a trial. The Key's clean.",
+        "status": "supported",
+        "tags": [
+          "take",
+          "shrine",
+          "sign"
+        ]
+      },
+      {
+        "id": "countRoom",
+        "name": "The Count Room",
+        "where": [
+          3
+        ],
+        "takes": "A Game Corner's night's takings",
+        "from": "The neighbour, or a local with a licence",
+        "gives": 8000,
+        "heat": 3,
+        "headline": "GAME CORNER COUNT ROOM HIT",
+        "beside": "the book, open, a column headed \"Stock\": forty-three.",
+        "other": "Win it: at the tables, straight, in person. ₽2,500 on a good night.",
+        "status": "supported",
+        "tags": [
+          "take"
+        ]
+      },
+      {
+        "id": "freight",
+        "name": "The Freight",
+        "where": [
+          5
+        ],
+        "takes": "A goods train between two towns",
+        "from": "A company; and whatever's aboard for the Scheme",
+        "gives": 7000,
+        "heat": 4,
+        "headline": "MAGNET TRAIN FREIGHT STOPPED AND EMPTIED",
+        "beside": "the driver's flask, and a photograph taped to the dial.",
+        "other": "Bid for the haulage (a Front): the freight's the team's to carry.",
+        "status": "supported",
+        "tags": [
+          "take"
+        ]
+      },
+      {
+        "id": "auction",
+        "name": "The Auction",
+        "where": [
+          3
+        ],
+        "takes": "The lot before it's sold",
+        "from": "An auction house; a seller who needed the money",
+        "gives": 11000,
+        "heat": 4,
+        "headline": "AUCTION LOT STOLEN THE NIGHT BEFORE SALE",
+        "beside": "the seller's letter: what the money was for.",
+        "other": "Bid. In person. It costs what it's worth.",
+        "status": "supported",
+        "tags": [
+          "take"
+        ]
+      },
+      {
+        "id": "gala",
+        "name": "The Gala",
+        "where": [
+          5
+        ],
+        "takes": "A room of jewels at a rich house, during a party",
+        "from": "Guests",
+        "gives": 13000,
+        "heat": 5,
+        "headline": "GALA GUESTS ROBBED: EVERYONE SAW A FACE",
+        "beside": "a dance card with the Boss's name on it.",
+        "other": "Be invited. Regard 6+: the Boss goes as a guest.",
+        "status": "supported",
+        "tags": [
+          "take"
+        ]
+      },
+      {
+        "id": "evidence",
+        "name": "The Evidence Room",
+        "where": [],
+        "takes": "The team's own file, from the station",
+        "from": "The detective",
+        "gives": 0,
+        "heat": 0,
+        "heatDown": 4,
+        "headline": "",
+        "beside": "the detective's own notes, in a careful hand.",
+        "other": "A lawyer (₽6,000). Half the list's struck, properly.",
+        "status": "limited",
+        "tags": [
+          "take"
+        ]
+      },
+      {
+        "id": "purse",
+        "name": "The Purse",
+        "where": [
+          4
+        ],
+        "takes": "A tournament's prize, before the final",
+        "from": "A League; the finalist who'd have won it",
+        "gives": 10000,
+        "heat": 4,
+        "regard": -2,
+        "headline": "TOURNAMENT PURSE STOLEN BEFORE FINAL",
+        "beside": "the finalist's name, engraved already.",
+        "other": "Enter. Win. It's the prize, and applause.",
+        "status": "supported",
+        "tags": [
+          "take"
+        ]
+      }
+    ],
+    "foes": {
+      "guard": [
+        "growlithe",
+        "machop",
+        "houndour"
+      ],
+      "dog": [
+        "growlithe",
+        "rockruff",
+        "houndour"
+      ],
+      "crew": [
+        "rattata",
+        "zubat",
+        "koffing"
+      ]
+    }
+  },
+  "digs": {
+    "tags": [
+      {
+        "match": "quarry",
+        "tag": "quarry"
+      },
+      {
+        "match": "pits",
+        "tag": "quarry"
+      },
+      {
+        "match": "cave",
+        "tag": "cave"
+      },
+      {
+        "match": "Diglett",
+        "tag": "cave"
+      },
+      {
+        "match": "Seafoam",
+        "tag": "cave"
+      },
+      {
+        "match": "mansion",
+        "tag": "ruin"
+      },
+      {
+        "match": "tower",
+        "tag": "eerie"
+      },
+      {
+        "match": "cellar",
+        "tag": "eerie"
+      },
+      {
+        "match": "tide",
+        "tag": "tide"
+      },
+      {
+        "match": "sea wall",
+        "tag": "tide"
+      },
+      {
+        "match": "breakwater",
+        "tag": "tide"
+      },
+      {
+        "match": "shore",
+        "tag": "tide"
+      },
+      {
+        "match": "dry dock",
+        "tag": "tide"
+      },
+      {
+        "match": "volcano",
+        "tag": "crater"
+      },
+      {
+        "match": "lava",
+        "tag": "crater"
+      }
+    ],
+    "days": 3,
+    "wonderDouble": true,
+    "putBack": {
+      "regard": 1,
+      "loyalty": 1
+    },
+    "list": [
+      {
+        "id": "ruin",
+        "name": "The Ruin",
+        "on": [
+          "cave",
+          "eerie"
+        ],
+        "ground": 10,
+        "found": "Writing on a wall. It's a warning: \"...not for taking. For keeping ...those who come after: leave it sleeping.\"",
+        "status": "supported",
+        "tags": [
+          "dig"
+        ]
+      },
+      {
+        "id": "fossil",
+        "name": "The Fossil Bed",
+        "on": [
+          "quarry"
+        ],
+        "funds": 2000,
+        "found": "A fossil, and whoever was there when it woke. It imprints on them.",
+        "status": "limited",
+        "tags": [
+          "dig"
+        ]
+      },
+      {
+        "id": "sealed",
+        "name": "The Sealed Door",
+        "on": [
+          "town"
+        ],
+        "ground": 15,
+        "found": "It was sealed from the inside. There's a room. There's a chair. There's a ledger, in a hand a century older.",
+        "status": "supported",
+        "tags": [
+          "dig"
+        ]
+      },
+      {
+        "id": "wreck",
+        "name": "The Wreck",
+        "on": [
+          "tide"
+        ],
+        "funds": 6000,
+        "found": "A ship's log. A name. Somebody in the district's descended. They'd like the log.",
+        "status": "supported",
+        "tags": [
+          "dig"
+        ]
+      },
+      {
+        "id": "site",
+        "name": "The Site",
+        "on": [
+          "cave",
+          "eerie",
+          "crater"
+        ],
+        "creeds": [
+          "wonder"
+        ],
+        "part": "place",
+        "confirm": true,
+        "found": "The Legend. Asleep.",
+        "status": "supported",
+        "tags": [
+          "dig",
+          "shrine"
+        ]
+      },
+      {
+        "id": "archive",
+        "name": "The Archive",
+        "on": [
+          "ruin",
+          "town"
+        ],
+        "creeds": [
+          "spite",
+          "cause"
+        ],
+        "part": "key",
+        "truth": true,
+        "found": "It's about more people than the Target. One of them's on the Roster.",
+        "status": "supported",
+        "tags": [
+          "dig"
+        ]
+      },
+      {
+        "id": "mine",
+        "name": "The Old Mine",
+        "on": [
+          "quarry",
+          "cave"
+        ],
+        "ground": 5,
+        "funds": 3000,
+        "found": "The reason it was closed, in the foreman's last entry.",
+        "status": "supported",
+        "tags": [
+          "dig"
+        ]
+      },
+      {
+        "id": "barrow",
+        "name": "The Barrow",
+        "on": [
+          "eerie"
+        ],
+        "ground": 10,
+        "shrine": true,
+        "found": "What's inside's somebody's. It's looked at, drawn, and left: or it isn't.",
+        "status": "supported",
+        "tags": [
+          "dig",
+          "shrine"
+        ]
+      },
+      {
+        "id": "cistern",
+        "name": "The Cistern",
+        "on": [
+          "town"
+        ],
+        "fills": "in",
+        "found": "Somebody's living down there. They mend things people throw away.",
+        "status": "limited",
+        "tags": [
+          "dig"
+        ]
+      },
+      {
+        "id": "rubble",
+        "name": "The Lab Under the Rubble",
+        "on": [
+          "ruin"
+        ],
+        "ground": 5,
+        "found": "Notes. What was made here.",
+        "status": "supported",
+        "tags": [
+          "dig"
+        ]
+      },
+      {
+        "id": "seabed",
+        "name": "The Seabed",
+        "on": [
+          "tide"
+        ],
+        "ground": 10,
+        "funds": 2000,
+        "found": "A chamber with an air pocket and writing in dots. Somebody's been here and didn't touch it.",
+        "status": "supported",
+        "tags": [
+          "dig"
+        ]
+      },
+      {
+        "id": "meteor",
+        "name": "The Meteor",
+        "on": [
+          "crater"
+        ],
+        "ground": 5,
+        "found": "It hums. One Grunt's Pokémon won't go back in its ball for a day.",
+        "status": "limited",
+        "tags": [
+          "dig"
+        ]
+      }
+    ],
+    "notes": {
+      "eyes": [
+        "We're through the first chamber. There's carving, floor to ceiling. It's going to take longer than you want it to and I'd ask you to let it.",
+        "Second chamber. The carving changes. It's the same hand but faster. I think they were in a hurry.",
+        "Found it. Come and look."
+      ],
+      "hands": [
+        "Got the door open. Hinges were bronze. Put them in a bag, labelled.",
+        "There's a second door. Sealed. Not locked: sealed. Different job.",
+        "It's open."
+      ],
+      "doubts": [
+        "We're in. I've been reading the wall. I'm not sure we should be reading the wall.",
+        "It says not to. I'm fairly sure now. It says it several ways.",
+        "It's open. I didn't open it. I watched."
+      ],
+      "after": {
+        "eyes": "...",
+        "hands": "We should put it back.",
+        "doubts": "No note. They're at the Office door at Night."
+      }
+    }
+  }
+}

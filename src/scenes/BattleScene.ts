@@ -4475,6 +4475,13 @@ export class BattleScene extends Phaser.Scene {
       await this.finishStepInDuel(result.stepIn, result.run);
       return;
     }
+    if (result.evilFight) {
+      // Evil Mode (slice 5): a battle the day waited on. The run goes on either way; back to the day.
+      for (const line of result.evilFight.lines) await this.say(line);
+      await exitWipe(this, this.motion, this.wipeMask());
+      this.scene.start(sceneForRun(result.run));
+      return;
+    }
     if (result.clubLost) {
       await this.say('The match is over. Your team is patched up: no hard feelings.');
       await exitWipe(this, this.motion, this.wipeMask());

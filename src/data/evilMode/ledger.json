@@ -1,0 +1,68 @@
+{
+  "note": "Evil Mode slice 3: the Honest Card's thirteen fields (design Part 12 section 1.1, in its order), the Ledger's grammar (Part 25a section 5), the Ledger's tabs (Part 29 section 8) and what adds to Given and Taken (Part 23 section 8.2). Templates fill {to} (who or where, with the street), {amount}, {fair}. Every job's Card is assembled from these; none is hand-written yet.",
+  "fields": ["The name", "Takes", "From", "Gives", "Moves", "Odds", "Who's going", "Who won't", "Holds or turns", "The Hero", "Not known", "How it's written down", "The other way"],
+  "written": {
+    "scout": "Looked at {to}.",
+    "persuade": "Asked {to} to pay {amount} a day. They said yes.",
+    "persuadeFavour": "Asked {to} for a favour. They said yes.",
+    "persuadeUnknown": "Asked {to} to pay a share. They said yes.",
+    "persuadeRooms": "Asked {to} for the rooms. They said yes.",
+    "payFair": "Paid {to} {amount}. A fair price.",
+    "payUnder": "Paid {to} {amount}. Under the price.",
+    "outplay": "Beat {to}, fairly.",
+    "outplayGround": "Beat the wild Pokémon at {to}, fairly.",
+    "went": "It went.",
+    "didnt": "It didn't go.",
+    "calledOff": "Called off.",
+    "wages": "Paid wages: {amount} to {heads}.",
+    "shares": "Paid shares: {amount} to {heads}.",
+    "short": "Paid what there was: {amount} to {heads}.",
+    "waive": "Let off. {to}. Until the district's done.",
+    "halve": "Halved. {to}. {amount} a day, from {fair}.",
+    "ask": "Asked about {to}."
+  },
+  "card": {
+    "takes": {
+      "scout": "Nothing. An afternoon of looking.",
+      "persuade": "{amount} a day, by agreement.",
+      "persuadeFavour": "A favour, by agreement.",
+      "persuadeRooms": "The rooms, by agreement.",
+      "persuadeNothing": "Their word. Nothing in money.",
+      "pay": "Nothing from them. You pay {amount}.",
+      "outplay": "The ground, by a fair battle.",
+      "outplayLocal": "Their say on the street, by a fair battle."
+    },
+    "from": {
+      "nobody": "Nobody.",
+      "local": "{to}, who clears about {earns} a day.",
+      "localNothing": "{to}.",
+      "notScouted": "Somebody at step {step}. Not scouted.",
+      "place": "Nobody. {to} is nobody's yet."
+    },
+    "gives": {
+      "scout": "What's known about step {step} and what touches it within {reach} steps.",
+      "money": "{amount} a day from tomorrow.",
+      "favour": "A favour, not money.",
+      "rooms": "A safehouse. Rent {rent} a day.",
+      "ground": "Ground on the road. It counts toward holding the district.",
+      "notKnown": "Not known yet."
+    },
+    "holds": { "holds": "Holds.", "turns": "Turns. Under their price, it would go back.", "nothing": "Nothing to hold." },
+    "hero": "Nobody's on the road yet.",
+    "wont": "Nobody.",
+    "notKnownNone": "Nothing. Every field is known.",
+    "clean": "This is it.",
+    "underPrice": "Pay the fair price: {fair}. It holds.",
+    "lead": "(lead)",
+    "unseen": "Confirmed without looking.",
+    "day": "1 day"
+  },
+  "count": { "wageHead": 1, "waive": 1 },
+  "ask": [
+    "{who}? Pays on the day. Brings it himself. Wants {want}",
+    "{who}? Never late. Mentioned, twice, that they want {want}",
+    "{who}? Pays. Doesn't talk much. When they do, it's about {want}"
+  ],
+  "tabs": ["Today", "The run", "By person", "Given and Taken"],
+  "givenTaken": "Kept since the Founding. Printed side by side and not compared."
+}

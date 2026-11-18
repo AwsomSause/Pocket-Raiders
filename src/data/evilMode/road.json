@@ -1,0 +1,339 @@
+{
+  "note": "Evil Mode slice 12, the other three on the road and the mother's letters (design Part 20 sections 1 to 8). The Road Four: the Hero and three more, made from the run's seed at founding, kept as rival records (run.story.rivals) for the whole run. Each walks one line a day. They can be helped, talked to or misled; never Leaned on, Taken from, posted against or hired: every lock that covers the Hero covers all four. Discouraged means they go home; the record stays. Text is data; numbers are starting values, none playtested.",
+  "on": true,
+  "roles": {
+    "rival": {
+      "word": "The Rival",
+      "ids": "evil-rival",
+      "personalities": [
+        "champion-chaser",
+        "bitter-challenger",
+        "prodigy",
+        "protector"
+      ],
+      "how": "Better than the Hero. A day ahead, always.",
+      "canon": {
+        "Kanto": {
+          "name": "Blue",
+          "who": "The Professor's grandson. Smug. A day ahead and tells everyone.",
+          "look": "trainer.pr/rich_kid_m"
+        }
+      },
+      "reasons": {
+        "beat": "\"They flattened my teacher and didn't even take the Badge.\"",
+        "buy": "\"I won that Badge and it's worth *nothing.*\"",
+        "bend": "\"She told me to ask them. I don't ask. I win.\"",
+        "none": "\"Somebody's in the way of the League. I'm going round them.\""
+      },
+      "home": "The Rival's gone home.",
+      "lines": [
+        {
+          "text": "Took the Badge at dawn. Didn't stay for the photograph.",
+          "when": "badge"
+        },
+        {
+          "text": "Waited at the route gate for forty minutes. Looking back down the road. Left."
+        },
+        {
+          "text": "Asked the Gym's stand-in where the real Leader is. Didn't like the answer.",
+          "when": "replaced"
+        },
+        {
+          "text": "Is training on the ridge. Alone. Hard."
+        },
+        {
+          "text": "At the League gate, a region early. Was told to come back with eight."
+        },
+        {
+          "text": "Beat a trainer on the route in three turns. Told them what they did wrong."
+        },
+        {
+          "text": "Passed the Hero on the road without stopping. Then stopped."
+        },
+        {
+          "text": "Bought the best Potions in town. Didn't share."
+        },
+        {
+          "text": "Was seen reading a map of the district. Upside down. Fixed it before anyone laughed."
+        },
+        {
+          "text": "Sent the Hero a postcard: \"Slow.\" Nothing else."
+        },
+        {
+          "text": "Asked a local about the team. Wrote nothing down. Remembered all of it."
+        },
+        {
+          "text": "Slept at the Pokémon Centre. Up first. Gone before breakfast."
+        }
+      ],
+      "talk": {
+        "where": "At a route gate, waiting for the Hero.",
+        "says": "\"You're not the Hero. You're just always where they're going.\" A look. \"Tell whoever you work for I'm not coming to their building. I'm going to the League. They can have the kid.\""
+      },
+      "help": "A Berry's left on the wall where they'll pass. They step over it. Then they come back for it.",
+      "mislead": "\"Wrong. I asked twice.\" They go the right way, and they'll tell the Hero who sent them the wrong one."
+    },
+    "friend": {
+      "word": "The Friend",
+      "ids": "evil-friend",
+      "personalities": [
+        "enthusiast",
+        "protector",
+        "underdog"
+      ],
+      "how": "From the corner of the home street. Not very good. Likes everybody. A day behind.",
+      "reasons": {
+        "cousin": "\"Somebody from our street's in it. I'm going to check they're eating.\"",
+        "none": "\"I'm going because they're going. Somebody's got to.\""
+      },
+      "home": "The Friend's gone back. Their family's shop.",
+      "lines": [
+        {
+          "text": "Had the soup. Asked for the recipe. Nobody would give it.",
+          "when": "mess"
+        },
+        {
+          "text": "Walked with one of yours as far as the bridge. They were meant to be on post."
+        },
+        {
+          "text": "Carried a letter. Didn't read it. *Nearly* read it."
+        },
+        {
+          "text": "Lost to a Grunt. Thanked her. She's been quiet since."
+        },
+        {
+          "text": "Told the Hero the kitchen's nice. The Hero didn't want to hear it.",
+          "when": "mess"
+        },
+        {
+          "text": "Stopped at every holding. Said hello at every one."
+        },
+        {
+          "text": "Asked one of your Grunts how they were. They said fine. They weren't."
+        },
+        {
+          "text": "Bought sweets for everyone at the Pokémon Centre. Ran out of money."
+        },
+        {
+          "text": "Got lost. Got found. Didn't mind either."
+        },
+        {
+          "text": "Wrote home. Three pages. Mostly about a Pidgey."
+        },
+        {
+          "text": "Sat outside the Gym all afternoon cheering for whoever was inside."
+        },
+        {
+          "text": "Shared lunch with the Stray. Traded half a sandwich for a drawing."
+        }
+      ],
+      "talk": {
+        "where": "In the Mess, if there's a Mess; at the door, if there isn't.",
+        "says": "\"I don't know who you are. You're always about.\" A big smile. \"D'you want me to give them something? I'll take anything. I'm going that way.\""
+      },
+      "help": "They take everything and say thanks to the air.",
+      "mislead": "They believe you completely, and tell the Hero all of it, and who said it."
+    },
+    "stray": {
+      "word": "The Stray",
+      "ids": "evil-stray",
+      "personalities": [
+        "strategist",
+        "underdog",
+        "idealist"
+      ],
+      "how": "Not after Badges. An assistant with a Pokédex. Off the road.",
+      "reasons": {
+        "take": "\"There should be a Pokémon on this route. There's a kennel and a bowl and nothing in it.\"",
+        "none": "\"I've got a Pokédex and it's mostly empty. That's all.\""
+      },
+      "home": "The Stray's gone home.",
+      "lines": [
+        {
+          "text": "Off the road. Following something small."
+        },
+        {
+          "text": "Found a kennel. And a bowl. Wrote \"empty\" and underlined it.",
+          "when": "take"
+        },
+        {
+          "text": "Slept in a barn. The farmer's one you Leaned on. They talked till late.",
+          "when": "lean"
+        },
+        {
+          "text": "Filled in a page. Showed it to a Grunt. The Grunt helped with the spelling."
+        },
+        {
+          "text": "Sat by a pond for a whole day. Saw one Poliwag. Was delighted."
+        },
+        {
+          "text": "Drew the Gym from the outside. Every window."
+        },
+        {
+          "text": "Asked a local what used to live here. Wrote down the whole answer."
+        },
+        {
+          "text": "Found tracks. Followed them. They went to a van."
+        },
+        {
+          "text": "Was chased off a field by a farmer. Came back at night with a torch."
+        },
+        {
+          "text": "Swapped notes with the Hero. The Hero got the better half."
+        },
+        {
+          "text": "Lost their pencil. Borrowed one off a Grunt. Gave it back."
+        },
+        {
+          "text": "Counted the Pidgey on the wire. Twice. Different number."
+        }
+      ],
+      "talk": {
+        "where": "At the fence of whatever they've found.",
+        "says": "They hold up a page with a drawing on it. \"Is this yours?\""
+      },
+      "help": "A lift to somewhere a rare Pokémon lives. You know where: the team scouted it.",
+      "mislead": "It doesn't work. They weren't following the trail. They were following a Pidgey."
+    }
+  },
+  "names": [
+    {
+      "name": "Sunny Okafor",
+      "look": "trainer.pr/school_kid_f",
+      "raisedBy": "Mr Okafor, who keeps the corner shop"
+    },
+    {
+      "name": "Pim Haldane",
+      "look": "trainer.pr/camper_m",
+      "raisedBy": "Mrs Haldane, a nurse"
+    },
+    {
+      "name": "Lettie Marsh",
+      "look": "trainer.pr/youngster_f",
+      "raisedBy": "her grandad, a ferryman"
+    },
+    {
+      "name": "Oskar Reyes",
+      "look": "trainer.pr/school_kid_m",
+      "raisedBy": "his aunt, who teaches"
+    },
+    {
+      "name": "Ada Finch",
+      "look": "trainer.pr/camper_f",
+      "raisedBy": "the Finches, who farm"
+    },
+    {
+      "name": "Teo Brannigan",
+      "look": "trainer.pr/rich_kid_f",
+      "raisedBy": "his mum, a postwoman"
+    }
+  ],
+  "board": {
+    "title": "The other three",
+    "none": "Nobody else on the road yet.",
+    "gap": "The wall's got a gap where {name} would be."
+  },
+  "approach": {
+    "rival": "The Rival arrives at noon. Stands, doesn't sit. \"D'you want me to do it? I'm better than you.\" \"I know. No.\" \"...Fine. I'll be here.\"",
+    "friend": "The Friend goes in. Comes out with soup. \"They said you can have some. The cook did. I didn't ask the one in charge.\"",
+    "stray": "The Stray draws the building. It's got every window. One has someone standing in it."
+  },
+  "mother": {
+    "start": "wary",
+    "lines": {
+      "warm": "...and the new people have mended something on our street. I know what they are. I'm not a fool. But nobody else had looked at it. I don't know what to tell you. Be careful. Eat properly.",
+      "easy": "...there's a team in the town now. They're polite. They pay for what they take in the shop, which is more than the last lot. Your uncle doesn't like them. He doesn't like anyone. Wear your scarf.",
+      "wary": "...I'd rather you didn't come home just yet. It's nothing. There are some people about. I've started locking the door at night, which I've never had to. I'm fine. Don't worry. Don't come.",
+      "sullen": "...they were on our street. I won't write what happened. I went round with soup and they wouldn't come to the door. *I want you to stay away from these people.* I mean it. Get your Badges and go to the League and tell someone who can do something."
+    },
+    "news": "This district, on the street: {news}",
+    "noNews": "Nothing's happened on the street. It's been quiet. I don't trust it.",
+    "steamed": "The last one came with the flap gone soft. Someone's reading these. Hello, whoever you are. {they}'s eleven.",
+    "reply": {
+      "0": "In the envelope, folded small, their last letter home: \"I'm fine. The road's long. I've made a friend. Don't worry.\"",
+      "1": "In the envelope, folded small, their last letter home: \"I'm all right. I keep my hand on a Poké Ball at doors now. I'm still asking.\"",
+      "2": "In the envelope, folded small, their last letter home: \"I know what I'm doing. I'm going to the building at the end.\"",
+      "3": "In the envelope, folded small, their last letter home: \"Don't write about them being kind. I don't want to hear it.\"",
+      "4": "In the envelope, folded small, their last letter home, one line: \"I'm going straight there.\""
+    },
+    "none": "Nothing from Mum. She always writes.",
+    "sealed": "Letters: {n}. Sealed.",
+    "open": {
+      "title": "OPEN THE LETTER?",
+      "from": "It's from {mother} to her child.",
+      "warn": "It isn't addressed to you.",
+      "yes": "Open it",
+      "no": "Leave it",
+      "need": "Opening a letter needs a Large Listening Post."
+    },
+    "readBy": "Lux reads it aloud, and stops halfway. \"I'll do the rest in my head, if it's all the same.\"",
+    "young": "{name}: \"You're reading a child's post.\"",
+    "keep": {
+      "name": "Keep the next letter back",
+      "other": "The other way: let the post through. It's a letter.",
+      "need": "Only at Grey or Whatever it takes.",
+      "done": "The next letter won't arrive. Nothing about this pays."
+    },
+    "write": {
+      "openings": [
+        "\"Your child's well. I saw them on the road.\"",
+        "\"I'm sorry about what happened on your street.\"",
+        "\"What does your street need?\"",
+        "\"I'm the one they're coming for.\""
+      ],
+      "warm": [
+        "\"Thank you. I don't know why you'd tell me. I've read it four times. Were they eating? You don't say if they were eating.\"",
+        "\"I know you are. I saw who brought the flour round after. You might try not doing the thing, rather than being sorry. But I saw.\"",
+        "A list. It's practical. A drain. The lamp at the corner. \"And somebody to look in on the old man at the end, since you've got his dog.\"",
+        "A long letter. The longest she writes. It ends: \"I can't tell you what they'll do when they get there. I never could. They were always going to find the biggest thing in the room and walk at it. I'd ask you to be kind, but I think you'll be whatever you are. Have something hot ready. They forget to eat when they're upset.\""
+      ],
+      "wary": [
+        "\"Who is this? How d'you know my child? ...Are they well, though? Truly?\"",
+        "\"Are you. The one to tell lives at number nine. She's in.\"",
+        "\"For you to go.\"",
+        "\"Then I hope you've a good answer. They'll want one. They've wanted one for everything since they were three.\""
+      ],
+      "sullen": [
+        "\"I know who you are. Don't you write to me about my child as if you were a neighbour.\"",
+        "\"Sorry's a thing you say to someone's face. You know where she lives. You were there.\"",
+        "(No reply.)",
+        "\"Good.\""
+      ],
+      "once": "One letter a region. You've written this region.",
+      "night": "Write at Night."
+    }
+  },
+  "temper": {
+    "words": [
+      "Curious",
+      "Uneasy",
+      "Set",
+      "Angry",
+      "Past talking"
+    ],
+    "does": [
+      "Asks locals about the team. Will sit by a stranger's fire.",
+      "Keeps a hand on a Poké Ball at doors. Still asks.",
+      "Has decided. Polite, and not stopping.",
+      "Moves fast: three steps a day. Doesn't eat at Fronts.",
+      "Goes straight for the base."
+    ],
+    "why": {
+      "turned": "A holding on their road turned by a Lean or a Take.",
+      "street": "Something was done on their street.",
+      "proud": "Lost to a Grunt who gloated.",
+      "decent": "A Grunt was decent to them.",
+      "fire": "The fire: you listened more than you talked.",
+      "warm": "Their mother's letter was warm about the team.",
+      "sullen": "Their mother's letter was sullen.",
+      "noLetter": "No letter from home.",
+      "steamed": "Somebody's been reading their post.",
+      "pen": "They saw the Pen.",
+      "penOpen": "They saw the Pen with the latch off.",
+      "friendHome": "The Friend's gone home. All four heard why.",
+      "gate": "Somebody at the gate spoke for the team.",
+      "ask": "You told them to just walk in and ask."
+    },
+    "angrySteps": 3
+  }
+}

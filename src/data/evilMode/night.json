@@ -1,0 +1,610 @@
+{
+  "note": "Evil Mode slice 7, the Night (design Part 24a sections 1-2, Part 24c section 7, Part 25a section 4, Part 29 section 11, Part 30 section 3.10). The picker's rules and numbers, the first forty knocks with three answers each and every echo, Hear someone out with its five mood wrappers, and the Wall. Text is never in the save, only ids. Numbers are starting values; none are playtested. A knock whose needs wait on a later slice is 'disabled' and says which.",
+  "rules": {
+    "firstNight": [1, 2],
+    "quietWeight": 2,
+    "sunday": 7,
+    "corruptionSun": 2,
+    "shutReturns": 1,
+    "loyaltyBirthday": 5
+  },
+  "needs": [
+    { "id": "voicePersuaded", "live": true, "says": "A Voice talked someone round today" },
+    { "id": "lead", "live": true, "says": "A Lead on the Roster" },
+    { "id": "minor", "live": true, "says": "A minor on the Roster" },
+    { "id": "heldLocal", "live": true, "says": "A local who pays the team" },
+    { "id": "heat5", "live": true, "says": "Heat 5 or more" },
+    { "id": "heat6", "live": true, "says": "Heat 6 or more" },
+    { "id": "regard4", "live": true, "says": "Regard 4 or more" },
+    { "id": "loyalty9", "live": true, "says": "The team's Loyalty Devoted" },
+    { "id": "flag:handshake", "live": true, "says": "A handshake at knock 31" },
+    { "id": "pen", "live": false, "says": "A Pen", "waits": "the base (slice 10)" },
+    { "id": "lab", "live": false, "says": "A Lab", "waits": "the base (slice 10)" },
+    { "id": "front", "live": false, "says": "A Front", "waits": "the economy (slice 11)" },
+    { "id": "school", "live": false, "says": "A School or a Day-Care", "waits": "the economy (slice 11)" },
+    { "id": "messLarge", "live": false, "says": "The Mess at Large", "waits": "the base (slice 10)" },
+    { "id": "officer", "live": false, "says": "An Officer", "waits": "the disagreement and holding a district (slice 9)" },
+    { "id": "patron", "live": false, "says": "The Patron", "waits": "the Patron page (a later founding slice)" },
+    { "id": "take", "live": false, "says": "A Take", "waits": "Take (slice 14)" },
+    { "id": "flawFired", "live": false, "says": "Their flaw fired", "waits": "flaws firing as events (a later people slice)" },
+    { "id": "metHero", "live": false, "says": "Somebody met the Hero", "waits": "the Hero (slice 12)" },
+    { "id": "lostToHero", "live": false, "says": "Somebody lost to the Hero", "waits": "the Hero (slice 12)" },
+    { "id": "heroInMess", "live": false, "says": "The Hero let eat in the Mess", "waits": "the Hero and the Reckoning (slice 12)" },
+    { "id": "neighbour", "live": false, "says": "A neighbour", "waits": "a neighbour (slice 13)" },
+    { "id": "region2", "live": false, "says": "Region 2 or later", "waits": "a second region (slice 16)" },
+    { "id": "mole", "live": false, "says": "The mole", "waits": "the mole (a later slice)" },
+    { "id": "moleFound", "live": false, "says": "The mole, found", "waits": "the mole (a later slice)" },
+    { "id": "pokemonLead", "live": false, "says": "The command party's lead", "waits": "Bond in Evil Mode (a later slice)" }
+  ],
+  "flags": [
+    { "id": "firstLie", "shown": "{name} will remember that.", "readBy": "The courtroom (Part 23): the question the prosecution asks four times" },
+    { "id": "cameAfter", "shown": "{name} will remember you asked.", "readBy": "The Hand-Off (Part 23), if they're the heir" },
+    { "id": "creedAtDoors", "shown": "It's what the team says at a door now.", "readBy": "The Hero's first door (slice 12)" },
+    { "id": "headlineGuess", "shown": "The region's first headline will be a guess.", "readBy": "Headlines (Part 25)" },
+    { "id": "ferryFree", "shown": "The ferry's free for {name} this region.", "readBy": "The Crossing (slice 9)" },
+    { "id": "ledgerNames", "shown": "Every Ledger line has a name from now on.", "readBy": "The Speech (Part 22)" },
+    { "id": "ledgerAmounts", "shown": "The Ledger shows amounts. {name} keeps the names in a second book.", "readBy": "The Speech (Part 22)" },
+    { "id": "waiverOffered", "shown": "A waiver will be offered.", "readBy": "The Board's Cards (slice 11)" },
+    { "id": "garageFirst", "shown": "{name} will take the Garage when it's needed.", "readBy": "Specialists (slice 10)" },
+    { "id": "courtLine", "shown": "{name} will say it again, if it comes to it.", "readBy": "The courtroom (Part 23)" },
+    { "id": "frozeStory", "shown": "{name} will tell the next new Grunt the story.", "readBy": "Hiring (slice 9)" },
+    { "id": "notHouseCall", "shown": "The Card now knows: {name}, not a house call.", "readBy": "The Card's Who won't (Part 12)" },
+    { "id": "neverFreeze", "shown": "{name} won't freeze again.", "readBy": "The Reckoning's doors (slice 12)" },
+    { "id": "pitchTrue", "shown": "{name} will notice first if the Creed and the Ledger stop matching.", "readBy": "The endings (Part 23)" },
+    { "id": "doubtsSooner", "shown": "{name}'s doubts will come a job sooner.", "readBy": "Flaws firing (a later slice)" },
+    { "id": "moleSlip", "shown": "A dated slip in the mole file.", "readBy": "The mole (Part 11)" },
+    { "id": "eyesQuest", "shown": "{name}'s quest has its first thread.", "readBy": "Quests (Part 10c)" },
+    { "id": "frontMum", "shown": "{name}'s mum will come to the café.", "readBy": "Fronts (slice 11)" },
+    { "id": "mumLetter", "shown": "A letter's pinned by {name}'s bunk: “As long as you're eating.”", "readBy": "The walk out (Part 23)" },
+    { "id": "birthdays", "shown": "The Roster shows birthdays from now on.", "readBy": "The Roster (a later slice)" },
+    { "id": "squadNames", "shown": "Dispatch will show squad names.", "readBy": "Dispatch (a later slice)" },
+    { "id": "squadDoor", "shown": "The squad's name will be heard at their door.", "readBy": "The Reckoning (slice 12)" },
+    { "id": "squadFile", "shown": "The Hero's File has the squad's name anyway.", "readBy": "The File (slice 12)" },
+    { "id": "mapTable", "shown": "{name} has the map table.", "readBy": "The Map Room (slice 10)" },
+    { "id": "askAgainSeventeen", "shown": "{name} will ask again at seventeen.", "readBy": "Nobody yet: the run's not that long" },
+    { "id": "tobiFriend", "shown": "{name} has a friend on the Roster now.", "readBy": "Between them (Part 9 section 9)" },
+    { "id": "localNamed", "shown": "The man at the door's been named to them.", "readBy": "The Hero's walk (slice 12)" },
+    { "id": "notebookBlank", "shown": "The detective's notebook has a blank line.", "readBy": "The endings (Part 23)" },
+    { "id": "listDelayed", "shown": "The detective's list is a day behind.", "readBy": "The detective's list (Part 17)" },
+    { "id": "stationOnBoard", "shown": "Tomorrow's Board has “Walk into the station” on it.", "readBy": "The Raid (slice 10)" },
+    { "id": "summonsDiary", "shown": "It's in the diary, under “things we're not going to”.", "readBy": "The detective's list (Part 17)" },
+    { "id": "handshake", "shown": "A handshake. Their plate stays on the bunk.", "readBy": "Knock 32, and the courtroom (Part 23)" },
+    { "id": "asked31", "shown": "{name} unpacked.", "readBy": "The walk out (Part 23)" },
+    { "id": "voteCustom", "shown": "It's a custom now, on the Board in small letters.", "readBy": "The Board (a later slice)" },
+    { "id": "ballotTin", "shown": "The Common Room has a ballot tin.", "readBy": "The Common Room (slice 10)" },
+    { "id": "catLedger", "shown": "The cat's called Ledger.", "readBy": "The Office, every scene from now" },
+    { "id": "lookedDown", "shown": "A small figure, running. Nothing else.", "readBy": "Nobody. The game doesn't say who" },
+    { "id": "keptFor", "shown": "{name} will keep that one, whatever else.", "readBy": "The Hand-Off (Part 23)" },
+    { "id": "cantDismiss", "shown": "They can't be dismissed by an Executive alone.", "readBy": "Executives (Part 9 section 8)" },
+    { "id": "oathShort", "shown": "Their Oath will be a line shorter.", "readBy": "The Chair (Part 16)" },
+    { "id": "heroReason", "shown": "{name} has a reason now.", "readBy": "The Reckoning's doors (slice 12)" },
+    { "id": "potionShelf", "shown": "The Potion's on {name}'s shelf.", "readBy": "The Hero's walk (slice 12)" },
+    { "id": "fileLine", "shown": "The File's first page gains a line.", "readBy": "The File (slice 12)" },
+    { "id": "penCards", "shown": "The Pen's cards gain a line in {name}'s hand.", "readBy": "The Pen (slice 10)" },
+    { "id": "penSendHome", "shown": "The Pen can send one home.", "readBy": "The Pen (slice 10)" },
+    { "id": "penFirstCard", "shown": "The Pen's first card says Biscuit.", "readBy": "The Pen (slice 10)" },
+    { "id": "collarHome", "shown": "The owner finds it on the step at dawn.", "readBy": "The Pen (slice 10)" },
+    { "id": "patronStops", "shown": "The Patron will stop one job, once.", "readBy": "The Board (a later slice)" },
+    { "id": "patronAsks", "shown": "The Patron will ask again, about something worse.", "readBy": "The Night (a later slice)" },
+    { "id": "messSecond", "shown": "The Mess has a second.", "readBy": "The Mess (slice 10)" },
+    { "id": "whereBossEats", "shown": "Where the Boss eats is counted from tonight.", "readBy": "The heir's first day (Part 23)" },
+    { "id": "flawAsks", "shown": "{name} will ask next time.", "readBy": "Flaws (a later slice)" },
+    { "id": "offTheMoney", "shown": "{name}'s off the money.", "readBy": "The courtroom (Part 23)" },
+    { "id": "bottleDrawer", "shown": "The bottle's in the Office drawer.", "readBy": "Flaws (a later slice)" },
+    { "id": "coveredLedger", "shown": "The Ledger was covered, and nothing was said.", "readBy": "Between them (Part 9 section 9)" },
+    { "id": "doubtsHeard", "shown": "{name} will fill in Not known on Cards.", "readBy": "The Card (Part 12)" },
+    { "id": "heatArrow", "shown": "Heat's arrow will show it tomorrow, if it lands.", "readBy": "Heat (Part 5)" },
+    { "id": "pubList", "shown": "One name on the list is the detective's.", "readBy": "The detective (Part 17)" },
+    { "id": "constableWarns", "shown": "The constable will come with the warning.", "readBy": "The Raid (slice 10)" },
+    { "id": "standingPair", "shown": "They're a standing pair from now on.", "readBy": "Squads (Part 9 section 6)" },
+    { "id": "kindTalent", "shown": "The word Kind moves on {name}'s card, to the talent's side.", "readBy": "The courtroom (Part 23)" },
+    { "id": "canneryWork", "shown": "A Work will be offered: the cannery, paid.", "readBy": "Works (slice 11)" },
+    { "id": "motherSeen", "shown": "Her next letter has a line in it.", "readBy": "The letters (slice 12)" },
+    { "id": "motherWalk", "shown": "The Hero will arrive knowing one room.", "readBy": "The Hero (slice 12)" },
+    { "id": "childTaken", "shown": "The next Take's Card will say it.", "readBy": "The Card (Part 12)" },
+    { "id": "vaultKey", "shown": "Otis moves the Vault's key that night.", "readBy": "The mole (Part 11)" },
+    { "id": "labClose", "shown": "The long way back from Corruption starts.", "readBy": "Corruption (Part 5)" },
+    { "id": "windowSeen", "shown": "They've seen the window.", "readBy": "The last room (slice 12)" },
+    { "id": "heroMark", "shown": "A mark, the gentlest in the mode.", "readBy": "The Hero's marks (slice 12)" },
+    { "id": "heroCat", "shown": "They remember the cat.", "readBy": "The last room (slice 12)" },
+    { "id": "neighbourNote", "shown": "The neighbour's noted which.", "readBy": "Neighbours (slice 13)" },
+    { "id": "officeLead", "shown": "It sleeps in the Office from now on.", "readBy": "Every Office scene, and the last room" },
+    { "id": "backAgain", "shown": "They're back, at their old rank.", "readBy": "The Roster" }
+  ],
+  "wall": [
+    { "id": "mug", "what": "A mug, washed, on the desk", "kind": "desk", "from": "The first hire (knock 1)" },
+    { "id": "bottle", "what": "A bottle, in the desk drawer", "kind": "desk", "from": "Knock 19" },
+    { "id": "coat", "what": "A coat on the peg by the door. Nobody takes it", "kind": "desk", "from": "Somebody who left (knock 31)" },
+    { "id": "birthdayCard", "what": "A birthday card, signed by everyone", "kind": "thanks", "from": "A birthday (knock 12)" },
+    { "id": "crayon", "what": "The uniform, in crayon. The colours are right", "kind": "thanks", "from": "The mat (knock 37)" },
+    { "id": "bigHat", "what": "A drawing: the Boss, in a very large hat", "kind": "thanks", "from": "A child from the School (knock 30)" },
+    { "id": "summons", "what": "A summons. A date, a room and a name", "kind": "threat", "from": "The mat (knock 38)" },
+    { "id": "ledgerPage", "what": "The Ledger's first page, every name on it", "kind": "other", "from": "Books (knock 3)" },
+    { "id": "basketCard", "what": "A card: “Regards.”", "kind": "other", "from": "A neighbour (knock 28)" }
+  ],
+  "text": {
+    "door": "Somebody's at the door.",
+    "doorQuiet": "Nobody knocks tonight.",
+    "doorDone": "The door's shut. The corridor's quiet.",
+    "fireNight": "Nobody. The Boss sits alone.",
+    "notTonight": "(Not tonight.)",
+    "notTonightGone": "They go away.",
+    "cantShut": "This one can't be shut out.",
+    "nothingMoved": "Nothing moved.",
+    "answerFirst": "Somebody's at the door.",
+    "acted": "The night's one action is used.",
+    "noAction": "Answer the door first.",
+    "sleep": "Lights off early. Somebody's glad.",
+    "hearShut": "“Nothing. I'm fine. Was there something you wanted?”",
+    "hearWary": "(They watch how you take it.)",
+    "hearSullen": "(Flatly.)",
+    "hearPlain": "Nothing much. It was a day. I did it.",
+    "hearAsked": "About what you asked me. In the yard. I've not stopped turning it over.",
+    "takeDownGap": "The gap stays: a paler rectangle.",
+    "wallTitle": "The Wall",
+    "wallEmpty": "Nothing's up yet. It's still a wall.",
+    "officeTitle": "The Office",
+    "loyaltyUp": "{name} stands a little straighter.",
+    "loyaltyDown": "{name} looks past you.",
+    "moodTo": "{name}: {mood}.",
+    "statUp": "{stat} +1.",
+    "statDown": "{stat} −1.",
+    "onWall": "On the Wall: {what}.",
+    "left": "{name}'s gone.",
+    "hushed": "{name} won't knock again this region. They're choosing it.",
+    "logKnock": "Night. {who} at the door: “{says}” The Boss: “{answer}”",
+    "logShut": "Night. {who} at the door. Not tonight.",
+    "logHear": "Night. Heard {who} out.",
+    "logDown": "Took down {what}."
+  },
+  "wallStates": { "kept": "Kept all of it", "kind": "Took down the kind ones", "edited": "Edited", "bare": "Bare" },
+  "hear": {
+    "warmExtra": {
+      "voice": "And I've started saying “we” about this place. I heard myself.",
+      "hands": "And I've stopped checking where the exits are when I come in. I only noticed tonight.",
+      "eyes": "And I watch your door last thing. To see it's shut. I don't know why I told you that.",
+      "nerve": "And I'd stand on any door for you. That's not a thing I say.",
+      "books": "And I've stopped keeping my own copy. Of anything. That's new.",
+      "wheels": "And I keep the tank full now. In case you need to go somewhere. Anywhere.",
+      "heart": "And you're eating badly. I've noticed. I'll say no more."
+    },
+    "byTalent": {
+      "voice": "A woman on the corner asked what we're for. I told her. She listened all the way through.",
+      "hands": "There's a latch on the yard gate that sticks on the third try. I've fixed it twice. It likes being stuck.",
+      "eyes": "The baker's started leaving the side door open after six. I don't think it's for us.",
+      "nerve": "Nobody tried the door today. I stood on it anyway. You never know which day it is.",
+      "books": "The figures came out round today. They never come out round. I checked them twice.",
+      "wheels": "There's a short cut past the canal if you don't mind the bins. I don't mind the bins.",
+      "heart": "Somebody's Pokémon came in limping and went out running. That's the whole day, for me."
+    },
+    "byPerson": {
+      "otis": "Door's sticking again. I like a door that sticks. You hear it.",
+      "faye": "There's a lock on the chemist's that's older than the building. Somebody moved it there. I'd like to know from where.",
+      "tobi": "I learned a word. “Fiduciary.” Ngozi said it. I've been saying it all day. Nobody's told me what it means.",
+      "lux": "The woman at number nine waters her plants at four in the morning. I don't think she sleeps either.",
+      "ngozi": "The books balance. I'd like you to know how rarely that's true of anything.",
+      "tomasz": "Second gear's going. I can feel it in my foot. She's got another month.",
+      "hortense": "They've stopped leaving the crusts. That's a happy kitchen. You can tell a place by its crusts.",
+      "vikram": "I counted the till four times today and it was right four times. I didn't know what to do with myself.",
+      "sioned": "I rewrote the notice. Then I put it back how it was. It was better. I don't like that it was better.",
+      "kwabena": "There's a lad on the neighbour's door who stands well. Feet right. I nodded at him. He nodded back. That's all.",
+      "beatriz": "There's a street on the map that isn't there. I walked it. It's a wall. Somebody drew a street on purpose.",
+      "obadiah": "Thirty years ago a pound of sugar was eleven. I only mention it.",
+      "chidi": "The swallows have gone. Three days early. I've written it down. I don't know what I've written it down for.",
+      "rahel": "I said the pitch today and a man said, “You don't believe that.” I did, though. I checked.",
+      "junseo": "There's a back road past the mill. Nobody uses it. I don't either. I just like knowing.",
+      "halima": "Nobody came in today. Not one. I cleaned the whole room twice. That's a good day and I hated it.",
+      "arlo": "Somebody in the Game Corner hit three sevens today. I could hear it from the street. The house doesn't mind. It never minds.",
+      "mirela": "The new cleaner at the Silph tower mops the lifts last. Wrong way round. I nearly went in to tell her.",
+      "dov": "Saw a lad on a bike on Cycling Road with no hands on the bars. Showing off. I used to do that. I waved.",
+      "nanami": "There's a Gastly at the Tower that comes to the window when I walk past. It's not unhappy. It just likes the window.",
+      "garrick": "The Anne's due Thursday. I always know when she's due. I can feel the harbour lean.",
+      "pilar": "I did a practice paper on the bus. Got the type chart one right. First time. I didn't tell anyone till now.",
+      "efua": "A woman asked me to look at her lock today. Not to open it. Just to tell her if it was any good. It wasn't.",
+      "walther": "A child asked me how to spell “Celadon”. I told her. She thanked me like I'd given her something.",
+      "sooah": "Somebody's left a scooter by the canal. Not stolen. Just left. I keep checking it's still there.",
+      "ignatius": "Someone called me by my name in the shop today. My actual name. I put the bread down and went back for it.",
+      "catriona": "The warden ate soup today. Proper soup, with the lumps in. That's teeth. That's nearly teeth.",
+      "yevgeny": "The lights flickered on Route 10 tonight. It's not the Plant. It's not anything. I went and looked anyway.",
+      "hinata": "The switchboard's still in my head. Seventy lines. I hear one ringing when it's quiet. Nobody picks it up.",
+      "barnaby": "Smelled charcoal in the yard tonight. Somebody's burning it wrong. Too green. I nearly went and showed them.",
+      "tsering": "I did the first turn of the piece in the corridor. Just the first turn. Don't tell anyone.",
+      "eamon": "There's a lamp on the harbour wall that flickers at nine. Every night. I keep meaning to see to it.",
+      "sachiko": "Fifty years over that cellar and the first thing I did here was look for the stairs down. Habit.",
+      "cosmin": "Pressure in my ears today and I wasn't anywhere near the water. Weather's turning, or I am.",
+      "adaeze": "Somebody's Pokémon has a cough in the next street. Dry, at night. I've written down what it needs. I'll leave it on the step.",
+      "ruairi": "Scyther moulted. You keep the old blade or you don't. I kept it. I always keep it.",
+      "mwajuma": "Walked past an empty stall today and priced it in my head. Rent, rates, the lot. Can't help it.",
+      "leif": "Rang a bell in my sleep again. My arms ache in the morning like I did. Funny, that.",
+      "quyen": "There's a pattern on the Board's wood grain. It isn't anything. I've been looking at it for an hour.",
+      "dermot": "Counted the stops between here and the station. Eleven. I'd have done it in nine.",
+      "keala": "Wind's from the south. Good sailing tomorrow, if anyone was sailing. Nobody is.",
+      "rohan": "I added up the week in my head on the stairs. It balances. I don't trust it when it balances.",
+      "imelda": "Somebody left a flower on the sill. Wrong season for it. I'd like to know where they got it.",
+      "tavita": "Sat still for a whole hour today. On purpose. Brawly would laugh. I'm telling you so somebody knows.",
+      "greta": "Barometer's dropping and the sky says it isn't. One of them's lying. It's usually not the barometer.",
+      "babajide": "I tied the knots on the washing line again. Somebody'd done them like a landlubber. No offence.",
+      "miyu": "I wrote my brother a letter. I'm not sending it. I just wanted it written down somewhere.",
+      "orsolya": "There's ash on the windowsill. Fine, grey, the good kind. I could make a flute out of this street.",
+      "declan": "I put a trick on the back door. Nothing nasty. You'll know it when you find it.",
+      "lakshmi": "Marked somebody's spelling today. They didn't ask. I couldn't stop myself. Old habits.",
+      "finlay": "Held my breath in the bath. Three minutes. I'm out of practice.",
+      "zainab": "I still check the key's in my pocket before I sleep. Every night. It's always there.",
+      "sp-teller": "Counted the takings twice. Out of habit. It's right. I'm sorry I checked.",
+      "sp-uncle": "My uncle's still telling everyone. I've stopped correcting him. It's better than what's true.",
+      "sp-always": "I've always wanted to. I keep saying it. It's still true.",
+      "sp-meowth": "Saw a Meowth on the wall eating out of somebody's hand. Nobody does that either.",
+      "sp-junior": "She'll ask me how you are. I've not decided what I'll say.",
+      "sp-other": "I nearly said 'ours' about the other lot today. Caught it. Took a minute.",
+      "sp-gran": "Gran sent a cake. It's in the Common Room. Don't let Otis near it.",
+      "sp-scared": "Walked past the Center and nobody looked at me. Nobody looked at me at all. That was new.",
+      "sp-cheap": "Found a ten on the stairs. Put it in the jar. Cheap isn't the same as a thief.",
+      "sp-builder": "The window frame's out by a hair. I built it. I can see it from the bed.",
+      "sp-road": "The kid's Pokémon was fine in the end. I checked. I always check.",
+      "sp-constable": "Old boots by the door. Constable's boots. I'll give them away when I've decided I'm not one.",
+      "sp-nobody": "Everyone was here at supper. Every single one. I counted."
+    }
+  },
+  "knocks": [
+    {
+      "n": 1, "title": "The first hire", "sun": false, "who": { "first": true }, "needs": [], "shut": true, "report": false, "status": "supported",
+      "says": "(In the doorway of a room with one chair in it.) “Who was here before you?”",
+      "answers": [
+        { "say": "I don't know. Somebody who left in a hurry.", "reply": "Right. …There's a mug in the sink. I'll wash it.", "echo": [{ "t": "wall", "item": "mug" }] },
+        { "say": "Nobody. It's ours.", "reply": "It's got somebody's height marks on the kitchen door. (A pause.) But all right.", "echo": [{ "t": "mood", "by": -1 }, { "t": "flag", "id": "firstLie" }] },
+        { "say": "Does it matter?", "reply": "It will to whoever comes after us.", "echo": [{ "t": "flag", "id": "cameAfter" }] }
+      ]
+    },
+    {
+      "n": 2, "title": "The ferry woman", "sun": true, "who": { "rank": "grunt" }, "needs": [], "shut": true, "report": false, "status": "supported",
+      "says": "“The ferry woman asked who we are. I didn't know what to tell her.”",
+      "answers": [
+        { "say": "Tell her: “{creedLine}”", "reply": "…That'll do. I'll tell her that.", "echo": [{ "t": "flag", "id": "creedAtDoors" }] },
+        { "say": "Tell her nothing.", "reply": "She'll make something up, then. They do.", "echo": [{ "t": "flag", "id": "headlineGuess" }] },
+        { "say": "What did you want to tell her?", "reply": "That I'd not had a job in two years and now I've a coat with a letter on it.", "echo": [{ "t": "loyalty", "by": 1 }, { "t": "flag", "id": "ferryFree" }] }
+      ]
+    },
+    {
+      "n": 3, "title": "A line on the Ledger", "sun": false, "who": { "talent": "books" }, "needs": [], "shut": true, "report": false, "status": "supported",
+      "says": "“There's a line on the Ledger I'd like you to look at before I total it.” (A name, written where the amount goes.)",
+      "answers": [
+        { "say": "Leave the name in.", "reply": "I'd intended to. I wanted to see if you'd make me take it out.", "echo": [{ "t": "flag", "id": "ledgerNames" }, { "t": "wall", "item": "ledgerPage" }] },
+        { "say": "Total it. It's a number.", "reply": "It's ₽400. It's also a Mrs. Okafor. I'll put the one you asked for.", "echo": [{ "t": "flag", "id": "ledgerAmounts" }] },
+        { "say": "Who is she?", "reply": "A widow with a fish stall. She paid in coins. I counted them twice out of respect.", "echo": [{ "t": "flag", "id": "waiverOffered" }] }
+      ]
+    },
+    {
+      "n": 4, "title": "The Pen", "sun": false, "who": { "talent": "heart" }, "needs": ["pen"], "shut": true, "report": false, "status": "disabled",
+      "says": "“I've been treating what's in the Pen. I wasn't asked. Is that all right?”",
+      "answers": [
+        { "say": "Yes. Put it on the Infirmary's list.", "reply": "Then I'll want the latch left off between nine and ten. I can't do it through bars.", "echo": [{ "t": "flag", "id": "penCards" }] },
+        { "say": "No. They're stock.", "reply": "They're patients. I'll do it in my own time and you needn't know.", "echo": [{ "t": "mood", "by": -1 }, { "t": "flag", "id": "courtLine" }] },
+        { "say": "Whose are they? D'you know?", "reply": "I know all eight. I've been reading the collars.", "echo": [{ "t": "flag", "id": "penSendHome" }] }
+      ]
+    },
+    {
+      "n": 5, "title": "The float", "sun": true, "who": { "talent": "wheels" }, "needs": [], "shut": true, "report": false, "status": "supported",
+      "says": "“I could've driven off. Tonight. I had the float in the van. I'm telling you because I didn't.”",
+      "answers": [
+        { "say": "I know you could. That's why you had it.", "reply": "…Oh. (Very pleased, and trying not to be.)", "echo": [{ "t": "loyalty", "by": 1 }, { "t": "flag", "id": "garageFirst" }] },
+        { "say": "Why didn't you?", "reply": "Where'd I go? …No. That's not it. I'd have had to stop being here.", "echo": [{ "t": "flag", "id": "courtLine" }] },
+        { "say": "Don't tell me things like that.", "reply": "Right. Sorry. I thought you'd want to—right.", "echo": [{ "t": "hush" }] }
+      ]
+    },
+    {
+      "n": 6, "title": "“I froze”", "sun": false, "who": { "talent": "nerve" }, "needs": [], "shut": true, "report": false, "status": "supported",
+      "says": "“I froze. On the door. You'll have seen. It's not on my card. I just did.”",
+      "answers": [
+        { "say": "Everybody does, once.", "reply": "Did you? (They wait. They nod, either way.)", "echo": [{ "t": "flag", "id": "frozeStory" }] },
+        { "say": "What was on the other side of the door?", "reply": "A man my dad's age. In his slippers.", "echo": [{ "t": "flag", "id": "notHouseCall" }] },
+        { "say": "Don't let it happen again.", "reply": "No.", "echo": [{ "t": "flag", "id": "neverFreeze" }] }
+      ]
+    },
+    {
+      "n": 7, "title": "“I'd like to know it was true”", "sun": false, "who": { "talent": "voice" }, "needs": ["voicePersuaded"], "shut": true, "report": false, "status": "supported",
+      "says": "“I talked someone into it today. I'm good at it. I'd like to know it was true, what I said.”",
+      "answers": [
+        { "say": "It was true.", "reply": "Good. Then I'll say it again tomorrow, and I'll not have to look at the floor.", "echo": [{ "t": "flag", "id": "pitchTrue" }] },
+        { "say": "It was true enough.", "reply": "“Enough.” That's a word I use on other people.", "echo": [{ "t": "flag", "id": "doubtsSooner" }] },
+        { "say": "What did you tell her?", "reply": "(They tell you. Your team's own pitch, once, from the outside.) “{creedLine}”", "echo": [] }
+      ]
+    },
+    {
+      "n": 8, "title": "The wage that isn't spent", "sun": false, "who": { "talent": "eyes" }, "needs": [], "shut": true, "report": false, "status": "supported",
+      "says": "“Somebody on the Roster's not spending their wage.”",
+      "answers": [
+        { "say": "Who?", "reply": "(A name.) I've not said why. I don't know why. I only see what's there.", "echo": [{ "t": "flag", "id": "moleSlip" }] },
+        { "say": "It's theirs not to spend.", "reply": "It is. I'll stop looking at it.", "echo": [] },
+        { "say": "What d'you spend yours on?", "reply": "…Batteries. And my brother.", "echo": [{ "t": "flag", "id": "eyesQuest" }] }
+      ]
+    },
+    {
+      "n": 9, "title": "The collar", "sun": false, "who": { "talent": "hands" }, "needs": ["take", "pen"], "shut": true, "report": false, "status": "disabled",
+      "says": "“I took it. It was easy. It had a name on the collar.” (They're holding the collar, not the Pokémon.)",
+      "answers": [
+        { "say": "Write the name on the card.", "reply": "I already have. “Biscuit.” I wanted you to have to read it.", "echo": [{ "t": "flag", "id": "penFirstCard" }] },
+        { "say": "Take it back.", "reply": "Tonight? (“Tonight.”) …I'll get my coat.", "echo": [{ "t": "team", "stat": "regard", "by": 1 }, { "t": "flag", "id": "collarHome" }] },
+        { "say": "Don't read the collars.", "reply": "I'll not take another, then. That's me telling you, not asking.", "echo": [{ "t": "flag", "id": "courtLine" }] }
+      ]
+    },
+    {
+      "n": 10, "title": "“Would he have done that?”", "sun": false, "who": { "outside": "The Patron" }, "needs": ["patron"], "shut": true, "report": false, "status": "disabled",
+      "says": "(After the day's worst job.) “Would he have done that? My old one. I'm asking.”",
+      "answers": [
+        { "say": "I'm not him.", "reply": "No. He'd not have let me ask.", "echo": [{ "t": "flag", "id": "patronAsks" }] },
+        { "say": "Would you have stopped him?", "reply": "I didn't. That's rather the point of me.", "echo": [{ "t": "flag", "id": "patronStops" }] },
+        { "say": "Yes. He would.", "reply": "Then I've learned nothing in fourteen years. Good night.", "echo": [{ "t": "flag", "id": "courtLine" }] }
+      ]
+    },
+    {
+      "n": 11, "title": "“My mum's asked what I do”", "sun": false, "who": { "maxAge": 25 }, "needs": [], "shut": true, "report": false, "status": "supported",
+      "says": "“My mum's asked what I do.”",
+      "answers": [
+        { "say": "Tell her the Front. You work at the café.", "reply": "I can't cook. (“You carry things.”) I can do that.", "needs": ["front"], "echo": [{ "t": "flag", "id": "frontMum" }] },
+        { "say": "Tell her the truth.", "reply": "She'll cry. (“Will she tell anyone?”) No. She'll just cry.", "echo": [{ "t": "flag", "id": "mumLetter" }] },
+        { "say": "What d'you want to tell her?", "reply": "That I've got mates.", "echo": [{ "t": "loyalty", "by": 1 }] }
+      ]
+    },
+    {
+      "n": 12, "title": "A birthday", "sun": true, "who": { "minLoyalty": 5 }, "needs": [], "shut": true, "report": false, "status": "supported",
+      "says": "“It's my birthday. Nobody knows. I don't know why I'm telling you.”",
+      "answers": [
+        { "say": "Happy birthday.", "reply": "…Thanks. That's all. I'll go.", "echo": [] },
+        { "say": "Go and tell the kitchen.", "reply": "They'll make a thing of it. (“Yes.”)", "echo": [{ "t": "wall", "item": "birthdayCard" }] },
+        { "say": "How old?", "reply": "{age}. (It's on their card. You could've looked.)", "echo": [{ "t": "flag", "id": "birthdays" }] }
+      ]
+    },
+    {
+      "n": 13, "title": "The squad's name", "sun": true, "who": { "rank": "lead" }, "needs": ["lead"], "shut": true, "report": false, "status": "supported",
+      "says": "“My squad's got a name. I didn't give it to them. They did.” (The Late Shift.)",
+      "answers": [
+        { "say": "Put it on the Board.", "reply": "They'll be insufferable.", "echo": [{ "t": "flag", "id": "squadNames" }] },
+        { "say": "What's the name?", "reply": "The Late Shift. (Embarrassed.)", "echo": [{ "t": "flag", "id": "squadDoor" }] },
+        { "say": "Squads don't have names.", "reply": "This one does. I only came to tell you.", "echo": [{ "t": "flag", "id": "squadFile" }] }
+      ]
+    },
+    {
+      "n": 14, "title": "“You've made me a department”", "sun": false, "who": { "talent": "heart" }, "needs": ["messLarge"], "shut": true, "report": false, "status": "disabled",
+      "says": "“The room's too big for me. I'm a cook. You've made me a department.”",
+      "answers": [
+        { "say": "Who d'you want under you?", "reply": "Under me. Listen to you. …The quiet one. She peels properly.", "echo": [{ "t": "flag", "id": "messSecond" }] },
+        { "say": "It's the same job. More pans.", "reply": "It's forty covers. I did forty covers at the ward. I'd hoped I was done.", "echo": [{ "t": "mood", "by": -1 }] },
+        { "say": "D'you want it smaller?", "reply": "No. I want you to come and eat in it.", "echo": [{ "t": "flag", "id": "whereBossEats" }] }
+      ]
+    },
+    {
+      "n": 15, "title": "“What'd you want kept?”", "sun": false, "who": { "rank": "officer" }, "needs": ["officer"], "shut": true, "report": false, "status": "disabled",
+      "says": "“If you weren't here tomorrow. What'd you want kept?”",
+      "answers": [
+        { "say": "A rule. (One of the team's lines.)", "reply": "I'll keep that one. Whatever else.", "echo": [{ "t": "flag", "id": "keptFor" }] },
+        { "say": "A person. (A name.)", "reply": "Them? …All right. Them.", "echo": [{ "t": "flag", "id": "cantDismiss" }] },
+        { "say": "Nothing. It goes with me.", "reply": "Then I'll not get attached.", "echo": [{ "t": "flag", "id": "oathShort" }] }
+      ]
+    },
+    {
+      "n": 16, "title": "A Grunt who met the Hero", "sun": false, "who": { "rank": "grunt" }, "needs": ["metHero"], "shut": true, "report": false, "status": "disabled",
+      "says": "“The kid asked me why I'm in it. I didn't have one. I've been thinking.”",
+      "answers": [
+        { "say": "And?", "reply": "(Their reason, now they've one.)", "echo": [{ "t": "flag", "id": "heroReason" }] },
+        { "say": "It's a wage.", "reply": "That's what I said. The kid said, “Is that all?”", "echo": [{ "t": "mood", "by": -1 }] },
+        { "say": "Why are you in it?", "reply": "(You tell them: “{creedLine}”) …That's better than mine.", "echo": [] }
+      ]
+    },
+    {
+      "n": 17, "title": "A Grunt who lost to the Hero", "sun": true, "who": { "rank": "grunt" }, "needs": ["lostToHero"], "shut": true, "report": false, "status": "disabled",
+      "says": "“They gave me a Potion. After. Who does that?”",
+      "answers": [
+        { "say": "Keep it.", "reply": "I was going to. I've not used it. It's on my shelf.", "echo": [{ "t": "flag", "id": "potionShelf" }] },
+        { "say": "Give it here.", "reply": "…It was given to me.", "echo": [{ "t": "mood", "by": -1 }] },
+        { "say": "Somebody who's going to be trouble.", "reply": "No. Somebody who's going to be all right. That's different.", "echo": [{ "t": "flag", "id": "fileLine" }] }
+      ]
+    },
+    {
+      "n": 18, "title": "Skims", "sun": false, "who": { "flaw": "skims" }, "needs": ["flawFired"], "shut": true, "report": false, "status": "disabled",
+      "says": "“Before you count it. It's two hundred short. It's my sister's rent. I'll put it back.”",
+      "answers": [
+        { "say": "Keep it. Ask next time.", "reply": "I didn't think asking was a thing here.", "echo": [{ "t": "flag", "id": "flawAsks" }] },
+        { "say": "Put it back by Friday.", "reply": "Friday. Yes.", "echo": [] },
+        { "say": "You're off the money.", "reply": "That's fair.", "echo": [{ "t": "flag", "id": "offTheMoney" }] }
+      ]
+    },
+    {
+      "n": 19, "title": "Drinks", "sun": false, "who": { "flaw": "drinks" }, "needs": ["flawFired"], "shut": true, "report": false, "status": "disabled",
+      "says": "“I missed the morning. I'm not going to say sorry again. I'm going to ask if you'd take the bottle.”",
+      "answers": [
+        { "say": "Give it here.", "reply": "(They do.) There's another in the cistern. I'm telling you so I've told someone.", "echo": [{ "t": "wall", "item": "bottle" }, { "t": "flag", "id": "bottleDrawer" }] },
+        { "say": "It's yours to put down.", "reply": "I know it is. I thought I'd try the easy way first.", "echo": [] },
+        { "say": "What was the morning?", "reply": "The Ledger. Thirty years I've never missed a ledger.", "echo": [{ "t": "flag", "id": "coveredLedger" }] }
+      ]
+    },
+    {
+      "n": 20, "title": "Doubts", "sun": false, "who": { "flaw": "doubts" }, "needs": ["flawFired"], "shut": true, "report": false, "status": "disabled",
+      "says": "“I stopped. On the stair. I'd like to know if I was wrong to.”",
+      "answers": [
+        { "say": "No. Tell me what you saw.", "reply": "(What stopped them: the job's Not known field, found out.)", "echo": [{ "t": "flag", "id": "doubtsHeard" }] },
+        { "say": "Yes. You cost us the job.", "reply": "I did. I'd do it again, I think. That's the trouble.", "echo": [] },
+        { "say": "I don't know either.", "reply": "…That's the first time anyone's said that to me in a uniform.", "echo": [{ "t": "mood", "by": 1 }] }
+      ]
+    },
+    {
+      "n": 21, "title": "Talks", "sun": false, "who": { "flaw": "talks" }, "needs": ["flawFired"], "shut": true, "report": false, "status": "disabled",
+      "says": "“I said something. In the pub. I don't know who heard.”",
+      "answers": [
+        { "say": "What did you say?", "reply": "(They say. It's a real fact of the run.)", "echo": [{ "t": "flag", "id": "heatArrow" }] },
+        { "say": "Who was in the pub?", "reply": "(They list them. One's a name from the detective's list.)", "echo": [{ "t": "flag", "id": "pubList" }] },
+        { "say": "Stay out of the pub.", "reply": "It's where my mates are.", "echo": [{ "t": "mood", "by": -1 }] }
+      ]
+    },
+    {
+      "n": 22, "title": "Loves someone on the other side", "sun": false, "who": { "flaw": "loves" }, "needs": ["flawFired"], "shut": true, "report": false, "status": "disabled",
+      "says": "“She's a constable. I've not told her. I've not told you. Now I've told you.”",
+      "answers": [
+        { "say": "Thank you for telling me.", "reply": "That's it? I'd a bag packed.", "echo": [{ "t": "loyalty", "by": 1 }] },
+        { "say": "Does she know anything?", "reply": "No. And she won't. From either of us.", "echo": [{ "t": "flag", "id": "constableWarns" }] },
+        { "say": "Choose.", "reply": "…Don't.", "echo": [{ "t": "flag", "id": "courtLine" }] }
+      ]
+    },
+    {
+      "n": 23, "title": "Proud", "sun": false, "who": { "flaw": "proud" }, "needs": ["flawFired"], "shut": true, "report": false, "status": "disabled",
+      "says": "“I'm not taking orders from a boy of nineteen.”",
+      "answers": [
+        { "say": "Then tell him how it's done, and let him give the order.", "reply": "…That's taking orders with extra steps. (Through the door:) Right. You. Listen.", "echo": [{ "t": "flag", "id": "standingPair" }] },
+        { "say": "You are, though.", "reply": "I am. I wanted it said that I mind.", "echo": [{ "t": "mood", "by": -1 }] },
+        { "say": "Bring him in.", "reply": "(In the doorway: “I didn't ask for it.”) You can't give it me. So do it properly.", "echo": [] }
+      ]
+    },
+    {
+      "n": 24, "title": "Kind", "sun": false, "who": { "flaw": "kind" }, "needs": ["flawFired", "take"], "shut": true, "report": false, "status": "disabled",
+      "says": "“I gave it back. The strongbox. I'm on the card as a flaw. Am I?”",
+      "answers": [
+        { "say": "No.", "reply": "Then would you have it taken off?", "echo": [{ "t": "flag", "id": "kindTalent" }] },
+        { "say": "Here, yes.", "reply": "I thought so. I just wanted it from you.", "echo": [] },
+        { "say": "What was in the strongbox?", "reply": "Wages. A cannery's. Friday's.", "echo": [{ "t": "flag", "id": "canneryWork" }] }
+      ]
+    },
+    {
+      "n": 25, "title": "“I'm eighteen”", "sun": false, "who": { "minor": true }, "needs": ["minor"], "shut": true, "report": false, "status": "supported",
+      "says": "“I'm eighteen.” (They aren't. They're asking to go on a job the minors' lock won't let them near.)",
+      "answers": [
+        { "say": "You're {age}. I've read your card.", "reply": "…Who told you? (“You did. In your own writing.”)", "echo": [{ "t": "flag", "id": "mapTable" }] },
+        { "say": "Then show me something with your age on it.", "reply": "(They can't. They stand there.)", "echo": [{ "t": "flag", "id": "askAgainSeventeen" }] },
+        { "say": "Why d'you want to go?", "reply": "Because the others go. And they're rubbish.", "echo": [{ "t": "flag", "id": "tobiFriend" }] }
+      ]
+    },
+    {
+      "n": 26, "title": "A local, in person", "sun": false, "who": { "outside": "A local, in their coat" }, "needs": ["heldLocal"], "shut": true, "report": false, "status": "supported",
+      "says": "(Having walked past the door Grunt.) “You've a man at my door every Friday. I've come to see whose he is.”",
+      "answers": [
+        { "say": "Mine. Sit down.", "reply": "(They don't sit.) I wanted to see if you'd say so.", "echo": [{ "t": "regardOrDread" }] },
+        { "say": "What's he been like?", "reply": "Polite. That's what's so awful.", "echo": [{ "t": "flag", "id": "localNamed" }] },
+        { "say": "He's not mine.", "reply": "He's got your letter on his coat.", "echo": [{ "t": "localMood", "by": -1 }] }
+      ]
+    },
+    {
+      "n": 27, "title": "The detective", "sun": false, "who": { "outside": "The detective, hat in hand" }, "needs": ["heat5"], "shut": true, "report": true, "status": "supported",
+      "says": "“I'm not here officially. I've a question. It's not in the notebook. Why the bakery? I can't make it fit.”",
+      "answers": [
+        { "say": "(The truth.)", "reply": "…Hm. (They don't write it down. That's the point.)", "echo": [{ "t": "flag", "id": "notebookBlank" }] },
+        { "say": "No comment.", "reply": "No. I'd not either.", "echo": [] },
+        { "say": "Come in. You'll have had no tea.", "reply": "(They come in. They have the tea. They see the Common Room and nothing else.)", "echo": [{ "t": "flag", "id": "listDelayed" }] }
+      ]
+    },
+    {
+      "n": 28, "title": "A canon Boss's messenger", "sun": false, "who": { "outside": "A messenger, with a fruit basket" }, "needs": ["neighbour"], "shut": true, "report": true, "status": "disabled",
+      "says": "(A fruit basket. A card: “Regards.”)",
+      "answers": [
+        { "say": "Keep it.", "reply": "(It's kept.)", "echo": [{ "t": "wall", "item": "basketCard" }, { "t": "flag", "id": "neighbourNote" }] },
+        { "say": "Send it back.", "reply": "(It goes back.)", "echo": [{ "t": "flag", "id": "neighbourNote" }] },
+        { "say": "Send one in return.", "reply": "(One goes.)", "echo": [{ "t": "flag", "id": "neighbourNote" }] }
+      ]
+    },
+    {
+      "n": 29, "title": "The Hero's mother", "sun": false, "who": { "outside": "The Hero's mother" }, "needs": ["region2"], "shut": false, "report": false, "status": "disabled",
+      "says": "“I'm told you run this. I'm not here to shout. My child's walking toward you. I'd like to know what they'll find.”",
+      "answers": [
+        { "say": "Someone who'll talk to them.", "reply": "I'll hold you to that. I've nothing to hold you with. I'll hold you anyway.", "echo": [{ "t": "flag", "id": "motherSeen" }] },
+        { "say": "I don't know yet.", "reply": "That's honest. I'd rather have had the other.", "echo": [] },
+        { "say": "Come and see.", "reply": "(She's walked round.)", "echo": [{ "t": "flag", "id": "motherWalk" }] }
+      ]
+    },
+    {
+      "n": 30, "title": "A child from the School", "sun": true, "who": { "outside": "A child of about seven" }, "needs": ["school"], "shut": true, "report": false, "status": "disabled",
+      "says": "(Brought by a Grunt who couldn't say no.) “Miss says you're the baddies. Are you?”",
+      "answers": [
+        { "say": "Sometimes.", "reply": "I'm sometimes.", "echo": [] },
+        { "say": "What does Miss say baddies do?", "reply": "Take things and not say sorry.", "echo": [{ "t": "flag", "id": "childTaken" }] },
+        { "say": "No.", "reply": "Miss says baddies say that.", "echo": [{ "t": "wall", "item": "bigHat" }] }
+      ]
+    },
+    {
+      "n": 31, "title": "Somebody who's leaving", "sun": false, "who": { "maxLoyalty": 2 }, "needs": [], "shut": true, "report": false, "status": "limited",
+      "says": "(In their own coat, with a bag.) “I'm going. I wanted to say it to you, not leave a note.”",
+      "answers": [
+        { "say": "(Shake their hand.)", "reply": "…Right. Yes.", "echo": [{ "t": "leave", "how": "handshake" }, { "t": "flag", "id": "handshake" }] },
+        { "say": "What would it take?", "reply": "A wage on time. And to be asked, once. (They unpack.)", "echo": [{ "t": "loyalty", "by": 1 }, { "t": "flag", "id": "asked31" }] },
+        { "say": "Leave the coat.", "reply": "(They do. On the chair.)", "echo": [{ "t": "leave", "how": "coat" }, { "t": "wall", "item": "coat" }] }
+      ]
+    },
+    {
+      "n": 32, "title": "Somebody who left, come back", "sun": false, "who": { "outside": "Somebody who left, thinner" }, "needs": ["flag:handshake", "region2"], "shut": true, "report": false, "status": "disabled",
+      "says": "“Is the bunk still—”",
+      "answers": [
+        { "say": "Your plate's still on it.", "reply": "(They can't say anything for a moment.)", "echo": [{ "t": "flag", "id": "backAgain" }] },
+        { "say": "It's been given to someone.", "reply": "Course it has. I only— (From the corridor: “They can have it. I'll go on the floor.”)", "echo": [{ "t": "flag", "id": "backAgain" }] },
+        { "say": "Why'd you come back?", "reply": "It was quieter than I thought. Out there.", "echo": [{ "t": "flag", "id": "backAgain" }] }
+      ]
+    },
+    {
+      "n": 33, "title": "The mole", "sun": false, "who": { "talent": "eyes" }, "needs": ["mole"], "shut": true, "report": false, "status": "disabled",
+      "says": "“Is the Vault always the second door past the kitchen, in these places?”",
+      "answers": [
+        { "say": "(Answer it.)", "reply": "Thanks. I get lost.", "echo": [{ "t": "flag", "id": "moleSlip" }] },
+        { "say": "Why d'you ask?", "reply": "(A reason. A good one, either way.)", "echo": [{ "t": "flag", "id": "moleSlip" }] },
+        { "say": "Ask the door.", "reply": "I'd rather not ask the door.", "echo": [{ "t": "flag", "id": "vaultKey" }] }
+      ]
+    },
+    {
+      "n": 34, "title": "The mole, found", "sun": false, "who": { "outside": "The mole" }, "needs": ["moleFound"], "shut": false, "report": false, "status": "disabled",
+      "says": "(Part 11 section 8: the scene, with its four ways through. It takes the Night's knock.)",
+      "answers": [
+        { "say": "(Keep them.)", "reply": "(Part 11.)", "echo": [{ "t": "flag", "id": "moleSlip" }] },
+        { "say": "(Turn them.)", "reply": "(Part 11.)", "echo": [{ "t": "flag", "id": "moleSlip" }] },
+        { "say": "(Let them go.)", "reply": "(Part 11.)", "echo": [{ "t": "flag", "id": "moleSlip" }] }
+      ]
+    },
+    {
+      "n": 35, "title": "Whoever runs the Lab", "sun": false, "who": { "talent": "wheels" }, "needs": ["lab"], "shut": true, "report": false, "status": "disabled",
+      "says": "“I didn't volunteer.”",
+      "answers": [
+        { "say": "D'you want off it?", "reply": "Who'd you put on instead? (They wait for a name.)", "echo": [] },
+        { "say": "Somebody has to.", "reply": "Do they.", "echo": [{ "t": "mood", "by": -1 }] },
+        { "say": "Then I'll close it.", "reply": "…Tonight? With them still in it?", "echo": [{ "t": "flag", "id": "labClose" }] }
+      ]
+    },
+    {
+      "n": 36, "title": "A Pokémon", "sun": true, "who": { "outside": "The command party's lead" }, "needs": ["pokemonLead"], "shut": true, "report": false, "status": "disabled",
+      "says": "(It's not a knock. It's at the door. It wants to sleep in the Office.)",
+      "answers": [
+        { "say": "(Let it in.)", "reply": "(It gets on the chair.)", "echo": [{ "t": "flag", "id": "officeLead" }] },
+        { "say": "(Take it back to its bed.)", "reply": "(It goes, and looks round once.)", "echo": [] },
+        { "say": "(Sit on the floor with it.)", "reply": "(It leans.)", "echo": [{ "t": "flag", "id": "officeLead" }] }
+      ]
+    },
+    {
+      "n": 37, "title": "Nobody, and a drawing", "sun": true, "who": { "nobody": true }, "needs": ["regard4"], "shut": true, "report": true, "status": "supported",
+      "says": "(The door. Nobody there. A drawing on the mat: the uniform, in crayon. The colours are right.)",
+      "answers": [
+        { "say": "(Pin it up.)", "reply": "(It goes up.)", "echo": [{ "t": "wall", "item": "crayon" }] },
+        { "say": "(Leave it on the mat.)", "reply": "(The door Grunt pins it up in the morning.)", "echo": [{ "t": "wall", "item": "crayon" }] },
+        { "say": "(Look down the street.)", "reply": "(A small figure, running.)", "echo": [{ "t": "flag", "id": "lookedDown" }] }
+      ]
+    },
+    {
+      "n": 38, "title": "Nobody, and a summons", "sun": false, "who": { "nobody": true }, "needs": ["heat6"], "shut": false, "report": true, "status": "supported",
+      "says": "(The door. Nobody. A summons on the mat.)",
+      "answers": [
+        { "say": "(Read it.)", "reply": "(The list's first three items, in legal words.)", "echo": [{ "t": "wall", "item": "summons" }, { "t": "flag", "id": "stationOnBoard" }] },
+        { "say": "(Give it to Books.)", "reply": "“It's a date, a room and a name. I'll put it in the diary. Under ‘things we're not going to’.”", "echo": [{ "t": "flag", "id": "summonsDiary" }] },
+        { "say": "(Burn it.)", "reply": "(It was served. Burning it's on the list now.)", "echo": [{ "t": "team", "stat": "heat", "by": 1 }] }
+      ]
+    },
+    {
+      "n": 39, "title": "A vote", "sun": true, "who": { "oldest": true }, "needs": ["loyalty9"], "shut": true, "report": false, "status": "supported",
+      "says": "(The rest behind them in the corridor.) “We took a vote. We've not done that before. We'd like to tell you what it was about.” (The name of the cat.)",
+      "answers": [
+        { "say": "What was the result?", "reply": "Unanimous, less one. (The one's named, and is delighted to be.)", "echo": [{ "t": "flag", "id": "voteCustom" }] },
+        { "say": "You don't need my leave to vote.", "reply": "We know. We wanted you to know we know.", "echo": [{ "t": "flag", "id": "ballotTin" }] },
+        { "say": "Was I in it?", "reply": "You'd a vote. The kitchen cast it for you. They said you'd want the cat called Ledger.", "echo": [{ "t": "flag", "id": "catLedger" }] }
+      ]
+    },
+    {
+      "n": 40, "title": "The Hero", "sun": true, "who": { "outside": "The Hero, with a bowl" }, "needs": ["heroInMess"], "shut": true, "report": false, "status": "disabled",
+      "says": "(Opening the wrong door.) “Sorry. I was looking for the— is this the way out?”",
+      "answers": [
+        { "say": "Second left. Mind the step.", "reply": "Thanks. …Nice window.", "echo": [{ "t": "flag", "id": "windowSeen" }] },
+        { "say": "Sit down a minute. Finish that.", "reply": "(They do. They talk about the soup. None of it's about the team.)", "echo": [{ "t": "flag", "id": "heroMark" }] },
+        { "say": "(Say nothing. Point.)", "reply": "Right. Sorry.", "echo": [{ "t": "flag", "id": "heroCat" }] }
+      ]
+    }
+  ]
+}

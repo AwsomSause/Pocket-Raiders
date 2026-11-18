@@ -590,6 +590,15 @@
       "checkpoints": false,
       "weeklySeed": true,
       "blurb": "The week decides the seed, the three starters and one themed ruleset (Nuzlocke, Monotype, Empty Bag...). Same for everyone; your best score is kept on this device. Account rewards pay once a week."
+    },
+    {
+      "id": "evil-mode",
+      "name": "Evil Mode",
+      "status": "supported",
+      "progressionEligible": false,
+      "checkpoints": false,
+      "gate": "evilMode",
+      "blurb": "You run a team. You'll be told what everything costs. A kid's coming. Early build: found a team and play through an empty day."
     }
   ],
   "duplicateCompensation": {

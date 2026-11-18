@@ -135,7 +135,7 @@ export class RunChoicesScene extends Phaser.Scene {
 
   private cur(row: OptionRow) {
     const { content, profile } = services().session;
-    return optionsFor(row, content, profile, this.state, this.testing);
+    return optionsFor(row, content, profile, this.state, this.testing, services().session.settings.expansion.evilMode);
   }
 
   private refreshRows(): void {
@@ -187,7 +187,7 @@ export class RunChoicesScene extends Phaser.Scene {
     const o = this.cur(row).options[i];
     if (!o) return;
     if (!o.ok) return this.say(o.detail);
-    this.state = applyOption(row, o.id, this.state, content, profile, this.testing);
+    this.state = applyOption(row, o.id, this.state, content, profile, this.testing, services().session.settings.expansion.evilMode);
     this.notice.setText('');
     this.refreshRows();
     this.focusRow(this.rowIndex);

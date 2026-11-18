@@ -1,0 +1,41 @@
+{
+  "note": "Evil Mode founding text and starting rules (design Part 3 sections 1, 3, 7 and 11; Part 29 sections 2 and 3). Text is data. Numbers are starting values, not playtested.",
+  "opening": [
+    "You can't stop the Hero. You can decide what they find.",
+    "You'll be shown the cost of everything before you choose it.",
+    "Nobody on your team can be made into someone else."
+  ],
+  "oldLookLine": "Evil Mode uses the New look. Your setting hasn't been changed.",
+  "confirmLine": "All of this is permanent except the Line.",
+  "names": {
+    "maxLength": 14,
+    "lists": {
+      "Things": ["Tally", "Lamplight", "Anvil", "Thorn", "Cinder", "Bell", "Hinge", "Plumb", "Kettle", "Ratchet", "Thimble", "Latch", "Gavel", "Bobbin", "Trowel", "Wick", "Anchor", "Ladle", "Awl", "Flint", "Staple", "Sieve", "Shuttle", "Rivet"],
+      "Places": ["Harbour", "Quarry", "Marsh", "Ridge", "Cellar", "Orchard", "Gantry", "Culvert", "Allotment", "Backstairs", "Yard", "Siding", "Loft", "Towpath", "Common", "Ferry", "Underpass", "Annexe"],
+      "Words": ["Enough", "Again", "After", "Nevertheless", "Otherwise", "Meanwhile", "Presently", "Unless", "Still", "Anyway", "Instead", "Besides", "Almost", "Elsewhere", "Likewise", "Eventually", "Perhaps", "Since"]
+    },
+    "taken": ["Rocket", "Aqua", "Magma", "Galactic", "Plasma", "Flare", "Skull", "Yell", "Star", "Sky", "Lantern", "Ledger", "Static", "Ember", "Tidepool", "Encore", "Homeroom", "Open Hand", "Aether", "Cipher", "Snagem", "Snag'em"]
+  },
+  "lines": [
+    { "id": "clean", "name": "Clean hands", "feel": "Slow, poor, and safe. The team can't take anything it isn't given or doesn't win.", "heat": 0, "regard": 1 },
+    { "id": "grey", "name": "Grey", "feel": "The standard game. Everything's possible and everything's on the Card.", "heat": 0, "regard": 0 },
+    { "id": "whatever", "name": "Whatever it takes", "feel": "Fast and rich. The best perks. People leave, and the game makes that felt and not fatal.", "heat": 1, "regard": 0 }
+  ],
+  "look": { "a": "#efe6c8", "b": "#2f7a4a" },
+  "region": { "id": "kanto", "name": "Kanto" },
+  "bands": [
+    { "min": 9, "name": "Devoted", "face": "Looks at you" },
+    { "min": 7, "name": "Easy", "face": "Easy" },
+    { "min": 5, "name": "Steady", "face": "Neutral" },
+    { "min": 3, "name": "Distant", "face": "Looks past you" },
+    { "min": 1, "name": "Leaving", "face": "Looks at the door" }
+  ],
+  "beats": [
+    { "id": "morning", "name": "Morning", "button": "To work", "empty": "The kettle's on. Nobody's asked for anything yet." },
+    { "id": "dispatch", "name": "Dispatch", "button": "Send them", "empty": "No jobs on the board today. The squads play cards." },
+    { "id": "inPerson", "name": "In person", "button": "Go", "empty": "Nothing needs the Boss in person. You stay in." },
+    { "id": "evening", "name": "Evening", "button": "Call it a day", "empty": "Nothing came back, because nothing went out. A quiet table." },
+    { "id": "night", "name": "Night", "button": "Lights out", "empty": "Nobody knocks tonight." },
+    { "id": "hero", "name": "The Hero", "button": "Watch the road", "empty": "Somewhere a kid is walking. Not here. Not yet." }
+  ]
+}

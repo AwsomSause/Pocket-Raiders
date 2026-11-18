@@ -1,0 +1,589 @@
+{
+  "note": "Evil Mode slice 18, the voice (design Part 25a: barks, the Radio, the paper, the Ledger's margins; Part 25b: the post). Text is data; the save keeps ids and the day, never the text. Numbers are starting values; none are playtested. A piece whose sender waits on a later slice says so in `waits` and is never sent. Barks are presentation only: they draw from a hash of the seed, never from a gameplay stream, and change nothing.",
+  "on": true,
+  "rules": {
+    "postPerDay": 1,
+    "steamHeat": 7,
+    "steamDelay": 1,
+    "emptyDread": 7,
+    "detectiveHeat": 3,
+    "marginLoyalty": 6,
+    "loudHeat": 2,
+    "radioHeat": 7,
+    "paperKnows": 5,
+    "bothAt": 5,
+    "wallStanding": 10,
+    "postcardLoyalty": 8,
+    "comeBackLoyalty": 8,
+    "comeBackDistricts": 2,
+    "basketStances": ["truce", "front", "merger", "understanding"],
+    "planks": 300,
+    "squadBack": 200,
+    "boxGiven": 1,
+    "fishLane": 200,
+    "cannery": 1100,
+    "dockers": 120,
+    "barkPerBeat": 1, "drawer": 12
+  },
+  "words": {
+    "page": "The post",
+    "radio": "The Radio",
+    "paper": "The paper",
+    "margin": "In the margin",
+    "envelope": "An envelope on the Board's corner: {from}. (P: the post.)",
+    "envelopeDesk": "An envelope on the Office desk: {from}. (P: the post.)",
+    "steamed": "It's a day late, and it's been opened. Somebody's steamed it and stuck it down again badly.",
+    "open": "Open it",
+    "leave": "Leave it for now",
+    "pin": "Pin it to the Wall",
+    "pinned": "Pinned. It's on the Wall now.",
+    "left": "Left on the corner. It'll keep.",
+    "drawer": "The drawer",
+    "drawerEmpty": "Nothing's come yet.",
+    "unread": "unopened",
+    "noPost": "No post today.",
+    "radioOff": "Switch the Radio off",
+    "radioOn": "Switch the Radio back on",
+    "radioIsOff": "The set's off. Nobody's said anything about it.",
+    "radioBackOn": "Hortense has switched the Radio back on. Nobody saw her do it.",
+    "answered": "Answered.",
+    "reply": "Answer",
+    "close": "Close",
+    "heroHeard": "At the Centre, the same set: {item}",
+    "fromOfficer": "{name}, from {town}",
+    "fromGarrison": "the garrison in {town}",
+    "fromCell": "{name}, from the cells",
+    "fromLeaver": "{name}",
+    "fromMother": "{name}'s mother",
+    "fromAunt": "{name}'s aunt",
+    "fromDaughter": "{name}'s daughter",
+    "fromTown": "someone in {town}",
+    "fromChild": "Class 2",
+    "fromLeader": "{name}",
+    "fromDetective": "the detective",
+    "fromNeighbour": "{name}",
+    "fromNobody": "nobody",
+    "fromPostcard": "a postcard",
+    "letterAgain": "A second letter, one line: “Send someone.”",
+    "fx": {
+      "loyalty": "{name}'s Loyalty {by}.",
+      "teamLoyalty": "Loyalty {by}.",
+      "heat": "Heat {by}.",
+      "regard": "Regard {by}.",
+      "dread": "Dread {by}.",
+      "funds": "Funds {money}.",
+      "given": "Given +1.",
+      "opinion": "{boss}'s opinion of you {by}.",
+      "recall": "{name} is on the road back."
+    }
+  },
+  "moments": ["rest", "win", "faint", "heal", "board", "dispatchGo", "dispatchStay", "jobWon", "jobLost", "mess", "door", "heroNear", "raidNear", "crossing"],
+  "barks": {
+    "bands": [
+      { "id": "leaving", "min": 0 },
+      { "id": "distant", "min": 3 },
+      { "id": "steady", "min": 5 },
+      { "id": "easy", "min": 7 },
+      { "id": "devoted", "min": 9 }
+    ],
+    "loyalty": {
+      "devoted": { "board": "What've we got? Give us the hard one.", "dispatchGo": "Back by tea. Save me a seat.", "mess": "Shove up. No, further. There's always room.", "jobWon": "Told you. Told you!", "jobLost": "My fault. No, it was. Next time.", "door": "Nobody's getting past me. I've decided." },
+      "easy": { "board": "Morning. Anything good?", "dispatchGo": "Right. Off we go, then.", "mess": "Is that the stew again? ...Good.", "jobWon": "That went all right.", "jobLost": "Ah, well. The Card said seventy.", "door": "Quiet tonight." },
+      "steady": { "board": "Let's see it.", "dispatchGo": "Which one's mine?", "mess": "Pass the salt.", "jobWon": "Done.", "jobLost": "Didn't land.", "door": "How long's this shift?" },
+      "distant": { "board": "What's it today.", "dispatchGo": "If I must.", "mess": "(Nothing. They eat facing the door.)", "jobWon": "It's done. Can I go?", "jobLost": "Not my plan.", "door": "I'm stood here. That's what I'm paid for." },
+      "leaving": { "board": "(They read it from the back and don't come forward.)", "dispatchGo": "Is it paid?", "mess": "I'll have mine in my bunk.", "jobWon": "(Nothing.)", "jobLost": "Course it did.", "door": "If anyone comes, I'm not sure I'll bother." }
+    },
+    "mood": {
+      "warm": ["Have you eaten? You've not eaten.", "Sit here. I've saved it.", "I had a thought about tomorrow. It's probably daft."],
+      "easy": ["All right?", "Nothing to report, Boss. That's a good thing.", "I'm about if I'm needed."],
+      "wary": ["...Boss.", "Did you want me for something?", "I'm fine where I am."],
+      "sullen": ["Mm.", "(They move their plate.)", "I've nothing to say that you'd want."],
+      "shut": []
+    },
+    "flaw": {
+      "talks": { "mess": "And another thing—", "dispatchGo": "Did I tell you about the—no? I'll tell you on the way.", "door": "You're not supposed to be here, I'm not supposed to tell you that, and the Vault's not down there." },
+      "drinks": { "mess": "Is there any of that left? The— never mind.", "dispatchGo": "Give me a minute. Head.", "door": "Is it Thursday? You're the Thursday one." },
+      "doubts": { "mess": "I've been thinking about yesterday.", "dispatchGo": "Are we sure? I mean. Are we?", "door": "I'm meant to stop you. I've been wondering whether I will." },
+      "skims": { "mess": "Who's doing the float tonight?", "dispatchGo": "I'll carry the bag.", "door": "There's a toll. (There isn't.)" },
+      "freezes": { "mess": "(They've not touched their food.)", "dispatchGo": "...Sorry. I'm coming. Sorry.", "door": "(Nothing. They're in the way. They can't move. It works as well as anything.)" },
+      "loves": { "mess": "(They're writing something and cover it.)", "dispatchGo": "Is it near the station? No reason.", "door": "Are you with the police? ...No. You'd have a hat." },
+      "proud": { "mess": "I'd have done it differently.", "dispatchGo": "I know the way.", "door": "This is my door." },
+      "kind": { "mess": "Has the lad on the door had his?", "dispatchGo": "Do we have to take the dog?", "door": "Have you eaten? ...Sorry. That's not what I'm meant to say." }
+    },
+    "talent": {
+      "voice": "She thanked me. At the end. They do, if you do it right.",
+      "hands": "Forty seconds. I wasn't even trying on the second lock.",
+      "eyes": "It was exactly where I said. To the yard.",
+      "nerve": "He blinked first.",
+      "books": "It comes out to the pound. I love it when it comes out to the pound.",
+      "wheels": "Three lights. All green. You can't plan that. Well. I planned it.",
+      "heart": "Nobody got hurt. Write that down. Nobody ever writes that down."
+    },
+    "doctrine": {
+      "swarm": "Count them. No, count them again.",
+      "bruisers": "Stretch first. All of you. You too, Machop.",
+      "tricksters": "Has everyone got the wrong hat? Good.",
+      "beasts": "He'll come when he's ready. He's nearly ready.",
+      "machines": "Checklist. Start at one.",
+      "ghosts": "Don't look behind you. It's ours. Probably.",
+      "tide": "Tide's at four. We go at four.",
+      "ember": "Gloves. I'm not saying it again."
+    },
+    "creed": {
+      "profit": "What's it worth?",
+      "cause": "Who's it for?",
+      "power": "Who's the strongest thing on there?",
+      "wonder": "Is there anything old on it?",
+      "belonging": "Who needs a hand?",
+      "spite": "Is he on it?"
+    },
+    "line": {
+      "persuade": { "clean": "Lovely woman. We had tea.", "grey": "Easy.", "whatever": "Took an hour. An hour. For a yes." },
+      "lean": { "grey": "He'll come round. ...He looked old.", "whatever": "Went down like a deckchair." },
+      "take": { "grey": "It's in the van. I didn't look at it.", "whatever": "Whose was it? Who cares." }
+    },
+    "hero": {
+      "curious": "There's a kid at the Centre asking about us. Nice manners.",
+      "curiousWork": "The kid stopped at the bridge. Read the plaque. Twice.",
+      "uneasy": "They looked at my coat today. Not at me. At the letter on it.",
+      "set": "They're training by the gate. Every morning. I think it's for us.",
+      "angry": "Don't put me on the kid's road, Boss. Not today. I'd not want to be the one.",
+      "past": "They walked straight past. Didn't even look. That's worse.",
+      "ate": "They said thanks for the soup. To me. I didn't make it. I let them think I did.",
+      "beat": "I've got a Potion on my shelf. Don't ask.",
+      "beaten": "I won. I didn't enjoy it. They shook my hand. Who shakes your hand?"
+    },
+    "raid": {
+      "8": ["There's a car at the end of the road. Same car as yesterday."],
+      "9": ["My mum's had a visit. Two of them. Very polite.", "Should I pack? I'm asking. Should I?"],
+      "10": ["Whatever happens. It's been— I've never had a peg with my name on before."]
+    },
+    "crossing": {
+      "glad": "Never been abroad. Is it abroad?",
+      "notGlad": "I'll come. I said I'd come.",
+      "staying": "Somebody's got to mind the bakery. Go on. I'll write.",
+      "obadiah": "I'll go where the Ledger goes.",
+      "beatriz": "Is there a map of the next one? Can I have it now?",
+      "hortense": "Who's got the big pan? If we've left the big pan I'm getting off."
+    },
+    "named": {
+      "otis": ["I'll stand here.", "I've stood worse places.", "Somebody tell me where to stand.", "I'll take the door. I always take the door.", "Not a word from anyone. Good.", "I'm not tired. I'm standing."],
+      "faye": ["It's not broken. It's different. I'll fix it.", "Who's had my screwdriver? The small one.", "I've oiled the gate. You'll not hear it now. That's a shame, in a way.", "Give it here.", "It'll hold. Probably. I'll hold it.", "I don't need a hand. I need a third hand."],
+      "tobi": ["I've had an idea! (Everyone leaves.)", "What if— no, listen. What if we didn't?", "I've written it down so I don't forget. I've lost the paper.", "Is it my turn to have an idea? It's my turn.", "Did anyone else think that was brilliant? Just me.", "Right. Right. I'm on it. What is it?"],
+      "lux": ["Somebody's left a window open on the second floor. Not ours. Theirs.", "There's a man at the bus stop who's not waiting for a bus.", "Third time that car's gone past. I'm counting.", "I've seen that face before. I'll tell you where in a minute.", "Don't turn round. It's fine. Just don't.", "Lights on at the station. Late, for them."],
+      "ngozi": ["Receipts.", "Who signed for this? Nobody? Somebody did.", "It's to the pound or it's wrong.", "I've a column for that.", "Bring me the float. All of it. The coins as well.", "I'll not round it. I never round it."],
+      "tomasz": ["Is there dental?", "There's dental.", "The van's making a noise. A new noise.", "I'll drive. Somebody else read the map. Not Tobi.", "Mind the seats. I've had them done.", "Back road's quicker. It's always quicker."],
+      "hortense": ["Sit down.", "Eat that. All of it.", "Who's not had breakfast? Don't lie to me.", "Boots off on my floor.", "There's more if you want it. You want it.", "I'm not your mother. Sit down."],
+      "vikram": ["I was only looking at it.", "It was just there. On the side.", "I'll put it back. Where was it?", "Nobody was using it.", "That's not mine. That one is.", "I'm holding it for someone."],
+      "sioned": ["No, no. Listen to how I say it.", "It's all in the second sentence.", "You lead with the weather. Always the weather.", "I've talked worse people into better things.", "Let me do the door. You smile.", "She'll say no first. Let her. Then she'll say yes."],
+      "kwabena": ["Again.", "Once more.", "Not like that. Again.", "Better. Again.", "Stand up. Again.", "That's enough. ...Again."],
+      "beatriz": ["I'm nearly seventeen.", "Is there a map?", "I've drawn the street. Look. I've done the drains.", "I can carry that. I can.", "Nobody tells me anything. I find out anyway.", "Can I go? Next time? Can I?"],
+      "obadiah": ["In the old days we'd have done that with a pencil.", "I've seen a ledger like this before. It ended.", "Slowly, now. The figures don't run.", "I knew your sort's grandfathers.", "Write it down twice. Once for you, once for the judge.", "Fetch me my glasses. The other ones."],
+      "chidi": ["That's interesting. That's— hang on. That's very interesting.", "Did anyone else notice the— no?", "I've a theory. It's a good one. Sit down.", "Wait. Say that again. Slower.", "Oh, that's clever. Who did that? Oh, it was them.", "I'll need a bigger notebook."],
+      "rahel": ["No letters for me? ...Fine. That's fine.", "Is the post in? Just asking.", "I'll write later. I always say that.", "Who's that from? No, go on, open it.", "She'd have liked it here. Never mind.", "I'll take the late shift. I don't sleep much."],
+      "junseo": ["I know a road.", "Not that way. I know a better one.", "There's a cut-through behind the chapel.", "Give me twenty minutes and no questions.", "Roads are all the same. Except mine.", "Left at the pond. Trust me."],
+      "halima": ["Show me. No. Show me.", "Where does it hurt? Not there. Where?", "Sit still. I'm not finished.", "Who bandaged this? Do it again.", "Drink something. Then talk.", "I'll see to them first. Then you."]
+    }
+  },
+  "radio": {
+    "presenters": {
+      "kanto": { "who": "A man who's done the Saffron breakfast show for thirty years and resents the news for interrupting the music", "says": "The news, such as it is." },
+      "johto": { "who": "Mary, of Goldenrod, bright as a button", "says": "Ooh! Listen to this!" },
+      "hoenn": { "who": "Two brothers on a boat who share one microphone and disagree about everything", "says": "And now—“ “It's my turn—“ “It is not—" },
+      "sinnoh": { "who": "A woman in Jubilife who reads everything as if it's very slightly funny", "says": "Well. This happened." },
+      "unova": { "who": "A Castelia announcer at great speed, over traffic", "says": "Top of the hour, here's what you missed—" },
+      "kalos": { "who": "A Lumiose man who finds everything either “regrettable” or “charming”", "says": "A regrettable item from the south." },
+      "alola": { "who": "A surfer who does the tide report and has been given the news as well", "says": "Uh. So. News. There's some." },
+      "galar": { "who": "A football commentator's voice on League results; a quieter woman on everything else", "says": "In other news, and there is other news—" },
+      "paldea": { "who": "The academy's student station. A different child each day, reading carefully", "says": "This is, um. This is the news. I'm in Year Two." }
+    },
+    "ticks": {
+      "giovanni": [
+        "A fossil's gone missing from the Mt. Moon site. The Pewter Museum says it's “disappointed.” That's the museum's word for furious.",
+        "The Celadon Game Corner's shut for refurbishment. Nobody's seen a builder go in. Several people have seen a child go in.",
+        "Silph Co. has asked staff to work from home. All of them. The doors are locked from the inside.",
+        "Walkers are asked to keep away from the cave north of Cerulean. The guides say something in it has stopped the Zubat coming out at dusk.",
+        "Viridian Gym has a Leader again. Nobody's saying where he's been."
+      ],
+      "archer": [
+        "Azalea's well is open again. The Slowpoke are back on the steps. Somebody's been selling their tails. Somebody's stopped.",
+        "The Lake of Rage has gone red. The Dragon Tamer from Blackthorn says it's “not natural.” She says very little, so that's a lot.",
+        "We're— sorry. We're back. Something happened in the building. Something's still happening in the building. Here's some music.",
+        "The souvenir shop in Mahogany's closed. The sign says “stocktaking.” The sign's been up a week. Nobody's taking any stock.",
+        "The Radio Tower would like to thank a young listener for their help this week. They know who they are. So do the men in black."
+      ],
+      "archie": [
+        "A delivery for Devon's gone missing on the Rusturf road. The Oceanic Museum's had visitors in bandanas, asking about submarines.",
+        "Two colours of trouble on Mt. Chimney this morning. The cable car's stopped. A child went up anyway.",
+        "The Weather Institute isn't answering its telephone. Its forecast for today was “sun.” It's raining on half of us.",
+        "There's a light under the sea off Sootopolis. The fishermen won't go out. The fishermen always go out.",
+        "The rain's stopped. The sun's stopped trying so hard. The Champion's been seen in a cave mouth, shaking a young trainer's hand."
+      ],
+      "maxie": [
+        "A delivery for Devon's gone missing on the Rusturf road. The Oceanic Museum's had visitors in hoods, asking after it politely.",
+        "There's a machine in the crater on Mt. Chimney. Nobody says whose. Everyone says it's warm.",
+        "The Weather Institute isn't answering its telephone. Its forecast for today was “rain.” It's baking on half of us.",
+        "The ground's warm by Mt. Pyre. The wells near Lavaridge have run dry. The hoods have gone into the hills.",
+        "The heat's broken. The rain's come back, gently. The Champion's been seen in a cave mouth, shaking a young trainer's hand."
+      ]
+    },
+    "stopped": {
+      "giovanni": ["The Mt. Moon dig reports nothing missing. A man in a black uniform was seen leaving with a sore head.", "The Game Corner's open as usual. A man in a black uniform was seen leaving with a mop.", "Silph Co.'s open. Business as usual, it says. It says it twice.", "The cave north of Cerulean is quiet. The Zubat came out at dusk, the guides say, every one.", "Viridian Gym's still shut. Nobody's sure that's good news."],
+      "archer": ["Azalea's well is just a well this week. That's the news.", "The Lake of Rage is blue. Some days that's the news.", "The Tower's fine. We're fine. Here's the music.", "The souvenir shop in Mahogany's selling souvenirs. Lovely.", "No news from the Tower. We like it that way."],
+      "archie": ["Devon's delivery arrived. Late, but it arrived.", "Mt. Chimney's cable car is running. The view's very nice.", "The Weather Institute says sun. It's sunny. Imagine.", "The sea off Sootopolis is the sea.", "The weather's the weather."],
+      "maxie": ["Devon's delivery arrived. Late, but it arrived.", "Mt. Chimney's quiet. The crater's just a crater.", "The Weather Institute says rain. It's raining. Imagine.", "The wells near Lavaridge are full.", "The weather's the weather."]
+    },
+    "badge": "A young trainer took the {badge} at {town} yesterday. Leader {leader} said, and I quote: “{quote}”",
+    "leaders": {
+      "brock": { "badge": "Boulder Badge", "quote": "Good hands." },
+      "misty": { "badge": "Cascade Badge", "quote": "Fine. Fine! They were fine." },
+      "lt-surge": { "badge": "Thunder Badge", "quote": "Kid's got guts. Put that on the radio." },
+      "erika": { "badge": "Rainbow Badge", "quote": "I was very nearly awake for all of it." },
+      "koga": { "badge": "Soul Badge", "quote": "They saw what was there to be seen." },
+      "janine": { "badge": "Soul Badge", "quote": "Father says it was fair. I say it was close." },
+      "sabrina": { "badge": "Marsh Badge", "quote": "I knew. I let it happen anyway." },
+      "blaine": { "badge": "Volcano Badge", "quote": "Hot-headed! In the right way!" },
+      "giovanni": { "badge": "Earth Badge", "quote": "No comment." },
+      "falkner": { "badge": "Zephyr Badge", "quote": "They'll go a long way. Up, I hope." },
+      "bugsy": { "badge": "Hive Badge", "quote": "I learned something, actually. Write that down." },
+      "whitney": { "badge": "Plain Badge", "quote": "It's not fair! ...It was fair." },
+      "morty": { "badge": "Fog Badge", "quote": "I saw it coming. I didn't see how." },
+      "chuck": { "badge": "Storm Badge", "quote": "Wahahah! Again tomorrow!" },
+      "jasmine": { "badge": "Mineral Badge", "quote": "Um. They were very kind about the lighthouse." },
+      "pryce": { "badge": "Glacier Badge", "quote": "Patience. They had it. Most don't." },
+      "clair": { "badge": "Rising Badge", "quote": "I'll be speaking to the elders about this." },
+      "roxanne": { "badge": "Stone Badge", "quote": "Textbook. I'll be revising the textbook." },
+      "brawly": { "badge": "Knuckle Badge", "quote": "Rode it out. Respect." },
+      "wattson": { "badge": "Dynamo Badge", "quote": "Wahahahah! Shocking!" },
+      "flannery": { "badge": "Heat Badge", "quote": "I meant to do that. Some of it." },
+      "norman": { "badge": "Balance Badge", "quote": "I'll be telling their mother myself." },
+      "winona": { "badge": "Feather Badge", "quote": "Grace. Under pressure." },
+      "tate-liza": { "badge": "Mind Badge", "quote": "We both— “—saw it coming.”" },
+      "juan": { "badge": "Rain Badge", "quote": "Magnifique. In a city of water, they did not drown." }
+    },
+    "loud": "Trouble at {place} yesterday: {what}. Police haven't said who. {who}",
+    "loudWhat": { "lean": "a shopkeeper leaned on, by several people", "take": "something taken, in daylight", "expose": "a story everyone's now telling", "pay": "money changing hands, a lot of it", "persuade": "a lot of talking", "outplay": "a battle in the street", "scout": "people looking at things", "heist": "a break-in, a big one", "other": "a lot of noise" },
+    "work": "The {name} is open again. No word on who paid. The council says it wasn't them.",
+    "front": "And now an advert. I've been handed this. “{name}. Under new management. Come in.” ...That's it. That's the advert.",
+    "heat": "Police are asking anyone with information about {guess} to come forward.",
+    "heatGuess": ["a group of {n} in matching coats", "a gang of about a dozen, one of them very tall", "persons in uniform, possibly with a van, possibly not", "a team known locally by a letter, possibly {wrong}"],
+    "birthday": "This one's for {name}, from “everyone at the café.” It's {song}. I don't choose them.",
+    "songs": ["a sea shanty", "a lullaby", "something with a brass band"],
+    "quiet": [
+      "Dry today, rain by the evening. A Meowth's gone missing from the chemist's. Answers to “Tiddles.” Doesn't answer to anything.",
+      "Fair and breezy. The church fête is Saturday. The tombola's been fixed. The vicar says not like that.",
+      "High tide at four, low tide at ten. The ferry's running. That's the whole news.",
+      "Showers. The bakery on the corner has a new loaf. People have opinions.",
+      "Fog till noon. The bus is late. The bus is always late. Here's a song about buses.",
+      "Bright and cold. Someone's left a bicycle by the Centre. It's a nice bicycle. Come and get it.",
+      "Sun all day. The Pidgey are nesting under the bridge again. Please don't."
+    ],
+    "names": {
+      "unknown": "Persons unknown.",
+      "regard": "That lot with the letter on their coats.",
+      "dread": "A gang, the police say.",
+      "both": "A group: opinions differ.",
+      "regardHigh": "{team}. That's {spelled}, for listeners.",
+      "dreadHigh": "{team}.",
+      "bothHigh": "{team}. (A pause.) You'll have your own view."
+    },
+    "requests": [
+      { "from": "Everyone at the café", "for": "a Grunt's birthday", "what": "A shanty. A lullaby. Something with a brass band.", "live": true },
+      { "from": "A grateful fishmonger", "for": "The young people who mended my roof", "what": "A hymn. She can't think what else they'd like.", "live": true },
+      { "from": "G.", "for": "The new firm in Fuchsia", "what": "Something classical, and long. It's Giovanni. It's a threat or a courtesy. With him they're the same.", "live": true },
+      { "from": "Mum", "for": "{hero}", "what": "“Wherever you are, wrap up.”", "live": true },
+      { "from": "The Late Shift", "for": "The Boss", "what": "Whatever's the silliest record in the region. They've clubbed together.", "live": true },
+      { "from": "Piers", "for": "Whoever opened the shutter", "what": "One of his own. He doesn't say which.", "live": false, "waits": "Galar (slice 20)" }
+    ],
+    "requestLine": "A request, from “{from},” for “{for}.” {what}"
+  },
+  "paper": {
+    "regard": {
+      "low": ["Page nine. “LOCAL BRIDGE MENDED.” The name's spelled wrong, if it's there at all."],
+      "mid": ["Page three. “WHO PAID FOR THE CLINIC?”", "Page three. “MYSTERY BENEFACTORS STRIKE AGAIN”", "Page three. “THE LETTER ON THE COAT: A READER WRITES”"],
+      "high": ["The front. “WHO ARE THEY?”", "The front. “MAYOR INVITES ‘THE KETTLE LOT’ TO OPEN FÊTE”", "The front. “SHOULD WE THANK THEM?”"],
+      "top": ["“OURS.” One word. With a photograph of the Common Room window, lit."]
+    },
+    "dread": {
+      "low": ["Page nine. “SHOP WINDOW BROKEN: POLICE ‘AWARE.’”"],
+      "mid": ["Page three. “DOCKS: ‘NOBODY SAW ANYTHING.’”", "Page three. “SHOPKEEPERS TOO FRIGHTENED TO TALK”", "Page three. A wanted poster. The likeness is poor. The reward's low; that's an insult."],
+      "high": ["The front. “HOW LONG?”", "The front. “LEAGUE SILENT AS DISTRICT FALLS”", "The front. A letter, unsigned: “My father picked it up off the floor.”"],
+      "top": ["“THEIRS.” One word. With a photograph of a street with every shutter down."]
+    },
+    "both": "“BOTH.”",
+    "bothNoInterview": "“SAINTS OR RACKETEERS? WE ASKED TWELVE NEIGHBOURS. SIX EACH.”",
+    "guesses": {
+      "waive": "“BAKERY ‘CURSED’: NO GANG WILL TOUCH IT”",
+      "work": "“COUNCIL TAKES CREDIT FOR BRIDGE IT DID NOT BUILD”",
+      "heist": "“INSIDE JOB? MUSEUM STAFF QUESTIONED”",
+      "front": "“NEW CAFÉ: ‘SUSPICIOUSLY GOOD SOUP’”",
+      "dig": "“LIGHTS ON THE HILL: IS IT THEM?”",
+      "pen": "“PETS VANISHING: ARE WILD POKÉMON TO BLAME?”",
+      "nothing": "“QUIET WEEK: WHAT ARE THEY PLANNING?”"
+    },
+    "ferry": "“STRANGERS OFF THE FERRY: WHO ARE THEY REALLY?”",
+    "hero": {
+      "first": "“LOCAL YOUNGSTER'S FIRST BADGE: MUM ‘KNEW THEY WOULD’”",
+      "third": "“THREE AND COUNTING”",
+      "tick": "“CHILD FOILS GANG. POLICE: ‘WE WERE ABOUT TO.’”",
+      "work": "“YOUNG TRAINER SPOTTED AT MYSTERY BRIDGE: ‘I WAS ONLY LOOKING’”"
+    },
+    "neighbour": {
+      "war": "“TWO GANGS, ONE HARBOUR: RESIDENTS CAUGHT BETWEEN”",
+      "rivals": "“TURF: WHO OWNS MARKET STREET THIS WEEK?”",
+      "truce": "“A SUSPICIOUS PEACE”",
+      "front": "“{them} AND ‘THE KETTLE LOT’ SEEN AT SAME RESTAURANT. SEPARATE TABLES”",
+      "merger": "“ONE GANG NOW. IS THAT BETTER?”"
+    },
+    "endings": {
+      "scheme": "“PRICES STEADY.” That's all. Nobody noticed.",
+      "schemeCause": "“THE WORST SPEECH EVER GIVEN.” And under it: “IT PASSED.”",
+      "lastRoom": "Nothing. It happened in a room.",
+      "straight": "An advert. Quarter page. “UNDER THE SAME MANAGEMENT. NOW OPEN SUNDAYS.” The Roster voted on Sundays. It was close.",
+      "handOff": "A small notice, in the business column: a change of name over the door.",
+      "recruit": "“CHAMPION ORDERS INQUIRY INTO OWN LEAGUE”",
+      "caught": "The count. In a box. With the names of everyone who spoke, in two columns, and nothing else on the page."
+    },
+    "letGoColdly": "A letter, unsigned: “I worked for them. Ask me what the back room's for.”"
+  },
+  "margins": {
+    "ngozi": "This is the fourth ‘Leaned on’ this week. I only count.",
+    "obadiah": "The last lot's ledger looked like this in its second year. I mention it.",
+    "priya": "Line 31 was entered a day late. By you.",
+    "any": "Nothing in the left column this week. I've left the space.",
+    "anyBusy": "{n} lines this district. I've ruled the next page."
+  },
+  "officer": [
+    { "n": 1, "talent": "voice", "kind": "quiet", "text": "Boss. All well. I've talked the market into Tuesdays as well as Fridays. Nobody asked me to. It seemed a waste of a square. Takings are up a tenth. I've told them it was your idea. It wasn't. You're welcome." },
+    { "n": 2, "talent": "voice", "kind": "trouble", "text": "There's a man from theirs been coming round saying we've gone and left them. He's good. I've had to be better. I've been better for nine days running and I'm hoarse. If you could be seen here, once, I'd not have to say it so loudly.",
+      "choices": [
+        { "say": "Send a squad back.", "reply": "Two of yours, a day. He's stopped coming round.", "fx": { "loyalty": 1, "funds": -200 } },
+        { "say": "Come in person.", "reply": "You stood in the square for an hour. He saw. Everyone saw.", "fx": { "loyalty": 1, "flag": "cameInPerson" } },
+        { "say": "“Say it louder.”", "reply": "“Right you are.” The next letter's shorter.", "fx": { "loyalty": -1 } }
+      ] },
+    { "n": 3, "talent": "voice", "kind": "third", "text": "The kid's mother writes to the woman at the post office here. I'm told what's in the letters because the woman at the post office tells everybody everything. She asks if we're kind to people. I've not said anything. The woman at the post office has said yes." },
+    { "n": 4, "talent": "voice", "kind": "fourth", "text": "They've asked me to judge the bonny baby contest. Me. I said I'd a conflict of interest, being a criminal. They said that's why they asked: I'd not be bribed, because I'd know how. I'm doing it Saturday." },
+    { "n": 5, "talent": "hands", "kind": "quiet", "text": "Nothing to report so I've fixed things. The pump. The chapel clock. The lock on the school that hasn't shut since before I was born. They think it's ghosts. I've let them." },
+    { "n": 6, "talent": "hands", "kind": "trouble", "text": "Somebody's been at our lock-up. Not theirs: a kid, on his own, with a hairpin. He's eleven. He's not bad. I've not told his dad. I've told him he holds the pick wrong. What d'you want done?",
+      "choices": [
+        { "say": "“Teach him properly. Nothing of ours.”", "reply": "He's a locksmith in ten years. He'll be on the last card.", "fx": { "flag": "locksmith", "given": 1 } },
+        { "say": "“Tell his dad.”", "reply": "His dad came round with the lad by the ear. He apologised to the lock.", "fx": {} },
+        { "say": "“Change the lock.”", "reply": "Changed. He'll be back. They come back.", "fx": {} }
+      ] },
+    { "n": 7, "talent": "hands", "kind": "third", "text": "Enclosed: a key. It's for nothing. I made it out of the bit left over from the pump. It's the best key I've ever cut and there's no door. Put it on the Wall or throw it in the canal." },
+    { "n": 8, "talent": "hands", "kind": "fourth", "text": "I took the verger's watch back to him. It was in the box from before we held the place. He said, ‘I thought that was gone for good.’ I said so did I. That's all. I wanted it in writing that I did it without being told." },
+    { "n": 9, "talent": "eyes", "kind": "quiet", "text": "I've been watching the town be a town. Bins Tuesday. Choir Thursday. The butcher and the baker's wife, which everybody knows and nobody says. It's the first place I've ever watched that I didn't have to report on. I'm reporting on it anyway. Habit." },
+    { "n": 10, "talent": "eyes", "kind": "trouble", "text": "The neighbour's got a man in the room over the chemist. He's been there four days. He writes things down at the same times I do. We've started nodding. I think he's as bored as I am. Shall I leave him?",
+      "choices": [
+        { "say": "“Leave him. Wave.”", "reply": "They wave now. He's the one who'll warn you of their next move.", "fx": { "opinion": 1, "flag": "waveWatcher" } },
+        { "say": "“Move him on.”", "reply": "He's gone. There's a new one, over the baker's. He doesn't nod.", "fx": {} },
+        { "say": "“Feed him something false.”", "reply": "A Mislead. It's on the Card, and the Card says so.", "fx": { "flag": "mislead" } }
+      ] },
+    { "n": 11, "talent": "eyes", "kind": "third", "text": "A woman with a notebook's been asking who mended the pump. I said ghosts. She wrote ‘ghosts’ down. She underlined it. I don't think she believed me, but she wrote it down." },
+    { "n": 12, "talent": "eyes", "kind": "fourth", "text": "The kid came back through. You said they don't. They did: for a day, to see somebody's grandmother. Didn't look at us. Left a tin of something on the old lady's step and went. I thought you'd want to know they do that." },
+    { "n": 13, "talent": "nerve", "kind": "quiet", "text": "Nobody's tried anything. I've stood in the square every evening in case. I think I'm frightening the pigeons. A child asked if I was a statue." },
+    { "n": 14, "talent": "nerve", "kind": "trouble", "text": "Theirs came. Six. I'd three. We held. Nobody's hurt bar pride and one Zubat's wing, which the Centre's seen to. I'm not asking for more people. I'm telling you three was enough, so you know what three of yours are worth." },
+    { "n": 15, "talent": "nerve", "kind": "third", "text": "A lad came to challenge for the street. He'd a Caterpie and his dad's Machop that didn't listen to him. I said come back in a year. He cried. I'd have beaten him in two turns and felt it for a month. I'll take the telling-off if there is one.",
+      "choices": [
+        { "say": "“There isn't.”", "reply": "“Thank you.” Underlined.", "fx": { "loyalty": 1 } },
+        { "say": "“A street's a street. Take the challenge next time.”", "reply": "“Right.” Nothing else.", "fx": { "loyalty": -1 } },
+        { "say": "“Train him.”", "reply": "He's a local now, a small one. The kid meets him at a gate one day and he says who taught him.", "fx": { "flag": "trainedLad", "given": 1 } }
+      ] },
+    { "n": 16, "talent": "nerve", "kind": "fourth", "text": "The Gym Leader came down. Not to fight. Stood next to me in the square for an hour. Said, ‘You stand well.’ Went. I've been thinking about it for three days." },
+    { "n": 17, "talent": "books", "kind": "quiet", "text": "Accounts enclosed. They balance. I've started doing the bakery's as well, in the evenings. Hers were in a biscuit tin. She's been overpaying her miller since the spring. I've had a word with the miller." },
+    { "n": 18, "talent": "books", "kind": "trouble", "text": "We're short ₽1,100 and it's not theft. The cannery's closed for the month: a boiler. Forty people on no wage. I can make the district's sum come right by Leaning on them, or I can show a loss. I've shown a loss. Tell me if I was wrong and I'll go round.",
+      "choices": [
+        { "say": "“You weren't.”", "reply": "The loss stands. So does the cannery.", "fx": { "loyalty": 1 } },
+        { "say": "“Go round.”", "reply": "They went round. The Ledger line's in the Officer's name, and in brackets: “On instruction.”", "fx": { "funds": 1100, "taken": 1, "dread": 1, "loyalty": -1 } },
+        { "say": "“Send them the ₽1,100.”", "reply": "Sent. The cannery's boiler's mended by the Thursday.", "fx": { "funds": -1100, "given": 1 } }
+      ] },
+    { "n": 19, "talent": "books", "kind": "third", "text": "The old lot paid the dockers ₽40 a shift. We've been paying ₽40 because that's what the book said. It should be ₽60. I've checked it four ways. I'd like to pay ₽60 and I'd like you to be the one who says so, because it's your money and it ought to be your kindness.",
+      "choices": [
+        { "say": "“Pay them sixty.”", "reply": "Paid. Somebody at the docks has written your team's name on a crate in chalk.", "fx": { "funds": -120, "given": 1, "loyalty": 1 } },
+        { "say": "“Pay them fifty.”", "reply": "“Fifty, then.” A sum with no flag in the margin.", "fx": {} },
+        { "say": "“The book says forty.”", "reply": "“So it does.”", "fx": { "loyalty": -1 } }
+      ] },
+    { "n": 20, "talent": "books", "kind": "fourth", "straight": true, "text": "For the first time since you left, the district's paid for itself with the back room shut. One week. It may not happen again. I've drawn a small flag in the margin." },
+    { "n": 21, "talent": "wheels", "kind": "quiet", "text": "I run the bus now. Nobody asked me. The old driver retired and there wasn't one. Twice a day to the Centre and back. I don't charge the old ones. Ngozi'll write to me about that. Tell her I said it's ‘goodwill, depreciating.’" },
+    { "n": 22, "talent": "wheels", "kind": "trouble", "text": "Road's out at the bridge. Not ours: the old one, the stone one. Nothing in or out by wheel. I can get a cart round by the ford if somebody sends planks. I'm asking for planks. I never thought I'd write that sentence to a crime boss.",
+      "choices": [
+        { "say": "Send planks.", "reply": "A Work, half price, and it's the district's own. The bridge has a plank with your letter burned into it.", "fx": { "funds": -300, "given": 1 } },
+        { "say": "“Use the ford.”", "reply": "They used the ford. A cart went over. Nobody was hurt. The cart was.", "fx": {} },
+        { "say": "Come in person.", "reply": "You carried planks. The whole street watched a crime boss carry planks.", "fx": { "loyalty": 1, "flag": "cameInPerson" } }
+      ] },
+    { "n": 23, "talent": "wheels", "kind": "third", "text": "You'll have it on the Board by now. We drove off and Dov was still at the gate. I went back. On foot, because the van was what they were looking for. He was sat on a wall eating an apple. He said, ‘I knew you'd come, I just didn't know which of you.’ It was me. I'd like it to always be somebody." },
+    { "n": 24, "talent": "wheels", "kind": "fourth", "text": "Found the old drovers' way over the top. It's on no map. Comes out a day ahead of the coast road. I've walked it both ways and I've told nobody but you and a ewe.", "flag": "drovers" },
+    { "n": 25, "talent": "heart", "kind": "quiet", "text": "Two births, one wedding, no funerals. The Clinic's had eleven in and eleven out. I'm told that's not what the letter's for. I don't know what else you'd want to know about a place." },
+    { "n": 26, "talent": "heart", "kind": "trouble", "text": "There's a fever in the lower town. It's not bad. It's the kind that's bad if nobody comes. I've used what we had. I'm asking for the Infirmary's second box and I'll not pretend it's for our people.",
+      "choices": [
+        { "say": "Send it.", "reply": "Sent. The lower town's fever broke on the Sunday. The Infirmary's short for three days.", "fx": { "given": 1, "flag": "infirmaryShort" } },
+        { "say": "“Half.”", "reply": "Half. It was nearly enough.", "fx": {} },
+        { "say": "“It's for the Roster.”", "reply": "“Understood.” They didn't sign it.", "fx": { "loyalty": -1 } }
+      ] },
+    { "n": 27, "talent": "heart", "kind": "third", "text": "You'll have heard what was done on Mill Street in the new place. They talk, the squads. I'm not there and I'll not judge it from here. I'll say that the people in this place heard too, and three of them have stopped saying good morning to me. That's what it cost, where I can count it." },
+    { "n": 28, "talent": "heart", "kind": "fourth", "text": "One of theirs came in with a burn. I did it. He paid in the only thing he had, which was where their people are sleeping this week. I didn't ask for it. I've written it on the back of this. Use it or don't. I've not decided whether I should've let him pay." },
+    { "n": 29, "flaw": "talks", "kind": "flaw", "text": "I've told the whole pub about the Scheme. Not what it is. That there is one. I thought I should tell you before the pub does." },
+    { "n": 30, "flaw": "drinks", "kind": "flaw", "text": "I missed three days. The garrison covered it and didn't write to you, and I'm writing to you so they'll not have to carry it. The district lost two holdings. They're my two. I'll get them back or I'll come and say so to your face." },
+    { "n": 31, "flaw": "doubts", "kind": "flaw", "text": "I've stopped collecting on Fish Lane. I don't know why. I stood at the top of it on Friday and I couldn't go down. It's ₽200 a week. I'd rather you docked me than made me. I think. I'm not sure. That's the trouble.",
+      "choices": [
+        { "say": "“Then don't go down it.”", "reply": "Fish Lane's let off. Somebody there's left a fish on the step, wrapped.", "fx": { "loyalty": 1, "given": 1 } },
+        { "say": "“Go down it.”", "reply": "They went down it. The next letter doesn't mention it.", "fx": { "loyalty": -1 } },
+        { "say": "“I'll dock you.”", "reply": "“Fair.” ₽200 back, in an envelope inside the envelope.", "fx": { "funds": 200 } }
+      ] },
+    { "n": 32, "flaw": "skims", "kind": "flaw", "text": "The count's ₽600 light. You know why. I'm not going to dress it. There's a girl here wants to go to the academy and her dad's a docker. It's gone on the fees. Take it out of mine or take me out of the district.",
+      "choices": [
+        { "say": "“Keep it. She's going.”", "reply": "She's going. She'll write, they say. She does.", "fx": { "given": 1 } },
+        { "say": "“Take it out of yours.”", "reply": "Out of theirs. They'd expected it.", "fx": { "loyalty": -1 } },
+        { "say": "“Come home.”", "reply": "They're on the road back.", "fx": { "recall": true } }
+      ] },
+    { "n": 33, "flaw": "freezes", "kind": "flaw", "text": "They came for the lock-up and I stood there. Somebody else shouted. I'm told I'm still the Officer. I don't see how. I'm writing because nobody here will say it and somebody should.",
+      "choices": [
+        { "say": "“You saw them coming. Who else did?”", "reply": "Nobody. They're kept, and the garrison's told why.", "fx": { "loyalty": 1 } },
+        { "say": "“Send your second forward next time.”", "reply": "“Yes, Boss.”", "fx": {} },
+        { "say": "Recall them.", "reply": "They're on the road back.", "fx": { "recall": true } }
+      ] },
+    { "n": 34, "flaw": "loves", "kind": "flaw", "text": "She's been posted here. The constable. Of all the districts. We're being very correct. She fined me for the van on Tuesday. I paid it. It's the most romantic thing that's ever happened to me." },
+    { "n": 35, "flaw": "proud", "kind": "flaw", "text": "I'll not be sending for help. I'm aware what the Board says about the east side. I have it in hand. I'd be obliged if nobody were sent.", "after": "letterAgain" },
+    { "n": 36, "flaw": "kind", "kind": "flaw", "text": "I've waived the lot. All eleven. I know. It was the boiler and the fever and then it seemed mean to start again. We're paying for the district out of the café. I can do it till the Crossing. After that you'll need somebody harder or a district that's just a place we look after. I know which I'd pick. It's not mine to pick.",
+      "choices": [
+        { "say": "“Then it's a place we look after.”", "reply": "The district leaves the takings and joins the count at the Notice, whole.", "fx": { "given": 1, "flag": "lookAfter" } },
+        { "say": "“Start again. Gently.”", "reply": "“Gently, then.”", "fx": {} },
+        { "say": "Send a harder Officer.", "reply": "They're on the road back. They don't say anything about it.", "fx": { "recall": true, "loyalty": -1 } }
+      ] },
+    { "n": 37, "any": true, "kind": "staying", "text": "When the boat goes I'd like not to be on it. I'm not leaving you. I'm staying here. There's a difference and I've spent a week working out what it is. They need a somebody and I've turned out to be one.",
+      "choices": [
+        { "say": "A handshake, by post.", "reply": "It counts.", "fx": { "flag": "handshakePost", "loyalty": 1 } },
+        { "say": "“Come and say it at the quay.”", "reply": "“I'll be there.”", "fx": {} },
+        { "say": "“I need you on the boat.”", "reply": "They'll come. They mind.", "fx": { "loyalty": -1 } }
+      ] },
+    { "n": 38, "any": true, "kind": "wedding", "text": "Two of the garrison are getting married on the fourteenth. They want to know if you'd come. They'd not ask. I'm asking. There's a chair with nobody's name on it, at the front, and they've told everyone it's for an aunt.", "status": "disabled", "waits": "the wedding (Part 24c), with the Night (slice 7)" },
+    { "n": 39, "any": true, "kind": "back", "text": "I've run it well. I've the figures. I'm writing to say I'd give it all up to be back at the long table. I didn't know I'd miss the noise. Send anyone. I'll show them where everything is.",
+      "choices": [
+        { "say": "“Come home.”", "reply": "They're on the road back. Somebody's already laid a place.", "fx": { "recall": true, "loyalty": 1 } },
+        { "say": "“A while longer.”", "reply": "“A while, then.”", "fx": {} },
+        { "say": "“You're needed there.”", "reply": "“Right.”", "fx": { "loyalty": -1 } }
+      ] },
+    { "n": 40, "any": true, "kind": "nightBefore", "text": "We've heard it's tomorrow. The Reckoning. We're a day's ride away and we'd not get there. We've lit the lamp in the upstairs window, the one that faces your way. It's daft. You can't see it. It's lit." }
+  ],
+  "garrison": [
+    { "id": "g1", "text": "Boss. The Officer says I can write. I don't know what to put. The food's all right. Not Hortense's. Tell her I said that. Don't tell her I said ‘all right.’" },
+    { "id": "g2", "text": "I've been asked to stand for the parish council. As a joke, I think. I'm not sure it's a joke any more. They've printed a poster." },
+    { "id": "g3", "text": "Dov's had a letter from the kid's Friend. They met at the gate last year. They write about a card game. I thought you should know there's a card game." },
+    { "id": "g4", "text": "Is it true about the Pen? We hear things. I'd rather hear it from you.", "needs": "pen",
+      "choices": [
+        { "say": "Tell them the truth.", "reply": "“Thank you for telling me.” The garrison's quieter.", "fx": { "loyalty": 1 } },
+        { "say": "“It's not what you've heard.”", "reply": "“Right.” They don't believe it. They'd like to.", "fx": { "loyalty": -1 } },
+        { "say": "Don't answer.", "reply": "Nothing goes back. The next letter's about the weather.", "fx": {} }
+      ] },
+    { "id": "g5", "text": "The old lady at number four's died. We carried the box. She'd asked for us. All six, in the coats. Her son said, ‘Mum always said you were lovely lads.’ Two of us aren't lads. Nobody corrected him." }
+  ],
+  "cells": {
+    "holds": ["Did they get out? Nobody'll tell me. I counted nine past me before I went down. Was it nine? If it was nine I'm all right in here.", "It's not bad. There's a library. I've read a book about canals. Tell Beatriz there's a map in it she'd like and I've copied it out for her on the back of the menu.", "I'm not writing to ask. I know what the lawyer costs. I'm writing so you've got a letter. People should have letters."],
+    "slow": ["I was fourth in the queue for the back way. Fourth. The kid went first, and the Pokémon from the Pen, and the cook. I'd have put it in that order too. I'm just saying it's a long way back from fourth.", "Is anyone coming? I'm not being funny. I'd like to know which kind of waiting I'm doing."],
+    "aside": ["I told them everything. I'm sorry. No: I'm not. I'd nothing left to hold it in with. You'll have noticed the list got longer. That's me.", "They've offered me a deal. I'm going to take it. I'm telling you first, which is more than you'd have done."],
+    "flaw": {
+      "talks": "I've made friends with the sergeant. He's got a Growlithe called Sergeant. I asked which was named after which. He wouldn't say.",
+      "drinks": "Forty days dry, because there's nothing in here. It doesn't count. I'm counting it.",
+      "doubts": "I keep thinking they're right. Then I think about the soup. Then I think they're right about some of it and so's the soup.",
+      "skims": "There's a card school. I'm up nine cigarettes and I don't smoke.",
+      "freezes": "It's easier in here. Nobody needs me to do anything fast.",
+      "loves": "She's on the desk on Wednesdays. We don't speak. She brings the tea round herself and it's got sugar in and I've never told anybody here I take sugar.",
+      "proud": "Don't send anyone. I'll do the time. I'd not have it said I was fetched.",
+      "kind": "The lad in the next one's nineteen and he's never had a letter. I've told him you'll write. Write to him. His name's on the back."
+    },
+    "kindChoices": [
+      { "say": "Write to him.", "reply": "You wrote. A year on, he's an applicant.", "fx": { "flag": "strangerWritten" } },
+      { "say": "Ask them to write for you.", "reply": "They wrote. He kept it.", "fx": {} },
+      { "say": "Don't.", "reply": "Nothing goes. He doesn't ask again.", "fx": {} }
+    ],
+    "lawyer": "I'm out Thursday. The solicitor says it cost six thousand. I'll not pay you back because I can't. I'll just be there. Every day. Till it feels like six thousand.",
+    "jailbreak": "That was the stupidest thing I've ever seen anyone do. You came through the wall. Tomasz was singing. I've never been so glad to see a van in my life.",
+    "epilogue": {
+      "hortense": "I've sent a cake. They'll have cut it open to look for a file. Tell them I'd not waste a file on a sponge.",
+      "tobi": "We're all right. I'm doing the Board now. I'm rubbish at it. Ngozi does it really and I stand in front.",
+      "obadiah": "Pension came. On the day. Somebody's kept it up. I don't ask who.",
+      "heir": "I've changed one thing. I'll tell you which when you're out. You'll hate it. You'd have done it yourself in another year.",
+      "hero": "I said what I saw. I hope it helped. I'm not sure it should have. I'll come on the first Sunday."
+    }
+  },
+  "leavers": {
+    "line": "I'd do it again. I want that understood before anything. I'd also come back if the order were withdrawn and you said so out loud, in front of the squad. Both are true.",
+    "loyalty": null,
+    "loyaltyWritten": "I didn't think you knew my address.",
+    "lineMoved": "We're at the Clinic. We're keeping it open. It's got your name on the bench still. We've not taken it off. We've not decided.",
+    "hero": "I walked with the kid as far as the next town. They asked me things. I answered. I'm not sorry. They bought me a pasty. Nobody at yours ever bought me a pasty. That's not fair: Hortense fed me every day. But nobody bought me one.",
+    "poached": "The money's double. The food's worse. Nobody here knows my birthday. I'm in the squad that's coming to Market Street on the ninth. I shouldn't have told you that.",
+    "quest": "I found her. She's well. She didn't know me at first. I'm staying a while. Thank you for the three days and the van. I've enclosed the fare for the van.",
+    "stayed": "The shop's doing all right. I've a sign. It says my name and then ‘Est.’ and this year, which looks silly now but won't in twenty. Come by, if you come back this way. You won't. Come by anyway.",
+    "letGoKindly": "The month's wage got me a room and a start. I've told nobody anything. I'll go on telling them nothing. You were fair about it.",
+    "letGoColdly": null,
+    "handshake": "It's quieter than I thought. Out here. I'd not say I regret it. I'd say I think about the peg.",
+    "waits": { "poached": "poaching (slice 17)", "quest": "applicants' quests (slice 17)", "handshake": "knock 31 (slice 7)" }
+  },
+  "mothers": {
+    "told": {
+      "front": "Dear Sir or Madam, I am {name}'s mother. He says you are very good to him. He's not a strong boy but he's willing. Please see he wears a vest. I enclose ₽20 for his dinners as I'd not want him a burden.",
+      "truth": "I know what you are. He told me. I cried, and then I asked was he eating, and he said better than at home. I don't know what to do with that. Look after him. I'll know if you don't.",
+      "mates": "He says he's got mates. He's never had mates. Whatever it is you're doing, and I've a fair idea, thank you for that part of it."
+    },
+    "toldWaits": "knock 11 (slice 7)",
+    "frontNote": "The ₽20's in the envelope. Ngozi won't bank it. It's pinned to the Wall.",
+    "unprompted": [
+      { "id": "tomasz", "from": "fromMother", "text": "Is there truly dental? He says there is. Only his father never had a tooth looked at in his life and I'd like one of us to." },
+      { "id": "beatriz", "from": "fromAunt", "text": "She is sixteen whatever she's told you. Her exams are in June. I am sending the books. If she's not at a desk two hours a night I shall come and I am worse than the police.", "note": "The books arrive. They're in the Map Room." },
+      { "id": "obadiah", "from": "fromDaughter", "text": "He's seventy. He'll not tell you he can't do the stairs. Put the ledger room on the ground floor. Don't say I wrote.", "note": "A room moved for him's a Night's Build. Nobody says why. He knows." }
+    ]
+  },
+  "town": {
+    "warm": "We're having a do for the bridge. A year since. There's a seat for whoever paid for it. We know you'll not come. It'll be the empty one with the cushion.",
+    "easy": "Your lad left his gloves in my shop. They're on the counter. Tell him no hurry.",
+    "wary": "I've paid on time every week since March. I'd like it noted. I don't know who by.",
+    "sullen": "The window's still broken. I'm told you didn't break it. I'm told a lot of things.",
+    "shut": "",
+    "empty": "An empty envelope, addressed, sealed, with nothing in it.",
+    "child": "Dear Baddies. Thank you for the swings. Miss says I have to say Dear Sir. Dear Sir. Thank you for the swings. From Class 2.",
+    "erika": "The cutting has taken. I enclose a leaf. You needn't reply. Plants don't.",
+    "detective": "I've nothing on you this quarter. I find that suspicious and restful in about equal parts. — A."
+  },
+  "baskets": {
+    "cards": ["Regards.", "Regards.", "Regards. The pears are from my own trees.", "Regards.", "Regards. I hear you waived a bakery. Sentimental. I once waived a florist. — G.", "Regards.", "Regards.", "Regards.", "Still at it. Good. — G."],
+    "big": "A fruit basket, twice the size. No card at all.",
+    "basket": "A fruit basket from Giovanni. The card: “{card}”",
+    "others": {
+      "archie": { "text": "A message in a bottle, delivered by hand. “COME FOR A SWIM. BRING NOBODY WHO'LL TELL MAXIE.”", "live": true },
+      "maxie": { "text": "A memo. “Re: the attached, from A. Do not go for a swim.”", "live": true },
+      "saturn": { "text": "A canteen menu, with one dish underlined and a time.", "live": false, "waits": "Sinnoh (slice 19)" },
+      "n": { "text": "Nothing written. A feather, a pebble, a leaf: whatever the Pokémon that came chose to carry.", "live": false, "waits": "Unova (slice 19)" },
+      "lysandre": { "text": "His list, copied fair, with one line through it. “For your records. I shall miss the name.”", "live": false, "waits": "Kalos (slice 19)" },
+      "guzma": { "text": "“ur alright” Then: “*you're” Then: “plumeria made me fix it”", "live": false, "waits": "Alola (slice 20)" },
+      "piers": { "text": "A set list. One song's circled.", "live": false, "waits": "Galar (slice 20)" },
+      "rose": { "text": "A statement of account. “Balance: nil. Facility: available.”", "live": false, "waits": "Galar (slice 20)" },
+      "star": { "text": "A hall pass, signed by Clavell, made out to “the bearer,” valid one day. Nobody knows which of the five sent it.", "live": false, "waits": "Paldea (slice 20)" }
+    }
+  },
+  "postcards": {
+    "prodigy": { "nobody": "From nobody much, to nobody much. It's bigger than I thought.", "truth": "You were right. I'd never looked at it.", "silent": "" },
+    "hero": "Home. Mum says hello, which is strange of her. I'm coming back next year. I'm telling you so it's fair.",
+    "looker": "Understood. It happens. It happened to me.",
+    "stray": "Found it! It was here all along. Not here. Where I am. This is just the card they had.",
+    "leave": "Weather's dreadful. Mum's well. I miss the noise. Back Thursday.",
+    "chaser": "(A signed photograph. No message. The signature's very large.)"
+  },
+  "notebook": {
+    "kanto": { "name": "Achterberg", "free": "It's a firm now. I can't arrest a firm for being a firm.", "caught": "Fourteen items. I could prove nine. I've written the other five down anyway, for me." },
+    "johto": { "name": "Morikawa", "free": "I never found the door. I think there wasn't one. I think it was a kitchen.", "caught": "They asked me what I'd got wrong. I'd got the bakery wrong." },
+    "hoenn": { "name": "Ndiaye", "free": "Closed. My wife says they did the flowers at the wedding. I've not asked which of them.", "caught": "I arrested four people who came to my wedding. I'd like that on the file. I'd like it to weigh something." },
+    "sinnoh": { "name": "Brandt", "free": "Insufficient.", "caught": "Sufficient." },
+    "unova": { "name": "Vega", "free": "They moved the whole thing on a train. I watched it go. I waved, God help me.", "caught": "They'd a timetable pinned up. It was right." },
+    "kalos": { "name": "Fournier", "free": "I was on a list. They were on it too. They got themselves taken off. I didn't.", "caught": "I've put them somewhere safe. From him. That's what I've told myself it was." },
+    "alola": { "name": "Makoa", "free": "Nanu says leave it. Nanu always says leave it. This time I think he's read the file.", "caught": "Nanu came to the hearing. He sat at the back. He left before the count." },
+    "galar": { "name": "Hargreaves", "free": "I'll be in on Thursdays.", "caught": "The soup was good. That's not evidence. I've put it in anyway." },
+    "paldea": { "name": "Zubiri", "free": "The Director says they're ‘a matter for the school.’ I don't know what that means. I think it means they were kind to a child.", "caught": "Five children gave statements. None of them matched. All of them were for." },
+    "looker": { "name": "Looker", "free": "Not this time.", "caught": "I've done this in nine regions. This is the first one who asked me to sit down." },
+    "straight": "Closed. Not solved. Closed."
+  },
+  "songs": {
+    "gate": { "intro": "This one's for the kid goin' in. It's short.", "lines": ["Door's at the end of the street, kid,", "an' the street's the same as it's been.", "Whatever's in there, it was somebody first.", "Go in like you've already seen."], "after": "He doesn't look at the Boss's window. Forty people, not shouting. The Hero stands a moment, and goes in.", "live": false, "waits": "Galar's Reckoning (slice 20)" },
+    "team": { "intro": "He's coiling a lead and he doesn't announce it.", "lines": ["Never told 'em to stop, did I,", "an' you never told yours to stay.", "Funny old thing, a door left open:", "it's them that makes it a way."], "after": "It's on the set list he sends, circled.", "live": false, "waits": "Galar's Understanding (slice 20)" }
+  }
+}
