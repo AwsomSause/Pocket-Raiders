@@ -12,19 +12,23 @@ import { hqModel, newSetup, openingLines, SETUP_PAGES, toggleType, typeGrid, typ
 import type { DominionAction } from '../core/dominion/schema';
 import { services } from '../game/services';
 import { onInputAction, type InputAction } from '../ui/input';
+import { setLogKeyTaken } from '../ui/overlays';
 import { rxFileOf } from '../ui/redux/assets';
 import { mountRedux, type ReduxView } from '../ui/redux/stage';
 import { hqView, openingView, setupView, titleView, type SetupFiles } from '../ui/redux/screens/dominion/views';
 import { CrewController } from './dominion/crewController';
+import { HqController } from './dominion/hqController';
 import { cardModel, gridPages, mapModel, newCursor, pageFor, type MapCursor } from '../core/dominion/fieldScreens';
 import { cardView, mapView } from '../ui/redux/screens/dominion/fieldViews';
 
-type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew';
+type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'base';
 
 /** The screen to come back to after a battle (D2: the map the action was picked on, or the HQ for a fight at the door). */
 let resume: Screen | null = null;
 
 const TAB_KEYS: Record<string, number> = { Digit1: 0, Digit2: 1, Digit3: 2, Digit4: 3, Digit5: 4, Digit6: 5 };
+/** Letters the input layer also reads as moves (WASD); the HQ menu uses A (View Assets) and S (Sell). */
+const MOVE_LETTERS = new Set(['KeyW', 'KeyA', 'KeyS', 'KeyD', 'KeyZ', 'KeyX']);
 
 export class DominionScene extends Phaser.Scene {
   private view: ReduxView | null = null;
@@ -35,12 +39,16 @@ export class DominionScene extends Phaser.Scene {
   private at = 0;
   private notice: string | null = null;
   private leaving = false;
+  /** A letter the HQ menu used that is also a move key (A = left, S = down): its move is dropped. */
+  private ate = false;
   private files: SetupFiles | null = null;
   private cursor: MapCursor | null = null;
   private garage = false;
   private manifest: AssetManifest | undefined;
   /** D3: the Morning (mockup 2) and the Crew File (mockup 5). */
   private crew = new CrewController(this);
+  /** D5: the HQ menu (mockup 6). */
+  private hq = new HqController(this);
 
   constructor() {
     super('Dominion');
@@ -54,6 +62,7 @@ export class DominionScene extends Phaser.Scene {
     this.notice = null;
     this.leaving = false;
     this.crew = new CrewController(this);
+    this.hq = new HqController(this);
     const { session } = services();
     const run = session.run;
     if (!run) return void this.scene.start('MainMenu');
@@ -106,6 +115,8 @@ export class DominionScene extends Phaser.Scene {
         buy: (id) => this.buy(id),
         dismiss: () => { this.notice = null; this.view?.refresh(); },
         ...this.crew.acts(),
+        ...this.hq.acts(),
+        base: () => { this.hq.open(); this.view?.refresh(); },
       },
       overs: {
         typeOver: (i) => { this.setup = { ...this.setup, at: Number(i) }; this.view?.refresh(); },
@@ -113,7 +124,6 @@ export class DominionScene extends Phaser.Scene {
         ...this.crew.overs(),
       },
     });
-    onInputAction(this, (a) => this.key(a));
     const kb = this.input.keyboard;
     const raw = (e: KeyboardEvent): void => {
       if (this.leaving) return;
@@ -129,14 +139,28 @@ export class DominionScene extends Phaser.Scene {
         if (e.code === 'KeyB') this.bring();
         return;
       }
+      if (this.screen === 'base') {
+        if (this.hq.raw(e.code)) return void (this.ate = MOVE_LETTERS.has(e.code));
+        if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
+        return;
+      }
       if (this.screen !== 'hq' && this.screen !== 'crew') return;
       if (this.crew.raw(e.code)) return;
+      // D5: B opens the HQ menu (mockup 6) from the HQ.
+      if (this.screen === 'hq' && e.code === 'KeyB') return void (this.hq.open(), this.view?.refresh());
       if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
       else if (e.code === 'KeyN') this.step({ t: 'toNight' });
       else if (e.code === 'KeyE') this.step({ t: 'endDay' });
     };
     kb?.on('keydown', raw);
-    this.events.once('shutdown', () => kb?.off('keydown', raw));
+    // After `raw`, so a letter the HQ menu took (A, S) is not also read as a move.
+    onInputAction(this, (a) => this.key(a));
+    // L is Money on the HQ menu (mockup 6), so it doesn't open the interaction log there (Shift+L still does).
+    setLogKeyTaken(() => this.scene.isActive() && this.screen === 'base');
+    this.events.once('shutdown', () => {
+      kb?.off('keydown', raw);
+      setLogKeyTaken(null);
+    });
   }
 
   private block() {
@@ -172,12 +196,16 @@ export class DominionScene extends Phaser.Scene {
       }
       case 'crew':
         return this.crew.render(this.notice);
+      case 'base':
+        return this.hq.render(this.notice);
     }
   }
 
   private key(a: InputAction): void {
+    if (this.ate) return void (this.ate = false);
     if (this.leaving) return;
     if (this.crew.key(a)) return void this.view?.refresh();
+    if (this.hq.key(a)) return void this.view?.refresh();
     if (a === 'back') return this.back();
     if (a === 'confirm') return this.confirm();
     if (this.screen === 'title' && (a === 'up' || a === 'down')) this.titleAt = this.titleAt ? 0 : 1;
@@ -270,6 +298,13 @@ export class DominionScene extends Phaser.Scene {
   setNotice(n: string | null): void {
     this.notice = n;
   }
+  /** D5: Hire Grunt and Manage Team on the HQ menu open the Crew File (with the hire list for Hire Grunt). */
+  openCrew(hire: boolean): void {
+    this.screen = 'hq';
+    this.crew.tab(2);
+    if (hire) this.crew.raw('KeyH');
+    this.view?.refresh();
+  }
   refresh(): void {
     this.view?.refresh();
   }
@@ -286,7 +321,13 @@ export class DominionScene extends Phaser.Scene {
   }
 
   private tab(i: number): void {
-    if (this.screen !== 'hq' && this.screen !== 'map' && this.screen !== 'crew') return;
+    if (this.screen !== 'hq' && this.screen !== 'map' && this.screen !== 'crew' && this.screen !== 'base') return;
+    if (this.screen === 'base' && i === 0) {
+      this.screen = 'hq';
+      this.notice = null;
+      return void this.view?.refresh();
+    }
+    if (this.screen === 'base' && i === 2) this.screen = 'hq';
     if (this.crew.tab(i)) return void this.view?.refresh();
     const b = this.block();
     this.notice = null;

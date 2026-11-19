@@ -15,6 +15,9 @@ import { beginDominionFight } from './fight';
 import { DOMINION_DATA } from './data';
 import { DominionBlockSchema, type DominionAction, type DominionBlock, type DominionSetup } from './schema';
 import { newBlock, typesProblem } from './start';
+import { build, letGo, loan, rebuild, repay, sell, storageCap, tierUp, upgrade, launder, type HqOut } from './hq';
+import { withHq } from './hqFx';
+import { levelCap } from '../regions';
 
 export const DOMINION_MODE_ID = 'dominion';
 export const isDominionRun = (run: RunState | null | undefined): boolean => run?.rules.modeId === DOMINION_MODE_ID;
@@ -45,7 +48,9 @@ export function startInRun(content: Content, run: RunState, setup: DominionSetup
   const problem = typesProblem(setup.types);
   if (problem) return { run, problem };
   let out = bossTeam(content, structuredClone(run));
-  const block = DominionBlockSchema.parse(fillCards(withCrew(newBlock(content, out, setup)), run.seed));
+  const fresh = newBlock(content, out, setup);
+  // D5: the starting money is clean (A21). D19: every member gets their personality card.
+  const block = DominionBlockSchema.parse(fillCards(withHq(withCrew(fresh), fresh.funds), run.seed));
   out = { ...withBlock(out, block), inventory: { ...DOMINION_DATA.start.start.inventory } };
   return { run: out, problem: null };
 }
@@ -63,6 +68,8 @@ function stepOnce(content: Content, run: RunState, action: DominionAction): Step
   if (!block) return { ok: false, block: block as never, notice: null, heal: false, run };
   const crewOut = crewInRun(content, run, action);
   if (crewOut) return crewOut;
+  const hqOut = hqInRun(content, run, action);
+  if (hqOut) return hqOut;
   if (action.t === 'act') {
     // D2: a Boss action (field.ts). A Pokémon lifted in a Ball (Thieve, a big success) joins the team or the box.
     const work = structuredClone(run);
@@ -89,6 +96,27 @@ function stepOnce(content: Content, run: RunState, action: DominionAction): Step
   }
   next = settleCrew(content, next);
   return { ...out, block: next.expansion!.dominion!, run: next };
+}
+
+/** D5: the HQ menu (hq.ts). The upgrade needs the run for the region's level cap (the Citadel's). */
+function hqInRun(content: Content, run: RunState, action: DominionAction): (StepOut & { run: RunState }) | null {
+  const b = run.expansion!.dominion!;
+  let out: HqOut;
+  switch (action.t) {
+    case 'upgrade': out = upgrade(b, levelCap(content, run.regionIndex)); break;
+    case 'build': out = build(b, action.building, action.district); break;
+    case 'tierUp': out = tierUp(b, action.room); break;
+    case 'sell': out = sell(b, action.room); break;
+    case 'rebuild': out = rebuild(b, action.room); break;
+    case 'launder': out = launder(b, action.amount); break;
+    case 'loan': out = loan(b, action.amount); break;
+    case 'repay': out = repay(b, action.amount); break;
+    case 'letGo': out = letGo(b, action.member); break;
+    default: return null;
+  }
+  if (!out.ok) return { ok: false, block: b, notice: out.notice, heal: false, run };
+  const next = withBlock(run, DominionBlockSchema.parse(out.block));
+  return { ok: true, block: next.expansion!.dominion!, notice: out.notice, heal: false, run: next };
 }
 
 /** D3 actions that need the run (new members' Pokémon, the Bag): hire, approach, admit, gifts, talks that give an item. */
@@ -171,6 +199,13 @@ export function settleCrew(content: Content, run: RunState): RunState {
     } else out.inventory[p.id] = (out.inventory[p.id] ?? 0) + p.n;
   }
   st.pending = [];
+  // D5: the stores hold 20 Pokémon, more with Pokémon Storage; the newest over the cap are let go, and the report says so.
+  const cap = storageCap(b);
+  if (st.stores.length > cap) {
+    const n = st.stores.length - cap;
+    st.stores = st.stores.slice(0, cap);
+    b.report = [...b.report, DOMINION_DATA.hq.lines.storageFull!.replace('{cap}', String(cap)).replace('{n}', String(n))];
+  }
   return out;
 }
 
