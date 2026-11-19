@@ -14,7 +14,7 @@ const ALERT: Record<string, [string, string, string]> = {
   crew: ['g', 'g-card-key', 'CREW'], money: ['y', 'g-relic-gold', 'FRONTS'], rival: ['r', 'g-meteorite', 'RIVALS'],
   police: ['b', 'g-silph-scope', 'POLICE'], hero: ['v', 'g-comet-shard', 'HERO'], world: ['b', 'g-journal', 'NEWS'],
 };
-export const OPEN_TABS = [0, 2] as const;
+export const OPEN_TABS = [0, 1, 2] as const;
 
 /** A member's picture: a plain png (Rook's) or a trainer atlas, cropped into a box. */
 function face(look: string, h: number, style: string): string {

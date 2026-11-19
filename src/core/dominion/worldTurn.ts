@@ -1,6 +1,7 @@
 // The World Turn (Part 9 A1): after the Boss's Night action or Rest, the world moves in a fixed order, and each move is
 // one line of the next morning's Night Report. The order never changes. Each later slice registers its step here (D2
-// police, D9 rivals, D11 Hero and Legendaries) with its own named stream; nothing in the World Turn ends a run.
+// police and the districts' world step in field.ts, D9 rivals, D11 Hero and Legendaries) with its own named stream;
+// nothing in the World Turn ends a run.
 
 import { DOMINION_DATA } from './data';
 import type { DominionBlock } from './schema';
@@ -17,11 +18,7 @@ const fill = (t: string, v: Record<string, string | number>): string => t.replac
 const STEPS: Partial<Record<WorldStepId, WorldStep[]>> = {
   // crew: slice D3's step (crew.ts) registers itself.
   world: [
-    (b) => {
-      const was = b.heat;
-      b.heat = Math.max(0, b.heat - DOMINION_DATA.start.clock.heatCoolPerDay);
-      return was === b.heat ? [] : [fill(DOMINION_DATA.start.report.cool, { heat: b.heat })];
-    },
+    // Heat cooling moved to D2's world step (field.ts): each district cools, and the top bar's Heat is the region's Wanted.
     // Weekly bills (Part 1 §2.2) on every 7th morning: rent, then wages member by member while the money lasts.
     // Going broke (A22) is D5's; here an unpaid member loses 15 Loyalty and counts an unpaid week.
     (b) => {

@@ -16,8 +16,13 @@ import { rxFileOf } from '../ui/redux/assets';
 import { mountRedux, type ReduxView } from '../ui/redux/stage';
 import { hqView, openingView, setupView, titleView, type SetupFiles } from '../ui/redux/screens/dominion/views';
 import { CrewController } from './dominion/crewController';
+import { cardModel, gridPages, mapModel, newCursor, pageFor, type MapCursor } from '../core/dominion/fieldScreens';
+import { cardView, mapView } from '../ui/redux/screens/dominion/fieldViews';
 
-type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'crew';
+type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew';
+
+/** The screen to come back to after a battle (D2: the map the action was picked on, or the HQ for a fight at the door). */
+let resume: Screen | null = null;
 
 const TAB_KEYS: Record<string, number> = { Digit1: 0, Digit2: 1, Digit3: 2, Digit4: 3, Digit5: 4, Digit6: 5 };
 
@@ -31,6 +36,9 @@ export class DominionScene extends Phaser.Scene {
   private notice: string | null = null;
   private leaving = false;
   private files: SetupFiles | null = null;
+  private cursor: MapCursor | null = null;
+  private garage = false;
+  private manifest: AssetManifest | undefined;
   /** D3: the Morning (mockup 2) and the Crew File (mockup 5). */
   private crew = new CrewController(this);
 
@@ -51,6 +59,19 @@ export class DominionScene extends Phaser.Scene {
     if (!run) return void this.scene.start('MainMenu');
     this.titleAt = dominionBlock(run) ? 1 : 0;
     const manifest = this.cache.json.get('manifest') as AssetManifest | undefined;
+    this.manifest = manifest;
+    this.garage = false;
+    this.cursor = null;
+    // D2: back from a battle (or a battle lost with a closed tab): settle what's left, then return to where it started.
+    const stale = session.dominionSettle();
+    if (stale?.length) this.notice = stale.join(' ');
+    const back = resume;
+    resume = null;
+    const blk = dominionBlock(session.run);
+    if (back && blk?.opened) {
+      this.screen = back === 'card' ? 'map' : back;
+      if (this.screen === 'map') this.cursor = newCursor(blk);
+    }
     const archetype = getArchetype(session.content, run.archetypeId);
     const level = run.party[0]?.level ?? 5;
     const d = DOMINION_DATA.start;
@@ -74,6 +95,16 @@ export class DominionScene extends Phaser.Scene {
         more: () => this.confirm(),
         order: (i) => { this.at = Number(i); this.confirm(); },
         tab: (i) => this.tab(Number(i)),
+        district: (id) => this.pickDistrict(id),
+        target: (i) => { if (this.cursor) this.cursor = { ...this.cursor, target: Number(i) }; this.view?.refresh(); },
+        grid: (i) => { if (!this.cursor) return; const at = Number(i); const again = this.cursor.focus === 'grid' && this.cursor.at === at; this.cursor = { ...this.cursor, at, focus: 'grid' }; if (again) this.openCard(); else this.view?.refresh(); },
+        page: (d) => this.turnPage(Number(d)),
+        card: () => this.openCard(),
+        doit: () => this.doIt(),
+        back: () => this.back(),
+        bring: () => this.bring(),
+        buy: (id) => this.buy(id),
+        dismiss: () => { this.notice = null; this.view?.refresh(); },
         ...this.crew.acts(),
       },
       overs: {
@@ -85,7 +116,20 @@ export class DominionScene extends Phaser.Scene {
     onInputAction(this, (a) => this.key(a));
     const kb = this.input.keyboard;
     const raw = (e: KeyboardEvent): void => {
-      if ((this.screen !== 'hq' && this.screen !== 'crew') || this.leaving) return;
+      if (this.leaving) return;
+      if (this.screen === 'map') {
+        if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
+        else if (e.code === 'KeyT') this.nextTarget();
+        else if (e.code === 'KeyV') { this.garage = !this.garage; this.view?.refresh(); }
+        else if (e.code === 'BracketLeft') this.turnPage(-1);
+        else if (e.code === 'BracketRight') this.turnPage(1);
+        return;
+      }
+      if (this.screen === 'card') {
+        if (e.code === 'KeyB') this.bring();
+        return;
+      }
+      if (this.screen !== 'hq' && this.screen !== 'crew') return;
       if (this.crew.raw(e.code)) return;
       if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
       else if (e.code === 'KeyN') this.step({ t: 'toNight' });
@@ -117,6 +161,15 @@ export class DominionScene extends Phaser.Scene {
       case 'hq':
         if (b && this.crew.owns()) return this.crew.render(this.notice);
         return b ? hqView(hqModel(b), this.notice, this.at, this.memberLook()) : '';
+      case 'map':
+        return b && this.cursor ? mapView(mapModel(b, services().session.run!, this.cursor), this.notice, this.garage) : '';
+      case 'card': {
+        const c = b && this.cursor ? this.cardOf() : null;
+        if (!b || !c) return '';
+        const sp = c.battle?.species ? services().session.content.species.get(c.battle.species) : undefined;
+        const file = sp ? rxFileOf(this.manifest, pokemonAssetIds(sp.assets).front)?.file ?? null : null;
+        return cardView(c, file, b.teamName?.[0]?.toUpperCase() ?? '');
+      }
       case 'crew':
         return this.crew.render(this.notice);
     }
@@ -129,6 +182,7 @@ export class DominionScene extends Phaser.Scene {
     if (a === 'confirm') return this.confirm();
     if (this.screen === 'title' && (a === 'up' || a === 'down')) this.titleAt = this.titleAt ? 0 : 1;
     else if (this.screen === 'setup') this.setupMove(a);
+    else if (this.screen === 'map') this.mapMove(a);
     else if (this.screen === 'hq' && (a === 'up' || a === 'down')) {
       const n = hqModel(this.block()!).orders.length;
       if (n) this.at = (this.at + (a === 'up' ? -1 : 1) + n) % n;
@@ -165,6 +219,12 @@ export class DominionScene extends Phaser.Scene {
         services().session.dominionStep({ t: 'open' });
         this.screen = 'hq';
       }
+    } else if (this.screen === 'map' && this.cursor) {
+      if (this.notice) this.notice = null;
+      else if (this.cursor.focus === 'map') this.cursor = { ...this.cursor, focus: 'grid' };
+      else return this.openCard();
+    } else if (this.screen === 'card') {
+      return this.doIt();
     } else if (this.screen === 'hq' && b) {
       const m = hqModel(b);
       const order = m.orders[this.at];
@@ -194,7 +254,9 @@ export class DominionScene extends Phaser.Scene {
     if (this.screen !== 'hq') return this.confirm();
     const b = this.block();
     if (!b) return;
-    const by: Record<string, DominionAction> = { evening: { t: 'toNight' }, night: { t: 'rest' }, morning: { t: 'toDay' }, day: { t: 'endDay' } };
+    // D2: Looker or a raid at the door is fought before the day starts.
+    if (b.phase === 'morning' && b.field.fight && !b.field.fight.begun) return this.fight('hq');
+    const by: Record<string, DominionAction> = { evening: { t: 'toNight' }, night: { t: b.nightActions < 1 ? 'skipNight' : 'rest' }, morning: { t: 'toDay' }, day: { t: 'endDay' } };
     this.step(by[b.phase]!);
   }
 
@@ -224,9 +286,127 @@ export class DominionScene extends Phaser.Scene {
   }
 
   private tab(i: number): void {
-    if (this.screen !== 'hq' && this.screen !== 'crew') return;
+    if (this.screen !== 'hq' && this.screen !== 'map' && this.screen !== 'crew') return;
     if (this.crew.tab(i)) return void this.view?.refresh();
-    this.notice = i === 0 ? null : DOMINION_DATA.start.lockedTab;
+    const b = this.block();
+    this.notice = null;
+    this.garage = false;
+    if (i === 0) this.screen = 'hq';
+    else if (i === 1 && b) {
+      this.screen = 'map';
+      this.cursor = this.cursor ?? newCursor(b);
+      this.cursor = { ...this.cursor, page: pageFor(b), at: 0 };
+    } else this.notice = DOMINION_DATA.start.lockedTab;
+    this.view?.refresh();
+  }
+
+  // ---------- D2: the Region Map and the Card ----------
+
+  private cardOf() {
+    const b = this.block(), c = this.cursor;
+    if (!b || !c) return null;
+    const id = gridPages(b)[c.page]?.[c.at];
+    const d = DOMINION_DATA.field.districts.find((x) => x.id === c.district);
+    if (!id || !d) return null;
+    return cardModel(b, services().session.run!, id, d.targets[c.target]?.id ?? null, d.id, c.bring);
+  }
+
+  private pickDistrict(id: string): void {
+    if (!this.cursor) return;
+    const same = this.cursor.district === id;
+    this.cursor = { ...this.cursor, district: id, target: same ? this.cursor.target : 0, focus: same ? 'grid' : 'map' };
+    this.view?.refresh();
+  }
+
+  /** Arrows on the map: to the nearest district that way; on the grid: round the 3x3. */
+  private mapMove(a: InputAction): void {
+    const c = this.cursor;
+    if (!c) return;
+    if (c.focus === 'grid') {
+      const n = gridPages(this.block()!)[c.page]?.length ?? 9;
+      const d = a === 'left' ? -1 : a === 'right' ? 1 : a === 'up' ? -3 : a === 'down' ? 3 : 0;
+      this.cursor = { ...c, at: Math.max(0, Math.min(n - 1, c.at + d)) };
+      return;
+    }
+    const all = DOMINION_DATA.field.districts;
+    const here = all.find((x) => x.id === c.district)!;
+    const [dx, dy] = a === 'left' ? [-1, 0] : a === 'right' ? [1, 0] : a === 'up' ? [0, -1] : a === 'down' ? [0, 1] : [0, 0];
+    let best: { id: string; score: number } | null = null;
+    for (const o of all) {
+      if (o.id === here.id) continue;
+      const vx = o.x - here.x, vy = o.y - here.y;
+      const along = vx * dx + vy * dy;
+      if (along <= 0) continue;
+      const score = along + 2 * Math.abs(vx * dy + vy * dx);
+      if (!best || score < best.score) best = { id: o.id, score };
+    }
+    if (best) this.cursor = { ...c, district: best.id, target: 0 };
+  }
+
+  private nextTarget(): void {
+    const c = this.cursor;
+    const d = c ? DOMINION_DATA.field.districts.find((x) => x.id === c.district) : undefined;
+    if (!c || !d) return;
+    this.cursor = { ...c, target: (c.target + 1) % d.targets.length };
+    this.view?.refresh();
+  }
+
+  private turnPage(dir: number): void {
+    const b = this.block(), c = this.cursor;
+    if (!b || !c) return;
+    const n = gridPages(b).length;
+    this.cursor = { ...c, page: (c.page + dir + n) % n, at: 0, focus: 'grid' };
+    this.view?.refresh();
+  }
+
+  private openCard(): void {
+    if (!this.cursor || !this.cardOf()) return;
+    this.notice = null;
+    this.garage = false;
+    this.screen = 'card';
+    this.view?.refresh();
+  }
+
+  /** Bring crew (up to two): none, then each member in turn. D3 adds more members. */
+  private bring(): void {
+    const b = this.block(), c = this.cursor;
+    if (!b || !c) return;
+    const ids = b.members.map((m) => m.id);
+    const now = c.bring[0];
+    const i = now ? ids.indexOf(now) : -1;
+    this.cursor = { ...c, bring: i + 1 < ids.length ? [ids[i + 1]!] : [] };
+    this.view?.refresh();
+  }
+
+  private doIt(): void {
+    const b = this.block(), c = this.cursor, card = this.cardOf();
+    if (!b || !c || !card) return;
+    if (card.blocked) return this.view?.refresh();
+    const id = gridPages(b)[c.page]![c.at]!;
+    const d = DOMINION_DATA.field.districts.find((x) => x.id === c.district)!;
+    const out = services().session.dominionStep({ t: 'act', action: id, target: d.targets[c.target]?.id ?? null, district: d.id, bring: c.bring });
+    this.screen = 'map';
+    this.notice = out.notice;
+    if (out.ok && out.fight) return this.fight('map');
+    this.view?.refresh();
+  }
+
+  /** Starts the battle the block waits on; the scene comes back to `from` afterwards. */
+  private fight(from: Screen): void {
+    resume = from;
+    if (services().session.dominionFight()) {
+      this.leaving = true;
+      this.scene.start('Battle');
+      return;
+    }
+    resume = null;
+    this.notice = 'Nobody can fight: rest first.';
+    this.view?.refresh();
+  }
+
+  private buy(id: string): void {
+    const out = services().session.dominionStep({ t: 'buy', vehicle: id });
+    this.notice = out.notice;
     this.view?.refresh();
   }
 
@@ -235,6 +415,18 @@ export class DominionScene extends Phaser.Scene {
       const i = SETUP_PAGES.indexOf(this.setup.page);
       if (i > 0) this.setup = { ...this.setup, page: SETUP_PAGES[i - 1]!, problem: null };
       else this.screen = 'title';
+      return this.view?.refresh();
+    }
+    if (this.screen === 'card') {
+      this.screen = 'map';
+      return this.view?.refresh();
+    }
+    if (this.screen === 'map') {
+      if (this.notice || this.garage) {
+        this.notice = null;
+        this.garage = false;
+      } else if (this.cursor?.focus === 'grid') this.cursor = { ...this.cursor, focus: 'map' };
+      else this.screen = 'hq';
       return this.view?.refresh();
     }
     if (this.screen === 'hq' && this.notice) {

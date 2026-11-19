@@ -188,7 +188,7 @@ export function hqView(m: HqModel, notice: string | null, at: number, member: { 
   } else {
     left = `<div class="pnl glass" style="left:10px;top:86px;width:290px;height:170px" data-testid="dom-night">
       <div class="hd" style="color:#9fc4ff"><img class="ic" src="${img('g-letter')}" alt="">TONIGHT</div>
-      <div class="col sm" style="gap:6px;line-height:1.35"><div><b>Rest:</b> your Pokémon heal for free, the crew's Morale +5, and +1 action tomorrow.</div><div class="mu xs">Heists, raids and night thieving come with the Boss's actions.</div></div></div>`;
+      <div class="col sm" style="gap:6px;line-height:1.35">${m.next.label === 'Turn in' ? '<div>Tonight\'s action is done. Turn in: no Rest tonight.</div>' : '<div><b>Rest:</b> your Pokémon heal for free, the crew\'s Morale +5, and +1 action tomorrow.</div><div class="mu xs">Or one Night action on the Region Map (key 2): Steal, Hide in the Warehouse...</div>'}</div></div>`;
   }
   const pic = member.atlas ? `<div class="a bob" style="left:404px;top:266px;z-index:4">${tall(member.look, 195)}</div>` : `<img class="spr bob" src="${rxUrl(member.look)}" alt="${esc(m.member.name)}" style="left:404px;top:266px;width:126px;height:195px;z-index:4">`;
   const face = member.atlas ? `<div style="position:absolute;left:-8px;top:-4px">${tall(member.look, 210)}</div>` : `<img class="spr" src="${rxUrl(member.look)}" alt="" style="left:-58px;top:-10px;width:210px;height:325px">`;
@@ -222,7 +222,7 @@ export function hqView(m: HqModel, notice: string | null, at: number, member: { 
   ${steps}
   <div class="cta${m.phase === 'morning' ? ' shine' : ''}" style="left:10px;width:${m.panel === 'report' ? 340 : 290}px;top:${m.panel === 'report' ? 398 : m.panel === 'night' ? 270 : 286}px;font-size:20px;padding:9px 18px"${act('next')} data-testid="dom-next">${esc(m.next.label)} ▶ <span class="kc">${esc(m.next.hint)}</span></div>
   ${notice ? `<div class="a" style="left:330px;width:300px;top:86px;z-index:20;background:rgba(10,14,30,.88);border:2px solid #8cc0ff;border-radius:8px;padding:8px 10px;font-size:14px;line-height:1.3" data-testid="dom-notice">${esc(notice)}</div>` : ''}
-  ${tabs(0, [0, 2])}
+  ${tabs(0, [0, 1, 2])}
   <div class="ping" style="left:120px;top:400px;width:40px;height:14px;--pc:rgba(160,200,255,.7)"></div>
   <div class="ping" style="left:200px;top:420px;width:34px;height:12px;--pc:rgba(160,200,255,.6);animation-delay:-1.1s"></div>
   <img class="spr bob" src="${img('p-rattata')}" alt="" style="left:96px;top:424px;width:46px;height:40px;z-index:4">

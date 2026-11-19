@@ -1,0 +1,221 @@
+{
+  "_source": "DOMINION D2, the Boss's hands. Design: plans/evil-mode-rework Part 1 §3 (the nine, odds, Heat and the police ladder), Part 3 §2 (districts and Control), Part 4 §4 (the police), Part 9 A1 (World Turn) and A20 (travel and vehicles); mockups s3 (Region Map) and s4 (the Card). Kanto's ten districts and their places follow mockup 3. Numbers are starting values (the design's own where it gives them).",
+  "region": "kanto",
+  "hq": "pewter",
+  "rivalTeam": "Rocket",
+  "districts": [
+    { "id": "pewter", "name": "Pewter", "x": 38, "y": 40, "control": 10, "rival": 0, "police": false, "wild": "ground-rock", "targets": [
+      { "id": "pewter-mart", "name": "Pewter Mart", "kind": "shop", "owner": { "name": "The Mart clerk", "look": "dominion/t-clerk.png", "line": "Fifteen years behind that till. He counts twice." }, "trait": { "word": "Timid", "odds": 5 }, "pay": 1, "foe": { "name": "The clerk's brother", "cls": "worker", "species": ["geodude"], "offset": 0 } },
+      { "id": "pewter-museum", "name": "Museum of Science", "kind": "site", "owner": { "name": "The night watchman", "look": "trainer/pr/veteran_m", "line": "Sixty, and fond of his chair by the door." }, "trait": { "word": "Stubborn", "odds": -6 }, "pay": 1.4, "foe": { "name": "The watchman", "cls": "veteran", "species": ["onix"], "offset": 1 } },
+      { "id": "route-3", "name": "Route 3", "kind": "route", "owner": { "name": "Trainers on the route", "look": "trainer/pr/backpacker_m", "line": "They'll walk home without their prize money." }, "trait": null, "pay": 1, "foe": { "name": "Hiker Marcos", "cls": "hiker", "species": ["geodude", "sandshrew"], "offset": 0 } }
+    ] },
+    { "id": "viridian", "name": "Viridian", "x": 38, "y": 156, "control": 0, "rival": 15, "police": false, "wild": "grass-bug", "targets": [
+      { "id": "viridian-mart", "name": "Viridian Mart", "kind": "shop", "owner": { "name": "The old man at the till", "look": "trainer/pr/rich_m", "line": "He'll pay. He'll tell everyone at the Center." }, "trait": { "word": "Tired", "odds": 4 }, "pay": 0.9, "foe": { "name": "His grandson, grown", "cls": "camper", "species": ["pidgey"], "offset": 0 } },
+      { "id": "viridian-center", "name": "Pokémon Center", "kind": "center", "owner": { "name": "Nurse Joy", "look": "trainer/pr/doctor_f", "line": "The donation box was for new Potions." }, "trait": { "word": "Watchful", "odds": -4 }, "pay": 0.8, "foe": { "name": "A trainer on the bench", "cls": "ace-trainer", "species": ["spearow"], "offset": 1 } },
+      { "id": "viridian-forest", "name": "Viridian Forest", "kind": "route", "owner": { "name": "Bug catchers, all grown up", "look": "trainer/pr/ranger_m", "line": "They came for Caterpie. They'll leave with less." }, "trait": null, "pay": 0.9, "foe": { "name": "Ranger Elle", "cls": "ranger", "species": ["beedrill"], "offset": 0 } }
+    ] },
+    { "id": "pallet", "name": "Pallet", "x": 38, "y": 254, "control": 0, "rival": 0, "police": false, "wild": "normal-flying", "targets": [
+      { "id": "oak-lab", "name": "Oak's Lab", "kind": "site", "owner": { "name": "The lab aide", "look": "trainer/pr/scientist_m", "line": "Writes everything down. Everything." }, "trait": { "word": "Careful", "odds": -8 }, "pay": 1.5, "foe": { "name": "The lab aide", "cls": "psychic", "species": ["abra", "rattata"], "offset": 1 } },
+      { "id": "pallet-street", "name": "Pallet Lane", "kind": "street", "owner": { "name": "Neighbours with time on their hands", "look": "trainer/pr/pokefan_f", "line": "A quiet town. It was." }, "trait": { "word": "Trusting", "odds": 8 }, "pay": 0.6, "foe": { "name": "A retired trainer", "cls": "veteran", "species": ["raticate"], "offset": 0 } },
+      { "id": "route-1", "name": "Route 1", "kind": "route", "owner": { "name": "Trainers on the route", "look": "trainer/pr/backpacker_f", "line": "Their first big win, in your pocket." }, "trait": null, "pay": 0.7, "foe": { "name": "Picnicker Sue", "cls": "picnicker", "species": ["pidgey", "rattata"], "offset": -1 } }
+    ] },
+    { "id": "cinnabar", "name": "Cinnabar", "x": 38, "y": 330, "w": 110, "control": 0, "rival": 10, "police": false, "wild": "fire-water", "targets": [
+      { "id": "cinnabar-mansion", "name": "Burned Mansion", "kind": "ghost", "owner": { "name": "Nobody, they say", "look": "trainer/pr/ruin_maniac", "line": "A ruin maniac keeps a cot in the cellar." }, "trait": { "word": "Superstitious", "odds": 6 }, "pay": 1.6, "foe": { "name": "Ruin maniac", "cls": "hiker", "species": ["grimer", "koffing"], "offset": 2 } },
+      { "id": "cinnabar-lab", "name": "Cinnabar Lab", "kind": "site", "owner": { "name": "The fossil man", "look": "trainer/pr/scientist_f", "line": "Years of work in those drawers." }, "trait": { "word": "Careful", "odds": -8 }, "pay": 1.8, "foe": { "name": "The night shift", "cls": "psychic", "species": ["magnemite", "voltorb"], "offset": 2 } },
+      { "id": "cinnabar-shore", "name": "Seafoam shore", "kind": "route", "owner": { "name": "Swimmers on the shore", "look": "trainer/pr/swimmer_m", "line": "Long swim back, short a prize." }, "trait": null, "pay": 1.2, "foe": { "name": "Swimmer Ray", "cls": "swimmer", "species": ["tentacool", "seel"], "offset": 2 } }
+    ] },
+    { "id": "cerulean", "name": "Cerulean", "x": 330, "y": 34, "control": 0, "rival": 22, "police": false, "wild": "water-bug", "targets": [
+      { "id": "bike-shop", "name": "Bike Shop", "kind": "shop", "owner": { "name": "Mr. Bicycle", "look": "dominion/t-clerk.png", "line": "He'll pay. He'll remember." }, "trait": { "word": "Stubborn", "odds": -6 }, "pay": 1.2, "foe": { "name": "His nephew", "cls": "biker", "species": ["machop"], "offset": 1 } },
+      { "id": "cerulean-gym", "name": "Gym (Misty)", "kind": "gym", "owner": { "name": "The Gym's trainers", "look": "trainer/pr/swimmer_m", "line": "Misty's people. They talk to each other." }, "trait": { "word": "Proud", "odds": -10 }, "pay": 1, "foe": { "name": "Gym trainer Luis", "cls": "swimmer", "species": ["staryu", "goldeen"], "offset": 2 } },
+      { "id": "nugget-bridge", "name": "Nugget Bridge", "kind": "route", "owner": { "name": "The bridge's five trainers", "look": "trainer/pr/ace_trainer_m", "line": "They line up to win a Nugget. Not today." }, "trait": null, "pay": 1.3, "foe": { "name": "Ace Trainer Kim", "cls": "ace-trainer", "species": ["oddish", "bellsprout"], "offset": 1 } }
+    ] },
+    { "id": "celadon", "name": "Celadon", "x": 180, "y": 156, "control": 0, "rival": 55, "police": false, "rivalNote": "Rocket", "wild": "grass-poison", "targets": [
+      { "id": "celadon-store", "name": "Department Store", "kind": "shop", "owner": { "name": "The floor manager", "look": "trainer/pr/waiter_m", "line": "Six floors, and the insurance covers four." }, "trait": { "word": "Nervous", "odds": 6 }, "pay": 1.6, "foe": { "name": "Store security", "cls": "worker", "species": ["growlithe"], "offset": 1 } },
+      { "id": "game-corner", "name": "Game Corner", "kind": "site", "owner": { "name": "Rocket's front", "look": "trainer/pr/rocket_grunt_m", "line": "Rocket's money. Rocket will notice." }, "trait": { "word": "Guarded", "odds": -12 }, "pay": 2, "foe": { "name": "Rocket Grunt", "cls": "roughneck", "species": ["zubat", "ekans"], "offset": 2 } },
+      { "id": "celadon-market", "name": "Market Street", "kind": "crowd", "owner": { "name": "Shoppers with full bags", "look": "trainer/pr/rich_f", "line": "Wallets, pockets, paper bags." }, "trait": { "word": "Distracted", "odds": 8 }, "pay": 1.2, "foe": { "name": "A shopper who fights back", "cls": "aroma-lady", "species": ["gloom"], "offset": 1 } }
+    ] },
+    { "id": "saffron", "name": "Saffron", "x": 330, "y": 156, "control": 0, "rival": 70, "police": false, "rivalNote": "Rocket · Silph", "wild": "fighting-psychic", "targets": [
+      { "id": "silph-co", "name": "Silph Co.", "kind": "site", "owner": { "name": "Silph security", "look": "trainer/pr/scientist_m", "line": "Silph's floors, Rocket's guards." }, "trait": { "word": "Guarded", "odds": -12 }, "pay": 2.4, "foe": { "name": "Rocket Grunt", "cls": "roughneck", "species": ["koffing", "raticate"], "offset": 3 } },
+      { "id": "saffron-station", "name": "Magnet Train station", "kind": "crowd", "owner": { "name": "Commuters", "look": "trainer/pr/worker_f", "line": "Tired, in a hurry, not looking." }, "trait": { "word": "Distracted", "odds": 8 }, "pay": 1.2, "foe": { "name": "An off-duty worker", "cls": "worker", "species": ["machop"], "offset": 1 } },
+      { "id": "fighting-dojo", "name": "Fighting Dojo", "kind": "street", "owner": { "name": "The Karate King's students", "look": "trainer/pr/black_belt_f", "line": "They'll want a rematch." }, "trait": { "word": "Proud", "odds": -10 }, "pay": 1.3, "foe": { "name": "Black Belt Koji", "cls": "black-belt", "species": ["mankey", "machop"], "offset": 2 } }
+    ] },
+    { "id": "lavender", "name": "Lavender", "x": 470, "y": 156, "w": 110, "control": 0, "rival": 5, "police": false, "wild": "poison-ghost", "targets": [
+      { "id": "pokemon-tower", "name": "Pokémon Tower", "kind": "ghost", "owner": { "name": "The Channelers", "look": "trainer/pr/psychic_f", "line": "Mourners leave things on the graves." }, "trait": { "word": "Superstitious", "odds": 6 }, "pay": 0.8, "foe": { "name": "Channeler Hope", "cls": "hex-maniac", "species": ["gastly"], "offset": 1 } },
+      { "id": "lavender-mart", "name": "Lavender Mart", "kind": "shop", "owner": { "name": "The Mart clerk", "look": "dominion/t-clerk.png", "line": "A quiet shop in a quiet town." }, "trait": { "word": "Timid", "odds": 5 }, "pay": 0.8, "foe": { "name": "A regular", "cls": "hiker", "species": ["cubone"], "offset": 0 } },
+      { "id": "rock-tunnel", "name": "Rock Tunnel", "kind": "cave", "owner": { "name": "Nobody down there", "look": "trainer/pr/backpacker_m", "line": "Dark, cold, and full of what people dropped." }, "trait": null, "pay": 1.1, "foe": { "name": "Hiker Lenny", "cls": "hiker", "species": ["geodude", "onix"], "offset": 1 } }
+    ] },
+    { "id": "fuchsia", "name": "Fuchsia", "x": 230, "y": 276, "w": 116, "control": 0, "rival": 10, "police": false, "wild": "poison-bug", "targets": [
+      { "id": "safari-gate", "name": "Safari Zone gate", "kind": "crowd", "owner": { "name": "Tourists in line", "look": "trainer/pr/backpacker_f", "line": "Holiday money, in their back pockets." }, "trait": { "word": "Distracted", "odds": 8 }, "pay": 1.2, "foe": { "name": "A warden", "cls": "ranger", "species": ["venonat"], "offset": 1 } },
+      { "id": "fuchsia-mart", "name": "Fuchsia Mart", "kind": "shop", "owner": { "name": "The Mart owner", "look": "trainer/pr/baker", "line": "Bought the shop last year. Still paying for it." }, "trait": { "word": "Nervous", "odds": 6 }, "pay": 1, "foe": { "name": "The owner's partner", "cls": "biker", "species": ["koffing"], "offset": 1 } },
+      { "id": "route-15", "name": "Route 15", "kind": "route", "owner": { "name": "Trainers on the route", "look": "trainer/pr/cyclist_m", "line": "Cycling Road crowds, short a prize." }, "trait": null, "pay": 1.1, "foe": { "name": "Biker Ruben", "cls": "biker", "species": ["grimer", "doduo"], "offset": 1 } }
+    ] },
+    { "id": "vermilion", "name": "Vermilion", "x": 384, "y": 276, "w": 116, "control": 0, "rival": 15, "police": true, "wild": "water-electric", "targets": [
+      { "id": "vermilion-harbour", "name": "The Harbour", "kind": "dock", "owner": { "name": "The harbour master", "look": "trainer/pr/pilot", "line": "Crates and crates, and a ledger nobody reads." }, "trait": { "word": "Tired", "odds": 4 }, "pay": 1.4, "foe": { "name": "A sailor on watch", "cls": "fisherman", "species": ["tentacool", "machop"], "offset": 1 } },
+      { "id": "vermilion-station", "name": "Police Station", "kind": "police", "owner": { "name": "Officer Jenny", "look": "dominion/t-policeman.png", "line": "The law in Vermilion. She knows faces." }, "trait": { "word": "Watchful", "odds": -4 }, "pay": 1, "foe": { "name": "Officer Jenny", "cls": "veteran", "species": ["growlithe"], "offset": 1 } },
+      { "id": "vermilion-center", "name": "Pokémon Center", "kind": "center", "owner": { "name": "Nurse Joy", "look": "trainer/pr/doctor_f", "line": "Sailors leave tips in the jar." }, "trait": { "word": "Trusting", "odds": 8 }, "pay": 1, "foe": { "name": "A sailor on leave", "cls": "fisherman", "species": ["krabby"], "offset": 1 } }
+    ] }
+  ],
+  "routes": [["pallet", "viridian"], ["viridian", "pewter"], ["pewter", "cerulean"], ["cerulean", "saffron"], ["celadon", "saffron"], ["saffron", "lavender"], ["saffron", "vermilion"], ["celadon", "fuchsia"], ["fuchsia", "vermilion"], ["lavender", "vermilion"]],
+  "water": [["pallet", "cinnabar"], ["cinnabar", "fuchsia"]],
+  "starting": ["extort", "take", "steal", "thieve", "attack", "recruit", "scout", "catch", "lay-low"],
+  "play": {
+    "extort": { "kinds": ["shop"], "chance": 25, "pay": [150, 600], "weekly": 120, "heat": 5, "failHeat": 12, "regard": -2, "dread": 3, "battle": { "chance": 40, "on": "fail", "foe": "target" }, "control": 8,
+      "win": "{owner} pays ₽{pay}. The till is lighter, and it will be every week.", "lose": "{owner} won't pay. Someone has run for the police." },
+    "collect-debt": { "kinds": ["shop", "street"], "chance": 35, "pay": [100, 250], "heat": 3, "failHeat": 8, "regard": -1, "dread": 2, "battle": { "chance": 30, "on": "fail", "foe": "target" },
+      "win": "An old debt, paid to new people: ₽{pay}.", "lose": "\"I don't owe you anything.\" The door closes." },
+    "parking-fees": { "kinds": ["street", "crowd"], "chance": 50, "pay": [60, 140], "heat": 2, "failHeat": 5, "regard": -1, "dread": 1,
+      "win": "A day of \"guarding\" bikes: ₽{pay} in coins.", "lose": "Nobody pays. A man takes your picture." },
+    "shake-the-jar": { "kinds": ["center"], "chance": 40, "pay": [40, 160], "heat": 4, "failHeat": 10, "regard": -3, "dread": 1, "battle": { "chance": 25, "on": "fail", "foe": "target" },
+      "win": "The jar is empty now: ₽{pay}.", "lose": "The jar is chained to the counter. Someone saw you try." },
+    "take": { "kinds": ["dock", "shop", "street"], "chance": 30, "crate": "goods", "heat": 8, "failHeat": 14, "regard": -2, "dread": 3, "battle": { "chance": 60, "on": "fail", "foe": "target" },
+      "win": "A crate off the cart: {loot}.", "lose": "The driver holds on. Witnesses everywhere." },
+    "steal": { "kinds": ["shop", "site", "dock"], "needs": "crowbar", "chance": 30, "crate": "haul", "heat": 2, "failHeat": 15, "dread": 2, "battle": { "chance": 50, "on": "fail", "foe": "target" },
+      "win": "In through the back with the crowbar. Out with {loot}.", "lose": "A light comes on. You run." },
+    "thieve": { "kinds": ["crowd", "street"], "chance": 40, "pay": [50, 300], "bigMon": true, "heat": 2, "failHeat": 6, "regard": -1, "battle": { "chance": 60, "on": "fail", "foe": "target" },
+      "win": "Two wallets and a watch: ₽{pay}.", "big": "One of the bags held a Poké Ball. {mon} is yours now.", "lose": "A hand closes on your wrist. A chase." },
+    "smash-and-grab": { "kinds": ["shop"], "chance": 35, "crate": "window", "heat": 10, "failHeat": 16, "regard": -3, "dread": 3, "battle": { "chance": 50, "on": "fail", "foe": "target" },
+      "win": "Glass on the pavement, and {loot} in your bag.", "lose": "The window holds. Your hand doesn't." },
+    "loot-the-dock": { "kinds": ["dock"], "chance": 30, "crate": "dock", "heat": 6, "failHeat": 15, "dread": 1, "battle": { "chance": 50, "on": "fail", "foe": "target" },
+      "win": "The harbour sleeps. {loot} doesn't come back.", "lose": "The dogs hear you first." },
+    "attack": { "kinds": ["route"], "chance": 30, "prize": 2, "toll": 60, "heat": 4, "failHeat": 4, "regard": -2, "dread": 2, "hero": 2, "battle": { "chance": 100, "on": "always", "foe": "target" }, "control": 3,
+      "win": "Prize money, twice over: ₽{pay}.", "big": "They'll pay a toll on this road every week now: ₽{weekly}.", "lose": "They beat you, and they'll tell the story." },
+    "street-duel": { "kinds": ["street", "crowd"], "wager": [100, 300], "heat": 1, "dread": 1, "battle": { "chance": 100, "on": "always", "foe": "target" }, "control": 3,
+      "win": "The wager's yours: ₽{pay}.", "lose": "You pay the wager: ₽{pay}." },
+    "ambush-a-patrol": { "kinds": ["police", "street", "crowd"], "needsPolice": true, "chance": 40, "heat": -10, "wanted": 3, "dread": 2, "battle": { "chance": 100, "on": "always", "foe": "police" },
+      "win": "The patrol won't be walking this beat for a while. Heat here −10.", "lose": "The patrol calls it in." },
+    "scout": { "kinds": ["shop", "street", "crowd", "route", "dock", "center", "site", "police", "gym", "cave", "ghost"], "chance": 60, "effect": "scout", "heat": 0, "failHeat": 3, "battle": { "chance": 30, "on": "fail", "foe": "target" },
+      "win": "You watch {target} for an hour. Exact odds now, and +15% for a week.", "lose": "Someone at {target} sees you watching." },
+    "tail-a-target": { "kinds": ["crowd", "street", "shop"], "chance": 50, "effect": "scout", "scoutDays": 14, "heat": 0, "failHeat": 4,
+      "win": "You follow {owner} all day. You know their week now (+15% for two weeks).", "lose": "They turn round. They've seen your face." },
+    "count-the-guards": { "kinds": ["site", "shop", "dock", "police", "gym"], "chance": 50, "effect": "count", "heat": 0, "failHeat": 4,
+      "win": "Shifts, gaps and who sleeps on duty: scouted, and any fight here is half as likely.", "lose": "A guard asks what you're counting." },
+    "listen-at-the-pokemon-center": { "kinds": ["center"], "effect": "scoutDistrict",
+      "win": "The Center talks all evening. Every place in {district} is scouted." },
+    "read-the-newspaper": { "effect": "paper",
+      "win": "Page six, small print: {target} in {district} is scouted." },
+    "catch": { "kinds": ["route", "cave"], "effect": "catch", "battle": { "chance": 100, "on": "always", "foe": "wild" },
+      "win": "{mon} is caught.", "lose": "It got away." },
+    "lay-low": { "kinds": ["any"], "effect": "laylow", "heat": -10,
+      "win": "A day indoors in {district}. Heat here −10." },
+    "change-clothes": { "cost": 100, "effect": "disguise",
+      "win": "A new coat, a new walk. The next job's Heat is halved." },
+    "pay-the-fine": { "cost": 300, "effect": "fine", "heat": -15, "wanted": -5,
+      "win": "The warrant is paid. Heat in {district} −15." },
+    "train-your-pokemon": { "effect": "exp", "exp": 8,
+      "win": "An evening of drills. Your team grows." },
+    "spar-with-a-member": { "effect": "spar", "battle": { "chance": 100, "on": "always", "foe": "member" },
+      "win": "{member} goes down fighting. They'll be better for it.", "lose": "{member} wins. They try not to smile." },
+    "workout": { "effect": "train", "xp": 3, "win": "Weights, ropes, the bag. Brawn XP +3." },
+    "meditate": { "effect": "train", "xp": 3, "win": "Breathing, and nothing else. Nerve XP +3." },
+    "practice-smooth-talk": { "effect": "train", "xp": 3, "win": "You talk to the mirror until it believes you. Charm XP +3." },
+    "practice-sneaking": { "effect": "train", "xp": 3, "win": "Round the block twice without a sound. Stealth XP +3." },
+    "plan-the-week": { "effect": "plan", "xp": 1, "win": "Routes and rotations on the wall. Tomorrow's first trip is free." },
+    "pamper-the-team": { "cost": 50, "effect": "pamper", "friendship": 10, "win": "Good food and a long brush. Your Pokémon like you more." },
+    "graveyard-shift": { "kinds": ["ghost"], "chance": 35, "crate": "spirit", "heat": 1, "failHeat": 4, "battle": { "chance": 100, "on": "always", "foe": "ghost" },
+      "win": "Among the graves: {loot}.", "lose": "Something cold follows you home." },
+    "cave-run": { "kinds": ["cave"], "chance": 35, "crate": "cave", "heat": 0, "failHeat": 2, "battle": { "chance": 50, "on": "fail", "foe": "wild" },
+      "win": "Deep in the dark: {loot}.", "lose": "A wrong turn, and something big." },
+    "hide-in-the-warehouse": { "effect": "hide", "heat": -10, "where": "hq",
+      "win": "You wait out the sweep behind the crates. Heat at the HQ −10, and the police find nothing tonight." }
+  },
+  "crates": {
+    "goods": { "picks": 2, "cash": [0, 150], "items": [["potion", 3], ["super-potion", 2], ["poke-ball", 3], ["great-ball", 1], ["full-heal", 2], ["ether", 1]] },
+    "haul": { "picks": 2, "cash": [100, 400], "items": [["great-ball", 2], ["super-potion", 2], ["revive", 1], ["moon-stone", 1], ["metal-coat", 1], ["kings-rock", 1]] },
+    "window": { "picks": 1, "cash": [50, 200], "items": [["poke-ball", 2], ["potion", 2], ["super-potion", 1], ["soothe-bell", 1]] },
+    "dock": { "picks": 2, "cash": [100, 350], "items": [["net-ball", 2], ["dive-ball", 2], ["water-stone", 1], ["hyper-potion", 1], ["revive", 1]] },
+    "spirit": { "picks": 1, "cash": [0, 100], "items": [["dusk-ball", 2], ["dusk-stone", 1], ["revive", 1], ["ether", 1]] },
+    "cave": { "picks": 2, "cash": [0, 150], "items": [["moon-stone", 2], ["fire-stone", 1], ["thunder-stone", 1], ["leaf-stone", 1], ["nest-ball", 2], ["ultra-ball", 1]] }
+  },
+  "foes": {
+    "ghost": ["gastly", "haunter", "cubone"],
+    "member": "roughneck"
+  },
+  "odds": { "min": 5, "max": 95, "scouted": 15, "heatPer": 2, "outsider": -10, "rangeHalf": 10, "scoutDays": 7, "bigShare": 0.25, "statPer": 8, "crewPer": 3, "maxBrought": 2 },
+  "edge": { "start": 2, "cap": 10, "xpPerPoint": 4, "xp": { "fail": 1, "win": 2, "big": 3 } },
+  "mastery": { "names": ["Rookie", "Practiced", "Skilled", "Expert", "Legend"], "thresholds": [5, 15, 30, 55], "odds": [0, 5, 10, 15, 20], "heat": [0, -1, -1, -2, -2], "pay": [0, 0, 20, 20, 40], "intelFrom": 4, "xp": { "fail": 1, "win": 2, "big": 3 } },
+  "control": { "foothold": 20, "contested": 40, "held": 60, "owned": 80, "rival": 40, "racketPay": { "out": 0.25, "foot": 0.5, "contested": 0.75, "held": 1, "owned": 1 }, "ownedHeat": 0.5 },
+  "levels": { "min": 2, "overCap": 3 },
+  "police": {
+    "bands": [
+      { "min": 0, "id": "unknown", "word": "Unknown" },
+      { "min": 20, "id": "noticed", "word": "Noticed" },
+      { "min": 40, "id": "wanted", "word": "Wanted" },
+      { "min": 60, "id": "hunted", "word": "Hunted" },
+      { "min": 80, "id": "most", "word": "Most Wanted" }
+    ],
+    "failBattle": 30, "patrolBattle": 25, "stationBattle": 20, "nightFactor": 0.5, "wantedDecay": 1,
+    "jenny": { "name": "Officer Jenny", "cls": "veteran", "species": ["growlithe"], "offset": 1 },
+    "looker": { "name": "Looker", "cls": "veteran", "species": ["croagunk", "growlithe"], "offset": 3 },
+    "raid": { "name": "International Police", "cls": "veteran", "species": ["growlithe", "machoke", "croagunk"], "offset": 4 },
+    "lost": { "fine": 0.1, "fineMin": 100, "heat": 5 },
+    "raidTake": 0.25, "raidWin": -10, "lookerWin": -10,
+    "lines": {
+      "quiet": "The police don't know your name yet.",
+      "patrol": "Officer Jenny walks a beat in {district} tomorrow.",
+      "checkpoint": "Checkpoint: {district} is closed to you tomorrow.",
+      "looker": "A man in a trench coat asks about {target} in {district}. Looker. He'll be at your door in the morning.",
+      "raid": "Sirens before dawn. The International Police are coming for the warehouse.",
+      "hidden": "The police sweep the streets and find nothing.",
+      "won": "You beat {name}. They back off for now.",
+      "lost": "{name} wins. A fine of ₽{fine}, and Heat +{heat} in {district}.",
+      "lookerWon": "Looker closes his notebook. {target} stays yours. Heat −10.",
+      "lookerLost": "Looker takes {target}. It's police property now.",
+      "raidWon": "The raid breaks on the warehouse door. Heat −10 everywhere.",
+      "raidLost": "The raid takes ₽{take} from the safe.",
+      "closed": "{district} is closed to you today: a checkpoint.",
+      "see": "Officer Jenny on her beat.",
+      "seeStation": "The police station is right there.",
+      "seeNone": "Nobody who matters."
+    }
+  },
+  "travel": {
+    "lines": { "here": "You're here.", "foot": "On foot: {n} action", "free": "Free trip", "water": "Over water: needs a Boat (or Fly).", "night": "Night: a short walk from {district}.", "far": "Too far tonight." },
+    "fly": { "hq": 3, "move": "fly" },
+    "vehicles": [
+      { "id": "bike", "name": "Bike", "price": 1000, "hq": 1, "does": "One free trip a day." },
+      { "id": "van", "name": "Van", "price": 6000, "hq": 1, "does": "Smuggling (opens with Growth). A member using it travels free (opens with the crew)." },
+      { "id": "boat", "name": "Boat", "price": 20000, "hq": 1, "does": "Water routes: Cinnabar." },
+      { "id": "truck", "name": "Truck", "price": 15000, "hq": 1, "does": "+1 member on raids (Raids open with Growth)." },
+      { "id": "airship", "name": "Airship", "price": 400000, "hq": 5, "does": "Anywhere, free, with a squad. Needs HQ Lv. 5." }
+    ]
+  },
+  "later": {
+    "byAction": {
+      "rest": "D1", "recruit": "D3", "street-recruit-drive": "D3", "talent-scout": "D3", "pay-the-families": "D3", "pick-a-fight-with-the-hiker": "D3",
+      "rescue-a-wild-pokemon": "D4", "evolve-in-peace": "D4", "tame-the-wild": "D4",
+      "skim-the-till": "D6", "street-theater": "D6", "spray-the-wall": "D6", "sponsor-a-trainer": "D6",
+      "hold-the-line": "D9", "steal-their-customers": "D9", "ambush-the-courier": "D9",
+      "three-on-one": "D10", "gauntlet": "D10", "rooftop-chase": "D10", "dig-the-dirt": "D10", "fossil-dig": "D10", "contraband-run": "D10", "air-drop": "D10", "fake-shipment": "D10", "evidence-locker-visit": "D10", "the-big-night": "D10",
+      "pay-the-pilot": "D15", "reckoning": "D15"
+    },
+    "byUnlock": [
+      ["Rank", "D4"], ["Front Office", "D5"], ["Workshop", "D5"], ["War Room", "D5"], ["Radio Room", "D5"], ["Print Shop", "D5"], ["Holding", "D5"], ["Garage", "D5"], ["Science Lab", "D5"], ["Library", "D5"], ["Dojo", "D5"], ["Night Shift", "D5"],
+      ["Notoriety", "D6"], ["Press contact", "D6"], ["Fence", "D10"], ["Black Market", "D10"], ["Tension", "D9"], ["Spy", "D9"], ["Raid suffered", "D9"], ["Rally", "D9"],
+      ["Hero", "D11"], ["Gym", "D10"], ["Champion", "D14"], ["Hostage", "D10"], ["traitor", "D15"], ["Region event", "D15"], ["Wanted", "D10"]
+    ]
+  },
+  "lines": {
+    "notHere": "Not this place.",
+    "wrongPhase": { "day": "That's a Day action.", "night": "That's a Night action.", "evening": "That's an Evening action." },
+    "noActions": "Not enough actions left today (travel included).",
+    "noMoney": "Not enough money: it costs ₽{cost}.",
+    "needs": "Needs a {item}.",
+    "noTeam": "Your team can't fight: rest first.",
+    "noMember": "Nobody to spar with.",
+    "notYet": "Opens on Day {day}.",
+    "later": "Opens with a later part of the build ({slice}).",
+    "doneTonight": "Already done this evening.",
+    "nightDone": "Tonight's action is spent.",
+    "noPolice": "No patrol to ambush: needs Wanted 20+ or the police station.",
+    "noFine": "No warrant to pay.",
+    "racket": "A Racket now: ₽{weekly} a week.",
+    "rackets": "Rackets and tolls: +₽{pay}.",
+    "seized": "Seized",
+    "mastery": "{action} is {level} now.",
+    "edge": "Boss {stat} {n}.",
+    "bought": "Bought: {name}.",
+    "owned": "You have one.",
+    "fled": "You got away. Nothing gained.",
+    "outsider": "Outsider here"
+  }
+}
