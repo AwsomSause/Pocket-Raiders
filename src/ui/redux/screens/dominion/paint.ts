@@ -16,6 +16,7 @@ function rng(seed: number): () => number {
 
 const PAL = {
   night: { sky: ['#1a0f3a', '#3b1c66', '#5a2a7a'], far: '#2a1852', mid: '#1c1040', near: '#0e0822', win: ['#ffd36b', '#ff7ab8', '#9fe3ff', '#ffe9a8'], lit: 0.32 },
+  day: { sky: ['#7cc4f0', '#a9dcf6', '#dff2fb'], far: '#8fb4cf', mid: '#6f93b0', near: '#4f6e88', win: ['#cfe9ff', '#e8f6ff'], lit: 0.5 },
 };
 
 function canvas(w: number, h: number): [HTMLCanvasElement, CanvasRenderingContext2D] | null {
@@ -27,11 +28,11 @@ function canvas(w: number, h: number): [HTMLCanvasElement, CanvasRenderingContex
   return g ? [c, g] : null;
 }
 
-function skyline(seed: number, tall: number): string {
+function skyline(seed: number, tall: number, pal: keyof typeof PAL = 'night'): string {
   const out = canvas(960, 540), half = canvas(480, 270);
   if (!out || !half) return '';
   const [c, x] = out, [b, g] = half;
-  const W = 480, H = 270, R = rng(seed), p = PAL.night;
+  const W = 480, H = 270, R = rng(seed), p = PAL[pal];
   const gr = g.createLinearGradient(0, 0, 0, H);
   gr.addColorStop(0, p.sky[0]!); gr.addColorStop(0.6, p.sky[1]!); gr.addColorStop(1, p.sky[2]!);
   g.fillStyle = gr; g.fillRect(0, 0, W, H);
@@ -128,6 +129,8 @@ const once = (key: string, make: () => string): string => {
 
 /** The title card's night city (mockup 0). */
 export const skylineUrl = (): string => once('skyline', () => skyline(5, 1.25));
+/** Mockup 4's blurred daytime street behind the Card (seed 21, tall .9, the day palette). */
+export const skylineDayUrl = (): string => once('skyline-day', () => skyline(21, 0.9, 'day'));
 /** HQ Lv. 1, the leaking warehouse (mockup 1); the morning sky through the skylight and door when `morning`. */
 export const warehouseUrl = (morning: boolean): string => once(`warehouse-${morning}`, () => warehouse(morning));
 /** Film grain shared by every Dominion stage (the mockups' `--noise`). */
