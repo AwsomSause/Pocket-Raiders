@@ -88,7 +88,33 @@
 .d-type i{width:0;height:4px;background:var(--ink);animation:dtype 1.8s steps(12) infinite}
 .d-type i:nth-child(n+2){display:none}
 .motion .tb{min-height:56px;padding:12px 18px;font-size:14px}
+/* signature screens: rays behind the title cast, light streaks over the arena, cards dealt like a hand */
+.t2 .ti-cast::before{content:'';position:absolute;right:-240px;bottom:-200px;width:1000px;height:1000px;border-radius:50%;background:repeating-conic-gradient(rgba(255,255,255,.5) 0 6deg,transparent 6deg 18deg);-webkit-mask:radial-gradient(circle,#000 0 30%,transparent 68%);mask:radial-gradient(circle,#000 0 30%,transparent 68%);animation:spin 40s linear infinite}
+.battle::after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(112deg,transparent 0 120px,rgba(255,255,255,.16) 120px 128px,transparent 128px 150px,rgba(255,255,255,.1) 150px 153px,transparent 153px 260px);background-size:280.4px 100%;animation:run2 3.2s linear infinite}
+.pt-rows .pcard:nth-child(odd){translate:-10px 0;rotate:-.7deg}
+.pt-rows .pcard:nth-child(even){translate:6px 0;rotate:.7deg}
+.leadc{rotate:-1.6deg}
+.leadc::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle 3px at 14% 16%,#fff 98%,transparent),radial-gradient(circle 4px at 84% 30%,#fff 98%,transparent),radial-gradient(circle 2.5px at 72% 12%,#fff 98%,transparent),radial-gradient(circle 3px at 22% 62%,#fff 98%,transparent),radial-gradient(circle 2px at 90% 70%,#fff 98%,transparent);animation:twinkle 1.6s ease-in-out infinite}
+.f3 .mv3:nth-child(1){rotate:-4deg;translate:6px 6px}
+.f3 .mv3:nth-child(2){rotate:-1.4deg;translate:2px -4px}
+.f3 .mv3:nth-child(3){rotate:1.4deg;translate:-2px -4px}
+.f3 .mv3:nth-child(4){rotate:4deg;translate:-6px 6px}
+.f3 .mv3.on{translate:6px -14px}
+.mn-list .btn:nth-child(1){margin-left:54px}
+.mn-list .btn:nth-child(2){margin-left:45px}
+.mn-list .btn:nth-child(3){margin-left:36px}
+.mn-list .btn:nth-child(4){margin-left:27px}
+.mn-list .btn:nth-child(5){margin-left:18px}
+.mn-list .btn:nth-child(6){margin-left:9px}
+.t2 .ti-menu .btn:nth-child(1){margin-left:40px}
+.t2 .ti-menu .btn:nth-child(2){margin-left:32px}
+.t2 .ti-menu .btn:nth-child(3){margin-left:24px}
+.t2 .ti-menu .btn:nth-child(4){margin-left:16px}
+.t2 .ti-menu .btn:nth-child(5){margin-left:8px}
+.f3 .mv3{gap:10px}
 /*@top*/
+@keyframes run2{to{background-position:280.4px 0}}
+@keyframes twinkle{50%{opacity:.25;scale:.97}}
 @keyframes spin{to{rotate:342deg}}
 @keyframes run{to{background-position:55.3px 0}}
 @keyframes pop{from{opacity:0;translate:0 16px;scale:.94}}

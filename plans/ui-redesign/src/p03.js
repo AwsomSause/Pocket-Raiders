@@ -52,3 +52,34 @@ def(3, 'types', { t: 'Type Chart', g: 'Pokémon' }, () => `<div class="scr types
     <div class="tc-row"><span>Takes double from</span><div>${['water', 'ground', 'rock'].map(t => C('ty', t)).join('')}</div></div>
     <div class="tc-row"><span>Shrugs off</span><div>${['fire', 'grass', 'ice', 'bug', 'steel', 'fairy'].map(t => C('ty', t)).join('')}</div></div></div>
   ${C('keys', [['←→↑↓', 'pick a type'], ['Esc', 'back']])}</div>`);
+/* pass 3 also repaints the signature screens: type auras in battle, a type ribbon on every slash, medals on the title */
+const TEAMRIB = () => 'linear-gradient(180deg,' + PARTY.map((p, i) => `${TYC[p.ty[0]]} ${Math.round(i * 100 / 6)}% ${Math.round((i + 1) * 100 / 6)}%`).join(',') + ')';
+comp(3, 'arena', (o = {}) => `<img class="px ar-bg${o.dim ? ' dim' : ''}" src="sprites/a-${o.bg || 'grass'}-bg.png" alt="">
+  <div class="ar-foe" style="${tgrad(FOE.ty)}"><i class="aura"></i>${spr('a-' + (o.bg || 'grass') + '-b', 3, 'ar-base')}${spr('m-' + FOE.k, 3, 'ar-mon')}</div>
+  <div class="ar-me" style="${tgrad(PARTY[0].ty)}"><i class="aura"></i>${spr('a-' + (o.bg || 'grass') + '-a', 4, 'ar-base')}${spr('mb-' + PARTY[0].k, 4, 'ar-mon')}</div>
+  ${C('plate', 'foe')}${C('plate', 'me')}<div class="ar-info">${RUN.region} · Stage ${RUN.stage} of ${RUN.stages} · Turn 3</div>`);
+def(3, 'battle', { t: 'Battle', g: 'Battle' }, () => `<div class="scr battle b2 b3">${C('arena')}
+  ${C('box', '', 'What will <b>Charizard</b> do?')}
+  <div class="cmd"><div class="btn on big tfight" style="${tgrad(PARTY[0].ty)}" ${go('fight')}>${spr('bd-fire', 3, 'mv-m')}<b>Fight</b></div><div class="btn" ${go('b-bag')}><b>Bag</b></div><div class="btn" ${go('b-switch')}><b>Pokémon</b></div><div class="btn sm"><b>Auto</b></div><div class="btn sm"><b>Info</b></div></div></div>`);
+def(3, 'title', { t: 'Title', g: 'Start' }, () => `<div class="scr title t2 t3" style="--rib:${TEAMRIB()}">
+  <img class="px ar-bg" src="sprites/a-plains-bg.png" alt="">
+  <div class="ti-cast"><i class="halo c1" style="--t:${TYC.dragon}"></i><i class="halo c2" style="--t:${TYC.fire}"></i><i class="halo c3" style="--t:${TYC.electric}"></i>${spr('m-149', 4, 'c1')}${spr('m-6', 5, 'c2')}${spr('m-25', 4, 'c3')}</div>
+  <div class="slash"></div>
+  <div class="logo" ${mm('logo')}><span>Pocket</span><span>Raiders</span><small>A Pokémon roguelike · Beta 0.7</small></div>
+  <div class="ti-menu">
+    <div class="btn on" ${go('map')}><b>Continue</b><small>Kanto · Stage 12 of 30 · 2 badges</small><span class="ti-team">${PARTY.map(p => C('medal', p.ty[0], .625)).join('')}</span></div>
+    <div class="btn" ${go('hub')}><b>Enter the Hub</b></div><div class="btn"><b>New Run</b></div><div class="btn"><b>Story Run</b></div>
+    <div class="btn"><b>Save Slots</b></div><div class="btn" ${go('settings')}><b>Settings</b></div>
+  </div>
+  <div class="ti-foot">Fan game. Not for sale.</div>
+  ${C('keys', [['↑↓', 'move'], ['Enter', 'choose']])}</div>`);
+def(3, 'hub', { t: 'Hub Town', g: 'Start' }, () => `<div class="scr hub h2 h3"><img class="px ar-bg" src="sprites/a-plains-bg.png" alt="">
+  ${C('hdr', 'Hub Town', ['Rank 4', '₽ ' + RUN.money])}
+  <div class="hub-line"><span class="hl">${spr('t-red', 3)}</span>${PARTY.map(p => `<span class="hl" style="--t:${TYC[p.ty[0]]}"><i></i>${spr('m-' + p.k, 2.5)}${C('medal', p.ty[0], .75)}</span>`).join('')}</div>
+  <div class="hub-cap"><b>Red's team</b><span>Last run: Kanto, stage 12 of 30</span></div>
+  <div class="hub-dock">
+    <div class="tile"><b>Trainers</b><span>Who you play as</span></div><div class="tile"><b>Events</b><span>Homeland Week</span></div><div class="tile"><b>Unlocks</b><span>3 new rewards</span></div>
+    <div class="tile on big" ${go('map')}><b>New Run</b><span>Start a fresh journey</span></div>
+    <div class="tile"><b>Town</b><span>Walk around</span></div><div class="tile"><b>Gallery</b><span>Past champions</span></div><div class="tile" ${go('settings')}><b>Settings</b><span>Sound, display</span></div>
+  </div>
+  ${C('keys', [['←→', 'move'], ['Enter', 'open'], ['Esc', 'title']])}</div>`);

@@ -465,6 +465,30 @@ small{font-size:12px;color:var(--mute);font-weight:500}
 .sw-pick.typed-card p{background:rgba(0,0,0,.4);border-radius:8px;padding:4px 10px}
 .tc-row div .ty,.sm-facts .ty{color:#fff;font-size:12px}
 .tc-row>span{color:var(--mute)}
+/* signature screens */
+&{--rib:linear-gradient(180deg,#e8452b 0 17%,#f5b800 17% 33%,#704170 33% 50%,#2980ef 50% 67%,#ff8000 67% 83%,#9fa19f 83% 100%)}
+.slash{border-right:26px solid;border-image:var(--rib) 1}
+.hdr::before{border-right:14px solid;border-image:var(--rib) 1}
+.aura{position:absolute;left:50%;bottom:30px;width:300px;height:90px;margin-left:-150px;border-radius:50%;background:radial-gradient(ellipse,color-mix(in srgb,var(--t) 85%,transparent) 0 30%,color-mix(in srgb,var(--t) 40%,transparent) 55%,transparent 70%);box-shadow:0 0 0 3px color-mix(in srgb,var(--t) 70%,transparent)}
+.ar-me .aura{bottom:-34px;width:440px;height:120px;margin-left:-220px}
+.tfight{position:relative;overflow:hidden;background:linear-gradient(140deg,var(--t),color-mix(in srgb,var(--t) 60%,#000))!important;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.4)}
+.tfight .mv-m{right:-8px;bottom:-14px;opacity:.4}
+.halo{position:absolute;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--t) 80%,#fff) 0 35%,color-mix(in srgb,var(--t) 55%,transparent) 60%,transparent 72%)}
+.halo.c1{right:300px;bottom:190px}
+.halo.c2{right:60px;bottom:90px;width:360px;height:360px}
+.halo.c3{right:330px;bottom:-20px;width:220px;height:220px}
+.ti-team{display:flex;gap:3px;margin-top:2px}
+.t3 .ti-menu{top:214px;gap:6px}
+.h3 .hub-line{gap:4px}
+.hl{position:relative;display:flex;flex-direction:column;align-items:center}
+.h3 .hub-line .hl img{margin:0 -14px}
+.hl>i{position:absolute;left:50%;bottom:-8px;width:130px;height:36px;margin-left:-65px;border-radius:50%;background:radial-gradient(ellipse,var(--t) 0 55%,color-mix(in srgb,var(--t) 50%,#000) 56% 66%,transparent 68%)}
+.hl>img{position:relative}
+.hl .medal{position:absolute;bottom:-14px;margin:0!important;filter:drop-shadow(0 2px 0 #1d2a4d)}
+.t3 .ti-menu{top:226px;gap:8px}
+.t3 .ti-team{position:absolute;right:10px;top:9px;margin:0}
+.t3 .btn.on>b{align-self:flex-start}
+.mv3 b{align-self:flex-start}
 
 }
 </style>
@@ -560,9 +584,35 @@ small{font-size:12px;color:var(--mute);font-weight:500}
 .d-type i{width:0;height:4px;background:var(--ink);animation:dtype 1.8s steps(12) infinite}
 .d-type i:nth-child(n+2){display:none}
 .motion .tb{min-height:56px;padding:12px 18px;font-size:14px}
+/* signature screens: rays behind the title cast, light streaks over the arena, cards dealt like a hand */
+.t2 .ti-cast::before{content:'';position:absolute;right:-240px;bottom:-200px;width:1000px;height:1000px;border-radius:50%;background:repeating-conic-gradient(rgba(255,255,255,.5) 0 6deg,transparent 6deg 18deg);-webkit-mask:radial-gradient(circle,#000 0 30%,transparent 68%);mask:radial-gradient(circle,#000 0 30%,transparent 68%);animation:spin 40s linear infinite}
+.battle::after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(112deg,transparent 0 120px,rgba(255,255,255,.16) 120px 128px,transparent 128px 150px,rgba(255,255,255,.1) 150px 153px,transparent 153px 260px);background-size:280.4px 100%;animation:run2 3.2s linear infinite}
+.pt-rows .pcard:nth-child(odd){translate:-10px 0;rotate:-.7deg}
+.pt-rows .pcard:nth-child(even){translate:6px 0;rotate:.7deg}
+.leadc{rotate:-1.6deg}
+.leadc::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle 3px at 14% 16%,#fff 98%,transparent),radial-gradient(circle 4px at 84% 30%,#fff 98%,transparent),radial-gradient(circle 2.5px at 72% 12%,#fff 98%,transparent),radial-gradient(circle 3px at 22% 62%,#fff 98%,transparent),radial-gradient(circle 2px at 90% 70%,#fff 98%,transparent);animation:twinkle 1.6s ease-in-out infinite}
+.f3 .mv3:nth-child(1){rotate:-4deg;translate:6px 6px}
+.f3 .mv3:nth-child(2){rotate:-1.4deg;translate:2px -4px}
+.f3 .mv3:nth-child(3){rotate:1.4deg;translate:-2px -4px}
+.f3 .mv3:nth-child(4){rotate:4deg;translate:-6px 6px}
+.f3 .mv3.on{translate:6px -14px}
+.mn-list .btn:nth-child(1){margin-left:54px}
+.mn-list .btn:nth-child(2){margin-left:45px}
+.mn-list .btn:nth-child(3){margin-left:36px}
+.mn-list .btn:nth-child(4){margin-left:27px}
+.mn-list .btn:nth-child(5){margin-left:18px}
+.mn-list .btn:nth-child(6){margin-left:9px}
+.t2 .ti-menu .btn:nth-child(1){margin-left:40px}
+.t2 .ti-menu .btn:nth-child(2){margin-left:32px}
+.t2 .ti-menu .btn:nth-child(3){margin-left:24px}
+.t2 .ti-menu .btn:nth-child(4){margin-left:16px}
+.t2 .ti-menu .btn:nth-child(5){margin-left:8px}
+.f3 .mv3{gap:10px}
 
 }
 
+@keyframes run2{to{background-position:280.4px 0}}
+@keyframes twinkle{50%{opacity:.25;scale:.97}}
 @keyframes spin{to{rotate:342deg}}
 @keyframes run{to{background-position:55.3px 0}}
 @keyframes pop{from{opacity:0;translate:0 16px;scale:.94}}
@@ -711,6 +761,27 @@ html[data-tr=page]::view-transition-new(stage){animation:vt-in .34s cubic-bezier
 .sl-team .pc-s{width:58px!important;height:50px!important}
 .saves .tb{min-height:62px;padding:12px 18px;font-size:14px}
 .sp5:not(.wide) .sld{width:120px}
+/* signature screens */
+.dial{position:absolute;right:18px;bottom:20px;width:400px;height:150px;z-index:4}
+.cmdb{margin:0;width:76px;height:76px;bottom:26px;top:auto}
+.cmdb:nth-child(1){left:0;width:118px;height:118px;bottom:24px;border-width:7px}
+.cmdb:nth-child(2){left:140px}
+.cmdb:nth-child(3){left:232px}
+.cmdb:nth-child(4){left:324px}
+.cmdb span{top:auto;bottom:-22px;font-size:13px}
+.cmdb.on{scale:1;background:radial-gradient(circle,#fff 0 40%,var(--yel) 41%)}
+.cmdb.on span{font:400 26px/1 var(--fd);padding:1px 14px;bottom:-24px}
+.dial-i{position:absolute;right:0;top:0;font-size:12px;color:#fff;background:rgba(29,42,77,.86);border-radius:999px;padding:2px 12px}
+.dial-i kbd{font:inherit;font-weight:800;background:#fff;color:var(--ink);border-radius:4px;padding:0 6px;margin-right:4px}
+.b5 .tb{width:520px}
+.t5 .ti-menu{top:212px;width:300px;gap:5px}
+.t5 .ti-team{position:static}
+.t5 .btn.ic{flex-direction:row;align-items:center;justify-content:flex-start;gap:10px;min-height:36px;padding:1px 12px}
+.bi{width:30px;height:30px;flex:none;border-radius:50%;background:#fff;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.bi img{width:22px!important;height:22px!important;object-fit:contain}
+.t5 .cont{min-height:78px;padding:2px 14px}
+.t5 .ti-team{gap:0;margin-top:1px}
+.t5 .ti-team .pc-s{width:40px!important;height:32px!important}
 
 }
 </style>
@@ -1161,6 +1232,37 @@ def(3, 'types', { t: 'Type Chart', g: 'Pokémon' }, () => `<div class="scr types
     <div class="tc-row"><span>Takes double from</span><div>${['water', 'ground', 'rock'].map(t => C('ty', t)).join('')}</div></div>
     <div class="tc-row"><span>Shrugs off</span><div>${['fire', 'grass', 'ice', 'bug', 'steel', 'fairy'].map(t => C('ty', t)).join('')}</div></div></div>
   ${C('keys', [['←→↑↓', 'pick a type'], ['Esc', 'back']])}</div>`);
+/* pass 3 also repaints the signature screens: type auras in battle, a type ribbon on every slash, medals on the title */
+const TEAMRIB = () => 'linear-gradient(180deg,' + PARTY.map((p, i) => `${TYC[p.ty[0]]} ${Math.round(i * 100 / 6)}% ${Math.round((i + 1) * 100 / 6)}%`).join(',') + ')';
+comp(3, 'arena', (o = {}) => `<img class="px ar-bg${o.dim ? ' dim' : ''}" src="sprites/a-${o.bg || 'grass'}-bg.png" alt="">
+  <div class="ar-foe" style="${tgrad(FOE.ty)}"><i class="aura"></i>${spr('a-' + (o.bg || 'grass') + '-b', 3, 'ar-base')}${spr('m-' + FOE.k, 3, 'ar-mon')}</div>
+  <div class="ar-me" style="${tgrad(PARTY[0].ty)}"><i class="aura"></i>${spr('a-' + (o.bg || 'grass') + '-a', 4, 'ar-base')}${spr('mb-' + PARTY[0].k, 4, 'ar-mon')}</div>
+  ${C('plate', 'foe')}${C('plate', 'me')}<div class="ar-info">${RUN.region} · Stage ${RUN.stage} of ${RUN.stages} · Turn 3</div>`);
+def(3, 'battle', { t: 'Battle', g: 'Battle' }, () => `<div class="scr battle b2 b3">${C('arena')}
+  ${C('box', '', 'What will <b>Charizard</b> do?')}
+  <div class="cmd"><div class="btn on big tfight" style="${tgrad(PARTY[0].ty)}" ${go('fight')}>${spr('bd-fire', 3, 'mv-m')}<b>Fight</b></div><div class="btn" ${go('b-bag')}><b>Bag</b></div><div class="btn" ${go('b-switch')}><b>Pokémon</b></div><div class="btn sm"><b>Auto</b></div><div class="btn sm"><b>Info</b></div></div></div>`);
+def(3, 'title', { t: 'Title', g: 'Start' }, () => `<div class="scr title t2 t3" style="--rib:${TEAMRIB()}">
+  <img class="px ar-bg" src="sprites/a-plains-bg.png" alt="">
+  <div class="ti-cast"><i class="halo c1" style="--t:${TYC.dragon}"></i><i class="halo c2" style="--t:${TYC.fire}"></i><i class="halo c3" style="--t:${TYC.electric}"></i>${spr('m-149', 4, 'c1')}${spr('m-6', 5, 'c2')}${spr('m-25', 4, 'c3')}</div>
+  <div class="slash"></div>
+  <div class="logo" ${mm('logo')}><span>Pocket</span><span>Raiders</span><small>A Pokémon roguelike · Beta 0.7</small></div>
+  <div class="ti-menu">
+    <div class="btn on" ${go('map')}><b>Continue</b><small>Kanto · Stage 12 of 30 · 2 badges</small><span class="ti-team">${PARTY.map(p => C('medal', p.ty[0], .625)).join('')}</span></div>
+    <div class="btn" ${go('hub')}><b>Enter the Hub</b></div><div class="btn"><b>New Run</b></div><div class="btn"><b>Story Run</b></div>
+    <div class="btn"><b>Save Slots</b></div><div class="btn" ${go('settings')}><b>Settings</b></div>
+  </div>
+  <div class="ti-foot">Fan game. Not for sale.</div>
+  ${C('keys', [['↑↓', 'move'], ['Enter', 'choose']])}</div>`);
+def(3, 'hub', { t: 'Hub Town', g: 'Start' }, () => `<div class="scr hub h2 h3"><img class="px ar-bg" src="sprites/a-plains-bg.png" alt="">
+  ${C('hdr', 'Hub Town', ['Rank 4', '₽ ' + RUN.money])}
+  <div class="hub-line"><span class="hl">${spr('t-red', 3)}</span>${PARTY.map(p => `<span class="hl" style="--t:${TYC[p.ty[0]]}"><i></i>${spr('m-' + p.k, 2.5)}${C('medal', p.ty[0], .75)}</span>`).join('')}</div>
+  <div class="hub-cap"><b>Red's team</b><span>Last run: Kanto, stage 12 of 30</span></div>
+  <div class="hub-dock">
+    <div class="tile"><b>Trainers</b><span>Who you play as</span></div><div class="tile"><b>Events</b><span>Homeland Week</span></div><div class="tile"><b>Unlocks</b><span>3 new rewards</span></div>
+    <div class="tile on big" ${go('map')}><b>New Run</b><span>Start a fresh journey</span></div>
+    <div class="tile"><b>Town</b><span>Walk around</span></div><div class="tile"><b>Gallery</b><span>Past champions</span></div><div class="tile" ${go('settings')}><b>Settings</b><span>Sound, display</span></div>
+  </div>
+  ${C('keys', [['←→', 'move'], ['Enter', 'open'], ['Esc', 'title']])}</div>`);
 
 /* ===== pass 4 ===== */
 /* Pass 4 · In Motion: everything moves. Ball cursor, idle sprites, marching route, plus pages that show the animations */
@@ -1231,6 +1333,21 @@ def(5, 'saves', { t: 'Save Slots', g: 'Menu' }, () => { const slot = (n, t, tk, 
   <div class="sl-list">${slot(1, 'Red', 'red', 'Kanto · Stage 12 of 30 · 2 badges', 'Play time 1:42 · saved today, 3:01 PM', ['6', '25', '94', '130', '448', '143'], 1)}${slot(2, 'Hilda', 'hilda', 'Unova · Stage 4 of 30 · 0 badges', 'Play time 0:21 · saved Nov 17', ['495', '25', '133'])}${slot(3)}</div>
   ${C('box', '', 'Saving keeps 3 backups of each slot. If a save ever breaks, the game offers the newest good backup.')}
   ${C('keys', [['↑↓', 'slot'], ['Enter', 'save here'], ['L', 'load'], ['Del', 'erase (hold)'], ['Esc', 'back']])}</div>`; });
+/* signature screens: battle commands and the title menu use the same round badges as the wheel */
+def(5, 'battle', { t: 'Battle', g: 'Battle' }, () => { const c = [['Fight', 'fight', 'bd-fire', 2.5, TYC.fire], ['Bag', 'b-bag', 'i-potion', 1.5, '#e8791a'], ['Pokémon', 'b-switch', 'b-pb', 3, '#e3350d'], ['Auto', '', 'i-quick_claw', 1.5, '#56627f']]; return `<div class="scr battle b2 b3 b5">${C('arena')}
+  ${C('box', '', 'What will <b>Charizard</b> do?')}
+  <div class="dial">${c.map((a, i) => `<div class="app cmdb${i === 0 ? ' on' : ''}" style="--a:${a[4]}" ${a[1] ? go(a[1]) : ''}>${spr(a[2], a[3])}<span>${a[0]}</span></div>`).join('')}<div class="dial-i"><kbd>I</kbd> battle info</div></div></div>`; });
+def(5, 'title', { t: 'Title', g: 'Start' }, () => { const m = [['Enter the Hub', 'hub', 'i-coin_case', 1], ['New Run', '', 'b-pb', 2], ['Story Run', '', 'i-map', 1], ['Save Slots', 'saves', 'i-calendar', 1], ['Settings', 'settings', 'i-metal_coat', 1]]; return `<div class="scr title t2 t3 t5" style="--rib:${TEAMRIB()}">
+  <img class="px ar-bg" src="sprites/a-plains-bg.png" alt="">
+  <div class="ti-cast"><i class="halo c1" style="--t:${TYC.dragon}"></i><i class="halo c2" style="--t:${TYC.fire}"></i><i class="halo c3" style="--t:${TYC.electric}"></i>${spr('m-149', 4, 'c1')}${spr('m-6', 5, 'c2')}${spr('m-25', 4, 'c3')}</div>
+  <div class="slash"></div>
+  <div class="logo" ${mm('logo')}><span>Pocket</span><span>Raiders</span><small>A Pokémon roguelike · Beta 0.7</small></div>
+  <div class="ti-menu">
+    <div class="btn on cont" ${go('map')}><b>Continue</b><small>Kanto · Stage 12 of 30 · 2 badges</small><span class="ti-team">${PARTY.map(p => spr('m-' + p.k, 1, 'pc-s')).join('')}</span></div>
+    ${m.map(x => `<div class="btn ic" ${x[1] ? go(x[1]) : ''}><i class="bi">${spr(x[2], x[3])}</i><b>${x[0]}</b></div>`).join('')}
+  </div>
+  <div class="ti-foot">Fan game. Not for sale.</div>
+  ${C('keys', [['↑↓', 'move'], ['Enter', 'choose']])}</div>`; });
 
 boot();
 </script>

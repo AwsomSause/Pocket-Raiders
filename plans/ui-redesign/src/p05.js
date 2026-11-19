@@ -43,3 +43,18 @@ def(5, 'saves', { t: 'Save Slots', g: 'Menu' }, () => { const slot = (n, t, tk, 
   <div class="sl-list">${slot(1, 'Red', 'red', 'Kanto · Stage 12 of 30 · 2 badges', 'Play time 1:42 · saved today, 3:01 PM', ['6', '25', '94', '130', '448', '143'], 1)}${slot(2, 'Hilda', 'hilda', 'Unova · Stage 4 of 30 · 0 badges', 'Play time 0:21 · saved Nov 17', ['495', '25', '133'])}${slot(3)}</div>
   ${C('box', '', 'Saving keeps 3 backups of each slot. If a save ever breaks, the game offers the newest good backup.')}
   ${C('keys', [['↑↓', 'slot'], ['Enter', 'save here'], ['L', 'load'], ['Del', 'erase (hold)'], ['Esc', 'back']])}</div>`; });
+/* signature screens: battle commands and the title menu use the same round badges as the wheel */
+def(5, 'battle', { t: 'Battle', g: 'Battle' }, () => { const c = [['Fight', 'fight', 'bd-fire', 2.5, TYC.fire], ['Bag', 'b-bag', 'i-potion', 1.5, '#e8791a'], ['Pokémon', 'b-switch', 'b-pb', 3, '#e3350d'], ['Auto', '', 'i-quick_claw', 1.5, '#56627f']]; return `<div class="scr battle b2 b3 b5">${C('arena')}
+  ${C('box', '', 'What will <b>Charizard</b> do?')}
+  <div class="dial">${c.map((a, i) => `<div class="app cmdb${i === 0 ? ' on' : ''}" style="--a:${a[4]}" ${a[1] ? go(a[1]) : ''}>${spr(a[2], a[3])}<span>${a[0]}</span></div>`).join('')}<div class="dial-i"><kbd>I</kbd> battle info</div></div></div>`; });
+def(5, 'title', { t: 'Title', g: 'Start' }, () => { const m = [['Enter the Hub', 'hub', 'i-coin_case', 1], ['New Run', '', 'b-pb', 2], ['Story Run', '', 'i-map', 1], ['Save Slots', 'saves', 'i-calendar', 1], ['Settings', 'settings', 'i-metal_coat', 1]]; return `<div class="scr title t2 t3 t5" style="--rib:${TEAMRIB()}">
+  <img class="px ar-bg" src="sprites/a-plains-bg.png" alt="">
+  <div class="ti-cast"><i class="halo c1" style="--t:${TYC.dragon}"></i><i class="halo c2" style="--t:${TYC.fire}"></i><i class="halo c3" style="--t:${TYC.electric}"></i>${spr('m-149', 4, 'c1')}${spr('m-6', 5, 'c2')}${spr('m-25', 4, 'c3')}</div>
+  <div class="slash"></div>
+  <div class="logo" ${mm('logo')}><span>Pocket</span><span>Raiders</span><small>A Pokémon roguelike · Beta 0.7</small></div>
+  <div class="ti-menu">
+    <div class="btn on cont" ${go('map')}><b>Continue</b><small>Kanto · Stage 12 of 30 · 2 badges</small><span class="ti-team">${PARTY.map(p => spr('m-' + p.k, 1, 'pc-s')).join('')}</span></div>
+    ${m.map(x => `<div class="btn ic" ${x[1] ? go(x[1]) : ''}><i class="bi">${spr(x[2], x[3])}</i><b>${x[0]}</b></div>`).join('')}
+  </div>
+  <div class="ti-foot">Fan game. Not for sale.</div>
+  ${C('keys', [['↑↓', 'move'], ['Enter', 'choose']])}</div>`; });
