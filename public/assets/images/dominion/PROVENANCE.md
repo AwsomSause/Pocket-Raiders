@@ -31,3 +31,11 @@ Copied from the Claude AI mockups (project files `plans/claude-api/mockups/sprit
 | --- | --- |
 | `p-dialga.png`, `p-palkia.png`, `p-giratina.png`, `p-groudon.png`, `p-kyogre.png` | Pokémon sprites from the PokeRogue pack |
 | `g-adamant-orb`, `g-lustrous-orb`, `g-griseous-orb`, `g-red-orb`, `g-blue-orb`, `g-key-charm`, `g-tea`, `g-scope-lens`, `g-choice-band`, `g-soothe-bell`, `g-storage-key` (.png) | Item icons from `images/items/` (PokeRogue pack) |
+
+## Slice D5 (the HQ, mockup 6)
+
+| File | From |
+| --- | --- |
+| `g-big-nugget`, `g-max-potion`, `g-relic-statue`, `g-storage-key` (.png) | Item icons from `images/items/` (PokeRogue pack), re-saved at the mockup's size by the mockup thread; copied from `plans/evil-mode-rework/mockups-redesign/sprites/` |
+| `p-growlithe.png`, `p-houndour.png` | Pokémon front sprites from the PokeRogue pack (`images/pokemon/`), one frame, cut by the mockup thread (the Holding Pens and the Compound's guard dogs) |
+| `c-gruntb.png`, `c-rook.png` | A Grunt and Rook from the PokeRogue trainer sprites (`images/trainer/`), one frame, cut by the mockup thread (crew in the Barracks) |
