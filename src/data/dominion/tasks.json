@@ -1,0 +1,3178 @@
+{
+ "_source": "plans/evil-mode-rework/lists/team-actions.md (1-150, word for word) + tools/dominion/lists-to-json.py ENGINE",
+ "tasks": [
+  {
+   "n": 0,
+   "id": "rest",
+   "name": "Rest",
+   "section": "F",
+   "group": "Training and Growth",
+   "stat": null,
+   "min": "hopeful",
+   "does": "Take the day off",
+   "levels": [
+    "Morale +15, heals injuries",
+    "Fatigue falls faster",
+    "Morale +20",
+    "Personal Heat cools faster",
+    "Morale +25 and a free XP"
+   ],
+   "risk": "—",
+   "status": "supported",
+   "effect": {
+    "kind": "rest",
+    "sure": true
+   },
+   "source": "Part 2 §2"
+  },
+  {
+   "n": 0,
+   "id": "steal-pokemon",
+   "name": "Steal Pokémon",
+   "section": "C",
+   "group": "Street Crime",
+   "stat": "stealth",
+   "min": "grunt",
+   "does": "Take a Pokémon from an adult's home",
+   "levels": [
+    "One Pokémon",
+    "Take a second one too",
+    "A pair",
+    "The owner never knows who did it",
+    "A rare one (never from a minor)"
+   ],
+   "risk": "Caught",
+   "status": "limited",
+   "note": "Goes to the stores; the Reserve screen is D4.",
+   "effect": {
+    "kind": "steal",
+    "heat": 3,
+    "risky": true,
+    "caughtHeat": 6
+   },
+   "source": "Part 6 §4; player-actions.md 64"
+  },
+  {
+   "n": 1,
+   "id": "guard-hq",
+   "name": "Guard (HQ)",
+   "section": "A",
+   "group": "Guarding and Defense",
+   "stat": "brawn",
+   "min": "recruit",
+   "does": "Stand watch at HQ",
+   "levels": [
+    "Adds team to a raid defense",
+    "raiders face one extra defender in the first wave",
+    "+1 extra battle",
+    "the guard's Pokémon heal 25% between defense battles",
+    "\"Wall\": raiders lose a turn"
+   ],
+   "risk": "Falls asleep",
+   "status": "supported",
+   "effect": {
+    "kind": "guard"
+   }
+  },
+  {
+   "n": 2,
+   "id": "guard-a-building",
+   "name": "Guard a Building",
+   "section": "A",
+   "group": "Guarding and Defense",
+   "stat": "brawn",
+   "min": "recruit",
+   "does": "Protect one owned building",
+   "levels": [
+    "Block thefts",
+    "building raises its own alarm, giving the Boss 1 hour's warning",
+    "block raids",
+    "building gains a lock tier, so thieves need 1 more Stealth",
+    "building is immune to sabotage"
+   ],
+   "risk": "Overwhelmed",
+   "status": "disabled",
+   "needs": "D5"
+  },
+  {
+   "n": 3,
+   "id": "night-watch",
+   "name": "Night Watch",
+   "section": "A",
+   "group": "Guarding and Defense",
+   "stat": "wits",
+   "min": "grunt",
+   "does": "Watch HQ after dark",
+   "levels": [
+    "Wake the crew early",
+    "wake-up delay shrinks from a full turn to half a turn",
+    "trap one thief",
+    "a trap rearms itself every night at no cost",
+    "catches every night raid"
+   ],
+   "risk": "Tired next day",
+   "status": "supported",
+   "effect": {
+    "kind": "guard"
+   }
+  },
+  {
+   "n": 4,
+   "id": "man-the-gate",
+   "name": "Man the Gate",
+   "section": "A",
+   "group": "Guarding and Defense",
+   "stat": "brawn",
+   "min": "recruit",
+   "does": "Check everyone who comes in",
+   "levels": [
+    "Turn away spies (30%)",
+    "a visitor log is kept for 7 days",
+    "60%",
+    "any spy caught is traced back to their handler",
+    "90%, plus a visitor log"
+   ],
+   "risk": "Bribed",
+   "status": "disabled",
+   "needs": "D9"
+  },
+  {
+   "n": 5,
+   "id": "patrol-the-district",
+   "name": "Patrol the District",
+   "section": "A",
+   "group": "Guarding and Defense",
+   "stat": "brawn",
+   "min": "grunt",
+   "does": "Walk a district's streets",
+   "levels": [
+    "Heat −1 on rivals' jobs",
+    "rival jobs in the district lose 5% odds",
+    "protect Rackets from muggers",
+    "the patrol finds one rival hideout per week",
+    "district is \"ours\": rival actions there −15%"
+   ],
+   "risk": "Meets the Hero",
+   "status": "disabled",
+   "needs": "D6"
+  },
+  {
+   "n": 6,
+   "id": "bodyguard-the-boss",
+   "name": "Bodyguard the Boss",
+   "section": "A",
+   "group": "Guarding and Defense",
+   "stat": "brawn",
+   "min": "senior-grunt",
+   "does": "Follow the Boss on a field action",
+   "levels": [
+    "Add stat and Pokémon",
+    "carries your bag: +1 item slot on the action",
+    "blocks one ambush",
+    "spots an ambush a turn early, so you act first",
+    "takes a hit for the Boss"
+   ],
+   "risk": "Hurt",
+   "status": "disabled",
+   "needs": "D2"
+  },
+  {
+   "n": 7,
+   "id": "guard-the-pens",
+   "name": "Guard the Pens",
+   "section": "A",
+   "group": "Guarding and Defense",
+   "stat": "wits",
+   "min": "grunt",
+   "does": "Protect stolen and captive Pokémon",
+   "levels": [
+    "Stop escapes",
+    "pens gain a lock: escape chance −50%",
+    "stop theft",
+    "pens gain a night guard: theft chance −50%",
+    "Pokémon heal faster"
+   ],
+   "risk": "Pokémon released",
+   "status": "disabled",
+   "needs": "D4"
+  },
+  {
+   "n": 8,
+   "id": "escort-a-shipment",
+   "name": "Escort a Shipment",
+   "section": "A",
+   "group": "Guarding and Defense",
+   "stat": "brawn",
+   "min": "grunt",
+   "does": "Walk goods across a district",
+   "levels": [
+    "Cargo arrives",
+    "cargo carries a decoy crate that draws 1 hijacker",
+    "ambush resisted",
+    "cargo moves at double speed, so one fewer ambush roll",
+    "arrives early"
+   ],
+   "risk": "Hijacked",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 9,
+   "id": "lookout",
+   "name": "Lookout",
+   "section": "A",
+   "group": "Guarding and Defense",
+   "stat": "stealth",
+   "min": "recruit",
+   "does": "Watch the street for police",
+   "levels": [
+    "Warn of a patrol",
+    "warns a day ahead of a police sweep",
+    "warn of Looker",
+    "warns when a rival Boss is within one district",
+    "warn of IP raids a day early"
+   ],
+   "risk": "Distracted",
+   "status": "disabled",
+   "needs": "D2"
+  },
+  {
+   "n": 10,
+   "id": "man-the-alarm",
+   "name": "Man the Alarm",
+   "section": "A",
+   "group": "Guarding and Defense",
+   "stat": "wits",
+   "min": "grunt",
+   "does": "Run the alarm and trap board",
+   "levels": [
+    "Detect intruders",
+    "the alarm checks every door, not just the front",
+    "trap one room",
+    "the alarm sends a message straight to the Boss's phone",
+    "every room trapped"
+   ],
+   "risk": "Triggers falsely",
+   "status": "disabled",
+   "needs": "D5"
+  },
+  {
+   "n": 11,
+   "id": "hold-the-roof",
+   "name": "Hold the Roof",
+   "section": "A",
+   "group": "Guarding and Defense",
+   "stat": "brawn",
+   "min": "senior-grunt",
+   "does": "Defend HQ against an attack from above",
+   "levels": [
+    "Counter fliers",
+    "roof is floodlit, so night climbers lose 10%",
+    "counter snipers",
+    "a spotter and net stop fliers and snipers",
+    "hold off a raid from the roof"
+   ],
+   "risk": "Falls",
+   "status": "disabled",
+   "needs": "D9"
+  },
+  {
+   "n": 12,
+   "id": "sentry-duty-at-the-hideout-door",
+   "name": "Sentry Duty at the Hideout Door",
+   "section": "A",
+   "group": "Guarding and Defense",
+   "stat": "nerve",
+   "min": "recruit",
+   "does": "Look intimidating at the front",
+   "levels": [
+    "Scares off loiterers",
+    "loiterers are cleared from the door",
+    "scares off beggars and kids",
+    "street kids bring you one rumor each week",
+    "the whole block avoids the door"
+   ],
+   "risk": "Bored",
+   "status": "supported",
+   "effect": {
+    "kind": "guard"
+   }
+  },
+  {
+   "n": 13,
+   "id": "collect",
+   "name": "Collect",
+   "section": "B",
+   "group": "Money and Collection",
+   "stat": "nerve",
+   "min": "recruit",
+   "does": "Collect weekly protection from Rackets in one district",
+   "levels": [
+    "Rackets pay 100%",
+    "Rackets pay out 5% faster, so the weekly take lands 1 day sooner",
+    "pay 110%",
+    "the collector picks which district to visit first, so no skips",
+    "pay 125%"
+   ],
+   "risk": "Jumped by rivals",
+   "status": "disabled",
+   "needs": "D6"
+  },
+  {
+   "n": 14,
+   "id": "shake-down",
+   "name": "Shake Down",
+   "section": "B",
+   "group": "Money and Collection",
+   "stat": "nerve",
+   "min": "grunt",
+   "does": "Extort one new shop",
+   "levels": [
+    "Half the Boss's payout",
+    "the shopkeeper tips you about one rival move",
+    "70%",
+    "extorts a second shop on the same trip",
+    "90%"
+   ],
+   "risk": "Arrest",
+   "status": "limited",
+   "note": "Pays like a new shop each time; the shop doesn't become a Racket until districts (D6).",
+   "effect": {
+    "kind": "money",
+    "funds": [
+     80,
+     240
+    ],
+    "heat": 5,
+    "risky": true
+   }
+  },
+  {
+   "n": 15,
+   "id": "collect-bad-debts",
+   "name": "Collect Bad Debts",
+   "section": "B",
+   "group": "Money and Collection",
+   "stat": "nerve",
+   "min": "grunt",
+   "does": "Chase a debtor",
+   "levels": [
+    "One debt",
+    "the debtor is nudged into a weekly plan of ₽50",
+    "three",
+    "a plan debtor becomes a Racket for ₽80 a week",
+    "all debts in a district"
+   ],
+   "risk": "Debtor flees",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 16,
+   "id": "run-the-loan-book",
+   "name": "Run the Loan Book",
+   "section": "B",
+   "group": "Money and Collection",
+   "stat": "wits",
+   "min": "senior-grunt",
+   "does": "Manage loans for the Loan Shark business",
+   "levels": [
+    "Keep records",
+    "ledger kept, so defaults drop by 10%",
+    "cut defaults",
+    "defaulted loans are sold to a Fence for 40% back",
+    "add a new tier of loans"
+   ],
+   "risk": "Mismanages",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 17,
+   "id": "count-the-take",
+   "name": "Count the Take",
+   "section": "B",
+   "group": "Money and Collection",
+   "stat": "wits",
+   "min": "recruit",
+   "does": "Count the week's cash",
+   "levels": [
+    "Reveals skimming",
+    "counted cash matches the till, so the Boss sees a true weekly total",
+    "fixes leaks",
+    "counting gives the whole crew +2% income",
+    "+3% of all income"
+   ],
+   "risk": "Errors",
+   "status": "disabled",
+   "needs": "D5"
+  },
+  {
+   "n": 18,
+   "id": "skim-the-till",
+   "name": "Skim the Till",
+   "section": "B",
+   "group": "Money and Collection",
+   "stat": "stealth",
+   "min": "grunt",
+   "does": "Take a small cut from a business",
+   "levels": [
+    "+3% of its take",
+    "skim is hidden in rounding, so owner discovery −50%",
+    "+6%",
+    "skim includes a share of a rival's cut",
+    "+10%"
+   ],
+   "risk": "Caught by owner",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 19,
+   "id": "work-the-door",
+   "name": "Work the Door",
+   "section": "B",
+   "group": "Money and Collection",
+   "stat": "charm",
+   "min": "grunt",
+   "does": "Run a club's door for cover charge",
+   "levels": [
+    "₽40/day",
+    "doormen learn the regulars, so trouble −20%",
+    "₽90",
+    "doormen turn rival agents away at the door",
+    "a VIP list"
+   ],
+   "risk": "Trouble",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 20,
+   "id": "street-vendor",
+   "name": "Street Vendor",
+   "section": "B",
+   "group": "Money and Collection",
+   "stat": "charm",
+   "min": "recruit",
+   "does": "Sell goods from a cart",
+   "levels": [
+    "₽30/day",
+    "a stool and a sign raise the cart's take by ₽15 a day",
+    "₽70",
+    "the cart serves a second street, +₽25 a day",
+    "a stall chain"
+   ],
+   "risk": "Police fine",
+   "status": "supported",
+   "effect": {
+    "kind": "money",
+    "funds": [
+     20,
+     90
+    ],
+    "fine": 30
+   }
+  },
+  {
+   "n": 21,
+   "id": "run-a-rigged-game",
+   "name": "Run a Rigged Game",
+   "section": "B",
+   "group": "Money and Collection",
+   "stat": "wits",
+   "min": "grunt",
+   "does": "Run a back-room card game",
+   "levels": [
+    "₽60/day",
+    "loaded dice lift the table's win rate by 5%",
+    "₽140",
+    "prizes are paid in items, so ₽ cost falls 20%",
+    "a high-roller table"
+   ],
+   "risk": "A winner complains",
+   "status": "supported",
+   "effect": {
+    "kind": "money",
+    "funds": [
+     40,
+     160
+    ],
+    "risky": true,
+    "caughtHeat": 3
+   }
+  },
+  {
+   "n": 22,
+   "id": "pawn-shop",
+   "name": "Pawn Shop",
+   "section": "B",
+   "group": "Money and Collection",
+   "stat": "charm",
+   "min": "senior-grunt",
+   "does": "Run a pawn shop front",
+   "levels": [
+    "Buy low, sell high",
+    "the shop pays cash on the spot, no waiting a day",
+    "fence rare items",
+    "the shop buys only rare items, sale value +30%",
+    "a \"hot item\" list"
+   ],
+   "risk": "Stolen-goods sweep",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 23,
+   "id": "pay-the-wages",
+   "name": "Pay the Wages",
+   "section": "B",
+   "group": "Money and Collection",
+   "stat": "wits",
+   "min": "senior-grunt",
+   "does": "Handle weekly wages",
+   "levels": [
+    "No missed pay",
+    "a handshake bonus gives Loyalty +1 on payday",
+    "−5% wage cost",
+    "loyal members get a bonus pay, Loyalty +3",
+    "no late pay penalty"
+   ],
+   "risk": "Mistakes anger crew",
+   "status": "disabled",
+   "needs": "D5"
+  },
+  {
+   "n": 24,
+   "id": "audit-the-books",
+   "name": "Audit the Books",
+   "section": "B",
+   "group": "Money and Collection",
+   "stat": "wits",
+   "min": "senior-grunt",
+   "does": "Hunt for fraud in your own books",
+   "levels": [
+    "Find a skimmer",
+    "the audit finds one hidden cost",
+    "find two",
+    "the audit finds one hidden profit as well",
+    "a ledger no one can fudge"
+   ],
+   "risk": "Offends loyal members",
+   "status": "supported",
+   "effect": {
+    "kind": "audit"
+   }
+  },
+  {
+   "n": 25,
+   "id": "pickpocket",
+   "name": "Pickpocket",
+   "section": "C",
+   "group": "Street Crime",
+   "stat": "stealth",
+   "min": "recruit",
+   "does": "Lift wallets daily",
+   "levels": [
+    "₽30–200",
+    "targets are picked from crowds, so odds +5% at festivals",
+    "rare items",
+    "one grab in four is a Poké Ball",
+    "Poké Balls"
+   ],
+   "risk": "Caught",
+   "status": "supported",
+   "effect": {
+    "kind": "money",
+    "funds": [
+     30,
+     200
+    ],
+    "risky": true
+   }
+  },
+  {
+   "n": 26,
+   "id": "take-a-delivery",
+   "name": "Take a Delivery",
+   "section": "C",
+   "group": "Street Crime",
+   "stat": "brawn",
+   "min": "grunt",
+   "does": "Grab a delivery cart",
+   "levels": [
+    "One cart",
+    "the driver is paid off, so the fight is skipped",
+    "two",
+    "the cart arrives straight at HQ, saving a day",
+    "a truck"
+   ],
+   "risk": "Driver fights",
+   "status": "supported",
+   "effect": {
+    "kind": "money",
+    "funds": [
+     60,
+     180
+    ],
+    "risky": true
+   }
+  },
+  {
+   "n": 27,
+   "id": "shoplift",
+   "name": "Shoplift",
+   "section": "C",
+   "group": "Street Crime",
+   "stat": "stealth",
+   "min": "recruit",
+   "does": "Lift small goods",
+   "levels": [
+    "A few Potions",
+    "price tags are cut, giving Heat −1",
+    "TMs",
+    "a shop's wanted item is lifted on request",
+    "hold items"
+   ],
+   "risk": "Store detective",
+   "status": "supported",
+   "effect": {
+    "kind": "money",
+    "funds": [
+     20,
+     100
+    ],
+    "risky": true
+   }
+  },
+  {
+   "n": 28,
+   "id": "burgle",
+   "name": "Burgle",
+   "section": "C",
+   "group": "Street Crime",
+   "stat": "stealth",
+   "min": "grunt",
+   "does": "Break into an empty home at night",
+   "levels": [
+    "₽150",
+    "the empty home is chosen from a tip, so odds +10%",
+    "jewelry",
+    "the Boss picks the target from three offered",
+    "a safe"
+   ],
+   "risk": "Alarm",
+   "status": "supported",
+   "effect": {
+    "kind": "money",
+    "funds": [
+     80,
+     260
+    ],
+    "heat": 2,
+    "risky": true,
+    "caughtHeat": 6
+   }
+  },
+  {
+   "n": 29,
+   "id": "car-boost",
+   "name": "Car Boost",
+   "section": "C",
+   "group": "Street Crime",
+   "stat": "stealth",
+   "min": "grunt",
+   "does": "Steal a vehicle (trucks, bikes)",
+   "levels": [
+    "A bike",
+    "a stolen bike is stripped for ₽80",
+    "a truck",
+    "a boosted truck is stored for the Smuggle task",
+    "the Garage fills"
+   ],
+   "risk": "Police chase",
+   "status": "disabled",
+   "needs": "D2"
+  },
+  {
+   "n": 30,
+   "id": "mug-a-drunk",
+   "name": "Mug a Drunk",
+   "section": "C",
+   "group": "Street Crime",
+   "stat": "brawn",
+   "min": "recruit",
+   "does": "Rob a drunk adult",
+   "levels": [
+    "₽40",
+    "the drunk's friends are ignored, so Heat −1",
+    "₽90",
+    "the mugger picks the richest target in view",
+    "₽150"
+   ],
+   "risk": "Sobers up",
+   "status": "supported",
+   "effect": {
+    "kind": "money",
+    "funds": [
+     20,
+     120
+    ],
+    "risky": true
+   }
+  },
+  {
+   "n": 31,
+   "id": "hustle-the-tourists",
+   "name": "Hustle the Tourists",
+   "section": "C",
+   "group": "Street Crime",
+   "stat": "charm",
+   "min": "recruit",
+   "does": "Run a tourist scam",
+   "levels": [
+    "₽50",
+    "tourist maps are forged: +₽30 per mark",
+    "₽120",
+    "each tourist pays for a \"guided tour\": +₽60",
+    "₽250"
+   ],
+   "risk": "Gets reported",
+   "status": "supported",
+   "effect": {
+    "kind": "money",
+    "funds": [
+     30,
+     140
+    ],
+    "risky": true,
+    "caughtHeat": 3
+   }
+  },
+  {
+   "n": 32,
+   "id": "graffiti-run",
+   "name": "Graffiti Run",
+   "section": "C",
+   "group": "Street Crime",
+   "stat": "stealth",
+   "min": "recruit",
+   "does": "Tag a district",
+   "levels": [
+    "+1 Dread",
+    "tags are small and quick, with a 5% faster run",
+    "+2",
+    "daylight tags go unnoticed, so Heat 0",
+    "a landmark"
+   ],
+   "risk": "Tagger arrested",
+   "status": "disabled",
+   "needs": "D6"
+  },
+  {
+   "n": 33,
+   "id": "fence-a-bag",
+   "name": "Fence a Bag",
+   "section": "C",
+   "group": "Street Crime",
+   "stat": "charm",
+   "min": "grunt",
+   "does": "Sell the day's loot",
+   "levels": [
+    "Normal rate",
+    "loot is checked first, so recalls drop to 0",
+    "Fence rate",
+    "the Fence fee is waived entirely",
+    "no questions"
+   ],
+   "risk": "Item recalled",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 34,
+   "id": "stake-out-a-store",
+   "name": "Stake Out a Store",
+   "section": "C",
+   "group": "Street Crime",
+   "stat": "wits",
+   "min": "grunt",
+   "does": "Map a store before a job",
+   "levels": [
+    "Shows guards",
+    "the store layout is drawn, so a Steal is 5% easier",
+    "shows safes",
+    "alarm codes are noted, so a Steal is 15% easier",
+    "shows the delivery schedule"
+   ],
+   "risk": "Spotted",
+   "status": "disabled",
+   "needs": "D2"
+  },
+  {
+   "n": 35,
+   "id": "decoy",
+   "name": "Decoy",
+   "section": "C",
+   "group": "Street Crime",
+   "stat": "charm",
+   "min": "grunt",
+   "does": "Distract a guard for the Boss",
+   "levels": [
+    "Guard −10%",
+    "the guard is pulled aside with a question, odds +10%",
+    "−20%",
+    "the guard is lured off his post for a full action",
+    "the guard leaves"
+   ],
+   "risk": "Caught",
+   "status": "disabled",
+   "needs": "D2"
+  },
+  {
+   "n": 36,
+   "id": "wheelman",
+   "name": "Wheelman",
+   "section": "C",
+   "group": "Street Crime",
+   "stat": "stealth",
+   "min": "senior-grunt",
+   "does": "Drive the getaway",
+   "levels": [
+    "Escape on a fail",
+    "the getaway route is mapped, so chase odds −10%",
+    "Heat −3",
+    "a second car splits the pursuit",
+    "police chases fail"
+   ],
+   "risk": "Crash",
+   "status": "disabled",
+   "needs": "D2"
+  },
+  {
+   "n": 37,
+   "id": "scout",
+   "name": "Scout",
+   "section": "D",
+   "group": "Intel and Spying",
+   "stat": "wits",
+   "min": "recruit",
+   "does": "Scout one target for you",
+   "levels": [
+    "Saves a Boss action",
+    "the scout adds a rumor about the target",
+    "two targets",
+    "the scout adds the guard's shift times",
+    "reveals odds to the percent"
+   ],
+   "risk": "Spotted",
+   "status": "limited",
+   "note": "Saves a Boss action and finds Patrons; scouting a named target comes with the Region Map (D2).",
+   "effect": {
+    "kind": "scout"
+   }
+  },
+  {
+   "n": 38,
+   "id": "spy",
+   "name": "Spy",
+   "section": "D",
+   "group": "Intel and Spying",
+   "stat": "stealth",
+   "min": "senior-grunt",
+   "does": "Plant in a rival team or a business",
+   "levels": [
+    "Learn one plan",
+    "the spy reports once a week",
+    "two",
+    "the spy gains one rank inside the rival",
+    "control a rival's lower ranks"
+   ],
+   "risk": "Captured",
+   "status": "disabled",
+   "needs": "D9"
+  },
+  {
+   "n": 39,
+   "id": "tail",
+   "name": "Tail",
+   "section": "D",
+   "group": "Intel and Spying",
+   "stat": "stealth",
+   "min": "grunt",
+   "does": "Follow a person",
+   "levels": [
+    "Know their route",
+    "the tail reveals a nickname the target uses",
+    "know their friends",
+    "the tail reveals the target's hideout",
+    "know their weakness"
+   ],
+   "risk": "Spotted",
+   "status": "disabled",
+   "needs": "D9"
+  },
+  {
+   "n": 40,
+   "id": "eavesdrop",
+   "name": "Eavesdrop",
+   "section": "D",
+   "group": "Intel and Spying",
+   "stat": "wits",
+   "min": "recruit",
+   "does": "Listen at a café or Center",
+   "levels": [
+    "A rumor",
+    "a rumor is confirmed as true or false",
+    "a tip",
+    "the listener learns the speaker's motive",
+    "a secret"
+   ],
+   "risk": "Overheard",
+   "status": "disabled",
+   "needs": "D6"
+  },
+  {
+   "n": 41,
+   "id": "read-the-mail",
+   "name": "Read the Mail",
+   "section": "D",
+   "group": "Intel and Spying",
+   "stat": "wits",
+   "min": "grunt",
+   "does": "Intercept mail",
+   "levels": [
+    "A letter",
+    "a letter is copied",
+    "a pile",
+    "letters are sorted by sender into a pile",
+    "a bag from a rival"
+   ],
+   "risk": "Tampering caught",
+   "status": "disabled",
+   "needs": "D9"
+  },
+  {
+   "n": 42,
+   "id": "map-the-sewers",
+   "name": "Map the Sewers",
+   "section": "D",
+   "group": "Intel and Spying",
+   "stat": "stealth",
+   "min": "grunt",
+   "does": "Map tunnels and drains",
+   "levels": [
+    "Opens a route",
+    "the map includes manholes and drains",
+    "opens two",
+    "the map shows a hidden entry into one building",
+    "hidden entry to any building"
+   ],
+   "risk": "Lost",
+   "status": "disabled",
+   "needs": "D2"
+  },
+  {
+   "n": 43,
+   "id": "bug-a-room",
+   "name": "Bug a Room",
+   "section": "D",
+   "group": "Intel and Spying",
+   "stat": "wits",
+   "min": "senior-grunt",
+   "does": "Plant a listening device",
+   "levels": [
+    "One room",
+    "the bug lasts 1 day",
+    "three",
+    "the bug lasts 7 days",
+    "the rival Boss's study"
+   ],
+   "risk": "Found",
+   "status": "disabled",
+   "needs": "D9"
+  },
+  {
+   "n": 44,
+   "id": "counter-spy",
+   "name": "Counter-Spy",
+   "section": "D",
+   "group": "Intel and Spying",
+   "stat": "wits",
+   "min": "senior-grunt",
+   "does": "Hunt moles at HQ",
+   "levels": [
+    "Find a mole at 30%",
+    "a clean member is cleared in 1 day",
+    "60%",
+    "a found mole is quietly fed false orders",
+    "90%"
+   ],
+   "risk": "Accuses the wrong person",
+   "status": "disabled",
+   "needs": "D9"
+  },
+  {
+   "n": 45,
+   "id": "track-the-hero",
+   "name": "Track the Hero",
+   "section": "D",
+   "group": "Intel and Spying",
+   "stat": "stealth",
+   "min": "senior-grunt",
+   "does": "Follow the Hero's route",
+   "levels": [
+    "Position now",
+    "the Hero's route is known 1 day ahead",
+    "tomorrow",
+    "the Hero's team is known by name",
+    "three days ahead"
+   ],
+   "risk": "Spotted",
+   "status": "disabled",
+   "needs": "D11"
+  },
+  {
+   "n": 46,
+   "id": "watch-the-police",
+   "name": "Watch the Police",
+   "section": "D",
+   "group": "Intel and Spying",
+   "stat": "wits",
+   "min": "grunt",
+   "does": "Log patrol shifts",
+   "levels": [
+    "Know patrol times",
+    "shift times are logged",
+    "predict a sweep",
+    "checkpoint days are predicted",
+    "avoid every checkpoint"
+   ],
+   "risk": "Spotted",
+   "status": "disabled",
+   "needs": "D2"
+  },
+  {
+   "n": 47,
+   "id": "poll-the-streets",
+   "name": "Poll the Streets",
+   "section": "D",
+   "group": "Intel and Spying",
+   "stat": "charm",
+   "min": "grunt",
+   "does": "Ask townsfolk what they think of you",
+   "levels": [
+    "Regard reading",
+    "the poll covers 1 district",
+    "by district",
+    "the poll shows a 7-day trend",
+    "real-time"
+   ],
+   "risk": "Bad news",
+   "status": "disabled",
+   "needs": "D6"
+  },
+  {
+   "n": 48,
+   "id": "decode",
+   "name": "Decode",
+   "section": "D",
+   "group": "Intel and Spying",
+   "stat": "wits",
+   "min": "senior-grunt",
+   "does": "Break a rival's coded message",
+   "levels": [
+    "One message",
+    "one coded line is decoded with a hint",
+    "a week of them",
+    "a code book is completed",
+    "their entire code"
+   ],
+   "risk": "Wrong key",
+   "status": "disabled",
+   "needs": "D9"
+  },
+  {
+   "n": 49,
+   "id": "recruit",
+   "name": "Recruit",
+   "section": "E",
+   "group": "Recruiting and People",
+   "stat": "charm",
+   "min": "grunt",
+   "does": "Find one candidate in a district",
+   "levels": [
+    "You close the deal",
+    "the candidate's trait is shown",
+    "you get a better candidate",
+    "the candidate's loyalty rating is shown",
+    "candidates arrive pre-vetted"
+   ],
+   "risk": "Recruits a mole",
+   "status": "limited",
+   "note": "Moles come with the rival team (D9).",
+   "effect": {
+    "kind": "recruit"
+   }
+  },
+  {
+   "n": 50,
+   "id": "spread-flyers",
+   "name": "Spread Flyers",
+   "section": "E",
+   "group": "Recruiting and People",
+   "stat": "charm",
+   "min": "grunt",
+   "does": "Post flyers in a district",
+   "levels": [
+    "One district",
+    "flyers reach 2 blocks",
+    "two",
+    "flyers target one type of recruit",
+    "every district"
+   ],
+   "risk": "Torn down",
+   "status": "disabled",
+   "needs": "D5"
+  },
+  {
+   "n": 51,
+   "id": "vet-a-recruit",
+   "name": "Vet a Recruit",
+   "section": "E",
+   "group": "Recruiting and People",
+   "stat": "wits",
+   "min": "senior-grunt",
+   "does": "Check a candidate's file for moles",
+   "levels": [
+    "Find a mole at 30%",
+    "vetting takes 1 day, not 2",
+    "60%",
+    "vetting leaves no trace, so the recruit never takes offence",
+    "90%"
+   ],
+   "risk": "Insulted",
+   "status": "disabled",
+   "needs": "D9"
+  },
+  {
+   "n": 52,
+   "id": "welcome-wagon",
+   "name": "Welcome Wagon",
+   "section": "E",
+   "group": "Recruiting and People",
+   "stat": "charm",
+   "min": "grunt",
+   "does": "Greet new members",
+   "levels": [
+    "Morale +2",
+    "the new member gets a ₽50 kit of gear",
+    "+4",
+    "the new member is paired with a mentor, +1 XP/day for a week",
+    "new recruits arrive at Lv +1"
+   ],
+   "risk": "Awkward",
+   "status": "supported",
+   "effect": {
+    "kind": "welcome"
+   }
+  },
+  {
+   "n": 53,
+   "id": "befriend-locals",
+   "name": "Befriend Locals",
+   "section": "E",
+   "group": "Recruiting and People",
+   "stat": "charm",
+   "min": "recruit",
+   "does": "Be friendly in a district",
+   "levels": [
+    "Regard +1",
+    "locals owe you one favour, usable once a week",
+    "+2",
+    "locals warn you 1 day before a police sweep",
+    "locals tip you off"
+   ],
+   "risk": "Disliked",
+   "status": "disabled",
+   "needs": "D6"
+  },
+  {
+   "n": 54,
+   "id": "poach-from-the-rival",
+   "name": "Poach from the Rival",
+   "section": "E",
+   "group": "Recruiting and People",
+   "stat": "charm",
+   "min": "senior-grunt",
+   "does": "Court a rival's members",
+   "levels": [
+    "10%",
+    "poach offer gets +10% odds",
+    "20%",
+    "a rival's officer is turned into a source",
+    "30% each"
+   ],
+   "risk": "Burned bridge",
+   "status": "disabled",
+   "needs": "D9"
+  },
+  {
+   "n": 55,
+   "id": "escort-a-recruit",
+   "name": "Escort a Recruit",
+   "section": "E",
+   "group": "Recruiting and People",
+   "stat": "brawn",
+   "min": "grunt",
+   "does": "Bring a recruit safely to HQ",
+   "levels": [
+    "Arrives",
+    "the recruit arrives calm, Morale +3",
+    "arrives happy",
+    "the recruit arrives with a friend (a second candidate)",
+    "arrives loyal"
+   ],
+   "risk": "Ambushed",
+   "status": "disabled",
+   "needs": "D2"
+  },
+  {
+   "n": 56,
+   "id": "interview",
+   "name": "Interview",
+   "section": "E",
+   "group": "Recruiting and People",
+   "stat": "charm",
+   "min": "senior-grunt",
+   "does": "Question candidates",
+   "levels": [
+    "Find their trait",
+    "the interview reveals the recruit's starting trait",
+    "find their goal",
+    "the interview reveals their fear and their price",
+    "find their price"
+   ],
+   "risk": "Rejects",
+   "status": "supported",
+   "effect": {
+    "kind": "interview"
+   }
+  },
+  {
+   "n": 57,
+   "id": "be-a-big-brother",
+   "name": "Be a Big Brother",
+   "section": "E",
+   "group": "Recruiting and People",
+   "stat": "charm",
+   "min": "senior-grunt",
+   "does": "Take one Recruit under their wing",
+   "levels": [
+    "+1 XP/day for the Recruit",
+    "the mentee gains a trait hint",
+    "+2",
+    "the mentee gains +1 to one stat",
+    "the Recruit gains the mentor's trait hint"
+   ],
+   "risk": "Bad influence",
+   "status": "supported",
+   "effect": {
+    "kind": "mentor"
+   }
+  },
+  {
+   "n": 58,
+   "id": "match-make",
+   "name": "Match-Make",
+   "section": "E",
+   "group": "Recruiting and People",
+   "stat": "charm",
+   "min": "senior-grunt",
+   "does": "Pair two crew members as a team",
+   "levels": [
+    "Small bonus",
+    "the pair share Morale +2",
+    "both gain a bond trait",
+    "the pair can swap Pokémon in a doubles battle",
+    "a duo that fights better"
+   ],
+   "risk": "Rivalry",
+   "status": "disabled",
+   "needs": "D8"
+  },
+  {
+   "n": 59,
+   "id": "rally-the-troops",
+   "name": "Rally the Troops",
+   "section": "E",
+   "group": "Recruiting and People",
+   "stat": "charm",
+   "min": "senior-grunt",
+   "does": "Boost the whole crew",
+   "levels": [
+    "Morale +2",
+    "the boost lasts a full day",
+    "+4",
+    "the boost lasts two days",
+    "+6, one day"
+   ],
+   "risk": "Annoys",
+   "status": "supported",
+   "effect": {
+    "kind": "rally"
+   }
+  },
+  {
+   "n": 60,
+   "id": "welcome-the-defector",
+   "name": "Welcome the Defector",
+   "section": "E",
+   "group": "Recruiting and People",
+   "stat": "charm",
+   "min": "sergeant",
+   "does": "Handle a defected rival member",
+   "levels": [
+    "Check them",
+    "the defector is questioned gently, Loyalty +2",
+    "welcome them",
+    "the defector's old team is spied on for a week",
+    "turn them into a source"
+   ],
+   "risk": "Double agent",
+   "status": "disabled",
+   "needs": "D9"
+  },
+  {
+   "n": 61,
+   "id": "train",
+   "name": "Train",
+   "section": "F",
+   "group": "Training and Growth",
+   "stat": null,
+   "min": "recruit",
+   "does": "Gain XP",
+   "levels": [
+    "+1 XP/day",
+    "training gives +0.1 to a stat",
+    "+2",
+    "training grants a free class day",
+    "+3"
+   ],
+   "risk": "Injury (1 day)",
+   "status": "supported",
+   "effect": {
+    "kind": "train",
+    "sure": true
+   }
+  },
+  {
+   "n": 62,
+   "id": "train-their-pokemon",
+   "name": "Train Their Pokémon",
+   "section": "F",
+   "group": "Training and Growth",
+   "stat": "brawn",
+   "min": "recruit",
+   "does": "Level up their own Pokémon",
+   "levels": [
+    "+1 level",
+    "their Pokémon learns a new move",
+    "+2",
+    "their Pokémon gains a nature tweak",
+    "+3"
+   ],
+   "risk": "Faints",
+   "status": "supported",
+   "effect": {
+    "kind": "trainMon"
+   }
+  },
+  {
+   "n": 63,
+   "id": "study",
+   "name": "Study",
+   "section": "F",
+   "group": "Training and Growth",
+   "stat": "wits",
+   "min": "grunt",
+   "does": "Read at the Library",
+   "levels": [
+    "+0.2 Wits",
+    "study adds +0.1 to Wits",
+    "+0.3",
+    "study unlocks a new class",
+    "+0.5"
+   ],
+   "risk": "Bored",
+   "status": "disabled",
+   "needs": "D5"
+  },
+  {
+   "n": 64,
+   "id": "run-drills",
+   "name": "Run Drills",
+   "section": "F",
+   "group": "Training and Growth",
+   "stat": "brawn",
+   "min": "senior-grunt",
+   "does": "Lead a group workout",
+   "levels": [
+    "+1 XP for 3 others",
+    "drills give Morale +1 to all attendees",
+    "5",
+    "drills cut injury risk by 50%",
+    "the whole crew"
+   ],
+   "risk": "Sprains",
+   "status": "supported",
+   "effect": {
+    "kind": "drills"
+   }
+  },
+  {
+   "n": 65,
+   "id": "sparring-partner",
+   "name": "Sparring Partner",
+   "section": "F",
+   "group": "Training and Growth",
+   "stat": "brawn",
+   "min": "grunt",
+   "does": "Spar with another member",
+   "levels": [
+    "Both +1 XP",
+    "the spar gives a stat tip",
+    "+2",
+    "both learn a move from each other",
+    "learn each other's tricks"
+   ],
+   "risk": "Injury",
+   "status": "supported",
+   "effect": {
+    "kind": "train",
+    "grow": "brawn",
+    "xp": 2,
+    "injury": 10
+   }
+  },
+  {
+   "n": 66,
+   "id": "coach",
+   "name": "Coach",
+   "section": "F",
+   "group": "Training and Growth",
+   "stat": "charm",
+   "min": "sergeant",
+   "does": "Coach one member",
+   "levels": [
+    "+2 XP/day",
+    "coaching gives a free hint about the trait to come",
+    "+3",
+    "coaching lets the Boss pick the trait",
+    "+4 and a trait hint"
+   ],
+   "risk": "Clashes",
+   "status": "supported",
+   "effect": {
+    "kind": "coach"
+   }
+  },
+  {
+   "n": 67,
+   "id": "learn-a-trade",
+   "name": "Learn a Trade",
+   "section": "F",
+   "group": "Training and Growth",
+   "stat": "wits",
+   "min": "recruit",
+   "does": "Study a specific trade (cook, mechanic, forger)",
+   "levels": [
+    "Learn it",
+    "the trade gives a small perk (a discount)",
+    "a second",
+    "the trade gives a blueprint for a better recipe",
+    "a master craft"
+   ],
+   "risk": "Apprentice mistakes",
+   "status": "disabled",
+   "needs": "D5"
+  },
+  {
+   "n": 68,
+   "id": "practice-battle-tactics",
+   "name": "Practice Battle Tactics",
+   "section": "F",
+   "group": "Training and Growth",
+   "stat": "wits",
+   "min": "senior-grunt",
+   "does": "Study battle theory",
+   "levels": [
+    "+1% win in battles",
+    "tactics notes are shared with the crew (+1% win)",
+    "+2%",
+    "a lecture covers a named rival's battle style (+3% against them)",
+    "+3%"
+   ],
+   "risk": "Overthinks",
+   "status": "supported",
+   "effect": {
+    "kind": "train",
+    "grow": "wits"
+   }
+  },
+  {
+   "n": 69,
+   "id": "teach-a-move",
+   "name": "Teach a Move",
+   "section": "F",
+   "group": "Training and Growth",
+   "stat": "wits",
+   "min": "sergeant",
+   "does": "Teach a move to a Pokémon",
+   "levels": [
+    "A tutor move",
+    "the tutor charges 20% less",
+    "two",
+    "the tutor teaches a whole team a move at once",
+    "an egg move"
+   ],
+   "risk": "Move forgotten",
+   "status": "disabled",
+   "needs": "D4"
+  },
+  {
+   "n": 70,
+   "id": "mock-raid",
+   "name": "Mock Raid",
+   "section": "F",
+   "group": "Training and Growth",
+   "stat": "brawn",
+   "min": "senior-grunt",
+   "does": "Practice an assault",
+   "levels": [
+    "+1 team XP",
+    "the raid plan is mapped to rooms",
+    "+2",
+    "the plan reveals traps in advance",
+    "\"Raid-ready\" status"
+   ],
+   "risk": "Injury",
+   "status": "disabled",
+   "needs": "D9"
+  },
+  {
+   "n": 71,
+   "id": "read-the-bosss-manifesto",
+   "name": "Read the Boss's Manifesto",
+   "section": "F",
+   "group": "Training and Growth",
+   "stat": "charm",
+   "min": "recruit",
+   "does": "Study the Boss's ideals",
+   "levels": [
+    "Loyalty +1",
+    "notes are copied for newcomers",
+    "+2",
+    "the manifesto is recited at HQ each dawn, Loyalty +1",
+    "ideology grows"
+   ],
+   "risk": "Disagrees",
+   "status": "disabled",
+   "needs": "D7"
+  },
+  {
+   "n": 72,
+   "id": "sleep-it-off",
+   "name": "Sleep it Off",
+   "section": "F",
+   "group": "Training and Growth",
+   "stat": null,
+   "min": "recruit",
+   "does": "Recover from a hard week",
+   "levels": [
+    "Heal injuries",
+    "rest includes a hot meal, Morale +2",
+    "also Morale +5",
+    "a visit from the Boss, Loyalty +2",
+    "also a free level-up XP"
+   ],
+   "risk": "Wastes a day",
+   "status": "supported",
+   "effect": {
+    "kind": "rest",
+    "sure": true
+   }
+  },
+  {
+   "n": 73,
+   "id": "catch",
+   "name": "Catch",
+   "section": "G",
+   "group": "Pokémon Care and Catching",
+   "stat": "brawn",
+   "min": "recruit",
+   "does": "Catch one wild Pokémon",
+   "levels": [
+    "One catch",
+    "the wild Pokémon is 1 level higher",
+    "two",
+    "the wild Pokémon is 3 levels higher",
+    "the species you asked for"
+   ],
+   "risk": "Pokémon escapes",
+   "status": "limited",
+   "note": "Catches go to the stores; the Reserve screen and hand assignment are D4.",
+   "effect": {
+    "kind": "catch"
+   }
+  },
+  {
+   "n": 74,
+   "id": "safari-patrol",
+   "name": "Safari Patrol",
+   "section": "G",
+   "group": "Pokémon Care and Catching",
+   "stat": "wits",
+   "min": "grunt",
+   "does": "Search for rare species",
+   "levels": [
+    "A rare",
+    "the search maps a route",
+    "a pair",
+    "the search finds a nest",
+    "a legendary rumor"
+   ],
+   "risk": "Gets lost",
+   "status": "disabled",
+   "needs": "D4"
+  },
+  {
+   "n": 75,
+   "id": "tend-the-pens",
+   "name": "Tend the Pens",
+   "section": "G",
+   "group": "Pokémon Care and Catching",
+   "stat": "charm",
+   "min": "recruit",
+   "does": "Feed and clean the Pokémon pens",
+   "levels": [
+    "No escapes",
+    "feeding is on time, no hunger",
+    "Pokémon grow faster",
+    "a washing station adds +5 happiness",
+    "friendship +1 each day"
+   ],
+   "risk": "Bite",
+   "status": "disabled",
+   "needs": "D4"
+  },
+  {
+   "n": 76,
+   "id": "hatch-eggs",
+   "name": "Hatch Eggs",
+   "section": "G",
+   "group": "Pokémon Care and Catching",
+   "stat": "wits",
+   "min": "grunt",
+   "does": "Look after eggs",
+   "levels": [
+    "One egg",
+    "the egg stays warm, hatching 10% faster",
+    "two",
+    "the egg hatches on the spot",
+    "eggs hatch quicker"
+   ],
+   "risk": "Egg breaks",
+   "status": "disabled",
+   "needs": "D4"
+  },
+  {
+   "n": 77,
+   "id": "heal-the-team",
+   "name": "Heal the Team",
+   "section": "G",
+   "group": "Pokémon Care and Catching",
+   "stat": "wits",
+   "min": "grunt",
+   "does": "Treat injured Pokémon",
+   "levels": [
+    "Heal one",
+    "healing is 25% faster",
+    "three",
+    "healing also removes a status ailment",
+    "the entire team overnight"
+   ],
+   "risk": "Poor care",
+   "status": "disabled",
+   "needs": "D4"
+  },
+  {
+   "n": 78,
+   "id": "breed",
+   "name": "Breed",
+   "section": "G",
+   "group": "Pokémon Care and Catching",
+   "stat": "charm",
+   "min": "senior-grunt",
+   "does": "Pair Pokémon for eggs",
+   "levels": [
+    "One pair",
+    "the pair's nature is picked",
+    "good IVs",
+    "the pair passes down one move",
+    "Hidden Ability"
+   ],
+   "risk": "Aggression",
+   "status": "disabled",
+   "needs": "D4"
+  },
+  {
+   "n": 79,
+   "id": "release-the-weak",
+   "name": "Release the Weak",
+   "section": "G",
+   "group": "Pokémon Care and Catching",
+   "stat": "charm",
+   "min": "grunt",
+   "does": "Release useless Pokémon for cash",
+   "levels": [
+    "₽20 each",
+    "released Pokémon sell for ₽30 each",
+    "₽50",
+    "released Pokémon give a bonus item",
+    "trade for a TM"
+   ],
+   "risk": "Regrets",
+   "status": "disabled",
+   "needs": "D4"
+  },
+  {
+   "n": 80,
+   "id": "rehab-a-wild-pokemon",
+   "name": "Rehab a Wild Pokémon",
+   "section": "G",
+   "group": "Pokémon Care and Catching",
+   "stat": "charm",
+   "min": "grunt",
+   "does": "Nurse a wounded wild Pokémon",
+   "levels": [
+    "Joins you",
+    "the Pokémon joins as a friend",
+    "joins at +loyalty",
+    "the Pokémon has a rare nature",
+    "a rare form"
+   ],
+   "risk": "Dies",
+   "status": "disabled",
+   "needs": "D4"
+  },
+  {
+   "n": 81,
+   "id": "feed-the-team",
+   "name": "Feed the Team",
+   "section": "G",
+   "group": "Pokémon Care and Catching",
+   "stat": "charm",
+   "min": "recruit",
+   "does": "Cook for Pokémon",
+   "levels": [
+    "Morale +1",
+    "a feast adds Morale +2",
+    "Pokémon +1 happiness",
+    "a feast adds team happiness +5",
+    "berries bonus"
+   ],
+   "risk": "Food runs out",
+   "status": "disabled",
+   "needs": "D4"
+  },
+  {
+   "n": 82,
+   "id": "berry-garden",
+   "name": "Berry Garden",
+   "section": "G",
+   "group": "Pokémon Care and Catching",
+   "stat": "charm",
+   "min": "grunt",
+   "does": "Grow berries for the crew",
+   "levels": [
+    "3 berries/week",
+    "the garden grows 3 common berries",
+    "8",
+    "the garden adds one rare berry a week",
+    "a rare berry"
+   ],
+   "risk": "Pests",
+   "status": "supported",
+   "effect": {
+    "kind": "berries"
+   }
+  },
+  {
+   "n": 83,
+   "id": "fossil-revive",
+   "name": "Fossil Revive",
+   "section": "G",
+   "group": "Pokémon Care and Catching",
+   "stat": "wits",
+   "min": "senior-grunt",
+   "does": "Revive a fossil",
+   "levels": [
+    "One fossil",
+    "a fossil revives in 2 days instead of 3",
+    "two",
+    "a common fossil revives at once",
+    "a rare fossil Pokémon"
+   ],
+   "risk": "Fails",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 84,
+   "id": "tame-an-alpha",
+   "name": "Tame an Alpha",
+   "section": "G",
+   "group": "Pokémon Care and Catching",
+   "stat": "nerve",
+   "min": "sergeant",
+   "does": "Calm a wild alpha",
+   "levels": [
+    "A wild alpha",
+    "the alpha is calmed with berries",
+    "+level",
+    "the alpha learns a signature move",
+    "joins"
+   ],
+   "risk": "Hurt",
+   "status": "disabled",
+   "needs": "D11"
+  },
+  {
+   "n": 85,
+   "id": "smuggle",
+   "name": "Smuggle",
+   "section": "H",
+   "group": "Logistics and Smuggling",
+   "stat": "stealth",
+   "min": "grunt",
+   "does": "Run a night smuggling route",
+   "levels": [
+    "₽200/night",
+    "the route skips one checkpoint",
+    "₽450",
+    "the route gains a safe stop",
+    "a route that runs itself"
+   ],
+   "risk": "Seized",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 86,
+   "id": "drive-the-truck",
+   "name": "Drive the Truck",
+   "section": "H",
+   "group": "Logistics and Smuggling",
+   "stat": "brawn",
+   "min": "grunt",
+   "does": "Move goods by road",
+   "levels": [
+    "One run",
+    "the truck gets a hidden compartment",
+    "two",
+    "the truck gets an escort car",
+    "a convoy"
+   ],
+   "risk": "Crash",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 87,
+   "id": "sail-the-boat",
+   "name": "Sail the Boat",
+   "section": "H",
+   "group": "Logistics and Smuggling",
+   "stat": "wits",
+   "min": "grunt",
+   "does": "Move goods by sea",
+   "levels": [
+    "One run",
+    "the boat gets a cabin",
+    "two",
+    "the boat gets a hidden hold",
+    "a trip to another region"
+   ],
+   "risk": "Storm",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 88,
+   "id": "fly-the-goods",
+   "name": "Fly the Goods",
+   "section": "H",
+   "group": "Logistics and Smuggling",
+   "stat": "stealth",
+   "min": "senior-grunt",
+   "does": "Move goods by air Pokémon",
+   "levels": [
+    "One drop",
+    "the drop lands on target",
+    "two",
+    "the drop is silent (no Heat)",
+    "a held region"
+   ],
+   "risk": "Shot down",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 89,
+   "id": "stock-the-stores",
+   "name": "Stock the Stores",
+   "section": "H",
+   "group": "Logistics and Smuggling",
+   "stat": "wits",
+   "min": "recruit",
+   "does": "Keep HQ supplies full",
+   "levels": [
+    "Potions on hand",
+    "stores are stocked at the start of the week",
+    "Balls on hand",
+    "stores restock themselves",
+    "TMs on hand"
+   ],
+   "risk": "Overbuys",
+   "status": "disabled",
+   "needs": "D5"
+  },
+  {
+   "n": 90,
+   "id": "run-the-warehouse",
+   "name": "Run the Warehouse",
+   "section": "H",
+   "group": "Logistics and Smuggling",
+   "stat": "wits",
+   "min": "grunt",
+   "does": "Manage stored goods",
+   "levels": [
+    "No loss",
+    "storage stays tidy (no loss)",
+    "space +20%",
+    "every item is tracked and fetched instantly",
+    "instant fetch"
+   ],
+   "risk": "Mix-ups",
+   "status": "disabled",
+   "needs": "D5"
+  },
+  {
+   "n": 91,
+   "id": "set-up-a-safehouse",
+   "name": "Set Up a Safehouse",
+   "section": "H",
+   "group": "Logistics and Smuggling",
+   "stat": "wits",
+   "min": "senior-grunt",
+   "does": "Prepare a hiding place",
+   "levels": [
+    "One safehouse",
+    "the safehouse gets a bed",
+    "three",
+    "the safehouse gets an escape hatch",
+    "police can't search them"
+   ],
+   "risk": "Found",
+   "status": "disabled",
+   "needs": "D5"
+  },
+  {
+   "n": 92,
+   "id": "bribe-the-customs-man",
+   "name": "Bribe the Customs Man",
+   "section": "H",
+   "group": "Logistics and Smuggling",
+   "stat": "charm",
+   "min": "senior-grunt",
+   "does": "Pay off a border or harbour official",
+   "levels": [
+    "Cargo clear",
+    "the official wavers (50% pass)",
+    "2 weeks clear",
+    "the official lets cargo through unseen",
+    "official turns informant"
+   ],
+   "risk": "Reports you",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 93,
+   "id": "dig-a-tunnel",
+   "name": "Dig a Tunnel",
+   "section": "H",
+   "group": "Logistics and Smuggling",
+   "stat": "brawn",
+   "min": "grunt",
+   "does": "Dig under a wall",
+   "levels": [
+    "A short tunnel",
+    "the tunnel is reinforced (no cave-in)",
+    "a long one",
+    "the tunnel exits in a rival's cellar",
+    "an escape route"
+   ],
+   "risk": "Collapse",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 94,
+   "id": "switch-the-labels",
+   "name": "Switch the Labels",
+   "section": "H",
+   "group": "Logistics and Smuggling",
+   "stat": "wits",
+   "min": "grunt",
+   "does": "Rebrand stolen goods",
+   "levels": [
+    "Resell at 60%",
+    "labels look real (80% resale)",
+    "80%",
+    "labels pass a close look (100% resale)",
+    "100%"
+   ],
+   "risk": "Spotted",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 95,
+   "id": "dead-drop",
+   "name": "Dead Drop",
+   "section": "H",
+   "group": "Logistics and Smuggling",
+   "stat": "stealth",
+   "min": "grunt",
+   "does": "Leave and fetch goods secretly",
+   "levels": [
+    "One drop",
+    "the drop is hidden in plain sight",
+    "three",
+    "the drop spot rotates weekly",
+    "a standing drop"
+   ],
+   "risk": "Found",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 96,
+   "id": "run-the-black-market",
+   "name": "Run the Black Market",
+   "section": "H",
+   "group": "Logistics and Smuggling",
+   "stat": "charm",
+   "min": "sergeant",
+   "does": "Run a stall at night",
+   "levels": [
+    "3 slots",
+    "the stall gets a guard",
+    "6",
+    "the stall carries a rare TM",
+    "rare TMs weekly"
+   ],
+   "risk": "Raided",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 97,
+   "id": "work-the-front",
+   "name": "Work the Front",
+   "section": "I",
+   "group": "Business and Fronts",
+   "stat": "charm",
+   "min": "grunt",
+   "does": "Run one of your businesses",
+   "levels": [
+    "+25% income",
+    "the front's layout adds +5% income",
+    "+35%",
+    "regular customers add +15% income",
+    "+50%"
+   ],
+   "risk": "Customers leave",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 98,
+   "id": "run-the-till",
+   "name": "Run the Till",
+   "section": "I",
+   "group": "Business and Fronts",
+   "stat": "wits",
+   "min": "recruit",
+   "does": "Mind a shop's cash register",
+   "levels": [
+    "No theft",
+    "the till gets a lock, theft −50%",
+    "+5%",
+    "receipts expose any short",
+    "+10%"
+   ],
+   "risk": "Short",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 99,
+   "id": "bartend",
+   "name": "Bartend",
+   "section": "I",
+   "group": "Business and Fronts",
+   "stat": "charm",
+   "min": "grunt",
+   "does": "Run a bar front",
+   "levels": [
+    "Tips +₽20",
+    "tips bring gossip",
+    "₽50",
+    "the bar becomes a meeting spot",
+    "gossip from patrons"
+   ],
+   "risk": "Fights",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 100,
+   "id": "cook",
+   "name": "Cook",
+   "section": "I",
+   "group": "Business and Fronts",
+   "stat": "charm",
+   "min": "grunt",
+   "does": "Cook at your restaurant",
+   "levels": [
+    "Crew Morale +1",
+    "the cook learns a recipe (+1 Morale)",
+    "+2",
+    "the cook gets a rare ingredient (+3 Morale)",
+    "a famous dish"
+   ],
+   "risk": "Fire",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 101,
+   "id": "mechanic",
+   "name": "Mechanic",
+   "section": "I",
+   "group": "Business and Fronts",
+   "stat": "wits",
+   "min": "grunt",
+   "does": "Repair vehicles and gear",
+   "levels": [
+    "Fix one",
+    "the mechanic fixes carts (+₽40)",
+    "three",
+    "the mechanic adds a speed upgrade to a vehicle",
+    "build upgrades"
+   ],
+   "risk": "Parts missing",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 102,
+   "id": "courier",
+   "name": "Courier",
+   "section": "I",
+   "group": "Business and Fronts",
+   "stat": "stealth",
+   "min": "recruit",
+   "does": "Carry packages",
+   "levels": [
+    "₽40/day",
+    "the courier learns shortcuts, 1 less risk roll",
+    "₽90",
+    "the courier avoids checkpoints",
+    "trusted by rival businesses"
+   ],
+   "risk": "Lost",
+   "status": "supported",
+   "effect": {
+    "kind": "money",
+    "funds": [
+     20,
+     80
+    ]
+   }
+  },
+  {
+   "n": 103,
+   "id": "run-the-print-shop",
+   "name": "Run the Print Shop",
+   "section": "I",
+   "group": "Business and Fronts",
+   "stat": "wits",
+   "min": "grunt",
+   "does": "Print flyers and papers",
+   "levels": [
+    "Flyers",
+    "print jobs finish a day faster",
+    "forged papers",
+    "print jobs carry a hidden code only you read",
+    "a newspaper"
+   ],
+   "risk": "Press jam",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 104,
+   "id": "run-the-radio",
+   "name": "Run the Radio",
+   "section": "I",
+   "group": "Business and Fronts",
+   "stat": "charm",
+   "min": "senior-grunt",
+   "does": "Hold a regular show",
+   "levels": [
+    "A news bulletin",
+    "the show books a guest (+Regard)",
+    "a call-in",
+    "the show gets a theme song (+Regard)",
+    "a famous host"
+   ],
+   "risk": "Dead air",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 105,
+   "id": "manage-a-shop",
+   "name": "Manage a Shop",
+   "section": "I",
+   "group": "Business and Fronts",
+   "stat": "wits",
+   "min": "senior-grunt",
+   "does": "Run a shop on your own",
+   "levels": [
+    "+10%",
+    "the shop stocks hot items (+10% sales)",
+    "+20%",
+    "the shop gets a loyalty card (+20%)",
+    "+30%"
+   ],
+   "risk": "Poor stock",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 106,
+   "id": "open-a-new-shop",
+   "name": "Open a New Shop",
+   "section": "I",
+   "group": "Business and Fronts",
+   "stat": "wits",
+   "min": "sergeant",
+   "does": "Set up a small shop in a held district",
+   "levels": [
+    "A stall",
+    "the stall gets a sign (+₽20/day)",
+    "a store",
+    "the store hires staff (+₽60/day)",
+    "a branch"
+   ],
+   "risk": "Fails",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 107,
+   "id": "negotiate-suppliers",
+   "name": "Negotiate Suppliers",
+   "section": "I",
+   "group": "Business and Fronts",
+   "stat": "charm",
+   "min": "senior-grunt",
+   "does": "Cut deals with suppliers",
+   "levels": [
+    "−5% costs",
+    "the supplier gives a 5% discount",
+    "−10%",
+    "the supplier gives 30 days of credit",
+    "−15%"
+   ],
+   "risk": "Suppliers refuse",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 108,
+   "id": "run-the-casino-floor",
+   "name": "Run the Casino Floor",
+   "section": "I",
+   "group": "Business and Fronts",
+   "stat": "wits",
+   "min": "sergeant",
+   "does": "Run a casino front",
+   "levels": [
+    "₽100/day",
+    "the floor adds a table (+₽30/day)",
+    "₽250",
+    "the floor adds a VIP room (+₽100/day)",
+    "big-spender tables"
+   ],
+   "risk": "Cheat caught",
+   "status": "disabled",
+   "needs": "D10"
+  },
+  {
+   "n": 109,
+   "id": "post-flyers",
+   "name": "Post Flyers",
+   "section": "J",
+   "group": "Propaganda and Culture",
+   "stat": "charm",
+   "min": "recruit",
+   "does": "Spread flyers",
+   "levels": [
+    "One district",
+    "flyers get +10% pickup",
+    "two",
+    "flyers include a map to the Boss's door",
+    "all"
+   ],
+   "risk": "Torn down",
+   "status": "disabled",
+   "needs": "D5"
+  },
+  {
+   "n": 110,
+   "id": "chant",
+   "name": "Chant",
+   "section": "J",
+   "group": "Propaganda and Culture",
+   "stat": "charm",
+   "min": "recruit",
+   "does": "Lead a crowd chant",
+   "levels": [
+    "+1 Regard",
+    "the chant is rehearsed (+Regard 1)",
+    "+2",
+    "the chant spreads to the next block (+Regard 3)",
+    "a movement"
+   ],
+   "risk": "Arrest",
+   "status": "disabled",
+   "needs": "D6"
+  },
+  {
+   "n": 111,
+   "id": "write-the-songs",
+   "name": "Write the Songs",
+   "section": "J",
+   "group": "Propaganda and Culture",
+   "stat": "charm",
+   "min": "grunt",
+   "does": "Compose a team anthem",
+   "levels": [
+    "One song",
+    "the song is catchy",
+    "a chant",
+    "the crowd sings it back",
+    "a hit"
+   ],
+   "risk": "Ridicule",
+   "status": "disabled",
+   "needs": "D6"
+  },
+  {
+   "n": 112,
+   "id": "street-preacher",
+   "name": "Street Preacher",
+   "section": "J",
+   "group": "Propaganda and Culture",
+   "stat": "charm",
+   "min": "senior-grunt",
+   "does": "Preach the team's ideals",
+   "levels": [
+    "+2 Regard",
+    "the sermon draws a crowd",
+    "+4",
+    "the sermon wins a rival's listeners",
+    "followers"
+   ],
+   "risk": "Mocked",
+   "status": "disabled",
+   "needs": "D6"
+  },
+  {
+   "n": 113,
+   "id": "paint-the-banners",
+   "name": "Paint the Banners",
+   "section": "J",
+   "group": "Propaganda and Culture",
+   "stat": "stealth",
+   "min": "recruit",
+   "does": "Make banners",
+   "levels": [
+    "+1 Dread",
+    "banners are bright (+Dread 1)",
+    "+2",
+    "banners hang in the open (+Dread 3)",
+    "a landmark"
+   ],
+   "risk": "Torn down",
+   "status": "disabled",
+   "needs": "D6"
+  },
+  {
+   "n": 114,
+   "id": "spin-the-story",
+   "name": "Spin the Story",
+   "section": "J",
+   "group": "Propaganda and Culture",
+   "stat": "wits",
+   "min": "senior-grunt",
+   "does": "Soften bad news",
+   "levels": [
+    "Heat −2",
+    "the spin cuts Heat by 3",
+    "−5",
+    "the spin works on police (Heat −8)",
+    "a public apology that works"
+   ],
+   "risk": "Backfires",
+   "status": "disabled",
+   "needs": "D6"
+  },
+  {
+   "n": 115,
+   "id": "spy-on-public-mood",
+   "name": "Spy on Public Mood",
+   "section": "J",
+   "group": "Propaganda and Culture",
+   "stat": "wits",
+   "min": "grunt",
+   "does": "Read what people say",
+   "levels": [
+    "Regard reading",
+    "the poll covers one street",
+    "fear reading",
+    "the poll covers a whole region",
+    "a rival's reputation"
+   ],
+   "risk": "None",
+   "status": "disabled",
+   "needs": "D6"
+  },
+  {
+   "n": 116,
+   "id": "host-a-block-party",
+   "name": "Host a Block Party",
+   "section": "J",
+   "group": "Propaganda and Culture",
+   "stat": "charm",
+   "min": "senior-grunt",
+   "does": "Throw a party",
+   "levels": [
+    "+3 Regard",
+    "the party has food (+Regard 2)",
+    "+6",
+    "the party has music and a speech (+Regard 5)",
+    "the district loves you"
+   ],
+   "risk": "Cops",
+   "status": "disabled",
+   "needs": "D6"
+  },
+  {
+   "n": 117,
+   "id": "make-a-hero-out-of-a-grunt",
+   "name": "Make a Hero Out of a Grunt",
+   "section": "J",
+   "group": "Propaganda and Culture",
+   "stat": "charm",
+   "min": "senior-grunt",
+   "does": "Boost a Grunt's public image",
+   "levels": [
+    "+2 Regard",
+    "his image grows (+Regard 1)",
+    "+4",
+    "his image survives a scandal",
+    "he's a legend"
+   ],
+   "risk": "Stuns him",
+   "status": "disabled",
+   "needs": "D6"
+  },
+  {
+   "n": 118,
+   "id": "counter-the-heros-story",
+   "name": "Counter the Hero's Story",
+   "section": "J",
+   "group": "Propaganda and Culture",
+   "stat": "wits",
+   "min": "senior-grunt",
+   "does": "Fight the Hero's good press",
+   "levels": [
+    "Hero image −1",
+    "a counter-story is printed",
+    "−2",
+    "the counter-story names a source",
+    "the Hero is a hypocrite"
+   ],
+   "risk": "Backfires",
+   "status": "disabled",
+   "needs": "D11"
+  },
+  {
+   "n": 119,
+   "id": "hold",
+   "name": "Hold",
+   "section": "K",
+   "group": "Holding and Governing",
+   "stat": "wits",
+   "min": "admin",
+   "does": "Run a held district without the Boss",
+   "levels": [
+    "District holds",
+    "the district has a written plan (+5% income)",
+    "income +10%",
+    "the district has a deputy (no Boss visit needed)",
+    "a self-running city"
+   ],
+   "risk": "Ambition grows",
+   "status": "disabled",
+   "needs": "D6"
+  },
+  {
+   "n": 120,
+   "id": "govern-a-region",
+   "name": "Govern a Region",
+   "section": "K",
+   "group": "Holding and Governing",
+   "stat": "wits",
+   "min": "admin",
+   "does": "Run a whole held region (Part 5)",
+   "levels": [
+    "Keeps it quiet",
+    "the region reports weekly",
+    "pays tribute",
+    "the region has a council (events −20%)",
+    "the region improves"
+   ],
+   "risk": "Betrayal",
+   "status": "disabled",
+   "needs": "D15"
+  },
+  {
+   "n": 121,
+   "id": "collect-tribute",
+   "name": "Collect Tribute",
+   "section": "K",
+   "group": "Holding and Governing",
+   "stat": "nerve",
+   "min": "admin",
+   "does": "Gather weekly tribute from a held region",
+   "levels": [
+    "Normal tribute",
+    "tribute arrives on time",
+    "+10%",
+    "tribute is sent automatically",
+    "+25%"
+   ],
+   "risk": "Short",
+   "status": "disabled",
+   "needs": "D15"
+  },
+  {
+   "n": 122,
+   "id": "answer-the-mail",
+   "name": "Answer the Mail",
+   "section": "K",
+   "group": "Holding and Governing",
+   "stat": "wits",
+   "min": "admin",
+   "does": "Handle your region's letters",
+   "levels": [
+    "One request",
+    "letters are sorted by topic",
+    "five",
+    "letters get a form answer (−1 task)",
+    "a standing system"
+   ],
+   "risk": "Mistakes",
+   "status": "disabled",
+   "needs": "D15"
+  },
+  {
+   "n": 123,
+   "id": "hold-court",
+   "name": "Hold Court",
+   "section": "K",
+   "group": "Holding and Governing",
+   "stat": "charm",
+   "min": "admin",
+   "does": "Settle local disputes",
+   "levels": [
+    "Peace",
+    "court takes one hour",
+    "fewer events",
+    "court has a clerk (decisions logged)",
+    "locals trust you"
+   ],
+   "risk": "Unfair ruling",
+   "status": "disabled",
+   "needs": "D15"
+  },
+  {
+   "n": 124,
+   "id": "hold-the-line",
+   "name": "Hold the Line",
+   "section": "K",
+   "group": "Holding and Governing",
+   "stat": "brawn",
+   "min": "admin",
+   "does": "Defend a district against an attack",
+   "levels": [
+    "One wave",
+    "the line holds one more wave",
+    "two",
+    "the line holds with traps",
+    "counterattack"
+   ],
+   "risk": "Loses a district",
+   "status": "disabled",
+   "needs": "D6"
+  },
+  {
+   "n": 125,
+   "id": "train-the-garrison",
+   "name": "Train the Garrison",
+   "section": "K",
+   "group": "Holding and Governing",
+   "stat": "brawn",
+   "min": "admin",
+   "does": "Train local forces",
+   "levels": [
+    "+1 level",
+    "the garrison drills daily (+1 level each week)",
+    "+2",
+    "the garrison gets an officer (+5% defense)",
+    "elite guards"
+   ],
+   "risk": "Soldiers desert",
+   "status": "disabled",
+   "needs": "D15"
+  },
+  {
+   "n": 126,
+   "id": "run-elections",
+   "name": "Run Elections",
+   "section": "K",
+   "group": "Holding and Governing",
+   "stat": "charm",
+   "min": "admin",
+   "does": "Rig a local vote",
+   "levels": [
+    "Win one",
+    "the vote is rigged quietly",
+    "win all",
+    "a rival candidate is struck from the list",
+    "no election needed"
+   ],
+   "risk": "Scandal",
+   "status": "disabled",
+   "needs": "D15"
+  },
+  {
+   "n": 127,
+   "id": "draft-laws",
+   "name": "Draft Laws",
+   "section": "K",
+   "group": "Holding and Governing",
+   "stat": "wits",
+   "min": "admin",
+   "does": "Write a new rule",
+   "levels": [
+    "One law",
+    "the law is posted in the square",
+    "two",
+    "a patrol enforces it (+Dread)",
+    "a code of law"
+   ],
+   "risk": "Unpopular",
+   "status": "disabled",
+   "needs": "D15"
+  },
+  {
+   "n": 128,
+   "id": "keep-the-peace",
+   "name": "Keep the Peace",
+   "section": "K",
+   "group": "Holding and Governing",
+   "stat": "charm",
+   "min": "admin",
+   "does": "Cool tensions in a district",
+   "levels": [
+    "Tension −2",
+    "peace is rumoured (Tension −1)",
+    "−4",
+    "peace is celebrated (Tension −4)",
+    "no riots"
+   ],
+   "risk": "Fails",
+   "status": "disabled",
+   "needs": "D6"
+  },
+  {
+   "n": 129,
+   "id": "inspect-the-fronts",
+   "name": "Inspect the Fronts",
+   "section": "K",
+   "group": "Holding and Governing",
+   "stat": "wits",
+   "min": "admin",
+   "does": "Check every business",
+   "levels": [
+    "Spot theft",
+    "the inspector finds a leak",
+    "fix them",
+    "the inspector fixes it on the spot",
+    "+10% income"
+   ],
+   "risk": "Offends",
+   "status": "disabled",
+   "needs": "D15"
+  },
+  {
+   "n": 130,
+   "id": "guard-the-succession",
+   "name": "Guard the Succession",
+   "section": "K",
+   "group": "Holding and Governing",
+   "stat": "wits",
+   "min": "admin",
+   "does": "Prepare a heir for a held region",
+   "levels": [
+    "A deputy",
+    "a deputy is named",
+    "an heir",
+    "the deputy is trained for 1 week",
+    "an heir loyal to you"
+   ],
+   "risk": "Coup",
+   "status": "disabled",
+   "needs": "D15"
+  },
+  {
+   "n": 131,
+   "id": "sabotage",
+   "name": "Sabotage",
+   "section": "L",
+   "group": "Rivals and War",
+   "stat": "wits",
+   "min": "senior-grunt",
+   "does": "Damage a rival site",
+   "levels": [
+    "−10% output",
+    "damage is hidden (Heat −2)",
+    "−25%",
+    "damage is blamed on someone else",
+    "shut it"
+   ],
+   "risk": "Caught",
+   "status": "disabled",
+   "needs": "D9"
+  },
+  {
+   "n": 132,
+   "id": "raid",
+   "name": "Raid",
+   "section": "L",
+   "group": "Rivals and War",
+   "stat": "brawn",
+   "min": "sergeant",
+   "does": "Lead a raid without the Boss",
+   "levels": [
+    "A small site",
+    "the raid has a plan (+5%)",
+    "a mid site",
+    "the raid has a fallback (retreat with no loss)",
+    "an HQ floor"
+   ],
+   "risk": "Heavy losses",
+   "status": "disabled",
+   "needs": "D9"
+  },
+  {
+   "n": 133,
+   "id": "ambush-their-collectors",
+   "name": "Ambush Their Collectors",
+   "section": "L",
+   "group": "Rivals and War",
+   "stat": "brawn",
+   "min": "grunt",
+   "does": "Hit a rival's money runners",
+   "levels": [
+    "₽200",
+    "collectors lose their cash",
+    "₽500",
+    "collectors lose a lieutenant",
+    "capture a ledger"
+   ],
+   "risk": "Counter-ambush",
+   "status": "disabled",
+   "needs": "D9"
+  },
+  {
+   "n": 134,
+   "id": "burn-a-rival-shop",
+   "name": "Burn a Rival Shop",
+   "section": "L",
+   "group": "Rivals and War",
+   "stat": "nerve",
+   "min": "senior-grunt",
+   "does": "Torch a rival Front",
+   "levels": [
+    "One shop",
+    "the fire is small",
+    "a block",
+    "the fire is blamed on a rival",
+    "HQ cover"
+   ],
+   "risk": "Fire spreads",
+   "status": "disabled",
+   "needs": "D9"
+  },
+  {
+   "n": 135,
+   "id": "rescue-a-captive",
+   "name": "Rescue a Captive",
+   "section": "L",
+   "group": "Rivals and War",
+   "stat": "stealth",
+   "min": "senior-grunt",
+   "does": "Free a member",
+   "levels": [
+    "A weak jail",
+    "the rescue is quick",
+    "a station",
+    "the rescue leaves a decoy behind",
+    "a holding cell"
+   ],
+   "risk": "Captured",
+   "status": "disabled",
+   "needs": "D9"
+  },
+  {
+   "n": 136,
+   "id": "hold-a-prisoner",
+   "name": "Hold a Prisoner",
+   "section": "L",
+   "group": "Rivals and War",
+   "stat": "brawn",
+   "min": "senior-grunt",
+   "does": "Guard a captive (adult only)",
+   "levels": [
+    "Keep them",
+    "the captive is fed (Morale 0)",
+    "keep them quiet",
+    "the captive is questioned (one answer)",
+    "turn them"
+   ],
+   "risk": "Escape",
+   "status": "disabled",
+   "needs": "D9"
+  },
+  {
+   "n": 137,
+   "id": "steal-their-plans",
+   "name": "Steal Their Plans",
+   "section": "L",
+   "group": "Rivals and War",
+   "stat": "stealth",
+   "min": "senior-grunt",
+   "does": "Take a rival's schedule",
+   "levels": [
+    "One plan",
+    "the plan is copied",
+    "three",
+    "the plan is altered, so the rival's job fails",
+    "their master plan"
+   ],
+   "risk": "Caught",
+   "status": "disabled",
+   "needs": "D9"
+  },
+  {
+   "n": 138,
+   "id": "defend-a-raid",
+   "name": "Defend a Raid",
+   "section": "L",
+   "group": "Rivals and War",
+   "stat": "brawn",
+   "min": "sergeant",
+   "does": "Lead the HQ defense",
+   "levels": [
+    "One battle",
+    "the defence has a plan (+5%)",
+    "two",
+    "the defence has a trap room",
+    "hold the line"
+   ],
+   "risk": "HQ damaged",
+   "status": "disabled",
+   "needs": "D9"
+  },
+  {
+   "n": 139,
+   "id": "pass-rumors",
+   "name": "Pass Rumors",
+   "section": "L",
+   "group": "Rivals and War",
+   "stat": "charm",
+   "min": "grunt",
+   "does": "Seed rumors about a rival",
+   "levels": [
+    "Tension +2",
+    "the rumour spreads in a bar",
+    "+5",
+    "the rumour spreads in print",
+    "a split in their ranks"
+   ],
+   "risk": "Backfire",
+   "status": "disabled",
+   "needs": "D9"
+  },
+  {
+   "n": 140,
+   "id": "negotiate-a-truce",
+   "name": "Negotiate a Truce",
+   "section": "L",
+   "group": "Rivals and War",
+   "stat": "charm",
+   "min": "admin",
+   "does": "Speak for the Boss in a truce",
+   "levels": [
+    "A pause",
+    "the truce is signed",
+    "a pact",
+    "the truce has a witness (cannot be broken for a week)",
+    "tribute"
+   ],
+   "risk": "Insult",
+   "status": "disabled",
+   "needs": "D9"
+  },
+  {
+   "n": 141,
+   "id": "run-a-crew",
+   "name": "Run a Crew",
+   "section": "M",
+   "group": "Executive Specials",
+   "stat": "charm",
+   "min": "executive",
+   "does": "Lead 5 members on one task",
+   "levels": [
+    "+half their stat",
+    "the crew has a plan (+5%)",
+    "+full",
+    "the crew has a signal (no failures from miscommunication)",
+    "bonus XP"
+   ],
+   "risk": "Splits",
+   "status": "disabled",
+   "needs": "D8"
+  },
+  {
+   "n": 142,
+   "id": "lead-a-raid",
+   "name": "Lead a Raid",
+   "section": "M",
+   "group": "Executive Specials",
+   "stat": "brawn",
+   "min": "executive",
+   "does": "Lead a full-scale raid",
+   "levels": [
+    "A big site",
+    "the raid map shows rooms",
+    "a rival HQ",
+    "the raid has a diversion (half the guards pulled away)",
+    "the Boss's study"
+   ],
+   "risk": "Loses squad",
+   "status": "disabled",
+   "needs": "D9"
+  },
+  {
+   "n": 143,
+   "id": "play-diplomat",
+   "name": "Play Diplomat",
+   "section": "M",
+   "group": "Executive Specials",
+   "stat": "charm",
+   "min": "executive",
+   "does": "Handle a rival Boss's envoy",
+   "levels": [
+    "Meet",
+    "the envoy is greeted (+1 Regard)",
+    "trade",
+    "the envoy is flattered (+deal terms)",
+    "ally"
+   ],
+   "risk": "Offends",
+   "status": "disabled",
+   "needs": "D14"
+  },
+  {
+   "n": 144,
+   "id": "run-the-black-ops",
+   "name": "Run the Black Ops",
+   "section": "M",
+   "group": "Executive Specials",
+   "stat": "stealth",
+   "min": "executive",
+   "does": "Run covert operations",
+   "levels": [
+    "One op",
+    "ops are small and quiet",
+    "three",
+    "ops are linked into one plan",
+    "silent ops"
+   ],
+   "risk": "Burned",
+   "status": "disabled",
+   "needs": "D14"
+  },
+  {
+   "n": 145,
+   "id": "hunt-the-hero",
+   "name": "Hunt the Hero",
+   "section": "M",
+   "group": "Executive Specials",
+   "stat": "wits",
+   "min": "executive",
+   "does": "Hunt the Hero for you",
+   "levels": [
+    "Learn habits",
+    "the hunt finds a lead",
+    "set a trap",
+    "the hunt sets a trap",
+    "the Hero must duel"
+   ],
+   "risk": "Hurt",
+   "status": "disabled",
+   "needs": "D11"
+  },
+  {
+   "n": 146,
+   "id": "be-your-face",
+   "name": "Be Your Face",
+   "section": "M",
+   "group": "Executive Specials",
+   "stat": "charm",
+   "min": "executive",
+   "does": "Stand in for the Boss in public",
+   "levels": [
+    "Regard +5",
+    "the face appears at events",
+    "+10",
+    "the face closes deals for the Boss",
+    "a second Boss"
+   ],
+   "risk": "Becomes rival",
+   "status": "disabled",
+   "needs": "D6"
+  },
+  {
+   "n": 147,
+   "id": "bring-a-region-to-heel",
+   "name": "Bring a Region to Heel",
+   "section": "M",
+   "group": "Executive Specials",
+   "stat": "nerve",
+   "min": "executive",
+   "does": "Hold a freshly taken region (Part 5)",
+   "levels": [
+    "Quiet",
+    "the region is calm",
+    "pays",
+    "the region is loyal",
+    "a model state"
+   ],
+   "risk": "Coup",
+   "status": "disabled",
+   "needs": "D14"
+  },
+  {
+   "n": 148,
+   "id": "be-the-moles-mole",
+   "name": "Be the Mole's Mole",
+   "section": "M",
+   "group": "Executive Specials",
+   "stat": "stealth",
+   "min": "executive",
+   "does": "Run a double agent in the rival Boss's circle",
+   "levels": [
+    "One tip",
+    "the double agent feeds truths",
+    "many",
+    "the double agent feeds lies",
+    "feed lies"
+   ],
+   "risk": "Discovered",
+   "status": "disabled",
+   "needs": "D14"
+  },
+  {
+   "n": 149,
+   "id": "plan-the-heist-of-the-year",
+   "name": "Plan the Heist of the Year",
+   "section": "M",
+   "group": "Executive Specials",
+   "stat": "wits",
+   "min": "executive",
+   "does": "Plan a mega heist",
+   "levels": [
+    "A plan",
+    "the plan has a map",
+    "a plan with tools",
+    "the plan has a backup route",
+    "an exact plan the Boss can run"
+   ],
+   "risk": "Leaks",
+   "status": "disabled",
+   "needs": "D14"
+  },
+  {
+   "n": 150,
+   "id": "the-quiet-coup",
+   "name": "The Quiet Coup",
+   "section": "M",
+   "group": "Executive Specials",
+   "stat": "wits",
+   "min": "executive",
+   "does": "Replace a rival Boss without a fight",
+   "levels": [
+    "Learn weak points",
+    "the coup is prepared (council shaken)",
+    "turn their council",
+    "the coup is staged (rival Boss alone)",
+    "take their chair"
+   ],
+   "risk": "Backfires",
+   "status": "disabled",
+   "needs": "D14"
+  }
+ ]
+}

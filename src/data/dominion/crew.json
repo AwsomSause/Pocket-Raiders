@@ -1,0 +1,2489 @@
+{
+  "_source": "Evil Mode rework (DOMINION) slice D3, the crew. Design: /mnt/project-files/plans/evil-mode-rework/ Part 2 (the crew), Part 8 section 2 (ranks: order, member level, pay), Part 9 A16-A18 and A24, Part 6 section 4 (the Assign Task card). Temperaments for Lost, Soft and Starstruck, the fifteen unnamed Signature traits, the six Patrons' jobs and four of their perks, the A24 names per region, the candidate classes and the lines are this slice's own writing (Part 2 names only some). Numbers are starting values; none are playtested.",
+  "ranks": [
+    {
+      "id": "hopeful",
+      "n": 1,
+      "word": "HOPEFUL",
+      "level": 1,
+      "wage": 0
+    },
+    {
+      "id": "recruit",
+      "n": 2,
+      "word": "RECRUIT",
+      "level": 2,
+      "wage": 60
+    },
+    {
+      "id": "grunt",
+      "n": 3,
+      "word": "GRUNT",
+      "level": 4,
+      "wage": 100
+    },
+    {
+      "id": "senior-grunt",
+      "n": 4,
+      "word": "SENIOR GRUNT",
+      "level": 6,
+      "wage": 130
+    },
+    {
+      "id": "veteran-grunt",
+      "n": 5,
+      "word": "VETERAN GRUNT",
+      "level": 8,
+      "wage": 160
+    },
+    {
+      "id": "corporal",
+      "n": 6,
+      "word": "CORPORAL",
+      "level": 10,
+      "wage": 200
+    },
+    {
+      "id": "sergeant",
+      "n": 7,
+      "word": "SERGEANT",
+      "level": 12,
+      "wage": 250
+    },
+    {
+      "id": "staff-sergeant",
+      "n": 8,
+      "word": "STAFF SERGEANT",
+      "level": 14,
+      "wage": 300
+    },
+    {
+      "id": "lieutenant",
+      "n": 9,
+      "word": "LIEUTENANT",
+      "level": 16,
+      "wage": 380
+    },
+    {
+      "id": "captain",
+      "n": 10,
+      "word": "CAPTAIN",
+      "level": 18,
+      "wage": 460
+    },
+    {
+      "id": "admin",
+      "n": 11,
+      "word": "ADMIN",
+      "level": 20,
+      "wage": 550
+    },
+    {
+      "id": "senior-admin",
+      "n": 12,
+      "word": "SENIOR ADMIN",
+      "level": 22,
+      "wage": 650
+    },
+    {
+      "id": "commander",
+      "n": 13,
+      "word": "COMMANDER",
+      "level": 24,
+      "wage": 750
+    },
+    {
+      "id": "executive",
+      "n": 14,
+      "word": "EXECUTIVE",
+      "level": 26,
+      "wage": 900
+    },
+    {
+      "id": "right-hand",
+      "n": 15,
+      "word": "RIGHT HAND",
+      "level": 28,
+      "wage": 1200
+    }
+  ],
+  "traitRanks": {
+    "first": "grunt",
+    "second": "sergeant",
+    "signature": "executive"
+  },
+  "rules": {
+    "xpBase": 3,
+    "xpPerLevel": 2,
+    "maxLevel": 30,
+    "statPerSuccess": 2,
+    "statStep": 10,
+    "oddsPerStat": 8,
+    "oddsPerLevel": 2,
+    "oddsMin": 5,
+    "oddsMax": 95,
+    "bestAtBonus": 10,
+    "taskLevelXp": [
+      0,
+      4,
+      12,
+      25,
+      45
+    ],
+    "taskLevelOdds": [
+      0,
+      5,
+      10,
+      15,
+      20
+    ],
+    "taskLevelYield": [
+      0,
+      0,
+      20,
+      20,
+      40
+    ],
+    "lowMorale": 25,
+    "lowMoralePenalty": 20,
+    "fatiguePerJob": 15,
+    "fatigueRest": 30,
+    "tiredAt": 70,
+    "tiredPenalty": 15,
+    "pHeatCool": 5,
+    "pHeatRestCool": 10,
+    "pHeatOnCaught": 15,
+    "heatOnCaught": 4,
+    "arrestAt": 50,
+    "arrestCaughtChance": 30,
+    "bail": 500,
+    "jailDays": 3,
+    "injuryDays": 1,
+    "injuryChance": 5,
+    "restMorale": 15,
+    "thiefChance": 20,
+    "thiefMax": 150,
+    "thiefPct": 5,
+    "disloyalAt": 20,
+    "quitChance": 30,
+    "stealChance": 25,
+    "sellOutChance": 15,
+    "sellOutHeat": 10,
+    "workedDaysForTimeOff": 10,
+    "talksPerDay": 2,
+    "talkRepeatDays": 7,
+    "berries": [
+      "oran-berry",
+      "pecha-berry",
+      "cheri-berry",
+      "rawst-berry"
+    ],
+    "rareBerries": [
+      "sitrus-berry",
+      "lum-berry"
+    ],
+    "catchLevel": [
+      3,
+      8
+    ],
+    "stealLevel": [
+      6,
+      12
+    ],
+    "scoutActions": 1,
+    "loudmouthHeat": 1,
+    "greedyPocket": 10,
+    "lazySkip": 15,
+    "lostWander": 10,
+    "clumsyPenalty": 10,
+    "nervousPenalty": 10,
+    "trainXp": 1,
+    "successXp": 1,
+    "doneXp": 1,
+    "memoryLength": 8,
+    "halfDayPenalty": 30,
+    "giftMorale": 10,
+    "rallyMorale": 5,
+    "mentorXp": 2,
+    "coachXp": 3,
+    "pushFatigue": 50,
+    "traitDays": 7,
+    "resentfulPunish": 5,
+    "thrillMorale": 3,
+    "belongingMorale": 3,
+    "moneyLoyalty": 2,
+    "stealBase": 100,
+    "stealPerLevel": 20,
+    "arrestBase": 40,
+    "welcomeMorale": 5,
+    "welcomeLoyalty": 3,
+    "auditLoyalty": 5,
+    "lawyerCool": 3,
+    "maxLeads": 5,
+    "neverMargin": 40,
+    "finderLoyalty": 2,
+    "joinLoyalty": 50,
+    "nerveTestBase": 30,
+    "loudmouthBackfire": 25,
+    "bailLoyalty": 5
+  },
+  "quick": [
+    "shake-down",
+    "steal-pokemon",
+    "scout",
+    "recruit",
+    "train",
+    "rest"
+  ],
+  "quickLabels": {
+    "shake-down": "Extort a Business",
+    "steal-pokemon": "Steal Pokémon",
+    "scout": "Scout a Route",
+    "recruit": "Recruit a Trainer",
+    "train": "Train in Battle",
+    "rest": "Rest"
+  },
+  "taskIcons": {
+    "shake-down": "g-relic-gold",
+    "steal-pokemon": "g-smoke-ball",
+    "scout": "g-devon-scope",
+    "recruit": "g-vs-seeker",
+    "train": "g-black-belt",
+    "rest": "g-tea"
+  },
+  "families": {
+    "guard": [
+      "guard-hq",
+      "night-watch",
+      "sentry-duty-at-the-hideout-door"
+    ],
+    "shake": [
+      "shake-down",
+      "take-a-delivery",
+      "mug-a-drunk"
+    ],
+    "pick": [
+      "pickpocket",
+      "shoplift",
+      "burgle",
+      "steal-pokemon",
+      "courier"
+    ],
+    "train": [
+      "train",
+      "train-their-pokemon",
+      "sparring-partner",
+      "practice-battle-tactics",
+      "run-drills"
+    ],
+    "recruit": [
+      "recruit",
+      "interview",
+      "welcome-wagon",
+      "be-a-big-brother",
+      "rally-the-troops",
+      "coach"
+    ],
+    "scout": [
+      "scout"
+    ],
+    "front": [
+      "street-vendor",
+      "hustle-the-tourists",
+      "run-a-rigged-game"
+    ],
+    "collect": [
+      "audit-the-books"
+    ],
+    "catch": [
+      "catch",
+      "berry-garden"
+    ],
+    "rest": [
+      "rest",
+      "sleep-it-off"
+    ]
+  },
+  "greens": [
+    {
+      "id": "clumsy",
+      "name": "Clumsy",
+      "effect": "−10% on Steal, Take, Pickpocket",
+      "temperaments": [
+        "calm",
+        "quiet"
+      ]
+    },
+    {
+      "id": "nervous",
+      "name": "Nervous",
+      "effect": "−10% Nerve tasks; flees a raid defense at half HP",
+      "temperaments": [
+        "jumpy"
+      ]
+    },
+    {
+      "id": "lazy",
+      "name": "Lazy",
+      "effect": "15% chance to skip the task entirely",
+      "temperaments": [
+        "restless"
+      ]
+    },
+    {
+      "id": "loudmouth",
+      "name": "Loudmouth",
+      "effect": "+Heat on every task",
+      "temperaments": [
+        "chatty"
+      ]
+    },
+    {
+      "id": "greedy",
+      "name": "Greedy",
+      "effect": "Pockets 10% of what they collect",
+      "temperaments": [
+        "hungry"
+      ]
+    },
+    {
+      "id": "soft",
+      "name": "Soft",
+      "effect": "Refuses Shake Down on kind shopkeepers",
+      "temperaments": [
+        "gentle"
+      ]
+    },
+    {
+      "id": "lost",
+      "name": "Lost",
+      "effect": "10% chance to do the task in the wrong district",
+      "temperaments": [
+        "wandering"
+      ]
+    },
+    {
+      "id": "starstruck",
+      "name": "Starstruck",
+      "effect": "−20% vs. Gym Leaders and famous trainers",
+      "temperaments": [
+        "dreamy"
+      ]
+    }
+  ],
+  "temperaments": [
+    {
+      "id": "calm",
+      "word": "Calm",
+      "leans": "Steady"
+    },
+    {
+      "id": "quiet",
+      "word": "Quiet",
+      "leans": "Light-Fingered"
+    },
+    {
+      "id": "jumpy",
+      "word": "Jumpy",
+      "leans": "Cold-Blooded or Smooth Talker"
+    },
+    {
+      "id": "restless",
+      "word": "Restless",
+      "leans": "Driven"
+    },
+    {
+      "id": "chatty",
+      "word": "Chatty",
+      "leans": "Charismatic"
+    },
+    {
+      "id": "hungry",
+      "word": "Hungry",
+      "leans": "Accountant or Embezzler"
+    },
+    {
+      "id": "gentle",
+      "word": "Gentle",
+      "leans": "Respectable"
+    },
+    {
+      "id": "wandering",
+      "word": "Wandering",
+      "leans": "Pathfinder"
+    },
+    {
+      "id": "dreamy",
+      "word": "Dreamy",
+      "leans": "Rival Killer"
+    }
+  ],
+  "formed": [
+    {
+      "id": "steady",
+      "name": "Steady",
+      "from": [
+        "clumsy"
+      ],
+      "family": "guard",
+      "treat": "praise",
+      "text": "+15% Guard. Never flees.",
+      "mods": {
+        "family": "guard",
+        "pct": 15,
+        "noFlee": true
+      },
+      "live": true
+    },
+    {
+      "id": "cold-blooded",
+      "name": "Cold-Blooded",
+      "from": [
+        "nervous"
+      ],
+      "family": "shake",
+      "treat": "push",
+      "text": "+15% Nerve tasks. Heat −2 on their tasks.",
+      "mods": {
+        "stat": "nerve",
+        "pct": 15,
+        "heat": -2
+      },
+      "live": true
+    },
+    {
+      "id": "smooth-talker",
+      "name": "Smooth Talker",
+      "from": [
+        "nervous"
+      ],
+      "family": "shake",
+      "treat": "praise",
+      "text": "Shake Down pays +25%.",
+      "mods": {
+        "task": "shake-down",
+        "yieldPct": 25
+      },
+      "live": true
+    },
+    {
+      "id": "light-fingered",
+      "name": "Light-Fingered",
+      "from": [
+        "clumsy"
+      ],
+      "family": "pick",
+      "treat": "leave",
+      "text": "+20% Stealth tasks.",
+      "mods": {
+        "stat": "stealth",
+        "pct": 20
+      },
+      "live": true
+    },
+    {
+      "id": "driven",
+      "name": "Driven",
+      "from": [
+        "lazy"
+      ],
+      "family": "train",
+      "treat": "spar",
+      "text": "Double training XP.",
+      "mods": {
+        "family": "train",
+        "xpMult": 2
+      },
+      "live": true
+    },
+    {
+      "id": "charismatic",
+      "name": "Charismatic",
+      "from": [
+        "loudmouth"
+      ],
+      "family": "recruit",
+      "treat": "praise",
+      "text": "Recruits come with +1 trait point.",
+      "mods": {
+        "recruitPoints": 1
+      },
+      "live": true
+    },
+    {
+      "id": "honest-accountant",
+      "name": "Honest Accountant",
+      "from": [
+        "greedy"
+      ],
+      "family": "collect",
+      "treat": "payOnTime",
+      "text": "Rackets +10%.",
+      "mods": {},
+      "live": false,
+      "needs": "D6"
+    },
+    {
+      "id": "embezzler",
+      "name": "Embezzler",
+      "from": [
+        "greedy"
+      ],
+      "family": "collect",
+      "treat": "payLate",
+      "text": "Keeps 20%. Ambition grows. A bad outcome you caused.",
+      "mods": {
+        "pocket": 20,
+        "ambition": 1
+      },
+      "live": true
+    },
+    {
+      "id": "resentful",
+      "name": "Resentful",
+      "from": [],
+      "family": null,
+      "treat": "punish",
+      "text": "Loyalty cap 50. Betrayal risk ×2.",
+      "mods": {
+        "loyaltyCap": 50,
+        "disloyal": 2
+      },
+      "live": true
+    },
+    {
+      "id": "pathfinder",
+      "name": "Pathfinder",
+      "from": [
+        "lost"
+      ],
+      "family": "scout",
+      "treat": "bring",
+      "text": "Opens a hidden route per region.",
+      "mods": {},
+      "live": false,
+      "needs": "D2"
+    },
+    {
+      "id": "respectable",
+      "name": "Respectable",
+      "from": [
+        "soft"
+      ],
+      "family": "front",
+      "treat": "praise",
+      "text": "Their Front pays +30%. Raises Regard.",
+      "mods": {
+        "family": "front",
+        "yieldPct": 30
+      },
+      "live": true
+    },
+    {
+      "id": "rival-killer",
+      "name": "Rival Killer",
+      "from": [
+        "starstruck"
+      ],
+      "family": "battle",
+      "treat": "win",
+      "text": "+20% against famous trainers.",
+      "mods": {},
+      "live": false,
+      "needs": "D2"
+    },
+    {
+      "id": "insomniac",
+      "name": "Insomniac",
+      "from": [],
+      "text": "Never skips. Night tasks +15%.",
+      "mods": {
+        "noSkip": true,
+        "task": "night-watch",
+        "pct": 15
+      },
+      "live": true
+    },
+    {
+      "id": "mule",
+      "name": "Mule",
+      "from": [],
+      "text": "Carries +50% cargo.",
+      "mods": {},
+      "live": false,
+      "needs": "D10"
+    },
+    {
+      "id": "mentor",
+      "name": "Mentor",
+      "from": [],
+      "text": "+1 XP to every Recruit you train beside him.",
+      "mods": {
+        "mentor": 1
+      },
+      "live": true
+    },
+    {
+      "id": "demolisher",
+      "name": "Demolisher",
+      "from": [],
+      "text": "Raids on rival buildings +15%.",
+      "mods": {},
+      "live": false,
+      "needs": "D9"
+    },
+    {
+      "id": "road-hog",
+      "name": "Road Hog",
+      "from": [],
+      "text": "Smuggle routes +1 stop.",
+      "mods": {},
+      "live": false,
+      "needs": "D10"
+    },
+    {
+      "id": "iron-nerved",
+      "name": "Iron-Nerved",
+      "from": [],
+      "text": "Never flees a raid.",
+      "mods": {
+        "noFlee": true
+      },
+      "live": false,
+      "needs": "D9"
+    },
+    {
+      "id": "immovable",
+      "name": "Immovable",
+      "from": [],
+      "text": "Guard defends two buildings.",
+      "mods": {},
+      "live": false,
+      "needs": "D5"
+    },
+    {
+      "id": "climber",
+      "name": "Climber",
+      "from": [],
+      "text": "Breaks into upper floors and rooftops.",
+      "mods": {
+        "task": "burgle",
+        "pct": 10
+      },
+      "live": true
+    },
+    {
+      "id": "ghost-in-training",
+      "name": "Ghost-in-Training",
+      "from": [],
+      "text": "Spy missions −20% discovery.",
+      "mods": {},
+      "live": false,
+      "needs": "D9"
+    },
+    {
+      "id": "fencer",
+      "name": "Fencer",
+      "from": [],
+      "text": "Sells stolen goods at +10%.",
+      "mods": {
+        "family": "pick",
+        "yieldPct": 10
+      },
+      "live": true
+    },
+    {
+      "id": "locksmith",
+      "name": "Locksmith",
+      "from": [],
+      "text": "Opens any vault room one tier up.",
+      "mods": {},
+      "live": false,
+      "needs": "D10"
+    },
+    {
+      "id": "burrower",
+      "name": "Burrower",
+      "from": [],
+      "text": "Smuggle route can't be seized once a week.",
+      "mods": {},
+      "live": false,
+      "needs": "D10"
+    },
+    {
+      "id": "tinkerer",
+      "name": "Tinkerer",
+      "from": [],
+      "text": "Lab room effects +20%.",
+      "mods": {},
+      "live": false,
+      "needs": "D5"
+    },
+    {
+      "id": "counterfeiter",
+      "name": "Counterfeiter",
+      "from": [],
+      "text": "Cheaper fake IDs and papers.",
+      "mods": {},
+      "live": false,
+      "needs": "D10"
+    },
+    {
+      "id": "eavesdropper",
+      "name": "Eavesdropper",
+      "from": [],
+      "text": "Hears one rival move a day early.",
+      "mods": {},
+      "live": false,
+      "needs": "D9"
+    },
+    {
+      "id": "planner",
+      "name": "Planner",
+      "from": [],
+      "text": "+10% to tasks you set a week ahead.",
+      "mods": {
+        "planned": 10
+      },
+      "live": true
+    },
+    {
+      "id": "oracle",
+      "name": "Oracle",
+      "from": [],
+      "text": "Shows true odds on one action a day.",
+      "mods": {},
+      "live": false,
+      "needs": "D2"
+    },
+    {
+      "id": "high-roller",
+      "name": "High Roller",
+      "from": [],
+      "text": "Front jackpots 2× more often.",
+      "mods": {
+        "family": "front",
+        "yieldPct": 20
+      },
+      "live": true
+    },
+    {
+      "id": "orator",
+      "name": "Orator",
+      "from": [],
+      "text": "Flyers raise Regard +50%.",
+      "mods": {},
+      "live": false,
+      "needs": "D6"
+    },
+    {
+      "id": "persuader",
+      "name": "Persuader",
+      "from": [],
+      "text": "Pitch odds +10% for the whole crew.",
+      "mods": {
+        "pitch": 10
+      },
+      "live": true
+    },
+    {
+      "id": "trailwise",
+      "name": "Trailwise",
+      "from": [],
+      "text": "Catch in caves +20%.",
+      "mods": {
+        "task": "catch",
+        "pct": 10
+      },
+      "live": true
+    },
+    {
+      "id": "bug-whisperer",
+      "name": "Bug Whisperer",
+      "from": [],
+      "text": "Bug-types in his team +10 level cap.",
+      "mods": {},
+      "live": false,
+      "needs": "D4"
+    },
+    {
+      "id": "clutch",
+      "name": "Clutch",
+      "from": [],
+      "text": "First turn of a defense battle is his.",
+      "mods": {},
+      "live": false,
+      "needs": "D9"
+    },
+    {
+      "id": "gentle-hands",
+      "name": "Gentle Hands",
+      "from": [],
+      "text": "Caught Pokémon start +10 Loyalty.",
+      "mods": {},
+      "live": false,
+      "needs": "D4"
+    },
+    {
+      "id": "nurturer",
+      "name": "Nurturer",
+      "from": [],
+      "text": "Stored Pokémon level while he rests.",
+      "mods": {},
+      "live": false,
+      "needs": "D4"
+    },
+    {
+      "id": "patient",
+      "name": "Patient",
+      "from": [],
+      "text": "Catch at water routes +20%.",
+      "mods": {
+        "task": "catch",
+        "pct": 10
+      },
+      "live": true
+    },
+    {
+      "id": "field-medic",
+      "name": "Field Medic",
+      "from": [],
+      "text": "Injured crew heal a day sooner.",
+      "mods": {
+        "medic": true
+      },
+      "live": true
+    },
+    {
+      "id": "alpha-handler",
+      "name": "Alpha Handler",
+      "from": [],
+      "text": "His lead Pokémon never flees.",
+      "mods": {},
+      "live": false,
+      "needs": "D9"
+    },
+    {
+      "id": "trapper",
+      "name": "Trapper",
+      "from": [],
+      "text": "Guard sets one tripwire per night.",
+      "mods": {
+        "family": "guard",
+        "pct": 10
+      },
+      "live": true
+    },
+    {
+      "id": "backdoor",
+      "name": "Backdoor",
+      "from": [],
+      "text": "Reads a rival's next move once a week.",
+      "mods": {},
+      "live": false,
+      "needs": "D9"
+    },
+    {
+      "id": "eye-in-the-sky",
+      "name": "Eye in the Sky",
+      "from": [],
+      "text": "Scout never makes the target \"on guard\".",
+      "mods": {
+        "task": "scout",
+        "pct": 10
+      },
+      "live": true
+    },
+    {
+      "id": "broadcaster",
+      "name": "Broadcaster",
+      "from": [],
+      "text": "Flyers reach a second district.",
+      "mods": {},
+      "live": false,
+      "needs": "D6"
+    },
+    {
+      "id": "sea-legs",
+      "name": "Sea Legs",
+      "from": [],
+      "text": "Smuggle by sea never fails in storms.",
+      "mods": {},
+      "live": false,
+      "needs": "D10"
+    },
+    {
+      "id": "mirage",
+      "name": "Mirage",
+      "from": [],
+      "text": "His route is shown wrong to rival spies.",
+      "mods": {},
+      "live": false,
+      "needs": "D9"
+    },
+    {
+      "id": "by-the-book",
+      "name": "By the Book",
+      "from": [],
+      "text": "Heat −3 on Guard tasks. Refuses to hurt civilians.",
+      "mods": {
+        "family": "guard",
+        "heat": -3,
+        "refuse": [
+          "mug-a-drunk"
+        ]
+      },
+      "live": true
+    },
+    {
+      "id": "zealot",
+      "name": "Zealot",
+      "from": [],
+      "text": "Recruits his own type. Loyalty never below 40.",
+      "mods": {
+        "loyaltyFloor": 40
+      },
+      "live": true
+    },
+    {
+      "id": "fortunate",
+      "name": "Fortunate",
+      "from": [],
+      "text": "One failed task a week is rerolled.",
+      "mods": {
+        "reroll": true
+      },
+      "live": true
+    },
+    {
+      "id": "conscience",
+      "name": "Conscience",
+      "from": [],
+      "text": "His Loyalty can't drop below 30, but he refuses the worst jobs.",
+      "mods": {
+        "loyaltyFloor": 30,
+        "refuse": [
+          "mug-a-drunk",
+          "burgle",
+          "steal-pokemon"
+        ]
+      },
+      "live": true
+    },
+    {
+      "id": "turncoats-edge",
+      "name": "Turncoat's Edge",
+      "from": [],
+      "text": "Knows the rival's rooms. Raid odds +10%.",
+      "mods": {},
+      "live": false,
+      "needs": "D9"
+    },
+    {
+      "id": "hardened",
+      "name": "Hardened",
+      "from": [],
+      "text": "Arrest costs nothing; he serves 1 day, not 3.",
+      "mods": {
+        "jailDays": 1
+      },
+      "live": true
+    },
+    {
+      "id": "heir-apparent",
+      "name": "Heir Apparent",
+      "from": [],
+      "text": "Hold at Grunt rank. His Ambition rises twice as fast.",
+      "mods": {
+        "ambition": 1
+      },
+      "live": false,
+      "needs": "D6"
+    },
+    {
+      "id": "weatherwise",
+      "name": "Weatherwise",
+      "from": [],
+      "text": "His tasks ignore storms and heat waves.",
+      "mods": {},
+      "live": false,
+      "needs": "D11"
+    }
+  ],
+  "signatures": [
+    {
+      "id": "iron-wall",
+      "name": "Iron Wall",
+      "family": "guard",
+      "text": "HQ defense +1 extra battle."
+    },
+    {
+      "id": "the-face",
+      "name": "The Face",
+      "family": "recruit",
+      "text": "All Charm tasks +10% team-wide."
+    },
+    {
+      "id": "ghost",
+      "name": "Ghost",
+      "family": "pick",
+      "text": "Their spy missions can't be discovered."
+    },
+    {
+      "id": "kingmaker",
+      "name": "Kingmaker",
+      "family": "collect",
+      "text": "A held region's betrayal checks are rolled at half chance."
+    },
+    {
+      "id": "warlord",
+      "name": "Warlord",
+      "family": "shake",
+      "text": "Raids they lead get a free first turn."
+    },
+    {
+      "id": "the-vault",
+      "name": "The Vault",
+      "family": "collect",
+      "text": "Thieves never take money from the HQ."
+    },
+    {
+      "id": "drill-sergeant",
+      "name": "Drill Sergeant",
+      "family": "train",
+      "text": "Everyone on Train gets +1 XP a day."
+    },
+    {
+      "id": "silver-tongue",
+      "name": "Silver Tongue",
+      "family": "recruit",
+      "text": "One failed Pitch a week can be tried again at once."
+    },
+    {
+      "id": "night-owl",
+      "name": "Night Owl",
+      "family": "guard",
+      "text": "Night tasks never fail on a mishap."
+    },
+    {
+      "id": "rainmaker",
+      "name": "Rainmaker",
+      "family": "front",
+      "text": "Every Front pays +10%."
+    },
+    {
+      "id": "cartographer",
+      "name": "Cartographer",
+      "family": "scout",
+      "text": "Scouting saves two Boss actions, not one."
+    },
+    {
+      "id": "beast-master",
+      "name": "Beast Master",
+      "family": "catch",
+      "text": "Catches come in at the HQ level cap."
+    },
+    {
+      "id": "untouchable",
+      "name": "Untouchable",
+      "family": "pick",
+      "text": "Personal Heat never rises above 40."
+    },
+    {
+      "id": "enforcer",
+      "name": "Enforcer",
+      "family": "shake",
+      "text": "Shake Down never raises district Heat."
+    },
+    {
+      "id": "big-sibling",
+      "name": "Big Sibling",
+      "family": "recruit",
+      "text": "New members join with Loyalty +15."
+    },
+    {
+      "id": "old-guard",
+      "name": "Old Guard",
+      "family": "guard",
+      "text": "Loyalty can't fall below 60; the crew's Morale +5 while they're on Guard."
+    },
+    {
+      "id": "treasurer",
+      "name": "Treasurer",
+      "family": "collect",
+      "text": "Weekly wages cost 10% less."
+    },
+    {
+      "id": "pathbreaker",
+      "name": "Pathbreaker",
+      "family": "scout",
+      "text": "Travel between districts costs no action once a day."
+    },
+    {
+      "id": "iron-will",
+      "name": "Iron Will",
+      "family": "train",
+      "text": "Their Pokémon never faint first in a defense battle."
+    },
+    {
+      "id": "the-shadow",
+      "name": "The Shadow",
+      "family": "pick",
+      "text": "Steal Pokémon can take one rare species a week."
+    }
+  ],
+  "motives": [
+    {
+      "id": "money",
+      "name": "Money",
+      "text": "Keep them with raises.",
+      "pitch": "money"
+    },
+    {
+      "id": "belonging",
+      "name": "Belonging",
+      "text": "A good HQ, a good squad.",
+      "pitch": "power"
+    },
+    {
+      "id": "cause",
+      "name": "Cause",
+      "text": "Your Goal's progress.",
+      "pitch": "cause"
+    },
+    {
+      "id": "thrill",
+      "name": "Thrill",
+      "text": "Dangerous jobs.",
+      "pitch": "power"
+    },
+    {
+      "id": "revenge",
+      "name": "Revenge",
+      "text": "A named enemy to go after.",
+      "pitch": "cause"
+    },
+    {
+      "id": "fear",
+      "name": "Fear",
+      "text": "Your Dread. Leaves the moment you look weak.",
+      "pitch": "fear"
+    }
+  ],
+  "lines": {
+    "clumsy": [
+      "I got the money, Boss! ...Most of it. Some of it. There was a Pidgey.",
+      "I'll be careful. I'm always careful. That's why the door's off its hinge."
+    ],
+    "nervous": [
+      "Is that a siren? That's a siren. Boss, that's a siren.",
+      "I'll do it. I'll do it. Just... don't watch me do it."
+    ],
+    "lazy": [
+      "I was resting my eyes, Boss. Both of them. On purpose.",
+      "Tomorrow. Tomorrow I'll be a legend. Tonight I'm a blanket."
+    ],
+    "loudmouth": [
+      "Did everyone hear what I did? I'll tell them again.",
+      "I told the noodle stand we're the toughest crew in Kanto. They laughed. I laughed louder."
+    ],
+    "greedy": [
+      "The take was light today, Boss. Lighter than my pockets, anyway.",
+      "A cut for the crew, a cut for the Boss, a cut for... the cutting."
+    ],
+    "soft": [
+      "She gave me tea, Boss. I couldn't take her money after tea.",
+      "I'll stand guard. Guarding doesn't hurt anybody."
+    ],
+    "lost": [
+      "I'm back! I think this is back. Is this the warehouse?",
+      "I found a whole new street, Boss. I wasn't looking for it."
+    ],
+    "starstruck": [
+      "Boss, that was a GYM LEADER. Did you see the cape? Was it a cape?",
+      "If I win one big battle, they'll put me on a card. A card!"
+    ],
+    "steady": [
+      "Nobody gets past this door. Not the cops, not Rocket, not the kid. Go to sleep, Boss. I've got it.",
+      "Same door, same night, same answer: no."
+    ],
+    "cold-blooded": [
+      "The shopkeeper paid. They always pay when you don't blink.",
+      "Heat? I don't feel heat, Boss."
+    ],
+    "smooth-talker": [
+      "He thanked me for the chance to pay. Can you believe it?",
+      "Words cost nothing, Boss. That's why they're profit."
+    ],
+    "light-fingered": [
+      "Wallet, watch, his lunch. He'll miss the lunch most.",
+      "Hands like a Sneasel. Quiet like one too."
+    ],
+    "driven": [
+      "Again. Again. One more round, then again.",
+      "Yesterday's me couldn't beat today's me. Tomorrow's me is scary."
+    ],
+    "charismatic": [
+      "I brought a friend. And their friend. And their friend's Machop.",
+      "People like me, Boss. Let me use it for us."
+    ],
+    "honest-accountant": [
+      "Every coin counted. Twice. You can sleep, Boss.",
+      "Late is expensive. Early is free."
+    ],
+    "embezzler": [
+      "The numbers are fine, Boss. Don't look at the numbers.",
+      "Wages were late. I paid myself. Fair's fair."
+    ],
+    "resentful": [
+      "Yes, Boss. Whatever you say, Boss.",
+      "I remember every time you shouted. Every time."
+    ],
+    "pathfinder": [
+      "There's an alley behind the alley. Nobody knows it but me.",
+      "Give me a map and I'll give you a shortcut."
+    ],
+    "respectable": [
+      "The shop's spotless, the customers smile, and nobody asks questions.",
+      "A clean front is the best mask, Boss."
+    ],
+    "rival-killer": [
+      "Famous trainers bleed like the rest. Their Pokémon do, anyway.",
+      "Bring me the big names, Boss."
+    ],
+    "trait": [
+      "{trait} suits me, Boss.",
+      "I'm not who I was on Day {joined}. I'm {trait} now."
+    ]
+  },
+  "growLine": "{name} grew: {from} became {to}.",
+  "patrons": [
+    {
+      "id": "former-executive",
+      "name": "Mr. Halloway",
+      "who": "a former Executive",
+      "look": "trainer/pr/veteran_m",
+      "gender": "m",
+      "rumour": "An old man in a good coat keeps buying drinks for Grunts and telling them they're doing it wrong.",
+      "job": {
+        "kind": "tasks",
+        "family": "guard",
+        "n": 5
+      },
+      "jobText": "Hold the door five nights without a thief getting in.",
+      "perk": "Crew tasks +5% while he advises.",
+      "mods": {
+        "pct": 5
+      },
+      "live": true,
+      "seat": "senior-admin"
+    },
+    {
+      "id": "disgraced-leader",
+      "name": "Ms. Kettering",
+      "who": "a disgraced Gym Leader",
+      "look": "trainer/pr/veteran_f",
+      "gender": "f",
+      "rumour": "A woman who used to wear a badge on her coat trains alone at the old Gym's back door.",
+      "job": {
+        "kind": "tasks",
+        "family": "train",
+        "n": 6
+      },
+      "jobText": "Show her six honest days of training.",
+      "perk": "Gym takeovers +15%.",
+      "mods": {},
+      "live": false,
+      "needs": "D10",
+      "seat": "captain"
+    },
+    {
+      "id": "struck-off-professor",
+      "name": "Dr. Ashgrove",
+      "who": "a struck-off Professor",
+      "look": "trainer/pr/scientist_m",
+      "gender": "m",
+      "rumour": "A Professor lost his licence and kept his notes. He sells them by the page.",
+      "job": {
+        "kind": "funds",
+        "amount": 1500
+      },
+      "jobText": "Buy his notes: ₽1,500.",
+      "perk": "Research Lab costs −50%.",
+      "mods": {},
+      "live": false,
+      "needs": "D5",
+      "seat": null
+    },
+    {
+      "id": "champion-who-quit",
+      "name": "Daria",
+      "who": "a Champion who quit",
+      "look": "trainer/pr/ace_trainer_f",
+      "gender": "f",
+      "rumour": "Somebody saw a former Champion feeding Pidgey in the park, every day at noon.",
+      "job": {
+        "kind": "tasks",
+        "family": "recruit",
+        "n": 4
+      },
+      "jobText": "Bring her four good people worth meeting.",
+      "perk": "Training XP +1 for everyone on Train.",
+      "mods": {
+        "trainXp": 1
+      },
+      "live": true,
+      "seat": "executive"
+    },
+    {
+      "id": "three-bosses",
+      "name": "Old Jory",
+      "who": "a Grunt who's seen three Bosses",
+      "look": "dominion/c-rook0.png",
+      "gender": "m",
+      "rumour": "An old Grunt in a faded uniform says he's outlived three Bosses and he'll outlive you.",
+      "job": {
+        "kind": "funds",
+        "amount": 600
+      },
+      "jobText": "Pay his bar tab: ₽600.",
+      "perk": "Members never quit on the weekly roll while he's around.",
+      "mods": {
+        "noQuit": true
+      },
+      "live": true,
+      "seat": "veteran-grunt"
+    },
+    {
+      "id": "nobody",
+      "name": "Nobody",
+      "who": "Nobody",
+      "look": "trainer/pr/harlequin",
+      "gender": "m",
+      "rumour": "Nobody knows who Nobody is. Nobody wants to meet you.",
+      "job": {
+        "kind": "tasks",
+        "family": "pick",
+        "n": 5
+      },
+      "jobText": "Five clean jobs nobody sees.",
+      "perk": "Personal Heat cools 5 faster for the whole crew.",
+      "mods": {
+        "pHeat": 5
+      },
+      "live": true,
+      "seat": null
+    }
+  ],
+  "patronNotoriety": 50,
+  "refusals": {
+    "kanto": {
+      "leader": "brock",
+      "leaderName": "Brock",
+      "e4": "lance",
+      "e4Name": "Lance"
+    },
+    "johto": {
+      "leader": "jasmine",
+      "leaderName": "Jasmine",
+      "e4": "will",
+      "e4Name": "Will"
+    },
+    "hoenn": {
+      "leader": "norman",
+      "leaderName": "Norman",
+      "e4": "drake",
+      "e4Name": "Drake"
+    },
+    "sinnoh": {
+      "leader": "byron",
+      "leaderName": "Byron",
+      "e4": "lucian",
+      "e4Name": "Lucian"
+    },
+    "unova": {
+      "leader": "drayden",
+      "leaderName": "Drayden",
+      "e4": "marshal",
+      "e4Name": "Marshal"
+    },
+    "kalos": {
+      "leader": "clemont",
+      "leaderName": "Clemont",
+      "e4": "wikstrom",
+      "e4Name": "Wikstrom"
+    },
+    "alola": {
+      "leader": "hapu",
+      "leaderName": "Hapu",
+      "e4": "hala",
+      "e4Name": "Hala"
+    },
+    "galar": {
+      "leader": "raihan",
+      "leaderName": "Raihan",
+      "e4": "mustard",
+      "e4Name": "Mustard"
+    },
+    "paldea": {
+      "leader": "grusha",
+      "leaderName": "Grusha",
+      "e4": "larry",
+      "e4Name": "Larry"
+    }
+  },
+  "refusalLine": "Won't. Not for any price.",
+  "recruit": {
+    "leadDays": 7,
+    "waitDays": 7,
+    "notYetDays": 3,
+    "notYetBonus": 10,
+    "matchBonus": 15,
+    "hatePenalty": 15,
+    "charmPer": 2,
+    "hqPer": 3,
+    "interviewBonus": 10,
+    "approachHeat": 1,
+    "fearLoyalty": 25,
+    "fearHeat": 2,
+    "powerAmbition": 15,
+    "moneyWage": 1.5,
+    "noCauseLine": "You don't stand for anything yet. (The Founding gives the team a Goal.)",
+    "noCausePenalty": 10,
+    "pitches": [
+      {
+        "id": "money",
+        "name": "Money",
+        "text": "Offer wages ×1.5."
+      },
+      {
+        "id": "power",
+        "name": "Power",
+        "text": "Promise them rank."
+      },
+      {
+        "id": "cause",
+        "name": "Cause",
+        "text": "Match your Goal to their values."
+      },
+      {
+        "id": "fear",
+        "name": "Fear",
+        "text": "A threat. They join with low Loyalty."
+      }
+    ],
+    "kinds": [
+      {
+        "id": "townsfolk",
+        "name": "Townsfolk",
+        "chance": [
+          40,
+          70
+        ],
+        "rank": "recruit"
+      },
+      {
+        "id": "route",
+        "name": "Route trainer",
+        "chance": [
+          20,
+          50
+        ],
+        "rank": "recruit"
+      }
+    ],
+    "classes": [
+      {
+        "cls": "Dockhand",
+        "kind": "townsfolk",
+        "look": "trainer/pr/depot_agent",
+        "gender": "m",
+        "lean": "brawn"
+      },
+      {
+        "cls": "Clerk",
+        "kind": "townsfolk",
+        "look": "trainer/pr/clerk_m",
+        "gender": "m",
+        "lean": "wits"
+      },
+      {
+        "cls": "Clerk",
+        "kind": "townsfolk",
+        "look": "trainer/pr/clerk_f",
+        "gender": "f",
+        "lean": "wits"
+      },
+      {
+        "cls": "Janitor",
+        "kind": "townsfolk",
+        "look": "trainer/pr/janitor",
+        "gender": "m",
+        "lean": "stealth"
+      },
+      {
+        "cls": "Worker",
+        "kind": "townsfolk",
+        "look": "trainer/pr/worker_f",
+        "gender": "f",
+        "lean": "brawn"
+      },
+      {
+        "cls": "Waiter",
+        "kind": "townsfolk",
+        "look": "trainer/pr/waiter_m",
+        "gender": "m",
+        "lean": "charm"
+      },
+      {
+        "cls": "Waitress",
+        "kind": "townsfolk",
+        "look": "trainer/pr/waiter_f",
+        "gender": "f",
+        "lean": "charm"
+      },
+      {
+        "cls": "Baker",
+        "kind": "townsfolk",
+        "look": "trainer/pr/baker",
+        "gender": "f",
+        "lean": "charm"
+      },
+      {
+        "cls": "Scientist",
+        "kind": "townsfolk",
+        "look": "trainer/pr/scientist_f",
+        "gender": "f",
+        "lean": "wits"
+      },
+      {
+        "cls": "Musician",
+        "kind": "townsfolk",
+        "look": "trainer/pr/musician",
+        "gender": "m",
+        "lean": "charm"
+      },
+      {
+        "cls": "Lawyer",
+        "kind": "townsfolk",
+        "look": "trainer/pr/rich_m",
+        "gender": "m",
+        "lean": "wits",
+        "role": "lawyer"
+      },
+      {
+        "cls": "Nurse",
+        "kind": "townsfolk",
+        "look": "trainer/pr/doctor_f",
+        "gender": "f",
+        "lean": "wits",
+        "role": "nurse"
+      },
+      {
+        "cls": "Fence",
+        "kind": "townsfolk",
+        "look": "trainer/pr/collector",
+        "gender": "m",
+        "lean": "charm",
+        "role": "fence"
+      },
+      {
+        "cls": "Hiker",
+        "kind": "route",
+        "look": "trainer/pr/backpacker_m",
+        "gender": "m",
+        "lean": "brawn"
+      },
+      {
+        "cls": "Ace Trainer",
+        "kind": "route",
+        "look": "trainer/pr/ace_trainer_m",
+        "gender": "m",
+        "lean": "nerve"
+      },
+      {
+        "cls": "Ace Trainer",
+        "kind": "route",
+        "look": "trainer/pr/ace_trainer_f",
+        "gender": "f",
+        "lean": "nerve"
+      },
+      {
+        "cls": "Black Belt",
+        "kind": "route",
+        "look": "trainer/pr/black_belt_f",
+        "gender": "f",
+        "lean": "brawn"
+      },
+      {
+        "cls": "Psychic",
+        "kind": "route",
+        "look": "trainer/pr/psychic_f",
+        "gender": "f",
+        "lean": "wits"
+      },
+      {
+        "cls": "Beauty",
+        "kind": "route",
+        "look": "trainer/pr/beauty_2",
+        "gender": "f",
+        "lean": "charm"
+      },
+      {
+        "cls": "Biker",
+        "kind": "route",
+        "look": "trainer/pr/cyclist_m",
+        "gender": "m",
+        "lean": "nerve"
+      },
+      {
+        "cls": "Veteran",
+        "kind": "route",
+        "look": "trainer/pr/veteran_m",
+        "gender": "m",
+        "lean": "nerve"
+      },
+      {
+        "cls": "Pokémon Ranger",
+        "kind": "route",
+        "look": "trainer/pr/ranger_f",
+        "gender": "f",
+        "lean": "stealth"
+      },
+      {
+        "cls": "Breeder",
+        "kind": "route",
+        "look": "trainer/pr/breeder_m",
+        "gender": "m",
+        "lean": "charm"
+      },
+      {
+        "cls": "Ruin Maniac",
+        "kind": "route",
+        "look": "trainer/pr/ruin_maniac",
+        "gender": "m",
+        "lean": "stealth"
+      }
+    ],
+    "roles": {
+      "lawyer": {
+        "text": "Cuts Heat: region Heat −1 a night, crew personal Heat −3 a night.",
+        "live": true
+      },
+      "nurse": {
+        "text": "Free healing: injured crew heal a day sooner.",
+        "live": true
+      },
+      "fence": {
+        "text": "Opens the Fence (sell stolen goods at full value).",
+        "live": false,
+        "needs": "D10"
+      }
+    },
+    "names": {
+      "m": [
+        "Dale",
+        "Gus",
+        "Hector",
+        "Ivo",
+        "Marek",
+        "Nils",
+        "Otto",
+        "Pell",
+        "Quin",
+        "Rufus",
+        "Sid",
+        "Teo",
+        "Vance",
+        "Wes",
+        "Abe",
+        "Bram",
+        "Cole",
+        "Dex",
+        "Ezra",
+        "Fitz"
+      ],
+      "f": [
+        "Mina",
+        "Rosa",
+        "Ada",
+        "Bea",
+        "Cass",
+        "Dot",
+        "Edie",
+        "Fern",
+        "Gwen",
+        "Hana",
+        "Iris",
+        "Jo",
+        "Kit",
+        "Lena",
+        "Mae",
+        "Nell",
+        "Opal",
+        "Pia",
+        "Rue",
+        "Sal"
+      ]
+    },
+    "says": {
+      "yes": "\"Fine. But I want my own locker.\"",
+      "notYet": "\"Not yet. Come back when you're more than a warehouse.\"",
+      "never": "\"No. And don't ask again.\"",
+      "full": "There's no room at the HQ. They'll wait {days} days on the waiting list."
+    }
+  },
+  "hire": {
+    "count": 3,
+    "rarityWeights": {
+      "C": 60,
+      "U": 30,
+      "R": 10
+    },
+    "rareFromDay": 8,
+    "onceFromDay": 30,
+    "price": {
+      "C": 250,
+      "U": 400,
+      "R": 650
+    },
+    "rank": "recruit",
+    "wage": 60,
+    "loyalty": 50,
+    "morale": 50,
+    "monLevel": [
+      3,
+      8
+    ]
+  },
+  "report": {
+    "guardHeld": "{name} guarded the HQ. A thief ran.",
+    "guardQuiet": "{name} guarded the HQ. Nobody came.",
+    "guardSlept": "{name} fell asleep on guard.",
+    "thief": "A thief got in while nobody watched the door. −₽{amount}.",
+    "money": "{name}: {task}. +₽{amount}.",
+    "pocket": "{name} came back light. (₽{amount} went missing.)",
+    "fail": "{name}: {task} didn't work out.",
+    "caught": "{name} was caught at {task}. Heat +{heat}.",
+    "arrested": "{name} was arrested. Bail ₽{bail}, or {days} days in a cell.",
+    "pickedUp": "Officers picked up {name} on old business. Bail ₽{bail}, or {days} days in a cell.",
+    "skipped": "{name} skipped {task}. Lazy.",
+    "wandered": "{name} did {task} in the wrong district. Wasted day.",
+    "refused": "{name} refused to {task}.",
+    "train": "{name} trained. +{xp} XP.",
+    "trainMon": "{name}'s {mon} trained up to Lv {level}.",
+    "rest": "{name} took the day off. Morale +{morale}.",
+    "injured": "{name} hurt themself training. Out for {days} day.",
+    "out": "{name} is out ({why}).",
+    "scout": "{name} scouted the area. +{n} Day action today.",
+    "rumour": "{name} heard a rumour: {rumour}",
+    "found": "{name} found someone: {cand}, a {cls}.",
+    "foundNone": "{name} talked to people. Nobody bit.",
+    "catch": "{name} caught a {mon} (Lv {level}) for the stores.",
+    "steal": "{name} came back with a {mon} (Lv {level}). The owner was out.",
+    "berries": "{name} brought in {n} {berry}.",
+    "audit": "{name} went through the books. ₽{amount} was missing; {who} had it. It's back.",
+    "auditClean": "{name} went through the books. Every coin is there.",
+    "welcome": "{name} made the new faces feel at home.",
+    "interview": "{name} sat down with {cand}. Next pitch +{n}%.",
+    "mentor": "{name} took {who} under their wing. +{xp} XP.",
+    "rally": "{name} rallied the crew. Morale +{n} all round.",
+    "drills": "{name} ran drills. Everyone training +1 XP.",
+    "coach": "{name} coached {who}. +{xp} XP.",
+    "level": "{name} reached member Lv {level}.",
+    "stat": "{name}'s {stat} rose to {value}.",
+    "taskLevel": "{name} is now {word} at {task} (task Lv {level}).",
+    "quit": "{name} quit in the night.",
+    "stole": "{name} took ₽{amount} from the cash box and is gone.",
+    "soldOut": "{name} talked to the police about you. Heat +{heat}.",
+    "unhappy": "{name} sulks. Loyalty is low.",
+    "leadGone": "{cand} stopped waiting and left.",
+    "waitGone": "{cand} gave up on the waiting list and left.",
+    "freed": "{name} is out of the cell.",
+    "healed": "{name} is fit again.",
+    "lawyer": "{name} made a few calls. Heat −1.",
+    "tired": "{name} is worn out (Fatigue {fatigue}).",
+    "patronRumour": "A rumour: {rumour}",
+    "patronWon": "{patron} is with you now. {perk}"
+  },
+  "talks": [
+    {
+      "n": 1,
+      "id": "first-day-jitters",
+      "name": "First Day Jitters",
+      "when": "evening",
+      "trigger": {
+        "newMember": true
+      },
+      "once": true,
+      "text": "{name} asks what the job really is.",
+      "choices": [
+        {
+          "label": "Reassure",
+          "loy": 5
+        },
+        {
+          "label": "Be honest",
+          "loy": 3,
+          "flag": "line-set"
+        },
+        {
+          "label": "Bark orders",
+          "mor": -5,
+          "stat": {
+            "nerve": 1
+          }
+        }
+      ]
+    },
+    {
+      "n": 2,
+      "id": "pep-talk",
+      "name": "The Pep Talk",
+      "when": "morning",
+      "trigger": {
+        "moraleBelow": 40
+      },
+      "text": "{name} looks flat before the job. A few words?",
+      "choices": [
+        {
+          "label": "Give a speech",
+          "mor": 10,
+          "loudmouthMor": -5
+        },
+        {
+          "label": "Not today"
+        }
+      ]
+    },
+    {
+      "n": 3,
+      "id": "tell-me-a-secret",
+      "name": "Tell Me a Secret",
+      "when": "evening",
+      "trigger": {
+        "loyaltyAtLeast": 60
+      },
+      "once": true,
+      "text": "{name} confesses something: a fear, a debt, a crush.",
+      "choices": [
+        {
+          "label": "Keep it",
+          "loy": 8
+        },
+        {
+          "label": "Use it",
+          "flag": "lever"
+        },
+        {
+          "label": "Share it",
+          "loy": -20
+        }
+      ]
+    },
+    {
+      "n": 4,
+      "id": "ask-for-a-raise",
+      "name": "Ask for a Raise",
+      "when": "evening",
+      "trigger": {
+        "wageStaleDays": 21
+      },
+      "text": "{name} asks for more money.",
+      "choices": [
+        {
+          "label": "Grant (+₽20 a week)",
+          "loy": 10,
+          "wage": 20
+        },
+        {
+          "label": "Refuse",
+          "loy": -8,
+          "amb": 5
+        },
+        {
+          "label": "Promise later",
+          "loy": -2,
+          "flag": "promised-raise"
+        }
+      ]
+    },
+    {
+      "n": 5,
+      "id": "pat-on-the-back",
+      "name": "Pat on the Back",
+      "when": "morning",
+      "trigger": {
+        "lastTask": "success"
+      },
+      "text": "{name} did well yesterday.",
+      "choices": [
+        {
+          "label": "Praise them",
+          "loy": 3,
+          "treat": "praise"
+        },
+        {
+          "label": "Say nothing"
+        }
+      ]
+    },
+    {
+      "n": 6,
+      "id": "dressing-down",
+      "name": "Dressing Down",
+      "when": "morning",
+      "trigger": {
+        "lastTask": "fail"
+      },
+      "text": "{name} botched yesterday's job.",
+      "choices": [
+        {
+          "label": "Scold",
+          "loy": -4,
+          "treat": "punish"
+        },
+        {
+          "label": "Shrug",
+          "loy": 1
+        },
+        {
+          "label": "Blame the Pokémon",
+          "mor": 3
+        }
+      ]
+    },
+    {
+      "n": 7,
+      "id": "sparring-match",
+      "name": "Sparring Match",
+      "needs": "D2"
+    },
+    {
+      "n": 8,
+      "id": "share-a-meal",
+      "name": "Share a Meal",
+      "when": "evening",
+      "trigger": {
+        "loyaltyBetween": [
+          30,
+          70
+        ]
+      },
+      "text": "Noodles for two? It costs ₽40.",
+      "choices": [
+        {
+          "label": "Eat together (₽40)",
+          "loy": 6,
+          "funds": -40,
+          "memory": "We ate noodles and the Boss paid."
+        },
+        {
+          "label": "Not tonight"
+        }
+      ]
+    },
+    {
+      "n": 9,
+      "id": "the-nickname",
+      "name": "The Nickname",
+      "when": "evening",
+      "trigger": {
+        "loyaltyAtLeast": 50
+      },
+      "once": true,
+      "text": "The crew wants a name for {name}.",
+      "choices": [
+        {
+          "label": "\"Brick\"",
+          "loy": 5,
+          "nick": "Brick"
+        },
+        {
+          "label": "\"Lucky\"",
+          "loy": 5,
+          "nick": "Lucky"
+        },
+        {
+          "label": "\"Ghost\"",
+          "loy": 5,
+          "nick": "Ghost"
+        }
+      ]
+    },
+    {
+      "n": 10,
+      "id": "cover-for-me",
+      "name": "Cover for Me",
+      "when": "morning",
+      "trigger": {
+        "pHeatAtLeast": 50
+      },
+      "text": "The police want {name}. They ask you to say the job was yours.",
+      "choices": [
+        {
+          "label": "Take the Heat",
+          "heat": 3,
+          "loy": 12,
+          "pHeat": -30
+        },
+        {
+          "label": "Refuse",
+          "loy": -6
+        }
+      ]
+    },
+    {
+      "n": 11,
+      "id": "personal-favour",
+      "name": "Personal Favour",
+      "when": "evening",
+      "trigger": {
+        "loyaltyAtLeast": 70
+      },
+      "once": true,
+      "text": "{name} asks you to find their pawned Pokémon. It'll cost tomorrow's first action.",
+      "choices": [
+        {
+          "label": "Help (−1 action tomorrow)",
+          "loy": 15,
+          "action": -1
+        },
+        {
+          "label": "Not now"
+        }
+      ]
+    },
+    {
+      "n": 12,
+      "id": "confession-of-doubt",
+      "name": "Confession of Doubt",
+      "when": "morning",
+      "trigger": {
+        "lastTask": "caught"
+      },
+      "text": "{name} wonders if this crew can win at all.",
+      "choices": [
+        {
+          "label": "Rally them",
+          "mor": 8
+        },
+        {
+          "label": "Admit it",
+          "loy": 6,
+          "mor": -3
+        }
+      ]
+    },
+    {
+      "n": 13,
+      "id": "promotion-day",
+      "name": "Promotion Day",
+      "needs": "D4"
+    },
+    {
+      "n": 14,
+      "id": "passed-over",
+      "name": "Passed Over",
+      "needs": "D4"
+    },
+    {
+      "n": 15,
+      "id": "the-gift",
+      "name": "The Gift",
+      "when": "evening",
+      "trigger": {
+        "hasHeldItem": true
+      },
+      "once": true,
+      "text": "{name} keeps looking at something in your bag.",
+      "choices": [
+        {
+          "label": "Give a held item",
+          "loy": 10,
+          "gift": true
+        },
+        {
+          "label": "Keep it"
+        }
+      ]
+    },
+    {
+      "n": 16,
+      "id": "birthday",
+      "name": "Birthday",
+      "when": "evening",
+      "trigger": {
+        "chance": 3
+      },
+      "once": true,
+      "text": "It's {name}'s birthday. A cake costs ₽60.",
+      "choices": [
+        {
+          "label": "Join the party (₽60)",
+          "loy": 6,
+          "crewMor": 2,
+          "funds": -60,
+          "memory": "The Boss came to my birthday."
+        },
+        {
+          "label": "Send a card",
+          "loy": 2
+        }
+      ]
+    },
+    {
+      "n": 17,
+      "id": "late-night-chat",
+      "name": "Late Night Chat",
+      "when": "morning",
+      "trigger": {
+        "rested": true,
+        "chance": 15
+      },
+      "text": "{name} couldn't sleep either. You talked until the rain stopped.",
+      "choices": [
+        {
+          "label": "Good talk",
+          "loy": 4
+        }
+      ]
+    },
+    {
+      "n": 18,
+      "id": "ask-for-time-off",
+      "name": "Ask for Time Off",
+      "when": "morning",
+      "trigger": {
+        "workedDays": 10
+      },
+      "text": "{name} has worked ten days straight and asks for a day off.",
+      "choices": [
+        {
+          "label": "Approve",
+          "mor": 15,
+          "task": "rest"
+        },
+        {
+          "label": "Deny",
+          "mor": -8,
+          "loy": -3
+        },
+        {
+          "label": "Half a day",
+          "mor": 6,
+          "half": true
+        }
+      ]
+    },
+    {
+      "n": 19,
+      "id": "homesick",
+      "name": "Homesick",
+      "when": "evening",
+      "trigger": {
+        "kind": "route"
+      },
+      "once": true,
+      "text": "{name} misses home.",
+      "choices": [
+        {
+          "label": "Let them visit (a day lost)",
+          "loy": 8,
+          "task": "rest"
+        },
+        {
+          "label": "Keep them busy",
+          "loy": -4,
+          "amb": 2
+        }
+      ]
+    },
+    {
+      "n": 20,
+      "id": "test-of-nerve",
+      "name": "Test of Nerve",
+      "when": "morning",
+      "trigger": {
+        "green": "nervous"
+      },
+      "once": true,
+      "text": "Send {name} on a small scare job?",
+      "choices": [
+        {
+          "label": "Send them",
+          "nerveTest": true
+        },
+        {
+          "label": "Not yet"
+        }
+      ]
+    },
+    {
+      "n": 21,
+      "id": "read-the-map",
+      "name": "Teach Them to Read the Map",
+      "when": "evening",
+      "trigger": {
+        "green": "lost"
+      },
+      "once": true,
+      "text": "You could walk the district with {name}.",
+      "choices": [
+        {
+          "label": "Walk it with them",
+          "flag": "map-14"
+        },
+        {
+          "label": "No time"
+        }
+      ]
+    },
+    {
+      "n": 22,
+      "id": "a-bosss-lie",
+      "name": "A Boss's Lie",
+      "when": "evening",
+      "trigger": {
+        "brokePromise": 14
+      },
+      "text": "{name} knows you never kept that promise.",
+      "choices": [
+        {
+          "label": "Apologise honestly",
+          "loy": 2,
+          "promiseAgain": true
+        },
+        {
+          "label": "Make excuses",
+          "loy": -6
+        },
+        {
+          "label": "Double down",
+          "loy": -12,
+          "amb": 4
+        }
+      ]
+    },
+    {
+      "n": 23,
+      "id": "hear-them-out",
+      "name": "Hear Them Out",
+      "when": "evening",
+      "trigger": {
+        "loyaltyBelow": 40
+      },
+      "text": "{name} has something to say. Listen?",
+      "choices": [
+        {
+          "label": "Listen",
+          "loy": 8,
+          "memory": "The Boss listened."
+        },
+        {
+          "label": "Not now"
+        }
+      ]
+    },
+    {
+      "n": 24,
+      "id": "draw-a-line",
+      "name": "Draw a Line",
+      "when": "morning",
+      "trigger": {
+        "refused": true
+      },
+      "text": "{name} won't {task}. It's their line.",
+      "choices": [
+        {
+          "label": "Respect it",
+          "loy": 6,
+          "saveLine": true
+        },
+        {
+          "label": "Override",
+          "loy": -12,
+          "force": true
+        }
+      ]
+    },
+    {
+      "n": 25,
+      "id": "second-chance",
+      "name": "Second Chance",
+      "when": "morning",
+      "trigger": {
+        "lastTask": "arrested"
+      },
+      "text": "{name} got caught. The crew watches what you do.",
+      "choices": [
+        {
+          "label": "Take them back",
+          "loy": 10,
+          "amb": -5
+        },
+        {
+          "label": "Dismiss them",
+          "leave": true,
+          "crewMor": -4
+        }
+      ]
+    },
+    {
+      "n": 26,
+      "id": "show-the-ledger",
+      "name": "Show Them the Ledger",
+      "when": "evening",
+      "trigger": {
+        "fundsAtLeast": 2000,
+        "rankAtLeast": "sergeant"
+      },
+      "once": true,
+      "text": "You have money to spare. Open the books to {name}?",
+      "choices": [
+        {
+          "label": "Open the books",
+          "loy": 6
+        },
+        {
+          "label": "Keep them shut"
+        }
+      ]
+    },
+    {
+      "n": 27,
+      "id": "the-oath",
+      "name": "The Oath",
+      "needs": "D4"
+    },
+    {
+      "n": 28,
+      "id": "boss-takes-the-blame",
+      "name": "Boss Takes the Blame",
+      "when": "morning",
+      "trigger": {
+        "lastTask": "caught",
+        "chance": 50
+      },
+      "text": "The job went badly and the crew expects blame.",
+      "choices": [
+        {
+          "label": "Say it was your plan",
+          "loy": 8,
+          "unpunish": true
+        },
+        {
+          "label": "Say nothing"
+        }
+      ]
+    },
+    {
+      "n": 29,
+      "id": "boss-takes-the-credit",
+      "name": "Boss Takes the Credit",
+      "when": "morning",
+      "trigger": {
+        "bigSuccess": true
+      },
+      "text": "A job went brilliantly. Whose name goes on it?",
+      "choices": [
+        {
+          "label": "Claim it",
+          "loy": -6,
+          "amb": 2
+        },
+        {
+          "label": "Hand it to them",
+          "loy": 8
+        }
+      ]
+    },
+    {
+      "n": 30,
+      "id": "goodbye",
+      "name": "Goodbye",
+      "when": "leaving",
+      "trigger": {
+        "leaving": true
+      },
+      "text": "{name}'s last evening with the crew.",
+      "choices": [
+        {
+          "label": "₽100 to see them off",
+          "funds": -100,
+          "crewLoy": 3
+        },
+        {
+          "label": "Your thanks",
+          "crewLoy": 3
+        },
+        {
+          "label": "A hard word"
+        }
+      ]
+    }
+  ],
+  "talksLeft": 270,
+  "pools": {
+    "kanto": {
+      "catch": [
+        "rattata",
+        "pidgey",
+        "spearow",
+        "ekans",
+        "sandshrew",
+        "zubat",
+        "oddish",
+        "meowth",
+        "psyduck",
+        "mankey",
+        "growlithe",
+        "poliwag",
+        "abra",
+        "machop",
+        "bellsprout",
+        "tentacool",
+        "geodude",
+        "ponyta",
+        "slowpoke",
+        "magnemite",
+        "doduo",
+        "seel",
+        "grimer",
+        "shellder",
+        "gastly",
+        "drowzee",
+        "krabby",
+        "voltorb",
+        "exeggcute",
+        "cubone",
+        "koffing",
+        "rhyhorn",
+        "horsea",
+        "goldeen",
+        "staryu",
+        "magikarp"
+      ],
+      "steal": [
+        "growlithe",
+        "abra",
+        "eevee",
+        "porygon",
+        "vulpix",
+        "pikachu",
+        "clefairy",
+        "jigglypuff",
+        "dratini",
+        "omanyte",
+        "kabuto",
+        "lickitung",
+        "chansey",
+        "scyther",
+        "pinsir",
+        "tauros",
+        "farfetchd",
+        "kangaskhan"
+      ]
+    }
+  }
+}

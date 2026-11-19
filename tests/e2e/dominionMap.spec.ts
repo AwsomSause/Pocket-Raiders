@@ -134,6 +134,8 @@ test('the Region Map and the Card: pick Cerulean, read the Card, do an action, f
 test('vehicles: V opens the list and the Bike can be bought', async ({ page }) => {
   await start(page, 'ui=new');
   await dayOne(page);
+  // D3's crew step runs overnight (a thief can take a little), so start the Day with exactly ₽1,000.
+  await page.evaluate(() => { (window as any).__pkr.session.run.expansion.dominion.funds = 1000; });
   const s = view(page, 'Dominion');
   await page.keyboard.press('Digit2');
   await page.keyboard.press('KeyV');

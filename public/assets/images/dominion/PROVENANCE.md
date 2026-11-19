@@ -17,6 +17,12 @@ Copied from the same mockup sprites folder (`plans/evil-mode-rework/mockups-rede
 | `t-clerk.png`, `t-policeman.png` | Trainer sprites from the PokeRogue pack (`images/trainer/`), one frame, for the Card's "Who's hurt" and "Who might see" |
 | `g-relic-gold.png`, `g-relic-crown.png`, `g-comet-shard.png`, `g-bicycle.png`, `g-smoke-ball.png`, `g-xtransceiver.png` | Item icons from `images/items/` (PokeRogue pack), re-saved at the mockup's size |
 
+## Slice D3 (the crew, mockups 2 and 5)
+
+| File | From |
+| --- | --- |
+| `g-xtransceiver`, `g-relic-gold`, `g-meteorite`, `g-silph-scope`, `g-comet-shard`, `g-devon-scope`, `g-smoke-ball`, `g-vs-seeker`, `g-black-belt`, `g-tea`, `g-soothe-bell`, `g-secret-key` (.png) | Item icons from `images/items/` and `images/items/gen5/` (PokeRogue pack), re-saved at the mockup's size by the mockup thread; copied from `plans/evil-mode-rework/mockups-redesign/sprites/` |
+
 ## Slice D18 (Rotom Key-Card screens, mockups a1 + a2)
 
 Copied from the Claude AI mockups (project files `plans/claude-api/mockups/sprites/`, published https://claude.ai/artifact/LEFrzZyJrVo7kyA3Rk59hg), cut by the mockup thread from art already in this repo (same packs and licence as above):

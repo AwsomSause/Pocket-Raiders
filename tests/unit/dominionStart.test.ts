@@ -102,7 +102,8 @@ describe('DOMINION D1: the clock', () => {
     r = go(r, { t: 'rest' });
     expect(blk(r)).toMatchObject({ day: 2, phase: 'morning', rested: true });
     expect(blk(r).report[0]).toBe(D.report.rest);
-    expect(blk(r).report).toContain('Rook guarded the warehouse. Nobody came.');
+    // D3: the crew step reports Rook's task (guarding, his Grunt type's best task).
+    expect(blk(r).report.some((l) => l.startsWith('Rook '))).toBe(true);
     r = go(r, { t: 'toDay' });
     expect(blk(r).actions).toBe(D.clock.dayActions + D.clock.restBonus);
     r = go(r, { t: 'do', order: 'scout-block' });

@@ -2,9 +2,13 @@
 // and the caller (GameSession.dominionApply) saves it.
 
 import type { Content } from '../contentSchema';
+import { addLevels } from '../pokemon';
 import { healParty, newMon } from '../run';
 import type { RunState } from '../state';
 import { step, type StepOut } from './clock';
+import { addMorale, withCrew } from './crew';
+import { admit, approach, hire } from './recruit';
+import { answer, eveningTalk } from './talk';
 import { act, buy, settle } from './field';
 import { beginDominionFight } from './fight';
 import { DOMINION_DATA } from './data';
@@ -40,7 +44,7 @@ export function startInRun(content: Content, run: RunState, setup: DominionSetup
   const problem = typesProblem(setup.types);
   if (problem) return { run, problem };
   let out = bossTeam(content, structuredClone(run));
-  const block = DominionBlockSchema.parse(newBlock(content, out, setup));
+  const block = DominionBlockSchema.parse(withCrew(newBlock(content, out, setup)));
   out = { ...withBlock(out, block), inventory: { ...DOMINION_DATA.start.start.inventory } };
   return { run: out, problem: null };
 }
@@ -49,6 +53,8 @@ export function startInRun(content: Content, run: RunState, setup: DominionSetup
 export function stepInRun(content: Content, run: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean } {
   const block = run.expansion?.dominion;
   if (!block) return { ok: false, block: block as never, notice: null, heal: false, run };
+  const crewOut = crewInRun(content, run, action);
+  if (crewOut) return crewOut;
   if (action.t === 'act') {
     // D2: a Boss action (field.ts). A Pokémon lifted in a Ball (Thieve, a big success) joins the team or the box.
     const work = structuredClone(run);
@@ -73,7 +79,91 @@ export function stepInRun(content: Content, run: RunState, action: DominionActio
     next = structuredClone(next);
     healParty(content, next);
   }
-  return { ...out, run: next };
+  next = settleCrew(content, next);
+  return { ...out, block: next.expansion!.dominion!, run: next };
+}
+
+/** D3 actions that need the run (new members' Pokémon, the Bag): hire, approach, admit, gifts, talks that give an item. */
+function crewInRun(content: Content, run: RunState, action: DominionAction): (StepOut & { run: RunState }) | null {
+  const done = (r: { ok: boolean; run: RunState; notice: string | null }): StepOut & { run: RunState } => {
+    const b = r.run.expansion!.dominion!;
+    if (!r.ok) return { ok: false, block: b, notice: r.notice, heal: false, run };
+    const next = withBlock(r.run, DominionBlockSchema.parse(b));
+    return { ok: true, block: next.expansion!.dominion!, notice: r.notice, heal: false, run: next };
+  };
+  const block = run.expansion!.dominion!;
+  switch (action.t) {
+    case 'hire':
+      return done(hire(content, run, action.index));
+    case 'approach':
+      return done(approach(content, run, action.lead, action.pitch));
+    case 'admit':
+      return done(admit(content, run, action.lead));
+    case 'gift':
+      return done(gift(run, action.member, action.item));
+    case 'evTalk': {
+      const out = eveningTalk(block, action.member, run.seed, { held: Object.values(run.looseHeld ?? {}).some((n) => n > 0) });
+      return done({ ok: out.ok, notice: out.notice, run: out.ok ? withBlock(run, out.block) : run });
+    }
+    case 'talk': {
+      const out = answer(block, action.choice, run.seed);
+      if (!out.ok) return done({ ok: false, notice: null, run });
+      let next = withBlock(run, out.block);
+      if (out.gift) {
+        const item = Object.keys(next.looseHeld ?? {}).sort().find((k) => (next.looseHeld![k] ?? 0) > 0);
+        if (item) next = gift(next, out.gift, item).run;
+      }
+      return done({ ok: true, notice: out.notice, run: next });
+    }
+    default:
+      return null;
+  }
+}
+
+/**
+ * Gifts (Part 2 §3): a Rare Candy is +1 member level; a held item goes on their first Pokémon and lifts Morale.
+ * (A Pokémon as a gift is D4's, with the Reserve.)
+ */
+export function gift(run: RunState, memberId: string, item: string): { ok: boolean; run: RunState; notice: string | null } {
+  const out = structuredClone(run);
+  const b = withCrew(out.expansion!.dominion!);
+  const m = b.members.find((x) => x.id === memberId);
+  if (!m) return { ok: false, run, notice: null };
+  if (item === 'rare-candy') {
+    if ((out.inventory['rare-candy'] ?? 0) < 1) return { ok: false, run, notice: 'You have no Rare Candy.' };
+    if (m.level >= DOMINION_DATA.crew.rules.maxLevel) return { ok: false, run, notice: `${m.name} is at the top level.` };
+    out.inventory['rare-candy'] = (out.inventory['rare-candy'] ?? 0) - 1;
+    m.level += 1;
+    m.crew!.memory.push({ day: b.day, line: 'The Boss gave me a Rare Candy.' });
+    return { ok: true, run: withBlock(out, b), notice: `${m.name} reached member Lv ${m.level}.` };
+  }
+  const loose = out.looseHeld?.[item] ?? 0;
+  const mon = m.team[0];
+  if (loose < 1 || !mon) return { ok: false, run, notice: 'Nothing to give.' };
+  if (loose > 1) out.looseHeld![item] = loose - 1;
+  else delete out.looseHeld![item];
+  mon.held = { ...mon.held, [item]: (mon.held?.[item] ?? 0) + 1 };
+  addMorale(m, DOMINION_DATA.crew.rules.giftMorale);
+  return { ok: true, run: withBlock(out, b), notice: `${m.name}'s Pokémon holds it now. Morale +${DOMINION_DATA.crew.rules.giftMorale}.` };
+}
+
+/** Finishes what the night left pending: caught Pokémon into the stores, levels, items into the Bag. Runs once per step. */
+export function settleCrew(content: Content, run: RunState): RunState {
+  const pending = run.expansion?.dominion?.crew?.pending;
+  if (!pending?.length) return run;
+  const out = structuredClone(run);
+  const b = out.expansion!.dominion!;
+  const st = b.crew!;
+  for (const p of st.pending) {
+    if (p.k === 'mon') {
+      if (content.species.has(p.species)) st.stores.push(newMon(content, out, p.species, p.level, 'p'));
+    } else if (p.k === 'level') {
+      const mon = b.members.find((m) => m.id === p.member)?.team.find((x) => x.uid === p.uid);
+      if (mon && p.level > mon.level) addLevels(content, mon, p.level - mon.level, p.level);
+    } else out.inventory[p.id] = (out.inventory[p.id] ?? 0) + p.n;
+  }
+  st.pending = [];
+  return out;
 }
 
 /** D2: starts the battle the block is waiting on (an action's, or Looker's or the raid's at the door). Null if none. */

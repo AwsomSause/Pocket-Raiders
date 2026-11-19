@@ -5,6 +5,9 @@ import { DOMINION_DATA } from './data';
 import type { DominionAction, DominionBlock } from './schema';
 import { addHeat, scoutHome, syncHeat } from './field';
 import { fill, runWorldTurn } from './worldTurn';
+import { assign, bail } from './crew';
+import { payPatron } from './recruit';
+import { answer, eveningTalk } from './talk';
 
 export interface StepOut {
   ok: boolean;
@@ -24,7 +27,8 @@ export const openOrders = (b: DominionBlock): string[] => DOMINION_DATA.start.or
 /** Day actions the Boss gets when the Day starts. */
 export function dayActions(b: DominionBlock): number {
   const c = C();
-  return Math.max(1, c.dayActions + (b.rested ? c.restBonus : 0) - (b.noRest >= c.exhaustedAfter ? 1 : 0));
+  // D3: a scout's success saves the Boss an action; a promised favour spends one.
+  return Math.max(1, c.dayActions + (b.rested ? c.restBonus : 0) - (b.noRest >= c.exhaustedAfter ? 1 : 0) + (b.crew?.saved ?? 0));
 }
 
 /** Marks First Steps whose goal is met and pays their reward. Returns the lines for the ones just done. */
@@ -130,5 +134,31 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
       const lines = [pay ? `Odd jobs: +₽${pay}.` : 'The day is done.', ...checkSteps(b)];
       return ok(b, lines.join(' '));
     }
+    // D3, the crew (crew.ts, talk.ts, recruit.ts). Hiring, recruiting and gifts need the run: session.ts runs them.
+    case 'assign': {
+      const out = assign(block, action.member, action.task);
+      return out.ok ? ok(out.block) : { ...no(block), notice: out.notice };
+    }
+    case 'talk': {
+      const out = answer(block, action.choice, seed);
+      return out.ok ? ok(out.block, out.notice) : no(block);
+    }
+    case 'evTalk': {
+      const out = eveningTalk(block, action.member, seed);
+      return out.ok ? ok(out.block) : { ...no(block), notice: out.notice };
+    }
+    case 'bail': {
+      const out = bail(block, action.member);
+      return out.ok ? ok(out.block, out.notice) : { ...no(block), notice: out.notice };
+    }
+    case 'patron': {
+      const out = payPatron(block, action.patron);
+      return out.ok ? ok(out.block, out.notice) : { ...no(block), notice: out.notice };
+    }
+    case 'hire':
+    case 'approach':
+    case 'admit':
+    case 'gift':
+      return no(block);
   }
 }

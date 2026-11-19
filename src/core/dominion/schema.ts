@@ -158,6 +158,8 @@ export const MemberSchema = z.object({
   joinedDay: I.min(1),
   /** Unpaid weeks in a row. */
   unpaid: N0,
+  /** D3: the crew file (Part 2, Part 9 A17-A18). Optional so a D1 save loads; `crewOf` fills it. */
+  crew: z.lazy(() => MemberCrewSchema).optional(),
 }).strict();
 export type Member = z.infer<typeof MemberSchema>;
 
@@ -275,6 +277,8 @@ const BlockSchema = z.object({
   opened: z.boolean(),
   /** D2: the Boss's hands (districts, Heat, the Edge, travel, the fight an action waits on). */
   field: FieldSchema,
+  /** D3: the crew's shared state (stores, leads, waiting list, hire list, talks, Patrons). Optional; `crewState` fills it. */
+  crew: z.lazy(() => CrewStateSchema).optional(),
 }).strict();
 export const DominionBlockSchema = z.preprocess(migrateDominion, BlockSchema);
 export type DominionBlock = z.infer<typeof BlockSchema>;
@@ -298,4 +302,251 @@ export type DominionAction =
   | { t: 'endDay' }
   /** D2: a Boss action from the Region Map (travel included), bringing up to two members. */
   | { t: 'act'; action: string; target: string | null; district: string; bring: string[] }
-  | { t: 'buy'; vehicle: string };
+  | { t: 'buy'; vehicle: string }
+  // D3, the crew
+  | { t: 'assign'; member: string; task: string }
+  | { t: 'talk'; choice: number }
+  | { t: 'evTalk'; member: string }
+  | { t: 'hire'; index: number }
+  | { t: 'approach'; lead: string; pitch: string }
+  | { t: 'admit'; lead: string }
+  | { t: 'bail'; member: string }
+  | { t: 'gift'; member: string; item: string }
+  | { t: 'patron'; patron: string };
+
+// ---------- D3 data: crew.json, tasks.json, gruntTypes.json ----------
+
+export const STAT = z.enum(STAT_IDS);
+const Pct = I.min(0).max(100);
+
+export const TaskEffectSchema = z.object({
+  kind: z.enum(['guard', 'money', 'scout', 'recruit', 'train', 'trainMon', 'rest', 'catch', 'steal', 'berries', 'audit', 'welcome', 'interview', 'mentor', 'rally', 'drills', 'coach']),
+  funds: Range.optional(),
+  heat: I.optional(),
+  risky: z.boolean().optional(),
+  caughtHeat: N0.optional(),
+  fine: N0.optional(),
+  sure: z.boolean().optional(),
+  grow: STAT.optional(),
+  xp: I.min(1).optional(),
+  injury: Pct.optional(),
+}).strict();
+export type TaskEffect = z.infer<typeof TaskEffectSchema>;
+
+export const TaskSchema = z.object({
+  n: N0, id: S, name: S, section: z.string().regex(/^[A-M]$/), group: S, stat: STAT.nullable(), min: S, does: S,
+  levels: z.array(S).length(5), risk: S, source: S.optional(),
+  status: z.enum(['supported', 'limited', 'disabled']),
+  note: S.optional(), needs: z.string().regex(/^D\d+$/).optional(), effect: TaskEffectSchema.optional(),
+}).strict().refine((t) => (t.status === 'disabled') === !t.effect, { message: 'a live task has an effect; a disabled one has none' })
+  .refine((t) => t.status !== 'disabled' || !!t.needs, { message: 'a disabled task names the slice it waits for' })
+  .refine((t) => t.status !== 'limited' || !!t.note, { message: 'a limited task says what waits' });
+export type Task = z.infer<typeof TaskSchema>;
+export const TasksFileSchema = z.object({ _source: S, tasks: z.array(TaskSchema).min(150) }).strict();
+
+export const GruntTypeSchema = z.object({
+  n: I.min(1), id: S, name: S, group: S, found: S, rarity: z.enum(['C', 'U', 'R']), lean: STAT, green: S, favours: z.array(S).min(1),
+  bestAt: S, grows: S, region: S.optional(), once: z.boolean().optional(),
+}).strict();
+export type GruntType = z.infer<typeof GruntTypeSchema>;
+export const GruntTypesFileSchema = z.object({ _source: S, types: z.array(GruntTypeSchema).length(150), _newTraits: z.record(S, S) }).strict();
+
+const ModsSchema = z.object({
+  family: S.optional(), task: S.optional(), stat: STAT.optional(), pct: I.optional(), heat: I.optional(), yieldPct: I.optional(),
+  noFlee: z.boolean().optional(), noSkip: z.boolean().optional(), xpMult: I.min(1).optional(), recruitPoints: N0.optional(),
+  pocket: Pct.optional(), ambition: N0.optional(), loyaltyCap: Pct.optional(), loyaltyFloor: Pct.optional(), disloyal: I.min(1).optional(),
+  mentor: N0.optional(), planned: N0.optional(), pitch: N0.optional(), medic: z.boolean().optional(), refuse: z.array(S).optional(),
+  reroll: z.boolean().optional(), jailDays: N0.optional(), trainXp: N0.optional(), noQuit: z.boolean().optional(), pHeat: N0.optional(),
+}).strict();
+export type Mods = z.infer<typeof ModsSchema>;
+const TREATS = ['praise', 'push', 'leave', 'spar', 'payOnTime', 'payLate', 'punish', 'bring', 'win'] as const;
+export const TREAT = z.enum(TREATS);
+export type Treat = z.infer<typeof TREAT>;
+
+const TalkChoiceSchema = z.object({
+  label: S, loy: I.optional(), mor: I.optional(), amb: I.optional(), heat: I.optional(), pHeat: I.optional(), funds: I.optional(), wage: I.optional(),
+  stat: z.partialRecord(STAT, I).optional(), crewMor: I.optional(), crewLoy: I.optional(), treat: TREAT.optional(), flag: S.optional(),
+  memory: S.optional(), nick: S.optional(), action: I.optional(), task: S.optional(), half: z.boolean().optional(), gift: z.boolean().optional(),
+  nerveTest: z.boolean().optional(), promiseAgain: z.boolean().optional(), saveLine: z.boolean().optional(), force: z.boolean().optional(),
+  leave: z.boolean().optional(), unpunish: z.boolean().optional(), loudmouthMor: I.optional(),
+}).strict();
+const TalkTriggerSchema = z.object({
+  newMember: z.boolean().optional(), moraleBelow: Pct.optional(), loyaltyAtLeast: Pct.optional(), loyaltyBelow: Pct.optional(),
+  loyaltyBetween: z.tuple([Pct, Pct]).optional(), wageStaleDays: I.min(1).optional(), lastTask: z.enum(['success', 'fail', 'caught', 'arrested']).optional(),
+  pHeatAtLeast: Pct.optional(), hasHeldItem: z.boolean().optional(), chance: Pct.optional(), rested: z.boolean().optional(), workedDays: I.min(1).optional(),
+  kind: S.optional(), green: S.optional(), brokePromise: I.min(1).optional(), refused: z.boolean().optional(), fundsAtLeast: N0.optional(),
+  rankAtLeast: S.optional(), bigSuccess: z.boolean().optional(), leaving: z.boolean().optional(),
+}).strict();
+const TalkSchema = z.object({
+  n: I.min(1), id: S, name: S, needs: z.string().regex(/^D\d+$/).optional(), when: z.enum(['morning', 'evening', 'leaving']).optional(),
+  trigger: TalkTriggerSchema.optional(), once: z.boolean().optional(), text: S.optional(), choices: z.array(TalkChoiceSchema).min(1).max(3).optional(),
+}).strict().refine((t) => !!t.needs !== !!t.choices, { message: 'a talk is either live (choices) or waits (needs)' });
+export type Talk = z.infer<typeof TalkSchema>;
+export type TalkChoice = z.infer<typeof TalkChoiceSchema>;
+
+const PatronSchema = z.object({
+  id: S, name: S, who: S, look: S, gender: z.enum(['m', 'f']), rumour: S,
+  job: z.union([z.object({ kind: z.literal('tasks'), family: S, n: I.min(1) }).strict(), z.object({ kind: z.literal('funds'), amount: I.min(1) }).strict()]),
+  jobText: S, perk: S, mods: ModsSchema, live: z.boolean(), needs: S.optional(), seat: S.nullable(),
+}).strict();
+export type Patron = z.infer<typeof PatronSchema>;
+
+export const CrewFileSchema = z.object({
+  _source: S,
+  ranks: z.array(z.object({ id: S, n: I.min(1).max(15), word: S, level: I.min(1).max(30), wage: N0 }).strict()).length(15),
+  traitRanks: z.object({ first: S, second: S, signature: S }).strict(),
+  rules: z.object({
+    xpBase: I.min(1), xpPerLevel: N0, maxLevel: I.min(1), statPerSuccess: I.min(1), statStep: I.min(1),
+    oddsPerStat: N0, oddsPerLevel: N0, oddsMin: Pct, oddsMax: Pct, bestAtBonus: N0,
+    taskLevelXp: z.array(N0).length(5), taskLevelOdds: z.array(N0).length(5), taskLevelYield: z.array(N0).length(5),
+    lowMorale: Pct, lowMoralePenalty: Pct, fatiguePerJob: Pct, fatigueRest: Pct, tiredAt: Pct, tiredPenalty: Pct,
+    pHeatCool: Pct, pHeatRestCool: Pct, pHeatOnCaught: Pct, heatOnCaught: Pct, arrestAt: Pct, arrestCaughtChance: Pct,
+    bail: N0, jailDays: I.min(1), injuryDays: I.min(1), injuryChance: Pct, restMorale: Pct, thiefChance: Pct, thiefMax: N0, thiefPct: Pct,
+    disloyalAt: Pct, quitChance: Pct, stealChance: Pct, sellOutChance: Pct, sellOutHeat: Pct,
+    workedDaysForTimeOff: I.min(1), talksPerDay: I.min(1), talkRepeatDays: I.min(1),
+    berries: z.array(S).min(1), rareBerries: z.array(S).min(1), catchLevel: Range, stealLevel: Range,
+    scoutActions: I.min(1), loudmouthHeat: N0, greedyPocket: Pct, lazySkip: Pct, lostWander: Pct, clumsyPenalty: Pct, nervousPenalty: Pct,
+    trainXp: I.min(1), successXp: N0, doneXp: N0, memoryLength: I.min(1), halfDayPenalty: Pct, giftMorale: Pct,
+    rallyMorale: N0, mentorXp: N0, coachXp: N0, pushFatigue: N0, traitDays: N0, resentfulPunish: N0, thrillMorale: N0, belongingMorale: N0, moneyLoyalty: N0, stealBase: N0, stealPerLevel: N0, arrestBase: N0, welcomeMorale: N0, welcomeLoyalty: N0, auditLoyalty: N0, lawyerCool: N0, maxLeads: N0, neverMargin: N0, finderLoyalty: N0, joinLoyalty: N0, nerveTestBase: N0, loudmouthBackfire: N0, bailLoyalty: N0,
+  }).strict(),
+  quick: z.array(S).length(6),
+  quickLabels: z.record(S, S),
+  taskIcons: z.record(S, S),
+  families: z.record(S, z.array(S).min(1)),
+  greens: z.array(z.object({ id: S, name: S, effect: S, temperaments: z.array(S).min(1) }).strict()).length(8),
+  temperaments: z.array(z.object({ id: S, word: S, leans: S }).strict()).min(8),
+  formed: z.array(z.object({
+    id: S, name: S, from: z.array(S), family: S.nullable().optional(), treat: TREAT.optional(), text: S, mods: ModsSchema, live: z.boolean(), needs: S.optional(),
+  }).strict()).min(12),
+  signatures: z.array(z.object({ id: S, name: S, family: S, text: S }).strict()).length(20),
+  motives: z.array(z.object({ id: S, name: S, text: S, pitch: S }).strict()).length(6),
+  lines: z.record(S, z.array(S).min(1)),
+  growLine: S,
+  patrons: z.array(PatronSchema).length(6),
+  patronNotoriety: N0,
+  refusals: z.record(S, z.object({ leader: S, leaderName: S, e4: S, e4Name: S }).strict()),
+  refusalLine: S,
+  recruit: z.object({
+    leadDays: I.min(1), waitDays: I.min(1), notYetDays: I.min(1), notYetBonus: N0, matchBonus: N0, hatePenalty: N0, charmPer: N0, hqPer: N0,
+    interviewBonus: N0, approachHeat: N0, fearLoyalty: Pct, fearHeat: N0, powerAmbition: N0, moneyWage: z.number().min(1), noCauseLine: S, noCausePenalty: N0,
+    pitches: z.array(z.object({ id: S, name: S, text: S }).strict()).length(4),
+    kinds: z.array(z.object({ id: S, name: S, chance: Range, rank: S }).strict()).min(1),
+    classes: z.array(z.object({ cls: S, kind: S, look: S, gender: z.enum(['m', 'f']), lean: STAT, role: S.optional() }).strict()).min(4),
+    roles: z.record(S, z.object({ text: S, live: z.boolean(), needs: S.optional() }).strict()),
+    names: z.object({ m: z.array(S).min(4), f: z.array(S).min(4) }).strict(),
+    says: z.object({ yes: S, notYet: S, never: S, full: S }).strict(),
+  }).strict(),
+  hire: z.object({
+    count: I.min(1), rarityWeights: z.object({ C: N0, U: N0, R: N0 }).strict(), rareFromDay: I.min(1), onceFromDay: I.min(1),
+    price: z.object({ C: N0, U: N0, R: N0 }).strict(), rank: S, wage: N0, loyalty: Pct, morale: Pct, monLevel: Range,
+  }).strict(),
+  report: z.record(S, S),
+  talks: z.array(TalkSchema).length(30),
+  talksLeft: N0,
+  pools: z.record(S, z.object({ catch: z.array(S).min(4), steal: z.array(S).min(4) }).strict()),
+}).strict();
+export type CrewFile = z.infer<typeof CrewFileSchema>;
+
+// ---------- D3 save shapes ----------
+
+const Stat10 = z.object({ brawn: N0, nerve: N0, wits: N0, charm: N0, stealth: N0 }).strict();
+
+export const MemberCrewSchema = z.object({
+  /** Grunt type id (gruntTypes.json) or null for a named recruit. */
+  type: S.nullable(),
+  /** Recruit class (crew.json recruit.classes), for named recruits. */
+  cls: S.nullable(),
+  kind: S.nullable(),
+  role: S.nullable(),
+  green: S,
+  temperament: S,
+  /** Formed traits, oldest first (Part 2 §4.2). */
+  formed: z.array(S),
+  /** The trait that grew most recently and the Green trait it replaced (the Crew File's GREW! badge). */
+  grew: z.object({ from: S, to: S, day: I.min(1) }).strict().nullable(),
+  motive: S,
+  ambition: Pct,
+  /** Personal Heat (A18). */
+  pHeat: Pct,
+  fatigue: Pct,
+  xp: N0,
+  /** Tenths towards +1 on each stat (Part 2 §3: +0.2 a success). */
+  statXp: Stat10,
+  /** Task XP per task id (team-actions.md task levels 1-5). */
+  taskXp: z.record(S, N0),
+  /** What they do most (by task family) and how you treat them (Part 2 §4.2). */
+  tally: z.record(S, N0),
+  treat: z.partialRecord(TREAT, N0),
+  /** Today's task id (kept day to day until changed). */
+  task: S,
+  /** The task set earlier than the day before it ran (Planner). */
+  setDay: I.min(0),
+  /** How yesterday's task went (talk triggers). */
+  last: z.enum(['none', 'success', 'big', 'fail', 'caught', 'arrested', 'refused', 'skipped', 'wandered']),
+  lastTask: S.nullable(),
+  /** Out of action: hurt or in a cell, with days left. */
+  out: z.object({ why: z.enum(['hurt', 'jail']), days: I.min(1) }).strict().nullable(),
+  /** Days worked in a row (Ask for Time Off). */
+  worked: N0,
+  /** Tasks they refuse (their Line). */
+  line: z.array(S),
+  memory: z.array(z.object({ day: I.min(1), line: S }).strict()),
+  nick: S.nullable(),
+  wageDay: I.min(1),
+  /** ₽ pocketed this week (Greedy, Embezzler); Audit the Books gets it back. */
+  pocketed: N0,
+  flags: z.array(S),
+  /** Talk id -> the last day it came up. */
+  talked: z.record(S, I.min(1)),
+}).strict();
+export type MemberCrew = z.infer<typeof MemberCrewSchema>;
+
+export const LeadSchema = z.object({
+  id: S, name: S, cls: S, kind: S, look: S, gender: z.enum(['m', 'f']), role: S.nullable(),
+  stats: StatsSchema, green: S, motive: S, hates: S, chance: Pct, foundBy: S, day: I.min(1),
+  /** Day they can be asked again after "not yet", or 0. */
+  notBefore: N0, bonus: N0,
+  /** Said yes but the HQ is full: on the waiting list. */
+  waiting: z.boolean(),
+  pitch: S.nullable(),
+}).strict();
+export type Lead = z.infer<typeof LeadSchema>;
+
+export const HireSchema = z.object({ type: S, name: S, price: N0, temperament: S, green: S, sold: z.boolean() }).strict();
+export type Hire = z.infer<typeof HireSchema>;
+
+export const AlertSchema = z.object({ kind: z.enum(['crew', 'money', 'rival', 'police', 'hero', 'world']), time: S, text: S }).strict();
+export type Alert = z.infer<typeof AlertSchema>;
+
+export const CrewStateSchema = z.object({
+  /** Caught and stolen Pokémon (D4 turns this into the Reserve). */
+  stores: z.array(MonSchema),
+  leads: z.array(LeadSchema),
+  hires: z.array(HireSchema),
+  hireDay: N0,
+  /** The talk cards waiting for an answer (member id + talk id). */
+  talks: z.array(z.object({ member: S, talk: S, task: S.nullable() }).strict()),
+  talksToday: N0,
+  talkDay: N0,
+  /** The crew's part of the last Night Report, with times (mockup 2). */
+  alerts: z.array(AlertSchema),
+  /** Day actions the scouts saved for today (a favour can spend one: below zero). */
+  saved: I,
+  /** Grunt types used once (#150), and names already taken. */
+  used: z.array(S),
+  /** Patron id -> 'rumour' | 'found' | 'won', plus job progress. */
+  patrons: z.record(S, z.object({ state: z.enum(['rumour', 'found', 'won']), progress: N0, day: I.min(1) }).strict()),
+  /** Members who left, for the Goodbye talk. */
+  gone: z.array(z.object({ id: S, name: S, day: I.min(1), why: S }).strict()),
+  /** Next member id number. */
+  next: I.min(2),
+  /** The weekly reroll (Fortunate) used this week, by member id. */
+  rerolled: z.array(S),
+  /** What the night made that needs the run to finish (a caught Pokémon, a level, an item); the session settles it. */
+  pending: z.array(z.union([
+    z.object({ k: z.literal('mon'), species: S, level: I.min(1) }).strict(),
+    z.object({ k: z.literal('level'), member: S, uid: S, level: I.min(1) }).strict(),
+    z.object({ k: z.literal('item'), id: S, n: I.min(1) }).strict(),
+  ])),
+}).strict();
+export type CrewState = z.infer<typeof CrewStateSchema>;

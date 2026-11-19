@@ -2,11 +2,20 @@
 
 import startRaw from '../../data/dominion/start.json';
 import actionsRaw from '../../data/dominion/actions.json';
+import crewRaw from '../../data/dominion/crew.json';
 import fieldRaw from '../../data/dominion/field.json';
-import { ActionsFileSchema, FieldFileSchema, StartFileSchema, type ActionsFile, type FieldFile, type StartFile } from './schema';
+import gruntTypesRaw from '../../data/dominion/gruntTypes.json';
+import tasksRaw from '../../data/dominion/tasks.json';
+import {
+  ActionsFileSchema, CrewFileSchema, FieldFileSchema, GruntTypesFileSchema, StartFileSchema, TasksFileSchema,
+  type ActionsFile, type CrewFile, type FieldFile, type GruntType, type StartFile, type Task,
+} from './schema';
 
-export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: FieldFile } = {
+export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[] } = {
   start: StartFileSchema.parse(startRaw),
   actions: ActionsFileSchema.parse(actionsRaw),
   field: FieldFileSchema.parse(fieldRaw),
+  crew: CrewFileSchema.parse(crewRaw),
+  tasks: TasksFileSchema.parse(tasksRaw).tasks,
+  gruntTypes: GruntTypesFileSchema.parse(gruntTypesRaw).types,
 };

@@ -1,0 +1,2456 @@
+{
+ "_source": "plans/evil-mode-rework/lists/grunt-types.md (1-150) via tools/dominion/lists-to-json.py",
+ "types": [
+  {
+   "n": 1,
+   "id": "t1",
+   "name": "Tripping Grunt",
+   "group": "THE FIRST GRUNTS (the pool you start from)",
+   "found": "any region, Day 1–7",
+   "rarity": "C",
+   "lean": "brawn",
+   "green": "clumsy",
+   "favours": [
+    "Rattata",
+    "Zubat"
+   ],
+   "bestAt": "guard-hq",
+   "grows": "steady"
+  },
+  {
+   "n": 2,
+   "id": "t2",
+   "name": "Warehouse Hand",
+   "group": "THE FIRST GRUNTS (the pool you start from)",
+   "found": "any region, Day 1–7",
+   "rarity": "C",
+   "lean": "brawn",
+   "green": "lazy",
+   "favours": [
+    "Machop",
+    "Geodude"
+   ],
+   "bestAt": "guard-hq",
+   "grows": "driven"
+  },
+  {
+   "n": 3,
+   "id": "t3",
+   "name": "Gate Watcher",
+   "group": "THE FIRST GRUNTS (the pool you start from)",
+   "found": "any region, Day 1–7",
+   "rarity": "C",
+   "lean": "nerve",
+   "green": "nervous",
+   "favours": [
+    "Growlithe",
+    "Poochyena"
+   ],
+   "bestAt": "guard-hq",
+   "grows": "steady"
+  },
+  {
+   "n": 4,
+   "id": "t4",
+   "name": "Night Shift Guy",
+   "group": "THE FIRST GRUNTS (the pool you start from)",
+   "found": "any region, Day 1–7",
+   "rarity": "C",
+   "lean": "stealth",
+   "green": "lazy",
+   "favours": [
+    "Meowth",
+    "Hoothoot"
+   ],
+   "bestAt": "guard-hq",
+   "grows": "insomniac"
+  },
+  {
+   "n": 5,
+   "id": "t5",
+   "name": "Errand Runner",
+   "group": "THE FIRST GRUNTS (the pool you start from)",
+   "found": "any region, Day 1–7",
+   "rarity": "C",
+   "lean": "stealth",
+   "green": "lost",
+   "favours": [
+    "Pidgey",
+    "Spearow"
+   ],
+   "bestAt": "scout",
+   "grows": "pathfinder"
+  },
+  {
+   "n": 6,
+   "id": "t6",
+   "name": "Ticket Tout",
+   "group": "THE FIRST GRUNTS (the pool you start from)",
+   "found": "any region, Day 1–7",
+   "rarity": "C",
+   "lean": "charm",
+   "green": "loudmouth",
+   "favours": [
+    "Meowth",
+    "Mankey"
+   ],
+   "bestAt": "post-flyers",
+   "grows": "charismatic"
+  },
+  {
+   "n": 7,
+   "id": "t7",
+   "name": "Bag Carrier",
+   "group": "THE FIRST GRUNTS (the pool you start from)",
+   "found": "any region, Day 1–7",
+   "rarity": "C",
+   "lean": "brawn",
+   "green": "soft",
+   "favours": [
+    "Machop",
+    "Slowpoke"
+   ],
+   "bestAt": "smuggle",
+   "grows": "mule"
+  },
+  {
+   "n": 8,
+   "id": "t8",
+   "name": "Old Pro on the Skids",
+   "group": "THE FIRST GRUNTS (the pool you start from)",
+   "found": "any region, Day 1–7",
+   "rarity": "U",
+   "lean": "wits",
+   "green": "lazy",
+   "favours": [
+    "Houndour",
+    "Koffing"
+   ],
+   "bestAt": "train",
+   "grows": "mentor"
+  },
+  {
+   "n": 9,
+   "id": "t9",
+   "name": "Fresh Off the Bus",
+   "group": "THE FIRST GRUNTS (the pool you start from)",
+   "found": "any region, Day 1–7",
+   "rarity": "C",
+   "lean": "charm",
+   "green": "lost",
+   "favours": [
+    "Pikachu",
+    "Eevee"
+   ],
+   "bestAt": "recruit",
+   "grows": "charismatic"
+  },
+  {
+   "n": 10,
+   "id": "t10",
+   "name": "Cousin of Somebody",
+   "group": "THE FIRST GRUNTS (the pool you start from)",
+   "found": "any region, Day 1–7",
+   "rarity": "C",
+   "lean": "nerve",
+   "green": "starstruck",
+   "favours": [
+    "Sandshrew",
+    "Ekans"
+   ],
+   "bestAt": "shake-down",
+   "grows": "cold-blooded"
+  },
+  {
+   "n": 11,
+   "id": "t11",
+   "name": "Dockhand",
+   "group": "MUSCLE (Brawn)",
+   "found": "docks, gyms' back alleys, construction sites",
+   "rarity": "C",
+   "lean": "brawn",
+   "green": "lazy",
+   "favours": [
+    "Machop",
+    "Tentacool"
+   ],
+   "bestAt": "guard-hq",
+   "grows": "steady"
+  },
+  {
+   "n": 12,
+   "id": "t12",
+   "name": "Bouncer",
+   "group": "MUSCLE (Brawn)",
+   "found": "docks, gyms' back alleys, construction sites",
+   "rarity": "C",
+   "lean": "brawn",
+   "green": "loudmouth",
+   "favours": [
+    "Mankey",
+    "Poochyena"
+   ],
+   "bestAt": "guard-hq",
+   "grows": "steady"
+  },
+  {
+   "n": 13,
+   "id": "t13",
+   "name": "Bruiser",
+   "group": "MUSCLE (Brawn)",
+   "found": "docks, gyms' back alleys, construction sites",
+   "rarity": "C",
+   "lean": "brawn",
+   "green": "clumsy",
+   "favours": [
+    "Primeape",
+    "Sandslash"
+   ],
+   "bestAt": "shake-down",
+   "grows": "cold-blooded"
+  },
+  {
+   "n": 14,
+   "id": "t14",
+   "name": "Debt Collector",
+   "group": "MUSCLE (Brawn)",
+   "found": "docks, gyms' back alleys, construction sites",
+   "rarity": "C",
+   "lean": "brawn",
+   "green": "greedy",
+   "favours": [
+    "Houndour",
+    "Raticate"
+   ],
+   "bestAt": "collect",
+   "grows": "honest-accountant"
+  },
+  {
+   "n": 15,
+   "id": "t15",
+   "name": "Wrecking Crew",
+   "group": "MUSCLE (Brawn)",
+   "found": "docks, gyms' back alleys, construction sites",
+   "rarity": "U",
+   "lean": "brawn",
+   "green": "clumsy",
+   "favours": [
+    "Geodude",
+    "Rhyhorn"
+   ],
+   "bestAt": "guard-hq",
+   "grows": "demolisher"
+  },
+  {
+   "n": 16,
+   "id": "t16",
+   "name": "Ex-Wrestler",
+   "group": "MUSCLE (Brawn)",
+   "found": "docks, gyms' back alleys, construction sites",
+   "rarity": "U",
+   "lean": "brawn",
+   "green": "starstruck",
+   "favours": [
+    "Hitmonlee",
+    "Machop"
+   ],
+   "bestAt": "train",
+   "grows": "rival-killer"
+  },
+  {
+   "n": 17,
+   "id": "t17",
+   "name": "Truck Driver",
+   "group": "MUSCLE (Brawn)",
+   "found": "docks, gyms' back alleys, construction sites",
+   "rarity": "C",
+   "lean": "brawn",
+   "green": "lost",
+   "favours": [
+    "Tauros",
+    "Rapidash"
+   ],
+   "bestAt": "smuggle",
+   "grows": "road-hog"
+  },
+  {
+   "n": 18,
+   "id": "t18",
+   "name": "Strongman Act",
+   "group": "MUSCLE (Brawn)",
+   "found": "docks, gyms' back alleys, construction sites",
+   "rarity": "U",
+   "lean": "brawn",
+   "green": "soft",
+   "favours": [
+    "Hitmonchan",
+    "Onix"
+   ],
+   "bestAt": "guard-hq",
+   "grows": "iron-nerved"
+  },
+  {
+   "n": 19,
+   "id": "t19",
+   "name": "Pit Fighter",
+   "group": "MUSCLE (Brawn)",
+   "found": "docks, gyms' back alleys, construction sites",
+   "rarity": "U",
+   "lean": "brawn",
+   "green": "greedy",
+   "favours": [
+    "Mankey",
+    "Scraggy"
+   ],
+   "bestAt": "shake-down",
+   "grows": "rival-killer"
+  },
+  {
+   "n": 20,
+   "id": "t20",
+   "name": "The Wall",
+   "group": "MUSCLE (Brawn)",
+   "found": "docks, gyms' back alleys, construction sites",
+   "rarity": "R",
+   "lean": "brawn",
+   "green": "lazy",
+   "favours": [
+    "Snorlax",
+    "Golem"
+   ],
+   "bestAt": "guard-hq",
+   "grows": "immovable"
+  },
+  {
+   "n": 21,
+   "id": "t21",
+   "name": "Pickpocket",
+   "group": "SNEAKS AND THIEVES (Stealth)",
+   "found": "Game Corner, markets, back streets",
+   "rarity": "C",
+   "lean": "stealth",
+   "green": "clumsy",
+   "favours": [
+    "Meowth",
+    "Zubat"
+   ],
+   "bestAt": "pickpocket",
+   "grows": "light-fingered"
+  },
+  {
+   "n": 22,
+   "id": "t22",
+   "name": "Lookout",
+   "group": "SNEAKS AND THIEVES (Stealth)",
+   "found": "Game Corner, markets, back streets",
+   "rarity": "C",
+   "lean": "stealth",
+   "green": "nervous",
+   "favours": [
+    "Pidgey",
+    "Hoothoot"
+   ],
+   "bestAt": "scout",
+   "grows": "pathfinder"
+  },
+  {
+   "n": 23,
+   "id": "t23",
+   "name": "Alley Cat",
+   "group": "SNEAKS AND THIEVES (Stealth)",
+   "found": "Game Corner, markets, back streets",
+   "rarity": "C",
+   "lean": "stealth",
+   "green": "loudmouth",
+   "favours": [
+    "Meowth",
+    "Sneasel"
+   ],
+   "bestAt": "pickpocket",
+   "grows": "light-fingered"
+  },
+  {
+   "n": 24,
+   "id": "t24",
+   "name": "Cat Burglar",
+   "group": "SNEAKS AND THIEVES (Stealth)",
+   "found": "Game Corner, markets, back streets",
+   "rarity": "U",
+   "lean": "stealth",
+   "green": "clumsy",
+   "favours": [
+    "Sneasel",
+    "Purrloin"
+   ],
+   "bestAt": "spy",
+   "grows": "climber"
+  },
+  {
+   "n": 25,
+   "id": "t25",
+   "name": "Window Cleaner",
+   "group": "SNEAKS AND THIEVES (Stealth)",
+   "found": "Game Corner, markets, back streets",
+   "rarity": "C",
+   "lean": "stealth",
+   "green": "lost",
+   "favours": [
+    "Spinarak",
+    "Ledyba"
+   ],
+   "bestAt": "spy",
+   "grows": "ghost-in-training"
+  },
+  {
+   "n": 26,
+   "id": "t26",
+   "name": "Smash-and-Grab",
+   "group": "SNEAKS AND THIEVES (Stealth)",
+   "found": "Game Corner, markets, back streets",
+   "rarity": "C",
+   "lean": "stealth",
+   "green": "greedy",
+   "favours": [
+    "Rattata",
+    "Koffing"
+   ],
+   "bestAt": "pickpocket",
+   "grows": "embezzler"
+  },
+  {
+   "n": 27,
+   "id": "t27",
+   "name": "Fence's Nephew",
+   "group": "SNEAKS AND THIEVES (Stealth)",
+   "found": "Game Corner, markets, back streets",
+   "rarity": "U",
+   "lean": "stealth",
+   "green": "soft",
+   "favours": [
+    "Murkrow",
+    "Rattata"
+   ],
+   "bestAt": "smuggle",
+   "grows": "fencer"
+  },
+  {
+   "n": 28,
+   "id": "t28",
+   "name": "Safecracker",
+   "group": "SNEAKS AND THIEVES (Stealth)",
+   "found": "Game Corner, markets, back streets",
+   "rarity": "U",
+   "lean": "stealth",
+   "green": "nervous",
+   "favours": [
+    "Magnemite",
+    "Voltorb"
+   ],
+   "bestAt": "spy",
+   "grows": "locksmith"
+  },
+  {
+   "n": 29,
+   "id": "t29",
+   "name": "Tunnel Rat",
+   "group": "SNEAKS AND THIEVES (Stealth)",
+   "found": "Game Corner, markets, back streets",
+   "rarity": "U",
+   "lean": "stealth",
+   "green": "lost",
+   "favours": [
+    "Diglett",
+    "Zubat"
+   ],
+   "bestAt": "smuggle",
+   "grows": "burrower"
+  },
+  {
+   "n": 30,
+   "id": "t30",
+   "name": "Shadow Man",
+   "group": "SNEAKS AND THIEVES (Stealth)",
+   "found": "Game Corner, markets, back streets",
+   "rarity": "R",
+   "lean": "stealth",
+   "green": "starstruck",
+   "favours": [
+    "Gastly",
+    "Umbreon"
+   ],
+   "bestAt": "spy",
+   "grows": "ghost-in-training"
+  },
+  {
+   "n": 31,
+   "id": "t31",
+   "name": "Junior Accountant",
+   "group": "BRAINS (Wits)",
+   "found": "Silph-style offices, libraries, labs, Poké Marts",
+   "rarity": "C",
+   "lean": "wits",
+   "green": "nervous",
+   "favours": [
+    "Slowpoke",
+    "Porygon"
+   ],
+   "bestAt": "collect",
+   "grows": "honest-accountant"
+  },
+  {
+   "n": 32,
+   "id": "t32",
+   "name": "Lab Dropout",
+   "group": "BRAINS (Wits)",
+   "found": "Silph-style offices, libraries, labs, Poké Marts",
+   "rarity": "U",
+   "lean": "wits",
+   "green": "clumsy",
+   "favours": [
+    "Magnemite",
+    "Grimer"
+   ],
+   "bestAt": "train",
+   "grows": "tinkerer"
+  },
+  {
+   "n": 33,
+   "id": "t33",
+   "name": "Night-School Kid (adult)",
+   "group": "BRAINS (Wits)",
+   "found": "Silph-style offices, libraries, labs, Poké Marts",
+   "rarity": "C",
+   "lean": "wits",
+   "green": "lost",
+   "favours": [
+    "Abra",
+    "Drowzee"
+   ],
+   "bestAt": "scout",
+   "grows": "pathfinder"
+  },
+  {
+   "n": 34,
+   "id": "t34",
+   "name": "Bookie",
+   "group": "BRAINS (Wits)",
+   "found": "Silph-style offices, libraries, labs, Poké Marts",
+   "rarity": "U",
+   "lean": "wits",
+   "green": "greedy",
+   "favours": [
+    "Meowth",
+    "Persian"
+   ],
+   "bestAt": "collect",
+   "grows": "embezzler"
+  },
+  {
+   "n": 35,
+   "id": "t35",
+   "name": "Forger",
+   "group": "BRAINS (Wits)",
+   "found": "Silph-style offices, libraries, labs, Poké Marts",
+   "rarity": "U",
+   "lean": "wits",
+   "green": "soft",
+   "favours": [
+    "Smeargle",
+    "Ditto"
+   ],
+   "bestAt": "spy",
+   "grows": "counterfeiter"
+  },
+  {
+   "n": 36,
+   "id": "t36",
+   "name": "Map Nerd",
+   "group": "BRAINS (Wits)",
+   "found": "Silph-style offices, libraries, labs, Poké Marts",
+   "rarity": "C",
+   "lean": "wits",
+   "green": "lost",
+   "favours": [
+    "Pidgeotto",
+    "Natu"
+   ],
+   "bestAt": "scout",
+   "grows": "pathfinder"
+  },
+  {
+   "n": 37,
+   "id": "t37",
+   "name": "Radio Nerd",
+   "group": "BRAINS (Wits)",
+   "found": "Silph-style offices, libraries, labs, Poké Marts",
+   "rarity": "C",
+   "lean": "wits",
+   "green": "loudmouth",
+   "favours": [
+    "Voltorb",
+    "Magnemite"
+   ],
+   "bestAt": "scout",
+   "grows": "eavesdropper"
+  },
+  {
+   "n": 38,
+   "id": "t38",
+   "name": "Chess Hustler",
+   "group": "BRAINS (Wits)",
+   "found": "Silph-style offices, libraries, labs, Poké Marts",
+   "rarity": "U",
+   "lean": "wits",
+   "green": "starstruck",
+   "favours": [
+    "Kadabra",
+    "Girafarig"
+   ],
+   "bestAt": "spy",
+   "grows": "planner"
+  },
+  {
+   "n": 39,
+   "id": "t39",
+   "name": "Retired Teacher",
+   "group": "BRAINS (Wits)",
+   "found": "Silph-style offices, libraries, labs, Poké Marts",
+   "rarity": "R",
+   "lean": "wits",
+   "green": "soft",
+   "favours": [
+    "Slowbro",
+    "Hypno"
+   ],
+   "bestAt": "train",
+   "grows": "mentor"
+  },
+  {
+   "n": 40,
+   "id": "t40",
+   "name": "The Quiet Analyst",
+   "group": "BRAINS (Wits)",
+   "found": "Silph-style offices, libraries, labs, Poké Marts",
+   "rarity": "R",
+   "lean": "wits",
+   "green": "nervous",
+   "favours": [
+    "Porygon2",
+    "Xatu"
+   ],
+   "bestAt": "scout",
+   "grows": "oracle"
+  },
+  {
+   "n": 41,
+   "id": "t41",
+   "name": "Sweet Talker",
+   "group": "THE FACES (Charm)",
+   "found": "Game Corner, bars, boardwalks, Dept. Store",
+   "rarity": "C",
+   "lean": "charm",
+   "green": "loudmouth",
+   "favours": [
+    "Clefairy",
+    "Jigglypuff"
+   ],
+   "bestAt": "recruit",
+   "grows": "charismatic"
+  },
+  {
+   "n": 42,
+   "id": "t42",
+   "name": "Barker",
+   "group": "THE FACES (Charm)",
+   "found": "Game Corner, bars, boardwalks, Dept. Store",
+   "rarity": "C",
+   "lean": "charm",
+   "green": "lazy",
+   "favours": [
+    "Meowth",
+    "Pikachu"
+   ],
+   "bestAt": "post-flyers",
+   "grows": "charismatic"
+  },
+  {
+   "n": 43,
+   "id": "t43",
+   "name": "Door-to-Door Salesman",
+   "group": "THE FACES (Charm)",
+   "found": "Game Corner, bars, boardwalks, Dept. Store",
+   "rarity": "C",
+   "lean": "charm",
+   "green": "greedy",
+   "favours": [
+    "Kangaskhan",
+    "Chansey"
+   ],
+   "bestAt": "work-the-front",
+   "grows": "respectable"
+  },
+  {
+   "n": 44,
+   "id": "t44",
+   "name": "Smooth Operator",
+   "group": "THE FACES (Charm)",
+   "found": "Game Corner, bars, boardwalks, Dept. Store",
+   "rarity": "U",
+   "lean": "charm",
+   "green": "soft",
+   "favours": [
+    "Persian",
+    "Vulpix"
+   ],
+   "bestAt": "shake-down",
+   "grows": "smooth-talker"
+  },
+  {
+   "n": 45,
+   "id": "t45",
+   "name": "Lounge Singer",
+   "group": "THE FACES (Charm)",
+   "found": "Game Corner, bars, boardwalks, Dept. Store",
+   "rarity": "U",
+   "lean": "charm",
+   "green": "lost",
+   "favours": [
+    "Jigglypuff",
+    "Lapras"
+   ],
+   "bestAt": "recruit",
+   "grows": "charismatic"
+  },
+  {
+   "n": 46,
+   "id": "t46",
+   "name": "Con Man",
+   "group": "THE FACES (Charm)",
+   "found": "Game Corner, bars, boardwalks, Dept. Store",
+   "rarity": "C",
+   "lean": "charm",
+   "green": "clumsy",
+   "favours": [
+    "Ditto",
+    "Meowth"
+   ],
+   "bestAt": "shake-down",
+   "grows": "smooth-talker"
+  },
+  {
+   "n": 47,
+   "id": "t47",
+   "name": "Bartender",
+   "group": "THE FACES (Charm)",
+   "found": "Game Corner, bars, boardwalks, Dept. Store",
+   "rarity": "U",
+   "lean": "charm",
+   "green": "lazy",
+   "favours": [
+    "Slowpoke",
+    "Hypno"
+   ],
+   "bestAt": "work-the-front",
+   "grows": "respectable"
+  },
+  {
+   "n": 48,
+   "id": "t48",
+   "name": "Gambler",
+   "group": "THE FACES (Charm)",
+   "found": "Game Corner, bars, boardwalks, Dept. Store",
+   "rarity": "C",
+   "lean": "charm",
+   "green": "greedy",
+   "favours": [
+    "Voltorb",
+    "Meowth"
+   ],
+   "bestAt": "work-the-front",
+   "grows": "high-roller"
+  },
+  {
+   "n": 49,
+   "id": "t49",
+   "name": "Failed Politician",
+   "group": "THE FACES (Charm)",
+   "found": "Game Corner, bars, boardwalks, Dept. Store",
+   "rarity": "U",
+   "lean": "charm",
+   "green": "starstruck",
+   "favours": [
+    "Arcanine",
+    "Pidgeot"
+   ],
+   "bestAt": "post-flyers",
+   "grows": "orator"
+  },
+  {
+   "n": 50,
+   "id": "t50",
+   "name": "Silver Tongue",
+   "group": "THE FACES (Charm)",
+   "found": "Game Corner, bars, boardwalks, Dept. Store",
+   "rarity": "R",
+   "lean": "charm",
+   "green": "nervous",
+   "favours": [
+    "Clefable",
+    "Kadabra"
+   ],
+   "bestAt": "recruit",
+   "grows": "persuader"
+  },
+  {
+   "n": 51,
+   "id": "t51",
+   "name": "Wannabe Trainer",
+   "group": "BATTLERS (fighting for the team)",
+   "found": "route trainers, Gym back doors, Battle Subway",
+   "rarity": "C",
+   "lean": "nerve",
+   "green": "starstruck",
+   "favours": [
+    "Rattata",
+    "Pidgey"
+   ],
+   "bestAt": "train",
+   "grows": "driven"
+  },
+  {
+   "n": 52,
+   "id": "t52",
+   "name": "Failed Gym Challenger",
+   "group": "BATTLERS (fighting for the team)",
+   "found": "route trainers, Gym back doors, Battle Subway",
+   "rarity": "C",
+   "lean": "nerve",
+   "green": "nervous",
+   "favours": [
+    "Starly",
+    "Geodude"
+   ],
+   "bestAt": "train",
+   "grows": "rival-killer"
+  },
+  {
+   "n": 53,
+   "id": "t53",
+   "name": "Hiker Gone Bad",
+   "group": "BATTLERS (fighting for the team)",
+   "found": "route trainers, Gym back doors, Battle Subway",
+   "rarity": "C",
+   "lean": "brawn",
+   "green": "lost",
+   "favours": [
+    "Geodude",
+    "Onix"
+   ],
+   "bestAt": "catch",
+   "grows": "trailwise"
+  },
+  {
+   "n": 54,
+   "id": "t54",
+   "name": "Black Belt Dropout",
+   "group": "BATTLERS (fighting for the team)",
+   "found": "route trainers, Gym back doors, Battle Subway",
+   "rarity": "U",
+   "lean": "brawn",
+   "green": "lazy",
+   "favours": [
+    "Machop",
+    "Hitmonlee"
+   ],
+   "bestAt": "train",
+   "grows": "driven"
+  },
+  {
+   "n": 55,
+   "id": "t55",
+   "name": "Bug Catcher (adult)",
+   "group": "BATTLERS (fighting for the team)",
+   "found": "route trainers, Gym back doors, Battle Subway",
+   "rarity": "C",
+   "lean": "wits",
+   "green": "clumsy",
+   "favours": [
+    "Weedle",
+    "Scyther"
+   ],
+   "bestAt": "catch",
+   "grows": "bug-whisperer"
+  },
+  {
+   "n": 56,
+   "id": "t56",
+   "name": "Biker",
+   "group": "BATTLERS (fighting for the team)",
+   "found": "route trainers, Gym back doors, Battle Subway",
+   "rarity": "C",
+   "lean": "nerve",
+   "green": "loudmouth",
+   "favours": [
+    "Koffing",
+    "Grimer"
+   ],
+   "bestAt": "smuggle",
+   "grows": "road-hog"
+  },
+  {
+   "n": 57,
+   "id": "t57",
+   "name": "Ace Trainer on a Bad Run",
+   "group": "BATTLERS (fighting for the team)",
+   "found": "route trainers, Gym back doors, Battle Subway",
+   "rarity": "U",
+   "lean": "nerve",
+   "green": "starstruck",
+   "favours": [
+    "Dragonair",
+    "Pidgeot"
+   ],
+   "bestAt": "train",
+   "grows": "rival-killer"
+  },
+  {
+   "n": 58,
+   "id": "t58",
+   "name": "Tournament Reject",
+   "group": "BATTLERS (fighting for the team)",
+   "found": "route trainers, Gym back doors, Battle Subway",
+   "rarity": "U",
+   "lean": "nerve",
+   "green": "greedy",
+   "favours": [
+    "Hitmonchan",
+    "Primeape"
+   ],
+   "bestAt": "shake-down",
+   "grows": "cold-blooded"
+  },
+  {
+   "n": 59,
+   "id": "t59",
+   "name": "Streak Breaker",
+   "group": "BATTLERS (fighting for the team)",
+   "found": "route trainers, Gym back doors, Battle Subway",
+   "rarity": "R",
+   "lean": "nerve",
+   "green": "nervous",
+   "favours": [
+    "Machoke",
+    "Arcanine"
+   ],
+   "bestAt": "guard-hq",
+   "grows": "clutch"
+  },
+  {
+   "n": 60,
+   "id": "t60",
+   "name": "Battle Tower Washout",
+   "group": "BATTLERS (fighting for the team)",
+   "found": "route trainers, Gym back doors, Battle Subway",
+   "rarity": "R",
+   "lean": "wits",
+   "green": "lazy",
+   "favours": [
+    "Skarmory",
+    "Gengar"
+   ],
+   "bestAt": "train",
+   "grows": "mentor"
+  },
+  {
+   "n": 61,
+   "id": "t61",
+   "name": "Net Man",
+   "group": "HANDLERS AND CATCHERS (wild Pokémon)",
+   "found": "routes, safari zones, ranches",
+   "rarity": "C",
+   "lean": "brawn",
+   "green": "clumsy",
+   "favours": [
+    "Butterfree",
+    "Paras"
+   ],
+   "bestAt": "catch",
+   "grows": "steady"
+  },
+  {
+   "n": 62,
+   "id": "t62",
+   "name": "Poacher",
+   "group": "HANDLERS AND CATCHERS (wild Pokémon)",
+   "found": "routes, safari zones, ranches",
+   "rarity": "C",
+   "lean": "stealth",
+   "green": "greedy",
+   "favours": [
+    "Rhyhorn",
+    "Tauros"
+   ],
+   "bestAt": "catch",
+   "grows": "embezzler"
+  },
+  {
+   "n": 63,
+   "id": "t63",
+   "name": "Ranch Hand",
+   "group": "HANDLERS AND CATCHERS (wild Pokémon)",
+   "found": "routes, safari zones, ranches",
+   "rarity": "C",
+   "lean": "brawn",
+   "green": "soft",
+   "favours": [
+    "Miltank",
+    "Ponyta"
+   ],
+   "bestAt": "catch",
+   "grows": "gentle-hands"
+  },
+  {
+   "n": 64,
+   "id": "t64",
+   "name": "Safari Guide",
+   "group": "HANDLERS AND CATCHERS (wild Pokémon)",
+   "found": "routes, safari zones, ranches",
+   "rarity": "U",
+   "lean": "wits",
+   "green": "lost",
+   "favours": [
+    "Kangaskhan",
+    "Pinsir"
+   ],
+   "bestAt": "catch",
+   "grows": "pathfinder"
+  },
+  {
+   "n": 65,
+   "id": "t65",
+   "name": "Breeder's Apprentice",
+   "group": "HANDLERS AND CATCHERS (wild Pokémon)",
+   "found": "routes, safari zones, ranches",
+   "rarity": "U",
+   "lean": "charm",
+   "green": "lazy",
+   "favours": [
+    "Eevee",
+    "Togepi"
+   ],
+   "bestAt": "train",
+   "grows": "nurturer"
+  },
+  {
+   "n": 66,
+   "id": "t66",
+   "name": "Egg Runner",
+   "group": "HANDLERS AND CATCHERS (wild Pokémon)",
+   "found": "routes, safari zones, ranches",
+   "rarity": "C",
+   "lean": "stealth",
+   "green": "nervous",
+   "favours": [
+    "Ditto",
+    "Chansey"
+   ],
+   "bestAt": "smuggle",
+   "grows": "mule"
+  },
+  {
+   "n": 67,
+   "id": "t67",
+   "name": "Fishing Bum",
+   "group": "HANDLERS AND CATCHERS (wild Pokémon)",
+   "found": "routes, safari zones, ranches",
+   "rarity": "C",
+   "lean": "nerve",
+   "green": "lazy",
+   "favours": [
+    "Magikarp",
+    "Poliwag"
+   ],
+   "bestAt": "catch",
+   "grows": "patient"
+  },
+  {
+   "n": 68,
+   "id": "t68",
+   "name": "Bird Keeper (adult)",
+   "group": "HANDLERS AND CATCHERS (wild Pokémon)",
+   "found": "routes, safari zones, ranches",
+   "rarity": "U",
+   "lean": "wits",
+   "green": "starstruck",
+   "favours": [
+    "Pidgeot",
+    "Fearow"
+   ],
+   "bestAt": "scout",
+   "grows": "pathfinder"
+  },
+  {
+   "n": 69,
+   "id": "t69",
+   "name": "Vet Tech",
+   "group": "HANDLERS AND CATCHERS (wild Pokémon)",
+   "found": "routes, safari zones, ranches",
+   "rarity": "U",
+   "lean": "wits",
+   "green": "soft",
+   "favours": [
+    "Chansey",
+    "Blissey"
+   ],
+   "bestAt": "rest",
+   "grows": "field-medic"
+  },
+  {
+   "n": 70,
+   "id": "t70",
+   "name": "Beast Tamer",
+   "group": "HANDLERS AND CATCHERS (wild Pokémon)",
+   "found": "routes, safari zones, ranches",
+   "rarity": "R",
+   "lean": "brawn",
+   "green": "loudmouth",
+   "favours": [
+    "Arcanine",
+    "Tauros"
+   ],
+   "bestAt": "catch",
+   "grows": "alpha-handler"
+  },
+  {
+   "n": 71,
+   "id": "t71",
+   "name": "Wire Puller",
+   "group": "Tech And Gadgets",
+   "found": "Celadon/Castelia-style cities, power plants, Devon-style firms",
+   "rarity": "C",
+   "lean": "wits",
+   "green": "clumsy",
+   "favours": [
+    "Magnemite",
+    "Voltorb"
+   ],
+   "bestAt": "guard-hq",
+   "grows": "trapper"
+  },
+  {
+   "n": 72,
+   "id": "t72",
+   "name": "Cable Guy",
+   "group": "Tech And Gadgets",
+   "found": "Celadon/Castelia-style cities, power plants, Devon-style firms",
+   "rarity": "C",
+   "lean": "stealth",
+   "green": "lost",
+   "favours": [
+    "Elekid",
+    "Magnemite"
+   ],
+   "bestAt": "spy",
+   "grows": "ghost-in-training"
+  },
+  {
+   "n": 73,
+   "id": "t73",
+   "name": "Camera Jockey",
+   "group": "Tech And Gadgets",
+   "found": "Celadon/Castelia-style cities, power plants, Devon-style firms",
+   "rarity": "U",
+   "lean": "wits",
+   "green": "nervous",
+   "favours": [
+    "Porygon",
+    "Rotom"
+   ],
+   "bestAt": "scout",
+   "grows": "pathfinder"
+  },
+  {
+   "n": 74,
+   "id": "t74",
+   "name": "Power Plant Tech",
+   "group": "Tech And Gadgets",
+   "found": "Celadon/Castelia-style cities, power plants, Devon-style firms",
+   "rarity": "C",
+   "lean": "wits",
+   "green": "lazy",
+   "favours": [
+    "Electabuzz",
+    "Voltorb"
+   ],
+   "bestAt": "work-the-front",
+   "grows": "respectable"
+  },
+  {
+   "n": 75,
+   "id": "t75",
+   "name": "Hacker",
+   "group": "Tech And Gadgets",
+   "found": "Celadon/Castelia-style cities, power plants, Devon-style firms",
+   "rarity": "U",
+   "lean": "wits",
+   "green": "loudmouth",
+   "favours": [
+    "Porygon",
+    "Rotom"
+   ],
+   "bestAt": "spy",
+   "grows": "backdoor"
+  },
+  {
+   "n": 76,
+   "id": "t76",
+   "name": "Print Shop Guy",
+   "group": "Tech And Gadgets",
+   "found": "Celadon/Castelia-style cities, power plants, Devon-style firms",
+   "rarity": "C",
+   "lean": "charm",
+   "green": "soft",
+   "favours": [
+    "Smeargle",
+    "Kecleon"
+   ],
+   "bestAt": "post-flyers",
+   "grows": "charismatic"
+  },
+  {
+   "n": 77,
+   "id": "t77",
+   "name": "Drone Pilot",
+   "group": "Tech And Gadgets",
+   "found": "Celadon/Castelia-style cities, power plants, Devon-style firms",
+   "rarity": "U",
+   "lean": "stealth",
+   "green": "clumsy",
+   "favours": [
+    "Beautifly",
+    "Rotom"
+   ],
+   "bestAt": "scout",
+   "grows": "eye-in-the-sky"
+  },
+  {
+   "n": 78,
+   "id": "t78",
+   "name": "Radio Tower Sneak",
+   "group": "Tech And Gadgets",
+   "found": "Celadon/Castelia-style cities, power plants, Devon-style firms",
+   "rarity": "U",
+   "lean": "stealth",
+   "green": "nervous",
+   "favours": [
+    "Pichu",
+    "Magnemite"
+   ],
+   "bestAt": "post-flyers",
+   "grows": "broadcaster"
+  },
+  {
+   "n": 79,
+   "id": "t79",
+   "name": "Lock-and-Alarm Man",
+   "group": "Tech And Gadgets",
+   "found": "Celadon/Castelia-style cities, power plants, Devon-style firms",
+   "rarity": "U",
+   "lean": "wits",
+   "green": "greedy",
+   "favours": [
+    "Magneton",
+    "Klink"
+   ],
+   "bestAt": "guard-hq",
+   "grows": "steady"
+  },
+  {
+   "n": 80,
+   "id": "t80",
+   "name": "The Inventor",
+   "group": "Tech And Gadgets",
+   "found": "Celadon/Castelia-style cities, power plants, Devon-style firms",
+   "rarity": "R",
+   "lean": "wits",
+   "green": "starstruck",
+   "favours": [
+    "Porygon-Z",
+    "Magneton"
+   ],
+   "bestAt": "train",
+   "grows": "tinkerer"
+  },
+  {
+   "n": 81,
+   "id": "t81",
+   "name": "Deckhand",
+   "group": "Sea And Coast",
+   "found": "docks, ferries, beaches, lighthouses",
+   "rarity": "C",
+   "lean": "brawn",
+   "green": "lost",
+   "favours": [
+    "Wingull",
+    "Tentacool"
+   ],
+   "bestAt": "smuggle",
+   "grows": "sea-legs"
+  },
+  {
+   "n": 82,
+   "id": "t82",
+   "name": "Ferry Ticket Taker",
+   "group": "Sea And Coast",
+   "found": "docks, ferries, beaches, lighthouses",
+   "rarity": "C",
+   "lean": "charm",
+   "green": "lazy",
+   "favours": [
+    "Pelipper",
+    "Slowpoke"
+   ],
+   "bestAt": "recruit",
+   "grows": "charismatic"
+  },
+  {
+   "n": 83,
+   "id": "t83",
+   "name": "Beach Bully",
+   "group": "Sea And Coast",
+   "found": "docks, ferries, beaches, lighthouses",
+   "rarity": "C",
+   "lean": "brawn",
+   "green": "loudmouth",
+   "favours": [
+    "Krabby",
+    "Sandshrew"
+   ],
+   "bestAt": "shake-down",
+   "grows": "cold-blooded"
+  },
+  {
+   "n": 84,
+   "id": "t84",
+   "name": "Diver",
+   "group": "Sea And Coast",
+   "found": "docks, ferries, beaches, lighthouses",
+   "rarity": "U",
+   "lean": "stealth",
+   "green": "nervous",
+   "favours": [
+    "Staryu",
+    "Horsea"
+   ],
+   "bestAt": "spy",
+   "grows": "ghost-in-training"
+  },
+  {
+   "n": 85,
+   "id": "t85",
+   "name": "Lighthouse Keeper",
+   "group": "Sea And Coast",
+   "found": "docks, ferries, beaches, lighthouses",
+   "rarity": "U",
+   "lean": "wits",
+   "green": "soft",
+   "favours": [
+    "Pelipper",
+    "Lapras"
+   ],
+   "bestAt": "scout",
+   "grows": "pathfinder"
+  },
+  {
+   "n": 86,
+   "id": "t86",
+   "name": "Fish Market Heavy",
+   "group": "Sea And Coast",
+   "found": "docks, ferries, beaches, lighthouses",
+   "rarity": "C",
+   "lean": "nerve",
+   "green": "greedy",
+   "favours": [
+    "Magikarp",
+    "Poliwhirl"
+   ],
+   "bestAt": "collect",
+   "grows": "honest-accountant"
+  },
+  {
+   "n": 87,
+   "id": "t87",
+   "name": "Smuggler Skipper",
+   "group": "Sea And Coast",
+   "found": "docks, ferries, beaches, lighthouses",
+   "rarity": "U",
+   "lean": "nerve",
+   "green": "starstruck",
+   "favours": [
+    "Tentacruel",
+    "Wailmer"
+   ],
+   "bestAt": "smuggle",
+   "grows": "sea-legs"
+  },
+  {
+   "n": 88,
+   "id": "t88",
+   "name": "Pearl Diver",
+   "group": "Sea And Coast",
+   "found": "docks, ferries, beaches, lighthouses",
+   "rarity": "U",
+   "lean": "stealth",
+   "green": "greedy",
+   "favours": [
+    "Clamperl",
+    "Shellder"
+   ],
+   "bestAt": "pickpocket",
+   "grows": "light-fingered"
+  },
+  {
+   "n": 89,
+   "id": "t89",
+   "name": "Harbour Master's Clerk",
+   "group": "Sea And Coast",
+   "found": "docks, ferries, beaches, lighthouses",
+   "rarity": "U",
+   "lean": "wits",
+   "green": "clumsy",
+   "favours": [
+    "Wingull",
+    "Staryu"
+   ],
+   "bestAt": "collect",
+   "grows": "honest-accountant"
+  },
+  {
+   "n": 90,
+   "id": "t90",
+   "name": "Sea Dog",
+   "group": "Sea And Coast",
+   "found": "docks, ferries, beaches, lighthouses",
+   "rarity": "R",
+   "lean": "brawn",
+   "green": "lazy",
+   "favours": [
+    "Gyarados",
+    "Wailord"
+   ],
+   "bestAt": "guard-hq",
+   "grows": "steady"
+  },
+  {
+   "n": 91,
+   "id": "t91",
+   "name": "Cave Dweller",
+   "group": "WILD PLACES (mountains, caves, forests, deserts)",
+   "found": "routes, caves, ruins",
+   "rarity": "C",
+   "lean": "stealth",
+   "green": "lost",
+   "favours": [
+    "Zubat",
+    "Geodude"
+   ],
+   "bestAt": "smuggle",
+   "grows": "burrower"
+  },
+  {
+   "n": 92,
+   "id": "t92",
+   "name": "Mountain Hermit",
+   "group": "WILD PLACES (mountains, caves, forests, deserts)",
+   "found": "routes, caves, ruins",
+   "rarity": "U",
+   "lean": "nerve",
+   "green": "soft",
+   "favours": [
+    "Machoke",
+    "Onix"
+   ],
+   "bestAt": "guard-hq",
+   "grows": "steady"
+  },
+  {
+   "n": 93,
+   "id": "t93",
+   "name": "Forest Ranger Reject",
+   "group": "WILD PLACES (mountains, caves, forests, deserts)",
+   "found": "routes, caves, ruins",
+   "rarity": "C",
+   "lean": "wits",
+   "green": "starstruck",
+   "favours": [
+    "Pidgeotto",
+    "Ledian"
+   ],
+   "bestAt": "scout",
+   "grows": "pathfinder"
+  },
+  {
+   "n": 94,
+   "id": "t94",
+   "name": "Desert Nomad",
+   "group": "WILD PLACES (mountains, caves, forests, deserts)",
+   "found": "routes, caves, ruins",
+   "rarity": "U",
+   "lean": "stealth",
+   "green": "lost",
+   "favours": [
+    "Sandslash",
+    "Trapinch"
+   ],
+   "bestAt": "smuggle",
+   "grows": "mirage"
+  },
+  {
+   "n": 95,
+   "id": "t95",
+   "name": "Ruin Raider",
+   "group": "WILD PLACES (mountains, caves, forests, deserts)",
+   "found": "routes, caves, ruins",
+   "rarity": "U",
+   "lean": "wits",
+   "green": "greedy",
+   "favours": [
+    "Natu",
+    "Golem"
+   ],
+   "bestAt": "spy",
+   "grows": "light-fingered"
+  },
+  {
+   "n": 96,
+   "id": "t96",
+   "name": "Swamp Trapper",
+   "group": "WILD PLACES (mountains, caves, forests, deserts)",
+   "found": "routes, caves, ruins",
+   "rarity": "C",
+   "lean": "nerve",
+   "green": "clumsy",
+   "favours": [
+    "Poliwhirl",
+    "Wooper"
+   ],
+   "bestAt": "catch",
+   "grows": "patient"
+  },
+  {
+   "n": 97,
+   "id": "t97",
+   "name": "Cliff Climber",
+   "group": "WILD PLACES (mountains, caves, forests, deserts)",
+   "found": "routes, caves, ruins",
+   "rarity": "U",
+   "lean": "brawn",
+   "green": "nervous",
+   "favours": [
+    "Machop",
+    "Sandslash"
+   ],
+   "bestAt": "scout",
+   "grows": "climber"
+  },
+  {
+   "n": 98,
+   "id": "t98",
+   "name": "Snow Hunter",
+   "group": "WILD PLACES (mountains, caves, forests, deserts)",
+   "found": "routes, caves, ruins",
+   "rarity": "U",
+   "lean": "nerve",
+   "green": "lazy",
+   "favours": [
+    "Sneasel",
+    "Delibird"
+   ],
+   "bestAt": "catch",
+   "grows": "trailwise"
+  },
+  {
+   "n": 99,
+   "id": "t99",
+   "name": "Volcano Miner",
+   "group": "WILD PLACES (mountains, caves, forests, deserts)",
+   "found": "routes, caves, ruins",
+   "rarity": "C",
+   "lean": "brawn",
+   "green": "greedy",
+   "favours": [
+    "Slugma",
+    "Magmar"
+   ],
+   "bestAt": "work-the-front",
+   "grows": "respectable"
+  },
+  {
+   "n": 100,
+   "id": "t100",
+   "name": "The Hollow Man (lives in a cave)",
+   "group": "WILD PLACES (mountains, caves, forests, deserts)",
+   "found": "routes, caves, ruins",
+   "rarity": "R",
+   "lean": "stealth",
+   "green": "starstruck",
+   "favours": [
+    "Gengar",
+    "Duskull"
+   ],
+   "bestAt": "spy",
+   "grows": "ghost-in-training"
+  },
+  {
+   "n": 101,
+   "id": "t101",
+   "name": "Mailroom Clerk",
+   "group": "City And Business",
+   "found": "cities, dept. stores, offices",
+   "rarity": "C",
+   "lean": "wits",
+   "green": "nervous",
+   "favours": [
+    "Pidgey",
+    "Ditto"
+   ],
+   "bestAt": "spy",
+   "grows": "ghost-in-training"
+  },
+  {
+   "n": 102,
+   "id": "t102",
+   "name": "Taxi Driver",
+   "group": "City And Business",
+   "found": "cities, dept. stores, offices",
+   "rarity": "C",
+   "lean": "wits",
+   "green": "loudmouth",
+   "favours": [
+    "Rapidash",
+    "Persian"
+   ],
+   "bestAt": "scout",
+   "grows": "pathfinder"
+  },
+  {
+   "n": 103,
+   "id": "t103",
+   "name": "Shopkeeper's Brother",
+   "group": "City And Business",
+   "found": "cities, dept. stores, offices",
+   "rarity": "C",
+   "lean": "charm",
+   "green": "soft",
+   "favours": [
+    "Chansey",
+    "Meowth"
+   ],
+   "bestAt": "work-the-front",
+   "grows": "respectable"
+  },
+  {
+   "n": 104,
+   "id": "t104",
+   "name": "Union Rep",
+   "group": "City And Business",
+   "found": "cities, dept. stores, offices",
+   "rarity": "U",
+   "lean": "charm",
+   "green": "greedy",
+   "favours": [
+    "Machoke",
+    "Mankey"
+   ],
+   "bestAt": "recruit",
+   "grows": "charismatic"
+  },
+  {
+   "n": 105,
+   "id": "t105",
+   "name": "Night Watchman",
+   "group": "City And Business",
+   "found": "cities, dept. stores, offices",
+   "rarity": "C",
+   "lean": "nerve",
+   "green": "lazy",
+   "favours": [
+    "Growlithe",
+    "Hoothoot"
+   ],
+   "bestAt": "guard-hq",
+   "grows": "steady"
+  },
+  {
+   "n": 106,
+   "id": "t106",
+   "name": "Warehouse Foreman",
+   "group": "City And Business",
+   "found": "cities, dept. stores, offices",
+   "rarity": "U",
+   "lean": "nerve",
+   "green": "loudmouth",
+   "favours": [
+    "Machamp",
+    "Rhyhorn"
+   ],
+   "bestAt": "collect",
+   "grows": "honest-accountant"
+  },
+  {
+   "n": 107,
+   "id": "t107",
+   "name": "Repo Man",
+   "group": "City And Business",
+   "found": "cities, dept. stores, offices",
+   "rarity": "U",
+   "lean": "nerve",
+   "green": "greedy",
+   "favours": [
+    "Houndoom",
+    "Persian"
+   ],
+   "bestAt": "collect",
+   "grows": "cold-blooded"
+  },
+  {
+   "n": 108,
+   "id": "t108",
+   "name": "Landlord's Enforcer",
+   "group": "City And Business",
+   "found": "cities, dept. stores, offices",
+   "rarity": "C",
+   "lean": "brawn",
+   "green": "soft",
+   "favours": [
+    "Ursaring",
+    "Rhyhorn"
+   ],
+   "bestAt": "collect",
+   "grows": "cold-blooded"
+  },
+  {
+   "n": 109,
+   "id": "t109",
+   "name": "Process Server",
+   "group": "City And Business",
+   "found": "cities, dept. stores, offices",
+   "rarity": "C",
+   "lean": "stealth",
+   "green": "nervous",
+   "favours": [
+    "Pidgeot",
+    "Meowth"
+   ],
+   "bestAt": "shake-down",
+   "grows": "smooth-talker"
+  },
+  {
+   "n": 110,
+   "id": "t110",
+   "name": "Ex-Cop",
+   "group": "City And Business",
+   "found": "cities, dept. stores, offices",
+   "rarity": "R",
+   "lean": "nerve",
+   "green": "starstruck",
+   "favours": [
+    "Growlithe",
+    "Arcanine"
+   ],
+   "bestAt": "guard-hq",
+   "grows": "by-the-book"
+  },
+  {
+   "n": 111,
+   "id": "t111",
+   "name": "True Believer",
+   "group": "Weirdos, Fanatics And Mystics",
+   "found": "shrines, towers, strange houses",
+   "rarity": "C",
+   "lean": "nerve",
+   "green": "starstruck",
+   "favours": [
+    "Gastly",
+    "Misdreavus"
+   ],
+   "bestAt": "recruit",
+   "grows": "zealot"
+  },
+  {
+   "n": 112,
+   "id": "t112",
+   "name": "Ghost Story Fan",
+   "group": "Weirdos, Fanatics And Mystics",
+   "found": "shrines, towers, strange houses",
+   "rarity": "C",
+   "lean": "nerve",
+   "green": "nervous",
+   "favours": [
+    "Gastly",
+    "Shuppet"
+   ],
+   "bestAt": "scout",
+   "grows": "pathfinder"
+  },
+  {
+   "n": 113,
+   "id": "t113",
+   "name": "Fortune Teller's Assistant",
+   "group": "Weirdos, Fanatics And Mystics",
+   "found": "shrines, towers, strange houses",
+   "rarity": "U",
+   "lean": "charm",
+   "green": "lost",
+   "favours": [
+    "Drowzee",
+    "Natu"
+   ],
+   "bestAt": "recruit",
+   "grows": "charismatic"
+  },
+  {
+   "n": 114,
+   "id": "t114",
+   "name": "Cult Drop-In",
+   "group": "Weirdos, Fanatics And Mystics",
+   "found": "shrines, towers, strange houses",
+   "rarity": "U",
+   "lean": "wits",
+   "green": "soft",
+   "favours": [
+    "Misdreavus",
+    "Duskull"
+   ],
+   "bestAt": "recruit",
+   "grows": "zealot"
+  },
+  {
+   "n": 115,
+   "id": "t115",
+   "name": "Conspiracy Guy",
+   "group": "Weirdos, Fanatics And Mystics",
+   "found": "shrines, towers, strange houses",
+   "rarity": "C",
+   "lean": "wits",
+   "green": "loudmouth",
+   "favours": [
+    "Porygon",
+    "Abra"
+   ],
+   "bestAt": "spy",
+   "grows": "eavesdropper"
+  },
+  {
+   "n": 116,
+   "id": "t116",
+   "name": "Doomsayer",
+   "group": "Weirdos, Fanatics And Mystics",
+   "found": "shrines, towers, strange houses",
+   "rarity": "U",
+   "lean": "nerve",
+   "green": "lazy",
+   "favours": [
+    "Murkrow",
+    "Houndour"
+   ],
+   "bestAt": "post-flyers",
+   "grows": "orator"
+  },
+  {
+   "n": 117,
+   "id": "t117",
+   "name": "Prank Merchant",
+   "group": "Weirdos, Fanatics And Mystics",
+   "found": "shrines, towers, strange houses",
+   "rarity": "C",
+   "lean": "stealth",
+   "green": "clumsy",
+   "favours": [
+    "Gastly",
+    "Haunter"
+   ],
+   "bestAt": "pickpocket",
+   "grows": "light-fingered"
+  },
+  {
+   "n": 118,
+   "id": "t118",
+   "name": "Occult Bookseller",
+   "group": "Weirdos, Fanatics And Mystics",
+   "found": "shrines, towers, strange houses",
+   "rarity": "U",
+   "lean": "wits",
+   "green": "greedy",
+   "favours": [
+    "Misdreavus",
+    "Hypno"
+   ],
+   "bestAt": "work-the-front",
+   "grows": "respectable"
+  },
+  {
+   "n": 119,
+   "id": "t119",
+   "name": "Shrine Sweeper",
+   "group": "Weirdos, Fanatics And Mystics",
+   "found": "shrines, towers, strange houses",
+   "rarity": "U",
+   "lean": "nerve",
+   "green": "lost",
+   "favours": [
+    "Sableye",
+    "Ralts"
+   ],
+   "bestAt": "guard-hq",
+   "grows": "steady"
+  },
+  {
+   "n": 120,
+   "id": "t120",
+   "name": "Dream Walker",
+   "group": "Weirdos, Fanatics And Mystics",
+   "found": "shrines, towers, strange houses",
+   "rarity": "R",
+   "lean": "wits",
+   "green": "soft",
+   "favours": [
+    "Drowzee",
+    "Hypno"
+   ],
+   "bestAt": "spy",
+   "grows": "ghost-in-training"
+  },
+  {
+   "n": 121,
+   "id": "t121",
+   "name": "Scared of Dogs",
+   "group": "MISFITS (comic relief with a hidden strength)",
+   "found": "anywhere, odd moments",
+   "rarity": "C",
+   "lean": "stealth",
+   "green": "nervous",
+   "favours": [
+    "Meowth",
+    "Pidgey"
+   ],
+   "bestAt": "pickpocket",
+   "grows": "light-fingered"
+  },
+  {
+   "n": 122,
+   "id": "t122",
+   "name": "Wrong Uniform",
+   "group": "MISFITS (comic relief with a hidden strength)",
+   "found": "anywhere, odd moments",
+   "rarity": "C",
+   "lean": "charm",
+   "green": "lost",
+   "favours": [
+    "Ditto",
+    "Rattata"
+   ],
+   "bestAt": "recruit",
+   "grows": "charismatic"
+  },
+  {
+   "n": 123,
+   "id": "t123",
+   "name": "Talks to His Pokémon",
+   "group": "MISFITS (comic relief with a hidden strength)",
+   "found": "anywhere, odd moments",
+   "rarity": "C",
+   "lean": "charm",
+   "green": "loudmouth",
+   "favours": [
+    "Pikachu",
+    "Eevee"
+   ],
+   "bestAt": "train",
+   "grows": "driven"
+  },
+  {
+   "n": 124,
+   "id": "t124",
+   "name": "Overly Honest",
+   "group": "MISFITS (comic relief with a hidden strength)",
+   "found": "anywhere, odd moments",
+   "rarity": "U",
+   "lean": "wits",
+   "green": "soft",
+   "favours": [
+    "Chansey",
+    "Slowpoke"
+   ],
+   "bestAt": "collect",
+   "grows": "honest-accountant"
+  },
+  {
+   "n": 125,
+   "id": "t125",
+   "name": "Allergic to Everything",
+   "group": "MISFITS (comic relief with a hidden strength)",
+   "found": "anywhere, odd moments",
+   "rarity": "C",
+   "lean": "brawn",
+   "green": "clumsy",
+   "favours": [
+    "Ledyba",
+    "Caterpie"
+   ],
+   "bestAt": "guard-hq",
+   "grows": "steady"
+  },
+  {
+   "n": 126,
+   "id": "t126",
+   "name": "Lucky Fool",
+   "group": "MISFITS (comic relief with a hidden strength)",
+   "found": "anywhere, odd moments",
+   "rarity": "U",
+   "lean": "nerve",
+   "green": "lazy",
+   "favours": [
+    "Magikarp",
+    "Togepi"
+   ],
+   "bestAt": "guard-hq",
+   "grows": "fortunate"
+  },
+  {
+   "n": 127,
+   "id": "t127",
+   "name": "Sleepwalker",
+   "group": "MISFITS (comic relief with a hidden strength)",
+   "found": "anywhere, odd moments",
+   "rarity": "U",
+   "lean": "stealth",
+   "green": "lazy",
+   "favours": [
+    "Slowpoke",
+    "Drowzee"
+   ],
+   "bestAt": "spy",
+   "grows": "insomniac"
+  },
+  {
+   "n": 128,
+   "id": "t128",
+   "name": "The Collector",
+   "group": "MISFITS (comic relief with a hidden strength)",
+   "found": "anywhere, odd moments",
+   "rarity": "C",
+   "lean": "wits",
+   "green": "greedy",
+   "favours": [
+    "Smeargle",
+    "Kecleon"
+   ],
+   "bestAt": "collect",
+   "grows": "embezzler"
+  },
+  {
+   "n": 129,
+   "id": "t129",
+   "name": "Overeager Intern",
+   "group": "MISFITS (comic relief with a hidden strength)",
+   "found": "anywhere, odd moments",
+   "rarity": "C",
+   "lean": "wits",
+   "green": "starstruck",
+   "favours": [
+    "Rattata",
+    "Pikachu"
+   ],
+   "bestAt": "scout",
+   "grows": "pathfinder"
+  },
+  {
+   "n": 130,
+   "id": "t130",
+   "name": "Moral Compass",
+   "group": "MISFITS (comic relief with a hidden strength)",
+   "found": "anywhere, odd moments",
+   "rarity": "R",
+   "lean": "wits",
+   "green": "soft",
+   "favours": [
+    "Arcanine",
+    "Chansey"
+   ],
+   "bestAt": "rest",
+   "grows": "conscience"
+  },
+  {
+   "n": 131,
+   "id": "t131",
+   "name": "Rival Team Defector",
+   "group": "VETERANS AND SPECIALS (rare, tied to events or earned)",
+   "found": "events, rescues, defections",
+   "rarity": "U",
+   "lean": "nerve",
+   "green": "nervous",
+   "favours": [
+    "His old team's signature Pokémon"
+   ],
+   "bestAt": "spy",
+   "grows": "turncoats-edge"
+  },
+  {
+   "n": 132,
+   "id": "t132",
+   "name": "Jailbird",
+   "group": "VETERANS AND SPECIALS (rare, tied to events or earned)",
+   "found": "events, rescues, defections",
+   "rarity": "U",
+   "lean": "nerve",
+   "green": "greedy",
+   "favours": [
+    "Koffing",
+    "Rattata"
+   ],
+   "bestAt": "smuggle",
+   "grows": "hardened"
+  },
+  {
+   "n": 133,
+   "id": "t133",
+   "name": "Former Gym Trainer",
+   "group": "VETERANS AND SPECIALS (rare, tied to events or earned)",
+   "found": "events, rescues, defections",
+   "rarity": "R",
+   "lean": "nerve",
+   "green": "starstruck",
+   "favours": [
+    "The Gym's type Pokémon"
+   ],
+   "bestAt": "train",
+   "grows": "rival-killer"
+  },
+  {
+   "n": 134,
+   "id": "t134",
+   "name": "Retired Elite's Valet",
+   "group": "VETERANS AND SPECIALS (rare, tied to events or earned)",
+   "found": "events, rescues, defections",
+   "rarity": "R",
+   "lean": "charm",
+   "green": "lost",
+   "favours": [
+    "Dragonair",
+    "Gengar"
+   ],
+   "bestAt": "recruit",
+   "grows": "charismatic"
+  },
+  {
+   "n": 135,
+   "id": "t135",
+   "name": "Washed-Up Ace",
+   "group": "VETERANS AND SPECIALS (rare, tied to events or earned)",
+   "found": "events, rescues, defections",
+   "rarity": "U",
+   "lean": "nerve",
+   "green": "lazy",
+   "favours": [
+    "Charmeleon",
+    "Pidgeot"
+   ],
+   "bestAt": "train",
+   "grows": "mentor"
+  },
+  {
+   "n": 136,
+   "id": "t136",
+   "name": "War Vet",
+   "group": "VETERANS AND SPECIALS (rare, tied to events or earned)",
+   "found": "events, rescues, defections",
+   "rarity": "R",
+   "lean": "brawn",
+   "green": "soft",
+   "favours": [
+    "Machamp",
+    "Arcanine"
+   ],
+   "bestAt": "guard-hq",
+   "grows": "iron-nerved"
+  },
+  {
+   "n": 137,
+   "id": "t137",
+   "name": "Ex-Bodyguard",
+   "group": "VETERANS AND SPECIALS (rare, tied to events or earned)",
+   "found": "events, rescues, defections",
+   "rarity": "R",
+   "lean": "brawn",
+   "green": "loudmouth",
+   "favours": [
+    "Machoke",
+    "Houndoom"
+   ],
+   "bestAt": "guard-hq",
+   "grows": "steady"
+  },
+  {
+   "n": 138,
+   "id": "t138",
+   "name": "Frontier Dropout",
+   "group": "VETERANS AND SPECIALS (rare, tied to events or earned)",
+   "found": "events, rescues, defections",
+   "rarity": "R",
+   "lean": "nerve",
+   "green": "clumsy",
+   "favours": [
+    "Dugtrio",
+    "Kadabra"
+   ],
+   "bestAt": "train",
+   "grows": "clutch"
+  },
+  {
+   "n": 139,
+   "id": "t139",
+   "name": "Heir Gone Wrong",
+   "group": "VETERANS AND SPECIALS (rare, tied to events or earned)",
+   "found": "events, rescues, defections",
+   "rarity": "R",
+   "lean": "charm",
+   "green": "starstruck",
+   "favours": [
+    "Persian",
+    "Kirlia"
+   ],
+   "bestAt": "work-the-front",
+   "grows": "respectable"
+  },
+  {
+   "n": 140,
+   "id": "t140",
+   "name": "Old Gang Boss's Son",
+   "group": "VETERANS AND SPECIALS (rare, tied to events or earned)",
+   "found": "events, rescues, defections",
+   "rarity": "R",
+   "lean": "nerve",
+   "green": "greedy",
+   "favours": [
+    "Murkrow",
+    "Houndoom"
+   ],
+   "bestAt": "hold",
+   "grows": "heir-apparent"
+  },
+  {
+   "n": 141,
+   "id": "t141",
+   "name": "Game Corner Regular",
+   "group": "REGION FLAVOUR (one for each canon region; drawn only in that region)",
+   "found": "Kanto, Johto, Hoenn, Sinnoh, Unova, Kalos, Alola, Galar, Paldea",
+   "rarity": "C",
+   "lean": "charm",
+   "green": "greedy",
+   "favours": [
+    "Abra",
+    "Voltorb"
+   ],
+   "bestAt": "work-the-front",
+   "grows": "high-roller",
+   "region": "kanto"
+  },
+  {
+   "n": 142,
+   "id": "t142",
+   "name": "Bell Tower Pilgrim",
+   "group": "REGION FLAVOUR (one for each canon region; drawn only in that region)",
+   "found": "Kanto, Johto, Hoenn, Sinnoh, Unova, Kalos, Alola, Galar, Paldea",
+   "rarity": "U",
+   "lean": "nerve",
+   "green": "lost",
+   "favours": [
+    "Hoothoot",
+    "Gastly"
+   ],
+   "bestAt": "scout",
+   "grows": "pathfinder",
+   "region": "johto"
+  },
+  {
+   "n": 143,
+   "id": "t143",
+   "name": "Weather Watcher",
+   "group": "REGION FLAVOUR (one for each canon region; drawn only in that region)",
+   "found": "Kanto, Johto, Hoenn, Sinnoh, Unova, Kalos, Alola, Galar, Paldea",
+   "rarity": "C",
+   "lean": "wits",
+   "green": "nervous",
+   "favours": [
+    "Wingull",
+    "Numel"
+   ],
+   "bestAt": "scout",
+   "grows": "weatherwise",
+   "region": "hoenn"
+  },
+  {
+   "n": 144,
+   "id": "t144",
+   "name": "Mine Worker",
+   "group": "REGION FLAVOUR (one for each canon region; drawn only in that region)",
+   "found": "Kanto, Johto, Hoenn, Sinnoh, Unova, Kalos, Alola, Galar, Paldea",
+   "rarity": "C",
+   "lean": "brawn",
+   "green": "lazy",
+   "favours": [
+    "Geodude",
+    "Onix"
+   ],
+   "bestAt": "work-the-front",
+   "grows": "respectable",
+   "region": "sinnoh"
+  },
+  {
+   "n": 145,
+   "id": "t145",
+   "name": "Subway Fixer",
+   "group": "REGION FLAVOUR (one for each canon region; drawn only in that region)",
+   "found": "Kanto, Johto, Hoenn, Sinnoh, Unova, Kalos, Alola, Galar, Paldea",
+   "rarity": "U",
+   "lean": "wits",
+   "green": "clumsy",
+   "favours": [
+    "Klink",
+    "Timburr"
+   ],
+   "bestAt": "guard-hq",
+   "grows": "steady",
+   "region": "unova"
+  },
+  {
+   "n": 146,
+   "id": "t146",
+   "name": "Café Waiter",
+   "group": "REGION FLAVOUR (one for each canon region; drawn only in that region)",
+   "found": "Kanto, Johto, Hoenn, Sinnoh, Unova, Kalos, Alola, Galar, Paldea",
+   "rarity": "C",
+   "lean": "charm",
+   "green": "soft",
+   "favours": [
+    "Spritzee",
+    "Furfrou"
+   ],
+   "bestAt": "work-the-front",
+   "grows": "respectable",
+   "region": "kalos"
+  },
+  {
+   "n": 147,
+   "id": "t147",
+   "name": "Island Guide",
+   "group": "REGION FLAVOUR (one for each canon region; drawn only in that region)",
+   "found": "Kanto, Johto, Hoenn, Sinnoh, Unova, Kalos, Alola, Galar, Paldea",
+   "rarity": "C",
+   "lean": "wits",
+   "green": "lost",
+   "favours": [
+    "Pikipek",
+    "Rockruff"
+   ],
+   "bestAt": "scout",
+   "grows": "pathfinder",
+   "region": "alola"
+  },
+  {
+   "n": 148,
+   "id": "t148",
+   "name": "Football Hooligan",
+   "group": "REGION FLAVOUR (one for each canon region; drawn only in that region)",
+   "found": "Kanto, Johto, Hoenn, Sinnoh, Unova, Kalos, Alola, Galar, Paldea",
+   "rarity": "C",
+   "lean": "brawn",
+   "green": "loudmouth",
+   "favours": [
+    "Machop",
+    "Zigzagoon"
+   ],
+   "bestAt": "guard-hq",
+   "grows": "steady",
+   "region": "galar"
+  },
+  {
+   "n": 149,
+   "id": "t149",
+   "name": "Academy Dropout (adult)",
+   "group": "REGION FLAVOUR (one for each canon region; drawn only in that region)",
+   "found": "Kanto, Johto, Hoenn, Sinnoh, Unova, Kalos, Alola, Galar, Paldea",
+   "rarity": "U",
+   "lean": "wits",
+   "green": "starstruck",
+   "favours": [
+    "Pawmi",
+    "Lechonk"
+   ],
+   "bestAt": "train",
+   "grows": "driven",
+   "region": "paldea"
+  },
+  {
+   "n": 150,
+   "id": "t150",
+   "name": "The Boss's Own Pick (your first-ever Grunt's cousin, appears once, day 30+)",
+   "group": "REGION FLAVOUR (one for each canon region; drawn only in that region)",
+   "found": "Kanto, Johto, Hoenn, Sinnoh, Unova, Kalos, Alola, Galar, Paldea",
+   "rarity": "R",
+   "lean": "charm",
+   "green": "greedy",
+   "favours": [
+    "Your Boss's starter"
+   ],
+   "bestAt": "hold",
+   "grows": "heir-apparent",
+   "once": true
+  }
+ ],
+ "_newTraits": {
+  "Insomniac": "never skips, Night tasks +15%",
+  "Mule": "carries +50% cargo",
+  "Mentor": "+1 XP to every Recruit you train beside him",
+  "Demolisher": "raids on rival buildings +15%",
+  "Road Hog": "smuggle routes +1 stop",
+  "Iron-Nerved": "never flees a raid",
+  "Immovable": "Guard defends two buildings",
+  "Climber": "breaks into upper floors and rooftops",
+  "Ghost-in-Training": "spy missions −20% discovery",
+  "Fencer": "sells stolen goods at +10%",
+  "Locksmith": "opens any vault room one tier up",
+  "Burrower": "smuggle route can't be seized once a week",
+  "Tinkerer": "Lab room effects +20%",
+  "Counterfeiter": "cheaper fake IDs and papers",
+  "Eavesdropper": "hears one rival move a day early",
+  "Planner": "+10% to tasks you set a week ahead",
+  "Oracle": "shows true odds on one action a day",
+  "High Roller": "Front jackpots 2× more often",
+  "Orator": "flyers raise Regard +50%",
+  "Persuader": "Pitch odds +10% for the whole crew",
+  "Trailwise": "Catch in caves +20%",
+  "Bug Whisperer": "Bug-types in his team +10 level cap",
+  "Clutch": "first turn of a defense battle is his",
+  "Gentle Hands": "caught Pokémon start +10 Loyalty",
+  "Nurturer": "stored Pokémon level while he rests",
+  "Patient": "Catch at water routes +20%",
+  "Field Medic": "injured crew heal a day sooner",
+  "Alpha Handler": "his lead Pokémon never flees",
+  "Trapper": "Guard sets one tripwire per night",
+  "Backdoor": "reads a rival's next move once a week",
+  "Eye in the Sky": "Scout never makes the target \"on guard\"",
+  "Broadcaster": "flyers reach a second district",
+  "Sea Legs": "smuggle by sea never fails in storms",
+  "Mirage": "his route is shown wrong to rival spies",
+  "By the Book": "Heat −3 on Guard tasks; refuses to hurt civilians",
+  "Zealot": "recruits his own type; Loyalty never below 40",
+  "Fortunate": "one failed task a week is rerolled",
+  "Conscience": "his Loyalty can't drop below 30, but he refuses the worst jobs",
+  "Turncoat's Edge": "knows the rival's rooms; raid odds +10%",
+  "Hardened": "arrest costs nothing; he serves 1 day, not 3",
+  "Heir Apparent": "Hold at Grunt rank; his Ambition rises twice as fast",
+  "Weatherwise": "his tasks ignore storms and heat waves"
+ }
+}

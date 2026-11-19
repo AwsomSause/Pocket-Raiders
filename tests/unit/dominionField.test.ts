@@ -165,7 +165,8 @@ describe('DOMINION D2: travel (Part 9 A20)', () => {
     expect(blk(r).field.at).toBe(FD.hq);
   });
   it('buying a vehicle: the Bike costs ₽1,000; not twice; the Airship needs HQ Lv. 5', () => {
-    let r = day();
+    // D3's crew step runs overnight (a thief can take a little), so start the Day with exactly ₽1,000.
+    let r = withBlock(day(), (b) => { b.funds = 1000; });
     r = go(r, { t: 'buy', vehicle: 'bike' });
     expect(blk(r).funds).toBe(1000 - 1000);
     expect(blk(r).field.vehicles).toEqual(['bike']);
