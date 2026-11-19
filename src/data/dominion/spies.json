@@ -135,7 +135,10 @@
     "bribedOnce": "You already made an offer.",
     "noTurns": "That's all they'll say. Accuse them, or let it go.",
     "turned": "{name} already works for you.",
-    "noRoom": "Nothing to confront: nobody is under suspicion."
+    "noRoom": "Nothing to confront: nobody is under suspicion.",
+    "noMole": "Needs a crew member of rank 2 or higher who is free and not already inside a rival team.",
+    "planted": "{name} is inside {team} now, reporting back.",
+    "plantedBig": "They're close to the top already: you read this week's plan tonight."
   },
   "ui": {
     "title": "Confront",

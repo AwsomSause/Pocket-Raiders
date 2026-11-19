@@ -13,8 +13,8 @@ import type { RunState } from '../state';
 import { DOMINION_DATA } from './data';
 import { DominionBlockSchema, SPY_ENDS, type DominionBlock, type Member, type SpiesState, type SpyTurn } from './schema';
 import { addWorldStep, fill } from './worldTurn';
-import { addFightSettler } from './field';
-import { addLoyalty, addMorale, crewOf, freshCrewState, leave } from './crew';
+import { addActEffect, addActionGate, addFightSettler } from './field';
+import { addLoyalty, addMorale, crewOf, freshCrewState, leave, rankN } from './crew';
 import { hqFx, spend } from './hqFx';
 import { learnPlan, rivalsOf, teamDef, teamsHere, withRivals } from './rivals';
 import { sheet, voice } from './personality';
@@ -382,6 +382,25 @@ addFightSettler('spy', (_content, block, _run: RunState, fight, outcome) => {
   }
   runAway(b, m, team);
   return [fill(SP().lines.battleLost!, v)];
+});
+
+// ---------- Plant a Mole (Boss action 54, moved here from D5/D9) ----------
+
+/** Who you'd send in: a member of rank 2+ (Recruit or above), free, not already inside a rival team, not a rival's mole. Best Charm + Stealth. */
+export function moleCandidate(b: DominionBlock): Member | null {
+  const inside = new Set(rivalsOf(b).mySpies.map((x) => x.member));
+  const ok = b.members.filter((m) => rankN(m.rank) >= 2 && !crewOf(m).out && !inside.has(m.id) && !isMole(b, m.id));
+  return ok.sort((p, q) => q.stats.charm + q.stats.stealth - (p.stats.charm + p.stats.stealth) || p.id.localeCompare(q.id))[0] ?? null;
+}
+addActionGate((b, def) => (def.id === 'plant-a-mole' && !moleCandidate(b) ? SP().lines.noMole! : null));
+addActEffect('plantMole', (b, x) => {
+  const m = moleCandidate(b);
+  const team = firstTeam();
+  if (!m) return [];
+  withRivals(b).rivals.mySpies.push({ member: m.id, team, day: b.day });
+  // A big success puts them close to the top at once: this week's plan is read tonight.
+  if (x.big) learnPlan(b, team);
+  return [fill(SP().lines.planted!, { name: m.name, team: teamName(team) }) + (x.big ? ` ${SP().lines.plantedBig!}` : '')];
 });
 
 // Third in the World Turn order, after the rival team's own step (this module imports rivals.ts, so it registers after).

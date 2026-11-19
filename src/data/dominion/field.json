@@ -75,6 +75,7 @@
     "declare-war": {"where": "hq", "effect": "war", "win": "You say it out loud, in front of the crew."},
     "peace-talks": {"where": "hq", "chance": 70, "effect": "truceTalk", "win": "A message goes out under a white handkerchief.", "lose": "Your message comes back unopened."},
     "counterstrike": {"kinds": ["any"], "chance": 50, "heat": 6, "failHeat": 8, "dread": 3, "battle": {"chance": 100, "on": "always", "foe": "rival"}, "effect": "rivalHit", "win": "You hit back the same day. They didn't expect it.", "lose": "They were waiting for you."},
+    "plant-a-mole": {"kinds": ["any"], "chance": 45, "heat": 1, "failHeat": 4, "effect": "plantMole", "win": "A quiet word, a forged reference, a new face in their ranks.", "lose": "Their recruiter looks too long at your mole's papers. Not this time."},
     "spy-on-the-boss": {"kinds": ["any"], "chance": 55, "failHeat": 4, "effect": "rivalSpy", "win": "You watch the Boss's windows until the lights go out.", "lose": "A guard dog barks. You run."},
     "extort": { "kinds": ["shop"], "chance": 25, "pay": [150, 600], "weekly": 120, "heat": 5, "failHeat": 12, "regard": -2, "dread": 3, "battle": { "chance": 40, "on": "fail", "foe": "target" }, "control": 8,
       "win": "{owner} pays ₽{pay}. The till is lighter, and it will be every week.", "lose": "{owner} won't pay. Someone has run for the police." },
