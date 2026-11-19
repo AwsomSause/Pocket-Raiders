@@ -9,12 +9,15 @@ import personalityRaw from '../../data/dominion/personality.json';
 import tasksRaw from '../../data/dominion/tasks.json';
 import hqRaw from '../../data/dominion/hq.json';
 import buildingsRaw from '../../data/dominion/buildings.json';
+import rivalsRaw from '../../data/dominion/rivals.json';
+import rivalActionsRaw from '../../data/dominion/rivalActions.json';
+import outsideRaw from '../../data/dominion/outside.json';
 import {
-  ActionsFileSchema, BuildingsFileSchema, CrewFileSchema, HqFileSchema, FieldFileSchema, GruntTypesFileSchema, PersonalityFileSchema, StartFileSchema, TasksFileSchema,
-  type ActionsFile, type Building, type CrewFile, type HqFile, type FieldFile, type GruntType, type PersonalityFile, type StartFile, type Task,
+  ActionsFileSchema, BuildingsFileSchema, OutsideFileSchema, RivalActionsFileSchema, RivalsFileSchema, CrewFileSchema, HqFileSchema, FieldFileSchema, GruntTypesFileSchema, PersonalityFileSchema, StartFileSchema, TasksFileSchema,
+  type ActionsFile, type Building, type OutsideRow, type RivalActionsFile, type RivalsFile, type CrewFile, type HqFile, type FieldFile, type GruntType, type PersonalityFile, type StartFile, type Task,
 } from './schema';
 
-export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; hq: HqFile; buildings: Building[]; personality: PersonalityFile } = {
+export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; hq: HqFile; buildings: Building[]; rivals: RivalsFile; rivalActions: RivalActionsFile; outside: OutsideRow[]; personality: PersonalityFile } = {
   start: StartFileSchema.parse(startRaw),
   actions: ActionsFileSchema.parse(actionsRaw),
   field: FieldFileSchema.parse(fieldRaw),
@@ -23,5 +26,8 @@ export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: Fie
   gruntTypes: GruntTypesFileSchema.parse(gruntTypesRaw).types,
   hq: HqFileSchema.parse(hqRaw),
   buildings: BuildingsFileSchema.parse(buildingsRaw).buildings,
+  rivals: RivalsFileSchema.parse(rivalsRaw),
+  rivalActions: RivalActionsFileSchema.parse(rivalActionsRaw),
+  outside: OutsideFileSchema.parse(outsideRaw).rows,
   personality: PersonalityFileSchema.parse(personalityRaw),
 };

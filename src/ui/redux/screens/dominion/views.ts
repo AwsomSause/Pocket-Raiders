@@ -5,6 +5,7 @@
 
 import './dominion.css';
 import type { HqModel, SetupDraft, TopModel } from '../../../../core/dominion/screens';
+import type { Threat } from '../../../../core/dominion/rivalScreens';
 import { act, esc, mini, tall, TYPE_COLORS } from '../../kit';
 import { rxUrl } from '../../assets';
 import { grainUrl, skylineUrl, warehouseUrl } from './paint';
@@ -171,7 +172,16 @@ export function openingView(lines: string[], shown: number, member: { look: stri
 
 // ---------- mockup 1: the HQ ----------
 
-export function hqView(m: HqModel, notice: string | null, at: number, member: { look: string; atlas: boolean }): string {
+/** Mockup 9's threat row ("TENSION 83 · Giovanni will raid your HQ within 3 nights."): a click opens the Rival File. */
+export function threatView(t: Threat | null, left: number, top: number, width: number): string {
+  if (!t) return '';
+  const bg = t.hot ? 'rgba(255,90,79,.22)' : 'rgba(255,204,51,.16)';
+  return `<div class="a col" style="left:${left}px;top:${top}px;width:${width}px;z-index:6;cursor:pointer"${act('rivalFile')} data-testid="dom-threat">
+    <div class="al ${t.hot ? 'r' : 'y'}" style="background:linear-gradient(90deg,${bg},rgba(20,26,48,.9));padding:6px 10px"><img class="px" src="${img(t.look.replace(/\.png$/, ''))}" alt="" style="width:30px;height:34px;object-fit:cover;object-position:top"><span><span class="t">${esc(t.tag)}</span>${esc(t.text)}</span></div>
+  </div>`;
+}
+
+export function hqView(m: HqModel, notice: string | null, at: number, member: { look: string; atlas: boolean }, threat: Threat | null = null): string {
   const sel = 'background:linear-gradient(90deg,#3a5a9e,#2a3f72);border-radius:6px;padding:5px 8px;box-shadow:0 0 0 2px #8cc0ff,0 0 14px rgba(79,163,255,.45)';
   let left = '';
   if (m.panel === 'orders') {
@@ -225,6 +235,8 @@ export function hqView(m: HqModel, notice: string | null, at: number, member: { 
   ${tabs(0, [0, 1, 2])}
   <div class="a" style="left:330px;top:96px;width:300px;height:360px;z-index:3;cursor:pointer"${act('base')} data-testid="dom-building"></div>
   <div class="a row" style="left:540px;top:92px;z-index:9;gap:6px;font:600 13px var(--ui);color:#dfe5ff;cursor:pointer"${act('base')} data-testid="dom-hq-open"><span class="kc">B</span>HQ menu</div>
+  <div class="a row" style="left:418px;top:92px;z-index:9;gap:6px;font:600 13px var(--ui);color:#dfe5ff;cursor:pointer"${act('rivalFile')} data-testid="dom-rival-open"><span class="kc">R</span>Rivals</div>
+  ${m.panel === 'report' ? '' : threatView(threat, 10, 336, 330)}
   <div class="ping" style="left:120px;top:400px;width:40px;height:14px;--pc:rgba(160,200,255,.7)"></div>
   <div class="ping" style="left:200px;top:420px;width:34px;height:12px;--pc:rgba(160,200,255,.6);animation-delay:-1.1s"></div>
   <img class="spr bob" src="${img('p-rattata')}" alt="" style="left:96px;top:424px;width:46px;height:40px;z-index:4">
