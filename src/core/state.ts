@@ -29,6 +29,7 @@ import type { TwiceToldStore } from './greenneedle/twiceTold';
 import { PondMarkSchema } from './episodes/poliPond';
 import { TimedStageSchema, VariantsSchema, type TimedStage, type Variants } from './expansion/variantLines';
 import { ArenaSchema, SkillInputSchema } from './battle/w1Play';
+import { AiLogSchema } from './ai/schema';
 
 const RngStateSchema = z.object({ a: z.number(), b: z.number(), c: z.number(), d: z.number() });
 // Role Pool Casting: a run saved before the "roleCast" stream existed gets a fixed start state (new runs and migrated v39 runs get it from their seed).
@@ -1621,6 +1622,8 @@ export const RunStateSchema = z.object({
   expansion: ExpansionRunSchema.optional(),
   /** Catalog Overhaul (places, SF102): Pokémon the player left somewhere for a while (a reef guard); they come back through an event (core/co/placesRules.ts). */
   coAway: z.array(z.object({ key: z.string(), mon: PokemonInstanceSchema, region: z.number().int().min(0) })).optional(),
+  /** Claude AI log (run v47; Dominion slice D18, src/ai/ask.ts): every Claude answer by call id, stored the moment it arrives so a reload replays it and never calls again. Absent until the first call. */
+  ai: AiLogSchema.optional(),
 });
 export type RunState = z.infer<typeof RunStateSchema>;
 

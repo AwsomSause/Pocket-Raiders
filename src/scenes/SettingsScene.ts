@@ -26,8 +26,13 @@ import { gameSummary, type SummaryTopic } from '../core/encyclopedia';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { menuView, settingsView } from '../ui/redux/templates';
 import { confirmBox } from '../ui/redux/screens/saves';
+import { openKeyVault } from '../ui/keyVault';
+import { aiRuntime } from '../ai/runtime';
+import { AI_DATA, usedUp } from '../core/ai/rules';
+import { AI_TIERS, CLAUDE_USES, CLAUDE_USE_LABELS } from '../core/ai/schema';
+import { claudeSettingsView, type ClaudeSettingsModel } from '../ui/redux/screens/dominion/claudeViews';
 
-type Page = 'home' | 'search' | 'confirmReset' | 'summary' | SettingCategory;
+type Page = 'home' | 'search' | 'confirmReset' | 'summary' | 'claude' | SettingCategory;
 interface Row {
   option: MenuOption;
   hint: string;
@@ -41,6 +46,14 @@ interface Row {
 /** New UI tab names, in SETTING_CATEGORIES order (the mock-ups' short forms). */
 
 const APPLIES_TAG = { now: '', nextBattle: '  · next battle', restart: '  · restart needed' } as const;
+
+/** Settings > Claude AI's left list (mockup a1): every category, with Claude AI before Save & Data. */
+const CAT_ICONS: Record<SettingCategory, string> = { display: 'g-scope-lens', audio: 'g-tea', gameplay: 'g-choice-band', animations: 'g-star-piece', text: 'g-letter', accessibility: 'g-soothe-bell', controls: 'g-machine-part', story: 'g-journal', data: 'g-storage-key' };
+const CLAUDE_CATS: { id: SettingCategory | 'claude'; label: string; icon: string }[] = [
+  ...SETTING_CATEGORIES.filter((c) => c.id !== 'data').map((c) => ({ id: c.id, label: c.label, icon: CAT_ICONS[c.id] })),
+  { id: 'claude', label: 'Rotom', icon: '' },
+  ...SETTING_CATEGORIES.filter((c) => c.id === 'data').map((c) => ({ id: c.id, label: c.label, icon: CAT_ICONS[c.id] })),
+];
 
 /** Rows of the Data page that are not offered while a run is open. */
 const IN_RUN_HIDDEN: ReadonlySet<string> = new Set(['Import save from a file', 'Replay the tutorial', 'Asset credits', 'Read the update log']);
@@ -64,6 +77,8 @@ export class SettingsScene extends Phaser.Scene {
   private hintText?: Phaser.GameObjects.Text;
   private view: ReduxView | null = null;
   private shown: Row[] = [];
+  /** Nine presses of 9 in a row so far (eight open the hidden Key-Card slot; Dominion slice D18). */
+  private nines = 0;
 
   constructor() {
     super('Settings');
@@ -79,6 +94,7 @@ export class SettingsScene extends Phaser.Scene {
     this.entering = true;
     this.query = '';
     this.notice = '';
+    this.nines = 0;
     this.skinned = skinFor('settings');
     const sid = screenStyleOf('settings', services().session.settings.screenStyles, services().session.profile.stats.runsEnded);
     this.look = sid !== 'original' && hasSettingsLook(sid) ? SETTINGS_LOOKS[sid]! : null;
@@ -90,7 +106,10 @@ export class SettingsScene extends Phaser.Scene {
       render: (c) => this.reduxHtml(c),
       acts: {
         pick: (i) => { this.menu?.focus(Number(i), false); this.menu?.confirm(); },
-        tab: (k) => this.go(SETTING_CATEGORIES[Number(k)]!.id),
+        tab: (k) => this.go(SETTING_CATEGORIES[Number(k)]?.id ?? 'claude'),
+        // Settings > Claude AI (mockup a1): a category in the left list, a tier tile.
+        cat: (k) => this.go(CLAUDE_CATS[Number(k)]?.id ?? 'claude'),
+        tier: (k) => this.setTier(AI_TIERS[Number(k)] ?? 'standard'),
       },
       overs: { over: (i) => { if (!this.shown[Number(i)]?.option.disabled) this.menu?.focus(Number(i), false); } },
     }) : null;
@@ -99,6 +118,7 @@ export class SettingsScene extends Phaser.Scene {
       if (this.page === 'search') return; // typing is handled by the key listener below
       if (a === 'back') this.back();
       // New UI: on a settings page, right steps a value forward and left steps it back (the row shows both arrows).
+      else if (this.view && this.page === 'claude' && (a === 'left' || a === 'right')) this.change('claudeAi', a === 'left');
       else if (this.view && (a === 'left' || a === 'right') && this.shown[this.menu?.index ?? -1]?.id) this.change(this.shown[this.menu!.index]!.id!, a === 'left');
       else this.menu?.handle(a);
     });
@@ -127,6 +147,20 @@ export class SettingsScene extends Phaser.Scene {
 
   /** Types into the search box while the search page is open. */
   private typed(e: KeyboardEvent): void {
+    // The hidden Key-Card slot (Kice 2026-11-18): press 9 eight times on any Settings page.
+    if (e.code === 'Digit9' || e.code === 'Numpad9') {
+      if (++this.nines >= 8) {
+        this.nines = 0;
+        const st = services().session.settings;
+        openKeyVault({ calm: !st.menuAnimations || st.disableAllAnimations, onClose: () => this.afterVault() });
+        this.view?.refresh();
+        return;
+      }
+      if (this.page === 'claude') this.view?.refresh();
+    } else if (this.nines) {
+      this.nines = 0;
+      if (this.page === 'claude') this.view?.refresh();
+    }
     if (this.page !== 'search') return;
     if (e.code === 'Escape') return this.go('home', 8);
     if (e.code === 'ArrowUp' || e.code === 'ArrowDown') return this.menu?.handle(e.code === 'ArrowUp' ? 'up' : 'down');
@@ -158,7 +192,19 @@ export class SettingsScene extends Phaser.Scene {
         { option: { label: 'Game Summary' }, hint: 'A readable summary of everything in the game: Pokémon, moves, items, trainers, events, modes and systems.', action: () => this.go('summary') },
         { option: { label: 'Search settings…' }, hint: 'Type to find a setting by name.', action: () => this.go('search') },
         { option: { label: 'Reset to defaults' }, hint: 'Puts every setting back to how it started. Your saves are not touched.', action: () => this.go('confirmReset') },
+        { option: { label: 'Rotom' }, hint: 'Extra lines from Rotom with your own Key-Card, and how much it has used. The game is complete without it.', action: () => this.go('claude') },
         { option: { label: this.from === 'Hub' ? 'Back to the Hub' : this.from === 'Map' ? 'Back to the map' : 'Back to the title screen' }, hint: '', action: () => this.back() },
+      ];
+    }
+    if (this.page === 'claude') {
+      const byId = (id: string): SettingDef => SETTINGS.find((d) => d.id === id)!;
+      const card = aiRuntime().keys.active();
+      return [
+        toggleRow(byId('claudeAi')),
+        ...CLAUDE_USES.map((u) => toggleRow(byId(`claudeUse.${u}`))),
+        { option: { label: card ? 'Change card (open the Key-Card vault)' : 'Add a card (open the Key-Card vault)' }, hint: 'Pick a Key-Card and paste the key you were sent. It stays in this browser, never in a save.', action: () => this.openVault() },
+        { option: { label: 'Forget key', disabled: !card }, hint: 'Removes the key from this browser. Its spend count stays, so it can never pass $10.', action: () => { aiRuntime().keys.forget(); this.notice = 'Key forgotten. The game plays offline.'; this.render(8); } },
+        back,
       ];
     }
     if (this.page === 'summary') {
@@ -307,7 +353,7 @@ export class SettingsScene extends Phaser.Scene {
     const rows = this.rows();
     this.shown = rows;
     const cat = SETTING_CATEGORIES.find((c) => c.id === this.page)?.label;
-    const title = this.page === 'home' ? 'Settings' : this.page === 'summary' ? 'Game Summary' : this.page === 'search' ? 'Search settings' : this.page === 'confirmReset' ? 'Reset to defaults?' : `Settings · ${cat}`;
+    const title = this.page === 'claude' ? 'Settings · Rotom' : this.page === 'home' ? 'Settings' : this.page === 'summary' ? 'Game Summary' : this.page === 'search' ? 'Search settings' : this.page === 'confirmReset' ? 'Reset to defaults?' : `Settings · ${cat}`;
     // The UIE Options backdrop already has the word "Options" in its corner: the home page leaves the title to the art,
     // and sub-pages put theirs beside it, so the two never print over each other.
     const art = !this.skinned && this.textures.exists('ui.optionsbg');
@@ -370,13 +416,14 @@ export class SettingsScene extends Phaser.Scene {
     const rows = this.shown, index = this.menu?.index ?? 0;
     const text = this.notice || rows[index]?.hint || 'Changes apply at once. Looks never change battle results.';
     const hints = [['Enter', 'choose'], ['Esc', 'back']] as const;
+    if (this.page === 'claude') return claudeSettingsView(this.claudeModel(index));
     const cats = SETTING_CATEGORIES.map((x) => x.id);
     if (cats.includes(this.page as SettingCategory) || this.page === 'search') {
       const search = this.page === 'search';
       return settingsView(c, {
         title: search ? 'Search settings' : 'Settings',
         // The mock-up's tabs carry each category's whole name ("Animations & Effects", "Save & Data"), two lines where it is long.
-        tabs: search ? [`Find: ${this.query}▌`] : SETTING_CATEGORIES.map((x) => x.label),
+        tabs: search ? [`Find: ${this.query}▌`] : [...SETTING_CATEGORIES.map((x) => x.label), 'Rotom'],
         tab: search ? 0 : cats.indexOf(this.page as SettingCategory),
         rows: rows.map((r) => ({ label: r.name ?? r.option.label, value: r.value ?? '', disabled: r.option.disabled })),
         index,
@@ -393,6 +440,50 @@ export class SettingsScene extends Phaser.Scene {
   }
 
   private homeItems: { label: string; note: string; disabled?: boolean; hint: string }[] = [];
+
+  /** Mockup a1's numbers: the tier, the Key-Card in use and its spend, the "Use Claude for" switches. */
+  private claudeModel(focus: number): ClaudeSettingsModel {
+    const settings = services().session.settings;
+    const s = settings.expansion;
+    const keys = aiRuntime().keys;
+    const now = keys.active();
+    const face = now ? AI_DATA.keyCards.find((c) => c.id === now.card) : undefined;
+    const spent = now ? keys.cardSpent(now.card) ?? 0 : 0;
+    const run = AI_DATA.tiers[s.claudeAi].runUsd;
+    const left = Math.max(0, AI_DATA.spendCapUsd - spent);
+    const pill = (v: string): 'g' | 'k' | 'b' | 'y' => (v === 'On' ? 'g' : v === 'Off' ? 'k' : v === 'Rivals only' ? 'b' : 'y');
+    return {
+      cats: CLAUDE_CATS.map((c) => ({ label: c.label, icon: c.icon, ...(c.id === 'claude' ? { on: true } : {}) })),
+      tiers: AI_TIERS.map((t) => ({ id: t, label: AI_DATA.tiers[t].label, blurb: AI_DATA.tiers[t].blurb, price: AI_DATA.tiers[t].runUsd ? `~$${AI_DATA.tiers[t].runUsd.toFixed(2)}` : '$0', note: AI_DATA.tiers[t].note, c: AI_DATA.tiers[t].c })),
+      tier: s.claudeAi,
+      focus,
+      nines: this.nines,
+      card: face ? { ...face, spent, usedUp: usedUp(spent), last: keys.last && Date.now() - keys.last.at < 60_000 ? keys.last.usd : null } : null,
+      runsLeft: run ? `≈ ${Math.floor(left / run)} more ${AI_DATA.tiers[s.claudeAi].label} runs` : null,
+      cap: AI_DATA.spendCapUsd,
+      uses: CLAUDE_USES.map((u) => {
+        const v = SETTINGS.find((d) => d.id === `claudeUse.${u}`)!.show(settings);
+        return { label: CLAUDE_USE_LABELS[u], value: v === 'On' ? 'ON' : v === 'Off' ? 'OFF' : v, cls: pill(v) };
+      }),
+      notice: this.notice,
+    };
+  }
+
+  private setTier(tier: (typeof AI_TIERS)[number]): void {
+    const { session } = services();
+    session.saveSettings({ ...session.settings, expansion: { ...session.settings.expansion, claudeAi: tier } });
+    this.render(this.menu?.index ?? 0);
+  }
+
+  private openVault(): void {
+    const st = services().session.settings;
+    this.nines = 0;
+    openKeyVault({ calm: !st.menuAnimations || st.disableAllAnimations, onClose: () => this.afterVault() });
+  }
+
+  private afterVault(): void {
+    if (this.scene.isActive()) this.render(this.menu?.index ?? 0);
+  }
 
   /** A live sample of the chosen theme, text size and popup size, drawn from the saved settings on the right. */
   private preview(ui: Phaser.GameObjects.Container): void {
