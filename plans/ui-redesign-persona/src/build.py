@@ -13,6 +13,7 @@ body = f"""<div class="vw">
 <div class="vw-stagewrap" id="vw-wrap"><div class="stage" id="stage"></div></div>
 <section class="vw-notes" id="vw-notes" aria-live="polite"></section>
 </div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="rough" x="-10%" y="-20%" width="120%" height="140%"><feTurbulence type="fractalNoise" baseFrequency=".022 .06" numOctaves="3" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="26" xChannelSelector="R" yChannelSelector="G"/></filter><filter id="rough2" x="-5%" y="-10%" width="110%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="9" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="9"/></filter></svg>
 <script>const PASSES={json.dumps(passes, ensure_ascii=False)};</script>
 <script>
 {js}

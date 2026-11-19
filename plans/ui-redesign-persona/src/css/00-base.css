@@ -2,7 +2,7 @@
 :root{
   --vw-bg:#111014; --vw-panel:#1b1a20; --vw-line:#34323c; --vw-fg:#f3f1ec; --vw-dim:#a9a5b3; --vw-acc:#ff2a45;
   --red:#e4002b; --red2:#b80022; --ink:#0c0b0d; --paper:#ffffff; --bone:#f2efe6; --cyan:#19d3ff; --gold:#ffd400;
-  --hp:#3ee06a; --hpmid:#ffcc00; --hplow:#ff3b3b;
+  --k:#000;--w:#fff;--on:#fff;--accw:#e4002b;--hp:#3ee06a; --hpmid:#ffcc00; --hplow:#ff3b3b;
   --f-disp:'Anton','Impact','Arial Narrow',sans-serif; --f-cond:'Barlow Condensed','Arial Narrow',sans-serif;
   --f-slab:'Alfa Slab One','Rockwell',serif; --f-fat:'Abril Fatface','Georgia',serif; --f-mono:'Rubik Mono One','Arial Black',sans-serif;
   --f-mark:'Permanent Marker','Comic Sans MS',cursive;
@@ -41,14 +41,14 @@ body{margin:0;background:var(--vw-bg);color:var(--vw-fg);font:15px/1.45 var(--f-
 body.shot{padding:0}body.shot .vw{max-width:none;gap:0}body.shot .vw>*:not(.vw-stagewrap){display:none}body.shot .vw-stagewrap{width:1280px;height:720px;aspect-ratio:auto;border:0}
 
 /* ===== the stage ===== */
-.stage{position:absolute;left:0;top:0;width:1280px;height:720px;transform-origin:0 0;transform:scale(var(--k,1));overflow:hidden;background:var(--ink);color:var(--paper);font:700 22px/1.2 var(--f-cond);letter-spacing:0;user-select:none}
+.stage{position:absolute;left:0;top:0;width:1280px;height:720px;transform-origin:0 0;transform:scale(var(--scale,1));overflow:hidden;background:var(--ink);color:var(--paper);font:700 22px/1.2 var(--f-cond);letter-spacing:0;user-select:none}
 .stage *{box-sizing:border-box}
 .scr{position:absolute;inset:0;overflow:hidden}
 .abs{position:absolute}
 .spr{display:block;line-height:0;font-style:normal}
 .px{image-rendering:pixelated;display:block;max-width:none;zoom:var(--z,1)}
-.ol{filter:drop-shadow(1px 0 0 #fff) drop-shadow(-1px 0 0 #fff) drop-shadow(0 1px 0 #fff) drop-shadow(0 -1px 0 #fff)}
-.olk{filter:drop-shadow(1px 0 0 #000) drop-shadow(-1px 0 0 #000) drop-shadow(0 1px 0 #000) drop-shadow(0 -1px 0 #000)}
+.ol{filter:drop-shadow(1px 0 0 var(--w)) drop-shadow(-1px 0 0 var(--w)) drop-shadow(0 1px 0 var(--w)) drop-shadow(0 -1px 0 var(--w))}
+.olk{filter:drop-shadow(1px 0 0 var(--k)) drop-shadow(-1px 0 0 var(--k)) drop-shadow(0 1px 0 var(--k)) drop-shadow(0 -1px 0 var(--k))}
 .flip{transform:scaleX(-1)}
 [data-go]{cursor:pointer}
 .stage.still *,.stage.still *::before,.stage.still *::after{animation-duration:.001s!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.001s!important}

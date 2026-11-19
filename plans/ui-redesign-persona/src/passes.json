@@ -96,5 +96,72 @@
    "m": "Opening Pause, picking a word and landing on its page is one unbroken move; the trainer shrinks from the hub into the Trainer card. Settings pages slide along the rail the same way.",
    "k": "Mega Evolution uses the game's own Mega ring and stone art, Exp bars fill the way they always have, and Red's victory line is six dots, because Red never talks."
   }
+ },
+ {
+  "n": 6,
+  "name": "Blue version: Midnight",
+  "change": "The style stops being one skin. Pokémon games come as versions, and so do Persona games, so each trainer now gets a version that borrows a different Persona. First is Blue version, taken from Persona 3 Reload: deep water blue, cyan light and glow instead of red and black, one clean slant instead of jagged cuts, bubbles rising where the dots were, a moon beside the stage stamp. The battle command star becomes a ring with a turning dashed rim. Blue stands where Red stood on every screen, with his own win line. Use the Version buttons above the stage to switch; all 27 screens have both.",
+  "pages": [],
+  "q": {
+   "x": "It is calmer than Phantom on purpose, but the glow, the moon and the water give it its own kind of show. Having two looks at all is the big jump.",
+   "b": "Passes 1 to 5 were one look with no way to tell runs apart. Now the look itself says whose run it is. Colours were also pulled out into named tokens, which is what makes versions possible.",
+   "p": "No new pages this pass; every existing page gained a second look. A Version select page comes in pass 9.",
+   "m": "Same pages, same keys. Settings › Look will get a Version row in pass 9.",
+   "k": "More than any pass so far: Red and Blue versions are the oldest Pokémon idea there is, and the rival finally has his own look."
+  }
+ },
+ {
+  "n": 7,
+  "name": "Yellow version: Channel",
+  "change": "The third version, taken from Persona 4 Golden. Where Phantom cuts and Midnight glows, Channel is a TV set: bright yellow with moving colour bars and scan lines, every panel rounded with a thick black outline and a drop shadow, chunky friendly lettering, a spinning sun as the weather forecast beside the stage stamp, and the battle command star turned into a rounded TV screen. Hilda is the trainer. All 27 screens.",
+  "pages": [],
+  "q": {
+   "x": "It is the loudest of the three and the most cheerful. The colour bars and the thick outlines read from across a room.",
+   "b": "Pass 6 proved a second version could work by changing colour and glow. This one changes shape as well: slanted cut panels become rounded outlined ones, which the token work in pass 6 did not cover, so accent text got its own token too.",
+   "p": "No new pages; every page gained a third look.",
+   "m": "Unchanged. The Settings rows turn into rounded switches and sliders here, which suits them better than slants did.",
+   "k": "Yes. Yellow version was the Pikachu one, and this is the look where the sprites feel most at home: bright, toy-like, sunny."
+  }
+ },
+ {
+  "n": 8,
+  "name": "Green version: Fantasia",
+  "change": "The fourth version, taken from Metaphor: ReFantazio. Nothing here is flat colour: backgrounds are grainy verdigris paint, the black shapes have torn, brushed edges, and thin gilt lines frame every panel. Lettering is a tall serif with a gold drop capital and italics. The slant is gone; everything sits upright and is built on circles: an astrolabe turns behind the pages, map stops are ringed medals, and the battle commands sit around a turning wheel instead of a star. Green is the trainer. All 27 screens.",
+  "pages": [],
+  "q": {
+   "x": "In a different way from the others: rich instead of loud. The turning gilt rings, the paint grain and the serif capitals make it look like a storybook.",
+   "b": "Midnight and Channel changed colour and panel shape. Fantasia changes the material (paint and paper instead of flat ink), the lettering and the geometry, and moves the six battle commands onto a wheel.",
+   "p": "No new pages; every page gained a fourth look.",
+   "m": "Unchanged in structure. The pause words stand upright with diamond bullets, and Settings rows read like a ledger with gilt rules.",
+   "k": "Green version was the very first Pokémon game in Japan, so it suits the old-book look. Types sit on small heraldic ribbons and HP bars keep their colours inside gilt frames."
+  }
+ },
+ {
+  "n": 9,
+  "name": "Pick your version",
+  "change": "The four looks stop being a hidden switch and become a choice the player makes. A new Version Select page lines the trainers up in five slanted columns, each drawn in its own style, and the one you pick opens wide. A fifth version arrives, Gold, in the style of the Velvet Room: blue curtains, gold trim, arched windows, and titles dealt out as playing cards. Settings › Look now names your version, the title screen wears a version tag, and switching plays a full-screen flash with the version's name.",
+  "pages": [
+   "Version select"
+  ],
+  "q": {
+   "x": "Yes. The select page shows all five styles side by side at once, which no earlier pass could, and the Gold version adds a rich, quiet look to contrast the loud ones.",
+   "b": "Passes 6 to 8 added looks you could only reach from the viewer. Now the game itself has a page and a setting for them, a trainer tied to each, and a proper switch animation.",
+   "p": "One new page, Version Select, so the choice is not buried in a settings row.",
+   "m": "Settings › Look gets a Version row and a preview that opens the select page. The Main Menu title carries the version tag with a key to change it.",
+   "k": "Very much: Red, Blue, Yellow, Green and Gold versions are how Pokémon games have always been sold, each with a cover Pokémon."
+  }
+ },
+ {
+  "n": 10,
+  "name": "Every version gets its own stage",
+  "change": "Until now the versions shared one layout and changed its paint. This pass gives each one its own staging for the two screens you see most, the title and the pause hub. Blue rises out of a tide under a full moon, with the menu as a staircase of slanted words. Yellow has the trainer climbing out of a TV set, with the menu as a stack of colourful show cards. Green sets the trainer inside an astrolabe ring with the menu running around its rim. Gold deals the menu as seven tarot cards under a spotlight. Each title also shows that version's own cover Pokémon. Red keeps the angled Phantom layout as the baseline. All five versions were checked on every page for cut-off or overlapping text.",
+  "pages": [],
+  "q": {
+   "x": "Yes. The five title screens no longer look like recolours of each other; each has its own scene, shapes and movement.",
+   "b": "Passes 6 to 9 changed colours, lettering and panel shapes. This one changes where things stand and how the menu is built, so a version is recognisable even as a silhouette.",
+   "p": "No new pages. Instead the same two pages exist in five different layouts.",
+   "m": "The pause hub is the menu, and it is the page that changes most: a staircase, show cards, a ring, or a card spread. Settings is one of its seven entries in every version.",
+   "k": "Each version has its own cover Pokémon on the title (Charizard, Gyarados, Pikachu, Venusaur, Gengar), the way each Pokémon game has its own box art."
+  }
  }
 ]

@@ -12,3 +12,9 @@ function rnd(seed){let h=seed>>>0||1;return()=>((h=Math.imul(h^h>>>15,2246822507
 function ransom(str,seed=7,cls=''){const r=rnd(seed);return`<span class="rs ${cls}" aria-label="${str}">`+[...str].map(ch=>ch===' '?'<i></i>':`<b class="r${Math.floor(r()*6)}" style="--a:${(r()*12-6).toFixed(1)}deg;--y:${Math.round(r()*10-5)}px;--s:${(0.86+r()*0.3).toFixed(2)}">${ch}</b>`).join('')+'</span>'}
 const keys=(...k)=>`<div class="keys">${k.map(([a,b])=>`<span class="key"><b>${a}</b>${b}</span>`).join('')}</div>`;
 const hp=(cur,max,cls='')=>{const p=Math.round(cur/max*100);return`<span class="hpbar ${cls} ${p<=20?'low':p<=50?'mid':''}"><i style="width:${p}%"></i></span>`};
+/* versions (liveries), from pass 6: each one borrows a different Persona game and puts a different trainer on screen */
+let LIV='phantom';
+const HEROES={phantom:['red','Red'],midnight:['blue','Blue'],channel:['hilda','Hilda'],fantasia:['green','Green'],velvet:['nate','Nate']};
+const H=()=>{const h=HEROES[LIV]||HEROES.phantom;return{k:h[0],n:h[1]}};
+const WINLINE={phantom:['“. . . . . .”','NEVER SAYS MUCH'],midnight:['“Smell ya later!”','NEVER CHANGES'],channel:['“We did it, team!”','ALWAYS GRINNING'],fantasia:['“Fufu. Too easy.”','NEVER MISSES A TRICK'],velvet:['“Let’s go, partner!”','ALWAYS READY']};
+const LIVERIES={since:6,intro:{6:'midnight',7:'channel',8:'fantasia',9:'velvet'},list:[['phantom','Red · Phantom',6],['midnight','Blue · Midnight',6],['channel','Yellow · Channel',7],['fantasia','Green · Fantasia',8],['velvet','Gold · Velvet',9]]};

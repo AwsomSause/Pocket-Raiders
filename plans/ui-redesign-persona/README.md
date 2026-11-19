@@ -8,9 +8,11 @@ Mockups only. Nothing here changes the game.
 - `src/` rebuilds it: `python3 src/build.py`. `src/js/*.js` holds the screens (a screen can have a newer version from a later pass), `src/css/NN.css` holds the styles pass NN added, all nested under `.pNN`.
 - `node src/shoot.cjs <pass>` screenshots every screen of a pass and checks that no text is cut off, off-screen or sitting on other text. `python3 src/sheet.py pNN 3` makes contact sheets. `node src/tour.cjs` records a click-through video.
 - `sprites/` is game art copied by `src/assets.py` from `public/assets/images` (the director's packs); `sprites/PROVENANCE.csv` lists where each file came from. `fonts/` are open-licence Google Fonts fetched by `src/fonts.py`.
-- `shots/p05-sheet*.jpg`, `p10-…` and so on are the contact sheets shown to Kice at each interval.
+- `shots/p05-sheet*.jpg` and `shots/interval-N-sheet*.jpg` are the contact sheets shown to Kice at each interval (`python3 src/grid.py` lays chosen screenshots out as a grid).
+- From pass 6 the page has Version buttons. `node src/shoot.cjs <pass> <version>` checks one version (phantom, midnight, channel, fantasia, velvet). A version is a block of CSS under `.pN[data-liv=name]` that mostly resets colour and font tokens, so new components should be built from the tokens in `src/css/00-base.css`.
 - Every animation stops under reduced motion.
 
 | Interval | Passes | Big change |
 |---|---|---|
 | 1 | 1 to 5 | The Phantom kit (Persona 5): red, black and white on a slant. Battle command burst, a page each for moves, party, bag; stage stamp, route map, talk then choice, reward cards, Mart; pause hub and six Settings pages; every page change is a morph. |
+| 2 | 6 to 10 | Five versions, each with its own trainer and cover Pokémon: Red (Persona 5), Blue (Persona 3: moon, tide, glow), Yellow (Persona 4: TV set, colour bars, rounded cards), Green (Metaphor: ink, gilt rings, serif capitals), Gold (the Velvet Room: curtains, playing cards). New Version Select page, a Version row in Settings › Look, a flash when you switch, and a different title and pause layout for each version. |

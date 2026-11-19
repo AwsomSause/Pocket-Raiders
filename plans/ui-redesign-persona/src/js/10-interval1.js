@@ -3,16 +3,16 @@ const PARTY=[['charizard','Charizard',58,214,236,['fire','flying']],['pikachu','
 scr('title','Start','Title',1,()=>`<div class="bgr"></div><div class="burst" style="--x:78%;--y:60%" aria-hidden="true"></div><div class="dots" aria-hidden="true"></div>
 <div class="shard" style="--cp:polygon(0 0,46% 0,30% 100%,0 100%);inset:0" aria-hidden="true"></div>
 <div class="shard" style="--cp:polygon(58% 100%,100% 38%,100% 100%);inset:0" aria-hidden="true"></div>
-<div class="heroes">${im('p-charizard',6,'ol','position:absolute;right:0;bottom:110px')}${im('t-red',6,'ol','position:absolute;left:40px;bottom:-30px')}${im('p-pikachu',4,'ol','position:absolute;left:250px;bottom:10px')}</div>
+<div class="heroes">${im('p-charizard',6,'ol','position:absolute;right:0;bottom:110px')}${im('t-'+H().k,6,'ol','position:absolute;left:40px;bottom:-30px')}${im('p-pikachu',4,'ol','position:absolute;left:250px;bottom:10px')}</div>
 <div class="logo">${ransom('POCKET',11)}${ransom('RAIDERS',23)}</div>
 <div class="tag">a Pokémon roguelike</div>
 <div class="blade on press" data-go="menu" style="--sh:#000">Press any button</div>
 <div class="ver">BETA 0.8 · FAN PROJECT</div>`);
 scr('menu','Start','Main menu',1,(P)=>`<div class="bgk"></div><div class="shard" style="--c:var(--red);--cp:polygon(52% 0,100% 0,100% 100%,30% 100%);inset:0" aria-hidden="true"></div><div class="burst" style="--x:80%;--y:70%" aria-hidden="true"></div>
 <div class="hd"><small>POCKET RAIDERS</small>Main menu</div>
-<div class="list">${[['Continue','Red · Johto · Stage 14 of 30','map'],['New run','Pick a trainer and a starter'],['Evil Mode','Run the team. Take the region.'],['Hub Town','Shops, gallery, records'],['Pokédex','412 seen · 187 caught'],['Settings','','set']].map(([a,b,g],i)=>`<div class="blade${i?'':' on'}" style="--i:${i}"${g?` data-go="${g==='map'?(P>=3?'map':'battle'):g}"`:''}>${a}${b&&!i?`<small>${b}</small>`:''}</div>`).join('')}</div>
-<div class="who" data-vt="hero">${im('t-red',8,'sh','position:absolute;left:26px;top:22px')}${im('t-red',8,'ol','position:relative')}</div>
-<div class="card"><b>Last save</b>Red · 3 badges · ₽12,480<br>Charizard Lv.58 leads a team of 6</div>
+<div class="list">${[['Continue',H().n+' · Johto · Stage 14 of 30','map'],['New run','Pick a trainer and a starter'],['Evil Mode','Run the team. Take the region.'],['Hub Town','Shops, gallery, records'],['Pokédex','412 seen · 187 caught'],['Settings','','set']].map(([a,b,g],i)=>`<div class="blade${i?'':' on'}" style="--i:${i}"${g?` data-go="${g==='map'?(P>=3?'map':'battle'):g}"`:''}>${a}${b&&!i?`<small>${b}</small>`:''}</div>`).join('')}</div>
+<div class="who" data-vt="hero">${im('t-'+H().k,8,'sh','position:absolute;left:26px;top:22px')}${im('t-'+H().k,8,'ol','position:relative')}</div>
+<div class="card"><b>Last save</b>${H().n} · 3 badges · ₽12,480<br>Charizard Lv.58 leads a team of 6</div>
 ${keys(['Z','Confirm'],['X','Back'])}`);
 scr('battle','Battle','Command',1,()=>`<div class="art" style="background-image:url(${SP}a-grass-bg.png)"></div>
 ${im('a-grass-b',4,'','position:absolute;left:0;top:60px')}${im('a-grass-a',4,'','position:absolute;left:0;top:192px')}
@@ -27,7 +27,7 @@ scr('event','Run','Event',1,()=>`<div class="art" style="background-image:url(${
 <div class="hd"><small>STAGE 14 · JOHTO</small>Event</div>
 <div class="npc">${im('t-oak',6,'ol')}</div>
 <div class="opts">${['Track it down','Leave berries as bait','Say you are busy'].map((c,i)=>`<div class="blade${i?'':' on'}" style="--i:${i};--r:${-3+i}deg">${c}</div>`).join('')}</div>
-<div class="who">Prof. Oak</div><div class="dlg">Ah, Red! A wild Dragonite has been raiding the berry carts on Route 22. Nobody has been hurt, but the farmers are worried. Could your team look into it?</div>
+<div class="who">Prof. Oak</div><div class="dlg">Ah, ${H().n}! A wild Dragonite has been raiding the berry carts on Route 22. Nobody has been hurt, but the farmers are worried. Could your team look into it?</div>
 ${keys(['Z','Choose'],['X','Log'])}`);
 scr('pause','Menus','Pause menu',1,()=>`<div class="bgr"></div><div class="burst" style="--x:20%;--y:80%" aria-hidden="true"></div><div class="dots" aria-hidden="true"></div>
 <div class="shard" style="--cp:polygon(46% 0,100% 0,100% 100%,40% 100%);inset:0" aria-hidden="true"></div>
@@ -85,7 +85,7 @@ scr('map','Run','Route map',3,()=>`<div class="bgk"></div><div class="tex" aria-
 <div class="shard" style="--cp:polygon(0 0,100% 0,100% 12%,0 26%);inset:0" aria-hidden="true"></div><div class="shard" style="--cp:polygon(0 86%,100% 78%,100% 100%,0 100%);inset:0" aria-hidden="true"></div>
 <svg viewBox="0 0 1280 720" aria-hidden="true">${LINKS.map(([a,b])=>`<path class="ln" d="M${NODES[a][0]} ${NODES[a][1]} L${NODES[b][0]} ${NODES[b][1]}"/>`).join('')}${LINKS.map(([a,b,o])=>`<path class="ln2${o?' old':''}" d="M${NODES[a][0]} ${NODES[a][1]} L${NODES[b][0]} ${NODES[b][1]}"/>`).join('')}</svg>
 ${NODES.map(([x,y,c,g],i)=>`<div class="nd ${c}" style="left:${x}px;top:${y}px"${c==='sel'?' data-go="event"':''}>${g==='ball'?im('ball-pb',3):g==='vs'?im('ball-ub',3):g?`<b>${g}</b>`:''}</div>`).join('')}
-<div class="you" style="left:412px;top:260px">${im('t-red',2,'ol')}</div><div class="youtag" style="left:396px;top:432px">You are here</div>
+<div class="you" style="left:412px;top:260px">${im('t-'+H().k,2,'ol')}</div><div class="youtag" style="left:396px;top:432px">You are here</div>
 <div class="cols">${[12,13,14,15,16,17].map((n,i)=>`<span style="left:${150+i*150}px" class="${n===14?'on':''}">${n}</span>`).join('')}</div>
 ${day()}<div class="wallet"><small>MONEY</small>₽12,480</div>
 <div class="stop"><small>NEXT STOP · STAGE 15</small><h3>Trainer</h3><h4>Dragon Tamer Kai</h4><div class="pic">${im('c-dragon_tamer',2,'ol')}</div><p>3 Pokémon · <b>Lv.56 to 58</b></p><p>Prize <b>₽1,240</b> and one reward pick</p><p>Rival Silver waits at <b>stage 17</b></p></div>
@@ -93,7 +93,7 @@ ${mini()}${keys(['Z','Go'],['C','Party'],['Esc','Menu'])}`);
 const oakScene=()=>`<div class="art" style="background-image:url(${SP}e-city_night.png)"></div><div class="dim" style="background:rgba(8,6,10,.35)"></div><div class="strip r" aria-hidden="true"></div><div class="strip" aria-hidden="true"></div>
 <div class="bust">${im('t-oak',9,'sh','position:absolute;left:18px;top:16px')}${im('t-oak',9,'ol','position:relative')}</div>`;
 scr('event','Run','Event · talk',3,()=>`${oakScene()}${day()}
-<div class="name">Prof. Oak</div><div class="talk" data-go="choice">Ah, Red! A wild <em>Dragonite</em> has been raiding the berry carts on Route 22. Nobody has been hurt, but the farmers are worried. Could your team look into it?</div><div class="nextb" aria-hidden="true">▼</div>
+<div class="name">Prof. Oak</div><div class="talk" data-go="choice">Ah, ${H().n}! A wild <em>Dragonite</em> has been raiding the berry carts on Route 22. Nobody has been hurt, but the farmers are worried. Could your team look into it?</div><div class="nextb" aria-hidden="true">▼</div>
 ${keys(['Z','Next'],['X','Log'],['Hold C','Skip'])}`);
 scr('choice','Run','Event · choice',3,()=>`${oakScene()}${day()}
 <div class="chs">${[['Track it down','Fight Dragonite Lv.60. You may catch it.'],['Leave berries as bait','Costs 2 Sitrus Berries. No fight, small reward.'],['Say you are busy','Nothing happens. Oak remembers this run.']].map(([a,b],i)=>`<div class="ch${i?'':' on'}" style="--i:${i}"${i?'':' data-go="reward"'}><kbd>${i+1}</kbd><b>${a}</b><span>${b}</span></div>`).join('')}</div>
@@ -114,7 +114,7 @@ scr('shop','Run','Poké Mart',3,()=>`<div class="bgk"></div><div class="shard" s
 /* ---- pass 4 ---- */
 const redbg=(x='20%',y='80%')=>`<div class="bgr"></div><div class="burst" style="--x:${x};--y:${y}" aria-hidden="true"></div><div class="dots" aria-hidden="true"></div>`;
 scr('pause','Menus','Pause menu',4,()=>`${redbg('75%','60%')}<div class="shard" style="--cp:polygon(0 0,40% 0,22% 100%,0 100%);inset:0" aria-hidden="true"></div>
-<div class="hero" data-vt="hero">${im('t-red',11,'sh','position:absolute;left:30px;top:24px')}${im('t-red',11,'ol','position:relative')}</div>
+<div class="hero" data-vt="hero">${im('t-'+H().k,11,'sh','position:absolute;left:30px;top:24px')}${im('t-'+H().k,11,'ol','position:relative')}</div>
 <div class="hd" style="top:10px"><small>STAGE 14 OF 30 · JOHTO</small>Pause</div>
 <div class="hub">${[['Party','6 Pokémon · 1 fainted','summary'],['Bag','','bag'],['Pokédex','','dex'],['Trainer card','','card'],['Save','','save'],['Settings','','set'],['Quit run','','title']].map(([a,b,g],i)=>`<div class="h${i?'':' on'}" style="--i:${i};--r:${[-5,-2,-4,-1,-3,-5,-2][i]}deg;--ml:${[0,40,14,56,26,6,44][i]}px" data-go="${g}">${a}${b?`<small>${b}</small>`:''}</div>`).join('')}</div>
 <div class="facts"><span><b>MONEY</b>₽12,480</span><span><b>BADGES</b>3</span><span><b>TIME</b>1:42:07</span></div>
@@ -135,15 +135,15 @@ scr('dex','Menus','Pokédex',4,()=>`<div class="bgk"></div><div class="shard" st
 <div class="dexgrid">${DEX.map(([s,n,u],i)=>`<div class="dx${u?' unk':''}${s==='gengar'?' on':''}" style="--i:${i}"><small>${String(n).padStart(3,'0')}</small>${im('p-'+s,.9)}</div>`).join('')}</div>
 <div class="dexcard"><span class="no">No. 094</span><h3>Gengar</h3><div style="display:flex;gap:8px">${ty('ghost')}${ty('poison')}</div><div class="pic">${im('p-gengar',2.2,'ol')}</div><p>Seen 14 times · Caught 3 · Best level 71</p><p><b>MASTERY: EXPERT</b> · 2 more wins to Master</p><div class="rank"><i class="f"></i><i class="f"></i><i class="f"></i><i></i></div></div>
 ${keys(['Z','Entry'],['Q E','Region'],['X','Back'])}`);
-scr('card','Menus','Trainer card',4,()=>`<div class="bgk"></div><div class="burst" style="--x:30%;--y:50%;background:repeating-conic-gradient(rgba(228,0,43,.5) 0 5deg,transparent 5deg 10deg)" aria-hidden="true"></div>
+scr('card','Menus','Trainer card',4,()=>`<div class="bgk"></div><div class="burst" style="--x:30%;--y:50%;background:repeating-conic-gradient(color-mix(in srgb,var(--red) 50%,transparent) 0 5deg,transparent 5deg 10deg)" aria-hidden="true"></div>
 <div class="hd"><small>PAUSE</small>Trainer card</div>
-<div class="tcard"><div class="pic" data-vt="hero">${im('t-red',6,'ol')}</div><h3>${ransom('RED',3)}</h3><div class="id">ID 48213 · PALLET TOWN</div>
+<div class="tcard"><div class="pic" data-vt="hero">${im('t-'+H().k,6,'ol')}</div><h3>${ransom(H().n.toUpperCase(),3)}</h3><div class="id">ID 48213 · PALLET TOWN</div>
 <dl><dt>Runs</dt><dd>23</dd><dt>Champion wins</dt><dd>4</dd><dt>Best stage</dt><dd>Region 3 · 28</dd><dt>Pokédex</dt><dd>187 caught</dd><dt>Play time</dt><dd>31:08</dd></dl>
 <div class="badges">${[1,1,1,0,0,0,0,0].map(f=>`<i class="${f?'f':''}"></i>`).join('')}</div></div>
 <div class="tside"><div class="kv" style="--i:0"><small>THIS RUN</small><b>Johto · Stage 14</b><p>12 battles won · 0 lost</p></div><div class="kv" style="--i:1"><small>RIVAL</small><b>Silver</b><p>Met twice. He leads 0 to 2.</p></div><div class="kv" style="--i:2"><small>BLESSING</small><b>Lugia's Calm</b><p>Rain never weakens your Fire moves.</p></div></div>${keys(['A','Flip card'],['X','Back'])}`);
 scr('save','Menus','Save',4,()=>`${redbg('90%','90%')}<div class="shard" style="--cp:polygon(0 0,100% 0,100% 100%,84% 100%,74% 0);inset:0;opacity:.25" aria-hidden="true"></div><div class="shard" style="--cp:polygon(0 0,30% 0,8% 100%,0 100%);inset:0" aria-hidden="true"></div>
 <div class="hd onred"><small>AUTO-SAVE IS ON · EVERY STAGE</small>Save</div>
-<div class="slots">${[['Red · Johto · Stage 14 of 30','3 badges · ₽12,480 · 1:42:07 · saved just now',-2,1],['Blue · Evil Mode · Kanto · Day 22','Team Nova · 9 districts · 6:15:40',1,1],['Empty','Start a second run here',-1,0]].map(([a,b,r,f],i)=>`<div class="slot${i?'':' on'}${f?'':' empty'}" style="--r:${r}deg;--i:${i}"><div class="no">${i+1}</div><div><h4>${a}</h4><p>${b}</p></div><div class="team">${f?(i?['persian','gengar','koffing']:['charizard','pikachu','gengar','lucario','gyarados','snorlax']).map(s=>im('p-'+s,.55)).join(''):''}</div></div>`).join('')}</div>
+<div class="slots">${[[H().n+' · Johto · Stage 14 of 30','3 badges · ₽12,480 · 1:42:07 · saved just now',-2,1],['Blue · Evil Mode · Kanto · Day 22','Team Nova · 9 districts · 6:15:40',1,1],['Empty','Start a second run here',-1,0]].map(([a,b,r,f],i)=>`<div class="slot${i?'':' on'}${f?'':' empty'}" style="--r:${r}deg;--i:${i}"><div class="no">${i+1}</div><div><h4>${a}</h4><p>${b}</p></div><div class="team">${f?(i?['persian','gengar','koffing']:['charizard','pikachu','gengar','lucario','gyarados','snorlax']).map(s=>im('p-'+s,.55)).join(''):''}</div></div>`).join('')}</div>
 <div class="acts" style="top:250px">${['Save here','Load','Erase'].map((a,i)=>`<div class="blade${i?'':' on'}" style="--i:${i};--sh:#000;--r:${-5+i*2}deg">${a}</div>`).join('')}</div>${keys(['Z','Choose'],['X','Back'])}`);
 const CATS=[['Game','set-game','Run length, text speed, what a run includes','G'],['Battle','set-battle','Animations, cut-ins, move hints','B'],['Look','set-look','Style, motion, flashes, text size','L'],['Sound','set-sound','Music, effects, cries','S'],['Controls','set-controls','Every key, and how to change it','C'],['Access','set-access','Motion, contrast, reading aids','A']];
 scr('set','Settings','Settings',4,()=>`<div class="bgk"></div><div class="shard" style="--c:var(--red);--cp:polygon(0 84%,100% 64%,100% 100%,0 100%);inset:0" aria-hidden="true"></div>
@@ -167,10 +167,10 @@ scr('mega','Battle','Mega cut-in',5,()=>`${arena()}<div class="dim" style="backg
 <div class="cut"><div class="rays" aria-hidden="true"></div><div class="face">${im('p-charizard',13,'ol')}</div></div><div class="cutedge" aria-hidden="true"></div><div class="cutedge b" aria-hidden="true"></div>
 <div class="megaring"><div class="ring2">${im('g-megaring',3)}</div>${im('g-mega',3)}</div>
 <div class="megat">${ransom('MEGA',17)}${ransom('EVOLUTION',29)}</div>
-<div class="megasay" data-go="battle">Charizard's <b>CHARIZARDITE X</b> is reacting to Red's Mega Bracelet!</div><div class="flashw" aria-hidden="true"></div>`);
+<div class="megasay" data-go="battle">Charizard's <b>CHARIZARDITE X</b> is reacting to ${H().n}'s Mega Bracelet!</div><div class="flashw" aria-hidden="true"></div>`);
 scr('win','Battle','Win splash',5,()=>`${redbg('30%','60%')}<div class="shard" style="--cp:polygon(54% 0,100% 0,100% 100%,70% 100%);inset:0" aria-hidden="true"></div>
-<div class="sil">${im('p-charizard',11)}</div><div class="champ" data-vt="hero">${im('t-red',9,'ol')}</div>
-<div class="line">“. . . . . .”<small>RED · NEVER SAYS MUCH</small></div>
+<div class="sil">${im('p-charizard',11)}</div><div class="champ" data-vt="hero">${im('t-'+H().k,9,'ol')}</div>
+<div class="line">${(WINLINE[LIV]||WINLINE.phantom)[0]}<small>${H().n.toUpperCase()} · ${(WINLINE[LIV]||WINLINE.phantom)[1]}</small></div>
 <div class="big">${ransom('YOU WIN',13)}</div><div class="sub" data-go="result">Dragon Tamer Kai is out of Pokémon · Z</div>${wipe()}`);
 scr('result','Battle','Result',5,()=>`<div class="bgk"></div><div class="shard" style="--c:var(--red);--cp:polygon(56% 0,100% 0,100% 100%,44% 100%);inset:0" aria-hidden="true"></div><div class="burst" style="--x:80%;--y:50%" aria-hidden="true"></div>
 <div class="hd"><small>STAGE 15 · TRAINER BATTLE</small>Result</div>
