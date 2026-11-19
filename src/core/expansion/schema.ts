@@ -8,6 +8,7 @@ import { CanonStateSchema } from './canonSpaces';
 import { TrackStateSchema } from './track';
 import { RescueStateSchema } from '../evil/rescueSchema';
 import { TeamSkyStateSchema } from '../evil/teamSkySchema';
+import { DominionBlockSchema } from '../dominion/schema';
 import { EpilogueStateSchema, GrandArcStateSchema } from '../grandArc/schema';
 import { UltraRunStateSchema } from '../ultra/schema';
 import { StandWithStateSchema } from '../arc/standWithSchema';
@@ -176,5 +177,7 @@ export const ExpansionRunSchema = z.object({
   teamSky: TeamSkyStateSchema.optional(),
   /** Evil Mode (core/evilMode): the run's team, day and beat. Present only in an Evil Mode run once its team is founded. */
   evilMode: EvilModeBlockSchema.optional(),
+  /** Evil Mode rework, DOMINION (core/dominion): the warehouse, the clock, the crew. Present only in a Dominion run once set up. Own `v`; optional, no save bump. */
+  dominion: z.lazy(() => DominionBlockSchema).optional(),
 });
 export type ExpansionRun = z.infer<typeof ExpansionRunSchema>;

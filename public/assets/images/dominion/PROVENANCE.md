@@ -1,0 +1,9 @@
+# DOMINION screen art (Evil Mode rework, slice D1)
+
+Copied from the redesigned DOMINION mockups Kice reviewed (project files `plans/evil-mode-rework/mockups-redesign/sprites/`, published https://claude.ai/artifact/S7xnxYf9ScV3sGYMezrEms). The mockup thread cut each one from art already in this repo (director's packs: PokeRogue, AGPL-3.0, Nintendo material; repo stays private, D4):
+
+| File | From |
+| --- | --- |
+| `c-rook0.png` | `images/trainer/pr/rocket_grunt_m.png` frame 0001, the R emblem painted out and a plain grey armband added (no team colours before the Founding, Part 6 §8) |
+| `p-rattata.png`, `p-golbat.png` | Pokémon sprites from the PokeRogue pack |
+| `g-*.png` (ball, calendar, amulet-coin, fire-stone, fame-checker, town-map, letter, member-card, star-piece, card-key, machine-part, journal) | Item icons from `images/items/` and `images/items/gen5/` (PokeRogue pack), re-saved at the mockup's size |

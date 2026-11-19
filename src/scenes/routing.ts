@@ -1,6 +1,7 @@
 import { parkWaiting } from '../core/minigame/flow';
 import type { RunState } from '../core/state';
 import { EVIL_MODE_ID } from '../core/evilMode/session';
+import { DOMINION_MODE_ID } from '../core/dominion/session';
 
 /** Which screen shows a run in its current phase. */
 export function sceneForRun(run: RunState): string {
@@ -10,6 +11,8 @@ export function sceneForRun(run: RunState): string {
     case 'map':
       // Evil Mode: the run's day is played on its own screen (founding first, while the team has no block).
       if (run.rules.modeId === EVIL_MODE_ID) return 'Evil';
+      // DOMINION (Evil Mode rework): the whole run is played on its own screen (setup first, while there's no block).
+      if (run.rules.modeId === DOMINION_MODE_ID) return 'Dominion';
       // gn.18: an event inside Safari Land has closed; the visit picks up where it stepped out.
       return parkWaiting(run) ? 'Minigame' : 'Map';
     case 'shop':

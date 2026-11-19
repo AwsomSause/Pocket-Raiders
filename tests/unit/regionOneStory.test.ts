@@ -35,6 +35,7 @@ describe('the first region shows one of three stories', () => {
     }
     expect(regionOneHeld(begin('r1-wait'), 'rival-buyout')).toBe(false);
   });
+  // 18 runs walked over every route (about 60 s on a quiet machine); busy CI runners passed the 90 s default.
   it('on the map: the picked story opens in the first region on every route, and the other two never do', () => {
     const stages = getCampaign(content, begin('r1-x').campaignId).stagesPerRegion;
     const seen = new Set<RegionOneStory>();
@@ -59,7 +60,7 @@ describe('the first region shows one of three stories', () => {
       expect(shown, `run ${i} never showed ${pick}`).toBe(true);
     }
     expect(seen.size).toBe(3);
-  });
+  }, 180_000);
   it('Flight North as the pick: the check always ends in the theft in the first region, and keeps its odds anywhere else', () => {
     const roll = content.events.get('gn-13-check')!.choices[0]!.success.effects.find((e) => e.kind === 'gn' && (e as { op: string }).op === 'roll')!;
     const stolen = (run: RunState, k: number): number => {

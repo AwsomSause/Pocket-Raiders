@@ -128,6 +128,9 @@ test('a battle choice at an event starts the battle', async ({ page }) => {
 // Run events redesign: every event style the player can pick draws the scene (frame, risk line,
 // money pill), shows the stage's location art, and takes a choice back to the map.
 test('every event style draws the event and takes a choice', async ({ page }) => {
+  // One loop over every style (about 75 s on a quiet machine, the same before and after Dominion D1); a busy CI shard
+  // ran out of the default 120 s at a different step each time. The checks are unchanged: only the time budget grows.
+  test.setTimeout(240_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
