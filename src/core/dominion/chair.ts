@@ -8,7 +8,8 @@
 import { DOMINION_DATA } from './data';
 import { addLoyalty, addMorale, crewOf, freshCrewState, leave, rankN, rng, traitNow } from './crew';
 import { addHeat, scoutHome, syncHeat } from './field';
-import { book, empireOf } from './book';
+import { book } from './book';
+import { addClean, clampClean } from './hqFx';
 import type { ChairState, CourtCard, CourtFx, Crisis, DominionBlock, Lead, Lean, Member, TallyRow } from './schema';
 import { addWorldStep, fill } from './worldTurn';
 
@@ -297,12 +298,17 @@ const bump = (x: Ctx, k: string, n: number): void => {
   if (n) x.changes[k] = (x.changes[k] ?? 0) + n;
 };
 
-function money(x: Ctx, n: number, clean: boolean): void {
-  const b = x.b;
-  b.funds += n;
+/** Chair money in or out, booked on the Ledger's Chair line. Clean money goes to D5's clean store; spending takes dirty first. */
+function pay(b: DominionBlock, n: number, clean: boolean): void {
+  if (n > 0 && clean) addClean(b, n);
+  else b.funds += n;
   if (n > 0) b.earned += n;
+  clampClean(b);
   book(b, clean ? 'chairClean' : 'chair', n);
-  if (n < 0 && clean) empireOf(b).clean = Math.max(0, empireOf(b).clean + n);
+}
+
+function money(x: Ctx, n: number, clean: boolean): void {
+  pay(x.b, n, clean);
   bump(x, 'funds', n);
 }
 
@@ -572,9 +578,7 @@ function chairStep(b: DominionBlock, seed: string): string[] {
   if (b.day % DOMINION_DATA.start.clock.weekLength === 0) {
     let net = 0;
     for (const deal of ch.deals) {
-      b.funds += deal.n;
-      if (deal.n > 0) b.earned += deal.n;
-      book(b, deal.clean ? 'chairClean' : 'chair', deal.n);
+      pay(b, deal.n, deal.clean);
       net += deal.n;
       if (deal.heat) addHeat(b, HQ(), deal.heat);
       if (deal.ten) ch.owed.ten = (ch.owed.ten ?? 0) + deal.ten;

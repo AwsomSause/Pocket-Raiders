@@ -13,6 +13,7 @@ import { addCrewHook, crewOf, modsOf, setDistrictTask, withCrew } from './crew';
 import { DOMINION_DATA } from './data';
 import type { ActionDef, DistrictState, DominionAction, DominionBlock, LedgerWeek, Member, Task } from './schema';
 import { addWorldEnd, fill } from './worldTurn';
+import { clampClean, cleanOf, dirtyOf, withHq } from './hqFx';
 
 const E = () => DOMINION_DATA.empire;
 const F = () => DOMINION_DATA.field;
@@ -70,6 +71,8 @@ export function checkRise(b: DominionBlock): string[] {
     e.press = true;
     lines.push(N.lines.press);
   }
+  // D5's HQ Lv. 6 needs "Feared": the list's old word, which the ladder reads as Outfit (empire.json oldWords).
+  if (!b.flags.includes('feared') && e.peak >= stepById(N.oldWords.Feared!)) b.flags.push('feared');
   return lines;
 }
 
@@ -96,7 +99,9 @@ addActionGate((b, def) => {
 export function afterStep(b: DominionBlock, fundsBefore: number, sumBefore: number, line: string, where: string | null): string[] {
   const e = empireOf(b);
   if (where && !e.visits.includes(where)) e.visits.push(where);
-  bookRest(b, fundsBefore, sumBefore, line);
+  const rest = bookRest(b, fundsBefore, sumBefore, line);
+  // A show or honest work (Street Theater) is clean money, kept with D5's clean part of the funds.
+  if (rest > 0 && E().ledger.lines[line]?.clean && line !== 'oddJobs') { withHq(b).hq!.clean += rest; clampClean(b); }
   return checkRise(b);
 }
 
@@ -164,7 +169,7 @@ export function closeWeek(b: DominionBlock): LedgerWeek {
   const ds = Object.values(b.field.districts);
   const w: LedgerWeek = {
     w: Math.max(1, Math.floor(b.day / weekLen())),
-    clean: e.clean, dirty: b.funds - e.clean, net: weekSum(b), lines: { ...e.week },
+    clean: cleanOf(b), dirty: dirtyOf(b), net: weekSum(b), lines: { ...e.week },
     notoriety: n.total, regard: ds.reduce((a, d) => a + Math.max(0, d.regard), 0), dread: ds.reduce((a, d) => a + Math.max(0, d.dread), 0),
     held: heldIds(b).length, wanted: b.heat,
   };

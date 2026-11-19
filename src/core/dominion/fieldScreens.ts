@@ -3,6 +3,7 @@
 
 import type { RunState } from '../state';
 import { DOMINION_DATA } from './data';
+import { hasRoom } from './hqFx';
 import { actionDef, actionStatus, bandOf, card, districtDef, masteryLevel, openDay, playOf, statusOf, type Card, type DistrictStatus } from './field';
 import type { DominionBlock, Slot } from './schema';
 import { topModel, type TopModel } from './screens';
@@ -117,7 +118,7 @@ export function mapModel(b: DominionBlock, run: Pick<RunState, 'party'>, c: MapC
   const grid = pages[page]!.map((id, i) => {
     const def = actionDef(id)!;
     const st2 = actionStatus(def);
-    const dim = !st2.play || def.slot !== phase || b.day < openDay(def);
+    const dim = !st2.play || def.slot !== phase || b.day < openDay(def) || (!!st2.room && !hasRoom(b, st2.room));
     return { id, label: label(id), on: c.focus === 'grid' && i === c.at, dim, night: def.slot === 'night' };
   });
   const sel = grid[c.at];
