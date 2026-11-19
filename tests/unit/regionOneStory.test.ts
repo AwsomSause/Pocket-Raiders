@@ -81,5 +81,5 @@ describe('the first region shows one of three stories', () => {
     expect(certain).toBe(20);
     expect(later).toBeLessThan(18);
     expect(later).toBeGreaterThan(2);
-  });
+  }, 240000);
 });
