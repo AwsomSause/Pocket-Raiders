@@ -22,6 +22,7 @@ import { settleRivalRecruits } from './rivals/eventRecruit';
 import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
 import { endEvilFight, evilFightOn } from './evilMode/fightEnd';
+import { dominionFightOn, endDominionFight } from './dominion/fightEnd';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
 import { FOE_WAITS, gnAfterTurn, gnShape, gnShapeDouble } from './greenneedle';
 import { answerAsk } from './greenneedle/ask';
@@ -3496,6 +3497,11 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   // steps: no prize, no node, and a loss never ends the run (core/evilMode/fightEnd.ts).
   if (battle.outcome && evilFightOn(run)) {
     const lines = endEvilFight(content, run, battle.outcome === 'win' || battle.outcome === 'caught', healParty);
+    return { run, events, end: null, defeated: false, cues: [], drama: [], evilFight: { won: battle.outcome !== 'lose', lines } };
+  }
+  // DOMINION (D2): a battle a Boss action waited on. Same path as Evil Mode's: back to the map, the run goes on.
+  if (battle.outcome && dominionFightOn(run)) {
+    const lines = endDominionFight(content, run, battle.outcome === 'win' || battle.outcome === 'caught' ? battle.outcome : 'lose');
     return { run, events, end: null, defeated: false, cues: [], drama: [], evilFight: { won: battle.outcome !== 'lose', lines } };
   }
   if ((battle.outcome === 'win' || battle.outcome === 'caught') && battle.evoStone) {
