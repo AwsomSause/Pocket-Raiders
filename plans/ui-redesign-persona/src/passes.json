@@ -1,0 +1,100 @@
+[
+ {
+  "n": 1,
+  "name": "The Phantom kit",
+  "change": "The first cut of the style, taken from Persona 5: red, black and white only, every panel cut on a slant, cut-out ransom letters for the logo, a turning sunburst and halftone dots behind everything. Six core screens: Title, Main menu, Battle command, Event, Pause and Settings.",
+  "pages": [
+   "Title",
+   "Main menu",
+   "Battle command",
+   "Event",
+   "Pause menu",
+   "Settings"
+  ],
+  "q": {
+   "x": "It is loud already, but flat: panels sit on the page and nothing overlaps or moves much yet. Battle is still a normal Pokémon layout with slanted boxes.",
+   "b": "First pass, so there is nothing to beat. It sets the rules every later pass has to top.",
+   "p": "Yes. Battle only has the command list; moves, party, bag and targets each need a page. That is pass 2.",
+   "m": "Pause is one list with the party beside it, and Settings is one page with six tabs. Both work but both are crowded; they get split up in pass 4.",
+   "k": "Only because of the sprites. Types and Poké Balls are tiny; later passes have to pull Pokémon things into the style itself."
+  }
+ },
+ {
+  "n": 2,
+  "name": "Battle leaves the box",
+  "change": "Battle stops being a Pokémon layout with slanted boxes. Commands burst out of your Pokémon in a jagged star, each on its own key, the way Persona 5 puts orders around the hero. Your party stands in a stack down the right edge with live HP. Black slanted bars frame the field like a film shot. Fight, Pokémon and Bag each open their own page, and a hit gets a full-screen splash.",
+  "pages": [
+   "Moves",
+   "Party (switch)",
+   "Bag",
+   "Hit splash"
+  ],
+  "q": {
+   "x": "Much more. The command burst and the Super Effective splash are the first things on the page that could not be mistaken for any other Pokémon game.",
+   "b": "Pass 1 had four words in a column. Now each command has a key, a size and an angle, the party is always in view, and moves show their type, power, PP and how well they hit before you choose.",
+   "p": "Four added. Moves, party and bag used to be nowhere; they are full pages now so the battle screen holds only the fight.",
+   "m": "Not touched this pass. In battle, X on the burst is Run and Info opens foe details; Pause still needs its own pass.",
+   "k": "Better: type colours carry the move cards, HP bars keep green, yellow and red, Poké Balls count the foe's team, and the run's real limits (10 heals, 6 revives) sit on the Bag page."
+  }
+ },
+ {
+  "n": 3,
+  "name": "The run gets a calendar",
+  "change": "Outside battle, every screen now carries a stage stamp in the top corner, built like Persona 5's date: a huge stage number, the region on a red tag and the time and weather in marker pen. The route is a subway-style map of diamond stops over the region's town map. Events are split in two: the character leans in from the side and talks, and only after you press does the choice page appear, with what each choice costs. Rewards are dealt as three cards. The Mart has a clerk, a wallet and a running cart total.",
+  "pages": [
+   "Route map",
+   "Event · choice",
+   "Reward",
+   "Poké Mart"
+  ],
+  "q": {
+   "x": "Yes. Big character art leaning into frame, dealt cards and the outlined stage number give each page one loud thing to look at.",
+   "b": "Pass 2 only fixed battle. This pass covers the other half of a run, and the old one-page event (text and choices on top of each other) is replaced by talk then choice.",
+   "p": "Four added. Splitting talk from choice also follows the rule that text stays until you press and rewards only come after.",
+   "m": "Esc on the map opens the menu and C jumps straight to the party. The menu itself is still the pass 1 list; it is the next pass.",
+   "k": "More than before: the route sits on the real region map, stops use Poké Balls, the Mart clerk is the game's own sprite, and the stage stamp shows time and weather, which matter for evolutions."
+  }
+ },
+ {
+  "n": 4,
+  "name": "Menus get rooms",
+  "change": "The pause list becomes a hub: your trainer stands huge on the right, the chosen word swells to twice the size, and each word opens its own page. New pages for the Pokémon summary (with a six-point stat web, the Pokémon answer to Persona's stat star), the Pokédex, a Trainer card laid out like a calling card, and Save slots. Settings stops being one crowded page: a hub of six big tiles, then one short page each, never more than six rows.",
+  "pages": [
+   "Pokémon summary",
+   "Pokédex",
+   "Trainer card",
+   "Save",
+   "Settings hub",
+   "Game",
+   "Battle",
+   "Look",
+   "Sound",
+   "Controls",
+   "Access"
+  ],
+  "q": {
+   "x": "Yes. The trainer filling the pause screen and the stat web give the menus the big-art feel the battle already had.",
+   "b": "Pass 1 squeezed seven jobs and the whole party onto one pause page and all settings behind six tiny tabs. Every job now has room, and Settings rows are big enough to read from the couch.",
+   "p": "Eleven added. Settings alone went from one page to seven.",
+   "m": "This pass is the answer: Esc opens the hub anywhere outside battle, Settings is the sixth word, and Q/E flips between its pages without going back.",
+   "k": "The summary keeps what players expect (types, ability, nature, held item, four moves, Exp bar); the Pokédex shows dark shapes for unseen Pokémon and the game's Mastery ranks."
+  }
+ },
+ {
+  "n": 5,
+  "name": "Everything moves into everything",
+  "change": "Motion pass. Changing page is now a morph: the header, the stage stamp, your trainer, your Pokémon, the party strip and the key hints each slide and resize from where they were to where they belong on the next page, while a red, black and white blade wipes the rest. Idle screens loop without a seam: the chosen item jitters, trainers breathe, the dots drift. Three new battle moments: a Mega Evolution cut-in across the eyes, a win splash with a line from your trainer, and a result tally where Exp bars fill and numbers punch in.",
+  "pages": [
+   "Mega cut-in",
+   "Win splash",
+   "Result"
+  ],
+  "q": {
+   "x": "This is the pass that makes it feel like Persona rather than look like it. The cut-in and the win splash are the showiest pages so far.",
+   "b": "Passes 1 to 4 were still pictures with slide-ins. Now nothing just appears: each page grows out of the one before, and each loop returns to its first frame.",
+   "p": "Three added. Win and Result are separate on purpose, so the splash stays clean and the numbers get room.",
+   "m": "Opening Pause, picking a word and landing on its page is one unbroken move; the trainer shrinks from the hub into the Trainer card. Settings pages slide along the rail the same way.",
+   "k": "Mega Evolution uses the game's own Mega ring and stone art, Exp bars fill the way they always have, and Red's victory line is six dots, because Red never talks."
+  }
+ }
+]

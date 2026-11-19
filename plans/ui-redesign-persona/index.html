@@ -1,0 +1,754 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Phantom UI Mockups</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+/* Layout: a viewer shell (pass stepper, screen list, notes) around one fixed 1280x720 game stage that scales to fit. */
+:root{
+  --vw-bg:#111014; --vw-panel:#1b1a20; --vw-line:#34323c; --vw-fg:#f3f1ec; --vw-dim:#a9a5b3; --vw-acc:#ff2a45;
+  --red:#e4002b; --red2:#b80022; --ink:#0c0b0d; --paper:#ffffff; --bone:#f2efe6; --cyan:#19d3ff; --gold:#ffd400;
+  --hp:#3ee06a; --hpmid:#ffcc00; --hplow:#ff3b3b;
+  --f-disp:'Anton','Impact','Arial Narrow',sans-serif; --f-cond:'Barlow Condensed','Arial Narrow',sans-serif;
+  --f-slab:'Alfa Slab One','Rockwell',serif; --f-fat:'Abril Fatface','Georgia',serif; --f-mono:'Rubik Mono One','Arial Black',sans-serif;
+  --f-mark:'Permanent Marker','Comic Sans MS',cursive;
+  color-scheme:dark;
+}
+body{margin:0;background:var(--vw-bg);color:var(--vw-fg);font:15px/1.45 var(--f-cond);letter-spacing:.01em;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 40px}
+.vw{max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.vw-top{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+.vw-top h1{font:400 26px/1 var(--f-disp);letter-spacing:.03em;margin:0;text-transform:uppercase}
+.vw-top h1 em{font-style:normal;color:var(--vw-acc)}
+.vw-step{display:flex;align-items:center;gap:8px;margin-left:auto;flex-wrap:wrap}
+.vw-step button,.vw-chip{font:700 15px/1 var(--f-cond);color:var(--vw-fg);background:var(--vw-panel);border:1px solid var(--vw-line);padding:8px 12px;cursor:pointer;text-transform:uppercase;letter-spacing:.06em}
+.vw-step button:hover,.vw-chip:hover{border-color:var(--vw-acc)}
+.vw-step button:focus-visible,.vw-chip:focus-visible,.vw-step input:focus-visible{outline:2px solid var(--vw-acc);outline-offset:2px}
+.vw-step output{font:400 22px/1 var(--f-disp);min-width:7.2em;text-align:center;font-variant-numeric:tabular-nums}
+.vw-step input[type=range]{width:min(260px,60vw);accent-color:var(--vw-acc)}
+.vw-nav{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
+.vw-grp{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.vw-grp>span{font:700 12px/1 var(--f-cond);color:var(--vw-dim);text-transform:uppercase;letter-spacing:.12em;margin-right:2px}
+.vw-chip{padding:6px 9px;font-size:13px;letter-spacing:.04em}
+.vw-chip[aria-pressed=true]{background:var(--vw-acc);border-color:var(--vw-acc);color:#fff}
+.vw-chip.new::after{content:"new";font-size:10px;margin-left:5px;color:var(--gold)}
+.vw-chip.chg::after{content:"changed";font-size:10px;margin-left:5px;color:var(--cyan)}
+.vw-stagewrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;overflow:hidden;border:1px solid var(--vw-line);max-width:100%}
+.vw-notes{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:14px}
+.vw-notes>div{background:var(--vw-panel);border:1px solid var(--vw-line);padding:14px 16px;min-width:0}
+.vw-notes h2{font:400 22px/1.1 var(--f-disp);margin:0 0 8px;text-transform:uppercase;letter-spacing:.03em;text-wrap:balance}
+.vw-notes h2 small{font:700 12px/1 var(--f-cond);color:var(--vw-acc);letter-spacing:.14em;display:block;margin-bottom:6px}
+.vw-notes p,.vw-notes li{font:500 16px/1.45 var(--f-cond);margin:0 0 6px;color:var(--vw-fg)}
+.vw-notes dl{margin:0;display:grid;gap:8px}
+.vw-notes dt{font:700 12px/1.2 var(--f-cond);color:var(--vw-dim);text-transform:uppercase;letter-spacing:.1em}
+.vw-notes dd{margin:2px 0 0;font:500 16px/1.4 var(--f-cond)}
+.vw-notes ul{margin:0;padding-left:18px}
+@media (max-width:760px){.vw-notes{grid-template-columns:1fr}.vw-step{margin-left:0}}
+body.shot{padding:0}body.shot .vw{max-width:none;gap:0}body.shot .vw>*:not(.vw-stagewrap){display:none}body.shot .vw-stagewrap{width:1280px;height:720px;aspect-ratio:auto;border:0}
+
+/* ===== the stage ===== */
+.stage{position:absolute;left:0;top:0;width:1280px;height:720px;transform-origin:0 0;transform:scale(var(--k,1));overflow:hidden;background:var(--ink);color:var(--paper);font:700 22px/1.2 var(--f-cond);letter-spacing:0;user-select:none}
+.stage *{box-sizing:border-box}
+.scr{position:absolute;inset:0;overflow:hidden}
+.abs{position:absolute}
+.spr{display:block;line-height:0;font-style:normal}
+.px{image-rendering:pixelated;display:block;max-width:none;zoom:var(--z,1)}
+.ol{filter:drop-shadow(1px 0 0 #fff) drop-shadow(-1px 0 0 #fff) drop-shadow(0 1px 0 #fff) drop-shadow(0 -1px 0 #fff)}
+.olk{filter:drop-shadow(1px 0 0 #000) drop-shadow(-1px 0 0 #000) drop-shadow(0 1px 0 #000) drop-shadow(0 -1px 0 #000)}
+.flip{transform:scaleX(-1)}
+[data-go]{cursor:pointer}
+.stage.still *,.stage.still *::before,.stage.still *::after{animation-duration:.001s!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.001s!important}
+@media (prefers-reduced-motion:reduce){.stage *,.stage *::before,.stage *::after{animation-duration:.001s!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.001s!important}}
+
+/* ===== pass 1 · the Phantom kit: red, black, white, everything cut on a slant ===== */
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes blink{50%{opacity:.25}}
+@keyframes inL{from{transform:translateX(-140%) rotate(var(--r,-4deg))}}
+@keyframes inR{from{transform:translateX(140%) rotate(var(--r,0deg))}}
+@keyframes inUp{from{transform:translateY(60px);opacity:0}}
+@keyframes bob{50%{transform:translateY(-6px)}}
+.p1{
+  & .bgr{position:absolute;inset:0;background:var(--red)}
+  & .bgk{position:absolute;inset:0;background:var(--ink)}
+  & .burst{position:absolute;left:var(--x,50%);top:var(--y,50%);width:2600px;height:2600px;margin:-1300px;background:repeating-conic-gradient(from 0deg,rgba(0,0,0,.2) 0 5deg,transparent 5deg 10deg);animation:spin 80s linear infinite}
+  & .dots{position:absolute;inset:0;background:radial-gradient(circle,rgba(0,0,0,.4) 2.4px,transparent 2.8px) 0 0/14px 14px;-webkit-mask-image:linear-gradient(115deg,transparent 35%,#000 95%);mask-image:linear-gradient(115deg,transparent 35%,#000 95%)}
+  & .shard{position:absolute;background:var(--c,var(--ink));clip-path:var(--cp)}
+  & .art{position:absolute;inset:0;background-size:cover;background-position:center;image-rendering:pixelated}
+  & .rs{display:inline-flex;align-items:center;white-space:nowrap}
+  & .rs i{width:.3em}
+  & .rs b{display:inline-block;font-weight:400;line-height:1;padding:.05em .11em .08em;margin:0 .012em;transform:rotate(var(--a)) translateY(var(--y)) scale(var(--s))}
+  & .rs .r0{font-family:var(--f-disp);background:#fff;color:#000}
+  & .rs .r1{font-family:var(--f-slab);background:#000;color:#fff}
+  & .rs .r2{font-family:var(--f-fat);background:var(--red);color:#fff;box-shadow:0 0 0 4px #000}
+  & .rs .r3{font-family:var(--f-mono);background:#000;color:#fff;font-size:.8em}
+  & .rs .r4{font-family:var(--f-disp);background:var(--bone);color:#000;clip-path:polygon(5% 0,100% 7%,95% 100%,0 93%)}
+  & .rs .r5{font-family:var(--f-slab);background:#fff;color:var(--red)}
+  & .blade{position:relative;display:block;width:max-content;font:400 50px/1 var(--f-disp);color:#fff;padding:5px 26px 8px;transform:rotate(var(--r,-4deg));text-transform:uppercase;white-space:nowrap}
+  & .blade small{display:block;font:700 18px/1.1 var(--f-cond);letter-spacing:.05em;margin-top:3px;text-transform:none;opacity:.85}
+  & .blade.on{color:#000}
+  & .blade.on::before,& .blade.on::after{content:"";position:absolute;inset:-3px -16px;clip-path:polygon(3% 0,100% 9%,97% 100%,0 89%);z-index:-1;background:#fff}
+  & .blade.on::after{background:var(--sh,var(--red));transform:translate(11px,9px);z-index:-2}
+  & .hd{position:absolute;left:-24px;top:16px;padding:12px 70px 16px 64px;background:#000;clip-path:polygon(0 0,100% 14%,95% 100%,0 84%);font:400 62px/1 var(--f-disp);transform:rotate(-5deg);color:#fff;text-transform:uppercase;white-space:nowrap;animation:inL .35s cubic-bezier(.2,1.3,.4,1) both}
+  & .hd small{display:block;font:800 17px/1 var(--f-cond);color:var(--red);letter-spacing:.22em;margin-bottom:3px}
+  & .hd.onred small{color:#fff}
+  & .keys{position:absolute;right:26px;bottom:16px;display:flex;gap:12px;transform:rotate(-2deg)}
+  & .key{display:flex;align-items:center;gap:8px;font:800 19px/1 var(--f-cond);text-transform:uppercase;letter-spacing:.04em;color:#fff;background:#000;padding:6px 18px 6px 6px;clip-path:polygon(0 0,100% 0,93% 100%,0 100%)}
+  & .key b{display:grid;place-items:center;min-width:28px;height:28px;padding:0 6px;background:#fff;color:#000;font:400 17px/1 var(--f-disp)}
+  & .ty{display:inline-flex;align-items:center;gap:5px;font:800 16px/1 var(--f-cond);letter-spacing:.06em;color:#fff;background:var(--tc);padding:3px 12px 3px 5px;transform:skewX(-12deg);text-shadow:0 1px 0 rgba(0,0,0,.45)}
+  & .ty img{width:20px;height:20px;transform:skewX(12deg)}
+  & .hpbar{display:block;width:var(--w,260px);height:16px;background:#000;border:2px solid #fff;transform:skewX(-24deg);overflow:hidden}
+  & .hpbar i{display:block;height:100%;background:var(--hp)}
+  & .hpbar.mid i{background:var(--hpmid)} & .hpbar.low i{background:var(--hplow)}
+  & .mk{font-family:var(--f-mark);font-weight:400}
+  /* title */
+  & .s-title .logo{position:absolute;left:54px;top:150px;transform:rotate(-7deg);font-size:112px;display:flex;flex-direction:column;gap:14px;animation:inL .5s cubic-bezier(.2,1.3,.4,1) both}
+  & .s-title .logo .rs:last-child{margin-left:70px;font-size:126px}
+  & .s-title .tag{position:absolute;left:170px;top:478px;font:400 34px/1 var(--f-mark);color:#fff;transform:rotate(-7deg)}
+  & .s-title .press{position:absolute;left:96px;top:560px;--r:-3deg;font-size:40px;animation:blink 1.3s steps(2) infinite}
+  & .s-title .ver{position:absolute;left:26px;bottom:16px;font:800 18px/1 var(--f-cond);letter-spacing:.14em;color:#fff}
+  & .s-title .heroes{position:absolute;right:40px;bottom:0;width:560px;height:640px}
+    /* main menu */
+  & .s-menu .list{position:absolute;left:70px;top:170px;display:flex;flex-direction:column;gap:12px}
+  & .s-menu .list .blade:nth-child(odd){--r:-5deg} & .s-menu .list .blade:nth-child(even){--r:-2deg;margin-left:34px}
+  & .s-menu .list .blade{animation:inL .4s cubic-bezier(.2,1.3,.4,1) both;animation-delay:calc(var(--i)*45ms)}
+  & .s-menu .who{position:absolute;right:120px;bottom:0;animation:inR .45s cubic-bezier(.2,1.2,.4,1) both}
+  & .s-menu .who .sh{filter:brightness(0) saturate(100%) invert(13%) sepia(96%) saturate(6500%) hue-rotate(343deg) brightness(92%);opacity:.95}
+  & .s-menu .card{position:absolute;right:40px;top:60px;width:330px;background:#fff;color:#000;padding:14px 20px 16px;transform:rotate(4deg);clip-path:polygon(0 4%,100% 0,97% 100%,3% 96%);font:700 20px/1.25 var(--f-cond)}
+  & .s-menu .card b{display:block;font:400 30px/1 var(--f-disp);text-transform:uppercase}
+  /* battle */
+  & .s-battle .plate{position:absolute;background:#000;color:#fff;padding:12px 30px 14px 26px;clip-path:polygon(0 0,100% 8%,96% 100%,2% 92%)}
+  & .s-battle .plate h3{margin:0;font:400 38px/1 var(--f-disp);text-transform:uppercase;display:flex;align-items:baseline;gap:14px;white-space:nowrap}
+  & .s-battle .plate h3 span{font:800 22px/1 var(--f-cond);color:var(--bone)}
+  & .s-battle .plate .row{display:flex;gap:10px;align-items:center;margin-top:8px}
+  & .s-battle .plate .num{font:400 26px/1 var(--f-disp);font-variant-numeric:tabular-nums}
+  & .s-battle .foe{left:26px;top:30px;transform:rotate(-3deg);animation:inL .4s both}
+  & .s-battle .me{right:330px;bottom:150px;transform:rotate(-2deg);animation:inR .4s both}
+  & .s-battle .cmds{position:absolute;right:30px;bottom:74px;display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+  & .s-battle .cmds .blade{font-size:46px;animation:inR .35s cubic-bezier(.2,1.3,.4,1) both;animation-delay:calc(var(--i)*50ms)}
+  & .s-battle .msg{position:absolute;left:24px;bottom:22px;width:600px;background:#fff;color:#000;padding:16px 30px 18px;font:700 28px/1.15 var(--f-cond);clip-path:polygon(0 8%,100% 0,97% 100%,2% 94%);transform:rotate(-1.5deg)}
+  & .s-battle .balls{position:absolute;display:flex;gap:6px}
+  & .s-battle .mega{position:absolute;right:300px;bottom:84px;display:flex;align-items:center;gap:8px;background:var(--gold);color:#000;font:400 26px/1 var(--f-disp);padding:6px 18px 6px 10px;transform:rotate(-6deg) skewX(-10deg)}
+  /* event */
+  & .s-event .dlg{position:absolute;left:150px;bottom:34px;width:990px;min-height:170px;background:#000;color:#fff;padding:34px 46px 26px 56px;clip-path:polygon(1% 6%,100% 0,98% 100%,0 92%);font:700 29px/1.22 var(--f-cond);animation:inUp .3s both}
+  & .s-event .who{position:absolute;left:190px;bottom:188px;background:var(--red);color:#fff;font:400 32px/1 var(--f-disp);padding:6px 30px 8px 22px;transform:rotate(-4deg) skewX(-10deg);text-transform:uppercase;box-shadow:6px 6px 0 #000}
+  & .s-event .opts{position:absolute;right:40px;top:150px;display:flex;flex-direction:column;gap:16px;align-items:flex-end}
+  & .s-event .opts .blade{font-size:34px;background:#000;animation:inR .35s both;animation-delay:calc(var(--i)*60ms)}
+  & .s-event .opts .blade.on{background:none}
+  & .s-event .npc{position:absolute;left:56px;bottom:150px}
+  /* pause + settings */
+  & .s-pause .list{position:absolute;left:80px;top:150px;display:flex;flex-direction:column;gap:6px}
+  & .s-pause .list .blade{font-size:46px;--sh:#000;animation:inL .4s cubic-bezier(.2,1.3,.4,1) both;animation-delay:calc(var(--i)*40ms)}
+  & .s-pause .list .blade:nth-child(even){margin-left:30px;--r:-2deg}
+  & .s-pause .party{position:absolute;right:36px;top:60px;width:520px;display:flex;flex-direction:column;gap:8px}
+  & .s-pause .pm{display:grid;grid-template-columns:76px 1fr auto;align-items:center;gap:10px;background:#000;padding:6px 24px 6px 10px;clip-path:polygon(0 0,100% 0,96% 100%,2% 100%);animation:inR .4s both;animation-delay:calc(var(--i)*40ms)}
+  & .s-pause .pm:nth-child(even){transform:translateX(-22px)}
+  & .s-pause .pm .pic{height:70px;display:grid;place-items:center}
+  & .s-pause .pm b{display:block;font:400 26px/1 var(--f-disp);text-transform:uppercase;margin-bottom:6px}
+  & .s-pause .pm .lv{font:800 20px/1 var(--f-cond);text-align:right}
+  & .s-pause .pm .lv small{display:block;font:700 16px/1 var(--f-cond);color:var(--bone);margin-top:5px}
+  & .s-pause .foot{position:absolute;left:36px;bottom:18px;display:flex;gap:10px}
+  & .s-pause .foot span{background:#fff;color:#000;font:800 20px/1 var(--f-cond);padding:7px 18px;transform:skewX(-12deg)}
+  & .s-set .tabs{position:absolute;left:400px;top:52px;display:flex;gap:6px}
+  & .s-set .tabs span{font:400 24px/1 var(--f-disp);padding:8px 20px;background:#222;color:#aaa;transform:skewX(-14deg);text-transform:uppercase}
+  & .s-set .tabs span.on{background:var(--red);color:#fff}
+  & .s-set .rows{position:absolute;left:110px;top:150px;width:1060px;display:flex;flex-direction:column;gap:8px}
+  & .s-set .row{display:flex;justify-content:space-between;align-items:center;padding:9px 34px;font:800 28px/1 var(--f-cond);text-transform:uppercase;letter-spacing:.03em;border-bottom:2px solid #333;animation:inUp .3s both;animation-delay:calc(var(--i)*30ms)}
+  & .s-set .row .val{font:400 28px/1 var(--f-disp);color:var(--bone);display:flex;gap:16px;align-items:center}
+  & .s-set .row .val::before{content:"◀";font-size:16px;color:var(--red)} & .s-set .row .val::after{content:"▶";font-size:16px;color:var(--red)}
+  & .s-set .row.on{background:#fff;color:#000;border-color:#fff;clip-path:polygon(0 0,100% 6%,99% 100%,1% 94%);box-shadow:none}
+  & .s-set .row.on .val{color:#000}
+  & .s-set .help{position:absolute;left:110px;bottom:70px;width:760px;font:400 24px/1.25 var(--f-mark);color:var(--bone);transform:rotate(-1.5deg)}
+}
+
+/* ===== pass 2 · battle leaves the box: command burst, party stack, and a page each for moves, party, bag, hit ===== */
+@keyframes pop{from{transform:scale(.2) rotate(var(--r,0deg));opacity:0}}
+@keyframes jit{0%,100%{transform:rotate(var(--r,0deg)) translate(0,0)}50%{transform:rotate(calc(var(--r,0deg) + .6deg)) translate(1px,-1px)}}
+@keyframes lock{from{transform:rotate(0) scale(1.5);opacity:0}to{transform:rotate(90deg) scale(1)}}
+@keyframes shake{0%,100%{transform:translate(0,0)}20%{transform:translate(-10px,4px)}40%{transform:translate(9px,-5px)}60%{transform:translate(-6px,2px)}80%{transform:translate(4px,-2px)}}
+@keyframes lines{to{background-position:-400px 0}}
+@keyframes drain{from{width:var(--from)}}
+.p2{
+  & .frame{position:absolute;inset:0;pointer-events:none;background:linear-gradient(#000,#000) top/100% 0 no-repeat}
+  & .frame::before,& .frame::after{content:"";position:absolute;left:0;right:0;height:120px;background:#000}
+  & .frame::before{top:0;clip-path:polygon(0 0,100% 0,100% 18%,0 62%)} & .frame::after{bottom:0;clip-path:polygon(0 80%,100% 30%,100% 100%,0 100%)}
+  & .dim{position:absolute;inset:0;background:rgba(8,6,10,.62)}
+  & .foe2{position:absolute;left:22px;top:26px;transform:rotate(-3deg);animation:inL .4s both}
+  & .foe2 h3{margin:0;display:inline-flex;align-items:baseline;gap:12px;background:#000;color:#fff;font:400 44px/1 var(--f-disp);padding:6px 34px 8px 20px;clip-path:polygon(0 0,100% 0,95% 100%,0 100%);text-transform:uppercase}
+  & .foe2 h3 span{font:800 22px/1 var(--f-cond);color:var(--gold)}
+  & .foe2 .r{display:flex;align-items:center;gap:10px;margin:7px 0 0 16px}
+  & .slash{display:block;position:relative;width:var(--w,300px);height:22px;background:#000;clip-path:polygon(0 0,100% 0,calc(100% - 14px) 100%,0 100%);padding:4px 18px 4px 4px}
+  & .slash i{display:block;height:100%;background:var(--hp);clip-path:polygon(0 0,100% 0,calc(100% - 9px) 100%,0 100%)}
+  & .slash.mid i{background:var(--hpmid)} & .slash.low i{background:var(--hplow)}
+  & .slash.xp{height:12px;padding:3px 12px 3px 3px} & .slash.xp i{background:var(--cyan)}
+  & .num2{font:400 26px/1 var(--f-disp);color:#fff;text-shadow:2px 2px 0 #000;font-variant-numeric:tabular-nums}
+  & .turn{position:absolute;right:300px;top:20px;background:var(--red);color:#fff;font:400 28px/1 var(--f-disp);padding:6px 24px 8px;transform:rotate(3deg) skewX(-12deg);box-shadow:5px 5px 0 #000}
+  /* command burst */
+  & .cw{position:absolute;left:330px;top:150px;width:520px;height:470px}
+  & .cwbg{position:absolute;inset:0;background:#000;clip-path:polygon(8% 30%,30% 4%,44% 22%,70% 0,74% 26%,100% 30%,82% 50%,98% 76%,70% 74%,58% 100%,40% 78%,12% 92%,22% 60%,0 52%);animation:pop .3s cubic-bezier(.2,1.4,.4,1) both}
+  & .cwbg.r{background:var(--red);transform:translate(12px,10px);animation:none}
+  & .cw .c{position:absolute;display:flex;align-items:center;gap:10px;font:400 var(--fs,44px)/1 var(--f-disp);color:#fff;text-transform:uppercase;transform:rotate(var(--r));white-space:nowrap;animation:pop .28s cubic-bezier(.2,1.5,.4,1) both;animation-delay:calc(var(--i)*45ms + 80ms)}
+  & .cw .c kbd{display:grid;place-items:center;width:34px;height:34px;background:#fff;color:#000;font:400 20px/1 var(--f-disp);transform:rotate(-8deg);box-shadow:3px 3px 0 var(--red)}
+  & .cw .c.on{color:#000;background:#fff;padding:2px 26px 6px 12px;clip-path:polygon(0 6%,100% 0,96% 100%,2% 92%);animation:pop .28s both,jit .22s steps(2) .4s infinite}
+  & .cw .c.on kbd{background:#000;color:#fff;box-shadow:none}
+  & .cw .c.g{color:var(--gold)}
+  & .cw .c small{font:800 16px/1 var(--f-cond);letter-spacing:.08em;color:var(--bone);align-self:flex-end;margin-bottom:6px}
+  & .say{position:absolute;left:26px;bottom:26px;background:#fff;color:#000;font:800 30px/1.1 var(--f-cond);padding:14px 40px 16px 26px;clip-path:polygon(0 12%,100% 0,95% 100%,3% 90%);transform:rotate(-2deg);animation:inL .35s both}
+  & .say b{font:400 30px/1 var(--f-disp);color:var(--red)}
+  /* party stack on the right edge */
+  & .stack{position:absolute;right:0;top:112px;width:290px;display:flex;flex-direction:column;gap:6px}
+  & .stack .m{display:grid;grid-template-columns:54px minmax(0,1fr);align-items:center;gap:6px;background:#000;color:#fff;padding:4px 16px 5px 20px;clip-path:polygon(7% 0,100% 0,100% 100%,0 100%);margin-left:36px;animation:inR .35s both;animation-delay:calc(var(--i)*40ms)}
+  & .stack .m .pic{height:52px;display:grid;place-items:center}
+  & .stack .m b{display:flex;justify-content:space-between;font:400 20px/1 var(--f-disp);text-transform:uppercase;margin-bottom:4px}
+  & .stack .m b span{font:800 16px/1 var(--f-cond);color:var(--bone)}
+  & .stack .m .slash{--w:100%;height:14px;padding:3px 12px 3px 3px;background:#333}
+  & .stack .m.on{margin-left:0;background:#fff;color:#000;padding-block:8px 9px;grid-template-columns:66px minmax(0,1fr)}
+  & .stack .m.on b{font-size:26px} & .stack .m.on b span{color:var(--red);font-size:20px} & .stack .m.on .slash{--w:100%;background:#000;margin-bottom:3px}
+  & .stack .m.out{opacity:.55} & .stack .m.out b{color:#999}
+  & .s-battle .keys,& .s-moves .keys{right:auto;left:440px;bottom:14px}
+  /* moves */
+  & .mv{position:absolute;left:54px;top:136px;display:flex;flex-direction:column;gap:12px}
+  & .mv .c{position:relative;display:grid;grid-template-columns:86px 1fr auto;align-items:center;width:540px;height:92px;background:#000;color:#fff;transform:rotate(-3deg) translateX(calc(var(--i)*26px));clip-path:polygon(0 0,100% 5%,97% 100%,2% 95%);animation:inL .35s cubic-bezier(.2,1.3,.4,1) both;animation-delay:calc(var(--i)*55ms)}
+  & .mv .c .t{height:100%;background:var(--tc);display:grid;place-items:center;clip-path:polygon(0 0,100% 0,78% 100%,0 100%)}
+  & .mv .c .t img{width:48px;height:48px;image-rendering:pixelated;margin-right:12px}
+  & .mv .c h4{margin:0;font:400 38px/1 var(--f-disp);text-transform:uppercase;white-space:nowrap}
+  & .mv .c p{margin:4px 0 0;font:800 17px/1 var(--f-cond);letter-spacing:.07em;color:var(--bone)}
+  & .mv .c .pp{font:400 30px/1 var(--f-disp);padding-right:30px;text-align:right}
+  & .mv .c .pp small{display:block;font:800 14px/1 var(--f-cond);letter-spacing:.14em;color:var(--bone)}
+  & .mv .c.on{background:#fff;color:#000;width:620px;height:108px}
+  & .mv .c.on h4{font-size:50px} & .mv .c.on p,& .mv .c.on .pp small{color:#333}
+  & .mv .w{position:relative;width:max-content}
+  & .eff{position:absolute;left:calc(100% + var(--i)*26px - 6px);top:-14px;z-index:2;font:400 22px/1 var(--f-disp);padding:6px 16px 7px;transform:rotate(5deg);text-transform:uppercase;white-space:nowrap;animation:pop .3s cubic-bezier(.2,1.6,.4,1) both;animation-delay:.35s}
+  & .eff.se{background:var(--gold);color:#000;box-shadow:4px 4px 0 #000;font-size:26px}
+  & .eff.nv{background:#555;color:#fff;box-shadow:4px 4px 0 #000}
+  & .info{position:absolute;right:300px;bottom:70px;width:330px;background:#000;color:#fff;padding:20px 26px 22px 30px;clip-path:polygon(4% 0,100% 5%,97% 100%,0 94%);font:700 21px/1.25 var(--f-cond);animation:inUp .3s .2s both}
+  & .info b{display:block;font:400 26px/1 var(--f-disp);color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+  & .ring{position:absolute;width:210px;height:210px;border:6px solid var(--red);border-radius:50%;animation:lock .45s cubic-bezier(.2,1,.3,1) both}
+  & .ring::before,& .ring::after{content:"";position:absolute;background:var(--red)}
+  & .ring::before{left:50%;top:-22px;bottom:-22px;width:6px;margin-left:-3px} & .ring::after{top:50%;left:-22px;right:-22px;height:6px;margin-top:-3px}
+  & .gim{position:absolute;display:flex;align-items:center;gap:10px;background:var(--gold);color:#000;font:400 28px/1 var(--f-disp);padding:8px 24px 8px 12px;transform:rotate(-4deg) skewX(-10deg);box-shadow:5px 5px 0 #000;text-transform:uppercase}
+  & .gim kbd{display:grid;place-items:center;width:32px;height:32px;background:#000;color:#fff;font:400 20px/1 var(--f-disp)}
+  /* party page */
+  & .pcards{position:absolute;left:40px;top:140px;width:940px;display:grid;grid-template-columns:1fr 1fr;gap:14px 20px}
+  & .pc{position:relative;display:grid;grid-template-columns:140px 1fr;gap:6px;align-items:center;height:160px;background:#000;color:#fff;padding:8px 26px 8px 8px;clip-path:polygon(0 0,100% 4%,97% 100%,2% 96%);animation:inUp .35s both;animation-delay:calc(var(--i)*45ms)}
+  & .pc:nth-child(odd){transform:rotate(-1.5deg)} & .pc:nth-child(even){transform:rotate(1deg) translateY(10px)}
+  & .pc .pic{display:grid;place-items:center;height:140px}
+  & .pc h4{margin:0 0 6px;font:400 34px/1 var(--f-disp);text-transform:uppercase;display:flex;justify-content:space-between;align-items:baseline}
+  & .pc h4 span{font:800 20px/1 var(--f-cond);color:var(--gold)}
+  & .pc .r{display:flex;gap:8px;align-items:center;margin-top:7px;font:800 18px/1 var(--f-cond)}
+  & .pc .r .spr{flex:none}
+  & .pc .slash{--w:230px}
+  & .pc.on{background:#fff;color:#000} & .pc.on h4 span{color:var(--red)} & .pc.on .num2{color:#000;text-shadow:none}
+  & .pc.ko .pic,& .pc.ko h4{opacity:.45}
+  & .stamp{position:absolute;font:400 34px/1 var(--f-slab);color:var(--red);border:5px solid var(--red);padding:4px 14px 6px;transform:rotate(-12deg);text-transform:uppercase;background:rgba(0,0,0,.6)}
+  & .tag{position:absolute;font:400 18px/1 var(--f-disp);background:var(--red);color:#fff;padding:4px 12px 5px;transform:rotate(-4deg);text-transform:uppercase;letter-spacing:.04em}
+  & .acts{position:absolute;right:26px;top:230px;display:flex;flex-direction:column;gap:14px;align-items:flex-end}
+  & .acts .blade{font-size:40px;animation:inR .35s both;animation-delay:calc(var(--i)*60ms)}
+  /* bag */
+  & .pockets{position:absolute;left:280px;top:50px;display:flex;gap:6px}
+  & .pockets span{font:400 24px/1 var(--f-disp);padding:8px 20px;background:#222;color:#aaa;transform:skewX(-14deg);text-transform:uppercase}
+  & .pockets span.on{background:var(--red);color:#fff}
+  & .items{position:absolute;left:70px;top:140px;width:560px;display:flex;flex-direction:column;gap:6px}
+  & .it{display:grid;grid-template-columns:56px 1fr auto;align-items:center;height:62px;padding:0 30px 0 12px;font:400 32px/1 var(--f-disp);text-transform:uppercase;color:#fff;border-bottom:2px solid #333;animation:inL .3s both;animation-delay:calc(var(--i)*35ms)}
+  & .it span{font:400 28px/1 var(--f-disp);color:var(--bone)}
+  & .it.on{background:#fff;color:#000;border:0;clip-path:polygon(0 0,100% 8%,97% 100%,1% 92%);transform:rotate(-1.5deg) translateX(18px)} & .it.on span{color:var(--red)}
+  & .idet{position:absolute;left:700px;top:130px;width:540px}
+  & .idet .big{position:relative;width:200px;height:200px;background:#fff;display:grid;place-items:center;transform:rotate(5deg);box-shadow:14px 14px 0 var(--red);animation:pop .3s both}
+  & .idet h3{position:absolute;left:170px;top:60px;margin:0;font:400 58px/1 var(--f-disp);text-transform:uppercase;background:#000;padding:4px 20px 8px;transform:rotate(-4deg);white-space:nowrap}
+  & .idet p{margin:34px 0 0;font:700 25px/1.25 var(--f-cond);color:#fff;max-width:520px}
+  & .idet .lim{display:flex;gap:10px;margin-top:14px} & .idet .lim span{background:#000;color:#fff;font:800 19px/1 var(--f-cond);padding:6px 16px;transform:skewX(-12deg);letter-spacing:.05em}
+  & .useon{position:absolute;left:700px;bottom:76px;display:flex;gap:8px;align-items:flex-end}
+  & .useon .u{width:82px;background:#000;border:2px solid #444;padding:4px 4px 6px;display:grid;justify-items:center;gap:3px}
+  & .useon .u .pic{height:46px;display:grid;place-items:center} & .useon .u .slash{--w:70px;height:10px;padding:2px 8px 2px 2px;background:#333}
+  & .useon .u.on{border-color:#fff;background:#fff;transform:translateY(-10px) rotate(-3deg)} & .useon .u.on .slash{background:#000}
+  & .useon>b{font:800 18px/1 var(--f-cond);letter-spacing:.12em;color:var(--bone);writing-mode:vertical-rl;transform:rotate(180deg);margin-right:2px}
+  /* hit */
+  & .speed{position:absolute;inset:-200px;background:repeating-linear-gradient(90deg,transparent 0 46px,rgba(255,255,255,.9) 46px 50px,transparent 50px 130px,rgba(0,0,0,.85) 130px 150px,transparent 150px 400px),var(--red);transform:rotate(-18deg);animation:lines .35s linear infinite}
+  & .s-hit .big{position:absolute;left:40px;top:90px;font-size:104px;transform:rotate(-10deg);display:flex;flex-direction:column;gap:8px;animation:pop .3s cubic-bezier(.2,1.6,.4,1) both}
+  & .s-hit .big .rs:last-child{margin-left:90px}
+  & .s-hit .dmg{position:absolute;right:70px;top:76px;font:400 150px/1 var(--f-disp);color:#fff;-webkit-text-stroke:10px #000;paint-order:stroke fill;transform:rotate(8deg);animation:pop .25s .15s cubic-bezier(.2,1.8,.4,1) both}
+  & .s-hit .victim{position:absolute;right:190px;top:150px;animation:shake .4s .1s both}
+  & .s-hit .foebar{position:absolute;right:70px;bottom:40px;transform:rotate(-3deg)}
+  & .s-hit .foebar .slash{--w:520px;height:34px;padding:6px 24px 6px 6px} & .s-hit .foebar .slash i{animation:drain .9s .3s cubic-bezier(.3,0,.2,1) both}
+  & .s-hit .foebar .ghost{position:absolute;left:6px;top:6px;height:22px;background:#fff;opacity:.5}
+  & .s-hit .foebar h3{margin:0 0 4px;font:400 40px/1 var(--f-disp);text-transform:uppercase;text-shadow:3px 3px 0 #000;display:flex;justify-content:space-between}
+}
+
+/* ===== pass 3 · the run outside battle: stage stamp, route map, talk and choice split, reward cards, mart ===== */
+@keyframes pulse{50%{transform:rotate(45deg) scale(1.12)}}
+@keyframes dash{to{stroke-dashoffset:-40}}
+@keyframes nextb{50%{transform:translateY(6px)}}
+@keyframes deal{from{transform:translate(var(--fx,0),520px) rotate(40deg);opacity:0}}
+.p3{
+  & .day{position:absolute;left:30px;top:34px;display:grid;grid-template-columns:auto auto;align-items:center;column-gap:10px;transform:rotate(-6deg);animation:inL .4s cubic-bezier(.2,1.3,.4,1) both;z-index:3}
+  & .day>b{grid-row:span 2;font:400 112px/.9 var(--f-disp);color:#fff;-webkit-text-stroke:9px #000;paint-order:stroke fill;letter-spacing:-.02em}
+  & .day>div{align-self:end;font:400 30px/1 var(--f-disp);color:#fff;-webkit-text-stroke:6px #000;paint-order:stroke fill;text-transform:uppercase;white-space:nowrap}
+  & .day>div span{font-size:20px;margin-left:8px}
+  & .day>strong{align-self:start;justify-self:start;background:var(--red);color:#fff;font:400 26px/1 var(--f-disp);padding:4px 18px 6px 12px;clip-path:polygon(0 0,100% 0,92% 100%,0 100%);text-transform:uppercase;box-shadow:0 0 0 3px #000}
+  & .day>i{grid-column:span 2;justify-self:start;margin:2px 0 0 14px;font:400 19px/1 var(--f-mark);color:#fff;background:#000;padding:4px 12px;transform:rotate(2deg);font-style:normal}
+  & .wallet{position:absolute;right:24px;top:22px;background:#fff;color:#000;font:400 40px/1 var(--f-disp);padding:6px 26px 8px 30px;clip-path:polygon(6% 0,100% 0,100% 100%,0 100%);transform:rotate(3deg);box-shadow:8px 8px 0 #000;font-variant-numeric:tabular-nums}
+  & .wallet small{font:800 16px/1 var(--f-cond);letter-spacing:.14em;margin-right:10px;color:var(--red)}
+  /* map */
+  & .s-map .tex{position:absolute;inset:0;background:url(sprites/map-region0.png) center/cover;image-rendering:pixelated;filter:grayscale(1) contrast(1.4) brightness(.55);opacity:.5}
+  & .s-map .wash{position:absolute;inset:0;background:var(--red);mix-blend-mode:multiply}
+  & .s-map svg{position:absolute;inset:0}
+  & .s-map .ln{fill:none;stroke:#000;stroke-width:14;stroke-linejoin:miter}
+  & .s-map .ln2{fill:none;stroke:#fff;stroke-width:5;stroke-dasharray:14 10;animation:dash 1s linear infinite}
+  & .s-map .ln2.old{stroke:#777;animation:none;stroke-dasharray:none}
+  & .nd{position:absolute;width:78px;height:78px;margin:-39px;background:#000;border:5px solid #fff;transform:rotate(45deg);display:grid;place-items:center}
+  & .nd>*{transform:rotate(-45deg)}
+  & .nd b{font:400 44px/1 var(--f-disp);color:#fff}
+  & .nd.done{background:#3a3a3a;border-color:#888} & .nd.done b{color:#888}
+  & .nd.skip{opacity:.35}
+  & .nd.next{background:#fff;border-color:#000;animation:pulse 1.1s ease-in-out infinite} & .nd.next b{color:#000}
+  & .nd.sel{width:104px;height:104px;margin:-52px;background:#fff;border-color:#000;box-shadow:12px 12px 0 var(--ink),0 0 0 6px var(--gold);animation:none} & .nd.sel b{color:var(--red);font-size:60px}
+  & .nd.here{background:var(--red);border-color:#fff}
+  & .you{position:absolute;animation:bob 1s ease-in-out infinite}
+  & .youtag{position:absolute;background:#000;color:#fff;font:400 20px/1 var(--f-disp);padding:4px 12px 5px;transform:rotate(-6deg)}
+  & .cols{position:absolute;left:0;top:598px;width:980px;height:40px}
+  & .cols span{position:absolute;margin-left:-30px;width:60px;text-align:center;font:400 30px/1 var(--f-disp);color:#fff;-webkit-text-stroke:5px #000;paint-order:stroke fill}
+  & .cols span.on{font-size:44px;top:-8px;color:var(--gold)}
+  & .stop{position:absolute;right:0;top:120px;width:316px;height:470px;background:#000;clip-path:polygon(9% 0,100% 0,100% 100%,0 96%);padding:26px 26px 30px 52px;color:#fff;animation:inR .4s both}
+  & .stop small{font:800 16px/1 var(--f-cond);letter-spacing:.2em;color:var(--red)}
+  & .stop h3{margin:4px 0 0;font:400 46px/1 var(--f-disp);text-transform:uppercase}
+  & .stop h4{margin:2px 0 8px;font:400 22px/1 var(--f-mark);color:var(--gold)}
+  & .stop .pic{height:170px;display:grid;place-items:center;background:var(--red);clip-path:polygon(0 8%,100% 0,96% 100%,4% 92%);margin:0 0 12px -8px}
+  & .stop p{margin:0 0 5px;font:700 20px/1.2 var(--f-cond)} & .stop p b{color:var(--gold);font-weight:800}
+  & .mini{position:absolute;left:24px;bottom:14px;display:flex;gap:6px;align-items:center}
+  & .mini .u{width:76px;background:#000;padding:3px 4px 6px;display:grid;justify-items:center;gap:2px;clip-path:polygon(0 0,100% 0,92% 100%,0 100%)}
+  & .mini .u .pic{height:44px;display:grid;place-items:center} & .mini .u .slash{--w:62px;height:10px;padding:2px 8px 2px 2px;background:#333}
+  /* talk + choice */
+  & .bust{position:absolute;left:30px;bottom:-60px;animation:inL .4s cubic-bezier(.2,1.2,.4,1) both}
+  & .bust .sh{filter:brightness(0);opacity:.85}
+  & .strip{position:absolute;inset:0;background:#fff;clip-path:polygon(4% 100%,20% 0,34% 0,24% 100%);opacity:.9}
+  & .strip.r{background:var(--red);clip-path:polygon(0 100%,14% 0,20% 0,4% 100%)}
+  & .talk{position:absolute;left:300px;bottom:44px;width:900px;min-height:176px;background:#000;color:#fff;padding:44px 70px 30px 60px;clip-path:polygon(2% 8%,100% 0,97% 100%,0 90%);font:700 30px/1.24 var(--f-cond);animation:inUp .3s both}
+  & .talk::before{content:"";position:absolute;inset:10px 14px;border:3px solid #fff;clip-path:polygon(2% 8%,100% 0,97% 100%,0 90%);pointer-events:none}
+  & .talk em{font-style:normal;color:var(--gold)}
+  & .name{position:absolute;left:330px;bottom:200px;background:var(--red);color:#fff;font:400 34px/1 var(--f-disp);padding:6px 36px 9px 22px;transform:rotate(-4deg);text-transform:uppercase;clip-path:polygon(0 0,100% 10%,94% 100%,3% 90%);z-index:2}
+  & .nextb{position:absolute;right:120px;bottom:60px;font:400 22px/1 var(--f-disp);color:#000;background:#fff;padding:4px 10px;animation:nextb .7s ease-in-out infinite;z-index:2}
+  & .chs{position:absolute;right:50px;top:110px;display:flex;flex-direction:column;gap:16px;align-items:flex-end}
+  & .ch{position:relative;display:grid;grid-template-columns:auto 1fr;column-gap:16px;align-items:center;width:600px;background:#000;color:#fff;padding:12px 40px 14px 22px;clip-path:polygon(3% 0,100% 6%,98% 100%,0 92%);animation:inR .35s cubic-bezier(.2,1.2,.4,1) both;animation-delay:calc(var(--i)*70ms)}
+  & .ch kbd{grid-row:span 2;display:grid;place-items:center;width:44px;height:44px;background:#fff;color:#000;font:400 26px/1 var(--f-disp);transform:rotate(-8deg)}
+  & .ch b{font:400 34px/1 var(--f-disp);text-transform:uppercase}
+  & .ch span{font:700 19px/1.15 var(--f-cond);color:var(--bone);margin-top:4px}
+  & .ch.on{background:#fff;color:#000;width:660px;filter:drop-shadow(10px 9px 0 var(--red))} & .ch.on kbd{background:#000;color:#fff} & .ch.on span{color:#333}
+  & .talk.q{min-height:0;padding-block:34px 26px;font-size:27px}
+  /* reward */
+  & .s-reward .ttl{position:absolute;left:36px;top:56px;font-size:70px;transform:rotate(-8deg);animation:inL .4s both}
+  & .rcs{position:absolute;left:372px;top:176px;display:flex;gap:26px}
+  & .rc{width:260px;height:390px;background:#fff;color:#000;display:grid;grid-template-rows:auto 150px auto 1fr;justify-items:center;text-align:center;padding:0 16px 14px;transform:rotate(var(--r)) translateY(var(--ty,30px));box-shadow:0 0 0 6px #000;animation:deal .45s cubic-bezier(.2,1.1,.3,1) both;animation-delay:calc(var(--i)*90ms)}
+  & .rc small{justify-self:stretch;margin:0 -16px;background:#000;color:#fff;font:800 17px/1 var(--f-cond);letter-spacing:.18em;padding:9px 0}
+  & .rc .pic{width:124px;height:124px;border-radius:50%;background:var(--red);display:grid;place-items:center;align-self:center;box-shadow:0 0 0 6px #000}
+  & .rc h4{margin:6px 0 4px;font:400 32px/1 var(--f-disp);text-transform:uppercase}
+  & .rc p{margin:0;font:700 19px/1.2 var(--f-cond)}
+  & .rc.on{--ty:-14px;box-shadow:0 0 0 6px #000,0 0 0 12px var(--gold),18px 18px 0 12px #000;z-index:2}
+  & .rc .take{position:absolute;left:50%;bottom:-24px;transform:translateX(-50%) rotate(-4deg);background:#000;color:#fff;font:400 28px/1 var(--f-disp);padding:6px 24px 8px;white-space:nowrap}
+  & .prize{position:absolute;right:40px;top:26px;font:400 62px/1 var(--f-disp);color:#fff;-webkit-text-stroke:8px #000;paint-order:stroke fill;transform:rotate(4deg)}
+  & .prize small{display:block;font:400 22px/1 var(--f-mark);-webkit-text-stroke:0;background:#000;padding:3px 10px;width:max-content;margin-left:auto}
+  /* mart */
+  & .clerk{position:absolute;left:60px;bottom:60px}
+  & .bub{position:absolute;left:40px;top:150px;width:240px;background:#fff;color:#000;font:400 23px/1.15 var(--f-mark);padding:14px 18px 18px;transform:rotate(-4deg);clip-path:polygon(0 0,100% 4%,96% 84%,40% 86%,30% 100%,26% 86%,2% 88%)}
+  & .s-shop .items{left:310px;width:470px;top:124px} & .s-shop .it span{color:var(--gold)} & .s-shop .it.on span{color:var(--red)}
+  & .s-shop .idet{left:830px;top:150px;width:420px} & .s-shop .idet h3{left:120px;top:150px;font-size:46px} & .s-shop .idet .big{width:170px;height:170px} & .s-shop .idet p{font-size:23px;margin-top:60px}
+  & .cart{position:absolute;left:310px;bottom:22px;display:flex;gap:10px} & .cart span{background:#fff;color:#000;font:800 21px/1 var(--f-cond);padding:8px 18px;transform:skewX(-12deg)} & .cart span b{color:var(--red)}
+}
+
+/* ===== pass 4 · menus get rooms: a pause hub, one page per job, Settings split into six short pages ===== */
+@keyframes sweep{from{clip-path:polygon(0 0,0 0,0 100%,0 100%)}to{clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}}
+@keyframes grow{from{transform:scale(0)}}
+.p4{
+  /* pause hub */
+  & .hub{position:absolute;left:60px;top:126px;display:flex;flex-direction:column;gap:2px}
+  & .hub .h{position:relative;display:flex;align-items:baseline;gap:18px;width:max-content;font:400 var(--fs,48px)/1.05 var(--f-disp);color:#fff;text-transform:uppercase;padding:2px 30px 6px 20px;transform:rotate(var(--r,-4deg));margin-left:var(--ml,0);animation:inL .4s cubic-bezier(.2,1.3,.4,1) both;animation-delay:calc(var(--i)*40ms)}
+  & .hub .h small{font:400 22px/1 var(--f-mark);text-transform:none;color:#000;background:var(--gold);padding:4px 12px;transform:rotate(3deg)}
+  & .hub .h.on{color:#000;--fs:84px}
+  & .hub .h.on::before,& .hub .h.on::after{content:"";position:absolute;inset:0 -10px;background:#fff;clip-path:polygon(2% 4%,100% 0,97% 100%,0 92%);z-index:-1}
+  & .hub .h.on::after{background:#000;transform:translate(12px,10px);z-index:-2}
+  & .hero{position:absolute;right:150px;bottom:-140px;animation:inR .45s cubic-bezier(.2,1.2,.4,1) both}
+  & .hero .sh{filter:brightness(0);opacity:.9}
+  & .s-pause .mini{left:auto;right:24px;bottom:66px}
+  & .facts{position:absolute;right:24px;top:24px;display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+  & .facts span{background:#000;color:#fff;font:400 26px/1 var(--f-disp);padding:6px 20px 8px 26px;clip-path:polygon(6% 0,100% 0,100% 100%,0 100%);text-transform:uppercase;font-variant-numeric:tabular-nums}
+  & .facts span b{font:800 15px/1 var(--f-cond);letter-spacing:.16em;color:var(--red);margin-right:10px}
+  /* summary */
+  & .sm-pic{position:absolute;left:60px;top:150px;width:420px;height:420px;display:grid;place-items:center}
+  & .sm-pic::before{content:"";position:absolute;inset:20px;background:#000;clip-path:polygon(50% 0,61% 30%,95% 20%,72% 48%,100% 72%,66% 70%,56% 100%,42% 72%,6% 88%,26% 54%,0 30%,36% 32%);animation:pop .35s cubic-bezier(.2,1.4,.4,1) both}
+  & .sm-pic .spr{position:relative;animation:bob 2.4s ease-in-out infinite}
+  & .sm-name{position:absolute;left:70px;top:100px;font-size:64px;transform:rotate(-6deg)}
+  & .sm-lv{position:absolute;left:330px;top:540px;font:400 54px/1 var(--f-disp);color:#fff;-webkit-text-stroke:7px #000;paint-order:stroke fill;transform:rotate(-6deg)}
+  & .sm-tabs{position:absolute;left:560px;top:36px;display:flex;gap:6px}
+  & .sm-tabs span{font:400 26px/1 var(--f-disp);padding:8px 24px;background:#000;color:#aaa;transform:skewX(-14deg);text-transform:uppercase}
+  & .sm-tabs span.on{background:#fff;color:#000;box-shadow:6px 6px 0 #000}
+  & .radar{position:absolute;left:540px;top:110px;width:400px;height:400px}
+  & .radar .web{fill:none;stroke:rgba(255,255,255,.35);stroke-width:2} & .radar .axis{stroke:rgba(255,255,255,.35);stroke-width:2}
+  & .radar .val{fill:var(--gold);stroke:#000;stroke-width:5;stroke-linejoin:miter;transform-origin:200px 200px;animation:grow .5s .15s cubic-bezier(.2,1.3,.4,1) both}
+  & .radar text{font:400 20px var(--f-disp);fill:#fff;text-anchor:middle;paint-order:stroke;stroke:#000;stroke-width:5px}
+  & .radar text.n{font-size:26px;fill:var(--gold)}
+  & .sm-side{position:absolute;right:30px;top:110px;width:300px;display:flex;flex-direction:column;gap:8px}
+  & .kv{background:#000;color:#fff;padding:8px 20px 10px 26px;clip-path:polygon(5% 0,100% 0,100% 100%,0 100%);animation:inR .35s both;animation-delay:calc(var(--i)*50ms)}
+  & .kv small{display:block;font:800 14px/1 var(--f-cond);letter-spacing:.18em;color:var(--red);margin-bottom:3px}
+  & .kv b{font:400 26px/1.05 var(--f-disp);text-transform:uppercase;display:flex;align-items:center;gap:8px}
+  & .kv p{margin:3px 0 0;font:700 17px/1.2 var(--f-cond);color:var(--bone)}
+  & .sm-moves{position:absolute;left:540px;bottom:70px;display:grid;grid-template-columns:repeat(4,170px);gap:8px}
+  & .sm-moves span{background:var(--tc);color:#fff;font:400 22px/1 var(--f-disp);padding:8px 10px 10px 14px;transform:skewX(-10deg);text-transform:uppercase;text-shadow:0 2px 0 rgba(0,0,0,.4);white-space:nowrap}
+  & .sm-moves span small{display:block;font:800 14px/1 var(--f-cond);letter-spacing:.1em;margin-top:3px}
+  & .pager{position:absolute;left:60px;bottom:18px;display:flex;gap:6px;align-items:center}
+  & .pager .u{width:62px;height:54px;background:#000;display:grid;place-items:center;clip-path:polygon(0 0,100% 0,90% 100%,0 100%)} & .pager .u.on{background:#fff;width:76px;height:64px}
+  /* dex */
+  & .dexgrid{position:absolute;left:50px;top:150px;display:grid;grid-template-columns:repeat(6,104px);gap:10px}
+  & .dx{position:relative;height:104px;background:#000;display:grid;place-items:center;clip-path:polygon(0 0,100% 4%,96% 100%,3% 96%);animation:pop .25s both;animation-delay:calc(var(--i)*18ms)}
+  & .dx small{position:absolute;left:8px;top:5px;font:400 15px/1 var(--f-disp);color:#999}
+  & .dx.unk .px{filter:brightness(0) invert(.25)}
+  & .dx.on{background:#fff;transform:rotate(-4deg) scale(1.14);z-index:2;box-shadow:8px 8px 0 #000} & .dx.on small{color:var(--red)}
+  & .dexcount{position:absolute;left:430px;top:44px;display:flex;gap:10px}
+  & .dexcount span{font:400 30px/1 var(--f-disp);background:#000;color:#fff;padding:6px 20px 8px;transform:skewX(-12deg)} & .dexcount span b{color:var(--gold);font-weight:400}
+  & .dexcard{position:absolute;right:30px;top:120px;width:440px;height:500px;background:#fff;color:#000;transform:rotate(2deg);clip-path:polygon(0 2%,100% 0,98% 100%,3% 97%);padding:24px 34px;animation:inR .4s both}
+  & .dexcard .no{font:400 34px/1 var(--f-disp);color:var(--red)}
+  & .dexcard h3{margin:0 0 6px;font:400 64px/1 var(--f-disp);text-transform:uppercase}
+  & .dexcard .pic{height:170px;display:grid;place-items:center;background:var(--red);margin:10px -34px;clip-path:polygon(0 10%,100% 0,100% 90%,0 100%)}
+  & .dexcard p{margin:6px 0;font:700 20px/1.25 var(--f-cond)}
+  & .dexcard .rank{display:flex;gap:6px;margin-top:8px} & .dexcard .rank i{flex:1;height:14px;background:#ccc;transform:skewX(-20deg)} & .dexcard .rank i.f{background:#000}
+  /* trainer card */
+  & .tcard{position:absolute;left:110px;top:120px;width:760px;height:470px;background:#fff;color:#000;transform:rotate(-4deg);box-shadow:20px 20px 0 #000;padding:30px 40px;animation:pop .35s cubic-bezier(.2,1.2,.4,1) both;overflow:hidden}
+  & .tcard::before{content:"";position:absolute;right:-60px;top:-60px;width:360px;height:600px;background:var(--red);transform:rotate(14deg)}
+  & .tcard .pic{position:absolute;right:50px;bottom:-30px}
+  & .tcard h3{position:relative;margin:0;font-size:96px;line-height:1}
+  & .tcard .id{font:800 20px/1 var(--f-cond);letter-spacing:.2em;margin:12px 0 18px}
+  & .tcard dl{position:relative;display:grid;grid-template-columns:auto auto;gap:6px 26px;margin:0;width:max-content}
+  & .tcard dt{font:800 18px/1.2 var(--f-cond);letter-spacing:.1em;color:#555;text-transform:uppercase} & .tcard dd{margin:0;font:400 28px/1 var(--f-disp);font-variant-numeric:tabular-nums}
+  & .badges{position:absolute;left:40px;bottom:28px;display:flex;gap:10px}
+  & .badges i{width:46px;height:46px;background:#ddd;transform:rotate(45deg) scale(.8);border:4px solid #000} & .badges i.f{background:var(--gold)}
+  & .tside{position:absolute;right:40px;top:150px;width:300px;display:flex;flex-direction:column;gap:10px}
+  /* save */
+  & .slots{position:absolute;left:90px;top:140px;display:flex;flex-direction:column;gap:18px}
+  & .slot{position:relative;display:grid;grid-template-columns:100px 1fr auto;align-items:center;gap:20px;width:860px;height:140px;background:#000;color:#fff;padding:0 50px 0 20px;clip-path:polygon(0 0,100% 6%,97% 100%,2% 94%);transform:rotate(var(--r));animation:inL .4s both;animation-delay:calc(var(--i)*70ms)}
+  & .slot .no{font:400 90px/1 var(--f-disp);color:var(--red);text-align:center}
+  & .slot h4{margin:0 0 6px;font:400 38px/1 var(--f-disp);text-transform:uppercase} & .slot p{margin:0;font:700 20px/1.2 var(--f-cond);color:var(--bone)}
+  & .slot .team{display:flex;gap:4px;align-items:center}
+  & .slot.on{background:#fff;color:#000;width:940px} & .slot.on p{color:#333}
+  & .slot.empty h4{color:#777}
+  /* settings hub + pages */
+  & .cats{position:absolute;left:70px;top:150px;display:grid;grid-template-columns:repeat(3,360px);gap:22px 26px}
+  & .cat{position:relative;height:200px;background:#000;color:#fff;padding:20px 26px;clip-path:polygon(0 0,100% 5%,97% 100%,3% 95%);transform:rotate(var(--r));animation:pop .3s cubic-bezier(.2,1.3,.4,1) both;animation-delay:calc(var(--i)*50ms)}
+  & .cat b{display:block;font:400 54px/1 var(--f-disp);text-transform:uppercase}
+  & .cat p{margin:8px 0 0;font:700 20px/1.25 var(--f-cond);color:var(--bone)}
+  & .cat i{position:absolute;right:20px;bottom:6px;font:400 100px/1 var(--f-fat);font-style:normal;color:var(--red);opacity:.9}
+  & .cat.on{background:#fff;color:#000;filter:drop-shadow(12px 10px 0 var(--red))} & .cat.on p{color:#333}
+  & .rail{position:absolute;left:0;top:140px;display:flex;flex-direction:column;gap:6px}
+  & .rail span{font:400 26px/1 var(--f-disp);color:#999;background:#1a1a1a;padding:9px 30px 11px 40px;clip-path:polygon(0 0,100% 0,90% 100%,0 100%);text-transform:uppercase;width:230px}
+  & .rail span.on{background:var(--red);color:#fff;width:270px;font-size:34px}
+  & .srows{position:absolute;left:330px;top:136px;width:900px;display:flex;flex-direction:column;gap:10px}
+  & .sr{display:grid;grid-template-columns:1fr auto;align-items:center;height:64px;padding:0 30px 0 34px;background:#151515;color:#fff;clip-path:polygon(1% 0,100% 0,99% 100%,0 100%);font:800 28px/1 var(--f-cond);text-transform:uppercase;letter-spacing:.02em;animation:inR .3s both;animation-delay:calc(var(--i)*35ms)}
+  & .sr.on{background:#fff;color:#000;height:76px;transform:rotate(-1deg) translateX(-14px);filter:drop-shadow(8px 7px 0 var(--red))}
+  & .sr .v{display:flex;align-items:center;gap:14px;font:400 28px/1 var(--f-disp)}
+  & .sr .v.cyc::before{content:"◀";font-size:15px;color:var(--red)} & .sr .v.cyc::after{content:"▶";font-size:15px;color:var(--red)}
+  & .tog{display:flex;font:400 20px/1 var(--f-disp);transform:skewX(-12deg)} & .tog i{font-style:normal;padding:7px 16px;background:#333;color:#888} & .tog i.a{background:var(--red);color:#fff}
+  & .sr.on .tog i{background:#ccc;color:#666} & .sr.on .tog i.a{background:var(--red);color:#fff}
+  & .sld{position:relative;width:260px;height:18px;background:#333;transform:skewX(-20deg)} & .sld i{position:absolute;inset:0 auto 0 0;background:var(--red)} & .sr.on .sld{background:#ccc}
+  & .kcap{display:grid;place-items:center;min-width:44px;height:40px;padding:0 12px;background:#fff;color:#000;font:400 22px/1 var(--f-disp);box-shadow:4px 4px 0 var(--red)} & .sr.on .kcap{background:#000;color:#fff}
+  & .shelp{position:absolute;left:340px;bottom:66px;width:640px;font:400 23px/1.25 var(--f-mark);color:#fff;transform:rotate(-1.2deg)}
+  & .prev{position:absolute;right:30px;bottom:60px;width:250px;height:142px;background:var(--red);border:5px solid #fff;transform:rotate(3deg);overflow:hidden}
+  & .prev b{position:absolute;left:10px;top:8px;font:400 30px/1 var(--f-disp);background:#000;color:#fff;padding:3px 12px;transform:rotate(-5deg)}
+  & .prev i{position:absolute;right:-20px;bottom:-30px;width:150px;height:150px;background:repeating-conic-gradient(rgba(0,0,0,.25) 0 10deg,transparent 10deg 20deg);border-radius:50%}
+  & .prev small{position:absolute;left:12px;bottom:8px;font:800 14px/1 var(--f-cond);letter-spacing:.14em;color:#fff}
+}
+
+/* ===== pass 5 · motion: every page change is a morph with a red wipe, plus the Mega cut-in, the win splash and the result tally ===== */
+@keyframes vtIn{from{clip-path:polygon(0 0,0 0,-40% 100%,-40% 100%)}to{clip-path:polygon(0 0,140% 0,100% 100%,0 100%)}}
+@keyframes vtOut{to{transform:translateX(4%) scale(1.04);filter:brightness(.4)}}
+@keyframes wipeA{from{left:-50%}to{left:130%}}
+@keyframes breathe{50%{transform:scaleY(1.012) translateY(-2px)}}
+@keyframes drift{to{background-position:14px 14px}}
+@keyframes cutIn{from{transform:scaleX(0)}}
+@keyframes rays{to{background-position:0 -600px}}
+@keyframes ringspin{to{transform:rotate(360deg)}}
+@keyframes flash{0%{opacity:1}100%{opacity:0}}
+@keyframes zoomIn{from{transform:scale(1.6);opacity:0}}
+@keyframes count{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes fill{from{width:var(--from,0%)}}
+::view-transition-old(stage){animation:vtOut .3s cubic-bezier(.5,0,.9,.4) both}
+::view-transition-new(stage){animation:vtIn .42s cubic-bezier(.2,.8,.2,1) both}
+::view-transition-group(hd),::view-transition-group(day),::view-transition-group(hero),::view-transition-group(mon),::view-transition-group(crew),::view-transition-group(keys),::view-transition-group(cash){animation-duration:.42s;animation-timing-function:cubic-bezier(.2,1.2,.3,1)}
+#stage.p5{view-transition-name:stage}
+.p5{
+  & .hd{view-transition-name:hd} & .day{view-transition-name:day} & .keys{view-transition-name:keys} & .wallet{view-transition-name:cash}
+  & [data-vt=hero]{view-transition-name:hero} & [data-vt=mon]{view-transition-name:mon} & .stack,& .mini,& .pager{view-transition-name:crew}
+  & .wipe{position:absolute;inset:-10% -30%;z-index:60;pointer-events:none}
+  & .wipe i{position:absolute;top:0;bottom:0;left:130%;width:34%;background:var(--red);transform:skewX(-22deg);animation:wipeA .5s cubic-bezier(.4,0,.2,1) both}
+  & .wipe i+i{width:12%;background:#000;animation-delay:.07s} & .wipe i+i+i{width:5%;background:#fff;animation-delay:.12s}
+  & .hero,& .bust{transform-origin:50% 100%} & .hero .spr:last-child,& .bust .spr:last-child{animation:breathe 3s ease-in-out infinite;transform-origin:50% 100%}
+  & .dots{animation:drift 1.2s linear infinite}
+  & .blade.on,& .hub .h.on,& .ch.on,& .sr.on,& .it.on{animation-name:inL,jit;animation-duration:.4s,.24s;animation-timing-function:cubic-bezier(.2,1.3,.4,1),steps(2);animation-iteration-count:1,infinite;animation-delay:0s,.5s;animation-fill-mode:both,none}
+  /* mega cut-in */
+  & .cut{position:absolute;inset:0;clip-path:polygon(0 30%,100% 8%,100% 58%,0 80%);background:#111;transform-origin:0 50%;animation:cutIn .28s cubic-bezier(.3,0,.2,1) both}
+  & .cut .rays{position:absolute;inset:-300px;background:repeating-linear-gradient(0deg,#ffd400 0 22px,#ff4fb0 22px 30px,#111 30px 74px,#19d3ff 74px 82px,#111 82px 150px);transform:rotate(-80deg);animation:rays .5s linear infinite}
+  & .cut .face{position:absolute;left:250px;top:-70px;animation:zoomIn .35s .15s cubic-bezier(.2,1.2,.3,1) both}
+  & .cutedge{position:absolute;inset:0;background:#fff;clip-path:polygon(0 28.6%,100% 6.6%,100% 8%,0 30%)}
+  & .cutedge.b{clip-path:polygon(0 80%,100% 58%,100% 59.4%,0 81.4%)}
+  & .megat{position:absolute;left:40px;bottom:70px;font-size:80px;transform:rotate(-9deg);display:flex;flex-direction:column;gap:8px;animation:pop .3s .3s cubic-bezier(.2,1.6,.4,1) both}
+  & .megat .rs:last-child{margin-left:110px}
+  & .megaring{position:absolute;right:60px;top:0;z-index:3;width:190px;height:190px;display:grid;place-items:center}
+  & .megaring .ring2{position:absolute;inset:0;animation:ringspin 4s linear infinite;display:grid;place-items:center}
+  & .megasay{position:absolute;right:40px;bottom:40px;width:420px;background:#fff;color:#000;font:800 26px/1.15 var(--f-cond);padding:16px 30px 18px 34px;clip-path:polygon(4% 0,100% 8%,97% 100%,0 92%);transform:rotate(2deg);animation:inR .35s .35s both}
+  & .megasay b{font:400 26px/1 var(--f-disp);color:var(--red)}
+  & .flashw{position:absolute;inset:0;background:#fff;animation:flash .5s .1s both;pointer-events:none}
+  /* win */
+  & .s-win .sil{position:absolute;left:-40px;bottom:-80px;filter:brightness(0);animation:inL .45s cubic-bezier(.2,1.1,.3,1) both}
+  & .s-win .champ{position:absolute;left:420px;bottom:-40px;animation:inUp .4s .15s both}
+  & .s-win .line{position:absolute;right:70px;top:70px;width:440px;font:400 64px/1 var(--f-mark);color:#fff;transform:rotate(6deg);text-shadow:5px 5px 0 #000;animation:pop .3s .45s cubic-bezier(.2,1.6,.4,1) both}
+  & .s-win .line small{display:block;font:800 20px/1 var(--f-cond);letter-spacing:.2em;margin-top:14px;text-shadow:none;background:#000;width:max-content;padding:5px 14px}
+  & .s-win .big{position:absolute;right:30px;bottom:130px;font-size:96px;transform:rotate(-7deg);animation:pop .3s .3s cubic-bezier(.2,1.6,.4,1) both}
+  & .s-win .sub{position:absolute;right:50px;bottom:60px;background:#000;color:#fff;font:800 24px/1 var(--f-cond);padding:10px 26px;transform:rotate(-3deg) skewX(-10deg)}
+  /* result */
+  & .tally{position:absolute;left:60px;top:150px;width:640px;display:flex;flex-direction:column;gap:8px}
+  & .tl{position:relative;display:grid;grid-template-columns:64px 170px 1fr auto;align-items:center;gap:12px;height:68px;background:#000;color:#fff;padding:0 34px 0 12px;clip-path:polygon(0 0,100% 0,96% 100%,0 100%);animation:inL .35s both;animation-delay:calc(var(--i)*60ms)}
+  & .tl b{font:400 26px/1 var(--f-disp);text-transform:uppercase}
+  & .tl .bar{height:16px;background:#333;transform:skewX(-20deg);overflow:hidden} & .tl .bar i{display:block;height:100%;background:var(--cyan);animation:fill .9s .5s cubic-bezier(.3,0,.2,1) both}
+  & .tl span{font:400 24px/1 var(--f-disp);color:var(--cyan);font-variant-numeric:tabular-nums;min-width:86px;text-align:right}
+  & .tl.up{background:#fff;color:#000} & .tl.up .bar{background:#ccc} & .tl.up span{color:#000}
+  & .lvup{position:absolute;left:calc(100% - 16px);top:14px;background:var(--gold);color:#000;font:400 24px/1 var(--f-disp);padding:5px 14px 6px;transform:rotate(6deg);box-shadow:4px 4px 0 #000;animation:pop .3s 1.2s cubic-bezier(.2,1.8,.4,1) both;white-space:nowrap}
+  & .tlw{position:relative}
+  & .gains{position:absolute;right:50px;top:150px;width:460px;display:flex;flex-direction:column;gap:14px;align-items:flex-end}
+  & .gains .g{font:400 78px/1 var(--f-disp);color:#fff;-webkit-text-stroke:9px #000;paint-order:stroke fill;transform:rotate(-4deg);animation:count .5s both;animation-delay:calc(var(--i)*180ms + .3s);white-space:nowrap}
+  & .gains .g small{display:block;font:400 24px/1 var(--f-mark);-webkit-text-stroke:0;background:#000;padding:4px 12px;width:max-content;margin-left:auto}
+  & .gains .g.s{font-size:44px;-webkit-text-stroke:7px #000}
+}
+
+</style></head><body>
+<div class="vw">
+<header class="vw-top"><h1>Pocket Raiders <em>Phantom UI</em></h1>
+<div class="vw-step"><button id="vw-prev" type="button">Earlier pass</button><output id="vw-out" for="vw-pass"></output><button id="vw-next" type="button">Later pass</button><input id="vw-pass" type="range" min="1" max="25" step="1" aria-label="Pass"><button id="vw-tour" type="button">Play tour</button></div></header>
+<div class="vw-nav" id="vw-liv" hidden></div>
+<nav class="vw-nav" id="vw-nav" aria-label="Screens"></nav>
+<div class="vw-stagewrap" id="vw-wrap"><div class="stage" id="stage"></div></div>
+<section class="vw-notes" id="vw-notes" aria-live="polite"></section>
+</div>
+<script>const PASSES=[{"n": 1, "name": "The Phantom kit", "change": "The first cut of the style, taken from Persona 5: red, black and white only, every panel cut on a slant, cut-out ransom letters for the logo, a turning sunburst and halftone dots behind everything. Six core screens: Title, Main menu, Battle command, Event, Pause and Settings.", "pages": ["Title", "Main menu", "Battle command", "Event", "Pause menu", "Settings"], "q": {"x": "It is loud already, but flat: panels sit on the page and nothing overlaps or moves much yet. Battle is still a normal Pokémon layout with slanted boxes.", "b": "First pass, so there is nothing to beat. It sets the rules every later pass has to top.", "p": "Yes. Battle only has the command list; moves, party, bag and targets each need a page. That is pass 2.", "m": "Pause is one list with the party beside it, and Settings is one page with six tabs. Both work but both are crowded; they get split up in pass 4.", "k": "Only because of the sprites. Types and Poké Balls are tiny; later passes have to pull Pokémon things into the style itself."}}, {"n": 2, "name": "Battle leaves the box", "change": "Battle stops being a Pokémon layout with slanted boxes. Commands burst out of your Pokémon in a jagged star, each on its own key, the way Persona 5 puts orders around the hero. Your party stands in a stack down the right edge with live HP. Black slanted bars frame the field like a film shot. Fight, Pokémon and Bag each open their own page, and a hit gets a full-screen splash.", "pages": ["Moves", "Party (switch)", "Bag", "Hit splash"], "q": {"x": "Much more. The command burst and the Super Effective splash are the first things on the page that could not be mistaken for any other Pokémon game.", "b": "Pass 1 had four words in a column. Now each command has a key, a size and an angle, the party is always in view, and moves show their type, power, PP and how well they hit before you choose.", "p": "Four added. Moves, party and bag used to be nowhere; they are full pages now so the battle screen holds only the fight.", "m": "Not touched this pass. In battle, X on the burst is Run and Info opens foe details; Pause still needs its own pass.", "k": "Better: type colours carry the move cards, HP bars keep green, yellow and red, Poké Balls count the foe's team, and the run's real limits (10 heals, 6 revives) sit on the Bag page."}}, {"n": 3, "name": "The run gets a calendar", "change": "Outside battle, every screen now carries a stage stamp in the top corner, built like Persona 5's date: a huge stage number, the region on a red tag and the time and weather in marker pen. The route is a subway-style map of diamond stops over the region's town map. Events are split in two: the character leans in from the side and talks, and only after you press does the choice page appear, with what each choice costs. Rewards are dealt as three cards. The Mart has a clerk, a wallet and a running cart total.", "pages": ["Route map", "Event · choice", "Reward", "Poké Mart"], "q": {"x": "Yes. Big character art leaning into frame, dealt cards and the outlined stage number give each page one loud thing to look at.", "b": "Pass 2 only fixed battle. This pass covers the other half of a run, and the old one-page event (text and choices on top of each other) is replaced by talk then choice.", "p": "Four added. Splitting talk from choice also follows the rule that text stays until you press and rewards only come after.", "m": "Esc on the map opens the menu and C jumps straight to the party. The menu itself is still the pass 1 list; it is the next pass.", "k": "More than before: the route sits on the real region map, stops use Poké Balls, the Mart clerk is the game's own sprite, and the stage stamp shows time and weather, which matter for evolutions."}}, {"n": 4, "name": "Menus get rooms", "change": "The pause list becomes a hub: your trainer stands huge on the right, the chosen word swells to twice the size, and each word opens its own page. New pages for the Pokémon summary (with a six-point stat web, the Pokémon answer to Persona's stat star), the Pokédex, a Trainer card laid out like a calling card, and Save slots. Settings stops being one crowded page: a hub of six big tiles, then one short page each, never more than six rows.", "pages": ["Pokémon summary", "Pokédex", "Trainer card", "Save", "Settings hub", "Game", "Battle", "Look", "Sound", "Controls", "Access"], "q": {"x": "Yes. The trainer filling the pause screen and the stat web give the menus the big-art feel the battle already had.", "b": "Pass 1 squeezed seven jobs and the whole party onto one pause page and all settings behind six tiny tabs. Every job now has room, and Settings rows are big enough to read from the couch.", "p": "Eleven added. Settings alone went from one page to seven.", "m": "This pass is the answer: Esc opens the hub anywhere outside battle, Settings is the sixth word, and Q/E flips between its pages without going back.", "k": "The summary keeps what players expect (types, ability, nature, held item, four moves, Exp bar); the Pokédex shows dark shapes for unseen Pokémon and the game's Mastery ranks."}}, {"n": 5, "name": "Everything moves into everything", "change": "Motion pass. Changing page is now a morph: the header, the stage stamp, your trainer, your Pokémon, the party strip and the key hints each slide and resize from where they were to where they belong on the next page, while a red, black and white blade wipes the rest. Idle screens loop without a seam: the chosen item jitters, trainers breathe, the dots drift. Three new battle moments: a Mega Evolution cut-in across the eyes, a win splash with a line from your trainer, and a result tally where Exp bars fill and numbers punch in.", "pages": ["Mega cut-in", "Win splash", "Result"], "q": {"x": "This is the pass that makes it feel like Persona rather than look like it. The cut-in and the win splash are the showiest pages so far.", "b": "Passes 1 to 4 were still pictures with slide-ins. Now nothing just appears: each page grows out of the one before, and each loop returns to its first frame.", "p": "Three added. Win and Result are separate on purpose, so the splash stays clean and the numbers get room.", "m": "Opening Pause, picking a word and landing on its page is one unbroken move; the trainer shrinks from the hub into the Trainer card. Settings pages slide along the rail the same way.", "k": "Mega Evolution uses the game's own Mega ring and stone art, Exp bars fill the way they always have, and Red's victory line is six dots, because Red never talks."}}];</script>
+<script>
+/* Engine: screens register versions by pass; the stage shows the newest version at or below the chosen pass. */
+const SP='sprites/';
+const SCR={},ORDER=[];
+function scr(id,group,title,since,fn){(SCR[id]||(SCR[id]={id,group,title,v:[]})).v.push({since,fn});SCR[id].v.sort((a,b)=>a.since-b.since);if(!ORDER.includes(id))ORDER.push(id)}
+const verAt=(id,p)=>{let r=null;for(const v of SCR[id].v)if(v.since<=p)r=v;return r};
+const listAt=p=>ORDER.filter(id=>verAt(id,p));
+const im=(n,z=1,c='',s='')=>`<i class="spr" style="${s}"><img class="px ${c}" src="${SP}${n}.png" alt="" style="--z:${z}"></i>`;
+const at=(x,y,w,h)=>`left:${x}px;top:${y}px;${w!=null?`width:${w}px;`:''}${h!=null?`height:${h}px;`:''}`;
+const TYC={normal:'#9fa19f',fire:'#ff6a2b',water:'#2f8fff',grass:'#3fb84a',electric:'#f7c400',ice:'#3fd8ff',fighting:'#ff8000',poison:'#a245d6',ground:'#a0672c',flying:'#7fb8ff',psychic:'#ff4f86',bug:'#96a81f',rock:'#b3a676',ghost:'#70417a',dragon:'#5a63e8',dark:'#50413f',steel:'#60a1b8',fairy:'#ef70ef'};
+const ty=t=>`<span class="ty" style="--tc:${TYC[t]}"><img class="px" src="${SP}ty-${t}.png" alt="">${t.toUpperCase()}</span>`;
+function rnd(seed){let h=seed>>>0||1;return()=>((h=Math.imul(h^h>>>15,2246822507)^Math.imul(h^h>>>13,3266489909),(h^=h>>>16)>>>0)/4294967296)}
+function ransom(str,seed=7,cls=''){const r=rnd(seed);return`<span class="rs ${cls}" aria-label="${str}">`+[...str].map(ch=>ch===' '?'<i></i>':`<b class="r${Math.floor(r()*6)}" style="--a:${(r()*12-6).toFixed(1)}deg;--y:${Math.round(r()*10-5)}px;--s:${(0.86+r()*0.3).toFixed(2)}">${ch}</b>`).join('')+'</span>'}
+const keys=(...k)=>`<div class="keys">${k.map(([a,b])=>`<span class="key"><b>${a}</b>${b}</span>`).join('')}</div>`;
+const hp=(cur,max,cls='')=>{const p=Math.round(cur/max*100);return`<span class="hpbar ${cls} ${p<=20?'low':p<=50?'mid':''}"><i style="width:${p}%"></i></span>`};
+
+/* ===== interval 1 (passes 1-5) ===== */
+const PARTY=[['charizard','Charizard',58,214,236,['fire','flying']],['pikachu','Pikachu',55,96,141,['electric']],['gengar','Gengar',56,31,158,['ghost','poison']],['lucario','Lucario',57,170,170,['fighting','steel']],['gyarados','Gyarados',54,0,201,['water','flying']],['snorlax','Snorlax',55,288,340,['normal']]];
+scr('title','Start','Title',1,()=>`<div class="bgr"></div><div class="burst" style="--x:78%;--y:60%" aria-hidden="true"></div><div class="dots" aria-hidden="true"></div>
+<div class="shard" style="--cp:polygon(0 0,46% 0,30% 100%,0 100%);inset:0" aria-hidden="true"></div>
+<div class="shard" style="--cp:polygon(58% 100%,100% 38%,100% 100%);inset:0" aria-hidden="true"></div>
+<div class="heroes">${im('p-charizard',6,'ol','position:absolute;right:0;bottom:110px')}${im('t-red',6,'ol','position:absolute;left:40px;bottom:-30px')}${im('p-pikachu',4,'ol','position:absolute;left:250px;bottom:10px')}</div>
+<div class="logo">${ransom('POCKET',11)}${ransom('RAIDERS',23)}</div>
+<div class="tag">a Pokémon roguelike</div>
+<div class="blade on press" data-go="menu" style="--sh:#000">Press any button</div>
+<div class="ver">BETA 0.8 · FAN PROJECT</div>`);
+scr('menu','Start','Main menu',1,(P)=>`<div class="bgk"></div><div class="shard" style="--c:var(--red);--cp:polygon(52% 0,100% 0,100% 100%,30% 100%);inset:0" aria-hidden="true"></div><div class="burst" style="--x:80%;--y:70%" aria-hidden="true"></div>
+<div class="hd"><small>POCKET RAIDERS</small>Main menu</div>
+<div class="list">${[['Continue','Red · Johto · Stage 14 of 30','map'],['New run','Pick a trainer and a starter'],['Evil Mode','Run the team. Take the region.'],['Hub Town','Shops, gallery, records'],['Pokédex','412 seen · 187 caught'],['Settings','','set']].map(([a,b,g],i)=>`<div class="blade${i?'':' on'}" style="--i:${i}"${g?` data-go="${g==='map'?(P>=3?'map':'battle'):g}"`:''}>${a}${b&&!i?`<small>${b}</small>`:''}</div>`).join('')}</div>
+<div class="who" data-vt="hero">${im('t-red',8,'sh','position:absolute;left:26px;top:22px')}${im('t-red',8,'ol','position:relative')}</div>
+<div class="card"><b>Last save</b>Red · 3 badges · ₽12,480<br>Charizard Lv.58 leads a team of 6</div>
+${keys(['Z','Confirm'],['X','Back'])}`);
+scr('battle','Battle','Command',1,()=>`<div class="art" style="background-image:url(${SP}a-grass-bg.png)"></div>
+${im('a-grass-b',4,'','position:absolute;left:0;top:60px')}${im('a-grass-a',4,'','position:absolute;left:0;top:192px')}
+${im('p-garchomp',3,'ol','position:absolute;right:190px;top:110px')}${im('b-charizard',4,'ol','position:absolute;left:150px;bottom:96px')}
+<div class="plate foe"><h3>Garchomp <span>Lv.62</span></h3><div class="row">${ty('dragon')}${ty('ground')}</div><div class="row">${hp(81,100)}<span class="num">81%</span></div></div>
+<div class="balls" style="left:44px;top:170px">${[1,1,1,1,0,0].map(a=>im('ball-pb',2,'',a?'':'filter:grayscale(1) brightness(.5)')).join('')}</div>
+<div class="plate me"><h3>Charizard <span>Lv.58</span></h3><div class="row">${hp(214,236)}<span class="num">214/236</span></div></div>
+<div class="mega">${im('g-mega',1)}MEGA READY</div>
+<div class="cmds">${['Fight','Bag','Pokémon','Run'].map((c,i)=>`<div class="blade${i?'':' on'}" style="--i:${i};--r:${-6+i*1.5}deg;--sh:#000">${c}</div>`).join('')}</div>
+<div class="msg">What will <b>CHARIZARD</b> do?</div>${keys(['Z','Confirm'],['X','Back'])}`);
+scr('event','Run','Event',1,()=>`<div class="art" style="background-image:url(${SP}e-city.png)"></div>
+<div class="hd"><small>STAGE 14 · JOHTO</small>Event</div>
+<div class="npc">${im('t-oak',6,'ol')}</div>
+<div class="opts">${['Track it down','Leave berries as bait','Say you are busy'].map((c,i)=>`<div class="blade${i?'':' on'}" style="--i:${i};--r:${-3+i}deg">${c}</div>`).join('')}</div>
+<div class="who">Prof. Oak</div><div class="dlg">Ah, Red! A wild Dragonite has been raiding the berry carts on Route 22. Nobody has been hurt, but the farmers are worried. Could your team look into it?</div>
+${keys(['Z','Choose'],['X','Log'])}`);
+scr('pause','Menus','Pause menu',1,()=>`<div class="bgr"></div><div class="burst" style="--x:20%;--y:80%" aria-hidden="true"></div><div class="dots" aria-hidden="true"></div>
+<div class="shard" style="--cp:polygon(46% 0,100% 0,100% 100%,40% 100%);inset:0" aria-hidden="true"></div>
+<div class="hd onred"><small>STAGE 14 OF 30</small>Pause</div>
+<div class="list">${['Party','Bag','Pokédex','Trainer card','Save','Settings','Quit run'].map((c,i)=>`<div class="blade${i?'':' on'}" style="--i:${i}"${c==='Settings'?' data-go="set"':''}>${c}</div>`).join('')}</div>
+<div class="party">${PARTY.map(([s,n,l,c,m],i)=>`<div class="pm" style="--i:${i}"><div class="pic">${im('p-'+s,.8,'',c?'':'filter:grayscale(1) brightness(.6)')}</div><div><b>${n}</b>${hp(c,m,'')}</div><div class="lv">Lv.${l}<small>${c?c+'/'+m:'FAINTED'}</small></div></div>`).join('')}</div>
+<div class="foot"><span>₽12,480</span><span>3 BADGES</span><span>1:42:07</span></div>${keys(['Z','Open'],['X','Close'])}`);
+scr('set','Menus','Settings',1,()=>`<div class="bgk"></div><div class="shard" style="--c:var(--red);--cp:polygon(0 78%,100% 62%,100% 100%,0 100%);inset:0" aria-hidden="true"></div>
+<div class="hd"><small>PAUSE</small>Settings</div>
+<div class="tabs">${['Game','Battle','Display','Sound','Controls','Access'].map((t,i)=>`<span class="${i?'':'on'}">${t}</span>`).join('')}</div>
+<div class="rows">${[['Run length','30 stages'],['Text speed','Fast'],['Blessings','On'],['Ultra Beasts','On'],['Evil Mode','On'],['Regional forms','Ask me'],['Auto-save','Every stage']].map(([a,b],i)=>`<div class="row${i?'':' on'}" style="--i:${i}"><span>${a}</span><span class="val">${b}</span></div>`).join('')}</div>
+<div class="help">How many stages a region has. 30 is the normal game; shorter runs give fewer stops.</div>${keys(['◀▶','Change'],['Q E','Tab'],['X','Back'])}`);
+/* ---- pass 2 ---- */
+const sl=(cur,max,cls='',st='')=>{const p=Math.round(cur/max*100);return`<span class="slash ${cls} ${cur&&p<=20?'low':p<=50?'mid':''}" style="${st}"><i style="width:${p}%"></i></span>`};
+const arena=(a='grass',dimmed)=>`<div class="art" style="background-image:url(${SP}a-${a}-bg.png)"></div>${im('a-'+a+'-b',4,'','position:absolute;left:0;top:60px')}${im('a-'+a+'-a',4,'','position:absolute;left:0;top:192px')}`;
+const stack=(act=0)=>`<div class="stack">${PARTY.map(([s,n,l,c,m],i)=>`<div class="m${i===act?' on':''}${c?'':' out'}" style="--i:${i}"><div class="pic">${im('p-'+s,i===act?.75:.55,'',c?'':'filter:grayscale(1)')}</div><div><b>${n}<span>${c?(i===act?c+'/'+m:'Lv.'+l):'KO'}</span></b>${sl(c,m)}${i===act?sl(64,100,'xp','--w:160px'):''}</div></div>`).join('')}</div>`;
+const foe2=(pct=81)=>`<div class="foe2"><h3>Garchomp <span>Lv.62</span></h3><div class="r">${ty('dragon')}${ty('ground')}</div><div class="r">${sl(pct,100,'','--w:330px')}<span class="num2">${pct}%</span></div><div class="r">${[1,1,1,1,0,0].map(a=>im('ball-pb',2,'',a?'':'filter:grayscale(1) brightness(.5)')).join('')}</div></div>`;
+scr('battle','Battle','Command',2,()=>`${arena()}<div class="frame" aria-hidden="true"></div>
+${im('p-garchomp',3,'ol','position:absolute;right:310px;top:96px')}<div data-vt="mon" style="position:absolute;left:40px;bottom:96px">${im('b-charizard',4,'ol')}</div>
+${foe2()}<div class="turn">TURN 3</div>
+<div class="cw"><div class="cwbg r" aria-hidden="true"></div><div class="cwbg" aria-hidden="true"></div>
+${[['Fight','Z',-8,150,96,78,'on','moves'],['Pokémon','A',-3,226,206,44,'','party'],['Bag','S',2,236,268,44,'','bag'],['Mega','D',5,196,328,40,'g','mega'],['Run','X',9,150,384,32,''],['Info','Q',-14,118,52,28,'']].map(([n,k,r,x,y,fs,c,g],i)=>`<div class="c ${c}" style="left:${x}px;top:${y}px;--r:${r}deg;--fs:${fs}px;--i:${i}"${g?` data-go="${g}"`:''}><kbd>${k}</kbd>${n}${c==='g'?'<small>READY</small>':''}</div>`).join('')}</div>
+<div class="say">What will <b>CHARIZARD</b> do?</div>${stack()}`);
+const MOVES=[['Flamethrower','fire','Special',90,100,'11/15','nv'],['Air Slash','flying','Special',75,95,'15/15',''],['Dragon Claw','dragon','Physical',80,100,'12/15','se'],['Earthquake','ground','Physical',100,100,'9/10','']];
+scr('moves','Battle','Moves',2,()=>`${arena()}<div class="dim"></div><div class="frame" aria-hidden="true"></div>
+${im('p-garchomp',3,'ol','position:absolute;right:330px;top:120px')}<div class="ring" style="right:328px;top:112px" aria-hidden="true"></div>
+<div class="hd"><small>CHARIZARD · TURN 3</small>Fight</div>
+<div class="mv">${MOVES.map(([n,t,c,p,a,pp,e],i)=>`<div class="w"><div class="c${i===2?' on':''}" style="--i:${i};--tc:${TYC[t]}"${i===2?' data-go="hit"':''}><div class="t"><img src="${SP}ty-${t}.png" alt=""></div><div><h4>${n}</h4><p>${t.toUpperCase()} · ${c.toUpperCase()} · POWER ${p} · ACC ${a}</p></div><div class="pp"><small>PP</small>${pp}</div></div>${e?`<div class="eff ${e}" style="--i:${i}">${e==='se'?'Super effective ×2':'Not very effective'}</div>`:''}</div>`).join('')}</div>
+<div class="info"><b>Dragon Claw</b>Slashes the target with huge, sharp claws. Makes contact. Garchomp is weak to Dragon.</div>
+<div class="gim" style="left:60px;bottom:22px"><kbd>D</kbd>${im('g-mega',1)}Mega Evolve first</div>
+${stack()}${keys(['Z','Use'],['X','Back'])}`);
+scr('party','Battle','Party',2,()=>`<div class="bgr"></div><div class="burst" style="--x:90%;--y:20%" aria-hidden="true"></div><div class="dots" aria-hidden="true"></div>
+<div class="shard" style="--cp:polygon(0 0,100% 0,100% 16%,0 30%);inset:0" aria-hidden="true"></div>
+<div class="hd onred"><small>SWITCH · TURN 3</small>Pokémon</div>
+<div class="pcards">${PARTY.map(([s,n,l,c,m,t],i)=>`<div class="pc${i===3?' on':''}${c?'':' ko'}" style="--i:${i}"><div class="pic">${im('p-'+s,1.6,i===3?'olk':'ol',c?'':'filter:grayscale(1)')}</div><div><h4>${n}<span>Lv.${l}</span></h4><div class="r">${t.map(ty).join('')}</div><div class="r">${c?sl(c,m,'','--w:200px')+`<span class="num2">${c}/${m}</span>`:'<span class="stamp" style="position:static;font-size:24px;border-width:4px;transform:rotate(-4deg)">Fainted</span>'}</div></div>${i===0?'<span class="tag" style="left:14px;top:8px">In battle</span>':''}</div>`).join('')}</div>
+<div class="acts">${['Switch in','Summary','Cancel'].map((a,i)=>`<div class="blade${i?'':' on'}" style="--i:${i};--sh:#000;--r:${-5+i*2}deg"${i===2?' data-go="battle"':''}>${a}</div>`).join('')}</div>${keys(['Z','Choose'],['X','Back'])}`);
+const BAG=[['hyper_potion','Hyper Potion',3],['super_potion','Super Potion',2],['full_restore','Full Restore',1],['revive','Revive',2],['full_heal','Full Heal',4],['ether','Ether',2],['rare_candy','Rare Candy',1]];
+scr('bag','Battle','Bag',2,()=>`<div class="bgk"></div><div class="shard" style="--c:var(--red);--cp:polygon(48% 0,100% 0,100% 100%,56% 100%);inset:0" aria-hidden="true"></div><div class="burst" style="--x:85%;--y:40%" aria-hidden="true"></div>
+<div class="hd"><small>IN BATTLE</small>Bag</div>
+<div class="pockets">${['Medicine','Poké Balls','Battle','Berries','Key items'].map((t,i)=>`<span class="${i?'':'on'}">${t}</span>`).join('')}</div>
+<div class="items">${BAG.map(([k,n,q],i)=>`<div class="it${i?'':' on'}" style="--i:${i}">${im('i-'+k,1.5)}<div>${n}</div><span>x${q}</span></div>`).join('')}</div>
+<div class="idet"><div class="big">${im('i-hyper_potion',5)}</div><h3>Hyper Potion</h3><p>Sprays a wound and restores 120 HP to one Pokémon. Using it takes your turn.</p><div class="lim"><span>HEALS LEFT THIS RUN 7 / 10</span><span>REVIVES 5 / 6</span></div></div>
+<div class="useon"><b>USE ON</b>${PARTY.map(([s,n,l,c,m],i)=>`<div class="u${i===2?' on':''}"><div class="pic">${im('p-'+s,.5,'',c?'':'filter:grayscale(1)')}</div>${sl(c,m)}</div>`).join('')}</div>${keys(['Z','Use'],['Q E','Pocket'],['X','Back'])}`);
+scr('hit','Battle','Hit',2,()=>`<div class="speed" aria-hidden="true"></div><div class="shard" style="--cp:polygon(0 62%,100% 34%,100% 100%,0 100%);inset:0" aria-hidden="true"></div>
+<div class="victim">${im('p-garchomp',5,'ol')}</div>
+<div class="big">${ransom('SUPER',5)}${ransom('EFFECTIVE!',31)}</div><div class="dmg">−142</div>
+<div class="foebar"><h3>Garchomp <span class="num2">23%</span></h3><div style="position:relative"><div class="ghost" style="width:calc((100% - 30px)*.81)" aria-hidden="true"></div>${sl(23,100,'','--from:81%')}</div></div>
+<div class="say" data-go="win">CHARIZARD used <b>DRAGON CLAW</b>!</div>`);
+/* ---- pass 3 ---- */
+const day=(n=14,time='NIGHT · CLEAR SKIES')=>`<div class="day"><b>${n}</b><div>Stage<span>of 30</span></div><strong>Johto</strong><i>${time}</i></div>`;
+const mini=()=>`<div class="mini">${PARTY.map(([s,n,l,c,m])=>`<div class="u"><div class="pic">${im('p-'+s,.5,'',c?'':'filter:grayscale(1)')}</div>${sl(c,m)}</div>`).join('')}</div>`;
+const NODES=[[150,380,'done','ball'],[300,290,'done','!'],[300,470,'skip','vs'],[450,380,'here',''],[600,250,'sel','vs'],[600,390,'next','?'],[600,530,'next','₽'],[750,320,'','+'],[750,470,'','ball'],[900,395,'','R']];
+const LINKS=[[0,1,1],[0,2,1],[1,3,1],[3,4,0],[3,5,0],[3,6,0],[4,7,0],[5,7,0],[5,8,0],[6,8,0],[7,9,0],[8,9,0]];
+scr('map','Run','Route map',3,()=>`<div class="bgk"></div><div class="tex" aria-hidden="true"></div><div class="wash" aria-hidden="true"></div>
+<div class="shard" style="--cp:polygon(0 0,100% 0,100% 12%,0 26%);inset:0" aria-hidden="true"></div><div class="shard" style="--cp:polygon(0 86%,100% 78%,100% 100%,0 100%);inset:0" aria-hidden="true"></div>
+<svg viewBox="0 0 1280 720" aria-hidden="true">${LINKS.map(([a,b])=>`<path class="ln" d="M${NODES[a][0]} ${NODES[a][1]} L${NODES[b][0]} ${NODES[b][1]}"/>`).join('')}${LINKS.map(([a,b,o])=>`<path class="ln2${o?' old':''}" d="M${NODES[a][0]} ${NODES[a][1]} L${NODES[b][0]} ${NODES[b][1]}"/>`).join('')}</svg>
+${NODES.map(([x,y,c,g],i)=>`<div class="nd ${c}" style="left:${x}px;top:${y}px"${c==='sel'?' data-go="event"':''}>${g==='ball'?im('ball-pb',3):g==='vs'?im('ball-ub',3):g?`<b>${g}</b>`:''}</div>`).join('')}
+<div class="you" style="left:412px;top:260px">${im('t-red',2,'ol')}</div><div class="youtag" style="left:396px;top:432px">You are here</div>
+<div class="cols">${[12,13,14,15,16,17].map((n,i)=>`<span style="left:${150+i*150}px" class="${n===14?'on':''}">${n}</span>`).join('')}</div>
+${day()}<div class="wallet"><small>MONEY</small>₽12,480</div>
+<div class="stop"><small>NEXT STOP · STAGE 15</small><h3>Trainer</h3><h4>Dragon Tamer Kai</h4><div class="pic">${im('c-dragon_tamer',2,'ol')}</div><p>3 Pokémon · <b>Lv.56 to 58</b></p><p>Prize <b>₽1,240</b> and one reward pick</p><p>Rival Silver waits at <b>stage 17</b></p></div>
+${mini()}${keys(['Z','Go'],['C','Party'],['Esc','Menu'])}`);
+const oakScene=()=>`<div class="art" style="background-image:url(${SP}e-city_night.png)"></div><div class="dim" style="background:rgba(8,6,10,.35)"></div><div class="strip r" aria-hidden="true"></div><div class="strip" aria-hidden="true"></div>
+<div class="bust">${im('t-oak',9,'sh','position:absolute;left:18px;top:16px')}${im('t-oak',9,'ol','position:relative')}</div>`;
+scr('event','Run','Event · talk',3,()=>`${oakScene()}${day()}
+<div class="name">Prof. Oak</div><div class="talk" data-go="choice">Ah, Red! A wild <em>Dragonite</em> has been raiding the berry carts on Route 22. Nobody has been hurt, but the farmers are worried. Could your team look into it?</div><div class="nextb" aria-hidden="true">▼</div>
+${keys(['Z','Next'],['X','Log'],['Hold C','Skip'])}`);
+scr('choice','Run','Event · choice',3,()=>`${oakScene()}${day()}
+<div class="chs">${[['Track it down','Fight Dragonite Lv.60. You may catch it.'],['Leave berries as bait','Costs 2 Sitrus Berries. No fight, small reward.'],['Say you are busy','Nothing happens. Oak remembers this run.']].map(([a,b],i)=>`<div class="ch${i?'':' on'}" style="--i:${i}"${i?'':' data-go="reward"'}><kbd>${i+1}</kbd><b>${a}</b><span>${b}</span></div>`).join('')}</div>
+<div class="name" style="bottom:136px">Prof. Oak</div><div class="talk q">Could your team look into it?</div>${keys(['Z','Choose'],['X','Read again'])}`);
+scr('reward','Run','Reward',3,()=>`<div class="bgr"></div><div class="burst" style="--x:60%;--y:55%" aria-hidden="true"></div><div class="dots" aria-hidden="true"></div>
+<div class="shard" style="--cp:polygon(0 0,34% 0,16% 100%,0 100%);inset:0" aria-hidden="true"></div>
+<div class="ttl">${ransom('PICK ONE',41)}</div>
+<div class="rcs">${[['shell_bell','Held item','Shell Bell','The holder heals a little every time it deals damage.',-7],['rare_candy','Medicine','Rare Candy','Raises one Pokémon by a level, right now.',0],['lucarionite','Mega Stone','Lucarionite','Lets Lucario Mega Evolve once per battle.',7]].map(([k,c,n,d,r],i)=>`<div class="rc${i===1?' on':''}" style="--r:${r}deg;--i:${i};position:relative"${i===1?' data-go="map"':''}><small>${c.toUpperCase()}</small><div class="pic">${im('i-'+k,3.5)}</div><h4>${n}</h4><p>${d}</p>${i===1?'<div class="take">Z · TAKE IT</div>':''}</div>`).join('')}</div>
+<div class="prize">+₽1,240<small>prize money</small></div>
+<div class="gim" style="left:40px;bottom:70px"><kbd>R</kbd>Reroll · ₽250</div>${keys(['◀▶','Look'],['X','Skip all'])}`);
+const MART=[['hyper_potion','Hyper Potion',1200],['revive','Revive',1500],['full_heal','Full Heal',400],['ultra_ball','Ultra Ball',800],['ether','Ether',900],['exp_candy_l','Exp. Candy L',2000]];
+scr('shop','Run','Poké Mart',3,()=>`<div class="bgk"></div><div class="shard" style="--c:var(--red);--cp:polygon(0 0,26% 0,18% 100%,0 100%);inset:0" aria-hidden="true"></div><div class="shard" style="--c:var(--red);--cp:polygon(62% 100%,100% 60%,100% 100%);inset:0" aria-hidden="true"></div>
+<div class="hd" style="top:14px"><small>STAGE 15 · JOHTO</small>Poké Mart</div><div class="wallet"><small>MONEY</small>₽12,480</div>
+<div class="bub">Gym's two stops away, kid. Stock up.</div><div class="clerk">${im('o-mart',6,'ol')}</div>
+<div class="items">${MART.map(([k,n,p],i)=>`<div class="it${i===1?' on':''}" style="--i:${i}">${k==='ultra_ball'?im('ball-ub',2.5):im('i-'+k,1.5)}<div>${n}</div><span>₽${p.toLocaleString()}</span></div>`).join('')}</div>
+<div class="idet"><div class="big">${im('i-revive',4.5)}</div><h3>Revive</h3><p>Brings back a fainted Pokémon with half its HP. You can use 5 more this run.</p></div>
+<div class="cart"><span>IN CART <b>2</b></span><span>TOTAL <b>₽2,700</b></span><span>LEFT AFTER <b>₽9,780</b></span></div>${keys(['Z','Add'],['A','Sell'],['X','Leave'])}`);
+/* ---- pass 4 ---- */
+const redbg=(x='20%',y='80%')=>`<div class="bgr"></div><div class="burst" style="--x:${x};--y:${y}" aria-hidden="true"></div><div class="dots" aria-hidden="true"></div>`;
+scr('pause','Menus','Pause menu',4,()=>`${redbg('75%','60%')}<div class="shard" style="--cp:polygon(0 0,40% 0,22% 100%,0 100%);inset:0" aria-hidden="true"></div>
+<div class="hero" data-vt="hero">${im('t-red',11,'sh','position:absolute;left:30px;top:24px')}${im('t-red',11,'ol','position:relative')}</div>
+<div class="hd" style="top:10px"><small>STAGE 14 OF 30 · JOHTO</small>Pause</div>
+<div class="hub">${[['Party','6 Pokémon · 1 fainted','summary'],['Bag','','bag'],['Pokédex','','dex'],['Trainer card','','card'],['Save','','save'],['Settings','','set'],['Quit run','','title']].map(([a,b,g],i)=>`<div class="h${i?'':' on'}" style="--i:${i};--r:${[-5,-2,-4,-1,-3,-5,-2][i]}deg;--ml:${[0,40,14,56,26,6,44][i]}px" data-go="${g}">${a}${b?`<small>${b}</small>`:''}</div>`).join('')}</div>
+<div class="facts"><span><b>MONEY</b>₽12,480</span><span><b>BADGES</b>3</span><span><b>TIME</b>1:42:07</span></div>
+${mini()}${keys(['Z','Open'],['X','Close'])}`);
+const radar=(vals,labs)=>{const c=200,R=140,pt=(i,r)=>{const a=-Math.PI/2+i*Math.PI/3;return[(c+Math.cos(a)*r).toFixed(1),(c+Math.sin(a)*r).toFixed(1)]};
+  return`<svg class="radar" viewBox="0 0 400 400">${[1,.66,.33].map(k=>`<polygon class="web" points="${[0,1,2,3,4,5].map(i=>pt(i,R*k).join(',')).join(' ')}"/>`).join('')}${[0,1,2,3,4,5].map(i=>`<line class="axis" x1="200" y1="200" x2="${pt(i,R)[0]}" y2="${pt(i,R)[1]}"/>`).join('')}
+<polygon class="val" points="${vals.map((v,i)=>pt(i,R*v/200).join(',')).join(' ')}"/>${labs.map((l,i)=>{const[x,y]=pt(i,R+34);return`<text x="${x}" y="${+y-4}">${l}</text><text class="n" x="${x}" y="${+y+20}">${vals[i]}</text>`}).join('')}</svg>`};
+scr('summary','Menus','Pokémon summary',4,()=>`${redbg('20%','50%')}<div class="shard" style="--cp:polygon(40% 0,100% 0,100% 100%,36% 100%);inset:0" aria-hidden="true"></div>
+<div class="sm-pic"><div data-vt="mon">${im('p-charizard',4,'ol')}</div></div><div class="sm-name">${ransom('CHARIZARD',9)}</div><div class="sm-lv">Lv.58</div>
+<div class="sm-tabs">${['Stats','Moves','Bond','Memo'].map((t,i)=>`<span class="${i?'':'on'}">${t}</span>`).join('')}</div>
+${radar([236,152,138,196,150,178],['HP','ATTACK','DEFENSE','SPEED','SP. DEF','SP. ATK'])}
+<div class="sm-side"><div class="kv" style="--i:0"><small>TYPE</small><b>${ty('fire')}${ty('flying')}</b></div><div class="kv" style="--i:1"><small>ABILITY</small><b>Blaze</b><p>Fire moves hit harder when HP is low.</p></div><div class="kv" style="--i:2"><small>HELD ITEM</small><b>${im('i-charizardite_x',1)}Charizardite X</b></div><div class="kv" style="--i:3"><small>NATURE</small><b>Jolly</b><p>Speed up, Sp. Atk down.</p></div><div class="kv" style="--i:4"><small>TO NEXT LEVEL</small>${sl(64,100,'xp','--w:240px')}<p>1,870 Exp. Points</p></div></div>
+<div class="sm-moves">${MOVES.map(([n,t,c,p,a,pp])=>`<span style="--tc:${TYC[t]}">${n}<small>PP ${pp}</small></span>`).join('')}</div>
+<div class="pager">${PARTY.map(([s],i)=>`<div class="u${i?'':' on'}">${im('p-'+s,i?.5:.65)}</div>`).join('')}</div>${keys(['Q E','Tab'],['▲▼','Pokémon'],['X','Back'])}`);
+const DEX=[['bulbasaur',1],['venusaur',3],['charmander',4],['charmeleon',5],['charizard',6],['squirtle',7],['blastoise',9],['pidgey',16,1],['rattata',19],['ekans',23,1],['pikachu',25],['zubat',41],['meowth',52],['persian',53,1],['arcanine',59],['alakazam',65,1],['gengar',94],['koffing',109,1],['gyarados',130],['lapras',131,1],['eevee',133],['snorlax',143],['dragonite',149,1],['mewtwo',150,1]];
+scr('dex','Menus','Pokédex',4,()=>`<div class="bgk"></div><div class="shard" style="--c:var(--red);--cp:polygon(58% 0,100% 0,100% 100%,66% 100%);inset:0" aria-hidden="true"></div><div class="burst" style="--x:84%;--y:50%" aria-hidden="true"></div>
+<div class="hd"><small>KANTO · 151</small>Pokédex</div><div class="dexcount"><span>SEEN <b>412</b></span><span>CAUGHT <b>187</b></span></div>
+<div class="dexgrid">${DEX.map(([s,n,u],i)=>`<div class="dx${u?' unk':''}${s==='gengar'?' on':''}" style="--i:${i}"><small>${String(n).padStart(3,'0')}</small>${im('p-'+s,.9)}</div>`).join('')}</div>
+<div class="dexcard"><span class="no">No. 094</span><h3>Gengar</h3><div style="display:flex;gap:8px">${ty('ghost')}${ty('poison')}</div><div class="pic">${im('p-gengar',2.2,'ol')}</div><p>Seen 14 times · Caught 3 · Best level 71</p><p><b>MASTERY: EXPERT</b> · 2 more wins to Master</p><div class="rank"><i class="f"></i><i class="f"></i><i class="f"></i><i></i></div></div>
+${keys(['Z','Entry'],['Q E','Region'],['X','Back'])}`);
+scr('card','Menus','Trainer card',4,()=>`<div class="bgk"></div><div class="burst" style="--x:30%;--y:50%;background:repeating-conic-gradient(rgba(228,0,43,.5) 0 5deg,transparent 5deg 10deg)" aria-hidden="true"></div>
+<div class="hd"><small>PAUSE</small>Trainer card</div>
+<div class="tcard"><div class="pic" data-vt="hero">${im('t-red',6,'ol')}</div><h3>${ransom('RED',3)}</h3><div class="id">ID 48213 · PALLET TOWN</div>
+<dl><dt>Runs</dt><dd>23</dd><dt>Champion wins</dt><dd>4</dd><dt>Best stage</dt><dd>Region 3 · 28</dd><dt>Pokédex</dt><dd>187 caught</dd><dt>Play time</dt><dd>31:08</dd></dl>
+<div class="badges">${[1,1,1,0,0,0,0,0].map(f=>`<i class="${f?'f':''}"></i>`).join('')}</div></div>
+<div class="tside"><div class="kv" style="--i:0"><small>THIS RUN</small><b>Johto · Stage 14</b><p>12 battles won · 0 lost</p></div><div class="kv" style="--i:1"><small>RIVAL</small><b>Silver</b><p>Met twice. He leads 0 to 2.</p></div><div class="kv" style="--i:2"><small>BLESSING</small><b>Lugia's Calm</b><p>Rain never weakens your Fire moves.</p></div></div>${keys(['A','Flip card'],['X','Back'])}`);
+scr('save','Menus','Save',4,()=>`${redbg('90%','90%')}<div class="shard" style="--cp:polygon(0 0,100% 0,100% 100%,84% 100%,74% 0);inset:0;opacity:.25" aria-hidden="true"></div><div class="shard" style="--cp:polygon(0 0,30% 0,8% 100%,0 100%);inset:0" aria-hidden="true"></div>
+<div class="hd onred"><small>AUTO-SAVE IS ON · EVERY STAGE</small>Save</div>
+<div class="slots">${[['Red · Johto · Stage 14 of 30','3 badges · ₽12,480 · 1:42:07 · saved just now',-2,1],['Blue · Evil Mode · Kanto · Day 22','Team Nova · 9 districts · 6:15:40',1,1],['Empty','Start a second run here',-1,0]].map(([a,b,r,f],i)=>`<div class="slot${i?'':' on'}${f?'':' empty'}" style="--r:${r}deg;--i:${i}"><div class="no">${i+1}</div><div><h4>${a}</h4><p>${b}</p></div><div class="team">${f?(i?['persian','gengar','koffing']:['charizard','pikachu','gengar','lucario','gyarados','snorlax']).map(s=>im('p-'+s,.55)).join(''):''}</div></div>`).join('')}</div>
+<div class="acts" style="top:250px">${['Save here','Load','Erase'].map((a,i)=>`<div class="blade${i?'':' on'}" style="--i:${i};--sh:#000;--r:${-5+i*2}deg">${a}</div>`).join('')}</div>${keys(['Z','Choose'],['X','Back'])}`);
+const CATS=[['Game','set-game','Run length, text speed, what a run includes','G'],['Battle','set-battle','Animations, cut-ins, move hints','B'],['Look','set-look','Style, motion, flashes, text size','L'],['Sound','set-sound','Music, effects, cries','S'],['Controls','set-controls','Every key, and how to change it','C'],['Access','set-access','Motion, contrast, reading aids','A']];
+scr('set','Settings','Settings',4,()=>`<div class="bgk"></div><div class="shard" style="--c:var(--red);--cp:polygon(0 84%,100% 64%,100% 100%,0 100%);inset:0" aria-hidden="true"></div>
+<div class="hd"><small>PAUSE</small>Settings</div>
+<div class="cats">${CATS.map(([n,g,d,l],i)=>`<div class="cat${i?'':' on'}" style="--i:${i};--r:${[-2,1,-1,1.5,-1.5,2][i]}deg" data-go="${g}"><b>${n}</b><p>${d}</p><i aria-hidden="true">${l}</i></div>`).join('')}</div>${keys(['Z','Open'],['X','Back'])}`);
+const V={ch:v=>`<span class="v cyc">${v}</span>`,tg:on=>`<span class="v"><span class="tog"><i class="${on?'a':''}">ON</i><i class="${on?'':'a'}">OFF</i></span></span>`,sl:n=>`<span class="v"><span class="sld"><i style="width:${n}%"></i></span>${n}</span>`,key:k=>`<span class="v"><span class="kcap">${k}</span></span>`};
+const setPage=(idx,rows,help,extra='')=>()=>`<div class="bgk"></div><div class="shard" style="--c:var(--red);--cp:polygon(0 88%,100% 70%,100% 100%,0 100%);inset:0" aria-hidden="true"></div>
+<div class="hd"><small>SETTINGS</small>${CATS[idx][0]}</div>
+<div class="rail">${CATS.map(([n,g],i)=>`<span class="${i===idx?'on':''}" data-go="${g}">${n}</span>`).join('')}</div>
+<div class="srows">${rows.map(([a,v],i)=>`<div class="sr${i?'':' on'}" style="--i:${i}"><span>${a}</span>${v}</div>`).join('')}</div>
+<div class="shelp">${help}</div>${extra}${keys(['◀▶','Change'],['Q E','Page'],['X','Back'])}`;
+scr('set-game','Settings','Game',4,setPage(0,[['Run length',V.ch('30 stages')],['Text speed',V.ch('Fast')],['Auto-save',V.ch('Every stage')],['Regional forms',V.ch('Ask me')],['Blessings',V.tg(1)],['Ultra Beasts',V.tg(1)]],'How many stages a region has. 30 is the normal game. You can go 10 shorter or 20 longer.'));
+scr('set-battle','Settings','Battle',4,setPage(1,[['Battle animations',V.ch('Full')],['Gimmick cut-ins',V.ch('Every time')],['Ace announcement',V.tg(1)],['Show how well moves hit',V.tg(1)],['Battle style',V.ch('Switch')],['Ask for nicknames',V.tg(0)]],'Full plays every move. Short keeps only the hit. Off skips straight to the numbers.'));
+scr('set-look','Settings','Look',4,setPage(2,[['UI style',V.ch('Phantom')],['Motion',V.ch('Full')],['Flashes and shake',V.ch('Normal')],['Text size',V.ch('Normal')],['Screen shape',V.ch('16:9')]],'Phantom is this red and black style. Classic is the old game look. Battle styles you picked by hand stay as they are.','<div class="prev" aria-hidden="true"><i></i><b>PHANTOM</b><small>PREVIEW</small></div>'));
+scr('set-sound','Settings','Sound',4,setPage(3,[['Master',V.sl(80)],['Music',V.sl(70)],['Effects',V.sl(90)],['Pokémon cries',V.sl(60)],['Menu sounds',V.tg(1)],['Quiet in the background',V.tg(1)]],'Turns everything up or down together.'));
+scr('set-controls','Settings','Controls',4,setPage(4,[['Confirm',V.key('Z')],['Back',V.key('X')],['Menu',V.key('Esc')],['Party',V.key('C')],['Fast forward (hold)',V.key('Shift')],['Skip text (hold)',V.key('C')]],'Press Z on a row, then the new key. A controller shows its own buttons here.'));
+scr('set-access','Settings','Access',4,setPage(5,[['Reduced motion',V.tg(0)],['High contrast',V.tg(0)],['Shapes on type colours',V.tg(1)],['Hold instead of mashing',V.tg(1)],['Easy-read font',V.tg(0)],['Larger buttons',V.tg(0)]],'Stops spinning backgrounds, shakes and fast wipes. Battles still play; they just hold still.'));
+/* ---- pass 5 ---- */
+const wipe=()=>`<div class="wipe" aria-hidden="true"><i></i><i></i><i></i></div>`;
+scr('mega','Battle','Mega cut-in',5,()=>`${arena()}<div class="dim" style="background:rgba(8,6,10,.8)"></div>
+<div class="cut"><div class="rays" aria-hidden="true"></div><div class="face">${im('p-charizard',13,'ol')}</div></div><div class="cutedge" aria-hidden="true"></div><div class="cutedge b" aria-hidden="true"></div>
+<div class="megaring"><div class="ring2">${im('g-megaring',3)}</div>${im('g-mega',3)}</div>
+<div class="megat">${ransom('MEGA',17)}${ransom('EVOLUTION',29)}</div>
+<div class="megasay" data-go="battle">Charizard's <b>CHARIZARDITE X</b> is reacting to Red's Mega Bracelet!</div><div class="flashw" aria-hidden="true"></div>`);
+scr('win','Battle','Win splash',5,()=>`${redbg('30%','60%')}<div class="shard" style="--cp:polygon(54% 0,100% 0,100% 100%,70% 100%);inset:0" aria-hidden="true"></div>
+<div class="sil">${im('p-charizard',11)}</div><div class="champ" data-vt="hero">${im('t-red',9,'ol')}</div>
+<div class="line">“. . . . . .”<small>RED · NEVER SAYS MUCH</small></div>
+<div class="big">${ransom('YOU WIN',13)}</div><div class="sub" data-go="result">Dragon Tamer Kai is out of Pokémon · Z</div>${wipe()}`);
+scr('result','Battle','Result',5,()=>`<div class="bgk"></div><div class="shard" style="--c:var(--red);--cp:polygon(56% 0,100% 0,100% 100%,44% 100%);inset:0" aria-hidden="true"></div><div class="burst" style="--x:80%;--y:50%" aria-hidden="true"></div>
+<div class="hd"><small>STAGE 15 · TRAINER BATTLE</small>Result</div>
+<div class="tally">${PARTY.map(([s,n,l,c,m],i)=>`<div class="tlw"><div class="tl${i===1?' up':''}" style="--i:${i}">${im('p-'+s,.6,'',c?'':'filter:grayscale(1)')}<b>${n}</b><div class="bar"><i style="width:${[82,18,64,40,0,71][i]}%;--from:${[64,90,50,22,0,60][i]}%"></i></div><span>${c?'+'+[1420,1420,710,710,0,710][i]:'—'}</span></div>${i===1?'<div class="lvup">LEVEL UP! 55 → 56</div>':''}</div>`).join('')}</div>
+<div class="gains"><div class="g" style="--i:0">+₽1,240<small>prize money</small></div><div class="g s" style="--i:1">7 TURNS<small>no one fainted</small></div><div class="g s" style="--i:2">1 REWARD PICK<small>coming up next</small></div></div>
+${keys(['Z','Next'],['C','Party'])}${wipe()}`);
+
+/* Viewer shell: pass stepper, screen chips, notes, scaling, and the morph between screens. */
+(function(){
+const Q=new URLSearchParams(location.search),stage=document.getElementById('stage'),MAXP=PASSES.length;
+let P=Math.min(MAXP,+Q.get('pass')||MAXP),CUR=Q.get('s')||null,LIV=Q.get('liv')||'';
+const still=Q.has('still');if(Q.has('shot'))document.body.classList.add('shot');
+function cls(){stage.className='stage '+Array.from({length:P},(_,i)=>'p'+(i+1)).join(' ')+(still?' still':'');if(LIV)stage.dataset.liv=LIV;else delete stage.dataset.liv;stage.dataset.pass=P}
+function paint(){const v=verAt(CUR,P);let h=v.fn(P);if(P>=5&&!h.includes('class="wipe"'))h+='<div class="wipe" aria-hidden="true"><i></i><i></i><i></i></div>';stage.innerHTML=`<section class="scr s-${CUR}">${h}</section>`;stage.dataset.scr=CUR}
+function show(id,anim){const L=listAt(P);if(!L.includes(id))id=L[0];const run=()=>{CUR=id;cls();paint();chrome()};
+  if(anim&&P>=5&&!still&&document.startViewTransition&&!matchMedia('(prefers-reduced-motion:reduce)').matches)document.startViewTransition(run);else run()}
+function chrome(){const L=listAt(P),nav=document.getElementById('vw-nav'),groups=[...new Set(L.map(id=>SCR[id].group))];
+  nav.innerHTML=groups.map(g=>`<div class="vw-grp"><span>${g}</span>${L.filter(id=>SCR[id].group===g).map(id=>{const v=verAt(id,P);return`<button class="vw-chip${v.since===P?(SCR[id].v[0].since===P?' new':' chg'):''}" data-s="${id}" aria-pressed="${id===CUR}">${SCR[id].title}</button>`}).join('')}</div>`).join('');
+  document.getElementById('vw-pass').value=P;document.getElementById('vw-out').textContent=`Pass ${P} of 25`;
+  const n=PASSES[P-1],Qs=[['More extravagant, pleasing, eye-catching?','x'],['How is it changed and better than the last pass?','b'],['More pages to avoid clutter?','p'],['How do a Menu and Settings fit?','m'],['Does it feel like a Pokémon game?','k']];
+  document.getElementById('vw-notes').innerHTML=`<div><h2><small>INTERVAL ${Math.ceil(P/5)} · PASS ${P}</small>${n.name}</h2><p>${n.change}</p>${n.pages&&n.pages.length?`<p><b>New pages:</b> ${n.pages.join(', ')}</p>`:''}</div><div><dl>${Qs.map(([q,k])=>`<div><dt>${q}</dt><dd>${n.q[k]}</dd></div>`).join('')}</dl></div>`;
+  const lv=document.getElementById('vw-liv');if(lv)lv.hidden=!(window.LIVERIES&&P>=LIVERIES.since);
+  if(lv&&!lv.hidden)lv.innerHTML=`<span>Version</span>`+LIVERIES.list.map(([k,l])=>`<button class="vw-chip" data-liv="${k}" aria-pressed="${(LIV||LIVERIES.list[0][0])===k}">${l}</button>`).join('')}
+function fit(){const w=document.getElementById('vw-wrap').clientWidth;stage.style.setProperty('--k',document.body.classList.contains('shot')?1:w/1280)}
+new ResizeObserver(fit).observe(document.getElementById('vw-wrap'));fit();
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g&&stage.contains(g)){show(g.dataset.go,true);return}
+  const c=e.target.closest('[data-s]');if(c){show(c.dataset.s,true);return}
+  const l=e.target.closest('[data-liv]');if(l){LIV=l.dataset.liv;show(CUR,true);return}
+  if(e.target.id==='vw-prev'){P=Math.max(1,P-1);show(CUR,true)}if(e.target.id==='vw-next'){P=Math.min(MAXP,P+1);show(CUR,true)}
+  if(e.target.id==='vw-tour'){tour()}});
+document.getElementById('vw-pass').max=MAXP;
+document.getElementById('vw-pass').addEventListener('input',e=>{P=+e.target.value;show(CUR,false)});
+document.addEventListener('keydown',e=>{if(e.target.matches('input,button'))return;const L=listAt(P),i=L.indexOf(CUR);if(e.key==='ArrowRight')show(L[(i+1)%L.length],true);if(e.key==='ArrowLeft')show(L[(i-1+L.length)%L.length],true)});
+let tt=null;function tour(){const b=document.getElementById('vw-tour');if(tt){clearInterval(tt);tt=null;b.textContent='Play tour';return}b.textContent='Stop tour';tt=setInterval(()=>{const L=listAt(P),i=L.indexOf(CUR);show(L[(i+1)%L.length],true)},2600)}
+window.__mock={list:()=>listAt(P),show:id=>show(id,false),go:id=>show(id,true),pass:()=>P,setLiv:l=>{LIV=l;show(CUR,false)}};
+show(CUR||listAt(P)[0],false);
+})();
+
+</script>
+</body></html>
