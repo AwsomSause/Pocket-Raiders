@@ -76,14 +76,15 @@ describe('DOMINION D4: the data', () => {
   });
   it('D4 turned on its tasks and actions; nothing still says it waits for D4', () => {
     for (const id of ['catch', 'steal-pokemon', 'guard-the-pens', 'tend-the-pens', 'feed-the-team', 'release-the-weak', 'rehab-a-wild-pokemon']) expect(taskById(id)!.status, id).toBe('supported');
-    // D5 (merged after D4 was planned) pointed 22 more items at D4: two crew tasks, three actions and 17 buildings. They are
+    // D5 and D9 (merged after D4 was planned) pointed 23 more items at D4: two crew tasks, three actions and 18 buildings. They are
     // not built yet and wait for a D4 follow-up (docs/status/dominion-d4.md, "Left"). This list is pinned so nothing new
     // quietly joins it.
     expect(DOMINION_DATA.tasks.filter((t) => t.needs === 'D4').map((t) => t.id).sort()).toEqual(['learn-a-trade', 'teach-a-move']);
     expect(Object.entries(DOMINION_DATA.field.later.byAction).filter(([, v]) => v === 'D4').map(([k]) => k).sort()).toEqual(['breed', 'egg-run', 'move-tutor']);
     expect(DOMINION_DATA.buildings.filter((x) => x.waits === 'D4').map((x) => x.id).sort()).toEqual([
       'admin-quarters', 'captains-hall', 'classroom', 'comfort-ward', 'grunt-academy', 'lieutenants-office', 'mentoring-office', 'officer-academy',
-      'personality-lab', 'retiree-hall', 'sergeants-post', 'skill-booth', 'skill-exam-hall', 'sparring-ring', 'stealth-school', 'therapy-room', 'veterans-corner',
+      'personality-lab', 'retiree-hall', 'sergeants-post', 'skill-booth', 'skill-exam-hall', 'sparring-ring', 'stealth-school', 'therapy-room', 'type-dojo-fire',
+      'veterans-corner',
     ]);
     expect(DOMINION_DATA.crew.talks.some((t) => t.needs === 'D4')).toBe(false);
     expect(DOMINION_DATA.crew.formed.some((t) => t.needs === 'D4')).toBe(false);

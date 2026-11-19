@@ -228,9 +228,11 @@
     "Velvet Room"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "intel": 1
+   },
+   "waits": null
   },
   {
    "n": "8",
@@ -1152,7 +1154,7 @@
    ],
    "minTier": 0,
    "status": "disabled",
-   "waits": "D9",
+   "waits": "later",
    "fx": {}
   },
   {
@@ -1465,12 +1467,11 @@
     "Dragon's Hoard"
    ],
    "minTier": 0,
-   "status": "limited",
+   "status": "supported",
    "fx": {
     "treasury": 10000
    },
-   "waits": null,
-   "note": "Raids on the HQ (D9) take only what is above this."
+   "waits": null
   },
   {
    "n": "47",
@@ -1533,9 +1534,11 @@
     "Great Arsenal"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "raidDef": 1
+   },
+   "waits": null
   },
   {
    "n": "49",
@@ -1627,7 +1630,7 @@
    ],
    "minTier": 0,
    "status": "disabled",
-   "waits": "D9",
+   "waits": "D10",
    "fx": {}
   },
   {
@@ -1688,9 +1691,11 @@
     "Sky Palace"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "intel": 1
+   },
+   "waits": null
   },
   {
    "n": "54",
@@ -1750,12 +1755,11 @@
     "Hellhound Den"
    ],
    "minTier": 0,
-   "status": "limited",
+   "status": "supported",
    "fx": {
     "defense": 1
    },
-   "waits": null,
-   "note": "Defense counts in raids on the HQ (D9)."
+   "waits": null
   },
   {
    "n": "56",
@@ -1983,7 +1987,7 @@
     "unlock": true
    },
    "waits": null,
-   "note": "Spread the Word and jamming spies are D9-D10."
+   "note": "Spread the Word is D10."
   },
   {
    "n": "63",
@@ -2012,9 +2016,12 @@
     "All-Seeing Room"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "spyCatch": 25,
+    "warn": 1
+   },
+   "waits": null
   },
   {
    "n": "64",
@@ -2106,7 +2113,7 @@
    ],
    "minTier": 1,
    "status": "disabled",
-   "waits": "D9",
+   "waits": "D10",
    "fx": {}
   },
   {
@@ -2169,9 +2176,12 @@
     "Shadow Service"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "cipher": 10
+   },
+   "waits": null,
+   "note": "Training moles waits for D22; your spies are caught less now."
   },
   {
    "n": "69",
@@ -2200,9 +2210,11 @@
     "Ear of the Region"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "intel": 1
+   },
+   "waits": null
   },
   {
    "n": "70",
@@ -2231,9 +2243,11 @@
     "Cipher Court"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "cipher": 10
+   },
+   "waits": null
   },
   {
    "n": "71",
@@ -2324,9 +2338,11 @@
     "Eyes Everywhere"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "intel": 1
+   },
+   "waits": null
   },
   {
    "n": "74",
@@ -2386,9 +2402,11 @@
     "Eye Wall"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "spyCatch": 15
+   },
+   "waits": null
   },
   {
    "n": "76",
@@ -2486,7 +2504,7 @@
    ],
    "minTier": 1,
    "status": "disabled",
-   "waits": "D9",
+   "waits": "D6",
    "fx": {}
   },
   {
@@ -2864,7 +2882,7 @@
    ],
    "minTier": 1,
    "status": "disabled",
-   "waits": "D9",
+   "waits": "D10",
    "fx": {}
   },
   {
@@ -2899,7 +2917,7 @@
     "unlock": true
    },
    "waits": null,
-   "note": "Sabotage and gadgets are D9-D10."
+   "note": "Gadgets are D10."
   },
   {
    "n": "92",
@@ -3062,7 +3080,7 @@
    ],
    "minTier": 1,
    "status": "disabled",
-   "waits": "D9",
+   "waits": "later",
    "fx": {}
   },
   {
@@ -3216,9 +3234,12 @@
     "Colossus Hangar"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "raidDef": 1
+   },
+   "waits": null,
+   "note": "Mechs are drawn later; they count in raids now."
   },
   {
    "n": "102",
@@ -3278,9 +3299,11 @@
     "Sky Hive"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "intel": 1
+   },
+   "waits": null
   },
   {
    "n": "104",
@@ -3310,7 +3333,7 @@
    ],
    "minTier": 1,
    "status": "disabled",
-   "waits": "D9",
+   "waits": "later",
    "fx": {}
   },
   {
@@ -3371,12 +3394,11 @@
     "Deathwalk"
    ],
    "minTier": 1,
-   "status": "limited",
+   "status": "supported",
    "fx": {
     "defense": 1
    },
-   "waits": null,
-   "note": "Defense counts in raids on the HQ (D9)."
+   "waits": null
   },
   {
    "n": "107",
@@ -3405,9 +3427,11 @@
     "Bastion"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "raidDef": 1
+   },
+   "waits": null
   },
   {
    "n": "108",
@@ -3436,9 +3460,11 @@
     "Iron Gate"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "raidDef": 1
+   },
+   "waits": null
   },
   {
    "n": "109",
@@ -3467,9 +3493,11 @@
     "Eye of the Hill"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "warn": 1
+   },
+   "waits": null
   },
   {
    "n": "110",
@@ -3498,9 +3526,11 @@
     "Immortal Wall"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "raidDef": 1
+   },
+   "waits": null
   },
   {
    "n": "111",
@@ -3530,7 +3560,7 @@
    ],
    "minTier": 1,
    "status": "disabled",
-   "waits": "D9",
+   "waits": "D14",
    "fx": {}
   },
   {
@@ -3561,7 +3591,7 @@
    ],
    "minTier": 1,
    "status": "disabled",
-   "waits": "D9",
+   "waits": "D14",
    "fx": {}
   },
   {
@@ -3591,9 +3621,11 @@
     "Flood System"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "fireCut": 50
+   },
+   "waits": null
   },
   {
    "n": "114",
@@ -3622,9 +3654,11 @@
     "Skyfire Alarm"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "raidDef": 1
+   },
+   "waits": null
   },
   {
    "n": "115",
@@ -3654,7 +3688,7 @@
    ],
    "minTier": 1,
    "status": "disabled",
-   "waits": "D9",
+   "waits": "D10",
    "fx": {}
   },
   {
@@ -3684,9 +3718,12 @@
     "Phantom HQ"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "raidDef": 1
+   },
+   "waits": null,
+   "note": "The fake vault counts as raid Defense."
   },
   {
    "n": "117",
@@ -3715,9 +3752,11 @@
     "Abyss Hall"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "raidDef": 1
+   },
+   "waits": null
   },
   {
    "n": "118",
@@ -3746,9 +3785,11 @@
     "Black Eye"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "spyCatch": 20
+   },
+   "waits": null
   },
   {
    "n": "119",
@@ -3777,9 +3818,11 @@
     "Gate of Gates"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "raidDef": 1
+   },
+   "waits": null
   },
   {
    "n": "120",
@@ -4152,9 +4195,12 @@
     "Ball of Shadows"
    ],
    "minTier": 2,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "truceOff": 10
+   },
+   "waits": null,
+   "note": "Hosting a Boss in person waits for D13; tribute is cheaper now."
   },
   {
    "n": "132",
@@ -4245,9 +4291,12 @@
     "Grand Embassy"
    ],
    "minTier": 2,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "truceOff": 10
+   },
+   "waits": null,
+   "note": "Envoys come as Rival File cards; tribute is cheaper now."
   },
   {
    "n": "135",
@@ -4508,7 +4557,7 @@
    ],
    "minTier": 0,
    "status": "disabled",
-   "waits": "D9",
+   "waits": "D10",
    "fx": {}
   },
   {
@@ -4569,9 +4618,11 @@
     "Eagle's Eye"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "intel": 1
+   },
+   "waits": null
   },
   {
    "n": "145",
@@ -4788,7 +4839,7 @@
    ],
    "minTier": 1,
    "status": "disabled",
-   "waits": "D9",
+   "waits": "later",
    "fx": {}
   },
   {
@@ -5112,7 +5163,7 @@
    ],
    "minTier": 1,
    "status": "disabled",
-   "waits": "D9",
+   "waits": "D4",
    "fx": {}
   },
   {
@@ -5944,7 +5995,7 @@
    ],
    "minTier": 1,
    "status": "disabled",
-   "waits": "D9",
+   "waits": "later",
    "fx": {}
   },
   {
@@ -6231,9 +6282,11 @@
     "Great Dex"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "intel": 1
+   },
+   "waits": null
   },
   {
    "n": "P47",
@@ -7046,7 +7099,7 @@
    ],
    "minTier": 1,
    "status": "disabled",
-   "waits": "D9",
+   "waits": "later",
    "fx": {}
   },
   {
@@ -7175,9 +7228,11 @@
     "All-Seeing Eye"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "intel": 1
+   },
+   "waits": null
   },
   {
    "n": "G26",
@@ -7406,7 +7461,7 @@
    ],
    "minTier": 1,
    "status": "disabled",
-   "waits": "D9",
+   "waits": "D10",
    "fx": {}
   },
   {
@@ -7469,9 +7524,11 @@
     "Palace"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "raidDef": 1
+   },
+   "waits": null
   },
   {
    "n": "G35",
@@ -7693,9 +7750,12 @@
     "Hall of Honor"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "raidDef": 1
+   },
+   "waits": null,
+   "note": "Guards the HQ in raids; the Boss's own escort waits for D14."
   },
   {
    "n": "G42",
@@ -7758,7 +7818,7 @@
    ],
    "minTier": 1,
    "status": "disabled",
-   "waits": "D9",
+   "waits": "later",
    "fx": {}
   },
   {
@@ -8089,9 +8149,12 @@
     "Empire"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D9",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "intel": 1
+   },
+   "waits": null,
+   "note": "Taxi fares come with D10; the drivers bring Intel now."
   },
   {
    "n": "G54",
@@ -8122,7 +8185,7 @@
    ],
    "minTier": 1,
    "status": "disabled",
-   "waits": "D9",
+   "waits": "D10",
    "fx": {}
   },
   {

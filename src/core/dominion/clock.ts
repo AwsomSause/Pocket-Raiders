@@ -128,6 +128,10 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'loan':
     case 'repay':
     case 'letGo':
+    case 'truce':
+    case 'breakTruce':
+    case 'card':
+    case 'ransom':
       // The Boss's hands need the run (party, bag): session.ts sends them to field.ts.
       return no(block);
     case 'toDay': {

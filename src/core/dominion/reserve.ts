@@ -7,7 +7,7 @@ import { evolutionTarget, evolve } from '../evolution';
 import { newMon } from '../run';
 import type { PokemonInstance, RunState } from '../state';
 import {
-  addCrewHook, addLoyalty, addMorale, addOddsHook, addTaskKind, crewOf, familyOf, gruntType, leave, monName, rng, withCrew,
+  addCrewHook, addLoyalty, addMorale, addOddsHook, addTaskKind, crewOf, familyOf, gruntType, leave, monName, rng, withCrew, type TaskCtx,
 } from './crew';
 import { DOMINION_DATA } from './data';
 import { hqFx } from './hqFx';
@@ -422,12 +422,15 @@ const rankName = (id: string): string => DOMINION_DATA.crew.ranks.find((x) => x.
 
 // ---------- the D4 crew tasks ----------
 
-addTaskKind('pens', (x) => {
+interface TaskRun { b: DominionBlock; m: Member; ok: boolean; lv: number; r: TaskCtx['r']; label: string; say: TaskCtx['say'] }
+const kind = (k: string, f: (x: TaskRun) => void): void => addTaskKind(k, (b, m, ok, c) => f({ b, m, ok, lv: c.lv, r: c.r, label: c.label, say: c.say }));
+
+kind('pens', (x) => {
   if (x.ok) x.say('crew', fill(L().penWatch!, { name: x.m.name }));
   else x.say('crew', fill(DOMINION_DATA.crew.report.fail!, { name: x.m.name, task: x.label }));
 });
 
-addTaskKind('tend', (x) => {
+kind('tend', (x) => {
   const r = book(x.b);
   const low = [...r.box].filter((m) => (r.meta[m.uid]?.trust ?? T().max) < T().max).sort((a, m) => r.meta[a.uid]!.trust - r.meta[m.uid]!.trust || a.uid.localeCompare(m.uid));
   if (!x.ok || !low.length) return x.say('crew', fill(DOMINION_DATA.crew.report.fail!, { name: x.m.name, task: x.label }));
@@ -438,14 +441,14 @@ addTaskKind('tend', (x) => {
   }
 });
 
-addTaskKind('feed', (x) => {
+kind('feed', (x) => {
   if (!x.ok) return x.say('crew', fill(DOMINION_DATA.crew.report.fail!, { name: x.m.name, task: x.label }));
   const k = x.lv >= 2 ? 2 : 1;
   for (const m of x.b.members) addMorale(m, k);
   x.say('crew', fill(L().feed!, { name: x.m.name, n: k }));
 });
 
-addTaskKind('release', (x) => {
+kind('release', (x) => {
   const r = book(x.b);
   const weak = [...r.box].filter((m) => !r.meta[m.uid]?.pens).sort((a, m) => (r.meta[a.uid]?.bst ?? 0) - (r.meta[m.uid]?.bst ?? 0) || a.level - m.level || a.uid.localeCompare(m.uid))[0];
   if (!x.ok) return x.say('crew', fill(DOMINION_DATA.crew.report.fail!, { name: x.m.name, task: x.label }));
@@ -458,7 +461,7 @@ addTaskKind('release', (x) => {
   x.say('money', fill(L().release!, { name: x.m.name, mon: monName(weak.speciesId), pay }));
 });
 
-addTaskKind('rehab', (x) => {
+kind('rehab', (x) => {
   if (!x.ok) return x.say('crew', fill(DOMINION_DATA.crew.report.fail!, { name: x.m.name, task: x.label }));
   const region = DOMINION_DATA.start.start.region.toLowerCase();
   const pool = (DOMINION_DATA.crew.pools[region] ?? DOMINION_DATA.crew.pools.kanto!).catch;
