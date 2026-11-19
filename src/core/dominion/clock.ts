@@ -9,6 +9,7 @@ import { assign, bail } from './crew';
 import { payPatron } from './recruit';
 import { setWhere } from './empire';
 import { answer, eveningTalk } from './talk';
+import { answerCard, chairDue, closeDoors, courtNext, cycleOpt, endSitting, handOff, inTally, lockedTask, openSitting } from './chair';
 
 export interface StepOut {
   ok: boolean;
@@ -101,9 +102,34 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
       return ok(b, [o.report, ...checkSteps(b)].join(' '));
     }
     case 'toNight': {
+      // D12: the Chair sits first (from Day 2); the Tally read, the Night begins.
       if (block.phase !== 'evening') return no(block);
+      if (block.chair?.open) return inTally(block) ? ok({ ...endSitting(block), phase: 'night' }) : no(block);
+      if (chairDue(block)) {
+        const b = openSitting(block, seed);
+        if (b.chair!.open) return ok(b);
+        return ok({ ...b, phase: 'night' });
+      }
       return ok({ ...block, phase: 'night' });
     }
+    case 'court': {
+      const out = answerCard(block, action.choice, seed);
+      return out.ok ? ok(out.block) : no(block);
+    }
+    case 'handOff': {
+      const out = handOff(block, action.member, seed);
+      return out.ok ? ok(out.block) : { ...no(block), notice: out.notice };
+    }
+    case 'courtNext': {
+      const out = courtNext(block);
+      return out.ok ? ok(out.block) : no(block);
+    }
+    case 'closeDoors': {
+      const out = closeDoors(block);
+      return out.ok ? ok(out.block, out.notice) : no(block);
+    }
+    case 'chairOpt':
+      return ok(cycleOpt(block, action.key));
     case 'rest': {
       if (block.phase !== 'night') return no(block);
       return ok(endNight(block, seed, true), null, true);
@@ -137,6 +163,9 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     }
     // D3, the crew (crew.ts, talk.ts, recruit.ts). Hiring, recruiting and gifts need the run: session.ts runs them.
     case 'assign': {
+      // D12: a member the Chair set to Guard (the gatekeeper, a guarded house) keeps that task until the lock ends.
+      const lock = lockedTask(block, action.member);
+      if (lock && action.task !== lock) return { ...no(block), notice: 'The Chair set that task: they keep it for now.' };
       const out = assign(block, action.member, action.task);
       return out.ok ? ok(out.block) : { ...no(block), notice: out.notice };
     }

@@ -25,7 +25,7 @@ export function beginDominionFight(content: Content, current: RunState): RunStat
   const district = districtDef(fight.district)!;
   const td = targetDef(fight.target);
   const P = DOMINION_DATA.field.police;
-  const foe = foeOf(b, run, fight.foe, district, td?.target ?? null);
+  const foe = foeOf(b, run, fight.foe, district, td?.target ?? null, fight.target);
   const rng = new Rng(hashSeed(`${run.seed}::dominion-foe::${b.field.rolls}::${fight.foe}`));
   const make = (species: string, level: number): PokemonInstance | null => (content.species.has(species) ? newMon(content, run, species, level, 'e') : null);
   let team: PokemonInstance[] = [];
@@ -39,7 +39,8 @@ export function beginDominionFight(content: Content, current: RunState): RunStat
     team = (m?.team ?? []).map((x) => ({ ...structuredClone(x), uid: `${x.uid}-spar` }));
     trainer = { classId: DOMINION_DATA.field.foes.member, name: m?.name ?? 'Crew', leaderId: null };
   } else {
-    const def = fight.foe === 'police' ? P.jenny : fight.foe === 'looker' ? P.looker : fight.foe === 'raid' ? P.raid : td?.target.foe;
+    const court = fight.foe === 'court' ? DOMINION_DATA.court.find((c) => String(c.id) === fight.target)?.foe : undefined;
+    const def = court ?? (fight.foe === 'police' ? P.jenny : fight.foe === 'looker' ? P.looker : fight.foe === 'raid' ? P.raid : td?.target.foe);
     if (!def) return null;
     team = def.species.map((s, i) => make(s, Math.max(2, foe.level - i))).filter((m): m is PokemonInstance => !!m);
     trainer = { classId: def.cls, name: def.name, leaderId: null };

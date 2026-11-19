@@ -16,6 +16,7 @@ import { rxFileOf } from '../ui/redux/assets';
 import { mountRedux, type ReduxView } from '../ui/redux/stage';
 import { hqView, openingView, setupView, titleView, type SetupFiles } from '../ui/redux/screens/dominion/views';
 import { CrewController } from './dominion/crewController';
+import { ChairController } from './dominion/chairController';
 import { cardModel, gridPages, mapModel, newCursor, pageFor, type MapCursor } from '../core/dominion/fieldScreens';
 import { cardView, mapView } from '../ui/redux/screens/dominion/fieldViews';
 import { ledgerModel, SPREADS } from '../core/dominion/ledgerScreens';
@@ -44,6 +45,8 @@ export class DominionScene extends Phaser.Scene {
   private manifest: AssetManifest | undefined;
   /** D3: the Morning (mockup 2) and the Crew File (mockup 5). */
   private crew = new CrewController(this);
+  /** D12: the Chair (mockups c1-c3), open in the Evening before the Night. */
+  private chair = new ChairController(this);
   /** D6: the Ledger's open spread (0 Money | Empire, 1 Territory | Notoriety, 2 Crew | Stores) and where L goes back to. */
   private spread = 0;
   private ledgerFrom: Screen = 'hq';
@@ -60,6 +63,7 @@ export class DominionScene extends Phaser.Scene {
     this.notice = null;
     this.leaving = false;
     this.crew = new CrewController(this);
+    this.chair = new ChairController(this);
     const { session } = services();
     const run = session.run;
     if (!run) return void this.scene.start('MainMenu');
@@ -114,11 +118,13 @@ export class DominionScene extends Phaser.Scene {
         ledgerTab: (i) => { this.spread = Number(i); this.view?.refresh(); },
         ledgerPage: (d) => this.turnLedger(Number(d)),
         ...this.crew.acts(),
+        ...this.chair.acts(),
       },
       overs: {
         typeOver: (i) => { this.setup = { ...this.setup, at: Number(i) }; this.view?.refresh(); },
         orderOver: (i) => { this.at = Number(i); this.view?.refresh(); },
         ...this.crew.overs(),
+        ...this.chair.overs(),
       },
     });
     onInputAction(this, (a) => this.key(a));
@@ -144,6 +150,7 @@ export class DominionScene extends Phaser.Scene {
         return;
       }
       if (this.screen !== 'hq' && this.screen !== 'crew') return;
+      if (this.chair.raw(e.code)) return;
       if (this.crew.raw(e.code)) return;
       if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
       else if (e.code === 'KeyN') this.step({ t: 'toNight' });
@@ -178,6 +185,7 @@ export class DominionScene extends Phaser.Scene {
       case 'opening':
         return openingView(b ? openingLines(b) : [], this.shown, this.memberLook());
       case 'hq':
+        if (b && this.chair.owns()) return this.chair.render(this.notice);
         if (b && this.crew.owns()) return this.crew.render(this.notice);
         return b ? hqView(hqModel(b), this.notice, this.at, this.memberLook()) : '';
       case 'map':
@@ -217,6 +225,7 @@ export class DominionScene extends Phaser.Scene {
 
   private key(a: InputAction): void {
     if (this.leaving) return;
+    if (this.chair.key(a)) return void this.view?.refresh();
     if (this.crew.key(a)) return void this.view?.refresh();
     if (this.screen === 'ledger') {
       if (a === 'back') return this.closeLedger();

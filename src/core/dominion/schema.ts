@@ -173,8 +173,9 @@ export type DistrictState = z.infer<typeof DistrictStateSchema>;
 
 /** A battle an action (or the police) is waiting on. The fight bridge (fight.ts) starts it; fightEnd settles it. */
 export const FieldFightSchema = z.object({
-  why: z.enum(['fail', 'always', 'police', 'looker', 'raid']),
-  foe: z.enum(['target', 'police', 'wild', 'ghost', 'member', 'looker', 'raid']),
+  why: z.enum(['fail', 'always', 'police', 'looker', 'raid', 'court']),
+  /** 'court' (D12): a Chair visitor at the door; `target` is the card id, `action` the answer ('0' or '1'). */
+  foe: z.enum(['target', 'police', 'wild', 'ghost', 'member', 'looker', 'raid', 'court']),
   begun: z.boolean(),
   action: S.nullable(),
   target: S.nullable(),
@@ -283,6 +284,8 @@ const BlockSchema = z.object({
   crew: z.lazy(() => CrewStateSchema).optional(),
   /** D6: the Ledger's books, holding and Notoriety (Part 3 §1-2, Part 9 A14). Optional; `empireOf` (book.ts) fills it. */
   empire: z.lazy(() => EmpireStateSchema).optional(),
+  /** D12: the Chair (Evening court). Optional; `chairOf` (chair.ts) fills it. */
+  chair: z.lazy(() => ChairStateSchema).optional(),
 }).strict();
 export const DominionBlockSchema = z.preprocess(migrateDominion, BlockSchema);
 export type DominionBlock = z.infer<typeof BlockSchema>;
@@ -318,7 +321,13 @@ export type DominionAction =
   | { t: 'gift'; member: string; item: string }
   | { t: 'patron'; patron: string }
   // D6: where a member's district task (Patrol, Hold, Chant...) is done
-  | { t: 'where'; member: string; district: string };
+  | { t: 'where'; member: string; district: string }
+  // D12, the Chair: answer the visitor (0 or 1), hand the card to a member, read on, close the doors, the settings
+  | { t: 'court'; choice: number }
+  | { t: 'handOff'; member: string }
+  | { t: 'courtNext' }
+  | { t: 'closeDoors' }
+  | { t: 'chairOpt'; key: 'length' | 'numbers' | 'speed' };
 
 // ---------- D3 data: crew.json, tasks.json, gruntTypes.json ----------
 
@@ -630,3 +639,160 @@ export const EmpireStateSchema = z.object({
   guarded: z.array(S),
 }).strict();
 export type EmpireState = z.infer<typeof EmpireStateSchema>;
+
+// ---------- D12: the Chair (court.json, courtRules.json, block `chair`) ----------
+
+export const OWED_KEYS = ['ten', 'threat', 'goal', 'stab', 'raid', 'shadow', 'wipe'] as const;
+export const LEANS = ['money', 'regard', 'dread', 'heat', 'self'] as const;
+export type Lean = (typeof LEANS)[number];
+const Who = z.enum(['named', 'second', 'all']);
+export type CourtFx =
+  | { k: 'funds'; n: number; clean?: boolean; each?: boolean }
+  | { k: 'zero' }
+  | { k: 'racket'; share: number }
+  | { k: 'heat' | 'wanted' | 'regard' | 'dread' | 'morale' | 'fame' | 'heatAll' | 'cool' | 'wage' | 'happy' | 'levels' | 'mon' | 'monMember' | 'out' | 'guard'; n: number }
+  | { k: 'loyalty' | 'xp'; n: number; who: 'named' | 'second' | 'all' }
+  | { k: 'item'; id: string; n: number; held?: boolean }
+  | { k: 'join'; name?: string; look?: string; green?: string }
+  | { k: 'leave' | 'jail' | 'free' | 'rest' | 'scout' | 'racketAdd' | 'racketLose' }
+  | { k: 'poach'; below: number; p: number }
+  | { k: 'tag'; tag: 'favour' | 'grudge'; who?: string }
+  | { k: 'follow'; card: number; days: number }
+  | { k: 'owed'; key: (typeof OWED_KEYS)[number]; n: number }
+  | { k: 'note'; slice: string; text: string }
+  | { k: 'deal'; n: number; clean?: boolean; heat?: number; risk?: number; wanted?: number; mon?: number; item?: string; itemN?: number; ten?: number }
+  | { k: 'chance'; p: number; yes: CourtFx[]; no: CourtFx[] }
+  | { k: 'later'; days: number; fx: CourtFx[] }
+  | { k: 'fight'; win: CourtFx[]; lose: CourtFx[] };
+export const CourtFxSchema: z.ZodType<CourtFx> = z.lazy(() => z.discriminatedUnion('k', [
+  z.object({ k: z.literal('funds'), n: I, clean: z.boolean().optional(), each: z.boolean().optional() }).strict(),
+  z.object({ k: z.literal('zero') }).strict(),
+  z.object({ k: z.literal('racket'), share: z.number().min(-1).max(1) }).strict(),
+  z.object({ k: z.enum(['heat', 'wanted', 'regard', 'dread', 'morale', 'fame', 'heatAll', 'cool', 'wage', 'happy', 'levels', 'mon', 'monMember', 'out', 'guard']), n: I }).strict(),
+  z.object({ k: z.enum(['loyalty', 'xp']), n: I, who: Who }).strict(),
+  z.object({ k: z.literal('item'), id: S, n: I, held: z.boolean().optional() }).strict(),
+  z.object({ k: z.literal('join'), name: S.optional(), look: S.optional(), green: S.optional() }).strict(),
+  z.object({ k: z.enum(['leave', 'jail', 'free', 'rest', 'scout', 'racketAdd', 'racketLose']) }).strict(),
+  z.object({ k: z.literal('poach'), below: I.min(1).max(100), p: I.min(1).max(100) }).strict(),
+  z.object({ k: z.literal('tag'), tag: z.enum(['favour', 'grudge']), who: S.optional() }).strict(),
+  z.object({ k: z.literal('follow'), card: I.min(1), days: I.min(1) }).strict(),
+  z.object({ k: z.literal('owed'), key: z.enum(OWED_KEYS), n: I }).strict(),
+  z.object({ k: z.literal('note'), slice: S, text: S }).strict(),
+  z.object({ k: z.literal('deal'), n: I, clean: z.boolean().optional(), heat: I.optional(), risk: I.min(1).max(100).optional(), wanted: I.optional(), mon: I.min(1).optional(), item: S.optional(), itemN: I.min(1).optional(), ten: I.optional() }).strict(),
+  z.object({ k: z.literal('chance'), p: I.min(1).max(99), yes: z.array(CourtFxSchema), no: z.array(CourtFxSchema) }).strict(),
+  z.object({ k: z.literal('later'), days: I.min(1), fx: z.array(CourtFxSchema).min(1) }).strict(),
+  z.object({ k: z.literal('fight'), win: z.array(CourtFxSchema), lose: z.array(CourtFxSchema) }).strict(),
+]) as unknown as z.ZodType<CourtFx>);
+const AnswerSchema = z.object({ label: S, does: z.string(), fx: z.array(CourtFxSchema) }).strict();
+export const NAMED = ['any', 'first', 'jailed', 'hurt', 'admin', 'admins', 'two', 'sergeant', 'lowLoy', 'best'] as const;
+export const CRISES = ['money', 'heat', 'morale', 'regard', 'loyalty', 'threat'] as const;
+export type Crisis = (typeof CRISES)[number];
+export const CourtCardSchema = z.object({
+  id: I.min(1), sect: z.enum(['crew', 'town', 'money', 'law', 'rival', 'hero', 'gyms', 'pokemon', 'empire', 'regular', 'crisis']),
+  visitor: S, name: S, role: S.nullable(), look: S, tier: z.tuple([I.min(0).max(5), I.min(0).max(5)]), ask: S,
+  a: AnswerSchema, b: AnswerSchema,
+  /** Who on the crew the card names (they're the visitor, or the one it's about). `name:X` = the member called X. */
+  named: z.union([z.enum(NAMED), z.string().regex(/^name:.+/)]).optional(),
+  /** The person a Favour or Grudge sticks to. */
+  who: S.optional(),
+  needs: z.enum(['racket', 'stores', 'stores2']).optional(),
+  foe: z.object({ name: S, cls: S, species: z.array(S).min(1), offset: I }).strict().optional(),
+  /** Switched off until this slice builds what the answers need (status "disabled"). */
+  wait: S.optional(),
+  region: S.optional(),
+  once: z.literal(true).optional(), oncePerRegion: z.literal(true).optional(), followOnly: z.literal(true).optional(),
+  rival: z.literal(true).optional(), first: z.literal(true).optional(),
+  regular: I.min(1).optional(), step: I.min(1).max(3).optional(),
+  crisis: z.enum(CRISES).optional(), red: S.optional(),
+}).strict();
+export type CourtCard = z.infer<typeof CourtCardSchema>;
+export const CourtFileSchema = z.object({ _source: S, cards: z.array(CourtCardSchema).length(150) }).strict().superRefine((f, ctx) => {
+  const ids = new Set(f.cards.map((c) => c.id));
+  const walk = (fx: CourtFx[], id: number): void => {
+    for (const e of fx) {
+      if (e.k === 'follow' && !ids.has(e.card)) ctx.addIssue({ code: 'custom', message: `card ${id}: follow-up ${e.card} doesn't exist` });
+      if (e.k === 'fight' && !f.cards.find((c) => c.id === id)?.foe) ctx.addIssue({ code: 'custom', message: `card ${id}: a fight needs a foe` });
+      if (e.k === 'chance') walk([...e.yes, ...e.no], id);
+      if (e.k === 'later') walk(e.fx, id);
+      if (e.k === 'fight') walk([...e.win, ...e.lose], id);
+    }
+  };
+  f.cards.forEach((c, i) => {
+    if (c.id !== i + 1) ctx.addIssue({ code: 'custom', message: `card ${i + 1} out of order` });
+    if (c.tier[0] > c.tier[1]) ctx.addIssue({ code: 'custom', message: `card ${c.id}: tier range` });
+    if (!c.a.fx.length && !c.b.fx.length) ctx.addIssue({ code: 'custom', message: `card ${c.id}: neither answer changes anything` });
+    walk([...c.a.fx, ...c.b.fx], c.id);
+  });
+});
+const Pair = z.tuple([I, I]);
+const Lines6 = z.array(S).length(6);
+export const CourtRulesSchema = z.object({
+  _source: S, chairs: Lines6, visitors: z.array(I.min(1)).length(6), tierPay: z.array(I.min(1)).length(6), firstDay: I.min(2),
+  openHouseEvery: I.min(1), cooldown: I.min(1), maxSameRival: I.min(1), weights: z.object({ base: I.min(1), region: I.min(1) }).strict(),
+  regulars: z.object({ first: Pair, gap: Pair }).strict(), big: z.object({ funds: I.min(1), n: I.min(1) }).strict(), logKeep: I.min(1),
+  red: z.object({ heat: I, morale: I, regard: I, regardDread: I, loyalty: I, threat: I }).strict(),
+  crisisOrder: z.array(z.enum(CRISES)).length(6), handOffRank: I.min(1), loyaltyHanded: I, whisperHonest: I, whisperMoney: I,
+  lengths: z.tuple([z.literal('off'), z.literal('short'), z.literal('normal'), z.literal('long')]), joinStats: Pair,
+  stray: z.array(S).min(1), strayLevel: I.min(1),
+  owed: z.record(z.enum(OWED_KEYS), z.object({ word: S, slice: S }).strict()),
+  leans: z.record(S, z.enum(LEANS)), leanWord: z.record(S, S), leanBar: z.record(S, I.min(0).max(100)), leanFamily: z.record(z.enum(LEANS), S),
+  whisper: z.object({ honest: z.array(S).min(1), money: z.array(S).min(1), neutral: z.array(S).min(1), selfish: z.array(S).min(1) }).strict(),
+  react: z.object({ happy: S, growl: S, sad: S, calm: S }).strict(),
+  lines: z.object({ handedWhy: z.record(S, S), closeLoss: I.min(0) }).catchall(z.union([S, I, z.record(S, S)])),
+}).strict();
+export type CourtRules = z.infer<typeof CourtRulesSchema>;
+
+/** One visitor on tonight's Docket. */
+const DocketSchema = z.object({ card: I.min(1), member: S.nullable(), second: S.nullable() }).strict();
+/** One line of the Tally: who came, what you answered (0 / 1, or -1 = sent home), who decided, what changed. */
+export const TallyRowSchema = z.object({
+  card: I.min(1), member: S.nullable(), pick: I.min(-1).max(1), by: S.nullable(), changes: z.record(S, I), tag: z.enum(['favour', 'grudge']).nullable(), back: z.boolean(),
+}).strict();
+export type TallyRow = z.infer<typeof TallyRowSchema>;
+export const ChairStateSchema = z.object({
+  /** The day of the last sitting (0: none yet). */
+  day: N0,
+  /** The sitting is open (the Chair holds the HQ screen until the Tally is read). */
+  open: z.boolean(),
+  docket: z.array(DocketSchema),
+  /** Index of the visitor at the door. Past the end: the Tally. */
+  at: N0,
+  /** The answer just given, shown until Enter (the All Events rule): its lines. */
+  result: z.array(S).nullable(),
+  /** Hand it off used this sitting. */
+  handed: z.boolean(),
+  tally: z.array(TallyRowSchema),
+  /** Card id -> the day it was last seen (cooldown, once, and Exact numbers for cards answered before). */
+  seen: z.record(S, I.min(1)),
+  follow: z.array(z.object({ card: I.min(1), day: I.min(1), member: S.nullable() }).strict()),
+  /** Delayed results ("in 3 days"). */
+  due: z.array(z.object({ day: I.min(1), card: I.min(1), member: S.nullable(), fx: z.array(CourtFxSchema) }).strict()),
+  /** Regular id -> the next step and the day it's due (step 4 = done). */
+  regulars: z.record(S, z.object({ step: I.min(1).max(4), day: I.min(1) }).strict()),
+  /** Person -> Favour or Grudge (for the run). */
+  tags: z.record(S, z.enum(['favour', 'grudge'])),
+  /** Weekly deals struck at the Chair. */
+  deals: z.array(z.object({ card: I.min(1), n: I, clean: z.boolean(), heat: I, risk: N0, wanted: I, mon: N0, item: S.nullable(), itemN: N0, ten: I }).strict()),
+  /** Numbers kept for the slices that build them (Tension D9, Hero Threat D11...). */
+  owed: z.record(S, I),
+  /** Notoriety the Chair added (press, a mural, a TV show). */
+  fame: N0,
+  /** HQ district Heat cooled each day (a favour to Jenny). */
+  cool: N0,
+  /** Member id -> the last day their task stays Guard. */
+  locks: z.record(S, I.min(1)),
+  /** A fight at the door's stakes: card, answer. */
+  stake: z.object({ card: I.min(1), pick: I.min(0).max(1), member: S.nullable() }).strict().nullable(),
+  /** What needs the run (Pokémon, items): settled by the session. */
+  give: z.array(z.union([
+    z.object({ k: z.literal('mon'), species: S, level: I.min(1), member: S.nullable() }).strict(),
+    z.object({ k: z.literal('item'), id: S, n: I, held: z.boolean() }).strict(),
+    z.object({ k: z.literal('levels'), n: I.min(1) }).strict(),
+  ])),
+  /** The last answers (day, card, pick). */
+  log: z.array(z.tuple([I.min(1), I.min(1), I.min(-1).max(1)])),
+  /** This week: visitors, first answers, second answers, handed off. */
+  week: z.tuple([N0, N0, N0, N0]),
+  opts: z.object({ length: z.enum(['off', 'short', 'normal', 'long']), numbers: z.enum(['arrows', 'exact']), speed: z.enum(['normal', 'fast']) }).strict(),
+}).strict();
+export type ChairState = z.infer<typeof ChairStateSchema>;

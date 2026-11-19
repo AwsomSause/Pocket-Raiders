@@ -33,14 +33,16 @@ export function whereOf(m: Member): string {
 
 // ---------- Notoriety (A14) ----------
 
-export interface NotorietyParts { towns: number; holdings: number; members: number; total: number }
+export interface NotorietyParts { towns: number; holdings: number; members: number; press: number; total: number }
 
 export function notorietyOf(b: DominionBlock): NotorietyParts {
   const N = E().notoriety;
   const towns = Object.values(b.field.districts).reduce((a, d) => a + Math.max(0, d.regard, d.dread), 0);
   const holdings = heldIds(b).length * N.perHolding;
   const members = b.members.length * N.perMember;
-  return { towns, holdings, members, total: towns + holdings + members };
+  // D12: what the Chair added (a quote to the papers, a mural, a TV show).
+  const press = b.chair?.fame ?? 0;
+  return { towns, holdings, members, press, total: towns + holdings + members + press };
 }
 
 export const stepIndex = (n: number): number => {

@@ -219,9 +219,14 @@ export interface Card {
 const teamLevel = (run: Pick<RunState, 'party'>): number => (run.party.length ? Math.round(run.party.reduce((a, m) => a + m.level, 0) / run.party.length) : 5);
 const foeLevel = (b: DominionBlock, run: Pick<RunState, 'party'>, offset: number): number => clamp(teamLevel(run) + offset, F().levels.min, b.levelCap + F().levels.overCap);
 
-export function foeOf(b: DominionBlock, run: Pick<RunState, 'party'>, kind: FieldFight['foe'], district: District, target: Target | null): Foe {
+export function foeOf(b: DominionBlock, run: Pick<RunState, 'party'>, kind: FieldFight['foe'], district: District, target: Target | null, card: string | null = null): Foe {
   const P = F().police;
   switch (kind) {
+    case 'court': {
+      // D12: a Chair visitor at the door (court.json card `card`).
+      const f = DOMINION_DATA.court.find((c) => String(c.id) === card)?.foe ?? P.raid;
+      return { name: f.name, species: f.species[0]!, level: foeLevel(b, run, f.offset), wild: false };
+    }
     case 'police': return { name: P.jenny.name, species: P.jenny.species[0]!, level: foeLevel(b, run, P.jenny.offset), wild: false };
     case 'looker': return { name: P.looker.name, species: P.looker.species[0]!, level: foeLevel(b, run, P.looker.offset), wild: false };
     case 'raid': return { name: P.raid.name, species: P.raid.species[0]!, level: foeLevel(b, run, P.raid.offset), wild: false };
@@ -605,6 +610,8 @@ export function settle(content: Content | null, b: DominionBlock, run: RunState,
   const f = b.field, fight = f.fight;
   if (!fight) return [];
   f.fight = null;
+  // D12: a Chair visitor's fight: its stakes are the Chair's (chair.ts courtFightEnd, called by fightEnd.ts).
+  if (fight.why === 'court') return [];
   const P = F().police, PL = P.lines;
   const district = districtDef(fight.district) ?? districtDef(F().hq)!;
   const won = outcome === 'win';

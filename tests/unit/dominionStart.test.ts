@@ -13,14 +13,21 @@ import { CURRENT_VERSIONS, SaveManager } from '../../src/save/saveManager';
 import { MemoryStorageProvider } from '../../src/save/storage';
 import { sceneForRun } from '../../src/scenes/routing';
 import { content } from './helpers';
+import { freshChair } from '../../src/core/dominion/chair';
 
 const D = DOMINION_DATA.start;
 const domRun = (seed = 'dm1'): RunState => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', rules: { ...STANDARD_CHOICE, modeId: DOMINION_MODE_ID } }), 0);
 const setup = (o: Partial<DominionSetup> = {}): DominionSetup => ({ types: ['poison', 'dark'], member: 'grunt', look: 0, ...o });
+/** D12: these tests are about other systems: the Chair is set to Off (a Crisis card still comes; none does here). */
+const quiet = (r: RunState): RunState => {
+  const out = structuredClone(r);
+  out.expansion!.dominion!.chair = { ...freshChair(), opts: { length: 'off', numbers: 'arrows', speed: 'normal' } };
+  return out;
+};
 const started = (o: Partial<DominionSetup> = {}): RunState => {
   const out = startInRun(content, domRun(), setup(o));
   expect(out.problem).toBeNull();
-  return out.run;
+  return quiet(out.run);
 };
 const blk = (r: RunState): DominionBlock => r.expansion!.dominion!;
 const go = (r: RunState, a: DominionAction): RunState => {
