@@ -159,6 +159,11 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'approach':
     case 'admit':
     case 'gift':
+    // D21: the desk needs the run (session.ts deskInRun).
+    case 'desk':
+    case 'deskAsk':
+    case 'deskInspect':
+    case 'deskStamp':
       return no(block);
   }
 }

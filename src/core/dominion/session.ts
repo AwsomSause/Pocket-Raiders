@@ -7,6 +7,7 @@ import { healParty, newMon } from '../run';
 import type { RunState } from '../state';
 import { step, type StepOut } from './clock';
 import { addMorale, withCrew } from './crew';
+import { ask as deskAsk, inspect as deskInspect, rollQueue, stamp as deskStamp } from './desk';
 import { fillCards } from './personality';
 import { admit, approach, hire } from './recruit';
 import { answer, eveningTalk } from './talk';
@@ -52,7 +53,13 @@ export function startInRun(content: Content, run: RunState, setup: DominionSetup
 
 /** One clock step on the run. Rest heals the Boss's team for free (Part 1 §2.1). Anyone new gets their card (D19). */
 export function stepInRun(content: Content, run: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean } {
-  const out = stepOnce(content, run, action);
+  let out = stepOnce(content, run, action);
+  // D21: the Day's applicants queue at the desk the first time the Day is seen (their own stream, so nothing else moves).
+  const queued = out.ok && out.run.expansion?.dominion ? structuredClone(out.run.expansion.dominion) : null;
+  if (queued && rollQueue(content, queued, run.seed)) {
+    const next = withBlock(out.run, DominionBlockSchema.parse(queued));
+    out = { ...out, block: next.expansion!.dominion!, run: next };
+  }
   const b = out.run.expansion?.dominion;
   if (!out.ok || !b || b.members.every((m) => !m.crew || m.crew.card)) return out;
   const next = withBlock(out.run, fillCards(structuredClone(b), run.seed));
@@ -63,6 +70,8 @@ function stepOnce(content: Content, run: RunState, action: DominionAction): Step
   if (!block) return { ok: false, block: block as never, notice: null, heal: false, run };
   const crewOut = crewInRun(content, run, action);
   if (crewOut) return crewOut;
+  const deskOut = deskInRun(content, run, action);
+  if (deskOut) return deskOut;
   if (action.t === 'act') {
     // D2: a Boss action (field.ts). A Pokémon lifted in a Ball (Thieve, a big success) joins the team or the box.
     const work = structuredClone(run);
@@ -89,6 +98,36 @@ function stepOnce(content: Content, run: RunState, action: DominionAction): Step
   }
   next = settleCrew(content, next);
   return { ...out, block: next.expansion!.dominion!, run: next };
+}
+
+/** D21: the applications desk. `desk` only opens it (the queue is rolled by stepInRun). */
+function deskInRun(content: Content, run: RunState, action: DominionAction): (StepOut & { run: RunState }) | null {
+  const block = run.expansion!.dominion!;
+  const put = (ok: boolean, b: DominionBlock, notice: string | null): StepOut & { run: RunState } => {
+    if (!ok) return { ok: false, block, notice, heal: false, run };
+    const next = withBlock(run, DominionBlockSchema.parse(b));
+    return { ok: true, block: next.expansion!.dominion!, notice, heal: false, run: next };
+  };
+  switch (action.t) {
+    case 'desk':
+      return put(true, block, null);
+    case 'deskAsk': {
+      const o = deskAsk(block, run.seed, action.q, action.text);
+      return put(o.ok, o.block, o.notice);
+    }
+    case 'deskInspect': {
+      const o = deskInspect(block, action.field);
+      return put(o.ok, o.block, o.notice);
+    }
+    case 'deskStamp': {
+      const o = deskStamp(content, run, action.stamp);
+      if (!o.ok) return { ok: false, block, notice: o.notice, heal: false, run };
+      const next = withBlock(o.run, DominionBlockSchema.parse(o.run.expansion!.dominion!));
+      return { ok: true, block: next.expansion!.dominion!, notice: o.notice, heal: false, run: next };
+    }
+    default:
+      return null;
+  }
 }
 
 /** D3 actions that need the run (new members' Pokémon, the Bag): hire, approach, admit, gifts, talks that give an item. */

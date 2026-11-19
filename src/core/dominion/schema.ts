@@ -279,6 +279,8 @@ const BlockSchema = z.object({
   field: FieldSchema,
   /** D3: the crew's shared state (stores, leads, waiting list, hire list, talks, Patrons). Optional; `crewState` fills it. */
   crew: z.lazy(() => CrewStateSchema).optional(),
+  /** D21: the applications desk (today's queue, the basement, who got in and what they really are). Optional; no bump. */
+  desk: z.lazy(() => DeskStateSchema).optional(),
 }).strict();
 export const DominionBlockSchema = z.preprocess(migrateDominion, BlockSchema);
 export type DominionBlock = z.infer<typeof BlockSchema>;
@@ -312,7 +314,12 @@ export type DominionAction =
   | { t: 'admit'; lead: string }
   | { t: 'bail'; member: string }
   | { t: 'gift'; member: string; item: string }
-  | { t: 'patron'; patron: string };
+  | { t: 'patron'; patron: string }
+  // D21, the applications desk
+  | { t: 'desk' }
+  | { t: 'deskAsk'; q: string; text?: string }
+  | { t: 'deskInspect'; field: string }
+  | { t: 'deskStamp'; stamp: Verdict };
 
 // ---------- D3 data: crew.json, tasks.json, gruntTypes.json ----------
 
@@ -601,3 +608,109 @@ export const CrewStateSchema = z.object({
   ])),
 }).strict();
 export type CrewState = z.infer<typeof CrewStateSchema>;
+
+// ---------- D21: the applications desk (Claude API draft §5.3 B, Rotom mockup k5) ----------
+
+export const TELLS = ['none', 'nervous', 'contradiction', 'rehearsed'] as const;
+export type Tell = (typeof TELLS)[number];
+export const TRUTHS = ['honest', 'plant', 'spy', 'glory'] as const;
+export type Truth = (typeof TRUTHS)[number];
+export const DESK_FIELDS = ['home', 'idno', 'badge', 'species', 'levels', 'stamp'] as const;
+export type DeskField = (typeof DESK_FIELDS)[number];
+export const VERDICTS = ['accept', 'reject', 'detain'] as const;
+export type Verdict = (typeof VERDICTS)[number];
+const TruthKey = z.enum(['honest', 'great', 'plant', 'spy', 'glory']);
+const TellWeights = z.object({ none: N0, nervous: N0, contradiction: N0, rehearsed: N0 }).strict();
+const TellLines = z.object({ none: z.array(S).min(1), nervous: z.array(S).min(1), contradiction: z.array(S).min(1), rehearsed: z.array(S).min(1) }).strict();
+const Range2 = z.tuple([I.min(0), I.min(0)]);
+
+export const DeskFileSchema = z.object({
+  _source: S,
+  fromDay: I.min(1),
+  perDay: Range2,
+  patience: I.min(1),
+  quickPerApplicant: I.min(1),
+  age: Range2,
+  truths: z.array(z.object({ id: z.enum(TRUTHS), weight: N0, word: S }).strict()).length(4),
+  plantPerHeat: I.min(1),
+  greatShare: Pct,
+  skill: Range2,
+  missCount: z.object({ honest: z.array(N0).min(1), great: z.array(N0).min(1), glory: z.array(N0).min(1), bySkill: z.array(z.array(N0).min(1)).length(5) }).strict(),
+  missKinds: z.record(TruthKey, z.partialRecord(z.enum(DESK_FIELDS), N0)),
+  tellOdds: z.record(TruthKey, z.object({ weights: TellWeights, slip: z.object({ base: Pct, perSkill: N0, min: Pct, split: z.partialRecord(z.enum(TELLS), N0) }).strict().optional() }).strict()),
+  traitTells: z.record(S, z.partialRecord(z.enum(TELLS), I)),
+  effects: z.object({
+    great: z.object({ lean: N0, traitPoints: N0, loyalty: Pct }).strict(),
+    plant: z.object({ nightHeat: N0, tipDays: Range2, tipHeat: N0 }).strict(),
+    spy: z.object({ leakDays: Range2, rival: N0 }).strict(),
+    glory: z.object({ quitDays: Range2, morale: I }).strict(),
+    detain: z.object({ heat: N0, honestMorale: I, plantHeat: N0, spyRival: I }).strict(),
+  }).strict(),
+  tells: z.record(z.enum(TELLS), z.object({ label: S, c: S }).strict()),
+  fields: z.array(z.object({ id: z.enum(DESK_FIELDS), label: S, doc: z.enum(['id', 'card', 'team', 'letter']) }).strict()).length(6),
+  lens: z.object({ fine: S, home: S, idno: S, badge: S, species: S, levels: S, stamp: S }).strict(),
+  ordinals: z.array(S).length(8),
+  levelCaps: z.array(I.min(1)).length(9),
+  regions: z.record(S, z.object({
+    name: S,
+    rivals: z.array(S).min(1),
+    badges: z.array(z.object({ name: S, town: S, c: S }).strict()).length(8),
+    codes: z.record(S, z.string().regex(/^[A-Z]{3}$/)),
+    mons: z.array(S).min(10),
+    offRegion: z.array(S).min(3),
+    writers: z.array(z.object({ name: S, short: S, town: S, quote: S }).strict()).min(6),
+  }).strict()),
+  surnames: z.array(S).min(20),
+  reasons: z.object({ any: z.array(S).min(4), glory: z.array(S).min(2), great: z.array(S).min(1) }).strict(),
+  questions: z.array(z.object({ id: S, ask: S, lines: TellLines }).strict()).min(4),
+  typed: TellLines,
+  says: z.record(S, S),
+  report: z.object({ left: S, held: z.object({ honest: S, great: S, plant: S, spy: S, glory: S }).strict(), plantTip: S, spyLeak: S, gloryQuit: S }).strict(),
+  rotom: z.object({ system: S, off: S, thinking: S, note: S, speed: z.record(S, S) }).strict(),
+}).strict();
+export type DeskFile = z.infer<typeof DeskFileSchema>;
+
+/** One applicant: the paperwork as shown (texts, never list indexes), the hidden truth, and what happened at the desk. */
+export const ApplicantSchema = z.object({
+  id: S, name: S, gender: z.enum(['m', 'f']), cls: S, kind: S, look: S, role: S.nullable(),
+  stats: StatsSchema, green: S, motive: S, hates: S, lean: STAT,
+  age: I.min(1),
+  /** True home town (their card's) and the one on the ID card (misspelt when `home` is a mismatch). */
+  home: S, homeShown: S,
+  idNo: S,
+  badges: I.min(0).max(8),
+  /** The badge named as their latest (index into the region's badges; not `badges - 1` when `badge` is a mismatch). */
+  badgeAt: I.min(0).max(7),
+  team: z.array(z.object({ s: S, lv: I.min(1) }).strict()).min(1).max(6),
+  writer: S, wshort: S, wtown: S, quote: S, stamp: S,
+  reason: S,
+  /** Hidden: rolled on the desk stream and saved. */
+  truth: z.enum(TRUTHS), great: z.boolean(), skill: I.min(0).max(5), rival: S.nullable(),
+  miss: z.array(z.enum(DESK_FIELDS)),
+  /** The quick questions offered (ids). */
+  qs: z.array(S),
+  asked: z.array(z.object({ q: S, text: S.nullable(), tell: z.enum(TELLS), line: S }).strict()),
+  checked: z.array(z.enum(DESK_FIELDS)),
+  patience: N0,
+  verdict: z.enum(VERDICTS).nullable(),
+}).strict();
+export type Applicant = z.infer<typeof ApplicantSchema>;
+
+export const DeskStateSchema = z.object({
+  /** The Day today's queue was rolled for (0: never). */
+  day: N0,
+  queue: z.array(ApplicantSchema),
+  /** Applicants rolled so far (ids A1, A2, ...). */
+  seen: N0,
+  /** Names applicants have used this run (each person is one card). */
+  names: z.array(S),
+  /** Detained: in the basement until the night. */
+  held: z.array(ApplicantSchema),
+  /** Accepted members whose truth comes out later (plant tip-off, spy leak, glory-seeker quits). */
+  watch: z.array(z.object({ member: S, name: S, truth: z.enum(TRUTHS), rival: S.nullable(), due: I.min(1), done: z.boolean() }).strict()),
+  /** Site plans leaked to rival teams (D9 and D22 read these). */
+  leaks: z.array(z.object({ day: I.min(1), team: S, what: S }).strict()),
+  /** Every stamped applicant (newest last, capped), for later slices and the run's story. */
+  log: z.array(z.object({ day: I.min(1), name: S, truth: z.enum(TRUTHS), great: z.boolean(), verdict: z.enum(VERDICTS) }).strict()),
+}).strict();
+export type DeskState = z.infer<typeof DeskStateSchema>;

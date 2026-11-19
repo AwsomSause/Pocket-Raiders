@@ -171,7 +171,8 @@ export function openingView(lines: string[], shown: number, member: { look: stri
 
 // ---------- mockup 1: the HQ ----------
 
-export function hqView(m: HqModel, notice: string | null, at: number, member: { look: string; atlas: boolean }): string {
+/** `desk`: applicants waiting at the D21 desk today (null while it's closed). */
+export function hqView(m: HqModel, notice: string | null, at: number, member: { look: string; atlas: boolean }, desk: number | null = null): string {
   const sel = 'background:linear-gradient(90deg,#3a5a9e,#2a3f72);border-radius:6px;padding:5px 8px;box-shadow:0 0 0 2px #8cc0ff,0 0 14px rgba(79,163,255,.45)';
   let left = '';
   if (m.panel === 'orders') {
@@ -220,6 +221,7 @@ export function hqView(m: HqModel, notice: string | null, at: number, member: { 
     </div>
   </div>
   ${steps}
+  ${desk === null ? '' : `<div class="a row" style="left:10px;top:340px;width:290px;z-index:8;gap:8px;background:linear-gradient(180deg,#3a2a16,#251a10);border-radius:8px;padding:6px 10px;box-shadow:0 0 0 2px #c9a64a,0 0 0 4px var(--ink);font:600 15px var(--ui);color:#f3e2b8;cursor:pointer"${act('desk')} data-testid="dom-desk"><img class="ic s" src="${img('g-idcard')}" alt="">APPLICATIONS<span class="mu xs" style="flex:1">${desk ? `${desk} in the rain` : 'queue empty'}</span><span class="kc">I</span></div>`}
   <div class="cta${m.phase === 'morning' ? ' shine' : ''}" style="left:10px;width:${m.panel === 'report' ? 340 : 290}px;top:${m.panel === 'report' ? 398 : m.panel === 'night' ? 270 : 286}px;font-size:20px;padding:9px 18px"${act('next')} data-testid="dom-next">${esc(m.next.label)} ▶ <span class="kc">${esc(m.next.hint)}</span></div>
   ${notice ? `<div class="a" style="left:330px;width:300px;top:86px;z-index:20;background:rgba(10,14,30,.88);border:2px solid #8cc0ff;border-radius:8px;padding:8px 10px;font-size:14px;line-height:1.3" data-testid="dom-notice">${esc(notice)}</div>` : ''}
   ${tabs(0, [0, 1, 2])}

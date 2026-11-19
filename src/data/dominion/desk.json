@@ -1,0 +1,210 @@
+{
+  "_source": "DOMINION slice D21, the applications desk. Design: plans/claude-api/CLAUDE_API_DRAFT.md §5.3 B (Kice 2026-11-18). Mockup: Rotom screen 5 (k5) in plans/evil-mode-rework/mockups-v4/index.html. Numbers here are the rules; Rotom only voices the applicant.",
+  "fromDay": 2,
+  "perDay": [2, 4],
+  "patience": 5,
+  "quickPerApplicant": 3,
+  "age": [18, 46],
+  "truths": [
+    { "id": "honest", "weight": 45, "word": "an honest recruit" },
+    { "id": "plant", "weight": 18, "word": "a police plant" },
+    { "id": "spy", "weight": 20, "word": "a {rival} spy" },
+    { "id": "glory", "weight": 17, "word": "a glory-seeker" }
+  ],
+  "plantPerHeat": 5,
+  "greatShare": 30,
+  "skill": [1, 5],
+  "missCount": {
+    "honest": [85, 15],
+    "great": [95, 5],
+    "glory": [40, 50, 10],
+    "bySkill": [[0, 10, 40, 50], [0, 20, 50, 30], [10, 40, 40, 10], [20, 50, 30, 0], [35, 50, 15, 0]]
+  },
+  "missKinds": {
+    "honest": { "home": 50, "stamp": 50 },
+    "great": { "home": 100 },
+    "glory": { "badge": 50, "levels": 40, "stamp": 10 },
+    "plant": { "idno": 30, "stamp": 30, "home": 20, "badge": 10, "levels": 10 },
+    "spy": { "species": 35, "idno": 20, "stamp": 20, "home": 15, "levels": 10 }
+  },
+  "tellOdds": {
+    "honest": { "weights": { "none": 80, "nervous": 15, "contradiction": 0, "rehearsed": 5 } },
+    "great": { "weights": { "none": 90, "nervous": 5, "contradiction": 0, "rehearsed": 5 } },
+    "glory": { "weights": { "none": 35, "nervous": 15, "contradiction": 5, "rehearsed": 45 } },
+    "plant": { "weights": { "none": 75, "nervous": 0, "contradiction": 0, "rehearsed": 25 }, "slip": { "base": 60, "perSkill": 10, "min": 5, "split": { "nervous": 50, "contradiction": 50 } } },
+    "spy": { "weights": { "none": 70, "nervous": 0, "contradiction": 0, "rehearsed": 30 }, "slip": { "base": 60, "perSkill": 10, "min": 5, "split": { "nervous": 40, "contradiction": 60 } } }
+  },
+  "traitTells": { "coward": { "nervous": 10 }, "proud": { "rehearsed": 10 }, "joker": { "none": 10 }, "cautious": { "rehearsed": 5 } },
+  "effects": {
+    "great": { "lean": 2, "traitPoints": 1, "loyalty": 70 },
+    "plant": { "nightHeat": 2, "tipDays": [3, 6], "tipHeat": 15 },
+    "spy": { "leakDays": [2, 5], "rival": 15 },
+    "glory": { "quitDays": [4, 7], "morale": -5 },
+    "detain": { "heat": 3, "honestMorale": -5, "plantHeat": 5, "spyRival": -10 }
+  },
+  "tells": {
+    "none": { "label": "NO TELL", "c": "#9fe0b4" },
+    "nervous": { "label": "NERVOUS", "c": "#ff8a2a" },
+    "contradiction": { "label": "CONTRADICTION", "c": "#ff4d63" },
+    "rehearsed": { "label": "OVERLY REHEARSED", "c": "#a678ff" }
+  },
+  "fields": [
+    { "id": "home", "label": "Home town", "doc": "id" },
+    { "id": "idno", "label": "ID number", "doc": "id" },
+    { "id": "badge", "label": "Latest badge", "doc": "card" },
+    { "id": "species", "label": "Pokémon", "doc": "team" },
+    { "id": "levels", "label": "Levels", "doc": "team" },
+    { "id": "stamp", "label": "Letter stamp", "doc": "letter" }
+  ],
+  "lens": {
+    "fine": "Looks right.",
+    "home": "should be {true}",
+    "idno": "{town} numbers end in -{letter}",
+    "badge": "the {badge} is the {nth} badge",
+    "species": "{mon} doesn't live in {region}",
+    "levels": "Lv. {level} won't obey {badges}",
+    "stamp": "{wtown} stamps say {code}"
+  },
+  "ordinals": ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"],
+  "levelCaps": [10, 20, 30, 40, 50, 60, 70, 80, 100],
+  "regions": {
+    "kanto": {
+      "name": "Kanto",
+      "rivals": ["Team Rocket"],
+      "badges": [
+        { "name": "Boulder Badge", "town": "Pewter City", "c": "#9aa6b6" },
+        { "name": "Cascade Badge", "town": "Cerulean City", "c": "#4fa3ff" },
+        { "name": "Thunder Badge", "town": "Vermilion City", "c": "#ffb238" },
+        { "name": "Rainbow Badge", "town": "Celadon City", "c": "#7ad66b" },
+        { "name": "Soul Badge", "town": "Fuchsia City", "c": "#d478ff" },
+        { "name": "Marsh Badge", "town": "Saffron City", "c": "#e8c94a" },
+        { "name": "Volcano Badge", "town": "Cinnabar Island", "c": "#ff5a3a" },
+        { "name": "Earth Badge", "town": "Viridian City", "c": "#3fa65a" }
+      ],
+      "codes": { "Pallet Town": "PLT", "Viridian City": "VRD", "Pewter City": "PWT", "Cerulean City": "CRN", "Vermilion City": "VMN", "Lavender Town": "LVN", "Celadon City": "CLD", "Fuchsia City": "FCH", "Saffron City": "SFN", "Cinnabar Island": "CNB" },
+      "mons": ["rattata", "pidgey", "spearow", "ekans", "sandshrew", "vulpix", "zubat", "oddish", "paras", "venonat", "diglett", "meowth", "psyduck", "mankey", "growlithe", "poliwag", "abra", "machop", "bellsprout", "tentacool", "geodude", "ponyta", "slowpoke", "magnemite", "doduo", "seel", "grimer", "shellder", "gastly", "onix", "drowzee", "krabby", "voltorb", "exeggcute", "cubone", "koffing", "rhyhorn", "horsea", "goldeen", "staryu", "magikarp", "eevee"],
+      "offRegion": ["zigzagoon", "poochyena", "wingull", "shinx", "lillipup", "pidove", "fletchling", "rookidee", "lechonk", "yungoos", "bidoof", "starly", "purrloin", "skwovet"],
+      "writers": [
+        { "name": "Dockmaster Hal", "short": "Hal", "town": "Vermilion City", "quote": "{first} worked my docks two years and never once asked a question." },
+        { "name": "Old Man Fenwick", "short": "Fenwick", "town": "Viridian City", "quote": "{first} carried my groceries every week and never took a tip. Hire them." },
+        { "name": "Foreman Brick", "short": "Brick", "town": "Pewter City", "quote": "{first} hauled rock in the museum dig and never dropped a fossil." },
+        { "name": "Captain Merle", "short": "Merle", "town": "Cerulean City", "quote": "{first} crewed my ferry through two storms. Steady hands, quiet mouth." },
+        { "name": "Mrs. Quill", "short": "Quill", "town": "Lavender Town", "quote": "{first} swept the tower stairs every night and was never once afraid." },
+        { "name": "Chef Basil", "short": "Basil", "town": "Celadon City", "quote": "{first} ran my kitchen on the busiest night of the year. Nothing burned." },
+        { "name": "Warden Sato", "short": "Sato", "town": "Fuchsia City", "quote": "{first} tracked a lost Kangaskhan through the Safari Zone in the dark." },
+        { "name": "Manager Pell", "short": "Pell", "town": "Saffron City", "quote": "{first} kept my office running and kept my secrets. Both matter." },
+        { "name": "Professor Ash Wren", "short": "Wren", "town": "Cinnabar Island", "quote": "{first} helped in the lab for a summer. Clever, and knows when to keep quiet." },
+        { "name": "Grandma Tilly", "short": "Tilly", "town": "Pallet Town", "quote": "I've known {first} since they were knee-high to a Pidgey. Good heart." },
+        { "name": "Coach Rhea", "short": "Rhea", "town": "Cerulean City", "quote": "{first} trained at my pool every morning at five. Never missed one." },
+        { "name": "Sergeant Doyle", "short": "Doyle", "town": "Vermilion City", "quote": "{first} served under me. Follows orders and doesn't ask why." }
+      ]
+    }
+  },
+  "surnames": ["Arden", "Blake", "Crane", "Dorsey", "Ellis", "Frost", "Garner", "Hale", "Irwin", "Jett", "Keene", "Lark", "Moss", "Nash", "Orr", "Pike", "Quinn", "Reyes", "Stone", "Tate", "Vance", "Wade", "York", "Ash", "Birch", "Cole", "Drake", "Flint", "Gray", "Hart", "Kemp", "Lowe", "Marsh", "North", "Price", "Rook", "Shaw", "Thorne", "Voss", "West"],
+  "reasons": {
+    "any": [
+      "I want to belong to something that wins. {rival} never called back.",
+      "My Pokémon and I are good, and nobody in town will pay us for it.",
+      "I heard you look after your own. I need that right now.",
+      "The Gyms said I'm not the type. Maybe I'm your type.",
+      "I owe money to the wrong people. You're the right wrong people.",
+      "I'm tired of being honest and broke.",
+      "Somebody in this town has to stand up to {rival}. Might as well be you.",
+      "My old boss called me useless. I want him to read about me."
+    ],
+    "glory": [
+      "I want my name on every front page in {region}.",
+      "One day they'll make a statue of me. This is step one.",
+      "I'm going to be the most famous villain since Giovanni. Write that down.",
+      "Fans. I want fans. Villains have the best fans."
+    ],
+    "great": [
+      "I've beaten every trainer on my route twice. I want harder work.",
+      "I want in, and I'll prove it. Give me a week."
+    ]
+  },
+  "questions": [
+    { "id": "train", "ask": "Where did you train?", "lines": {
+      "none": ["Around {home}, mostly. Then the routes. Same as anybody.", "{home}. The grass outside town, every day after work."],
+      "nervous": ["Train? Oh. Around. You know. Places with... grass.", "Uh, {home}? Yes. {home}. Definitely there."],
+      "contradiction": ["Up north, near {btown}. Well, south. I moved around a lot.", "In {home}... I mean, I wasn't really from there. My aunt was."],
+      "rehearsed": ["I trained in {home} from the age of ten, under strict daily routines, with discipline.", "Five years, six days a week, on Route 1. I can list every trainer I beat."]
+    } },
+    { "id": "letter", "ask": "Who is {wshort}?", "lines": {
+      "none": ["{writer}? Gruff, fair. Pays late but always pays.", "My old boss in {wtown}. Ask {wshort} anything, I don't mind."],
+      "nervous": ["{wshort}! Yes. Big fan of mine. Very... real person.", "Oh, {wshort}'s great. Tall. Or short. Nice, anyway."],
+      "contradiction": ["We worked together in {btown}. Or... it was {wtown}? It was a long time ago.", "{wshort}? Never met... I mean, never met a better boss."],
+      "rehearsed": ["{writer} of {wtown} has known me for two years and will vouch for my character.", "{wshort} wrote that letter on a Tuesday. A sunny Tuesday. I remember every detail."]
+    } },
+    { "id": "home", "ask": "What's {home} like?", "lines": {
+      "none": ["Quiet. Too quiet. That's why I'm here.", "Small. Everyone knows your business. I'd like some business of my own."],
+      "nervous": ["It's... you know. A town. With houses in it.", "Lovely! Lots of... buildings. I'd rather not talk about it."],
+      "contradiction": ["Big busy port, ships everywhere. Wait. No, that's the other one.", "I grew up by the sea there. Hm? There's no sea? There's a lake. A big lake."],
+      "rehearsed": ["{home} is a charming town with friendly people and a rich history.", "My home town is {home}, population modest, famous for its fresh air."]
+    } },
+    { "id": "badge", "ask": "How did you win the {badge}?", "lines": {
+      "none": ["Third try. I nearly gave up after the second.", "Out-waited them. Patience wins more badges than power."],
+      "nervous": ["How? With Pokémon. Obviously. Next question?", "It was a hard fight. I don't like to relive it. At all."],
+      "contradiction": ["Beat the Leader with one Pokémon. Or was it three? Long day.", "The {btown} Gym? I won that? I mean, yes, I won that."],
+      "rehearsed": ["I won the {badge} through careful type matchups and disciplined training.", "A clean victory, earned with honour, as my Trainer card clearly shows."]
+    } },
+    { "id": "why", "ask": "Why us, and not {rival}?", "lines": {
+      "none": ["{rival} wants soldiers. You want people. I can tell.", "They didn't call back. And honestly, I like your style better."],
+      "nervous": ["{rival}? Never heard of them. Who? No.", "Why would I go to {rival}? Ha. Ha ha. Why would anyone."],
+      "contradiction": ["I'd never work with {rival}. Their uniforms itch. Not that I've worn one.", "{rival} is all talk. I sat in their briefings for a... I heard they're all talk."],
+      "rehearsed": ["Your crew represents a bold new vision that {rival} cannot match.", "I have always admired your crew's values, ambition and leadership."]
+    } },
+    { "id": "police", "ask": "Ever had trouble with the police?", "lines": {
+      "none": ["One fine for fishing without a licence. I paid it.", "Never caught. Is that the answer you want?"],
+      "nervous": ["The police? Why? Did they say something? About me?", "No! Never. I don't even know any. Officer Jenny who?"],
+      "contradiction": ["Never had trouble with them. They're good people. I mean, terrible. Pigs.", "No record at all. Well, one. Several. Clean as a whistle."],
+      "rehearsed": ["My record is completely clean, as you will find if you check.", "I have never been arrested, questioned or detained by any officer."]
+    } },
+    { "id": "team", "ask": "Why that {mon}?", "lines": {
+      "none": ["Found it hurt on the road. We've looked after each other since.", "It bit me the day we met. We get on fine now."],
+      "nervous": ["It's mine. Of course it's mine. Why, is it reported?", "It was... a gift. From a friend. Who moved away."],
+      "contradiction": ["Caught it near home. Raised it from an egg, actually. Both.", "Had it since I was a kid. Well, since last month."],
+      "rehearsed": ["My {mon} is a loyal partner with excellent stats and steady training.", "I selected my {mon} for its strong type coverage against Gym Leaders."]
+    } }
+  ],
+  "typed": {
+    "none": ["Fair question. Ask me anything, I've got nothing to hide.", "Honestly? I'd have to think about that. But yes."],
+    "nervous": ["What? Why are you asking that? Is this a test?", "Uh... could you repeat that? Slower? Or not at all?"],
+    "contradiction": ["Of course. I mean, of course not. Depends what you meant.", "Yes. No. I'd rather answer the one before."],
+    "rehearsed": ["That is an excellent question, and I am glad you asked it.", "I believe my paperwork answers that fully and accurately."]
+  },
+  "says": {
+    "accept": "{name} is in. Welcome to the crew.",
+    "full": "The HQ is full. Make room first, or Reject or Detain.",
+    "reject": "{name} walks back out into the rain.",
+    "detain": "{name} is taken down to the basement. Heat +{heat}.",
+    "notDay": "The desk is open during the Day.",
+    "closed": "No applicants until Day {day}.",
+    "empty": "The queue is empty. More come tomorrow.",
+    "patience": "{name} has had enough questions. Stamp the papers.",
+    "asked": "You already asked that.",
+    "checked": "You already checked that.",
+    "found": "{label}: {lens}",
+    "fine": "{label}: looks right."
+  },
+  "report": {
+    "left": "{n} applicant{s} went home without an answer.",
+    "held": {
+      "honest": "{name} sat in the basement all night: just a {cls} who wanted a job. Let go. The crew heard about it: Morale −{m}.",
+      "great": "{name} sat in the basement all night: a strong trainer who truly wanted in. Let go, and gone for good. The crew heard about it: Morale −{m}.",
+      "plant": "{name} cracked in the basement: a police plant! Let go with a warning, but the police noticed. Heat +{h}.",
+      "spy": "{name} cracked in the basement: a {rival} spy. They talked, and {rival} loses ground in {district}.",
+      "glory": "{name} cried all night in the basement and went home: just a glory-seeker."
+    },
+    "plantTip": "{name} was a police plant, and tipped the police off about the HQ. {name} is gone. Heat +{h}.",
+    "spyLeak": "Someone leaked the HQ plan to {rival}. {rival} gains ground in {district}.",
+    "gloryQuit": "{name} quit: “This isn't the spotlight I wanted.” The crew is rattled: Morale −{m}."
+  },
+  "rotom": {
+    "system": "You play an applicant at the applications desk of a Pokémon villain crew's HQ (a cartoon-villain game in the style of Team Rocket). The Boss is interviewing you. Answer in character in one or two short spoken sentences (under 40 words), first person, no stage directions, no quotes around the line. You know your own hidden truth and must never state it outright. An honest recruit answers plainly. A police plant or a rival-team spy is hiding something and may slip in the way the tell says. A glory-seeker sounds rehearsed and self-important. Show the tell you are given in how you speak: none (calm and plain), nervous (hesitant, defensive), contradiction (say something that clashes with your paperwork or an earlier answer), rehearsed (polished, too perfect). Reply as JSON: {\"reply\": your line, \"tell\": the tell you showed}.",
+    "off": "Rotom stays quiet (no Key-Card): written answers only.",
+    "thinking": "Rotom is listening…",
+    "note": "Their truth was rolled and saved. Rotom plays them.",
+    "speed": { "haiku": "Quick", "sonnet": "Deep", "opus": "Deep" }
+  }
+}

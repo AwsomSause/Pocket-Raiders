@@ -38,3 +38,12 @@ Copied from the Claude AI mockups (project files `plans/claude-api/mockups/sprit
 | --- | --- |
 | `p-dialga.png`, `p-palkia.png`, `p-giratina.png`, `p-groudon.png`, `p-kyogre.png` | Pokémon sprites from the PokeRogue pack |
 | `g-adamant-orb`, `g-lustrous-orb`, `g-griseous-orb`, `g-red-orb`, `g-blue-orb`, `g-key-charm`, `g-tea`, `g-scope-lens`, `g-choice-band`, `g-soothe-bell`, `g-storage-key` (.png) | Item icons from `images/items/` (PokeRogue pack) |
+
+## Slice D21 (the applications desk, Rotom mockup k5)
+
+Copied from the round-4 mockups (`plans/evil-mode-rework/mockups-v4/sprites/`, PR #1496), which cut them from art already in this repo (director's packs: PokeRogue, AGPL-3.0, Nintendo material):
+
+| File | From |
+| --- | --- |
+| `t-applicant.png`, `t-hex.png`, `t-biker.png`, `t-backpacker.png` | Trainer sprites from `images/trainer/pr/` (PokeRogue pack), first frame; the applicant's stand-in and the queue in the rain |
+| `g-idcard.png`, `g-badgecard.png` | Item icons from `images/items/` (PokeRogue pack), re-saved at the mockup's size |

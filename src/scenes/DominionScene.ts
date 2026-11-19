@@ -16,10 +16,12 @@ import { rxFileOf } from '../ui/redux/assets';
 import { mountRedux, type ReduxView } from '../ui/redux/stage';
 import { hqView, openingView, setupView, titleView, type SetupFiles } from '../ui/redux/screens/dominion/views';
 import { CrewController } from './dominion/crewController';
+import { DeskController } from './dominion/deskController';
+import { waiting as deskWaiting, deskOpen } from '../core/dominion/desk';
 import { cardModel, gridPages, mapModel, newCursor, pageFor, type MapCursor } from '../core/dominion/fieldScreens';
 import { cardView, mapView } from '../ui/redux/screens/dominion/fieldViews';
 
-type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew';
+type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'desk';
 
 /** The screen to come back to after a battle (D2: the map the action was picked on, or the HQ for a fight at the door). */
 let resume: Screen | null = null;
@@ -41,6 +43,8 @@ export class DominionScene extends Phaser.Scene {
   private manifest: AssetManifest | undefined;
   /** D3: the Morning (mockup 2) and the Crew File (mockup 5). */
   private crew = new CrewController(this);
+  /** D21: the applications desk (Rotom mockup k5). */
+  private desk = new DeskController(this);
 
   constructor() {
     super('Dominion');
@@ -54,6 +58,7 @@ export class DominionScene extends Phaser.Scene {
     this.notice = null;
     this.leaving = false;
     this.crew = new CrewController(this);
+    this.desk = new DeskController(this);
     const { session } = services();
     const run = session.run;
     if (!run) return void this.scene.start('MainMenu');
@@ -106,17 +111,24 @@ export class DominionScene extends Phaser.Scene {
         buy: (id) => this.buy(id),
         dismiss: () => { this.notice = null; this.view?.refresh(); },
         ...this.crew.acts(),
+        ...this.desk.acts(),
+        desk: () => this.desk.open(),
       },
       overs: {
         typeOver: (i) => { this.setup = { ...this.setup, at: Number(i) }; this.view?.refresh(); },
         orderOver: (i) => { this.at = Number(i); this.view?.refresh(); },
         ...this.crew.overs(),
+        ...this.desk.overs(),
       },
     });
     onInputAction(this, (a) => this.key(a));
     const kb = this.input.keyboard;
     const raw = (e: KeyboardEvent): void => {
       if (this.leaving) return;
+      if (this.screen === 'desk') {
+        this.desk.raw(e);
+        return;
+      }
       if (this.screen === 'map') {
         if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
         else if (e.code === 'KeyT') this.nextTarget();
@@ -131,12 +143,20 @@ export class DominionScene extends Phaser.Scene {
       }
       if (this.screen !== 'hq' && this.screen !== 'crew') return;
       if (this.crew.raw(e.code)) return;
-      if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
+      if (e.code === 'KeyI') this.desk.open();
+      else if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
       else if (e.code === 'KeyN') this.step({ t: 'toNight' });
       else if (e.code === 'KeyE') this.step({ t: 'endDay' });
     };
     kb?.on('keydown', raw);
-    this.events.once('shutdown', () => kb?.off('keydown', raw));
+    // D21: the desk hears every key first, so A and D stamp there instead of moving (the game's key map has them as ◀ ▶).
+    const note = (e: KeyboardEvent): void => this.desk.note(e);
+    window.addEventListener('keydown', note, true);
+    this.events.once('shutdown', () => {
+      kb?.off('keydown', raw);
+      window.removeEventListener('keydown', note, true);
+      this.desk.shutdown();
+    });
   }
 
   private block() {
@@ -160,7 +180,7 @@ export class DominionScene extends Phaser.Scene {
         return openingView(b ? openingLines(b) : [], this.shown, this.memberLook());
       case 'hq':
         if (b && this.crew.owns()) return this.crew.render(this.notice);
-        return b ? hqView(hqModel(b), this.notice, this.at, this.memberLook()) : '';
+        return b ? hqView(hqModel(b), this.notice, this.at, this.memberLook(), deskOpen(b) ? deskWaiting(b) : null) : '';
       case 'map':
         return b && this.cursor ? mapView(mapModel(b, services().session.run!, this.cursor), this.notice, this.garage) : '';
       case 'card': {
@@ -172,11 +192,14 @@ export class DominionScene extends Phaser.Scene {
       }
       case 'crew':
         return this.crew.render(this.notice);
+      case 'desk':
+        return this.desk.render(this.notice);
     }
   }
 
   private key(a: InputAction): void {
     if (this.leaving) return;
+    if (this.desk.key(a)) return void this.view?.refresh();
     if (this.crew.key(a)) return void this.view?.refresh();
     if (a === 'back') return this.back();
     if (a === 'confirm') return this.confirm();
@@ -419,6 +442,11 @@ export class DominionScene extends Phaser.Scene {
     }
     if (this.screen === 'card') {
       this.screen = 'map';
+      return this.view?.refresh();
+    }
+    if (this.screen === 'desk') {
+      this.screen = 'hq';
+      this.notice = null;
       return this.view?.refresh();
     }
     if (this.screen === 'map') {
