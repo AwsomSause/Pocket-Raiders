@@ -1,0 +1,25 @@
+{
+ "1": {
+  "name": "Clean Slate",
+  "big": "A fresh start. Twelve core screens redrawn bright and simple in the three Pokémon logo colours (red, yellow, blue), replacing the dark navy look.",
+  "pages": [
+   "Title",
+   "Hub Town",
+   "Stage Map",
+   "Battle",
+   "Battle · Moves",
+   "Event",
+   "Party",
+   "Summary",
+   "Bag",
+   "Poké Mart",
+   "Pause Menu",
+   "Settings"
+  ],
+  "q1": "Not yet. It is tidy but flat: square cards on dotted paper, small sprites, nothing moves. Next pass needs energy and scale.",
+  "q2": "Against the game today: light instead of dark, far bigger words, one selection colour, and every button says what it does.",
+  "q3": "Yes. The battle screen sends Bag and Pokémon to the general pages, which hides the fight. They need their own battle pages.",
+  "q4": "The Pause Menu is a plain list and Settings is one long tab row. Both work, neither is special yet.",
+  "q5": "Partly. The logo colours and Poké Ball markers say Pokémon, but the shapes could be any app."
+ }
+}
