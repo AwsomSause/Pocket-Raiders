@@ -6,6 +6,7 @@
 
 import { hashSeed, Rng } from '../rng';
 import { DOMINION_DATA } from './data';
+import { fillCards, sheet, voice } from './personality';
 import type { Alert, CrewState, DominionBlock, Member, MemberCrew, Mods, StatId, Talk, TalkChoice, Task, Treat } from './schema';
 import { STAT_IDS } from './schema';
 import { addWorldStep, fill } from './worldTurn';
@@ -84,6 +85,9 @@ export function modsOf(b: DominionBlock, m: Member): Mods[] {
     const f = formedById(id);
     if (f?.live) out.push(f.mods);
   }
+  // D19: the personality card's two traits are live rules too.
+  const card = mc(m).card;
+  if (card) for (const t of sheet(card).traits) for (const e of t.effects) if (e.mods && !e.needs) out.push(e.mods);
   for (const p of C().patrons) if (p.live && cs(b).patrons[p.id]?.state === 'won') out.push(p.mods);
   return out;
 }
@@ -498,6 +502,7 @@ export function crewStep(block: DominionBlock, seed: string): string[] {
   const rep = C().report;
   const n: Night = { lines: [], alerts: [], guardHeld: null, guards: [], slept: [] };
   st.pending = [];
+  fillCards(b, seed);
   st.saved = Math.min(0, st.saved);
   if (b.day % 7 === 1) st.rerolled = [];
   for (const m of b.members) {
@@ -541,9 +546,37 @@ export function crewStep(block: DominionBlock, seed: string): string[] {
     m.loyalty = clamp(m.loyalty, lo, hi);
     growTraits(b, m, n);
   }
+  cardNight(b, n);
   for (const h of DAY_HOOKS) h(b, seed, { lines: n.lines, say: (k, t) => say(n, k, t) });
   st.alerts = n.alerts;
   return n.lines;
+}
+
+/** D19: personality-card traits that act on the whole night: squad Morale, and how pay day lands. */
+function cardNight(b: DominionBlock, n: Night): void {
+  const rep = DOMINION_DATA.personality.report;
+  const effects = (m: Member) => (mc(m).card ? sheet(mc(m).card!).traits.flatMap((t) => t.effects).filter((e) => !e.needs) : []);
+  const lifter = b.members.find((m) => !mc(m).out && effects(m).some((e) => e.squadMor));
+  if (lifter && b.members.length > 1) {
+    const k = Math.max(...effects(lifter).map((e) => e.squadMor ?? 0));
+    for (const m of b.members) if (m.id !== lifter.id) addMorale(m, k);
+    n.lines.push(fill(rep.squad, { name: lifter.name, n: k }));
+  }
+  if (!(b.day > 1 && (b.day - 1) % DOMINION_DATA.start.clock.weekLength === 0)) return;
+  for (const m of b.members) {
+    for (const e of effects(m)) {
+      if (e.payLoy && !m.unpaid) {
+        // The Money motive already gave its Loyalty once (crewStep); the trait makes it ×payLoy in all.
+        const k = R().moneyLoyalty * (e.payLoy - (mc(m).motive === 'money' ? 1 : 0));
+        addLoyalty(b, m, k);
+        n.lines.push(fill(rep.pay, { name: m.name, n: k }));
+      }
+      if (e.unpaidLoy && m.unpaid) {
+        addLoyalty(b, m, e.unpaidLoy);
+        n.lines.push(fill(e.unpaidLoy > 0 ? rep.unpaid : rep.unpaidHurt, { name: m.name, n: e.unpaidLoy > 0 ? `+${e.unpaidLoy}` : e.unpaidLoy }));
+      }
+    }
+  }
 }
 
 /** Loyalty below 20: a weekly roll to quit, steal from you, or sell you out (Part 2 §5). */
@@ -623,9 +656,11 @@ export function pickTrait(m: Member): string | null {
 export function memberLine(m: Member, day: number): string {
   const id = traitNow(m);
   const bank = C().lines[id];
-  if (bank) return bank[day % bank.length]!;
   const g = C().lines.trait!;
-  return fill(g[day % g.length]!, { trait: traitName(id), joined: m.joinedDay });
+  const line = bank ? bank[day % bank.length]! : fill(g[day % g.length]!, { trait: traitName(id), joined: m.joinedDay });
+  // D19: they say it their way (the card's speech quirk).
+  const card = mc(m).card;
+  return card ? voice(sheet(card).quirk, line) : line;
 }
 
 /** Pays a jailed member's bail (Part 2 §2: ₽500 or they're gone 3 days). */

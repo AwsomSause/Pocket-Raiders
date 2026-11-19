@@ -7,6 +7,7 @@ import { healParty, newMon } from '../run';
 import type { RunState } from '../state';
 import { step, type StepOut } from './clock';
 import { addMorale, withCrew } from './crew';
+import { fillCards } from './personality';
 import { admit, approach, hire } from './recruit';
 import { answer, eveningTalk } from './talk';
 import { act, buy, settle } from './field';
@@ -44,13 +45,20 @@ export function startInRun(content: Content, run: RunState, setup: DominionSetup
   const problem = typesProblem(setup.types);
   if (problem) return { run, problem };
   let out = bossTeam(content, structuredClone(run));
-  const block = DominionBlockSchema.parse(withCrew(newBlock(content, out, setup)));
+  const block = DominionBlockSchema.parse(fillCards(withCrew(newBlock(content, out, setup)), run.seed));
   out = { ...withBlock(out, block), inventory: { ...DOMINION_DATA.start.start.inventory } };
   return { run: out, problem: null };
 }
 
-/** One clock step on the run. Rest heals the Boss's team for free (Part 1 §2.1). */
+/** One clock step on the run. Rest heals the Boss's team for free (Part 1 §2.1). Anyone new gets their card (D19). */
 export function stepInRun(content: Content, run: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean } {
+  const out = stepOnce(content, run, action);
+  const b = out.run.expansion?.dominion;
+  if (!out.ok || !b || b.members.every((m) => !m.crew || m.crew.card)) return out;
+  const next = withBlock(out.run, fillCards(structuredClone(b), run.seed));
+  return { ...out, block: next.expansion!.dominion!, run: next };
+}
+function stepOnce(content: Content, run: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean } {
   const block = run.expansion?.dominion;
   if (!block) return { ok: false, block: block as never, notice: null, heal: false, run };
   const crewOut = crewInRun(content, run, action);

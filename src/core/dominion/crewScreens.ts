@@ -8,6 +8,7 @@ import type { Alert, DominionBlock, Member } from './schema';
 import { STAT_IDS } from './schema';
 import { topModel, type TopModel } from './screens';
 import { topTalk } from './talk';
+import { cardFor, cardLine, lineKind, sheet, traitWords } from './personality';
 
 const C = () => DOMINION_DATA.crew;
 
@@ -141,7 +142,7 @@ export function fileModel(block: DominionBlock, sel: number): FileModel {
   const greenLines = C().lines[c.green] ?? [];
   const card = topTalk(b);
   const t = taskById(c.task);
-  const keys = [{ key: 'G', label: 'Gift' }, { key: 'H', label: 'Hire' }, { key: 'R', label: `Leads (${b.crew!.leads.length})` }];
+  const keys = [{ key: 'P', label: 'Card' }, { key: 'G', label: 'Gift' }, { key: 'H', label: 'Hire' }, { key: 'R', label: `Leads (${b.crew!.leads.length})` }];
   if (b.phase === 'evening') keys.unshift({ key: 'T', label: 'Talk' });
   if (c.out?.why === 'jail') keys.unshift({ key: 'B', label: `Bail ₽${C().rules.bail}` });
   return {
@@ -194,8 +195,8 @@ export function hireModel(block: DominionBlock, seed: string): { rows: HireRow[]
   };
 }
 
-export interface LeadRow { id: string; name: string; cls: string; look: string; motive: string; hates: string; green: string; waiting: boolean; notBefore: number; odds: { id: string; name: string; odds: number }[]; role: string | null; days: number }
-export function leadsModel(block: DominionBlock): { rows: LeadRow[]; actions: number; phase: string } {
+export interface LeadRow { id: string; name: string; cls: string; look: string; motive: string; hates: string; green: string; traits: string | null; waiting: boolean; notBefore: number; odds: { id: string; name: string; odds: number }[]; role: string | null; days: number }
+export function leadsModel(block: DominionBlock, seed?: string): { rows: LeadRow[]; actions: number; phase: string } {
   const b = withCrew(block);
   const rc = C().recruit;
   return {
@@ -204,11 +205,53 @@ export function leadsModel(block: DominionBlock): { rows: LeadRow[]; actions: nu
       motive: C().motives.find((x) => x.id === l.motive)?.name ?? l.motive,
       hates: rc.pitches.find((p) => p.id === l.hates)?.name ?? l.hates,
       green: greenById(l.green)?.name ?? l.green,
+      // D19: an applicant's card is the one they bring if they join (rolled from their name).
+      traits: seed ? traitWords(cardFor(seed, l)) : null,
       role: l.role ? rc.roles[l.role]?.text ?? null : null,
       odds: rc.pitches.map((p) => ({ id: p.id, name: p.name, odds: pitchOdds(b, l, p.id) })),
       days: Math.max(0, (l.waiting ? rc.waitDays : rc.leadDays) - (b.day - l.day)),
     })),
     actions: b.actions,
     phase: b.phase,
+  };
+}
+
+// ---------- D19: the personality card on the Crew File (mockup a3) ----------
+
+export interface PersonaModel {
+  name: string; rank: string; file: string; look: string; mon: string | null; his: string; stamp: string;
+  traits: { name: string; icon: string; tone: string }[];
+  effects: { trait: string; text: string; needs: string | null }[];
+  quirk: string; want: string; fear: string; home: string;
+  memory: { day: number; line: string }[];
+  offline: string;
+  /** A Rotom line saved with the run for this card, or null (then `rotomOff` shows). Filled by the Rotom slices. */
+  rotom: { text: string; meta: string } | null;
+  rotomOff: string; note: string;
+  others: { name: string; look: string; traits: string }[];
+}
+
+export function personaModel(block: DominionBlock, sel: number, seed: string): PersonaModel {
+  const b = withCrew(block);
+  const i = Math.min(sel, b.members.length - 1);
+  const m = b.members[i]!;
+  const c = crewOf(m);
+  const card = cardFor(seed, m);
+  const s = sheet(card);
+  const P = DOMINION_DATA.personality;
+  const payDay = b.day > 1 && (b.day - 1) % DOMINION_DATA.start.clock.weekLength === 0;
+  return {
+    name: m.name, rank: rankWord(m.rank), file: String(i + 1).padStart(3, '0'), look: m.look, mon: m.team[0]?.speciesId ?? null,
+    his: m.gender === 'f' ? 'her' : 'his',
+    stamp: `CREW · ${DOMINION_DATA.start.start.region}`,
+    traits: s.traits.map((t) => ({ name: t.name, icon: t.icon, tone: t.tone })),
+    effects: s.traits.flatMap((t) => t.effects.map((e) => ({ trait: t.name, text: e.text, needs: e.needs ?? null }))),
+    quirk: s.quirk.text, want: s.want, fear: s.fear, home: s.home,
+    memory: c.memory.slice(-3),
+    offline: cardLine(card, lineKind(payDay && !m.unpaid ? 'pay' : c.last), b.day),
+    rotom: null,
+    rotomOff: P.rotom.off,
+    note: P.rotom.note.replace('{name}', m.name),
+    others: b.members.filter((x) => x.id !== m.id).slice(0, 2).map((x) => ({ name: x.name, look: x.look, traits: traitWords(cardFor(seed, x)) })),
   };
 }

@@ -447,6 +447,55 @@ export const CrewFileSchema = z.object({
 }).strict();
 export type CrewFile = z.infer<typeof CrewFileSchema>;
 
+// ---------- D19 data: personality.json, and the card on a member (Claude API draft §5.3 A, mockup a3) ----------
+
+const QuirkSchema = z.object({
+  id: S.optional(), text: S, pre: S.optional(), end: S.optional(), swap: z.tuple([S, S]).optional(), upper: z.boolean().optional(),
+}).strict();
+export type Quirk = z.infer<typeof QuirkSchema>;
+const TraitEffectSchema = z.object({
+  text: S,
+  /** A live modifier on the member (read by crew.ts modsOf). */
+  mods: ModsSchema.optional(),
+  /** Morale added to every other member each night (at most once a night, however many have it). */
+  squadMor: I.min(1).optional(),
+  /** On-time pay: Loyalty from pay times this (the Money motive's gain, given to anyone with the trait). */
+  payLoy: I.min(2).optional(),
+  /** Loyalty change on a pay day they weren't paid (on top of D1's −15). */
+  unpaidLoy: I.optional(),
+  /** The slice that makes this effect work (shown on the card until then). */
+  needs: S.optional(),
+}).strict();
+const LineKinds = z.object({ hello: z.array(S).min(1), done: z.array(S).min(1), fail: z.array(S).min(1), scared: z.array(S).min(1), pay: z.array(S).min(1) }).strict();
+export const PersonalityFileSchema = z.object({
+  _source: S,
+  traits: z.array(z.object({ id: S, name: S, icon: S, tone: z.enum(['g', 'y', 'r', 'v', 'b', 'm', 'k']), effects: z.array(TraitEffectSchema).length(2) }).strict()).min(6),
+  /** Trait pairs that never roll together. */
+  clash: z.array(z.tuple([S, S])),
+  quirks: z.array(QuirkSchema.extend({ id: S })).min(1),
+  wants: z.array(S).min(1),
+  fears: z.array(S).min(1),
+  towns: z.record(S, z.array(S).min(1)),
+  lines: z.record(S, LineKinds),
+  canon: z.record(S, z.object({ name: S, team: S, traits: z.tuple([S, S]), quirk: QuirkSchema, want: S, fear: S, home: S }).strict()),
+  report: z.object({ squad: S, pay: S, unpaid: S, unpaidHurt: S }).strict(),
+  rotom: z.object({ off: S, note: S }).strict(),
+}).strict().superRefine((f, ctx) => {
+  const ids = new Set(f.traits.map((t) => t.id));
+  for (const t of f.traits) if (!f.lines[t.id]) ctx.addIssue({ code: 'custom', message: `trait ${t.id} has no lines` });
+  for (const [a, b] of f.clash) if (!ids.has(a) || !ids.has(b)) ctx.addIssue({ code: 'custom', message: `clash ${a}/${b}: unknown trait` });
+  for (const [id, c] of Object.entries(f.canon)) for (const t of c.traits) if (!ids.has(t)) ctx.addIssue({ code: 'custom', message: `canon ${id}: unknown trait ${t}` });
+});
+export type PersonalityFile = z.infer<typeof PersonalityFileSchema>;
+export type LineKind = keyof z.infer<typeof LineKinds>;
+
+/** A rolled card keeps ids and texts, never list indexes, so a longer list never changes a saved card. A canon card names its sheet. */
+export const CardSchema = z.union([
+  z.object({ canon: S }).strict(),
+  z.object({ t: z.tuple([S, S]), q: S, w: S, f: S, h: S }).strict(),
+]);
+export type Card = z.infer<typeof CardSchema>;
+
 // ---------- D3 save shapes ----------
 
 const Stat10 = z.object({ brawn: N0, nerve: N0, wits: N0, charm: N0, stealth: N0 }).strict();
@@ -498,6 +547,8 @@ export const MemberCrewSchema = z.object({
   flags: z.array(S),
   /** Talk id -> the last day it came up. */
   talked: z.record(S, I.min(1)),
+  /** D19: the personality card, rolled once (personality.ts) and kept. Optional: older saves get it on the next step. */
+  card: CardSchema.optional(),
 }).strict();
 export type MemberCrew = z.infer<typeof MemberCrewSchema>;
 

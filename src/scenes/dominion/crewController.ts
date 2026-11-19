@@ -3,7 +3,7 @@
 
 import { pokemonAssetIds, type AssetManifest } from '../../assets/catalog';
 import { crewOf } from '../../core/dominion/crew';
-import { fileModel, hireModel, leadsModel, morningModel } from '../../core/dominion/crewScreens';
+import { fileModel, hireModel, leadsModel, morningModel, personaModel } from '../../core/dominion/crewScreens';
 import { DOMINION_DATA } from '../../core/dominion/data';
 import { dominionBlock } from '../../core/dominion/session';
 import type { DominionAction } from '../../core/dominion/schema';
@@ -11,6 +11,7 @@ import { services } from '../../game/services';
 import type { InputAction } from '../../ui/input';
 import { rxFileOf } from '../../ui/redux/assets';
 import { fileView, hireOverlay, leadsOverlay, morningView } from '../../ui/redux/screens/dominion/crew';
+import { personaView } from '../../ui/redux/screens/dominion/persona';
 
 interface Host {
   screenName: 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew';
@@ -29,6 +30,8 @@ export class CrewController {
   private overlay: 'hire' | 'leads' | null = null;
   private pickAt = 0;
   private pitchAt = 0;
+  /** D19: the personality card page of the Crew File (P opens it, Esc goes back to the file). */
+  private persona = false;
 
   constructor(private readonly host: Host) {}
 
@@ -51,7 +54,9 @@ export class CrewController {
     if (!b) return '';
     this.sel = Math.min(this.sel, b.members.length - 1);
     if (this.host.screenName === 'crew') {
-      const overlay = this.overlay === 'hire' ? hireOverlay(hireModel(b, services().session.run!.seed), this.pickAt) : this.overlay === 'leads' ? leadsOverlay(leadsModel(b), this.pickAt, this.pitchAt) : '';
+      const seed = services().session.run!.seed;
+      if (this.persona && !this.talking()) return personaView(personaModel(b, this.sel, seed), (s) => this.monFile(s));
+      const overlay = this.overlay === 'hire' ? hireOverlay(hireModel(b, seed), this.pickAt) : this.overlay === 'leads' ? leadsOverlay(leadsModel(b, seed), this.pickAt, this.pitchAt) : '';
       return fileView(fileModel(b, this.sel), (s) => this.monFile(s), notice, overlay, this.talkAt);
     }
     return morningView(morningModel(b, this.sel, this.taskAt, this.all), notice, this.talkAt);
@@ -94,6 +99,7 @@ export class CrewController {
       lead: (i) => { this.pickAt = Number(i); this.pitchAt = 0; this.host.refresh(); },
       pitch: (i) => { this.pitchAt = Number(i); this.pickConfirm(); },
       admit: () => this.pickConfirm(),
+      persona: () => this.togglePersona(),
     };
   }
   overs(): Record<string, (arg: string) => void> {
@@ -107,6 +113,13 @@ export class CrewController {
   private flip(d: number): void {
     const n = this.block()?.members.length ?? 1;
     this.sel = (this.sel + d + n) % n;
+    this.host.setNotice(null);
+    this.host.refresh();
+  }
+
+  private togglePersona(): void {
+    this.persona = !this.persona;
+    this.overlay = null;
     this.host.setNotice(null);
     this.host.refresh();
   }
@@ -129,12 +142,14 @@ export class CrewController {
     if (i === 2) {
       this.host.screenName = 'crew';
       this.overlay = null;
+      this.persona = false;
       this.host.setNotice(null);
       return true;
     }
     if (i === 0 && this.host.screenName === 'crew') {
       this.host.screenName = 'hq';
       this.overlay = null;
+      this.persona = false;
       this.host.setNotice(null);
       return true;
     }
@@ -154,6 +169,11 @@ export class CrewController {
     if (this.host.screenName !== 'crew' || this.overlay || this.talking()) return false;
     const m = b.members[this.sel];
     if (!m) return false;
+    if (code === 'KeyP') return this.togglePersona(), true;
+    if (this.persona) {
+      if (code === 'KeyQ' || code === 'KeyE') return this.flip(code === 'KeyQ' ? -1 : 1), true;
+      return false;
+    }
     const go = (a: DominionAction): boolean => (this.host.step(a), true);
     switch (code) {
       case 'KeyT':
@@ -207,6 +227,7 @@ export class CrewController {
         return true;
       }
       if (a === 'left' || a === 'right') this.flip(a === 'left' ? -1 : 1);
+      else if (a === 'back' && this.persona) this.togglePersona();
       else if (a === 'back') {
         this.host.screenName = 'hq';
         this.host.setNotice(null);

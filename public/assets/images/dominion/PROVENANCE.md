@@ -22,3 +22,9 @@ Copied from the same mockup sprites folder (`plans/evil-mode-rework/mockups-rede
 | File | From |
 | --- | --- |
 | `g-xtransceiver`, `g-relic-gold`, `g-meteorite`, `g-silph-scope`, `g-comet-shard`, `g-devon-scope`, `g-smoke-ball`, `g-vs-seeker`, `g-black-belt`, `g-tea`, `g-soothe-bell`, `g-secret-key` (.png) | Item icons from `images/items/` and `images/items/gen5/` (PokeRogue pack), re-saved at the mockup's size by the mockup thread; copied from `plans/evil-mode-rework/mockups-redesign/sprites/` |
+
+## Slice D19 (the personality card, Rotom mockup a3)
+
+| File | From |
+| --- | --- |
+| `g-mic.png` | Item icon from `images/items/` (PokeRogue pack), re-saved at the mockup's size by the Rotom mockups thread; copied from `plans/claude-api/mockups/sprites/` |

@@ -1,5 +1,6 @@
 // DOMINION slice D3: the crew (plans/evil-mode-rework BUILD_SLICES.md; Part 2, Part 9 A16-A18, A24).
 import { describe, expect, it } from 'vitest';
+import { fillCards, sheet, voice } from '../../src/core/dominion/personality';
 import { cantTake, crewOf, crewStep, growTraits, memberLine, odds, pickTrait, taskById, taskLevel, withCrew } from '../../src/core/dominion/crew';
 import { fileModel, hireModel, leadsModel, morningModel, skillOf } from '../../src/core/dominion/crewScreens';
 import { DOMINION_DATA } from '../../src/core/dominion/data';
@@ -90,7 +91,8 @@ describe('DOMINION D3: members', () => {
     const loaded = new SaveManager(storage, content).loadRun();
     expect(loaded.status).toBe('ok');
     if (loaded.status !== 'ok') return;
-    expect(withCrew(blk(loaded.data))).toEqual(withCrew(blk(r)));
+    // D19: the personality card comes back on the next step, rolled the same way (fillCards).
+    expect(fillCards(withCrew(blk(loaded.data)), loaded.data.seed)).toEqual(withCrew(blk(r)));
   });
   it('odds follow Part 2 §2: a new Grunt with Brawn 2 guarding is about 30%; sure tasks are sure; low Morale and Fatigue cost', () => {
     const b = withCrew(blk(started()));
@@ -229,7 +231,7 @@ describe('DOMINION D3: personality', () => {
     m.level = 4;
     expect(growTraits(b, m, null)).toBe('steady');
     expect(m.untrained).toBe(false);
-    expect(memberLine(m, 0)).toBe(CR.lines.steady![0]);
+    expect(memberLine(m, 0)).toBe(voice(sheet(crewOf(m).card!).quirk, CR.lines.steady![0]!));
     const f = fileModel(b, 0);
     expect(f.formed[0]!.name).toBe('Steady');
     expect(f.grew).toBe(true);
