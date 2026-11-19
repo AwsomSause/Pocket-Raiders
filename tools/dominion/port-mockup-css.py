@@ -1,4 +1,4 @@
-"""Ports the DOMINION mockup CSS (plans/evil-mode-rework/mockups-v3/index.html (round 3; earlier: mockups-redesign)) into the game.
+"""Ports the DOMINION mockup CSS (plans/evil-mode-rework/mockups-redesign/index.html) into the game.
 
 Every selector is scoped under `#rx .dom` (the id outranks the New look skins' class rules) (the root of a Dominion screen), keyframes get a `dm-` prefix, the page layout
 (header, figures, captions) is dropped, and looping animations take the view's clock (`var(--now)`) so a redraw
@@ -39,7 +39,8 @@ def split_rules(text):
 def anim(decls):
     def fix(m):
         parts = []
-        for one in re.split(r',(?![^()]*\))', m.group(2)):
+        # Split on top-level commas only, so cubic-bezier(.2,1.25,.35,1) stays whole.
+        for one in re.split(r',(?![^(]*\))', m.group(2)):
             toks = one.split()
             if toks and not toks[0][0].isdigit() and toks[0] not in ('none', 'var(--now)'):
                 toks[0] = 'dm-' + toks[0]
@@ -49,9 +50,8 @@ def anim(decls):
             parts.append(' '.join(toks))
         return m.group(1) + ','.join(parts)
     decls = re.sub(r'(animation:)([^;!}]+)', fix, decls)
-    # A delay set on its own still runs on the view's clock, so a redraw doesn't restart it (a one-shot entrance
-    # plays once when the view opens).
-    decls = re.sub(r'(animation-delay:)\s*([^;!}]+)', lambda m: m.group(1) + 'calc(var(--now,0s) + %s)' % m.group(2).strip(), decls)
+    # An entrance delay counts from when the view first drew, so a redraw doesn't play it again.
+    decls = re.sub(r'animation-delay:calc\((?!var\(--now)', 'animation-delay:calc(var(--now,0ms) + ', decls)
     return re.sub(r'(animation-name:)\s*([\w-]+)', lambda m: m.group(1) + 'dm-' + m.group(2), decls)
 
 
@@ -79,7 +79,7 @@ def emit(rules, inner=False):
         if pre.startswith('@keyframes'):
             name = pre.split()[1]
             lines.append('@keyframes dm-%s{%s}' % (name, body.strip()))
-        elif pre.startswith('@property'):
+        elif pre.startswith('@property') or pre.startswith('@font-face'):
             lines.append('%s{%s}' % (pre, body.strip()))
         elif pre.startswith('@media'):
             if 'max-width' in pre:
@@ -101,7 +101,5 @@ out += '''#rx .dom .hd{position:static;left:auto;right:auto;top:auto;height:auto
 #rx .dom .col{gap:0}
 #rx .dom .key{width:auto;height:auto;display:inline-block;color:inherit;font-weight:400}
 '''
-# Mockup sprites the CSS points at live in public/assets/images/dominion/ in the game (Vite adds the base path).
-out = re.sub(r'url\((["\']?)sprites/', r'url(\1/assets/images/dominion/', out)
 open(dst, 'w', encoding='utf-8').write(out)
 print(len(out), 'bytes')

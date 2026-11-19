@@ -10,6 +10,7 @@ import {
   addCrewHook, addLoyalty, addMorale, addOddsHook, addTaskKind, crewOf, familyOf, gruntType, leave, monName, rng, withCrew,
 } from './crew';
 import { DOMINION_DATA } from './data';
+import { hqFx } from './hqFx';
 import { acesOf, demote, fitFor, freshReserve, promote, readyFor, seatsOpen, strip, teamSizeOf, type Fit } from './pyramid';
 import { favourIds } from './recruit';
 import type { DominionAction, DominionBlock, Member, MonMeta, ReserveState } from './schema';
@@ -26,10 +27,7 @@ type Src = MonMeta['src'];
 /** The block's Reserve book (made empty if a save predates D4). */
 export const book = (b: DominionBlock): ReserveState => (b.reserve ??= freshReserve());
 /** How many Pokémon the Reserve holds: the Warehouse's 20 (each Pokémon Storage room adds 60 with the HQ, D5). */
-export const reserveSize = (b: DominionBlock): number => {
-  void b;
-  return RS().size;
-};
+export const reserveSize = (b: DominionBlock): number => RS().size + hqFx(b).storage;
 
 const bstOf = (s: { baseStats: Record<string, number> }): number => Object.values(s.baseStats).reduce((a, x) => a + x, 0);
 
@@ -59,11 +57,16 @@ export function withReserve(content: Content, b: DominionBlock): DominionBlock {
   const r = book(b);
   const st = b.crew;
   if (st?.stores.length) {
+    // D5's rule: the Reserve holds 20 (more with Pokémon Storage); the newest over the cap are let go, and the report says so.
+    let lost = 0;
     for (const mon of st.stores) {
-      if (r.box.length < reserveSize(b)) r.box.push(mon);
-      r.meta[mon.uid] ??= metaFor(content, mon.speciesId, 'caught', null, b.day);
+      if (r.box.length < reserveSize(b)) {
+        r.box.push(mon);
+        r.meta[mon.uid] ??= metaFor(content, mon.speciesId, 'caught', null, b.day);
+      } else lost++;
     }
     st.stores = [];
+    if (lost) b.report = [...b.report, fill(DOMINION_DATA.hq.lines.storageFull!, { cap: reserveSize(b), n: lost })];
   }
   const seen = new Set<string>();
   for (const mon of r.box) {

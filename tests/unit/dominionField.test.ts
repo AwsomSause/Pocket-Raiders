@@ -48,13 +48,15 @@ describe('DOMINION D2: the data', () => {
     expect(all).toHaveLength(150);
     expect(all.map((a) => a.n)).toEqual(Array.from({ length: 150 }, (_, i) => i + 1));
     const played = all.filter((a) => actionStatus(a).play);
-    expect(played.length).toBe(41); // D2's 32 + D4's 9
+    // 32 from D2, 13 more that D5's rooms open (each also needs its room built), 9 from D4.
+    expect(played.length).toBe(54);
     for (const a of all) {
       const s = actionStatus(a);
       expect(s.play || /^D\d+$/.test(s.slice ?? ''), a.id).toBe(true);
     }
     expect(actionStatus(actionDef('recruit')!).slice).toBe('D3');
-    expect(actionStatus(actionDef('buy-out')!).slice).toBe('D5');
+    // Buy Out needs the Front Office (D5) and is played by D10's growth actions.
+    expect(actionStatus(actionDef('buy-out')!)).toEqual({ play: false, slice: 'D10', room: 'front-office' });
   });
   it('the starting nine are the mockup\'s nine, in order; every played action has a row', () => {
     expect(FD.starting).toEqual(['extort', 'take', 'steal', 'thieve', 'attack', 'recruit', 'scout', 'catch', 'lay-low']);

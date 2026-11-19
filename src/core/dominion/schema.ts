@@ -88,7 +88,7 @@ const DistrictSchema = z.object({
 }).strict();
 export type District = z.infer<typeof DistrictSchema>;
 export const BATTLE_FOES = ['target', 'police', 'wild', 'ghost', 'member'] as const;
-export const EFFECTS = ['scout', 'count', 'scoutDistrict', 'paper', 'catch', 'laylow', 'disguise', 'fine', 'exp', 'spar', 'train', 'plan', 'pamper', 'hide', 'rescue', 'evolve', 'ceremony', 'mentor'] as const;
+export const EFFECTS = ['scout', 'count', 'scoutDistrict', 'paper', 'catch', 'laylow', 'disguise', 'fine', 'exp', 'spar', 'train', 'plan', 'pamper', 'hide', 'rescue', 'evolve', 'ceremony', 'mentor', 'launder'] as const;
 const PlaySchema = z.object({
   kinds: z.array(z.union([z.enum(TARGET_KINDS), z.literal('any')])).min(1).optional(),
   chance: I.min(0).max(100).optional(),
@@ -285,6 +285,8 @@ const BlockSchema = z.object({
   crew: z.lazy(() => CrewStateSchema).optional(),
   /** D4: the Reserve, Trust, the pyramid's bookkeeping. Optional; `reserveOf` fills it (and moves D3's stores in). */
   reserve: z.lazy(() => ReserveStateSchema).optional(),
+  /** D5: the HQ's rooms, outside buildings, works, clean money, laundering and loans. Optional; `hqOf` fills it. */
+  hq: z.lazy(() => HqStateSchema).optional(),
 }).strict();
 export const DominionBlockSchema = z.preprocess(migrateDominion, BlockSchema);
 export type DominionBlock = z.infer<typeof BlockSchema>;
@@ -327,7 +329,17 @@ export type DominionAction =
   | { t: 'free'; uid: string }
   | { t: 'promote'; member: string }
   | { t: 'demote'; member: string }
-  | { t: 'strip'; member: string };
+  | { t: 'strip'; member: string }
+  // D5, the HQ (hq.ts)
+  | { t: 'upgrade' }
+  | { t: 'build'; building: string; district: string | null }
+  | { t: 'tierUp'; room: string }
+  | { t: 'sell'; room: string }
+  | { t: 'rebuild'; room: string }
+  | { t: 'launder'; amount: number }
+  | { t: 'loan'; amount: number }
+  | { t: 'repay'; amount: number }
+  | { t: 'letGo'; member: string };
 
 // ---------- D3 data: crew.json, tasks.json, gruntTypes.json ----------
 
@@ -353,6 +365,8 @@ export const TaskSchema = z.object({
   levels: z.array(S).length(5), risk: S, source: S.optional(),
   status: z.enum(['supported', 'limited', 'disabled']),
   note: S.optional(), needs: z.string().regex(/^D\d+$/).optional(), effect: TaskEffectSchema.optional(),
+  /** D5: the room the task needs (buildings.json id). */
+  room: S.optional(),
 }).strict().refine((t) => (t.status === 'disabled') === !t.effect, { message: 'a live task has an effect; a disabled one has none' })
   .refine((t) => t.status !== 'disabled' || !!t.needs, { message: 'a disabled task names the slice it waits for' })
   .refine((t) => t.status !== 'limited' || !!t.note, { message: 'a limited task says what waits' });
@@ -643,3 +657,92 @@ export const ReserveStateSchema = z.object({
   stripped: z.array(S),
 }).strict();
 export type ReserveState = z.infer<typeof ReserveStateSchema>;
+
+// ---------- D5 data: hq.json (Part 3 §3, Part 9 A21-A22) and buildings.json (lists/buildings*.md) ----------
+
+const Pair = z.tuple([S, S]);
+export const HqLevelSchema = z.object({
+  lv: I.min(1).max(6), name: S, cost: N0,
+  /** Null: the region cap (the main game's rule: 100 in the first region, +50 a region, max 500). */
+  levelCap: I.min(1).nullable(), crewCap: I.min(1), slots: I.min(1), defense: N0,
+  needs: z.object({ districts: I.min(1).optional(), crew: I.min(1).optional(), gym: z.boolean().optional(), admin: z.boolean().optional(), half: z.boolean().optional(), feared: z.boolean().optional() }).strict(),
+  look: S, wall: Pair, roof: Pair,
+}).strict();
+export const BuildingTierSchema = z.object({ t: I.min(1).max(8), name: S, cost: z.number().positive(), effect: z.number().positive(), days: I.min(1), hq: I.min(1).max(6), region: I.min(1), gym: z.boolean().optional() }).strict();
+export const HqFileSchema = z.object({
+  _source: S,
+  levels: z.array(HqLevelSchema).length(6),
+  upgradeDays: I.min(1),
+  tiers: z.array(BuildingTierSchema).length(8),
+  rules: z.object({
+    storageBase: N0, upkeepPct: N0, unpaidCondition: N0, rebuildPct: N0, sellPct: N0, loanPer: N0, loanRate: N0, loanWeeks: I.min(1),
+    launderDays: I.min(1), launderAction: z.object({ max: I.min(1), fee: N0, days: I.min(1) }).strict(), brokeDefense: N0, regionsInRun: I.min(1), hideoutDistricts: S,
+  }).strict(),
+  /** An action's or task's unlock word -> the building that opens it. */
+  rooms: z.record(S, S),
+  /** The first seven on the Buy Room list (Kice's poster). */
+  poster: z.array(S).length(7),
+  menu: z.array(z.object({ id: S, label: S, key: S }).strict()).min(6),
+  lines: z.record(S, S),
+  icons: z.object({ groups: z.record(S, S), ids: z.record(S, S), colours: z.record(S, Pair) }).strict(),
+}).strict();
+export type HqFile = z.infer<typeof HqFileSchema>;
+
+/** What a building does at T1 (scaled by the tier's Effect x). See tools/dominion/buildings-to-json.py. */
+export const BuildingFxSchema = z.object({
+  crewCap: N0.optional(), morale: N0.optional(), loyalty: N0.optional(), income: N0.optional(), clean: N0.optional(), weekly: N0.optional(),
+  heatDay: N0.optional(), heatWeek: N0.optional(), heatOnce: N0.optional(), control: N0.optional(), trainXp: N0.optional(), injury: Pct.optional(),
+  recruit: N0.optional(), hireOff: Pct.optional(), launder: Pct.optional(), treasury: N0.optional(), storage: N0.optional(), defense: N0.optional(),
+  dayActions: N0.optional(), nightActions: N0.optional(), restBonus: N0.optional(), fatigue: N0.optional(), repair: N0.optional(), incomePct: N0.optional(),
+  items: z.record(S, I.min(1)).optional(), weeklyItems: z.record(S, I.min(1)).optional(), unlock: z.boolean().optional(),
+}).strict();
+export type BuildingFx = z.infer<typeof BuildingFxSchema>;
+export const BuildingSchema = z.object({
+  n: S, id: S, name: S, listName: S, group: z.string().regex(/^[A-JPQ]$/), sub: S.optional(), groupName: S, focus: z.enum(['hq', 'pokemon', 'grunt']),
+  part3: z.boolean(), slots: N0, outside: z.boolean(), canOutside: z.boolean(), cost: N0, t1: S, per: S, cap: S, ladder: z.array(S).length(8),
+  minTier: I.min(0).max(5), status: z.enum(['supported', 'limited', 'disabled']), fx: BuildingFxSchema, waits: S.nullable(), note: S.optional(),
+}).strict().refine((b) => (b.status === 'disabled') === !Object.keys(b.fx).length, { message: 'a live building has an effect; a disabled one has none' })
+  .refine((b) => b.status !== 'disabled' || !!b.waits, { message: 'a disabled building names what it waits for' })
+  .refine((b) => b.status !== 'limited' || !!b.note, { message: 'a limited building says what waits' });
+export type Building = z.infer<typeof BuildingSchema>;
+export const BuildingsFileSchema = z.object({ _source: S, buildings: z.array(BuildingSchema).min(266) }).strict();
+
+// ---------- D5: the save block's `hq` (optional; no block bump) ----------
+
+export const RoomSchema = z.object({
+  uid: S,
+  /** Building id (buildings.json). */
+  id: S,
+  tier: I.min(1).max(8),
+  /** Condition 0-100 (lists/buildings.md §1): raids, sabotage, the Hero and unpaid upkeep lower it; 0 ruins it. */
+  cond: I.min(0).max(100),
+  /** ₽ spent on it so far (upkeep is a share of this; selling gives back a share). */
+  spent: N0,
+  /** Being built (new) or raised a tier: works from `ready` (the morning of that day). */
+  building: z.boolean(),
+  up: z.boolean(),
+  ready: N0,
+  /** Shut while broke (A22). */
+  shut: z.boolean(),
+  /** Ruined at Condition 0: rebuild at 60% cost, one tier lower. */
+  ruined: z.boolean(),
+  /** Outside buildings: the district it stands in (null inside the HQ). */
+  at: S.nullable(),
+}).strict();
+export type Room = z.infer<typeof RoomSchema>;
+
+export const HqStateSchema = z.object({
+  rooms: z.array(RoomSchema),
+  next: I.min(1),
+  /** The HQ upgrade under way (Part 3 §3.1: three days): the level it reaches, the day it's done, the level cap it brings. */
+  upgrade: z.object({ to: I.min(2).max(6), ready: I.min(1), cap: I.min(1) }).strict().nullable(),
+  /** The clean part of the funds (A21: upgrades and Buy Outs take clean money only). Never more than the funds. */
+  clean: N0,
+  /** Money in the wash: comes back clean on `ready`. */
+  wash: z.array(z.object({ net: I.min(1), ready: I.min(1), front: S }).strict()),
+  /** A Fence's loan (A22): what's owed and the weeks it has run. */
+  loan: z.object({ owed: N0, weeks: N0 }).strict().nullable(),
+  /** Broke at the last weekly bill (A22): Defense down, the costliest room shut until paid. */
+  broke: z.boolean(),
+}).strict();
+export type HqState = z.infer<typeof HqStateSchema>;

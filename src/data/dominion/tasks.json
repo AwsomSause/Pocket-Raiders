@@ -91,7 +91,7 @@
    ],
    "risk": "Overwhelmed",
    "status": "disabled",
-   "needs": "D5"
+   "needs": "D9"
   },
   {
    "n": 3,
@@ -255,7 +255,7 @@
    ],
    "risk": "Triggers falsely",
    "status": "disabled",
-   "needs": "D5"
+   "needs": "D9"
   },
   {
    "n": 11,
@@ -405,8 +405,10 @@
     "+3% of all income"
    ],
    "risk": "Errors",
-   "status": "disabled",
-   "needs": "D5"
+   "status": "supported",
+   "effect": {
+    "kind": "audit"
+   }
   },
   {
    "n": 18,
@@ -541,7 +543,7 @@
    ],
    "risk": "Mistakes anger crew",
    "status": "disabled",
-   "needs": "D5"
+   "needs": "D6"
   },
   {
    "n": 24,
@@ -1134,7 +1136,7 @@
    ],
    "risk": "Torn down",
    "status": "disabled",
-   "needs": "D5"
+   "needs": "D10"
   },
   {
    "n": 51,
@@ -1406,8 +1408,12 @@
     "+0.5"
    ],
    "risk": "Bored",
-   "status": "disabled",
-   "needs": "D5"
+   "room": "library",
+   "status": "supported",
+   "effect": {
+    "kind": "train",
+    "grow": "wits"
+   }
   },
   {
    "n": 64,
@@ -1496,7 +1502,7 @@
    ],
    "risk": "Apprentice mistakes",
    "status": "disabled",
-   "needs": "D5"
+   "needs": "D4"
   },
   {
    "n": 68,
@@ -1539,7 +1545,7 @@
    ],
    "risk": "Move forgotten",
    "status": "disabled",
-   "needs": "D5"
+   "needs": "D4"
   },
   {
    "n": 70,
@@ -1954,7 +1960,7 @@
    ],
    "risk": "Overbuys",
    "status": "disabled",
-   "needs": "D5"
+   "needs": "D10"
   },
   {
    "n": 90,
@@ -1974,7 +1980,7 @@
    ],
    "risk": "Mix-ups",
    "status": "disabled",
-   "needs": "D5"
+   "needs": "D9"
   },
   {
    "n": 91,
@@ -1994,7 +2000,7 @@
    ],
    "risk": "Found",
    "status": "disabled",
-   "needs": "D5"
+   "needs": "D10"
   },
   {
    "n": 92,
@@ -2360,7 +2366,7 @@
    ],
    "risk": "Torn down",
    "status": "disabled",
-   "needs": "D5"
+   "needs": "D10"
   },
   {
    "n": 110,
