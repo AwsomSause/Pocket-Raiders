@@ -9,8 +9,12 @@ import { STAT_IDS } from './schema';
 import { topModel, type TopModel } from './screens';
 import { topTalk } from './talk';
 import { cardFor, cardLine, lineKind, sheet, traitWords } from './personality';
+import { usable } from './reserve';
+import { rivalBadge, rivalTag } from './rivalScreens';
 
 const C = () => DOMINION_DATA.crew;
+/** Why a member is out, for the cards (D9 adds held by a rival team). */
+const OUT_WORD: Record<string, string> = { jail: 'In a cell', hurt: 'Hurt', held: 'Held by a rival team' };
 
 export interface TaskRow { id: string; label: string; icon: string | null; odds: string; tone: 'y' | 'gn' | 'mu' | 'rd'; locked: string | null; on: boolean }
 export interface StripCard { id: string; name: string; look: string; task: string; odds: string; tone: string; sel: boolean; out: boolean }
@@ -24,6 +28,8 @@ export interface MorningModel {
   alerts: Alert[];
   more: number;
   badge: { label: string; word: string; hot: boolean };
+  /** The tag on rival alerts ("ROCKET"). */
+  rivalTag: string;
   member: InfoCard;
   tasks: TaskRow[];
   moreCount: number;
@@ -52,7 +58,7 @@ export function infoCard(b: DominionBlock, m: Member): InfoCard {
     green: greenById(c.green)?.name.toUpperCase() ?? c.green, trait: trait ? traitName(trait) : null,
     typeName: gruntType(c.type)?.name ?? c.cls, loyalty: m.loyalty, skill: skillOf(m),
     personality: trait ? traitName(trait) : `${temper?.word ?? '?'}?`, forming: !trait, fatigue: c.fatigue, pHeat: c.pHeat,
-    out: c.out ? (c.out.why === 'jail' ? `In a cell, ${c.out.days} day${c.out.days === 1 ? '' : 's'}` : `Hurt, ${c.out.days} day${c.out.days === 1 ? '' : 's'}`) : null,
+    out: c.out ? (c.out.why === 'held' ? OUT_WORD.held! : `${OUT_WORD[c.out.why] ?? 'Out'}, ${c.out.days} day${c.out.days === 1 ? '' : 's'}`) : null,
     armband: b.teamName ? `${b.teamName} armband` : null,
   };
 }
@@ -82,15 +88,16 @@ export function morningModel(block: DominionBlock, sel: number, at: number, all:
     top: topModel(b, `${DOMINION_DATA.start.start.hqName} · LV. ${b.hqLevel}`),
     alerts: alerts.slice(0, shown),
     more: Math.max(0, alerts.length - shown),
-    // Until the rival team (D9) brings Tension, the badge reads the region's Heat.
-    badge: { label: 'Heat', word: b.heat >= 60 ? 'HOT' : b.heat >= 25 ? 'RISING' : 'LOW', hot: b.heat >= 25 },
+    // D9: the rival team's Tension (the region's Heat when no team is on).
+    badge: rivalBadge(b),
+    rivalTag: rivalTag(),
     member: infoCard(b, m),
     tasks,
     moreCount: taskIds(m).length,
     all,
     strip: b.members.map((x, i) => {
       const xc = crewOf(x);
-      const o = xc.out ? { odds: xc.out.why === 'jail' ? 'cell' : 'hurt', tone: 'rd' } : oddsText(b, x, xc.task);
+      const o = xc.out ? { odds: xc.out.why === 'jail' ? 'cell' : xc.out.why === 'held' ? 'held' : 'hurt', tone: 'rd' } : oddsText(b, x, xc.task);
       return { id: x.id, name: x.name, look: x.look, task: label(xc.task), odds: o.odds === 'sure' ? '' : o.odds, tone: o.tone, sel: i === sel, out: !!xc.out };
     }),
     talk: card ? { name: card.name, title: card.talk.name, text: card.text, choices: card.talk.choices!.map((x) => x.label) } : null,
@@ -116,7 +123,7 @@ export interface FileModel {
   loyalty: number; morale: number; fatigue: number; pHeat: number; motive: string; ambitionKnown: boolean;
   green: string; formed: { name: string; text: string; live: boolean; needs: string | null }[]; grew: boolean; record: string; temperament: string;
   second: string; signature: string;
-  types: string; team: { species: string; level: number }[];
+  types: string; team: { species: string; level: number; dim: boolean }[];
   then: { day: number; line: string }; now: { day: number; line: string };
   task: string; taskLevel: string; out: string | null; xp: string; points: number;
   keys: { key: string; label: string }[];
@@ -142,7 +149,7 @@ export function fileModel(block: DominionBlock, sel: number): FileModel {
   const greenLines = C().lines[c.green] ?? [];
   const card = topTalk(b);
   const t = taskById(c.task);
-  const keys = [{ key: 'C', label: 'Card' }, { key: 'G', label: 'Gift' }, { key: 'H', label: 'Hire' }, { key: 'R', label: `Leads (${b.crew!.leads.length})` }];
+  const keys = [{ key: 'C', label: 'Card' }, { key: 'G', label: 'Gift' }, { key: 'H', label: 'Hire' }, { key: 'R', label: `Leads (${b.crew!.leads.length})` }, { key: 'P', label: 'Pyramid' }];
   if (b.phase === 'evening') keys.unshift({ key: 'T', label: 'Talk' });
   if (c.out?.why === 'jail') keys.unshift({ key: 'B', label: `Bail ₽${C().rules.bail}` });
   return {
@@ -164,11 +171,12 @@ export function fileModel(block: DominionBlock, sel: number): FileModel {
     second: c.formed[1] ? '' : `2nd trait, at ${sergeant.word[0]}${sergeant.word.slice(1).toLowerCase()}`,
     signature: `Executive signature at Lv ${exec.level}: ${sig.name}?`,
     types: b.types.map((x) => x[0]!.toUpperCase() + x.slice(1)).join(' · '),
-    team: m.team.map((x) => ({ species: x.speciesId, level: x.level })),
+    // D4: a Pokémon over the member's caps stays but sits out, shown dimmed (Part 7 §4.3).
+    team: m.team.map((x) => ({ species: x.speciesId, level: x.level, dim: !usable(b, m, x) })),
     then: { day: m.joinedDay, line: greenLines[0] ?? memberLine(m, m.joinedDay) },
     now: { day: b.day, line: memberLine(m, b.day) },
     task: label(c.task), taskLevel: t ? `${taskLevelWord(taskLevel(m, t.id))} (task Lv ${taskLevel(m, t.id)})` : '',
-    out: c.out ? (c.out.why === 'jail' ? `In a cell: ${c.out.days} day${c.out.days === 1 ? '' : 's'} left` : `Hurt: ${c.out.days} day${c.out.days === 1 ? '' : 's'}`) : null,
+    out: c.out ? (c.out.why === 'held' ? 'Held by a rival team: pay the ransom on the Rival File (R) or send a rescue' : c.out.why === 'jail' ? `In a cell: ${c.out.days} day${c.out.days === 1 ? '' : 's'} left` : `Hurt: ${c.out.days} day${c.out.days === 1 ? '' : 's'}`) : null,
     xp: `${c.xp}/${xpToNext(m.level)} XP`, points: m.traitPoints,
     keys,
     talk: card ? { name: card.name, title: card.talk.name, text: card.text, choices: card.talk.choices!.map((x) => x.label) } : null,

@@ -15,9 +15,11 @@ import { beginDominionFight } from './fight';
 import { DOMINION_DATA } from './data';
 import { DominionBlockSchema, type DominionAction, type DominionBlock, type DominionSetup } from './schema';
 import { newBlock, typesProblem } from './start';
+import { autoFill, book, placeMon, reserveInRun, seedStart, withReserve } from './reserve';
 import { build, letGo, loan, rebuild, repay, sell, storageCap, tierUp, upgrade, launder, type HqOut } from './hq';
 import { withHq } from './hqFx';
 import { levelCap } from '../regions';
+import { answerCard, breakTruce, maybeStreet, noteTop, ransom, startTruce, withRivals, type RivalOut } from './rivals';
 
 export const DOMINION_MODE_ID = 'dominion';
 export const isDominionRun = (run: RunState | null | undefined): boolean => run?.rules.modeId === DOMINION_MODE_ID;
@@ -48,40 +50,72 @@ export function startInRun(content: Content, run: RunState, setup: DominionSetup
   const problem = typesProblem(setup.types);
   if (problem) return { run, problem };
   let out = bossTeam(content, structuredClone(run));
-  const fresh = newBlock(content, out, setup);
+  const fresh = withCrew(newBlock(content, out, setup));
+  // D4: Day 1's Reserve (one Pokémon of each Team Type; the first member holds the first).
+  seedStart(content, out, fresh);
   // D5: the starting money is clean (A21). D19: every member gets their personality card.
-  const block = DominionBlockSchema.parse(fillCards(withHq(withCrew(fresh), fresh.funds), run.seed));
+  const block = DominionBlockSchema.parse(fillCards(withRivals(withHq(withReserve(content, fresh), fresh.funds)), run.seed));
+  noteTop(block, out);
   out = { ...withBlock(out, block), inventory: { ...DOMINION_DATA.start.start.inventory } };
   return { run: out, problem: null };
 }
 
 /** One clock step on the run. Rest heals the Boss's team for free (Part 1 §2.1). Anyone new gets their card (D19). */
 export function stepInRun(content: Content, run: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean } {
-  const out = stepOnce(content, run, action);
-  const b = out.run.expansion?.dominion;
-  if (!out.ok || !b || b.members.every((m) => !m.crew || m.crew.card)) return out;
-  const next = withBlock(out.run, fillCards(structuredClone(b), run.seed));
-  return { ...out, block: next.expansion!.dominion!, run: next };
+  const out = stepInner(content, run, action);
+  if (!out.ok) return out;
+  // D9: the rival tier reads the Boss's best level; a night ambush (rival action 135) hurts the Boss's team.
+  const next = structuredClone(out.run);
+  const b = next.expansion!.dominion!;
+  noteTop(b, next);
+  if (b.flags.includes('ambushed')) {
+    b.flags = b.flags.filter((f) => f !== 'ambushed');
+    for (const m of next.party) m.hp = Math.max(1, Math.round(m.hp * 0.75));
+  }
+  // D19: anyone new gets their personality card.
+  fillCards(b, run.seed);
+  const block = DominionBlockSchema.parse(b);
+  return { ...out, block, run: withBlock(next, block) };
 }
-function stepOnce(content: Content, run: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean } {
+
+function stepInner(content: Content, run: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean } {
   const block = run.expansion?.dominion;
   if (!block) return { ok: false, block: block as never, notice: null, heal: false, run };
   const crewOut = crewInRun(content, run, action);
   if (crewOut) return crewOut;
+  const resOut = reserveInRun(content, run, action);
+  if (resOut) {
+    if (!resOut.ok) return { ok: false, block, notice: resOut.notice, heal: false, run };
+    const next = withBlock(resOut.run, DominionBlockSchema.parse(resOut.run.expansion!.dominion!));
+    return { ok: true, block: next.expansion!.dominion!, notice: resOut.notice, heal: false, run: next };
+  }
   const hqOut = hqInRun(content, run, action);
   if (hqOut) return hqOut;
+  const rivalOut = rivalInRun(run, action);
+  if (rivalOut) return rivalOut;
   if (action.t === 'act') {
     // D2: a Boss action (field.ts). A Pokémon lifted in a Ball (Thieve, a big success) joins the team or the box.
     const work = structuredClone(run);
     const out = act(content, work, action);
     if (!out.ok) return { ok: false, block, notice: out.notice, heal: false, run };
-    if (out.mon && content.species.has(out.mon.species)) {
+    if (out.mon && out.mon.trust !== undefined) {
+      // D4: a rescued or tamed Pokémon joins the Reserve, not the Boss's team.
+      const line = placeMon(content, work, withReserve(content, out.block), { species: out.mon.species, level: out.mon.level, src: 'rescued', trust: out.mon.trust });
+      if (line && out.notice) out.notice = `${out.notice} ${line}`;
+    } else if (out.mon && content.species.has(out.mon.species)) {
       const mon = newMon(content, work, out.mon.species, out.mon.level, 'p');
       if (work.party.length < 6) work.party.push(mon);
       else work.box = [...(work.box ?? []), mon];
     }
-    const next = withBlock(work, DominionBlockSchema.parse(out.block));
-    return { ok: true, block: next.expansion!.dominion!, notice: out.notice, heal: false, run: next, fight: out.fight };
+    // D9: a rival street meeting may come up where the rival team has a stake (once per row per run).
+    let blk = out.block, notice = out.notice;
+    if (!out.fight) {
+      const met = maybeStreet(blk, action.district, run.seed, blk.phase === 'night');
+      blk = met.block;
+      if (met.line) notice = [notice, met.line].filter(Boolean).join(' ');
+    }
+    const next = withBlock(work, DominionBlockSchema.parse(blk));
+    return { ok: true, block: next.expansion!.dominion!, notice, heal: false, run: next, fight: out.fight };
   }
   if (action.t === 'buy') {
     const out = buy(block, action.vehicle);
@@ -96,6 +130,22 @@ function stepOnce(content: Content, run: RunState, action: DominionAction): Step
   }
   next = settleCrew(content, next);
   return { ...out, block: next.expansion!.dominion!, run: next };
+}
+
+/** D9: the Rival File's answers (rivals.ts). A fight answered leaves `field.fight` for the scene to start. */
+function rivalInRun(run: RunState, action: DominionAction): (StepOut & { run: RunState; fight?: boolean }) | null {
+  const b = run.expansion!.dominion!;
+  let out: RivalOut;
+  switch (action.t) {
+    case 'truce': out = startTruce(b, action.team); break;
+    case 'breakTruce': out = breakTruce(b, action.team); break;
+    case 'card': out = answerCard(b, action.index, action.choice, run.seed); break;
+    case 'ransom': out = ransom(b, action.member); break;
+    default: return null;
+  }
+  if (!out.ok) return { ok: false, block: b, notice: out.notice, heal: false, run };
+  const next = withBlock(run, DominionBlockSchema.parse(out.block));
+  return { ok: true, block: next.expansion!.dominion!, notice: out.notice, heal: false, run: next, fight: out.fight };
 }
 
 /** D5: the HQ menu (hq.ts). The upgrade needs the run for the region's level cap (the Citadel's). */
@@ -124,7 +174,8 @@ function crewInRun(content: Content, run: RunState, action: DominionAction): (St
   const done = (r: { ok: boolean; run: RunState; notice: string | null }): StepOut & { run: RunState } => {
     const b = r.run.expansion!.dominion!;
     if (!r.ok) return { ok: false, block: b, notice: r.notice, heal: false, run };
-    const next = withBlock(r.run, DominionBlockSchema.parse(b));
+    // D4: new members' Pokémon and hired off-type ones get their Reserve records.
+    const next = withBlock(r.run, DominionBlockSchema.parse(withReserve(content, structuredClone(b))));
     return { ok: true, block: next.expansion!.dominion!, notice: r.notice, heal: false, run: next };
   };
   const block = run.expansion!.dominion!;
@@ -183,22 +234,34 @@ export function gift(run: RunState, memberId: string, item: string): { ok: boole
   return { ok: true, run: withBlock(out, b), notice: `${m.name}'s Pokémon holds it now. Morale +${DOMINION_DATA.crew.rules.giftMorale}.` };
 }
 
-/** Finishes what the night left pending: caught Pokémon into the stores, levels, items into the Bag. Runs once per step. */
+/**
+ * Finishes what the night left pending: caught Pokémon (kept "for themselves" or into the Reserve, D4), levels, items
+ * into the Bag. Runs once per step; also keeps the Reserve's records up to date and runs Auto-fill when it's on.
+ */
 export function settleCrew(content: Content, run: RunState): RunState {
-  const pending = run.expansion?.dominion?.crew?.pending;
-  if (!pending?.length) return run;
+  const blk = run.expansion?.dominion;
+  if (!blk) return run;
   const out = structuredClone(run);
-  const b = out.expansion!.dominion!;
-  const st = b.crew!;
+  const b = withReserve(content, out.expansion!.dominion!);
+  const st = b.crew;
+  if (!st?.pending.length) {
+    if (book(b).auto) autoFill(b);
+    return out;
+  }
+  const lines: string[] = [];
   for (const p of st.pending) {
     if (p.k === 'mon') {
-      if (content.species.has(p.species)) st.stores.push(newMon(content, out, p.species, p.level, 'p'));
+      const line = placeMon(content, out, b, p);
+      if (line) lines.push(line);
     } else if (p.k === 'level') {
-      const mon = b.members.find((m) => m.id === p.member)?.team.find((x) => x.uid === p.uid);
+      // A member's Pokémon, or (Nurturer) one in the Reserve.
+      const mon = b.members.find((m) => m.id === p.member)?.team.find((x) => x.uid === p.uid) ?? b.reserve?.box.find((x) => x.uid === p.uid);
       if (mon && p.level > mon.level) addLevels(content, mon, p.level - mon.level, p.level);
     } else out.inventory[p.id] = (out.inventory[p.id] ?? 0) + p.n;
   }
   st.pending = [];
+  if (lines.length) b.report = [...b.report, ...lines];
+  if (book(b).auto) autoFill(b);
   // D5: the stores hold 20 Pokémon, more with Pokémon Storage; the newest over the cap are let go, and the report says so.
   const cap = storageCap(b);
   if (st.stores.length > cap) {

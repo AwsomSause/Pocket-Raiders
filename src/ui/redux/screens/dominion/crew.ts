@@ -14,10 +14,10 @@ const ALERT: Record<string, [string, string, string]> = {
   crew: ['g', 'g-card-key', 'CREW'], money: ['y', 'g-relic-gold', 'FRONTS'], rival: ['r', 'g-meteorite', 'RIVALS'],
   police: ['b', 'g-silph-scope', 'POLICE'], hero: ['v', 'g-comet-shard', 'HERO'], world: ['b', 'g-journal', 'NEWS'],
 };
-export const OPEN_TABS = [0, 1, 2] as const;
+export const OPEN_TABS = [0, 1, 2, 3] as const;
 
 /** A member's picture: a plain png (Rook's) or a trainer atlas, cropped into a box. */
-function face(look: string, h: number, style: string): string {
+export function face(look: string, h: number, style: string): string {
   return look.endsWith('.png')
     ? `<img class="px" src="${rxUrl(look)}" alt="" style="${style}">`
     : `<div style="${style};display:flex;align-items:flex-end;justify-content:center;overflow:hidden">${tall(look, h)}</div>`;
@@ -38,7 +38,8 @@ export function talkCard(t: TalkModel, at: number): string {
 
 export function morningView(m: MorningModel, notice: string | null, talkAt: number): string {
   const alerts = m.alerts.map((a) => {
-    const [cls, ic, t] = ALERT[a.kind] ?? ALERT.world!;
+    const [cls, ic, t0] = ALERT[a.kind] ?? ALERT.world!;
+    const t = a.kind === 'rival' ? esc(m.rivalTag) : t0;
     return `<div class="al ${cls}"><img class="ic" src="${img(ic)}" alt=""><div><span class="t">${t}</span><span class="xs dm" style="float:right;margin-left:6px">${esc(a.time)}</span>${esc(a.text)}</div></div>`;
   }).join('') || '<div class="mu sm">A quiet night.</div>';
   const rows = m.tasks.map((t, i) => {
@@ -66,7 +67,7 @@ export function morningView(m: MorningModel, notice: string | null, talkAt: numb
     <div class="hd"><img class="ic" src="${img('g-xtransceiver')}" alt="">MORNING REPORT<span class="r">overnight</span></div>
     <div class="col" style="gap:7px;max-height:290px;overflow:hidden">${alerts}</div>
     ${m.more ? `<div class="xs mu" style="margin-top:4px">+${m.more} more in the Ledger</div>` : ''}
-    <div class="row" style="position:absolute;left:0;right:0;bottom:12px;justify-content:center;gap:10px;color:${m.badge.hot ? 'var(--red)' : '#9fe0b4'};font-weight:700">⚠ <span class="${m.badge.hot ? 'pulse' : ''}" style="display:inline-block;border:2px solid ${m.badge.hot ? 'var(--red)' : '#43cf78'};border-radius:6px;padding:2px 10px;box-shadow:0 0 12px ${m.badge.hot ? 'rgba(255,90,79,.4)' : 'rgba(67,207,120,.3)'}" data-testid="dom-badge">${esc(m.badge.label)}: ${esc(m.badge.word)}</span> ⚠</div>
+    <div class="row" style="position:absolute;left:0;right:0;bottom:12px;justify-content:center;gap:10px;color:${m.badge.hot ? 'var(--red)' : '#9fe0b4'};font-weight:700">⚠ <span class="${m.badge.hot ? 'pulse' : ''}" style="display:inline-block;border:2px solid ${m.badge.hot ? 'var(--red)' : '#43cf78'};border-radius:6px;padding:2px 10px;cursor:pointer;box-shadow:0 0 12px ${m.badge.hot ? 'rgba(255,90,79,.4)' : 'rgba(67,207,120,.3)'}"${act('rivalFile')} title="Rival File (R)" data-testid="dom-badge">${esc(m.badge.label)}: ${esc(m.badge.word)}</span> ⚠</div>
   </div>
   <div class="pnl glass" style="left:350px;top:86px;width:276px;height:308px" data-testid="dom-assign">
     <div class="hd"><img class="ic" src="${img('g-letter')}" alt="">ASSIGN TASK<span class="r">${esc(m.strip.find((s) => s.sel)?.name ?? '')}</span></div>
@@ -129,7 +130,7 @@ export function fileView(f: FileModel, monFile: (species: string) => string | nu
     : `<div class="row" style="gap:8px;margin-top:9px;opacity:.7"><span class="pill b" style="opacity:.6">?</span><span class="xs mu">${esc(f.second)}</span></div>`;
   const team = f.team.map((t) => {
     const file = monFile(t.species);
-    return `<div class="col" style="align-items:center">${file ? mini(file, 44) : ''}<span class="xs">${esc(monName(t.species))} <b class="y">${t.level}</b></span></div>`;
+    return `<div class="col" style="align-items:center;${t.dim ? 'opacity:.45;filter:grayscale(.8)' : ''}" title="${t.dim ? 'Over a cap: sits out' : ''}">${file ? mini(file, 44) : ''}<span class="xs">${esc(monName(t.species))} <b class="y">${t.level}</b></span></div>`;
   }).join('');
   const keys = f.keys.map((k) => `<span class="kc">${esc(k.key)}</span><span class="dm" style="margin-right:6px">${esc(k.label)}</span>`).join('');
   return stage(`<div class="layer" style="background:radial-gradient(420px 380px at 150px 300px,rgba(140,80,220,.45),transparent 70%)"></div>

@@ -13,6 +13,9 @@ import trainersRaw from '../../data/trainers.json';
 import { DOMINION_DATA } from './data';
 import type { ActionDef, District, DistrictState, DominionBlock, Field, FieldFight, Play, StatId, Target } from './schema';
 import { addWorldStep, fill } from './worldTurn';
+import { addLoyalty, addMorale, addXp, monName } from './crew';
+import { hasBand } from './pyramid';
+import { evolveOne } from './reserve';
 import { buildingDef, hasRoom, launderAction, roomFor, spend } from './hqFx';
 
 const F = () => DOMINION_DATA.field;
@@ -204,6 +207,8 @@ export interface Card {
   exact: boolean;
   range: [number, number];
   pay: [number, number] | null;
+  /** The members brought along (D4: Mentor teaches them). */
+  bring: string[];
   weekly: number | null;
   crate: string | null;
   heat: number;
@@ -236,6 +241,8 @@ export function foeOf(b: DominionBlock, run: Pick<RunState, 'party'>, kind: Fiel
       const m = b.members[0];
       return { name: m?.name ?? 'Crew', species: m?.team[0]?.speciesId ?? '', level: m?.team[0]?.level ?? 5, wild: false };
     }
+    case 'rival':
+      return RIVAL_FOE ? RIVAL_FOE(b, run) : { name: 'Rival Grunt', species: 'rattata', level: foeLevel(b, run, 0), wild: false };
     case 'target': {
       const f = target?.foe ?? district.targets[0]!.foe;
       return { name: f.name, species: f.species[0]!, level: foeLevel(b, run, f.offset), wild: false };
@@ -316,7 +323,7 @@ export function card(b: DominionBlock, run: Pick<RunState, 'party'>, actionId: s
   const cost = def.slot === 'day' ? tr.cost + 1 : 0;
   const money = play?.cost ?? 0;
   const out: Card = {
-    def, play, district, target, blocked: null, roll, chance, parts, base, exact, range, pay, weekly, crate: play?.crate ?? null,
+    def, play, district, target, blocked: null, roll, chance, parts, base, exact, range, pay, bring: [...bring], weekly, crate: play?.crate ?? null,
     heat, failHeat, regard: play?.regard ?? 0, dread: play?.dread ?? 0, cost, money, travel: tr, battle, police, level,
   };
   out.blocked = blockedWhy(b, run, out, bring);
@@ -348,11 +355,45 @@ function blockedWhy(b: DominionBlock, run: Pick<RunState, 'party'>, c: Card, bri
   if (play.needs && !b.keyItems.includes(play.needs)) return fill(Ln.needs!, { item: play.needs });
   if (play.needsPolice && !(bandAt(wanted(f), 'noticed') || c.district.police || f.patrol === c.district.id)) return Ln.noPolice!;
   if (play.effect === 'fine' && !hottest(f)) return Ln.noFine!;
+  for (const gate of GATES) {
+    const why = gate(b, def);
+    if (why) return why;
+  }
   if (c.money && b.funds < c.money) return fill(Ln.noMoney!, { cost: c.money });
   if (play.effect === 'spar' && !b.members.some((m) => m.team.some((x) => x.hp > 0))) return Ln.noMember!;
   if (c.battle?.on === 'always' && !canBattle(run)) return Ln.noTeam!;
   if (bring.length > F().odds.maxBrought) return 'Bring two at most.';
+  // D4: "Rank N crew" actions need a member in that band of the pyramid; the Ceremony needs a promotion, Mentor a pupil.
+  if (play.band && !hasBand(b, play.band)) return fill(Ln.band!, { band: DOMINION_DATA.pyramid.bands[play.band - 1]!.name, n: play.band });
+  if (play.effect === 'ceremony' && !b.reserve?.promoted.some((p) => p.day === b.day)) return DOMINION_DATA.pyramid.lines.noCeremony!;
+  if (play.effect === 'mentor' && !bring.length) return DOMINION_DATA.pyramid.lines.noPupil!;
   return null;
+}
+
+/** D6: later rules that can close an action (Notoriety, a press contact), checked after the Card's own reasons. */
+type Gate = (b: DominionBlock, def: ActionDef) => string | null;
+const GATES: Gate[] = [];
+export function addActionGate(g: Gate): void {
+  GATES.push(g);
+}
+
+/** D9: what a later slice's effect does when the action works (rivals.ts: hits on the rival team, spying, truce talks). */
+export interface ActFx { action: string; district: string; target: string | null; big: boolean }
+type ActEffect = (b: DominionBlock, x: ActFx) => string[];
+const ACT_EFFECTS: Partial<Record<string, ActEffect>> = {};
+export function addActEffect(effect: string, f: ActEffect): void {
+  ACT_EFFECTS[effect] = f;
+}
+/** D9: a fight that isn't an action's (a rival Boss at the door, a challenge answered) is settled by its owner. */
+type Settler = (content: Content | null, b: DominionBlock, run: RunState, fight: FieldFight, outcome: 'win' | 'lose' | 'fled') => string[];
+const SETTLERS: Partial<Record<FieldFight['why'], Settler>> = {};
+export function addFightSettler(why: FieldFight['why'], f: Settler): void {
+  SETTLERS[why] = f;
+}
+/** D9: the rival foe on the Card (rivals.ts). */
+let RIVAL_FOE: ((b: DominionBlock, run: Pick<RunState, 'party'>) => Foe) | null = null;
+export function setRivalFoe(f: (b: DominionBlock, run: Pick<RunState, 'party'>) => Foe): void {
+  RIVAL_FOE = f;
 }
 
 // ---------- doing it ----------
@@ -364,7 +405,7 @@ export interface ActOut {
   /** A battle is waiting (block.field.fight): the session starts it. */
   fight: boolean;
   /** Thieve's big success: a Pokémon in a lifted Ball (the session makes it; core/run.ts isn't reachable from here). */
-  mon: { species: string; level: number } | null;
+  mon: { species: string; level: number; trust?: number } | null;
 }
 
 const rngFor = (seed: string, f: Field): Rng => {
@@ -494,8 +535,43 @@ function succeed(content: Content | null, b: DominionBlock, run: RunState, x: Ct
       if (m) m.morale = Math.min(100, m.morale + 5);
       break;
     }
-    default:
+    // D4 (Part 9 A19, the Rank Pyramid)
+    case 'rescue': {
+      const region = DOMINION_DATA.start.start.region.toLowerCase();
+      const pool = (DOMINION_DATA.crew.pools[region] ?? DOMINION_DATA.crew.pools.kanto!).catch;
+      const species = pool[rng.int(0, pool.length - 1)]!;
+      const level = Math.max(2, Math.min(b.levelCap, teamLevel(run) - 3 + (play.alpha ?? 0)));
+      const trust = play.trust ?? DOMINION_DATA.pyramid.trust.start.rescued;
+      mon = { species, level, trust };
+      lines[lines.length - 1] = fill(play.alpha ? DOMINION_DATA.pyramid.lines.tamed! : DOMINION_DATA.pyramid.lines.rescued!, { mon: monName(species), n: trust });
       break;
+    }
+    case 'evolve':
+      if (content) lines[lines.length - 1] = evolveOne(content, run, b);
+      break;
+    case 'ceremony': {
+      const pl = DOMINION_DATA.pyramid.lines;
+      const who = b.members.find((m) => b.reserve?.promoted.some((p) => p.day === b.day && p.member === m.id));
+      if (!who) break;
+      addMorale(who, 10);
+      for (const m of b.members) addLoyalty(b, m, 2);
+      lines[lines.length - 1] = fill(pl.ceremony!, { name: who.name, morale: 10, loyalty: 2 });
+      break;
+    }
+    case 'mentor': {
+      const pupils = c.bring.map((id) => b.members.find((m) => m.id === id)).filter((m): m is NonNullable<typeof m> => !!m);
+      const xp = play.xp ?? 1;
+      const more: string[] = [];
+      for (const m of pupils) addXp(m, xp, more);
+      lines[lines.length - 1] = fill(DOMINION_DATA.pyramid.lines.mentor!, { names: pupils.map((m) => m.name).join(' and '), n: xp });
+      lines.push(...more);
+      break;
+    }
+    default: {
+      const fx = play.effect ? ACT_EFFECTS[play.effect] : undefined;
+      if (fx) lines.push(...fx(b, { action: def.id, district: district.id, target: target?.id ?? null, big: x.big }));
+      break;
+    }
   }
   return { lines, mon };
 }
@@ -601,6 +677,12 @@ export function settle(content: Content | null, b: DominionBlock, run: RunState,
   const district = districtDef(fight.district) ?? districtDef(F().hq)!;
   const won = outcome === 'win';
   const lines: string[] = [];
+  const own = SETTLERS[fight.why];
+  if (own) {
+    lines.push(...own(content, b, run, fight, outcome));
+    syncHeat(b);
+    return lines;
+  }
   if (fight.why === 'looker') {
     const t = targetDef(fight.racket);
     if (won) {
