@@ -395,15 +395,16 @@ export function moleCandidate(b: DominionBlock): Member | null {
   return ok.sort((p, q) => q.stats.charm + q.stats.stealth - (p.stats.charm + p.stats.stealth) || p.id.localeCompare(q.id))[0] ?? null;
 }
 addActionGate((b, def) => (def.id === 'plant-a-mole' && !moleCandidate(b) ? SP().lines.noMole! : null));
-addActEffect('plantMole', (b, x) => {
+/** The action's effect: the candidate goes inside the region's rival team; a big success reads this week's plan at once. */
+export function plantMole(b: DominionBlock, big: boolean): string[] {
   const m = moleCandidate(b);
   const team = firstTeam();
   if (!m) return [];
   withRivals(b).rivals.mySpies.push({ member: m.id, team, day: b.day });
-  // A big success puts them close to the top at once: this week's plan is read tonight.
-  if (x.big) learnPlan(b, team);
-  return [fill(SP().lines.planted!, { name: m.name, team: teamName(team) }) + (x.big ? ` ${SP().lines.plantedBig!}` : '')];
-});
+  if (big) learnPlan(b, team);
+  return [fill(SP().lines.planted!, { name: m.name, team: teamName(team) }) + (big ? ` ${SP().lines.plantedBig!}` : '')];
+}
+addActEffect('plantMole', (b, x) => plantMole(b, x.big));
 
 // Third in the World Turn order, after the rival team's own step (this module imports rivals.ts, so it registers after).
 addWorldStep('rivals', spyStep);

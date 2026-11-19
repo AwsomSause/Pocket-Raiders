@@ -90,7 +90,7 @@ export type District = z.infer<typeof DistrictSchema>;
 export const BATTLE_FOES = ['target', 'police', 'wild', 'ghost', 'member', 'rival'] as const;
 export const EFFECTS = ['scout', 'count', 'scoutDistrict', 'paper', 'catch', 'laylow', 'disguise', 'fine', 'exp', 'spar', 'train', 'plan', 'pamper', 'hide', 'launder',
   // D9 (rivals.ts addActEffect)
-  'rivalHit', 'rivalSpy', 'counterSpy', 'truceTalk', 'war', 'poach', 'court'] as const;
+  'rivalHit', 'rivalSpy', 'counterSpy', 'truceTalk', 'war', 'poach', 'court', 'plantMole'] as const;
 const PlaySchema = z.object({
   kinds: z.array(z.union([z.enum(TARGET_KINDS), z.literal('any')])).min(1).optional(),
   chance: I.min(0).max(100).optional(),
