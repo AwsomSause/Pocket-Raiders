@@ -10,6 +10,7 @@ import { topModel, type TopModel } from './screens';
 import { topTalk } from './talk';
 import { cantConfront, isDouble, suspicion } from './spies';
 import { cardFor, cardLine, lineKind, sheet, traitWords } from './personality';
+import { usable } from './reserve';
 import { rivalBadge, rivalTag } from './rivalScreens';
 
 const C = () => DOMINION_DATA.crew;
@@ -123,7 +124,7 @@ export interface FileModel {
   loyalty: number; morale: number; fatigue: number; pHeat: number; motive: string; ambitionKnown: boolean;
   green: string; formed: { name: string; text: string; live: boolean; needs: string | null }[]; grew: boolean; record: string; temperament: string;
   second: string; signature: string;
-  types: string; team: { species: string; level: number }[];
+  types: string; team: { species: string; level: number; dim: boolean }[];
   then: { day: number; line: string }; now: { day: number; line: string };
   task: string; taskLevel: string; out: string | null; xp: string; points: number;
   keys: { key: string; label: string }[];
@@ -151,7 +152,7 @@ export function fileModel(block: DominionBlock, sel: number): FileModel {
   const greenLines = C().lines[c.green] ?? [];
   const card = topTalk(b);
   const t = taskById(c.task);
-  const keys = [{ key: 'C', label: 'Card' }, { key: 'G', label: 'Gift' }, { key: 'H', label: 'Hire' }, { key: 'R', label: `Leads (${b.crew!.leads.length})` }];
+  const keys = [{ key: 'C', label: 'Card' }, { key: 'G', label: 'Gift' }, { key: 'H', label: 'Hire' }, { key: 'R', label: `Leads (${b.crew!.leads.length})` }, { key: 'P', label: 'Pyramid' }];
   if (b.phase === 'evening') keys.unshift({ key: 'T', label: 'Talk' });
   if (c.out?.why === 'jail') keys.unshift({ key: 'B', label: `Bail ₽${C().rules.bail}` });
   // D22: F confronts a suspected member (spies.ts).
@@ -176,7 +177,8 @@ export function fileModel(block: DominionBlock, sel: number): FileModel {
     second: c.formed[1] ? '' : `2nd trait, at ${sergeant.word[0]}${sergeant.word.slice(1).toLowerCase()}`,
     signature: `Executive signature at Lv ${exec.level}: ${sig.name}?`,
     types: b.types.map((x) => x[0]!.toUpperCase() + x.slice(1)).join(' · '),
-    team: m.team.map((x) => ({ species: x.speciesId, level: x.level })),
+    // D4: a Pokémon over the member's caps stays but sits out, shown dimmed (Part 7 §4.3).
+    team: m.team.map((x) => ({ species: x.speciesId, level: x.level, dim: !usable(b, m, x) })),
     then: { day: m.joinedDay, line: greenLines[0] ?? memberLine(m, m.joinedDay) },
     now: { day: b.day, line: memberLine(m, b.day) },
     task: label(c.task), taskLevel: t ? `${taskLevelWord(taskLevel(m, t.id))} (task Lv ${taskLevel(m, t.id)})` : '',
