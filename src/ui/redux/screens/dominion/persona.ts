@@ -50,7 +50,7 @@ export function personaView(p: PersonaModel, monFile: (species: string) => strin
   <div class="layer" style="background:radial-gradient(520px 360px at 330px 290px,rgba(255,214,140,.22),transparent 70%)"></div>
   <div class="pool flick" style="left:120px;top:120px;width:460px;height:380px;z-index:6;--pc:rgba(255,220,150,.22)"></div>
   <div class="ttl" style="--t1:#5b34b0;--t2:#a678ff">Crew File <span class="sub">· ${esc(p.name)}</span></div>
-  <div class="keys"><span class="key"${act('flip', -1)}>Q</span><span class="key"${act('flip', 1)}>E</span><span>Next member</span><span class="key"${act('persona')} style="margin-left:8px">Esc</span><span>File</span></div>
+  <div class="keys"><span class="key"${act('flip', -1)}>◀</span><span class="key"${act('flip', 1)}>▶</span><span>Next member</span><span class="key"${act('persona')} style="margin-left:8px">Esc</span><span>File</span></div>
 
   <div class="a" style="left:28px;top:76px;width:600px;height:448px;z-index:3;border-radius:6px 16px 8px 8px;background:linear-gradient(180deg,var(--manila),#d9c18a);box-shadow:0 0 0 3px #3a2a10,0 18px 34px rgba(0,0,0,.55)"></div>
   <div class="a" style="left:40px;top:58px;width:180px;height:30px;z-index:4;border-radius:10px 10px 0 0;background:var(--manila);box-shadow:0 0 0 3px #3a2a10;font:700 14px var(--ui);letter-spacing:.14em;color:#5a4420;padding:6px 14px">PERSONNEL · ${esc(p.file)}</div>

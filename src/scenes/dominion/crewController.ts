@@ -170,10 +170,8 @@ export class CrewController {
     const m = b.members[this.sel];
     if (!m) return false;
     if (code === 'KeyC') return this.togglePersona(), true;
-    if (this.persona) {
-      if (code === 'KeyQ' || code === 'KeyE') return this.flip(code === 'KeyQ' ? -1 : 1), true;
-      return false;
-    }
+    // On the card page the arrow keys flip members (key()); no letters (Q is the round-4 command wheel).
+    if (this.persona) return false;
     const go = (a: DominionAction): boolean => (this.host.step(a), true);
     switch (code) {
       case 'KeyT':

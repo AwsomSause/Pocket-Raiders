@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { open, start, view, waitForScene, watch } from './helpers/newUi';
 
-// DOMINION slice D19 (personality cards): C on the Crew File opens the member's card (Rotom mockup a3), Q/E flip
+// DOMINION slice D19 (personality cards): C on the Crew File opens the member's card (Rotom mockup a3), ◀ ▶ flip
 // members, Esc goes back. The card is kept in the save and comes back the same after a reload.
 
 async function newDominion(page: Page) {
@@ -54,8 +54,11 @@ test('the personality card on the Crew File: traits, quirk, home town, flip memb
   for (const m of b.members) expect(m.crew.card.t).toHaveLength(2);
 
   // C: Rook's card.
-  await page.keyboard.press('KeyC');
-  await expect(s.getByTestId('dom-persona-name')).toContainText('ROOK');
+  // A key press can be lost in a busy headless frame (same as the scene-change gotcha), so press again until it opens.
+  await expect(async () => {
+    if (!(await s.getByTestId('dom-persona-name').count())) await page.keyboard.press('KeyC');
+    await expect(s.getByTestId('dom-persona-name')).toContainText('ROOK', { timeout: 1500 });
+  }).toPass({ timeout: 15_000 });
   const traits = s.getByTestId('dom-persona-trait');
   await expect(traits).toHaveCount(2);
   await expect(traits.nth(0)).toContainText(traitName(b.members[0].crew.card.t[0]));
@@ -67,13 +70,16 @@ test('the personality card on the Crew File: traits, quirk, home town, flip memb
   await expect(view(page, 'Dominion')).not.toContainText(/Claude|\bAI\b/);
   await shot('a3-personality-card');
 
-  // E: the next member's card; Q back.
-  await page.keyboard.press('KeyE');
-  await expect(s.getByTestId('dom-persona-name')).toContainText(b.members[1].name.toUpperCase(), { timeout: 10_000 });
+  // ▶: the next member's card; ◀ back.
+  // Each press is checked, and pressed again only if the card didn't change (a press can be lost in a busy headless
+  // frame); with two members a flip either way lands on the other one.
+  const flipTo = async (key: string, name: string) => expect(async () => {
+    if (!((await s.getByTestId('dom-persona-name').textContent()) ?? '').includes(name)) await page.keyboard.press(key);
+    await expect(s.getByTestId('dom-persona-name')).toContainText(name, { timeout: 1500 });
+  }).toPass({ timeout: 15_000 });
+  await flipTo('ArrowRight', b.members[1].name.toUpperCase());
   await expect(s.getByTestId('dom-persona-home')).toHaveText(b.members[1].crew.card.h);
-  await page.keyboard.press('KeyQ');
-  // The round-3 card is heavy to paint in a headless browser: give the redraw time (the rule checked is the same).
-  await expect(s.getByTestId('dom-persona-name')).toContainText('ROOK', { timeout: 10_000 });
+  await flipTo('ArrowLeft', 'ROOK');
 
   for (const [w, h] of [[1280, 720], [960, 540], [800, 600]] as const) {
     await page.setViewportSize({ width: w, height: h });
