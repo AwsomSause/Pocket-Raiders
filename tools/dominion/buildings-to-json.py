@@ -71,18 +71,33 @@ FX = {
     'perimeter-wall': dict(raidDef=1), 'alarm-network': dict(raidDef=1), 'decoy-room': dict(raidDef=1), 'pitfall-corridor': dict(raidDef=1),
     'reinforced-doors': dict(raidDef=1), 'guard-duty-hall': dict(raidDef=1), 'honor-guard-hall': dict(raidDef=1),
     'watchtower': dict(warn=1), 'fire-suppression': dict(fireCut=50), 'ballroom': dict(truceOff=10), 'embassy-wing': dict(truceOff=10),
+    # D4b (school.ts, pyramid.ts): seats are extra seats in a rank (+1 at T1, +1 more every 3 tiers); promoTrait a trait
+    # forms on promotion; spar bouts a week; sneak Stealth tenths a week; rankLv member levels off ranks up to Sergeant;
+    # examStat stat points on promotion; cure bad traits a week; retirees places; trustCure anxious Pokémon a week;
+    # gruntSkill stat points a week; taskXp task XP a day; vets / pairs lessons a week; reveal traits a week; dojo
+    # type -> level x XP a week (all eight Type Dojos share the rule).
+    'admin-quarters': dict(seats={'admin': 1}), 'sergeants-post': dict(seats={'sergeant': 1}),
+    'lieutenants-office': dict(seats={'lieutenant': 1}), 'captains-hall': dict(seats={'captain': 1}),
+    'classroom': dict(promoTrait=1), 'sparring-ring': dict(spar=1), 'stealth-school': dict(sneak=4), 'officer-academy': dict(rankLv=2),
+    'therapy-room': dict(cure=1), 'retiree-hall': dict(retirees=1), 'comfort-ward': dict(trustCure=1), 'grunt-academy': dict(gruntSkill=1),
+    'skill-booth': dict(taskXp=1), 'veterans-corner': dict(vets=1), 'skill-exam-hall': dict(examStat=1), 'personality-lab': dict(reveal=1),
+    'mentoring-office': dict(pairs=1),
+    'type-dojo-fire': dict(dojo={'fire': 4}), 'type-dojo-water': dict(dojo={'water': 4}), 'type-dojo-grass': dict(dojo={'grass': 4}),
+    'type-dojo-electric': dict(dojo={'electric': 4}), 'type-dojo-psychic-and-dark': dict(dojo={'psychic': 4, 'dark': 4}),
+    'type-dojo-fighting-and-rock': dict(dojo={'fighting': 4, 'rock': 4}), 'type-dojo-ghost-and-poison': dict(dojo={'ghost': 4, 'poison': 4}),
+    'type-dojo-steel-and-dragon': dict(dojo={'steel': 4, 'dragon': 4}),
 }
 # D9 rows the rival rules don't reach yet: the slice that does (the keyword guess said D9).
 WAIT_OVERRIDE = {
     'quarantine-ward': 'later', 'contraband-cellar': 'D10', 'interrogation-cell': 'D10', 'ledger-office': 'D6', 'investment-office': 'D10',
     'machine-shop': 'later', 'test-chamber': 'later', 'panic-room': 'D14', 'escape-tunnel': 'D14', 'battle-arena': 'D10', 'hidden-lab': 'D10',
-    'pokemon-nap-house': 'later', 'type-dojo-fire': 'D4', 'cave-habitat': 'later', 'strike-breakers-office': 'later', 'drivers-pool': 'D10',
+    'pokemon-nap-house': 'later', 'cave-habitat': 'later', 'strike-breakers-office': 'later', 'drivers-pool': 'D10',
     'assassins-guild': 'later', 'security-firm': 'D10',
 }
 # Effects that only part works now (the rest waits): shown on the room card.
 NOTE = {
     'barracks': None,
-    'dojo': 'Stat classes come with ranks (D4).',
+    'dojo': 'Stat classes come with ranks (later).',
     'treasury': None, 'kennel': None, 'trap-hall': None,
     'operations-room': 'Raid itself is D10.', 'front-office': 'Buy Out and Bribe are D10.',
     'radio-room': 'Spread the Word is D10.', 'workshop': 'Gadgets are D10.',
@@ -91,8 +106,8 @@ NOTE = {
     'honor-guard-hall': 'Guards the HQ in raids; the Boss\'s own escort waits for D14.', 'ballroom': 'Hosting a Boss in person waits for D13; tribute is cheaper now.',
     'embassy-wing': 'Envoys come as Rival File cards; tribute is cheaper now.', 'watchtower': None, 'security-room': None,
     'garage': 'Smuggle is D10.', 'print-shop': 'Flyers are D10.', 'research-lab': 'Hit a Lab and breeding are D10.',
-    'holding-pens': 'Cooling off stolen Pokémon comes with the Reserve (D4).', 'outpost': 'Its own 2 room slots come with many regions (D15).',
-    'safehouse': None, 'luxury-suite': 'Debate +10% is D13; Executives\' Morale waits for ranks (D4).',
+    'holding-pens': None, 'outpost': 'Its own 2 room slots come with many regions (D15).',
+    'safehouse': None, 'luxury-suite': 'Debate +10% is D13; Executives\' Morale comes later.',
     'recruitment-center': 'The weekly walk-in is D6.', 'executive-office': 'Admins\' Hold +20% is D15.',
     'night-market-stall': 'The list gives no T1 number; ₽80 a day matches the Grunt Café.', 'berry-garden': 'One berry kind until the Cold Cellar (later).', 'card-den': 'The cheat chance comes with the Ledger (D6).', 'infirmary': 'Free healing: Rest already heals the team.',
 }

@@ -321,7 +321,8 @@ export function card(b: DominionBlock, run: Pick<RunState, 'party'>, actionId: s
   police = Math.min(100, police);
 
   const cost = def.slot === 'day' ? tr.cost + 1 : 0;
-  const money = play?.cost ?? 0;
+  // D4b: an action that gets cheaper with mastery (Move Tutor) takes `cheaper`% off from the second level.
+  const money = Math.round(((play?.cost ?? 0) * (100 - (level >= 2 ? play?.cheaper ?? 0 : 0))) / 100);
   const out: Card = {
     def, play, district, target, blocked: null, roll, chance, parts, base, exact, range, pay, bring: [...bring], weekly, crate: play?.crate ?? null,
     heat, failHeat, regard: play?.regard ?? 0, dread: play?.dread ?? 0, cost, money, travel: tr, battle, police, level,
@@ -381,6 +382,13 @@ export function addActionGate(g: Gate): void {
 export interface ActFx { action: string; district: string; target: string | null; big: boolean }
 type ActEffect = (b: DominionBlock, x: ActFx) => string[];
 const ACT_EFFECTS: Partial<Record<string, ActEffect>> = {};
+/** D4b: an effect that needs the content, the run and the action's mastery level (school.ts: Egg Run, Breed, Move Tutor). */
+export interface PlayFx { content: Content; b: DominionBlock; run: RunState; level: number; rng: Rng }
+type PlayEffect = (x: PlayFx) => string[];
+const PLAY_EFFECTS: Partial<Record<string, PlayEffect>> = {};
+export function addPlayEffect(effect: string, f: PlayEffect): void {
+  PLAY_EFFECTS[effect] = f;
+}
 export function addActEffect(effect: string, f: ActEffect): void {
   ACT_EFFECTS[effect] = f;
 }
@@ -570,6 +578,9 @@ function succeed(content: Content | null, b: DominionBlock, run: RunState, x: Ct
     default: {
       const fx = play.effect ? ACT_EFFECTS[play.effect] : undefined;
       if (fx) lines.push(...fx(b, { action: def.id, district: district.id, target: target?.id ?? null, big: x.big }));
+      const pfx = play.effect ? PLAY_EFFECTS[play.effect] : undefined;
+      // The line the effect writes replaces the win line (as Evolve in Peace's does).
+      if (pfx && content) lines.splice(lines.length - 1, 1, ...pfx({ content, b, run, level: masteryLevel(f.mastery[def.id] ?? 0), rng }));
       break;
     }
   }
