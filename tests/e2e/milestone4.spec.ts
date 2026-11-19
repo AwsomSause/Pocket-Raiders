@@ -123,7 +123,11 @@ test('beating the last champion shows the victory screen', async ({ page }) => {
       mon.moves[Math.max(0, index)].pp = 35; // the league has many Pokémon; the move must not run dry
       session.takeTurn({ kind: 'move', index: Math.max(0, index) });
     }
-    while (session.run.phase === 'decision') session.resolveDecision({ kind: 'skipMove' });
+    // A level-up can leave a pending evolution (it waits for an answer now): decline it; other decisions are move prompts.
+    let decisions = 0;
+    while (session.run.phase === 'decision' && decisions++ < 100) {
+      session.resolveDecision(session.run.pending[0]?.kind === 'evolve' ? { kind: 'evolve', accept: false } : { kind: 'skipMove' });
+    }
     (window as any).__pkr.game.scene.getScene('Map').scene.start('GameOver');
   });
   // NE100 The Road Home plays first (after the final battle, win or lose); answering it goes on to the results.
