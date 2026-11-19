@@ -19,11 +19,12 @@ import { hqView, openingView, setupView, titleView, type SetupFiles } from '../u
 import { CrewController } from './dominion/crewController';
 import { HqController } from './dominion/hqController';
 import { RivalController } from './dominion/rivalController';
+import { DebateController } from './dominion/debateController';
 import { threatRow } from '../core/dominion/rivalScreens';
 import { cardModel, gridPages, mapModel, newCursor, pageFor, type MapCursor } from '../core/dominion/fieldScreens';
 import { cardView, mapView } from '../ui/redux/screens/dominion/fieldViews';
 
-type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'base' | 'rival';
+type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'base' | 'rival' | 'debate';
 
 /** The screen to come back to after a battle (D2: the map the action was picked on, or the HQ for a fight at the door). */
 let resume: Screen | null = null;
@@ -53,6 +54,8 @@ export class DominionScene extends Phaser.Scene {
   private hq = new HqController(this);
   /** D9: the Rival File (key R). */
   private rival = new RivalController(this);
+  /** D13: the Debate (mockup 8). */
+  private debate = new DebateController(this);
 
   constructor() {
     super('Dominion');
@@ -68,6 +71,7 @@ export class DominionScene extends Phaser.Scene {
     this.crew = new CrewController(this);
     this.hq = new HqController(this);
     this.rival = new RivalController(this);
+    this.debate = new DebateController(this);
     const { session } = services();
     const run = session.run;
     if (!run) return void this.scene.start('MainMenu');
@@ -118,10 +122,11 @@ export class DominionScene extends Phaser.Scene {
         back: () => this.back(),
         bring: () => this.bring(),
         buy: (id) => this.buy(id),
-        dismiss: () => { this.notice = null; this.rival.dismiss(); this.view?.refresh(); },
+        dismiss: () => { this.notice = null; this.rival.dismiss(); this.debate.dismiss(); this.view?.refresh(); },
         ...this.crew.acts(),
         ...this.hq.acts(),
         ...this.rival.acts(),
+        ...this.debate.acts(),
         base: () => { this.hq.open(); this.view?.refresh(); },
       },
       overs: {
@@ -134,6 +139,7 @@ export class DominionScene extends Phaser.Scene {
     const kb = this.input.keyboard;
     const raw = (e: KeyboardEvent): void => {
       if (this.leaving) return;
+      if (this.debate.raw(e.code)) return;
       if (this.screen === 'map') {
         if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
         else if (e.code === 'KeyT') this.nextTarget();
@@ -189,6 +195,8 @@ export class DominionScene extends Phaser.Scene {
 
   private render(): string {
     const b = this.block();
+    // D13: a Debate on the table takes the screen (after the Debate action, a card answered, or a reload).
+    if (b?.debate?.live && (this.screen === 'hq' || this.screen === 'map' || this.screen === 'card' || this.screen === 'rival' || this.screen === 'crew' || this.screen === 'base')) this.debate.claim();
     switch (this.screen) {
       case 'title':
         return titleView({ at: this.titleAt, started: !!b, cont: b ? `${b.teamName ?? 'Unnamed Crew'} · Kanto · Day ${b.day}` : null });
@@ -214,12 +222,15 @@ export class DominionScene extends Phaser.Scene {
         return this.hq.render(this.notice);
       case 'rival':
         return this.rival.render();
+      case 'debate':
+        return this.debate.render();
     }
   }
 
   private key(a: InputAction): void {
     if (this.ate) return void (this.ate = false);
     if (this.leaving) return;
+    if (this.debate.key(a)) return void this.view?.refresh();
     if (this.rival.key(a)) return void this.view?.refresh();
     if (this.crew.key(a)) return void this.view?.refresh();
     if (this.hq.key(a)) return void this.view?.refresh();
@@ -327,6 +338,10 @@ export class DominionScene extends Phaser.Scene {
   }
   /** D9: an answer on the Rival File (saved). */
   rivalStep(action: DominionAction): { ok: boolean; fight: boolean; notice: string | null } {
+    return services().session.dominionStep(action);
+  }
+  /** D13: a turn at the Leader's Table (saved). */
+  debateStep(action: DominionAction): { ok: boolean; notice: string | null } {
     return services().session.dominionStep(action);
   }
   /** D9: a challenge answered with Fight starts at once; the Rival File's HQ is where it comes back to. */

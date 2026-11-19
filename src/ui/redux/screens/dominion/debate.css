@@ -1,0 +1,14 @@
+/* DOMINION slice D13, the Debate (mockup 8): the round-4 Nova livery rules the screen uses that dominion.css (the D1 port)
+   doesn't have yet: the Nova sigil (.sig4) and the crimson underlight with its siren seam (.vl4). Copied from
+   plans/evil-mode-rework/mockups-v4/index.html, scoped under #rx .dom, keyframes prefixed dm- and timed on the view clock.
+   D26 re-ports the whole v4 CSS; then these rules can go. */
+#rx .dom .vl4{position:absolute;inset:0;z-index:37;pointer-events:none;background:radial-gradient(120% 60% at 50% 115%,rgba(194,24,58,.30),transparent 60%),radial-gradient(60% 40% at 0 0,rgba(90,20,120,.22),transparent 70%)}
+#rx .dom .vl4::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,transparent,#ff4d63 20%,transparent 40%,#a678ff 60%,transparent 80%) 0 0/200% 100%;opacity:.8;filter:drop-shadow(0 0 6px #ff4d63)}
+#rx .dom .sig4{position:absolute;z-index:1;pointer-events:none;width:420px;height:462px;right:-70px;top:60px;opacity:.14;mix-blend-mode:screen;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'%3E%3Cg fill='none' stroke='%23ff4d63' stroke-width='5'%3E%3Cpath d='M100 6 192 52v116l-92 46-92-46V52z'/%3E%3Cpath d='M100 26 174 63v94l-74 37-74-37V63z' stroke-width='2' stroke-opacity='.6'/%3E%3C/g%3E%3Cpath d='M30 110Q100 40 170 110Q100 180 30 110z' fill='none' stroke='%23ff4d63' stroke-width='5'/%3E%3Cellipse cx='100' cy='110' rx='26' ry='26' fill='%23ff4d63' fill-opacity='.5'/%3E%3Cellipse cx='100' cy='110' rx='7' ry='24' fill='%23ff4d63'/%3E%3C/svg%3E") center/contain no-repeat}
+#rx .dom .sig4.l{right:auto;left:-80px}
+@media (prefers-reduced-motion:no-preference){
+#rx .dom .vl4::before{animation:dm-siren4 4.5s var(--now,0s) linear infinite}
+#rx .dom .sig4{animation:dm-sig4 40s var(--now,0s) ease-in-out infinite alternate}
+@keyframes dm-siren4{to{background-position:-200% 0}}
+@keyframes dm-sig4{from{transform:rotate(-4deg) scale(1)}to{transform:rotate(4deg) scale(1.06)}}
+}

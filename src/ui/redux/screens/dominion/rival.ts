@@ -43,7 +43,7 @@ export function rivalFileView(m: RivalFileModel): string {
     <div class="hd y"><img class="ic" src="${img('g-journal')}" alt="">THIS WEEK</div>
     <div class="xs mu">Their plan</div>
     <div class="sm" style="margin-bottom:8px;${m.seen ? 'color:#ffe28a;font-weight:700' : ''}" data-testid="dom-rival-plan">${esc(m.plan)}</div>
-    <div class="col" style="gap:6px;margin-bottom:8px">${m.raid ? threat('r', `TENSION ${m.tension}`, m.raid, 'dom-rival-raid') : ''}${m.truce ? threat('g', 'TRUCE', m.truce, 'dom-rival-truce') : ''}</div>
+    <div class="col" style="gap:6px;margin-bottom:8px">${m.raid ? threat('r', `TENSION ${m.tension}`, m.raid, 'dom-rival-raid') : ''}${m.truce ? threat('g', 'TRUCE', m.truce, 'dom-rival-truce') : ''}${m.deal ? threat('g', 'BRANCH', m.deal, 'dom-rival-deal') : ''}</div>
     <div class="xs" style="margin-bottom:8px;line-height:1.3">${esc(m.spies)}</div>
     <div class="xs mu">Their sites</div>
     <div class="col" style="gap:3px">${sites}</div>
