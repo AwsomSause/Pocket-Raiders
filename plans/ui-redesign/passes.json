@@ -109,5 +109,23 @@
   "q3": "Yes, seven. One picker, four scenes, one page for the powered-up battle and a new Animations settings page.",
   "q4": "The pause menu and the Party page show which powers are ready, used or locked. Settings gets an Animations page where the scenes can be set to Full, Short or Off.",
   "q5": "Yes. These are the four big Pokémon battle gimmicks, shown the way the main games show them, with the game's own sprites and effects."
+ },
+ "8": {
+  "name": "Victory Lap",
+  "big": "Winning now feels like winning. The dark battle bar grows to fill the screen and walks you through seven clear steps: the win, team EXP, level up, a new move, evolution, a catch and a reward pick.",
+  "pages": [
+   "Victory",
+   "Team EXP",
+   "Level Up",
+   "New Move",
+   "Evolution",
+   "Catch",
+   "Pick a Reward"
+  ],
+  "q1": "A giant Victory banner with rays and an MVP badge, EXP bars that fill on six cards at once, a gold level stamp, and reward cards that deal in like a hand of cards.",
+  "q2": "Before this pass a battle simply ended. Now EXP runs along the edge of the battle bar the whole time, the prize is shown during the fight, and every reward has its own screen.",
+  "q3": "Yes, seven new pages. One job per page, so the level-up numbers, the move swap and the reward choice never fight for space.",
+  "q4": "The pause menu shows the run score, stars and win streak. Header pills gain coin, badge and ball icons. The Animations settings from pass 7 also control these scenes.",
+  "q5": "Yes. EXP bars, level-up stat lists, 'wants to learn a move', evolution with B to stop, and 'Gotcha!' are the heart of every Pokémon game."
  }
 }
