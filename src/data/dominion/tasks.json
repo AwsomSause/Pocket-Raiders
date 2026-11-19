@@ -42,8 +42,7 @@
     "A rare one (never from a minor)"
    ],
    "risk": "Caught",
-   "status": "limited",
-   "note": "Goes to the stores; the Reserve screen is D4.",
+   "status": "supported",
    "effect": {
     "kind": "steal",
     "heat": 3,
@@ -198,8 +197,10 @@
     "Pokémon heal faster"
    ],
    "risk": "Pokémon released",
-   "status": "disabled",
-   "needs": "D4"
+   "status": "supported",
+   "effect": {
+    "kind": "pens"
+   }
   },
   {
    "n": 8,
@@ -1656,8 +1657,7 @@
     "the species you asked for"
    ],
    "risk": "Pokémon escapes",
-   "status": "limited",
-   "note": "Catches go to the stores; the Reserve screen and hand assignment are D4.",
+   "status": "supported",
    "effect": {
     "kind": "catch"
    }
@@ -1680,7 +1680,7 @@
    ],
    "risk": "Gets lost",
    "status": "disabled",
-   "needs": "D4"
+   "needs": "D5"
   },
   {
    "n": 75,
@@ -1699,8 +1699,10 @@
     "friendship +1 each day"
    ],
    "risk": "Bite",
-   "status": "disabled",
-   "needs": "D4"
+   "status": "supported",
+   "effect": {
+    "kind": "tend"
+   }
   },
   {
    "n": 76,
@@ -1720,7 +1722,7 @@
    ],
    "risk": "Egg breaks",
    "status": "disabled",
-   "needs": "D4"
+   "needs": "D5"
   },
   {
    "n": 77,
@@ -1740,7 +1742,7 @@
    ],
    "risk": "Poor care",
    "status": "disabled",
-   "needs": "D4"
+   "needs": "D5"
   },
   {
    "n": 78,
@@ -1760,7 +1762,7 @@
    ],
    "risk": "Aggression",
    "status": "disabled",
-   "needs": "D4"
+   "needs": "D5"
   },
   {
    "n": 79,
@@ -1779,8 +1781,10 @@
     "trade for a TM"
    ],
    "risk": "Regrets",
-   "status": "disabled",
-   "needs": "D4"
+   "status": "supported",
+   "effect": {
+    "kind": "release"
+   }
   },
   {
    "n": 80,
@@ -1799,8 +1803,10 @@
     "a rare form"
    ],
    "risk": "Dies",
-   "status": "disabled",
-   "needs": "D4"
+   "status": "supported",
+   "effect": {
+    "kind": "rehab"
+   }
   },
   {
    "n": 81,
@@ -1819,8 +1825,10 @@
     "berries bonus"
    ],
    "risk": "Food runs out",
-   "status": "disabled",
-   "needs": "D4"
+   "status": "supported",
+   "effect": {
+    "kind": "feed"
+   }
   },
   {
    "n": 82,

@@ -111,7 +111,7 @@ const TASK_WORDS = ['Green', 'Steady', 'Reliable', 'Veteran', 'Master'];
 export const taskLevelWord = (lv: number): string => TASK_WORDS[lv - 1] ?? 'Green';
 
 /** Adds member XP; returns the report lines for levels gained. */
-function addXp(m: Member, xp: number, lines: string[]): void {
+export function addXp(m: Member, xp: number, lines: string[]): void {
   const c = mc(m);
   c.xp += xp;
   while (m.level < R().maxLevel && c.xp >= xpToNext(m.level)) {
@@ -180,6 +180,7 @@ export function odds(b: DominionBlock, m: Member, task: Task): number {
   if (c.green === 'nervous' && !c.formed.length && !c.flags.includes('nervous-fading') && task.stat === 'nerve') p -= r.nervousPenalty;
   if (m.morale < r.lowMorale) p -= r.lowMoralePenalty;
   if (c.fatigue >= r.tiredAt) p -= r.tiredPenalty;
+  for (const h of ODDS_HOOKS) p += h(b, m, task);
   return clamp(p, r.oddsMin, r.oddsMax);
 }
 
@@ -305,7 +306,7 @@ function runTask(b: DominionBlock, m: Member, seed: string, n: Night): void {
         const pool = pools(b).steal;
         const species = pool[r.int(0, pool.length - 1)]!;
         const level = Math.min(b.levelCap, r.int(R().stealLevel[0], R().stealLevel[1]));
-        cs(b).pending.push({ k: 'mon', species, level });
+        cs(b).pending.push({ k: 'mon', species, level, by: m.id, src: 'stolen', self: b.reserve?.hunt[m.id] === 'self' });
         b.heat = clamp(b.heat + (e.heat ?? 0) + heatMod);
         c.pHeat = clamp(c.pHeat + (e.heat ?? 0));
         say(n, 'crew', fill(rep.steal!, { name: m.name, mon: monName(species), level }));
@@ -317,7 +318,7 @@ function runTask(b: DominionBlock, m: Member, seed: string, n: Night): void {
         const pool = pools(b).catch;
         const species = pool[r.int(0, pool.length - 1)]!;
         const level = Math.min(b.levelCap, r.int(R().catchLevel[0], R().catchLevel[1]) + (lv >= 2 ? 1 : 0) + (lv >= 4 ? 2 : 0));
-        cs(b).pending.push({ k: 'mon', species, level });
+        cs(b).pending.push({ k: 'mon', species, level, by: m.id, src: 'caught', self: b.reserve?.hunt[m.id] === 'self' });
         say(n, 'crew', fill(rep.catch!, { name: m.name, mon: monName(species), level }));
       } else say(n, 'crew', fill(rep.fail!, { name: m.name, task: label }));
       break;
@@ -444,9 +445,9 @@ function runTask(b: DominionBlock, m: Member, seed: string, n: Night): void {
       break;
     }
     default: {
-      // D9 and later: kinds another module runs (rivals.ts registers the rival tasks).
+      // D4 and later: kinds another module runs (reserve.ts the Pens and the Reserve, rivals.ts the rival tasks).
       const run = TASK_KINDS[e.kind];
-      if (run) run(b, m, ok, { say: (k, t) => say(n, k, t), label, task, stat, yieldPct, r });
+      if (run) run(b, m, ok, { say: (k, t) => say(n, k, t), label, task, stat, yieldPct, r, lv });
       else say(n, 'crew', fill(rep.fail!, { name: m.name, task: label }));
     }
   }
@@ -495,8 +496,8 @@ const pools = (b: DominionBlock) => {
   return C().pools[region] ?? C().pools.kanto!;
 };
 
-/** A task kind run by another module (D9's rival tasks). `ok` is the task's odds roll; `r` is the member's crew stream. */
-export interface TaskCtx { say: (kind: Alert['kind'], text: string) => void; label: string; task: Task; stat: number; yieldPct: number; r: Rng }
+/** A task kind run by another module (D4's Pens and Reserve tasks, D9's rival tasks). `ok` is the task's odds roll; `r` is the member's crew stream. */
+export interface TaskCtx { say: (kind: Alert['kind'], text: string) => void; label: string; task: Task; stat: number; yieldPct: number; r: Rng; lv: number }
 type TaskKind = (b: DominionBlock, m: Member, ok: boolean, ctx: TaskCtx) => void;
 const TASK_KINDS: Record<string, TaskKind> = {};
 export function addTaskKind(kind: string, f: TaskKind): void {
@@ -508,6 +509,12 @@ type LeadMaker = (b: DominionBlock, finder: Member, seed: string) => { name: str
 let LEAD_MAKER: LeadMaker | null = null;
 export function setLeadMaker(f: LeadMaker): void {
   LEAD_MAKER = f;
+}
+/** Odds changes owned by later slices (D4: Trust, an empty team). Added to the task's odds before the clamp. */
+type OddsHook = (b: DominionBlock, m: Member, task: Task) => number;
+const ODDS_HOOKS: OddsHook[] = [];
+export function addOddsHook(h: OddsHook): void {
+  ODDS_HOOKS.push(h);
 }
 type DayHook = (b: DominionBlock, seed: string, n: { lines: string[]; say: (kind: Alert['kind'], text: string) => void }) => void;
 const DAY_HOOKS: DayHook[] = [];

@@ -318,9 +318,12 @@ describe('DOMINION D5: going broke and loans (A22)', () => {
       for (let i = 0; i < 22; i++) b.crew!.stores.push(newMon(content, run, 'rattata', 3, 'p'));
       b.crew!.pending.push({ k: 'item', id: 'potion', n: 1 });
     });
+    // D4 merged: the stores move into the Reserve (Day 1 already put one Pokémon there), which holds the same 20.
+    const held = blk(r).reserve!.box.length;
     const out = settleCrew(content, r);
-    expect(blk(out).crew!.stores).toHaveLength(20);
-    expect(blk(out).report.at(-1)).toContain('2 Pokémon had to be let go');
+    expect(blk(out).crew!.stores).toHaveLength(0);
+    expect(blk(out).reserve!.box).toHaveLength(20);
+    expect(blk(out).report.join(' ')).toContain(`${22 + held - 20} Pokémon had to be let go`);
   });
 });
 

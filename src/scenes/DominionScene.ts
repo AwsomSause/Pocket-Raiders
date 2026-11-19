@@ -17,6 +17,7 @@ import { rxFileOf } from '../ui/redux/assets';
 import { mountRedux, type ReduxView } from '../ui/redux/stage';
 import { hqView, openingView, setupView, titleView, type SetupFiles } from '../ui/redux/screens/dominion/views';
 import { CrewController } from './dominion/crewController';
+import { ReserveController } from './dominion/reserveController';
 import { HqController } from './dominion/hqController';
 import { RivalController } from './dominion/rivalController';
 import { DebateController } from './dominion/debateController';
@@ -24,7 +25,7 @@ import { threatRow } from '../core/dominion/rivalScreens';
 import { cardModel, gridPages, mapModel, newCursor, pageFor, type MapCursor } from '../core/dominion/fieldScreens';
 import { cardView, mapView } from '../ui/redux/screens/dominion/fieldViews';
 
-type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'base' | 'rival' | 'debate';
+type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'debate';
 
 /** The screen to come back to after a battle (D2: the map the action was picked on, or the HQ for a fight at the door). */
 let resume: Screen | null = null;
@@ -50,6 +51,7 @@ export class DominionScene extends Phaser.Scene {
   private manifest: AssetManifest | undefined;
   /** D3: the Morning (mockup 2) and the Crew File (mockup 5). */
   private crew = new CrewController(this);
+  private res = new ReserveController(this);
   /** D5: the HQ menu (mockup 6). */
   private hq = new HqController(this);
   /** D9: the Rival File (key R). */
@@ -70,6 +72,7 @@ export class DominionScene extends Phaser.Scene {
     this.leaving = false;
     this.crew = new CrewController(this);
     this.hq = new HqController(this);
+    this.res = new ReserveController(this);
     this.rival = new RivalController(this);
     this.debate = new DebateController(this);
     const { session } = services();
@@ -124,6 +127,7 @@ export class DominionScene extends Phaser.Scene {
         buy: (id) => this.buy(id),
         dismiss: () => { this.notice = null; this.rival.dismiss(); this.debate.dismiss(); this.view?.refresh(); },
         ...this.crew.acts(),
+        ...this.res.acts(),
         ...this.hq.acts(),
         ...this.rival.acts(),
         ...this.debate.acts(),
@@ -133,6 +137,7 @@ export class DominionScene extends Phaser.Scene {
         typeOver: (i) => { this.setup = { ...this.setup, at: Number(i) }; this.view?.refresh(); },
         orderOver: (i) => { this.at = Number(i); this.view?.refresh(); },
         ...this.crew.overs(),
+        ...this.res.overs(),
         ...this.rival.overs(),
       },
     });
@@ -166,7 +171,12 @@ export class DominionScene extends Phaser.Scene {
         if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
         return;
       }
-      if (this.screen !== 'hq' && this.screen !== 'crew') return;
+      if (this.screen !== 'hq' && this.screen !== 'crew' && this.screen !== 'reserve' && this.screen !== 'pyramid') return;
+      // D4: the Reserve and the Pyramid read their letters first; a move letter they use (W, A, S, D, X) isn't also a move.
+      if (this.res.raw(e.code)) {
+        if (e.code === 'Tab') e.preventDefault();
+        return void (this.ate = MOVE_LETTERS.has(e.code));
+      }
       if (this.crew.raw(e.code)) return;
       // D9: R opens the Rival File from the HQ and the Morning (on the Crew File R is the leads list).
       if (this.screen === 'hq' && e.code === 'KeyR' && !this.block()?.crew?.talks.length) return void (this.rival.open() && this.view?.refresh());
@@ -200,7 +210,7 @@ export class DominionScene extends Phaser.Scene {
   private render(): string {
     const b = this.block();
     // D13: a Debate on the table takes the screen (after the Debate action, a card answered, or a reload).
-    if (b?.debate?.live && (this.screen === 'hq' || this.screen === 'map' || this.screen === 'card' || this.screen === 'rival' || this.screen === 'crew' || this.screen === 'base')) this.debate.claim();
+    if (b?.debate?.live && (this.screen === 'hq' || this.screen === 'map' || this.screen === 'card' || this.screen === 'rival' || this.screen === 'crew' || this.screen === 'reserve' || this.screen === 'pyramid' || this.screen === 'base')) this.debate.claim();
     switch (this.screen) {
       case 'title':
         return titleView({ at: this.titleAt, started: !!b, cont: b ? `${b.teamName ?? 'Unnamed Crew'} · Kanto · Day ${b.day}` : null });
@@ -222,6 +232,9 @@ export class DominionScene extends Phaser.Scene {
       }
       case 'crew':
         return this.crew.render(this.notice);
+      case 'reserve':
+      case 'pyramid':
+        return this.res.render(this.notice);
       case 'base':
         return this.hq.render(this.notice);
       case 'rival':
@@ -235,6 +248,7 @@ export class DominionScene extends Phaser.Scene {
     if (this.ate) return void (this.ate = false);
     if (this.leaving) return;
     if (this.debate.key(a)) return void this.view?.refresh();
+    if (this.res.key(a)) return void this.view?.refresh();
     if (this.rival.key(a)) return void this.view?.refresh();
     if (this.crew.key(a)) return void this.view?.refresh();
     if (this.hq.key(a)) return void this.view?.refresh();
@@ -367,13 +381,14 @@ export class DominionScene extends Phaser.Scene {
 
   private tab(i: number): void {
     if (this.screen === 'rival') this.screen = 'hq';
-    if (this.screen !== 'hq' && this.screen !== 'map' && this.screen !== 'crew' && this.screen !== 'base') return;
+    if (this.screen !== 'hq' && this.screen !== 'map' && this.screen !== 'crew' && this.screen !== 'reserve' && this.screen !== 'pyramid' && this.screen !== 'base') return;
     if (this.screen === 'base' && i === 0) {
       this.screen = 'hq';
       this.notice = null;
       return void this.view?.refresh();
     }
     if (this.screen === 'base' && i === 2) this.screen = 'hq';
+    if (this.res.tab(i)) return void this.view?.refresh();
     if (this.crew.tab(i)) return void this.view?.refresh();
     const b = this.block();
     this.notice = null;

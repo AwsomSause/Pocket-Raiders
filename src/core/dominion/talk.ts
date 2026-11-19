@@ -9,6 +9,7 @@ import { DOMINION_DATA } from './data';
 import type { DominionBlock, Member, Talk, TalkChoice } from './schema';
 import { STAT_IDS } from './schema';
 import { fill } from './worldTurn';
+import { promote, readyFor, seatsOpen } from './pyramid';
 
 const C = () => DOMINION_DATA.crew;
 const R = () => DOMINION_DATA.crew.rules;
@@ -51,6 +52,11 @@ export function fits(b: DominionBlock, m: Member, t: Talk, when: 'morning' | 'ev
   if (g.refused && c.last !== 'refused') return false;
   if (g.fundsAtLeast !== undefined && b.funds < g.fundsAtLeast) return false;
   if (g.rankAtLeast && rankN(m.rank) < rankN(g.rankAtLeast)) return false;
+  if (g.ready) {
+    const next = readyFor(b, m);
+    if (!next || !seatsOpen(b, next.id)) return false;
+  }
+  if (g.passedOver && (flagDay(c.flags, 'passed') ?? -9) < b.day - 1) return false;
   if (c.out && g.lastTask !== 'arrested') return false;
   if (g.chance !== undefined && roll() > g.chance) return false;
   return true;
@@ -175,6 +181,10 @@ function apply(b: DominionBlock, m: Member | null, ch: TalkChoice, task: string 
   else if (ch.flag) c.flags.push(ch.flag);
   if (ch.promiseAgain) c.flags = [...c.flags.filter((f) => !f.startsWith('promised-raise:')), `promised-raise:${b.day - 7}`];
   if (ch.memory) c.memory.push({ day: b.day, line: ch.memory });
+  if (ch.promote) {
+    const p = promote(b, m.id);
+    notice = p.notice;
+  }
   if (ch.nick) c.nick = ch.nick;
   if (ch.action) b.crew!.saved += ch.action;
   if (ch.task) c.flags.push(`once:${ch.task}`);
