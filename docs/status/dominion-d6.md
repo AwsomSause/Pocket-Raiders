@@ -3,7 +3,7 @@
 ## What's built
 - **Data** `src/data/dominion/empire.json` (shape `EmpireFileSchema` in `schema.ts`): the Notoriety ladder (Nobody, Street Gang, Crew, Outfit, Syndicate, Team, Empire; what each step opens), Control rules, the Ledger's lines (which are clean money), and the district tasks' report lines.
 - **Rules** in `src/core/dominion/`:
-  - `book.ts`: every ₽ in or out lands on one line of this week's page (Rackets, the Boss's jobs, shows, odd jobs, crew jobs, hiring, vehicles, fines, wages, rent, other). Clean money (odd jobs, Street Theater) is kept apart; spending takes dirty money first.
+  - `book.ts`: every ₽ in or out lands on one line of this week's page (Rackets, the Boss's jobs, shows, odd jobs, crew jobs, hiring, vehicles, fines, wages, rent, other). Clean money is D5's (`hq.clean`, hqFx.ts): odd jobs and the starting money come through D5's `addClean`, and Street Theater's pay is added there by `afterStep`; spending takes dirty money first.
   - `empire.ts`: Notoriety (larger of Regard and Dread in every town + 2 per held town + 1 per member), the ladder (a step once reached stays open; Street Gang brings a press contact), the action gates, Control (Rackets +2 a week in their town; Heat 40+ wears 1 a night; a Held town nobody holds for a week loses 5), the week's close into history (last 8 weeks), and the crew's district tasks.
   - `ledgerScreens.ts`: the Ledger's three spreads.
   - The World Turn books each step's money (`worldTurn.ts`), and `addWorldEnd` runs D6's end-of-turn after all steps.
@@ -27,4 +27,6 @@ No version bump: `block.empire` and `member.crew.where` are optional and filled 
 - Buildings shows the HQ only; Safehouses (Foothold), Outposts, businesses and laundering are D5/D10. Held towns' "+1 crew task slot" has nothing to raise yet (tasks have no per-town cap); flyers recruiting weekly waits for Post Flyers (D10); Gym takeover at Owned is D10. Orator and Broadcaster (flyer traits) now wait for D10.
 - Limited tasks name what waits: Patrol (rival odds D9, the Hero D11), Collect (rivals jumping D9), Hold (income bonus D10), Hold the Line and Keep the Peace (rival attacks and Tension D9), Be Your Face (turning rival D15).
 - The Founding at Street Gang is D7; D6 only marks the step.
+- Handed to D6 by D5 after D6 was built, still waiting (D6 follow-up): Hold a Rally (Radio Room), the crew task Pay the Wages, and 14 Regard/Dread buildings (Barber and Uniform Shop, Trophy Hall, Propaganda Studio, Press Office, Emblem Gallery, Banner Hall, Charm School, Culture Wing, Fossil Gallery, Zoo of Stolen, Uniform Depot, Dress Code Wall, Standard Bearers Hall, Newsstand). Done here: the ladder's Outfit (the list's "Feared") sets D5's `feared` flag for HQ Lv. 6.
+- D5's HQ actions (Upgrade, Build, Launder, Loan...) book on the Ledger's "Other" line for now.
 - The panel entrance plays when Dominion opens, not on each screen change (one view for the whole scene). Other slices' screens get the shared round-3 chrome from the CSS but not their own overlay sets (haze, particles, frame): each slice adds its screen's set.

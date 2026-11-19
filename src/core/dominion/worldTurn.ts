@@ -30,10 +30,14 @@ const STEPS: Partial<Record<WorldStepId, WorldStep[]>> = {
       const lines = [fill(r.week, { week: b.day / c.weekLength, rent: c.rent, wages })];
       b.funds -= c.rent;
       book(b, 'rent', -c.rent);
+      // D5: bills take dirty money first (the clean part can't be more than what's left).
+      const clamp = (): void => void (b.hq && (b.hq.clean = Math.max(0, Math.min(b.hq.clean, b.funds))));
+      clamp();
       for (const m of b.members) {
         if (b.funds >= m.wage) {
           b.funds -= m.wage;
           book(b, 'wages', -m.wage);
+          clamp();
           m.unpaid = 0;
         } else {
           m.unpaid += 1;
