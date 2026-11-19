@@ -1,7 +1,7 @@
 // DOMINION slice D19 screen: the personality card on the Crew File (Rotom mockup a3, ported from
 // plans/claude-api/mockups/index.html #k3: the manila dossier under a desk lamp, the photo with the member's first
 // Pokémon, the trait pills ringed in red pen, the "What his traits do" slip, the memory of this run, and the "How they
-// talk" panel with the offline line and the Rotom line). Plain data in from core/dominion/crewScreens.ts personaModel.
+// talk" panel with the offline line and the Rotom line), with the round-3 passes (mockups-v3). Plain data in from core/dominion/crewScreens.ts personaModel.
 
 import type { PersonaModel } from '../../../../core/dominion/crewScreens';
 import { act, esc, mini, tall } from '../../kit';
@@ -9,6 +9,18 @@ import { rxUrl } from '../../assets';
 import { stage } from './views';
 
 const img = (f: string): string => rxUrl(`dominion/${f}.png`);
+
+/** Round-3 mockup passes on k3 (plans/evil-mode-rework/mockups-v3, PR #1494): haze, bokeh, motes, grade, the lamp's
+ * focal spotlight, edge glow, gold frame, the finale sunburst and glints. Decoration only: no clicks (the CSS sets
+ * pointer-events:none) and every animation stops under reduced motion. */
+const OVERLAYS = `<div class="haze" style="--hz:#ffe0a0;--hz2:#ffb38a" aria-hidden="true"></div>
+  <div class="bokeh" aria-hidden="true" style="background:radial-gradient(circle 39px at 182px 197px,color-mix(in srgb,#ffb38a 34%,transparent),color-mix(in srgb,#ffb38a 18%,transparent) 70%,transparent 100%),radial-gradient(circle 21px at 888px 178px,color-mix(in srgb,#ffe0a0 34%,transparent),color-mix(in srgb,#ffe0a0 18%,transparent) 70%,transparent 100%),radial-gradient(circle 28px at 855px 122px,color-mix(in srgb,#ffb38a 34%,transparent),color-mix(in srgb,#ffb38a 18%,transparent) 70%,transparent 100%),radial-gradient(circle 35px at 614px 462px,color-mix(in srgb,#ffe0a0 34%,transparent),color-mix(in srgb,#ffe0a0 18%,transparent) 70%,transparent 100%),radial-gradient(circle 28px at 834px 193px,color-mix(in srgb,#ffb38a 34%,transparent),color-mix(in srgb,#ffb38a 18%,transparent) 70%,transparent 100%),radial-gradient(circle 38px at 836px 130px,color-mix(in srgb,#ffe0a0 34%,transparent),color-mix(in srgb,#ffe0a0 18%,transparent) 70%,transparent 100%),radial-gradient(circle 45px at 208px 141px,color-mix(in srgb,#ffb38a 34%,transparent),color-mix(in srgb,#ffb38a 18%,transparent) 70%,transparent 100%),radial-gradient(circle 43px at 27px 186px,color-mix(in srgb,#ffe0a0 34%,transparent),color-mix(in srgb,#ffe0a0 18%,transparent) 70%,transparent 100%)"></div>
+  <div class="pts" aria-hidden="true"><i class="pt mote f" style="left:65px;top:232px;--dl:-0.8s;--t:4.1s;--c:#ffe0a0"></i><i class="pt mote f" style="left:97px;top:315px;--dl:-3.9s;--t:5.6s;--c:#fff"></i><i class="pt mote f" style="left:278px;top:371px;--dl:-5.4s;--t:5.0s;--c:#ffe0a0"></i><i class="pt mote f" style="left:638px;top:277px;--dl:-4.6s;--t:4.7s;--c:#ffe0a0"></i><i class="pt mote f" style="left:93px;top:236px;--dl:-2.2s;--t:4.4s;--c:#fff"></i><i class="pt mote f" style="left:514px;top:107px;--dl:-3.6s;--t:3.8s;--c:#fff"></i><i class="pt mote f" style="left:442px;top:272px;--dl:-2.7s;--t:3.3s;--c:#ffe0a0"></i><i class="pt mote f" style="left:510px;top:234px;--dl:-3.4s;--t:3.1s;--c:#ffb38a"></i><i class="pt mote f" style="left:265px;top:288px;--dl:-5.4s;--t:3.6s;--c:#fff"></i><i class="pt mote f" style="left:216px;top:133px;--dl:-5.6s;--t:5.4s;--c:#fff"></i></div>
+  <div class="grade" aria-hidden="true" style="--g1:#ffe0a0;--g2:#ffb38a"></div>
+  <div class="focus" aria-hidden="true" style="left:144px;top:216px;--r:150px;--fc:255,205,140"></div>
+  <div class="edgeglow" aria-hidden="true" style="--eg:#ffe0a0"></div>
+  <div class="orn" aria-hidden="true"></div>
+  <div class="rays turn finale" aria-hidden="true" style="left:-21px;top:51px;width:330px;height:330px;--rc:rgba(255,205,140,.30)"></div><i class="glint fg" style="left:226px;top:126px;--g:20px"></i><i class="glint fg" style="left:39px;top:268px;--g:14px;animation-delay:-1.4s"></i>`;
 
 function photo(look: string, name: string): string {
   return look.endsWith('.png')
@@ -82,5 +94,6 @@ export function personaView(p: PersonaModel, monFile: (species: string) => strin
       <div class="caps xs dm" style="letter-spacing:.14em">Others on file</div>
       <div class="row" style="gap:8px">${others || '<span class="xs mu">Nobody else yet.</span>'}</div>
     </div>
-  </div>`, 'background:#1a1428');
+  </div>
+  ${OVERLAYS}`, 'background:#1a1428', 'kl-warm vign grain');
 }

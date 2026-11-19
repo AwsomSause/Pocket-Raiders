@@ -76,6 +76,8 @@ def emit(rules, inner=False):
         if pre.startswith('@keyframes'):
             name = pre.split()[1]
             lines.append('@keyframes dm-%s{%s}' % (name, body.strip()))
+        elif pre.startswith('@property'):
+            lines.append('%s{%s}' % (pre, body.strip()))
         elif pre.startswith('@media'):
             if 'max-width' in pre:
                 continue
@@ -96,5 +98,7 @@ out += '''#rx .dom .hd{position:static;left:auto;right:auto;top:auto;height:auto
 #rx .dom .col{gap:0}
 #rx .dom .key{width:auto;height:auto;display:inline-block;color:inherit;font-weight:400}
 '''
+# Mockup sprites the CSS points at live in public/assets/images/dominion/ in the game (Vite adds the base path).
+out = re.sub(r'url\((["\']?)sprites/', r'url(\1/assets/images/dominion/', out)
 open(dst, 'w', encoding='utf-8').write(out)
 print(len(out), 'bytes')

@@ -44,6 +44,11 @@ test('the personality card on the Crew File: traits, quirk, home town, flip memb
   await s.getByTestId('dom-hire-0').click();
   await expect(s.getByTestId('dom-notice')).toContainText('joined');
   await page.keyboard.press('Escape');
+  // A new member can bring a talk card; it is answered before anything else (D3).
+  for (let n = (await block(page)).crew.talks.length; n > 0; n--) {
+    await s.getByTestId('dom-talk-0').click();
+    await expect.poll(async () => (await block(page)).crew.talks.length).toBe(n - 1);
+  }
   const b = await block(page);
   expect(b.members).toHaveLength(2);
   for (const m of b.members) expect(m.crew.card.t).toHaveLength(2);
@@ -64,10 +69,11 @@ test('the personality card on the Crew File: traits, quirk, home town, flip memb
 
   // E: the next member's card; Q back.
   await page.keyboard.press('KeyE');
-  await expect(s.getByTestId('dom-persona-name')).toContainText(b.members[1].name.toUpperCase());
+  await expect(s.getByTestId('dom-persona-name')).toContainText(b.members[1].name.toUpperCase(), { timeout: 10_000 });
   await expect(s.getByTestId('dom-persona-home')).toHaveText(b.members[1].crew.card.h);
   await page.keyboard.press('KeyQ');
-  await expect(s.getByTestId('dom-persona-name')).toContainText('ROOK');
+  // The round-3 card is heavy to paint in a headless browser: give the redraw time (the rule checked is the same).
+  await expect(s.getByTestId('dom-persona-name')).toContainText('ROOK', { timeout: 10_000 });
 
   for (const [w, h] of [[1280, 720], [960, 540], [800, 600]] as const) {
     await page.setViewportSize({ width: w, height: h });

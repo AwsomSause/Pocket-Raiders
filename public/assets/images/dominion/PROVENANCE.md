@@ -27,4 +27,5 @@ Copied from the same mockup sprites folder (`plans/evil-mode-rework/mockups-rede
 
 | File | From |
 | --- | --- |
+| `p-rotom.png` | Pokémon sprite from the PokeRogue pack, the Rotom chip icon of the Rotom mockups (`plans/evil-mode-rework/mockups-v3/sprites/`) |
 | `g-mic.png` | Item icon from `images/items/` (PokeRogue pack), re-saved at the mockup's size by the Rotom mockups thread; copied from `plans/claude-api/mockups/sprites/` |
