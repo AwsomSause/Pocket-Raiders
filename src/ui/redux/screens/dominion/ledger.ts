@@ -119,6 +119,28 @@ function storesPage(m: LedgerModel): string {
   </div>`;
 }
 
+/** Round-3 overlays (mockup s7, passes 4, 7, 9, 10, 17, 18, 20, 25): haze, bokeh, embers and stars, the colour grade,
+ * the edge glow and the gold frame; on the money spread, the spotlight and sunburst on the week's net. None take clicks. */
+const PTS: [string, number, number, number, number, string][] = [
+  ['ember', 27, 348, -5.2, 4.1, '#ffdf9a'], ['ember', 59, 414, -5.9, 3.8, '#fff'], ['ember', 24, 343, -5.8, 5.9, '#ffdf9a'],
+  ['ember', 43, 409, -1.6, 4.2, '#fff'], ['ember', 66, 393, -4.2, 4.6, '#fff'], ['ember', 64, 343, -2.2, 3.7, '#ffdf9a'],
+  ['ember', 24, 413, -0.3, 3.1, '#ffdf9a'], ['ember', 56, 382, -0.8, 5.2, '#ffdf9a'], ['star', 711, 434, -5.1, 3.2, '#ffc070'],
+  ['star', 657, 450, -0.6, 4.6, '#ffc070'], ['star', 682, 409, -0.5, 3.7, '#ffdf9a'], ['star', 723, 429, -3.0, 4.6, '#fff'],
+];
+const BOKEH = 'radial-gradient(circle 46px at 106px 428px,color-mix(in srgb,#ffdf9a 34%,transparent),color-mix(in srgb,#ffdf9a 18%,transparent) 70%,transparent 100%),radial-gradient(circle 50px at 313px 155px,color-mix(in srgb,#ffc070 34%,transparent),color-mix(in srgb,#ffc070 18%,transparent) 70%,transparent 100%),radial-gradient(circle 51px at 123px 194px,color-mix(in srgb,#ffdf9a 34%,transparent),color-mix(in srgb,#ffdf9a 18%,transparent) 70%,transparent 100%),radial-gradient(circle 23px at 841px 135px,color-mix(in srgb,#ffc070 34%,transparent),color-mix(in srgb,#ffc070 18%,transparent) 70%,transparent 100%),radial-gradient(circle 31px at 467px 173px,color-mix(in srgb,#ffdf9a 34%,transparent),color-mix(in srgb,#ffdf9a 18%,transparent) 70%,transparent 100%),radial-gradient(circle 38px at 88px 137px,color-mix(in srgb,#ffc070 34%,transparent),color-mix(in srgb,#ffc070 18%,transparent) 70%,transparent 100%),radial-gradient(circle 52px at 54px 146px,color-mix(in srgb,#ffdf9a 34%,transparent),color-mix(in srgb,#ffdf9a 18%,transparent) 70%,transparent 100%),radial-gradient(circle 24px at 229px 183px,color-mix(in srgb,#ffc070 34%,transparent),color-mix(in srgb,#ffc070 18%,transparent) 70%,transparent 100%)';
+
+function overlays(money: boolean): string {
+  const pts = PTS.map(([k, x, y, dl, t, c]) => `<i class="pt ${k} f" style="left:${x}px;top:${y}px;--dl:${dl}s;--t:${t}s;--c:${c}"></i>`).join('');
+  return `<div class="haze" style="--hz:#ffc070;--hz2:#ffdf9a" aria-hidden="true"></div>
+  <div class="bokeh" aria-hidden="true" style="background:${BOKEH}"></div>
+  <div class="pts" aria-hidden="true">${pts}</div>
+  <div class="grade" aria-hidden="true" style="--g1:#ffc070;--g2:#ffdf9a"></div>
+  ${money ? '<div class="focus" aria-hidden="true" style="left:414px;top:444px;--r:100px;--fc:255,215,90" data-testid="dom-ledger-focus"></div>' : ''}
+  <div class="edgeglow" aria-hidden="true" style="--eg:#ffc070"></div>
+  <div class="orn" aria-hidden="true"></div>
+  ${money ? `<div class="rays turn finale" aria-hidden="true" style="left:304px;top:334px;width:220px;height:220px;--rc:rgba(255,215,90,.30)"></div><i class="glint fg" style="left:469px;top:384px;--g:20px"></i><i class="glint fg" style="left:344px;top:479px;--g:14px;animation-delay:calc(var(--now,0s) - 1.4s)"></i>` : ''}`;
+}
+
 export function ledgerView(m: LedgerModel, notice: string | null): string {
   const [left, right] = m.spread === 1 ? [territoryPage(m), ladderPage(m)] : m.spread === 2 ? [crewPage(m), storesPage(m)] : [moneyPage(m), empirePage(m)];
   const tabs = m.tabs.map((t, i) => `<div class="idx" style="left:896px;top:${200 + i * 62}px;background:${t.colour};${t.on ? 'transform:translateX(8px);box-shadow:0 0 0 3px #1a0f08,0 0 12px rgba(255,220,150,.5)' : ''}"${act('ledgerTab', i)} data-testid="dom-ledger-tab-${i}">${esc(t.word)}</div>`).join('');
@@ -155,6 +177,7 @@ export function ledgerView(m: LedgerModel, notice: string | null): string {
   ${scribble}
   ${tabs}
   <div class="a" style="left:850px;top:466px;width:34px;height:34px;z-index:7;background:linear-gradient(135deg,transparent 50%,#d8c597 50%,#f4e9cc);box-shadow:-2px -2px 4px rgba(0,0,0,.2)"></div>
+  ${overlays(m.spread === 0)}
   ${notice ? `<div class="a" style="left:120px;top:516px;width:720px;z-index:14;text-align:center;font:600 14px var(--ui);color:#ffe9b0;text-shadow:0 1px 0 #000"${act('dismiss')} data-testid="dom-notice">${esc(notice)}</div>` : ''}
-  `, 'background:#2a1a10');
+  `, 'background:#2a1a10', 'kl-warm vign grain');
 }
