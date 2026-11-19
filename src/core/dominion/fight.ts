@@ -41,7 +41,8 @@ export function beginDominionFight(content: Content, current: RunState): RunStat
     team = side.species.map((s, i) => make(s, Math.max(2, side.level - (i ? 1 : 0)))).filter((m): m is PokemonInstance => !!m);
     trainer = { classId: side.classId, name: side.name, leaderId: side.leaderId };
   } else if (fight.foe === 'member') {
-    const m = b.members[0];
+    // A spar with the first member, or (D22) a confronted spy's own team.
+    const m = (fight.target && b.members.find((x) => x.id === fight.target)) || b.members[0];
     team = (m?.team ?? []).map((x) => ({ ...structuredClone(x), uid: `${x.uid}-spar` }));
     trainer = { classId: DOMINION_DATA.field.foes.member, name: m?.name ?? 'Crew', leaderId: null };
   } else {

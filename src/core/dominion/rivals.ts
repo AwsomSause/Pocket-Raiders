@@ -172,7 +172,7 @@ export function planSeen(b: DominionBlock, team: string): boolean {
 }
 /** A flag that the plan was learned this week (a deal, a tail, a wire). */
 const planFlag = (b: DominionBlock, team: string): string => `plan:${team}:${b.day - ((b.day - 1) % WEEK())}`;
-const learnPlan = (b: DominionBlock, team: string): void => {
+export const learnPlan = (b: DominionBlock, team: string): void => {
   b.flags = [...b.flags.filter((f) => !f.startsWith(`plan:${team}:`)), planFlag(b, team)];
 };
 

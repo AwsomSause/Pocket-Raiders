@@ -164,7 +164,7 @@ export function fileView(f: FileModel, monFile: (species: string) => string | nu
     <div class="a col" style="left:14px;right:14px;top:222px;gap:2px;font-size:15px">
       <div class="row sp"><span>♥ Loyalty</span><b class="gn">${f.loyalty}</b></div><div class="mt g t" style="--v:${f.loyalty}"></div>
       <div class="row sp"><span>☺ Morale</span><b class="cy">${f.morale}</b></div><div class="mt c t" style="--v:${f.morale}"></div>
-      <div class="row sp xs mu" style="margin-top:2px" data-testid="dom-file-a17"><span>Motive: ${esc(f.motive)}</span><span>Fatigue ${f.fatigue}</span><span>Heat ${f.pHeat}</span></div>
+      <div class="row sp xs mu" style="margin-top:2px" data-testid="dom-file-a17"><span>Motive: ${esc(f.motive)}</span><span>Fatigue ${f.fatigue}</span><span>Heat ${f.pHeat}</span>${f.double ? '<span class="pill b" style="font-size:10px;padding:0 6px" data-testid="dom-file-double">DOUBLE AGENT</span>' : f.suspicion ? `<span style="color:${f.suspicion >= 70 ? '#ff6a7a' : '#ffb238'};font-weight:700" data-testid="dom-file-suspicion">Suspicion ${f.suspicion}</span>` : ''}</div>
     </div>
   </div>
   <div class="pnl" style="left:622px;top:72px;width:328px;height:316px" data-testid="dom-file-personality">

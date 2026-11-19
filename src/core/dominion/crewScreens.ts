@@ -8,6 +8,7 @@ import type { Alert, DominionBlock, Member } from './schema';
 import { STAT_IDS } from './schema';
 import { topModel, type TopModel } from './screens';
 import { topTalk } from './talk';
+import { cantConfront, isDouble, suspicion } from './spies';
 import { cardFor, cardLine, lineKind, sheet, traitWords } from './personality';
 import { rivalBadge, rivalTag } from './rivalScreens';
 
@@ -126,6 +127,8 @@ export interface FileModel {
   then: { day: number; line: string }; now: { day: number; line: string };
   task: string; taskLevel: string; out: string | null; xp: string; points: number;
   keys: { key: string; label: string }[];
+  /** D22: Suspicion (0 hides it) and whether F can confront them now. */
+  suspicion: number; double: boolean;
   talk: TalkModel | null;
 }
 
@@ -151,7 +154,10 @@ export function fileModel(block: DominionBlock, sel: number): FileModel {
   const keys = [{ key: 'C', label: 'Card' }, { key: 'G', label: 'Gift' }, { key: 'H', label: 'Hire' }, { key: 'R', label: `Leads (${b.crew!.leads.length})` }];
   if (b.phase === 'evening') keys.unshift({ key: 'T', label: 'Talk' });
   if (c.out?.why === 'jail') keys.unshift({ key: 'B', label: `Bail ₽${C().rules.bail}` });
+  // D22: F confronts a suspected member (spies.ts).
+  if (!cantConfront(b, m.id)) keys.unshift({ key: 'F', label: 'Confront' });
   return {
+    suspicion: suspicion(b, m.id), double: isDouble(b, m.id),
     name: m.name.toUpperCase(), rank: rankWord(m.rank), rankN: rankN(m.rank), level: m.level, wage: m.wage, chevrons: Math.min(5, Math.ceil(rankN(m.rank) / 3)),
     joined: m.joinedDay, look: m.look,
     prev: b.members.length > 1 ? b.members[(i - 1 + b.members.length) % b.members.length]!.name : null,

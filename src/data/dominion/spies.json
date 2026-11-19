@@ -1,0 +1,161 @@
+{
+  "_source": "Slice D22 spies on the crew: /mnt/project-files/plans/claude-api/CLAUDE_API_DRAFT.md §5.3 C (Kice 2026-11-18), BUILD_SLICES.md row D22, mockup a6/k6 (plans/evil-mode-rework/mockups-v4/index.html #k6). A rival's spies (D9 rivals.spies) become real members; World Turn clues raise Suspicion; the Confront talk's truth is fixed by the rules, Rotom only voices the member.",
+  "suspicion": { "confrontAt": 40, "high": 70, "coolAfter": 3, "coolPerNight": 2 },
+  "clues": { "moleChance": 40, "moleGain": [10, 18], "herringChance": 7, "herringGain": [5, 10], "securityGain": 6, "exposed": 100, "gossipIntel": 2, "keep": 40 },
+  "pick": { "base": 2, "lowLoyaltyBelow": 40, "lowLoyalty": 2, "newDays": 7, "newMember": 2, "traits": { "loyal": 0, "greedy": 6, "zealot": 1, "schemer": 4, "loner": 3, "kind": 1 } },
+  "pool": [
+    "{team} knew the patrol time",
+    "Seen near the {site}",
+    "Paid off a debt in cash",
+    "Came back late with no story",
+    "A {team} calling card in their jacket",
+    "Asked where the safe is kept",
+    "A call from the payphone at 3 AM",
+    "New shoes, and no raise this month",
+    "Left the meeting early, twice",
+    "Their Pokémon came back smelling of {team}'s Koffing",
+    "Copied the duty list by hand",
+    "Knows a {team} Grunt by first name",
+    "A note in code under their bunk",
+    "Was in {district} on a day off",
+    "Burned a letter in the yard"
+  ],
+  "talk": { "turns": 4, "bribe": 300, "threatLoyalty": -3, "typedMax": 120 },
+  "questions": [
+    { "id": "evidence", "label": "Show the evidence", "sub": "Lay the clues on the table", "pressure": 20, "tellMole": 55, "tellInnocent": 20, "lines": {
+      "mole": [
+        "\"{clue}\"? That proves nothing. Anyone could have done that.",
+        "Who told you that? Whoever it was, they're the one you should be asking.",
+        "I can explain all of it. I just need a minute to think how.",
+        "That's... a coincidence. A big one. I know how it looks."
+      ],
+      "innocent": [
+        "\"{clue}\"? Boss, I can tell you exactly why. It's boring, I promise.",
+        "Ask anyone in {town}. I've got nothing to hide.",
+        "I know how that looks. It isn't what it looks like.",
+        "Fine. Check my locker, check my Pokémon, check whatever you like."
+      ] } },
+    { "id": "probe", "label": "Ask about the clue", "sub": "Where were you, and who saw you?", "pressure": 12, "tellMole": 45, "tellInnocent": 15, "lines": {
+      "mole": [
+        "I was at my mum's in {town}. She'll tell you the exact time I got there and what we ate.",
+        "Training. Alone. On Route 4. No, nobody saw me. That's the point of alone.",
+        "I was at the Game Corner. Or the Pokémon Center. One of the two.",
+        "I went for a walk to think about {want}. It was a long walk."
+      ],
+      "innocent": [
+        "I was out trying to sort out {want}. Ask the clerk, he'll remember me.",
+        "Honestly? I was hiding from a Spearow. Don't tell the others.",
+        "I was home in {town}. My neighbour saw me come in.",
+        "Visiting the Day-Care. My Pokémon misses me when I'm on jobs."
+      ] } },
+    { "id": "bribe", "label": "Offer a way out", "sub": "₽{bribe}: tell me everything and we're square", "pressure": 6, "tellMole": 35, "tellInnocent": 10, "lines": {
+      "mole": [
+        "Money? ...How much money, exactly? Hypothetically.",
+        "You'd do that? After... no. I mean, I've got nothing to tell. Probably.",
+        "Keep talking. I'm not saying yes. I'm just listening.",
+        "That's a lot of ₽. {team} never paid that well. ...I didn't say that."
+      ],
+      "innocent": [
+        "You're paying me to confess to something I didn't do? Boss, that's weird.",
+        "I'll take the money, but there's nothing to tell you.",
+        "If this is a test, I hope I'm passing it.",
+        "Put the ₽ away. I'm loyal for free."
+      ] } },
+    { "id": "threaten", "label": "Threaten", "sub": "Lean on them (−3 Loyalty)", "pressure": 25, "tellMole": 60, "tellInnocent": 30, "lines": {
+      "mole": [
+        "All right, all right! Don't do anything you'll regret. I'm thinking.",
+        "You don't scare me. ...Much. Not that much.",
+        "Back off! My {fear} is scarier than you, and that's saying something.",
+        "Fine! Maybe I talked to someone. Talking isn't a crime. Well. It's a small one."
+      ],
+      "innocent": [
+        "You're shouting at the wrong person, Boss.",
+        "I've been with this crew since day one of my file. This is how you treat me?",
+        "Go on then. You'll still be wrong.",
+        "I'm scared, sure. Scared you'll miss the real one while you yell at me."
+      ] } },
+    { "id": "typed", "label": "Say it", "sub": "Your own words", "pressure": 10, "tellMole": 45, "tellInnocent": 15, "lines": {
+      "mole": [
+        "I don't know what you want me to say to that.",
+        "That's not how it happened. Not exactly.",
+        "Can we talk about this tomorrow? I'm tired.",
+        "You've got it all wrong. Mostly wrong."
+      ],
+      "innocent": [
+        "I hear you, Boss. I still didn't do it.",
+        "Ask me anything. My answer won't change.",
+        "That's fair. Here's the truth: it wasn't me.",
+        "I get why you'd ask. I'd ask too."
+      ] } }
+  ],
+  "tells": {
+    "nervous": { "word": "NERVOUS", "colour": "#d8402f" },
+    "contradiction": { "word": "CONTRADICTION", "colour": "#e08a1c" },
+    "rehearsed": { "word": "OVERLY REHEARSED", "colour": "#7a46e0" }
+  },
+  "innocentTells": ["nervous"],
+  "ends": {
+    "confess": { "label": "Confess", "sub": "{they} name{s} {their} contact", "colour": "#43cf78", "weight": 25, "line": "{name} breaks down and confesses: {team} paid them. They name their contact. {team}'s plan this week is yours to read." },
+    "double": { "label": "Double agent", "sub": "feed {team} fake plans", "colour": "#4fa3ff", "weight": 25, "line": "{name} turns. From tonight they feed {team} fake plans, and you read theirs." },
+    "run": { "label": "{They} run{s}", "sub": "a member and a secret gone", "colour": "#ffb238", "weight": 25, "line": "{name} bolts out the back door before anyone can stop them. A member gone, and {team} knows more than it should." },
+    "battle": { "label": "Battle", "sub": "{their} team against yours", "colour": "#ef4a3a", "weight": 25, "line": "{name} throws a Poké Ball down on the table. It's a battle." }
+  },
+  "traitEnds": {
+    "coward": { "confess": 20, "run": 20, "battle": -20 },
+    "hothead": { "battle": 30, "confess": -10 },
+    "schemer": { "double": 20, "run": 10 },
+    "zealot": { "battle": 10, "confess": -10 },
+    "proud": { "battle": 15 },
+    "kind": { "confess": 15 },
+    "loner": { "run": 20 },
+    "joker": { "double": 10 },
+    "cautious": { "confess": 10, "battle": -10 },
+    "greedy": { "double": 10 },
+    "gossip": { "confess": 10 }
+  },
+  "pressureConfess": 4, "bribeDouble": 40, "loyalConfess": 2,
+  "wrong": { "loyalty": -15, "morale": -10, "crewMorale": -2 },
+  "drop": { "suspicion": -15 },
+  "effects": { "confessIntel": 10, "runIntel": 15, "doubleIntel": 2, "battleDread": 2, "confessLoyalty": 10 },
+  "lines": {
+    "mole": "{team} has bought someone on the inside. Watch the crew.",
+    "clue": "{name}: {clue}. Suspicion {n}.",
+    "high": "{name} looks shifty (Suspicion {n}). F on the Crew File to confront them.",
+    "exposed": "The counter-spy work points at {name}: Suspicion {n}. Confront them (F on the Crew File).",
+    "gossip": "{name} talks too much: {team} learned a little more about you (+{n} intel).",
+    "double": "{name} fed {team} fake plans (−{n} intel).",
+    "cleared": "{name} was clean. They won't forget you thought otherwise (Loyalty {loyalty}, Morale {morale}; the crew Morale {crew}).",
+    "dropped": "You let it go for now. {name}'s Suspicion falls by {n}.",
+    "battleWon": "{name} is beaten and thrown out of the HQ. {team} lost its eyes inside.",
+    "battleLost": "{name} gets away with what they know. {team} knows more now.",
+    "noTalk": "Only a member with Suspicion {n} or more can be confronted.",
+    "oneADay": "One confront a day: the crew needs time to calm down.",
+    "busy": "{name} is out (hurt, in a cell or held). Confront them when they're back.",
+    "noMoney": "You need ₽{n} for that offer.",
+    "bribedOnce": "You already made an offer.",
+    "noTurns": "That's all they'll say. Accuse them, or let it go.",
+    "turned": "{name} already works for you.",
+    "noRoom": "Nothing to confront: nobody is under suspicion."
+  },
+  "ui": {
+    "title": "Confront",
+    "suspicion": "Suspicion",
+    "talk": "The talk",
+    "you": "You",
+    "truth": "The truth is already fixed. The rules pick the ending:",
+    "typeHint": "Type your own question…",
+    "say": "Say it",
+    "accuse": "Accuse",
+    "drop": "Let it go",
+    "end": "End talk",
+    "intercepted": "Intercepted",
+    "empty": "Ask a question. Watch for tells.",
+    "high": "HIGH", "mid": "WATCH", "low": "LOW",
+    "file": "Suspicion"
+  },
+  "rotom": {
+    "system": "You voice one crew member of a cartoon villain team being questioned by their Boss in a back room, in the tone of the Pokémon games. Reply in 1-2 short sentences, in character, using their speech quirk. The truth about them is fixed: if they are a spy they lie and deflect, if not they are honest and a bit hurt. The reply must show the tell you are given (or none). Never confess or reveal the truth outright; the game decides that.",
+    "thinking": "Rotom is listening…",
+    "chip": "Quick · tell: {tell}"
+  }
+}

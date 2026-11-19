@@ -19,6 +19,7 @@ import { build, letGo, loan, rebuild, repay, sell, storageCap, tierUp, upgrade, 
 import { withHq } from './hqFx';
 import { levelCap } from '../regions';
 import { answerCard, breakTruce, maybeStreet, noteTop, ransom, startTruce, withRivals, type RivalOut } from './rivals';
+import { accuse, askSpy, dropTalk, startConfront, type SpyOut } from './spies';
 
 export const DOMINION_MODE_ID = 'dominion';
 export const isDominionRun = (run: RunState | null | undefined): boolean => run?.rules.modeId === DOMINION_MODE_ID;
@@ -128,6 +129,11 @@ function rivalInRun(run: RunState, action: DominionAction): (StepOut & { run: Ru
     case 'breakTruce': out = breakTruce(b, action.team); break;
     case 'card': out = answerCard(b, action.index, action.choice, run.seed); break;
     case 'ransom': out = ransom(b, action.member); break;
+    // D22: the Confront talk (spies.ts). An accused spy who fights leaves `field.fight` waiting.
+    case 'spyStart': out = startConfront(b, action.member) as SpyOut; break;
+    case 'spyAsk': out = askSpy(b, action.q, run.seed, action.text); break;
+    case 'spyAccuse': out = accuse(b, run.seed); break;
+    case 'spyDrop': out = dropTalk(b); break;
     default: return null;
   }
   if (!out.ok) return { ok: false, block: b, notice: out.notice, heal: false, run };
