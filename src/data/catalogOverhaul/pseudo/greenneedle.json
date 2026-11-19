@@ -78,7 +78,7 @@
    "id": "ps_gn_maiden",
    "name": "Maiden's Peak",
    "entry": "gn-12-door",
-   "themeId": "fairy-ghost",
+   "themeId": "ghost-fairy",
    "tint": "#3b2f52",
    "mood": "festival lanterns",
    "start": "opened"
@@ -96,7 +96,7 @@
    "id": "ps_gn_savanna",
    "name": "The Deep Savanna",
    "entry": "gn-19-door",
-   "themeId": "ground-fire",
+   "themeId": "fire-ground",
    "tint": "#b08a3a",
    "mood": "dry heat",
    "start": "opened"

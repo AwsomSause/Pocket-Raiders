@@ -428,10 +428,32 @@ describe('save upgrades (v1 → v2)', () => {
   it('drops an item that no longer exists instead of discarding the run (save safety, 2026-11-17)', () => {
     const storage = new MemoryStorageProvider();
     const saves = new SaveManager(storage, content);
-    saves.saveRun({ ...newRun('bad-item'), inventory: { 'no-such-ball': 1 } });
-    const loaded = saves.loadRun();
-    expect(loaded).toMatchObject({ status: 'ok', repaired: ['item no-such-ball'] });
-    if (loaded.status === 'ok') expect(loaded.data.inventory['no-such-ball']).toBeUndefined();
+    // Written by an older build: saveRun now tidies the Bag first (save audit 2026-11-19), so the bad id goes in by hand.
+    saves.saveRun(newRun('bad-item'));
+    const stored = JSON.parse(storage.get('pkr.run')!) as { data: { inventory: Record<string, number> }; checksum?: string };
+    stored.data.inventory = { 'no-such-ball': 1 };
+    delete stored.checksum;
+    storage.set('pkr.run', JSON.stringify(stored));
+    const loaded = new SaveManager(storage, content).loadRun();
+    expect(loaded.status).toBe('ok');
+    if (loaded.status !== 'ok') return;
+    expect(loaded.repaired).toContain('item no-such-ball');
+    expect(loaded.data.inventory['no-such-ball']).toBeUndefined();
+  });
+
+  it('a catalog item in the Bag is moved where it belongs on save, not thrown away on load (save audit 2026-11-19)', () => {
+    const storage = new MemoryStorageProvider();
+    const saves = new SaveManager(storage, content);
+    const run = { ...newRun('berry'), inventory: { 'sitrus-berry': 2, 'no-such-ball': 1 }, money: 0 };
+    expect(saves.saveRun(run).ok).toBe(true);
+    const loaded = new SaveManager(storage, content).loadRun();
+    expect(loaded.status).toBe('ok');
+    if (loaded.status !== 'ok') return;
+    expect(loaded.repaired ?? []).toEqual([]);
+    expect(loaded.data.inventory).toEqual({});
+    expect(loaded.data.looseHeld?.['sitrus-berry']).toBe(2);
+    // An id the game no longer knows is sold like an event gift that can't be used.
+    expect(loaded.data.money).toBe(content.balance.events.soldGift);
   });
 
   it('still rejects a run whose trainer no longer exists (nothing safe to drop)', () => {

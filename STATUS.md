@@ -9,6 +9,7 @@ Current versions (`src/save/saveManager.ts` `CURRENT_VERSIONS`): profile 20, run
 The long "Done" list (about 140 bullets) and the older known-limits notes moved to `docs/archive/status-done-2026-10-30.md`; newer slice notes are in `docs/status/` (run `npm run status:find -- word`, or grep `docs/status/INDEX.md`, one line per note; do not read it whole). To check if a feature exists: `grep -il "<word>" docs/status/*.md docs/archive/status-done-2026-10-30.md` or grep `CHECKLIST.md`. Do not read either whole.
 
 ## In progress / next
+- **Save audit sweep** (2026-11-19): every event choice, item, Pokémon and ability is played and save-round-tripped by `tests/unit/saveSweep.test.ts`; five save-breakers fixed. `docs/status/save-audit.md`.
 - **Title clips and springy buttons** (2026-11-16): the title fades between six animated scenes; buttons bounce in both looks. `docs/status/title-clips.md`.
 - **Catalog Overhaul pack** (next update, shared branch `ui-mockups`): all 17 rows are merged there except row 11 Evil Mode (on hold, Kice). Batches: #1329, #1331, #1338 (batches 3 and 4). NE100 The Road Home plays at the run end (`docs/status/co-new-events.md`). Plan and rows: `/mnt/project-files/plans/catalog-overhaul/PLAN.md`; each row's note is `docs/status/co-*.md`. Batch 5 (the last 130 ids): row B, pseudo-stage worlds and the rift, in `docs/status/co-legends-rules-b.md`. Left: final whole-pack check, update log, one PR into `main`.
 - Pseudo-stages rebuilt as real drawn stages inside a node (`docs/status/pseudo-stages-real-stages.md`).

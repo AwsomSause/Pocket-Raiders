@@ -6,8 +6,9 @@ import { bossRoleForClass } from '../core/encounters';
 import { isPlayerTrainer, playerTrainerFor } from '../core/archetypes';
 import type { z } from 'zod';
 import { ATTRIBUTE_KEYS, type Content } from '../core/contentSchema';
-import { validateLeagueMap, validateStageMap } from '../core/map';
+import { validateLeagueMap, validatePseudoMap, validateStageMap } from '../core/map';
 import { createProfile } from '../core/profile';
+import { tidyBag } from '../core/bag';
 import { hashSeed } from '../core/rng';
 import { rollIvs } from '../core/ivs';
 import { createStoryState } from '../core/story/record';
@@ -883,12 +884,7 @@ export class SaveManager {
     }
     run.party.forEach(fixMoves);
     run.battle?.enemyTeam.forEach(fixMoves);
-    for (const id of Object.keys(run.inventory)) {
-      if (!c.items.has(id)) {
-        delete (run.inventory as Record<string, unknown>)[id];
-        fixes.push(`item ${id}`);
-      }
-    }
+    fixes.push(...tidyBag(c, run));
     if (run.draft) {
       const draft = run.draft.filter((id) => c.rewards.has(id));
       if (draft.length > 0 && draft.length < run.draft.length) {
@@ -924,7 +920,8 @@ export class SaveManager {
       const t = run.battle.trainer;
       if (t?.leaderId && !isBoss(c, t.leaderId)) return `Unknown gym leader, Elite Four member or champion "${t.leaderId}" in save.`;
       // A boss's ace back as a nemesis keeps the boss class (gym-leader...) with no leader id.
-      if (t && !t.leaderId && !c.trainers.has(t.classId) && !bossRoleForClass(t.classId)) return `Unknown trainer class "${t.classId}" in save.`;
+      // 'event' is the class an event's own trainer battle uses when its data names none (core/events.ts).
+      if (t && !t.leaderId && t.classId !== 'event' && !c.trainers.has(t.classId) && !bossRoleForClass(t.classId)) return `Unknown trainer class "${t.classId}" in save.`;
     }
     if (run.phase === 'decision' && run.pending.length === 0) return 'The save is waiting on a decision that is missing.';
     if (run.stage) {
@@ -932,7 +929,8 @@ export class SaveManager {
       const league = run.stage.kind === 'league';
       if (!c.bosses.has(run.stage.leaderId)) return `Unknown ${league ? 'champion' : 'gym leader'} "${run.stage.leaderId}" in save.`;
       for (const id of run.stage.eliteFour) if (!c.bosses.has(id)) return `Unknown Elite Four member "${id}" in save.`;
-      const mapProblems = league ? validateLeagueMap(run.stage.map) : validateStageMap(run.stage.map);
+      // A pseudo-stage (a place with a map of its own inside one node) is a short path, not a full stage: only its links are checked, and the real stage waits in pseudoParent.
+      const mapProblems = run.stage.pseudo ? validatePseudoMap(run.stage.map) : league ? validateLeagueMap(run.stage.map) : validateStageMap(run.stage.map);
       if (mapProblems.length > 0) return `The stage map in the save is damaged (${mapProblems[0]}).`;
       if (run.stage.current !== null && !run.stage.map.nodes.some((n) => n.id === run.stage!.current)) return 'The save points to a map node that does not exist.';
     } else if (run.phase === 'map' || run.phase === 'shop') {
@@ -943,12 +941,15 @@ export class SaveManager {
     if (run.regionOrder.length > 0 && run.regionIndex >= run.regionOrder.length) return 'The save points to a region that does not exist.';
     if (run.phase === 'battle' && (!run.battle || !run.party[run.battle.activeIndex])) return 'Battle data is missing from the save.';
     if (run.phase === 'reward' && !run.draft) return 'Reward choices are missing from the save.';
-    if (run.phase !== 'starter' && run.party.length === 0) return 'The save has no party.';
+    // Some events take the whole team away for a while (Battle Factory rentals, the prison cell, the draft): they wait in the box or the stash.
+    if (run.phase !== 'starter' && run.party.length === 0 && run.box.length === 0 && !run.expansion?.canon?.stash?.length) return 'The save has no party.';
     if (run.party.length > c.balance.partyMax) return 'The save has too many Pokémon in the party.';
     return null;
   }
 
   saveRun(run: RunState): SaveResult {
+    // A catalog item that landed in the Bag would make this save fail its checks on the next load: move it first.
+    tidyBag(this.content, run);
     return this.write('run', run);
   }
 
@@ -972,12 +973,14 @@ export class SaveManager {
     const result = this.read('run', RunStateSchema, this.replayKey);
     if (result.status !== 'ok') return result;
     if (!result.data.timeline) return { status: 'corrupt', reason: 'The replay save is not a timeline.' };
+    tidyBag(this.content, result.data);
     const problem = this.findRunReferenceProblem(result.data);
     return problem ? { status: 'corrupt', reason: problem } : result;
   }
 
   saveReplay(run: RunState): SaveResult {
     if (!run.timeline) return { ok: false, reason: 'Only a timeline replay can be saved in the replay slot.' };
+    tidyBag(this.content, run);
     return this.write('run', run, this.replayKey);
   }
 
@@ -1102,6 +1105,7 @@ export class SaveManager {
     if (file.run) {
       const decoded = this.decode('run', JSON.stringify(file.run), RunStateSchema);
       if (decoded.status !== 'ok') return { ok: false, reason: `The run in that file is damaged: ${'reason' in decoded ? decoded.reason : 'unreadable.'}` };
+      tidyBag(this.content, decoded.data);
       const problem = this.findRunReferenceProblem(decoded.data);
       if (problem) return { ok: false, reason: `The run in that file cannot be used: ${problem}` };
       run = decoded.data;
