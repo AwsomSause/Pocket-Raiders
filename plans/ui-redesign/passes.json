@@ -91,5 +91,23 @@
   "q3": "Yes, three. Throwing the ball, the trainer's VS intro and the ace reveal each get their own page, so the main battle screen never has to squeeze them in.",
   "q4": "The pause menu dims the world and puts a spotlight on the wheel. Settings and the other pages keep their layout but now show the world faintly behind them.",
   "q5": "Yes. The behind-the-back camera, the VS split and the Poké Ball throw are the classic Pokémon battle moments, just bigger."
+ },
+ "7": {
+  "name": "Power Surge",
+  "big": "Mega Evolution, Terastallizing, Dynamax and Z-Moves stop hiding inside the move list. They get a Power button, a picker page, a full-screen scene each, and a rainbow energy line that marks anything charged.",
+  "pages": [
+   "Battle · Power Up",
+   "Mega Evolution",
+   "Terastallize",
+   "Dynamax",
+   "Z-Move",
+   "Battle · Powered Up",
+   "Settings · Animations"
+  ],
+  "q1": "Each power-up fills the whole screen with the game's own effect art: the Mega spiral, Tera crystals, the red Dynamax storm and the Z-Move title. The title screen now stars Mega Charizard X.",
+  "q2": "Pass 6 had no place for power-ups at all. Now the battle bar has a glowing Power button, the Fight page shows what is armed, and the bars carry Mega, Tera, Max and Z tags.",
+  "q3": "Yes, seven. One picker, four scenes, one page for the powered-up battle and a new Animations settings page.",
+  "q4": "The pause menu and the Party page show which powers are ready, used or locked. Settings gets an Animations page where the scenes can be set to Full, Short or Off.",
+  "q5": "Yes. These are the four big Pokémon battle gimmicks, shown the way the main games show them, with the game's own sprites and effects."
  }
 }

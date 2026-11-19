@@ -127,7 +127,7 @@ function boot() {
   paint(PR.cur); chrome(); fit();
   addEventListener('resize', fit);
   document.addEventListener('click', e => {
-    const g = e.target.closest('[data-go]'); if (g && $('#stage').contains(g)) { tour(false); return show(g.dataset.go, g.dataset.tr); }
+    const g = e.target.closest('[data-go]'); if (g && $('#stage').contains(g)) { if (!screensAt(PR.P).find(x => x.id === g.dataset.go)) return; tour(false); return show(g.dataset.go, g.dataset.tr); }
     const c = e.target.closest('[data-show]'); if (c) { tour(false); return show(c.dataset.show); }
     const p = e.target.closest('[data-pass-step]'); if (p) return setPass(PR.P + +p.dataset.passStep);
     if (e.target.closest('#vw-tour')) return tour(!tourT);
