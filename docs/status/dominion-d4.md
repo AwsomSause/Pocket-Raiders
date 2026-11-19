@@ -19,7 +19,7 @@
 
 ## Round-3 look (mockups-v3)
 - `dominion.css` is re-ported from `plans/evil-mode-rework/mockups-v3/index.html` with `tools/dominion/port-mockup-css.py`, so every Dominion screen gets the round-3 chrome (gold rims, foil title, jewel tabs, living buttons, medallions, damask, screws, 3D numbers, the entrance).
-- The tool now keeps `cubic-bezier(...)` whole, leaves `@property` unscoped, runs particle loops on the view clock, and plays the entrance once per screen (`stage(..., once)` sets `data-once`), not on every key press.
+- The port tool is the same as in #1491 / #1492 (they carry the v3 fixes), so `dominion.css` comes out identical on every branch: re-run the tool rather than hand-merging.
 - The Reserve and the Pyramid also carry their per-screen overlays (haze, bokeh, particles, grade, spotlight, edge glow, frame, sunburst) from `reserveFx.ts`. On the Reserve the spotlight and sunburst follow the picked tile.
 - D1-D3 screens get the shared chrome from the CSS but not their own overlays yet (their markup lives in those slices).
 

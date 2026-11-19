@@ -85,7 +85,7 @@ export function reserveView(m: ReserveModel, file: MonFile, notice: string | nul
   <div class="cta${m.cta.ok ? ' shine' : ''}" style="left:352px;top:474px;width:592px;height:52px;font-size:22px;${m.cta.ok ? '' : 'filter:saturate(.3);opacity:.75'}"${act('giveIt')} data-testid="dom-give-cta"><span class="kc" style="position:absolute;right:14px">Enter</span>${ctaIc}${esc(m.cta.text)}</div>
   ${cur}
   ${reserveFx(at >= 0 && focus === 'box' ? at : -1)}
-`, '', 'kl-gold check vign grain', 'reserve');
+`, '', 'kl-gold check vign grain');
 }
 
 // ---------- mockup 12: the Rank Pyramid ----------
@@ -140,5 +140,5 @@ export function pyramidView(m: PyramidModel, notice: string | null): string {
   <div class="a" style="left:292px;top:54px;width:24px;height:16px;z-index:7;display:grid;place-items:center;font:800 13px/1 var(--logo);font-style:italic;color:#4a1f6e">${esc(m.initial)}</div>
   <div class="embers" style="left:60px;top:80px;width:500px;height:440px;z-index:6;--ec:#ffe27a;background-size:250px 220px;opacity:.9"></div>
   ${thread}
-  ${PYRAMID_FX}`, '', 'kl-gold check vign grain', 'pyramid');
+  ${PYRAMID_FX}`, '', 'kl-gold check vign grain');
 }

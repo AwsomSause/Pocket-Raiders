@@ -1,4 +1,4 @@
-"""Ports the DOMINION mockup CSS (plans/evil-mode-rework/mockups-redesign/index.html) into the game.
+"""Ports the DOMINION mockup CSS (plans/evil-mode-rework/mockups-v3/index.html (round 3; earlier: mockups-redesign)) into the game.
 
 Every selector is scoped under `#rx .dom` (the id outranks the New look skins' class rules) (the root of a Dominion screen), keyframes get a `dm-` prefix, the page layout
 (header, figures, captions) is dropped, and looping animations take the view's clock (`var(--now)`) so a redraw
@@ -36,39 +36,22 @@ def split_rules(text):
     return out
 
 
-def top_split(text):
-    """Split on commas that are not inside brackets (cubic-bezier(.2,1,.3,1) stays whole)."""
-    out, depth, cur = [], 0, ''
-    for ch in text:
-        depth += (ch == '(') - (ch == ')')
-        if ch == ',' and depth == 0:
-            out.append(cur)
-            cur = ''
-        else:
-            cur += ch
-    return out + [cur]
-
-
 def anim(decls):
     def fix(m):
         parts = []
-        for one in top_split(m.group(2)):
+        for one in re.split(r',(?![^()]*\))', m.group(2)):
             toks = one.split()
             if toks and not toks[0][0].isdigit() and toks[0] not in ('none', 'var(--now)'):
                 toks[0] = 'dm-' + toks[0]
-            times = [k for k, t in enumerate(toks) if TIME.match(t) or t == 'var(--t)']
-            if 'infinite' in toks and 'var(--dl)' in toks:
-                # Particles start at their own delay: keep it, on the view's clock.
-                toks[toks.index('var(--dl)')] = 'calc(var(--dl) + var(--now,0s))'
-            elif len(times) == 1 and 'infinite' in toks:
+            times = [k for k, t in enumerate(toks) if TIME.match(t)]
+            if len(times) == 1 and 'infinite' in toks:
                 toks.insert(times[0] + 1, 'var(--now,0s)')
             parts.append(' '.join(toks))
         return m.group(1) + ','.join(parts)
     decls = re.sub(r'(animation:)([^;!}]+)', fix, decls)
-    # The v3 entrance is a one-shot: it plays from when the screen first showed (data-once sets --t0) or, without
-    # that, from when the view opened (--now), so a redraw on a key press doesn't replay it.
-    if 'dm-enter' in decls:
-        decls = decls.replace('animation-delay:calc(', 'animation-delay:calc(var(--t0,var(--now,0s)) + ')
+    # A delay set on its own still runs on the view's clock, so a redraw doesn't restart it (a one-shot entrance
+    # plays once when the view opens).
+    decls = re.sub(r'(animation-delay:)\s*([^;!}]+)', lambda m: m.group(1) + 'calc(var(--now,0s) + %s)' % m.group(2).strip(), decls)
     return re.sub(r'(animation-name:)\s*([\w-]+)', lambda m: m.group(1) + 'dm-' + m.group(2), decls)
 
 
@@ -118,5 +101,7 @@ out += '''#rx .dom .hd{position:static;left:auto;right:auto;top:auto;height:auto
 #rx .dom .col{gap:0}
 #rx .dom .key{width:auto;height:auto;display:inline-block;color:inherit;font-weight:400}
 '''
+# Mockup sprites the CSS points at live in public/assets/images/dominion/ in the game (Vite adds the base path).
+out = re.sub(r'url\((["\']?)sprites/', r'url(\1/assets/images/dominion/', out)
 open(dst, 'w', encoding='utf-8').write(out)
 print(len(out), 'bytes')

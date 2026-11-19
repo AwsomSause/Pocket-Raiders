@@ -13,12 +13,8 @@ const img = (f: string): string => rxUrl(`dominion/${f}.png`);
 const cap = (t: string): string => t[0]!.toUpperCase() + t.slice(1);
 
 /** The 960x540 stage every Dominion screen draws on (the mockups' `.st`, with the vignette and grain). */
-export function stage(inner: string, style = '', cls = 'vign grain', once = ''): string {
-  // `once` names the screen: its round-3 entrance (dm-enter) plays when that screen first shows, not on every redraw.
-  // The view sets --t0 on later redraws; the first draw starts it at 0.
-  const o = once ? ` data-once="dom-${once}"` : '';
-  const st = once ? `--t0:0ms;${style}` : style;
-  return `<div class="dom" style="position:absolute;left:0;top:0;width:960px;height:540px;--noise:url(${grainUrl()})"><div class="st ${cls}" style="${st}"${o}>${inner}</div></div>`;
+export function stage(inner: string, style = '', cls = 'vign grain'): string {
+  return `<div class="dom" style="position:absolute;left:0;top:0;width:960px;height:540px;--noise:url(${grainUrl()})"><div class="st ${cls}" style="${style}">${inner}</div></div>`;
 }
 
 /** The top bar on every Dominion screen (Part 6 §2; mockup 1). */
