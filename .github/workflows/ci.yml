@@ -48,7 +48,10 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # The whole project's types need a little over Node's default 4 GB heap (Dominion D2 + D3 crossed it on 2026-11-19).
       - run: npm run typecheck
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
       - run: npm test
       - run: npm run build
       # Content quality gate (QUALITY_GATES.md): fails when a content-report number gets worse than tools/content-baseline.json.
