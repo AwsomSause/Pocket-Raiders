@@ -231,6 +231,157 @@ small{font-size:12px;color:var(--mute);font-weight:500}
 
 }
 </style>
+<style data-pass="2">
+#stage{
+/* Pass 2 · Slant & Scale. Layout idea: everything leans forward; a red slash carries titles; sprites double in size. */
+&{--sk:-9deg;--usk:9deg}
+.scr{background:linear-gradient(108deg,#fff 0 58%,#e6ecf7 58% 100%)}
+.scr::before{content:'';position:absolute;right:-70px;bottom:-70px;width:330px;height:330px;background:url(sprites/ball256.png) center/contain no-repeat;opacity:.09;transform:rotate(-18deg);image-rendering:pixelated;pointer-events:none}
+.hdr{height:58px;background:none;border:0;padding:0 20px 6px 0}
+.hdr::before{content:'';position:absolute;left:-24px;top:0;height:52px;width:480px;background:var(--red);transform:skewX(-20deg);border-right:10px solid var(--yel);box-shadow:8px 0 0 var(--ink);z-index:-1}
+.hdr-t{font-size:40px;margin-left:22px;transform:skewX(var(--sk))}
+.hdr-p b{transform:skewX(-20deg);border-radius:4px;border:2px solid var(--ink);padding:3px 14px;box-shadow:3px 3px 0 var(--ink)}
+.hdr-p u{display:inline-block;text-decoration:none;transform:skewX(20deg)}
+.keys{left:auto;padding:0 20px 0 46px;clip-path:polygon(26px 0,100% 0,100% 100%,0 100%)}
+.btn{transform:skewX(var(--sk));border-radius:5px;box-shadow:4px 4px 0 var(--ink)}
+.btn>*{transform:skewX(var(--usk))}
+.btn.on{border-left:10px solid var(--red);translate:10px 0}
+.btn.on>b::before{content:none}
+.btn.sm.on,.cmd .btn.on,.mv.on,.row .btn.on,.bb-tabs .btn.on{translate:0 0}
+.pn{border-radius:4px 18px 4px 18px;box-shadow:6px 6px 0 var(--ink)}
+.ty{border-radius:3px;transform:skewX(-14deg)}
+.hp{transform:skewX(-24deg);border-radius:2px;height:13px}
+.tb{border-radius:4px 18px 4px 18px;box-shadow:6px 6px 0 var(--ink)}
+.tb-w{transform:skewX(-14deg);border-radius:3px;background:var(--red)}
+.tab{transform:skewX(-14deg);border-radius:4px 4px 0 0;margin-left:2px}
+.li.on{border-left:8px solid var(--red);border-radius:3px}
+.slash{position:absolute;left:-90px;top:0;bottom:0;width:480px;background:var(--red);transform:skewX(-12deg);border-right:14px solid var(--yel);box-shadow:10px 0 0 var(--ink)}
+.ev-tag{transform:skewX(-14deg);border-radius:4px;box-shadow:4px 4px 0 var(--ink)}
+.ev-tag b{border-radius:3px}
+/* title */
+.t2 .logo{left:30px;top:20px;font-size:108px}
+.t2 .ti-menu{left:30px;top:226px;width:286px;gap:8px}
+.t2 .ti-cast{width:640px;height:480px}
+.t2 .c1{right:300px;bottom:170px}
+.t2 .c2{right:14px;bottom:10px}
+.t2 .c3{right:360px;bottom:6px}
+/* hub */
+.h2 .hub-line{bottom:150px;gap:0}
+.h2 .hub-line img{margin:0 -12px}
+.h2 .hub-cap{top:70px;right:16px;left:auto;transform:skewX(var(--sk));border-radius:4px;box-shadow:4px 4px 0 var(--ink)}
+.hub-dock{position:absolute;left:20px;right:20px;bottom:44px;display:grid;grid-template-columns:1fr 1fr 1fr 1.5fr 1fr 1fr 1fr;gap:10px;align-items:end}
+.hub-dock .tile{transform:skewX(var(--sk));border-radius:5px;box-shadow:4px 4px 0 var(--ink);height:84px;padding:8px 10px}
+.hub-dock .tile>*{transform:skewX(var(--usk))}
+.hub-dock .tile span{font-size:12px;line-height:1.2}
+.hub-dock .tile.big{height:112px}
+.hub-dock .tile.big b{font-size:40px}
+/* map */
+.m2 .map-board{top:68px;height:300px;background:#dff0d4}
+.m2 .map-svg line{stroke-dasharray:none}
+.m2 .map-svg .edge{stroke:var(--ink);stroke-width:14}
+.m2 .map-svg .top{stroke:#fbf3d3;stroke-width:8}
+.m2 .map-svg .top.walked{stroke:var(--yel)}
+.map-tick{position:absolute;top:6px;transform:translateX(-50%);font:400 16px/1 var(--fd);color:#6f8a73}
+.map-tick.on{background:var(--ink);color:#fff;padding:1px 8px;border-radius:3px}
+.m2 .node{width:58px;height:58px;margin:-29px 0 0 -29px;border-width:5px}
+.m2 .node span{top:54px}
+.m2 .node.next{box-shadow:0 0 0 5px var(--yel),0 0 0 7px var(--ink)}
+.m2 .map-you{margin:-128px 0 0 -27px}
+.m2 .map-info{top:384px;height:52px;padding:0;gap:14px;align-items:stretch}
+.mi-a,.mi-b{transform:skewX(var(--sk));justify-content:center;padding:4px 22px;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink);background:#fff}
+.mi-a>*,.mi-b>*{transform:skewX(var(--usk))}
+.mi-a{flex:1;border-left:10px solid var(--red)}
+.mi-b{background:var(--yel)}
+.m2 .map-info .mi-b span{color:var(--ink)}
+.m2 .map-menu{top:454px}
+/* battle */
+.b2 .ar-foe{left:540px;top:150px}
+.b2 .ar-me{left:20px;top:392px;width:480px;height:60px}
+.b2 .ar-me .ar-mon{bottom:-40px}
+.b2 .plate{width:330px;border-radius:0;padding:0;border:0;box-shadow:none;background:none}
+.pl-in{background:#fff;border:2px solid var(--ink);transform:skewX(-14deg);padding:8px 26px 9px;box-shadow:6px 6px 0 var(--ink);display:flex;flex-direction:column;gap:5px}
+.pl-in>*{transform:skewX(14deg)}
+.b2 .plate.foe{left:-14px;top:20px}
+.b2 .plate.foe .pl-in{border-left:16px solid var(--red)}
+.b2 .plate.me{right:-14px;top:262px}
+.b2 .plate.me .pl-in{border-right:16px solid var(--blu)}
+.b2 .tb{left:-16px;right:auto;width:556px;bottom:20px;min-height:66px;border-radius:0;transform:skewX(-14deg);padding:18px 20px 16px 48px;font-size:20px}
+.b2 .tb>*{transform:skewX(14deg)}
+.b2 .cmd{right:16px;bottom:20px;width:372px;grid-template-columns:1.25fr 1fr;grid-template-rows:52px 52px 34px;gap:8px}
+.b2 .cmd .btn{min-height:0}
+.b2 .cmd .big{grid-row:span 2}
+.b2 .cmd .big b{font:400 46px/1 var(--fd);letter-spacing:.03em}
+.mv-rib{position:absolute;left:-16px;bottom:120px;width:640px;background:var(--ink);color:#fff;transform:skewX(-14deg);padding:8px 26px 8px 48px;display:grid;grid-template-columns:1fr auto;gap:3px 14px;font-size:13px;z-index:4}
+.mv-rib>*{transform:skewX(14deg)}
+.mv-rib span{display:flex;gap:6px;align-items:center}
+.mv-rib p{grid-column:span 2}
+.mv-rib .eff{margin:0}
+.mv-rib .eff.e-1{color:#b9c3da}
+.mv-rib .eff.e1{color:var(--yel)}
+.b2 .moves{left:20px;right:20px;width:auto;bottom:20px;grid-template-columns:repeat(4,1fr);gap:14px}
+.b2 .mv{min-height:84px;gap:8px}
+.b2 .mv b{font-size:18px}
+.b2 .mv.on{translate:0 -8px}
+.bbag .plate,.bsw .plate,.bbag .ar-info,.bsw .ar-info{display:none}
+.bb-tabs{position:absolute;left:20px;top:20px;display:flex;gap:12px;z-index:4}
+.bb-tabs .btn{min-width:130px;align-items:center}
+.bb-tabs .back{background:var(--ink);color:#fff}
+.bb-grid{position:absolute;left:20px;top:84px;width:560px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;z-index:4}
+.it{height:112px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.it.on{background:var(--yel)}
+.bb-use{position:absolute;right:20px;top:84px;width:336px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;z-index:4}
+.bb-use>b{font:400 30px/1 var(--fd)}
+.bb-t{display:flex;gap:12px;align-items:center;background:#eef3fa;border-radius:8px;padding:8px 10px}
+.bb-t div{flex:1;display:flex;flex-direction:column;gap:3px}
+.bb-t span{font-size:13px}
+.bb-use .btn{align-items:center}
+.sw-list{position:absolute;left:24px;top:20px;width:560px;display:flex;flex-direction:column;gap:9px;z-index:4}
+.sw{min-height:70px;padding:4px 14px}
+.sw.on{translate:10px 0}
+.sw.fnt{background:#e5e8ef}
+.sw-r{display:flex;align-items:center;gap:10px}
+.sw-r .pc-s{width:64px!important;height:56px!important}
+.sw-r b{width:96px}
+.sw-r .hp{flex:1}
+.hint{font-style:normal;font-size:12px;font-weight:800;width:140px;text-align:right;color:var(--mute)}
+.hint.h1{color:#1d8a34}
+.hint.h4{color:var(--red)}
+.sw-pick{position:absolute;right:20px;top:20px;width:330px;padding:16px 18px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;z-index:4}
+.sw-pick>b{font:400 32px/1 var(--fd)}
+.sw-pick p{font-size:13px}
+.sw-pick .btn{min-width:120px;align-items:center}
+/* party */
+.leadc{position:absolute;left:16px;top:76px;width:320px;height:418px;padding:12px 18px;display:flex;flex-direction:column;align-items:center;gap:8px;background:var(--yel)}
+.leadc .st{align-self:flex-start}
+.leadc .pc-1,.leadc .pc-2{width:100%}
+.leadc .pc-1{font-size:22px}
+.pt-rows{position:absolute;left:360px;right:20px;top:76px;display:flex;flex-direction:column;gap:11px}
+.p2 .pcard{height:74px}
+.p2 .pc-s{width:76px!important;height:60px!important}
+.p2 .pcard .pc-3{width:156px;flex-wrap:wrap;justify-content:flex-end}
+/* summary */
+.sm-band{position:absolute;left:-50px;top:0;bottom:0;width:420px;background:var(--red);transform:skewX(var(--sk));border-right:12px solid var(--yel);box-shadow:8px 0 0 var(--ink)}
+.s2 .sm-left{background:none;border:0;box-shadow:none;width:330px;color:#fff;top:62px;padding:6px 14px}
+.s2 .sm-art{background:none;height:330px}
+.s2 .sm-left .lv{color:#ffe9a8}
+.s2 .sm-left .gd{color:#fff}
+.s2 .sm-right{left:392px;top:70px}
+.s2 .sm-body{height:386px}
+/* pause menu */
+.mn2 .mn-h{position:absolute;left:30px;top:24px;color:#fff}
+.mn2 .mn-h b{font-size:52px}
+.mn2 .mn-h span{color:#ffe9a8}
+.mn-list{position:absolute;left:30px;top:118px;width:280px;display:flex;flex-direction:column;gap:9px}
+.mn-me{position:absolute;left:450px;bottom:34px}
+.mn2 .mn-side{left:auto;right:40px;top:170px;width:230px;align-items:flex-start;padding:14px 20px;font-size:15px}
+.mn2 .mn-side b{font-size:40px}
+/* settings */
+.set-cats{position:absolute;left:16px;top:74px;width:190px;display:flex;flex-direction:column;gap:5px}
+.set-cats .btn{min-height:31px;align-items:flex-start}
+.st2 .set-list{left:230px;top:74px;height:330px}
+
+}
+</style>
 </head><body>
 <div id="app">
 <header class="vw-top vw-ui"><h1>Pocket Raiders · UI Redesign</h1>
@@ -242,7 +393,7 @@ small{font-size:12px;color:var(--mute);font-weight:500}
 </div>
 <script>
 const SPR={"a-abyss-a":[120,18],"a-abyss-b":[128,32],"a-abyss-bg":[320,180],"a-cave-a":[120,15],"a-cave-b":[128,32],"a-cave-bg":[320,180],"a-desert-a":[120,11],"a-desert-b":[128,32],"a-desert-bg":[320,180],"a-dojo-a":[120,11],"a-dojo-b":[128,32],"a-dojo-bg":[320,180],"a-factory-a":[120,11],"a-factory-b":[128,32],"a-factory-bg":[320,180],"a-forest-a":[120,21],"a-forest-b":[135,43],"a-forest-bg":[320,180],"a-grass-a":[120,15],"a-grass-b":[128,43],"a-grass-bg":[320,180],"a-graveyard-a":[120,15],"a-graveyard-b":[128,32],"a-graveyard-bg":[320,180],"a-ice_cave-a":[120,11],"a-ice_cave-b":[128,32],"a-ice_cave-bg":[320,180],"a-mountain-a":[120,15],"a-mountain-b":[128,32],"a-mountain-bg":[320,180],"a-plains-a":[120,18],"a-plains-b":[128,36],"a-plains-bg":[320,180],"a-power_plant-a":[120,11],"a-power_plant-b":[128,32],"a-power_plant-bg":[320,180],"a-raid_max-bg":[320,180],"a-raid_tera-bg":[320,180],"a-raid_ultra-bg":[320,180],"a-ruins-a":[120,11],"a-ruins-b":[128,32],"a-ruins-bg":[320,180],"a-sea-a":[120,13],"a-sea-b":[128,35],"a-sea-bg":[320,180],"a-swamp-a":[123,35],"a-swamp-b":[128,32],"a-swamp-bg":[320,180],"a-tall_grass-a":[130,18],"a-tall_grass-b":[130,44],"a-tall_grass-bg":[320,180],"a-volcano-a":[125,20],"a-volcano-b":[128,32],"a-volcano-bg":[320,180],"b-dive":[12,12],"b-dusk":[12,12],"b-gb":[12,12],"b-heal":[12,12],"b-love":[12,12],"b-luxury":[12,12],"b-master":[12,12],"b-moon":[12,12],"b-net":[12,12],"b-pb":[12,12],"b-premier":[12,12],"b-quick":[12,12],"b-timer":[12,12],"b-ub":[12,12],"ball256":[256,256],"bd-bug":[32,32],"bd-dark":[32,32],"bd-dragon":[32,32],"bd-electric":[32,32],"bd-fairy":[32,32],"bd-fighting":[32,32],"bd-fire":[32,32],"bd-flying":[32,32],"bd-ghost":[32,32],"bd-grass":[32,32],"bd-ground":[32,32],"bd-ice":[32,32],"bd-normal":[32,32],"bd-poison":[32,32],"bd-psychic":[32,32],"bd-rock":[32,32],"bd-steel":[32,32],"bd-water":[32,32],"ev-cave":[512,288],"ev-city":[512,288],"ev-city_eve":[512,288],"ev-city_night":[512,288],"ev-field":[512,384],"ev-field_eve":[512,288],"ev-forest":[512,288],"ev-forest_night":[512,288],"ev-grotto":[512,384],"ev-indoor":[512,288],"ev-mountain":[512,384],"ev-ruins":[512,384],"ev-sand":[512,384],"ev-snow_eve":[512,288],"ev-water":[512,288],"ev-water_eve":[512,288],"fx-burst":[512,384],"fx-crystal":[512,384],"fx-max":[512,384],"fx-shine":[512,384],"fx-spiral":[608,619],"fx-tera":[512,384],"fx-ultra":[512,384],"fx-vs":[640,480],"g-dmax":[34,34],"g-mega":[30,54],"g-megaring":[48,48],"g-tera":[258,317],"i-amulet_coin":[32,32],"i-big_nugget":[32,32],"i-black_glasses":[32,32],"i-blue_orb":[32,32],"i-calendar":[32,32],"i-candy":[32,32],"i-charizardite_x":[32,32],"i-coin_case":[32,32],"i-dynamax_band":[32,32],"i-electrium_z":[32,32],"i-ether":[32,32],"i-exp_charm":[32,32],"i-fire_stone":[32,32],"i-fire_tera_shard":[32,32],"i-firium_z":[32,32],"i-focus_sash":[32,32],"i-full_heal":[32,32],"i-full_restore":[32,32],"i-gengarite":[32,32],"i-hyper_potion":[32,32],"i-kings_rock":[32,32],"i-lucarionite":[32,32],"i-lucky_egg":[32,32],"i-map":[32,32],"i-master_ribbon":[32,32],"i-mega_bracelet":[32,32],"i-metal_coat":[32,32],"i-moon_stone":[32,32],"i-muscle_band":[32,32],"i-mystery_egg":[32,32],"i-nugget":[32,32],"i-potion":[32,32],"i-quick_claw":[32,32],"i-rare_candy":[32,32],"i-red_orb":[32,32],"i-revive":[32,32],"i-scanner":[32,32],"i-shell_bell":[32,32],"i-shiny_charm":[32,32],"i-soothe_bell":[32,32],"i-super_potion":[32,32],"i-tera_orb":[32,32],"i-thunder_stone":[32,32],"i-wise_glasses":[32,32],"i-z_ring":[32,32],"m-1":[35,33],"m-109":[34,35],"m-110":[78,64],"m-112":[73,63],"m-121":[53,52],"m-129":[44,57],"m-130":[81,77],"m-131":[68,66],"m-133":[37,47],"m-143":[62,67],"m-144":[72,81],"m-145":[91,58],"m-146":[92,75],"m-147":[35,44],"m-149":[61,80],"m-150-mega-y":[53,86],"m-150":[68,65],"m-152":[39,44],"m-155":[42,37],"m-16":[37,41],"m-163":[43,43],"m-169":[88,48],"m-172":[26,37],"m-19":[36,43],"m-197":[42,51],"m-198":[40,44],"m-20":[56,51],"m-208":[81,74],"m-212":[68,73],"m-214":[58,63],"m-215":[53,48],"m-228":[37,44],"m-229":[65,67],"m-23":[41,44],"m-24":[61,65],"m-241":[54,47],"m-243":[78,65],"m-244":[75,68],"m-245":[74,69],"m-246":[34,44],"m-248":[77,76],"m-249":[96,85],"m-25":[39,46],"m-250":[83,91],"m-252":[41,45],"m-255":[25,43],"m-257":[59,75],"m-258":[39,42],"m-26":[63,61],"m-282":[69,73],"m-3":[79,69],"m-302":[42,43],"m-303":[57,47],"m-306":[72,72],"m-308":[38,66],"m-310":[54,67],"m-319":[62,70],"m-323":[72,60],"m-334":[58,63],"m-354":[49,51],"m-359":[53,58],"m-362":[55,56],"m-373":[78,71],"m-376":[77,52],"m-380":[68,53],"m-381":[70,72],"m-382":[94,57],"m-383":[77,74],"m-384-mega":[115,114],"m-384":[89,83],"m-387":[31,42],"m-390":[30,45],"m-393":[27,35],"m-4":[38,42],"m-41":[51,37],"m-42":[80,62],"m-428":[53,62],"m-430":[54,56],"m-443":[45,51],"m-445-mega":[80,79],"m-445":[73,76],"m-447":[42,45],"m-448-mega":[42,76],"m-448":[46,63],"m-460":[80,69],"m-461":[51,65],"m-475":[54,69],"m-483":[79,87],"m-484":[78,67],"m-495":[40,37],"m-498":[33,39],"m-5":[60,56],"m-501":[29,36],"m-52":[41,49],"m-53":[69,62],"m-531":[45,52],"m-59":[70,69],"m-6-gigantamax":[93,95],"m-6-mega-x":[102,89],"m-6":[74,81],"m-643":[96,82],"m-644":[95,91],"m-65":[72,67],"m-650":[34,49],"m-653":[40,48],"m-656":[32,35],"m-66":[50,50],"m-68":[63,68],"m-7":[38,39],"m-717":[99,88],"m-719":[41,70],"m-722":[30,35],"m-725":[47,40],"m-728":[40,39],"m-74":[56,24],"m-76":[65,57],"m-791":[76,85],"m-792":[89,86],"m-793":[46,70],"m-800":[87,84],"m-810":[36,42],"m-813":[33,51],"m-816":[36,46],"m-88":[53,37],"m-888":[82,76],"m-889":[74,90],"m-89":[78,58],"m-890":[88,82],"m-9":[66,62],"m-906":[38,39],"m-909":[39,48],"m-912":[32,47],"m-92":[65,55],"m-93":[61,48],"m-94-mega":[80,63],"m-94":[58,56],"m-95":[72,73],"map-region0":[480,320],"map-region1":[480,320],"mb-130":[91,77],"mb-133":[36,47],"mb-143":[63,63],"mb-149":[69,80],"mb-150":[69,65],"mb-155":[44,36],"mb-25":[35,47],"mb-258":[40,43],"mb-384":[77,92],"mb-4":[40,41],"mb-445":[76,73],"mb-448-mega":[41,76],"mb-448":[45,65],"mb-6-gigantamax":[96,91],"mb-6-mega-x":[106,90],"mb-6":[84,81],"mb-94-mega":[81,70],"mb-94":[55,54],"st-burn":[196,196],"st-para":[196,196],"st-poison":[196,196],"t-acef":[50,73],"t-acem":[29,77],"t-archer":[29,79],"t-blue":[53,74],"t-brock":[44,51],"t-cynthia":[53,80],"t-giovanni":[51,79],"t-green":[42,68],"t-grunt":[42,65],"t-hilda":[40,74],"t-lance":[59,74],"t-leon":[50,80],"t-misty":[51,72],"t-nate":[36,70],"t-red":[37,69],"t-redm":[42,71],"t-silver":[27,71],"t-steven":[38,75],"t-whitney":[42,69],"ty-bug":[32,32],"ty-dark":[32,32],"ty-dragon":[32,32],"ty-electric":[32,32],"ty-fairy":[32,32],"ty-fighting":[32,32],"ty-fire":[32,32],"ty-flying":[32,32],"ty-ghost":[32,32],"ty-grass":[32,32],"ty-ground":[32,32],"ty-ice":[32,32],"ty-normal":[32,32],"ty-poison":[32,32],"ty-psychic":[32,32],"ty-rock":[32,32],"ty-steel":[32,32],"ty-water":[32,32],"z-gigavolt":[512,200],"z-inferno":[512,200]};
-const NOTES={"1": {"name": "Clean Slate", "big": "A fresh start. Twelve core screens redrawn bright and simple in the three Pokémon logo colours (red, yellow, blue), replacing the dark navy look.", "pages": ["Title", "Hub Town", "Stage Map", "Battle", "Battle · Moves", "Event", "Party", "Summary", "Bag", "Poké Mart", "Pause Menu", "Settings"], "q1": "Not yet. It is tidy but flat: square cards on dotted paper, small sprites, nothing moves. Next pass needs energy and scale.", "q2": "Against the game today: light instead of dark, far bigger words, one selection colour, and every button says what it does.", "q3": "Yes. The battle screen sends Bag and Pokémon to the general pages, which hides the fight. They need their own battle pages.", "q4": "The Pause Menu is a plain list and Settings is one long tab row. Both work, neither is special yet.", "q5": "Partly. The logo colours and Poké Ball markers say Pokémon, but the shapes could be any app."}};
+const NOTES={"1": {"name": "Clean Slate", "big": "A fresh start. Twelve core screens redrawn bright and simple in the three Pokémon logo colours (red, yellow, blue), replacing the dark navy look.", "pages": ["Title", "Hub Town", "Stage Map", "Battle", "Battle · Moves", "Event", "Party", "Summary", "Bag", "Poké Mart", "Pause Menu", "Settings"], "q1": "Not yet. It is tidy but flat: square cards on dotted paper, small sprites, nothing moves. Next pass needs energy and scale.", "q2": "Against the game today: light instead of dark, far bigger words, one selection colour, and every button says what it does.", "q3": "Yes. The battle screen sends Bag and Pokémon to the general pages, which hides the fight. They need their own battle pages.", "q4": "The Pause Menu is a plain list and Settings is one long tab row. Both work, neither is special yet.", "q5": "Partly. The logo colours and Poké Ball markers say Pokémon, but the shapes could be any app."}, "2": {"name": "Slant & Scale", "big": "Everything leans forward. A red slash carries every title, buttons and plates are slanted, sprites are about twice as big, and the battle gets its own Bag and Switch pages.", "pages": ["Battle · Bag", "Battle · Switch"], "q1": "Better: the slash and the huge Charizard on the title grab the eye. But it is still two flat colours with no life from the Pokémon themselves.", "q2": "Pass 1 was square cards on paper. Now panels lean, the lead Pokémon gets a big card, the map is a real road with stop numbers, and Fight is the biggest button in battle.", "q3": "Done here: Bag and Switch are battle pages now, so the fight stays on screen behind them. Move details still crowd the move row and should get more room.", "q4": "The Pause Menu moved onto the red slash with the trainer standing beside it. Settings swapped the tab row for a category list on the left, which leaves room for more categories.", "q5": "More than before. Slanted bars and a road map read as modern Pokémon. What is missing is type colour, the thing every Pokémon screen is built on."}};
 /* Pocket Raiders UI redesign: mockup kit. Screens and parts are versioned by pass:
    def(pass, id, meta, fn) and comp(pass, name, fn). At pass P the newest version with pass <= P is drawn. */
 const PR = { defs: {}, comps: {}, order: [], P: 1, cur: null };
@@ -532,6 +683,96 @@ def(1, 'settings', { t: 'Settings', g: 'Settings' }, () => { const rows = [['Tex
   <div class="set-list pn">${rows.map((r, i) => `<div class="li${i === 0 ? ' on' : ''}"><b>${r[0]}</b><span class="val">◀ ${r[1]} ▶</span></div>`).join('')}</div>
   ${C('box', '', 'How fast words appear in text boxes. Fast shows a full line almost at once.')}
   ${C('keys', [['←→', 'change'], ['↑↓', 'move'], ['Q E', 'tab'], ['Esc', 'back']])}</div>`; });
+
+/* ===== pass 2 ===== */
+/* Pass 2 · Slant & Scale: slanted bands, sprites twice the size, battle gets its own Bag and Switch pages */
+comp(2, 'hdr', (t, pills = []) => `<div class="hdr" ${mm('hdr')}><span class="hdr-t">${t}</span><span class="hdr-p">${pills.map(p => `<b><u>${p}</u></b>`).join('')}</span></div>`);
+comp(2, 'plate', (who) => { const me = PARTY[0], f = who === 'foe'; return `<div class="plate ${who}" ${mm('plate-' + who)}><div class="pl-in"><div class="pl-1"><b>${f ? FOE.n : me.n}</b><i class="gd">${f ? FOE.g : me.g}</i><span class="lv">Lv ${f ? FOE.lv : me.lv}</span></div><div class="pl-2"><em>HP</em>${C('hp', f ? FOE.hp : pct(me.hp, me.mx))}${f ? '' : `<span class="num">${me.hp}/${me.mx}</span>`}</div><div class="pl-3">${C('balls', f ? 4 : 6, 1)}<span>${f ? FOE.owner : 'Exp ' + me.exp + '%'}</span></div></div></div>`; });
+comp(2, 'arena', (o = {}) => `<img class="px ar-bg${o.dim ? ' dim' : ''}" src="sprites/a-${o.bg || 'grass'}-bg.png" alt="">
+  <div class="ar-foe">${spr('a-' + (o.bg || 'grass') + '-b', 3, 'ar-base')}${spr('m-' + FOE.k, 3, 'ar-mon')}</div>
+  <div class="ar-me">${spr('a-' + (o.bg || 'grass') + '-a', 4, 'ar-base')}${spr('mb-' + PARTY[0].k, 4, 'ar-mon')}</div>
+  ${C('plate', 'foe')}${C('plate', 'me')}<div class="ar-info">${RUN.region} · Stage ${RUN.stage} of ${RUN.stages} · Turn 3</div>`);
+
+def(2, 'title', { t: 'Title', g: 'Start' }, () => `<div class="scr title t2">
+  <img class="px ar-bg" src="sprites/a-plains-bg.png" alt="">
+  <div class="ti-cast">${spr('m-149', 4, 'c1')}${spr('m-6', 5, 'c2')}${spr('m-25', 4, 'c3')}</div>
+  <div class="slash"></div>
+  <div class="logo" ${mm('logo')}><span>Pocket</span><span>Raiders</span><small>A Pokémon roguelike · Beta 0.7</small></div>
+  <div class="ti-menu">
+    <div class="btn on" ${go('map')}><b>Continue</b><small>Kanto · Stage 12 of 30 · 2 badges</small></div>
+    <div class="btn" ${go('hub')}><b>Enter the Hub</b></div><div class="btn"><b>New Run</b></div><div class="btn"><b>Story Run</b></div>
+    <div class="btn"><b>Save Slots</b></div><div class="btn" ${go('settings')}><b>Settings</b></div>
+  </div>
+  <div class="ti-foot">Fan game. Not for sale.</div>
+  ${C('keys', [['↑↓', 'move'], ['Enter', 'choose']])}</div>`);
+
+def(2, 'hub', { t: 'Hub Town', g: 'Start' }, () => `<div class="scr hub h2"><img class="px ar-bg" src="sprites/a-plains-bg.png" alt="">
+  ${C('hdr', 'Hub Town', ['Rank 4', '₽ ' + RUN.money])}
+  <div class="hub-line">${spr('t-red', 3)}${PARTY.map(p => spr('m-' + p.k, 2.5)).join('')}</div>
+  <div class="hub-cap"><b>Red's team</b><span>Last run: Kanto, stage 12 of 30</span></div>
+  <div class="hub-dock">
+    <div class="tile"><b>Trainers</b><span>Who you play as</span></div><div class="tile"><b>Events</b><span>Homeland Week</span></div><div class="tile"><b>Unlocks</b><span>3 new rewards</span></div>
+    <div class="tile on big" ${go('map')}><b>New Run</b><span>Start a fresh journey</span></div>
+    <div class="tile"><b>Town</b><span>Walk around</span></div><div class="tile"><b>Gallery</b><span>Past champions</span></div><div class="tile" ${go('settings')}><b>Settings</b><span>Sound, display</span></div>
+  </div>
+  ${C('keys', [['←→', 'move'], ['Enter', 'open'], ['Esc', 'title']])}</div>`);
+
+def(2, 'map', { t: 'Stage Map', g: 'Map' }, () => {
+  const X = c => 84 + c * 113, Y = r => 84 + r * 80;
+  return `<div class="scr map m2">
+  ${C('hdr', `${RUN.region} · Stage ${RUN.stage} of ${RUN.stages}`, [RUN.day, '₽ ' + RUN.money, 'Badges ' + RUN.badges, 'Level cap ' + RUN.cap])}
+  <div class="map-board pn"><svg viewBox="0 0 928 300" class="map-svg">${[0, 1].map(k => MAPE.map(([a, b]) => { const A = MAPN[a], B = MAPN[b]; return `<line x1="${X(A[1])}" y1="${Y(A[2])}" x2="${X(B[1])}" y2="${Y(B[2])}" class="${k ? 'top' : 'edge'} ${A[4] === 'done' && (B[4] === 'done' || B[4] === 'here') ? 'walked' : ''}"/>`; }).join('')).join('')}</svg>
+    ${rep(8, c => `<span class="map-tick${c === 3 ? ' on' : ''}" style="left:${X(c)}px">${9 + c}</span>`)}
+    ${MAPN.map(n => `<div class="node ${n[4]}" style="left:${X(n[1])}px;top:${Y(n[2])}px;--c:${NODE[n[3]][1]}" ${n[4] === 'next' && n[3] === 'event' ? go('event') : n[4] === 'next' && n[3] === 'wild' ? go('battle') + ' data-tr="battle"' : ''}>${spr(NICON[n[3]], n[3] === 'trainer' || n[3] === 'rest' ? 3 : 1.5)}<span>${NODE[n[3]][0]}</span></div>`).join('')}
+    <div class="map-you" style="left:${X(3)}px;top:${Y(1)}px">${spr('t-red', 1.5)}</div></div>
+  <div class="map-info"><div class="mi-a"><b>Next stop: Event</b><span>The Old Lighthouse. Something is flashing at the top.</span></div><div class="mi-b"><b>${RUN.gym}</b><span>Misty · Water type</span></div></div>
+  <div class="map-menu">${MAPMENU.map((m, i) => `<div class="btn sm${i === 0 ? ' on' : ''}" ${i === 0 ? go('party') : i === 1 ? go('bag') : ''}><b>${m}</b></div>`).join('')}</div>
+  ${C('keys', [['←→↑↓', 'pick a stop'], ['Enter', 'go'], ['Tab', 'menu row'], ['Esc', 'pause']])}</div>`;
+});
+
+def(2, 'battle', { t: 'Battle', g: 'Battle' }, () => `<div class="scr battle b2">${C('arena')}
+  ${C('box', '', 'What will <b>Charizard</b> do?')}
+  <div class="cmd"><div class="btn on big" ${go('fight')}><b>Fight</b></div><div class="btn" ${go('b-bag')}><b>Bag</b></div><div class="btn" ${go('b-switch')}><b>Pokémon</b></div><div class="btn sm"><b>Auto</b></div><div class="btn sm"><b>Info</b></div></div></div>`);
+
+def(2, 'fight', { t: 'Battle · Moves', g: 'Battle' }, () => { const m = MOVES[0]; return `<div class="scr battle b2 fight">${C('arena')}
+  <div class="mv-rib" ${mm('tb')}><span>${C('ty', m.ty)}<b>${m.cat}</b> · Power <b>${m.pw}</b> · Accuracy <b>${m.acc}</b></span><span class="eff e${m.e}">${m.eff} on ${FOE.n}</span><p>${m.d}</p></div>
+  <div class="moves">${MOVES.map((v, i) => `<div class="btn mv${i === 0 ? ' on' : ''}" ${go('battle')}><b>${v.n}</b><span>${C('ty', v.ty)}<i>PP ${v.pp}/${v.mpp}</i></span></div>`).join('')}</div></div>`; });
+
+def(2, 'b-bag', { t: 'Battle · Bag', g: 'Battle' }, () => `<div class="scr battle b2 bbag">${C('arena', { dim: 1 })}
+  <div class="bb-tabs">${['Heal', 'Poké Balls', 'Battle items'].map((t, i) => `<div class="btn${i === 0 ? ' on' : ''}"><b>${t}</b></div>`).join('')}<div class="btn back" ${go('battle')}><b>Back</b></div></div>
+  <div class="bb-grid">${BAG.map((b, i) => `<div class="it pn${i === 1 ? ' on' : ''}">${spr('i-' + b.k, 2)}<b>${b.n}</b><span class="num">× ${b.q}</span></div>`).join('')}</div>
+  <div class="bb-use pn" ${mm('tb')}><b>Super Potion</b><p>Restores 60 HP to one Pokémon.</p><div class="bb-t">${spr('m-6', 1.5)}<div><b>Charizard</b><span>HP 98 → 124</span>${C('hp', 100)}</div></div><div class="btn on"><b>Use on Charizard</b></div></div></div>`);
+
+def(2, 'b-switch', { t: 'Battle · Switch', g: 'Battle' }, () => { const hint = ['In battle', 'Strong vs Water', 'Takes normal damage', 'Resists Water', 'Fainted', 'Bulky pick']; return `<div class="scr battle b2 bsw">${C('arena', { dim: 1 })}
+  <div class="sw-list">${PARTY.map((p, i) => `<div class="sw btn${i === 1 ? ' on' : ''}${p.st === 'FNT' ? ' fnt' : ''}"><div class="sw-r">${spr('m-' + p.k, 1, 'pc-s')}<b>${p.n}</b><span class="lv">Lv ${p.lv}</span>${C('hp', pct(p.hp, p.mx))}<em class="hint h${i}">${hint[i]}</em></div></div>`).join('')}</div>
+  <div class="sw-pick pn" ${mm('tb')}>${spr('m-25', 3)}<b>Pikachu</b><div>${C('ty', 'electric')}</div><p>Thunderbolt · Volt Tackle · Iron Tail · Quick Attack</p><div class="row"><div class="btn on" ${go('battle')}><b>Send out</b></div><div class="btn" ${go('battle')}><b>Back</b></div></div></div></div>`; });
+
+def(2, 'party', { t: 'Party', g: 'Pokémon' }, () => { const p = PARTY[0]; return `<div class="scr party p2">${C('hdr', 'Party', ['6 of 6', '₽ ' + RUN.money])}
+  <div class="leadc pn on" ${go('summary')} ${mm('mon-card')}><i class="st lead">Lead</i>${spr('m-' + p.k, 3)}<div class="pc-1"><b>${p.n}</b><span class="lv">Lv ${p.lv}</span></div><div class="pc-2">${C('hp', pct(p.hp, p.mx))}<span class="num">${p.hp}/${p.mx}</span></div><div class="pc-3">${p.ty.map(t => C('ty', t)).join('')}</div><div class="sm-i">${spr('i-' + p.ik, 1)}<span>${p.item}</span></div></div>
+  <div class="pt-rows">${PARTY.slice(1).map(p => `<div class="pcard pn${p.st === 'FNT' ? ' fnt' : ''}">${spr('m-' + p.k, 1.5, 'pc-s')}<div class="pc-b"><div class="pc-1"><b>${p.n}</b><span class="lv">Lv ${p.lv}</span></div><div class="pc-2">${C('hp', pct(p.hp, p.mx))}<span class="num">${p.hp}/${p.mx}</span></div></div><div class="pc-3">${p.ty.map(t => C('ty', t)).join('')}${p.st ? `<i class="st ${p.st}">${p.st}</i>` : ''}</div></div>`).join('')}</div>
+  ${C('keys', [['↑↓', 'move'], ['Enter', 'summary'], ['Shift', 'swap'], ['Esc', 'back']])}</div>`; });
+
+def(2, 'summary', { t: 'Summary', g: 'Pokémon' }, () => { const p = PARTY[0], st = [['HP', 124], ['Attack', 86], ['Defense', 80], ['Sp. Atk', 118], ['Sp. Def', 88], ['Speed', 112]]; return `<div class="scr summary s2">${C('hdr', 'Summary', ['1 of 6'])}
+  <div class="sm-band"></div>
+  <div class="sm-left" ${mm('mon-card')}><div class="sm-art">${spr('m-' + p.k, 4)}</div><div class="sm-n"><b>${p.n}</b><i class="gd">${p.g}</i><span class="lv">Lv ${p.lv}</span></div><div class="sm-t">${p.ty.map(t => C('ty', t)).join('')}</div><div class="sm-i">${spr('i-' + p.ik, 1)}<span>${p.item}</span></div></div>
+  <div class="sm-right"><div class="tabs">${['Overview', 'Stats', 'Moves', 'Items', 'Bond', 'History', 'Traits'].map((t, i) => `<span class="tab${i === 1 ? ' on' : ''}">${t}</span>`).join('')}</div>
+    <div class="sm-body pn"><div class="sm-stats">${st.map(s => `<div class="stat"><span>${s[0]}</span><i><u style="width:${Math.round(s[1] / 1.4)}%"></u></i><b>${s[1]}</b></div>`).join('')}</div>
+    <div class="sm-facts"><div><span>Ability</span><b>${p.ab}</b></div><div><span>Nature</span><b>${p.nat} (+Speed, −Attack)</b></div><div><span>Exp to next level</span><b>1,204</b></div><div><span>Met</span><b>Kanto, stage 1 (starter)</b></div></div></div></div>
+  ${C('keys', [['←→', 'page'], ['↑↓', 'Pokémon'], ['Enter', 'actions'], ['Esc', 'back']])}</div>`; });
+
+def(2, 'menu', { t: 'Pause Menu', g: 'Menu' }, () => `<div class="scr menu mn2"><img class="px ar-bg dim" src="sprites/a-plains-bg.png" alt="">
+  <div class="slash"></div>
+  <div class="mn-h"><b>Paused</b><span>${RUN.region} · Stage ${RUN.stage} of ${RUN.stages}</span></div>
+  <div class="mn-list">${[['Party', 'party'], ['Bag', 'bag'], ['Pokédex', ''], ['Trainer Card', ''], ['Save', ''], ['Settings', 'settings'], ['Quit to Title', 'title']].map((m, i) => `<div class="btn${i === 0 ? ' on' : ''}" ${m[1] ? go(m[1]) : ''}><b>${m[0]}</b></div>`).join('')}</div>
+  <div class="mn-me">${spr('t-red', 5)}</div>
+  <div class="mn-side pn"><b>Red</b><span>Play time 1:42</span><span>₽ ${RUN.money}</span><span>Badges ${RUN.badges}</span></div>
+  ${C('keys', [['↑↓', 'move'], ['Enter', 'open'], ['Esc', 'resume']])}</div>`);
+
+def(2, 'settings', { t: 'Settings', g: 'Settings' }, () => { const rows = [['Text speed', 'Fast'], ['Battle animations', 'On'], ['Screen size', '100%'], ['High contrast', 'Off'], ['UI style', 'New'], ['Route map style', 'Road']]; return `<div class="scr settings st2">${C('hdr', 'Settings', [])}
+  <div class="set-cats">${['Display', 'Audio', 'Gameplay', 'Animations', 'Text', 'Accessibility', 'Controls', 'Story', 'Save & Data'].map((t, i) => `<div class="btn sm${i === 0 ? ' on' : ''}"><b>${t}</b></div>`).join('')}</div>
+  <div class="set-list pn">${rows.map((r, i) => `<div class="li${i === 0 ? ' on' : ''}"><b>${r[0]}</b><span class="val">◀ ${r[1]} ▶</span></div>`).join('')}</div>
+  ${C('box', '', 'How fast words appear in text boxes. Fast shows a full line almost at once.')}
+  ${C('keys', [['←→', 'change'], ['↑↓', 'move'], ['Q E', 'category'], ['Esc', 'back']])}</div>`; });
 
 boot();
 </script>

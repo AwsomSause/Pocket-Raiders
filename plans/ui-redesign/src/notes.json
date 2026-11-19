@@ -1,10 +1,38 @@
 {
- "1": {"name": "Clean Slate",
+ "1": {
+  "name": "Clean Slate",
   "big": "A fresh start. Twelve core screens redrawn bright and simple in the three Pokémon logo colours (red, yellow, blue), replacing the dark navy look.",
-  "pages": ["Title", "Hub Town", "Stage Map", "Battle", "Battle · Moves", "Event", "Party", "Summary", "Bag", "Poké Mart", "Pause Menu", "Settings"],
+  "pages": [
+   "Title",
+   "Hub Town",
+   "Stage Map",
+   "Battle",
+   "Battle · Moves",
+   "Event",
+   "Party",
+   "Summary",
+   "Bag",
+   "Poké Mart",
+   "Pause Menu",
+   "Settings"
+  ],
   "q1": "Not yet. It is tidy but flat: square cards on dotted paper, small sprites, nothing moves. Next pass needs energy and scale.",
   "q2": "Against the game today: light instead of dark, far bigger words, one selection colour, and every button says what it does.",
   "q3": "Yes. The battle screen sends Bag and Pokémon to the general pages, which hides the fight. They need their own battle pages.",
   "q4": "The Pause Menu is a plain list and Settings is one long tab row. Both work, neither is special yet.",
-  "q5": "Partly. The logo colours and Poké Ball markers say Pokémon, but the shapes could be any app."}
+  "q5": "Partly. The logo colours and Poké Ball markers say Pokémon, but the shapes could be any app."
+ },
+ "2": {
+  "name": "Slant & Scale",
+  "big": "Everything leans forward. A red slash carries every title, buttons and plates are slanted, sprites are about twice as big, and the battle gets its own Bag and Switch pages.",
+  "pages": [
+   "Battle · Bag",
+   "Battle · Switch"
+  ],
+  "q1": "Better: the slash and the huge Charizard on the title grab the eye. But it is still two flat colours with no life from the Pokémon themselves.",
+  "q2": "Pass 1 was square cards on paper. Now panels lean, the lead Pokémon gets a big card, the map is a real road with stop numbers, and Fight is the biggest button in battle.",
+  "q3": "Done here: Bag and Switch are battle pages now, so the fight stays on screen behind them. Move details still crowd the move row and should get more room.",
+  "q4": "The Pause Menu moved onto the red slash with the trainer standing beside it. Settings swapped the tab row for a category list on the left, which leaves room for more categories.",
+  "q5": "More than before. Slanted bars and a road map read as modern Pokémon. What is missing is type colour, the thing every Pokémon screen is built on."
+ }
 }
