@@ -178,6 +178,7 @@ function decor(pass, id, o) {
     if (o.cls) h = h.replace('class="scr ', 'class="scr ' + o.cls + ' ');
     for (const [a, b] of o.rep || []) h = h.split(a).join(b);
     if (o.add) h = h.replace(/<\/div>\s*$/, o.add + '</div>');
+    if (o.fn) h = o.fn(h);
     return h;
   });
 }

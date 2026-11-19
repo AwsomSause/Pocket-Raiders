@@ -127,5 +127,21 @@
   "q3": "Yes, seven new pages. One job per page, so the level-up numbers, the move swap and the reward choice never fight for space.",
   "q4": "The pause menu shows the run score, stars and win streak. Header pills gain coin, badge and ball icons. The Animations settings from pass 7 also control these scenes.",
   "q5": "Yes. EXP bars, level-up stat lists, 'wants to learn a move', evolution with B to stop, and 'Gotcha!' are the heart of every Pokémon game."
+ },
+ "9": {
+  "name": "Story Time",
+  "big": "An event now plays like a small scene in four beats: talk, choose, result, reward. The place fills the screen, whoever speaks gets a face, and the text box waits for you every time.",
+  "pages": [
+   "Event · Choice",
+   "Event · Result",
+   "Event Stage",
+   "Event · Reward",
+   "Run Journal"
+  ],
+  "q1": "Full-screen place art with the hour and weather, a tall speaker with a portrait in the text box, and choices as three big cards that deal in with a coloured risk label.",
+  "q2": "Pass 8 still showed the speech and all the choices crammed on one screen. Now the text stays alone until you press Enter, the choices get a clean page, and rewards only appear after the text is gone, as you asked.",
+  "q3": "Yes, five. Choice, result and reward pages, an Event Stage page for battles that happen inside an event, and a Run Journal that lists every stop of this run.",
+  "q4": "The pause menu and the title show the next stop and open the Journal with J. The map's Story button opens it too. Speaker portraits also appear in the shop and in the battle bar.",
+  "q5": "Yes. A character talks, you answer, something happens. It reads like the story scenes of the main games, and the Journal works like a trainer's diary."
  }
 }
