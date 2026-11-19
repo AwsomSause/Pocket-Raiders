@@ -85,7 +85,7 @@ test('set up a Dominion in the New look, live a day round the clock, and it relo
   await expect(s.getByTestId('dom-notice')).toContainText('Find one useful contact');
   await shot('hq-day');
   // A locked tab says so; Esc closes the line.
-  await page.keyboard.press('Digit4');
+  await page.keyboard.press('Digit5');
   await expect(s.getByTestId('dom-notice')).toContainText('later part');
   await s.getByTestId('dom-next').click();
   await expect(s.getByTestId('dom-phase')).toHaveText('EVENING');

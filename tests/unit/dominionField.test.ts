@@ -48,8 +48,8 @@ describe('DOMINION D2: the data', () => {
     expect(all).toHaveLength(150);
     expect(all.map((a) => a.n)).toEqual(Array.from({ length: 150 }, (_, i) => i + 1));
     const played = all.filter((a) => actionStatus(a).play);
-    // 32 from D2, 13 more that D5's rooms open (each also needs its room built), 17 more from D9 (the rival team).
-    expect(played.length).toBe(62);
+    // 32 from D2, 13 more that D5's rooms open (each also needs its room built), 9 from D4, 17 more from D9 (the rival team).
+    expect(played.length).toBe(71);
     for (const a of all) {
       const s = actionStatus(a);
       expect(s.play || /^D\d+$/.test(s.slice ?? ''), a.id).toBe(true);

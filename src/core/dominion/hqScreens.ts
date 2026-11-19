@@ -206,7 +206,7 @@ export function assetsModel(b: DominionBlock, at: number): AssetsModel {
       ['FUNDS', money(b.funds)], ['CLEAN', money(cleanOf(b))], ['TEAM', `${b.members.length}/${b.rosterCap}`],
       ['GRUNTS', String(b.members.filter((m) => m.rank.includes('grunt') || m.rank === 'recruit' || m.rank === 'hopeful').length)],
       ['REGIONS HELD', `${heldDistricts(b).length} districts · ${regionsReached(b)} region`], ['DEFENSE', String(defense(b))],
-      ['STORES', `${b.crew?.stores.length ?? 0}/${storageCap(b)}`],
+      ['STORES', `${(b.reserve?.box.length ?? 0) + (b.crew?.stores.length ?? 0)}/${storageCap(b)}`],
     ],
     rows, at: Math.max(0, Math.min(at, rows.length - 1)),
   };

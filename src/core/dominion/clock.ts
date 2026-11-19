@@ -178,6 +178,15 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'approach':
     case 'admit':
     case 'gift':
+    // D4's actions need the run (session.ts -> reserve.ts).
+    case 'give':
+    case 'takeBack':
+    case 'autoFill':
+    case 'hunt':
+    case 'free':
+    case 'promote':
+    case 'demote':
+    case 'strip':
       return no(block);
   }
 }

@@ -13,7 +13,7 @@ import { rxFileOf } from '../../ui/redux/assets';
 import { fileView, hireOverlay, leadsOverlay, morningView } from '../../ui/redux/screens/dominion/crew';
 
 interface Host {
-  screenName: 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'base' | 'rival';
+  screenName: 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival';
   setNotice(n: string | null): void;
   refresh(): void;
   step(a: DominionAction): boolean;

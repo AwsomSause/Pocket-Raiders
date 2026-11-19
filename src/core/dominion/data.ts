@@ -8,21 +8,23 @@ import gruntTypesRaw from '../../data/dominion/gruntTypes.json';
 import tasksRaw from '../../data/dominion/tasks.json';
 import hqRaw from '../../data/dominion/hq.json';
 import buildingsRaw from '../../data/dominion/buildings.json';
+import pyramidRaw from '../../data/dominion/pyramid.json';
 import rivalsRaw from '../../data/dominion/rivals.json';
 import rivalActionsRaw from '../../data/dominion/rivalActions.json';
 import outsideRaw from '../../data/dominion/outside.json';
 import {
-  ActionsFileSchema, BuildingsFileSchema, OutsideFileSchema, RivalActionsFileSchema, RivalsFileSchema, CrewFileSchema, HqFileSchema, FieldFileSchema, GruntTypesFileSchema, StartFileSchema, TasksFileSchema,
-  type ActionsFile, type Building, type OutsideRow, type RivalActionsFile, type RivalsFile, type CrewFile, type HqFile, type FieldFile, type GruntType, type StartFile, type Task,
+  ActionsFileSchema, BuildingsFileSchema, OutsideFileSchema, RivalActionsFileSchema, RivalsFileSchema, CrewFileSchema, HqFileSchema, PyramidFileSchema, FieldFileSchema, GruntTypesFileSchema, StartFileSchema, TasksFileSchema,
+  type ActionsFile, type Building, type OutsideRow, type RivalActionsFile, type RivalsFile, type CrewFile, type HqFile, type PyramidFile, type FieldFile, type GruntType, type StartFile, type Task,
 } from './schema';
 
-export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; hq: HqFile; buildings: Building[]; rivals: RivalsFile; rivalActions: RivalActionsFile; outside: OutsideRow[] } = {
+export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; hq: HqFile; buildings: Building[]; pyramid: PyramidFile; rivals: RivalsFile; rivalActions: RivalActionsFile; outside: OutsideRow[] } = {
   start: StartFileSchema.parse(startRaw),
   actions: ActionsFileSchema.parse(actionsRaw),
   field: FieldFileSchema.parse(fieldRaw),
   crew: CrewFileSchema.parse(crewRaw),
   tasks: TasksFileSchema.parse(tasksRaw).tasks,
   gruntTypes: GruntTypesFileSchema.parse(gruntTypesRaw).types,
+  pyramid: PyramidFileSchema.parse(pyramidRaw),
   hq: HqFileSchema.parse(hqRaw),
   buildings: BuildingsFileSchema.parse(buildingsRaw).buildings,
   rivals: RivalsFileSchema.parse(rivalsRaw),

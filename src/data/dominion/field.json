@@ -134,6 +134,21 @@
       "win": "Deep in the dark: {loot}.", "lose": "A wrong turn, and something big." },
     "hide-in-the-warehouse": { "effect": "hide", "heat": -10, "where": "hq",
       "win": "You wait out the sweep behind the crates. Heat at the HQ −10, and the police find nothing tonight." },
+    "rescue-a-wild-pokemon": { "kinds": ["route", "cave"], "chance": 60, "effect": "rescue", "trust": 7, "heat": 0,
+      "win": "{mon} limps after you.", "lose": "It bolts into the grass before you can reach it." },
+    "tame-the-wild": { "kinds": ["route", "cave"], "chance": 35, "effect": "rescue", "trust": 4, "alpha": 5, "heat": 1, "dread": 1, "battle": { "chance": 100, "on": "fail", "foe": "wild" },
+      "win": "The alpha stands down.", "lose": "The alpha doesn't back off. It charges." },
+    "evolve-in-peace": { "effect": "evolve", "win": "A quiet evening." },
+    "promotion-ceremony": { "effect": "ceremony", "band": 3, "win": "The crew gathers." },
+    "mentor": { "effect": "mentor", "band": 2, "xp": 1, "win": "An evening of lessons." },
+    "toll-booth": { "kinds": ["route"], "chance": 45, "pay": [100, 220], "heat": 3, "failHeat": 6, "regard": -1, "dread": 2, "band": 2, "battle": { "chance": 50, "on": "fail", "foe": "target" }, "control": 2,
+      "win": "A crate across the bridge and a hat for coins: ₽{pay}.", "lose": "A trainer won't pay. Poké Balls come out." },
+    "cat-burglar": { "kinds": ["shop", "site"], "chance": 35, "crate": "haul", "heat": 3, "failHeat": 12, "dread": 1, "band": 1, "battle": { "chance": 40, "on": "fail", "foe": "target" },
+      "win": "Up the drainpipe, in through the window, out with {loot}.", "lose": "A dog. A light. A long way down." },
+    "back-alley-brawl": { "kinds": ["street", "crowd"], "wager": [200, 500], "heat": 2, "dread": 2, "band": 2, "battle": { "chance": 100, "on": "always", "foe": "target" }, "control": 2,
+      "win": "The pit roars. The pot's yours: ₽{pay}.", "lose": "You're carried out. The pot isn't: ₽{pay} gone." },
+    "train-robbery": { "kinds": ["site", "dock"], "chance": 25, "pay": [600, 1400], "heat": 12, "failHeat": 20, "dread": 3, "band": 3, "battle": { "chance": 60, "on": "fail", "foe": "police" },
+      "win": "The freight car opens like a tin: ₽{pay}.", "lose": "The guard's whistle. The railway police are aboard." },
     "rig-the-rent": { "kinds": ["shop", "street"], "chance": 45, "pay": [40, 80], "weekly": 80, "heat": 3, "failHeat": 8, "regard": -2, "dread": 1, "control": 4,
       "win": "The landlord's new rent goes up; the difference goes to you: ₽{pay} now.", "lose": "The landlord laughs and calls a lawyer." },
     "fines-scam": { "kinds": ["crowd", "street"], "chance": 45, "pay": [100, 250], "heat": 4, "failHeat": 9, "regard": -2, "battle": { "chance": 30, "on": "fail", "foe": "police" },
@@ -225,7 +240,7 @@
   "later": {
     "byAction": {
       "rest": "D1", "recruit": "D3", "street-recruit-drive": "D3", "talent-scout": "D3", "pay-the-families": "D3", "pick-a-fight-with-the-hiker": "D3",
-      "rescue-a-wild-pokemon": "D4", "evolve-in-peace": "D4", "tame-the-wild": "D4",
+      "hire-a-specialist": "D10", "plant-a-mole": "D9",
       "skim-the-till": "D6", "street-theater": "D6", "spray-the-wall": "D6", "sponsor-a-trainer": "D6",
       
       "three-on-one": "D10", "gauntlet": "D10", "rooftop-chase": "D10", "dig-the-dirt": "D10", "fossil-dig": "D10", "contraband-run": "D10", "air-drop": "D10", "fake-shipment": "D10", "evidence-locker-visit": "D10", "the-big-night": "D10",
@@ -233,13 +248,14 @@
       "buy-out": "D10", "hold-a-rally": "D6", "forge-papers": "D10", "hack-the-terminal": "D10", "interrogate": "D10", "kidnap-a-pokemon": "D10", "hit-a-lab": "D10", "smuggle": "D10", "open-a-black-market-stall": "D10", "run-the-docks": "D10", "underground-auction": "D10", "tunnel": "D10", "safehouse-network": "D10", "post-flyers": "D10", "spread-the-word": "D10", "pirate-radio": "D14", "bribe": "D10", "sabotage-the-station": "D10", "sabotage": "D10", "raid": "D10", "hire-mercenaries": "D10", "write-a-manifesto": "D13", "debate": "D13", "chant-night": "D6", "blackout": "D10", "night-raid": "D10", "loan-shark": "D10", "egg-run": "D4", "breed": "D4", "move-tutor": "D4"
     },
     "byUnlock": [
-      ["Rank", "D4"], ["Front Office", "D10"], ["Workshop", "D10"], ["War Room", "D10"], ["Radio Room", "D10"], ["Print Shop", "D10"], ["Holding", "D10"], ["Garage", "D10"], ["Science Lab", "D10"], ["Library", "D10"], ["Dojo", "D10"], ["Night Shift", "D10"],
+      ["Front Office", "D10"], ["Workshop", "D10"], ["War Room", "D10"], ["Radio Room", "D10"], ["Print Shop", "D10"], ["Holding", "D10"], ["Garage", "D10"], ["Science Lab", "D10"], ["Library", "D10"], ["Dojo", "D10"], ["Night Shift", "D10"],
       ["Notoriety", "D6"], ["Press contact", "D6"], ["Fence", "D10"], ["Black Market", "D10"], ["Tension", "D9"], ["Spy", "D9"], ["Raid suffered", "D9"], ["Rally", "D6"],
       ["Hero", "D11"], ["Gym", "D10"], ["Champion", "D14"], ["Hostage", "D10"], ["traitor", "D15"], ["Region event", "D15"], ["Wanted", "D10"]
     ]
   },
   "lines": {
     "notHere": "Not this place.",
+    "band": "Needs a member in the {band} band (Rank {n} crew) or higher.",
     "wrongPhase": { "day": "That's a Day action.", "night": "That's a Night action.", "evening": "That's an Evening action." },
     "noActions": "Not enough actions left today (travel included).",
     "noMoney": "Not enough money: it costs ₽{cost}.",

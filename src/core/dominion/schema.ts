@@ -88,7 +88,7 @@ const DistrictSchema = z.object({
 }).strict();
 export type District = z.infer<typeof DistrictSchema>;
 export const BATTLE_FOES = ['target', 'police', 'wild', 'ghost', 'member', 'rival'] as const;
-export const EFFECTS = ['scout', 'count', 'scoutDistrict', 'paper', 'catch', 'laylow', 'disguise', 'fine', 'exp', 'spar', 'train', 'plan', 'pamper', 'hide', 'launder',
+export const EFFECTS = ['scout', 'count', 'scoutDistrict', 'paper', 'catch', 'laylow', 'disguise', 'fine', 'exp', 'spar', 'train', 'plan', 'pamper', 'hide', 'rescue', 'evolve', 'ceremony', 'mentor', 'launder',
   // D9 (rivals.ts addActEffect)
   'rivalHit', 'rivalSpy', 'counterSpy', 'truceTalk', 'war', 'poach', 'court'] as const;
 const PlaySchema = z.object({
@@ -99,6 +99,10 @@ const PlaySchema = z.object({
   heat: I.optional(), failHeat: N0.optional(), regard: I.optional(), dread: I.optional(), wanted: I.optional(), hero: N0.optional(), control: N0.optional(),
   cost: N0.optional(), effect: z.enum(EFFECTS).optional(), scoutDays: I.min(1).optional(), exp: N0.optional(), xp: N0.optional(), friendship: N0.optional(),
   battle: z.object({ chance: I.min(1).max(100), on: z.enum(['fail', 'always']), foe: z.enum(BATTLE_FOES) }).strict().optional(),
+  /** D4: the action needs a member in this band of the Rank Pyramid or higher ("Rank N crew", Part 8 §3). */
+  band: I.min(1).max(5).optional(),
+  /** D4 'rescue': the Trust the Pokémon joins with, and levels above the team (an alpha). */
+  trust: I.min(0).max(10).optional(), alpha: N0.optional(),
   win: S, big: S.optional(), lose: S.optional(),
 }).strict();
 export type Play = z.infer<typeof PlaySchema>;
@@ -281,6 +285,8 @@ const BlockSchema = z.object({
   field: FieldSchema,
   /** D3: the crew's shared state (stores, leads, waiting list, hire list, talks, Patrons). Optional; `crewState` fills it. */
   crew: z.lazy(() => CrewStateSchema).optional(),
+  /** D4: the Reserve, Trust, the pyramid's bookkeeping. Optional; `reserveOf` fills it (and moves D3's stores in). */
+  reserve: z.lazy(() => ReserveStateSchema).optional(),
   /** D5: the HQ's rooms, outside buildings, works, clean money, laundering and loans. Optional; `hqOf` fills it. */
   hq: z.lazy(() => HqStateSchema).optional(),
   /** D9: the rival teams (Tension, plan, spies, truces, raids). Optional; `rivalsOf` fills it. */
@@ -319,6 +325,15 @@ export type DominionAction =
   | { t: 'bail'; member: string }
   | { t: 'gift'; member: string; item: string }
   | { t: 'patron'; patron: string }
+  // D4, the Reserve and the Rank Pyramid
+  | { t: 'give'; uid: string; to: string }
+  | { t: 'takeBack'; member: string; uid: string }
+  | { t: 'autoFill' }
+  | { t: 'hunt'; member: string; mode: 'self' | 'reserve' }
+  | { t: 'free'; uid: string }
+  | { t: 'promote'; member: string }
+  | { t: 'demote'; member: string }
+  | { t: 'strip'; member: string }
   // D5, the HQ (hq.ts)
   | { t: 'upgrade' }
   | { t: 'build'; building: string; district: string | null }
@@ -342,6 +357,8 @@ const Pct = I.min(0).max(100);
 
 export const TaskEffectSchema = z.object({
   kind: z.enum(['guard', 'money', 'scout', 'recruit', 'train', 'trainMon', 'rest', 'catch', 'steal', 'berries', 'audit', 'welcome', 'interview', 'mentor', 'rally', 'drills', 'coach',
+    // D4 (reserve.ts)
+    'pens', 'tend', 'feed', 'release', 'rehab',
     // D9 (rivals.ts)
     'rivalSpy', 'rivalIntel', 'counterSpy', 'poachRival', 'rivalHit', 'rescue', 'rumours', 'truceTalk']),
   funds: Range.optional(),
@@ -394,6 +411,8 @@ const TalkChoiceSchema = z.object({
   memory: S.optional(), nick: S.optional(), action: I.optional(), task: S.optional(), half: z.boolean().optional(), gift: z.boolean().optional(),
   nerveTest: z.boolean().optional(), promiseAgain: z.boolean().optional(), saveLine: z.boolean().optional(), force: z.boolean().optional(),
   leave: z.boolean().optional(), unpunish: z.boolean().optional(), loudmouthMor: I.optional(),
+  /** D4: promote them one rank (the Evening scene; needs the level, the seat and the HQ). */
+  promote: z.boolean().optional(),
 }).strict();
 const TalkTriggerSchema = z.object({
   newMember: z.boolean().optional(), moraleBelow: Pct.optional(), loyaltyAtLeast: Pct.optional(), loyaltyBelow: Pct.optional(),
@@ -401,6 +420,8 @@ const TalkTriggerSchema = z.object({
   pHeatAtLeast: Pct.optional(), hasHeldItem: z.boolean().optional(), chance: Pct.optional(), rested: z.boolean().optional(), workedDays: I.min(1).optional(),
   kind: S.optional(), green: S.optional(), brokePromise: I.min(1).optional(), refused: z.boolean().optional(), fundsAtLeast: N0.optional(),
   rankAtLeast: S.optional(), bigSuccess: z.boolean().optional(), leaving: z.boolean().optional(),
+  /** D4: ready for the next rank with a seat open; passed over in the last day. */
+  ready: z.boolean().optional(), passedOver: z.boolean().optional(),
 }).strict();
 const TalkSchema = z.object({
   n: I.min(1), id: S, name: S, needs: z.string().regex(/^D\d+$/).optional(), when: z.enum(['morning', 'evening', 'leaving']).optional(),
@@ -569,12 +590,86 @@ export const CrewStateSchema = z.object({
   rerolled: z.array(S),
   /** What the night made that needs the run to finish (a caught Pokémon, a level, an item); the session settles it. */
   pending: z.array(z.union([
-    z.object({ k: z.literal('mon'), species: S, level: I.min(1) }).strict(),
+    /** D4: `by` the member who caught or stole it, `src` how, `self` hunted "for themselves". */
+    z.object({ k: z.literal('mon'), species: S, level: I.min(1), by: S.optional(), src: z.enum(['caught', 'stolen', 'rescued']).optional(), self: z.boolean().optional() }).strict(),
     z.object({ k: z.literal('level'), member: S, uid: S, level: I.min(1) }).strict(),
     z.object({ k: z.literal('item'), id: S, n: I.min(1) }).strict(),
   ])),
 }).strict();
 export type CrewState = z.infer<typeof CrewStateSchema>;
+
+// ---------- D4: ranks, Team Types and the Reserve (pyramid.json; block `reserve`) ----------
+
+const RankRowSchema = z.object({
+  id: S, seats: N0, hq: I.min(1).max(6), team: I.min(1).max(6), lvPct: I.min(1).max(100), bst: I.min(1), aces: I.min(0).max(2), aceCap: N0, band: I.min(1).max(5), unlocks: S,
+}).strict();
+export const PyramidFileSchema = z.object({
+  _source: S,
+  ranks: z.array(RankRowSchema).length(15),
+  bands: z.array(z.object({ n: I.min(1).max(5), name: S, from: I.min(1), to: I.max(15), z: S }).strict()).length(5),
+  caps: z.object({
+    bstMax: I.min(1), aceOver: N0, regionBonus: z.array(N0).min(1),
+    standing: z.array(z.object({ min: N0, word: S, bonus: N0 }).strict()).min(1),
+    neverTags: z.array(S), never: z.array(S),
+  }).strict(),
+  moves: z.object({
+    promoteLoyalty: N0, promoteMorale: N0, passedAmbition: N0, resentfulAfter: I.min(1), readyAmbition: N0,
+    demoteLoyalty: I.max(0), demoteMorale: I.max(0), stripLoyalty: I.max(0), stripQuitChance: Pct,
+  }).strict(),
+  reserve: z.object({
+    size: I.min(1), takeLoyalty: I.max(0), takeAceLoyalty: I.max(0), selfLoyalty: N0, pensDays: N0, pensHeat: N0,
+    battleFamilies: z.array(S).min(1), emptyPenalty: N0, onTypeMorale: N0, favourMorale: N0, trainXpPct: N0,
+    startLevel: z.tuple([I.min(1), I.min(1)]), startMaxBst: I.min(100), escapeChance: Pct, releasePay: z.array(N0).length(5),
+    /** Formed traits (crew.json): Bug Whisperer's level-cap bonus for Bug types, Gentle Hands' Trust bonus. */
+    bugCap: N0, gentleTrust: N0,
+  }).strict(),
+  trust: z.object({
+    start: z.object({ caught: I.min(0).max(10), stolen: I.min(0).max(10), snagged: I.min(0).max(10), shadow: I.min(0).max(10), own: I.min(0).max(10), rescued: I.min(0).max(10) }).strict(),
+    disobeyBelow: I.min(0).max(10), loyalFrom: I.min(0).max(10), max: I.min(1).max(10), jobBonus: N0, disobeyPenalty: N0,
+    gentleWeekly: N0, gentle: z.array(S), winChance: Pct, freedomStayPer: N0,
+  }).strict(),
+  lines: z.record(S, S),
+  why: z.object({ offType: S, lv: S, bst: S, never: S, full: S, pens: S }).strict(),
+}).strict().refine((p) => p.ranks.every((r) => r.aces === 0 || r.aceCap > 0), { message: 'a rank with Aces has an Ace cap' });
+export type PyramidFile = z.infer<typeof PyramidFileSchema>;
+export type RankRow = z.infer<typeof RankRowSchema>;
+
+export const MON_SOURCES = ['own', 'caught', 'stolen', 'snagged', 'shadow', 'rescued'] as const;
+/** What the team knows about one Pokémon it holds (in the Reserve or on a member's team), by uid. */
+export const MonMetaSchema = z.object({
+  /** Pokémon Trust 0-10 (Part 9 A19). */
+  trust: I.min(0).max(10),
+  src: z.enum(MON_SOURCES),
+  /** The member who caught or stole it (Loyalty −10 if it's taken back from them). */
+  by: S.nullable(),
+  /** Last day in the Holding Pens (stolen: 5 days to cool off), or 0. */
+  pens: N0,
+  /** Sits in an Ace slot (Lieutenant and up: any type, the Ace cap). */
+  ace: z.boolean(),
+  /** The species' base stat total and types, kept so the night's crew step can read the caps without the content. */
+  bst: N0,
+  types: z.array(S).max(2),
+  /** Never for a member (Legendary, Mythical, Ultra Beast, Paradox). */
+  rare: z.boolean(),
+}).strict();
+export type MonMeta = z.infer<typeof MonMetaSchema>;
+
+export const ReserveStateSchema = z.object({
+  /** The Reserve: the team's shared box of Pokémon (Part 7 §2). */
+  box: z.array(MonSchema),
+  meta: z.record(S, MonMetaSchema),
+  /** Catch and Steal: who hunts "for themselves" (the default is "for the Reserve"). */
+  hunt: z.record(S, z.enum(['self', 'reserve'])),
+  /** Auto-fill is on (it only ever runs after the player turns it on). */
+  auto: z.boolean(),
+  /** Times each member was passed over (three: Resentful). */
+  passed: z.record(S, N0),
+  /** Promotions today (the Promotion Ceremony honours them). */
+  promoted: z.array(z.object({ member: S, day: I.min(1) }).strict()),
+  /** Members stripped back to Recruit today: the night may see them walk out. */
+  stripped: z.array(S),
+}).strict();
+export type ReserveState = z.infer<typeof ReserveStateSchema>;
 
 // ---------- D5 data: hq.json (Part 3 §3, Part 9 A21-A22) and buildings.json (lists/buildings*.md) ----------
 
