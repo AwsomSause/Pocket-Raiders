@@ -77,5 +77,19 @@
   "q3": "Five added. Settings alone went from one page to a home page and four category pages (the other categories follow the same pattern), plus Save Slots.",
   "q4": "This pass is the answer: Esc opens the wheel from anywhere, Settings is one stop on it, and Q and E flip between Settings categories without going back.",
   "q5": "Yes. The menu is literally a Poké Ball, and the Save Slots read like a trainer's journal."
+ },
+ "6": {
+  "name": "Battle Stage",
+  "big": "The battle is filmed like a movie. Dark bars at the top and bottom hold all the battle text, the camera sits right behind your Pokémon, and every menu now floats over the world instead of a blank page.",
+  "pages": [
+   "Send Out",
+   "Trainer Intro",
+   "Ace Announcement"
+  ],
+  "q1": "Your Pokémon is drawn five times bigger from behind, the commands are round buttons that pop out of the bottom bar, and the lead of your party stands under a spotlight.",
+  "q2": "Pass 5 still had small boxes floating over the arena. Now nothing floats: names, HP and text sit in two film bars, so the arena is clear and the Pokémon are huge.",
+  "q3": "Yes, three. Throwing the ball, the trainer's VS intro and the ace reveal each get their own page, so the main battle screen never has to squeeze them in.",
+  "q4": "The pause menu dims the world and puts a spotlight on the wheel. Settings and the other pages keep their layout but now show the world faintly behind them.",
+  "q5": "Yes. The behind-the-back camera, the VS split and the Poké Ball throw are the classic Pokémon battle moments, just bigger."
  }
 }

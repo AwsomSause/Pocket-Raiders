@@ -170,3 +170,14 @@ function __check() {
   }
   return out;
 }
+/* decor(pass, id, {cls, add, rep}): from this pass on, draw the previous version of a page with an extra class, extra html before its end, or text swaps */
+function decor(pass, id, o) {
+  const prev = () => pick(PR.defs[id].filter(d => d.pass < pass), pass);
+  def(pass, id, o.meta || prev().meta, P => {
+    let h = prev().fn(P);
+    if (o.cls) h = h.replace('class="scr ', 'class="scr ' + o.cls + ' ');
+    for (const [a, b] of o.rep || []) h = h.split(a).join(b);
+    if (o.add) h = h.replace(/<\/div>\s*$/, o.add + '</div>');
+    return h;
+  });
+}
