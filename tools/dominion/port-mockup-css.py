@@ -36,19 +36,39 @@ def split_rules(text):
     return out
 
 
+def top_split(text):
+    """Split on commas that are not inside brackets (cubic-bezier(.2,1,.3,1) stays whole)."""
+    out, depth, cur = [], 0, ''
+    for ch in text:
+        depth += (ch == '(') - (ch == ')')
+        if ch == ',' and depth == 0:
+            out.append(cur)
+            cur = ''
+        else:
+            cur += ch
+    return out + [cur]
+
+
 def anim(decls):
     def fix(m):
         parts = []
-        for one in m.group(2).split(','):
+        for one in top_split(m.group(2)):
             toks = one.split()
             if toks and not toks[0][0].isdigit() and toks[0] not in ('none', 'var(--now)'):
                 toks[0] = 'dm-' + toks[0]
-            times = [k for k, t in enumerate(toks) if TIME.match(t)]
-            if len(times) == 1 and 'infinite' in toks:
+            times = [k for k, t in enumerate(toks) if TIME.match(t) or t == 'var(--t)']
+            if 'infinite' in toks and 'var(--dl)' in toks:
+                # Particles start at their own delay: keep it, on the view's clock.
+                toks[toks.index('var(--dl)')] = 'calc(var(--dl) + var(--now,0s))'
+            elif len(times) == 1 and 'infinite' in toks:
                 toks.insert(times[0] + 1, 'var(--now,0s)')
             parts.append(' '.join(toks))
         return m.group(1) + ','.join(parts)
     decls = re.sub(r'(animation:)([^;!}]+)', fix, decls)
+    # The v3 entrance is a one-shot: it plays from when the screen first showed (data-once sets --t0) or, without
+    # that, from when the view opened (--now), so a redraw on a key press doesn't replay it.
+    if 'dm-enter' in decls:
+        decls = decls.replace('animation-delay:calc(', 'animation-delay:calc(var(--t0,var(--now,0s)) + ')
     return re.sub(r'(animation-name:)\s*([\w-]+)', lambda m: m.group(1) + 'dm-' + m.group(2), decls)
 
 
@@ -76,6 +96,8 @@ def emit(rules, inner=False):
         if pre.startswith('@keyframes'):
             name = pre.split()[1]
             lines.append('@keyframes dm-%s{%s}' % (name, body.strip()))
+        elif pre.startswith('@property'):
+            lines.append('%s{%s}' % (pre, body.strip()))
         elif pre.startswith('@media'):
             if 'max-width' in pre:
                 continue

@@ -45,6 +45,7 @@ test('the Reserve: give Rook a Pokémon by hand; the Pyramid: promote him; both 
   await expect(s.getByTestId('dom-tile-0')).toContainText('FITS');
   await expect(s.getByTestId('dom-ghost')).toBeVisible();
   await expect(s.getByTestId('dom-give-cta')).toContainText('to Rook');
+  await page.waitForTimeout(900); // let the round-3 entrance finish so the shot is the rest frame
   await shot('11-reserve');
   const b0 = await block(page);
   const uid = b0.reserve.box[0].uid;
@@ -83,6 +84,7 @@ test('the Reserve: give Rook a Pokémon by hand; the Pyramid: promote him; both 
   await expect(s.getByTestId('dom-tier-4')).toHaveClass(/hot/);
   await expect(s.getByTestId('dom-seat')).toContainText('SENIOR GRUNT SEAT OPEN');
   await expect(s.getByTestId('dom-promote')).toContainText('Promote Rook');
+  await page.waitForTimeout(900);
   await shot('12-pyramid');
   await page.keyboard.press('Enter');
   await expect(s.getByTestId('dom-notice')).toContainText('SENIOR GRUNT');

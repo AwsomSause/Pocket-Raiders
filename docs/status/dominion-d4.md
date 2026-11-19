@@ -17,6 +17,12 @@
   - Pyramid keys: arrows pick a member, Enter promotes, D demotes, S strips (press twice), Esc back to the Crew File.
   - Tab 4 is now open. Two icons added (see PROVENANCE.md).
 
+## Round-3 look (mockups-v3)
+- `dominion.css` is re-ported from `plans/evil-mode-rework/mockups-v3/index.html` with `tools/dominion/port-mockup-css.py`, so every Dominion screen gets the round-3 chrome (gold rims, foil title, jewel tabs, living buttons, medallions, damask, screws, 3D numbers, the entrance).
+- The tool now keeps `cubic-bezier(...)` whole, leaves `@property` unscoped, runs particle loops on the view clock, and plays the entrance once per screen (`stage(..., once)` sets `data-once`), not on every key press.
+- The Reserve and the Pyramid also carry their per-screen overlays (haze, bokeh, particles, grade, spotlight, edge glow, frame, sunburst) from `reserveFx.ts`. On the Reserve the spotlight and sunburst follow the picked tile.
+- D1-D3 screens get the shared chrome from the CSS but not their own overlays yet (their markup lives in those slices).
+
 ## Saves
 No version bump. `block.reserve` is optional and filled the same way every time by `withReserve` (seeded on Day 1, stores moved in, missing Trust records added, stale ones dropped), so a D3 save loads unchanged (tested with a D3-era block and with a damaged record).
 
