@@ -462,6 +462,255 @@ small{font-size:12px;color:var(--mute);font-weight:500}
 .tc-row{display:flex;flex-direction:column;gap:4px}
 .tc-row span{font-size:13px;font-weight:800;color:var(--mute)}
 .tc-row div{display:flex;flex-wrap:wrap;gap:5px}
+.sw-pick.typed-card p{background:rgba(0,0,0,.4);border-radius:8px;padding:4px 10px}
+.tc-row div .ty,.sm-facts .ty{color:#fff;font-size:12px}
+.tc-row>span{color:var(--mute)}
+
+}
+</style>
+<style data-pass="4">
+#stage{
+/* Pass 4 · In Motion. Layout idea: nothing sits still; the cursor is a Poké Ball and the header band runs. */
+.scr::before{animation:spin 50s linear infinite}
+.hdr::before{background:repeating-linear-gradient(-70deg,var(--red) 0 26px,#f2552f 26px 52px);background-size:55.3px 100%;animation:run .9s linear infinite}
+.slash{background:repeating-linear-gradient(-78deg,var(--red) 0 40px,#ee4a23 40px 80px);background-size:81.8px 100%;animation:run 1.6s linear infinite}
+.btn,.tile,.pcard,.mv3,.it,.tc,.li,.mo-row{animation:pop .36s cubic-bezier(.3,1.5,.5,1) both}
+:is(.btn,.tile,.pcard,.mv3,.it,.tc,.li,.mo-row):nth-child(2){animation-delay:.04s}
+:is(.btn,.tile,.pcard,.mv3,.it,.tc,.li,.mo-row):nth-child(3){animation-delay:.08s}
+:is(.btn,.tile,.pcard,.mv3,.it,.tc,.li,.mo-row):nth-child(4){animation-delay:.12s}
+:is(.btn,.tile,.pcard,.mv3,.it,.tc,.li,.mo-row):nth-child(5){animation-delay:.16s}
+:is(.btn,.tile,.pcard,.mv3,.it,.tc,.li,.mo-row):nth-child(6){animation-delay:.2s}
+:is(.btn,.tile,.pcard,.mv3,.it,.tc,.li,.mo-row):nth-child(n+7){animation-delay:.24s}
+.btn.on,.tile.on,.li.on,.it.on,.tc.on,.leadc{outline:3px solid var(--ink);outline-offset:3px;animation:pop .36s cubic-bezier(.3,1.5,.5,1) both,ring 1.1s ease-in-out infinite}
+.btn.on::before,.li.on::before{content:'';position:absolute;left:-36px;top:50%;width:24px;height:24px;margin-top:-12px;background:url(sprites/b-pb.png) center/contain no-repeat;image-rendering:pixelated;animation:hop .7s ease-in-out infinite}
+.li{position:relative}
+.btn.sm.on::before,.cmd .btn.on::before,.row .btn.on::before,.bb-tabs .btn.on::before,.set-cats .btn.on::before,.enc-next::before{left:auto;right:6px;top:-16px;margin:0}
+.tb::after{content:'';position:absolute;right:16px;bottom:10px;border:8px solid transparent;border-top:10px solid var(--red);border-bottom:0;animation:hop .6s ease-in-out infinite}
+.hp i{position:relative;overflow:hidden;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.hp i::after{content:'';position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.75) 50%,transparent 70%);background-size:300% 100%;animation:shine 2.2s linear infinite}
+.ar-mon{animation:bob 2.2s ease-in-out infinite}
+.ar-me .ar-mon{animation-delay:-1.1s}
+.ar-foe::after,.ar-me::after{content:'';position:absolute;left:50%;bottom:44px;width:190px;height:26px;margin-left:-95px;border-radius:50%;background:rgba(10,20,40,.32);animation:shadow 2.2s ease-in-out infinite}
+.ar-me::after{bottom:-6px;width:300px;height:34px;margin-left:-150px;animation-delay:-1.1s}
+.ar-base{position:relative;z-index:0}
+.ar-foe::after,.ar-me::after{z-index:1}
+.ar-mon{z-index:2}
+.hub-line img,.ti-cast img,.mn-me img,.sm-art img,.leadc>img.px:not(.mv-m),.ev-cast img,.sh-clerk img{animation:bob 2.4s ease-in-out infinite}
+.hub-line img:nth-child(2n),.ti-cast .c1{animation-delay:-.8s}
+.hub-line img:nth-child(3n),.ti-cast .c3{animation-delay:-1.5s}
+.ti-cast img,.hub-line img,.mn-me img{filter:drop-shadow(0 10px 0 rgba(10,20,40,.22))}
+.title::after{content:'';position:absolute;left:0;right:0;top:20px;height:150px;pointer-events:none;background:radial-gradient(ellipse 60px 16px at 60px 30px,#fff 98%,transparent),radial-gradient(ellipse 90px 20px at 150px 44px,#fff 98%,transparent),radial-gradient(ellipse 70px 14px at 420px 100px,#fff 98%,transparent),radial-gradient(ellipse 50px 12px at 620px 26px,#fff 98%,transparent);background-size:760px 150px;background-repeat:repeat-x;opacity:.85;animation:drift 38s linear infinite}
+.logo{animation:drop .7s cubic-bezier(.3,1.6,.5,1) both}
+.logo span:nth-child(2){animation:drop .7s .12s cubic-bezier(.3,1.6,.5,1) both}
+.m2 .map-svg .top:not(.walked){stroke-dasharray:10 12;animation:march .8s linear infinite}
+.node.next{animation:ring 1.1s ease-in-out infinite;outline:3px solid var(--ink);outline-offset:6px}
+.map-you img{animation:hop .7s ease-in-out infinite}
+.mv3.on{animation:pop .36s both,ring 1.1s ease-in-out infinite;outline:3px solid var(--ink);outline-offset:6px}
+.title>div{z-index:1}
+.t2 .logo{font-size:100px;top:14px}
+/* timeline strip used on animation pages */
+.tl{position:absolute;left:50%;top:18px;transform:translateX(-50%);display:flex;gap:4px;z-index:6;white-space:nowrap}
+.tl span{background:rgba(29,42,77,.86);color:#fff;font-size:12px;padding:3px 10px 4px;transform:skewX(-14deg);display:flex;gap:6px;align-items:baseline}
+.tl span i{font:400 15px/1 var(--fd);font-style:normal;color:var(--yel)}
+.tl .on{background:var(--yel);color:var(--ink);font-weight:800}
+.tl .on i{color:var(--red)}
+.tl .past{opacity:.75}
+.enc .tl,.hitp .tl{top:auto;bottom:6px;left:20px;transform:none}
+.enc .tb,.hitp .tb{bottom:42px}
+.hitp .plate{z-index:5}
+.enc .plate.foe{animation:plate .4s 1.2s cubic-bezier(.3,1.4,.5,1) both}
+.enc .ar-foe{animation:slidein .5s .8s cubic-bezier(.2,.9,.3,1) both}
+.enc .ar-me{animation:slideinL .5s .8s cubic-bezier(.2,.9,.3,1) both}
+.enc .tb{animation:plate .3s 1.3s both}
+.iris{position:absolute;left:0;right:0;height:50%;z-index:8;border:0 solid var(--ink)}
+.iris.top{top:0;background:var(--red);border-bottom-width:14px;animation:irisT 1.2s cubic-bezier(.7,0,.3,1) both}
+.iris.bot{bottom:0;background:#fff;border-top-width:14px;animation:irisB 1.2s cubic-bezier(.7,0,.3,1) both}
+.iris-btn{position:absolute;left:50%;top:50%;width:92px;height:92px;margin:-46px 0 0 -46px;border-radius:50%;background:#fff;border:14px solid var(--ink);z-index:9;animation:irisO 1.2s both}
+.enc-next{position:absolute;right:16px;bottom:48px;z-index:6;min-width:110px;align-items:center}
+.hitp .ar-foe .ar-mon{animation:shake .5s .25s 1 both,blink .12s .25s 4}
+.hitp .ar-me .ar-mon{animation:lunge .5s 1 both}
+.fx-burst{position:absolute;left:640px;top:70px;width:230px;height:230px;border-radius:50%;z-index:3;background:radial-gradient(circle,#fff 0 16%,#ffe46b 17% 34%,var(--t) 35% 55%,transparent 56%),repeating-conic-gradient(var(--t) 0 9deg,transparent 9deg 20deg);animation:burst .7s .15s cubic-bezier(.2,.9,.3,1) both;opacity:.92}
+.fx-flash{position:absolute;inset:0;background:#fff;z-index:7;opacity:0;pointer-events:none;animation:flash .35s .25s 1}
+.dmg{position:absolute;left:560px;top:74px;z-index:6;display:flex;flex-direction:column;align-items:center;animation:pop .4s .3s cubic-bezier(.3,1.8,.5,1) both;transform:rotate(-8deg)}
+.dmg{gap:4px}
+.dmg b{font:400 76px/1 var(--fd);color:#fff;-webkit-text-stroke:8px var(--ink);paint-order:stroke fill}
+.dmg span{background:var(--ink);color:#fff;font-size:13px;font-weight:800;padding:1px 10px;border-radius:999px}
+.hitp .plate.foe .hp i{width:60%!important;animation:drain .7s .5s both}
+.hitp .plate.foe .hp{background:linear-gradient(90deg,#ffb9a8 0 74%,#d8deea 74%)}
+.hitp .tb{width:520px}
+/* motion sheet */
+.mo-list{position:absolute;left:16px;right:16px;top:72px;padding:8px 14px;display:flex;flex-direction:column}
+.mo-row{display:grid;grid-template-columns:150px 130px 96px 1fr 120px;align-items:center;gap:12px;padding:8px 4px;border-bottom:2px dashed #cdd6e6;font-size:13px}
+.mo-row:last-child{border:0}
+.mo-row b{font-size:15px}
+.mo-row em{font:400 20px/1 var(--fd);font-style:normal;color:var(--red)}
+.mo-row span{color:var(--mute)}
+.demo{position:relative;height:30px;background:#e6ecf7;border-radius:6px;overflow:hidden;display:flex;align-items:center;gap:4px;padding:0 6px}
+.demo i{display:block;width:22px;height:18px;border-radius:4px;background:var(--blu)}
+.d-slide i{animation:dslide 1.6s cubic-bezier(.3,1.3,.5,1) infinite}
+.d-iris i{display:none}
+.d-iris::after{content:'';position:absolute;inset:0;background:var(--red);animation:diris 1.8s cubic-bezier(.7,0,.3,1) infinite}
+.d-hop i{border-radius:50%;width:18px;background:var(--red);animation:hop .7s ease-in-out infinite}
+.d-hop i:nth-child(n+2){display:none}
+.d-deal i{animation:pop .9s cubic-bezier(.3,1.5,.5,1) infinite both}
+.d-deal i:nth-child(2){animation-delay:.12s}
+.d-deal i:nth-child(3){animation-delay:.24s}
+.d-drain i{width:100%;background:var(--ok);animation:ddrain 2s ease-out infinite}
+.d-drain i:nth-child(n+2){display:none}
+.d-type i{width:0;height:4px;background:var(--ink);animation:dtype 1.8s steps(12) infinite}
+.d-type i:nth-child(n+2){display:none}
+.motion .tb{min-height:56px;padding:12px 18px;font-size:14px}
+
+}
+
+@keyframes spin{to{rotate:342deg}}
+@keyframes run{to{background-position:55.3px 0}}
+@keyframes pop{from{opacity:0;translate:0 16px;scale:.94}}
+@keyframes ring{50%{outline-offset:7px}}
+@keyframes hop{50%{translate:0 -6px}}
+@keyframes bob{50%{translate:0 -7px}}
+@keyframes shadow{50%{scale:.88;opacity:.7}}
+@keyframes shine{from{background-position:150% 0}to{background-position:-150% 0}}
+@keyframes drift{to{background-position:760px 0}}
+@keyframes drop{from{translate:0 -160px;opacity:0}}
+@keyframes march{to{stroke-dashoffset:-22}}
+@keyframes plate{from{translate:0 -120px;opacity:0}}
+@keyframes slidein{from{translate:520px 0}}
+@keyframes slideinL{from{translate:-520px 0}}
+@keyframes irisT{0%{translate:0 -100%}33%,45%{translate:0 0}100%{translate:0 -104%}}
+@keyframes irisB{0%{translate:0 100%}33%,45%{translate:0 0}100%{translate:0 104%}}
+@keyframes irisO{0%{scale:0}33%,45%{scale:1}70%,100%{scale:0}}
+@keyframes shake{20%{translate:-12px 0}40%{translate:10px 0}60%{translate:-7px 0}80%{translate:4px 0}}
+@keyframes blink{50%{filter:brightness(4)}}
+@keyframes lunge{40%{translate:70px -30px}}
+@keyframes burst{from{scale:.1;opacity:0}60%{scale:1.15;opacity:1}}
+@keyframes flash{30%{opacity:.8}}
+@keyframes drain{from{width:74%}}
+@keyframes dslide{0%{translate:-40px 0;opacity:0}30%,70%{translate:0 0;opacity:1}100%{translate:120px 0;opacity:0}}
+@keyframes diris{0%,100%{clip-path:circle(0 at 50% 50%)}45%,55%{clip-path:circle(75% at 50% 50%)}}
+@keyframes ddrain{0%,20%{width:100%}70%,100%{width:35%}}
+@keyframes dtype{to{width:96px}}
+html[data-tr=battle]::view-transition-old(stage){animation:vt-hold .7s both}
+html[data-tr=battle]::view-transition-new(stage){animation:vt-iris .7s cubic-bezier(.7,0,.3,1) both}
+html[data-tr=page]::view-transition-old(stage){animation:vt-out .3s cubic-bezier(.4,0,.8,.4) both}
+html[data-tr=page]::view-transition-new(stage){animation:vt-in .34s cubic-bezier(.2,1.2,.4,1) both}
+@keyframes vt-hold{to{opacity:1}}
+@keyframes vt-iris{from{clip-path:circle(0 at 50% 50%)}to{clip-path:circle(80% at 50% 50%)}}
+@keyframes vt-out{to{translate:-60px 0;opacity:0}}
+@keyframes vt-in{from{translate:60px 0;opacity:0}}
+</style>
+<style data-pass="5">
+#stage{
+/* Pass 5 · Menu & Settings Hub. Layout idea: every area has its own colour and badge; the Pause Menu is a Poké Ball wheel. */
+.scr:has(.hdr[data-a=party]){--a:#e3350d}
+.scr:has(.hdr[data-a=bag]){--a:#e8791a}
+.scr:has(.hdr[data-a=dex]){--a:#d9365e}
+.scr:has(.hdr[data-a=map]){--a:#2f9e44}
+.scr:has(.hdr[data-a=town]){--a:#2a75bb}
+.scr:has(.hdr[data-a=set]){--a:#56627f}
+.scr:has(.hdr[data-a=guide]){--a:#7a4fd0}
+.scr:has(.hdr[data-a=card]){--a:#b97f00}
+.scr{background:linear-gradient(108deg,#fff 0 58%,color-mix(in srgb,var(--a,var(--lead)) 14%,#fff) 58% 100%)}
+.hdr{justify-content:flex-start}
+.hdr::before{background:repeating-linear-gradient(-70deg,var(--a,var(--red)) 0 26px,color-mix(in srgb,var(--a,var(--red)) 84%,#fff) 26px 52px);background-size:55.3px 100%}
+.hdr-ic{width:44px;height:44px;border-radius:50%;background:#fff;border:3px solid var(--ink);display:flex;align-items:center;justify-content:center;margin-left:10px;flex:none;box-shadow:0 3px 0 var(--ink)}
+.hdr-t{margin-left:12px}
+.hdr-p{margin-left:auto}
+.crumb{position:absolute;left:512px;top:15px;display:flex;gap:6px;font-size:12px;font-weight:800;color:var(--mute)}
+.crumb i{font-style:normal}
+.crumb i:not(:last-child)::after{content:'›';margin-left:6px}
+.crumb i:last-child{color:var(--ink)}
+.btn.on,.li.on,.tile.on{--sel:var(--yel)}
+/* wheel */
+.wheel{position:absolute;left:36px;top:40px;width:420px;height:420px}
+.wh-ball{position:absolute;left:85px;top:85px;width:250px;height:250px;border-radius:50%;border:6px solid var(--ink);background:linear-gradient(180deg,var(--red) 0 46%,var(--ink) 46% 54%,#fff 54%);box-shadow:0 8px 0 rgba(10,20,40,.4);animation:pop .5s cubic-bezier(.3,1.5,.5,1) both}
+.wh-me{position:absolute;left:164px;top:110px;animation:bob 2.4s ease-in-out infinite}
+.app{position:absolute;width:68px;height:68px;margin:-34px 0 0 -34px;border-radius:50%;background:#fff;border:5px solid var(--a);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 0 var(--ink);animation:pop .4s cubic-bezier(.3,1.6,.5,1) both}
+.app:nth-of-type(4){animation-delay:.04s}
+.app:nth-of-type(5){animation-delay:.08s}
+.app:nth-of-type(6){animation-delay:.12s}
+.app:nth-of-type(7){animation-delay:.16s}
+.app:nth-of-type(n+8){animation-delay:.2s}
+.app span{position:absolute;top:64px;white-space:nowrap;font-size:12px;font-weight:800;background:var(--ink);color:#fff;border-radius:999px;padding:0 9px}
+.app.on{scale:1.22;background:var(--yel);outline:3px solid #fff;outline-offset:3px;animation:pop .4s both,ring 1.1s ease-in-out infinite;z-index:2}
+.app.on span{background:var(--yel);color:var(--ink);border:2px solid var(--ink)}
+.glance{position:absolute;left:504px;top:44px;width:416px;padding:12px 16px;display:flex;flex-direction:column;gap:4px}
+.gl-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px}
+.gl-h b{font:400 34px/1 var(--fd);color:var(--red)}
+.gl-h span{font-size:12px;color:var(--mute)}
+.gl-r{display:flex;align-items:center;gap:10px;height:44px}
+.gl-r .pc-s{width:52px!important;height:42px!important}
+.gl-r b{width:86px}
+.gl-r .num{width:64px;text-align:right}
+.mn-strip{position:absolute;left:504px;top:414px;width:416px;display:flex;flex-wrap:wrap;gap:4px 8px;font-size:13px;color:#fff}
+.mn-strip>*{background:rgba(29,42,77,.9);border-radius:999px;padding:2px 12px}
+.mn-strip b{background:var(--yel);color:var(--ink)}
+/* settings home */
+.sc-grid{position:absolute;left:20px;right:20px;top:76px;display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:98px;gap:12px}
+.sc{flex-direction:row;align-items:center;justify-content:flex-start;gap:14px;border-radius:6px 18px 6px 18px;box-shadow:5px 5px 0 var(--ink)}
+.sc>img{flex:none;width:48px!important;height:48px!important;object-fit:contain}
+.sc div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.sc b{font-size:30px}
+/* settings pages */
+.sp5 .hdr-t{font-size:34px}
+.set-rows{position:absolute;left:230px;top:74px;right:290px;padding:6px 10px;display:flex;flex-direction:column}
+.wide .set-rows{right:20px}
+.srow{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:8px 12px;border-bottom:2px dashed #cdd6e6;min-height:62px}
+.srow:last-child{border:0}
+.srow>div{display:flex;flex-direction:column;min-width:0}
+.srow b{font-size:16px}
+.srow span{font-size:12.5px}
+.srow>div>span{color:var(--mute)}
+.srow.on{background:var(--yel);border-radius:6px;border-bottom-color:transparent;outline:3px solid var(--ink);outline-offset:2px;animation:ring 1.1s ease-in-out infinite}
+.srow.on>div>span{color:var(--ink)}
+.seg{display:inline-flex;flex:none;border:2px solid var(--ink);border-radius:999px;overflow:hidden;background:#fff}
+.seg i{font-style:normal;font-size:13px;font-weight:800;padding:3px 14px}
+.seg .on{background:var(--ink);color:#fff}
+.tog{display:inline-flex;flex:none;align-items:center;gap:8px}
+.tog i{width:50px;height:26px;border-radius:999px;border:2px solid var(--ink);background:#d8deea;position:relative}
+.tog i::after{content:'';position:absolute;left:2px;top:2px;width:18px;height:18px;border-radius:50%;background:#fff;border:2px solid var(--ink)}
+.tog.on i{background:var(--ok)}
+.tog.on i::after{left:26px}
+.tog u{text-decoration:none;font-weight:800;width:24px}
+.sld{position:relative;display:inline-block;flex:none;width:210px;height:14px;border:2px solid var(--ink);border-radius:999px;background:#d8deea;margin-right:54px}
+.sld i{position:absolute;left:0;top:0;bottom:0;background:var(--blu);border-radius:999px}
+.sld u{position:absolute;top:-7px;width:20px;height:24px;margin-left:-10px;background:#fff;border:2px solid var(--ink);border-radius:6px}
+.sld b{position:absolute;left:100%;top:-6px;margin-left:12px;font:400 20px/1 var(--fd)}
+.preview{position:absolute;right:20px;top:74px;width:250px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.preview small{text-transform:uppercase;letter-spacing:.1em}
+.pv-scr{position:relative;width:222px;height:125px;overflow:hidden;border:2px solid var(--ink);border-radius:6px}
+.pv-scr>img:first-child{width:222px;height:125px}
+.pv-scr img{position:absolute;left:0;top:0}
+.pv-scr .pv-f{left:140px;top:14px}
+.pv-scr .pv-m{left:6px;top:36px}
+.pv-scr i{position:absolute;background:#fff;border:1.5px solid var(--ink);transform:skewX(-14deg)}
+.pv-p1{left:-4px;top:8px;width:74px;height:16px}
+.pv-p2{right:-4px;top:62px;width:78px;height:18px}
+.pv-b{left:-6px;bottom:6px;width:120px;height:20px}
+.keysheet{padding:4px 10px}
+.kr{display:grid;grid-template-columns:1.5fr 1fr 1fr;align-items:center;padding:6px 12px;border-bottom:2px dashed #cdd6e6;font-size:15px;min-height:43px}
+.kr:last-child{border:0}
+.kh{min-height:30px;font-size:12px;font-weight:800;color:var(--mute);text-transform:uppercase;letter-spacing:.08em}
+.kr kbd{font:inherit;font-weight:800;background:#fff;border:2px solid var(--ink);border-bottom-width:4px;border-radius:6px;padding:0 10px}
+.kr em{font-style:normal;color:var(--mute);font-size:13px}
+.kr.on{background:var(--yel);border-radius:6px}
+/* save slots */
+.sl-list{position:absolute;left:20px;right:26px;top:76px;display:flex;flex-direction:column;gap:14px}
+.slot{position:relative;display:flex;align-items:center;gap:16px;padding:6px 18px;height:98px;animation:pop .36s cubic-bezier(.3,1.5,.5,1) both}
+.slot:nth-child(2){animation-delay:.06s}
+.slot:nth-child(3){animation-delay:.12s}
+.slot em{font:400 22px/1 var(--fd);font-style:normal;color:var(--mute);width:60px}
+.slot.on{background:var(--yel);outline:3px solid var(--ink);outline-offset:3px}
+.slot.on em{color:var(--ink)}
+.slot.empty{background:repeating-linear-gradient(-60deg,#fff 0 14px,#eef3fa 14px 28px);border-style:dashed;box-shadow:none}
+.sl-t{width:74px!important;height:84px!important;object-fit:cover;object-position:top}
+.sl-b{display:flex;flex-direction:column}
+.sl-b b{font:400 30px/1 var(--fd)}
+.sl-b span{font-size:13px}
+.sl-team{position:absolute;right:18px;top:50%;translate:0 -50%;display:flex;gap:2px}
+.sl-team .pc-s{width:58px!important;height:50px!important}
+.saves .tb{min-height:62px;padding:12px 18px;font-size:14px}
+.sp5:not(.wide) .sld{width:120px}
 
 }
 </style>
@@ -476,7 +725,7 @@ small{font-size:12px;color:var(--mute);font-weight:500}
 </div>
 <script>
 const SPR={"a-abyss-a":[120,18],"a-abyss-b":[128,32],"a-abyss-bg":[320,180],"a-cave-a":[120,15],"a-cave-b":[128,32],"a-cave-bg":[320,180],"a-desert-a":[120,11],"a-desert-b":[128,32],"a-desert-bg":[320,180],"a-dojo-a":[120,11],"a-dojo-b":[128,32],"a-dojo-bg":[320,180],"a-factory-a":[120,11],"a-factory-b":[128,32],"a-factory-bg":[320,180],"a-forest-a":[120,21],"a-forest-b":[135,43],"a-forest-bg":[320,180],"a-grass-a":[120,15],"a-grass-b":[128,43],"a-grass-bg":[320,180],"a-graveyard-a":[120,15],"a-graveyard-b":[128,32],"a-graveyard-bg":[320,180],"a-ice_cave-a":[120,11],"a-ice_cave-b":[128,32],"a-ice_cave-bg":[320,180],"a-mountain-a":[120,15],"a-mountain-b":[128,32],"a-mountain-bg":[320,180],"a-plains-a":[120,18],"a-plains-b":[128,36],"a-plains-bg":[320,180],"a-power_plant-a":[120,11],"a-power_plant-b":[128,32],"a-power_plant-bg":[320,180],"a-raid_max-bg":[320,180],"a-raid_tera-bg":[320,180],"a-raid_ultra-bg":[320,180],"a-ruins-a":[120,11],"a-ruins-b":[128,32],"a-ruins-bg":[320,180],"a-sea-a":[120,13],"a-sea-b":[128,35],"a-sea-bg":[320,180],"a-swamp-a":[123,35],"a-swamp-b":[128,32],"a-swamp-bg":[320,180],"a-tall_grass-a":[130,18],"a-tall_grass-b":[130,44],"a-tall_grass-bg":[320,180],"a-volcano-a":[125,20],"a-volcano-b":[128,32],"a-volcano-bg":[320,180],"b-dive":[12,12],"b-dusk":[12,12],"b-gb":[12,12],"b-heal":[12,12],"b-love":[12,12],"b-luxury":[12,12],"b-master":[12,12],"b-moon":[12,12],"b-net":[12,12],"b-pb":[12,12],"b-premier":[12,12],"b-quick":[12,12],"b-timer":[12,12],"b-ub":[12,12],"ball256":[256,256],"bd-bug":[32,32],"bd-dark":[32,32],"bd-dragon":[32,32],"bd-electric":[32,32],"bd-fairy":[32,32],"bd-fighting":[32,32],"bd-fire":[32,32],"bd-flying":[32,32],"bd-ghost":[32,32],"bd-grass":[32,32],"bd-ground":[32,32],"bd-ice":[32,32],"bd-normal":[32,32],"bd-poison":[32,32],"bd-psychic":[32,32],"bd-rock":[32,32],"bd-steel":[32,32],"bd-water":[32,32],"ev-cave":[512,288],"ev-city":[512,288],"ev-city_eve":[512,288],"ev-city_night":[512,288],"ev-field":[512,384],"ev-field_eve":[512,288],"ev-forest":[512,288],"ev-forest_night":[512,288],"ev-grotto":[512,384],"ev-indoor":[512,288],"ev-mountain":[512,384],"ev-ruins":[512,384],"ev-sand":[512,384],"ev-snow_eve":[512,288],"ev-water":[512,288],"ev-water_eve":[512,288],"fx-burst":[512,384],"fx-crystal":[512,384],"fx-max":[512,384],"fx-shine":[512,384],"fx-spiral":[608,619],"fx-tera":[512,384],"fx-ultra":[512,384],"fx-vs":[640,480],"g-dmax":[34,34],"g-mega":[30,54],"g-megaring":[48,48],"g-tera":[258,317],"i-amulet_coin":[32,32],"i-big_nugget":[32,32],"i-black_glasses":[32,32],"i-blue_orb":[32,32],"i-calendar":[32,32],"i-candy":[32,32],"i-charizardite_x":[32,32],"i-coin_case":[32,32],"i-dynamax_band":[32,32],"i-electrium_z":[32,32],"i-ether":[32,32],"i-exp_charm":[32,32],"i-fire_stone":[32,32],"i-fire_tera_shard":[32,32],"i-firium_z":[32,32],"i-focus_sash":[32,32],"i-full_heal":[32,32],"i-full_restore":[32,32],"i-gengarite":[32,32],"i-hyper_potion":[32,32],"i-kings_rock":[32,32],"i-lucarionite":[32,32],"i-lucky_egg":[32,32],"i-map":[32,32],"i-master_ribbon":[32,32],"i-mega_bracelet":[32,32],"i-metal_coat":[32,32],"i-moon_stone":[32,32],"i-muscle_band":[32,32],"i-mystery_egg":[32,32],"i-nugget":[32,32],"i-potion":[32,32],"i-quick_claw":[32,32],"i-rare_candy":[32,32],"i-red_orb":[32,32],"i-revive":[32,32],"i-scanner":[32,32],"i-shell_bell":[32,32],"i-shiny_charm":[32,32],"i-soothe_bell":[32,32],"i-super_potion":[32,32],"i-tera_orb":[32,32],"i-thunder_stone":[32,32],"i-wise_glasses":[32,32],"i-z_ring":[32,32],"m-1":[35,33],"m-109":[34,35],"m-110":[78,64],"m-112":[73,63],"m-121":[53,52],"m-129":[44,57],"m-130":[81,77],"m-131":[68,66],"m-133":[37,47],"m-143":[62,67],"m-144":[72,81],"m-145":[91,58],"m-146":[92,75],"m-147":[35,44],"m-149":[61,80],"m-150-mega-y":[53,86],"m-150":[68,65],"m-152":[39,44],"m-155":[42,37],"m-16":[37,41],"m-163":[43,43],"m-169":[88,48],"m-172":[26,37],"m-19":[36,43],"m-197":[42,51],"m-198":[40,44],"m-20":[56,51],"m-208":[81,74],"m-212":[68,73],"m-214":[58,63],"m-215":[53,48],"m-228":[37,44],"m-229":[65,67],"m-23":[41,44],"m-24":[61,65],"m-241":[54,47],"m-243":[78,65],"m-244":[75,68],"m-245":[74,69],"m-246":[34,44],"m-248":[77,76],"m-249":[96,85],"m-25":[39,46],"m-250":[83,91],"m-252":[41,45],"m-255":[25,43],"m-257":[59,75],"m-258":[39,42],"m-26":[63,61],"m-282":[69,73],"m-3":[79,69],"m-302":[42,43],"m-303":[57,47],"m-306":[72,72],"m-308":[38,66],"m-310":[54,67],"m-319":[62,70],"m-323":[72,60],"m-334":[58,63],"m-354":[49,51],"m-359":[53,58],"m-362":[55,56],"m-373":[78,71],"m-376":[77,52],"m-380":[68,53],"m-381":[70,72],"m-382":[94,57],"m-383":[77,74],"m-384-mega":[115,114],"m-384":[89,83],"m-387":[31,42],"m-390":[30,45],"m-393":[27,35],"m-4":[38,42],"m-41":[51,37],"m-42":[80,62],"m-428":[53,62],"m-430":[54,56],"m-443":[45,51],"m-445-mega":[80,79],"m-445":[73,76],"m-447":[42,45],"m-448-mega":[42,76],"m-448":[46,63],"m-460":[80,69],"m-461":[51,65],"m-475":[54,69],"m-483":[79,87],"m-484":[78,67],"m-495":[40,37],"m-498":[33,39],"m-5":[60,56],"m-501":[29,36],"m-52":[41,49],"m-53":[69,62],"m-531":[45,52],"m-59":[70,69],"m-6-gigantamax":[93,95],"m-6-mega-x":[102,89],"m-6":[74,81],"m-643":[96,82],"m-644":[95,91],"m-65":[72,67],"m-650":[34,49],"m-653":[40,48],"m-656":[32,35],"m-66":[50,50],"m-68":[63,68],"m-7":[38,39],"m-717":[99,88],"m-719":[41,70],"m-722":[30,35],"m-725":[47,40],"m-728":[40,39],"m-74":[56,24],"m-76":[65,57],"m-791":[76,85],"m-792":[89,86],"m-793":[46,70],"m-800":[87,84],"m-810":[36,42],"m-813":[33,51],"m-816":[36,46],"m-88":[53,37],"m-888":[82,76],"m-889":[74,90],"m-89":[78,58],"m-890":[88,82],"m-9":[66,62],"m-906":[38,39],"m-909":[39,48],"m-912":[32,47],"m-92":[65,55],"m-93":[61,48],"m-94-mega":[80,63],"m-94":[58,56],"m-95":[72,73],"map-region0":[480,320],"map-region1":[480,320],"mb-130":[91,77],"mb-133":[36,47],"mb-143":[63,63],"mb-149":[69,80],"mb-150":[69,65],"mb-155":[44,36],"mb-25":[35,47],"mb-258":[40,43],"mb-384":[77,92],"mb-4":[40,41],"mb-445":[76,73],"mb-448-mega":[41,76],"mb-448":[45,65],"mb-6-gigantamax":[96,91],"mb-6-mega-x":[106,90],"mb-6":[84,81],"mb-94-mega":[81,70],"mb-94":[55,54],"st-burn":[196,196],"st-para":[196,196],"st-poison":[196,196],"t-acef":[50,73],"t-acem":[29,77],"t-archer":[29,79],"t-blue":[53,74],"t-brock":[44,51],"t-cynthia":[53,80],"t-giovanni":[51,79],"t-green":[42,68],"t-grunt":[42,65],"t-hilda":[40,74],"t-lance":[59,74],"t-leon":[50,80],"t-misty":[51,72],"t-nate":[36,70],"t-red":[37,69],"t-redm":[42,71],"t-silver":[27,71],"t-steven":[38,75],"t-whitney":[42,69],"ty-bug":[32,32],"ty-dark":[32,32],"ty-dragon":[32,32],"ty-electric":[32,32],"ty-fairy":[32,32],"ty-fighting":[32,32],"ty-fire":[32,32],"ty-flying":[32,32],"ty-ghost":[32,32],"ty-grass":[32,32],"ty-ground":[32,32],"ty-ice":[32,32],"ty-normal":[32,32],"ty-poison":[32,32],"ty-psychic":[32,32],"ty-rock":[32,32],"ty-steel":[32,32],"ty-water":[32,32],"z-gigavolt":[512,200],"z-inferno":[512,200]};
-const NOTES={"1": {"name": "Clean Slate", "big": "A fresh start. Twelve core screens redrawn bright and simple in the three Pokémon logo colours (red, yellow, blue), replacing the dark navy look.", "pages": ["Title", "Hub Town", "Stage Map", "Battle", "Battle · Moves", "Event", "Party", "Summary", "Bag", "Poké Mart", "Pause Menu", "Settings"], "q1": "Not yet. It is tidy but flat: square cards on dotted paper, small sprites, nothing moves. Next pass needs energy and scale.", "q2": "Against the game today: light instead of dark, far bigger words, one selection colour, and every button says what it does.", "q3": "Yes. The battle screen sends Bag and Pokémon to the general pages, which hides the fight. They need their own battle pages.", "q4": "The Pause Menu is a plain list and Settings is one long tab row. Both work, neither is special yet.", "q5": "Partly. The logo colours and Poké Ball markers say Pokémon, but the shapes could be any app."}, "2": {"name": "Slant & Scale", "big": "Everything leans forward. A red slash carries every title, buttons and plates are slanted, sprites are about twice as big, and the battle gets its own Bag and Switch pages.", "pages": ["Battle · Bag", "Battle · Switch"], "q1": "Better: the slash and the huge Charizard on the title grab the eye. But it is still two flat colours with no life from the Pokémon themselves.", "q2": "Pass 1 was square cards on paper. Now panels lean, the lead Pokémon gets a big card, the map is a real road with stop numbers, and Fight is the biggest button in battle.", "q3": "Done here: Bag and Switch are battle pages now, so the fight stays on screen behind them. Move details still crowd the move row and should get more room.", "q4": "The Pause Menu moved onto the red slash with the trainer standing beside it. Settings swapped the tab row for a category list on the left, which leaves room for more categories.", "q5": "More than before. Slanted bars and a road map read as modern Pokémon. What is missing is type colour, the thing every Pokémon screen is built on."}, "3": {"name": "Type Colour", "big": "Colour now means something. Moves, party cards, HP plates and the Summary are painted in the Pokémon's own type with type medals, and every move shows how well it will hit.", "pages": ["Battle · Move Info", "Type Chart"], "q1": "Yes: move cards are big blocks of type colour with a ghosted medal, and the Summary band is a fire-to-sky gradient. It still sits perfectly still, which is the next thing to fix.", "q2": "Pass 2 used red, yellow and white for everything. Now a glance tells you type, matchup (▲ Super effective, ▼ Weak hit) and event risk (orange risky, green certain, blue costs money).", "q3": "Two added. Move Info takes the long move text and the damage estimate off the move row. The Type Chart gets its own page, opened with T from Party or Summary.", "q4": "No change to their layout this pass. Settings needs a colour-blind option now that colour carries meaning (planned with the accessibility pass); medals and arrows already repeat what the colour says.", "q5": "Much more. Type colours and type medals are the most Pokémon thing on any screen."}};
+const NOTES={"1": {"name": "Clean Slate", "big": "A fresh start. Twelve core screens redrawn bright and simple in the three Pokémon logo colours (red, yellow, blue), replacing the dark navy look.", "pages": ["Title", "Hub Town", "Stage Map", "Battle", "Battle · Moves", "Event", "Party", "Summary", "Bag", "Poké Mart", "Pause Menu", "Settings"], "q1": "Not yet. It is tidy but flat: square cards on dotted paper, small sprites, nothing moves. Next pass needs energy and scale.", "q2": "Against the game today: light instead of dark, far bigger words, one selection colour, and every button says what it does.", "q3": "Yes. The battle screen sends Bag and Pokémon to the general pages, which hides the fight. They need their own battle pages.", "q4": "The Pause Menu is a plain list and Settings is one long tab row. Both work, neither is special yet.", "q5": "Partly. The logo colours and Poké Ball markers say Pokémon, but the shapes could be any app."}, "2": {"name": "Slant & Scale", "big": "Everything leans forward. A red slash carries every title, buttons and plates are slanted, sprites are about twice as big, and the battle gets its own Bag and Switch pages.", "pages": ["Battle · Bag", "Battle · Switch"], "q1": "Better: the slash and the huge Charizard on the title grab the eye. But it is still two flat colours with no life from the Pokémon themselves.", "q2": "Pass 1 was square cards on paper. Now panels lean, the lead Pokémon gets a big card, the map is a real road with stop numbers, and Fight is the biggest button in battle.", "q3": "Done here: Bag and Switch are battle pages now, so the fight stays on screen behind them. Move details still crowd the move row and should get more room.", "q4": "The Pause Menu moved onto the red slash with the trainer standing beside it. Settings swapped the tab row for a category list on the left, which leaves room for more categories.", "q5": "More than before. Slanted bars and a road map read as modern Pokémon. What is missing is type colour, the thing every Pokémon screen is built on."}, "3": {"name": "Type Colour", "big": "Colour now means something. Moves, party cards, HP plates and the Summary are painted in the Pokémon's own type with type medals, and every move shows how well it will hit.", "pages": ["Battle · Move Info", "Type Chart"], "q1": "Yes: move cards are big blocks of type colour with a ghosted medal, and the Summary band is a fire-to-sky gradient. It still sits perfectly still, which is the next thing to fix.", "q2": "Pass 2 used red, yellow and white for everything. Now a glance tells you type, matchup (▲ Super effective, ▼ Weak hit) and event risk (orange risky, green certain, blue costs money).", "q3": "Two added. Move Info takes the long move text and the damage estimate off the move row. The Type Chart gets its own page, opened with T from Party or Summary.", "q4": "No change to their layout this pass. Settings needs a colour-blind option now that colour carries meaning (planned with the accessibility pass); medals and arrows already repeat what the colour says.", "q5": "Much more. Type colours and type medals are the most Pokémon thing on any screen."}, "4": {"name": "In Motion", "big": "Nothing sits still any more. The cursor is a hopping Poké Ball, the title band runs, sprites breathe over ground shadows, cards deal in one by one, pages slide and morph, and entering a battle is a Poké Ball that snaps shut and splits open.", "pages": ["Battle Start", "Move Hit", "Motion Sheet"], "q1": "Yes in play: press Play tour or click around. The ball iris and the hit burst are the showpieces. On a still picture it reads through the ball cursor, ground shadows and the timeline strips.", "q2": "Pass 3 was a set of posters. Now every page has an entrance, every choice has a hopping ball and a breathing outline, HP drains with a ghost bar, and the map road marches toward the next stops.", "q3": "Two battle moments got their own pages so the animation can be designed step by step: Battle Start and Move Hit, each with a timeline. The Motion Sheet lists every animation and how long it takes.", "q4": "Menus slide in from the slash with the cards dealing in. Settings needs an Animations page where each effect can be turned down, and a Reduced motion switch that these mockups already obey.", "q5": "Yes. The ball opening on a wild Pokémon and the flash-shake-number of a hit are straight from the series."}, "5": {"name": "Menu & Settings Hub", "big": "The Pause Menu is now a Poké Ball wheel with a live glance panel, Settings became a home page plus one page per category with real switches, sliders and a preview, and every area of the game has its own colour and badge in the title band.", "pages": ["Settings · Display", "Settings · Audio", "Settings · Controls", "Settings · Accessibility", "Save Slots"], "q1": "The wheel is the most eye-catching menu so far: eight badges orbit a Poké Ball with the trainer inside. Settings pages are calm on purpose, but they finally look like part of the game.", "q2": "Pass 4 still had a plain list for the menu and one cramped Settings list. Now the menu shows your party before you open anything, each setting has a proper control, and the title band changes colour by area with a trail showing where you are (Menu › Settings › Display).", "q3": "Five added. Settings alone went from one page to a home page and four category pages (the other categories follow the same pattern), plus Save Slots.", "q4": "This pass is the answer: Esc opens the wheel from anywhere, Settings is one stop on it, and Q and E flip between Settings categories without going back.", "q5": "Yes. The menu is literally a Poké Ball, and the Save Slots read like a trainer's journal."}};
 /* Pocket Raiders UI redesign: mockup kit. Screens and parts are versioned by pass:
    def(pass, id, meta, fn) and comp(pass, name, fn). At pass P the newest version with pass <= P is drawn. */
 const PR = { defs: {}, comps: {}, order: [], P: 1, cur: null };
@@ -912,6 +1161,76 @@ def(3, 'types', { t: 'Type Chart', g: 'Pokémon' }, () => `<div class="scr types
     <div class="tc-row"><span>Takes double from</span><div>${['water', 'ground', 'rock'].map(t => C('ty', t)).join('')}</div></div>
     <div class="tc-row"><span>Shrugs off</span><div>${['fire', 'grass', 'ice', 'bug', 'steel', 'fairy'].map(t => C('ty', t)).join('')}</div></div></div>
   ${C('keys', [['←→↑↓', 'pick a type'], ['Esc', 'back']])}</div>`);
+
+/* ===== pass 4 ===== */
+/* Pass 4 · In Motion: everything moves. Ball cursor, idle sprites, marching route, plus pages that show the animations */
+comp(4, 'tl', (steps, on) => `<div class="tl">${steps.map((s, i) => `<span class="${i === on ? 'on' : i < on ? 'past' : ''}"><i>${s[0]}</i>${s[1]}</span>`).join('')}</div>`);
+const WILD = { k: '163', n: 'Hoothoot', ty: ['normal', 'flying'], lv: 31, g: '♀' };
+def(4, 'encounter', { t: 'Battle Start', g: 'Battle' }, () => `<div class="scr battle b2 enc"><img class="px ar-bg" src="sprites/a-forest-bg.png" alt="">
+  <div class="ar-foe">${spr('a-forest-b', 3, 'ar-base')}${spr('m-' + WILD.k, 3, 'ar-mon')}</div>
+  <div class="ar-me">${spr('a-forest-a', 4, 'ar-base')}${spr('mb-6', 4, 'ar-mon')}</div>
+  <div class="plate foe" style="${tgrad(WILD.ty)}"><div class="pl-in"><div class="pl-1"><b>${WILD.n}</b><i class="gd">${WILD.g}</i>${WILD.ty.map(t => C('medal', t, .625)).join('')}<span class="lv">Lv ${WILD.lv}</span></div><div class="pl-2"><em>HP</em>${C('hp', 100)}</div><div class="pl-3"><span>Wild Pokémon</span><span>Not caught yet</span></div></div></div>
+  ${C('box', '', 'A wild <b>Hoothoot</b> appeared!')}
+  <div class="iris top"></div><div class="iris bot"></div><div class="iris-btn"></div>
+  ${C('tl', [['0.0s', 'Ball snaps shut'], ['0.4s', 'Ball splits open'], ['0.8s', 'Hoothoot slides in'], ['1.2s', 'Plate drops, text types'], ['1.8s', 'Go! Charizard!']], 3)}
+  <div class="enc-next btn on" ${go('battle')}><b>Next</b></div></div>`);
+def(4, 'hit', { t: 'Move Hit', g: 'Battle' }, () => `<div class="scr battle b2 hitp">${C('arena')}
+  <div class="fx-burst" style="--t:${TYC.fire}"></div><div class="fx-flash"></div>
+  <div class="dmg" data-nocheck><b>−38</b><span>Weak hit</span></div>
+  ${C('box', '', '<b>Charizard</b> used <b>Flamethrower</b>! It is not very effective…')}
+  ${C('tl', [['0.0s', 'Charizard lunges'], ['0.2s', 'Fire burst on Blastoise'], ['0.3s', 'Flash, shake, number pops'], ['0.5s', 'HP drains'], ['1.1s', 'Text confirms']], 3)}
+  <div class="enc-next btn on" ${go('battle')}><b>Next</b></div></div>`);
+def(4, 'motion', { t: 'Motion Sheet', g: 'Guide' }, () => { const rows = [['Change page', 'Any menu page', '0.30s', 'Old page slides out left, new one slides in; shared pieces morph', 'slide'], ['Enter battle', 'Map to battle', '0.70s', 'Poké Ball iris: snaps shut, then splits open', 'iris'], ['Move the cursor', 'Every list', '0.18s', 'Ball cursor hops to the new row, row springs out', 'hop'], ['Deal cards', 'Party, Bag, moves', '0.04s each', 'Cards pop in one after another', 'deal'], ['HP change', 'Battle', '0.60s', 'Bar drains with a pale ghost of the lost HP', 'drain'], ['Text', 'All text boxes', '40 letters/s', 'Types out; a bouncing arrow waits for input', 'type']]; return `<div class="scr motion">${C('hdr', 'Motion Sheet', ['Pass 4'])}
+  <div class="mo-list pn">${rows.map(r => `<div class="mo-row"><b>${r[0]}</b><span>${r[1]}</span><em>${r[2]}</em><p>${r[3]}</p><div class="demo d-${r[4]}"><i></i><i></i><i></i></div></div>`).join('')}</div>
+  ${C('box', '', 'Every animation is skipped when Reduced motion is on, and none of them delays a result.')}
+  ${C('keys', [['Esc', 'back']])}</div>`; });
+
+/* ===== pass 5 ===== */
+/* Pass 5 · Menu & Settings Hub: a Poké Ball wheel for the Pause Menu, Settings split into pages, area colours */
+const AREA = { party: ['#e3350d', 'b-pb', 2], bag: ['#e8791a', 'i-potion', 1], dex: ['#d9365e', 'i-scanner', 1], map: ['#2f9e44', 'i-map', 1], town: ['#2a75bb', 'i-coin_case', 1], set: ['#56627f', 'i-metal_coat', 1], guide: ['#7a4fd0', 'i-calendar', 1], card: ['#b97f00', 'i-master_ribbon', 1] };
+const AREA_OF = { 'Party': 'party', 'Summary': 'party', 'Type Chart': 'dex', 'Bag': 'bag', 'Poké Mart': 'town', 'Hub Town': 'town', 'Motion Sheet': 'guide', 'Save Slots': 'card' };
+comp(5, 'hdr', (t, pills = [], area, crumb) => { const a = area || AREA_OF[t] || (t.startsWith('Settings') ? 'set' : 'map'), A = AREA[a]; return `<div class="hdr" data-a="${a}" ${mm('hdr')}><span class="hdr-ic">${spr(A[1], A[2])}</span><span class="hdr-t">${t}</span>${crumb ? `<span class="crumb">${crumb.map(c => `<i>${c}</i>`).join('')}</span>` : ''}<span class="hdr-p">${pills.map(p => `<b><u>${p}</u></b>`).join('')}</span></div>`; });
+comp(5, 'seg', (opts, on) => `<span class="seg">${opts.map((o, i) => `<i class="${i === on ? 'on' : ''}">${o}</i>`).join('')}</span>`);
+comp(5, 'tog', on => `<span class="tog${on ? ' on' : ''}"><i></i><u>${on ? 'On' : 'Off'}</u></span>`);
+comp(5, 'sld', v => `<span class="sld"><i style="width:${v}%"></i><u style="left:${v}%"></u><b>${v}%</b></span>`);
+comp(5, 'srow', (label, desc, ctl, on) => `<div class="srow${on ? ' on' : ''}"><div><b>${label}</b><span>${desc}</span></div>${ctl}</div>`);
+const SCATS = [['Display', 'set-display', 'i-scanner', 'New look · 100% size'], ['Audio', 'set-audio', 'i-soothe_bell', 'Music 70% · Sound 80%'], ['Gameplay', '', 'b-pb', 'Normal · 30 stops'], ['Animations', '', 'i-quick_claw', 'Battle effects on'], ['Text', '', 'i-map', 'Fast · Medium size'], ['Accessibility', 'set-access', 'i-wise_glasses', 'Nothing switched on'], ['Controls', 'set-controls', 'i-z_ring', 'Keyboard'], ['Story', '', 'i-calendar', 'Scenes on · Rotom on'], ['Save & Data', 'saves', 'i-coin_case', 'Slot 1 · 3 backups']];
+const setSide = on => `<div class="set-cats">${SCATS.map((c, i) => `<div class="btn sm${i === on ? ' on' : ''}" ${c[1] ? go(c[1]) : ''}><b>${c[0]}</b></div>`).join('')}</div>`;
+
+def(5, 'menu', { t: 'Pause Menu', g: 'Menu' }, () => { const apps = [['Party', 'party', 'b-pb', 3, '#e3350d'], ['Bag', 'bag', 'i-potion', 1.5, '#e8791a'], ['Pokédex', '', 'i-scanner', 1.5, '#d9365e'], ['Trainer Card', '', 'i-master_ribbon', 1.5, '#b97f00'], ['Type Chart', 'types', 'bd-fire', 1.5, '#7a4fd0'], ['Save', 'saves', 'i-calendar', 1.5, '#2f9e44'], ['Settings', 'settings', 'i-metal_coat', 1.5, '#56627f'], ['Quit', 'title', 'b-premier', 3, '#1d2a4d']]; return `<div class="scr menu mn5"><img class="px ar-bg dim" src="sprites/a-plains-bg.png" alt="">
+  <div class="wheel"><div class="wh-ball"></div><div class="wh-me">${spr('t-red', 2.5)}</div>
+    ${apps.map((a, i) => { const ang = (-90 + i * 45) * Math.PI / 180; return `<div class="app${i === 0 ? ' on' : ''}" style="left:${Math.round(210 + 168 * Math.cos(ang))}px;top:${Math.round(210 + 168 * Math.sin(ang))}px;--a:${a[4]}" ${a[1] ? go(a[1]) : ''}>${spr(a[2], a[3])}<span>${a[0]}</span></div>`; }).join('')}</div>
+  <div class="glance pn"><div class="gl-h"><b>Party</b><span>Enter opens it</span></div>
+    ${PARTY.map(p => `<div class="gl-r">${spr('m-' + p.k, 1, 'pc-s')}<b>${p.n}</b>${C('hp', pct(p.hp, p.mx))}<span class="num">${p.hp}/${p.mx}</span></div>`).join('')}</div>
+  <div class="mn-strip"><b>Red</b><span>${RUN.region} · Stage ${RUN.stage} of ${RUN.stages}</span><span>₽ ${RUN.money}</span><span>Badges ${RUN.badges}</span><span>Play time 1:42</span></div>
+  ${C('keys', [['←→↑↓', 'turn the wheel'], ['Enter', 'open'], ['Esc', 'resume']])}</div>`; });
+
+def(5, 'settings', { t: 'Settings', g: 'Settings' }, () => `<div class="scr settings sh5">${C('hdr', 'Settings', [], 'set', ['Menu', 'Settings'])}
+  <div class="sc-grid">${SCATS.map((c, i) => `<div class="tile sc${i === 0 ? ' on' : ''}" ${c[1] ? go(c[1]) : ''}>${spr(c[2], c[2].startsWith('b-') ? 3 : 1.5)}<div><b>${c[0]}</b><span>${c[3]}</span></div></div>`).join('')}</div>
+  ${C('box', '', 'Display: the look of the game, screen size and which screen styles you use.')}
+  ${C('keys', [['←→↑↓', 'move'], ['Enter', 'open'], ['/', 'search'], ['Esc', 'back']])}</div>`);
+
+def(5, 'set-display', { t: 'Settings · Display', g: 'Settings' }, () => `<div class="scr settings sp5">${C('hdr', 'Settings · Display', [], 'set', ['Menu', 'Settings', 'Display'])}${setSide(0)}
+  <div class="set-rows pn">${C('srow', 'UI style', 'New is this look. Old is the look from before.', C('seg', ['Old', 'New'], 1), 1)}${C('srow', 'Screen size', 'How much of the window the game fills.', C('sld', 100))}${C('srow', 'Battle screen style', 'The layout of plates and buttons in battle.', C('seg', ['Original', 'Slanted'], 1))}${C('srow', 'Route map style', 'How the stage map is drawn.', C('seg', ['Dots', 'Road'], 1))}${C('srow', 'High contrast', 'Thicker outlines and darker text.', C('tog', 0))}</div>
+  <div class="preview pn"><small>Preview</small><div class="pv-scr"><img class="px" src="sprites/a-grass-bg.png" alt="">${spr('m-9', 1, 'pv-f')}${spr('mb-6', 1.5, 'pv-m')}<i class="pv-p1"></i><i class="pv-p2"></i><i class="pv-b"></i></div><span>UI style: New</span></div>
+  ${C('keys', [['←→', 'change'], ['↑↓', 'move'], ['Q E', 'category'], ['R', 'reset page'], ['Esc', 'back']])}</div>`);
+
+def(5, 'set-audio', { t: 'Settings · Audio', g: 'Settings' }, () => `<div class="scr settings sp5 wide">${C('hdr', 'Settings · Audio', [], 'set', ['Menu', 'Settings', 'Audio'])}${setSide(1)}
+  <div class="set-rows pn">${C('srow', 'Master volume', 'Everything at once.', C('sld', 90), 1)}${C('srow', 'Music', 'Route, town and battle themes.', C('sld', 70))}${C('srow', 'Sound effects', 'Hits, menus and item sounds.', C('sld', 80))}${C('srow', 'Pokémon cries', 'The cry when a Pokémon enters or faints.', C('sld', 80))}${C('srow', 'Mute in the background', 'Silence the game when its window is hidden.', C('tog', 1))}${C('srow', 'Gym battle music', 'The track for Gym Leaders and Champions.', C('seg', ['Classic', 'Galar'], 1))}</div>
+  ${C('keys', [['←→', 'change'], ['↑↓', 'move'], ['Q E', 'category'], ['Enter', 'play a sample'], ['Esc', 'back']])}</div>`);
+
+def(5, 'set-controls', { t: 'Settings · Controls', g: 'Settings' }, () => { const k = [['Move', '↑ ↓ ← →', 'W A S D'], ['Confirm', 'Enter', 'Z'], ['Back', 'Esc', 'X'], ['Pause Menu', 'Esc', 'P'], ['Menu row / next tab', 'Tab', 'E'], ['Move info in battle', 'I', '—'], ['Type chart', 'T', '—'], ['Skip text', 'Hold Space', '—']]; return `<div class="scr settings sp5 wide">${C('hdr', 'Settings · Controls', [], 'set', ['Menu', 'Settings', 'Controls'])}${setSide(6)}
+  <div class="set-rows pn keysheet"><div class="kr kh"><span>Action</span><span>Key</span><span>Second key</span></div>${k.map((r, i) => `<div class="kr${i === 1 ? ' on' : ''}"><b>${r[0]}</b><span><kbd>${r[1]}</kbd></span><span>${r[2] === '—' ? '<em>not set</em>' : `<kbd>${r[2]}</kbd>`}</span></div>`).join('')}</div>
+  ${C('keys', [['Enter', 'set a new key'], ['Del', 'clear'], ['R', 'reset all'], ['Esc', 'back']])}</div>`; });
+
+def(5, 'set-access', { t: 'Settings · Accessibility', g: 'Settings' }, () => `<div class="scr settings sp5 wide">${C('hdr', 'Settings · Accessibility', [], 'set', ['Menu', 'Settings', 'Accessibility'])}${setSide(5)}
+  <div class="set-rows pn">${C('srow', 'Reduced motion', 'Pages cut instead of sliding. Sprites stand still.', C('tog', 0), 1)}${C('srow', 'Screen flashes', 'The white flash when a move lands.', C('tog', 1))}${C('srow', 'Screen shake', 'The shake on big hits.', C('tog', 1))}${C('srow', 'Type patterns', 'Stripes and dots on type colours for colour-blind play.', C('tog', 0))}${C('srow', 'Text size', 'Small, Medium or Large text in every box.', C('seg', ['S', 'M', 'L'], 1))}${C('srow', 'Hold to confirm', 'Hold Enter for risky choices such as Quit.', C('tog', 1))}</div>
+  ${C('keys', [['←→', 'change'], ['↑↓', 'move'], ['Q E', 'category'], ['Esc', 'back']])}</div>`);
+
+def(5, 'saves', { t: 'Save Slots', g: 'Menu' }, () => { const slot = (n, t, tk, l1, l2, team, on) => `<div class="slot pn${on ? ' on' : ''}${t ? '' : ' empty'}"><em>Slot ${n}</em>${t ? `${spr('t-' + tk, 2, 'sl-t')}<div class="sl-b"><b>${t}</b><span>${l1}</span><span>${l2}</span><div class="sl-team">${team.map(k => spr('m-' + k, 1, 'pc-s')).join('')}</div></div>` : `<div class="sl-b"><b>Empty</b><span>Start a new journey here.</span></div>`}</div>`; return `<div class="scr saves">${C('hdr', 'Save Slots', [], 'card', ['Menu', 'Save'])}
+  <div class="sl-list">${slot(1, 'Red', 'red', 'Kanto · Stage 12 of 30 · 2 badges', 'Play time 1:42 · saved today, 3:01 PM', ['6', '25', '94', '130', '448', '143'], 1)}${slot(2, 'Hilda', 'hilda', 'Unova · Stage 4 of 30 · 0 badges', 'Play time 0:21 · saved Nov 17', ['495', '25', '133'])}${slot(3)}</div>
+  ${C('box', '', 'Saving keeps 3 backups of each slot. If a save ever breaks, the game offers the newest good backup.')}
+  ${C('keys', [['↑↓', 'slot'], ['Enter', 'save here'], ['L', 'load'], ['Del', 'erase (hold)'], ['Esc', 'back']])}</div>`; });
 
 boot();
 </script>

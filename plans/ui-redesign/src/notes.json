@@ -47,5 +47,35 @@
   "q3": "Two added. Move Info takes the long move text and the damage estimate off the move row. The Type Chart gets its own page, opened with T from Party or Summary.",
   "q4": "No change to their layout this pass. Settings needs a colour-blind option now that colour carries meaning (planned with the accessibility pass); medals and arrows already repeat what the colour says.",
   "q5": "Much more. Type colours and type medals are the most Pokémon thing on any screen."
+ },
+ "4": {
+  "name": "In Motion",
+  "big": "Nothing sits still any more. The cursor is a hopping Poké Ball, the title band runs, sprites breathe over ground shadows, cards deal in one by one, pages slide and morph, and entering a battle is a Poké Ball that snaps shut and splits open.",
+  "pages": [
+   "Battle Start",
+   "Move Hit",
+   "Motion Sheet"
+  ],
+  "q1": "Yes in play: press Play tour or click around. The ball iris and the hit burst are the showpieces. On a still picture it reads through the ball cursor, ground shadows and the timeline strips.",
+  "q2": "Pass 3 was a set of posters. Now every page has an entrance, every choice has a hopping ball and a breathing outline, HP drains with a ghost bar, and the map road marches toward the next stops.",
+  "q3": "Two battle moments got their own pages so the animation can be designed step by step: Battle Start and Move Hit, each with a timeline. The Motion Sheet lists every animation and how long it takes.",
+  "q4": "Menus slide in from the slash with the cards dealing in. Settings needs an Animations page where each effect can be turned down, and a Reduced motion switch that these mockups already obey.",
+  "q5": "Yes. The ball opening on a wild Pokémon and the flash-shake-number of a hit are straight from the series."
+ },
+ "5": {
+  "name": "Menu & Settings Hub",
+  "big": "The Pause Menu is now a Poké Ball wheel with a live glance panel, Settings became a home page plus one page per category with real switches, sliders and a preview, and every area of the game has its own colour and badge in the title band.",
+  "pages": [
+   "Settings · Display",
+   "Settings · Audio",
+   "Settings · Controls",
+   "Settings · Accessibility",
+   "Save Slots"
+  ],
+  "q1": "The wheel is the most eye-catching menu so far: eight badges orbit a Poké Ball with the trainer inside. Settings pages are calm on purpose, but they finally look like part of the game.",
+  "q2": "Pass 4 still had a plain list for the menu and one cramped Settings list. Now the menu shows your party before you open anything, each setting has a proper control, and the title band changes colour by area with a trail showing where you are (Menu › Settings › Display).",
+  "q3": "Five added. Settings alone went from one page to a home page and four category pages (the other categories follow the same pattern), plus Save Slots.",
+  "q4": "This pass is the answer: Esc opens the wheel from anywhere, Settings is one stop on it, and Q and E flip between Settings categories without going back.",
+  "q5": "Yes. The menu is literally a Poké Ball, and the Save Slots read like a trainer's journal."
  }
 }

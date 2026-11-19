@@ -77,3 +77,5 @@
 .tc-row span{font-size:13px;font-weight:800;color:var(--mute)}
 .tc-row div{display:flex;flex-wrap:wrap;gap:5px}
 .sw-pick.typed-card p{background:rgba(0,0,0,.4);border-radius:8px;padding:4px 10px}
+.tc-row div .ty,.sm-facts .ty{color:#fff;font-size:12px}
+.tc-row>span{color:var(--mute)}
