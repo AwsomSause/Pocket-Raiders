@@ -425,10 +425,38 @@ describe('save upgrades (v1 → v2)', () => {
     expect(profile.candies).toBe(0);
   });
 
-  it('rejects a save that refers to an item that no longer exists', () => {
+  it('an item that no longer exists is sold on load instead of discarding the run (save audit 2026-11-19)', () => {
     const storage = new MemoryStorageProvider();
     const saves = new SaveManager(storage, content);
-    saves.saveRun({ ...newRun('bad-item'), inventory: { 'no-such-ball': 1 } });
+    // Written by an older build: saveRun now tidies the Bag first, so the bad id goes in by hand.
+    saves.saveRun({ ...newRun('bad-item'), money: 0 });
+    const stored = JSON.parse(storage.get('pkr.run')!) as { data: { inventory: Record<string, number> } };
+    stored.data.inventory = { 'no-such-ball': 1 };
+    storage.set('pkr.run', JSON.stringify(stored));
+    const loaded = new SaveManager(storage, content).loadRun();
+    expect(loaded.status).toBe('ok');
+    if (loaded.status !== 'ok') return;
+    expect(loaded.data.inventory['no-such-ball']).toBeUndefined();
+    expect(loaded.data.money).toBe(content.balance.events.soldGift);
+  });
+
+  it('a catalog item in the Bag is moved where it belongs on save, not thrown away on load (save audit 2026-11-19)', () => {
+    const storage = new MemoryStorageProvider();
+    const saves = new SaveManager(storage, content);
+    const run = { ...newRun('berry'), inventory: { 'sitrus-berry': 2, 'no-such-ball': 1 }, money: 0 };
+    expect(saves.saveRun(run).ok).toBe(true);
+    const loaded = new SaveManager(storage, content).loadRun();
+    expect(loaded.status).toBe('ok');
+    if (loaded.status !== 'ok') return;
+    expect(loaded.data.inventory).toEqual({});
+    expect(loaded.data.looseHeld?.['sitrus-berry']).toBe(2);
+    expect(loaded.data.money).toBe(content.balance.events.soldGift);
+  });
+
+  it('still rejects a run whose trainer no longer exists', () => {
+    const storage = new MemoryStorageProvider();
+    const saves = new SaveManager(storage, content);
+    saves.saveRun({ ...newRun('bad-trainer'), archetypeId: 'no-such-trainer' });
     expect(saves.loadRun()).toMatchObject({ status: 'corrupt' });
   });
 });

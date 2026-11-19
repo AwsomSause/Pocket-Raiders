@@ -250,6 +250,12 @@ function returnRent(content: Content, run: RunState, e: MarketEffect): string {
     take(run, id, 1);
     return `Returned ${nameOf(content, id)}`;
   }
+  // A rented held item is kept with the loose held items once the run is saved (bag.ts tidyBag).
+  if (!e.used && (run.looseHeld?.[id] ?? 0) > 0) {
+    run.looseHeld![id]! -= 1;
+    if (run.looseHeld![id] === 0) delete run.looseHeld![id];
+    return `Returned ${nameOf(content, id)}`;
+  }
   const value = Math.min(run.money, itemValue(content, id));
   run.money -= value;
   return `Paid ₽${value} for the ${nameOf(content, id)}`;

@@ -279,3 +279,25 @@ export function giveHeld(content: Content, current: RunState, itemId: string, pa
   const name = content.species.get(mon.speciesId)?.name ?? mon.speciesId;
   return { run, message: `${name} is now holding the ${content.catalog.get(itemId)!.name}.` };
 }
+
+/**
+ * Bag ids that are not Bag items (save audit 2026-11-19): some events, markets and rentals put a catalog item
+ * (a Sitrus Berry, a Focus Sash) straight into `run.inventory`, where the Bag never shows it and an older save check
+ * threw the whole run away. Each one goes where it belongs: a held item waits in the Bag to be given (looseHeld),
+ * a team or player passive joins the passives, anything else is sold like an event gift that can't be used
+ * (balance.events.soldGift each). Mutates `run`; returns what moved, for the save's repair list.
+ */
+export function tidyBag(content: Content, run: RunState): string[] {
+  const moved: string[] = [];
+  for (const [id, n] of Object.entries(run.inventory)) {
+    if (content.items.has(id)) continue;
+    delete run.inventory[id];
+    if (!(n > 0)) continue;
+    const entry = content.catalog.get(id);
+    if (entry?.stacksOn === 'pokemon' && entry.effect?.kind === 'held') run.looseHeld = { ...run.looseHeld, [id]: (run.looseHeld?.[id] ?? 0) + n };
+    else if (entry && entry.stacksOn !== 'pokemon' && (entry.effect?.kind === 'passive' || entry.effect?.kind === 'held')) run.passives = { ...run.passives, [id]: (run.passives?.[id] ?? 0) + n };
+    else run.money += content.balance.events.soldGift * n;
+    moved.push(`item ${id}`);
+  }
+  return moved;
+}
