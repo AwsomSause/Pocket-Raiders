@@ -107,11 +107,11 @@ describe('DOMINION D3: members', () => {
     expect(cantTake(m, taskById('pickpocket')!)).toBeNull();
     expect(cantTake(m, taskById('shake-down')!)).toBeNull();
     expect(cantTake(m, taskById('rally-the-troops')!)).toMatch(/SENIOR GRUNT/);
-    expect(cantTake(m, taskById('man-the-gate')!)).toMatch(/D9/);
+    expect(cantTake(m, taskById('stock-the-stores')!)).toMatch(/D10/);
   });
   it('assigning is a Morning/Evening step, refused for a task they can\'t take', () => {
     let r = started();
-    expect(stepInRun(content, r, { t: 'assign', member: 'm1', task: 'man-the-gate' }).ok).toBe(false);
+    expect(stepInRun(content, r, { t: 'assign', member: 'm1', task: 'stock-the-stores' }).ok).toBe(false);
     r = go(r, { t: 'assign', member: 'm1', task: 'pickpocket' });
     expect(crewOf(rook(blk(r))).task).toBe('pickpocket');
     r = go(go(night(r), { t: 'toDay' }), { t: 'endDay' });

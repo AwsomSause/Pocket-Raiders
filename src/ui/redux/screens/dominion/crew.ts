@@ -38,7 +38,8 @@ export function talkCard(t: TalkModel, at: number): string {
 
 export function morningView(m: MorningModel, notice: string | null, talkAt: number): string {
   const alerts = m.alerts.map((a) => {
-    const [cls, ic, t] = ALERT[a.kind] ?? ALERT.world!;
+    const [cls, ic, t0] = ALERT[a.kind] ?? ALERT.world!;
+    const t = a.kind === 'rival' ? esc(m.rivalTag) : t0;
     return `<div class="al ${cls}"><img class="ic" src="${img(ic)}" alt=""><div><span class="t">${t}</span><span class="xs dm" style="float:right;margin-left:6px">${esc(a.time)}</span>${esc(a.text)}</div></div>`;
   }).join('') || '<div class="mu sm">A quiet night.</div>';
   const rows = m.tasks.map((t, i) => {
@@ -66,7 +67,7 @@ export function morningView(m: MorningModel, notice: string | null, talkAt: numb
     <div class="hd"><img class="ic" src="${img('g-xtransceiver')}" alt="">MORNING REPORT<span class="r">overnight</span></div>
     <div class="col" style="gap:7px;max-height:290px;overflow:hidden">${alerts}</div>
     ${m.more ? `<div class="xs mu" style="margin-top:4px">+${m.more} more in the Ledger</div>` : ''}
-    <div class="row" style="position:absolute;left:0;right:0;bottom:12px;justify-content:center;gap:10px;color:${m.badge.hot ? 'var(--red)' : '#9fe0b4'};font-weight:700">⚠ <span class="${m.badge.hot ? 'pulse' : ''}" style="display:inline-block;border:2px solid ${m.badge.hot ? 'var(--red)' : '#43cf78'};border-radius:6px;padding:2px 10px;box-shadow:0 0 12px ${m.badge.hot ? 'rgba(255,90,79,.4)' : 'rgba(67,207,120,.3)'}" data-testid="dom-badge">${esc(m.badge.label)}: ${esc(m.badge.word)}</span> ⚠</div>
+    <div class="row" style="position:absolute;left:0;right:0;bottom:12px;justify-content:center;gap:10px;color:${m.badge.hot ? 'var(--red)' : '#9fe0b4'};font-weight:700">⚠ <span class="${m.badge.hot ? 'pulse' : ''}" style="display:inline-block;border:2px solid ${m.badge.hot ? 'var(--red)' : '#43cf78'};border-radius:6px;padding:2px 10px;cursor:pointer;box-shadow:0 0 12px ${m.badge.hot ? 'rgba(255,90,79,.4)' : 'rgba(67,207,120,.3)'}"${act('rivalFile')} title="Rival File (R)" data-testid="dom-badge">${esc(m.badge.label)}: ${esc(m.badge.word)}</span> ⚠</div>
   </div>
   <div class="pnl glass" style="left:350px;top:86px;width:276px;height:308px" data-testid="dom-assign">
     <div class="hd"><img class="ic" src="${img('g-letter')}" alt="">ASSIGN TASK${m.where ? `<span class="r" style="white-space:nowrap"${act('crewWhere')} data-testid="dom-where"><b class="y">${esc(m.where)}</b> <span class="kc" style="font-size:11px;padding:0 4px">P</span></span>` : `<span class="r">${esc(m.strip.find((s) => s.sel)?.name ?? '')}</span>`}</div>

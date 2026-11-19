@@ -237,6 +237,8 @@ export function foeOf(b: DominionBlock, run: Pick<RunState, 'party'>, kind: Fiel
       const m = b.members[0];
       return { name: m?.name ?? 'Crew', species: m?.team[0]?.speciesId ?? '', level: m?.team[0]?.level ?? 5, wild: false };
     }
+    case 'rival':
+      return RIVAL_FOE ? RIVAL_FOE(b, run) : { name: 'Rival Grunt', species: 'rattata', level: foeLevel(b, run, 0), wild: false };
     case 'target': {
       const f = target?.foe ?? district.targets[0]!.foe;
       return { name: f.name, species: f.species[0]!, level: foeLevel(b, run, f.offset), wild: false };
@@ -372,6 +374,25 @@ type Gate = (b: DominionBlock, def: ActionDef) => string | null;
 const GATES: Gate[] = [];
 export function addActionGate(g: Gate): void {
   GATES.push(g);
+}
+
+/** D9: what a later slice's effect does when the action works (rivals.ts: hits on the rival team, spying, truce talks). */
+export interface ActFx { action: string; district: string; target: string | null; big: boolean }
+type ActEffect = (b: DominionBlock, x: ActFx) => string[];
+const ACT_EFFECTS: Partial<Record<string, ActEffect>> = {};
+export function addActEffect(effect: string, f: ActEffect): void {
+  ACT_EFFECTS[effect] = f;
+}
+/** D9: a fight that isn't an action's (a rival Boss at the door, a challenge answered) is settled by its owner. */
+type Settler = (content: Content | null, b: DominionBlock, run: RunState, fight: FieldFight, outcome: 'win' | 'lose' | 'fled') => string[];
+const SETTLERS: Partial<Record<FieldFight['why'], Settler>> = {};
+export function addFightSettler(why: FieldFight['why'], f: Settler): void {
+  SETTLERS[why] = f;
+}
+/** D9: the rival foe on the Card (rivals.ts). */
+let RIVAL_FOE: ((b: DominionBlock, run: Pick<RunState, 'party'>) => Foe) | null = null;
+export function setRivalFoe(f: (b: DominionBlock, run: Pick<RunState, 'party'>) => Foe): void {
+  RIVAL_FOE = f;
 }
 
 // ---------- doing it ----------
@@ -514,8 +535,11 @@ function succeed(content: Content | null, b: DominionBlock, run: RunState, x: Ct
       if (m) m.morale = Math.min(100, m.morale + 5);
       break;
     }
-    default:
+    default: {
+      const fx = play.effect ? ACT_EFFECTS[play.effect] : undefined;
+      if (fx) lines.push(...fx(b, { action: def.id, district: district.id, target: target?.id ?? null, big: x.big }));
       break;
+    }
   }
   return { lines, mon };
 }
@@ -621,6 +645,12 @@ export function settle(content: Content | null, b: DominionBlock, run: RunState,
   const district = districtDef(fight.district) ?? districtDef(F().hq)!;
   const won = outcome === 'win';
   const lines: string[] = [];
+  const own = SETTLERS[fight.why];
+  if (own) {
+    lines.push(...own(content, b, run, fight, outcome));
+    syncHeat(b);
+    return lines;
+  }
   if (fight.why === 'looker') {
     const t = targetDef(fight.racket);
     if (won) {

@@ -9,12 +9,15 @@ import tasksRaw from '../../data/dominion/tasks.json';
 import empireRaw from '../../data/dominion/empire.json';
 import hqRaw from '../../data/dominion/hq.json';
 import buildingsRaw from '../../data/dominion/buildings.json';
+import rivalsRaw from '../../data/dominion/rivals.json';
+import rivalActionsRaw from '../../data/dominion/rivalActions.json';
+import outsideRaw from '../../data/dominion/outside.json';
 import {
-  ActionsFileSchema, BuildingsFileSchema, CrewFileSchema, EmpireFileSchema, HqFileSchema, FieldFileSchema, GruntTypesFileSchema, StartFileSchema, TasksFileSchema,
-  type ActionsFile, type Building, type CrewFile, type EmpireFile, type HqFile, type FieldFile, type GruntType, type StartFile, type Task,
+  ActionsFileSchema, BuildingsFileSchema, EmpireFileSchema, OutsideFileSchema, RivalActionsFileSchema, RivalsFileSchema, CrewFileSchema, HqFileSchema, FieldFileSchema, GruntTypesFileSchema, StartFileSchema, TasksFileSchema,
+  type ActionsFile, type Building, type EmpireFile, type OutsideRow, type RivalActionsFile, type RivalsFile, type CrewFile, type HqFile, type FieldFile, type GruntType, type StartFile, type Task,
 } from './schema';
 
-export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; empire: EmpireFile; hq: HqFile; buildings: Building[] } = {
+export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; empire: EmpireFile; hq: HqFile; buildings: Building[]; rivals: RivalsFile; rivalActions: RivalActionsFile; outside: OutsideRow[] } = {
   start: StartFileSchema.parse(startRaw),
   actions: ActionsFileSchema.parse(actionsRaw),
   field: FieldFileSchema.parse(fieldRaw),
@@ -24,4 +27,7 @@ export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: Fie
   empire: EmpireFileSchema.parse(empireRaw),
   hq: HqFileSchema.parse(hqRaw),
   buildings: BuildingsFileSchema.parse(buildingsRaw).buildings,
+  rivals: RivalsFileSchema.parse(rivalsRaw),
+  rivalActions: RivalActionsFileSchema.parse(rivalActionsRaw),
+  outside: OutsideFileSchema.parse(outsideRaw).rows,
 };

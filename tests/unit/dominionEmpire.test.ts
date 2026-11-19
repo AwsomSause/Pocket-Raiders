@@ -12,6 +12,7 @@ import { actionDef, actionStatus, card } from '../../src/core/dominion/field';
 import { mapModel, newCursor } from '../../src/core/dominion/fieldScreens';
 import { morningModel } from '../../src/core/dominion/crewScreens';
 import { ledgerModel } from '../../src/core/dominion/ledgerScreens';
+import { rivalsOf, teamsHere } from '../../src/core/dominion/rivals';
 import { notoriety, pitchOdds } from '../../src/core/dominion/recruit';
 import { DominionBlockSchema, type DominionAction, type DominionBlock } from '../../src/core/dominion/schema';
 import { DOMINION_MODE_ID, startInRun, stepInRun } from '../../src/core/dominion/session';
@@ -63,9 +64,10 @@ describe('DOMINION D6: the data', () => {
   it('plays the ten Boss actions D6 opens; Gym Takeover waits for Growth (D10)', () => {
     const d6 = ['skim-the-till', 'marry-in', 'street-theater', 'spray-the-wall', 'leak-a-story', 'befriend-the-mayor', 'sponsor-a-trainer', 'silence-a-reporter', 'cooperate-with-jenny', 'secret-meeting'];
     for (const id of d6) expect(actionStatus(actionDef(id)!).play, id).toBe(true);
-    expect(DOMINION_DATA.actions.actions.filter((a) => actionStatus(a).play)).toHaveLength(55);
-    // D5 handed Hold a Rally (Radio Room) to D6 after D6 was built: it waits for D6's follow-up (docs/status/dominion-d6.md).
-    expect(DOMINION_DATA.actions.actions.filter((a) => actionStatus(a).slice === 'D6').map((a) => a.id)).toEqual(['hold-a-rally']);
+    expect(DOMINION_DATA.actions.actions.filter((a) => actionStatus(a).play)).toHaveLength(72);
+    // D5 (Hold a Rally, Radio Room) and D9 (Chant Night, a Rally event) handed these to D6 after D6 was built: they wait
+    // for D6's follow-up (docs/status/dominion-d6.md).
+    expect(DOMINION_DATA.actions.actions.filter((a) => actionStatus(a).slice === 'D6').map((a) => a.id)).toEqual(['hold-a-rally', 'chant-night']);
     expect(actionStatus(actionDef('gym-takeover')!).slice).toBe('D10');
   });
   it('all eighteen crew tasks that waited for D6 are live district tasks; none waits for D6 now', () => {
@@ -317,6 +319,10 @@ describe('DOMINION D6: the Ledger screen, saves', () => {
     expect(m.money.lines.map((l) => l.label)).toEqual(['Odd jobs', 'Wages (1 crew)', 'Rent and upkeep']);
     expect(m.money.lines[1]!.due).toBe('due Day 7');
     expect(m.empire.held).toBe('0 of 10');
+    // D9's Tension with the region's first rival team (Kanto: Team Rocket), from its stage words.
+    expect(m.empire.tension.n).toBe(rivalsOf(blk(r)).teams[teamsHere()[0]!.id]!.tension);
+    expect(m.empire.tension.name).toBe(teamsHere()[0]!.name);
+    expect(DOMINION_DATA.rivals.stages.map((s) => s.word)).toContain(m.empire.tension.word);
     const t = ledgerModel(blk(r), r, 1);
     expect(t.territory).toHaveLength(10);
     expect(t.ladder.next).toEqual({ word: 'Street Gang', need: 19 });

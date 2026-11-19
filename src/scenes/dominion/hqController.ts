@@ -12,7 +12,7 @@ import { services } from '../../game/services';
 import type { InputAction } from '../../ui/input';
 import { assetsOverlay, baseView, moneyOverlay } from '../../ui/redux/screens/dominion/hq';
 
-type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'base' | 'ledger';
+type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'base' | 'rival' | 'ledger';
 interface Host {
   screenName: Screen;
   setNotice(n: string | null): void;
