@@ -42,7 +42,7 @@ export const ACTIVE_SLOT_KEY = `${KEY_PREFIX}.slot`;
 export type RecordName = 'profile' | 'run' | 'settings' | 'meta' | 'timeline';
 
 /** Current schema version of each record. Bump when a record's shape changes and add a migration. */
-export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 21, run: 45, settings: 45, meta: 1, timeline: 1 };
+export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 21, run: 47, settings: 45, meta: 1, timeline: 1 };
 
 /** v41: walks a saved run and gives every Pokémon (anything with uid, speciesId, level and vitamins) IVs and empty EVs. */
 function withIvs(node: unknown): unknown {
@@ -394,6 +394,10 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
     43: (data) => data,
     // v45 (eight Legendary Blessings): optional blessing fields (calmStages, riteArmed, vow, vowBroken, copy). Old blessings have none, so nothing changes.
     44: (data) => data,
+    // v46 is the evolution scene's on the ui-mockups branch (a pending 'evolve' decision); old runs have none, so nothing changes.
+    45: (data) => data,
+    // v47 (Dominion slice D18): the optional run.ai log of Claude answers. Old runs have none (no call was ever made), so nothing changes.
+    46: (data) => data,
   },
   settings: {
     // v2 (Milestone 9): battle animation settings.
