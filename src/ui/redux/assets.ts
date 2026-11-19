@@ -25,6 +25,11 @@ export function onRxAssets(fn: () => void): () => void {
   return () => listeners.delete(fn);
 }
 
+/** Something drawn for a view finished building (a recoloured picture): open views redraw, as when a file arrives. */
+export function rxRedraw(): void {
+  arrived();
+}
+
 function arrived(): void {
   if (queued) return;
   queued = true;

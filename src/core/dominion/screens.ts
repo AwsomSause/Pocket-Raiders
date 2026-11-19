@@ -1,5 +1,6 @@
 // DOMINION view models (plain data for the redux screens in ui/redux/screens/dominion). Pure: no Phaser, no RNG.
 
+import { foundingOpen, teamColours, type TeamColours } from './founding';
 import { DOMINION_DATA } from './data';
 import { openOrders, stepsShown } from './clock';
 import type { DominionBlock, Member, Phase } from './schema';
@@ -53,6 +54,10 @@ export interface TopModel {
   team: string;
   sub: string;
   initial: string;
+  /** D7: the team's colours and mark (null before the Founding: blank emblem, grey armbands). */
+  colours: TeamColours | null;
+  /** D7: the Founding is ready (the HQ shows its banner, key O). */
+  founding: boolean;
   day: string;
   phase: Phase;
   phaseWord: string;
@@ -68,7 +73,9 @@ export function topModel(b: DominionBlock, sub = 'HEADQUARTERS'): TopModel {
   return {
     team: b.teamName ? b.teamName.toUpperCase() : 'UNNAMED CREW',
     sub,
-    initial: b.teamName ? b.teamName[0]!.toUpperCase() : '',
+    initial: b.team?.initial ?? (b.teamName ? b.teamName[0]!.toUpperCase() : ''),
+    colours: teamColours(b),
+    founding: foundingOpen(b),
     day: `DAY ${String(b.day).padStart(2, '0')}`,
     phase: b.phase,
     phaseWord: ph.word,

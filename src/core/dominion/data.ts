@@ -7,12 +7,14 @@ import fieldRaw from '../../data/dominion/field.json';
 import gruntTypesRaw from '../../data/dominion/gruntTypes.json';
 import tasksRaw from '../../data/dominion/tasks.json';
 import empireRaw from '../../data/dominion/empire.json';
+import foundingRaw from '../../data/dominion/founding.json';
+import armbandsRaw from '../../data/dominion/armbands.json';
 import {
-  ActionsFileSchema, CrewFileSchema, EmpireFileSchema, FieldFileSchema, GruntTypesFileSchema, StartFileSchema, TasksFileSchema,
-  type ActionsFile, type CrewFile, type EmpireFile, type FieldFile, type GruntType, type StartFile, type Task,
+  ActionsFileSchema, ArmbandsFileSchema, CrewFileSchema, FoundingFileSchema, EmpireFileSchema, FieldFileSchema, GruntTypesFileSchema, StartFileSchema, TasksFileSchema,
+  type ActionsFile, type ArmbandLook, type CrewFile, type FoundingFile, type EmpireFile, type FieldFile, type GruntType, type StartFile, type Task,
 } from './schema';
 
-export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; empire: EmpireFile } = {
+export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; empire: EmpireFile; founding: FoundingFile; armbands: Record<string, ArmbandLook> } = {
   start: StartFileSchema.parse(startRaw),
   actions: ActionsFileSchema.parse(actionsRaw),
   field: FieldFileSchema.parse(fieldRaw),
@@ -20,4 +22,6 @@ export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: Fie
   tasks: TasksFileSchema.parse(tasksRaw).tasks,
   gruntTypes: GruntTypesFileSchema.parse(gruntTypesRaw).types,
   empire: EmpireFileSchema.parse(empireRaw),
+  founding: FoundingFileSchema.parse(foundingRaw),
+  armbands: ArmbandsFileSchema.parse(armbandsRaw).looks,
 };

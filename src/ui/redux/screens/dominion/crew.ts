@@ -7,7 +7,9 @@ import type { FileModel, HireRow, LeadRow, MorningModel, TalkModel } from '../..
 import { act, esc, mini, tall } from '../../kit';
 import { rxUrl } from '../../assets';
 import { warehouseUrl } from './paint';
-import { stage, tabs, topBar } from './views';
+import { bandChip, foundingBanner, stage, tabs, topBar } from './views';
+import type { TeamColours } from '../../../../core/dominion/founding';
+import { memberPic, pngSrc, tallTeam } from './teamPic';
 
 const img = (f: string): string => rxUrl(`dominion/${f}.png`);
 const ALERT: Record<string, [string, string, string]> = {
@@ -17,7 +19,9 @@ const ALERT: Record<string, [string, string, string]> = {
 export const OPEN_TABS = [0, 1, 2, 5] as const;
 
 /** A member's picture: a plain png (Rook's) or a trainer atlas, cropped into a box. */
-function face(look: string, h: number, style: string): string {
+function face(look: string, h: number, style: string, team?: TeamColours | null): string {
+  // D7: a member (team given, null before the Founding) wears the colours and the band; a lead is drawn as they are.
+  if (team !== undefined) return memberPic(look, h, style, team);
   return look.endsWith('.png')
     ? `<img class="px" src="${rxUrl(look)}" alt="" style="${style}">`
     : `<div style="${style};display:flex;align-items:flex-end;justify-content:center;overflow:hidden">${tall(look, h)}</div>`;
@@ -51,10 +55,8 @@ export function morningView(m: MorningModel, notice: string | null, talkAt: numb
     : `<div class="col" style="gap:4px;font-size:16px">${rows.join('')}<div class="row" style="padding:3px 7px;color:var(--muted)"${act('moreTasks')} data-testid="dom-more">More… (${m.moreCount} tasks) <span class="kc" style="margin-left:6px">M</span></div></div>`;
   const i = m.member;
   const pill = i.trait ? `<span class="pill g" style="margin-top:2px">${esc(i.trait.toUpperCase())}</span>` : `<span class="pill r" style="margin-top:2px">${esc(i.green)}</span>`;
-  const band = i.armband
-    ? `<span class="row xs" style="gap:4px;color:#d4b8ff"><i style="width:26px;height:10px;border-radius:3px;background:linear-gradient(180deg,#9a5ac0,#7b3fa0);box-shadow:0 0 0 2px var(--ink),inset 0 0 0 1px #e8e2ff"></i>${esc(i.armband)}</span>`
-    : '<span class="row xs" style="gap:4px;color:#b2bde6"><i style="width:26px;height:10px;border-radius:3px;background:linear-gradient(180deg,#8a8f9e,#5a5f6e);box-shadow:0 0 0 2px var(--ink)"></i>Grey armband</span>';
-  const strip = m.strip.slice(0, 4).map((s) => `<div class="pnl" style="position:relative;padding:6px 8px;display:flex;gap:8px;align-items:center;${s.sel ? 'border-color:#8cc0ff;box-shadow:0 0 0 3px var(--ink),0 0 16px rgba(79,163,255,.5)' : ''};${s.out ? 'opacity:.6' : ''}"${act('crewMember', m.strip.indexOf(s))} data-testid="dom-strip-${s.id}">${face(s.look, 53, 'width:36px;height:53px;object-fit:cover;object-position:top')}<div class="col xs" style="line-height:1.15;min-width:0"><b style="font-size:14px">${esc(s.name)}</b><span class="${s.sel ? 'y' : s.tone}" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(s.task)}${s.odds ? ` ${esc(s.odds)}` : ''}</span></div></div>`).join('');
+  const band = bandChip(m.top.colours, i.armband ?? 'Grey armband');
+  const strip = m.strip.slice(0, 4).map((s) => `<div class="pnl" style="position:relative;padding:6px 8px;display:flex;gap:8px;align-items:center;${s.sel ? 'border-color:#8cc0ff;box-shadow:0 0 0 3px var(--ink),0 0 16px rgba(79,163,255,.5)' : ''};${s.out ? 'opacity:.6' : ''}"${act('crewMember', m.strip.indexOf(s))} data-testid="dom-strip-${s.id}">${face(s.look, 53, 'width:36px;height:53px;object-fit:cover;object-position:top', m.top.colours)}<div class="col xs" style="line-height:1.15;min-width:0"><b style="font-size:14px">${esc(s.name)}</b><span class="${s.sel ? 'y' : s.tone}" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(s.task)}${s.odds ? ` ${esc(s.odds)}` : ''}</span></div></div>`).join('');
   return stage(`<img class="cv" src="${warehouseUrl(true)}" alt="" style="position:absolute;inset:0;width:960px;height:540px">
   <div class="layer" style="background:linear-gradient(180deg,rgba(255,170,90,.16),rgba(255,120,60,.06));mix-blend-mode:screen"></div>
   <div class="a" style="left:300px;top:40px;width:120px;height:520px;transform:rotate(-24deg);transform-origin:top;background:linear-gradient(180deg,rgba(255,220,160,.35),transparent);mix-blend-mode:screen"></div>
@@ -76,7 +78,7 @@ export function morningView(m: MorningModel, notice: string | null, talkAt: numb
     <div class="hd"><img class="ic" src="${img('g-member-card')}" alt="">GRUNT INFO</div>
     <div class="row" style="align-items:flex-start;gap:10px">
       <div style="width:110px;height:118px;position:relative;border-radius:8px;background:radial-gradient(circle at 50% 60%,#5a3a8a,#241a40);box-shadow:0 0 0 3px #6f80b8,0 0 0 5px var(--ink);overflow:hidden">
-        ${face(i.look, 150, 'position:absolute;left:-36px;top:4px;width:172px;height:150px;object-fit:contain;object-position:top')}</div>
+        ${face(i.look, 150, 'position:absolute;left:-36px;top:4px;width:172px;height:150px;object-fit:contain;object-position:top', m.top.colours)}</div>
       <div class="col" style="gap:5px;flex:1;min-width:0"><b style="font-size:20px;letter-spacing:.05em" data-testid="dom-info-name">${esc(i.name)}</b><span class="pill k">${esc(i.rank)}</span>${pill}${band}<span class="xs mu">${esc(i.out ?? i.typeName ?? '')}</span></div>
     </div>
     <div class="col" style="gap:4px;margin-top:10px;font-size:15px">
@@ -89,6 +91,7 @@ export function morningView(m: MorningModel, notice: string | null, talkAt: numb
   <div class="rays turn" style="left:757px;top:317px;width:240px;height:240px;z-index:19;--rc:rgba(255,200,90,.45)"></div>
   <div class="cta shine" style="left:804px;top:404px;width:146px;height:66px;font-size:19px;line-height:1.05;text-align:center;display:grid;place-items:center"${act('next')} data-testid="dom-next">${m.phase === 'morning' ? 'Start the day ▶' : 'Done ▶'}</div>
   ${tabs(0, OPEN_TABS)}
+  ${m.top.founding ? foundingBanner() : ''}
   <div class="glint" style="left:862px;top:392px;--g:22px"></div>
   ${notice ? `<div class="a" style="left:350px;width:276px;top:300px;z-index:20;background:rgba(10,14,30,.9);border:2px solid #8cc0ff;border-radius:8px;padding:8px 10px;font-size:14px;line-height:1.3" data-testid="dom-notice">${esc(notice)}</div>` : ''}
   ${m.talk ? talkCard(m.talk, talkAt) : ''}`);
@@ -114,8 +117,8 @@ export function fileView(f: FileModel, monFile: (species: string) => string | nu
   const dots = pts.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="4"/>`).join('');
   const chev = Array.from({ length: f.chevrons }, () => '<i style="width:18px;height:10px;background:var(--gold);clip-path:polygon(0 0,50% 60%,100% 0,100% 40%,50% 100%,0 40%)"></i>').join('');
   const big = f.look.endsWith('.png')
-    ? `<img class="spr bob" src="${rxUrl(f.look)}" alt="${esc(f.name)}" style="left:62px;top:90px;width:176px;height:260px;z-index:4;filter:drop-shadow(0 0 10px rgba(166,120,255,.6))">`
-    : `<div class="a bob" style="left:62px;top:90px;width:176px;height:260px;z-index:4;display:flex;align-items:flex-end;justify-content:center;filter:drop-shadow(0 0 10px rgba(166,120,255,.6))">${tall(f.look, 250)}</div>`;
+    ? `<img class="spr bob" src="${pngSrc(f.look, f.colours)}" alt="${esc(f.name)}" style="left:62px;top:90px;width:176px;height:260px;z-index:4;filter:drop-shadow(0 0 10px rgba(166,120,255,.6))" data-testid="dom-file-pic">`
+    : `<div class="a bob" style="left:62px;top:90px;width:176px;height:260px;z-index:4;display:flex;align-items:flex-end;justify-content:center;filter:drop-shadow(0 0 10px rgba(166,120,255,.6))" data-testid="dom-file-pic">${tallTeam(f.look, 250, f.colours)}</div>`;
   const first = f.formed[0];
   const personality = first
     ? `<div class="row" style="gap:8px;font-size:16px"><span class="pill r" style="text-decoration:line-through;opacity:.8">${esc(f.green)}</span><b class="y" style="font-size:20px">➜</b><span class="pill g" style="font-size:15px;box-shadow:0 0 0 2px rgba(0,0,0,.35),0 0 16px rgba(67,207,120,.8)" data-testid="dom-formed">${esc(first.name)}</span>${f.grew ? '<span class="chipf" style="position:relative;font-size:12px;padding:2px 8px" data-testid="dom-grew">GREW!</span>' : ''}</div>

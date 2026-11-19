@@ -5,6 +5,8 @@
 
 import './dominion.css';
 import type { HqModel, SetupDraft, TopModel } from '../../../../core/dominion/screens';
+import type { TeamColours } from '../../../../core/dominion/founding';
+import { pngSrc, tallTeam } from './teamPic';
 import { act, esc, mini, tall, TYPE_COLORS } from '../../kit';
 import { rxUrl } from '../../assets';
 import { grainUrl, skylineUrl, warehouseUrl } from './paint';
@@ -17,11 +19,35 @@ export function stage(inner: string, style = '', cls = 'vign grain'): string {
   return `<div class="dom" style="position:absolute;left:0;top:0;width:960px;height:540px;--noise:url(${grainUrl()})"><div class="st ${cls}" style="${style}">${inner}</div></div>`;
 }
 
+/** D7: the mark's outline for each logo (the emblem on the top bar, the door, the title tower). */
+const LOGO_CLIP: Record<string, string> = {
+  shield: 'polygon(0 0,100% 0,100% 70%,50% 100%,0 70%)',
+  diamond: 'polygon(50% 0,100% 50%,50% 100%,0 50%)',
+  ring: 'circle(50% at 50% 50%)',
+  fang: 'polygon(0 0,100% 0,100% 30%,62% 100%,50% 62%,38% 100%,0 30%)',
+  star: 'polygon(50% 0,63% 34%,100% 36%,71% 58%,81% 100%,50% 76%,19% 100%,29% 58%,0 36%,37% 34%)',
+  eye: 'ellipse(50% 36% at 50% 50%)',
+};
+
+/** The team's emblem in its colours (Part 9 A15): the mark filled with the primary, the initial in the secondary. */
+export function emblem(c: TeamColours | null, w: number, h: number, fs: number, extra = ''): string {
+  if (!c) return `<div class="emb" style="width:${w}px;height:${h}px;font-size:${fs}px;${extra}" data-testid="dom-emblem"></div>`;
+  return `<div class="emb" style="width:${w}px;height:${h}px;font-size:${fs}px;clip-path:${LOGO_CLIP[c.logo] ?? LOGO_CLIP.shield};background:linear-gradient(180deg,color-mix(in srgb,${c.primary} 75%,#fff),${c.primary} 55%,color-mix(in srgb,${c.primary} 60%,#000));color:${c.secondary};text-shadow:0 2px 0 rgba(0,0,0,.45);${extra}" data-testid="dom-emblem">${esc(c.initial)}</div>`;
+}
+
+/** A small armband chip for a member's card: the team's band (primary, letter in secondary) or the plain grey one. */
+export function bandChip(c: TeamColours | null, label: string): string {
+  const band = c
+    ? `<i style="width:30px;height:12px;border-radius:3px;display:grid;place-items:center;font:800 9px/1 var(--logo);font-style:normal;color:${c.secondary};background:linear-gradient(180deg,color-mix(in srgb,${c.primary} 80%,#fff),${c.primary});box-shadow:0 0 0 2px var(--ink),inset 0 0 0 1px ${c.secondary}">${esc(c.initial)}</i>`
+    : '<i style="width:30px;height:12px;border-radius:3px;background:linear-gradient(180deg,#9aa0b0,#6a7080);box-shadow:0 0 0 2px var(--ink)"></i>';
+  return `<span class="row xs" style="gap:5px;color:${c ? '#d4b8ff' : '#b2bde6'}" data-testid="dom-band">${band}${esc(label)}</span>`;
+}
+
 /** The top bar on every Dominion screen (Part 6 §2; mockup 1). */
 export function topBar(t: TopModel): string {
   const ph = `color:${t.phaseColour};text-shadow:0 0 10px ${t.phaseColour}99`;
   return `<div class="top" data-testid="dom-top">
-    <div class="team"><div class="emb">${esc(t.initial)}</div><div><div class="nm" data-testid="dom-team">${esc(t.team)}</div><div class="s">${esc(t.sub)}</div></div></div>
+    <div class="team">${emblem(t.colours, 46, 40, 30)}<div><div class="nm" data-testid="dom-team">${esc(t.team)}</div><div class="s">${esc(t.sub)}</div></div></div>
     <div><img class="ic l" src="${img('g-calendar')}" alt=""><div><span class="l" data-testid="dom-day">${esc(t.day)}</span><span class="v" style="${ph}" data-testid="dom-phase">${esc(t.phaseWord)}</span></div></div>
     <div><img class="ic l" src="${img('g-amulet-coin')}" alt=""><div><span class="l">FUNDS</span><span class="v y" data-testid="dom-funds">${esc(t.funds)}</span></div></div>
     <div><img class="ic l" src="${img('g-fire-stone')}" alt=""><div><span class="l">HEAT</span><span class="v rd" data-testid="dom-heat">${esc(t.heat)}</span></div></div>
@@ -42,7 +68,7 @@ export function tabs(on: number, open: readonly number[] = [0]): string {
 
 // ---------- mockup 0: the title card ----------
 
-export interface TitleModel { at: number; started: boolean; cont: string | null }
+export interface TitleModel { at: number; started: boolean; cont: string | null; colours?: TeamColours | null }
 
 export function titleView(m: TitleModel): string {
   const rows = [
@@ -61,7 +87,7 @@ export function titleView(m: TitleModel): string {
   <div class="a" style="left:832px;top:112px;width:78px;height:440px;background:linear-gradient(90deg,#120a26,#24154a 60%,#0c0619);box-shadow:0 0 0 2px #070312"></div>
   <div class="a" style="left:868px;top:66px;width:6px;height:50px;background:#120a26"></div>
   <div class="a blink" style="left:867px;top:60px;width:8px;height:8px;background:#ff3b3b;box-shadow:0 0 10px #ff3b3b"></div>
-  <div class="a flick" style="left:842px;top:130px;width:58px;height:58px;display:grid;place-items:center;font:800 42px/1 var(--logo);font-style:italic;color:#ff4f9a;border:3px solid #ff4f9a;border-radius:8px;text-shadow:0 0 12px #ff3d8a,0 0 26px #ff3d8a;box-shadow:0 0 16px #ff3d8a,inset 0 0 12px rgba(255,61,138,.6)">D</div>
+  <div class="a flick" style="left:842px;top:130px;width:58px;height:58px;display:grid;place-items:center;font:800 42px/1 var(--logo);font-style:italic;color:#ff4f9a;border:3px solid #ff4f9a;border-radius:8px;text-shadow:0 0 12px #ff3d8a,0 0 26px #ff3d8a;box-shadow:0 0 16px #ff3d8a,inset 0 0 12px rgba(255,61,138,.6)${m.colours ? `;color:${m.colours.secondary};border-color:${m.colours.primary};text-shadow:0 0 12px ${m.colours.primary},0 0 26px ${m.colours.primary};box-shadow:0 0 16px ${m.colours.primary},inset 0 0 12px ${m.colours.primary}` : ''}" data-testid="dom-tower">${m.colours ? esc(m.colours.initial) : 'D'}</div>
   <div class="a" style="left:430px;bottom:0;width:400px;height:360px;z-index:3;filter:drop-shadow(0 0 2px #d9bfff) drop-shadow(0 0 18px rgba(166,120,255,.75))">
     <div style="position:absolute;inset:0;background:linear-gradient(180deg,#0d0620,#05020c 40%);clip-path:polygon(150px 40px,140px 10px,170px 30px,178px 0,198px 26px,214px 2px,226px 30px,252px 12px,246px 44px,262px 60px,256px 92px,240px 132px,264px 122px,302px 94px,292px 150px,350px 180px,386px 232px,398px 360px,2px 360px,14px 232px,50px 180px,108px 150px,98px 94px,136px 122px,160px 132px,144px 92px,138px 60px)"></div>
   </div>
@@ -162,7 +188,7 @@ export function setupView(d: SetupDraft, f: SetupFiles): string {
 
 export function openingView(lines: string[], shown: number, member: { look: string; atlas: boolean }): string {
   const text = lines.slice(0, shown).map((l) => `<div>${esc(l)}</div>`).join('');
-  const pic = member.atlas ? `<div class="a" style="left:404px;top:266px;z-index:4">${tall(member.look, 195)}</div>` : `<img class="spr bob" src="${rxUrl(member.look)}" alt="" style="left:404px;top:266px;width:126px;height:195px;z-index:4">`;
+  const pic = member.atlas ? `<div class="a" style="left:404px;top:266px;z-index:4">${tallTeam(member.look, 195, null)}</div>` : `<img class="spr bob" src="${pngSrc(member.look, null)}" alt="" style="left:404px;top:266px;width:126px;height:195px;z-index:4">`;
   return stage(`${warehouseBack()}
     <div class="cone flick" style="left:330px;top:70px;width:300px;height:400px;z-index:2;--cc:rgba(255,214,140,.30)"></div>
     <div class="shd" style="left:396px;top:454px;width:150px;height:22px"></div>${pic}
@@ -190,8 +216,9 @@ export function hqView(m: HqModel, notice: string | null, at: number, member: { 
       <div class="hd" style="color:#9fc4ff"><img class="ic" src="${img('g-letter')}" alt="">TONIGHT</div>
       <div class="col sm" style="gap:6px;line-height:1.35">${m.next.label === 'Turn in' ? '<div>Tonight\'s action is done. Turn in: no Rest tonight.</div>' : '<div><b>Rest:</b> your Pokémon heal for free, the crew\'s Morale +5, and +1 action tomorrow.</div><div class="mu xs">Or one Night action on the Region Map (key 2): Steal, Hide in the Warehouse...</div>'}</div></div>`;
   }
-  const pic = member.atlas ? `<div class="a bob" style="left:404px;top:266px;z-index:4">${tall(member.look, 195)}</div>` : `<img class="spr bob" src="${rxUrl(member.look)}" alt="${esc(m.member.name)}" style="left:404px;top:266px;width:126px;height:195px;z-index:4">`;
-  const face = member.atlas ? `<div style="position:absolute;left:-8px;top:-4px">${tall(member.look, 210)}</div>` : `<img class="spr" src="${rxUrl(member.look)}" alt="" style="left:-58px;top:-10px;width:210px;height:325px">`;
+  const tc = m.top.colours;
+  const pic = member.atlas ? `<div class="a bob" style="left:404px;top:266px;z-index:4">${tallTeam(member.look, 195, tc)}</div>` : `<img class="spr bob" src="${pngSrc(member.look, tc)}" alt="${esc(m.member.name)}" style="left:404px;top:266px;width:126px;height:195px;z-index:4" data-testid="dom-hq-pic">`;
+  const face = member.atlas ? `<div style="position:absolute;left:-8px;top:-4px">${tallTeam(member.look, 210, tc)}</div>` : `<img class="spr" src="${pngSrc(member.look, tc)}" alt="" style="left:-58px;top:-10px;width:210px;height:325px">`;
   const steps = m.steps ? `<div class="pnl glass" style="left:652px;top:358px;width:298px;height:112px" data-testid="dom-steps">
       <div class="hd y"><img class="ic" src="${img('g-star-piece')}" alt="">FIRST STEPS</div>
       <div class="col" style="gap:6px;font-size:17px">${m.steps.map((s) => `<div class="row"${s.done ? ' style="color:#9fe0b4"' : ''}><span style="width:16px;height:16px;border:2px solid ${s.done ? '#43cf78' : '#b2bde6'};border-radius:3px;display:grid;place-items:center;font-size:12px;line-height:1">${s.done ? '✓' : ''}</span>${s.done ? `<s>${esc(s.label)}</s>` : esc(s.label)}</div>`).join('')}</div>
@@ -213,7 +240,7 @@ export function hqView(m: HqModel, notice: string | null, at: number, member: { 
     <div class="hd"><img class="ic" src="${img('g-member-card')}" alt="">${esc(m.member.title)}</div>
     <div class="row" style="gap:12px;align-items:flex-start">
       <div style="width:104px;height:104px;border-radius:8px;overflow:hidden;background:linear-gradient(180deg,#4a5578,#2a3150);box-shadow:0 0 0 3px #6f80b8,0 0 0 5px var(--ink);position:relative">${face}</div>
-      <div class="col" style="gap:4px"><b style="font-size:24px;letter-spacing:.06em">${esc(m.member.name)}</b><span class="mu" style="font-size:18px;letter-spacing:.06em">${esc(m.member.rank)}</span>${m.member.untrained ? '<span class="pill v" style="font-size:16px;padding:3px 10px;margin-top:4px">UNTRAINED</span>' : ''}<span class="row xs mu" style="gap:5px;margin-top:3px"><i style="width:30px;height:12px;border-radius:3px;background:linear-gradient(180deg,#9aa0b0,#6a7080);box-shadow:0 0 0 2px var(--ink)"></i>blank armband</span></div>
+      <div class="col" style="gap:4px"><b style="font-size:24px;letter-spacing:.06em">${esc(m.member.name)}</b><span class="mu" style="font-size:18px;letter-spacing:.06em">${esc(m.member.rank)}</span>${m.member.untrained ? '<span class="pill v" style="font-size:16px;padding:3px 10px;margin-top:4px">UNTRAINED</span>' : ''}<span style="margin-top:3px">${bandChip(tc, tc ? `${m.top.team.toLowerCase().replace(/\b\w/g, (x) => x.toUpperCase())} armband` : 'blank armband')}</span></div>
     </div>
     <div class="col" style="gap:3px;margin-top:12px;padding-top:9px;border-top:2px solid rgba(148,166,222,.28);font-size:18px;letter-spacing:.04em">
       ${m.member.skills.map(([k, v]) => `<div class="row sp"><span>${k}</span><b class="${v === 'POOR' ? 'rd' : v === 'FAIR' ? 'y' : 'gn'}">${v}</b></div>`).join('')}
@@ -226,5 +253,11 @@ export function hqView(m: HqModel, notice: string | null, at: number, member: { 
   <div class="ping" style="left:120px;top:400px;width:40px;height:14px;--pc:rgba(160,200,255,.7)"></div>
   <div class="ping" style="left:200px;top:420px;width:34px;height:12px;--pc:rgba(160,200,255,.6);animation-delay:-1.1s"></div>
   <img class="spr bob" src="${img('p-rattata')}" alt="" style="left:96px;top:424px;width:46px;height:40px;z-index:4">
-  ${m.panel === 'orders' && m.orders.length ? '<div class="qmark" style="left:450px;top:150px">!</div>' : ''}`);
+  ${m.panel === 'orders' && m.orders.length ? '<div class="qmark" style="left:450px;top:150px">!</div>' : ''}
+  ${m.top.founding ? foundingBanner() : ''}`);
+}
+
+/** D7: the HQ's gold banner while the Founding waits (key O or a tap opens it). */
+export function foundingBanner(): string {
+  return `<div class="chipf pulse" style="position:absolute;left:330px;top:44px;z-index:21;font-size:15px;padding:5px 14px;cursor:pointer"${act('founding')} data-testid="dom-founding-ready">★ THE FOUNDING <span class="kc" style="margin-left:6px">O</span></div>`;
 }

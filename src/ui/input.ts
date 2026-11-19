@@ -63,7 +63,12 @@ function watchDroppedKeys(): void {
 export function onInputAction(scene: Phaser.Scene, handler: (action: InputAction) => void): void {
   const keyboard = scene.input.keyboard;
   if (!keyboard) return;
+  // Phaser re-dispatches every key event still queued in the same frame each time a new one arrives, so two quick
+  // presses inside one frame reach this listener three times. Each DOM event counts once.
+  const seen = new WeakSet<KeyboardEvent>();
   const listener = (event: KeyboardEvent) => {
+    if (seen.has(event)) return;
+    seen.add(event);
     // Let the debug panel's text boxes receive typing.
     const target = event.target as HTMLElement | null;
     if (target && (target.tagName === 'INPUT' || target.tagName === 'SELECT' || target.tagName === 'TEXTAREA')) return;

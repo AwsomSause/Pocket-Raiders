@@ -21,8 +21,10 @@ import { cardView, mapView } from '../ui/redux/screens/dominion/fieldViews';
 import { ledgerModel, SPREADS } from '../core/dominion/ledgerScreens';
 import { ledgerView } from '../ui/redux/screens/dominion/ledger';
 import { setLogKeyTaken } from '../ui/overlays';
+import { foundedLines, foundingOpen, initialOf, nameIdeas, newDraft, teamColours } from '../core/dominion/founding';
+import { FOUNDING_ROWS, foundedView, foundingView, type FoundingUi } from '../ui/redux/screens/dominion/founding';
 
-type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'ledger';
+type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'ledger' | 'founding' | 'founded';
 
 /** The screen to come back to after a battle (D2: the map the action was picked on, or the HQ for a fight at the door). */
 let resume: Screen | null = null;
@@ -47,6 +49,10 @@ export class DominionScene extends Phaser.Scene {
   /** D6: the Ledger's open spread (0 Money | Empire, 1 Territory | Notoriety, 2 Crew | Stores) and where L goes back to. */
   private spread = 0;
   private ledgerFrom: Screen = 'hq';
+  /** D7: the Founding page's draft and cursor, where Esc goes back to, and the scene's lines shown. */
+  private founding: FoundingUi | null = null;
+  private foundingFrom: Screen = 'hq';
+  private foundedShown = 1;
 
   constructor() {
     super('Dominion');
@@ -60,6 +66,8 @@ export class DominionScene extends Phaser.Scene {
     this.notice = null;
     this.leaving = false;
     this.crew = new CrewController(this);
+    this.founding = null;
+    this.foundedShown = 1;
     const { session } = services();
     const run = session.run;
     if (!run) return void this.scene.start('MainMenu');
@@ -113,6 +121,20 @@ export class DominionScene extends Phaser.Scene {
         dismiss: () => { this.notice = null; this.view?.refresh(); },
         ledgerTab: (i) => { this.spread = Number(i); this.view?.refresh(); },
         ledgerPage: (d) => this.turnLedger(Number(d)),
+        founding: () => this.openFounding(),
+        fRow: (i) => {
+          const f = this.founding;
+          if (!f) return;
+          const r = FOUNDING_ROWS[Number(i)];
+          if (f.typing && f.typing !== r) this.endTyping();
+          f.row = Number(i);
+          if (r === 'name' || r === 'motto') this.startTyping(r);
+          this.view?.refresh();
+        },
+        fPrimary: (id) => this.pickColour('primary', id),
+        fSecondary: (id) => this.pickColour('secondary', id),
+        fLogo: (id) => { if (this.founding) this.founding.d = { ...this.founding.d, logo: id }; this.view?.refresh(); },
+        fFound: () => this.submitFounding(),
         ...this.crew.acts(),
       },
       overs: {
@@ -123,8 +145,13 @@ export class DominionScene extends Phaser.Scene {
     });
     onInputAction(this, (a) => this.key(a));
     const kb = this.input.keyboard;
+    const seen = new WeakSet<KeyboardEvent>(); // Phaser can hand the same press over again within a frame
     const raw = (e: KeyboardEvent): void => {
+      if (seen.has(e)) return;
+      seen.add(e);
       if (this.leaving) return;
+      if (this.screen === 'founding') return;
+      if (e.code === 'KeyO' && (this.screen === 'hq' || this.screen === 'map' || this.screen === 'crew')) return this.openFounding();
       if (this.screen === 'ledger') {
         if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
         else if (e.code === 'KeyL') this.closeLedger();
@@ -155,6 +182,8 @@ export class DominionScene extends Phaser.Scene {
     this.events.once('shutdown', () => {
       kb?.off('keydown', raw);
       setLogKeyTaken(null);
+      window.removeEventListener('keydown', this.typeKey, true);
+      if (kb) kb.enabled = true;
     });
   }
 
@@ -172,7 +201,14 @@ export class DominionScene extends Phaser.Scene {
     const b = this.block();
     switch (this.screen) {
       case 'title':
-        return titleView({ at: this.titleAt, started: !!b, cont: b ? `${b.teamName ?? 'Unnamed Crew'} · Kanto · Day ${b.day}` : null });
+        return titleView({ at: this.titleAt, started: !!b, cont: b ? `${b.teamName ?? 'Unnamed Crew'} · Kanto · Day ${b.day}` : null, colours: b ? teamColours(b) : null });
+      case 'founding':
+        return this.founding ? foundingView(this.founding) : '';
+      case 'founded': {
+        const c = b ? teamColours(b) : null;
+        const m = b?.members[0];
+        return b && c && m ? foundedView(foundedLines(b), this.foundedShown, c, b.team!.name, { look: m.look, name: m.name }) : '';
+      }
       case 'setup':
         return setupView(this.setup, this.files!);
       case 'opening':
@@ -215,8 +251,144 @@ export class DominionScene extends Phaser.Scene {
     this.view?.refresh();
   }
 
+  // ---------- D7: the Founding (Part 9 A15) ----------
+
+  private openFounding(): void {
+    const b = this.block();
+    if (!b?.opened || this.screen === 'founding') return;
+    if (!foundingOpen(b)) {
+      this.notice = b.team ? null : DOMINION_DATA.founding.lines.notYet;
+      return void this.view?.refresh();
+    }
+    const { session } = services();
+    const lead = session.run?.party[0];
+    const ace = lead ? session.content.species.get(lead.speciesId)?.name ?? null : null;
+    const m = b.members[0];
+    this.foundingFrom = this.screen === 'founded' || this.screen === 'ledger' || this.screen === 'card' ? 'hq' : this.screen;
+    this.founding = {
+      d: this.founding?.d ?? newDraft(b, ace), row: 0, typing: null, ideas: nameIdeas(b, ace), problem: null,
+      member: { look: m?.look ?? DOMINION_DATA.start.members.grunt.look, name: m?.name ?? 'Rook' },
+    };
+    this.notice = null;
+    this.screen = 'founding';
+    this.view?.refresh();
+  }
+
+  private closeFounding(): void {
+    this.screen = this.foundingFrom;
+    if (this.screen === 'map' && !this.cursor) this.cursor = newCursor(this.block()!);
+    this.notice = DOMINION_DATA.founding.lines.later;
+    this.view?.refresh();
+  }
+
+  private pickColour(which: 'primary' | 'secondary', id: string): void {
+    const f = this.founding;
+    if (!f) return;
+    const other = which === 'primary' ? f.d.secondary : f.d.primary;
+    if (id !== other) f.d = { ...f.d, [which]: id };
+    f.problem = null;
+    this.view?.refresh();
+  }
+
+  /** ◀ ▶ on a row: the next name idea, colour, letter, mark, motto idea or Goal. */
+  private cycle(dir: number): void {
+    const f = this.founding;
+    if (!f) return;
+    const F = DOMINION_DATA.founding;
+    const next = <T,>(list: readonly T[], now: T): T => list[(Math.max(0, list.indexOf(now)) + dir + list.length) % list.length]!;
+    const r = FOUNDING_ROWS[f.row];
+    const d = f.d;
+    if (r === 'name') {
+      const at = f.ideas.indexOf(d.name);
+      const name = f.ideas[((at < 0 ? (dir > 0 ? -1 : 0) : at) + dir + f.ideas.length) % f.ideas.length]!;
+      f.d = { ...d, name, initial: initialOf(name) || d.initial };
+    } else if (r === 'primary' || r === 'secondary') {
+      const ids = F.colours.map((c) => c.id).filter((id) => id !== (r === 'primary' ? d.secondary : d.primary));
+      f.d = { ...d, [r]: next(ids, d[r]) };
+    } else if (r === 'initial') f.d = { ...d, initial: next('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''), d.initial) };
+    else if (r === 'logo') f.d = { ...d, logo: next(F.logos.map((l) => l.id), d.logo) };
+    else if (r === 'motto') {
+      const goal = d.goal ? F.goals.find((g) => g.id === d.goal)?.quote : undefined;
+      const ideas = [...F.motto.ideas, ...(goal && goal.length <= F.motto.max ? [goal] : [])];
+      f.d = { ...d, motto: next(ideas, d.motto) };
+    } else if (r === 'goal') f.d = { ...d, goal: next([null, ...F.goals.map((g) => g.id)], d.goal) };
+    f.problem = null;
+  }
+
+  private foundingKey(a: InputAction): void {
+    const f = this.founding;
+    if (!f || f.typing) return;
+    const r = FOUNDING_ROWS[f.row];
+    if (a === 'back') return this.closeFounding();
+    if (a === 'up' || a === 'down') f.row = (f.row + (a === 'up' ? -1 : 1) + FOUNDING_ROWS.length) % FOUNDING_ROWS.length;
+    else if (a === 'left' || a === 'right') this.cycle(a === 'left' ? -1 : 1);
+    else if (a === 'confirm') {
+      if (r === 'name' || r === 'motto') this.startTyping(r);
+      else if (r === 'found') return this.submitFounding();
+      else f.row += 1;
+    }
+    this.view?.refresh();
+  }
+
+  /**
+   * Typing into the Name or Motto field. Phaser hands over a frame's key presses in one batch, so while typing the
+   * scene's keyboard is switched off and the page listens to the window directly: every press lands once, in order.
+   * The press that ends the typing never reaches the game actions (the keyboard comes back after that frame).
+   */
+  private startTyping(field: 'name' | 'motto'): void {
+    const f = this.founding;
+    if (!f || f.typing) return;
+    f.typing = field;
+    if (this.input.keyboard) this.input.keyboard.enabled = false;
+    window.addEventListener('keydown', this.typeKey, true);
+  }
+
+  private endTyping(): void {
+    const f = this.founding;
+    if (f) f.typing = null;
+    window.removeEventListener('keydown', this.typeKey, true);
+    this.game.events.once(Phaser.Core.Events.POST_STEP, () => {
+      if (this.input?.keyboard && !this.founding?.typing) this.input.keyboard.enabled = true;
+    });
+  }
+
+  private readonly typeKey = (e: KeyboardEvent): void => {
+    const f = this.founding;
+    if (!f?.typing || this.screen !== 'founding') return this.endTyping();
+    const F = DOMINION_DATA.founding;
+    const field = f.typing;
+    const max = field === 'name' ? F.name.max : F.motto.max;
+    let text = field === 'name' ? f.d.name : f.d.motto;
+    if (e.code === 'Enter' || e.code === 'NumpadEnter' || e.code === 'Escape') this.endTyping();
+    else if (e.code === 'Backspace') text = text.slice(0, -1);
+    else if (e.key.length === 1 && /[A-Za-z0-9 '\-.,!?]/.test(e.key) && text.length < max) text += e.key;
+    else return;
+    e.preventDefault();
+    if (field === 'name') f.d = { ...f.d, name: text, initial: initialOf(text) || f.d.initial };
+    else f.d = { ...f.d, motto: text };
+    f.problem = null;
+    this.view?.refresh();
+  };
+
+  private submitFounding(): void {
+    const f = this.founding;
+    if (!f) return;
+    if (f.typing) this.endTyping();
+    const out = services().session.dominionStep({ t: 'found', team: f.d });
+    if (!out.ok) {
+      f.problem = out.notice;
+      return void this.view?.refresh();
+    }
+    this.founding = null;
+    this.notice = out.notice;
+    this.foundedShown = 1;
+    this.screen = 'founded';
+    this.view?.refresh();
+  }
+
   private key(a: InputAction): void {
     if (this.leaving) return;
+    if (this.screen === 'founding') return this.foundingKey(a);
     if (this.crew.key(a)) return void this.view?.refresh();
     if (this.screen === 'ledger') {
       if (a === 'back') return this.closeLedger();
@@ -257,6 +429,10 @@ export class DominionScene extends Phaser.Scene {
     } else if (this.screen === 'setup') {
       if (this.setup.page === 'types') this.setup = toggleType(this.setup);
       else return this.next();
+    } else if (this.screen === 'founded') {
+      const b2 = this.block();
+      if (b2 && this.foundedShown < foundedLines(b2).length) this.foundedShown += 1;
+      else this.screen = 'hq';
     } else if (this.screen === 'opening') {
       const lines = b ? openingLines(b) : [];
       if (this.shown < lines.length) this.shown += 1;
@@ -458,6 +634,10 @@ export class DominionScene extends Phaser.Scene {
   }
 
   private back(): void {
+    if (this.screen === 'founded') {
+      this.screen = 'hq';
+      return this.view?.refresh();
+    }
     if (this.screen === 'setup') {
       const i = SETUP_PAGES.indexOf(this.setup.page);
       if (i > 0) this.setup = { ...this.setup, page: SETUP_PAGES[i - 1]!, problem: null };

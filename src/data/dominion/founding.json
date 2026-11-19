@@ -1,0 +1,101 @@
+{
+  "_source": "DOMINION D7 (Evil Mode rework): the Founding at Street Gang (Part 9 A15), the armband rule (Part 6 §8, Part 11), the fourteen Goals (Kice's evil_mode_goals.zip, Parts 35a-35c: name, one line, motto quote). Text is data. Names taken by canon teams and the old Evil Mode come from src/data/evilMode/founding.json.",
+  "opensAt": "street-gang",
+  "name": {
+    "max": 14,
+    "chars": "^[A-Za-z][A-Za-z '\\-]*$",
+    "taken": ["Rocket", "Aqua", "Magma", "Galactic", "Plasma", "Flare", "Skull", "Yell", "Star", "Aether", "Cipher", "Snagem", "Snag'em", "Macro Cosmos", "Neo Plasma"],
+    "skip": ["Team ", "The "],
+    "byType": {
+      "normal": "Common", "fire": "Cinder", "water": "Tide", "grass": "Bramble", "electric": "Volt", "ice": "Frost",
+      "fighting": "Knuckle", "poison": "Venom", "ground": "Rubble", "flying": "Gale", "psychic": "Mirage", "bug": "Swarm",
+      "rock": "Flint", "ghost": "Wraith", "dark": "Shade", "steel": "Rivet"
+    },
+    "byEdge": { "brawn": "Iron", "nerve": "Nerve", "wits": "Gambit", "charm": "Velvet", "stealth": "Shroud" },
+    "byFeared": "Dread",
+    "byLiked": "Lantern",
+    "town": "{town} Lot",
+    "ace": "Team {ace}",
+    "type": "Team {word}",
+    "edge": "Team {word}",
+    "fallback": ["Team Hinge", "Team Latch", "Backstairs", "Team Cellar", "Team Anvil", "Team Thorn"]
+  },
+  "colours": [
+    { "id": "purple", "name": "Purple", "hex": "#7b3fa0" },
+    { "id": "lilac", "name": "Lilac", "hex": "#e8e2ff" },
+    { "id": "crimson", "name": "Crimson", "hex": "#c0392b" },
+    { "id": "charcoal", "name": "Charcoal", "hex": "#2b2b33" },
+    { "id": "emerald", "name": "Emerald", "hex": "#1f7a5c" },
+    { "id": "gold", "name": "Gold", "hex": "#e0b030" },
+    { "id": "navy", "name": "Navy", "hex": "#23366e" },
+    { "id": "sky", "name": "Sky", "hex": "#5fb4ff" },
+    { "id": "orange", "name": "Orange", "hex": "#e8742a" },
+    { "id": "teal", "name": "Teal", "hex": "#1f9e9a" },
+    { "id": "rose", "name": "Rose", "hex": "#e05a8a" },
+    { "id": "white", "name": "White", "hex": "#f2f2f2" },
+    { "id": "black", "name": "Black", "hex": "#16161c" },
+    { "id": "olive", "name": "Olive", "hex": "#6b7a2a" }
+  ],
+  "start": { "primary": "purple", "secondary": "lilac", "logo": "shield" },
+  "logos": [
+    { "id": "shield", "name": "Shield" },
+    { "id": "diamond", "name": "Diamond" },
+    { "id": "ring", "name": "Ring" },
+    { "id": "fang", "name": "Fang" },
+    { "id": "star", "name": "Star" },
+    { "id": "eye", "name": "Eye" }
+  ],
+  "motto": {
+    "max": 48,
+    "ideas": [
+      "From a single grunt.",
+      "Nobody gave us anything.",
+      "We keep what we take.",
+      "Loyal to the door.",
+      "The night is ours.",
+      "Ask once. Then we ask again.",
+      "Every street, one day.",
+      "Quiet hands, loud names."
+    ]
+  },
+  "goals": [
+    { "id": "total-takeover", "name": "Total Takeover", "line": "Own every lever in the region, with a fist or a mask.", "quote": "Everything in this region belongs to someone. It should belong to us." },
+    { "id": "land-preservation", "name": "Land Preservation", "line": "Take the world back from people, for the land or the sea.", "quote": "People took the world from the Pokémon. We're taking it back." },
+    { "id": "perfect-order", "name": "A New Perfect Order", "line": "The world's flawed. Remake it without spirit, or without the unworthy.", "quote": "The world is flawed. We have the means to correct it." },
+    { "id": "herald-of-legends", "name": "Herald of Legends", "line": "A golden prophecy says something's coming. Be there when it arrives.", "quote": "It's written in gold: something's coming. We'll be there to meet it." },
+    { "id": "ultra-divinity", "name": "Ultra Divinity", "line": "The Ultra Beasts are evolution's summit, and you'll prove it.", "quote": "They came from beyond the sky, perfect. We're the rough draft." },
+    { "id": "spores-of-creation", "name": "Spores of Creation", "line": "Paras can bond with people. Everyone should be one. If they'll say yes.", "quote": "Paras doesn't carry the mushroom. They're one thing. We could be one thing too." },
+    { "id": "pure-hate", "name": "Pure Hate", "line": "Hate everyone. Spread it. See what's left.", "quote": "I hate all of you. I want you to know how it feels." },
+    { "id": "every-ball-opened", "name": "Every Ball Opened", "line": "Free every Pokémon from every trainer. You mean it.", "quote": "No Pokémon chose its Ball. Every one of them deserves the chance." },
+    { "id": "endless-energy", "name": "Endless Energy", "line": "The world runs out of power in a thousand years. Fix it now, whatever it costs.", "quote": "In a thousand years the lights go out. I'm the only one who's done the sum." },
+    { "id": "everlasting", "name": "Everlasting", "line": "You're going to die. You've decided not to.", "quote": "Everything I love ends. I've decided I won't." },
+    { "id": "every-window", "name": "Every Window", "line": "Put a Rotom in every machine, and see everything.", "quote": "If I can see everything, nothing can surprise me again." },
+    { "id": "rightful-crown", "name": "The Rightful Crown", "line": "The region had a king once. You're the heir.", "quote": "This region had a king. The line didn't end. It's me." },
+    { "id": "apex", "name": "Apex", "line": "Strength is the only true thing. Make the strongest there's ever been.", "quote": "Strength is the only thing that's never lied to me." },
+    { "id": "clean-slate", "name": "Clean Slate", "line": "The region carries a terrible memory. Make it forget.", "quote": "Something terrible happened here. If nobody remembers it, it never has to hurt again." }
+  ],
+  "noGoal": { "name": "Rule", "line": "No special Goal: win by taking the region (Wipe Out, Shadow or Monarch).", "quote": "We don't need a reason. We need the region." },
+  "band": { "grey": "#8a8f9e", "greyDark": "#5a5f6e", "ink": "#18141f", "white": "#ffffff", "near": 70, "contrast": 60 },
+  "lines": {
+    "ready": "The town says your name now, quietly. Time for the Founding: a name, colours, a mark and a motto.",
+    "readyShort": "THE FOUNDING · O",
+    "later": "The Founding can wait. It's on the HQ when you're ready (O).",
+    "notYet": "Not yet: both First Steps done and Street Gang on the Notoriety ladder.",
+    "done": "The sign goes up: {name}.",
+    "short": "Too short: at least two letters.",
+    "long": "Too long: {max} letters at most.",
+    "chars": "Letters, spaces, ' and - only.",
+    "taken": "{name} is already a team. Pick your own.",
+    "same": "Pick two different colours.",
+    "motto": "The motto is {max} letters at most.",
+    "said": {
+      "grunt": "...Huh. It's on the door now. That's real, then.",
+      "admin": "A name on the door. Good. Now they'll know whose door it is."
+    },
+    "scene": [
+      "Somebody's painted it on the warehouse door overnight: {name}.",
+      "{member} turns the new armband over twice, then ties it on. {colours}.",
+      "{said}"
+    ]
+  }
+}

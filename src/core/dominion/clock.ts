@@ -164,6 +164,7 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'approach':
     case 'admit':
     case 'gift':
+    case 'found': // D7: handled by session.ts (founding.ts)
       return no(block);
   }
 }

@@ -1,0 +1,595 @@
+{
+ "_source": "tools/dominion/armbands/build.py (Part 11: roles + armband anchor per crew picture, hand-checked)",
+ "looks": {
+  "dominion/c-rook0.png": {
+   "w": 42,
+   "h": 65,
+   "headY": 17,
+   "primary": [
+    "#292941"
+   ],
+   "secondary": [
+    "#4a4a52",
+    "#5a5a62",
+    "#42454f",
+    "#6a6a6a"
+   ],
+   "anchor": {
+    "side": "right",
+    "y": 21,
+    "rows": [
+     [
+      34,
+      37
+     ],
+     [
+      35,
+      38
+     ],
+     [
+      35,
+      38
+     ],
+     [
+      36,
+      39
+     ],
+     [
+      36,
+      39
+     ],
+     [
+      37,
+      39
+     ],
+     [
+      37,
+      39
+     ]
+    ]
+   }
+  },
+  "trainer/pr/ace_trainer_f": {
+   "w": 80,
+   "h": 80,
+   "headY": 27,
+   "primary": [
+    "#424273"
+   ],
+   "secondary": [
+    "#a55a63"
+   ],
+   "anchor": null
+  },
+  "trainer/pr/ace_trainer_m": {
+   "w": 80,
+   "h": 89,
+   "headY": 33,
+   "primary": [
+    "#526384"
+   ],
+   "secondary": [
+    "#313a5a"
+   ],
+   "anchor": {
+    "side": "right",
+    "y": 37,
+    "rows": [
+     [
+      38,
+      41
+     ],
+     [
+      38,
+      42
+     ],
+     [
+      38,
+      42
+     ],
+     [
+      38,
+      43
+     ],
+     [
+      38,
+      43
+     ],
+     [
+      41,
+      43
+     ],
+     [
+      41,
+      43
+     ]
+    ]
+   }
+  },
+  "trainer/pr/scientist_f": {
+   "w": 80,
+   "h": 80,
+   "headY": 27,
+   "primary": [
+    "#ffffff",
+    "#ced6d6",
+    "#adadad"
+   ],
+   "secondary": [
+    "#6b6b7b"
+   ],
+   "anchor": null
+  },
+  "trainer/pr/scientist_m": {
+   "w": 80,
+   "h": 80,
+   "headY": 25,
+   "primary": [
+    "#ffffff",
+    "#adadad",
+    "#d6cece"
+   ],
+   "secondary": [
+    "#6b6b73",
+    "#4a4a4a"
+   ],
+   "anchor": null
+  },
+  "trainer/pr/psychic_f": {
+   "w": 80,
+   "h": 82,
+   "headY": 29,
+   "primary": [
+    "#524a9c",
+    "#3a315a"
+   ],
+   "secondary": [
+    "#fff7ff",
+    "#bdb5c5"
+   ],
+   "anchor": null
+  },
+  "trainer/pr/beauty_2": {
+   "w": 80,
+   "h": 80,
+   "headY": 23,
+   "primary": [
+    "#006bce",
+    "#314a5a"
+   ],
+   "secondary": [
+    "#7b4a5a"
+   ],
+   "anchor": {
+    "side": "left",
+    "y": 29,
+    "rows": [
+     [
+      34,
+      38
+     ],
+     [
+      34,
+      39
+     ],
+     [
+      34,
+      39
+     ],
+     [
+      33,
+      37
+     ],
+     [
+      33,
+      37
+     ],
+     [
+      33,
+      36
+     ],
+     [
+      32,
+      36
+     ]
+    ]
+   }
+  },
+  "trainer/pr/veteran_m": {
+   "w": 80,
+   "h": 80,
+   "headY": 24,
+   "primary": [
+    "#525252",
+    "#3a3129",
+    "#524a3a",
+    "#634a4a"
+   ],
+   "secondary": [
+    "#7b4242",
+    "#bd4a4a"
+   ],
+   "anchor": {
+    "side": "right",
+    "y": 30,
+    "rows": [
+     [
+      45,
+      50
+     ],
+     [
+      45,
+      50
+     ],
+     [
+      45,
+      50
+     ],
+     [
+      45,
+      51
+     ],
+     [
+      45,
+      51
+     ],
+     [
+      46,
+      51
+     ],
+     [
+      45,
+      51
+     ]
+    ]
+   }
+  },
+  "trainer/pr/veteran_f": {
+   "w": 80,
+   "h": 80,
+   "headY": 26,
+   "primary": [
+    "#31313a",
+    "#525252",
+    "#4a3131"
+   ],
+   "secondary": [
+    "#b54a4a",
+    "#7b4242"
+   ],
+   "anchor": null
+  },
+  "trainer/pr/harlequin": {
+   "w": 80,
+   "h": 92,
+   "headY": 38,
+   "primary": [
+    "#e6e64a",
+    "#cead42"
+   ],
+   "secondary": [
+    "#a54a4a",
+    "#632929"
+   ],
+   "anchor": null
+  },
+  "trainer/pr/depot_agent": {
+   "w": 80,
+   "h": 80,
+   "headY": 23,
+   "primary": [
+    "#5a9c4a"
+   ],
+   "secondary": [
+    "#29633a"
+   ],
+   "anchor": {
+    "side": "left",
+    "y": 24,
+    "rows": [
+     [
+      23,
+      27
+     ],
+     [
+      23,
+      28
+     ],
+     [
+      23,
+      28
+     ],
+     [
+      23,
+      28
+     ],
+     [
+      23,
+      28
+     ],
+     [
+      23,
+      28
+     ],
+     [
+      24,
+      28
+     ]
+    ]
+   }
+  },
+  "trainer/pr/clerk_m": {
+   "w": 80,
+   "h": 80,
+   "headY": 26,
+   "primary": [
+    "#3a4242",
+    "#5a5a6b"
+   ],
+   "secondary": [
+    "#c5c5de"
+   ],
+   "anchor": null
+  },
+  "trainer/pr/clerk_f": {
+   "w": 80,
+   "h": 80,
+   "headY": 40,
+   "primary": [
+    "#c5adad",
+    "#b5b5c5",
+    "#ffffff"
+   ],
+   "secondary": [
+    "#5a3a4a",
+    "#9c7384"
+   ],
+   "anchor": null
+  },
+  "trainer/pr/janitor": {
+   "w": 80,
+   "h": 80,
+   "headY": 28,
+   "primary": [
+    "#73a58c"
+   ],
+   "secondary": [
+    "#29a58c",
+    "#217363"
+   ],
+   "anchor": null
+  },
+  "trainer/pr/worker_f": {
+   "w": 35,
+   "h": 74,
+   "headY": 20,
+   "primary": [
+    "#4b6c90",
+    "#1f3552",
+    "#59869c",
+    "#3a5968"
+   ],
+   "secondary": [
+    "#656352",
+    "#262626",
+    "#3b381e",
+    "#505050"
+   ],
+   "anchor": null
+  },
+  "trainer/pr/waiter_m": {
+   "w": 80,
+   "h": 80,
+   "headY": 25,
+   "primary": [
+    "#cecece",
+    "#ffffff",
+    "#8c8c9c"
+   ],
+   "secondary": [
+    "#4a4a5a",
+    "#63637b"
+   ],
+   "anchor": {
+    "side": "right",
+    "y": 27,
+    "rows": [
+     [
+      55,
+      58
+     ],
+     [
+      55,
+      58
+     ],
+     [
+      56,
+      58
+     ],
+     [
+      56,
+      59
+     ],
+     [
+      56,
+      59
+     ],
+     [
+      56,
+      59
+     ],
+     [
+      56,
+      59
+     ]
+    ]
+   }
+  },
+  "trainer/pr/waiter_f": {
+   "w": 80,
+   "h": 80,
+   "headY": 29,
+   "primary": [
+    "#ffffff",
+    "#bdbdc5"
+   ],
+   "secondary": [
+    "#5a5252",
+    "#84848c"
+   ],
+   "anchor": null
+  },
+  "trainer/pr/baker": {
+   "w": 80,
+   "h": 80,
+   "headY": 27,
+   "primary": [
+    "#9c4a4a",
+    "#ce6b6b",
+    "#733131"
+   ],
+   "secondary": [
+    "#ffffff",
+    "#d6cece",
+    "#9c9c9c"
+   ],
+   "anchor": null
+  },
+  "trainer/pr/musician": {
+   "w": 80,
+   "h": 80,
+   "headY": 25,
+   "primary": [
+    "#5a8ca5",
+    "#3a6373"
+   ],
+   "secondary": [
+    "#cecede",
+    "#9c9cad",
+    "#ffffff"
+   ],
+   "anchor": null
+  },
+  "trainer/pr/rich_m": {
+   "w": 80,
+   "h": 80,
+   "headY": 26,
+   "primary": [
+    "#635a4a",
+    "#84848c"
+   ],
+   "secondary": [
+    "#ffffff"
+   ],
+   "anchor": null
+  },
+  "trainer/pr/doctor_f": {
+   "w": 80,
+   "h": 80,
+   "headY": 28,
+   "primary": [
+    "#424242",
+    "#212121",
+    "#73737b"
+   ],
+   "secondary": [
+    "#ffa5a5",
+    "#ef7373"
+   ],
+   "anchor": null
+  },
+  "trainer/pr/collector": {
+   "w": 52,
+   "h": 52,
+   "headY": 14,
+   "primary": [
+    "#c5cdd5",
+    "#eeeeff",
+    "#9ca4ac"
+   ],
+   "secondary": [
+    "#e66a5a",
+    "#b44152"
+   ],
+   "anchor": null
+  },
+  "trainer/pr/backpacker_m": {
+   "w": 80,
+   "h": 80,
+   "headY": 25,
+   "primary": [
+    "#4a5242"
+   ],
+   "secondary": [
+    "#ffffff",
+    "#adb5b5"
+   ],
+   "anchor": null
+  },
+  "trainer/pr/black_belt_f": {
+   "w": 80,
+   "h": 80,
+   "headY": 31,
+   "primary": [
+    "#b54a5a",
+    "#e6526b",
+    "#7b3a42"
+   ],
+   "secondary": [
+    "#ffffff"
+   ],
+   "anchor": null
+  },
+  "trainer/pr/cyclist_m": {
+   "w": 80,
+   "h": 80,
+   "headY": 26,
+   "primary": [
+    "#4a4a6b",
+    "#8c84c5",
+    "#6b639c"
+   ],
+   "secondary": [
+    "#31313a",
+    "#848484"
+   ],
+   "anchor": null
+  },
+  "trainer/pr/ranger_f": {
+   "w": 80,
+   "h": 80,
+   "headY": 29,
+   "primary": [
+    "#192131"
+   ],
+   "secondary": [
+    "#314263"
+   ],
+   "anchor": null
+  },
+  "trainer/pr/breeder_m": {
+   "w": 80,
+   "h": 80,
+   "headY": 24,
+   "primary": [
+    "#4a7363"
+   ],
+   "secondary": [
+    "#84ad6b"
+   ],
+   "anchor": null
+  },
+  "trainer/pr/ruin_maniac": {
+   "w": 52,
+   "h": 53,
+   "headY": 14,
+   "primary": [
+    "#83735a"
+   ],
+   "secondary": [
+    "#5a5241"
+   ],
+   "anchor": null
+  }
+ }
+}
