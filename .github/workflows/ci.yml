@@ -14,6 +14,11 @@ concurrency:
   # PRs: a newer push cancels the running one. Main: the running CI finishes and only waiting runs are replaced by the newest.
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
+# tsc over the whole project needs a little more than Node's default 4 GB heap (Dominion D2 + D3 crossed it on 2026-11-19).
+# It runs in typecheck, in `npm run build` and in the browser tests' web server, so every job gets 6 GB.
+env:
+  NODE_OPTIONS: --max-old-space-size=6144
+
 jobs:
   # Docs-only PRs (markdown, docs, plans, promo, reports, ideas) skip the heavy jobs; "CI ok" still reports.
   changes:
@@ -48,10 +53,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      # The whole project's types need a little over Node's default 4 GB heap (Dominion D2 + D3 crossed it on 2026-11-19).
       - run: npm run typecheck
-        env:
-          NODE_OPTIONS: --max-old-space-size=6144
       - run: npm test
       - run: npm run build
       # Content quality gate (QUALITY_GATES.md): fails when a content-report number gets worse than tools/content-baseline.json.
