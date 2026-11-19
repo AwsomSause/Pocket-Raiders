@@ -137,7 +137,11 @@ export class DominionScene extends Phaser.Scene {
       },
     });
     const kb = this.input.keyboard;
+    const once = new WeakSet<KeyboardEvent>();
     const raw = (e: KeyboardEvent): void => {
+      // Phaser can hand the same event over twice when keys land in one frame (see onInputAction).
+      if (once.has(e)) return;
+      once.add(e);
       if (this.leaving) return;
       if (this.debate.raw(e.code)) return;
       if (this.screen === 'map') {
