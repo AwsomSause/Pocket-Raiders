@@ -79,7 +79,7 @@ export function mapView(m: MapModel, notice: string | null, garage: boolean): st
     ${compass}
   </div>
   <div class="pnl" style="left:616px;top:84px;width:334px;height:196px" data-testid="dom-file">
-    <div class="row sp"><b class="y" style="font-size:26px">${esc(f.name)}</b></div>
+    <div class="row" style="gap:10px"><b class="y" style="font-size:26px">${esc(f.name)}</b><span class="xs" style="color:#ff9ab0" data-testid="dom-regard" title="Regard">♥ ${f.regard}</span><span class="xs" style="color:#b9a0ff" data-testid="dom-dread" title="Dread">✊ ${f.dread}</span></div>
     <div class="stamp" style="right:14px;top:10px;color:${f.stamp.colour};text-shadow:0 0 8px ${f.stamp.colour}99;box-shadow:0 0 12px ${f.stamp.colour}4d">${esc(f.stamp.word)}</div>
     <div class="col" style="gap:3px;margin-top:8px;font-size:15px">
       <div class="row sp"><span>Your Control</span><b class="y" data-testid="dom-control">${f.control}</b></div><div class="mt" style="--v:${f.control}"></div>
@@ -94,7 +94,7 @@ export function mapView(m: MapModel, notice: string | null, garage: boolean): st
   </div>
   ${cta}
   ${garageBox}
-  ${tabs(1, [0, 1, 2])}
+  ${tabs(1, [0, 1, 2, 5])}
   <div class="a" style="left:12px;top:472px;z-index:8;font:600 12px var(--ui);color:#dfe5ff" data-testid="dom-map-note">${esc(m.note)} · <span class="kc">T</span> place · <span class="kc">V</span> vehicles</div>
   ${pings}
   ${flags.replace(/left:(\d+)px;top:(\d+)px/g, (_, x: string, yy: string) => `left:${Number(x) + 10}px;top:${Number(yy) + 12}px`)}

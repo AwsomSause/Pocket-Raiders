@@ -7,6 +7,7 @@ import { addHeat, scoutHome, syncHeat } from './field';
 import { fill, runWorldTurn } from './worldTurn';
 import { assign, bail } from './crew';
 import { payPatron } from './recruit';
+import { setWhere } from './empire';
 import { answer, eveningTalk } from './talk';
 
 export interface StepOut {
@@ -154,6 +155,10 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'patron': {
       const out = payPatron(block, action.patron);
       return out.ok ? ok(out.block, out.notice) : { ...no(block), notice: out.notice };
+    }
+    case 'where': {
+      const out = setWhere(block, action.member, action.district);
+      return out.ok ? ok(out.block) : no(block);
     }
     case 'hire':
     case 'approach':

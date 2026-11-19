@@ -18,8 +18,11 @@ import { hqView, openingView, setupView, titleView, type SetupFiles } from '../u
 import { CrewController } from './dominion/crewController';
 import { cardModel, gridPages, mapModel, newCursor, pageFor, type MapCursor } from '../core/dominion/fieldScreens';
 import { cardView, mapView } from '../ui/redux/screens/dominion/fieldViews';
+import { ledgerModel, SPREADS } from '../core/dominion/ledgerScreens';
+import { ledgerView } from '../ui/redux/screens/dominion/ledger';
+import { setLogKeyTaken } from '../ui/overlays';
 
-type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew';
+type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'ledger';
 
 /** The screen to come back to after a battle (D2: the map the action was picked on, or the HQ for a fight at the door). */
 let resume: Screen | null = null;
@@ -41,6 +44,9 @@ export class DominionScene extends Phaser.Scene {
   private manifest: AssetManifest | undefined;
   /** D3: the Morning (mockup 2) and the Crew File (mockup 5). */
   private crew = new CrewController(this);
+  /** D6: the Ledger's open spread (0 Money | Empire, 1 Territory | Notoriety, 2 Crew | Stores) and where L goes back to. */
+  private spread = 0;
+  private ledgerFrom: Screen = 'hq';
 
   constructor() {
     super('Dominion');
@@ -105,6 +111,8 @@ export class DominionScene extends Phaser.Scene {
         bring: () => this.bring(),
         buy: (id) => this.buy(id),
         dismiss: () => { this.notice = null; this.view?.refresh(); },
+        ledgerTab: (i) => { this.spread = Number(i); this.view?.refresh(); },
+        ledgerPage: (d) => this.turnLedger(Number(d)),
         ...this.crew.acts(),
       },
       overs: {
@@ -117,6 +125,12 @@ export class DominionScene extends Phaser.Scene {
     const kb = this.input.keyboard;
     const raw = (e: KeyboardEvent): void => {
       if (this.leaving) return;
+      if (this.screen === 'ledger') {
+        if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
+        else if (e.code === 'KeyL') this.closeLedger();
+        return;
+      }
+      if (e.code === 'KeyL' && (this.screen === 'map' || this.screen === 'hq' || this.screen === 'crew') && this.block()?.opened) return this.openLedger();
       if (this.screen === 'map') {
         if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
         else if (e.code === 'KeyT') this.nextTarget();
@@ -136,7 +150,12 @@ export class DominionScene extends Phaser.Scene {
       else if (e.code === 'KeyE') this.step({ t: 'endDay' });
     };
     kb?.on('keydown', raw);
-    this.events.once('shutdown', () => kb?.off('keydown', raw));
+    // D6: L is the Ledger here, not the game's interaction log (Shift+L still opens the log).
+    setLogKeyTaken(() => this.scene.isActive() && !!this.block()?.opened && ['hq', 'map', 'crew', 'ledger'].includes(this.screen));
+    this.events.once('shutdown', () => {
+      kb?.off('keydown', raw);
+      setLogKeyTaken(null);
+    });
   }
 
   private block() {
@@ -172,12 +191,38 @@ export class DominionScene extends Phaser.Scene {
       }
       case 'crew':
         return this.crew.render(this.notice);
+      case 'ledger':
+        return b ? ledgerView(ledgerModel(b, services().session.run!, this.spread), this.notice) : '';
     }
+  }
+
+  // ---------- D6: the Empire Ledger (mockup 7) ----------
+
+  private openLedger(): void {
+    if (this.screen !== 'ledger') this.ledgerFrom = this.screen === 'card' ? 'map' : this.screen;
+    this.screen = 'ledger';
+    this.notice = null;
+    this.garage = false;
+    this.view?.refresh();
+  }
+  private closeLedger(): void {
+    this.screen = this.ledgerFrom;
+    if (this.screen === 'map' && !this.cursor) this.cursor = newCursor(this.block()!);
+    this.view?.refresh();
+  }
+  private turnLedger(d: number): void {
+    this.spread = (this.spread + d + SPREADS) % SPREADS;
+    this.view?.refresh();
   }
 
   private key(a: InputAction): void {
     if (this.leaving) return;
     if (this.crew.key(a)) return void this.view?.refresh();
+    if (this.screen === 'ledger') {
+      if (a === 'back') return this.closeLedger();
+      if (a === 'left' || a === 'right') return this.turnLedger(a === 'left' ? -1 : 1);
+      return;
+    }
     if (a === 'back') return this.back();
     if (a === 'confirm') return this.confirm();
     if (this.screen === 'title' && (a === 'up' || a === 'down')) this.titleAt = this.titleAt ? 0 : 1;
@@ -286,7 +331,9 @@ export class DominionScene extends Phaser.Scene {
   }
 
   private tab(i: number): void {
-    if (this.screen !== 'hq' && this.screen !== 'map' && this.screen !== 'crew') return;
+    if (this.screen !== 'hq' && this.screen !== 'map' && this.screen !== 'crew' && this.screen !== 'ledger') return;
+    if (i === 5) return this.openLedger();
+    if (this.screen === 'ledger') this.screen = 'hq';
     if (this.crew.tab(i)) return void this.view?.refresh();
     const b = this.block();
     this.notice = null;

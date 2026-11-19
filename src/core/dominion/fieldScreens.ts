@@ -53,6 +53,8 @@ export interface MapModel {
     name: string;
     stamp: { word: string; colour: string };
     control: number; heat: number; rival: number; rivalName: string;
+    /** D6: the town's Regard and Dread (never netted). */
+    regard: number; dread: number;
     alert: { text: string; cls: string } | null;
     targets: { id: string; name: string; on: boolean }[];
   };
@@ -130,7 +132,7 @@ export function mapModel(b: DominionBlock, run: Pick<RunState, 'party'>, c: MapC
     top: topModel(b, 'REGION MAP'),
     districts,
     tally,
-    file: { name: d.name, stamp: { word: STAMP[st].word, colour: STAMP[st].colour }, control: ds.control, heat: ds.heat, rival: ds.rival, rivalName: F().rivalTeam, alert, targets },
+    file: { name: d.name, stamp: { word: STAMP[st].word, colour: STAMP[st].colour }, control: ds.control, heat: ds.heat, rival: ds.rival, rivalName: F().rivalTeam, regard: ds.regard, dread: ds.dread, alert, targets },
     grid,
     page,
     pages: pages.length,

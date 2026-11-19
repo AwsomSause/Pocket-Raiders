@@ -12,6 +12,7 @@ import type { RunState } from '../state';
 import trainersRaw from '../../data/trainers.json';
 import { DOMINION_DATA } from './data';
 import type { ActionDef, District, DistrictState, DominionBlock, Field, FieldFight, Play, StatId, Target } from './schema';
+import { book, empireOf } from './book';
 import { addWorldStep, fill } from './worldTurn';
 
 const F = () => DOMINION_DATA.field;
@@ -279,6 +280,12 @@ export function card(b: DominionBlock, run: Pick<RunState, 'party'>, actionId: s
   // what's at stake
   const payK = (target?.pay ?? 1) * (1 + M.pay[level - 1]! / 100);
   let pay: [number, number] | null = play?.pay ? [round10(play.pay[0] * payK), round10(play.pay[1] * payK)] : play?.wager ? [play.wager[0], play.wager[1]] : null;
+  // D6, Skim the Till: a cut of the Racket's weekly take there.
+  const racket = play?.effect === 'skim' && target ? f.rackets.find((r) => r.target === target.id) : undefined;
+  if (racket) {
+    const p = Math.max(10, round10(racket.weekly * DOMINION_DATA.empire.control.skimShare * (1 + M.pay[level - 1]! / 100)));
+    pay = [p, p];
+  }
   const foeBits = play?.battle ? foeOf(b, run, play.battle.foe, district, target) : null;
   if (play?.prize && foeBits) {
     const per = CLASS_MONEY.get(target?.foe.cls ?? '') ?? 24;
@@ -340,11 +347,23 @@ function blockedWhy(b: DominionBlock, run: Pick<RunState, 'party'>, c: Card, bri
   if (play.needs && !b.keyItems.includes(play.needs)) return fill(Ln.needs!, { item: play.needs });
   if (play.needsPolice && !(bandAt(wanted(f), 'noticed') || c.district.police || f.patrol === c.district.id)) return Ln.noPolice!;
   if (play.effect === 'fine' && !hottest(f)) return Ln.noFine!;
+  if (play.effect === 'skim' && !c.pay) return Ln.noRacket!;
+  for (const gate of GATES) {
+    const why = gate(b, def);
+    if (why) return why;
+  }
   if (c.money && b.funds < c.money) return fill(Ln.noMoney!, { cost: c.money });
   if (play.effect === 'spar' && !b.members.some((m) => m.team.some((x) => x.hp > 0))) return Ln.noMember!;
   if (c.battle?.on === 'always' && !canBattle(run)) return Ln.noTeam!;
   if (bring.length > F().odds.maxBrought) return 'Bring two at most.';
   return null;
+}
+
+/** D6: later rules that can close an action (Notoriety, a press contact), checked after the Card's own reasons. */
+type Gate = (b: DominionBlock, def: ActionDef) => string | null;
+const GATES: Gate[] = [];
+export function addActionGate(g: Gate): void {
+  GATES.push(g);
 }
 
 // ---------- doing it ----------
@@ -429,6 +448,7 @@ function succeed(content: Content | null, b: DominionBlock, run: RunState, x: Ct
   ds.regard += c.regard;
   ds.dread += c.dread;
   if (play.control) ds.control = clamp(ds.control + play.control, 0, 100);
+  if (play.rival) ds.rival = clamp(ds.rival + play.rival, 0, 100);
   if (play.wanted) f.wanted = clamp(f.wanted + play.wanted, 0, 100);
   if (play.hero) f.hero += play.hero;
   const days = play.scoutDays ?? F().odds.scoutDays;
@@ -714,14 +734,18 @@ export function worldStep(b: DominionBlock): string[] {
   if (b.heat !== was) lines.push(fill(R.cool, { heat: b.heat }));
   if (b.day % C.weekLength === 0 && f.rackets.length) {
     const K = F().control.racketPay;
+    // D6: a collector (crew task Collect) makes a district's Rackets pay their %, whatever its status.
+    const collect = empireOf(b).collect;
     const k = (id: string): number => {
       const st = statusOf(f.districts[id]!);
-      return K[st === 'rival' ? 'out' : st];
+      return Math.max(K[st === 'rival' ? 'out' : st], (collect[id] ?? 0) / 100);
     };
-    const pay = f.rackets.reduce((a, r) => a + Math.round(r.weekly * k(r.district)), 0);
+    const bonus = 1 + (collect['*'] ?? 0) / 100;
+    const pay = f.rackets.reduce((a, r) => a + Math.round(r.weekly * k(r.district) * bonus), 0);
     if (pay) {
       b.funds += pay;
       b.earned += pay;
+      book(b, 'rackets', pay);
       lines.push(fill(L().rackets!, { pay }));
     }
   }

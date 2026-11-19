@@ -14,7 +14,7 @@ const ALERT: Record<string, [string, string, string]> = {
   crew: ['g', 'g-card-key', 'CREW'], money: ['y', 'g-relic-gold', 'FRONTS'], rival: ['r', 'g-meteorite', 'RIVALS'],
   police: ['b', 'g-silph-scope', 'POLICE'], hero: ['v', 'g-comet-shard', 'HERO'], world: ['b', 'g-journal', 'NEWS'],
 };
-export const OPEN_TABS = [0, 1, 2] as const;
+export const OPEN_TABS = [0, 1, 2, 5] as const;
 
 /** A member's picture: a plain png (Rook's) or a trainer atlas, cropped into a box. */
 function face(look: string, h: number, style: string): string {
@@ -69,7 +69,7 @@ export function morningView(m: MorningModel, notice: string | null, talkAt: numb
     <div class="row" style="position:absolute;left:0;right:0;bottom:12px;justify-content:center;gap:10px;color:${m.badge.hot ? 'var(--red)' : '#9fe0b4'};font-weight:700">⚠ <span class="${m.badge.hot ? 'pulse' : ''}" style="display:inline-block;border:2px solid ${m.badge.hot ? 'var(--red)' : '#43cf78'};border-radius:6px;padding:2px 10px;box-shadow:0 0 12px ${m.badge.hot ? 'rgba(255,90,79,.4)' : 'rgba(67,207,120,.3)'}" data-testid="dom-badge">${esc(m.badge.label)}: ${esc(m.badge.word)}</span> ⚠</div>
   </div>
   <div class="pnl glass" style="left:350px;top:86px;width:276px;height:308px" data-testid="dom-assign">
-    <div class="hd"><img class="ic" src="${img('g-letter')}" alt="">ASSIGN TASK<span class="r">${esc(m.strip.find((s) => s.sel)?.name ?? '')}</span></div>
+    <div class="hd"><img class="ic" src="${img('g-letter')}" alt="">ASSIGN TASK${m.where ? `<span class="r" style="white-space:nowrap"${act('crewWhere')} data-testid="dom-where"><b class="y">${esc(m.where)}</b> <span class="kc" style="font-size:11px;padding:0 4px">P</span></span>` : `<span class="r">${esc(m.strip.find((s) => s.sel)?.name ?? '')}</span>`}</div>
     ${list}
   </div>
   <div class="pnl glass" style="left:636px;top:86px;width:314px;height:308px" data-testid="dom-info"><span class="brk"></span>

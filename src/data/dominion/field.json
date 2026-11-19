@@ -59,6 +59,16 @@
   "water": [["pallet", "cinnabar"], ["cinnabar", "fuchsia"]],
   "starting": ["extort", "take", "steal", "thieve", "attack", "recruit", "scout", "catch", "lay-low"],
   "play": {
+    "skim-the-till": { "kinds": ["any"], "chance": 70, "effect": "skim", "heat": 1, "failHeat": 4, "regard": -1, "win": "A quiet cut from {target}'s till: ₽{pay}. Nobody writes it down.", "lose": "{owner} counts the till twice and finds the gap." },
+    "marry-in": { "kinds": ["any"], "chance": 45, "cost": 200, "regard": 4, "control": 4, "win": "Dinner with one of {district}'s old families, and flowers for the daughter. A ring gets mentioned. Regard and Control rise.", "lose": "The family is polite over dinner, and doesn't call again." },
+    "street-theater": { "kinds": ["street", "crowd", "route"], "chance": 70, "pay": [60, 200], "clean": true, "regard": 2, "win": "Your Pokémon put on a show in {district}. The hat comes back with ₽{pay}, and it's clean money.", "lose": "Nobody in {district} stops to watch." },
+    "spray-the-wall": { "kinds": ["any"], "chance": 75, "heat": 2, "failHeat": 5, "dread": 2, "control": 1, "win": "By morning your sign is on every wall in {district}.", "lose": "Headlights at the end of the street. You drop the can and run." },
+    "leak-a-story": { "kinds": ["any"], "chance": 65, "regard": 1, "rival": -6, "win": "Your reporter runs the story. The rival team's name is mud in {district}.", "lose": "The reporter shrugs: old news, nobody will print it." },
+    "befriend-the-mayor": { "kinds": ["any"], "chance": 55, "effect": "scoutDistrict", "regard": 3, "control": 5, "win": "The mayor of {district} pours you a drink and talks too much. Every place in {district} is scouted.", "lose": "The mayor is “in a meeting” all evening." },
+    "sponsor-a-trainer": { "kinds": ["any"], "cost": 300, "regard": 4, "control": 2, "win": "A young trainer from {district} sets off with your money for the entry fees. They tell everyone who paid." },
+    "silence-a-reporter": { "kinds": ["any"], "chance": 60, "cost": 200, "effect": "fine", "heat": -8, "wanted": -6, "dread": 1, "win": "The story about {district} never runs. Heat there −8.", "lose": "The story runs anyway, and your money's gone." },
+    "cooperate-with-jenny": { "kinds": ["any"], "chance": 70, "needsPolice": true, "heat": -6, "wanted": -3, "win": "A tip about someone else's job, and Officer Jenny looks the other way in {district}. Heat −6.", "lose": "Jenny takes the tip and gives nothing back." },
+    "secret-meeting": { "kinds": ["any"], "chance": 60, "effect": "scoutDistrict", "dread": 1, "failHeat": 3, "win": "A back room in {district}, two chairs, no names. By the end you know every place in town.", "lose": "Nobody comes. Someone may have been watching." },
     "extort": { "kinds": ["shop"], "chance": 25, "pay": [150, 600], "weekly": 120, "heat": 5, "failHeat": 12, "regard": -2, "dread": 3, "battle": { "chance": 40, "on": "fail", "foe": "target" }, "control": 8,
       "win": "{owner} pays ₽{pay}. The till is lighter, and it will be every week.", "lose": "{owner} won't pay. Someone has run for the police." },
     "collect-debt": { "kinds": ["shop", "street"], "chance": 35, "pay": [100, 250], "heat": 3, "failHeat": 8, "regard": -1, "dread": 2, "battle": { "chance": 30, "on": "fail", "foe": "target" },
@@ -183,7 +193,7 @@
     "byAction": {
       "rest": "D1", "recruit": "D3", "street-recruit-drive": "D3", "talent-scout": "D3", "pay-the-families": "D3", "pick-a-fight-with-the-hiker": "D3",
       "rescue-a-wild-pokemon": "D4", "evolve-in-peace": "D4", "tame-the-wild": "D4",
-      "skim-the-till": "D6", "street-theater": "D6", "spray-the-wall": "D6", "sponsor-a-trainer": "D6",
+      "gym-takeover": "D10",
       "hold-the-line": "D9", "steal-their-customers": "D9", "ambush-the-courier": "D9",
       "three-on-one": "D10", "gauntlet": "D10", "rooftop-chase": "D10", "dig-the-dirt": "D10", "fossil-dig": "D10", "contraband-run": "D10", "air-drop": "D10", "fake-shipment": "D10", "evidence-locker-visit": "D10", "the-big-night": "D10",
       "pay-the-pilot": "D15", "reckoning": "D15"
@@ -216,6 +226,7 @@
     "bought": "Bought: {name}.",
     "owned": "You have one.",
     "fled": "You got away. Nothing gained.",
-    "outsider": "Outsider here"
+    "outsider": "Outsider here",
+    "noRacket": "No Racket here to skim."
   }
 }

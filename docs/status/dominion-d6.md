@@ -1,0 +1,28 @@
+- **DOMINION slice D6, "districts, Notoriety and the Ledger"** (Evil Mode rework, 2026-11-19; build plan `/mnt/project-files/plans/evil-mode-rework/BUILD_SLICES.md`, design Part 3 §1-2, Part 9 A14, mockup 7): tab 6 (or key L on the HQ, the map or the Crew File) opens the Empire Ledger, the team's book on the Boss's desk. Districts are now held and lost, every town keeps its own Regard and Dread, and Notoriety climbs a seven-step ladder that opens new actions.
+
+## What's built
+- **Data** `src/data/dominion/empire.json` (shape `EmpireFileSchema` in `schema.ts`): the Notoriety ladder (Nobody, Street Gang, Crew, Outfit, Syndicate, Team, Empire; what each step opens), Control rules, the Ledger's lines (which are clean money), and the district tasks' report lines.
+- **Rules** in `src/core/dominion/`:
+  - `book.ts`: every ₽ in or out lands on one line of this week's page (Rackets, the Boss's jobs, shows, odd jobs, crew jobs, hiring, vehicles, fines, wages, rent, other). Clean money (odd jobs, Street Theater) is kept apart; spending takes dirty money first.
+  - `empire.ts`: Notoriety (larger of Regard and Dread in every town + 2 per held town + 1 per member), the ladder (a step once reached stays open; Street Gang brings a press contact), the action gates, Control (Rackets +2 a week in their town; Heat 40+ wears 1 a night; a Held town nobody holds for a week loses 5), the week's close into history (last 8 weeks), and the crew's district tasks.
+  - `ledgerScreens.ts`: the Ledger's three spreads.
+  - The World Turn books each step's money (`worldTurn.ts`), and `addWorldEnd` runs D6's end-of-turn after all steps.
+- **The Boss's actions**: 10 more played (42 of 150): Skim the Till (half a Racket's weekly take), Marry In, Street Theater (clean money), Spray the Wall, Leak a Story (rival Control −6), Befriend the Mayor, Sponsor a Trainer, Silence a Reporter, Cooperate with Jenny, Secret Meeting. The list's old word "Known" maps to the ladder's Crew (50); "Press contact" opens at Street Gang. Gym Takeover moved to D10 (Growth builds it).
+- **The crew's tasks**: all 18 that waited for D6 are live (49 of 152 now): Patrol the District, Collect, Graffiti Run, Eavesdrop, Poll the Streets, Befriend Locals, Chant, Write the Songs, Street Preacher, Paint the Banners, Spin the Story, Spy on Public Mood, Host a Block Party, Make a Hero Out of a Grunt, Hold, Hold the Line, Keep the Peace, Be Your Face. Each is done in the member's town: on the Morning, P (or the "In …" row) picks the town. Made by `tools/dominion/lists-to-json.py` (ENGINE table). Formed traits Honest Accountant (Rackets +10%) and Heir Apparent (Hold below Admin) are live.
+- **Holders**: the Boss working in a town that week, a member on Hold there, or Be Your Face.
+- **Screens**: `src/ui/redux/screens/dominion/ledger.ts` (mockup 7: candle, brass corners, stamp, quill, index tabs, red-ink "best week yet!" when it is). Spreads: MONEY (Money | Empire), EMPIRE (Territory | Notoriety), CREW (Crew | Pokémon and stores). ◀ ▶ turn, the tabs jump, L or Esc close. The map's district file shows ♥ Regard and ✊ Dread. DominionScene takes the L key from the game's interaction log while a Dominion screen is up (Shift+L still opens the log). Art: `g-big-nugget`, `g-nugget`, `t-giovanni` (PROVENANCE.md).
+- Notoriety now feeds recruiting (pitch odds, capped at +20) and the Patrons' gate (50).
+
+## Saves
+No version bump: `block.empire` and `member.crew.where` are optional and filled the same way every time (`empireOf`), so a D3 save loads unchanged (tested). Fights book their money through `book.ts`; their Notoriety step is announced on the next step.
+
+## Tests
+- `tests/unit/dominionEmpire.test.ts` (25): data and counts; Notoriety formula and ladder edges (19/20, 49/50, 699/700); rise announced once, press contact, step stays open; gates closed then open (failure + normal); recruiting cap; books add up over three weeks; clean money and dirty-first spending; Street Theater clean; weeks kept to 8; holding lost without a holder, kept by the Boss's visit and by Hold; Heat wear and a patrol stopping it; Collect paying 100% in a Contested town; Chant in a picked town; bad town refused; Skim needs a Racket; Spray adds Dread and Notoriety; the Ledger model; save/reload with and without `empire`; damaged Ledger refused; determinism.
+- D2/D3 tests updated for the new counts (42 played actions; a still-disabled task for the "can't take" checks).
+- Browser `tests/e2e/dominionLedger.spec.ts`: district task town picked with P, odd jobs, map Regard/Dread, Ledger from the map (L) and from the HQ (tab 6), all three spreads, three window sizes, reload keeps the books.
+
+## Limits (by plan)
+- Tension (D9) and the Hero's Threat (D11) show on the Empire page as "no word yet" / "not seen yet"; the Hero number is the Boss's Attack attention D2 already counts.
+- Buildings shows the HQ only; Safehouses (Foothold), Outposts, businesses and laundering are D5/D10. Held towns' "+1 crew task slot" has nothing to raise yet (tasks have no per-town cap); flyers recruiting weekly waits for Post Flyers (D10); Gym takeover at Owned is D10. Orator and Broadcaster (flyer traits) now wait for D10.
+- Limited tasks name what waits: Patrol (rival odds D9, the Hero D11), Collect (rivals jumping D9), Hold (income bonus D10), Hold the Line and Keep the Peace (rival attacks and Tension D9), Be Your Face (turning rival D15).
+- The Founding at Street Gang is D7; D6 only marks the step.

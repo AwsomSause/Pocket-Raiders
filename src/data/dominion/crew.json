@@ -518,10 +518,11 @@
       ],
       "family": "collect",
       "treat": "payOnTime",
-      "text": "Rackets +10%.",
-      "mods": {},
-      "live": false,
-      "needs": "D6"
+      "text": "Rackets +10% while they work for you.",
+      "mods": {
+        "collect": 10
+      },
+      "live": true
     },
     {
       "id": "embezzler",
@@ -774,7 +775,7 @@
       "text": "Flyers raise Regard +50%.",
       "mods": {},
       "live": false,
-      "needs": "D6"
+      "needs": "D10"
     },
     {
       "id": "persuader",
@@ -901,7 +902,7 @@
       "text": "Flyers reach a second district.",
       "mods": {},
       "live": false,
-      "needs": "D6"
+      "needs": "D10"
     },
     {
       "id": "sea-legs",
@@ -995,10 +996,10 @@
       "from": [],
       "text": "Hold at Grunt rank. His Ambition rises twice as fast.",
       "mods": {
-        "ambition": 1
+        "ambition": 1,
+        "hold": true
       },
-      "live": false,
-      "needs": "D6"
+      "live": true
     },
     {
       "id": "weatherwise",

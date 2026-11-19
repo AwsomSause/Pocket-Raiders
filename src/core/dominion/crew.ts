@@ -157,7 +157,9 @@ export const addMorale = (m: Member, n: number): void => void (m.morale = clamp(
 /** Why the member can't take this task today, or null. */
 export function cantTake(m: Member, task: Task): string | null {
   if (task.status === 'disabled') return `Opens with ${task.needs}.`;
-  if (rankN(m.rank) < rankN(task.min)) return `Needs ${rankWord(task.min)} rank.`;
+  // D6: Heir Apparent may Hold below Admin rank.
+  const heir = task.id === 'hold' && modsOfMember(m).some((x) => x.hold);
+  if (!heir && rankN(m.rank) < rankN(task.min)) return `Needs ${rankWord(task.min)} rank.`;
   if (rankN(m.rank) <= 1 && !['rest', 'train', 'guard-hq', 'sleep-it-off'].includes(task.id)) return 'Hopefuls only Rest, Train and Guard.';
   if (mc(m).line.includes(task.id)) return 'Their line: they won\'t.';
   return null;
@@ -432,6 +434,12 @@ function runTask(b: DominionBlock, m: Member, seed: string, n: Night): void {
       } else say(n, 'crew', fill(rep.fail!, { name: m.name, task: label }));
       break;
     }
+    case 'district': {
+      // D6 (empire.ts): Patrol, Hold, Chant and the rest, done in the member's district.
+      if (ok && DISTRICT_TASK) DISTRICT_TASK(b, m, task, { lv, r, say: (k, t) => say(n, k, t) });
+      else if (!ok) caughtOrFail(b, m, label, e.risky ?? false, e.caughtHeat, e.fine, r, n);
+      break;
+    }
   }
   // After the task: XP, task XP, Fatigue (A18), Thrill.
   addXp(m, xp, n.lines);
@@ -477,6 +485,13 @@ const pools = (b: DominionBlock) => {
   const region = DOMINION_DATA.start.start.region.toLowerCase();
   return C().pools[region] ?? C().pools.kanto!;
 };
+
+/** empire.ts (D6) registers what a district task does, so this file doesn't import it. */
+export type DistrictTask = (b: DominionBlock, m: Member, task: Task, x: { lv: number; r: Rng; say: (kind: Alert['kind'], text: string) => void }) => void;
+let DISTRICT_TASK: DistrictTask | null = null;
+export function setDistrictTask(f: DistrictTask): void {
+  DISTRICT_TASK = f;
+}
 
 /** recruit.ts registers the lead maker (it owns the candidate roll), so this file doesn't import it. */
 type LeadMaker = (b: DominionBlock, finder: Member, seed: string) => { name: string; cls: string } | null;

@@ -8,6 +8,7 @@ import type { Alert, DominionBlock, Member } from './schema';
 import { STAT_IDS } from './schema';
 import { topModel, type TopModel } from './screens';
 import { topTalk } from './talk';
+import { whereOf } from './empire';
 
 const C = () => DOMINION_DATA.crew;
 
@@ -30,12 +31,17 @@ export interface MorningModel {
   strip: StripCard[];
   talk: TalkModel | null;
   phase: string;
+  /** D6: the selected member's task is done in a district: which one (P picks the next). */
+  where: string | null;
 }
 
 /** Skill (Part 2 §1): the average of the five stats ×10, plus level. */
 export const skillOf = (m: Member): number => Math.min(100, Math.round((STAT_IDS.reduce((a, k) => a + m.stats[k], 0) / 5) * 10 + m.level));
 
 const label = (id: string): string => C().quickLabels[id] ?? taskById(id)?.name ?? id;
+/** D6: a district task's district, for the strip and the Assign panel. */
+const placeOf = (m: Member): string | null => (taskById(crewOf(m).task)?.effect?.kind === 'district' ? DOMINION_DATA.field.districts.find((d) => d.id === whereOf(m))?.name ?? null : null);
+const withPlace = (m: Member): string => { const p = placeOf(m); return p ? `${label(crewOf(m).task)} · ${p}` : label(crewOf(m).task); };
 const oddsText = (b: DominionBlock, m: Member, id: string): { odds: string; tone: TaskRow['tone'] } => {
   const t = taskById(id)!;
   const p = odds(b, m, t);
@@ -90,10 +96,11 @@ export function morningModel(block: DominionBlock, sel: number, at: number, all:
     strip: b.members.map((x, i) => {
       const xc = crewOf(x);
       const o = xc.out ? { odds: xc.out.why === 'jail' ? 'cell' : 'hurt', tone: 'rd' } : oddsText(b, x, xc.task);
-      return { id: x.id, name: x.name, look: x.look, task: label(xc.task), odds: o.odds === 'sure' ? '' : o.odds, tone: o.tone, sel: i === sel, out: !!xc.out };
+      return { id: x.id, name: x.name, look: x.look, task: withPlace(x), odds: o.odds === 'sure' ? '' : o.odds, tone: o.tone, sel: i === sel, out: !!xc.out };
     }),
     talk: card ? { name: card.name, title: card.talk.name, text: card.text, choices: card.talk.choices!.map((x) => x.label) } : null,
     phase: b.phase,
+    where: placeOf(m),
   };
   void c;
 }
