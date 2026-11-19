@@ -232,7 +232,7 @@ export function hqView(m: HqModel, notice: string | null, at: number, member: { 
   ${steps}
   <div class="cta${m.phase === 'morning' ? ' shine' : ''}" style="left:10px;width:${m.panel === 'report' ? 340 : 290}px;top:${m.panel === 'report' ? 398 : m.panel === 'night' ? 270 : 286}px;font-size:20px;padding:9px 18px"${act('next')} data-testid="dom-next">${esc(m.next.label)} ▶ <span class="kc">${esc(m.next.hint)}</span></div>
   ${notice ? `<div class="a" style="left:330px;width:300px;top:86px;z-index:20;background:rgba(10,14,30,.88);border:2px solid #8cc0ff;border-radius:8px;padding:8px 10px;font-size:14px;line-height:1.3" data-testid="dom-notice">${esc(notice)}</div>` : ''}
-  ${tabs(0, [0, 1, 2, 5])}
+  ${tabs(0, [0, 1, 2, 3, 5])}
   <div class="a" style="left:330px;top:96px;width:300px;height:360px;z-index:3;cursor:pointer"${act('base')} data-testid="dom-building"></div>
   <div class="a row" style="left:540px;top:92px;z-index:9;gap:6px;font:600 13px var(--ui);color:#dfe5ff;cursor:pointer"${act('base')} data-testid="dom-hq-open"><span class="kc">B</span>HQ menu</div>
   <div class="a row" style="left:418px;top:92px;z-index:9;gap:6px;font:600 13px var(--ui);color:#dfe5ff;cursor:pointer"${act('rivalFile')} data-testid="dom-rival-open"><span class="kc">R</span>Rivals</div>

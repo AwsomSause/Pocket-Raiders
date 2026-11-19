@@ -9,7 +9,7 @@ import { services } from '../../game/services';
 import type { InputAction } from '../../ui/input';
 import { rivalFileView } from '../../ui/redux/screens/dominion/rival';
 
-type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'base' | 'rival' | 'ledger';
+type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger';
 interface Host {
   screenName: Screen;
   setNotice(n: string | null): void;

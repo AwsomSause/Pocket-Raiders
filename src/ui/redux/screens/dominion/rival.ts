@@ -56,5 +56,5 @@ export function rivalFileView(m: RivalFileModel): string {
   </div>
   <div class="a row" style="left:12px;top:478px;z-index:8;gap:6px;font:600 13px var(--ui);color:#dfe5ff"><span class="kc">▲▼</span>choose <span class="kc">Enter</span>answer <span class="kc">Esc</span><span${act('back')} style="cursor:pointer">back</span></div>
   ${m.notice ? `<div class="a" style="left:330px;width:300px;top:86px;z-index:20;background:rgba(10,14,30,.92);border:2px solid #8cc0ff;border-radius:8px;padding:8px 10px;font-size:14px;line-height:1.3"${act('dismiss')} data-testid="dom-notice">${esc(m.notice)}</div>` : ''}
-  ${tabs(0, [0, 1, 2])}`);
+  ${tabs(0, [0, 1, 2, 3, 5])}`);
 }

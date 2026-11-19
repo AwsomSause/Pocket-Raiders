@@ -31,6 +31,12 @@ Copied from the same mockup sprites folder (`plans/evil-mode-rework/mockups-rede
 | `t-giovanni.png` | Trainer sprite from the PokeRogue pack (`images/trainer/`), one frame, cut by the mockup thread (the Tension row's portrait) |
 | `p-rotom.png` | Pokémon sprite from the PokeRogue pack, the Rotom chip icon the round-3 CSS points at (`plans/evil-mode-rework/mockups-v3/sprites/`); the same file D19 brings |
 
+## Slice D4 (the Reserve and the Rank Pyramid, mockups 11 and 12)
+
+| File | From |
+| --- | --- |
+| `g-relic-statue.png`, `g-dark-gem.png` | Item icons from `images/items/` (PokeRogue pack), re-saved at the mockup's size by the mockup thread; copied from `plans/evil-mode-rework/mockups-redesign/sprites/` |
+
 ## Slice D18 (Rotom Key-Card screens, mockups a1 + a2)
 
 Copied from the Claude AI mockups (project files `plans/claude-api/mockups/sprites/`, published https://claude.ai/artifact/LEFrzZyJrVo7kyA3Rk59hg), cut by the mockup thread from art already in this repo (same packs and licence as above):

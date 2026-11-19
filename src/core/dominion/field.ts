@@ -14,6 +14,9 @@ import { DOMINION_DATA } from './data';
 import type { ActionDef, District, DistrictState, DominionBlock, Field, FieldFight, Play, StatId, Target } from './schema';
 import { book, empireOf } from './book';
 import { addWorldStep, fill } from './worldTurn';
+import { addLoyalty, addMorale, addXp, monName } from './crew';
+import { hasBand } from './pyramid';
+import { evolveOne } from './reserve';
 import { buildingDef, hasRoom, launderAction, roomFor, spend } from './hqFx';
 
 const F = () => DOMINION_DATA.field;
@@ -205,6 +208,8 @@ export interface Card {
   exact: boolean;
   range: [number, number];
   pay: [number, number] | null;
+  /** The members brought along (D4: Mentor teaches them). */
+  bring: string[];
   weekly: number | null;
   crate: string | null;
   heat: number;
@@ -325,7 +330,7 @@ export function card(b: DominionBlock, run: Pick<RunState, 'party'>, actionId: s
   const cost = def.slot === 'day' ? tr.cost + 1 : 0;
   const money = play?.cost ?? 0;
   const out: Card = {
-    def, play, district, target, blocked: null, roll, chance, parts, base, exact, range, pay, weekly, crate: play?.crate ?? null,
+    def, play, district, target, blocked: null, roll, chance, parts, base, exact, range, pay, bring: [...bring], weekly, crate: play?.crate ?? null,
     heat, failHeat, regard: play?.regard ?? 0, dread: play?.dread ?? 0, cost, money, travel: tr, battle, police, level,
   };
   out.blocked = blockedWhy(b, run, out, bring);
@@ -358,7 +363,7 @@ function blockedWhy(b: DominionBlock, run: Pick<RunState, 'party'>, c: Card, bri
   if (play.needsPolice && !(bandAt(wanted(f), 'noticed') || c.district.police || f.patrol === c.district.id)) return Ln.noPolice!;
   if (play.effect === 'fine' && !hottest(f)) return Ln.noFine!;
   if (play.effect === 'skim' && !c.pay) return Ln.noRacket!;
-  for (const gate of GATES) {
+  for (const gate of gates()) {
     const why = gate(b, def);
     if (why) return why;
   }
@@ -366,14 +371,22 @@ function blockedWhy(b: DominionBlock, run: Pick<RunState, 'party'>, c: Card, bri
   if (play.effect === 'spar' && !b.members.some((m) => m.team.some((x) => x.hp > 0))) return Ln.noMember!;
   if (c.battle?.on === 'always' && !canBattle(run)) return Ln.noTeam!;
   if (bring.length > F().odds.maxBrought) return 'Bring two at most.';
+  // D4: "Rank N crew" actions need a member in that band of the pyramid; the Ceremony needs a promotion, Mentor a pupil.
+  if (play.band && !hasBand(b, play.band)) return fill(Ln.band!, { band: DOMINION_DATA.pyramid.bands[play.band - 1]!.name, n: play.band });
+  if (play.effect === 'ceremony' && !b.reserve?.promoted.some((p) => p.day === b.day)) return DOMINION_DATA.pyramid.lines.noCeremony!;
+  if (play.effect === 'mentor' && !bring.length) return DOMINION_DATA.pyramid.lines.noPupil!;
   return null;
 }
 
 /** D6: later rules that can close an action (Notoriety, a press contact), checked after the Card's own reasons. */
 type Gate = (b: DominionBlock, def: ActionDef) => string | null;
-const GATES: Gate[] = [];
+/** Kept on a hoisted function, not a `const`: empire.ts registers while this file is still loading (field -> pyramid -> recruit -> empire). */
+function gates(): Gate[] {
+  const box = gates as unknown as { list?: Gate[] };
+  return (box.list ??= []);
+}
 export function addActionGate(g: Gate): void {
-  GATES.push(g);
+  gates().push(g);
 }
 
 /** D9: what a later slice's effect does when the action works (rivals.ts: hits on the rival team, spying, truce talks). */
@@ -404,7 +417,7 @@ export interface ActOut {
   /** A battle is waiting (block.field.fight): the session starts it. */
   fight: boolean;
   /** Thieve's big success: a Pokémon in a lifted Ball (the session makes it; core/run.ts isn't reachable from here). */
-  mon: { species: string; level: number } | null;
+  mon: { species: string; level: number; trust?: number } | null;
 }
 
 const rngFor = (seed: string, f: Field): Rng => {
@@ -533,6 +546,38 @@ function succeed(content: Content | null, b: DominionBlock, run: RunState, x: Ct
     case 'spar': {
       const m = b.members[0];
       if (m) m.morale = Math.min(100, m.morale + 5);
+      break;
+    }
+    // D4 (Part 9 A19, the Rank Pyramid)
+    case 'rescue': {
+      const region = DOMINION_DATA.start.start.region.toLowerCase();
+      const pool = (DOMINION_DATA.crew.pools[region] ?? DOMINION_DATA.crew.pools.kanto!).catch;
+      const species = pool[rng.int(0, pool.length - 1)]!;
+      const level = Math.max(2, Math.min(b.levelCap, teamLevel(run) - 3 + (play.alpha ?? 0)));
+      const trust = play.trust ?? DOMINION_DATA.pyramid.trust.start.rescued;
+      mon = { species, level, trust };
+      lines[lines.length - 1] = fill(play.alpha ? DOMINION_DATA.pyramid.lines.tamed! : DOMINION_DATA.pyramid.lines.rescued!, { mon: monName(species), n: trust });
+      break;
+    }
+    case 'evolve':
+      if (content) lines[lines.length - 1] = evolveOne(content, run, b);
+      break;
+    case 'ceremony': {
+      const pl = DOMINION_DATA.pyramid.lines;
+      const who = b.members.find((m) => b.reserve?.promoted.some((p) => p.day === b.day && p.member === m.id));
+      if (!who) break;
+      addMorale(who, 10);
+      for (const m of b.members) addLoyalty(b, m, 2);
+      lines[lines.length - 1] = fill(pl.ceremony!, { name: who.name, morale: 10, loyalty: 2 });
+      break;
+    }
+    case 'mentor': {
+      const pupils = c.bring.map((id) => b.members.find((m) => m.id === id)).filter((m): m is NonNullable<typeof m> => !!m);
+      const xp = play.xp ?? 1;
+      const more: string[] = [];
+      for (const m of pupils) addXp(m, xp, more);
+      lines[lines.length - 1] = fill(DOMINION_DATA.pyramid.lines.mentor!, { names: pupils.map((m) => m.name).join(' and '), n: xp });
+      lines.push(...more);
       break;
     }
     default: {

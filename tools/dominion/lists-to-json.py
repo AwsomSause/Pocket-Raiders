@@ -32,6 +32,7 @@ def clean(t):
 ENGINE = {
     1: dict(kind='guard'),
     3: dict(kind='guard'),
+    7: dict(kind='pens'),
     12: dict(kind='guard'),
     14: dict(kind='money', funds=[80, 240], heat=5, risky=True, note='Pays like a new shop each time; a crew shake-down doesn\'t make a Racket (the Boss\'s Extort does).'),
     20: dict(kind='money', funds=[20, 90], fine=30),
@@ -59,7 +60,11 @@ ENGINE = {
     63: dict(kind='train', grow='wits', room='library'),
     17: dict(kind='audit'),
     72: dict(kind='rest', sure=True),
-    73: dict(kind='catch', note='Catches go to the stores; the Reserve screen and hand assignment are D4.'),
+    73: dict(kind='catch'),
+    75: dict(kind='tend'),
+    79: dict(kind='release'),
+    80: dict(kind='rehab'),
+    81: dict(kind='feed'),
     82: dict(kind='berries'),
     102: dict(kind='money', funds=[20, 80]),
     # D6: district tasks (kind 'district', done in the member's district; n = [task Lv 1-2, Lv 3+]).
@@ -98,9 +103,9 @@ ENGINE = {
 }
 
 # The slice each disabled row waits for: by section, then by row.
-NEEDS_SECTION = {'A': 'D5', 'B': 'D10', 'C': 'D2', 'D': 'D9', 'E': 'D9', 'F': 'D5', 'G': 'D4', 'H': 'D10', 'I': 'D10', 'J': 'D6', 'K': 'D15', 'L': 'D9', 'M': 'D14'}
+NEEDS_SECTION = {'A': 'D5', 'B': 'D10', 'C': 'D2', 'D': 'D9', 'E': 'D9', 'F': 'D5', 'G': 'D5', 'H': 'D10', 'I': 'D10', 'J': 'D6', 'K': 'D15', 'L': 'D9', 'M': 'D14'}
 NEEDS_ROW = {
-    4: 'D9', 5: 'D6', 6: 'D2', 7: 'D4', 8: 'D10', 9: 'D2', 11: 'D9', 13: 'D6', 23: 'D6', 2: 'D9', 10: 'D9', 67: 'D4', 32: 'D6', 33: 'D10',
+    4: 'D9', 5: 'D6', 6: 'D2', 8: 'D10', 9: 'D2', 11: 'D9', 13: 'D6', 23: 'D6', 2: 'D9', 10: 'D9', 67: 'D4', 32: 'D6', 33: 'D10',
     40: 'D6', 46: 'D2', 47: 'D6', 42: 'D2', 45: 'D11', 50: 'D10', 53: 'D6', 55: 'D2', 58: 'D8', 69: 'D4', 70: 'D9', 71: 'D7',
     83: 'D10', 84: 'D11', 89: 'D10', 90: 'D9', 91: 'D10', 109: 'D10', 118: 'D11', 119: 'D6', 124: 'D6', 128: 'D6', 141: 'D8',
     142: 'D9', 145: 'D11', 146: 'D6', 136: 'D10',
@@ -147,7 +152,7 @@ tasks.insert(0, dict(n=0, id='rest', name='Rest', section='F', group='Training a
 tasks.insert(1, dict(n=0, id='steal-pokemon', name='Steal Pokémon', section='C', group='Street Crime', stat='stealth', min='grunt',
                      does="Take a Pokémon from an adult's home", levels=['One Pokémon', 'Take a second one too', 'A pair',
                                                                           'The owner never knows who did it', 'A rare one (never from a minor)'],
-                     risk='Caught', status='limited', note='Goes to the stores; the Reserve screen is D4.',
+                     risk='Caught', status='supported',
                      effect=dict(kind='steal', heat=3, risky=True, caughtHeat=6), source='Part 6 §4; player-actions.md 64'))
 ids = [t['id'] for t in tasks]
 dup = {i for i in ids if ids.count(i) > 1}

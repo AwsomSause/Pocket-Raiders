@@ -64,7 +64,7 @@ describe('DOMINION D6: the data', () => {
   it('plays the ten Boss actions D6 opens; Gym Takeover waits for Growth (D10)', () => {
     const d6 = ['skim-the-till', 'marry-in', 'street-theater', 'spray-the-wall', 'leak-a-story', 'befriend-the-mayor', 'sponsor-a-trainer', 'silence-a-reporter', 'cooperate-with-jenny', 'secret-meeting'];
     for (const id of d6) expect(actionStatus(actionDef(id)!).play, id).toBe(true);
-    expect(DOMINION_DATA.actions.actions.filter((a) => actionStatus(a).play)).toHaveLength(72);
+    expect(DOMINION_DATA.actions.actions.filter((a) => actionStatus(a).play)).toHaveLength(81);
     // D5 (Hold a Rally, Radio Room) and D9 (Chant Night, a Rally event) handed these to D6 after D6 was built: they wait
     // for D6's follow-up (docs/status/dominion-d6.md).
     expect(DOMINION_DATA.actions.actions.filter((a) => actionStatus(a).slice === 'D6').map((a) => a.id)).toEqual(['hold-a-rally', 'chant-night']);

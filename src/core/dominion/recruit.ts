@@ -155,7 +155,7 @@ function joinLead(content: Content, run: RunState, leadId: string): RunState {
   const finder = b.members.find((m) => m.id === lead.foundBy);
   if (finder) member.traitPoints += crewOf(finder).formed.reduce((a, f) => a + (DOMINION_DATA.crew.formed.find((x) => x.id === f)?.mods.recruitPoints ?? 0), 0);
   out = { ...out, expansion: { ...out.expansion, dominion: b } };
-  const mon = typeMon(content, out, b, r, DOMINION_DATA.crew.hire.monLevel);
+  const mon = typeMon(content, out, b, r, DOMINION_DATA.crew.hire.monLevel, [], rank);
   member.team = [mon];
   b.members.push(member);
   if (finder) addLoyalty(b, finder, C().rules.finderLoyalty);
@@ -163,10 +163,13 @@ function joinLead(content: Content, run: RunState, leadId: string): RunState {
 }
 
 /** A Pokémon of a Team Type for a new member (Part 7: every Grunt's Pokémon has one). */
-function typeMon(content: Content, run: RunState, b: DominionBlock, r: ReturnType<typeof rng>, lv: [number, number], prefer: readonly string[] = []): PokemonInstance {
+function typeMon(content: Content, run: RunState, b: DominionBlock, r: ReturnType<typeof rng>, lv: [number, number], prefer: readonly string[] = [], rank = 'recruit'): PokemonInstance {
   const onType = prefer.filter((s) => content.species.get(s)?.types.some((t) => b.types.includes(t)));
   const pool = onType.length ? onType : memberMonPool(content, b.types);
-  return newMon(content, run, pick(r, pool), Math.min(b.levelCap, r.int(lv[0], lv[1])), 'p');
+  // D4: never over the new member's own level cap (their rank's share of the HQ cap, Part 8 §2).
+  const pct = DOMINION_DATA.pyramid.ranks.find((x) => x.id === rank)?.lvPct ?? 100;
+  const cap = Math.max(1, Math.floor((b.levelCap * pct) / 100));
+  return newMon(content, run, pick(r, pool), Math.min(cap, r.int(lv[0], lv[1])), 'p');
 }
 
 // ---------- Hire Grunt (Part 6 §3) ----------
@@ -221,8 +224,8 @@ export function hire(content: Content, run: RunState, index: number): { run: Run
   const id = `m${st.next++}`;
   let out: RunState = { ...structuredClone(run), expansion: { ...run.expansion, dominion: b } };
   const favours = favourIds(t).filter((s) => content.species.has(s));
-  const mon = typeMon(content, out, b, r, h.monLevel, favours);
-  // Off-type favours go to the stores (Q6: off-type catches go to the Reserve, D4).
+  const mon = typeMon(content, out, b, r, h.monLevel, favours, h.rank);
+  // Off-type favours go to the stores, which the Reserve takes in at the next step (Q6: off-type catches go to the Reserve).
   const off = favours.filter((s) => !content.species.get(s)!.types.some((ty) => b.types.includes(ty)));
   for (const s of off.slice(0, 1)) st.stores.push(newMon(content, out, s, Math.min(b.levelCap, r.int(h.monLevel[0], h.monLevel[1])), 'p'));
   const motive = pick(r, C().motives).id;
