@@ -440,6 +440,12 @@ function runTask(b: DominionBlock, m: Member, seed: string, n: Night): void {
       else if (!ok) caughtOrFail(b, m, label, e.risky ?? false, e.caughtHeat, e.fine, r, n);
       break;
     }
+    case 'hero': {
+      // D11 (hero.ts): Track the Hero, Counter the Hero's Story, Hunt the Hero.
+      if (HERO_TASK) HERO_TASK(b, m, task, { lv, r, ok, say: (k, t) => say(n, k, t) });
+      if (!ok) caughtOrFail(b, m, label, e.risky ?? false, e.caughtHeat, e.fine, r, n);
+      break;
+    }
   }
   // After the task: XP, task XP, Fatigue (A18), Thrill.
   addXp(m, xp, n.lines);
@@ -491,6 +497,13 @@ export type DistrictTask = (b: DominionBlock, m: Member, task: Task, x: { lv: nu
 let DISTRICT_TASK: DistrictTask | null = null;
 export function setDistrictTask(f: DistrictTask): void {
   DISTRICT_TASK = f;
+}
+
+/** hero.ts (D11) registers what the Hero tasks do, so this file doesn't import it. */
+export type HeroTask = (b: DominionBlock, m: Member, task: Task, x: { lv: number; r: Rng; ok: boolean; say: (kind: Alert['kind'], text: string) => void }) => void;
+let HERO_TASK: HeroTask | null = null;
+export function setHeroTask(f: HeroTask): void {
+  HERO_TASK = f;
 }
 
 /** recruit.ts registers the lead maker (it owns the candidate roll), so this file doesn't import it. */

@@ -1,6 +1,7 @@
 // DOMINION D2 view models: the Region Map (mockup 3) and the Card (mockup 4). Plain data for the redux screens. Pure:
 // no Phaser, no RNG (the Card is the same numbers `act` uses, never a roll).
 
+import { heroAt, heroDefOf } from './hero';
 import type { RunState } from '../state';
 import { DOMINION_DATA } from './data';
 import { actionDef, actionStatus, bandOf, card, districtDef, masteryLevel, openDay, playOf, statusOf, type Card, type DistrictStatus } from './field';
@@ -104,9 +105,11 @@ export function mapModel(b: DominionBlock, run: Pick<RunState, 'party'>, c: MapC
   const band = bandOf(b.heat);
   const P = F().police.lines;
   let alert: MapModel['file']['alert'] = null;
-  if (f.fight && !f.fight.begun) alert = { text: f.fight.why === 'looker' ? 'Looker is waiting at the door.' : f.fight.why === 'raid' ? 'The International Police are at the door.' : 'A fight is waiting.', cls: 'r' };
+  if (f.fight && !f.fight.begun) alert = { text: f.fight.why === 'looker' ? 'Looker is waiting at the door.' : f.fight.why === 'raid' ? 'The International Police are at the door.' : f.fight.why === 'heroRaid' || f.fight.why === 'stand' ? 'The Hero is at the door.' : 'A fight is waiting.', cls: 'r' };
   else if (f.closed === d.id) alert = { text: P.closed!.replace('{district}', d.name), cls: 'r' };
   else if (f.patrol === d.id) alert = { text: `Officer Jenny patrols ${d.name} today.`, cls: 'r' };
+  // D11: the Hero's town, once you've met them or tracked their route.
+  else if (b.hero && (b.hero.met || b.hero.intel >= b.day) && heroAt(b) === d.id) alert = { text: `${heroDefOf(b.hero.id).name}, the Hero, is in ${d.name}.`, cls: 'b' };
   else if (d.police) alert = { text: P.seeStation!, cls: 'b' };
   else if (band.id !== 'unknown') alert = { text: `Wanted: ${band.word} (${b.heat}%).`, cls: 'y' };
   else if (f.at === d.id) alert = { text: 'You are here.', cls: 'g' };

@@ -48,7 +48,7 @@ describe('DOMINION D2: the data', () => {
     expect(all).toHaveLength(150);
     expect(all.map((a) => a.n)).toEqual(Array.from({ length: 150 }, (_, i) => i + 1));
     const played = all.filter((a) => actionStatus(a).play);
-    expect(played.length).toBe(42);
+    expect(played.length).toBe(47); // D11 opened the five Hero actions
     for (const a of all) {
       const s = actionStatus(a);
       expect(s.play || /^D\d+$/.test(s.slice ?? ''), a.id).toBe(true);

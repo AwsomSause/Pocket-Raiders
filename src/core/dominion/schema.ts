@@ -87,8 +87,8 @@ const DistrictSchema = z.object({
   rivalNote: S.optional(), wild: S, targets: z.array(TargetSchema).min(1),
 }).strict();
 export type District = z.infer<typeof DistrictSchema>;
-export const BATTLE_FOES = ['target', 'police', 'wild', 'ghost', 'member'] as const;
-export const EFFECTS = ['scout', 'count', 'scoutDistrict', 'paper', 'catch', 'laylow', 'disguise', 'fine', 'exp', 'spar', 'train', 'plan', 'pamper', 'hide', 'skim'] as const;
+export const BATTLE_FOES = ['target', 'police', 'wild', 'ghost', 'member', 'hero'] as const;
+export const EFFECTS = ['scout', 'count', 'scoutDistrict', 'paper', 'catch', 'laylow', 'disguise', 'fine', 'exp', 'spar', 'train', 'plan', 'pamper', 'hide', 'skim', 'heroShame', 'heroDuel', 'heroFriend', 'heroAmbush', 'heroItem'] as const;
 const PlaySchema = z.object({
   kinds: z.array(z.union([z.enum(TARGET_KINDS), z.literal('any')])).min(1).optional(),
   chance: I.min(0).max(100).optional(),
@@ -173,8 +173,9 @@ export type DistrictState = z.infer<typeof DistrictStateSchema>;
 
 /** A battle an action (or the police) is waiting on. The fight bridge (fight.ts) starts it; fightEnd settles it. */
 export const FieldFightSchema = z.object({
-  why: z.enum(['fail', 'always', 'police', 'looker', 'raid']),
-  foe: z.enum(['target', 'police', 'wild', 'ghost', 'member', 'looker', 'raid']),
+  /** D11: 'hero' a job the Hero stepped into (m11), 'challenge' an encounter's battle, 'heroRaid' the Hero at the HQ, 'stand' the final stand, 'legend' a Heroic Legendary. */
+  why: z.enum(['fail', 'always', 'police', 'looker', 'raid', 'hero', 'challenge', 'heroRaid', 'stand', 'legend']),
+  foe: z.enum(['target', 'police', 'wild', 'ghost', 'member', 'looker', 'raid', 'hero', 'sidekick', 'legend']),
   begun: z.boolean(),
   action: S.nullable(),
   target: S.nullable(),
@@ -283,6 +284,8 @@ const BlockSchema = z.object({
   crew: z.lazy(() => CrewStateSchema).optional(),
   /** D6: the Ledger's books, holding and Notoriety (Part 3 §1-2, Part 9 A14). Optional; `empireOf` (book.ts) fills it. */
   empire: z.lazy(() => EmpireStateSchema).optional(),
+  /** D11: the Hero and the Heroic Legendaries (Part 4 §7-8, Part 9 A8-A9). Optional; `heroOf` (hero.ts) fills it. */
+  hero: z.lazy(() => HeroStateSchema).optional(),
 }).strict();
 export const DominionBlockSchema = z.preprocess(migrateDominion, BlockSchema);
 export type DominionBlock = z.infer<typeof BlockSchema>;
@@ -318,7 +321,13 @@ export type DominionAction =
   | { t: 'gift'; member: string; item: string }
   | { t: 'patron'; patron: string }
   // D6: where a member's district task (Patrol, Hold, Chant...) is done
-  | { t: 'where'; member: string; district: string };
+  | { t: 'where'; member: string; district: string }
+  // D11: the Hero steps into a job (m11: battle, run, Smoke Ball); an encounter card's answer; fighting a Legendary;
+  // after the final stand, leave the Hero in their shame or try to recruit them
+  | { t: 'interrupt'; how: 'fight' | 'run' | 'smoke' }
+  | { t: 'meet'; choice: number }
+  | { t: 'legend'; legend: string }
+  | { t: 'after'; how: 'leave' | 'recruit' };
 
 // ---------- D3 data: crew.json, tasks.json, gruntTypes.json ----------
 
@@ -326,9 +335,9 @@ export const STAT = z.enum(STAT_IDS);
 const Pct = I.min(0).max(100);
 
 export const TaskEffectSchema = z.object({
-  kind: z.enum(['guard', 'money', 'scout', 'recruit', 'train', 'trainMon', 'rest', 'catch', 'steal', 'berries', 'audit', 'welcome', 'interview', 'mentor', 'rally', 'drills', 'coach', 'district']),
+  kind: z.enum(['guard', 'money', 'scout', 'recruit', 'train', 'trainMon', 'rest', 'catch', 'steal', 'berries', 'audit', 'welcome', 'interview', 'mentor', 'rally', 'drills', 'coach', 'district', 'hero']),
   /** D6 district tasks (kind 'district'): what it does in the member's district, and how much (task Lv 1-2, Lv 3+). */
-  does: z.enum(['regard', 'dread', 'cool', 'patrol', 'collect', 'hold', 'line', 'eavesdrop', 'poll', 'face', 'party', 'song', 'peace']).optional(),
+  does: z.enum(['regard', 'dread', 'cool', 'patrol', 'collect', 'hold', 'line', 'eavesdrop', 'poll', 'face', 'party', 'song', 'peace', 'track', 'counter', 'hunt']).optional(),
   n: Range.optional(),
   /** Collect: what the district's Rackets pay this week, % by task level 1-5. */
   collect: z.array(N0).length(5).optional(),
@@ -630,3 +639,127 @@ export const EmpireStateSchema = z.object({
   guarded: z.array(S),
 }).strict();
 export type EmpireState = z.infer<typeof EmpireStateSchema>;
+
+// ---------- D11: the Hero and the Heroic Legendaries (Part 4 §7-8, Part 9 A8-A9; hero.json) ----------
+
+const Pct100 = I.min(0).max(100);
+const HeroDefSchema = z.object({
+  id: S, name: S, look: S, gender: z.enum(['m', 'f']), archetype: S, partner: S.nullable(), place: S,
+  /** Six evolution lines; the stage is picked by level (hero.json team.stageAt). */
+  lines: z.array(z.array(S).min(1).max(3)).length(6),
+}).strict();
+const LegendDefSchema = z.object({ id: S, name: S, home: S.optional(), over: S.optional() }).strict();
+const AllyDefSchema = z.object({ id: S, name: S, look: S, ace: S, champion: z.boolean().optional() }).strict();
+const HeroRegionSchema = z.object({
+  heroes: z.array(S).min(1), playerIs: z.array(S).min(1), standIn: z.record(S, S), legends: z.array(LegendDefSchema).min(1),
+  path: z.array(S).length(9).optional(), allies: z.array(AllyDefSchema).optional(), mentor: S.optional(), parent: S.optional(), sidekick: S.optional(),
+}).strict();
+const EncounterChoiceSchema = z.object({
+  label: S, line: S, regard: I.optional(), dread: I.optional(), heat: I.optional(), harm: N0.optional(), disill: I.optional(), delay: N0.optional(),
+  intel: N0.optional(), funds: I.optional(), item: S.optional(), battle: z.enum(['hero', 'sidekick']).optional(), wrong: z.boolean().optional(),
+  crewMor: I.optional(), tension: z.string().regex(/^D\d+$/).optional(),
+}).strict();
+export const EncounterSchema = z.object({
+  id: z.string().regex(/^O\d{3}$/), title: S, who: S, text: S, lock: z.boolean().optional(), night: z.boolean().optional(), badge: z.boolean().optional(),
+  choices: z.array(EncounterChoiceSchema).min(1).max(3),
+}).strict().refine((e) => !e.lock || e.choices.every((c) => !c.harm && !c.funds && !c.item), { message: 'a locked (minor) row is battle or talk only' });
+export type Encounter = z.infer<typeof EncounterSchema>;
+export type EncounterChoice = z.infer<typeof EncounterChoiceSchema>;
+
+export const HeroFileSchema = z.object({
+  _source: S,
+  regions: z.record(S, HeroRegionSchema),
+  heroes: z.array(HeroDefSchema).min(1),
+  archetypes: z.array(z.object({ id: S, name: S, taunt: S }).strict()).length(8),
+  threat: z.object({
+    weights: z.object({ wanted: z.number().min(0), dread: z.number().min(0), stolen: N0, building: N0, harm: z.number().min(0) }).strict(),
+    stages: z.array(z.object({ min: Pct100, id: z.enum(['ignores', 'foils', 'attacks', 'raids', 'allies']), word: S, does: S }).strict()).length(5),
+    stolenActions: z.array(S),
+  }).strict(),
+  level: z.object({ low: I, high: I, moraleStep: I.min(1) }).strict(),
+  team: z.object({ stageAt: z.tuple([I.min(1), I.min(1)]), sizeByBadges: z.array(I.min(1).max(6)).length(9) }).strict(),
+  badges: z.object({ every: I.min(1), first: I.min(1), perStage: N0, min: I.min(1) }).strict(),
+  reasons: z.array(z.object({ id: S, actions: z.array(S), text: S, wrong: S.nullable() }).strict()).min(1),
+  counters: z.record(S, z.tuple([S, z.array(S).min(1)])),
+  adapt: z.object({ after: I.min(1), max: I.min(1).max(3), line: S }).strict(),
+  disillusion: z.object({
+    puppet: I, bribe: I, good: I, fair: I, wrong: I, hurt: I, fear: I, shadow: I, fearRatio: z.number().min(1), fearMargin: N0, joinMax: Pct100,
+    bribeActions: z.array(S), goodActions: z.array(S),
+  }).strict(),
+  foil: z.object({ smokeChance: Pct100, runHeat: N0, smokeItem: S }).strict(),
+  attacks: z.object({ huntChance: Pct100, hurtDays: I.min(1), free: I.min(1) }).strict(),
+  allies: z.object({ every: I.min(1) }).strict(),
+  heroRaid: z.object({ take: z.number().min(0).max(1), free: N0, every: I.min(1) }).strict(),
+  stand: z.object({ take: I.min(1), control: Pct100, rematch: I.min(1), leaveDread: I, leaveRegard: I, refuseRegard: I, rank: S, joinLoyalty: Pct100, joinLine: S, stats: z.object({ brawn: I.min(1).max(10), nerve: I.min(1).max(10), wits: I.min(1).max(10), charm: I.min(1).max(10), stealth: I.min(1).max(10) }).strict() }).strict(),
+  legends: z.object({ wakeAt: Pct100, strikeEvery: I.min(1), warn: I.min(1), away: I.min(1), levelOver: N0, scatter: I.min(1) }).strict(),
+  encounters: z.object({ chance: Pct100, from: I.min(1), rows: z.array(EncounterSchema).length(20) }).strict(),
+  actions: z.object({
+    shame: z.object({ morale: I.min(1), bigMorale: I.min(1) }).strict(), duel: z.object({ morale: I.min(1) }).strict(),
+    ambush: z.object({ delay: I.min(1), bigDelay: I.min(1) }).strict(), item: z.object({ delay: I.min(1), item: S, bigItem: S }).strict(),
+    friend: z.object({ intel: I.min(1) }).strict(),
+  }).strict(),
+  tasks: z.object({ track: z.array(N0).length(5), counter: z.array(N0).length(5), backfire: N0 }).strict(),
+  lines: z.record(S, S),
+}).strict().superRefine((f, ctx) => {
+  const ids = new Set(f.heroes.map((h) => h.id));
+  const arch = new Set(f.archetypes.map((a) => a.id));
+  for (const h of f.heroes) if (!arch.has(h.archetype)) ctx.addIssue({ code: 'custom', message: `unknown archetype ${h.archetype}` });
+  for (const [rid, r] of Object.entries(f.regions)) {
+    for (const h of [...r.heroes, ...Object.values(r.standIn)]) if (!ids.has(h)) ctx.addIssue({ code: 'custom', message: `${rid}: unknown hero ${h}` });
+    for (const p of r.playerIs) if (!r.standIn[p]) ctx.addIssue({ code: 'custom', message: `${rid}: ${p} has no stand-in` });
+    for (const h of r.heroes) if (!r.standIn[h]) ctx.addIssue({ code: 'custom', message: `${rid}: ${h} has no stand-in` });
+  }
+  for (let i = 1; i < f.threat.stages.length; i++) if (f.threat.stages[i]!.min <= f.threat.stages[i - 1]!.min) ctx.addIssue({ code: 'custom', message: 'Threat stages go up' });
+});
+export type HeroFile = z.infer<typeof HeroFileSchema>;
+export type HeroDef = z.infer<typeof HeroDefSchema>;
+
+/** One Legendary's state this region: never seen, out (seen; strikes weekly), or driven off until a day. */
+export const LegendStateSchema = z.object({ seen: z.boolean(), next: N0, away: N0, beaten: N0 }).strict();
+
+export const HeroStateSchema = z.object({
+  /** The hero.json id playing the Hero this region (Q5: your rival when you're that region's Hero). */
+  id: S,
+  /** Threat 0-100 (recomputed each night); `harm` is what the Boss did in their path, on top of D2's Attack count. */
+  threat: Pct100,
+  harm: N0,
+  stolen: N0,
+  /** Highest stage reached (its line is read once). */
+  stage: I.min(0).max(4),
+  badges: I.min(0).max(8),
+  /** The day the next badge falls due. */
+  badgeDay: I.min(1),
+  /** Days lost (Lie, ambush, a trap): the next badge comes this much later. */
+  delay: N0,
+  /** Shame and duels knock the Hero's nerve: the level offset drops a step per `moraleStep` below 100. */
+  morale: Pct100,
+  met: z.boolean(),
+  /** The first thing they saw you do (A9), reason id; and whether it turned out wrong (once). */
+  reason: S.nullable(),
+  wrong: z.boolean(),
+  /** Hidden track (A8): never shown. */
+  disill: Pct100,
+  /** Hero battles fought (A9: counters start after `adapt.after`) and the Boss's types they've seen, by count. */
+  seen: N0,
+  types: z.record(S, N0),
+  /** Counter types they've caught for (newest last) and whether the Morning Report said so. */
+  counters: z.array(S),
+  /** Intel: the day until which the Hero's route is known (Watch, Track the Hero). */
+  intel: N0,
+  /** Hunt the Hero Lv 5: they must duel, whatever the Threat. */
+  forced: z.boolean(),
+  /** This week's foil: the week number and the day it falls; `foiled` once it happened. */
+  foilWeek: N0, foilDay: N0, foiled: z.boolean(),
+  /** Weekly moves at Attacks+ (free from stores), Raids (a Racket), Allies (an ally, the HQ raid): the last week done. */
+  weekDone: z.record(S, N0),
+  allies: z.array(S),
+  /** The encounter card waiting (O166-O185) and the rows already used this run. */
+  meet: z.object({ id: S, day: I.min(1), district: S }).strict().nullable(),
+  used: z.array(S),
+  /** This week's line on the Hero file ("This week: ..."). */
+  week: z.array(S),
+  /** The last stand (Part 4 §7.3): due on a day; won and waiting for a choice; settled. */
+  stand: z.object({ state: z.enum(['due', 'choose', 'done']), day: I.min(1), lost: N0, outcome: z.enum(['leave', 'joined', 'refused']).nullable() }).strict().nullable(),
+  legends: z.record(S, LegendStateSchema),
+}).strict();
+export type HeroState = z.infer<typeof HeroStateSchema>;

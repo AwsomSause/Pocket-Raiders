@@ -1,0 +1,13 @@
+/* Dominion slice D11: the round-4 rules the Hero screens use that dominion.css (the round-3 port) doesn't have yet:
+   mockup m11 "The Hero shows up" (.crack, .vs4, .hero4), copied from plans/evil-mode-rework/mockups-v4/index.html as
+   tools/dominion/port-mockup-css.py scopes them. D26 re-ports dominion.css from round 4; these rules then come from there
+   and this file can go. */
+#rx .dom .crack{position:absolute;inset:0;z-index:18;pointer-events:none}
+#rx .dom .vs4{position:absolute;z-index:16;font:700 84px var(--ui);color:#fff;transform:rotate(-8deg);text-shadow:0 0 0 #000,4px 4px 0 #ff4d63,8px 8px 0 #12071a,0 0 40px rgba(255,255,255,.7)}
+#rx .dom .hero4{position:absolute;z-index:17;font:700 40px var(--ui);letter-spacing:.08em;color:#ff4d63;text-shadow:0 3px 0 #12071a,0 0 24px #ff4d63}
+#rx .dom .hero4 small{display:block;font:600 15px var(--ui);letter-spacing:.2em;color:#ffd9de}
+#rx .dom .ch.dim{opacity:.55;filter:saturate(.4)}
+@media (prefers-reduced-motion:no-preference){
+#rx .dom .vs4{animation:dm-vs4 2.4s var(--now,0s) ease-in-out infinite}
+@keyframes dm-vs4{50%{transform:rotate(-8deg) scale(1.08)}}
+}

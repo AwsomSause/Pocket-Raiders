@@ -11,6 +11,7 @@ import type { PokemonInstance, RunState } from '../state';
 import { pickThemeSpecies } from '../themes';
 import { DOMINION_DATA } from './data';
 import { districtDef, foeOf, targetDef } from './field';
+import { heroTeam, sawTypes } from './hero';
 
 /** Starts `field.fight` and marks it begun. Returns null when there's nothing to start or nobody can fight. */
 export function beginDominionFight(content: Content, current: RunState): RunState | null {
@@ -30,7 +31,14 @@ export function beginDominionFight(content: Content, current: RunState): RunStat
   const make = (species: string, level: number): PokemonInstance | null => (content.species.has(species) ? newMon(content, run, species, level, 'e') : null);
   let team: PokemonInstance[] = [];
   let trainer: { classId: string; name: string; leaderId: null } | null = null;
-  if (fight.foe === 'wild' || fight.foe === 'ghost') {
+  if (fight.foe === 'hero' || fight.foe === 'sidekick' || fight.foe === 'legend') {
+    // D11: the Hero (or their sidekick) as a trainer; a Heroic Legendary as a wild battle that can't be caught.
+    const t = heroTeam(b, run, fight.foe, fight.why);
+    team = t.team.map((x) => make(x.species, x.level)).filter((m): m is PokemonInstance => !!m);
+    trainer = t.cls ? { classId: t.cls, name: t.name, leaderId: null } : null;
+    if (fight.foe === 'hero') sawTypes(b, run.party.flatMap((m) => content.species.get(m.speciesId)?.types ?? []));
+  } else if (fight.foe === 'wild' || fight.foe === 'ghost') {
+
     const theme = content.themes.get(district.wild);
     const species = fight.foe === 'ghost' ? DOMINION_DATA.field.foes.ghost[rng.int(0, DOMINION_DATA.field.foes.ghost.length - 1)]! : theme ? pickThemeSpecies(content, theme, rng, undefined, DOMINION_DATA.field.region, undefined, foe.level) : 'rattata';
     team = [make(species, foe.level)].filter((m): m is PokemonInstance => !!m);

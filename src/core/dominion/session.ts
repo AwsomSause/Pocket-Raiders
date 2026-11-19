@@ -12,9 +12,13 @@ import { answer, eveningTalk } from './talk';
 import { act, buy, settle } from './field';
 import { beginDominionFight } from './fight';
 import { DOMINION_DATA } from './data';
+import { fill } from './worldTurn';
 import { DominionBlockSchema, type DominionAction, type DominionBlock, type DominionSetup } from './schema';
 import { newBlock, typesProblem } from './start';
 import { afterStep, lineFor, weekSum } from './empire';
+import { afterStand, answerMeet, ensureHero, heroMember, heroTeam, startLegend } from './hero';
+import { escapeHero } from './field';
+import { hashSeed, Rng } from '../rng';
 
 export const DOMINION_MODE_ID = 'dominion';
 export const isDominionRun = (run: RunState | null | undefined): boolean => run?.rules.modeId === DOMINION_MODE_ID;
@@ -45,7 +49,7 @@ export function startInRun(content: Content, run: RunState, setup: DominionSetup
   const problem = typesProblem(setup.types);
   if (problem) return { run, problem };
   let out = bossTeam(content, structuredClone(run));
-  const block = DominionBlockSchema.parse(withCrew(newBlock(content, out, setup)));
+  const block = DominionBlockSchema.parse(ensureHero(withCrew(newBlock(content, out, setup)), run.archetypeId, run.seed));
   out = { ...withBlock(out, block), inventory: { ...DOMINION_DATA.start.start.inventory } };
   return { run: out, problem: null };
 }
@@ -54,7 +58,10 @@ export function startInRun(content: Content, run: RunState, setup: DominionSetup
  * One clock step on the run. D6: the money it moved goes on the Ledger's line for it (the World Turn books its own),
  * the district the Boss worked in counts as this week's visit, and a new Notoriety step is announced.
  */
-export function stepInRun(content: Content, run: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean } {
+export function stepInRun(content: Content, run0: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean } {
+  // D11: a save from before the Hero gets theirs on the first step (picked by the Boss's trainer, Q5).
+  const b0 = run0.expansion?.dominion;
+  const run = b0 && !b0.hero ? withBlock(run0, ensureHero(b0, run0.archetypeId, run0.seed)) : run0;
   const before = run.expansion?.dominion;
   const out = stepInner(content, run, action);
   if (!out.ok || !before) return out;
@@ -80,6 +87,8 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
   if (!block) return { ok: false, block: block as never, notice: null, heal: false, run };
   const crewOut = crewInRun(content, run, action);
   if (crewOut) return crewOut;
+  const heroOut = heroInRun(content, run, action);
+  if (heroOut) return heroOut;
   if (action.t === 'act') {
     // D2: a Boss action (field.ts). A Pokémon lifted in a Ball (Thieve, a big success) joins the team or the box.
     const work = structuredClone(run);
@@ -139,6 +148,62 @@ function crewInRun(content: Content, run: RunState, action: DominionAction): (St
         if (item) next = gift(next, out.gift, item).run;
       }
       return done({ ok: true, notice: out.notice, run: next });
+    }
+    default:
+      return null;
+  }
+}
+
+/** D11: the Hero's choices (m11 interrupt, encounter cards, a Legendary fight, after the final stand). */
+function heroInRun(content: Content, run: RunState, action: DominionAction): (StepOut & { run: RunState; fight?: boolean }) | null {
+  const block = run.expansion!.dominion!;
+  const H = DOMINION_DATA.hero;
+  const res = (ok: boolean, next: RunState, notice: string | null, fight = false): StepOut & { run: RunState; fight?: boolean } => {
+    if (!ok) return { ok: false, block, notice, heal: false, run };
+    const out = withBlock(next, DominionBlockSchema.parse(next.expansion!.dominion!));
+    return { ok: true, block: out.expansion!.dominion!, notice, heal: false, run: out, fight };
+  };
+  switch (action.t) {
+    case 'interrupt': {
+      const f = block.field.fight;
+      if (!f || f.why !== 'hero' || f.begun) return res(false, run, null);
+      if (action.how === 'fight') return res(true, run, null, true);
+      const out = structuredClone(run);
+      const b = out.expansion!.dominion!;
+      const hero = H.heroes.find((h) => h.id === b.hero?.id)?.name ?? 'The Hero';
+      if (action.how === 'run') return res(true, out, escapeHero(content, b, out, false, H.foil.runHeat, fill(H.lines.run!, { heat: H.foil.runHeat })).join(' '));
+      const item = H.foil.smokeItem;
+      if ((out.inventory[item] ?? 0) < 1) return res(false, run, H.lines.noSmoke!);
+      out.inventory[item] = (out.inventory[item] ?? 0) - 1;
+      if (!out.inventory[item]) delete out.inventory[item];
+      const clean = new Rng(hashSeed(`${run.seed}::dominion-hero-smoke::${b.field.rolls}`)).int(1, 100) <= H.foil.smokeChance;
+      if (clean) return res(true, out, escapeHero(content, b, out, true, 0, H.lines.smokeClean!).join(' '));
+      return res(true, out, fill(H.lines.smokeFail!, { hero }), true);
+    }
+    case 'meet': {
+      const r = answerMeet(block, action.choice);
+      if (!r.ok) return res(false, run, r.notice);
+      const out = withBlock(structuredClone(run), r.block);
+      if (r.item) out.inventory[r.item] = (out.inventory[r.item] ?? 0) + 1;
+      return res(true, out, r.notice, r.fight);
+    }
+    case 'legend': {
+      const r = startLegend(block, action.legend);
+      return res(r.ok, r.ok ? withBlock(run, r.block) : run, r.notice, r.ok);
+    }
+    case 'after': {
+      const r = afterStand(block, action.how, run.seed);
+      if (!r.ok) return res(false, run, r.notice);
+      let out = withBlock(structuredClone(run), withCrew(r.block));
+      if (r.joined) {
+        // They join as an Executive (Part 8) and bring their own six.
+        const b = out.expansion!.dominion!;
+        const m = heroMember(b, `m${b.crew!.next++}`);
+        m.team = heroTeam(b, out, 'hero', 'stand').team.filter((x) => content.species.has(x.species)).slice(0, 6).map((x) => newMon(content, out, x.species, x.level, 'p'));
+        b.members.push(m);
+        out = withBlock(out, withCrew(b));
+      }
+      return res(true, out, r.notice);
     }
     default:
       return null;

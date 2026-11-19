@@ -235,7 +235,41 @@ export function foeOf(b: DominionBlock, run: Pick<RunState, 'party'>, kind: Fiel
       const f = target?.foe ?? district.targets[0]!.foe;
       return { name: f.name, species: f.species[0]!, level: foeLevel(b, run, f.offset), wild: false };
     }
+    case 'hero':
+    case 'sidekick':
+    case 'legend':
+      return HOOKS.foe?.(b, run, kind) ?? { name: 'The Hero', species: '', level: foeLevel(b, run, 0), wild: false };
   }
+}
+
+// ---------- D11 hooks (hero.ts registers them at import, so this file doesn't import it) ----------
+
+/** What one effect does after the action worked (lines already holds the win line); may change block and run. */
+type EffectHook = (b: DominionBlock, run: RunState, x: { district: District; target: Target | null; big: boolean }, lines: string[]) => void;
+/** After any settled fight (the fight as it was, the outcome). */
+type FightHook = (b: DominionBlock, run: RunState, fight: FieldFight, outcome: 'win' | 'lose' | 'fled') => string[];
+/** Before an action's roll lands: true when the Hero steps in (Part 4 §7.2 Foils; mockup m11). */
+type InterruptHook = (b: DominionBlock, def: ActionDef, district: District) => boolean;
+/** After an action worked (the Hero's reason, what they saw). */
+type ActedHook = (b: DominionBlock, def: ActionDef, district: District, won: boolean) => void;
+const HOOKS: {
+  effects: Partial<Record<string, EffectHook>>; fights: FightHook[]; interrupt: InterruptHook | null; acted: ActedHook[];
+  foe: ((b: DominionBlock, run: Pick<RunState, 'party'>, kind: 'hero' | 'sidekick' | 'legend') => Foe) | null;
+} = { effects: {}, fights: [], interrupt: null, acted: [], foe: null };
+export function addEffectHook(effect: string, h: EffectHook): void {
+  HOOKS.effects[effect] = h;
+}
+export function addFightHook(h: FightHook): void {
+  HOOKS.fights.push(h);
+}
+export function setInterruptHook(h: InterruptHook): void {
+  HOOKS.interrupt = h;
+}
+export function addActedHook(h: ActedHook): void {
+  HOOKS.acted.push(h);
+}
+export function setHeroFoe(h: NonNullable<typeof HOOKS.foe>): void {
+  HOOKS.foe = h;
 }
 
 const canBattle = (run: Pick<RunState, 'party'>): boolean => run.party.some((m) => m.hp > 0);
@@ -349,7 +383,7 @@ function blockedWhy(b: DominionBlock, run: Pick<RunState, 'party'>, c: Card, bri
   if (play.effect === 'fine' && !hottest(f)) return Ln.noFine!;
   if (play.effect === 'skim' && !c.pay) return Ln.noRacket!;
   for (const gate of GATES) {
-    const why = gate(b, def);
+    const why = gate(b, def, c.district.id);
     if (why) return why;
   }
   if (c.money && b.funds < c.money) return fill(Ln.noMoney!, { cost: c.money });
@@ -360,7 +394,7 @@ function blockedWhy(b: DominionBlock, run: Pick<RunState, 'party'>, c: Card, bri
 }
 
 /** D6: later rules that can close an action (Notoriety, a press contact), checked after the Card's own reasons. */
-type Gate = (b: DominionBlock, def: ActionDef) => string | null;
+type Gate = (b: DominionBlock, def: ActionDef, district: string) => string | null;
 const GATES: Gate[] = [];
 export function addActionGate(g: Gate): void {
   GATES.push(g);
@@ -504,8 +538,10 @@ function succeed(content: Content | null, b: DominionBlock, run: RunState, x: Ct
       break;
     }
     default:
+      if (play.effect) HOOKS.effects[play.effect]?.(b, run, { district, target, big: x.big }, lines);
       break;
   }
+  for (const h of HOOKS.acted) h(b, def, district, true);
   return { lines, mon };
 }
 
@@ -583,11 +619,18 @@ export function act(content: Content | null, run: RunState, a: { action: string;
     syncHeat(b);
     return { ok: true, block: b, notice: null, fight: true, mon: null };
   };
+  // D11: the Hero steps in (the roll is kept; m11 offers battle, run or a Smoke Ball). The scene shows the page first.
+  if (c.def.slot !== 'evening' && c.play!.battle?.foe !== 'hero' && HOOKS.interrupt?.(b, c.def, c.district)) {
+    f.fight = { why: 'hero', foe: 'hero', begun: false, action: c.def.id, target: c.target?.id ?? null, district: c.district.id, pass, big, wager, racket: null };
+    syncHeat(b);
+    return { ok: true, block: b, notice: null, fight: false, mon: null };
+  }
   if (c.battle?.on === 'always') return wait('always', c.play!.battle!.foe);
   if (!pass) {
     if (c.battle && rng.int(1, 100) <= c.battle.chance && canBattle(run)) return wait('fail', c.play!.battle!.foe);
     if (c.police && rng.int(1, 100) <= c.police && canBattle(run)) return wait('police', 'police');
     const lines = [...fail(b, x), ...grow(b, c.def, c.play!, false, false)];
+    for (const h of HOOKS.acted) h(b, c.def, c.district, false);
     syncHeat(b);
     return { ok: true, block: b, notice: lines.join(' '), fight: false, mon: null };
   }
@@ -602,6 +645,35 @@ export function act(content: Content | null, run: RunState, a: { action: string;
  * Mutates `b` and `run` (the battle rules' copy). Returns the lines to read out.
  */
 export function settle(content: Content | null, b: DominionBlock, run: RunState, outcome: 'win' | 'lose' | 'fled', caught: string | null): string[] {
+  const fight = b.field.fight;
+  if (!fight) return [];
+  const lines = settleFight(content, b, run, outcome, caught);
+  for (const h of HOOKS.fights) lines.push(...h(b, run, fight, outcome));
+  syncHeat(b);
+  return lines;
+}
+
+/**
+ * D11: the Hero stepped into a job and the Boss got away without a battle: a clean Smoke Ball escape (the job lands
+ * as its roll said) or running (the job is lost, Heat in the district). Mutates `b` and `run`.
+ */
+export function escapeHero(content: Content | null, b: DominionBlock, run: RunState, clean: boolean, runHeat: number, line: string): string[] {
+  const fight = b.field.fight;
+  if (!fight || fight.why !== 'hero' || fight.begun) return [];
+  const got = fight.action ? ctxOf(b, run, fight.action, fight.target, fight.district, []) : null;
+  b.field.fight = null;
+  const lines = [line];
+  if (got && clean) {
+    const x: Ctx = { ...got.x, card: got.c, pass: fight.pass, big: fight.big, wager: fight.wager };
+    const rng = rngFor(run.seed, b.field);
+    if (fight.pass) lines.push(...succeed(content, b, run, x, rng).lines, ...grow(b, x.def, x.play, true, fight.big));
+    else lines.push(...fail(b, x), ...grow(b, x.def, x.play, false, false));
+  } else addHeat(b, fight.district, runHeat);
+  syncHeat(b);
+  return lines;
+}
+
+function settleFight(content: Content | null, b: DominionBlock, run: RunState, outcome: 'win' | 'lose' | 'fled', caught: string | null): string[] {
   const f = b.field, fight = f.fight;
   if (!fight) return [];
   f.fight = null;
@@ -653,6 +725,10 @@ export function settle(content: Content | null, b: DominionBlock, run: RunState,
     lines.push(...grow(b, x.def, x.play, false, false));
   } else if (outcome === 'fled') {
     lines.push(L().fled!);
+  } else if (fight.why === 'hero') {
+    // The Hero stepped in: win and the job goes on as its roll said; lose and it's off.
+    if (won && fight.pass) lines.push(...succeed(content, b, run, x, rng).lines, ...grow(b, x.def, x.play, true, fight.big));
+    else lines.push(...fail(b, x), ...grow(b, x.def, x.play, false, false));
   } else if (won) {
     // 'always': the fight was the action (its roll gave the bonus); 'fail': winning it turns the failure round.
     const s = succeed(content, b, run, { ...x, big: fight.why === 'always' ? fight.big : false }, rng);

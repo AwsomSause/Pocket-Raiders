@@ -62,7 +62,7 @@ describe('DOMINION D6: the data', () => {
   it('plays the ten Boss actions D6 opens; Gym Takeover waits for Growth (D10)', () => {
     const d6 = ['skim-the-till', 'marry-in', 'street-theater', 'spray-the-wall', 'leak-a-story', 'befriend-the-mayor', 'sponsor-a-trainer', 'silence-a-reporter', 'cooperate-with-jenny', 'secret-meeting'];
     for (const id of d6) expect(actionStatus(actionDef(id)!).play, id).toBe(true);
-    expect(DOMINION_DATA.actions.actions.filter((a) => actionStatus(a).play)).toHaveLength(42);
+    expect(DOMINION_DATA.actions.actions.filter((a) => actionStatus(a).play)).toHaveLength(47); // + the five Hero actions (D11)
     expect(DOMINION_DATA.actions.actions.filter((a) => actionStatus(a).slice === 'D6')).toHaveLength(0);
     expect(actionStatus(actionDef('gym-takeover')!).slice).toBe('D10');
   });

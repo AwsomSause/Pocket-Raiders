@@ -13,6 +13,11 @@ const MODE = 'dominion';
 /** True while a Dominion run's battle is one an action is waiting on. */
 export const dominionFightOn = (run: RunState): boolean => run.rules.modeId === MODE && !!run.expansion?.dominion?.field.fight?.begun && !!run.battle;
 
+/** D11: a Heroic Legendary defending the region can't be caught (Part 4 §8). Pure, no imports (run.ts calls it). */
+export function dominionCatchBlock(run: RunState): string | null {
+  return dominionFightOn(run) && run.expansion?.dominion?.field.fight?.why === 'legend' ? DOMINION_DATA.hero.lines.legendNoCatch ?? 'It won\'t be caught.' : null;
+}
+
 /** Settles the fight: a caught Pokémon joins the team (or the box), the battle's gone, the run's back on the map. Mutates `run`. */
 export function endDominionFight(content: Content, run: RunState, outcome: 'win' | 'lose' | 'caught' | 'fled'): string[] {
   const block = structuredClone(run.expansion!.dominion!);

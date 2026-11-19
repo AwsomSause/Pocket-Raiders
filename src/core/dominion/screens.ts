@@ -93,6 +93,8 @@ export interface HqModel {
   actions: number;
   member: { title: string; name: string; rank: string; look: string; untrained: boolean; skills: [string, string][] };
   steps: { label: string; done: boolean }[] | null;
+  /** D11: the Hero's file chip (H). */
+  hero: { threat: number; word: string } | null;
   says: string;
   /** The one button for moving the clock on, with its key hint. */
   next: { label: string; hint: string };
@@ -113,7 +115,7 @@ export function hqModel(b: DominionBlock): HqModel {
   const door = b.field.fight && !b.field.fight.begun ? b.field.fight.why : null;
   const next = b.phase === 'evening' ? { label: 'Night falls', hint: 'N' }
     : b.phase === 'night' ? (b.nightActions < 1 ? { label: 'Turn in', hint: 'Enter' } : { label: 'Rest', hint: 'Enter' })
-    : b.phase === 'morning' && door ? { label: door === 'looker' ? 'Face Looker' : door === 'raid' ? 'Face the raid' : 'Fight', hint: 'Enter' }
+    : b.phase === 'morning' && door ? { label: door === 'looker' ? 'Face Looker' : door === 'raid' ? 'Face the raid' : door === 'heroRaid' || door === 'stand' ? 'Face the Hero' : 'Fight', hint: 'Enter' }
     : b.phase === 'morning' ? { label: 'Start the day', hint: 'Enter' }
     : { label: `End Day${b.actions ? ` (+₽${b.actions * d.clock.oddJobPay})` : ''}`, hint: 'E' };
   const lines = m.rank === 'grunt' ? d.says.grunt : d.says.admin;
@@ -133,6 +135,7 @@ export function hqModel(b: DominionBlock): HqModel {
       untrained: m.untrained,
       skills: skills(m),
     },
+    hero: b.hero ? { threat: b.hero.threat, word: [...DOMINION_DATA.hero.threat.stages].reverse().find((x) => b.hero!.threat >= x.min)?.word ?? '' } : null,
     steps: stepsShown(b) ? d.firstSteps.map((s) => ({ label: s.label, done: b.stepsDone.includes(s.id) })) : null,
     says: lines[(b.day - 1) % lines.length]!,
     next,

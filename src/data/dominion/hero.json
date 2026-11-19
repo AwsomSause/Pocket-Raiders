@@ -1,0 +1,2034 @@
+{
+ "_source": "Evil Mode rework (DOMINION) slice D11, the Hero and the Heroic Legendaries. Design: /mnt/project-files/plans/evil-mode-rework/ Part 4 sections 7-8 (the Hero, Threat stages, the final stand; Heroic Legendaries), Part 9 A8-A9 (the Hero's reason, adapting, Disillusion), Part 0 section 6.1 Q1 (grown-up Heroes) and Q5 (your rival plays the Hero), lists/outside-interactions.md section G (O166-O185, all twenty). Teams, allies, counters, encounter text and every number are this slice's own writing; none are playtested.",
+ "regions": {
+  "kanto": {
+   "heroes": [
+    "red"
+   ],
+   "playerIs": [
+    "red"
+   ],
+   "standIn": {
+    "red": "blue"
+   },
+   "legends": [
+    {
+     "id": "moltres",
+     "name": "Moltres",
+     "home": "cinnabar",
+     "over": "Cinnabar"
+    },
+    {
+     "id": "zapdos",
+     "name": "Zapdos",
+     "home": "cerulean",
+     "over": "the Power Plant"
+    },
+    {
+     "id": "articuno",
+     "name": "Articuno",
+     "home": "fuchsia",
+     "over": "the Seafoam Islands"
+    }
+   ],
+   "path": [
+    "pallet",
+    "pewter",
+    "cerulean",
+    "vermilion",
+    "celadon",
+    "fuchsia",
+    "saffron",
+    "cinnabar",
+    "viridian"
+   ],
+   "allies": [
+    {
+     "id": "brock",
+     "name": "Brock",
+     "look": "bosses/brock.png",
+     "ace": "onix"
+    },
+    {
+     "id": "misty",
+     "name": "Misty",
+     "look": "bosses/misty.png",
+     "ace": "starmie"
+    },
+    {
+     "id": "erika",
+     "name": "Erika",
+     "look": "bosses/erika.png",
+     "ace": "vileplume"
+    },
+    {
+     "id": "ltsurge",
+     "name": "Lt. Surge",
+     "look": "bosses/ltsurge.png",
+     "ace": "raichu"
+    },
+    {
+     "id": "koga",
+     "name": "Koga",
+     "look": "bosses/koga.png",
+     "ace": "weezing"
+    },
+    {
+     "id": "blaine",
+     "name": "Blaine",
+     "look": "bosses/blaine.png",
+     "ace": "arcanine"
+    },
+    {
+     "id": "lance",
+     "name": "Lance",
+     "look": "bosses/lance.png",
+     "ace": "dragonite",
+     "champion": true
+    }
+   ],
+   "mentor": "Professor Oak",
+   "parent": "The Hero's mother",
+   "sidekick": "A kid from Pallet Town"
+  },
+  "johto": {
+   "heroes": [
+    "ethan"
+   ],
+   "playerIs": [
+    "ethan"
+   ],
+   "standIn": {
+    "ethan": "silver"
+   },
+   "legends": [
+    {
+     "id": "suicune",
+     "name": "Suicune"
+    },
+    {
+     "id": "raikou",
+     "name": "Raikou"
+    },
+    {
+     "id": "entei",
+     "name": "Entei"
+    }
+   ]
+  },
+  "hoenn": {
+   "heroes": [
+    "may",
+    "brendan"
+   ],
+   "playerIs": [
+    "may",
+    "brendan"
+   ],
+   "standIn": {
+    "may": "brendan",
+    "brendan": "may"
+   },
+   "legends": [
+    {
+     "id": "latios",
+     "name": "Latios"
+    },
+    {
+     "id": "latias",
+     "name": "Latias"
+    }
+   ]
+  },
+  "sinnoh": {
+   "heroes": [
+    "lucas",
+    "dawn"
+   ],
+   "playerIs": [
+    "lucas",
+    "dawn"
+   ],
+   "standIn": {
+    "lucas": "barry",
+    "dawn": "barry"
+   },
+   "legends": [
+    {
+     "id": "uxie",
+     "name": "Uxie"
+    },
+    {
+     "id": "mesprit",
+     "name": "Mesprit"
+    },
+    {
+     "id": "azelf",
+     "name": "Azelf"
+    }
+   ]
+  },
+  "unova": {
+   "heroes": [
+    "hilbert"
+   ],
+   "playerIs": [
+    "hilbert",
+    "hilda"
+   ],
+   "standIn": {
+    "hilbert": "cheren",
+    "hilda": "cheren"
+   },
+   "legends": [
+    {
+     "id": "cobalion",
+     "name": "Cobalion"
+    },
+    {
+     "id": "terrakion",
+     "name": "Terrakion"
+    },
+    {
+     "id": "virizion",
+     "name": "Virizion"
+    }
+   ]
+  },
+  "kalos": {
+   "heroes": [
+    "calem",
+    "serena"
+   ],
+   "playerIs": [
+    "calem",
+    "serena"
+   ],
+   "standIn": {
+    "calem": "shauna",
+    "serena": "shauna"
+   },
+   "legends": [
+    {
+     "id": "xerneas",
+     "name": "Xerneas"
+    },
+    {
+     "id": "yveltal",
+     "name": "Yveltal"
+    }
+   ]
+  },
+  "alola": {
+   "heroes": [
+    "elio",
+    "selene"
+   ],
+   "playerIs": [
+    "elio",
+    "selene"
+   ],
+   "standIn": {
+    "elio": "hau",
+    "selene": "hau"
+   },
+   "legends": [
+    {
+     "id": "tapu-koko",
+     "name": "Tapu Koko"
+    },
+    {
+     "id": "tapu-lele",
+     "name": "Tapu Lele"
+    },
+    {
+     "id": "tapu-bulu",
+     "name": "Tapu Bulu"
+    },
+    {
+     "id": "tapu-fini",
+     "name": "Tapu Fini"
+    }
+   ]
+  },
+  "galar": {
+   "heroes": [
+    "victor",
+    "gloria"
+   ],
+   "playerIs": [
+    "victor",
+    "gloria"
+   ],
+   "standIn": {
+    "victor": "hop",
+    "gloria": "hop"
+   },
+   "legends": [
+    {
+     "id": "zacian",
+     "name": "Zacian"
+    },
+    {
+     "id": "zamazenta",
+     "name": "Zamazenta"
+    }
+   ]
+  },
+  "paldea": {
+   "heroes": [
+    "florian",
+    "juliana"
+   ],
+   "playerIs": [
+    "florian",
+    "juliana"
+   ],
+   "standIn": {
+    "florian": "nemona",
+    "juliana": "nemona"
+   },
+   "legends": [
+    {
+     "id": "koraidon",
+     "name": "Koraidon"
+    },
+    {
+     "id": "miraidon",
+     "name": "Miraidon"
+    }
+   ]
+  }
+ },
+ "heroes": [
+  {
+   "id": "red",
+   "name": "Red",
+   "look": "bosses/red.png",
+   "gender": "m",
+   "archetype": "prodigy",
+   "partner": null,
+   "place": "Mt. Silver",
+   "lines": [
+    [
+     "pikachu"
+    ],
+    [
+     "bulbasaur",
+     "ivysaur",
+     "venusaur"
+    ],
+    [
+     "charmander",
+     "charmeleon",
+     "charizard"
+    ],
+    [
+     "squirtle",
+     "wartortle",
+     "blastoise"
+    ],
+    [
+     "snorlax"
+    ],
+    [
+     "lapras"
+    ]
+   ]
+  },
+  {
+   "id": "blue",
+   "name": "Blue",
+   "look": "bosses/blue.png",
+   "gender": "m",
+   "archetype": "bitter",
+   "partner": null,
+   "place": "the Indigo Plateau",
+   "lines": [
+    [
+     "pidgey",
+     "pidgeotto",
+     "pidgeot"
+    ],
+    [
+     "abra",
+     "kadabra",
+     "alakazam"
+    ],
+    [
+     "rhyhorn",
+     "rhydon"
+    ],
+    [
+     "exeggcute",
+     "exeggutor"
+    ],
+    [
+     "growlithe",
+     "arcanine"
+    ],
+    [
+     "eevee",
+     "jolteon"
+    ]
+   ]
+  },
+  {
+   "id": "ethan",
+   "name": "Ethan",
+   "look": "bosses/ethan.png",
+   "gender": "m",
+   "archetype": "chaser",
+   "partner": "ho-oh",
+   "place": "the Bell Tower",
+   "lines": [
+    [
+     "cyndaquil",
+     "quilava",
+     "typhlosion"
+    ],
+    [
+     "togepi",
+     "togetic"
+    ],
+    [
+     "sentret",
+     "furret"
+    ],
+    [
+     "mareep",
+     "flaaffy",
+     "ampharos"
+    ],
+    [
+     "sudowoodo"
+    ],
+    [
+     "heracross"
+    ]
+   ]
+  },
+  {
+   "id": "silver",
+   "name": "Silver",
+   "look": "bosses/silver.png",
+   "gender": "m",
+   "archetype": "bitter",
+   "partner": "lugia",
+   "place": "the Whirl Islands",
+   "lines": [
+    [
+     "totodile",
+     "croconaw",
+     "feraligatr"
+    ],
+    [
+     "zubat",
+     "golbat",
+     "crobat"
+    ],
+    [
+     "gastly",
+     "haunter",
+     "gengar"
+    ],
+    [
+     "sneasel"
+    ],
+    [
+     "magnemite",
+     "magneton"
+    ],
+    [
+     "abra",
+     "kadabra",
+     "alakazam"
+    ]
+   ]
+  },
+  {
+   "id": "may",
+   "name": "May",
+   "look": "bosses/may-rs.png",
+   "gender": "f",
+   "archetype": "enthusiast",
+   "partner": "latias",
+   "place": "Sky Pillar",
+   "lines": [
+    [
+     "torchic",
+     "combusken",
+     "blaziken"
+    ],
+    [
+     "wingull",
+     "pelipper"
+    ],
+    [
+     "shroomish",
+     "breloom"
+    ],
+    [
+     "skitty",
+     "delcatty"
+    ],
+    [
+     "numel",
+     "camerupt"
+    ],
+    [
+     "swablu",
+     "altaria"
+    ]
+   ]
+  },
+  {
+   "id": "brendan",
+   "name": "Brendan",
+   "look": "bosses/brendan-rs.png",
+   "gender": "m",
+   "archetype": "strategist",
+   "partner": "latios",
+   "place": "Sky Pillar",
+   "lines": [
+    [
+     "mudkip",
+     "marshtomp",
+     "swampert"
+    ],
+    [
+     "taillow",
+     "swellow"
+    ],
+    [
+     "lotad",
+     "lombre",
+     "ludicolo"
+    ],
+    [
+     "aron",
+     "lairon",
+     "aggron"
+    ],
+    [
+     "ralts",
+     "kirlia",
+     "gardevoir"
+    ],
+    [
+     "trapinch",
+     "vibrava",
+     "flygon"
+    ]
+   ]
+  },
+  {
+   "id": "lucas",
+   "name": "Lucas",
+   "look": "bosses/lucas.png",
+   "gender": "m",
+   "archetype": "strategist",
+   "partner": "dialga",
+   "place": "Spear Pillar",
+   "lines": [
+    [
+     "turtwig",
+     "grotle",
+     "torterra"
+    ],
+    [
+     "starly",
+     "staravia",
+     "staraptor"
+    ],
+    [
+     "shinx",
+     "luxio",
+     "luxray"
+    ],
+    [
+     "bidoof",
+     "bibarel"
+    ],
+    [
+     "gible",
+     "gabite",
+     "garchomp"
+    ],
+    [
+     "riolu",
+     "lucario"
+    ]
+   ]
+  },
+  {
+   "id": "dawn",
+   "name": "Dawn",
+   "look": "bosses/dawn.png",
+   "gender": "f",
+   "archetype": "protector",
+   "partner": "palkia",
+   "place": "Spear Pillar",
+   "lines": [
+    [
+     "piplup",
+     "prinplup",
+     "empoleon"
+    ],
+    [
+     "buneary",
+     "lopunny"
+    ],
+    [
+     "pachirisu"
+    ],
+    [
+     "budew",
+     "roselia"
+    ],
+    [
+     "ponyta",
+     "rapidash"
+    ],
+    [
+     "togepi",
+     "togetic"
+    ]
+   ]
+  },
+  {
+   "id": "barry",
+   "name": "Barry",
+   "look": "bosses/barry.png",
+   "gender": "m",
+   "archetype": "enthusiast",
+   "partner": null,
+   "place": "the Fight Area",
+   "lines": [
+    [
+     "chimchar",
+     "monferno",
+     "infernape"
+    ],
+    [
+     "starly",
+     "staravia",
+     "staraptor"
+    ],
+    [
+     "munchlax",
+     "snorlax"
+    ],
+    [
+     "buizel",
+     "floatzel"
+    ],
+    [
+     "roselia"
+    ],
+    [
+     "heracross"
+    ]
+   ]
+  },
+  {
+   "id": "hilbert",
+   "name": "Hilbert",
+   "look": "bosses/hilbert.png",
+   "gender": "m",
+   "archetype": "idealist",
+   "partner": "reshiram",
+   "place": "Dragonspiral Tower",
+   "lines": [
+    [
+     "oshawott",
+     "dewott",
+     "samurott"
+    ],
+    [
+     "pidove",
+     "tranquill",
+     "unfezant"
+    ],
+    [
+     "sandile",
+     "krokorok",
+     "krookodile"
+    ],
+    [
+     "joltik",
+     "galvantula"
+    ],
+    [
+     "roggenrola",
+     "boldore"
+    ],
+    [
+     "timburr",
+     "gurdurr"
+    ]
+   ]
+  },
+  {
+   "id": "cheren",
+   "name": "Cheren",
+   "look": "bosses/cheren.png",
+   "gender": "m",
+   "archetype": "strategist",
+   "partner": null,
+   "place": "Aspertia Gym",
+   "lines": [
+    [
+     "snivy",
+     "servine",
+     "serperior"
+    ],
+    [
+     "purrloin",
+     "liepard"
+    ],
+    [
+     "patrat",
+     "watchog"
+    ],
+    [
+     "lillipup",
+     "herdier",
+     "stoutland"
+    ],
+    [
+     "pidove",
+     "tranquill",
+     "unfezant"
+    ],
+    [
+     "minccino",
+     "cinccino"
+    ]
+   ]
+  },
+  {
+   "id": "calem",
+   "name": "Calem",
+   "look": "bosses/calem.png",
+   "gender": "m",
+   "archetype": "bitter",
+   "partner": "xerneas",
+   "place": "the Lysandre Labs",
+   "lines": [
+    [
+     "froakie",
+     "frogadier",
+     "greninja"
+    ],
+    [
+     "fletchling",
+     "fletchinder",
+     "talonflame"
+    ],
+    [
+     "honedge",
+     "doublade"
+    ],
+    [
+     "helioptile",
+     "heliolisk"
+    ],
+    [
+     "tyrunt",
+     "tyrantrum"
+    ],
+    [
+     "goomy",
+     "sliggoo"
+    ]
+   ]
+  },
+  {
+   "id": "serena",
+   "name": "Serena",
+   "look": "bosses/serena.png",
+   "gender": "f",
+   "archetype": "chaser",
+   "partner": "yveltal",
+   "place": "the Lysandre Labs",
+   "lines": [
+    [
+     "fennekin",
+     "braixen",
+     "delphox"
+    ],
+    [
+     "flabebe",
+     "floette"
+    ],
+    [
+     "litleo",
+     "pyroar"
+    ],
+    [
+     "espurr",
+     "meowstic"
+    ],
+    [
+     "amaura",
+     "aurorus"
+    ],
+    [
+     "skiddo",
+     "gogoat"
+    ]
+   ]
+  },
+  {
+   "id": "shauna",
+   "name": "Shauna",
+   "look": "bosses/shauna.png",
+   "gender": "f",
+   "archetype": "protector",
+   "partner": null,
+   "place": "Lumiose City",
+   "lines": [
+    [
+     "chespin",
+     "quilladin",
+     "chesnaught"
+    ],
+    [
+     "bunnelby",
+     "diggersby"
+    ],
+    [
+     "swirlix",
+     "slurpuff"
+    ],
+    [
+     "spritzee",
+     "aromatisse"
+    ],
+    [
+     "pancham",
+     "pangoro"
+    ],
+    [
+     "dedenne"
+    ]
+   ]
+  },
+  {
+   "id": "elio",
+   "name": "Elio",
+   "look": "bosses/elio-usum.png",
+   "gender": "m",
+   "archetype": "underdog",
+   "partner": "solgaleo",
+   "place": "the Altar of the Sunne",
+   "lines": [
+    [
+     "rowlet",
+     "dartrix",
+     "decidueye"
+    ],
+    [
+     "pikipek",
+     "trumbeak",
+     "toucannon"
+    ],
+    [
+     "rockruff",
+     "lycanroc"
+    ],
+    [
+     "mudbray",
+     "mudsdale"
+    ],
+    [
+     "fomantis",
+     "lurantis"
+    ],
+    [
+     "salandit",
+     "salazzle"
+    ]
+   ]
+  },
+  {
+   "id": "selene",
+   "name": "Selene",
+   "look": "bosses/selene.png",
+   "gender": "f",
+   "archetype": "enthusiast",
+   "partner": "lunala",
+   "place": "the Altar of the Moone",
+   "lines": [
+    [
+     "popplio",
+     "brionne",
+     "primarina"
+    ],
+    [
+     "cutiefly",
+     "ribombee"
+    ],
+    [
+     "wishiwashi"
+    ],
+    [
+     "morelull",
+     "shiinotic"
+    ],
+    [
+     "stufful",
+     "bewear"
+    ],
+    [
+     "sandygast",
+     "palossand"
+    ]
+   ]
+  },
+  {
+   "id": "hau",
+   "name": "Hau",
+   "look": "bosses/hau-stance.png",
+   "gender": "m",
+   "archetype": "underdog",
+   "partner": null,
+   "place": "Iki Town",
+   "lines": [
+    [
+     "litten",
+     "torracat",
+     "incineroar"
+    ],
+    [
+     "pichu",
+     "pikachu",
+     "raichu"
+    ],
+    [
+     "eevee",
+     "flareon"
+    ],
+    [
+     "noibat",
+     "noivern"
+    ],
+    [
+     "komala"
+    ],
+    [
+     "tauros"
+    ]
+   ]
+  },
+  {
+   "id": "victor",
+   "name": "Victor",
+   "look": "trainer/pr/victor.png",
+   "gender": "m",
+   "archetype": "chaser",
+   "partner": "zacian",
+   "place": "the Slumbering Weald",
+   "lines": [
+    [
+     "grookey",
+     "thwackey",
+     "rillaboom"
+    ],
+    [
+     "rookidee",
+     "corvisquire",
+     "corviknight"
+    ],
+    [
+     "wooloo",
+     "dubwool"
+    ],
+    [
+     "yamper",
+     "boltund"
+    ],
+    [
+     "rolycoly",
+     "carkol",
+     "coalossal"
+    ],
+    [
+     "toxel",
+     "toxtricity"
+    ]
+   ]
+  },
+  {
+   "id": "gloria",
+   "name": "Gloria",
+   "look": "bosses/gloria-league.png",
+   "gender": "f",
+   "archetype": "underdog",
+   "partner": "zamazenta",
+   "place": "the Slumbering Weald",
+   "lines": [
+    [
+     "sobble",
+     "drizzile",
+     "inteleon"
+    ],
+    [
+     "skwovet",
+     "greedent"
+    ],
+    [
+     "nickit",
+     "thievul"
+    ],
+    [
+     "applin",
+     "flapple"
+    ],
+    [
+     "silicobra",
+     "sandaconda"
+    ],
+    [
+     "hatenna",
+     "hattrem",
+     "hatterene"
+    ]
+   ]
+  },
+  {
+   "id": "hop",
+   "name": "Hop",
+   "look": "bosses/hop.png",
+   "gender": "m",
+   "archetype": "chaser",
+   "partner": null,
+   "place": "Wyndon Stadium",
+   "lines": [
+    [
+     "scorbunny",
+     "raboot",
+     "cinderace"
+    ],
+    [
+     "wooloo",
+     "dubwool"
+    ],
+    [
+     "rookidee",
+     "corvisquire",
+     "corviknight"
+    ],
+    [
+     "snorlax"
+    ],
+    [
+     "pincurchin"
+    ],
+    [
+     "rhyhorn",
+     "rhydon"
+    ]
+   ]
+  },
+  {
+   "id": "florian",
+   "name": "Florian",
+   "look": "trainer/pr/victor.png",
+   "gender": "m",
+   "archetype": "idealist",
+   "partner": "koraidon",
+   "place": "Area Zero",
+   "lines": [
+    [
+     "sprigatito",
+     "floragato",
+     "meowscarada"
+    ],
+    [
+     "lechonk",
+     "oinkologne"
+    ],
+    [
+     "tarountula",
+     "spidops"
+    ],
+    [
+     "pawmi",
+     "pawmo",
+     "pawmot"
+    ],
+    [
+     "fidough",
+     "dachsbun"
+    ],
+    [
+     "tinkatink",
+     "tinkatuff",
+     "tinkaton"
+    ]
+   ]
+  },
+  {
+   "id": "juliana",
+   "name": "Juliana",
+   "look": "bosses/nemona-v.png",
+   "gender": "f",
+   "archetype": "protector",
+   "partner": "miraidon",
+   "place": "Area Zero",
+   "lines": [
+    [
+     "fuecoco",
+     "crocalor",
+     "skeledirge"
+    ],
+    [
+     "smoliv",
+     "dolliv",
+     "arboliva"
+    ],
+    [
+     "nymble",
+     "lokix"
+    ],
+    [
+     "shroodle",
+     "grafaiai"
+    ],
+    [
+     "wattrel",
+     "kilowattrel"
+    ],
+    [
+     "maschiff",
+     "mabosstiff"
+    ]
+   ]
+  },
+  {
+   "id": "nemona",
+   "name": "Nemona",
+   "look": "bosses/nemona-v.png",
+   "gender": "f",
+   "archetype": "prodigy",
+   "partner": null,
+   "place": "Mesagoza",
+   "lines": [
+    [
+     "quaxly",
+     "quaxwell",
+     "quaquaval"
+    ],
+    [
+     "pawmi",
+     "pawmo",
+     "pawmot"
+    ],
+    [
+     "goomy",
+     "sliggoo",
+     "goodra"
+    ],
+    [
+     "rockruff",
+     "lycanroc"
+    ],
+    [
+     "orthworm"
+    ],
+    [
+     "dunsparce",
+     "dudunsparce"
+    ]
+   ]
+  }
+ ],
+ "archetypes": [
+  {
+   "id": "protector",
+   "name": "Protector",
+   "taunt": "Nobody gets hurt while I'm here."
+  },
+  {
+   "id": "chaser",
+   "name": "Champion-Chaser",
+   "taunt": "You're one more trainer between me and the top."
+  },
+  {
+   "id": "strategist",
+   "name": "Strategist",
+   "taunt": "I've read every move you've made. You repeat yourself."
+  },
+  {
+   "id": "bitter",
+   "name": "Bitter Challenger",
+   "taunt": "I used to be like you. Then I grew up."
+  },
+  {
+   "id": "enthusiast",
+   "name": "Enthusiast",
+   "taunt": "A real villain! This is going to be a great battle!"
+  },
+  {
+   "id": "idealist",
+   "name": "Idealist",
+   "taunt": "Pokémon deserve better than you. So do people."
+  },
+  {
+   "id": "prodigy",
+   "name": "Prodigy",
+   "taunt": "..."
+  },
+  {
+   "id": "underdog",
+   "name": "Underdog",
+   "taunt": "Everyone says I can't beat you. Everyone's been wrong before."
+  }
+ ],
+ "threat": {
+  "weights": {
+   "wanted": 0.35,
+   "dread": 0.25,
+   "stolen": 3,
+   "building": 4,
+   "harm": 1
+  },
+  "stages": [
+   {
+    "min": 0,
+    "id": "ignores",
+    "word": "IGNORES",
+    "does": "Ignores you; travels the region."
+   },
+   {
+    "min": 25,
+    "id": "foils",
+    "word": "FOILS",
+    "does": "Shows up at one of your jobs a week and battles you for it."
+   },
+   {
+    "min": 45,
+    "id": "attacks",
+    "word": "ATTACKS",
+    "does": "Hunts your crew on their tasks; frees Pokémon from your stores."
+   },
+   {
+    "min": 65,
+    "id": "raids",
+    "word": "RAIDS",
+    "does": "Breaks up one of your Rackets a week."
+   },
+   {
+    "min": 80,
+    "id": "allies",
+    "word": "ALLIES",
+    "does": "Recruits Gym Leaders, the Champion and a Legendary; raids your HQ."
+   }
+  ],
+  "stolenActions": [
+   "steal",
+   "thieve",
+   "smash-and-grab",
+   "loot-the-dock"
+  ]
+ },
+ "level": {
+  "low": -5,
+  "high": 5,
+  "moraleStep": 10
+ },
+ "team": {
+  "stageAt": [
+   16,
+   32
+  ],
+  "sizeByBadges": [
+   1,
+   2,
+   2,
+   3,
+   3,
+   4,
+   5,
+   5,
+   6
+  ]
+ },
+ "badges": {
+  "every": 7,
+  "first": 4,
+  "perStage": 1,
+  "min": 4
+ },
+ "reasons": [
+  {
+   "id": "stole",
+   "actions": [
+    "steal",
+    "thieve",
+    "smash-and-grab",
+    "loot-the-dock"
+   ],
+   "text": "get the stolen Pokémon back to their trainers",
+   "wrong": "The trainer the Hero was protecting had been selling their own Pokémon on the side."
+  },
+  {
+   "id": "extort",
+   "actions": [
+    "extort",
+    "collect-a-debt",
+    "shake-the-jar",
+    "skim-the-till",
+    "parking-fees"
+   ],
+   "text": "protect the shop owners",
+   "wrong": "The shopkeeper the Hero was protecting had been skimming from the whole street."
+  },
+  {
+   "id": "gym",
+   "actions": [
+    "gym-takeover",
+    "intimidate-a-leader",
+    "rig-the-badge"
+   ],
+   "text": "put the Gym Leader back",
+   "wrong": "The Leader the Hero wanted back had been taking bribes for years."
+  },
+  {
+   "id": "good",
+   "actions": [
+    "street-theater",
+    "sponsor-a-trainer",
+    "befriend-the-mayor"
+   ],
+   "text": "find out why criminals are helping people",
+   "wrong": null
+  },
+  {
+   "id": "lab",
+   "actions": [],
+   "text": "recover the stolen research",
+   "wrong": "The research the Hero wanted back was weapons work."
+  },
+  {
+   "id": "rival",
+   "actions": [],
+   "text": "stop every criminal team, not just one",
+   "wrong": null
+  },
+  {
+   "id": "business",
+   "actions": [],
+   "text": "find out what you really want",
+   "wrong": null
+  },
+  {
+   "id": "attack",
+   "actions": [
+    "attack",
+    "ambush-a-patrol",
+    "street-duel"
+   ],
+   "text": "stop the attacks on travellers",
+   "wrong": "The 'travellers' the Hero was guarding were smugglers."
+  }
+ ],
+ "counters": {
+  "normal": [
+   "fighting",
+   [
+    "mankey",
+    "primeape"
+   ]
+  ],
+  "fire": [
+   "water",
+   [
+    "poliwag",
+    "poliwhirl",
+    "poliwrath"
+   ]
+  ],
+  "water": [
+   "grass",
+   [
+    "oddish",
+    "gloom",
+    "vileplume"
+   ]
+  ],
+  "grass": [
+   "fire",
+   [
+    "ponyta",
+    "rapidash"
+   ]
+  ],
+  "electric": [
+   "ground",
+   [
+    "diglett",
+    "dugtrio"
+   ]
+  ],
+  "ice": [
+   "fire",
+   [
+    "growlithe",
+    "arcanine"
+   ]
+  ],
+  "fighting": [
+   "psychic",
+   [
+    "abra",
+    "kadabra",
+    "alakazam"
+   ]
+  ],
+  "poison": [
+   "psychic",
+   [
+    "drowzee",
+    "hypno"
+   ]
+  ],
+  "ground": [
+   "water",
+   [
+    "psyduck",
+    "golduck"
+   ]
+  ],
+  "flying": [
+   "electric",
+   [
+    "magnemite",
+    "magneton"
+   ]
+  ],
+  "psychic": [
+   "ghost",
+   [
+    "gastly",
+    "haunter",
+    "gengar"
+   ]
+  ],
+  "bug": [
+   "fire",
+   [
+    "vulpix",
+    "ninetales"
+   ]
+  ],
+  "rock": [
+   "water",
+   [
+    "staryu",
+    "starmie"
+   ]
+  ],
+  "ghost": [
+   "ghost",
+   [
+    "gastly",
+    "haunter",
+    "gengar"
+   ]
+  ],
+  "dark": [
+   "fighting",
+   [
+    "machop",
+    "machoke",
+    "machamp"
+   ]
+  ],
+  "steel": [
+   "fire",
+   [
+    "magmar"
+   ]
+  ],
+  "dragon": [
+   "ice",
+   [
+    "seel",
+    "dewgong"
+   ]
+  ],
+  "fairy": [
+   "poison",
+   [
+    "ekans",
+    "arbok"
+   ]
+  ]
+ },
+ "adapt": {
+  "after": 2,
+  "max": 2,
+  "line": "The Hero has been beating {type} specialists all week."
+ },
+ "disillusion": {
+  "puppet": 15,
+  "bribe": 15,
+  "good": 10,
+  "fair": 5,
+  "wrong": 20,
+  "hurt": -30,
+  "fear": -20,
+  "shadow": -20,
+  "fearRatio": 2,
+  "fearMargin": 20,
+  "joinMax": 80,
+  "bribeActions": [
+   "cooperate-with-jenny",
+   "pay-the-fine"
+  ],
+  "goodActions": [
+   "street-theater",
+   "sponsor-a-trainer",
+   "befriend-the-mayor"
+  ]
+ },
+ "foil": {
+  "smokeChance": 45,
+  "runHeat": 2,
+  "smokeItem": "smoke-ball"
+ },
+ "attacks": {
+  "huntChance": 35,
+  "hurtDays": 2,
+  "free": 3
+ },
+ "allies": {
+  "every": 7
+ },
+ "heroRaid": {
+  "take": 0.2,
+  "free": 3,
+  "every": 7
+ },
+ "stand": {
+  "take": 3,
+  "control": 45,
+  "rematch": 7,
+  "leaveDread": 5,
+  "leaveRegard": -2,
+  "refuseRegard": 1,
+  "rank": "executive",
+  "joinLoyalty": 60,
+  "stats": {
+   "brawn": 7,
+   "nerve": 8,
+   "wits": 7,
+   "charm": 7,
+   "stealth": 5
+  },
+  "joinLine": "I'll fight anyone you point me at. Not people. Teams."
+ },
+ "legends": {
+  "wakeAt": 70,
+  "strikeEvery": 7,
+  "warn": 2,
+  "away": 28,
+  "levelOver": 10,
+  "scatter": 25
+ },
+ "encounters": {
+  "chance": 30,
+  "from": 5,
+  "rows": [
+   {
+    "id": "O166",
+    "title": "The Hero is spotted in town",
+    "who": "hero",
+    "text": "{hero} is walking down {district}'s main street, nodding at shopkeepers like they own the place.",
+    "choices": [
+     {
+      "label": "Avoid",
+      "line": "You step into a doorway until {hero} has passed."
+     },
+     {
+      "label": "Watch",
+      "line": "You trail {hero} for an hour. You know where they'll be for the next two days.",
+      "intel": 2
+     },
+     {
+      "label": "Challenge",
+      "line": "You step out and call {hero}'s name. A battle, here, in the street: fixed rules, no stakes.",
+      "battle": "hero"
+     }
+    ]
+   },
+   {
+    "id": "O167",
+    "title": "The Hero helps townsfolk",
+    "who": "hero",
+    "text": "{hero} is carrying an old man's shopping across {district}. People are clapping.",
+    "choices": [
+     {
+      "label": "Cheer",
+      "line": "You clap too. Nobody believes you mean it.",
+      "regard": -1
+     },
+     {
+      "label": "Disrupt",
+      "line": "Your people knock the bags out of their arms. The crowd goes quiet and afraid.",
+      "dread": 3,
+      "harm": 3
+     }
+    ]
+   },
+   {
+    "id": "O168",
+    "title": "The Hero's Pokémon is injured",
+    "who": "hero",
+    "text": "{hero}'s partner is limping outside the closed Pokémon Center in {district}. They look lost.",
+    "choices": [
+     {
+      "label": "Help",
+      "line": "You hand over a Potion without a word. {hero} stares at you for a long time.",
+      "regard": 2,
+      "disill": 10
+     },
+     {
+      "label": "Ignore",
+      "line": "You walk past. You don't look back."
+     }
+    ]
+   },
+   {
+    "id": "O169",
+    "title": "The Hero asks directions",
+    "who": "hero",
+    "text": "{hero} doesn't recognise you in the crowd and asks the way to the next Gym.",
+    "choices": [
+     {
+      "label": "Lie",
+      "line": "You send {hero} the long way round, through the marsh. That's a day gone.",
+      "delay": 1
+     },
+     {
+      "label": "Tell",
+      "line": "You point the right way. Old habits."
+     },
+     {
+      "label": "Offer help",
+      "line": "You walk {hero} there yourself. Halfway, they realise who you are, and say nothing.",
+      "disill": 5,
+      "regard": 1
+     }
+    ]
+   },
+   {
+    "id": "O170",
+    "title": "A letter from the Hero",
+    "who": "hero",
+    "text": "A letter under the warehouse door, in careful handwriting: \"I know what you are. I want to know why.\"",
+    "choices": [
+     {
+      "label": "Reply",
+      "line": "You write back the truth, and some proof.",
+      "wrong": true,
+      "disill": 5
+     },
+     {
+      "label": "Burn",
+      "line": "You burn it in front of the crew. They cheer.",
+      "dread": 1
+     },
+     {
+      "label": "Show the town",
+      "line": "You pin it up in the square with a joke under it.",
+      "dread": 3,
+      "harm": 2
+     }
+    ]
+   },
+   {
+    "id": "O171",
+    "title": "The Hero's mentor speaks to you",
+    "who": "mentor",
+    "text": "{mentor} finds you on a bench in {district}. \"I taught that trainer everything. Don't make them use it on you.\"",
+    "choices": [
+     {
+      "label": "Listen",
+      "line": "You let the old man talk. Some of it even stays with you.",
+      "disill": 5
+     },
+     {
+      "label": "Taunt",
+      "line": "\"Tell your student I'm waiting.\" Word gets back fast.",
+      "dread": 2,
+      "harm": 2
+     }
+    ]
+   },
+   {
+    "id": "O172",
+    "title": "Another rival challenges the Hero",
+    "who": "trainer",
+    "text": "An Ace Trainer has stopped {hero} on the road out of {district}. A crowd gathers.",
+    "choices": [
+     {
+      "label": "Watch",
+      "line": "You watch every move. Now you know {hero}'s team by heart.",
+      "intel": 3
+     },
+     {
+      "label": "Interfere",
+      "line": "Your Grunt throws a Smoke Ball into the battle. {hero} loses the day sorting it out.",
+      "delay": 1,
+      "harm": 2,
+      "heat": 3
+     }
+    ]
+   },
+   {
+    "id": "O173",
+    "title": "The Hero fights a rival Admin",
+    "who": "hero",
+    "text": "{hero} has cornered an Admin of {rival} behind the Game Corner.",
+    "choices": [
+     {
+      "label": "Help the Hero",
+      "line": "You send your Grunts in on {hero}'s side. {hero} doesn't know what to make of it.",
+      "disill": 10,
+      "tension": "D9"
+     },
+     {
+      "label": "Help the Admin",
+      "line": "You back the Admin. {hero} sees exactly who you are.",
+      "harm": 4,
+      "tension": "D9"
+     },
+     {
+      "label": "Stay out",
+      "line": "Let them tire each other out."
+     }
+    ]
+   },
+   {
+    "id": "O174",
+    "title": "A kid asks the Hero to sign a hat",
+    "who": "kid",
+    "lock": true,
+    "text": "A kid in {district} holds out a cap and a marker. {hero} kneels down to sign it.",
+    "choices": [
+     {
+      "label": "Watch",
+      "line": "You watch from across the street. For a second you remember wanting that."
+     },
+     {
+      "label": "Hide",
+      "line": "You pull your collar up and keep walking."
+     }
+    ]
+   },
+   {
+    "id": "O175",
+    "title": "The Hero visits a Gym",
+    "who": "hero",
+    "text": "{hero} walks into the {district} Gym with a fresh bag of Potions.",
+    "choices": [
+     {
+      "label": "Follow",
+      "line": "You watch the whole match from the stands. You learn their next two stops.",
+      "intel": 2
+     },
+     {
+      "label": "Stop",
+      "line": "Your people block the Gym doors. {hero} has to come back tomorrow.",
+      "delay": 1,
+      "harm": 3,
+      "heat": 4
+     }
+    ]
+   },
+   {
+    "id": "O176",
+    "title": "A challenge: the Hero's team against yours",
+    "who": "hero",
+    "text": "{hero} sends word: \"Fixed rules. No stakes. Just us.\"",
+    "choices": [
+     {
+      "label": "Accept",
+      "line": "You meet at the edge of {district} at noon.",
+      "battle": "hero"
+     },
+     {
+      "label": "Refuse",
+      "line": "You don't answer. Let them wonder."
+     }
+    ]
+   },
+   {
+    "id": "O177",
+    "title": "The Hero leaves a mark on a bridge",
+    "who": "prop",
+    "text": "Someone has painted {hero}'s badge on the bridge into {district}, right over your crew's mark.",
+    "choices": [
+     {
+      "label": "Replace",
+      "line": "You paint over it, bigger.",
+      "dread": 2,
+      "harm": 1
+     },
+     {
+      "label": "Keep",
+      "line": "You leave it. The town notices you left it.",
+      "regard": 1
+     }
+    ]
+   },
+   {
+    "id": "O178",
+    "title": "The Hero's sidekick speaks to you",
+    "who": "sidekick",
+    "lock": true,
+    "text": "{sidekick} who follows {hero} everywhere plants their feet in front of you: \"Battle me!\"",
+    "choices": [
+     {
+      "label": "Battle",
+      "line": "You battle the kid. Fair and square, nothing else.",
+      "battle": "sidekick"
+     }
+    ]
+   },
+   {
+    "id": "O179",
+    "title": "The Hero saves a kidnapped Pokémon",
+    "who": "hero",
+    "text": "{hero} has found a Pokémon in a cage behind a {district} warehouse and is picking the lock.",
+    "choices": [
+     {
+      "label": "Interrupt",
+      "line": "Your Grunts chase them off. The cage goes back in the van.",
+      "harm": 4,
+      "dread": 2
+     },
+     {
+      "label": "Applaud",
+      "line": "You clap slowly from the shadows. {hero} doesn't know whether to thank you.",
+      "disill": 5
+     }
+    ]
+   },
+   {
+    "id": "O180",
+    "title": "The Hero faces the bounty hunters you hired",
+    "who": "hero",
+    "text": "The hunters you paid have {hero} pinned down outside {district}.",
+    "choices": [
+     {
+      "label": "Reinforce",
+      "line": "You pay for two more. {hero} loses two days getting out.",
+      "delay": 2,
+      "harm": 5,
+      "funds": -200
+     },
+     {
+      "label": "Pull back",
+      "line": "You call them off. Not like this."
+     }
+    ]
+   },
+   {
+    "id": "O181",
+    "title": "The Hero's badge count rises",
+    "who": "hero",
+    "badge": true,
+    "text": "{hero} has won another badge. That's {badges} now.",
+    "choices": [
+     {
+      "label": "Plan around it",
+      "line": "You mark the next Gym on the map. You'll know where {hero} is going.",
+      "intel": 3
+     }
+    ]
+   },
+   {
+    "id": "O182",
+    "title": "The Hero is cornered by Grunts",
+    "who": "hero",
+    "text": "Three of your Grunts have {hero} backed against a fence in {district}, without your orders.",
+    "choices": [
+     {
+      "label": "Join the Grunts",
+      "line": "You step in beside them. {hero} has to fight their way out.",
+      "harm": 5,
+      "battle": "hero"
+     },
+     {
+      "label": "Save them",
+      "line": "You send the Grunts home. {hero} walks past you very slowly.",
+      "disill": 15,
+      "regard": 2,
+      "crewMor": -5
+     }
+    ]
+   },
+   {
+    "id": "O183",
+    "title": "The Hero's family calls",
+    "who": "parent",
+    "text": "{parent} rings the warehouse phone. \"I know my child is chasing you. I want you to know they're not alone.\"",
+    "choices": [
+     {
+      "label": "Talk",
+      "line": "You talk for twenty minutes. You hang up before you say too much.",
+      "disill": 5
+     },
+     {
+      "label": "Mock",
+      "line": "You laugh down the phone. The story is all over town by night.",
+      "dread": 2,
+      "harm": 3
+     }
+    ]
+   },
+   {
+    "id": "O184",
+    "title": "The Hero stands on your doorstep",
+    "who": "hero",
+    "night": true,
+    "text": "Late. A knock at the warehouse. {hero} is on the doorstep, alone.",
+    "choices": [
+     {
+      "label": "Fight",
+      "line": "You step outside. The crew watches from the windows.",
+      "battle": "hero"
+     },
+     {
+      "label": "Talk",
+      "line": "You talk until the street lamps go off. {hero} tells you why they started.",
+      "disill": 5
+     },
+     {
+      "label": "Hide",
+      "line": "You kill the lights and wait until they leave."
+     }
+    ]
+   },
+   {
+    "id": "O185",
+    "title": "The Hero's gift to a stranger",
+    "who": "hero",
+    "text": "{hero} hands a stranger in {district} something small and shiny, then walks on.",
+    "choices": [
+     {
+      "label": "Learn",
+      "line": "You ask the stranger. It's a lucky charm from {hero}'s first journey. You learn where they're headed.",
+      "intel": 2
+     },
+     {
+      "label": "Steal",
+      "line": "You take it off the stranger before nightfall. {hero} will hear about this.",
+      "harm": 10,
+      "item": "nugget"
+     }
+    ]
+   }
+  ]
+ },
+ "actions": {
+  "shame": {
+   "morale": 10,
+   "bigMorale": 25
+  },
+  "duel": {
+   "morale": 10
+  },
+  "ambush": {
+   "delay": 1,
+   "bigDelay": 3
+  },
+  "item": {
+   "delay": 1,
+   "item": "nugget",
+   "bigItem": "star-piece"
+  },
+  "friend": {
+   "intel": 2
+  }
+ },
+ "tasks": {
+  "track": [
+   0,
+   1,
+   1,
+   2,
+   3
+  ],
+  "counter": [
+   1,
+   1,
+   2,
+   2,
+   3
+  ],
+  "backfire": 2
+ },
+ "lines": {
+  "met": "You've seen the Hero up close: {hero}.",
+  "reason": "{hero} has a reason to fight you now: {reason}.",
+  "wrong": "{wrong} {hero} has gone very quiet.",
+  "badge": "{hero} won a badge in {district}. {badges} of 8.",
+  "stage": "{hero}'s Threat: {word}. {does}",
+  "won": "You beat {hero}, fair and square.",
+  "lost": "{hero} beat you.",
+  "foilWon": "{hero} goes down. The job goes on.",
+  "foilLost": "{hero} beat you. The job is off.",
+  "run": "You run. The job is lost. Heat +{heat}.",
+  "smokeClean": "Smoke fills the street. By the time it clears, you're gone.",
+  "smokeFail": "The smoke clears too soon. {hero} is right there.",
+  "noSmoke": "You have no Smoke Ball.",
+  "hunt": "{hero} found {name} on the job. {name} is hurt for {days} days.",
+  "free": "{hero} broke into your stores and set {n} Pokémon free.",
+  "racket": "{hero} broke up your Racket at {target}. The owner is free of you.",
+  "noRacket": "{hero} went looking for your Rackets and found none.",
+  "ally": "{ally} has joined {hero} against you.",
+  "allyLegend": "{legend} now stands with {hero}.",
+  "raid": "{hero} is at the warehouse door with {n} allies.",
+  "raidWon": "You held the warehouse against {hero}.",
+  "raidLost": "{hero} cleaned out the warehouse: ₽{take} gone, {n} Pokémon set free.",
+  "seen": "{legend} was seen over {over}.",
+  "wreck": "{legend} tore through {target}. That Racket is gone.",
+  "scatter": "{legend} swept over {district}. Your Control there fell by {n}.",
+  "loose": "{legend} broke open your stores. {n} Pokémon flew free.",
+  "calm": "{legend} circled {over} and left your holdings alone.",
+  "legendWon": "{legend} is driven off. It won't be back for {weeks} weeks.",
+  "legendLost": "{legend} beat you back.",
+  "legendNoCatch": "It won't be caught. It is defending this region.",
+  "legendDay": "Fighting a Legendary takes a Day action.",
+  "legendNone": "No Legendary is out there right now.",
+  "standDue": "{hero} has come for you at {place}.",
+  "standWon": "You beat {hero} at full strength. The region is yours. Now decide what happens to them.",
+  "standLost": "{hero} beat you. {n} districts slip back to Contested; {hero} will be back in {days} days.",
+  "leave": "{hero} walks away with nothing. People will talk about this for years.",
+  "joined": "{hero} joins your crew as an Executive: \"{line}\"",
+  "refused": "{hero} refuses, and leaves with their head up.",
+  "notMet": "You haven't met the Hero yet.",
+  "notHere": "The Hero isn't in {district}. They're in {at}.",
+  "notStage": "The Hero isn't hunting you hard enough for a duel yet (Threat 45).",
+  "track": "{name} tracked {hero}: the route is known {n} days ahead.",
+  "trackNow": "{name} tracked {hero}: they're in {at} today.",
+  "counter": "{name}'s counter-story ran. {hero}'s name loses some shine.",
+  "backfire": "{name}'s story backfired. People like {hero} more.",
+  "hunt1": "{name} learned {hero}'s habits.",
+  "hunt3": "{name} set a trap on {hero}'s road. They lose a day.",
+  "hunt5": "{name} has {hero} cornered: they must duel you, whatever their Threat.",
+  "patrol": "{name} ran into {hero} on patrol in {district}.",
+  "shame": "{hero} was laughed at in {district}. Their nerve slips.",
+  "ambush": "{hero} is stuck on the road for {n} days.",
+  "item": "You lifted {hero}'s {item}. They'll waste a day looking for it.",
+  "friend": "{ally} walks away from {hero}.",
+  "friendHint": "{hero}'s friend tells you where they're headed next.",
+  "challenge": "No stakes: you shake hands and go your ways."
+ }
+}
