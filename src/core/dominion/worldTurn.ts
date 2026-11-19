@@ -15,9 +15,7 @@ const fill = (t: string, v: Record<string, string | number>): string => t.replac
 
 /** D1 steps. Later slices add theirs to the same table under their own id. */
 const STEPS: Partial<Record<WorldStepId, WorldStep[]>> = {
-  crew: [
-    (b) => b.members.map((m) => fill(DOMINION_DATA.start.report.guard, { name: m.name })),
-  ],
+  // crew: slice D3's step (crew.ts) registers itself.
   world: [
     (b) => {
       const was = b.heat;

@@ -15,8 +15,9 @@ import { onInputAction, type InputAction } from '../ui/input';
 import { rxFileOf } from '../ui/redux/assets';
 import { mountRedux, type ReduxView } from '../ui/redux/stage';
 import { hqView, openingView, setupView, titleView, type SetupFiles } from '../ui/redux/screens/dominion/views';
+import { CrewController } from './dominion/crewController';
 
-type Screen = 'title' | 'setup' | 'opening' | 'hq';
+type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'crew';
 
 const TAB_KEYS: Record<string, number> = { Digit1: 0, Digit2: 1, Digit3: 2, Digit4: 3, Digit5: 4, Digit6: 5 };
 
@@ -30,6 +31,8 @@ export class DominionScene extends Phaser.Scene {
   private notice: string | null = null;
   private leaving = false;
   private files: SetupFiles | null = null;
+  /** D3: the Morning (mockup 2) and the Crew File (mockup 5). */
+  private crew = new CrewController(this);
 
   constructor() {
     super('Dominion');
@@ -42,6 +45,7 @@ export class DominionScene extends Phaser.Scene {
     this.at = 0;
     this.notice = null;
     this.leaving = false;
+    this.crew = new CrewController(this);
     const { session } = services();
     const run = session.run;
     if (!run) return void this.scene.start('MainMenu');
@@ -70,16 +74,19 @@ export class DominionScene extends Phaser.Scene {
         more: () => this.confirm(),
         order: (i) => { this.at = Number(i); this.confirm(); },
         tab: (i) => this.tab(Number(i)),
+        ...this.crew.acts(),
       },
       overs: {
         typeOver: (i) => { this.setup = { ...this.setup, at: Number(i) }; this.view?.refresh(); },
         orderOver: (i) => { this.at = Number(i); this.view?.refresh(); },
+        ...this.crew.overs(),
       },
     });
     onInputAction(this, (a) => this.key(a));
     const kb = this.input.keyboard;
     const raw = (e: KeyboardEvent): void => {
-      if (this.screen !== 'hq' || this.leaving) return;
+      if ((this.screen !== 'hq' && this.screen !== 'crew') || this.leaving) return;
+      if (this.crew.raw(e.code)) return;
       if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
       else if (e.code === 'KeyN') this.step({ t: 'toNight' });
       else if (e.code === 'KeyE') this.step({ t: 'endDay' });
@@ -108,12 +115,16 @@ export class DominionScene extends Phaser.Scene {
       case 'opening':
         return openingView(b ? openingLines(b) : [], this.shown, this.memberLook());
       case 'hq':
+        if (b && this.crew.owns()) return this.crew.render(this.notice);
         return b ? hqView(hqModel(b), this.notice, this.at, this.memberLook()) : '';
+      case 'crew':
+        return this.crew.render(this.notice);
     }
   }
 
   private key(a: InputAction): void {
     if (this.leaving) return;
+    if (this.crew.key(a)) return void this.view?.refresh();
     if (a === 'back') return this.back();
     if (a === 'confirm') return this.confirm();
     if (this.screen === 'title' && (a === 'up' || a === 'down')) this.titleAt = this.titleAt ? 0 : 1;
@@ -157,7 +168,7 @@ export class DominionScene extends Phaser.Scene {
     } else if (this.screen === 'hq' && b) {
       const m = hqModel(b);
       const order = m.orders[this.at];
-      if (m.panel === 'orders' && order) return this.step(b.phase === 'day' ? { t: 'do', order: order.id } : { t: 'plan', order: order.id });
+      if (m.panel === 'orders' && order) return void this.step(b.phase === 'day' ? { t: 'do', order: order.id } : { t: 'plan', order: order.id });
       return this.next();
     }
     this.view?.refresh();
@@ -187,18 +198,34 @@ export class DominionScene extends Phaser.Scene {
     this.step(by[b.phase]!);
   }
 
-  private step(action: DominionAction): void {
+  /** Exposed for the crew controller. */
+  get screenName(): Screen {
+    return this.screen;
+  }
+  set screenName(s: Screen) {
+    this.screen = s;
+  }
+  setNotice(n: string | null): void {
+    this.notice = n;
+  }
+  refresh(): void {
+    this.view?.refresh();
+  }
+
+  step(action: DominionAction): boolean {
     const out = services().session.dominionStep(action);
     if (out.ok) {
       this.notice = out.notice;
       const n = hqModel(this.block()!).orders.length;
       this.at = Math.min(this.at, Math.max(0, n - 1));
-    }
+    } else if (out.notice) this.notice = out.notice;
     this.view?.refresh();
+    return out.ok;
   }
 
   private tab(i: number): void {
-    if (this.screen !== 'hq') return;
+    if (this.screen !== 'hq' && this.screen !== 'crew') return;
+    if (this.crew.tab(i)) return void this.view?.refresh();
     this.notice = i === 0 ? null : DOMINION_DATA.start.lockedTab;
     this.view?.refresh();
   }

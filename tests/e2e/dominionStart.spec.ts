@@ -22,6 +22,15 @@ async function toTitle(page: Page) {
 }
 
 const block = (page: Page) => page.evaluate(() => (window as any).__pkr.session.run.expansion.dominion);
+/** D3: Morning talk cards wait for an answer; take the first choice of each, one card at a time. */
+async function answerTalks(page: Page) {
+  const s = view(page, 'Dominion');
+  for (let n = (await block(page)).crew?.talks.length ?? 0; n > 0; n--) {
+    await s.getByTestId('dom-talk-0').click();
+    await expect.poll(async () => (await block(page)).crew.talks.length).toBe(n - 1);
+  }
+  await expect(s.getByTestId('dom-talk')).toBeHidden();
+}
 
 test('set up a Dominion in the New look, live a day round the clock, and it reloads where it was', async ({ page }, info) => {
   const shot = (n: string) => page.screenshot({ path: info.outputPath(`${n}.png`) });
@@ -66,7 +75,9 @@ test('set up a Dominion in the New look, live a day round the clock, and it relo
   await shot('hq-night');
   await s.getByTestId('dom-next').click();
   await expect(s.getByTestId('dom-phase')).toHaveText('MORNING');
-  await expect(s.getByTestId('dom-report')).toContainText('Rook guarded the warehouse.');
+  // D3: the Morning screen (mockup 2) replaces D1's report panel; a talk card may wait first.
+  await expect(s.getByTestId('dom-morning-report')).toContainText(/Rook (guarded the HQ|fell asleep on guard)/);
+  await answerTalks(page);
   await shot('hq-morning');
   await s.getByTestId('dom-next').click();
   await expect(s.getByTestId('dom-phase')).toHaveText('DAY');
@@ -74,7 +85,7 @@ test('set up a Dominion in the New look, live a day round the clock, and it relo
   await expect(s.getByTestId('dom-notice')).toContainText('Find one useful contact');
   await shot('hq-day');
   // A locked tab says so; Esc closes the line.
-  await page.keyboard.press('Digit3');
+  await page.keyboard.press('Digit4');
   await expect(s.getByTestId('dom-notice')).toContainText('later part');
   await s.getByTestId('dom-next').click();
   await expect(s.getByTestId('dom-phase')).toHaveText('EVENING');
