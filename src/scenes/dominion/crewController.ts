@@ -14,7 +14,7 @@ import { fileView, hireOverlay, leadsOverlay, morningView } from '../../ui/redux
 import { personaView } from '../../ui/redux/screens/dominion/persona';
 
 interface Host {
-  screenName: 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'desk';
+  screenName: 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'base' | 'desk';
   setNotice(n: string | null): void;
   refresh(): void;
   step(a: DominionAction): boolean;
