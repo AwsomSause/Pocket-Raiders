@@ -3,6 +3,7 @@
 // defaults the game plays exactly as it did before (see tests/unit/expansionFoundation.test.ts).
 
 import { z } from 'zod';
+import { AiTierSchema, CLAUDE_USES_DEFAULT, ClaudeUsesSchema } from '../ai/schema';
 import { CastEntrySchema } from './cast/entry';
 import { CanonStateSchema } from './canonSpaces';
 import { TrackStateSchema } from './track';
@@ -74,6 +75,10 @@ export const ExpansionSettingsSchema = z.object({
   evilRollSeed: z.boolean().default(false),
   /** Evil Mode slice 22: a line at Morning while a fire's on the road (a fire missed is gone). */
   evilFireReminder: z.boolean().default(true),
+  /** Dominion slice D18 (CLAUDE_API_DRAFT section 1; Kice 2026-11-18: Standard by default): how much Claude voices, with a Key-Card set. Without one the game plays offline whatever this says. */
+  claudeAi: AiTierSchema.default('standard'),
+  /** Dominion slice D18 (mockup a1, "Use Claude for"): single uses on or off; each later slice reads its own. */
+  claudeUses: ClaudeUsesSchema.default(() => ({ ...CLAUDE_USES_DEFAULT })),
 });
 export type ExpansionSettings = z.infer<typeof ExpansionSettingsSchema>;
 export const EXPANSION_SETTINGS_DEFAULTS: ExpansionSettings = ExpansionSettingsSchema.parse({});
