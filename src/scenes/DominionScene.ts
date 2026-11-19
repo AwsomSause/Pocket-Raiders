@@ -17,10 +17,11 @@ import { mountRedux, type ReduxView } from '../ui/redux/stage';
 import { hqView, openingView, setupView, titleView, type SetupFiles } from '../ui/redux/screens/dominion/views';
 import { CrewController } from './dominion/crewController';
 import { ReserveController } from './dominion/reserveController';
+import { SquadController } from './dominion/squadController';
 import { cardModel, gridPages, mapModel, newCursor, pageFor, type MapCursor } from '../core/dominion/fieldScreens';
 import { cardView, mapView } from '../ui/redux/screens/dominion/fieldViews';
 
-type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid';
+type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'squads';
 
 /** The screen to come back to after a battle (D2: the map the action was picked on, or the HQ for a fight at the door). */
 let resume: Screen | null = null;
@@ -43,6 +44,8 @@ export class DominionScene extends Phaser.Scene {
   /** D3: the Morning (mockup 2) and the Crew File (mockup 5). */
   private crew = new CrewController(this);
   private res = new ReserveController(this);
+  /** D8: the Squads page (mockup 13, U on the Crew File). */
+  private sq = new SquadController(this, this);
 
   constructor() {
     super('Dominion');
@@ -56,6 +59,7 @@ export class DominionScene extends Phaser.Scene {
     this.notice = null;
     this.leaving = false;
     this.crew = new CrewController(this);
+    this.sq = new SquadController(this, this);
     const { session } = services();
     const run = session.run;
     if (!run) return void this.scene.start('MainMenu');
@@ -109,12 +113,14 @@ export class DominionScene extends Phaser.Scene {
         dismiss: () => { this.notice = null; this.view?.refresh(); },
         ...this.crew.acts(),
         ...this.res.acts(),
+        ...this.sq.acts(),
       },
       overs: {
         typeOver: (i) => { this.setup = { ...this.setup, at: Number(i) }; this.view?.refresh(); },
         orderOver: (i) => { this.at = Number(i); this.view?.refresh(); },
         ...this.crew.overs(),
         ...this.res.overs(),
+        ...this.sq.overs(),
       },
     });
     onInputAction(this, (a) => this.key(a));
@@ -133,7 +139,11 @@ export class DominionScene extends Phaser.Scene {
         if (e.code === 'KeyB') this.bring();
         return;
       }
-      if (this.screen !== 'hq' && this.screen !== 'crew' && this.screen !== 'reserve' && this.screen !== 'pyramid') return;
+      if (this.screen !== 'hq' && this.screen !== 'crew' && this.screen !== 'reserve' && this.screen !== 'pyramid' && this.screen !== 'squads') return;
+      if (this.sq.raw(e.code)) {
+        if (e.code === 'Tab') e.preventDefault();
+        return;
+      }
       if (this.res.raw(e.code)) {
         if (e.code === 'Tab') e.preventDefault();
         return;
@@ -183,11 +193,14 @@ export class DominionScene extends Phaser.Scene {
       case 'reserve':
       case 'pyramid':
         return this.res.render(this.notice);
+      case 'squads':
+        return this.sq.render(this.notice);
     }
   }
 
   private key(a: InputAction): void {
     if (this.leaving) return;
+    if (this.sq.key(a)) return void this.view?.refresh();
     if (this.res.key(a)) return void this.view?.refresh();
     if (this.crew.key(a)) return void this.view?.refresh();
     if (a === 'back') return this.back();
@@ -298,7 +311,8 @@ export class DominionScene extends Phaser.Scene {
   }
 
   private tab(i: number): void {
-    if (this.screen !== 'hq' && this.screen !== 'map' && this.screen !== 'crew' && this.screen !== 'reserve' && this.screen !== 'pyramid') return;
+    if (this.screen !== 'hq' && this.screen !== 'map' && this.screen !== 'crew' && this.screen !== 'reserve' && this.screen !== 'pyramid' && this.screen !== 'squads') return;
+    if (this.sq.tab(i)) return void this.view?.refresh();
     if (this.res.tab(i)) return void this.view?.refresh();
     if (this.crew.tab(i)) return void this.view?.refresh();
     const b = this.block();

@@ -1,0 +1,735 @@
+{
+  "_source": "plans/evil-mode-rework/10_SQUADS.md (Part 10: Squads and Groups, Kice 2026-11-18 11:41 PM PT), sections 1-10; mockup 13 (plans/evil-mode-rework/mockups-v4 #s13). Numbers are starting values, none playtested. Squad Traits 8-20 are new (Part 10 §6 names seven of the twenty).",
+  "unlock": {
+    "notoriety": 20,
+    "word": "Street Gang",
+    "leaderMin": "corporal"
+  },
+  "codeName": {
+    "max": 20,
+    "allowed": "^[A-Za-z0-9 .'&-]+$",
+    "badWords": [
+      "fuck",
+      "shit",
+      "cunt",
+      "bitch",
+      "dick",
+      "piss",
+      "bastard",
+      "whore",
+      "slut",
+      "nazi"
+    ]
+  },
+  "sizes": [
+    {
+      "rank": "corporal",
+      "max": 3,
+      "kind": "squad"
+    },
+    {
+      "rank": "sergeant",
+      "max": 4,
+      "kind": "squad"
+    },
+    {
+      "rank": "staff-sergeant",
+      "max": 6,
+      "kind": "squad"
+    },
+    {
+      "rank": "lieutenant",
+      "max": 8,
+      "kind": "unit"
+    },
+    {
+      "rank": "captain",
+      "max": 12,
+      "kind": "unit"
+    }
+  ],
+  "minMembers": 2,
+  "groups": [
+    {
+      "kind": "group",
+      "word": "Group",
+      "from": "admin",
+      "to": "commander",
+      "min": 2,
+      "max": 4
+    },
+    {
+      "kind": "division",
+      "word": "Division",
+      "from": "executive",
+      "to": "right-hand",
+      "min": 2,
+      "max": 99
+    }
+  ],
+  "kinds": {
+    "squad": "Squad",
+    "unit": "Unit",
+    "group": "Group",
+    "division": "Division"
+  },
+  "cap": {
+    "perHq": 1,
+    "base": 1,
+    "opsRoom": 1
+  },
+  "incentives": [
+    {
+      "id": "cut",
+      "name": "Cut of the Take",
+      "short": "Cut",
+      "deal": "They keep 10% of what they bring in",
+      "bonus": "+15% on money jobs",
+      "cost": "10% of their income",
+      "fits": [
+        "money"
+      ],
+      "live": true
+    },
+    {
+      "id": "glory",
+      "name": "Glory",
+      "short": "Glory",
+      "deal": "Their Code Name in the paper, a mural at HQ",
+      "bonus": "Dread +2 a week in their town; Attack and Raid +10%",
+      "cost": "Personal Heat builds 25% faster",
+      "fits": [
+        "thrill"
+      ],
+      "live": true,
+      "note": "The paper and the mural are drawn with the morning paper (D30)."
+    },
+    {
+      "id": "brotherhood",
+      "name": "Brotherhood",
+      "short": "Brother",
+      "deal": "They eat together, they stick together",
+      "bonus": "Cohesion grows twice as fast; members never poached while together",
+      "cost": "−10% when split up",
+      "fits": [
+        "belonging"
+      ],
+      "live": true,
+      "note": "Poaching comes with the rival team (D9)."
+    },
+    {
+      "id": "promotion",
+      "name": "Promotion Track",
+      "short": "Promo",
+      "deal": "The best of them moves up first",
+      "bonus": "Member XP +25%",
+      "cost": "Ambition +2 a week for every member",
+      "fits": [
+        "money",
+        "revenge"
+      ],
+      "live": true
+    },
+    {
+      "id": "cause",
+      "name": "The Cause",
+      "short": "Cause",
+      "deal": "They're doing it for the Goal",
+      "bonus": "+10% on Goal-track jobs; Goal Track +1 a week",
+      "cost": "Morale −5 if the Goal stalls for 2 weeks",
+      "fits": [
+        "cause"
+      ],
+      "live": false,
+      "needs": "D14",
+      "note": "The Goal track comes with the Founding and the takeover paths (D7, D14); until then the Cause has no bonus and no cost."
+    },
+    {
+      "id": "fear",
+      "name": "Fear of the Boss",
+      "short": "Fear",
+      "deal": "They work because they're scared not to",
+      "bonus": "Mishaps halved; never refuse a job",
+      "cost": "Loyalty can't rise above 50; betrayal risk +10 for its leader",
+      "fits": [
+        "fear"
+      ],
+      "live": true,
+      "note": "Betrayals come with many regions (D15)."
+    },
+    {
+      "id": "vengeance",
+      "name": "Vengeance",
+      "short": "Venge",
+      "deal": "A named target (a rival Admin, a Gym, a cop)",
+      "bonus": "+25% against that target only",
+      "cost": "Morale −10 a week once the target's gone, until a new one's named",
+      "fits": [
+        "revenge"
+      ],
+      "live": true,
+      "note": "Rival Admins as targets come with the rival team (D9)."
+    },
+    {
+      "id": "pokemon",
+      "name": "Pokémon First",
+      "short": "Poké",
+      "deal": "Their Pokémon get the best of everything",
+      "bonus": "Their Pokémon gain Trust +1 a week and +10% XP",
+      "cost": "+₽50 a week per member in upkeep",
+      "fits": [
+        "belonging",
+        "cause"
+      ],
+      "live": true,
+      "note": "The +10% Pokémon XP waits for crew Pokémon XP (D5's training rooms)."
+    },
+    {
+      "id": "quiet",
+      "name": "Quiet Work",
+      "short": "Quiet",
+      "deal": "No names, no noise",
+      "bonus": "Personal Heat −50%; Steal, Smuggle, Spy +10%",
+      "cost": "No Dread or Regard from their jobs",
+      "fits": [
+        "fear",
+        "money"
+      ],
+      "live": true
+    },
+    {
+      "id": "purse",
+      "name": "Open Purse",
+      "short": "Purse",
+      "deal": "Paid double, no questions",
+      "bonus": "Morale +10; any job",
+      "cost": "Double wages",
+      "fits": [
+        "money"
+      ],
+      "live": true
+    }
+  ],
+  "numbers": {
+    "cutOdds": 15,
+    "cutKeepPct": 10,
+    "gloryDread": 2,
+    "gloryOdds": 10,
+    "gloryHeatPct": 125,
+    "brotherhoodGrowth": 2,
+    "splitPenalty": 10,
+    "promoXpPct": 25,
+    "promoAmbition": 2,
+    "causeOdds": 10,
+    "fearLoyaltyMax": 50,
+    "vengeanceOdds": 25,
+    "vengeanceGoneMorale": -10,
+    "firstTrust": 1,
+    "firstUpkeep": 50,
+    "quietHeatPct": 50,
+    "quietOdds": 10,
+    "purseMorale": 10,
+    "purseWageX": 2,
+    "matchLoyalty": 10,
+    "matchMorale": 2,
+    "clashMorale": -2,
+    "focusOn": 10,
+    "focusOff": -5,
+    "fatigue": 10,
+    "followerXp": [
+      1,
+      2
+    ],
+    "longShot": 40,
+    "chatterChance": 20,
+    "splitFamilyMorale": -15,
+    "splitQuitChance": 25,
+    "companionCohesion": 40,
+    "groupClashGrowth": 2,
+    "matchOdds": 3,
+    "matchPairMorale": 2,
+    "matchFailMorale": -3,
+    "runCrewMax": 5,
+    "runCrewPlan": 5
+  },
+  "focus": [
+    {
+      "id": "collect",
+      "name": "Collect",
+      "families": [
+        "collect",
+        "shake",
+        "front"
+      ]
+    },
+    {
+      "id": "steal",
+      "name": "Steal",
+      "families": [
+        "pick"
+      ]
+    },
+    {
+      "id": "guard",
+      "name": "Guard",
+      "families": [
+        "guard"
+      ]
+    },
+    {
+      "id": "scout",
+      "name": "Scout",
+      "families": [
+        "scout"
+      ]
+    },
+    {
+      "id": "recruit",
+      "name": "Recruit",
+      "families": [
+        "recruit"
+      ]
+    },
+    {
+      "id": "train",
+      "name": "Train",
+      "families": [
+        "train"
+      ]
+    },
+    {
+      "id": "catch",
+      "name": "Catch",
+      "families": [
+        "catch"
+      ]
+    },
+    {
+      "id": "raid",
+      "name": "Raid",
+      "families": [],
+      "needs": "D10"
+    },
+    {
+      "id": "smuggle",
+      "name": "Smuggle",
+      "families": [],
+      "needs": "D10"
+    }
+  ],
+  "marks": [
+    "◆",
+    "▲",
+    "●",
+    "✚",
+    "☾",
+    "★",
+    "■",
+    "♠",
+    "♣",
+    "♥",
+    "⬢",
+    "✦"
+  ],
+  "colors": [
+    "#3fcf74",
+    "#b28cff",
+    "#4fa3ff",
+    "#f2c230",
+    "#ff7a59",
+    "#4fd2ff",
+    "#ff5a9a",
+    "#a0e05a",
+    "#e0a0ff",
+    "#ffb238",
+    "#7ae0c8",
+    "#ff9a8f"
+  ],
+  "cohesion": {
+    "start": 20,
+    "bands": [
+      {
+        "min": 0,
+        "id": "strangers",
+        "word": "STRANGERS",
+        "pill": "r",
+        "pct": -10,
+        "text": "−10% on squad jobs; members may argue"
+      },
+      {
+        "min": 20,
+        "id": "workmates",
+        "word": "WORKMATES",
+        "pill": "k",
+        "pct": 0,
+        "text": "No bonus"
+      },
+      {
+        "min": 50,
+        "id": "tight",
+        "word": "TIGHT",
+        "pill": "y",
+        "pct": 10,
+        "text": "+10% on squad jobs; mishaps −25%"
+      },
+      {
+        "min": 80,
+        "id": "family",
+        "word": "FAMILY",
+        "pill": "g",
+        "pct": 20,
+        "text": "+20%; a downed member's Pokémon fights on; picks a Squad Trait"
+      }
+    ],
+    "up": {
+      "job": 2,
+      "longShot": 8,
+      "matchWeek": 1,
+      "rescue": 15,
+      "night": 5
+    },
+    "down": {
+      "swapped": -10,
+      "lost": -15,
+      "demoted": -20,
+      "punished": -8,
+      "incentive": -15
+    }
+  },
+  "traits": [
+    {
+      "id": "ghost-shift",
+      "name": "Ghost Shift",
+      "earned": [
+        "pick",
+        "guard"
+      ],
+      "text": "Their night jobs can't be seen by the police in the World Turn: no Heat from them.",
+      "live": true
+    },
+    {
+      "id": "shield-wall",
+      "name": "Shield Wall",
+      "earned": [
+        "guard"
+      ],
+      "text": "+1 defense battle wherever they guard.",
+      "live": false,
+      "needs": "D9"
+    },
+    {
+      "id": "money-hands",
+      "name": "Money Hands",
+      "earned": [
+        "collect",
+        "shake"
+      ],
+      "text": "Rackets in their town pay +20%.",
+      "live": true
+    },
+    {
+      "id": "breach-team",
+      "name": "Breach Team",
+      "earned": [],
+      "text": "Raids they lead start with the first defender at −25% HP.",
+      "live": false,
+      "needs": "D10"
+    },
+    {
+      "id": "talkers",
+      "name": "Talkers",
+      "earned": [
+        "recruit"
+      ],
+      "text": "Recruits who join while they work the streets come with +1 trait point.",
+      "live": true
+    },
+    {
+      "id": "heros-shadow",
+      "name": "Hero's Shadow",
+      "earned": [],
+      "text": "+15% against the Hero; they report where the Hero is each morning.",
+      "live": false,
+      "needs": "D11"
+    },
+    {
+      "id": "old-warehouse",
+      "name": "Old Warehouse",
+      "earned": [],
+      "warehouse": true,
+      "text": "+5 Loyalty to every member, forever; one free retry a region.",
+      "live": true,
+      "note": "The free retry a region comes with many regions (D15)."
+    },
+    {
+      "id": "iron-nerves",
+      "name": "Iron Nerves",
+      "earned": [
+        "train"
+      ],
+      "text": "+10% on Nerve jobs.",
+      "live": true
+    },
+    {
+      "id": "sticky-fingers",
+      "name": "Sticky Fingers",
+      "earned": [
+        "pick"
+      ],
+      "text": "+10% on Street Crime jobs.",
+      "live": true
+    },
+    {
+      "id": "lookouts",
+      "name": "Lookouts",
+      "earned": [
+        "scout"
+      ],
+      "text": "+10% on Scout; every member's personal Heat cools 1 more a night.",
+      "live": true
+    },
+    {
+      "id": "night-owls",
+      "name": "Night Owls",
+      "earned": [
+        "guard"
+      ],
+      "text": "Squad jobs tire them +5 Fatigue, not +10.",
+      "live": true
+    },
+    {
+      "id": "pack-hunters",
+      "name": "Pack Hunters",
+      "earned": [
+        "catch"
+      ],
+      "text": "+10% on Catch and Pokémon Care jobs.",
+      "live": true
+    },
+    {
+      "id": "welcome-mat",
+      "name": "Welcome Mat",
+      "earned": [
+        "recruit"
+      ],
+      "text": "New members join with Loyalty +10.",
+      "live": true
+    },
+    {
+      "id": "drill-sergeants",
+      "name": "Drill Sergeants",
+      "earned": [
+        "train"
+      ],
+      "text": "Every squad job gives each member +1 XP.",
+      "live": true
+    },
+    {
+      "id": "shopkeepers",
+      "name": "Shopkeepers",
+      "earned": [
+        "front"
+      ],
+      "text": "Front jobs bring in +15% more money.",
+      "live": true
+    },
+    {
+      "id": "bookkeepers",
+      "name": "Bookkeepers",
+      "earned": [
+        "collect"
+      ],
+      "text": "Nobody in the squad pockets a cent; Audit the Books +10%.",
+      "live": true
+    },
+    {
+      "id": "unbreakable",
+      "name": "Unbreakable",
+      "earned": [
+        "rest"
+      ],
+      "text": "Members' Morale never falls below 30.",
+      "live": true
+    },
+    {
+      "id": "street-legends",
+      "name": "Street Legends",
+      "earned": [
+        "shake"
+      ],
+      "text": "Dread +1 a week in their town.",
+      "live": true
+    },
+    {
+      "id": "tunnel-rats",
+      "name": "Tunnel Rats",
+      "earned": [],
+      "text": "Smuggling routes they run can't be stopped at a checkpoint.",
+      "live": false,
+      "needs": "D10"
+    },
+    {
+      "id": "blood-oath",
+      "name": "Blood Oath",
+      "earned": [],
+      "text": "Members' Loyalty never falls below 20: nobody walks out.",
+      "live": true
+    }
+  ],
+  "traitNumbers": {
+    "ironNerves": 10,
+    "stickyFingers": 10,
+    "lookouts": 10,
+    "lookoutsCool": 1,
+    "nightOwls": 5,
+    "packHunters": 10,
+    "welcomeMat": 10,
+    "drill": 1,
+    "shopkeepers": 15,
+    "bookkeepers": 10,
+    "unbreakable": 30,
+    "streetLegends": 1,
+    "moneyHands": 20,
+    "oldWarehouse": 5,
+    "bloodOath": 20
+  },
+  "suggest": {
+    "byFamily": {
+      "guard": "Night Shift",
+      "shake": "Dock Rats",
+      "pick": "Viper Unit",
+      "scout": "Fog Walkers",
+      "recruit": "Open Door",
+      "train": "Iron Pack",
+      "catch": "Ball Hounds",
+      "front": "Counter Kings",
+      "collect": "Ledger Men",
+      "rest": "The Regulars"
+    },
+    "byDistrict": {
+      "lavender": "Tower Ghosts",
+      "vermilion": "Low Tide",
+      "cinnabar": "Ash Hands",
+      "celadon": "Back Door",
+      "saffron": "Static",
+      "pewter": "Boulder Boys",
+      "cerulean": "Bridge Kids",
+      "fuchsia": "Gate Crashers",
+      "viridian": "Forest Lot",
+      "pallet": "Quiet Street"
+    },
+    "warehouse": "The Drips",
+    "town": "{town} Lot",
+    "spare": [
+      "Short Fuse",
+      "Gutter Saints",
+      "Rock Bottom",
+      "Second Shift",
+      "The Late Crowd",
+      "Black Socks"
+    ]
+  },
+  "targets": [
+    {
+      "id": "proton",
+      "name": "Proton",
+      "kind": "rival",
+      "look": "t-proton",
+      "live": false,
+      "needs": "D9"
+    },
+    {
+      "id": "petrel",
+      "name": "Petrel",
+      "kind": "rival",
+      "look": "t-petrel",
+      "live": false,
+      "needs": "D9"
+    },
+    {
+      "id": "cerulean-gym",
+      "name": "Gym (Misty)",
+      "kind": "gym",
+      "look": "t-misty",
+      "live": true
+    },
+    {
+      "id": "vermilion-station",
+      "name": "Vermilion police",
+      "kind": "police",
+      "look": "t-policeman",
+      "live": true
+    }
+  ],
+  "lines": {
+    "formed": "{squad} is formed: {n} under {leader}, on {incentive}.",
+    "groupFormed": "{group} is formed: {n} squads under {leader}.",
+    "edited": "{squad}'s changes are in.",
+    "disbanded": "{squad} is broken up.",
+    "groupDisbanded": "{group} is broken up. Its squads keep going.",
+    "splitFamily": "{squad} was Family. Breaking it up costs everyone Morale {n}.",
+    "splitQuit": "{name} won't work for anyone else and walks out.",
+    "order": "{squad} takes {task} tonight ({odds}%).",
+    "orderGroup": "{group}'s squads all take {task} tonight.",
+    "cleared": "{squad} has no order: each member keeps their own task.",
+    "refuse": "{squad} won't do it, Boss. {name}'s line, and they stand with {them}.",
+    "cut": "{squad} (Cut of the Take) brought back ₽{amount}. They kept ₽{kept}. Nobody's complaining.",
+    "job": "{squad} went out together on {task}.",
+    "longShot": "{squad} pulled it off against the odds ({odds}%). Cohesion +{n}.",
+    "family": "{squad} is Family now: pick their Squad Trait on the Squads page.",
+    "trait": "{squad} earns a Squad Trait: {trait}.",
+    "lost": "{squad} lost {name}. Cohesion {n}.",
+    "demoted": "{squad}'s leader {name} was demoted. Cohesion {n}.",
+    "leaderless": "{squad} has no leader fit to lead it. Pick a new leader on the Squads page.",
+    "punished": "{name} was punished in front of {squad}. Cohesion {n}.",
+    "rescued": "{squad} saw the Boss bail {name} out. Cohesion +{n}.",
+    "upkeep": "{squad} (Pokémon First): ₽{amount} for their Pokémon's upkeep.",
+    "purse": "{squad} (Open Purse): ₽{amount} more in wages.",
+    "dread": "{squad}'s name is on the walls in {town}. Dread +{n}.",
+    "goneTarget": "{squad} has no one left to hate. Name a new target. Morale {n}.",
+    "rackets": "{squad} (Money Hands) squeezed ₽{amount} more out of {town}'s rackets.",
+    "matched": "{a} and {b} are paired up by {name}. They work better side by side.",
+    "matchFailed": "{name} tried to pair {a} with {b}. They can't stand each other. Morale {n}.",
+    "runCrew": "{name} ran a crew of {n} tonight: each of them sharper for it.",
+    "noLeader": "Pick a leader: a Corporal or higher.",
+    "locked": "Squads open at {word} (Notoriety {need}) with a Corporal or higher.",
+    "lockedNoCorporal": "You need a Corporal or higher to lead a squad.",
+    "full": "You run {n} squads already: the HQ allows {cap}.",
+    "tooFew": "A squad needs at least {n} members, leader included.",
+    "tooMany": "A {rank} leads {n} at most, leader included.",
+    "taken": "{name} is already in {squad}.",
+    "nameEmpty": "Type a Code Name first (N).",
+    "nameLong": "A Code Name is {n} letters at most.",
+    "nameBad": "Not that name.",
+    "nameChars": "Letters, numbers, spaces and . ' & - only.",
+    "nameTaken": "{name} is taken.",
+    "needsSlice": "{what} comes later ({needs}).",
+    "needTarget": "Vengeance needs a target.",
+    "groupLeader": "A Group needs an Admin or higher to lead it.",
+    "groupSize": "A Group holds {min} to {max} squads.",
+    "inGroup": "{squad} is already in {group}.",
+    "phase": "Orders are given in the Morning or the Evening."
+  },
+  "chatter": {
+    "strangers": [
+      "{squad}? We barely know each other's names, Boss.",
+      "{name} keeps sitting on his own at {squad}'s table.",
+      "Somebody in {squad} ate somebody else's lunch. It's a whole thing."
+    ],
+    "workmates": [
+      "{squad} gets the job done. Nobody's sending cards.",
+      "{name}: \"{squad}'s fine. We nod at each other now.\"",
+      "{squad} has a group chat. Nobody posts in it."
+    ],
+    "tight": [
+      "{squad} has a handshake now. It takes eleven seconds.",
+      "{name}: \"{squad} covers for each other, Boss. Every time.\"",
+      "{squad} was late because they waited for {name}. All of them."
+    ],
+    "family": [
+      "{squad} doesn't do mornings, Boss.",
+      "{name}: \"Touch one of {squad} and you've touched all of us.\"",
+      "{squad} painted their Mark on the HQ door. Nobody asked. Nobody minds."
+    ]
+  }
+}

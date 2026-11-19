@@ -247,6 +247,13 @@ const crewStat = (b: DominionBlock, bring: readonly string[], stat: StatId): [st
   bring.map((id) => b.members.find((m) => m.id === id)).filter((m) => !!m).slice(0, F().odds.maxBrought).map((m) => [`${m!.name} brought along`, m!.stats[stat] * F().odds.crewPer]);
 
 /** The Card (Part 1 §3, mockup 4): everything the action risks and pays, worked out from the block. Never rolls. */
+/** D8: odds parts from later slices on the Boss's Card (a squad's Vengeance target, Glory on Attack and Raid). */
+type CardHook = (b: DominionBlock, actionId: string, targetId: string | null, bring: readonly string[]) => [string, number][];
+const CARD_HOOKS: CardHook[] = [];
+export function addCardHook(h: CardHook): void {
+  CARD_HOOKS.push(h);
+}
+
 export function card(b: DominionBlock, run: Pick<RunState, 'party'>, actionId: string, targetId: string | null, districtId: string, bring: readonly string[] = []): Card | null {
   const def = actionDef(actionId);
   const play = def ? playOf(def.id) ?? null : null;
@@ -269,6 +276,7 @@ export function card(b: DominionBlock, run: Pick<RunState, 'party'>, actionId: s
   if (roll) {
     if (stat) parts.push([`Boss ${cap(stat)} ${f.edge.stats[stat]}`, f.edge.stats[stat] * O.statPer]);
     if (stat) parts.push(...crewStat(b, bring, stat));
+    for (const h of CARD_HOOKS) parts.push(...h(b, def.id, target?.id ?? null, bring));
     const intel = target ? f.scouted[target.id] ?? 0 : 0;
     if (target && intel >= b.day) parts.push([intel - O.scoutDays >= b.day - 1 ? 'Scouted yesterday' : 'Scouted', O.scouted]);
     if (ds.heat >= O.heatPer) parts.push([`Heat in ${district.name}`, -Math.floor(ds.heat / O.heatPer)]);

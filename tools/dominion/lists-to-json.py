@@ -64,14 +64,17 @@ ENGINE = {
     81: dict(kind='feed'),
     82: dict(kind='berries'),
     102: dict(kind='money', funds=[20, 80]),
+    # D8 (squads.ts): pairs two members; an Executive leads five on their tasks.
+    58: dict(kind='matchMake', note='The bond trait (level 3) and swapping Pokémon in a doubles battle (level 4) wait for squads in battle (D10).'),
+    141: dict(kind='runCrew', note='Level 4 (no failures from miscommunication) has nothing to stop yet: crew tasks have no miscommunication roll.'),
 }
 
 # The slice each disabled row waits for: by section, then by row.
 NEEDS_SECTION = {'A': 'D5', 'B': 'D10', 'C': 'D2', 'D': 'D9', 'E': 'D9', 'F': 'D5', 'G': 'D5', 'H': 'D10', 'I': 'D10', 'J': 'D6', 'K': 'D15', 'L': 'D9', 'M': 'D14'}
 NEEDS_ROW = {
     4: 'D9', 5: 'D6', 6: 'D2', 8: 'D10', 9: 'D2', 11: 'D9', 13: 'D6', 17: 'D5', 23: 'D5', 32: 'D6', 33: 'D10',
-    40: 'D6', 46: 'D2', 47: 'D6', 42: 'D2', 45: 'D11', 50: 'D5', 53: 'D6', 55: 'D2', 58: 'D8', 69: 'D5', 70: 'D9', 71: 'D7',
-    83: 'D10', 84: 'D11', 89: 'D5', 90: 'D5', 91: 'D5', 109: 'D5', 118: 'D11', 119: 'D6', 124: 'D6', 128: 'D6', 141: 'D8',
+    40: 'D6', 46: 'D2', 47: 'D6', 42: 'D2', 45: 'D11', 50: 'D5', 53: 'D6', 55: 'D2', 69: 'D5', 70: 'D9', 71: 'D7',
+    83: 'D10', 84: 'D11', 89: 'D5', 90: 'D5', 91: 'D5', 109: 'D5', 118: 'D11', 119: 'D6', 124: 'D6', 128: 'D6', 
     142: 'D9', 145: 'D11', 146: 'D6',
 }
 

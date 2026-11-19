@@ -37,3 +37,4 @@ Copied from the Claude AI mockups (project files `plans/claude-api/mockups/sprit
 | --- | --- |
 | `p-dialga.png`, `p-palkia.png`, `p-giratina.png`, `p-groudon.png`, `p-kyogre.png` | Pokémon sprites from the PokeRogue pack |
 | `g-adamant-orb`, `g-lustrous-orb`, `g-griseous-orb`, `g-red-orb`, `g-blue-orb`, `g-key-charm`, `g-tea`, `g-scope-lens`, `g-choice-band`, `g-soothe-bell`, `g-storage-key` (.png) | Item icons from `images/items/` (PokeRogue pack) |
+| `t-proton.png`, `t-petrel.png`, `t-misty.png` (D8, the Squads page's Vengeance targets) | Trainer sprites from the PokeRogue pack (`images/trainer/`), one frame, as in `plans/evil-mode-rework/mockups-v3/sprites/` |

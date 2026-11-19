@@ -1,6 +1,7 @@
 // DOMINION slice D4: view models for mockup 11 (the Pokémon Reserve) and mockup 12 (the Rank Pyramid). Plain data out;
 // the views draw it and the controller keeps the cursors. Nothing here rolls or changes the block.
 
+import { squadOf } from './squads';
 import { crewOf, monName, rankN, rankWord } from './crew';
 import { DOMINION_DATA } from './data';
 import {
@@ -11,6 +12,12 @@ import type { DominionBlock, Member } from './schema';
 
 const P = () => DOMINION_DATA.pyramid;
 export const RESERVE_PAGE = 8;
+
+/** D8: the squad Mark shown beside a face on the Pyramid (Part 10 §9). */
+function markOf(b: DominionBlock, id: string): CandModel['mark'] {
+  const s = squadOf(b, id);
+  return s ? { ch: DOMINION_DATA.squads.marks[s.mark]!, colour: DOMINION_DATA.squads.colors[s.mark]!, squad: s.codeName } : null;
+}
 
 export interface SlotModel { uid: string; species: string; level: number; bad: string | null; ace: boolean; pens: number }
 export interface TileModel { uid: string; species: string; level: number; bst: number; type: string; fits: boolean; ace: boolean; tag: string; on: boolean; trust: number }
@@ -101,7 +108,7 @@ export function reserveModel(b: DominionBlock, whoId: string, at: number, page: 
 // ---------- mockup 12: the Rank Pyramid ----------
 
 export interface TierModel { n: number; label: string; z: string; seats: ('f' | 'o' | 'w')[]; count: string | null; hot: boolean; locked: boolean; left: number; top: number; width: number }
-export interface CandModel { id: string; name: string; look: string; rank: string; level: number; loyalty: number; ambition: number; z: string; stripe: string }
+export interface CandModel { id: string; name: string; look: string; rank: string; level: number; loyalty: number; ambition: number; z: string; stripe: string; mark: { ch: string; colour: string; squad: string } | null }
 export interface PyramidModel {
   crew: string;
   hq: string;
@@ -157,7 +164,7 @@ export function pyramidModel(b: DominionBlock, sel: number, hqName: string): Pyr
     const others = order.filter((x) => x.id !== m.id && x.rank === m.rank && readyFor(b, x)?.id === target.id);
     for (const x of [m, ...others].slice(0, 2)) {
       const c = crewOf(x);
-      cands.push({ id: x.id, name: x.name, look: x.look, rank: rankWord(x.rank), level: x.level, loyalty: x.loyalty, ambition: c.ambition, z: bandOf(x.rank).z, stripe: STRIPE[bandOf(x.rank).z] ?? '#7b3fa0' });
+      cands.push({ id: x.id, name: x.name, look: x.look, rank: rankWord(x.rank), level: x.level, loyalty: x.loyalty, ambition: c.ambition, z: bandOf(x.rank).z, stripe: STRIPE[bandOf(x.rank).z] ?? '#7b3fa0', mark: markOf(b, x.id) });
     }
     const row = rankRow(target.id);
     head = row.seats ? (seatsOpen(b, target.id) ? `${rankWord(target.id)} SEAT OPEN` : `${rankWord(target.id)} SEATS FULL`) : `NEXT: ${rankWord(target.id)}`;

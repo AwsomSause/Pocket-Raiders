@@ -285,6 +285,8 @@ const BlockSchema = z.object({
   crew: z.lazy(() => CrewStateSchema).optional(),
   /** D4: the Reserve, Trust, the pyramid's bookkeeping. Optional; `reserveOf` fills it (and moves D3's stores in). */
   reserve: z.lazy(() => ReserveStateSchema).optional(),
+  /** D8: Squads and Groups (Part 10). Optional; `squadsOf` fills it. */
+  squads: z.lazy(() => SquadsStateSchema).optional(),
 }).strict();
 export const DominionBlockSchema = z.preprocess(migrateDominion, BlockSchema);
 export type DominionBlock = z.infer<typeof BlockSchema>;
@@ -327,7 +329,19 @@ export type DominionAction =
   | { t: 'free'; uid: string }
   | { t: 'promote'; member: string }
   | { t: 'demote'; member: string }
-  | { t: 'strip'; member: string };
+  | { t: 'strip'; member: string }
+  // D8, Squads and Groups
+  | { t: 'squadSave'; draft: SquadDraft }
+  | { t: 'squadDisband'; squad: string }
+  | { t: 'squadOrder'; squad: string; task: string | null }
+  | { t: 'squadTrait'; squad: string; trait: string }
+  | { t: 'groupSave'; draft: GroupDraft }
+  | { t: 'groupDisband'; group: string }
+  | { t: 'groupOrder'; group: string; task: string | null };
+
+/** D8: what the Squads page's builder hands over (a new squad when `id` is null). `members` leaves out the leader. */
+export interface SquadDraft { id: string | null; codeName: string; leader: string; members: string[]; incentive: string; target: string | null; focus: string | null; mark: number }
+export interface GroupDraft { id: string | null; codeName: string; leader: string; squads: string[]; incentive: string }
 
 // ---------- D3 data: crew.json, tasks.json, gruntTypes.json ----------
 
@@ -335,7 +349,7 @@ export const STAT = z.enum(STAT_IDS);
 const Pct = I.min(0).max(100);
 
 export const TaskEffectSchema = z.object({
-  kind: z.enum(['guard', 'money', 'scout', 'recruit', 'train', 'trainMon', 'rest', 'catch', 'steal', 'berries', 'audit', 'welcome', 'interview', 'mentor', 'rally', 'drills', 'coach', 'pens', 'tend', 'feed', 'release', 'rehab']),
+  kind: z.enum(['guard', 'money', 'scout', 'recruit', 'train', 'trainMon', 'rest', 'catch', 'steal', 'berries', 'audit', 'welcome', 'interview', 'mentor', 'rally', 'drills', 'coach', 'pens', 'tend', 'feed', 'release', 'rehab', 'matchMake', 'runCrew']),
   funds: Range.optional(),
   heat: I.optional(),
   risky: z.boolean().optional(),
@@ -643,3 +657,90 @@ export const ReserveStateSchema = z.object({
   stripped: z.array(S),
 }).strict();
 export type ReserveState = z.infer<typeof ReserveStateSchema>;
+
+// ---------- D8: Squads and Groups (squads.json; block `squads`) ----------
+
+const NeedsS = z.string().regex(/^D\d+$/);
+export const SquadsFileSchema = z.object({
+  _source: S,
+  unlock: z.object({ notoriety: N0, word: S, leaderMin: S }).strict(),
+  codeName: z.object({ max: I.min(4), allowed: S, badWords: z.array(S) }).strict(),
+  sizes: z.array(z.object({ rank: S, max: I.min(2).max(12), kind: z.enum(['squad', 'unit']) }).strict()).min(1),
+  minMembers: I.min(2),
+  groups: z.array(z.object({ kind: z.enum(['group', 'division']), word: S, from: S, to: S, min: I.min(2), max: I.min(2) }).strict()).length(2),
+  kinds: z.record(S, S),
+  cap: z.object({ perHq: N0, base: N0, opsRoom: N0 }).strict(),
+  incentives: z.array(z.object({ id: S, name: S, short: S, deal: S, bonus: S, cost: S, fits: z.array(S).min(1), live: z.boolean(), needs: NeedsS.optional(), note: S.optional() }).strict()).length(10),
+  numbers: z.record(S, z.union([I, z.array(I)])),
+  focus: z.array(z.object({ id: S, name: S, families: z.array(S), needs: NeedsS.optional() }).strict()).min(1),
+  marks: z.array(S).length(12),
+  colors: z.array(z.string().regex(/^#[0-9a-f]{6}$/i)).length(12),
+  cohesion: z.object({
+    start: Pct,
+    bands: z.array(z.object({ min: Pct, id: S, word: S, pill: S, pct: I, text: S }).strict()).length(4),
+    up: z.object({ job: N0, longShot: N0, matchWeek: N0, rescue: N0, night: N0 }).strict(),
+    down: z.object({ swapped: I.max(0), lost: I.max(0), demoted: I.max(0), punished: I.max(0), incentive: I.max(0) }).strict(),
+  }).strict(),
+  traits: z.array(z.object({ id: S, name: S, earned: z.array(S), warehouse: z.boolean().optional(), text: S, live: z.boolean(), needs: NeedsS.optional(), note: S.optional() }).strict()
+    .refine((t) => t.live || !!t.needs, { message: 'a trait that waits names its slice' })).length(20),
+  traitNumbers: z.record(S, N0),
+  suggest: z.object({ byFamily: z.record(S, S), byDistrict: z.record(S, S), warehouse: S, town: S, spare: z.array(S).min(6) }).strict(),
+  targets: z.array(z.object({ id: S, name: S, kind: z.enum(['rival', 'gym', 'police']), look: S, live: z.boolean(), needs: NeedsS.optional() }).strict()).min(1),
+  lines: z.record(S, S),
+  chatter: z.object({ strangers: z.array(S).min(1), workmates: z.array(S).min(1), tight: z.array(S).min(1), family: z.array(S).min(1) }).strict(),
+}).strict().refine((f) => f.incentives.every((i) => i.live || !!i.needs), { message: 'an incentive that waits names its slice' });
+export type SquadsFile = z.infer<typeof SquadsFileSchema>;
+
+export const SquadSchema = z.object({
+  id: S,
+  codeName: S,
+  /** The leader (Corporal to Captain); also in `members`. */
+  leader: S,
+  /** Everyone in the squad, leader first. A member is in one squad at a time. */
+  members: z.array(S).min(1).max(12),
+  incentive: S,
+  /** Vengeance: the named target id (squads.json targets), or null. */
+  target: S.nullable(),
+  focus: S.nullable(),
+  /** Index into squads.json marks (and colors). */
+  mark: I.min(0).max(11),
+  cohesion: Pct,
+  trait: S.nullable(),
+  /** Three Squad Traits offered on reaching Family, until one is picked. */
+  offered: z.array(S).max(3),
+  /** Tonight's squad order (a task id), or null: members keep their own tasks. */
+  order: S.nullable(),
+  /** The district the squad calls home (Glory, Money Hands, Street Legends). */
+  town: S,
+  formed: I.min(1),
+  /** Formed in the first Warehouse (HQ Lv 1): Old Warehouse can be offered. */
+  warehouse: z.boolean(),
+  /** The leader's rank when last seen (a demotion costs Cohesion). */
+  leaderRank: S,
+  /** Punishments counted so far, by member (one in front of the squad costs Cohesion). */
+  punished: z.record(S, N0),
+  /** The squad's own Ledger page (Part 10 §1 Record). */
+  record: z.object({
+    jobs: N0, wins: N0, losses: N0, hurt: N0,
+    /** Squad jobs by task family: the Squad Traits it is offered. */
+    fam: z.record(S, N0),
+    /** Notable nights, newest last (at most 12). */
+    legends: z.array(z.object({ day: I.min(1), line: S }).strict()).max(12),
+  }).strict(),
+}).strict();
+export type Squad = z.infer<typeof SquadSchema>;
+
+export const GroupSchema = z.object({ id: S, codeName: S, leader: S, incentive: S, squads: z.array(S).min(1), order: S.nullable(), mark: I.min(0).max(11) }).strict();
+export type Group = z.infer<typeof GroupSchema>;
+
+export const SquadsStateSchema = z.object({
+  list: z.array(SquadSchema),
+  groups: z.array(GroupSchema),
+  /** Next squad/group id number. */
+  next: I.min(1),
+  /** Match-Make pairs (they get a small bonus on the same task). */
+  pairs: z.array(z.tuple([S, S])),
+  /** Members who were on the crew at the last look (to spot new ones: Welcome Mat, Talkers). */
+  seen: z.array(S),
+}).strict();
+export type SquadsState = z.infer<typeof SquadsStateSchema>;

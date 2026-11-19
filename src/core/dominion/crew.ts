@@ -85,7 +85,14 @@ export function modsOf(b: DominionBlock, m: Member): Mods[] {
     if (f?.live) out.push(f.mods);
   }
   for (const p of C().patrons) if (p.live && cs(b).patrons[p.id]?.state === 'won') out.push(p.mods);
+  for (const h of MOD_HOOKS) out.push(...h(b, m));
   return out;
+}
+/** Modifiers from later slices (D8: a squad's Incentive and Squad Trait). */
+type ModHook = (b: DominionBlock, m: Member) => Mods[];
+const MOD_HOOKS: ModHook[] = [];
+export function addModHook(h: ModHook): void {
+  MOD_HOOKS.push(h);
 }
 const appliesTo = (mod: Mods, task: Task): boolean =>
   (!mod.family && !mod.task && !mod.stat) || (!!mod.family && familyOf(task.id) === mod.family) || mod.task === task.id || (!!mod.stat && task.stat === mod.stat);
@@ -505,6 +512,16 @@ export function addTaskKind(kind: string, f: (x: TaskRun) => void): void {
   TASK_KINDS[kind] = f;
 }
 type DayHook = (b: DominionBlock, seed: string, n: { lines: string[]; say: (kind: Alert['kind'], text: string) => void }) => void;
+/** D8: around each member's task: skip it (a squad follower), note the state before, settle after (the squad job). */
+export interface RunHook {
+  skip?(b: DominionBlock, m: Member): boolean;
+  before?(b: DominionBlock, m: Member): void;
+  after?(b: DominionBlock, m: Member, seed: string, n: { lines: string[]; say: (kind: Alert['kind'], text: string) => void }): void;
+}
+const RUN_HOOKS: RunHook[] = [];
+export function addRunHook(h: RunHook): void {
+  RUN_HOOKS.push(h);
+}
 const DAY_HOOKS: DayHook[] = [];
 /** recruit.ts and talk.ts add their nightly upkeep here (leads leaving, Patrons, the talk cards). */
 export function addCrewHook(h: DayHook): void {
@@ -522,7 +539,11 @@ export function crewStep(block: DominionBlock, seed: string): string[] {
   if (b.day % 7 === 1) st.rerolled = [];
   for (const m of b.members) {
     mc(m);
+    // D8: a squad's members follow their leader on a squad job (squads.ts runs them after the leader's task).
+    if (RUN_HOOKS.some((h) => h.skip?.(b, m))) continue;
+    for (const h of RUN_HOOKS) h.before?.(b, m);
     runTask(b, m, seed, n);
+    for (const h of RUN_HOOKS) h.after?.(b, m, seed, { lines: n.lines, say: (k, t) => say(n, k, t) });
   }
   // A thief tries the door (Part 2 §2: Guard defends against thieves).
   const r = rng(seed, 'dominion-crew', b.day, 'thief');
