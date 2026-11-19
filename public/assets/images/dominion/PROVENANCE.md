@@ -22,3 +22,11 @@ Copied from the same mockup sprites folder (`plans/evil-mode-rework/mockups-rede
 | File | From |
 | --- | --- |
 | `g-xtransceiver`, `g-relic-gold`, `g-meteorite`, `g-silph-scope`, `g-comet-shard`, `g-devon-scope`, `g-smoke-ball`, `g-vs-seeker`, `g-black-belt`, `g-tea`, `g-soothe-bell`, `g-secret-key` (.png) | Item icons from `images/items/` and `images/items/gen5/` (PokeRogue pack), re-saved at the mockup's size by the mockup thread; copied from `plans/evil-mode-rework/mockups-redesign/sprites/` |
+
+## Slice D5 (the HQ, mockup 6)
+
+| File | From |
+| --- | --- |
+| `g-big-nugget`, `g-max-potion`, `g-relic-statue`, `g-storage-key` (.png) | Item icons from `images/items/` (PokeRogue pack), re-saved at the mockup's size by the mockup thread; copied from `plans/evil-mode-rework/mockups-redesign/sprites/` |
+| `p-growlithe.png`, `p-houndour.png` | Pokémon front sprites from the PokeRogue pack (`images/pokemon/`), one frame, cut by the mockup thread (the Holding Pens and the Compound's guard dogs) |
+| `c-gruntb.png`, `c-rook.png` | A Grunt and Rook from the PokeRogue trainer sprites (`images/trainer/`), one frame, cut by the mockup thread (crew in the Barracks) |

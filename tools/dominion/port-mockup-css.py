@@ -39,7 +39,8 @@ def split_rules(text):
 def anim(decls):
     def fix(m):
         parts = []
-        for one in m.group(2).split(','):
+        # Split on top-level commas only, so cubic-bezier(.2,1.25,.35,1) stays whole.
+        for one in re.split(r',(?![^(]*\))', m.group(2)):
             toks = one.split()
             if toks and not toks[0][0].isdigit() and toks[0] not in ('none', 'var(--now)'):
                 toks[0] = 'dm-' + toks[0]
@@ -49,6 +50,8 @@ def anim(decls):
             parts.append(' '.join(toks))
         return m.group(1) + ','.join(parts)
     decls = re.sub(r'(animation:)([^;!}]+)', fix, decls)
+    # An entrance delay counts from when the view first drew, so a redraw doesn't play it again.
+    decls = re.sub(r'animation-delay:calc\((?!var\(--now)', 'animation-delay:calc(var(--now,0ms) + ', decls)
     return re.sub(r'(animation-name:)\s*([\w-]+)', lambda m: m.group(1) + 'dm-' + m.group(2), decls)
 
 
@@ -76,6 +79,8 @@ def emit(rules, inner=False):
         if pre.startswith('@keyframes'):
             name = pre.split()[1]
             lines.append('@keyframes dm-%s{%s}' % (name, body.strip()))
+        elif pre.startswith('@property') or pre.startswith('@font-face'):
+            lines.append('%s{%s}' % (pre, body.strip()))
         elif pre.startswith('@media'):
             if 'max-width' in pre:
                 continue
