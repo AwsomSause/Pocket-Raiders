@@ -28,3 +28,12 @@ Copied from the same mockup sprites folder (`plans/evil-mode-rework/mockups-rede
 | File | From |
 | --- | --- |
 | `g-relic-statue.png`, `g-dark-gem.png` | Item icons from `images/items/` (PokeRogue pack), re-saved at the mockup's size by the mockup thread; copied from `plans/evil-mode-rework/mockups-redesign/sprites/` |
+
+## Slice D18 (Rotom Key-Card screens, mockups a1 + a2)
+
+Copied from the Claude AI mockups (project files `plans/claude-api/mockups/sprites/`, published https://claude.ai/artifact/LEFrzZyJrVo7kyA3Rk59hg), cut by the mockup thread from art already in this repo (same packs and licence as above):
+
+| File | From |
+| --- | --- |
+| `p-dialga.png`, `p-palkia.png`, `p-giratina.png`, `p-groudon.png`, `p-kyogre.png` | Pokémon sprites from the PokeRogue pack |
+| `g-adamant-orb`, `g-lustrous-orb`, `g-griseous-orb`, `g-red-orb`, `g-blue-orb`, `g-key-charm`, `g-tea`, `g-scope-lens`, `g-choice-band`, `g-soothe-bell`, `g-storage-key` (.png) | Item icons from `images/items/` (PokeRogue pack) |
