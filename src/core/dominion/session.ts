@@ -19,6 +19,9 @@ import { afterStep, lineFor, weekSum } from './empire';
 import { afterStand, answerMeet, ensureHero, heroMember, heroTeam, startLegend } from './hero';
 import { escapeHero } from './field';
 import { hashSeed, Rng } from '../rng';
+import { build, letGo, loan, rebuild, repay, sell, storageCap, tierUp, upgrade, launder, type HqOut } from './hq';
+import { withHq } from './hqFx';
+import { levelCap } from '../regions';
 
 export const DOMINION_MODE_ID = 'dominion';
 export const isDominionRun = (run: RunState | null | undefined): boolean => run?.rules.modeId === DOMINION_MODE_ID;
@@ -49,7 +52,9 @@ export function startInRun(content: Content, run: RunState, setup: DominionSetup
   const problem = typesProblem(setup.types);
   if (problem) return { run, problem };
   let out = bossTeam(content, structuredClone(run));
-  const block = DominionBlockSchema.parse(ensureHero(withCrew(newBlock(content, out, setup)), run.archetypeId, run.seed));
+  const fresh = newBlock(content, out, setup);
+  // D5: the starting money is clean (A21). D11: the region's Hero.
+  const block = DominionBlockSchema.parse(ensureHero(withHq(withCrew(fresh), fresh.funds), run.archetypeId, run.seed));
   out = { ...withBlock(out, block), inventory: { ...DOMINION_DATA.start.start.inventory } };
   return { run: out, problem: null };
 }
@@ -87,6 +92,8 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
   if (!block) return { ok: false, block: block as never, notice: null, heal: false, run };
   const crewOut = crewInRun(content, run, action);
   if (crewOut) return crewOut;
+  const hqOut = hqInRun(content, run, action);
+  if (hqOut) return hqOut;
   const heroOut = heroInRun(content, run, action);
   if (heroOut) return heroOut;
   if (action.t === 'act') {
@@ -115,6 +122,27 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
   }
   next = settleCrew(content, next);
   return { ...out, block: next.expansion!.dominion!, run: next };
+}
+
+/** D5: the HQ menu (hq.ts). The upgrade needs the run for the region's level cap (the Citadel's). */
+function hqInRun(content: Content, run: RunState, action: DominionAction): (StepOut & { run: RunState }) | null {
+  const b = run.expansion!.dominion!;
+  let out: HqOut;
+  switch (action.t) {
+    case 'upgrade': out = upgrade(b, levelCap(content, run.regionIndex)); break;
+    case 'build': out = build(b, action.building, action.district); break;
+    case 'tierUp': out = tierUp(b, action.room); break;
+    case 'sell': out = sell(b, action.room); break;
+    case 'rebuild': out = rebuild(b, action.room); break;
+    case 'launder': out = launder(b, action.amount); break;
+    case 'loan': out = loan(b, action.amount); break;
+    case 'repay': out = repay(b, action.amount); break;
+    case 'letGo': out = letGo(b, action.member); break;
+    default: return null;
+  }
+  if (!out.ok) return { ok: false, block: b, notice: out.notice, heal: false, run };
+  const next = withBlock(run, DominionBlockSchema.parse(out.block));
+  return { ok: true, block: next.expansion!.dominion!, notice: out.notice, heal: false, run: next };
 }
 
 /** D3 actions that need the run (new members' Pokémon, the Bag): hire, approach, admit, gifts, talks that give an item. */
@@ -253,6 +281,13 @@ export function settleCrew(content: Content, run: RunState): RunState {
     } else out.inventory[p.id] = (out.inventory[p.id] ?? 0) + p.n;
   }
   st.pending = [];
+  // D5: the stores hold 20 Pokémon, more with Pokémon Storage; the newest over the cap are let go, and the report says so.
+  const cap = storageCap(b);
+  if (st.stores.length > cap) {
+    const n = st.stores.length - cap;
+    st.stores = st.stores.slice(0, cap);
+    b.report = [...b.report, DOMINION_DATA.hq.lines.storageFull!.replace('{cap}', String(cap)).replace('{n}', String(n))];
+  }
   return out;
 }
 

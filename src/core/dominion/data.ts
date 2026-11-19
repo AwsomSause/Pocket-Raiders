@@ -8,12 +8,14 @@ import gruntTypesRaw from '../../data/dominion/gruntTypes.json';
 import tasksRaw from '../../data/dominion/tasks.json';
 import empireRaw from '../../data/dominion/empire.json';
 import heroRaw from '../../data/dominion/hero.json';
+import hqRaw from '../../data/dominion/hq.json';
+import buildingsRaw from '../../data/dominion/buildings.json';
 import {
-  ActionsFileSchema, CrewFileSchema, EmpireFileSchema, FieldFileSchema, GruntTypesFileSchema, HeroFileSchema, StartFileSchema, TasksFileSchema,
-  type ActionsFile, type CrewFile, type EmpireFile, type FieldFile, type GruntType, type HeroFile, type StartFile, type Task,
+  ActionsFileSchema, BuildingsFileSchema, CrewFileSchema, EmpireFileSchema, HqFileSchema, FieldFileSchema, GruntTypesFileSchema, HeroFileSchema, StartFileSchema, TasksFileSchema,
+  type ActionsFile, type Building, type CrewFile, type EmpireFile, type HqFile, type FieldFile, type GruntType, type HeroFile, type StartFile, type Task,
 } from './schema';
 
-export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; empire: EmpireFile; hero: HeroFile } = {
+export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; empire: EmpireFile; hq: HqFile; buildings: Building[]; hero: HeroFile } = {
   start: StartFileSchema.parse(startRaw),
   actions: ActionsFileSchema.parse(actionsRaw),
   field: FieldFileSchema.parse(fieldRaw),
@@ -22,4 +24,6 @@ export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: Fie
   gruntTypes: GruntTypesFileSchema.parse(gruntTypesRaw).types,
   empire: EmpireFileSchema.parse(empireRaw),
   hero: HeroFileSchema.parse(heroRaw),
+  hq: HqFileSchema.parse(hqRaw),
+  buildings: BuildingsFileSchema.parse(buildingsRaw).buildings,
 };

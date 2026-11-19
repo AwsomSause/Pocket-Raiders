@@ -8,6 +8,7 @@ import { DOMINION_DATA } from './data';
 import { heldIds, notorietyOf, peakOf, stepNow, type NotorietyParts } from './empire';
 import { bandOf, statusOf } from './field';
 import { stageIndex } from './hero';
+import { cleanOf } from './hqFx';
 import type { DominionBlock } from './schema';
 import { fill } from './worldTurn';
 
@@ -60,7 +61,7 @@ export function ledgerModel(b: DominionBlock, run: Pick<RunState, 'party' | 'inv
   const e = b.empire, L = E().ledger, N = E().notoriety;
   const weekLen = DOMINION_DATA.start.clock.weekLength;
   const week = Math.floor(b.day / weekLen) + 1;
-  const clean = Math.max(0, Math.min(e?.clean ?? 0, b.funds));
+  const clean = cleanOf(b);
   const dirty = b.funds - clean;
 
   // money: this week's lines, then the bills still due before the week closes

@@ -13,6 +13,7 @@ import { STAT_IDS } from './schema';
 import { memberMonPool } from './start';
 import { fill } from './worldTurn';
 import { notorietyOf } from './empire';
+import { hirePrice, hqFx, spend } from './hqFx';
 
 const C = () => DOMINION_DATA.crew;
 const RC = () => DOMINION_DATA.crew.recruit;
@@ -74,7 +75,8 @@ export function pitchOdds(b: DominionBlock, lead: Lead, pitch: string): number {
   const rc = RC();
   const motive = C().motives.find((x) => x.id === lead.motive);
   const finder = b.members.find((m) => m.id === lead.foundBy);
-  let p = lead.chance + lead.bonus + b.hqLevel * rc.hqPer + (finder ? finder.stats.charm * rc.charmPer : 0) + pitchNotoriety(b);
+  // D5: the Recruitment Center adds to every pitch.
+  let p = lead.chance + lead.bonus + b.hqLevel * rc.hqPer + (finder ? finder.stats.charm * rc.charmPer : 0) + pitchNotoriety(b) + hqFx(b).recruit;
   if (motive?.pitch === pitch) p += rc.matchBonus;
   if (lead.hates === pitch) p -= rc.hatePenalty;
   if (pitch === 'cause' && !b.teamName) p -= rc.noCausePenalty;
@@ -188,7 +190,7 @@ export function hireList(b: DominionBlock, seed: string): Hire[] {
     const t = pick(r, pool);
     taken.add(t.id);
     const name = nameFor({ ...b, crew: { ...(b.crew ?? freshCrewState()), hires: out } } as DominionBlock, r, 'm');
-    out.push({ type: t.id, name, price: h.price[t.rarity], temperament: C().greens.find((g) => g.id === t.green)!.temperaments[0]!, green: t.green, sold: false });
+    out.push({ type: t.id, name, price: hirePrice(b, h.price[t.rarity]), temperament: C().greens.find((g) => g.id === t.green)!.temperaments[0]!, green: t.green, sold: false });
   }
   return out;
 }
@@ -210,7 +212,7 @@ export function hire(content: Content, run: RunState, index: number): { run: Run
   const t = gruntType(hr.type)!;
   const h = C().hire;
   const r = rng(run.seed, 'dominion-hire', b.day, index, 'join');
-  b.funds -= hr.price;
+  spend(b, hr.price);
   hr.sold = true;
   if (t.once) st.used.push(t.id);
   const id = `m${st.next++}`;
@@ -245,7 +247,7 @@ export function payPatron(block: DominionBlock, patronId: string): { ok: boolean
   const st = b.crew!.patrons[patronId];
   if (!p || st?.state !== 'found' || p.job.kind !== 'funds') return { ok: false, block, notice: null };
   if (b.funds < p.job.amount) return { ok: false, block, notice: `Not enough money: ₽${p.job.amount}.` };
-  b.funds -= p.job.amount;
+  spend(b, p.job.amount);
   st.state = 'won';
   return { ok: true, block: b, notice: fill(C().report.patronWon!, { patron: p.name, perk: p.perk }) };
 }

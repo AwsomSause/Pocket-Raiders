@@ -4,6 +4,7 @@
 // crew tasks D6 plays, and save/reload.
 import { describe, expect, it } from 'vitest';
 import { empireOf, weekSum } from '../../src/core/dominion/book';
+import { cleanOf, withHq } from '../../src/core/dominion/hqFx';
 import { crewOf, taskById, withCrew } from '../../src/core/dominion/crew';
 import { DOMINION_DATA } from '../../src/core/dominion/data';
 import { checkRise, closeWeek, heldIds, notorietyOf, peakOf, stepIndex, unlockStep } from '../../src/core/dominion/empire';
@@ -62,14 +63,16 @@ describe('DOMINION D6: the data', () => {
   it('plays the ten Boss actions D6 opens; Gym Takeover waits for Growth (D10)', () => {
     const d6 = ['skim-the-till', 'marry-in', 'street-theater', 'spray-the-wall', 'leak-a-story', 'befriend-the-mayor', 'sponsor-a-trainer', 'silence-a-reporter', 'cooperate-with-jenny', 'secret-meeting'];
     for (const id of d6) expect(actionStatus(actionDef(id)!).play, id).toBe(true);
-    expect(DOMINION_DATA.actions.actions.filter((a) => actionStatus(a).play)).toHaveLength(47); // + the five Hero actions (D11)
-    expect(DOMINION_DATA.actions.actions.filter((a) => actionStatus(a).slice === 'D6')).toHaveLength(0);
+    expect(DOMINION_DATA.actions.actions.filter((a) => actionStatus(a).play)).toHaveLength(60); // + the five Hero actions (D11)
+    // D5 handed Hold a Rally (Radio Room) to D6 after D6 was built: it waits for D6's follow-up (docs/status/dominion-d6.md).
+    expect(DOMINION_DATA.actions.actions.filter((a) => actionStatus(a).slice === 'D6').map((a) => a.id)).toEqual(['hold-a-rally']);
     expect(actionStatus(actionDef('gym-takeover')!).slice).toBe('D10');
   });
   it('all eighteen crew tasks that waited for D6 are live district tasks; none waits for D6 now', () => {
     const live = DOMINION_DATA.tasks.filter((t) => t.effect?.kind === 'district');
     expect(live).toHaveLength(18);
-    expect(DOMINION_DATA.tasks.filter((t) => t.needs === 'D6')).toHaveLength(0);
+    // Pay the Wages came to D6 from D5 after D6 was built: D6's follow-up.
+    expect(DOMINION_DATA.tasks.filter((t) => t.needs === 'D6').map((t) => t.id)).toEqual(['pay-the-wages']);
     expect(DOMINION_DATA.crew.formed.filter((f) => f.needs === 'D6')).toHaveLength(0);
     expect(DOMINION_DATA.crew.formed.find((f) => f.id === 'honest-accountant')!.live).toBe(true);
   });
@@ -101,6 +104,14 @@ describe('DOMINION D6: Notoriety (A14)', () => {
     b.field.districts.pewter!.dread = 0;
     expect(peakOf(b)).toBe(1);
     expect(b.empire!.press).toBe(true);
+    // D5's HQ Lv. 6 needs "Feared" (the ladder's Outfit, 100): not yet at 25, set once reached, kept after a fall.
+    expect(b.flags).not.toContain('feared');
+    b.field.districts.pewter!.dread = 100;
+    checkRise(b);
+    expect(b.flags.filter((f) => f === 'feared')).toHaveLength(1);
+    b.field.districts.pewter!.dread = 0;
+    checkRise(b);
+    expect(b.flags).toContain('feared');
   });
   it('closes actions by Notoriety and the press contact (failure), and opens them when reached', () => {
     let r = round(started('gate'));
@@ -143,23 +154,27 @@ describe('DOMINION D6: the Ledger\'s books', () => {
     const b = blk(r);
     expect(b.empire!.week.oddJobs! % DOMINION_DATA.start.clock.oddJobPay).toBe(0);
     expect(b.empire!.week.oddJobs).toBeGreaterThan(0);
-    expect(b.empire!.clean).toBe(b.empire!.week.oddJobs);
+    // D5 keeps the clean part (hq.clean); the starting money is clean too.
+    expect(cleanOf(b)).toBeGreaterThanOrEqual(b.empire!.week.oddJobs!);
     r = edit(r, (x) => {
       x.funds = 100;
-      empireOf(x).clean = 400;
+      withHq(x).hq!.clean = 400;
     });
     r = go(go(r, { t: 'toNight' }), { t: 'rest' });
-    expect(blk(r).empire!.clean).toBeLessThanOrEqual(Math.max(0, blk(r).funds));
+    expect(blk(r).hq!.clean).toBeLessThanOrEqual(Math.max(0, blk(r).funds));
   });
   it('Street Theater pays clean money onto its own line', () => {
     let r = edit(go(go(night(started('show')), { t: 'toDay' }), { t: 'endDay' }), (b) => {
       b.day = 15;
       sharp(b);
     });
-    r = go(go(night(r), { t: 'toDay' }), act('street-theater', 'route-3', HQ));
+    r = go(night(r), { t: 'toDay' });
+    const before = blk(r);
+    r = go(r, act('street-theater', 'route-3', HQ));
     const b = blk(r);
-    expect(b.empire!.week.legit).toBeGreaterThan(0);
-    expect(b.empire!.clean).toBeGreaterThanOrEqual(b.empire!.week.legit!);
+    const legit = b.empire!.week.legit! - (before.empire!.week.legit ?? 0);
+    expect(legit).toBeGreaterThan(0);
+    expect(cleanOf(b) - cleanOf(before)).toBe(legit);
   });
   it('the week closes on bill day into the graph\'s history (kept to the last eight)', () => {
     const b = withCrew(structuredClone(blk(started())));
@@ -329,7 +344,7 @@ describe('DOMINION D6: the Ledger screen, saves', () => {
   it('a damaged Ledger does not pass the schema (failure)', () => {
     const b = withCrew(structuredClone(blk(round(started()))));
     const bad = structuredClone(b);
-    bad.empire!.clean = -5;
+    bad.empire!.peak = -1;
     expect(DominionBlockSchema.safeParse(bad).success).toBe(false);
   });
   it('is deterministic: the same seed and steps give the same block', () => {

@@ -14,6 +14,7 @@ import { DOMINION_DATA } from './data';
 import type { ActionDef, District, DistrictState, DominionBlock, Field, FieldFight, Play, StatId, Target } from './schema';
 import { book, empireOf } from './book';
 import { addWorldStep, fill } from './worldTurn';
+import { buildingDef, hasRoom, launderAction, roomFor, spend } from './hqFx';
 
 const F = () => DOMINION_DATA.field;
 const L = () => DOMINION_DATA.field.lines;
@@ -42,7 +43,12 @@ export function openDay(def: ActionDef): number {
 }
 
 /** Whether D2 plays an action, or which slice opens it (Rest is D1's, played from the HQ's Night panel). */
-export function actionStatus(def: ActionDef): { play: boolean; slice: string | null } {
+export function actionStatus(def: ActionDef): { play: boolean; slice: string | null; room: string | null } {
+  const room = roomFor(def.unlock);
+  const st = playStatus(def);
+  return { ...st, room };
+}
+function playStatus(def: ActionDef): { play: boolean; slice: string | null } {
   if (F().play[def.id]) return { play: true, slice: null };
   const by = F().later.byAction[def.id];
   if (by) return { play: false, slice: by };
@@ -365,6 +371,8 @@ function blockedWhy(b: DominionBlock, run: Pick<RunState, 'party'>, c: Card, bri
   const { def, play } = c, f = b.field, Ln = L();
   const st = actionStatus(def);
   if (!st.play || !play) return fill(Ln.later!, { slice: st.slice ?? 'later' });
+  // D5: an action a room opens (Front Office, Workshop, War Room...) needs that room built and working.
+  if (st.room && !hasRoom(b, st.room)) return fill(Ln.needsRoom ?? 'Build the {room} first.', { room: buildingDef(st.room)?.name ?? st.room });
   if (b.day < openDay(def)) return fill(Ln.notYet!, { day: openDay(def) });
   if (f.fight) return 'A fight is waiting.';
   const phase = b.phase === 'morning' ? 'day' : b.phase;
@@ -372,7 +380,7 @@ function blockedWhy(b: DominionBlock, run: Pick<RunState, 'party'>, c: Card, bri
   if (b.phase === 'morning') return 'Start the day first.';
   if (play.kinds && !play.kinds.includes('any') && (!c.target || !play.kinds.includes(c.target.kind))) return Ln.notHere!;
   if (def.slot === 'evening' && f.evening.includes(def.id)) return Ln.doneTonight!;
-  if (def.slot === 'night' && (f.night || b.nightActions < 1)) return Ln.nightDone!;
+  if (def.slot === 'night' && b.nightActions < 1) return Ln.nightDone!;
   if (def.slot !== 'evening' && play.where !== 'hq') {
     if (!c.travel.ok) return c.travel.line;
     if (f.closed === c.district.id) return fill(F().police.lines.closed!, { district: c.district.name });
@@ -532,6 +540,9 @@ function succeed(content: Content | null, b: DominionBlock, run: RunState, x: Ct
     case 'plan':
       f.planned = true;
       break;
+    case 'launder':
+      lines[lines.length - 1] = launderAction(b);
+      break;
     case 'spar': {
       const m = b.members[0];
       if (m) m.morale = Math.min(100, m.morale + 5);
@@ -596,11 +607,12 @@ export function act(content: Content | null, run: RunState, a: { action: string;
   // spend the slot, the money and the trip
   if (c.def.slot === 'day') b.actions -= c.cost;
   if (c.def.slot === 'night') {
+    // D5: the Night Shift gives a second Night action, so each one spends one.
     f.night = c.def.id;
-    b.nightActions = 0;
+    b.nightActions -= 1;
   }
   if (c.def.slot === 'evening') f.evening.push(c.def.id);
-  b.funds -= c.money;
+  spend(b, c.money);
   if (c.def.slot !== 'evening') {
     if (c.play!.where === 'hq') f.at = F().hq;
     else goTo(b, run, c.district.id);
@@ -699,7 +711,7 @@ function settleFight(content: Content | null, b: DominionBlock, run: RunState, o
       lines.push(PL.raidWon!);
     } else {
       const take = Math.max(0, Math.floor(Math.max(0, b.funds) * P.raidTake));
-      b.funds -= take;
+      spend(b, take);
       lines.push(fill(PL.raidLost!, { take }));
     }
     syncHeat(b);
@@ -718,7 +730,7 @@ function settleFight(content: Content | null, b: DominionBlock, run: RunState, o
     if (won) lines.push(fill(PL.won!, { name: P.jenny.name }));
     else {
       const fine = Math.max(P.lost.fineMin, Math.round(Math.max(0, b.funds) * P.lost.fine));
-      b.funds -= fine;
+      spend(b, fine);
       addHeat(b, district.id, P.lost.heat);
       lines.push(fill(PL.lost!, { name: P.jenny.name, fine, heat: P.lost.heat, district: district.name }));
     }
@@ -736,7 +748,7 @@ function settleFight(content: Content | null, b: DominionBlock, run: RunState, o
     lines.push(...s.lines, ...grow(b, x.def, x.play, true, fight.why === 'always' && fight.big));
   } else {
     if (x.play.wager) {
-      b.funds -= fight.wager;
+      spend(b, fight.wager);
     }
     lines.push(...fail(b, x), ...grow(b, x.def, x.play, false, false));
   }
@@ -753,7 +765,7 @@ export function buy(block: DominionBlock, id: string): { ok: boolean; block: Dom
   if (block.hqLevel < v.hq) return no(`Needs HQ Lv. ${v.hq}.`);
   if (block.funds < v.price) return no(fill(L().noMoney!, { cost: v.price }));
   const b = structuredClone(block);
-  b.funds -= v.price;
+  spend(b, v.price);
   b.field.vehicles.push(id);
   if (id === 'bike' && b.phase !== 'evening') b.field.free += 1;
   return { ok: true, block: b, notice: fill(L().bought!, { name: v.name }) };

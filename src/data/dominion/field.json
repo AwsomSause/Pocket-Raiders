@@ -131,8 +131,34 @@
     "cave-run": { "kinds": ["cave"], "chance": 35, "crate": "cave", "heat": 0, "failHeat": 2, "battle": { "chance": 50, "on": "fail", "foe": "wild" },
       "win": "Deep in the dark: {loot}.", "lose": "A wrong turn, and something big." },
     "hide-in-the-warehouse": { "effect": "hide", "heat": -10, "where": "hq",
-      "win": "You wait out the sweep behind the crates. Heat at the HQ −10, and the police find nothing tonight." }
-  },
+      "win": "You wait out the sweep behind the crates. Heat at the HQ −10, and the police find nothing tonight." },
+    "rig-the-rent": { "kinds": ["shop", "street"], "chance": 45, "pay": [40, 80], "weekly": 80, "heat": 3, "failHeat": 8, "regard": -2, "dread": 1, "control": 4,
+      "win": "The landlord's new rent goes up; the difference goes to you: ₽{pay} now.", "lose": "The landlord laughs and calls a lawyer." },
+    "fines-scam": { "kinds": ["crowd", "street"], "chance": 45, "pay": [100, 250], "heat": 4, "failHeat": 9, "regard": -2, "battle": { "chance": 30, "on": "fail", "foe": "police" },
+      "win": "A clipboard and a stern face: ₽{pay} in \"fines\".", "lose": "A tourist asks for your badge number." },
+    "charity-drive": { "kinds": ["center", "crowd"], "chance": 55, "pay": [100, 200], "heat": 1, "failHeat": 4, "regard": 3,
+      "win": "The tin fills up for a good cause: ₽{pay}. Regard +3.", "lose": "Nobody believes the cause." },
+    "enforcer-duty": { "kinds": ["shop"], "chance": 60, "pay": [150, 250], "heat": 3, "failHeat": 6, "dread": 2, "battle": { "chance": 60, "on": "always", "foe": "target" }, "control": 3,
+      "win": "The dispute is over. {owner} pays ₽{pay} for the quiet.", "lose": "The other side brought friends." },
+    "armored-car-ambush": { "kinds": ["route"], "chance": 35, "pay": [600, 1000], "heat": 12, "failHeat": 15, "regard": -3, "dread": 3, "hero": 2, "battle": { "chance": 100, "on": "always", "foe": "target" },
+      "win": "The guards give up the cases: ₽{pay}.", "lose": "The van speeds off and the radio crackles." },
+    "safe-crack": { "kinds": ["shop", "site"], "chance": 35, "crate": "haul", "heat": 2, "failHeat": 12, "dread": 1, "battle": { "chance": 40, "on": "fail", "foe": "target" },
+      "win": "Click, click, open. Inside: {loot}.", "lose": "The dial won't give. An alarm starts somewhere." },
+    "bank-job": { "kinds": ["site", "shop"], "chance": 20, "pay": [1500, 2500], "heat": 20, "failHeat": 25, "wanted": 5, "dread": 4, "hero": 3, "battle": { "chance": 70, "on": "fail", "foe": "police" },
+      "win": "The plan works to the minute: ₽{pay} in bags.", "lose": "Sirens before the vault is open." },
+    "counterfeit": { "where": "hq", "chance": 60, "pay": [150, 250], "heat": 3, "failHeat": 8,
+      "win": "The press runs all evening: ₽{pay} that almost looks real.", "lose": "The ink smears. Into the stove it goes." },
+    "study": { "where": "hq", "effect": "train", "xp": 3,
+      "win": "Books and notes at the Library. Wits XP +3." },
+    "alibi": { "where": "hq", "effect": "disguise",
+      "win": "A story, a witness and a receipt. The next job's Heat is halved." },
+    "fund-a-festival": { "where": "hq", "cost": 500, "effect": "laylow", "heat": -5, "regard": 5,
+      "win": "Lanterns and music in {district}, paid for by you. Regard +5, Heat −5." },
+    "moonlit-heist": { "kinds": ["shop", "site"], "chance": 30, "crate": "haul", "heat": 6, "failHeat": 14, "dread": 2, "battle": { "chance": 50, "on": "fail", "foe": "target" },
+      "win": "Under the moon, in and out: {loot}.", "lose": "The moon was too bright." },
+    "launder": { "where": "hq", "effect": "launder",
+      "win": "The back room counts and washes." }
+ },
   "crates": {
     "goods": { "picks": 2, "cash": [0, 150], "items": [["potion", 3], ["super-potion", 2], ["poke-ball", 3], ["great-ball", 1], ["full-heal", 2], ["ether", 1]] },
     "haul": { "picks": 2, "cash": [100, 400], "items": [["great-ball", 2], ["super-potion", 2], ["revive", 1], ["moon-stone", 1], ["metal-coat", 1], ["kings-rock", 1]] },
@@ -201,10 +227,11 @@
       "gym-takeover": "D10",
       "hold-the-line": "D9", "steal-their-customers": "D9", "ambush-the-courier": "D9",
       "three-on-one": "D10", "gauntlet": "D10", "rooftop-chase": "D10", "dig-the-dirt": "D10", "fossil-dig": "D10", "contraband-run": "D10", "air-drop": "D10", "fake-shipment": "D10", "evidence-locker-visit": "D10", "the-big-night": "D10",
-      "pay-the-pilot": "D15", "reckoning": "D15"
+      "pay-the-pilot": "D15", "reckoning": "D15",
+      "buy-out": "D10", "hold-a-rally": "D6", "wire-a-phone": "D9", "forge-papers": "D10", "hack-the-terminal": "D10", "interrogate": "D9", "kidnap-a-pokemon": "D10", "hit-a-lab": "D10", "smuggle": "D10", "open-a-black-market-stall": "D10", "run-the-docks": "D10", "underground-auction": "D10", "tunnel": "D10", "safehouse-network": "D10", "post-flyers": "D10", "spread-the-word": "D10", "pirate-radio": "D9", "bribe": "D10", "sabotage-the-station": "D9", "court-day": "D9", "sabotage": "D10", "raid": "D10", "burn-a-front": "D9", "hire-mercenaries": "D10", "write-a-manifesto": "D13", "blackout": "D10", "night-raid": "D10", "frame-a-rival": "D9", "prison-break": "D9", "bail-out": "D9", "loan-shark": "D10", "egg-run": "D4", "breed": "D4", "move-tutor": "D4"
     },
     "byUnlock": [
-      ["Rank", "D4"], ["Front Office", "D5"], ["Workshop", "D5"], ["War Room", "D5"], ["Radio Room", "D5"], ["Print Shop", "D5"], ["Holding", "D5"], ["Garage", "D5"], ["Science Lab", "D5"], ["Library", "D5"], ["Dojo", "D5"], ["Night Shift", "D5"],
+      ["Rank", "D4"], ["Front Office", "D10"], ["Workshop", "D10"], ["War Room", "D10"], ["Radio Room", "D10"], ["Print Shop", "D10"], ["Holding", "D10"], ["Garage", "D10"], ["Science Lab", "D10"], ["Library", "D10"], ["Dojo", "D10"], ["Night Shift", "D10"],
       ["Notoriety", "D6"], ["Press contact", "D6"], ["Fence", "D10"], ["Black Market", "D10"], ["Tension", "D9"], ["Spy", "D9"], ["Raid suffered", "D9"], ["Rally", "D9"],
       ["Hero", "D11"], ["Gym", "D10"], ["Champion", "D14"], ["Hostage", "D10"], ["traitor", "D15"], ["Region event", "D15"], ["Wanted", "D10"]
     ]
@@ -215,6 +242,7 @@
     "noActions": "Not enough actions left today (travel included).",
     "noMoney": "Not enough money: it costs ₽{cost}.",
     "needs": "Needs a {item}.",
+    "needsRoom": "Build the {room} first (HQ menu, key B).",
     "noTeam": "Your team can't fight: rest first.",
     "noMember": "Nobody to spar with.",
     "notYet": "Opens on Day {day}.",
