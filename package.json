@@ -120,6 +120,7 @@
     "vitest": "^5.0.5"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "1.10.0",
     "phaser": "3.90.0",
     "zod": "^4.6.7"
   }
