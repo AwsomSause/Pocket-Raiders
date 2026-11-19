@@ -77,7 +77,7 @@ KIND = {
     106: ('research', S, None), 107: ('arm', S, None), 108: ('grow', S, None), 109: ('hide', S, None), 110: ('research', S, None),
     # L. Diplomacy and alliances
     111: ('deal', L, 'A joint raid is offered as paid work; the Debate rule is D13.'), 112: ('demand', S, None), 113: ('deal', S, None), 114: ('deal', S, None),
-    115: ('truce', S, None), 116: ('poach', L, 'The swap is one way until D16 adds trades.'), 117: ('heat', S, None), 118: (None, X, 'D13'), 119: (None, X, 'D13'), 120: ('tension', S, None),
+    115: ('truce', S, None), 116: ('poach', L, 'The swap is one way until D16 adds trades.'), 117: ('heat', S, None), 118: ('debate', S, None), 119: ('debate', S, None), 120: ('tension', S, None),
     # M. Pokémon schemes
     121: ('mood', L, 'Pokémon XP loss waits for D10; the crew feel it as Morale.'), 122: ('fight', S, None), 123: ('skim', S, None),
     124: (None, X, 'D4'), 125: (None, X, 'D11'), 126: ('grow', S, None), 127: ('grow', S, None), 128: (None, X, 'D10'),

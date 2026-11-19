@@ -70,6 +70,9 @@ function cardText(c: RivalCard): string {
     case 'defect': return `${c.who} wants out of ${team?.name ?? 'the team'} for ${money(c.amount)}.`;
     case 'truce': return `${c.who} offers a truce.`;
     case 'street': return `${streetRow(c.ref)?.what ?? 'A meeting on the street'}${where}.`;
+    // D13 (debate.ts)
+    case 'debate': return c.who === team?.boss.name ? `${c.who} will sit down for a Debate.` : `${c.who} has doubts about ${team?.name ?? 'their team'}: a Debate might bring them over.`;
+    case 'directive': return `Give ${team?.name ?? 'your'} Branch its order for the week.`;
   }
 }
 

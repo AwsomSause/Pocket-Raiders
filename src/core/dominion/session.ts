@@ -18,6 +18,7 @@ import { build, letGo, loan, rebuild, repay, sell, storageCap, tierUp, upgrade, 
 import { withHq } from './hqFx';
 import { levelCap } from '../regions';
 import { answerCard, breakTruce, maybeStreet, noteTop, ransom, startTruce, withRivals, type RivalOut } from './rivals';
+import { argue, chooseDeal, closeDebate, walkOut, type DebateOut } from './debate';
 
 export const DOMINION_MODE_ID = 'dominion';
 export const isDominionRun = (run: RunState | null | undefined): boolean => run?.rules.modeId === DOMINION_MODE_ID;
@@ -81,6 +82,8 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
   if (hqOut) return hqOut;
   const rivalOut = rivalInRun(run, action);
   if (rivalOut) return rivalOut;
+  const debateOut = debateInRun(content, run, action);
+  if (debateOut) return debateOut;
   if (action.t === 'act') {
     // D2: a Boss action (field.ts). A Pokémon lifted in a Ball (Thieve, a big success) joins the team or the box.
     const work = structuredClone(run);
@@ -114,6 +117,22 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
   }
   next = settleCrew(content, next);
   return { ...out, block: next.expansion!.dominion!, run: next };
+}
+
+/** D13: a turn at the Leader's Table, the deal a Convinced Boss makes, walking out, and reading the result (debate.ts). */
+function debateInRun(content: Content, run: RunState, action: DominionAction): (StepOut & { run: RunState }) | null {
+  let out: DebateOut;
+  switch (action.t) {
+    case 'argue': out = argue(content, run, action.line); break;
+    case 'deal': out = chooseDeal(content, run, action.kind); break;
+    case 'walkOut': out = walkOut(run); break;
+    case 'debateDone': out = closeDebate(run); break;
+    default: return null;
+  }
+  const b = run.expansion!.dominion!;
+  if (!out.ok) return { ok: false, block: b, notice: out.notice, heal: false, run };
+  const block = DominionBlockSchema.parse(out.run.expansion!.dominion!);
+  return { ok: true, block, notice: out.notice, heal: false, run: withBlock(out.run, block) };
 }
 
 /** D9: the Rival File's answers (rivals.ts). A fight answered leaves `field.fight` for the scene to start. */

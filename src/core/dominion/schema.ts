@@ -90,7 +90,9 @@ export type District = z.infer<typeof DistrictSchema>;
 export const BATTLE_FOES = ['target', 'police', 'wild', 'ghost', 'member', 'rival'] as const;
 export const EFFECTS = ['scout', 'count', 'scoutDistrict', 'paper', 'catch', 'laylow', 'disguise', 'fine', 'exp', 'spar', 'train', 'plan', 'pamper', 'hide', 'launder',
   // D9 (rivals.ts addActEffect)
-  'rivalHit', 'rivalSpy', 'counterSpy', 'truceTalk', 'war', 'poach', 'court'] as const;
+  'rivalHit', 'rivalSpy', 'counterSpy', 'truceTalk', 'war', 'poach', 'court',
+  // D13 (debate.ts addActEffect)
+  'debate', 'manifesto'] as const;
 const PlaySchema = z.object({
   kinds: z.array(z.union([z.enum(TARGET_KINDS), z.literal('any')])).min(1).optional(),
   chance: I.min(0).max(100).optional(),
@@ -285,6 +287,8 @@ const BlockSchema = z.object({
   hq: z.lazy(() => HqStateSchema).optional(),
   /** D9: the rival teams (Tension, plan, spies, truces, raids). Optional; `rivalsOf` fills it. */
   rivals: z.lazy(() => RivalsStateSchema).optional(),
+  /** D13: the Debate (the one at the table, past tries, Branches and Mergers). Optional; `debateOf` fills it. */
+  debate: z.lazy(() => DebateStateSchema).optional(),
 }).strict();
 export const DominionBlockSchema = z.preprocess(migrateDominion, BlockSchema);
 export type DominionBlock = z.infer<typeof BlockSchema>;
@@ -333,7 +337,12 @@ export type DominionAction =
   | { t: 'truce'; team: string }
   | { t: 'breakTruce'; team: string }
   | { t: 'card'; index: number; choice: number }
-  | { t: 'ransom'; member: string };
+  | { t: 'ransom'; member: string }
+  // D13, the Debate (debate.ts)
+  | { t: 'argue'; line: string }
+  | { t: 'deal'; kind: 'merger' | 'branch' }
+  | { t: 'debateDone' }
+  | { t: 'walkOut' };
 
 // ---------- D3 data: crew.json, tasks.json, gruntTypes.json ----------
 
@@ -617,6 +626,9 @@ export const BuildingFxSchema = z.object({
   // your spies being caught), raidDef (Defense in raids only), warn (days' warning of the Boss's raid), fireCut (% off
   // building damage), truceOff (% off tribute).
   intel: N0.optional(), spyCatch: Pct.optional(), cipher: Pct.optional(), raidDef: N0.optional(), warn: N0.optional(), fireCut: Pct.optional(), truceOff: Pct.optional(),
+  // D13 (debate.ts): debate (Conviction at the start), debateFloor (the first turn moves the bar at least this much),
+  // debateSee (each set line's marks show before you pick it).
+  debate: N0.optional(), debateFloor: N0.optional(), debateSee: N0.optional(),
 }).strict();
 export type BuildingFx = z.infer<typeof BuildingFxSchema>;
 export const BuildingSchema = z.object({
@@ -678,6 +690,8 @@ export const RIVAL_KINDS = [
   'spy', 'intel', 'heat', 'rent', 'money', 'sweep', 'closed', 'cond', 'mood', 'jam', 'racket', 'smash', 'vault', 'stealMon', 'kidnap', 'burn',
   'poach', 'loyalty', 'loyalty1', 'recruitCut', 'skim', 'regard', 'hero', 'control', 'fight', 'demand', 'deal', 'defect', 'bossRaid', 'truce',
   'tension', 'grow', 'research', 'arm', 'hide', 'hurt',
+  // D13: an invitation to a Debate (a summit with the Boss, or an Admin who might be talked round)
+  'debate',
 ] as const;
 export type RivalKind = (typeof RIVAL_KINDS)[number];
 const LadderKey = z.enum(['S', 'M', 'P', 'D', 'H', 'C', 'R', 'N']);
@@ -782,7 +796,7 @@ export const RivalTeamStateSchema = z.object({
 }).strict();
 export type RivalTeamState = z.infer<typeof RivalTeamStateSchema>;
 export const RivalCardSchema = z.object({
-  kind: z.enum(['fight', 'demand', 'deal', 'defect', 'truce', 'street']),
+  kind: z.enum(['fight', 'demand', 'deal', 'defect', 'truce', 'street', 'debate', 'directive']),
   team: S,
   /** The rival action (rivalActions.json id) or street row (O141..O165). */
   ref: S,
@@ -817,3 +831,110 @@ export const RivalsStateSchema = z.object({
   top: I.min(1),
 }).strict();
 export type RivalsState = z.infer<typeof RivalsStateSchema>;
+
+// ---------- D13: the Debate (debate.json; the save block's `debate`, optional, no block bump) ----------
+
+export const STANCES = ['partnership', 'merger', 'recruit', 'threaten'] as const;
+export const CLAIMS = ['towns', 'rich', 'army', 'clean', 'strong'] as const;
+export const DEBATE_RESULTS = ['convinced', 'persuaded', 'unmoved', 'offended'] as const;
+export const DIRECTIVES = ['expand', 'defend', 'recruit', 'hero', 'hold'] as const;
+export const DEMANDS = ['towns', 'hq', 'goal', 'shadow'] as const;
+const Mark = I.min(0).max(5);
+const Replies = z.object({ strong: z.array(S).min(1), fair: z.array(S).min(1), weak: z.array(S).min(1), insult: z.array(S).min(1) }).strict();
+const LeanSchema = z.object({ partnership: I.min(-2).max(2), merger: I.min(-2).max(2), recruit: I.min(-2).max(2), threaten: I.min(-2).max(2) }).strict();
+export const DebateBossSchema = z.object({
+  values: S, them: S, portrait: S.nullable(), mon: S.nullable(), crest: z.string().length(1), colour: S,
+  lean: LeanSchema, demands: z.array(z.enum(DEMANDS)).min(1), order: z.enum(DIRECTIVES),
+  creed: S, judge: S, clean: S, price: S, replies: Replies,
+}).strict();
+export type DebateBoss = z.infer<typeof DebateBossSchema>;
+export const DebateFileSchema = z.object({
+  _source: S,
+  rounds: z.array(z.object({ id: S, num: S, name: S, what: S }).strict()).length(3),
+  turnsPerRound: I.min(1),
+  adminRounds: z.array(S).min(1),
+  marks: z.array(z.object({ id: S, name: S, what: S }).strict()).length(5),
+  move: z.object({ base: N0, k: I.min(1), min: I.max(0), max: I.min(1), threaten: N0, merger: N0, sour: N0 }).strict(),
+  start: z.object({ cap: N0, hot: Pct, hotCut: N0, cool: Pct, coolAdd: N0, beatBoss: N0, beatAdmin: N0, perAdminGone: N0, perPage: N0, maxPages: N0, perMastery: N0 }).strict(),
+  results: z.array(z.object({ id: z.enum(DEBATE_RESULTS), min: I.min(-100).max(100), name: S, word: S, text: S }).strict()).length(4),
+  rules: z.object({ minTension: Pct, maxFails: I.min(1), unmoved: I, offended: N0, adminWin: N0, adminLose: N0, risk: Pct, breakRisk: Pct, walk: Pct, walkTension: Pct, hqSlack: N0, townsTaken: Pct }).strict(),
+  strength: z.object({ base: N0, perAdmin: N0, perPower: N0, perHeld: N0, fearBase: N0, fearPerAdmin: N0, fearPerPower: N0 }).strict(),
+  branch: z.object({ members: I.min(1), perAdmin: N0, tributeK: z.number().positive(), perMember: N0, recruit: I.min(1), expand: I.min(1), defend: I.min(1) }).strict(),
+  stances: z.array(z.object({ id: z.enum(STANCES), name: S, full: S, key: I.min(1).max(4), stripe: S, aims: S }).strict()).length(4),
+  lines: z.array(z.object({ id: S, stance: z.enum(STANCES), marks: z.array(Mark).length(5), claim: z.enum(CLAIMS).optional(), text: S }).strict()).length(12),
+  claims: z.record(z.enum(CLAIMS), z.object({ what: S, min: N0, callout: S }).strict()),
+  sins: z.array(z.object({ action: S, text: S }).strict()).min(1),
+  demands: z.array(z.object({ id: z.enum(DEMANDS), text: S, status: z.enum(['supported', 'limited']), broken: S.optional(), note: S.optional() }).strict()).length(4),
+  directives: z.array(z.object({ id: z.enum(DIRECTIVES), name: S, what: S, status: z.enum(['supported', 'limited']), note: S.optional() }).strict()).length(5),
+  bosses: z.record(S, DebateBossSchema),
+  admin: z.object({ creed: S, price: S, replies: Replies }).strict(),
+  text: z.record(S, S),
+}).strict().refine((f) => STANCES.every((st) => f.lines.filter((l) => l.stance === st).length === 3), { message: 'three set lines per stance' });
+export type DebateFile = z.infer<typeof DebateFileSchema>;
+
+export const DebateTurnSchema = z.object({
+  line: S,
+  stance: z.enum(STANCES),
+  marks: z.array(Mark).length(5),
+  /** The stance's modifier and a sour turn, already in `move`. */
+  mod: I,
+  move: I,
+  /** The claim the line made and whether the Ledger backs it. */
+  claim: z.enum(CLAIMS).nullable(),
+  held: z.boolean(),
+  /** What they said back (stored the moment it's picked, so a reload replays it). */
+  reply: S,
+}).strict();
+export type DebateTurn = z.infer<typeof DebateTurnSchema>;
+export const LiveDebateSchema = z.object({
+  team: S,
+  /** 'boss' or the Admin's id. */
+  who: S,
+  name: S,
+  rounds: z.array(S).min(1),
+  start: I.min(-100).max(100),
+  conviction: I.min(-100).max(100),
+  turns: z.array(DebateTurnSchema),
+  /** Their opening line for the current turn. */
+  said: S,
+  /** The last turn's line was an insult: the next turn moves the bar less. */
+  sour: z.boolean(),
+  result: z.enum(DEBATE_RESULTS).nullable(),
+  /** 'argue' while turns are left, 'choose' for a Convinced Boss (Merger or Branch), 'done' to read the result. */
+  phase: z.enum(['argue', 'choose', 'done']),
+  /** The result's lines (after the deal is made). */
+  outcome: z.array(S),
+  day: I.min(1),
+}).strict();
+export type LiveDebate = z.infer<typeof LiveDebateSchema>;
+export const DealSchema = z.object({
+  kind: z.enum(['merger', 'branch']),
+  since: I.min(1),
+  /** Convinced: betrayal risk halved (D15 reads `risk`). */
+  loyal: z.boolean(),
+  risk: Pct,
+  demand: z.enum(DEMANDS).nullable(),
+  /** The demand's towns (keep two towns) or their old HQ's district (never touch it), and your Control there at the deal. */
+  towns: z.array(S),
+  base: z.record(S, N0),
+  members: N0,
+  /** This week's Branch Directive and the town held. */
+  order: z.enum(DIRECTIVES),
+  hold: S.nullable(),
+  holdAt: N0,
+  /** Days the Hero is delayed (D11 reads it). */
+  hero: N0,
+}).strict();
+export type Deal = z.infer<typeof DealSchema>;
+export const DebateStateSchema = z.object({
+  live: LiveDebateSchema.nullable(),
+  /** Per rival team (and Admin): failed Debates, the week of the last one, and closed for good. */
+  tries: z.record(S, z.object({ fails: N0, week: I.min(-1), closed: z.boolean() }).strict()),
+  deals: z.record(S, DealSchema),
+  /** Manifesto pages written (Write a Manifesto, an Evening action). */
+  pages: N0,
+  /** Rolls made on `dominion-debate`. */
+  rolls: N0,
+  past: z.array(z.object({ day: I.min(1), team: S, name: S, result: z.enum(DEBATE_RESULTS), conviction: I }).strict()),
+}).strict();
+export type DebateState = z.infer<typeof DebateStateSchema>;

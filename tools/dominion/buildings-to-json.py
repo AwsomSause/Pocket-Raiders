@@ -56,7 +56,7 @@ FX = {
     'smuggler-den': dict(income=100), 'racket-office': dict(weekly=100), 'street-patrol-station': dict(control=5),
     'vanguard-camp': dict(control=10), 'hall-of-ranks': dict(loyalty=2), 'grunt-cafe': dict(clean=80), 'grunt-arcade': dict(clean=100),
     'delivery-service': dict(clean=80), 'repair-shop': dict(clean=100), 'cleaning-crew': dict(heatWeek=5),
-    'pokemon-storage': dict(storage=60), 'recruitment-center': dict(recruit=10, hireOff=25), 'luxury-suite': dict(restBonus=1),
+    'pokemon-storage': dict(storage=60), 'recruitment-center': dict(recruit=10, hireOff=25), 'luxury-suite': dict(restBonus=1, debate=5),
     'night-shift': dict(nightActions=1, unlock=True),
     'berry-garden': dict(items={'oran-berry': 2}), 'pharmacy': dict(items={'potion': 1}), 'ball-foundry': dict(items={'poke-ball': 5}),
     'first-aid-closet': dict(weeklyItems={'revive': 2}), 'canteen-kitchen': dict(fatigue=10), 'fix-it-corner': dict(repair=10),
@@ -70,7 +70,10 @@ FX = {
     'armory': dict(raidDef=1), 'mech-hangar': dict(raidDef=1), 'guard-post': dict(raidDef=1), 'gate-house': dict(raidDef=1),
     'perimeter-wall': dict(raidDef=1), 'alarm-network': dict(raidDef=1), 'decoy-room': dict(raidDef=1), 'pitfall-corridor': dict(raidDef=1),
     'reinforced-doors': dict(raidDef=1), 'guard-duty-hall': dict(raidDef=1), 'honor-guard-hall': dict(raidDef=1),
-    'watchtower': dict(warn=1), 'fire-suppression': dict(fireCut=50), 'ballroom': dict(truceOff=10), 'embassy-wing': dict(truceOff=10),
+    'watchtower': dict(warn=1), 'fire-suppression': dict(fireCut=50), 'ballroom': dict(truceOff=10, debate=5), 'embassy-wing': dict(truceOff=10),
+    # D13 (debate.ts): debate is Conviction at a Debate's start; debateFloor the least the first argument moves the bar;
+    # debateSee shows each set line's marks before you pick it.
+    'debate-hall': dict(debateFloor=5), 'briefing-theater': dict(debateSee=1),
 }
 # D9 rows the rival rules don't reach yet: the slice that does (the keyword guess said D9).
 WAIT_OVERRIDE = {
@@ -88,11 +91,12 @@ NOTE = {
     'radio-room': 'Spread the Word is D10.', 'workshop': 'Gadgets are D10.',
     'taxi-rank': 'Taxi fares come with D10; the drivers bring Intel now.', 'spy-academy': 'Training moles waits for D22; your spies are caught less now.',
     'mech-hangar': 'Mechs are drawn later; they count in raids now.', 'decoy-room': 'The fake vault counts as raid Defense.',
-    'honor-guard-hall': 'Guards the HQ in raids; the Boss\'s own escort waits for D14.', 'ballroom': 'Hosting a Boss in person waits for D13; tribute is cheaper now.',
+    'honor-guard-hall': 'Guards the HQ in raids; the Boss\'s own escort waits for D14.', 'ballroom': 'Hosting a Boss: +5 Conviction when a Debate starts; tribute is cheaper.',
     'embassy-wing': 'Envoys come as Rival File cards; tribute is cheaper now.', 'watchtower': None, 'security-room': None,
     'garage': 'Smuggle is D10.', 'print-shop': 'Flyers are D10.', 'research-lab': 'Hit a Lab and breeding are D10.',
     'holding-pens': 'Cooling off stolen Pokémon comes with the Reserve (D4).', 'outpost': 'Its own 2 room slots come with many regions (D15).',
-    'safehouse': None, 'luxury-suite': 'Debate +10% is D13; Executives\' Morale waits for ranks (D4).',
+    'safehouse': None, 'luxury-suite': 'Debates start at +5 Conviction (the +10% meeting bonus); Executives\' Morale waits for ranks (D4).',
+    'debate-hall': 'The first argument of each Debate moves the bar at least +5; the rhetoric die is the bar itself.', 'briefing-theater': 'Every set line\'s five marks show before you pick it; crew talks are D3\'s.',
     'recruitment-center': 'The weekly walk-in is D6.', 'executive-office': 'Admins\' Hold +20% is D15.',
     'night-market-stall': 'The list gives no T1 number; ₽80 a day matches the Grunt Café.', 'berry-garden': 'One berry kind until the Cold Cellar (later).', 'card-den': 'The cheat chance comes with the Ledger (D6).', 'infirmary': 'Free healing: Rest already heals the team.',
 }

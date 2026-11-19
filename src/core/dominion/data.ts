@@ -11,12 +11,13 @@ import buildingsRaw from '../../data/dominion/buildings.json';
 import rivalsRaw from '../../data/dominion/rivals.json';
 import rivalActionsRaw from '../../data/dominion/rivalActions.json';
 import outsideRaw from '../../data/dominion/outside.json';
+import debateRaw from '../../data/dominion/debate.json';
 import {
-  ActionsFileSchema, BuildingsFileSchema, OutsideFileSchema, RivalActionsFileSchema, RivalsFileSchema, CrewFileSchema, HqFileSchema, FieldFileSchema, GruntTypesFileSchema, StartFileSchema, TasksFileSchema,
-  type ActionsFile, type Building, type OutsideRow, type RivalActionsFile, type RivalsFile, type CrewFile, type HqFile, type FieldFile, type GruntType, type StartFile, type Task,
+  ActionsFileSchema, BuildingsFileSchema, DebateFileSchema, OutsideFileSchema, RivalActionsFileSchema, RivalsFileSchema, CrewFileSchema, HqFileSchema, FieldFileSchema, GruntTypesFileSchema, StartFileSchema, TasksFileSchema,
+  type ActionsFile, type Building, type DebateFile, type OutsideRow, type RivalActionsFile, type RivalsFile, type CrewFile, type HqFile, type FieldFile, type GruntType, type StartFile, type Task,
 } from './schema';
 
-export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; hq: HqFile; buildings: Building[]; rivals: RivalsFile; rivalActions: RivalActionsFile; outside: OutsideRow[] } = {
+export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; hq: HqFile; buildings: Building[]; rivals: RivalsFile; rivalActions: RivalActionsFile; outside: OutsideRow[]; debate: DebateFile } = {
   start: StartFileSchema.parse(startRaw),
   actions: ActionsFileSchema.parse(actionsRaw),
   field: FieldFileSchema.parse(fieldRaw),
@@ -28,4 +29,5 @@ export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: Fie
   rivals: RivalsFileSchema.parse(rivalsRaw),
   rivalActions: RivalActionsFileSchema.parse(rivalActionsRaw),
   outside: OutsideFileSchema.parse(outsideRaw).rows,
+  debate: DebateFileSchema.parse(debateRaw),
 };

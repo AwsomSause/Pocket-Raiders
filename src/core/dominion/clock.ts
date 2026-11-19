@@ -132,6 +132,11 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'breakTruce':
     case 'card':
     case 'ransom':
+    // D13: the Debate (debate.ts, sent there by session.ts).
+    case 'argue':
+    case 'deal':
+    case 'walkOut':
+    case 'debateDone':
       // The Boss's hands need the run (party, bag): session.ts sends them to field.ts.
       return no(block);
     case 'toDay': {
