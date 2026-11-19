@@ -56,11 +56,11 @@ test('the Reserve: give Rook a Pokémon by hand; the Pyramid: promote him; both 
   expect(b1.reserve.box).toHaveLength(0);
   await expect(s.getByTestId('dom-reserve-count')).toHaveText('0 / 20');
 
-  // E: the Boss is the other target (no BST cap).
+  // E and W: the Boss is the other target (no BST cap). (Q is the command wheel.)
   await page.keyboard.press('KeyE');
   await expect(s.getByTestId('dom-who')).toHaveText('The Boss');
   await expect(s.getByTestId('dom-bstcap')).toHaveText('—');
-  await page.keyboard.press('KeyQ');
+  await page.keyboard.press('KeyW');
   await expect(s.getByTestId('dom-who')).toHaveText('Rook');
 
   // Several window sizes.

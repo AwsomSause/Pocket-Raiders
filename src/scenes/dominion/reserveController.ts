@@ -169,7 +169,7 @@ export class ReserveController {
     return false;
   }
 
-  /** Letter keys. P on the Crew File opens the Pyramid. On these two screens every letter key is theirs. */
+  /** Letter keys. P on the Crew File opens the Pyramid. On these two screens every letter key but Q is theirs. */
   raw(code: string): boolean {
     if (this.host.screenName === 'crew' && code === 'KeyP') {
       this.host.screenName = 'pyramid';
@@ -177,7 +177,8 @@ export class ReserveController {
       this.host.refresh();
       return true;
     }
-    if (!this.owns() || code.startsWith('Digit')) return false;
+    // Q (hold: the command wheel) and End (quit to title) belong to the whole scene, never to these screens.
+    if (!this.owns() || code.startsWith('Digit') || code === 'KeyQ' || code === 'End') return false;
     const b = this.block();
     if (!b) return true;
     if (this.host.screenName === 'pyramid') {
@@ -197,7 +198,7 @@ export class ReserveController {
     }
     const m = this.model();
     switch (code) {
-      case 'KeyQ': this.flipWho(-1); break;
+      case 'KeyW': this.flipWho(-1); break;
       case 'KeyE': this.flipWho(1); break;
       case 'KeyF': this.fitsOnly = !this.fitsOnly; this.at = 0; this.page = 0; break;
       case 'KeyA': this.go({ t: 'autoFill' }); break;

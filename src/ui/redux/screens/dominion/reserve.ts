@@ -60,7 +60,7 @@ export function reserveView(m: ReserveModel, file: MonFile, notice: string | nul
   <div class="keys"><span class="key" data-testid="dom-reserve-count">${esc(m.count)}</span><span class="key">${esc(m.hq)}</span></div>
 
   <div class="pnl" style="left:16px;top:70px;width:320px;height:458px;padding:12px 14px" data-testid="dom-give">
-    <div class="hd"><img class="ic" src="${img('g-fame-checker')}" alt="">GIVE TO<span class="r row" style="gap:4px"><span class="kc"${act('who', -1)}>Q</span><span data-testid="dom-who">${esc(w.name)}</span><span class="kc"${act('who', 1)}>E</span></span></div>
+    <div class="hd"><img class="ic" src="${img('g-fame-checker')}" alt="">GIVE TO<span class="r row" style="gap:4px"><span class="kc"${act('who', -1)}>W</span><span data-testid="dom-who">${esc(w.name)}</span><span class="kc"${act('who', 1)}>E</span></span></div>
     <div class="row" style="gap:12px;align-items:flex-start">
       <div style="position:relative;width:84px;height:108px;flex:none;border-radius:8px;background:radial-gradient(circle at 50% 85%,rgba(166,120,255,.6),#1a1438 70%);box-shadow:0 0 0 3px var(--ink);overflow:hidden">${portrait}</div>
       <div class="col" style="gap:4px;font-size:15px;min-width:0">

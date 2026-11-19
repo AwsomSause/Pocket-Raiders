@@ -13,7 +13,7 @@
   - New RNG streams: `dominion-reserve-start`, `dominion-trust`, `dominion-rank`. No old roll moves.
 - **Screens**:
   - `src/ui/redux/screens/dominion/reserve.ts` draws both mockups; `src/scenes/dominion/reserveController.ts` keeps their cursors.
-  - Reserve keys: arrows pick, Enter gives, Q / E change who gets it, F fits only, A Auto-Fill, H hunt mode, X set free, Tab team slots (Enter takes back), [ ] box page, Esc HQ.
+  - Reserve keys: arrows pick, Enter gives, W / E change who gets it (Q is left for the command wheel, End for Quit), F fits only, A Auto-Fill, H hunt mode, X set free, Tab team slots (Enter takes back), [ ] box page, Esc HQ.
   - Pyramid keys: arrows pick a member, Enter promotes, D demotes, S strips (press twice), Esc back to the Crew File.
   - Tab 4 is now open. Two icons added (see PROVENANCE.md).
 
