@@ -14,19 +14,21 @@
   - `src/scenes/dominion/hqController.ts` keeps the cursors; DominionScene only forwards to it.
   - Keys: B opens it; arrows and Enter buy; ◀ ▶ picks the district for an outside building; U upgrade, H hire, M manage team, A View Assets (U/S/R inside it), L Money, Esc leave. L does not open the interaction log on this screen (Shift+L still does). A and S no longer also count as moves there.
   - 8 new pictures in `public/assets/images/dominion/` (see PROVENANCE.md).
+  - Round-3 look (`mockups-v3`, screen 6): the CSS is ported again with `tools/dominion/port-mockup-css.py` (gold seams, medallion icons, Nova damask, striped meters, orbiting spark, panels rising in), and the HQ menu adds the screen's haze, bokeh, stars, colour grade, edge glow, sky searchlights, gold frame, and the spotlight, sunburst and glints on the blueprint. All of it stops with the game's animation setting.
+  - Port tool fixes: `cubic-bezier(...)` in an animation no longer gets a `dm-` prefix, `@property` is kept unscoped (it broke the build), and the entrance delay counts from the first draw so a redraw doesn't replay it.
 
 ## Saves
 - No block bump. `hq` is a new optional field on the D2 block (v2); a save without it gets an empty Warehouse.
 
 ## Lists: how much is in
-- Buildings: 266 of 266 in the data. 65 are live (45 supported, 20 limited with a note), 201 are disabled. The disabled ones name the slice that turns them on: D9 47, D10 26, D4 17, D6 14, D15 6, D8 4, D13 2, D16 2, D11 1, D14 1. 81 more are marked "later" (no slice yet).
+- Buildings: 266 of 266 in the data. 65 are live (45 supported, 20 limited with a note), 201 are disabled. The disabled ones name the slice that turns them on: D9 47, D10 26, D4 17, D6 14, D15 6, D8 4, D13 2, D16 2, D11 1, D14 1, and 81 are marked "later" (no slice named yet).
 - Field actions: 45 played (was 32). The rest still name their slice.
 - Crew tasks: 33 live (was 31).
 
 ## Tests
 - `tests/unit/dominionHq.test.ts`: 26 tests (data, build, upgrade, tiers, sell, rebuild, upkeep, broke, loans, laundering, outside buildings, failure cases, save and reload).
-- `tests/e2e/dominionHq.spec.ts`: opens the HQ menu, is refused a too-dear room, builds a Bunk Room, opens View Assets and Money, passes the night (room ready, crew cap 5), draws a Lv. 3 Compound at 1280x720, 960x540 and 800x600, and reloads. Passed 4 runs in a row, with the Crew spec.
-- `npm run check` green.
+- `tests/e2e/dominionHq.spec.ts`: opens the HQ menu, is refused a too-dear room, builds a Bunk Room, opens View Assets and Money, passes the night (room ready, crew cap 5), draws a Lv. 3 Compound at 1280x720, 960x540 and 800x600, and reloads. Passed 4 runs in a row.
+- Typecheck, build, content gate and asset report pass; all 114 Dominion and content unit tests pass. All 6 Dominion browser tests pass (the Crew spec now waits 200 ms after closing the hire list, like the HQ spec, because a key pressed straight after can be dropped). The full unit suite is left to CI (it takes over 50 minutes here).
 
 ## Limits (by plan)
 - "A Gym taken or beaten" (Lv. 4) waits for D10, and "Feared" (Lv. 6) waits for D6. Until then the HQ stops at Lv. 3 (Lv. 5 also needs an Admin).

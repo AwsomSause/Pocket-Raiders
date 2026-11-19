@@ -56,6 +56,7 @@ test('Crew File, Hire Grunt, then the Morning: answer a talk, assign a task, and
   expect(hired.funds).toBeLessThan(funds0);
   await page.keyboard.press('Escape');
   await expect(s.getByTestId('dom-hire')).toBeHidden();
+  await page.waitForTimeout(200);
   await page.keyboard.press('ArrowRight');
   await expect(s.getByTestId('dom-file-name')).toContainText(hired.members[1].name.toUpperCase());
 

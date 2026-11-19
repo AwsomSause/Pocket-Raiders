@@ -121,7 +121,7 @@ export function baseView(m: BaseModel, overlay: string): string {
   ${m.level >= 3 ? '<div class="beam sweep" style="left:296px;top:-80px;height:540px;--a0:150deg;--a1:210deg;transform-origin:50% 0;opacity:.6;z-index:2"></div>' : ''}
   <div class="a" style="left:10px;top:372px;width:600px;height:96px;background:linear-gradient(180deg,#2a2a3a,#1c1c28);z-index:1"></div>
   ${fence}${dogs}
-  <div class="a row" style="left:14px;top:448px;width:592px;z-index:8;gap:10px;flex-wrap:nowrap;white-space:nowrap;justify-content:center;font:600 11px var(--ui);color:#dfe5ff" data-testid="dom-hq-menu">${menu}</div>
+  <div class="a row" style="left:96px;top:448px;width:516px;z-index:8;gap:7px;flex-wrap:nowrap;white-space:nowrap;justify-content:center;font:600 11px var(--ui);color:#dfe5ff" data-testid="dom-hq-menu">${menu}</div>
   <div class="a xs" style="left:16px;top:378px;z-index:8;color:#cfd6f5" data-testid="dom-defense">DEFENSE ${m.defense}</div>
   ${nextPanel(m)}
   ${buildPanel(m)}
