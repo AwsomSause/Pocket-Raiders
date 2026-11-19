@@ -41,6 +41,9 @@ jobs:
     if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 100
+    # tsc on the whole game needs more than Node's default ~4 GB heap since the Dominion slices (D2 + D18 ran out).
+    env:
+      NODE_OPTIONS: --max-old-space-size=6144
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -78,6 +81,9 @@ jobs:
     if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    # tsc on the whole game needs more than Node's default ~4 GB heap since the Dominion slices (D2 + D18 ran out).
+    env:
+      NODE_OPTIONS: --max-old-space-size=6144
     strategy:
       fail-fast: false
       matrix:
