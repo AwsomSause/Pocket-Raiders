@@ -294,7 +294,7 @@
 #rx .dom .flick{animation:dm-flick 4s var(--now,0s) steps(1) infinite}
 @keyframes dm-flick{0%,100%{opacity:1}42%{opacity:.55}43%{opacity:1}71%{opacity:.75}72%{opacity:1}}
 #rx .dom .sweep{animation:dm-sweep 7s var(--now,0s) ease-in-out infinite alternate}
-#rx .dom .sweep.b{animation-duration:9s;animation-delay:calc(var(--now,0s) + -3s)}
+#rx .dom .sweep.b{animation-duration:9s;animation-delay:-3s}
 @keyframes dm-sweep{from{transform:rotate(var(--a0,-24deg))}to{transform:rotate(var(--a1,20deg))}}
 #rx .dom .bob{animation:dm-bob 1.6s var(--now,0s) ease-in-out infinite}
 @keyframes dm-bob{50%{transform:translateY(-2px)}}
@@ -321,7 +321,7 @@
 #rx .dom{--ai:#ffb38a;--ai-d:#d9774a;--ai-glow:rgba(255,160,110,.55);--manila:#e9d6a4;--manila-d:#c9b073;--steel:#5d6b80;--block:#4a5262}
 #rx .dom .aichip{position:absolute;z-index:32;display:inline-flex;align-items:center;gap:7px;padding:3px 11px 3px 6px;border-radius:999px;font:600 13px var(--ui);color:#2b1408;
   background:linear-gradient(180deg,#ffd9bf,#ffad80);box-shadow:0 0 0 3px var(--ink),0 0 16px var(--ai-glow);white-space:nowrap}
-#rx .dom .aichip i{width:22px;height:20px;flex:none;margin:-3px 0;background:url(/assets/images/dominion/p-rotom.png) center/contain no-repeat;image-rendering:pixelated}
+#rx .dom .aichip i{width:22px;height:20px;flex:none;margin:-3px 0;background:url(sprites/p-rotom.png) center/contain no-repeat;image-rendering:pixelated}
 #rx .dom .aichip .dm2{opacity:.7;font-weight:500}
 #rx .dom .spark{display:inline-block;width:var(--z,16px);height:var(--z,16px);background:var(--sc,#ffb38a);clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);filter:drop-shadow(0 0 6px var(--sc,#ffb38a));flex:none}
 #rx .dom .tell{position:absolute;z-index:34;padding:5px 16px;font:800 22px/1 var(--logo);font-style:italic;letter-spacing:.04em;color:#fff;background:var(--tc,#d8402f);border-radius:6px;
@@ -355,8 +355,8 @@
 #rx .dom .dots i{display:inline-block;width:9px;height:9px;margin:0 2px;border-radius:50%;background:var(--ai);box-shadow:0 0 8px var(--ai)}
 @media (prefers-reduced-motion:no-preference){
 #rx .dom .dots i{animation:dm-dotb 1.2s var(--now,0s) ease-in-out infinite}
-#rx .dom .dots i:nth-child(2){animation-delay:calc(var(--now,0s) + .15s)}
-#rx .dom .dots i:nth-child(3){animation-delay:calc(var(--now,0s) + .3s)}
+#rx .dom .dots i:nth-child(2){animation-delay:.15s}
+#rx .dom .dots i:nth-child(3){animation-delay:.3s}
 @keyframes dm-dotb{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-7px);opacity:1}}
 #rx .dom .swing{animation:dm-swing 4s var(--now,0s) ease-in-out infinite;transform-origin:50% 0}
 @keyframes dm-swing{50%{transform:rotate(6deg)}0%,100%{transform:rotate(-6deg)}}
@@ -468,7 +468,7 @@
 #rx .dom .grade{position:absolute;inset:0;z-index:39;pointer-events:none;mix-blend-mode:soft-light;background:linear-gradient(150deg,color-mix(in srgb,var(--g1) 55%,transparent),transparent 38%,transparent 62%,color-mix(in srgb,var(--g2) 45%,transparent))}
 #rx .dom .vign::after{background:radial-gradient(120% 90% at 50% 45%,transparent 55%,rgba(22,6,44,.62))}
 @media (prefers-reduced-motion:no-preference){
-#rx .dom .st>.pnl,#rx .dom .st>.path,#rx .dom .st>.sq,#rx .dom .st>.kcard,#rx .dom .st>.doc,#rx .dom .st>.tbox,#rx .dom .st>.cta,#rx .dom .st>.ch,#rx .dom .st>.dz,#rx .dom .st>.tier,#rx .dom .st>.tabs,#rx .dom .st>.top,#rx .dom .st>.rib,#rx .dom .st>.bnr,#rx .dom .st>.sticker,#rx .dom .st>.tell{animation:dm-enter .62s cubic-bezier(.2,1.25,.35,1) backwards;animation-delay:calc(var(--now,0s) + calc(var(--i,0) * 70ms))}
+#rx .dom .st>.pnl,#rx .dom .st>.path,#rx .dom .st>.sq,#rx .dom .st>.kcard,#rx .dom .st>.doc,#rx .dom .st>.tbox,#rx .dom .st>.cta,#rx .dom .st>.ch,#rx .dom .st>.dz,#rx .dom .st>.tier,#rx .dom .st>.tabs,#rx .dom .st>.top,#rx .dom .st>.rib,#rx .dom .st>.bnr,#rx .dom .st>.sticker,#rx .dom .st>.tell{animation:dm-enter .62s cubic-bezier(.2,1.25,.35,1) backwards;animation-delay:calc(var(--now,0ms) + var(--i,0) * 70ms)}
 @keyframes dm-enter{from{opacity:0;translate:0 16px;scale:.96}}
 #rx .dom .st>:nth-child(4n+1){--i:1}
 #rx .dom .st>:nth-child(4n+2){--i:2}

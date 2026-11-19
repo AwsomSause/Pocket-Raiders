@@ -9,12 +9,14 @@ import tasksRaw from '../../data/dominion/tasks.json';
 import empireRaw from '../../data/dominion/empire.json';
 import foundingRaw from '../../data/dominion/founding.json';
 import armbandsRaw from '../../data/dominion/armbands.json';
+import hqRaw from '../../data/dominion/hq.json';
+import buildingsRaw from '../../data/dominion/buildings.json';
 import {
-  ActionsFileSchema, ArmbandsFileSchema, CrewFileSchema, FoundingFileSchema, EmpireFileSchema, FieldFileSchema, GruntTypesFileSchema, StartFileSchema, TasksFileSchema,
-  type ActionsFile, type ArmbandLook, type CrewFile, type FoundingFile, type EmpireFile, type FieldFile, type GruntType, type StartFile, type Task,
+  ActionsFileSchema, ArmbandsFileSchema, BuildingsFileSchema, CrewFileSchema, FoundingFileSchema, EmpireFileSchema, HqFileSchema, FieldFileSchema, GruntTypesFileSchema, StartFileSchema, TasksFileSchema,
+  type ActionsFile, type ArmbandLook, type Building, type CrewFile, type FoundingFile, type EmpireFile, type HqFile, type FieldFile, type GruntType, type StartFile, type Task,
 } from './schema';
 
-export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; empire: EmpireFile; founding: FoundingFile; armbands: Record<string, ArmbandLook> } = {
+export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; empire: EmpireFile; hq: HqFile; buildings: Building[]; founding: FoundingFile; armbands: Record<string, ArmbandLook> } = {
   start: StartFileSchema.parse(startRaw),
   actions: ActionsFileSchema.parse(actionsRaw),
   field: FieldFileSchema.parse(fieldRaw),
@@ -22,6 +24,8 @@ export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: Fie
   tasks: TasksFileSchema.parse(tasksRaw).tasks,
   gruntTypes: GruntTypesFileSchema.parse(gruntTypesRaw).types,
   empire: EmpireFileSchema.parse(empireRaw),
+  hq: HqFileSchema.parse(hqRaw),
+  buildings: BuildingsFileSchema.parse(buildingsRaw).buildings,
   founding: FoundingFileSchema.parse(foundingRaw),
   armbands: ArmbandsFileSchema.parse(armbandsRaw).looks,
 };

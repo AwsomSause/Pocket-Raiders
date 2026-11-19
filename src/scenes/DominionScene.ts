@@ -12,24 +12,27 @@ import { hqModel, newSetup, openingLines, SETUP_PAGES, toggleType, typeGrid, typ
 import type { DominionAction } from '../core/dominion/schema';
 import { services } from '../game/services';
 import { onInputAction, type InputAction } from '../ui/input';
+import { setLogKeyTaken } from '../ui/overlays';
 import { rxFileOf } from '../ui/redux/assets';
 import { mountRedux, type ReduxView } from '../ui/redux/stage';
 import { hqView, openingView, setupView, titleView, type SetupFiles } from '../ui/redux/screens/dominion/views';
 import { CrewController } from './dominion/crewController';
+import { HqController } from './dominion/hqController';
 import { cardModel, gridPages, mapModel, newCursor, pageFor, type MapCursor } from '../core/dominion/fieldScreens';
 import { cardView, mapView } from '../ui/redux/screens/dominion/fieldViews';
 import { ledgerModel, SPREADS } from '../core/dominion/ledgerScreens';
 import { ledgerView } from '../ui/redux/screens/dominion/ledger';
-import { setLogKeyTaken } from '../ui/overlays';
 import { foundedLines, foundingOpen, initialOf, nameIdeas, newDraft, teamColours } from '../core/dominion/founding';
 import { FOUNDING_ROWS, foundedView, foundingView, type FoundingUi } from '../ui/redux/screens/dominion/founding';
 
-type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'ledger' | 'founding' | 'founded';
+type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'ledger' | 'founding' | 'founded' | 'base';
 
 /** The screen to come back to after a battle (D2: the map the action was picked on, or the HQ for a fight at the door). */
 let resume: Screen | null = null;
 
 const TAB_KEYS: Record<string, number> = { Digit1: 0, Digit2: 1, Digit3: 2, Digit4: 3, Digit5: 4, Digit6: 5 };
+/** Letters the input layer also reads as moves (WASD); the HQ menu uses A (View Assets) and S (Sell). */
+const MOVE_LETTERS = new Set(['KeyW', 'KeyA', 'KeyS', 'KeyD', 'KeyZ', 'KeyX']);
 
 export class DominionScene extends Phaser.Scene {
   private view: ReduxView | null = null;
@@ -40,6 +43,8 @@ export class DominionScene extends Phaser.Scene {
   private at = 0;
   private notice: string | null = null;
   private leaving = false;
+  /** A letter the HQ menu used that is also a move key (A = left, S = down): its move is dropped. */
+  private ate = false;
   private files: SetupFiles | null = null;
   private cursor: MapCursor | null = null;
   private garage = false;
@@ -53,6 +58,8 @@ export class DominionScene extends Phaser.Scene {
   private founding: FoundingUi | null = null;
   private foundingFrom: Screen = 'hq';
   private foundedShown = 1;
+  /** D5: the HQ menu (mockup 6). */
+  private hq = new HqController(this);
 
   constructor() {
     super('Dominion');
@@ -68,6 +75,7 @@ export class DominionScene extends Phaser.Scene {
     this.crew = new CrewController(this);
     this.founding = null;
     this.foundedShown = 1;
+    this.hq = new HqController(this);
     const { session } = services();
     const run = session.run;
     if (!run) return void this.scene.start('MainMenu');
@@ -136,6 +144,8 @@ export class DominionScene extends Phaser.Scene {
         fLogo: (id) => { if (this.founding) this.founding.d = { ...this.founding.d, logo: id }; this.view?.refresh(); },
         fFound: () => this.submitFounding(),
         ...this.crew.acts(),
+        ...this.hq.acts(),
+        base: () => { this.hq.open(); this.view?.refresh(); },
       },
       overs: {
         typeOver: (i) => { this.setup = { ...this.setup, at: Number(i) }; this.view?.refresh(); },
@@ -143,7 +153,6 @@ export class DominionScene extends Phaser.Scene {
         ...this.crew.overs(),
       },
     });
-    onInputAction(this, (a) => this.key(a));
     const kb = this.input.keyboard;
     const seen = new WeakSet<KeyboardEvent>(); // Phaser can hand the same press over again within a frame
     const raw = (e: KeyboardEvent): void => {
@@ -170,15 +179,25 @@ export class DominionScene extends Phaser.Scene {
         if (e.code === 'KeyB') this.bring();
         return;
       }
+      if (this.screen === 'base') {
+        if (this.hq.raw(e.code)) return void (this.ate = MOVE_LETTERS.has(e.code));
+        if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
+        return;
+      }
       if (this.screen !== 'hq' && this.screen !== 'crew') return;
       if (this.crew.raw(e.code)) return;
+      // D5: B opens the HQ menu (mockup 6) from the HQ.
+      if (this.screen === 'hq' && e.code === 'KeyB') return void (this.hq.open(), this.view?.refresh());
       if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
       else if (e.code === 'KeyN') this.step({ t: 'toNight' });
       else if (e.code === 'KeyE') this.step({ t: 'endDay' });
     };
     kb?.on('keydown', raw);
-    // D6: L is the Ledger here, not the game's interaction log (Shift+L still opens the log).
-    setLogKeyTaken(() => this.scene.isActive() && !!this.block()?.opened && ['hq', 'map', 'crew', 'ledger'].includes(this.screen));
+    // After `raw`, so a letter the HQ menu took (A, S) is not also read as a move.
+    onInputAction(this, (a) => this.key(a));
+    // L is the Ledger on the HQ, the map and the Crew File (D6) and Money on the HQ menu (D5, mockup 6), so it doesn't
+    // open the game's interaction log there (Shift+L still does).
+    setLogKeyTaken(() => this.scene.isActive() && (this.screen === 'base' || (!!this.block()?.opened && ['hq', 'map', 'crew', 'ledger'].includes(this.screen))));
     this.events.once('shutdown', () => {
       kb?.off('keydown', raw);
       setLogKeyTaken(null);
@@ -229,6 +248,8 @@ export class DominionScene extends Phaser.Scene {
         return this.crew.render(this.notice);
       case 'ledger':
         return b ? ledgerView(ledgerModel(b, services().session.run!, this.spread), this.notice) : '';
+      case 'base':
+        return this.hq.render(this.notice);
     }
   }
 
@@ -387,6 +408,7 @@ export class DominionScene extends Phaser.Scene {
   }
 
   private key(a: InputAction): void {
+    if (this.ate) return void (this.ate = false);
     if (this.leaving) return;
     if (this.screen === 'founding') return this.foundingKey(a);
     if (this.crew.key(a)) return void this.view?.refresh();
@@ -395,6 +417,7 @@ export class DominionScene extends Phaser.Scene {
       if (a === 'left' || a === 'right') return this.turnLedger(a === 'left' ? -1 : 1);
       return;
     }
+    if (this.hq.key(a)) return void this.view?.refresh();
     if (a === 'back') return this.back();
     if (a === 'confirm') return this.confirm();
     if (this.screen === 'title' && (a === 'up' || a === 'down')) this.titleAt = this.titleAt ? 0 : 1;
@@ -491,6 +514,13 @@ export class DominionScene extends Phaser.Scene {
   setNotice(n: string | null): void {
     this.notice = n;
   }
+  /** D5: Hire Grunt and Manage Team on the HQ menu open the Crew File (with the hire list for Hire Grunt). */
+  openCrew(hire: boolean): void {
+    this.screen = 'hq';
+    this.crew.tab(2);
+    if (hire) this.crew.raw('KeyH');
+    this.view?.refresh();
+  }
   refresh(): void {
     this.view?.refresh();
   }
@@ -507,9 +537,15 @@ export class DominionScene extends Phaser.Scene {
   }
 
   private tab(i: number): void {
-    if (this.screen !== 'hq' && this.screen !== 'map' && this.screen !== 'crew' && this.screen !== 'ledger') return;
+    if (this.screen !== 'hq' && this.screen !== 'map' && this.screen !== 'crew' && this.screen !== 'ledger' && this.screen !== 'base') return;
     if (i === 5) return this.openLedger();
     if (this.screen === 'ledger') this.screen = 'hq';
+    if (this.screen === 'base' && i === 0) {
+      this.screen = 'hq';
+      this.notice = null;
+      return void this.view?.refresh();
+    }
+    if (this.screen === 'base' && i === 2) this.screen = 'hq';
     if (this.crew.tab(i)) return void this.view?.refresh();
     const b = this.block();
     this.notice = null;

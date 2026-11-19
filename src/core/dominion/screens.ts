@@ -66,6 +66,8 @@ export interface TopModel {
   heat: string;
   roster: string;
   region: string;
+  /** The last cell's label (REGION: by default; the HQ menu shows LV CAP, mockup 6). */
+  regionLabel?: string;
 }
 
 export function topModel(b: DominionBlock, sub = 'HEADQUARTERS'): TopModel {

@@ -5,6 +5,7 @@ import { DOMINION_DATA } from './data';
 import type { DominionAction, DominionBlock } from './schema';
 import { addHeat, scoutHome, syncHeat } from './field';
 import { fill, runWorldTurn } from './worldTurn';
+import { addClean, hqFx } from './hqFx';
 import { assign, bail } from './crew';
 import { payPatron } from './recruit';
 import { setWhere } from './empire';
@@ -28,8 +29,10 @@ export const openOrders = (b: DominionBlock): string[] => DOMINION_DATA.start.or
 /** Day actions the Boss gets when the Day starts. */
 export function dayActions(b: DominionBlock): number {
   const c = C();
-  // D3: a scout's success saves the Boss an action; a promised favour spends one.
-  return Math.max(1, c.dayActions + (b.rested ? c.restBonus : 0) - (b.noRest >= c.exhaustedAfter ? 1 : 0) + (b.crew?.saved ?? 0));
+  // D3: a scout's success saves the Boss an action; a promised favour spends one. D5: rooms add actions (Operations
+  // Room, Executive Office) and the Luxury Suite makes a rest worth one more.
+  const fx = hqFx(b);
+  return Math.max(1, c.dayActions + fx.dayActions + (b.rested ? c.restBonus + fx.restBonus : 0) - (b.noRest >= c.exhaustedAfter ? 1 : 0) + (b.crew?.saved ?? 0));
 }
 
 /** Marks First Steps whose goal is met and pays their reward. Returns the lines for the ones just done. */
@@ -57,8 +60,9 @@ export function endNight(block: DominionBlock, seed: string, rested: boolean): D
   b.noRest = rested ? 0 : b.noRest + 1;
   b.day += 1;
   b.phase = 'morning';
-  b.nightActions = C().nightActions;
   const lines = runWorldTurn(b, seed);
+  // D5: the Night Shift adds a Night action (counted after the World Turn, which finishes the night's works).
+  b.nightActions = C().nightActions + hqFx(b).nightActions;
   if (rested) {
     for (const m of b.members) m.morale = Math.min(100, m.morale + 5);
     lines.unshift(r.rest);
@@ -115,6 +119,16 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     }
     case 'act':
     case 'buy':
+    // D5: the HQ menu (hq.ts), sent there by session.ts.
+    case 'upgrade':
+    case 'build':
+    case 'tierUp':
+    case 'sell':
+    case 'rebuild':
+    case 'launder':
+    case 'loan':
+    case 'repay':
+    case 'letGo':
       // The Boss's hands need the run (party, bag): session.ts sends them to field.ts.
       return no(block);
     case 'toDay': {
@@ -128,7 +142,8 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
       if (block.phase !== 'day') return no(block);
       const b = structuredClone(block);
       const pay = b.actions * C().oddJobPay;
-      b.funds += pay;
+      // D5: odd jobs are honest work, so the money is clean (A21).
+      addClean(b, pay);
       b.earned += pay;
       b.actions = 0;
       b.phase = 'evening';
