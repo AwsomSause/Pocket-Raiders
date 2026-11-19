@@ -80,7 +80,7 @@ def emit(rules, inner=False):
             name = pre.split()[1]
             lines.append('@keyframes dm-%s{%s}' % (name, body.strip()))
         elif pre.startswith('@property'):
-            lines.append('%s{%s}' % (pre, body.strip()))
+            lines.append('%s{%s}' % (pre, body.strip()))  # registered custom properties stay global (round-3 halo spark)
         elif pre.startswith('@media'):
             if 'max-width' in pre:
                 continue
