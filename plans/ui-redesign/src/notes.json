@@ -34,5 +34,18 @@
   "q3": "Done here: Bag and Switch are battle pages now, so the fight stays on screen behind them. Move details still crowd the move row and should get more room.",
   "q4": "The Pause Menu moved onto the red slash with the trainer standing beside it. Settings swapped the tab row for a category list on the left, which leaves room for more categories.",
   "q5": "More than before. Slanted bars and a road map read as modern Pokémon. What is missing is type colour, the thing every Pokémon screen is built on."
+ },
+ "3": {
+  "name": "Type Colour",
+  "big": "Colour now means something. Moves, party cards, HP plates and the Summary are painted in the Pokémon's own type with type medals, and every move shows how well it will hit.",
+  "pages": [
+   "Battle · Move Info",
+   "Type Chart"
+  ],
+  "q1": "Yes: move cards are big blocks of type colour with a ghosted medal, and the Summary band is a fire-to-sky gradient. It still sits perfectly still, which is the next thing to fix.",
+  "q2": "Pass 2 used red, yellow and white for everything. Now a glance tells you type, matchup (▲ Super effective, ▼ Weak hit) and event risk (orange risky, green certain, blue costs money).",
+  "q3": "Two added. Move Info takes the long move text and the damage estimate off the move row. The Type Chart gets its own page, opened with T from Party or Summary.",
+  "q4": "No change to their layout this pass. Settings needs a colour-blind option now that colour carries meaning (planned with the accessibility pass); medals and arrows already repeat what the colour says.",
+  "q5": "Much more. Type colours and type medals are the most Pokémon thing on any screen."
  }
 }

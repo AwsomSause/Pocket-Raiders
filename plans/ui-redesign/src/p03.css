@@ -1,0 +1,79 @@
+/* Pass 3 · Type Colour. Layout idea: colour is information; a Pokémon thing is always painted in its type. */
+&{--lead:#e8452b}
+.scr{background:linear-gradient(108deg,#fff 0 58%,color-mix(in srgb,var(--lead) 13%,#fff) 58% 100%)}
+.ty{display:inline-flex;align-items:center;gap:4px;padding:1px 10px 1px 2px;border-radius:999px;transform:none;border:1.5px solid rgba(0,0,0,.35);background:linear-gradient(180deg,var(--t),color-mix(in srgb,var(--t) 78%,#000))}
+.ty-i,.medal{display:inline-block!important;flex:none}
+.pl-1 .medal{align-self:center}
+.b2 .plate.foe .pl-in{border-left-color:var(--t)}
+.b2 .plate.me .pl-in{border-right-color:var(--t)}
+.pl-in{background:linear-gradient(100deg,#fff 62%,color-mix(in srgb,var(--t) 26%,#fff))}
+.mv-m{position:absolute;right:-14px;bottom:-18px;opacity:.28;pointer-events:none}
+.mv3{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:5px;min-height:96px;padding:10px 14px;color:#fff;border:2px solid var(--ink);border-radius:6px 16px 6px 16px;box-shadow:4px 4px 0 var(--ink);background:linear-gradient(140deg,var(--t),color-mix(in srgb,var(--t) 62%,#000));text-shadow:0 1px 0 rgba(0,0,0,.4)}
+.mv3 b{font:400 27px/1 var(--fd);letter-spacing:.02em}
+.mv-r{display:flex;gap:10px;font-size:13px}
+.mv-r i{font-style:normal}
+.mv3 em{font-style:normal;font-size:12px;font-weight:800;align-self:flex-start;border-radius:999px;padding:0 9px;text-shadow:none}
+.mv3 .e1{background:var(--yel);color:var(--ink)}
+.mv3 .e-1{background:rgba(0,0,0,.45);color:#fff}
+.mv3.on{translate:0 -10px;box-shadow:0 0 0 4px var(--yel),4px 8px 0 4px var(--ink)}
+.f3 .moves{bottom:18px}
+.f3 .mv-rib{bottom:136px;background:linear-gradient(90deg,var(--ink) 70%,color-mix(in srgb,var(--t) 70%,var(--ink)))}
+.mv-rib .more{justify-self:end}
+.mv-rib kbd{font:inherit;font-weight:800;background:#fff;color:var(--ink);border-radius:4px;padding:0 6px}
+.minfo .plate,.minfo .ar-info{display:none}
+.mi-card{position:absolute;left:24px;top:24px;width:480px;height:330px;overflow:hidden;padding:22px 26px;display:flex;flex-direction:column;gap:10px;color:#fff;border:2px solid var(--ink);border-radius:6px 22px 6px 22px;box-shadow:6px 6px 0 var(--ink);background:linear-gradient(140deg,var(--t),color-mix(in srgb,var(--t) 58%,#000));text-shadow:0 1px 0 rgba(0,0,0,.4);z-index:4}
+.mi-card small{color:#fff;letter-spacing:.1em;text-transform:uppercase}
+.mi-card>b{font:400 60px/.9 var(--fd)}
+.mi-row{display:flex;gap:12px;align-items:center;font-size:14px;font-weight:800}
+.mi-nums{display:flex;gap:26px}
+.mi-nums div{display:flex;flex-direction:column}
+.mi-nums span{font-size:12px}
+.mi-nums b{font:400 36px/1 var(--fd)}
+.mi-card p{font-size:16px;max-width:330px}
+.mi-vs{position:absolute;right:24px;top:24px;width:396px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;z-index:4}
+.mi-vs>b{font:400 30px/1 var(--fd)}
+.mult{display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.mult span{display:flex;align-items:center;gap:6px}
+.mult b{font:400 26px/1 var(--fd)}
+.bad{color:var(--red)}
+.good{color:#1d8a34}
+.est{display:flex;align-items:center;gap:10px;font-size:14px}
+.est .hp{position:relative}
+.est .hp u{position:absolute;top:0;bottom:0;background:repeating-linear-gradient(90deg,var(--red) 0 3px,#fff 3px 5px)}
+.est b{font:400 26px/1 var(--fd)}
+.mi-vs p{font-size:13px;color:var(--mute)}
+.mi-vs .btn{min-width:120px;align-items:center}
+.typed{border-left:14px solid var(--t);background:linear-gradient(100deg,#fff 70%,color-mix(in srgb,var(--t2) 24%,#fff))}
+.btn.typed.on{border-left-color:var(--t);background:var(--yel)}
+.sw-r .medal{margin:0 -2px}
+.sw-r b{width:84px}
+.hint{width:128px}
+.typed-card{overflow:hidden;background:linear-gradient(150deg,color-mix(in srgb,var(--t) 78%,#fff),var(--t) 50%,color-mix(in srgb,var(--t2) 80%,#000));color:#fff;text-shadow:0 1px 0 rgba(0,0,0,.35)}
+.typed-card>*{position:relative}
+.typed-card>.mv-m{position:absolute;right:-30px;bottom:-30px;opacity:.22}
+.typed-card .lv,.typed-card .num{color:#fff}
+.typed-card .btn{color:var(--ink);text-shadow:none}
+.leadc.typed-card{background:linear-gradient(150deg,color-mix(in srgb,var(--t) 78%,#fff),var(--t) 50%,color-mix(in srgb,var(--t2) 80%,#000))}
+.disc{width:76px;height:64px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--t) 45%,#fff) 0 60%,transparent 62%)}
+.tone small i{font-style:normal;font-weight:800;color:#fff;border-radius:999px;padding:0 8px;margin-right:6px;background:#1d8a34}
+.tone.risk small i{background:#e07000}
+.tone.cost small i{background:var(--blu)}
+.tone.risk{border-right:10px solid #e07000}
+.tone.cost{border-right:10px solid var(--blu)}
+.tone.safe{border-right:10px solid #1d8a34}
+.s3 .sm-band{overflow:hidden;background:linear-gradient(170deg,color-mix(in srgb,var(--t) 80%,#fff),var(--t) 45%,var(--t2));border-right-color:#fff}
+.s3 .sm-band .mv-m{right:auto;left:40px;bottom:auto;top:60px;opacity:.18}
+.s3 .hdr::before{background:var(--t)}
+.s3 .stat u{background:linear-gradient(90deg,var(--t),var(--t2))}
+.s3 .sm-left{text-shadow:0 1px 0 rgba(0,0,0,.4)}
+.tyrow{display:flex;gap:4px;flex-wrap:wrap}
+.tc-grid{position:absolute;left:20px;top:78px;width:536px;display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.tc{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0 6px;border:2px solid var(--ink);border-radius:6px 14px 6px 14px;background:color-mix(in srgb,var(--t) 22%,#fff);font-size:13px;box-shadow:3px 3px 0 var(--ink)}
+.tc.on{background:var(--t);color:#fff;box-shadow:0 0 0 4px var(--yel),3px 3px 0 4px var(--ink)}
+.tc-side{position:absolute;right:20px;top:78px;width:356px;height:404px;padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.tc-h{display:flex;align-items:center;gap:10px}
+.tc-h b{font:400 44px/1 var(--fd);color:var(--t)}
+.tc-row{display:flex;flex-direction:column;gap:4px}
+.tc-row span{font-size:13px;font-weight:800;color:var(--mute)}
+.tc-row div{display:flex;flex-wrap:wrap;gap:5px}
+.sw-pick.typed-card p{background:rgba(0,0,0,.4);border-radius:8px;padding:4px 10px}
