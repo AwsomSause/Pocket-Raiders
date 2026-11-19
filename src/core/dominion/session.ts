@@ -17,6 +17,7 @@ import { newBlock, typesProblem } from './start';
 import { build, letGo, loan, rebuild, repay, sell, storageCap, tierUp, upgrade, launder, type HqOut } from './hq';
 import { withHq } from './hqFx';
 import { levelCap } from '../regions';
+import { answerCard, breakTruce, maybeStreet, noteTop, ransom, startTruce, withRivals, type RivalOut } from './rivals';
 
 export const DOMINION_MODE_ID = 'dominion';
 export const isDominionRun = (run: RunState | null | undefined): boolean => run?.rules.modeId === DOMINION_MODE_ID;
@@ -49,19 +50,37 @@ export function startInRun(content: Content, run: RunState, setup: DominionSetup
   let out = bossTeam(content, structuredClone(run));
   const fresh = newBlock(content, out, setup);
   // D5: the starting money is clean (A21).
-  const block = DominionBlockSchema.parse(withHq(withCrew(fresh), fresh.funds));
+  const block = DominionBlockSchema.parse(withRivals(withHq(withCrew(fresh), fresh.funds)));
+  noteTop(block, out);
   out = { ...withBlock(out, block), inventory: { ...DOMINION_DATA.start.start.inventory } };
   return { run: out, problem: null };
 }
 
 /** One clock step on the run. Rest heals the Boss's team for free (Part 1 §2.1). */
 export function stepInRun(content: Content, run: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean } {
+  const out = stepInner(content, run, action);
+  if (!out.ok) return out;
+  // D9: the rival tier reads the Boss's best level; a night ambush (rival action 135) hurts the Boss's team.
+  const next = structuredClone(out.run);
+  const b = next.expansion!.dominion!;
+  noteTop(b, next);
+  if (b.flags.includes('ambushed')) {
+    b.flags = b.flags.filter((f) => f !== 'ambushed');
+    for (const m of next.party) m.hp = Math.max(1, Math.round(m.hp * 0.75));
+  }
+  const block = DominionBlockSchema.parse(b);
+  return { ...out, block, run: withBlock(next, block) };
+}
+
+function stepInner(content: Content, run: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean } {
   const block = run.expansion?.dominion;
   if (!block) return { ok: false, block: block as never, notice: null, heal: false, run };
   const crewOut = crewInRun(content, run, action);
   if (crewOut) return crewOut;
   const hqOut = hqInRun(content, run, action);
   if (hqOut) return hqOut;
+  const rivalOut = rivalInRun(run, action);
+  if (rivalOut) return rivalOut;
   if (action.t === 'act') {
     // D2: a Boss action (field.ts). A Pokémon lifted in a Ball (Thieve, a big success) joins the team or the box.
     const work = structuredClone(run);
@@ -72,8 +91,15 @@ export function stepInRun(content: Content, run: RunState, action: DominionActio
       if (work.party.length < 6) work.party.push(mon);
       else work.box = [...(work.box ?? []), mon];
     }
-    const next = withBlock(work, DominionBlockSchema.parse(out.block));
-    return { ok: true, block: next.expansion!.dominion!, notice: out.notice, heal: false, run: next, fight: out.fight };
+    // D9: a rival street meeting may come up where the rival team has a stake (once per row per run).
+    let blk = out.block, notice = out.notice;
+    if (!out.fight) {
+      const met = maybeStreet(blk, action.district, run.seed, blk.phase === 'night');
+      blk = met.block;
+      if (met.line) notice = [notice, met.line].filter(Boolean).join(' ');
+    }
+    const next = withBlock(work, DominionBlockSchema.parse(blk));
+    return { ok: true, block: next.expansion!.dominion!, notice, heal: false, run: next, fight: out.fight };
   }
   if (action.t === 'buy') {
     const out = buy(block, action.vehicle);
@@ -88,6 +114,22 @@ export function stepInRun(content: Content, run: RunState, action: DominionActio
   }
   next = settleCrew(content, next);
   return { ...out, block: next.expansion!.dominion!, run: next };
+}
+
+/** D9: the Rival File's answers (rivals.ts). A fight answered leaves `field.fight` for the scene to start. */
+function rivalInRun(run: RunState, action: DominionAction): (StepOut & { run: RunState; fight?: boolean }) | null {
+  const b = run.expansion!.dominion!;
+  let out: RivalOut;
+  switch (action.t) {
+    case 'truce': out = startTruce(b, action.team); break;
+    case 'breakTruce': out = breakTruce(b, action.team); break;
+    case 'card': out = answerCard(b, action.index, action.choice, run.seed); break;
+    case 'ransom': out = ransom(b, action.member); break;
+    default: return null;
+  }
+  if (!out.ok) return { ok: false, block: b, notice: out.notice, heal: false, run };
+  const next = withBlock(run, DominionBlockSchema.parse(out.block));
+  return { ok: true, block: next.expansion!.dominion!, notice: out.notice, heal: false, run: next, fight: out.fight };
 }
 
 /** D5: the HQ menu (hq.ts). The upgrade needs the run for the region's level cap (the Citadel's). */

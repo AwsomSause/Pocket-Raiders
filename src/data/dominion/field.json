@@ -59,6 +59,23 @@
   "water": [["pallet", "cinnabar"], ["cinnabar", "fuchsia"]],
   "starting": ["extort", "take", "steal", "thieve", "attack", "recruit", "scout", "catch", "lay-low"],
   "play": {
+    "hold-the-line": {"kinds": ["shop", "crowd", "street"], "chance": 45, "heat": 2, "dread": 2, "battle": {"chance": 100, "on": "always", "foe": "rival"}, "effect": "rivalHit", "win": "You held the line at {target}. The rival's collector goes home empty.", "lose": "The rival's collectors walk off with today's money."},
+    "steal-their-customers": {"kinds": ["shop", "crowd", "street"], "chance": 45, "regard": 1, "control": 6, "heat": 1, "failHeat": 2, "effect": "rivalHit", "win": "{district} buys from you this week, not from them.", "lose": "The customers stay loyal to the rival's stall."},
+    "ambush-the-courier": {"kinds": ["street", "route", "dock", "crowd"], "chance": 40, "pay": [400, 900], "heat": 6, "failHeat": 8, "dread": 2, "battle": {"chance": 50, "on": "fail", "foe": "rival"}, "effect": "rivalHit", "win": "The courier's bag is yours: ₽{pay}.", "lose": "The courier ran, and shouted your name."},
+    "wire-a-phone": {"kinds": ["any"], "chance": 55, "heat": 2, "failHeat": 6, "effect": "rivalSpy", "win": "The line clicks. You listen all night.", "lose": "The tap squeals. They know someone tried."},
+    "court-day": {"where": "hq", "chance": 60, "cost": 300, "effect": "court", "win": "The judge listens to the Front's lawyer.", "lose": "The judge doesn't buy it. ₽300 gone."},
+    "bail-out": {"where": "hq", "chance": 100, "cost": 500, "effect": "court", "win": "You pay at the window and talk a little. The clerk nods."},
+    "burn-a-front": {"kinds": ["shop", "site", "crowd"], "chance": 35, "heat": 14, "failHeat": 18, "regard": -2, "dread": 4, "battle": {"chance": 40, "on": "fail", "foe": "rival"}, "effect": "rivalHit", "win": "{target} burns. The rival team will feel that.", "lose": "The match goes out. A rival lookout saw you."},
+    "frame-a-rival": {"kinds": ["any"], "chance": 45, "heat": -3, "failHeat": 6, "effect": "rivalHit", "win": "The police find the rival's prints on your crime. Heat here −3.", "lose": "The planted evidence doesn't stick."},
+    "prison-break": {"kinds": ["police", "street", "crowd", "site"], "chance": 35, "heat": 12, "failHeat": 16, "wanted": 4, "battle": {"chance": 60, "on": "fail", "foe": "police"}, "effect": "court", "win": "The cell door swings open.", "lose": "The alarm goes before the lock does."},
+    "hunt-the-snitch": {"where": "hq", "chance": 55, "effect": "counterSpy", "win": "You go through the crew one by one."},
+    "boss-duel": {"kinds": ["any"], "chance": 50, "dread": 3, "battle": {"chance": 100, "on": "always", "foe": "rival"}, "effect": "rivalHit", "win": "The Admin bows out in front of everyone.", "lose": "The Admin walks away laughing."},
+    "poach": {"kinds": ["street", "crowd", "shop"], "chance": 35, "effect": "poach", "win": "A rival Grunt hears you out.", "lose": "The Grunt spits and walks off."},
+    "counter-intelligence": {"where": "hq", "chance": 60, "effect": "counterSpy", "win": "You sweep the HQ for moles."},
+    "declare-war": {"where": "hq", "effect": "war", "win": "You say it out loud, in front of the crew."},
+    "peace-talks": {"where": "hq", "chance": 70, "effect": "truceTalk", "win": "A message goes out under a white handkerchief.", "lose": "Your message comes back unopened."},
+    "counterstrike": {"kinds": ["any"], "chance": 50, "heat": 6, "failHeat": 8, "dread": 3, "battle": {"chance": 100, "on": "always", "foe": "rival"}, "effect": "rivalHit", "win": "You hit back the same day. They didn't expect it.", "lose": "They were waiting for you."},
+    "spy-on-the-boss": {"kinds": ["any"], "chance": 55, "failHeat": 4, "effect": "rivalSpy", "win": "You watch the Boss's windows until the lights go out.", "lose": "A guard dog barks. You run."},
     "extort": { "kinds": ["shop"], "chance": 25, "pay": [150, 600], "weekly": 120, "heat": 5, "failHeat": 12, "regard": -2, "dread": 3, "battle": { "chance": 40, "on": "fail", "foe": "target" }, "control": 8,
       "win": "{owner} pays ₽{pay}. The till is lighter, and it will be every week.", "lose": "{owner} won't pay. Someone has run for the police." },
     "collect-debt": { "kinds": ["shop", "street"], "chance": 35, "pay": [100, 250], "heat": 3, "failHeat": 8, "regard": -1, "dread": 2, "battle": { "chance": 30, "on": "fail", "foe": "target" },
@@ -210,14 +227,14 @@
       "rest": "D1", "recruit": "D3", "street-recruit-drive": "D3", "talent-scout": "D3", "pay-the-families": "D3", "pick-a-fight-with-the-hiker": "D3",
       "rescue-a-wild-pokemon": "D4", "evolve-in-peace": "D4", "tame-the-wild": "D4",
       "skim-the-till": "D6", "street-theater": "D6", "spray-the-wall": "D6", "sponsor-a-trainer": "D6",
-      "hold-the-line": "D9", "steal-their-customers": "D9", "ambush-the-courier": "D9",
+      
       "three-on-one": "D10", "gauntlet": "D10", "rooftop-chase": "D10", "dig-the-dirt": "D10", "fossil-dig": "D10", "contraband-run": "D10", "air-drop": "D10", "fake-shipment": "D10", "evidence-locker-visit": "D10", "the-big-night": "D10",
       "pay-the-pilot": "D15", "reckoning": "D15",
-      "buy-out": "D10", "hold-a-rally": "D6", "wire-a-phone": "D9", "forge-papers": "D10", "hack-the-terminal": "D10", "interrogate": "D9", "kidnap-a-pokemon": "D10", "hit-a-lab": "D10", "smuggle": "D10", "open-a-black-market-stall": "D10", "run-the-docks": "D10", "underground-auction": "D10", "tunnel": "D10", "safehouse-network": "D10", "post-flyers": "D10", "spread-the-word": "D10", "pirate-radio": "D9", "bribe": "D10", "sabotage-the-station": "D9", "court-day": "D9", "sabotage": "D10", "raid": "D10", "burn-a-front": "D9", "hire-mercenaries": "D10", "write-a-manifesto": "D13", "blackout": "D10", "night-raid": "D10", "frame-a-rival": "D9", "prison-break": "D9", "bail-out": "D9", "loan-shark": "D10", "egg-run": "D4", "breed": "D4", "move-tutor": "D4"
+      "buy-out": "D10", "hold-a-rally": "D6", "forge-papers": "D10", "hack-the-terminal": "D10", "interrogate": "D10", "kidnap-a-pokemon": "D10", "hit-a-lab": "D10", "smuggle": "D10", "open-a-black-market-stall": "D10", "run-the-docks": "D10", "underground-auction": "D10", "tunnel": "D10", "safehouse-network": "D10", "post-flyers": "D10", "spread-the-word": "D10", "pirate-radio": "D14", "bribe": "D10", "sabotage-the-station": "D10", "sabotage": "D10", "raid": "D10", "hire-mercenaries": "D10", "write-a-manifesto": "D13", "debate": "D13", "chant-night": "D6", "blackout": "D10", "night-raid": "D10", "loan-shark": "D10", "egg-run": "D4", "breed": "D4", "move-tutor": "D4"
     },
     "byUnlock": [
       ["Rank", "D4"], ["Front Office", "D10"], ["Workshop", "D10"], ["War Room", "D10"], ["Radio Room", "D10"], ["Print Shop", "D10"], ["Holding", "D10"], ["Garage", "D10"], ["Science Lab", "D10"], ["Library", "D10"], ["Dojo", "D10"], ["Night Shift", "D10"],
-      ["Notoriety", "D6"], ["Press contact", "D6"], ["Fence", "D10"], ["Black Market", "D10"], ["Tension", "D9"], ["Spy", "D9"], ["Raid suffered", "D9"], ["Rally", "D9"],
+      ["Notoriety", "D6"], ["Press contact", "D6"], ["Fence", "D10"], ["Black Market", "D10"], ["Tension", "D9"], ["Spy", "D9"], ["Raid suffered", "D9"], ["Rally", "D6"],
       ["Hero", "D11"], ["Gym", "D10"], ["Champion", "D14"], ["Hostage", "D10"], ["traitor", "D15"], ["Region event", "D15"], ["Wanted", "D10"]
     ]
   },

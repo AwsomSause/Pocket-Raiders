@@ -78,6 +78,9 @@ export function pitchOdds(b: DominionBlock, lead: Lead, pitch: string): number {
   // D5: the Recruitment Center adds to every pitch.
   let p = lead.chance + lead.bonus + b.hqLevel * rc.hqPer + (finder ? finder.stats.charm * rc.charmPer : 0) + notoriety(b) + hqFx(b).recruit;
   if (motive?.pitch === pitch) p += rc.matchBonus;
+  // D9: a rival scaring your recruiter (rival actions 37, 58, 73, 95) takes its % off while it lasts.
+  const cut = b.rivals?.recruit;
+  if (cut && cut.until > b.day) p -= cut.pct;
   if (lead.hates === pitch) p -= rc.hatePenalty;
   if (pitch === 'cause' && !b.teamName) p -= rc.noCausePenalty;
   for (const m of b.members) for (const id of crewOf(m).formed) p += DOMINION_DATA.crew.formed.find((f) => f.id === id && f.live)?.mods.pitch ?? 0;

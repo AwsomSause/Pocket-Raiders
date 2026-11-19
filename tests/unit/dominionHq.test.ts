@@ -81,8 +81,9 @@ describe('DOMINION D5: the lists as data', () => {
       if (b.status === 'disabled') expect(b.waits, b.id).toMatch(/^(D\d+|later)$/);
       else expect(Object.keys(b.fx).length, b.id).toBeGreaterThan(0);
     }
-    expect(st.supported + st.limited).toBe(65);
-    expect(st.disabled).toBe(201);
+    // D5 opened 65; D9 (the rival team: intel, raid Defense, spy catching, truce discounts) opened 29 more.
+    expect(st.supported + st.limited).toBe(94);
+    expect(st.disabled).toBe(172);
   });
   it('the six HQ levels match Part 3 §3.1 and A21 (cost, level cap, crew cap, slots, Defense)', () => {
     expect(HQ.levels.map((l) => [l.name, l.cost, l.levelCap, l.crewCap, l.slots, l.defense])).toEqual([

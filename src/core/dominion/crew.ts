@@ -213,6 +213,13 @@ function runTask(b: DominionBlock, m: Member, seed: string, n: Night): void {
   const c = mc(m);
   const rep = C().report;
   const r = rng(seed, 'dominion-crew', b.day, m.id);
+  if (c.out?.why === 'held') {
+    // D9: a rival team is holding them; rivals.ts frees them (rescue, ransom or time).
+    say(n, 'crew', fill(rep.out!, { name: m.name, why: 'held by a rival team' }));
+    c.last = 'none';
+    c.worked = 0;
+    return;
+  }
   if (c.out) {
     // Hurt or in a cell: no task; the days count down (a Nurse or a Field Medic heals a day sooner).
     const medic = c.out.why === 'hurt' && (b.members.some((x) => x.id !== m.id && mc(x).role === 'nurse' && !mc(x).out) || b.members.some((x) => modsOfMember(x).some((y) => y.medic)));
@@ -436,6 +443,12 @@ function runTask(b: DominionBlock, m: Member, seed: string, n: Night): void {
       } else say(n, 'crew', fill(rep.fail!, { name: m.name, task: label }));
       break;
     }
+    default: {
+      // D9 and later: kinds another module runs (rivals.ts registers the rival tasks).
+      const run = TASK_KINDS[e.kind];
+      if (run) run(b, m, ok, { say: (k, t) => say(n, k, t), label, task, stat, yieldPct, r });
+      else say(n, 'crew', fill(rep.fail!, { name: m.name, task: label }));
+    }
   }
   // After the task: XP, task XP, Fatigue (A18), Thrill.
   addXp(m, xp, n.lines);
@@ -481,6 +494,14 @@ const pools = (b: DominionBlock) => {
   const region = DOMINION_DATA.start.start.region.toLowerCase();
   return C().pools[region] ?? C().pools.kanto!;
 };
+
+/** A task kind run by another module (D9's rival tasks). `ok` is the task's odds roll; `r` is the member's crew stream. */
+export interface TaskCtx { say: (kind: Alert['kind'], text: string) => void; label: string; task: Task; stat: number; yieldPct: number; r: Rng }
+type TaskKind = (b: DominionBlock, m: Member, ok: boolean, ctx: TaskCtx) => void;
+const TASK_KINDS: Record<string, TaskKind> = {};
+export function addTaskKind(kind: string, f: TaskKind): void {
+  TASK_KINDS[kind] = f;
+}
 
 /** recruit.ts registers the lead maker (it owns the candidate roll), so this file doesn't import it. */
 type LeadMaker = (b: DominionBlock, finder: Member, seed: string) => { name: string; cls: string } | null;
