@@ -22,3 +22,9 @@ Copied from the same mockup sprites folder (`plans/evil-mode-rework/mockups-rede
 | File | From |
 | --- | --- |
 | `g-xtransceiver`, `g-relic-gold`, `g-meteorite`, `g-silph-scope`, `g-comet-shard`, `g-devon-scope`, `g-smoke-ball`, `g-vs-seeker`, `g-black-belt`, `g-tea`, `g-soothe-bell`, `g-secret-key` (.png) | Item icons from `images/items/` and `images/items/gen5/` (PokeRogue pack), re-saved at the mockup's size by the mockup thread; copied from `plans/evil-mode-rework/mockups-redesign/sprites/` |
+
+## Slice D4 (the Reserve and the Rank Pyramid, mockups 11 and 12)
+
+| File | From |
+| --- | --- |
+| `g-relic-statue.png`, `g-dark-gem.png` | Item icons from `images/items/` (PokeRogue pack), re-saved at the mockup's size by the mockup thread; copied from `plans/evil-mode-rework/mockups-redesign/sprites/` |

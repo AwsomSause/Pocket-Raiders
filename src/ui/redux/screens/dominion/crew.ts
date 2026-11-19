@@ -14,10 +14,10 @@ const ALERT: Record<string, [string, string, string]> = {
   crew: ['g', 'g-card-key', 'CREW'], money: ['y', 'g-relic-gold', 'FRONTS'], rival: ['r', 'g-meteorite', 'RIVALS'],
   police: ['b', 'g-silph-scope', 'POLICE'], hero: ['v', 'g-comet-shard', 'HERO'], world: ['b', 'g-journal', 'NEWS'],
 };
-export const OPEN_TABS = [0, 1, 2] as const;
+export const OPEN_TABS = [0, 1, 2, 3] as const;
 
 /** A member's picture: a plain png (Rook's) or a trainer atlas, cropped into a box. */
-function face(look: string, h: number, style: string): string {
+export function face(look: string, h: number, style: string): string {
   return look.endsWith('.png')
     ? `<img class="px" src="${rxUrl(look)}" alt="" style="${style}">`
     : `<div style="${style};display:flex;align-items:flex-end;justify-content:center;overflow:hidden">${tall(look, h)}</div>`;
@@ -129,7 +129,7 @@ export function fileView(f: FileModel, monFile: (species: string) => string | nu
     : `<div class="row" style="gap:8px;margin-top:9px;opacity:.7"><span class="pill b" style="opacity:.6">?</span><span class="xs mu">${esc(f.second)}</span></div>`;
   const team = f.team.map((t) => {
     const file = monFile(t.species);
-    return `<div class="col" style="align-items:center">${file ? mini(file, 44) : ''}<span class="xs">${esc(monName(t.species))} <b class="y">${t.level}</b></span></div>`;
+    return `<div class="col" style="align-items:center;${t.dim ? 'opacity:.45;filter:grayscale(.8)' : ''}" title="${t.dim ? 'Over a cap: sits out' : ''}">${file ? mini(file, 44) : ''}<span class="xs">${esc(monName(t.species))} <b class="y">${t.level}</b></span></div>`;
   }).join('');
   const keys = f.keys.map((k) => `<span class="kc">${esc(k.key)}</span><span class="dm" style="margin-right:6px">${esc(k.label)}</span>`).join('');
   return stage(`<div class="layer" style="background:radial-gradient(420px 380px at 150px 300px,rgba(140,80,220,.45),transparent 70%)"></div>
