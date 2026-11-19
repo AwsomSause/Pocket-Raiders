@@ -41,14 +41,16 @@ export function spyView(m: SpyModel, draft: string, at: number, notice: string |
   const levelCls = m.level === 'high' ? 'r' : m.level === 'mid' ? 'y' : 'b';
   const clues = m.clues.map((c) => `<div class="al ${c.hot ? 'r' : 'y'}" style="font-size:13px;padding:5px 8px" data-testid="dom-spy-clue"><span><span class="t">D${c.day}</span>${esc(c.text)}</span></div>`).join('')
     || `<div class="xs mu">${esc(U.empty!)}</div>`;
-  const turns = m.turns.slice(-2).map((t) => `<div style="background:#0b1020;border-radius:8px;padding:6px 9px;box-shadow:0 0 0 2px #56679d">${esc(U.you!)}: “${esc(t.you)}”</div>
+  const turns = m.turns.slice(-1).map((t) => `<div style="background:#0b1020;border-radius:8px;padding:6px 9px;box-shadow:0 0 0 2px #56679d">${esc(U.you!)}: “${esc(t.you)}”</div>
       <div class="${t.rotom ? 'typing' : ''}" style="background:#2a1a14;border-radius:8px;padding:6px 9px;box-shadow:0 0 0 2px ${t.rotom ? '#ff9a62' : '#c4532a'}" data-testid="dom-spy-reply">${esc(m.name)}: “${esc(t.them)}”</div>`).join('')
     || `<div class="xs mu" style="line-height:1.35">${esc(U.empty!)}</div>`;
-  const qs = m.questions.map((q, i) => `<div class="ch${at === i ? ' on' : ''}" style="--stripe:${q.off ? '#56679d' : '#ffd23f'};padding:5px 10px;font-size:15px;${q.off ? 'opacity:.5' : ''}"${act('spyRow', i)} data-over="spyOver" data-testid="dom-spy-q-${esc(q.id)}">${esc(q.label)}<div class="sub">${esc(q.sub)}</div></div>`).join('');
-  const ends = m.ends.map((e) => `<div class="ch" style="--stripe:${e.colour};padding:5px 10px;font-size:15px" data-testid="dom-spy-end-${esc(e.id)}">${esc(e.label)}<div class="sub">${esc(e.sub)}</div></div>`).join('');
+  const chip = (i: number, label: string, tip: string, colour: string, off: boolean, id: string): string =>
+    `<div class="ch${at === i ? ' on' : ''}" style="--stripe:${off ? '#56679d' : colour};padding:4px 8px 4px 14px;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;${off ? 'opacity:.5' : ''}" title="${esc(tip)}"${act('spyRow', i)} data-over="spyOver" data-testid="${id}">${esc(label)}</div>`;
+  const qs = m.questions.map((q, i) => chip(i, q.short, `${q.label}: ${q.sub}`, '#ffd23f', q.off, `dom-spy-q-${q.id}`)).join('');
   const n = m.questions.length;
-  const decide = `<div class="ch${at === n ? ' on' : ''}" style="--stripe:#ef4a3a;padding:5px 10px;font-size:15px"${act('spyRow', n)} data-over="spyOver" data-testid="dom-spy-accuse">${esc(U.accuse!)}<div class="sub">${esc(U.truth!)}</div></div>
-      <div class="ch${at === n + 1 ? ' on' : ''}" style="--stripe:#56679d;padding:5px 10px;font-size:15px"${act('spyRow', n + 1)} data-over="spyOver" data-testid="dom-spy-drop">${esc(U.drop!)}<div class="sub">Suspicion −15</div></div>`;
+  const decide = chip(n, U.accuse!, U.truth!, '#ef4a3a', false, 'dom-spy-accuse') + chip(n + 1, U.drop!, `${U.drop!}: Suspicion −15`, '#56679d', false, 'dom-spy-drop');
+  const pick = at < n ? m.questions[at]! : null;
+  const ends = m.ends.map((e) => `<div class="ch" style="--stripe:${e.colour};padding:4px 10px 4px 16px;font-size:15px" data-testid="dom-spy-end-${esc(e.id)}">${esc(e.label)}<div class="sub">${esc(e.sub)}</div></div>`).join('');
   return stage(`<div class="a" style="left:0;top:0;width:960px;height:330px;z-index:1;background:repeating-linear-gradient(90deg,#1c1824 0 46px,#18141f 46px 48px),linear-gradient(180deg,#141018,#221c2c)"></div>
   <div class="a" style="left:0;top:330px;width:960px;height:210px;z-index:1;background:linear-gradient(180deg,#2a2230,#16121c)"></div>
   <div class="a swing" style="left:452px;top:0;width:56px;height:96px;z-index:6">
@@ -81,12 +83,12 @@ export function spyView(m: SpyModel, draft: string, at: number, notice: string |
   <div class="embers" style="left:330px;top:100px;width:300px;height:300px;z-index:4;--ec:#fff3c4;opacity:.6"></div>
   <svg class="a" style="left:0;top:0;z-index:8;pointer-events:none" width="960" height="540" viewBox="0 0 960 540"><path d="M250 210 C 300 260, 300 290, 318 316" fill="none" stroke="#e02a2a" stroke-width="3"/><path d="M250 300 C 400 380, 520 360, 600 320" fill="none" stroke="#e02a2a" stroke-width="3"/><circle cx="318" cy="316" r="5" fill="#ffd23f" stroke="#2a1a0c" stroke-width="2"/><circle cx="600" cy="320" r="5" fill="#ffd23f" stroke="#2a1a0c" stroke-width="2"/></svg>
 
-  <div class="a" style="left:16px;top:372px;width:928px;z-index:8">
-    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px">${qs}${decide}</div>
-    <div class="caps xs mu" style="letter-spacing:.14em;margin:6px 0 4px">${esc(U.truth!)}</div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">${ends}</div>
+  <div class="a" style="left:16px;top:368px;width:928px;z-index:8">
+    <div style="display:grid;grid-template-columns:1.1fr 1.3fr 1.1fr 1fr 1fr 1fr;gap:8px">${qs}${decide}</div>
+    <div class="caps xs mu" style="letter-spacing:.14em;margin:6px 0 4px;white-space:nowrap;overflow:hidden" data-testid="dom-spy-hint">${pick ? `${esc(pick.label)} · ${esc(pick.sub)}` : esc(U.truth!)}</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">${ends}</div>
   </div>
-  <div class="row" style="position:absolute;left:16px;top:494px;width:928px;z-index:8;gap:10px">
+  <div class="row" style="position:absolute;left:16px;top:490px;width:928px;z-index:8;gap:10px">
     <input data-testid="dom-spy-type" maxlength="120" autocomplete="off" spellcheck="false" placeholder="${esc(U.typeHint!)}" value="${esc(draft)}" style="flex:1;height:38px;border-radius:9px;background:#0b1020;border:3px solid #56679d;box-shadow:0 0 0 3px var(--ink);padding:0 12px;font:15px var(--ui);color:#e8ecff;outline:none">
     <div class="bt y" style="font-size:16px"${act('spySay')} data-testid="dom-spy-say">${esc(U.say!)} <span class="kc">Enter</span></div>
   </div>

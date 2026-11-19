@@ -896,7 +896,7 @@ export const SpiesFileSchema = z.object({
   pool: z.array(S).min(8),
   talk: z.object({ turns: I.min(1), bribe: N0, threatLoyalty: I, typedMax: I.min(20) }).strict(),
   questions: z.array(z.object({
-    id: S, label: S, sub: S, pressure: N0,
+    id: S, label: S, short: S, sub: S, pressure: N0,
     /** % chance a mole (or an innocent member) shows a tell on this question. */
     tellMole: Pct, tellInnocent: Pct,
     lines: Lines2,

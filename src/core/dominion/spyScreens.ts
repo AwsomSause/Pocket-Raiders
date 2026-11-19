@@ -29,7 +29,7 @@ export interface SpyModel {
   tell: { word: string; colour: string } | null;
   chip: string | null;
   waiting: boolean;
-  questions: { id: string; label: string; sub: string; off: boolean }[];
+  questions: { id: string; label: string; short: string; sub: string; off: boolean }[];
   left: number;
   ends: { id: string; label: string; sub: string; colour: string }[];
   ui: Record<string, string>;
@@ -69,7 +69,7 @@ export function spyModel(b: DominionBlock, log: AiLog | undefined, waiting = fal
     chip: lastRotom && last ? fill(SP().rotom.chip, { tell: last.tell ? SP().tells[last.tell].word.toLowerCase().replace('overly ', '') : 'none' }) : null,
     waiting,
     questions: SP().questions.filter((x) => x.id !== 'typed').map((x) => ({
-      id: x.id, label: x.label, sub: fill(x.sub, vars),
+      id: x.id, label: x.label, short: fill(x.short, vars), sub: fill(x.sub, vars),
       off: left <= 0 || (x.id === 'bribe' && (talk.bribed || b.funds < SP().talk.bribe)),
     })),
     left,

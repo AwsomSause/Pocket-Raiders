@@ -30,6 +30,8 @@ interface Host {
 }
 
 const TYPE = '[data-testid="dom-spy-type"]';
+/** A letter, digit or sign (not Space, which stays Confirm) with no Ctrl/Alt/Cmd starts a typed line. */
+const typeStarts = (e: KeyboardEvent): boolean => e.key.length === 1 && e.key !== ' ' && !e.ctrlKey && !e.metaKey && !e.altKey;
 const ReplySchema = z.object({ reply: z.string().min(1).max(300) });
 
 export class SpyController {
@@ -55,6 +57,17 @@ export class SpyController {
       t.blur();
     }
   };
+  /** A printable key pressed on the screen (outside the box): the box takes the focus now, while the key is still being
+   * dispatched, so the browser types the character into it. */
+  private readonly onAnyKey = (e: KeyboardEvent): void => {
+    const t = e.target as HTMLElement | null;
+    if (!this.active() || this.notice || t?.matches?.(TYPE) || t?.tagName === 'INPUT' || !typeStarts(e)) return;
+    const el = document.querySelector<HTMLInputElement>(TYPE);
+    if (!el) return;
+    this.typing = true;
+    el.focus();
+    el.setSelectionRange(el.value.length, el.value.length);
+  };
   private readonly onFocus = (e: Event): void => {
     if ((e.target as HTMLElement | null)?.matches?.(TYPE)) this.typing = true;
   };
@@ -62,12 +75,14 @@ export class SpyController {
   constructor(private readonly host: Host) {
     document.addEventListener('input', this.onInput, true);
     document.addEventListener('keydown', this.onKey, true);
+    document.addEventListener('keydown', this.onAnyKey, true);
     document.addEventListener('focusin', this.onFocus, true);
   }
 
   destroy(): void {
     document.removeEventListener('input', this.onInput, true);
     document.removeEventListener('keydown', this.onKey, true);
+    document.removeEventListener('keydown', this.onAnyKey, true);
     document.removeEventListener('focusin', this.onFocus, true);
   }
 
@@ -232,17 +247,7 @@ export class SpyController {
    * true when the key was taken (the scene eats the same key's move/confirm/back, MOVE_LETTERS).
    */
   raw(e: KeyboardEvent): boolean {
-    if (!this.active()) return false;
-    if (e.key.length !== 1 || e.key === ' ' || e.ctrlKey || e.metaKey || e.altKey) return false;
-    const el = document.querySelector<HTMLInputElement>(TYPE);
-    if (!el) return false;
-    e.preventDefault();
-    this.draft = (el.value + e.key).slice(0, DOMINION_DATA.spies.talk.typedMax);
-    el.value = this.draft;
-    this.typing = true;
-    el.focus();
-    el.setSelectionRange(el.value.length, el.value.length);
-    return true;
+    return this.active() && typeStarts(e);
   }
 
   dismiss(): void {

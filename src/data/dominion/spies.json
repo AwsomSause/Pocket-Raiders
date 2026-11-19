@@ -22,20 +22,20 @@
   ],
   "talk": { "turns": 4, "bribe": 300, "threatLoyalty": -3, "typedMax": 120 },
   "questions": [
-    { "id": "evidence", "label": "Show the evidence", "sub": "Lay the clues on the table", "pressure": 20, "tellMole": 55, "tellInnocent": 20, "lines": {
+    { "id": "evidence", "label": "Show the evidence", "short": "Evidence", "sub": "Lay the clues on the table", "pressure": 20, "tellMole": 55, "tellInnocent": 20, "lines": {
       "mole": [
-        "\"{clue}\"? That proves nothing. Anyone could have done that.",
+        "{clue}? That proves nothing. Anyone could have done that.",
         "Who told you that? Whoever it was, they're the one you should be asking.",
         "I can explain all of it. I just need a minute to think how.",
         "That's... a coincidence. A big one. I know how it looks."
       ],
       "innocent": [
-        "\"{clue}\"? Boss, I can tell you exactly why. It's boring, I promise.",
+        "{clue}? Boss, I can tell you exactly why. It's boring, I promise.",
         "Ask anyone in {town}. I've got nothing to hide.",
         "I know how that looks. It isn't what it looks like.",
         "Fine. Check my locker, check my Pokémon, check whatever you like."
       ] } },
-    { "id": "probe", "label": "Ask about the clue", "sub": "Where were you, and who saw you?", "pressure": 12, "tellMole": 45, "tellInnocent": 15, "lines": {
+    { "id": "probe", "label": "Ask about the clue", "short": "Where were you?", "sub": "Where were you, and who saw you?", "pressure": 12, "tellMole": 45, "tellInnocent": 15, "lines": {
       "mole": [
         "I was at my mum's in {town}. She'll tell you the exact time I got there and what we ate.",
         "Training. Alone. On Route 4. No, nobody saw me. That's the point of alone.",
@@ -48,7 +48,7 @@
         "I was home in {town}. My neighbour saw me come in.",
         "Visiting the Day-Care. My Pokémon misses me when I'm on jobs."
       ] } },
-    { "id": "bribe", "label": "Offer a way out", "sub": "₽{bribe}: tell me everything and we're square", "pressure": 6, "tellMole": 35, "tellInnocent": 10, "lines": {
+    { "id": "bribe", "label": "Offer a way out", "short": "Offer ₽{bribe}", "sub": "₽{bribe}: tell me everything and we're square", "pressure": 6, "tellMole": 35, "tellInnocent": 10, "lines": {
       "mole": [
         "Money? ...How much money, exactly? Hypothetically.",
         "You'd do that? After... no. I mean, I've got nothing to tell. Probably.",
@@ -61,7 +61,7 @@
         "If this is a test, I hope I'm passing it.",
         "Put the ₽ away. I'm loyal for free."
       ] } },
-    { "id": "threaten", "label": "Threaten", "sub": "Lean on them (−3 Loyalty)", "pressure": 25, "tellMole": 60, "tellInnocent": 30, "lines": {
+    { "id": "threaten", "label": "Threaten", "short": "Threaten", "sub": "Lean on them (−3 Loyalty)", "pressure": 25, "tellMole": 60, "tellInnocent": 30, "lines": {
       "mole": [
         "All right, all right! Don't do anything you'll regret. I'm thinking.",
         "You don't scare me. ...Much. Not that much.",
@@ -74,7 +74,7 @@
         "Go on then. You'll still be wrong.",
         "I'm scared, sure. Scared you'll miss the real one while you yell at me."
       ] } },
-    { "id": "typed", "label": "Say it", "sub": "Your own words", "pressure": 10, "tellMole": 45, "tellInnocent": 15, "lines": {
+    { "id": "typed", "label": "Say it", "short": "Say it", "sub": "Your own words", "pressure": 10, "tellMole": 45, "tellInnocent": 15, "lines": {
       "mole": [
         "I don't know what you want me to say to that.",
         "That's not how it happened. Not exactly.",
