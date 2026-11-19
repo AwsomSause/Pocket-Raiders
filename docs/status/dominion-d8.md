@@ -9,7 +9,7 @@
   - Each Incentive works: Cut of the Take, Glory, Brotherhood, Promotion, Fear, Vengeance (+25 on the Card against the target), Pokémon First, Quiet, Purse. Cause waits for D14.
   - Traits are offered at Cohesion milestones and change odds, Heat, pockets or Fatigue.
   - Groups and Divisions: form, order every squad at once, break up.
-  - Crew tasks now live: Match-Make (58) and Run a Crew (141). **38 of 152 tasks can be played** (was 36).
+  - Crew tasks now live: Match-Make (58) and Run a Crew (141). With D5 and D9 merged, **65 of 152 tasks can be played**.
   - Bail out a squad member: Cohesion +15.
   - New hooks: `addModHook` and `addRunHook` in `crew.ts`, `addCardHook` in `field.ts`. New RNG stream `dominion-squad`; no old roll moves.
 - **Screens**: `src/ui/redux/screens/dominion/squads.ts` draws mockup 13 (cards on the left, the builder on the right, the order and trait picker); `src/scenes/dominion/squadController.ts` keeps the cursors. The Rank Pyramid shows each member's squad Mark.

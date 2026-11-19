@@ -1,0 +1,418 @@
+{
+  "_source": "plans/evil-mode-rework Part 3 §3 (tiers, rooms, outside buildings), Part 6 §3 (HQ menu), Part 9 A21 (clean money, Defense) and A22 (going broke, loans); lists/buildings.md §1 (building tiers)",
+  "levels": [
+    {
+      "lv": 1,
+      "name": "The Warehouse",
+      "cost": 0,
+      "levelCap": 15,
+      "crewCap": 3,
+      "slots": 3,
+      "defense": 1,
+      "needs": {},
+      "look": "Leaking roof, one bulb, crates for chairs",
+      "wall": [
+        "#4a3f36",
+        "#2e2620"
+      ],
+      "roof": [
+        "#3a3530",
+        "#25211d"
+      ]
+    },
+    {
+      "lv": 2,
+      "name": "Hideout",
+      "cost": 3000,
+      "levelCap": 25,
+      "crewCap": 5,
+      "slots": 6,
+      "defense": 2,
+      "needs": {
+        "districts": 1
+      },
+      "look": "Patched roof, a real door, a sign with your emblem spray-painted",
+      "wall": [
+        "#3f3a5a",
+        "#2a2644"
+      ],
+      "roof": [
+        "#3a2f5a",
+        "#2a2244"
+      ]
+    },
+    {
+      "lv": 3,
+      "name": "Compound",
+      "cost": 12000,
+      "levelCap": 40,
+      "crewCap": 10,
+      "slots": 10,
+      "defense": 4,
+      "needs": {
+        "districts": 3,
+        "crew": 5
+      },
+      "look": "A fenced yard, a second floor, guard dogs (Houndour)",
+      "wall": [
+        "#3f3a5a",
+        "#2a2644"
+      ],
+      "roof": [
+        "#3a2f5a",
+        "#2a2244"
+      ]
+    },
+    {
+      "lv": 4,
+      "name": "Fortress",
+      "cost": 40000,
+      "levelCap": 60,
+      "crewCap": 18,
+      "slots": 15,
+      "defense": 6,
+      "needs": {
+        "districts": 5,
+        "gym": true
+      },
+      "look": "Steel walls, cameras, a battle arena",
+      "wall": [
+        "#4a5268",
+        "#2f3548"
+      ],
+      "roof": [
+        "#3a4258",
+        "#262c3e"
+      ]
+    },
+    {
+      "lv": 5,
+      "name": "Tower",
+      "cost": 120000,
+      "levelCap": 80,
+      "crewCap": 28,
+      "slots": 21,
+      "defense": 8,
+      "needs": {
+        "districts": 7,
+        "admin": true
+      },
+      "look": "A skyscraper in the region's biggest city",
+      "wall": [
+        "#2f3f66",
+        "#1f2a48"
+      ],
+      "roof": [
+        "#2a3658",
+        "#1a2240"
+      ]
+    },
+    {
+      "lv": 6,
+      "name": "Citadel",
+      "cost": 300000,
+      "levelCap": null,
+      "crewCap": 40,
+      "slots": 28,
+      "defense": 10,
+      "needs": {
+        "half": true,
+        "feared": true
+      },
+      "look": "Your emblem on the skyline, a landing pad, a throne room",
+      "wall": [
+        "#4a2f66",
+        "#2f1f48"
+      ],
+      "roof": [
+        "#3a2458",
+        "#241640"
+      ]
+    }
+  ],
+  "upgradeDays": 3,
+  "tiers": [
+    {
+      "t": 1,
+      "name": "Scrap",
+      "cost": 1,
+      "effect": 1,
+      "days": 1,
+      "hq": 1,
+      "region": 1
+    },
+    {
+      "t": 2,
+      "name": "Patched",
+      "cost": 2.5,
+      "effect": 1.5,
+      "days": 1,
+      "hq": 2,
+      "region": 1
+    },
+    {
+      "t": 3,
+      "name": "Working",
+      "cost": 6,
+      "effect": 2,
+      "days": 2,
+      "hq": 3,
+      "region": 1
+    },
+    {
+      "t": 4,
+      "name": "Solid",
+      "cost": 14,
+      "effect": 2.7,
+      "days": 2,
+      "hq": 4,
+      "region": 1,
+      "gym": true
+    },
+    {
+      "t": 5,
+      "name": "Fitted",
+      "cost": 30,
+      "effect": 3.5,
+      "days": 3,
+      "hq": 4,
+      "region": 2
+    },
+    {
+      "t": 6,
+      "name": "Grand",
+      "cost": 65,
+      "effect": 4.5,
+      "days": 3,
+      "hq": 5,
+      "region": 2
+    },
+    {
+      "t": 7,
+      "name": "Elite",
+      "cost": 140,
+      "effect": 5.7,
+      "days": 4,
+      "hq": 6,
+      "region": 3
+    },
+    {
+      "t": 8,
+      "name": "Legendary",
+      "cost": 300,
+      "effect": 7,
+      "days": 5,
+      "hq": 6,
+      "region": 3
+    }
+  ],
+  "rules": {
+    "storageBase": 20,
+    "upkeepPct": 4,
+    "unpaidCondition": 10,
+    "rebuildPct": 60,
+    "sellPct": 60,
+    "loanPer": 5000,
+    "loanRate": 20,
+    "loanWeeks": 4,
+    "launderDays": 1,
+    "launderAction": {
+      "max": 1000,
+      "fee": 30,
+      "days": 2
+    },
+    "brokeDefense": 1,
+    "regionsInRun": 3,
+    "hideoutDistricts": "held"
+  },
+  "rooms": {
+    "Front Office": "front-office",
+    "Workshop": "workshop",
+    "War Room": "operations-room",
+    "Radio Room": "radio-room",
+    "Print Shop": "print-shop",
+    "Holding Pens": "holding-pens",
+    "Holding cell": "holding-cell",
+    "Garage": "garage",
+    "Science Lab": "research-lab",
+    "Library": "library",
+    "Dojo": "dojo",
+    "Night Shift": "night-shift"
+  },
+  "poster": [
+    "training-room",
+    "research-lab",
+    "pokemon-storage",
+    "treasury",
+    "recruitment-center",
+    "operations-room",
+    "luxury-suite"
+  ],
+  "menu": [
+    {
+      "id": "upgrade",
+      "label": "Upgrade HQ",
+      "key": "U"
+    },
+    {
+      "id": "hire",
+      "label": "Hire Grunt",
+      "key": "H"
+    },
+    {
+      "id": "build",
+      "label": "Buy Room",
+      "key": "B"
+    },
+    {
+      "id": "team",
+      "label": "Manage Team",
+      "key": "M"
+    },
+    {
+      "id": "assets",
+      "label": "View Assets",
+      "key": "A"
+    },
+    {
+      "id": "money",
+      "label": "Money",
+      "key": "L"
+    },
+    {
+      "id": "leave",
+      "label": "Leave",
+      "key": "Esc"
+    }
+  ],
+  "lines": {
+    "upgradeStart": "Work starts on the {name}. Three days of dust and noise; Defense is halved until it's done.",
+    "upgradeDone": "The {name} is finished. HQ Lv. {lv}: level cap {cap}, crew {crew}, {slots} room slots.",
+    "built": "The {name} is ready.",
+    "building": "Work starts on the {name}: ready in {days} day{s}.",
+    "tierUp": "The {name} becomes the {ladder} (T{t}).",
+    "sold": "Sold the {name}: +₽{pay} clean.",
+    "noClean": "Upgrades take clean money: ₽{clean} clean of ₽{cost}. Launder through a Front first.",
+    "noMoney": "Not enough money: it costs ₽{cost}.",
+    "noSlot": "No free room slot: upgrade the HQ or sell a room.",
+    "needsTier": "Needs HQ Lv. {lv}.",
+    "needsHeld": "Build it in a district you hold.",
+    "busy": "Work is already going on there.",
+    "upgrading": "The HQ is already being upgraded.",
+    "top": "The HQ is at its top level.",
+    "maxTier": "The {name} can't go higher yet: HQ Lv. {lv} and region {region} cap it at T{t}.",
+    "waits": "Opens with a later part of the build ({slice}).",
+    "launder": "₽{amount} goes through the {front} ({fee}% fee): ₽{net} comes back clean {when}.",
+    "laundered": "₽{net} came back clean from the {front}.",
+    "noFront": "No Front to launder through: build a Front Shop in a held district, a Laundering Room or a Front Office.",
+    "noDirty": "No dirty money to wash.",
+    "income": "The buildings brought in ₽{dirty}{clean}.",
+    "upkeep": "Upkeep on the buildings: ₽{pay}.",
+    "unpaid": "Upkeep unpaid: every building loses {n} Condition.",
+    "destroyed": "The {name} fell apart (Condition 0). It can be rebuilt at {pct}% cost, one tier lower.",
+    "rebuilt": "The {name} is rebuilt.",
+    "broke": "Broke: the {name} is shut until the bills are paid, wages went unpaid and HQ Defense is down {n}.",
+    "brokeNoRoom": "Broke: wages went unpaid and HQ Defense is down {n}.",
+    "unbroke": "The bills are paid. The {name} opens again.",
+    "loanTaken": "A Fence lends you ₽{amount}. They want it back with {rate}% a week, within {weeks} weeks.",
+    "loanPaid": "The Fence is paid off.",
+    "loanPart": "Paid the Fence ₽{pay}. ₽{owed} still owed.",
+    "loanGrows": "The Fence's loan grows {rate}%: ₽{owed} owed (week {week} of {weeks}).",
+    "loanTakes": "The Fence comes for what's owed and takes the {name}.",
+    "loanTakesNothing": "The Fence comes for what's owed. There's nothing to take, so they take it out of your hide: Heat +10 at the HQ.",
+    "loanMax": "The Fence lends up to ₽{max} at HQ Lv. {lv}.",
+    "noLoan": "No loan to pay.",
+    "letGo": "{name} leaves with their Pokémon. Wages −₽{wage} a week.",
+    "lastMember": "You can't let your last member go.",
+    "storageFull": "The stores are full ({cap}): {n} Pokémon had to be let go.",
+    "safehouse": "The safehouse in {district} is quiet: Heat there −{n}.",
+    "control": "Your buildings hold their ground: Control +{n} in {where}.",
+    "morale": "The crew likes the new rooms: Morale +{morale}, Loyalty +{loyalty}.",
+    "items": "Made in the HQ: {list}.",
+    "repair": "The buildings are patched up: Condition +{n}."
+  },
+  "icons": {
+    "groups": {
+      "A": "g-tea",
+      "B": "g-black-belt",
+      "C": "g-max-potion",
+      "D": "g-storage-key",
+      "E": "g-machine-part",
+      "F": "g-big-nugget",
+      "G": "g-meteorite",
+      "H": "g-secret-key",
+      "I": "g-relic-crown",
+      "J": "g-town-map",
+      "P": "g-ball",
+      "Q": "g-member-card"
+    },
+    "ids": {
+      "barracks": "g-tea",
+      "operations-room": "g-machine-part",
+      "treasury": "g-big-nugget",
+      "print-shop": "g-letter",
+      "training-room": "g-black-belt",
+      "infirmary": "g-max-potion",
+      "garage": "g-bicycle",
+      "front-office": "g-letter",
+      "workshop": "g-smoke-ball",
+      "radio-room": "g-xtransceiver",
+      "research-lab": "g-silph-scope",
+      "pokemon-storage": "g-ball",
+      "recruitment-center": "g-fame-checker",
+      "luxury-suite": "g-relic-gold",
+      "night-shift": "g-vs-seeker",
+      "kennel": "p-houndour"
+    },
+    "colours": {
+      "A": [
+        "#4a3f6a",
+        "#352d50"
+      ],
+      "B": [
+        "#5a2f3a",
+        "#40222a"
+      ],
+      "C": [
+        "#2f5a5a",
+        "#224040"
+      ],
+      "D": [
+        "#45403a",
+        "#302c28"
+      ],
+      "E": [
+        "#2f4a6a",
+        "#223650"
+      ],
+      "F": [
+        "#5a4a1f",
+        "#3d3214"
+      ],
+      "G": [
+        "#3a4a3a",
+        "#2a382a"
+      ],
+      "H": [
+        "#3a3a3a",
+        "#2a2a2a"
+      ],
+      "I": [
+        "#5a2f5a",
+        "#402240"
+      ],
+      "J": [
+        "#2f3f5a",
+        "#222e40"
+      ],
+      "P": [
+        "#2f5a3a",
+        "#22402a"
+      ],
+      "Q": [
+        "#4a3a5a",
+        "#342a40"
+      ]
+    }
+  }
+}

@@ -472,7 +472,8 @@ function weekly(b: DominionBlock, lines: string[]): void {
 
 // ---------- task kinds: Match-Make (58) and Run a Crew (141) ----------
 
-addTaskKind('matchMake', (x) => {
+addTaskKind('matchMake', (b0, m0, ok0, ctx) => {
+  const x = { ...ctx, b: b0, m: m0, ok: ok0 };
   const b = x.b;
   const st = squadsOf(b);
   const paired = new Set(st.pairs.flat());
@@ -492,7 +493,8 @@ addTaskKind('matchMake', (x) => {
   }
 });
 
-addTaskKind('runCrew', (x) => {
+addTaskKind('runCrew', (b0, m0, ok0, ctx) => {
+  const x = { ...ctx, b: b0, m: m0, ok: ok0 };
   const rc = runCrewOf(x.b);
   const led = rc?.exec.id === x.m.id ? rc.led : [];
   if (!x.ok || !led.length) return x.say('crew', fill(DOMINION_DATA.crew.report.fail!, { name: x.m.name, task: x.label }));

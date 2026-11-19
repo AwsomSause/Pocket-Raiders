@@ -6,8 +6,8 @@
   - `pyramid.ts`: ranks, seats, bands, level / BST / Ace caps (base + region + standing), the fit check (on-type, level, BST, never-allowed Pokémon, team full), Ready, promote / demote / strip. Members passed over gain Ambition; three passes make them Resentful.
   - `reserve.ts`: the Reserve box (20 places), Day 1's Pokémon of the other Team Type, give (to a member or the Boss), take back (Loyalty −5, −10 for an Ace or a member's own catch), Auto-Fill, "hunts for themselves" vs "for the Reserve", the Pens (stolen Pokémon cool off 5 days, Heat, escapes), offer freedom, Trust (start by source, +1 on wins, weekly for gentle natures, odds bonus at 7+, penalty below 4), evolve-in-peace, and an odds penalty for battle tasks with no usable Pokémon.
   - Off-type catches and steals go to the Reserve (Kice). D3's `crew.stores` moves into the Reserve on first load.
-  - Crew tasks now live: Pens watch, Tend, Feed, Release, Rehab (plus Catch now fills the Reserve). **36 of 152 tasks can be played** (was 31).
-  - Field plays now live (41 of 150, was 32): rescue a wild Pokémon, tame the wild, evolve in peace, promotion ceremony, mentor, toll booth, cat burglar, back-alley brawl, train robbery. Some need a band (rank group) in the crew.
+  - Crew tasks now live: Pens watch, Tend, Feed, Release, Rehab (plus Catch now fills the Reserve). **36 of 152 tasks could be played with D4** (was 31; 38 with D5 merged, 63 with D9 merged).
+  - Field plays now live (41 of 150, was 32; 71 with D5 and D9 merged): rescue a wild Pokémon, tame the wild, evolve in peace, promotion ceremony, mentor, toll booth, cat burglar, back-alley brawl, train robbery. Some need a band (rank group) in the crew.
   - Talks now live: 13 promotion day, 14 passed over, 27 the oath. Formed traits now live: Bug Whisperer, Gentle Hands, Nurturer.
   - Hooks `addOddsHook` / `addTaskKind` in `crew.ts` let later slices add odds and task kinds without import loops.
   - New RNG streams: `dominion-reserve-start`, `dominion-trust`, `dominion-rank`. No old roll moves.
@@ -19,7 +19,7 @@
 
 ## Round-3 look (mockups-v3)
 - `dominion.css` is re-ported from `plans/evil-mode-rework/mockups-v3/index.html` with `tools/dominion/port-mockup-css.py`, so every Dominion screen gets the round-3 chrome (gold rims, foil title, jewel tabs, living buttons, medallions, damask, screws, 3D numbers, the entrance).
-- The port tool is the same as in #1491 / #1492 (they carry the v3 fixes), so `dominion.css` comes out identical on every branch: re-run the tool rather than hand-merging.
+- `dominion.css` and the port tool are evil-mode's (after D5): re-run the tool on mockups-v3 rather than hand-merging.
 - The Reserve and the Pyramid also carry their per-screen overlays (haze, bokeh, particles, grade, spotlight, edge glow, frame, sunburst) from `reserveFx.ts`. On the Reserve the spotlight and sunburst follow the picked tile.
 - D1-D3 screens get the shared chrome from the CSS but not their own overlays yet (their markup lives in those slices).
 
@@ -32,7 +32,13 @@ No version bump. `block.reserve` is optional and filled the same way every time 
 - Browser: `tests/e2e/dominionReserve.spec.ts`: tab 4, give to Rook, switch to the Boss, three window sizes, the Pyramid, promote Rook, then reload. `dominionStart.spec.ts` now checks the locked tab with tab 5 (tab 4 is open). dominionStart, dominionCrew and dominionMap pass.
 
 ## Limits and what's left
-- Moved to D5 (they need HQ rooms): Teach a Move, Safari Patrol, Hatch Eggs, Heal the Team, Breed, and Holding Pens upgrades. The Reserve stays at 20 places until D5.
+- Merged with D9: the rival team's task kinds and D4's share one `addTaskKind` hook (D9's signature, plus the task level `lv`). The Rival File (R from the HQ) and the Reserve / Pyramid live side by side.
+- Merged with D5: the Reserve holds D5's 20 plus each Pokémon Storage room's places, and Pokémon over the cap are let go with D5's report line. D5's stores test now checks the Reserve.
+- **Left, pointed at D4 by D5 and D9 and not built yet** (pinned in `dominionReserve.test.ts` so nothing joins quietly), for a D4 follow-up:
+  - Crew tasks: Learn a Trade (67), Teach a Move (69).
+  - Actions: Egg Run, Breed, Move Tutor.
+  - 18 buildings: Type Dojo: Fire (from D9), Admin Quarters, Classroom, Sparring Ring, Stealth School, Officer Academy, Therapy Room, Retiree Hall, Comfort Ward, Grunt Academy, Skill Booth, Veteran's Corner, Skill Exam Hall, Personality Lab, Mentoring Office, Sergeant's Post, Lieutenant's Office, Captain's Hall.
+- Safari Patrol, Hatch Eggs and Heal the Team wait for the slices D5 named.
 - Moved: Hire a Specialist to D10, Plant a Mole to D9.
 - Not built yet: Train's +10% XP for on-type Pokémon; named recruits' 7-day off-type rule; the Morale hit for "favours a type you don't run"; the Flyer recruit bonus; rivals or the Hero scouting your types (D9, D11).
 - The region bonus to caps reads region 0 until D15 adds regions; the Sworn flag's effect waits for D15.

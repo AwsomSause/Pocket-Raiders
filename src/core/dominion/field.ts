@@ -16,6 +16,7 @@ import { addWorldStep, fill } from './worldTurn';
 import { addLoyalty, addMorale, addXp, monName } from './crew';
 import { hasBand } from './pyramid';
 import { evolveOne } from './reserve';
+import { buildingDef, hasRoom, launderAction, roomFor, spend } from './hqFx';
 
 const F = () => DOMINION_DATA.field;
 const L = () => DOMINION_DATA.field.lines;
@@ -44,7 +45,12 @@ export function openDay(def: ActionDef): number {
 }
 
 /** Whether D2 plays an action, or which slice opens it (Rest is D1's, played from the HQ's Night panel). */
-export function actionStatus(def: ActionDef): { play: boolean; slice: string | null } {
+export function actionStatus(def: ActionDef): { play: boolean; slice: string | null; room: string | null } {
+  const room = roomFor(def.unlock);
+  const st = playStatus(def);
+  return { ...st, room };
+}
+function playStatus(def: ActionDef): { play: boolean; slice: string | null } {
   if (F().play[def.id]) return { play: true, slice: null };
   const by = F().later.byAction[def.id];
   if (by) return { play: false, slice: by };
@@ -235,6 +241,8 @@ export function foeOf(b: DominionBlock, run: Pick<RunState, 'party'>, kind: Fiel
       const m = b.members[0];
       return { name: m?.name ?? 'Crew', species: m?.team[0]?.speciesId ?? '', level: m?.team[0]?.level ?? 5, wild: false };
     }
+    case 'rival':
+      return RIVAL_FOE ? RIVAL_FOE(b, run) : { name: 'Rival Grunt', species: 'rattata', level: foeLevel(b, run, 0), wild: false };
     case 'target': {
       const f = target?.foe ?? district.targets[0]!.foe;
       return { name: f.name, species: f.species[0]!, level: foeLevel(b, run, f.offset), wild: false };
@@ -337,6 +345,8 @@ function blockedWhy(b: DominionBlock, run: Pick<RunState, 'party'>, c: Card, bri
   const { def, play } = c, f = b.field, Ln = L();
   const st = actionStatus(def);
   if (!st.play || !play) return fill(Ln.later!, { slice: st.slice ?? 'later' });
+  // D5: an action a room opens (Front Office, Workshop, War Room...) needs that room built and working.
+  if (st.room && !hasRoom(b, st.room)) return fill(Ln.needsRoom ?? 'Build the {room} first.', { room: buildingDef(st.room)?.name ?? st.room });
   if (b.day < openDay(def)) return fill(Ln.notYet!, { day: openDay(def) });
   if (f.fight) return 'A fight is waiting.';
   const phase = b.phase === 'morning' ? 'day' : b.phase;
@@ -344,7 +354,7 @@ function blockedWhy(b: DominionBlock, run: Pick<RunState, 'party'>, c: Card, bri
   if (b.phase === 'morning') return 'Start the day first.';
   if (play.kinds && !play.kinds.includes('any') && (!c.target || !play.kinds.includes(c.target.kind))) return Ln.notHere!;
   if (def.slot === 'evening' && f.evening.includes(def.id)) return Ln.doneTonight!;
-  if (def.slot === 'night' && (f.night || b.nightActions < 1)) return Ln.nightDone!;
+  if (def.slot === 'night' && b.nightActions < 1) return Ln.nightDone!;
   if (def.slot !== 'evening' && play.where !== 'hq') {
     if (!c.travel.ok) return c.travel.line;
     if (f.closed === c.district.id) return fill(F().police.lines.closed!, { district: c.district.name });
@@ -353,6 +363,10 @@ function blockedWhy(b: DominionBlock, run: Pick<RunState, 'party'>, c: Card, bri
   if (play.needs && !b.keyItems.includes(play.needs)) return fill(Ln.needs!, { item: play.needs });
   if (play.needsPolice && !(bandAt(wanted(f), 'noticed') || c.district.police || f.patrol === c.district.id)) return Ln.noPolice!;
   if (play.effect === 'fine' && !hottest(f)) return Ln.noFine!;
+  for (const gate of GATES) {
+    const why = gate(b, def);
+    if (why) return why;
+  }
   if (c.money && b.funds < c.money) return fill(Ln.noMoney!, { cost: c.money });
   if (play.effect === 'spar' && !b.members.some((m) => m.team.some((x) => x.hp > 0))) return Ln.noMember!;
   if (c.battle?.on === 'always' && !canBattle(run)) return Ln.noTeam!;
@@ -362,6 +376,32 @@ function blockedWhy(b: DominionBlock, run: Pick<RunState, 'party'>, c: Card, bri
   if (play.effect === 'ceremony' && !b.reserve?.promoted.some((p) => p.day === b.day)) return DOMINION_DATA.pyramid.lines.noCeremony!;
   if (play.effect === 'mentor' && !bring.length) return DOMINION_DATA.pyramid.lines.noPupil!;
   return null;
+}
+
+/** D6: later rules that can close an action (Notoriety, a press contact), checked after the Card's own reasons. */
+type Gate = (b: DominionBlock, def: ActionDef) => string | null;
+const GATES: Gate[] = [];
+export function addActionGate(g: Gate): void {
+  GATES.push(g);
+}
+
+/** D9: what a later slice's effect does when the action works (rivals.ts: hits on the rival team, spying, truce talks). */
+export interface ActFx { action: string; district: string; target: string | null; big: boolean }
+type ActEffect = (b: DominionBlock, x: ActFx) => string[];
+const ACT_EFFECTS: Partial<Record<string, ActEffect>> = {};
+export function addActEffect(effect: string, f: ActEffect): void {
+  ACT_EFFECTS[effect] = f;
+}
+/** D9: a fight that isn't an action's (a rival Boss at the door, a challenge answered) is settled by its owner. */
+type Settler = (content: Content | null, b: DominionBlock, run: RunState, fight: FieldFight, outcome: 'win' | 'lose' | 'fled') => string[];
+const SETTLERS: Partial<Record<FieldFight['why'], Settler>> = {};
+export function addFightSettler(why: FieldFight['why'], f: Settler): void {
+  SETTLERS[why] = f;
+}
+/** D9: the rival foe on the Card (rivals.ts). */
+let RIVAL_FOE: ((b: DominionBlock, run: Pick<RunState, 'party'>) => Foe) | null = null;
+export function setRivalFoe(f: (b: DominionBlock, run: Pick<RunState, 'party'>) => Foe): void {
+  RIVAL_FOE = f;
 }
 
 // ---------- doing it ----------
@@ -495,6 +535,9 @@ function succeed(content: Content | null, b: DominionBlock, run: RunState, x: Ct
     case 'plan':
       f.planned = true;
       break;
+    case 'launder':
+      lines[lines.length - 1] = launderAction(b);
+      break;
     case 'spar': {
       const m = b.members[0];
       if (m) m.morale = Math.min(100, m.morale + 5);
@@ -532,8 +575,11 @@ function succeed(content: Content | null, b: DominionBlock, run: RunState, x: Ct
       lines.push(...more);
       break;
     }
-    default:
+    default: {
+      const fx = play.effect ? ACT_EFFECTS[play.effect] : undefined;
+      if (fx) lines.push(...fx(b, { action: def.id, district: district.id, target: target?.id ?? null, big: x.big }));
       break;
+    }
   }
   return { lines, mon };
 }
@@ -589,11 +635,12 @@ export function act(content: Content | null, run: RunState, a: { action: string;
   // spend the slot, the money and the trip
   if (c.def.slot === 'day') b.actions -= c.cost;
   if (c.def.slot === 'night') {
+    // D5: the Night Shift gives a second Night action, so each one spends one.
     f.night = c.def.id;
-    b.nightActions = 0;
+    b.nightActions -= 1;
   }
   if (c.def.slot === 'evening') f.evening.push(c.def.id);
-  b.funds -= c.money;
+  spend(b, c.money);
   if (c.def.slot !== 'evening') {
     if (c.play!.where === 'hq') f.at = F().hq;
     else goTo(b, run, c.district.id);
@@ -638,6 +685,12 @@ export function settle(content: Content | null, b: DominionBlock, run: RunState,
   const district = districtDef(fight.district) ?? districtDef(F().hq)!;
   const won = outcome === 'win';
   const lines: string[] = [];
+  const own = SETTLERS[fight.why];
+  if (own) {
+    lines.push(...own(content, b, run, fight, outcome));
+    syncHeat(b);
+    return lines;
+  }
   if (fight.why === 'looker') {
     const t = targetDef(fight.racket);
     if (won) {
@@ -656,7 +709,7 @@ export function settle(content: Content | null, b: DominionBlock, run: RunState,
       lines.push(PL.raidWon!);
     } else {
       const take = Math.max(0, Math.floor(Math.max(0, b.funds) * P.raidTake));
-      b.funds -= take;
+      spend(b, take);
       lines.push(fill(PL.raidLost!, { take }));
     }
     syncHeat(b);
@@ -675,7 +728,7 @@ export function settle(content: Content | null, b: DominionBlock, run: RunState,
     if (won) lines.push(fill(PL.won!, { name: P.jenny.name }));
     else {
       const fine = Math.max(P.lost.fineMin, Math.round(Math.max(0, b.funds) * P.lost.fine));
-      b.funds -= fine;
+      spend(b, fine);
       addHeat(b, district.id, P.lost.heat);
       lines.push(fill(PL.lost!, { name: P.jenny.name, fine, heat: P.lost.heat, district: district.name }));
     }
@@ -689,7 +742,7 @@ export function settle(content: Content | null, b: DominionBlock, run: RunState,
     lines.push(...s.lines, ...grow(b, x.def, x.play, true, fight.why === 'always' && fight.big));
   } else {
     if (x.play.wager) {
-      b.funds -= fight.wager;
+      spend(b, fight.wager);
     }
     lines.push(...fail(b, x), ...grow(b, x.def, x.play, false, false));
   }
@@ -706,7 +759,7 @@ export function buy(block: DominionBlock, id: string): { ok: boolean; block: Dom
   if (block.hqLevel < v.hq) return no(`Needs HQ Lv. ${v.hq}.`);
   if (block.funds < v.price) return no(fill(L().noMoney!, { cost: v.price }));
   const b = structuredClone(block);
-  b.funds -= v.price;
+  spend(b, v.price);
   b.field.vehicles.push(id);
   if (id === 'bike' && b.phase !== 'evening') b.field.free += 1;
   return { ok: true, block: b, notice: fill(L().bought!, { name: v.name }) };

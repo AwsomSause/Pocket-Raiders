@@ -37,4 +37,27 @@ Copied from the Claude AI mockups (project files `plans/claude-api/mockups/sprit
 | --- | --- |
 | `p-dialga.png`, `p-palkia.png`, `p-giratina.png`, `p-groudon.png`, `p-kyogre.png` | Pokémon sprites from the PokeRogue pack |
 | `g-adamant-orb`, `g-lustrous-orb`, `g-griseous-orb`, `g-red-orb`, `g-blue-orb`, `g-key-charm`, `g-tea`, `g-scope-lens`, `g-choice-band`, `g-soothe-bell`, `g-storage-key` (.png) | Item icons from `images/items/` (PokeRogue pack) |
+
+## Slice D5 (the HQ, mockup 6)
+
+| File | From |
+| --- | --- |
+| `g-big-nugget`, `g-max-potion`, `g-relic-statue`, `g-storage-key` (.png) | Item icons from `images/items/` (PokeRogue pack), re-saved at the mockup's size by the mockup thread; copied from `plans/evil-mode-rework/mockups-redesign/sprites/` |
+| `p-growlithe.png`, `p-houndour.png` | Pokémon front sprites from the PokeRogue pack (`images/pokemon/`), one frame, cut by the mockup thread (the Holding Pens and the Compound's guard dogs) |
+| `c-gruntb.png`, `c-rook.png` | A Grunt and Rook from the PokeRogue trainer sprites (`images/trainer/`), one frame, cut by the mockup thread (crew in the Barracks) |
+
+## Slice D9 (the rival team)
+
+Copied from the round-4 mockups (`plans/evil-mode-rework/mockups-v4/sprites/`), cut by the mockup thread from the same packs:
+
+| File | From |
+| --- | --- |
+| `t-giovanni.png` | Trainer sprite from the PokeRogue pack (`images/trainer/`), one frame (the Tension row's portrait; same file as D6's) |
+| `g-dire-hit.png` | Item icon from `images/items/` (PokeRogue pack): the raid row on the Rival File |
+| `p-moltres.png` | Pokémon sprite from the PokeRogue pack (the mockup's night-sky silhouette on the Rival File) |
+
+## Slice D8 (Squads and Groups, mockup 13)
+
+| File | From |
+| --- | --- |
 | `t-proton.png`, `t-petrel.png`, `t-misty.png` (D8, the Squads page's Vengeance targets) | Trainer sprites from the PokeRogue pack (`images/trainer/`), one frame, as in `plans/evil-mode-rework/mockups-v3/sprites/` |

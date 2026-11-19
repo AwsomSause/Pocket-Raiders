@@ -87,8 +87,10 @@ const DistrictSchema = z.object({
   rivalNote: S.optional(), wild: S, targets: z.array(TargetSchema).min(1),
 }).strict();
 export type District = z.infer<typeof DistrictSchema>;
-export const BATTLE_FOES = ['target', 'police', 'wild', 'ghost', 'member'] as const;
-export const EFFECTS = ['scout', 'count', 'scoutDistrict', 'paper', 'catch', 'laylow', 'disguise', 'fine', 'exp', 'spar', 'train', 'plan', 'pamper', 'hide', 'rescue', 'evolve', 'ceremony', 'mentor'] as const;
+export const BATTLE_FOES = ['target', 'police', 'wild', 'ghost', 'member', 'rival'] as const;
+export const EFFECTS = ['scout', 'count', 'scoutDistrict', 'paper', 'catch', 'laylow', 'disguise', 'fine', 'exp', 'spar', 'train', 'plan', 'pamper', 'hide', 'rescue', 'evolve', 'ceremony', 'mentor', 'launder',
+  // D9 (rivals.ts addActEffect)
+  'rivalHit', 'rivalSpy', 'counterSpy', 'truceTalk', 'war', 'poach', 'court'] as const;
 const PlaySchema = z.object({
   kinds: z.array(z.union([z.enum(TARGET_KINDS), z.literal('any')])).min(1).optional(),
   chance: I.min(0).max(100).optional(),
@@ -175,8 +177,8 @@ export type DistrictState = z.infer<typeof DistrictStateSchema>;
 
 /** A battle an action (or the police) is waiting on. The fight bridge (fight.ts) starts it; fightEnd settles it. */
 export const FieldFightSchema = z.object({
-  why: z.enum(['fail', 'always', 'police', 'looker', 'raid']),
-  foe: z.enum(['target', 'police', 'wild', 'ghost', 'member', 'looker', 'raid']),
+  why: z.enum(['fail', 'always', 'police', 'looker', 'raid', 'rival']),
+  foe: z.enum(['target', 'police', 'wild', 'ghost', 'member', 'looker', 'raid', 'rival']),
   begun: z.boolean(),
   action: S.nullable(),
   target: S.nullable(),
@@ -285,6 +287,10 @@ const BlockSchema = z.object({
   crew: z.lazy(() => CrewStateSchema).optional(),
   /** D4: the Reserve, Trust, the pyramid's bookkeeping. Optional; `reserveOf` fills it (and moves D3's stores in). */
   reserve: z.lazy(() => ReserveStateSchema).optional(),
+  /** D5: the HQ's rooms, outside buildings, works, clean money, laundering and loans. Optional; `hqOf` fills it. */
+  hq: z.lazy(() => HqStateSchema).optional(),
+  /** D9: the rival teams (Tension, plan, spies, truces, raids). Optional; `rivalsOf` fills it. */
+  rivals: z.lazy(() => RivalsStateSchema).optional(),
   /** D8: Squads and Groups (Part 10). Optional; `squadsOf` fills it. */
   squads: z.lazy(() => SquadsStateSchema).optional(),
 }).strict();
@@ -330,6 +336,21 @@ export type DominionAction =
   | { t: 'promote'; member: string }
   | { t: 'demote'; member: string }
   | { t: 'strip'; member: string }
+  // D5, the HQ (hq.ts)
+  | { t: 'upgrade' }
+  | { t: 'build'; building: string; district: string | null }
+  | { t: 'tierUp'; room: string }
+  | { t: 'sell'; room: string }
+  | { t: 'rebuild'; room: string }
+  | { t: 'launder'; amount: number }
+  | { t: 'loan'; amount: number }
+  | { t: 'repay'; amount: number }
+  | { t: 'letGo'; member: string }
+  // D9, the rival team (rivals.ts)
+  | { t: 'truce'; team: string }
+  | { t: 'breakTruce'; team: string }
+  | { t: 'card'; index: number; choice: number }
+  | { t: 'ransom'; member: string }
   // D8, Squads and Groups
   | { t: 'squadSave'; draft: SquadDraft }
   | { t: 'squadDisband'; squad: string }
@@ -349,7 +370,13 @@ export const STAT = z.enum(STAT_IDS);
 const Pct = I.min(0).max(100);
 
 export const TaskEffectSchema = z.object({
-  kind: z.enum(['guard', 'money', 'scout', 'recruit', 'train', 'trainMon', 'rest', 'catch', 'steal', 'berries', 'audit', 'welcome', 'interview', 'mentor', 'rally', 'drills', 'coach', 'pens', 'tend', 'feed', 'release', 'rehab', 'matchMake', 'runCrew']),
+  kind: z.enum(['guard', 'money', 'scout', 'recruit', 'train', 'trainMon', 'rest', 'catch', 'steal', 'berries', 'audit', 'welcome', 'interview', 'mentor', 'rally', 'drills', 'coach',
+    // D4 (reserve.ts)
+    'pens', 'tend', 'feed', 'release', 'rehab',
+    // D9 (rivals.ts)
+    'rivalSpy', 'rivalIntel', 'counterSpy', 'poachRival', 'rivalHit', 'rescue', 'rumours', 'truceTalk',
+    // D8 (squads.ts)
+    'matchMake', 'runCrew']),
   funds: Range.optional(),
   heat: I.optional(),
   risky: z.boolean().optional(),
@@ -367,6 +394,8 @@ export const TaskSchema = z.object({
   levels: z.array(S).length(5), risk: S, source: S.optional(),
   status: z.enum(['supported', 'limited', 'disabled']),
   note: S.optional(), needs: z.string().regex(/^D\d+$/).optional(), effect: TaskEffectSchema.optional(),
+  /** D5: the room the task needs (buildings.json id). */
+  room: S.optional(),
 }).strict().refine((t) => (t.status === 'disabled') === !t.effect, { message: 'a live task has an effect; a disabled one has none' })
   .refine((t) => t.status !== 'disabled' || !!t.needs, { message: 'a disabled task names the slice it waits for' })
   .refine((t) => t.status !== 'limited' || !!t.note, { message: 'a limited task says what waits' });
@@ -518,7 +547,7 @@ export const MemberCrewSchema = z.object({
   last: z.enum(['none', 'success', 'big', 'fail', 'caught', 'arrested', 'refused', 'skipped', 'wandered']),
   lastTask: S.nullable(),
   /** Out of action: hurt or in a cell, with days left. */
-  out: z.object({ why: z.enum(['hurt', 'jail']), days: I.min(1) }).strict().nullable(),
+  out: z.object({ why: z.enum(['hurt', 'jail', 'held']), days: I.min(1) }).strict().nullable(),
   /** Days worked in a row (Ask for Time Off). */
   worked: N0,
   /** Tasks they refuse (their Line). */
@@ -657,6 +686,248 @@ export const ReserveStateSchema = z.object({
   stripped: z.array(S),
 }).strict();
 export type ReserveState = z.infer<typeof ReserveStateSchema>;
+
+// ---------- D5 data: hq.json (Part 3 §3, Part 9 A21-A22) and buildings.json (lists/buildings*.md) ----------
+
+const Pair = z.tuple([S, S]);
+export const HqLevelSchema = z.object({
+  lv: I.min(1).max(6), name: S, cost: N0,
+  /** Null: the region cap (the main game's rule: 100 in the first region, +50 a region, max 500). */
+  levelCap: I.min(1).nullable(), crewCap: I.min(1), slots: I.min(1), defense: N0,
+  needs: z.object({ districts: I.min(1).optional(), crew: I.min(1).optional(), gym: z.boolean().optional(), admin: z.boolean().optional(), half: z.boolean().optional(), feared: z.boolean().optional() }).strict(),
+  look: S, wall: Pair, roof: Pair,
+}).strict();
+export const BuildingTierSchema = z.object({ t: I.min(1).max(8), name: S, cost: z.number().positive(), effect: z.number().positive(), days: I.min(1), hq: I.min(1).max(6), region: I.min(1), gym: z.boolean().optional() }).strict();
+export const HqFileSchema = z.object({
+  _source: S,
+  levels: z.array(HqLevelSchema).length(6),
+  upgradeDays: I.min(1),
+  tiers: z.array(BuildingTierSchema).length(8),
+  rules: z.object({
+    storageBase: N0, upkeepPct: N0, unpaidCondition: N0, rebuildPct: N0, sellPct: N0, loanPer: N0, loanRate: N0, loanWeeks: I.min(1),
+    launderDays: I.min(1), launderAction: z.object({ max: I.min(1), fee: N0, days: I.min(1) }).strict(), brokeDefense: N0, regionsInRun: I.min(1), hideoutDistricts: S,
+  }).strict(),
+  /** An action's or task's unlock word -> the building that opens it. */
+  rooms: z.record(S, S),
+  /** The first seven on the Buy Room list (Kice's poster). */
+  poster: z.array(S).length(7),
+  menu: z.array(z.object({ id: S, label: S, key: S }).strict()).min(6),
+  lines: z.record(S, S),
+  icons: z.object({ groups: z.record(S, S), ids: z.record(S, S), colours: z.record(S, Pair) }).strict(),
+}).strict();
+export type HqFile = z.infer<typeof HqFileSchema>;
+
+/** What a building does at T1 (scaled by the tier's Effect x). See tools/dominion/buildings-to-json.py. */
+export const BuildingFxSchema = z.object({
+  crewCap: N0.optional(), morale: N0.optional(), loyalty: N0.optional(), income: N0.optional(), clean: N0.optional(), weekly: N0.optional(),
+  heatDay: N0.optional(), heatWeek: N0.optional(), heatOnce: N0.optional(), control: N0.optional(), trainXp: N0.optional(), injury: Pct.optional(),
+  recruit: N0.optional(), hireOff: Pct.optional(), launder: Pct.optional(), treasury: N0.optional(), storage: N0.optional(), defense: N0.optional(),
+  dayActions: N0.optional(), nightActions: N0.optional(), restBonus: N0.optional(), fatigue: N0.optional(), repair: N0.optional(), incomePct: N0.optional(),
+  items: z.record(S, I.min(1)).optional(), weeklyItems: z.record(S, I.min(1)).optional(), unlock: z.boolean().optional(),
+  // D9 (rivals.ts): intel (the rival's weekly plan shows), spyCatch (% of planted spies caught at the door), cipher (% off
+  // your spies being caught), raidDef (Defense in raids only), warn (days' warning of the Boss's raid), fireCut (% off
+  // building damage), truceOff (% off tribute).
+  intel: N0.optional(), spyCatch: Pct.optional(), cipher: Pct.optional(), raidDef: N0.optional(), warn: N0.optional(), fireCut: Pct.optional(), truceOff: Pct.optional(),
+}).strict();
+export type BuildingFx = z.infer<typeof BuildingFxSchema>;
+export const BuildingSchema = z.object({
+  n: S, id: S, name: S, listName: S, group: z.string().regex(/^[A-JPQ]$/), sub: S.optional(), groupName: S, focus: z.enum(['hq', 'pokemon', 'grunt']),
+  part3: z.boolean(), slots: N0, outside: z.boolean(), canOutside: z.boolean(), cost: N0, t1: S, per: S, cap: S, ladder: z.array(S).length(8),
+  minTier: I.min(0).max(5), status: z.enum(['supported', 'limited', 'disabled']), fx: BuildingFxSchema, waits: S.nullable(), note: S.optional(),
+}).strict().refine((b) => (b.status === 'disabled') === !Object.keys(b.fx).length, { message: 'a live building has an effect; a disabled one has none' })
+  .refine((b) => b.status !== 'disabled' || !!b.waits, { message: 'a disabled building names what it waits for' })
+  .refine((b) => b.status !== 'limited' || !!b.note, { message: 'a limited building says what waits' });
+export type Building = z.infer<typeof BuildingSchema>;
+export const BuildingsFileSchema = z.object({ _source: S, buildings: z.array(BuildingSchema).min(266) }).strict();
+
+// ---------- D5: the save block's `hq` (optional; no block bump) ----------
+
+export const RoomSchema = z.object({
+  uid: S,
+  /** Building id (buildings.json). */
+  id: S,
+  tier: I.min(1).max(8),
+  /** Condition 0-100 (lists/buildings.md §1): raids, sabotage, the Hero and unpaid upkeep lower it; 0 ruins it. */
+  cond: I.min(0).max(100),
+  /** ₽ spent on it so far (upkeep is a share of this; selling gives back a share). */
+  spent: N0,
+  /** Being built (new) or raised a tier: works from `ready` (the morning of that day). */
+  building: z.boolean(),
+  up: z.boolean(),
+  ready: N0,
+  /** Shut while broke (A22). */
+  shut: z.boolean(),
+  /** Ruined at Condition 0: rebuild at 60% cost, one tier lower. */
+  ruined: z.boolean(),
+  /** Outside buildings: the district it stands in (null inside the HQ). */
+  at: S.nullable(),
+}).strict();
+export type Room = z.infer<typeof RoomSchema>;
+
+export const HqStateSchema = z.object({
+  rooms: z.array(RoomSchema),
+  next: I.min(1),
+  /** The HQ upgrade under way (Part 3 §3.1: three days): the level it reaches, the day it's done, the level cap it brings. */
+  upgrade: z.object({ to: I.min(2).max(6), ready: I.min(1), cap: I.min(1) }).strict().nullable(),
+  /** The clean part of the funds (A21: upgrades and Buy Outs take clean money only). Never more than the funds. */
+  clean: N0,
+  /** Money in the wash: comes back clean on `ready`. */
+  wash: z.array(z.object({ net: I.min(1), ready: I.min(1), front: S }).strict()),
+  /** A Fence's loan (A22): what's owed and the weeks it has run. */
+  loan: z.object({ owed: N0, weeks: N0 }).strict().nullable(),
+  /** Broke at the last weekly bill (A22): Defense down, the costliest room shut until paid. */
+  broke: z.boolean(),
+}).strict();
+export type HqState = z.infer<typeof HqStateSchema>;
+
+// ---------- D9 data: rivals.json, rivalActions.json, outside.json (Part 4 §1-2, Part 3 §4, Part 9 A7) ----------
+
+export const RIVAL_STAGES = ['unaware', 'watching', 'annoyed', 'hostile', 'war', 'boss'] as const;
+export type RivalStage = (typeof RIVAL_STAGES)[number];
+/** What the engine does with a rival action (rivals.ts KINDS). */
+export const RIVAL_KINDS = [
+  'spy', 'intel', 'heat', 'rent', 'money', 'sweep', 'closed', 'cond', 'mood', 'jam', 'racket', 'smash', 'vault', 'stealMon', 'kidnap', 'burn',
+  'poach', 'loyalty', 'loyalty1', 'recruitCut', 'skim', 'regard', 'hero', 'control', 'fight', 'demand', 'deal', 'defect', 'bossRaid', 'truce',
+  'tension', 'grow', 'research', 'arm', 'hide', 'hurt',
+] as const;
+export type RivalKind = (typeof RIVAL_KINDS)[number];
+const LadderKey = z.enum(['S', 'M', 'P', 'D', 'H', 'C', 'R', 'N']);
+export type LadderKey = z.infer<typeof LadderKey>;
+export const RivalActionSchema = z.object({
+  n: I.min(1).max(150), id: S, name: S, cat: z.string().regex(/^[A-O]$/), stage: z.enum(RIVAL_STAGES).exclude(['unaware']), text: S,
+  uses: z.array(LadderKey), milestones: z.record(z.enum(['3', '6', '8']), S),
+  status: z.enum(['supported', 'limited', 'disabled']), kind: z.enum(RIVAL_KINDS).optional(), note: S.optional(), waits: z.string().regex(/^D\d+$/).optional(),
+}).strict().refine((a) => (a.status === 'disabled') === !a.kind, { message: 'a live action has a kind; a disabled one has none' })
+  .refine((a) => a.status !== 'disabled' || !!a.waits, { message: 'a disabled action names the slice it waits for' })
+  .refine((a) => a.status !== 'limited' || !!a.note, { message: 'a limited action says what waits' });
+export type RivalAction = z.infer<typeof RivalActionSchema>;
+export const RivalActionsFileSchema = z.object({
+  _source: S, categories: z.record(S, S), ladders: z.record(LadderKey, z.array(z.number()).length(8)), actions: z.array(RivalActionSchema).length(150),
+}).strict();
+export type RivalActionsFile = z.infer<typeof RivalActionsFileSchema>;
+
+export const OutsideRowSchema = z.object({
+  id: z.string().regex(/^O\d{3}$/), section: z.string().regex(/^[A-L]$/), what: S, who: S, choices: z.array(S).min(1),
+  marks: z.array(z.enum(['minor', 'night', 'day', 'scales', 'chain'])), status: z.enum(['supported', 'limited', 'disabled']), waits: z.string().regex(/^D\d+$/).optional(),
+}).strict().refine((r) => r.status !== 'disabled' || !!r.waits, { message: 'a disabled row names the slice it waits for' });
+export type OutsideRow = z.infer<typeof OutsideRowSchema>;
+export const OutsideFileSchema = z.object({ _source: S, sections: z.record(S, S), rows: z.array(OutsideRowSchema).length(300) }).strict();
+
+const RivalFoeSchema = z.object({ id: S, name: S, species: z.array(S).min(1) }).strict();
+export const RivalTeamSchema = z.object({
+  id: S, region: S, on: z.boolean(), name: S, tag: S, colour: S, note: S.optional(),
+  boss: z.object({ id: S, name: S, personality: S, look: S.nullable(), species: z.array(S).min(1) }).strict(),
+  admins: z.array(RivalFoeSchema),
+  grunt: z.object({ name: S, species: z.array(S).min(1) }).strict(),
+  sites: z.array(z.object({ id: S, name: S, district: S, hq: z.boolean().optional() }).strict()),
+}).strict();
+export type RivalTeam = z.infer<typeof RivalTeamSchema>;
+/** One choice on a rival street meeting (outside.json section F): what it changes. Money is in M-ladder steps (+ gain, − cost). */
+export const StreetChoiceSchema = z.object({
+  label: S, ten: I.optional(), rg: I.optional(), dr: I.optional(), h: I.optional(), money: I.optional(), control: I.optional(), theirControl: I.optional(),
+  fight: z.enum(['grunt', 'admin']).optional(), racket: z.boolean().optional(), lead: z.boolean().optional(), intel: z.boolean().optional(), mySpy: z.boolean().optional(),
+  spyGone: z.boolean().optional(), foil: z.boolean().optional(), theirIntel: I.optional(), theirPower: I.optional(), item: S.optional(), truceDays: I.min(1).optional(),
+  loot: z.boolean().optional(), gamble: z.boolean().optional(), debate: z.boolean().optional(), mon: z.boolean().optional(), site: z.boolean().optional(),
+}).strict();
+export type StreetChoice = z.infer<typeof StreetChoiceSchema>;
+export const RivalsFileSchema = z.object({
+  _source: S, region: S,
+  teams: z.array(RivalTeamSchema).min(1),
+  stages: z.array(z.object({ id: z.enum(RIVAL_STAGES), min: I.min(0).max(100), name: S, word: S, does: S }).strict()).length(6),
+  tension: z.object({ start: N0, perControl: I.min(1), perMember: N0, perHqLevel: N0, hitSite: N0, poach: N0, decay: N0, quietNights: N0, truceWeek: N0, breakTruce: N0, bossWin: N0, raidHeld: N0 }).strict(),
+  ap: z.object({ base: N0, perAdmin: N0 }).strict(),
+  plan: z.object({
+    day: I.min(1), count: I.min(1),
+    priorities: z.array(z.object({ id: S, name: S, text: S, cats: z.array(z.string().regex(/^[A-O]$/)).min(1) }).strict()).length(6),
+    personalities: z.record(S, z.record(S, N0)), lawHeat: N0, research: N0, seeHq: I.min(1), inPlan: N0, perRoom: N0, perMember: N0,
+  }).strict(),
+  raid: z.object({ hold: N0, perDefense: N0, perGuard: N0, theirSpy: N0, mySpy: N0, min: N0, max: N0, jam: N0, lossPower: N0 }).strict(),
+  bossRaid: z.object({ warn: I.min(1), size: I.min(1).max(6), min: I.min(1), perDefense: I.min(1), level: I, dread: N0, vaultPct: N0, held: I.min(1), after: Pct }).strict(),
+  truce: z.object({ tributeK: z.number().positive(), askChance: N0, minTension: N0 }).strict(),
+  spy: z.object({ max: I.min(1), caught: N0, raidCut: N0, sweepBase: N0 }).strict(),
+  held: z.object({ days: I.min(1), ransomK: z.number().positive() }).strict(),
+  cards: z.object({ days: I.min(1) }).strict(),
+  street: z.object({ chance: N0, night: N0, minTension: N0, rows: z.record(S, z.array(StreetChoiceSchema).min(1)) }).strict(),
+  lines: z.record(S, S),
+}).strict();
+export type RivalsFile = z.infer<typeof RivalsFileSchema>;
+
+// ---------- D9: the save block's `rivals` (optional; no block bump) ----------
+
+const SITE = z.enum(['theirs', 'yours', 'gone']);
+export const RivalTeamStateSchema = z.object({
+  tension: Pct,
+  peak: Pct,
+  /** The stage last announced (0 Unaware .. 5 Boss's attention). */
+  stage: I.min(0).max(5),
+  /** Nights since Tension last rose (it cools after `quietNights`). */
+  quiet: N0,
+  /** The week's three priorities (A7) and the day they were picked. */
+  plan: z.array(S),
+  planDay: N0,
+  /** Action Points left this week. */
+  ap: N0,
+  /** Admins still standing (ids). */
+  admins: z.array(S),
+  /** Their strength beyond the start: more Grunts, levels, mercenaries (+), raids lost (−). */
+  power: I,
+  /** Their Goal track (Research priority). */
+  research: Pct,
+  /** What they know about you: raid odds +%. */
+  intel: Pct,
+  /** Their spies planted in your crew. */
+  spies: N0,
+  /** Stockpiled arms: the next raid is this % stronger. */
+  arm: Pct,
+  /** Cells reorganised: your spies find this % less. */
+  hide: Pct,
+  /** A truce: the weekly tribute (0 for a set-length truce that ends on `until`). */
+  truce: z.object({ tribute: N0, since: I.min(1), paid: N0, until: I.min(1).nullable() }).strict().nullable(),
+  sites: z.record(S, SITE),
+  /** The night the Boss raids the HQ (Tension 80+), or null. */
+  raid: I.nullable(),
+  /** This week's moves, newest last (the Rival File). */
+  log: z.array(z.object({ day: I.min(1), text: S }).strict()),
+  /** What the last night saw (Tension from growth). */
+  seen: z.object({ control: N0, members: N0, hq: I.min(1) }).strict(),
+}).strict();
+export type RivalTeamState = z.infer<typeof RivalTeamStateSchema>;
+export const RivalCardSchema = z.object({
+  kind: z.enum(['fight', 'demand', 'deal', 'defect', 'truce', 'street']),
+  team: S,
+  /** The rival action (rivalActions.json id) or street row (O141..O165). */
+  ref: S,
+  who: S,
+  amount: N0,
+  district: S.nullable(),
+  /** A truce offer that asks for a member or a district instead of money. */
+  ask: z.enum(['money', 'member', 'district']).nullable(),
+  until: I.min(1),
+}).strict();
+export type RivalCard = z.infer<typeof RivalCardSchema>;
+export const RivalsStateSchema = z.object({
+  teams: z.record(S, RivalTeamStateSchema),
+  /** Your spies inside a rival team (crew task Spy). */
+  mySpies: z.array(z.object({ member: S, team: S, day: I.min(1) }).strict()),
+  rent: z.object({ pct: Pct, until: I.min(1) }).strict().nullable(),
+  recruit: z.object({ pct: Pct, until: I.min(1) }).strict().nullable(),
+  /** The night the alarms are jammed. */
+  jam: N0,
+  /** Rooms the rival shut, and the day they open again. */
+  closed: z.array(z.object({ uid: S, until: I.min(1) }).strict()),
+  /** Rackets paying a rival until a day. */
+  turned: z.array(z.object({ racket: RacketSchema, team: S, until: I.min(1) }).strict()),
+  /** Members a rival is holding. */
+  held: z.array(z.object({ member: S, team: S, day: I.min(1), ransom: N0 }).strict()),
+  cards: z.array(RivalCardSchema),
+  /** Street rows met this run (each at most once). */
+  street: z.array(S),
+  /** Rolls made on `dominion-rival-card` (answers and street meetings). */
+  rolls: N0,
+  /** The Boss's highest Pokémon level, read at each step: the rival actions' tier (rival-team-actions.md). */
+  top: I.min(1),
+}).strict();
+export type RivalsState = z.infer<typeof RivalsStateSchema>;
 
 // ---------- D8: Squads and Groups (squads.json; block `squads`) ----------
 

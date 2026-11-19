@@ -56,6 +56,9 @@ ENGINE = {
     65: dict(kind='train', grow='brawn', xp=2, injury=10),
     66: dict(kind='coach'),
     68: dict(kind='train', grow='wits'),
+    # D5: rooms open these.
+    63: dict(kind='train', grow='wits', room='library'),
+    17: dict(kind='audit'),
     72: dict(kind='rest', sure=True),
     73: dict(kind='catch'),
     75: dict(kind='tend'),
@@ -64,6 +67,20 @@ ENGINE = {
     81: dict(kind='feed'),
     82: dict(kind='berries'),
     102: dict(kind='money', funds=[20, 80]),
+    # D9: the rival team (rivals.ts runs the new kinds). Guards count in raid defence (Part 3 §4).
+    2: dict(kind='guard', note='Counts in raids on the HQ; guarding one outside building comes with D10.'),
+    4: dict(kind='guard'), 10: dict(kind='guard'), 11: dict(kind='guard'), 138: dict(kind='guard'),
+    90: dict(kind='guard', note='Counts as a guard against Warehouse grabs; stored goods come with D10.'),
+    38: dict(kind='rivalSpy'),
+    39: dict(kind='rivalIntel'), 41: dict(kind='rivalIntel'), 43: dict(kind='rivalIntel'), 48: dict(kind='rivalIntel'), 137: dict(kind='rivalIntel'),
+    44: dict(kind='counterSpy'), 51: dict(kind='counterSpy'),
+    54: dict(kind='poachRival'), 60: dict(kind='poachRival', note='Defectors come as leads; a double agent waits for D22.'),
+    70: dict(kind='drills'),
+    131: dict(kind='rivalHit'), 132: dict(kind='rivalHit', risky=True), 133: dict(kind='rivalHit', funds=[100, 400], risky=True),
+    134: dict(kind='rivalHit', heat=4, risky=True, caughtHeat=6), 142: dict(kind='rivalHit', risky=True),
+    135: dict(kind='rescue', risky=True),
+    139: dict(kind='rumours'),
+    140: dict(kind='truceTalk'),
     # D8 (squads.ts): pairs two members; an Executive leads five on their tasks.
     58: dict(kind='matchMake', note='The bond trait (level 3) and swapping Pokémon in a doubles battle (level 4) wait for squads in battle (D10).'),
     141: dict(kind='runCrew', note='Level 4 (no failures from miscommunication) has nothing to stop yet: crew tasks have no miscommunication roll.'),
@@ -72,10 +89,10 @@ ENGINE = {
 # The slice each disabled row waits for: by section, then by row.
 NEEDS_SECTION = {'A': 'D5', 'B': 'D10', 'C': 'D2', 'D': 'D9', 'E': 'D9', 'F': 'D5', 'G': 'D5', 'H': 'D10', 'I': 'D10', 'J': 'D6', 'K': 'D15', 'L': 'D9', 'M': 'D14'}
 NEEDS_ROW = {
-    4: 'D9', 5: 'D6', 6: 'D2', 8: 'D10', 9: 'D2', 11: 'D9', 13: 'D6', 17: 'D5', 23: 'D5', 32: 'D6', 33: 'D10',
-    40: 'D6', 46: 'D2', 47: 'D6', 42: 'D2', 45: 'D11', 50: 'D5', 53: 'D6', 55: 'D2', 69: 'D5', 70: 'D9', 71: 'D7',
-    83: 'D10', 84: 'D11', 89: 'D5', 90: 'D5', 91: 'D5', 109: 'D5', 118: 'D11', 119: 'D6', 124: 'D6', 128: 'D6', 
-    142: 'D9', 145: 'D11', 146: 'D6',
+    4: 'D9', 5: 'D6', 6: 'D2', 8: 'D10', 9: 'D2', 11: 'D9', 13: 'D6', 23: 'D6', 2: 'D9', 10: 'D9', 67: 'D4', 32: 'D6', 33: 'D10',
+    40: 'D6', 46: 'D2', 47: 'D6', 42: 'D2', 45: 'D11', 50: 'D10', 53: 'D6', 55: 'D2', 69: 'D4', 70: 'D9', 71: 'D7',
+    83: 'D10', 84: 'D11', 89: 'D10', 90: 'D9', 91: 'D10', 109: 'D10', 118: 'D11', 119: 'D6', 124: 'D6', 128: 'D6',
+    142: 'D9', 145: 'D11', 146: 'D6', 136: 'D10',
 }
 
 tasks = []
@@ -98,6 +115,9 @@ for line in open(f'{lists}/team-actions.md', encoding='utf-8'):
     if e:
         e = dict(e)
         note = e.pop('note', None)
+        room = e.pop('room', None)
+        if room:
+            t['room'] = room
         t['status'] = 'limited' if note else 'supported'
         if note:
             t['note'] = note

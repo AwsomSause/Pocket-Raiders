@@ -9,6 +9,7 @@ import { DOMINION_DATA } from './data';
 import type { Alert, CrewState, DominionBlock, Member, MemberCrew, Mods, StatId, Talk, TalkChoice, Task, Treat } from './schema';
 import { STAT_IDS } from './schema';
 import { addWorldStep, fill } from './worldTurn';
+import { buildingDef, hasRoom, hqFx, spend } from './hqFx';
 
 const C = () => DOMINION_DATA.crew;
 const R = () => DOMINION_DATA.crew.rules;
@@ -220,6 +221,13 @@ function runTask(b: DominionBlock, m: Member, seed: string, n: Night): void {
   const c = mc(m);
   const rep = C().report;
   const r = rng(seed, 'dominion-crew', b.day, m.id);
+  if (c.out?.why === 'held') {
+    // D9: a rival team is holding them; rivals.ts frees them (rescue, ransom or time).
+    say(n, 'crew', fill(rep.out!, { name: m.name, why: 'held by a rival team' }));
+    c.last = 'none';
+    c.worked = 0;
+    return;
+  }
   if (c.out) {
     // Hurt or in a cell: no task; the days count down (a Nurse or a Field Medic heals a day sooner).
     const medic = c.out.why === 'hurt' && (b.members.some((x) => x.id !== m.id && mc(x).role === 'nurse' && !mc(x).out) || b.members.some((x) => modsOfMember(x).some((y) => y.medic)));
@@ -354,7 +362,8 @@ function runTask(b: DominionBlock, m: Member, seed: string, n: Night): void {
       break;
     }
     case 'train': {
-      let gain = (e.xp ?? R().trainXp) + mods.reduce((a, x) => a + (x.trainXp ?? 0), 0);
+      // D5: the Training Room and the Dojo add XP to every Train task.
+      let gain = (e.xp ?? R().trainXp) + mods.reduce((a, x) => a + (x.trainXp ?? 0), 0) + hqFx(b).trainXp;
       if (mods.some((x) => x.xpMult && appliesTo(x, task!))) gain *= 2;
       const mentor = b.members.find((x) => x.id !== m.id && mc(x).task === task!.id && modsOfMember(x).some((y) => y.mentor) && rankN(m.rank) <= 2);
       if (mentor) gain += 1;
@@ -362,8 +371,10 @@ function runTask(b: DominionBlock, m: Member, seed: string, n: Night): void {
       if (e.grow) growStat(m, e.grow, R().statPerSuccess, n.lines);
       say(n, 'crew', fill(rep.train!, { name: m.name, xp: gain }));
       if (r.int(1, 100) <= (e.injury ?? R().injuryChance)) {
-        c.out = { why: 'hurt', days: R().injuryDays };
-        say(n, 'crew', fill(rep.injured!, { name: m.name, days: R().injuryDays }));
+        // D5: the Infirmary halves the time off.
+        const days = Math.max(1, Math.round((R().injuryDays * (100 - hqFx(b).injury)) / 100));
+        c.out = { why: 'hurt', days };
+        say(n, 'crew', fill(rep.injured!, { name: m.name, days }));
       }
       break;
     }
@@ -378,7 +389,7 @@ function runTask(b: DominionBlock, m: Member, seed: string, n: Night): void {
     }
     case 'rest': {
       addMorale(m, R().restMorale + (lv >= 3 ? 5 : 0));
-      c.fatigue = clamp(c.fatigue - R().fatigueRest);
+      c.fatigue = clamp(c.fatigue - Math.round((R().fatigueRest * (100 + hqFx(b).fatigue)) / 100));
       c.pHeat = clamp(c.pHeat - R().pHeatRestCool);
       c.worked = 0;
       say(n, 'crew', fill(rep.rest!, { name: m.name, morale: R().restMorale }));
@@ -441,11 +452,10 @@ function runTask(b: DominionBlock, m: Member, seed: string, n: Night): void {
       break;
     }
     default: {
-      // D4's task kinds (the Pens, the Reserve) live in reserve.ts, registered with addTaskKind.
-      const h = TASK_KINDS[e.kind];
-      if (h) h({ b, m, task, ok, lv, r, label, say: (k, t) => say(n, k, t) });
+      // D4 and later: kinds another module runs (reserve.ts the Pens and the Reserve, rivals.ts the rival tasks).
+      const run = TASK_KINDS[e.kind];
+      if (run) run(b, m, ok, { say: (k, t) => say(n, k, t), label, task, stat, yieldPct, r, lv });
       else say(n, 'crew', fill(rep.fail!, { name: m.name, task: label }));
-      break;
     }
   }
   // After the task: XP, task XP, Fatigue (A18), Thrill.
@@ -466,7 +476,7 @@ function caughtOrFail(b: DominionBlock, m: Member, label: string, risky: boolean
   const c = mc(m);
   const rep = C().report;
   if (!risky) {
-    if (fine) b.funds -= fine;
+    if (fine) spend(b, fine);
     say(n, 'crew', fill(rep.fail!, { name: m.name, task: label }));
     return;
   }
@@ -493,6 +503,14 @@ const pools = (b: DominionBlock) => {
   return C().pools[region] ?? C().pools.kanto!;
 };
 
+/** A task kind run by another module (D4's Pens and Reserve tasks, D9's rival tasks). `ok` is the task's odds roll; `r` is the member's crew stream. */
+export interface TaskCtx { say: (kind: Alert['kind'], text: string) => void; label: string; task: Task; stat: number; yieldPct: number; r: Rng; lv: number }
+type TaskKind = (b: DominionBlock, m: Member, ok: boolean, ctx: TaskCtx) => void;
+const TASK_KINDS: Record<string, TaskKind> = {};
+export function addTaskKind(kind: string, f: TaskKind): void {
+  TASK_KINDS[kind] = f;
+}
+
 /** recruit.ts registers the lead maker (it owns the candidate roll), so this file doesn't import it. */
 type LeadMaker = (b: DominionBlock, finder: Member, seed: string) => { name: string; cls: string } | null;
 let LEAD_MAKER: LeadMaker | null = null;
@@ -504,12 +522,6 @@ type OddsHook = (b: DominionBlock, m: Member, task: Task) => number;
 const ODDS_HOOKS: OddsHook[] = [];
 export function addOddsHook(h: OddsHook): void {
   ODDS_HOOKS.push(h);
-}
-/** Task kinds run by later slices (D4: pens, tend, feed, release, rehab). */
-export interface TaskRun { b: DominionBlock; m: Member; task: Task; ok: boolean; lv: number; r: Rng; label: string; say: (kind: Alert['kind'], text: string) => void }
-const TASK_KINDS: Partial<Record<string, (x: TaskRun) => void>> = {};
-export function addTaskKind(kind: string, f: (x: TaskRun) => void): void {
-  TASK_KINDS[kind] = f;
 }
 type DayHook = (b: DominionBlock, seed: string, n: { lines: string[]; say: (kind: Alert['kind'], text: string) => void }) => void;
 /** D8: around each member's task: skip it (a squad follower), note the state before, settle after (the squad job). */
@@ -551,7 +563,7 @@ export function crewStep(block: DominionBlock, seed: string): string[] {
     if (n.guardHeld) say(n, 'crew', fill(rep.guardHeld!, { name: n.guardHeld.name }));
     else if (b.funds > 0) {
       const amount = Math.min(R().thiefMax, Math.max(1, Math.round((b.funds * R().thiefPct) / 100)));
-      b.funds -= amount;
+      spend(b, amount);
       for (const s of n.slept) say(n, 'crew', fill(rep.guardSlept!, { name: s.name }));
       say(n, 'crew', fill(rep.thief!, { amount }));
     }
@@ -600,7 +612,7 @@ function weekly(b: DominionBlock, seed: string, n: Night): void {
     if (!noQuit && roll <= R().quitChance * mult) leave(b, m, 'quit', n, fill(rep.quit!, { name: m.name }));
     else if (!noQuit && roll <= (R().quitChance + R().stealChance) * mult) {
       const amount = Math.max(0, Math.min(b.funds, R().stealBase + m.level * R().stealPerLevel));
-      b.funds -= amount;
+      spend(b, amount);
       leave(b, m, 'stole', n, fill(rep.stole!, { name: m.name, amount }));
     } else if (roll <= (R().quitChance + R().stealChance + R().sellOutChance) * mult) {
       b.heat = clamp(b.heat + R().sellOutHeat);
@@ -675,7 +687,7 @@ export function bail(block: DominionBlock, memberId: string): { ok: boolean; blo
   const m = b.members.find((x) => x.id === memberId);
   if (!m || mc(m).out?.why !== 'jail') return { ok: false, block, notice: null };
   if (b.funds < R().bail) return { ok: false, block, notice: `Not enough money: bail is ₽${R().bail}.` };
-  b.funds -= R().bail;
+  spend(b, R().bail);
   mc(m).out = null;
   addLoyalty(b, m, R().bailLoyalty);
   return { ok: true, block: b, notice: `${m.name} is out on bail. −₽${R().bail}.` };
@@ -690,6 +702,7 @@ export function assign(block: DominionBlock, memberId: string, taskId: string): 
   if (!m || !task || !['morning', 'evening'].includes(b.phase)) return { ok: false, block, notice: null };
   const why = cantTake(m, task);
   if (why) return { ok: false, block, notice: why };
+  if (task.room && !hasRoom(b, task.room)) return { ok: false, block, notice: `Build the ${buildingDef(task.room)?.name ?? task.room} first.` };
   const c = mc(m);
   if (c.task !== taskId) {
     c.task = taskId;
