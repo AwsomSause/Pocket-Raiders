@@ -142,7 +142,7 @@ export function fileModel(block: DominionBlock, sel: number): FileModel {
   const greenLines = C().lines[c.green] ?? [];
   const card = topTalk(b);
   const t = taskById(c.task);
-  const keys = [{ key: 'P', label: 'Card' }, { key: 'G', label: 'Gift' }, { key: 'H', label: 'Hire' }, { key: 'R', label: `Leads (${b.crew!.leads.length})` }];
+  const keys = [{ key: 'C', label: 'Card' }, { key: 'G', label: 'Gift' }, { key: 'H', label: 'Hire' }, { key: 'R', label: `Leads (${b.crew!.leads.length})` }];
   if (b.phase === 'evening') keys.unshift({ key: 'T', label: 'Talk' });
   if (c.out?.why === 'jail') keys.unshift({ key: 'B', label: `Bail ₽${C().rules.bail}` });
   return {

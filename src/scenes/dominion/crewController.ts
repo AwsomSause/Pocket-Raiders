@@ -30,7 +30,7 @@ export class CrewController {
   private overlay: 'hire' | 'leads' | null = null;
   private pickAt = 0;
   private pitchAt = 0;
-  /** D19: the personality card page of the Crew File (P opens it, Esc goes back to the file). */
+  /** D19: the personality card page of the Crew File (C opens it, Esc goes back to the file). */
   private persona = false;
 
   constructor(private readonly host: Host) {}
@@ -169,7 +169,7 @@ export class CrewController {
     if (this.host.screenName !== 'crew' || this.overlay || this.talking()) return false;
     const m = b.members[this.sel];
     if (!m) return false;
-    if (code === 'KeyP') return this.togglePersona(), true;
+    if (code === 'KeyC') return this.togglePersona(), true;
     if (this.persona) {
       if (code === 'KeyQ' || code === 'KeyE') return this.flip(code === 'KeyQ' ? -1 : 1), true;
       return false;

@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { open, start, view, waitForScene, watch } from './helpers/newUi';
 
-// DOMINION slice D19 (personality cards): P on the Crew File opens the member's card (Rotom mockup a3), Q/E flip
+// DOMINION slice D19 (personality cards): C on the Crew File opens the member's card (Rotom mockup a3), Q/E flip
 // members, Esc goes back. The card is kept in the save and comes back the same after a reload.
 
 async function newDominion(page: Page) {
@@ -53,8 +53,8 @@ test('the personality card on the Crew File: traits, quirk, home town, flip memb
   expect(b.members).toHaveLength(2);
   for (const m of b.members) expect(m.crew.card.t).toHaveLength(2);
 
-  // P: Rook's card.
-  await page.keyboard.press('KeyP');
+  // C: Rook's card.
+  await page.keyboard.press('KeyC');
   await expect(s.getByTestId('dom-persona-name')).toContainText('ROOK');
   const traits = s.getByTestId('dom-persona-trait');
   await expect(traits).toHaveCount(2);
