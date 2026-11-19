@@ -1,0 +1,146 @@
+{
+  "_doc": "Claude AI (Dominion slice D18; design plans/claude-api/CLAUDE_API_DRAFT.md sections 0, 1, 8, 9, 11). List prices in US dollars per million tokens (Nov 2026). No key is ever stored here: players paste their own. tiers.runUsd: rough cost of one Dominion run (draft section 7), shown on the Settings page.",
+  "spendCapUsd": 10,
+  "models": {
+    "haiku": {
+      "id": "claude-haiku-5-5",
+      "label": "Claude Haiku 5.5",
+      "input": 0.1,
+      "output": 0.5,
+      "cacheRead": 0.01,
+      "cacheWrite": 0.125,
+      "effort": "low",
+      "thinkingOff": true
+    },
+    "sonnet": {
+      "id": "claude-sonnet-5-5",
+      "label": "Claude Sonnet 5.5",
+      "input": 2.0,
+      "output": 10.0,
+      "cacheRead": 0.1,
+      "cacheWrite": 2.5,
+      "effort": "low",
+      "thinkingOff": false
+    },
+    "opus": {
+      "id": "claude-opus-5-5",
+      "label": "Claude Opus 5.5",
+      "input": 4.0,
+      "output": 20.0,
+      "cacheRead": 0.2,
+      "cacheWrite": 5.0,
+      "effort": "low",
+      "thinkingOff": false
+    }
+  },
+  "roles": {
+    "line": {
+      "doc": "A spoken line or short reply (dialogue, chatter, a captive's answer).",
+      "light": "haiku",
+      "standard": "haiku",
+      "rich": "haiku"
+    },
+    "judge": {
+      "doc": "Structured judging or picking from a game-built list.",
+      "standard": "haiku",
+      "rich": "haiku"
+    },
+    "big": {
+      "doc": "Big moments: the Debate Boss voice, the Chronicle.",
+      "light": "haiku",
+      "standard": "sonnet",
+      "rich": "opus"
+    }
+  },
+  "timeoutMs": {
+    "line": 6000,
+    "judge": 6000,
+    "big": 15000,
+    "test": 10000
+  },
+  "maxTokens": {
+    "line": 400,
+    "judge": 400,
+    "big": 1200,
+    "test": 16
+  },
+  "log": {
+    "maxEntryChars": 3000,
+    "maxLogChars": 60000
+  },
+  "playerText": {
+    "maxChars": 280
+  },
+  "keyCards": [
+    {
+      "id": "diamond",
+      "name": "Diamond",
+      "k1": "#cfe3ff",
+      "k2": "#5a7fc4",
+      "legend": "dialga",
+      "orb": "adamant-orb"
+    },
+    {
+      "id": "pearl",
+      "name": "Pearl",
+      "k1": "#ffd6ea",
+      "k2": "#b0569a",
+      "legend": "palkia",
+      "orb": "lustrous-orb"
+    },
+    {
+      "id": "platinum",
+      "name": "Platinum",
+      "k1": "#e9e2d0",
+      "k2": "#7a7262",
+      "legend": "giratina",
+      "orb": "griseous-orb"
+    },
+    {
+      "id": "ruby",
+      "name": "Ruby",
+      "k1": "#ff9a8a",
+      "k2": "#a8242a",
+      "legend": "groudon",
+      "orb": "red-orb"
+    },
+    {
+      "id": "sapphire",
+      "name": "Sapphire",
+      "k1": "#9fd6ff",
+      "k2": "#1f55b0",
+      "legend": "kyogre",
+      "orb": "blue-orb"
+    }
+  ],
+  "tiers": {
+    "off": {
+      "label": "Off",
+      "blurb": "Offline lines only",
+      "runUsd": 0,
+      "note": "no key needed",
+      "c": "#6a7396"
+    },
+    "light": {
+      "label": "Light",
+      "blurb": "Dialogue only · Haiku",
+      "runUsd": 0.05,
+      "note": "a Dominion run",
+      "c": "#4fa3ff"
+    },
+    "standard": {
+      "label": "Standard",
+      "blurb": "Talks, judge, rivals · Haiku|Debate voice · Sonnet",
+      "runUsd": 0.55,
+      "note": "a Dominion run",
+      "c": "#ff9a62"
+    },
+    "rich": {
+      "label": "Rich",
+      "blurb": "Opus for big moments",
+      "runUsd": 0.9,
+      "note": "a Dominion run",
+      "c": "#b07aff"
+    }
+  }
+}

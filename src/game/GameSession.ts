@@ -91,6 +91,8 @@ import { scoutGift } from '../core/story2/starterScouts';
 import type { LoadoutPreset, Profile, RunPrep, RunState, Settings } from '../core/state';
 import { SaveManager, SLOTS, readActiveSlot, writeActiveSlot, type LoadResult, type SlotNumber, type SlotPeek } from '../save/saveManager';
 import type { StorageProvider } from '../save/storage';
+import type { AskEnv } from '../ai/ask';
+import { aiRuntime } from '../ai/runtime';
 
 function randomId(prefix: string): string {
   const rand = Math.random().toString(36).slice(2, 10);
@@ -251,6 +253,17 @@ export class GameSession {
     if (this.run) Run.capMoney(this.content, this.run);
     if (this.run) this.checkSave(this.run.timeline ? this.saves.saveReplay(this.run) : this.saves.saveRun(this.run));
     this.changed();
+  }
+
+  /**
+   * Dominion slice D18: what `askClaude` needs for the open run: the "Claude AI" setting, the run's AI log (`run.ai`) and
+   * a save after the log changes. Null with no run. The Key-Card itself never enters the run or any save.
+   */
+  aiEnv(): AskEnv | null {
+    const run = this.run;
+    if (!run) return null;
+    run.ai ??= {};
+    return { tier: this.settings.expansion.claudeAi, uses: this.settings.expansion.claudeUses, log: run.ai, saved: () => { if (this.run === run) this.persistRun(); }, ...aiRuntime() };
   }
 
   /** Save the run now (it also saves after every step; this is the player's explicit Save). Returns whether it worked. */
