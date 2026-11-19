@@ -1,4 +1,4 @@
-"""Ports the DOMINION mockup CSS (plans/evil-mode-rework/mockups-redesign/index.html) into the game.
+"""Ports the DOMINION mockup CSS (plans/evil-mode-rework/mockups-v3/index.html (round 3; earlier: mockups-redesign)) into the game.
 
 Every selector is scoped under `#rx .dom` (the id outranks the New look skins' class rules) (the root of a Dominion screen), keyframes get a `dm-` prefix, the page layout
 (header, figures, captions) is dropped, and looping animations take the view's clock (`var(--now)`) so a redraw
@@ -39,7 +39,7 @@ def split_rules(text):
 def anim(decls):
     def fix(m):
         parts = []
-        for one in m.group(2).split(','):
+        for one in re.split(r',(?![^()]*\))', m.group(2)):
             toks = one.split()
             if toks and not toks[0][0].isdigit() and toks[0] not in ('none', 'var(--now)'):
                 toks[0] = 'dm-' + toks[0]
@@ -49,6 +49,9 @@ def anim(decls):
             parts.append(' '.join(toks))
         return m.group(1) + ','.join(parts)
     decls = re.sub(r'(animation:)([^;!}]+)', fix, decls)
+    # A delay set on its own still runs on the view's clock, so a redraw doesn't restart it (a one-shot entrance
+    # plays once when the view opens).
+    decls = re.sub(r'(animation-delay:)\s*([^;!}]+)', lambda m: m.group(1) + 'calc(var(--now,0s) + %s)' % m.group(2).strip(), decls)
     return re.sub(r'(animation-name:)\s*([\w-]+)', lambda m: m.group(1) + 'dm-' + m.group(2), decls)
 
 
