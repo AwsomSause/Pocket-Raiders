@@ -19,11 +19,12 @@ import { hqView, openingView, setupView, titleView, type SetupFiles } from '../u
 import { CrewController } from './dominion/crewController';
 import { HqController } from './dominion/hqController';
 import { RivalController } from './dominion/rivalController';
+import { SpyController } from './dominion/spyController';
 import { threatRow } from '../core/dominion/rivalScreens';
 import { cardModel, gridPages, mapModel, newCursor, pageFor, type MapCursor } from '../core/dominion/fieldScreens';
 import { cardView, mapView } from '../ui/redux/screens/dominion/fieldViews';
 
-type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'base' | 'rival';
+type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'base' | 'rival' | 'spy';
 
 /** The screen to come back to after a battle (D2: the map the action was picked on, or the HQ for a fight at the door). */
 let resume: Screen | null = null;
@@ -53,6 +54,8 @@ export class DominionScene extends Phaser.Scene {
   private hq = new HqController(this);
   /** D9: the Rival File (key R). */
   private rival = new RivalController(this);
+  /** D22: Confront, the spy on the crew (F on the Crew File). */
+  private spy = new SpyController(this);
 
   constructor() {
     super('Dominion');
@@ -68,6 +71,8 @@ export class DominionScene extends Phaser.Scene {
     this.crew = new CrewController(this);
     this.hq = new HqController(this);
     this.rival = new RivalController(this);
+    this.spy.destroy();
+    this.spy = new SpyController(this);
     const { session } = services();
     const run = session.run;
     if (!run) return void this.scene.start('MainMenu');
@@ -118,10 +123,11 @@ export class DominionScene extends Phaser.Scene {
         back: () => this.back(),
         bring: () => this.bring(),
         buy: (id) => this.buy(id),
-        dismiss: () => { this.notice = null; this.rival.dismiss(); this.view?.refresh(); },
+        dismiss: () => { this.notice = null; this.rival.dismiss(); this.spy.dismiss(); this.view?.refresh(); },
         ...this.crew.acts(),
         ...this.hq.acts(),
         ...this.rival.acts(),
+        ...this.spy.acts(),
         base: () => { this.hq.open(); this.view?.refresh(); },
       },
       overs: {
@@ -129,11 +135,15 @@ export class DominionScene extends Phaser.Scene {
         orderOver: (i) => { this.at = Number(i); this.view?.refresh(); },
         ...this.crew.overs(),
         ...this.rival.overs(),
+        ...this.spy.overs(),
       },
     });
     const kb = this.input.keyboard;
     const raw = (e: KeyboardEvent): void => {
       if (this.leaving) return;
+      // D22: the Confront room's text box keeps its own keys; a letter pressed elsewhere on it starts a typed line.
+      if ((e.target as HTMLElement | null)?.tagName === 'INPUT') return;
+      if (this.screen === 'spy') return void (this.spy.raw(e) && (this.ate = MOVE_LETTERS.has(e.code)));
       if (this.screen === 'map') {
         if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
         else if (e.code === 'KeyT') this.nextTarget();
@@ -170,10 +180,11 @@ export class DominionScene extends Phaser.Scene {
     // After `raw`, so a letter the HQ menu took (A, S) is not also read as a move.
     onInputAction(this, (a) => this.key(a));
     // L is Money on the HQ menu (mockup 6), so it doesn't open the interaction log there (Shift+L still does).
-    setLogKeyTaken(() => this.scene.isActive() && this.screen === 'base');
+    setLogKeyTaken(() => this.scene.isActive() && (this.screen === 'base' || this.screen === 'spy'));
     this.events.once('shutdown', () => {
       kb?.off('keydown', raw);
       setLogKeyTaken(null);
+      this.spy.destroy();
     });
   }
 
@@ -214,12 +225,15 @@ export class DominionScene extends Phaser.Scene {
         return this.hq.render(this.notice);
       case 'rival':
         return this.rival.render();
+      case 'spy':
+        return this.spy.render();
     }
   }
 
   private key(a: InputAction): void {
     if (this.ate) return void (this.ate = false);
     if (this.leaving) return;
+    if (this.spy.key(a)) return void this.view?.refresh();
     if (this.rival.key(a)) return void this.view?.refresh();
     if (this.crew.key(a)) return void this.view?.refresh();
     if (this.hq.key(a)) return void this.view?.refresh();
@@ -328,6 +342,10 @@ export class DominionScene extends Phaser.Scene {
   /** D9: an answer on the Rival File (saved). */
   rivalStep(action: DominionAction): { ok: boolean; fight: boolean; notice: string | null } {
     return services().session.dominionStep(action);
+  }
+  /** D22: F on the Crew File opens the Confront room. */
+  confront(member: string): void {
+    this.spy.open(member);
   }
   /** D9: a challenge answered with Fight starts at once; the Rival File's HQ is where it comes back to. */
   startFight(): void {

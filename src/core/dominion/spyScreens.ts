@@ -77,6 +77,6 @@ export function spyModel(b: DominionBlock, log: AiLog | undefined, waiting = fal
       const e = SP().ends[k];
       return { id: k, label: fill(e.label, vars), sub: fill(e.sub, vars), colour: e.colour };
     }),
-    ui: U,
+    ui: { ...U, thinking: SP().rotom.thinking },
   };
 }

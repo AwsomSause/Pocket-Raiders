@@ -352,6 +352,8 @@ export function dropTalk(block: DominionBlock): SpyOut {
   const talk = spiesOf(block).talk;
   if (!talk) return no(block, null);
   const b = withSpies(structuredClone(block));
+  // Nothing asked yet: walking out costs nothing and settles nothing.
+  if (!talk.turns.length) return (b.spies.talk = null), { ok: true, block: b, notice: null };
   const m = b.members.find((x) => x.id === talk.member);
   const n = -SP().drop.suspicion;
   if (m) {
