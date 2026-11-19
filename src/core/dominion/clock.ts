@@ -3,6 +3,7 @@
 
 import { DOMINION_DATA } from './data';
 import type { DominionAction, DominionBlock } from './schema';
+import { addHeat, scoutHome, syncHeat } from './field';
 import { fill, runWorldTurn } from './worldTurn';
 
 export interface StepOut {
@@ -86,7 +87,9 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
       b.actions -= 1;
       b.funds += o.funds;
       if (o.funds > 0) b.earned += o.funds;
-      b.heat = Math.max(0, Math.min(100, b.heat + o.heat));
+      addHeat(b, DOMINION_DATA.field.hq, o.heat);
+      syncHeat(b);
+      if (o.flag === 'scouted-home') scoutHome(b);
       b.ordersDone.push(o.id);
       b.orders = b.orders.filter((x) => x !== o.id);
       if (!b.flags.includes(o.flag)) b.flags.push(o.flag);
@@ -105,9 +108,15 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
       if (block.phase !== 'night' || block.nightActions > 0) return no(block);
       return ok(endNight(block, seed, false));
     }
+    case 'act':
+    case 'buy':
+      // The Boss's hands need the run (party, bag): session.ts sends them to field.ts.
+      return no(block);
     case 'toDay': {
-      if (block.phase !== 'morning') return no(block);
-      return ok({ ...block, phase: 'day', actions: dayActions(block), rested: false });
+      // D2: a fight at the door (Looker, a raid) comes first.
+      if (block.phase !== 'morning' || block.field.fight) return no(block);
+      const n = dayActions(block);
+      return ok({ ...block, phase: 'day', actions: n, rested: false, field: { ...block.field, today: n } });
     }
     case 'endDay': {
       // Unused actions become odd jobs (Part 1 §2.3).

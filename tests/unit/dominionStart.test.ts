@@ -45,7 +45,7 @@ describe('DOMINION D1: setup', () => {
   it('Day 1 matches Part 1 §1.2: ₽1,000, Heat 5%, roster 1/3, level cap 15, Evening, Unnamed Crew', () => {
     const r = started();
     const b = blk(r);
-    expect(b).toMatchObject({ v: 1, day: 1, phase: 'evening', funds: 1000, heat: 5, rosterCap: 3, levelCap: 15, hqLevel: 1, teamName: null, types: ['poison', 'dark'], keyItems: ['crowbar'] });
+    expect(b).toMatchObject({ v: 2, day: 1, phase: 'evening', funds: 1000, heat: 5, rosterCap: 3, levelCap: 15, hqLevel: 1, teamName: null, types: ['poison', 'dark'], keyItems: ['crowbar'] });
     expect(r.inventory).toEqual({ 'poke-ball': 3, potion: 2 });
     expect(hqModel(b).top).toMatchObject({ team: 'UNNAMED CREW', day: 'DAY 01', phaseWord: 'EVENING', funds: '₽1,000', heat: '5%', roster: '1/3', region: 'KANTO' });
   });

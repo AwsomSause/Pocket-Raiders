@@ -110,8 +110,10 @@ export function hqModel(b: DominionBlock): HqModel {
   const ordersNote = b.phase === 'evening'
     ? (orders.length ? `Plan tomorrow: ${b.orders.length} of ${d.clock.dayActions + d.clock.restBonus}.` : 'Nothing left to plan.')
     : orders.length ? `${b.actions} action${b.actions === 1 ? '' : 's'} left today.` : `No orders left. End the day: ₽${d.clock.oddJobPay} per unused action.`;
+  const door = b.field.fight && !b.field.fight.begun ? b.field.fight.why : null;
   const next = b.phase === 'evening' ? { label: 'Night falls', hint: 'N' }
-    : b.phase === 'night' ? { label: 'Rest', hint: 'Enter' }
+    : b.phase === 'night' ? (b.nightActions < 1 ? { label: 'Turn in', hint: 'Enter' } : { label: 'Rest', hint: 'Enter' })
+    : b.phase === 'morning' && door ? { label: door === 'looker' ? 'Face Looker' : door === 'raid' ? 'Face the raid' : 'Fight', hint: 'Enter' }
     : b.phase === 'morning' ? { label: 'Start the day', hint: 'Enter' }
     : { label: `End Day${b.actions ? ` (+₽${b.actions * d.clock.oddJobPay})` : ''}`, hint: 'E' };
   const lines = m.rank === 'grunt' ? d.says.grunt : d.says.admin;

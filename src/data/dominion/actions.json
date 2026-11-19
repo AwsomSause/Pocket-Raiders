@@ -1,0 +1,2555 @@
+{
+ "_source": "plans/evil-mode-rework/lists/player-actions.md (rows 1-150), built by tools/dominion/build-actions.py",
+ "actions": [
+  {
+   "n": 1,
+   "id": "extort",
+   "name": "Extort",
+   "section": "Pressure and Money",
+   "slot": "day",
+   "stat": "nerve",
+   "what": "Lean on a shop for \"protection\"",
+   "levels": [
+    "One shop, ₽150–600",
+    "shopkeeper pays a day sooner",
+    "shop pays at once and weekly",
+    "two shops in one action",
+    "pick a whole street of shops in one action"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 2,
+   "id": "collect-debt",
+   "name": "Collect Debt",
+   "section": "Pressure and Money",
+   "slot": "day",
+   "stat": "nerve",
+   "what": "Visit someone who owes the previous owner of a stall",
+   "levels": [
+    "One debtor, ₽100",
+    "debtor pays in two parts",
+    "debtor offers a favour instead of cash",
+    "debtor's friends also pay",
+    "debts become permanent weekly payments"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 3,
+   "id": "loan-shark",
+   "name": "Loan Shark",
+   "section": "Pressure and Money",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Lend cash at a \"friendly\" rate to desperate townsfolk",
+   "levels": [
+    "₽300 out, ₽390 back in 7 days",
+    "rate drops, so borrowers repay faster",
+    "3 loans at once",
+    "borrowers can pledge Pokémon as collateral",
+    "borrowers become informants (free Scout each week)"
+   ],
+   "unlock": "Front Office"
+  },
+  {
+   "n": 4,
+   "id": "skim-the-till",
+   "name": "Skim the Till",
+   "section": "Pressure and Money",
+   "slot": "day",
+   "stat": "stealth",
+   "what": "Quietly take a cut from a business you already own or extort",
+   "levels": [
+    "+5% of its weekly take",
+    "skim leaves no paper trail",
+    "+10% and no Heat",
+    "skim doubles in a festival week",
+    "skim also hides a rival's cut from the books"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 5,
+   "id": "rig-the-rent",
+   "name": "Rig the Rent",
+   "section": "Pressure and Money",
+   "slot": "day",
+   "stat": "wits",
+   "what": "Raise a landlord's rent in a district and take the difference",
+   "levels": [
+    "₽80/week",
+    "tenants grumble but pay",
+    "₽200/week",
+    "landlord starts handing you a cut",
+    "whole district rent, tenants blame the landlord, not you"
+   ],
+   "unlock": "Front Office"
+  },
+  {
+   "n": 6,
+   "id": "parking-fees",
+   "name": "Parking Fees",
+   "section": "Pressure and Money",
+   "slot": "day",
+   "stat": "nerve",
+   "what": "\"Guard\" cars and bikes at a busy place",
+   "levels": [
+    "₽60/day while you stand there",
+    "attendant sells snacks too (+₽20)",
+    "hire a Grunt to stand for you",
+    "booth also shelters your crew from patrols",
+    "fee booth stays after you leave"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 7,
+   "id": "toll-booth",
+   "name": "Toll Booth",
+   "section": "Pressure and Money",
+   "slot": "day",
+   "stat": "brawn",
+   "what": "Block a bridge or tunnel and charge passers-by",
+   "levels": [
+    "₽120 plus a few trainer battles",
+    "trainers pay without battling once",
+    "a weekly toll on that route",
+    "route toll can be paid in items",
+    "trainers on the route pay a flat fee and skip fights"
+   ],
+   "unlock": "Rank 2 crew"
+  },
+  {
+   "n": 8,
+   "id": "fines-scam",
+   "name": "Fines Scam",
+   "section": "Pressure and Money",
+   "slot": "day",
+   "stat": "charm",
+   "what": "Pose as an official and \"fine\" tourists",
+   "levels": [
+    "₽100–250",
+    "fake ticket pads cost half",
+    "fake tickets, Heat halved",
+    "fines work on locals, not only tourists",
+    "forged Looker's badge buys one police-free day"
+   ],
+   "unlock": "Print Shop"
+  },
+  {
+   "n": 9,
+   "id": "charity-drive",
+   "name": "Charity Drive",
+   "section": "Pressure and Money",
+   "slot": "day",
+   "stat": "charm",
+   "what": "Run a donation tin for a \"good cause\" (the cause is you)",
+   "levels": [
+    "₽150 and +Regard",
+    "a thank-you note raises Regard more",
+    "₽450, Regard doubles",
+    "local press prints a flattering line",
+    "a local hero appears on your flyer and Dread falls"
+   ],
+   "unlock": "Radio Room"
+  },
+  {
+   "n": 10,
+   "id": "buy-out",
+   "name": "Buy Out",
+   "section": "Pressure and Money",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Purchase a business outright (Part 3 §5)",
+   "levels": [
+    "One small shop",
+    "price discount on small shops",
+    "a mid-size business with a discount",
+    "keep the old staff and the shop's loyalty",
+    "a chain, 3 shops in one action"
+   ],
+   "unlock": "Front Office"
+  },
+  {
+   "n": 11,
+   "id": "launder",
+   "name": "Launder",
+   "section": "Pressure and Money",
+   "slot": "evening",
+   "stat": "wits",
+   "what": "Turn dirty cash into clean income",
+   "levels": [
+    "70% back",
+    "launder takes one day, not two",
+    "80% back, Heat −5",
+    "launder also washes a rival's marked cash",
+    "90% back, and bills can't be traced by police"
+   ],
+   "unlock": "Front Office"
+  },
+  {
+   "n": 12,
+   "id": "shake-the-jar",
+   "name": "Shake the Jar",
+   "section": "Pressure and Money",
+   "slot": "day",
+   "stat": "nerve",
+   "what": "Take the cash from a Pokémon Center donation box or Poké Mart tip jar",
+   "levels": [
+    "₽60",
+    "jar is refilled the next day",
+    "₽150",
+    "you can pick which district's jars",
+    "\"Shake the Jar\" empties every jar in a district at once"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 13,
+   "id": "take",
+   "name": "Take",
+   "section": "Theft and Heists",
+   "slot": "day",
+   "stat": "brawn",
+   "what": "Grab goods openly: a cart, a crate",
+   "levels": [
+    "Crate ₽200–1,000",
+    "choose between two crates",
+    "pick the crate type",
+    "crate may hold a TM",
+    "take the whole delivery truck"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 14,
+   "id": "steal",
+   "name": "Steal",
+   "section": "Theft and Heists",
+   "slot": "night",
+   "stat": "stealth",
+   "what": "Break into a closed place",
+   "levels": [
+    "Cash box",
+    "crowbar breaks less often",
+    "vault door, key items",
+    "lockpick set opens any door without noise",
+    "\"Clean Hands\": the guard never wakes"
+   ],
+   "unlock": "Crowbar"
+  },
+  {
+   "n": 15,
+   "id": "thieve",
+   "name": "Thieve (pickpocket)",
+   "section": "Theft and Heists",
+   "slot": "day",
+   "stat": "stealth",
+   "what": "Lift wallets in a crowd",
+   "levels": [
+    "₽50–300",
+    "wallets show a small rumor",
+    "rare items",
+    "lift a second pocket at once",
+    "lift a Poké Ball from an adult NPC's belt"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 16,
+   "id": "smash-and-grab",
+   "name": "Smash and Grab",
+   "section": "Theft and Heists",
+   "slot": "day",
+   "stat": "brawn",
+   "what": "Hit a shop window and run",
+   "levels": [
+    "₽400 fast",
+    "a lookout buys you an extra turn",
+    "run with a bonus crate",
+    "shops pay hush money after",
+    "two shops in one action, police arrive a turn late"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 17,
+   "id": "loot-the-dock",
+   "name": "Loot the Dock",
+   "section": "Theft and Heists",
+   "slot": "night",
+   "stat": "brawn",
+   "what": "Hit the harbour warehouses at night",
+   "levels": [
+    "1 crate",
+    "forklift trick gives 2 crates",
+    "forklift run, 3 crates",
+    "decoy crate draws away guards",
+    "the whole shipment, needs a vehicle"
+   ],
+   "unlock": "Day 3"
+  },
+  {
+   "n": 18,
+   "id": "cat-burglar",
+   "name": "Cat Burglar",
+   "section": "Theft and Heists",
+   "slot": "night",
+   "stat": "stealth",
+   "what": "Climb into an apartment or mansion",
+   "levels": [
+    "₽300 and jewelry",
+    "climbing gear removes the fall risk",
+    "hidden safe",
+    "take two rooms in one night",
+    "rare held item (always one)"
+   ],
+   "unlock": "Rank 1 crew"
+  },
+  {
+   "n": 19,
+   "id": "safe-crack",
+   "name": "Safe Crack",
+   "section": "Theft and Heists",
+   "slot": "night",
+   "stat": "wits",
+   "what": "Open a safe without breaking it",
+   "levels": [
+    "Small safe",
+    "safe stethoscope halves time",
+    "bank box",
+    "open a safe your Scout has not seen",
+    "the \"unopenable\" safe of a rich NPC"
+   ],
+   "unlock": "Workshop"
+  },
+  {
+   "n": 20,
+   "id": "bank-job",
+   "name": "Bank Job",
+   "section": "Theft and Heists",
+   "slot": "night",
+   "stat": "wits",
+   "what": "Rob a bank branch with a plan and a crew of 2",
+   "levels": [
+    "₽2,000",
+    "a decoy guard distracts the vault",
+    "₽5,000, fewer guards",
+    "getaway Pokémon removes the chase",
+    "₽12,000 with a getaway Pokémon bonus"
+   ],
+   "unlock": "War Room"
+  },
+  {
+   "n": 21,
+   "id": "museum-heist",
+   "name": "Museum Heist",
+   "section": "Theft and Heists",
+   "slot": "night",
+   "stat": "stealth",
+   "what": "Steal a fossil, gem, or artifact",
+   "levels": [
+    "One piece",
+    "exhibit swap hides the loss for a day",
+    "a second piece for the Fence",
+    "take two items, one is forged",
+    "the museum's star exhibit (a Key Item)"
+   ],
+   "unlock": "Fence"
+  },
+  {
+   "n": 22,
+   "id": "armored-car-ambush",
+   "name": "Armored Car Ambush",
+   "section": "Theft and Heists",
+   "slot": "day",
+   "stat": "brawn",
+   "what": "Stop a cash transport on a route",
+   "levels": [
+    "Win the guard battle for ₽800",
+    "stolen cash is split on the spot",
+    "2 trucks",
+    "guards lose a turn on the second truck",
+    "decoy truck: Heat stays low"
+   ],
+   "unlock": "Garage"
+  },
+  {
+   "n": 23,
+   "id": "train-robbery",
+   "name": "Train Robbery",
+   "section": "Theft and Heists",
+   "slot": "night",
+   "stat": "nerve",
+   "what": "Rob a train between cities (Kanto Magnet Train, Unova Subway)",
+   "levels": [
+    "₽1,000",
+    "stolen cargo gets a free fence price bump",
+    "hijack for a free ride",
+    "ride aboard for a bonus rare item",
+    "capture the cargo car"
+   ],
+   "unlock": "Rank 3 crew"
+  },
+  {
+   "n": 24,
+   "id": "fence",
+   "name": "Fence",
+   "section": "Theft and Heists",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Sell stolen goods at full value",
+   "levels": [
+    "Normal shops pay 40%, Fence pays 70%",
+    "sell rare goods without a Fence contact",
+    "85%",
+    "fence sets a standing order for goods",
+    "100%, plus a buyer for any rare item"
+   ],
+   "unlock": "Fence contact"
+  },
+  {
+   "n": 25,
+   "id": "attack",
+   "name": "Attack",
+   "section": "Fighting and Battle",
+   "slot": "day",
+   "stat": "brawn",
+   "what": "Ambush a route trainer for prize money",
+   "levels": [
+    "Prize ×2",
+    "the trainer's friend offers to pay too",
+    "scared trainer pays toll weekly",
+    "a rematch every week pays again",
+    "a whole route pays one toll"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 26,
+   "id": "street-duel",
+   "name": "Street Duel",
+   "section": "Fighting and Battle",
+   "slot": "day",
+   "stat": "brawn",
+   "what": "Take a challenge from a street fighter for a wager",
+   "levels": [
+    "₽100 stake",
+    "a crowd bets on you (+₽100)",
+    "₽300 stake and a crowd",
+    "local stars challenge you for bigger stakes",
+    "champion of the street, locals pay to watch"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 27,
+   "id": "back-alley-brawl",
+   "name": "Back Alley Brawl",
+   "section": "Fighting and Battle",
+   "slot": "night",
+   "stat": "brawn",
+   "what": "A hidden tournament with a cash pot",
+   "levels": [
+    "1 fight",
+    "you may bet on a fighter",
+    "3 fights, pot ₽1,500",
+    "you may fix a bout in your favour",
+    "the pit is yours, take a cut of every bout"
+   ],
+   "unlock": "Rank 2 crew"
+  },
+  {
+   "n": 28,
+   "id": "ambush-a-patrol",
+   "name": "Ambush a Patrol",
+   "section": "Fighting and Battle",
+   "slot": "day",
+   "stat": "nerve",
+   "what": "Jump a police patrol before it finds you",
+   "levels": [
+    "Win: patrol skips tomorrow",
+    "one patrol shift is lost",
+    "three patrols fewer",
+    "police cooldown on that district is longer",
+    "raises Looker's wait"
+   ],
+   "unlock": "Day 5"
+  },
+  {
+   "n": 29,
+   "id": "hold-the-line",
+   "name": "Hold the Line",
+   "section": "Fighting and Battle",
+   "slot": "day",
+   "stat": "brawn",
+   "what": "Defend a Racket from a rival shake-down",
+   "levels": [
+    "One battle",
+    "shopkeeper tips you off about the rival",
+    "keep the shopkeeper's loyalty",
+    "rival collector loses a day",
+    "rival loses a Grunt"
+   ],
+   "unlock": "Racket owned"
+  },
+  {
+   "n": 30,
+   "id": "three-on-one",
+   "name": "Three on One",
+   "section": "Fighting and Battle",
+   "slot": "day",
+   "stat": "nerve",
+   "what": "Fight three trainers at once",
+   "levels": [
+    "Triple battle for ×3 prize",
+    "two of three can be recruited",
+    "+1 free item",
+    "all three drop their prize at once",
+    "they all join as recruits if you win"
+   ],
+   "unlock": "Day 10"
+  },
+  {
+   "n": 31,
+   "id": "gauntlet",
+   "name": "Gauntlet",
+   "section": "Fighting and Battle",
+   "slot": "day",
+   "stat": "brawn",
+   "what": "Run a chain of five battles with no healing",
+   "levels": [
+    "₽600",
+    "rest between fights once",
+    "rare item at the end",
+    "you choose the reward item from three",
+    "a TM of your choice"
+   ],
+   "unlock": "Day 10"
+  },
+  {
+   "n": 32,
+   "id": "enforcer-duty",
+   "name": "Enforcer Duty",
+   "section": "Fighting and Battle",
+   "slot": "day",
+   "stat": "nerve",
+   "what": "Break a dispute for a business and be paid",
+   "levels": [
+    "₽200",
+    "business agrees to a free week of service",
+    "business becomes an ally",
+    "business lends you a guard",
+    "free upkeep for a week"
+   ],
+   "unlock": "Front Office"
+  },
+  {
+   "n": 33,
+   "id": "execute-the-traitor",
+   "name": "Execute the Traitor",
+   "section": "Fighting and Battle",
+   "slot": "evening",
+   "stat": "nerve",
+   "what": "Handle a crew member who sold you out (Part 2 §7)",
+   "levels": [
+    "Fire and shame",
+    "crew sees you were fair, Loyalty +3",
+    "exile, Dread +5",
+    "traitor's friends are shaken, Dread +3",
+    "scare the whole crew (Loyalty +10 for all)"
+   ],
+   "unlock": "A traitor exists"
+  },
+  {
+   "n": 34,
+   "id": "hunt-the-snitch",
+   "name": "Hunt the Snitch",
+   "section": "Fighting and Battle",
+   "slot": "day",
+   "stat": "wits",
+   "what": "Find who is feeding the police or a rival",
+   "levels": [
+    "One lead",
+    "snitch takes the bait and reveals a name",
+    "name the snitch",
+    "you may leak false news back",
+    "the snitch can be turned into a double agent"
+   ],
+   "unlock": "Spy found"
+  },
+  {
+   "n": 35,
+   "id": "rooftop-chase",
+   "name": "Rooftop Chase",
+   "section": "Fighting and Battle",
+   "slot": "day",
+   "stat": "stealth",
+   "what": "Escape police or a Hero on foot",
+   "levels": [
+    "Win a chase minigame",
+    "short chase lasts two rounds",
+    "Heat −10",
+    "police give up the chase after three",
+    "disappear for 2 days"
+   ],
+   "unlock": "Heat ≥ 20"
+  },
+  {
+   "n": 36,
+   "id": "boss-duel",
+   "name": "Boss Duel",
+   "section": "Fighting and Battle",
+   "slot": "day",
+   "stat": "brawn",
+   "what": "A formal duel with a rival Admin",
+   "levels": [
+    "Win a prized Pokémon",
+    "the Admin yields a Pokémon of their choice",
+    "hostage freed",
+    "the Admin's Pokémon is damaged next fight",
+    "their tier drops"
+   ],
+   "unlock": "Tension ≥ 30"
+  },
+  {
+   "n": 37,
+   "id": "recruit",
+   "name": "Recruit",
+   "section": "People and Recruiting",
+   "slot": "day",
+   "stat": "charm",
+   "what": "Talk a person into joining",
+   "levels": [
+    "Offer a job",
+    "their first trait is visible",
+    "pick their starting trait",
+    "they bring a Pokémon with them",
+    "they bring a friend"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 38,
+   "id": "street-recruit-drive",
+   "name": "Street Recruit Drive",
+   "section": "People and Recruiting",
+   "slot": "day",
+   "stat": "charm",
+   "what": "Sign anyone idle on a corner",
+   "levels": [
+    "1 Grunt",
+    "you get a free bonus recruit once",
+    "2 Grunts",
+    "each Grunt keeps a Poké Ball",
+    "3 Grunts, one has a Pokémon of their own"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 39,
+   "id": "poach",
+   "name": "Poach",
+   "section": "People and Recruiting",
+   "slot": "day",
+   "stat": "charm",
+   "what": "Persuade a rival team's Grunt to defect",
+   "levels": [
+    "10% chance",
+    "defector brings 100₽ of gear",
+    "25% chance",
+    "defector brings their rival's access code",
+    "the defector knows a rival route"
+   ],
+   "unlock": "Tension ≥ 20"
+  },
+  {
+   "n": 40,
+   "id": "prison-break",
+   "name": "Prison Break",
+   "section": "People and Recruiting",
+   "slot": "night",
+   "stat": "nerve",
+   "what": "Free a captured crew member",
+   "levels": [
+    "Weak jail",
+    "you know the guard shift",
+    "police station",
+    "you can strike at shift change",
+    "Indigo Plateau holding cell"
+   ],
+   "unlock": "War Room"
+  },
+  {
+   "n": 41,
+   "id": "bail-out",
+   "name": "Bail Out",
+   "section": "People and Recruiting",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Pay and talk a member out of jail",
+   "levels": [
+    "₽500",
+    "free one extra member",
+    "₽300",
+    "bail clerk looks the other way",
+    "free, the judge is on the payroll"
+   ],
+   "unlock": "Front Office"
+  },
+  {
+   "n": 42,
+   "id": "hire-a-specialist",
+   "name": "Hire a Specialist",
+   "section": "People and Recruiting",
+   "slot": "day",
+   "stat": "charm",
+   "what": "Recruit a named type: medic, hacker, chef, forger",
+   "levels": [
+    "Learn the price",
+    "specialist arrives with a tool kit",
+    "they work at half price",
+    "specialist trains a member for you",
+    "lifetime loyalty"
+   ],
+   "unlock": "Rank 2 crew"
+  },
+  {
+   "n": 43,
+   "id": "talent-scout",
+   "name": "Talent Scout",
+   "section": "People and Recruiting",
+   "slot": "day",
+   "stat": "wits",
+   "what": "Look for someone with a rare skill",
+   "levels": [
+    "One candidate",
+    "candidate shown with a hidden trait",
+    "two, matched to your weakest need",
+    "candidate shown with a loyalty rating",
+    "a named Ace Trainer's File opens"
+   ],
+   "unlock": "Day 10"
+  },
+  {
+   "n": 44,
+   "id": "hold-a-rally",
+   "name": "Hold a Rally",
+   "section": "People and Recruiting",
+   "slot": "day",
+   "stat": "charm",
+   "what": "Gather a crowd and sell them the dream",
+   "levels": [
+    "+3 recruit candidates",
+    "the crowd offers donations",
+    "+5",
+    "local police skip the rally",
+    "every district gets a rally flyer"
+   ],
+   "unlock": "Radio Room"
+  },
+  {
+   "n": 45,
+   "id": "pay-the-families",
+   "name": "Pay the Families",
+   "section": "People and Recruiting",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Support the family of a jailed or hurt member",
+   "levels": [
+    "₽100",
+    "member brings a thank-you gift",
+    "Loyalty +5",
+    "families pass on tips from town",
+    "the whole crew will hold a debt for you"
+   ],
+   "unlock": "Day 15"
+  },
+  {
+   "n": 46,
+   "id": "pick-a-fight-with-the-hiker",
+   "name": "Pick a Fight with the Hiker",
+   "section": "People and Recruiting",
+   "slot": "day",
+   "stat": "brawn",
+   "what": "Provoke a nearby veteran trainer to recruit by beating",
+   "levels": [
+    "Win and recruit a Black Belt",
+    "veteran gives a free battle tip",
+    "the veteran brings a rival Hiker",
+    "veteran gives you a rare held item",
+    "the whole Hiker club joins"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 47,
+   "id": "marry-in",
+   "name": "Marry In",
+   "section": "People and Recruiting",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Build a family tie with a town leader (dating-sim-lite)",
+   "levels": [
+    "Meet the family",
+    "their family hosts you for a night",
+    "engagement",
+    "family gets a Racket discount",
+    "their district is yours for one week"
+   ],
+   "unlock": "Notoriety \"Known\""
+  },
+  {
+   "n": 48,
+   "id": "promotion-ceremony",
+   "name": "Promotion Ceremony",
+   "section": "People and Recruiting",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Promote a member before the whole crew",
+   "levels": [
+    "+10 Morale for the promoted",
+    "the crew cheers, +2 Loyalty each",
+    "crew stays loyal, no Ambition rise",
+    "a speech grants all +1 XP",
+    "every member gains +1 XP"
+   ],
+   "unlock": "Rank 3 crew"
+  },
+  {
+   "n": 49,
+   "id": "scout",
+   "name": "Scout",
+   "section": "Intel and Spying",
+   "slot": "day",
+   "stat": "stealth",
+   "what": "Watch a place and reveal odds, guards, weak points",
+   "levels": [
+    "One target",
+    "see the guard shift",
+    "two targets",
+    "see the loot split",
+    "see the target's schedule for the week"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 50,
+   "id": "tail-a-target",
+   "name": "Tail a Target",
+   "section": "Intel and Spying",
+   "slot": "day",
+   "stat": "stealth",
+   "what": "Follow an NPC through the day",
+   "levels": [
+    "See where they sleep",
+    "see the target's friends",
+    "see who they trust",
+    "see their daily schedule",
+    "learn their secret"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 51,
+   "id": "listen-at-the-pokemon-center",
+   "name": "Listen at the Pokémon Center",
+   "section": "Intel and Spying",
+   "slot": "evening",
+   "stat": "wits",
+   "what": "Overhear the town's talk at a Center",
+   "levels": [
+    "Hear 1 rumor",
+    "rumor is more accurate",
+    "rumor with a tip",
+    "the Center's staff trade gossip",
+    "the Center nurse tips you off"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 52,
+   "id": "wire-a-phone",
+   "name": "Wire a Phone",
+   "section": "Intel and Spying",
+   "slot": "night",
+   "stat": "wits",
+   "what": "Tap a police station or rival phone",
+   "levels": [
+    "One call",
+    "tap lasts two days",
+    "ongoing, 3 days",
+    "you hear the rival Boss's calls",
+    "full week of calls"
+   ],
+   "unlock": "Workshop"
+  },
+  {
+   "n": 53,
+   "id": "forge-papers",
+   "name": "Forge Papers",
+   "section": "Intel and Spying",
+   "slot": "evening",
+   "stat": "wits",
+   "what": "Make a permit, license, or badge",
+   "levels": [
+    "One item",
+    "forged item lasts 4 days",
+    "keeps for a week",
+    "forgery fools the clerk",
+    "a pass that opens any single checkpoint"
+   ],
+   "unlock": "Print Shop"
+  },
+  {
+   "n": 54,
+   "id": "plant-a-mole",
+   "name": "Plant a Mole",
+   "section": "Intel and Spying",
+   "slot": "night",
+   "stat": "charm",
+   "what": "Put a spy in a business or team (Part 4 §2)",
+   "levels": [
+    "Low rank",
+    "the mole reports twice a week",
+    "mid rank",
+    "the mole can plant false orders",
+    "inside the rival Boss's circle"
+   ],
+   "unlock": "Rank 2 crew"
+  },
+  {
+   "n": 55,
+   "id": "hack-the-terminal",
+   "name": "Hack the Terminal",
+   "section": "Intel and Spying",
+   "slot": "night",
+   "stat": "wits",
+   "what": "Break into a company or police computer",
+   "levels": [
+    "Copy a file",
+    "copy two files",
+    "delete a warrant",
+    "erase a patrol schedule too",
+    "open the rival HQ's alarm log"
+   ],
+   "unlock": "Science Lab"
+  },
+  {
+   "n": 56,
+   "id": "read-the-newspaper",
+   "name": "Read the Newspaper",
+   "section": "Intel and Spying",
+   "slot": "evening",
+   "stat": "wits",
+   "what": "Mine the paper for tips",
+   "levels": [
+    "One tip",
+    "tip names a place",
+    "targeted tip, a Gym schedule",
+    "tip names a place and a time",
+    "a leaked Hero route"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 57,
+   "id": "dig-the-dirt",
+   "name": "Dig the Dirt",
+   "section": "Intel and Spying",
+   "slot": "day",
+   "stat": "wits",
+   "what": "Find a person's dark secret to use later",
+   "levels": [
+    "A bit of leverage",
+    "a second secret surfaces",
+    "blackmail-ready",
+    "you can sell the secret for cash",
+    "the secret turns a Gym Leader or Warden"
+   ],
+   "unlock": "Day 20"
+  },
+  {
+   "n": 58,
+   "id": "interrogate",
+   "name": "Interrogate",
+   "section": "Intel and Spying",
+   "slot": "night",
+   "stat": "nerve",
+   "what": "Question a captive without breaking the minors lock",
+   "levels": [
+    "One answer",
+    "the captive names one ally",
+    "two",
+    "the captive offers a trade",
+    "the captive \"switches sides\""
+   ],
+   "unlock": "Holding cell"
+  },
+  {
+   "n": 59,
+   "id": "count-the-guards",
+   "name": "Count the Guards",
+   "section": "Intel and Spying",
+   "slot": "day",
+   "stat": "stealth",
+   "what": "Case a place by observing shifts",
+   "levels": [
+    "Guard count",
+    "find a second weak spot",
+    "blind spots",
+    "find a shortcut",
+    "a patrol map"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 60,
+   "id": "counter-intelligence",
+   "name": "Counter-Intelligence",
+   "section": "Intel and Spying",
+   "slot": "evening",
+   "stat": "wits",
+   "what": "Hunt for rival spies in your own HQ",
+   "levels": [
+    "Find a mole",
+    "find a mole's handler",
+    "find two",
+    "catch the mole in the act",
+    "feed the mole false info"
+   ],
+   "unlock": "Spy event"
+  },
+  {
+   "n": 61,
+   "id": "catch",
+   "name": "Catch",
+   "section": "Pokémon",
+   "slot": "day",
+   "stat": "brawn",
+   "what": "Catch wild Pokémon for the stores",
+   "levels": [
+    "One catch",
+    "two catches if lucky",
+    "two",
+    "shiny roll doubled once",
+    "a shiny-chance boost"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 62,
+   "id": "safari-run",
+   "name": "Safari Run",
+   "section": "Pokémon",
+   "slot": "day",
+   "stat": "wits",
+   "what": "A guided catch run on a special route",
+   "levels": [
+    "A rare species",
+    "route has a safe resting spot",
+    "a pair",
+    "route offers a rare encounter",
+    "a legendary rumor"
+   ],
+   "unlock": "Region event"
+  },
+  {
+   "n": 63,
+   "id": "egg-run",
+   "name": "Egg Run",
+   "section": "Pokémon",
+   "slot": "day",
+   "stat": "wits",
+   "what": "Take a stolen or found egg to be hatched",
+   "levels": [
+    "One egg",
+    "egg hatches a day sooner",
+    "known species",
+    "egg species is shown",
+    "pick a species"
+   ],
+   "unlock": "Holding Pens"
+  },
+  {
+   "n": 64,
+   "id": "kidnap-a-pokemon",
+   "name": "Kidnap a Pokémon",
+   "section": "Pokémon",
+   "slot": "night",
+   "stat": "stealth",
+   "what": "Take a specific wanted Pokémon from an adult's home",
+   "levels": [
+    "One Pokémon",
+    "take a second Pokémon too",
+    "a pair",
+    "the owner never knows who did it",
+    "a rare one (never from a minor)"
+   ],
+   "unlock": "Holding Pens"
+  },
+  {
+   "n": 65,
+   "id": "hit-a-lab",
+   "name": "Hit a Lab",
+   "section": "Pokémon",
+   "slot": "night",
+   "stat": "wits",
+   "what": "Raid a Professor's lab for rare Pokémon and parts",
+   "levels": [
+    "A part",
+    "find a second part",
+    "the starter",
+    "lab data reveals a rare species",
+    "a fossil"
+   ],
+   "unlock": "Science Lab"
+  },
+  {
+   "n": 66,
+   "id": "rescue-a-wild-pokemon",
+   "name": "Rescue a Wild Pokémon",
+   "section": "Pokémon",
+   "slot": "day",
+   "stat": "charm",
+   "what": "Save a wounded wild Pokémon and win its loyalty",
+   "levels": [
+    "Join as friend",
+    "Pokémon shows a hint of its trait",
+    "joins at +loyalty",
+    "Pokémon joins with a new move",
+    "it is a rare form"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 67,
+   "id": "evolve-in-peace",
+   "name": "Evolve in Peace",
+   "section": "Pokémon",
+   "slot": "evening",
+   "stat": "wits",
+   "what": "Spend an Evening evolving a team member",
+   "levels": [
+    "One evolution",
+    "the evolution gives a stat bonus",
+    "two",
+    "evolved Pokémon learns a signature move",
+    "a trade-evolution by a trusted crew trade"
+   ],
+   "unlock": "Day 10"
+  },
+  {
+   "n": 68,
+   "id": "breed",
+   "name": "Breed",
+   "section": "Pokémon",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Pair two Pokémon from stores and hatch an egg",
+   "levels": [
+    "One egg",
+    "egg has better odds of a good nature",
+    "better IVs",
+    "eggs may carry a move from the parent",
+    "Hidden Ability"
+   ],
+   "unlock": "Holding Pens"
+  },
+  {
+   "n": 69,
+   "id": "pokemon-swap-meet",
+   "name": "Pokémon Swap Meet",
+   "section": "Pokémon",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Trade with a crew member or a fence",
+   "levels": [
+    "One swap",
+    "swap is stress-free, no questions",
+    "a 1-for-2 swap",
+    "swap includes an item",
+    "a legendary swap-in"
+   ],
+   "unlock": "Fence contact"
+  },
+  {
+   "n": 70,
+   "id": "fossil-dig",
+   "name": "Fossil Dig",
+   "section": "Pokémon",
+   "slot": "day",
+   "stat": "brawn",
+   "what": "Dig for fossils in a cave",
+   "levels": [
+    "One fossil",
+    "dig is quicker",
+    "two",
+    "dig finds a Fossil and a Stone",
+    "a rare one"
+   ],
+   "unlock": "Mt. Moon etc."
+  },
+  {
+   "n": 71,
+   "id": "tame-the-wild",
+   "name": "Tame the Wild",
+   "section": "Pokémon",
+   "slot": "day",
+   "stat": "nerve",
+   "what": "Face down a wild alpha and make it join",
+   "levels": [
+    "A wild alpha",
+    "alpha's stats are shown",
+    "+level",
+    "alpha joins with a held item",
+    "a Legendary beast (region event)"
+   ],
+   "unlock": "Day 20"
+  },
+  {
+   "n": 72,
+   "id": "move-tutor",
+   "name": "Move Tutor",
+   "section": "Pokémon",
+   "slot": "evening",
+   "stat": "wits",
+   "what": "Teach a new move to a team member",
+   "levels": [
+    "One TM-style move",
+    "tutor is cheaper",
+    "move tutor access",
+    "tutor teaches two moves in one session",
+    "egg move"
+   ],
+   "unlock": "Dojo"
+  },
+  {
+   "n": 73,
+   "id": "smuggle",
+   "name": "Smuggle",
+   "section": "Smuggling and the Black Market",
+   "slot": "night",
+   "stat": "stealth",
+   "what": "Move goods or Pokémon across districts",
+   "levels": [
+    "One run",
+    "one more route used",
+    "two",
+    "route runs a second night each week",
+    "a route that runs itself"
+   ],
+   "unlock": "Garage"
+  },
+  {
+   "n": 74,
+   "id": "open-a-black-market-stall",
+   "name": "Open a Black Market Stall",
+   "section": "Smuggling and the Black Market",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Set up illegal sales in a back room",
+   "levels": [
+    "3 slots",
+    "ships stop for a bribe",
+    "6",
+    "dock guards are on your payroll",
+    "rare TMs weekly"
+   ],
+   "unlock": "Front Office"
+  },
+  {
+   "n": 75,
+   "id": "run-the-docks",
+   "name": "Run the Docks",
+   "section": "Smuggling and the Black Market",
+   "slot": "night",
+   "stat": "wits",
+   "what": "Control a harbour's shipping",
+   "levels": [
+    "One ship",
+    "bidders bring friends",
+    "a regular ship",
+    "auction draws a rival Boss's envoy",
+    "every ship pays tribute"
+   ],
+   "unlock": "Garage"
+  },
+  {
+   "n": 76,
+   "id": "underground-auction",
+   "name": "Underground Auction",
+   "section": "Smuggling and the Black Market",
+   "slot": "night",
+   "stat": "charm",
+   "what": "Auction a rare item to bidders",
+   "levels": [
+    "One item",
+    "an extra buyer appears",
+    "three",
+    "buyer pays in rare items",
+    "a Pokémon auction"
+   ],
+   "unlock": "Front Office"
+  },
+  {
+   "n": 77,
+   "id": "contraband-run",
+   "name": "Contraband Run",
+   "section": "Smuggling and the Black Market",
+   "slot": "night",
+   "stat": "stealth",
+   "what": "Carry banned items past a checkpoint",
+   "levels": [
+    "₽800",
+    "print goes unnoticed in bundles",
+    "₽1,500",
+    "you print with two plates at once",
+    "a dedicated safe route"
+   ],
+   "unlock": "Day 12"
+  },
+  {
+   "n": 78,
+   "id": "counterfeit",
+   "name": "Counterfeit",
+   "section": "Smuggling and the Black Market",
+   "slot": "evening",
+   "stat": "wits",
+   "what": "Print forged cash or items",
+   "levels": [
+    "₽200",
+    "tunnel has lights and supports",
+    "₽500",
+    "tunnel hides a stash room",
+    "₽1,200 per job"
+   ],
+   "unlock": "Print Shop"
+  },
+  {
+   "n": 79,
+   "id": "tunnel",
+   "name": "Tunnel",
+   "section": "Smuggling and the Black Market",
+   "slot": "night",
+   "stat": "brawn",
+   "what": "Dig a route under a wall or a street",
+   "levels": [
+    "A short tunnel",
+    "drop lands near an ally",
+    "a long one",
+    "drop auto-delivers to a held district",
+    "an escape route from your HQ"
+   ],
+   "unlock": "Workshop"
+  },
+  {
+   "n": 80,
+   "id": "air-drop",
+   "name": "Air Drop",
+   "section": "Smuggling and the Black Market",
+   "slot": "night",
+   "stat": "stealth",
+   "what": "Drop goods by Flying Pokémon",
+   "levels": [
+    "Small drop",
+    "safehouse has a bed and food",
+    "large drop",
+    "safehouse has an exit tunnel",
+    "deliver to a held region"
+   ],
+   "unlock": "Flying Pokémon"
+  },
+  {
+   "n": 81,
+   "id": "safehouse-network",
+   "name": "Safehouse Network",
+   "section": "Smuggling and the Black Market",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Rent hiding places across districts",
+   "levels": [
+    "One",
+    "ticket costs half",
+    "three",
+    "ticket arrives with a fake name",
+    "police can't search them"
+   ],
+   "unlock": "Front Office"
+  },
+  {
+   "n": 82,
+   "id": "pay-the-pilot",
+   "name": "Pay the Pilot",
+   "section": "Smuggling and the Black Market",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Buy a boat or plane ride",
+   "levels": [
+    "A ride",
+    "Candy ring runs smoothly, 1 per run",
+    "a ride to another region",
+    "candy ring produces a bonus Candy",
+    "a ticket for your chosen member"
+   ],
+   "unlock": "Day 30"
+  },
+  {
+   "n": 83,
+   "id": "rare-candy-ring",
+   "name": "Rare Candy Ring",
+   "section": "Smuggling and the Black Market",
+   "slot": "night",
+   "stat": "wits",
+   "what": "Smuggle Rare Candies",
+   "levels": [
+    "1 per run",
+    "decoy lasts a day",
+    "2",
+    "decoy leaks to the rival, who falls for it",
+    "3 per week"
+   ],
+   "unlock": "Black Market"
+  },
+  {
+   "n": 84,
+   "id": "fake-shipment",
+   "name": "Fake Shipment",
+   "section": "Smuggling and the Black Market",
+   "slot": "night",
+   "stat": "wits",
+   "what": "Send a decoy shipment to fool the police",
+   "levels": [
+    "Draw one patrol",
+    "stall sells a stolen item at once",
+    "draw all",
+    "stall hosts a visiting Boss",
+    "the cops raid an empty crate"
+   ],
+   "unlock": "Day 15"
+  },
+  {
+   "n": 85,
+   "id": "post-flyers",
+   "name": "Post Flyers",
+   "section": "Influence and Propaganda",
+   "slot": "day",
+   "stat": "charm",
+   "what": "Spread recruiting flyers",
+   "levels": [
+    "One district",
+    "flyer reaches a second street",
+    "two",
+    "flyers include a coupon (+Regard)",
+    "a regional flyer"
+   ],
+   "unlock": "Print Shop"
+  },
+  {
+   "n": 86,
+   "id": "spread-the-word",
+   "name": "Spread the Word",
+   "section": "Influence and Propaganda",
+   "slot": "day",
+   "stat": "charm",
+   "what": "Talk up your team; raises Regard instead of Dread",
+   "levels": [
+    "+3 Regard",
+    "chants appear on walls",
+    "+6",
+    "a local band picks up the song",
+    "a chant spreads"
+   ],
+   "unlock": "Radio Room"
+  },
+  {
+   "n": 87,
+   "id": "pirate-radio",
+   "name": "Pirate Radio",
+   "section": "Influence and Propaganda",
+   "slot": "night",
+   "stat": "wits",
+   "what": "Hijack a broadcast",
+   "levels": [
+    "A short clip",
+    "clip repeats on loop",
+    "a bulletin",
+    "the clip names a rival",
+    "a speech"
+   ],
+   "unlock": "Radio Room"
+  },
+  {
+   "n": 88,
+   "id": "street-theater",
+   "name": "Street Theater",
+   "section": "Influence and Propaganda",
+   "slot": "day",
+   "stat": "charm",
+   "what": "A public show with your Pokémon",
+   "levels": [
+    "Crowd cash",
+    "crowd donates a bit",
+    "recruits",
+    "a recruit emerges from the audience",
+    "a ballad about you"
+   ],
+   "unlock": "Day 15"
+  },
+  {
+   "n": 89,
+   "id": "spray-the-wall",
+   "name": "Spray the Wall",
+   "section": "Influence and Propaganda",
+   "slot": "night",
+   "stat": "stealth",
+   "what": "Tag your team's sign across a district",
+   "levels": [
+    "+1 Dread",
+    "tag lasts a week",
+    "+3",
+    "rivals' tags get covered",
+    "a city landmark"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 90,
+   "id": "leak-a-story",
+   "name": "Leak a Story",
+   "section": "Influence and Propaganda",
+   "slot": "evening",
+   "stat": "wits",
+   "what": "Feed a reporter a story",
+   "levels": [
+    "Small smear",
+    "story reaches a second paper",
+    "rival Tension +5",
+    "rival must answer in public",
+    "public scandal"
+   ],
+   "unlock": "Press contact"
+  },
+  {
+   "n": 91,
+   "id": "bribe",
+   "name": "Bribe",
+   "section": "Influence and Propaganda",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Pay a police officer, clerk, or Leader's assistant",
+   "levels": [
+    "₽200",
+    "clerk sends a favour",
+    "one favour",
+    "officer tips you off about raids",
+    "they work for you"
+   ],
+   "unlock": "Front Office"
+  },
+  {
+   "n": 92,
+   "id": "befriend-the-mayor",
+   "name": "Befriend the Mayor",
+   "section": "Influence and Propaganda",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Court a local leader",
+   "levels": [
+    "Meet",
+    "mayor shares gossip",
+    "an ally",
+    "mayor attends your party",
+    "the mayor looks away"
+   ],
+   "unlock": "Notoriety \"Known\""
+  },
+  {
+   "n": 93,
+   "id": "fund-a-festival",
+   "name": "Fund a Festival",
+   "section": "Influence and Propaganda",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Sponsor a town festival",
+   "levels": [
+    "Regard +5",
+    "festival gives a free recruit",
+    "+10",
+    "crew gets a day off with Morale +5",
+    "festival named after you"
+   ],
+   "unlock": "Radio Room"
+  },
+  {
+   "n": 94,
+   "id": "sponsor-a-trainer",
+   "name": "Sponsor a Trainer",
+   "section": "Influence and Propaganda",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Back a young adult trainer's journey",
+   "levels": [
+    "Pay entry",
+    "trainer sends a postcard",
+    "they become a hero in your name",
+    "trainer wins a local title for you",
+    "a trusted ally"
+   ],
+   "unlock": "Day 20"
+  },
+  {
+   "n": 95,
+   "id": "chant-night",
+   "name": "Chant Night",
+   "section": "Influence and Propaganda",
+   "slot": "night",
+   "stat": "charm",
+   "what": "A midnight rally with torches",
+   "levels": [
+    "Crowd",
+    "torches draw more crowd",
+    "recruits",
+    "crowd gives a bonus Regard",
+    "a regional following"
+   ],
+   "unlock": "Rally event"
+  },
+  {
+   "n": 96,
+   "id": "silence-a-reporter",
+   "name": "Silence a Reporter",
+   "section": "Influence and Propaganda",
+   "slot": "night",
+   "stat": "nerve",
+   "what": "Stop a story before it prints (no violence on minors)",
+   "levels": [
+    "Buy it",
+    "reporter holds the story for a day",
+    "threaten it",
+    "reporter becomes a source",
+    "the reporter writes your side"
+   ],
+   "unlock": "Press contact"
+  },
+  {
+   "n": 97,
+   "id": "lay-low",
+   "name": "Lay Low",
+   "section": "Law and Police",
+   "slot": "day",
+   "stat": "stealth",
+   "what": "Hide for a day",
+   "levels": [
+    "Heat −10",
+    "Heat −15",
+    "−20",
+    "Heat −25",
+    "−30"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 98,
+   "id": "change-clothes",
+   "name": "Change Clothes",
+   "section": "Law and Police",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Disguise your Boss",
+   "levels": [
+    "Heat −5",
+    "disguise lasts a day",
+    "hide your face",
+    "disguise survives a stop",
+    "new identity (a nickname)"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 99,
+   "id": "pay-the-fine",
+   "name": "Pay the Fine",
+   "section": "Law and Police",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Settle a police warrant with cash",
+   "levels": [
+    "₽300",
+    "warrant cleared on the spot",
+    "₽200",
+    "clerk deletes the record",
+    "warrants expire"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 100,
+   "id": "frame-a-rival",
+   "name": "Frame a Rival",
+   "section": "Law and Police",
+   "slot": "night",
+   "stat": "wits",
+   "what": "Plant evidence on a rival",
+   "levels": [
+    "Heat on them +5",
+    "rival's Heat +10",
+    "+15",
+    "rival gets an IP visit",
+    "police raid them"
+   ],
+   "unlock": "Workshop"
+  },
+  {
+   "n": 101,
+   "id": "sabotage-the-station",
+   "name": "Sabotage the Station",
+   "section": "Law and Police",
+   "slot": "night",
+   "stat": "brawn",
+   "what": "Disable a police station's gear",
+   "levels": [
+    "One day",
+    "alarm is off for a night",
+    "three days",
+    "police radios fail",
+    "a district free of patrols for a week"
+   ],
+   "unlock": "War Room"
+  },
+  {
+   "n": 102,
+   "id": "dodge-looker",
+   "name": "Dodge Looker",
+   "section": "Law and Police",
+   "slot": "day",
+   "stat": "stealth",
+   "what": "Escape Looker's investigation",
+   "levels": [
+    "Hide a building",
+    "hide one more building",
+    "hide two",
+    "Looker gives up the case on one building",
+    "Looker leaves the region"
+   ],
+   "unlock": "Wanted 60+"
+  },
+  {
+   "n": 103,
+   "id": "cooperate-with-jenny",
+   "name": "Cooperate with Jenny",
+   "section": "Law and Police",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Trade a tip for leniency",
+   "levels": [
+    "Heat −5",
+    "tip earns a favour",
+    "−10",
+    "Jenny covers a mistake",
+    "Jenny becomes a contact"
+   ],
+   "unlock": "Notoriety \"Known\""
+  },
+  {
+   "n": 104,
+   "id": "alibi",
+   "name": "Alibi",
+   "section": "Law and Police",
+   "slot": "evening",
+   "stat": "wits",
+   "what": "Prepare an alibi for a night action",
+   "levels": [
+    "One night",
+    "alibi covers one extra member",
+    "two",
+    "alibi covers the whole crew",
+    "a standing alibi"
+   ],
+   "unlock": "Front Office"
+  },
+  {
+   "n": 105,
+   "id": "evidence-locker-visit",
+   "name": "Evidence Locker Visit",
+   "section": "Law and Police",
+   "slot": "night",
+   "stat": "stealth",
+   "what": "Retrieve your own evidence",
+   "levels": [
+    "Remove one",
+    "retrieve a second file",
+    "remove all",
+    "forge a fake file to replace it",
+    "destroy their files"
+   ],
+   "unlock": "Day 20"
+  },
+  {
+   "n": 106,
+   "id": "court-day",
+   "name": "Court Day",
+   "section": "Law and Police",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Handle a trial for a captured member",
+   "levels": [
+    "Plea",
+    "judge is sympathetic",
+    "bargain",
+    "jury is bought",
+    "acquittal"
+   ],
+   "unlock": "Front Office"
+  },
+  {
+   "n": 107,
+   "id": "sabotage",
+   "name": "Sabotage",
+   "section": "Rivals and War",
+   "slot": "night",
+   "stat": "wits",
+   "what": "Damage a rival's or a business's operations",
+   "levels": [
+    "−10% output",
+    "−15% output",
+    "−25%",
+    "rival must rebuild the site",
+    "shut one site"
+   ],
+   "unlock": "Workshop"
+  },
+  {
+   "n": 108,
+   "id": "raid",
+   "name": "Raid",
+   "section": "Rivals and War",
+   "slot": "day",
+   "stat": "brawn",
+   "what": "Full assault on a building with a squad (Part 3 §5)",
+   "levels": [
+    "Small site",
+    "a second squad joins",
+    "HQ outpost",
+    "a captured captive is freed too",
+    "rival HQ floor"
+   ],
+   "unlock": "War Room"
+  },
+  {
+   "n": 109,
+   "id": "burn-a-front",
+   "name": "Burn a Front",
+   "section": "Rivals and War",
+   "slot": "night",
+   "stat": "nerve",
+   "what": "Torch a rival's business",
+   "levels": [
+    "One shop",
+    "fire spreads to a neighbour",
+    "a block",
+    "rival must pay for repairs",
+    "their HQ cover"
+   ],
+   "unlock": "Workshop"
+  },
+  {
+   "n": 110,
+   "id": "debate",
+   "name": "Debate",
+   "section": "Rivals and War",
+   "slot": "day",
+   "stat": "charm",
+   "what": "Challenge a rival Boss to a debate of ideals (Part 4 §3)",
+   "levels": [
+    "A round",
+    "bonus argument granted",
+    "a bonus argument",
+    "rival must concede a point",
+    "the Debate verdict auto-wins once"
+   ],
+   "unlock": "Tension ≥ 40"
+  },
+  {
+   "n": 111,
+   "id": "steal-their-customers",
+   "name": "Steal Their Customers",
+   "section": "Rivals and War",
+   "slot": "day",
+   "stat": "charm",
+   "what": "Undercut a rival's Racket",
+   "levels": [
+    "1 Racket",
+    "customers prefer you for a week",
+    "3",
+    "rival's staff defect",
+    "a district switches"
+   ],
+   "unlock": "Day 15"
+  },
+  {
+   "n": 112,
+   "id": "ambush-the-courier",
+   "name": "Ambush the Courier",
+   "section": "Rivals and War",
+   "slot": "night",
+   "stat": "brawn",
+   "what": "Hit a rival's cash runner",
+   "levels": [
+    "₽400",
+    "you also grab a bag",
+    "₽900",
+    "you grab the courier's phone",
+    "capture their ledger"
+   ],
+   "unlock": "Day 10"
+  },
+  {
+   "n": 113,
+   "id": "hostage-trade",
+   "name": "Hostage Trade",
+   "section": "Rivals and War",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Negotiate a swap of captives",
+   "levels": [
+    "Equal swap",
+    "captive is returned healthy",
+    "better swap",
+    "swap yields their Boss's note",
+    "keep one extra"
+   ],
+   "unlock": "Hostage held"
+  },
+  {
+   "n": 114,
+   "id": "declare-war",
+   "name": "Declare War",
+   "section": "Rivals and War",
+   "slot": "evening",
+   "stat": "nerve",
+   "what": "Open open war with a rival team",
+   "levels": [
+    "A skirmish week",
+    "skirmish steals a rival Racket",
+    "a war week",
+    "war week gives a free Raid",
+    "a full war"
+   ],
+   "unlock": "Tension ≥ 50"
+  },
+  {
+   "n": 115,
+   "id": "peace-talks",
+   "name": "Peace Talks",
+   "section": "Rivals and War",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "End a war on terms",
+   "levels": [
+    "A truce",
+    "truce lasts 2 weeks",
+    "a pact",
+    "truce includes shared tips",
+    "rival pays tribute"
+   ],
+   "unlock": "Tension ≥ 30"
+  },
+  {
+   "n": 116,
+   "id": "hire-mercenaries",
+   "name": "Hire Mercenaries",
+   "section": "Rivals and War",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Buy temporary muscle",
+   "levels": [
+    "One squad",
+    "squad stays three days",
+    "two",
+    "squad has a leader with a trait",
+    "an elite squad"
+   ],
+   "unlock": "Front Office"
+  },
+  {
+   "n": 117,
+   "id": "counterstrike",
+   "name": "Counterstrike",
+   "section": "Rivals and War",
+   "slot": "night",
+   "stat": "nerve",
+   "what": "Answer a rival raid within the day",
+   "levels": [
+    "Match the raid",
+    "you hit back harder",
+    "double",
+    "raid camp loses a squad",
+    "destroy their raid camp"
+   ],
+   "unlock": "Raid suffered"
+  },
+  {
+   "n": 118,
+   "id": "spy-on-the-boss",
+   "name": "Spy on the Boss",
+   "section": "Rivals and War",
+   "slot": "night",
+   "stat": "stealth",
+   "what": "Watch the rival Boss's home",
+   "levels": [
+    "One look",
+    "you learn their routine",
+    "their habits",
+    "you learn their phone numbers",
+    "their weakness"
+   ],
+   "unlock": "Spy placed"
+  },
+  {
+   "n": 119,
+   "id": "gym-takeover",
+   "name": "Gym Takeover",
+   "section": "Gyms and Heroes",
+   "slot": "day",
+   "stat": "nerve",
+   "what": "The five-way Gym deal from slice 8, now a takeover",
+   "levels": [
+    "One method",
+    "a second method unlocked",
+    "two",
+    "badge ceremony recorded",
+    "all five routes open"
+   ],
+   "unlock": "Notoriety \"Known\""
+  },
+  {
+   "n": 120,
+   "id": "intimidate-a-leader",
+   "name": "Intimidate a Leader",
+   "section": "Gyms and Heroes",
+   "slot": "day",
+   "stat": "nerve",
+   "what": "Pressure a Gym Leader",
+   "levels": [
+    "−10% their resolve",
+    "Leader cancels one match",
+    "−25%",
+    "Leader sends a gift of peace",
+    "they step aside"
+   ],
+   "unlock": "Gym scouted"
+  },
+  {
+   "n": 121,
+   "id": "court-a-leader",
+   "name": "Court a Leader",
+   "section": "Gyms and Heroes",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Befriend a Gym Leader",
+   "levels": [
+    "A gift",
+    "favour grants a free item",
+    "a favour",
+    "alliance gives their Gym's tips",
+    "an alliance"
+   ],
+   "unlock": "Gym scouted"
+  },
+  {
+   "n": 122,
+   "id": "rig-the-badge",
+   "name": "Rig the Badge",
+   "section": "Gyms and Heroes",
+   "slot": "day",
+   "stat": "wits",
+   "what": "Fix the badge count in a Gym",
+   "levels": [
+    "Skip one battle",
+    "badge case marked",
+    "skip two",
+    "badge forgery fools the inspectors",
+    "hand out badges"
+   ],
+   "unlock": "Gym ally"
+  },
+  {
+   "n": 123,
+   "id": "shame-the-hero",
+   "name": "Shame the Hero",
+   "section": "Gyms and Heroes",
+   "slot": "day",
+   "stat": "charm",
+   "what": "Embarrass the region's Hero in public",
+   "levels": [
+    "−10 Hero morale",
+    "Hero is embarrassed on radio",
+    "−25",
+    "Hero loses a gym challenge",
+    "the Hero's allies leave"
+   ],
+   "unlock": "Hero met"
+  },
+  {
+   "n": 124,
+   "id": "duel-the-hero",
+   "name": "Duel the Hero",
+   "section": "Gyms and Heroes",
+   "slot": "day",
+   "stat": "brawn",
+   "what": "Fight the Hero in the open (Part 4 §6)",
+   "levels": [
+    "An opening duel",
+    "rematch gives a free item",
+    "a rematch",
+    "final stand grants a title",
+    "the final stand"
+   ],
+   "unlock": "Hero stage 3+"
+  },
+  {
+   "n": 125,
+   "id": "recruit-a-hero-s-friend",
+   "name": "Recruit a Hero's Friend",
+   "section": "Gyms and Heroes",
+   "slot": "day",
+   "stat": "charm",
+   "what": "Win one of the Hero's companions",
+   "levels": [
+    "One",
+    "the friend offers a hint",
+    "two",
+    "friend swears loyalty",
+    "the Hero is alone"
+   ],
+   "unlock": "Hero met"
+  },
+  {
+   "n": 126,
+   "id": "ambush-the-hero-s-route",
+   "name": "Ambush the Hero's Route",
+   "section": "Gyms and Heroes",
+   "slot": "day",
+   "stat": "nerve",
+   "what": "Wait on the Hero's path",
+   "levels": [
+    "Delay the Hero by a day",
+    "trap the Hero for a day",
+    "three days",
+    "Hero's team is rattled",
+    "the Hero's Pokémon are hurt"
+   ],
+   "unlock": "Hero scouted"
+  },
+  {
+   "n": 127,
+   "id": "steal-the-hero-s-item",
+   "name": "Steal the Hero's Item",
+   "section": "Gyms and Heroes",
+   "slot": "night",
+   "stat": "stealth",
+   "what": "Take a Hero's prized item",
+   "levels": [
+    "An item",
+    "Hero looks for it, wasting a day",
+    "a Pokémon's held item",
+    "Hero loses a badge case slot",
+    "the Hero's badge case"
+   ],
+   "unlock": "Hero scouted"
+  },
+  {
+   "n": 128,
+   "id": "meet-the-champion",
+   "name": "Meet the Champion",
+   "section": "Gyms and Heroes",
+   "slot": "day",
+   "stat": "charm",
+   "what": "Seek a Champion's ear",
+   "levels": [
+    "Meet",
+    "Champion shares a secret",
+    "a favour",
+    "Champion asks you for a favour",
+    "an offer to stand down"
+   ],
+   "unlock": "Champion stage"
+  },
+  {
+   "n": 129,
+   "id": "train-your-pokemon",
+   "name": "Train Your Pokémon",
+   "section": "The Boss Himself: Training and Self",
+   "slot": "evening",
+   "stat": "brawn",
+   "what": "Spend an Evening grinding",
+   "levels": [
+    "+1 level",
+    "level gain is shown",
+    "+2",
+    "trainer gains a move too",
+    "+3 on one Pokémon"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 130,
+   "id": "spar-with-a-member",
+   "name": "Spar with a Member",
+   "section": "The Boss Himself: Training and Self",
+   "slot": "evening",
+   "stat": "brawn",
+   "what": "Battle a crew member (Part 2 §3)",
+   "levels": [
+    "They gain 3 XP",
+    "member leaves with a stat bonus",
+    "+1 stat",
+    "member takes your advice into battle",
+    "a signature trait"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 131,
+   "id": "study",
+   "name": "Study",
+   "section": "The Boss Himself: Training and Self",
+   "slot": "evening",
+   "stat": "wits",
+   "what": "Read at the library or a Lab",
+   "levels": [
+    "+1 Wits XP",
+    "library trip unlocks a book",
+    "+2",
+    "you gain a Wits class discount",
+    "a new class"
+   ],
+   "unlock": "Library room"
+  },
+  {
+   "n": 132,
+   "id": "workout",
+   "name": "Workout",
+   "section": "The Boss Himself: Training and Self",
+   "slot": "evening",
+   "stat": "brawn",
+   "what": "Hit the gym equipment",
+   "levels": [
+    "+1 Brawn XP",
+    "workout adds a rep bonus",
+    "+2",
+    "workout makes the next fight easier",
+    "+3"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 133,
+   "id": "meditate",
+   "name": "Meditate",
+   "section": "The Boss Himself: Training and Self",
+   "slot": "evening",
+   "stat": "nerve",
+   "what": "Steady yourself",
+   "levels": [
+    "+1 Nerve XP",
+    "calm gives −Heat on actions",
+    "Heat −3",
+    "calm gives a free reroll",
+    "calm in every Card"
+   ],
+   "unlock": "Day 5"
+  },
+  {
+   "n": 134,
+   "id": "practice-smooth-talk",
+   "name": "Practice Smooth Talk",
+   "section": "The Boss Himself: Training and Self",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Rehearse your pitch",
+   "levels": [
+    "+1 Charm XP",
+    "pitch builds a repeat line",
+    "+2",
+    "pitch wins a notable convert",
+    "a signature line"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 135,
+   "id": "practice-sneaking",
+   "name": "Practice Sneaking",
+   "section": "The Boss Himself: Training and Self",
+   "slot": "evening",
+   "stat": "stealth",
+   "what": "Run drills at night",
+   "levels": [
+    "+1 Stealth XP",
+    "drill adds a new trick",
+    "+2",
+    "drill makes you silent in all fights",
+    "+3"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 136,
+   "id": "rest",
+   "name": "Rest",
+   "section": "The Boss Himself: Training and Self",
+   "slot": "night",
+   "stat": null,
+   "what": "Heal fully; Morale +5",
+   "levels": [
+    "+1 Day action tomorrow",
+    "rest heals injuries too",
+    "heal fully and Morale +10",
+    "rest grants an extra Morale +5",
+    "a third rest night in a row grants a bonus Day action"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 137,
+   "id": "pamper-the-team",
+   "name": "Pamper the Team",
+   "section": "The Boss Himself: Training and Self",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Feed and brush your Pokémon",
+   "levels": [
+    "Friendship +5",
+    "bond shows as a stat",
+    "+10",
+    "bond lets Pokémon survive a hit once",
+    "a bond bonus in battle"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 138,
+   "id": "write-a-manifesto",
+   "name": "Write a Manifesto",
+   "section": "The Boss Himself: Training and Self",
+   "slot": "evening",
+   "stat": "wits",
+   "what": "Put your ideals on paper (feeds the Debate)",
+   "levels": [
+    "A page",
+    "book gets a title",
+    "a book",
+    "book is read at the Debate",
+    "a printed book"
+   ],
+   "unlock": "Print Shop"
+  },
+  {
+   "n": 139,
+   "id": "mentor",
+   "name": "Mentor",
+   "section": "The Boss Himself: Training and Self",
+   "slot": "evening",
+   "stat": "charm",
+   "what": "Teach a crew member",
+   "levels": [
+    "+1 member XP",
+    "apprentice gains a personal goal",
+    "+2",
+    "apprentice trusts you more",
+    "an apprentice"
+   ],
+   "unlock": "Rank 2 crew"
+  },
+  {
+   "n": 140,
+   "id": "plan-the-week",
+   "name": "Plan the Week",
+   "section": "The Boss Himself: Training and Self",
+   "slot": "evening",
+   "stat": "wits",
+   "what": "Set up rotations and routes",
+   "levels": [
+    "+1% crew task success",
+    "planning adds a free Scout",
+    "+3%",
+    "planning cancels one random bad event",
+    "+5%"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 141,
+   "id": "midnight-market",
+   "name": "Midnight Market",
+   "section": "Night Specials",
+   "slot": "night",
+   "stat": "charm",
+   "what": "Trade on a hidden night market",
+   "levels": [
+    "One deal",
+    "market offers a hot item",
+    "three",
+    "market allows haggling",
+    "a full stall"
+   ],
+   "unlock": "Black Market"
+  },
+  {
+   "n": 142,
+   "id": "graveyard-shift",
+   "name": "Graveyard Shift",
+   "section": "Night Specials",
+   "slot": "night",
+   "stat": "nerve",
+   "what": "Visit a Pokémon Tower or ghost site",
+   "levels": [
+    "A rumor",
+    "ghost battle gives a rare item",
+    "a ghost battle",
+    "ghost joins you for a day",
+    "a Ghost-type ally"
+   ],
+   "unlock": "Day 10"
+  },
+  {
+   "n": 143,
+   "id": "cave-run",
+   "name": "Cave Run",
+   "section": "Night Specials",
+   "slot": "night",
+   "stat": "stealth",
+   "what": "Explore a dangerous cave for loot",
+   "levels": [
+    "A common item",
+    "cave gives a free healing item",
+    "a rare",
+    "cave grants a hidden Pokémon",
+    "a hidden room"
+   ],
+   "unlock": "Day 10"
+  },
+  {
+   "n": 144,
+   "id": "moonlit-heist",
+   "name": "Moonlit Heist",
+   "section": "Night Specials",
+   "slot": "night",
+   "stat": "wits",
+   "what": "A planned heist with a theme",
+   "levels": [
+    "Small take",
+    "heist plan is shared with crew",
+    "big take",
+    "heist hits a secondary target too",
+    "famous take"
+   ],
+   "unlock": "War Room"
+  },
+  {
+   "n": 145,
+   "id": "blackout",
+   "name": "Blackout",
+   "section": "Night Specials",
+   "slot": "night",
+   "stat": "wits",
+   "what": "Cut the power in a district",
+   "levels": [
+    "A block",
+    "blackout lasts two hours longer",
+    "the district",
+    "blackout hides your crew's tracks",
+    "two districts"
+   ],
+   "unlock": "Workshop"
+  },
+  {
+   "n": 146,
+   "id": "night-raid",
+   "name": "Night Raid",
+   "section": "Night Specials",
+   "slot": "night",
+   "stat": "brawn",
+   "what": "A night assault with the Night Shift",
+   "levels": [
+    "Small",
+    "raid leaves rival squad hurt",
+    "mid",
+    "raid captures a lieutenant",
+    "large"
+   ],
+   "unlock": "Night Shift"
+  },
+  {
+   "n": 147,
+   "id": "hide-in-the-warehouse",
+   "name": "Hide in the Warehouse",
+   "section": "Night Specials",
+   "slot": "night",
+   "stat": "stealth",
+   "what": "Wait out a police sweep",
+   "levels": [
+    "Heat −10",
+    "hide leaves no trail",
+    "−20",
+    "hideout never gets searched",
+    "police skip your HQ"
+   ],
+   "unlock": "Day 1"
+  },
+  {
+   "n": 148,
+   "id": "secret-meeting",
+   "name": "Secret Meeting",
+   "section": "Night Specials",
+   "slot": "night",
+   "stat": "charm",
+   "what": "Meet a Boss, informant, or fence at night",
+   "levels": [
+    "A deal",
+    "deal leaks nothing",
+    "a pact",
+    "contact becomes a regular source",
+    "a standing contact"
+   ],
+   "unlock": "Notoriety \"Known\""
+  },
+  {
+   "n": 149,
+   "id": "reckoning",
+   "name": "Reckoning",
+   "section": "Night Specials",
+   "slot": "night",
+   "stat": "nerve",
+   "what": "Settle one old score in your run",
+   "levels": [
+    "A grudge",
+    "grudge gets settled with a note",
+    "a debt",
+    "debt is paid in kind",
+    "a total end to it"
+   ],
+   "unlock": "Day 30"
+  },
+  {
+   "n": 150,
+   "id": "the-big-night",
+   "name": "The Big Night",
+   "section": "Night Specials",
+   "slot": "night",
+   "stat": "all",
+   "what": "The once-per-week set piece: pick 3 night actions for a combined strike",
+   "levels": [
+    "Combine 2",
+    "combine 2 with a small bonus",
+    "combine 3",
+    "combine 3 with a free retry",
+    "combine 3 with a free slot"
+   ],
+   "unlock": "Day 30"
+  }
+ ]
+}

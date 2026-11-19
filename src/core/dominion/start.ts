@@ -7,6 +7,7 @@ import { hashSeed, Rng } from '../rng';
 import type { RunState } from '../state';
 import { DOMINION_DATA } from './data';
 import type { DominionBlock, DominionSetup, Member } from './schema';
+import { newField } from './migrate';
 
 const D = () => DOMINION_DATA.start;
 
@@ -69,7 +70,7 @@ export function newBlock(content: Content, run: RunState, setup: DominionSetup):
   const s = D().start;
   const c = D().clock;
   return {
-    v: 1,
+    v: 2,
     day: 1,
     phase: 'evening',
     actions: 0,
@@ -92,5 +93,6 @@ export function newBlock(content: Content, run: RunState, setup: DominionSetup):
     stepsDone: [],
     report: [],
     opened: false,
+    field: newField(s.heat) as DominionBlock['field'],
   };
 }
