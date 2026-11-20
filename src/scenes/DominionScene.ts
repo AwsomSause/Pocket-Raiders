@@ -25,6 +25,7 @@ import { cardModel, gridPages, mapModel, newCursor, pageFor, type MapCursor } fr
 import { cardView, mapView } from '../ui/redux/screens/dominion/fieldViews';
 import { ledgerModel, SPREADS } from '../core/dominion/ledgerScreens';
 import { ledgerView } from '../ui/redux/screens/dominion/ledger';
+import { meetModel } from '../core/dominion/town';
 
 type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger';
 
@@ -55,6 +56,8 @@ export class DominionScene extends Phaser.Scene {
   /** D6: the Ledger's open spread (0 Money | Empire, 1 Territory | Notoriety, 2 Crew | Stores) and where L goes back to. */
   private spread = 0;
   private ledgerFrom: Screen = 'hq';
+  /** D6b: the picked answer of a street meeting on the map. */
+  private meetAt = 0;
   private res = new ReserveController(this);
   /** D5: the HQ menu (mockup 6). */
   private hq = new HqController(this);
@@ -126,6 +129,7 @@ export class DominionScene extends Phaser.Scene {
         back: () => this.back(),
         bring: () => this.bring(),
         buy: (id) => this.buy(id),
+        meet: (i) => this.answerMeet(Number(i)),
         dismiss: () => { this.notice = null; this.rival.dismiss(); this.view?.refresh(); },
         ledgerTab: (i) => { this.spread = Number(i); this.view?.refresh(); },
         ledgerPage: (d) => this.turnLedger(Number(d)),
@@ -224,7 +228,7 @@ export class DominionScene extends Phaser.Scene {
         if (b && this.crew.owns()) return this.crew.render(this.notice);
         return b ? hqView(hqModel(b), this.notice, this.at, this.memberLook(), threatRow(b)) : '';
       case 'map':
-        return b && this.cursor ? mapView(mapModel(b, services().session.run!, this.cursor), this.notice, this.garage) : '';
+        return b && this.cursor ? mapView(mapModel(b, services().session.run!, this.cursor), this.notice, this.garage, this.meetPanel()) : '';
       case 'card': {
         const c = b && this.cursor ? this.cardOf() : null;
         if (!b || !c) return '';
@@ -281,7 +285,10 @@ export class DominionScene extends Phaser.Scene {
     if (a === 'confirm') return this.confirm();
     if (this.screen === 'title' && (a === 'up' || a === 'down')) this.titleAt = this.titleAt ? 0 : 1;
     else if (this.screen === 'setup') this.setupMove(a);
-    else if (this.screen === 'map') this.mapMove(a);
+    else if (this.screen === 'map' && this.meetPanel() && !this.notice && (a === 'up' || a === 'down')) {
+      const n = this.meetPanel()!.choices.length;
+      this.meetAt = (this.meetAt + (a === 'up' ? -1 : 1) + n) % n;
+    } else if (this.screen === 'map') this.mapMove(a);
     else if (this.screen === 'hq' && (a === 'up' || a === 'down')) {
       const n = hqModel(this.block()!).orders.length;
       if (n) this.at = (this.at + (a === 'up' ? -1 : 1) + n) % n;
@@ -320,6 +327,7 @@ export class DominionScene extends Phaser.Scene {
       }
     } else if (this.screen === 'map' && this.cursor) {
       if (this.notice) this.notice = null;
+      else if (this.meetPanel()) return this.answerMeet(this.meetAt);
       else if (this.cursor.focus === 'map') this.cursor = { ...this.cursor, focus: 'grid' };
       else return this.openCard();
     } else if (this.screen === 'card') {
@@ -512,6 +520,22 @@ export class DominionScene extends Phaser.Scene {
     const out = services().session.dominionStep({ t: 'act', action: id, target: d.targets[c.target]?.id ?? null, district: d.id, bring: c.bring });
     this.screen = 'map';
     this.notice = out.notice;
+    if (out.ok && out.fight) return this.fight('map');
+    this.view?.refresh();
+  }
+
+  /** D6b: the street meeting waiting on the map, drawn as a panel. */
+  private meetPanel(): import('../ui/redux/screens/dominion/fieldViews').MeetPanel | null {
+    const b = this.block();
+    const m = b ? meetModel(b) : null;
+    if (!m) return null;
+    const L = DOMINION_DATA.town.lines;
+    return { ...m, at: Math.min(this.meetAt, m.choices.length - 1), title: L.panel!, hint: L.pick! };
+  }
+  private answerMeet(i: number): void {
+    const out = services().session.dominionStep({ t: 'meet', choice: i });
+    this.notice = out.notice;
+    if (out.ok) this.meetAt = 0;
     if (out.ok && out.fight) return this.fight('map');
     this.view?.refresh();
   }

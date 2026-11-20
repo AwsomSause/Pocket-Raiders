@@ -64,17 +64,17 @@ describe('DOMINION D6: the data', () => {
   it('plays the ten Boss actions D6 opens; Gym Takeover waits for Growth (D10)', () => {
     const d6 = ['skim-the-till', 'marry-in', 'street-theater', 'spray-the-wall', 'leak-a-story', 'befriend-the-mayor', 'sponsor-a-trainer', 'silence-a-reporter', 'cooperate-with-jenny', 'secret-meeting'];
     for (const id of d6) expect(actionStatus(actionDef(id)!).play, id).toBe(true);
-    expect(DOMINION_DATA.actions.actions.filter((a) => actionStatus(a).play)).toHaveLength(81);
-    // D5 (Hold a Rally, Radio Room) and D9 (Chant Night, a Rally event) handed these to D6 after D6 was built: they wait
-    // for D6's follow-up (docs/status/dominion-d6.md).
-    expect(DOMINION_DATA.actions.actions.filter((a) => actionStatus(a).slice === 'D6').map((a) => a.id)).toEqual(['hold-a-rally', 'chant-night']);
+    expect(DOMINION_DATA.actions.actions.filter((a) => actionStatus(a).play)).toHaveLength(83);
+    // D5 (Hold a Rally, Radio Room) and D9 (Chant Night, a Rally event) handed these to D6 after D6 was built: D6b plays
+    // them (dominionTown.test.ts), so nothing waits for D6 now.
+    expect(DOMINION_DATA.actions.actions.filter((a) => actionStatus(a).slice === 'D6').map((a) => a.id)).toEqual([]);
     expect(actionStatus(actionDef('gym-takeover')!).slice).toBe('D10');
   });
   it('all eighteen crew tasks that waited for D6 are live district tasks; none waits for D6 now', () => {
     const live = DOMINION_DATA.tasks.filter((t) => t.effect?.kind === 'district');
     expect(live).toHaveLength(18);
-    // Pay the Wages came to D6 from D5 after D6 was built: D6's follow-up.
-    expect(DOMINION_DATA.tasks.filter((t) => t.needs === 'D6').map((t) => t.id)).toEqual(['pay-the-wages']);
+    // Pay the Wages came to D6 from D5 after D6 was built: D6b runs it (dominionTown.test.ts).
+    expect(DOMINION_DATA.tasks.filter((t) => t.needs === 'D6').map((t) => t.id)).toEqual([]);
     expect(DOMINION_DATA.crew.formed.filter((f) => f.needs === 'D6')).toHaveLength(0);
     expect(DOMINION_DATA.crew.formed.find((f) => f.id === 'honest-accountant')!.live).toBe(true);
   });

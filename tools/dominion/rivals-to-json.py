@@ -159,8 +159,8 @@ def actions():
     }
 
 
-# Outside interactions: the slice each section waits for (F is D9's). Marks: 🔒 minor lock, 🌙 night, ☀ day, ⟳ scales, 🔗 chain.
-SECTION_WAITS = {'A': 'D6', 'B': 'D10', 'C': 'D10', 'D': 'D10', 'E': 'D10', 'F': None, 'G': 'D11', 'H': 'D10', 'I': 'D10', 'J': 'D6', 'K': 'D10', 'L': 'D15'}
+# Outside interactions: the slice each section waits for (F is D9's; A and J are D6b's, town.ts and town.json). Marks: 🔒 minor lock, 🌙 night, ☀ day, ⟳ scales, 🔗 chain.
+SECTION_WAITS = {'A': None, 'B': 'D10', 'C': 'D10', 'D': 'D10', 'E': 'D10', 'F': None, 'G': 'D11', 'H': 'D10', 'I': 'D10', 'J': None, 'K': 'D10', 'L': 'D15'}
 
 
 def outside():

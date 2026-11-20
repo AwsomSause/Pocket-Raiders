@@ -21,6 +21,7 @@ import { build, letGo, loan, rebuild, repay, sell, storageCap, tierUp, upgrade, 
 import { withHq } from './hqFx';
 import { levelCap } from '../regions';
 import { answerCard, breakTruce, maybeStreet, noteTop, ransom, startTruce, withRivals, type RivalOut } from './rivals';
+import { answerMeet, maybeMeet } from './town';
 
 export const DOMINION_MODE_ID = 'dominion';
 export const isDominionRun = (run: RunState | null | undefined): boolean => run?.rules.modeId === DOMINION_MODE_ID;
@@ -131,6 +132,12 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
       const met = maybeStreet(blk, action.district, run.seed, blk.phase === 'night');
       blk = met.block;
       if (met.line) notice = [notice, met.line].filter(Boolean).join(' ');
+      // D6b: or someone from the town (outside.json sections A and J), answered on the Region Map.
+      else {
+        const town = maybeMeet(blk, action.district, run.seed, blk.phase === 'night');
+        blk = town.block;
+        if (town.line) notice = [notice, town.line].filter(Boolean).join(' ');
+      }
     }
     const next = withBlock(work, DominionBlockSchema.parse(blk));
     return { ok: true, block: next.expansion!.dominion!, notice, heal: false, run: next, fight: out.fight };
@@ -158,6 +165,7 @@ function rivalInRun(run: RunState, action: DominionAction): (StepOut & { run: Ru
     case 'truce': out = startTruce(b, action.team); break;
     case 'breakTruce': out = breakTruce(b, action.team); break;
     case 'card': out = answerCard(b, action.index, action.choice, run.seed); break;
+    case 'meet': out = answerMeet(b, action.choice, run.seed); break;
     case 'ransom': out = ransom(b, action.member); break;
     default: return null;
   }

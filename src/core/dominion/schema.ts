@@ -89,8 +89,8 @@ const DistrictSchema = z.object({
 export type District = z.infer<typeof DistrictSchema>;
 export const BATTLE_FOES = ['target', 'police', 'wild', 'ghost', 'member', 'rival'] as const;
 export const EFFECTS = ['scout', 'count', 'scoutDistrict', 'paper', 'catch', 'laylow', 'disguise', 'fine', 'exp', 'spar', 'train', 'plan', 'pamper', 'hide', 'rescue', 'evolve', 'ceremony', 'mentor', 'launder',
-  // D6 (field.ts)
-  'skim',
+  // D6 (field.ts) and D6b (town.ts: Hold a Rally, Chant Night)
+  'skim', 'rally', 'chant',
   // D9 (rivals.ts addActEffect)
   'rivalHit', 'rivalSpy', 'counterSpy', 'truceTalk', 'war', 'poach', 'court'] as const;
 const PlaySchema = z.object({
@@ -181,7 +181,7 @@ export type DistrictState = z.infer<typeof DistrictStateSchema>;
 
 /** A battle an action (or the police) is waiting on. The fight bridge (fight.ts) starts it; fightEnd settles it. */
 export const FieldFightSchema = z.object({
-  why: z.enum(['fail', 'always', 'police', 'looker', 'raid', 'rival']),
+  why: z.enum(['fail', 'always', 'police', 'looker', 'raid', 'rival', 'town']),
   foe: z.enum(['target', 'police', 'wild', 'ghost', 'member', 'looker', 'raid', 'rival']),
   begun: z.boolean(),
   action: S.nullable(),
@@ -333,6 +333,8 @@ export type DominionAction =
   | { t: 'patron'; patron: string }
   // D6: where a member's district task (Patrol, Hold, Chant...) is done
   | { t: 'where'; member: string; district: string }
+  // D6b: the answer to a street meeting (town.ts)
+  | { t: 'meet'; choice: number }
   // D4, the Reserve and the Rank Pyramid
   | { t: 'give'; uid: string; to: string }
   | { t: 'takeBack'; member: string; uid: string }
@@ -369,8 +371,8 @@ export const TaskEffectSchema = z.object({
     'pens', 'tend', 'feed', 'release', 'rehab',
     // D9 (rivals.ts)
     'rivalSpy', 'rivalIntel', 'counterSpy', 'poachRival', 'rivalHit', 'rescue', 'rumours', 'truceTalk',
-    // D6 (empire.ts)
-    'district']),
+    // D6 (empire.ts), D6b (town.ts: Pay the Wages)
+    'district', 'wages']),
   /** D6 district tasks (kind 'district'): what it does in the member's district, and how much (task Lv 1-2, Lv 3+). */
   does: z.enum(['regard', 'dread', 'cool', 'patrol', 'collect', 'hold', 'line', 'eavesdrop', 'poll', 'face', 'party', 'song', 'peace']).optional(),
   n: Range.optional(),
@@ -728,6 +730,10 @@ export const EmpireStateSchema = z.object({
   collect: z.record(S, N0),
   /** Districts guarded by Hold the Line or Patrol today: Heat doesn't wear their Control down. */
   guarded: z.array(S),
+  /** D6b: a street meeting waiting for an answer (outside.json sections A and J, town.json), and the rows met this run. */
+  meet: z.object({ row: S, district: S, day: I.min(1) }).strict().nullable().optional(),
+  met: z.array(S).optional(),
+  metDay: N0.optional(),
 }).strict();
 export type EmpireState = z.infer<typeof EmpireStateSchema>;
 
@@ -845,6 +851,10 @@ export const BuildingFxSchema = z.object({
   // your spies being caught), raidDef (Defense in raids only), warn (days' warning of the Boss's raid), fireCut (% off
   // building damage), truceOff (% off tribute).
   intel: N0.optional(), spyCatch: Pct.optional(), cipher: Pct.optional(), raidDef: N0.optional(), warn: N0.optional(), fireCut: Pct.optional(), truceOff: Pct.optional(),
+  // D6b (hq.ts weekly): Regard and Dread each week in the building's district (the HQ's for a room).
+  regard: N0.optional(), dread: N0.optional(),
+  // D6b (field.ts): the Card shows the exact odds (the Ledger Office's Honest Card).
+  honest: N0.optional(),
 }).strict();
 export type BuildingFx = z.infer<typeof BuildingFxSchema>;
 export const BuildingSchema = z.object({
@@ -1045,3 +1055,30 @@ export const RivalsStateSchema = z.object({
   top: I.min(1),
 }).strict();
 export type RivalsState = z.infer<typeof RivalsStateSchema>;
+
+// ---------- D6b: street meetings (town.json; outside.json sections A and J) ----------
+
+const TownFxSchema = z.object({
+  rg: I.optional(), dr: I.optional(), h: I.optional(), ten: I.optional(), hero: I.optional(), money: I.optional(), wanted: I.optional(),
+  control: I.optional(), mor: I.optional(), lead: z.boolean().optional(), scout: z.boolean().optional(), intel: z.boolean().optional(), foil: z.boolean().optional(),
+}).strict();
+export type TownFx = z.infer<typeof TownFxSchema>;
+export const TownChoiceSchema = TownFxSchema.extend({
+  /** A battle first (town.ts starts it): the rest applies on a win, `lose` on a loss. */
+  fight: z.enum(['target', 'police', 'wild']).optional(),
+  fightChance: I.min(1).max(100).optional(),
+  lose: TownFxSchema.optional(),
+  /** A test of your best member's stat: the rest applies on a pass, `fail` on a miss. */
+  check: STAT.optional(),
+  fail: TownFxSchema.optional(),
+}).strict();
+export type TownChoice = z.infer<typeof TownChoiceSchema>;
+export const TownFileSchema = z.object({
+  _source: S,
+  /** No meetings below this Notoriety step (1 = Street Gang): the town notices you once you're known. */
+  meet: z.object({ minStep: N0, chance: I.min(0).max(100), night: I.min(0).max(100), maxPerDay: I.min(1), checkBase: N0, checkPer: N0, fightLose: TownFxSchema }).strict(),
+  lines: z.record(S, S),
+  rows: z.record(z.string().regex(/^O\d{3}$/), z.array(TownChoiceSchema).min(1)),
+  needs: z.record(z.string().regex(/^O\d{3}$/), z.object({ wanted: N0.optional(), rival: z.boolean().optional() }).strict()),
+}).strict();
+export type TownFile = z.infer<typeof TownFileSchema>;

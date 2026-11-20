@@ -86,7 +86,8 @@ describe('DOMINION D9: the lists as data', () => {
       expect(r.status, r.id).not.toBe('disabled');
       expect(RV.street.rows[r.id]?.length, r.id).toBeGreaterThan(0);
     }
-    for (const r of DOMINION_DATA.outside.filter((x) => x.section !== 'F')) {
+    // D6b plays sections A (the street) and J (the press and politics): dominionTown.test.ts.
+    for (const r of DOMINION_DATA.outside.filter((x) => !['F', 'A', 'J'].includes(x.section))) {
       expect(r.status, r.id).toBe('disabled');
       expect(r.waits, r.id).toMatch(/^D\d+$/);
     }

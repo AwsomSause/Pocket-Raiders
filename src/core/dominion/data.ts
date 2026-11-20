@@ -14,12 +14,13 @@ import pyramidRaw from '../../data/dominion/pyramid.json';
 import rivalsRaw from '../../data/dominion/rivals.json';
 import rivalActionsRaw from '../../data/dominion/rivalActions.json';
 import outsideRaw from '../../data/dominion/outside.json';
+import townRaw from '../../data/dominion/town.json';
 import {
-  ActionsFileSchema, BuildingsFileSchema, EmpireFileSchema, OutsideFileSchema, RivalActionsFileSchema, RivalsFileSchema, CrewFileSchema, HqFileSchema, PyramidFileSchema, FieldFileSchema, GruntTypesFileSchema, PersonalityFileSchema, StartFileSchema, TasksFileSchema,
-  type ActionsFile, type Building, type EmpireFile, type OutsideRow, type RivalActionsFile, type RivalsFile, type CrewFile, type HqFile, type PyramidFile, type FieldFile, type GruntType, type PersonalityFile, type StartFile, type Task,
+  ActionsFileSchema, BuildingsFileSchema, EmpireFileSchema, OutsideFileSchema, RivalActionsFileSchema, RivalsFileSchema, CrewFileSchema, HqFileSchema, PyramidFileSchema, FieldFileSchema, GruntTypesFileSchema, PersonalityFileSchema, StartFileSchema, TasksFileSchema, TownFileSchema,
+  type ActionsFile, type Building, type EmpireFile, type OutsideRow, type RivalActionsFile, type RivalsFile, type CrewFile, type HqFile, type PyramidFile, type FieldFile, type GruntType, type PersonalityFile, type StartFile, type Task, type TownFile,
 } from './schema';
 
-export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; empire: EmpireFile; hq: HqFile; buildings: Building[]; pyramid: PyramidFile; rivals: RivalsFile; rivalActions: RivalActionsFile; outside: OutsideRow[]; personality: PersonalityFile } = {
+export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; empire: EmpireFile; hq: HqFile; buildings: Building[]; pyramid: PyramidFile; rivals: RivalsFile; rivalActions: RivalActionsFile; outside: OutsideRow[]; personality: PersonalityFile; town: TownFile } = {
   start: StartFileSchema.parse(startRaw),
   actions: ActionsFileSchema.parse(actionsRaw),
   field: FieldFileSchema.parse(fieldRaw),
@@ -34,4 +35,5 @@ export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: Fie
   rivalActions: RivalActionsFileSchema.parse(rivalActionsRaw),
   outside: OutsideFileSchema.parse(outsideRaw).rows,
   personality: PersonalityFileSchema.parse(personalityRaw),
+  town: TownFileSchema.parse(townRaw),
 };

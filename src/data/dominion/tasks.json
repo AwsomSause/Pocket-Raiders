@@ -570,8 +570,10 @@
     "no late pay penalty"
    ],
    "risk": "Mistakes anger crew",
-   "status": "disabled",
-   "needs": "D6"
+   "status": "supported",
+   "effect": {
+    "kind": "wages"
+   }
   },
   {
    "n": 24,

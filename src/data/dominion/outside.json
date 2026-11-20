@@ -26,8 +26,7 @@
     "Hold it for a favour later"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O002",
@@ -42,8 +41,7 @@
    "marks": [
     "day"
    ],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O003",
@@ -58,8 +56,7 @@
    "marks": [
     "minor"
    ],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O004",
@@ -74,8 +71,7 @@
    "marks": [
     "scales"
    ],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O005",
@@ -87,8 +83,7 @@
     "Charge the vendor for \"peace\""
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O006",
@@ -101,8 +96,7 @@
     "Refuse"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O007",
@@ -117,8 +111,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O008",
@@ -131,8 +124,7 @@
     "Lead them to a decoy"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O009",
@@ -148,8 +140,7 @@
     "scales",
     "chain"
    ],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O010",
@@ -162,8 +153,7 @@
     "Leave it"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O011",
@@ -176,8 +166,7 @@
     "Let it go"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O012",
@@ -190,8 +179,7 @@
     "Catch"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O013",
@@ -204,8 +192,7 @@
     "Walk on"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O014",
@@ -217,8 +204,7 @@
     "Return it"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O015",
@@ -233,8 +219,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O016",
@@ -250,8 +235,7 @@
     "minor",
     "day"
    ],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O017",
@@ -264,8 +248,7 @@
     "Threaten (curse chance, −luck 3 days)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O018",
@@ -279,8 +262,7 @@
    "marks": [
     "minor"
    ],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O019",
@@ -293,8 +275,7 @@
     "Call Nurse Joy"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O020",
@@ -307,8 +288,7 @@
     "Hire her to write yours"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O021",
@@ -320,8 +300,7 @@
     "Pay him ₽50"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O022",
@@ -333,8 +312,7 @@
     "Leave"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O023",
@@ -349,8 +327,7 @@
    "marks": [
     "day"
    ],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O024",
@@ -364,8 +341,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O025",
@@ -378,8 +354,7 @@
     "Hire as a night watch"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O026",
@@ -393,8 +368,7 @@
    "marks": [
     "minor"
    ],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O027",
@@ -407,8 +381,7 @@
     "Threaten the station"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O028",
@@ -423,8 +396,7 @@
    "marks": [
     "day"
    ],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O029",
@@ -436,8 +408,7 @@
     "Laugh it off (Rg+1)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O030",
@@ -450,8 +421,7 @@
     "Disrupt (Dr+8, Hero+3, big H)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O031",
@@ -3219,8 +3189,7 @@
     "Refuse (neutral, the story is written without you)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O232",
@@ -3233,8 +3202,7 @@
     "Hide your face (no effect)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O233",
@@ -3249,8 +3217,7 @@
    "marks": [
     "day"
    ],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O234",
@@ -3263,8 +3230,7 @@
     "Support it (Wanted lower, Dr−)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O235",
@@ -3277,8 +3243,7 @@
     "Ignore"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O236",
@@ -3291,8 +3256,7 @@
     "Ignore"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O237",
@@ -3305,8 +3269,7 @@
     "Silence her (H+5)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O238",
@@ -3319,8 +3282,7 @@
     "Stay out"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O239",
@@ -3335,8 +3297,7 @@
    "marks": [
     "chain"
    ],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O240",
@@ -3349,8 +3310,7 @@
     "Evade (H+4, he returns)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O241",
@@ -3363,8 +3323,7 @@
     "Pay the shopkeeper to calm them"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O242",
@@ -3379,8 +3338,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O243",
@@ -3393,8 +3351,7 @@
     "Hire the author to write your own"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O244",
@@ -3407,8 +3364,7 @@
     "Hire for a day as a decoy"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O245",
@@ -3423,8 +3379,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O246",
@@ -3437,8 +3392,7 @@
     "Skip"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O247",
@@ -3451,8 +3405,7 @@
     "Blackmail"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O248",
@@ -3465,8 +3418,7 @@
     "Stay quiet"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O249",
@@ -3480,8 +3432,7 @@
    "marks": [
     "scales"
    ],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O250",
@@ -3494,8 +3445,7 @@
     "Ignore"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D6"
+   "status": "supported"
   },
   {
    "id": "O251",
