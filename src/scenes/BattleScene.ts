@@ -1784,8 +1784,10 @@ export class BattleScene extends Phaser.Scene {
       const b = m ? (m[1] === 'foe' ? foes : mine)[Number(m[2])] : undefined;
       return b?.container.visible ? b : undefined;
     };
-    if (this.rxPin && !boxOf(this.rxPin)) this.rxPin = null;
-    const shownBox = boxOf(this.rxPin) ?? boxOf(hot);
+    // Party, Item, Auto or the info page cover the field: the Ability card closes instead of sitting half under them.
+    const covered = !!this.picker || !!this.infoPanel || (this.tabs.current !== null && this.tabs.current !== 'attack');
+    if (this.rxPin && (covered || !boxOf(this.rxPin))) this.rxPin = null;
+    const shownBox = covered ? undefined : boxOf(this.rxPin) ?? boxOf(hot);
     const card = shownBox?.mon ? { ...this.rxCard(shownBox.mon, shownBox.isPlayer), pinned: !!this.rxPin } : null;
     const tip = moves && hot?.startsWith('move:') && !this.infoPanel ? this.moveTip(Number(hot.slice(5))) : null;
     const content = services().session.content;

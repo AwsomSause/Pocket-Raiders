@@ -164,7 +164,7 @@ export class LegacyGalleryScene extends Phaser.Scene {
       this.picker = new LegacyGallery(this, styleId, items, this.motion, { onSelect: (i) => this.showRecord(i), onBack: () => this.scene.start('Hub', { focus: 3 }) }, start ?? 0);
       return;
     }
-    this.open(rows, records.length ? 'Legacy Gallery' : 'Legacy Gallery: finish a run to see its Trainer here', onSelect, () => this.scene.start('Hub', { focus: 3 }), start);
+    this.open(rows, records.length ? 'Legacy Gallery' : 'Legacy Gallery · no runs yet', onSelect, () => this.scene.start('Hub', { focus: 3 }), start);
   }
 
   /** One past Trainer, row by row; the first row is Relive the Moment, then Revisit This Timeline for a lost run. */

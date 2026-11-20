@@ -1991,7 +1991,7 @@ export class HubScene extends Phaser.Scene {
         const last = p.runHistory[0];
         entries.push({
           label: 'Keep my last run\'s seed',
-          sub: last ? `Seed ${last.seed} as ${last.archetypeId}, standard rules.` : 'Finish a run first.',
+          sub: last ? `Seed ${last.seed} as ${last.archetypeId}, standard rules.` : 'Keeps the seed of your last finished run.',
           problem: last ? shelfProblem(p, encodeSeedCode({ seed: last.seed, archetypeId: last.archetypeId, rules: STANDARD_CHOICE })) : 'Finish a run first.',
           run: () => apply((pr) => shelveSeed(pr, encodeSeedCode({ seed: last!.seed, archetypeId: last!.archetypeId, rules: STANDARD_CHOICE }), `Run ${last!.seed}`, now), 'Seed kept on the shelf.'),
         });
