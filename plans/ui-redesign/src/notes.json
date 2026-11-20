@@ -522,5 +522,24 @@
   "q3": "Yes, six endings: Raid Clear, The Catch, the Totem's Gift, Round Won, the Expedition's Haul, and the evil team falling apart (which leads into the Betrayal and Legendary pages from before).",
   "q4": "Unchanged.",
   "q5": "Yes. A single throw at a worn-out raid boss and a Totem stepping aside are the series' own endings for these fights."
+ },
+ "32": {
+  "name": "New areas 6 · Roll Call",
+  "label": "New areas · pass 6 of 25",
+  "big": "Every special screen now shows exactly who is on each side. Raids get a four-trainer squad rail with what each ally picked this turn. The Totem's side is a row of slots: the Totem, the ally it called, and the call it still has. The Galar match gets a TV line-up board with both teams of six. The expedition header carries your party's health, and the evil team stop shows the grunt's extra Pokémon before you choose.",
+  "pages": [
+   "Raid · Lobby",
+   "Raid · This Turn",
+   "Raid · Shield Broken",
+   "Totem · Both Sides",
+   "Galar · Line-ups",
+   "Evil Team · Never Fair",
+   "Expedition · Party Check"
+  ],
+  "q1": "Yes. Faces and Pokémon replace plain counters, and the raid finally looks like four trainers against one giant.",
+  "q2": "Pass 5 showed the numbers. This pass shows the people and Pokémon behind them, so you can plan around who is still standing.",
+  "q3": "Yes, seven: a raid lobby where everyone readies up, a turn-order page, the shield-break moment, and a both-sides page for the Totem, the Gym, the evil team and the expedition.",
+  "q4": "Unchanged. The line-up pages open with one key from the battle and close straight back to it.",
+  "q5": "Yes. Line-up boards before a stadium match and a row of Poké Balls for each side are how the series has always shown a team."
  }
 }
