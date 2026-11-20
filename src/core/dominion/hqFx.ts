@@ -47,6 +47,8 @@ const ZERO = (): HqFx => ({
   debate: 0, debateFloor: 0, debateSee: 0,
   // D10 (growth.ts)
   contact: 0, routes: 0, papers: 0, flyerPct: 0, interest: 0, fence: 0,
+  // D23 (snatch.ts)
+  talk: 0,
 });
 
 /** Everything the working rooms and buildings add, in one place. Percentages are capped at 90. */

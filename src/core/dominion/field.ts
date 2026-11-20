@@ -269,6 +269,8 @@ export function foeOf(b: DominionBlock, run: Pick<RunState, 'party'>, kind: Fiel
       return RIVAL_FOE ? RIVAL_FOE(b, run) : { name: 'Rival Grunt', species: 'rattata', level: foeLevel(b, run, 0), wild: false };
     case 'growth':
       return GROWTH_FOE ? GROWTH_FOE(b, run) : { name: 'A guard', species: 'rattata', level: foeLevel(b, run, 0), wild: false };
+    case 'snatch':
+      return SNATCH_FOE ? SNATCH_FOE(b, run) : { name: 'A guard', species: 'rattata', level: foeLevel(b, run, 0), wild: false };
     case 'target': {
       const f = target?.foe ?? district.targets[0]!.foe;
       return { name: f.name, species: f.species[0]!, level: foeLevel(b, run, f.offset), wild: false };
@@ -506,6 +508,12 @@ export function setRivalFoe(f: (b: DominionBlock, run: Pick<RunState, 'party'>) 
 let GROWTH_FOE: ((b: DominionBlock, run: Pick<RunState, 'party'>) => Foe) | null = null;
 export function setGrowthFoe(f: (b: DominionBlock, run: Pick<RunState, 'party'>) => Foe): void {
   GROWTH_FOE = f;
+}
+
+/** D23: the person a Snatch Operation goes after (snatch.ts). */
+let SNATCH_FOE: ((b: DominionBlock, run: Pick<RunState, 'party'>) => Foe) | null = null;
+export function setSnatchFoe(f: (b: DominionBlock, run: Pick<RunState, 'party'>) => Foe): void {
+  SNATCH_FOE = f;
 }
 
 // ---------- doing it ----------

@@ -3293,8 +3293,10 @@
     "turn them"
    ],
    "risk": "Escape",
-   "status": "disabled",
-   "needs": "D23"
+   "status": "supported",
+   "effect": {
+    "kind": "captive"
+   }
   },
   {
    "n": 137,

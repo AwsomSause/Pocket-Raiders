@@ -512,10 +512,7 @@
    "win": "The Big Night: three more night jobs before dawn."
   }
  },
- "later": {
-  "interrogate": "D23",
-  "hostage-trade": "D23"
- },
+ "later": {},
  "crates": {
   "museum": {
    "picks": 1,
