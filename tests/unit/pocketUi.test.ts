@@ -10,6 +10,7 @@ import { pkPause } from '../../src/ui/pocket/screens/pause';
 import { pkBag, pocketIcon } from '../../src/ui/pocket/screens/bag';
 import { CARD_BADGES, pkCard, rankFact } from '../../src/ui/pocket/screens/card';
 import { PK_TYPE_ORDER, pkTypes, typeRows } from '../../src/ui/pocket/screens/types';
+import { journalIcon, pkJournal, splitEntry } from '../../src/ui/pocket/screens/journal';
 import { dexNo, movesSize, pkDex, pkDexWall, type PkDexCell } from '../../src/ui/pocket/screens/dex';
 import type { DexModel } from '../../src/ui/redux/screens/dex';
 import { pkParty } from '../../src/ui/pocket/screens/party';
@@ -640,5 +641,34 @@ describe('Pocket look: the Type Chart', () => {
     expect(html).toContain('Hits hard');
     expect(pkTypes({ types: PK_TYPE_ORDER, index: 0, chart })).toContain('Nothing');
     expect(pkTypes({ types: PK_TYPE_ORDER, index: 1, chart, book: true })).toContain('data-act="dexType"');
+  });
+});
+
+describe('Pocket look: the Journal', () => {
+  const rows = Array.from({ length: 10 }, (_, k) => ({ title: k === 9 ? 'Act I: Arrival in Kanto. This region belongs to its rivals; expect old faces and fierce rematches.' : `Entry ${k}`, sub: `Region 1 · Stage ${k}`, tag: k === 0 ? 'Rival' : 'Memory', pct: k === 1 ? 40 : null }));
+  const d = { title: 'Story Journal', area: 'story' as const, rows, index: 9, text: 'Open quests and story threads for this run.' };
+  it('a long entry splits into a short title and the rest', () => {
+    expect(splitEntry('Act I: Arrival in Kanto. This region belongs to its rivals; expect old faces.')).toEqual(['Act I: Arrival in Kanto', 'This region belongs to its rivals; expect old faces.']);
+    expect(splitEntry('Beat Bug Catcher Rick')).toEqual(['Beat Bug Catcher Rick', '']);
+  });
+  it('icons follow the tag', () => {
+    expect(journalIcon('Rival').file).toBe('items/master_ribbon.png');
+    expect(journalIcon(undefined).file).toBe('items/map.png');
+  });
+  it('seven numbered entries, the lit one read out without the stand-in line', () => {
+    const html = pkJournal(d);
+    expect(pkPageOf(html)?.id).toBe('journal');
+    expect(html.match(/class="jr[ "]/g)?.length).toBe(7);
+    expect(html).toContain('data-key="jr-9"');
+    expect(html).not.toContain('data-key="jr-0"');
+    expect(html).toContain('<em>10</em>');
+    expect(html).toContain('Entry 10 · Memory');
+    expect(html).toContain('expect old faces and fierce rematches.');
+    expect(html).not.toContain('Open quests and story threads');
+    expect(html).toContain('10 entries');
+  });
+  it('a thread with steps shows how far it has come; an empty journal is a blank page', () => {
+    expect(pkJournal({ ...d, index: 1 })).toContain('width:40%');
+    expect(pkJournal({ ...d, rows: [], index: 0, text: '' })).toContain('A blank page');
   });
 });

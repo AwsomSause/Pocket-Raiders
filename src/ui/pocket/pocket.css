@@ -405,3 +405,14 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .rp-scr .gx-rp-dots{display:flex;justify-content:center;gap:8px;margin-top:-4px}
 .pkx .pks .rp-scr .gx-rp-dots u{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer}
 .pkx .pks .rp-scr .gx-rp-dots u.on{background:var(--yel)}
+/* Journal: the street behind the lit entry's picture, its icon large, and a bar for how far a thread has come. */
+.pkx .pks .journal .jr{cursor:pointer}
+.pkx .pks .journal .jr.gx-jr-off{opacity:.55}
+.pkx .pks .journal .jr div{min-width:0}
+.pkx .pks .journal .jr span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:290px}
+.pkx .pks .journal .jr-pic>img:first-child{top:-120px;opacity:.9}
+.pkx .pks .journal .jr-pic .gx-jr-ic{position:absolute;right:24px;bottom:10px}
+.pkx .pks .journal .gx-jr-bar{position:relative;display:block;height:14px;border:2px solid var(--ink);border-radius:999px;background:#e8ecf5;overflow:hidden}
+.pkx .pks .journal .gx-jr-bar i{position:absolute;left:0;top:0;bottom:0;background:var(--yel)}
+.pkx .pks .journal .gx-jr-bar em{position:relative;display:block;text-align:center;font:800 10px/10px var(--fb);font-style:normal}
+.pkx .pks .journal .jr b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:290px}

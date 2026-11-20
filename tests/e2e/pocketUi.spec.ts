@@ -510,3 +510,28 @@ test('Pocket look: the Trainer Card shows the ID, the record and the badges won'
   expect(await page.evaluate(() => JSON.stringify((window as any).__pkr.session.profile))).toBe(before);
   expect(errors).toEqual([]);
 });
+
+test('Pocket look: the Story Journal is a numbered list with the lit entry read out; looking changes nothing', async ({ page }) => {
+  test.setTimeout(120_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=pk-journal');
+  await toPocketMap(page);
+  const before = await runNow(page);
+  await page.evaluate(() => {
+    const map = (window as any).__pkr.game.scene.getScene('Map');
+    map.activate(map.options.findIndex((o: any) => o.kind === 'story'));
+  });
+  await onPkPage(page, 'Map', 'journal');
+  const jr = pkView(page, 'Map', 'journal');
+  await expect(jr.locator('.jr.on')).toHaveCount(1);
+  await expect(jr.locator('.jr-page > b')).not.toBeEmpty();
+  await fits(page, 'Map', 'journal');
+  if (await jr.locator('.jr').count() > 1) {
+    const first = await jr.locator('.jr.on').getAttribute('data-key');
+    await step(page, 'ArrowDown');
+    expect(await jr.locator('.jr.on').getAttribute('data-key')).not.toBe(first);
+  }
+  await step(page, 'Escape');
+  expect(await runNow(page)).toBe(before);
+  expect(errors).toEqual([]);
+});

@@ -6,6 +6,7 @@ import { act, type Area, B, esc, facts, H, hpb, icon, mini, tall, TX, W } from '
 import { rxImage, rxUrl } from './assets';
 import { phBoard, phGrid, phMenu, phOptions, phStats } from '../phantom/templates';
 import { pkBoard, pkGrid, pkMenu, pkOptions, pkStats } from '../pocket/templates';
+import { pkJournal } from '../pocket/screens/journal';
 
 /** First row to show so `index` stays visible in a window of `size` rows out of `n`. */
 export const scrollStart = (n: number, index: number, size: number): number => Math.max(0, Math.min(n - size, index - Math.floor(size / 2)));
@@ -201,7 +202,7 @@ export function boardProgress(tag: string): { pct: number; state: 'New' | 'Activ
 /** The mock-ups' `board` template. A list longer than one screen scrolls with the focused row and says where it is. */
 export function boardView(c: ReduxCtx, d: BoardModel): string {
   if (c.ph) return phBoard(c.ph, d);
-  if (c.pk) return pkBoard(d);
+  if (c.pk) return /journal|^story/i.test(d.title) ? pkJournal(d) : pkBoard(d);
   const grid = c.v(2) === 1, n = d.rows.length;
   // A long text box (three lines or more) grows up over the last row of the one-column list: show one row fewer then.
   const size = boardSize(c) - (!grid && Math.ceil(d.text.length / 76) >= 3 ? 1 : 0);
