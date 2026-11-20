@@ -68,7 +68,7 @@ jobs:
         env:
           NODE_OPTIONS: --max-old-space-size=6144
 
-  # Browser tests run in 10 parallel shards (the slowest part of CI used to be one long serial job). Six became too few on
+  # Browser tests run in 14 parallel shards (the slowest part of CI used to be one long serial job). Six became too few on
   # 2026-11-15: with the catalog overhaul's specs two shards ran out of their 30 minutes while every test was passing.
   # Eight became too few on 2026-11-17: with Evil Mode's specs shard 2 ran out at 67 of 77 tests, every one passing.
   # A spec file runs in one worker from start to end, so a very long file cannot be shared out: split it instead.
@@ -76,6 +76,8 @@ jobs:
   # the alphabet: four of them side by side in one shard ran two at a time and timed out on a slow runner.
   # Ten from 2026-11-17: Evil Mode's specs moved frontDoorStyles' many tests into shard 2, which ran out of its 30 minutes
   # twice with every test passing.
+  # Fourteen from 2026-11-20: the Dominion slices put every dominion*.spec plus eggs/events in shard 2, which hit its
+  # 30 minutes on several PRs (events.spec slowed under load, then the job was cancelled) while each spec passed alone.
   e2e:
     needs: changes
     if: needs.changes.outputs.code == 'true'
@@ -87,7 +89,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -106,10 +108,10 @@ jobs:
       - run: npx playwright install-deps chromium
         if: steps.pw.outputs.cache-hit == 'true'
       # The perf project depends on main, which makes Playwright keep everything in one shard (shard 1 ran all 254 tests,
-      # shards 2-4 ran none). Shard the main project alone, and run the frame-time budget (perf) once, alone, after shard 10.
-      - run: npx playwright test --project=main --shard=${{ matrix.shard }}/10 --trace off --reporter=list
+      # shards 2-4 ran none). Shard the main project alone, and run the frame-time budget (perf) once, alone, after shard 14.
+      - run: npx playwright test --project=main --shard=${{ matrix.shard }}/14 --trace off --reporter=list
       - run: npx playwright test --project=perf --no-deps --trace off --reporter=list
-        if: matrix.shard == 10
+        if: matrix.shard == 14
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
