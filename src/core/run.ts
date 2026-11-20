@@ -22,7 +22,7 @@ import { settleRivalRecruits } from './rivals/eventRecruit';
 import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
 import { endEvilFight, evilFightOn } from './evilMode/fightEnd';
-import { dominionFightOn, endDominionFight } from './dominion/fightEnd';
+import { dominionCatchBlock, dominionFightOn, endDominionFight } from './dominion/fightEnd';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
 import { FOE_WAITS, gnAfterTurn, gnShape, gnShapeDouble } from './greenneedle';
 import { answerAsk } from './greenneedle/ask';
@@ -3234,7 +3234,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     teamItems: run.passives,
     noBattleItems: noBattleItems(run.rules),
     setStyle: isHardcore(run.rules),
-    catchBlocked: nuzlockeCatchProblem(run.battle!),
+    catchBlocked: nuzlockeCatchProblem(run.battle!) ?? dominionCatchBlock(run),
     bondScore: (uid) => bondScoreOf(run.story.histories[uid]?.bond),
     bondPartners: (uid) => run.story.relationships.filter((r) => r.open && r.kind === 'bond' && (r.a.id === uid || r.b.id === uid)).map((r) => (r.a.id === uid ? r.b.id : r.a.id)),
   };

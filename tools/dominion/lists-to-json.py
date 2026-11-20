@@ -68,7 +68,7 @@ ENGINE = {
     82: dict(kind='berries'),
     102: dict(kind='money', funds=[20, 80]),
     # D6: district tasks (kind 'district', done in the member's district; n = [task Lv 1-2, Lv 3+]).
-    5: dict(kind='district', does='patrol', n=[3, 5], note='Rival jobs losing odds there wait for the rival team (D9); meeting the Hero waits for D11.'),
+    5: dict(kind='district', does='patrol', n=[3, 5], note='Rival jobs losing odds there wait for the rival team (D9).'),
     13: dict(kind='district', does='collect', collect=[100, 100, 110, 110, 125], note='Being jumped by rivals waits for the rival team (D9).'),
     32: dict(kind='district', does='dread', n=[1, 2], heat=1, risky=True, caughtHeat=4),
     40: dict(kind='district', does='eavesdrop'),
@@ -86,6 +86,10 @@ ENGINE = {
     124: dict(kind='district', does='line', n=[2, 3], note='Attacks on a district come with the rival team (D9); until then it keeps Heat from wearing Control down and pushes the rivals back.'),
     128: dict(kind='district', does='peace', n=[2, 4], note='Tension comes with the rival team (D9); until then it cools Heat there.'),
     146: dict(kind='district', does='face', n=[5, 10], note='A face who turns rival waits for betrayals (D15).'),
+    # D11: the Hero tasks (hero.ts).
+    45: dict(kind='hero', does='track', heat=1, risky=True),
+    118: dict(kind='hero', does='counter', heat=0, risky=True),
+    145: dict(kind='hero', does='hunt', heat=2, risky=True),
     # D9: the rival team (rivals.ts runs the new kinds). Guards count in raid defence (Part 3 §4).
     2: dict(kind='guard', note='Counts in raids on the HQ; guarding one outside building comes with D10.'),
     4: dict(kind='guard'), 10: dict(kind='guard'), 11: dict(kind='guard'), 138: dict(kind='guard'),
@@ -140,7 +144,7 @@ NEEDS_SECTION = {'A': 'D5', 'B': 'D10', 'C': 'D2', 'D': 'D9', 'E': 'D9', 'F': 'D
 NEEDS_ROW = {
     4: 'D9', 5: 'D6', 6: 'D2', 8: 'D10', 9: 'D2', 11: 'D9', 13: 'D6', 23: 'D6', 2: 'D9', 10: 'D9', 67: 'D4', 32: 'D6', 33: 'D10',
     40: 'D6', 46: 'D2', 47: 'D6', 42: 'D2', 45: 'D11', 50: 'D10', 53: 'D6', 55: 'D2', 58: 'D8', 69: 'D4', 70: 'D9', 71: 'D7',
-    83: 'D10', 84: 'D11', 89: 'D10', 90: 'D9', 91: 'D10', 109: 'D10', 118: 'D11', 119: 'D6', 124: 'D6', 128: 'D6', 141: 'D8',
+    83: 'D10', 84: 'D15', 89: 'D10', 90: 'D9', 91: 'D10', 109: 'D10', 118: 'D11', 119: 'D6', 124: 'D6', 128: 'D6', 141: 'D8',
     142: 'D9', 145: 'D11', 146: 'D6', 136: 'D23',
 }
 

@@ -3,9 +3,9 @@
 ## What's built
 - **Data**
   - `actions.json` now holds all 600 Boss actions (`tools/dominion/build-actions.py` reads the four list files).
-  - `growthActions.json` is the play data for rows 151-600, made by `tools/dominion/growth-to-json.py` from section rules plus each row's Lv 1 numbers. Of the 450: 249 supported, 68 limited (the note says what isn't acted on), 133 disabled (each names its slice: D11 30, D14 30, D15 41, D16 15, D22 15, D9 2).
+  - `growthActions.json` is the play data for rows 151-600, made by `tools/dominion/growth-to-json.py` from section rules plus each row's Lv 1 numbers. Of the 450: 249 supported, 68 limited (the note says what isn't acted on), 133 disabled (each names its slice: D11 30, D14 30, D15 41, D16 15, D22 15, D9 2). D11 merged while D10 was in review: its 30 rows (sections AB and AJ, the Hero) are a D11 follow-up.
   - `growth.json` (`tools/dominion/growth-data.py`) holds the 42 hand-made plays for the D10 rows of 1-150, plus the rules: 12 businesses with perks, the 8 Kanto Gyms, the five ways, Defiance numbers, raid fights per place, flyer designs, bribes, Fence rates, smuggling, 5 specialists, loans, the stall, safehouses, mercenaries, the lab's rare species and the lines.
-  - Crew tasks: all 600 are in (`lists-to-json.py`). 533 live; none waits for D10. Of team-actions 151-600: 117 supported, 303 limited, 30 disabled (AN waits D15, AQ waits D14).
+  - Crew tasks: all 600 are in (`lists-to-json.py`). 536 live with D11's; none waits for D10. Of team-actions 151-600: 117 supported, 303 limited, 30 disabled (AN waits D15, AQ waits D14).
   - Buildings: 121 of 266 live (27 more, such as the Operations Room, Front Office, Radio Room, Print Shop, Garage and Workshop). None waits for D10.
 - **Rules** (`src/core/dominion/growth.ts`, registered into field.ts, crew.ts and the World Turn; every roll on its own stream: `dominion-loot`, `-route`, `-loan`, `-flyers`, `-kidnap`, `-lab`, `-swap`):
   - **Buy Out** a business for clean money; it pays every week (clean or dirty, with a perk). Extort the same shop three times and the owner is Cornered: half price, dirty money is fine, Heat +20, Regard −5.
