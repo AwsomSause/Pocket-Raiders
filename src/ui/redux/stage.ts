@@ -104,7 +104,7 @@ function phantomReady(): boolean {
     fonts.id = 'ph-fonts';
     fonts.textContent = PHANTOM_FONTS.map(([fam, w, st, f]) => `@font-face{font-family:"${fam}";font-style:${st};font-weight:${w};font-display:swap;src:url("assets/fonts/phantom/${f}.woff2") format("woff2")}`).join('\n');
     document.head.append(fonts);
-    void Promise.all([import('../phantom/phantom.gen.css'), import('../phantom/phantom.css'), import('../phantom/shared.css'), import('../phantom/run.css'), import('../phantom/party.css'), import('../phantom/pages.css'), import('../phantom/map.css'), import('../phantom/event.css'), import('../phantom/pops.css')]).then(() => {
+    void Promise.all([import('../phantom/phantom.gen.css'), import('../phantom/phantom.css'), import('../phantom/shared.css'), import('../phantom/run.css'), import('../phantom/party.css'), import('../phantom/pages.css'), import('../phantom/map.css'), import('../phantom/event.css'), import('../phantom/pops.css'), import('../phantom/teams.css')]).then(() => {
       phantomState = 'ready';
       lastBox = '';
       views.forEach((v) => v.redraw());

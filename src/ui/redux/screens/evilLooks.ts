@@ -95,6 +95,18 @@ function riskOf(label: string): { text: string; noticed: number | null } {
   return m ? { text: label.slice(0, m.index), noticed: Number(m[1]) } : { text: label, noticed: null };
 }
 
+/** The drawn map of Hoenn on the table: sea, land, the threads between the pins, and the one move under the cursor (`moving`, or -1). */
+export function warChart(look: TableLook, moving: number, color: string): string {
+  const from = moving >= 0 ? look.pins[moving]! : null;
+  // Threads between the pins (the plans as they stand), and the one move under the cursor.
+  const threads = look.pins.map((p, i) => { const q = look.pins[(i + 1) % look.pins.length]!; return `<line x1="${p.x}" y1="${p.y - 6}" x2="${q.x}" y2="${q.y - 6}" stroke="${color}" stroke-width="1.2" opacity=".35" vector-effect="non-scaling-stroke"/>`; }).join('');
+  const move = from ? `<line class="wr-march" x1="${from.x}" y1="${from.y - 6}" x2="50" y2="46" stroke="${color}" stroke-width="2.5" stroke-dasharray="8 6" stroke-linecap="round" vector-effect="non-scaling-stroke"/>` : '';
+  // The map: sea, the land of Hoenn in a few strokes, its volcano, a grid and a compass rose.
+  const land = '<path d="M7 31 16 16 31 12 40 20 51 14 62 18 71 30 68 46 71 60 62 75 51 70 43 80 31 75 23 84 14 75 9 55z" fill="#b9c78e" stroke="#6f7f4c" stroke-width="1" vector-effect="non-scaling-stroke"/><path d="M79 35 85 29 91 37 89 49 82 50zM81 65 87 62 92 71 86 80 80 76zM36 88 42 85 45 92 40 97z" fill="#b9c78e" stroke="#6f7f4c" stroke-width="1" vector-effect="non-scaling-stroke"/><path d="M20 30 24 20 28 30z" fill="#a0683c" stroke="#6b3e1c" stroke-width="1" vector-effect="non-scaling-stroke"/><path d="M40 44 44 37 48 44zM47 46 50 40 53 46z" fill="#8fa06a" stroke="#6f7f4c" stroke-width=".8" vector-effect="non-scaling-stroke"/>';
+  const waves = [[6, 8], [70, 8], [88, 18], [4, 92], [58, 92], [74, 88], [94, 56]].map(([x, y]) => `<path d="M${x} ${y}q1.5-3 3 0t3 0" fill="none" stroke="#5b8fb0" stroke-width="1" opacity=".7" vector-effect="non-scaling-stroke"/>`).join('');
+  return `<svg class="fill" width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect width="100" height="100" fill="#9cc4d8" opacity=".38"/>${[20, 40, 60, 80].map((v) => `<path d="M${v} 0V100M0 ${v}H100" stroke="#6b4a1c" stroke-width=".6" opacity=".25" vector-effect="non-scaling-stroke"/>`).join('')}${waves}${land}${threads}${move}</svg>`;
+}
+
 /**
  * 7.6: the war room. A long table under a lamp with a drawn map of Hoenn on it; the leader at the head under the team's
  * banner, the lieutenants each side, and an empty chair for you. Plans are pins: the plan under the cursor lifts its
@@ -110,16 +122,10 @@ export function tableView(d: TableModel): string {
     ? `<div class="abs" style="left:${p.x}%;top:${p.y}%;width:18px;height:18px;margin:-20px 0 0 -9px;border-radius:50%;border:2px dashed ${st.head};opacity:.7"></div><div class="abs wr-tag" style="left:${p.x}%;top:${p.y}%;transform:translate(-50%,-2px);opacity:.6;text-decoration:line-through">${esc(p.label)}</div>`
     : pin(p.x, p.y, p.label))).join('');
   const from = moving >= 0 ? d.look.pins[moving]! : null;
-  // Threads between the pins (the plans as they stand), and the one move under the cursor.
-  const threads = d.look.pins.map((p, i) => { const q = d.look.pins[(i + 1) % d.look.pins.length]!; return `<line x1="${p.x}" y1="${p.y - 6}" x2="${q.x}" y2="${q.y - 6}" stroke="${st.head}" stroke-width="1.2" opacity=".35" vector-effect="non-scaling-stroke"/>`; }).join('');
-  const move = from ? `<line class="wr-march" x1="${from.x}" y1="${from.y - 6}" x2="50" y2="46" stroke="${st.head}" stroke-width="2.5" stroke-dasharray="8 6" stroke-linecap="round" vector-effect="non-scaling-stroke"/>` : '';
   const target = from
     ? `<div class="abs wr-pulse" style="left:50%;top:50%;width:34px;height:34px;margin:-27px 0 0 -17px;border-radius:50%;box-shadow:0 0 0 2px ${st.head},0 0 14px 4px #fff"></div>${pin(50, 50, 'the empty hills', 'wr-bob', 'box-shadow:0 0 0 2px #fff,0 0 10px 3px #fff')}`
     : '<div class="abs" style="left:50%;top:50%;transform:translate(-50%,-50%);font-size:11px;color:#6b5a3a;font-style:italic">the empty hills</div>';
-  // The map: sea, the land of Hoenn in a few strokes, its volcano, a grid and a compass rose.
-  const land = '<path d="M7 31 16 16 31 12 40 20 51 14 62 18 71 30 68 46 71 60 62 75 51 70 43 80 31 75 23 84 14 75 9 55z" fill="#b9c78e" stroke="#6f7f4c" stroke-width="1" vector-effect="non-scaling-stroke"/><path d="M79 35 85 29 91 37 89 49 82 50zM81 65 87 62 92 71 86 80 80 76zM36 88 42 85 45 92 40 97z" fill="#b9c78e" stroke="#6f7f4c" stroke-width="1" vector-effect="non-scaling-stroke"/><path d="M20 30 24 20 28 30z" fill="#a0683c" stroke="#6b3e1c" stroke-width="1" vector-effect="non-scaling-stroke"/><path d="M40 44 44 37 48 44zM47 46 50 40 53 46z" fill="#8fa06a" stroke="#6f7f4c" stroke-width=".8" vector-effect="non-scaling-stroke"/>';
-  const waves = [[6, 8], [70, 8], [88, 18], [4, 92], [58, 92], [74, 88], [94, 56]].map(([x, y]) => `<path d="M${x} ${y}q1.5-3 3 0t3 0" fill="none" stroke="#5b8fb0" stroke-width="1" opacity=".7" vector-effect="non-scaling-stroke"/>`).join('');
-  const chart = `<svg class="fill" width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect width="100" height="100" fill="#9cc4d8" opacity=".38"/>${[20, 40, 60, 80].map((v) => `<path d="M${v} 0V100M0 ${v}H100" stroke="#6b4a1c" stroke-width=".6" opacity=".25" vector-effect="non-scaling-stroke"/>`).join('')}${waves}${land}${threads}${move}</svg>`;
+  const chart = warChart(d.look, moving, st.head);
   const rose = `<svg class="abs" style="right:8px;bottom:6px" width="40" height="40" viewBox="-20 -20 40 40" aria-hidden="true"><circle r="13" fill="none" stroke="#6b4a1c" stroke-width="1.5" opacity=".7"/><path d="M0-18 4-4 18 0 4 4 0 18-4 4-18 0-4-4z" fill="#6b4a1c" opacity=".8"/><path d="M0-18 4-4-4-4z" fill="${st.head}"/></svg>`;
   const seat = (i: number, x: number, y: number, px: number, role: string): string =>
     `<div class="abs" style="left:${x}px;top:${y}px;width:120px;text-align:center"><div class="abs wr-chair" style="left:${60 - px * 0.36}px;top:${px * 0.22}px;width:${px * 0.72}px;height:${px * 0.82}px"></div>${i === 0 ? `<div class="abs wr-aura wr-pulse" style="left:${60 - px * 0.8}px;top:${-px * 0.2}px;width:${px * 1.6}px;height:${px * 1.4}px"></div>` : ''}<div style="position:relative">${art(d.files[i] ?? null, px)}</div><div style="position:relative;margin-top:2px"><span class="wr-plaque">${role ? `<b>${role}</b> · ` : ''}${esc(d.look.seats[i]?.name ?? '')}</span></div></div>`;

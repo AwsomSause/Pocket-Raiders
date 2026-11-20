@@ -48,6 +48,7 @@ import { ghostScareFor } from '../core/presentation/ghostScare';
 import type { HonestModel, HonestSide } from '../ui/redux/screens/stops';
 import type { TeamModel } from '../ui/redux/screens/team';
 import { briefingView, finalView, rankUpView, resultView, tableView } from '../ui/redux/screens/evilLooks';
+import { phBriefing, phFiled, phFinal, phTable, phTeamRank } from '../ui/phantom/screens/teams';
 import { evilLook, rankUpLook, resultLook, type EvilLook } from '../core/evil/screens';
 
 
@@ -362,15 +363,15 @@ export class EventScene extends Phaser.Scene {
           const lookChoices = view.choices.map((x) => ({ label: x.label, sub: sub(x), chance: pct(x), locked: x.locked !== null }));
           if (look && !out && !this.picker && this.rxAt >= this.rxPages.length - 1) {
             const text = pages[at]!.map((l) => (l.who ? `${l.who}: ${l.text}` : l.text)).join(' ');
-            if (look.kind === 'final') return finalView({ look, choices: lookChoices, index: this.index, hold: this.holdPct, files: lookFiles, title: view.event.name });
-            if (look.kind === 'briefing') return briefingView({ look, choices: lookChoices, index: this.index, text });
-            if (look.kind === 'table') return tableView({ look, choices: lookChoices, index: this.index, files: lookFiles, text });
+            if (look.kind === 'final') { const m = { look, choices: lookChoices, index: this.index, hold: this.holdPct, files: lookFiles, title: view.event.name }; return c.ph ? phFinal(c.ph, m) : finalView(m); }
+            if (look.kind === 'briefing') { const m = { look, choices: lookChoices, index: this.index, text }; return c.ph ? phBriefing(c.ph, m) : briefingView(m); }
+            if (look.kind === 'table') { const m = { look, choices: lookChoices, index: this.index, files: lookFiles, text }; return c.ph ? phTable(c.ph, m) : tableView(m); }
           }
           if (out && r && out.step === 'rewards') {
             const up = rankUpLook(content, r.run, r.changes);
-            if (up) return rankUpView(up, { leader: fileOf(up.leader), lt: fileOf(up.lt), grunt: fileOf(up.grunt) }, out.next);
+            if (up) { const files = { leader: fileOf(up.leader), lt: fileOf(up.lt), grunt: fileOf(up.grunt) }; return c.ph ? phTeamRank(c.ph, up, files, out.next) : rankUpView(up, files, out.next); }
             const form = resultLook(content, view.event.id, this.index, view.choices[this.index]?.label ?? '', r.changes, r.text);
-            if (form) return resultView(form, out.next);
+            if (form) return c.ph ? phFiled(c.ph, form, out.next) : resultView(form, out.next);
           }
           const speaker = pageSpeaker(pages[at]!);
           return rxEventView(c, {
@@ -433,9 +434,11 @@ export class EventScene extends Phaser.Scene {
       // 7.7: press and hold a corner (or Enter) to choose; letting go cancels.
       if (this.rxLook?.kind === 'final') {
         const el = this.rx.el;
-        const down = (e: Event): void => { const t = (e.target as HTMLElement).closest<HTMLElement>('[data-hold]'); if (t && el.contains(t)) this.startHold(Number(t.dataset.hold)); };
+        // The Phantom page is drawn on its own layer, which keeps presses to itself: hear them on the way down (capture) and check both layers.
+        const down = (e: Event): void => { const t = (e.target as HTMLElement).closest<HTMLElement>('[data-hold]'); if (t && (el.contains(t) || t.closest('#phx .phs[data-scene="Event"]'))) this.startHold(Number(t.dataset.hold)); };
         const up = (): void => this.cancelHold();
-        el.addEventListener('pointerdown', down);
+        document.addEventListener('pointerdown', down, true);
+        this.events.once('shutdown', () => document.removeEventListener('pointerdown', down, true));
         window.addEventListener('pointerup', up);
         this.input.keyboard?.on('keyup', (e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') up(); });
         this.events.once('shutdown', () => window.removeEventListener('pointerup', up));
