@@ -9,7 +9,7 @@ import { services } from '../game/services';
 import { onInputAction } from '../ui/input';
 import { COLORS, GAME_WIDTH, textStyle } from '../ui/theme';
 import { drawBackdrop, drawPanel, Menu, type MenuOption } from '../ui/widgets';
-import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, phantomOn, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { talkView } from '../ui/redux/screens/talk';
 import { pageLines, pageSpeaker, type ScriptPage } from '../ui/redux/script';
 import { artOf } from '../ui/redux/game';
@@ -135,8 +135,10 @@ abstract class PagedScene extends Phaser.Scene {
       if (!this.menu) return;
       // New UI: while the text has more pages, Enter turns the page before the menu takes it.
       if (this.rx && a === 'confirm' && this.rxTurn(1)) return;
-      if (a === 'left') this.handlers.left?.();
-      else this.menu.handle(a);
+      // Phantom UI deals the choices as a row of cards, so left and right move along them (left still turns back a lesson page).
+      const row = phantomOn() && !!this.rx;
+      if (a === 'left' && (this.handlers.left || !row)) this.handlers.left?.();
+      else this.menu.handle(row && a === 'right' ? 'down' : row && a === 'left' ? 'up' : a);
     });
   }
 }

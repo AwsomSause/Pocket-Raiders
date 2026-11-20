@@ -104,7 +104,10 @@ function fitLabel(text: string, max = 38): string {
 }
 
 import { mountRedux, reduxOn } from '../ui/redux/stage';
-import { menuView } from '../ui/redux/templates';
+import { menuView, type MenuModel } from '../ui/redux/templates';
+import { rxFileOf } from '../ui/redux/assets';
+import { phSetup } from '../ui/phantom/screens/run';
+import type { AssetManifest } from '../assets/catalog';
 import { DESK_ROWS, deskItems } from '../ui/redux/screens/run';
 import { ownsTrainer } from '../core/progress';
 
@@ -301,7 +304,7 @@ export class RunPrepScene extends Phaser.Scene {
       const view = mountRedux(this, {
         render: (c) => {
           const row = rows[this.focusIndex]!;
-          return menuView(c, {
+          const model: MenuModel = {
             title: 'Preparation Desk', area: 'run', hints: this.desk ? [['Enter', 'choose'], ['←→', 'change'], ['Esc', 'back']] : [['Enter', 'select'], ['←→', 'change'], ['Q/E', 'page'], ['Esc', 'trainers']],
             items: items.map((x, i) => ({ ...x, disabled: disabled(rows[i]!) })),
             index: this.focusIndex,
@@ -309,7 +312,15 @@ export class RunPrepScene extends Phaser.Scene {
             detail: !this.desk || row === 'start' ? { title: lines[0] ?? def.title, body: lines.slice(1).join('\n') } : { title: items[this.focusIndex]!.label, body: ROW_HELP[row].replace(' ←/→ changes it.', ''), facts: deskFacts },
             text: notice || (this.desk ? 'Set the run up, then depart.' : ROW_HELP[row] || def.blurb),
             ...(this.desk ? {} : { tabs: { labels: PAGES.map((p) => p.title), index: this.page } }),
-          });
+          };
+          // Phantom UI: the desk is the mock-ups' Run rules page (the run's card, the rows, Depart as the big blade).
+          if (c.ph && this.desk) {
+            return phSetup(c.ph, {
+              ...model, art: rxFileOf(this.cache.json.get('manifest') as AssetManifest | undefined, archetype.spriteAssetId), seed: this.seed === null || this.seed === '' ? 'RANDOM' : this.seed,
+              card: [['Trainer', archetype.name], ['Campaign', items[0]?.note ?? ''], ['Difficulty', getDifficulty(this.rules.difficultyId)?.name ?? ''], ['Weeks', this.rules.weeks === false ? 'Off' : 'On']],
+            });
+          }
+          return menuView(c, model);
         },
         acts: { pick: (i) => { this.menu.focus(Number(i), false); this.menu.confirm(); }, tab: (k) => !this.picker && this.goPage(Number(k)) },
         overs: { over: (i) => { if (!disabled(rows[Number(i)]!)) this.menu.focus(Number(i), false); } },

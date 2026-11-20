@@ -39,7 +39,8 @@ import { storeOf } from '../ui/redux/storeFloors';
 import { itemEvolutionTargets } from '../core/evolution';
 import { maxHp } from '../core/pokemon';
 import { pageSpeaker, scriptPages, type ScriptPage } from '../ui/redux/script';
-import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, phantomOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { currentRegion, runCampaign } from '../core/regions';
 import { leadStarEvent, skyBirdStaging } from '../core/presentation/eventStars';
 import { tourneyHome, tourneyPage, tourneyRounds } from '../ui/redux/screens/bracket';
 import { eventView as rxEventView, type EventLook } from '../ui/redux/screens/event';
@@ -409,11 +410,13 @@ export class EventScene extends Phaser.Scene {
             bracket: tv && this.rxBracket !== null ? tourneyPage(tv, (sp) => monFile(this, sp), this.rxBracket, 'Saffron Fighting Tournament') : null,
             title: champion ? 'CHAMPION' : null,
             store: store ? { ...store, party: partyChips(this), notes: helps(r?.run ?? run) } : null,
+            place: c.ph && run.stage ? { no: String(run.stage.index + 1), of: run.stage.pseudo ? '' : String(runCampaign(content, run).stagesPerRegion), region: run.stage.pseudo?.name ?? currentRegion(content, run).name, sub: clockLabel(run) } : null,
+            me: c.ph ? youArt : null,
           });
         },
         acts: {
           pick: (k) => (this.rxLook?.kind === 'final' ? this.startHold(Number(k)) : this.confirm(Number(k))),
-          page: () => this.turnPage(1),
+          page: (k) => this.turnPage(Number(k) < 0 ? -1 : 1),
           bracket: () => this.toggleBracket?.(),
           bracketPage: (k) => { this.rxBracket = Number(k); this.rx?.refresh(); },
           next: () => this.advanceOutcome(),
@@ -443,6 +446,8 @@ export class EventScene extends Phaser.Scene {
     this.cards = this.layout.widgets.map((w, i) => ({ box: w.box, view: view.choices[i]!, widget: w }));
     this.focus(Math.max(0, view.choices.findIndex((c) => !c.locked)), false);
     onInputAction(this, (action) => this.handle(action));
+    // Phantom UI: the choice cards carry numbers; a number key lights its card (Enter still chooses).
+    this.input.keyboard?.on('keydown', (e: KeyboardEvent) => { const k = Number(e.key) - 1; if (phantomOn() && this.rx && this.phase === 'choose' && this.rxAt >= this.rxPages.length - 1 && Number.isInteger(k) && k >= 0 && k < this.cards.length) this.focus(k); });
     this.cameras.main.fadeIn(this.calm ? 1 : 300);
     // Split-second choice (ideas W1): a countdown when timed prompts are on; at zero the fallback option is taken.
     const seconds = view.event.countdown;

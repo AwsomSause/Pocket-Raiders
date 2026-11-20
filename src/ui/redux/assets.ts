@@ -84,6 +84,35 @@ export function rxImage(file: string): [number, number] | undefined {
   return undefined;
 }
 
+const trims = new Map<string, [number, number, number, number] | null>();
+/** Where a plain picture's drawing sits inside its file: x, y, width, height of everything that is not see-through. Undefined until it has loaded and been measured. */
+export function rxTrim(file: string): [number, number, number, number] | undefined {
+  const hit = trims.get(file);
+  if (hit !== undefined) return hit ?? undefined;
+  const key = 'trim:' + file;
+  if (pending.has(key) || typeof Image === 'undefined') return undefined;
+  pending.add(key);
+  const im = new Image();
+  const done = (box: [number, number, number, number] | null): void => { trims.set(file, box); pending.delete(key); arrived(); };
+  im.onerror = () => done(null);
+  im.onload = () => {
+    try {
+      const w = im.naturalWidth, h = im.naturalHeight, c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      const g = c.getContext('2d', { willReadFrequently: true })!;
+      g.drawImage(im, 0, 0);
+      const d = g.getImageData(0, 0, w, h).data;
+      let x0 = w, y0 = h, x1 = -1, y1 = -1;
+      for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (d[(y * w + x) * 4 + 3]) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+      done(x1 < 0 ? [0, 0, w, h] : [x0, y0, x1 - x0 + 1, y1 - y0 + 1]);
+    } catch {
+      done(null);
+    }
+  };
+  im.src = rxUrl(file);
+  return undefined;
+}
+
 let byId: Map<string, { file: string; atlas: boolean }> | null = null;
 /** The file behind one of the game's asset ids (a Phaser texture key), read from the asset manifest. Null when it is not a picture. */
 export function rxFileOf(manifest: { assets: { id: string; kind: string; path: string }[] } | null | undefined, assetId: string): { file: string; atlas: boolean } | null {

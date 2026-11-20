@@ -5,6 +5,7 @@
 import { act, B, esc, H, TX, W } from '../kit';
 import type { ScriptLine } from '../script';
 import type { ReduxCtx } from '../stage';
+import { phName } from '../../phantom/screens/run';
 
 /** The on-screen keys: the alphabet, then a hyphen, an apostrophe, a space and "delete" (30 keys, as the mock-up's grid). */
 export const FORM_KEYS: readonly string[] = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ', '-', "'", ' ', '⌫'];
@@ -35,7 +36,8 @@ export function typeKey(value: string, key: string, max: number, fromGrid = fals
   return value + (value === '' || /[\s'-]$/.test(value) ? key : key.toLowerCase());
 }
 
-export function formView(_c: ReduxCtx, d: FormModel): string {
+export function formView(c: ReduxCtx, d: FormModel): string {
+  if (c.ph) return phName(c.ph, d);
   const last = d.value.slice(-1).toUpperCase();
   const many = d.fields.length > 1;
   const chips = many ? `<div class="row" style="gap:6px;flex-wrap:wrap;justify-content:center;max-width:860px">${d.fields.map((f, k) => `<span class="tg${k === d.field ? '' : ' no'}" style="cursor:pointer"${act('field', k)}>${esc(f.label)}: ${esc(f.value || '…')}</span>`).join('')}</div>` : '';

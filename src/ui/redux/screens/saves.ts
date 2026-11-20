@@ -2,6 +2,7 @@
 
 import type { ReduxCtx } from '../stage';
 import { act, B, esc, H, mini, TX, W } from '../kit';
+import { phSaves } from '../../phantom/templates';
 
 export interface SavesModel {
   slots: { tag: string; name: string; where: string; time: string; party: string[]; empty: boolean }[];
@@ -19,6 +20,7 @@ export const confirmBox = (d: ConfirmModel): string =>
   '<div class="shade"></div>' + W(`<b style="font-size:21px">${esc(d.title)}</b><div class="sm" style="line-height:20px">${esc(d.body)}</div><div class="row">${d.options.map((o, k) => B(esc(o), k === d.index, 'flex:1;justify-content:center', '', `${act('confirm', k)} data-over="confirmOver"`)).join('')}</div>`, 'position:absolute;left:260px;right:260px;top:170px;display:flex;flex-direction:column;gap:12px;padding:18px 20px;z-index:9');
 
 export function savesView(c: ReduxCtx, d: SavesModel): string {
+  if (c.ph) return phSaves(c.ph, d);
   const v = c.v(2);
   const rows = d.slots.map((s, k) => {
     const on = k === d.focus;

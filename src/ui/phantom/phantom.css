@@ -1,0 +1,70 @@
+/* The Phantom UI in the game: what the mock-up rules (phantom.gen.css) need to sit over the game canvas, plus the
+   pieces only the game has. Hand-written; the mock-up rules themselves are generated. */
+
+/* ---- the layer: a 1280 x 720 stage scaled onto the 960 x 540 game ---- */
+.phx{position:fixed;left:0;top:0;width:0;height:0;z-index:40;pointer-events:none}
+.phx .phs{pointer-events:auto;transform:scale(calc(var(--s,.35)*.75))}
+.phx .phs.clear{background:none;pointer-events:none}
+.phx .phs.clear [data-act],.phx .phs.clear .hit{pointer-events:auto}
+.phx [data-act]{cursor:pointer}
+.phx .phs .an{display:block}
+.phx .phs .an b{display:block;image-rendering:pixelated}
+
+/* ---- a New UI screen that has no Phantom page yet wears Phantom colours ---- */
+.rx .stage.phfb{--g:#0c0b0d;--p:#19171c;--p2:#2c2930;--l:#000;--f:#fff;--acc:#e4002b;--pa:#fff;--pai:#0c0b0d;--tf:#e4002b;--ink:#fff;--wink:#fff;--font:"Barlow Condensed";--fs:20px;--fw:700;
+  --pat:radial-gradient(#ffffff14 2px,#0000 2px) 0 0/22px 22px,linear-gradient(115deg,#0c0b0d 62%,var(--acc) 62% 100%)}
+.rx .stage.phfb[data-liv=midnight]{--g:#06142e;--p:#0b2148;--p2:#143266;--acc:#19d3ff;--tf:#19d3ff;--l:#020814}
+.rx .stage.phfb[data-liv=channel]{--g:#f4c400;--p:#111;--p2:#2b2b2b;--acc:#ffd400;--tf:#111;--ink:#111}
+.rx .stage.phfb[data-liv=fantasia]{--g:#0f2a26;--p:#143a34;--p2:#1f5148;--acc:#d8b45a;--tf:#d8b45a;--l:#06140f}
+.rx .stage.phfb[data-liv=velvet]{--g:#0b0f3a;--p:#151b5c;--p2:#232b80;--acc:#ffd400;--tf:#ffd400;--l:#04061c}
+.rx .stage.phfb .hd{background:var(--l);color:#fff;font-family:"Anton","Impact",sans-serif;font-weight:400;letter-spacing:.04em;text-transform:uppercase;text-shadow:none;transform:skewX(-12deg);transform-origin:0 0;padding-left:30px;box-shadow:8px 0 0 var(--acc)}
+.rx .stage.phfb .btn{text-transform:uppercase;letter-spacing:.03em;transform:skewX(-10deg)}
+.rx .stage.phfb .btn.on{background:var(--acc);color:#fff}
+.rx .stage.phfb[data-liv=channel] .btn.on,.rx .stage.phfb[data-liv=velvet] .btn.on,.rx .stage.phfb[data-liv=fantasia] .btn.on{color:#0c0b0d}
+.rx .stage.phfb .win.sel{color:#fff}
+.phx .phs .blade.off{opacity:.42}
+
+/* ---- Settings: ten pages where the mock-up had eight, and the pieces a real list needs ---- */
+.phx .phs .ct8.n10{grid-template-columns:repeat(5,1fr);gap:12px 14px;top:290px}
+.phx .phs .ct8.n10 .c8{height:128px;padding:14px 16px}
+.phx .phs .ct8.n10 .c8 b{font-size:30px}
+.phx .phs .ct8.n10 .c8 p{width:150px;font-size:15px}
+.phx .phs .ct8.n10 .c8 i{font-size:74px}
+.phx .phs .rl8.n10{top:128px;gap:4px}
+.phx .phs .rl8.n10 span{height:47px;font-size:26px}
+.phx .phs .rl8.n10 span.on{font-size:32px}
+.phx .phs .keys.ph-more{left:70px;right:auto;top:566px;bottom:auto;gap:10px}
+.phx .phs .keys.ph-more .key{padding:6px 14px;transition:transform .12s,background .12s,color .12s}
+.phx .phs .keys.ph-more .key.on{background:var(--w);color:var(--k);transform:translateY(-3px) rotate(-2deg);box-shadow:5px 5px 0 var(--red)}
+.phx .phs .sr.off{opacity:.45}
+.phx .phs .sr .v .ph-note{font:800 12px/1 var(--f-cond);letter-spacing:.1em;text-transform:uppercase;background:var(--gold);color:#000;padding:4px 6px}
+.phx .phs .sr.ph-long{font-size:19px}.phx .phs .sr.ph-long .v{font-size:20px}
+.phx .phs .sr .v{white-space:nowrap}
+.phx .phs .ph-scroll{position:absolute;left:728px;top:136px;width:6px;height:440px;background:#ffffff22;z-index:2}
+.phx .phs .ph-scroll b{position:absolute;left:0;right:0;top:var(--a);height:var(--b);background:var(--red);transition:top .18s cubic-bezier(.2,1.2,.4,1)}
+.phx .phs .ph-count{position:absolute;left:640px;width:78px;text-align:right;top:110px;font:800 14px/1 var(--f-cond);letter-spacing:.14em;color:var(--w);opacity:.8;z-index:2}
+.phx .phs .ph-wide .sr8{left:70px;width:1000px}
+.phx .phs .ph-wide .ph-scroll{left:1084px}
+.phx .phs .ph-wide .ph-count{left:992px}
+.phx .phs .ph-wide.low .sr8{top:190px}
+.phx .phs .ph-wide.low .ph-scroll{top:194px;height:380px}
+.phx .phs .ph-wide.low .ph-count{top:168px}
+.phx .phs .ph-find{position:absolute;left:70px;top:128px;padding:8px 18px;background:var(--w);color:var(--k);font:400 30px/1 var(--f-disp);transform:rotate(-1.5deg);box-shadow:6px 6px 0 var(--red);z-index:3}
+.phx .phs .pv-o>div{min-width:0}
+.phx .phs .pv-o b{font-size:17px;line-height:1.05;overflow-wrap:anywhere}
+
+/* ---- more motion than the mock-ups (the game redraws by changing only what differs, so these glide) ---- */
+@keyframes phx-float{0%,100%{translate:0 0}50%{translate:0 -10px}}
+@keyframes phx-sway{0%,100%{rotate:-1.2deg}50%{rotate:1.2deg}}
+@keyframes phx-breathe{0%,100%{scale:1}50%{scale:1.035}}
+@keyframes phx-slide{from{background-position:0 0}to{background-position:220px 0}}
+@keyframes phx-tick{0%{translate:0 0}25%{translate:3px -2px}50%{translate:-2px 2px}75%{translate:2px 1px}100%{translate:0 0}}
+.phx .phs:not(.still) :is(.blade,.sr,.c8,.ps,.key,.rl8 span,.pv-o>div,.vc,.ch,.pn){transition:transform .18s cubic-bezier(.2,1.5,.4,1),background-color .12s,color .12s,box-shadow .18s,filter .18s,height .18s cubic-bezier(.2,1.5,.4,1),width .18s cubic-bezier(.2,1.5,.4,1),margin .18s,opacity .15s,scale .12s,translate .18s cubic-bezier(.2,1.5,.4,1)}
+.phx .phs [data-act]:not(.on):not(.off):hover{filter:brightness(1.3)}
+.phx .phs [data-act]:not(.off):active{scale:.95}
+.phx .phs:not(.still) .ph-float{animation:phx-float 3.4s ease-in-out infinite}
+.phx .phs:not(.still) .ph-sway{animation:phx-sway 5s ease-in-out infinite;transform-origin:50% 100%}
+.phx .phs:not(.still) .ph-breathe{animation:phx-breathe 2.6s ease-in-out infinite;transform-origin:50% 100%}
+.phx .phs:not(.still) .c8.on i{animation:phx-tick .5s steps(4) infinite}
+.phx .phs:not(.still) .ps.on{animation:phx-breathe 1.8s ease-in-out infinite}
+.phx .phs .ph-float,.phx .phs .ph-sway,.phx .phs .ph-breathe{display:block}

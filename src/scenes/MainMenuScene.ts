@@ -18,12 +18,15 @@ import { screenStyleOf } from '../core/presentation/screenStyles';
 import { dressScreen } from '../ui/screenDress';
 import { TITLE_LAYOUTS } from '../ui/titleLayouts';
 import { slotCard } from '../core/presentation/slotLines';
-import { mountRedux, reduxOn } from '../ui/redux/stage';
+import { mountRedux, phantomOn, reduxOn } from '../ui/redux/stage';
 import { titleView } from '../ui/redux/screens/title';
 import { bg } from '../ui/redux/kit';
 import { clipsPlayable, runTitleClips, titleClipsHtml, titleClipsOnCanvas } from '../ui/titleClips';
 import { VERSION_LABEL } from '../ui/updateSplashGate';
 import { downloadText } from '../ui/files';
+
+/** Phantom UI: its "Press any button" splash has been passed once since the page loaded. */
+let splashSeen = false;
 
 export class MainMenuScene extends Phaser.Scene {
   private menu!: Menu;
@@ -169,7 +172,8 @@ export class MainMenuScene extends Phaser.Scene {
     if (data?.focus) this.menu.focus(data.focus, false);
     onInputAction(this, (a) => {
       if (this.pressWait) {
-        if (a === 'confirm') this.events.emit('pressStart');
+        // Phantom UI: its splash says "Press any button", so any game key starts.
+        if (a === 'confirm' || phantomOn()) this.events.emit('pressStart');
         return;
       }
       this.menu.handle(a);
@@ -188,19 +192,30 @@ export class MainMenuScene extends Phaser.Scene {
 
     // New UI: the mock-up's Title screen, drawn over this scene; the menu above stays the controller.
     if (reduxOn()) {
-      this.pressWait = false;
+      // Phantom UI: the splash waits for any button the first time the title opens; coming back from another screen goes straight to the list.
+      this.pressWait = phantomOn() && !splashSeen;
       this.menu.container.setVisible(true);
       // The backdrop is its own view: its markup never changes, so the clips keep playing while the menu redraws.
-      const back = mountRedux(this, { render: () => bg('ui/splash-beta-0.5.png') + titleClipsHtml() });
+      // (A Phantom page paints its own backdrop, so the clips sit out.)
+      const back = mountRedux(this, { render: (c) => (c.ph ? '' : bg('ui/splash-beta-0.5.png') + titleClipsHtml()) });
       back.el.dataset.scene = 'MainMenuBack';
       runTitleClips(this, back.el, stillClips);
+      const peek = session.slotPeeks().find((p) => p.slot === (latest ?? session.slot));
+      const card = peek ? slotCard(session.content, peek) : null;
       const view = mountRedux(this, {
         clear: true,
-        render: (c) => titleView(c, { options: options.map((o) => o.option), index: this.menu.index, version: VERSION_LABEL, art: '', notes }),
-        acts: { pick: (i) => { this.menu.focus(Number(i), false); this.menu.confirm(); } },
+        render: (c) => titleView(c, { options: options.map((o) => o.option), index: this.menu.index, version: VERSION_LABEL, art: '', notes, press: this.pressWait, save: card ? { title: card.title, lines: card.lines } : null }),
+        acts: {
+          pick: (i) => { this.menu.focus(Number(i), false); this.menu.confirm(); },
+          start: () => this.events.emit('pressStart'),
+          version: () => this.scene.start('VersionSelect', { from: 'MainMenu' }),
+        },
         overs: { over: (i) => { if (!options[Number(i)]?.option.disabled) this.menu.focus(Number(i), false); } },
       });
       this.menu.onFocus = () => view.refresh();
+      this.events.on('pressStart', () => { this.pressWait = false; splashSeen = true; view.refresh(); });
+      // V changes the Phantom version from the title (the mock-up's "Change version").
+      this.input.keyboard?.on('keydown-V', () => { if (phantomOn()) view.el.querySelector<HTMLElement>('[data-act="version"]')?.click(); });
     }
 
     const s = session.profile.stats;

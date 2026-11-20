@@ -63,6 +63,7 @@ import { device } from '../game/deviceTools';
 import { flagOn } from '../core/tools/featureFlags';
 import { commentaryLine } from '../core/tools/commentary';
 import { maxHp } from '../core/pokemon';
+import { displayName } from '../core/care';
 import { newSplits, parseSplits, formatMs, updateSplits } from '../core/tools/speedrun';
 import { tradeSalt, useTradeScreen } from '../core/presentation/tradeStyles';
 import { playCry, playMusic, playSfx, playSfxLazy, playMusicLazy, storyOr, playCue, playStoryMusic } from '../ui/audio';
@@ -124,11 +125,17 @@ import { castSpriteId, drawDossier } from '../ui/dossier';
 import { dossierFolders } from '../core/expansion/cast/dossier';
 import { pokemonAssetIds, type AssetManifest } from '../assets/catalog';
 import { rxFileOf } from '../ui/redux/assets';
-import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, phantomOn, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
 import { askText } from '../ui/redux/ask';
 import { hoverTips, ownAbilityCard } from '../ui/redux/tips';
 import type { BattlePanel } from '../ui/redux/screens/battle';
 import { mapView, type MapLegendRow, type MapModel, type MapNodeView } from '../ui/redux/screens/map';
+import type { PhantomVersion } from '../core/presentation/phantom';
+import { phInto } from '../ui/phantom/picker';
+import { phMap, phNodeMenu, phPause } from '../ui/phantom/screens/map';
+import { phHeal, type PhHealModel } from '../ui/phantom/screens/stops';
+import { dockFact } from '../ui/phantom/screens/town';
+import { phConfirm } from '../ui/phantom/templates';
 import { bestMedalWord } from '../ui/redux/screens/minigame';
 import { confirmBox } from '../ui/redux/screens/saves';
 import { bookRows, bookView, dossierView, nodeMenuView, pauseView, reportView, rollView, trackView, type NodeMenuCard } from '../ui/redux/screens/popups';
@@ -259,6 +266,8 @@ export class MapScene extends Phaser.Scene {
   private rxPause: { index: number; ask: number | null } | null = null;
   /** New UI: the node event menu while it is open (the cards, the cursor, and what a pick does). */
   private rxMenu: { header: string; cards: NodeMenuCard[]; index: number; pick: (k: number) => void } | null = null;
+  /** Phantom UI: the healing spot's page, up until the player presses (then `done` goes back to the map). */
+  private rxHeal: { model: PhHealModel; done: () => void } | null = null;
   /** New UI: a tournament match is being watched (drawn on the canvas, so the layer steps aside). */
   private rxWatching = false;
   /** New UI: when a pop-up last opened or closed. Its key can also be a direction (D is "right"), and that same press must not move anything. */
@@ -369,6 +378,17 @@ export class MapScene extends Phaser.Scene {
     const note = MapScene.PAUSE[p.index] === 'End run' && !can ? 'Only an Adventure run can be ended here. Use Save to leave this one.' : '';
     if (p.ask === null) return pauseView({ options: MapScene.PAUSE.map((label) => ({ label, off: label === 'End run' && !can })), index: p.index, note });
     return confirmBox({ title: 'End this run?', body: 'Your progress is banked as a defeat. This cannot be undone.', options: ['Keep playing', 'End run'], index: p.ask }).replace('class="shade"', 'class="shade hit"');
+  }
+
+  /** The Phantom pause menu: the mock-up's Pause page, with the "End this run?" card over it while that is asked. */
+  private pausePhantom(ph: PhantomVersion, model: MapModel): string {
+    const p = this.rxPause!;
+    const can = !!wipeStatus(services().session.run!);
+    const note = MapScene.PAUSE[p.index] === 'End run' && !can ? 'Only an Adventure run can be ended here. Use Save to leave this one.' : '';
+    const stage = model.chips.find((x) => /^Stage\s+\d+/i.test(x));
+    const facts = model.chips.filter((x) => /^(₽|Badges\b|Level cap\b)/i.test(x)).map(dockFact);
+    const html = phPause(ph, { options: MapScene.PAUSE.map((label) => ({ label, off: label === 'End run' && !can })), index: p.index, note, where: [stage, model.title.split(' · ')[0]].filter(Boolean).join(' · '), facts, party: model.party });
+    return p.ask === null ? html : phInto(html, phConfirm({ title: 'End this run?', body: 'Your progress is banked as a defeat. This cannot be undone.', options: ['Keep playing', 'End run'], index: p.ask }));
   }
 
   private popClose(): void {
@@ -1234,6 +1254,7 @@ export class MapScene extends Phaser.Scene {
     this.rxPop = null;
     this.rxPause = null;
     this.rxMenu = null;
+    this.rxHeal = null;
     this.rxWatching = false;
     if (reduxOn() && !mapSkin) {
       const manifest = this.cache.json.get('manifest') as AssetManifest | undefined;
@@ -1257,12 +1278,21 @@ export class MapScene extends Phaser.Scene {
       };
       const keyActs: Record<string, () => void> = { C: doCry, H: doHand, N: doName, R: () => this.toggleRivalReport(), T: () => this.toggleTrackPage(), D: () => this.toggleDossier(), F: () => this.toggleFieldNotes(), O: () => this.popToggle('roll') };
       this.rxView = mountRedux(this, {
-        render: (c) => this.rxPop ? this.popView(c, this.rxPop) : mapView(c, { ...this.rxModel!, index: this.index, info: this.info?.text ?? '', notice: this.notice?.text ?? '', going: this.rxGoing, banner: this.rxBanner, legend: this.rxLegend, card: this.rxCardOf() }) + this.pauseHtml() + (this.rxMenu ? nodeMenuView(this.rxMenu) : ''),
+        render: (c) => {
+          if (this.rxHeal && c.ph) return phHeal(c.ph, this.rxHeal.model);
+          if (this.rxPop) return this.popView(c, this.rxPop);
+          const model: MapModel = { ...this.rxModel!, index: this.index, info: this.info?.text ?? '', notice: this.notice?.text ?? '', going: this.rxGoing, banner: this.rxBanner, legend: this.rxLegend, card: this.rxCardOf() };
+          if (!c.ph) return mapView(c, model) + this.pauseHtml() + (this.rxMenu ? nodeMenuView(this.rxMenu) : '');
+          // Phantom: the pause menu is a page of its own; the node menu stands over the map.
+          if (this.rxPause) return this.pausePhantom(c.ph, model);
+          return phInto(phMap(c.ph, model), this.rxMenu ? phNodeMenu(this.rxMenu) : '');
+        },
         acts: {
           pick: (i) => { if (this.busy || this.picker) return; if (Number(i) !== this.index) this.focus(Number(i)); this.activate(Number(i)); },
           go: () => { if (!this.busy && !this.picker) this.activate(this.index); },
           key: (k) => { if (!this.busy && !this.picker) keyActs[k]?.(); },
           legend: () => this.toggleLegend(),
+          heal: () => this.rxHeal?.done(),
           pop: () => this.popClose(),
           pause: (k) => this.pausePick(Number(k)),
           menu: (k) => this.menuPick(Number(k)),
@@ -1287,6 +1317,7 @@ export class MapScene extends Phaser.Scene {
 
     onInputAction(this, (action) => {
       if (this.rxView && this.time.now === this.rxPopAt && action !== 'back' && action !== 'confirm') return;
+      if (this.rxHeal) { if (action === 'confirm' || action === 'back') this.rxHeal.done(); return; }
       if (this.rxPause) return this.pauseInput(action);
       if (this.rxMenu) return this.menuInput(action);
       if (this.rxPop) {
@@ -1768,12 +1799,27 @@ export class MapScene extends Phaser.Scene {
           if (!option.side.used) this.openMinigame(option.side.id);
           break;
         }
+        // Phantom UI: the healing page shows each Pokémon's HP filling from what it was.
+        const hpWas = option.side.kind === 'heal' ? session.run!.party.map((m) => (m.hp / Math.max(1, maxHp(session.content, m))) * 100) : [];
         const message = session.visitSide(option.side.id);
         if (option.side.kind === 'heal') {
           playSfxLazy(this, 'me.heal');
           this.busy = true;
           const heal = barkLine(session.content, session.run!, 'heal', `${option.side.id}-${session.run!.stage?.visited.length ?? 0}`);
-          this.healFx(() => this.scene.restart({ notice: heal ? `${message} ${heal}` : message, focus: 0 }));
+          const notice = heal ? `${message} ${heal}` : message;
+          if (phantomOn() && this.rxView) {
+            const run = session.run!, stage = run.stage;
+            this.rxHeal = {
+              model: {
+                title: 'Healing spot', small: `${currentRegion(session.content, run).name}${stage ? ` · Stage ${stage.index + 1}` : ''}`, text: notice,
+                party: run.party.map((m, k) => ({ file: monFile(this, m.speciesId, 'front', !!m.shiny), name: displayName(session.content, m), from: hpWas[k] ?? 100, hp: `${m.hp}/${maxHp(session.content, m)}` })),
+              },
+              done: () => { if (!this.rxHeal) return; this.rxHeal = null; this.scene.restart({ notice, focus: 0 }); },
+            };
+            this.rxView.refresh();
+            break;
+          }
+          this.healFx(() => this.scene.restart({ notice, focus: 0 }));
         } else {
           this.busy = true;
           this.scene.start(sceneForRun(session.run!));

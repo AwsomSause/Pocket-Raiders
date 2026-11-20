@@ -5,6 +5,7 @@
 import type { DexCard, DexDataPage } from '../../../core/presentation/dexInfo';
 import { act, bg, esc, facts, H, hpb, mini, TX, ty, W } from '../kit';
 import type { ReduxCtx } from '../stage';
+import { phDex } from '../../phantom/screens/dex';
 
 export interface DexModel {
   card: DexCard;
@@ -27,6 +28,7 @@ const pair = (line: string): [string, string] => {
 };
 
 export function dexView(c: ReduxCtx, d: DexModel): string {
+  if (c.ph) return phDex(c.ph, d);
   const v = c.v(2), k = d.card, known = k.state !== 'unknown';
   const head = H('Pokédex', 'party', known ? [['←→', 'page'], ['Esc', 'back']] : [['Esc', 'back']]);
   const picture = known && d.art ? mini(d.art, 180, '', true) : '<b style="font-size:64px;opacity:.5">?</b>';

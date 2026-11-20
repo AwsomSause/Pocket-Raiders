@@ -11,7 +11,7 @@ import { onInputAction } from '../ui/input';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import { Menu, type MenuOption } from '../ui/widgets';
 import { drawBackdrop } from '../ui/widgets';
-import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, phantomOn, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
 import { talkView } from '../ui/redux/screens/talk';
 import { cutBeat, cutView } from '../ui/redux/screens/cut';
 import { beatTag, formView, typeKey, vanceLine } from '../ui/redux/screens/prologue';
@@ -288,7 +288,8 @@ export class PrologueScene extends Phaser.Scene {
     }
     if (m.cut && a === 'back' && m.cut.skip) return m.cut.skip();
     if (m.cut && a !== 'confirm') return;
-    if (this.menu && !m.next) this.menu.handle(a);
+    // Phantom UI deals the choices as a row of cards: left and right move along them.
+    if (this.menu && !m.next) this.menu.handle(phantomOn() ? (a === 'left' ? 'up' : a === 'right' ? 'down' : a) : a);
     else if (a === 'confirm') this.onConfirm?.();
   }
 

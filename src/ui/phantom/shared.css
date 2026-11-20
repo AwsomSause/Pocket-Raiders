@@ -1,0 +1,105 @@
+/* Phantom UI: the shared templates (templates.ts) laid out on the 1280 x 720 Phantom stage. They are built from the
+   mock-ups' own parts (.items/.it, .dexgrid/.dx/.dexcard, .rc-s, .slot, .pn, .sr, .blade); this file only places
+   them and adds the few pieces the mock-ups had no generic form of. Every class added here starts with ph-. */
+.phx .phs{
+  /* redux sprite helpers (an atlas frame or a plain picture at a set size) drawn on a Phantom page */
+  & .an{position:relative;flex:none}
+  & .an b{position:absolute;background-repeat:no-repeat}
+  & .im{display:block;flex:none;image-rendering:pixelated;background-repeat:no-repeat}
+  & .an.sil b,& .sil{filter:brightness(0) invert(.25)}
+
+  & .ph-tabs{left:auto;right:28px;top:26px;flex-wrap:wrap;justify-content:flex-end;max-width:640px;z-index:3}
+  & .ph-tabs span{cursor:pointer;font-size:20px;padding:7px 16px}
+  & .ph-more2{position:absolute;font:800 15px/1 var(--f-cond);letter-spacing:.14em;color:var(--bone);text-transform:uppercase;z-index:3}
+
+  /* the note along the bottom: the line the game's text box holds */
+  & .ph-say{position:absolute;left:60px;bottom:62px;max-width:1040px;padding:10px 30px 12px 24px;rotate:-1deg;z-index:4;animation:ph-inL .35s both}
+  & .ph-say .txt{font-size:19px}
+  & .ph-say-m{max-width:600px}
+  & .ph-say-w{left:50px;max-width:674px}
+  & .ph-say-r{left:70px;max-width:760px}
+  & .ph-say-b{left:80px;max-width:1000px}
+  & .ph-say-s{left:90px;max-width:860px}
+
+  /* menu: list and card */
+  & .ph-it{cursor:pointer;white-space:nowrap}
+  & .ph-it>div{min-width:0}
+  & .ph-it .ph-no{font:400 22px/1 var(--f-disp);font-style:normal;color:var(--red)}
+  & .ph-it.on .ph-no{color:var(--accw)}
+  & .ph-it span{font:700 18px/1 var(--f-cond);text-transform:none;padding-left:12px}
+  & .ph-it.off{opacity:.45}
+  & .ph-det{position:absolute;left:700px;top:132px;width:540px;animation:ph-inR .35s both}
+  & .ph-det .pn{padding:18px 34px 24px 30px}
+  & .ph-det .tl1{margin:6px 0 10px}
+  & .ph-det .big{position:relative;z-index:2;width:150px;height:150px;margin:0 0 -34px 370px;background:var(--w);display:grid;place-items:center;transform:rotate(5deg);box-shadow:12px 12px 0 var(--red);animation:ph-pop .3s both}
+  & .ph-det.pic .pn{padding-top:26px}
+  & .ph-det.pic .tl1{max-width:330px}
+  & .dm-fr.one{justify-content:flex-start;gap:10px;line-height:1.15}
+  & .dm-fr.one b{color:var(--accw);flex:none}
+
+  /* option rows */
+  & .ph-rows{position:absolute;left:70px;top:150px;width:780px;display:flex;flex-direction:column;gap:8px}
+  & .ph-sr{cursor:pointer;height:58px}
+  & .ph-sr.on{height:66px}
+  & .ph-sr.off{opacity:.45}
+  & .ph-sr>span:first-child{white-space:nowrap}
+
+  /* wall of pictures */
+  & .ph-wall{top:150px}
+  & .ph-dx{cursor:pointer;align-content:center}
+  & .ph-dx>.an,& .ph-dx>.im{margin-bottom:20px}
+  & .ph-dx small{left:3px;right:3px;top:auto;bottom:5px;font:700 12px/1.05 var(--f-cond);text-align:center;text-transform:uppercase;color:var(--bone);letter-spacing:0}
+  & .ph-dx.on small{color:var(--k)}
+  & .ph-dx.unk .im{filter:brightness(0) invert(.25)}
+  & .ph-dx em{font:400 44px/1 var(--f-disp);font-style:normal;color:#555;margin-bottom:18px}
+  & .ph-count2{left:auto;right:30px;top:50px}
+  & .ph-card{height:auto;min-height:470px;top:112px;padding:20px 34px 26px}
+  & .ph-card .no{font-size:24px}
+  & .ph-card h3{white-space:nowrap}
+  & .ph-card .pic{height:150px}
+  & .ph-card p{font-size:19px}
+  & .ph-facts .dm-fr{font-size:17px;padding:4px 0}
+  & .ph-facts .dm-fr b{font-size:19px}
+  & .ph-facts.sm .dm-fr{font-size:14px;padding:2px 0}
+  & .ph-facts.sm .dm-fr b{font-size:15px}
+
+  /* board */
+  & .ph-board{position:absolute;left:80px;top:146px;width:1010px;display:flex;flex-direction:column;gap:8px}
+  & .ph-row{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:18px;height:78px;padding:0 40px 0 24px;cursor:pointer;animation:ph-inL .3s both;animation-delay:calc(var(--i)*40ms);transition:translate .16s cubic-bezier(.2,1.3,.4,1)}
+  & .ph-row>.ph-av{grid-column:1}
+  & .ph-row>.ph-rt{grid-column:2}
+  & .ph-row>.ph-bar{grid-column:3;background:#444}
+  & .ph-row>em{grid-column:4}
+  & .ph-board.noart .ph-row{grid-template-columns:0 1fr auto auto;gap:18px 18px;column-gap:18px;padding-left:28px}
+  & .ph-board.noart .ph-rt{margin-left:-18px}
+  & .ph-row.on{translate:26px 0;rotate:-1deg}
+  & .ph-row.off{opacity:.5}
+  & .ph-rt{min-width:0}
+  & .ph-rt b{display:block;font:400 30px/1 var(--f-disp);text-transform:uppercase;white-space:nowrap}
+  & .ph-rt span{display:block;font:700 17px/1.15 var(--f-cond);color:var(--bone);margin-top:4px}
+  & .ph-row.on .ph-rt span{color:#333}
+  & .ph-row em{font:400 20px/1 var(--f-disp);font-style:normal;background:var(--red);color:var(--on);padding:5px 14px 6px;transform:skewX(-12deg);white-space:nowrap}
+  & .ph-av{display:grid;place-items:center;width:56px;height:56px}
+  & .ph-none{font:400 44px/1 var(--f-disp);text-transform:uppercase;color:var(--bone);padding:120px 0 0 120px;opacity:.7}
+
+  /* number tiles */
+  & .ph-tiles{grid-template-columns:repeat(4,274px);left:60px;top:160px}
+  & .ph-tiles.c3{grid-template-columns:repeat(3,370px)}
+  & .ph-tile b{white-space:nowrap}
+  & .ph-tile.first b{color:var(--gold)}
+  & .ph-tile[data-act]{cursor:pointer;box-shadow:inset 0 -6px 0 var(--red)}
+
+  /* confirm */
+  & .ph-shade{position:absolute;inset:0;background:rgba(0,0,0,.74);z-index:20;animation:phx-fade .2s both}
+  & .ph-ask{position:absolute;left:330px;top:200px;width:620px;z-index:21;padding:26px 44px 34px;animation:ph-pop .28s cubic-bezier(.2,1.3,.4,1) both}
+  & .ph-ask .tl1{margin:6px 0 10px;font-size:40px}
+  & .ph-ask .txt{font-size:21px}
+  & .ph-ans{display:flex;gap:22px;margin-top:22px}
+  & .ph-ans .blade{font-size:34px;cursor:pointer}
+
+  /* save files */
+  & .ph-acts .blade{cursor:pointer}
+  & .slot{cursor:pointer}
+  & .slot h4{white-space:nowrap}
+}
+@keyframes phx-fade{from{opacity:0}to{opacity:1}}

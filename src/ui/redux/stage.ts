@@ -5,9 +5,12 @@
 
 import './redux.css';
 import type Phaser from 'phaser';
+import { phantomVersion, type PhantomVersion } from '../../core/presentation/phantom';
 import { REDUX_SKINS, reduxLayout, reduxSkinIndex, type ReduxSkin } from '../../core/presentation/redux';
 import { services } from '../../game/services';
-import { onRxAssets, rxAtlas } from './assets';
+import { morph } from '../phantom/morph';
+import { pageOf } from '../phantom/kit';
+import { onRxAssets, rxAtlas, rxUrl } from './assets';
 
 export interface ReduxCtx {
   /** Index of the look in use (0 to 19). */
@@ -15,6 +18,8 @@ export interface ReduxCtx {
   skin: ReduxSkin;
   /** Which layout this look uses for a screen that has `layouts` of them (the mock-ups' own rule). */
   v: (layouts: number) => number;
+  /** The Phantom UI's version while that style is chosen and ready, else null. A screen with a Phantom page draws it when this is set. */
+  ph?: PhantomVersion | null;
 }
 
 export interface ReduxView {
@@ -49,7 +54,18 @@ const FONT_FILES: [string, number, string][] = [
   ['PRMain', 400, 'pokemon-emerald-pro'], ['PRBold', 400, 'pkmnems'],
 ];
 
+/** The Phantom UI's fonts (assets/fonts/phantom), from the mock-ups: family, weight, style, file. */
+const PHANTOM_FONTS: [string, number, 'normal' | 'italic', string][] = [
+  ['Anton', 400, 'normal', 'Anton-400'], ['Alfa Slab One', 400, 'normal', 'AlfaSlabOne-400'], ['Abril Fatface', 400, 'normal', 'AbrilFatface-400'], ['Rubik Mono One', 400, 'normal', 'RubikMonoOne-400'],
+  ['Barlow Condensed', 500, 'normal', 'BarlowCondensed-500'], ['Barlow Condensed', 700, 'normal', 'BarlowCondensed-700'], ['Barlow Condensed', 800, 'normal', 'BarlowCondensed-800'],
+  ['Barlow Condensed', 600, 'italic', 'BarlowCondensed-600i'], ['Barlow Condensed', 800, 'italic', 'BarlowCondensed-800i'],
+  ['Permanent Marker', 400, 'normal', 'PermanentMarker-400'], ['Passion One', 400, 'normal', 'PassionOne-400'], ['Passion One', 700, 'normal', 'PassionOne-700'],
+  ['Instrument Serif', 400, 'normal', 'InstrumentSerif-400'], ['Instrument Serif', 400, 'italic', 'InstrumentSerif-400i'],
+];
+
 let host: HTMLDivElement | null = null;
+/** The Phantom layer: a second host beside the New one, so neither look's rules reach the other's views. */
+let phost: HTMLDivElement | null = null;
 let canvas: HTMLCanvasElement | null = null;
 const views = new Set<{ redraw: () => void }>();
 /** How many full-screen cards are up (see `ReduxOptions.card`). */
@@ -66,13 +82,47 @@ let gone = { key: '', at: 0 };
  * comparing the two). A browser driven by automation (the Playwright tests) gets Old unless it asks for New:
  * the older browser tests click and read the canvas, which the New UI layer covers. New has its own specs.
  */
-const forced: 'new' | 'old' | null = (() => {
+const forced: 'new' | 'old' | 'phantom' | null = (() => {
   if (typeof location === 'undefined') return null;
   const q = new URLSearchParams(location.search).get('ui');
-  if (q === 'new' || q === 'old') return q;
+  if (q === 'new' || q === 'old' || q === 'phantom') return q;
   return typeof navigator !== 'undefined' && navigator.webdriver ? 'old' : null;
 })();
-export const reduxOn = (): boolean => (forced ?? services().session.settings.uiStyle) === 'new';
+const styleNow = (): 'new' | 'old' | 'phantom' => forced ?? services().session.settings.uiStyle;
+/** True while the HTML layer draws the screens: the New UI, or the Phantom UI (which is built on it). */
+export const reduxOn = (): boolean => styleNow() !== 'old';
+/** True while the Phantom UI is chosen (Settings > Display > UI style). A screen without a Phantom page yet shows its New one in Phantom colours. */
+export const phantomOn = (): boolean => styleNow() === 'phantom';
+
+/** The Phantom UI's rules and fonts load the first time the style is used; views redraw when they are in. */
+let phantomState: 'no' | 'loading' | 'ready' = 'no';
+function phantomReady(): boolean {
+  if (phantomState === 'ready') return true;
+  if (phantomState === 'no') {
+    phantomState = 'loading';
+    const fonts = document.createElement('style');
+    fonts.id = 'ph-fonts';
+    fonts.textContent = PHANTOM_FONTS.map(([fam, w, st, f]) => `@font-face{font-family:"${fam}";font-style:${st};font-weight:${w};font-display:swap;src:url("assets/fonts/phantom/${f}.woff2") format("woff2")}`).join('\n');
+    document.head.append(fonts);
+    void Promise.all([import('../phantom/phantom.gen.css'), import('../phantom/phantom.css'), import('../phantom/shared.css'), import('../phantom/run.css'), import('../phantom/party.css'), import('../phantom/pages.css'), import('../phantom/map.css'), import('../phantom/event.css'), import('../phantom/pops.css')]).then(() => {
+      phantomState = 'ready';
+      lastBox = '';
+      views.forEach((v) => v.redraw());
+    });
+  }
+  return false;
+}
+/** The version to draw Phantom pages in, or null (style not chosen, or its rules still loading). */
+const phantomNow = (): PhantomVersion | null => (phantomOn() && phantomReady() ? phantomVersion(services().session.settings.phantomVersion) : null);
+/** Extra classes for a New view while the Phantom style is on: it wears Phantom colours until its own page is built. */
+const phantomDress = (el: HTMLElement): string => {
+  const ph = phantomNow();
+  if (ph) el.dataset.liv = ph.id;
+  else delete el.dataset.liv;
+  return ph ? ' phfb' : '';
+};
+/** The classes of a New view: its own look, or (Phantom style on) the one Phantom stand-in look. */
+const lookClass = (k: number, el: HTMLElement): string => { const fb = phantomDress(el); return fb ? `stage sk0 b-slant k-plate w-cut caps${fb}` : skinClass(k); };
 
 function skinCss(): string {
   return REDUX_SKINS.map((s, i) => {
@@ -95,12 +145,15 @@ function place(): void {
   // A phone held upright turns the game a quarter turn (ui/portraitRotate.ts): the layer turns with it, about the
   // canvas's own top-left corner, which then sits at the top right of the box on screen.
   const turned = document.body.classList.contains('rot-portrait');
-  host.style.left = `${turned ? r.right : r.left}px`;
-  host.style.top = `${r.top}px`;
-  host.style.transformOrigin = '0 0';
-  host.style.transform = turned ? 'rotate(90deg)' : '';
-  host.style.setProperty('--s', String((turned ? r.height : r.width) / 960));
-  host.style.filter = canvas.style.filter;
+  for (const h of [host, phost]) {
+    if (!h) continue;
+    h.style.left = `${turned ? r.right : r.left}px`;
+    h.style.top = `${r.top}px`;
+    h.style.transformOrigin = '0 0';
+    h.style.transform = turned ? 'rotate(90deg)' : '';
+    h.style.setProperty('--s', String((turned ? r.height : r.width) / 960));
+    h.style.filter = canvas.style.filter;
+  }
   // The on-screen pad lies over the game on a phone held sideways; it must stay above the layer to be pressed.
   document.body.classList.toggle('rx-on', reduxOn());
   document.body.style.setProperty('--rxs', String((turned ? r.height : r.width) / 960));
@@ -117,6 +170,13 @@ function ensureHost(game: Phaser.Game): HTMLDivElement {
   host.id = 'rx';
   host.className = 'rx';
   document.body.append(host);
+  phost = document.createElement('div');
+  phost.id = 'phx';
+  phost.className = 'phx';
+  phost.style.setProperty('--ph-map0', `url(${rxUrl('packs/memories/townmap/region0.png')})`);
+  // The mock-ups' rough paint edges (the Green and Gold versions).
+  phost.innerHTML = '<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="rough" x="-10%" y="-20%" width="120%" height="140%"><feTurbulence type="fractalNoise" baseFrequency=".022 .06" numOctaves="3" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="9"/></filter><filter id="rough2" x="-10%" y="-20%" width="120%" height="140%"><feTurbulence type="fractalNoise" baseFrequency=".04 .09" numOctaves="2" seed="9" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="5"/></filter></svg>';
+  document.body.append(phost);
   // Springy buttons: a button-sized clickable gets .sp (redux.css) when the pointer reaches it. Whole-screen click
   // areas and big panels stay put, like the canvas rule in wiiMotion.ts.
   const spring = (e: Event): void => {
@@ -139,7 +199,7 @@ function ensureHost(game: Phaser.Game): HTMLDivElement {
   // Plays the atlas frames of every sprite marked data-play (the mock-ups' own 95 ms step).
   window.setInterval(() => {
     if (!host || document.hidden || !services().session.settings.spriteAnimations) return;
-    host.querySelectorAll<HTMLElement>('.an[data-play]').forEach((el) => {
+    document.querySelectorAll<HTMLElement>('#rx .an[data-play],#phx .an[data-play]').forEach((el) => {
       const a = rxAtlas(el.dataset.a!);
       if (!a || a.f.length < 2) return;
       const n = ((Number(el.dataset.i) || 0) + 1) % a.f.length;
@@ -187,8 +247,8 @@ export function mountOverlay(game: Phaser.Game, o: Pick<ReduxOptions, 'render' |
   let last = '';
   const redraw = (): void => {
     const k = reduxSkinIndex(services().session.settings.reduxSkin);
-    el.className = `${skinClass(k)} clear noin`;
-    const html = reduxOn() ? o.render({ k, skin: REDUX_SKINS[k]!, v: (n) => reduxLayout(k, n) }) : '';
+    el.className = `${lookClass(k, el)} clear noin`;
+    const html = reduxOn() ? o.render({ k, skin: REDUX_SKINS[k]!, v: (n) => reduxLayout(k, n), ph: null }) : '';
     if (html === last) return;
     last = html;
     el.innerHTML = html;
@@ -218,7 +278,7 @@ export function mountTool(game: Phaser.Game, name: string): HTMLElement {
   el.style.zIndex = '70';
   root.append(el);
   const redraw = (): void => {
-    el.className = `${skinClass(reduxSkinIndex(services().session.settings.reduxSkin))} clear noin`;
+    el.className = `${lookClass(reduxSkinIndex(services().session.settings.reduxSkin), el)} clear noin`;
   };
   shield(el);
   views.add({ redraw });
@@ -237,24 +297,55 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
   const el = document.createElement('div');
   el.dataset.scene = scene.scene.key;
   const again = gone.key === scene.scene.key && performance.now() - gone.at < 400;
-  let k = -1;
+  let k = -1, calm = false, wear = '', last = '';
+  let phv: PhantomVersion | null = null;
   let ctx!: ReduxCtx;
   // The look can change while a screen is open (Settings > UI theme): read it at every draw.
   const dress = (): void => {
     const settings = services().session.settings;
     root.classList.toggle('calm', !settings.menuAnimations || settings.disableAllAnimations);
-    const now = reduxSkinIndex(settings.reduxSkin);
-    if (now === k) return;
+    calm = !settings.menuAnimations || settings.disableAllAnimations;
+    phost?.classList.toggle('calm', calm);
+    const now = reduxSkinIndex(settings.reduxSkin), ph = phantomNow();
+    if (now === k && ph === phv) return;
     k = now;
-    ctx = { k, skin: REDUX_SKINS[k]!, v: (n) => reduxLayout(k, n) };
-    el.className = skinClass(k) + (o.clear ? ' clear' : '') + (again ? ' noin' : '');
+    phv = ph;
+    // The Phantom style has one layout per screen: every view steers its cursor by layout A while it is on.
+    ctx = { k, skin: REDUX_SKINS[k]!, v: (n) => (ph ? 0 : reduxLayout(k, n)), ph };
+    wear = '';
+  };
+  // A view is drawn on the Phantom layer when its HTML is a Phantom page, and on the New layer otherwise; the same
+  // view can change sides between two draws (Settings > UI style, or a screen whose pages are only partly built).
+  const put = (pageId: string | null): void => {
+    const hc = services().session.settings.highContrast;
+    const now = `${pageId !== null}|${k}|${phv?.id}|${calm}|${hc}`;
+    if (now !== wear) {
+      wear = now;
+      const side = pageId !== null ? phost! : root;
+      if (el.parentElement !== side) { el.textContent = ''; last = ''; side.append(el); }
+      if (pageId !== null) {
+        el.className = 'phs' + (o.clear ? ' clear' : '') + (calm ? ' still' : '');
+        el.dataset.liv = phv!.id;
+        el.dataset.pass = '25';
+        // The mock-ups' own High contrast and Reduced motion looks (pass 24).
+        el.toggleAttribute('data-hc', hc);
+        el.toggleAttribute('data-calm', calm);
+      } else {
+        delete el.dataset.scr;
+        delete el.dataset.pass;
+        el.removeAttribute('data-hc');
+        el.removeAttribute('data-calm');
+        el.className = lookClass(k, el) + (o.clear ? ' clear' : '') + (again ? ' noin' : '');
+      }
+    }
+    if (pageId !== null) el.dataset.scr = pageId;
   };
   dress();
-  root.append(el);
+  put(null);
   lastBox = '';
   place();
 
-  let last = '', queued = false, dead = false;
+  let queued = false, dead = false;
   // Animations keep their place across redraws (every redraw replaces the view's HTML): a looping one runs on the
   // view's own clock (--now, a negative delay since the view opened), and a one-shot marked data-once="key" runs from
   // when that key first showed (--t0). A key that leaves the view and comes back plays again.
@@ -265,9 +356,12 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     if (dead) return;
     dress();
     const html = o.render(ctx);
+    const pageId = pageOf(html);
+    put(pageId);
     if (html === last) return;
     last = html;
     const now = performance.now();
+    if (pageId !== null) { morph(el, html); return; }
     el.style.setProperty('--now', `${Math.round(born - now)}ms`);
     el.innerHTML = html;
     if (!html.includes('data-once="')) { firstSeen.clear(); return; }
@@ -285,6 +379,8 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     if (!t || !el.contains(t) || !table) return;
     const fn = table[t.dataset[attr]!];
     if (fn) fn(t.dataset.arg ?? '');
+    // A "back" key hint with no handler of its own presses Esc for the scene (the Phantom pages' key row).
+    else if (attr === 'act' && t.dataset.act === 'back') scene.input.keyboard?.emit('keydown', { code: 'Escape', key: 'Escape', repeat: false, target: null });
   };
   el.addEventListener('click', (e) => pick(e, 'act', o.acts));
   el.addEventListener('pointerover', (e) => {

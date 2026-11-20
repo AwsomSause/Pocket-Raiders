@@ -1,0 +1,103 @@
+/* Phantom UI: Party and Summary (screens/party.ts). The mock-ups' rules draw the cards, the burst, the chart and the
+   chips; this file places the game's extra facts around them. */
+.phx .phs{
+  /* Party */
+  & .ph-pcards{width:900px;top:138px;gap:12px 20px}
+  & .ph-pc{height:150px;cursor:pointer}
+  & .ph-pc .pic{height:130px}
+  & .ph-pc h4{white-space:nowrap;gap:10px}
+  & .ph-pc.off{opacity:.55}
+  & .ph-pc .slash{--w:190px}
+  & .ph-held{font:700 15px/1 var(--f-cond);color:var(--bone);margin-top:6px}
+  & .ph-pc.on .ph-held{color:#333}
+  & .ph-line{font:700 17px/1.15 var(--f-cond)}
+  & .ph-pside{position:absolute;left:974px;top:150px;width:276px;box-sizing:border-box;padding:14px 26px 20px 22px;animation:ph-inR .3s both}
+  & .ph-pside .dm-fr{font-size:16px;padding:5px 0}
+  & .ph-pside .dm-fr b{font-size:17px}
+  & .ph-mvs{display:flex;flex-direction:column;gap:5px;margin-top:10px}
+  & .ph-mvs span{background:var(--tc);color:#fff;font:400 19px/1 var(--f-disp);text-transform:uppercase;padding:5px 12px 6px;transform:skewX(-10deg);text-shadow:0 2px 0 rgba(0,0,0,.4);white-space:nowrap}
+  & .ph-say-p{left:auto;right:26px;bottom:66px;max-width:276px;padding:8px 20px 10px 18px}
+  & .ph-say-p .txt{font-size:16px}
+
+  /* Summary: the Pokémon's side */
+  & .s-summary .sm-pic{top:130px;width:400px;height:400px}
+  & .s-summary .sm-name{top:92px;white-space:nowrap}
+  & .s-summary .sm-lv{top:500px;left:300px;white-space:nowrap}
+  & .ph-face{position:absolute;left:64px;top:566px;width:420px}
+  & .ph-chips{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  & .ph-no{font:400 22px/1 var(--f-disp);color:var(--w);text-shadow:2px 2px 0 var(--k);margin-left:6px}
+  & .ph-fb{display:inline-flex;align-items:center;gap:6px;margin:8px 10px 0 0}
+  & .ph-fb small{font:800 14px/1 var(--f-cond);letter-spacing:.1em;color:var(--w);text-shadow:1px 1px 0 var(--k)}
+  & .ph-fb .slash{--w:150px;height:18px}
+  & .ph-held2{display:table;margin-top:8px;background:var(--k);color:var(--w);font:800 17px/1 var(--f-cond);padding:7px 18px;transform:skewX(-10deg);cursor:pointer}
+  & .ph-held2.on{background:var(--w);color:var(--k)}
+
+  /* Summary: tabs and the open tab */
+  & .ph-sm-tabs{left:540px;top:34px;right:20px;flex-wrap:wrap}
+  & .ph-sm-tabs span{cursor:pointer}
+  & .ph-sm-tabs.some span{font-size:21px;padding:8px 16px}
+  & .ph-sm-tabs.many span{font-size:17px;padding:7px 11px}
+  & .ph-sm-body{position:absolute;left:540px;right:30px;top:104px;bottom:132px;display:flex;gap:14px;animation:ph-inR .3s both}
+  & .ph-sm-body.k-overview,& .ph-sm-body.k-text{flex-direction:column;gap:10px}
+  & .ph-sm-wide{position:static;width:auto;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  & .ph-sm-wide .kv:first-child{grid-column:span 2}
+  & .ph-sm-wide .kv b{font-size:21px}
+  & .ph-sm-wide .kv{padding:6px 18px 8px 24px}
+  & .ph-sm-wide .kv:first-child{padding-left:30px}
+  & .ph-sm-body.k-items>.ph-sm-note,& .ph-sm-body.k-moves>.ph-sm-note{align-self:flex-start;flex:1}
+  & .ph-sm-note{padding:8px 26px 10px 22px}
+  & .ph-sm-note .txt{font-size:17px}
+  & .ph-sm-moves{position:static;grid-template-columns:repeat(4,1fr)}
+  & .ph-sm-moves span{font-size:19px;white-space:normal;cursor:help}
+  & .ph-sm-body.k-stats{display:block}
+  & .ph-sm-body .radar{left:-34px;top:-8px;width:470px;height:392px}
+  & .radar text.up{fill:var(--gold)}
+  & .ph-sm-stats{right:0;top:4px;width:288px;gap:5px}
+  & .ph-sm-stats.wide{left:0;right:0;width:auto}
+  & .ph-sth,& .kv.ph-st{display:grid;grid-template-columns:1fr 44px 44px;gap:6px;align-items:center}
+  & .ph-sth:has(span:nth-child(4)),& .kv.ph-st:has(span:nth-child(4)){grid-template-columns:1fr 40px 40px 44px}
+  & .ph-sth{font:800 13px/1 var(--f-cond);letter-spacing:.14em;text-transform:uppercase;color:var(--w);padding:0 16px 0 24px;text-shadow:1px 1px 0 var(--k)}
+  & .kv.ph-st{padding:7px 16px 8px 24px;font:800 18px/1 var(--f-cond)}
+  & .kv.ph-st b{display:inline;font-size:20px;color:var(--gold)}
+  & .kv.ph-st.up>span:first-child{color:var(--gold)}
+  & .kv.ph-st .best{color:var(--gold)}
+  & .ph-sm-note.low{position:absolute;left:0;right:0;bottom:0}
+  & .ph-sm-list{display:flex;flex-direction:column;gap:8px;width:350px;flex:none}
+  & .ph-mv{width:auto;cursor:pointer;padding:9px 30px 10px 18px}
+  & .ph-mv.on{width:auto}
+  & .ph-mv b{font-size:27px}
+  & .ph-mv kbd{background:var(--tc);color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.4)}
+  & .ph-mv.on kbd{background:var(--tc);color:#fff}
+  & .ph-sm-info{flex:1;min-width:0;align-self:flex-start;padding:16px 30px 20px 26px}
+  & .ph-sm-info .txt{margin-top:6px;font-size:17px}
+  & .ph-sm-info .dm-fr{font-size:16px;padding:4px 0}
+  & .ph-sm-info .dm-fr b{font-size:18px}
+  & .ph-sm-sum{display:flex;gap:12px;align-items:center;font:800 15px/1 var(--f-cond);letter-spacing:.08em;text-transform:uppercase;color:var(--w);text-shadow:1px 1px 0 var(--k)}
+  & .ph-sm-sum span:first-child{flex:1}
+  & .ph-sm-sum em{font:400 18px/1 var(--f-disp);font-style:normal;background:var(--k);color:var(--w);padding:5px 14px 6px;transform:skewX(-12deg);cursor:pointer;text-shadow:none}
+  & .ph-it2{grid-template-columns:48px 1fr auto;height:54px;font-size:22px;cursor:pointer;background:var(--k);padding:0 20px 0 8px;border:0;white-space:nowrap}
+  & .ph-it2 span{font:700 15px/1 var(--f-cond);text-transform:none}
+  & .ph-sm-text{padding:14px 30px 18px 26px;overflow:visible}
+  & .ph-sm-text .tl1{font-size:28px;margin-bottom:6px}
+  & .ph-sm-text .txt{font-size:16px;margin-top:2px}
+  & .ph-sm-text.sm .txt{font-size:14px}
+  & .ph-sm-text.xs .txt{font-size:12.5px;line-height:1.15}
+  & .ph-cols.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  & .ph-sec{margin-top:8px}
+  & .ph-bars{display:grid;grid-template-columns:1fr 1fr;gap:6px 22px;margin:4px 0 6px}
+  & .ph-bars>div{display:flex;gap:8px;align-items:center;font:700 15px/1 var(--f-cond)}
+  & .ph-bars span:first-child{flex:1;white-space:nowrap}
+  & .ph-bars .slash{--w:130px;flex:none;background:#444}
+  & .ph-bars b{width:28px;text-align:right}
+  & .ph-say-sm{left:540px;bottom:62px;max-width:700px}
+  & .ph-say-sm.top{z-index:23}
+
+  /* Summary: the action menu and the move tooltip */
+  & .ph-smenu{position:absolute;left:470px;top:84px;z-index:22;display:flex;flex-direction:column;gap:9px;align-items:flex-start;background:var(--k);padding:22px 44px 26px 30px;clip-path:polygon(0 0,100% 3%,96% 100%,2% 97%);rotate:-1.5deg;animation:ph-pop .22s both}
+  & .ph-smenu .blade{font-size:30px;cursor:pointer;animation:ph-inL .3s both;animation-delay:calc(var(--i)*40ms)}
+  & .ph-tip{position:absolute;right:36px;bottom:138px;width:350px;z-index:8;pointer-events:none;padding:14px 26px 18px 22px;animation:ph-pop .2s both}
+  & .ph-tip .tl1{font-size:28px;margin:4px 0 6px}
+  & .ph-tip .txt{font-size:16px;margin-top:5px}
+  & .ph-tip .dm-fr{font-size:15px;padding:3px 0}
+  & .ph-tip .dm-fr b{font-size:17px}
+}

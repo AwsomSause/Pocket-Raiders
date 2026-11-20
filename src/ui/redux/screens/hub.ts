@@ -6,6 +6,7 @@ import { act, B, esc, foot, mon, tall } from '../kit';
 import { rxAtlas } from '../assets';
 import type { ReduxCtx } from '../stage';
 import { figure, type Art } from '../templates';
+import { phDock } from '../../phantom/screens/town';
 
 export interface DockButton { label: string; small?: string; off?: boolean }
 /** One figure of the line-up: `scale` 1 is the sprite's own size; `px` (the hub) gives the height outright instead. */
@@ -27,6 +28,7 @@ export interface DockModel {
 }
 
 export function dockView(c: ReduxCtx, d: DockModel): string {
+  if (c.ph) return phDock(c.ph, d);
   const v = c.v(3), n = d.buttons.length;
   const gy = v === 1 ? 420 : 318, cx = v === 1 ? 600 : 480;
   const stand = (a: DockFigure): string => {

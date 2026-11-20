@@ -8,6 +8,7 @@ import { PLAZA_STYLE_LABELS, nextPlazaStyle, plazaStyleOf } from './presentation
 import { applyProfile, nextProfile, PROFILE_INFO } from './accessibility';
 import type { Settings } from './state';
 import { nextReduxSkin, reduxSkin } from './presentation/redux';
+import { nextPhantomVersion, phantomVersionLabel } from './presentation/phantom';
 import { AUTO_RULES } from './battle/autoBattle';
 import { applyPerfPreset, nextPerfPreset, PERF_INFO } from './tools/perfPreset';
 import { nextPadButton, PAD_ACTIONS, PAD_ACTION_LABEL, POPUP_SCALES, PAD_BUTTON_NAMES, remapPad, TOOLTIP_DELAY_MS, TRANSITION_INFO, UI_THEME_ORDER, UI_THEMES } from './presentation/uiPrefs';
@@ -97,8 +98,9 @@ const ANIM_SWITCHES: [Key, string, string][] = [
 export const SETTINGS: SettingDef[] = [
   // Display
   // UI mock-ups: the New / Old switch comes first, then the New UI's look; every other look setting follows these two.
-  { id: 'uiStyle', label: 'UI style', description: 'New is the redesigned interface. Old is the interface from before the redesign. Screens redraw as you open them.', category: 'display', applies: 'now', ...choice('uiStyle', { new: 'New', old: 'Old' }, ['new', 'old']) },
+  { id: 'uiStyle', label: 'UI style', description: 'New is the redesigned interface. Phantom is the stylish red, black and white interface with five versions. Old is the interface from before the redesign. Screens redraw as you open them.', category: 'display', applies: 'now', ...choice('uiStyle', { new: 'New', phantom: 'Phantom', old: 'Old' }, ['new', 'phantom', 'old']) },
   { id: 'reduxSkin', label: 'UI theme', description: 'The look of the New interface: twenty themes, each with its own colours, frames, font and layouts. Battle results never change.', category: 'display', applies: 'now', disabled: (s) => s.uiStyle !== 'new', show: (s) => reduxSkin(s.reduxSkin).n, next: (s) => custom({ ...s, reduxSkin: nextReduxSkin(s.reduxSkin) }) },
+  { id: 'phantomVersion', label: 'Phantom version', description: 'The version of the Phantom interface: Red, Blue, Yellow, Green or Gold. Each has its own colours, shapes and trainer on the menus. Battle results never change.', category: 'display', applies: 'now', disabled: (s) => s.uiStyle !== 'phantom', show: (s) => phantomVersionLabel(s.phantomVersion), next: (s) => custom({ ...s, phantomVersion: nextPhantomVersion(s.phantomVersion) }) },
   { id: 'uiScale', label: 'Screen size', description: 'How much of the window the game fills.', category: 'display', applies: 'now', ...choice('uiScale', { full: '100%', medium: '90%', small: '80%' }, ['full', 'medium', 'small']) },
   { id: 'highContrast', label: 'High contrast', description: 'Stronger contrast for the whole screen.', category: 'display', also: ['accessibility'], applies: 'now', ...toggle('highContrast') },
   { id: 'eventStyle', label: 'Event screen style', description: 'How map events are shown: Diorama, Storybook and more.', category: 'display', applies: 'now', show: (s) => EVENT_STYLE_LABELS[eventStyleOf(s.eventStyle)], next: (s) => ({ ...s, eventStyle: nextEventStyle(eventStyleOf(s.eventStyle)) }) },

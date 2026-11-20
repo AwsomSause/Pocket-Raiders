@@ -18,6 +18,7 @@ import { bracketView, type BracketModel, type RoundChip } from './bracket';
 import { runCardView, type RunCardModel } from './over';
 import { honestView, type HonestModel } from './stops';
 import { teamView, type TeamModel } from './team';
+import { phEvent } from '../../phantom/screens/event';
 
 export interface EventChoice { label: string; sub: string; chance: string; locked: boolean }
 /** What the event director decided for this event, and how the page on show reacts (EventScene fills it in). */
@@ -90,6 +91,10 @@ export interface EventModel {
   teamHint?: boolean;
   /** A department store floor (mock-up `store`): the floor directory with this floor lit, the party, and a note per Pokémon for each choice (who a good helps). */
   store?: { title: string; clerk: string; floors: { tag: string; name: string; on: boolean }[]; party: PartyChip[]; notes: string[][] } | null;
+  /** Phantom UI: which stage of which region this is and the hour, for the big stage number. */
+  place?: { no: string; of: string; region: string; sub: string } | null;
+  /** Phantom UI: the player's own figure, shown listening while someone else speaks. */
+  me?: Art | null;
 }
 
 const pickAttr = (k: number): string => `${act('pick', k)} data-over="over"`;
@@ -118,8 +123,8 @@ const ICONS: Record<ChoiceIcon | 'bolt' | 'plus' | 'dot', string> = {
   plus: '<path d="M8 3v10M3 8h10"/>',
   dot: '<circle cx="8" cy="8" r="2.5"/>',
 };
-const ic = (name: keyof typeof ICONS, px = 16): string => `<svg viewBox="0 0 16 16" width="${px}" height="${px}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
-const CHANGE_ICON: Record<ChangeVisual['kind'], keyof typeof ICONS> = { money: 'coin', heal: 'plus', hurt: 'bolt', join: 'catch', bond: 'care', item: 'give', learn: 'train', trade: 'trade', evil: 'look', stat: 'star', note: 'dot' };
+export const ic = (name: keyof typeof ICONS, px = 16): string => `<svg viewBox="0 0 16 16" width="${px}" height="${px}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
+export const CHANGE_ICON: Record<ChangeVisual['kind'], keyof typeof ICONS> = { money: 'coin', heal: 'plus', hurt: 'bolt', join: 'catch', bond: 'care', item: 'give', learn: 'train', trade: 'trade', evil: 'look', stat: 'star', note: 'dot' };
 const MOOD_INK: Record<Mood, string> = { calm: '#8fe0b0', warm: '#ffc070', tense: '#ff7a6a', eerie: '#b09af4', sad: '#8ab4ee', festive: '#ffe05a', grand: '#f4d060', mystery: '#7ae0ee', playful: '#ff9ad8' };
 
 /** The event's own mark: a 5 x 5 mirrored grid from its 15 bits, in the mood's ink. */
@@ -133,7 +138,7 @@ const hashOf = (t: string): number => { let h = 0x811c9dc5; for (let i = 0; i < 
 const oddsOf = (x: EventChoice): number | null => { const n = /(\d+)\s*%/.exec(x.chance); return n ? Math.max(0, Math.min(100, Number(n[1]))) : null; };
 
 /** A model without the director's picture (a scene outside a run, a test) still gets a stage: dressed from its plain fields. */
-function plainLook(d: EventModel): EventLook {
+export function plainLook(d: EventModel): EventLook {
   const seed = hashOf(d.name);
   return {
     scene: { set: 'wilds', place: 'route', inside: false, time: 'day', mood: 'calm', weather: null, motes: 'none', seed, pic: d.art, tint: d.tint, still: true },
@@ -192,9 +197,12 @@ function burstOf(kind: Burst, key: string): string {
 
 const BAD = '#f08080';
 /** One outcome line as "what · how much" with the icon of what it is about: "+₽300" reads Coins / +₽300, "Charisma +2" reads Charisma / +2. */
-function changeRow(t: string, i: number): string {
+export function changeParts(t: string): [string, string] {
   const money = /^([+−-]₽[\d,]+)$/.exec(t), tail = /^(.+?) ([+−-]\d+%?)$/.exec(t), head = /^([+−-]\d+%?) (.+)$/.exec(t), times = /^(.+) (×\d+)$/.exec(t);
-  const [a, b] = money ? ['Coins', money[1]!] : tail ? [tail[1]!, tail[2]!] : head ? [head[2]!, head[1]!] : times ? [times[1]!, times[2]!] : [t, ''];
+  return money ? ['Coins', money[1]!] : tail ? [tail[1]!, tail[2]!] : head ? [head[2]!, head[1]!] : times ? [times[1]!, times[2]!] : [t, ''];
+}
+function changeRow(t: string, i: number): string {
+  const [a, b] = changeParts(t);
   const v = changeVisual(t);
   return `<div class="row sm ev-row" data-once="row${i}:${esc(t)}" style="--i:${i};${v.good ? '' : `color:${BAD}`}"><i class="ev-ic k-${v.kind}">${ic(CHANGE_ICON[v.kind], 14)}</i><span class="grow">${esc(cap(a))}</span><b>${esc(b)}</b></div>`;
 }
@@ -207,6 +215,7 @@ export function eventView(c: ReduxCtx, d: EventModel): string {
     return runCardView(c, { ...d.codeCard, title: 'Code Name', team: [], text, hints: [['Enter', 'next']], area: 'story', save: false, tap: 'next' });
   }
   if (d.team) return teamView(c, d.team);
+  if (c.ph && !d.store) return phEvent(c.ph, d);
   const out = d.outcome, more = d.page.at < d.page.of - 1, ch = out || more ? [] : d.choices;
   const L = d.look ?? plainLook(d);
   const pageKey = `${out ? out.step : 'intro'}${d.page.at}`;
