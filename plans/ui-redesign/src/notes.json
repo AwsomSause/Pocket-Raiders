@@ -801,5 +801,24 @@
   "q3": "Five new pages: a raid on a phone held sideways, three areas on phones held upright, the Dungeon list, the inside of a dungeon as a cave you walk through, and the Mentor page with three teachers at a time.",
   "q4": "Settings > Controls already has touch pads from the Final Cut. One new line belongs there: Button row, bottom (new) or side (the picked layout), so either hand position works.",
   "q5": "Yes. The handheld games keep every command at the bottom of the screen and the Pokémon above it. This is that layout, stretched to a wide screen."
+ },
+ "47": {
+  "name": "New areas 21 · Light",
+  "label": "New areas · pass 21 of 25",
+  "big": "Every area gets its own hour and its own lamp, and the light falls on the Pokémon",
+  "pages": [
+   "fm-blackout",
+   "fm-convoy",
+   "fm-ledger",
+   "fm-debate",
+   "fm-front",
+   "fm-colossus",
+   "fm-door"
+  ],
+  "q1": "You can now tell the area from the light alone: pink glow from below in the den, low gold sun on the Totem, white floodlights at the Galar night match, first light on the expedition, one street lamp and a red neon R for Team Rocket. Each Pokémon has a thin edge of that light on it.",
+  "q2": "Passes 16 to 20 lit all five areas the same way, with a dark frame and two bright pools. That frame is gone. Each area now has a real light source drawn in the scene, shadows that fall away from it, and a colour wash that matches the hour.",
+  "q3": "Seven new pages for the Format scenes, which had none: Blackout (three anchors under the Seal), Convoy (the night road and the LEDGER answer), Debate, the three-lane Front, the Colossus raid with its helicopter clock, and the League Door.",
+  "q4": "Settings > Display gets one line: Scene lighting, full or flat. Flat removes the colour wash for players who want the plain picture or need more contrast.",
+  "q5": "Yes. The games change the light by place and hour: caves glow, stadium matches are played under lamps, and Team Rocket works at night."
  }
 }
