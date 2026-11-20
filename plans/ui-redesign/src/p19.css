@@ -74,7 +74,7 @@
 .hq-day p{margin:0;display:grid;grid-template-columns:26px 1fr auto;align-items:center;gap:8px;padding:6px 8px;font-size:13px;font-weight:800;border-radius:4px 12px 4px 12px;background:#231a28}
 .hq-day p i{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-style:normal;background:#3a2a34}
 .hq-day p em{font-style:normal;font-size:12px;color:#c9bfae}
-.hq-day p.done{opacity:.7}
+.hq-day p.done{opacity:.6}
 .hq-day p.on{background:#5a0a14;outline:2px solid var(--yel)}
 .hq-day p.on i{background:var(--yel);color:#17131d}
 .hq-day .btn{margin-top:auto}
@@ -216,4 +216,39 @@
 .ch-ans u.up,.ch-ans u.up2{color:#3ddc6c}.ch-ans u.dn,.ch-ans u.dn2{color:#ff6b5d}
 .ch-met{position:absolute;left:16px;top:426px;z-index:3;display:flex;gap:8px}
 .ch-met u{text-decoration:none;font-size:13px;font-weight:800;padding:3px 14px;background:#17131d;border:2px solid #3a2a34;border-radius:999px}
+/* the Boss looms over the main title */
+.loom19{position:absolute;left:596px;top:76px;z-index:1;pointer-events:none;filter:brightness(0) drop-shadow(0 0 0 #c1121f) drop-shadow(6px 0 0 rgba(193,18,31,.85)) drop-shadow(-6px 0 0 rgba(193,18,31,.85));opacity:.6}
+.loom19 img{display:block}
+.tt19 .tt-bg{filter:saturate(.7) brightness(.8)}
+.tt19::after{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(200deg,rgba(120,10,24,.55),transparent 55%)}
+.tm17 .tm.evil{height:34px;align-items:center;border:2px solid #ffb3ab;box-shadow:0 0 14px rgba(255,60,60,.8)}
+/* Evil Mode battle in Team Nova's livery */
+.scr.battle.nb19{background:#07060b}
+.nb19 .ar-bg{filter:brightness(.5) saturate(.6) sepia(.5) hue-rotate(-35deg)}
+.scr.battle.nb19::after{background:conic-gradient(from 180deg at 50% -10%,transparent 0 150deg,rgba(193,18,31,.4) 160deg,transparent 172deg,rgba(232,178,58,.25) 184deg,transparent 196deg,rgba(193,18,31,.4) 206deg,transparent 216deg)}
+.nb19 .lb.top,.nb19 .lb.bot{background:repeating-linear-gradient(-70deg,#17101a 0 26px,#1f1420 26px 52px);border-color:#e8b23a}
+.nb19 .lb.bot .lb-me{background:linear-gradient(90deg,#6a0b14,#17101a 70%)}
+.nb19 .rib{display:none}
+.nb19 .bench{display:none}
+.nb19 .cw{--a:#3a2230;border-color:#e8b23a;color:#f4e9d8}
+.nb19 .cw.on{background:linear-gradient(180deg,#e03a2f,#8f0d18);color:#fff;border-color:#e8b23a;outline-color:#17101a}
+.nb19 .cw.on b{text-shadow:3px 3px 0 #17101a}
+.nb19 .cw.pw{background:linear-gradient(#17101a,#17101a) padding-box,linear-gradient(180deg,#e8b23a,#8a5a10) border-box}
+.nb19 .cw.pw i img{max-width:28px;max-height:28px;width:auto;height:auto}
+.nb19 .say17{background:rgba(23,16,26,.94);border-color:#e8b23a}
+.nb19 .say17 em{background:#c1121f}
+.nb19 .say17>i{background:#2a1a26}
+.nraid{position:absolute;left:12px;top:92px;z-index:4;display:grid;grid-template-columns:auto auto;align-items:center;gap:3px 12px;padding:6px 16px 8px 12px;color:#f4e9d8;background:rgba(23,16,26,.92);border:2px solid #e8b23a;border-left:8px solid #c1121f;border-radius:4px 16px 4px 16px;white-space:nowrap}
+.nraid b{font:400 20px/1 var(--fd);color:#e8b23a;text-transform:uppercase}
+.nraid span{font-size:12px;font-weight:800}
+.nraid span u{text-decoration:none;font:400 20px/1 var(--fd);color:#fff;margin:0 2px}
+.nraid>i{grid-column:1/3;height:8px;border-radius:4px;background:#07060b;border:1px solid #e8b23a;overflow:hidden}
+.nraid>i s{display:block;height:100%;background:linear-gradient(90deg,#c1121f,#e8b23a)}
+.nbc19{position:absolute;left:520px;top:300px;z-index:3;display:flex;gap:8px}
+.nbc19 span{width:76px;display:grid;justify-items:center;gap:2px;padding:4px 4px 6px;background:rgba(23,16,26,.9);border:2px solid #e8b23a;border-radius:4px 12px 4px 12px}
+.nbc19 span>i{height:38px;display:grid;place-items:center}
+.nbc19 em{font-style:normal;font-size:11px;font-weight:800;color:#f4e9d8}
+.nbc19 s{width:60px;height:6px;border-radius:3px;background:#07060b;border:1px solid #f4e9d8;overflow:hidden}
+.nbc19 s u{display:block;height:100%;background:#3ddc6c}
+.nbc19 .ko{opacity:.6}.nbc19 .ko>i{filter:grayscale(1) brightness(.6)}
 /*@top*/

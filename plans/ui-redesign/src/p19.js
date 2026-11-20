@@ -12,7 +12,6 @@ def(19, 'ev-title', { t: 'Evil Mode · Title', g: 'Evil Mode' }, () => nova('nti
   <div class="nt-crew">${[['dv-gus', 150], ['dv-dale', 220], ['dv-rosa', 200], ['dv-rook', 150]].map(c => `<i>${csp(c[0], c[1])}</i>`).join('')}<i class="nt-cat">${spr('dv-persian', 2)}</i></div>
   <div class="nt-quote"><p>"Kanto doesn't need a hero. It needs a landlord."</p><b>the Boss</b></div>
   <div class="foot17">Fan game. Not for sale.</div>${C('keys', [['↑↓', 'move'], ['Enter', 'choose']])}`));
-decor(19, 'title', { cls: 'tt19', fn: h => h.replace('</div></div>\n  <div class="hero17">', `</div><div class="tm evil" ${go('ev-title')}><b>Evil Mode</b><span>Play the other side</span></div></div>\n  <div class="hero17">`) });
 const CREW = [['dv-mina', 'Mina', 'Sergeant', 'Free'], ['dv-dale', 'Dale', 'Sergeant', 'On guard'], ['dv-rosa', 'Rosa', 'Captain', 'Free'], ['dv-gus', 'Gus', 'Grunt', 'Free']];
 def(19, 'ev-hq', { t: 'Evil Mode · The Hideout', g: 'Evil Mode' }, () => nova('nhq', `${nbar('The Hideout · Lv 2')}
   <div class="hq-room"><i class="hq-flag" data-nocheck>N</i>${CREW.map((c, i) => `<div class="hq-m${i === 0 ? ' on' : ''}" ${go(i === 1 ? 'ev-crew' : 'ev-assign')}><i>${csp(c[0], 130)}</i><b>${c[1]}</b><span>${c[2]}</span><em class="${c[3] === 'Free' ? 'free' : ''}">${c[3]}</em></div>`).join('')}</div>
@@ -70,3 +69,14 @@ def(19, 'ev-menu', { t: 'Evil Mode · Boss Menu', g: 'Evil Mode' }, () => nova('
   <div class="tm17 bm">${BM.map((m, i) => `<div class="tm${i === 0 ? ' on' : ''}" ${m[1] ? go(m[1]) : ''}><b>${m[0]}</b><span>${m[2]}</span></div>`).join('')}</div>
   <div class="bm-glance pn"><b>The empire at a glance</b><dl><dt>Day</dt><dd>18 · Morning</dd><dt>Funds</dt><dd>₽4,310</dd><dt>Heat</dt><dd>22%</dd><dt>Regard · Dread</dt><dd>38 · 52</dd><dt>Goal · Takeover</dt><dd>71%</dd><dt>The Hero</dt><dd>Red · Threat 74</dd></dl><p class="warn"><b>Rocket</b>Raid on your Hideout in 3 nights</p><p class="save">Slot 1 · Team Nova · Kanto · saved 2 min ago</p></div>
   ${C('keys', [['↑↓', 'move'], ['Enter', 'open'], ['Esc', 'back to work']])}`));
+/* the other side shows up in the main game too: the Boss looms over the title */
+decor(19, 'title', { cls: 'tt19', fn: h => h.replace('<i class="tt-slab"></i>', `<i class="loom19" data-nocheck>${spr('t-giovanni', 5)}</i><i class="tt-slab"></i>`).replace('</div></div>\n  <div class="hero17">', `</div><div class="tm evil" ${go('ev-title')}><b>Evil Mode</b><span>Play the other side</span></div></div>\n  <div class="hero17">`) + '' });
+/* Evil Mode battle: you are the Boss, the Hero raids your Hideout */
+const VENU = { k: '3', n: 'Venusaur', ty: ['grass', 'poison'], lv: 52, hp: 71, g: '♀', owner: 'Hero Green' };
+const NCREW = [['dv-persian', 100, 'Persian'], ['dv-houndoom', 64, 'Houndoom'], ['dv-golbat', 0, 'Golbat'], ['dv-weezing', 88, 'Weezing']];
+def(19, 'ev-battle', { t: 'Evil Mode · Battle', g: 'Evil Mode' }, () => { const p0 = PARTY[0], p2 = PARTY[2]; PARTY[0] = p2; PARTY[2] = p0; let h;
+  try { h = C('arena', { foe: VENU, bg: 'factory', noorder: 1, team: [['m-143', 'ko'], ['m-3', 'on'], ['', ''], ['', '']], bottom: `<div class="cmd17"><div class="cw pw" ${go('ev-order')}><i>${spr('dv-leaders_crest', 1)}</i><b>Order</b><span>1 ready</span></div>${[['Fight', 'fight'], ['Crate', 'b-bag'], ['Crew', 'ev-crew'], ['Retreat', ''], ['Info', 'b-info']].map((c, i) => `<div class="cw${i === 0 ? ' on' : ''}" ${c[1] ? go(c[1]) : ''}><b>${c[0]}</b><kbd>${i + 1}</kbd></div>`).join('')}</div>` }); } finally { PARTY[0] = p0; PARTY[2] = p2; }
+  return `<div class="scr battle b6 b7 b16 b17 nova nb19">${h}
+  <div class="say17" ${mm('tb')}><i>${spr('dv-rosa', 1)}</i><p>What will <b>${p2.n}</b> do, Boss?</p><span><em>Rosa</em>She has 3 left. Hold the door and she runs out of time.</span></div>
+  <div class="nraid"><b>Hideout raid</b><span>Hold for <u>4</u> more turns</span><i><s style="width:60%"></s></i></div>
+  <div class="nbc19">${NCREW.map(c => `<span class="${c[1] ? '' : 'ko'}"><i>${spr(c[0], fitS(c[0], 40, 36))}</i><em>${c[2]}</em><s><u style="width:${c[1]}%"></u></s></span>`).join('')}</div></div>`; });

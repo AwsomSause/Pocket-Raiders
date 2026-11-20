@@ -301,7 +301,7 @@
  },
  "19": {
   "name": "The Other Side",
-  "big": "Evil Mode joins the redesign. The same big type, cards and word menus, but in Team Nova's black, crimson and gold, so it is clearly the same game seen from the other side. Evil Mode gets its own row on the title.",
+  "big": "Evil Mode joins the redesign. The same big type, cards and word menus, but in Team Nova's black, crimson and gold, so it is clearly the same game seen from the other side. Evil Mode gets its own glowing row on the title, the Boss's shadow looms behind Red there, and the Boss gets a battle screen of his own.",
   "pages": [
    "Evil Mode · Title",
    "Evil Mode · The Hideout",
@@ -313,12 +313,31 @@
    "Evil Mode · A Hero Appears",
    "Evil Mode · Crew File",
    "Evil Mode · The Chair",
-   "Evil Mode · Boss Menu"
+   "Evil Mode · Boss Menu",
+   "Evil Mode · Battle"
   ],
   "q1": "Yes. Lacquer black with crimson seams and gold numbers, a giant N behind the crew, a glass-crack split when the Hero walks in, a PAID IN FULL stamp.",
   "q2": "Until now the redesign only covered the hero's game. Evil Mode now has the same parts (word menu, panels, cut-ins, key strip) in its own livery, following the approved Dominion mockups for content.",
-  "q3": "Yes, eleven. Giving an order, the odds Card, the Boss order, the result and the Hero interrupt are each their own page, so no screen has to hold a whole day.",
+  "q3": "Yes, twelve. Giving an order, the odds Card, the Boss order, the result and the Hero interrupt are each their own page, so no screen has to hold a whole day. The Boss also gets his own battle page: the Hero raids the Hideout and you hold the door.",
   "q4": "Esc opens the Boss Menu: the title's word menu in black, with the empire at a glance beside it. Settings is the same Settings, with a Dominion category.",
   "q5": "Yes, the villain side of one: grunts with ranks, Persian by the Boss, Rocket as the rival gang, and Red as the trainer you do not want to meet."
+ },
+ "20": {
+  "name": "Any Screen, Any Player",
+  "big": "Built for fingers as well as keys. The title menu becomes a pad of big buttons, battle commands leave the bottom bar and sit under the right thumb with a Menu button on screen, party cards stand straight so none overlap, and every page gets a full-width button bar. Plus an answer for every screen and player: ultrawide wings, phone layouts, high-contrast, colour-blind, large-text and calm versions.",
+  "pages": [
+   "Screen · Ultrawide",
+   "Screen · Phone, sideways",
+   "Screen · Phone, upright",
+   "Access · High Contrast",
+   "Access · Colour-blind",
+   "Access · Large Text",
+   "Access · Reduced Motion"
+  ],
+  "q1": "Less about flash, more about reach: the upright phone battle with a giant FIGHT button and the patterned type wall are the eye-catchers.",
+  "q2": "Passes 1 to 19 only ever drew one 960 by 540 screen for a keyboard. Now the Title and Battle are laid out again around a thumb, every key hint is a button you can tap, and every colour signal has a shape as well.",
+  "q3": "Yes, seven: three for screen shapes, four for accessibility. Each is linked to the setting that switches it on.",
+  "q4": "Battle now has an on-screen Menu button, because a phone has no Esc key. Settings › Display gains Wide screen (Wings, Scenery, Black bars). The button bar colours confirm green and back red on every page.",
+  "q5": "Yes. The upright phone layout is the handheld layout the series grew up on: scene on top, big buttons underneath."
  }
 }
