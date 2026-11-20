@@ -14,6 +14,10 @@ import { chooseStarter, createRun } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { jobBotchedView, jobDoneView, orderView, paperView } from '../../src/ui/redux/screens/dominion/moments';
 import { topModel } from '../../src/core/dominion/screens';
+import { presetFx } from '../../src/core/dominion/fx';
+import type { Settings } from '../../src/core/state';
+import { DEFAULT_SETTINGS } from '../../src/save/saveManager';
+import { cutInsOn, stillFx } from '../../src/ui/redux/screens/dominion/cutins';
 import { content } from './helpers';
 
 const domRun = (seed: string): RunState => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', rules: { ...STANDARD_CHOICE, modeId: DOMINION_MODE_ID } }), 0);
@@ -296,5 +300,25 @@ describe('DOMINION D30: a member caught on a botched job (m10: Bail / Break out 
     const r = go(out.run, { t: 'jobCaught', choice: 'leave' });
     expect(stepInRun(content, r, { t: 'jobCaught', choice: 'bail' }).ok).toBe(false);
     expect(DominionBlockSchema.parse(JSON.parse(JSON.stringify(blk(r)))).paper!.caught!.left).toBe(true);
+  });
+});
+
+describe('DOMINION D30: the cut-in follows D27\'s Settings · Dominion effects', () => {
+  const withFx = (fx: Partial<Settings['expansion']['dominionPrefs']['fx']>, more: Partial<Settings> = {}): Settings => ({
+    ...DEFAULT_SETTINGS, ...more,
+    expansion: { ...DEFAULT_SETTINGS.expansion, dominionPrefs: { ...DEFAULT_SETTINGS.expansion.dominionPrefs, fx: { ...DEFAULT_SETTINGS.expansion.dominionPrefs.fx, ...fx } } },
+  });
+  it('Full show plays it and moves; Cut-ins Skip skips it; Lighter plays it but holds the pages still', () => {
+    expect(cutInsOn(withFx({}))).toBe(true);
+    expect(stillFx(withFx({}))).toBe(false);
+    expect(cutInsOn(withFx({ cutIns: 'skip' }))).toBe(false);
+    expect(cutInsOn(withFx(presetFx('lighter')))).toBe(true);
+    expect(stillFx(withFx(presetFx('lighter')))).toBe(true);
+    expect(cutInsOn(withFx(presetFx('calm')))).toBe(false);
+  });
+  it('the game\'s own Motion still caps it (Battle motion Off, Disable all animations)', () => {
+    expect(cutInsOn(withFx({}, { battleAnimations: 'off' }))).toBe(false);
+    expect(cutInsOn(withFx({}, { disableAllAnimations: true }))).toBe(false);
+    expect(stillFx(withFx({}, { battleAnimations: 'reduced' }))).toBe(true);
   });
 });
