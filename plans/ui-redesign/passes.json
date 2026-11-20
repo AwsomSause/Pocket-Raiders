@@ -387,5 +387,19 @@
   "q3": "Yes, four, and they exist only so the main screens can be emptier: Battle Status holds the folded strips, News holds the title's notices, This Run holds the phone's powers, score and Gym card, and a before / after sheet shows the rule.",
   "q4": "The pause menu loses three strips and gains one This Run card. Battle gets Menu inside the status bar. Settings is untouched, but Settings › Display could offer 'Show everything' for players who liked the busy battle.",
   "q5": "More than before. The classic battle screen is two Pokémon, two HP boxes and four big choices, and that is what this pass returns to."
+ },
+ "24": {
+  "name": "The Tilted Ball",
+  "big": "The game gets a mark of its own: a Poké Ball whose belt is tipped 14 degrees, the same slant as the slash on the title. It becomes the O in the logo, the giant sun behind the hero, a court painted on every battlefield, the cap on every party card, every app on the Rotom Phone, every page icon and the save mark. Every button becomes a capsule.",
+  "pages": [
+   "The Signature",
+   "Save Marks",
+   "Screen Wipe"
+  ],
+  "q1": "Yes. Red now stands in front of a giant tilted ball instead of a plain sun, every battle is fought on a painted ball court, and the party looks like six balls opened into cards.",
+  "q2": "Before this pass the design had good parts but nothing you could point to and say 'that is Pocket Raiders'. Now one shape repeats from the logo to the save icon, so a single cropped corner of any screen is recognisable.",
+  "q3": "Yes, three: The Signature (the mark, three shapes, five colours, where it lives), Save Marks (saving, saved, loading, could not save) and Screen Wipe (the ball-shut change of place).",
+  "q4": "Menu apps are now balls in each app's colour, and the phone wallpaper is the mark. Settings › Save & Data gains 'Show save mark'. Reduced motion swaps the wipe for a fade.",
+  "q5": "Yes, as directly as it can: the Poké Ball is the most Pokémon shape there is, and the tilt and the capsule buttons make it this game's own."
  }
 }
