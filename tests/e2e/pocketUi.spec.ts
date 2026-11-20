@@ -350,3 +350,36 @@ test('Pocket look: a healing stop is the Pokémon Center; the party is healed on
   expect(await page.evaluate(() => (window as any).__pkr.session.run.stage.map.nodes.flatMap((n: any) => n.sides).find((s: any) => s.id === 'pk-heal')?.used)).toBe(true);
   expect(errors).toEqual([]);
 });
+
+test('Pocket look: Party is a hand of cards and Summary has every tab; neither changes the run', async ({ page }) => {
+  test.setTimeout(240_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=pk-party');
+  await toPocketMap(page);
+  await page.waitForTimeout(800);
+  const before = await runNow(page);
+  await page.evaluate(() => {
+    const map = (window as any).__pkr.game.scene.getScene('Map');
+    map.activate(map.options.findIndex((o: any) => o.kind === 'party'));
+  });
+  await onPkPage(page, 'Map', 'party');
+  const party = pkView(page, 'Map', 'party');
+  await expect(party.locator('.pkc')).toHaveCount(await page.evaluate(() => (window as any).__pkr.session.run.party.length));
+  await expect(party.locator('.pkc.on')).toHaveCount(1);
+  await expect(party.locator('.kc-lead')).toHaveCount(1);
+  await fits(page, 'Map', 'party');
+
+  await step(page, 'Enter');
+  await onPkPage(page, 'Map', 'summary');
+  const sum = pkView(page, 'Map', 'summary');
+  const tabs = await sum.locator('.t12 .tab').count();
+  expect(tabs).toBeGreaterThanOrEqual(5);
+  for (let t = 0; t < tabs; t++) {
+    await expect(sum.locator('.t12 .tab').nth(t)).toHaveClass(/\bon\b/);
+    await fits(page, 'Map', 'summary');
+    await step(page, 'ArrowRight');
+  }
+  await step(page, 'Escape', 2);
+  expect(await runNow(page)).toBe(before);
+  expect(errors).toEqual([]);
+});

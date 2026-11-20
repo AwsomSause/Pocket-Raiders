@@ -315,3 +315,38 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .pc-list.gx-pc-few{height:auto;gap:14px;padding:14px}
 .pkx .pks .pc-mach u.gx-pc-empty{width:36px;height:36px;place-items:center;animation:none}
 .pkx .pks .pc-mach u.gx-pc-empty i{width:24px;height:24px;border-radius:50%;background:rgba(13,21,48,.35);box-shadow:inset 0 3px 0 rgba(0,0,0,.25)}
+
+/* Party (mock-up `party`): with no Gym strip (a pick, the run's end) Rotom says what the page is for. */
+.pkx .pks .party .pk-rot.gx-show{display:flex;top:363px}
+.pkx .pks .pkc.gx-off{opacity:.55}
+/* The lit card is drawn first, as the mock-up's lead card is: its moves and the Gym strip stand beside it. */
+.pkx .pks .party .hand>.pkc.on{order:-1}
+
+/* Summary (mock-ups `summary`, `summary-moves`, `summary-bond`) and the game's other tabs drawn in the same pieces. */
+.pkx .pks .gx-sm-stats{flex:none;width:308px;display:flex;flex-direction:column;align-items:center}
+.pkx .pks .gx-sm-stats .radar{margin:30px 34px 0}
+.pkx .pks .gx-sm-foot{margin-top:auto;width:300px;font-weight:800;color:var(--mute);line-height:1.3;text-align:center}
+.pkx .pks .gx-sm-ov{flex:none;width:330px;justify-content:flex-start}
+.pkx .pks .gx-sm-facts{justify-content:center}
+.pkx .pks .gx-sm-facts p{grid-template-columns:96px 1fr;padding:5px 10px}
+.pkx .pks .gx-sm-facts em{font-size:11px;line-height:1.6}
+.pkx .pks .bd-log.gx-wide p{grid-template-columns:150px 1fr}
+.pkx .pks .gx-sm-rows{display:flex;flex-direction:column;gap:6px;min-height:0;overflow:hidden}
+.pkx .pks .gx-sm-rows p{font-size:inherit}
+.pkx .pks .gx-sm-rows p em:empty{background:none}
+.pkx .pks .bd-big u.gx-off{color:#d5dbe8;animation:none}
+.pkx .pks .gx-sm-bars{margin-top:auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:4px 10px}
+.pkx .pks .gx-sm-bars p{display:grid;grid-template-columns:70px 1fr 22px;align-items:center;gap:4px;font-size:11px;font-weight:800;text-align:left}
+.pkx .pks .gx-sm-bars i{height:6px;border-radius:3px;background:#cfd6e6;overflow:hidden}
+.pkx .pks .gx-sm-bars u{display:block;height:100%;background:#ff5c8a}
+.pkx .pks .gx-sm-bars b{text-align:right}
+.pkx .pks .gx-sm-more{text-align:right;font-size:12px;font-weight:800;color:var(--mute)}
+.pkx .pks .gx-sm-take{margin-left:auto;font-style:normal;font-size:12.5px;font-weight:800;color:#fff;background:var(--red);border-radius:999px;padding:2px 12px;cursor:pointer}
+.pkx .pks .summary .gx-shade{position:absolute;inset:0;z-index:8;background:rgba(13,21,48,.45)}
+.pkx .pks .gx-sm-menu{position:absolute;left:300px;top:110px;width:280px;z-index:9;display:flex;flex-direction:column;gap:6px;padding:12px}
+.pkx .pks .gx-sm-menu .btn{height:32px}
+.pkx .pks .gx-sm-menu p{font-size:13px;line-height:1.3;color:var(--ink)}
+.pkx .pks .mr>.gx-fit{grid-column:1;grid-row:1/3;display:grid;place-items:center}
+.pkx .pks .gx-sm-rows p{grid-template-columns:96px 1fr}
+.pkx .pks .bd-log.gx-wide .gx-sm-rows p{grid-template-columns:150px 1fr}
+.pkx .pks .gx-sm-rows em{font-size:11px;line-height:1.6}

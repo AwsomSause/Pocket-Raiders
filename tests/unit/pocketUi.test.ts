@@ -7,6 +7,9 @@ import { pkAce, pkVersus } from '../../src/ui/pocket/screens/cards';
 import { dealOf, dealWord, pageText, pkEvent, points } from '../../src/ui/pocket/screens/event';
 import { mapWindow, nodeState, pkMap, pkMiniMap, pkNodeMenu } from '../../src/ui/pocket/screens/map';
 import { pkPause } from '../../src/ui/pocket/screens/pause';
+import { pkParty } from '../../src/ui/pocket/screens/party';
+import { pkSummary, radar } from '../../src/ui/pocket/screens/summary';
+import type { PartyCard, SummaryModel } from '../../src/ui/redux/screens/party';
 import { healNote, pkCenter } from '../../src/ui/pocket/screens/center';
 import { categoryWord, pkReward, rarityOf } from '../../src/ui/pocket/screens/reward';
 import type { RewardModel } from '../../src/ui/redux/screens/stops';
@@ -416,5 +419,61 @@ describe('Pocket look: the Pokémon Center', () => {
     expect(html).toContain('gx-pc-few');
     expect(html).toContain('Day 3 · Evening');
     expect(html).toContain('data-act="heal"');
+  });
+});
+
+describe('Pocket look: Party and Summary', () => {
+  const mon = (name: string, o: Partial<PartyCard> = {}): PartyCard => ({ name, file: null, level: 36, hp: 98, maxHp: 124, held: 'Charizardite X', tag: '', types: ['fire', 'flying'], ability: 'Blaze', nature: 'Timid', moves: [{ name: 'Flamethrower', type: 'fire', pp: '12/15' }, { name: 'Roost', type: 'flying', pp: '5/5' }], off: false, hearts: 4, xpPct: 62, xpText: '1,240 to Lv 37', status: '', heldId: 'charizardite-x', ...o });
+  const party = [mon('Charizard', { tag: 'LEAD' }), mon('Gengar', { types: ['ghost', 'poison'], status: 'PSN' }), mon('Lucario', { hp: 0 })];
+  it('the team is a hand of cards; the lit one shows its moves and PP; a fainted one is greyed', () => {
+    const html = pkParty({ title: 'Party', mons: party, index: 0, text: 'Pick one.', hints: [['Enter', 'summary']], money: 4820, gym: { when: 'Gym in 3 stops', who: 'Misty · Water', file: null, rows: [{ file: null, word: 'Weak', cls: 'dn' }] } });
+    expect(pkPageOf(html)?.id).toBe('party');
+    expect(html.match(/class="pkc[ "]/g)?.length).toBe(3);
+    expect(html).toContain('class="pkc on"');
+    expect(html).toContain('class="pkc fnt"');
+    expect(html).toContain('<u class="kc-lead">Lead</u>');
+    expect(html).toContain('<u class="kc-st">PSN</u>');
+    expect(html).toContain('<u class="kc-st">FNT</u>');
+    expect(html).toContain('1,240 to Lv 37');
+    expect(html).toContain('Flamethrower<em>12/15</em>');
+    expect(html).toContain('<b>Gym in 3 stops</b><span>Misty · Water</span>');
+    expect(html).toContain('₽ 4,820');
+    expect(html).not.toContain('pk-rot gx-show');
+  });
+  it('without a Gym strip (a pick) Rotom says what the page is for; an empty party says so', () => {
+    expect(pkParty({ title: 'Give it to', mons: party, index: 1, text: 'Choose who holds it.', hints: [], gym: null })).toContain('pk-rot gx-show');
+    expect(pkParty({ title: 'Party', mons: [], index: 0, text: 'No Pokémon.', hints: [] })).toContain('No Pokémon.');
+  });
+  it('the stats radar goes round the six stats and marks what the nature raises and lowers', () => {
+    const rows = ['HP', 'Attack', 'Defense', 'Sp. Atk', 'Sp. Def', 'Speed'].map((label, k) => ({ label, value: 50 + k, pct: k * 20, up: k === 5, down: k === 1 }));
+    const html = radar(rows);
+    expect(html).toContain('class="rv"');
+    expect(html).toContain('class="up ">Speed<b>55</b>');
+    expect(html).toContain('class="dn rt">Attack<b>51</b>');
+    expect(html.indexOf('Speed')).toBeLessThan(html.indexOf('Sp. Def'));
+  });
+  it('the Summary has the card, every tab, and each tab drawn in the mock-up\'s pieces', () => {
+    const base: SummaryModel = { title: 'Summary', hints: [['←→', 'page']], face: { name: 'Charizard', file: null, art: null, level: 36, gender: '', types: ['fire', 'flying'], no: 'No. 006', held: 'Holding 1 item', hpPct: 79, xpPct: 62 }, tabs: ['Overview', 'Stats', 'Moves', 'Items', 'Bond', 'History', 'Traits'], tab: 2, itemsTab: 3, text: '', menu: null, card: party[0], count: '1 of 6',
+      body: { kind: 'moves', moves: [{ name: 'Flamethrower', type: 'fire', pp: '12/15' }, { name: 'Roost', type: 'flying', pp: '5/5' }], cursor: 0, facts: [['Type / Category', 'Fire · Special'], ['Power / Accuracy', '90 / 100']], lines: ['• May burn.'] },
+      extra: { name: 'Charizard', types: ['fire', 'flying'], nature: ['Timid', '+Speed, −Attack'], ability: ['Blaze', 'Fire moves get stronger.'], held: ['Charizardite X', 'Mega Evolves.', 'charizardite-x'], weak: ['rock', 'water', 'electric'], moveKinds: ['Special', 'Status'], moveText: 'Scorches the target.', bond: { hearts: 5, mood: 'Best friends', hint: 'Fired up.' } } };
+    const moves = pkSummary(base);
+    expect(pkPageOf(moves)?.id).toBe('summary');
+    expect(moves.match(/class="tab[ "]/g)?.length).toBe(7);
+    expect(moves).toContain('class="tab on" data-act="tab" data-arg="2"');
+    expect(moves).toContain('data-key="sm-card"');
+    expect(moves).toContain('class="mr on"');
+    expect(moves).toContain('<b>90</b>Power');
+    expect(moves).toContain('Same type as Charizard: 1.5× power');
+    expect(moves).toContain('Scorches the target. May burn.');
+    const stats = pkSummary({ ...base, tab: 1, body: { kind: 'stats', rows: ['HP', 'Attack', 'Defense', 'Sp. Atk', 'Sp. Def', 'Speed'].map((label) => ({ label, value: 80, pct: 50, iv: '31', ev: 0, up: false, perfect: true, delta: '' })), foot: 'EV 0/510', versus: '' } });
+    expect(stats).toContain('Weak to');
+    expect(stats).toContain('Charizardite X');
+    expect(stats).toContain('IV 31 / 31');
+    const bond = pkSummary({ ...base, tab: 4, body: { kind: 'text', head: 'Best friends', bars: [{ label: 'Trust', value: 40 }], sections: [{ title: 'Mood', lines: ['Fired up.'] }] } });
+    expect(bond).toContain('class="bd-big"');
+    expect(bond).toContain('Trust');
+    const menu = pkSummary({ ...base, menu: { options: [{ label: 'Make lead', off: false }, { label: 'Review items', off: true }], index: 0 } });
+    expect(menu).toContain('gx-sm-menu');
+    expect(menu).toContain('gx-dim');
   });
 });

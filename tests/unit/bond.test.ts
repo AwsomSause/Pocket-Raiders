@@ -5,7 +5,7 @@
 const KANTO = ['charmander', 'squirtle', 'bulbasaur'];
 import { describe, expect, it } from 'vitest';
 import { endHyperMoves } from '../../src/core/battle/hyperMove';
-import { adjustBond, bondLevelHandover, bondMood, pairedMoveName, bondVictory, pairBondLevel, bondOf, enemyCombo, freshBond, playerCombo, revealMove, revealableMove, shapeAction, traitOf, wouldRefuse } from '../../src/core/bond';
+import { adjustBond, bondLevelHandover, bondMood, pairedMoveName, bondVictory, pairBondLevel, bondOf, peekBond, enemyCombo, freshBond, playerCombo, revealMove, revealableMove, shapeAction, traitOf, wouldRefuse } from '../../src/core/bond';
 import { trackFeelings } from '../../src/core/bond/feelings';
 import { createBattle, type BattleEvent } from '../../src/core/battle/engine';
 import { openingDrama, planDrama } from '../../src/core/drama';
@@ -359,5 +359,24 @@ describe('SF161 Battle Moments: the after-battle choice', () => {
     const lines = planDrama(content, run, structuredClone(run.battle!), [{ type: 'combo', side: 'enemy', from: 'e0', to: 'e1', stat: 'atk' }], 'high');
     expect(lines.some((l) => l.cue?.event === 'foeCombination' && l.speaker === 'Joey')).toBe(true);
     expect(run.itemCounters?.['later-event:moment-combo']).toBeUndefined();
+  });
+});
+
+describe('peekBond (screens read a bond without writing one)', () => {
+  it('gives the same bond bondOf would, and leaves the run as it was', () => {
+    const run = battleRun();
+    const uid = run.party[0]!.uid;
+    delete run.story.histories[uid]!.bond;
+    const before = JSON.stringify(run);
+    const seen = peekBond(run, uid);
+    expect(JSON.stringify(run)).toBe(before);
+    expect(bondOf(run, uid)).toEqual(seen);
+    expect(peekBond(run, uid)).toBe(bondOf(run, uid));
+  });
+  it('a Pokémon with no history yet gets a fresh bond, and nothing is written', () => {
+    const run = battleRun();
+    const before = JSON.stringify(run);
+    expect(peekBond(run, 'nobody').trust).toBe(freshBond('nobody').trust);
+    expect(JSON.stringify(run)).toBe(before);
   });
 });
