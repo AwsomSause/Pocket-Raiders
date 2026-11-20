@@ -11,14 +11,33 @@ async function newDominion(page: Page) {
     s.saveSettings({ ...s.settings, expansion: { ...s.settings.expansion, evilMode: true } });
   });
   await open(page, 'RunPrep', { archetypeId: 'red', modeId: 'dominion' });
+  // The first key press right after a scene change can be dropped: wait 250 ms after each one.
+  await page.waitForTimeout(250);
   await page.keyboard.press('Enter');
   await waitForScene(page, 'StarterSelect');
+  await page.waitForTimeout(250);
   await page.keyboard.press('Enter');
   await waitForScene(page, 'Dominion');
   const s = view(page, 'Dominion');
   await expect(s.getByTestId('dom-logo')).toBeVisible();
   await page.waitForTimeout(300);
   return s;
+}
+
+/** Presses `key` until `shown` is visible: a press can be lost in a busy headless frame, and every press is checked. */
+async function pressUntil(page: Page, key: string, shown: ReturnType<Page['locator']>) {
+  await expect(async () => {
+    if (!(await shown.isVisible())) await page.keyboard.press(key);
+    await expect(shown).toBeVisible({ timeout: 1500 });
+  }).toPass({ timeout: 15_000 });
+}
+
+/** Presses `key` until `gone` is hidden (never presses once it is). */
+async function pressUntilGone(page: Page, key: string, gone: ReturnType<Page['locator']>) {
+  await expect(async () => {
+    if (await gone.isVisible()) await page.keyboard.press(key);
+    await expect(gone).toBeHidden({ timeout: 1500 });
+  }).toPass({ timeout: 15_000 });
 }
 
 const block = (page: Page) => page.evaluate(() => (window as any).__pkr.session.run.expansion.dominion);
@@ -58,13 +77,13 @@ test('round 4: Nova livery on every screen, Q is free, arrows page the Crew File
   await expect(s.getByTestId('dom-phase')).toHaveText('EVENING');
 
   // The Crew File: Q Wheel leads the key strip, Q does nothing, C/H/R still work, arrows page members.
-  await page.keyboard.press('Digit3');
+  await pressUntil(page, 'Digit3', s.getByTestId('dom-file-keys'));
   await expect(s.getByTestId('dom-file-keys')).toContainText('Card');
   await expect(s.locator('.keys .q4')).toHaveText('Q');
-  await page.keyboard.press('KeyH');
+  await pressUntil(page, 'KeyH', s.getByTestId('dom-hire-0'));
   await s.getByTestId('dom-hire-0').click();
   await expect(s.getByTestId('dom-notice')).toContainText('joined');
-  await page.keyboard.press('Escape');
+  await pressUntilGone(page, 'Escape', s.getByTestId('dom-hire-0'));
   for (let n = (await block(page)).crew.talks.length; n > 0; n--) {
     await s.getByTestId('dom-talk-0').click();
     await expect.poll(async () => (await block(page)).crew.talks.length).toBe(n - 1);
@@ -88,7 +107,7 @@ test('round 4: Nova livery on every screen, Q is free, arrows page the Crew File
   await expect(s.locator('.keys .q4')).toHaveText('Q');
   await expect(view(page, 'Dominion')).not.toContainText(/Claude|\bAI\b/);
   await shot('k3-card');
-  await page.keyboard.press('Escape');
+  await pressUntil(page, 'Escape', s.getByTestId('dom-file-stats'));
 
   // The Crew File at three window sizes: the sigil stays on the stage.
   for (const [w, h] of [[1280, 720], [960, 540], [800, 600]] as const) {
