@@ -219,9 +219,11 @@ describe('Sweet Air (KANTO_PLACED_2, Erika\'s perfume)', () => {
   it('puts the lead to sleep for one turn about 20% of the time, the same way for the same seed, and never a statused lead', () => {
     let slept = 0;
     for (let i = 0; i < 400; i++) {
+      // One fresh run per seed; the copy is the same state, so it must roll the same way.
+      // (Building a second run per seed doubled this test's time on slow CI runners.)
       const run = at(`SA${i}`, 4, forest);
+      const again = structuredClone(run);
       kantoSweetAir(content, run);
-      const again = at(`SA${i}`, 4, forest);
       kantoSweetAir(content, again);
       expect(again.party[0]!.status).toEqual(run.party[0]!.status);
       if (run.party[0]!.status) { slept++; expect(run.party[0]!.status).toEqual({ id: 'slp', turns: 1 }); }
