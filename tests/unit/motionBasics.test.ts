@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ClipBuilder, clipEnd, EASES, fxAllowed, sampleClip, type ClipLevel, type MotionClip } from '../../src/core/presentation/motionClip';
-import { aceLandClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
+import { aceLandClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
 
 const ME: MonSpot = { x: 312, y: 428, h: 180, side: 'player' };
 const FOE: MonSpot = { x: 648, y: 240, h: 150, side: 'enemy' };
@@ -297,5 +297,22 @@ describe('standing (pass 11)', () => {
     expect(standLook('twitch')).toMatchObject({ ms: 1100, hop: 9, hopEvery: 2600 });
     expect(standLook('sway')).toMatchObject({ ms: 1900, tilt: 2.5, tiltMs: 2300 });
     for (const k of ['steady', 'hover', 'float', 'heavy', 'twitch', 'sway'] as const) expect(Object.keys(standLook(k))).not.toContain('x');
+  });
+});
+
+describe('shiny entrance (pass 11)', () => {
+  const mid = { x: 648, y: 180 };
+  it('six stars spiral in from a wide ellipse and collapse onto the middle; glint and chip cues follow', () => {
+    const c = shinyClip(mid, 'full');
+    expect(sampleClip(c, 0).star0).toMatchObject({ x: mid.x + 170, y: mid.y, alpha: 1 });
+    const end = sampleClip(c, 800).star3!;
+    expect(Math.hypot(end.x! - mid.x, end.y! - mid.y)).toBeLessThan(25);
+    expect(sampleClip(c, 900).star3!.alpha).toBeCloseTo(0);
+    const cues = c.fx.filter((f) => f.kind === 'cue').map((f) => [f.at, (f as { name: string }).name]);
+    expect(cues).toEqual([[SHINY_GLINT, 'glint'], [SHINY_CHIP, 'chip']]);
+    expect(c.fx.filter((f) => f.kind === 'ring')).toHaveLength(3);
+  });
+  it('Reduced and Off keep only the chip', () => {
+    for (const level of ['reduced', 'off'] as const) expect(shinyClip(mid, level).fx).toEqual([{ kind: 'cue', at: 0, name: 'chip' }]);
   });
 });

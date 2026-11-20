@@ -310,3 +310,24 @@ test('HP bar and danger: a drop jolts the plate; under a fifth the plate glows, 
   expect(healed.sx).toBeCloseTo(home.sx, 3);
   expect(errors).toEqual([]);
 });
+
+test('a shiny entrance: stars circle in and go, the SHINY chip pins itself to the plate, and leaves with the shiny', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'shiny-e2e');
+  const stars = () => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.list.filter((c: any) => c.texture?.key === 'cheer.star4').length);
+  const chip = () => page.evaluate(() => { const box = (window as any).__pkr.game.scene.getScene('Battle').enemyBox; return box.shinyChip ? { inPlate: box.container.list.includes(box.shinyChip), key: box.shinyChip.texture.key } : null; });
+  await page.evaluate(() => { const b = (window as any).__pkr.game.scene.getScene('Battle'); b.shown.enemy.shiny = true; });
+  await start(page, 'b.shinySparkle()');
+  await expect.poll(stars, { timeout: 2_000 }).toBe(6);
+  await expect.poll(chip, { timeout: 5_000 }).toEqual({ inPlate: true, key: 'cheer.shiny' });
+  // The line waits for a press; the stars are gone by then.
+  await expect.poll(stars, { timeout: 5_000 }).toBe(0);
+  await page.keyboard.press('Enter');
+  await expect.poll(() => over(page), { timeout: 5_000 }).toBe(true);
+  expect(await chip()).toEqual({ inPlate: true, key: 'cheer.shiny' });
+  // A different, plain Pokémon on that plate takes the chip off.
+  await page.evaluate(() => { const b = (window as any).__pkr.game.scene.getScene('Battle'); b.shown.enemy.shiny = false; return b.refreshInfoBox(b.enemyBox, b.shown.enemy, false); });
+  expect(await chip()).toBeNull();
+  expect(errors).toEqual([]);
+});

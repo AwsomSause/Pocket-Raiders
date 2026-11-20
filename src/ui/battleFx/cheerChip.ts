@@ -70,16 +70,25 @@ export function cheerFace(scene: Phaser.Scene, artId: string, color: number): st
 
 /** The word as the mockup's pill: white, dark round letters, a thin ring in the trainer's colour. */
 export function cheerWordPicture(scene: Phaser.Scene, word: string, color: number): string | null {
-  const key = `cheer.word.${word}.${color}`;
+  return pill(scene, `cheer.word.${word}.${color}`, word, { fill: '#ffffff', ink: '#16203f', ring: css(color), size: 13 });
+}
+
+/** The shiny's chip (pass 11): "✦ SHINY" on the mockup's yellow pill with a white ring. */
+export function shinyChipPicture(scene: Phaser.Scene): string | null {
+  return pill(scene, 'cheer.shiny', '✦ SHINY', { fill: '#ffcb05', ink: '#16203f', ring: '#ffffff', size: 15 });
+}
+
+/** The mockup's `.pill`: round letters (M PLUS Rounded 1c, 800), 4 x 10 px padding, fully rounded, a 2 px ring. */
+function pill(scene: Phaser.Scene, key: string, word: string, look: { fill: string; ink: string; ring: string; size: number }): string | null {
   if (scene.textures.exists(key)) return key;
   try {
-    const font = `800 ${13 * HI}px "M PLUS Rounded 1c", ${FONT_FAMILY}`;
+    const font = `800 ${look.size * HI}px "M PLUS Rounded 1c", ${FONT_FAMILY}`;
     const probe = document.createElement('canvas').getContext('2d');
     if (!probe) return null;
     probe.font = font;
     const border = 2 * HI;
     const w = Math.ceil(probe.measureText(word).width) + 20 * HI + border * 2;
-    const h = 13 * HI + 8 * HI + border * 2;
+    const h = look.size * HI + 8 * HI + border * 2;
     const c = document.createElement('canvas');
     c.width = w;
     c.height = h;
@@ -88,13 +97,13 @@ export function cheerWordPicture(scene: Phaser.Scene, word: string, color: numbe
     const r = h / 2 - border / 2;
     ctx.beginPath();
     ctx.roundRect(border / 2, border / 2, w - border, h - border, r);
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = look.fill;
     ctx.fill();
     ctx.lineWidth = border;
-    ctx.strokeStyle = css(color);
+    ctx.strokeStyle = look.ring;
     ctx.stroke();
     ctx.font = font;
-    ctx.fillStyle = '#16203f';
+    ctx.fillStyle = look.ink;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(word, w / 2, h / 2 + HI);
@@ -104,6 +113,32 @@ export function cheerWordPicture(scene: Phaser.Scene, word: string, color: numbe
     return null;
   }
 }
+
+/** The mockup's four-pointed white star (26 px), drawn once. */
+export function starPicture(scene: Phaser.Scene): string | null {
+  const key = 'cheer.star4';
+  if (scene.textures.exists(key)) return key;
+  try {
+    const z = 26 * HI;
+    const c = document.createElement('canvas');
+    c.width = c.height = z;
+    const ctx = c.getContext('2d');
+    if (!ctx) return null;
+    const pts: [number, number][] = [[0.5, 0], [0.6, 0.4], [1, 0.5], [0.6, 0.6], [0.5, 1], [0.4, 0.6], [0, 0.5], [0.4, 0.4]];
+    ctx.beginPath();
+    pts.forEach(([x, y], k) => (k ? ctx.lineTo(x * z, y * z) : ctx.moveTo(x * z, y * z)));
+    ctx.closePath();
+    ctx.fillStyle = '#ffffff';
+    ctx.fill();
+    scene.textures.addCanvas(key, c);
+    return key;
+  } catch {
+    return null;
+  }
+}
+
+/** Pictures here are drawn at twice their size; this is the scale that shows them at their own. */
+export const PICTURE_SCALE = 1 / HI;
 
 /** Both pictures, placed at their rest spots and shrunk to nothing (the clip grows them). */
 export function cheerParts(scene: Phaser.Scene, face: { x: number; y: number }, faceKey: string, wordKey: string, depth: number): { face: Phaser.GameObjects.Image; word: Phaser.GameObjects.Image } {

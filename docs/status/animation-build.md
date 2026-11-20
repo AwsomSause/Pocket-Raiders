@@ -72,3 +72,7 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   mockup, then by first type; a Dynamaxed giant stands heavy. Sideways moves are left out (attack lunges move
   sideways). Faint, recall, miss and danger stop it and put the Pokémon back on its spot first. Full only. Limit:
   the contact shadow does not shrink with the breath yet.
+- Shiny entrance (pass 11): six stars spiral in and collapse onto the foe; a flash, a white glint sweeps across it,
+  the arena brightens for a beat and three rings go out; a yellow "SHINY" chip springs up over it and flies to the top
+  of its name plate, where it stays until a plain Pokémon takes the plate (`shinyClip`). Reduced/Off: just the chip.
+  Limit: the mockup's slow shimmer on the shiny afterwards is not in.

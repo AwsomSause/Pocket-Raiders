@@ -339,3 +339,40 @@ export function standLook(kind: StandKind): StandLook {
       return { ...still, ms: 1900, sy: 1.03, sx: 0.988 };
   }
 }
+
+/** When the shiny's stars collapse onto it (cue "glint": the glint and the arena brightening) and the chip leaves. */
+export const SHINY_GLINT = 850;
+export const SHINY_CHIP = 1000;
+
+/**
+ * Shiny entrance (pass 11): six stars circle in around the Pokémon and collapse onto it; at the collapse a flash,
+ * a glint across the sprite and the arena brightening (cue "glint") and three rings; then a "SHINY" chip springs
+ * up over it and flies to its name plate (cue "chip"; the screen moves the chip, which needs the plate's place).
+ * `mon` is the middle of the Pokémon. Reduced: only the chip (cue at 0). Off: only the chip, no motion.
+ */
+export function shinyClip(mon: Point, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('shiny', level);
+  const stars = Array.from({ length: 6 }, (_, i) => b.part(`star${i}`, { x: mon.x, y: mon.y, sx: 1, sy: 1, alpha: 0 }));
+  if (level !== 'full') {
+    b.fx({ kind: 'cue', at: 0, name: 'chip' });
+    return b.end(0);
+  }
+  // Each star spirals in on an ellipse that shrinks from 170 x 110 to 20 x 10 px over 0.8 s, 60° apart.
+  const steps = 10;
+  stars.forEach((s, i) => {
+    const at = (u: number): Point => ({ x: mon.x + (170 - 150 * u) * Math.cos(u * 6 + i * 1.047), y: mon.y + (110 - 100 * u) * Math.sin(u * 6 + i * 1.047) });
+    const p0 = at(0);
+    s.at(0).set({ alpha: 1, x: p0.x, y: p0.y });
+    for (let k = 1; k <= steps; k++) {
+      const p = at(k / steps);
+      s.to(800 / steps, { x: p.x, y: p.y }, 'lin');
+    }
+    s.to(100, { s: 2, alpha: 0 });
+  });
+  b.fx({ kind: 'cue', at: SHINY_GLINT, name: 'glint' });
+  b.fx({ kind: 'flash', at: SHINY_GLINT, d: 300, alpha: 0.6 });
+  [0xffffff, 0xffcb05, 0xffffff].forEach((color, i) => b.fx({ kind: 'ring', at: SHINY_GLINT + i * 80, x: mon.x, y: mon.y, r1: 150 + i * 50, flat: 1, d: 500, color, w: 5 }));
+  b.fx({ kind: 'cue', at: SHINY_CHIP, name: 'chip' });
+  b.beat(0, 'Six stars circle in').beat(SHINY_GLINT, 'Collapse: glint, the arena brightens').beat(SHINY_CHIP, 'Star chip flies to the plate');
+  return b.end(SHINY_CHIP + 1300);
+}

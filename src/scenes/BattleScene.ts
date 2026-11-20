@@ -122,14 +122,14 @@ import { teraJewel } from '../ui/battleFx/teraJewel';
 import { megaGlass } from '../ui/battleFx/megaGlass';
 import { drawnBox, type GimmickPage } from '../ui/battleFx/gimmickStage';
 import { stand, standStill } from '../ui/battleFx/stance';
-import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture } from '../ui/battleFx/cheerChip';
+import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture, PICTURE_SCALE, shinyChipPicture, starPicture } from '../ui/battleFx/cheerChip';
 import { dynamaxPan } from '../ui/battleFx/dynamaxPan';
 import { keyItemFor } from '../ui/battleFx/cineLook';
 import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel } from '../core/presentation/motionClip';
-import { aceLandClip, bigHit, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { aceLandClip, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
@@ -299,6 +299,8 @@ interface InfoBox {
   xpBar?: GaugeLike;
   teamText?: Phaser.GameObjects.Text;
   statusBadge?: Phaser.GameObjects.Container;
+  /** The "SHINY" chip pinned to the plate of a shiny foe (pass 11). */
+  shinyChip?: Phaser.GameObjects.Image;
   /** "TERA WATER" while the Pokémon is Terastallized. */
   teraBadge?: Phaser.GameObjects.Container;
   /** Raid role (Tank / Striker / Support) of your Pokémon in front. */
@@ -1798,6 +1800,10 @@ export class BattleScene extends Phaser.Scene {
     const pct = Math.ceil((Math.max(0, mon.hp) / max) * 100);
     box.hpText?.setText(spec?.hpText ? `${spec.hpText.prefix ?? ''}${spec.hpText.pct ? `${pct}%` : `${Math.max(0, mon.hp)}/${max}`}` : `${Math.max(0, mon.hp)}/${max}`);
     if (spec) this.refreshSkinParts(box, mon);
+    if (!mon.shiny) {
+      box.shinyChip?.destroy();
+      box.shinyChip = undefined;
+    }
     box.statusBadge?.destroy();
     box.statusBadge = undefined;
     if (mon.status) {
@@ -4204,14 +4210,84 @@ export class BattleScene extends Phaser.Scene {
     await this.say(intro.line);
   }
 
+  /**
+   * Shiny entrance (redesign pass 11): six stars circle in and collapse onto the foe, a glint runs across it, the
+   * arena brightens for a beat, and a "SHINY" chip springs up and flies to its name plate, where it stays.
+   */
   private async shinySparkle(): Promise<void> {
     playSfx(this, 'se.shiny');
-    const stars = [0, 1, 2, 3, 4].map((i) =>
-      this.add.text(ENEMY_POS.x + Math.cos(i * 1.26) * 60, ENEMY_POS.y - 80 + Math.sin(i * 1.26) * 60, '✦', textStyle(32, '#fff4a0')).setOrigin(0.5),
-    );
-    await tween(this, { targets: stars, alpha: 0, scale: 2, duration: 700 });
-    stars.forEach((s) => s.destroy());
+    const v = this.enemySprite;
+    const box = this.enemyBox;
+    const level = this.clipLevel();
+    const h = v instanceof Phaser.GameObjects.Sprite ? v.displayHeight * v.originY : 120;
+    const mid = { x: v?.x ?? ENEMY_POS.x, y: (v?.y ?? ENEMY_POS.y) - h / 2 };
+    const starKey = starPicture(this);
+    const stars = starKey && level === 'full' ? Array.from({ length: 6 }, () => this.add.image(mid.x, mid.y, starKey).setScale(PICTURE_SCALE).setAlpha(0).setDepth(32)) : [];
+    const parts = Object.fromEntries(stars.map((st, i) => [`star${i}`, { kind: 'free' as const, get: () => st }]));
+    let chipFlight: Promise<void> = Promise.resolve();
+    const run = playClip(this, shinyClip(mid, level), this.clipHost(parts, {
+      cue: (name) => {
+        if (name === 'glint' && v instanceof Phaser.GameObjects.Sprite) this.shinyGlint(v);
+        if (name === 'chip' && box) chipFlight = this.shinyChip(box, mid, level);
+      },
+    }));
+    await run.done;
+    stars.forEach((st) => st.destroy());
+    await chipFlight;
     await this.say(`It's a shiny ${this.speciesName(this.shown.enemy)}!`);
+  }
+
+  /** The shiny's glint: a white band sweeps across the sprite while the arena behind it brightens and settles. */
+  private shinyGlint(v: Phaser.GameObjects.Sprite): void {
+    const copy = this.add.sprite(v.x, v.y, v.texture.key, v.frame.name).setOrigin(v.originX, v.originY).setScale(v.scaleX, v.scaleY).setFlipX(v.flipX).setTintFill(0xffffff).setBlendMode(Phaser.BlendModes.ADD);
+    if (v.parentContainer) v.parentContainer.addAt(copy, v.parentContainer.getIndex(v) + 1);
+    else copy.setDepth(v.depth + 0.5);
+    const band = { u: -0.3 };
+    const w = copy.width;
+    this.tweens.add({
+      targets: band,
+      u: 1.1,
+      duration: 500,
+      ease: 'Sine.easeInOut',
+      onUpdate: () => copy.setCrop(Math.max(0, band.u * w), 0, w * 0.22, copy.height),
+      onComplete: () => copy.destroy(),
+    });
+    const lit = this.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH * 1.4, GAME_HEIGHT * 1.4, 0xffffff, 0).setBlendMode(Phaser.BlendModes.ADD);
+    this.field.addAt(lit, this.fieldBase);
+    this.tweens.chain({ targets: lit, tweens: [{ alpha: 0.3, duration: 100 }, { alpha: 0, duration: 600 }], onComplete: () => lit.destroy() });
+  }
+
+  /** The "SHINY" chip springs up over the foe, then flies to the top of its name plate and stays on it. */
+  private shinyChip(box: InfoBox, from: Point, level: ClipLevel): Promise<void> {
+    box.shinyChip?.destroy();
+    const key = shinyChipPicture(this);
+    if (!key) return Promise.resolve();
+    const c = box.container;
+    const [px, py, pw] = box.spec ? box.spec.panel : [6, 2, 360];
+    const local = { x: px! + pw! * 0.55, y: py! + 4 };
+    // The plate may be drawn smaller than 1:1; the chip keeps the mockup's own size on screen.
+    const k = Math.abs(c.scaleX) || 1;
+    const size = PICTURE_SCALE / k;
+    const chip = this.add.image(local.x, local.y, key).setScale(size);
+    c.add(chip);
+    box.shinyChip = chip;
+    if (level !== 'full') return Promise.resolve();
+    // It starts over the Pokémon (in the plate's own coordinates) at nothing and springs to twice its size.
+    chip.setPosition((from.x - c.x) / k, (Math.max(40, from.y - 150) - c.y) / k).setScale(0);
+    return new Promise((resolve) => {
+      this.tweens.chain({
+        targets: chip,
+        tweens: [
+          { scale: size * 2, duration: 200, ease: 'Back.easeOut', easeParams: [3.2] },
+          { x: local.x, y: local.y, scale: size, delay: 500, duration: 300, ease: 'Cubic.easeInOut' },
+        ],
+        onComplete: () => {
+          // The plate takes it with a little bump.
+          if (c.active) this.tweens.chain({ targets: c, tweens: [{ scale: k * 1.04, duration: 50 }, { scale: k, duration: 250, ease: 'Elastic.easeOut' }] });
+          resolve();
+        },
+      });
+    });
   }
 
   /** Shows the right prompt for the current state: forced switch or the action menu. */
