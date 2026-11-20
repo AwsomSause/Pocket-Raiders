@@ -121,7 +121,7 @@ import { pokemonHeightM, trainerHeightM } from '../core/heights';
 import { teraJewel } from '../ui/battleFx/teraJewel';
 import { megaGlass } from '../ui/battleFx/megaGlass';
 import { drawnBox, type GimmickPage } from '../ui/battleFx/gimmickStage';
-import { stand, standStill } from '../ui/battleFx/stance';
+import { HIT_RUN, stand, standStill } from '../ui/battleFx/stance';
 import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture, PICTURE_SCALE, shinyChipPicture, stampPicture, starPicture } from '../ui/battleFx/cheerChip';
 import { dynamaxPan } from '../ui/battleFx/dynamaxPan';
 import { keyItemFor } from '../ui/battleFx/cineLook';
@@ -129,7 +129,7 @@ import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel } from '../core/presentation/motionClip';
-import { aceLandClip, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { aceLandClip, hitClip, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
@@ -657,6 +657,7 @@ export class BattleScene extends Phaser.Scene {
       mastery: (moveId) => moveRank(session.profile.moveUses?.[moveId] ?? 0),
       fullScreen: (on) => this.rx?.visible(!on),
       numbers: () => ({ show: services().session.settings.damageNumbers, scale: services().session.settings.popupScale }),
+      recoil: (side, cue) => this.hitMoment(side, cue.crit || cue.effectiveness > 1),
     });
 
     this.shown = { player: structuredClone(run.party[battle.activeIndex]!), enemy: structuredClone(currentEnemy(battle)) };
@@ -4029,6 +4030,30 @@ export class BattleScene extends Phaser.Scene {
     }));
     await run.done;
     if (visual.active) this.standUp(visual, mon);
+  }
+
+  /**
+   * Hit (pass 2): the target goes white, squashes, is thrown back away from the attacker (further for a super effective
+   * or critical hit) and springs home with dust. Full animations only; false when it can't play (the plain hit-stop shows).
+   */
+  private hitMoment(side: Side, big: boolean): boolean {
+    const sprite = side === 'player' ? this.playerSprite : this.enemySprite;
+    if (!(sprite instanceof Phaser.GameObjects.Sprite) || !sprite.active || !sprite.visible || this.clipLevel() !== 'full') return false;
+    const at = this.spotXY(side);
+    // Something else is moving it (a move's own animation): leave it to that.
+    if (Math.abs(sprite.x - at.x) > 1) return false;
+    standStill(this, sprite);
+    const mon = this.shown[side];
+    const run = playClip(this, hitClip({ x: sprite.x, y: at.y }, side === 'enemy' ? 1 : -1, big, 'full'), this.clipHost({ mon: { kind: 'mon', get: () => sprite } }));
+    let cut = false;
+    sprite.setData(HIT_RUN, { stop: () => ((cut = true), run.stop()) });
+    void run.done.then(() => {
+      if (cut || !sprite.active) return;
+      sprite.setData(HIT_RUN, undefined);
+      run.rest('mon');
+      if (sprite === (side === 'player' ? this.playerSprite : this.enemySprite)) this.standUp(sprite, mon);
+    });
+    return true;
   }
 
   /**

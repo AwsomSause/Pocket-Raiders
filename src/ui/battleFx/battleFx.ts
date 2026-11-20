@@ -50,6 +50,11 @@ export interface FxOptions {
   fullScreen?: (on: boolean) => void;
   /** Settings > Damage numbers (off: none) and Damage popup size. Shown at size 1 when left out. */
   numbers?: () => { show: boolean; scale: number };
+  /**
+   * The target's own reaction to a hit (redesign pass 2: white, squash, thrown back, springs home). Called when the
+   * hit lands with full animations; it plays by itself while the battle goes on. Left out: the plain white hit-stop.
+   */
+  recoil?: (side: Side, cue: Extract<Cue, { kind: 'impact' }>) => boolean;
 }
 
 const BADGES: Record<string, { label: string; color: string }> = {
@@ -385,7 +390,10 @@ export class BattleFx {
     const visual = this.opts.sprite(cue.side);
     if (!visual) return;
     // Hit-stop: the target flashes white and everything holds for a moment.
-    if (cue.hitStopMs > 0 && !this.skipping) {
+    if (cue.hitStopMs > 0 && !this.skipping && this.opts.recoil?.(cue.side, cue)) {
+      // The scene's recoil draws the white and the squash; the battle still holds for the hit-stop.
+      await this.wait(cue.hitStopMs);
+    } else if (cue.hitStopMs > 0 && !this.skipping) {
       if (visual instanceof Phaser.GameObjects.Sprite) visual.setTintFill(0xffffff);
       else visual.setAlpha(0.5);
       await this.wait(cue.hitStopMs);

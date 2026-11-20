@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ClipBuilder, clipEnd, EASES, fxAllowed, sampleClip, type ClipLevel, type MotionClip } from '../../src/core/presentation/motionClip';
-import { aceLandClip, levelUpClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
+import { aceLandClip, HIT_KNOCK, HIT_KNOCK_BIG, hitClip, levelUpClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
 
 const ME: MonSpot = { x: 312, y: 428, h: 180, side: 'player' };
 const FOE: MonSpot = { x: 648, y: 240, h: 150, side: 'enemy' };
@@ -380,5 +380,26 @@ describe('motion clips: level up (pass 2)', () => {
     const o = levelUpClip(me, 'off');
     expect(o.length).toBe(0);
     expect(o.fx).toEqual([{ kind: 'cue', at: 0, name: 'tick' }]);
+  });
+});
+
+describe('motion clips: the target takes a hit (pass 2, 12)', () => {
+  const at = { x: 648, y: 240 };
+  it('white for 80 ms, squashed thin and tall, thrown away from the attacker, springs home with dust', () => {
+    const c = hitClip(at, 1, false, 'full');
+    expect(sampleClip(c, 0).mon).toMatchObject({ white: 1, sx: 0.8, sy: 1.14, dx: 0 });
+    expect(sampleClip(c, 80).mon!.white).toBe(1);
+    expect(sampleClip(c, 180).mon!.white).toBe(0);
+    expect(sampleClip(c, 160).mon!.dx).toBeCloseTo(HIT_KNOCK);
+    expect(c.fx).toEqual([{ kind: 'dust', at: 160, x: at.x + HIT_KNOCK, y: at.y, n: 4 }]);
+    expect(clipEnd(c).mon).toMatchObject({ dx: 0, sx: 1, sy: 1, white: 0 });
+    // Your Pokémon is thrown left; a super effective or critical hit throws further.
+    expect(sampleClip(hitClip(at, -1, true, 'full'), 160).mon!.dx).toBeCloseTo(-HIT_KNOCK_BIG);
+  });
+  it('Reduced and Off leave it to the battle blink', () => {
+    for (const level of ['reduced', 'off'] as const) {
+      const c = hitClip(at, 1, true, level);
+      expect([c.length, c.segs.length, c.fx.length]).toEqual([0, 0, 0]);
+    }
   });
 });

@@ -9,11 +9,17 @@ import { spritesAnimate } from '../display';
 
 const BASE = 'standBase';
 const LOOPS = 'standLoops';
+/** A hit's recoil playing on the sprite (`{ stop }`); `standStill` ends it so nothing else starts from mid-recoil. */
+export const HIT_RUN = 'hitRun';
 
 type Base = { y: number; sx: number; sy: number; angle: number };
 
 /** Stops a sprite's standing loops and puts it back at its resting place, size and angle. */
 export function standStill(scene: Phaser.Scene, v: Phaser.GameObjects.Sprite): void {
+  // A hit's recoil still playing ends first (in its end state: on its spot, at its size).
+  const hit = v.getData(HIT_RUN) as { stop: () => void } | undefined;
+  v.setData(HIT_RUN, undefined);
+  hit?.stop();
   const loops = v.getData(LOOPS) as Phaser.Tweens.Tween[] | undefined;
   loops?.forEach((t) => t.remove());
   v.setData(LOOPS, undefined);

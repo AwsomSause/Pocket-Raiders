@@ -86,3 +86,9 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   the Pokémon does two happy hops (46 px, then 30 px) with dust on each landing, and a yellow "LEVEL n" stamp springs
   out over it, hangs a second and lifts away (`levelUpClip`, `BattleScene.levelUpMoment`; replaces the old gold
   "LEVEL UP!" banner). Reduced: the stamp shows and fades. Off: just the number. Singles only.
+- Hit (pass 2 and 12, the target's side): with full animations a hit turns the target white for 80 ms and squashes it
+  thin and tall; it is thrown 30 px away from the attacker (46 px for a super effective or critical hit) and springs
+  home with dust where it landed (`hitClip`, `BattleScene.hitMoment`, through BattleFx's `recoil`). The battle still
+  holds for the hit-stop. Quick hits in a row restart it from the spot, never from mid-recoil. When a move's own
+  animation is moving the target, it is left alone. Reduced/Off keep the battle's own blink. The attacker's side
+  (wind-up and dash) is the move's own animation and is not changed (Kice's move rule).

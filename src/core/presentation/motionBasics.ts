@@ -456,3 +456,26 @@ export function levelUpClip(me: Point & { h: number }, level: ClipLevel): Motion
   b.beat(0, 'Flash, number ticks over').beat(100, 'Two hops').beat(100, 'LEVEL stamp');
   return b.end(1700);
 }
+
+/** How far a hit throws the target (pass 2), and how much further a super effective or critical one does (pass 12). */
+export const HIT_KNOCK = 30;
+export const HIT_KNOCK_BIG = 46;
+
+/**
+ * Hit (pass 2, the target's side of Attack and Hit): the target goes white for a beat and squashes thin and tall,
+ * is thrown back away from the attacker and springs back to its spot, with dust where it was thrown to. `away` is
+ * +1 when it is thrown to the right (the foe) and -1 to the left (yours). Full only: Reduced and Off keep the
+ * battle's own blink. Part: `mon`.
+ */
+export function hitClip(target: Point, away: 1 | -1, big: boolean, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('hit', level);
+  const m = b.part('mon', { dx: 0, dy: 0, sx: 1, sy: 1, white: 0 });
+  if (level !== 'full') return b.end(0);
+  const k = (big ? HIT_KNOCK_BIG : HIT_KNOCK) * away;
+  m.at(0).set({ white: 1 }).wait(80).to(100, { white: 0 });
+  m.at(0).set({ sx: 0.8, sy: 1.14 }).wait(70).to(340, { sx: 1, sy: 1 }, 'el');
+  m.at(70).to(90, { dx: k }, 'out').to(300, { dx: 0 }, 'back');
+  b.fx({ kind: 'dust', at: 160, x: target.x + k, y: target.y, n: 4 });
+  b.beat(0, 'Hit-stop: white, squash').beat(70, 'Thrown back').beat(160, 'Springs home');
+  return b.end(460);
+}
