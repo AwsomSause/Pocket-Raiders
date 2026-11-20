@@ -23,8 +23,6 @@ export interface NavHost {
   navFree(): boolean;
   /** Go to a page the way its own key would. */
   navJump(p: PageId): void;
-  /** D27's Boss Menu, once built (null until then). */
-  navMenu(): (() => void) | null;
   setNotice(n: string | null): void;
 }
 
@@ -48,15 +46,15 @@ export class NavController {
     return !!this.board;
   }
   boardRender(): string {
-    return boardView({ sheet: this.board!.sheet, at: this.board!.at, menuReady: !!this.host.navMenu() });
+    return boardView({ sheet: this.board!.sheet, at: this.board!.at });
   }
 
   /** Every draw passes through here: a new page starts the shutter, and the wheel draws over the page. */
-  wrap(html: string, here: Here): string {
+  wrap(html: string, here: Here, level: 'full' | 'lighter' | 'calm'): string {
     const was = this.prev;
     if (was && was.here !== here) {
       if (was.here && was.here !== 'board' && here && here !== 'board') this.last = pushLast(this.last, was.here, here);
-      if (was.here && here) this.startShutter(was, here);
+      if (was.here && here) this.startShutter(was, here, level);
     }
     if (!was || was.here !== here) this.prev = { here, html };
     else was.html = html;
@@ -66,10 +64,9 @@ export class NavController {
     return out;
   }
 
-  private startShutter(was: { here: Here; html: string }, here: Exclude<Here, null>): void {
-    const s = services().session.settings;
-    const reduced = typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-    const mode = shutterMode(s, reduced);
+  private startShutter(was: { here: Here; html: string }, here: Exclude<Here, null>, level: 'full' | 'lighter' | 'calm'): void {
+    const os = typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    const mode = shutterMode(level, os || services().session.settings.animationIntensity === 'reduced');
     if (mode === 'off') return void (this.shutter = null);
     const name = (h: Exclude<Here, null>): string => (h === 'board' ? 'The Board' : PAGE_NAMES[h]);
     const n = ++this.n;
@@ -85,14 +82,13 @@ export class NavController {
     const b = this.host.navBlock();
     const here = this.host.navHere();
     const spot = this.at === null ? null : SPOTS[this.at]!;
-    const menu = !!this.host.navMenu();
     return wheelView({
       at: this.at,
       hubName: spot ? spot.name : here ? PAGE_NAMES[here] : 'Dominion',
-      hubLine: spot && b ? (spot.id === 'menu' && menu ? 'Pause, save and Settings.' : hubLine(b, spot)) : 'Point at a place, then let go of Q.',
+      hubLine: spot && b ? hubLine(b, spot) : 'Point at a place, then let go of Q.',
       last: this.last.map((id) => ({ id, name: PAGE_NAMES[id] })),
       pins: b ? pinned(b) : [],
-      shut: SPOTS.map((s, i) => ((s.id === 'ops' || (s.id === 'menu' && !menu)) ? i : -1)).filter((i) => i >= 0),
+      shut: SPOTS.map((s, i) => (s.id === 'ops' ? i : -1)).filter((i) => i >= 0),
     });
   }
 
@@ -132,10 +128,6 @@ export class NavController {
     this.close();
     if (!s) return this.host.refresh();
     if (s.id === 'ops') return this.say(DOMINION_DATA.start.lockedTab);
-    if (s.id === 'menu') {
-      const menu = this.host.navMenu();
-      return menu ? menu() : this.say(DOMINION_DATA.start.lockedTab);
-    }
     this.go(s.id);
   }
 
@@ -143,10 +135,6 @@ export class NavController {
   go(p: PageId): void {
     this.close();
     this.board = null;
-    if (p === 'menu') {
-      const menu = this.host.navMenu();
-      return menu ? menu() : this.say(DOMINION_DATA.start.lockedTab);
-    }
     if (!jumpable(p)) return this.say('That page comes to you: nobody walks into it.');
     this.host.navJump(p);
     this.host.refresh();

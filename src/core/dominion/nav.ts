@@ -14,10 +14,9 @@ export const PAGE_IDS = [
 ] as const;
 export type PageId = (typeof PAGE_IDS)[number];
 
-/** How a page is reached: `jump` (the board and the wheel take you there), `comes` (the game brings it: the Hero
- *  stepping in, police questioning, a Debate, a Confront; nobody walks into those), `later` (the slice that builds it
- *  hasn't landed: the Boss Menu, D27). */
-export type Reach = 'jump' | 'comes' | 'later';
+/** How a page is reached: `jump` (the board and the wheel take you there) or `comes` (the game brings it: the Hero
+ *  stepping in, police questioning, a Debate, a Confront; nobody walks into those). */
+export type Reach = 'jump' | 'comes';
 
 export interface Pin {
   id: PageId;
@@ -35,7 +34,7 @@ const P = (id: PageId, sheet: 0 | 1, x: number, y: number, r: number, icon: stri
 /** The board's photos. Sheet 0 is mockup m5 (positions, tilts, icons and words as drawn). */
 export const PINS: readonly Pin[] = [
   P('title', 0, 30, 70, -3, 'i-leaders_crest', 'Title', 'start'),
-  P('menu', 0, 428, 66, 2, 'g-relic-crown', 'Boss Menu', 'Esc, anywhere', 'gold new', 'later'),
+  P('menu', 0, 428, 66, 2, 'g-relic-crown', 'Boss Menu', 'Esc, anywhere', 'gold new'),
   P('settings', 0, 800, 70, -2, 'g-scope-lens', 'Settings', 'from the Menu', 'gold new'),
   P('hq', 0, 30, 222, 3, 'g-card-key', 'HQ', 'tab 1'),
   P('morning', 0, 182, 210, -2, 'g-calendar', 'Morning', 'each day'),
@@ -76,9 +75,11 @@ export const EDGES: readonly Edge[] = [
   E(0, 'map', 'district', false), E(0, 'district', 'card', false, '1–9'), E(0, 'card', 'takeover', false), E(0, 'morning', 'chair', false, 'day ends'),
   E(0, 'hq', 'crew', false), E(0, 'crew', 'ledger', false), E(0, 'menu', 'settings', true, 'S'), E(0, 'settings', 'rotom', true),
   E(0, 'menu', 'hq', true, 'Esc'), E(0, 'menu', 'morning', true), E(0, 'menu', 'assign', true), E(0, 'menu', 'crew', true),
-  E(1, 'hq', 'base', false, 'B'), E(1, 'hq', 'rival', false, 'R'), E(1, 'hq', 'hero', false, 'H'), E(1, 'hq', 'voices', false, 'V'),
-  E(1, 'hq', 'founding', false, 'O'), E(1, 'hq', 'desk', false, 'I'), E(1, 'hq', 'crew', false, 'Tab 3'), E(1, 'crew', 'persona', false, 'C'),
-  E(1, 'crew', 'pyramid', false, 'P'), E(1, 'crew', 'squads', false, 'U'), E(1, 'hq', 'reserve', false, 'Tab 4'),
+  // Sheet 1: each row is a chain of neighbours; the tag is the key that opens the next page (top row: keys on the HQ,
+  // middle row: keys on the Crew File), so the strings stay short and readable.
+  E(1, 'hq', 'base', false, 'B'), E(1, 'base', 'rival', false, 'R'), E(1, 'rival', 'hero', false, 'H'), E(1, 'hero', 'voices', false, 'V'),
+  E(1, 'voices', 'founding', false, 'O'), E(1, 'founding', 'desk', false, 'I'), E(1, 'hq', 'crew', false, 'Tab 3'), E(1, 'crew', 'persona', false, 'C'),
+  E(1, 'persona', 'pyramid', false, 'P'), E(1, 'pyramid', 'squads', false, 'U'), E(1, 'squads', 'reserve', false, 'Tab 4'),
 ];
 
 export const SHEETS = ['the main routes', 'the back rooms'] as const;
@@ -151,7 +152,7 @@ export function hubLine(b: DominionBlock, spot: Spot): string {
     case 'ops': return DOMINION_DATA.start.lockedTab;
     case 'ledger': return `₽${b.funds.toLocaleString('en-US')} in the books. Heat ${b.heat}.`;
     case 'rotom': return 'Rotom and the Key-Card, in Settings.';
-    case 'menu': return DOMINION_DATA.start.lockedTab;
+    case 'menu': return 'Pause, save and Settings.';
   }
   return '';
 }

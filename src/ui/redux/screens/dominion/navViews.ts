@@ -20,8 +20,6 @@ export interface BoardModel {
   sheet: 0 | 1;
   /** The photo the keyboard cursor is on (index into this sheet's photos). */
   at: number;
-  /** Whether the Boss Menu is built (D27); until then its photo says so. */
-  menuReady: boolean;
 }
 
 const ctr = (p: Pin): [number, number] => [p.x + 52, p.y + 2];
@@ -48,14 +46,13 @@ function strings(sheet: 0 | 1): string {
 export function boardView(m: BoardModel): string {
   const pins = PINS.filter((p) => p.sheet === m.sheet);
   const pols = pins.map((p, i) => {
-    const how = p.id === 'menu' && !m.menuReady ? 'coming soon' : p.how;
-    const cls = ['pol', p.cls, i === m.at ? 'on4' : '', p.reach === 'jump' || (p.id === 'menu' && m.menuReady) ? '' : 'off4'].filter(Boolean).join(' ');
-    return `<div class="${cls}" style="left:${p.x}px;top:${p.y}px;--r:${p.r}deg"${act('navPin', i)} data-over="navPinOver" data-testid="dom-pin-${p.id}"><div class="ph"><img src="${img(p.icon)}" alt=""></div><b>${esc(p.name)}</b><small>${esc(how)}</small></div>`;
+    const cls = ['pol', p.cls, i === m.at ? 'on4' : '', p.reach === 'jump' ? '' : 'off4'].filter(Boolean).join(' ');
+    return `<div class="${cls}" style="left:${p.x}px;top:${p.y}px;--r:${p.r}deg"${act('navPin', i)} data-over="navPinOver" data-testid="dom-pin-${p.id}"><div class="ph"><img src="${img(p.icon)}" alt=""></div><b>${esc(p.name)}</b><small>${esc(p.how)}</small></div>`;
   }).join('');
   const other = m.sheet ? 0 : 1;
   const memo = m.sheet === 0
     ? 'Red string: the normal way.<br>Gold string: Esc to the Menu.<br><b>Hold Q</b>: the wheel jumps anywhere.'
-    : 'Red string: the key on that page.<br>Bottom row: these pages come to you.<br><b>Hold Q</b>: the wheel jumps anywhere.';
+    : 'Top row: keys on the HQ.<br>Middle row: keys on the Crew File.<br>Bottom row: these come to you.';
   return stage(`<div class="cork"></div>
   <div class="ttl" style="--t1:#7a3a12;--t2:#c9338f">The Board <span class="sub">· ${esc(SHEETS[m.sheet])}</span></div>
   <div class="keys" data-testid="dom-board-keys"><span class="key"${act('navSheet', other)} style="cursor:pointer">Tab</span><span>${esc(SHEETS[other])}</span><span class="key">Enter</span><span>Go</span><span class="key"${act('navBoardClose')} style="cursor:pointer">Esc</span><span>Back</span></div>
@@ -75,7 +72,7 @@ export interface WheelModel {
   hubLine: string;
   last: { id: PageId; name: string }[];
   pins: Waiting[];
-  /** Places that can't be jumped to yet (Operations, the Boss Menu before D27): drawn dim. */
+  /** Places that can't be jumped to yet (Operations): drawn dim. */
   shut: number[];
 }
 
@@ -108,11 +105,12 @@ export function wheelView(m: WheelModel): string {
 
 export type ShutterMode = 'blade' | 'fade' | 'off';
 
-/** Full show plays the blade; Lighter (Reduced animation intensity, or the OS asking for reduced motion) a plain fade;
- *  Calm (menu animations off, or every animation off) none. */
-export function shutterMode(s: { menuAnimations: boolean; disableAllAnimations: boolean; animationIntensity: string }, osReduced: boolean): ShutterMode {
-  if (!s.menuAnimations || s.disableAllAnimations) return 'off';
-  return s.animationIntensity === 'reduced' || osReduced ? 'fade' : 'blade';
+/** Settings · Effects & motion (D27's resolved level, which already follows the game's own Motion settings): Full show
+ *  plays the blade, Lighter a plain fade, Calm none. Reduced animation intensity or the OS asking for reduced motion
+ *  turn Full show into the fade too. */
+export function shutterMode(level: 'full' | 'lighter' | 'calm', reduced: boolean): ShutterMode {
+  if (level === 'calm') return 'off';
+  return level === 'lighter' || reduced ? 'fade' : 'blade';
 }
 
 /** How long a page change shows the shutter (m7: "about a third of a second"). */

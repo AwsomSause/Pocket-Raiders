@@ -114,10 +114,14 @@ export function mapView(m: MapModel, notice: string | null, garage: boolean, mee
 
 // ---------- mockup 4: the Card ----------
 
-export function cardView(c: CardModel, monFile: string | null, initial: string): string {
+/** `showOdds` (D27, Settings · Dominion "Show odds on the Card"): off draws the dial as "?" and hides how the odds are made. Drawing only: the roll is the same. */
+export function cardView(c: CardModel, monFile: string | null, initial: string, showOdds = true): string {
+  const hide = !showOdds && c.roll;
+  if (hide) c = { ...c, dial: '?', bar: 0, chance: 0, exact: false, parts: [] };
   const pct = c.roll ? c.bar : c.chance;
   const parts = c.parts.map(([k, n]) => `<div class="row sp"><span>${esc(k)}</span><b style="color:${n >= 0 ? '#1f8a49' : '#c0392b'}">${n >= 0 ? '+' : '−'}${Math.abs(n)}</b></div>`).join('');
-  const odds = c.roll ? `<b style="font-size:15px;color:#5d6a90;letter-spacing:.08em">HOW THE ODDS ARE MADE</b>${parts}
+  const odds = hide ? `<b style="font-size:15px;color:#5d6a90;letter-spacing:.08em">ODDS HIDDEN</b><div data-testid="dom-card-odds-hidden">Settings · Dominion has the odds turned off. The roll is the same either way.</div>`
+    : c.roll ? `<b style="font-size:15px;color:#5d6a90;letter-spacing:.08em">HOW THE ODDS ARE MADE</b>${parts}
         <div class="row sp" style="border-top:2px solid #28314b;padding-top:3px"><b>Total</b><b data-testid="dom-card-total">${esc(c.dial)}</b></div>`
     : `<b style="font-size:15px;color:#5d6a90;letter-spacing:.08em">NO ROLL</b><div>A sure thing: it just takes the time.</div>`;
   const heatRow = c.heat > 0 || c.failHeat > 0 ? `<div class="row" style="gap:6px;margin-top:6px;white-space:nowrap"><img class="ic" src="${img('g-fire-stone')}" alt="">Heat <b style="color:#c0392b">+${c.heat}</b> here ${c.failHeat ? `<span style="color:#5d6a90">· +${c.failHeat} if it fails</span>` : ''}</div>`
@@ -154,7 +158,7 @@ export function cardView(c: CardModel, monFile: string | null, initial: string):
         <div class="rays turn" style="position:absolute;left:${100 - (dial + 76) / 2}px;top:-6px;width:${dial + 76}px;height:${dial + 76}px;--rc:rgba(245,180,30,.35)"></div><div style="position:relative;width:${dial}px;height:${dial}px;border-radius:50%;background:conic-gradient(#f5c927 0 ${pct}%,#dfe4f2 0);box-shadow:0 0 0 4px #28314b,0 0 22px rgba(245,201,39,.5);display:grid;place-items:center">
           <div style="width:${dial - 44}px;height:${dial - 44}px;border-radius:50%;background:var(--paper);box-shadow:inset 0 0 0 4px #28314b;display:grid;place-items:center;text-align:center"><div><div class="num" style="font-size:${Math.round((c.dial.length > 4 ? 38 : 62) * (dial - 44) / 124)}px;line-height:.9;color:#28314b" data-testid="dom-card-chance">${esc(c.dial)}</div><div style="font-size:15px;color:#5d6a90">chance</div></div></div>
         </div>
-        <span class="pill ${c.exact ? 'g' : 'k'}" style="font-size:14px">${c.roll ? (c.exact ? 'SCOUTED' : 'UNSCOUTED') : 'NO ROLL'}</span>
+        <span class="pill ${c.exact ? 'g' : 'k'}" style="font-size:14px">${c.roll ? (hide ? 'HIDDEN' : c.exact ? 'SCOUTED' : 'UNSCOUTED') : 'NO ROLL'}</span>
       </div>
       <div class="col" style="gap:5px;font-size:16px">
         ${odds}

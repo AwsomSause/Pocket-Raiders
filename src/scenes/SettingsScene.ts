@@ -63,7 +63,7 @@ export class SettingsScene extends Phaser.Scene {
   /** True until the current page's menu has been built once (its options slide in only then). */
   private entering = true;
   /** Where Back leads: the title, the Hub, or the stage map (the New UI's pause menu opens Settings in a run). */
-  private from: 'MainMenu' | 'Hub' | 'Map' | 'Dominion' = 'MainMenu';
+  private from: 'MainMenu' | 'Hub' | 'Map' = 'MainMenu';
   private query = '';
   private notice = '';
   /** The redesigned look when one is picked (replaces the Options art). */
@@ -88,7 +88,7 @@ export class SettingsScene extends Phaser.Scene {
     queueAssets(this, ['ui.optionsbg']);
   }
 
-  create(data?: { from?: 'MainMenu' | 'Hub' | 'Map' | 'Dominion'; page?: Page; focus?: number }): void {
+  create(data?: { from?: 'MainMenu' | 'Hub' | 'Map'; page?: Page; focus?: number }): void {
     this.from = data?.from ?? 'MainMenu';
     this.page = data?.page ?? 'home';
     this.entering = true;
@@ -193,7 +193,7 @@ export class SettingsScene extends Phaser.Scene {
         { option: { label: 'Search settings…' }, hint: 'Type to find a setting by name.', action: () => this.go('search') },
         { option: { label: 'Reset to defaults' }, hint: 'Puts every setting back to how it started. Your saves are not touched.', action: () => this.go('confirmReset') },
         { option: { label: 'Rotom' }, hint: 'Extra lines from Rotom with your own Key-Card, and how much it has used. The game is complete without it.', action: () => this.go('claude') },
-        { option: { label: this.from === 'Hub' ? 'Back to the Hub' : this.from === 'Map' ? 'Back to the map' : this.from === 'Dominion' ? 'Back to the Dominion' : 'Back to the title screen' }, hint: '', action: () => this.back() },
+        { option: { label: this.from === 'Hub' ? 'Back to the Hub' : this.from === 'Map' ? 'Back to the map' : 'Back to the title screen' }, hint: '', action: () => this.back() },
       ];
     }
     if (this.page === 'claude') {
@@ -233,7 +233,7 @@ export class SettingsScene extends Phaser.Scene {
         { option: { label: 'Reset settings to defaults' }, hint: 'Asks first. Run and profile data are not touched.', action: () => this.go('confirmReset') },
         back,
         // Opened from a run (the pause menu): nothing that swaps the profile or leaves for another screen.
-      ].filter((r) => (this.from !== 'Map' && this.from !== 'Dominion') || !IN_RUN_HIDDEN.has(r.option.label));
+      ].filter((r) => this.from !== 'Map' || !IN_RUN_HIDDEN.has(r.option.label));
     }
     const rows = settingsIn(this.page).map((d) => toggleRow(d));
     if (this.page === 'controls') rows.push({ option: { label: this.remapping ? `Press a button for: ${PAD_ACTION_LABEL[PAD_ACTIONS[this.remapStep]!]}…` : 'Remap by pressing buttons…' }, hint: 'Press the controller button you want for each action in turn (Up, Down, Left, Right, Confirm, Back). A button already in use swaps.', action: () => this.startRemap() });

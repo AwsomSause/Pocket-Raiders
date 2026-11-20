@@ -4,7 +4,7 @@ import { open, start, view, waitForScene, watch } from './helpers/newUi';
 // DOMINION slice D28 (round-4 mockups m5-m7): getting around. Hold Q for the command wheel (point with the arrows,
 // let go to jump; digits, R and Backspace jump straight), the Boss's board (M on the wheel) with a photo for every page,
 // every page you can walk into reached from both, the crimson shutter between pages (a fade on Lighter, none on Calm),
-// the Rotom place's round trip through Settings, and no wheel before the run opens. Nothing here is saved.
+// the Rotom and Boss Menu places (D27's pages), and no wheel before the run opens. Nothing here is saved.
 
 async function newDominion(page: Page) {
   await page.evaluate(() => {
@@ -32,8 +32,11 @@ async function newDominion(page: Page) {
   await s.getByTestId('dom-type-dark').click();
   await s.getByTestId('dom-next').click();
   await s.getByTestId('dom-next').click();
-  for (let i = 0; i < 4; i++) await s.getByTestId('dom-opening').click();
-  await expect(s.getByTestId('dom-phase')).toHaveText('EVENING');
+  // The opening's lines: click until the HQ shows (a click can land while a line is still typing).
+  await expect(async () => {
+    if (await s.getByTestId('dom-opening').isVisible()) await s.getByTestId('dom-opening').click({ timeout: 1000 });
+    await expect(s.getByTestId('dom-phase')).toHaveText('EVENING', { timeout: 1000 });
+  }).toPass({ timeout: 30_000 });
   return s;
 }
 
@@ -156,6 +159,7 @@ test('the Boss\'s board: every page has a photo, and every page you can walk int
     hq: /^hq$/, morning: /^hq$/, assign: /^hq$/, chair: /^hq$/, crew: /^crew$/, ledger: /^ledger$/, map: /^map$/, district: /^map$/,
     card: /^map$/, takeover: /^map$/, base: /^base$/, rival: /^rival$/, hero: /^hero$/, voices: /^voices$/,
     persona: /^persona$/, pyramid: /^pyramid$/, squads: /^squads$/, reserve: /^reserve$/, desk: /^desk$/,
+    menu: /^menu$/, settings: /^settings$/, rotom: /^settings$/,
   };
   const board = async () => {
     await holdQ(page, s);
@@ -191,7 +195,7 @@ test('the Boss\'s board: every page has a photo, and every page you can walk int
   expect(errors).toEqual([]);
 });
 
-test('the Rotom place goes to Settings and Back returns to the same page; Lighter fades, Calm has no shutter; three sizes', async ({ page }, info) => {
+test('Rotom and the Boss Menu places open over the page and Esc comes back; Lighter fades, Calm has no shutter; three sizes', async ({ page }, info) => {
   const errors = watch(page);
   await start(page, 'ui=new');
   const s = await newDominion(page);
@@ -200,35 +204,39 @@ test('the Rotom place goes to Settings and Back returns to the same page; Lighte
   await page.keyboard.up('KeyQ');
   await hereIs(page, 'ledger');
 
-  // R on the wheel: Rotom's page of the game's Settings; Back (twice: Rotom, then Settings) returns to the Ledger.
+  // R on the wheel: the Rotom tab of the Boss Menu's Settings, over the Ledger; Esc steps back out to the Ledger.
   await holdQ(page, s);
   await page.keyboard.press('KeyR');
   await page.keyboard.up('KeyQ');
-  await waitForScene(page, 'Settings');
-  await page.waitForTimeout(300);
-  const active = () => page.evaluate(() => (window as any).__pkr.game.scene.getScenes(true).map((x: any) => x.scene.key).join(','));
+  await hereIs(page, 'settings');
   await expect(async () => {
-    if (!(await active()).includes('Dominion')) await page.keyboard.press('Escape');
-    await page.waitForTimeout(400);
-    expect(await active()).toContain('Dominion');
+    if ((await here(page)) !== 'ledger') await page.keyboard.press('Escape');
+    expect(await here(page)).toBe('ledger');
   }).toPass({ timeout: 15_000 });
+  // Esc on the wheel is the Boss Menu's place.
+  await holdQ(page, s);
+  await page.keyboard.press('Escape');
+  await page.keyboard.up('KeyQ');
+  await hereIs(page, 'menu');
+  await holdQ(page, s);
+  await page.keyboard.press('Digit6');
+  await page.keyboard.up('KeyQ');
   await hereIs(page, 'ledger');
 
-  // Lighter (Reduced animation intensity): a plain fade.
-  await page.evaluate(() => {
+  // Settings · Effects & motion: Lighter makes it a plain fade.
+  const fx = (level: string) => page.evaluate((lv) => {
     const x = (window as any).__pkr.session;
-    x.saveSettings({ ...x.settings, animationIntensity: 'reduced' });
-  });
+    const f = lv === 'calm' ? { level: lv, particles: false, cutIns: 'skip', shake: false, flashes: 'off' } : { level: lv, particles: false, cutIns: 'show', shake: true, flashes: 'soft' };
+    x.saveSettings({ ...x.settings, expansion: { ...x.settings.expansion, dominionPrefs: { ...x.settings.expansion.dominionPrefs, fx: f } } });
+  }, level);
+  await fx('lighter');
   await holdQ(page, s);
   await page.keyboard.press('Digit2');
   await page.keyboard.up('KeyQ');
   await expect(s.getByTestId('dom-shutter')).toHaveAttribute('data-mode', 'fade');
   await hereIs(page, 'map');
-  // Calm (menu animations off): no shutter at all.
-  await page.evaluate(() => {
-    const x = (window as any).__pkr.session;
-    x.saveSettings({ ...x.settings, animationIntensity: 'normal', menuAnimations: false });
-  });
+  // Calm: no shutter at all.
+  await fx('calm');
   await page.waitForTimeout(500);
   await holdQ(page, s);
   await page.keyboard.press('Digit1');

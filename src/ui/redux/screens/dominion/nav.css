@@ -7,9 +7,9 @@
 #rx .dom .pol.off4{cursor:default}
 #rx .dom .pol.off4 .ph{filter:saturate(.35) brightness(.8)}
 
-/* m6: the page behind the wheel dims and blurs, as the mockup's canvas does */
-#rx .dom.nav4 .dim4l{position:absolute;inset:0;z-index:19;backdrop-filter:brightness(.3) saturate(.5) blur(3px);-webkit-backdrop-filter:brightness(.3) saturate(.5) blur(3px);
-  background:radial-gradient(circle at 480px 300px,rgba(90,20,120,.35),rgba(6,3,12,.75) 60%)}
+/* m6: the page behind the wheel dims, as the mockup's canvas does (the game's stage turns backdrop filters off) */
+#rx .dom.nav4 .dim4l{position:absolute;inset:0;z-index:19;background:radial-gradient(circle at 480px 300px,rgba(48,12,72,.72),rgba(6,3,12,.9) 60%)}
+#rx .dom.nav4 .keys{white-space:nowrap}
 #rx .dom.nav4 .wheel.idle4::before{opacity:0;animation:none}
 #rx .dom.nav4 .wo{cursor:pointer}
 #rx .dom.nav4 .wo.dim4{opacity:.45;filter:saturate(.3)}

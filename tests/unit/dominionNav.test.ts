@@ -50,10 +50,10 @@ describe('D28 the Boss\'s board (m5)', () => {
     }
   });
 
-  it('only the pages the game brings to you (and the Boss Menu, D27) cannot be walked into', () => {
+  it('only the pages the game brings to you cannot be walked into', () => {
     const notJump = PINS.filter((p) => !jumpable(p.id)).map((p) => p.id).sort();
-    expect(notJump).toEqual(['debate', 'interrupt', 'menu', 'police', 'spy']);
-    expect(PINS.find((p) => p.id === 'menu')!.reach).toBe('later');
+    expect(notJump).toEqual(['debate', 'interrupt', 'police', 'spy']);
+    for (const p of PINS.filter((x) => x.reach === 'comes')) expect(p.how).toBe('comes to you');
     // Pages that live inside another one open that one.
     expect(OPENS).toEqual({ morning: 'hq', assign: 'hq', chair: 'hq', district: 'map', card: 'map', takeover: 'map' });
   });
@@ -70,13 +70,14 @@ describe('D28 the Boss\'s board (m5)', () => {
   });
 
   it('draws every photo with its own tap, the cursor ring and the right memo per sheet', () => {
-    const h = boardView({ sheet: 0, at: 3, menuReady: false });
+    const h = boardView({ sheet: 0, at: 3 });
     for (const p of PINS.filter((x) => x.sheet === 0)) expect(h).toContain(`data-testid="dom-pin-${p.id}"`);
     expect(h).toContain('class="pol on4"');
     expect(h.match(/class="tag4/g)).toHaveLength(mockEdges.filter((e) => e.label).length);
-    expect(h).toContain('coming soon');
-    expect(boardView({ sheet: 0, at: 0, menuReady: true })).not.toContain('coming soon');
-    expect(boardView({ sheet: 1, at: 0, menuReady: false })).toContain('these pages come to you');
+    expect(h).not.toContain('off4');
+    const back = boardView({ sheet: 1, at: 0 });
+    expect(back).toContain('these come to you');
+    expect(back.match(/class="pol off4"/g)).toHaveLength(4);
   });
 });
 
@@ -89,6 +90,7 @@ describe('D28 the command wheel (m6)', () => {
   it('every page you can walk into sits under a wheel place (one key from it) or is one', () => {
     // The title is End, from every page (D26).
     for (const p of PAGE_IDS.filter((x) => jumpable(x) && x !== 'title')) expect(spotOf(p), p).not.toBeNull();
+    expect(spotOf('settings')).toBe(7);
     expect(spotOf('pyramid')).toBe(2);
     expect(spotOf('desk')).toBe(6);
     expect(spotOf(null)).toBeNull();
@@ -129,6 +131,7 @@ describe('D28 the command wheel (m6)', () => {
     expect(hubLine(b, SPOTS[4]!)).toBe(DOMINION_DATA.start.lockedTab);
     expect(hubLine(b, SPOTS[2]!)).toBe(`${b.members.length} member${b.members.length === 1 ? '' : 's'} on the roster.`);
     expect(hubLine(b, SPOTS[5]!)).toContain(`Heat ${b.heat}`);
+    expect(hubLine(b, SPOTS[7]!)).toBe('Pause, save and Settings.');
     for (const s of SPOTS) expect(hubLine(b, s).length, s.id).toBeGreaterThan(0);
   });
 
@@ -159,13 +162,12 @@ describe('D28 the command wheel (m6)', () => {
 });
 
 describe('D28 the crimson shutter (m7)', () => {
-  const s = { menuAnimations: true, disableAllAnimations: false, animationIntensity: 'normal' };
-  it('Full show plays the blade, Lighter a fade, Calm nothing', () => {
-    expect(shutterMode(s, false)).toBe('blade');
-    expect(shutterMode({ ...s, animationIntensity: 'reduced' }, false)).toBe('fade');
-    expect(shutterMode(s, true)).toBe('fade');
-    expect(shutterMode({ ...s, menuAnimations: false }, false)).toBe('off');
-    expect(shutterMode({ ...s, disableAllAnimations: true }, false)).toBe('off');
+  it('Effects & motion: Full show plays the blade, Lighter a fade, Calm nothing; reduced motion fades', () => {
+    expect(shutterMode('full', false)).toBe('blade');
+    expect(shutterMode('full', true)).toBe('fade');
+    expect(shutterMode('lighter', false)).toBe('fade');
+    expect(shutterMode('calm', false)).toBe('off');
+    expect(shutterMode('calm', true)).toBe('off');
   });
 
   it('wraps the new page, names both pages on the blade, and never takes a tap', () => {

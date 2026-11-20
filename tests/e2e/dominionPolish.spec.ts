@@ -69,14 +69,14 @@ test('round 4: Nova livery on every screen, Q is free, arrows page the Crew File
   expect(edge).toBe('#c2183a');
   await shot('s1-hq');
 
-  // Boundary: Q on the HQ does nothing (no page, no step).
+  // Boundary: a quick Q tap opens and shuts the wheel (D28) and changes nothing (no page, no step).
   const before = await block(page);
   await page.keyboard.press('KeyQ');
   await page.waitForTimeout(200);
   expect(await block(page)).toEqual(before);
   await expect(s.getByTestId('dom-phase')).toHaveText('EVENING');
 
-  // The Crew File: Q Wheel leads the key strip, Q does nothing, C/H/R still work, arrows page members.
+  // The Crew File: Q Wheel leads the key strip, a Q tap changes nothing, C/H/R still work, arrows page members.
   await pressUntil(page, 'Digit3', s.getByTestId('dom-file-keys'));
   await expect(s.getByTestId('dom-file-keys')).toContainText('Card');
   await expect(s.locator('.keys .q4')).toHaveText('Q');
