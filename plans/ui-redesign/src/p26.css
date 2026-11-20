@@ -1,0 +1,35 @@
+/* Pass 26 · Final Cut (Kice's picks) */
+/* Hub Town: no light over the Pokémon */
+.hb26 .rays16,.hb26 .spk25{display:none}
+.hb26 .walkrow{z-index:2}
+/* Battle: smaller status bar under the foe, question box clear of the EXP bar */
+.bar23{top:94px;height:26px;gap:8px;padding:0 4px;border-width:2px}
+.bar23 b{font:400 13px/18px var(--fd);padding:0 9px}
+.bar23 span,.bar23>i{font-size:11px}
+.bar23 .wxi{width:16px;height:16px}
+.bar23>i img{width:14px!important;height:14px!important}
+.bar23 em,.bar23 u{font-size:11px;line-height:18px;padding:0 9px}
+.say17{top:386px;grid-template-columns:38px auto;padding:4px 16px 4px 6px}
+.say17>i{width:38px;height:38px}.say17>i img{max-width:34px;max-height:34px}
+.say17 p{font-size:19px}
+/* overlays keep a dark backdrop */
+.battle .ar-bg.dim{filter:brightness(.4) saturate(1.1)}
+/* the picks page */
+.cut-g{position:absolute;left:24px;top:70px;width:440px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cut-g p{margin:0;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px;color:var(--ink);background:#fff;border-radius:6px 18px 6px 18px;cursor:pointer}
+.cut-g p:last-child{grid-column:1/3}
+.cut-g b{font:400 20px/1 var(--fd);text-transform:uppercase;white-space:nowrap}
+.cut-g u{text-decoration:none;font-size:12px;font-weight:800;color:#fff;background:#2a75bb;border-radius:999px;padding:1px 10px;white-space:nowrap}
+.cut-g u.alt{color:var(--ink);background:var(--yel)}
+.cut-f{position:absolute;left:496px;top:70px;width:440px;display:grid;gap:10px;padding:14px 16px;color:var(--ink);background:#fff;border-radius:8px 24px 8px 24px}
+.cut-f>b{font:400 22px/1 var(--fd);text-transform:uppercase;color:#2a75bb}
+.cut-f p{margin:0;display:flex;align-items:flex-start;gap:10px;font-size:13px;font-weight:700;line-height:1.4}
+.cut-f p i{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:800;color:var(--ink);background:var(--yel)}
+.scr.m26 .map-board{left:128px;top:82px;width:704px;height:268px}.scr.m26 .on-map{display:none}
+.scr.m26 .node{width:44px;height:44px;margin:-22px 0 0 -22px;border-width:4px}
+.scr.m26 .node>img{zoom:.74}.scr.m26 .node span{top:45px}.scr.m26 .node.next{box-shadow:0 0 0 3px var(--yel),0 0 0 5px var(--ink);outline:0}
+.scr.m26 .node:not(.next) span:not(.keep){display:none}
+.scr.m26 .map-you{margin:-98px 0 0 -20px}.scr.m26 .map-you img{width:40px!important;height:74px!important}
+.scr.ec26 .ch-row{top:92px}.scr.ec26 .chc{height:252px}
+.ev-you,.ev-npc{bottom:176px}
+/*@top*/

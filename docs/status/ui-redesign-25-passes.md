@@ -1,1 +1,5 @@
-- UI redesign mockups (Pokémon-game style): all 25 passes done, 137 pages, in `plans/ui-redesign/` (open `index.html`; the slider picks a pass). Mockups only, nothing in the game changes. Pass 25 holds the style guide, page map, motion rules and a suggested build order. Waiting on Kice to pick which look and pages to build for real.
+- UI redesign mockups (Pokémon-game style): all 25 passes done, 137 pages, in `plans/ui-redesign/` (open `index.html`; the slider picks a pass). Mockups only, nothing in the game changes. Pass 25 holds the style guide, page map, motion rules and a suggested build order.
+- Final Cut (slider 26): Kice's picks in one set (Title pass 17, Pause pass 24, everything else pass 25, with his fixes).
+- New areas round (slider 27 to 51, "New areas · pass 1 to 25"): the same 25-pass process for Galar, raids, totems, expeditions and evil teams (not Dominion), plus the pages around a run. 283 pages at pass 51. The last pass is the Master Cut: one layout for all five areas, with Menu, Settings and guide pages.
+- Checks at pass 51: fit check 0 problems on 283 pages (`sh src/run.sh 51`); sprite check 0 of 597 sprites cut off or covered (`node src/sprites.cjs 51`).
+- Mockups only (Kice, 2026-11-19): nothing from this work is built into the game until Kice asks.

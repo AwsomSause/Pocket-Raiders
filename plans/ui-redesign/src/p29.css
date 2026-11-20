@@ -1,0 +1,41 @@
+/* New areas · pass 3 · Bigger Than Life */
+.big29.a-rd .ar-foe .ar-mon{scale:1.75;transform-origin:50% 100%;filter:brightness(1.35) drop-shadow(0 0 10px #ff8ccc)}
+.big29.a-rd .ar-foe{z-index:2}
+.big29.a-rd .vig25{display:none}
+.big29.a-rd .ar-foe{left:500px;top:190px}
+.big29.a-rd .spin28{left:400px;top:-110px;width:520px!important;height:520px!important}
+.shield29{position:absolute;left:452px;top:22px;width:420px;height:300px;z-index:2;pointer-events:none;border-radius:50%;border:6px solid rgba(255,140,200,.9);box-shadow:0 0 30px 6px rgba(217,38,125,.8),inset 0 0 50px 10px rgba(255,140,200,.35);background:repeating-linear-gradient(60deg,transparent 0 26px,rgba(255,255,255,.16) 26px 28px),repeating-linear-gradient(-60deg,transparent 0 26px,rgba(255,255,255,.16) 26px 28px);animation:glow21 1.4s ease-in-out infinite}
+.shield29 i{position:absolute;bottom:-18px;width:34px;height:38px;background:linear-gradient(180deg,#ffd0ea,#d9267d);border:3px solid #fff;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
+.shield29 i:nth-child(1){left:150px}.shield29 i:nth-child(2){left:193px}.shield29 i:nth-child(3){left:236px}
+.shield29 i.off{background:#3a2140;opacity:.8}
+.tag29{position:absolute;z-index:4;display:flex;align-items:center;gap:8px;padding:2px 14px 2px 3px;color:#fff;background:rgba(13,21,48,.92);border:2px solid var(--ac);border-radius:999px;font-size:12px;font-weight:800;white-space:nowrap}
+.tag29 b{font:400 15px/20px var(--fd);text-transform:uppercase;color:#fff;background:var(--ac);border-radius:999px;padding:0 10px}
+.tag29.k-rd{left:604px;top:324px}
+.big29 .warn27{right:auto;left:12px;top:130px}
+.big29 .ally27{top:14px}
+.big29.a-tm .ar-foe .ar-mon{scale:1.35;transform-origin:50% 100%}
+.big29.a-tm .ar-foe{top:204px}
+.aura29{position:absolute;left:520px;top:-20px;width:300px;height:330px;z-index:1;pointer-events:none;border-radius:50% 50% 46% 46%;background:radial-gradient(ellipse 50% 60% at 50% 70%,rgba(255,220,120,.85),rgba(255,140,30,.45) 55%,transparent 75%);mix-blend-mode:screen;animation:glow21 1.2s ease-in-out infinite}
+.tag29.k-tm{left:590px;top:318px}
+.big29 .call27{left:430px;top:196px}
+.big29.a-ga .ar-foe .ar-mon{scale:1.9;transform-origin:50% 100%;filter:drop-shadow(0 0 14px #ff3d7f) saturate(1.2)}
+.big29.a-ga .ar-foe{top:196px}
+.dm29{position:absolute;left:380px;top:-40px;width:580px;height:300px;z-index:1;opacity:.8;mix-blend-mode:screen;pointer-events:none}
+.tag29.k-ga{left:560px;top:322px;--ac:#d9267d}
+.loom29{position:absolute;right:-24px;top:236px;z-index:0;filter:brightness(.2) saturate(1.6) drop-shadow(0 0 22px rgba(18,135,156,.9));opacity:.9;pointer-events:none}
+.tag29.k-xp{left:470px;top:440px;cursor:pointer}
+.big29.a-xp .sm-rule{z-index:2}
+.big29.a-xp .sm-rule{background:rgba(255,255,255,.96)}
+.big29.a-et .et-g{left:110px;top:92px}
+.big29.a-et .et-g img{width:228px!important;height:auto!important}
+.big29 .dr-ch{z-index:2}
+.crew29{position:absolute;left:14px;top:176px;z-index:0;display:flex;gap:140px;filter:brightness(.12) drop-shadow(0 0 0 #000);opacity:.85;pointer-events:none}
+.big29 .rmark28{left:250px;top:40px;font-size:520px;color:rgba(193,18,31,.5)}
+/* entrances */
+.in29 .ct-mon{right:60px}
+.in29 .storm{mix-blend-mode:screen;opacity:.75}
+.in29.a-ga .ct-mon img{filter:drop-shadow(0 0 16px #ff3d7f)}
+.amb29{display:flex;align-items:flex-end;gap:0}
+.amb29 img:nth-child(1),.amb29 img:nth-child(3){filter:brightness(.35)}
+.amb29 img:nth-child(1){margin-right:-30px}.amb29 img:nth-child(3){margin-left:-30px}
+/*@top*/

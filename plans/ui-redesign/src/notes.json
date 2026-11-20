@@ -417,5 +417,476 @@
   "q3": "Yes, five hand-over pages: Master Cut (the journey from pass 1), Style Guide, Page Map (every page by group), Motion Rules (six kinds of movement with timings) and Build Order.",
   "q4": "The pause menu and party now share one backdrop idea (the ball's two halves, belt in the middle), so opening the menu from anywhere feels like the same place. Settings is listed in the Page Map with all ten of its pages.",
   "q5": "Yes. Rays, sparkles, foil cards and a ball in the logo are the title-screen language of the series, and nothing here needs art the game does not already have."
+ },
+ "26": {
+  "name": "Final Cut",
+  "label": "Final Cut · Kice's picks",
+  "big": "Kice's picks in one set: the Title from pass 17, the Pause menu from pass 24, and every other screen from pass 25. Evil Mode pages are left out. Three fixes Kice asked for are in: no light rays over the Pokémon in Hub Town, a smaller status bar under the foe in battle, and the \"What will Charizard do?\" box moved clear of the EXP bar.",
+  "pages": [
+   "Final Cut"
+  ],
+  "q1": "It keeps the loudest pass (25) for almost everything, and takes the calmer word-menu Title from pass 17 that Kice preferred.",
+  "q2": "Nothing new is invented here. It is the chosen mix, with the three things Kice pointed at fixed.",
+  "q3": "One: the Final Cut page lists which pass each screen comes from and what was fixed.",
+  "q4": "Pause is the pass 24 phone with the giant ball behind it. Settings is the pass 25 set of ten pages.",
+  "q5": "Yes. These are the screens Kice picked as the game's look."
+ },
+ "27": {
+  "name": "New areas 1 · First Draft",
+  "label": "New areas · pass 1 of 25",
+  "big": "The first drawing of five areas the 25 passes never covered: Raids, Totems, the Galar Gym Challenge, Mega-Expeditions and the main game's evil teams. All eleven pages use the Final Cut look as it is, with words and numbers taken from the game's own files.",
+  "pages": [
+   "Raid · The Den",
+   "Raid · Battle",
+   "Totem · Territory",
+   "Totem · Battle",
+   "Galar · Gym Challenge Intro",
+   "Galar · Stadium Battle",
+   "Galar · Tournament Bracket",
+   "Expedition · The Gate",
+   "Expedition · Route",
+   "Evil Team · They Are Here",
+   "Evil Team · Encounter"
+  ],
+  "q1": "Not yet. This pass borrows the existing battle, event and map parts so each area can be judged on what it needs to show. The loud versions start next pass.",
+  "q2": "These areas had no mockups at all before. Now each has a first screen for its key moment and one for the choice that leads into it.",
+  "q3": "Yes, eleven: a den page before a raid, a territory page before a totem, a gate before an expedition, and a reveal before the first evil team stop, so the battle screens stay clean.",
+  "q4": "Unchanged. Pause and Settings from the Final Cut open the same way from all of these.",
+  "q5": "Yes. Dens, totems, the stadium crowd and a villain team with a red R are straight from the series, drawn with the game's own sprites."
+ },
+ "28": {
+  "name": "New areas 2 · Five Flags",
+  "label": "New areas · pass 2 of 25",
+  "big": "Each area now has its own colour and emblem. Raids are Dynamax pink with the storm spiral behind the boss, totems are amber with a carved band, the Gym Challenge is league blue with a scoreboard, expeditions are teal on a map grid, and the evil team stamps a giant R in its own colour. Five reference pages join.",
+  "pages": [
+   "Raid · Tiers",
+   "Totem · Totems of the Region",
+   "Galar · The Dynamax Band",
+   "Expedition · Party",
+   "Evil Team · Teams by Region"
+  ],
+  "q1": "Yes. Pass 1 borrowed the normal battle and event look; now a raid, a totem fight and a stadium match can be told apart from across the room by colour alone.",
+  "q2": "Pass 1 was one look for five different things. This pass gives each a flag: colour, emblem, and one prop that only it has (spiral, carved band, scoreboard, map grid, the R).",
+  "q3": "Yes, five reference pages so the den, territory and gate pages do not have to explain everything: tiers, the list of totems, the Dynamax Band, party rules and which team belongs to which region.",
+  "q4": "Unchanged. The emblem in the page header also shows on the pause menu's Next Stop line when one of these stops is next.",
+  "q5": "Yes. The pink Dynamax symbol, the red R and a stadium scoreboard are the series' own signals."
+ },
+ "29": {
+  "name": "New areas 3 · Bigger Than Life",
+  "label": "New areas · pass 3 of 25",
+  "big": "The stars of each area now fill the screen. The raid boss is nearly twice the size inside a honeycomb shield with three counted plates, the Totem burns in an amber aura, the Gym Leader's Duraludon Dynamaxes under red storm clouds, Mega Garchomp's shadow looms over the end of the expedition route, and the grunt stands taller with two more behind him. Five entrance scenes join.",
+  "pages": [
+   "Raid · Boss Appears",
+   "Totem · It Appears",
+   "Galar · Leader Dynamaxes",
+   "Expedition · Finale",
+   "Evil Team · Ambush"
+  ],
+  "q1": "Yes, much. Pass 2 coloured the screens; this pass changes their scale. A boss that is the same size as a wild Pidgey does not feel like a boss.",
+  "q2": "Pass 2's bosses were normal size with a coloured strip. Now size and a prop (shield, aura, storm, shadow, crew) carry the message, and each gets a proper entrance.",
+  "q3": "Yes, five entrances: Raid Boss, Totem, Leader Dynamax, Expedition Finale and Ambush. The den and territory pages now lead into them.",
+  "q4": "Unchanged.",
+  "q5": "Yes. Giant Dynamax Pokémon under red clouds and oversized Totems are exactly how the series stages these fights."
+ },
+ "30": {
+  "name": "New areas 4 · On Air",
+  "label": "New areas · pass 4 of 25",
+  "big": "Every special screen now has a voice and a ticker. A caster strip sits where the question box normally is: an ally cheers you on in a raid, Rotom reads the Totem's aura, the stadium reporter calls the Galar match live with a camera on the Leader, a ranger talks on the expedition radio, and Rotom's scanner warns you near the evil team. A ticker in the area colour runs along the top. Five pages cover what you can say back.",
+  "pages": [
+   "Raid · Cheers and Talk",
+   "Raid · Boss Cards",
+   "Totem · Ally Call",
+   "Galar · The Crowd",
+   "Expedition · Rest Area"
+  ],
+  "q1": "Yes. Pass 3 was big but silent. Now there is a live broadcast frame, a moving ticker and a talking head on each screen.",
+  "q2": "Pass 3 showed the size of the thing. This pass explains it while you play, so the status strip can stay short and the rules do not need a separate read.",
+  "q3": "Yes, five: Cheers and Talk and Boss Cards for raids, the Ally Call moment for totems, The Crowd for Galar, and a Rest Area stop for expeditions.",
+  "q4": "Unchanged. The caster strip uses the same slot as the battle question box, so the pause menu and its key hints stay where they were.",
+  "q5": "Yes. A stadium match called by a reporter is the Galar games' own framing, and Rotom as the helper keeps the game's rule that the helper is always Rotom."
+ },
+ "31": {
+  "name": "New areas 5 · Dials and Prizes",
+  "label": "New areas · pass 5 of 25",
+  "big": "The number that decides each area is now one big dial: a turn clock in raids, a phase dial at the Totem, a tug-of-war bar with both faces for the Galar crowd, a loot bag with what you keep in each outcome on the expedition, and a Heat thermometer with the Ambush and Reinforcements lines marked. Six ending pages close each loop.",
+  "pages": [
+   "Raid · Raid Clear",
+   "Raid · The Catch",
+   "Totem · The Gift",
+   "Galar · Round Won",
+   "Expedition · The Haul",
+   "Evil Team · It Falls Apart"
+  ],
+  "q1": "Yes. Round dials, a thermometer and a tug-of-war bar are louder and faster to read than the text strips they replace.",
+  "q2": "Pass 4 told you what was going on in words. This pass shows the one number that matters as a shape, and finally shows how each area ends.",
+  "q3": "Yes, six endings: Raid Clear, The Catch, the Totem's Gift, Round Won, the Expedition's Haul, and the evil team falling apart (which leads into the Betrayal and Legendary pages from before).",
+  "q4": "Unchanged.",
+  "q5": "Yes. A single throw at a worn-out raid boss and a Totem stepping aside are the series' own endings for these fights."
+ },
+ "32": {
+  "name": "New areas 6 · Roll Call",
+  "label": "New areas · pass 6 of 25",
+  "big": "Every special screen now shows exactly who is on each side. Raids get a four-trainer squad rail with what each ally picked this turn. The Totem's side is a row of slots: the Totem, the ally it called, and the call it still has. The Galar match gets a TV line-up board with both teams of six. The expedition header carries your party's health, and the evil team stop shows the grunt's extra Pokémon before you choose.",
+  "pages": [
+   "Raid · Lobby",
+   "Raid · This Turn",
+   "Raid · Shield Broken",
+   "Totem · Both Sides",
+   "Galar · Line-ups",
+   "Evil Team · Never Fair",
+   "Expedition · Party Check"
+  ],
+  "q1": "Yes. Faces and Pokémon replace plain counters, and the raid finally looks like four trainers against one giant.",
+  "q2": "Pass 5 showed the numbers. This pass shows the people and Pokémon behind them, so you can plan around who is still standing.",
+  "q3": "Yes, seven: a raid lobby where everyone readies up, a turn-order page, the shield-break moment, and a both-sides page for the Totem, the Gym, the evil team and the expedition.",
+  "q4": "Unchanged. The line-up pages open with one key from the battle and close straight back to it.",
+  "q5": "Yes. Line-up boards before a stadium match and a row of Poké Balls for each side are how the series has always shown a team."
+ },
+ "33": {
+  "name": "New areas 7 · Home Ground",
+  "label": "New areas · pass 7 of 25",
+  "big": "Each area now owns the ground it stands on. Patterned side rails frame the screen: hex plates for raids, a zigzag weave for Totems, stadium chevrons for Galar, map contours for expeditions and hazard stripes for the evil team. The FIGHT button wears the area's colours, the Totem stands in a ring of torches, the Galar pitch has its painted lines, and the expedition map is split into five labelled layers.",
+  "pages": [
+   "Totem · The Aura",
+   "Totem · Phase Two",
+   "Totem · Tiers",
+   "Totem · The Totem Stands",
+   "Raid · Out of Turns",
+   "Expedition · Failed"
+  ],
+  "q1": "Yes. Torches, pitch lines and patterned rails make each place feel built, not just tinted.",
+  "q2": "Pass 6 showed who is there. This pass shows where you are: you can tell the area from the edge of the screen alone, before reading a word.",
+  "q3": "Yes, six. Three finish the Totem (what its aura does, its second phase, its tiers), and three cover losing, which had no pages at all: the Totem stands, the raid clock runs out, the expedition fails.",
+  "q4": "Unchanged.",
+  "q5": "Yes. Losing a Totem trial or a raid and walking away to try again is exactly how those fights work in the series."
+ },
+ "34": {
+  "name": "New areas 8 · Road to the Top",
+  "label": "New areas · pass 8 of 25",
+  "big": "Every area is a climb, and now you can see the whole climb. The scrolling ticker is replaced by a step track across the top: shields in a raid, the Totem's stages, the eight Galar gyms and the tournament, the expedition's layers, and the evil team's seven encounters. The step you are on is stamped huge behind the action. Galar gets its full run of pages.",
+  "pages": [
+   "Galar · Gym Challenge Road",
+   "Galar · Tournament Bracket (rebuilt as a real bracket)",
+   "Galar · Round Card",
+   "Galar · Stadium Shop",
+   "Galar · The Final",
+   "Galar · Champion"
+  ],
+  "q1": "Yes. Giant outlined words behind the fight (MATCH 8, SHIELD 2) and a lit step track make every screen feel like a stop on a tour.",
+  "q2": "Pass 7 told you where you are standing. This pass tells you how far you have come and what is left, which the ticker never did.",
+  "q3": "Yes. The tournament was one list page; it is now six pages: the gym road, a bracket you can read left to right with heal and shop stops marked, a round card, the shop, the final against Leon and the champion page.",
+  "q4": "Unchanged. The bracket opens with B from any tournament page, as it does in the game.",
+  "q5": "Yes. A gym road with eight faces and a tournament bracket with the Champion waiting at the end is the Galar story in two pages."
+ },
+ "35": {
+  "name": "New areas 9 · Loud and Clear",
+  "label": "New areas · pass 9 of 25",
+  "big": "The special fights finally make noise. Bosses get comic-book cries stamped over the field, the Gym Leader and the grunts talk in speech balloons that point at them, and the expedition's guardian growls from the ridge. The expedition also gets the rest of its pages.",
+  "pages": [
+   "Expedition · Draft",
+   "Expedition · Rentals",
+   "Expedition · Recruit",
+   "Expedition · Mega-energy Deposit",
+   "Expedition · Research Station",
+   "Expedition · Extract or Keep Going"
+  ],
+  "q1": "Yes. A jagged KRAAAW! burst over a raid boss is the loudest single thing added so far.",
+  "q2": "Passes 6 to 8 organised the screen. This pass gives the other side a voice, so a Totem, a Leader and a grunt no longer feel like the same enemy in a different colour.",
+  "q3": "Yes, six for the expedition: drafting three from six, the rental team with its moves, a recruit stop, the Mega-energy deposit with its charge meter, the research station, and a side-by-side page for Extract now against Keep going.",
+  "q4": "Unchanged.",
+  "q5": "Yes. Cries are how Pokémon speak, and rental teams and drafts come straight from the series' battle facilities."
+ },
+ "36": {
+  "name": "New areas 10 · Case File",
+  "label": "New areas · pass 10 of 25",
+  "big": "Know your enemy. Every special screen carries an intel chip with what the foe is weak to, and the helper's strip becomes a paper field note clipped to the screen. The evil team gets its whole story as pages, pinned to a cork board you can open from any of its stops.",
+  "pages": [
+   "Evil Team · Case File",
+   "Evil Team · Evidence",
+   "Evil Team · An Executive",
+   "Evil Team · The Offer",
+   "Evil Team · The Inside Route",
+   "Evil Team · Final Choice",
+   "Evil Team · The Hideout",
+   "Evil Team · The Boss"
+  ],
+  "q1": "Yes. A cork board with seven pinned cards and red pins is the most characterful page in the set, and the paper notes break up all the glossy panels.",
+  "q2": "Pass 9 let the enemy talk. This pass lets you study them: weaknesses on every screen and one board that shows the whole seven-encounter story at a glance.",
+  "q3": "Yes, eight. The evil team had three pages; it now has a page for each turning point, including the Offer and the Inside route with its Acts, Operations, Trust and four endings.",
+  "q4": "The Case File is the evil team's own menu page: J opens it from any of their stops, the same key as the journal.",
+  "q5": "Yes. A grunt, an executive who comes back, a hideout cleared room by room and the Boss in his office is the classic evil-team arc."
+ },
+ "37": {
+  "name": "New areas 11 · Clean Sweep",
+  "label": "New areas · pass 11 of 25",
+  "big": "Your note: the designs are crowded and too many sprites are cut off. This pass is the answer. Two rules from here on. One: a battle or map screen shows one status line and one small extra; everything else moves to an Info page one key away. Two: every Pokémon and trainer sprite is shown whole, and a new checker measures every sprite on every page. The five special screens are rebuilt from your picked battle and map screens instead of being stacked on ten passes of extras.",
+  "pages": [
+   "Raid · Info",
+   "Totem · Info",
+   "Galar · Match Info",
+   "Clean Sweep · The two rules"
+  ],
+  "q1": "No, on purpose. This pass removes things. The boss, the Totem and the Leader's Pokémon are the show again because nothing sits on top of them.",
+  "q2": "Passes 6 to 10 kept adding rails, tracks, cries and chips. This pass takes the raid battle from 64 pieces of text to 31 and the boss from 31% visible to 100%.",
+  "q3": "Yes, three Info pages (raid, Totem, Galar match) that hold what left the battle screens, plus one guide page with the two rules and the before and after numbers.",
+  "q4": "Unchanged, and the same rule now applies to them: one key (I) opens the detail instead of showing it all the time.",
+  "q5": "Yes, more than before. The main games keep the field clear and put detail behind a button; this matches the battle screen you picked."
+ },
+ "38": {
+  "name": "New areas 12 · Ready Check",
+  "label": "New areas · pass 12 of 25",
+  "big": "The road from New Run to the first stop, and one home for every status line",
+  "pages": [
+   "pd-desk",
+   "pd-setup",
+   "pd-bring",
+   "pd-mods",
+   "pd-seed",
+   "pd-brief",
+   "pd-name"
+  ],
+  "q1": "The Preparation Desk is a ticket you check and stamp: your trainer stands whole on the left, five lines sum up the run, and one big button rolls the starters. The seed is eight big tiles you can read across the room.",
+  "q2": "Pass 11 cleaned the five special screens but left the status line floating as a loose pill. Now it hangs from the foe's name plate as a tab in the area's colour, the line-up runs along the top edge, the expedition's loot sits inside the Next stop card and the evil team's Heat sits in the header. Nothing floats on its own any more.",
+  "q3": "Seven new pages: the desk's four pages (Run Setup, Trainer, Modifiers, Overview), the seed page, the region briefing and the name page. Each has one job, so none of them needs small print.",
+  "q4": "The desk is the run's own settings page: the same rows and switches as Settings, with the four pages as tabs down the left. Esc always goes back to the street, and presets save and load from the Overview.",
+  "q5": "Yes. Professor Oak asks your name, a region briefing shows the first Gym Leader, and the seed tiles look like the name-entry tiles from the old games."
+ },
+ "39": {
+  "name": "New areas 13 · Home Streets",
+  "label": "New areas · pass 13 of 25",
+  "big": "The places between runs, and a name plate made of each area's own material",
+  "pages": [
+   "pt-town",
+   "pt-door",
+   "pt-map",
+   "pt-plaza",
+   "pt-trade",
+   "pt-tools",
+   "pt-memories",
+   "pt-gallery"
+  ],
+  "q1": "Pocket Town is a real street with four whole buildings and your Pokémon walking beside you. The Trade Post is two big cards and one arrow, so the swap is the whole picture.",
+  "q2": "Pass 12 hung the status tab from the name plate, but every area still used the same navy plate. Now the plate itself tells you where you are: pink crystal for raids, a carved plank for Totems, a dotted scoreboard for Galar, a paper trail tag for expeditions, black steel with a red edge for evil teams. No part was added.",
+  "q3": "Eight new pages: Pocket Town's street, the door card, the town map, the Trainer Plaza, a Trade Post offer, the Tools room, Memories and a Legacy Gallery run. Walking up to a door opens its own card instead of squeezing a description onto the street.",
+  "q4": "Tools is the Hub's back office: eight plain tiles next to Settings, with a line saying none of them changes a run. M opens the town map from anywhere in Pocket Town and Esc always walks back to the Hub.",
+  "q5": "Yes. You walk a town with a partner Pokémon behind you, press one key at a door and trade over a counter, the way towns work in the handheld games."
+ },
+ "40": {
+  "name": "New areas 14 · Side Paths",
+  "label": "New areas · pass 14 of 25",
+  "big": "Minigames, mining, safari, camp and daycare, and numbers you can read across the room",
+  "pages": [
+   "sa-fish",
+   "sa-memory",
+   "sa-prize",
+   "sa-mine",
+   "sa-safari",
+   "sa-camp",
+   "sa-gadgets",
+   "sa-daycare"
+  ],
+  "q1": "A minigame is one huge prompt and four big buttons: \"A bite!\" with the Gyarados on the hook. The camp is a fire with your team sitting round it and four choices beside it.",
+  "q2": "Pass 13 gave each area its own material, but the status tab was still a row of small words. Now the numbers lead: a big 8 for turns, +1 for the aura, 62 for the crowd, ₽1,200 of loot, Heat 2. The evil team choices lost half their small print.",
+  "q3": "Eight new pages: two minigames on the one shared screen, the prize page, a Mining Spot, Safari Land, the Camp, its gadgets and the Daycare. Gadgets got their own page so the camp keeps four choices.",
+  "q4": "Every minigame shows the same two helper keys from Settings, S to slow the timer and T to pause it. Esc always leaves the side path and returns to the map or the street.",
+  "q5": "Yes. Fishing, a Safari with steps and balls, a memory game, digging for fossils, a camp with the team round the fire and an Egg at the Daycare are all things the main games do."
+ },
+ "41": {
+  "name": "New areas 15 · Special Days",
+  "label": "New areas · pass 15 of 25",
+  "big": "Daily runs, contracts, bounties, rescues and sieges, and the light is on the foe",
+  "pages": [
+   "sp-daily",
+   "sp-contracts",
+   "sp-bounty",
+   "sp-exhibit",
+   "sp-rescue",
+   "sp-siege",
+   "sp-breather",
+   "sp-share",
+   "sp-update"
+  ],
+  "q1": "The Daily Run is a calendar page with a huge 20 on it. The Siege Map is a ruled ledger with rubber stamps: Held, Contested, Lost. The bounty is a wanted poster.",
+  "q2": "Pass 14 made the numbers big, but the scenery was as bright as the foe. Now everything outside one soft spotlight is darker, so the raid boss, the Totem, the Gym Leader's Pokémon, your layer on the expedition and the grunt are the first thing you see. No part was added to the interface.",
+  "q3": "Nine new pages: Daily Run, Contract Board, Bounty, Exhibition match, Rival Rescue Plan, Siege ledger, Breather room, share card and update log. The Breather asks one question (who comes back?) on its own page.",
+  "q4": "The update log is the page Settings opens from Save and Data, with three big numbers before the full list. The share card saves a picture and is opened from the Run Report or the pause menu.",
+  "q5": "Yes. Gym Leaders facing off in an exhibition, your rival asking for help, a wanted poster for five Water types: these are side stories the series tells, drawn in its bright, chunky style."
+ },
+ "42": {
+  "name": "New areas 16 · Big Stage",
+  "label": "New areas · pass 16 of 25",
+  "big": "The camera pulls back: whole Pokémon, a giant foe, a mountain you climb, and the story opening",
+  "pages": [
+   "so-cold",
+   "so-station",
+   "so-vance",
+   "so-notebook",
+   "so-trial",
+   "so-echo",
+   "so-depart",
+   "so-lessons"
+  ],
+  "q1": "The raid boss now fills the sky and your three allies stand in the field beside you. The expedition is a mountain at dusk with the Finale on the summit against the moon. The grunt stands under a giant red R.",
+  "q2": "Passes 11 to 15 tidied the panels around the picture. This pass changes the picture. Your own Pokémon is drawn whole for the first time (it used to sit behind the bottom bar), the foe is up to half again as big, the allies panel is gone because the allies are really there, and the expedition's five boxes became five terraces of rock.",
+  "q3": "Eight new pages for the story opening: the cold open and the departure as wide cinema cards, the Station with five things to look at, the Professor's first question, the Field Notebook, the Field Trial with one arrow on one button, a backstory scene and the nine lessons.",
+  "q4": "The lessons page is what Settings opens from Save and Data. The small choice list used for the grunt is the same one the story uses, so every question in the game can look alike.",
+  "q5": "Yes. A small list of answers above the text box, a silhouette crossing the moon, a rival waiting for your first battle and a Professor handing you a notebook are how these games begin."
+ },
+ "43": {
+  "name": "New areas 17 · Set Design",
+  "label": "New areas · pass 17 of 25",
+  "big": "A painted set for every area, and how each one looks on the map",
+  "pages": [
+   "mp-raid",
+   "mp-totem",
+   "mp-galar",
+   "mp-xp",
+   "mp-evil"
+  ],
+  "q1": "The raid is inside a den crater with the pink light pillar rising into a storm. The Totem waits at a jungle shrine with the sun behind it. Galar is a floodlit stadium with a striped pitch. The expedition's ridge glows with lava. The grunt's letter is thrown on the sky by a searchlight.",
+  "q2": "Pass 16 moved the camera but kept the old scenery, a small game backdrop stretched until it blurred, so every place looked like the same field. Now each of the five has its own drawn set with a sky, a far layer, a near layer and a floor. The dotted crowd strip and the loose light rays are gone from the stadium because the set does their job.",
+  "q3": "Five new map pages, one for each area, show the special stop on the small eight-stop map: a den with a light pillar, a Totem site with a gold ring, a stadium with floodlights, an expedition gate with an arch and a black Rocket stop.",
+  "q4": "Nothing new is needed. The sets are scenery, so Settings > Display > Battle effects (already in the Final Cut) can dim them, and the map pages use the same menu row as the map.",
+  "q5": "Yes. A den's light pillar, Alola's trial sites, Galar's stadiums and a Rocket stop on a bridge are places from the games, and now each one is recognisable before a single panel is read."
+ },
+ "44": {
+  "name": "New areas 18 · The Moment",
+  "label": "New areas · pass 18 of 25",
+  "big": "Each screen caught at its biggest instant, with the state of the fight drawn into the scene",
+  "pages": [
+   "mo-egg",
+   "mo-care",
+   "mo-legend",
+   "mo-sos",
+   "mo-team",
+   "mo-heart"
+  ],
+  "q1": "The raid boss stands behind a wall of glass hexagons with one layer already smashed. The Totem's aura is a red flame taller than it is. A red Dynamax storm hangs over the stadium while cameras flash. The grunt has the series' \"!\" over his head.",
+  "q2": "Pass 17 built the sets but nothing was happening on them. Now every screen shows one instant, and that instant tells you the state: shield left, aura on, Dynamax running, roar from the summit, spotted. You can read the fight from the picture before you read the tab.",
+  "q3": "Six new pages for small moments: an Egg hatching (with its four rarity steps), a care break (pet, hug, feed), a Legendary stirring, a wild Pokémon calling for help, a Teamwork pair and a Shadow Pokémon's heart with its four stages.",
+  "q4": "Effects follow Settings > Display > Battle effects and Reduce motion from the Final Cut: with them off the shield, aura and storm stay as still pictures and the flashes are removed. The care break is opened from the map menu's Bonds button.",
+  "q5": "Yes. Raid shields, Totem auras, the red Dynamax sky, the \"!\" of a Trainer who has seen you and \"Oh?\" before an Egg hatches are some of the most recognisable moments the series has."
+ },
+ "45": {
+  "name": "New areas 19 · Full Dress",
+  "label": "New areas · pass 19 of 25",
+  "big": "The whole interface dresses for the place: crystal, wood, scoreboard, paper and steel",
+  "pages": [
+   "cl-craft",
+   "cl-berry",
+   "cl-frames",
+   "cl-nook",
+   "cl-books",
+   "cl-research"
+  ],
+  "q1": "The Fight button is a cut pink crystal in a raid, a carved plank at a Totem site and a glowing dot-matrix board in a Galar stadium. The expedition card is a paper tag on a string with a red wax button. Team Rocket's choices sit on black steel with a red edge.",
+  "q2": "Since pass 13 only the name plate wore the area's material, so the bottom half of every screen was the same yellow and blue. Now the buttons, the bottom bar, the choice list and the text box wear it too. Cover the scenery and you can still tell where you are. Nothing moved or changed size.",
+  "q3": "Six new pages: the crafting bench (three recipes and your six materials as big numbers), Berry plots, card frames, the Corner Nook with its fortune cookie, the Collection Books as a real shelf of spines, and species research with its two tasks.",
+  "q4": "A new switch belongs in Settings > Display: Area dress, on or off. Off keeps the yellow Fight button everywhere for players who want one look. Card frames are picked on their own page from the Hub.",
+  "q5": "Yes. The games change the frame for special places: the Battle Frontier, Contests and stadiums each have their own trim. Research levels come straight from Legends: Arceus."
+ },
+ "46": {
+  "name": "New areas 20 · Bottom Edge",
+  "label": "New areas · pass 20 of 25",
+  "big": "Everything you press sits on the bottom edge, and the five areas on a phone",
+  "pages": [
+   "ph-side",
+   "ph-up",
+   "dg-list",
+   "dg-room",
+   "mn-pick"
+  ],
+  "q1": "The battlefield now runs edge to edge with nothing floating on it: the raid boss, its shield and your four Pokémon share one clear picture. On a phone held upright the expedition becomes a climb you scroll up, with one big Go button.",
+  "q2": "Until now the Fight block covered the right-hand third of the field, and the expedition tag and the Rocket answers sat over the scenery. All of them moved to the bottom edge. The scenery gained about a third more room, and your thumbs no longer cross the picture to reach a button.",
+  "q3": "Five new pages: a raid on a phone held sideways, three areas on phones held upright, the Dungeon list, the inside of a dungeon as a cave you walk through, and the Mentor page with three teachers at a time.",
+  "q4": "Settings > Controls already has touch pads from the Final Cut. One new line belongs there: Button row, bottom (new) or side (the picked layout), so either hand position works.",
+  "q5": "Yes. The handheld games keep every command at the bottom of the screen and the Pokémon above it. This is that layout, stretched to a wide screen."
+ },
+ "47": {
+  "name": "New areas 21 · Light",
+  "label": "New areas · pass 21 of 25",
+  "big": "Every area gets its own hour and its own lamp, and the light falls on the Pokémon",
+  "pages": [
+   "fm-blackout",
+   "fm-convoy",
+   "fm-ledger",
+   "fm-debate",
+   "fm-front",
+   "fm-colossus",
+   "fm-door"
+  ],
+  "q1": "You can now tell the area from the light alone: pink glow from below in the den, low gold sun on the Totem, white floodlights at the Galar night match, first light on the expedition, one street lamp and a red neon R for Team Rocket. Each Pokémon has a thin edge of that light on it.",
+  "q2": "Passes 16 to 20 lit all five areas the same way, with a dark frame and two bright pools. That frame is gone. Each area now has a real light source drawn in the scene, shadows that fall away from it, and a colour wash that matches the hour.",
+  "q3": "Seven new pages for the Format scenes, which had none: Blackout (three anchors under the Seal), Convoy (the night road and the LEDGER answer), Debate, the three-lane Front, the Colossus raid with its helicopter clock, and the League Door.",
+  "q4": "Settings > Display gets one line: Scene lighting, full or flat. Flat removes the colour wash for players who want the plain picture or need more contrast.",
+  "q5": "Yes. The games change the light by place and hour: caves glow, stadium matches are played under lamps, and Team Rocket works at night."
+ },
+ "48": {
+  "name": "New areas 22 · Depth",
+  "label": "New areas · pass 22 of 25",
+  "big": "Three planes in every scene: a hazy far wall, the Pokémon, and one big shape close to the camera",
+  "pages": [
+   "ex-fog",
+   "ex-roam",
+   "ex-secret",
+   "ex-tower",
+   "ex-mystery"
+  ],
+  "q1": "Each scene now has something close to the camera: stalactites and a crystal bed, fern leaves, a League flag over the front row of the crowd, a pine bough, Rocket crates in the rain. Behind the Pokémon a band of haze pushes the back wall away, and motes, pollen, confetti, cloud or rain fill the air between.",
+  "q2": "Until now everything sat on one flat wall, however well it was painted and lit. The picture now has a near, a middle and a far plane, so the Pokémon look like they stand inside a place. The near shapes only use the corners and gaps: no Pokémon is touched (the sprite check is still 0).",
+  "q3": "Five new pages for exploring: fog on the map, a Legendary that roams ahead of you, a secret path an Ability opens, the Tower of Legends, and a Mystery Dungeon floor.",
+  "q4": "Settings > Display: Foreground shapes, on or off. Off removes the near plane and the air effects for small screens. The Menu is unchanged.",
+  "q5": "Yes. The newer games frame battles this way, with grass, rocks and crowd between the camera and the Pokémon, and the roaming Legendary and foggy map come straight from the older ones."
+ },
+ "49": {
+  "name": "New areas 23 · In the World",
+  "label": "New areas · pass 23 of 25",
+  "big": "The boss's ground ring is its HP bar, and the top of the battle is open sky",
+  "pages": [
+   "iw-dossier",
+   "iw-notes",
+   "iw-report",
+   "iw-protege"
+  ],
+  "q1": "The ring under a raid boss, a Totem or a Dynamax Pokémon fills and drains as its HP, in the same green, yellow and red as always. The expedition's layer numbers are painted on the mountain. Team Rocket's Heat is a row of bulbs on the sign under the neon R.",
+  "q2": "Every pass so far kept the boss's plate in the top-left corner, away from the boss. That plate is gone, and its numbers sit on the ground right under the Pokémon. The top third of the battle is now empty sky, which is the least crowded these screens have been. Your own bar stays where the main battle has it.",
+  "q3": "Four new pages, each drawn as an object: the Dossier as a manila folder with a clipped photo, Field Notes as a book with four tabs down the edge, the Rival Report as a newspaper with all four rivals, and the scene where a Pokémon you once beat comes back to learn from yours.",
+  "q4": "Settings > Battle: Boss HP, on the ring (new) or as a plate (classic). The Dossier, Field Notes and Rival Report sit in the pause Menu under one line called Papers.",
+  "q5": "The ring is new for Pokémon, so the name tag keeps the familiar parts: type medals, name, level and HP. The folder, notebook and newspaper are the kind of objects these games have always used for records."
+ },
+ "50": {
+  "name": "New areas 24 · Crest",
+  "label": "New areas · pass 24 of 25",
+  "big": "Each area gets a crest: painted on the ground you fight on, on the status tab, and filling the screen when you walk in",
+  "pages": [
+   "cr-rd",
+   "cr-tm",
+   "cr-ga",
+   "cr-xp",
+   "cr-et",
+   "cr-all"
+  ],
+  "q1": "Five crests: a crystal star in a hexagon for raids, a four-colour trial diamond for Totems, a League shield for Galar, a flagged peak for expeditions and the red R for Team Rocket. Each one is painted large on the battle floor like a stadium's centre circle, so a single glance at the ground tells you where you are.",
+  "q2": "Until now an area was told apart by its colours and its set. It now has a mark of its own that turns up in every place the area does: floor, status tab, header and entry card. The thirty-dot stage ribbon is replaced inside an area by a five-step rail that says where you are in this visit.",
+  "q3": "Six new pages: an entry card for each of the five areas (crest, name, one line, the steps ahead) and a guide page that shows the five crests together.",
+  "q4": "The Menu's map legend shows the five crests next to the stop icons. Settings > Display: Floor crest, on or off.",
+  "q5": "Yes. Gyms, leagues and teams in these games all carry an emblem, and stadium floors are painted with one. The crests give the new areas the same kind of badge the old ones have."
+ },
+ "51": {
+  "name": "New areas 25 · Master Cut",
+  "label": "New areas · pass 25 of 25",
+  "big": "One of each idea, one layout for all five areas, and one line of interface at the bottom",
+  "pages": [
+   "mn-area",
+   "set-areas",
+   "mc-five",
+   "mc-grammar",
+   "mc-passes"
+  ],
+  "q1": "The scene now runs from the top edge to one slim band at the bottom. Your Pokémon stands clear with ground under it, the boss wears its HP as a ring, and the only things on the picture are a crest tab and a steps rail in one corner. The expedition and the Rocket stop are full-screen scenes for the first time.",
+  "q2": "Passes 16 to 24 each added something, and the screens had begun to fill up again. This pass removes: the loose specks in front of the camera, the two header bands, the second bottom row. Your HP and the six buttons now share one band, which hands a strip of ground back to the scene. All five areas now follow the same layout, so learning one teaches the other four.",
+  "q3": "Five new pages: the Pause Menu as it looks inside an area (crest, steps rail, Rotom's advice about this fight), a Settings page with the six switches these passes asked for, and three guide pages: the five areas side by side, how one screen is built, and what each pass from 16 to 25 added.",
+  "q4": "This pass draws both. The Pause Menu shows the area you are in, with its crest and steps. Settings > Display > New areas holds Scene lighting, Foreground shapes, Boss HP, Floor crest, Steps rail and Button row.",
+  "q5": "Yes. A wide, clear field with one band of commands under it is how the series has always framed a battle. What is new is drawn into the place itself, not laid over it."
  }
 }
