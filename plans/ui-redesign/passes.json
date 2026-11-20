@@ -615,5 +615,21 @@
   "q3": "Yes, eight. The evil team had three pages; it now has a page for each turning point, including the Offer and the Inside route with its Acts, Operations, Trust and four endings.",
   "q4": "The Case File is the evil team's own menu page: J opens it from any of their stops, the same key as the journal.",
   "q5": "Yes. A grunt, an executive who comes back, a hideout cleared room by room and the Boss in his office is the classic evil-team arc."
+ },
+ "37": {
+  "name": "New areas 11 · Clean Sweep",
+  "label": "New areas · pass 11 of 25",
+  "big": "Your note: the designs are crowded and too many sprites are cut off. This pass is the answer. Two rules from here on. One: a battle or map screen shows one status line and one small extra; everything else moves to an Info page one key away. Two: every Pokémon and trainer sprite is shown whole, and a new checker measures every sprite on every page. The five special screens are rebuilt from your picked battle and map screens instead of being stacked on ten passes of extras.",
+  "pages": [
+   "Raid · Info",
+   "Totem · Info",
+   "Galar · Match Info",
+   "Clean Sweep · The two rules"
+  ],
+  "q1": "No, on purpose. This pass removes things. The boss, the Totem and the Leader's Pokémon are the show again because nothing sits on top of them.",
+  "q2": "Passes 6 to 10 kept adding rails, tracks, cries and chips. This pass takes the raid battle from 64 pieces of text to 31 and the boss from 31% visible to 100%.",
+  "q3": "Yes, three Info pages (raid, Totem, Galar match) that hold what left the battle screens, plus one guide page with the two rules and the before and after numbers.",
+  "q4": "Unchanged, and the same rule now applies to them: one key (I) opens the detail instead of showing it all the time.",
+  "q5": "Yes, more than before. The main games keep the field clear and put detail behind a button; this matches the battle screen you picked."
  }
 }
