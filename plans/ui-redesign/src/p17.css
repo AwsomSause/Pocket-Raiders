@@ -96,5 +96,5 @@
 .cr-back{position:absolute;left:48px;top:440px;min-width:200px;align-items:center;color:var(--ink);cursor:pointer}
 .ld-n small{position:relative;z-index:1;margin-bottom:8px}
 /*@top*/
-@keyframes call17{0%,70%{scale:1;opacity:1}84%{scale:1.12;opacity:0}85%{scale:.5;opacity:0}100%{scale:1;opacity:1}}
+@keyframes call17{0%,100%{scale:1}50%{scale:1.06}}
 @keyframes spin17{to{rotate:360deg}}

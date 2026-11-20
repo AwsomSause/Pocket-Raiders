@@ -281,5 +281,22 @@
   "q3": "Yes, six. Text, Story and Save & Data were settings tiles with no page behind them; Boot, Loading and Credits did not exist at all.",
   "q4": "Settings now has a page behind all nine tiles. Save & Data shows backups, the save check, export and import in one place. The phone's next stop is a headline.",
   "q5": "Yes. Big slanted command words, loud move call-outs and a loading tip with your team walking are all series habits."
+ },
+ "18": {
+  "name": "Showdown",
+  "big": "Big fights look big. Trainer battles hang pennants in the trainer's colours and show the foe's team down the side. The next Gym is posted on the title, the phone and the party screen with who is a good pick. Gym Leaders, Legendaries and the Evil Team get their own scenes.",
+  "pages": [
+   "Gym Leader Intro",
+   "Gym Battle",
+   "Legendary Encounter",
+   "Evil Team · Betrayal",
+   "Badge Earned",
+   "Rival Wins"
+  ],
+  "q1": "Yes. Pennants, a gold-trimmed boss plate, a glowing Legendary in the dark, a spinning badge in a burst of light.",
+  "q2": "Pass 17 made every screen louder, but a Gym fight still looked like any other. Now the stakes show: what the boss brings, how many heals are left, whether the boss power is used.",
+  "q3": "Yes, six. Each big moment has its own page instead of sharing the normal battle or victory screens. Losing to a rival has a page that says clearly the run goes on.",
+  "q4": "The phone carries a Next Gym poster under the run score and Rotom talks about it. Nothing new is needed in Settings; boss scenes follow the Animations page.",
+  "q5": "Yes. Gym intro, badge ceremony, a Legendary waiting in a cave and a rival who says 'Smell ya later' are the heart of the series."
  }
 }

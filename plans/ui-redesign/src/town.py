@@ -53,3 +53,8 @@ im = first('pokemon/479'); print('m-479', im.size); im.save(OUT + 'm-479.png', o
 Image.open(A + 'overworld/followers/ROTOM.png').convert('RGBA').save(OUT + 'fw-479.png', optimize=True)
 im = Image.open(A + 'bosses/oak.png').convert('RGBA'); im = im.crop(im.getbbox()); print('t-oak', im.size); im.save(OUT + 't-oak.png', optimize=True)
 im = first('pokemon/shiny/163'); print('ms-163', im.size); im.save(OUT + 'ms-163.png', optimize=True)
+for n, src in [('t-giovanni', 'bosses/giovanni-rocketboss'), ('t-grunt', 'bosses/npc_teamrocket_m'), ('t-lance', 'bosses/lance'), ('t-surge', 'bosses/ltsurge')]:
+    im = Image.open(A + src + '.png').convert('RGBA'); im = im.crop(im.getbbox()); print(n, im.size); im.save(OUT + n + '.png', optimize=True)
+im = first('pokemon/150'); print('m-150', im.size); im.save(OUT + 'm-150.png', optimize=True)
+for d in ['54', '55']:
+    im = first('pokemon/' + d); im.save(OUT + 'm-' + d + '.png', optimize=True)
