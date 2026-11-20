@@ -247,7 +247,7 @@ export class DominionScene extends Phaser.Scene {
       // D24: the interview room and the release page read their keys first (typing included).
       if (this.inRun() && this.police.raw(e)) return;
       if (this.screen === 'founding') return;
-      if (this.debate.raw(e.code)) return;
+      if (this.debate.raw(e.code, e)) return;
       // D12: while the Chair sits, O is its settings, not the Founding.
       if (e.code === 'KeyO' && (this.screen === 'hq' || this.screen === 'map' || this.screen === 'crew') && !this.chair.owns()) return this.openFounding();
       if (this.screen === 'desk') {
@@ -324,6 +324,7 @@ export class DominionScene extends Phaser.Scene {
       this.desk.shutdown();
       this.spy.destroy();
       this.police.shutdown();
+      this.debate.shutdown();
     });
   }
 

@@ -167,6 +167,8 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'spyDrop':
     // D13: the Debate (debate.ts, sent there by session.ts).
     case 'argue':
+    case 'argueTyped':
+    case 'debateVoice':
     case 'deal':
     case 'walkOut':
     case 'debateDone':

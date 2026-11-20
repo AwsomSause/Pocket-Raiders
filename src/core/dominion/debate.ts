@@ -89,7 +89,7 @@ export function strengths(b: DominionBlock, team: string): { yours: number; thei
 
 // ---------- who will talk ----------
 
-const vars = (b: DominionBlock, team: string, who = 'boss'): Record<string, string> => {
+export const vars = (b: DominionBlock, team: string, who = 'boss'): Record<string, string> => {
   const def = teamDef(team);
   const admin = def?.admins.find((a) => a.id === who);
   return { boss: def?.boss.name ?? 'The Boss', team: def?.name ?? 'Their team', who: admin?.name ?? def?.boss.name ?? '', my: b.teamName ?? 'your crew', them: bossOf(team)?.them ?? 'them' };
@@ -137,7 +137,7 @@ export function startConviction(b: DominionBlock, team: string, who = 'boss'): n
 }
 
 const roundsFor = (who: string): string[] => (who === 'boss' ? D().rounds.map((r) => r.id) : [...D().adminRounds]);
-const totalTurns = (l: LiveDebate): number => l.rounds.length * D().turnsPerRound;
+export const totalTurns = (l: LiveDebate): number => l.rounds.length * D().turnsPerRound;
 
 /** Their opening line for a round (Values: their creed; Methods: your worst Ledger line, judged; The Future: their price). */
 function opener(b: DominionBlock, team: string, who: string, round: string): string {
@@ -180,25 +180,34 @@ export function scoreLine(b: DominionBlock, l: LiveDebate, lineId: string): Scor
   const held = !claim || claimHolds(b, claim, l.team);
   if (claim && !held) marks[1] = marks[4] = 0;
   else if (claim) marks[1] = Math.min(5, marks[1]! + 1);
+  const mod = stanceMod(b, l, line.stance);
+  const sum = marks.reduce((a, x) => a + x, 0);
+  return { marks, mod, move: hallFloor(b, l, clamp((sum - M.base) * M.k + mod, M.min, M.max)), claim, held };
+}
+
+/** The stance's modifier (Threaten without the Dread, a Merger while weaker) and a sour turn. */
+export function stanceMod(b: DominionBlock, l: LiveDebate, stance: DebateTurn['stance']): number {
+  const M = D().move;
   let mod = 0;
-  if (line.stance === 'threaten' && dreadOf(b) < 2 * fearOf(b, l.team)) mod -= M.threaten;
-  if (line.stance === 'merger') {
+  if (stance === 'threaten' && dreadOf(b) < 2 * fearOf(b, l.team)) mod -= M.threaten;
+  if (stance === 'merger') {
     const s = strengths(b, l.team);
     if (s.yours <= s.theirs) mod -= M.merger;
   }
   if (l.sour) mod -= M.sour;
-  const sum = marks.reduce((a, x) => a + x, 0);
-  let move = clamp((sum - M.base) * M.k + mod, M.min, M.max);
-  // The Debate Hall: the first argument always lands.
-  if (!l.turns.length && hqFx(b).debateFloor) move = Math.max(move, Math.min(M.max, hqFx(b).debateFloor));
-  return { marks, mod, move, claim, held };
+  return mod;
+}
+
+/** The Debate Hall: the first argument always lands. */
+export function hallFloor(b: DominionBlock, l: LiveDebate, move: number): number {
+  return !l.turns.length && hqFx(b).debateFloor ? Math.max(move, Math.min(D().move.max, hqFx(b).debateFloor)) : move;
 }
 
 export const resultOf = (conviction: number) => D().results.find((r) => conviction >= r.min)!;
 
 export interface DebateOut { ok: boolean; run: RunState; notice: string | null }
 const no = (run: RunState, notice: string | null): DebateOut => ({ ok: false, run, notice });
-const withBlock = (run: RunState, b: DominionBlock): RunState => ({ ...run, expansion: { ...(run.expansion ?? {}), dominion: b } });
+export const withBlock = (run: RunState, b: DominionBlock): RunState => ({ ...run, expansion: { ...(run.expansion ?? {}), dominion: b } });
 
 /** One turn: the line, its marks, the move, their reply (stored), then the next opener or the result. */
 export function argue(content: Content, run: RunState, lineId: string): DebateOut {
@@ -213,18 +222,30 @@ export function argue(content: Content, run: RunState, lineId: string): DebateOu
   const s = scoreLine(b, l, lineId);
   if (!s) return no(run, null);
   const line = lineDef(lineId)!;
+  const reply = replyFor(b, l, s, run.seed);
+  return finishTurn(content, out, b, { line: lineId, stance: line.stance, marks: s.marks, mod: s.mod, move: s.move, claim: s.claim, held: s.held, reply });
+}
+
+/** Their written reply to a turn (a claim the Ledger can't back is called out; an insult; else by how well it landed). */
+export function replyFor(b: DominionBlock & { debate: DebateState }, l: LiveDebate, s: { marks: number[]; move: number; claim: DebateTurn['claim']; held: boolean }, seed: string): string {
   const v = vars(b, l.team, l.who);
-  const r = roll(b, run.seed, `turn-${l.day}-${l.turns.length}`);
+  const r = roll(b, seed, `turn-${l.day}-${l.turns.length}`);
   const pool = l.who === 'boss' ? bossOf(l.team)?.replies ?? D().admin.replies : D().admin.replies;
-  let reply: string;
   if (!s.held) {
     const c = D().claims[s.claim!]!;
-    reply = fill(c.callout, { ...v, boss: l.name, towns: heldTowns(b), s: heldTowns(b) === 1 ? '' : 's', funds: b.funds.toLocaleString('en-US'), members: b.members.length, sin: sinOf(b) ?? '' });
-  } else if (s.marks[3] === 0) reply = fill(pick(r, pool.insult), v);
-  else reply = fill(pick(r, s.move >= 10 ? pool.strong : s.move >= 0 ? pool.fair : pool.weak), v);
-  l.turns.push({ line: lineId, stance: line.stance, marks: s.marks, mod: s.mod, move: s.move, claim: s.claim, held: s.held, reply });
-  l.conviction = clamp(l.conviction + s.move, -100, 100);
-  l.sour = s.marks[3] === 0;
+    return fill(c.callout, { ...v, boss: l.name, towns: heldTowns(b), s: heldTowns(b) === 1 ? '' : 's', funds: b.funds.toLocaleString('en-US'), members: b.members.length, sin: sinOf(b) ?? '' });
+  }
+  if (s.marks[3] === 0) return fill(pick(r, pool.insult), v);
+  return fill(pick(r, s.move >= 10 ? pool.strong : s.move >= 0 ? pool.fair : pool.weak), v);
+}
+
+/** Records a turn on `b` (a clone inside `out`): the bar moves, then the next opener or the result. */
+export function finishTurn(content: Content, out: RunState, b: DominionBlock & { debate: DebateState }, turn: DebateTurn): DebateOut {
+  const l = b.debate.live!;
+  const reply = turn.reply;
+  l.turns.push(turn);
+  l.conviction = clamp(l.conviction + turn.move, -100, 100);
+  l.sour = turn.marks[3] === 0;
   const n = l.turns.length;
   if (n < totalTurns(l)) {
     const per = D().turnsPerRound;
