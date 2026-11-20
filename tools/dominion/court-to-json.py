@@ -15,6 +15,7 @@ does with an answer is the SPEC table below, written in a small effect language 
   deal:N[:clean][:heat=H][:risk=P:heat=H|wanted=W][:mon=N][:item=id:n][:ten=N]  (every week)
   ten:N threat:N goal:N stab:N raid:N shadow:N wipe:N   (kept for the slice that builds them: owed)
   note:SLICE:"text"  (a part that waits for a later slice: the answer is "limited")
+  hero:intel:N  hero:battle  hero:letter  hero:spare  hero:late:N  hero:hunt  hero:lose   (D11: the Hero, hero.ts)
 
 A card with `wait` is switched off (status "disabled") until the named slice builds what its answers need.
 Re-run after the list changes:  python3 tools/dominion/court-to-json.py <plans/evil-mode-rework/lists> src/data/dominion
@@ -130,6 +131,13 @@ def fx(s):
                 res.append({'k': 'fight', 'win': fx(parts[0]), 'lose': fx(parts[1]) if len(parts) > 1 else []})
             else:
                 raise SystemExit(f'bad block {t}')
+            continue
+        if t.startswith('hero:'):
+            p = t.split(':')
+            e = {'k': 'hero', 'what': p[1]}
+            if len(p) > 2:
+                e['n'] = int(p[2])
+            res.append(e)
             continue
         if t.startswith('note:'):
             _, slice_, text = t.split(':', 2)
@@ -330,11 +338,11 @@ SPEC = {
     89: dict(look='trainer/blue', who='hero-friend', foe='friend', a='fight{threat:-4 dread:4}{threat:6}', b='threat:3'),
     90: dict(look='trainer/pr/interviewers', who='reporter', a='reg:4 threat:-2', b='dread:4 threat:6'),
     91: dict(look='member', named='any', a='loy:3 threat:-2', b='threat:4 note:D11:"+10% vs. the Hero"'),
-    92: dict(look='trainer/pr/ace_trainer_m', who='gym-trainer', wait='D11', a='$-100 note:D11:"the Hero\'s district tomorrow"', b=''),
-    93: dict(look='trainer/red', who='hero', wait='D11', a='threat:-8 reg:4 dread:-4', b='threat:10 note:D11:"Hero battle tomorrow"'),
-    94: dict(look='trainer/red', who='hero', wait='D11', a='note:D10:"release the Holding Pens" reg:12 threat:-15', b='threat:12'),
-    95: dict(look='trainer/red', who='hero', wait='D11', a='note:D11:"that district is locked to you" threat:-20', b='threat:15 dread:5'),
-    96: dict(look='trainer/red', who='hero', wait='D11', once=True, a='mor:8 reg:4', b='dread:8 goal:5 threat:5'),
+    92: dict(look='trainer/pr/ace_trainer_m', who='gym-trainer', a='$-100 hero:intel:1', b=''),
+    93: dict(look='trainer/red', who='hero', a='threat:-8 reg:4 dread:-4', b='threat:10 hero:battle'),
+    94: dict(look='trainer/red', who='hero', a='note:D10:"release the Holding Pens" reg:12 threat:-15', b='threat:12'),
+    95: dict(look='trainer/red', who='hero', a='hero:spare threat:-20', b='threat:15 dread:5'),
+    96: dict(look='trainer/red', who='hero', once=True, a='mor:8 reg:4', b='dread:8 goal:5 threat:5'),
     # G. gyms, League and famous trainers
     97: dict(look='trainer/pr/veteran_m', who='surge', name='Lt. Surge', role='Gym Leader', foe='surge', a='fight{$600}', b='dread:-1'),
     98: dict(look='trainer/pr/striker', who='koga', wait='D10', a='$-800 note:D10:"+10% Steal/Thieve for 14 days"', b=''),
@@ -360,7 +368,7 @@ SPEC = {
     117: dict(look='trainer/pr/ruin_maniac', who='ballmaker', a='deal:0:item=luxury-ball:5 note:D10:"that forest is off-limits"', b='dread:2'),
     118: dict(look='mon:meowth', who='stray', a='chance:50{mon:1} mor:3', b=''),
     119: dict(look='trainer/pr/scientist_m', who='cipher', wait='D16', a='$-1000 note:D16:"a Shadow Pokémon" threat:8', b='reg:3'),
-    120: dict(look='trainer/pr/ruin_maniac', who='hermit', wait='D11', a='reg:6 note:D11:"heroic Legendaries come 7 days later"', b='note:D11:"a Legendary hunt opens" threat:10'),
+    120: dict(look='trainer/pr/ruin_maniac', who='hermit', a='reg:6 hero:late:7', b='hero:hunt threat:10'),
     121: dict(look='member', named='any', a='rest chance:50{$200 fame:1}', b='loy:-3'),
     122: dict(look='trainer/pr/camper_m', who='trainer', a='$-60 reg:3', b='dread:2 reg:-2'),
     # I. empire scale
@@ -393,7 +401,7 @@ SPEC = {
     147: dict(look='member', named='first', who='crew', a='$each:-300 mor:30', b='mor:20 dread:-5 reg:5'),
     148: dict(look='trainer/pr/pokefan_m', who='town', a='$-1000 reg:15 dread:-10', b='dread:5 heat:15 reg:10'),
     149: dict(look='member', named='lowLoy', who='member', a='wage:200 loy:30', b='leave grudge raid:20'),
-    150: dict(look='trainer/red', who='hero', wait='D11', a='note:D11:"Hero battle tomorrow, HQ defense bonus" threat:-20', b='note:D11:"lose 1 district" threat:-30'),
+    150: dict(look='trainer/red', who='hero', a='hero:letter in:1{threat:-20}', b='hero:lose threat:-30'),
 }
 assert sorted(SPEC) == list(range(1, 151))
 

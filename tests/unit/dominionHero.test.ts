@@ -2,13 +2,13 @@
 // stages, the m11 interrupt (battle / run / Smoke Ball), encounter cards (O166-O185), the Legendaries, adapting, the
 // hidden Disillusion, the final stand and recruiting the Hero, the five Hero actions and their gates, saves.
 import { describe, expect, it } from 'vitest';
-import { freshChair } from '../../src/core/dominion/chair';
+import { atDoor, cardById, cardStatus, freshChair, redZones } from '../../src/core/dominion/chair';
 import { withCrew } from '../../src/core/dominion/crew';
 import { DOMINION_DATA } from '../../src/core/dominion/data';
-import { actionDef, actionStatus, card } from '../../src/core/dominion/field';
+import { actionDef, actionStatus, card, districtDef } from '../../src/core/dominion/field';
 import { beginDominionFight } from '../../src/core/dominion/fight';
 import { dominionCatchBlock, endDominionFight } from '../../src/core/dominion/fightEnd';
-import { activeLegends, afterStand, callFinalStand, heroAt, heroFor, heroOf, stageIndex, threatOf } from '../../src/core/dominion/hero';
+import { activeLegends, afterStand, callFinalStand, heroAt, heroFor, heroOf, heroTeam, stageIndex, threatOf } from '../../src/core/dominion/hero';
 import { heroModel, interruptModel } from '../../src/core/dominion/heroScreens';
 import { ledgerModel } from '../../src/core/dominion/ledgerScreens';
 import { DominionBlockSchema, type DominionAction, type DominionBlock } from '../../src/core/dominion/schema';
@@ -306,6 +306,103 @@ describe('DOMINION D11: the five Hero actions and the three Hero tasks', () => {
       expect(t.status, id).toBe('supported');
       expect(t.effect?.kind).toBe('hero');
     }
+  });
+});
+
+/** D12 x D11: the Evening with the Chair on and one visitor at the door (`card`). */
+const atCourt = (id: number, seed = 'dc'): RunState => {
+  let r = go(day(seed), { t: 'endDay' });
+  r = edit(r, (b) => void (b.chair!.opts.length = 'normal'));
+  r = go(r, { t: 'toNight' });
+  expect(blk(r).chair?.open).toBe(true);
+  return edit(r, (b) => {
+    b.chair!.docket = [{ card: id, member: null, second: null }];
+    b.chair!.at = 0;
+  });
+};
+const answer = (r: RunState, choice: number): RunState => go(r, { t: 'court', choice });
+
+describe('DOMINION D11 x D12: the Chair\'s Hero visitors (cards 92-96, 120, 150)', () => {
+  it('the seven cards that waited for D11 play now; Threat on a card is the Hero\'s Threat', () => {
+    for (const id of [92, 93, 94, 95, 96, 120, 150]) {
+      expect(cardById(id)!.wait, `${id}`).toBeUndefined();
+      expect(cardStatus(cardById(id)!), `${id}`).not.toBe('disabled');
+    }
+    // 94 still has a D10 part (the Holding Pens) and 96 a D14 Goal: limited; the rest are whole.
+    expect([92, 93, 95, 120, 150, 88, 90].map((id) => cardStatus(cardById(id)!))).toEqual(Array(7).fill('supported'));
+    expect([94, 96].map((id) => cardStatus(cardById(id)!))).toEqual(['limited', 'limited']);
+  });
+  it('card 93: Listen lowers Threat and it stays through the night; Lock the door brings the Hero to the door', () => {
+    let r = atCourt(93);
+    expect(atDoor(blk(r))!.card.id).toBe(93);
+    const t0 = threatOf(blk(r));
+    r = answer(r, 0);
+    expect(heroOf(blk(r)).nudge).toBe(-8);
+    expect(threatOf(blk(r))).toBe(Math.max(0, t0 - 8));
+    expect(blk(r).chair!.owed.threat).toBeUndefined();
+    let b = atCourt(93, 'dc2');
+    b = answer(b, 1);
+    expect(heroOf(blk(b)).nudge).toBe(10);
+    expect(blk(b).field.fight).toMatchObject({ why: 'heroRaid', foe: 'hero', begun: false });
+    expect(heroOf(blk(b)).met).toBe(true);
+  });
+  it('Threat a D12 save kept for D11 (chair.owed.threat) is added once on the next night', () => {
+    let r = go(day('do'), { t: 'endDay' });
+    r = edit(r, (b) => void (b.chair!.owed.threat = 12));
+    const before = threatOf(blk(r));
+    r = night(r);
+    expect(blk(r).chair!.owed.threat).toBeUndefined();
+    expect(heroOf(blk(r)).nudge).toBe(12);
+    expect(heroOf(blk(r)).threat).toBeGreaterThanOrEqual(Math.min(100, before + 12) - 1);
+    r = night(go(go(r, { t: 'toDay' }), { t: 'endDay' }));
+    expect(heroOf(blk(r)).nudge).toBe(12);
+  });
+  it('card 92 tells you where the Hero is tomorrow; card 95 spares a town (no Boss actions there)', () => {
+    let r = answer(atCourt(92), 0);
+    expect(heroOf(blk(r)).intel).toBe(blk(r).day + 1);
+    r = answer(atCourt(95, 'dc3'), 0);
+    const h = heroOf(blk(r));
+    expect(h.spared).toHaveLength(1);
+    const town = h.spared![0]!;
+    expect(town).not.toBe(DOMINION_DATA.field.hq);
+    expect(h.nudge).toBe(-20);
+    const dayB = { ...structuredClone(blk(r)), phase: 'day' as const, actions: 9 };
+    // Every Day action there that would otherwise pass its checks is refused with the promise; none in another town.
+    const tgt = districtDef(town)!.targets[0]?.id ?? null;
+    const why = (d: string, t: string | null) => DOMINION_DATA.actions.actions.filter((x) => x.slot === 'day').map((x) => card(dayB, r, x.id, t, d)?.blocked ?? '');
+    expect(why(town, tgt).some((w) => /left alone/.test(w))).toBe(true);
+    expect(why(DOMINION_DATA.field.hq, null).some((w) => /left alone/.test(w))).toBe(false);
+  });
+  it('card 120: a Promise keeps the Legendaries away 7 days; Hunt it wakes one (fought from the Hero file)', () => {
+    let r = answer(atCourt(120), 0);
+    const day = blk(r).day;
+    for (const s of Object.values(heroOf(blk(r)).legends)) expect(s.away).toBe(day + 7);
+    expect(activeLegends(blk(r))).toEqual([]);
+    r = answer(atCourt(120, 'dc4'), 1);
+    expect(activeLegends(blk(r))).toHaveLength(1);
+    expect(heroOf(blk(r)).nudge).toBe(10);
+  });
+  it('card 150 (Threat 90+): the Letter is a crisis; Prepare brings the Hero with the HQ\'s Defense; Flee loses a town', () => {
+    let r = atCourt(150);
+    r = edit(r, (b) => void (heroOf(b).threat = 92));
+    expect(redZones(blk(r))).toContain('threat');
+    const plain = heroTeam(blk(r), r, 'hero', 'heroRaid').team[0]!.level;
+    r = answer(r, 0);
+    const h = heroOf(blk(r));
+    expect(blk(r).field.fight).toMatchObject({ why: 'heroRaid', foe: 'hero' });
+    expect(h.bonus).toBeGreaterThan(0);
+    expect(heroTeam(blk(r), r, 'hero', 'heroRaid').team[0]!.level).toBe(Math.max(DOMINION_DATA.field.levels.min, plain - h.bonus!));
+    // Threat −20 comes the day after.
+    expect(blk(r).chair!.due.some((d) => d.card === 150)).toBe(true);
+    let f = atCourt(150, 'dc5');
+    f = edit(f, (b) => {
+      const id = Object.keys(b.field.districts).find((x) => x !== DOMINION_DATA.field.hq)!;
+      b.field.districts[id]!.control = 60;
+    });
+    const held = Object.keys(blk(f).field.districts).filter((x) => x !== DOMINION_DATA.field.hq && blk(f).field.districts[x]!.control >= 60);
+    f = answer(f, 1);
+    expect(held.some((x) => blk(f).field.districts[x]!.control === 0)).toBe(true);
+    expect(heroOf(blk(f)).nudge).toBe(-30);
   });
 });
 

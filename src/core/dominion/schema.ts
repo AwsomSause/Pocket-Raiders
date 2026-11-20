@@ -796,6 +796,9 @@ export type EmpireState = z.infer<typeof EmpireStateSchema>;
 // ---------- D12: the Chair (court.json, courtRules.json, block `chair`) ----------
 
 export const OWED_KEYS = ['ten', 'threat', 'goal', 'stab', 'raid', 'shadow', 'wipe'] as const;
+/** D11: what a Chair answer does to the Hero (hero.ts): the route tomorrow, the Hero at the door (the Letter with the HQ's
+ * Defense on your side), a town left alone, the Legendaries later, a Legendary hunt, a town lost. */
+export const HERO_COURT = ['intel', 'battle', 'letter', 'spare', 'late', 'hunt', 'lose'] as const;
 export const LEANS = ['money', 'regard', 'dread', 'heat', 'self'] as const;
 export type Lean = (typeof LEANS)[number];
 const Who = z.enum(['named', 'second', 'all']);
@@ -813,6 +816,7 @@ export type CourtFx =
   | { k: 'follow'; card: number; days: number }
   | { k: 'owed'; key: (typeof OWED_KEYS)[number]; n: number }
   | { k: 'note'; slice: string; text: string }
+  | { k: 'hero'; what: (typeof HERO_COURT)[number]; n?: number }
   | { k: 'deal'; n: number; clean?: boolean; heat?: number; risk?: number; wanted?: number; mon?: number; item?: string; itemN?: number; ten?: number }
   | { k: 'chance'; p: number; yes: CourtFx[]; no: CourtFx[] }
   | { k: 'later'; days: number; fx: CourtFx[] }
@@ -831,6 +835,7 @@ export const CourtFxSchema: z.ZodType<CourtFx> = z.lazy(() => z.discriminatedUni
   z.object({ k: z.literal('follow'), card: I.min(1), days: I.min(1) }).strict(),
   z.object({ k: z.literal('owed'), key: z.enum(OWED_KEYS), n: I }).strict(),
   z.object({ k: z.literal('note'), slice: S, text: S }).strict(),
+  z.object({ k: z.literal('hero'), what: z.enum(HERO_COURT), n: I.min(1).optional() }).strict(),
   z.object({ k: z.literal('deal'), n: I, clean: z.boolean().optional(), heat: I.optional(), risk: I.min(1).max(100).optional(), wanted: I.optional(), mon: I.min(1).optional(), item: S.optional(), itemN: I.min(1).optional(), ten: I.optional() }).strict(),
   z.object({ k: z.literal('chance'), p: I.min(1).max(99), yes: z.array(CourtFxSchema), no: z.array(CourtFxSchema) }).strict(),
   z.object({ k: z.literal('later'), days: I.min(1), fx: z.array(CourtFxSchema).min(1) }).strict(),
@@ -1243,6 +1248,11 @@ export const HeroStateSchema = z.object({
   /** The last stand (Part 4 §7.3): due on a day; won and waiting for a choice; settled. */
   stand: z.object({ state: z.enum(['due', 'choose', 'done']), day: I.min(1), lost: N0, outcome: z.enum(['leave', 'joined', 'refused']).nullable() }).strict().nullable(),
   legends: z.record(S, LegendStateSchema),
+  /** D11 x D12: Threat the Chair's answers moved (on top of what `threatOf` counts); a town the Hero asked you to leave
+   * alone (no Boss actions there); levels off the Hero's team at the next fight at the HQ door (the Letter). Optional. */
+  nudge: I.min(-100).max(100).optional(),
+  spared: z.array(S).optional(),
+  bonus: N0.optional(),
 }).strict();
 export type HeroState = z.infer<typeof HeroStateSchema>;
 // ---------- D9 data: rivals.json, rivalActions.json, outside.json (Part 4 §1-2, Part 3 §4, Part 9 A7) ----------
