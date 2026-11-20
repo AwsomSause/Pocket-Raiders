@@ -15,6 +15,7 @@ import { heroTeam, sawTypes } from './hero';
 import { rivalSide } from './rivals';
 import { growthSide } from './growth';
 import { snatchSide } from './snatch';
+import { takeoverSide } from './takeover';
 
 /** Starts `field.fight` and marks it begun. Returns null when there's nothing to start or nobody can fight. */
 export function beginDominionFight(content: Content, current: RunState): RunState | null {
@@ -50,9 +51,9 @@ export function beginDominionFight(content: Content, current: RunState): RunStat
     const side = rivalSide(b, run, fight);
     team = side.species.map((s, i) => make(s, Math.max(2, side.level - (i ? 1 : 0)))).filter((m): m is PokemonInstance => !!m);
     trainer = { classId: side.classId, name: side.name, leaderId: side.leaderId };
-  } else if (fight.foe === 'growth') {
-    // D10: a Raid's, a Gym's or the Gauntlet's next fight (growth.ts).
-    const side = growthSide(b, run);
+  } else if (fight.foe === 'growth' || fight.foe === 'takeover') {
+    // D10: a Raid's, a Gym's or the Gauntlet's next fight (growth.ts); D14: a Takeover's (takeover.ts).
+    const side = fight.foe === 'growth' ? growthSide(b, run) : takeoverSide(b, run);
     if (!side) return null;
     team = side.species.map((s, i) => make(s, Math.max(2, side.level - (i ? 1 : 0)))).filter((m): m is PokemonInstance => !!m);
     trainer = { classId: side.classId, name: side.name, leaderId: side.leaderId };

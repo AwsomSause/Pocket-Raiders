@@ -240,6 +240,7 @@
     }
   },
   "text": {
+    "early": "The assistant puts a word in: {boss} will sit down for a Debate early (Rival File).",
     "noTeam": "No rival Boss to talk to.",
     "yours": "{team} is already yours.",
     "closed": "{boss} will never talk to you again this region.",

@@ -145,6 +145,7 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
       return ok(endNight(block, seed, false));
     }
     case 'act':
+    case 'jobCaught':
     case 'buy':
     // D5: the HQ menu (hq.ts), sent there by session.ts.
     case 'upgrade':
@@ -252,6 +253,7 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'deskInspect':
     case 'deskStamp':
     case 'found': // D7: handled by session.ts (founding.ts)
+    case 'takeover': // D14: handled by session.ts (takeover.ts)
       return no(block);
     // D8, Squads and Groups (squads.ts): the block only.
     case 'squadSave':

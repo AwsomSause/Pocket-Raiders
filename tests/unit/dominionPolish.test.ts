@@ -39,6 +39,6 @@ describe('D26 Nova livery', () => {
   });
 
   it('the wheel key is Q, and only Q (Quit moved to End, Crew File paging to the arrows)', () => {
-    expect(WHEEL_KEY).toBe('<span class="key q4">Q</span><span>Wheel</span>');
+    expect(WHEEL_KEY).toBe('<span class="key q4" data-act="wheel" data-arg="" style="cursor:pointer">Q</span><span>Wheel</span>');
   });
 });

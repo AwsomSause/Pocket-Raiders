@@ -146,6 +146,11 @@ ENGINE = {
     107: dict(kind='front', funds=[40, 160], note='Pays as a front; lower costs on rooms are later.'),
     108: dict(kind='front', funds=[100, 400], risky=True, caughtHeat=4),
     109: dict(kind='flyers'),
+    # D14 (takeover.ts): Executive specials of section M. 147 waits for held regions (D15), 148 for double agents (D22).
+    143: dict(kind='truceTalk', note="Runs as truce talk with the rival's envoy; better deal terms aren't acted on."),
+    144: dict(kind='rivalHit', risky=True, note='Runs as a covert hit on the rival team; linked ops are one hit each.'),
+    149: dict(kind='takeover', does='plan', note='A plan is one Plan point for the takeover (and Goal Track +1 with a Goal).'),
+    150: dict(kind='takeover', does='coup', risky=True, note="Each step weakens the rival Boss's circle (their power −1); taking the chair is the Wipe Out path's HQ fight."),
 }
 
 # The slice each disabled row waits for: by section, then by row.
@@ -154,7 +159,7 @@ NEEDS_ROW = {
     4: 'D9', 5: 'D6', 6: 'D2', 8: 'D10', 9: 'D2', 11: 'D9', 13: 'D6', 2: 'D9', 10: 'D9', 32: 'D6', 33: 'D10',
     40: 'D6', 46: 'D2', 47: 'D6', 42: 'D2', 45: 'D11', 50: 'D10', 53: 'D6', 55: 'D2', 70: 'D9', 71: 'D7',
     83: 'D10', 84: 'D15', 89: 'D10', 90: 'D9', 91: 'D10', 109: 'D10', 118: 'D11', 119: 'D6', 124: 'D6', 128: 'D6',
-    142: 'D9', 145: 'D11', 146: 'D6',
+    142: 'D9', 145: 'D11', 146: 'D6', 147: 'D15', 148: 'D22',
 }
 
 tasks = []
@@ -209,7 +214,24 @@ SEC10 = {
     'AF': dict(kind='rally'), 'AG': dict(kind='district', does='hold'), 'AH': None, 'AI': dict(kind='train', xp=2), 'AJ': dict(kind='guard'),
     'AK': dict(kind='front'), 'AL': dict(kind='district', does='regard'), 'AM': dict(kind='rivalHit'), 'AO': dict(kind='front'), 'AP': None,
 }
-NEEDS10 = {'AN': 'D15', 'AQ': 'D14'}
+NEEDS10 = {'AN': 'D15'}
+# D14: AQ (executive projects) row by row; succession (590) waits for held regions (D15).
+AQ = {
+    586: (dict(kind='takeover', does='track'), 'Each project is Goal Track +1 (a Rule team: one Plan point).'),
+    587: (dict(kind='takeover', does='plan'), 'A plan is one Plan point for the takeover (and Goal Track +1 with a Goal).'),
+    588: (dict(kind='audit'), None),
+    589: (dict(kind='takeover', does='loyalty'), None),
+    591: (dict(kind='recruit'), 'Runs as a hunt for recruits; recruits at scale are one lead each.'),
+    592: (dict(kind='train', xp=2), "Runs as the member's training; the whole crew's XP isn't acted on."),
+    593: (dict(kind='money', funds=[400, 1600], risky=True, heat=3, caughtHeat=6), None),
+    594: (dict(kind='guard'), None),
+    595: (dict(kind='district', does='regard', n=[3, 4]), None),
+    596: (dict(kind='truceTalk'), 'Runs as truce talk; Tension −3 comes with a truce, not from the task.'),
+    597: (dict(kind='rivalHit', funds=[300, 750], risky=True), None),
+    598: (dict(kind='district', does='cool', n=[5, 8]), None),
+    599: (dict(kind='guard'), None),
+    600: (dict(kind='takeover', does='loyalty'), 'Loyalty +3; coming along to the next region is D15\'s (bring one member).'),
+}
 # AH (elite specialists) and AP (night crew): by the row's stat.
 BY_STAT = {'stealth': dict(kind='money', risky=True, heat=3, caughtHeat=6), 'brawn': dict(kind='guard'), 'wits': dict(kind='scout'),
            'charm': dict(kind='recruit'), 'nerve': dict(kind='guard')}
@@ -242,6 +264,18 @@ for f in ('team-actions-151-300.md', 'team-actions-301-450.md', 'team-actions-45
         stat = STAT[c[2]]
         t = dict(n=n, id=slug(clean(c[1])), name=clean(c[1]), section=section[0], group=section[1], stat=stat, min=RANK10[c[3]],
                  does=clean(c[4]), levels=levels, risk=clean(c[6]), source=f)
+        if section[0] == 'AQ':
+            e, note = AQ.get(n, (None, None))
+            if not e:
+                t['status'] = 'disabled'
+                t['needs'] = 'D15'
+            else:
+                t['status'] = 'limited' if note else 'supported'
+                if note:
+                    t['note'] = note
+                t['effect'] = dict(e)
+            tasks.append(t)
+            continue
         if section[0] in NEEDS10:
             t['status'] = 'disabled'
             t['needs'] = NEEDS10[section[0]]

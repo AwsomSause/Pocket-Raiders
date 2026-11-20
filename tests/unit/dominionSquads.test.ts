@@ -4,13 +4,14 @@ import { crewOf, crewStep, odds, taskById, withCrew } from '../../src/core/domin
 import { DOMINION_DATA } from '../../src/core/dominion/data';
 import { card } from '../../src/core/dominion/field';
 import { withReserve } from '../../src/core/dominion/reserve';
+import { takeoverOf } from '../../src/core/dominion/takeover';
 import { pyramidModel, pyramidOrder } from '../../src/core/dominion/reserveScreens';
 import { DOMINION_MODE_ID, startInRun, stepInRun } from '../../src/core/dominion/session';
 import { DominionBlockSchema, type DominionAction, type DominionBlock, type Member, type SquadDraft } from '../../src/core/dominion/schema';
 import { editDraft, newDraft, orderRows, squadBuilder, squadsModel } from '../../src/core/dominion/squadScreens';
 import {
   bandOf, chooseTrait, crewFor, disband, groupKindFor, lockedWhy, nameProblem, offerTraits, saveGroup, saveSquad, setOrder, sizeFor, squadCap, squadOdds,
-  squadOf, suggestions, groupOrder,
+  squadOf, squadParts, suggestions, groupOrder,
 } from '../../src/core/dominion/squads';
 import { STANDARD_CHOICE } from '../../src/core/rules';
 import { chooseStarter, createRun } from '../../src/core/run';
@@ -267,6 +268,34 @@ describe('D8 orders and the squad job', () => {
     expect(morale(b, 'sgt')).toBe(Math.min(100, m0.sgt + 2)); // belonging fits Pokémon First
     expect(morale(b, 'g1')).toBe(Math.max(0, m0.g1 - 2)); // money doesn't
     expect(b.funds).toBeLessThanOrEqual(funds - 150);
+  });
+  it('The Cause (D14): pushes the Goal Track each week, adds odds on Goal work, and stalls cost Morale', () => {
+    const b = formed(ready(), { incentive: 'cause', members: ['g1', 'g2'] });
+    b.team = { name: 'Team Venom', primary: 'red', secondary: 'black', initial: 'V', logo: 'fang', motto: '', goal: 'total-takeover', day: 1 };
+    const s = b.squads!.list[0]!;
+    const task = DOMINION_DATA.tasks.find((t) => t.effect?.kind === 'takeover')!;
+    // Takeover tasks need a high rank, so give the order by hand to see the odds part.
+    const x = structuredClone(b), xs = x.squads!.list[0]!;
+    xs.order = task.id;
+    for (const id of xs.members) crewOf(x.members.find((m) => m.id === id)!).task = task.id;
+    expect(squadParts(x, xs, task).map((p) => p[0])).toContain('The Cause');
+    const morale = (id: string) => b.members.find((m) => m.id === id)!.morale;
+    takeoverOf(b).goal.track = 30;
+    const week = () => { b.day += 7; b.phase = 'night'; crewStep(b, 'week'); };
+    b.day = 0;
+    week();
+    expect(takeoverOf(b).goal.track).toBe(31); // +1 from the squad
+    expect(s.cause).toEqual({ track: 31, weeks: 0 }); // the first week sets the mark
+    week();
+    expect(s.cause).toEqual({ track: 32, weeks: 1 }); // only the squad moved it
+    const m0 = morale('g1');
+    week();
+    expect(takeoverOf(b).goal.track).toBe(33);
+    expect(s.cause!.weeks).toBe(2);
+    expect(morale('g1')).toBeLessThanOrEqual(Math.max(0, m0 - 5 + 2)); // stall: Morale −5 (motive drift at most +2)
+    takeoverOf(b).goal.track = 50; // the empire moved the Goal: the stall resets
+    week();
+    expect(s.cause!.weeks).toBe(0);
   });
   it('a Family squad broken up: Morale −15 each, one may quit (seeded)', () => {
     const b = formed(ready());

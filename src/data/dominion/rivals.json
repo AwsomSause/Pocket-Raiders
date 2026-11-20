@@ -89,7 +89,8 @@
     "min": 5,
     "max": 90,
     "jam": 50,
-    "lossPower": 1
+    "lossPower": 1,
+    "insured": 50
   },
   "bossRaid": { "warn": 3, "size": 6, "min": 3, "perDefense": 3, "level": 4, "dread": 30, "vaultPct": 50, "held": 7, "after": 70 },
   "truce": { "tributeK": 0.5, "askChance": 30, "minTension": 20 },
@@ -134,6 +135,9 @@
     "stageDown": "{team} cools to {stage}.",
     "plan": "{boss}'s plan this week: {plan}.",
     "planHidden": "{boss} made a plan for the week. A spy (or an Operations Room at HQ Lv. {hq}) would show it.",
+    "insured": "Insured: raids now take {pct}% less from the Warehouse while you keep paying.",
+    "insuredPaid": "The insurance covered ₽{amount} of it.",
+    "agent": "The caught spy works for you now, inside {team}: their plan shows every week in the Rival File.",
     "law": "{team} bribed the detective to look at you: Heat +{pct}%.",
     "research": "{team}'s research moves on (Goal {goal} of 100).",
     "held": "{guard} held the door. {team} lost {n} Grunts and went home.",

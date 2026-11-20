@@ -15,7 +15,8 @@ import { DOMINION_DATA } from './data';
 import { crewOf, freshCrew, withCrew } from './crew';
 import { addActEffect, addActionGate, addHeat, masteryLevel, statusOf } from './field';
 import { hqFx } from './hqFx';
-import { addTension, ladder, rivalsOf, setCardHook, teamDef, teamsHere, tier, withRivals, type RivalOut } from './rivals';
+import { addTension, ladder, rivalsOf, setCardHook, teamAt, teamDef, teamsHere, tier, withRivals, type RivalOut } from './rivals';
+import { setChairHook } from './chair';
 import { CLAIMS } from './schema';
 import type { Deal, DebateBoss, DebateState, DebateTurn, DominionBlock, LiveDebate, Member } from './schema';
 import { addWorldStep, fill } from './worldTurn';
@@ -555,6 +556,16 @@ setCardHook('directive', (b, c, index, choice) => {
 /** The Branch Directive's five orders, with their numbers. */
 export const directiveLabels = (): string[] =>
   D().directives.map((d) => fill(`${d.name}: ${d.what}`, { n: d.id === 'recruit' ? D().branch.recruit : d.id === 'expand' ? D().branch.expand : D().branch.defend }));
+
+/** The Chair's D13 answer (card 81, Proton): the rival Boss sits down for a Debate early, as an invitation (no Tension 40+
+ * or win needed). One Debate card per team at a time, and none once they're a Branch or Merger. */
+setChairHook('debate-early', (b) => {
+  const team = teamAt(b, null), def = teamDef(team), rv = withRivals(b).rivals;
+  if (!def || dealOf(b, team)) return null;
+  if (!rv.cards.some((x) => x.team === team && x.kind === 'debate'))
+    rv.cards.push({ kind: 'debate', team, ref: 'chair-81', who: def.boss.name, amount: 0, district: null, ask: null, until: b.day + DOMINION_DATA.rivals.cards.days });
+  return fill(T().early!, { boss: def.boss.name });
+});
 
 /** After the rival step: the Branches' nights. */
 addWorldStep('rivals', branchStep);
