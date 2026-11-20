@@ -6,11 +6,10 @@
 // core/dominion/debateScreens.ts; the scene's DebateController keeps the cursor.
 
 import './dominion.css';
-import './debate.css';
 import type { DebateModel } from '../../../../core/dominion/debateScreens';
 import { act, esc } from '../../kit';
 import { rxUrl } from '../../assets';
-import { stage } from './views';
+import { stage, WHEEL_KEY } from './views';
 
 const img = (f: string): string => rxUrl(`dominion/${f}.png`);
 const signed = (n: number): string => `${n > 0 ? '+' : n < 0 ? '−' : '±'}${Math.abs(n)}`;
@@ -40,7 +39,7 @@ export function debateView(m: DebateModel): string {
   <div class="layer" style="background:radial-gradient(460px 320px at 150px 150px,rgba(123,63,160,.55),transparent 70%),radial-gradient(460px 320px at 810px 150px,rgba(200,40,40,.45),transparent 70%)"></div>
   <div class="a" style="left:-20px;top:284px;width:1000px;height:280px;z-index:1;background:repeating-linear-gradient(90deg,#4a2c18 0 120px,#42271450 120px 122px,#55331d 122px 240px),linear-gradient(180deg,#5a3720,#2e1b0e);border-top:6px solid #e3b955;box-shadow:0 -3px 0 #7a5208,0 -16px 30px rgba(0,0,0,.5)"></div>
   <div class="ttl" style="--t1:#1f8f86;--t2:#2bb3a5" data-testid="dom-debate-title">The Debate <span class="sub">· vs. ${esc(m.boss)}</span></div>
-  <div class="keys"><span class="key">Round ${esc(m.round.num)}</span><span data-testid="dom-debate-round">${esc(m.round.name)}</span><span class="key">${m.turn}/${m.turns}</span><span class="key"${act('back')} style="cursor:pointer">Esc</span><span>Walk out</span></div>
+  <div class="keys">${WHEEL_KEY}<span class="key">Round ${esc(m.round.num)}</span><span data-testid="dom-debate-round">${esc(m.round.name)}</span><span class="key">${m.turn}/${m.turns}</span><span class="key"${act('back')} style="cursor:pointer">Esc</span><span>Walk out</span></div>
   <div class="cone" style="left:24px;top:-30px;width:300px;height:330px;z-index:2;--cc:rgba(190,140,255,.38)"></div>
   <div class="cone" style="left:636px;top:-30px;width:300px;height:330px;z-index:2;--cc:rgba(255,120,110,.34)"></div>
   <div class="pool flick" style="left:330px;top:250px;width:300px;height:110px;z-index:2;--pc:rgba(255,200,110,.45)"></div>
@@ -83,9 +82,8 @@ export function debateView(m: DebateModel): string {
   <div class="edgeglow" aria-hidden="true" style="--eg:#ff8a8a"></div>
   <div class="orn" aria-hidden="true"></div>
   <div class="rays turn finale" aria-hidden="true" style="left:${Math.round(24 + (912 * at(c)) / 100) - 176}px;top:116px;width:352px;height:352px;--rc:rgba(255,215,90,.30)"></div>
-  <div class="sig4 l" aria-hidden="true"></div><div class="vl4" aria-hidden="true"></div>
   ${results}
-  ${m.notice ? `<div class="a" style="left:330px;width:300px;top:86px;z-index:60;background:rgba(10,14,30,.94);border:2px solid #8cc0ff;border-radius:8px;padding:8px 10px;font-size:14px;line-height:1.3"${act('dismiss')} data-testid="dom-notice">${esc(m.notice)}</div>` : ''}`, 'background:#140f1e', 'kl-red vign grain');
+  ${m.notice ? `<div class="a" style="left:330px;width:300px;top:86px;z-index:60;background:rgba(10,14,30,.94);border:2px solid #8cc0ff;border-radius:8px;padding:8px 10px;font-size:14px;line-height:1.3"${act('dismiss')} data-testid="dom-notice">${esc(m.notice)}</div>` : ''}`, 'background:#140f1e', 'kl-red vign grain', 'l');
 }
 
 /** The end of the Debate: the result's banner, what it does, and the Convinced choice (Merger or a loyal Branch). */

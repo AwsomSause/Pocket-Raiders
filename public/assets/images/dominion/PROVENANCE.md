@@ -74,6 +74,15 @@ Copied from the round-4 mockups (`plans/evil-mode-rework/mockups-v4/sprites/`), 
 | `v-giovanni.png` | D13: Giovanni's side of the Debate (mockup 8), same source |
 | `p-persian.png` | D13: Giovanni's Persian at the Debate table (mockup 8), Pokémon sprite from the PokeRogue pack via the round-4 mockup sprites |
 
+## D24 (police questioning, Rotom mockups a8 + a9)
+
+| File | From |
+| --- | --- |
+| `t-off2.png` | Trainer sprite from the PokeRogue pack (`images/trainer/`), one frame, the interview room's officer; copied from `plans/claude-api/mockups/sprites/` |
+| `t-looker.png` | Trainer sprite from the PokeRogue pack (`images/trainer/`), one frame, Looker behind the one-way mirror; copied from `plans/claude-api/mockups/sprites/` |
+| `g-tape.png` | Item icon from `images/items/` (PokeRogue pack), the tape recorder on the table; copied from `plans/claude-api/mockups/sprites/` |
+| `g-policekey.png` | Item icon from `images/items/` (PokeRogue pack), the "What it cost" panel; copied from `plans/claude-api/mockups/sprites/` |
+
 ## Slice D21 (the applications desk, Rotom mockup k5)
 
 Copied from the round-4 mockups (`plans/evil-mode-rework/mockups-v4/sprites/`, PR #1496), which cut them from art already in this repo (director's packs: PokeRogue, AGPL-3.0, Nintendo material):

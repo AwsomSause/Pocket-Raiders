@@ -45,6 +45,8 @@ const ZERO = (): HqFx => ({
   intel: 0, spyCatch: 0, cipher: 0, raidDef: 0, warn: 0, fireCut: 0, truceOff: 0,
   // D13 (debate.ts)
   debate: 0, debateFloor: 0, debateSee: 0,
+  // D10 (growth.ts)
+  contact: 0, routes: 0, papers: 0, flyerPct: 0, interest: 0, fence: 0,
 });
 
 /** Everything the working rooms and buildings add, in one place. Percentages are capped at 90. */
