@@ -26,6 +26,7 @@ import { autoFill, book, placeMon, reserveInRun, seedStart, withReserve } from '
 import { build, letGo, loan, rebuild, repay, sell, storageCap, tierUp, upgrade, launder, type HqOut } from './hq';
 import { withHq } from './hqFx';
 import { levelCap } from '../regions';
+import './voices';
 import { answerCard, breakTruce, maybeStreet, noteTop, ransom, startTruce, withRivals, type RivalOut } from './rivals';
 import { answerQ, noteAct, releasedSeen, releaseQ, returnHeld } from './police';
 import './growth';

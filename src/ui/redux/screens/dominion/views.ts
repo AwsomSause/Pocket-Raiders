@@ -123,7 +123,7 @@ export interface SetupFiles {
 
 const typeChip = (t: string, extra = ''): string => `<span class="type" style="--c:${TYPE_COLORS[cap(t)] ?? '#888'};${extra}">${cap(t).toUpperCase()}</span>`;
 
-function warehouseBack(morning = false): string {
+export function warehouseBack(morning = false): string {
   return `<img class="cv" src="${warehouseUrl(morning)}" alt="" style="position:absolute;inset:0;width:960px;height:540px">
   <div class="rain" style="left:40px;top:192px;width:268px;height:176px;right:auto;bottom:auto;opacity:.9"></div>
   <div class="rain" style="left:304px;top:16px;width:376px;height:62px;right:auto;bottom:auto"></div>`;
@@ -208,7 +208,7 @@ export function threatView(t: Threat | null, left: number, top: number, width: n
 }
 
 /** `desk`: applicants waiting at the D21 desk today (null while it's closed). */
-export function hqView(m: HqModel, notice: string | null, at: number, member: { look: string; atlas: boolean }, threat: Threat | null = null, desk: number | null = null): string {
+export function hqView(m: HqModel, notice: string | null, at: number, member: { look: string; atlas: boolean }, threat: Threat | null = null, desk: number | null = null, paper: string | null = null): string {
   const sel = 'background:linear-gradient(90deg,#3a5a9e,#2a3f72);border-radius:6px;padding:5px 8px;box-shadow:0 0 0 2px #8cc0ff,0 0 14px rgba(79,163,255,.45)';
   let left = '';
   if (m.panel === 'orders') {
@@ -265,6 +265,7 @@ export function hqView(m: HqModel, notice: string | null, at: number, member: { 
   ${tabs(0, [0, 1, 2, 3, 5])}
   <div class="a" style="left:330px;top:96px;width:300px;height:360px;z-index:3;cursor:pointer"${act('base')} data-testid="dom-building"></div>
   <div class="a row" style="left:540px;top:92px;z-index:9;gap:6px;font:600 13px var(--ui);color:#dfe5ff;cursor:pointer"${act('base')} data-testid="dom-hq-open"><span class="kc">B</span>HQ menu</div>
+  <div class="a row" style="left:418px;top:118px;z-index:9;gap:6px;font:600 13px var(--ui);color:#dfe5ff;cursor:pointer;white-space:nowrap"${act('voicesOpen')} data-testid="dom-voices-open"${paper ? ` title="${esc(paper)}"` : ''}><span class="kc">V</span>Crew talk${paper ? ' · <b class="y">NEW LEDGER</b>' : ''}</div>
   <div class="a row" style="left:418px;top:92px;z-index:9;gap:6px;font:600 13px var(--ui);color:#dfe5ff;cursor:pointer"${act('rivalFile')} data-testid="dom-rival-open"><span class="kc">R</span>Rivals</div>
   ${m.panel === 'report' ? '' : threatView(threat, 10, 336, 330)}
   <div class="ping" style="left:120px;top:400px;width:40px;height:14px;--pc:rgba(160,200,255,.7)"></div>

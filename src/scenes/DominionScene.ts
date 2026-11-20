@@ -23,6 +23,8 @@ import { waiting as deskWaiting, deskOpen } from '../core/dominion/desk';
 import { HqController } from './dominion/hqController';
 import { RivalController } from './dominion/rivalController';
 import { PoliceController } from './dominion/policeController';
+import { VoicesController } from './dominion/voicesController';
+import { paperNote } from '../core/dominion/voices';
 import { threatRow } from '../core/dominion/rivalScreens';
 import { cardModel, gridPages, mapModel, newCursor, pageFor, type MapCursor } from '../core/dominion/fieldScreens';
 import { cardView, mapView } from '../ui/redux/screens/dominion/fieldViews';
@@ -78,6 +80,8 @@ export class DominionScene extends Phaser.Scene {
   private police = new PoliceController(this);
   /** D21: the applications desk (Rotom mockup k5). */
   private desk = new DeskController(this);
+  /** D25: the Evening voices scene (mockup a10), an overlay on the HQ. */
+  private voices = new VoicesController({ refresh: () => this.view?.refresh(), onHq: () => this.screen === 'hq' && !this.crew.owns() && !this.police.owns() && !this.block()?.crew?.talks.length });
 
   constructor() {
     super('Dominion');
@@ -98,6 +102,7 @@ export class DominionScene extends Phaser.Scene {
     this.rival = new RivalController(this);
     this.police = new PoliceController(this);
     this.desk = new DeskController(this);
+    this.voices.close();
     const { session } = services();
     const run = session.run;
     if (!run) return void this.scene.start('MainMenu');
@@ -184,6 +189,7 @@ export class DominionScene extends Phaser.Scene {
         ...this.hq.acts(),
         ...this.rival.acts(),
         ...this.police.acts(),
+        ...this.voices.acts(),
         base: () => { this.hq.open(); this.view?.refresh(); },
         ...this.desk.acts(),
         desk: () => this.desk.open(),
@@ -211,6 +217,7 @@ export class DominionScene extends Phaser.Scene {
         this.desk.raw(e);
         return;
       }
+      if (this.voices.raw(e.code)) return void (this.ate = MOVE_LETTERS.has(e.code));
       if (this.heroRaw(e.code)) return;
       if (this.screen === 'ledger') {
         if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
@@ -294,6 +301,7 @@ export class DominionScene extends Phaser.Scene {
   private render(): string {
     const b = this.block();
     if (b && this.inRun() && this.police.owns()) return this.police.render();
+    if (this.voices.on && this.screen === 'hq') return this.voices.render();
     switch (this.screen) {
       case 'title':
         return titleView({ at: this.titleAt, started: !!b, cont: b ? `${b.teamName ?? 'Unnamed Crew'} · Kanto · Day ${b.day}` : null, colours: b ? teamColours(b) : null });
@@ -310,7 +318,7 @@ export class DominionScene extends Phaser.Scene {
         return openingView(b ? openingLines(b) : [], this.shown, this.memberLook());
       case 'hq':
         if (b && this.crew.owns()) return this.crew.render(this.notice);
-        return b ? hqView(hqModel(b), this.notice, this.at, this.memberLook(), threatRow(b), deskOpen(b) ? deskWaiting(b) : null) : '';
+        return b ? hqView(hqModel(b), this.notice, this.at, this.memberLook(), threatRow(b), deskOpen(b) ? deskWaiting(b) : null, paperNote(b)) : '';
       case 'map':
         return b && this.cursor ? mapView(mapModel(b, services().session.run!, this.cursor), this.notice, this.garage) : '';
       case 'card': {
@@ -506,6 +514,7 @@ export class DominionScene extends Phaser.Scene {
     if (this.leaving) return;
     if (this.inRun() && this.police.key(a)) return void this.view?.refresh();
     if (this.screen === 'founding') return this.foundingKey(a);
+    if (this.voices.key(a)) return void this.view?.refresh();
     if (this.screen === 'interrupt') {
       if (a === 'left' || a === 'up') this.intAt = (this.intAt + 2) % 3;
       else if (a === 'right' || a === 'down') this.intAt = (this.intAt + 1) % 3;

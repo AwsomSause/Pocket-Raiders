@@ -1,6 +1,8 @@
 // DOMINION slice D3 view models: the Morning (mockup 2) and the Crew File (mockup 5), the hire list, the leads and the
 // talk card. Plain data for ui/redux/screens/dominion/crew.ts. Pure: no Phaser, no RNG beyond reading today's hire list.
 
+import type { AiLog } from '../ai/schema';
+import { lastRotomFor } from './voices';
 import { teamColours, type TeamColours } from './founding';
 import { crewOf, familyOf, memberLine, odds, rankN, rankWord, taskById, taskLevel, taskLevelWord, traitName, withCrew, xpToNext, cantTake, formedById, greenById, gruntType } from './crew';
 import { DOMINION_DATA } from './data';
@@ -250,7 +252,7 @@ export interface PersonaModel {
   others: { name: string; look: string; traits: string }[];
 }
 
-export function personaModel(block: DominionBlock, sel: number, seed: string): PersonaModel {
+export function personaModel(block: DominionBlock, sel: number, seed: string, log?: AiLog): PersonaModel {
   const b = withCrew(block);
   const i = Math.min(sel, b.members.length - 1);
   const m = b.members[i]!;
@@ -268,7 +270,7 @@ export function personaModel(block: DominionBlock, sel: number, seed: string): P
     quirk: s.quirk.text, want: s.want, fear: s.fear, home: s.home,
     memory: c.memory.slice(-3),
     offline: cardLine(card, lineKind(payDay && !m.unpaid ? 'pay' : c.last), b.day),
-    rotom: null,
+    rotom: lastRotomFor(log, m.id),
     rotomOff: P.rotom.off,
     note: P.rotom.note.replace('{name}', m.name),
     others: b.members.filter((x) => x.id !== m.id).slice(0, 2).map((x) => ({ name: x.name, look: x.look, traits: traitWords(cardFor(seed, x)) })),

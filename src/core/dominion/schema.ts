@@ -319,6 +319,8 @@ const BlockSchema = z.object({
   hero: z.lazy(() => HeroStateSchema).optional(),
   /** D21: the applications desk (today's queue, the basement, who got in and what they really are). Optional; no bump. */
   desk: z.lazy(() => DeskStateSchema).optional(),
+  /** D25: this week's news lines and the last few Ledger papers. Optional; `voicesOf` (voices.ts) fills it. */
+  voices: z.lazy(() => VoicesStateSchema).optional(),
 }).strict();
 export const DominionBlockSchema = z.preprocess(migrateDominion, BlockSchema);
 export type DominionBlock = z.infer<typeof BlockSchema>;
@@ -1546,6 +1548,24 @@ export const DeskStateSchema = z.object({
   log: z.array(z.object({ day: I.min(1), name: S, truth: z.enum(TRUTHS), great: z.boolean(), verdict: z.enum(VERDICTS) }).strict()),
 }).strict();
 export type DeskState = z.infer<typeof DeskStateSchema>;
+// ---------- D25: chatter and news (the save block's `voices`; optional, no block bump) ----------
+
+export const NEWS_KINDS = ['hero', 'police', 'rivals', 'legends', 'crew'] as const;
+export type NewsKind = (typeof NEWS_KINDS)[number];
+export const PaperSchema = z.object({
+  /** Week number (day / 7) and the morning it came out. */
+  w: I.min(1), day: I.min(1),
+  items: z.array(z.object({ k: z.enum([...NEWS_KINDS, 'quiet']), head: S, body: z.array(S).min(1) }).strict()).min(1).max(2),
+  photo: z.object({ text: S, look: S }).strict().nullable(),
+}).strict();
+export type Paper = z.infer<typeof PaperSchema>;
+export const VoicesStateSchema = z.object({
+  /** This week's report lines worth printing (police, rivals, Hero, Legendaries, a traitor leaving). */
+  week: z.array(z.object({ k: z.enum(NEWS_KINDS), d: I.min(1), l: S }).strict()),
+  /** The newest papers, oldest first (voices.json news.keep). */
+  papers: z.array(PaperSchema),
+}).strict();
+export type VoicesState = z.infer<typeof VoicesStateSchema>;
 // ---------- D7: the Founding and team colours (founding.json, armbands.json, block `team`) ----------
 
 const HEX = z.string().regex(/^#[0-9a-f]{6}$/);
