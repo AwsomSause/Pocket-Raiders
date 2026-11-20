@@ -24,6 +24,7 @@ import {
 import { addPart, growthOf, ownedGyms } from './growth';
 import { callFinalStand } from './hero';
 import { setChairOwed } from './chair';
+import { setSquadCause } from './squads';
 import { addClean } from './hqFx';
 import { makeLead } from './recruit';
 import { addTension, learnPlan, rivalsOf, teamsHere } from './rivals';
@@ -852,6 +853,18 @@ setChairOwed('wipe', (b, n) => {
   if (!team || n <= 0) return;
   const rt = (b.rivals ??= rivalsOf(b)).teams[team.id]!;
   for (const site of team.sites.filter((x) => !x.hq && (rt.sites[x.id] ?? 'theirs') === 'theirs').slice(0, n)) rt.sites[site.id] = 'yours';
+});
+
+// ---------- D8's The Cause (squads.ts): Goal-track jobs and a weekly push ----------
+
+setSquadCause({
+  /** A Boss action whose section the Goal grows by. */
+  fits: (b, actionId) => {
+    const g = goalOf(b), def = DOMINION_DATA.actions.actions.find((a) => a.id === actionId);
+    return !!g && !!def && (g.sections[def.section] ?? 0) > 0;
+  },
+  track: (b) => (goalOf(b) ? peek(b).goal.track : null),
+  feed: (b, n) => gainTrack(b, n),
 });
 
 // ---------- crew tasks of kind 'takeover' (AQ and section M) ----------

@@ -1999,6 +1999,8 @@ export const SquadSchema = z.object({
   leaderRank: S,
   /** Punishments counted so far, by member (one in front of the squad costs Cohesion). */
   punished: z.record(S, N0),
+  /** D14 The Cause: the Goal Track at the last wage day and the weeks it has stalled since. */
+  cause: z.object({ track: z.number().min(0).max(100), weeks: N0 }).strict().optional(),
   /** The squad's own Ledger page (Part 10 §1 Record). */
   record: z.object({
     jobs: N0, wins: N0, losses: N0, hurt: N0,

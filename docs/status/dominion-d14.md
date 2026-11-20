@@ -21,8 +21,8 @@
   - Fights come back to the Takeover page; a chain's next fight waits on Enter (also on the map for League fights started from the Card).
 
 ## Hand-offs from other slices
-- Done here: the Chair's owed numbers (D12) now move for real: Goal = Goal Track ±n, Shadow = Regard ±2 a point in every town, Wipe Out = one rival site (not the HQ) per point. Card 82 (the deserter Admin's HQ plans) is live (Chair: 114 of 150). Card 129's Uprising checks are relabelled D15 (uprisings come with Stability). Storming Rocket's HQ hands over the Viridian Gym (growth.json: "it falls when Rocket falls").
-- Still waiting (named here so nothing is lost): D8's Cause incentive for squads; buildings Panic Room and Escape Tunnel (Boss capture and raid retreat) and Throne Room (Monarch's "Rule from the Throne"); the Boss's own escort (Guard Post note); the Debate's "Pursue their Goal too" stance being broken by a Goal. These touch D8/D5/D13 code and are the next follow-up.
+- Done here: the Chair's owed numbers (D12) now move for real: Goal = Goal Track ±n, Shadow = Regard ±2 a point in every town, Wipe Out = one rival site (not the HQ) per point. Card 82 (the deserter Admin's HQ plans) is live (Chair: 114 of 150). Card 129's Uprising checks are relabelled D15 (uprisings come with Stability). Storming Rocket's HQ hands over the Viridian Gym (growth.json: "it falls when Rocket falls"). D8's **The Cause** incentive is live: a Cause squad adds +10 odds on Goal work (actions in the Goal's sections and `takeover` tasks), pushes the Goal Track +1 a week, and if nothing else moves the Track for two weeks its members lose 5 Morale a week (numbers in `squads.json`).
+- Still waiting (named here so nothing is lost): buildings Panic Room and Escape Tunnel (Boss capture and raid retreat) and Throne Room (Monarch's "Rule from the Throne"); the Boss's own escort (Guard Post note); the Debate's "Pursue their Goal too" stance being broken by a Goal. These touch D5/D13 code and are the next follow-up.
 
 ## Limited (honest list)
 - Holdings marked limited name what's simplified in their note (battle-only bonuses like type damage, shop prices, fast travel, legendary rumours wait for D15/D17).
@@ -34,6 +34,7 @@ No version bump: `block.takeover` is optional and made on first need (tested wit
 
 ## Tests
 - `tests/unit/dominionTakeover.test.ts` (19): data and statuses, every line written and no "Claude"/"AI" in game text, paths (Wipe Out to Taken, broadcast queued), Plan points on the stand, Goal Track feeding and Turning Points, the Moment won and lost, Cost strike, Holdings (buy, seize over days, every refusal), broadcast once, saves old and new, damaged block fails, determinism.
+- `dominionSquads`: The Cause (odds part, weekly push, stall Morale).
 - Updated counts in `dominionField`, `dominionEmpire`, `dominionGrowth` (more actions play).
 - `tests/e2e/dominionTakeover.spec.ts`: K opens s9, Turning Point, Holdings buy, broadcast shown and skipped, three window sizes, the Moment starts a trainer battle; no console errors.
 
