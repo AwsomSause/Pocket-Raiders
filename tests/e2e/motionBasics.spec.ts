@@ -67,11 +67,31 @@ test('send-out, faint and recall play like the mockups and leave the sprites as 
   const foeRest = await look(page, 'enemy');
 
   // Faint: the foe staggers away from you, then sinks into the ground at its feet and its base goes dark.
+  // Every frame is checked in the page (a slow machine's polls can fall between the short sink and the end).
+  await page.evaluate(() => {
+    const w = window as any;
+    const b = w.__pkr.game.scene.getScene('Battle');
+    w.__faint = { away: 0, sunk: false, shade: false };
+    w.__faintWatch = () => {
+      const v = b.enemySprite;
+      if (!v?.active) return;
+      w.__faint.away = Math.max(w.__faint.away, v.x - b.spotXY('enemy').x);
+      if (v.isCropped) {
+        w.__faint.sunk = true;
+        w.__faint.shade ||= Boolean(b.baseShade.enemy?.active);
+      }
+    };
+    b.events.on('update', w.__faintWatch);
+  });
   await start(page, `b.faintMoment('enemy', b.enemySprite)`);
-  await expect.poll(async () => (await look(page, 'enemy')).x, { timeout: 3000 }).toBeGreaterThan(foeRest.x + 6);
-  await expect.poll(async () => (await look(page, 'enemy')).cropped, { timeout: 4000 }).toBe(true);
-  expect((await look(page, 'enemy')).shade).toBe(true);
   await expect.poll(() => over(page), { timeout: 5000 }).toBe(true);
+  const faint = await page.evaluate(() => {
+    const w = window as any;
+    w.__pkr.game.scene.getScene('Battle').events.off('update', w.__faintWatch);
+    return w.__faint;
+  });
+  expect(faint.away).toBeGreaterThan(6);
+  expect(faint).toMatchObject({ sunk: true, shade: true });
   expect(await page.evaluate(() => (window as any).__ms)).toBeGreaterThan(900);
   // Afterwards it is hidden but otherwise as it stood (a revive only has to show it again).
   expect(await look(page, 'enemy')).toMatchObject({ x: foeRest.x, y: foeRest.y, alpha: 0, sx: foeRest.sx, angle: 0, cropped: false, shade: true });
