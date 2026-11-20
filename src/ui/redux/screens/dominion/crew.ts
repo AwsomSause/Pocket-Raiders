@@ -14,10 +14,10 @@ const ALERT: Record<string, [string, string, string]> = {
   crew: ['g', 'g-card-key', 'CREW'], money: ['y', 'g-relic-gold', 'FRONTS'], rival: ['r', 'g-meteorite', 'RIVALS'],
   police: ['b', 'g-silph-scope', 'POLICE'], hero: ['v', 'g-comet-shard', 'HERO'], world: ['b', 'g-journal', 'NEWS'],
 };
-export const OPEN_TABS = [0, 1, 2, 5] as const;
+export const OPEN_TABS = [0, 1, 2, 3, 5] as const;
 
 /** A member's picture: a plain png (Rook's) or a trainer atlas, cropped into a box. */
-function face(look: string, h: number, style: string): string {
+export function face(look: string, h: number, style: string): string {
   return look.endsWith('.png')
     ? `<img class="px" src="${rxUrl(look)}" alt="" style="${style}">`
     : `<div style="${style};display:flex;align-items:flex-end;justify-content:center;overflow:hidden">${tall(look, h)}</div>`;
@@ -38,7 +38,8 @@ export function talkCard(t: TalkModel, at: number): string {
 
 export function morningView(m: MorningModel, notice: string | null, talkAt: number): string {
   const alerts = m.alerts.map((a) => {
-    const [cls, ic, t] = ALERT[a.kind] ?? ALERT.world!;
+    const [cls, ic, t0] = ALERT[a.kind] ?? ALERT.world!;
+    const t = a.kind === 'rival' ? esc(m.rivalTag) : t0;
     return `<div class="al ${cls}"><img class="ic" src="${img(ic)}" alt=""><div><span class="t">${t}</span><span class="xs dm" style="float:right;margin-left:6px">${esc(a.time)}</span>${esc(a.text)}</div></div>`;
   }).join('') || '<div class="mu sm">A quiet night.</div>';
   const rows = m.tasks.map((t, i) => {
@@ -66,7 +67,7 @@ export function morningView(m: MorningModel, notice: string | null, talkAt: numb
     <div class="hd"><img class="ic" src="${img('g-xtransceiver')}" alt="">MORNING REPORT<span class="r">overnight</span></div>
     <div class="col" style="gap:7px;max-height:290px;overflow:hidden">${alerts}</div>
     ${m.more ? `<div class="xs mu" style="margin-top:4px">+${m.more} more in the Ledger</div>` : ''}
-    <div class="row" style="position:absolute;left:0;right:0;bottom:12px;justify-content:center;gap:10px;color:${m.badge.hot ? 'var(--red)' : '#9fe0b4'};font-weight:700">⚠ <span class="${m.badge.hot ? 'pulse' : ''}" style="display:inline-block;border:2px solid ${m.badge.hot ? 'var(--red)' : '#43cf78'};border-radius:6px;padding:2px 10px;box-shadow:0 0 12px ${m.badge.hot ? 'rgba(255,90,79,.4)' : 'rgba(67,207,120,.3)'}" data-testid="dom-badge">${esc(m.badge.label)}: ${esc(m.badge.word)}</span> ⚠</div>
+    <div class="row" style="position:absolute;left:0;right:0;bottom:12px;justify-content:center;gap:10px;color:${m.badge.hot ? 'var(--red)' : '#9fe0b4'};font-weight:700">⚠ <span class="${m.badge.hot ? 'pulse' : ''}" style="display:inline-block;border:2px solid ${m.badge.hot ? 'var(--red)' : '#43cf78'};border-radius:6px;padding:2px 10px;cursor:pointer;box-shadow:0 0 12px ${m.badge.hot ? 'rgba(255,90,79,.4)' : 'rgba(67,207,120,.3)'}"${act('rivalFile')} title="Rival File (R)" data-testid="dom-badge">${esc(m.badge.label)}: ${esc(m.badge.word)}</span> ⚠</div>
   </div>
   <div class="pnl glass" style="left:350px;top:86px;width:276px;height:308px" data-testid="dom-assign">
     <div class="hd"><img class="ic" src="${img('g-letter')}" alt="">ASSIGN TASK${m.where ? `<span class="r" style="white-space:nowrap"${act('crewWhere')} data-testid="dom-where"><b class="y">${esc(m.where)}</b> <span class="kc" style="font-size:11px;padding:0 4px">P</span></span>` : `<span class="r">${esc(m.strip.find((s) => s.sel)?.name ?? '')}</span>`}</div>
@@ -129,7 +130,7 @@ export function fileView(f: FileModel, monFile: (species: string) => string | nu
     : `<div class="row" style="gap:8px;margin-top:9px;opacity:.7"><span class="pill b" style="opacity:.6">?</span><span class="xs mu">${esc(f.second)}</span></div>`;
   const team = f.team.map((t) => {
     const file = monFile(t.species);
-    return `<div class="col" style="align-items:center">${file ? mini(file, 44) : ''}<span class="xs">${esc(monName(t.species))} <b class="y">${t.level}</b></span></div>`;
+    return `<div class="col" style="align-items:center;${t.dim ? 'opacity:.45;filter:grayscale(.8)' : ''}" title="${t.dim ? 'Over a cap: sits out' : ''}">${file ? mini(file, 44) : ''}<span class="xs">${esc(monName(t.species))} <b class="y">${t.level}</b></span></div>`;
   }).join('');
   const keys = f.keys.map((k) => `<span class="kc">${esc(k.key)}</span><span class="dm" style="margin-right:6px">${esc(k.label)}</span>`).join('');
   return stage(`<div class="layer" style="background:radial-gradient(420px 380px at 150px 300px,rgba(140,80,220,.45),transparent 70%)"></div>
@@ -202,7 +203,7 @@ export function leadsOverlay(m: { rows: LeadRow[]; actions: number; phase: strin
   const l = m.rows[at];
   const list = m.rows.map((r, i) => `<div class="row sp" style="padding:4px 8px;border-radius:6px;${i === at ? 'background:linear-gradient(90deg,#3a5a9e,#2a3f72);box-shadow:0 0 0 2px #8cc0ff' : 'background:#2b375a'}"${act('lead', i)} data-over="pickOver" data-testid="dom-lead-${i}"><span>${esc(r.name)} <span class="xs mu">${esc(r.cls)}</span></span><span class="xs ${r.waiting ? 'gn' : 'mu'}">${r.waiting ? 'waiting' : `${r.days}d`}</span></div>`).join('');
   const file = l ? `<div class="row" style="gap:10px;align-items:flex-end">${face(l.look, 110, 'width:80px;height:110px')}<div class="col sm" style="gap:3px;line-height:1.3">
-      <b style="font-size:18px">${esc(l.name)}</b><span>${esc(l.cls)}</span><span>Wants: <b class="gn">${esc(l.motive)}</b></span><span>Hates: <b class="rd">${esc(l.hates)}</b></span><span class="xs"><span class="pill r" style="font-size:11px;padding:1px 6px">${esc(l.green)}</span></span>${l.role ? `<span class="xs y">${esc(l.role)}</span>` : ''}</div></div>
+      <b style="font-size:18px">${esc(l.name)}</b><span>${esc(l.cls)}</span><span>Wants: <b class="gn">${esc(l.motive)}</b></span><span>Hates: <b class="rd">${esc(l.hates)}</b></span><span class="xs"><span class="pill r" style="font-size:11px;padding:1px 6px">${esc(l.green)}</span>${l.traits ? ` <b class="vi" data-testid="dom-lead-traits">${esc(l.traits)}</b>` : ''}</span>${l.role ? `<span class="xs y">${esc(l.role)}</span>` : ''}</div></div>
     ${l.waiting
       ? `<div class="sm gn" style="margin-top:10px">Said yes. Waiting for room at the HQ (${l.days} days left).</div><div class="cta" style="position:relative;margin-top:8px;font-size:16px;padding:6px 12px"${act('admit')} data-testid="dom-admit">Make room: let them in ▶</div>`
       : `<div class="col" style="gap:4px;margin-top:10px">${l.odds.map((o, i) => `<div class="row sp" style="padding:3px 8px;border-radius:6px;${i === pitch ? 'background:linear-gradient(90deg,#5a3a9e,#3a2a72);box-shadow:0 0 0 2px #c9a6ff' : 'background:#2b375a'}"${act('pitch', i)} data-testid="dom-pitch-${o.id}"><span>${esc(o.name)}</span><b class="${o.odds >= 60 ? 'gn' : o.odds >= 35 ? 'y' : 'rd'}">${o.odds}%</b></div>`).join('')}</div>

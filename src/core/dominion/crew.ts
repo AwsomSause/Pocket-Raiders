@@ -6,6 +6,7 @@
 
 import { hashSeed, Rng } from '../rng';
 import { DOMINION_DATA } from './data';
+import { fillCards, sheet, voice } from './personality';
 import type { Alert, CrewState, DominionBlock, Member, MemberCrew, Mods, StatId, Talk, TalkChoice, Task, Treat } from './schema';
 import { STAT_IDS } from './schema';
 import { addWorldStep, fill } from './worldTurn';
@@ -85,6 +86,9 @@ export function modsOf(b: DominionBlock, m: Member): Mods[] {
     const f = formedById(id);
     if (f?.live) out.push(f.mods);
   }
+  // D19: the personality card's two traits are live rules too.
+  const card = mc(m).card;
+  if (card) for (const t of sheet(card).traits) for (const e of t.effects) if (e.mods && !e.needs) out.push(e.mods);
   for (const p of C().patrons) if (p.live && cs(b).patrons[p.id]?.state === 'won') out.push(p.mods);
   return out;
 }
@@ -111,7 +115,7 @@ const TASK_WORDS = ['Green', 'Steady', 'Reliable', 'Veteran', 'Master'];
 export const taskLevelWord = (lv: number): string => TASK_WORDS[lv - 1] ?? 'Green';
 
 /** Adds member XP; returns the report lines for levels gained. */
-function addXp(m: Member, xp: number, lines: string[]): void {
+export function addXp(m: Member, xp: number, lines: string[]): void {
   const c = mc(m);
   c.xp += xp;
   while (m.level < R().maxLevel && c.xp >= xpToNext(m.level)) {
@@ -182,6 +186,7 @@ export function odds(b: DominionBlock, m: Member, task: Task): number {
   if (c.green === 'nervous' && !c.formed.length && !c.flags.includes('nervous-fading') && task.stat === 'nerve') p -= r.nervousPenalty;
   if (m.morale < r.lowMorale) p -= r.lowMoralePenalty;
   if (c.fatigue >= r.tiredAt) p -= r.tiredPenalty;
+  for (const h of ODDS_HOOKS) p += h(b, m, task);
   return clamp(p, r.oddsMin, r.oddsMax);
 }
 
@@ -215,6 +220,13 @@ function runTask(b: DominionBlock, m: Member, seed: string, n: Night): void {
   const c = mc(m);
   const rep = C().report;
   const r = rng(seed, 'dominion-crew', b.day, m.id);
+  if (c.out?.why === 'held') {
+    // D9: a rival team is holding them; rivals.ts frees them (rescue, ransom or time).
+    say(n, 'crew', fill(rep.out!, { name: m.name, why: 'held by a rival team' }));
+    c.last = 'none';
+    c.worked = 0;
+    return;
+  }
   if (c.out) {
     // Hurt or in a cell: no task; the days count down (a Nurse or a Field Medic heals a day sooner).
     const medic = c.out.why === 'hurt' && (b.members.some((x) => x.id !== m.id && mc(x).role === 'nurse' && !mc(x).out) || b.members.some((x) => modsOfMember(x).some((y) => y.medic)));
@@ -300,7 +312,7 @@ function runTask(b: DominionBlock, m: Member, seed: string, n: Night): void {
         const pool = pools(b).steal;
         const species = pool[r.int(0, pool.length - 1)]!;
         const level = Math.min(b.levelCap, r.int(R().stealLevel[0], R().stealLevel[1]));
-        cs(b).pending.push({ k: 'mon', species, level });
+        cs(b).pending.push({ k: 'mon', species, level, by: m.id, src: 'stolen', self: b.reserve?.hunt[m.id] === 'self' });
         b.heat = clamp(b.heat + (e.heat ?? 0) + heatMod);
         c.pHeat = clamp(c.pHeat + (e.heat ?? 0));
         say(n, 'crew', fill(rep.steal!, { name: m.name, mon: monName(species), level }));
@@ -312,7 +324,7 @@ function runTask(b: DominionBlock, m: Member, seed: string, n: Night): void {
         const pool = pools(b).catch;
         const species = pool[r.int(0, pool.length - 1)]!;
         const level = Math.min(b.levelCap, r.int(R().catchLevel[0], R().catchLevel[1]) + (lv >= 2 ? 1 : 0) + (lv >= 4 ? 2 : 0));
-        cs(b).pending.push({ k: 'mon', species, level });
+        cs(b).pending.push({ k: 'mon', species, level, by: m.id, src: 'caught', self: b.reserve?.hunt[m.id] === 'self' });
         say(n, 'crew', fill(rep.catch!, { name: m.name, mon: monName(species), level }));
       } else say(n, 'crew', fill(rep.fail!, { name: m.name, task: label }));
       break;
@@ -450,6 +462,12 @@ function runTask(b: DominionBlock, m: Member, seed: string, n: Night): void {
       if (!ok) caughtOrFail(b, m, label, e.risky ?? false, e.caughtHeat, e.fine, r, n);
       break;
     }
+    default: {
+      // D4 and later: kinds another module runs (reserve.ts the Pens and the Reserve, rivals.ts the rival tasks).
+      const run = TASK_KINDS[e.kind];
+      if (run) run(b, m, ok, { say: (k, t) => say(n, k, t), label, task, stat, yieldPct, r, lv });
+      else say(n, 'crew', fill(rep.fail!, { name: m.name, task: label }));
+    }
   }
   // After the task: XP, task XP, Fatigue (A18), Thrill.
   addXp(m, xp, n.lines);
@@ -509,12 +527,25 @@ let HERO_TASK: HeroTask | null = null;
 export function setHeroTask(f: HeroTask): void {
   HERO_TASK = f;
 }
+/** A task kind run by another module (D4's Pens and Reserve tasks, D9's rival tasks). `ok` is the task's odds roll; `r` is the member's crew stream. */
+export interface TaskCtx { say: (kind: Alert['kind'], text: string) => void; label: string; task: Task; stat: number; yieldPct: number; r: Rng; lv: number }
+type TaskKind = (b: DominionBlock, m: Member, ok: boolean, ctx: TaskCtx) => void;
+const TASK_KINDS: Record<string, TaskKind> = {};
+export function addTaskKind(kind: string, f: TaskKind): void {
+  TASK_KINDS[kind] = f;
+}
 
 /** recruit.ts registers the lead maker (it owns the candidate roll), so this file doesn't import it. */
 type LeadMaker = (b: DominionBlock, finder: Member, seed: string) => { name: string; cls: string } | null;
 let LEAD_MAKER: LeadMaker | null = null;
 export function setLeadMaker(f: LeadMaker): void {
   LEAD_MAKER = f;
+}
+/** Odds changes owned by later slices (D4: Trust, an empty team). Added to the task's odds before the clamp. */
+type OddsHook = (b: DominionBlock, m: Member, task: Task) => number;
+const ODDS_HOOKS: OddsHook[] = [];
+export function addOddsHook(h: OddsHook): void {
+  ODDS_HOOKS.push(h);
 }
 type DayHook = (b: DominionBlock, seed: string, n: { lines: string[]; say: (kind: Alert['kind'], text: string) => void }) => void;
 const DAY_HOOKS: DayHook[] = [];
@@ -530,6 +561,7 @@ export function crewStep(block: DominionBlock, seed: string): string[] {
   const rep = C().report;
   const n: Night = { lines: [], alerts: [], guardHeld: null, guards: [], slept: [] };
   st.pending = [];
+  fillCards(b, seed);
   st.saved = Math.min(0, st.saved);
   if (b.day % 7 === 1) st.rerolled = [];
   for (const m of b.members) {
@@ -573,9 +605,37 @@ export function crewStep(block: DominionBlock, seed: string): string[] {
     m.loyalty = clamp(m.loyalty, lo, hi);
     growTraits(b, m, n);
   }
+  cardNight(b, n);
   for (const h of DAY_HOOKS) h(b, seed, { lines: n.lines, say: (k, t) => say(n, k, t) });
   st.alerts = n.alerts;
   return n.lines;
+}
+
+/** D19: personality-card traits that act on the whole night: squad Morale, and how pay day lands. */
+function cardNight(b: DominionBlock, n: Night): void {
+  const rep = DOMINION_DATA.personality.report;
+  const effects = (m: Member) => (mc(m).card ? sheet(mc(m).card!).traits.flatMap((t) => t.effects).filter((e) => !e.needs) : []);
+  const lifter = b.members.find((m) => !mc(m).out && effects(m).some((e) => e.squadMor));
+  if (lifter && b.members.length > 1) {
+    const k = Math.max(...effects(lifter).map((e) => e.squadMor ?? 0));
+    for (const m of b.members) if (m.id !== lifter.id) addMorale(m, k);
+    n.lines.push(fill(rep.squad, { name: lifter.name, n: k }));
+  }
+  if (!(b.day > 1 && (b.day - 1) % DOMINION_DATA.start.clock.weekLength === 0)) return;
+  for (const m of b.members) {
+    for (const e of effects(m)) {
+      if (e.payLoy && !m.unpaid) {
+        // The Money motive already gave its Loyalty once (crewStep); the trait makes it ×payLoy in all.
+        const k = R().moneyLoyalty * (e.payLoy - (mc(m).motive === 'money' ? 1 : 0));
+        addLoyalty(b, m, k);
+        n.lines.push(fill(rep.pay, { name: m.name, n: k }));
+      }
+      if (e.unpaidLoy && m.unpaid) {
+        addLoyalty(b, m, e.unpaidLoy);
+        n.lines.push(fill(e.unpaidLoy > 0 ? rep.unpaid : rep.unpaidHurt, { name: m.name, n: e.unpaidLoy > 0 ? `+${e.unpaidLoy}` : e.unpaidLoy }));
+      }
+    }
+  }
 }
 
 /** Loyalty below 20: a weekly roll to quit, steal from you, or sell you out (Part 2 §5). */
@@ -655,9 +715,11 @@ export function pickTrait(m: Member): string | null {
 export function memberLine(m: Member, day: number): string {
   const id = traitNow(m);
   const bank = C().lines[id];
-  if (bank) return bank[day % bank.length]!;
   const g = C().lines.trait!;
-  return fill(g[day % g.length]!, { trait: traitName(id), joined: m.joinedDay });
+  const line = bank ? bank[day % bank.length]! : fill(g[day % g.length]!, { trait: traitName(id), joined: m.joinedDay });
+  // D19: they say it their way (the card's speech quirk).
+  const card = mc(m).card;
+  return card ? voice(sheet(card).quirk, line) : line;
 }
 
 /** Pays a jailed member's bail (Part 2 §2: ₽500 or they're gone 3 days). */

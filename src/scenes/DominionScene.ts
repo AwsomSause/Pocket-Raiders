@@ -17,7 +17,10 @@ import { rxFileOf } from '../ui/redux/assets';
 import { mountRedux, type ReduxView } from '../ui/redux/stage';
 import { hqView, openingView, setupView, titleView, type SetupFiles } from '../ui/redux/screens/dominion/views';
 import { CrewController } from './dominion/crewController';
+import { ReserveController } from './dominion/reserveController';
 import { HqController } from './dominion/hqController';
+import { RivalController } from './dominion/rivalController';
+import { threatRow } from '../core/dominion/rivalScreens';
 import { cardModel, gridPages, mapModel, newCursor, pageFor, type MapCursor } from '../core/dominion/fieldScreens';
 import { cardView, mapView } from '../ui/redux/screens/dominion/fieldViews';
 import { ledgerModel, SPREADS } from '../core/dominion/ledgerScreens';
@@ -25,7 +28,7 @@ import { ledgerView } from '../ui/redux/screens/dominion/ledger';
 import { heroModel, interruptModel } from '../core/dominion/heroScreens';
 import { heroView, interruptView, type MonFiles } from '../ui/redux/screens/dominion/heroViews';
 
-type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'ledger' | 'base' | 'hero' | 'interrupt';
+type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt';
 
 /** The screen to come back to after a battle (D2: the map the action was picked on, or the HQ for a fight at the door). */
 let resume: Screen | null = null;
@@ -54,11 +57,14 @@ export class DominionScene extends Phaser.Scene {
   /** D6: the Ledger's open spread (0 Money | Empire, 1 Territory | Notoriety, 2 Crew | Stores) and where L goes back to. */
   private spread = 0;
   private ledgerFrom: Screen = 'hq';
+  private res = new ReserveController(this);
   /** D5: the HQ menu (mockup 6). */
   private hq = new HqController(this);
   /** D11: where the Hero's file (H) goes back to, and the m11 choice under the cursor. */
   private heroFrom: Screen = 'hq';
   private intAt = 0;
+  /** D9: the Rival File (key R). */
+  private rival = new RivalController(this);
 
   constructor() {
     super('Dominion');
@@ -73,6 +79,8 @@ export class DominionScene extends Phaser.Scene {
     this.leaving = false;
     this.crew = new CrewController(this);
     this.hq = new HqController(this);
+    this.res = new ReserveController(this);
+    this.rival = new RivalController(this);
     const { session } = services();
     const run = session.run;
     if (!run) return void this.scene.start('MainMenu');
@@ -126,7 +134,7 @@ export class DominionScene extends Phaser.Scene {
         back: () => this.back(),
         bring: () => this.bring(),
         buy: (id) => this.buy(id),
-        dismiss: () => { this.notice = null; this.view?.refresh(); },
+        dismiss: () => { this.notice = null; this.rival.dismiss(); this.view?.refresh(); },
         ledgerTab: (i) => { this.spread = Number(i); this.view?.refresh(); },
         ledgerPage: (d) => this.turnLedger(Number(d)),
         heroFile: () => this.openHero(),
@@ -135,13 +143,17 @@ export class DominionScene extends Phaser.Scene {
         after: (how) => this.heroAct({ t: 'after', how: how === 'recruit' ? 'recruit' : 'leave' }),
         interrupt: (i) => this.interrupt(Number(i)),
         ...this.crew.acts(),
+        ...this.res.acts(),
         ...this.hq.acts(),
+        ...this.rival.acts(),
         base: () => { this.hq.open(); this.view?.refresh(); },
       },
       overs: {
         typeOver: (i) => { this.setup = { ...this.setup, at: Number(i) }; this.view?.refresh(); },
         orderOver: (i) => { this.at = Number(i); this.view?.refresh(); },
         ...this.crew.overs(),
+        ...this.res.overs(),
+        ...this.rival.overs(),
       },
     });
     const kb = this.input.keyboard;
@@ -171,8 +183,20 @@ export class DominionScene extends Phaser.Scene {
         if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
         return;
       }
-      if (this.screen !== 'hq' && this.screen !== 'crew') return;
+      if (this.screen === 'rival') {
+        if (this.rival.raw(e.code)) return;
+        if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
+        return;
+      }
+      if (this.screen !== 'hq' && this.screen !== 'crew' && this.screen !== 'reserve' && this.screen !== 'pyramid') return;
+      // D4: the Reserve and the Pyramid read their letters first; a move letter they use (W, A, S, D, X) isn't also a move.
+      if (this.res.raw(e.code)) {
+        if (e.code === 'Tab') e.preventDefault();
+        return void (this.ate = MOVE_LETTERS.has(e.code));
+      }
       if (this.crew.raw(e.code)) return;
+      // D9: R opens the Rival File from the HQ and the Morning (on the Crew File R is the leads list).
+      if (this.screen === 'hq' && e.code === 'KeyR' && !this.block()?.crew?.talks.length) return void (this.rival.open() && this.view?.refresh());
       // D5: B opens the HQ menu (mockup 6) from the HQ.
       if (this.screen === 'hq' && e.code === 'KeyB') return void (this.hq.open(), this.view?.refresh());
       if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
@@ -212,7 +236,7 @@ export class DominionScene extends Phaser.Scene {
         return openingView(b ? openingLines(b) : [], this.shown, this.memberLook());
       case 'hq':
         if (b && this.crew.owns()) return this.crew.render(this.notice);
-        return b ? hqView(hqModel(b), this.notice, this.at, this.memberLook()) : '';
+        return b ? hqView(hqModel(b), this.notice, this.at, this.memberLook(), threatRow(b)) : '';
       case 'map':
         return b && this.cursor ? mapView(mapModel(b, services().session.run!, this.cursor), this.notice, this.garage) : '';
       case 'card': {
@@ -237,8 +261,13 @@ export class DominionScene extends Phaser.Scene {
         const lead = services().session.run!.party.find((p) => p.hp > 0) ?? services().session.run!.party[0];
         return interruptView(m, this.memberLook(), lead ? this.monFiles([lead.speciesId])[lead.speciesId] ?? null : null, this.intAt, this.notice);
       }
+      case 'reserve':
+      case 'pyramid':
+        return this.res.render(this.notice);
       case 'base':
         return this.hq.render(this.notice);
+      case 'rival':
+        return this.rival.render();
     }
   }
 
@@ -280,6 +309,8 @@ export class DominionScene extends Phaser.Scene {
       if (a === 'confirm') return this.heroCta();
       return;
     }
+    if (this.res.key(a)) return void this.view?.refresh();
+    if (this.rival.key(a)) return void this.view?.refresh();
     if (this.crew.key(a)) return void this.view?.refresh();
     if (this.screen === 'ledger') {
       if (a === 'back') return this.closeLedger();
@@ -393,6 +424,15 @@ export class DominionScene extends Phaser.Scene {
   refresh(): void {
     this.view?.refresh();
   }
+  /** D9: an answer on the Rival File (saved). */
+  rivalStep(action: DominionAction): { ok: boolean; fight: boolean; notice: string | null } {
+    return services().session.dominionStep(action);
+  }
+  /** D9: a challenge answered with Fight starts at once; the Rival File's HQ is where it comes back to. */
+  startFight(): void {
+    this.screen = 'hq';
+    this.fight('hq');
+  }
 
   step(action: DominionAction): boolean {
     const out = services().session.dominionStep(action);
@@ -406,7 +446,8 @@ export class DominionScene extends Phaser.Scene {
   }
 
   private tab(i: number): void {
-    if (this.screen !== 'hq' && this.screen !== 'map' && this.screen !== 'crew' && this.screen !== 'ledger' && this.screen !== 'base') return;
+    if (this.screen === 'rival') this.screen = 'hq';
+    if (this.screen !== 'hq' && this.screen !== 'map' && this.screen !== 'crew' && this.screen !== 'reserve' && this.screen !== 'pyramid' && this.screen !== 'ledger' && this.screen !== 'base') return;
     if (i === 5) return this.openLedger();
     if (this.screen === 'ledger') this.screen = 'hq';
     if (this.screen === 'base' && i === 0) {
@@ -415,6 +456,7 @@ export class DominionScene extends Phaser.Scene {
       return void this.view?.refresh();
     }
     if (this.screen === 'base' && i === 2) this.screen = 'hq';
+    if (this.res.tab(i)) return void this.view?.refresh();
     if (this.crew.tab(i)) return void this.view?.refresh();
     const b = this.block();
     this.notice = null;

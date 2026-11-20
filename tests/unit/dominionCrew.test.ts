@@ -1,5 +1,6 @@
 // DOMINION slice D3: the crew (plans/evil-mode-rework BUILD_SLICES.md; Part 2, Part 9 A16-A18, A24).
 import { describe, expect, it } from 'vitest';
+import { fillCards, sheet, voice } from '../../src/core/dominion/personality';
 import { cantTake, crewOf, crewStep, growTraits, memberLine, odds, pickTrait, taskById, taskLevel, withCrew } from '../../src/core/dominion/crew';
 import { fileModel, hireModel, leadsModel, morningModel, skillOf } from '../../src/core/dominion/crewScreens';
 import { DOMINION_DATA } from '../../src/core/dominion/data';
@@ -90,7 +91,8 @@ describe('DOMINION D3: members', () => {
     const loaded = new SaveManager(storage, content).loadRun();
     expect(loaded.status).toBe('ok');
     if (loaded.status !== 'ok') return;
-    expect(withCrew(blk(loaded.data))).toEqual(withCrew(blk(r)));
+    // D19: the personality card comes back on the next step, rolled the same way (fillCards).
+    expect(fillCards(withCrew(blk(loaded.data)), loaded.data.seed)).toEqual(withCrew(blk(r)));
   });
   it('odds follow Part 2 §2: a new Grunt with Brawn 2 guarding is about 30%; sure tasks are sure; low Morale and Fatigue cost', () => {
     const b = withCrew(blk(started()));
@@ -107,11 +109,11 @@ describe('DOMINION D3: members', () => {
     expect(cantTake(m, taskById('pickpocket')!)).toBeNull();
     expect(cantTake(m, taskById('shake-down')!)).toBeNull();
     expect(cantTake(m, taskById('rally-the-troops')!)).toMatch(/SENIOR GRUNT/);
-    expect(cantTake(m, taskById('man-the-gate')!)).toMatch(/D9/);
+    expect(cantTake(m, taskById('stock-the-stores')!)).toMatch(/D10/);
   });
   it('assigning is a Morning/Evening step, refused for a task they can\'t take', () => {
     let r = started();
-    expect(stepInRun(content, r, { t: 'assign', member: 'm1', task: 'man-the-gate' }).ok).toBe(false);
+    expect(stepInRun(content, r, { t: 'assign', member: 'm1', task: 'stock-the-stores' }).ok).toBe(false);
     r = go(r, { t: 'assign', member: 'm1', task: 'pickpocket' });
     expect(crewOf(rook(blk(r))).task).toBe('pickpocket');
     r = go(go(night(r), { t: 'toDay' }), { t: 'endDay' });
@@ -203,7 +205,7 @@ describe('DOMINION D3: the crew step', () => {
     expect(took).toBeGreaterThan(0);
     expect(took).toBeLessThanOrEqual(CR.rules.thiefMax);
   });
-  it('Catch and Steal Pokémon fill the stores through the session, once', () => {
+  it('Catch and Steal Pokémon fill the Reserve through the session, once (D4 took over the stores)', () => {
     let r = started('catch');
     r = withRun(r, (b) => {
       crewOf(rook(b)).task = 'catch';
@@ -211,10 +213,12 @@ describe('DOMINION D3: the crew step', () => {
     });
     for (let i = 0; i < 4; i++) r = round(r);
     const st = blk(r).crew!;
-    expect(st.stores.length).toBeGreaterThan(0);
+    const box = blk(r).reserve!.box;
+    expect(st.stores).toEqual([]);
+    expect(box.length).toBeGreaterThan(1); // Day 1's Reserve Pokémon + the catches
     expect(st.pending).toEqual([]);
-    expect(settleCrew(content, r)).toBe(r);
-    for (const mon of st.stores) expect(mon.level).toBeLessThanOrEqual(blk(r).levelCap);
+    expect(blk(settleCrew(content, r)).reserve!.box).toEqual(box);
+    for (const mon of box) expect(mon.level).toBeLessThanOrEqual(blk(r).levelCap);
   });
 });
 
@@ -229,7 +233,7 @@ describe('DOMINION D3: personality', () => {
     m.level = 4;
     expect(growTraits(b, m, null)).toBe('steady');
     expect(m.untrained).toBe(false);
-    expect(memberLine(m, 0)).toBe(CR.lines.steady![0]);
+    expect(memberLine(m, 0)).toBe(voice(sheet(crewOf(m).card!).quirk, CR.lines.steady![0]!));
     const f = fileModel(b, 0);
     expect(f.formed[0]!.name).toBe('Steady');
     expect(f.grew).toBe(true);
