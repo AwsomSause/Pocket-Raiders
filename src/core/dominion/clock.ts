@@ -197,6 +197,11 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'promote':
     case 'demote':
     case 'strip':
+    // D21: the desk needs the run (session.ts deskInRun).
+    case 'desk':
+    case 'deskAsk':
+    case 'deskInspect':
+    case 'deskStamp':
       return no(block);
   }
 }
