@@ -871,5 +871,22 @@
   "q3": "Six new pages: an entry card for each of the five areas (crest, name, one line, the steps ahead) and a guide page that shows the five crests together.",
   "q4": "The Menu's map legend shows the five crests next to the stop icons. Settings > Display: Floor crest, on or off.",
   "q5": "Yes. Gyms, leagues and teams in these games all carry an emblem, and stadium floors are painted with one. The crests give the new areas the same kind of badge the old ones have."
+ },
+ "51": {
+  "name": "New areas 25 · Master Cut",
+  "label": "New areas · pass 25 of 25",
+  "big": "One of each idea, one layout for all five areas, and one line of interface at the bottom",
+  "pages": [
+   "mn-area",
+   "set-areas",
+   "mc-five",
+   "mc-grammar",
+   "mc-passes"
+  ],
+  "q1": "The scene now runs from the top edge to one slim band at the bottom. Your Pokémon stands clear with ground under it, the boss wears its HP as a ring, and the only things on the picture are a crest tab and a steps rail in one corner. The expedition and the Rocket stop are full-screen scenes for the first time.",
+  "q2": "Passes 16 to 24 each added something, and the screens had begun to fill up again. This pass removes: the loose specks in front of the camera, the two header bands, the second bottom row. Your HP and the six buttons now share one band, which hands a strip of ground back to the scene. All five areas now follow the same layout, so learning one teaches the other four.",
+  "q3": "Five new pages: the Pause Menu as it looks inside an area (crest, steps rail, Rotom's advice about this fight), a Settings page with the six switches these passes asked for, and three guide pages: the five areas side by side, how one screen is built, and what each pass from 16 to 25 added.",
+  "q4": "This pass draws both. The Pause Menu shows the area you are in, with its crest and steps. Settings > Display > New areas holds Scene lighting, Foreground shapes, Boss HP, Floor crest, Steps rail and Button row.",
+  "q5": "Yes. A wide, clear field with one band of commands under it is how the series has always framed a battle. What is new is drawn into the place itself, not laid over it."
  }
 }
