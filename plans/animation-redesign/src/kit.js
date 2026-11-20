@@ -226,7 +226,7 @@ function setTour(on) { AK.tour = on; const b = $('#vw-tour'); if (b) b.textConte
 function lists() {
   const el = $('#vw-lists'); if (!el || !LISTS || QS.has('bare')) return;
   const one = (k, title, word) => { let i = 0; const n = LISTS[k].reduce((a, g) => a + g[1].length, 0);
-    return `<details><summary>${title} (${n})</summary>` + LISTS[k].map(([g, v]) => `<h3>${esc(g)}</h3><ol>` + v.map(e => `<li><p class="t"><b>${++i}. ${esc(e.t)}</b>${e.tag ? `<i class="${e.tag}">${e.tag}</i>` : ''}${e.id ? `<button class="vw-chip" data-jump="${e.id}">Watch</button>` : ''}</p><p><b>Today</b>${esc(e.today)}</p><p><b>${word}</b>${esc(e.idea)}</p>${e.note ? `<p><b>Note</b>${esc(e.note)}</p>` : ''}</li>`).join('') + '</ol>').join('') + '</details>'; };
+    return `<details><summary>${title} (${n})</summary>` + LISTS[k].map(([g, v]) => `<h3>${esc(g)}</h3><ol>` + v.map(e => `<li><p class="t"><b>${++i}. ${esc(e.t)}</b>${e.tag ? `<i class="${e.tag}">${e.tag}</i>` : ''}${e.id ? `<button class="vw-chip" data-jump="${e.id}">Watch</button>` : ''}</p><p><b>Today</b>${esc(e.today)}</p><p><b>${word}</b>${esc(e.idea)}</p>${e.note ? `<p><b>Note</b>${esc(e.note)}</p>` : ''}${e.build ? `<p><b>Build</b>${esc(e.build)}</p>` : ''}</li>`).join('') + '</ol>').join('') + '</details>'; };
   el.innerHTML = one('R', 'List 1: what to reanimate', 'Redesign') + one('N', 'List 2: new animations', 'New');
   el.addEventListener('click', e => { const b = e.target.closest('[data-jump]'); if (!b) return; AK.P = AK.maxPass; for (const s of document.querySelectorAll('style[data-pass]')) s.media = 'all'; show(b.dataset.jump); window.scrollTo({ top: 0, behavior: 'smooth' }); });
 }
