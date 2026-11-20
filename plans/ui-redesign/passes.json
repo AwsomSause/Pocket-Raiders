@@ -355,5 +355,22 @@
   "q3": "Yes, five. Time of Day and Weather each get an explainer page instead of a tooltip, the weather change gets its own moment, the forecast gets a page, and night gets its own encounter.",
   "q4": "The pause menu shows the time and how long the rain lasts, and its backdrop follows the sky. Battle Info already lists the weather; the new chip links to the Weather page. Settings › Display can gain a 'Time of day lighting' switch for players who want the bright look.",
   "q5": "Yes. Day and night, weather that changes which moves hit hard, and Pokémon that only come out after dark are core to the series since Gold and Silver."
+ },
+ "22": {
+  "name": "Festivals & Side Roads",
+  "big": "The game event of the week now dresses the whole game in its own colour: bunting over the title, the town and every menu header, a banner hanging in the battle arena, and a goal chip on the phone and party. Side roads (sub-regions inside a stop) get their own pages, drawn like a stage but never counted as one.",
+  "pages": [
+   "Game Event · Homeland Week",
+   "Side Road · The Door",
+   "Side Road · Map",
+   "Side Road · Prize",
+   "Ultra Wormhole",
+   "Regional Forms"
+  ],
+  "q1": "Yes. Strings of flags across the title and Hub Town, a hanging event banner over the arena, a spinning wormhole behind Nihilego, and a festival poster page in the event's blue.",
+  "q2": "Until now a game event was one line from Rotom. Now you can see at a glance that an event is on from any screen, and what you still need to do for it. Side roads were not drawn at all before.",
+  "q3": "Yes, six. The door, the side-road map and its prize are three separate pages so the choice to enter is never mixed with the map; the event has its own poster page; Ultra Wormholes and regional forms each get a page.",
+  "q4": "The pause menu and party show the event chip, and it opens the event page. Settings › Game keeps the Ultra Beasts switch (on by default) and the page says so. Regional forms are asked once per region, not buried in Settings.",
+  "q5": "Yes. Sevii and the Orange Islands, festivals, Ultra Wormholes and Alolan forms are all straight from the series, and the side road is drawn with the same stage map the main road uses."
  }
 }
