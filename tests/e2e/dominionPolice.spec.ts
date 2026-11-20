@@ -107,14 +107,20 @@ test('police questioning: answers, a typed answer, the tell, a reload mid-case, 
   await page.waitForTimeout(400);
   await shot('a8-room-contradiction');
 
-  // T: your own words (no Key-Card here, so the rules judge them; nothing is sent anywhere).
+  // T: your own words in the shared typing box (no Key-Card here, so the rules judge them; nothing is sent anywhere).
+  const box = page.getByTestId('type-box-input');
   await expect(async () => {
-    if (!(await s.getByTestId('dom-q-type').textContent())?.includes('▌')) await page.keyboard.press('KeyT');
-    await expect(s.getByTestId('dom-q-type')).toContainText('▌', { timeout: 1500 });
+    if (!(await box.count())) await page.keyboard.press('KeyT');
+    await expect(box).toBeVisible({ timeout: 1500 });
   }).toPass({ timeout: 15_000 });
+  await expect(page.getByTestId('type-box')).toContainText('Officer Dalton');
+  // Every key belongs to the box: its "e"s and "T"s never end the day or reopen anything behind it.
   await page.keyboard.type("That jacket's sold at every Mart in Kanto", { delay: 15 });
-  await expect(s.getByTestId('dom-q-type')).toContainText("That jacket's sold at every Mart in Kanto");
+  await expect(box).toHaveValue("That jacket's sold at every Mart in Kanto");
+  await expect(s.getByTestId('dom-q-turn')).toHaveText(/^1\//);
+  await shot('a8-room-typing');
   await page.keyboard.press('Enter');
+  await expect(box).toHaveCount(0);
   await expect(s.getByTestId('dom-q-turn')).toHaveText(/^2\//);
   await expect(s.getByTestId('dom-q-said')).toContainText('every Mart in Kanto');
   const b2 = await block(page);

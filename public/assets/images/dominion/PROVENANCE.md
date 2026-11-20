@@ -79,3 +79,12 @@ Copied from the round-4 mockups (`plans/evil-mode-rework/mockups-v4/sprites/`), 
 | `t-looker.png` | Trainer sprite from the PokeRogue pack (`images/trainer/`), one frame, Looker behind the one-way mirror; copied from `plans/claude-api/mockups/sprites/` |
 | `g-tape.png` | Item icon from `images/items/` (PokeRogue pack), the tape recorder on the table; copied from `plans/claude-api/mockups/sprites/` |
 | `g-policekey.png` | Item icon from `images/items/` (PokeRogue pack), the "What it cost" panel; copied from `plans/claude-api/mockups/sprites/` |
+
+## Slice D21 (the applications desk, Rotom mockup k5)
+
+Copied from the round-4 mockups (`plans/evil-mode-rework/mockups-v4/sprites/`, PR #1496), which cut them from art already in this repo (director's packs: PokeRogue, AGPL-3.0, Nintendo material):
+
+| File | From |
+| --- | --- |
+| `t-applicant.png`, `t-hex.png`, `t-biker.png`, `t-backpacker.png` | Trainer sprites from `images/trainer/pr/` (PokeRogue pack), first frame; the applicant's stand-in and the queue in the rain |
+| `g-idcard.png`, `g-badgecard.png` | Item icons from `images/items/` (PokeRogue pack), re-saved at the mockup's size |
