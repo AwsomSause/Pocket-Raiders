@@ -43,32 +43,71 @@ test('a run with a blessing opens with the blessing screen, then the briefing an
   expect(errors).toEqual([]);
 });
 
-// What the opening draws: its text objects' fonts, and whether any drawn shape (the old spotlight and plinth) is left.
-// (The screen-change wipe is a tall rectangle far above everything; it is not part of the scene's picture.)
+// What the opening draws: its text objects' fonts, and the parts of the holy rite (animation redesign pass 15, Kice's
+// 2026-11-19 note "more religious-themed and holy": a rose window, light from above, a halo, candles; still no plinth).
 const drawn = (page: Page) => page.evaluate(() => {
   const list = (window as any).__pkr.game.scene.getScene('Blessing').children.list as any[];
-  return { fonts: [...new Set(list.filter((o) => o.type === 'Text').map((o) => String(o.style.fontFamily).split(',')[0]!.replace(/"/g, '')))], shapes: list.filter((o) => o.type === 'Graphics' || (o.type === 'Rectangle' && o.depth < 1000)).length };
+  const shown = (name: string) => list.some((o) => o.name === name && o.visible && o.alpha > 0 && o.scaleY > 0);
+  return {
+    fonts: [...new Set(list.filter((o) => o.type === 'Text').map((o) => String(o.style.fontFamily).split(',')[0]!.replace(/"/g, '')))],
+    rite: ['rite.window', 'rite.shaft', 'rite.rays', 'rite.halo', 'rite.panel', 'rite.partnerHalo'].filter(shown),
+    candles: list.filter((o) => o.type === 'Rectangle' && o.originY === 1 && o.width === 12 && o.alpha === 1).length,
+  };
 });
+const RITE = ['rite.window', 'rite.shaft', 'rite.rays', 'rite.halo', 'rite.panel', 'rite.partnerHalo'];
 
-test('the opening has no spotlight or plinth, and in the New look its text is in the skin font (the mock-ups\' own)', async ({ page }) => {
+test('the holy opening: the rite is drawn once it has played, and in the New look its text is in the skin font (the mock-ups\' own)', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
-  // Old look: the game's own pixel fonts.
+  // Old look: the game's own pixel fonts. It opens in the dark: nothing of the rite shows yet.
   await toStarter(page, true);
   await page.keyboard.press('Enter');
   await waitForScene(page, 'Blessing');
   const old = await drawn(page);
-  expect(old.shapes).toBe(0);
   expect(old.fonts.every((f) => f.startsWith('Pokemon'))).toBe(true);
+  expect(old.rite).not.toContain('rite.panel');
+  expect(old.candles).toBe(0);
+  // A first Confirm shows the whole picture at once: window, light, halo, the six lit candles, the panel, the partner's halo.
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(400);
+  const done = await drawn(page);
+  expect(done.rite).toEqual(RITE);
+  expect(done.candles).toBe(6);
+  await page.screenshot({ path: 'test-results/blessing-holy.png' });
   // New look: the chosen skin's font (Raiders: Pixelify Sans), and the next screen's canvas text is not affected.
   await toStarter(page, true, '&ui=new');
   await page.keyboard.press('Enter');
   await waitForScene(page, 'Blessing');
   const now = await drawn(page);
-  expect(now.shapes).toBe(0);
   expect(now.fonts).toEqual(['Pixelify Sans']);
   await page.keyboard.press('Enter');
   await page.waitForTimeout(400);
+  expect((await drawn(page)).rite).toEqual(RITE);
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'Briefing');
+  expect(errors).toEqual([]);
+});
+
+test('with animations off the opening is whole at once, and Reduced plays it without drifting', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await toStarter(page, true);
+  await page.evaluate(() => ((window as any).__pkr.session.settings.battleAnimations = 'off'));
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'Blessing');
+  const off = await drawn(page);
+  expect(off.rite).toEqual(RITE);
+  expect(off.candles).toBe(6);
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Blessing').tweens.getTweens().length)).toBe(0);
+  // Reduced: each part fades in place on a shorter clock; nothing loops or drifts once it has played.
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr;
+    pkr.session.settings.battleAnimations = 'reduced';
+    pkr.game.scene.getScene('Blessing').scene.restart();
+  });
+  await expect.poll(async () => (await drawn(page)).rite.length, { timeout: 8000 }).toBe(RITE.length);
+  await page.waitForTimeout(600);
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Blessing').tweens.getTweens().length)).toBe(0);
   await page.keyboard.press('Enter');
   await waitForScene(page, 'Briefing');
   expect(errors).toEqual([]);

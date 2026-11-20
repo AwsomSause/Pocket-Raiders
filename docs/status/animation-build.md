@@ -36,7 +36,18 @@ Tests: `tests/unit/motionBasics.test.ts` (timings against the mockups, the Reduc
 - Double battles use the new faint, recall and send-out for the focused Pokémon; the dark base and exp lights are singles only.
 - The faint's camera push is still the game's own KO camera (it already follows the Battle camera setting).
 
+## Slice 2: Kice's six notes (in progress)
+
+| Note | State | Where |
+|---|---|---|
+| Blessing, "more religious-themed and holy" | Done. The original cutscene in its order, made holy as in pass 15: a bell tolls three times (a synthesised bell), light comes down through a turning rose window, the object descends under a halo, the Legendary appears behind it vast and pale, the passage is written a line at a time after an illuminated letter, candles catch from the middle out, feathers fall, and your partner bows under its own small halo. Reduced: each part fades in place, no flashes, particles or drifting. Off: the whole picture at once. | `src/scenes/BlessingScene.ts`, `src/ui/blessingRite.ts`, `playBellToll` in `src/ui/procAudio.ts` |
+| Gimmick cutscenes | Next. | |
+| Trainer intro, ace call, event choice, small map | Wait for the UI build's pages (it draws them; this build moves them). | |
+
+Limits: the light shaft is back on the blessing screen by the approved mockup (the spotlight and plinth were removed on
+2026-11-16; there is still no plinth). The bell is synthesised because the packs have no bell sound.
+
 ## Next
 
-Slice 2: Kice's six notes in motion (trainer intro, ace call, gimmick cutscenes, blessing, event choice, the small map).
+The rest of slice 2, then conditions, arenas, side roads, screens and flow from the two lists.
 The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` carry a **Build** line per entry.
