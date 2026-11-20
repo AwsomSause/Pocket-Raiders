@@ -1,0 +1,25 @@
+/* The Phantom UI in the game: what the mock-up rules (phantom.gen.css) need to sit over the game canvas, plus the
+   pieces only the game has. Hand-written; the mock-up rules themselves are generated. */
+
+/* ---- the layer: a 1280 x 720 stage scaled onto the 960 x 540 game ---- */
+.phx{position:fixed;left:0;top:0;width:0;height:0;z-index:40;pointer-events:none}
+.phx .phs{pointer-events:auto;transform:scale(calc(var(--s,.35)*.75))}
+.phx .phs.clear{background:none;pointer-events:none}
+.phx .phs.clear [data-act],.phx .phs.clear .hit{pointer-events:auto}
+.phx [data-act]{cursor:pointer}
+.phx .phs .an{display:block}
+.phx .phs .an b{display:block;image-rendering:pixelated}
+
+/* ---- a New UI screen that has no Phantom page yet wears Phantom colours ---- */
+.rx .stage.phfb{--g:#0c0b0d;--p:#19171c;--p2:#2c2930;--l:#000;--f:#fff;--acc:#e4002b;--pa:#fff;--pai:#0c0b0d;--tf:#e4002b;--ink:#fff;--wink:#fff;--font:"Barlow Condensed";--fs:20px;--fw:700;
+  --pat:radial-gradient(#ffffff14 2px,#0000 2px) 0 0/22px 22px,linear-gradient(115deg,#0c0b0d 62%,var(--acc) 62% 100%)}
+.rx .stage.phfb[data-liv=midnight]{--g:#06142e;--p:#0b2148;--p2:#143266;--acc:#19d3ff;--tf:#19d3ff;--l:#020814}
+.rx .stage.phfb[data-liv=channel]{--g:#f4c400;--p:#111;--p2:#2b2b2b;--acc:#ffd400;--tf:#111;--ink:#111}
+.rx .stage.phfb[data-liv=fantasia]{--g:#0f2a26;--p:#143a34;--p2:#1f5148;--acc:#d8b45a;--tf:#d8b45a;--l:#06140f}
+.rx .stage.phfb[data-liv=velvet]{--g:#0b0f3a;--p:#151b5c;--p2:#232b80;--acc:#ffd400;--tf:#ffd400;--l:#04061c}
+.rx .stage.phfb .hd{background:var(--l);color:#fff;font-family:"Anton","Impact",sans-serif;font-weight:400;letter-spacing:.04em;text-transform:uppercase;text-shadow:none;transform:skewX(-12deg);transform-origin:0 0;padding-left:30px;box-shadow:8px 0 0 var(--acc)}
+.rx .stage.phfb .btn{text-transform:uppercase;letter-spacing:.03em;transform:skewX(-10deg)}
+.rx .stage.phfb .btn.on{background:var(--acc);color:#fff}
+.rx .stage.phfb[data-liv=channel] .btn.on,.rx .stage.phfb[data-liv=velvet] .btn.on,.rx .stage.phfb[data-liv=fantasia] .btn.on{color:#0c0b0d}
+.rx .stage.phfb .win.sel{color:#fff}
+.phx .phs .blade.off{opacity:.42}
