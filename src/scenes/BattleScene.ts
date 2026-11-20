@@ -129,7 +129,7 @@ import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel } from '../core/presentation/motionClip';
-import { aceLandClip, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { aceLandClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
@@ -231,6 +231,8 @@ const TRAINER_POS = { x: 312, y: 400 };
 const FLOAT_LIFT = 14;
 /** The bottom message bar, and the command window on its right. */
 const MESSAGE_Y = 396;
+/** The wild entrance's dark bars cover everything on the screen, the menus too (pass 5). */
+const WILD_DEPTH = 4600;
 /** How long the first-time Hyper/Overdrive explanation ignores Continue, so it can't be skipped by accident. */
 const EXPLAIN_LOCK_MS = 1200;
 const COMMAND_X = 588;
@@ -2924,13 +2926,15 @@ export class BattleScene extends Phaser.Scene {
       this.phLast = null;
       interactionLog.tell('stage', battle.trainer ? (title ?? battle.trainer.name) : `Wild ${this.speciesName(battle.enemyTeam[0]!)}`, 'Battle');
       await this.playIntro();
+      // A lone wild Pokémon gets the redesign's own entrance (pass 5); its bars stand in for the opening sweep.
+      const wildIn = !battle.trainer && !this.duo && !battle.raid && !battle.totem && !this.phCards();
       // The foe trainer waits on the platform (a black shape at first) while the camera sweeps over the arena.
       const openArt = this.trainerArt();
       const openTitle = this.trainerTitle();
       const foeTrainer = openTitle && openArt ? trainerVisual(this, openArt.assetId, openArt.label, ENEMY_POS.x, ENEMY_POS.y, 2.5) : null;
       // Every foe trainer stands the same height on the platform (the reference's Red and N are the yardstick).
       if (foeTrainer) fitTrainer(this, foeTrainer, ENEMY_POS.y);
-      await this.playBeat(openingReveal(this, this.motion, ENEMY_POS, foeTrainer));
+      if (!(wildIn && this.clipLevel() === 'full')) await this.playBeat(openingReveal(this, this.motion, ENEMY_POS, foeTrainer));
       await this.skin?.intro?.(this, this.frameInfo());
       const modeLine = modeBattleLine(this.run.rules.modeId, !!battle.trainer && isBossClass(battle.trainer.classId));
       if (modeLine) await this.say(modeLine);
@@ -2977,8 +2981,11 @@ export class BattleScene extends Phaser.Scene {
         await this.showDuoSide('enemy', true);
         await this.say(`Wild ${this.nameList([this.shown.enemy, ...this.otherMons('enemy')])} appeared!`);
       } else {
-        this.showSprite('enemy', this.shown.enemy);
-        await this.refreshInfoBox(this.enemyBox, this.shown.enemy, false);
+        if (wildIn) await this.wildEntranceMoment(this.shown.enemy);
+        else {
+          this.showSprite('enemy', this.shown.enemy);
+          await this.refreshInfoBox(this.enemyBox, this.shown.enemy, false);
+        }
         await this.say(battle.nemesis ? `Your nemesis, ${this.speciesName(this.shown.enemy)}, appeared!` : battle.monRival ? `Your ${this.speciesName(this.shown.enemy)} rival appeared!` : `A wild ${this.speciesName(this.shown.enemy)} appeared!`);
         // Shadow and Blissful foes announce themselves (a dark haze / soft motes) before the fight.
         if (this.shown.enemy.blissful) {
@@ -4022,6 +4029,48 @@ export class BattleScene extends Phaser.Scene {
     }));
     await run.done;
     if (visual.active) this.standUp(visual, mon);
+  }
+
+  /**
+   * A wild Pokémon appears (pass 5, Wild Encounter): two flashes, the screen splits into nine dark bars that pull
+   * apart, the Pokémon slides in as a dark shape, its colour floods in with its cry and a hop, then its plate flies in.
+   * Resolves when the plate is in (the clip's last beats play on while the line is read).
+   */
+  private async wildEntranceMoment(mon: PokemonInstance): Promise<void> {
+    const level = this.clipLevel();
+    const at = this.spotXY('enemy');
+    const visual = this.showSprite('enemy', mon, false, false);
+    const bars: Phaser.GameObjects.Image[] = [];
+    if (level === 'full') {
+      const key = 'wild.bar';
+      if (!this.textures.exists(key)) {
+        const g = this.make.graphics({ x: 0, y: 0 }, false);
+        g.fillStyle(0x0b0d14, 1).fillRect(0, 0, 980, 61);
+        g.generateTexture(key, 980, 61);
+        g.destroy();
+      }
+      for (let i = 0; i < WILD_BARS; i++) bars.push(this.add.image(480, 30 + i * 60, key).setDepth(WILD_DEPTH).setScrollFactor(0));
+    }
+    const parts: Record<string, ClipPart> = { foe: { kind: 'mon', get: () => visual } };
+    bars.forEach((bar, i) => (parts[`bar${i}`] = { kind: 'free', get: () => bar }));
+    let plateIn: () => void = () => undefined;
+    const plate = new Promise<void>((resolve) => (plateIn = resolve));
+    const species = getSpecies(services().session.content, mon.speciesId);
+    const host = this.clipHost(parts, {
+      cue: (name) => {
+        if (name === 'cry') playCry(this, species, 100);
+        if (name === 'plate') plateIn();
+      },
+    });
+    const h = visual instanceof Phaser.GameObjects.Sprite ? visual.displayHeight * visual.originY : 120;
+    const run = playClip(this, wildEntranceClip({ x: at.x, y: at.y, h }, level), { ...host, depth: WILD_DEPTH + 1 });
+    void run.done.then(() => {
+      bars.forEach((bar) => bar.destroy());
+      plateIn();
+      if (visual.active) this.standUp(visual, mon);
+    });
+    await plate;
+    await this.refreshInfoBox(this.enemyBox, mon, false);
   }
 
   /**

@@ -43,7 +43,7 @@ export interface ClipRun {
 /** Sets how strongly a sprite's contact shadow shows (arenaLife reads it); 1 = as usual. */
 export const SHADOW_KEY = 'motionShadow';
 
-const TINTS: Record<string, number> = { red: 0xff3b30, white: 0xffffff };
+const TINTS: Record<string, number> = { red: 0xff3b30, white: 0xffffff, black: 0x000000 };
 
 interface MonRig {
   v: Visual;

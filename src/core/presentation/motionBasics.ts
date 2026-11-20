@@ -376,3 +376,44 @@ export function shinyClip(mon: Point, level: ClipLevel): MotionClip {
   b.beat(0, 'Six stars circle in').beat(SHINY_GLINT, 'Collapse: glint, the arena brightens').beat(SHINY_CHIP, 'Star chip flies to the plate');
   return b.end(SHINY_CHIP + 1300);
 }
+
+/** When the wild Pokémon's colour floods in with its cry, and when its plate flies in (pass 5, Wild Encounter). */
+export const WILD_CRY = 1150;
+export const WILD_PLATE = 1350;
+/** The nine dark bars that cover the screen and pull apart: 980 x 61 px, 60 px apart. */
+export const WILD_BARS = 9;
+
+/**
+ * A wild Pokémon appears (pass 5): two white flashes, the screen is nine dark bars that pull apart left and right,
+ * the Pokémon slides in from the right as a black shape, its colour floods in with its cry (three rings) and it hops,
+ * then its plate flies in. `foe` is its feet; `h` its height on screen (the rings go round its middle). Parts: `foe` (the Pokémon; `black` is its silhouette) and `bar0`..`bar8` (x, y).
+ * Reduced: the shape is just there and its colour fades in. Off: nothing moves.
+ */
+export function wildEntranceClip(foe: Point & { h: number }, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('wild-entrance', level);
+  const f = b.part('foe', { dx: 0, dy: 0, sx: 1, sy: 1, black: 0, shadow: 1 });
+  const bars = Array.from({ length: WILD_BARS }, (_, i) => b.part(`bar${i}`, { x: 480, y: 30 + i * 60, alpha: level === 'full' ? 1 : 0 }));
+  if (level === 'off') {
+    b.fx({ kind: 'cue', at: 0, name: 'cry' }).fx({ kind: 'cue', at: 0, name: 'plate' });
+    return b.end(0);
+  }
+  if (level === 'reduced') {
+    f.at(0).set({ black: 1 }).to(300, { black: 0 });
+    b.fx({ kind: 'cue', at: 0, name: 'cry' }).fx({ kind: 'cue', at: 300, name: 'plate' });
+    b.beat(0, 'Colour and cry');
+    return b.end(300);
+  }
+  b.fx({ kind: 'flash', at: 0, d: 100, alpha: 1 }).fx({ kind: 'flash', at: 160, d: 100, alpha: 1 });
+  bars.forEach((bar, i) => bar.at(320 + i * 20).to(340, { x: i % 2 ? 1500 : -540 }, 'in3'));
+  f.at(0).set({ dx: 1150 - foe.x, black: 1 }).at(500).to(550, { dx: 0 }, 'out3');
+  f.at(WILD_CRY).to(300, { black: 0 });
+  // Its contact shadow waits on the spot until it has nearly arrived.
+  f.at(0).set({ shadow: 0 }).at(850).to(200, { shadow: 1 });
+  b.fx({ kind: 'cue', at: WILD_CRY, name: 'cry' });
+  for (let i = 0; i < 3; i++) b.fx({ kind: 'ring', at: 1200 + i * 100, x: foe.x - 40, y: foe.y - foe.h / 2 - 10, r1: 70 + i * 30, flat: 1, d: 400, color: 0xffffff, w: 4 });
+  // The hop with the cry: a squash, up 22 px with a stretch, down, and a springy settle.
+  f.at(1200).to(60, { sy: 0.9, sx: 1.08 }).to(140, { dy: -22, sy: 1.06 }, 'out').to(120, { dy: 0 }, 'in').to(200, { sy: 1, sx: 1 }, 'el');
+  b.fx({ kind: 'cue', at: WILD_PLATE, name: 'plate' });
+  b.beat(0, 'Two flashes').beat(320, 'Bars pull apart').beat(500, 'Dark shape slides in').beat(WILD_CRY, 'Colour and cry').beat(WILD_PLATE, 'The plate flies in');
+  return b.end(1720);
+}

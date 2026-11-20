@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ClipBuilder, clipEnd, EASES, fxAllowed, sampleClip, type ClipLevel, type MotionClip } from '../../src/core/presentation/motionClip';
-import { aceLandClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
+import { aceLandClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
 
 const ME: MonSpot = { x: 312, y: 428, h: 180, side: 'player' };
 const FOE: MonSpot = { x: 648, y: 240, h: 150, side: 'enemy' };
@@ -314,5 +314,41 @@ describe('shiny entrance (pass 11)', () => {
   });
   it('Reduced and Off keep only the chip', () => {
     for (const level of ['reduced', 'off'] as const) expect(shinyClip(mid, level).fx).toEqual([{ kind: 'cue', at: 0, name: 'chip' }]);
+  });
+});
+
+describe('motion clips: the wild encounter (pass 5)', () => {
+  const at = { x: 648, y: 240, h: 120 };
+  it('two flashes, nine bars pull apart, the dark shape slides in, colour and cry, then the plate', () => {
+    const c = wildEntranceClip(at, 'full');
+    expect(c.fx.filter((f) => f.kind === 'flash').map((f) => f.at)).toEqual([0, 160]);
+    const s0 = sampleClip(c, 0);
+    expect(s0.foe).toMatchObject({ dx: 1150 - at.x, black: 1, shadow: 0 });
+    for (let i = 0; i < WILD_BARS; i++) expect(s0[`bar${i}`]).toMatchObject({ x: 480, y: 30 + i * 60, alpha: 1 });
+    // Bars leave in turn, 20 ms apart, alternating sides, gone by 1 s.
+    const s1 = sampleClip(c, 1000);
+    expect(s1.bar0!.x).toBe(-540);
+    expect(s1.bar1!.x).toBe(1500);
+    expect(sampleClip(c, 330).bar8!.x).toBe(480);
+    expect(sampleClip(c, 1050).foe!.dx).toBeCloseTo(0);
+    expect(sampleClip(c, WILD_CRY).foe!.black).toBe(1);
+    expect(sampleClip(c, WILD_CRY + 300).foe!.black).toBe(0);
+    expect(sampleClip(c, 1400).foe!.dy).toBeCloseTo(-22);
+    const cues = c.fx.filter((f) => f.kind === 'cue').map((f) => [f.at, (f as { name: string }).name]);
+    expect(cues).toEqual([[WILD_CRY, 'cry'], [WILD_PLATE, 'plate']]);
+    // Three cry rings round its middle (the mockup's X - 40, Y - 10, Y being the sprite's middle).
+    expect(c.fx.filter((f) => f.kind === 'ring').map((f) => [(f as { x: number }).x, (f as { y: number }).y])).toEqual([[608, 170], [608, 170], [608, 170]]);
+    expect(clipEnd(c).foe).toMatchObject({ dx: 0, dy: 0, sx: 1, sy: 1, black: 0, shadow: 1 });
+  });
+  it('Reduced: no flashes or bars, the colour fades in; Off: nothing moves, the cry and plate come at once', () => {
+    const r = wildEntranceClip(at, 'reduced');
+    expect(r.fx.some((f) => f.kind === 'flash')).toBe(false);
+    expect(sampleClip(r, 0).bar0!.alpha).toBe(0);
+    expect(sampleClip(r, 0).foe!.black).toBe(1);
+    expect(clipEnd(r).foe!.black).toBe(0);
+    const o = wildEntranceClip(at, 'off');
+    expect(o.length).toBe(0);
+    expect(o.fx).toEqual([{ kind: 'cue', at: 0, name: 'cry' }, { kind: 'cue', at: 0, name: 'plate' }]);
+    expect(clipEnd(o).foe).toMatchObject({ dx: 0, black: 0 });
   });
 });

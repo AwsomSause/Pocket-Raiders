@@ -10,7 +10,7 @@ async function waitForScene(page: Page, key: string) {
   await page.waitForTimeout(250);
 }
 
-async function startBattle(page: Page, seed: string) {
+async function startBattle(page: Page, seed: string, kind = 'trainer', confirm = true) {
   await page.goto('/');
   await page.evaluate(() => localStorage.clear());
   await page.goto(`/?seed=${seed}`);
@@ -20,15 +20,15 @@ async function startBattle(page: Page, seed: string) {
     await waitForScene(page, k);
   }
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);
-  await page.evaluate(() => {
+  await page.evaluate((k) => {
     const { session, game } = (window as any).__pkr;
     const node = session.run.stage.map.nodes.find((n: any) => n.column === 1);
-    node.kind = 'trainer';
+    node.kind = k;
     session.chooseNode(node.id);
     game.scene.getScene('Map').scene.start('Battle');
-  });
+  }, kind);
   await waitForScene(page, 'Battle');
-  await confirmToMenu(page);
+  if (confirm) await confirmToMenu(page);
 }
 
 /** What a side's sprite looks like right now, and the leftovers a clip must never leave behind. */
@@ -329,5 +329,37 @@ test('a shiny entrance: stars circle in and go, the SHINY chip pins itself to th
   // A different, plain Pokémon on that plate takes the chip off.
   await page.evaluate(() => { const b = (window as any).__pkr.game.scene.getScene('Battle'); b.shown.enemy.shiny = false; return b.refreshInfoBox(b.enemyBox, b.shown.enemy, false); });
   expect(await chip()).toBeNull();
+  expect(errors).toEqual([]);
+});
+
+test('a wild Pokémon: nine dark bars pull apart, it slides in as a dark shape, its colour floods in, then its plate', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  const peek = () => page.evaluate(() => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    const v = b.enemySprite;
+    return {
+      bars: b.children.list.filter((c: any) => c.texture?.key === 'wild.bar').length,
+      dark: b.field.list.some((o: any) => o.type === 'Sprite' && o.tintFill && o.tintTopLeft === 0 && o.visible && o.alpha > 0.5),
+      x: v?.active ? v.x : null,
+      homeX: b.spotXY('enemy').x,
+      plate: Boolean(b.enemyBox?.container?.visible && b.enemyBox.container.alpha > 0),
+    };
+  });
+  // The real opening of a wild battle: the bars cover the screen and the Pokémon is still a dark shape off its spot.
+  await startBattle(page, 'wild-e2e', 'wild', false);
+  await expect.poll(async () => (await peek()).bars, { timeout: 15_000 }).toBe(9);
+  await expect.poll(async () => { const p = await peek(); return p.dark && p.x !== null && p.x > p.homeX + 20; }, { timeout: 3_000 }).toBe(true);
+  // Then the bars are gone, the Pokémon stands on its spot in colour, and the plate is in.
+  await expect.poll(async () => { const p = await peek(); return { bars: p.bars, dark: p.dark, home: p.x !== null && Math.abs(p.x - p.homeX) < 1, plate: p.plate }; }, { timeout: 5_000 }).toEqual({ bars: 0, dark: false, home: true, plate: true });
+  await confirmToMenu(page);
+  const e = await look(page, 'enemy');
+  expect({ x: e.x, y: e.y, alpha: e.alpha, solid: e.solid }).toEqual({ x: e.homeX, y: e.homeY, alpha: 1, solid: 0 });
+  // Off: the moment moves nothing and takes no time.
+  await page.evaluate(() => { const { session } = (window as any).__pkr; session.saveSettings({ ...session.settings, battleAnimations: 'off' }); });
+  await start(page, 'b.wildEntranceMoment(b.shown.enemy)');
+  await expect.poll(() => over(page), { timeout: 2_000 }).toBe(true);
+  expect(await page.evaluate(() => (window as any).__ms)).toBeLessThan(400);
+  expect((await peek()).bars).toBe(0);
   expect(errors).toEqual([]);
 });

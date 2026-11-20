@@ -76,3 +76,9 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   the arena brightens for a beat and three rings go out; a yellow "SHINY" chip springs up over it and flies to the top
   of its name plate, where it stays until a plain Pokémon takes the plate (`shinyClip`). Reduced/Off: just the chip.
   Limit: the mockup's slow shimmer on the shiny afterwards is not in.
+- Wild encounter (pass 5): a lone wild Pokémon (not doubles, raids, totems or the Phantom look's own card) opens with
+  two white flashes; the screen is nine dark bars that pull apart left and right in turn; the Pokémon slides in from
+  the right as a black shape; its colour floods in with its cry, three white rings and a hop; then its plate flies in
+  and "A wild X appeared!" (`wildEntranceClip`, `BattleScene.wildEntranceMoment`). The bars stand in for the opening
+  camera sweep. Reduced: the usual short fade, then the shape's colour fades in. Off: it is just there. Limit: the
+  mockup's platform slides in with the Pokémon; ours is part of the arena picture, so it stays.
