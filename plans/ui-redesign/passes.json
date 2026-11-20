@@ -470,5 +470,57 @@
   "q3": "Yes, five reference pages so the den, territory and gate pages do not have to explain everything: tiers, the list of totems, the Dynamax Band, party rules and which team belongs to which region.",
   "q4": "Unchanged. The emblem in the page header also shows on the pause menu's Next Stop line when one of these stops is next.",
   "q5": "Yes. The pink Dynamax symbol, the red R and a stadium scoreboard are the series' own signals."
+ },
+ "29": {
+  "name": "New areas 3 · Bigger Than Life",
+  "label": "New areas · pass 3 of 25",
+  "big": "The stars of each area now fill the screen. The raid boss is nearly twice the size inside a honeycomb shield with three counted plates, the Totem burns in an amber aura, the Gym Leader's Duraludon Dynamaxes under red storm clouds, Mega Garchomp's shadow looms over the end of the expedition route, and the grunt stands taller with two more behind him. Five entrance scenes join.",
+  "pages": [
+   "Raid · Boss Appears",
+   "Totem · It Appears",
+   "Galar · Leader Dynamaxes",
+   "Expedition · Finale",
+   "Evil Team · Ambush"
+  ],
+  "q1": "Yes, much. Pass 2 coloured the screens; this pass changes their scale. A boss that is the same size as a wild Pidgey does not feel like a boss.",
+  "q2": "Pass 2's bosses were normal size with a coloured strip. Now size and a prop (shield, aura, storm, shadow, crew) carry the message, and each gets a proper entrance.",
+  "q3": "Yes, five entrances: Raid Boss, Totem, Leader Dynamax, Expedition Finale and Ambush. The den and territory pages now lead into them.",
+  "q4": "Unchanged.",
+  "q5": "Yes. Giant Dynamax Pokémon under red clouds and oversized Totems are exactly how the series stages these fights."
+ },
+ "30": {
+  "name": "New areas 4 · On Air",
+  "label": "New areas · pass 4 of 25",
+  "big": "Every special screen now has a voice and a ticker. A caster strip sits where the question box normally is: an ally cheers you on in a raid, Rotom reads the Totem's aura, the stadium reporter calls the Galar match live with a camera on the Leader, a ranger talks on the expedition radio, and Rotom's scanner warns you near the evil team. A ticker in the area colour runs along the top. Five pages cover what you can say back.",
+  "pages": [
+   "Raid · Cheers and Talk",
+   "Raid · Boss Cards",
+   "Totem · Ally Call",
+   "Galar · The Crowd",
+   "Expedition · Rest Area"
+  ],
+  "q1": "Yes. Pass 3 was big but silent. Now there is a live broadcast frame, a moving ticker and a talking head on each screen.",
+  "q2": "Pass 3 showed the size of the thing. This pass explains it while you play, so the status strip can stay short and the rules do not need a separate read.",
+  "q3": "Yes, five: Cheers and Talk and Boss Cards for raids, the Ally Call moment for totems, The Crowd for Galar, and a Rest Area stop for expeditions.",
+  "q4": "Unchanged. The caster strip uses the same slot as the battle question box, so the pause menu and its key hints stay where they were.",
+  "q5": "Yes. A stadium match called by a reporter is the Galar games' own framing, and Rotom as the helper keeps the game's rule that the helper is always Rotom."
+ },
+ "31": {
+  "name": "New areas 5 · Dials and Prizes",
+  "label": "New areas · pass 5 of 25",
+  "big": "The number that decides each area is now one big dial: a turn clock in raids, a phase dial at the Totem, a tug-of-war bar with both faces for the Galar crowd, a loot bag with what you keep in each outcome on the expedition, and a Heat thermometer with the Ambush and Reinforcements lines marked. Six ending pages close each loop.",
+  "pages": [
+   "Raid · Raid Clear",
+   "Raid · The Catch",
+   "Totem · The Gift",
+   "Galar · Round Won",
+   "Expedition · The Haul",
+   "Evil Team · It Falls Apart"
+  ],
+  "q1": "Yes. Round dials, a thermometer and a tug-of-war bar are louder and faster to read than the text strips they replace.",
+  "q2": "Pass 4 told you what was going on in words. This pass shows the one number that matters as a shape, and finally shows how each area ends.",
+  "q3": "Yes, six endings: Raid Clear, The Catch, the Totem's Gift, Round Won, the Expedition's Haul, and the evil team falling apart (which leads into the Betrayal and Legendary pages from before).",
+  "q4": "Unchanged.",
+  "q5": "Yes. A single throw at a worn-out raid boss and a Totem stepping aside are the series' own endings for these fights."
  }
 }
