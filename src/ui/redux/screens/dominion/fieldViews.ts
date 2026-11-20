@@ -88,7 +88,7 @@ export function mapView(m: MapModel, notice: string | null, garage: boolean, mee
     ${wanted}
     ${compass}
   </div>
-  <div class="pnl" style="left:616px;top:84px;width:334px;height:196px" data-testid="dom-file">
+  <div class="pnl" style="left:616px;top:84px;width:334px;height:196px;cursor:pointer"${act('dfile')} title="District file (Enter)" data-testid="dom-file">
     <div class="row" style="gap:10px"><b class="y" style="font-size:26px">${esc(f.name)}</b><span class="xs" style="color:#ff9ab0" data-testid="dom-regard" title="Regard">♥ ${f.regard}</span><span class="xs" style="color:#b9a0ff" data-testid="dom-dread" title="Dread">✊ ${f.dread}</span></div>
     <div class="stamp" style="right:14px;top:10px;color:${f.stamp.colour};text-shadow:0 0 8px ${f.stamp.colour}99;box-shadow:0 0 12px ${f.stamp.colour}4d">${esc(f.stamp.word)}</div>
     <div class="col" style="gap:3px;margin-top:8px;font-size:15px">
@@ -106,7 +106,7 @@ export function mapView(m: MapModel, notice: string | null, garage: boolean, mee
   ${garageBox}
   ${meetBox}
   ${tabs(1, [0, 1, 2, 3, 5])}
-  <div class="a" style="left:12px;top:472px;z-index:8;font:600 12px var(--ui);color:#dfe5ff" data-testid="dom-map-note">${esc(m.note)} · <span class="kc">T</span> place · <span class="kc">V</span> vehicles</div>
+  <div class="a" style="left:12px;top:472px;z-index:8;font:600 12px var(--ui);color:#dfe5ff" data-testid="dom-map-note">${esc(m.note)} · <span class="kc">Enter</span> file · <span class="kc">T</span> place · <span class="kc">V</span> vehicles</div>
   ${pings}
   ${flags.replace(/left:(\d+)px;top:(\d+)px/g, (_, x: string, yy: string) => `left:${Number(x) + 10}px;top:${Number(yy) + 12}px`)}
   ${notice ? `<div class="a" style="left:180px;width:300px;top:120px;z-index:40;background:rgba(10,14,30,.92);border:2px solid #8cc0ff;border-radius:8px;padding:8px 10px;font-size:14px;line-height:1.3"${act('dismiss')} data-testid="dom-notice">${esc(notice)}</div>` : ''}`, '', 'check vign grain');

@@ -1133,13 +1133,13 @@ export class GameSession {
   }
 
   /** DOMINION: one clock step, saved when it happened. Returns whether it happened and the line to show. */
-  dominionStep(action: DominionAction): { ok: boolean; notice: string | null; fight: boolean } {
+  dominionStep(action: DominionAction): { ok: boolean; notice: string | null; fight: boolean; roll: { r: number; chance: number; rolled: boolean } | null } {
     const out = dominionStepInRun(this.content, this.requireRun(), action);
     if (out.ok) {
       this.run = out.run;
       this.persistRun();
     }
-    return { ok: out.ok, notice: out.notice, fight: !!out.fight };
+    return { ok: out.ok, notice: out.notice, fight: !!out.fight, roll: out.roll ?? null };
   }
 
   /** DOMINION (D2): starts the battle an action (or the police) waits on and saves. False when there's none to start. */

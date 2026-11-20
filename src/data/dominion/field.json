@@ -274,6 +274,45 @@
       ["Hero", "D11"], ["Gym", "D10"], ["Champion", "D14"], ["Hostage", "D10"], ["traitor", "D15"], ["Region event", "D15"], ["Wanted", "D10"]
     ]
   },
+  "file": {
+    "_note": "D29 (mockup v4 m4): the District file groups each grid page's actions as Money, Muscle and Shadow. A section's group comes from 'sections'; 'byAction' overrides one action. Icons are dominion/*.png names.",
+    "groups": [
+      { "id": "money", "name": "MONEY", "colour": "#ffd23f", "icon": "g-relic-gold" },
+      { "id": "muscle", "name": "MUSCLE", "colour": "#ff6a5c", "icon": "g-black-belt" },
+      { "id": "shadow", "name": "SHADOW", "colour": "#b48cff", "icon": "g-silph-scope" }
+    ],
+    "sections": {
+      "Pressure and Money": "money", "Smuggling and the Black Market": "money", "Street Economy": "money", "Docks and the Underworld Trade": "money",
+      "Snagem and Cipher Deals": "money", "Pokémon Business": "money", "Corporate and Lab Ops": "money", "Crime Families and Syndicates": "money",
+      "Holding Regions": "money", "Territory and Districts": "money", "Endgame and Takeover": "money",
+      "Theft and Heists": "muscle", "Fighting and Battle": "muscle", "Pokémon": "muscle", "Rivals and War": "muscle", "Gyms and Heroes": "muscle",
+      "The Boss Himself: Training and Self": "muscle", "Burglary and Tricks": "muscle", "Combat Specials": "muscle", "Pokémon Handling": "muscle",
+      "Rival Warfare": "muscle", "The Hero": "muscle", "Dungeons and Sites": "muscle", "Elite Four and Champion": "muscle", "Legendary and Rare Events": "muscle",
+      "People and Recruiting": "shadow", "Intel and Spying": "shadow", "Influence and Propaganda": "shadow", "Law and Police": "shadow", "Night Specials": "shadow",
+      "Persuasion and Crew": "shadow", "Detective Work": "shadow", "Public Image": "shadow", "Evasion and Police": "shadow", "Events and Festivals": "shadow",
+      "Gadgets and Technology": "shadow", "Travel and Exploration": "shadow", "Betrayal and Loyalty": "shadow", "Night Shows": "shadow", "Spies and Moles": "shadow",
+      "Police and Justice": "shadow", "Crew Growth and Culture": "shadow", "Crew Missions": "shadow"
+    },
+    "byAction": { "take": "money", "catch": "money" },
+    "icons": { "extort": "g-relic-gold", "take": "g-amulet-coin", "catch": "g-ball", "steal": "g-smoke-ball", "thieve": "g-dark-gem", "attack": "g-black-belt", "recruit": "g-member-card", "scout": "g-silph-scope", "lay-low": "g-tea" },
+    "kindIcons": { "shop": "g-bicycle", "gym": "g-badgecard", "route": "g-nugget" },
+    "lines": {
+      "ask": "What will you do here?",
+      "left": "{n} action{s} left today",
+      "phase": "{phase}: no Day actions here now",
+      "cardFirst": "Each action opens its Card first: you see the odds, pay and risk before anything happens.",
+      "toHeld": "Reach {n} control to make {district} Held.",
+      "isHeld": "{district} is yours: keep Control over {n} to hold it.",
+      "owner": "{trait} · {guard}",
+      "noTrait": "No temper",
+      "noGuard": "no guard",
+      "guard": "guard: {name}",
+      "hero": "{name} IS IN {district} TODAY",
+      "patrol": "OFFICER JENNY PATROLS {district} TODAY",
+      "closed": "POLICE CHECKPOINT IN {district}",
+      "fileKey": "Enter: district file"
+    }
+  },
   "lines": {
     "notHere": "Not this place.",
     "band": "Needs a member in the {band} band (Rank {n} crew) or higher.",

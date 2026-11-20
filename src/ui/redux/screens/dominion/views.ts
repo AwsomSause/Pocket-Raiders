@@ -60,7 +60,7 @@ export function topBar(t: TopModel): string {
     <div><img class="ic l" src="${img('g-amulet-coin')}" alt=""><div><span class="l">FUNDS</span><span class="v y" data-testid="dom-funds">${esc(t.funds)}</span></div></div>
     <div><img class="ic l" src="${img('g-fire-stone')}" alt=""><div><span class="l">HEAT</span><span class="v rd" data-testid="dom-heat">${esc(t.heat)}</span></div></div>
     <div><img class="ic l" src="${img('g-fame-checker')}" alt=""><div><span class="l">ROSTER</span><span class="v" data-testid="dom-roster">${esc(t.roster)}</span></div></div>
-    <div style="flex:1"><img class="ic l" src="${img('g-town-map')}" alt=""><div><span class="l">${esc(t.regionLabel ?? 'REGION:')}</span><span class="v cy" data-testid="dom-region">${esc(t.region)}</span></div></div>
+    <div style="flex:1"><img class="ic l" src="${img('g-town-map')}" alt=""><div><span class="l">${esc(t.regionLabel ?? 'REGION:')}</span><span class="v cy"${t.region.includes('›') ? ' style="font-size:16px;white-space:nowrap"' : ''} data-testid="dom-region">${esc(t.region)}</span></div></div>
   </div>`;
 }
 
