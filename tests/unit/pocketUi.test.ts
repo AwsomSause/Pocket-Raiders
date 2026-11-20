@@ -7,6 +7,7 @@ import { pkAce, pkVersus } from '../../src/ui/pocket/screens/cards';
 import { dealOf, dealWord, pageText, pkEvent, points } from '../../src/ui/pocket/screens/event';
 import { mapWindow, nodeState, pkMap, pkMiniMap, pkNodeMenu } from '../../src/ui/pocket/screens/map';
 import { pkPause } from '../../src/ui/pocket/screens/pause';
+import { pkBag, pocketIcon } from '../../src/ui/pocket/screens/bag';
 import { pkParty } from '../../src/ui/pocket/screens/party';
 import { pkSummary, radar } from '../../src/ui/pocket/screens/summary';
 import type { PartyCard, SummaryModel } from '../../src/ui/redux/screens/party';
@@ -475,5 +476,36 @@ describe('Pocket look: Party and Summary', () => {
     const menu = pkSummary({ ...base, menu: { options: [{ label: 'Make lead', off: false }, { label: 'Review items', off: true }], index: 0 } });
     expect(menu).toContain('gx-sm-menu');
     expect(menu).toContain('gx-dim');
+  });
+});
+
+describe('Pocket look: the Bag', () => {
+  const items = Array.from({ length: 12 }, (_, k) => ({ label: `Item ${k}`, tag: `×${k + 1} · COMMON`, note: k === 0 ? 'Not held · Raises Speed.' : 'Restores 20 HP.', art: null, off: k === 1 }));
+  const d = { title: 'Bag', hints: [['Enter', 'choose']] as const, pockets: { labels: ['All', 'Medicine', 'Poké Balls', 'Key items'], index: 1 }, n: 12, item: (i: number) => items[i]!, index: 0, strip: '', text: 'Item 0: Raises Speed. Only in battle.', money: 4820, party: [{ name: 'Pikachu', file: null, hp: 100, level: 5, fainted: false }], notes: ['Can use'] };
+  it('pockets get an icon by their name', () => {
+    expect(pocketIcon('Poké Balls').file).toBe('pokeball/pb.png');
+    expect(pocketIcon('Medicine').file).toBe('items/potion.png');
+    expect(pocketIcon('Key items').file).toBe('items/map.png');
+    expect(pocketIcon('Odd things').file).toBe('items/amulet_coin.png');
+  });
+  it('shows the pockets, nine items at a time with counts, and the lit item\'s card and button', () => {
+    const html = pkBag(d);
+    expect(pkPageOf(html)?.id).toBe('bag');
+    expect(html.match(/class="pocket[ "]/g)?.length).toBe(4);
+    expect(html).toContain('class="pocket on"');
+    expect(html.match(/class="it12 pn/g)?.length).toBe(9);
+    expect(html).toContain('<em>×1</em>');
+    expect(html).toContain('You have 1 · COMMON');
+    expect(html).toContain('<b>Give</b>');
+    expect(html).toContain('Only in battle.');
+    expect(html).toContain('₽ 4,820');
+    expect(html).toContain('1–9 of 12');
+    expect(html).toContain('class="ok"');
+    const late = pkBag({ ...d, index: 11 });
+    expect(late).toContain('data-key="bag-i-11"');
+    expect(late).not.toContain('data-key="bag-i-0"');
+  });
+  it('an empty pocket says so', () => {
+    expect(pkBag({ ...d, n: 0, text: 'Nothing here yet.' })).toContain('Nothing here yet');
   });
 });

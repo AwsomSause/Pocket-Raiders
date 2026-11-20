@@ -163,7 +163,9 @@ function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerK
     const bag = { title: name, hints, pockets: p.tabs ? { labels: p.tabs.labels, index: p.tabs.index } : null, n, item: (i: number) => ({ ...row(i), off: p.problem(i) !== null }), index, text };
     body = c.ph
       ? phBag(c.ph, { ...bag, strip: '', party: inRun ? partyChips(scene) : [], notes })
-      : bagView(c, { ...bag, strip: inRun ? partyStrip(partyChips(scene), 'left:24px;right:24px;bottom:100px', notes) : '' });
+      : c.pk
+        ? bagView(c, { ...bag, strip: '', ...(inRun ? { party: partyChips(scene), money: services().session.run!.money, ...(notes ? { notes } : {}) } : {}) })
+        : bagView(c, { ...bag, strip: inRun ? partyStrip(partyChips(scene), 'left:24px;right:24px;bottom:100px', notes) : '' });
   } else if (kind === 'board') {
     // Only the rows near the cursor are on screen, so only those are read.
     const near = (i: number): boolean => Math.abs(i - index) < 8;

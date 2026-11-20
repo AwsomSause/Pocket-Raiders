@@ -383,3 +383,29 @@ test('Pocket look: Party is a hand of cards and Summary has every tab; neither c
   expect(await runNow(page)).toBe(before);
   expect(errors).toEqual([]);
 });
+
+test('Pocket look: the Bag is pockets, a grid of items and the item\'s card; looking changes nothing', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=pk-bag');
+  await toPocketMap(page);
+  await page.evaluate(() => { Object.assign((window as any).__pkr.session.run.inventory, { potion: 5, revive: 2, 'great-ball': 4 }); });
+  await page.waitForTimeout(800);
+  const before = await runNow(page);
+  await page.evaluate(() => {
+    const map = (window as any).__pkr.game.scene.getScene('Map');
+    map.activate(map.options.findIndex((o: any) => o.kind === 'bag'));
+  });
+  await onPkPage(page, 'Map', 'bag');
+  const bag = pkView(page, 'Map', 'bag');
+  await expect(bag.locator('.pocket.on')).toHaveCount(1);
+  await expect(bag.locator('.it12.on')).toHaveCount(1);
+  await expect(bag.locator('.bg12-d b').first()).not.toBeEmpty();
+  await fits(page, 'Map', 'bag');
+  const first = await bag.locator('.it12.on').getAttribute('data-key');
+  await step(page, 'ArrowDown');
+  expect(await bag.locator('.it12.on').getAttribute('data-key')).not.toBe(first);
+  await step(page, 'Escape');
+  expect(await runNow(page)).toBe(before);
+  expect(errors).toEqual([]);
+});

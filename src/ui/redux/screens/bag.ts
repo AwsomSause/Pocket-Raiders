@@ -4,6 +4,7 @@
 import { act, B, esc, H, TX, W } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { type Art, gridStart, pic, scrollStart } from '../templates';
+import { pkBag, PK_BAG_COLS, type PkBagModel } from '../../pocket/screens/bag';
 
 export interface BagItem { label: string; tag: string; note: string; art: Art | null; off: boolean }
 export interface BagModel {
@@ -20,7 +21,7 @@ export interface BagModel {
 }
 
 /** How many columns the cursor moves across: the grid layout is seven wide, the list is one. */
-export const bagCols = (c: Pick<ReduxCtx, 'v'>): number => (c.v(2) === 1 ? 7 : 1);
+export const bagCols = (c: Pick<ReduxCtx, 'v'> & { pk?: unknown }): number => (c.pk ? PK_BAG_COLS : c.v(2) === 1 ? 7 : 1);
 
 /**
  * What Enter does with an item, read from the first words of its note: the name on the detail window's button.
@@ -44,7 +45,8 @@ export function bagUseNote(holds: number, usableOutside: boolean, problem: strin
   return problem === null ? 'Can use' : hp <= 0 ? 'Fainted' : 'No effect';
 }
 
-export function bagView(c: ReduxCtx, d: BagModel): string {
+export function bagView(c: ReduxCtx, d: BagModel & Partial<PkBagModel>): string {
+  if (c.pk) return pkBag(d);
   const grid = bagCols(c) === 7;
   const n = Math.max(0, Math.floor(d.n));
   const head = H(d.title, 'shop', d.hints);
