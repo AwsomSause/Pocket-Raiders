@@ -26,6 +26,8 @@ import { pkSettingsHome } from '../../src/ui/pocket/screens/settings';
 import { doorSub, pkHub, type PkHubModel } from '../../src/ui/pocket/screens/hub';
 import { districtProp, pkPlaza, pkTownDoor, pkTownHud, pkTownMap, placeProp, plazaProp } from '../../src/ui/pocket/screens/town';
 import { POCKET_TOWN } from '../../src/core/hubTown/schema';
+import { leaderLine, pkBrief, pkStarter, regionOfGen, runSteps } from '../../src/ui/pocket/screens/run';
+import type { BriefModel } from '../../src/ui/redux/screens/run';
 import { firstThought, fitBody, pkBoard, pkConfirm, pkGrid, pkMenu, pkOptions, pkSaves, pkStats } from '../../src/ui/pocket/templates';
 
 const stage = (current: string | null) => ({
@@ -763,5 +765,57 @@ describe('Pocket Town', () => {
     expect(html).toContain('data-act="pick" data-arg="6"');
     expect(html.match(/<u class="(past|on|)( gym| lg)*"><\/u>/g)?.length).toBe(30);
     expect(plazaProp('services')).toBe('pc');
+  });
+});
+
+describe('Pocket run start: Starter Pick and Briefing', () => {
+  const picks = [
+    { name: 'Froakie', file: null, types: ['water'], stats: '', moves: 'Lv 5: Pound', gen: 6 },
+    { name: 'Magby', file: null, types: ['fire'], stats: '', moves: 'Lv 5: Ember', gen: 2 },
+    { name: 'Gastly', file: null, types: ['ghost', 'poison'], stats: '', moves: 'Lv 5: Lick', gen: 1 },
+  ];
+  it('three cards with each home region stamped, the lit one read out; the steps show Starter', () => {
+    const html = pkStarter({ title: 'Starter Select', picks, on: 1, sub: '' });
+    expect(pkPageOf(html)?.id).toBe('starter');
+    expect(html.match(/class="spc[ "]/g)?.length).toBe(3);
+    expect(html).toMatch(/class="spc on"[^>]*data-key="sp-1"/);
+    expect(html).toContain('Kalos');
+    expect(html).toContain('Region 6');
+    expect(html).toContain('Magby, the Fire Pokémon. Lv 5: Ember. Will you take this one?');
+    expect(html).toContain('<i class="on"><b>2</b>Starter</i>');
+    expect(html.match(/class="ty"/g)?.length).toBe(4);
+  });
+  it('a Blind Draft hides names, types and regions', () => {
+    const html = pkStarter({ title: 'Starter Select', picks, on: 0, sub: '', blind: true });
+    expect(html).not.toContain('Froakie');
+    expect(html).not.toContain('Kalos');
+    expect(html.match(/\?\?\?/g)?.length).toBeGreaterThanOrEqual(3);
+    expect(html).toContain('gx-sp-sil');
+  });
+  it('regions by generation, the steps and the Gym line', () => {
+    expect(regionOfGen(3)?.name).toBe('Hoenn');
+    expect(regionOfGen(undefined)).toBeNull();
+    expect(regionOfGen(99)).toBeNull();
+    expect(runSteps(0)).toContain('<i class="on"><b>1</b>Trainer</i>');
+    expect(leaderLine(['rock'], ['water', 'grass', 'fighting'])).toBe('Rock type. Water and Grass moves hit hard.');
+    expect(leaderLine([], [])).toBe('');
+  });
+  it('the Briefing shows the region map, stops, cap and first Gym, then Set off or Copy seed', () => {
+    const d: BriefModel = { title: 'Campaign Briefing', campaign: 'Full', regions: ['Kanto'], facts: [], nodes: [], stage: '', notes: [], seed: 'abc', party: [], index: 0, text: 'Check the plan, then depart.' };
+    const x = { region: 'Kanto', regionNo: 1, stops: 30, cap: 13, leader: { name: 'Brock', art: null, types: ['rock'], weak: ['water', 'grass'] } };
+    const html = pkBrief(d, x);
+    expect(pkPageOf(html)?.id).toBe('pd-brief');
+    expect(html).toContain('region1.png');
+    expect(html).toContain('<u>30</u><b>stops</b>');
+    expect(html).toContain('<u>13</u><b>level cap</b>');
+    expect(html).toContain('First Gym: Brock');
+    expect(html).toContain('Seed abc');
+    expect(html).toMatch(/class="btn on"[^>]*data-act="go"/);
+    expect(html).not.toContain('gx-bf-note');
+    const copy = pkBrief({ ...d, index: 1, text: 'Seed copied.' }, { ...x, region: 'Paldea', leader: null });
+    expect(copy).toContain('region0.png');
+    expect(copy).not.toContain('First Gym');
+    expect(copy).toContain('Seed copied.');
+    expect(copy).toContain('<kbd>Enter</kbd>copy seed');
   });
 });

@@ -692,3 +692,34 @@ test('Pocket look: the Trainer Plaza is six district cards three across; up and 
   await waitForScene(page, 'Map');
   expect(errors).toEqual([]);
 });
+
+test('Pocket look: starting a run, Starter Pick is three cards and the Briefing shows the first region and Gym', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=pk-run1');
+  const now = () => page.evaluate(() => (window as any).__pkr.activeScene());
+  for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect']) {
+    await page.keyboard.press('Enter');
+    await expect.poll(now, { timeout: 20_000 }).toBe(next);
+    await page.waitForTimeout(400);
+  }
+  await onPkPage(page, 'StarterSelect', 'starter');
+  const sp = pkView(page, 'StarterSelect', 'starter');
+  await expect(sp.locator('.spc')).toHaveCount(3);
+  await expect(sp.locator('.spc.on')).toHaveCount(1);
+  await expect(sp.locator('.steps .on')).toContainText('Starter');
+  await fits(page, 'StarterSelect', 'starter');
+  const first = await sp.locator('.spc.on').getAttribute('data-key');
+  await step(page, 'ArrowRight');
+  expect(await sp.locator('.spc.on').getAttribute('data-key')).not.toBe(first);
+  await step(page, 'Enter');
+  await expect.poll(now, { timeout: 20_000 }).toBe('Briefing');
+  await onPkPage(page, 'Briefing', 'pd-brief');
+  const bf = pkView(page, 'Briefing', 'pd-brief');
+  await expect(bf.locator('.bff38 .pn')).toHaveCount(3);
+  await expect(bf.locator('.bff38 .gym')).toContainText('First Gym');
+  await fits(page, 'Briefing', 'pd-brief');
+  await step(page, 'Enter');
+  await expect.poll(now, { timeout: 20_000 }).toBe('Map');
+  expect(errors).toEqual([]);
+});

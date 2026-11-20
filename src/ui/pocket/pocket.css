@@ -546,3 +546,13 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .pg39 .gx-pz-n{position:absolute;right:14px;top:12px;min-width:22px;padding:0 6px;text-align:center;text-decoration:none;font:800 13px/22px var(--fb);color:#fff;background:var(--red);border:2px solid var(--ink);border-radius:999px}
 .pkx .pks .pg39 .gx-pz-say{position:absolute;left:160px;right:160px;bottom:44px;padding:6px 14px;z-index:6;animation:gx-fade .25s both}
 .pkx .pks .pg39 .gx-pz-say p{margin:0;font-weight:700;text-align:center}
+/* Starter Pick (mock-up starter): a Blind Draft's partners are shadows. */
+.pkx .pks .startp .gx-sp-sil img.sp-mon,.pkx .pks .startp .gx-sp-sil .sp-mon img{filter:brightness(0) opacity(.75)}
+.pkx .pks .startp .gx-sp-q{font:700 12px var(--fb);color:var(--mute)}
+.pkx .pks .startp .gx-sp-ty{display:flex;gap:4px;justify-content:center}
+/* Briefing (mock-up pd-brief): the map fills its frame; Copy seed beside Set off; a note when the seed is copied. */
+.pkx .pks .bf38 .bfm38>img{width:100%;height:100%;object-fit:cover;image-rendering:pixelated}
+.pkx .pks .bf38 .bfg38{display:flex;flex-direction:row-reverse;align-items:center;gap:10px}
+.pkx .pks .bf38 .gx-bf-copy{height:36px;padding:0 14px;display:flex;align-items:center}
+.pkx .pks .bf38 .gx-bf-copy b{font-size:13px}
+.pkx .pks .bf38 .gx-bf-note{position:absolute;left:480px;right:24px;bottom:96px;padding:6px 12px;font-weight:700;font-size:13px;z-index:5}
