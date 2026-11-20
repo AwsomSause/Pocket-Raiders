@@ -1,5 +1,6 @@
 // DOMINION slice D4: ranks, Team Types and the Reserve (plans/evil-mode-rework BUILD_SLICES.md; Part 7, Part 8, Part 9 A19).
 import { describe, expect, it } from 'vitest';
+import { freshChair } from '../../src/core/dominion/chair';
 import { crewOf, crewStep, monName, odds, taskById, withCrew } from '../../src/core/dominion/crew';
 import { fileModel } from '../../src/core/dominion/crewScreens';
 import { DOMINION_DATA } from '../../src/core/dominion/data';
@@ -21,10 +22,16 @@ import { content } from './helpers';
 
 const PY = DOMINION_DATA.pyramid;
 const domRun = (seed = 'dm4'): RunState => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', rules: { ...STANDARD_CHOICE, modeId: DOMINION_MODE_ID } }), 0);
+/** D12: the Chair is switched off here, so these nights stay the same as before it. */
+const quiet = (r: RunState): RunState => {
+  const out = structuredClone(r);
+  out.expansion!.dominion!.chair = { ...freshChair(), opts: { length: 'off', numbers: 'arrows', speed: 'normal' } };
+  return out;
+};
 const started = (seed = 'dm4', member: 'grunt' | 'admin' = 'grunt'): RunState => {
   const out = startInRun(content, domRun(seed), { types: ['poison', 'dark'], member, look: 0 });
   expect(out.problem).toBeNull();
-  return stepInRun(content, out.run, { t: 'open' }).run;
+  return quiet(stepInRun(content, out.run, { t: 'open' }).run);
 };
 const blk = (r: RunState): DominionBlock => r.expansion!.dominion!;
 const go = (r: RunState, a: DominionAction): RunState => {
@@ -76,16 +83,12 @@ describe('DOMINION D4: the data', () => {
   });
   it('D4 turned on its tasks and actions; nothing still says it waits for D4', () => {
     for (const id of ['catch', 'steal-pokemon', 'guard-the-pens', 'tend-the-pens', 'feed-the-team', 'release-the-weak', 'rehab-a-wild-pokemon']) expect(taskById(id)!.status, id).toBe('supported');
-    // D5 and D9 (merged after D4 was planned) pointed 23 more items at D4: two crew tasks, three actions and 18 buildings. They are
-    // not built yet and wait for a D4 follow-up (docs/status/dominion-d4.md, "Left"). This list is pinned so nothing new
-    // quietly joins it.
-    expect(DOMINION_DATA.tasks.filter((t) => t.needs === 'D4').map((t) => t.id).sort()).toEqual(['learn-a-trade', 'teach-a-move']);
-    expect(Object.entries(DOMINION_DATA.field.later.byAction).filter(([, v]) => v === 'D4').map(([k]) => k).sort()).toEqual(['breed', 'egg-run', 'move-tutor']);
-    expect(DOMINION_DATA.buildings.filter((x) => x.waits === 'D4').map((x) => x.id).sort()).toEqual([
-      'admin-quarters', 'captains-hall', 'classroom', 'comfort-ward', 'grunt-academy', 'lieutenants-office', 'mentoring-office', 'officer-academy',
-      'personality-lab', 'retiree-hall', 'sergeants-post', 'skill-booth', 'skill-exam-hall', 'sparring-ring', 'stealth-school', 'therapy-room', 'type-dojo-fire',
-      'veterans-corner',
-    ]);
+    // D5 and D9 (merged after D4 was planned) pointed 23 more items at D4: two crew tasks, three actions and 18 buildings.
+    // D4b built them (tests/unit/dominionSchool.test.ts), so nothing waits for D4 any more.
+    expect(DOMINION_DATA.tasks.filter((t) => t.needs === 'D4').map((t) => t.id)).toEqual([]);
+    expect(Object.entries(DOMINION_DATA.field.later.byAction).filter(([, v]) => v === 'D4')).toEqual([]);
+    expect(DOMINION_DATA.buildings.filter((x) => x.waits === 'D4').map((x) => x.id)).toEqual([]);
+    for (const id of ['learn-a-trade', 'teach-a-move']) expect(taskById(id)!.status, id).toBe('supported');
     expect(DOMINION_DATA.crew.talks.some((t) => t.needs === 'D4')).toBe(false);
     expect(DOMINION_DATA.crew.formed.some((t) => t.needs === 'D4')).toBe(false);
     for (const id of ['rescue-a-wild-pokemon', 'tame-the-wild', 'evolve-in-peace', 'promotion-ceremony', 'mentor', 'toll-booth', 'cat-burglar', 'back-alley-brawl', 'train-robbery']) expect(DOMINION_DATA.field.play[id], id).toBeDefined();

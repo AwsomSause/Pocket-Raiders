@@ -22,14 +22,21 @@ import type { RunState } from '../../src/core/state';
 import { SaveManager } from '../../src/save/saveManager';
 import { MemoryStorageProvider } from '../../src/save/storage';
 import { content } from './helpers';
+import { freshChair } from '../../src/core/dominion/chair';
 
 const EM = DOMINION_DATA.empire;
 const HQ = DOMINION_DATA.field.hq;
 const domRun = (seed = 'dm6'): RunState => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', rules: { ...STANDARD_CHOICE, modeId: DOMINION_MODE_ID } }), 0);
+/** D12: these tests are about other systems: the Chair is set to Off (a Crisis card still comes; none does here). */
+const quiet = (r: RunState): RunState => {
+  const out = structuredClone(r);
+  out.expansion!.dominion!.chair = { ...freshChair(), opts: { length: 'off', numbers: 'arrows', speed: 'normal' } };
+  return out;
+};
 const started = (seed = 'dm6'): RunState => {
   const out = startInRun(content, domRun(seed), { types: ['poison', 'dark'], member: 'grunt', look: 0 });
   expect(out.problem).toBeNull();
-  return stepInRun(content, out.run, { t: 'open' }).run;
+  return quiet(stepInRun(content, out.run, { t: 'open' }).run);
 };
 const blk = (r: RunState): DominionBlock => r.expansion!.dominion!;
 const go = (r: RunState, a: DominionAction): RunState => {
@@ -61,18 +68,20 @@ describe('DOMINION D6: the data', () => {
     expect(unlockStep(actionDef('befriend-the-mayor')!)).toBe(2);
     expect(unlockStep(actionDef('extort')!)).toBe(-1);
   });
-  it('plays the ten Boss actions D6 opens; Gym Takeover waits for Growth (D10)', () => {
+  it('plays the ten Boss actions D6 opens; Gym Takeover came with Growth (D10)', () => {
     const d6 = ['skim-the-till', 'marry-in', 'street-theater', 'spray-the-wall', 'leak-a-story', 'befriend-the-mayor', 'sponsor-a-trainer', 'silence-a-reporter', 'cooperate-with-jenny', 'secret-meeting'];
     for (const id of d6) expect(actionStatus(actionDef(id)!).play, id).toBe(true);
-    expect(DOMINION_DATA.actions.actions.filter((a) => actionStatus(a).play)).toHaveLength(88); // + the five Hero actions (D11)
+    // D10 (Growth) played 42 more of rows 1-150; D11 the five Hero actions; D13 Debate and Write a Manifesto; D4b Egg Run, Breed, Move Tutor; D22 Plant a Mole; D6b Hold a Rally and Chant Night.
+    expect(DOMINION_DATA.actions.actions.filter((a) => a.n <= 150 && actionStatus(a).play)).toHaveLength(136);
     // D5 (Hold a Rally, Radio Room) and D9 (Chant Night, a Rally event) handed these to D6 after D6 was built: D6b plays
     // them (dominionTown.test.ts), so nothing waits for D6 now.
     expect(DOMINION_DATA.actions.actions.filter((a) => actionStatus(a).slice === 'D6').map((a) => a.id)).toEqual([]);
-    expect(actionStatus(actionDef('gym-takeover')!).slice).toBe('D10');
+    expect(actionStatus(actionDef('gym-takeover')!).play).toBe(true);
   });
   it('all eighteen crew tasks that waited for D6 are live district tasks; none waits for D6 now', () => {
-    const live = DOMINION_DATA.tasks.filter((t) => t.effect?.kind === 'district');
-    expect(live).toHaveLength(18);
+    // D6 made 18 of rows 1-150 live district tasks; D10 added Set Up a Safehouse and Run the Radio (and 60 from rows 151-600).
+    const live = DOMINION_DATA.tasks.filter((t) => t.effect?.kind === 'district' && t.n <= 150);
+    expect(live).toHaveLength(20);
     // Pay the Wages came to D6 from D5 after D6 was built: D6b runs it (dominionTown.test.ts).
     expect(DOMINION_DATA.tasks.filter((t) => t.needs === 'D6').map((t) => t.id)).toEqual([]);
     expect(DOMINION_DATA.crew.formed.filter((f) => f.needs === 'D6')).toHaveLength(0);
@@ -89,7 +98,7 @@ describe('DOMINION D6: Notoriety (A14)', () => {
       b.field.districts.celadon!.regard = -6;
       b.field.districts.viridian!.control = 65;
     });
-    expect(notorietyOf(blk(r))).toEqual({ towns: 12, holdings: 2, members: 1, total: 15 });
+    expect(notorietyOf(blk(r))).toEqual({ towns: 12, holdings: 2, members: 1, press: 0, total: 15 });
     expect(notoriety(blk(r))).toBe(15);
     expect(heldIds(blk(r))).toEqual(['viridian']);
   });

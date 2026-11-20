@@ -220,10 +220,15 @@ export function offerFreedom(b: DominionBlock, uid: string, seed: string): { ok:
 }
 
 /** A caught, stolen or rescued Pokémon arrives: kept "for themselves" if it fits, else the Reserve (or let go when full). */
-export function placeMon(content: Content, run: RunState, b: DominionBlock, p: { species: string; level: number; by?: string; src?: Src; self?: boolean; trust?: number }): string | null {
+export function placeMon(
+  content: Content, run: RunState, b: DominionBlock,
+  p: { species: string; level: number; by?: string; src?: Src; self?: boolean; trust?: number; shape?: (mon: PokemonInstance) => void },
+): string | null {
   if (!content.species.has(p.species)) return null;
   const r = book(b);
   const mon = newMon(content, run, p.species, p.level, 'p');
+  // D4b: a hatched egg's nature, IVs, egg move and ability.
+  p.shape?.(mon);
   const src = p.src ?? 'caught';
   const finder = p.by ? b.members.find((x) => x.id === p.by) : undefined;
   // Gentle Hands (a Formed trait): what they catch trusts the team a little more.

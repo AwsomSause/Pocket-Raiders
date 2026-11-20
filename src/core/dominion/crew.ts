@@ -124,7 +124,7 @@ export function addXp(m: Member, xp: number, lines: string[]): void {
     lines.push(fill(C().report.level!, { name: m.name, level: m.level }));
   }
 }
-function growStat(m: Member, stat: StatId, tenths: number, lines: string[]): void {
+export function growStat(m: Member, stat: StatId, tenths: number, lines: string[]): void {
   const c = mc(m);
   c.statXp[stat] += tenths;
   while (c.statXp[stat] >= R().statStep) {
@@ -472,7 +472,8 @@ function runTask(b: DominionBlock, m: Member, seed: string, n: Night): void {
   // After the task: XP, task XP, Fatigue (A18), Thrill.
   addXp(m, xp, n.lines);
   const before = taskLevel(m, task.id);
-  c.taskXp[task.id] = (c.taskXp[task.id] ?? 0) + (ok ? 2 : 1);
+  // D4b: the Skill Booth adds task XP on every working day (not Rest).
+  c.taskXp[task.id] = (c.taskXp[task.id] ?? 0) + (ok ? 2 : 1) + (e.kind !== 'rest' ? hqFx(b).taskXp : 0);
   const after = taskLevel(m, task.id);
   if (after > before) n.lines.push(fill(C().report.taskLevel!, { name: m.name, word: taskLevelWord(after), task: label, level: after }));
   if (e.kind !== 'rest') {
@@ -661,10 +662,18 @@ function weekly(b: DominionBlock, seed: string, n: Night): void {
 }
 
 /** A member leaves the crew for good (quit, stole, dismissed). The Goodbye talk can see them off. */
-export function leave(b: DominionBlock, m: Member, why: string, n: Night | null, line: string): void {
+export function leave(b: DominionBlock, m: Member, why: string, n: Night | null, line: string, out?: string[]): void {
   b.members = b.members.filter((x) => x.id !== m.id);
   cs(b).gone.push({ id: m.id, name: m.name, day: b.day, why });
   if (n) say(n, 'crew', line);
+  const lines = n ? n.lines : out ?? b.report;
+  for (const h of LEAVE_HOOKS) h(b, m, why, lines);
+}
+/** D4b: someone leaving (the Retiree Hall takes a member who leaves on good terms). */
+type LeaveHook = (b: DominionBlock, m: Member, why: string, lines: string[]) => void;
+const LEAVE_HOOKS: LeaveHook[] = [];
+export function addLeaveHook(h: LeaveHook): void {
+  LEAVE_HOOKS.push(h);
 }
 
 /** Green traits mature (Part 2 §4.2): the first at Grunt rank and level, the second at Sergeant. */

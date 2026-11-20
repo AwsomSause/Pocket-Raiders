@@ -15,10 +15,17 @@ import { grainUrl, skylineUrl, warehouseUrl } from './paint';
 const img = (f: string): string => rxUrl(`dominion/${f}.png`);
 const cap = (t: string): string => t[0]!.toUpperCase() + t.slice(1);
 
-/** The 960x540 stage every Dominion screen draws on (the mockups' `.st`, with the vignette and grain). */
-export function stage(inner: string, style = '', cls = 'vign grain'): string {
-  return `<div class="dom" style="position:absolute;left:0;top:0;width:960px;height:540px;--noise:url(${grainUrl()})"><div class="st ${cls}" style="${style}">${inner}</div></div>`;
+/** The 960x540 stage every Dominion screen draws on (the mockups' `.st`, with the vignette and grain). Round 4 (D26): every
+ *  screen wears the Nova livery, so the stage ends with the Nova sigil (`sig`: right by default, `l` left, `c` centre, where
+ *  the mockup puts it on open background) and the crimson underlight. Both are pointer-events:none. */
+export function stage(inner: string, style = '', cls = 'vign grain', sig: '' | 'l' | 'c' = ''): string {
+  const nova = `<div class="sig4${sig ? ` ${sig}` : ''}" aria-hidden="true"></div><div class="vl4" aria-hidden="true"></div>`;
+  return `<div class="dom" style="position:absolute;left:0;top:0;width:960px;height:540px;--noise:url(${grainUrl()})"><div class="st ${cls}" style="${style}">${inner}
+  ${nova}</div></div>`;
 }
+
+/** Round 4 (D26): every in-game key strip starts with Q, held for the command wheel (D28 builds the wheel). */
+export const WHEEL_KEY = '<span class="key q4">Q</span><span>Wheel</span>';
 
 /** D7: the mark's outline for each logo (the emblem on the top bar, the door, the title tower). */
 const LOGO_CLIP: Record<string, string> = {
@@ -108,7 +115,7 @@ export function titleView(m: TitleModel): string {
   <div class="glint" style="left:150px;top:350px;--g:14px;animation-delay:-2.2s"></div>
   <img class="spr cross" src="${img('p-golbat')}" alt="" style="left:520px;top:60px;width:70px;height:55px;z-index:2;filter:brightness(0) drop-shadow(0 0 2px #b38cff);--x:260px">
   <div class="a blink" style="left:54px;top:488px;z-index:10;font:700 16px var(--ui);letter-spacing:.24em;color:#ffe98a;text-shadow:0 0 10px rgba(255,210,63,.8)">PRESS ENTER</div>
-  <div class="sticker pulse" style="left:470px;top:200px;transform:rotate(-8deg)">EVIL MODE!</div>`, 'background:#12082a');
+  <div class="sticker pulse" style="left:470px;top:200px;transform:rotate(-8deg)">EVIL MODE!</div>`, 'background:#12082a', 'vign grain', 'c');
 }
 
 // ---------- setup pages (Part 1 §1.1, Part 7 §1.1) ----------
@@ -123,7 +130,7 @@ export interface SetupFiles {
 
 const typeChip = (t: string, extra = ''): string => `<span class="type" style="--c:${TYPE_COLORS[cap(t)] ?? '#888'};${extra}">${cap(t).toUpperCase()}</span>`;
 
-function warehouseBack(morning = false): string {
+export function warehouseBack(morning = false): string {
   return `<img class="cv" src="${warehouseUrl(morning)}" alt="" style="position:absolute;inset:0;width:960px;height:540px">
   <div class="rain" style="left:40px;top:192px;width:268px;height:176px;right:auto;bottom:auto;opacity:.9"></div>
   <div class="rain" style="left:304px;top:16px;width:376px;height:62px;right:auto;bottom:auto"></div>`;
@@ -208,7 +215,7 @@ export function threatView(t: Threat | null, left: number, top: number, width: n
 }
 
 /** `desk`: applicants waiting at the D21 desk today (null while it's closed). */
-export function hqView(m: HqModel, notice: string | null, at: number, member: { look: string; atlas: boolean }, threat: Threat | null = null, desk: number | null = null): string {
+export function hqView(m: HqModel, notice: string | null, at: number, member: { look: string; atlas: boolean }, threat: Threat | null = null, desk: number | null = null, paper: string | null = null): string {
   const sel = 'background:linear-gradient(90deg,#3a5a9e,#2a3f72);border-radius:6px;padding:5px 8px;box-shadow:0 0 0 2px #8cc0ff,0 0 14px rgba(79,163,255,.45)';
   let left = '';
   if (m.panel === 'orders') {
@@ -265,6 +272,7 @@ export function hqView(m: HqModel, notice: string | null, at: number, member: { 
   ${tabs(0, [0, 1, 2, 3, 5])}
   <div class="a" style="left:330px;top:96px;width:300px;height:360px;z-index:3;cursor:pointer"${act('base')} data-testid="dom-building"></div>
   <div class="a row" style="left:540px;top:92px;z-index:9;gap:6px;font:600 13px var(--ui);color:#dfe5ff;cursor:pointer"${act('base')} data-testid="dom-hq-open"><span class="kc">B</span>HQ menu</div>
+  <div class="a row" style="left:418px;top:118px;z-index:9;gap:6px;font:600 13px var(--ui);color:#dfe5ff;cursor:pointer;white-space:nowrap"${act('voicesOpen')} data-testid="dom-voices-open"${paper ? ` title="${esc(paper)}"` : ''}><span class="kc">V</span>Crew talk${paper ? ' · <b class="y">NEW LEDGER</b>' : ''}</div>
   <div class="a row" style="left:418px;top:92px;z-index:9;gap:6px;font:600 13px var(--ui);color:#dfe5ff;cursor:pointer"${act('rivalFile')} data-testid="dom-rival-open"><span class="kc">R</span>Rivals</div>
   ${m.panel === 'report' ? '' : threatView(threat, 10, 336, 330)}
   <div class="ping" style="left:120px;top:400px;width:40px;height:14px;--pc:rgba(160,200,255,.7)"></div>

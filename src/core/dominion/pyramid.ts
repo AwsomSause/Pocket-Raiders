@@ -1,10 +1,12 @@
 // DOMINION slice D4: the Rank Pyramid (Part 8) and the caps each rank sets (Part 7 §4). Fifteen ranks, seats that run
 // out as you climb, five bands, and the Evening moves: promote, pass over, demote, strip. Pure: changes the block given.
 
-import { addLoyalty, addMorale, crewOf, rankN, rankWord } from './crew';
+import { addLoyalty, addMorale, crewOf, growStat, pickTrait, rankN, rankWord, traitName } from './crew';
 import { DOMINION_DATA } from './data';
+import { hqFx } from './hqFx';
 import { notoriety } from './recruit';
 import type { DominionBlock, Member, MonMeta, RankRow, ReserveState } from './schema';
+import { STAT_IDS } from './schema';
 import { fill } from './worldTurn';
 
 const P = () => DOMINION_DATA.pyramid;
@@ -22,8 +24,18 @@ export const prevRank = (id: string): RankRow | null => (rankN(id) > 1 ? P().ran
 export const seatsTaken = (b: DominionBlock, id: string): number => b.members.filter((m) => m.rank === id).length;
 /** Open seats in a rank: Infinity for the open ranks (Hopeful, Recruit, Grunt). */
 export function seatsOpen(b: DominionBlock, id: string): number {
+  return seatsOf(b, id) === Infinity ? Infinity : Math.max(0, seatsOf(b, id) - seatsTaken(b, id));
+}
+/** All seats in a rank: the pyramid's, plus D4b's seat rooms (Admin Quarters, Sergeant's Post, Lieutenant's Office, Captain's Hall). */
+export function seatsOf(b: DominionBlock, id: string): number {
   const r = rankRow(id);
-  return r.seats ? Math.max(0, r.seats - seatsTaken(b, id)) : Infinity;
+  return r.seats ? r.seats + (hqFx(b).seats[id] ?? 0) : Infinity;
+}
+
+/** D4b: the member level a rank needs; the Officer Academy takes levels off every rank up to Sergeant. */
+export function levelFor(b: DominionBlock, id: string): number {
+  const off = rankN(id) <= rankN('sergeant') ? hqFx(b).rankLv : 0;
+  return Math.max(1, rankLevel(id) - off);
 }
 
 /** A member in this band or higher ("Rank N crew" in the lists, Part 8 §3). */
@@ -84,7 +96,7 @@ export function fitFor(b: DominionBlock, m: Pick<Member, 'rank'> & { crew?: Memb
 /** The rank a member is ready for (level and HQ level), seat or no seat. */
 export function readyFor(b: DominionBlock, m: Member): RankRow | null {
   const next = nextRank(m.rank);
-  if (!next || m.level < rankLevel(next.id) || b.hqLevel < next.hq) return null;
+  if (!next || m.level < levelFor(b, next.id) || b.hqLevel < next.hq) return null;
   return next;
 }
 
@@ -93,7 +105,7 @@ export function promoteProblem(b: DominionBlock, m: Member): string | null {
   const next = nextRank(m.rank);
   if (!next) return `${m.name} is already the Right Hand.`;
   if (b.phase !== 'evening') return 'Promotions happen in the Evening.';
-  if (m.level < rankLevel(next.id)) return `${rankWord(next.id)} needs member Lv ${rankLevel(next.id)} (${m.name} is Lv ${m.level}).`;
+  if (m.level < levelFor(b, next.id)) return `${rankWord(next.id)} needs member Lv ${levelFor(b, next.id)} (${m.name} is Lv ${m.level}).`;
   if (b.hqLevel < next.hq) return `${rankWord(next.id)} needs HQ Lv ${next.hq}.`;
   if (!seatsOpen(b, next.id)) return `Every ${rankWord(next.id)} seat is taken.`;
   return null;
@@ -122,6 +134,7 @@ export function promote(b: DominionBlock, memberId: string): { ok: boolean; noti
   addMorale(m, mv.promoteMorale);
   crewOf(m).memory.push({ day: b.day, line: `The Boss made me ${rankWord(to.id)}.` });
   const lines = [fill(L.promoted!, { name: m.name, rank: rankWord(to.id), loyalty: mv.promoteLoyalty, morale: mv.promoteMorale })];
+  lines.push(...schooled(b, m));
   const book = reserveBook(b);
   book.promoted.push({ member: m.id, day: b.day });
   // Only pass over if the seat is now gone for them (an open rank never passes anyone over).
@@ -139,6 +152,34 @@ export function promote(b: DominionBlock, memberId: string): { ok: boolean; noti
     }
   }
   return { ok: true, notice: lines.join(' ') };
+}
+
+/** D4b: what the Classroom and the Skill Exam Hall give a member on promotion. */
+function schooled(b: DominionBlock, m: Member): string[] {
+  const fx = hqFx(b), SL = P().school.lines, out: string[] = [];
+  for (let i = 0; i < fx.promoTrait; i++) {
+    // Classroom: the member chooses their next trait now (at most two formed); with two, a trait point instead.
+    const c = crewOf(m);
+    const to = c.formed.length < 2 ? pickTrait(m) : null;
+    if (to) {
+      c.grew = { from: c.formed.at(-1) ?? c.green, to, day: b.day };
+      c.formed.push(to);
+      m.untrained = false;
+      out.push(fill(SL.classTrait!, { name: m.name, trait: traitName(to) }));
+    } else {
+      m.traitPoints += 1;
+      out.push(fill(SL.classPoint!, { name: m.name }));
+    }
+  }
+  if (fx.examStat) {
+    // Skill Exam Hall: the exam finds a talent: tenths on the member's best stat that can still grow.
+    const stat = STAT_IDS.filter((k) => m.stats[k] < 10).sort((a, x) => m.stats[x] - m.stats[a])[0];
+    if (stat) {
+      growStat(m, stat, fx.examStat * 10, []);
+      out.push(fill(SL.exam!, { name: m.name, stat: stat[0]!.toUpperCase() + stat.slice(1), value: m.stats[stat] }));
+    }
+  }
+  return out;
 }
 
 /** One rank down, any Evening: Loyalty −20, Morale −20. Pokémon over the new caps are benched (Part 7 §4.3). */

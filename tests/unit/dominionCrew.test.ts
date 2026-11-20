@@ -14,13 +14,20 @@ import type { RunState } from '../../src/core/state';
 import { SaveManager } from '../../src/save/saveManager';
 import { MemoryStorageProvider } from '../../src/save/storage';
 import { content } from './helpers';
+import { freshChair } from '../../src/core/dominion/chair';
 
 const CR = DOMINION_DATA.crew;
 const domRun = (seed = 'dm3'): RunState => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', rules: { ...STANDARD_CHOICE, modeId: DOMINION_MODE_ID } }), 0);
+/** D12: these tests are about other systems: the Chair is set to Off (a Crisis card still comes; none does here). */
+const quiet = (r: RunState): RunState => {
+  const out = structuredClone(r);
+  out.expansion!.dominion!.chair = { ...freshChair(), opts: { length: 'off', numbers: 'arrows', speed: 'normal' } };
+  return out;
+};
 const started = (seed = 'dm3', member: 'grunt' | 'admin' = 'grunt'): RunState => {
   const out = startInRun(content, domRun(seed), { types: ['poison', 'dark'], member, look: 0 });
   expect(out.problem).toBeNull();
-  return stepInRun(content, out.run, { t: 'open' }).run;
+  return quiet(stepInRun(content, out.run, { t: 'open' }).run);
 };
 const blk = (r: RunState): DominionBlock => r.expansion!.dominion!;
 const go = (r: RunState, a: DominionAction): RunState => {
@@ -44,9 +51,9 @@ const withRun = (r: RunState, f: (b: DominionBlock) => void): RunState => {
 const rook = (b: DominionBlock): Member => b.members[0]!;
 
 describe('DOMINION D3: the lists as data', () => {
-  it('all 150 crew tasks are in, word for word, each with a status; live ones have an effect, waiting ones name their slice', () => {
+  it('all 600 crew tasks are in, word for word, each with a status; live ones have an effect, waiting ones name their slice', () => {
     const list = DOMINION_DATA.tasks.filter((t) => t.n > 0);
-    expect(list.map((t) => t.n)).toEqual(Array.from({ length: 150 }, (_, i) => i + 1));
+    expect(list.map((t) => t.n)).toEqual(Array.from({ length: 600 }, (_, i) => i + 1));
     expect(taskById('guard-hq')!.levels).toHaveLength(5);
     for (const t of DOMINION_DATA.tasks) {
       if (t.status === 'disabled') expect(t.needs).toMatch(/^D\d+$/);
@@ -109,11 +116,11 @@ describe('DOMINION D3: members', () => {
     expect(cantTake(m, taskById('pickpocket')!)).toBeNull();
     expect(cantTake(m, taskById('shake-down')!)).toBeNull();
     expect(cantTake(m, taskById('rally-the-troops')!)).toMatch(/SENIOR GRUNT/);
-    expect(cantTake(m, taskById('stock-the-stores')!)).toMatch(/D10/);
+    expect(cantTake(m, taskById('govern-a-region')!)).toMatch(/D15/);
   });
   it('assigning is a Morning/Evening step, refused for a task they can\'t take', () => {
     let r = started();
-    expect(stepInRun(content, r, { t: 'assign', member: 'm1', task: 'stock-the-stores' }).ok).toBe(false);
+    expect(stepInRun(content, r, { t: 'assign', member: 'm1', task: 'govern-a-region' }).ok).toBe(false);
     r = go(r, { t: 'assign', member: 'm1', task: 'pickpocket' });
     expect(crewOf(rook(blk(r))).task).toBe('pickpocket');
     r = go(go(night(r), { t: 'toDay' }), { t: 'endDay' });

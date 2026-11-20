@@ -15,6 +15,14 @@ export type WorldStep = (block: DominionBlock, seed: string) => string[];
 
 const fill = (t: string, v: Record<string, string | number>): string => t.replace(/\{(\w+)\}/g, (_, k: string) => String(v[k] ?? ''));
 
+/** D4b: % off wages (a cook's cheap meals); school.ts sets it, so this file needs no import of the HQ. */
+let wageOff: (b: DominionBlock) => number = () => 0;
+export function setWageOff(f: (b: DominionBlock) => number): void {
+  wageOff = f;
+}
+/** A member's wage this week, after the cook's discount. */
+export const wageOf = (b: DominionBlock, wage: number): number => Math.round((wage * (100 - wageOff(b))) / 100);
+
 /** D1 steps. Later slices add theirs to the same table under their own id. */
 const STEPS: Partial<Record<WorldStepId, WorldStep[]>> = {
   // crew: slice D3's step (crew.ts) registers itself.
@@ -26,7 +34,7 @@ const STEPS: Partial<Record<WorldStepId, WorldStep[]>> = {
       const c = DOMINION_DATA.start.clock;
       if (b.day % c.weekLength !== 0) return [];
       const r = DOMINION_DATA.start.report;
-      const wages = b.members.reduce((a, m) => a + m.wage, 0);
+      const wages = b.members.reduce((a, m) => a + wageOf(b, m.wage), 0);
       // D9: a rival who bought the landlord (rival action 5) puts the rent up while it lasts.
       const up = b.rivals?.rent && b.rivals.rent.until > b.day ? b.rivals.rent.pct : 0;
       const rent = Math.round((c.rent * (100 + up)) / 100);
@@ -40,7 +48,7 @@ const STEPS: Partial<Record<WorldStepId, WorldStep[]>> = {
       const pay = PAYROLL?.(b) ?? null;
       const order = pay?.lowFirst ? [...b.members].sort((x, y) => x.wage - y.wage) : b.members;
       for (const m of order) {
-        const wage = pay ? Math.round((m.wage * (100 - pay.cut)) / 100) : m.wage;
+        const wage = wageOf(b, pay ? Math.round((m.wage * (100 - pay.cut)) / 100) : m.wage);
         if (b.funds >= wage) {
           b.funds -= wage;
           book(b, 'wages', -wage);
@@ -71,9 +79,11 @@ export function addWorldStep(id: WorldStepId, step: WorldStep): void {
   (STEPS[id] ??= []).push(step);
 }
 
-/** D6: what runs after every step (the Ledger closes the week, the districts' holding). Same shape as a step. */
-const ENDS: WorldStep[] = [];
-export function addWorldEnd(step: WorldStep): void {
+/** D6: what runs after every step (the Ledger closes the week, the districts' holding). Same shape as a step; D25's news
+ * also reads tonight's lines by step. */
+export type WorldEnd = (block: DominionBlock, seed: string, byStep: Partial<Record<WorldStepId, string[]>>) => string[];
+const ENDS: WorldEnd[] = [];
+export function addWorldEnd(step: WorldEnd): void {
   ENDS.push(step);
 }
 
@@ -84,14 +94,17 @@ export function addWorldEnd(step: WorldStep): void {
 export function runWorldTurn(block: DominionBlock, seed: string): string[] {
   const lines: string[] = [];
   const byStep = DOMINION_DATA.empire.ledger.byStep;
+  const said: Partial<Record<WorldStepId, string[]>> = {};
   for (const id of WORLD_ORDER) {
     for (const step of STEPS[id] ?? []) {
       const funds = block.funds, sum = weekSum(block);
-      lines.push(...step(block, seed));
+      const out = step(block, seed);
+      lines.push(...out);
+      (said[id] ??= []).push(...out);
       bookRest(block, funds, sum, byStep[id] ?? 'other');
     }
   }
-  for (const end of ENDS) lines.push(...end(block, seed));
+  for (const end of ENDS) lines.push(...end(block, seed, said));
   return lines;
 }
 
