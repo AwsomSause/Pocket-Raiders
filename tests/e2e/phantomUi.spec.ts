@@ -116,10 +116,10 @@ test('Phantom UI: a screen without a Phantom page yet shows its New page in Phan
   const errors = watch(page);
   await start(page, 'ui=phantom');
   await onPage(page, 'MainMenu', 'title');
-  await page.evaluate(() => void (window as any).__pkr.game.scene.getScene('MainMenu').scene.start('Hub'));
-  await waitForScene(page, 'Hub');
-  const hub = page.locator('#rx .stage[data-scene="Hub"]').first();
-  await expect(hub).toBeVisible();
-  await expect(hub).toHaveClass(/phfb/);
+  await page.evaluate(() => void (window as any).__pkr.game.scene.getScene('MainMenu').scene.start('Credits'));
+  await waitForScene(page, 'Credits');
+  const stand = page.locator('#rx .stage[data-scene="Credits"]').first();
+  await expect(stand).toBeVisible();
+  await expect(stand).toHaveClass(/phfb/);
   expect(errors).toEqual([]);
 });

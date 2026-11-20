@@ -207,6 +207,11 @@ test('Phantom UI: a talk page (the tutorial) is a Phantom page with no step stri
   await onPage(page, 'Tutorial', 'choice');
   const talk = page.locator('#phx .phs[data-scene="Tutorial"]');
   await expect(talk.locator('.sy-st > div')).toHaveCount(0);
+  // First the list of lessons, dealt as cards in two rows; picking one opens the lesson.
+  await expect(talk.locator('.sy-cd')).toHaveCount(10);
+  await expect(talk.locator('.sy-cd.on')).toHaveCount(1);
+  await fits(page, 'Tutorial', 'choice');
+  await page.keyboard.press('Enter');
   await expect(talk.locator('.sy-cd')).toHaveCount(2);
   await expect(talk.locator('.sy-cd.on')).toHaveText(/Next/);
   const first = await talk.locator('.sy-q > span').innerText();
@@ -223,5 +228,45 @@ test('Phantom UI: a talk page (the tutorial) is a Phantom page with no step stri
     await expect(page.locator(`#phx .phs[data-scene="Tutorial"][data-liv="${id}"]`)).toBeVisible();
     await fits(page, 'Tutorial', 'choice');
   }
+  expect(errors).toEqual([]);
+});
+
+test('Phantom UI: a healing spot is a Phantom page that stays until an input', async ({ page }) => {
+  test.setTimeout(120_000);
+  const errors = watch(page);
+  await start(page, 'ui=phantom&seed=phantom-heal');
+  await onPage(page, 'MainMenu', 'title');
+  await toPhantomMap(page);
+  await addSide(page, { id: 'ph-heal', kind: 'heal' });
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr, run = pkr.session.run;
+    run.party[0].hp = 1;
+    pkr.game.scene.getScene('Map').scene.restart();
+  });
+  await page.waitForTimeout(900);
+  await onPage(page, 'Map', 'map');
+  await pview(page, 'Map', 'map').locator('.ph-mbar [data-act]', { hasText: 'Heal' }).click();
+  await onPage(page, 'Map', 'heal');
+  const heal = pview(page, 'Map', 'heal');
+  // The rules healed at once; the page only shows it.
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.party[0].hp)).toBeGreaterThan(1);
+  await expect(heal.locator('.hc-s')).toHaveCount(await page.evaluate(() => (window as any).__pkr.session.run.party.length));
+  await expect(heal.locator('.hc-say')).toContainText('healed');
+  await fits(page, 'Map', 'heal');
+  // ALL EVENTS rule: the words stay until an input.
+  await page.waitForTimeout(2500);
+  expect(await pageNow(page, 'Map')).toBe('heal');
+  for (const [id, w, h] of [['midnight', 844, 390], ['velvet', 1920, 1080]] as const) {
+    await version(page, id);
+    await page.setViewportSize({ width: w, height: h });
+    await page.evaluate(() => void (window as any).__pkr.game.scene.getScene('Map').rxView.refresh());
+    await expect(page.locator(`#phx .phs[data-scene="Map"][data-scr="heal"][data-liv="${id}"]`)).toBeVisible();
+    await fits(page, 'Map', 'heal');
+  }
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.keyboard.press('Enter');
+  await onPage(page, 'Map', 'map');
+  // The stop is used up: its button is gone, and the map says what happened.
+  await expect(pview(page, 'Map', 'map').locator('.ph-mbar [data-act]', { hasText: 'Heal' })).toHaveCount(0);
   expect(errors).toEqual([]);
 });

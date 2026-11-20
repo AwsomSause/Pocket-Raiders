@@ -6,8 +6,9 @@ import type { PhantomVersion } from '../../../core/presentation/phantom';
 import type { PartyChip } from '../../redux/game';
 import type { RewardModel } from '../../redux/screens/stops';
 import type { ConfirmModel } from '../../redux/screens/saves';
+import { rxAtlas } from '../../redux/assets';
 import { figure, pic as rxPic, scrollStart, type Art } from '../../redux/templates';
-import { act, esc, keys, mon, page, ransom } from '../kit';
+import { act, esc, keys, mon, page, pic, ransom } from '../kit';
 import { phConfirm, phKeys } from '../templates';
 import { useOn } from './bag';
 
@@ -92,4 +93,29 @@ export function phShop(_ph: PhantomVersion, d: PhShopModel): string {
     + `<div class="bub ph-bub" data-key="bub:${esc(d.text)}" style="font-size:${d.text.length > 150 ? 15 : d.text.length > 90 ? 18 : 23}px">${esc(d.text)}</div><div class="clerk ph-clerk" aria-hidden="true">${d.keeper ? mon(d.keeper, 4.2, 'ol', '', true) : figure(d.clerk, 400)}</div>`
     + `<div class="items">${rows}</div>${where}${card}${useOn(d.party, d.notes, 'Can use')}<div class="cart ph-cart">${till}</div>`
     + (d.ask ? phConfirm(d.ask) : '') + phKeys(d.hints));
+}
+
+/** The nurse of a healing spot: the first frame of the overworld sheet the mock-ups drew theirs from. */
+export const HEAL_NURSE: Art = { file: 'overworld/trainers/NPC_B2W2_Nurse.png', atlas: false, crop: [0, 0, 64, 64] };
+export interface PhHealModel {
+  title: string;
+  small: string;
+  /** Each team member: its sprite, its HP as it walked in (0 to 100) and its HP now as "236/236". */
+  party: readonly { file: string | null; name: string; from: number; hp: string }[];
+  /** What the game says about the heal; it stays until the player presses. */
+  text: string;
+}
+
+/** A healing spot: the mock-ups' `heal` page. One ball per Pokémon lights in turn as its HP fills, then "ALL BETTER!". */
+export function phHeal(_ph: PhantomVersion, d: PhHealModel): string {
+  const n = d.party.length;
+  // Each Pokémon is fitted to its slot: a small one is drawn larger, a tall one smaller.
+  const fit = (file: string): number => { const f = rxAtlas(file)?.f[0]; return f ? Math.round(Math.min(1.5, 84 / Math.max(1, f[3]), 110 / Math.max(1, f[2])) * 100) / 100 : 1; };
+  const slots = d.party.map((p, i) => `<div class="hc-s" style="--i:${i}" title="${esc(p.name)}"><div class="hc-p">${p.file ? mon(p.file, fit(p.file)) : ''}</div><div class="hc-b">${pic('pokeball/pb.png', 3)}</div><div class="hc-hp"><i style="--from:${Math.max(0, Math.min(100, Math.round(p.from)))}%"></i></div><small>${esc(p.hp)}</small></div>`).join('');
+  return page('heal', '<div class="bgk"></div><div class="burst" style="--x:70%;--y:40%" aria-hidden="true"></div><div class="dim" style="background:color-mix(in srgb,var(--k) 55%,transparent)"></div><div class="shard" style="--c:var(--red);--cp:polygon(0 0,36% 0,22% 100%,0 100%);inset:0" aria-hidden="true"></div>'
+    + `<div class="hd"><small>${esc(d.small)}</small>${esc(d.title)}</div><div class="hc-n" aria-hidden="true">${figure(HEAL_NURSE, 474)}</div>`
+    + `<div class="pn hc-m"><span class="lab">Healing</span><div class="hc-row">${slots}</div></div>`
+    + `<div class="hc-t" style="animation-delay:${(n * 0.28 + 0.6).toFixed(2)}s">${ransom('ALL', 4)}${ransom('BETTER!', 12)}</div>`
+    + `<div class="pn lt hc-say ph-hc-say tilt" style="--r:-2deg"${act('heal')}><p class="txt" style="font-size:${d.text.length > 200 ? 16 : d.text.length > 120 ? 19 : 24}px">${esc(d.text)}</p><i class="nx" aria-hidden="true">▼</i></div>`
+    + keys(['Enter', 'Thank you', 'heal']));
 }

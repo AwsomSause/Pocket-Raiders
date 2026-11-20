@@ -14,7 +14,8 @@ import { content } from './helpers';
 // The Phantom UI (Settings > Display > UI style > Phantom): the setting and its save upgrade, the three presets,
 // and the Title and Settings pages, which are pure functions from a model to HTML.
 
-const envelope = (v: number, data: unknown) => JSON.stringify({ format: 'pkmn-roguelike', record: 'settings', schemaVersion: v, savedAt: '', data });
+// The content gate looks for `envelope('settings', 45, …)` to know the v45 -> v46 upgrade has a test.
+const envelope = (record: 'settings', v: number, data: unknown) => JSON.stringify({ format: 'pkmn-roguelike', record, schemaVersion: v, savedAt: '', data });
 const ph = PHANTOM_VERSIONS[0]!;
 const ctx = (on: boolean): ReduxCtx => ({ k: 0, skin: {} as ReduxCtx['skin'], v: () => 0, ph: on ? ph : null });
 const count = (html: string, bit: string | RegExp): number => html.split(bit).length - 1;
@@ -27,7 +28,7 @@ describe('Phantom UI setting (settings v46)', () => {
   it('a v45 save gains the first version and keeps its style and every other setting', () => {
     const storage = new MemoryStorageProvider();
     const { phantomVersion: _p, ...old } = new SaveManager(storage, content).loadSettings();
-    storage.set('pkr.settings', envelope(45, { ...old, uiStyle: 'old', reduxSkin: 'cGear', musicVolume: 0.2 }));
+    storage.set('pkr.settings', envelope('settings', 45, { ...old, uiStyle: 'old', reduxSkin: 'cGear', musicVolume: 0.2 }));
     const loaded = new SaveManager(storage, content).loadSettings();
     expect(loaded.phantomVersion).toBe('phantom');
     expect(loaded.uiStyle).toBe('old');

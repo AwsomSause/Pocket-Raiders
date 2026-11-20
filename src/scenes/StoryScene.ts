@@ -9,7 +9,7 @@ import { playStorySfx } from '../ui/audio';
 import { onInputAction, type InputAction } from '../ui/input';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import { sceneForRun } from './routing';
-import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, phantomOn, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { talkView } from '../ui/redux/screens/talk';
 import { playerPortrait } from '../ui/redux/templates';
 
@@ -117,6 +117,8 @@ export class StoryScene extends Phaser.Scene {
 
   private handle(action: InputAction): void {
     if (this.done) return;
+    // Phantom UI deals the choices as a row of cards: left and right move along them.
+    if (phantomOn() && this.rx) action = action === 'left' ? 'up' : action === 'right' ? 'down' : action;
     const last = this.page >= this.view.lines.length - 1;
     if (!last && this.view.lines.length > 0) {
       if (action === 'confirm') {
