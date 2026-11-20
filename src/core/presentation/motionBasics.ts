@@ -292,3 +292,50 @@ export function missClip(attacker: Point, target: Point, level: ClipLevel): Moti
   b.beat(0, 'The attacker winds up').beat(140, 'Side-step').beat(260, 'Overshoot and skid').beat(600, 'Reset');
   return b.end(800);
 }
+
+/** How a Pokémon stands between turns (pass 11, Standing): its own way of breathing and moving in place. */
+export type StandKind = 'steady' | 'hover' | 'float' | 'heavy' | 'twitch' | 'sway';
+
+/** The mockup's own picks by National Dex number, then by first type; everything else stands steady. */
+const STAND_BY_DEX: Record<number, StandKind> = { 6: 'hover', 16: 'hover', 163: 'hover', 149: 'hover', 94: 'float', 150: 'float', 890: 'float', 9: 'heavy', 143: 'heavy', 812: 'heavy', 834: 'heavy', 25: 'twitch', 130: 'sway', 131: 'sway', 448: 'steady' };
+const STAND_BY_TYPE: Record<string, StandKind> = { flying: 'hover', dragon: 'hover', ghost: 'float', psychic: 'float', fairy: 'float', rock: 'heavy', steel: 'heavy', ground: 'heavy', electric: 'twitch', water: 'sway', grass: 'sway', poison: 'sway' };
+
+/** A Pokémon's way of standing: by species, then its first type; a Dynamaxed giant stands heavy. */
+export function standKind(dex: number, types: readonly string[], dynamaxed = false): StandKind {
+  if (dynamaxed) return 'heavy';
+  return STAND_BY_DEX[dex] ?? STAND_BY_TYPE[types[0] ?? ''] ?? 'steady';
+}
+
+/**
+ * One loop of standing, as the mockup's numbers: `ms` per breath, the height and width at the top of the breath
+ * (1 = as drawn), a rise in px, a tilt either way in degrees, and a hop (`hop` px every `hopEvery` ms).
+ * `x` moves are left out: the game's attack lunges move the Pokémon sideways.
+ */
+export interface StandLook {
+  ms: number;
+  sy: number;
+  sx: number;
+  rise: number;
+  tilt: number;
+  tiltMs: number;
+  hop: number;
+  hopEvery: number;
+}
+
+export function standLook(kind: StandKind): StandLook {
+  const still = { rise: 0, tilt: 0, tiltMs: 0, hop: 0, hopEvery: 0 };
+  switch (kind) {
+    case 'hover':
+      return { ...still, ms: 1500, sy: 1.02, sx: 1, rise: 8 };
+    case 'float':
+      return { ...still, ms: 2600, sy: 1, sx: 1, rise: 12, tilt: 2, tiltMs: 2600 };
+    case 'heavy':
+      return { ...still, ms: 2800, sy: 1.04, sx: 0.98 };
+    case 'twitch':
+      return { ...still, ms: 1100, sy: 1.035, sx: 1, hop: 9, hopEvery: 2600 };
+    case 'sway':
+      return { ...still, ms: 1900, sy: 1.025, sx: 1, tilt: 2.5, tiltMs: 2300 };
+    default:
+      return { ...still, ms: 1900, sy: 1.03, sx: 0.988 };
+  }
+}

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ClipBuilder, clipEnd, EASES, fxAllowed, sampleClip, type ClipLevel, type MotionClip } from '../../src/core/presentation/motionClip';
-import { aceLandClip, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
+import { aceLandClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
 
 const ME: MonSpot = { x: 312, y: 428, h: 180, side: 'player' };
 const FOE: MonSpot = { x: 648, y: 240, h: 150, side: 'enemy' };
@@ -275,5 +275,27 @@ describe('miss (pass 2)', () => {
     expect(sampleClip(r, 130).tgt!.dx).toBeCloseTo(-28);
     expect(sampleClip(r, 130).atk!.dx).toBe(0);
     expect(missClip(foe, me, 'off').length).toBe(0);
+  });
+});
+
+describe('standing (pass 11)', () => {
+  it('picks the mockup way by species, then by first type, and a giant stands heavy', () => {
+    expect(standKind(6, ['fire', 'flying'])).toBe('hover');
+    expect(standKind(25, ['electric'])).toBe('twitch');
+    expect(standKind(9, ['water'])).toBe('heavy');
+    expect(standKind(448, ['fighting', 'steel'])).toBe('steady');
+    expect(standKind(1, ['grass', 'poison'])).toBe('sway');
+    expect(standKind(92, ['ghost', 'poison'])).toBe('float');
+    expect(standKind(19, ['normal'])).toBe('steady');
+    expect(standKind(25, ['electric'], true)).toBe('heavy');
+  });
+  it('uses the mockup numbers, and nothing moves sideways', () => {
+    expect(standLook('steady')).toMatchObject({ ms: 1900, sy: 1.03, sx: 0.988, rise: 0 });
+    expect(standLook('hover')).toMatchObject({ ms: 1500, rise: 8, sy: 1.02 });
+    expect(standLook('float')).toMatchObject({ ms: 2600, rise: 12, tilt: 2 });
+    expect(standLook('heavy')).toMatchObject({ ms: 2800, sy: 1.04, sx: 0.98 });
+    expect(standLook('twitch')).toMatchObject({ ms: 1100, hop: 9, hopEvery: 2600 });
+    expect(standLook('sway')).toMatchObject({ ms: 1900, tilt: 2.5, tiltMs: 2300 });
+    for (const k of ['steady', 'hover', 'float', 'heavy', 'twitch', 'sway'] as const) expect(Object.keys(standLook(k))).not.toContain('x');
   });
 });

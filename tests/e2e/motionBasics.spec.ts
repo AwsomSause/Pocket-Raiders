@@ -38,7 +38,9 @@ const look = (page: Page, side: 'player' | 'enemy') =>
     const v = s === 'enemy' ? b.enemySprite : b.playerSprite;
     const home = b.spotXY(s);
     const solid = b.field.list.filter((o: any) => o.type === 'Sprite' && o.tintFill && o !== v).length;
-    return { x: v.x, y: v.y, homeX: home.x, homeY: home.y, alpha: v.alpha, sx: v.scaleX, sy: v.scaleY, angle: v.angle, cropped: v.isCropped, shade: Boolean(b.baseShade[s]?.active), solid };
+    // A Pokémon standing its own way (pass 11) breathes, hovers or tilts around its resting place: report that place.
+    const rest = v.getData('standBase') ?? { y: v.y, sx: v.scaleX, sy: v.scaleY, angle: v.angle };
+    return { x: v.x, y: rest.y, homeX: home.x, homeY: home.y, alpha: v.alpha, sx: rest.sx, sy: rest.sy, angle: rest.angle, cropped: v.isCropped, shade: Boolean(b.baseShade[s]?.active), solid };
   }, side);
 
 /** Starts one of the scene's moments without waiting for it; `__moment` is true once it is over. */
@@ -266,7 +268,8 @@ test('HP bar and danger: a drop jolts the plate; under a fifth the plate glows, 
   const state = () =>
     page.evaluate(() => {
       const b = (window as any).__pkr.game.scene.getScene('Battle');
-      return { y: b.playerBox.container.y, danger: Boolean(b.playerBox.danger), sag: b.playerSprite.getData('sag') ?? null, sx: b.playerSprite.scaleX, pulsing: Boolean(b.playerBox.hpBar.pulsing) };
+      const v = b.playerSprite;
+      return { y: b.playerBox.container.y, danger: Boolean(b.playerBox.danger), sag: v.getData('sag') ?? null, sx: (v.getData('standBase') ?? { sx: v.scaleX }).sx, pulsing: Boolean(b.playerBox.hpBar.pulsing) };
     });
   const home = await state();
   expect(home).toMatchObject({ danger: false, sag: null, pulsing: false });

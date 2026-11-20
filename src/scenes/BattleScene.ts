@@ -121,6 +121,7 @@ import { pokemonHeightM, trainerHeightM } from '../core/heights';
 import { teraJewel } from '../ui/battleFx/teraJewel';
 import { megaGlass } from '../ui/battleFx/megaGlass';
 import { drawnBox, type GimmickPage } from '../ui/battleFx/gimmickStage';
+import { stand, standStill } from '../ui/battleFx/stance';
 import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture } from '../ui/battleFx/cheerChip';
 import { dynamaxPan } from '../ui/battleFx/dynamaxPan';
 import { keyItemFor } from '../ui/battleFx/cineLook';
@@ -128,7 +129,7 @@ import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel } from '../core/presentation/motionClip';
-import { aceLandClip, bigHit, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { aceLandClip, bigHit, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
@@ -1210,7 +1211,7 @@ export class BattleScene extends Phaser.Scene {
     ball?.destroy();
     show();
     const shown = visual as Visual | null;
-    if (shown?.active) breathe(this, shown, this.motion);
+    if (shown?.active) this.standUp(shown, mon);
   }
 
   /**
@@ -1237,6 +1238,7 @@ export class BattleScene extends Phaser.Scene {
    * beam and the ball jolts as it catches. Reduced: red, the beam, a plain shrink. Off: it is just gone.
    */
   private async recallMoment(side: Side, sprite: Visual, hand: Point | null): Promise<void> {
+    if (sprite instanceof Phaser.GameObjects.Sprite) standStill(this, sprite);
     const level = this.clipLevel();
     const at = hand ?? recallBallSpot(side);
     const mon = this.shown[side];
@@ -1259,6 +1261,8 @@ export class BattleScene extends Phaser.Scene {
    * ground with dust and its base goes dark. Reduced: it only sinks. Off: it is just gone.
    */
   private async faintMoment(side: Side, sprite: Visual): Promise<void> {
+    // It falls from where it stands, not from the top of a hover or breath.
+    if (sprite instanceof Phaser.GameObjects.Sprite) standStill(this, sprite);
     this.tweens.killTweensOf(sprite);
     const ground = this.spotXY(side).y;
     const run = playClip(this, faintClip({ x: sprite.x, y: ground, h: 0, side }, this.clipLevel()), this.clipHost({ mon: { kind: 'mon', get: () => sprite } }, { dim: (fx) => this.dimBase(side, fx.d) }));
@@ -1479,7 +1483,7 @@ export class BattleScene extends Phaser.Scene {
       this.skin?.sprite?.(this.playerSprite);
       this.wearPink(this.playerSprite, pinkTint(mon));
       this.prefetchMoves(mon);
-      if (lively) this.liven(this.playerSprite, cry);
+      if (lively) this.liven(this.playerSprite, mon, cry);
       return this.playerSprite;
     }
     this.dropSprite(this.enemySprite);
@@ -1496,7 +1500,7 @@ export class BattleScene extends Phaser.Scene {
     const b = this.run.battle;
     if (b && this.boss() && b.enemyTeam.length > 1 && b.enemyIndex >= b.enemyTeam.length - 1) this.arenaLight?.set(Math.max(this.arenaPhase, 1), 0xff5030);
     this.prefetchMoves(mon);
-    if (lively) this.liven(this.enemySprite, cry);
+    if (lively) this.liven(this.enemySprite, mon, cry);
     return this.enemySprite;
   }
 
@@ -1518,10 +1522,20 @@ export class BattleScene extends Phaser.Scene {
     visual.destroy();
   }
 
-  /** A bouncy entrance (when it is sent out) and then a slow idle breath. */
-  private liven(visual: Visual, entering: boolean): void {
+  /** A bouncy entrance (when it is sent out) and then its own way of standing. */
+  private liven(visual: Visual, mon: PokemonInstance, entering: boolean): void {
     if (entering) bounceIn(this, visual, this.motion);
-    breathe(this, visual, this.motion, entering ? 450 : 0);
+    this.standUp(visual, mon, entering ? 450 : 0);
+  }
+
+  /** Standing (redesign pass 11): the Pokémon breathes and moves in place its own way (hover, float, heavy, twitch, sway). */
+  private standUp(visual: Visual, mon: PokemonInstance, delay = 0): void {
+    const sp = getSpecies(services().session.content, mon.speciesId);
+    // It stands on its own spot (the entrance may still be settling it there).
+    const restY = visual === this.playerSprite ? this.spotXY('player').y : visual === this.enemySprite ? this.spotXY('enemy').y : undefined;
+    // A Pokémon in danger keeps its sag and its fast, shallow breath.
+    if (visual.getData('sag')) return stand(this, visual, 'steady', this.motion === 'full', delay, 750, restY);
+    stand(this, visual, standKind(sp.dex, sp.types, !!mon.dynamaxed), this.motion === 'full', delay, undefined, restY);
   }
 
   /** Starts loading the animations of a Pokémon's moves while the player reads. */
@@ -2069,23 +2083,19 @@ export class BattleScene extends Phaser.Scene {
    */
   private dangerSag(side: Side, on: boolean): void {
     const v = side === 'player' ? this.playerSprite : this.enemySprite;
-    if (!(v instanceof Phaser.GameObjects.Sprite) || !v.active) return;
+    const mon = this.shown[side];
+    if (!(v instanceof Phaser.GameObjects.Sprite) || !v.active || !mon) return;
     const sagged = v.getData('sag') as { sx: number; sy: number } | undefined;
     if (on === Boolean(sagged)) return;
-    for (const t of this.tweens.getTweensOf(v)) {
-      if (t.data.some((d) => (d as unknown as { repeat?: number }).repeat === -1)) {
-        t.seek(0);
-        t.stop();
-      }
-    }
+    standStill(this, v);
     if (on) {
       v.setData('sag', { sx: v.scaleX, sy: v.scaleY });
       v.setScale(v.scaleX * 1.03, v.scaleY * 0.95);
-      breathe(this, v, this.motion, 0, 750);
+      stand(this, v, 'steady', this.motion === 'full', 0, 750);
     } else {
       v.setScale(sagged!.sx, sagged!.sy);
       v.setData('sag', undefined);
-      breathe(this, v, this.motion);
+      this.standUp(v, mon);
     }
   }
 
@@ -4005,7 +4015,7 @@ export class BattleScene extends Phaser.Scene {
       },
     }));
     await run.done;
-    if (visual.active) breathe(this, visual, this.motion);
+    if (visual.active) this.standUp(visual, mon);
   }
 
   /**
@@ -4050,9 +4060,8 @@ export class BattleScene extends Phaser.Scene {
     const tgt = other === 'player' ? this.playerSprite : this.enemySprite;
     const level = this.clipLevel();
     if (tgt && level !== 'off') {
-      // Their breathing holds still while they move, and goes on after.
-      const held = [atk, tgt].flatMap((v) => (v ? this.tweens.getTweensOf(v) : [])).filter((t) => t.isPlaying());
-      held.forEach((t) => t.pause());
+      // They stop standing their own way while they move (back at their resting place), and start again after.
+      for (const v of [atk, tgt]) if (v instanceof Phaser.GameObjects.Sprite) standStill(this, v);
       // Feet below the message bar's top (your Pokémon stands in the foreground) count as standing on its edge, so the
       // dust and the dash stay on the field.
       const onField = (p: Point): Point => ({ x: p.x, y: Math.min(p.y, MESSAGE_Y - 8) });
@@ -4060,7 +4069,8 @@ export class BattleScene extends Phaser.Scene {
       await run.done;
       run.rest('atk');
       run.rest('tgt');
-      held.forEach((t) => t.resume());
+      if (atk && this.shown[side]) this.standUp(atk, this.shown[side]!);
+      if (this.shown[other]) this.standUp(tgt, this.shown[other]!);
     }
   }
 

@@ -66,3 +66,9 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
 - Danger (pass 5): under a fifth of HP (was a quarter) the plate glows red in a soft 1 s pulse, the bar pulses
   brighter every 0.5 s, and the Pokémon sags (3% wider, 5% shorter) and breathes in 0.75 s. A heal ends all of it
   and stands the Pokémon back up at its own size. Reduced/Off: a still glow only.
+- Standing (pass 11): each Pokémon stands its own way between turns (`standKind`/`standLook`, `src/ui/battleFx/stance.ts`):
+  steady breath 1.9 s with the width squeezing, hover (rises 8 px, 1.5 s), float (rises 12 px, tilts 2°), heavy
+  (slow 2.8 s), twitch (fast breath and a small hop every 2.6 s), sway (tilts 2.5°). Chosen by species as in the
+  mockup, then by first type; a Dynamaxed giant stands heavy. Sideways moves are left out (attack lunges move
+  sideways). Faint, recall, miss and danger stop it and put the Pokémon back on its spot first. Full only. Limit:
+  the contact shadow does not shrink with the breath yet.
