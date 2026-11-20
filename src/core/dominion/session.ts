@@ -7,6 +7,7 @@ import { healParty, newMon } from '../run';
 import type { RunState } from '../state';
 import { step, type StepOut } from './clock';
 import { addMorale, withCrew } from './crew';
+import { ask as deskAsk, inspect as deskInspect, rollQueue, stamp as deskStamp } from './desk';
 import { fillCards } from './personality';
 import { admit, approach, hire } from './recruit';
 import { answer, eveningTalk } from './talk';
@@ -87,6 +88,8 @@ export function stepInRun(content: Content, run0: RunState, action: DominionActi
     b.flags = b.flags.filter((f) => f !== 'ambushed');
     for (const m of next.party) m.hp = Math.max(1, Math.round(m.hp * 0.75));
   }
+  // D21: the Day's applicants queue at the desk the first time the Day is seen (their own stream, so nothing else moves).
+  rollQueue(content, b, run.seed);
   // D19: anyone new gets their personality card.
   fillCards(b, run.seed);
   // D6: the Ledger books what the step did to the money, the Boss's visit, and a new Notoriety step.
@@ -122,6 +125,8 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
   if (rivalOut) return rivalOut;
   const heroOut = heroInRun(content, run, action);
   if (heroOut) return heroOut;
+  const deskOut = deskInRun(content, run, action);
+  if (deskOut) return deskOut;
   if (action.t === 'act') {
     // D2: a Boss action (field.ts). A Pokémon lifted in a Ball (Thieve, a big success) joins the team or the box.
     const work = structuredClone(run);
@@ -197,6 +202,36 @@ function hqInRun(content: Content, run: RunState, action: DominionAction): (Step
   if (!out.ok) return { ok: false, block: b, notice: out.notice, heal: false, run };
   const next = withBlock(run, DominionBlockSchema.parse(out.block));
   return { ok: true, block: next.expansion!.dominion!, notice: out.notice, heal: false, run: next };
+}
+
+/** D21: the applications desk. `desk` only opens it (the queue is rolled by stepInRun). */
+function deskInRun(content: Content, run: RunState, action: DominionAction): (StepOut & { run: RunState }) | null {
+  const block = run.expansion!.dominion!;
+  const put = (ok: boolean, b: DominionBlock, notice: string | null): StepOut & { run: RunState } => {
+    if (!ok) return { ok: false, block, notice, heal: false, run };
+    const next = withBlock(run, DominionBlockSchema.parse(b));
+    return { ok: true, block: next.expansion!.dominion!, notice, heal: false, run: next };
+  };
+  switch (action.t) {
+    case 'desk':
+      return put(true, block, null);
+    case 'deskAsk': {
+      const o = deskAsk(block, run.seed, action.q, action.text);
+      return put(o.ok, o.block, o.notice);
+    }
+    case 'deskInspect': {
+      const o = deskInspect(block, action.field);
+      return put(o.ok, o.block, o.notice);
+    }
+    case 'deskStamp': {
+      const o = deskStamp(content, run, action.stamp);
+      if (!o.ok) return { ok: false, block, notice: o.notice, heal: false, run };
+      const next = withBlock(o.run, DominionBlockSchema.parse(o.run.expansion!.dominion!));
+      return { ok: true, block: next.expansion!.dominion!, notice: o.notice, heal: false, run: next };
+    }
+    default:
+      return null;
+  }
 }
 
 /** D3 actions that need the run (new members' Pokémon, the Bag): hire, approach, admit, gifts, talks that give an item. */
