@@ -14,8 +14,20 @@ test('Phantom UI: the splash waits for a button, then the main menu opens and wo
   await expect(title).toContainText('Red VERSION');
   expect(await fitProblems(page, 'MainMenu')).toEqual([]);
 
-  // V changes the version on the spot: colours, shapes and the trainer.
+  // V opens Version Select: five cards, the cursor on the version in use; the next one changes colours, shapes and the trainer.
   await page.keyboard.press('v');
+  await waitForScene(page, 'VersionSelect');
+  await onPage(page, 'VersionSelect', 'version');
+  const pick = pview(page, 'VersionSelect');
+  await expect(pick.locator('.vc')).toHaveCount(5);
+  await expect(pick.locator('.vc.on')).toContainText('Red');
+  await expect(pick.locator('.vc.on')).toContainText('IN USE');
+  expect(await fitProblems(page, 'VersionSelect')).toEqual([]);
+  await page.keyboard.press('ArrowRight');
+  await expect(pick.locator('.vc.on')).toContainText('Blue');
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'MainMenu');
+  await onPage(page, 'MainMenu', 'title');
   await expect(title).toHaveAttribute('data-liv', 'midnight');
   await expect(title).toContainText('Blue VERSION');
   expect(await page.evaluate(() => (window as any).__pkr.session.settings.phantomVersion)).toBe('midnight');
@@ -104,10 +116,10 @@ test('Phantom UI: a screen without a Phantom page yet shows its New page in Phan
   const errors = watch(page);
   await start(page, 'ui=phantom');
   await onPage(page, 'MainMenu', 'title');
-  await page.evaluate(() => void (window as any).__pkr.game.scene.getScene('MainMenu').scene.start('SaveSlots'));
-  await waitForScene(page, 'SaveSlots');
-  const slots = page.locator('#rx .stage[data-scene="SaveSlots"]');
-  await expect(slots).toBeVisible();
-  await expect(slots).toHaveClass(/phfb/);
+  await page.evaluate(() => void (window as any).__pkr.game.scene.getScene('MainMenu').scene.start('Hub'));
+  await waitForScene(page, 'Hub');
+  const hub = page.locator('#rx .stage[data-scene="Hub"]').first();
+  await expect(hub).toBeVisible();
+  await expect(hub).toHaveClass(/phfb/);
   expect(errors).toEqual([]);
 });

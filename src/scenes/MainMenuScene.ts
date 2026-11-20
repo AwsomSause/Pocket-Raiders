@@ -19,7 +19,6 @@ import { dressScreen } from '../ui/screenDress';
 import { TITLE_LAYOUTS } from '../ui/titleLayouts';
 import { slotCard } from '../core/presentation/slotLines';
 import { mountRedux, phantomOn, reduxOn } from '../ui/redux/stage';
-import { nextPhantomVersion } from '../core/presentation/phantom';
 import { titleView } from '../ui/redux/screens/title';
 import { bg } from '../ui/redux/kit';
 import { clipsPlayable, runTitleClips, titleClipsHtml, titleClipsOnCanvas } from '../ui/titleClips';
@@ -209,10 +208,7 @@ export class MainMenuScene extends Phaser.Scene {
         acts: {
           pick: (i) => { this.menu.focus(Number(i), false); this.menu.confirm(); },
           start: () => this.events.emit('pressStart'),
-          version: () => {
-            session.saveSettings({ ...session.settings, phantomVersion: nextPhantomVersion(session.settings.phantomVersion) });
-            view.refresh();
-          },
+          version: () => this.scene.start('VersionSelect', { from: 'MainMenu' }),
         },
         overs: { over: (i) => { if (!options[Number(i)]?.option.disabled) this.menu.focus(Number(i), false); } },
       });

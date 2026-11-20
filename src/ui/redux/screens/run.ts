@@ -2,6 +2,7 @@
 
 import { act, B, bg, esc, facts, foot, H, mini, mon, nodeDot, TX, ty, TYPE_COLORS, W, type Area } from '../kit';
 import type { ReduxCtx } from '../stage';
+import { phBrief, phStarter } from '../../phantom/screens/run';
 
 export interface FormModel {
   title: string;
@@ -40,6 +41,7 @@ export interface StarterModel {
 
 /** The mock-ups' `starter` template: A three balls on the lab table, B three cards, C the three out on the grass. */
 export function starterView(c: ReduxCtx, d: StarterModel): string {
+  if (c.ph) return phStarter(c.ph, d);
   const v = c.v(3), S = d.picks, on = d.on, cur = S[on]!, blind = !!d.blind;
   const head = H(d.title, 'run', d.hints ?? [['←→', 'look'], ['Enter', 'take'], ['Esc', 'menu']]);
   const pic = (p: StarterPick, k: number, play: boolean): string => (p.file ? mon(p.file, k, blind ? 'sil' : '', play) : '');
@@ -76,7 +78,8 @@ export interface BriefModel {
 }
 
 /** The mock-ups' `brief` template: the plan, the first stage with the seed, the party and Depart. */
-export function briefView(_c: ReduxCtx, d: BriefModel): string {
+export function briefView(c: ReduxCtx, d: BriefModel): string {
+  if (c.ph) return phBrief(c.ph, d);
   // The mock-up's plan has three regions and no notes; a long campaign or a run with events gets taller windows and the party row moves down.
   const many = d.regions.length > 4, tall = d.notes.length > 1 || many, h = tall ? 290 : 212;
   const chips = (many ? d.regions.slice(0, 3) : d.regions).map((r, k) => `<span class="tg${k ? ' no' : ''}">${k + 1}. ${esc(r)}</span>`).join('') + (many ? `<span class="tg no">+${d.regions.length - 3} more</span>` : '');

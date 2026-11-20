@@ -4,6 +4,7 @@
 import type { ReduxCtx } from './stage';
 import { act, type Area, B, esc, facts, H, hpb, icon, mini, tall, TX, W } from './kit';
 import { rxImage, rxUrl } from './assets';
+import { phBoard, phGrid, phMenu, phOptions, phStats } from '../phantom/templates';
 
 /** First row to show so `index` stays visible in a window of `size` rows out of `n`. */
 export const scrollStart = (n: number, index: number, size: number): number => Math.max(0, Math.min(n - size, index - Math.floor(size / 2)));
@@ -41,6 +42,7 @@ export function rowNote(label: string, note: string): string {
 }
 
 export function menuView(c: ReduxCtx, d: MenuModel): string {
+  if (c.ph) return phMenu(c.ph, d);
   const v = c.v(3), it = d.items, n = it.length, cur = it[d.index], text = TX(esc(d.text ?? '')) + (d.tabs ? tabsBar(d.tabs.labels, d.tabs.index) : '');
   const head = H(d.title, d.area ?? 'sys', d.hints);
   if (v === 1) {
@@ -70,7 +72,8 @@ export interface StatsModel {
 }
 
 /** The mock-ups' `stats` template: a grid of number tiles over the text box (Me, My stats, Speedrun timer). */
-export function statsView(_c: ReduxCtx, d: StatsModel): string {
+export function statsView(c: ReduxCtx, d: StatsModel): string {
+  if (c.ph) return phStats(c.ph, d);
   const size = (v: string): number => (v.length > 14 ? 18 : v.length > 9 ? 23 : 30);
   return H(d.title, d.area ?? 'hub', d.hints) +
     `<div class="abs" style="left:24px;right:24px;top:74px;display:grid;grid-template-columns:repeat(${d.cols === 3 ? 3 : 4},1fr);gap:18px">${d.tiles.slice(0, 8).map(([a, b], k) => W(`<span class="sm">${esc(a)}</span><b${k ? '' : ' class="acc"'} style="font-size:${size(b)}px;line-height:32px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(b)}</b>`, 'display:flex;flex-direction:column;gap:6px;padding:14px 16px;min-width:0', '', d.press === k ? act('pick', k) : '')).join('')}</div>` + TX(esc(d.text));
@@ -90,6 +93,7 @@ export interface SettingsModel {
 
 /** The mock-ups' `settings` template: A tabs across the top, B tabs down the left. Seven rows show; the list scrolls. */
 export function settingsView(c: ReduxCtx, d: SettingsModel): string {
+  if (c.ph) return phOptions(c.ph, d);
   const v = c.v(2), n = d.rows.length, s = scrollStart(n, d.index, 7);
   const rows = d.rows.slice(s, s + 7).map((r, q) => `<div class="btn${s + q === d.index ? ' on' : ''}${r.disabled ? ' off' : ''}" style="height:38px"${pickAttr(s + q)}><span class="grow">${esc(r.label)}</span>${r.value ? `<span>◀ ${esc(r.value)} ▶</span>` : ''}</div>`).join('');
   const more = dots(n, s, 7, v === 1 ? 'right:28px;top:398px' : 'right:28px;top:428px');
@@ -146,6 +150,7 @@ export const gridCols = (c: Pick<ReduxCtx, 'v'>): number => (c.v(2) === 1 ? 5 : 
 
 /** The mock-ups' `grid` template: A a detail window, the Found bar and a 6 x 3 wall of cells; B 5 x 2 picture cards. */
 export function gridView(c: ReduxCtx, d: GridModel): string {
+  if (c.ph) return phGrid(c.ph, d);
   const head = H(d.title, d.area ?? 'hub', d.hints), n = d.n;
   if (c.v(2) === 1) {
     const s = Math.floor(scrollStart(n, d.index, 10) / 5) * 5;
@@ -190,6 +195,7 @@ export function boardProgress(tag: string): { pct: number; state: 'New' | 'Activ
 
 /** The mock-ups' `board` template. A list longer than one screen scrolls with the focused row and says where it is. */
 export function boardView(c: ReduxCtx, d: BoardModel): string {
+  if (c.ph) return phBoard(c.ph, d);
   const grid = c.v(2) === 1, n = d.rows.length;
   // A long text box (three lines or more) grows up over the last row of the one-column list: show one row fewer then.
   const size = boardSize(c) - (!grid && Math.ceil(d.text.length / 76) >= 3 ? 1 : 0);

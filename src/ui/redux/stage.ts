@@ -104,7 +104,7 @@ function phantomReady(): boolean {
     fonts.id = 'ph-fonts';
     fonts.textContent = PHANTOM_FONTS.map(([fam, w, st, f]) => `@font-face{font-family:"${fam}";font-style:${st};font-weight:${w};font-display:swap;src:url("assets/fonts/phantom/${f}.woff2") format("woff2")}`).join('\n');
     document.head.append(fonts);
-    void Promise.all([import('../phantom/phantom.gen.css'), import('../phantom/phantom.css')]).then(() => {
+    void Promise.all([import('../phantom/phantom.gen.css'), import('../phantom/phantom.css'), import('../phantom/shared.css'), import('../phantom/run.css')]).then(() => {
       phantomState = 'ready';
       lastBox = '';
       views.forEach((v) => v.redraw());
@@ -310,7 +310,8 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     if (now === k && ph === phv) return;
     k = now;
     phv = ph;
-    ctx = { k, skin: REDUX_SKINS[k]!, v: (n) => reduxLayout(k, n), ph };
+    // The Phantom style has one layout per screen: every view steers its cursor by layout A while it is on.
+    ctx = { k, skin: REDUX_SKINS[k]!, v: (n) => (ph ? 0 : reduxLayout(k, n)), ph };
     wear = '';
   };
   // A view is drawn on the Phantom layer when its HTML is a Phantom page, and on the New layer otherwise; the same
@@ -378,6 +379,8 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     if (!t || !el.contains(t) || !table) return;
     const fn = table[t.dataset[attr]!];
     if (fn) fn(t.dataset.arg ?? '');
+    // A "back" key hint with no handler of its own presses Esc for the scene (the Phantom pages' key row).
+    else if (attr === 'act' && t.dataset.act === 'back') scene.input.keyboard?.emit('keydown', { code: 'Escape', key: 'Escape', repeat: false, target: null });
   };
   el.addEventListener('click', (e) => pick(e, 'act', o.acts));
   el.addEventListener('pointerover', (e) => {
