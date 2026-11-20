@@ -19,6 +19,7 @@ import { buildingDef, hqFx, hqOf, spend, working } from './hqFx';
 import { defense, roomName, wear } from './hq';
 import { makeLead } from './recruit';
 import { setChairTension } from './chair';
+import { paced } from './rules';
 
 const RV = () => DOMINION_DATA.rivals;
 const RA = () => DOMINION_DATA.rivalActions;
@@ -99,7 +100,8 @@ const log = (b: DominionBlock, team: string, text: string): void => {
 export function addTension(b: DominionBlock, team: string, n: number): number {
   const t = ts(b, team);
   const was = t.tension;
-  t.tension = clamp(t.tension + n);
+  // D27: Day pace scales a rise.
+  t.tension = clamp(t.tension + paced(b, n));
   t.peak = Math.max(t.peak, t.tension);
   if (t.tension > was) t.quiet = 0;
   return t.tension - was;

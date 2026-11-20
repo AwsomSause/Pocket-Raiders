@@ -337,6 +337,8 @@ const BlockSchema = z.object({
   spies: z.lazy(() => SpiesStateSchema).optional(),
   /** D25: this week's news lines and the last few Ledger papers. Optional; `voicesOf` (voices.ts) fills it. */
   voices: z.lazy(() => VoicesStateSchema).optional(),
+  /** D27: the run rules picked in Settings before this run began (Day pace, Hero pressure...). Optional (normal). */
+  rules: z.lazy(() => RunRulesSchema).optional(),
 }).strict();
 export const DominionBlockSchema = z.preprocess(migrateDominion, BlockSchema);
 export type DominionBlock = z.infer<typeof BlockSchema>;
@@ -347,6 +349,8 @@ export interface DominionSetup {
   member: 'grunt' | 'admin';
   /** Index into `members.admin.looks` when the member is an Admin. */
   look: number;
+  /** D27: the Settings page's run rules (the session passes them; absent = all normal). */
+  rules?: RunRules;
 }
 
 export type DominionAction =
@@ -2199,3 +2203,40 @@ export const TeamSchema = z.object({
   day: I.min(1),
 }).strict();
 export type Team = z.infer<typeof TeamSchema>;
+
+// ---------- D27: the Boss Menu's Settings (mockup m2) ----------
+
+/** The "Your run" rules (mockup m2). Stamped on the block when a Dominion starts, so a run keeps the rules it began with. */
+export const RunRulesSchema = z.object({
+  /** Regions to take before the end. Only Kanto plays until the Crossing (D16), so Six can't be picked yet. */
+  length: z.enum(['three', 'six']),
+  /** How fast Heat and the rivals' Tension rise (settings.json `pace`). */
+  pace: z.enum(['calm', 'normal', 'ruthless']),
+  /** How fast the Hero's Threat climbs (settings.json `hero`). */
+  hero: z.enum(['low', 'normal', 'high']),
+  /** Holders turning on you (Part 9 A11): D15's betrayal checks scale by settings.json `betrayals`. */
+  betrayals: z.enum(['off', 'rare', 'normal']),
+}).strict();
+export type RunRules = z.infer<typeof RunRulesSchema>;
+export const RUN_RULES_DEFAULT: RunRules = { length: 'three', pace: 'normal', hero: 'normal', betrayals: 'normal' };
+
+/** Effects & motion (mockup m2's right panel). Presentation only: never read by a rule. */
+export const DominionFxSchema = z.object({
+  level: z.enum(['full', 'lighter', 'calm']),
+  particles: z.boolean(),
+  cutIns: z.enum(['show', 'skip']),
+  shake: z.boolean(),
+  flashes: z.enum(['on', 'soft', 'off']),
+}).strict();
+export type DominionFx = z.infer<typeof DominionFxSchema>;
+
+/** The Dominion tab of Settings, kept in the settings record (settings.expansion.dominionPrefs; optional, no bump). */
+export const DominionPrefsSchema = z.object({
+  run: RunRulesSchema.default(() => ({ ...RUN_RULES_DEFAULT })),
+  /** The Card's chance dial and "how the odds are made" before every action. */
+  showOdds: z.boolean().default(true),
+  /** With no actions left in the Day, the Day ends by itself (unused actions are odd jobs anyway). */
+  autoEndDay: z.boolean().default(false),
+  fx: DominionFxSchema.default(() => ({ level: 'full' as const, particles: true, cutIns: 'show' as const, shake: true, flashes: 'on' as const })),
+}).strict();
+export type DominionPrefs = z.infer<typeof DominionPrefsSchema>;
