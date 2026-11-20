@@ -8,7 +8,7 @@ import type { EventModel } from '../../redux/screens/event';
 import type { RewardModel } from '../../redux/screens/stops';
 import { priceOf } from '../../redux/storeFloors';
 import type { ConfirmModel } from '../../redux/screens/saves';
-import { rxAtlas } from '../../redux/assets';
+import { rxAtlas, rxUrl } from '../../redux/assets';
 import { figure, pic as rxPic, scrollStart, type Art } from '../../redux/templates';
 import { act, esc, keys, mon, page, pic, ransom } from '../kit';
 import { phConfirm, phKeys } from '../templates';
@@ -101,6 +101,8 @@ export function phShop(_ph: PhantomVersion, d: PhShopModel): string {
 }
 
 /** The nurse of a healing spot: the first frame of the overworld sheet the mock-ups drew theirs from. */
+/** The room behind the healing page (the mock-ups' blurred indoor backdrop, the Memories pack's event background). */
+export const HEAL_ROOM = 'packs/memories/eventbg/indoor.png';
 export const HEAL_NURSE: Art = { file: 'overworld/trainers/NPC_B2W2_Nurse.png', atlas: false, crop: [0, 0, 64, 64] };
 export interface PhHealModel {
   title: string;
@@ -117,7 +119,7 @@ export function phHeal(_ph: PhantomVersion, d: PhHealModel): string {
   // Each Pokémon is fitted to its slot: a small one is drawn larger, a tall one smaller.
   const fit = (file: string): number => { const f = rxAtlas(file)?.f[0]; return f ? Math.round(Math.min(1.5, 84 / Math.max(1, f[3]), 110 / Math.max(1, f[2])) * 100) / 100 : 1; };
   const slots = d.party.map((p, i) => `<div class="hc-s" style="--i:${i}" title="${esc(p.name)}"><div class="hc-p">${p.file ? mon(p.file, fit(p.file)) : ''}</div><div class="hc-b">${pic('pokeball/pb.png', 3)}</div><div class="hc-hp"><i style="--from:${Math.max(0, Math.min(100, Math.round(p.from)))}%"></i></div><small>${esc(p.hp)}</small></div>`).join('');
-  return page('heal', '<div class="bgk"></div><div class="burst" style="--x:70%;--y:40%" aria-hidden="true"></div><div class="dim" style="background:color-mix(in srgb,var(--k) 55%,transparent)"></div><div class="shard" style="--c:var(--red);--cp:polygon(0 0,36% 0,22% 100%,0 100%);inset:0" aria-hidden="true"></div>'
+  return page('heal', `<div class="art" style="background-image:url(${rxUrl(HEAL_ROOM)})"></div><div class="dim" style="background:color-mix(in srgb,var(--k) 55%,transparent)"></div><div class="shard" style="--c:var(--red);--cp:polygon(0 0,36% 0,22% 100%,0 100%);inset:0" aria-hidden="true"></div>`
     + `<div class="hd"><small>${esc(d.small)}</small>${esc(d.title)}</div><div class="hc-n" aria-hidden="true">${figure(HEAL_NURSE, 474)}</div>`
     + `<div class="pn hc-m"><span class="lab">Healing</span><div class="hc-row">${slots}</div></div>`
     + `<div class="hc-t" style="animation-delay:${(n * 0.28 + 0.6).toFixed(2)}s">${ransom('ALL', 4)}${ransom('BETTER!', 12)}</div>`

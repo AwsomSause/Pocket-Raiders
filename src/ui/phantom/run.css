@@ -9,6 +9,8 @@
   & .s-starter .ph-st i{font-style:normal;white-space:nowrap}
   & .s-starter .ph-st b{color:var(--k);font-size:19px}
   & .s-starter .sctk{bottom:-44px}
+  /* Your past runs with this partner, under its numbers (the mock-up's card foot). */
+  & .s-starter .ph-sc-past{margin-top:6px;font:800 14px/1 var(--f-cond);letter-spacing:.1em;text-transform:uppercase;color:var(--accw)}
   & .s-starter .sc-say{width:auto;max-width:520px;bottom:16px;z-index:5}
   & .ph-sil{filter:brightness(0)}
 
