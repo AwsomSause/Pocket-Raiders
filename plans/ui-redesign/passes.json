@@ -820,5 +820,22 @@
   "q3": "Seven new pages for the Format scenes, which had none: Blackout (three anchors under the Seal), Convoy (the night road and the LEDGER answer), Debate, the three-lane Front, the Colossus raid with its helicopter clock, and the League Door.",
   "q4": "Settings > Display gets one line: Scene lighting, full or flat. Flat removes the colour wash for players who want the plain picture or need more contrast.",
   "q5": "Yes. The games change the light by place and hour: caves glow, stadium matches are played under lamps, and Team Rocket works at night."
+ },
+ "48": {
+  "name": "New areas 22 · Depth",
+  "label": "New areas · pass 22 of 25",
+  "big": "Three planes in every scene: a hazy far wall, the Pokémon, and one big shape close to the camera",
+  "pages": [
+   "ex-fog",
+   "ex-roam",
+   "ex-secret",
+   "ex-tower",
+   "ex-mystery"
+  ],
+  "q1": "Each scene now has something close to the camera: stalactites and a crystal bed, fern leaves, a League flag over the front row of the crowd, a pine bough, Rocket crates in the rain. Behind the Pokémon a band of haze pushes the back wall away, and motes, pollen, confetti, cloud or rain fill the air between.",
+  "q2": "Until now everything sat on one flat wall, however well it was painted and lit. The picture now has a near, a middle and a far plane, so the Pokémon look like they stand inside a place. The near shapes only use the corners and gaps: no Pokémon is touched (the sprite check is still 0).",
+  "q3": "Five new pages for exploring: fog on the map, a Legendary that roams ahead of you, a secret path an Ability opens, the Tower of Legends, and a Mystery Dungeon floor.",
+  "q4": "Settings > Display: Foreground shapes, on or off. Off removes the near plane and the air effects for small screens. The Menu is unchanged.",
+  "q5": "Yes. The newer games frame battles this way, with grass, rocks and crowd between the camera and the Pokémon, and the roaming Legendary and foggy map come straight from the older ones."
  }
 }
