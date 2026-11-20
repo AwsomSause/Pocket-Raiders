@@ -262,9 +262,9 @@ describe('DOMINION D6b: street meetings (sections A and J)', () => {
     const r = edit(r0, (b) => {
       Object.assign(empireOf(b), { meet: { row: 'O003', district: DOMINION_DATA.field.hq, day: b.day }, met: ['O003'], metDay: b.day });
     });
-    const out = step(r, { t: 'meet', choice: 0 });
+    const out = step(r, { t: 'townMeet', choice: 0 });
     expect(out.ok).toBe(true);
     expect(blk(out.run).empire!.meet).toBeNull();
-    expect(step(out.run, { t: 'meet', choice: 0 }).ok).toBe(false);
+    expect(step(out.run, { t: 'townMeet', choice: 0 }).ok).toBe(false);
   });
 });

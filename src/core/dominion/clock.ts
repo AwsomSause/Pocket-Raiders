@@ -133,7 +133,7 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'breakTruce':
     case 'card':
     case 'ransom':
-    case 'meet':
+    case 'townMeet':
       // The Boss's hands need the run (party, bag): session.ts sends them to field.ts.
       return no(block);
     case 'toDay': {
@@ -184,6 +184,11 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'approach':
     case 'admit':
     case 'gift':
+    // D11: the Hero's choices need the run (battles, the Bag, a new member): session.ts runs them.
+    case 'interrupt':
+    case 'meet':
+    case 'legend':
+    case 'after':
     // D4's actions need the run (session.ts -> reserve.ts).
     case 'give':
     case 'takeBack':
@@ -193,6 +198,11 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'promote':
     case 'demote':
     case 'strip':
+    // D21: the desk needs the run (session.ts deskInRun).
+    case 'desk':
+    case 'deskAsk':
+    case 'deskInspect':
+    case 'deskStamp':
       return no(block);
   }
 }

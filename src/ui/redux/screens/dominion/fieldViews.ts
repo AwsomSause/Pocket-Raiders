@@ -71,11 +71,11 @@ export function mapView(m: MapModel, notice: string | null, garage: boolean, mee
       <div class="hd y"><img class="ic" src="${img('g-bicycle')}" alt="">VEHICLES<span class="r"><span class="kc">V</span> close</span></div>
       <div class="col sm" style="gap:6px">${m.vehicles.map((v) => `<div class="row sp" style="gap:8px;align-items:flex-start"${act('buy', v.id)} data-testid="dom-buy-${v.id}"><div><b>${esc(v.name)}</b> <span class="mu xs">${esc(v.does)}</span></div>${v.owned ? '<span class="pill g">OWNED</span>' : `<span class="bt" style="font-size:13px;padding:2px 8px;white-space:nowrap">${esc(v.price)}</span>`}</div>`).join('')}</div>
     </div>` : '';
-  const meetBox = meet ? `<div class="pnl glass" style="left:616px;top:84px;width:334px;height:330px;z-index:32" data-testid="dom-meet">
+  const meetBox = meet ? `<div class="pnl glass" style="left:616px;top:84px;width:334px;height:330px;z-index:32" data-testid="dom-town">
       <div class="hd y"><img class="ic" src="${img('g-tea')}" alt="">${esc(meet.title)}<span class="r xs mu">${esc(meet.district)}</span></div>
       <div class="sm" style="line-height:1.3;margin-bottom:4px">${esc(meet.what)}</div>
       <div class="xs mu" style="margin-bottom:8px">${esc(meet.who)}</div>
-      <div class="col sm" style="gap:6px">${meet.choices.map((c, i) => `<div class="bt${i === meet.at ? ' y shine' : ''}" style="font-size:13px;padding:4px 8px;text-align:left;white-space:normal;line-height:1.25"${act('meet', i)} data-testid="dom-meet-${i}">${esc(c)}</div>`).join('')}</div>
+      <div class="col sm" style="gap:6px">${meet.choices.map((c, i) => `<div class="bt${i === meet.at ? ' y shine' : ''}" style="font-size:13px;padding:4px 8px;text-align:left;white-space:normal;line-height:1.25"${act('townMeet', i)} data-testid="dom-town-${i}">${esc(c)}</div>`).join('')}</div>
       <div class="xs mu" style="position:absolute;left:12px;bottom:8px">${esc(meet.hint)}</div>
     </div>` : '';
   return stage(`${topBar(m.top)}

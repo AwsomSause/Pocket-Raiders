@@ -18,6 +18,8 @@ import { mountRedux, type ReduxView } from '../ui/redux/stage';
 import { hqView, openingView, setupView, titleView, type SetupFiles } from '../ui/redux/screens/dominion/views';
 import { CrewController } from './dominion/crewController';
 import { ReserveController } from './dominion/reserveController';
+import { DeskController } from './dominion/deskController';
+import { waiting as deskWaiting, deskOpen } from '../core/dominion/desk';
 import { HqController } from './dominion/hqController';
 import { RivalController } from './dominion/rivalController';
 import { threatRow } from '../core/dominion/rivalScreens';
@@ -26,8 +28,10 @@ import { cardView, mapView } from '../ui/redux/screens/dominion/fieldViews';
 import { ledgerModel, SPREADS } from '../core/dominion/ledgerScreens';
 import { ledgerView } from '../ui/redux/screens/dominion/ledger';
 import { meetModel } from '../core/dominion/town';
+import { heroModel, interruptModel } from '../core/dominion/heroScreens';
+import { heroView, interruptView, type MonFiles } from '../ui/redux/screens/dominion/heroViews';
 
-type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger';
+type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk';
 
 /** The screen to come back to after a battle (D2: the map the action was picked on, or the HQ for a fight at the door). */
 let resume: Screen | null = null;
@@ -61,8 +65,13 @@ export class DominionScene extends Phaser.Scene {
   private res = new ReserveController(this);
   /** D5: the HQ menu (mockup 6). */
   private hq = new HqController(this);
+  /** D11: where the Hero's file (H) goes back to, and the m11 choice under the cursor. */
+  private heroFrom: Screen = 'hq';
+  private intAt = 0;
   /** D9: the Rival File (key R). */
   private rival = new RivalController(this);
+  /** D21: the applications desk (Rotom mockup k5). */
+  private desk = new DeskController(this);
 
   constructor() {
     super('Dominion');
@@ -79,6 +88,7 @@ export class DominionScene extends Phaser.Scene {
     this.hq = new HqController(this);
     this.res = new ReserveController(this);
     this.rival = new RivalController(this);
+    this.desk = new DeskController(this);
     const { session } = services();
     const run = session.run;
     if (!run) return void this.scene.start('MainMenu');
@@ -96,7 +106,10 @@ export class DominionScene extends Phaser.Scene {
     if (back && blk?.opened) {
       this.screen = back === 'card' ? 'map' : back;
       if (this.screen === 'map') this.cursor = newCursor(blk);
+      if (this.screen === 'hero' && !blk.hero) this.screen = 'hq';
     }
+    // D11: the Hero stepped into a job and the tab closed before a choice (m11 waits).
+    if (blk?.opened && this.heroPending()) this.screen = 'interrupt';
     const archetype = getArchetype(session.content, run.archetypeId);
     const level = run.party[0]?.level ?? 5;
     const d = DOMINION_DATA.start;
@@ -129,15 +142,22 @@ export class DominionScene extends Phaser.Scene {
         back: () => this.back(),
         bring: () => this.bring(),
         buy: (id) => this.buy(id),
-        meet: (i) => this.answerMeet(Number(i)),
+        townMeet: (i) => this.answerMeet(Number(i)),
         dismiss: () => { this.notice = null; this.rival.dismiss(); this.view?.refresh(); },
         ledgerTab: (i) => { this.spread = Number(i); this.view?.refresh(); },
         ledgerPage: (d) => this.turnLedger(Number(d)),
+        heroFile: () => this.openHero(),
+        legend: (id) => this.heroAct({ t: 'legend', legend: id }),
+        meet: (i) => this.heroAct({ t: 'meet', choice: Number(i) }),
+        after: (how) => this.heroAct({ t: 'after', how: how === 'recruit' ? 'recruit' : 'leave' }),
+        interrupt: (i) => this.interrupt(Number(i)),
         ...this.crew.acts(),
         ...this.res.acts(),
         ...this.hq.acts(),
         ...this.rival.acts(),
         base: () => { this.hq.open(); this.view?.refresh(); },
+        ...this.desk.acts(),
+        desk: () => this.desk.open(),
       },
       overs: {
         typeOver: (i) => { this.setup = { ...this.setup, at: Number(i) }; this.view?.refresh(); },
@@ -145,11 +165,17 @@ export class DominionScene extends Phaser.Scene {
         ...this.crew.overs(),
         ...this.res.overs(),
         ...this.rival.overs(),
+        ...this.desk.overs(),
       },
     });
     const kb = this.input.keyboard;
     const raw = (e: KeyboardEvent): void => {
       if (this.leaving) return;
+      if (this.screen === 'desk') {
+        this.desk.raw(e);
+        return;
+      }
+      if (this.heroRaw(e.code)) return;
       if (this.screen === 'ledger') {
         if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
         else if (e.code === 'KeyL') this.closeLedger();
@@ -189,7 +215,8 @@ export class DominionScene extends Phaser.Scene {
       if (this.screen === 'hq' && e.code === 'KeyR' && !this.block()?.crew?.talks.length) return void (this.rival.open() && this.view?.refresh());
       // D5: B opens the HQ menu (mockup 6) from the HQ.
       if (this.screen === 'hq' && e.code === 'KeyB') return void (this.hq.open(), this.view?.refresh());
-      if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
+      if (e.code === 'KeyI') this.desk.open();
+      else if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
       else if (e.code === 'KeyN') this.step({ t: 'toNight' });
       else if (e.code === 'KeyE') this.step({ t: 'endDay' });
     };
@@ -198,10 +225,15 @@ export class DominionScene extends Phaser.Scene {
     onInputAction(this, (a) => this.key(a));
     // L is the Ledger on the HQ, the map and the Crew File (D6) and Money on the HQ menu (D5, mockup 6), so it doesn't
     // open the game's interaction log there (Shift+L still does).
-    setLogKeyTaken(() => this.scene.isActive() && (this.screen === 'base' || (!!this.block()?.opened && ['hq', 'map', 'crew', 'ledger'].includes(this.screen))));
+    setLogKeyTaken(() => this.scene.isActive() && (this.screen === 'base' || (!!this.block()?.opened && ['hq', 'map', 'crew', 'ledger', 'hero'].includes(this.screen))));
+    // D21: the desk hears every key first, so A and D stamp there instead of moving (the game's key map has them as ◀ ▶).
+    const note = (e: KeyboardEvent): void => this.desk.note(e);
+    window.addEventListener('keydown', note, true);
     this.events.once('shutdown', () => {
       kb?.off('keydown', raw);
       setLogKeyTaken(null);
+      window.removeEventListener('keydown', note, true);
+      this.desk.shutdown();
     });
   }
 
@@ -226,7 +258,7 @@ export class DominionScene extends Phaser.Scene {
         return openingView(b ? openingLines(b) : [], this.shown, this.memberLook());
       case 'hq':
         if (b && this.crew.owns()) return this.crew.render(this.notice);
-        return b ? hqView(hqModel(b), this.notice, this.at, this.memberLook(), threatRow(b)) : '';
+        return b ? hqView(hqModel(b), this.notice, this.at, this.memberLook(), threatRow(b), deskOpen(b) ? deskWaiting(b) : null) : '';
       case 'map':
         return b && this.cursor ? mapView(mapModel(b, services().session.run!, this.cursor), this.notice, this.garage, this.meetPanel()) : '';
       case 'card': {
@@ -240,6 +272,17 @@ export class DominionScene extends Phaser.Scene {
         return this.crew.render(this.notice);
       case 'ledger':
         return b ? ledgerView(ledgerModel(b, services().session.run!, this.spread), this.notice) : '';
+      case 'hero': {
+        if (!b?.hero) return '';
+        const m = heroModel(b, services().session.run!);
+        return heroView(m, this.monFiles(m.legends.map((l) => l.id)), this.notice);
+      }
+      case 'interrupt': {
+        const m = b ? interruptModel(b, services().session.run!.inventory) : null;
+        if (!m) return '';
+        const lead = services().session.run!.party.find((p) => p.hp > 0) ?? services().session.run!.party[0];
+        return interruptView(m, this.memberLook(), lead ? this.monFiles([lead.speciesId])[lead.speciesId] ?? null : null, this.intAt, this.notice);
+      }
       case 'reserve':
       case 'pyramid':
         return this.res.render(this.notice);
@@ -247,6 +290,8 @@ export class DominionScene extends Phaser.Scene {
         return this.hq.render(this.notice);
       case 'rival':
         return this.rival.render();
+      case 'desk':
+        return this.desk.render(this.notice);
     }
   }
 
@@ -272,8 +317,25 @@ export class DominionScene extends Phaser.Scene {
   private key(a: InputAction): void {
     if (this.ate) return void (this.ate = false);
     if (this.leaving) return;
+    if (this.screen === 'interrupt') {
+      if (a === 'left' || a === 'up') this.intAt = (this.intAt + 2) % 3;
+      else if (a === 'right' || a === 'down') this.intAt = (this.intAt + 1) % 3;
+      else if (a === 'confirm') return this.interrupt(this.intAt);
+      // Esc never leaves the run from here: the Hero waits for an answer.
+      return void this.view?.refresh();
+    }
+    if (this.screen === 'hero') {
+      if (this.notice && (a === 'confirm' || a === 'back')) {
+        this.notice = null;
+        return void this.view?.refresh();
+      }
+      if (a === 'back') return this.closeHero();
+      if (a === 'confirm') return this.heroCta();
+      return;
+    }
     if (this.res.key(a)) return void this.view?.refresh();
     if (this.rival.key(a)) return void this.view?.refresh();
+    if (this.desk.key(a)) return void this.view?.refresh();
     if (this.crew.key(a)) return void this.view?.refresh();
     if (this.screen === 'ledger') {
       if (a === 'back') return this.closeLedger();
@@ -314,7 +376,7 @@ export class DominionScene extends Phaser.Scene {
     const b = this.block();
     if (this.screen === 'title') {
       if (this.titleAt === 0 && !b) this.screen = 'setup';
-      else if (this.titleAt === 1 && b) this.screen = b.opened ? 'hq' : 'opening';
+      else if (this.titleAt === 1 && b) this.screen = !b.opened ? 'opening' : this.heroPending() ? 'interrupt' : 'hq';
     } else if (this.screen === 'setup') {
       if (this.setup.page === 'types') this.setup = toggleType(this.setup);
       else return this.next();
@@ -363,6 +425,10 @@ export class DominionScene extends Phaser.Scene {
     if (!b) return;
     // D2: Looker or a raid at the door is fought before the day starts.
     if (b.phase === 'morning' && b.field.fight && !b.field.fight.begun) return this.fight('hq');
+    if (this.heroPending()) {
+      this.screen = 'interrupt';
+      return this.view?.refresh();
+    }
     const by: Record<string, DominionAction> = { evening: { t: 'toNight' }, night: { t: b.nightActions < 1 ? 'skipNight' : 'rest' }, morning: { t: 'toDay' }, day: { t: 'endDay' } };
     this.step(by[b.phase]!);
   }
@@ -521,6 +587,11 @@ export class DominionScene extends Phaser.Scene {
     this.screen = 'map';
     this.notice = out.notice;
     if (out.ok && out.fight) return this.fight('map');
+    // D11 (m11): the Hero stepped into the job; the choice comes before any battle.
+    if (out.ok && this.heroPending()) {
+      this.screen = 'interrupt';
+      this.intAt = 0;
+    }
     this.view?.refresh();
   }
 
@@ -533,11 +604,110 @@ export class DominionScene extends Phaser.Scene {
     return { ...m, at: Math.min(this.meetAt, m.choices.length - 1), title: L.panel!, hint: L.pick! };
   }
   private answerMeet(i: number): void {
-    const out = services().session.dominionStep({ t: 'meet', choice: i });
+    const out = services().session.dominionStep({ t: 'townMeet', choice: i });
     this.notice = out.notice;
     if (out.ok) this.meetAt = 0;
     if (out.ok && out.fight) return this.fight('map');
     this.view?.refresh();
+  }
+
+  // ---------- D11: the Hero's file (mockup s9) and the Hero interrupt (m11) ----------
+
+  /** A job the Hero stepped into, waiting on Battle / Run / Smoke Ball. */
+  private heroPending(): boolean {
+    const f = this.block()?.field.fight;
+    return !!f && f.why === 'hero' && !f.begun;
+  }
+
+  /** Pokémon atlas files for the given species (missing art falls back to nothing). */
+  private monFiles(ids: string[]): MonFiles {
+    const out: MonFiles = {};
+    for (const id of ids) {
+      const sp = services().session.content.species.get(id);
+      out[id] = sp ? rxFileOf(this.manifest, pokemonAssetIds(sp.assets).front)?.file ?? null : null;
+    }
+    return out;
+  }
+
+  private openHero(): void {
+    const b = this.block();
+    if (!b?.opened || this.screen === 'hero') return;
+    if (!b.hero) {
+      this.notice = 'Nobody has heard of a Hero yet. End the day first.';
+      return void this.view?.refresh();
+    }
+    this.heroFrom = this.screen === 'card' ? 'map' : this.screen === 'ledger' ? this.ledgerFrom : this.screen;
+    this.screen = 'hero';
+    this.notice = null;
+    this.garage = false;
+    this.view?.refresh();
+  }
+
+  private closeHero(): void {
+    this.screen = this.heroFrom;
+    this.notice = null;
+    if (this.screen === 'map' && !this.cursor) this.cursor = newCursor(this.block()!);
+    this.view?.refresh();
+  }
+
+  /** The Hero file's big button: fight the Legendary that's out, or go back. */
+  private heroCta(): void {
+    const b = this.block();
+    if (!b?.hero) return this.closeHero();
+    const m = heroModel(b, services().session.run!);
+    if (m.cta.act === 'legend' && m.cta.id) return this.heroAct({ t: 'legend', legend: m.cta.id });
+    this.closeHero();
+  }
+
+  private heroAct(action: DominionAction): void {
+    const out = services().session.dominionStep(action);
+    this.notice = out.notice;
+    if (out.ok && out.fight) return this.fight('hero');
+    this.view?.refresh();
+  }
+
+  /** m11: 0 battle, 1 run, 2 Smoke Ball. */
+  private interrupt(i: number): void {
+    if (!this.heroPending()) return;
+    const how = (['fight', 'run', 'smoke'] as const)[i];
+    if (!how) return;
+    this.intAt = i;
+    const out = services().session.dominionStep({ t: 'interrupt', how });
+    if (!out.ok) {
+      this.notice = out.notice;
+      return void this.view?.refresh();
+    }
+    if (out.fight) {
+      this.notice = out.notice;
+      return this.fight('map');
+    }
+    this.screen = 'map';
+    if (!this.cursor) this.cursor = newCursor(this.block()!);
+    this.notice = out.notice;
+    this.view?.refresh();
+  }
+
+  /** H opens the Hero's file (not on the Crew File, where H hires); on the file: 1-3 answer, F fights, L/R after the stand. */
+  private heroRaw(code: string): boolean {
+    if (this.screen === 'interrupt') {
+      const i = { Digit1: 0, Digit2: 1, Digit3: 2 }[code];
+      if (i !== undefined) this.interrupt(i);
+      return true;
+    }
+    if (this.screen === 'hero') {
+      const b = this.block();
+      const m = b?.hero ? heroModel(b, services().session.run!) : null;
+      if (code === 'KeyH') this.closeHero();
+      else if (code in TAB_KEYS && m?.meet?.open && TAB_KEYS[code]! < m.meet.choices.length) this.heroAct({ t: 'meet', choice: TAB_KEYS[code]! });
+      else if (code === 'KeyF' && m?.cta.act === 'legend') this.heroCta();
+      else if (m?.choose && (code === 'KeyL' || code === 'KeyR')) this.heroAct({ t: 'after', how: code === 'KeyR' ? 'recruit' : 'leave' });
+      return true;
+    }
+    if (code === 'KeyH' && (this.screen === 'hq' || this.screen === 'map' || this.screen === 'ledger')) {
+      this.openHero();
+      return true;
+    }
+    return false;
   }
 
   /** Starts the battle the block waits on; the scene comes back to `from` afterwards. */
@@ -568,6 +738,11 @@ export class DominionScene extends Phaser.Scene {
     }
     if (this.screen === 'card') {
       this.screen = 'map';
+      return this.view?.refresh();
+    }
+    if (this.screen === 'desk') {
+      this.screen = 'hq';
+      this.notice = null;
       return this.view?.refresh();
     }
     if (this.screen === 'map') {
