@@ -29,6 +29,7 @@ import { POCKET_TOWN } from '../../src/core/hubTown/schema';
 import { leaderLine, pkBrief, pkStarter, regionOfGen, runSteps } from '../../src/ui/pocket/screens/run';
 import type { BriefModel } from '../../src/ui/redux/screens/run';
 import type { TradeModel } from '../../src/ui/redux/screens/stops';
+import { pkGallery, pkMemories, shelfMon, type PkGalleryModel } from '../../src/ui/pocket/screens/memories';
 import { firstThought, fitBody, pkBoard, pkConfirm, pkGrid, pkMenu, pkOptions, pkSaves, pkStats } from '../../src/ui/pocket/templates';
 
 const stage = (current: string | null) => ({
@@ -855,5 +856,47 @@ describe('Pocket look: the Trade Post', () => {
     expect(html).toContain('Lucario joined your party!');
     expect(html).toContain('data-act="done"');
     expect(html).not.toContain('data-act="accept"');
+  });
+});
+
+describe('Pocket look: Memories and the Legacy Gallery', () => {
+  const shelves = ['chronicle', 'journal', 'hall', 'lane', 'fallen', 'replays', 'heirlooms', 'lost'].map((id, i) => ({ id, label: `Shelf ${id}`, count: `${i} things` }));
+  it('the shelf is a card per memory, four across for eight, the lit one opens', () => {
+    const html = pkMemories({ shelves, index: 4 });
+    expect(pkPageOf(html)?.id).toBe('pt-memories');
+    expect(html).toContain('gr39 q4 ph39');
+    expect(html.split('data-act="pick"').length - 1).toBe(9); // eight cards and the Enter key
+    expect(html).toMatch(/class="pn on" data-key="mem-fallen"/);
+    expect(html).toContain('Read only');
+    expect(html).toContain('back to the Hub');
+    expect(pkMemories({ shelves: shelves.slice(0, 6), index: 99 })).toContain('gr39 q3 ph39');
+    expect(shelfMon('journal')).toBe(6);
+    expect(shelfMon('nope')).toBe(133);
+  });
+  const run = (over: Partial<PkGalleryModel> = {}): PkGalleryModel => ({
+    at: 8, count: 12, tag: 'Champion · Kanto to Hoenn', name: 'Blue', art: null, colour: '#2f6fc8',
+    team: [{ file: null, ace: true, shiny: false }, { file: null, ace: false, shiny: true }], ace: 'Blastoise, Lv 212', ended: 'Beat the Hoenn Champion', moments: 3, ...over,
+  });
+  it('the gallery shows one Trainer: tag, team with the Ace lit, how it ended, Relive and Whole team', () => {
+    const html = pkGallery(run());
+    expect(pkPageOf(html)?.id).toBe('pt-gallery');
+    expect(html).toContain('Run 9 of 12');
+    expect(html).toContain('Champion · Kanto to Hoenn');
+    expect(html).toContain('<i class="ace">');
+    expect(html).toContain('gx-lg-shiny');
+    expect(html).toContain('Blastoise, Lv 212');
+    expect(html).toContain('data-act="relive"');
+    expect(html).toContain('another run');
+    expect(html).not.toContain('gx-tr-off');
+  });
+  it('one run has no "another run" key; no moments dims Relive; reliving draws the moment over the page', () => {
+    expect(pkGallery(run({ count: 1, at: 0 }))).not.toContain('another run');
+    expect(pkGallery(run({ moments: 0 }))).toContain('gx-tr-off');
+    const html = pkGallery(run({ relive: { label: 'Champion victory', text: 'Beat Lance.', file: null, at: 0, count: 2 } }));
+    expect(html).toContain('gx-lg-rl');
+    expect(html).toContain('Beat Lance.');
+    expect(html).toContain('1 of 2');
+    expect(html).toContain('next moment');
+    expect(pkGallery(run({ relive: { label: 'x', text: 'y', file: null, at: 1, count: 2 } }))).toContain('done');
   });
 });

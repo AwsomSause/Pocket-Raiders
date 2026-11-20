@@ -15,7 +15,9 @@ import { preloadPokemon } from '../ui/lazyAssets';
 import { Picker, type PickerRow } from '../ui/partyPanel';
 import { act, esc, paper } from '../ui/redux/kit';
 import { phMemory } from '../ui/phantom/screens/rooms';
-import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, pocketOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { pkMemories } from '../ui/pocket/screens/memories';
+import { playSfx } from '../ui/audio';
 import { pokemonIcon } from '../ui/sprites';
 import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 
@@ -42,6 +44,8 @@ export class MemoriesScene extends Phaser.Scene {
   /** New UI: the open reading page (the canvas one is under the layer). */
   private rxReader: ReduxView | null = null;
   private back: (() => void) | null = null;
+  /** Pocket look: the shelf of memories (mock-up `pt-memories`) in place of the menu list. */
+  private shelf: { view: ReduxView; index: number } | null = null;
 
   constructor() {
     super('Memories');
@@ -56,6 +60,7 @@ export class MemoriesScene extends Phaser.Scene {
   create(): void {
     this.reader = null;
     this.rxReader = null;
+    this.shelf = null;
     this.showMenu();
     onInputAction(this, (a) => {
       if (this.reader) {
@@ -64,6 +69,7 @@ export class MemoriesScene extends Phaser.Scene {
         else if (a === 'up' || a === 'down') this.rxReader?.el.querySelector('[data-scroll]')?.scrollBy({ top: a === 'up' ? -80 : 80 });
         return;
       }
+      if (this.shelf) return this.shelfInput(a);
       this.picker?.handle(a);
     });
   }
@@ -106,8 +112,62 @@ export class MemoriesScene extends Phaser.Scene {
   }
 
   private showMenu(start?: number): void {
+    if (pocketOn()) return this.showShelf(start ?? 0);
     const rows = SECTIONS.map((s) => this.row(s.blurb, s.label, s.blurb));
     this.open(rows, 'Memories', (i) => this.openSection(SECTIONS[i]!.id, i), () => this.scene.start('Hub', { focus: 3 }), start);
+  }
+
+  /** How many of each kind of memory there are, as the shelf's small line ("12 runs"). */
+  private shelfCount(id: Section): string {
+    const { session } = services();
+    const n = (k: number, one: string, many: string): string => `${k} ${k === 1 ? one : many}`;
+    switch (id) {
+      case 'chronicle': return n(session.profile.story.chronicles.length, 'chronicle', 'chronicles');
+      case 'journal': return n(this.records.length, 'run', 'runs');
+      case 'hall': return n(hallOfMemories(this.content, this.records).length, 'story', 'stories');
+      case 'lane': return n(memoryLane(this.content, this.records).length, 'moment', 'moments');
+      case 'fallen': return n(fallenTrainers(this.content, this.records).length, 'name', 'names');
+      case 'replays': return n(this.records.reduce((k, r) => k + r.replays.length, 0), 'saved', 'saved');
+      case 'heirlooms': return `${session.profile.memories.heirlooms.filter((h) => !h.spent).length} ready to pass on`;
+      case 'lost': return n(pastDigest(this.content, session.profile).keepsakes.length, 'item', 'items');
+    }
+  }
+
+  private showShelf(start: number): void {
+    this.picker?.close();
+    this.picker = null;
+    this.shelf?.view.destroy();
+    const shelves = SECTIONS.map((s) => ({ id: s.id, label: NEW_NAMES[s.id] ?? s.label, count: this.shelfCount(s.id) }));
+    const shelf = { index: Math.max(0, Math.min(SECTIONS.length - 1, start)), view: null as unknown as ReduxView };
+    shelf.view = mountRedux(this, {
+      render: (c) => (c.pk ? pkMemories({ shelves, index: shelf.index }) : ''),
+      acts: { pick: (i) => this.openShelf(Number(i)), back: () => this.shelfInput('back') },
+      overs: { over: (i) => { if (Number(i) !== shelf.index) { shelf.index = Number(i); shelf.view.refresh(); } } },
+    });
+    this.shelf = shelf;
+  }
+
+  private shelfInput(a: string): void {
+    const s = this.shelf;
+    if (!s) return;
+    const n = SECTIONS.length, across = n > 6 ? 4 : 3;
+    if (a === 'back') { playSfx(this, 'ui.select', 0.6); this.scene.start('Hub', { focus: 3 }); return; }
+    if (a === 'confirm') return this.openShelf(s.index);
+    const step = a === 'left' ? -1 : a === 'right' ? 1 : a === 'up' ? -across : a === 'down' ? across : 0;
+    const next = s.index + step;
+    if (!step || next < 0 || next >= n) return;
+    s.index = next;
+    playSfx(this, 'ui.move', 0.5);
+    s.view.refresh();
+  }
+
+  private openShelf(i: number): void {
+    const section = SECTIONS[i];
+    if (!section) return;
+    playSfx(this, 'ui.select');
+    this.shelf?.view.destroy();
+    this.shelf = null;
+    this.openSection(section.id, i);
   }
 
   private openSection(id: Section, menuIndex: number): void {

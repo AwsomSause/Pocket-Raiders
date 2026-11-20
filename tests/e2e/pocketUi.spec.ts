@@ -724,6 +724,41 @@ test('Pocket look: the Trade Post shows what you give and get, and No thanks lea
   expect(errors).toEqual([]);
 });
 
+test('Pocket look: Memories is a shelf of cards and the Legacy Gallery shows one past Trainer; looking changes nothing', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=mem-e2e');
+  await toPocketMap(page);
+  // End the run so the profile keeps one legacy record.
+  await page.evaluate(() => { const pkr = (window as any).__pkr; pkr.session.run.victory = true; pkr.session.run.phase = 'over'; pkr.session.finishRun(); pkr.game.scene.getScene('Map').scene.start('Memories'); });
+  await waitForScene(page, 'Memories');
+  await onPkPage(page, 'Memories', 'pt-memories');
+  const shelf = pkView(page, 'Memories', 'pt-memories');
+  await expect(shelf.locator('.gr39 > .pn')).toHaveCount(8);
+  await expect(shelf.locator('[data-key="mem-journal"] p')).toHaveText('1 run');
+  await fits(page, 'Memories', 'pt-memories');
+  const profile = () => page.evaluate(() => JSON.stringify((window as any).__pkr.session.profile.legacyRuns));
+  const before = await profile();
+  await step(page, 'ArrowRight');
+  await expect(shelf.locator('.pn.on')).toHaveAttribute('data-key', 'mem-journal');
+  await step(page, 'Enter');
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Memories').shelf)).toBeNull();
+  await page.evaluate(() => { (window as any).__pkr.game.scene.getScene('Memories').scene.start('LegacyGallery'); });
+  await waitForScene(page, 'LegacyGallery');
+  await onPkPage(page, 'LegacyGallery', 'pt-gallery');
+  const gallery = pkView(page, 'LegacyGallery', 'pt-gallery');
+  await expect(gallery.locator('.lgt39 i.ace')).toHaveCount(1);
+  await fits(page, 'LegacyGallery', 'pt-gallery');
+  await step(page, 'Enter');
+  await expect(gallery.locator('.gx-lg-rl')).toHaveCount(1);
+  await step(page, 'Escape');
+  await expect(gallery.locator('.gx-lg-rl')).toHaveCount(0);
+  await step(page, 't');
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('LegacyGallery').pk)).toBeNull();
+  expect(await profile()).toBe(before);
+  expect(errors).toEqual([]);
+});
+
 test('Pocket look: starting a run, Starter Pick is three cards and the Briefing shows the first region and Gym', async ({ page }) => {
   test.setTimeout(180_000);
   const errors = watch(page);

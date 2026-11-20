@@ -18,6 +18,10 @@ import { Picker, type PickerLike, type PickerRow } from '../ui/partyPanel';
 import { fitHeight } from '../ui/showcase';
 import { pokemonIcon, pokemonVisual, trainerVisual } from '../ui/sprites';
 import { GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, textStyle } from '../ui/theme';
+import { pkGallery, type PkGalleryModel } from '../ui/pocket/screens/memories';
+import { artOf, monFile } from '../ui/redux/game';
+import { mountRedux, pocketOn, type ReduxView } from '../ui/redux/stage';
+import { playSfx } from '../ui/audio';
 
 const GOLD = '#ffe08a';
 const SKY = '#cfefff';
@@ -32,6 +36,8 @@ export class LegacyGalleryScene extends Phaser.Scene {
   private motion: MotionLevel = 'full';
   /** Abandon asks twice (the first press arms it). */
   private confirmAbandon = false;
+  /** Pocket look: one past Trainer at a time (mock-up `pt-gallery`) in place of the list. */
+  private pk: { view: ReduxView; at: number } | null = null;
 
   constructor() {
     super('LegacyGallery');
@@ -48,11 +54,19 @@ export class LegacyGalleryScene extends Phaser.Scene {
     this.motion = services().session.settings.battleAnimations;
     this.relive = null;
     this.confirmAbandon = false;
+    this.pk = null;
+    this.input.keyboard?.on('keydown-T', () => { if (this.pk && !this.relive) this.pkTeam(); });
     this.showList();
     onInputAction(this, (a) => {
       if (this.relive) {
         if (a === 'back') this.closeRelive();
         else if (a === 'confirm' || a === 'right' || a === 'down') this.nextMoment();
+        return;
+      }
+      if (this.pk) {
+        if (a === 'left' || a === 'right') this.pkStep(a === 'left' ? -1 : 1);
+        else if (a === 'confirm') this.pkRelive();
+        else if (a === 'back') this.scene.start('Hub', { focus: 3 });
         return;
       }
       this.picker?.handle(a);
@@ -152,6 +166,7 @@ export class LegacyGalleryScene extends Phaser.Scene {
       this.confirmAbandon = false;
       this.showRecord(i - offset);
     };
+    if (pocketOn() && offset === 0 && records.length) return this.showPocket(start ?? 0);
     // Screens redesign: a picked look draws the runs the way its mock-up does (not while a revisited timeline needs its extra rows).
     const styleId = screenStyleOf('legacy', services().session.settings.screenStyles, services().session.profile.stats.runsEnded);
     if (styleId !== 'original' && hasGalleryLook(styleId) && offset === 0) {
@@ -165,6 +180,66 @@ export class LegacyGalleryScene extends Phaser.Scene {
       return;
     }
     this.open(rows, records.length ? 'Legacy Gallery' : 'Legacy Gallery · no runs yet', onSelect, () => this.scene.start('Hub', { focus: 3 }), start);
+  }
+
+  private showPocket(at: number): void {
+    this.picker?.close();
+    this.picker = null;
+    this.pk?.view.destroy();
+    const records = services().session.profile.legacyRuns;
+    const st = { at: Math.max(0, Math.min(records.length - 1, at)), view: null as unknown as ReduxView };
+    st.view = mountRedux(this, {
+      render: (c) => (c.pk && records[st.at] ? pkGallery(this.galleryModel(records[st.at]!, st.at, records.length)) : ''),
+      acts: { step: (d) => this.pkStep(Number(d)), relive: () => this.pkRelive(), rlNext: () => this.nextMoment(), rlStop: () => this.closeRelive(), team: () => this.pkTeam(), back: () => this.scene.start('Hub', { focus: 3 }) },
+    });
+    this.pk = st;
+  }
+
+  private galleryModel(r: LegacyRun, at: number, count: number): PkGalleryModel {
+    const ace = legacyAce(r);
+    const regionName = (id: string | undefined): string => (id ? this.content.regions.get(id)?.name ?? id : '');
+    const from = regionName(r.regionOrder[0]), to = this.region(r);
+    const won = r.outcome === 'victory';
+    const done = accomplishments(this.content, r).filter((x) => x !== 'Champion');
+    return {
+      at, count,
+      tag: `${won ? 'Champion' : 'Fell'} · ${from && from !== to ? `${from} to ${to}` : to}`,
+      name: this.trainer(r),
+      art: artOf(this, this.content.archetypes.get(r.archetypeId)?.spriteAssetId),
+      colour: won ? '#2f6fc8' : '#5b6478',
+      team: r.team.map((m) => ({ file: monFile(this, m.speciesId, 'front', m.shiny), ace: m.uid === ace?.uid, shiny: m.shiny })),
+      ace: ace ? `${this.name(ace.speciesId)}, Lv ${ace.level}` : 'Unknown',
+      ended: r.epitaph ?? ([won ? `Became Champion in ${to}` : `Fell in ${to}`, ...done].join(' · ')),
+      moments: r.moments.length,
+      relive: this.relive && this.relive.index >= 0 && this.relive.index < this.relive.moments.length ? (() => {
+        const m = this.relive.moments[this.relive.index]!;
+        return { label: MOMENT_LABEL[m.kind], text: m.text, file: monFile(this, m.speciesId ?? ace?.speciesId ?? '', 'front'), at: this.relive.index, count: this.relive.moments.length };
+      })() : null,
+    };
+  }
+
+  private pkStep(d: number): void {
+    const st = this.pk, n = services().session.profile.legacyRuns.length;
+    if (!st || n < 2) return;
+    st.at = (st.at + d + n) % n;
+    playSfx(this, 'ui.move', 0.5);
+    st.view.refresh();
+  }
+
+  private pkRelive(): void {
+    const r = this.pk ? services().session.profile.legacyRuns[this.pk.at] : undefined;
+    if (!r?.moments.length) return;
+    playSfx(this, 'ui.select');
+    this.startRelive(r);
+  }
+
+  private pkTeam(): void {
+    const st = this.pk;
+    if (!st) return;
+    playSfx(this, 'ui.select');
+    st.view.destroy();
+    this.pk = null;
+    this.showRecord(st.at);
   }
 
   /** One past Trainer, row by row; the first row is Relive the Moment, then Revisit This Timeline for a lost run. */
@@ -271,6 +346,8 @@ export class LegacyGalleryScene extends Phaser.Scene {
     const root = this.add.container(0, 0).setDepth(3000).setName('legacy-relive');
     root.add(this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x050a14, 0.92).setOrigin(0).setInteractive().on('pointerdown', () => this.nextMoment()));
     this.relive = { root, moments: record.moments, index: -1, record };
+    // Pocket look: the page draws the moment itself; the canvas card stays hidden under it.
+    if (this.pk) root.setVisible(false);
     this.nextMoment();
   }
 
@@ -290,6 +367,7 @@ export class LegacyGalleryScene extends Phaser.Scene {
     const old = rl.root.list.find((o) => o.name === 'legacy-moment');
     old?.destroy();
     rl.root.add(card);
+    this.pk?.view.refresh();
     if (this.motion !== 'off') {
       card.setAlpha(0);
       this.tweens.add({ targets: card, alpha: 1, duration: this.motion === 'full' ? 600 : 250, ease: 'Sine.easeOut' });
@@ -304,5 +382,6 @@ export class LegacyGalleryScene extends Phaser.Scene {
   private closeRelive(): void {
     this.relive?.root.destroy();
     this.relive = null;
+    this.pk?.view.refresh();
   }
 }
