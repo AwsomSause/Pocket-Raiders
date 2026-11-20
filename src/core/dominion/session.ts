@@ -16,6 +16,7 @@ import { beginDominionFight } from './fight';
 import { DOMINION_DATA } from './data';
 import { DominionBlockSchema, type DominionAction, type DominionBlock, type DominionSetup } from './schema';
 import { newBlock, typesProblem } from './start';
+import { afterStep, lineFor, weekSum } from './empire';
 import { autoFill, book, placeMon, reserveInRun, seedStart, withReserve } from './reserve';
 import { build, letGo, loan, rebuild, repay, sell, storageCap, tierUp, upgrade, launder, type HqOut } from './hq';
 import { withHq } from './hqFx';
@@ -61,8 +62,13 @@ export function startInRun(content: Content, run: RunState, setup: DominionSetup
   return { run: out, problem: null };
 }
 
-/** One clock step on the run. Rest heals the Boss's team for free (Part 1 §2.1). Anyone new gets their card (D19). */
+/**
+ * One clock step on the run. Rest heals the Boss's team for free (Part 1 §2.1). Anyone new gets their card (D19).
+ * D6: the money it moved goes on the Ledger's line for it (the World Turn books its own),
+ * the district the Boss worked in counts as this week's visit, and a new Notoriety step is announced.
+ */
 export function stepInRun(content: Content, run: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean } {
+  const before = run.expansion?.dominion;
   const out = stepInner(content, run, action);
   if (!out.ok) return out;
   // D9: the rival tier reads the Boss's best level; a night ambush (rival action 135) hurts the Boss's team.
@@ -77,10 +83,22 @@ export function stepInRun(content: Content, run: RunState, action: DominionActio
   rollQueue(content, b, run.seed);
   // D19: anyone new gets their personality card.
   fillCards(b, run.seed);
+  // D6: the Ledger books what the step did to the money, the Boss's visit, and a new Notoriety step.
+  const turned = !!before && b.day !== before.day;
+  const lines = before ? afterStep(b, turned ? b.funds : before.funds, turned ? weekSum(b) : weekSum(before), lineFor(action), visitOf(action)) : [];
   const block = DominionBlockSchema.parse(b);
-  return { ...out, block, run: withBlock(next, block) };
+  if (lines.length && turned) block.report = [...block.report, ...lines];
+  const notice = lines.length && !turned ? [out.notice, ...lines].filter(Boolean).join(' ') : out.notice;
+  return { ...out, block, notice, run: withBlock(next, block) };
 }
 
+/** The town the Boss worked in (a Holder's visit): Day and Night actions only; Evening ones are done from the HQ. */
+function visitOf(a: DominionAction): string | null {
+  if (a.t !== 'act' || DOMINION_DATA.actions.actions.find((x) => x.id === a.action)?.slot === 'evening') return null;
+  return DOMINION_DATA.field.play[a.action]?.where === 'hq' ? DOMINION_DATA.field.hq : a.district;
+}
+
+/** Rest heals the Boss's team for free (Part 1 §2.1). */
 function stepInner(content: Content, run: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean } {
   const block = run.expansion?.dominion;
   if (!block) return { ok: false, block: block as never, notice: null, heal: false, run };
@@ -321,6 +339,8 @@ export function settleStaleFight(content: Content, run: RunState): { run: RunSta
   if (!block?.field.fight?.begun || run.battle) return null;
   const out = structuredClone(run);
   const b = structuredClone(block);
+  const funds = b.funds, sum = weekSum(b), why = block.field.fight.why;
   const lines = settle(content, b, out, 'fled', null);
+  lines.push(...afterStep(b, funds, sum, DOMINION_DATA.empire.ledger.byFight[why] ?? 'jobs', null));
   return { run: withBlock(out, DominionBlockSchema.parse(b)), lines };
 }

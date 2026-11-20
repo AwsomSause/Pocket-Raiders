@@ -3,6 +3,7 @@
 // police and the districts' world step in field.ts, D9 rivals, D11 Hero and Legendaries) with its own named stream;
 // nothing in the World Turn ends a run.
 
+import { book, bookRest, weekSum } from './book';
 import { DOMINION_DATA } from './data';
 import type { DominionBlock } from './schema';
 
@@ -31,12 +32,14 @@ const STEPS: Partial<Record<WorldStepId, WorldStep[]>> = {
       const rent = Math.round((c.rent * (100 + up)) / 100);
       const lines = [fill(r.week, { week: b.day / c.weekLength, rent, wages })];
       b.funds -= rent;
+      book(b, 'rent', -rent);
       // D5: bills take dirty money first (the clean part can't be more than what's left).
       const clamp = (): void => void (b.hq && (b.hq.clean = Math.max(0, Math.min(b.hq.clean, b.funds))));
       clamp();
       for (const m of b.members) {
         if (b.funds >= m.wage) {
           b.funds -= m.wage;
+          book(b, 'wages', -m.wage);
           clamp();
           m.unpaid = 0;
         } else {
@@ -55,10 +58,27 @@ export function addWorldStep(id: WorldStepId, step: WorldStep): void {
   (STEPS[id] ??= []).push(step);
 }
 
-/** Runs every step in the fixed order on `block` (changed in place) and returns the Night Report. */
+/** D6: what runs after every step (the Ledger closes the week, the districts' holding). Same shape as a step. */
+const ENDS: WorldStep[] = [];
+export function addWorldEnd(step: WorldStep): void {
+  ENDS.push(step);
+}
+
+/**
+ * Runs every step in the fixed order on `block` (changed in place) and returns the Night Report. Money a step moves
+ * without booking it lands on that step's Ledger line (empire.json ledger.byStep).
+ */
 export function runWorldTurn(block: DominionBlock, seed: string): string[] {
   const lines: string[] = [];
-  for (const id of WORLD_ORDER) for (const step of STEPS[id] ?? []) lines.push(...step(block, seed));
+  const byStep = DOMINION_DATA.empire.ledger.byStep;
+  for (const id of WORLD_ORDER) {
+    for (const step of STEPS[id] ?? []) {
+      const funds = block.funds, sum = weekSum(block);
+      lines.push(...step(block, seed));
+      bookRest(block, funds, sum, byStep[id] ?? 'other');
+    }
+  }
+  for (const end of ENDS) lines.push(...end(block, seed));
   return lines;
 }
 
