@@ -6,7 +6,7 @@ import type { CardModel, MapModel } from '../../../../core/dominion/fieldScreens
 import { act, esc, mini, tall } from '../../kit';
 import { rxUrl } from '../../assets';
 import { skylineDayUrl } from './paint';
-import { stage, tabs, topBar } from './views';
+import { stage, tabs, topBar, WHEEL_KEY } from './views';
 
 const img = (f: string): string => rxUrl(`dominion/${f}.png`);
 
@@ -123,7 +123,7 @@ export function cardView(c: CardModel, monFile: string | null, initial: string):
   return stage(`<img class="cv" src="${skylineDayUrl()}" alt="" style="position:absolute;inset:0;width:960px;height:540px;filter:blur(2px) saturate(.9)">
   <div class="layer" style="background:linear-gradient(180deg,rgba(10,14,30,.25),rgba(10,14,30,.75))"></div>
   <div class="ttl" style="--t1:#d8a21c;--t2:#e05a2a">${esc(c.title)} <span class="sub">· ${esc(c.sub)}</span></div>
-  <div class="keys"><span class="key" data-testid="dom-card-slot">${esc(c.slotLine)}</span>${c.travel ? `<span class="key">${esc(c.travel)}</span>` : ''}<span class="key">${esc(c.level)}</span></div>
+  <div class="keys">${WHEEL_KEY}<span class="key" data-testid="dom-card-slot">${esc(c.slotLine)}</span>${c.travel ? `<span class="key">${esc(c.travel)}</span>` : ''}<span class="key">${esc(c.level)}</span></div>
 
   <div class="a" style="left:96px;top:74px;width:768px;height:400px;z-index:10;background:var(--paper);color:var(--paper-ink);border:4px solid var(--paper-edge);border-radius:16px;box-shadow:0 0 0 3px var(--ink),inset 0 -6px 0 #e1e7f6,0 24px 50px rgba(0,0,0,.55);padding:18px 22px" data-testid="dom-card">
     <div class="a" style="inset:8px;border:2px solid #e3b955;border-radius:10px;box-shadow:inset 0 0 0 2px #f6f7fc,inset 0 0 0 4px rgba(227,185,85,.5);pointer-events:none"></div><div class="seal" style="right:-34px;top:-34px;--s:62px;transform:rotate(-12deg)">${esc(initial || 'D')}</div>

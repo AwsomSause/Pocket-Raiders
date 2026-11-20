@@ -6,7 +6,7 @@ import './dominion.css';
 import type { LedgerModel } from '../../../../core/dominion/ledgerScreens';
 import { act, esc } from '../../kit';
 import { rxUrl } from '../../assets';
-import { stage } from './views';
+import { stage, WHEEL_KEY } from './views';
 
 const img = (f: string): string => rxUrl(`dominion/${f}.png`);
 const INK = '#3a2a18', RED = '#a8322a', GREEN = '#2d7a3e', VIOLET = '#5b34b0', BLUE = '#2f63b8', HEAD = '#5a1e14', SOFT = '#7a6040';
@@ -152,7 +152,7 @@ export function ledgerView(m: LedgerModel, notice: string | null): string {
   <div class="layer" style="background:repeating-linear-gradient(180deg,#4a2e1a 0 46px,#3f2715 46px 48px,#523320 48px 92px,#3a2414 92px 94px);"></div>
   <div class="layer" style="background:radial-gradient(520px 340px at 480px 300px,rgba(255,190,110,.28),transparent 70%),radial-gradient(260px 260px at 40px 470px,rgba(255,170,80,.35),transparent 70%)"></div>
   <div class="ttl" style="--t1:#8a5a14;--t2:#c98a2a" data-testid="dom-ledger">Ledger <span class="sub">· Week ${m.week}</span></div>
-  <div class="keys"><span class="kc"${act('ledgerPage', -1)}>◀</span><span>page</span><span class="kc"${act('ledgerPage', 1)}>▶</span><span class="key" style="margin-left:8px"${act('back')}>L</span><span>close</span></div>
+  <div class="keys">${WHEEL_KEY}<span class="kc"${act('ledgerPage', -1)}>◀</span><span>page</span><span class="kc"${act('ledgerPage', 1)}>▶</span><span class="key" style="margin-left:8px"${act('back')}>L</span><span>close</span></div>
 
   <div class="a" style="left:18px;top:388px;width:34px;height:110px;z-index:12;background:linear-gradient(90deg,#e9dcc0,#fff6df 40%,#cdbd9a);border-radius:6px 6px 3px 3px;box-shadow:0 0 0 3px #1a0f08"></div>
   <div class="a" style="left:10px;top:490px;width:50px;height:14px;z-index:12;border-radius:50%;background:#b08a3a;box-shadow:0 0 0 3px #1a0f08"></div>

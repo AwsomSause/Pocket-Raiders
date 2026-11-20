@@ -159,6 +159,9 @@ export class DominionScene extends Phaser.Scene {
     const kb = this.input.keyboard;
     const raw = (e: KeyboardEvent): void => {
       if (this.leaving) return;
+      // Round 4 (D26): End saves and quits to the title from any Dominion page (not mid-interrupt: the Hero's three
+      // choices must be answered first). Q stays free on every page for the hold-Q command wheel (D28): no screen reads it.
+      if (e.code === 'End' && this.screen !== 'interrupt') return this.leave();
       if (this.heroRaw(e.code)) return;
       if (this.screen === 'ledger') {
         if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);

@@ -7,7 +7,7 @@ import type { FileModel, HireRow, LeadRow, MorningModel, TalkModel } from '../..
 import { act, esc, mini, tall } from '../../kit';
 import { rxUrl } from '../../assets';
 import { warehouseUrl } from './paint';
-import { stage, tabs, topBar } from './views';
+import { stage, tabs, topBar, WHEEL_KEY } from './views';
 
 const img = (f: string): string => rxUrl(`dominion/${f}.png`);
 const ALERT: Record<string, [string, string, string]> = {
@@ -135,7 +135,7 @@ export function fileView(f: FileModel, monFile: (species: string) => string | nu
   const keys = f.keys.map((k) => `<span class="kc">${esc(k.key)}</span><span class="dm" style="margin-right:6px">${esc(k.label)}</span>`).join('');
   return stage(`<div class="layer" style="background:radial-gradient(420px 380px at 150px 300px,rgba(140,80,220,.45),transparent 70%)"></div>
   <div class="ttl">Crew File <span class="sub">· ${esc(f.name[0] + f.name.slice(1).toLowerCase())}</span></div>
-  <div class="keys"><span class="kc"${act('flip', -1)}>◀</span><span class="dm">${f.prev ? `${esc(f.prev)} · ${esc(f.next)}` : esc(f.count)}</span><span class="kc"${act('flip', 1)}>▶</span><span class="dm" style="margin-left:8px">joined</span><span class="key">Day ${f.joined}</span></div>
+  <div class="keys">${WHEEL_KEY}<span class="kc"${act('flip', -1)}>◀</span><span class="dm">${f.prev ? `${esc(f.prev)} · ${esc(f.next)}` : esc(f.count)}</span><span class="kc"${act('flip', 1)}>▶</span><span class="dm" style="margin-left:8px">joined</span><span class="key">Day ${f.joined}</span></div>
   <div class="a row" style="right:16px;top:44px;z-index:9;gap:4px;font:600 12px var(--ui);color:#dfe5ff" data-testid="dom-file-keys">${keys}<span class="kc">Esc</span><span class="dm">HQ</span></div>
   <div class="drape" style="left:0;top:58px;height:482px;--w:46px;clip-path:polygon(0 0,100% 0,60% 100%,0 100%)"></div>
   <div class="drape" style="left:248px;top:58px;height:482px;--w:46px;clip-path:polygon(0 0,100% 0,100% 100%,40% 100%);box-shadow:inset 8px 0 14px rgba(0,0,0,.45)"></div>
