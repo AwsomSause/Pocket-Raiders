@@ -837,5 +837,21 @@
   "q3": "Five new pages for exploring: fog on the map, a Legendary that roams ahead of you, a secret path an Ability opens, the Tower of Legends, and a Mystery Dungeon floor.",
   "q4": "Settings > Display: Foreground shapes, on or off. Off removes the near plane and the air effects for small screens. The Menu is unchanged.",
   "q5": "Yes. The newer games frame battles this way, with grass, rocks and crowd between the camera and the Pokémon, and the roaming Legendary and foggy map come straight from the older ones."
+ },
+ "49": {
+  "name": "New areas 23 · In the World",
+  "label": "New areas · pass 23 of 25",
+  "big": "The boss's ground ring is its HP bar, and the top of the battle is open sky",
+  "pages": [
+   "iw-dossier",
+   "iw-notes",
+   "iw-report",
+   "iw-protege"
+  ],
+  "q1": "The ring under a raid boss, a Totem or a Dynamax Pokémon fills and drains as its HP, in the same green, yellow and red as always. The expedition's layer numbers are painted on the mountain. Team Rocket's Heat is a row of bulbs on the sign under the neon R.",
+  "q2": "Every pass so far kept the boss's plate in the top-left corner, away from the boss. That plate is gone, and its numbers sit on the ground right under the Pokémon. The top third of the battle is now empty sky, which is the least crowded these screens have been. Your own bar stays where the main battle has it.",
+  "q3": "Four new pages, each drawn as an object: the Dossier as a manila folder with a clipped photo, Field Notes as a book with four tabs down the edge, the Rival Report as a newspaper with all four rivals, and the scene where a Pokémon you once beat comes back to learn from yours.",
+  "q4": "Settings > Battle: Boss HP, on the ring (new) or as a plate (classic). The Dossier, Field Notes and Rival Report sit in the pause Menu under one line called Papers.",
+  "q5": "The ring is new for Pokémon, so the name tag keeps the familiar parts: type medals, name, level and HP. The folder, notebook and newspaper are the kind of objects these games have always used for records."
  }
 }
