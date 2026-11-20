@@ -19,7 +19,9 @@ export function phDex(_ph: PhantomVersion, d: DexModel): string {
   const picture = `<div class="de-mon ph-de-mon" data-key="mon">${known && d.art ? mon(d.art, 3.6, 'ol', '', true) : '<b class="ph-de-q">?</b>'}</div>`;
   const fact = (name: string): string => k.facts.find(([a]) => a.toLowerCase() === name)?.[1] ?? '';
   const rest = k.facts.filter(([a]) => !/^(height|weight)$/i.test(a));
-  const foot = keys(...(known ? [['◀▶', 'Page', 'flip'] as const] : []), ['Esc', 'Back', 'back']);
+  const foot = d.book
+    ? keys(['◀▶', 'Next entry', 'dexGo', 'stepR'], ...(known ? [['▲▼', 'Page', 'dexGo', 'flip'] as const, ['C', 'Cry', 'dexGo', 'cry'] as const] : []), ['Q', 'Type chart', 'dexGo', 'types'], ['X', 'Back', 'dexGo', 'back'])
+    : keys(...(known ? [['◀▶', 'Page', 'flip'] as const] : []), ['Esc', 'Back', 'back']);
   if (!known) {
     return page('dexentry', back + head + picture + `<div class="pn de-tx ph-de-tx" style="top:200px"><p class="txt">${esc(k.note)}</p></div>` + foot);
   }
@@ -37,5 +39,5 @@ export function phDex(_ph: PhantomVersion, d: DexModel): string {
       + `<div class="de-evo ph-de-evo" data-key="e0"><span class="lab">Evolution line</span><div class="de-line">${line}</div></div>`
       + `<div class="de-chips ph-de-chips" data-key="c0">${rest.map(([a, b]) => `<span><b>${esc(b)}</b>${esc(a)}</span>`).join('')}${k.next ? `<span class="w">${esc(k.next)}</span>` : ''}</div>`;
   }
-  return page('dexentry', back + head + picture + stats + right + `<div class="ph-de-hit"${act('flip')}></div>` + foot);
+  return page('dexentry', back + head + picture + stats + right + `<div class="ph-de-hit"${d.book ? act('dexGo', 'flip') : act('flip')}></div>` + foot);
 }

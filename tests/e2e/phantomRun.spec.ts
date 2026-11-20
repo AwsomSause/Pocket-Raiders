@@ -74,6 +74,10 @@ test('Phantom UI: a new run goes Trainer, Rules, Partner, Plan, each on its Phan
   await expect(rules.locator('.sr.on')).toContainText('Loadout presets');
   await page.waitForTimeout(600);
   expect(await fitProblems(page, 'RunPrep')).toEqual([]);
+  // The pointer lights the row first (the page redraws), then the click opens it.
+  await rules.locator('.sr', { hasText: 'Mode' }).hover();
+  await expect(rules.locator('.sr.on')).toContainText('Mode');
+  await page.waitForTimeout(250);
   await rules.locator('.sr', { hasText: 'Mode' }).click();
   await waitForScene(page, 'RunChoices');
   await onPage(page, 'RunChoices', 'opts');

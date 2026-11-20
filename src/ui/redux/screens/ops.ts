@@ -6,6 +6,7 @@
 import { act, B, esc, facts, foot, H, mini, paper, TX, ty, W } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { figure, type Art } from '../templates';
+import { phCounterPick, phRescue, phSiege } from '../../phantom/screens/ops';
 
 // ---------- Rescue ----------
 
@@ -44,6 +45,7 @@ export interface RescueModel {
 export const ODDS_COLORS: Record<string, string> = { Risky: '#d8483a', Even: '#d8a810', Likely: '#3fae5a', Safe: '#3d8bea' };
 
 export function rescueView(c: ReduxCtx, d: RescueModel): string {
+  if (c.ph) return phRescue(c.ph, d);
   const v = c.v(2), ink = d.stampGood ? '#3fae5a' : '#d8483a';
   const tag = (o: RescueOption, st = ''): string => (o.tag ? `<span class="tg" style="background:${ODDS_COLORS[o.tag] ?? '#888'};color:#fff;${st}">${esc(o.tag)}</span>` : '');
   const receipt = paper(
@@ -110,6 +112,7 @@ export const siegeCost = (r: SiegeDistrict): string => (!r.gate ? 'No gate' : r.
 const siegeEffect = (r: SiegeDistrict): string => (r.status === 'lost' ? r.ifLost : !r.gate ? 'No gate here' : r.status === 'held' ? 'Free entry' : 'Costs one battle');
 
 export function siegeMapView(c: ReduxCtx, d: SiegeMapModel): string {
+  if (c.ph) return phSiege(c.ph, d);
   const v = c.v(2), cur = d.rows[d.index];
   const tagc = (s: SiegeStatus): string => `<span class="tg" style="flex:none;background:${SIEGE_COLORS[s]};color:#fff">${SIEGE_WORD[s]}</span>`;
   const hit = (k: number): string => `${act('district', k)} data-over="over"`;
@@ -242,6 +245,7 @@ export interface CounterModel {
 const COUNTER_TAG: Record<CounterMon['state'], string> = { answer: 'The League will answer this', registered: 'Registered', out: 'Not registered' };
 
 export function counterView(c: ReduxCtx, d: CounterModel): string {
+  if (c.ph) return phCounterPick(c.ph, d);
   const v = c.v(2), n = d.bench.length;
   const tiles = d.party.map((p) => W(
     `<div class="row">${p.file ? mini(p.file, 48) : ''}<div class="col grow" style="gap:3px;min-width:0"><b style="font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(p.name)}</b><div class="row" style="gap:3px">${p.types.map(ty).join('')}</div></div></div>` +

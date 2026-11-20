@@ -57,7 +57,7 @@ import { finalRivalArenaTheme } from '../core/story/highHype';
 import { ultimateRival } from '../core/rivals/ultimate';
 import { bossRoleForClass } from '../core/encounters';
 import { findNode } from '../core/map';
-import { bossInfo, currentRegion, runCampaign, type BossInfo } from '../core/regions';
+import { bossInfo, currentRegion, runCampaign, runLevelCap, type BossInfo } from '../core/regions';
 import { isPseudoBattle } from '../core/events';
 import { isFinalBoss, type RunEvent, type TurnResult } from '../core/run';
 import { secondShotNotice, type ShotNotice } from '../core/arc/climaxExtended';
@@ -79,6 +79,8 @@ import { launcherReady } from '../core/camp';
 import { moveBlockReason } from '../core/battle/moveBlock';
 import { cheerProblem, coopOwner, exposedWeakSpot, puzzlePattern, raidBot, raidDef, raidRole } from '../core/raid/raid';
 import { RETURN_MUSIC } from '../core/instrumentality/flightNorth';
+import { DexInfo } from '../ui/dexInfo';
+import { liveDexProfile } from '../core/presentation/dexInfo';
 import { playCry, playMusic, playMusicLazy, playSfx, playSfxLazy, setMusicIntensity, storyOr, playCue } from '../ui/audio';
 import { storyTeamTrack } from '../core/presentation/storyMusic';
 import { isStoryCampaign } from '../core/campaign/circuit';
@@ -138,6 +140,8 @@ import { reduxLayout, reduxSkinIndex } from '../core/presentation/redux';
 import { useLookFont } from '../ui/redux/canvasFont';
 import { mountRedux, phantomOn, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { phGimmick, type GimmickCard } from '../ui/phantom/screens/cutin';
+import { gimmickSlots } from '../core/battle/bossGimmicks';
+import { phTravel } from '../ui/phantom/screens/travel';
 import { phGimmickPick, phHit, phKo, phPhase, phResult, phRivalLoss, phSend, phSide, phWild, phWin, type GimmickSlot, type ResultRow, type SendSide } from '../ui/phantom/screens/moments';
 import type { PhantomVersion } from '../core/presentation/phantom';
 import { playEvolution } from '../ui/evolutionScene';
@@ -359,6 +363,11 @@ export class BattleScene extends Phaser.Scene {
   /** Phantom UI: the move menu is the open menu (the gimmick page opens from it), and that page while it is up. */
   private rxMoves = false;
   private phGimView: ReduxView | null = null;
+  /** The full-screen Phantom card that is up now (a card is drawn once; a change of version asks it to draw again). */
+  private phMomentView: ReduxView | null = null;
+  /** Phantom UI: the wild card's Pokédex key, while that card is up, and the page it opened. */
+  private phWildKey: (() => void) | null = null;
+  private phWildDex: DexInfo | null = null;
   private phGimInput: ((action: InputAction) => void) | null = null;
   /** New UI: the callout of the event being played (a boss's Rally brace, a signature trait going off). */
   private rxCall: { rally?: string; trait?: { file: string; name: string; text: string } } | null = null;
@@ -550,6 +559,8 @@ export class BattleScene extends Phaser.Scene {
     this.rxRing = null;
     this.rxBag = null;
     this.rxRingTold = new Set();
+    this.phWildKey = null;
+    this.phWildDex = null;
     this.advance = null;
     this.busy = true;
     this.riledUid = Object.entries(battle.hyper?.rage ?? {}).find(([, r]) => r.state === 'warned')?.[0] ?? null;
@@ -703,7 +714,7 @@ export class BattleScene extends Phaser.Scene {
     this.tabs = new BattleTabs(this, { motion: this.motion, onPage: (p) => this.gotoPage(p), onAuto: () => this.toggleAuto(), onInfo: () => this.toggleInfo() }, this.tabsAt.x, this.tabsAt.y);
     this.tabs.show(false);
     this.note = this.add.text(12, 6, '', textStyle(18, COLORS.textLight, { stroke: '#181818', strokeThickness: 4, wordWrap: { width: 560 } })).setOrigin(0, 0).setDepth(130).setAlpha(0);
-    this.input.keyboard?.on('keydown-Q', () => this.gotoPage(this.tabs.neighbour(-1)));
+    this.input.keyboard?.on('keydown-Q', () => (this.phWildKey ? this.phWildKey() : this.gotoPage(this.tabs.neighbour(-1))));
     this.input.keyboard?.on('keydown-E', () => this.gotoPage(this.tabs.neighbour(1)));
     this.input.keyboard?.on('keydown-I', () => this.toggleInfo());
     this.input.keyboard?.on('keydown-T', () => this.toggleAuto());
@@ -2052,6 +2063,11 @@ export class BattleScene extends Phaser.Scene {
       this.phGimInput(action);
       return;
     }
+    if (this.phWildDex) {
+      if (action === 'confirm' || action === 'back') this.phWildDex.close();
+      else if (action === 'left' || action === 'right') this.phWildDex.flip();
+      return;
+    }
     if (this.infoPanel) {
       if (action === 'back' || action === 'confirm') this.closePanel();
       return;
@@ -3291,7 +3307,7 @@ export class BattleScene extends Phaser.Scene {
    * Phantom UI: one full-screen card over the battle. It ends on a click or a key, or after `ms` (null: it waits for an
    * input, unless Settings > Auto-advance is on). Presentation only: a card that fails to draw is skipped.
    */
-  private async phMoment(draw: (ph: PhantomVersion) => string, ms: number | null): Promise<void> {
+  private async phMoment(draw: (ph: PhantomVersion) => string, ms: number | null, more?: { acts: Record<string, () => void>; held: () => boolean }): Promise<void> {
     if (!this.rx || !phantomOn()) return;
     try {
       const st = services().session.settings;
@@ -3299,9 +3315,11 @@ export class BattleScene extends Phaser.Scene {
       let over = false;
       let finish!: () => void;
       const done = new Promise<void>((r) => (finish = r));
-      const end = (): void => {
-        if (over) return;
+      const end = (force = false): void => {
+        // A page that is open over the card (the Pokédex) keeps it up: it then waits for an input.
+        if (over || (!force && more?.held())) return;
         over = true;
+        if (this.phMomentView === view) this.phMomentView = null;
         try {
           view.destroy();
         } catch {
@@ -3309,13 +3327,38 @@ export class BattleScene extends Phaser.Scene {
         }
         finish();
       };
-      const view = mountRedux(this, { render: (c) => (c.ph ? draw(c.ph) : ''), acts: { next: end }, card: true });
-      if (wait !== null) this.time.delayedCall(wait, end);
-      this.events.once('shutdown', end);
-      await this.playBeat({ done, skip: end });
+      const view = mountRedux(this, { render: (c) => (c.ph ? draw(c.ph) : ''), acts: { ...more?.acts, next: () => end() }, card: true });
+      this.phMomentView = view;
+      if (wait !== null) this.time.delayedCall(wait, () => end());
+      this.events.once('shutdown', () => end(true));
+      await this.playBeat({ done, skip: () => end() });
     } catch (e) {
       console.warn('Phantom card failed', e);
     }
+  }
+
+  /**
+   * Phantom UI: a region's Champion fell and another region waits. The mock-ups' Next region page: the ticket the run
+   * holds (a run's regions are fixed when it starts), the road so far and what changes there. Waits for an input.
+   */
+  private async phTravelCard(run: RunState, cleared: string): Promise<boolean> {
+    if (!this.phCards()) return false;
+    const { content } = services().session;
+    const at = run.regionOrder.indexOf(cleared), id = at < 0 ? undefined : run.regionOrder[at + 1];
+    const region = id ? content.regions.get(id) : undefined;
+    if (!id || !region) return false;
+    const cap = (i: number): number => runLevelCap(content, { regionIndex: i, rules: run.rules });
+    const slots = gimmickSlots(at + 1, null, content.balance.transformations.bossGimmickAfterStage);
+    await this.phMoment((ph) => phTravel(ph, {
+      region: region.name,
+      no: at + 2,
+      road: run.regionOrder.map((r, i) => ({ name: content.regions.get(r)?.name ?? r, done: i <= at, next: i === at + 1 })),
+      tagline: region.tagline ?? '',
+      forms: [...content.species.values()].filter((sp) => sp.form?.kind === 'regional' && sp.form.region === id).length,
+      facts: [['Level cap', cap(at) === cap(at + 1) ? `${cap(at + 1)}` : `${cap(at)} → ${cap(at + 1)}`], ['Boss gimmicks', slots > 0 ? `up to ${slots}` : 'none'], ['Stages', `${runCampaign(content, run).stagesPerRegion}`], ['Your team', 'comes with you']],
+      backdrop: this.phBackdrop(),
+    }), null);
+    return true;
   }
 
   /** Phantom UI: a fight inside an event opens on the side-stage card (mock-up `side`). Returns whether it showed. */
@@ -3655,6 +3698,13 @@ export class BattleScene extends Phaser.Scene {
     }
     const others = battle.doubles ? battle.enemyTeam.slice(1, battle.doubles.trio ? 3 : 2).map((m) => this.speciesName(m)) : [];
     const isNew = !profile.speciesCaught.includes(foe.speciesId);
+    // The mock-up's Pokédex key: the species' page opens over the card (it only reads), and the card waits under it.
+    const openDex = (): void => {
+      if (this.phWildDex) return;
+      playSfx(this, 'ui.select', 0.5);
+      this.phWildDex = new DexInfo(this, content, liveDexProfile(profile, this.run.log), foe.speciesId, () => (this.phWildDex = null), true);
+    };
+    this.phWildKey = openDex;
     await this.phMoment((ph) => phWild(ph, {
       name: this.speciesName(foe),
       mon: this.phArt(foe),
@@ -3670,7 +3720,9 @@ export class BattleScene extends Phaser.Scene {
       balls: ballIds.map((id) => ({ name: content.items.get(id)!.name, n: this.run.inventory[id] ?? 0 })).sort((a, b) => b.n - a.n),
       backdrop: this.phBackdrop(),
       grass: ['grass', 'bug'].includes(this.arenaTypes[0] ?? ''),
-    }), 3000);
+    }), 3000, { acts: { dex: openDex }, held: () => this.phWildDex !== null });
+    this.phWildKey = null;
+    this.phWildDex?.close();
   }
 
   /** Phantom UI: both sides send out (the mock-up's `send` card), just before the throw. */
@@ -5185,7 +5237,7 @@ export class BattleScene extends Phaser.Scene {
       await this.playBeat(stamp(this, 'CHAMPION!', region, ROLE_RIMS.champion, this.motion));
       await this.say(end.regionCleared === 'grand' ? `You beat the final boss and are the ${region} Champion!` : `You are the ${region} Champion!`);
       if (end.victory) for (const line of buildEpilogue(content, result.run)) await this.say(line);
-      await this.say(end.victory ? 'You have conquered every region!' : 'A new region awaits…');
+      if (end.victory || !(await this.phTravelCard(result.run, end.regionCleared))) await this.say(end.victory ? 'You have conquered every region!' : 'A new region awaits…');
     }
     this.updateHeader();
     // Evolutions this battle earned wait as decisions: the evolution scene plays on the next screen (B can stop it).

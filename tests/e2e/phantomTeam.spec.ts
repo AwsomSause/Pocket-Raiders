@@ -101,11 +101,48 @@ test('Phantom UI: Party, Summary, Bag and PC of a run are Phantom pages', async 
   await onPage(page, 'Map', 'box');
   await expect(map.locator('.bx-party .bxc')).toHaveCount(4);
   await expect(map.locator('.bx .bxc.on')).toHaveCount(1);
-  await expect(map.locator('.bx-d .blade')).toHaveText('Move to party');
+  await expect(map.locator('.bx-d .blade.on')).toHaveText('Move to party');
+  // The lit Pokémon's other buttons: its Summary, and a held item for it (none is free in the Bag yet).
+  await expect(map.locator('.bx-d .ph-bx-x')).toHaveCount(2);
+  await expect(map.locator('.bx-d .ph-bx-x').nth(0)).toContainText('Summary');
+  await expect(map.locator('.bx-d .ph-bx-x').nth(1)).toHaveClass(/\boff\b/);
   await fits(page, 'Map', 'box');
   await map.locator('.bx .bxc.e').first().hover();
-  await expect(map.locator('.bx-d .blade')).toHaveText('Put one here');
+  await expect(map.locator('.bx-d .blade.on')).toHaveText('Put one here');
+  await expect(map.locator('.bx-d .ph-bx-x')).toHaveCount(0);
   await fits(page, 'Map', 'box');
+
+  // Summary (I): the game's own Summary, reading the PC's Pokémon. It only reads; Esc goes back to the same slot.
+  await map.locator('.bx .bxc').nth(1).hover();
+  await expect(map.locator('.bx .bxc').nth(1)).toHaveClass(/\bon\b/);
+  await page.waitForTimeout(250);
+  await page.keyboard.press('i');
+  await onPage(page, 'Map', 'summary');
+  await expect(map.locator('.sm-lv')).toContainText('10');
+  await fits(page, 'Map', 'summary');
+  await page.keyboard.press('ArrowDown');
+  await expect(map.locator('.sm-lv')).toContainText('11');
+  await page.keyboard.press('Enter');
+  await expect(map.locator('.ph-smenu')).toHaveCount(0);
+  await onPage(page, 'Map', 'box');
+  await expect(map.locator('.bx .bxc').nth(2)).toHaveClass(/\bon\b/);
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.box.length)).toBe(5);
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#phx .phs[data-scene="Map"][data-scr="box"]')).toHaveCount(0);
+
+  // Give item (G): a held item waiting in the Bag goes to the lit PC Pokémon.
+  await page.evaluate(() => { (window as any).__pkr.session.run.looseHeld = { charcoal: 1 }; });
+  await page.waitForTimeout(300);
+  await mapButton(page, 'PC');
+  await onPage(page, 'Map', 'box');
+  await expect(map.locator('.bx-d .ph-bx-x').nth(1)).not.toHaveClass(/\boff\b/);
+  await page.waitForTimeout(250);
+  await page.keyboard.press('g');
+  await onPage(page, 'Map', 'list');
+  await expect(map).toContainText('Charcoal');
+  await fits(page, 'Map', 'list');
+  await page.keyboard.press('Enter');
+  await expect.poll(() => page.evaluate(() => { const r = (window as any).__pkr.session.run; return [r.box[0].held?.charcoal ?? 0, r.looseHeld?.charcoal ?? 0, r.box.length]; })).toEqual([1, 0, 5]);
   expect(errors).toEqual([]);
 });
 

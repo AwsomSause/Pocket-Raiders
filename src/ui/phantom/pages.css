@@ -68,6 +68,8 @@
   & .ph-bx-d .txt{font-size:17px}
   & .ph-bx-d .bx-acts .blade{cursor:pointer}
   & .ph-bx-d .bx-acts .blade.off{opacity:.5}
+  & .ph-bx-d .bx-acts .ph-bx-x{font-size:24px}
+  & .ph-bx-d .bx-acts .ph-bx-x kbd{display:inline-block;margin-right:10px;padding:2px 8px;background:#fff;color:#000;font:800 .62em/1.1 var(--f-cond);vertical-align:.18em;transform:skewX(-8deg)}
   & .ph-say-bx{left:170px;bottom:62px;max-width:580px}
 
   /* what a Picker adds around its page */

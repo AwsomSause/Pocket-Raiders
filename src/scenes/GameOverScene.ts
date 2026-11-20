@@ -13,6 +13,7 @@ import { gameRewardText } from '../core/gameEvents';
 import { attributeChanges } from '../core/attributes';
 import { topMoments } from '../core/story/record';
 import { buildRecap } from '../core/recap';
+import { runCampaign } from '../core/regions';
 import { buildRunCard } from '../core/runCard';
 import { pokemonAssetIds } from '../assets/catalog';
 import { saveRunCard } from '../ui/runCardImage';
@@ -61,6 +62,11 @@ interface NewEnd {
   report: string[];
   witness: WitnessBeat[];
   card: { name: string; facts: Fact[]; badges: number };
+  /** Phantom UI: where the run stood, why it ended, the road, and the Pokémon with the best record. */
+  where: string;
+  line: string;
+  road: { done: number; of: number } | null;
+  mvp: { file: string | null; name: string; text: string } | null;
   save: () => boolean;
   /** The screen's own choices: 0 back to the Hub, 1 retry this seed, 2 roll the credits. */
   choose: (i: number) => void;
@@ -360,7 +366,15 @@ export class GameOverScene extends Phaser.Scene {
       const archetype = content.archetypes.get(run.archetypeId)?.name ?? run.archetypeId;
       const lead = run.party[0];
       const mvp = recap?.legend?.split(':')[0] ?? (lead ? content.species.get(lead.speciesId)?.name ?? lead.speciesId : 'Nobody');
+      // Phantom UI: the Pokémon with the best record (the recap's own pick), or the lead when the run kept no record.
+      const star = [...run.party, ...run.box].find((m) => (content.species.get(m.speciesId)?.name ?? m.speciesId) === mvp) ?? lead;
+      const legendText = recap?.legend?.includes(':') ? recap.legend.slice(recap.legend.indexOf(':') + 1).trim() : '';
+      const stages = run.stage ? Math.max(run.stage.index + 1, runCampaign(content, run).stagesPerRegion) : 0;
       this.mountNew({
+        where: [run.stage ? `Stage ${run.stage.index + 1} of ${stages}` : '', region, !won && by ? `lost to ${by.trainer ?? content.species.get(by.speciesId)?.name ?? by.speciesId}` : ''].filter(Boolean).join(' · '),
+        line: recap?.ending ?? '',
+        road: run.stage && !won ? { done: run.stage.index, of: stages } : null,
+        mvp: star ? { file: monFile(this, star.speciesId, 'front', !!star.shiny), name: mvp, text: legendText || `Lv.${star.level} · led the team to the end` } : null,
         won,
         sub: won ? `${run.regionsCleared.length} of ${run.regionOrder.length} regions cleared · Day ${run.clock.day}` : `Fell in ${region}${by ? ` · ${by.trainer ?? content.species.get(by.speciesId)?.name ?? by.speciesId}` : ''}`,
         facts,
@@ -438,14 +452,14 @@ export class GameOverScene extends Phaser.Scene {
     };
     const render = (c: ReduxCtx): string => {
       this.rxCols = partyCols(c);
-      const main = (): string => overView(c, { win: o.won, title: o.won ? 'CHAMPION!' : 'RUN OVER', sub: o.sub, facts: o.facts, payouts: o.payouts, team, buttons, index: this.rxIndex, extras, backdrop, poked: this.rxPoked });
+      const main = (): string => overView(c, { win: o.won, title: o.won ? 'CHAMPION!' : 'RUN OVER', sub: o.sub, facts: o.facts, payouts: o.payouts, team, buttons, index: this.rxIndex, extras, backdrop, poked: this.rxPoked, where: o.where, line: o.line, road: o.road, mvp: o.mvp, report: c.ph && this.rxMode === 'report' ? { title: 'Full report', lines: pages[this.rxPage] ?? [], page: this.rxPage, pages: pages.length } : null });
       if (this.rxMode === 'witness') {
         const w = o.witness[this.rxPage]!;
         return cutView(c, { name: w.name, role: w.role, line: w.line, cast: w.cast, player, backdrop: stage, beat: cutBeat(this.rxPage, o.witness.length), skip: ['Esc', o.won ? 'credits' : 'skip'] });
       }
       if (this.rxMode === 'card') return runCardView(c, { title: 'Run card', name: o.card.name, rank: o.won ? 'Win' : 'Loss', facts: o.card.facts, trainer: player, badges: o.card.badges, team: team.map((t) => t.file), hints: [['Enter', 'save'], ['Esc', 'back']], text: this.rxSaved === null ? 'Press Enter to save the card as a PNG you can share.' : this.rxSaved ? 'Saved as a PNG you can share.' : 'The card could not be saved.' });
       if (this.rxMode === 'team') return partyView(c, { title: 'Final team', area: 'end', hints: [['Esc', 'back']], mons: cards, index: Math.min(this.rxPage, Math.max(0, cards.length - 1)), text: 'Your final team, as it stood at the end.' });
-      return main() + (this.rxMode === 'report' ? reportView(c, { title: 'Full report', pages, page: this.rxPage }) : '');
+      return main() + (this.rxMode === 'report' && !c.ph ? reportView(c, { title: 'Full report', pages, page: this.rxPage }) : '');
     };
     this.rx = mountRedux(this, {
       render,
@@ -467,7 +481,7 @@ export class GameOverScene extends Phaser.Scene {
     this.input.keyboard?.on('keydown-R', () => { if (this.rxMode === 'main') o.choose(1); });
     this.rxKey = (a) => {
       if (this.rxMode === 'main') {
-        if (a === 'left' || a === 'right') { this.rxIndex = (this.rxIndex + (a === 'left' ? buttons.length - 1 : 1)) % buttons.length; this.rx?.refresh(); }
+        if (a === 'left' || a === 'right' || a === 'up' || a === 'down') { this.rxIndex = (this.rxIndex + (a === 'left' || a === 'up' ? buttons.length - 1 : 1)) % buttons.length; this.rx?.refresh(); }
         else if (a === 'confirm') press(this.rxIndex);
         return;
       }

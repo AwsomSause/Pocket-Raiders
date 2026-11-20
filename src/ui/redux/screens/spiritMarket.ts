@@ -5,6 +5,7 @@
 
 import { act, B, esc, foot, H, tall, W } from '../kit';
 import type { ReduxCtx } from '../stage';
+import { phMarket } from '../../phantom/screens/games';
 
 export interface SpiritMarketModel {
   title: string;
@@ -38,7 +39,8 @@ function lantern(x: number, lit: boolean, last: boolean): string {
   return `<div class="abs" style="left:${x}px;top:0;width:34px;height:58px"><i class="abs" style="left:16px;top:0;width:2px;height:10px;background:#1c1826"></i><i class="abs" style="left:7px;top:9px;width:20px;height:5px;border-radius:2px;background:#1c1826"></i><i class="abs" style="left:3px;top:14px;width:28px;height:34px;border-radius:12px/16px;${paper}"></i><i class="abs" style="left:9px;top:48px;width:16px;height:4px;border-radius:2px;background:#1c1826"></i>${lit ? '' : '<i class="abs" style="left:15px;top:22px;width:4px;height:14px;border-radius:2px;background:#1c1826"></i>'}</div>`;
 }
 
-export function spiritMarketView(_c: ReduxCtx, d: SpiritMarketModel): string {
+/** The drawn part alone (the lantern counter and the lane with its stalls and gate), in this screen's own pixels from 24,62; 912 wide, 260 tall. The Phantom page lays the same drawing on its own page. */
+export function marketScene(d: SpiritMarketModel): string {
   const inLanes = d.at === 'lanes' && !d.outcome;
   const ring = (on: boolean): string => (on ? 'box-shadow:0 0 0 3px var(--acc),0 0 0 5px #0008;' : '');
   // The counter: one lantern for every action there was, the burnt ones dark.
@@ -72,6 +74,13 @@ export function spiritMarketView(_c: ReduxCtx, d: SpiritMarketModel): string {
     + `<div class="abs"${inLanes ? ` data-cell="${gi}"` : ''} style="left:4px;top:4px;right:4px;bottom:4px;border-radius:8px;${inLanes ? 'cursor:pointer;' : ''}${ring(gateOn || ((d.at === 'gate' || d.at === 'dark') && !d.outcome))}"${inLanes ? `${act('pick', gi)} data-over="over"` : ''}></div></div>`;
   if (dark) lane += '<div class="abs" style="left:0;top:0;right:0;bottom:0;background:#0a0814aa;pointer-events:none"></div>';
   lane += '</div>';
+  return counter + lane;
+}
+
+export function spiritMarketView(c: ReduxCtx, d: SpiritMarketModel): string {
+  if (c.ph) return phMarket(c.ph, d);
+  const inLanes = d.at === 'lanes' && !d.outcome;
+  const scene = marketScene(d);
   // Under the lane: what is said, and (at a stall, the gate or in the dark) the answers.
   const top = LANE.y + LANE.h + 12, h = 540 - top - 14;
   const size = (t: string, room: number): number => (t.length > room * 2.2 ? 12 : t.length > room * 1.5 ? 13 : t.length > room ? 14 : 16);
@@ -79,14 +88,14 @@ export function spiritMarketView(_c: ReduxCtx, d: SpiritMarketModel): string {
     const said = d.outcome.lines.join(' ');
     const log = d.outcome.log.length ? `<div style="margin-top:6px;font-size:12px;line-height:1.3;opacity:.85">${d.outcome.log.map((l) => esc(l)).join('<br>')}</div>` : '';
     const total = said.length + d.outcome.log.join(' ').length;
-    return H(d.title, 'story', d.hints) + counter + lane
+    return H(d.title, 'story', d.hints) + scene
       + W(`<div style="overflow:hidden;max-height:${h - 16}px"><div style="font-size:${total > 620 ? 12 : size(said, 150)}px;line-height:1.3">${rich(said)}</div>${total > 900 ? '' : log}</div>`, `position:absolute;left:24px;top:${top}px;width:${LANE.w - 150}px;height:${h}px;padding:8px 14px;box-sizing:border-box`)
       + `<div class="abs" style="right:24px;top:${top + h - 46}px;width:124px">${B('Done', true, 'justify-content:center', '', act('pick', 0))}</div>`;
   }
   const focus = d.cells[d.index];
   if (inLanes) {
     const note = focus ? `<div style="margin-top:6px;font-size:13px;opacity:.85"><b>${esc(focus.label)}</b> ${esc(focus.detail)}</div>` : '';
-    return H(d.title, 'story', d.hints) + counter + lane
+    return H(d.title, 'story', d.hints) + scene
       + W(`<div style="font-size:${size(d.prompt, 230)}px;line-height:1.3">${rich(d.prompt)}</div>${note}`, `position:absolute;left:24px;top:${top}px;width:${LANE.w}px;height:${h}px;padding:10px 14px;box-sizing:border-box;overflow:hidden`);
   }
   const textW = 372, listX = 24 + textW + 12, listW = LANE.w - textW - 12;
@@ -97,7 +106,7 @@ export function spiritMarketView(_c: ReduxCtx, d: SpiritMarketModel): string {
     return `<div class="abs" data-cell="${i}" style="left:${x}px;top:${y}px;width:${bw}px;opacity:${c.off ? 0.45 : 1}">${B(`<span style="overflow:hidden;text-overflow:ellipsis">${esc(c.label)}</span>`, d.index === i, `height:${bh}px;font-size:${bh < 30 ? 13 : 15}px;padding:0 12px;${c.off ? '' : 'cursor:pointer'}`, cols === 1 && c.off ? esc(c.detail) : '', c.off ? '' : `${act('pick', i)} data-over="over"`)}</div>`;
   }).join('');
   const note = focus ? `<div style="margin-top:8px;font-size:13px;line-height:1.3;opacity:.85">${esc(focus.detail)}</div>` : '';
-  return H(d.title, 'story', d.hints) + counter + lane
+  return H(d.title, 'story', d.hints) + scene
     + W(`<div style="font-size:${size(d.prompt, 120)}px;line-height:1.3">${rich(d.prompt)}</div>${note}`, `position:absolute;left:24px;top:${top}px;width:${textW}px;height:${h}px;padding:10px 14px;box-sizing:border-box;overflow:hidden`)
     + list;
 }

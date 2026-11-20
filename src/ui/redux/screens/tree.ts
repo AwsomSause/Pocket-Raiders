@@ -4,6 +4,7 @@
 
 import { act, type Area, B, chipsLeft, esc, facts, H, TX, W } from '../kit';
 import type { ReduxCtx } from '../stage';
+import { phTree } from '../../phantom/screens/rooms';
 
 export type TreeCellState = 'owned' | 'open' | 'locked' | 'none';
 export interface TreeModel {
@@ -20,7 +21,8 @@ export interface TreeModel {
   text: string;
 }
 
-export function treeView(_c: ReduxCtx, d: TreeModel): string {
+export function treeView(c: ReduxCtx, d: TreeModel): string {
+  if (c.ph) return phTree(c.ph, d);
   const chips = d.chips.length ? `<div class="abs row" style="left:${chipsLeft(d.title)}px;top:13px;gap:6px;z-index:4">${d.chips.map((x, k) => `<span class="tg${k ? ' no' : ''}">${esc(x)}</span>`).join('')}</div>` : '';
   const rows = d.rows.map((r, ri) => `<div class="row" style="gap:12px"><span class="sm" style="width:84px;line-height:16px">${esc(r.name)}</span>${Array.from({ length: d.cols }, (_, ci) => {
     const k = ri * d.cols + ci, cell = r.cells[ci];

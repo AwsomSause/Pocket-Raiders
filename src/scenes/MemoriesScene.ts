@@ -14,6 +14,7 @@ import { onInputAction } from '../ui/input';
 import { preloadPokemon } from '../ui/lazyAssets';
 import { Picker, type PickerRow } from '../ui/partyPanel';
 import { act, esc, paper } from '../ui/redux/kit';
+import { phMemory } from '../ui/phantom/screens/rooms';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { pokemonIcon } from '../ui/sprites';
 import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
@@ -212,7 +213,8 @@ export class MemoriesScene extends Phaser.Scene {
       const text = lines.map((l) => (l ? `<div>${esc(l)}</div>` : '<div style="height:10px"></div>')).join('');
       this.rxReader = mountRedux(this, {
         clear: true,
-        render: () =>
+        render: (c) =>
+          c.ph ? phMemory(c.ph, title, lines) :
           `<div class="shade hit" style="z-index:8"${act('close')}></div>` +
           `<div class="abs" data-scroll style="left:110px;right:110px;top:36px;bottom:44px;z-index:9;overflow-y:auto;padding:4px 8px 8px 4px;cursor:pointer"${act('close')}>${paper(`<b style="font-size:20px">${esc(title)}</b><div class="col" style="gap:6px;margin-top:10px;font-size:15px;line-height:21px">${text}</div><div class="sm" style="margin-top:auto;padding-top:12px;text-align:right;opacity:.7">Enter or Esc to close</div>`, 'min-height:100%;box-sizing:border-box;display:flex;flex-direction:column')}</div>`,
         acts: { close: () => this.closeReader() },

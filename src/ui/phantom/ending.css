@@ -1,0 +1,85 @@
+/* Phantom UI: how a run ends (mock-ups `runover`, `record`) and the pages after it. */
+.phx .phs{
+  & .ph-ro-t{max-width:640px}
+  & .ph-ro-t .lab{display:block;max-width:620px}
+  & .ph-ro-t h2{font-size:88px}
+  & .ph-ro-t p{max-width:600px;font-size:24px}
+  & .ro-road.ph-ro-long{gap:3px} & .ro-road.ph-ro-long i{width:9px}
+  & .ph-ro-st{cursor:pointer;top:56px}
+  & .ph-ro-st .ro-r b{white-space:nowrap}
+  & .ph-ro-mvp{top:330px}
+  & .ph-ro-mvp .txt{font-size:17px}
+  & .ph-ro-keep{top:500px}
+  & .ph-ro-keep .txt{font-size:18px;line-height:1.3}
+  & .ph-ov-mvp{display:grid;place-items:center;flex:none}
+  & .ph-ro-go{top:384px}
+  & .ph-ro-go .blade,& .ph-rc-go .blade{cursor:pointer}
+  & .ph-ov-team{position:absolute;left:66px;bottom:66px;display:flex;gap:10px;z-index:3}
+  & .ph-ov-team i{position:relative;display:grid;place-items:center;width:60px;height:60px;background:color-mix(in srgb,var(--k) 70%,transparent);box-shadow:0 0 0 2px color-mix(in srgb,var(--w) 40%,transparent);cursor:pointer;font-style:normal}
+  & .ph-ov-team i.ko{filter:grayscale(1) brightness(.6)}
+  & .ph-ov-team i.poked{box-shadow:0 0 0 3px var(--gold);translate:0 -6px}
+  & .ph-ov-team u{position:absolute;left:50%;top:-26px;translate:-50% 0;text-decoration:none;font:400 22px/1 var(--f-disp);color:var(--gold);text-shadow:2px 2px 0 var(--k);animation:ph-pop .3s both}
+  & .s-runover .keys,& .s-record .keys{z-index:6}
+  /* a won run */
+  & .ph-rc-g{top:140px;grid-template-columns:repeat(3,214px);gap:12px}
+  & .ph-rc-g .rc-s{height:112px}
+  & .ph-rc-g .rc-s b{white-space:nowrap}
+  & .ph-rc-gr{right:150px;top:96px;width:180px;height:180px}
+  & .ph-rc-mvp{top:404px}
+  & .ph-rc-mvp span{max-width:520px}
+  & .ph-rc-new{cursor:pointer;top:286px;width:440px;padding:12px 26px 14px}
+  & .ph-rc-new .dm-fr{padding:4px 0;font-size:17px}
+  & .ph-rc-new .dm-fr b{font-size:20px}
+  & .ph-rc-new .dm-fr b{white-space:nowrap}
+  & .ph-rc-go{left:auto;right:56px;top:auto;bottom:62px;justify-items:end;gap:6px;z-index:4}
+  & .ph-rc-go .blade{font-size:28px}
+  & .s-record .fn-st span{cursor:default}
+  /* Hall of Fame: a champion's team */
+  & .ph-hf-b{cursor:pointer;animation:ph-inUp .4s both;animation-delay:calc(var(--i)*70ms)}
+  & .ph-hf-b.on{translate:0 -14px;box-shadow:0 0 0 4px var(--gold),10px 10px 0 4px var(--red)}
+  & .ph-hf-b b{white-space:nowrap}
+  & .ph-hf-me{left:44px;bottom:30px}
+  & .hf-cap.ph-hf-solo{left:58px}
+  & .s-hall .hf-cap span{max-width:700px}
+  /* credits */
+  & .ph-cr-roll{cursor:pointer;z-index:3}
+  & .ph-cr-roll>div{animation:none;padding:0 0 40px}
+  & .ph-cr-roll h3{margin:34px 0 0;font:400 36px/1 var(--f-disp);text-transform:uppercase;color:var(--gold)}
+  & .ph-cr-roll p{overflow-wrap:anywhere}
+  & .ph-cr-roll p.g{height:14px}
+  & .ph-cr-roll p.m{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  & .ph-cr-roll p.m i{display:grid;place-items:center;width:48px;height:48px}
+  & .ph-cr-roll.still{overflow:auto;-webkit-mask-image:none;mask-image:none;top:96px;height:560px;scrollbar-width:thin}
+  & .ph-cr-roll.still>div{padding-top:0}
+  & .ph-cr-roll.wide{width:1120px}
+  & .ph-cr-roll.wide p{font-size:19px}
+  & .ph-cr-ph figure{width:250px}
+  & .ph-cr-shot{display:grid;place-items:center;width:230px;height:150px;background:linear-gradient(135deg,var(--c),var(--k))}
+  & .ph-cr-ph figcaption{font-size:17px;line-height:1.1;max-height:57px;overflow:hidden}
+  & .ph-cr-walk span{display:grid;place-items:end center;width:76px;height:76px}
+  & .s-credits .keys{z-index:6}
+  /* blessing */
+  & .ph-bl-wait{opacity:0!important;animation:none!important;pointer-events:none}
+  & .s-blessing .bl-t,& .ph-bl-card,& .ph-bl-say,& .ph-bl-ghost,& .ph-bl-card .txt{transition:opacity .9s}
+  & .ph-bl-ghost{left:300px;top:40px}
+  & .ph-bl-card{height:430px}
+  & .ph-bl-card .txt{font-size:17px;line-height:1.2}
+  & .ph-bl-pic b{font:400 110px/1 var(--f-disp);color:#fff}
+  & .ph-bl-say{width:340px;right:30px;bottom:80px}
+  & .ph-bl-say .txt{font-size:19px;line-height:1.3}
+  & .ph-bl-vows{position:absolute;left:44px;right:auto;bottom:74px;width:540px;display:grid;gap:10px;padding:0;cursor:default;color:var(--w);z-index:4}
+  & .ph-bl-vows .ch{cursor:pointer;width:auto}
+  & .ph-bl-vows .ch span{font-size:15px;line-height:1.2;white-space:normal}
+  & .ph-bl-book{left:150px;right:150px;top:60px;bottom:70px;width:auto;max-height:none;display:grid;grid-auto-rows:min-content;gap:6px;overflow:hidden}
+  & .ph-bl-row{display:grid;grid-template-columns:110px 250px 1fr;align-items:baseline;gap:12px;padding:6px 0;border-bottom:2px solid color-mix(in srgb,currentColor 16%,transparent)}
+  & .ph-bl-row small{font:800 12px/1 var(--f-cond);text-transform:uppercase;letter-spacing:.14em;color:var(--accw)}
+  & .ph-bl-row b{font:400 22px/1.3 var(--f-disp);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  & .ph-bl-row span{font:700 15px/1.2 var(--f-cond)}
+  & .ph-bl-row.no{opacity:.45}
+  & .ph-bl-row.mine b{color:var(--accw)}
+  & .s-blessing .keys{z-index:6}
+  & .ph-ov-report{cursor:pointer;left:120px;right:120px;top:50px;max-height:620px}
+  & .ph-ov-report .txt{font-size:17px;line-height:1.28}
+  & .ph-ov-report.sm .txt{font-size:15px}
+  & .ph-ov-report.xs .txt{font-size:13px}
+}

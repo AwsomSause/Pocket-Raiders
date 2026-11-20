@@ -6,6 +6,7 @@ import { act, B, esc, foot, H, mini, mon, W } from '../kit';
 import type { Board } from '../../../core/minigame/games';
 import { rxUrl } from '../assets';
 import type { ReduxCtx } from '../stage';
+import { phGame } from '../../phantom/screens/games';
 
 export interface GameCell { label: string; detail: string; off: boolean }
 export interface GameModel {
@@ -46,7 +47,7 @@ const TILE: Record<string, string> = {
 };
 
 /** The cabinet: its screen (tiles, then the bird) on the left; the game's name, what is happening and the score table on the right. */
-function boardView(d: GameModel, b: Board, fieldH: number): string {
+export function boardView(d: GameModel, b: Board, fieldH: number): string {
   const boxW = 404, boxH = fieldH - 24;
   const cell = Math.floor(Math.min((boxW - 12) / b.w, (boxH - 12) / b.h));
   const gw = cell * b.w, gh = cell * b.h;
@@ -78,7 +79,8 @@ export function bestMedalWord(medal: string | undefined): string {
   return !medal || medal === 'none' ? 'None yet' : `${medal[0]!.toUpperCase()}${medal.slice(1)}`;
 }
 
-export function gameView(_c: ReduxCtx, d: GameModel): string {
+export function gameView(c: ReduxCtx, d: GameModel): string {
+  if (c.ph) return phGame(c.ph, d);
   const cols = Math.max(1, Math.min(d.cols, d.cells.length || 1)), rows = Math.ceil(d.cells.length / cols);
   // The field gives up height to a tall grid of choices, down to a strip that still holds the prompt.
   const rowH = Math.max(22, Math.min(46, Math.floor((230 - (rows - 1) * 8) / rows)));

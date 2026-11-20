@@ -57,7 +57,7 @@ export function phWild(_ph: PhantomVersion, d: WildModel): string {
     + `<div class="wl-t"><em>${esc(d.lead)}</em><span style="font-size:${wordSize(n, 104)}px">${ransom(d.name.toUpperCase(), 11)}</span><em class="b">${esc(d.tail)}</em></div>`
     + `<div class="wl-tags"><b>Lv.${d.level}</b>${d.types.map(ty).join('')}${d.note ? `<span class="wl-new">${esc(d.note)}</span>` : ''}</div>`
     + `<div class="pn wl-c">${can}</div>`
-    + tap() + keys(['Z', 'Send out', 'next']));
+    + tap() + keys(['Z', 'Send out', 'next'], ['Q', 'Pokédex', 'dex']));
 }
 
 export interface SendSide { by: string; name: string; level: number; types: readonly string[]; mon: Art | null }

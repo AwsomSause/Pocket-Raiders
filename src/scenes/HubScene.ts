@@ -57,9 +57,11 @@ import { loadAssets, preloadPokemon, queueAssets } from '../ui/lazyAssets';
 import { currencyChip, drawLogo } from '../ui/showcase';
 import { legacyRotation, type RotationEntry } from '../core/legacyRuns';
 import { HUB_TOWN, type HubPlace } from '../core/hubTown/schema';
-import { chooseHubPokemon, hubPokemon, hubPokemonChoices, placeById } from '../core/hubTown/world';
+import { chooseHubPokemon, districtAt, districtOf, hubPokemon, hubPokemonChoices, placeById, placesIn, teleportSpot } from '../core/hubTown/world';
 import { pokemonHeightM } from '../core/heights';
-import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, phantomOn, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
+import { phPlace, phTownMap, type PlaceModel, type TownMapModel } from '../ui/phantom/screens/townmap';
+import type { Art } from '../ui/redux/templates';
 import { askText, type AskOptions } from '../ui/redux/ask';
 import { useLookFont } from '../ui/redux/canvasFont';
 import { runCardView } from '../ui/redux/screens/over';
@@ -69,14 +71,14 @@ import { rxFileOf } from '../ui/redux/assets';
 import { counterView } from '../ui/redux/screens/counter';
 import { treeView, type TreeCellState } from '../ui/redux/screens/tree';
 import type { AssetManifest } from '../assets/catalog';
-import { monFile } from '../ui/redux/game';
+import { artOf, monFile } from '../ui/redux/game';
 import { boughtToday, buyFromMerchant, merchantProblem, merchantStock } from '../core/hubTown/merchant';
 import { cardBackground, localDay } from '../core/town';
 import { HubTownView } from '../ui/hubTown/townView';
 import { HubMinimap } from '../ui/hubTown/minimap';
 import { HubIndicators, indicatorAssets } from '../ui/hubTown/indicators';
 import { drawDaylight, startTownSound } from '../ui/hubTown/townTime';
-import { hubPeriod } from '../core/hubTown/daylight';
+import { HUB_LIGHT, hubPeriod } from '../core/hubTown/daylight';
 import type { Period } from '../core/clock';
 import { ArenaLobby, lobbyMons, type LobbyTile } from '../ui/arenaLobby/lobby';
 import { LegacyDisplay, displayAssets, displayLines } from '../ui/hubTown/legacyDisplay';
@@ -243,6 +245,15 @@ const DOCK: { tab: string; buttons: DockEntry[] }[] = [
     ],
   },
 ];
+/** Phantom UI: where the Town Map's cursor was (the district, then the place in it). */
+const mapSpot = { district: 1, place: 0 };
+/** Phantom UI: who keeps a place (the title over their line on the place page) and the Trainer picture they use. */
+const PLACE_HOST: Record<string, [string, string]> = {
+  achievements: ['Hall curator', 'trainer.worker_m'], dojo: ['Dojo master', 'trainer.black_belt_m'], arena: ['Arena steward', 'trainer.black_belt_m'],
+  memories: ['Keeper of memories', 'trainer.aroma_lady'], events: ['Event host', 'trainer.guitarist'], hq: ['HQ clerk', 'boss.npc_cooltrainer_m'],
+  boutique: ['Boutique stylist', 'trainer.fairy_tale_girl'], center: ['Center nurse', 'boss.npc_pokemonbreeder'], bank: ['Bank teller', 'trainer.psychic_m'],
+  post: ['Post clerk', 'trainer.bird_keeper_m'], institute: ['Institute researcher', 'trainer.hex_maniac'], sanctuary: ['Sanctuary Keeper', 'boss.npc_pokemonbreeder'],
+};
 /** Where the dock's cursor was, so coming back from a room lands on the same button (the middle one at first). */
 const dockSpot = { tab: 0, index: 2 };
 /** The mock-up's own line-up: it fills the ground line while the profile has few Pokémon of its own to show. */
@@ -265,7 +276,10 @@ export class HubScene extends Phaser.Scene {
   private dexInfo: DexInfo | null = null;
   private dexTab: 'all' | 'seen' | 'owned' | 'mastered' = 'all';
   /** The page of a place with several rooms, while it is open; room pages open on top of it. */
-  private section: Picker | null = null;
+  private section: PickerLike | null = null;
+  /** Phantom UI: the Town Map is open (its M key walks instead), and a place's rooms were reached through it. */
+  private phMap: { walk(): void } | null = null;
+  private viaMap = false;
   /** The place whose page is open (its rooms, in order). */
   private place: { name: string; rooms: Room[] } | null = null;
   /** The walkable Hub Town (spec 2026-11-01). */
@@ -350,6 +364,10 @@ export class HubScene extends Phaser.Scene {
     this.picker = null;
     this.section = null;
     this.place = null;
+    this.phMap = null;
+    this.viaMap = false;
+    // Phantom UI: M opens the Town Map (and, on the map, walks instead).
+    this.input.keyboard?.on('keydown-M', () => { if (this.phMap) this.phMap.walk(); else this.townMapOpen(); });
     playMusicLazy(this, 'bgm.hub');
     const p = session.profile;
     const motion = session.settings.battleAnimations;
@@ -411,7 +429,7 @@ export class HubScene extends Phaser.Scene {
       quests: ready > 0 ? ['arena'] : [],
       pedestals: Math.min(this.entries.length, HUB_TOWN.pads.length),
     }, keeperSprites, this.crowd, motion);
-    this.minimap = new HubMinimap(this, this.town, { motion, busy });
+    this.minimap = new HubMinimap(this, this.town, { motion, busy, own: () => phantomOn() });
     // Day and night follow your own clock; the town's sounds follow the time and where you stand.
     this.period = hubPeriod(new Date(Date.now()));
     drawDaylight(this.town, this, this.period, motion);
@@ -478,7 +496,8 @@ export class HubScene extends Phaser.Scene {
       dockSpot.tab = tab;
       dockSpot.index = index;
       this.dock.refresh();
-      if (b.rooms.length > 1) this.openSection({ name: b.label, rooms: b.rooms }, b.rooms.indexOf(room));
+      if (b.label === 'Town' && phantomOn()) this.townMapOpen();
+      else if (b.rooms.length > 1) this.openSection({ name: b.label, rooms: b.rooms }, b.rooms.indexOf(room));
       return;
     }
     if (pauseRooms().includes(room)) this.openPause(pauseRooms().indexOf(room));
@@ -650,6 +669,8 @@ export class HubScene extends Phaser.Scene {
     this.dockSay = '';
     this.dock?.refresh();
     playSfx(this, 'ui.select');
+    // Phantom UI: the Town button is the Town Map (walking, Pocket Town's gate and the Merchant are all on it).
+    if (b.label === 'Town' && phantomOn()) return this.townMapOpen();
     if (b.rooms.length === 1) this.enter(b.rooms[0]!);
     else this.openSection({ name: b.label, rooms: b.rooms }, 0);
   }
@@ -699,6 +720,7 @@ export class HubScene extends Phaser.Scene {
     const place = { name: section.name, rooms: section.rooms.filter((room) => ROOMS.some((r) => r.room === room)) };
     focus = Math.max(0, place.rooms.indexOf(section.rooms[focus]!));
     this.place = place;
+    if (phantomOn()) return this.openRooms(place, focus);
     const rows: PickerRow[] = place.rooms.map((room) => {
       const info = ROOMS.find((r) => r.room === room)!;
       const summary = this.roomSummary(room);
@@ -731,6 +753,156 @@ export class HubScene extends Phaser.Scene {
     this.section = null;
     this.place = null;
     this.town?.lockUntilRelease();
+    // Phantom UI: a place reached through the Town Map goes back to it (on the dock; on foot you stand at its door).
+    const back = this.viaMap && !this.town;
+    this.viaMap = false;
+    if (back) this.townMapOpen();
+  }
+
+  // ---------- Phantom UI: the Town Map (mock-up `town`) and a place's rooms (mock-up `place`) ----------
+
+  private townMapModel(): TownMapModel {
+    const { session } = services();
+    const d = HUB_TOWN.districts[mapSpot.district]!;
+    const inside = placesIn(d.id);
+    const light = HUB_LIGHT[hubPeriod(new Date(Date.now()))];
+    const at = this.town?.tile();
+    return {
+      town: 'Hub Town',
+      when: `${light.label}${light.lamps ? ', lamps on' : ''}`,
+      size: [HUB_TOWN.size[0], HUB_TOWN.size[1]],
+      rows: HUB_TOWN.minimap,
+      districts: HUB_TOWN.districts.map((x) => ({ name: x.name, color: x.color, rect: x.rect })),
+      district: mapSpot.district,
+      blurb: d.blurb,
+      places: inside.map((pl) => ({ name: pl.name, small: pl.blurb.replace(/\.$/, ''), x: pl.door.x, y: pl.door.y })),
+      place: mapSpot.place,
+      pins: HUB_TOWN.places.filter((pl) => !inside.includes(pl)).map((pl) => ({ x: pl.door.x, y: pl.door.y })),
+      you: at ? { x: at.x, y: at.y, file: monFile(this, hubPokemon(session.profile).speciesId ?? 'pikachu', 'front') } : null,
+      walk: this.town ? 'Keep walking' : 'Walk instead',
+    };
+  }
+
+  /** Opens the Town Map: on the district you stand in (on foot), or where its cursor was. */
+  private townMapOpen(): void {
+    if (!phantomOn() || this.phMap || this.picker || this.section || this.dexInfo || this.lobby) return;
+    const n = HUB_TOWN.districts.length;
+    const here = this.town ? districtAt(this.town.tile()) : null;
+    if (here) { mapSpot.district = HUB_TOWN.districts.indexOf(here); mapSpot.place = 0; }
+    const places = (): HubPlace[] => placesIn(HUB_TOWN.districts[mapSpot.district]!.id);
+    mapSpot.district = Phaser.Math.Clamp(mapSpot.district, 0, n - 1);
+    mapSpot.place = Phaser.Math.Clamp(mapSpot.place, 0, Math.max(0, places().length - 1));
+    const shut = (): void => { if (this.picker === map) this.closePicker(); this.town?.lockUntilRelease(); this.dock?.refresh(); };
+    const move = (district: number, place: number): void => {
+      const d = ((district % n) + n) % n;
+      const count = placesIn(HUB_TOWN.districts[d]!.id).length;
+      const k = count ? ((place % count) + count) % count : 0;
+      if (d === mapSpot.district && k === mapSpot.place) return;
+      mapSpot.district = d;
+      mapSpot.place = k;
+      playSfx(this, 'ui.move');
+      view.refresh();
+    };
+    const go = (): void => {
+      const pl = places()[mapSpot.place];
+      if (!pl) return void playSfx(this, 'ui.error', 0.5);
+      shut();
+      // On foot you are put at its door first, so you come out where you went in.
+      const spot = this.town ? teleportSpot(pl.id) : null;
+      if (spot) this.town!.moveTo(spot);
+      this.viaMap = pl.rooms.length > 1;
+      this.visit(pl.id);
+    };
+    const walk = (): void => { playSfx(this, 'ui.select'); shut(); if (!this.town) this.enter('hubtown'); };
+    const view = mountRedux(this, {
+      render: (c) => (c.ph ? phTownMap(c.ph, this.townMapModel()) : ''),
+      acts: {
+        mapDistrict: (i) => move(Number(i), 0),
+        mapPlace: (i) => { if (Number(i) === mapSpot.place) go(); else move(mapSpot.district, Number(i)); },
+        mapGo: go,
+        mapWalk: walk,
+        mapBack: () => { playSfx(this, 'ui.select', 0.6); shut(); },
+      },
+      overs: { mapOver: (i) => { if (Number(i) !== mapSpot.place) move(mapSpot.district, Number(i)); } },
+    });
+    const map: PickerLike = {
+      handle: (a) => {
+        if (a === 'back') { playSfx(this, 'ui.select', 0.6); return shut(); }
+        if (a === 'confirm') return go();
+        if (a === 'left' || a === 'right') return move(mapSpot.district + (a === 'right' ? 1 : -1), 0);
+        move(mapSpot.district, mapSpot.place + (a === 'down' ? 1 : -1));
+      },
+      close: () => { view.destroy(); this.phMap = null; },
+    };
+    this.picker = map;
+    this.phMap = { walk };
+    playSfx(this, 'ui.select');
+  }
+
+  /** A place's rooms as the Phantom place page: who keeps it, its rooms, and what the lit room holds. */
+  private openRooms(place: { name: string; rooms: Room[] }, focus: number): void {
+    const { session } = services();
+    const hub = HUB_TOWN.places.find((x) => x.name === place.name) ?? null;
+    const host = hub ? PLACE_HOST[hub.id] : undefined;
+    const state = { index: Phaser.Math.Clamp(focus, 0, place.rooms.length - 1) };
+    const info = (room: Room) => ROOMS.find((r) => r.room === room)!;
+    const people = (room: Room): PlaceModel['preview']['people'] => {
+      if (room !== 'archive') return [];
+      // The five Trainers you have run with most (then the ones you can pick), with the last one you used lit.
+      const runs = new Map<string, number>();
+      for (const r of session.profile.runHistory) runs.set(r.archetypeId, (runs.get(r.archetypeId) ?? 0) + 1);
+      const last = session.profile.runHistory[session.profile.runHistory.length - 1]?.archetypeId;
+      return [...session.content.archetypes.values()]
+        .filter((a) => trainerStatus(session.profile, a) === 'unlocked')
+        .sort((a, b) => (runs.get(b.id) ?? 0) - (runs.get(a.id) ?? 0))
+        .slice(0, 5)
+        .map((a) => ({ art: artOf(this, a.spriteAssetId) ?? null, name: a.name, small: `${runs.get(a.id) ?? 0} ${runs.get(a.id) === 1 ? 'run' : 'runs'}`, on: a.id === last }));
+    };
+    const model = (): PlaceModel => {
+      const room = place.rooms[state.index]!;
+      const summary = this.roomSummary(room);
+      const bust: Art | null = host ? artOf(this, host[1]) ?? null : null;
+      return {
+        town: 'Hub Town',
+        district: hub ? districtOf(hub)?.name ?? '' : '',
+        name: place.name,
+        // Few rooms: each shows its count under its name; a long list keeps that for the lit one.
+        rooms: place.rooms.map((r) => ({ label: info(r).label, small: place.rooms.length <= 5 || r === room ? this.roomSummary(r).split(' · ')[0] ?? '' : '' })),
+        index: state.index,
+        who: host ? host[0] : 'Town guide',
+        say: hub ? hub.blurb : `${place.rooms.length} doors here. Which one today?`,
+        bust,
+        preview: { label: summary ? `${info(room).label} · ${summary}` : info(room).label, text: room === 'hubtown' && this.dock ? 'Walk the town as your Pokémon: every room is a building. Esc opens the menu with the way back here.' : info(room).blurb, people: people(room) },
+        // The mock-up's room: the indoor picture of the event backdrops.
+        backdrop: 'packs/memories/eventbg/indoor.png',
+        back: this.town ? 'Back to town' : 'Back',
+      };
+    };
+    const point = (k: number): void => {
+      if (k === state.index || k < 0 || k >= place.rooms.length) return;
+      state.index = k;
+      playSfx(this, 'ui.move');
+      view.refresh();
+    };
+    const pick = (): void => { playSfx(this, 'ui.select'); this.enter(place.rooms[state.index]!); };
+    const free = (): boolean => !this.picker && !this.dexInfo;
+    const view = mountRedux(this, {
+      render: (c) => (c.ph ? phPlace(c.ph, model()) : ''),
+      acts: {
+        roomPick: (i) => { if (!free()) return; if (Number(i) === state.index) pick(); else point(Number(i)); },
+        roomBack: () => { if (free()) { playSfx(this, 'ui.select', 0.6); this.closeSection(); } },
+      },
+      overs: { roomOver: (i) => { if (free()) point(Number(i)); } },
+    });
+    const n = place.rooms.length;
+    this.section = {
+      handle: (a) => {
+        if (a === 'back') { playSfx(this, 'ui.select', 0.6); return this.closeSection(); }
+        if (a === 'confirm') return pick();
+        if (a === 'up' || a === 'down') point((state.index + (a === 'down' ? 1 : n - 1)) % n);
+      },
+      close: () => view.destroy(),
+    };
   }
 
   private handle(a: InputAction): void {

@@ -87,3 +87,30 @@ ${keys(['Enter', 'Choose', 'pick', d.index], ['Esc', 'Back', 'back'])}`);
 }
 
 export const phSettings = (ph: PhantomVersion, d: PhSettingsModel): string => (d.kind === 'home' ? home(d) : d.kind === 'page' ? one(ph, d) : list(d));
+
+/** Settings > Look > Page changes (mock-up `reel`): the six page changes, each playing in its own small frame, and how much they move. */
+export type ReelModel = { cards: { id: string; n: string; when: string; about: string }[]; index: number; motions: string[]; motion: number; help: string };
+const REEL_FRAME: Record<string, string> = { slash: 'rr-slash', iris: 'rr-iris', drop: 'rr-drop', page: 'rr-page', sweep: 'rr-sweep', share: 'rr-share' };
+export function phReel(d: ReelModel): string {
+  const cards = d.cards.map((c, i) => `<div class="pn rr-c${i === d.index ? ' lt' : ''}" style="--i:${i}"${act('reelPick', i, 'reelOver')}><div class="rr-d ${REEL_FRAME[c.id] ?? ''}" aria-hidden="true"><i class="a"></i><i class="b"></i>${c.id === 'share' ? '<u></u>' : ''}</div><span class="lab">${esc(c.when)}</span><h3 class="tl1">${esc(c.n)}</h3><p class="txt">${esc(c.about)}</p></div>`).join('');
+  const motions = d.motions.map((m, i) => `<span class="${i === d.motion ? 'on' : ''}"${act('reelMotion', i)}>${esc(m)}</span>`).join('');
+  return page('reel', `${SHARD(86, 68)}<div class="hd"><small>SETTINGS · LOOK · MOTION</small>Page changes</div>
+<div class="rr-g">${cards}</div>
+<div class="rr-m"><b>Motion</b>${motions}</div>${d.help ? `<p class="ph-rr-say">${esc(d.help)}</p>` : ''}
+${keys(['▲▼', 'Pick'], ['◀▶', 'Motion'], ['Enter', 'Play one', 'reelPlay'], ['Esc', 'Back', 'back'])}`);
+}
+
+/** Settings > Every page (mock-up `index`): the look's pages in their groups; the lit one says where it is found. */
+export type PageIndexModel = { groups: { n: string; pages: { n: string; open: boolean }[] }[]; index: number; where: string };
+export function phPageIndex(d: PageIndexModel): string {
+  let at = 0;
+  const total = d.groups.reduce((n, g) => n + g.pages.length, 0);
+  const groups = d.groups.map((g) => `<div class="ix-g"><h4>${esc(g.n)}<small>${g.pages.length}</small></h4>${g.pages.map((p) => { const i = at++; return `<span class="${i === d.index ? 'on' : ''}${p.open ? ' go' : ''}"${act('ixPick', i, 'ixOver')}>${esc(p.n)}</span>`; }).join('')}</div>`).join('');
+  const lit = d.groups.flatMap((g) => g.pages)[d.index];
+  return page('index', `<div class="bgk"></div><div class="shard" style="--c:var(--red);--cp:polygon(0 0,100% 0,100% 9%,0 17%);inset:0" aria-hidden="true"></div>
+<div class="hd"><small>${total} ${total === 1 ? 'PAGE' : 'PAGES'} · ${d.groups.length} ${d.groups.length === 1 ? 'GROUP' : 'GROUPS'}</small>Every page</div>
+<div class="ix ph-ix">${groups}</div>
+<p class="ph-ix-say"><b>${esc(lit?.n ?? '')}</b>${esc(d.where)}</p>
+${keys(['▲▼', 'Page'], ['◀▶', 'Group'], ...(lit?.open ? [['Enter', 'Open', 'ixOpen'] as [string, string, string]] : []), ['Esc', 'Back', 'back'])}`);
+}
+

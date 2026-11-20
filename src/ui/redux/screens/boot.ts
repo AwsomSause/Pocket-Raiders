@@ -3,6 +3,8 @@
 
 import { act, bg, esc, mini, mon } from '../kit';
 import type { ReduxCtx } from '../stage';
+import { phCredits } from '../../phantom/screens/ending';
+import { phLoading } from '../../phantom/screens/rooms';
 
 export interface BootModel {
   /** "Loading the region…", or "Beta 0.7 is here" on the update splash. */
@@ -17,6 +19,7 @@ export interface BootModel {
 
 /** Two layouts: a Poké Ball over the bar, or Pikachu running in place over it. On the splash a click anywhere moves on. */
 export function bootView(c: ReduxCtx, d: BootModel): string {
+  if (c.ph) return phLoading(c.ph, d);
   const v = c.v(2), pct = Math.round(Math.max(0, Math.min(1, d.progress)) * 100);
   return (d.splash ? bg(d.splash) + '<div class="shade"></div>' : '')
     + `<div class="abs col cen" style="left:0;right:0;top:${v ? 120 : 170}px;gap:20px">${v ? mon('pokemon/25', 3, '', true) : '<i class="ball" style="--b:70px"></i>'}<b style="font-size:26px">${esc(d.title)}</b><div class="hp gold" style="width:520px;height:16px"><i style="width:${pct}%"></i></div><span class="sm" style="max-width:760px;text-align:center">${esc(d.note)}</span></div>`
@@ -34,6 +37,8 @@ export interface CreditsModel {
   art: string;
   /** A number: the rows roll up the screen and sit this many pixels down right now (the scene moves them). Null: the page stands still and can be scrolled. */
   roll: number | null;
+  /** Phantom UI: the run's moments as photos beside the roll (a Pokémon of the team and a caption each). */
+  photos?: readonly { file: string | null; cap: string }[];
 }
 
 /** The rows as the mock-up's column: a small heading over bold lines, gold titles, a row of Pokémon for a team. */
@@ -59,7 +64,8 @@ export function creditsRows(rows: readonly CreditsRow[]): string {
   return out.join('');
 }
 
-export function creditsView(_c: ReduxCtx, d: CreditsModel): string {
+export function creditsView(c: ReduxCtx, d: CreditsModel): string {
+  if (c.ph) return phCredits(c.ph, d);
   const col = `<div class="col cen rx-roll" style="gap:12px;color:#fff;padding:40px 0${d.roll === null ? '' : `;transform:translateY(${Math.round(d.roll)}px)`}">${d.lead ? `<span class="sm">${esc(d.lead)}</span>` : ''}${creditsRows(d.rows)}</div>`;
   const low = d.party.length ? 150 : 44;
   return bg(d.art) + '<div class="shade"></div>'

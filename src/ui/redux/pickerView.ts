@@ -55,6 +55,9 @@ export interface PickerBridge {
   lead?: string;
   /** The quick-summary text while it is open (I), else null. */
   summary: () => string | null;
+  /** More buttons for a row beside what Enter does (the Phantom PC's Summary and Give item), and a click on one. */
+  extras?: (i: number) => { label: string; key: string; off: boolean }[];
+  extra?: (k: number) => void;
   pick: (i: number) => void;
   hover: (i: number) => void;
   back: () => void;
@@ -154,7 +157,7 @@ function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerK
     const artOf = (file: string | null): { file: string; atlas: boolean } | null => (file ? { file, atlas: true } : null);
     const detail = said ? { title: said.title, body: said.body, art: said.off ? null : artOf(said.file) } : { title: cur!.label, body: cur!.note, facts: cur!.tag ? [['', cur!.tag] as const] : [], art: cur!.art };
     const wall: GridModel = { title: name, area, hints, n, cell: (i) => { const x = p.cell?.(i); if (x) return { art: artOf(x.file), label: x.off ? '' : x.title, off: x.off, sil: x.sil }; const r = row(i); return { art: r.art, label: r.label, off: p.problem(i) !== null }; }, index, detail, found, total: n, text };
-    body = c.ph && /^PC\b/.test(name) ? phBox(c.ph, { ...wall, party: partyChips(scene) }) : gridView(c, wall);
+    body = c.ph && /^PC\b/.test(name) ? phBox(c.ph, { ...wall, party: partyChips(scene), extras: p.extras?.(index) ?? [] }) : gridView(c, wall);
   } else if (kind === 'bag') {
     const inRun = !!services().session.run, notes = bagNotes(p.item?.(index));
     const bag = { title: name, hints, pockets: p.tabs ? { labels: p.tabs.labels, index: p.tabs.index } : null, n, item: (i: number) => ({ ...row(i), off: p.problem(i) !== null }), index, text };
@@ -207,7 +210,7 @@ export function mountPickerView(scene: Phaser.Scene, p: PickerBridge, kind: Pick
       cols = p.page ? p.pageCols ?? 1 : pickerCols(kind, c);
       return p.page ? p.page(c, p.index()) + (p.canBack ? BACK_HIT : '') : render(c, scene, p, kind);
     },
-    acts: { pick: (i) => p.pick(Number(i)), tab, bracketPage: tab, back: () => p.back() },
+    acts: { pick: (i) => p.pick(Number(i)), tab, bracketPage: tab, back: () => p.back(), extra: (k) => p.extra?.(Number(k)) },
     overs: { over: (i) => p.hover(Number(i)) },
     clear: kind === 'window',
   });

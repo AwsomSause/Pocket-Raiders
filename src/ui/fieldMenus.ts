@@ -29,9 +29,10 @@ import { services } from '../game/services';
 import { itemCard, itemFooter } from '../core/itemPreview';
 import { runHealMultiplier } from '../core/run';
 import { partyPreviews, quickSummaryText } from './itemScreen';
-import { emotionDot, partyRow, partyRows, Picker, speciesRow, type PickerLike, type PickerRow } from './partyPanel';
+import { emotionDot, partyRow, partyRows, Picker, speciesRow, type PickerExtra, type PickerLike, type PickerRow } from './partyPanel';
+import { openPokemonMenu } from './pokemonMenu';
 import { monFile } from './redux/game';
-import { reduxOn } from './redux/stage';
+import { phantomOn, reduxOn } from './redux/stage';
 import { itemVisual } from './sprites';
 import { withEvolutionScene } from './evolutionScene';
 import { COLORS, textStyle } from './theme';
@@ -82,6 +83,43 @@ export function openBoxMenu(host: FieldMenuHost): void {
   host.setPicker(picker);
 }
 
+/** The held items waiting in the Bag (taken off a Pokémon, or put there by an event). */
+const looseHeld = (content: Content, run: RunState): BagEntry[] => bagEntries(content, run).filter((e) => e.source === 'loose');
+
+/** Phantom UI, the PC's Give item: one held item waiting in the Bag goes to a Pokémon in the PC. Esc goes back to the PC. */
+function openBoxGive(host: FieldMenuHost, boxIndex: number): void {
+  const { session } = services();
+  const run = session.run!;
+  const content = session.content;
+  const mon = run.box[boxIndex];
+  if (!mon) return openBoxWall(host);
+  const name = content.species.get(mon.speciesId)?.name ?? mon.speciesId;
+  const loose = looseHeld(content, run);
+  const picker: Picker = new Picker(host.scene, {
+    title: `Give ${name} which item?`,
+    area: 'party',
+    columns: 1,
+    rowHeight: 62,
+    rows: loose.map((e) => ({
+      problem: giveHeldProblem(content, run, e.itemId, boxIndex, 'box'),
+      hint: bagEntryText(e),
+      item: e.itemId,
+      menu: { label: e.name, note: `×${e.quantity}`, detail: e.description },
+      draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number, h: number) => {
+        if (e.iconAssetId) box.add(itemVisual(scene, e.iconAssetId, 26, h / 2, 2));
+        box.add(scene.add.text(56, h / 2, e.name, textStyle(20)).setOrigin(0, 0.5));
+        box.add(scene.add.text(w - 16, h / 2, `×${e.quantity}`, textStyle(20)).setOrigin(1, 0.5));
+      },
+    })),
+    onSelect: (k) => {
+      close(host, picker);
+      host.changed(session.giveHeld(loose[k]!.itemId, boxIndex, 'box'));
+    },
+    onBack: () => { close(host, picker); openBoxWall(host, boxIndex); },
+  });
+  host.setPicker(picker);
+}
+
 /**
  * New UI: the PC as the mock-up's wall of slots. A boxed Pokémon joins the party on Enter; an empty slot asks which
  * party Pokémon to put there. The Found bar counts the slots in use.
@@ -100,11 +138,18 @@ function openBoxWall(host: FieldMenuHost, at = 0): void {
     return { ...row, cell: { file: monFile(host.scene, row.mon!.speciesId, 'front', row.mon!.shiny), title: name, body: `Lv ${mon.level} · HP ${Math.round(row.mon!.hp * 100)}%. ${slots}` } };
   });
   for (let k = 0; k < free; k++) rows.push({ problem: run.party.length <= 1 ? 'The party needs one Pokémon.' : null, hint: 'An empty slot. Enter sends a party Pokémon to the PC.', cell: { file: null, title: 'Empty slot', body: slots, off: true }, draw: () => undefined });
+  // Phantom UI (the mock-up's Reserve card): a PC Pokémon's Summary, and a held item from the Bag for it.
+  const loose = phantomOn() ? looseHeld(content, run) : [];
+  const extras = (i: number): PickerExtra[] => (i >= run.box.length ? [] : [
+    { label: 'Summary', key: 'I', run: () => { close(host, picker); openPokemonMenu(host, i, { title: 'Summary', problemFor: () => null, onPick: (k) => openBoxWall(host, k), from: () => services().session.run!.box }); } },
+    { label: loose.length ? 'Give item' : 'Give item · none free', key: 'G', off: loose.length === 0, run: () => { close(host, picker); openBoxGive(host, i); } },
+  ]);
   const picker: Picker = new Picker(host.scene, {
     title: 'PC',
     columns: 2,
     rowHeight: 78,
     rows,
+    extras: phantomOn() ? extras : undefined,
     start: Math.min(at, Math.max(0, rows.length - 1)),
     onSelect: (i) => {
       close(host, picker);

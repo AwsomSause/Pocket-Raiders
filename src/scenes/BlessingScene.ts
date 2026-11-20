@@ -5,12 +5,15 @@
 // the blessing was rolled at run start. Respects the animation setting (off = everything shown at once).
 
 import Phaser from 'phaser';
-import { getBlessing, VOWS } from '../core/blessings';
+import { BLESSINGS, getBlessing, reliquary, VOWS, type BlessingDef, type BlessingState } from '../core/blessings';
 import { services } from '../game/services';
 import { playCry } from '../ui/audio';
 import { onInputAction } from '../ui/input';
 import { loadAssets } from '../ui/lazyAssets';
 import { useLookFont } from '../ui/redux/canvasFont';
+import { monFile } from '../ui/redux/game';
+import { mountRedux, phantomOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { BLESSING_ROWS, phBlessing } from '../ui/phantom/screens/ending';
 import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 
 const TIER_LABEL = { lesser: 'LESSER', greater: 'GREATER', divine: 'DIVINE', primordial: 'PRIMORDIAL', origin: 'ORIGIN' } as const;
@@ -39,6 +42,8 @@ export class BlessingScene extends Phaser.Scene {
     const motion = session.settings.battleAnimations;
     const fast = motion !== 'full';
     this.cameras.main.setBackgroundColor(0x000000);
+    // Phantom UI: the opening is the mock-ups' `blessing` page (the same beats, the same vow, the same way on).
+    if (reduxOn() && phantomOn()) return this.createPhantom(state, def);
 
     // The item floats on the left, on plain black.
     const px = 250;
@@ -134,6 +139,78 @@ export class BlessingScene extends Phaser.Scene {
       if (a === 'confirm' || (a === 'back' && vowAt < 0)) next();
     });
     this.input.on('pointerdown', next);
+  }
+
+  /**
+   * Phantom UI: the blessing as a Phantom page. The beats arrive on the same clock as the canvas opening (a first
+   * Confirm shows all of it), a Vow is sworn before going on, and C reads the Reliquary: every blessing found so far.
+   */
+  private createPhantom(state: BlessingState, def: BlessingDef): void {
+    const { session } = services();
+    const run = session.run!;
+    const motion = session.settings.battleAnimations;
+    const fast = motion !== 'full';
+    const roman = (n: number): string => [['M', 1000], ['CM', 900], ['D', 500], ['CD', 400], ['C', 100], ['XC', 90], ['L', 50], ['XL', 40], ['X', 10], ['IX', 9], ['V', 5], ['IV', 4], ['I', 1]].reduce((out, [s, v]) => { while (n >= (v as number)) { out += s; n -= v as number; } return out; }, '');
+    const cry = (): void => { const sp = def.speciesId && session.content.species.get(def.speciesId); if (sp) playCry(this, sp, 70); };
+    const all = reliquary(session.profile.blessings);
+    const pages = Math.max(1, Math.ceil(all.length / BLESSING_ROWS));
+    let step = motion === 'off' ? 5 : 0, vowAt = -1, book = -1;
+    let view: ReduxView | null = null;
+    const draw = (): void => view?.refresh();
+    const steps: [number, number][] = [[600, 1], [2600, 2], [4200, 3], [8200, 4], [11500, 5]];
+    if (motion === 'off') cry();
+    else {
+      for (const [delay, to] of steps) this.timers.push(this.time.delayedCall(fast ? delay / 3 : delay, () => { step = Math.max(step, to); draw(); }));
+      this.timers.push(this.time.delayedCall(fast ? 1700 / 3 : 1700, cry));
+    }
+    const needsVow = (): boolean => def.effect.kind === 'vow' && !run.expansion?.blessing?.vow;
+    const next = (): void => {
+      if (this.leaving || book >= 0) return;
+      if (step < 5) {
+        for (const t of this.timers) t.remove(false);
+        this.timers = [];
+        step = 5;
+        return draw();
+      }
+      if (needsVow()) {
+        if (vowAt < 0) { vowAt = 0; return draw(); }
+        session.swearVow(VOWS[vowAt]!.id);
+      }
+      this.leaving = true;
+      if (run.expansion?.blessing) run.expansion.blessing.seen = true;
+      session.saveRunNow();
+      this.scene.start('Briefing');
+    };
+    const toggleBook = (): void => { book = book >= 0 ? -1 : Math.max(0, Math.floor(all.findIndex((b) => b.id === state.id) / BLESSING_ROWS)); draw(); };
+    view = mountRedux(this, {
+      render: (c) => (c.ph ? phBlessing(c.ph, {
+        tier: state.tier[0]!.toUpperCase() + state.tier.slice(1),
+        name: def.name,
+        legendary: def.legendary,
+        mon: def.speciesId ? monFile(this, def.speciesId, 'front') : null,
+        number: roman(BLESSINGS.indexOf(def) + 1),
+        passage: def.passage,
+        headline: def.headline,
+        summary: def.summary,
+        step,
+        vows: vowAt >= 0 ? VOWS.map((v) => ({ label: v.label, text: v.text })) : null,
+        vowAt,
+        book: book >= 0 ? { rows: all.slice(book * BLESSING_ROWS, (book + 1) * BLESSING_ROWS).map((b) => ({ name: b.name, legendary: b.legendary, tier: b.tier, text: b.text, found: b.found, mine: b.id === state.id })), page: book, pages, found: all.filter((b) => b.found).length, of: all.length } : null,
+      }) : ''),
+      acts: { next, book: toggleBook, vow: (i) => { if (vowAt < 0) return; if (Number(i) === vowAt) next(); else { vowAt = Number(i); draw(); } } },
+      overs: { over: (i) => { if (vowAt >= 0 && Number(i) !== vowAt) { vowAt = Number(i); draw(); } } },
+    });
+    this.input.keyboard?.on('keydown-C', toggleBook);
+    onInputAction(this, (a) => {
+      if (book >= 0) {
+        if (a === 'back' || a === 'confirm') toggleBook();
+        else { book = (book + (a === 'left' || a === 'up' ? pages - 1 : 1)) % pages; draw(); }
+        return;
+      }
+      if (vowAt >= 0 && (a === 'up' || a === 'down')) { vowAt = (vowAt + (a === 'up' ? VOWS.length - 1 : 1)) % VOWS.length; return draw(); }
+      if (a === 'confirm' || (a === 'back' && vowAt < 0)) next();
+    });
+    this.events.once('shutdown', () => { try { view?.destroy(); } catch { /* already gone */ } });
   }
 
   /** Shows everything at once (a first Confirm, or animations off). */

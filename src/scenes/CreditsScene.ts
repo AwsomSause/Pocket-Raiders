@@ -13,7 +13,8 @@ import { playMusic } from '../ui/audio';
 import { partySpecies, preloadPokemon } from '../ui/lazyAssets';
 import { pokemonIcon } from '../ui/sprites';
 import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
-import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, phantomOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { runTimeline } from '../core/recap';
 import { creditsView, type CreditsRow } from '../ui/redux/screens/boot';
 import { monFile } from '../ui/redux/game';
 
@@ -101,26 +102,33 @@ export class CreditsScene extends Phaser.Scene {
     const party = this.assets || !run ? [] : run.party.map((m) => monFile(this, m.speciesId, 'front', !!m.shiny)).filter((f): f is string => !!f);
     const me = run ? run.story.v2?.protagonist?.name || session.content.archetypes.get(run.archetypeId)?.name || '' : '';
     const roll = !this.assets && session.settings.battleAnimations === 'full';
+    // Phantom UI: the run's best-remembered moments as three photos, each with a Pokémon of the team.
+    const photos = this.assets || !run ? [] : runTimeline(run, 3).map((m, i) => ({ file: party[i % Math.max(1, party.length)] ?? null, cap: `${m.where} · ${m.text}` }));
     let ready = false;
     this.time.delayedCall(400, () => (ready = true));
     const leave = (): void => { if (ready) this.leave(); };
     this.rx = mountRedux(this, {
-      render: (c) => creditsView(c, { lead: !this.assets && me ? `A run by ${me}` : '', rows, party, art: 'arenas/mountain_bg.png', roll: roll ? this.rollAt : null }),
+      render: (c) => creditsView(c, { lead: !this.assets && me ? `A run by ${me}` : '', rows, party, art: 'arenas/mountain_bg.png', roll: roll ? this.rollAt : null, photos }),
       acts: { next: leave },
     });
     this.rollY = roll ? 0 : null;
     this.rollAt = 600;
     onInputAction(this, (a) => {
       if (a === 'confirm' || a === 'back') return leave();
-      const box = this.rx?.el.querySelector<HTMLElement>('.rx-credits');
+      const box = this.rollRoot()?.querySelector<HTMLElement>('.rx-credits');
       if (box && this.rollY === null && (a === 'up' || a === 'down')) box.scrollTop += a === 'up' ? -90 : 90;
     });
+  }
+
+  /** Where the rolling column is drawn: the Phantom page when that look is on, the New UI layer otherwise. */
+  private rollRoot(): ParentNode | null {
+    return (phantomOn() ? document.querySelector('#phx .phs[data-scene="Credits"]') : null) ?? this.rx?.el ?? null;
   }
 
   override update(_time: number, delta: number): void {
     if (this.rollY === null || !this.rx) return;
     // The page may be redrawn (a picture finished loading), so the column is found again each frame.
-    const box = this.rx.el.querySelector<HTMLElement>('.rx-credits');
+    const box = this.rollRoot()?.querySelector<HTMLElement>('.rx-credits');
     const col = box?.querySelector<HTMLElement>('.rx-roll');
     if (!box || !col) return;
     this.rollY += (delta / 1000) * ROLL_SPEED;

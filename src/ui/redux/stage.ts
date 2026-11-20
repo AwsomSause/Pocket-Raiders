@@ -5,9 +5,11 @@
 
 import './redux.css';
 import type Phaser from 'phaser';
+import { joinKind, joinMotion } from '../../core/presentation/joins';
 import { phantomVersion, type PhantomVersion } from '../../core/presentation/phantom';
 import { REDUX_SKINS, reduxLayout, reduxSkinIndex, type ReduxSkin } from '../../core/presentation/redux';
 import { services } from '../../game/services';
+import { joinBusy, joinEnter, joinFrom, joinGhost, joinLeave } from '../phantom/joins';
 import { morph } from '../phantom/morph';
 import { pageOf } from '../phantom/kit';
 import { onRxAssets, rxAtlas, rxUrl } from './assets';
@@ -104,7 +106,7 @@ function phantomReady(): boolean {
     fonts.id = 'ph-fonts';
     fonts.textContent = PHANTOM_FONTS.map(([fam, w, st, f]) => `@font-face{font-family:"${fam}";font-style:${st};font-weight:${w};font-display:swap;src:url("assets/fonts/phantom/${f}.woff2") format("woff2")}`).join('\n');
     document.head.append(fonts);
-    void Promise.all([import('../phantom/phantom.gen.css'), import('../phantom/phantom.css'), import('../phantom/shared.css'), import('../phantom/run.css'), import('../phantom/party.css'), import('../phantom/pages.css'), import('../phantom/map.css'), import('../phantom/event.css'), import('../phantom/pops.css'), import('../phantom/teams.css'), import('../phantom/battle.css')]).then(() => {
+    void Promise.all([import('../phantom/phantom.gen.css'), import('../phantom/phantom.css'), import('../phantom/shared.css'), import('../phantom/rooms.css'), import('../phantom/run.css'), import('../phantom/party.css'), import('../phantom/pages.css'), import('../phantom/map.css'), import('../phantom/event.css'), import('../phantom/pops.css'), import('../phantom/teams.css'), import('../phantom/battle.css'), import('../phantom/ending.css'), import('../phantom/book.css')]).then(() => {
       phantomState = 'ready';
       lastBox = '';
       views.forEach((v) => v.redraw());
@@ -322,6 +324,8 @@ export function mountTool(game: Phaser.Game, name: string): HTMLElement {
 /** Draws a scene's New UI view over the canvas until the scene shuts down. Call only when `reduxOn()`. */
 /** Where the pointer was at the last hover any view took (shared, so a view opening under a resting pointer does not count either). */
 let overAt = '';
+/** The full Phantom pages that are up, oldest first (a pause menu over the map: the map, then the menu). */
+const pagesUp = new Map<HTMLElement, string>();
 
 export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
   const root = ensureHost(scene.game);
@@ -385,17 +389,40 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
   // when that key first showed (--t0). A key that leaves the view and comes back plays again.
   const born = performance.now();
   let firstSeen = new Map<string, number>();
+  /** The Phantom page this view shows as a full page (null: none, or an overlay). */
+  let mine: string | null = null;
   const redraw = (): void => {
     queued = false;
     if (dead) return;
     dress();
     const html = o.render(ctx);
     const pageId = pageOf(html);
+    // Phantom UI: a full page that is new here comes in by its page change (ui/phantom/joins.ts), and one that
+    // leaves this view goes by it. A see-through view (the battle HUD, a prompt) has its own entrance.
+    const changed = html !== last;
+    const full = pageId !== null && (!o.clear || /class="(bg|bgk|bgr|art)"/.test(html));
+    const turning = full && changed && pageId !== mine;
+    const motion = changed && (turning || mine !== null) ? joinMotion(services().session.settings) : 'off';
+    let old: HTMLElement | null = null;
+    if (changed && mine !== null && !full) {
+      if (el.style.display !== 'none') joinLeave(el, mine, motion);
+      mine = null;
+      pagesUp.delete(el);
+    } else if (turning && mine !== null && el.style.display !== 'none') old = joinGhost(el, motion);
     put(pageId);
     if (html === last) return;
     last = html;
     const now = performance.now();
-    if (pageId !== null) { morph(el, html); return; }
+    if (pageId !== null) {
+      morph(el, html);
+      if (turning) {
+        const from = mine ?? joinFrom() ?? [...pagesUp].reverse().find(([v]) => v !== el)?.[1] ?? null;
+        mine = pageId;
+        pagesUp.set(el, pageId);
+        joinEnter(el, from === pageId ? null : joinKind(from, pageId), motion, old);
+      }
+      return;
+    }
     el.style.setProperty('--now', `${Math.round(born - now)}ms`);
     el.innerHTML = html;
     if (!html.includes('data-once="')) { firstSeen.clear(); return; }
@@ -423,6 +450,8 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     const at = `${e.clientX},${e.clientY}`;
     if (at === overAt) return;
     overAt = at;
+    // Phantom UI: nor is a page that slides in under a resting pointer (ui/phantom/joins.ts).
+    if (joinBusy(el)) return;
     pick(e, 'over', o.overs);
   });
   // Tooltips follow the pointer anywhere on the page, so leaving an element (onto the canvas too) is noticed.
@@ -449,6 +478,10 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     }
     gone = { key: scene.scene.key, at: performance.now() };
     window.removeEventListener('pointermove', onTip);
+    if (mine !== null) {
+      pagesUp.delete(el);
+      if (el.style.display !== 'none') joinLeave(el, mine, joinMotion(services().session.settings));
+    }
     el.remove();
     scene.events.off('shutdown', destroy);
     scene.events.off('destroy', destroy);

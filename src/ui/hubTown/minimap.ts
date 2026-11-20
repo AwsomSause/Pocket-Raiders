@@ -37,7 +37,7 @@ export class HubMinimap {
   constructor(
     private readonly scene: Phaser.Scene,
     private readonly town: HubTownView,
-    private readonly opts: { busy(): boolean; motion: 'full' | 'reduced' | 'off'; title?: string },
+    private readonly opts: { busy(): boolean; motion: 'full' | 'reduced' | 'off'; title?: string; /** True while the scene has its own page for the M key (the map here stays as it is). */ own?(): boolean },
   ) {
     this.map = town.map;
     const [W, H] = this.map.size;
@@ -111,7 +111,7 @@ export class HubMinimap {
   }
 
   private readonly onKey = (): void => {
-    if (!this.opts.busy()) this.cycle();
+    if (!this.opts.busy() && !this.opts.own?.()) this.cycle();
   };
 
   /** One rectangle per tile, then each district's edge in its colour. */

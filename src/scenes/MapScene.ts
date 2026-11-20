@@ -87,7 +87,7 @@ import { barkLine } from '../core/evil/barks';
 import { openRunContentsMenu } from '../ui/runContentsMenu';
 import { onInputAction, type InputAction } from '../ui/input';
 import { Picker, speciesRow, type PickerLike, type PickerRow } from '../ui/partyPanel';
-import { regionFormPrompt } from '../core/regionForms';
+import { regionFormPrompt, type RegionFormOffer } from '../core/regionForms';
 import { STOP_STYLES, stopStyle } from '../ui/stopIcons';
 import { stopArtFor } from '../ui/stopArt';
 import { addStopArt } from '../ui/stopArtView';
@@ -136,6 +136,11 @@ import { mapView, type MapLegendRow, type MapModel, type MapNodeView } from '../
 import type { PhantomVersion } from '../core/presentation/phantom';
 import { phInto } from '../ui/phantom/picker';
 import { phMap, phNodeMenu, phPause } from '../ui/phantom/screens/map';
+import { phForms } from '../ui/phantom/screens/travel';
+import { phPhone } from '../ui/phantom/screens/phone';
+import type { Art } from '../ui/redux/templates';
+import { phoneBook, phoneChats, type PhoneChat } from '../core/presentation/phone';
+import { PhantomDex } from '../ui/phantomDex';
 import { phWheel, wheelStep } from '../ui/phantom/screens/system';
 import { phCard } from '../ui/phantom/screens/ending';
 import { phHeal, type PhHealModel } from '../ui/phantom/screens/stops';
@@ -210,7 +215,8 @@ type MapPop =
   | { kind: 'notes'; tab: number; sel: number[] }
   | { kind: 'track' }
   | { kind: 'roll'; town: number; pick: number }
-  | { kind: 'bracket'; page: number };
+  | { kind: 'bracket'; page: number }
+  | { kind: 'phone'; chat: number; reply: number };
 
 type Option =
   | { kind: 'node'; node: MapNode }
@@ -268,7 +274,8 @@ export class MapScene extends Phaser.Scene {
   /** New UI: the pop-up that is open over the map (R, T, D, F, B), drawn by the layer instead of the canvas. */
   private rxPop: MapPop | null = null;
   /** New UI: the pause menu (Esc on the map) and its cursor; `ask` is the cursor of the "End this run?" box while it is open. */
-  private rxPause: { index: number; ask: number | null; card?: boolean } | null = null;
+  private rxForm: { offer: RegionFormOffer; index: number; pick: (i: number) => void } | null = null;
+  private rxPause: { index: number; ask: number | null; card?: boolean; dex?: PhantomDex | null } | null = null;
   /** New UI: the node event menu while it is open (the cards, the cursor, and what a pick does). */
   private rxMenu: { header: string; cards: NodeMenuCard[]; index: number; pick: (k: number) => void } | null = null;
   /** Phantom UI: the healing spot's page, up until the player presses (then `done` goes back to the map). */
@@ -291,6 +298,7 @@ export class MapScene extends Phaser.Scene {
     else if (kind === 'track') pop = trackPage(session.content, run) ? { kind } : null;
     else if (kind === 'notes') pop = { kind, tab: 0, sel: [0, 0, 0, 0] };
     else if (kind === 'roll') pop = townRollPages(session.content, run).length ? { kind, town: 0, pick: 0 } : null;
+    else if (kind === 'phone') pop = phantomOn() ? { kind, chat: this.phoneFirst(), reply: 0 } : null;
     else pop = { kind, page: galarHome(bracketTree(session.content, run)) };
     if (!pop) return;
     this.rxPop = pop;
@@ -311,13 +319,15 @@ export class MapScene extends Phaser.Scene {
     const rivals = rivalReport(run);
     const down = run.party.filter((m) => m.hp <= 0).length;
     const pc = boxCapacity(runPerks(content, run));
-    const lines = interactionLog.backlog().length;
+    const lines = interactionLog.backlog().filter((e) => e.kind !== undefined).length;
+    const unread = this.phoneList().reduce((n, c) => n + c.unread, 0);
+    const dex = new Set(run.log.speciesSeen).size;
     return [
       { label: 'Party', note: `${run.party.length} Pokémon${down ? ` · ${down} fainted` : ''}`, go: () => openPokemonMenu(this.fieldHost()) },
       { label: 'Bag', note: `₽${run.money.toLocaleString('en-US')} in your wallet`, go: () => openBagMenu(this.fieldHost()) },
       { label: 'Rivals', note: rivals.length ? `${rivals[0]!.name}: ${rivals[0]!.leadText}` : 'No rival has found you yet', off: rivals.length === 0, go: () => this.toggleRivalReport() },
-      { label: 'Log', note: lines ? `${lines} ${lines === 1 ? 'line' : 'lines'} of this run` : 'Nothing said yet', go: () => openLog() },
-      { label: 'Trainer card', note: `Known as ${protagonistTitle(run).name}`, go: () => { this.pauseOpen(); this.pausePick(MapScene.PAUSE_PH.indexOf('Trainer card')); } },
+      { label: 'Phone', note: unread ? `${unread} new ${unread === 1 ? 'line' : 'lines'}` : lines ? `${lines} ${lines === 1 ? 'line' : 'lines'} of this run` : 'Rotom is on the line', go: () => this.popToggle('phone') },
+      { label: 'Pokédex', note: `${dex} met in this run`, go: () => { this.pauseOpen(); this.pausePick(MapScene.PAUSE_PH.indexOf('Pokédex')); } },
       { label: 'Reserve', note: pc > 0 ? `${run.box.length} of ${pc} in the PC` : 'This run has no PC', off: pc <= 0, go: () => openBoxMenu(this.fieldHost()) },
       { label: 'Save', note: 'Save, then stay or leave', go: () => openSaveMenu(this.fieldHost(), (to) => { this.busy = true; this.scene.start(to); }) },
       { label: 'Settings', note: 'Sound, text and the look', go: () => this.scene.start('Settings', { from: 'Map' }) },
@@ -387,7 +397,7 @@ export class MapScene extends Phaser.Scene {
 
   private static readonly PAUSE = ['Resume', 'Party', 'Bag', 'Settings', 'Save', 'End run'] as const;
   /** The Phantom pause page also has the mock-up's Trainer card. */
-  private static readonly PAUSE_PH = ['Resume', 'Party', 'Bag', 'Trainer card', 'Settings', 'Save', 'End run'] as const;
+  private static readonly PAUSE_PH = ['Resume', 'Party', 'Bag', 'Pokédex', 'Trainer card', 'Settings', 'Save', 'End run'] as const;
 
   private pauseRows(): readonly string[] {
     return phantomOn() ? MapScene.PAUSE_PH : MapScene.PAUSE;
@@ -402,6 +412,7 @@ export class MapScene extends Phaser.Scene {
   }
 
   private pauseClose(): void {
+    this.rxPause?.dex?.close();
     this.rxPause = null;
     this.busy = false;
     this.rxView?.refresh();
@@ -410,6 +421,7 @@ export class MapScene extends Phaser.Scene {
   private pauseInput(action: InputAction): void {
     const p = this.rxPause;
     if (!p) return;
+    if (p.dex) return p.dex.input(action);
     if (p.card) {
       // The Trainer card: any of Enter and Esc goes back to the pause menu.
       if (action === 'back' || action === 'confirm') this.pauseCard(false);
@@ -434,9 +446,16 @@ export class MapScene extends Phaser.Scene {
   private pausePick(k: number): void {
     const p = this.rxPause;
     if (!p) return;
-    if (p.ask !== null || p.card) return;
+    if (p.ask !== null || p.card || p.dex) return;
     const name = this.pauseRows()[k];
     if (!name || name === 'Resume') return this.pauseClose();
+    if (name === 'Pokédex') {
+      // The Pokédex of the pause menu (Phantom UI): it opens on the lead's page of its set and comes back to this word.
+      p.index = k;
+      p.dex = new PhantomDex(this, () => this.rxView?.refresh(), () => { p.dex = null; this.rxView?.refresh(); }, services().session.run?.party[0]?.speciesId);
+      this.rxView?.refresh();
+      return;
+    }
     if (name === 'Trainer card') {
       p.index = k;
       return this.pauseCard(true);
@@ -498,6 +517,7 @@ export class MapScene extends Phaser.Scene {
     const rows = this.pauseRows();
     const note = rows[p.index] === 'End run' && !can ? 'Only an Adventure run can be ended here. Use Save to leave this one.' : '';
     const stage = model.chips.find((x) => /^Stage\s+\d+/i.test(x));
+    if (p.dex) return p.dex.html(ph);
     if (p.card) return this.cardPhantom(ph, stage ?? '');
     const facts = model.chips.filter((x) => /^(₽|Badges\b|Level cap\b)/i.test(x)).map(dockFact);
     const html = phPause(ph, { options: rows.map((label) => ({ label, off: label === 'End run' && !can })), index: p.index, note, where: [stage, model.title.split(' · ')[0]].filter(Boolean).join(' · '), facts, party: model.party });
@@ -542,6 +562,7 @@ export class MapScene extends Phaser.Scene {
     const { session } = services();
     const run = session.run;
     if (!p || !run) return;
+    if (p.kind === 'phone') return this.phoneInput(p, action);
     if (action === 'back' || action === 'confirm') return this.popClose();
     const d = action === 'right' || action === 'down' ? 1 : -1;
     const side = action === 'left' || action === 'right';
@@ -596,11 +617,114 @@ export class MapScene extends Phaser.Scene {
     this.rxView?.refresh();
   }
 
+  // ---- Phantom UI: the Rotom Phone (mock-up `phone`): this run read back as chats; a reply opens a page or is only talk ----
+
+  /** The chats of this run: the rivals, the people who spoke to you, then Rotom. */
+  private phoneList(): PhoneChat[] {
+    const { session } = services();
+    const run = session.run!, content = session.content;
+    const stage = this.rxModel?.chips.find((x) => /^Stage\s+\d+/i.test(x));
+    const where = [stage, currentRegion(content, run).name].filter(Boolean).join(' · ');
+    return phoneChats({
+      facts: { where, levelCap: runLevelCap(content, run), party: run.party.map((m) => ({ name: displayName(content, m), hp: m.hp, max: maxHp(content, m) })) },
+      rivals: rivalReport(run),
+      log: interactionLog.backlog(),
+      book: phoneBook,
+    });
+  }
+
+  /** The chat the phone opens on: the first one with something new, else Rotom. */
+  private phoneFirst(): number {
+    const chats = this.phoneList();
+    const fresh = chats.findIndex((c) => c.unread > 0);
+    return fresh >= 0 ? fresh : Math.max(0, chats.length - 1);
+  }
+
+  /** A face for a chat: a rival's own picture, a person's Trainer sprite when the game has one for the name. */
+  private phoneArt(chat: PhoneChat): Art | null {
+    if (chat.kind === 'rotom') return null;
+    if (chat.kind === 'rival') return rivalArt(this, services().session.run!.story.rivals.find((r) => `rival:${r.id}` === chat.id));
+    for (const word of [chat.name, ...chat.name.split(/\s+/).reverse()]) {
+      const id = castSpriteId(word);
+      if (id) return artOf(this, id);
+    }
+    return null;
+  }
+
+  private phoneChat(to: number): void {
+    const p = this.rxPop;
+    if (p?.kind !== 'phone') return;
+    const n = this.phoneList().length;
+    const k = ((to % n) + n) % n;
+    if (k === p.chat) return;
+    p.chat = k;
+    p.reply = 0;
+    playSfx(this, 'ui.select', 0.4);
+    this.rxView?.refresh();
+  }
+
+  /** A reply: a line of talk is kept beside the chat; a door closes the phone and opens that page. */
+  private phoneReply(i: number): void {
+    const p = this.rxPop;
+    if (p?.kind !== 'phone') return;
+    const chat = this.phoneList()[p.chat], r = chat?.replies[i];
+    if (!chat || !r) return;
+    p.reply = i;
+    if (r.go === 'send') {
+      playSfx(this, phoneBook.send(chat.id, r.label) ? 'ui.confirm' : 'ui.error', 0.4);
+      return void this.rxView?.refresh();
+    }
+    playSfx(this, 'ui.confirm', 0.4);
+    if (r.go === 'rivals') {
+      const at = rivalReport(services().session.run!).findIndex((x) => `rival:${x.id}` === chat.id);
+      this.rxPop = { kind: 'report', pick: Math.max(0, at) };
+      this.rxPopAt = this.time.now;
+      return void this.rxView?.refresh();
+    }
+    this.popClose();
+    if (r.go === 'log') openLog();
+    else if (r.go === 'party') openPokemonMenu(this.fieldHost());
+    else { this.pauseOpen(); this.pausePick(MapScene.PAUSE_PH.indexOf('Pokédex')); }
+  }
+
+  private phoneInput(p: Extract<MapPop, { kind: 'phone' }>, action: InputAction): void {
+    if (action === 'back') return this.popClose();
+    if (action === 'confirm') return this.phoneReply(p.reply);
+    if (action === 'left' || action === 'right') return this.phoneChat(p.chat + (action === 'right' ? 1 : -1));
+    const n = this.phoneList()[p.chat]?.replies.length ?? 0;
+    if (n < 2) return;
+    p.reply = (p.reply + (action === 'down' ? 1 : n - 1)) % n;
+    playSfx(this, 'ui.select', 0.3);
+    this.rxView?.refresh();
+  }
+
+  private phoneView(ph: PhantomVersion, p: Extract<MapPop, { kind: 'phone' }>): string {
+    const { session } = services();
+    const chats = this.phoneList();
+    p.chat = Math.max(0, Math.min(chats.length - 1, p.chat));
+    const on = chats[p.chat]!;
+    p.reply = Math.max(0, Math.min(on.replies.length - 1, p.reply));
+    // What is on the page has been read.
+    phoneBook.markRead(on.id, on.heard);
+    const stage = this.rxModel?.chips.find((x) => /^Stage\s+\d+/i.test(x));
+    return phPhone(ph, {
+      where: [stage, currentRegion(session.content, session.run!).name].filter(Boolean).join(' · '),
+      chats: chats.map((c, i) => ({ name: c.name, last: c.last, unread: i === p.chat ? 0 : c.unread, art: this.phoneArt(c), rotom: c.kind === 'rotom' })),
+      chat: p.chat,
+      msgs: on.msgs,
+      replies: on.replies,
+      reply: p.reply,
+      me: artOf(this, session.content.archetypes.get(session.run!.archetypeId)?.spriteAssetId) ?? null,
+      rotom: monFile(this, 'rotom', 'front'),
+    });
+  }
+
   /** Draws the open New UI pop-up from the same core views the old canvas pop-ups read. */
   private popView(c: ReduxCtx, p: MapPop): string {
     const { session } = services();
     const run = session.run!;
     const content = session.content;
+    if (p.kind === 'phone') return c.ph ? this.phoneView(c.ph, p) : '';
     const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
     if (p.kind === 'report') {
       const rows = rivalReport(run);
@@ -800,6 +924,7 @@ export class MapScene extends Phaser.Scene {
     const known = session.profile.nook?.nodeNames ?? {};
     for (const n of run.stage?.map.nodes ?? []) if (!n.name && known[stageKey(n.id)]) n.name = known[stageKey(n.id)];
     const doCry = (): void => {
+      if (this.rxPause?.dex) return; // C belongs to the Pokédex while it is open
       const names = habitatList(content, run);
       if (names.length === 0) return;
       const pick = names[Math.floor(Math.random() * names.length)]!; // presentation only, never gameplay RNG
@@ -1390,6 +1515,7 @@ export class MapScene extends Phaser.Scene {
     this.rxBanner = null;
     this.rxLegend = null;
     this.rxPop = null;
+    this.rxForm = null;
     this.rxPause = null;
     this.rxWheel = null;
     this.rxMenu = null;
@@ -1397,6 +1523,7 @@ export class MapScene extends Phaser.Scene {
     this.rxWatching = false;
     // The run log (the Phantom Log page) belongs to this run, and opens each stage with a heading.
     interactionLog.scope(`${run.seed}#${session.profile.stats.runsStarted}`);
+    phoneBook.scope(`${run.seed}#${session.profile.stats.runsStarted}`);
     interactionLog.tell('stage', league ? `${region.name} Pokémon League` : stage.pseudo ? stage.pseudo.name : blindMap(run.rules) ? region.name : `${region.name} · ${theme.name}`, `Stage ${stage.index + 1}`);
     if (reduxOn() && !mapSkin) {
       const manifest = this.cache.json.get('manifest') as AssetManifest | undefined;
@@ -1426,6 +1553,7 @@ export class MapScene extends Phaser.Scene {
           const model: MapModel = { ...this.rxModel!, index: this.index, info: this.info?.text ?? '', notice: this.notice?.text ?? '', going: this.rxGoing, banner: this.rxBanner, legend: this.rxLegend, card: this.rxCardOf() };
           if (!c.ph) return mapView(c, model) + this.pauseHtml() + (this.rxMenu ? nodeMenuView(this.rxMenu) : '');
           // Phantom: the pause menu is a page of its own; the node menu stands over the map.
+          if (this.rxForm) return this.formPhantom(c.ph, model.art);
           if (this.rxPause) return this.pausePhantom(c.ph, model);
           if (this.rxWheel) return phInto(phMap(c.ph, model), phWheel({ items: this.wheelItems(), index: this.rxWheel.index, held: this.rxWheel.held, spin: this.rxWheel.spin }));
           return phInto(phMap(c.ph, model), this.rxMenu ? phNodeMenu(this.rxMenu) : '');
@@ -1441,14 +1569,20 @@ export class MapScene extends Phaser.Scene {
           menu: (k) => this.menuPick(Number(k)),
           confirm: (k) => this.pauseAsk(Number(k)),
           pauseCard: () => this.pauseCard(false),
+          form: (i) => this.rxForm?.pick(Number(i)),
+          dexPick: (i) => this.rxPause?.dex?.pick(Number(i)),
+          dexGo: (name) => this.rxPause?.dex?.go(String(name)),
+          dexType: (i) => this.rxPause?.dex?.pickType(Number(i)),
           wheel: (k) => this.wheelPick(Number(k)),
           popTab: (i) => this.popPick('tab', Number(i)),
+          phoneChat: (i) => this.phoneChat(Number(i)),
+          phoneReply: (i) => this.phoneReply(Number(i)),
           popPick: (i) => this.popPick('pick', Number(i)),
           bracket: () => this.popClose(),
           bracketPage: (i) => { if (this.rxPop?.kind === 'bracket') { this.rxPop.page = Math.max(0, Math.min(4, Number(i) || 0)); this.rxView?.refresh(); } },
           bracketWatch: () => this.watchLast(),
         },
-        overs: { wheelOver: (i) => this.wheelPoint(Number(i)), menuOver: (i) => this.menuFocus(Number(i)), over: (i) => { if (!this.busy && !this.picker && Number(i) !== this.index) this.focus(Number(i)); }, popOver: (i) => this.popPick('pick', Number(i)), pauseOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask === null && k >= 0 && k !== p.index) { p.index = k; this.rxView?.refresh(); } }, confirmOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask !== null && (k === 0 || k === 1) && k !== p.ask) { p.ask = k; this.rxView?.refresh(); } } },
+        overs: { phoneOver: (i) => { const p = this.rxPop, k = Number(i); if (p?.kind === 'phone' && k >= 0 && k !== p.reply) { p.reply = k; this.rxView?.refresh(); } }, formOver: (i) => { const f = this.rxForm; if (f && Number(i) !== f.index) { f.index = Number(i); this.rxView?.refresh(); } }, dexOver: (i) => this.rxPause?.dex?.over(Number(i)), wheelOver: (i) => this.wheelPoint(Number(i)), menuOver: (i) => this.menuFocus(Number(i)), over: (i) => { if (!this.busy && !this.picker && Number(i) !== this.index) this.focus(Number(i)); }, popOver: (i) => this.popPick('pick', Number(i)), pauseOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask === null && k >= 0 && k !== p.index) { p.index = k; this.rxView?.refresh(); } }, confirmOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask !== null && (k === 0 || k === 1) && k !== p.ask) { p.ask = k; this.rxView?.refresh(); } } },
         // Resting the pointer on a party Pokémon shows its Ability card (the mock-ups' Pokémon info card).
         tip: hoverTips((key) => { if (this.rxPop) return; this.rxCard = key; this.rxView?.refresh(); }),
       });
@@ -1460,6 +1594,9 @@ export class MapScene extends Phaser.Scene {
         const tabUp = (e: KeyboardEvent): void => this.wheelRelease(e.timeStamp);
         const lost = (): void => this.wheelClose(false);
         kb?.addCapture('TAB');
+        // The Rotom Phone: Q and E turn the chat.
+        kb?.on('keydown-Q', () => { if (this.rxPop?.kind === 'phone' && !runLogOpen()) this.phoneChat(this.rxPop.chat - 1); });
+        kb?.on('keydown-E', () => { if (this.rxPop?.kind === 'phone' && !runLogOpen()) this.phoneChat(this.rxPop.chat + 1); });
         kb?.on('keydown-TAB', tabDown);
         kb?.on('keyup-TAB', tabUp);
         window.addEventListener('blur', lost);
@@ -1620,6 +1757,24 @@ export class MapScene extends Phaser.Scene {
       const note = session.answerRegionForm(offer.uid, target);
       this.scene.restart({ notice: note, focus: this.index });
     };
+    if (this.rxView && phantomOn()) {
+      // Phantom UI: the offer is the mock-ups' Regional forms page; the answers and what they do are the same.
+      const n = offer.targets.length + 1;
+      const form = { offer, index: 0, pick: (i: number): void => { if (i >= 0 && i < n) answer(offer.targets[i] ?? null); } };
+      this.rxForm = form;
+      this.picker = {
+        handle: (action) => {
+          if (action === 'back') return answer(null);
+          if (action === 'confirm') return form.pick(form.index);
+          form.index = (form.index + (action === 'left' || action === 'up' ? n - 1 : 1)) % n;
+          playSfx(this, 'ui.cursor', 0.5);
+          this.rxView?.refresh();
+        },
+        close: () => { this.rxForm = null; },
+      };
+      this.rxView.refresh();
+      return;
+    }
     const rows = [...offer.targets.map((t) => row(`Yes: become ${name(t)}`, 'Free. Swap back any time at Camp > Form shift (a Moon Stone).')), row('Not now', `${name(offer.speciesId)} stays as it is.`)];
     const picker: Picker = new Picker(this, {
       glass: true,
@@ -1631,6 +1786,26 @@ export class MapScene extends Phaser.Scene {
       onBack: () => answer(null),
     });
     this.picker = picker;
+  }
+
+  /** The Phantom Regional forms page for the offer that is open. */
+  private formPhantom(ph: PhantomVersion, art: string | null): string {
+    const { session } = services();
+    const f = this.rxForm!, content = session.content, run = session.run!;
+    const sp = (id: string) => content.species.get(id);
+    const name = (id: string): string => sp(id)?.name ?? id;
+    const region = content.regions.get(run.regionOrder[run.regionIndex] ?? '')?.name ?? 'this region';
+    return phForms(ph, {
+      region,
+      name: name(f.offer.speciesId),
+      prompt: regionFormPrompt(content, run, f.offer),
+      from: { file: monFile(this, f.offer.speciesId, 'front'), types: sp(f.offer.speciesId)?.types ?? [] },
+      targets: f.offer.targets.map((t) => ({ name: name(t), file: monFile(this, t, 'front'), types: sp(t)?.types ?? [] })),
+      options: [...f.offer.targets.map((t) => ({ label: `Yes: become ${name(t)}`, small: 'Free. Swap back any time at Camp > Form shift (a Moon Stone).' })), { label: 'Not now', small: `${name(f.offer.speciesId)} stays as it is.` }],
+      index: f.index,
+      backdrop: art,
+      more: Math.max(0, session.regionFormOffers().length - 1),
+    });
   }
 
   /** The gym leader, Elite Four member or champion waiting at a node (null for other nodes). */

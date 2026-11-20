@@ -17,6 +17,8 @@ export interface DexModel {
   line: (string | null)[];
   /** A backdrop behind the picture in the second layout (plain image file), if the room has one. */
   backdrop?: string | null;
+  /** Phantom UI: the entry is a page of the pause menu's Pokédex (other keys: next entry, cry, type chart). */
+  book?: boolean;
 }
 
 /** A base stat as a bar: 160 fills it, as in the mock-up. */

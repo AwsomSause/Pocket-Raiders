@@ -4,6 +4,9 @@
 /* ---- the layer: a 1280 x 720 stage scaled onto the 960 x 540 game ---- */
 .phx{position:fixed;left:0;top:0;width:0;height:0;z-index:40;pointer-events:none}
 .phx .phs{pointer-events:auto;transform:scale(calc(var(--s,.35)*.75))}
+/* A page never scrolls as a whole: its backdrop is far bigger than the page (the turning burst), and a "scroll into
+   view" from the browser (find on page, a focus move, a test's click) would slide every part off the screen. */
+.phx .phs,.phx .phs .scr{overflow:clip}
 .phx .phs.clear{background:none;pointer-events:none}
 .phx .phs.clear [data-act],.phx .phs.clear .hit{pointer-events:auto}
 .phx [data-act]{cursor:pointer}

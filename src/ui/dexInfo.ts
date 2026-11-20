@@ -25,7 +25,7 @@ export class DexInfo {
   /** The New UI's picture of the page (the mock-ups' `dex` page); the canvas page is not drawn then. */
   private rx: ReduxView | null = null;
 
-  constructor(private readonly scene: Phaser.Scene, content: Content, profile: Profile, speciesId: string, private readonly onClose: () => void) {
+  constructor(private readonly scene: Phaser.Scene, content: Content, profile: Profile, speciesId: string, private readonly onClose: () => void, overCard = false) {
     const page = dexPage(content, profile, speciesId);
     this.root = scene.add.container(0, 0).setDepth(120).setName('dex-info');
     if (reduxOn()) {
@@ -34,6 +34,8 @@ export class DexInfo {
       this.rx = mountRedux(scene, {
         render: (c) => dexView(c, { card, data, page: this.pageNo as 0 | 1, art, line }),
         acts: { back: () => this.close(), flip: () => this.flip() },
+        // Opened over a full-screen card (a battle's wild card), it is one too, so it lies on top.
+        card: overCard,
       });
       this.draw = () => this.rx?.refresh();
       return;

@@ -67,8 +67,9 @@ test('Phantom UI: the run card at a run’s end shows the run and saves as a pic
   });
   await waitForScene(page, 'GameOver');
   await page.waitForTimeout(600);
-  // The run end itself is still the stand-in page; its "Run card" button opens the Phantom card.
-  await page.locator('#rx .stage[data-scene="GameOver"] [data-act="pick"]', { hasText: 'Run card' }).click();
+  // The run end is the Phantom run-over page; its "Run card" blade opens the Phantom card.
+  await onPage(page, 'GameOver', 'runover');
+  await pview(page, 'GameOver', 'runover').locator('[data-act="pick"]', { hasText: 'Run card' }).click();
   await onPage(page, 'GameOver', 'card');
   const card = pview(page, 'GameOver', 'card');
   for (const t of ['Run card', 'Run end', 'Loss', 'Result', 'Seed', 'phantom-card', 'Final team', 'Save as picture', 'Press Enter to save']) await expect(card).toContainText(t, { ignoreCase: true });
@@ -84,7 +85,8 @@ test('Phantom UI: the run card at a run’s end shows the run and saves as a pic
   await expect(card.locator('.ph-tc-note p')).toHaveText(/Saved as a PNG|could not be saved/);
   await page.keyboard.press('Escape');
   await expect(page.locator('#phx .phs[data-scene="GameOver"][data-scr="card"]')).toHaveCount(0);
-  await expect(page.locator('#rx .stage[data-scene="GameOver"]')).toContainText('RUN OVER');
+  await onPage(page, 'GameOver', 'runover');
+  await expect(pview(page, 'GameOver', 'runover').locator('.ro-t')).toContainText('The run', { ignoreCase: true });
   expect(errors).toEqual([]);
 });
 

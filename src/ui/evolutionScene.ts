@@ -17,6 +17,7 @@ import { playCry, playCue, playSfxLazy } from './audio';
 import { loadAssets, pokemonArtIds } from './lazyAssets';
 import { monFile } from './redux/game';
 import { esc, foot, mon, TX } from './redux/kit';
+import { phEvolve } from './phantom/screens/battle';
 import { mountRedux, reduxOn } from './redux/stage';
 import { pokemonVisual, type Visual } from './sprites';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, textStyle } from './theme';
@@ -317,10 +318,14 @@ function playCanvas(scene: Phaser.Scene, show: EvolutionShow, lines: ReturnType<
 function playCard(scene: Phaser.Scene, show: EvolutionShow, lines: ReturnType<typeof evolutionLines>, tl: EvoTimeline, flash: number): Promise<void> {
   const files = { from: monFile(scene, show.from, 'front', !!show.shiny), to: monFile(scene, show.to, 'front', !!show.shiny) };
   const st = { text: '', which: 'from' as 'from' | 'to', sil: false, flicker: false, revealed: false };
+  let tap: (() => void) | null = null;
   const view = mountRedux(scene, {
     card: true,
-    render: () => {
+    acts: { next: () => tap?.() },
+    render: (c) => {
       const f = files[st.which];
+      // Phantom: the mock-ups' evolve page (the same beats; a click anywhere moves on).
+      if (c.ph) return phEvolve({ from: f, to: files.to, done: st.revealed, sil: st.sil, tap: true }, st.text);
       const pic = f ? mon(f, 3.4, st.sil ? 'evo-w' : '', !st.sil) : '';
       return (
         '<div class="fill" style="background:radial-gradient(circle at 50% 46%,var(--p2),#000 70%)"></div>' +
@@ -355,8 +360,9 @@ function playCard(scene: Phaser.Scene, show: EvolutionShow, lines: ReturnType<ty
       close: () => view.destroy(),
     },
     (fn) => {
+      tap = fn;
       view.el.addEventListener('click', fn);
-      return () => view.el.removeEventListener('click', fn);
+      return () => { tap = null; view.el.removeEventListener('click', fn); };
     },
   );
 }
