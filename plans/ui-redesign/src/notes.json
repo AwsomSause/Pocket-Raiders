@@ -541,5 +541,23 @@
   "q3": "Yes, seven: a raid lobby where everyone readies up, a turn-order page, the shield-break moment, and a both-sides page for the Totem, the Gym, the evil team and the expedition.",
   "q4": "Unchanged. The line-up pages open with one key from the battle and close straight back to it.",
   "q5": "Yes. Line-up boards before a stadium match and a row of Poké Balls for each side are how the series has always shown a team."
+ },
+ "33": {
+  "name": "New areas 7 · Home Ground",
+  "label": "New areas · pass 7 of 25",
+  "big": "Each area now owns the ground it stands on. Patterned side rails frame the screen: hex plates for raids, a zigzag weave for Totems, stadium chevrons for Galar, map contours for expeditions and hazard stripes for the evil team. The FIGHT button wears the area's colours, the Totem stands in a ring of torches, the Galar pitch has its painted lines, and the expedition map is split into five labelled layers.",
+  "pages": [
+   "Totem · The Aura",
+   "Totem · Phase Two",
+   "Totem · Tiers",
+   "Totem · The Totem Stands",
+   "Raid · Out of Turns",
+   "Expedition · Failed"
+  ],
+  "q1": "Yes. Torches, pitch lines and patterned rails make each place feel built, not just tinted.",
+  "q2": "Pass 6 showed who is there. This pass shows where you are: you can tell the area from the edge of the screen alone, before reading a word.",
+  "q3": "Yes, six. Three finish the Totem (what its aura does, its second phase, its tiers), and three cover losing, which had no pages at all: the Totem stands, the raid clock runs out, the expedition fails.",
+  "q4": "Unchanged.",
+  "q5": "Yes. Losing a Totem trial or a raid and walking away to try again is exactly how those fights work in the series."
  }
 }
