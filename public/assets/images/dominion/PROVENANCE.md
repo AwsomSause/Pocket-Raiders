@@ -73,3 +73,12 @@ Copied from the round-4 mockups (`plans/evil-mode-rework/mockups-v4/sprites/`), 
 | `v-nate.png` | D13: the Boss's side of the Debate (mockup 8). Copied from the round-4 mockup sprites (`plans/evil-mode-rework/mockups-v4/sprites/`, trimmed from the director's PokeRogue pack VS art) |
 | `v-giovanni.png` | D13: Giovanni's side of the Debate (mockup 8), same source |
 | `p-persian.png` | D13: Giovanni's Persian at the Debate table (mockup 8), Pokémon sprite from the PokeRogue pack via the round-4 mockup sprites |
+
+## Slice D21 (the applications desk, Rotom mockup k5)
+
+Copied from the round-4 mockups (`plans/evil-mode-rework/mockups-v4/sprites/`, PR #1496), which cut them from art already in this repo (director's packs: PokeRogue, AGPL-3.0, Nintendo material):
+
+| File | From |
+| --- | --- |
+| `t-applicant.png`, `t-hex.png`, `t-biker.png`, `t-backpacker.png` | Trainer sprites from `images/trainer/pr/` (PokeRogue pack), first frame; the applicant's stand-in and the queue in the rain |
+| `g-idcard.png`, `g-badgecard.png` | Item icons from `images/items/` (PokeRogue pack), re-saved at the mockup's size |

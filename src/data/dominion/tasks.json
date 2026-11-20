@@ -158,7 +158,7 @@
    ],
    "risk": "Meets the Hero",
    "status": "limited",
-   "note": "Rival jobs losing odds there wait for the rival team (D9); meeting the Hero waits for D11.",
+   "note": "Rival jobs losing odds there wait for the rival team (D9).",
    "effect": {
     "kind": "district",
     "does": "patrol",
@@ -1083,8 +1083,13 @@
     "three days ahead"
    ],
    "risk": "Spotted",
-   "status": "disabled",
-   "needs": "D11"
+   "status": "supported",
+   "effect": {
+    "kind": "hero",
+    "does": "track",
+    "heat": 1,
+    "risky": true
+   }
   },
   {
    "n": 46,
@@ -1933,7 +1938,7 @@
    ],
    "risk": "Hurt",
    "status": "disabled",
-   "needs": "D11"
+   "needs": "D15"
   },
   {
    "n": 85,
@@ -2681,8 +2686,13 @@
     "the Hero is a hypocrite"
    ],
    "risk": "Backfires",
-   "status": "disabled",
-   "needs": "D11"
+   "status": "supported",
+   "effect": {
+    "kind": "hero",
+    "does": "counter",
+    "heat": 0,
+    "risky": true
+   }
   },
   {
    "n": 119,
@@ -3272,8 +3282,13 @@
     "the Hero must duel"
    ],
    "risk": "Hurt",
-   "status": "disabled",
-   "needs": "D11"
+   "status": "supported",
+   "effect": {
+    "kind": "hero",
+    "does": "hunt",
+    "heat": 2,
+    "risky": true
+   }
   },
   {
    "n": 146,
