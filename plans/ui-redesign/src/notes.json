@@ -650,5 +650,25 @@
   "q3": "Seven new pages: the desk's four pages (Run Setup, Trainer, Modifiers, Overview), the seed page, the region briefing and the name page. Each has one job, so none of them needs small print.",
   "q4": "The desk is the run's own settings page: the same rows and switches as Settings, with the four pages as tabs down the left. Esc always goes back to the street, and presets save and load from the Overview.",
   "q5": "Yes. Professor Oak asks your name, a region briefing shows the first Gym Leader, and the seed tiles look like the name-entry tiles from the old games."
+ },
+ "39": {
+  "name": "New areas 13 · Home Streets",
+  "label": "New areas · pass 13 of 25",
+  "big": "The places between runs, and a name plate made of each area's own material",
+  "pages": [
+   "pt-town",
+   "pt-door",
+   "pt-map",
+   "pt-plaza",
+   "pt-trade",
+   "pt-tools",
+   "pt-memories",
+   "pt-gallery"
+  ],
+  "q1": "Pocket Town is a real street with four whole buildings and your Pokémon walking beside you. The Trade Post is two big cards and one arrow, so the swap is the whole picture.",
+  "q2": "Pass 12 hung the status tab from the name plate, but every area still used the same navy plate. Now the plate itself tells you where you are: pink crystal for raids, a carved plank for Totems, a dotted scoreboard for Galar, a paper trail tag for expeditions, black steel with a red edge for evil teams. No part was added.",
+  "q3": "Eight new pages: Pocket Town's street, the door card, the town map, the Trainer Plaza, a Trade Post offer, the Tools room, Memories and a Legacy Gallery run. Walking up to a door opens its own card instead of squeezing a description onto the street.",
+  "q4": "Tools is the Hub's back office: eight plain tiles next to Settings, with a line saying none of them changes a run. M opens the town map from anywhere in Pocket Town and Esc always walks back to the Hub.",
+  "q5": "Yes. You walk a town with a partner Pokémon behind you, press one key at a door and trade over a counter, the way towns work in the handheld games."
  }
 }
