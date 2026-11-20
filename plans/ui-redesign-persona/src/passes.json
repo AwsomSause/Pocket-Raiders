@@ -249,5 +249,92 @@
    "m": "The wheel is the menu when you are in a hurry, and the pause hub is the menu when you are not. Settings is on both, and the trail strip always shows the way back to it.",
    "k": "The Reserve is the PC Box by another name, with the same grid of sprites, and the wheel uses plain Pokémon words: Party, Bag, Pokédex, Save."
   }
+ },
+ {
+  "n": 16,
+  "name": "The fight gets a cast",
+  "change": "Until now a battle simply began. Now it is introduced. A Versus page splits the screen down a slanted line with your trainer on one side and the rival on the other, their Poké Balls counted out and the stakes written underneath. One press opens a scouting page that shows what you have seen of their team this run, and nothing you have not. When a trainer sends out their ace it is announced with its own cut-in, the trainer's eyes across the screen and an ACE star, so the ace rule is impossible to miss. Bosses get a title card that lists the gimmicks they carry.",
+  "pages": [
+   "Versus",
+   "Scout the team",
+   "Ace announcement",
+   "Boss title card"
+  ],
+  "q": {
+   "x": "Yes. The Versus slam and the ace cut-in are the loudest things in the game so far: the screen tears in two, the letters land with a thud, and a star spins in.",
+   "b": "Interval 3 added calm pages around the battle. This pass adds drama in front of it, so a rival or a Champion feels like an event before a single move is chosen.",
+   "p": "Four new pages. Scouting is its own page so the Versus page stays a poster, and the ace gets a page to itself because the rule says it must be announced.",
+   "m": "The pause menu and the quick wheel are closed while these play, since they last a second or two. Settings › Battle already has an Ace announcement switch and a cut-in length setting that these pages obey.",
+   "k": "Poké Balls count the teams exactly as the old games did, the foes are canon (Silver with Sneasel and Gengar, Lance with his dragons), and the wording is plain trainer talk."
+  }
+ },
+ {
+  "n": 17,
+  "name": "The command screen reads the fight",
+  "change": "The battle screen itself is rebuilt. Commands no longer sit in a burst in the middle; they fan out in an arc around your own Pokémon, the way Persona hangs its menu on the hero, and the chosen one grows. A turn ribbon across the top shows who moves next. The foe panel now shows what you actually know: status, stat changes and the types it is weak to. Moves moved onto a four-way cross, one press each, beside a target card that previews how much HP the move should take. Two new pages hold the detail so the main screen stays clean: Battle info and the Battle log.",
+  "pages": [
+   "Battle info",
+   "Battle log"
+  ],
+  "q": {
+   "x": "The fan springs open plate by plate and the damage preview pulses on the foe's HP bar. It is flashier and it tells you more at the same time.",
+   "b": "Pass 16 dressed up the start of a fight. This pass changes the part you look at most: fewer presses to pick a move, and the answers to “who goes first” and “will this hurt” are on screen before you ask.",
+   "p": "Two new pages. Stat stages, weather and hazards went to Battle info, and the turn-by-turn record went to Battle log, instead of being squeezed around the arena.",
+   "m": "Pause and the quick wheel still open from here. Settings › Battle decides whether the damage preview and weakness icons show, for players who want the old guessing game.",
+   "k": "Fight, Pokémon, Bag and Run are all still there in the classic order, with type icons, PP and status tags like PAR exactly as the series writes them."
+  }
+ },
+ {
+  "n": 18,
+  "name": "Four gimmicks, four different shows",
+  "change": "Mega Evolution had a cut-in since pass 5 and the other three gimmicks had nothing. Now each has its own show, built so you could tell them apart with the sound off. Terastallize fills the screen with moving prism light, crowns the Pokémon and spells its name in cut gems. Dynamax makes the Pokémon tower out of frame over a tiny foe while the letters stack up the side like a building. The Z-Move is a gold flare with a huge Z and the trainer in silhouette. Because a battle allows only one, a new Gimmick page deals the four as cards and says which are ready.",
+  "pages": [
+   "Choose a gimmick",
+   "Terastallize cut-in",
+   "Dynamax cut-in",
+   "Z-Move cut-in"
+  ],
+  "q": {
+   "x": "By a long way. These are the most over-the-top pages in the set, and each one has its own colours and its own kind of lettering instead of sharing one template.",
+   "b": "Pass 17 was about reading the fight calmly. This is the opposite: the reward for pressing the big button. It also fixes a gap, since three of the four gimmicks had no page at all.",
+   "p": "Four new pages. The chooser keeps a four-way decision off the command screen, where it would have meant four extra buttons.",
+   "m": "Settings › Battle has a Gimmick cut-ins row (every time, first time each battle, off). With cut-ins off the battle shows a one-line banner instead, so nothing here is forced on anyone.",
+   "k": "These are the series' own four gimmicks with their own icons from the game files, the Tera crown, the Dynamax turn count and Max Moves, and a real Z-Move name."
+  }
+ },
+ {
+  "n": 19,
+  "name": "Every fight gets an ending",
+  "change": "Battles had a start and a middle but only one way to end: You Win. Now the ending depends on what happened. A knockout gets its own splash in the Persona finishing-blow style, with the winner posed large and the loser tipped over. A boss who is nearly beaten gets a Last Stand page, two shutters closing on the screen with a phase meter between them. Losing to a rival shows Not Over, which says in plain words that the run goes on. And when a run really does end, the Run Over page is quiet instead of loud: the road you travelled, your best Pokémon, and what you keep.",
+  "pages": [
+   "Knockout splash",
+   "Boss last stand",
+   "Rival loss",
+   "Run over"
+  ],
+  "q": {
+   "x": "The knockout and Last Stand pages are as loud as anything so far. Run Over is deliberately the opposite, and the contrast makes both land harder.",
+   "b": "Passes 16 to 18 built the fight up. This one pays it off, and it closes two gaps: nothing told you a rival loss was safe, and nothing marked the end of a run.",
+   "p": "Four new pages. Each is a moment that used to be a single line of text in the battle box.",
+   "m": "Run Over is the one place where the menu is the page: New run, Back to Hub Town, Look back at the run. Settings stays reachable from Hub Town a press later.",
+   "k": "A fainted Pokémon tips over the way it always has, the rival is still rude about winning, and what you keep is counted in Pokédex pages and Remembrances."
+  }
+ },
+ {
+  "n": 20,
+  "name": "The joins between pages",
+  "change": "Since pass 5 every page change used the same slanted sweep. With 60 pages that became wallpaper, so now the join tells you what kind of thing is happening. Going into a fight slashes the screen open. Cut-ins and big moments open from the middle like a flashbulb. Menus drop in over a dimmed game. Moving to a new place pushes the old one away. Pages inside one menu keep the quick sweep. Two missing beats at the start of a battle were added: a wild Pokémon bursting out of the grass, and both sides sending out. A Page changes page in Settings shows all of the joins looping side by side.",
+  "pages": [
+   "Wild Pokémon appears",
+   "Send out",
+   "Page changes"
+  ],
+  "q": {
+   "x": "Yes, and this one is felt more than seen: click from the map into a fight and the whole screen tears open, where before it only slid.",
+   "b": "Passes 16 to 19 made single pages louder. This pass works on the gaps between them, which is what makes 60 separate pages feel like one moving game.",
+   "p": "Three new pages. The wild entrance and the send-out used to be one line of text each, and the joins get a page of their own so they can be judged without hunting for them.",
+   "m": "Menus have their own join (the drop), so opening Pause or Settings never looks like starting a battle. The Page changes page lives in Settings › Look beside Motion, with Full, Reduced and Off.",
+   "k": "A wild Pokémon appearing out of tall grass with a “!” and a thrown Poké Ball opening are the two oldest animations in the series. They are both here, just drawn in this style."
+  }
  }
 ]
