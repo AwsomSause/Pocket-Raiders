@@ -70,4 +70,24 @@ describe('key queue: each key event reaches a scene once', () => {
     one.update();
     expect(log).toEqual(['a:KeyT', 'b:KeyT', 'b:Enter', 'a:Enter']);
   });
+
+  it('a scene not running yet marks nothing seen, so it reads the keys once it runs; two real presses both count', () => {
+    const log: string[] = [];
+    const proto = {
+      update(this: any) {
+        if (!this.isActive()) return;
+        for (const e of this.manager.queue) log.push(e.code);
+      },
+    };
+    patchKeyQueue(proto);
+    const manager = { queue: [ev('keydown', 'Enter')] as any[] };
+    let on = false;
+    const kb = Object.assign(Object.create(proto), { manager, isActive: () => on });
+    kb.update();
+    on = true;
+    kb.update();
+    manager.queue.push(ev('keydown', 'Enter')); // a second, separate press of the same key
+    kb.update();
+    expect(log).toEqual(['Enter', 'Enter']);
+  });
 });

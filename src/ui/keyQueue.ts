@@ -11,7 +11,7 @@ export function freshKeyEvents<T extends object>(queue: readonly T[], seen: Weak
   return fresh;
 }
 
-type Plugin = { manager?: { queue: KeyboardEvent[] } | null; update: () => void; __seen?: WeakSet<KeyboardEvent> };
+type Plugin = { manager?: { queue: KeyboardEvent[] } | null; update: () => void; isActive?: () => boolean; __seen?: WeakSet<KeyboardEvent> };
 
 /** Wraps the keyboard plugin's update so that each event reaches a scene once. */
 export function patchKeyQueue(proto: { update: () => void }): void {
@@ -21,7 +21,8 @@ export function patchKeyQueue(proto: { update: () => void }): void {
   const update = p.update;
   p.update = function (this: Plugin) {
     const m = this.manager;
-    if (!m || !m.queue.length) return update.call(this);
+    // A scene that isn't running yet reads nothing, so nothing is marked seen for it (it reads the queue once it runs).
+    if (!m || !m.queue.length || (this.isActive && !this.isActive())) return update.call(this);
     const all = m.queue;
     const fresh = freshKeyEvents(all, (this.__seen ??= new WeakSet()));
     if (!fresh.length) return;
