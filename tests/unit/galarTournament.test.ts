@@ -95,7 +95,8 @@ describe('Galar tournament', () => {
 });
 
 import { buyItem, chooseStarter, createRun, debugJumpToLeague, leaveShop, visitSide } from '../../src/core/run';
-import { GALAR_SHOP_COLUMNS, ballGuyStock } from '../../src/core/galarTournament';
+import { GALAR_SHOP_COLUMNS, ballGuyStock, runBracket } from '../../src/core/galarTournament';
+import { simulateMatch } from '../../src/core/galarSim';
 import { RunStateSchema } from '../../src/core/state';
 
 describe('Galar League is the tournament', () => {
@@ -114,7 +115,8 @@ describe('Galar League is the tournament', () => {
     expect(stage.kind).toBe('league');
     expect(stage.eliteFour).toHaveLength(4);
     expect(new Set([...stage.eliteFour!, stage.leaderId]).size).toBe(5);
-    const b = buildBracket({ runSeed: run.seed, championId: stage.leaderId });
+    const b = runBracket(content, run);
+    expect(b.sim).toBeDefined();
     expect(stage.eliteFour).toEqual(playerPath(b).slice(0, 4));
     expect(stage.map.nodes.filter((n) => n.sides.length > 0).map((n) => n.column)).toEqual([...GALAR_SHOP_COLUMNS]);
     expect(RunStateSchema.safeParse(run).success).toBe(true);
@@ -248,5 +250,99 @@ describe('the rival is the last challenger', () => {
     const b = buildBracket({ runSeed: 'norival' });
     expect(b.lastRival).toBeUndefined();
     expect(playerPath(b)[4]).toBe(b.champion);
+  });
+});
+
+describe('Galar tournament: the other matches are real simulated battles', () => {
+  const content = getContent();
+  const sim = (seed: string, rivalIds: string[] = []) => buildBracket({ runSeed: seed, content, teamIndex: 7, rivalIds });
+
+  it('plays every other match as a battle: a winner with Pokemon left, a play-by-play, and the champion in the final', () => {
+    for (let i = 0; i < 12; i++) {
+      const b = sim(`SIM${i}`, ['hop']);
+      const path = playerPath(b);
+      expect(path[4]).toBe('leon');
+      expect(path[3]).toBe('hop'); // the last rival always reaches round 4
+      expect(new Set(path).size).toBe(5);
+      for (let r = 1; r <= 5; r++) {
+        for (const m of otherMatches(b, r)) {
+          expect(m.sim).toBeDefined();
+          const left = m.sim!.winner === 'a' ? m.sim!.leftA : m.sim!.leftB;
+          expect(left).toBeGreaterThan(0);
+          expect(m.winner).toBe(m.sim!.winner === 'a' ? m.a : m.b);
+          expect(m.sim!.beats.length).toBeGreaterThan(2);
+          expect(m.sim!.beats.at(-1)!.text).toContain(content.bosses.get(m.winner)!.name);
+        }
+      }
+    }
+  });
+
+  it('is the same bracket for the same seed and a different one for another', () => {
+    const paths = (seed: string) => [1, 2, 3, 4, 5].map((r) => otherMatches(sim(seed), r).map((m) => `${m.winner}:${m.sim!.leftA}-${m.sim!.leftB}`).join(','));
+    expect(paths('SAME')).toEqual(paths('SAME'));
+    expect(paths('SAME')).not.toEqual(paths('OTHER'));
+  });
+
+  it('the stronger team usually wins, upsets still happen, and a match is decided by its own stream', () => {
+    const side = (bossId: string, level: number) => ({ bossId, name: bossId, level, teamIndex: 3, role: 'elite' as const });
+    const strong = Array.from({ length: 10 }, (_, i) => simulateMatch(content, side('milo', 30), side('raihan', 70), `t${i}`));
+    expect(strong.every((r) => r.winner === 'b')).toBe(true);
+    expect(simulateMatch(content, side('milo', 50), side('kabu', 50), 'x')).toEqual(simulateMatch(content, side('milo', 50), side('kabu', 50), 'x'));
+    let upsets = 0;
+    for (let i = 0; i < 20; i++) upsets += otherMatches(sim(`UP${i}`), 1).filter((m) => m.upset).length;
+    expect(upsets).toBeGreaterThan(0);
+  });
+
+  it('a boss with no team data still fields a side (failure case): an unknown boss simply has no Pokemon and loses', () => {
+    const r = simulateMatch(content, { bossId: 'nobody', name: 'Nobody', level: 50, teamIndex: 0, role: 'elite' }, { bossId: 'milo', name: 'Milo', level: 50, teamIndex: 0, role: 'elite' }, 'empty');
+    expect(r.winner).toBe('b');
+    expect(r.leftA).toBe(0);
+  });
+});
+
+describe('Galar tournament: the run uses the simulated bracket', () => {
+  const content = getContent();
+  const league = (seed: string, wins: number) => {
+    let run = createRun(content, { runId: 'r', seed, archetypeId: 'red' });
+    run.regionOrder = ['galar', ...run.regionOrder.filter((r) => r !== 'galar')];
+    run.regionIndex = 0;
+    run = debugJumpToLeague(content, chooseStarter(content, run, 0));
+    run.stage!.visited = ['a', 'b', 'c', 'd', 'e'].slice(0, wins);
+    return run;
+  };
+
+  it('the next opponents on the bracket are the winners of the simulated matches, and the bracket shows scores', () => {
+    const run = league('RUNSIM', 2);
+    const b = runBracket(content, run);
+    expect(b.sim).toBeDefined();
+    const view = bracketView(content, run);
+    expect(view.rounds.map((r) => r.opponent.id)).toEqual(playerPath(b));
+    expect(view.rounds[0]!.headline).toMatch(/ beat .+ \d–\d$/);
+    expect(view.rounds[2]!.headline).toBeNull();
+    expect(view.rounds.map((r) => r.others)).toEqual([15, 7, 3, 1, 0]);
+    // the stadium reporter says who the next opponent beat to get here
+    expect(currentTournamentRound(content, run)!.via).toMatch(/ \d–\d$/);
+    expect(currentTournamentRound(content, league('RUNSIM', 0))!.via).toBeNull();
+  });
+
+  it('watching a match replays its real play-by-play', () => {
+    const run = league('RUNSIM', 2);
+    const replay = matchReplay(content, run, 1)!;
+    expect(replay.beats.at(-1)!.text).toMatch(/wins/);
+    expect(replay.beats.some((x) => x.text.includes('knocks out'))).toBe(true);
+    const last = replay.beats.at(-1)!;
+    expect(replay.winner === 'a' ? last.hpB : last.hpA).toBe(0);
+  });
+
+  it('a run saved mid-tournament with the old bracket keeps the old bracket (no save change needed)', () => {
+    const run = league('OLDSAVE', 1);
+    const champion = run.stage!.leaderId!;
+    const old = buildBracket({ runSeed: run.seed, championId: champion, rivalIds: run.story.rivals.map((r) => r.name.toLowerCase()).filter((id) => content.bosses.has(id)) });
+    const oldFour = playerPath(old).slice(0, 4);
+    run.roleCast = run.roleCast.map((c) => (c.role === 'elite' && c.regionIndex === 0 ? { ...c, id: oldFour[c.slot]! } : c));
+    const b = runBracket(content, run);
+    expect(playerPath(b).slice(0, 4)).toEqual(oldFour);
+    // the fresh run (cast from the simulation) uses the simulated bracket
+    expect(runBracket(content, league('OLDSAVE', 1)).sim).toBeDefined();
   });
 });
