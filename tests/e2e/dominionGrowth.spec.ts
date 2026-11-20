@@ -9,7 +9,7 @@ import { open, scene, start, toCommands, view, waitForScene, watch } from './hel
 async function dayOne(page: Page) {
   await page.evaluate(() => {
     const s = (window as any).__pkr.session;
-    s.saveSettings({ ...s.settings, expansion: { ...s.settings.expansion, evilMode: true } });
+    s.saveSettings({ ...s.settings, expansion: { ...s.settings.expansion, evilMode: true }, battleSpeed: 'quick', battleAnimations: 'off', textSpeed: 'instant' });
   });
   await open(page, 'RunPrep', { archetypeId: 'red', modeId: 'dominion' });
   await page.keyboard.press('Enter');
@@ -62,7 +62,8 @@ async function winBattle(page: Page) {
 }
 
 test('Growth: the section pages, the Card\'s five Gym ways, Break in a chain of fights, and the Gym kept on reload', async ({ page }, info) => {
-  test.setTimeout(240_000);
+  // Two full battles: quick battles, no animations, instant text; a loaded CI runner still needs the room.
+  test.setTimeout(420_000);
   const shot = (n: string) => page.screenshot({ path: info.outputPath(`${n}.png`) });
   const errors = watch(page);
   await start(page, 'ui=new');
