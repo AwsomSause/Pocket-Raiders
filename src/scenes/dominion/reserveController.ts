@@ -12,7 +12,7 @@ import type { InputAction } from '../../ui/input';
 import { rxFileOf } from '../../ui/redux/assets';
 import { pyramidView, reserveView } from '../../ui/redux/screens/dominion/reserve';
 
-type ScreenName = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'founding' | 'founded' | 'debate';
+type ScreenName = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'founding' | 'founded' | 'debate' | 'takeover' | 'broadcast';
 interface Host {
   screenName: ScreenName;
   setNotice(n: string | null): void;

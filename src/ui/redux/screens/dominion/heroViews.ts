@@ -50,15 +50,6 @@ export function heroView(m: HeroModel, files: MonFiles, notice: string | null): 
     : `<div class="a rib" style="left:16px;top:330px;width:600px;font-size:15px;padding:6px 40px 6px 16px;white-space:nowrap">${esc(m.rib)}</div>
       <div class="a col" style="left:16px;top:372px;width:600px;gap:8px;z-index:6" data-testid="dom-hero-alerts">${alerts || `<div class="al b" style="padding:6px 10px"><span><span class="t">QUIET</span>Nothing has come for you yet.</span></div>`}</div>`;
   const cta = m.meet ? '' : `<div class="cta shine" style="left:16px;top:478px;width:600px;height:48px;font-size:20px"${act(m.cta.act === 'legend' ? 'legend' : 'back', m.cta.id ?? '')} data-testid="dom-hero-cta">${esc(m.cta.label)} <span class="kc">${m.cta.act === 'legend' ? 'F' : 'Esc'}</span></div>`;
-  const allies = h.allies.length
-    ? h.allies.slice(0, 4).map((a) => (a.look ? `<img class="px" src="${rxUrl(a.look)}" alt="${esc(a.name)}" title="${esc(a.name)}" style="width:26px;height:36px;object-fit:contain">` : `<span title="${esc(a.name)}" style="display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center">${monPic(files, a.species, 28)}</span>`)).join('')
-    : '<span style="color:#7a6440">none yet</span>';
-  const pills = m.choose
-    ? `<span class="pill k" style="font-size:12.5px;cursor:pointer"${act('after', 'leave')} data-testid="dom-stand-leave">Leave them in their shame <span class="kc">L</span></span><span class="pill v" style="font-size:12.5px;cursor:pointer"${act('after', 'recruit')} data-testid="dom-stand-recruit">Try to recruit them <span class="kc">R</span></span>`
-    : m.outcome
-      ? `<span class="pill g" style="font-size:12.5px" data-testid="dom-stand-outcome">${esc(m.outcome)}</span>`
-      : '<span class="pill k" style="font-size:12.5px;opacity:.6">Leave them in their shame</span><span class="pill v" style="font-size:12.5px;opacity:.6">Try to recruit them</span>';
-  const badges = Array.from({ length: 8 }, (_, i) => `<i class="badge${i < h.badges ? '' : ' off'}"></i>`).join('');
   return stage(`
   <div class="layer" style="background:linear-gradient(180deg,#060818,#121a3e 55%,#1e1640)"></div>
   <div class="stars twinkle" style="height:260px"></div>
@@ -72,7 +63,30 @@ export function heroView(m: HeroModel, files: MonFiles, notice: string | null): 
   ${cards}
   ${meet}
   ${cta}
-  <div class="a" style="left:632px;top:70px;width:312px;height:458px;z-index:7;transform:rotate(1.2deg);background:linear-gradient(180deg,#f3e8cb,#e6d6ae);border-radius:4px;box-shadow:0 0 0 3px #2a1c0c,0 18px 34px rgba(0,0,0,.6);color:#3a2a18;padding:14px 16px" data-testid="dom-hero-file">
+  ${heroFile(m, files)}
+  <div class="layer pulse" style="top:440px;z-index:1;background:radial-gradient(500px 120px at 316px 540px,rgba(255,60,60,.45),transparent 70%);pointer-events:none"></div>
+  <div class="cone" style="left:470px;top:60px;width:240px;height:480px;z-index:1;--cc:rgba(220,220,255,.18)"></div>
+  <div class="haze" style="--hz:#ff7a6a;--hz2:#cfd8ff" aria-hidden="true"></div>
+  <div class="grade" aria-hidden="true" style="--g1:#ff7a6a;--g2:#cfd8ff"></div>
+  <div class="edgeglow" aria-hidden="true" style="--eg:#ff7a6a"></div>
+  <div class="orn" aria-hidden="true"></div>
+  ${notice ? `<div class="a pnl" style="left:180px;top:200px;width:600px;padding:14px 18px;z-index:40;font-size:16px;line-height:1.35"${act('dismiss')} data-testid="dom-notice">${esc(notice)} <span class="kc">Enter</span></div>` : ''}
+  `, 'background:#070a1c', 'kl-red vign grain');
+}
+
+/** The Hero's file pinned up on the right (s9); the Takeover page pins the same file. */
+export function heroFile(m: HeroModel, files: MonFiles): string {
+  const h = m.hero;
+  const allies = h.allies.length
+    ? h.allies.slice(0, 4).map((a) => (a.look ? `<img class="px" src="${rxUrl(a.look)}" alt="${esc(a.name)}" title="${esc(a.name)}" style="width:26px;height:36px;object-fit:contain">` : `<span title="${esc(a.name)}" style="display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center">${monPic(files, a.species, 28)}</span>`)).join('')
+    : '<span style="color:#7a6440">none yet</span>';
+  const pills = m.choose
+    ? `<span class="pill k" style="font-size:12.5px;cursor:pointer"${act('after', 'leave')} data-testid="dom-stand-leave">Leave them in their shame <span class="kc">L</span></span><span class="pill v" style="font-size:12.5px;cursor:pointer"${act('after', 'recruit')} data-testid="dom-stand-recruit">Try to recruit them <span class="kc">R</span></span>`
+    : m.outcome
+      ? `<span class="pill g" style="font-size:12.5px" data-testid="dom-stand-outcome">${esc(m.outcome)}</span>`
+      : '<span class="pill k" style="font-size:12.5px;opacity:.6">Leave them in their shame</span><span class="pill v" style="font-size:12.5px;opacity:.6">Try to recruit them</span>';
+  const badges = Array.from({ length: 8 }, (_, i) => `<i class="badge${i < h.badges ? '' : ' off'}"></i>`).join('');
+  return `  <div class="a" style="left:632px;top:70px;width:312px;height:458px;z-index:7;transform:rotate(1.2deg);background:linear-gradient(180deg,#f3e8cb,#e6d6ae);border-radius:4px;box-shadow:0 0 0 3px #2a1c0c,0 18px 34px rgba(0,0,0,.6);color:#3a2a18;padding:14px 16px" data-testid="dom-hero-file">
     <i style="position:absolute;left:146px;top:-8px;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ff9a8f,#c62a2a 60%,#5a0e0e);box-shadow:0 2px 0 #2a0808"></i>
     <div style="text-align:center;font:700 26px var(--regal);letter-spacing:.12em;color:#7a1414;border-bottom:3px double #7a1414;padding-bottom:4px">THE HERO</div>
     <div class="row" style="gap:12px;margin-top:10px;align-items:flex-start">
@@ -94,15 +108,7 @@ export function heroView(m: HeroModel, files: MonFiles, notice: string | null): 
     <div style="margin-top:8px;font-size:13px;line-height:1.3;color:#5d4a30;font-style:italic">“${esc(h.taunt)}”</div>
     <div style="margin-top:8px;font-size:14px;color:#5d4a30">After the final battle${m.choose ? '' : ` at ${esc(h.place)}`}:</div>
     <div class="row" style="gap:6px;margin-top:4px;flex-wrap:wrap">${pills}</div>
-  </div>
-  <div class="layer pulse" style="top:440px;z-index:1;background:radial-gradient(500px 120px at 316px 540px,rgba(255,60,60,.45),transparent 70%);pointer-events:none"></div>
-  <div class="cone" style="left:470px;top:60px;width:240px;height:480px;z-index:1;--cc:rgba(220,220,255,.18)"></div>
-  <div class="haze" style="--hz:#ff7a6a;--hz2:#cfd8ff" aria-hidden="true"></div>
-  <div class="grade" aria-hidden="true" style="--g1:#ff7a6a;--g2:#cfd8ff"></div>
-  <div class="edgeglow" aria-hidden="true" style="--eg:#ff7a6a"></div>
-  <div class="orn" aria-hidden="true"></div>
-  ${notice ? `<div class="a pnl" style="left:180px;top:200px;width:600px;padding:14px 18px;z-index:40;font-size:16px;line-height:1.35"${act('dismiss')} data-testid="dom-notice">${esc(notice)} <span class="kc">Enter</span></div>` : ''}
-  `, 'background:#070a1c', 'kl-red vign grain');
+  </div>`;
 }
 
 // ---------- m11: the Hero shows up ----------

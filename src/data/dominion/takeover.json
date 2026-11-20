@@ -1,5 +1,5 @@
 {
- "_source": "plans/evil-mode-rework/05_WINNING_AND_THE_REGIONS.md §1-2 (paths), lists/takeover-bonuses.md (holdings, word for word), Kice's evil_mode_goals.zip Parts 35a-35c (Goals: stages, Turning Points, endings, the Hero's reason word for word), list rows 451-465 and 586-600 (actions); built by tools/dominion/takeover-to-json.py",
+ "_source": "plans/evil-mode-rework/05_WINNING_AND_THE_REGIONS.md §1-2 (paths), lists/takeover-bonuses.md (holdings, word for word), Kice's evil_mode_goals.zip Parts 35a-35c (Goals: stages, Turning Points, endings, the Hero's reason word for word), list rows 87, 128, 451-465 and 586-600 (actions); built by tools/dominion/takeover-to-json.py",
  "paths": [
   {
    "id": "wipe",
@@ -12394,13 +12394,13 @@
   }
  },
  "lines": {
-  "rowSites": "{n} of {tag} sites taken",
+  "rowSites": "{n} of {of} {tag} sites taken",
   "rowBossBeaten": "{boss} beaten at the HQ",
   "rowBossNot": "{boss} still holds the HQ",
   "rowAdmins": "{n} of {of} Admins gone",
   "rowRegard": "Regard {n} (needs {of})",
   "rowBiz": "{n} of {of} businesses owned",
-  "rowBizPillar": "{n} of {of} businesses, Silph Co. and the Game Corner among them",
+  "rowBizPillar": "{n} of {of} businesses (Silph Co. and the Game Corner)",
   "rowWanted": "Wanted {n} (must stay at {max} or lower)",
   "rowPocket": "{n} of {of} Gym Leaders in your pocket",
   "rowChampBought": "The Champion is bought",

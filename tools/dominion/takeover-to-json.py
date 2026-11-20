@@ -412,9 +412,9 @@ LEAGUE = dict(
 
 LINES = {
     # path rows (s9 cards)
-    'rowSites': '{n} of {tag} sites taken', 'rowBossBeaten': '{boss} beaten at the HQ', 'rowBossNot': '{boss} still holds the HQ',
+    'rowSites': '{n} of {of} {tag} sites taken', 'rowBossBeaten': '{boss} beaten at the HQ', 'rowBossNot': '{boss} still holds the HQ',
     'rowAdmins': '{n} of {of} Admins gone', 'rowRegard': 'Regard {n} (needs {of})', 'rowBiz': '{n} of {of} businesses owned',
-    'rowBizPillar': '{n} of {of} businesses, Silph Co. and the Game Corner among them', 'rowWanted': 'Wanted {n} (must stay at {max} or lower)',
+    'rowBizPillar': '{n} of {of} businesses (Silph Co. and the Game Corner)', 'rowWanted': 'Wanted {n} (must stay at {max} or lower)',
     'rowPocket': '{n} of {of} Gym Leaders in your pocket', 'rowChampBought': 'The Champion is bought', 'rowChampNot': 'The Champion is not bought yet',
     'rowGyms': '{n} of {of} Gyms ruled', 'rowHeldPct': '{n}% of the region held (needs {of}%)', 'rowLeagueDone': 'The League has fallen',
     'rowElite': '{n} of 4 Elite Four beaten', 'rowEliteNot': 'Elite Four untouched', 'rowCitadel': 'HQ is a Citadel',
@@ -476,7 +476,7 @@ LINES = {
 data = {
     '_source': 'plans/evil-mode-rework/05_WINNING_AND_THE_REGIONS.md §1-2 (paths), lists/takeover-bonuses.md (holdings, word for word), '
                'Kice\'s evil_mode_goals.zip Parts 35a-35c (Goals: stages, Turning Points, endings, the Hero\'s reason word for word), '
-               'list rows 451-465 and 586-600 (actions); built by tools/dominion/takeover-to-json.py',
+               'list rows 87, 128, 451-465 and 586-600 (actions); built by tools/dominion/takeover-to-json.py',
     'paths': [
         dict(id='wipe', name='Wipe Out', icon='g-dire-hit', colour='#ef4a3a', fantasy='Destroy the rival team',
              after='Clean field. Their remaining Grunts can be recruited; their Boss is yours to recruit, exile or let go.'),
