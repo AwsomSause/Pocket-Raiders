@@ -23,6 +23,14 @@ Copied from the same mockup sprites folder (`plans/evil-mode-rework/mockups-rede
 | --- | --- |
 | `g-xtransceiver`, `g-relic-gold`, `g-meteorite`, `g-silph-scope`, `g-comet-shard`, `g-devon-scope`, `g-smoke-ball`, `g-vs-seeker`, `g-black-belt`, `g-tea`, `g-soothe-bell`, `g-secret-key` (.png) | Item icons from `images/items/` and `images/items/gen5/` (PokeRogue pack), re-saved at the mockup's size by the mockup thread; copied from `plans/evil-mode-rework/mockups-redesign/sprites/` |
 
+## Slice D6 (the Ledger, mockup 7)
+
+| File | From |
+| --- | --- |
+| `g-big-nugget.png`, `g-nugget.png` | Item icons from `images/items/` (PokeRogue pack), re-saved at the mockup's size by the mockup thread; copied from `plans/evil-mode-rework/mockups-redesign/sprites/` |
+| `t-giovanni.png` | Trainer sprite from the PokeRogue pack (`images/trainer/`), one frame, cut by the mockup thread (the Tension row's portrait) |
+| `p-rotom.png` | Pokémon sprite from the PokeRogue pack, the Rotom chip icon the round-3 CSS points at (`plans/evil-mode-rework/mockups-v3/sprites/`); the same file D19 brings |
+
 ## Slice D19 (the personality card, Rotom mockup a3)
 
 | File | From |

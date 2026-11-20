@@ -5,6 +5,8 @@
 import type { Content } from '../contentSchema';
 import type { RunState } from '../state';
 import { settle } from './field';
+import { DOMINION_DATA } from './data';
+import { bookRest, weekSum } from './book';
 
 const MODE = 'dominion';
 
@@ -26,7 +28,11 @@ export function endDominionFight(content: Content, run: RunState, outcome: 'win'
   }
   run.battle = null;
   run.phase = 'map';
+  const funds = block.funds, sum = weekSum(block), why = block.field.fight?.why ?? 'fail';
   const lines = settle(content, block, run, outcome === 'caught' ? 'win' : outcome, caught);
+  // D6: the fight's money on the Ledger (a fine, a raid's take, a duel's wager). The Notoriety ladder is checked on the
+  // next step (empire.ts isn't imported here: run.ts imports this file, and empire.ts would close a cycle).
+  bookRest(block, funds, sum, DOMINION_DATA.empire.ledger.byFight[why] ?? 'jobs');
   run.expansion = { ...(run.expansion ?? {}), dominion: block };
   return lines;
 }

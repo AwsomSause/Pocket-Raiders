@@ -89,6 +89,8 @@ const DistrictSchema = z.object({
 export type District = z.infer<typeof DistrictSchema>;
 export const BATTLE_FOES = ['target', 'police', 'wild', 'ghost', 'member', 'rival'] as const;
 export const EFFECTS = ['scout', 'count', 'scoutDistrict', 'paper', 'catch', 'laylow', 'disguise', 'fine', 'exp', 'spar', 'train', 'plan', 'pamper', 'hide', 'rescue', 'evolve', 'ceremony', 'mentor', 'launder',
+  // D6 (field.ts)
+  'skim',
   // D9 (rivals.ts addActEffect)
   'rivalHit', 'rivalSpy', 'counterSpy', 'truceTalk', 'war', 'poach', 'court'] as const;
 const PlaySchema = z.object({
@@ -99,6 +101,8 @@ const PlaySchema = z.object({
   heat: I.optional(), failHeat: N0.optional(), regard: I.optional(), dread: I.optional(), wanted: I.optional(), hero: N0.optional(), control: N0.optional(),
   cost: N0.optional(), effect: z.enum(EFFECTS).optional(), scoutDays: I.min(1).optional(), exp: N0.optional(), xp: N0.optional(), friendship: N0.optional(),
   battle: z.object({ chance: I.min(1).max(100), on: z.enum(['fail', 'always']), foe: z.enum(BATTLE_FOES) }).strict().optional(),
+  /** D6: the pay is clean money (the Ledger, Part 9 A21); the rival team's Control in the district moves by this much. */
+  clean: z.boolean().optional(), rival: I.optional(),
   /** D4: the action needs a member in this band of the Rank Pyramid or higher ("Rank N crew", Part 8 §3). */
   band: I.min(1).max(5).optional(),
   /** D4 'rescue': the Trust the Pokémon joins with, and levels above the team (an alpha). */
@@ -285,6 +289,8 @@ const BlockSchema = z.object({
   field: FieldSchema,
   /** D3: the crew's shared state (stores, leads, waiting list, hire list, talks, Patrons). Optional; `crewState` fills it. */
   crew: z.lazy(() => CrewStateSchema).optional(),
+  /** D6: the Ledger's books, holding and Notoriety (Part 3 §1-2, Part 9 A14). Optional; `empireOf` (book.ts) fills it. */
+  empire: z.lazy(() => EmpireStateSchema).optional(),
   /** D4: the Reserve, Trust, the pyramid's bookkeeping. Optional; `reserveOf` fills it (and moves D3's stores in). */
   reserve: z.lazy(() => ReserveStateSchema).optional(),
   /** D5: the HQ's rooms, outside buildings, works, clean money, laundering and loans. Optional; `hqOf` fills it. */
@@ -325,6 +331,8 @@ export type DominionAction =
   | { t: 'bail'; member: string }
   | { t: 'gift'; member: string; item: string }
   | { t: 'patron'; patron: string }
+  // D6: where a member's district task (Patrol, Hold, Chant...) is done
+  | { t: 'where'; member: string; district: string }
   // D4, the Reserve and the Rank Pyramid
   | { t: 'give'; uid: string; to: string }
   | { t: 'takeBack'; member: string; uid: string }
@@ -360,7 +368,16 @@ export const TaskEffectSchema = z.object({
     // D4 (reserve.ts)
     'pens', 'tend', 'feed', 'release', 'rehab',
     // D9 (rivals.ts)
-    'rivalSpy', 'rivalIntel', 'counterSpy', 'poachRival', 'rivalHit', 'rescue', 'rumours', 'truceTalk']),
+    'rivalSpy', 'rivalIntel', 'counterSpy', 'poachRival', 'rivalHit', 'rescue', 'rumours', 'truceTalk',
+    // D6 (empire.ts)
+    'district']),
+  /** D6 district tasks (kind 'district'): what it does in the member's district, and how much (task Lv 1-2, Lv 3+). */
+  does: z.enum(['regard', 'dread', 'cool', 'patrol', 'collect', 'hold', 'line', 'eavesdrop', 'poll', 'face', 'party', 'song', 'peace']).optional(),
+  n: Range.optional(),
+  /** Collect: what the district's Rackets pay this week, % by task level 1-5. */
+  collect: z.array(N0).length(5).optional(),
+  cost: N0.optional(),
+  mor: N0.optional(),
   funds: Range.optional(),
   heat: I.optional(),
   risky: z.boolean().optional(),
@@ -399,6 +416,8 @@ const ModsSchema = z.object({
   pocket: Pct.optional(), ambition: N0.optional(), loyaltyCap: Pct.optional(), loyaltyFloor: Pct.optional(), disloyal: I.min(1).optional(),
   mentor: N0.optional(), planned: N0.optional(), pitch: N0.optional(), medic: z.boolean().optional(), refuse: z.array(S).optional(),
   reroll: z.boolean().optional(), jailDays: N0.optional(), trainXp: N0.optional(), noQuit: z.boolean().optional(), pHeat: N0.optional(),
+  /** D6: may take Hold below its rank (Heir Apparent); Collect pays this many % more (Honest Accountant). */
+  hold: z.boolean().optional(), collect: N0.optional(),
 }).strict();
 export type Mods = z.infer<typeof ModsSchema>;
 const TREATS = ['praise', 'push', 'leave', 'spar', 'payOnTime', 'payLate', 'punish', 'bring', 'win'] as const;
@@ -593,6 +612,8 @@ export const MemberCrewSchema = z.object({
   flags: z.array(S),
   /** Talk id -> the last day it came up. */
   talked: z.record(S, I.min(1)),
+  /** D6: the district their district task is done in (Patrol, Hold, Chant...); the HQ's when unset. */
+  where: S.optional(),
   /** D19: the personality card, rolled once (personality.ts) and kept. Optional: older saves get it on the next step. */
   card: CardSchema.optional(),
 }).strict();
@@ -648,6 +669,67 @@ export const CrewStateSchema = z.object({
   ])),
 }).strict();
 export type CrewState = z.infer<typeof CrewStateSchema>;
+
+// ---------- D6: districts, Notoriety and the Ledger (empire.json, block `empire`) ----------
+
+const LineDefSchema = z.object({ label: S, clean: z.boolean() }).strict();
+export const EmpireFileSchema = z.object({
+  _source: S,
+  notoriety: z.object({
+    perHolding: N0, perMember: N0, pitchCap: N0,
+    steps: z.array(z.object({ id: S, word: S, min: N0, calls: S, unlocks: z.array(S).min(1) }).strict()).length(7),
+    oldWords: z.record(S, S),
+    pressFrom: S,
+    lines: z.object({ risen: S, press: S, gate: S, noPress: S }).strict(),
+  }).strict(),
+  control: z.object({
+    racketWeekly: N0, heatErodeAt: N0, heatErode: N0, holdLoss: N0, skimShare: z.number().min(0).max(1),
+    lines: z.object({ unheld: S, slipped: S, rose: S, erode: S, rackets: S }).strict(),
+    words: z.object({ out: S, foot: S, contested: S, held: S, owned: S, rival: S }).strict(),
+    short: z.object({ out: S, foot: S, contested: S, held: S, owned: S, rival: S }).strict(),
+  }).strict(),
+  ledger: z.object({
+    keep: I.min(2), graph: I.min(2),
+    lines: z.record(S, LineDefSchema),
+    byAction: z.record(S, S), byStep: z.record(S, S), byFight: z.record(S, S),
+    best: S, bestFirst: S, due: S, rivalLook: S, noRival: S, heroWord: S,
+    tabs: z.array(z.object({ id: S, word: S, colour: S }).strict()).length(3),
+  }).strict(),
+  tasks: z.object({ lines: z.record(S, S) }).strict(),
+}).strict().superRefine((f, ctx) => {
+  const ids = f.notoriety.steps.map((s) => s.id);
+  for (const k of [...Object.values(f.notoriety.oldWords), f.notoriety.pressFrom]) if (!ids.includes(k)) ctx.addIssue({ code: 'custom', message: `unknown Notoriety step ${k}` });
+  const keys = Object.keys(f.ledger.lines);
+  for (const k of [...Object.values(f.ledger.byAction), ...Object.values(f.ledger.byStep), ...Object.values(f.ledger.byFight)]) if (!keys.includes(k)) ctx.addIssue({ code: 'custom', message: `unknown Ledger line ${k}` });
+  for (let i = 1; i < f.notoriety.steps.length; i++) if (f.notoriety.steps[i]!.min <= f.notoriety.steps[i - 1]!.min) ctx.addIssue({ code: 'custom', message: 'Notoriety steps go up' });
+});
+export type EmpireFile = z.infer<typeof EmpireFileSchema>;
+
+/** One closed week of the Ledger (the graph and last week's lines). */
+export const LedgerWeekSchema = z.object({
+  w: I.min(1), clean: I, dirty: I, net: I, lines: z.record(S, I),
+  notoriety: N0, regard: N0, dread: N0, held: N0, wanted: N0,
+}).strict();
+export type LedgerWeek = z.infer<typeof LedgerWeekSchema>;
+
+export const EmpireStateSchema = z.object({
+  /** This week's money, line by line (empire.json ledger.lines keys). */
+  week: z.record(S, I),
+  /** Closed weeks, oldest first (the last `keep`). */
+  weeks: z.array(LedgerWeekSchema),
+  /** The highest Notoriety step reached (index into the ladder): unlocks never close again. */
+  peak: N0,
+  press: z.boolean(),
+  /** Districts the Boss worked in this week (a Holder's visit, Part 3 §2). */
+  visits: z.array(S),
+  /** Districts a member held (Hold, Be Your Face) this week. */
+  holders: z.array(S),
+  /** Collect: district -> what its Rackets pay this week, %. */
+  collect: z.record(S, N0),
+  /** Districts guarded by Hold the Line or Patrol today: Heat doesn't wear their Control down. */
+  guarded: z.array(S),
+}).strict();
+export type EmpireState = z.infer<typeof EmpireStateSchema>;
 
 // ---------- D4: ranks, Team Types and the Reserve (pyramid.json; block `reserve`) ----------
 
