@@ -10,7 +10,7 @@ const TYC={normal:'#9fa19f',fire:'#ff6a2b',water:'#2f8fff',grass:'#3fb84a',elect
 const ty=t=>`<span class="ty" style="--tc:${TYC[t]}"><img class="px" src="${SP}ty-${t}.png" alt="">${t.toUpperCase()}</span>`;
 function rnd(seed){let h=seed>>>0||1;return()=>((h=Math.imul(h^h>>>15,2246822507)^Math.imul(h^h>>>13,3266489909),(h^=h>>>16)>>>0)/4294967296)}
 function ransom(str,seed=7,cls=''){const r=rnd(seed);return`<span class="rs ${cls}" aria-label="${str}">`+[...str].map(ch=>ch===' '?'<i></i>':`<b class="r${Math.floor(r()*6)}" style="--a:${(r()*12-6).toFixed(1)}deg;--y:${Math.round(r()*10-5)}px;--s:${(0.86+r()*0.3).toFixed(2)}">${ch}</b>`).join('')+'</span>'}
-const keys=(...k)=>`<div class="keys">${k.map(([a,b])=>`<span class="key"><b>${a}</b>${b}</span>`).join('')}</div>`;
+const keys=(...k)=>`<div class="keys">${k.map(([a,b])=>`<span class="key"><b${a.length>1?' class="w"':''}>${a}</b>${b}</span>`).join('')}</div>`;
 const hp=(cur,max,cls='')=>{const p=Math.round(cur/max*100);return`<span class="hpbar ${cls} ${p<=20?'low':p<=50?'mid':''}"><i style="width:${p}%"></i></span>`};
 /* versions (liveries), from pass 6: each one borrows a different Persona game and puts a different trainer on screen */
 let LIV='phantom';

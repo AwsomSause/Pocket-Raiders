@@ -9,7 +9,8 @@ prov = []
 def frame0(src_png, src_json, dst):
     if not os.path.exists(src_png): print('MISSING', src_png); return
     im = Image.open(src_png).convert('RGBA')
-    fr = sorted(json.load(open(src_json))['textures'][0]['frames'], key=lambda f: f['filename'])[0]
+    if not os.path.exists(src_json): print('MISSING', src_json); return
+    d = json.load(open(src_json)); fr = sorted(d['textures'][0]['frames'] if 'textures' in d else d['frames'], key=lambda f: f['filename'])[0]
     r = fr['frame']; s = fr['spriteSourceSize']; ss = fr['sourceSize']
     crop = im.crop((r['x'], r['y'], r['x'] + r['w'], r['y'] + r['h']))
     canvas = Image.new('RGBA', (ss['w'], ss['h']), (0, 0, 0, 0)); canvas.paste(crop, (s['x'], s['y']))
@@ -22,7 +23,7 @@ def copy(src, dst, trim=False):
     if trim:
         bb = im.getbbox(); im = im.crop(bb) if bb else im
     im.save(os.path.join(OUT, dst)); prov.append((dst, src))
-MON = {1:'bulbasaur',4:'charmander',7:'squirtle',6:'charizard',25:'pikachu',94:'gengar',448:'lucario',130:'gyarados',143:'snorlax',445:'garchomp',150:'mewtwo',384:'rayquaza',53:'persian',133:'eevee',9:'blastoise',3:'venusaur',149:'dragonite',248:'tyranitar',282:'gardevoir',197:'umbreon',658:'greninja',52:'meowth',41:'zubat',19:'rattata',16:'pidgey',249:'lugia',483:'dialga',59:'arcanine',131:'lapras',65:'alakazam',373:'salamence',376:'metagross',350:'milotic',442:'spiritomb',407:'roserade',109:'koffing',23:'ekans',5:'charmeleon'}
+MON = {155:'cyndaquil',258:'mudkip',393:'piplup',495:'snivy',722:'rowlet',152:'chikorita',255:'torchic',250:'hooh',245:'suicune',151:'mew',129:'magikarp',212:'scizor',700:'sylveon',1:'bulbasaur',4:'charmander',7:'squirtle',6:'charizard',25:'pikachu',94:'gengar',448:'lucario',130:'gyarados',143:'snorlax',445:'garchomp',150:'mewtwo',384:'rayquaza',53:'persian',133:'eevee',9:'blastoise',3:'venusaur',149:'dragonite',248:'tyranitar',282:'gardevoir',197:'umbreon',658:'greninja',52:'meowth',41:'zubat',19:'rattata',16:'pidgey',249:'lugia',483:'dialga',59:'arcanine',131:'lapras',65:'alakazam',373:'salamence',376:'metagross',350:'milotic',442:'spiritomb',407:'roserade',109:'koffing',23:'ekans',5:'charmeleon'}
 for n, name in MON.items():
     frame0(f'{A}/pokemon/{n}.png', f'{A}/pokemon/{n}.json', f'{OUT}/p-{name}.png')
 for n in (6, 25, 448, 94, 130, 143, 4):

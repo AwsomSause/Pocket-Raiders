@@ -10,7 +10,7 @@ await pg.goto('file://' + R + `/index.html?pass=${pass}&still=1&shot=1${liv ? '&
 const ids = (await pg.evaluate(() => window.__mock.list())).filter(i => !only || only.includes(i)); const problems = [];
 for (const id of ids) {
   await pg.evaluate(i => window.__mock.show(i), id); await pg.waitForTimeout(140);
-  await pg.evaluate(() => Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r }))));
+  await pg.evaluate(() => Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r })))); await pg.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)))); await pg.waitForTimeout(90);
   const bad = await pg.evaluate(() => { const res = [], S = document.getElementById('stage'); const leaves = [];
     for (const el of S.querySelectorAll('*')) { if (el.closest('[aria-hidden=true],.deco')) continue; const cs = getComputedStyle(el); if (cs.visibility === 'hidden' || cs.display === 'none' || +cs.opacity === 0) continue;
       const txt = [...el.childNodes].filter(n => n.nodeType === 3 && n.textContent.trim()).map(n => n.textContent.trim()).join(' '); if (!txt) continue;

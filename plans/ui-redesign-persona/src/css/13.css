@@ -1,0 +1,37 @@
+/* ===== pass 13 · people remember you: the four rivals as a ranked board, a full-screen rank-up moment, and the Rotom Phone for messages ===== */
+@keyframes conf{from{translate:0 -80px;opacity:0}15%{opacity:1}to{translate:0 760px;opacity:1}}
+@keyframes numIn{from{scale:3;opacity:0}}
+.p13{
+  & .pips{display:flex;gap:4px} & .pips i{width:11px;height:11px;transform:rotate(45deg);background:color-mix(in srgb,currentColor 22%,transparent)} & .pips i.f{background:var(--gold);box-shadow:0 0 0 2px var(--k)}
+  & .av{display:block;width:60px;height:60px;overflow:hidden;background:var(--red);flex:none;text-align:center;box-shadow:0 0 0 3px var(--k),0 0 0 5px var(--w)}
+  & .rv-big{position:absolute;left:560px;top:34px;font:400 640px/1 var(--f-disp);color:transparent;-webkit-text-stroke:5px color-mix(in srgb,var(--on) 55%,transparent);animation:numIn .5s cubic-bezier(.2,1.2,.3,1) both}
+  & .rv-bust{position:absolute;left:470px;bottom:-110px;animation:inUp .45s cubic-bezier(.2,1.2,.4,1) both} & .rv-bust .sh{filter:brightness(0);opacity:.85}
+  & .rv-list{position:absolute;left:36px;top:140px;width:400px;display:flex;flex-direction:column;gap:12px}
+  & .rv{display:grid;grid-template-columns:auto 1fr;column-gap:16px;align-items:center;padding:12px 24px 12px 16px;animation:inL .35s cubic-bezier(.2,1.2,.4,1) both;animation-delay:calc(var(--i)*55ms)}
+  & .rv .av{grid-row:span 3} & .rv b{font:400 30px/1 var(--f-disp);text-transform:uppercase} & .rv>span:not(.av):not(.pips){font:700 16px/1.1 var(--f-cond);color:var(--bone);margin:2px 0 5px} & .rv.on>span:not(.av):not(.pips){color:inherit;opacity:.8}
+  & .rv.on{translate:18px 0} & .rv.on b{font-size:38px}
+  & .rv-info{position:absolute;right:30px;top:120px;width:380px;padding:18px 28px 20px;animation:inR .4s both}
+  & .rv-info .tl1{font-size:58px;margin:4px 0 2px} & .rv-q{margin:0 0 12px;font:400 23px/1.15 var(--f-mark);color:var(--gold)}
+  & .rv-info dl{margin:0 0 12px;display:grid;grid-template-columns:auto 1fr;gap:9px 14px;align-items:center} & .rv-info dt{font:800 14px/1 var(--f-cond);letter-spacing:.16em;text-transform:uppercase;color:var(--red)} & .rv-info dd{margin:0;font:700 20px/1.1 var(--f-cond)}
+  & .rv-info .ace{display:grid;grid-template-columns:auto 1fr;column-gap:8px;align-items:center} & .rv-info .ace .spr{grid-row:span 2} & .rv-info .ace small{font:700 14px/1 var(--f-cond);color:var(--bone)}
+  & .rv-n{border-top:3px solid var(--red);padding-top:10px;color:var(--bone)}
+  & .ru-conf{position:absolute;inset:0;overflow:hidden;pointer-events:none} & .ru-conf i{position:absolute;left:var(--x);top:0;width:14px;height:26px;background:var(--w);rotate:var(--r);animation:conf 2.6s linear var(--d) infinite} & .ru-conf i:nth-child(3n){background:var(--k)} & .ru-conf i:nth-child(3n+1){background:var(--gold)}
+  & .ru-t{position:absolute;left:50px;top:120px;font-size:150px;display:flex;flex-direction:column;gap:18px;rotate:-8deg;animation:inL .5s cubic-bezier(.2,1.3,.4,1) both} & .ru-t .rs:last-child{margin-left:90px}
+  & .ru-card{position:absolute;left:730px;top:86px;width:290px;height:420px;box-sizing:border-box;background:var(--w);color:var(--k);box-shadow:0 0 0 6px var(--k),0 0 0 12px var(--gold),20px 20px 0 12px var(--k);display:flex;flex-direction:column;align-items:center;gap:8px;padding:0 0 16px;animation:flipIn .5s .15s both}
+  & .ru-card .lab{align-self:stretch;text-align:center;background:var(--k);color:var(--w);padding:10px 0} & .ru-pic{flex:1;display:grid;place-items:end center;width:100%;background:radial-gradient(circle at 50% 60%,var(--red) 0 46%,transparent 47%)}
+  & .ru-n{position:absolute;right:54px;top:150px;display:grid;justify-items:center;color:var(--w);animation:numIn .45s .5s both} & .ru-n s{font:400 60px/1 var(--f-disp);opacity:.6;text-decoration-thickness:6px} & .ru-n b{font:400 230px/.9 var(--f-disp);-webkit-text-stroke:12px var(--k);paint-order:stroke fill}
+  & .ru-say{position:absolute;left:330px;bottom:62px;width:640px;padding:16px 60px 18px 30px;cursor:pointer;animation:inUp .35s .7s both} & .ru-say em{position:absolute;right:26px;bottom:14px;font-style:normal;color:var(--gold);animation:blink 1s steps(2) infinite}
+  & .ph-list{position:absolute;left:30px;top:138px;width:290px;display:flex;flex-direction:column;gap:10px}
+  & .ph-list .pn{display:grid;grid-template-columns:auto 1fr auto;column-gap:12px;align-items:center;padding:9px 16px 9px 12px;animation:inL .32s both;animation-delay:calc(var(--i)*45ms)}
+  & .ph-list .av{grid-row:span 2;width:48px;height:48px} & .ph-list b{font:400 22px/1 var(--f-disp);text-transform:uppercase} & .ph-list span:not(.av){grid-column:2;font:700 15px/1.1 var(--f-cond);opacity:.8}
+  & .ph-list em{grid-column:3;grid-row:1/span 2;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--gold);color:var(--k);font:800 15px/1 var(--f-cond);font-style:normal}
+  & .ph-chat{position:absolute;left:372px;top:124px;width:640px;display:flex;flex-direction:column;gap:14px}
+  & .im{display:flex;align-items:flex-end;gap:16px;animation:inUp .3s both;animation-delay:calc(var(--i)*160ms + .15s)} & .im .pn{max-width:440px;padding:14px 28px 15px} & .im .txt{font-size:23px}
+  & .im.me{justify-content:flex-end} & .im.sys .pn{max-width:470px;padding-right:44px}
+  & .ph-reply{position:absolute;right:36px;top:452px;display:flex;flex-direction:column;gap:14px;align-items:flex-end} & .ph-reply .ch{width:330px} & .ph-reply .ch.on{width:360px} & .ph-reply .ch b{font-size:25px;white-space:normal}
+}
+.p13[data-liv=midnight]{ & .rv-big{-webkit-text-stroke:3px rgba(125,249,255,.5);font-style:italic} & .av{box-shadow:0 0 0 2px var(--cyan),0 0 14px var(--red)} & .ru-card{box-shadow:inset 0 8px 0 var(--red),0 0 0 3px #fff,0 0 50px rgba(125,249,255,.9)} & .ru-n b{-webkit-text-stroke:0;text-shadow:0 0 30px var(--red);font-style:italic} & .rv-info,& .ru-say{clip-path:none} }
+.p13[data-liv=channel]{ & .av{border-radius:14px;box-shadow:0 0 0 3px var(--k)} & .pips i{border-radius:50%;transform:none} & .ru-card{border-radius:22px;box-shadow:0 0 0 5px var(--k),12px 12px 0 5px var(--k)} & .ru-card .lab{border-radius:17px 17px 0 0} & .rv-big{-webkit-text-stroke:5px rgba(22,20,18,.35)} & .ru-n b{-webkit-text-stroke:10px var(--k);color:var(--red)} & .ru-n s{color:var(--k)} }
+.p13[data-liv=fantasia],.p13[data-liv=velvet]{ & .av{border-radius:50%;box-shadow:0 0 0 2px var(--gold),0 0 0 5px var(--k),0 0 0 6px var(--gold)} & .rv-big{-webkit-text-stroke:2px color-mix(in srgb,var(--gold) 70%,transparent)} & .rv-q{font-style:italic;font-size:26px} & .rv-n{border-top:1px solid var(--gold)} & .rv-info dt{color:var(--gold)}
+  & .ru-t{rotate:0deg;font-size:120px} & .ru-card{box-shadow:0 0 0 2px var(--gold),0 0 0 9px var(--k),0 0 0 11px var(--gold),0 30px 50px rgba(0,0,0,.6)} & .ru-card .lab{color:var(--gold);font-size:22px} & .ru-pic{border-radius:999px 999px 0 0} & .ru-n b{-webkit-text-stroke:0;text-shadow:5px 6px 0 var(--ink)} & .ru-conf i{width:8px;height:8px;border-radius:50%;background:var(--gold)!important} }
+.p13[data-liv=velvet]{ & .rv b{font-size:23px} & .rv.on b{font-size:28px} & .rv-info .tl1{font-size:44px} & .ru-t{font-size:110px} & .ph-list b{font-size:17px} & .ph-reply .ch b{font-size:19px} & .ru-n b{font-size:190px} }
