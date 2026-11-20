@@ -81,12 +81,12 @@ const PILL_ICON: readonly (readonly [RegExp, PkArt, number])[] = [
 ];
 /** The big faint word behind a page (the title's last part, or its first word when that is long). */
 const watermark = (t: string): string => { const s = t.split(' · ').pop() ?? t; return s.length <= 9 ? s : s.split(' ')[0]!; };
-export interface PkHeader { area?: PkArea; pills?: readonly string[]; crumb?: readonly string[]; road?: PkRoad | null }
+export interface PkHeader { area?: PkArea; pills?: readonly string[]; crumb?: readonly string[]; road?: PkRoad | null; /** The title's font size when it must step down to fit beside the pills. */ size?: number }
 /** The page header: area icon, title, the trail of pages that led here, fact pills, and (inside a run) the progress ribbon under it. */
 export function hdr(title: string, o: PkHeader = {}): string {
   const a = o.area ?? 'map', [icon, sc] = AREA_ICON[a];
   const pills = (o.pills ?? []).map((p) => { const ic = PILL_ICON.find((x) => x[0].test(p)); return ic ? `<b class="ip"><u>${spr(ic[1], ic[2])}${esc(p)}</u></b>` : `<b><u>${esc(p)}</u></b>`; }).join('');
-  return `<div class="hdr" data-a="${a}" ${mm('hdr')}><span class="hdr-ic">${spr(icon, sc)}</span><span class="hdr-t">${esc(title)}</span>${o.crumb?.length ? `<span class="crumb">${o.crumb.map((c) => `<i>${esc(c)}</i>`).join('')}</span>` : ''}<span class="hdr-p">${pills}</span>${ribbon(o.road, 'under')}</div>` +
+  return `<div class="hdr" data-a="${a}" ${mm('hdr')}><span class="hdr-ic">${spr(icon, sc)}</span><span class="hdr-t"${o.size ? ` style="font-size:${o.size}px"` : ''}>${esc(title)}</span>${o.crumb?.length ? `<span class="crumb">${o.crumb.map((c) => `<i>${esc(c)}</i>`).join('')}</span>` : ''}<span class="hdr-p">${pills}</span>${ribbon(o.road, 'under')}</div>` +
     `<i class="wm17" data-nocheck>${esc(watermark(title))}</i><i class="bunt22 hd" data-nocheck></i>`;
 }
 

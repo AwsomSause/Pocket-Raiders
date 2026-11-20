@@ -130,6 +130,7 @@ import { pokemonAssetIds, type AssetManifest } from '../assets/catalog';
 import { rxFileOf } from '../ui/redux/assets';
 import { mountRedux, phantomOn, pocketOn, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
 import { pkPauseModel } from '../ui/pocket/models';
+import { pkMap } from '../ui/pocket/screens/map';
 import { PK_PAUSE_COLS, pkPause } from '../ui/pocket/screens/pause';
 import { askText } from '../ui/redux/ask';
 import { hoverTips, ownAbilityCard } from '../ui/redux/tips';
@@ -1589,6 +1590,7 @@ export class MapScene extends Phaser.Scene {
           if (this.rxPop) return this.popView(c, this.rxPop);
           const model: MapModel = { ...this.rxModel!, index: this.index, info: this.info?.text ?? '', notice: this.notice?.text ?? '', going: this.rxGoing, banner: this.rxBanner, legend: this.rxLegend, card: this.rxCardOf() };
           if (c.pk && this.rxPause) return this.pausePocket(model);
+          if (c.pk) return pkMap(model, this.rxMenu);
           if (!c.ph) return mapView(c, model) + this.pauseHtml() + (this.rxMenu ? nodeMenuView(this.rxMenu) : '');
           // Phantom: the pause menu is a page of its own; the node menu stands over the map.
           if (this.rxForm) return this.formPhantom(c.ph, model.art);

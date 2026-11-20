@@ -124,6 +124,7 @@ export function pkCssArt(host: HTMLElement): void {
     cssSet.set(k, url);
     host.style.setProperty(`--pk-u-${k}`, `url(${url})`);
   };
-  for (const [k, f] of Object.entries(CSS_FILES)) put(k, rxUrl(f));
+  // A relative url() inside a variable is read against the stylesheet that uses it (in the built game, assets/): make it whole.
+  for (const [k, f] of Object.entries(CSS_FILES)) put(k, new URL(rxUrl(f), document.baseURI).href);
   for (const [k, a] of Object.entries(CSS_CUTS)) { const c = pkCut(a); if (c) put(k, c.url); }
 }

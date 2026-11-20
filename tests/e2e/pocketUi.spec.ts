@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { start, view, waitForScene, watch } from './helpers/newUi';
+import { start, waitForScene, watch } from './helpers/newUi';
 import { onPkPage, pkFitProblems, pkView, toPocketMap } from './helpers/pocketUi';
 
 // The Pocket look (the Pokémon-style UI redesign, built from the mock-ups in plans/ui-redesign), part 1: the Title,
@@ -127,7 +127,7 @@ test('Pocket look: the Pause menu is the Rotom Phone; it changes nothing and its
   // Esc resumes: the map is back, and the phone is gone.
   await step(page, 'Escape');
   await expect(phone).toHaveCount(0);
-  await expect(view(page, 'Map').first()).toBeVisible();
+  await expect(pkView(page, 'Map', 'map')).toBeVisible();
 
   // Party opens the map's own Party menu, on top of the map.
   await step(page, 'Escape');
@@ -199,5 +199,39 @@ test('Pocket look: an event reads as the mock-ups (talk, choice cards, result, r
   await step(page, 'Enter');
   await waitForScene(page, 'Map');
   expect(await page.evaluate(() => (window as any).__pkr.session.run.stage.map.nodes.flatMap((n: any) => n.sides).find((s: any) => s.id === 'pk-ev')?.used)).toBe(true);
+  expect(errors).toEqual([]);
+});
+
+test('Pocket look: the stage map is the small Town Map board; the cursor, the legend and a stop all work as before', async ({ page }) => {
+  test.setTimeout(240_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=pk-map');
+  await toPocketMap(page);
+  await onPkPage(page, 'Map', 'map');
+  const map = pkView(page, 'Map', 'map');
+  await expect(map.locator('.map-board[data-key="map"]')).toBeVisible();
+  await expect(map.locator('.map-tick')).toHaveCount(8);
+  await expect(map.locator('.node.next').first()).toBeVisible();
+  await expect(map.locator('.hdr-t')).toContainText(/Stage 1 of \d+/);
+  // The board is the region's Town Map, not a flat colour.
+  expect(await map.locator('.map-board').evaluate((b) => getComputedStyle(b).backgroundImage)).toMatch(/townmap\/region1\.png/);
+  await fits(page, 'Map', 'map');
+  const before = await runNow(page);
+
+  // The arrows move the lit stop; the legend opens and closes; nothing in the run changes.
+  const lit = () => map.locator('.node.gx-lit').getAttribute('data-key');
+  const first = await lit();
+  await step(page, 'ArrowDown');
+  await step(page, 'l');
+  await expect(map.locator('[data-key="map-legend"]')).toBeVisible();
+  await fits(page, 'Map', 'map');
+  await step(page, 'l');
+  await expect(map.locator('[data-key="map-legend"]')).toHaveCount(0);
+  expect(await runNow(page)).toBe(before);
+  expect(first).not.toBeNull();
+
+  // Clicking a stop to go to travels there, as the map always has.
+  await map.locator('.node.next[data-act="pick"]').first().click();
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.activeScene()), { timeout: 20_000 }).not.toBe('Map');
   expect(errors).toEqual([]);
 });

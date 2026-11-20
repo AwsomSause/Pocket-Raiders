@@ -5,7 +5,9 @@ import { DEFAULT_SETTINGS } from '../../src/save/saveManager';
 import { page, pkPageOf, tierClass } from '../../src/ui/pocket/kit';
 import { pkAce, pkVersus } from '../../src/ui/pocket/screens/cards';
 import { dealOf, dealWord, pageText, pkEvent, points } from '../../src/ui/pocket/screens/event';
+import { mapWindow, nodeState, pkMap, pkMiniMap, pkNodeMenu } from '../../src/ui/pocket/screens/map';
 import { pkPause } from '../../src/ui/pocket/screens/pause';
+import type { MapModel, MapNodeView } from '../../src/ui/redux/screens/map';
 import type { EventModel } from '../../src/ui/redux/screens/event';
 import { pkSettingsHome } from '../../src/ui/pocket/screens/settings';
 import { firstThought, fitBody, pkBoard, pkConfirm, pkGrid, pkMenu, pkOptions, pkSaves, pkStats } from '../../src/ui/pocket/templates';
@@ -241,5 +243,61 @@ describe('Pocket look: event pages', () => {
     expect(dealWord('safe', base.choices[2]!, null)).toBe('Locked');
     expect(points('A battle may start. You could find something rare. And more. And more still.', 2)).toEqual(['A battle may start', 'You could find something rare']);
     expect(pageText({ lines: [{ who: 'Amos', text: 'Hi.' }, { who: 'Lily', text: 'Yo.' }], speaker: 'Amos' })).toBe('Hi.\nLily: Yo.');
+  });
+});
+
+describe('Pocket look: the stage map', () => {
+  const node = (col: number, row: number, rows: number, o: Partial<MapNodeView> = {}): MapNodeView => ({ id: `n${col}-${row}`, col, row, rows, kind: 'wild', fog: false, visited: false, cur: false, go: false, dim: false, harder: false, opt: -1, sides: [], marks: [], title: 'Wild Pokémon', text: '', ...o });
+  const nodes: MapNodeView[] = [];
+  for (let c = 1; c <= 30; c++) for (let r = 0; r < (c % 3 === 0 ? 1 : 2); r++) nodes.push(node(c, r, c % 3 === 0 ? 1 : 2, { visited: c < 12 && r === 0, cur: c === 12 && r === 0, kind: c === 30 ? 'gym' : c % 4 === 0 ? 'trainer' : 'wild' }));
+  for (const n of nodes.filter((n) => n.col === 13)) { n.go = true; n.opt = n.row; }
+  const edges = nodes.filter((n) => n.col < 30).flatMap((a) => nodes.filter((b) => b.col === a.col + 1).map((b) => ({ a: a.id, b: b.id, open: a.cur, walked: a.visited && (b.visited || b.cur) })));
+  const d: MapModel = {
+    title: 'Kanto · Stage 3', chips: ['Stage 3 / 8', 'Gym in 18 stops', '₽ 4,820', 'Day 3 · Evening', 'High tide', 'Badges 2', 'Level cap 150'], types: ['water'],
+    lines: ['Seaside (Water) · Gym Leader Misty', 'Escort: keep Pikachu safe'], party: [], eggs: ['3B'], art: null, trainer: 'trainer/red', columns: 30, column: 12, nodes, edges,
+    buttons: [{ label: 'Party', opt: 2, hot: false }, { label: 'Bag', opt: 3, hot: false }], keys: [['C', 'cry']], hints: [], index: 1, info: 'Level 13: Wild Pokémon. Something rustles.', notice: '', going: null, banner: null, legend: null,
+  };
+  it('shows eight stops at a time with the current one fourth from the left', () => {
+    expect(mapWindow(30, 12)).toBe(9);
+    expect(mapWindow(30, 0)).toBe(1);
+    expect(mapWindow(30, 29)).toBe(23);
+    expect(mapWindow(5, 3)).toBe(1);
+    const html = pkMiniMap(d);
+    expect(html.match(/class="map-tick/g)?.length).toBe(8);
+    expect(html).toContain('<span class="map-tick on" style="left:310px">12</span>');
+    expect(html).not.toContain('data-key="map-n-n8-0"');
+    expect(html).toContain('data-key="map-n-n16-0"');
+    expect(html).not.toContain('data-key="map-n-n17-0"');
+  });
+  it('marks walked, passed, current and next stops, and lights the one under the cursor', () => {
+    expect(nodeState(nodes.find((n) => n.id === 'n10-0')!, 12)).toBe('done');
+    expect(nodeState(nodes.find((n) => n.id === 'n10-1')!, 12)).toBe('skip');
+    expect(nodeState(nodes.find((n) => n.id === 'n12-0')!, 12)).toBe('here');
+    expect(nodeState(nodes.find((n) => n.id === 'n13-1')!, 12)).toBe('next');
+    expect(nodeState(nodes.find((n) => n.id === 'n14-0')!, 12)).toBe('');
+    const html = pkMiniMap(d, 'hold');
+    expect(html).toContain('class="node next gx-lit"');
+    expect(html).toContain('gx-cue is-hold');
+    expect(html).toContain('data-key="map-you"');
+    expect(html).toMatch(/class="top walked" data-key="map-r-n10-0-n11-0"/);
+  });
+  it('the page says the stage of the region, the Gym and its leader, and keeps the stage notes behind L', () => {
+    const html = pkMap(d);
+    expect(pkPageOf(html)?.id).toBe('map');
+    expect(html).toContain('Kanto · Stage 3 of 8');
+    expect(html).toContain('<b>Gym in 18 stops</b><span>Misty · Water type</span>');
+    expect(html).toContain('Next stop: Wild Pokémon');
+    expect(html).toContain('<i>High tide</i><i>Egg 3B</i>');
+    expect(html).toContain('stage note');
+    const open = pkMap({ ...d, legend: [{ glyph: 'W', color: '#3fae5a', text: 'Wild Pokémon' }] });
+    expect(open).toContain('Escort: keep Pikachu safe');
+    expect(open).toContain('data-act="key" data-arg="C"');
+  });
+  it('a stop with several things at it opens as cards; an empty status shows no pill', () => {
+    const html = pkNodeMenu({ header: 'Wild Pokémon', index: 1, cards: [{ kind: 'Rest', color: '#3fa129', name: 'Catnap', text: 'A short rest.', status: '', off: false, must: false }, { kind: 'Story', color: '#9141cb', name: 'Field notes', text: 'Jot it down.', status: 'Required', off: false, must: true }] });
+    expect(html.match(/class="chc /g)?.length).toBe(2);
+    expect(html).toContain('class="chc safe on"');
+    expect(html).toContain('gx-st must');
+    expect(html.match(/gx-st/g)?.length).toBe(1);
   });
 });
