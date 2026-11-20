@@ -2456,6 +2456,8 @@ export class MapScene extends Phaser.Scene {
     for (const r of view.rounds) {
       const x = left + (r.round - 1) * (cardW + gap);
       const cx = x + cardW / 2;
+      // The other matches are real simulated battles: an opponent is known only once the matches that decide them are played (the Champion waits in the final).
+      const hidden = r.state === 'later' && r.round < 5;
       const color = r.state === 'won' ? '#78d890' : r.state === 'next' ? '#ffe060' : '#a69cb4';
       const edge = r.state === 'won' ? 0x3c8a5a : r.state === 'next' ? 0xd9b45a : 0x50486a;
       const card = this.add.graphics();
@@ -2464,11 +2466,19 @@ export class MapScene extends Phaser.Scene {
       layer.add(card);
       layer.add(this.add.text(cx, 96, r.name, textStyle(16, color)).setOrigin(0.5, 0));
       layer.add(this.add.text(cx, 116, r.state === 'won' ? '✓ BEATEN' : r.state === 'next' ? '▶ NEXT OPPONENT' : 'AHEAD', textStyle(12, color)).setOrigin(0.5, 0));
-      const pic = r.opponent.sprite ? (trainerVisual(this, r.opponent.sprite, r.opponent.name, cx, 232, 1) as unknown as { height: number; setScale: (n: number) => unknown }) : null;
+      const pic = !hidden && r.opponent.sprite ? (trainerVisual(this, r.opponent.sprite, r.opponent.name, cx, 232, 1) as unknown as { height: number; setScale: (n: number) => unknown }) : null;
       if (pic) {
         if (pic.height > 0) pic.setScale(Math.min(100 / pic.height, 4));
         layer.add(pic as unknown as Phaser.GameObjects.GameObject);
         if (r.state === 'later') (pic as unknown as { setAlpha?: (a: number) => unknown }).setAlpha?.(0.8);
+      }
+      if (hidden) {
+        layer.add(this.add.text(cx, 190, '?', textStyle(48, '#a69cb4')).setOrigin(0.5));
+        layer.add(this.add.text(cx, 240, 'Not decided', textStyle(17, '#a69cb4', { align: 'center' })).setOrigin(0.5, 0));
+        layer.add(this.add.text(cx, 264, `${2 ** (r.round - 1)} trainers still fighting for this spot`, textStyle(12, '#a69cb4', { wordWrap: { width: cardW - 16 }, align: 'center' })).setOrigin(0.5, 0));
+        layer.add(this.add.text(cx, 372, `Field strength: +${r.levelBonus} levels`, textStyle(12, '#e8e0f0', { align: 'center' })).setOrigin(0.5, 0));
+        layer.add(this.add.text(cx, 446, `${r.shopAfter ? '🛒 Ball Guy after' : ''}`, textStyle(11, '#a69cb4', { align: 'center' })).setOrigin(0.5, 0));
+        continue;
       }
       layer.add(this.add.text(cx, 240, r.opponent.name, textStyle(17, '#ffffff', { align: 'center', wordWrap: { width: cardW - 12 } })).setOrigin(0.5, 0));
       layer.add(this.add.text(cx, 264, r.opponent.style, textStyle(12, '#bfe9ff', { wordWrap: { width: cardW - 16 }, align: 'center' })).setOrigin(0.5, 0));
@@ -2489,9 +2499,10 @@ export class MapScene extends Phaser.Scene {
       });
       layer.add(this.add.text(cx, 354, team.length > 0 ? 'known team' : '', textStyle(11, '#a69cb4')).setOrigin(0.5, 0));
       layer.add(this.add.text(cx, 372, `Field strength: +${r.levelBonus} levels`, textStyle(12, '#e8e0f0', { align: 'center' })).setOrigin(0.5, 0));
-      const detail = r.state === 'next' ? `"${r.opponent.intro}"` : r.crowd ?? '';
-      if (detail) layer.add(this.add.text(cx, 392, detail, textStyle(11, '#e8e0f0', { wordWrap: { width: cardW - 16 }, align: 'center' })).setOrigin(0.5, 0));
-      if (r.upsets.length > 0) layer.add(this.add.text(cx, 430, `Upset: ${r.upsets.slice(0, 1).join('; ')}`, textStyle(10, '#ff9860', { wordWrap: { width: cardW - 16 }, align: 'center' })).setOrigin(0.5, 0));
+      // A won round shows its big-screen match with the score (an upset in orange); the next round, the opponent's words.
+      const upset = r.upsets.length > 0;
+      const detail = r.state === 'next' ? `"${r.opponent.intro}"` : r.headline ? (upset ? `Upset! ${r.upsets[0]}` : `Big screen: ${r.headline}`) : r.crowd ?? '';
+      if (detail) layer.add(this.add.text(cx, 392, detail, textStyle(11, r.state !== 'next' && upset ? '#ff9860' : '#e8e0f0', { wordWrap: { width: cardW - 16 }, align: 'center' })).setOrigin(0.5, 0));
       layer.add(this.add.text(cx, 446, `${r.remaining.length} left${r.shopAfter ? '  ·  🛒 Ball Guy after' : ''}`, textStyle(11, '#a69cb4', { align: 'center' })).setOrigin(0.5, 0));
     }
     view.featured.slice(-2).forEach((f, i) => layer.add(this.add.text(GAME_WIDTH / 2, 466 + i * 16, f.text, textStyle(12, f.upset ? '#ff9860' : '#bfe9ff')).setOrigin(0.5, 0)));

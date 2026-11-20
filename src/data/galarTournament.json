@@ -3,6 +3,11 @@
  "entrants": 32,
  "shopEvery": 2,
  "healBetweenRounds": true,
+ "sim": {
+  "level": 70,
+  "maxTurns": 300,
+  "retries": 24
+ },
  "champion": "leon",
  "roundNames": [
   "Round of 32",

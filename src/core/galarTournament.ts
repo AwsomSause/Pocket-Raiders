@@ -3,6 +3,7 @@ import type { Content } from './contentSchema';
 import type { RunState } from './state';
 import tournamentJson from '../data/galarTournament.json';
 import { hashSeed, Rng } from './rng';
+import { simulateMatch, type SimResult } from './galarSim';
 
 /**
  * The Galar Champion's Tournament (Beta 0.5, section 1.3): 32 trainers, five rounds, replaces Galar's Elite Four.
@@ -16,6 +17,8 @@ const TournamentSchema = z.object({
   entrants: z.literal(32),
   shopEvery: z.number().int().min(1),
   healBetweenRounds: z.boolean(),
+  /** The other matches are played for real (core/galarSim.ts): both teams at this level; a match that runs out of turns goes to the judges; how often a seeded champion or last rival may replay a lost match (the second half with a level edge) before their win is simply taken. */
+  sim: z.object({ level: z.number().int().min(1).max(100), maxTurns: z.number().int().min(10), retries: z.number().int().min(1) }),
   champion: z.string().min(1),
   roundNames: z.array(z.string()).length(5),
   roundLevelBonus: z.array(z.number().int()).length(5),
@@ -42,6 +45,8 @@ export interface Bracket {
   roster: Record<string, RosterEntry>;
   /** The rival who always reaches the player's last challenger round (round 4, just before the Champion's final). Undefined when the run has no rival. */
   lastRival?: string;
+  /** Set when the other matches are simulated battles. */
+  sim?: { content: Content; teamIndex: number };
 }
 
 export interface BuildOptions {
@@ -52,6 +57,10 @@ export interface BuildOptions {
   rivalIds?: readonly string[];
   /** Bosses the player already beat as gym leaders; they are not rolled out of the roster, only used to fill in with the weakest first. */
   avoid?: readonly string[];
+  /** Given content, the other matches are real simulated battles (core/galarSim.ts) with each boss's team for this region; without it, a strength roll (old saves, quick tests). */
+  content?: Content;
+  /** Which of each boss's Elite Four teams the simulation uses (the run's region index). */
+  teamIndex?: number;
 }
 
 const GUEST_STRENGTH = 6;
@@ -87,7 +96,7 @@ export function buildBracket(opts: BuildOptions): Bracket {
   }
   const byId: Record<string, RosterEntry> = {};
   for (const e of roster) byId[e.bossId] = e;
-  return { seed: opts.runSeed, champion, slots, roster: byId, lastRival };
+  return { seed: opts.runSeed, champion, slots, roster: byId, lastRival, ...(opts.content ? { sim: { content: opts.content, teamIndex: opts.teamIndex ?? 0 } } : {}) };
 }
 
 function strengthOf(b: Bracket, id: string): number {
@@ -95,11 +104,41 @@ function strengthOf(b: Bracket, id: string): number {
   return b.roster[id]?.strength ?? GUEST_STRENGTH;
 }
 
-export interface Match { round: number; a: string; b: string; winner: string; upset: boolean }
+export interface Match { round: number; a: string; b: string; winner: string; upset: boolean; /** The simulated battle (when the bracket is simulated): Pokémon left, turn count and the play-by-play. */ sim?: SimResult }
+
+const simCache = new Map<string, SimResult>();
+
+/** A real simulated battle between two entrants. A seeded champion or last rival who loses replays (fresh rolls, then a level edge) until they win: the bracket promises them their place. */
+function simMatch(b: Bracket, round: number, index: number, a: string, c: string, forced: string | null): SimResult {
+  const { content, teamIndex } = b.sim!;
+  const key = `${b.seed}|${b.champion}|${b.lastRival ?? ''}|${teamIndex}|${round}|${index}|${a}|${c}`;
+  const hit = simCache.get(key);
+  if (hit) return hit;
+  const cfg = GALAR_TOURNAMENT.sim;
+  const name = (id: string): string => content.bosses.get(id)?.name ?? id;
+  const side = (id: string, edge: number) => ({ bossId: id, name: name(id), level: Math.min(100, cfg.level + roundLevelBonus(round) + edge), teamIndex, role: id === b.champion ? 'champion' as const : 'elite' as const });
+  let result: SimResult | null = null;
+  for (let tryNo = 0; tryNo < (forced ? cfg.retries : 1); tryNo++) {
+    const edge = forced && tryNo >= cfg.retries / 2 ? 5 + 5 * Math.floor((tryNo - cfg.retries / 2) / 4) : 0;
+    result = simulateMatch(content, side(a, forced === a ? edge : 0), side(c, forced === c ? edge : 0), `${b.seed}:r${round}m${index}:${tryNo}`, cfg.maxTurns);
+    if (!forced || (result.winner === 'a' ? a : c) === forced) break;
+  }
+  if (forced && (result!.winner === 'a' ? a : c) !== forced) result = { ...result!, winner: forced === a ? 'a' : 'b' };
+  if (simCache.size > 2000) simCache.clear();
+  simCache.set(key, result!);
+  return result!;
+}
 
 /** Plays one match between two non-player entrants. The champion always wins; otherwise the stronger entrant is favoured but upsets happen. */
 function playMatch(b: Bracket, round: number, index: number, a: string, c: string): Match {
   let winner: string;
+  if (b.sim) {
+    const forced = a === b.champion || c === b.champion ? b.champion : a === b.lastRival || c === b.lastRival ? b.lastRival! : null;
+    const sim = simMatch(b, round, index, a, c, forced);
+    winner = sim.winner === 'a' ? a : c;
+    const loser = winner === a ? c : a;
+    return { round, a, b: c, winner, upset: strengthOf(b, winner) + 2 <= strengthOf(b, loser), sim };
+  }
   if (a === b.champion) winner = a;
   else if (c === b.champion) winner = c;
   else if (a === b.lastRival) winner = a; // the rival always reaches round 4
@@ -206,11 +245,29 @@ export function usesGalarTournament(regionId: string, story: boolean, daily: boo
  * Elite Four casting record to match. Uses its own seeded stream, so no gameplay roll moves. Returns the new Elite Four ids (battle order).
  */
 export function galarEliteFour(content: Content, run: RunState, champion: string): string[] {
-  const rivalIds = run.story.rivals.map((r) => r.name.toLowerCase()).filter((id) => content.bosses.has(id));
-  const bracket = buildBracket({ runSeed: run.seed, championId: champion, rivalIds });
+  const bracket = buildBracket({ runSeed: run.seed, championId: champion, rivalIds: rivalIdsOf(content, run), content, teamIndex: run.regionIndex });
   const four = playerPath(bracket).slice(0, 4).map((id) => (content.bosses.has(id) ? id : GALAR_TOURNAMENT.roster[0]!.bossId));
   run.roleCast = run.roleCast.map((c) => (c.role === 'elite' && c.regionIndex === run.regionIndex ? { ...c, id: four[c.slot] ?? c.id } : c));
   return four;
+}
+
+function rivalIdsOf(content: Content, run: RunState): string[] {
+  return run.story.rivals.map((r) => r.name.toLowerCase()).filter((id) => content.bosses.has(id));
+}
+
+/**
+ * The run's bracket. Tournaments are simulated battles; a run saved mid-tournament before that (its cast Elite Four matches the old
+ * strength-roll bracket, not the simulated one) keeps its old bracket, so the screen always shows the fights the run really has.
+ */
+export function runBracket(content: Content, run: RunState, champion: string = run.stage?.leaderId ?? GALAR_TOURNAMENT.champion): Bracket {
+  const rivalIds = rivalIdsOf(content, run);
+  const sim = buildBracket({ runSeed: run.seed, championId: champion, rivalIds, content, teamIndex: run.regionIndex });
+  const cast = run.roleCast.filter((c) => c.role === 'elite' && c.regionIndex === run.regionIndex).sort((x, y) => x.slot - y.slot).map((c) => c.id);
+  if (cast.length < 4) return sim;
+  const four = (b: Bracket): boolean => playerPath(b).slice(0, 4).every((id, i) => !content.bosses.has(id) || cast[i] === id);
+  if (four(sim)) return sim;
+  const legacy = buildBracket({ runSeed: run.seed, championId: champion, rivalIds });
+  return four(legacy) ? legacy : sim;
 }
 
 /** Ball Guy's stock for the current visit, minus what this visit already sold out. */
@@ -224,12 +281,15 @@ export function ballGuyLimit(runSeed: string, visit: number, itemId: string): nu
 }
 
 /** The tournament round the current League battle is (1 to 5), or null outside the Galar tournament. */
-export function currentTournamentRound(content: Content, run: RunState): { round: number; name: string; opponent: string; intro: string; final: boolean; style: string; sprite: string } | null {
+export function currentTournamentRound(content: Content, run: RunState): { round: number; name: string; opponent: string; intro: string; final: boolean; style: string; sprite: string; /** Who they beat to get here, with the score ('Milo 4–1'); null in round 1. */ via: string | null } | null {
   const stage = run.stage;
   if (!stage || stage.kind !== 'league' || run.regionOrder[run.regionIndex] !== 'galar' || !stage.map.nodes.some((n) => n.sides.length > 0)) return null;
   const view = bracketView(content, run);
   const r = view.rounds[Math.min(view.wins, GALAR_TOURNAMENT.rounds - 1)]!;
-  return { round: r.round, name: r.name, opponent: r.opponent.name, intro: r.opponent.intro, final: r.round === GALAR_TOURNAMENT.rounds, style: r.opponent.style, sprite: content.bosses.get(r.opponent.id)?.sprites.default ?? '' };
+  // How they got here: their win in the round before (a real simulated match), for the reporter.
+  const last = r.round > 1 ? otherMatches(runBracket(content, run), r.round - 1).find((m) => m.winner === r.opponent.id) : undefined;
+  const via = last ? `${content.bosses.get(last.winner === last.a ? last.b : last.a)?.name ?? '?'}${scoreText(last)}` : null;
+  return { round: r.round, name: r.name, opponent: r.opponent.name, intro: r.opponent.intro, final: r.round === GALAR_TOURNAMENT.rounds, style: r.opponent.style, sprite: content.bosses.get(r.opponent.id)?.sprites.default ?? '', via };
 }
 
 // ---------- the bracket screen's data (pure) ----------
@@ -247,6 +307,10 @@ export interface BracketRound {
   upsets: string[];
   crowd: string | null;
   shopAfter: boolean;
+  /** Once the round is won: its big-screen match in a few words with the score ("Bede beat Milo 4–1"), else null. */
+  headline: string | null;
+  /** How many other matches the round has (15, 7, 3, 1, 0). */
+  others: number;
 }
 
 export interface FeaturedMatch { round: number; text: string; upset: boolean }
@@ -255,9 +319,7 @@ export interface BracketView { rounds: BracketRound[]; wins: number; standing: s
 /** What the bracket screen draws: five rounds, the player's opponent and the field. `wins` = rounds the player has won. */
 export function bracketView(content: Content, run: RunState): BracketView {
   const stage = run.stage;
-  const champion = stage?.leaderId ?? GALAR_TOURNAMENT.champion;
-  const rivalIds = run.story.rivals.map((r) => r.name.toLowerCase()).filter((id) => content.bosses.has(id));
-  const b = buildBracket({ runSeed: run.seed, championId: champion, rivalIds });
+  const b = runBracket(content, run);
   // The node is added to `visited` when its battle starts, so during a battle the current round is not won yet.
   const wins = Math.min(GALAR_TOURNAMENT.rounds, Math.max(0, (stage?.visited.length ?? 0) - (run.battle ? 1 : 0)));
   const name = (id: string): string => (id === PLAYER_SLOT ? 'You' : (content.bosses.get(id)?.name ?? id));
@@ -273,19 +335,43 @@ export function bracketView(content: Content, run: RunState): BracketView {
       levelBonus: roundLevelBonus(round),
       opponent: { id, name: name(id), types: content.bosses.get(id)?.types ?? [], sprite: content.bosses.get(id)?.sprites.default ?? '', team: (content.bosses.get(id)?.signature ?? []).slice(0, 6), style: id === b.champion ? 'Galar Champion' : (entry?.style ?? 'Challenger'), intro: id === b.champion ? `${name(id)} raises a hand to the roaring stadium.` : (entry?.intro ?? GALAR_TOURNAMENT.introduceLine.replace('{name}', name(id))) },
       remaining: remaining(b, round).map(name),
-      upsets: won ? otherMatches(b, round).filter((m) => m.upset).map((m) => `${name(m.winner)} beat ${name(m.winner === m.a ? m.b : m.a)}`) : [],
+      upsets: won ? otherMatches(b, round).filter((m) => m.upset).map((m) => `${name(m.winner)} beat ${name(m.winner === m.a ? m.b : m.a)}${scoreText(m)}`) : [],
       crowd: won ? crowdLine(b, round) : null,
       shopAfter: shopOpenAfter(round),
+      headline: won && round < GALAR_TOURNAMENT.rounds ? headlineOf(b, otherMatches(b, round), name) : null,
+      others: 2 ** (GALAR_TOURNAMENT.rounds - round) - 1,
     });
   }
   const featured: FeaturedMatch[] = [];
   for (let round = 1; round <= wins && round < GALAR_TOURNAMENT.rounds; round++) {
     const matches = otherMatches(b, round);
-    const pick = matches.find((m) => m.upset) ?? matches.reduce((best, m) => (strengthOf(b, m.winner) + strengthOf(b, m.a === m.winner ? m.b : m.a) > strengthOf(b, best.winner) + strengthOf(b, best.a === best.winner ? best.b : best.a) ? m : best), matches[0]!);
+    const pick = featuredMatch(b, matches);
     const loser = pick.winner === pick.a ? pick.b : pick.a;
-    featured.push({ round, upset: pick.upset, text: pick.upset ? `On the big screen: ${name(pick.winner)} stuns ${name(loser)}!` : `On the big screen: ${name(pick.winner)} edges out ${name(loser)} in a close one.` });
+    featured.push({ round, upset: pick.upset, text: pick.upset ? `On the big screen: ${name(pick.winner)} stuns ${name(loser)}${scoreText(pick)}!` : `On the big screen: ${name(pick.winner)} edges out ${name(loser)}${scoreText(pick)} in a close one.` });
   }
   return { rounds, wins, standing: remaining(b, wins).map(name), featured };
+}
+
+function headlineOf(b: Bracket, matches: Match[], name: (id: string) => string): string | null {
+  if (matches.length === 0) return null;
+  const m = featuredMatch(b, matches);
+  return `${name(m.winner)} beat ${name(m.winner === m.a ? m.b : m.a)}${scoreText(m)}`;
+}
+
+/** " 4–1": Pokémon left on each side of a simulated match (winner first); empty for a strength-roll match. */
+export function scoreText(m: Match): string {
+  if (!m.sim) return '';
+  const w = m.sim.winner === 'a' ? m.sim.leftA : m.sim.leftB;
+  const l = m.sim.winner === 'a' ? m.sim.leftB : m.sim.leftA;
+  return ` ${w}–${l}`;
+}
+
+/** The match of a round the big screen shows: an upset first, else (simulated) the closest finish, else the strongest pairing. */
+function featuredMatch(b: Bracket, matches: Match[]): Match {
+  const up = matches.find((m) => m.upset);
+  if (up) return up;
+  if (matches[0]?.sim) return matches.reduce((best, m) => (Math.abs(m.sim!.leftA - m.sim!.leftB) < Math.abs(best.sim!.leftA - best.sim!.leftB) ? m : best), matches[0]);
+  return matches.reduce((best, m) => (strengthOf(b, m.winner) + strengthOf(b, m.a === m.winner ? m.b : m.a) > strengthOf(b, best.winner) + strengthOf(b, best.a === best.winner ? best.b : best.a) ? m : best), matches[0]!);
 }
 
 export interface BracketTreeSlot { id: string; name: string; you: boolean; /** Their best-known Pokémon (species id; the player's lead), or null. */ ace: string | null }
@@ -299,8 +385,7 @@ export interface BracketTree {
 /** The whole bracket as a tree, for the New UI's bracket screen. Only rounds already played are listed; read only. */
 export function bracketTree(content: Content, run: RunState): BracketTree {
   const stage = run.stage;
-  const rivalIds = run.story.rivals.map((r) => r.name.toLowerCase()).filter((id) => content.bosses.has(id));
-  const b = buildBracket({ runSeed: run.seed, championId: stage?.leaderId ?? GALAR_TOURNAMENT.champion, rivalIds });
+  const b = runBracket(content, run);
   const wins = Math.min(GALAR_TOURNAMENT.rounds, Math.max(0, (stage?.visited.length ?? 0) - (run.battle ? 1 : 0)));
   const slot = (id: string): BracketTreeSlot => ({ id, name: id === PLAYER_SLOT ? 'You' : (content.bosses.get(id)?.name ?? id), you: id === PLAYER_SLOT, ace: id === PLAYER_SLOT ? (run.party[0]?.speciesId ?? null) : (content.bosses.get(id)?.signature?.[0] ?? null) });
   return { wins, lines: Array.from({ length: wins + 1 }, (_, c) => remaining(b, c).map(slot)) };
@@ -321,14 +406,22 @@ export interface MatchReplay {
 /** A short, presentation-only replay of the featured match of a won round: HP bars and commentary. Same bracket, same replay; never touches gameplay rolls. */
 export function matchReplay(content: Content, run: RunState, round: number): MatchReplay | null {
   const stage = run.stage;
-  const champion = stage?.leaderId ?? GALAR_TOURNAMENT.champion;
-  const rivalIds = run.story.rivals.map((r) => r.name.toLowerCase()).filter((id) => content.bosses.has(id));
-  const b = buildBracket({ runSeed: run.seed, championId: champion, rivalIds });
+  const b = runBracket(content, run);
   const matches = otherMatches(b, round);
   if (matches.length === 0) return null;
-  const pick = matches.find((m) => m.upset) ?? matches[0]!;
+  const pick = featuredMatch(b, matches);
   const info = (id: string) => ({ id, name: content.bosses.get(id)?.name ?? id, sprite: content.bosses.get(id)?.sprites.default ?? '' });
   const winner = pick.winner === pick.a ? 'a' : 'b';
+  // A simulated match replays its own play-by-play: the opening, every knock-out (with the next Pokémon), and the result.
+  if (pick.sim) {
+    const beats: ReplayBeat[] = [];
+    pick.sim.beats.forEach((x, i) => {
+      const last = beats.at(-1);
+      if (i > 0 && last && beats.length > 1 && x.text.includes('sends out') && !last.text.includes('sends out')) beats[beats.length - 1] = { text: `${last.text} ${x.text}`, hpA: x.hpA, hpB: x.hpB };
+      else beats.push({ ...x });
+    });
+    return { round, a: info(pick.a), b: info(pick.b), winner, upset: pick.upset, beats };
+  }
   const rng = streamFor(b.seed, `replay${round}`);
   const A = info(pick.a);
   const B = info(pick.b);

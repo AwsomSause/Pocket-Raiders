@@ -265,7 +265,7 @@ export class StadiumDirector {
   }
 
   /** A tournament round's opening: a round card with the opponent, their introduction, and a bigger staging for the final. Never throws. */
-  async tournamentIntro(round: { round: number; name: string; opponent: string; intro: string; final: boolean; style?: string; sprite?: string }): Promise<void> {
+  async tournamentIntro(round: { round: number; name: string; opponent: string; intro: string; final: boolean; style?: string; sprite?: string; via?: string | null }): Promise<void> {
     try {
       if (!this.h.disableAnimations()) {
         const spec = defaultMoment(round.final ? 'championIntro' : 'e4Intro', `galar-tournament-${round.round}`);
@@ -280,7 +280,7 @@ export class StadiumDirector {
         if (!this.h.card) await playIntroCard(this.scene, { tag: round.final ? 'THE FINAL' : round.name.toUpperCase(), name: round.opponent, style: round.style ?? '', line: round.intro, sprite: round.sprite ?? '', final: round.final }, `${this.h.battleId}:${round.round}`, !this.h.reduceMotion(), (x, y) => (round.sprite ? this.h.portrait?.(round.sprite, x, y) ?? null : null));
       }
       const reporter = (text: string): Promise<void> => (this.h.announce ? this.h.announce(text) : this.h.say(text));
-      await reporter(round.final ? `Ladies and gentlemen, this is it: the final! ${round.opponent} stands in the champion's circle and the whole stadium is on its feet!` : `${round.name}! Next up: ${round.opponent}${round.style ? `, ${round.style}` : ''}. The crowd is getting loud!`);
+      await reporter(round.final ? `Ladies and gentlemen, this is it: the final! ${round.opponent} stands in the champion's circle and the whole stadium is on its feet!` : `${round.name}! Next up: ${round.opponent}${round.style ? `, ${round.style}` : ''}${round.via ? `, fresh from beating ${round.via}` : ''}. The crowd is getting loud!`);
       if (this.h.opponentSays) await this.h.opponentSays(round.opponent, round.sprite ?? '', round.intro);
       else await this.h.say(round.intro);
       await this.interview('pre');
