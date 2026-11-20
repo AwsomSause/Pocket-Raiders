@@ -209,6 +209,16 @@ test('Rotom and the Boss Menu places open over the page and Esc comes back; Ligh
   await page.keyboard.press('KeyR');
   await page.keyboard.up('KeyQ');
   await hereIs(page, 'settings');
+  // Settings · Controls: the Board is in-game help here too (m5), and Esc comes back to Settings.
+  await s.getByTestId('dom-set-cat-controls').click();
+  await page.screenshot({ path: info.outputPath('settings-controls.png') });
+  await s.locator('[data-testid="dom-set-row-0"] [data-act="setRow"]').click();
+  await expect(s.getByTestId('dom-board-keys')).toBeVisible();
+  await expect(s.getByTestId('dom-pin-ledger')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(s.getByTestId('dom-board-keys')).toBeHidden();
+  await hereIs(page, 'settings');
+  await expect(s.getByTestId('dom-set-title')).toContainText('Controls');
   await expect(async () => {
     if ((await here(page)) !== 'ledger') await page.keyboard.press('Escape');
     expect(await here(page)).toBe('ledger');
@@ -218,6 +228,24 @@ test('Rotom and the Boss Menu places open over the page and Esc comes back; Ligh
   await page.keyboard.press('Escape');
   await page.keyboard.up('KeyQ');
   await hereIs(page, 'menu');
+  await holdQ(page, s);
+  await page.keyboard.press('Digit6');
+  await page.keyboard.up('KeyQ');
+  await hereIs(page, 'ledger');
+  // A controller: holding Select is hold-Q (the gamepad loop sends this event); the stick or d-pad points, letting go jumps.
+  const pad = (down: boolean) => page.evaluate((d) => window.dispatchEvent(new CustomEvent('pkr-pad-wheel', { detail: d })), down);
+  await pad(true);
+  await expect.poll(() => wheelUp(page)).toBe(true);
+  await page.keyboard.press('ArrowLeft'); // starts on the Ledger (5)
+  await page.keyboard.press('ArrowLeft'); // Operations (5 on the wheel)
+  await page.keyboard.press('ArrowLeft'); // Pokémon (4 on the wheel): the Reserve
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Dominion').nav.at)).toBe(3);
+  await pad(false);
+  await hereIs(page, 'reserve');
+  await pad(true);
+  await pad(false); // pointing at nothing: the wheel just closes
+  await expect.poll(() => wheelUp(page)).toBe(false);
+  await hereIs(page, 'reserve');
   await holdQ(page, s);
   await page.keyboard.press('Digit6');
   await page.keyboard.up('KeyQ');

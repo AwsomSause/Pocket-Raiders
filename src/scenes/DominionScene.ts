@@ -30,6 +30,7 @@ import { DebateController } from './dominion/debateController';
 import { PoliceController } from './dominion/policeController';
 import { VoicesController } from './dominion/voicesController';
 import { NavController, type Here } from './dominion/navController';
+import { PAD_WHEEL_EVENT } from '../ui/gamepad';
 import { jumpable, OPENS, type PageId } from '../core/dominion/nav';
 import { paperNote } from '../core/dominion/voices';
 import { threatRow } from '../core/dominion/rivalScreens';
@@ -336,6 +337,9 @@ export class DominionScene extends Phaser.Scene {
     kb?.on('keydown', raw);
     const up = (e: KeyboardEvent): void => this.nav.up(e);
     kb?.on('keyup', up);
+    // D28: a controller's Select held is the hold-Q of the pad.
+    const pad = (e: Event): void => { if (!this.leaving && this.scene.isActive()) this.nav.pad(!!(e as CustomEvent<boolean>).detail); };
+    window.addEventListener(PAD_WHEEL_EVENT, pad);
     // After `raw`, so a letter the HQ menu took (A, S) is not also read as a move.
     onInputAction(this, (a) => this.key(a), { onceEach: true });
     // L is the Ledger on the HQ, the map and the Crew File (D6) and Money on the HQ menu (D5, mockup 6), so it doesn't
@@ -347,6 +351,7 @@ export class DominionScene extends Phaser.Scene {
     this.events.once('shutdown', () => {
       kb?.off('keydown', raw);
       kb?.off('keyup', up);
+      window.removeEventListener(PAD_WHEEL_EVENT, pad);
       setLogKeyTaken(null);
       window.removeEventListener('keydown', this.typeKey, true);
       if (kb) kb.enabled = true;
@@ -379,6 +384,7 @@ export class DominionScene extends Phaser.Scene {
       refresh: () => sc.view?.refresh(),
       tabTo: (i: number) => { sc.screen = 'hq'; sc.notice = null; sc.tab(i); },
       hide: () => sc.leave(),
+      openBoard: () => sc.nav.openBoard(),
       bossFile: () => sc.files?.boss.file ?? null,
     };
   }

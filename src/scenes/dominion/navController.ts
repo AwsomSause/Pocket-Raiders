@@ -173,7 +173,18 @@ export class NavController {
 
   /** Q let go: jump to the place pointed at, or just close when nothing is. */
   up(e: KeyboardEvent): void {
-    if (e.code !== 'KeyQ' || !this.wheel || !this.held) return;
+    if (e.code === 'KeyQ') this.release();
+  }
+
+  /** A controller's Select (D28): held opens the wheel like Q, let go jumps like letting go of Q. */
+  pad(down: boolean): void {
+    if (down) {
+      if (!this.wheel) this.openWheel(true);
+    } else this.release();
+  }
+
+  private release(): void {
+    if (!this.wheel || !this.held) return;
     if (this.at === null) {
       this.close();
       return this.host.refresh();

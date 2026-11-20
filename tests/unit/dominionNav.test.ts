@@ -10,6 +10,7 @@ import { DOMINION_DATA } from '../../src/core/dominion/data';
 import { DOMINION_MODE_ID, startInRun } from '../../src/core/dominion/session';
 import type { DominionBlock } from '../../src/core/dominion/schema';
 import { boardView, shutterMode, wheelView, withShutter } from '../../src/ui/redux/screens/dominion/navViews';
+import { DEFAULT_PAD_MAP, padWheelHeld, WHEEL_BUTTON } from '../../src/core/presentation/uiPrefs';
 import { STANDARD_CHOICE } from '../../src/core/rules';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { content } from './helpers';
@@ -179,5 +180,16 @@ describe('D28 the crimson shutter (m7)', () => {
     const f = withShutter('<p></p>', { n: 4, mode: 'fade', from: 'a', to: 'b', ghost: '' });
     expect(f).not.toContain('class="shut"');
     expect(f).toContain('ghl4 fade');
+  });
+});
+
+describe('D28 controllers', () => {
+  const pad = (held: number[]) => ({ buttons: Array.from({ length: 17 }, (_, i) => held.includes(i)), axes: [0, 0] });
+  it('Select held is the pad\'s hold-Q, unless a game action is mapped to Select', () => {
+    expect(WHEEL_BUTTON).toBe(8);
+    expect(padWheelHeld(pad([8]), DEFAULT_PAD_MAP)).toBe(true);
+    expect(padWheelHeld(pad([]), DEFAULT_PAD_MAP)).toBe(false);
+    expect(padWheelHeld(pad([9]), DEFAULT_PAD_MAP)).toBe(false);
+    expect(padWheelHeld(pad([8]), { ...DEFAULT_PAD_MAP, back: 8 })).toBe(false);
   });
 });
