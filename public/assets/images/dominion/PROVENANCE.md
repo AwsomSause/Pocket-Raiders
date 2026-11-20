@@ -97,3 +97,10 @@ Copied from the round-4 mockups (`plans/evil-mode-rework/mockups-v4/sprites/`, P
 | File | From |
 | --- | --- |
 | `t-proton.png`, `t-petrel.png`, `t-misty.png` (D8, the Squads page's Vengeance targets) | Trainer sprites from the PokeRogue pack (`images/trainer/`), one frame, as in `plans/evil-mode-rework/mockups-v3/sprites/` |
+
+## Slice D28 (the Boss's board, round-4 mockup m5)
+
+| File | From |
+| --- | --- |
+| `i-leaders_crest.png` | Item icon (Leader's Crest) from `images/items/` (PokeRogue pack), re-saved at the mockup's size by the round-4 mockup thread; copied from `plans/evil-mode-rework/mockups-v4/sprites/` (the Title photo) |
+| `c-mina.png` | Grunt sprite cut by the mockup thread from `images/trainer/` art in this repo (PokeRogue pack), one frame; copied from `plans/evil-mode-rework/mockups-v4/sprites/` (the Assign photo) |
