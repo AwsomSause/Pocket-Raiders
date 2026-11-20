@@ -5,7 +5,7 @@
 import type { Content } from '../contentSchema';
 import type { RunState } from '../state';
 import { settle } from './field';
-import { DOMINION_DATA } from './data';
+import { DOMINION_DATA, useRegion } from './data';
 import { bookRest, weekSum } from './book';
 import { courtFightEnd } from './chair';
 
@@ -22,6 +22,7 @@ export function dominionCatchBlock(run: RunState): string | null {
 /** Settles the fight: a caught Pokémon joins the team (or the box), the battle's gone, the run's back on the map. Mutates `run`. */
 export function endDominionFight(content: Content, run: RunState, outcome: 'win' | 'lose' | 'caught' | 'fled'): string[] {
   const block = structuredClone(run.expansion!.dominion!);
+  useRegion(block);
   let caught: string | null = null;
   if (outcome === 'caught' && run.battle) {
     const foe = run.battle.enemyTeam[run.battle.enemyIndex];

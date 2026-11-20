@@ -215,8 +215,8 @@ export type DistrictState = z.infer<typeof DistrictStateSchema>;
 /** A battle an action (or the police) is waiting on. The fight bridge (fight.ts) starts it; fightEnd settles it. */
 export const FieldFightSchema = z.object({
   /** D11: 'hero' a job the Hero stepped into (m11), 'challenge' an encounter's battle, 'heroRaid' the Hero at the HQ, 'stand' the final stand, 'legend' a Heroic Legendary. D10: 'growth' a fight of a chain (Raid, a Gym). D12: 'court' a Chair visitor at the door (`target` the card id, `action` the answer). */
-  why: z.enum(['fail', 'always', 'police', 'looker', 'raid', 'rival', 'hero', 'challenge', 'heroRaid', 'stand', 'legend', 'growth', 'court', 'spy', 'town', 'snatch', 'takeover']),
-  foe: z.enum(['target', 'police', 'wild', 'ghost', 'member', 'looker', 'raid', 'rival', 'hero', 'sidekick', 'legend', 'growth', 'court', 'snatch', 'takeover']),
+  why: z.enum(['fail', 'always', 'police', 'looker', 'raid', 'rival', 'hero', 'challenge', 'heroRaid', 'stand', 'legend', 'growth', 'court', 'spy', 'town', 'snatch', 'takeover', 'realm']),
+  foe: z.enum(['target', 'police', 'wild', 'ghost', 'member', 'looker', 'raid', 'rival', 'hero', 'sidekick', 'legend', 'growth', 'court', 'snatch', 'takeover', 'realm']),
   begun: z.boolean(),
   action: S.nullable(),
   target: S.nullable(),
@@ -359,6 +359,8 @@ const BlockSchema = z.object({
   rules: z.lazy(() => RunRulesSchema).optional(),
   /** D30: yesterday's jobs and the morning snapshots the morning paper reads. Optional; `paperOf` (moments.ts) fills it. */
   paper: z.lazy(() => PaperStateSchema).optional(),
+  /** D15: many regions (the region played now, the ones left behind with their Holders). Optional: absent = Kanto, the first. */
+  realm: z.lazy(() => RealmStateSchema).optional(),
 }).strict();
 export const DominionBlockSchema = z.preprocess(migrateDominion, BlockSchema);
 export type DominionBlock = z.infer<typeof BlockSchema>;
@@ -375,6 +377,9 @@ export interface DominionSetup {
 
 export type DominionAction =
   | { t: 'open' }
+  /** D15: leave the Taken region (the Holder, standing orders, the one member brought), and the Empire screen's answers. */
+  | { t: 'leave'; holder: string; orders: Record<string, string>; bring: string | null }
+  | { t: 'realm'; op: 'visit' | 'pay' | 'replace' | 'spy' | 'talk' | 'orders' | 'tribute' | 'trip' | 'letGo'; region: string; member?: string; orders?: Record<string, string>; tribute?: number }
   | { t: 'plan'; order: string }
   | { t: 'do'; order: string }
   | { t: 'toNight' }
@@ -2528,3 +2533,154 @@ export const DominionPrefsSchema = z.object({
   fx: DominionFxSchema.default(() => ({ level: 'full' as const, particles: true, cutIns: 'show' as const, shake: true, flashes: 'on' as const })),
 }).strict();
 export type DominionPrefs = z.infer<typeof DominionPrefsSchema>;
+
+// ---------- D15: many regions (regions.json, regions/<id>.json, `block.realm`) ----------
+
+export const POLICY_KEYS = ['money', 'people', 'region', 'security'] as const;
+export const BETRAYAL_KINDS = ['secession', 'sellout', 'coup'] as const;
+const PolicyOption = z.object({
+  id: S, name: S, tribute: I.min(0).max(200).optional(), stab: I.optional(), risk: I.optional(), grow: I.optional(), guard: I.optional(),
+  crew: I.optional(), towns: I.optional(), uprising: I.optional(), hero: I.optional(), revolt: I.optional(), usurpedOnly: z.boolean().optional(), line: S,
+}).strict();
+export type PolicyOption = z.infer<typeof PolicyOption>;
+const PolicyGroup = z.object({ name: S, options: z.array(PolicyOption).length(5) }).strict();
+const Reading = z.object({
+  motive: S.optional(), usurped: z.boolean().optional(), policy: S, tribute: I.optional(), stab: I.optional(), risk: I.optional(),
+  crew: I.optional(), grow: I.optional(), dread: z.boolean().optional(), line: S,
+}).strict();
+export type PolicyReading = z.infer<typeof Reading>;
+const PathNums = z.record(z.enum(PATH_IDS), I);
+export const RegionsFileSchema = z.object({
+  _source: S,
+  order: z.array(S).length(9),
+  lengths: z.object({ three: I.min(1), six: I.min(1) }).strict(),
+  /** First release: these regions play; the rest are built but switched off. */
+  open: z.array(S).min(1), openNote: S,
+  regions: z.record(S, z.object({ name: S, crest: z.string().length(1), colour: S, glow: S, shade: S, boon: S }).strict()),
+  boons: z.array(z.object({
+    id: S, region: S, name: S, icon: S, text: S, status: z.enum(['supported', 'limited', 'disabled']), note: S.optional(), rooms: z.array(S).optional(),
+  }).strict()).length(9),
+  arrive: z.object({ funds: N0, aceLevel: I.min(1), notorietyCap: S, ultraBalls: N0, garage: S, fairSkies: N0, lines: z.record(S, S) }).strict(),
+  holders: z.object({
+    self: z.object({ floor: I.min(0).max(100), visitEvery: I.min(1), missed: I }).strict(),
+    usurped: z.object({ stability: I }).strict(),
+    ranks: z.array(S).min(1), coupRanks: z.array(S).min(1), swapDays: I.min(1),
+    kinds: z.record(S, S), why: z.record(S, S),
+  }).strict(),
+  stability: z.object({
+    start: PathNums, path: PathNums, decay: N0, witsOver: N0, perWits: N0, traitBonus: z.record(S, I), visit: N0,
+    wanted: z.object({ over: N0, n: I }).strict(),
+    bands: z.array(z.object({ min: N0, id: z.enum(['calm', 'grumbling', 'unrest', 'revolt']), word: S, boon: I.min(0).max(100) }).strict()).length(4),
+    grumble: N0, unrestLoss: N0, revoltLoss: N0,
+    uprising: z.object({ chance: I.min(0).max(100), hit: I }).strict(),
+    newHero: z.object({ chance: I.min(0).max(100), hit: I }).strict(),
+    shadowCrack: z.object({ chance: I.min(0).max(100), towns: I.min(1) }).strict(),
+  }).strict(),
+  betrayal: z.object({
+    ambitionTrait: N0, ambitionAt: N0, ambitionShare: I.min(1), perWeekAway: N0, tributeOver: N0, per5Tribute: N0, grievance: N0,
+    rivalOffer: N0, rivalOfferChance: I.min(0).max(100), usurped: N0, loyaltyOver: N0, visit: I, raise: I, spy: I,
+    convincedHalf: z.boolean(), kingmakerHalf: z.boolean(), riskShare: I.min(1), stabilityShare: I.min(1), cap: I.min(1).max(100),
+    longTalkAt: N0, coupChance: I.min(0).max(100), sellout: z.array(S), sellWanted: N0, tellsAt: z.array(N0).min(1),
+    bands: z.array(z.object({ min: N0, word: S }).strict()).min(2),
+  }).strict(),
+  tribute: z.object({ default: I.min(0).max(100), steps: z.array(I.min(0).max(100)).min(2), share: I.min(1), late: I.min(0).max(100) }).strict(),
+  answers: z.object({
+    visit: z.object({ days: I.min(1), stab: N0 }).strict(),
+    pay: z.object({ cost: N0, costPerWeek: N0, loyalty: N0 }).strict(),
+    replace: z.object({ keepHalf: z.boolean(), stab: I }).strict(),
+    spy: z.object({ cost: N0 }).strict(),
+    talk: z.object({ half: z.boolean() }).strict(),
+  }).strict(),
+  reclaim: z.object({ control: N0, tension: N0, stab: N0 }).strict(),
+  policies: z.object({
+    money: PolicyGroup, people: PolicyGroup, region: PolicyGroup, security: PolicyGroup,
+    default: z.record(z.enum(POLICY_KEYS), S), readings: z.array(Reading), holderPicks: z.record(S, S),
+  }).strict(),
+  kinds: z.record(z.enum(BETRAYAL_KINDS), z.object({ name: S, text: S, answer: S }).strict()),
+  lines: z.record(S, S),
+  tells: z.array(S).min(3),
+  memory: z.object({ arrive: z.array(S).min(1), compare: z.array(S).min(1), name: z.array(S).min(1), warn: z.array(S).min(1) }).strict(),
+  screen: z.object({
+    buttons: z.record(S, S), leave: z.record(S, S),
+  }).catchall(S),
+}).strict();
+export type RegionsFile = z.infer<typeof RegionsFileSchema>;
+
+/** One region's own places and people (regions/<id>.json, made by tools/dominion/regions-to-json.py). Kanto's live in the D2-D14 files. */
+export const RegionPackSchema = z.object({
+  _source: S, id: S, label: S, warehouse: S, hq: S, arrive: z.array(S).min(1),
+  districts: FieldFileSchema.shape.districts, routes: FieldFileSchema.shape.routes, water: FieldFileSchema.shape.water,
+  pools: z.object({ catch: z.array(S).min(4), steal: z.array(S).min(4) }).strict(),
+  rivals: z.record(S, RivalTeamSchema.shape.sites),
+  gyms: GrowthFileSchema.shape.gyms, business: GrowthFileSchema.shape.business, pillars: z.array(S).min(1),
+  hero: z.object({
+    path: z.array(S).length(9), allies: z.array(AllyDefSchema).min(1), mentor: S, parent: S, sidekick: S,
+    homes: z.record(S, z.object({ home: S, over: S }).strict()),
+  }).strict(),
+  league: TakeoverFileSchema.shape.league.pick({ elite: true, champion: true, standIn: true }),
+  lab: z.array(S).min(1),
+  desk: DeskFileSchema.shape.regions.valueType,
+  /** Holdings of this region from takeover.json, placed in a town and given their weekly effects. */
+  holdings: z.record(S, z.object({ district: S, fx: z.array(HoldingFx), via: S.optional(), note: S.optional() }).strict()),
+}).strict();
+export type RegionPack = z.infer<typeof RegionPackSchema>;
+
+/** The Holder of a region the Boss left (Part 5 §4): yourself, a member (kept here, off the crew), or the usurped rival Boss. */
+const HolderSchema = z.object({
+  kind: z.enum(['self', 'member', 'usurped']),
+  name: S,
+  member: z.lazy(() => MemberSchema).nullable(),
+}).strict();
+export const HeldRegionSchema = z.object({
+  id: S,
+  /** The path that took it (Stability's start and weekly drift). */
+  path: z.enum(PATH_IDS),
+  /** Run day it was left (Run day = the region's day + the days before it). */
+  left: I.min(1),
+  holder: HolderSchema,
+  stability: I.min(0).max(100),
+  /** Weeks since the Boss last visited (betrayal risk +3 a week, A11). */
+  away: N0,
+  /** Run day of the last visit (self-holding: every 14 days, or Stability −20). */
+  visited: I.min(1),
+  /** A11's things that build: grievances, a rival's offer this week, a raise, a spy, the Long Talk. */
+  grievances: N0, offer: z.boolean(), raised: z.boolean(), spy: z.boolean(), talked: z.boolean(),
+  tribute: I.min(0).max(100),
+  orders: z.record(z.enum(POLICY_KEYS), S),
+  /** The region's weekly income when the Boss left (tribute is a share of it). */
+  base: N0,
+  /** Towns still held, members left behind. */
+  towns: N0, crew: N0,
+  status: z.enum(['held', 'seceded', 'sellout', 'lost']),
+  /** Who turned (secession/sellout/coup), and how. */
+  traitor: S.nullable(), kind: z.enum(BETRAYAL_KINDS).nullable(),
+  /** Tells already shown (by risk threshold). */
+  tells: N0,
+  /** Wanted there (a Sellout adds 50). */
+  wanted: I.min(0).max(100),
+  /** The last week's tribute, and whether the region rose (Uprising) or got a new Hero this week. */
+  last: N0,
+  /** Rival and Hero names, for the brought member's memory (A13). */
+  rival: S.nullable(), hero: S.nullable(),
+}).strict();
+export type HeldRegion = z.infer<typeof HeldRegionSchema>;
+export const RealmStateSchema = z.object({
+  /** The region being played now. */
+  at: S,
+  /** Run days before this region's Day 1 (the Empire screen's "Run day"). */
+  base: N0,
+  held: z.array(HeldRegionSchema),
+  /** The member brought from the last region (A13), and how many memory lines they've said here. */
+  brought: S.nullable(), said: N0,
+  /** Days the Boss is away visiting a held region (the crew runs those Days). */
+  away: N0,
+  /** Hoenn's boon: fair skies over this district until this day. */
+  skies: z.object({ district: S, until: I.min(1) }).strict().nullable(),
+  /** The week the boons last paid out (Radio Tower's free Spread the Word, Plasma's walk-in, the Academy's Wits). */
+  boonWeek: N0, spreadFree: z.boolean(),
+  /** First HQ upgrade free (Kalos), Infirmary free (Alola): used yet in this region. */
+  freeUpgrade: z.boolean(), freeInfirmary: z.boolean(),
+  /** The Long Trip: the region being retaken (a fight against the traitor waits). */
+  trip: S.nullable(),
+}).strict();
+export type RealmState = z.infer<typeof RealmStateSchema>;

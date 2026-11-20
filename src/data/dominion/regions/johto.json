@@ -1,0 +1,2102 @@
+{
+ "_source": "tools/dominion/regions-to-json.py (johto); see the tool for sources.",
+ "id": "johto",
+ "label": "JOHTO",
+ "warehouse": "Olivine",
+ "hq": "olivine",
+ "arrive": [
+  "The new warehouse is a fish store on the Olivine docks, and it still smells like one. The lighthouse sweeps the window every eight seconds.",
+  "\"{brought},\" you say. \"Find a broom.\"",
+  "Somewhere up the coast, a radio is playing an old Rocket song nobody's supposed to know any more."
+ ],
+ "districts": [
+  {
+   "id": "new-bark",
+   "name": "New Bark",
+   "x": 40,
+   "y": 196,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "normal-flying",
+   "targets": [
+    {
+     "id": "elm-lab",
+     "name": "Elm's Lab",
+     "kind": "site",
+     "owner": {
+      "name": "Professor Elm",
+      "look": "trainer/pr/scientist_m",
+      "line": "Nervous, kind, and always one sample short."
+     },
+     "trait": {
+      "word": "Timid",
+      "odds": 6
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Lab aide",
+      "cls": "youngster",
+      "species": [
+       "marill",
+       "sentret"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "new-bark-street",
+     "name": "The Windy Lane",
+     "kind": "street",
+     "owner": {
+      "name": "The town elders",
+      "look": "trainer/pr/veteran_f",
+      "line": "They know every face that comes off Route 29."
+     },
+     "trait": {
+      "word": "Watchful",
+      "odds": -4
+     },
+     "pay": 1,
+     "foe": {
+      "name": "A local",
+      "cls": "picnicker",
+      "species": [
+       "sentret",
+       "hoothoot"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "route-29",
+     "name": "Route 29",
+     "kind": "route",
+     "owner": {
+      "name": "Trainers on the route",
+      "look": "trainer/pr/backpacker_m",
+      "line": "First-timers with their first Pokémon."
+     },
+     "trait": null,
+     "pay": 1,
+     "foe": {
+      "name": "Youngster Joey",
+      "cls": "youngster",
+      "species": [
+       "rattata",
+       "pidgey"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "cherrygrove",
+   "name": "Cherrygrove",
+   "x": 40,
+   "y": 290,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "normal-water",
+   "targets": [
+    {
+     "id": "cherrygrove-mart",
+     "name": "Cherrygrove Mart",
+     "kind": "shop",
+     "owner": {
+      "name": "The Mart clerk",
+      "look": "dominion/t-clerk.png",
+      "line": "She knows the guide gent better than her own brother."
+     },
+     "trait": {
+      "word": "Timid",
+      "odds": 5
+     },
+     "pay": 1,
+     "foe": {
+      "name": "The clerk's cousin",
+      "cls": "fisherman",
+      "species": [
+       "poliwag"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "cherrygrove-bay",
+     "name": "Cherrygrove Bay",
+     "kind": "dock",
+     "owner": {
+      "name": "The fishermen",
+      "look": "trainer/pr/scuba_diver_m",
+      "line": "Boats in at dawn, gone by noon."
+     },
+     "trait": {
+      "word": "Stubborn",
+      "odds": -4
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Fisherman Tully",
+      "cls": "fisherman",
+      "species": [
+       "tentacool",
+       "krabby"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "route-30",
+     "name": "Route 30",
+     "kind": "route",
+     "owner": {
+      "name": "Bug catchers",
+      "look": "trainer/pr/backpacker_f",
+      "line": "Nets and jars and lunch money."
+     },
+     "trait": null,
+     "pay": 1,
+     "foe": {
+      "name": "Bug Catcher Don",
+      "cls": "bug-catcher",
+      "species": [
+       "caterpie",
+       "weedle"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "violet",
+   "name": "Violet",
+   "x": 178,
+   "y": 112,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "grass-flying",
+   "targets": [
+    {
+     "id": "sprout-tower",
+     "name": "Sprout Tower",
+     "kind": "ghost",
+     "owner": {
+      "name": "The sages",
+      "look": "trainer/pr/veteran_m",
+      "line": "Old men on a swaying floor. Calm as a pond."
+     },
+     "trait": {
+      "word": "Pious",
+      "odds": -6
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Sage Nico",
+      "cls": "psychic",
+      "species": [
+       "bellsprout",
+       "gastly"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "violet-mart",
+     "name": "Violet Mart",
+     "kind": "shop",
+     "owner": {
+      "name": "The Mart clerk",
+      "look": "dominion/t-clerk.png",
+      "line": "Sells more Escape Ropes than anything else."
+     },
+     "trait": {
+      "word": "Timid",
+      "odds": 5
+     },
+     "pay": 1,
+     "foe": {
+      "name": "The clerk's son",
+      "cls": "youngster",
+      "species": [
+       "pidgey",
+       "spearow"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "violet-school",
+     "name": "Earl's Academy",
+     "kind": "crowd",
+     "owner": {
+      "name": "Earl, the teacher",
+      "look": "trainer/pr/harlequin",
+      "line": "Spins when he talks. Owns the building outright."
+     },
+     "trait": {
+      "word": "Gullible",
+      "odds": 6
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Earl",
+      "cls": "psychic",
+      "species": [
+       "ponyta",
+       "abra"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "azalea",
+   "name": "Azalea",
+   "x": 178,
+   "y": 290,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "poison-bug",
+   "targets": [
+    {
+     "id": "slowpoke-well",
+     "name": "Slowpoke Well",
+     "kind": "cave",
+     "owner": {
+      "name": "The well keeper",
+      "look": "trainer/pr/veteran_m",
+      "line": "Thinks the Slowpoke bring the rain."
+     },
+     "trait": {
+      "word": "Pious",
+      "odds": -4
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Well hand",
+      "cls": "hiker",
+      "species": [
+       "slowpoke",
+       "zubat"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "kurt-workshop",
+     "name": "Kurt's Workshop",
+     "kind": "site",
+     "owner": {
+      "name": "Kurt",
+      "look": "trainer/pr/veteran_m",
+      "line": "Makes Balls from Apricorns. Hates anyone in a uniform."
+     },
+     "trait": {
+      "word": "Proud",
+      "odds": -6
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Kurt",
+      "cls": "veteran",
+      "species": [
+       "slowpoke",
+       "pineco"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "ilex-forest",
+     "name": "Ilex Forest",
+     "kind": "route",
+     "owner": {
+      "name": "The charcoal makers",
+      "look": "trainer/pr/worker_f",
+      "line": "They burn wood all night and sell it all day."
+     },
+     "trait": null,
+     "pay": 1,
+     "foe": {
+      "name": "Charcoal maker",
+      "cls": "worker",
+      "species": [
+       "paras",
+       "oddish"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "goldenrod",
+   "name": "Goldenrod",
+   "x": 316,
+   "y": 196,
+   "control": 0,
+   "rival": 40,
+   "police": false,
+   "wild": "normal-electric",
+   "targets": [
+    {
+     "id": "goldenrod-store",
+     "name": "Goldenrod Dept. Store",
+     "kind": "shop",
+     "owner": {
+      "name": "The floor manager",
+      "look": "trainer/pr/rich_m",
+      "line": "Six floors, a rooftop, and a man who counts all of it."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 4
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Security guard",
+      "cls": "veteran",
+      "species": [
+       "growlithe",
+       "magnemite"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "radio-tower",
+     "name": "Radio Tower",
+     "kind": "site",
+     "owner": {
+      "name": "The station director",
+      "look": "trainer/pr/interviewers",
+      "line": "On the air every hour. Hates dead air more than crime."
+     },
+     "trait": {
+      "word": "Proud",
+      "odds": -6
+     },
+     "pay": 1.6,
+     "foe": {
+      "name": "Station guard",
+      "cls": "veteran",
+      "species": [
+       "magnemite",
+       "voltorb"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "goldenrod-underground",
+     "name": "The Underground",
+     "kind": "crowd",
+     "owner": {
+      "name": "The tunnel traders",
+      "look": "trainer/pr/hooligans",
+      "line": "Haircuts, bargains, and nobody asks your name."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 5
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Tunnel tough",
+      "cls": "roughneck",
+      "species": [
+       "grimer",
+       "koffing"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "w": 130,
+   "rivalNote": "Rocket remnants"
+  },
+  {
+   "id": "ecruteak",
+   "name": "Ecruteak",
+   "x": 316,
+   "y": 70,
+   "control": 0,
+   "rival": 0,
+   "police": true,
+   "wild": "fire-ghost",
+   "targets": [
+    {
+     "id": "burned-tower",
+     "name": "Burned Tower",
+     "kind": "ghost",
+     "owner": {
+      "name": "The tower watch",
+      "look": "trainer/pr/veteran_f",
+      "line": "Nobody goes down to the basement. Nobody."
+     },
+     "trait": {
+      "word": "Superstitious",
+      "odds": 6
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Watch hand",
+      "cls": "hex-maniac",
+      "species": [
+       "gastly",
+       "koffing"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "dance-theatre",
+     "name": "Dance Theatre",
+     "kind": "crowd",
+     "owner": {
+      "name": "The Kimono Girls",
+      "look": "trainer/pr/dancer",
+      "line": "Five dancers, one stage, a crowd every night."
+     },
+     "trait": {
+      "word": "Proud",
+      "odds": -5
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Theatre gent",
+      "cls": "veteran",
+      "species": [
+       "umbreon",
+       "espeon"
+      ],
+      "offset": 2
+     }
+    },
+    {
+     "id": "ecruteak-station",
+     "name": "Ecruteak Police Post",
+     "kind": "police",
+     "owner": {
+      "name": "Officer Jenny",
+      "look": "dominion/t-policeman.png",
+      "line": "Old town, old rules. She walks the tower lanes every night."
+     },
+     "trait": {
+      "word": "Sharp",
+      "odds": -10
+     },
+     "pay": 1,
+     "foe": {
+      "name": "Officer",
+      "cls": "veteran",
+      "species": [
+       "growlithe",
+       "noctowl"
+      ],
+      "offset": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "olivine",
+   "name": "Olivine",
+   "x": 454,
+   "y": 290,
+   "control": 10,
+   "rival": 0,
+   "police": false,
+   "wild": "water-steel",
+   "targets": [
+    {
+     "id": "olivine-docks",
+     "name": "Olivine Docks",
+     "kind": "dock",
+     "owner": {
+      "name": "The harbour master",
+      "look": "trainer/pr/pilot",
+      "line": "The SS Aqua comes in Mondays. He meets it every time."
+     },
+     "trait": {
+      "word": "Stubborn",
+      "odds": -4
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Dock hand",
+      "cls": "worker",
+      "species": [
+       "machop",
+       "tentacool"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "olivine-lighthouse",
+     "name": "Glitter Lighthouse",
+     "kind": "site",
+     "owner": {
+      "name": "The keeper",
+      "look": "trainer/pr/veteran_m",
+      "line": "Up and down two hundred stairs, every night."
+     },
+     "trait": {
+      "word": "Steady",
+      "odds": -4
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Keeper",
+      "cls": "fisherman",
+      "species": [
+       "magnemite",
+       "tentacool"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "olivine-cafe",
+     "name": "Olivine Café",
+     "kind": "crowd",
+     "owner": {
+      "name": "The cook",
+      "look": "trainer/pr/waiter_m",
+      "line": "Sailors eat here. Sailors talk here."
+     },
+     "trait": {
+      "word": "Gossip",
+      "odds": 5
+     },
+     "pay": 1.1,
+     "foe": {
+      "name": "Sailor Huey",
+      "cls": "swimmer",
+      "species": [
+       "poliwhirl",
+       "machop"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "cianwood",
+   "name": "Cianwood",
+   "x": 454,
+   "y": 118,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "water-fighting",
+   "targets": [
+    {
+     "id": "cianwood-pharmacy",
+     "name": "Cianwood Pharmacy",
+     "kind": "shop",
+     "owner": {
+      "name": "The pharmacist",
+      "look": "trainer/pr/doctor_m",
+      "line": "His secret medicine is famous across the sea."
+     },
+     "trait": {
+      "word": "Timid",
+      "odds": 4
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Pharmacy guard",
+      "cls": "black-belt",
+      "species": [
+       "machop"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "cianwood-shore",
+     "name": "Cianwood Shore",
+     "kind": "route",
+     "owner": {
+      "name": "Swimmers",
+      "look": "trainer/pr/swimmer_m",
+      "line": "The current is cruel; they swim it anyway."
+     },
+     "trait": null,
+     "pay": 1,
+     "foe": {
+      "name": "Swimmer Rory",
+      "cls": "swimmer",
+      "species": [
+       "tentacool",
+       "shellder"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "cianwood-photo",
+     "name": "Photo Studio",
+     "kind": "street",
+     "owner": {
+      "name": "The photographer",
+      "look": "trainer/pr/artist",
+      "line": "Takes your picture for free. Keeps the negatives."
+     },
+     "trait": {
+      "word": "Gossip",
+      "odds": 5
+     },
+     "pay": 1,
+     "foe": {
+      "name": "Studio help",
+      "cls": "picnicker",
+      "species": [
+       "smeargle"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "w": 118
+  },
+  {
+   "id": "mahogany",
+   "name": "Mahogany",
+   "x": 178,
+   "y": 20,
+   "control": 0,
+   "rival": 30,
+   "police": false,
+   "wild": "ice-dark",
+   "targets": [
+    {
+     "id": "mahogany-mart",
+     "name": "Souvenir Shop",
+     "kind": "shop",
+     "owner": {
+      "name": "The old man at the till",
+      "look": "dominion/t-clerk.png",
+      "line": "The basement stairs are behind the counter. He says there's no basement."
+     },
+     "trait": {
+      "word": "Shifty",
+      "odds": 6
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Basement guard",
+      "cls": "veteran",
+      "species": [
+       "koffing",
+       "rattata"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "lake-of-rage",
+     "name": "Lake of Rage",
+     "kind": "route",
+     "owner": {
+      "name": "The fishermen",
+      "look": "trainer/pr/scuba_diver_f",
+      "line": "Red Gyarados sightings every spring."
+     },
+     "trait": null,
+     "pay": 1.2,
+     "foe": {
+      "name": "Fisherman Andre",
+      "cls": "fisherman",
+      "species": [
+       "magikarp",
+       "gyarados"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "ice-path",
+     "name": "Ice Path",
+     "kind": "cave",
+     "owner": {
+      "name": "Ice cutters",
+      "look": "trainer/pr/snow_worker",
+      "line": "Blocks of ice for the whole region."
+     },
+     "trait": null,
+     "pay": 1.1,
+     "foe": {
+      "name": "Ice cutter",
+      "cls": "snow-worker",
+      "species": [
+       "swinub",
+       "sneasel"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "rivalNote": "Rocket remnants"
+  },
+  {
+   "id": "blackthorn",
+   "name": "Blackthorn",
+   "x": 40,
+   "y": 40,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "ice-dragon",
+   "targets": [
+    {
+     "id": "dragons-den",
+     "name": "Dragon's Den",
+     "kind": "cave",
+     "owner": {
+      "name": "The Dragon elders",
+      "look": "trainer/pr/veteran_m",
+      "line": "They test anyone who walks in. Most fail."
+     },
+     "trait": {
+      "word": "Proud",
+      "odds": -8
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Dragon Tamer Paul",
+      "cls": "dragon-tamer",
+      "species": [
+       "dratini",
+       "horsea"
+      ],
+      "offset": 2
+     }
+    },
+    {
+     "id": "blackthorn-mart",
+     "name": "Blackthorn Mart",
+     "kind": "shop",
+     "owner": {
+      "name": "The Mart clerk",
+      "look": "dominion/t-clerk.png",
+      "line": "Sells Max Repels by the crate."
+     },
+     "trait": {
+      "word": "Timid",
+      "odds": 5
+     },
+     "pay": 1,
+     "foe": {
+      "name": "The clerk's uncle",
+      "cls": "hiker",
+      "species": [
+       "geodude",
+       "graveler"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "blackthorn-square",
+     "name": "Dragon Square",
+     "kind": "crowd",
+     "owner": {
+      "name": "The clan",
+      "look": "trainer/pr/black_belt_f",
+      "line": "A clan town. A stranger is news."
+     },
+     "trait": {
+      "word": "Watchful",
+      "odds": -6
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Clan hand",
+      "cls": "ace-trainer",
+      "species": [
+       "dragonair"
+      ],
+      "offset": 2
+     }
+    }
+   ]
+  }
+ ],
+ "routes": [
+  [
+   "new-bark",
+   "cherrygrove"
+  ],
+  [
+   "cherrygrove",
+   "violet"
+  ],
+  [
+   "violet",
+   "azalea"
+  ],
+  [
+   "azalea",
+   "goldenrod"
+  ],
+  [
+   "goldenrod",
+   "ecruteak"
+  ],
+  [
+   "ecruteak",
+   "olivine"
+  ],
+  [
+   "ecruteak",
+   "mahogany"
+  ],
+  [
+   "mahogany",
+   "blackthorn"
+  ],
+  [
+   "violet",
+   "ecruteak"
+  ],
+  [
+   "goldenrod",
+   "olivine"
+  ]
+ ],
+ "water": [
+  [
+   "olivine",
+   "cianwood"
+  ],
+  [
+   "new-bark",
+   "blackthorn"
+  ]
+ ],
+ "pools": {
+  "catch": [
+   "sentret",
+   "hoothoot",
+   "ledyba",
+   "spinarak",
+   "mareep",
+   "hoppip",
+   "sunkern",
+   "wooper",
+   "yanma",
+   "murkrow",
+   "misdreavus",
+   "girafarig",
+   "pineco",
+   "dunsparce",
+   "snubbull",
+   "qwilfish",
+   "shuckle",
+   "heracross",
+   "sneasel",
+   "teddiursa",
+   "slugma",
+   "swinub",
+   "corsola",
+   "remoraid",
+   "delibird",
+   "skarmory",
+   "houndour",
+   "phanpy",
+   "stantler",
+   "natu",
+   "marill",
+   "chinchou"
+  ],
+  "steal": [
+   "larvitar",
+   "dratini",
+   "togepi",
+   "eevee",
+   "smeargle",
+   "miltank",
+   "tyrogue",
+   "elekid",
+   "magby",
+   "smoochum",
+   "scyther",
+   "gligar",
+   "aipom",
+   "yanma",
+   "bagon",
+   "sneasel"
+  ]
+ },
+ "rivals": {
+  "rocket-remnants": [
+   {
+    "id": "slowpoke-well-camp",
+    "name": "Slowpoke Well Camp",
+    "district": "azalea"
+   },
+   {
+    "id": "goldenrod-tunnel",
+    "name": "Goldenrod Tunnel Hideout",
+    "district": "goldenrod",
+    "hq": true
+   },
+   {
+    "id": "radio-tower-booth",
+    "name": "Radio Tower Booth",
+    "district": "goldenrod"
+   },
+   {
+    "id": "mahogany-basement",
+    "name": "Mahogany Basement",
+    "district": "mahogany"
+   },
+   {
+    "id": "lake-transmitter",
+    "name": "Lake of Rage Transmitter",
+    "district": "mahogany"
+   },
+   {
+    "id": "ilex-shrine-watch",
+    "name": "Ilex Shrine Watch",
+    "district": "azalea"
+   },
+   {
+    "id": "route-43-gate",
+    "name": "Route 43 Toll Gate",
+    "district": "mahogany"
+   }
+  ]
+ },
+ "gyms": [
+  {
+   "id": "violet-gym",
+   "district": "violet",
+   "leader": "Falkner",
+   "leaderId": "falkner",
+   "type": "flying",
+   "badge": "Zephyr",
+   "species": [
+    "pidgey",
+    "pidgeotto"
+   ],
+   "offset": 1,
+   "trainers": [
+    {
+     "name": "Bird Keeper Rod",
+     "cls": "bird-keeper",
+     "leaderId": null,
+     "species": [
+      "pidgey",
+      "spearow"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "azalea-gym",
+   "district": "azalea",
+   "leader": "Bugsy",
+   "leaderId": "bugsy",
+   "type": "bug",
+   "badge": "Hive",
+   "species": [
+    "metapod",
+    "kakuna",
+    "scyther"
+   ],
+   "offset": 1,
+   "trainers": [
+    {
+     "name": "Bug Catcher Al",
+     "cls": "bug-catcher",
+     "leaderId": null,
+     "species": [
+      "caterpie",
+      "weedle"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "goldenrod-gym",
+   "district": "goldenrod",
+   "leader": "Whitney",
+   "leaderId": "whitney",
+   "type": "normal",
+   "badge": "Plain",
+   "species": [
+    "clefairy",
+    "miltank"
+   ],
+   "offset": 2,
+   "trainers": [
+    {
+     "name": "Lass Carrie",
+     "cls": "lass",
+     "leaderId": null,
+     "species": [
+      "snubbull"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "ecruteak-gym",
+   "district": "ecruteak",
+   "leader": "Morty",
+   "leaderId": "morty",
+   "type": "ghost",
+   "badge": "Fog",
+   "species": [
+    "gastly",
+    "haunter",
+    "gengar"
+   ],
+   "offset": 2,
+   "trainers": [
+    {
+     "name": "Sage Jeffrey",
+     "cls": "hex-maniac",
+     "leaderId": null,
+     "species": [
+      "haunter"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "cianwood-gym",
+   "district": "cianwood",
+   "leader": "Chuck",
+   "leaderId": "chuck",
+   "type": "fighting",
+   "badge": "Storm",
+   "species": [
+    "primeape",
+    "poliwrath"
+   ],
+   "offset": 3,
+   "trainers": [
+    {
+     "name": "Black Belt Yoshi",
+     "cls": "black-belt",
+     "leaderId": null,
+     "species": [
+      "hitmonlee"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "olivine-gym",
+   "district": "olivine",
+   "leader": "Jasmine",
+   "leaderId": "jasmine",
+   "type": "steel",
+   "badge": "Mineral",
+   "species": [
+    "magnemite",
+    "steelix"
+   ],
+   "offset": 3,
+   "trainers": [
+    {
+     "name": "Gentleman Preston",
+     "cls": "veteran",
+     "leaderId": null,
+     "species": [
+      "growlithe"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "mahogany-gym",
+   "district": "mahogany",
+   "leader": "Pryce",
+   "leaderId": "pryce",
+   "type": "ice",
+   "badge": "Glacier",
+   "species": [
+    "seel",
+    "dewgong",
+    "piloswine"
+   ],
+   "offset": 4,
+   "trainers": [
+    {
+     "name": "Skier Roxanne",
+     "cls": "snow-worker",
+     "leaderId": null,
+     "species": [
+      "jynx"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "blackthorn-gym",
+   "district": "blackthorn",
+   "leader": "Clair",
+   "leaderId": "clair",
+   "type": "dragon",
+   "badge": "Rising",
+   "species": [
+    "dragonair",
+    "dragonair",
+    "kingdra"
+   ],
+   "offset": 4,
+   "trainers": [
+    {
+     "name": "Dragon Tamer Erick",
+     "cls": "dragon-tamer",
+     "leaderId": null,
+     "species": [
+      "dragonair"
+     ],
+     "offset": -1
+    }
+   ]
+  }
+ ],
+ "business": [
+  {
+   "target": "cherrygrove-mart",
+   "name": "Cherrygrove Mart",
+   "price": 5000,
+   "income": 200,
+   "clean": true,
+   "perk": {
+    "kind": "items",
+    "n": 2,
+    "item": "potion"
+   },
+   "text": "2 Potions a week from the back room."
+  },
+  {
+   "target": "violet-mart",
+   "name": "Violet Mart",
+   "price": 5000,
+   "income": 200,
+   "clean": true,
+   "perk": {
+    "kind": "items",
+    "n": 2,
+    "item": "escape-rope"
+   },
+   "text": "2 Escape Ropes a week."
+  },
+  {
+   "target": "goldenrod-store",
+   "name": "Goldenrod Dept. Store",
+   "price": 15000,
+   "income": 600,
+   "clean": true,
+   "perk": {
+    "kind": "regard",
+    "n": 1
+   },
+   "text": "The biggest shop in Johto. Regard +1 in Goldenrod each week."
+  },
+  {
+   "target": "radio-tower",
+   "name": "Radio Tower",
+   "price": 30000,
+   "income": 800,
+   "clean": true,
+   "perk": {
+    "kind": "heroDown",
+    "n": 1
+   },
+   "text": "Your news on every set. The Hero hears it too.",
+   "rival": true
+  },
+  {
+   "target": "goldenrod-underground",
+   "name": "The Underground",
+   "price": 12000,
+   "income": 450,
+   "clean": false,
+   "perk": {
+    "kind": "clean",
+    "n": 200
+   },
+   "text": "Tunnel trade: ₽200 a week comes back clean.",
+   "rival": true
+  },
+  {
+   "target": "cianwood-pharmacy",
+   "name": "Cianwood Pharmacy",
+   "price": 8000,
+   "income": 250,
+   "clean": true,
+   "perk": {
+    "kind": "items",
+    "n": 2,
+    "item": "super-potion"
+   },
+   "text": "Secret medicine: 2 Super Potions a week."
+  },
+  {
+   "target": "olivine-cafe",
+   "name": "Olivine Café",
+   "price": 4500,
+   "income": 180,
+   "clean": true,
+   "perk": {
+    "kind": "odds",
+    "n": 5
+   },
+   "text": "Sailors talk: +5% on jobs in Olivine."
+  },
+  {
+   "target": "dance-theatre",
+   "name": "Dance Theatre",
+   "price": 6000,
+   "income": 220,
+   "clean": true,
+   "perk": {
+    "kind": "heatDown",
+    "n": 1
+   },
+   "text": "Nobody looks past the stage: Heat −1 in Ecruteak each week."
+  },
+  {
+   "target": "mahogany-mart",
+   "name": "Souvenir Shop",
+   "price": 9000,
+   "income": 300,
+   "clean": true,
+   "perk": {
+    "kind": "income",
+    "n": 300
+   },
+   "text": "The basement pays more than the shop."
+  }
+ ],
+ "pillars": [
+  "radio-tower",
+  "goldenrod-store"
+ ],
+ "hero": {
+  "path": [
+   "new-bark",
+   "violet",
+   "azalea",
+   "goldenrod",
+   "ecruteak",
+   "cianwood",
+   "olivine",
+   "mahogany",
+   "blackthorn"
+  ],
+  "allies": [
+   {
+    "id": "falkner",
+    "name": "Falkner",
+    "look": "bosses/falkner.png",
+    "ace": "pidgeot"
+   },
+   {
+    "id": "bugsy",
+    "name": "Bugsy",
+    "look": "bosses/bugsy.png",
+    "ace": "scyther"
+   },
+   {
+    "id": "whitney",
+    "name": "Whitney",
+    "look": "bosses/whitney.png",
+    "ace": "miltank"
+   },
+   {
+    "id": "morty",
+    "name": "Morty",
+    "look": "bosses/morty.png",
+    "ace": "gengar"
+   },
+   {
+    "id": "jasmine",
+    "name": "Jasmine",
+    "look": "bosses/jasmine.png",
+    "ace": "steelix"
+   },
+   {
+    "id": "clair",
+    "name": "Clair",
+    "look": "bosses/clair.png",
+    "ace": "kingdra"
+   },
+   {
+    "id": "lance",
+    "name": "Lance",
+    "look": "bosses/lance.png",
+    "ace": "dragonite",
+    "champion": true
+   }
+  ],
+  "mentor": "Professor Elm",
+  "parent": "The Hero's mother",
+  "sidekick": "Lyra, from New Bark",
+  "homes": {
+   "suicune": {
+    "home": "cianwood",
+    "over": "the Tin Tower"
+   },
+   "raikou": {
+    "home": "ecruteak",
+    "over": "the Burned Tower"
+   },
+   "entei": {
+    "home": "mahogany",
+    "over": "Route 43"
+   }
+  }
+ },
+ "league": {
+  "elite": [
+   {
+    "id": "will",
+    "name": "Will",
+    "species": [
+     "xatu",
+     "jynx",
+     "exeggutor",
+     "slowbro",
+     "xatu"
+    ],
+    "offset": 2
+   },
+   {
+    "id": "koga",
+    "name": "Koga",
+    "species": [
+     "ariados",
+     "forretress",
+     "muk",
+     "venomoth",
+     "crobat"
+    ],
+    "offset": 3
+   },
+   {
+    "id": "bruno",
+    "name": "Bruno",
+    "species": [
+     "hitmontop",
+     "hitmonlee",
+     "hitmonchan",
+     "onix",
+     "machamp"
+    ],
+    "offset": 4
+   },
+   {
+    "id": "karen",
+    "name": "Karen",
+    "species": [
+     "umbreon",
+     "vileplume",
+     "gengar",
+     "murkrow",
+     "houndoom"
+    ],
+    "offset": 5
+   }
+  ],
+  "champion": {
+   "id": "lance",
+   "name": "Lance",
+   "species": [
+    "gyarados",
+    "dragonite",
+    "charizard",
+    "aerodactyl",
+    "dragonite",
+    "dragonite"
+   ],
+   "offset": 6
+  },
+  "standIn": {}
+ },
+ "lab": [
+  "eevee",
+  "porygon",
+  "omanyte",
+  "kabuto",
+  "togepi"
+ ],
+ "desk": {
+  "name": "Johto",
+  "rivals": [
+   "Rocket remnants"
+  ],
+  "badges": [
+   {
+    "name": "Zephyr Badge",
+    "town": "Violet City",
+    "c": "#a8c8e8"
+   },
+   {
+    "name": "Hive Badge",
+    "town": "Azalea Town",
+    "c": "#7ab84a"
+   },
+   {
+    "name": "Plain Badge",
+    "town": "Goldenrod City",
+    "c": "#e8c840"
+   },
+   {
+    "name": "Fog Badge",
+    "town": "Ecruteak City",
+    "c": "#9a8ab8"
+   },
+   {
+    "name": "Storm Badge",
+    "town": "Cianwood City",
+    "c": "#c88a5a"
+   },
+   {
+    "name": "Mineral Badge",
+    "town": "Olivine City",
+    "c": "#c8c8d8"
+   },
+   {
+    "name": "Glacier Badge",
+    "town": "Mahogany Town",
+    "c": "#8ad8f0"
+   },
+   {
+    "name": "Rising Badge",
+    "town": "Blackthorn City",
+    "c": "#4a6ab8"
+   }
+  ],
+  "codes": {
+   "Violet City": "VLT",
+   "Azalea Town": "AZL",
+   "Goldenrod City": "GLD",
+   "Ecruteak City": "ECR",
+   "Cianwood City": "CNW",
+   "Olivine City": "OLV",
+   "Mahogany Town": "MHG",
+   "Blackthorn City": "BLC"
+  },
+  "mons": [
+   "sentret",
+   "hoothoot",
+   "ledyba",
+   "spinarak",
+   "mareep",
+   "hoppip",
+   "sunkern",
+   "wooper",
+   "yanma",
+   "murkrow",
+   "misdreavus",
+   "girafarig",
+   "pineco",
+   "dunsparce",
+   "snubbull",
+   "qwilfish",
+   "shuckle",
+   "heracross",
+   "sneasel",
+   "teddiursa",
+   "slugma",
+   "swinub",
+   "corsola",
+   "remoraid",
+   "delibird",
+   "skarmory",
+   "houndour",
+   "phanpy",
+   "stantler",
+   "natu",
+   "marill",
+   "chinchou"
+  ],
+  "offRegion": [
+   "zigzagoon",
+   "poochyena",
+   "shinx",
+   "lillipup",
+   "fletchling",
+   "rookidee",
+   "yungoos",
+   "bidoof"
+  ],
+  "writers": [
+   {
+    "name": "Falkner's old flight coach",
+    "short": "Coach Ren",
+    "town": "Violet City",
+    "quote": "{first} swept the tower stairs every morning. Never missed one."
+   },
+   {
+    "name": "Charcoal maker Ilex",
+    "short": "Ilex",
+    "town": "Azalea Town",
+    "quote": "{first} hauled wood for my kilns all winter. Strong back, quiet mouth."
+   },
+   {
+    "name": "Radio DJ Mary",
+    "short": "Mary",
+    "town": "Goldenrod City",
+    "quote": "{first} ran cables at the station. Knows every back door in the building."
+   },
+   {
+    "name": "Sage Li",
+    "short": "Li",
+    "town": "Ecruteak City",
+    "quote": "{first} kept the tower lamps lit. Patient. Maybe too patient."
+   },
+   {
+    "name": "Pharmacist Tao",
+    "short": "Tao",
+    "town": "Cianwood City",
+    "quote": "{first} delivered my medicine across the sea, rain or shine."
+   },
+   {
+    "name": "Lighthouse keeper Amos",
+    "short": "Amos",
+    "town": "Olivine City",
+    "quote": "{first} fixed the lamp twice and never asked for a coin. Hire them."
+   },
+   {
+    "name": "Souvenir seller Old Pell",
+    "short": "Pell",
+    "town": "Mahogany Town",
+    "quote": "{first} minded my shop. Never once went down the basement stairs. Probably."
+   }
+  ]
+ },
+ "holdings": {
+  "johto:violet-gym-falkner": {
+   "district": "violet",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:violet-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Flying crew +1 Speed stage; spot enemy squads by air.\" waits for a battle or shop hook."
+  },
+  "johto:azalea-gym-bugsy": {
+   "district": "azalea",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1050
+    }
+   ],
+   "via": "gym:azalea-gym",
+   "note": "Read from the list's Bonus as income each week; the rest of \"Bug crew +15% damage; Apricorn fruit income (+₽150/day).\" waits for a battle or shop hook."
+  },
+  "johto:goldenrod-gym-whitney": {
+   "district": "goldenrod",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:goldenrod-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Normal crew HP +10%; Whitney's tears event gives Regard.\" waits for a battle or shop hook."
+  },
+  "johto:ecruteak-gym-morty": {
+   "district": "ecruteak",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:ecruteak-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Ghost crew +20% evasion; the \"Kimono Girls\" dance event unlocks.\" waits for a battle or shop hook."
+  },
+  "johto:cianwood-gym-chuck": {
+   "district": "cianwood",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:cianwood-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Fighting crew train ×2 (one tier higher).\" waits for a battle or shop hook."
+  },
+  "johto:olivine-gym-jasmine": {
+   "district": "olivine",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:olivine-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Steel crew +10% defense; the Lighthouse's Ampharos.\" waits for a battle or shop hook."
+  },
+  "johto:mahogany-gym-pryce": {
+   "district": "mahogany",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:mahogany-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Ice crew +15% damage; a stream of ₽ from tourists.\" waits for a battle or shop hook."
+  },
+  "johto:blackthorn-gym-clair": {
+   "district": "blackthorn",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:blackthorn-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Dragon-type Pokémon in the shop; the Dragon Master rank.\" waits for a battle or shop hook."
+  },
+  "johto:indigo-plateau-league": {
+   "district": "new-bark",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "champion",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"the same League seat as in Kanto (shared, not doubled); Johto's Champion Lance b\" waits for a battle or shop hook."
+  },
+  "johto:new-bark-town-city": {
+   "district": "new-bark",
+   "fx": [
+    {
+     "k": "income",
+     "n": 350
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"one free Pokémon egg a month.\" waits for a battle or shop hook."
+  },
+  "johto:elms-lab": {
+   "district": "new-bark",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"hatch eggs ×2; research on Mystery Egg.\" waits for a battle or shop hook."
+  },
+  "johto:cherrygrove-city": {
+   "district": "cherrygrove",
+   "fx": [
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit each week; the rest of \"a free Potion each night and a Pokédex gift to every new recruit (a map and a ro\" waits for a battle or shop hook."
+  },
+  "johto:violet-city": {
+   "district": "violet",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Bellsprout fans (Grass +1).\" waits for a battle or shop hook."
+  },
+  "johto:sprout-tower": {
+   "district": "violet",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"crew gain Wits +1 each week; Falkner's mentor teaches a Flying move once.\" waits for a battle or shop hook."
+  },
+  "johto:azalea-town": {
+   "district": "azalea",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1050
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"Kurt's Apricorn Balls in your shop (Level, Fast, Friend Balls); Heavy Ball for h\" waits for a battle or shop hook."
+  },
+  "johto:slowpoke-well": {
+   "district": "azalea",
+   "fx": [
+    {
+     "k": "income",
+     "n": 2800
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"+₽400/day selling tails; a hidden path to the Rocket-hidden cache.\" waits for a battle or shop hook."
+  },
+  "johto:goldenrod-city": {
+   "district": "goldenrod",
+   "fx": [
+    {
+     "k": "income",
+     "n": 2800
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"all income ×1.5; Magnet Train link.\" waits for a battle or shop hook."
+  },
+  "johto:goldenrod-dept-store": {
+   "district": "goldenrod",
+   "fx": [
+    {
+     "k": "income",
+     "n": 2800
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"all items −20% on weekends.\" waits for a battle or shop hook."
+  },
+  "johto:goldenrod-game-corner": {
+   "district": "goldenrod",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"5% laundering; Abra and Ekans prize Pokémon; coin cases give crew free tokens.\" waits for a battle or shop hook."
+  },
+  "johto:goldenrod-radio-tower": {
+   "district": "goldenrod",
+   "fx": [
+    {
+     "k": "dread",
+     "n": 30,
+     "where": "district"
+    }
+   ],
+   "via": "biz:radio-tower",
+   "note": "Read from the list's Bonus as dread each week; the rest of \"Morning Report news +; Spread the Word free weekly; Regard/Dread +30.\" waits for a battle or shop hook."
+  },
+  "johto:goldenrod-underground": {
+   "district": "goldenrod",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1750
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"a barber (crew grooming Loyalty +1) and dealers selling contraband; +₽250/day in\" waits for a battle or shop hook."
+  },
+  "johto:magnet-train-station": {
+   "district": "goldenrod",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"fast travel between any held Johto and Kanto cities (−2 travel days); import/exp\" waits for a battle or shop hook."
+  },
+  "johto:national-park": {
+   "district": "goldenrod",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"a monthly contest gives ₽2,000 and a rare bug; Regard +10 once.\" waits for a battle or shop hook."
+  },
+  "johto:ecruteak-city": {
+   "district": "ecruteak",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"a stage for Kimono Girls (adult); Ghost +.\" waits for a battle or shop hook."
+  },
+  "johto:burned-tower": {
+   "district": "ecruteak",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Raikou, Entei and Suicune rumour track opens; Fire crew +10%; ghost trainers.\" waits for a battle or shop hook."
+  },
+  "johto:bell-tower": {
+   "district": "ecruteak",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 20,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"the Ho-Oh rumour track opens; Regard +20 once; Rainbow Wing weekly clue.\" waits for a battle or shop hook."
+  },
+  "johto:ruins-of-alph": {
+   "district": "violet",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"research; crew Wits +1; Psychic crew +10%.\" waits for a battle or shop hook."
+  },
+  "johto:olivine-city": {
+   "district": "olivine",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"sea control (ships +1); a Pokémon Center and Glitter Lighthouse view.\" waits for a battle or shop hook."
+  },
+  "johto:olivine-lighthouse": {
+   "district": "olivine",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"ships bow to you (sea smuggling +1); Amphy and Steelix events; Jasmine's cure st\" waits for a battle or shop hook."
+  },
+  "johto:cianwood-city": {
+   "district": "cianwood",
+   "fx": [
+    {
+     "k": "income",
+     "n": 350
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Revive supply (+2 Revives a week); Storm Drum event.\" waits for a battle or shop hook."
+  },
+  "johto:mahogany-town": {
+   "district": "mahogany",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"a Rocket base under the Souvenir Shop (free 4-slot hideout); a Rocket Boss rumou\" waits for a battle or shop hook."
+  },
+  "johto:lake-of-rage": {
+   "district": "mahogany",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"a weekly red Gyarados event (a shiny Magikarp roll); fishing +50%.\" waits for a battle or shop hook."
+  },
+  "johto:blackthorn-city": {
+   "district": "blackthorn",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Dragon-type rites; Move Deleter and Move Reminder shops; Dragon crew +5%.\" waits for a battle or shop hook."
+  },
+  "johto:dragons-den": {
+   "district": "blackthorn",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Dragon crew +10%; a Dratini egg monthly; Dragon Scale trade.\" waits for a battle or shop hook."
+  },
+  "johto:whirl-islands": {
+   "district": "cianwood",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"the Lugia rumour track opens; Water crew +10%; tidal caves hide treasure.\" waits for a battle or shop hook."
+  },
+  "johto:tin-tower": {
+   "district": "ecruteak",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 20,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"the sacred stair opens the Ho-Oh track; Regard +20; a Rainbow Wing is awarded on\" waits for a battle or shop hook."
+  },
+  "johto:safari-zone-johto": {
+   "district": "cianwood",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"five wild Pokémon a day; Safari species (Larvitar, Houndour); rare chance +10%.\" waits for a battle or shop hook."
+  },
+  "johto:ilex-forest": {
+   "district": "azalea",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Celebi rumour track opens; Grass crew +10%; Farfetch'd herding event.\" waits for a battle or shop hook."
+  },
+  "johto:dark-cave": {
+   "district": "violet",
+   "fx": [
+    {
+     "k": "income",
+     "n": 2100
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"a contraband dealer (+₽300/day); hidden TMs.\" waits for a battle or shop hook."
+  },
+  "johto:union-cave": {
+   "district": "azalea",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Rock/Ground crew +10%; Lapras event on Fridays.\" waits for a battle or shop hook."
+  },
+  "johto:mt-mortar": {
+   "district": "mahogany",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Tyrogue event; Fighting crew train ×1.5; a free Black Belt practice weekly.\" waits for a battle or shop hook."
+  },
+  "johto:ice-path": {
+   "district": "mahogany",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Ice crew +10%; a hidden route between Blackthorn and Mahogany.\" waits for a battle or shop hook."
+  },
+  "johto:victory-road-johto": {
+   "district": "new-bark",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"₽500 from every League challenger; a free ledge shortcut.\" waits for a battle or shop hook."
+  }
+ }
+}

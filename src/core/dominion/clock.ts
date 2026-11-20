@@ -184,6 +184,12 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'toDay': {
       // D2: a fight at the door (Looker, a raid) comes first.
       if (block.phase !== 'morning' || block.field.fight) return no(block);
+      // D15: a Day the Boss is away visiting a held region starts with no actions (the crew runs it).
+      if (block.realm && block.realm.away > 0) {
+        const b = structuredClone(block);
+        b.realm!.away -= 1;
+        return ok({ ...b, phase: 'day', actions: 0, rested: false, field: { ...b.field, today: 0 } }, DOMINION_DATA.regions.lines.visitAway ?? null);
+      }
       const n = dayActions(block);
       return ok({ ...block, phase: 'day', actions: n, rested: false, field: { ...block.field, today: n } });
     }
@@ -268,5 +274,9 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
       const out = squadStep(block, action, seed)!;
       return out.ok ? ok(out.block, out.notice) : { ...no(block), notice: out.notice };
     }
+    // Leaving and the held regions run through session.ts (regions.ts), never through the clock.
+    case 'leave':
+    case 'realm':
+      return no(block);
   }
 }

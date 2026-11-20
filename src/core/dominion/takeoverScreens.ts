@@ -4,6 +4,8 @@
 import { DOMINION_DATA } from './data';
 import type { DominionBlock, HoldingDef } from './schema';
 import { topModel, type TopModel } from './screens';
+import { nextRegion, regionName } from './regions';
+import { fill } from './worldTurn';
 import {
   broadcastOf, goalOf, momentProblem, pathsOf, placesHere, priceOf, stormProblem, takeCost, takeoverOf, takeProblem,
 } from './takeover';
@@ -13,7 +15,7 @@ const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 const dname = (id: string): string => DOMINION_DATA.field.districts.find((d) => d.id === id)?.name ?? id;
 
 export interface PathCard { id: string; name: string; icon: string; colour: string; dial: number; rows: { text: string; ok: boolean }[]; lead: boolean; pill: string | null; pillTone: 'y' | 'g' | 'k' }
-export type TakeoverCta = { act: 'fight' | 'moment' | 'storm' | 'holdings' | 'back'; label: string; key: string };
+export type TakeoverCta = { act: 'fight' | 'moment' | 'storm' | 'holdings' | 'back' | 'leave'; label: string; key: string };
 export interface TakeoverModel {
   top: TopModel;
   region: string;
@@ -58,8 +60,12 @@ export function takeoverModel(b: DominionBlock): TakeoverModel {
   }
   if (g && st.track >= 100 && !st.done && g.finish && alerts.length < 2) alerts.push({ tone: 'v', title: 'THE MOMENT', text: `${g.opposition.name} stands between you and ${g.name}.` });
   const fightWaits = b.field.fight?.why === 'takeover' && !b.field.fight.begun;
+  // D15: once the region is Taken, the way on is the next region (the Leaving page).
+  const next = t.taken ? nextRegion(b) : null;
   const cta: TakeoverCta = fightWaits
     ? { act: 'fight', label: '⚔ Next fight ▶', key: 'Enter' }
+    : next
+      ? { act: 'leave', label: `⚓ ${fill(DOMINION_DATA.regions.screen.leave.cta!, { next: regionName(next) }).replace(' (L)', '')} ▶`, key: 'L' }
     : !momentProblem(b)
       ? { act: 'moment', label: `★ Face ${g!.opposition.name} ▶`, key: 'M' }
       : !stormProblem(b)

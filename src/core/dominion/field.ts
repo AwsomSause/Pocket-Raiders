@@ -275,6 +275,8 @@ export function foeOf(b: DominionBlock, run: Pick<RunState, 'party'>, kind: Fiel
       return SNATCH_FOE ? SNATCH_FOE(b, run) : { name: 'A guard', species: 'rattata', level: foeLevel(b, run, 0), wild: false };
     case 'takeover':
       return TAKEOVER_FOE ? TAKEOVER_FOE(b, run) : { name: 'A guard', species: 'rattata', level: foeLevel(b, run, 0), wild: false };
+    case 'realm':
+      return REALM_FOE ? REALM_FOE(b, run) : { name: 'A traitor', species: 'raticate', level: foeLevel(b, run, 3), wild: false };
     case 'target': {
       const f = target?.foe ?? district.targets[0]!.foe;
       return { name: f.name, species: f.species[0]!, level: foeLevel(b, run, f.offset), wild: false };
@@ -534,6 +536,12 @@ export function setGrowthFoe(f: (b: DominionBlock, run: Pick<RunState, 'party'>)
 let TAKEOVER_FOE: ((b: DominionBlock, run: Pick<RunState, 'party'>) => Foe) | null = null;
 export function setTakeoverFoe(f: (b: DominionBlock, run: Pick<RunState, 'party'>) => Foe): void {
   TAKEOVER_FOE = f;
+}
+
+/** D15: the traitor at the end of the Long Trip (regions.ts registers it). */
+let REALM_FOE: ((b: DominionBlock, run: Pick<RunState, 'party'>) => Foe) | null = null;
+export function setRealmFoe(f: (b: DominionBlock, run: Pick<RunState, 'party'>) => Foe): void {
+  REALM_FOE = f;
 }
 
 /** D23: the person a Snatch Operation goes after (snatch.ts). */
