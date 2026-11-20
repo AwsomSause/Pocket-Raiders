@@ -22,6 +22,7 @@ import { DeskController } from './dominion/deskController';
 import { waiting as deskWaiting, deskOpen } from '../core/dominion/desk';
 import { HqController } from './dominion/hqController';
 import { RivalController } from './dominion/rivalController';
+import { PoliceController } from './dominion/policeController';
 import { VoicesController } from './dominion/voicesController';
 import { paperNote } from '../core/dominion/voices';
 import { threatRow } from '../core/dominion/rivalScreens';
@@ -29,10 +30,12 @@ import { cardModel, gridPages, mapModel, newCursor, pageFor, type MapCursor } fr
 import { cardView, mapView } from '../ui/redux/screens/dominion/fieldViews';
 import { ledgerModel, SPREADS } from '../core/dominion/ledgerScreens';
 import { ledgerView } from '../ui/redux/screens/dominion/ledger';
+import { foundedLines, foundingOpen, initialOf, nameIdeas, newDraft, teamColours } from '../core/dominion/founding';
+import { FOUNDING_ROWS, foundedView, foundingView, type FoundingUi } from '../ui/redux/screens/dominion/founding';
 import { heroModel, interruptModel } from '../core/dominion/heroScreens';
 import { heroView, interruptView, type MonFiles } from '../ui/redux/screens/dominion/heroViews';
 
-type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk';
+type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'founding' | 'founded';
 
 /** The screen to come back to after a battle (D2: the map the action was picked on, or the HQ for a fight at the door). */
 let resume: Screen | null = null;
@@ -61,6 +64,10 @@ export class DominionScene extends Phaser.Scene {
   /** D6: the Ledger's open spread (0 Money | Empire, 1 Territory | Notoriety, 2 Crew | Stores) and where L goes back to. */
   private spread = 0;
   private ledgerFrom: Screen = 'hq';
+  /** D7: the Founding page's draft and cursor, where Esc goes back to, and the scene's lines shown. */
+  private founding: FoundingUi | null = null;
+  private foundingFrom: Screen = 'hq';
+  private foundedShown = 1;
   private res = new ReserveController(this);
   /** D5: the HQ menu (mockup 6). */
   private hq = new HqController(this);
@@ -69,10 +76,12 @@ export class DominionScene extends Phaser.Scene {
   private intAt = 0;
   /** D9: the Rival File (key R). */
   private rival = new RivalController(this);
+  /** D24: police questioning (owns the screen while a case is open or its release page unread). */
+  private police = new PoliceController(this);
   /** D21: the applications desk (Rotom mockup k5). */
   private desk = new DeskController(this);
   /** D25: the Evening voices scene (mockup a10), an overlay on the HQ. */
-  private voices = new VoicesController({ refresh: () => this.view?.refresh(), onHq: () => this.screen === 'hq' && !this.crew.owns() && !this.block()?.crew?.talks.length });
+  private voices = new VoicesController({ refresh: () => this.view?.refresh(), onHq: () => this.screen === 'hq' && !this.crew.owns() && !this.police.owns() && !this.block()?.crew?.talks.length });
 
   constructor() {
     super('Dominion');
@@ -86,9 +95,12 @@ export class DominionScene extends Phaser.Scene {
     this.notice = null;
     this.leaving = false;
     this.crew = new CrewController(this);
+    this.founding = null;
+    this.foundedShown = 1;
     this.hq = new HqController(this);
     this.res = new ReserveController(this);
     this.rival = new RivalController(this);
+    this.police = new PoliceController(this);
     this.desk = new DeskController(this);
     this.voices.close();
     const { session } = services();
@@ -109,6 +121,11 @@ export class DominionScene extends Phaser.Scene {
       this.screen = back === 'card' ? 'map' : back;
       if (this.screen === 'map') this.cursor = newCursor(blk);
       if (this.screen === 'hero' && !blk.hero) this.screen = 'hq';
+    }
+    // D10: back from one fight of a chain (a Raid, a Gym's trainers): the map says who's next; Enter starts it.
+    const ch = blk?.growth?.chain, nextSide = ch?.sides[ch.step];
+    if (ch && nextSide && blk?.field.fight && !blk.field.fight.begun && !this.notice) {
+      this.notice = `${DOMINION_DATA.growth.lines.chainNext!.replace('{n}', String(ch.step + 1)).replace('{of}', String(ch.sides.length)).replace('{name}', nextSide.name)} Enter to go on.`;
     }
     // D11: the Hero stepped into a job and the tab closed before a choice (m11 waits).
     if (blk?.opened && this.heroPending()) this.screen = 'interrupt';
@@ -143,10 +160,25 @@ export class DominionScene extends Phaser.Scene {
         doit: () => this.doIt(),
         back: () => this.back(),
         bring: () => this.bring(),
+        opt: (id) => { if (this.cursor) this.cursor = { ...this.cursor, opt: String(id) }; this.view?.refresh(); },
         buy: (id) => this.buy(id),
         dismiss: () => { this.notice = null; this.rival.dismiss(); this.view?.refresh(); },
         ledgerTab: (i) => { this.spread = Number(i); this.view?.refresh(); },
         ledgerPage: (d) => this.turnLedger(Number(d)),
+        founding: () => this.openFounding(),
+        fRow: (i) => {
+          const f = this.founding;
+          if (!f) return;
+          const r = FOUNDING_ROWS[Number(i)];
+          if (f.typing && f.typing !== r) this.endTyping();
+          f.row = Number(i);
+          if (r === 'name' || r === 'motto') this.startTyping(r);
+          this.view?.refresh();
+        },
+        fPrimary: (id) => this.pickColour('primary', id),
+        fSecondary: (id) => this.pickColour('secondary', id),
+        fLogo: (id) => { if (this.founding) this.founding.d = { ...this.founding.d, logo: id }; this.view?.refresh(); },
+        fFound: () => this.submitFounding(),
         heroFile: () => this.openHero(),
         legend: (id) => this.heroAct({ t: 'legend', legend: id }),
         meet: (i) => this.heroAct({ t: 'meet', choice: Number(i) }),
@@ -156,6 +188,7 @@ export class DominionScene extends Phaser.Scene {
         ...this.res.acts(),
         ...this.hq.acts(),
         ...this.rival.acts(),
+        ...this.police.acts(),
         ...this.voices.acts(),
         base: () => { this.hq.open(); this.view?.refresh(); },
         ...this.desk.acts(),
@@ -171,8 +204,15 @@ export class DominionScene extends Phaser.Scene {
       },
     });
     const kb = this.input.keyboard;
+    const seen = new WeakSet<KeyboardEvent>(); // Phaser can hand the same press over again within a frame
     const raw = (e: KeyboardEvent): void => {
+      if (seen.has(e)) return;
+      seen.add(e);
       if (this.leaving) return;
+      // D24: the interview room and the release page read their keys first (typing included).
+      if (this.inRun() && this.police.raw(e)) return;
+      if (this.screen === 'founding') return;
+      if (e.code === 'KeyO' && (this.screen === 'hq' || this.screen === 'map' || this.screen === 'crew')) return this.openFounding();
       if (this.screen === 'desk') {
         this.desk.raw(e);
         return;
@@ -225,7 +265,7 @@ export class DominionScene extends Phaser.Scene {
     };
     kb?.on('keydown', raw);
     // After `raw`, so a letter the HQ menu took (A, S) is not also read as a move.
-    onInputAction(this, (a) => this.key(a));
+    onInputAction(this, (a) => this.key(a), { onceEach: true });
     // L is the Ledger on the HQ, the map and the Crew File (D6) and Money on the HQ menu (D5, mockup 6), so it doesn't
     // open the game's interaction log there (Shift+L still does).
     setLogKeyTaken(() => this.scene.isActive() && (this.screen === 'base' || (!!this.block()?.opened && ['hq', 'map', 'crew', 'ledger', 'hero'].includes(this.screen))));
@@ -235,8 +275,11 @@ export class DominionScene extends Phaser.Scene {
     this.events.once('shutdown', () => {
       kb?.off('keydown', raw);
       setLogKeyTaken(null);
+      window.removeEventListener('keydown', this.typeKey, true);
+      if (kb) kb.enabled = true;
       window.removeEventListener('keydown', note, true);
       this.desk.shutdown();
+      this.police.shutdown();
     });
   }
 
@@ -250,12 +293,25 @@ export class DominionScene extends Phaser.Scene {
     return { look, atlas: !look.endsWith('.png') };
   }
 
+  /** Past the title, the setup and the opening: a run page (where a police case can take over). */
+  private inRun(): boolean {
+    return this.screen !== 'title' && this.screen !== 'setup' && this.screen !== 'opening';
+  }
+
   private render(): string {
     const b = this.block();
+    if (b && this.inRun() && this.police.owns()) return this.police.render();
     if (this.voices.on && this.screen === 'hq') return this.voices.render();
     switch (this.screen) {
       case 'title':
-        return titleView({ at: this.titleAt, started: !!b, cont: b ? `${b.teamName ?? 'Unnamed Crew'} · Kanto · Day ${b.day}` : null });
+        return titleView({ at: this.titleAt, started: !!b, cont: b ? `${b.teamName ?? 'Unnamed Crew'} · Kanto · Day ${b.day}` : null, colours: b ? teamColours(b) : null });
+      case 'founding':
+        return this.founding ? foundingView(this.founding) : '';
+      case 'founded': {
+        const c = b ? teamColours(b) : null;
+        const m = b?.members[0];
+        return b && c && m ? foundedView(foundedLines(b), this.foundedShown, c, b.team!.name, { look: m.look, name: m.name }) : '';
+      }
       case 'setup':
         return setupView(this.setup, this.files!);
       case 'opening':
@@ -318,9 +374,146 @@ export class DominionScene extends Phaser.Scene {
     this.view?.refresh();
   }
 
+  // ---------- D7: the Founding (Part 9 A15) ----------
+
+  private openFounding(): void {
+    const b = this.block();
+    if (!b?.opened || this.screen === 'founding') return;
+    if (!foundingOpen(b)) {
+      this.notice = b.team ? null : DOMINION_DATA.founding.lines.notYet;
+      return void this.view?.refresh();
+    }
+    const { session } = services();
+    const lead = session.run?.party[0];
+    const ace = lead ? session.content.species.get(lead.speciesId)?.name ?? null : null;
+    const m = b.members[0];
+    this.foundingFrom = this.screen === 'founded' || this.screen === 'ledger' || this.screen === 'card' ? 'hq' : this.screen;
+    this.founding = {
+      d: this.founding?.d ?? newDraft(b, ace), row: 0, typing: null, ideas: nameIdeas(b, ace), problem: null,
+      member: { look: m?.look ?? DOMINION_DATA.start.members.grunt.look, name: m?.name ?? 'Rook' },
+    };
+    this.notice = null;
+    this.screen = 'founding';
+    this.view?.refresh();
+  }
+
+  private closeFounding(): void {
+    this.screen = this.foundingFrom;
+    if (this.screen === 'map' && !this.cursor) this.cursor = newCursor(this.block()!);
+    this.notice = DOMINION_DATA.founding.lines.later;
+    this.view?.refresh();
+  }
+
+  private pickColour(which: 'primary' | 'secondary', id: string): void {
+    const f = this.founding;
+    if (!f) return;
+    const other = which === 'primary' ? f.d.secondary : f.d.primary;
+    if (id !== other) f.d = { ...f.d, [which]: id };
+    f.problem = null;
+    this.view?.refresh();
+  }
+
+  /** ◀ ▶ on a row: the next name idea, colour, letter, mark, motto idea or Goal. */
+  private cycle(dir: number): void {
+    const f = this.founding;
+    if (!f) return;
+    const F = DOMINION_DATA.founding;
+    const next = <T,>(list: readonly T[], now: T): T => list[(Math.max(0, list.indexOf(now)) + dir + list.length) % list.length]!;
+    const r = FOUNDING_ROWS[f.row];
+    const d = f.d;
+    if (r === 'name') {
+      const at = f.ideas.indexOf(d.name);
+      const name = f.ideas[((at < 0 ? (dir > 0 ? -1 : 0) : at) + dir + f.ideas.length) % f.ideas.length]!;
+      f.d = { ...d, name, initial: initialOf(name) || d.initial };
+    } else if (r === 'primary' || r === 'secondary') {
+      const ids = F.colours.map((c) => c.id).filter((id) => id !== (r === 'primary' ? d.secondary : d.primary));
+      f.d = { ...d, [r]: next(ids, d[r]) };
+    } else if (r === 'initial') f.d = { ...d, initial: next('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''), d.initial) };
+    else if (r === 'logo') f.d = { ...d, logo: next(F.logos.map((l) => l.id), d.logo) };
+    else if (r === 'motto') {
+      const goal = d.goal ? F.goals.find((g) => g.id === d.goal)?.quote : undefined;
+      const ideas = [...F.motto.ideas, ...(goal && goal.length <= F.motto.max ? [goal] : [])];
+      f.d = { ...d, motto: next(ideas, d.motto) };
+    } else if (r === 'goal') f.d = { ...d, goal: next([null, ...F.goals.map((g) => g.id)], d.goal) };
+    f.problem = null;
+  }
+
+  private foundingKey(a: InputAction): void {
+    const f = this.founding;
+    if (!f || f.typing) return;
+    const r = FOUNDING_ROWS[f.row];
+    if (a === 'back') return this.closeFounding();
+    if (a === 'up' || a === 'down') f.row = (f.row + (a === 'up' ? -1 : 1) + FOUNDING_ROWS.length) % FOUNDING_ROWS.length;
+    else if (a === 'left' || a === 'right') this.cycle(a === 'left' ? -1 : 1);
+    else if (a === 'confirm') {
+      if (r === 'name' || r === 'motto') this.startTyping(r);
+      else if (r === 'found') return this.submitFounding();
+      else f.row += 1;
+    }
+    this.view?.refresh();
+  }
+
+  /**
+   * Typing into the Name or Motto field. Phaser hands over a frame's key presses in one batch, so while typing the
+   * scene's keyboard is switched off and the page listens to the window directly: every press lands once, in order.
+   * The press that ends the typing never reaches the game actions (the keyboard comes back after that frame).
+   */
+  private startTyping(field: 'name' | 'motto'): void {
+    const f = this.founding;
+    if (!f || f.typing) return;
+    f.typing = field;
+    if (this.input.keyboard) this.input.keyboard.enabled = false;
+    window.addEventListener('keydown', this.typeKey, true);
+  }
+
+  private endTyping(): void {
+    const f = this.founding;
+    if (f) f.typing = null;
+    window.removeEventListener('keydown', this.typeKey, true);
+    this.game.events.once(Phaser.Core.Events.POST_STEP, () => {
+      if (this.input?.keyboard && !this.founding?.typing) this.input.keyboard.enabled = true;
+    });
+  }
+
+  private readonly typeKey = (e: KeyboardEvent): void => {
+    const f = this.founding;
+    if (!f?.typing || this.screen !== 'founding') return this.endTyping();
+    const F = DOMINION_DATA.founding;
+    const field = f.typing;
+    const max = field === 'name' ? F.name.max : F.motto.max;
+    let text = field === 'name' ? f.d.name : f.d.motto;
+    if (e.code === 'Enter' || e.code === 'NumpadEnter' || e.code === 'Escape') this.endTyping();
+    else if (e.code === 'Backspace') text = text.slice(0, -1);
+    else if (e.key.length === 1 && /[A-Za-z0-9 '\-.,!?]/.test(e.key) && text.length < max) text += e.key;
+    else return;
+    e.preventDefault();
+    if (field === 'name') f.d = { ...f.d, name: text, initial: initialOf(text) || f.d.initial };
+    else f.d = { ...f.d, motto: text };
+    f.problem = null;
+    this.view?.refresh();
+  };
+
+  private submitFounding(): void {
+    const f = this.founding;
+    if (!f) return;
+    if (f.typing) this.endTyping();
+    const out = services().session.dominionStep({ t: 'found', team: f.d });
+    if (!out.ok) {
+      f.problem = out.notice;
+      return void this.view?.refresh();
+    }
+    this.founding = null;
+    this.notice = out.notice;
+    this.foundedShown = 1;
+    this.screen = 'founded';
+    this.view?.refresh();
+  }
+
   private key(a: InputAction): void {
     if (this.ate) return void (this.ate = false);
     if (this.leaving) return;
+    if (this.inRun() && this.police.key(a)) return void this.view?.refresh();
+    if (this.screen === 'founding') return this.foundingKey(a);
     if (this.voices.key(a)) return void this.view?.refresh();
     if (this.screen === 'interrupt') {
       if (a === 'left' || a === 'up') this.intAt = (this.intAt + 2) % 3;
@@ -353,6 +546,7 @@ export class DominionScene extends Phaser.Scene {
     if (this.screen === 'title' && (a === 'up' || a === 'down')) this.titleAt = this.titleAt ? 0 : 1;
     else if (this.screen === 'setup') this.setupMove(a);
     else if (this.screen === 'map') this.mapMove(a);
+    else if (this.screen === 'card' && (a === 'left' || a === 'right')) this.cycleOpt(a === 'left' ? -1 : 1);
     else if (this.screen === 'hq' && (a === 'up' || a === 'down')) {
       const n = hqModel(this.block()!).orders.length;
       if (n) this.at = (this.at + (a === 'up' ? -1 : 1) + n) % n;
@@ -382,6 +576,10 @@ export class DominionScene extends Phaser.Scene {
     } else if (this.screen === 'setup') {
       if (this.setup.page === 'types') this.setup = toggleType(this.setup);
       else return this.next();
+    } else if (this.screen === 'founded') {
+      const b2 = this.block();
+      if (b2 && this.foundedShown < foundedLines(b2).length) this.foundedShown += 1;
+      else this.screen = 'hq';
     } else if (this.screen === 'opening') {
       const lines = b ? openingLines(b) : [];
       if (this.shown < lines.length) this.shown += 1;
@@ -390,6 +588,7 @@ export class DominionScene extends Phaser.Scene {
         this.screen = 'hq';
       }
     } else if (this.screen === 'map' && this.cursor) {
+      if (this.chainWaiting()) return this.fight('map');
       if (this.notice) this.notice = null;
       else if (this.cursor.focus === 'map') this.cursor = { ...this.cursor, focus: 'grid' };
       else return this.openCard();
@@ -454,6 +653,25 @@ export class DominionScene extends Phaser.Scene {
   refresh(): void {
     this.view?.refresh();
   }
+  /** D24: an answer in the interview room, or the release page read (saved). */
+  policeStep(action: DominionAction): { ok: boolean; notice: string | null } {
+    return services().session.dominionStep(action);
+  }
+  /** D24: the release page is read. */
+  toHq(): void {
+    this.screen = 'hq';
+    this.notice = null;
+    this.view?.refresh();
+  }
+  /** A species' front atlas (the CCTV still, a Pokémon held as evidence). */
+  monFile(species: string): string | null {
+    const sp = services().session.content.species.get(species);
+    return sp ? rxFileOf(this.manifest, pokemonAssetIds(sp.assets).front)?.file ?? null : null;
+  }
+  /** The Boss's sprite on the release page. */
+  bossLook(): string | null {
+    return this.files?.boss.file ?? null;
+  }
   /** D9: an answer on the Rival File (saved). */
   rivalStep(action: DominionAction): { ok: boolean; fight: boolean; notice: string | null } {
     return services().session.dominionStep(action);
@@ -508,7 +726,21 @@ export class DominionScene extends Phaser.Scene {
     const id = gridPages(b)[c.page]?.[c.at];
     const d = DOMINION_DATA.field.districts.find((x) => x.id === c.district);
     if (!id || !d) return null;
-    return cardModel(b, services().session.run!, id, d.targets[c.target]?.id ?? null, d.id, c.bring);
+    return cardModel(b, services().session.run!, id, d.targets[c.target]?.id ?? null, d.id, c.bring, c.opt);
+  }
+
+  /** D10: Left/Right on the Card picks the next choice (a Gym way, a bribe, a design, a specialist). */
+  private cycleOpt(dir: number): void {
+    const c = this.cursor, card = this.cardOf();
+    if (!c || !card || !card.opts.length) return;
+    const i = Math.max(0, card.opts.findIndex((o) => o.id === card.opt));
+    this.cursor = { ...c, opt: card.opts[(i + dir + card.opts.length) % card.opts.length]!.id };
+  }
+
+  /** D10: a Raid, a Gym's trainers, the Gauntlet: the chain's next fight waits on the map. */
+  private chainWaiting(): boolean {
+    const f = this.block()?.field.fight;
+    return !!f && !f.begun && f.why === 'growth';
   }
 
   private pickDistrict(id: string): void {
@@ -561,17 +793,25 @@ export class DominionScene extends Phaser.Scene {
 
   private openCard(): void {
     if (!this.cursor || !this.cardOf()) return;
+    if (this.chainWaiting()) return this.fight('map');
     this.notice = null;
     this.garage = false;
+    this.cursor = { ...this.cursor, opt: null, bring: [] };
     this.screen = 'card';
     this.view?.refresh();
   }
 
-  /** Bring crew (up to two): none, then each member in turn. D3 adds more members. */
+  /** Bring crew: none, then each member in turn. D10: a squad action (Raid: three) adds one more member each press. */
   private bring(): void {
     const b = this.block(), c = this.cursor;
     if (!b || !c) return;
     const ids = b.members.map((m) => m.id);
+    const squad = this.cardOf()?.squad ?? 1;
+    if (squad > 1) {
+      const next = ids.find((id) => !c.bring.includes(id));
+      this.cursor = { ...c, bring: next && c.bring.length < squad ? [...c.bring, next] : [] };
+      return this.view?.refresh();
+    }
     const now = c.bring[0];
     const i = now ? ids.indexOf(now) : -1;
     this.cursor = { ...c, bring: i + 1 < ids.length ? [ids[i + 1]!] : [] };
@@ -584,7 +824,7 @@ export class DominionScene extends Phaser.Scene {
     if (card.blocked) return this.view?.refresh();
     const id = gridPages(b)[c.page]![c.at]!;
     const d = DOMINION_DATA.field.districts.find((x) => x.id === c.district)!;
-    const out = services().session.dominionStep({ t: 'act', action: id, target: d.targets[c.target]?.id ?? null, district: d.id, bring: c.bring });
+    const out = services().session.dominionStep({ t: 'act', action: id, target: d.targets[c.target]?.id ?? null, district: d.id, bring: c.bring, opt: card.opt });
     this.screen = 'map';
     this.notice = out.notice;
     if (out.ok && out.fight) return this.fight('map');
@@ -715,6 +955,10 @@ export class DominionScene extends Phaser.Scene {
   }
 
   private back(): void {
+    if (this.screen === 'founded') {
+      this.screen = 'hq';
+      return this.view?.refresh();
+    }
     if (this.screen === 'setup') {
       const i = SETUP_PAGES.indexOf(this.setup.page);
       if (i > 0) this.setup = { ...this.setup, page: SETUP_PAGES[i - 1]!, problem: null };

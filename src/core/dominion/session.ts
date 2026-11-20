@@ -18,6 +18,7 @@ import { fill } from './worldTurn';
 import { DominionBlockSchema, type DominionAction, type DominionBlock, type DominionSetup } from './schema';
 import { newBlock, typesProblem } from './start';
 import { afterStep, lineFor, weekSum } from './empire';
+import { found, foundingOpen } from './founding';
 import { afterStand, answerMeet, ensureHero, heroMember, heroTeam, startLegend } from './hero';
 import { escapeHero } from './field';
 import { hashSeed, Rng } from '../rng';
@@ -27,6 +28,8 @@ import { withHq } from './hqFx';
 import { levelCap } from '../regions';
 import './voices';
 import { answerCard, breakTruce, maybeStreet, noteTop, ransom, startTruce, withRivals, type RivalOut } from './rivals';
+import { answerQ, noteAct, releasedSeen, releaseQ, returnHeld } from './police';
+import './growth';
 
 export const DOMINION_MODE_ID = 'dominion';
 export const isDominionRun = (run: RunState | null | undefined): boolean => run?.rules.modeId === DOMINION_MODE_ID;
@@ -88,6 +91,9 @@ export function stepInRun(content: Content, run0: RunState, action: DominionActi
     b.flags = b.flags.filter((f) => f !== 'ambushed');
     for (const m of next.party) m.hp = Math.max(1, Math.round(m.hp * 0.75));
   }
+  // D24: Pokémon the police held as evidence come back on their day.
+  const back = returnHeld(content, next);
+  if (back.length) b.report = [...b.report, ...back];
   // D21: the Day's applicants queue at the desk the first time the Day is seen (their own stream, so nothing else moves).
   rollQueue(content, b, run.seed);
   // D19: anyone new gets their personality card.
@@ -95,6 +101,8 @@ export function stepInRun(content: Content, run0: RunState, action: DominionActi
   // D6: the Ledger books what the step did to the money, the Boss's visit, and a new Notoriety step.
   const turned = !!before && b.day !== before.day;
   const lines = before ? afterStep(b, turned ? b.funds : before.funds, turned ? weekSum(b) : weekSum(before), lineFor(action), visitOf(action)) : [];
+  // D7: the step that opens the Founding says so (once: it stays open until the sign goes up).
+  if (before && !foundingOpen(before) && foundingOpen(b)) lines.push(DOMINION_DATA.founding.lines.ready);
   const block = DominionBlockSchema.parse(b);
   if (lines.length && turned) block.report = [...block.report, ...lines];
   const notice = lines.length && !turned ? [out.notice, ...lines].filter(Boolean).join(' ') : out.notice;
@@ -111,6 +119,13 @@ function visitOf(a: DominionAction): string | null {
 function stepInner(content: Content, run: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean } {
   const block = run.expansion?.dominion;
   if (!block) return { ok: false, block: block as never, notice: null, heal: false, run };
+  // D24: while the police question someone, only answers go through.
+  const polOut = policeInRun(content, run, action);
+  if (polOut) return polOut;
+  if (action.t === 'found') {
+    const out = found(block, action.team);
+    return { ok: out.ok, block: out.block, notice: out.notice, heal: false, run: out.ok ? withBlock(run, DominionBlockSchema.parse(out.block)) : run };
+  }
   const crewOut = crewInRun(content, run, action);
   if (crewOut) return crewOut;
   const resOut = reserveInRun(content, run, action);
@@ -130,8 +145,11 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
   if (action.t === 'act') {
     // D2: a Boss action (field.ts). A Pokémon lifted in a Ball (Thieve, a big success) joins the team or the box.
     const work = structuredClone(run);
+    const heatWas = block.field.districts[action.district]?.heat ?? 0;
     const out = act(content, work, action);
     if (!out.ok) return { ok: false, block, notice: out.notice, heal: false, run };
+    // D24: someone may have seen it (the police's evidence log).
+    noteAct(out.block, run.seed, action.district, action.target, (out.block.field.districts[action.district]?.heat ?? 0) - heatWas, run.party[0]?.speciesId ?? null);
     if (out.mon && out.mon.trust !== undefined) {
       // D4: a rescued or tamed Pokémon joins the Reserve, not the Boss's team.
       const line = placeMon(content, work, withReserve(content, out.block), { species: out.mon.species, level: out.mon.level, src: 'rescued', trust: out.mon.trust });
@@ -148,7 +166,8 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
       blk = met.block;
       if (met.line) notice = [notice, met.line].filter(Boolean).join(' ');
     }
-    const next = withBlock(work, DominionBlockSchema.parse(blk));
+    // D10: Pokémon an action took (Kidnap, a lab's rare one, the Swap Meet) wait in the crew's pending list: place them now.
+    const next = settleCrew(content, withBlock(work, DominionBlockSchema.parse(blk)));
     return { ok: true, block: next.expansion!.dominion!, notice, heal: false, run: next, fight: out.fight };
   }
   if (action.t === 'buy') {
@@ -164,6 +183,24 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
   }
   next = settleCrew(content, next);
   return { ...out, block: next.expansion!.dominion!, run: next };
+}
+
+/** D24: answers in the interview room, and the release page read (police.ts). Null for any other action with no case open. */
+function policeInRun(content: Content, run: RunState, action: DominionAction): (StepOut & { run: RunState; fight?: boolean }) | null {
+  const block = run.expansion!.dominion!;
+  const no = (notice: string | null) => ({ ok: false, block, notice, heal: false, run });
+  if (action.t === 'released') {
+    const b = releasedSeen(block);
+    return b ? { ok: true, block: b, notice: null, heal: false, run: withBlock(run, DominionBlockSchema.parse(b)) } : no(null);
+  }
+  // The Boss in the interview room holds the clock; a member's questioning waits on its screen without stopping the day.
+  if (action.t !== 'answer') return block.police?.q?.who === 'boss' ? no(DOMINION_DATA.police.lines.busy) : null;
+  const out = answerQ(block, action, run.seed);
+  if (!out.ok) return no(out.notice);
+  const next = withBlock(structuredClone(run), out.block);
+  if (out.over) releaseQ(content, next, run.seed);
+  const b = DominionBlockSchema.parse(next.expansion!.dominion!);
+  return { ok: true, block: b, notice: null, heal: false, run: withBlock(next, b) };
 }
 
 /** D9: the Rival File's answers (rivals.ts). A fight answered leaves `field.fight` for the scene to start. */

@@ -133,6 +133,8 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'breakTruce':
     case 'card':
     case 'ransom':
+    case 'answer':
+    case 'released':
       // The Boss's hands need the run (party, bag): session.ts sends them to field.ts.
       return no(block);
     case 'toDay': {
@@ -202,6 +204,7 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'deskAsk':
     case 'deskInspect':
     case 'deskStamp':
+    case 'found': // D7: handled by session.ts (founding.ts)
       return no(block);
   }
 }
