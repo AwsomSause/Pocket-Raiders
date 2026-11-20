@@ -23,6 +23,7 @@ import {
 } from './field';
 import { addPart, growthOf, ownedGyms } from './growth';
 import { callFinalStand } from './hero';
+import { setChairOwed } from './chair';
 import { addClean } from './hqFx';
 import { makeLead } from './recruit';
 import { addTension, learnPlan, rivalsOf, teamsHere } from './rivals';
@@ -88,7 +89,7 @@ export function measures(b: DominionBlock): Record<string, number> {
   const s = sitesOf(b), lg = peek(b).league;
   const sum = (k: 'regard' | 'dread'): number => Math.floor(Object.values(b.field.districts).reduce((a, d) => a + Math.max(0, d[k]), 0) / 10);
   return {
-    gyms: ownedGyms(b).length + (s.hqStormed ? 1 : 0), biz: Object.keys(b.growth?.biz ?? {}).length, held: heldIds(b).length,
+    gyms: ownedGyms(b).length, biz: Object.keys(b.growth?.biz ?? {}).length, held: heldIds(b).length,
     holdings: heldPlaces(b).length, sites: s.mine, legends: Object.values(b.hero?.legends ?? {}).reduce((a, l) => a + l.beaten, 0),
     members: b.members.length, pens: b.reserve?.box.length ?? 0, elite: lg.elite.length + (lg.champion ? 1 : 0), hq: b.hqLevel,
     dread: sum('dread'), regard: sum('regard'),
@@ -105,7 +106,7 @@ const dialOf = (parts: number[]): number => Math.floor((parts.reduce((a, x) => a
 
 export function pathsOf(b: DominionBlock): PathState[] {
   const N = T().need, s = sitesOf(b), lg = peek(b).league, g = goalOf(b), st = peek(b).goal;
-  const gyms = ownedGyms(b).length + (s.hqStormed ? 1 : 0);
+  const gyms = ownedGyms(b).length;
   const pocket = Object.values(b.growth?.gyms ?? {}).filter((x) => x.way === 'buy' || x.way === 'blackmail' || x.way === 'convert').length;
   const biz = Object.keys(b.growth?.biz ?? {});
   const pillar = biz.some((id) => N.pillars.includes(id));
@@ -650,7 +651,11 @@ function wonChain(b: DominionBlock, what: string): string[] {
     if (hq) rt.sites[hq.id] = 'yours';
     if (!b.flags.includes(`beat:${team.id}:hq`)) b.flags.push(`beat:${team.id}:hq`);
     if (!b.flags.includes(`beat:${team.id}:boss`)) b.flags.push(`beat:${team.id}:boss`);
-    rt.power -= 5;
+    rt.power = Math.max(0, rt.power - 5);
+    // The rival Boss's own Gym (Viridian: "it falls when Rocket falls", growth.json) is yours now.
+    for (const gym of DOMINION_DATA.growth.gyms.filter((x) => x.district === hq?.district && x.only?.length === 1 && x.only[0] === 'beat')) {
+      if (!growthOf(b).gyms[gym.id]) growthOf(b).gyms[gym.id] = { way: 'break', day: b.day, defiance: 0, told: false, leader: null }; // taken by force
+    }
     if (hq) {
       const ds = b.field.districts[hq.district];
       if (ds) {
@@ -830,6 +835,23 @@ addCardHook((b, _run, c) => {
     }
   }
   for (const s of sets) if ((groups[s.group] ?? 0) >= s.n) for (const f of s.fx) if (f.k === 'odds') addPart(c, s.name, f.n ?? 0);
+});
+
+// ---------- the Chair's owed numbers (D12 kept them for D14) ----------
+
+/** A Chair answer moves the Goal Track (±n), the Shadow (Regard ±2 a point in every town) or Wipe Out (n rival sites, not their HQ, become yours). */
+setChairOwed('goal', (b, n) => {
+  const g = goalOf(b), st = takeoverOf(b).goal;
+  if (g) st.track = clamp(st.track + n, 0, g.finish ? 100 : 99);
+});
+setChairOwed('shadow', (b, n) => {
+  for (const d of Object.values(b.field.districts)) d.regard += 2 * n;
+});
+setChairOwed('wipe', (b, n) => {
+  const team = rivalTeams()[0];
+  if (!team || n <= 0) return;
+  const rt = (b.rivals ??= rivalsOf(b)).teams[team.id]!;
+  for (const site of team.sites.filter((x) => !x.hq && (rt.sites[x.id] ?? 'theirs') === 'theirs').slice(0, n)) rt.sites[site.id] = 'yours';
 });
 
 // ---------- crew tasks of kind 'takeover' (AQ and section M) ----------

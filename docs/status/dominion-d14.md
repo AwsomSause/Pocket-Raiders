@@ -20,6 +20,10 @@
   - **m13 the hijacked broadcast**: plays once per town (or the region) the next time the Boss looks in; Enter skips.
   - Fights come back to the Takeover page; a chain's next fight waits on Enter (also on the map for League fights started from the Card).
 
+## Hand-offs from other slices
+- Done here: the Chair's owed numbers (D12) now move for real: Goal = Goal Track ±n, Shadow = Regard ±2 a point in every town, Wipe Out = one rival site (not the HQ) per point. Card 82 (the deserter Admin's HQ plans) is live (Chair: 114 of 150). Card 129's Uprising checks are relabelled D15 (uprisings come with Stability). Storming Rocket's HQ hands over the Viridian Gym (growth.json: "it falls when Rocket falls").
+- Still waiting (named here so nothing is lost): D8's Cause incentive for squads; buildings Panic Room and Escape Tunnel (Boss capture and raid retreat) and Throne Room (Monarch's "Rule from the Throne"); the Boss's own escort (Guard Post note); the Debate's "Pursue their Goal too" stance being broken by a Goal. These touch D8/D5/D13 code and are the next follow-up.
+
 ## Limited (honest list)
 - Holdings marked limited name what's simplified in their note (battle-only bonuses like type damage, shop prices, fast travel, legendary rumours wait for D15/D17).
 - Goal endings are stored but the ending scenes are D17. Each Goal shares one frame (Track, Cost, Moment); Goal-specific screens (Org Chart, Ledger of Tides etc.) are not built.

@@ -3,7 +3,7 @@
 // actions, the hijacked broadcast (v4 m13); save/reload; determinism.
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { freshChair } from '../../src/core/dominion/chair';
+import { freshChair, payOwed } from '../../src/core/dominion/chair';
 import { withCrew } from '../../src/core/dominion/crew';
 import { DOMINION_DATA } from '../../src/core/dominion/data';
 import { actionDef, actionStatus } from '../../src/core/dominion/field';
@@ -262,6 +262,40 @@ describe('DOMINION D14: Holdings', () => {
     expect(takeProblem(blk(r), 'kanto:reds-house-pallet')).toContain('₽');
     expect(stepInRun(content, r, tk('take', 'kanto:reds-house-pallet')).ok).toBe(false);
     expect(takeProblem(blk(r), 'kanto:celadon-city')).toContain('more places');
+  });
+});
+
+describe('DOMINION D14: hand-offs from other slices', () => {
+  it('storming Rocket\'s HQ (Admins, then Giovanni) wins Wipe Out\'s HQ row and hands over the Viridian Gym', () => {
+    let r = edit(day(started('storm')), (b) => {
+      const rv = (b.rivals ??= rivalsOf(b));
+      const team = DOMINION_DATA.rivals.teams.find((t) => t.id === 'rocket')!;
+      for (const s of team.sites) if (!s.hq) rv.teams.rocket!.sites[s.id] = 'yours';
+    });
+    const out = stepInRun(content, r, tk('storm'));
+    expect(out.ok, out.notice ?? '').toBe(true);
+    const f = fightAll(out.run);
+    expect(f.fights).toBe(5);
+    r = f.run;
+    expect(blk(r).flags).toContain('beat:rocket:hq');
+    expect(growthOf(blk(r)).gyms['viridian-gym']).toMatchObject({ way: 'break' });
+    expect(pathsOf(blk(r))[0]!.done).toBe(true);
+    expect(stepInRun(content, r, tk('storm')).ok).toBe(false);
+  });
+  it('the Chair\'s Goal, Shadow and Wipe Out numbers move for real now', () => {
+    const b = withCrew(structuredClone(blk(started('owed'))));
+    withGoal(b, 'total-takeover');
+    expect(payOwed(b, 'goal', 5)).toBe(true);
+    expect(takeoverOf(b).goal.track).toBe(5);
+    const regard = b.field.districts.pewter!.regard;
+    expect(payOwed(b, 'shadow', 1)).toBe(true);
+    expect(b.field.districts.pewter!.regard).toBe(regard + 2);
+    b.rivals = rivalsOf(b);
+    const mine = (): number => Object.values(b.rivals!.teams.rocket!.sites).filter((x) => x === 'yours').length;
+    const had = mine();
+    expect(payOwed(b, 'wipe', 1)).toBe(true); // card 82, the deserter Admin's HQ plans: one site
+    expect(mine()).toBe(had + 1);
+    expect(payOwed(b, 'stab', 1)).toBe(false); // Stability waits for D15
   });
 });
 

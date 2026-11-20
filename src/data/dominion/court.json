@@ -3783,7 +3783,6 @@
     ]
    },
    "who": "rival",
-   "wait": "D14",
    "rival": true
   },
   {
@@ -5839,7 +5838,7 @@
      },
      {
       "k": "note",
-      "slice": "D14",
+      "slice": "D15",
       "text": "Monarch Uprising check -50%"
      }
     ]
@@ -5850,13 +5849,13 @@
     "fx": [
      {
       "k": "note",
-      "slice": "D14",
+      "slice": "D15",
       "text": "Uprising check +25%"
      }
     ]
    },
    "who": "gym-union",
-   "wait": "D14"
+   "wait": "D15"
   },
   {
    "id": 130,
