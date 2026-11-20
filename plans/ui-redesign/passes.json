@@ -711,5 +711,25 @@
   "q3": "Nine new pages: Daily Run, Contract Board, Bounty, Exhibition match, Rival Rescue Plan, Siege ledger, Breather room, share card and update log. The Breather asks one question (who comes back?) on its own page.",
   "q4": "The update log is the page Settings opens from Save and Data, with three big numbers before the full list. The share card saves a picture and is opened from the Run Report or the pause menu.",
   "q5": "Yes. Gym Leaders facing off in an exhibition, your rival asking for help, a wanted poster for five Water types: these are side stories the series tells, drawn in its bright, chunky style."
+ },
+ "42": {
+  "name": "New areas 16 · Big Stage",
+  "label": "New areas · pass 16 of 25",
+  "big": "The camera pulls back: whole Pokémon, a giant foe, a mountain you climb, and the story opening",
+  "pages": [
+   "so-cold",
+   "so-station",
+   "so-vance",
+   "so-notebook",
+   "so-trial",
+   "so-echo",
+   "so-depart",
+   "so-lessons"
+  ],
+  "q1": "The raid boss now fills the sky and your three allies stand in the field beside you. The expedition is a mountain at dusk with the Finale on the summit against the moon. The grunt stands under a giant red R.",
+  "q2": "Passes 11 to 15 tidied the panels around the picture. This pass changes the picture. Your own Pokémon is drawn whole for the first time (it used to sit behind the bottom bar), the foe is up to half again as big, the allies panel is gone because the allies are really there, and the expedition's five boxes became five terraces of rock.",
+  "q3": "Eight new pages for the story opening: the cold open and the departure as wide cinema cards, the Station with five things to look at, the Professor's first question, the Field Notebook, the Field Trial with one arrow on one button, a backstory scene and the nine lessons.",
+  "q4": "The lessons page is what Settings opens from Save and Data. The small choice list used for the grunt is the same one the story uses, so every question in the game can look alike.",
+  "q5": "Yes. A small list of answers above the text box, a silhouette crossing the moon, a rival waiting for your first battle and a Professor handing you a notebook are how these games begin."
  }
 }
