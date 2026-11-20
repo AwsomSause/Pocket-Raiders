@@ -51,9 +51,9 @@ const withRun = (r: RunState, f: (b: DominionBlock) => void): RunState => {
 const rook = (b: DominionBlock): Member => b.members[0]!;
 
 describe('DOMINION D3: the lists as data', () => {
-  it('all 150 crew tasks are in, word for word, each with a status; live ones have an effect, waiting ones name their slice', () => {
+  it('all 600 crew tasks are in, word for word, each with a status; live ones have an effect, waiting ones name their slice', () => {
     const list = DOMINION_DATA.tasks.filter((t) => t.n > 0);
-    expect(list.map((t) => t.n)).toEqual(Array.from({ length: 150 }, (_, i) => i + 1));
+    expect(list.map((t) => t.n)).toEqual(Array.from({ length: 600 }, (_, i) => i + 1));
     expect(taskById('guard-hq')!.levels).toHaveLength(5);
     for (const t of DOMINION_DATA.tasks) {
       if (t.status === 'disabled') expect(t.needs).toMatch(/^D\d+$/);
@@ -116,11 +116,11 @@ describe('DOMINION D3: members', () => {
     expect(cantTake(m, taskById('pickpocket')!)).toBeNull();
     expect(cantTake(m, taskById('shake-down')!)).toBeNull();
     expect(cantTake(m, taskById('rally-the-troops')!)).toMatch(/SENIOR GRUNT/);
-    expect(cantTake(m, taskById('stock-the-stores')!)).toMatch(/D10/);
+    expect(cantTake(m, taskById('govern-a-region')!)).toMatch(/D15/);
   });
   it('assigning is a Morning/Evening step, refused for a task they can\'t take', () => {
     let r = started();
-    expect(stepInRun(content, r, { t: 'assign', member: 'm1', task: 'stock-the-stores' }).ok).toBe(false);
+    expect(stepInRun(content, r, { t: 'assign', member: 'm1', task: 'govern-a-region' }).ok).toBe(false);
     r = go(r, { t: 'assign', member: 'm1', task: 'pickpocket' });
     expect(crewOf(rook(blk(r))).task).toBe('pickpocket');
     r = go(go(night(r), { t: 'toDay' }), { t: 'endDay' });

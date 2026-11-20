@@ -50,20 +50,21 @@ const act = (action: string, target: string | null, district: string, bring: str
 const envelope = (record: string, v: number, data: unknown) => JSON.stringify({ format: 'pkmn-roguelike', record, schemaVersion: v, savedAt: '', data });
 
 describe('DOMINION D2: the data', () => {
-  it('carries all 150 Boss actions from the list; each is played now or names the slice that opens it', () => {
+  it('carries all 600 Boss actions from the lists; each is played now or names the slice that opens it', () => {
     const all = DOMINION_DATA.actions.actions;
-    expect(all).toHaveLength(150);
-    expect(all.map((a) => a.n)).toEqual(Array.from({ length: 150 }, (_, i) => i + 1));
-    const played = all.filter((a) => actionStatus(a).play);
-    // 32 from D2, 10 from D6, 13 more that D5's rooms open (each also needs its room built), 9 from D4, 17 more from D9 (the rival team), 5 Hero actions (D11).
-    expect(played.length).toBe(86);
+    expect(all).toHaveLength(600);
+    expect(all.map((a) => a.n)).toEqual(Array.from({ length: 600 }, (_, i) => i + 1));
+    const played = all.filter((a) => a.n <= 150 && actionStatus(a).play);
+    // Rows 1-150: 42 from D10 (Growth), 32 from D2, 10 from D6, 13 more that D5's rooms open (each also needs its room built), 9 from D4, 17 more from D9 (the rival team), 5 Hero actions (D11), 2 from D13 (Debate, Write a Manifesto).
+    expect(played.length).toBe(130);
+    expect(all.filter((a) => actionStatus(a).play)).toHaveLength(447);
     for (const a of all) {
       const s = actionStatus(a);
       expect(s.play || /^D\d+$/.test(s.slice ?? ''), a.id).toBe(true);
     }
     expect(actionStatus(actionDef('recruit')!).slice).toBe('D3');
     // Buy Out needs the Front Office (D5) and is played by D10's growth actions.
-    expect(actionStatus(actionDef('buy-out')!)).toEqual({ play: false, slice: 'D10', room: 'front-office' });
+    expect(actionStatus(actionDef('buy-out')!)).toEqual({ play: true, slice: null, room: 'front-office' });
   });
   it('the starting nine are the mockup\'s nine, in order; every played action has a row', () => {
     expect(FD.starting).toEqual(['extort', 'take', 'steal', 'thieve', 'attack', 'recruit', 'scout', 'catch', 'lay-low']);

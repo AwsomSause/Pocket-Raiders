@@ -9,7 +9,7 @@ import type { PyramidModel, ReserveModel, SlotModel } from '../../../../core/dom
 import { act, esc, mini, TYPE_COLORS } from '../../kit';
 import { rxUrl } from '../../assets';
 import { face } from './crew';
-import { stage } from './views';
+import { stage, WHEEL_KEY } from './views';
 
 const img = (f: string): string => rxUrl(`dominion/${f}.png`);
 const cap = (t: string): string => t[0]!.toUpperCase() + t.slice(1);
@@ -57,7 +57,7 @@ export function reserveView(m: ReserveModel, file: MonFile, notice: string | nul
   return stage(`<div class="layer" style="background:radial-gradient(500px 300px at 650px 250px,rgba(160,64,160,.28),transparent 70%)"></div>
   <div class="ttl" style="--t1:#7a3a9a;--t2:#a040a0">Pokémon <span class="sub">· Reserve</span></div>
   <div class="a row" style="left:378px;top:16px;gap:8px;z-index:30">${m.types.map((t) => `<span class="type" style="--c:${col(t)}">${cap(t).toUpperCase()}</span>`).join('')}<span class="sm mu">Team Types</span></div>
-  <div class="keys"><span class="key" data-testid="dom-reserve-count">${esc(m.count)}</span><span class="key">${esc(m.hq)}</span></div>
+  <div class="keys">${WHEEL_KEY}<span class="key" data-testid="dom-reserve-count">${esc(m.count)}</span><span class="key">${esc(m.hq)}</span></div>
 
   <div class="pnl" style="left:16px;top:70px;width:320px;height:458px;padding:12px 14px" data-testid="dom-give">
     <div class="hd"><img class="ic" src="${img('g-fame-checker')}" alt="">GIVE TO<span class="r row" style="gap:4px"><span class="kc"${act('who', -1)}>W</span><span data-testid="dom-who">${esc(w.name)}</span><span class="kc"${act('who', 1)}>E</span></span></div>
@@ -117,7 +117,7 @@ export function pyramidView(m: PyramidModel, notice: string | null): string {
   const msg = notice ? `<div class="al y" style="position:absolute;left:16px;top:70px;width:180px;z-index:35;font-size:13px" data-testid="dom-notice"><span>${esc(notice)}</span></div>` : '';
   return stage(`<div class="layer" style="background:radial-gradient(360px 260px at 304px 90px,rgba(255,210,63,.32),transparent 70%),radial-gradient(500px 320px at 304px 400px,rgba(123,63,160,.3),transparent 70%)"></div>
   <div class="ttl" style="--t1:#7b3fa0;--t2:#b04ad0">Roster <span class="sub">· Rank Pyramid</span></div>
-  <div class="keys"><span class="key" data-testid="dom-crew-count">${esc(m.crew)}</span><span class="key">${esc(m.hq)}</span></div>
+  <div class="keys">${WHEEL_KEY}<span class="key" data-testid="dom-crew-count">${esc(m.crew)}</span><span class="key">${esc(m.hq)}</span></div>
   <div class="rays turn" style="left:144px;top:-90px;width:320px;height:320px;z-index:2;--rc:rgba(255,220,110,.32)"></div>
   <div class="beam sweep" style="left:270px;--a0:-14deg;--a1:14deg;opacity:.55;z-index:1"></div>
   ${tiers}

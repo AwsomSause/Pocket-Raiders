@@ -94,7 +94,7 @@ export function claudeSettingsView(m: ClaudeSettingsModel): string {
     <div class="hd" style="font-size:15px">Use Rotom for</div>
     <div class="col" style="gap:5px;font-size:15px">${uses}</div>
   </div>
-  ${m.notice ? `<div class="aichip" style="left:240px;top:500px" data-testid="claude-notice"><i></i>${esc(m.notice)}</div>` : ''}`, '', 'check vign grain');
+  ${m.notice ? `<div class="aichip" style="left:240px;top:500px" data-testid="claude-notice"><i></i>${esc(m.notice)}</div>` : ''}`, '', 'check vign grain', 'l');
 }
 
 // ---------- mockup a2: the Key-Card vault ----------

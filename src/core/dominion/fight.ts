@@ -13,6 +13,7 @@ import { DOMINION_DATA } from './data';
 import { districtDef, foeOf, targetDef } from './field';
 import { heroTeam, sawTypes } from './hero';
 import { rivalSide } from './rivals';
+import { growthSide } from './growth';
 
 /** Starts `field.fight` and marks it begun. Returns null when there's nothing to start or nobody can fight. */
 export function beginDominionFight(content: Content, current: RunState): RunState | null {
@@ -46,6 +47,12 @@ export function beginDominionFight(content: Content, current: RunState): RunStat
   } else if (fight.foe === 'rival') {
     // D9: a rival Grunt squad, an Admin, or the Boss at the door (rivals.ts).
     const side = rivalSide(b, run, fight);
+    team = side.species.map((s, i) => make(s, Math.max(2, side.level - (i ? 1 : 0)))).filter((m): m is PokemonInstance => !!m);
+    trainer = { classId: side.classId, name: side.name, leaderId: side.leaderId };
+  } else if (fight.foe === 'growth') {
+    // D10: a Raid's, a Gym's or the Gauntlet's next fight (growth.ts).
+    const side = growthSide(b, run);
+    if (!side) return null;
     team = side.species.map((s, i) => make(s, Math.max(2, side.level - (i ? 1 : 0)))).filter((m): m is PokemonInstance => !!m);
     trainer = { classId: side.classId, name: side.name, leaderId: side.leaderId };
   } else if (fight.foe === 'member') {
