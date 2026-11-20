@@ -33,6 +33,17 @@ export interface BattleBox {
 
 export interface BattleOption { label: string; sub?: string; type?: string; off?: boolean; /** Hover key for this choice's tooltip. */ tip?: string }
 
+/** The Battle info page (Phantom UI, mock-up `binfo`): both sides, the field, and every other line the old panel held. */
+import type { LogRow } from '../../logRows';
+
+export interface BattleInfoView {
+  turn: number;
+  sides: readonly { lab: string; name: string; file: string | null; hp: string; status: string | null; item: string; stages: readonly { stat: string; n: number }[]; side: readonly string[] }[];
+  field: { head: string; text: string; first: { who: string | null; why: string } };
+  /** The rest, a page at a time (Q and E switch): your Pokémon, the foe, then the moves and the field. */
+  more: { tabs: readonly string[]; index: number; lines: readonly string[] };
+}
+
 export interface BattleModel {
   /** One box per Pokémon on the field, in field order (one in a single battle, up to three). */
   foes: readonly BattleBox[];
@@ -53,6 +64,7 @@ export interface BattleModel {
   auto: boolean;
   /** Phantom UI: the turn number, and your Pokémon not on the field (the mock-ups' stack at the right). */
   turn?: number;
+  binfo?: BattleInfoView | null;
   bench?: readonly { name: string; level: string; hp: number; file: string | null }[] | null;
   /** Your own party as balls (the top-bar layout shows them under your name): how many, and how many have fainted. */
   party: { n: number; out: number } | null;
@@ -78,7 +90,8 @@ export interface BattleModel {
   /** A Pokémon's Ability card over the field (hover on its box, or pinned by a click); `pinned` marks the pinned one. */
   card?: (BattlePanel & { pinned?: boolean }) | null;
   /** The battle log (H): its filter tabs and the lines of the open one. */
-  log?: { tabs: readonly string[]; index: number; lines: readonly string[] } | null;
+  /** The battle log. The Phantom page (mock-up `blog`) draws `rows` a screen at a time from `top`, under its `head`. */
+  log?: { tabs: readonly string[]; index: number; lines: readonly string[]; rows?: readonly LogRow[]; top?: number; head?: string } | null;
   /** The Beta 0.6 pieces over the field; each shows only while its rule is in play. */
   fx?: BattleFx | null;
   /** A notice over the field that waits for an input (the Extended Cut's Second Shot): the mock-ups' confirm box with one button. */

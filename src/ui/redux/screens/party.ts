@@ -2,6 +2,8 @@
 // (lead big and the rest as rows; a three-wide grid; or a list with a detail window). Summary: the Pokémon on the
 // left, tabs, and one window of facts for the tab. Pure drawing; ui/pokemonMenu.ts keeps the state and the input.
 
+import { crumbHtml } from '../../pauseRing';
+import { phInto } from '../../phantom/picker';
 import { rxUrl } from '../assets';
 import { act, type Area, B, esc, facts, H, hpb, mini, mon, TX, ty, TYPE_COLORS, W } from '../kit';
 import type { ReduxCtx } from '../stage';
@@ -41,7 +43,7 @@ const typeColor = (t: string): string => TYPE_COLORS[t.charAt(0).toUpperCase() +
 const pick = (k: number): string => `${act('pick', k)} data-over="over"`;
 
 export function partyView(c: ReduxCtx, d: PartyModel): string {
-  if (c.ph) return phParty(c.ph, d);
+  if (c.ph) return phInto(phParty(c.ph, d), crumbHtml());
   const v = c.v(3), head = H(d.title, d.area ?? 'party', d.hints);
   const cls = (p: PartyCard, k: number): string => (k === d.index ? 'sel' : p.hp > 0 && !p.off ? '' : 'dim');
   const tag = (p: PartyCard): string => (p.tag ? `<span class="tg no" style="font-size:11px">${esc(p.tag)}</span>` : '');
@@ -121,7 +123,7 @@ function bodyOf(b: SummaryBody): string {
 }
 
 export function summaryView(c: ReduxCtx, d: SummaryModel): string {
-  if (c.ph) return phSummary(c.ph, d);
+  if (c.ph) return phInto(phSummary(c.ph, d), crumbHtml());
   const v = c.v(2), f = d.face;
   const backdrop = f.art ? `background:url(${rxUrl(f.art)}) 50% 60%/cover;image-rendering:pixelated` : '';
   const left = W(`<div class="cell" style="height:170px;aspect-ratio:auto;flex:none;${backdrop}">${f.file ? mon(f.file, 2, '', true) : ''}</div><div class="row"><b class="grow" style="font-size:21px;min-width:0;${one}">${esc(f.name)}</b><span class="sm">Lv ${f.level}${f.gender ? ' ' + esc(f.gender) : ''}</span></div><div class="row" style="gap:5px">${f.types.map(ty).join('')}<span class="grow"></span><span class="sm">${esc(f.no)}</span></div><div class="btn${d.tab === d.itemsTab ? ' on' : ''}" style="height:34px;font-size:14px;cursor:pointer"${act('tab', d.itemsTab)}>${esc(f.held)}<small>open</small></div>${hpb(f.hpPct)}${hpb(f.xpPct, 0, ' xp')}`, `position:absolute;left:24px;top:${v ? 74 : 72}px;width:280px;display:flex;flex-direction:column;gap:8px`);

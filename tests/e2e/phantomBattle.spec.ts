@@ -105,24 +105,41 @@ test('Phantom UI: the battle is a see-through Phantom page; the fan, the move ca
   await press(page, 'Escape');
   await expect.poll(async () => (await battle(page)).tab).toBeNull();
   await expect(list).toHaveCount(0);
-  // I: the info papers, and the fan lights Info. A click on them shuts them.
+  // I: the Battle info page (mock-up binfo): both sides with their stat ladders, the field and who moves first,
+  // and every other line of the old info panel on a card a page at a time (E/Q switch). L opens the log from it.
   await press(page, 'i');
-  const papers = hud.locator('.ph-bt-panels .ph-bt-paper');
-  await expect(papers.first()).toBeVisible();
-  expect(await papers.count()).toBeGreaterThanOrEqual(2);
-  await expect(hud.locator('.ph-bt-tab.on')).toContainText('Info', { ignoreCase: true });
+  const sides = hud.locator('.ph-bi-side');
+  await expect(sides).toHaveCount(2);
+  await expect(sides.nth(1)).toContainText((await battle(page)).foe, { ignoreCase: true });
+  expect(await hud.locator('.ph-bi-side .b3-sr').count()).toBeGreaterThanOrEqual(10);
+  await expect(hud.locator('.ph-bi-fld')).toContainText('Who moves first');
+  await expect(hud.locator('.ph-bi-more .ph-bi-tabs span').first()).toHaveClass(/\bon\b/);
+  await expect(hud.locator('.ph-bi-more')).toContainText('Stance');
   await page.waitForTimeout(400);
   expect(await fitProblems(page, 'Battle', 'battle')).toEqual([]);
-  await hud.locator('.ph-bt-panels').click();
-  await expect(papers).toHaveCount(0);
-  // H: the battle log with its filter tabs.
+  await press(page, 'e');
+  await expect(hud.locator('.ph-bi-more .ph-bi-tabs span').nth(1)).toHaveClass(/\bon\b/);
+  await expect(hud.locator('.ph-bi-side.r')).toHaveClass(/\bon\b/);
+  // L: the battle log page, a row per line with who acted; its tabs filter, Q goes back to Battle info.
+  await press(page, 'l');
+  await expect(sides).toHaveCount(0);
+  const rows = hud.locator('.ph-lg .ph-lg-r');
+  await expect(hud.locator('.ph-lg')).toContainText('appeared');
+  await expect(rows.last()).toHaveClass(/\bon\b/);
+  await page.waitForTimeout(400);
+  expect(await fitProblems(page, 'Battle', 'battle')).toEqual([]);
+  await hud.locator('.ph-lg-tabs [data-act="log"]').nth(1).click();
+  await expect(hud.locator('.ph-lg-tabs [data-act="log"]').nth(1)).toHaveClass(/\bon\b/);
+  await hud.locator('.ph-lg-tabs [data-act="log"]').first().click();
+  await press(page, 'q');
+  await expect(sides).toHaveCount(2);
+  await hud.locator('.ph-bi-keys [data-act="info"]').click();
+  await expect(sides).toHaveCount(0);
+  // H opens the same log; Esc shuts it, and the commands are back.
   await press(page, 'h');
-  await expect(hud.locator('.ph-bt-log')).toContainText('appeared');
-  await hud.locator('.ph-bt-log [data-act="log"]').nth(1).click();
-  await expect(hud.locator('.ph-bt-log [data-act="log"].on')).toHaveCount(1);
-  await expect(hud.locator('.ph-bt-log [data-act="log"]').nth(1)).toHaveClass(/\bon\b/);
-  await press(page, 'h');
-  await expect(hud.locator('.ph-bt-log')).toHaveCount(0);
+  await expect(hud.locator('.ph-lg')).toBeVisible();
+  await press(page, 'Escape');
+  await expect(hud.locator('.ph-lg')).toHaveCount(0);
   // Every version and several window sizes: nothing cut off.
   for (const [id, w, h] of [['midnight', 844, 390], ['channel', 1920, 1080], ['fantasia', 1024, 768], ['velvet', 1280, 720], ['phantom', 1280, 720]] as const) {
     await page.evaluate((id) => { const pkr = (window as any).__pkr; pkr.session.saveSettings({ ...pkr.session.settings, phantomVersion: id }); pkr.game.scene.getScene('Battle').rx.refresh(); }, id);

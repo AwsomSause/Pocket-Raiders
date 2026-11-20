@@ -356,3 +356,80 @@ test('Phantom UI: a department store floor is the shop page while choosing; buyi
   expect(await page.evaluate(() => JSON.stringify((window as any).__pkr.session.run.inventory ?? {}).includes('fire-stone'))).toBe(true);
   expect(errors).toEqual([]);
 });
+
+test('Phantom UI: a page opened from the pause menu shows where it is, and Q / E turn through the pause pages', async ({ page }) => {
+  test.setTimeout(120_000);
+  const errors = watch(page);
+  await start(page, 'ui=phantom&seed=phantom-ring');
+  await onPage(page, 'MainMenu', 'title');
+  await toPhantomMap(page);
+  await onPage(page, 'Map', 'map');
+  const crumb = page.locator('#phx .phs:visible .crumb');
+  // The map itself is not a pause page: no crumb.
+  await expect(crumb).toHaveCount(0);
+  await page.keyboard.press('Escape');
+  await onPage(page, 'Map', 'pause');
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Enter');
+  await onPage(page, 'Map', 'party');
+  // The mock-up's crumb: Pause › Party, and the pages Q and E turn to.
+  await expect(crumb).toHaveText(/Pause\s*Party\s*Q\s*Settings\s*·\s*Bag\s*E/i);
+  await page.keyboard.press('e');
+  await onPage(page, 'Map', 'bag');
+  await expect(crumb).toContainText('Pokédex');
+  await fits(page, 'Map', 'bag');
+  await page.keyboard.press('e');
+  await onPage(page, 'Map', 'dex');
+  // The Pokédex keeps Q and E for its regions, so its crumb has no keys.
+  await expect(crumb).toHaveText(/^\s*Pause\s*Pokédex\s*$/i);
+  await page.keyboard.press('Escape');
+  await onPage(page, 'Map', 'pause');
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Enter');
+  await onPage(page, 'Map', 'card');
+  await expect(crumb).toContainText('Trainer card');
+  await page.keyboard.press('q');
+  await onPage(page, 'Map', 'dex');
+  await page.keyboard.press('Escape');
+  await onPage(page, 'Map', 'pause');
+  // Settings: on its home page Q and E turn the ring (on a settings page they turn its own pages).
+  const pause = pview(page, 'Map', 'pause');
+  await expect(pause.locator('.hub .h.on')).toHaveText(/^Pokédex/);
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('ArrowDown');
+  await expect(pause.locator('.hub .h.on')).toHaveText(/^Settings/);
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'Settings');
+  await onPage(page, 'Settings', 'set');
+  await expect(crumb).toHaveText(/Pause\s*Settings\s*Q\s*Save\s*·\s*Party\s*E/i);
+  await page.waitForTimeout(250);
+  await page.keyboard.press('e');
+  await waitForScene(page, 'Map');
+  await onPage(page, 'Map', 'party');
+  await expect(crumb).toContainText('Party');
+  // Back shuts the page and the ring with it.
+  await page.keyboard.press('Escape');
+  await onPage(page, 'Map', 'map');
+  await expect(crumb).toHaveCount(0);
+  // The Save page (mock-up save): the three slots, this run's lit, and its words; Save here saves and says so.
+  await page.keyboard.press('Escape');
+  await onPage(page, 'Map', 'pause');
+  for (let i = 0; i < 6; i++) await page.keyboard.press('ArrowDown');
+  await expect(pview(page, 'Map', 'pause').locator('.hub .h.on')).toHaveText(/^Save/);
+  await page.keyboard.press('Enter');
+  await onPage(page, 'Map', 'save');
+  const save = pview(page, 'Map', 'save');
+  await expect(save.locator('.slots .slot')).toHaveCount(3);
+  await expect(save.locator('.slots .slot.on')).not.toHaveClass(/empty/);
+  await expect(save.locator('.acts .blade')).toHaveText(['Save here', 'Save & quit', 'Save & go back to Hub']);
+  await expect(crumb).toHaveText(/Pause\s*Save\s*Q\s*Trainer card\s*·\s*Settings\s*E/i);
+  await fits(page, 'Map', 'save');
+  await page.keyboard.press('Enter');
+  await expect(save).toContainText('Run saved.');
+  // An empty slot offers to start a run there; nothing happens until it is chosen.
+  await page.keyboard.press('ArrowDown');
+  await expect(save.locator('.acts .blade')).toHaveText(['Start here']);
+  await page.keyboard.press('Escape');
+  await onPage(page, 'Map', 'pause');
+  expect(errors).toEqual([]);
+});

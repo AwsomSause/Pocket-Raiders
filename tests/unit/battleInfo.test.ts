@@ -1,6 +1,6 @@
 // Overhaul slice 8: the battle Info panel shows type matchups, transformations and revealed abilities, and never leaks hidden foes.
 import { describe, expect, it } from 'vitest';
-import { battleConditions, foeIdentityHidden } from '../../src/core/battle/conditions';
+import { battleConditions, battleInfo, foeIdentityHidden } from '../../src/core/battle/conditions';
 import { currentEnemy } from '../../src/core/state';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { createPokemon } from '../../src/core/pokemon';
@@ -93,6 +93,65 @@ describe('battle Info: your side', () => {
     const run = battleRun();
     const before = JSON.stringify(run);
     battleConditions(content, run, { ability: 'blaze' });
+    expect(JSON.stringify(run)).toBe(before);
+  });
+});
+
+// The Phantom Battle info page (mock-up binfo): the same facts as cards, stat ladders and who moves first.
+describe('battle Info page data', () => {
+  it('gives both sides Attack to Speed, HP as numbers for you and a share for the foe, and the item as far as it is seen', () => {
+    const run = battleRun();
+    withFoe(run, 'bulbasaur');
+    run.battle!.playerStages.atk = 1;
+    run.battle!.enemyStages.spe = -2;
+    const b = battleInfo(content, run)!;
+    expect(b.mine.stages.map((s) => s.stat)).toEqual(['Attack', 'Defense', 'Sp. Atk', 'Sp. Def', 'Speed']);
+    expect(b.mine.stages[0]).toEqual({ stat: 'Attack', n: 1 });
+    expect(b.foe.stages[4]).toEqual({ stat: 'Speed', n: -2 });
+    expect(b.mine.hp).toMatch(/^\d+\/\d+$/);
+    expect(b.foe.hp).toMatch(/^\d+%$/);
+    currentEnemy(run.battle!).hp = 0;
+    expect(battleInfo(content, run)!.foe.hp).toBe('0%');
+    expect(b.foe.item).toBe('Item not seen yet');
+    expect(battleInfo(content, run, { items: ['oran-berry'] })!.foe.item).not.toBe('Item not seen yet');
+    // Accuracy and Evasion join only once they have moved.
+    run.battle!.playerStages.eva = 1;
+    expect(battleInfo(content, run)!.mine.stages.at(-1)).toEqual({ stat: 'Evasion', n: 1 });
+  });
+  it('names the weather (or the calm) with what it does, and what lies on each side', () => {
+    const run = battleRun();
+    expect(battleInfo(content, run)!.field.head).toBe('Clear');
+    run.battle!.weather = { id: 'rain', turns: 3 };
+    run.battle!.sideEffects.player.stealthRock = true;
+    const b = battleInfo(content, run)!;
+    expect(b.field).toEqual({ head: 'Rain', text: '3 turns left. Water moves hit harder, Fire moves hit softer.' });
+    expect(b.mine.side).toEqual(['Stealth Rock']);
+    expect(b.foe.side).toEqual([]);
+  });
+  it('says who moves first: the faster, the paralysis that flipped it, Trick Room, a tie', () => {
+    const run = battleRun();
+    withFoe(run, 'bulbasaur');
+    const mon = run.party[run.battle!.activeIndex]!, foe = currentEnemy(run.battle!);
+    foe.level = mon.level;
+    const fast = battleInfo(content, run)!.first;
+    expect(fast.who).toBe('Charmander');
+    expect(fast.why).toContain('faster than Bulbasaur');
+    run.battle!.field.trickRoom = 3;
+    expect(battleInfo(content, run)!.first).toEqual({ who: 'Bulbasaur', why: 'Trick Room is up, so the slower one moves first.' });
+    run.battle!.field.trickRoom = 0;
+    // Charmander is only a little faster: paralysis makes it the slower one.
+    mon.status = { id: 'par', turns: 0 } as never;
+    const par = battleInfo(content, run)!.first;
+    expect(par).toEqual({ who: 'Bulbasaur', why: 'because Charmander is paralyzed.' });
+  });
+  it('tells nothing about a hidden foe and is pure', () => {
+    const run = battleRun();
+    run.battle!.eventRule = { ...(run.battle!.eventRule ?? {}), hiddenFoe: true } as never;
+    const before = JSON.stringify(run);
+    const b = battleInfo(content, run)!;
+    expect(b.foe.speciesId).toBeNull();
+    expect(b.foe.name).toBe('???');
+    expect(b.first.who).toBeNull();
     expect(JSON.stringify(run)).toBe(before);
   });
 });

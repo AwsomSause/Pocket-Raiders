@@ -2,6 +2,7 @@
 // with the mock-ups' menu, grid or board template. The Picker stays the controller; this reads what each row drew
 // (its words and its picture) and lays it out again. Presentation only.
 
+import { crumbHtml } from '../pauseRing';
 import Phaser from 'phaser';
 import type { AssetManifest } from '../../assets/catalog';
 import { rxFileOf } from './assets';
@@ -194,7 +195,7 @@ function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerK
     body = menuView(c, { title: name, area, hints, items, index, detail, text });
   }
   // A Phantom page carries the chips, the tabs and the sheet inside itself; its Esc key hint is the Back button.
-  if (c.ph) return phInto(body, phChips(extra) + (kind === 'bag' ? '' : phTabs(p.tabs)) + phSheet(sum));
+  if (c.ph) return phInto(body, phChips(extra) + (kind === 'bag' ? '' : phTabs(p.tabs)) + phSheet(sum) + crumbHtml());
   return body + chips + tabs + back + over;
 }
 

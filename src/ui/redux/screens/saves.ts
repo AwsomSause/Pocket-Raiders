@@ -11,6 +11,10 @@ export interface SavesModel {
   onDelete: boolean;
   note: string;
   confirm: ConfirmModel | null;
+  /** In a run (Phantom pause Save page, mock-up `save`): the page's title and the words beside the lit slot, one of them lit. */
+  title?: string;
+  acts?: { label: string }[];
+  actAt?: number;
 }
 
 export interface ConfirmModel { title: string; body: string; options: string[]; index: number }

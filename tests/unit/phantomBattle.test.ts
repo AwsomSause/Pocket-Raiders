@@ -220,3 +220,34 @@ describe('the battle\'s Party and Item windows', () => {
     expect(count(phBattleList(ph, list({ n: 0, index: 0 })), 'class="ph-bl-r')).toBe(0);
   });
 });
+
+describe('the Phantom Battle info and Battle log pages', () => {
+  const side = (name: string, n: number) => ({ lab: 'Your side', name, file: null, hp: '30/40', status: null, item: 'No item held', stages: [{ stat: 'Attack', n }, { stat: 'Speed', n: -n }], side: [] as string[] });
+  const binfo = { turn: 3, sides: [side('Rowlet', 2), { ...side('Feebas', 0), lab: 'Foe’s side', hp: '50%', status: 'Paralyzed', side: ['Stealth Rock'] }], field: { head: 'Rain', text: '3 turns left.', first: { who: 'Rowlet', why: 'because Feebas is paralyzed.' } }, more: { tabs: ['Your Rowlet', 'The foe’s Feebas'], index: 1, lines: ['Type: Water'] } };
+  it('draws both sides with ladders, the field card and the lit extra page, over everything else', () => {
+    const html = phBattle(ph, model({ binfo }));
+    expect(pageOf(html)).toBe('battle');
+    expect(count(html, 'ph-bi-side')).toBe(2);
+    expect(count(html, '<i class="u"></i>')).toBe(2);
+    expect(count(html, '<i class="d"></i>')).toBe(2);
+    expect(html).toContain('<b class="u">+2</b>');
+    expect(html).toContain('On its side: <b>Stealth Rock</b>');
+    expect(html).toContain('On your side: nothing');
+    expect(html).toContain('<b>Rowlet</b>, because Feebas is paralyzed.');
+    expect(html).toMatch(/ph-bi-side r on/);
+    expect(html).toContain('Type: Water');
+    // The command fan and the text box are not drawn under it.
+    expect(count(html, 'ph-bt-op')).toBe(0);
+    expect(html).not.toContain('What will Rowlet do?');
+  });
+  it('draws the log as rows: a turn tag, a foe in red, the move in gold, the newest lit; eight to a screen', () => {
+    const rows = [{ turn: 1, text: 'Rain began to fall.' }, { who: 'Feebas', foe: true, text: 'used Splash!', move: 'Splash' }, ...Array.from({ length: 9 }, (_, k) => ({ who: 'Rowlet', foe: false, text: `line ${k}` }))];
+    const top = phBattle(ph, model({ log: { tabs: ['All', 'Damage'], index: 0, lines: [], rows, top: 0, head: 'Stage 1 · Wild battle' } }));
+    expect(count(top, 'ph-lg-r')).toBe(8);
+    expect(top).toContain('<b>Turn 1</b>');
+    expect(top).toMatch(/ph-lg-r f[^>]*><b>Feebas<\/b><p class="txt">used <b>Splash<\/b>!/);
+    expect(top).not.toMatch(/ph-lg-r[^"]* on"/);
+    const end = phBattle(ph, model({ log: { tabs: ['All'], index: 0, lines: [], rows, top: 3, head: '' } }));
+    expect(end).toMatch(/ph-lg-r[^"]* on"[^>]*><b>Rowlet<\/b><p class="txt">line 8/);
+  });
+});

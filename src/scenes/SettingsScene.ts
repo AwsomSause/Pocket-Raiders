@@ -1,6 +1,8 @@
 // The one Settings screen. The title screen and the Hub both open it, so they always show the same
 // settings from the same registry (core/settingsRegistry.ts). It is never reachable from inside a battle.
 
+import { crumbHtml, ringPage, setRing, setRingTrail } from '../ui/pauseRing';
+import { phInto } from '../ui/phantom/picker';
 import { fitLine } from '../ui/fitText';
 import Phaser from 'phaser';
 import { DEFAULT_SETTINGS } from '../save/saveManager';
@@ -79,8 +81,13 @@ export class SettingsScene extends Phaser.Scene {
     queueAssets(this, ['ui.optionsbg']);
   }
 
-  create(data?: { from?: 'MainMenu' | 'Hub' | 'Map'; page?: Page; focus?: number }): void {
+  create(data?: { from?: 'MainMenu' | 'Hub' | 'Map'; page?: Page; focus?: number; ring?: boolean }): void {
     this.from = data?.from ?? 'MainMenu';
+    // Opened from the Phantom pause menu: Q and E on the home page turn to Save and Party (mock-up crumb).
+    if (data?.ring && this.from === 'Map' && phantomOn()) {
+      setRing({ page: 'Settings', trail: [], go: (to) => this.scene.start('Map', { ring: to }), busy: () => this.page !== 'home' });
+      this.events.once('shutdown', () => setRing(null));
+    }
     this.page = data?.page ?? 'home';
     this.viaIndex = null;
     this.entering = true;
@@ -450,7 +457,11 @@ export class SettingsScene extends Phaser.Scene {
 
   /** New UI: the page as the mock-ups draw it. The home list is a menu; a category is the tabbed Settings screen. */
   private reduxHtml(c: Parameters<typeof menuView>[0]): string {
-    if (c.ph) return this.phantomHtml(c.ph);
+    if (c.ph) {
+      const at = PHANTOM_SETTINGS_PAGES.find((p) => p.id === this.page);
+      if (ringPage() === 'Settings') setRingTrail(at ? [at.n] : []);
+      return phInto(this.phantomHtml(c.ph), crumbHtml());
+    }
     const rows = this.shown, index = this.menu?.index ?? 0;
     const text = this.notice || rows[index]?.hint || 'Changes apply at once. Looks never change battle results.';
     const hints = [['Enter', 'choose'], ['Esc', 'back']] as const;

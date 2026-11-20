@@ -4,8 +4,8 @@
 // animation, so every battle style stays as it is. Pure drawing; BattleScene keeps the rules, the input and the state.
 
 import type { PhantomVersion } from '../../../core/presentation/phantom';
-import { rxUrl } from '../../redux/assets';
-import { BATTLE_LIST_ROWS, windowTitle, type BattleBox, type BattleEvolve, type BattleExp, type BattleGimmick, type BattleLevel, type BattleListModel, type BattleModel, type BattleOption, type BattlePanel } from '../../redux/screens/battle';
+import { rxAtlas, rxUrl } from '../../redux/assets';
+import { BATTLE_LIST_ROWS, windowTitle, type BattleBox, type BattleEvolve, type BattleExp, type BattleGimmick, type BattleInfoView, type BattleLevel, type BattleListModel, type BattleModel, type BattleOption, type BattlePanel } from '../../redux/screens/battle';
 import { figure, scrollStart } from '../../redux/templates';
 import { act, esc, keys, mon, page, TYC, ty } from '../kit';
 import { phConfirm } from '../templates';
@@ -180,9 +180,50 @@ export function phBattle(_ph: PhantomVersion, d: BattleModel): string {
   const dark = f.shadow ? `<div class="pn ph-bt-fx dark" style="bottom:${above + (gimRow ? 62 : 0)}px"><span class="lab">${esc(f.shadow.head)}</span>${f.shadow.plan ? `<p class="txt">${esc(f.shadow.plan)}</p>` : ''}</div>` : '';
   const pieces = level ? '' : budget + rally + rule + variant + trait + dark;
   const notice = d.notice ? phConfirm({ title: d.notice.title, body: d.notice.body, options: [d.notice.button], index: 0 }) : '';
+  if (d.log?.rows) return page('battle', '<div class="frame" aria-hidden="true"></div>' + blogPage(d.log) + notice, false);
+  if (d.binfo) return page('battle', '<div class="frame" aria-hidden="true"></div>' + binfoPage(d.binfo) + notice, false);
   return page('battle', (d.shadow ? '<div class="ph-bt-shadow" aria-hidden="true"></div>' : '') + '<div class="frame" aria-hidden="true"></div>'
     + (cross ? `<div class="dim ph-bt-dim" aria-hidden="true"></div><div class="hd ph-bt-hd"><small>${esc(d.mine[0]?.name ?? '')}${d.turn ? ` · Turn ${d.turn}` : ''}</small>Fight</div>` : '')
     + foes + ord + fan + mine + say + menu + xMenu + target + gim + (cross ? keys(['Z', 'Use that move'], ['Q E', 'Page', 'tab', 1], ['I', 'Details', 'tab', (d.tabs?.labels.length ?? 1) - 1], ['X', 'Back', 'back']) : '') + marks + header + momentum + status + note + pin + exp + pieces + panels + tip + card + log + level + notice, false);
+}
+
+/** The battle log page (mock-up `blog`): a turn tag where each turn starts, who acted (the foe's in red) and what happened,
+ *  the move's name in gold; eight rows a screen, the newest lit. The filter tabs (All, Damage...) sit over it. */
+function blogPage(l: NonNullable<BattleModel['log']>): string {
+  const rows = l.rows ?? [], top = l.top ?? 0, shown = rows.slice(top, top + 8);
+  const body = (r: (typeof rows)[number]): string => {
+    const t = esc(r.text);
+    return r.move ? t.replace(esc(r.move), `<b>${esc(r.move)}</b>`) : t;
+  };
+  const list = shown.map((r, k) => {
+    const tag = r.who ?? (r.turn ? `Turn ${r.turn}` : '');
+    return `<div class="b3-l ph-lg-r${r.foe ? ' f' : ''}${r.who ? '' : r.turn ? ' t' : ' n'}${top + k === rows.length - 1 ? ' on' : ''}" style="--i:${k}"><b>${esc(tag)}</b><p class="txt">${body(r)}</p></div>`;
+  }).join('');
+  const share = rows.length > 8 ? 8 / rows.length : 1, at = rows.length > 8 ? top / (rows.length - 8) : 1;
+  const bar = `<div class="lg-bar ph-lg-bar" aria-hidden="true"><i style="height:${Math.round(share * 100)}%;top:${Math.round(at * (1 - share) * 100)}%;bottom:auto"></i></div>`;
+  const tabs = `<div class="ph-bi-tabs ph-lg-tabs">${l.tabs.map((t, k) => `<span class="${k === l.index ? 'on' : ''}"${act('log', k)}>${esc(t)}</span>`).join('')}</div>`;
+  return `<div class="dim ph-bi-dim" aria-hidden="true"></div><div class="hd ph-bt-hd"><small>${esc(l.head ?? '')}</small>Battle log</div>${tabs}<div class="b3-lg ph-lg">${list || '<div class="b3-l t"><b></b><p class="txt">Nothing here yet.</p></div>'}</div>${bar}`
+    + keys(['▲▼', 'Scroll'], ['Q', 'Battle info', 'binfoOpen'], ['X', 'Back', 'history']).replace('class="keys"', 'class="keys ph-bi-keys"');
+}
+
+/** The Battle info page (mock-up `binfo`): your side and the foe's (stat stages as ladders), the field and who moves first,
+ *  and a card with every other line the info panel holds, a page at a time (Q and E switch). A click or X closes it. */
+function binfoPage(b: BattleInfoView): string {
+  // Each Pokémon is drawn about as tall as the mock-up's (a small one is scaled up more).
+  const fit = (file: string): number => { const f = rxAtlas(file)?.f[0]; const big = f ? Math.max(f[2], f[3]) : 0; return big ? Math.max(1.2, Math.min(3, 140 / big)) : 2; };
+  const ladder = (n: number): string => Array.from({ length: 6 }, (_, k) => `<i class="${k < Math.abs(n) ? (n > 0 ? 'u' : 'd') : ''}"></i>`).join('');
+  const sides = b.sides.map((s, k) => {
+    const on = b.more.index === k ? ' on' : '';
+    const rows = s.stages.map((r) => { const c = r.n > 0 ? 'u' : r.n < 0 ? 'd' : ''; return `<div class="b3-sr"><span>${esc(r.stat)}</span><div class="b3-lad">${ladder(r.n)}</div><b class="${c}">${r.n > 0 ? `+${r.n}` : r.n < 0 ? r.n : '·'}</b></div>`; }).join('');
+    const hz = `<p class="txt hz">${k === 0 ? 'On your side' : 'On its side'}: ${s.side.length ? `<b>${esc(s.side.join(', '))}</b>` : 'nothing'}</p>`;
+    return `<div class="pn b3-side ph-bi-side ${k === 0 ? 'l' : 'r'}${on}${s.stages.length > 5 ? ' long' : ''}" data-key="bi${k}"${act('binfo', k)}><span class="lab">${esc(s.lab)}</span><div class="b3-sh">${s.file ? mon(s.file, fit(s.file), 'ol') : '<i class="spr ph-bi-q">?</i>'}<div><h3 class="tl1">${esc(s.name)}</h3><p class="txt">${esc(s.hp)} · ${s.status ? `<b>${esc(s.status)}</b>` : 'no status'}</p><p class="txt it">${esc(s.item)}</p></div></div>${rows}${hz}</div>`;
+  }).join('');
+  const f = b.field;
+  const fld = `<div class="pn lt b3-fld ph-bi-fld${b.more.index === 2 ? ' on' : ''}" data-key="bifld"><span class="lab">The field</span><h3 class="tl1">${esc(f.head)}</h3><p class="txt">${esc(f.text)}</p><span class="lab" style="margin-top:12px">Who moves first</span><p class="txt">${f.first.who ? `<b>${esc(f.first.who)}</b>, ${esc(f.first.why)}` : esc(f.first.why)}</p></div>`;
+  const m = b.more;
+  const more = `<div class="pn ph-bi-more" data-key="bimore"><div class="ph-bi-tabs">${m.tabs.map((t, k) => `<span class="${k === m.index ? 'on' : ''}"${act('binfo', k)}>${esc(t)}</span>`).join('')}</div>${m.lines.length ? m.lines.map((l) => `<p class="txt">${esc(l)}</p>`).join('') : '<p class="txt">Nothing more to tell.</p>'}</div>`;
+  return `<div class="dim ph-bi-dim" aria-hidden="true"${act('info')}></div><div class="hd ph-bt-hd"><small>Turn ${b.turn} · What is in play</small>Battle info</div>${sides}${fld}${more}`
+    + keys(['Q E', 'Switch side', 'binfoStep', 1], ['L', 'Battle log', 'history'], ['X', 'Back', 'info']).replace('class="keys"', 'class="keys ph-bi-keys"');
 }
 
 /** The battle's Party and Item windows (mock-ups `pocket` and the battle party list): a tilted list over the field's left. */
