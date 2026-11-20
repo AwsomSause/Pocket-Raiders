@@ -5,6 +5,7 @@
 import { act, B, esc, facts, H, hpb, mini, paper, tall, TX, W } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { figure, type Art } from '../templates';
+import { phBook, phDossier, phReport, phRoll, phTrack } from '../../phantom/screens/pops';
 
 const pips = (n: number, of = 3): string => `<span style="flex:none">${Array.from({ length: of }, (_, k) => `<i style="display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:4px;background:${k < n ? 'var(--acc)' : '#0000'};box-shadow:0 0 0 2px var(--tf)"></i>`).join('')}</span>`;
 const clip = 'white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0';
@@ -43,6 +44,7 @@ export function pyramidFace(rows: number, widest: number): { face: number; cell:
 }
 
 export function dossierView(c: ReduxCtx, d: DossierModel): string {
+  if (c.ph) return phDossier(c.ph, d);
   const v = c.v(2);
   const face = (p: DossierPerson, size: number): string => (p.file ? figure(p.file, size) : d.shade ? mini(d.shade, size, 'sil') : '');
   const sel = d.people[d.pick] ?? d.people[0];
@@ -86,6 +88,7 @@ export interface BookModel {
 export const bookRows = (c: Pick<ReduxCtx, 'v'>): number => (c.v(2) ? 7 : 6);
 
 export function bookView(c: ReduxCtx, d: BookModel): string {
+  if (c.ph) return phBook(c.ph, d);
   const v = c.v(2);
   const s = d.entries[d.pick];
   const w = listWindow(d.entries.length, d.pick, bookRows(c));
@@ -122,6 +125,7 @@ export interface TrackModel {
 }
 
 export function trackView(c: ReduxCtx, d: TrackModel): string {
+  if (c.ph) return phTrack(c.ph, d);
   const v = c.v(2);
   const cur = Math.max(0, d.steps.findIndex((s) => s.state === 'now'));
   const now = d.steps[cur];
@@ -162,6 +166,7 @@ export interface ReportModel {
 export const leadLine = (name: string, lead: number): string => (lead === 0 ? 'Level' : lead > 0 ? `${name} is ahead by ${lead}` : `You lead by ${-lead}`);
 
 export function reportView(c: ReduxCtx, d: ReportModel): string {
+  if (c.ph) return phReport(c.ph, d);
   const v = c.v(2);
   const chips = d.rivals.length > 1 ? `<div class="row" style="gap:5px;flex-wrap:wrap;margin-top:2px">${d.rivals.map((n, k) => `<span class="tg${k === d.pick ? '' : ' no'}" style="cursor:pointer"${act('popPick', k)}>${esc(n)}</span>`).join('')}</div>` : '';
   const card = W(`<div class="cell" style="height:150px;aspect-ratio:auto">${d.art ? tall(d.art, 130) : ''}</div><b style="font-size:22px;${clip}">${esc(d.name)}</b><span class="tg">${esc(d.tag)}</span>${facts(d.facts)}${chips}`, 'display:flex;flex-direction:column;gap:7px;align-items:stretch');
@@ -198,6 +203,7 @@ const DICE = '⚄⚁⚅⚂⚀⚃';
 
 /** The Town Roll page (mock-up `roll`): a card per space of the town, starred, rolled or left out this run. */
 export function rollView(c: ReduxCtx, d: RollModel): string {
+  if (c.ph) return phRoll(c.ph, d);
   const v = c.v(2), n = d.cards.length;
   const hit = (k: number): string => `${act('popPick', k)} data-over="popOver"`;
   let die = 0;
