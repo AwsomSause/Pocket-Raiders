@@ -336,5 +336,86 @@
    "m": "Menus have their own join (the drop), so opening Pause or Settings never looks like starting a battle. The Page changes page lives in Settings › Look beside Motion, with Full, Reduced and Off.",
    "k": "A wild Pokémon appearing out of tall grass with a “!” and a thrown Poké Ball opening are the two oldest animations in the series. They are both here, just drawn in this style."
   }
+ },
+ {
+  "n": 21,
+  "name": "A Pokémon game first",
+  "change": "Twenty passes of Persona style risked burying the game underneath. This pass puts Pokémon back on top. Every page title now carries a spinning Poké Ball in the version's own colour, so the franchise's best-known shape is on all 65 pages. A full Pokédex entry page takes the colour of the Pokémon's type, with height, weight, a description and its evolution line. A type chart answers the question players look up most. The nickname keyboard and the Pokémon Center, two of the most familiar screens in the series, now exist in this style.",
+  "pages": [
+   "Pokédex entry",
+   "Type chart",
+   "Nickname",
+   "Pokémon Center"
+  ],
+  "q": {
+   "x": "The Pokédex entry is the showpiece: the whole left side floods with the type's colour behind a giant turning Poké Ball outline.",
+   "b": "Interval 4 was all Persona drama. This pass changes the balance: it adds the pages only a Pokémon game has, and stamps a Poké Ball on everything that was already there.",
+   "p": "Four new pages. The Pokédex list keeps its grid and the detail moves to an entry page; the type chart leaves Battle info free for the current fight only.",
+   "m": "Pokédex is already on the pause hub and the quick wheel, and the type chart is one press from an entry or from Battle info. Settings › Access has the shapes-on-type-colours switch these pages obey.",
+   "k": "Yes, more than any pass so far: Poké Balls, type colours, No. 149, height and weight, a nurse saying she hopes to see you again."
+  }
+ },
+ {
+  "n": 22,
+  "name": "Evil Mode wears the same clothes",
+  "change": "Evil Mode has to use the new UI, so this pass draws Dominion in it. The rule is simple: the same five versions turned to night. Black comes first and the version's colour second, an eye blinks in the corner, and a top bar carries the crew name, the day, funds and Heat above six tabs. Seven pages cover a full day: founding an Unnamed Crew from a leaking warehouse, the HQ with your hands-on actions, the Crew File with the rank pyramid and Team Types, the Region Map with district files and operations, a Debate with the rival Boss through Rotom, a Hero interrupting a job, and the morning paper that tells you how the night went.",
+  "pages": [
+   "Dominion · begin",
+   "Dominion · HQ",
+   "Dominion · Crew File",
+   "Dominion · Region Map",
+   "Dominion · Debate",
+   "Dominion · Hero interrupt",
+   "Dominion · morning paper"
+  ],
+  "q": {
+   "x": "The morning paper is the most eye-catching page in the set: a whole tilted front page of The Kanto Ledger dealt onto the screen, with your grunt as the wanted photo.",
+   "b": "Until now the redesign only covered the hero's game. This pass shows the style can carry a management game as well, and gives the Dominion build one look to follow in all five versions.",
+   "p": "Seven new pages. District details, the Crew File and the paper each get their own page, so the HQ page only has to answer one question: what do I do tonight?",
+   "m": "The six tabs across the top are Evil Mode's menu, and the quick wheel still opens on hold. Settings is the same Settings as the main game, reached from the wheel, so nothing is duplicated.",
+   "k": "Team Rocket and Giovanni are the rivals, grunts have Koffing and Zubat, Officer Jenny is in the paper, and a kid Hero turns up to ruin your plan. It is the villains' side of a Pokémon game."
+  }
+ },
+ {
+  "n": 23,
+  "name": "Events become scenes that wait for you",
+  "change": "Events had not moved since pass 3: one text box, three rows, a reward page. This pass turns an event into a five-step scene and shows the steps on every page: Talk, Choose, Side stage, Outcome, Reward. The text box is rebuilt with a name plate, a line counter and a round Z pin that pulses to say the text will not move on without you. Choices become three cards dealt face up, each tagged Fight, Cost or Safe with what you risk. A fight inside an event is drawn as a Side stage that does not use up a stage. The outcome page keeps the reward as a sealed card until you close the text, and the reward page stays until you press Z.",
+  "pages": [
+   "Event · talk",
+   "Event · choice",
+   "Side stage",
+   "Event · outcome",
+   "Event · reward"
+  ],
+  "q": {
+   "x": "The reward is now a small show: a striped sealed card bobs on the outcome page, then three cards flip over one at a time under a cut-out YOURS.",
+   "b": "Pass 3 had the look but not the rules. Now the page itself shows Kice's event rules: text stays until you press a key, the reward only appears after the text is closed, and it only leaves when you say so.",
+   "p": "Three new pages (Side stage, outcome, reward) and two rebuilt ones. Splitting outcome and reward means neither has to share space with the other.",
+   "m": "Read back and Skip sit on the key row of every event page, and the Settings page for text speed and skipping applies here. Party opens from the Side stage before you commit to the fight.",
+   "k": "Prof. Oak, a Dragonite stealing berries for three hungry Dratini, a Lucky Egg as thanks, and your lead Pokémon reacting to the choice. It could not be any other game."
+  }
+ },
+ {
+  "n": 24,
+  "name": "Settings you can see",
+  "change": "Settings were lists of switches with one line of help. This pass rebuilds all of them around a preview pane: the left half is the list, the right half shows what the highlighted row does on a real page of the game. Battle shows a hit, Look shows the version, Sound shows the mix, Controls shows the keyboard, Text shows three sizes side by side. Two new pages, Text and Phone, bring the count to eight, so the side rail shrinks to eight letters. The Settings hub gains three one-press presets: Showtime, Standard and Calm. And two Access switches now really work in this mockup: turn on High contrast or Reduced motion and every page from here on obeys.",
+  "pages": [
+   "Settings (rebuilt)",
+   "Game",
+   "Battle",
+   "Look",
+   "Sound",
+   "Controls",
+   "Access",
+   "Text",
+   "Phone"
+  ],
+  "q": {
+   "x": "The preview pane puts a small live page of the game inside every settings page, framed and tilted like a photo pinned to the wall. Settings stop being the dull part.",
+   "b": "Before, you had to change a setting and go and look. Now you see it before you leave the page, and High contrast and Reduced motion can be tried for real on all 77 pages.",
+   "p": "Two new pages. Text size, speed and the easy-read font move out of Look into their own Text page, and phones get their own page instead of squeezing into Controls.",
+   "m": "This pass is the Settings answer: a hub with presets, eight pages one press apart with Q and E, a Reset page key on each, and X always goes back to the hub.",
+   "k": "The previews use the game's own pages: the route map, a Charizard hit, the five versions named for Red, Blue, Yellow, Green and Gold, and a Dragonite line as the sample text."
+  }
  }
 ]
