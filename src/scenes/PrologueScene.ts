@@ -12,6 +12,7 @@ import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import { Menu, type MenuOption } from '../ui/widgets';
 import { drawBackdrop } from '../ui/widgets';
 import { mountRedux, phantomOn, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
+import { phQuiz } from '../ui/phantom/screens/run';
 import { talkView } from '../ui/redux/screens/talk';
 import { cutBeat, cutView } from '../ui/redux/screens/cut';
 import { beatTag, formView, typeKey, vanceLine } from '../ui/redux/screens/prologue';
@@ -51,9 +52,11 @@ interface RxPage {
   cut: { pages: { name: string; line: string }[]; beat: number | null; who: 'me' | 'vance'; skip: (() => void) | null } | null;
   /** Looks to show as the picture, one per option. */
   looks: PlayerLookId[] | null;
+  /** The quiz: which question this is, of how many, and whether one can go back (the Phantom UI draws its own page for it). */
+  quiz: { at: number; of: number; back: boolean } | null;
 }
 type PlayerLookId = 'a' | 'b';
-const emptyPage = (): RxPage => ({ title: '', lines: [], options: [], next: null, notice: '', vance: null, fields: [], field: 0, cut: null, looks: null });
+const emptyPage = (): RxPage => ({ title: '', lines: [], options: [], next: null, notice: '', vance: null, fields: [], field: 0, cut: null, looks: null, quiz: null });
 /** New UI: the backdrop of the station's rooms and how big Professor Vance's 160-pixel frames are drawn. */
 const RX_ROOM = 'packs/memories/eventbg/indoor.png';
 const VANCE_FRAME = 160;
@@ -235,6 +238,7 @@ export class PrologueScene extends Phaser.Scene {
         },
         page: () => this.rxTurn(1),
         next: () => this.rxInput('confirm'),
+        back: () => this.rxInput('back'),
         key: (k) => this.rxType(String(k), true),
         ok: () => this.onConfirm?.(),
         clear: () => this.rxEdit(() => ''),
@@ -288,6 +292,14 @@ export class PrologueScene extends Phaser.Scene {
     }
     if (m.cut && a === 'back' && m.cut.skip) return m.cut.skip();
     if (m.cut && a !== 'confirm') return;
+    // Phantom UI lays the quiz's answers two to a row: up and down move a row, left and right one answer.
+    if (this.menu && m.quiz && phantomOn() && (a === 'up' || a === 'down')) {
+      const n = m.options.length, cols = n > 6 ? 1 : 2, at = this.menu.index;
+      // Down from the last full row lands on a lone last answer.
+      const to = a === 'up' ? at - cols : at + cols >= n && Math.floor(at / cols) < Math.floor((n - 1) / cols) ? n - 1 : at + cols;
+      if (to >= 0 && to < n && !m.options[to]?.disabled) this.menu.focus(to, false);
+      return;
+    }
     // Phantom UI deals the choices as a row of cards: left and right move along them.
     if (this.menu && !m.next) this.menu.handle(phantomOn() ? (a === 'left' ? 'up' : a === 'right' ? 'down' : a) : a);
     else if (a === 'confirm') this.onConfirm?.();
@@ -309,6 +321,12 @@ export class PrologueScene extends Phaser.Scene {
   /** The name entry's keys: letters type, Backspace deletes, Tab or the arrows change box, Enter confirms, Esc goes back. */
   private rxKey(e: KeyboardEvent): void {
     const m = this.rxM;
+    // Phantom quiz: a number key lights that answer (Enter still answers).
+    if (m.quiz && this.menu && phantomOn() && /^[1-9]$/.test(e.key) && this.rxAt >= this.rxPages().length - 1) {
+      const k = Number(e.key) - 1;
+      if (k < m.options.length && !m.options[k]?.disabled) this.menu.focus(k, false);
+      return;
+    }
     if (!m.fields.length || this.time.now === this.rxOpened) return;
     if (e.key === 'Enter') return void this.onConfirm?.();
     if (e.key === 'Escape') return void this.menu?.handle('back');
@@ -351,6 +369,13 @@ export class PrologueScene extends Phaser.Scene {
     const pages = this.rxPages(), at = Math.min(this.rxAt, pages.length - 1), page = pages[at]!;
     const { tag, name } = beatTag(m.title, BEATS.length);
     const index = this.menu?.index ?? 0;
+    if (c.ph && m.quiz && !m.next && at >= pages.length - 1) {
+      return phQuiz(c.ph, {
+        who: 'Prof. Vance', bust: vance(m.vance ?? 'explain'), intro: page.slice(0, -1).map((l) => l.text).join(' '), question: page[page.length - 1]!.text, at: m.quiz.at, of: m.quiz.of, back: m.quiz.back,
+        answers: m.options.map((o) => ({ label: o.label, off: !!o.disabled })), index,
+        hint: 'There are no wrong answers. They choose three partners for you, each from a different region.',
+      });
+    }
     return talkView(c, {
       name,
       tag: m.looks && !this.story.prologue.done ? 'First launch' : tag,
@@ -548,6 +573,7 @@ export class PrologueScene extends Phaser.Scene {
       this.answers[q.id] = shown[k]!.id;
       this.stepQuiz(i + 1);
     }, y, i > 0 ? () => this.stepQuiz(i - 1) : undefined);
+    this.rxM.quiz = { at: i, of: qs.length, back: i > 0 };
   }
 
   private stepReveal(): void {

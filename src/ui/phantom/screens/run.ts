@@ -9,6 +9,7 @@ import type { BriefModel, StarterModel } from '../../redux/screens/run';
 import { type Art, figure, type MenuModel } from '../../redux/templates';
 import { act, esc, hero, keys, mon, page, ransom, TYC, ty } from '../kit';
 import { phHead } from '../templates';
+import { tall } from './event';
 
 /** The four steps of a new run as the game really takes them, the current one lit. */
 export const RUN_STEPS = ['Trainer', 'Rules', 'Partner', 'Plan'] as const;
@@ -87,4 +88,41 @@ export function phName(ph: PhantomVersion, d: NameModel): string {
     + `<div class="nk-kb ph-kb">${NAME_KEYS.map((k, i) => `<i class="${k.length === 1 && k !== ' ' && k === last ? 'on' : ''}${k === ' ' || k === '⌫' ? ' ph-k2' : ''}" style="--i:${i}"${act('key', k)}>${esc(face(k))}</i>`).join('')}<i class="w"${act('paste')}>Paste</i><i class="w ok"${act('ok')}>${esc(d.ok)}</i><i class="w"${act('clear')}>Clear</i></div>`
     + (d.note ? `<div class="pn ph-say ph-say-n"><p class="txt">${esc(d.note)}</p></div>` : '')
     + keys(...(many ? [['Tab', 'Next box'] as const] : []), ['Enter', 'Choose'], ['Esc', 'Back']));
+}
+
+/** The quiz of the intake (mock-up `quiz`): who asks, the question with where you are in it, and the answers as cards. */
+export interface QuizModel {
+  /** Who asks ("Prof. Vance") and their picture. */
+  who: string;
+  bust: Art | null;
+  /** Words said before the question (the professor's opening before the first one); they are set smaller above it. */
+  intro?: string;
+  question: string;
+  at: number;
+  of: number;
+  answers: readonly { label: string; off?: boolean }[];
+  index: number;
+  /** True when Esc goes back a question. */
+  back: boolean;
+  hint: string;
+}
+
+/** The intake's four beats, as the ribbon at the top. */
+export const QUIZ_STEPS = ['Quiz', 'Reveal', 'Your story', 'Partner'] as const;
+
+export function phQuiz(_ph: PhantomVersion, d: QuizModel): string {
+  const n = Math.max(1, d.of), at = Math.max(0, Math.min(n - 1, d.at));
+  const bust = d.bust ? `<div class="bust ph-qz-bust" aria-hidden="true"><div class="ph-qz-sh">${tall(d.bust, 560, 720)}</div><div>${tall(d.bust, 560, 720)}</div></div>` : '';
+  const ribbon = `<div class="stp">${QUIZ_STEPS.map((t, k) => `<span class="${k === 0 ? 'on' : ''}"><b>${k + 1}</b>${t}</span>`).join('')}</div>`;
+  const q = d.question, lead = d.intro ?? '', load = q.length + lead.length * 0.6;
+  const size = load > 190 ? 22 : load > 130 ? 26 : load > 80 ? 31 : 38;
+  const longest = Math.max(1, ...d.answers.map((a) => a.label.length)), single = d.answers.length > 6, odd = !single && d.answers.length % 2 === 1;
+  const font = longest > 70 ? 17 : longest > 46 ? 20 : longest > 28 ? 24 : 29;
+  const answers = d.answers.map((a, k) => `<div class="ch ph-qz-ch${k === d.index ? ' on' : ''}${a.off ? ' off' : ''}${odd && k === d.answers.length - 1 ? ' last' : ''}" data-key="qz${at}:${k}" style="--i:${k}"${act('pick', k, 'over')}><kbd>${k + 1}</kbd><b style="font-size:${single ? Math.min(font, 22) : font}px">${esc(a.label)}</b></div>`).join('');
+  return page('quiz', '<div class="bgk"></div><div class="strip r" aria-hidden="true"></div><div class="strip" aria-hidden="true"></div>'
+    + bust + `<div class="hd"><small>Prologue · the intake</small>Partner quiz</div>` + ribbon
+    + `<div class="pn qz-q tilt ph-qz-q" data-key="q${at}" style="--r:-1.2deg"><span class="lab">${esc(d.who)} asks · question ${at + 1} of ${n}</span>${lead ? `<p class="ph-qz-in">${esc(lead)}</p>` : ''}<p style="font-size:${size}px">${esc(q)}</p><div class="qz-pips" aria-hidden="true">${Array.from({ length: n }, (_, k) => `<i class="${k < at ? 'f' : k === at ? 'n' : ''}"></i>`).join('')}</div></div>`
+    + `<div class="qz-a ph-qz-a${single ? ' tall' : ''}">${answers}</div>`
+    + `<p class="txt qz-h ph-qz-h">${esc(d.hint)}</p>`
+    + keys(['▲▼◀▶', 'Pick'], ['Enter', 'Answer', 'pick', d.index], ...(d.back ? [['Esc', 'Last question', 'back'] as const] : [])));
 }

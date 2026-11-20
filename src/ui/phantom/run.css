@@ -73,3 +73,21 @@
   & .s-version .vc{cursor:pointer}
   & .s-version .go{cursor:pointer}
 }
+
+/* ---- the intake's quiz (mock-up `quiz`) ---- */
+.phx .phs{
+  & .ph-qz-bust{left:6px;bottom:-46px;width:370px;height:560px;pointer-events:none}
+  & .ph-qz-bust>div{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:center;align-items:flex-end}
+  & .ph-qz-bust>.ph-qz-sh{translate:18px 16px;filter:brightness(0);opacity:.85}
+  & .ph-qz-q p{line-height:1.14;padding-right:120px}
+  & .ph-qz-q p.ph-qz-in{font:600 17px/1.25 var(--f-cond);text-transform:none;letter-spacing:.2px;opacity:.82;margin:0 0 6px;padding-right:40px;animation:ph-inL .34s .1s both}
+  & .ph-qz-ch{cursor:pointer;min-height:58px;box-sizing:border-box}
+  & .ph-qz-ch b{line-height:1.08}
+  & .ph-qz-ch.off{opacity:.5;cursor:not-allowed}
+  & .ph-qz-a.tall{grid-template-columns:1fr;gap:9px;top:296px}
+  & .ph-qz-a.tall .ph-qz-ch{min-height:0;padding-top:8px;padding-bottom:9px}
+  & .ph-qz-a{gap:14px 22px;top:306px}
+  & .ph-qz-ch.last{grid-column:1/-1;justify-self:center;width:52%!important}
+  & .ph-qz-h{top:580px;margin:0;font-size:18px}
+  & .ph-qz-a.tall~.ph-qz-h{top:650px;left:376px;width:540px;font-size:15px}
+}

@@ -11,7 +11,7 @@ import { scenery } from '../../redux/eventScenery';
 import { icon } from '../../redux/kit';
 import { CHANGE_ICON, changeParts, ic, plainLook, type EventChoice, type EventLook, type EventModel } from '../../redux/screens/event';
 import type { ScriptLine } from '../../redux/script';
-import { figure } from '../../redux/templates';
+import { type Art, figure } from '../../redux/templates';
 import { act, esc, hp, keys, mon, page, ransom } from '../kit';
 
 const STEPS = ['Talk', 'Choose', 'Outcome', 'Reward'] as const;
@@ -24,6 +24,13 @@ const DEED: Record<ChoiceIcon, [string, string]> = {
 };
 const KIND_WORD: Record<ChangeKind, string> = { money: 'Money', heal: 'Healed', hurt: 'Hurt', join: 'Joined you', bond: 'Bond', item: 'Item', learn: 'Learned', trade: 'Trade', evil: 'Standing', stat: 'Stat', note: 'This run' };
 
+/**
+ * A person `px` tall. A story portrait is a wide frame drawn larger than a Trainer picture (its `k`): its whole frame
+ * is kept to `cap`, so the head never leaves the page.
+ */
+export const tallSize = (a: Art, px: number, cap: number): number => Math.min(px, Math.floor(cap / (a.k ?? 1)));
+export const tall = (a: Art, px: number, cap: number): string => figure(a, tallSize(a, px, cap));
+
 /** The step strip at the top right: the event's name and where in it the player is. */
 const strip = (name: string, at: number, steps = true): string =>
   `<div class="sy-st${steps ? '' : ' ph-st-talk'}"${steps ? ` aria-label="step ${at + 1} of ${STEPS.length}"` : ''}><b style="font-size:${name.length > 40 ? 15 : name.length > 28 ? 19 : 24}px">${esc(name)}</b>${steps ? `<div>${STEPS.map((t, k) => `<span class="${k < at ? 'd' : k === at ? 'on' : ''}"><i></i>${t}</span>`).join('')}</div>` : ''}</div>`;
@@ -35,8 +42,8 @@ const backdrop = (L: EventLook, dim: number, strips = true): string =>
 /** Everyone in the scene: the speaker (or the first person) as the big bust, the others, the Pokémon and the things the text names beside them. */
 function cast(L: EventLook, tone: Tone | null, hush: boolean): string {
   const lead = L.speaking >= 0 ? L.speaking : 0, a = L.cast[lead];
-  const bust = a ? `<div class="bust ph-ev-bust${tone ? ` t-${tone}` : ''}${hush ? ' hush' : ''}" data-key="bust:${esc(a.file)}"><div class="ph-ev-sh">${figure(a, 540)}</div><div class="ph-ev-fig">${figure(a, 540)}</div></div>` : '';
-  const others = L.cast.map((x, i) => (i === lead ? '' : `<div class="ph-ev-other${L.speaking >= 0 ? ' hush' : ''}" style="--i:${i}">${figure(x, 250)}</div>`)).join('');
+  const bust = a ? `<div class="bust ph-ev-bust${tone ? ` t-${tone}` : ''}${hush ? ' hush' : ''}" data-key="bust:${esc(a.file)}"><div class="ph-ev-sh">${tall(a, 540, 720)}</div><div class="ph-ev-fig">${tall(a, 540, 720)}</div></div>` : '';
+  const others = L.cast.map((x, i) => (i === lead ? '' : `<div class="ph-ev-other${L.speaking >= 0 ? ' hush' : ''}" style="--i:${i}">${tall(x, 250, 340)}</div>`)).join('');
   const base = a ? (L.cast.length > 1 ? 2.6 : 3.4) : 4.4;
   const mons = L.mons.map((file, i) => {
     const rel = L.monSize?.[i], h0 = rxAtlas(L.mons[0]!)?.f[0]?.[3], h = rxAtlas(file)?.f[0]?.[3];
@@ -154,14 +161,22 @@ export function phEvent(_ph: PhantomVersion, d: EventModel, steps = true): strin
   if (ch.length && !solo) {
     // The choice: the scene steps back, the page's text is the question and the choices are dealt as cards.
     const n = lettersOf(d);
-    const q = `<div class="sy-q ph-q${n > 54 ? ' long' : ''}" data-key="q:${key}"><small>${esc(d.speaker ? `${d.speaker} says` : 'What do you do?')}</small><span style="font-size:${n > 54 ? (n > 300 ? 16 : n > 200 ? 18 : 20) : 38}px">${lines(d, key)}</span></div>`;
-    return page('choice', backdrop(L, 0.35) + cast(L, tone, true) + '<div class="dim ph-ev-dim2" style="background:rgba(8,6,10,.5)"></div>' + top(d, 1, steps) + q + hand(d, L, ch, key) + picker(d)
+    // The question sits over the cards, and the lit card lifts toward it: a text of many short lines is set smaller,
+    // and past that the cards are dealt a little lower, so the last line is never under a card.
+    const lens = d.lines.map((l) => l.text.length + (l.who && l.who !== d.speaker ? l.who.length + 2 : 0));
+    const rowsAt = (f: number): number => lens.reduce((sum, t) => sum + Math.max(1, Math.ceil(t / (802 / (0.44 * f)))), 0);
+    let size = n > 300 ? 16 : n > 200 ? 18 : 20;
+    while (size > 15 && rowsAt(size) * size * 1.2 > 78) size -= 1;
+    const push = n > 54 ? Math.min(44, Math.max(0, Math.ceil(rowsAt(size) * size * 1.2 - 78))) : 0;
+    const q = `<div class="sy-q ph-q${n > 54 ? ' long' : ''}" data-key="q:${key}"><small>${esc(d.speaker ? `${d.speaker} says` : 'What do you do?')}</small><span style="font-size:${n > 54 ? size : 38}px">${lines(d, key)}</span></div>`;
+    const dealt = push ? `<div class="ph-ev-low" style="translate:0 ${push}px">${hand(d, L, ch, key)}</div>` : hand(d, L, ch, key);
+    return page('choice', backdrop(L, 0.35) + cast(L, tone, true) + '<div class="dim ph-ev-dim2" style="background:rgba(8,6,10,.5)"></div>' + top(d, 1, steps) + q + dealt + picker(d)
       + keys(['◀▶', 'Look'], ['Enter', 'Choose'], ...(steps && d.page.of > 1 ? [['Esc', 'Read back', 'page', -1] as const] : []), ...(d.rounds ? [['B', 'Bracket', 'bracket'] as const] : [])));
   }
   // The talk, and the outcome's text: the scene, the people in it and the text box that waits.
   const label = more ? 'Waits for you' : out ? (out.changes.length ? 'Continue' : out.next) : solo ? solo.label : 'Waits for you';
   const go = out ? act('next') : more ? act('page') : solo ? act('pick', 0) : '';
-  const me = d.me && d.speaker && !out ? `<div class="sy-me" aria-label="your trainer"><div><div class="ph-ev-me">${figure(d.me, 300)}</div></div><em>…</em><span>listening</span></div>` : '';
+  const me = d.me && d.speaker && !out ? `<div class="sy-me" aria-label="your trainer"><div><div class="ph-ev-me">${tall(d.me, 300, 400)}</div></div><em>…</em><span>listening</span></div>` : '';
   const seal = out && out.changes.length ? '<div class="sy-seal" aria-label="what changed, still closed"><div><i></i></div><b>What changed</b><span>Opens after you close this</span></div>' : '';
   const hit = out && !out.ok ? '<div class="ph-ev-hit" data-key="hit" aria-hidden="true"></div>' : '';
   return page(out ? 'sy-result' : 'event', backdrop(L, out ? 0.45 : 0.35) + cast(L, null, false) + hit + top(d, out ? 2 : 0, steps) + me + seal

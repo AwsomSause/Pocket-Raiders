@@ -232,3 +232,4 @@
 .phx .phs[data-liv=velvet]{ & .ph-tr-who b{font-size:22px} & .ph-tr-btn .blade{font-size:28px} & .ph-tr-mid.full .ph-tr-btn .blade{font-size:24px} & .ph-tr-ttl{font-size:40px} & .ph-tr-mid.full .ph-tr-ttl{font-size:34px} }
 
 .phx .phs{ & .ph-smark{display:grid;place-items:center;width:100%;height:100%;font:400 84px/1 var(--f-disp);color:var(--red);rotate:-6deg} }
+.phx .phs{ & .ph-ev-low{position:absolute;inset:0;z-index:3;pointer-events:none} & .ph-ev-low>*{pointer-events:auto} }
