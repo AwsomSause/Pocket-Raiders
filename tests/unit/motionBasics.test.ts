@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ClipBuilder, clipEnd, EASES, fxAllowed, sampleClip, type ClipLevel, type MotionClip } from '../../src/core/presentation/motionClip';
-import { expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
+import { aceLandClip, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
 
 const ME: MonSpot = { x: 312, y: 428, h: 180, side: 'player' };
 const FOE: MonSpot = { x: 648, y: 240, h: 150, side: 'enemy' };
@@ -159,5 +159,29 @@ describe('one rule for Reduced and Off (redesign pass 25)', () => {
       expect(c.fx.find((f) => f.kind === 'cue' && f.name === 'open')?.at).toBe(sendOpenAt(level));
       expect(sendOpenAt(level)).toBeLessThanOrEqual(c.length);
     }
+  });
+});
+
+describe('the ace lands (pass 15, Ace Call)', () => {
+  it('Full: it leaps off the band, comes down onto its spot at 360 ms, squashes flat and wide, and the ground answers', () => {
+    const c = aceLandClip(FOE, 'full');
+    expect(sampleClip(c, 0).mon!.lift).toBeCloseTo(0.9);
+    expect(sampleClip(c, 140).mon!.lift).toBeCloseTo(1.15);
+    expect(sampleClip(c, 360).mon!.lift).toBeCloseTo(0);
+    expect(sampleClip(c, 420).mon).toMatchObject({ sx: 1.2, sy: 0.75 });
+    const at = (k: string) => c.fx.filter((f) => f.kind === k).map((f) => f.at);
+    expect(at('cue')).toEqual([360]);
+    expect(at('dust')).toEqual([360]);
+    expect(at('ring')).toEqual([360]);
+    expect(at('star')).toEqual([360]);
+    expect(c.fx.find((f) => f.kind === 'ring')).toMatchObject({ color: 0xffcb05, r1: 260, flat: 0.4, d: 700 });
+    expect(c.length).toBe(820);
+  });
+
+  it('every level ends with it standing whole on its spot; Reduced has no star or dust, Off takes no time', () => {
+    for (const level of LEVELS) expect(clipEnd(aceLandClip(FOE, level)).mon).toMatchObject({ lift: 0, sx: 1, sy: 1, alpha: 1, shadow: 1 });
+    expect(aceLandClip(FOE, 'reduced').fx.filter((f) => fxAllowed(f, 'reduced')).map((f) => f.kind).sort()).toEqual(['cue', 'ring']);
+    expect(aceLandClip(FOE, 'off').length).toBe(0);
+    expect(fxAllowed({ kind: 'star', at: 0, x: 0, y: 0, size: 1, points: 12, d: 1 }, 'reduced')).toBe(false);
   });
 });

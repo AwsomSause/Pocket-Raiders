@@ -262,9 +262,15 @@ export function drawFx(scene: Phaser.Scene, fx: MotionFx, o: FxOpts): void {
     }
     case 'ring': {
       // A shockwave on the ground: it grows fast, then thins out.
-      const e = scene.add.ellipse(fx.x, fx.y, fx.r1 * 2, fx.r1 * 2 * fx.flat).setStrokeStyle(6, 0xffffff, 1).setDepth(o.depth).setScale(8 / fx.r1);
+      const e = scene.add.ellipse(fx.x, fx.y, fx.r1 * 2, fx.r1 * 2 * fx.flat).setStrokeStyle(fx.w ?? 6, fx.color ?? 0xffffff, 1).setDepth(o.depth).setScale(8 / fx.r1);
       scene.tweens.add({ targets: e, scale: 1, duration: ms(fx.d), ease: EASES.out3 });
       scene.tweens.add({ targets: e, alpha: 0, delay: ms(fx.d * 0.45), duration: ms(fx.d * 0.55), onComplete: () => e.destroy() });
+      return;
+    }
+    case 'star': {
+      // A white burst of many points that grows and fades.
+      const st = scene.add.star(fx.x, fx.y, fx.points, fx.size * 0.15, fx.size / 2, 0xffffff, 1).setDepth(o.depth + 1).setScale(0.1).setBlendMode(Phaser.BlendModes.ADD);
+      scene.tweens.add({ targets: st, scale: 1, angle: 20, alpha: 0, duration: ms(fx.d), ease: EASES.out, onComplete: () => st.destroy() });
       return;
     }
     case 'streak': {

@@ -127,7 +127,7 @@ import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel } from '../core/presentation/motionClip';
-import { expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { aceLandClip, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
@@ -3901,6 +3901,44 @@ export class BattleScene extends Phaser.Scene {
     }
   }
 
+  /** The ace's card: the long boss sequence (Champion), a boss's band, or the ACE! stamp. Presentation only. */
+  private async aceCall(): Promise<void> {
+    if (!this.shown.enemy) return;
+    const bossNow = this.boss();
+    if (bossNow?.role === 'champion') {
+      // M7: the Champion's final Pokémon changes the music and gets the long ace sequence.
+      const finalTrack = 'bgm.raid.tera3';
+      if (services().assets.has(finalTrack) && !this.stadium) {
+        this.baseTrack = finalTrack;
+        this.playingTrack = finalTrack;
+        playMusicLazy(this, finalTrack, finalTrack);
+      }
+      await this.bigMoment('aceEntrance', `ace.${bossNow.title}`, 'FINAL POKÉMON', this.speciesName(this.shown.enemy), true, { name: bossNow.name, role: 'Final Battle', line: 'Last Pokémon. Make it count.' });
+    } else if (bossNow) await this.bigMoment('aceEntrance', `ace.${bossNow.title}`, 'ACE!', `${bossNow.title}: ${this.speciesName(this.shown.enemy)}`, false, { name: this.speciesName(this.shown.enemy), role: `${bossNow.role === 'elite' ? 'Elite Four' : 'Gym Leader'}’s Ace`, line: `${this.speciesName(this.shown.enemy)}. It is time.` });
+    else await this.playBeat(stamp(this, 'ACE!', this.speciesName(this.shown.enemy), this.foeRim(), this.motion));
+  }
+
+  /**
+   * The ace lands (redesign pass 15): after its card it leaps onto its spot, squashes, and the ground answers with
+   * dust, a gold ring and a star. Reduced: it appears with the squash and the ring. Off: it is simply there.
+   */
+  private async aceLandMoment(mon: PokemonInstance): Promise<void> {
+    const level = this.clipLevel();
+    const at = this.spotXY('enemy');
+    const visual = this.showSprite('enemy', mon, true, false);
+    const h = visual instanceof Phaser.GameObjects.Sprite ? visual.displayHeight * visual.originY : 120;
+    const st = services().session.settings;
+    const run = playClip(this, aceLandClip({ x: at.x, y: at.y, h, side: 'enemy' }, level), this.clipHost({ mon: { kind: 'mon', get: () => visual } }, {
+      cue: (name) => {
+        if (name !== 'land') return;
+        playSfx(this, 'se.ball_catch', 0.4);
+        if (level === 'full' && st.battleScreenEffects) this.cameras.main.shake(350, 0.012 * st.shakeIntensity);
+      },
+    }));
+    await run.done;
+    if (visual.active) breathe(this, visual, this.motion);
+  }
+
   /** The words the Mega Evolution cutscene locks on: stone and ring, the new type and ability, which stats rose. */
   private megaPage(mon: PokemonInstance, toId: string, itemId: string | null): GimmickPage {
     const { content } = services().session;
@@ -5940,32 +5978,22 @@ export class BattleScene extends Phaser.Scene {
               cameraTo(this, this.motion, lookAt, 1.12, 350);
             }
             if (e.side === 'enemy') await this.ensureArt(this.shown.enemy!.speciesId);
-            await this.sendMoment(e.side, this.shown[e.side]!, hand);
+            // A trainer's designated ace (battle.aceUid, not the last slot) is announced BEFORE it lands (Kice: an ace
+            // must be announced when sent out; animation redesign pass 15, Ace Call): the trainer speaks, the ace's
+            // card plays, and then the ace leaps onto the field. Presentation only.
+            const ace = e.side === 'enemy' && !!this.run.battle?.trainer && isEnemyAce(this.run.battle, e.uid);
+            if (ace) {
+              await this.say(`${this.trainerTitle() ?? this.run.battle!.trainer!.name} sends out their ace, ${this.speciesName(this.shown.enemy!)}!`);
+              await this.aceCall();
+              await this.aceLandMoment(this.shown.enemy!);
+              if (this.role === 'rival') void this.fx.flourish('enemy', 'rival.ace');
+            } else await this.sendMoment(e.side, this.shown[e.side]!, hand);
             this.applyTeraTint(e.side, this.shown[e.side]);
             if (this.camPinned) {
               cameraTo(this, this.motion, null, 1, 350);
               this.camPinned = false;
             }
             await this.refreshInfoBox(e.side === 'enemy' ? this.enemyBox : this.playerBox, this.shown[e.side], false);
-            // A trainer's designated ace (battle.aceUid, not the last slot): one special beat when it comes out.
-            if (e.side === 'enemy' && this.run.battle?.trainer && isEnemyAce(this.run.battle, e.uid)) {
-              void burstReveal(this, ENEMY_POS.x, ENEMY_POS.y - 80, this.foeRim(), this.motion);
-              // Kice: the ace is announced in words (both looks), not just their last Pokémon. Presentation only.
-              await this.say(`${this.trainerTitle() ?? this.run.battle.trainer.name} sends out their ace, ${this.speciesName(this.shown.enemy!)}!`);
-              if (this.role === 'rival') void this.fx.flourish('enemy', 'rival.ace');
-              const bossNow = this.boss();
-              if (bossNow?.role === 'champion') {
-                // M7: the Champion's final Pokémon changes the music and gets the long ace sequence.
-                const finalTrack = 'bgm.raid.tera3';
-                if (services().assets.has(finalTrack) && !this.stadium) {
-                  this.baseTrack = finalTrack;
-                  this.playingTrack = finalTrack;
-                  playMusicLazy(this, finalTrack, finalTrack);
-                }
-                await this.bigMoment('aceEntrance', `ace.${bossNow.title}`, 'FINAL POKÉMON', this.speciesName(this.shown.enemy), true, { name: bossNow.name, role: 'Final Battle', line: 'Last Pokémon. Make it count.' });
-              } else if (bossNow) await this.bigMoment('aceEntrance', `ace.${bossNow.title}`, 'ACE!', `${bossNow.title}: ${this.speciesName(this.shown.enemy)}`, false, { name: this.speciesName(this.shown.enemy), role: `${bossNow.role === 'elite' ? 'Elite Four' : 'Gym Leader'}’s Ace`, line: `${this.speciesName(this.shown.enemy)}. It is time.` });
-              else await this.playBeat(stamp(this, 'ACE!', this.speciesName(this.shown.enemy), this.foeRim(), this.motion));
-            }
           }
           break;
         }

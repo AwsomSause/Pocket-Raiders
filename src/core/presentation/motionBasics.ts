@@ -137,6 +137,40 @@ export function sendClip(mon: MonSpot, from: Point, level: ClipLevel): MotionCli
   return b.end(open + 600);
 }
 
+/**
+ * The ace lands (pass 15, Ace Call): announced first, it leaps off the band and comes down onto its spot, squashes
+ * flat and wide, and the ground answers with dust, a gold ring and a star. "land" is when it hits (shake, sound).
+ * Reduced: it appears with the squash and the ring. Off: it is simply there.
+ */
+export function aceLandClip(mon: MonSpot, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('aceLand', level);
+  const m = b.part('mon', { lift: 0, sx: 1, sy: 1, alpha: 0, shadow: 0 });
+  if (level === 'off') {
+    m.at(0).set({ alpha: 1, shadow: 1 });
+    b.fx({ kind: 'cue', at: 0, name: 'land' });
+    return b.end(0);
+  }
+  const gold = 0xffcb05;
+  if (level === 'reduced') {
+    m.at(0).to(120, { alpha: 1, shadow: 1 });
+    m.at(0).set({ sx: 1.12, sy: 0.85 }).to(300, { sx: 1, sy: 1 }, 'out');
+    b.fx({ kind: 'cue', at: 0, name: 'land' });
+    b.fx({ kind: 'ring', at: 0, x: mon.x, y: mon.y - 10, r1: 260, flat: 0.4, d: 700, color: gold, w: 10 });
+    b.beat(0, 'The ace is there');
+    return b.end(400);
+  }
+  const hit = 360;
+  // Off the band: up a little and smaller, then down onto its spot.
+  m.at(0).set({ alpha: 1, lift: 0.9, sx: 0.9, sy: 0.9 }).to(140, { lift: 1.15 }, 'out').to(220, { lift: 0, sx: 1, sy: 1 }, 'in');
+  m.at(hit).set({ shadow: 1 }).to(60, { sx: 1.2, sy: 0.75 }).to(400, { sx: 1, sy: 1 }, 'el');
+  b.fx({ kind: 'cue', at: hit, name: 'land' });
+  b.fx({ kind: 'dust', at: hit, x: mon.x, y: mon.y, n: 14 });
+  b.fx({ kind: 'ring', at: hit, x: mon.x, y: mon.y - 10, r1: 260, flat: 0.4, d: 700, color: gold, w: 10 });
+  b.fx({ kind: 'star', at: hit, x: mon.x, y: mon.y - mon.h / 2, size: 300, points: 12, d: 350 });
+  b.beat(0, 'It leaps off the band').beat(hit, 'It lands; the ground answers');
+  return b.end(hit + 460);
+}
+
 /** Exp lights (pass 23): a fallen foe's experience leaves it as lights and flies to your bar. The bar fills on "arrive". */
 export function expLightsClip(from: Point, bar: Point, level: ClipLevel): MotionClip {
   const b = new ClipBuilder('expLights', level);
