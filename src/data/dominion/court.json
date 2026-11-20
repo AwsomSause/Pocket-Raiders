@@ -4227,9 +4227,9 @@
       "n": -100
      },
      {
-      "k": "note",
-      "slice": "D11",
-      "text": "the Hero's district tomorrow"
+      "k": "hero",
+      "what": "intel",
+      "n": 1
      }
     ]
    },
@@ -4238,8 +4238,7 @@
     "does": "nothing",
     "fx": []
    },
-   "who": "gym-trainer",
-   "wait": "D11"
+   "who": "gym-trainer"
   },
   {
    "id": 93,
@@ -4282,14 +4281,12 @@
       "n": 10
      },
      {
-      "k": "note",
-      "slice": "D11",
-      "text": "Hero battle tomorrow"
+      "k": "hero",
+      "what": "battle"
      }
     ]
    },
-   "who": "hero",
-   "wait": "D11"
+   "who": "hero"
   },
   {
    "id": 94,
@@ -4334,8 +4331,7 @@
      }
     ]
    },
-   "who": "hero",
-   "wait": "D11"
+   "who": "hero"
   },
   {
    "id": 95,
@@ -4354,9 +4350,8 @@
     "does": "that district is locked to you, Threat −20",
     "fx": [
      {
-      "k": "note",
-      "slice": "D11",
-      "text": "that district is locked to you"
+      "k": "hero",
+      "what": "spare"
      },
      {
       "k": "owed",
@@ -4380,8 +4375,7 @@
      }
     ]
    },
-   "who": "hero",
-   "wait": "D11"
+   "who": "hero"
   },
   {
    "id": 96,
@@ -4430,7 +4424,6 @@
     ]
    },
    "who": "hero",
-   "wait": "D11",
    "once": true
   },
   {
@@ -5454,9 +5447,9 @@
       "n": 6
      },
      {
-      "k": "note",
-      "slice": "D11",
-      "text": "heroic Legendaries come 7 days later"
+      "k": "hero",
+      "what": "late",
+      "n": 7
      }
     ]
    },
@@ -5465,9 +5458,8 @@
     "does": "Opens a Legendary hunt (Part 4 §8), Threat +10",
     "fx": [
      {
-      "k": "note",
-      "slice": "D11",
-      "text": "a Legendary hunt opens"
+      "k": "hero",
+      "what": "hunt"
      },
      {
       "k": "owed",
@@ -5476,8 +5468,7 @@
      }
     ]
    },
-   "who": "hermit",
-   "wait": "D11"
+   "who": "hermit"
   },
   {
    "id": 121,
@@ -6757,14 +6748,19 @@
     "does": "Hero battle tomorrow with HQ defense bonus, Threat −20 after",
     "fx": [
      {
-      "k": "note",
-      "slice": "D11",
-      "text": "Hero battle tomorrow, HQ defense bonus"
+      "k": "hero",
+      "what": "letter"
      },
      {
-      "k": "owed",
-      "key": "threat",
-      "n": -20
+      "k": "later",
+      "days": 1,
+      "fx": [
+       {
+        "k": "owed",
+        "key": "threat",
+        "n": -20
+       }
+      ]
      }
     ]
    },
@@ -6773,9 +6769,8 @@
     "does": "lose 1 district, Threat −30",
     "fx": [
      {
-      "k": "note",
-      "slice": "D11",
-      "text": "lose 1 district"
+      "k": "hero",
+      "what": "lose"
      },
      {
       "k": "owed",
@@ -6785,7 +6780,6 @@
     ]
    },
    "who": "hero",
-   "wait": "D11",
    "crisis": "threat",
    "red": "Hero Threat 90+"
   }

@@ -40,7 +40,8 @@ export const scale = (b: DominionBlock, n: number): number => n * R().tierPay[ti
 /** A card is "live" when nothing in it waits for a later slice; "limited" when part of it does; else "disabled". */
 export function cardStatus(c: CourtCard): 'supported' | 'limited' | 'disabled' {
   if (c.wait) return 'disabled';
-  const part = (fx: CourtFx[]): boolean => fx.some((e) => e.k === 'note' || e.k === 'owed' || (e.k === 'deal' && e.ten !== undefined)
+  // D11 builds Hero Threat, so `threat:N` plays in full; the other owed numbers still wait.
+  const part = (fx: CourtFx[]): boolean => fx.some((e) => e.k === 'note' || (e.k === 'owed' && e.key !== 'threat') || (e.k === 'deal' && e.ten !== undefined)
     || (e.k === 'chance' && (part(e.yes) || part(e.no))) || (e.k === 'later' && part(e.fx)) || (e.k === 'fight' && (part(e.win) || part(e.lose))));
   return part(c.a.fx) || part(c.b.fx) ? 'limited' : 'supported';
 }
@@ -104,7 +105,7 @@ export function redZones(b: DominionBlock): Crisis[] {
     morale: b.members.length > 0 && morale(b) < z.morale,
     regard: d.regard < z.regard && d.dread >= z.regardDread,
     loyalty: b.members.some((m) => m.loyalty < z.loyalty),
-    threat: false,
+    threat: !!b.hero && b.hero.threat >= z.threat,
   };
   return R().crisisOrder.filter((k) => on[k]);
 }
@@ -300,6 +301,13 @@ export function setChairTension(f: (b: DominionBlock, n: number) => void): void 
   tension = f;
 }
 
+/** D11 (hero.ts) registers how Threat moves and what the Hero's answers do, the same way (no import of hero.ts here). */
+type HeroFx = Extract<CourtFx, { k: 'hero' }>;
+let heroHooks: { threat: (b: DominionBlock, n: number) => void; act: (b: DominionBlock, e: HeroFx, lines: string[]) => void } | null = null;
+export function setChairHero(h: NonNullable<typeof heroHooks>): void {
+  heroHooks = h;
+}
+
 /** Answers whose rule another slice owns (`hook:id` in the SPEC): that slice registers it at load, like the Tension hook. */
 const hooks: Partial<Record<ChairHook, (b: DominionBlock) => string | null>> = {};
 export function setChairHook(id: ChairHook, f: (b: DominionBlock) => string | null): void {
@@ -433,10 +441,12 @@ function apply(x: Ctx, fx: CourtFx[]): void {
       case 'owed':
         // D9 built the rival team: Tension now moves the region's rival for real. The rest wait for their slice.
         if (e.key === 'ten' && tension) tension(b, e.n);
+        else if (e.key === 'threat' && heroHooks) heroHooks.threat(b, e.n);
         else ch.owed[e.key] = (ch.owed[e.key] ?? 0) + e.n;
         bump(x, e.key, e.n);
         break;
       case 'note': x.lines.push(`${e.text} ${fill(L().waits!, { slice: e.slice })}`); break;
+      case 'hero': heroHooks?.act(b, e, x.lines); break;
       case 'hook': { const said = hooks[e.id]?.(b); if (said) x.lines.push(said); break; }
       case 'deal': {
         ch.deals.push({ card: x.card.id, n: scale(b, e.n), clean: !!e.clean, heat: e.heat ?? 0, risk: e.risk ?? 0, wanted: e.wanted ?? 0, mon: e.mon ?? 0, item: e.item ?? null, itemN: e.itemN ?? 0, ten: e.ten ?? 0 });

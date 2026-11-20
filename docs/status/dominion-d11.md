@@ -23,9 +23,10 @@
     - On the file: **1-3** answer a card, **F** fights a Legendary, **L/R** choose after the stand. On m11: **1-3**, the arrows and Enter.
     - Esc never leaves the run from m11.
   - The Ledger's Hero row and the HQ door ("Face the Hero") use the real Threat. The map says where the Hero is once you know.
+- **The Chair's Hero visitors** (follow-up after D12): Chair answers move Threat (`nudge` on top of the nightly sum; D12's kept `chair.owed.threat` is added once), and cards 92-96, 120 and 150 play (`hero:` effects in `court-to-json.py`; see `dominion-d12.md`). A spared town refuses Boss actions (the action gate). The Letter's HQ bonus is the HQ level's Defense plus the rooms' (not halved for upgrades: hero.ts doesn't import hq.ts).
 
 ## Saves
-No version bump: `block.hero` is optional, and the first step after loading adds it (tested with a save that has no `hero`). New streams: `dominion-hero::<day>` (and `::meet` / `::row`), `dominion-legends::<day>`, `dominion-hero-pick`, `dominion-hero-smoke::<rolls>`, `dominion-hero-join::<day>`. No existing roll moved.
+No version bump: `block.hero` is optional (and so are its later `nudge`, `spared` and `bonus`), and the first step after loading adds it (tested with a save that has no `hero`). New streams: `dominion-hero::<day>` (and `::meet` / `::row`), `dominion-legends::<day>`, `dominion-hero-pick`, `dominion-hero-smoke::<rolls>`, `dominion-hero-join::<day>`. No existing roll moved.
 
 ## Tests
 - `tests/unit/dominionHero.test.ts` (23): data; Q5; a D6 save loads; save/reload; stage edges (24/25, 44/45, 64/65, 79/80); Threat and the stage line; the path; the interrupt (Run, Smoke Ball refused and used, Battle win); no interrupt below FOILS; adapting; encounter cards (Watch, Challenge, night card, bad choice); Disillusion never shown; Legendaries (wake, warn, fight, can't catch, driven off, refused when not out); the final stand (lose, win, Leave, Recruit at 0 and capped at 80, joins as an Executive); the five actions' gates; the three tasks; determinism.

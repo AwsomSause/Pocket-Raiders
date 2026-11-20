@@ -20,7 +20,9 @@ import { DOMINION_DATA } from './data';
 import {
   addActedHook, addActionGate, addEffectHook, addFightHook, addHeat, districtDef, setHeroFoe, setInterruptHook, statusOf, syncHeat, targetDef, wanted,
 } from './field';
-import type { ActionDef, Alert, DominionBlock, Encounter, FieldFight, HeroDef, HeroState, Member } from './schema';
+import { setChairHero } from './chair';
+import { hqFx, levelDef } from './hqFx';
+import type { ActionDef, Alert, CourtFx, DominionBlock, Encounter, FieldFight, HeroDef, HeroState, Member } from './schema';
 import { addWorldStep, fill } from './worldTurn';
 import { heroFactor } from './rules';
 
@@ -82,7 +84,8 @@ export function threatOf(b: DominionBlock): number {
   const raw = wanted(b.field) * w.wanted + dread * w.dread + h.stolen * w.stolen + buildings * w.building + (h.harm + b.field.hero) * w.harm;
   // D27: Hero pressure (Normal, and every run before D27, multiplies by 1 and keeps the old value exactly).
   const k = heroFactor(b);
-  return clamp(k === 1 ? raw : Math.round(raw * k));
+  // D12's Chair answers move Threat too (`nudge`, either way), after the pressure factor.
+  return clamp((k === 1 ? raw : Math.round(raw * k)) + (h.nudge ?? 0));
 }
 
 export function stageIndex(threat: number): number {
@@ -131,7 +134,8 @@ export function heroTeam(b: DominionBlock, run: Pick<RunState, 'party'>, kind: '
     return { name: regionDef().sidekick ?? 'A kid', cls: 'youngster', team: def.lines.slice(0, 2).map((l) => ({ species: stageFor(l, lv), level: lv })), wild: false };
   }
   const stand = why === 'stand';
-  const lv = stand ? b.levelCap : heroLevel(b, run);
+  // The Letter (Chair card 150): the HQ's Defense takes levels off the Hero at the door.
+  const lv = stand ? b.levelCap : Math.max(F().levels.min, heroLevel(b, run) - (why === 'heroRaid' ? h.bonus ?? 0 : 0));
   const size = stand ? 6 : T.sizeByBadges[Math.min(8, h.badges)]!;
   const species = def.lines.slice(0, size).map((l) => stageFor(l, lv));
   // Counters replace the newest catches, never the starter.
@@ -228,6 +232,12 @@ function heroStep(b: DominionBlock, seed: string): string[] {
   const week = weekOf(b.day);
   if (h.foilWeek && h.foilWeek !== week) h.week = [];
   const r = rngOf(seed, 'dominion-hero', b.day);
+  // Threat the Chair kept for this slice before it was built (a D12 save) is added once.
+  const owed = b.chair?.owed.threat;
+  if (owed) {
+    h.nudge = clamp((h.nudge ?? 0) + owed, -100, 100);
+    delete b.chair!.owed.threat;
+  }
   // Threat and stage (stages once reached are announced once).
   h.threat = threatOf(b);
   const st = stageIndex(h.threat);
@@ -553,6 +563,7 @@ function afterFight(b: DominionBlock, run: RunState, fight: FieldFight, outcome:
       lines.push(fill(won ? Ln().won! : Ln().lost!, { hero: fight.foe === 'sidekick' ? regionDef().sidekick ?? 'The kid' : name }), Ln().challenge!);
       break;
     case 'heroRaid': {
+      delete h.bonus;
       if (won) lines.push(fill(Ln().raidWon!, { hero: name }));
       else {
         const take = Math.max(0, Math.floor(Math.max(0, b.funds) * H().heroRaid.take));
@@ -605,6 +616,8 @@ export function sawTypes(b: DominionBlock, types: readonly string[]): void {
 // ---------- the five Boss actions on the Hero (lists/player-actions.md 123-127) ----------
 
 function heroGate(b: DominionBlock, def: ActionDef, district: string): string | null {
+  // Chair card 95: the town you promised the Hero to leave alone.
+  if (b.hero?.spared?.includes(district)) return fill(Ln().spared!, { hero: heroDefOf(b.hero.id).name, district: dName(district) });
   if (!HERO_ACTIONS.has(def.id)) return null;
   const h = heroOf(b);
   if (def.unlock.includes('stage')) {
@@ -696,6 +709,84 @@ function patrolMeets(b: DominionBlock): string[] {
 }
 
 // ---------- registration (once, at import) ----------
+
+// ---------- the Chair's Hero visitors (D12 cards 92-96, 120, 150) ----------
+
+/** Threat a Chair answer moves: kept as `nudge` on top of what `threatOf` counts, so tonight's sum keeps it. */
+function chairThreat(b: DominionBlock, n: number): void {
+  const h = heroOf(b);
+  h.nudge = clamp((h.nudge ?? 0) + n, -100, 100);
+  h.threat = threatOf(b);
+}
+
+const heldIds = (b: DominionBlock): string[] => Object.keys(b.field.districts).filter((id) => id !== F().hq && ['held', 'owned', 'contested'].includes(statusOf(b.field.districts[id]!)));
+
+/** What a Chair answer does to the Hero (the card's `hero:` effects). Lines go to the Tally. */
+function chairAct(b: DominionBlock, e: Extract<CourtFx, { k: 'hero' }>, lines: string[]): void {
+  const h = heroOf(b), hero = heroDefOf(h.id).name;
+  const say = (t: string): void => {
+    lines.push(t);
+    note(b, t);
+  };
+  switch (e.what) {
+    case 'intel':
+      h.intel = Math.max(h.intel, b.day + (e.n ?? 1));
+      say(fill(Ln().courtIntel!, { hero }));
+      break;
+    case 'battle':
+    case 'letter': {
+      if (b.field.fight) break;
+      b.field.fight = { why: 'heroRaid', foe: 'hero', begun: false, action: null, target: null, district: F().hq, pass: false, big: false, wager: 0, racket: null };
+      h.met = true;
+      if (e.what === 'letter') {
+        const n = Math.max(0, levelDef(b.hqLevel).defense + hqFx(b).defense);
+        if (n) h.bonus = n;
+        say(fill(Ln().courtLetter!, { hero, n }));
+      } else say(fill(Ln().courtBattle!, { hero }));
+      break;
+    }
+    case 'spare': {
+      // The town the Hero is in now (never the HQ's: then the next town on their path).
+      const path = regionDef().path ?? [];
+      const id = heroAt(b) !== F().hq ? heroAt(b) : path.find((x) => x !== F().hq && !(h.spared ?? []).includes(x));
+      if (!id) break;
+      h.spared = [...new Set([...(h.spared ?? []), id])];
+      say(fill(Ln().courtSpare!, { district: dName(id) }));
+      break;
+    }
+    case 'late': {
+      const days = e.n ?? 7;
+      for (const L of regionDef().legends) {
+        const s = (h.legends[L.id] ??= { seen: false, next: 0, away: 0, beaten: 0 });
+        s.away = Math.max(s.away, b.day + days);
+      }
+      say(fill(Ln().courtLate!, { days }));
+      break;
+    }
+    case 'hunt': {
+      const L = regionDef().legends.find((l) => !h.legends[l.id]?.seen && (h.legends[l.id]?.away ?? 0) <= b.day);
+      if (!L) {
+        say(Ln().courtNoHunt!);
+        break;
+      }
+      h.legends[L.id] = { seen: true, next: b.day + H().legends.warn, away: 0, beaten: h.legends[L.id]?.beaten ?? 0 };
+      say(fill(Ln().courtHunt!, { legend: L.name, over: L.over ?? dName(L.home ?? F().hq) }));
+      break;
+    }
+    case 'lose': {
+      const held = heldIds(b);
+      const id = held.includes(heroAt(b)) ? heroAt(b) : [...held].sort((x, y) => b.field.districts[x]!.control - b.field.districts[y]!.control || x.localeCompare(y))[0];
+      if (!id) {
+        say(Ln().courtNoLose!);
+        break;
+      }
+      b.field.districts[id]!.control = 0;
+      say(fill(Ln().courtLose!, { district: dName(id) }));
+      break;
+    }
+  }
+}
+setChairHero({ threat: chairThreat, act: chairAct });
 
 addWorldStep('hero', (b, seed) => [...patrolMeets(b), ...heroStep(b, seed)]);
 addWorldStep('legends', legendsStep);
