@@ -3,6 +3,7 @@
 import startRaw from '../../data/dominion/start.json';
 import actionsRaw from '../../data/dominion/actions.json';
 import crewRaw from '../../data/dominion/crew.json';
+import deskRaw from '../../data/dominion/desk.json';
 import fieldRaw from '../../data/dominion/field.json';
 import gruntTypesRaw from '../../data/dominion/gruntTypes.json';
 import personalityRaw from '../../data/dominion/personality.json';
@@ -10,6 +11,7 @@ import tasksRaw from '../../data/dominion/tasks.json';
 import empireRaw from '../../data/dominion/empire.json';
 import foundingRaw from '../../data/dominion/founding.json';
 import armbandsRaw from '../../data/dominion/armbands.json';
+import heroRaw from '../../data/dominion/hero.json';
 import hqRaw from '../../data/dominion/hq.json';
 import buildingsRaw from '../../data/dominion/buildings.json';
 import pyramidRaw from '../../data/dominion/pyramid.json';
@@ -17,11 +19,11 @@ import rivalsRaw from '../../data/dominion/rivals.json';
 import rivalActionsRaw from '../../data/dominion/rivalActions.json';
 import outsideRaw from '../../data/dominion/outside.json';
 import {
-  ActionsFileSchema, ArmbandsFileSchema, BuildingsFileSchema, FoundingFileSchema, EmpireFileSchema, OutsideFileSchema, RivalActionsFileSchema, RivalsFileSchema, CrewFileSchema, HqFileSchema, PyramidFileSchema, FieldFileSchema, GruntTypesFileSchema, PersonalityFileSchema, StartFileSchema, TasksFileSchema,
-  type ActionsFile, type ArmbandLook, type Building, type FoundingFile, type EmpireFile, type OutsideRow, type RivalActionsFile, type RivalsFile, type CrewFile, type HqFile, type PyramidFile, type FieldFile, type GruntType, type PersonalityFile, type StartFile, type Task,
+  ActionsFileSchema, ArmbandsFileSchema, BuildingsFileSchema, FoundingFileSchema, EmpireFileSchema, OutsideFileSchema, RivalActionsFileSchema, RivalsFileSchema, CrewFileSchema, DeskFileSchema, HqFileSchema, PyramidFileSchema, FieldFileSchema, GruntTypesFileSchema, HeroFileSchema, PersonalityFileSchema, StartFileSchema, TasksFileSchema,
+  type ActionsFile, type ArmbandLook, type Building, type FoundingFile, type EmpireFile, type OutsideRow, type RivalActionsFile, type RivalsFile, type CrewFile, type DeskFile, type HqFile, type PyramidFile, type FieldFile, type GruntType, type HeroFile, type PersonalityFile, type StartFile, type Task,
 } from './schema';
 
-export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; empire: EmpireFile; hq: HqFile; buildings: Building[]; pyramid: PyramidFile; rivals: RivalsFile; rivalActions: RivalActionsFile; outside: OutsideRow[]; personality: PersonalityFile ; founding: FoundingFile; armbands: Record<string, ArmbandLook> } = {
+export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; empire: EmpireFile; hq: HqFile; buildings: Building[]; pyramid: PyramidFile; rivals: RivalsFile; rivalActions: RivalActionsFile; outside: OutsideRow[]; personality: PersonalityFile; hero: HeroFile; desk: DeskFile ; founding: FoundingFile; armbands: Record<string, ArmbandLook> } = {
   start: StartFileSchema.parse(startRaw),
   actions: ActionsFileSchema.parse(actionsRaw),
   field: FieldFileSchema.parse(fieldRaw),
@@ -30,6 +32,7 @@ export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: Fie
   gruntTypes: GruntTypesFileSchema.parse(gruntTypesRaw).types,
   empire: EmpireFileSchema.parse(empireRaw),
   pyramid: PyramidFileSchema.parse(pyramidRaw),
+  hero: HeroFileSchema.parse(heroRaw),
   hq: HqFileSchema.parse(hqRaw),
   buildings: BuildingsFileSchema.parse(buildingsRaw).buildings,
   rivals: RivalsFileSchema.parse(rivalsRaw),
@@ -38,4 +41,5 @@ export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: Fie
   personality: PersonalityFileSchema.parse(personalityRaw),
   founding: FoundingFileSchema.parse(foundingRaw),
   armbands: ArmbandsFileSchema.parse(armbandsRaw).looks,
+  desk: DeskFileSchema.parse(deskRaw),
 };
