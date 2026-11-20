@@ -29,6 +29,8 @@ import { SpyController } from './dominion/spyController';
 import { DebateController } from './dominion/debateController';
 import { PoliceController } from './dominion/policeController';
 import { VoicesController } from './dominion/voicesController';
+import { NavController, type Here } from './dominion/navController';
+import { jumpable, OPENS, type PageId } from '../core/dominion/nav';
 import { paperNote } from '../core/dominion/voices';
 import { threatRow } from '../core/dominion/rivalScreens';
 import { cardModel, gridPages, mapModel, newCursor, pageFor, type MapCursor } from '../core/dominion/fieldScreens';
@@ -97,6 +99,8 @@ export class DominionScene extends Phaser.Scene {
   /** D8: the Squads page (mockup 13, U on the Crew File). */
   private sq = new SquadController(this, this);
   /** D25: the Evening voices scene (mockup a10), an overlay on the HQ. */
+  /** D28: the hold-Q command wheel, the Boss's board and the shutter between pages. */
+  private nav = new NavController(this.navHost());
   private voices = new VoicesController({ refresh: () => this.view?.refresh(), onHq: () => this.screen === 'hq' && !this.crew.owns() && !this.police.owns() && !this.block()?.crew?.talks.length });
 
   constructor() {
@@ -124,6 +128,7 @@ export class DominionScene extends Phaser.Scene {
     this.spy.destroy();
     this.spy = new SpyController(this);
     this.voices.close();
+    this.nav = new NavController(this.navHost());
     const { session } = services();
     const run = session.run;
     if (!run) return void this.scene.start('MainMenu');
@@ -219,6 +224,7 @@ export class DominionScene extends Phaser.Scene {
         ...this.desk.acts(),
         desk: () => this.desk.open(),
         ...this.sq.acts(),
+        ...this.nav.acts(),
       },
       overs: {
         typeOver: (i) => { this.setup = { ...this.setup, at: Number(i) }; this.view?.refresh(); },
@@ -230,6 +236,7 @@ export class DominionScene extends Phaser.Scene {
         ...this.spy.overs(),
         ...this.desk.overs(),
         ...this.sq.overs(),
+        ...this.nav.overs(),
       },
     });
     const kb = this.input.keyboard;
@@ -246,6 +253,9 @@ export class DominionScene extends Phaser.Scene {
       if (e.code === 'End' && this.screen !== 'interrupt' && !typeBoxOpen()) return this.leave();
       // D24: the interview room and the release page read their keys first (typing included).
       if (this.inRun() && this.police.raw(e)) return;
+      // D28: hold Q for the command wheel; while the wheel or the board is up it reads every key first.
+      const wheelUp = this.nav.wheel;
+      if (this.nav.raw(e)) return void (this.ate = wheelUp && (e.code === 'Backspace' || e.code === 'KeyX'));
       if (this.screen === 'founding') return;
       if (this.debate.raw(e.code)) return;
       // D12: while the Chair sits, O is its settings, not the Founding.
@@ -307,6 +317,8 @@ export class DominionScene extends Phaser.Scene {
       else if (e.code === 'KeyE') this.step({ t: 'endDay' });
     };
     kb?.on('keydown', raw);
+    const up = (e: KeyboardEvent): void => this.nav.up(e);
+    kb?.on('keyup', up);
     // After `raw`, so a letter the HQ menu took (A, S) is not also read as a move.
     onInputAction(this, (a) => this.key(a), { onceEach: true });
     // L is the Ledger on the HQ, the map and the Crew File (D6) and Money on the HQ menu (D5, mockup 6), so it doesn't
@@ -317,6 +329,7 @@ export class DominionScene extends Phaser.Scene {
     window.addEventListener('keydown', note, true);
     this.events.once('shutdown', () => {
       kb?.off('keydown', raw);
+      kb?.off('keyup', up);
       setLogKeyTaken(null);
       window.removeEventListener('keydown', this.typeKey, true);
       if (kb) kb.enabled = true;
@@ -343,6 +356,11 @@ export class DominionScene extends Phaser.Scene {
   }
 
   private render(): string {
+    if (this.nav.boardOn() && this.navHere()) return this.nav.wrap(this.nav.boardRender(), 'board');
+    return this.nav.wrap(this.renderPage(), this.navHere() as Here);
+  }
+
+  private renderPage(): string {
     const b = this.block();
     if (b && this.inRun() && this.police.owns()) return this.police.render();
     if (this.voices.on && this.screen === 'hq') return this.voices.render();
@@ -565,6 +583,7 @@ export class DominionScene extends Phaser.Scene {
   private key(a: InputAction): void {
     if (this.ate) return void (this.ate = false);
     if (this.leaving) return;
+    if (this.nav.key(a)) return;
     if (this.spy.key(a)) return void this.view?.refresh();
     if (this.debate.key(a)) return void this.view?.refresh();
     if (this.inRun() && this.police.key(a)) return void this.view?.refresh();
@@ -692,6 +711,98 @@ export class DominionScene extends Phaser.Scene {
     }
     const by: Record<string, DominionAction> = { evening: { t: 'toNight' }, night: { t: b.nightActions < 1 ? 'skipNight' : 'rest' }, morning: { t: 'toDay' }, day: { t: 'endDay' } };
     this.step(by[b.phase]!);
+  }
+
+  // ---------- D28: getting around (the wheel, the board, the shutter) ----------
+
+  private navHost() {
+    const scene = (): DominionScene => this; // the scene's clock is set up after the fields
+    return {
+      get time() { return scene().time; },
+      refresh: () => this.view?.refresh(),
+      navBlock: () => this.block() ?? null,
+      navHere: () => this.navHere(),
+      navFree: () => this.navFree(),
+      navJump: (p: PageId) => this.navJump(p),
+      navMenu: () => DominionScene.bossMenu?.(this) ?? null,
+      setNotice: (n: string | null) => { this.notice = n; },
+    };
+  }
+
+  /** D27 sets this to open its Boss Menu (the wheel's Esc place and the board's gold photo); null until then. */
+  static bossMenu: ((scene: DominionScene) => (() => void) | null) | null = null;
+
+  /** The page on screen, as the board and the wheel name it (null before the run opens). */
+  private navHere(): PageId | null {
+    const b = this.block();
+    if (!b?.opened || !this.inRun()) return null;
+    if (this.police.owns()) return 'police';
+    switch (this.screen) {
+      case 'hq':
+        if (this.voices.on) return 'voices';
+        if (this.chair.owns()) return 'chair';
+        return this.crew.owns() ? 'morning' : 'hq';
+      case 'crew': return this.crew.personaOn() ? 'persona' : 'crew';
+      case 'founded': return 'founding';
+      case 'title': case 'setup': case 'opening': return null;
+      default: return this.screen;
+    }
+  }
+
+  /** The wheel and the board stay shut where the game holds you: the Hero stepping in, questioning, a Debate, a
+   *  Confront, the Founding form, and while typing (the desk's Type box). */
+  private navFree(): boolean {
+    const p = this.navHere();
+    if (!p || this.leaving || typeBoxOpen()) return false;
+    if (this.block()?.debate?.live) return false;
+    return !['interrupt', 'police', 'debate', 'spy', 'founding'].includes(p);
+  }
+
+  /** D28: go to a page the way its own key would, from wherever you are. */
+  private navJump(p: PageId): void {
+    const b = this.block();
+    if (!b?.opened || !jumpable(p)) return;
+    const to = OPENS[p] ?? p;
+    if (to === 'title') return this.leave();
+    if (to === 'settings' || to === 'rotom') return this.toSettings(to === 'rotom');
+    // Leave the page you are on the way its own keys would (overlays and sub-pages closed), from the HQ.
+    if (this.voices.on) this.voices.close();
+    if (this.screen === 'crew') this.crew.tab(0);
+    else if (this.res.owns()) this.res.tab(0);
+    else if (this.sq.owns()) this.sq.tab(0);
+    this.screen = 'hq';
+    this.notice = null;
+    this.garage = false;
+    switch (to) {
+      case 'map': return this.tab(1);
+      case 'crew': return this.tab(2);
+      case 'reserve': return this.tab(3);
+      case 'ledger': return this.openLedger();
+      case 'persona': this.tab(2); this.crew.raw('KeyC'); break;
+      case 'pyramid': this.tab(2); this.res.raw('KeyP'); break;
+      case 'squads': this.tab(2); this.sq.raw('KeyU'); break;
+      case 'base': this.hq.open(); break;
+      case 'rival':
+        if (b.crew?.talks.length) this.notice = 'Answer the crew first.';
+        else this.rival.open();
+        break;
+      case 'hero': return this.openHero();
+      case 'desk': return this.desk.open();
+      case 'voices': if (!this.voices.raw('KeyV')) this.notice = 'The voices come in the evening, at the HQ.'; break;
+      case 'founding': return this.openFounding();
+    }
+    this.view?.refresh();
+  }
+
+  /** D28: the wheel's Rotom place and the board's Settings photo open the game's Settings; Back returns here. */
+  private toSettings(rotom: boolean): void {
+    resume = this.screen === 'card' ? 'map' : this.screen;
+    this.scene.start('Settings', { from: 'Dominion', ...(rotom ? { page: 'claude' } : {}) });
+  }
+
+  /** D28: the Boss's board (D27's Settings > Controls can open it too). */
+  openBoard(): void {
+    this.nav.openBoard();
   }
 
   /** Exposed for the crew controller. */
