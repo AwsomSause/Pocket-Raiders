@@ -457,9 +457,12 @@
     "Imperial Tailor"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "dread": 2
+   },
+   "waits": null,
+   "note": "New looks wait for team colours (D7)."
   },
   {
    "n": "15",
@@ -1940,9 +1943,13 @@
     "Hall of Conquest"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "dread": 1,
+    "recruit": 5
+   },
+   "waits": null,
+   "note": "Visitors surrendering at the door comes later."
   },
   {
    "n": "61",
@@ -2526,9 +2533,11 @@
     "Book of Gold"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "honest": 1
+   },
+   "waits": null
   },
   {
    "n": "79",
@@ -4022,9 +4031,12 @@
     "Voice of the Empire"
    ],
    "minTier": 2,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "dread": 2
+   },
+   "waits": null,
+   "note": "Spread the Word is D10; broadcasting to the next region waits for many regions (D15)."
   },
   {
    "n": "125",
@@ -4086,9 +4098,13 @@
     "Empire Press"
    ],
    "minTier": 2,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "regard": 1,
+    "dread": 1
+   },
+   "waits": null,
+   "note": "Choosing the Morning Report headline comes later; the press work on the town now."
   },
   {
    "n": "127",
@@ -4151,9 +4167,11 @@
     "Sky Emblem"
    ],
    "minTier": 2,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dread": 3
+   },
+   "waits": null
   },
   {
    "n": "129",
@@ -4182,9 +4200,12 @@
     "Palace"
    ],
    "minTier": 2,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "regard": 1,
+    "dread": 1
+   },
+   "waits": null
   },
   {
    "n": "130",
@@ -4213,9 +4234,13 @@
     "Court Academy"
    ],
    "minTier": 2,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "regard": 1,
+    "recruit": 5
+   },
+   "waits": null,
+   "note": "The Boss has no Charm stat of their own yet: the school helps your pitches and Regard."
   },
   {
    "n": "131",
@@ -4375,9 +4400,11 @@
     "Cultural Palace"
    ],
    "minTier": 2,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "regard": 2
+   },
+   "waits": null
   },
   {
    "n": "136",
@@ -6191,9 +6218,12 @@
     "Great Museum"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "dread": 3
+   },
+   "waits": null,
+   "note": "The fossil stat aura comes later."
   },
   {
    "n": "P41",
@@ -6255,9 +6285,13 @@
     "Wonder Zoo"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "dread": 2,
+    "income": 100
+   },
+   "waits": null,
+   "note": "Pokémon on display never rebelling waits for rebellions (later)."
   },
   {
    "n": "P43",
@@ -6645,9 +6679,11 @@
     "Imperial Wardrobe"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dread": 2
+   },
+   "waits": null
   },
   {
    "n": "G5",
@@ -7247,9 +7283,11 @@
     "Standard"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dread": 2
+   },
+   "waits": null
   },
   {
    "n": "G23",
@@ -8087,9 +8125,12 @@
     "Imperial Hall"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "morale": 2
+   },
+   "waits": null,
+   "note": "Crew never routing waits for squads (D8)."
   },
   {
    "n": "G48",
@@ -8427,9 +8468,13 @@
     "Empire"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "intel": 1,
+    "regard": 1
+   },
+   "waits": null,
+   "note": "Controlling the Morning Report comes later."
   },
   {
    "n": "G58",
@@ -8594,13 +8639,12 @@
     "Grand Hall"
    ],
    "minTier": 0,
-   "status": "limited",
+   "status": "supported",
    "fx": {
     "recruit": 10,
     "hireOff": 25
    },
-   "waits": null,
-   "note": "The weekly walk-in is D6."
+   "waits": null
   },
   {
    "listName": "Luxury Suite",

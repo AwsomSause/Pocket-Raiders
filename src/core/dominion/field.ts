@@ -17,7 +17,7 @@ import { addWorldStep, fill } from './worldTurn';
 import { addLoyalty, addMorale, addXp, monName } from './crew';
 import { hasBand } from './pyramid';
 import { evolveOne } from './reserve';
-import { buildingDef, hasRoom, launderAction, roomFor, spend } from './hqFx';
+import { buildingDef, hasRoom, hqFx, launderAction, roomFor, spend } from './hqFx';
 
 const F = () => DOMINION_DATA.field;
 const L = () => DOMINION_DATA.field.lines;
@@ -346,7 +346,8 @@ export function card(b: DominionBlock, run: Pick<RunState, 'party'>, actionId: s
     if (M.odds[level - 1]) parts.push([`${M.names[level - 1]} (Lv ${level})`, M.odds[level - 1]!]);
   }
   const chance = roll ? clamp(base + parts.reduce((a, [, n]) => a + n, 0), O.min, O.max) : 100;
-  const exact = !roll || (target ? (f.scouted[target.id] ?? 0) >= b.day : true) || level >= M.intelFrom;
+  // D6b: the Ledger Office's Honest Card shows the exact odds.
+  const exact = !roll || (target ? (f.scouted[target.id] ?? 0) >= b.day : true) || level >= M.intelFrom || hqFx(b).honest > 0;
   const range: [number, number] = exact ? [chance, chance] : [clamp(chance - O.rangeHalf, O.min, O.max), clamp(chance + O.rangeHalf, O.min, O.max)];
 
   // what's at stake

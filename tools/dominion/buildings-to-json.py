@@ -70,6 +70,13 @@ FX = {
     'armory': dict(raidDef=1), 'mech-hangar': dict(raidDef=1), 'guard-post': dict(raidDef=1), 'gate-house': dict(raidDef=1),
     'perimeter-wall': dict(raidDef=1), 'alarm-network': dict(raidDef=1), 'decoy-room': dict(raidDef=1), 'pitfall-corridor': dict(raidDef=1),
     'reinforced-doors': dict(raidDef=1), 'guard-duty-hall': dict(raidDef=1), 'honor-guard-hall': dict(raidDef=1),
+    # D6b (hq.ts weekly, town.ts): regard/dread each week in the building's district (the HQ's for a room); honest: the
+    # Card shows exact odds (Ledger Office).
+    'barber-and-uniform-shop': dict(dread=2), 'trophy-hall': dict(dread=1, recruit=5), 'ledger-office': dict(honest=1),
+    'propaganda-studio': dict(dread=2), 'press-office': dict(regard=1, dread=1), 'emblem-gallery': dict(dread=3),
+    'banner-hall': dict(regard=1, dread=1), 'charm-school': dict(regard=1, recruit=5), 'culture-wing': dict(regard=2),
+    'fossil-gallery': dict(dread=3), 'zoo-of-stolen': dict(dread=2, income=100), 'uniform-depot': dict(dread=2),
+    'dress-code-wall': dict(dread=2), 'standard-bearers-hall': dict(morale=2), 'newsstand': dict(intel=1, regard=1),
     'watchtower': dict(warn=1), 'fire-suppression': dict(fireCut=50), 'ballroom': dict(truceOff=10, debate=5), 'embassy-wing': dict(truceOff=10),
     # D4b (school.ts, pyramid.ts): seats are extra seats in a rank (+1 at T1, +1 more every 3 tiers); promoTrait a trait
     # forms on promotion; spar bouts a week; sneak Stealth tenths a week; rankLv member levels off ranks up to Sergeant;
@@ -131,8 +138,14 @@ NOTE = {
     'holding-pens': None, 'outpost': 'Its own 2 room slots come with many regions (D15).',
     'safehouse': None, 'luxury-suite': 'Debates start at +5 Conviction (the +10% meeting bonus); Executives\' Morale waits for ranks (D4).',
     'debate-hall': 'The first argument of each Debate moves the bar at least +5; the rhetoric die is the bar itself.', 'briefing-theater': 'Every set line\'s five marks show before you pick it; crew talks are D3\'s.',
-    'recruitment-center': 'The weekly walk-in is D6.', 'executive-office': 'Admins\' Hold +20% is D15.',
+    'recruitment-center': None, 'executive-office': 'Admins\' Hold +20% is D15.',
     'night-market-stall': 'The list gives no T1 number; ₽80 a day matches the Grunt Café.', 'berry-garden': 'One berry kind until the Cold Cellar (later).', 'card-den': 'The cheat chance comes with the Ledger (D6).', 'infirmary': 'Free healing: Rest already heals the team.',
+    'barber-and-uniform-shop': 'New looks wait for team colours (D7).', 'trophy-hall': 'Visitors surrendering at the door comes later.',
+    'propaganda-studio': 'Spread the Word is D10; broadcasting to the next region waits for many regions (D15).',
+    'press-office': 'Choosing the Morning Report headline comes later; the press work on the town now.',
+    'charm-school': 'The Boss has no Charm stat of their own yet: the school helps your pitches and Regard.',
+    'zoo-of-stolen': 'Pokémon on display never rebelling waits for rebellions (later).', 'newsstand': 'Controlling the Morning Report comes later.',
+    'standard-bearers-hall': 'Crew never routing waits for squads (D8).', 'fossil-gallery': 'The fossil stat aura comes later.',
 }
 # Slices for the rest, by the first keyword found in the row (effect, per tier, capstone).
 WAITS = [

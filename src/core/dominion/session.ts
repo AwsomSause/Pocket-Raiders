@@ -30,6 +30,7 @@ import { levelCap } from '../regions';
 import { hatchEggs, settleDojo, settleLesson } from './school';
 import './voices';
 import { answerCard, breakTruce, maybeStreet, noteTop, ransom, startTruce, withRivals, type RivalOut } from './rivals';
+import { answerMeet as answerTownMeet, maybeMeet } from './town';
 import { accuse, askSpy, dropTalk, startConfront, type SpyOut } from './spies';
 import { argue, chooseDeal, closeDebate, walkOut, type DebateOut } from './debate';
 import { answerQ, noteAct, releasedSeen, releaseQ, returnHeld } from './police';
@@ -171,6 +172,12 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
       const met = maybeStreet(blk, action.district, run.seed, blk.phase === 'night');
       blk = met.block;
       if (met.line) notice = [notice, met.line].filter(Boolean).join(' ');
+      // D6b: or someone from the town (outside.json sections A and J), answered on the Region Map.
+      else {
+        const town = maybeMeet(blk, action.district, run.seed, blk.phase === 'night');
+        blk = town.block;
+        if (town.line) notice = [notice, town.line].filter(Boolean).join(' ');
+      }
     }
     // D10: Pokémon an action took (Kidnap, a lab's rare one, the Swap Meet) wait in the crew's pending list: place them now.
     const next = settleCrew(content, withBlock(work, DominionBlockSchema.parse(blk)));
@@ -234,6 +241,7 @@ function rivalInRun(run: RunState, action: DominionAction): (StepOut & { run: Ru
     case 'truce': out = startTruce(b, action.team); break;
     case 'breakTruce': out = breakTruce(b, action.team); break;
     case 'card': out = answerCard(b, action.index, action.choice, run.seed); break;
+    case 'townMeet': out = answerTownMeet(b, action.choice, run.seed); break;
     case 'ransom': out = ransom(b, action.member); break;
     // D22: the Confront talk (spies.ts). An accused spy who fights leaves `field.fight` waiting.
     case 'spyStart': out = startConfront(b, action.member) as SpyOut; break;

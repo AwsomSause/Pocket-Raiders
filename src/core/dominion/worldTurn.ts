@@ -44,23 +44,35 @@ const STEPS: Partial<Record<WorldStepId, WorldStep[]>> = {
       // D5: bills take dirty money first (the clean part can't be more than what's left).
       const clamp = (): void => void (b.hq && (b.hq.clean = Math.max(0, Math.min(b.hq.clean, b.funds))));
       clamp();
-      for (const m of b.members) {
-        const pay = wageOf(b, m.wage);
-        if (b.funds >= pay) {
-          b.funds -= pay;
-          book(b, 'wages', -pay);
+      // D6b: a member on Pay the Wages runs payday (town.ts): cheapest first, a cut, Loyalty on payday, no late penalty.
+      const pay = PAYROLL?.(b) ?? null;
+      const order = pay?.lowFirst ? [...b.members].sort((x, y) => x.wage - y.wage) : b.members;
+      for (const m of order) {
+        const wage = wageOf(b, pay ? Math.round((m.wage * (100 - pay.cut)) / 100) : m.wage);
+        if (b.funds >= wage) {
+          b.funds -= wage;
+          book(b, 'wages', -wage);
           clamp();
           m.unpaid = 0;
+          if (pay?.loyalty) m.loyalty = Math.min(100, m.loyalty + pay.loyalty);
         } else {
           m.unpaid += 1;
-          m.loyalty = Math.max(0, m.loyalty - 15);
+          if (!pay?.noPenalty) m.loyalty = Math.max(0, m.loyalty - 15);
           lines.push(fill(r.broke, { name: m.name }));
         }
       }
+      if (pay) lines.push(...pay.after(b));
       return lines;
     },
   ],
 };
+
+/** D6b: who runs payday (town.ts registers it; null when nobody is on Pay the Wages). */
+export interface Payroll { lowFirst: boolean; cut: number; loyalty: number; noPenalty: boolean; after: (b: DominionBlock) => string[] }
+let PAYROLL: ((b: DominionBlock) => Payroll | null) | null = null;
+export function setPayroll(f: (b: DominionBlock) => Payroll | null): void {
+  PAYROLL = f;
+}
 
 /** Adds a step (a later slice's module calls this once, at import). */
 export function addWorldStep(id: WorldStepId, step: WorldStep): void {

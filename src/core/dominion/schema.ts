@@ -89,8 +89,8 @@ const DistrictSchema = z.object({
 export type District = z.infer<typeof DistrictSchema>;
 export const BATTLE_FOES = ['target', 'police', 'wild', 'ghost', 'member', 'rival', 'hero'] as const;
 export const EFFECTS = ['scout', 'count', 'scoutDistrict', 'paper', 'catch', 'laylow', 'disguise', 'fine', 'exp', 'spar', 'train', 'plan', 'pamper', 'hide', 'rescue', 'evolve', 'ceremony', 'mentor', 'launder',
-  // D6 (field.ts)
-  'skim',
+  // D6 (field.ts) and D6b (town.ts: Hold a Rally, Chant Night)
+  'skim', 'rally', 'chant',
   // D9 (rivals.ts addActEffect)
   'rivalHit', 'rivalSpy', 'counterSpy', 'truceTalk', 'war', 'poach', 'court',
   // D4b (school.ts): Egg Run, Breed, Move Tutor
@@ -201,7 +201,7 @@ export type DistrictState = z.infer<typeof DistrictStateSchema>;
 /** A battle an action (or the police) is waiting on. The fight bridge (fight.ts) starts it; fightEnd settles it. */
 export const FieldFightSchema = z.object({
   /** D11: 'hero' a job the Hero stepped into (m11), 'challenge' an encounter's battle, 'heroRaid' the Hero at the HQ, 'stand' the final stand, 'legend' a Heroic Legendary. D10: 'growth' a fight of a chain (Raid, a Gym). D12: 'court' a Chair visitor at the door (`target` the card id, `action` the answer). */
-  why: z.enum(['fail', 'always', 'police', 'looker', 'raid', 'rival', 'hero', 'challenge', 'heroRaid', 'stand', 'legend', 'growth', 'court', 'spy']),
+  why: z.enum(['fail', 'always', 'police', 'looker', 'raid', 'rival', 'hero', 'challenge', 'heroRaid', 'stand', 'legend', 'growth', 'court', 'spy', 'town']),
   foe: z.enum(['target', 'police', 'wild', 'ghost', 'member', 'looker', 'raid', 'rival', 'hero', 'sidekick', 'legend', 'growth', 'court']),
   begun: z.boolean(),
   action: S.nullable(),
@@ -371,6 +371,8 @@ export type DominionAction =
   | { t: 'patron'; patron: string }
   // D6: where a member's district task (Patrol, Hold, Chant...) is done
   | { t: 'where'; member: string; district: string }
+  // D6b: the answer to a street meeting (town.ts)
+  | { t: 'townMeet'; choice: number }
   // D12, the Chair: answer the visitor (0 or 1), hand the card to a member, read on, close the doors, the settings
   | { t: 'court'; choice: number }
   | { t: 'handOff'; member: string }
@@ -443,8 +445,8 @@ export const TaskEffectSchema = z.object({
     'trade', 'tutor',
     // D9 (rivals.ts)
     'rivalSpy', 'rivalIntel', 'counterSpy', 'poachRival', 'rivalHit', 'rescue', 'rumours', 'truceTalk',
-    // D6 (empire.ts)
-    'district',
+    // D6 (empire.ts), D6b (town.ts: Pay the Wages)
+    'district', 'wages',
     // D10 (growth.ts)
     'haul', 'front', 'fence', 'flyers', 'revive', 'stock',
     // D11 (hero.ts)
@@ -812,6 +814,10 @@ export const EmpireStateSchema = z.object({
   collect: z.record(S, N0),
   /** Districts guarded by Hold the Line or Patrol today: Heat doesn't wear their Control down. */
   guarded: z.array(S),
+  /** D6b: a street meeting waiting for an answer (outside.json sections A and J, town.json), and the rows met this run. */
+  meet: z.object({ row: S, district: S, day: I.min(1) }).strict().nullable().optional(),
+  met: z.array(S).optional(),
+  metDay: N0.optional(),
 }).strict();
 export type EmpireState = z.infer<typeof EmpireStateSchema>;
 
@@ -1091,6 +1097,10 @@ export const BuildingFxSchema = z.object({
   // your spies being caught), raidDef (Defense in raids only), warn (days' warning of the Boss's raid), fireCut (% off
   // building damage), truceOff (% off tribute).
   intel: N0.optional(), spyCatch: Pct.optional(), cipher: Pct.optional(), raidDef: N0.optional(), warn: N0.optional(), fireCut: Pct.optional(), truceOff: Pct.optional(),
+  // D6b (hq.ts weekly): Regard and Dread each week in the building's district (the HQ's for a room).
+  regard: N0.optional(), dread: N0.optional(),
+  // D6b (field.ts): the Card shows the exact odds (the Ledger Office's Honest Card).
+  honest: N0.optional(),
   // D4b (school.ts, pyramid.ts): seats (extra seats by rank id), promoTrait (a trait forms on promotion), spar (bouts a
   // week), sneak (Stealth tenths a week), rankLv (member levels off ranks up to Sergeant), examStat (tenths of the best
   // stat on promotion), cure (bad traits cured a week), retirees (retiree places), trustCure (anxious Pokémon helped a
@@ -1432,6 +1442,33 @@ export const RivalsStateSchema = z.object({
   top: I.min(1),
 }).strict();
 export type RivalsState = z.infer<typeof RivalsStateSchema>;
+
+// ---------- D6b: street meetings (town.json; outside.json sections A and J) ----------
+
+const TownFxSchema = z.object({
+  rg: I.optional(), dr: I.optional(), h: I.optional(), ten: I.optional(), hero: I.optional(), money: I.optional(), wanted: I.optional(),
+  control: I.optional(), mor: I.optional(), lead: z.boolean().optional(), scout: z.boolean().optional(), intel: z.boolean().optional(), foil: z.boolean().optional(),
+}).strict();
+export type TownFx = z.infer<typeof TownFxSchema>;
+export const TownChoiceSchema = TownFxSchema.extend({
+  /** A battle first (town.ts starts it): the rest applies on a win, `lose` on a loss. */
+  fight: z.enum(['target', 'police', 'wild']).optional(),
+  fightChance: I.min(1).max(100).optional(),
+  lose: TownFxSchema.optional(),
+  /** A test of your best member's stat: the rest applies on a pass, `fail` on a miss. */
+  check: STAT.optional(),
+  fail: TownFxSchema.optional(),
+}).strict();
+export type TownChoice = z.infer<typeof TownChoiceSchema>;
+export const TownFileSchema = z.object({
+  _source: S,
+  /** No meetings below this Notoriety step (1 = Street Gang): the town notices you once you're known. */
+  meet: z.object({ minStep: N0, chance: I.min(0).max(100), night: I.min(0).max(100), maxPerDay: I.min(1), checkBase: N0, checkPer: N0, fightLose: TownFxSchema }).strict(),
+  lines: z.record(S, S),
+  rows: z.record(z.string().regex(/^O\d{3}$/), z.array(TownChoiceSchema).min(1)),
+  needs: z.record(z.string().regex(/^O\d{3}$/), z.object({ wanted: N0.optional(), rival: z.boolean().optional() }).strict()),
+}).strict();
+export type TownFile = z.infer<typeof TownFileSchema>;
 
 // ---------- D22: spies on the crew (spies.json, block `spies`) ----------
 

@@ -327,6 +327,7 @@
     "storageFull": "The stores are full ({cap}): {n} Pokémon had to be let go.",
     "safehouse": "The safehouse in {district} is quiet: Heat there −{n}.",
     "control": "Your buildings hold their ground: Control +{n} in {where}.",
+    "face": "Your buildings work on the town: Regard +{rg}, Dread +{dr} in {where}.",
     "morale": "The crew likes the new rooms: Morale +{morale}, Loyalty +{loyalty}.",
     "items": "Made in the HQ: {list}.",
     "repair": "The buildings are patched up: Condition +{n}."

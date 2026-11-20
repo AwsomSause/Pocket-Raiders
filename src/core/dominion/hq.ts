@@ -427,6 +427,22 @@ function weekly(b: DominionBlock & { hq: HqState }, fx: ReturnType<typeof hqFx>)
     if (st) st.control = Math.min(100, st.control + n);
     out.push(fill(Ln().control!, { n, where: districtDef(d)?.name ?? d }));
   }
+  // D6b: Regard and Dread from buildings (uniforms, banners, galleries...), the same way: own district, or the HQ's.
+  const face: Record<string, { rg: number; dr: number }> = {};
+  for (const r of h.rooms) {
+    const fxr = buildingDef(r.id)?.fx;
+    if (!fxr || !working(r) || (!fxr.regard && !fxr.dread)) continue;
+    const at = (face[r.at ?? F().hq] ??= { rg: 0, dr: 0 });
+    if (fxr.regard) at.rg += scaled('regard', fxr.regard, r.tier);
+    if (fxr.dread) at.dr += scaled('dread', fxr.dread, r.tier);
+  }
+  for (const [d, v] of Object.entries(face)) {
+    const st = b.field.districts[d];
+    if (!st) continue;
+    st.regard += v.rg;
+    st.dread += v.dr;
+    out.push(fill(Ln().face!, { rg: v.rg, dr: v.dr, where: districtDef(d)?.name ?? d }));
+  }
   if (fx.heatWeek) addHeat(b, F().hq, -fx.heatWeek);
   if (fx.repair) {
     for (const r of h.rooms) if (!r.ruined) r.cond = Math.min(100, r.cond + fx.repair);

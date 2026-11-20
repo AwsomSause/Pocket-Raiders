@@ -34,6 +34,7 @@ import { cardModel, gridPages, mapModel, newCursor, pageFor, type MapCursor } fr
 import { cardView, mapView } from '../ui/redux/screens/dominion/fieldViews';
 import { ledgerModel, SPREADS } from '../core/dominion/ledgerScreens';
 import { ledgerView } from '../ui/redux/screens/dominion/ledger';
+import { meetModel } from '../core/dominion/town';
 import { foundedLines, foundingOpen, initialOf, nameIdeas, newDraft, teamColours } from '../core/dominion/founding';
 import { FOUNDING_ROWS, foundedView, foundingView, type FoundingUi } from '../ui/redux/screens/dominion/founding';
 import { heroModel, interruptModel } from '../core/dominion/heroScreens';
@@ -70,6 +71,8 @@ export class DominionScene extends Phaser.Scene {
   /** D6: the Ledger's open spread (0 Money | Empire, 1 Territory | Notoriety, 2 Crew | Stores) and where L goes back to. */
   private spread = 0;
   private ledgerFrom: Screen = 'hq';
+  /** D6b: the picked answer of a street meeting on the map. */
+  private meetAt = 0;
   /** D7: the Founding page's draft and cursor, where Esc goes back to, and the scene's lines shown. */
   private founding: FoundingUi | null = null;
   private foundingFrom: Screen = 'hq';
@@ -176,6 +179,7 @@ export class DominionScene extends Phaser.Scene {
         bring: () => this.bring(),
         opt: (id) => { if (this.cursor) this.cursor = { ...this.cursor, opt: String(id) }; this.view?.refresh(); },
         buy: (id) => this.buy(id),
+        townMeet: (i) => this.answerMeet(Number(i)),
         dismiss: () => { this.notice = null; this.rival.dismiss(); this.debate.dismiss(); this.spy.dismiss(); this.view?.refresh(); },
         ledgerTab: (i) => { this.spread = Number(i); this.view?.refresh(); },
         ledgerPage: (d) => this.turnLedger(Number(d)),
@@ -352,7 +356,7 @@ export class DominionScene extends Phaser.Scene {
         if (b && this.crew.owns()) return this.crew.render(this.notice);
         return b ? hqView(hqModel(b), this.notice, this.at, this.memberLook(), threatRow(b), deskOpen(b) ? deskWaiting(b) : null, paperNote(b)) : '';
       case 'map':
-        return b && this.cursor ? mapView(mapModel(b, services().session.run!, this.cursor), this.notice, this.garage) : '';
+        return b && this.cursor ? mapView(mapModel(b, services().session.run!, this.cursor), this.notice, this.garage, this.meetPanel()) : '';
       case 'card': {
         const c = b && this.cursor ? this.cardOf() : null;
         if (!b || !c) return '';
@@ -584,7 +588,10 @@ export class DominionScene extends Phaser.Scene {
     if (a === 'confirm') return this.confirm();
     if (this.screen === 'title' && (a === 'up' || a === 'down')) this.titleAt = this.titleAt ? 0 : 1;
     else if (this.screen === 'setup') this.setupMove(a);
-    else if (this.screen === 'map') this.mapMove(a);
+    else if (this.screen === 'map' && this.meetPanel() && !this.notice && (a === 'up' || a === 'down')) {
+      const n = this.meetPanel()!.choices.length;
+      this.meetAt = (this.meetAt + (a === 'up' ? -1 : 1) + n) % n;
+    } else if (this.screen === 'map') this.mapMove(a);
     else if (this.screen === 'card' && (a === 'left' || a === 'right')) this.cycleOpt(a === 'left' ? -1 : 1);
     else if (this.screen === 'hq' && (a === 'up' || a === 'down')) {
       const n = hqModel(this.block()!).orders.length;
@@ -629,6 +636,7 @@ export class DominionScene extends Phaser.Scene {
     } else if (this.screen === 'map' && this.cursor) {
       if (this.chainWaiting()) return this.fight('map');
       if (this.notice) this.notice = null;
+      else if (this.meetPanel()) return this.answerMeet(this.meetAt);
       else if (this.cursor.focus === 'map') this.cursor = { ...this.cursor, focus: 'grid' };
       else return this.openCard();
     } else if (this.screen === 'card') {
@@ -881,6 +889,22 @@ export class DominionScene extends Phaser.Scene {
       this.screen = 'interrupt';
       this.intAt = 0;
     }
+    this.view?.refresh();
+  }
+
+  /** D6b: the street meeting waiting on the map, drawn as a panel. */
+  private meetPanel(): import('../ui/redux/screens/dominion/fieldViews').MeetPanel | null {
+    const b = this.block();
+    const m = b ? meetModel(b) : null;
+    if (!m) return null;
+    const L = DOMINION_DATA.town.lines;
+    return { ...m, at: Math.min(this.meetAt, m.choices.length - 1), title: L.panel!, hint: L.pick! };
+  }
+  private answerMeet(i: number): void {
+    const out = services().session.dominionStep({ t: 'townMeet', choice: i });
+    this.notice = out.notice;
+    if (out.ok) this.meetAt = 0;
+    if (out.ok && out.fight) return this.fight('map');
     this.view?.refresh();
   }
 

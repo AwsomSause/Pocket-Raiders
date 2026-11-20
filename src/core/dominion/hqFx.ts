@@ -46,6 +46,8 @@ const ZERO = (): HqFx => ({
   incomePct: 0, items: {}, weeklyItems: {}, launder: null,
   // D9 (rivals.ts)
   intel: 0, spyCatch: 0, cipher: 0, raidDef: 0, warn: 0, fireCut: 0, truceOff: 0,
+  // D6b: regard/dread are per district (hq.ts weekly); honest is the Ledger Office's Honest Card (field.ts).
+  regard: 0, dread: 0, honest: 0,
   // D4b (school.ts, pyramid.ts)
   seats: {}, promoTrait: 0, spar: 0, sneak: 0, rankLv: 0, examStat: 0, cure: 0, retirees: 0, trustCure: 0, gruntSkill: 0,
   taskXp: 0, vets: 0, pairs: 0, reveal: 0, dojo: {}, wageOff: 0, buildOff: 0,
@@ -73,7 +75,7 @@ export function hqFx(b: DominionBlock): HqFx {
     const def = BY_ID.get(r.id);
     if (!def) continue;
     for (const [k, v] of Object.entries(def.fx) as [keyof BuildingFx, unknown][]) {
-      if (k === 'unlock' || k === 'heatOnce' || k === 'control') continue;
+      if (k === 'unlock' || k === 'heatOnce' || k === 'control' || k === 'regard' || k === 'dread') continue;
       if (k === 'seats') {
         for (const [id, n] of Object.entries(v as Record<string, number>)) out.seats[id] = (out.seats[id] ?? 0) + seatsAt(n, r.tier);
       } else if (k === 'items' || k === 'weeklyItems' || k === 'dojo') {
