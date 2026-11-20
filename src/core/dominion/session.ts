@@ -38,6 +38,7 @@ import { argueTyped, voiceTurn } from './debateTyped';
 import { answerQ, noteAct, releasedSeen, releaseQ, returnHeld } from './police';
 import './growth';
 import { settleCourt } from './growthCourt';
+import './growthOutside';
 import { endS, goalS, inRoom, sayS, stopS, type SOut } from './snatch';
 import { takeoverStep } from './takeover';
 
@@ -93,8 +94,9 @@ export function stepInRun(content: Content, run0: RunState, action: DominionActi
   const before = run.expansion?.dominion;
   const out = stepInner(content, run, action);
   if (!out.ok) return out;
+  // What any step left for the run (the Chair's or a street meeting's items and Pokémon; hot goods sold, a heist's crate).
   // D9: the rival tier reads the Boss's best level; a night ambush (rival action 135) hurts the Boss's team.
-  const next = structuredClone(out.run);
+  const next = structuredClone(settleCourt(content, settleChair(content, out.run)));
   let b = next.expansion!.dominion!;
   noteTop(b, next);
   if (b.flags.includes('ambushed')) {
@@ -219,8 +221,6 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
     healParty(content, next);
   }
   next = settleCrew(content, next);
-  next = settleChair(content, next);
-  next = settleCourt(content, next);
   return { ...out, block: next.expansion!.dominion!, run: next };
 }
 

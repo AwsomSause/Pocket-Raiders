@@ -216,7 +216,7 @@ export type DistrictState = z.infer<typeof DistrictStateSchema>;
 export const FieldFightSchema = z.object({
   /** D11: 'hero' a job the Hero stepped into (m11), 'challenge' an encounter's battle, 'heroRaid' the Hero at the HQ, 'stand' the final stand, 'legend' a Heroic Legendary. D10: 'growth' a fight of a chain (Raid, a Gym). D12: 'court' a Chair visitor at the door (`target` the card id, `action` the answer). */
   why: z.enum(['fail', 'always', 'police', 'looker', 'raid', 'rival', 'hero', 'challenge', 'heroRaid', 'stand', 'legend', 'growth', 'court', 'spy', 'town', 'snatch', 'takeover']),
-  foe: z.enum(['target', 'police', 'wild', 'ghost', 'member', 'looker', 'raid', 'rival', 'hero', 'sidekick', 'legend', 'growth', 'court', 'snatch', 'takeover']),
+  foe: z.enum(['target', 'police', 'wild', 'ghost', 'member', 'looker', 'raid', 'rival', 'hero', 'sidekick', 'legend', 'growth', 'court', 'snatch', 'takeover', 'town']),
   begun: z.boolean(),
   action: S.nullable(),
   target: S.nullable(),
@@ -1384,6 +1384,8 @@ export const RIVAL_KINDS = [
   'tension', 'grow', 'research', 'arm', 'hide', 'hurt',
   // D13: an invitation to a Debate (a summit with the Boss, or an Admin who might be talked round)
   'debate',
+  // D10 follow-up: against your Gym plans (growthOutside.ts), and one of your own Pokémon turned on you
+  'gymSmear', 'gymRefuse', 'gymFrame', 'gymAnnex', 'gymWeaken', 'turned',
 ] as const;
 export type RivalKind = (typeof RIVAL_KINDS)[number];
 const LadderKey = z.enum(['S', 'M', 'P', 'D', 'H', 'C', 'R', 'N']);
@@ -1404,7 +1406,9 @@ export type RivalActionsFile = z.infer<typeof RivalActionsFileSchema>;
 export const OutsideRowSchema = z.object({
   id: z.string().regex(/^O\d{3}$/), section: z.string().regex(/^[A-L]$/), what: S, who: S, choices: z.array(S).min(1),
   marks: z.array(z.enum(['minor', 'night', 'day', 'scales', 'chain'])), status: z.enum(['supported', 'limited', 'disabled']), waits: z.string().regex(/^D\d+$/).optional(),
-}).strict().refine((r) => r.status !== 'disabled' || !!r.waits, { message: 'a disabled row names the slice it waits for' });
+  /** A limited row: what it does differently from the list. */
+  note: S.optional(),
+}).strict().refine((r) => r.status !== 'disabled' || !!r.waits, { message: 'a disabled row names the slice it waits for' }).refine((r) => r.status !== 'limited' || !!r.note, { message: 'a limited row says what it leaves out' });
 export type OutsideRow = z.infer<typeof OutsideRowSchema>;
 export const OutsideFileSchema = z.object({ _source: S, sections: z.record(S, S), rows: z.array(OutsideRowSchema).length(300) }).strict();
 
@@ -1529,11 +1533,23 @@ export type RivalsState = z.infer<typeof RivalsStateSchema>;
 const TownFxSchema = z.object({
   rg: I.optional(), dr: I.optional(), h: I.optional(), ten: I.optional(), hero: I.optional(), money: I.optional(), wanted: I.optional(),
   control: I.optional(), mor: I.optional(), lead: z.boolean().optional(), scout: z.boolean().optional(), intel: z.boolean().optional(), foil: z.boolean().optional(),
+  // D10 follow-up (growthOutside.ts): what the rows of sections B-E, H, I and K add.
+  /** A shop or street here starts paying weekly; a smuggling route to here; a specialist joins (growth.json specialists). */
+  racket: z.boolean().optional(), route: z.boolean().optional(), contact: S.optional(),
+  /** The district's Gym: scouted once more; courted as an ally; its Leader shaken. */
+  gymScout: z.boolean().optional(), ally: z.boolean().optional(), shaken: z.boolean().optional(),
+  /** Forged papers; Edge XP in a stat (meet.edge); an item to the Bag; a Pokémon to the Stores ('local' = one from here). */
+  papers: I.optional(), edge: STAT.optional(), item: S.optional(), mon: S.optional(),
+  /** Hot goods sold at this %; a safehouse here; a joint heist (court); dirt on someone here; police look away N days; a tip-off N days. */
+  sell: I.min(1).max(100).optional(), safehouse: z.boolean().optional(), heist: z.boolean().optional(), dirt: z.boolean().optional(),
+  cover: I.min(1).optional(), tip: I.min(1).optional(),
+  /** A jailed member walks out. */
+  free: z.boolean().optional(),
 }).strict();
 export type TownFx = z.infer<typeof TownFxSchema>;
 export const TownChoiceSchema = TownFxSchema.extend({
   /** A battle first (town.ts starts it): the rest applies on a win, `lose` on a loss. */
-  fight: z.enum(['target', 'police', 'wild']).optional(),
+  fight: S.optional(),
   fightChance: I.min(1).max(100).optional(),
   lose: TownFxSchema.optional(),
   /** A test of your best member's stat: the rest applies on a pass, `fail` on a miss. */
@@ -1544,11 +1560,16 @@ export type TownChoice = z.infer<typeof TownChoiceSchema>;
 export const TownFileSchema = z.object({
   _source: S,
   /** No meetings below this Notoriety step (1 = Street Gang): the town notices you once you're known. */
-  meet: z.object({ minStep: N0, chance: I.min(0).max(100), night: I.min(0).max(100), maxPerDay: I.min(1), checkBase: N0, checkPer: N0, fightLose: TownFxSchema }).strict(),
+  meet: z.object({ minStep: N0, chance: I.min(0).max(100), night: I.min(0).max(100), maxPerDay: I.min(1), checkBase: N0, checkPer: N0, fightLose: TownFxSchema, edge: N0, monBelow: N0 }).strict(),
   lines: z.record(S, S),
   rows: z.record(z.string().regex(/^O\d{3}$/), z.array(TownChoiceSchema).min(1)),
-  needs: z.record(z.string().regex(/^O\d{3}$/), z.object({ wanted: N0.optional(), rival: z.boolean().optional() }).strict()),
-}).strict();
+  needs: z.record(z.string().regex(/^O\d{3}$/), z.object({ wanted: N0.optional(), rival: z.boolean().optional(), gym: z.boolean().optional(), jailed: z.boolean().optional() }).strict()),
+  /** D10 follow-up: who a street fight is against when it isn't the district's own (a choice's `fight` names one, or 'leader'). */
+  foes: z.record(S, z.object({ name: S, cls: S, species: z.array(S).min(1), offset: I, wild: z.boolean().optional() }).strict()),
+}).strict().superRefine((t, ctx) => {
+  const ok = new Set(['target', 'police', 'wild', 'leader', ...Object.keys(t.foes)]);
+  for (const [id, cs] of Object.entries(t.rows)) for (const c of cs) if (c.fight && !ok.has(c.fight)) ctx.addIssue({ code: 'custom', message: `${id}: unknown fight ${c.fight}` });
+});
 export type TownFile = z.infer<typeof TownFileSchema>;
 
 // ---------- D22: spies on the crew (spies.json, block `spies`) ----------
@@ -1842,6 +1863,8 @@ export const GrowthFileSchema = z.object({
     quiz: z.object({ prize: S, prizeName: S, base: I.min(0).max(100), perWits: N0, cap: I.min(1).max(100), right: I.min(1), riddles: z.array(z.tuple([S, S])).min(3) }).strict(),
   }).strict(),
   revive: z.object({ species: z.array(S).min(1), level: Range }).strict(),
+  /** D10 follow-up: the rival teams' Gym moves (growthOutside.ts). */
+  rivalGym: z.object({ coldPer: N0, annexPer: N0, weakDays: I.min(1) }).strict(),
   lines: z.record(S, S),
 }).strict();
 export type GrowthFile = z.infer<typeof GrowthFileSchema>;
@@ -1909,6 +1932,8 @@ export const GrowthStateSchema = z.object({
   burrowed: N0.optional(),
   /** D10 follow-up: what the Chair's visitors set going (days are the last day a thing holds). */
   court: GrowthCourtSchema.optional(),
+  /** D10 follow-up: what rival teams did to your Gym plans, by Gym id (stance points, refused until day, annex points, weakened [until day, %]). */
+  foes: z.object({ cold: z.record(S, N0), refuse: z.record(S, I.min(1)), annex: z.record(S, N0), weak: z.record(S, z.tuple([I.min(1), N0])) }).strict().optional(),
 }).strict();
 export type GrowthState = z.infer<typeof GrowthStateSchema>;
 

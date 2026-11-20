@@ -197,7 +197,8 @@ function canDo(b: DominionBlock, team: string, a: RivalAction): boolean {
     case 'spy': return t.spies < RV().spy.max;
     // D13: an invitation to a Debate, while talks are still open with them (debate.ts).
     case 'debate': return !r.cards.some((c) => c.team === team && c.kind === 'debate') && !b.debate?.tries[team]?.closed && (a.id !== 'break-a-coalition' || t.admins.length > 0);
-    default: return true;
+    case 'turned': return r.cards.filter((c) => c.team === team).length < 3;
+    default: return a.kind && EXTRA[a.kind] ? EXTRA[a.kind]!.can(b) : true;
   }
 }
 
@@ -375,7 +376,27 @@ function free(b: DominionBlock, memberId: string): void {
   }
 }
 
+/** D10 follow-up: kinds another file carries out (growthOutside.ts: the Gym ones). `can` says whether there is anything to hit. */
+export type RivalHit = { b: DominionBlock; team: RivalTeam; tier: number; r: Rng; num: (key: Parameters<typeof ladder>[0]) => number; v: Record<string, string | number> };
+type Extra = { run: (c: RivalHit) => string | null; can: (b: DominionBlock) => boolean };
+const EXTRA: Partial<Record<RivalKind, Extra>> = {};
+export function setRivalKind(kind: RivalKind, run: Extra['run'], can: Extra['can'] = () => true): void {
+  EXTRA[kind] = { run, can };
+}
+const extra = (c: Ctx): void => {
+  const text = EXTRA[c.a.kind!]?.run({ b: c.b, team: c.team, tier: c.tier, r: c.r, num: (k) => num(c, k), v: c.v });
+  if (text) say(c.b, c.team.id, text, c.out);
+};
+/** The action that sets one of your own Pokémon on you (a fight card; rivalSide builds the side from your team). */
+export const TURNED = 'turn-your-pok-mon-against-you';
+
 const KINDS: Record<RivalKind, (c: Ctx) => void> = {
+  gymSmear: extra, gymRefuse: extra, gymFrame: extra, gymAnnex: extra, gymWeaken: extra,
+  turned: (c) => {
+    const who = adminName(c.team, ts(c.b, c.team.id), c.r);
+    card(c, 'fight', who, 0);
+    line(c, 'turned', { who });
+  },
   spy: (c) => {
     const t = ts(c.b, c.team.id);
     const n = Math.min(RV().spy.max - t.spies, num(c, 'N'));
@@ -663,6 +684,12 @@ export function rivalSide(b: DominionBlock, run: Pick<RunState, 'party'>, fight:
   const top = Math.max(1, ...run.party.map((m) => m.level));
   const capped = (n: number): number => clamp(n, DOMINION_DATA.field.levels.min, b.levelCap + DOMINION_DATA.field.levels.overCap);
   const power = Math.max(0, t?.power ?? 0);
+  // D10 follow-up: their trainer device turns your strongest Pokémon on you, once.
+  if (fight.action === TURNED) {
+    const best = [...run.party].sort((x, y) => y.level - x.level)[0];
+    const a = team.admins.find((x) => fight.target === `admin:${x.id}`) ?? team.admins[0];
+    if (best) return { name: `${a?.name ?? team.grunt.name} (with your own ${best.speciesId.replace(/-/g, ' ').replace(/\b\w/g, (ch) => ch.toUpperCase())})`, classId: 'veteran', leaderId: null, species: [best.speciesId], level: best.level };
+  }
   if (fight.target === 'boss' || fight.action === 'boss-duel-boss') {
     const B = RV().bossRaid;
     const size = Math.max(B.min, Math.min(B.size, B.size - Math.floor(defense(b) / B.perDefense) - Math.min(2, guardsTonight(b).length)));

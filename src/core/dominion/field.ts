@@ -250,9 +250,23 @@ export function addCardGate(g: (b: DominionBlock, run: Pick<RunState, 'party'>, 
 const teamLevel = (run: Pick<RunState, 'party'>): number => (run.party.length ? Math.round(run.party.reduce((a, m) => a + m.level, 0) / run.party.length) : 5);
 export const foeLevel = (b: DominionBlock, run: Pick<RunState, 'party'>, offset: number): number => clamp(teamLevel(run) + offset, F().levels.min, b.levelCap + F().levels.overCap);
 
+/** D10 follow-up: a street meeting's named foe (town.json foes), or 'leader:<gym>' for that Gym's Leader. */
+export function townFoe(key: string | null): { name: string; cls: string; species: string[]; offset: number; leaderId: string | null; wild?: boolean } | null {
+  if (key?.startsWith('leader:')) {
+    const g = DOMINION_DATA.growth.gyms.find((x) => x.id === key.slice('leader:'.length));
+    return g ? { name: g.leader, cls: 'gym-leader', species: g.species, offset: g.offset, leaderId: g.leaderId } : null;
+  }
+  const f = key ? DOMINION_DATA.town.foes[key] : undefined;
+  return f ? { ...f, leaderId: null } : null;
+}
+
 export function foeOf(b: DominionBlock, run: Pick<RunState, 'party'>, kind: FieldFight['foe'], district: District, target: Target | null, card: string | null = null): Foe {
   const P = F().police;
   switch (kind) {
+    case 'town': {
+      const f = townFoe(card);
+      return f ? { name: f.name, species: f.species[0]!, level: foeLevel(b, run, f.offset), wild: !!f.wild } : { name: P.raid.name, species: P.raid.species[0]!, level: foeLevel(b, run, P.raid.offset), wild: false };
+    }
     case 'court': {
       // D12: a Chair visitor at the door (court.json card `card`).
       const f = DOMINION_DATA.court.find((c) => String(c.id) === card)?.foe ?? P.raid;
