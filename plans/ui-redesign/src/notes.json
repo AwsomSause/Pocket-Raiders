@@ -559,5 +559,23 @@
   "q3": "Yes, six. Three finish the Totem (what its aura does, its second phase, its tiers), and three cover losing, which had no pages at all: the Totem stands, the raid clock runs out, the expedition fails.",
   "q4": "Unchanged.",
   "q5": "Yes. Losing a Totem trial or a raid and walking away to try again is exactly how those fights work in the series."
+ },
+ "34": {
+  "name": "New areas 8 · Road to the Top",
+  "label": "New areas · pass 8 of 25",
+  "big": "Every area is a climb, and now you can see the whole climb. The scrolling ticker is replaced by a step track across the top: shields in a raid, the Totem's stages, the eight Galar gyms and the tournament, the expedition's layers, and the evil team's seven encounters. The step you are on is stamped huge behind the action. Galar gets its full run of pages.",
+  "pages": [
+   "Galar · Gym Challenge Road",
+   "Galar · Tournament Bracket (rebuilt as a real bracket)",
+   "Galar · Round Card",
+   "Galar · Stadium Shop",
+   "Galar · The Final",
+   "Galar · Champion"
+  ],
+  "q1": "Yes. Giant outlined words behind the fight (MATCH 8, SHIELD 2) and a lit step track make every screen feel like a stop on a tour.",
+  "q2": "Pass 7 told you where you are standing. This pass tells you how far you have come and what is left, which the ticker never did.",
+  "q3": "Yes. The tournament was one list page; it is now six pages: the gym road, a bracket you can read left to right with heal and shop stops marked, a round card, the shop, the final against Leon and the champion page.",
+  "q4": "Unchanged. The bracket opens with B from any tournament page, as it does in the game.",
+  "q5": "Yes. A gym road with eight faces and a tournament bracket with the Champion waiting at the end is the Galar story in two pages."
  }
 }
