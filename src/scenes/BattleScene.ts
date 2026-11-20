@@ -125,6 +125,9 @@ import { keyItemFor } from '../ui/battleFx/cineLook';
 import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
+import type { ClipLevel } from '../core/presentation/motionClip';
+import { expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { playClip, type ClipHost, type ClipPart } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
 import type { PlayerTrainerActor } from '../ui/playerTrainer';
@@ -416,6 +419,10 @@ export class BattleScene extends Phaser.Scene {
   private trainerActor: PlayerTrainerActor | null = null;
   private trainerHomeX = 0;
   private trainerAway: Phaser.Time.TimerEvent | null = null;
+  /** Animation redesign: a fainted side's base stays dark until its next Pokémon lands. */
+  private baseShade: Partial<Record<Side, Phaser.GameObjects.Ellipse>> = {};
+  /** Where the last foe fell this turn: its experience leaves from there as lights. */
+  private fellAt: Point | null = null;
   private trainerReady: Promise<void> = Promise.resolve();
   /** The doubles target picker's marker on the highlighted Pokémon. */
   private reticle: Phaser.GameObjects.Graphics | null = null;
@@ -1144,18 +1151,121 @@ export class BattleScene extends Phaser.Scene {
     return services().session.content.archetypes.get(this.run.archetypeId)?.spriteAssetId ?? null;
   }
 
-  /** The throw for sending a Pokémon out: its own caught ball flies to its spot and opens there. */
-  private async sendOutMoment(mon: PokemonInstance): Promise<void> {
-    const ball = mon.caughtBall ?? DEFAULT_BALL;
-    const at = this.spotXY('player');
+  // ---------- animation redesign: battle basics (plans/animation-redesign, core/presentation/motionBasics) ----------
+
+  /** How much a motion clip may do: the battle animation setting, or nothing with Disable all animations. */
+  private clipLevel(): ClipLevel {
+    const st = services().session.settings;
+    return st.disableAllAnimations ? 'off' : st.battleAnimations;
+  }
+
+  /** What every motion clip gets from the settings: flash strength, particles and the animation speed. */
+  private clipHost(parts: Record<string, ClipPart>, more: Pick<ClipHost, 'cue' | 'dim'> = {}): ClipHost {
+    const st = services().session.settings;
+    const look = animSettingsFrom(st);
+    return { parts, ...more, flash: st.reducedFlash || !st.battleScreenEffects ? 0 : look.intensity, particles: !st.reduceParticles, rate: 1 / animationTimeScale(st) };
+  }
+
+  /** Your trainer steps in and throws. Resolves with the hand's place the moment the ball leaves it (null: no trainer, or nothing may move). */
+  private async throwMoment(): Promise<Point | null> {
     const actor = await this.trainerIn();
-    if (!actor) return;
-    await actor.play('sendOut', {
-      target: { x: at.x, y: at.y - 50 },
-      makeBall: (x, y) => ballVisual(this, ball, x, y),
-      onLand: (p) => ballOpenEffect(this, ball, p.x, p.y, this.motion),
+    if (!actor) return null;
+    return new Promise<Point | null>((resolve) => {
+      void actor.play('sendOut', { onRelease: (from) => resolve(from) }).then(() => {
+        resolve(null);
+        this.trainerOut();
+      });
     });
-    this.trainerOut();
+  }
+
+  /**
+   * Send-out (redesign pass 2): the ball arcs in from the hand, lands, bounces once and bursts; the Pokémon
+   * pops out white, stretches up, lands flat and wide, and settles. Reduced: a short throw and a ring. Off: it is just there.
+   */
+  private async sendMoment(side: Side, mon: PokemonInstance, from: Point | null): Promise<void> {
+    const level = this.clipLevel();
+    const at = this.spotXY(side);
+    const start = from ?? throwFromSpot(side);
+    const ballId = side === 'player' ? mon.caughtBall ?? DEFAULT_BALL : DEFAULT_BALL;
+    const ball = level === 'off' ? null : ballVisual(this, ballId, start.x, start.y).setDepth(31).setAlpha(0);
+    let visual: Visual | null = null;
+    const show = (): void => {
+      if (visual) return;
+      visual = this.showSprite(side, mon, true, false);
+      ballOpenEffect(this, ballId, at.x, at.y - 50, this.motion);
+    };
+    const run = playClip(this, sendClip({ x: at.x, y: at.y, h: 0, side }, start, level), this.clipHost({ mon: { kind: 'mon', get: () => visual }, ball: { kind: 'free', get: () => ball } }, {
+      cue: (name) => {
+        if (name === 'throw') playSfx(this, 'se.ball_throw');
+        if (name === 'open') show();
+      },
+    }));
+    await run.done;
+    ball?.destroy();
+    show();
+    const shown = visual as Visual | null;
+    if (shown?.active) breathe(this, shown, this.motion);
+  }
+
+  /**
+   * Recall (redesign pass 2 + 4): the ball is held out, the Pokémon turns red, braces, is pulled thin up the
+   * beam and the ball jolts as it catches. Reduced: red, the beam, a plain shrink. Off: it is just gone.
+   */
+  private async recallMoment(side: Side, sprite: Visual, hand: Point | null): Promise<void> {
+    const level = this.clipLevel();
+    const at = hand ?? recallBallSpot(side);
+    const mon = this.shown[side];
+    const ball = level === 'off' ? null : ballVisual(this, (side === 'player' ? mon?.caughtBall : null) ?? DEFAULT_BALL, at.x, at.y).setDepth(31).setAlpha(0);
+    const h = sprite instanceof Phaser.GameObjects.Sprite ? sprite.displayHeight * sprite.originY : 120;
+    const run = playClip(this, recallClip({ x: sprite.x, y: sprite.y, h, side }, at, level), this.clipHost({ mon: { kind: 'mon', get: () => sprite }, ball: { kind: 'free', get: () => ball } }, {
+      cue: (name) => {
+        if (name === 'catch') playSfx(this, 'se.ball_catch', 0.6);
+      },
+    }));
+    await run.done;
+    ball?.destroy();
+    if (sprite.active) sprite.setAlpha(0);
+    run.rest('mon');
+  }
+
+  /**
+   * Faint (redesign passes 11, 2 and 7): a stagger back, a sway, the knees give, then it sinks into the
+   * ground with dust and its base goes dark. Reduced: it only sinks. Off: it is just gone.
+   */
+  private async faintMoment(side: Side, sprite: Visual): Promise<void> {
+    this.tweens.killTweensOf(sprite);
+    const ground = this.spotXY(side).y;
+    const run = playClip(this, faintClip({ x: sprite.x, y: ground, h: 0, side }, this.clipLevel()), this.clipHost({ mon: { kind: 'mon', get: () => sprite } }, { dim: (fx) => this.dimBase(side, fx.d) }));
+    await run.done;
+    if (sprite.active) sprite.setAlpha(0);
+    run.rest('mon');
+  }
+
+  /** The fainted side's base goes dark (redesign pass 7) until its next Pokémon is shown. */
+  private dimBase(side: Side, ms: number): void {
+    this.liftBaseShade(side);
+    if (this.duo) return;
+    const at = this.spotXY(side);
+    const shade = this.add.ellipse(at.x, at.y + 4, 200, 46, 0x000000, 0);
+    this.field.addAt(shade, this.fieldBase);
+    this.baseShade[side] = shade;
+    if (ms <= 0) shade.setFillStyle(0x000000, 0.4);
+    else this.tweens.add({ targets: shade, fillAlpha: 0.4, duration: ms });
+  }
+
+  private liftBaseShade(side: Side): void {
+    const shade = this.baseShade[side];
+    delete this.baseShade[side];
+    if (!shade?.active) return;
+    this.tweens.killTweensOf(shade);
+    if (this.motion === 'off') shade.destroy();
+    else this.tweens.add({ targets: shade, fillAlpha: 0, duration: 200, onComplete: () => shade.destroy() });
+  }
+
+  /** Where exp lights fly to: the end of your Exp bar, or the mockup's place when another look draws the bar. */
+  private expBarPoint(): Point {
+    const c = this.playerBox?.container;
+    return c?.active && c.visible && c.alpha > 0.5 ? { x: c.x + 250, y: c.y + 118 } : { x: 860, y: 506 };
   }
 
   /**
@@ -1231,13 +1341,11 @@ export class BattleScene extends Phaser.Scene {
    * The player's trainer throws out the first Pokémon (Gen 4/5 back sprite, Pokémon Memories), then slides away.
    * Presentation only: skipped when motion is off or the trainer has no back sprite.
    */
-  private async throwPose(): Promise<void> {
+  private async throwPose(): Promise<Point | null> {
     if (this.trainerReady) await this.trainerReady;
-    if (this.trainerActor) {
-      await this.sendOutMoment(this.shown.player);
-      return;
-    }
+    if (this.trainerActor) return this.throwMoment();
     await this.ownBackThrow();
+    return null;
   }
 
   /** Trainers with their own throwing sprite: it shows at the left for a beat, then slides away (singles and doubles). */
@@ -1309,14 +1417,15 @@ export class BattleScene extends Phaser.Scene {
 
   // ---------- sprites and info boxes ----------
 
-  private showSprite(side: 'player' | 'enemy', mon: PokemonInstance, cry = true): Visual {
+  private showSprite(side: 'player' | 'enemy', mon: PokemonInstance, cry = true, lively = true): Visual {
     const species = getSpecies(services().session.content, mon.speciesId);
     if (cry) playCry(this, species, side === 'player' ? mon.care?.cryVolume ?? 100 : 100);
     // Gigantamax art is already drawn huge, so only a plain Dynamax grows.
     const grow = mon.dynamaxed && species.form?.kind !== 'gigantamax' ? DYNAMAX_SCALE : 1;
     this.markObjs[side].forEach((o) => o.destroy());
     this.markObjs[side] = [];
-    const visual = this.showSpriteBody(side, mon, lookSpecies(services().session.content, mon), cry, grow);
+    this.liftBaseShade(side);
+    const visual = this.showSpriteBody(side, mon, lookSpecies(services().session.content, mon), cry, grow, lively);
     try {
       const vs = this.run.battle?.extra?.variants?.[mon.uid];
       this.markObjs[side] = addMarks(this, this.field, visual, { shadow: Boolean(mon.shadow), variant: vs?.line ?? null, motion: this.motion });
@@ -1331,7 +1440,7 @@ export class BattleScene extends Phaser.Scene {
     if (tint !== null && visual instanceof Phaser.GameObjects.Sprite) visual.setTint(tint);
   }
 
-  private showSpriteBody(side: 'player' | 'enemy', mon: PokemonInstance, species: ReturnType<typeof getSpecies>, cry: boolean, grow: number): Visual {
+  private showSpriteBody(side: 'player' | 'enemy', mon: PokemonInstance, species: ReturnType<typeof getSpecies>, cry: boolean, grow: number, lively = true): Visual {
     if (side === 'player') {
       this.dropSprite(this.playerSprite);
       const at = this.spotXY('player');
@@ -1344,7 +1453,7 @@ export class BattleScene extends Phaser.Scene {
       this.skin?.sprite?.(this.playerSprite);
       this.wearPink(this.playerSprite, pinkTint(mon));
       this.prefetchMoves(mon);
-      this.liven(this.playerSprite, cry);
+      if (lively) this.liven(this.playerSprite, cry);
       return this.playerSprite;
     }
     this.dropSprite(this.enemySprite);
@@ -1361,7 +1470,7 @@ export class BattleScene extends Phaser.Scene {
     const b = this.run.battle;
     if (b && this.boss() && b.enemyTeam.length > 1 && b.enemyIndex >= b.enemyTeam.length - 1) this.arenaLight?.set(Math.max(this.arenaPhase, 1), 0xff5030);
     this.prefetchMoves(mon);
-    this.liven(this.enemySprite, cry);
+    if (lively) this.liven(this.enemySprite, cry);
     return this.enemySprite;
   }
 
@@ -2810,10 +2919,9 @@ export class BattleScene extends Phaser.Scene {
         this.camPinned = true;
         cameraTo(this, this.motion, { x: 400, y: PLAYER_POS.y - 100 }, 1.2, 600);
         const goLine = this.say(`Go! ${this.speciesName(this.shown.player)}!`, true);
-        await this.throwPose();
-        this.showSprite('player', this.shown.player);
+        // The ball leaves the hand, lands, bounces and bursts; your Pokémon pops out and settles (redesign send-out).
+        await this.sendMoment('player', this.shown.player, await this.throwPose());
         // The camera pulls back and your box slides in a beat after your Pokémon lands.
-        if (this.motion === 'full') await sleep(this, 400);
         cameraTo(this, this.motion, null, 1, 450);
         this.camPinned = false;
         await this.refreshInfoBox(this.playerBox, this.shown.player, false);
@@ -5546,6 +5654,7 @@ export class BattleScene extends Phaser.Scene {
     // New UI: a pinned card steps aside for the turn's pictures.
     this.rxPin = null;
 
+    this.fellAt = null;
     for (const [index, e] of events.entries()) {
       // New UI: a Rally brace or a signature trait gets its callout for its own line and the stat lines that belong to it.
       if (this.rx) this.rxCall = this.calloutOf(events, index) ?? (keepsCallout(e) ? this.rxCall : null);
@@ -5701,8 +5810,10 @@ export class BattleScene extends Phaser.Scene {
           mon!.hp = 0;
           playSfx(this, 'se.faint');
           if (!this.cameraMove(e)) this.focusPush('ko');
-          if (sprite) this.tweens.killTweensOf(sprite);
-          if (sprite) await tween(this, { targets: sprite, alpha: 0, y: sprite.y + 30, duration: 400 });
+          if (sprite) {
+            if (e.side === 'enemy') this.fellAt = { x: sprite.x, y: this.spotXY('enemy').y };
+            await this.faintMoment(e.side, sprite);
+          }
           if (e.side === 'enemy' && mon && this.phTurnCards()) await this.phKoCard(mon, before, trainer, events.slice(0, index + 1).filter((x) => x.type === 'faint' && x.side === 'enemy').length);
           break;
         case 'miss': {
@@ -5719,9 +5830,12 @@ export class BattleScene extends Phaser.Scene {
         }
         case 'switchOut': {
           if (sprite) this.tweens.killTweensOf(sprite);
-          const recall = e.side === 'player' && this.trainerActor ? this.trainerIn().then((a) => a?.play('recall')).then(() => this.trainerOut()) : undefined;
-          if (sprite) await tween(this, { targets: sprite, alpha: 0, duration: 250 });
-          await recall;
+          // Your trainer leans in holding the ball out, takes the Pokémon back and steps away.
+          const actor = e.side === 'player' && this.trainerActor ? await this.trainerIn() : null;
+          const pose = actor?.play('recall');
+          if (sprite) await this.recallMoment(e.side, sprite, actor ? actor.hand() : null);
+          await pose;
+          if (actor) this.trainerOut();
           break;
         }
         case 'evolved': {
@@ -5749,16 +5863,15 @@ export class BattleScene extends Phaser.Scene {
           if (incoming) {
             this.shown[e.side] = structuredClone(incoming);
             if (e.side === 'enemy') this.phHits = 0;
-            if (e.side === 'player' && this.trainerActor) await this.sendOutMoment(this.shown.player);
+            const hand = e.side === 'player' && this.trainerActor ? await this.throwMoment() : null;
             const lookAt = e.side === 'enemy' ? { x: 560, y: ENEMY_POS.y - 20 } : { x: 400, y: PLAYER_POS.y - 100 };
             if (!this.camBusy && !this.camPinned) {
               this.camPinned = true;
               cameraTo(this, this.motion, lookAt, 1.12, 350);
             }
             if (e.side === 'enemy') await this.ensureArt(this.shown.enemy!.speciesId);
-            this.showSprite(e.side, this.shown[e.side]);
+            await this.sendMoment(e.side, this.shown[e.side]!, hand);
             this.applyTeraTint(e.side, this.shown[e.side]);
-            if (this.camPinned) await sleep(this, this.motion === 'full' ? 500 : 0);
             if (this.camPinned) {
               cameraTo(this, this.motion, null, 1, 350);
               this.camPinned = false;
@@ -5990,6 +6103,10 @@ export class BattleScene extends Phaser.Scene {
           if (this.rx) this.rxExp.set(e.uid, { amount: (this.rxExp.get(e.uid)?.amount ?? 0) + e.amount, level: this.rxExp.get(e.uid)?.level ?? null, was: this.rxExp.get(e.uid)?.was ?? before.party.find((m) => m.uid === e.uid) });
           if (e.uid === this.shown.player.uid) {
             this.shown.player.xp += e.amount;
+            // A fallen foe's experience leaves it as lights and flies to your bar (redesign pass 23); the bar fills as they arrive.
+            const fell = this.fellAt;
+            this.fellAt = null;
+            if (fell && !this.duo) await new Promise<void>((arrive) => void playClip(this, expLightsClip(fell, this.expBarPoint(), this.clipLevel()), this.clipHost({}, { cue: () => arrive() })).done.then(arrive));
             playSfx(this, 'se.exp', 0.6);
             void this.refreshInfoBox(this.playerBox, this.shown.player, true);
           }

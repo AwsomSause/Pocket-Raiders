@@ -78,6 +78,11 @@ export class PlayerTrainerActor {
     this.show('back_idle', 0);
   }
 
+  /** Where the trainer's throwing hand is on screen (a ball held out for a recall sits here). */
+  hand(): { x: number; y: number } {
+    return { x: this.sprite.x + HAND.dx * this.height, y: this.sprite.y + HAND.dy * this.height };
+  }
+
   /** Ends the moment that is playing right now (no-op otherwise). */
   skip(): void {
     this.current?.finish();

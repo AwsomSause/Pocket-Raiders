@@ -105,6 +105,7 @@ Each entry says what happens today, what the new animation is, and where to watc
 - **Today:** The move animation plays once and the damage is shown as separate numbers.
 - **New animation:** Each hit is a quick jab with its own spark and its own notch off the HP bar, and a combo counter in the corner ticks up and grows with every one. It ends by slamming the total.
 - **See it:** pass 12, clip "Multi-Hit"
+- **Build:** Kept from the redesign: the counter, the stamp and the target shaking a little more on each hit. Not built, by your rule that specific move animations are not added or changed: the effect of each hit.
 
 ### 15. Recoil
 - **Today:** A number on the user and a text line.
@@ -115,31 +116,37 @@ Each entry says what happens today, what the new animation is, and where to watc
 - **Today:** Two numbers: damage on the target, healing on the user.
 - **New animation:** After the hit, what was taken travels: green lights lift off the target one by one, cross the field in an arc and sink into the user, whose HP bar steps up as each arrives.
 - **See it:** pass 12, clip "Drain"
+- **Build:** Kept from the redesign: the healing glow on the user and the bar filling. Not built, by your rule that specific move animations are not added or changed: the tether between the two Pokémon.
 
 ### 17. One-Hit KO
 - **Today:** A normal hit animation and the bar empties.
 - **New animation:** The ground opens. A crack races from the user to the target, the target's base splits and it drops straight down out of sight, and the bar empties in one frame under a ONE-HIT KO stamp.
 - **See it:** pass 12, improved up to pass 23, clip "One-Hit KO"
+- **Build:** Kept from the redesign: the silence, the shake of the arena and the stamp. Not built, by your rule that specific move animations are not added or changed: the crack drawn across the ground.
 
 ### 18. Recharge Turn
 - **Today:** A text line: "must recharge!".
 - **New animation:** After the biggest moves the user is spent, and looks it: steam pours off it, it sags with a grey tint and a RECHARGE chip hangs over it while the foe takes a free turn. When the turn ends the chip pops and it stands back up.
 - **See it:** pass 12, improved up to pass 18, clip "Recharge Turn"
+- **Build:** Kept from the redesign: the brace before it and the recoil of the Pokémon after it. Not built, by your rule that specific move animations are not added or changed: the beam.
 
 ### 19. Contact Punish
 - **Today:** A number on the attacker and a text line (Rocky Helmet, Rough Skin).
 - **New animation:** Touching the wrong thing bites back at the moment of contact: spikes jab out of the target, the attacker bounces off further than it came in with a star on its nose, and the item or ability flag slides out to say why.
 - **See it:** pass 12, clip "Contact Punish"
+- **Build:** Kept from the redesign: the dash of the attacker and the knock-back of the target. Not built, by your rule that specific move animations are not added or changed: the contact effect of the move.
 
 ### 20. Priority Move
 - **Today:** Plays like any other move; only the turn order tells you it went first.
 - **New animation:** A FIRST! tag snaps onto the user before anything else on the turn can start. It does not wind up: it blurs, leaves three after-images across the field, and the hit lands before the tag has faded.
 - **See it:** pass 12, clip "Priority Move"
+- **Build:** Kept from the redesign: the Pokémon blurring forward first. Not built, by your rule that specific move animations are not added or changed: the effect of the move.
 
 ### 21. Entry Hazards
 - **Today:** The move animation plays; nothing stays on the field and the switch-in damage is a number.
 - **New animation:** Hazards stay where you can see them. Stealth Rock throws five stones that plant themselves around your side and hover there with a ROCKS chip. When your next Pokémon comes in they all stab inward at once.
 - **See it:** pass 12, clip "Entry Hazards"
+- **Build:** Kept from the redesign: the marks the hazard leaves on the arena. Not built, by your rule that specific move animations are not added or changed: the throw of the hazard move.
 
 
 ## Conditions

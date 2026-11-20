@@ -109,6 +109,25 @@ XN = [
  ('Screens', 'Update log and tutorial', 'The update log unrolls from the top. In the tutorial a Rotom arrow hops to whatever it is talking about.'),
  ('World', 'Safari Park', 'Walking uses the Hub Town rules. A thrown ball uses the Catch arc, and bait and rocks get their own small arcs.'),
 ]
+# Build status (2026-11-20). Kice's rule: "do not add or change specific move animations", but "animating the
+# Pokemon or surroundings is still fine (Solar Beam charge, giga drain healing animation, power tiers)".
+KEEP = 'Kept from the redesign: '
+DROP = ' Not built, by your rule that specific move animations are not added or changed: '
+S1 = 'Built into the game (build slice 1).'
+BUILD = {
+ 'sendout': S1, 'recall': S1, 'faint': S1 + ' The exp lights (pass 23) are in too. The trainer face chip (pass 19) comes with the Together slice.', 'switch': S1 + ' It plays as the recall followed by the send-out; the bar tuck comes with the battle bars.',
+ 'types': KEEP + 'the hit reaction on the Pokémon and the type colour of numbers and stamps.' + DROP + 'type-shaped effects drawn for the move itself.',
+ 'bh-charge': KEEP + 'the charge on the Pokémon (the pose, the gathering light, the arena dimming).' + DROP + 'the beam.',
+ 'bh-drain': KEEP + 'the healing glow on the user and the bar filling.' + DROP + 'the tether between the two Pokémon.',
+ 'bh-ohko': KEEP + 'the silence, the shake of the arena and the stamp.' + DROP + 'the crack drawn across the ground.',
+ 'bh-beam': KEEP + 'the brace before it and the recoil of the Pokémon after it.' + DROP + 'the beam.',
+ 'bh-contact': KEEP + 'the dash of the attacker and the knock-back of the target.' + DROP + 'the contact effect of the move.',
+ 'bh-multi': KEEP + 'the counter, the stamp and the target shaking a little more on each hit.' + DROP + 'the effect of each hit.',
+ 'bh-hazard': KEEP + 'the marks the hazard leaves on the arena.' + DROP + 'the throw of the hazard move.',
+ 'bh-priority': KEEP + 'the Pokémon blurring forward first.' + DROP + 'the effect of the move.',
+}
+for k in ('mf-close', 'mf-shot', 'mf-element', 'mf-mind', 'mf-self', 'mf-burst', 'mf-type', 'mf-reel'):
+    BUILD[k] = KEEP + 'the wind-up of the user and the reaction of the target.' + DROP + 'the family shape (the 26 shared move effects).'
 def steps(c):
     I = c.get('ideas') or [[c['first'], c['idea']]]
     return I[0][1] if len(I) == 1 else ' '.join('Pass %d: %s' % (p, t) for p, t in I)
@@ -120,7 +139,7 @@ def build(kind):
         isR = c['id'] in R
         if (kind == 'R') != isR: continue
         tag, where = R.get(c['id'], ('', ''))
-        by[c['g']].append(dict(id=c['id'], t=c['t'], today=c['now'], idea=steps(c), see='%s, clip "%s"' % (passes(c), c['t']), tag=tag, where=where, note=NOTE.get(c['id'], '')))
+        by[c['g']].append(dict(id=c['id'], t=c['t'], today=c['now'], idea=steps(c), see='%s, clip "%s"' % (passes(c), c['t']), tag=tag, where=where, note=NOTE.get(c['id'], ''), build=BUILD.get(c['id'], '')))
     if kind == 'R':
         for g, t, today, idea, tag, where in XR: by[g].append(dict(t=t, today=today, idea=idea, see='', tag=tag, where=where, note=''))
     else:
@@ -140,6 +159,7 @@ def write(kind, name, title, intro):
             L.append('- **See it:** ' + (e['see'] if e['see'] else 'no mockup yet, described only'))
             if e['where']: L.append('- **In the game:** `' + e['where'] + '`')
             if e['note']: L.append('- **Note:** ' + e['note'])
+            if e.get('build'): L.append('- **Build:** ' + e['build'])
             L.append('')
     open(OUT + name, 'w', encoding='utf8').write('\n'.join(L).rstrip() + '\n'); PAGE[kind] = [[GNAME.get(g, g), v] for g, v in by.items()]; return n, need, mock
 r = write('R', 'REANIMATE.md', 'What to reanimate', 'Everything in the main game that already moves and should be animated again. {n} entries. Evil Mode and Dominion are left out, and so are Pokémon sprite frames, trainer throw frames and the move animation packs, which are kept as they are.\n\nEach entry says what the game does today, what the redesign does, where to watch it in the mockups (`index.html`, or the live page), and where the code is. **(need)** marks the {need} entries that have to change: your six notes, gaps where the game shows nothing useful, and the two rules everything else depends on. **(want)** marks the {want} that work today and would simply be better. {mock} entries have a mockup clip; {nomock} are described only.\n\nSuggested order to build: the two rules (Reduced motion, Skip) first, then your six notes, then Battle basics, then the rest in the order of this page.')
