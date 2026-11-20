@@ -748,5 +748,23 @@
   "q3": "Five new map pages, one for each area, show the special stop on the small eight-stop map: a den with a light pillar, a Totem site with a gold ring, a stadium with floodlights, an expedition gate with an arch and a black Rocket stop.",
   "q4": "Nothing new is needed. The sets are scenery, so Settings > Display > Battle effects (already in the Final Cut) can dim them, and the map pages use the same menu row as the map.",
   "q5": "Yes. A den's light pillar, Alola's trial sites, Galar's stadiums and a Rocket stop on a bridge are places from the games, and now each one is recognisable before a single panel is read."
+ },
+ "44": {
+  "name": "New areas 18 · The Moment",
+  "label": "New areas · pass 18 of 25",
+  "big": "Each screen caught at its biggest instant, with the state of the fight drawn into the scene",
+  "pages": [
+   "mo-egg",
+   "mo-care",
+   "mo-legend",
+   "mo-sos",
+   "mo-team",
+   "mo-heart"
+  ],
+  "q1": "The raid boss stands behind a wall of glass hexagons with one layer already smashed. The Totem's aura is a red flame taller than it is. A red Dynamax storm hangs over the stadium while cameras flash. The grunt has the series' \"!\" over his head.",
+  "q2": "Pass 17 built the sets but nothing was happening on them. Now every screen shows one instant, and that instant tells you the state: shield left, aura on, Dynamax running, roar from the summit, spotted. You can read the fight from the picture before you read the tab.",
+  "q3": "Six new pages for small moments: an Egg hatching (with its four rarity steps), a care break (pet, hug, feed), a Legendary stirring, a wild Pokémon calling for help, a Teamwork pair and a Shadow Pokémon's heart with its four stages.",
+  "q4": "Effects follow Settings > Display > Battle effects and Reduce motion from the Final Cut: with them off the shield, aura and storm stay as still pictures and the flashes are removed. The care break is opened from the map menu's Bonds button.",
+  "q5": "Yes. Raid shields, Totem auras, the red Dynamax sky, the \"!\" of a Trainer who has seen you and \"Oh?\" before an Egg hatches are some of the most recognisable moments the series has."
  }
 }
