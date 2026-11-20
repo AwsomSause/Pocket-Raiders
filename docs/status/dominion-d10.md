@@ -35,6 +35,7 @@ No version bump: `block.growth` is optional and filled the same way every time (
   - the grid's sections, the Card model (choices, note, squad, no placeholder left in any Win line)
   - save/reload before and after D10, a damaged Growth refused, the Card never changes the block, determinism
 - D2/D3/D5/D6 count tests updated (600 actions and tasks; D10's rows counted apart).
+- `tests/unit/keyQueue.test.ts` (3): one key press reaches each screen once even when a slow frame holds several key events (Phaser re-read the queue and its neighbour-only duplicate check let Enter act twice; this made the Hero test flaky on CI). The fix is `src/ui/keyQueue.ts`, applied in `main.ts`.
 - Browser `tests/e2e/dominionGrowth.spec.ts`: page to "Gyms and Heroes", the Card's five ways with Left/Right, Buy refused, Break in two battles with the map between, three window sizes, reload keeps the Gym.
 
 ## Limits and what waits
