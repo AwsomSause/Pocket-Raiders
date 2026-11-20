@@ -106,6 +106,39 @@ ENGINE = {
     140: dict(kind='truceTalk'),
     # D4b (school.ts): Learn a Trade, Teach a Move.
     67: dict(kind='trade'), 69: dict(kind='tutor'),
+    # D10 (growth.ts): hauls, fronts, the Fence, flyers, fossils, the stores.
+    8: dict(kind='haul', funds=[60, 200], note='Pays more on each smuggling route you run; a hijack is a failed run.'),
+    15: dict(kind='money', funds=[80, 240], risky=True, caughtHeat=3),
+    16: dict(kind='front', funds=[40, 140], room='front-office', note='Keeps the Loan Shark\'s books: pays as a front; the loans themselves are the Boss\'s action.'),
+    18: dict(kind='money', funds=[40, 160], risky=True, caughtHeat=4),
+    19: dict(kind='front', funds=[40, 160]),
+    22: dict(kind='front', funds=[60, 200], note='Runs as a front; buying stolen goods cheap is the Fence\'s job.'),
+    33: dict(kind='fence', funds=[60, 220]),
+    50: dict(kind='flyers', room='print-shop'),
+    83: dict(kind='revive', room='research-lab'),
+    85: dict(kind='haul', funds=[200, 600], risky=True, heat=2, caughtHeat=6, room='garage'),
+    86: dict(kind='haul', funds=[80, 240], room='garage'),
+    87: dict(kind='haul', funds=[100, 300], room='garage', note='No boat check yet: any member can sail.'),
+    88: dict(kind='haul', funds=[120, 360], risky=True, caughtHeat=4, room='garage', note='No Flying Pokémon check yet.'),
+    89: dict(kind='stock'),
+    91: dict(kind='district', does='cool', n=[1, 2], note='The hiding place cools its district; the Boss\'s Safehouse Network is the action.'),
+    92: dict(kind='haul', funds=[60, 180], note='Clears cargo as a paid haul; customs as its own system is later.'),
+    93: dict(kind='haul', funds=[60, 180], room='workshop', note='Digs as a paid haul; the Boss\'s Tunnel action hides the HQ.'),
+    94: dict(kind='fence', funds=[40, 160]),
+    95: dict(kind='scout', note='The drop saves a Boss action like Scout.'),
+    96: dict(kind='money', funds=[120, 360], risky=True, heat=2, caughtHeat=6),
+    97: dict(kind='front', funds=[60, 200]),
+    98: dict(kind='front', funds=[30, 120]),
+    99: dict(kind='front', funds=[40, 140]),
+    100: dict(kind='rally'),
+    101: dict(kind='front', funds=[30, 120], note='Paid repairs for the neighbourhood; fixing your own vehicles waits for vehicle wear (later).'),
+    103: dict(kind='flyers', room='print-shop'),
+    104: dict(kind='district', does='regard', n=[1, 2], room='radio-room'),
+    105: dict(kind='front', funds=[60, 220]),
+    106: dict(kind='front', funds=[40, 160], note='A stall pays as a front; it isn\'t a business you can buy yet.'),
+    107: dict(kind='front', funds=[40, 160], note='Pays as a front; lower costs on rooms are later.'),
+    108: dict(kind='front', funds=[100, 400], risky=True, caughtHeat=4),
+    109: dict(kind='flyers'),
 }
 
 # The slice each disabled row waits for: by section, then by row.
@@ -114,7 +147,7 @@ NEEDS_ROW = {
     4: 'D9', 5: 'D6', 6: 'D2', 8: 'D10', 9: 'D2', 11: 'D9', 13: 'D6', 23: 'D6', 2: 'D9', 10: 'D9', 32: 'D6', 33: 'D10',
     40: 'D6', 46: 'D2', 47: 'D6', 42: 'D2', 45: 'D11', 50: 'D10', 53: 'D6', 55: 'D2', 58: 'D8', 70: 'D9', 71: 'D7',
     83: 'D10', 84: 'D15', 89: 'D10', 90: 'D9', 91: 'D10', 109: 'D10', 118: 'D11', 119: 'D6', 124: 'D6', 128: 'D6', 141: 'D8',
-    142: 'D9', 145: 'D11', 146: 'D6', 136: 'D10',
+    142: 'D9', 145: 'D11', 146: 'D6', 136: 'D23',
 }
 
 tasks = []
@@ -149,6 +182,89 @@ for line in open(f'{lists}/team-actions.md', encoding='utf-8'):
         t['needs'] = NEEDS_ROW.get(n, NEEDS_SECTION[section[0]])
     tasks.append(t)
 
+
+# ---------- D10: crew tasks 151-600 (team-actions-151-300.md, -301-450.md, -451-600.md) ----------
+# Each section runs as one engine kind. The row's own five level steps are kept word for word and shown; what the engine
+# does is the kind's (a section's rows differ in wording, not in rules), so a row is "supported" when its Lv 1 step is
+# exactly what the kind does (pay in ₽, a stat's training) and "limited" otherwise, with a note naming the kind.
+# AN (governing held regions) waits for D15 and AQ (executive projects, the takeover paths) for D14.
+WORD = {'guard': 'a guard shift (counts in HQ defence)', 'audit': 'a books check (finds pocketed money)', 'money': 'a cash job',
+        'catch': 'a catch for the Reserve', 'tend': 'Pokémon care', 'train': "the member's training", 'rally': 'a Morale lift for the crew',
+        'recruit': 'a hunt for recruits', 'scout': 'scouting (saves a Boss action, finds Patrons)', 'front': 'clean money from a front',
+        'haul': 'a haul (pays more on your smuggling routes)', 'district': 'district work', 'rivalIntel': 'intel on the rival team',
+        'rivalHit': 'a hit on the rival team', 'trainMon': "training the member's Pokémon"}
+SEC10 = {
+    'N': dict(kind='guard'), 'O': dict(kind='audit'), 'P': dict(kind='money', risky=True, heat=2, caughtHeat=4),
+    'Q': dict(kind='catch'), 'R': dict(kind='tend'), 'S': dict(kind='train'), 'T': dict(kind='rally'),
+    'U': dict(kind='haul'), 'V': dict(kind='recruit'), 'W': dict(kind='money', risky=True, heat=3, caughtHeat=6),
+    'X': dict(kind='scout'), 'Y': dict(kind='front'), 'Z': dict(kind='district', does='cool'), 'AA': dict(kind='district', does='regard'),
+    'AB': dict(kind='rivalIntel'), 'AC': dict(kind='train'), 'AD': dict(kind='tend'), 'AE': dict(kind='haul', risky=True, heat=2, caughtHeat=5),
+    'AF': dict(kind='rally'), 'AG': dict(kind='district', does='hold'), 'AH': None, 'AI': dict(kind='train', xp=2), 'AJ': dict(kind='guard'),
+    'AK': dict(kind='front'), 'AL': dict(kind='district', does='regard'), 'AM': dict(kind='rivalHit'), 'AO': dict(kind='front'), 'AP': None,
+}
+NEEDS10 = {'AN': 'D15', 'AQ': 'D14'}
+# AH (elite specialists) and AP (night crew): by the row's stat.
+BY_STAT = {'stealth': dict(kind='money', risky=True, heat=3, caughtHeat=6), 'brawn': dict(kind='guard'), 'wits': dict(kind='scout'),
+           'charm': dict(kind='recruit'), 'nerve': dict(kind='guard')}
+RANK10 = dict(RANK, Senior='senior-grunt')
+# A row is "supported" when its Lv 1 step says what the kind does.
+SURE = {'rally': r'Morale \+', 'guard': r'raid|intruder|guard|warn|alarm|stops', 'catch': r'catch|bug|wild|Pokémon',
+        'tend': r'Happiness|Friendship|heal|Potion', 'regard': r'Regard \+', 'dread': r'Dread \+', 'cool': r'Heat −',
+        'recruit': r'inquiry|recruit|lead|joins', 'scout': r'see|spot|learn|watch|notes', 'rivalIntel': r'spot|learn|rival',
+        'audit': r'₽|error|ledger|books'}
+
+
+def lv1_cash(t):
+    m = re.search(r'₽([\d,]+)', t)
+    return int(m.group(1).replace(',', '')) if m else None
+
+
+for f in ('team-actions-151-300.md', 'team-actions-301-450.md', 'team-actions-451-600.md'):
+    for line in open(f'{lists}/{f}', encoding='utf-8'):
+        m = re.match(r'^## ([A-Z]{1,2})\. (.+?) \(', line)
+        if m:
+            section = (m.group(1), m.group(2).strip())
+            continue
+        if not re.match(r'^\| \d+ \| \*\*', line):
+            continue
+        c = [x.strip() for x in line.strip().strip('|').split('|')]
+        n = int(c[0])
+        levels = [clean(x) for x in c[5].split('→')]
+        if len(levels) != 5:
+            raise SystemExit(f'task {n}: {len(levels)} levels')
+        stat = STAT[c[2]]
+        t = dict(n=n, id=slug(clean(c[1])), name=clean(c[1]), section=section[0], group=section[1], stat=stat, min=RANK10[c[3]],
+                 does=clean(c[4]), levels=levels, risk=clean(c[6]), source=f)
+        if section[0] in NEEDS10:
+            t['status'] = 'disabled'
+            t['needs'] = NEEDS10[section[0]]
+            tasks.append(t)
+            continue
+        e = dict(SEC10[section[0]] or BY_STAT[stat or 'wits'])
+        cash = lv1_cash(levels[0])
+        sure = False
+        if e['kind'] in ('money', 'front', 'haul'):
+            lo = cash or (20 if e['kind'] == 'front' else 40)
+            e['funds'] = [lo, lo * 4]
+            sure = cash is not None
+        if e['kind'] == 'train':
+            g = re.match(r'^(Brawn|Nerve|Wits|Charm|Stealth) \+', levels[0])
+            grow = g.group(1).lower() if g else stat
+            if grow:
+                e['grow'] = grow
+            sure = bool(g)
+        if e['kind'] == 'district' and e.get('does') == 'regard' and re.search(r'Dread \+', levels[0]):
+            e['does'] = 'dread'
+        if e['kind'] == 'district':
+            e['n'] = [1, 2]
+        if re.search(SURE.get(e.get('does') or e['kind'], r'^$'), levels[0], re.I):
+            sure = True
+        t['status'] = 'supported' if sure else 'limited'
+        if not sure:
+            t['note'] = f"Lv 1 reads “{levels[0]}”; the task runs as {WORD[e['kind']]}."
+        t['effect'] = e
+        tasks.append(t)
+
 # Two tasks named outside the list: Rest (Part 2 §2's table) and Steal Pokémon (Part 6 §4's quick task, the crew's
 # version of player action 64, Kidnap a Pokémon from an adult's home).
 tasks.insert(0, dict(n=0, id='rest', name='Rest', section='F', group='Training and Growth', stat=None, min='hopeful',
@@ -165,7 +281,7 @@ dup = {i for i in ids if ids.count(i) > 1}
 if dup:
     raise SystemExit(f'duplicate task ids {dup}')
 
-json.dump({'_source': 'plans/evil-mode-rework/lists/team-actions.md (1-150, word for word) + tools/dominion/lists-to-json.py ENGINE',
+json.dump({'_source': 'plans/evil-mode-rework/lists/team-actions.md (1-150) and team-actions-151-300/301-450/451-600.md (D10), word for word, + tools/dominion/lists-to-json.py ENGINE and SEC10',
            'tasks': tasks}, open(f'{out}/tasks.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 
 # ---------- grunt types ----------

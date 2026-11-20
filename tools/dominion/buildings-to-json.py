@@ -56,7 +56,7 @@ FX = {
     'smuggler-den': dict(income=100), 'racket-office': dict(weekly=100), 'street-patrol-station': dict(control=5),
     'vanguard-camp': dict(control=10), 'hall-of-ranks': dict(loyalty=2), 'grunt-cafe': dict(clean=80), 'grunt-arcade': dict(clean=100),
     'delivery-service': dict(clean=80), 'repair-shop': dict(clean=100), 'cleaning-crew': dict(heatWeek=5),
-    'pokemon-storage': dict(storage=60), 'recruitment-center': dict(recruit=10, hireOff=25), 'luxury-suite': dict(restBonus=1),
+    'pokemon-storage': dict(storage=60), 'recruitment-center': dict(recruit=10, hireOff=25), 'luxury-suite': dict(restBonus=1, debate=5),
     'night-shift': dict(nightActions=1, unlock=True),
     'berry-garden': dict(items={'oran-berry': 2}), 'pharmacy': dict(items={'potion': 1}), 'ball-foundry': dict(items={'poke-ball': 5}),
     'first-aid-closet': dict(weeklyItems={'revive': 2}), 'canteen-kitchen': dict(fatigue=10), 'fix-it-corner': dict(repair=10),
@@ -70,7 +70,7 @@ FX = {
     'armory': dict(raidDef=1), 'mech-hangar': dict(raidDef=1), 'guard-post': dict(raidDef=1), 'gate-house': dict(raidDef=1),
     'perimeter-wall': dict(raidDef=1), 'alarm-network': dict(raidDef=1), 'decoy-room': dict(raidDef=1), 'pitfall-corridor': dict(raidDef=1),
     'reinforced-doors': dict(raidDef=1), 'guard-duty-hall': dict(raidDef=1), 'honor-guard-hall': dict(raidDef=1),
-    'watchtower': dict(warn=1), 'fire-suppression': dict(fireCut=50), 'ballroom': dict(truceOff=10), 'embassy-wing': dict(truceOff=10),
+    'watchtower': dict(warn=1), 'fire-suppression': dict(fireCut=50), 'ballroom': dict(truceOff=10, debate=5), 'embassy-wing': dict(truceOff=10),
     # D4b (school.ts, pyramid.ts): seats are extra seats in a rank (+1 at T1, +1 more every 3 tiers); promoTrait a trait
     # forms on promotion; spar bouts a week; sneak Stealth tenths a week; rankLv member levels off ranks up to Sergeant;
     # examStat stat points on promotion; cure bad traits a week; retirees places; trustCure anxious Pokémon a week;
@@ -86,6 +86,19 @@ FX = {
     'type-dojo-electric': dict(dojo={'electric': 4}), 'type-dojo-psychic-and-dark': dict(dojo={'psychic': 4, 'dark': 4}),
     'type-dojo-fighting-and-rock': dict(dojo={'fighting': 4, 'rock': 4}), 'type-dojo-ghost-and-poison': dict(dojo={'ghost': 4, 'poison': 4}),
     'type-dojo-steel-and-dragon': dict(dojo={'steel': 4, 'dragon': 4}),
+    # D13 (debate.ts): debate is Conviction at a Debate's start; debateFloor the least the first argument moves the bar;
+    # debateSee shows each set line's marks before you pick it.
+    'debate-hall': dict(debateFloor=5), 'briefing-theater': dict(debateSee=1),
+    # D10 (growth.ts): contact (a Black Market contact), routes (+ smuggling routes), papers (a forged paper a week),
+    # flyerPct (% on flyer walk-ins), interest (% a week on idle money, max ₽1,000), fence (% on what the Fence pays).
+    'contraband-cellar': dict(treasury=2000), 'aquarium-tank': dict(storage=10), 'forgery-desk': dict(papers=1), 'loan-desk': dict(weekly=100),
+    'pawn-shop-inside': dict(contact=1, fence=5), 'black-market-counter': dict(contact=1), 'smugglers-desk': dict(routes=1),
+    'auction-hall': dict(fence=10), 'treasury-hall': dict(treasury=20000, interest=1), 'investment-office': dict(interest=1),
+    'battle-arena': dict(trainXp=1), 'lockdown-control': dict(raidDef=2), 'recruitment-desk': dict(flyerPct=10), 'dockside-depot': dict(routes=1),
+    'lighthouse-beacon': dict(control=5), 'sewer-network': dict(heatWeek=5), 'gym-annex-branch': dict(control=10), 'ocean-pen': dict(routes=1),
+    'trainer-gym-annex': dict(weekly=150), 'grunt-bar': dict(morale=3), 'drivers-pool': dict(heatWeek=3), 'grunt-plot-desk': dict(income=60),
+    'collectors-office': dict(weekly=120), 'black-ops-room': dict(nightActions=1), 'security-firm': dict(clean=100, control=5),
+    'pawn-counter': dict(clean=80), 'grunt-gym-front': dict(control=10),
 }
 # D9 rows the rival rules don't reach yet: the slice that does (the keyword guess said D9).
 WAIT_OVERRIDE = {
@@ -93,21 +106,31 @@ WAIT_OVERRIDE = {
     'machine-shop': 'later', 'test-chamber': 'later', 'panic-room': 'D14', 'escape-tunnel': 'D14', 'battle-arena': 'D10', 'hidden-lab': 'D10',
     'pokemon-nap-house': 'later', 'cave-habitat': 'later', 'strike-breakers-office': 'later', 'drivers-pool': 'D10',
     'assassins-guild': 'later', 'security-firm': 'D10',
+    # D10 read these and found they need other systems: Pokémon friendship rooms and TMs (later), captives (D23).
+    'pokemon-spa': 'later', 'tm-library': 'later', 'interrogation-cell': 'D23', 'research-library': 'later', 'hidden-lab': 'later',
+    'friendship-meadow': 'later',
 }
 # Effects that only part works now (the rest waits): shown on the room card.
 NOTE = {
     'barracks': None,
     'dojo': 'Stat classes come with ranks (later).',
     'treasury': None, 'kennel': None, 'trap-hall': None,
-    'operations-room': 'Raid itself is D10.', 'front-office': 'Buy Out and Bribe are D10.',
-    'radio-room': 'Spread the Word is D10.', 'workshop': 'Gadgets are D10.',
-    'taxi-rank': 'Taxi fares come with D10; the drivers bring Intel now.', 'spy-academy': 'Training moles waits for D22; your spies are caught less now.',
+    'operations-room': None, 'front-office': None, 'radio-room': None, 'workshop': None,
+    'taxi-rank': 'Taxi fares are later; the drivers bring Intel now.', 'spy-academy': 'Training moles waits for D22; your spies are caught less now.',
     'mech-hangar': 'Mechs are drawn later; they count in raids now.', 'decoy-room': 'The fake vault counts as raid Defense.',
-    'honor-guard-hall': 'Guards the HQ in raids; the Boss\'s own escort waits for D14.', 'ballroom': 'Hosting a Boss in person waits for D13; tribute is cheaper now.',
+    'honor-guard-hall': 'Guards the HQ in raids; the Boss\'s own escort waits for D14.', 'ballroom': 'Hosting a Boss: +5 Conviction when a Debate starts; tribute is cheaper.',
     'embassy-wing': 'Envoys come as Rival File cards; tribute is cheaper now.', 'watchtower': None, 'security-room': None,
-    'garage': 'Smuggle is D10.', 'print-shop': 'Flyers are D10.', 'research-lab': 'Hit a Lab and breeding are D10.',
+    'garage': None, 'print-shop': None, 'research-lab': 'Breeding is the Breed action (D4b, in the Pens); Hit a Lab and Hack the Terminal are open.',
+    # D10 rows that do part of what the list says.
+    'contraband-cellar': 'Hidden goods count as money kept safe in a raid.', 'aquarium-tank': 'Sea scouting is later; it holds 10 more Pokémon.',
+    'loan-desk': 'Interest from locals as a weekly ₽100.', 'auction-hall': 'Auctions sell through the Fence (+10%).',
+    'battle-arena': 'Battles on your terms are later; crew training +1 XP.', 'lockdown-control': 'Counts as raid Defense.',
+    'lighthouse-beacon': 'Sea control as Control in its district.', 'sewer-network': 'Moving unseen: Heat −5 a week.',
+    'gym-annex-branch': 'A local seat: Control +10 (badge power is later).', 'drivers-pool': 'Escape speed as Heat −3 a week.',
+    'grunt-plot-desk': 'Small plots as ₽60 a day.', 'black-ops-room': 'Special missions as one more Night action.',
     'holding-pens': None, 'outpost': 'Its own 2 room slots come with many regions (D15).',
-    'safehouse': None, 'luxury-suite': 'Debate +10% is D13; Executives\' Morale comes later.',
+    'safehouse': None, 'luxury-suite': 'Debates start at +5 Conviction (the +10% meeting bonus); Executives\' Morale waits for ranks (D4).',
+    'debate-hall': 'The first argument of each Debate moves the bar at least +5; the rhetoric die is the bar itself.', 'briefing-theater': 'Every set line\'s five marks show before you pick it; crew talks are D3\'s.',
     'recruitment-center': 'The weekly walk-in is D6.', 'executive-office': 'Admins\' Hold +20% is D15.',
     'night-market-stall': 'The list gives no T1 number; ₽80 a day matches the Grunt Café.', 'berry-garden': 'One berry kind until the Cold Cellar (later).', 'card-den': 'The cheat chance comes with the Ledger (D6).', 'infirmary': 'Free healing: Rest already heals the team.',
 }

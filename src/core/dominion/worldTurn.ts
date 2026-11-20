@@ -67,9 +67,11 @@ export function addWorldStep(id: WorldStepId, step: WorldStep): void {
   (STEPS[id] ??= []).push(step);
 }
 
-/** D6: what runs after every step (the Ledger closes the week, the districts' holding). Same shape as a step. */
-const ENDS: WorldStep[] = [];
-export function addWorldEnd(step: WorldStep): void {
+/** D6: what runs after every step (the Ledger closes the week, the districts' holding). Same shape as a step; D25's news
+ * also reads tonight's lines by step. */
+export type WorldEnd = (block: DominionBlock, seed: string, byStep: Partial<Record<WorldStepId, string[]>>) => string[];
+const ENDS: WorldEnd[] = [];
+export function addWorldEnd(step: WorldEnd): void {
   ENDS.push(step);
 }
 
@@ -80,14 +82,17 @@ export function addWorldEnd(step: WorldStep): void {
 export function runWorldTurn(block: DominionBlock, seed: string): string[] {
   const lines: string[] = [];
   const byStep = DOMINION_DATA.empire.ledger.byStep;
+  const said: Partial<Record<WorldStepId, string[]>> = {};
   for (const id of WORLD_ORDER) {
     for (const step of STEPS[id] ?? []) {
       const funds = block.funds, sum = weekSum(block);
-      lines.push(...step(block, seed));
+      const out = step(block, seed);
+      lines.push(...out);
+      (said[id] ??= []).push(...out);
       bookRest(block, funds, sum, byStep[id] ?? 'other');
     }
   }
-  for (const end of ENDS) lines.push(...end(block, seed));
+  for (const end of ENDS) lines.push(...end(block, seed, said));
   return lines;
 }
 

@@ -1,5 +1,6 @@
 // DOMINION slice D4: ranks, Team Types and the Reserve (plans/evil-mode-rework BUILD_SLICES.md; Part 7, Part 8, Part 9 A19).
 import { describe, expect, it } from 'vitest';
+import { freshChair } from '../../src/core/dominion/chair';
 import { crewOf, crewStep, monName, odds, taskById, withCrew } from '../../src/core/dominion/crew';
 import { fileModel } from '../../src/core/dominion/crewScreens';
 import { DOMINION_DATA } from '../../src/core/dominion/data';
@@ -21,10 +22,16 @@ import { content } from './helpers';
 
 const PY = DOMINION_DATA.pyramid;
 const domRun = (seed = 'dm4'): RunState => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', rules: { ...STANDARD_CHOICE, modeId: DOMINION_MODE_ID } }), 0);
+/** D12: the Chair is switched off here, so these nights stay the same as before it. */
+const quiet = (r: RunState): RunState => {
+  const out = structuredClone(r);
+  out.expansion!.dominion!.chair = { ...freshChair(), opts: { length: 'off', numbers: 'arrows', speed: 'normal' } };
+  return out;
+};
 const started = (seed = 'dm4', member: 'grunt' | 'admin' = 'grunt'): RunState => {
   const out = startInRun(content, domRun(seed), { types: ['poison', 'dark'], member, look: 0 });
   expect(out.problem).toBeNull();
-  return stepInRun(content, out.run, { t: 'open' }).run;
+  return quiet(stepInRun(content, out.run, { t: 'open' }).run);
 };
 const blk = (r: RunState): DominionBlock => r.expansion!.dominion!;
 const go = (r: RunState, a: DominionAction): RunState => {

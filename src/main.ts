@@ -6,6 +6,7 @@ import { hasSkinBackdrop } from './ui/screenSkins';
 import { ruleWipe, wipeAssetId, type WipeMask } from './ui/battleFx/ruleWipe';
 import { loadAssets } from './ui/lazyAssets';
 import { installTouchControls, setTouchLayout } from './ui/touchControls';
+import { patchKeyQueue } from './ui/keyQueue';
 import { playReaction, runInteractionPrompt } from './ui/interactionPrompt';
 import { promptById } from './core/interaction/prompt';
 import { sheenSweep } from './ui/battleFx/transitions';
@@ -117,6 +118,8 @@ function start(): void {
   (window as unknown as { pkrPlugins: unknown }).pkrPlugins = { onCues: registerCueHook, remove: unregisterCueHook, list: hookNames };
 
   installTouchControls();
+  // One key press reaches each screen once, even when a slow frame holds several key events.
+  patchKeyQueue(Phaser.Input.Keyboard.KeyboardPlugin.prototype as unknown as { update: () => void });
   const game = new Phaser.Game({
     type: Phaser.AUTO,
     parent: 'game',

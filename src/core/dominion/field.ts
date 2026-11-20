@@ -224,15 +224,38 @@ export interface Card {
   /** Chance (on a failed roll with no fight of its own) that the police step in. */
   police: number;
   level: number;
+  /** D10: a choice the action needs (a Gym's way, a bribe's target, a specialist), the choices, and an extra line. */
+  opt: string | null;
+  opts: { id: string; label: string }[];
+  note: string | null;
+}
+
+/** D10: a later slice's say on a Card (growth.ts: a business's price, a Gym's ways). Runs before the blocked check; never rolls. */
+type CardHook = (b: DominionBlock, run: Pick<RunState, 'party'>, c: Card) => void;
+/** Kept on a hoisted function (like the gates): growth.ts may register while this file is still loading. */
+function cardHooks(): { fill: CardHook[]; gate: ((b: DominionBlock, run: Pick<RunState, 'party'>, c: Card) => string | null)[] } {
+  const box = cardHooks as unknown as { v?: { fill: CardHook[]; gate: ((b: DominionBlock, run: Pick<RunState, 'party'>, c: Card) => string | null)[] } };
+  return (box.v ??= { fill: [], gate: [] });
+}
+export function addCardHook(f: CardHook): void {
+  cardHooks().fill.push(f);
+}
+export function addCardGate(g: (b: DominionBlock, run: Pick<RunState, 'party'>, c: Card) => string | null): void {
+  cardHooks().gate.push(g);
 }
 
 /** Average level of the Boss's team. */
 const teamLevel = (run: Pick<RunState, 'party'>): number => (run.party.length ? Math.round(run.party.reduce((a, m) => a + m.level, 0) / run.party.length) : 5);
-const foeLevel = (b: DominionBlock, run: Pick<RunState, 'party'>, offset: number): number => clamp(teamLevel(run) + offset, F().levels.min, b.levelCap + F().levels.overCap);
+export const foeLevel = (b: DominionBlock, run: Pick<RunState, 'party'>, offset: number): number => clamp(teamLevel(run) + offset, F().levels.min, b.levelCap + F().levels.overCap);
 
-export function foeOf(b: DominionBlock, run: Pick<RunState, 'party'>, kind: FieldFight['foe'], district: District, target: Target | null): Foe {
+export function foeOf(b: DominionBlock, run: Pick<RunState, 'party'>, kind: FieldFight['foe'], district: District, target: Target | null, card: string | null = null): Foe {
   const P = F().police;
   switch (kind) {
+    case 'court': {
+      // D12: a Chair visitor at the door (court.json card `card`).
+      const f = DOMINION_DATA.court.find((c) => String(c.id) === card)?.foe ?? P.raid;
+      return { name: f.name, species: f.species[0]!, level: foeLevel(b, run, f.offset), wild: false };
+    }
     case 'police': return { name: P.jenny.name, species: P.jenny.species[0]!, level: foeLevel(b, run, P.jenny.offset), wild: false };
     case 'looker': return { name: P.looker.name, species: P.looker.species[0]!, level: foeLevel(b, run, P.looker.offset), wild: false };
     case 'raid': return { name: P.raid.name, species: P.raid.species[0]!, level: foeLevel(b, run, P.raid.offset), wild: false };
@@ -244,6 +267,8 @@ export function foeOf(b: DominionBlock, run: Pick<RunState, 'party'>, kind: Fiel
     }
     case 'rival':
       return RIVAL_FOE ? RIVAL_FOE(b, run) : { name: 'Rival Grunt', species: 'rattata', level: foeLevel(b, run, 0), wild: false };
+    case 'growth':
+      return GROWTH_FOE ? GROWTH_FOE(b, run) : { name: 'A guard', species: 'rattata', level: foeLevel(b, run, 0), wild: false };
     case 'target': {
       const f = target?.foe ?? district.targets[0]!.foe;
       return { name: f.name, species: f.species[0]!, level: foeLevel(b, run, f.offset), wild: false };
@@ -286,11 +311,11 @@ export function setHeroFoe(h: NonNullable<typeof HOOKS.foe>): void {
 }
 
 const canBattle = (run: Pick<RunState, 'party'>): boolean => run.party.some((m) => m.hp > 0);
-const crewStat = (b: DominionBlock, bring: readonly string[], stat: StatId): [string, number][] =>
-  bring.map((id) => b.members.find((m) => m.id === id)).filter((m) => !!m).slice(0, F().odds.maxBrought).map((m) => [`${m!.name} brought along`, m!.stats[stat] * F().odds.crewPer]);
+const crewStat = (b: DominionBlock, bring: readonly string[], stat: StatId, most: number): [string, number][] =>
+  bring.map((id) => b.members.find((m) => m.id === id)).filter((m) => !!m).slice(0, most).map((m) => [`${m!.name} brought along`, m!.stats[stat] * F().odds.crewPer]);
 
 /** The Card (Part 1 §3, mockup 4): everything the action risks and pays, worked out from the block. Never rolls. */
-export function card(b: DominionBlock, run: Pick<RunState, 'party'>, actionId: string, targetId: string | null, districtId: string, bring: readonly string[] = []): Card | null {
+export function card(b: DominionBlock, run: Pick<RunState, 'party'>, actionId: string, targetId: string | null, districtId: string, bring: readonly string[] = [], opt: string | null = null): Card | null {
   const def = actionDef(actionId);
   const play = def ? playOf(def.id) ?? null : null;
   // Hide in the Warehouse is always at the HQ, wherever the map's cursor is.
@@ -311,7 +336,7 @@ export function card(b: DominionBlock, run: Pick<RunState, 'party'>, actionId: s
   const base = play?.chance ?? 100;
   if (roll) {
     if (stat) parts.push([`Boss ${cap(stat)} ${f.edge.stats[stat]}`, f.edge.stats[stat] * O.statPer]);
-    if (stat) parts.push(...crewStat(b, bring, stat));
+    if (stat) parts.push(...crewStat(b, bring, stat, play?.squad ?? O.maxBrought));
     const intel = target ? f.scouted[target.id] ?? 0 : 0;
     if (target && intel >= b.day) parts.push([intel - O.scoutDays >= b.day - 1 ? 'Scouted yesterday' : 'Scouted', O.scouted]);
     if (ds.heat >= O.heatPer) parts.push([`Heat in ${district.name}`, -Math.floor(ds.heat / O.heatPer)]);
@@ -366,8 +391,9 @@ export function card(b: DominionBlock, run: Pick<RunState, 'party'>, actionId: s
   const money = Math.round(((play?.cost ?? 0) * (100 - (level >= 2 ? play?.cheaper ?? 0 : 0))) / 100);
   const out: Card = {
     def, play, district, target, blocked: null, roll, chance, parts, base, exact, range, pay, bring: [...bring], weekly, crate: play?.crate ?? null,
-    heat, failHeat, regard: play?.regard ?? 0, dread: play?.dread ?? 0, cost, money, travel: tr, battle, police, level,
+    heat, failHeat, regard: play?.regard ?? 0, dread: play?.dread ?? 0, cost, money, travel: tr, battle, police, level, opt, opts: [], note: null,
   };
+  for (const h of cardHooks().fill) h(b, run, out);
   out.blocked = blockedWhy(b, run, out, bring);
   return out;
 }
@@ -391,7 +417,7 @@ function blockedWhy(b: DominionBlock, run: Pick<RunState, 'party'>, c: Card, bri
   if (def.slot === 'night' && b.nightActions < 1) return Ln.nightDone!;
   if (def.slot !== 'evening' && play.where !== 'hq') {
     if (!c.travel.ok) return c.travel.line;
-    if (f.closed === c.district.id) return fill(F().police.lines.closed!, { district: c.district.name });
+    if (f.closed === c.district.id && !(b.growth?.papers ?? 0)) return fill(F().police.lines.closed!, { district: c.district.name });
   }
   if (def.slot === 'day' && b.actions < c.cost) return Ln.noActions!;
   if (play.needs && !b.keyItems.includes(play.needs)) return fill(Ln.needs!, { item: play.needs });
@@ -405,11 +431,15 @@ function blockedWhy(b: DominionBlock, run: Pick<RunState, 'party'>, c: Card, bri
   if (c.money && b.funds < c.money) return fill(Ln.noMoney!, { cost: c.money });
   if (play.effect === 'spar' && !b.members.some((m) => m.team.some((x) => x.hp > 0))) return Ln.noMember!;
   if (c.battle?.on === 'always' && !canBattle(run)) return Ln.noTeam!;
-  if (bring.length > F().odds.maxBrought) return 'Bring two at most.';
+  if (bring.length > (play.squad ?? F().odds.maxBrought)) return `Bring ${play.squad ?? F().odds.maxBrought} at most.`;
   // D4: "Rank N crew" actions need a member in that band of the pyramid; the Ceremony needs a promotion, Mentor a pupil.
   if (play.band && !hasBand(b, play.band)) return fill(Ln.band!, { band: DOMINION_DATA.pyramid.bands[play.band - 1]!.name, n: play.band });
   if (play.effect === 'ceremony' && !b.reserve?.promoted.some((p) => p.day === b.day)) return DOMINION_DATA.pyramid.lines.noCeremony!;
   if (play.effect === 'mentor' && !bring.length) return DOMINION_DATA.pyramid.lines.noPupil!;
+  for (const g of cardHooks().gate) {
+    const why = g(b, run, c);
+    if (why) return why;
+  }
   return null;
 }
 
@@ -426,7 +456,11 @@ export function addActionGate(g: Gate): void {
 }
 
 /** D9: what a later slice's effect does when the action works (rivals.ts: hits on the rival team, spying, truce talks). */
-export interface ActFx { action: string; district: string; target: string | null; big: boolean }
+export interface ActFx {
+  action: string; district: string; target: string | null; big: boolean;
+  /** D10: the Card's choice, the members brought, the run and content (inventory, party), and the Card. */
+  opt?: string | null; bring?: readonly string[]; run?: RunState; content?: Content | null; card?: Card;
+}
 type ActEffect = (b: DominionBlock, x: ActFx) => string[];
 const ACT_EFFECTS: Partial<Record<string, ActEffect>> = {};
 /** D4b: an effect that needs the content, the run and the action's mastery level (school.ts: Egg Run, Breed, Move Tutor). */
@@ -439,16 +473,47 @@ export function addPlayEffect(effect: string, f: PlayEffect): void {
 export function addActEffect(effect: string, f: ActEffect): void {
   ACT_EFFECTS[effect] = f;
 }
+/** D10: what runs after any success (Morale, Loyalty, Edge XP, Tension from the list's numbers; Extort cornering a shop). */
+type ActAfter = (b: DominionBlock, x: ActFx, play: Play) => string[];
+function afters(): ActAfter[] {
+  const box = afters as unknown as { list?: ActAfter[] };
+  return (box.list ??= []);
+}
+export function addActAfter(f: ActAfter): void {
+  afters().push(f);
+}
+/** D10: items a crate drops are stolen goods (the Fence buys them). */
+type LootHook = (b: DominionBlock, got: Record<string, number>) => void;
+function lootHooks(): LootHook[] {
+  const box = lootHooks as unknown as { list?: LootHook[] };
+  return (box.list ??= []);
+}
+export function addLootHook(f: LootHook): void {
+  lootHooks().push(f);
+}
 /** D9: a fight that isn't an action's (a rival Boss at the door, a challenge answered) is settled by its owner. */
 type Settler = (content: Content | null, b: DominionBlock, run: RunState, fight: FieldFight, outcome: 'win' | 'lose' | 'fled') => string[];
 const SETTLERS: Partial<Record<FieldFight['why'], Settler>> = {};
 export function addFightSettler(why: FieldFight['why'], f: Settler): void {
   SETTLERS[why] = f;
 }
+/** D24: the Boss is caught (a failed act, a lost police fight or raid); police.ts may open a questioning. */
+export interface CaughtEv { why: 'stealth' | 'police' | 'raid'; district: string; action: ActionDef | null; place: string | null; seed: string }
+type CaughtHook = (b: DominionBlock, ev: CaughtEv) => string[];
+const CAUGHT: CaughtHook[] = [];
+export function addCaughtHook(h: CaughtHook): void {
+  CAUGHT.push(h);
+}
+const caughtLines = (b: DominionBlock, ev: CaughtEv): string[] => CAUGHT.flatMap((h) => h(b, ev));
 /** D9: the rival foe on the Card (rivals.ts). */
 let RIVAL_FOE: ((b: DominionBlock, run: Pick<RunState, 'party'>) => Foe) | null = null;
 export function setRivalFoe(f: (b: DominionBlock, run: Pick<RunState, 'party'>) => Foe): void {
   RIVAL_FOE = f;
+}
+/** D10: the next fight of a Raid, a Gym or the Gauntlet (growth.ts). */
+let GROWTH_FOE: ((b: DominionBlock, run: Pick<RunState, 'party'>) => Foe) | null = null;
+export function setGrowthFoe(f: (b: DominionBlock, run: Pick<RunState, 'party'>) => Foe): void {
+  GROWTH_FOE = f;
 }
 
 // ---------- doing it ----------
@@ -491,6 +556,7 @@ function openCrate(content: Content | null, b: DominionBlock, inv: Record<string
     }
   }
   for (const [item, n] of Object.entries(got)) addItem(inv, item, n);
+  for (const h of lootHooks()) h(b, got);
   const cash = round10(rng.int(c.cash[0], c.cash[1]));
   b.funds += cash;
   b.earned += cash;
@@ -499,7 +565,7 @@ function openCrate(content: Content | null, b: DominionBlock, inv: Record<string
   return bits.length > 1 ? `${bits.slice(0, -1).join(', ')} and ${bits.at(-1)}` : bits[0] ?? 'nothing much';
 }
 
-interface Ctx { def: ActionDef; play: Play; district: District; target: Target | null; card: Card; big: boolean; pass: boolean; wager: number }
+interface Ctx { def: ActionDef; play: Play; district: District; target: Target | null; card: Card; big: boolean; pass: boolean; wager: number; opt: string | null }
 
 function vars(b: DominionBlock, x: Ctx, extra: Record<string, string | number> = {}): Record<string, string | number> {
   return { owner: x.target?.owner.name ?? 'They', target: x.target?.name ?? x.district.name, district: x.district.name, member: b.members[0]?.name ?? 'Your member', ...extra };
@@ -625,7 +691,7 @@ function succeed(content: Content | null, b: DominionBlock, run: RunState, x: Ct
     }
     default: {
       const fx = play.effect ? ACT_EFFECTS[play.effect] : undefined;
-      if (fx) lines.push(...fx(b, { action: def.id, district: district.id, target: target?.id ?? null, big: x.big }));
+      if (fx) lines.push(...fx(b, { action: def.id, district: district.id, target: target?.id ?? null, big: x.big, opt: x.opt, bring: c.bring, run, content, card: c }));
       const pfx = play.effect ? PLAY_EFFECTS[play.effect] : undefined;
       // The line the effect writes replaces the win line (as Evolve in Peace's does).
       if (pfx && content) lines.splice(lines.length - 1, 1, ...pfx({ content, b, run, level: masteryLevel(f.mastery[def.id] ?? 0), rng }));
@@ -634,6 +700,8 @@ function succeed(content: Content | null, b: DominionBlock, run: RunState, x: Ct
       break;
     }
   }
+  const fxAll: ActFx = { action: def.id, district: district.id, target: target?.id ?? null, big: x.big, opt: x.opt, bring: c.bring, run, content, card: c };
+  for (const h of afters()) lines.push(...h(b, fxAll, play));
   for (const h of HOOKS.acted) h(b, def, district, true);
   return { lines, mon };
 }
@@ -666,21 +734,21 @@ function grow(b: DominionBlock, def: ActionDef, play: Play, won: boolean, big: b
   return out;
 }
 
-function ctxOf(b: DominionBlock, run: Pick<RunState, 'party'>, action: string, target: string | null, district: string, bring: readonly string[]): { c: Card; x: Omit<Ctx, 'big' | 'pass' | 'wager'> } | null {
-  const c = card(b, run, action, target, district, bring);
+function ctxOf(b: DominionBlock, run: Pick<RunState, 'party'>, action: string, target: string | null, district: string, bring: readonly string[], opt: string | null): { c: Card; x: Omit<Ctx, 'big' | 'pass' | 'wager'> } | null {
+  const c = card(b, run, action, target, district, bring, opt);
   if (!c || !c.play) return null;
-  return { c, x: { def: c.def, play: c.play, district: c.district, target: c.target, card: c } };
+  return { c, x: { def: c.def, play: c.play, district: c.district, target: c.target, card: c, opt: c.opt } };
 }
 
 /**
  * Does a Boss action (the Card's numbers, rolled on `dominion-act`). Spends the slot and the travel, rolls the odds,
  * and either settles it now or leaves the battle it's waiting on in `field.fight`. Changes `run` (a private copy).
  */
-export function act(content: Content | null, run: RunState, a: { action: string; target: string | null; district: string; bring: string[] }): ActOut {
+export function act(content: Content | null, run: RunState, a: { action: string; target: string | null; district: string; bring: string[]; opt?: string | null }): ActOut {
   const block = run.expansion?.dominion;
   const no = (notice: string | null = null): ActOut => ({ ok: false, block: block!, notice, fight: false, mon: null });
   if (!block) return no();
-  const got = ctxOf(block, run, a.action, a.target, a.district, a.bring);
+  const got = ctxOf(block, run, a.action, a.target, a.district, a.bring, a.opt ?? null);
   if (!got) return no();
   if (got.c.blocked) return no(got.c.blocked);
   const b = structuredClone(block);
@@ -697,7 +765,11 @@ export function act(content: Content | null, run: RunState, a: { action: string;
   spend(b, c.money);
   if (c.def.slot !== 'evening') {
     if (c.play!.where === 'hq') f.at = F().hq;
-    else goTo(b, run, c.district.id);
+    else {
+      // D10: a forged paper gets the Boss through a checkpoint (and is used up).
+      if (f.closed === c.district.id && b.growth && b.growth.papers > 0) b.growth.papers -= 1;
+      goTo(b, run, c.district.id);
+    }
   }
   const used = f.disguise && c.def.slot !== 'evening' && (c.heat > 0 || c.failHeat > 0);
   // the roll
@@ -726,12 +798,14 @@ export function act(content: Content | null, run: RunState, a: { action: string;
     const lines = [...fail(b, x), ...grow(b, c.def, c.play!, false, false)];
     for (const h of HOOKS.acted) h(b, c.def, c.district, false);
     syncHeat(b);
+    lines.push(...caughtLines(b, { why: 'stealth', district: c.district.id, action: c.def, place: c.target?.name ?? null, seed: run.seed }));
     return { ok: true, block: b, notice: lines.join(' '), fight: false, mon: null };
   }
   const s = succeed(content, b, run, x, rng);
   const lines = [...s.lines, ...grow(b, c.def, c.play!, true, big)];
   syncHeat(b);
-  return { ok: true, block: b, notice: lines.join(' '), fight: false, mon: s.mon };
+  // D10: an action can start a fight of its own when it works (a Raid's first fight, a Gym's Leader).
+  return { ok: true, block: b, notice: lines.join(' '), fight: !!f.fight && !f.fight.begun, mon: s.mon };
 }
 
 /**
@@ -754,7 +828,7 @@ export function settle(content: Content | null, b: DominionBlock, run: RunState,
 export function escapeHero(content: Content | null, b: DominionBlock, run: RunState, clean: boolean, runHeat: number, line: string): string[] {
   const fight = b.field.fight;
   if (!fight || fight.why !== 'hero' || fight.begun) return [];
-  const got = fight.action ? ctxOf(b, run, fight.action, fight.target, fight.district, []) : null;
+  const got = fight.action ? ctxOf(b, run, fight.action, fight.target, fight.district, [], null) : null;
   b.field.fight = null;
   const lines = [line];
   if (got && clean) {
@@ -771,6 +845,8 @@ function settleFight(content: Content | null, b: DominionBlock, run: RunState, o
   const f = b.field, fight = f.fight;
   if (!fight) return [];
   f.fight = null;
+  // D12: a Chair visitor's fight: its stakes are the Chair's (chair.ts courtFightEnd, called by fightEnd.ts).
+  if (fight.why === 'court') return [];
   const P = F().police, PL = P.lines;
   const district = districtDef(fight.district) ?? districtDef(F().hq)!;
   const won = outcome === 'win';
@@ -801,11 +877,13 @@ function settleFight(content: Content | null, b: DominionBlock, run: RunState, o
       const take = Math.max(0, Math.floor(Math.max(0, b.funds) * P.raidTake));
       spend(b, take);
       lines.push(fill(PL.raidLost!, { take }));
+      syncHeat(b);
+      lines.push(...caughtLines(b, { why: 'raid', district: district.id, action: null, place: null, seed: run.seed }));
     }
     syncHeat(b);
     return lines;
   }
-  const got = fight.action ? ctxOf(b, run, fight.action, fight.target, fight.district, []) : null;
+  const got = fight.action ? ctxOf(b, run, fight.action, fight.target, fight.district, [], null) : null;
   if (!got) {
     syncHeat(b);
     return lines;
@@ -823,6 +901,10 @@ function settleFight(content: Content | null, b: DominionBlock, run: RunState, o
       lines.push(fill(PL.lost!, { name: P.jenny.name, fine, heat: P.lost.heat, district: district.name }));
     }
     lines.push(...grow(b, x.def, x.play, false, false));
+    if (!won) {
+      syncHeat(b);
+      lines.push(...caughtLines(b, { why: 'police', district: district.id, action: x.def, place: x.target?.name ?? null, seed: run.seed }));
+    }
   } else if (outcome === 'fled') {
     lines.push(L().fled!);
   } else if (fight.why === 'hero') {

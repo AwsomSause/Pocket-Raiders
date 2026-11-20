@@ -49,6 +49,10 @@ const ZERO = (): HqFx => ({
   // D4b (school.ts, pyramid.ts)
   seats: {}, promoTrait: 0, spar: 0, sneak: 0, rankLv: 0, examStat: 0, cure: 0, retirees: 0, trustCure: 0, gruntSkill: 0,
   taskXp: 0, vets: 0, pairs: 0, reveal: 0, dojo: {}, wageOff: 0, buildOff: 0,
+  // D13 (debate.ts)
+  debate: 0, debateFloor: 0, debateSee: 0,
+  // D10 (growth.ts)
+  contact: 0, routes: 0, papers: 0, flyerPct: 0, interest: 0, fence: 0,
 });
 
 /** D4b: a seat room gives +1 at T1 and one more every three tiers (Admin Quarters: "+1 Admin per 3 tiers"). */

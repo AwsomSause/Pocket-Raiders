@@ -201,6 +201,8 @@
     "streetDone": "{choice}: done.",
     "noMoney": "Not enough money: it costs ₽{cost}.",
     "won": "You won. {team} backs off.",
+    "debateSummit": "{who} sends word: a meeting on neutral ground, a Debate if you want one (Rival File, R).",
+    "debateAdmin": "{who} has doubts about {team}. A Debate might bring them over (Rival File, R).",
     "lost": "You lost the battle. Nothing else is lost.",
     "truceNow": "A truce holds: {team} won't push you.",
     "dread": "{action}: Dread +{n} in {district}."

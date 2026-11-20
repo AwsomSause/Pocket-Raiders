@@ -3,13 +3,13 @@
 // Trainer card, team, reference letter, "Why join?"), the Inspect lens with the red string between found mismatches,
 // the questions panel, the speech bubble with its tell and the ✦ Rotom chip, and the three stamps).
 // Plain data in from core/dominion/desk.ts deskModel; DeskController keeps the cursors and the input.
-// The round-4 livery layers (`sig4`, `vl4`) are drawn as in the mockup; their CSS arrives with D26's v4 port.
+// The round-4 livery layers (`sig4`, `vl4`) come from stage() (D26).
 
 import type { DeskModel } from '../../../../core/dominion/desk';
 import type { DeskField, Verdict } from '../../../../core/dominion/schema';
 import { act, esc, tall } from '../../kit';
 import { rxUrl } from '../../assets';
-import { stage } from './views';
+import { stage, WHEEL_KEY } from './views';
 
 const img = (f: string): string => rxUrl(`dominion/${f}.png`);
 
@@ -24,7 +24,7 @@ export interface DeskUi {
 }
 
 /** Round-3 mockup passes on k5 (haze, bokeh, raindrops, grade, the spotlight on the applicant, edge glow, two
- * searchlights, gold frame, sunburst, glints) plus the round-4 livery. Decoration only (pointer-events:none in the CSS). */
+ * searchlights, gold frame, sunburst, glints) Decoration only (pointer-events:none in the CSS). */
 const OVERLAYS = `<div class="haze" style="--hz:#9fd0ff;--hz2:#ffb38a" aria-hidden="true"></div>
   <div class="bokeh" aria-hidden="true" style="background:radial-gradient(circle 30px at 127px 120px,color-mix(in srgb,#ffb38a 34%,transparent),color-mix(in srgb,#ffb38a 18%,transparent) 70%,transparent 100%),radial-gradient(circle 38px at 176px 90px,color-mix(in srgb,#9fd0ff 34%,transparent),color-mix(in srgb,#9fd0ff 18%,transparent) 70%,transparent 100%),radial-gradient(circle 29px at 153px 168px,color-mix(in srgb,#ffb38a 34%,transparent),color-mix(in srgb,#ffb38a 18%,transparent) 70%,transparent 100%),radial-gradient(circle 37px at 190px 89px,color-mix(in srgb,#9fd0ff 34%,transparent),color-mix(in srgb,#9fd0ff 18%,transparent) 70%,transparent 100%),radial-gradient(circle 31px at 856px 445px,color-mix(in srgb,#ffb38a 34%,transparent),color-mix(in srgb,#ffb38a 18%,transparent) 70%,transparent 100%),radial-gradient(circle 48px at 743px 72px,color-mix(in srgb,#9fd0ff 34%,transparent),color-mix(in srgb,#9fd0ff 18%,transparent) 70%,transparent 100%),radial-gradient(circle 29px at 12px 120px,color-mix(in srgb,#ffb38a 34%,transparent),color-mix(in srgb,#ffb38a 18%,transparent) 70%,transparent 100%),radial-gradient(circle 39px at 59px 115px,color-mix(in srgb,#9fd0ff 34%,transparent),color-mix(in srgb,#9fd0ff 18%,transparent) 70%,transparent 100%)"></div>
   <div class="pts" aria-hidden="true"><div class="pt-flash" aria-hidden="true"></div><i class="pt drop" style="left:262px;top:287px;--dl:-0.2s;--t:4.4s;--c:#fff"></i><i class="pt drop" style="left:333px;top:212px;--dl:-3.0s;--t:5.8s;--c:#9fd0ff"></i><i class="pt drop" style="left:277px;top:184px;--dl:-3.4s;--t:3.1s;--c:#ffb38a"></i><i class="pt drop" style="left:209px;top:173px;--dl:-5.7s;--t:5.2s;--c:#9fd0ff"></i><i class="pt drop" style="left:102px;top:190px;--dl:-5.9s;--t:2.9s;--c:#fff"></i><i class="pt drop" style="left:133px;top:169px;--dl:-5.2s;--t:2.7s;--c:#ffb38a"></i><i class="pt drop" style="left:178px;top:51px;--dl:-3.5s;--t:5.7s;--c:#fff"></i><i class="pt drop" style="left:126px;top:115px;--dl:-4.0s;--t:5.9s;--c:#9fd0ff"></i></div>
@@ -32,8 +32,7 @@ const OVERLAYS = `<div class="haze" style="--hz:#9fd0ff;--hz2:#ffb38a" aria-hidd
   <div class="focus" aria-hidden="true" style="left:432px;top:156px;--r:130px;--fc:170,205,255"></div>
   <div class="edgeglow" aria-hidden="true" style="--eg:#9fd0ff"></div><div class="beam sweep" aria-hidden="true" style="left:120px;z-index:1;--a0:-30deg;--a1:14deg;background:linear-gradient(0deg,transparent,#9fd0ff 35%,transparent);opacity:.35"></div><div class="beam sweep b" aria-hidden="true" style="left:780px;z-index:1;--a0:22deg;--a1:-18deg;background:linear-gradient(0deg,transparent,#ffb38a 35%,transparent);opacity:.3"></div>
   <div class="orn" aria-hidden="true"></div>
-  <div class="rays turn finale" aria-hidden="true" style="left:289px;top:13px;width:286px;height:286px;--rc:rgba(170,205,255,.30)"></div><i class="glint fg" style="left:503px;top:78px;--g:20px"></i><i class="glint fg" style="left:341px;top:201px;--g:14px;animation-delay:-1.4s"></i>
-  <div class="sig4" aria-hidden="true"></div><div class="vl4" aria-hidden="true"></div>`;
+  <div class="rays turn finale" aria-hidden="true" style="left:289px;top:13px;width:286px;height:286px;--rc:rgba(170,205,255,.30)"></div><i class="glint fg" style="left:503px;top:78px;--g:20px"></i><i class="glint fg" style="left:341px;top:201px;--g:14px;animation-delay:-1.4s"></i>`;
 
 /** Where each field sits on the desk: its red "miss" box and the end of the red string. */
 const SPOTS: Record<DeskField, { box: [number, number, number, number, number]; pin: [number, number] }> = {
@@ -172,7 +171,7 @@ export function deskView(m: DeskModel, ui: DeskUi, notice: string | null): strin
     : `<span class="key"${act('back')}>Esc</span><span>HQ</span>`;
   return stage(`${booth(m)}
   <div class="ttl" style="--t1:#8a6a2a;--t2:#c79a3a">Applications <span class="sub" data-testid="desk-sub">· Day ${m.day}${open ? ` · ${m.place}` : ''}</span></div>
-  <div class="keys">${keys}</div>
+  <div class="keys">${WHEEL_KEY}${keys}</div>
   ${open ? `${paperwork(m)}${rings(m, ui)}${redString(m)}${count}${lens(m)}${questions(m, ui)}${answer(m)}${stamps(m, ui)}` : closed(m)}
   <div class="pool flick" style="left:20px;top:250px;width:520px;height:260px;z-index:6;--pc:rgba(255,220,150,.18)"></div>
   <div class="puff" style="left:690px;top:140px;width:26px;height:20px;z-index:2"></div>

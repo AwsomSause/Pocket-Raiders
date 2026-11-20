@@ -7,6 +7,7 @@ import { districtDef } from './field';
 import { cardChoices, planSeen, rivalsOf, stageDef, stageIndex, streetRow, teamsHere, tribute } from './rivals';
 import type { DominionAction, DominionBlock, RivalCard } from './schema';
 import { topModel, type TopModel } from './screens';
+import { dealOf, demandText, tributeOf } from './debate';
 
 const RV = () => DOMINION_DATA.rivals;
 const money = (n: number): string => `₽${n.toLocaleString('en-US')}`;
@@ -22,6 +23,8 @@ export interface RivalFileModel {
   plan: string; seen: boolean;
   raid: string | null;
   truce: string | null;
+  /** D13: the team is your Branch (or merged into you) after a Debate. */
+  deal: string | null;
   spies: string;
   sites: { name: string; where: string; state: 'theirs' | 'yours' | 'gone'; hq: boolean }[];
   log: { day: number; text: string }[];
@@ -55,6 +58,8 @@ export function threatRow(b: DominionBlock): Threat | null {
     const n = Math.max(0, t.raid - b.day);
     return { ...base, hot: true, text: n ? `${team.boss.name} will raid your HQ within ${nights(n)}.` : `${team.boss.name} is at your door.` };
   }
+  const deal = dealOf(b, team.id);
+  if (deal) return deal.kind === 'merger' ? null : { ...base, hot: false, text: `${team.name} is your Branch. This week: ${DOMINION_DATA.debate.directives.find((x) => x.id === deal.order)?.name ?? deal.order}.` };
   if (t.truce) return { ...base, hot: false, text: `A truce with ${team.name} holds.` };
   if (s === 0) return null;
   return { ...base, hot: s >= 3, text: `${team.name}: ${stageDef(s).name}. ${stageDef(s).does}` };
@@ -70,6 +75,9 @@ function cardText(c: RivalCard): string {
     case 'defect': return `${c.who} wants out of ${team?.name ?? 'the team'} for ${money(c.amount)}.`;
     case 'truce': return `${c.who} offers a truce.`;
     case 'street': return `${streetRow(c.ref)?.what ?? 'A meeting on the street'}${where}.`;
+    // D13 (debate.ts)
+    case 'debate': return c.who === team?.boss.name ? `${c.who} will sit down for a Debate.` : `${c.who} has doubts about ${team?.name ?? 'their team'}: a Debate might bring them over.`;
+    case 'directive': return `Give ${team?.name ?? 'your'} Branch its order for the week.`;
   }
 }
 
@@ -94,7 +102,10 @@ export function rivalFileModel(b: DominionBlock, at: number, notice: string | nu
     const m = b.members.find((x) => x.id === h.member);
     rows.push({ id: `ransom-${h.member}`, label: `Pay ${money(h.ransom)} for ${m?.name ?? 'your member'}`, sub: `Held since Day ${h.day}. Let go on Day ${h.day + RV().held.days} anyway, or rescue them (crew task).`, act: { t: 'ransom', member: h.member } });
   }
-  if (t.truce) rows.push({ id: 'break', label: 'Break the truce', sub: `Tension +${RV().tension.breakTruce} at once.`, act: { t: 'breakTruce', team: team.id } });
+  const deal = dealOf(b, team.id);
+  if (deal) {
+    // A Branch or a Merger: no truce to offer or break.
+  } else if (t.truce) rows.push({ id: 'break', label: 'Break the truce', sub: `Tension +${RV().tension.breakTruce} at once.`, act: { t: 'breakTruce', team: team.id } });
   else if (t.tension >= RV().truce.minTension) rows.push({ id: 'truce', label: `Offer a truce (${money(tribute(b))} a week)`, sub: `Tension −${RV().tension.truceWeek} now and every week it's paid. No raids while it holds.`, act: { t: 'truce', team: team.id } });
   const k = rows.length ? Math.max(0, Math.min(at, rows.length - 1)) : -1;
   const mine = r.mySpies.filter((x) => x.team === team.id).map((x) => b.members.find((m) => m.id === x.member)?.name).filter(Boolean);
@@ -108,6 +119,11 @@ export function rivalFileModel(b: DominionBlock, at: number, notice: string | nu
     seen,
     raid: t.raid === null ? null : t.raid > b.day ? `${team.boss.name} will raid your HQ within ${nights(t.raid - b.day)}.` : `${team.boss.name} is at your door.`,
     truce: t.truce ? (t.truce.tribute ? `Truce since Day ${t.truce.since}: ${money(t.truce.tribute)} a week.` : `Truce until Day ${t.truce.until ?? '?'}.`) : null,
+    deal: deal
+      ? deal.kind === 'merger'
+        ? `Merged into you on Day ${deal.since}.`
+        : `Your Branch since Day ${deal.since}: ${money(tributeOf(b, deal))} a week. This week: ${DOMINION_DATA.debate.directives.find((x) => x.id === deal.order)?.name ?? deal.order}${deal.demand ? `. Their demand: ${demandText(deal)}` : ''}${deal.loyal ? '. Loyal.' : '.'}`
+      : null,
     spies: `${mine.length ? `Inside for you: ${mine.join(', ')}.` : 'Nobody of yours inside.'} ${t.spies ? `Moles in your crew: ${t.spies} (Counter-spy finds them).` : 'No moles found.'}`,
     sites: team.sites.map((x) => ({ name: x.name, where: districtDef(x.district)?.name ?? x.district, state: t.sites[x.id] ?? 'theirs', hq: !!x.hq })),
     log: [...t.log].reverse().slice(0, 5),
