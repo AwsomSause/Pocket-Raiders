@@ -321,7 +321,7 @@
 #rx .dom{--ai:#ffb38a;--ai-d:#d9774a;--ai-glow:rgba(255,160,110,.55);--manila:#e9d6a4;--manila-d:#c9b073;--steel:#5d6b80;--block:#4a5262}
 #rx .dom .aichip{position:absolute;z-index:32;display:inline-flex;align-items:center;gap:7px;padding:3px 11px 3px 6px;border-radius:999px;font:600 13px var(--ui);color:#2b1408;
   background:linear-gradient(180deg,#ffd9bf,#ffad80);box-shadow:0 0 0 3px var(--ink),0 0 16px var(--ai-glow);white-space:nowrap}
-#rx .dom .aichip i{width:22px;height:20px;flex:none;margin:-3px 0;background:url(sprites/p-rotom.png) center/contain no-repeat;image-rendering:pixelated}
+#rx .dom .aichip i{width:22px;height:20px;flex:none;margin:-3px 0;background:url(/assets/images/dominion/p-rotom.png) center/contain no-repeat;image-rendering:pixelated}
 #rx .dom .aichip .dm2{opacity:.7;font-weight:500}
 #rx .dom .spark{display:inline-block;width:var(--z,16px);height:var(--z,16px);background:var(--sc,#ffb38a);clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);filter:drop-shadow(0 0 6px var(--sc,#ffb38a));flex:none}
 #rx .dom .tell{position:absolute;z-index:34;padding:5px 16px;font:800 22px/1 var(--logo);font-style:italic;letter-spacing:.04em;color:#fff;background:var(--tc,#d8402f);border-radius:6px;

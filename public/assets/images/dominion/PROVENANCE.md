@@ -31,6 +31,13 @@ Copied from the same mockup sprites folder (`plans/evil-mode-rework/mockups-rede
 | `t-giovanni.png` | Trainer sprite from the PokeRogue pack (`images/trainer/`), one frame, cut by the mockup thread (the Tension row's portrait) |
 | `p-rotom.png` | Pokémon sprite from the PokeRogue pack, the Rotom chip icon the round-3 CSS points at (`plans/evil-mode-rework/mockups-v3/sprites/`); the same file D19 brings |
 
+## Slice D19 (the personality card, Rotom mockup a3)
+
+| File | From |
+| --- | --- |
+| `p-rotom.png` | Pokémon sprite from the PokeRogue pack, the Rotom chip icon of the Rotom mockups (`plans/evil-mode-rework/mockups-v3/sprites/`) |
+| `g-mic.png` | Item icon from `images/items/` (PokeRogue pack), re-saved at the mockup's size by the Rotom mockups thread; copied from `plans/claude-api/mockups/sprites/` |
+
 ## Slice D4 (the Reserve and the Rank Pyramid, mockups 11 and 12)
 
 | File | From |
