@@ -18,6 +18,7 @@ import { mountRedux, type ReduxView } from '../ui/redux/stage';
 import { hqView, openingView, setupView, titleView, type SetupFiles } from '../ui/redux/screens/dominion/views';
 import { CrewController } from './dominion/crewController';
 import { ReserveController } from './dominion/reserveController';
+import { typeBoxOpen } from '../ui/typeBox';
 import { DeskController } from './dominion/deskController';
 import { waiting as deskWaiting, deskOpen } from '../core/dominion/desk';
 import { HqController } from './dominion/hqController';
@@ -209,6 +210,9 @@ export class DominionScene extends Phaser.Scene {
       if (seen.has(e)) return;
       seen.add(e);
       if (this.leaving) return;
+      // Round 4 (D26): End saves and quits to the title from any Dominion page (not mid-interrupt: the Hero's three
+      // choices must be answered first; not while typing in the desk's Type box). Q stays free on every page for the hold-Q command wheel (D28): no screen reads it.
+      if (e.code === 'End' && this.screen !== 'interrupt' && !typeBoxOpen()) return this.leave();
       // D24: the interview room and the release page read their keys first (typing included).
       if (this.inRun() && this.police.raw(e)) return;
       if (this.screen === 'founding') return;

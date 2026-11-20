@@ -10,8 +10,11 @@ async function newDominion(page: Page) {
     s.saveSettings({ ...s.settings, expansion: { ...s.settings.expansion, evilMode: true } });
   });
   await open(page, 'RunPrep', { archetypeId: 'red', modeId: 'dominion' });
+  // The first key press right after a scene change can be dropped: wait 250 ms after each one.
+  await page.waitForTimeout(250);
   await page.keyboard.press('Enter');
   await waitForScene(page, 'StarterSelect');
+  await page.waitForTimeout(250);
   await page.keyboard.press('Enter');
   await waitForScene(page, 'Dominion');
   const s = view(page, 'Dominion');
@@ -28,6 +31,22 @@ async function newDominion(page: Page) {
   return s;
 }
 
+/** Presses `key` until `shown` is visible: a press can be lost in a busy headless frame, and every press is checked. */
+async function pressUntil(page: Page, key: string, shown: ReturnType<Page['locator']>) {
+  await expect(async () => {
+    if (!(await shown.isVisible())) await page.keyboard.press(key);
+    await expect(shown).toBeVisible({ timeout: 1500 });
+  }).toPass({ timeout: 15_000 });
+}
+
+/** Presses `key` until `gone` is hidden (never presses once it is). */
+async function pressUntilGone(page: Page, key: string, gone: ReturnType<Page['locator']>) {
+  await expect(async () => {
+    if (await gone.isVisible()) await page.keyboard.press(key);
+    await expect(gone).toBeHidden({ timeout: 1500 });
+  }).toPass({ timeout: 15_000 });
+}
+
 const block = (page: Page) => page.evaluate(() => (window as any).__pkr.session.run.expansion.dominion);
 const traitName = (id: string) => (id === 'loner' ? 'LONE WOLF' : id.toUpperCase());
 
@@ -38,12 +57,12 @@ test('the personality card on the Crew File: traits, quirk, home town, flip memb
   const s = await newDominion(page);
 
   // Hire a second Grunt so there's someone to flip to.
-  await page.keyboard.press('Digit3');
+  await pressUntil(page, 'Digit3', s.getByTestId('dom-file-keys'));
   await expect(s.getByTestId('dom-file-keys')).toContainText('Card');
-  await page.keyboard.press('KeyH');
+  await pressUntil(page, 'KeyH', s.getByTestId('dom-hire-0'));
   await s.getByTestId('dom-hire-0').click();
   await expect(s.getByTestId('dom-notice')).toContainText('joined');
-  await page.keyboard.press('Escape');
+  await pressUntilGone(page, 'Escape', s.getByTestId('dom-hire-0'));
   // A new member can bring a talk card; it is answered before anything else (D3).
   for (let n = (await block(page)).crew.talks.length; n > 0; n--) {
     await s.getByTestId('dom-talk-0').click();
@@ -89,8 +108,7 @@ test('the personality card on the Crew File: traits, quirk, home town, flip memb
   }
 
   // Esc: back to the Crew File; the card was free to look at.
-  await page.keyboard.press('Escape');
-  await expect(s.getByTestId('dom-file-stats')).toBeVisible();
+  await pressUntil(page, 'Escape', s.getByTestId('dom-file-stats'));
   const before = await block(page);
   expect(before).toEqual(b);
 

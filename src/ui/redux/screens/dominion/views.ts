@@ -15,10 +15,17 @@ import { grainUrl, skylineUrl, warehouseUrl } from './paint';
 const img = (f: string): string => rxUrl(`dominion/${f}.png`);
 const cap = (t: string): string => t[0]!.toUpperCase() + t.slice(1);
 
-/** The 960x540 stage every Dominion screen draws on (the mockups' `.st`, with the vignette and grain). */
-export function stage(inner: string, style = '', cls = 'vign grain'): string {
-  return `<div class="dom" style="position:absolute;left:0;top:0;width:960px;height:540px;--noise:url(${grainUrl()})"><div class="st ${cls}" style="${style}">${inner}</div></div>`;
+/** The 960x540 stage every Dominion screen draws on (the mockups' `.st`, with the vignette and grain). Round 4 (D26): every
+ *  screen wears the Nova livery, so the stage ends with the Nova sigil (`sig`: right by default, `l` left, `c` centre, where
+ *  the mockup puts it on open background) and the crimson underlight. Both are pointer-events:none. */
+export function stage(inner: string, style = '', cls = 'vign grain', sig: '' | 'l' | 'c' = ''): string {
+  const nova = `<div class="sig4${sig ? ` ${sig}` : ''}" aria-hidden="true"></div><div class="vl4" aria-hidden="true"></div>`;
+  return `<div class="dom" style="position:absolute;left:0;top:0;width:960px;height:540px;--noise:url(${grainUrl()})"><div class="st ${cls}" style="${style}">${inner}
+  ${nova}</div></div>`;
 }
+
+/** Round 4 (D26): every in-game key strip starts with Q, held for the command wheel (D28 builds the wheel). */
+export const WHEEL_KEY = '<span class="key q4">Q</span><span>Wheel</span>';
 
 /** D7: the mark's outline for each logo (the emblem on the top bar, the door, the title tower). */
 const LOGO_CLIP: Record<string, string> = {
@@ -108,7 +115,7 @@ export function titleView(m: TitleModel): string {
   <div class="glint" style="left:150px;top:350px;--g:14px;animation-delay:-2.2s"></div>
   <img class="spr cross" src="${img('p-golbat')}" alt="" style="left:520px;top:60px;width:70px;height:55px;z-index:2;filter:brightness(0) drop-shadow(0 0 2px #b38cff);--x:260px">
   <div class="a blink" style="left:54px;top:488px;z-index:10;font:700 16px var(--ui);letter-spacing:.24em;color:#ffe98a;text-shadow:0 0 10px rgba(255,210,63,.8)">PRESS ENTER</div>
-  <div class="sticker pulse" style="left:470px;top:200px;transform:rotate(-8deg)">EVIL MODE!</div>`, 'background:#12082a');
+  <div class="sticker pulse" style="left:470px;top:200px;transform:rotate(-8deg)">EVIL MODE!</div>`, 'background:#12082a', 'vign grain', 'c');
 }
 
 // ---------- setup pages (Part 1 §1.1, Part 7 §1.1) ----------

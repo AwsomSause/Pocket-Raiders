@@ -1,21 +1,19 @@
 // DOMINION slice D24 screens: the interview room (Rotom mockup a8) and the release page (a9), ported from the round-4
-// copy (plans/evil-mode-rework/mockups-v4/index.html #k8, #k9: the Nova livery, sigil and villain light, in police.css).
+// copy (plans/evil-mode-rework/mockups-v4/index.html #k8, #k9: the Nova livery, sigil and villain light come from dominion.css and stage(), D26).
 // Plain data in from core/dominion/policeScreens.ts; the scene's PoliceController keeps the typing box and the input.
 // Every button is a tap target with a key: 1-5 the quick answers, T your own words, Esc stay silent, Enter back to HQ.
 
 import './claude.css';
-import './police.css';
 import type { QuestionModel, ReleaseModel } from '../../../../core/dominion/policeScreens';
 import type { ReleaseLine } from '../../../../core/dominion/schema';
 import { act, esc, mini, tall } from '../../kit';
 import { rxUrl } from '../../assets';
 import { skylineDuskUrl } from './paint';
-import { stage } from './views';
+import { stage, WHEEL_KEY } from './views';
 
 const img = (f: string): string => rxUrl(`dominion/${f}.png`);
 const sign = (n: number): string => (n > 0 ? `+${n}` : n < 0 ? `−${-n}` : '±0');
 const BAND = { free: '#43cf78', bail: '#ffb238', held: '#ff5a4f' } as const;
-const LIVERY = '<div class="sig4" aria-hidden="true"></div><div class="vl4" aria-hidden="true"></div>';
 
 /** Where the four case papers sit on the cork board (mockup a8), and the pin the red string ends on. */
 const DOCS = [
@@ -108,7 +106,7 @@ export function questionView(m: QuestionModel, t: TypingState, monFile: (species
   <div class="a" style="left:640px;top:80px;width:300px;height:150px;z-index:3;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.14) 38%,transparent 46%,transparent 60%,rgba(255,255,255,.08) 66%,transparent 72%)"></div>
 
   <div class="ttl" style="--t1:#2a4a8a;--t2:#4f7fd0" data-testid="dom-q-title">Questioning <span class="sub">· ${esc(m.station)}</span></div>
-  <div class="keys"><span class="key"${act('policeType')}>T</span><span>Your words</span><span class="key"${act('policeAnswer', 'silent')} data-testid="dom-q-silent">Esc</span><span>Stay silent</span></div>
+  <div class="keys">${WHEEL_KEY}<span class="key"${act('policeType')}>T</span><span>Your words</span><span class="key"${act('policeAnswer', 'silent')} data-testid="dom-q-silent">Esc</span><span>Stay silent</span></div>
 
   <div class="shd" style="left:410px;top:322px;width:180px;height:24px"></div>
   <img class="spr" src="${img(m.officer.sprite)}" alt="${esc(m.officer.name)}" style="left:432px;top:148px;width:120px;height:189px;z-index:4" data-testid="dom-q-officer">
@@ -139,8 +137,7 @@ export function questionView(m: QuestionModel, t: TypingState, monFile: (species
     ${buttons}
     <div style="flex:1;min-width:200px;height:34px;border-radius:8px;background:#0b1020;border:3px solid ${t.on ? 'var(--gold)' : '#56679d'};box-shadow:0 0 0 3px var(--ink);display:flex;align-items:center;padding:0 10px;font-size:14px;color:#e8ecff;overflow:hidden;white-space:nowrap"${act('policeType')} data-testid="dom-q-type">${box}</div>
   </div>
-  ${ROOM_FX}
-  ${LIVERY}`, 'background:#1a1e24', 'd24 kl-police vign grain');
+  ${ROOM_FX}`, 'background:#1a1e24', 'd24 kl-police vign grain');
 }
 
 function lineRow(l: ReleaseLine, tag: string, monFile: (species: string) => string | null, compact: boolean): string {
@@ -185,7 +182,7 @@ export function releaseView(m: ReleaseModel, who: { look: string | null; name: s
   ${fig}
 
   <div class="ttl" style="--t1:#b0569a;--t2:#ff9a62" data-testid="dom-rel-title">${esc(m.title)} <span class="sub">· ${esc(m.when)}</span></div>
-  <div class="keys"><span class="key"${act('policeDone')} data-testid="dom-rel-enter">Enter</span><span>Back to HQ</span></div>
+  <div class="keys">${WHEEL_KEY}<span class="key"${act('policeDone')} data-testid="dom-rel-enter">Enter</span><span>Back to HQ</span></div>
 
   <div class="inked jolt" style="left:76px;top:66px;z-index:20;color:${stamp};font-size:34px;transform:rotate(-6deg);mix-blend-mode:normal;background:rgba(30,20,40,.6);box-shadow:0 0 0 4px rgba(30,20,40,.6),0 0 0 7px ${stamp},0 0 26px ${stamp}99" data-testid="dom-rel-stamp">${esc(m.stamp)}</div>
 
@@ -197,6 +194,5 @@ export function releaseView(m: ReleaseModel, who: { look: string | null; name: s
     <div class="row xs mu" style="margin-top:8px;gap:6px" data-testid="dom-rel-cell"><img class="ic s" src="${img('g-calendar')}" alt="">${esc(m.cell)}</div>
   </div>
   <div class="bub" style="left:40px;top:216px;width:230px;z-index:20;--tx:150px;font-size:14px" data-testid="dom-rel-parting">${esc(m.parting)}</div>
-  ${DAWN_FX}
-  ${LIVERY}`, 'background:#2a2050', 'd24 kl-dawn vign grain');
+  ${DAWN_FX}`, 'background:#2a2050', 'd24 kl-dawn vign grain');
 }

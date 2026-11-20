@@ -9,7 +9,7 @@ import './claude.css';
 import type { ChatLine, VoicesModel } from '../../../../core/dominion/voices';
 import { act, esc, tall } from '../../kit';
 import { rxUrl } from '../../assets';
-import { stage, warehouseBack } from './views';
+import { stage, warehouseBack, WHEEL_KEY } from './views';
 
 const img = (f: string): string => rxUrl(`dominion/${f}.png`);
 const AI = 'color:#ffb38a;text-shadow:0 0 8px rgba(255,138,74,.5)';
@@ -64,7 +64,7 @@ export function voicesView(m: VoicesModel): string {
   return stage(`<div style="position:absolute;inset:0;filter:brightness(.8)">${warehouseBack(false)}</div>
   <div class="cone flick" style="left:330px;top:70px;width:300px;height:400px;z-index:2;--cc:rgba(255,214,140,.30)"></div>
   <div class="ttl" style="--t1:#5b34b0;--t2:#a678ff" data-testid="dom-voices">${esc(m.title)} <span class="sub">${esc(m.sub)}</span></div>
-  <div class="keys"><span class="key"${act('voicesClose')} style="cursor:pointer">V</span><span>Back</span><span class="key"${act('voicesClose')} style="cursor:pointer">Esc</span></div>
+  <div class="keys">${WHEEL_KEY}<span class="key"${act('voicesClose')} style="cursor:pointer">V</span><span>Back</span><span class="key"${act('voicesClose')} style="cursor:pointer">Esc</span></div>
   <div class="shd" style="left:300px;top:446px;width:320px;height:24px"></div>
   ${crew}
   <div class="pool flick" style="left:300px;top:380px;width:360px;height:110px;z-index:2;--pc:rgba(255,200,120,.35)"></div>
