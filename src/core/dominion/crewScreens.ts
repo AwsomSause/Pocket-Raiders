@@ -1,6 +1,9 @@
 // DOMINION slice D3 view models: the Morning (mockup 2) and the Crew File (mockup 5), the hire list, the leads and the
 // talk card. Plain data for ui/redux/screens/dominion/crew.ts. Pure: no Phaser, no RNG beyond reading today's hire list.
 
+import type { AiLog } from '../ai/schema';
+import { lastRotomFor } from './voices';
+import { teamColours, type TeamColours } from './founding';
 import { crewOf, familyOf, memberLine, odds, rankN, rankWord, taskById, taskLevel, taskLevelWord, traitName, withCrew, xpToNext, cantTake, formedById, greenById, gruntType } from './crew';
 import { DOMINION_DATA } from './data';
 import { hireList, pitchOdds } from './recruit';
@@ -65,7 +68,7 @@ export function infoCard(b: DominionBlock, m: Member): InfoCard {
     typeName: gruntType(c.type)?.name ?? c.cls, loyalty: m.loyalty, skill: skillOf(m),
     personality: trait ? traitName(trait) : `${temper?.word ?? '?'}?`, forming: !trait, fatigue: c.fatigue, pHeat: c.pHeat,
     out: c.out ? (c.out.why === 'held' ? OUT_WORD.held! : `${OUT_WORD[c.out.why] ?? 'Out'}, ${c.out.days} day${c.out.days === 1 ? '' : 's'}`) : null,
-    armband: b.teamName ? `${b.teamName} armband` : null,
+    armband: b.team ? `${b.team.name} armband` : null,
   };
 }
 
@@ -135,6 +138,8 @@ export interface FileModel {
   task: string; taskLevel: string; out: string | null; xp: string; points: number;
   keys: { key: string; label: string }[];
   talk: TalkModel | null;
+  /** D7: the team's colours for the recoloured picture (null: own colours, grey band). */
+  colours: TeamColours | null;
 }
 
 const RECORD_WORDS: Record<string, string> = { guard: 'Guarded', shake: 'Shook down', pick: 'Thieved', train: 'Trained', recruit: 'Recruited', scout: 'Scouted', front: 'Worked a front', collect: 'Kept the books', catch: 'Caught', rest: 'Rested' };
@@ -187,6 +192,7 @@ export function fileModel(block: DominionBlock, sel: number): FileModel {
     xp: `${c.xp}/${xpToNext(m.level)} XP`, points: m.traitPoints,
     keys,
     talk: card ? { name: card.name, title: card.talk.name, text: card.text, choices: card.talk.choices!.map((x) => x.label) } : null,
+    colours: teamColours(b),
   };
 }
 
@@ -246,7 +252,7 @@ export interface PersonaModel {
   others: { name: string; look: string; traits: string }[];
 }
 
-export function personaModel(block: DominionBlock, sel: number, seed: string): PersonaModel {
+export function personaModel(block: DominionBlock, sel: number, seed: string, log?: AiLog): PersonaModel {
   const b = withCrew(block);
   const i = Math.min(sel, b.members.length - 1);
   const m = b.members[i]!;
@@ -264,7 +270,7 @@ export function personaModel(block: DominionBlock, sel: number, seed: string): P
     quirk: s.quirk.text, want: s.want, fear: s.fear, home: s.home,
     memory: c.memory.slice(-3),
     offline: cardLine(card, lineKind(payDay && !m.unpaid ? 'pay' : c.last), b.day),
-    rotom: null,
+    rotom: lastRotomFor(log, m.id),
     rotomOff: P.rotom.off,
     note: P.rotom.note.replace('{name}', m.name),
     others: b.members.filter((x) => x.id !== m.id).slice(0, 2).map((x) => ({ name: x.name, look: x.look, traits: traitWords(cardFor(seed, x)) })),

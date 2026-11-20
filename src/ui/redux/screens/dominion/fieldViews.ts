@@ -62,7 +62,7 @@ export function mapView(m: MapModel, notice: string | null, garage: boolean): st
     const st = `justify-content:center;font-size:14px;padding:4px;${bt.dim ? 'opacity:.45;' : ''}${bt.on ? 'box-shadow:0 0 0 3px #ffd23f,0 0 12px rgba(255,210,63,.6);' : ''}`;
     return `<span class="bt${bt.on ? ' y' : ''}" style="${st}"${act('grid', i)} data-testid="dom-act-${bt.id}">${esc(bt.label)}${bt.night ? ' ☾' : ''}</span>`;
   }).join('');
-  const pager = m.pages > 1 ? `<span class="row xs" style="margin-left:auto;gap:4px"><span class="kc"${act('page', -1)}>[</span>${m.page + 1}/${m.pages}<span class="kc"${act('page', 1)}>]</span></span>` : '';
+  const pager = m.pages > 1 ? `<span class="row xs" style="margin-left:auto;gap:4px;white-space:nowrap;flex-shrink:0" data-testid="dom-pager"><span class="y" style="max-width:120px;overflow:hidden;text-overflow:ellipsis" data-testid="dom-section">${esc(m.section)}</span><span class="kc"${act('page', -1)}>[</span>${m.page + 1}/${m.pages}<span class="kc"${act('page', 1)}>]</span></span>` : '';
   const cta = m.cta ? `<div class="cta${m.focus === 'grid' ? ' shine' : ''}" style="left:616px;top:422px;width:334px;height:46px;font-size:${m.cta.length > 26 ? 16 : 20}px;padding:0"${act('card')} data-testid="dom-cta">${esc(m.cta)} <span class="kc">Enter</span></div>` : '';
   const garageBox = garage ? `<div class="pnl glass" style="left:616px;top:84px;width:334px;height:330px;z-index:30" data-testid="dom-garage">
       <div class="hd y"><img class="ic" src="${img('g-bicycle')}" alt="">VEHICLES<span class="r"><span class="kc">V</span> close</span></div>
@@ -89,7 +89,7 @@ export function mapView(m: MapModel, notice: string | null, garage: boolean): st
     ${f.alert ? `<div class="al ${f.alert.cls}" style="margin-top:8px;font-size:14px;padding:4px 8px" data-testid="dom-alert"><img class="ic" src="${img('g-comet-shard')}" alt="">${esc(f.alert.text)}</div>` : ''}
   </div>
   <div class="pnl" style="left:616px;top:288px;width:334px;height:126px;padding:8px 10px" data-testid="dom-grid">
-    <div class="row xs mu" style="margin-bottom:7px;gap:4px;white-space:nowrap;overflow:hidden"><img class="ic s" src="${img('g-relic-gold')}" alt="">${targets}${pager}</div>
+    <div class="row xs mu" style="margin-bottom:7px;gap:4px;white-space:nowrap;overflow:hidden"><img class="ic s" src="${img('g-relic-gold')}" alt=""><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis">${targets}</span>${pager}</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px 7px">${grid}</div>
   </div>
   ${cta}
@@ -119,6 +119,12 @@ export function cardView(c: CardModel, monFile: string | null, initial: string):
   const fail = 100 - pct;
   const bar = c.roll ? `<div style="display:flex;height:22px;border-radius:6px;overflow:hidden;box-shadow:0 0 0 3px #28314b"><div style="flex:${pct};background:repeating-linear-gradient(135deg,#3fcf74 0 10px,#35b866 10px 20px);display:flex;align-items:center;padding-left:10px;font:700 14px var(--ui);color:#0c2a16;white-space:nowrap">SUCCESS ${c.exact ? `${pct}%` : `~${c.dial}`}</div><div style="flex:${fail};background:repeating-linear-gradient(135deg,#ef6a5a 0 10px,#d8503f 10px 20px);display:flex;align-items:center;justify-content:flex-end;padding-right:10px;font:700 14px var(--ui);color:#3a0a06;white-space:nowrap">${fail >= 12 ? (c.exact ? `FAIL ${fail}%` : 'FAIL ?') : ''}</div></div>`
     : `<div style="display:flex;height:22px;border-radius:6px;overflow:hidden;box-shadow:0 0 0 3px #28314b"><div style="flex:1;background:repeating-linear-gradient(135deg,#3fcf74 0 10px,#35b866 10px 20px);display:flex;align-items:center;padding-left:10px;font:700 14px var(--ui);color:#0c2a16">SURE THING</div></div>`;
+  // D10: the Card's choices (Left/Right: a Gym way, a bribe, a flyer design, a specialist) and what this one means.
+  const strip = c.opts.length || c.note ? `<div class="col" style="gap:4px;margin-top:8px;font-size:14px" data-testid="dom-card-strip">
+      ${c.opts.length ? `<div class="row" style="gap:6px;flex-wrap:nowrap"><span class="kc">◀ ▶</span>${c.opts.map((o) => `<span class="pill ${o.id === c.opt ? 'y' : 'k'}" style="font-size:13px;cursor:pointer;white-space:nowrap${o.id === c.opt ? ';box-shadow:0 0 0 2px #28314b' : ''}"${act('opt', o.id)} data-testid="dom-opt-${esc(o.id)}">${esc(o.label)}</span>`).join('')}</div>` : ''}
+      ${c.note ? `<div style="color:#28314b;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.25" data-testid="dom-card-note">${esc(c.note)}</div>` : ''}
+    </div>` : '';
+  const dial = strip ? 140 : 168;
   const blocked = c.blocked ? `<div class="a" style="left:96px;top:486px;z-index:13;font:700 16px var(--ui);color:#ffb4a8;text-shadow:0 2px 0 #000" data-testid="dom-card-blocked">${esc(c.blocked)}</div>` : '';
   return stage(`<img class="cv" src="${skylineDayUrl()}" alt="" style="position:absolute;inset:0;width:960px;height:540px;filter:blur(2px) saturate(.9)">
   <div class="layer" style="background:linear-gradient(180deg,rgba(10,14,30,.25),rgba(10,14,30,.75))"></div>
@@ -131,10 +137,11 @@ export function cardView(c: CardModel, monFile: string | null, initial: string):
       <div class="row" style="gap:10px"><img class="ic l" src="${img('g-relic-gold')}" alt=""><b style="font-size:26px;color:#b23a2e;letter-spacing:.02em;white-space:nowrap">The Card</b><span style="font-size:16px;color:#5d6a90;white-space:nowrap">shown before every action</span></div>
       <div class="row" style="gap:8px;font-size:17px;white-space:nowrap" data-testid="dom-card-pays"><img class="ic" src="${img('g-amulet-coin')}" alt="">${c.pays}</div>
     </div>
-    <div style="display:grid;grid-template-columns:200px 1fr 220px;gap:18px;margin-top:14px">
+    ${strip}
+    <div style="display:grid;grid-template-columns:200px 1fr 220px;gap:18px;margin-top:${strip ? 8 : 14}px">
       <div class="col" style="align-items:center;gap:8px;position:relative">
-        <div class="rays turn" style="position:absolute;left:-22px;top:-6px;width:244px;height:244px;--rc:rgba(245,180,30,.35)"></div><div style="position:relative;width:168px;height:168px;border-radius:50%;background:conic-gradient(#f5c927 0 ${pct}%,#dfe4f2 0);box-shadow:0 0 0 4px #28314b,0 0 22px rgba(245,201,39,.5);display:grid;place-items:center">
-          <div style="width:124px;height:124px;border-radius:50%;background:var(--paper);box-shadow:inset 0 0 0 4px #28314b;display:grid;place-items:center;text-align:center"><div><div class="num" style="font-size:${c.dial.length > 4 ? 38 : 62}px;line-height:.9;color:#28314b" data-testid="dom-card-chance">${esc(c.dial)}</div><div style="font-size:15px;color:#5d6a90">chance</div></div></div>
+        <div class="rays turn" style="position:absolute;left:${100 - (dial + 76) / 2}px;top:-6px;width:${dial + 76}px;height:${dial + 76}px;--rc:rgba(245,180,30,.35)"></div><div style="position:relative;width:${dial}px;height:${dial}px;border-radius:50%;background:conic-gradient(#f5c927 0 ${pct}%,#dfe4f2 0);box-shadow:0 0 0 4px #28314b,0 0 22px rgba(245,201,39,.5);display:grid;place-items:center">
+          <div style="width:${dial - 44}px;height:${dial - 44}px;border-radius:50%;background:var(--paper);box-shadow:inset 0 0 0 4px #28314b;display:grid;place-items:center;text-align:center"><div><div class="num" style="font-size:${Math.round((c.dial.length > 4 ? 38 : 62) * (dial - 44) / 124)}px;line-height:.9;color:#28314b" data-testid="dom-card-chance">${esc(c.dial)}</div><div style="font-size:15px;color:#5d6a90">chance</div></div></div>
         </div>
         <span class="pill ${c.exact ? 'g' : 'k'}" style="font-size:14px">${c.roll ? (c.exact ? 'SCOUTED' : 'UNSCOUTED') : 'NO ROLL'}</span>
       </div>
@@ -153,7 +160,7 @@ export function cardView(c: CardModel, monFile: string | null, initial: string):
   ${blocked}
   <div class="a row" style="left:96px;top:486px;width:768px;justify-content:flex-end;gap:14px;z-index:12">
     ${c.brought.length ? `<span class="xs" style="color:#dfe5ff">Bringing ${esc(c.brought.join(', '))}</span>` : ''}
-    <span class="bt" style="font-size:16px;padding:9px 14px"${act('bring')} data-testid="dom-bring"><span class="kc">B</span>Bring crew</span>
+    <span class="bt" style="font-size:16px;padding:9px 14px"${act('bring')} data-testid="dom-bring"><span class="kc">B</span>${c.squad > 1 ? `Squad (up to ${c.squad})` : 'Bring crew'}</span>
     <span class="bt" style="font-size:18px;padding:9px 18px"${act('back')} data-testid="dom-card-back"><span class="kc" style="background:linear-gradient(180deg,#5a6488,#3a4466);color:#fff;box-shadow:0 0 0 2px var(--ink)">Esc</span>Back</span>
     <div class="cta${c.blocked ? '' : ' shine'}" style="position:relative;font-size:20px;padding:9px 22px;${c.blocked ? 'opacity:.5;filter:saturate(.3)' : ''}"${act('doit')} data-testid="dom-doit">Do it ▶ <span class="kc">Enter</span></div>
   </div>
