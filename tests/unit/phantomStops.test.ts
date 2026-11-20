@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { PHANTOM_VERSIONS } from '../../src/core/presentation/phantom';
 import { pageOf } from '../../src/ui/phantom/kit';
-import { phHeal, phReward, phShop, type PhHealModel, type PhShopModel } from '../../src/ui/phantom/screens/stops';
+import { phHeal, phReward, phShop, phStore, type PhHealModel, type PhShopModel } from '../../src/ui/phantom/screens/stops';
+import type { EventModel } from '../../src/ui/redux/screens/event';
 import type { RewardModel } from '../../src/ui/redux/screens/stops';
 
 // The Phantom UI's stops of a run: the reward draft, the shop and the healing spot. Pure functions from a model to HTML.
@@ -108,5 +109,38 @@ describe('Phantom healing spot', () => {
     expect(count(html, 'data-act="heal"')).toBe(2);
     expect(html).not.toContain('<b>x</b>');
     expect(phHeal(ph, heal({ party: [] }))).toContain('hc-row');
+  });
+});
+
+describe('Phantom department store floor', () => {
+  const floor = (over: Partial<EventModel> = {}): EventModel => ({
+    name: 'Fifth floor', tag: 'Canon Spaces: Kanto · Common', lines: [{ who: null, text: 'One of each Kanto stone on velvet.' }], speaker: null, page: { at: 0, of: 1 },
+    art: null, tint: null, fx: null, cast: null, mon: null,
+    choices: [{ label: 'Fire Stone (₽3,000)', sub: '−₽3000 · Certain outcome', chance: '', locked: false }, { label: 'Leaf Stone (₽3,000)', sub: 'You need ₽3,000.', chance: '', locked: true }, { label: 'The other two stones.', sub: 'Another tray.', chance: '', locked: false }],
+    index: 0, money: 3500, outcome: null, pick: null, countdown: '', timer: null,
+    store: { title: 'Celadon Dept. Store', clerk: 'Clerk', floors: [{ tag: 'RF', name: 'Rooftop', on: false }, { tag: '5F', name: 'Evolution Stones', on: true }], party: [chip('Eevee')], notes: [['Can evolve'], [''], ['']] },
+    ...over,
+  });
+
+  it('is the shop page: the directory with this floor marked, goods with their prices split from the names, and who a good helps', () => {
+    const html = phStore(ph, floor());
+    expect(pageOf(html)).toBe('shop');
+    for (const t of ['Celadon Dept. Store', 'Evolution Stones', '▶ 5F', 'RF', '₽3,500', 'Fire Stone', '₽3,000', 'One of each Kanto stone on velvet.', 'Can evolve', 'LEFT AFTER', '₽500']) expect(html).toContain(t);
+    expect(html).not.toContain('(₽');
+    expect(count(html, 'class="it ph-bi ph-si')).toBe(3);
+    expect(count(html, /class="it ph-bi ph-si[^"]* off"/)).toBe(1);
+    expect(html).toMatch(/class="blade on"[^>]*data-act="pick" data-arg="0">Buy</);
+    expect(html).toContain('class="ph-smark">5F<');
+    expect(html).not.toContain('IN BAG');
+  });
+
+  it('a good you cannot buy says why in the clerk’s bubble, and a row with no price is a plain choice', () => {
+    const locked = phStore(ph, floor({ index: 1 }));
+    expect(locked).toContain('You need ₽3,000.');
+    expect(locked).toMatch(/class="blade on off"[^>]*data-act="pick" data-arg="1"/);
+    expect(locked).toContain('LOCKED');
+    const plain = phStore(ph, floor({ index: 2 }));
+    expect(plain).toMatch(/data-act="pick" data-arg="2">Choose</);
+    expect(plain).not.toContain('LEFT AFTER');
   });
 });

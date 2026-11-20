@@ -270,3 +270,55 @@ test('Phantom UI: a healing spot is a Phantom page that stays until an input', a
   await expect(pview(page, 'Map', 'map').locator('.ph-mbar [data-act]', { hasText: 'Heal' })).toHaveCount(0);
   expect(errors).toEqual([]);
 });
+
+test('Phantom UI: a department store floor is the shop page while choosing; buying shows the text, then what changed', async ({ page }) => {
+  test.setTimeout(120_000);
+  const errors = watch(page);
+  await start(page, 'ui=phantom&seed=newui-store');
+  await onPage(page, 'MainMenu', 'title');
+  await toPhantomMap(page);
+  await addSide(page, { id: 'ph-store', kind: 'event', used: false, eventId: 'cs-kanto-celadon-mart-f5' });
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr;
+    pkr.session.run.money = 3500;
+    pkr.session.run.party[0].speciesId = 'eevee';
+    pkr.game.scene.getScene('Map').scene.start('Event', { sideId: 'ph-store' });
+  });
+  await waitForScene(page, 'Event');
+  // Read any opening pages; the shelf shows after them.
+  for (let k = 0; k < 6 && (await pageNow(page, 'Event')) !== 'shop'; k++) { await page.keyboard.press('Enter'); await page.waitForTimeout(400); }
+  await onPage(page, 'Event', 'shop');
+  const shop = pview(page, 'Event', 'shop');
+  for (const t of ['Celadon Dept. Store', 'Evolution Stones', 'RF', '5F', '1F', 'Fire Stone', '₽3,000', '₽3,500', 'Can evolve']) await expect(shop).toContainText(t, { ignoreCase: true });
+  await expect(shop).not.toContainText('4½');
+  const rows = shop.locator('.items .it');
+  await expect(rows).toHaveCount(4);
+  await expect(rows.nth(0)).toHaveClass(/\bon\b/);
+  await fits(page, 'Event', 'shop');
+  // The last row is not a good: nobody is named for it.
+  await rows.nth(3).hover();
+  await expect(rows.nth(3)).toHaveClass(/\bon\b/);
+  await expect(shop).not.toContainText('Can evolve', { ignoreCase: true });
+  await version(page, 'channel');
+  await page.setViewportSize({ width: 844, height: 390 });
+  await rows.nth(0).hover();
+  await expect(page.locator('#phx .phs[data-scene="Event"][data-scr="shop"][data-liv="channel"]')).toBeVisible();
+  await fits(page, 'Event', 'shop');
+  await page.setViewportSize({ width: 1280, height: 720 });
+  // Buy the Fire Stone: the text first, then what changed, then the map with the stone and less money.
+  await page.waitForTimeout(250);
+  await expect(rows.nth(0)).toHaveClass(/\bon\b/);
+  await expect(rows.nth(0)).toContainText('Fire Stone', { ignoreCase: true });
+  await page.keyboard.press('Enter');
+  await onPage(page, 'Event', 'sy-result');
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.money)).toBe(500);
+  await page.waitForTimeout(900);
+  await page.keyboard.press('Enter');
+  await onPage(page, 'Event', 'sy-reward');
+  await page.waitForTimeout(1500);
+  expect(await pageNow(page, 'Event')).toBe('sy-reward');
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'Map');
+  expect(await page.evaluate(() => JSON.stringify((window as any).__pkr.session.run.inventory ?? {}).includes('fire-stone'))).toBe(true);
+  expect(errors).toEqual([]);
+});

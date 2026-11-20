@@ -23,7 +23,7 @@ A third UI style next to New and Old: **Settings > Display > UI style > Phantom*
 | 2 | Shared pages (menu, option rows, picture wall, board, number tiles, confirm), save files, Version Select (new page), and a new run: Trainer, Rules, Partner, Plan, name keys | done |
 | 3 | Party, Summary (every tab, the action menu, the move tooltip), Bag, Pokédex entry (both pages), the town dock (Hub Town and a Plaza), the PC | done |
 | 4a | Stage map (legend, stage banner, node menu), its pause menu, events (talk, choice, outcome, reward), the reward draft, the shop | done |
-| 4b | Talk pages (prologue, story, tutorial) and the healing spot: done. Open: the partner quiz, department store, trades, the map's pop pages, quick wheel, log, Seed & Codes | part |
+| 4b | Done: talk pages (prologue, story, tutorial), healing spot, the map's five pop pages, trades (quick trade and Honest Trade Card), tournament bracket, a rival's team page, department store floors. Open: the partner quiz, the code-name card, the team's own event screens, quick wheel, log, Seed & Codes | part |
 | 5 | Battle screens and cut-ins | |
 | 6 | Ceremonies, rivals, phone, ending pages, and the menus the game does not have yet | |
 
@@ -59,11 +59,16 @@ A third UI style next to New and Old: **Settings > Display > UI style > Phantom*
 - **Node menu**: one card per thing to do at a stop, the required one marked.
 - **Events** (`screens/event.ts`, `event.css`): the mock-ups' steps as Talk, Choose, Outcome, Reward ("Side stage" is the battle itself, slice 5). The event director's drawn scene is the backdrop; the speaker is the big bust, everyone else, the Pokémon and the named things stand beside. The text box waits (ALL EVENTS rule), choices are dealt as cards (up to four with their text; five or more in two rows with the lit one read out underneath), the outcome's text comes first with "What changed" sealed, then the changes open as cards and stay until Enter. Kept from the New page: tag, money, countdown and its bar, Trade card (T), Their team (R), tournament rounds (B), the big title, the standing panel, the trade picker, the black-screen scare. New in Phantom: number keys light a choice card (Enter still chooses).
 - **Reward draft and shop** (`screens/stops.ts`): "PICK ONE" cards with who each helps, Party/Bag as gold tabs, the result card that stays until Enter. The shop has the clerk (the overworld Mart clerk; Kecleon and Meowth keep their own shops), the shelf, the lit good's card with Buy 1 / Buy 5 / Add to basket, Sell, the Depot's basket and checkout, and who can use the good.
-- Still in the stand-in look after 4a: the team's own event screens (briefing, table, final, rank up), the Honest Trade Card, the bracket, the code-name card, a department store floor, and the map's pop pages (report, dossier, book, roll, track).
+- Still in the stand-in look after 4a (see the 4b notes for what has since been built): the team's own event screens (briefing, table, final, rank up) and the code-name card.
 
 ## Slice 4b notes (so far)
 - Talk pages: the prologue, story chapters and the tutorial draw the event page without the step strip. A lone "Continue" keeps the text box as the button. Left and right move along the cards (the tutorial's left still turns back a lesson page).
 - Healing spot (`phHeal`, page `heal`): the rules heal at once; the page then shows each Pokémon's ball lighting and its HP filling from what it was, then "ALL BETTER!". It stays until Enter, Esc or a click, then the map shows the same notice as before.
+- Map pop pages (`screens/pops.ts`, `pops.css`): Rival Report (R), Dossier (D), Field Notes (F), Notebook (T) and the Town Roll, each a full page that closes on the same keys as before. Unknown rows stay hidden as "???".
+- Trades (`screens/trade.ts`): the quick trade (your Pokémon, theirs, what it costs, Accept / Decline, arrows step through offers) and the Honest Trade Card. The "TRADED!" result stays until Enter.
+- Tournament bracket and a rival's team (`phBracket`, `phScout` in `pops.ts`): the bracket pages by round with the winner's card at the end; the team page shows the rival's bust and each Pokémon's level and types.
+- Department store floor (`phStore` in `stops.ts`): while choosing, a floor is the shop page: the directory with this floor marked, goods with prices split from their names, "left after", who a good helps, and the reason a locked good can't be bought. Its talk and outcome stay the event page (text first, then what changed).
+- Gotchas for later pages: the mock-up's `.dim` is a full-screen cover, never use it as a modifier; `.tabs` only has a place on the Settings page, use `pockets ph-tabs`.
 
 ## Known limits
 
@@ -76,6 +81,7 @@ A third UI style next to New and Old: **Settings > Display > UI style > Phantom*
 - `tests/unit/phantomTemplates.test.ts`: the shared pages and the run pages (windows that follow the cursor, nothing cut with an ellipsis, the hand-over only while Phantom is on).
 - `tests/unit/phantomPages.test.ts` and `tests/e2e/phantomTeam.spec.ts`: the slice 3 pages (models to HTML; in the browser from a run's map and from the hub, all five versions, four window sizes, text-fit check).
 - `tests/unit/phantomMap.test.ts`, `tests/unit/phantomEvent.test.ts` and `tests/e2e/phantomRoad.spec.ts`: the slice 4a pages (map, legend, pause in five versions at five sizes; an event from its first line to its reward with nothing given before its text is closed; shop buying; the reward draft and its result).
-- `tests/unit/phantomStops.test.ts`: the reward draft, the shop and the healing spot as pure pages (8 tests). `phantomRoad.spec.ts` also plays a healing spot and the tutorial's talk pages.
+- `tests/unit/phantomStops.test.ts`: the reward draft, the shop, the healing spot and a department store floor as pure pages (10 tests). `phantomRoad.spec.ts` also plays a healing spot, the tutorial's talk pages and buying a Fire Stone on a store floor.
+- `tests/unit/phantomPops.test.ts` (13 tests) and `tests/e2e/phantomPops.spec.ts`: the pop pages, the Town Roll, the bracket and a rival's team. `tests/unit/phantomTrade.test.ts` (7 tests) and `tests/e2e/phantomTrade.spec.ts`: both trade pages, accept and decline.
 - `tests/e2e/phantomRun.spec.ts`: save files, a whole new run from Trainer to Depart, and the shared pages in the other four versions at four window sizes, each with the text-fit check.
 - `tests/e2e/phantomUi.spec.ts`: splash, main menu by keys and mouse, Settings (presets, pages, changing a value, Phone, all five versions) with a check that no text is cut off or off the screen, and the stand-in look for a screen without a Phantom page.
