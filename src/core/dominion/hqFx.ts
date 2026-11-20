@@ -41,6 +41,8 @@ const ZERO = (): HqFx => ({
   crewCap: 0, morale: 0, loyalty: 0, income: 0, clean: 0, weekly: 0, heatDay: 0, heatWeek: 0, control: 0, trainXp: 0, injury: 0,
   recruit: 0, hireOff: 0, treasury: 0, storage: 0, defense: 0, dayActions: 0, nightActions: 0, restBonus: 0, fatigue: 0, repair: 0,
   incomePct: 0, items: {}, weeklyItems: {}, launder: null,
+  // D9 (rivals.ts)
+  intel: 0, spyCatch: 0, cipher: 0, raidDef: 0, warn: 0, fireCut: 0, truceOff: 0,
 });
 
 /** Everything the working rooms and buildings add, in one place. Percentages are capped at 90. */
@@ -66,6 +68,10 @@ export function hqFx(b: DominionBlock): HqFx {
     if (r.at && def.fx.clean) out.launder = out.launder === null ? 10 : Math.min(out.launder, 10);
   }
   out.injury = Math.min(90, out.injury);
+  out.spyCatch = Math.min(90, out.spyCatch);
+  out.fireCut = Math.min(90, out.fireCut);
+  out.cipher = Math.min(90, out.cipher);
+  out.truceOff = Math.min(90, out.truceOff);
   out.hireOff = Math.min(90, out.hireOff);
   return out;
 }

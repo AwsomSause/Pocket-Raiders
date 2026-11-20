@@ -42,8 +42,7 @@
     "A rare one (never from a minor)"
    ],
    "risk": "Caught",
-   "status": "limited",
-   "note": "Goes to the stores; the Reserve screen is D4.",
+   "status": "supported",
    "effect": {
     "kind": "steal",
     "heat": 3,
@@ -91,8 +90,11 @@
     "building is immune to sabotage"
    ],
    "risk": "Overwhelmed",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "limited",
+   "note": "Counts in raids on the HQ; guarding one outside building comes with D10.",
+   "effect": {
+    "kind": "guard"
+   }
   },
   {
    "n": 3,
@@ -133,8 +135,10 @@
     "90%, plus a visitor log"
    ],
    "risk": "Bribed",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "supported",
+   "effect": {
+    "kind": "guard"
+   }
   },
   {
    "n": 5,
@@ -201,8 +205,10 @@
     "Pokémon heal faster"
    ],
    "risk": "Pokémon released",
-   "status": "disabled",
-   "needs": "D4"
+   "status": "supported",
+   "effect": {
+    "kind": "pens"
+   }
   },
   {
    "n": 8,
@@ -261,8 +267,10 @@
     "every room trapped"
    ],
    "risk": "Triggers falsely",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "supported",
+   "effect": {
+    "kind": "guard"
+   }
   },
   {
    "n": 11,
@@ -281,8 +289,10 @@
     "hold off a raid from the roof"
    ],
    "risk": "Falls",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "supported",
+   "effect": {
+    "kind": "guard"
+   }
   },
   {
    "n": 12,
@@ -920,8 +930,10 @@
     "control a rival's lower ranks"
    ],
    "risk": "Captured",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "supported",
+   "effect": {
+    "kind": "rivalSpy"
+   }
   },
   {
    "n": 39,
@@ -940,8 +952,10 @@
     "know their weakness"
    ],
    "risk": "Spotted",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "supported",
+   "effect": {
+    "kind": "rivalIntel"
+   }
   },
   {
    "n": 40,
@@ -983,8 +997,10 @@
     "a bag from a rival"
    ],
    "risk": "Tampering caught",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "supported",
+   "effect": {
+    "kind": "rivalIntel"
+   }
   },
   {
    "n": 42,
@@ -1023,8 +1039,10 @@
     "the rival Boss's study"
    ],
    "risk": "Found",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "supported",
+   "effect": {
+    "kind": "rivalIntel"
+   }
   },
   {
    "n": 44,
@@ -1043,8 +1061,10 @@
     "90%"
    ],
    "risk": "Accuses the wrong person",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "supported",
+   "effect": {
+    "kind": "counterSpy"
+   }
   },
   {
    "n": 45,
@@ -1127,8 +1147,10 @@
     "their entire code"
    ],
    "risk": "Wrong key",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "supported",
+   "effect": {
+    "kind": "rivalIntel"
+   }
   },
   {
    "n": 49,
@@ -1190,8 +1212,10 @@
     "90%"
    ],
    "risk": "Insulted",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "supported",
+   "effect": {
+    "kind": "counterSpy"
+   }
   },
   {
    "n": 52,
@@ -1259,8 +1283,10 @@
     "30% each"
    ],
    "risk": "Burned bridge",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "supported",
+   "effect": {
+    "kind": "poachRival"
+   }
   },
   {
    "n": 55,
@@ -1385,8 +1411,11 @@
     "turn them into a source"
    ],
    "risk": "Double agent",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "limited",
+   "note": "Defectors come as leads; a double agent waits for D22.",
+   "effect": {
+    "kind": "poachRival"
+   }
   },
   {
    "n": 61,
@@ -1606,8 +1635,10 @@
     "\"Raid-ready\" status"
    ],
    "risk": "Injury",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "supported",
+   "effect": {
+    "kind": "drills"
+   }
   },
   {
    "n": 71,
@@ -1669,8 +1700,7 @@
     "the species you asked for"
    ],
    "risk": "Pokémon escapes",
-   "status": "limited",
-   "note": "Catches go to the stores; the Reserve screen and hand assignment are D4.",
+   "status": "supported",
    "effect": {
     "kind": "catch"
    }
@@ -1693,7 +1723,7 @@
    ],
    "risk": "Gets lost",
    "status": "disabled",
-   "needs": "D4"
+   "needs": "D5"
   },
   {
    "n": 75,
@@ -1712,8 +1742,10 @@
     "friendship +1 each day"
    ],
    "risk": "Bite",
-   "status": "disabled",
-   "needs": "D4"
+   "status": "supported",
+   "effect": {
+    "kind": "tend"
+   }
   },
   {
    "n": 76,
@@ -1733,7 +1765,7 @@
    ],
    "risk": "Egg breaks",
    "status": "disabled",
-   "needs": "D4"
+   "needs": "D5"
   },
   {
    "n": 77,
@@ -1753,7 +1785,7 @@
    ],
    "risk": "Poor care",
    "status": "disabled",
-   "needs": "D4"
+   "needs": "D5"
   },
   {
    "n": 78,
@@ -1773,7 +1805,7 @@
    ],
    "risk": "Aggression",
    "status": "disabled",
-   "needs": "D4"
+   "needs": "D5"
   },
   {
    "n": 79,
@@ -1792,8 +1824,10 @@
     "trade for a TM"
    ],
    "risk": "Regrets",
-   "status": "disabled",
-   "needs": "D4"
+   "status": "supported",
+   "effect": {
+    "kind": "release"
+   }
   },
   {
    "n": 80,
@@ -1812,8 +1846,10 @@
     "a rare form"
    ],
    "risk": "Dies",
-   "status": "disabled",
-   "needs": "D4"
+   "status": "supported",
+   "effect": {
+    "kind": "rehab"
+   }
   },
   {
    "n": 81,
@@ -1832,8 +1868,10 @@
     "berries bonus"
    ],
    "risk": "Food runs out",
-   "status": "disabled",
-   "needs": "D4"
+   "status": "supported",
+   "effect": {
+    "kind": "feed"
+   }
   },
   {
    "n": 82,
@@ -2014,8 +2052,11 @@
     "instant fetch"
    ],
    "risk": "Mix-ups",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "limited",
+   "note": "Counts as a guard against Warehouse grabs; stored goods come with D10.",
+   "effect": {
+    "kind": "guard"
+   }
   },
   {
    "n": 91,
@@ -2920,8 +2961,10 @@
     "shut it"
    ],
    "risk": "Caught",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "supported",
+   "effect": {
+    "kind": "rivalHit"
+   }
   },
   {
    "n": 132,
@@ -2940,8 +2983,11 @@
     "an HQ floor"
    ],
    "risk": "Heavy losses",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "supported",
+   "effect": {
+    "kind": "rivalHit",
+    "risky": true
+   }
   },
   {
    "n": 133,
@@ -2960,8 +3006,15 @@
     "capture a ledger"
    ],
    "risk": "Counter-ambush",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "supported",
+   "effect": {
+    "kind": "rivalHit",
+    "funds": [
+     100,
+     400
+    ],
+    "risky": true
+   }
   },
   {
    "n": 134,
@@ -2980,8 +3033,13 @@
     "HQ cover"
    ],
    "risk": "Fire spreads",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "supported",
+   "effect": {
+    "kind": "rivalHit",
+    "heat": 4,
+    "risky": true,
+    "caughtHeat": 6
+   }
   },
   {
    "n": 135,
@@ -3000,8 +3058,11 @@
     "a holding cell"
    ],
    "risk": "Captured",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "supported",
+   "effect": {
+    "kind": "rescue",
+    "risky": true
+   }
   },
   {
    "n": 136,
@@ -3021,7 +3082,7 @@
    ],
    "risk": "Escape",
    "status": "disabled",
-   "needs": "D9"
+   "needs": "D10"
   },
   {
    "n": 137,
@@ -3040,8 +3101,10 @@
     "their master plan"
    ],
    "risk": "Caught",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "supported",
+   "effect": {
+    "kind": "rivalIntel"
+   }
   },
   {
    "n": 138,
@@ -3060,8 +3123,10 @@
     "hold the line"
    ],
    "risk": "HQ damaged",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "supported",
+   "effect": {
+    "kind": "guard"
+   }
   },
   {
    "n": 139,
@@ -3080,8 +3145,10 @@
     "a split in their ranks"
    ],
    "risk": "Backfire",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "supported",
+   "effect": {
+    "kind": "rumours"
+   }
   },
   {
    "n": 140,
@@ -3100,8 +3167,10 @@
     "tribute"
    ],
    "risk": "Insult",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "supported",
+   "effect": {
+    "kind": "truceTalk"
+   }
   },
   {
    "n": 141,
@@ -3140,8 +3209,11 @@
     "the Boss's study"
    ],
    "risk": "Loses squad",
-   "status": "disabled",
-   "needs": "D9"
+   "status": "supported",
+   "effect": {
+    "kind": "rivalHit",
+    "risky": true
+   }
   },
   {
    "n": 143,

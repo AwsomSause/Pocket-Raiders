@@ -126,7 +126,7 @@ export function baseView(m: BaseModel, overlay: string): string {
   ${nextPanel(m)}
   ${buildPanel(m)}
   ${m.notice ? `<div class="a" style="left:120px;width:400px;top:86px;z-index:30;background:rgba(10,14,30,.92);border:2px solid #8cc0ff;border-radius:8px;padding:8px 10px;font-size:14px;line-height:1.3"${act('dismiss')} data-testid="dom-notice">${esc(m.notice)}</div>` : ''}
-  ${tabs(0, [0, 1, 2, 5])}
+  ${tabs(0, [0, 1, 2, 3, 5])}
   <div class="a" style="left:500px;top:96px;width:26px;height:50px;z-index:1;background:linear-gradient(90deg,${m.roof[0]},${m.roof[1]});box-shadow:0 0 0 3px #1a1430"></div>
   <div class="puff" style="left:494px;top:70px;width:36px;height:36px"></div>
   <div class="puff" style="left:494px;top:70px;width:36px;height:36px;animation-delay:-1.4s;--dx:24px"></div>

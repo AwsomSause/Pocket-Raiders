@@ -1,0 +1,426 @@
+{
+  "_source": "plans/evil-mode-rework Part 7 (Team Types and the Reserve), Part 8 (the Rank Pyramid), Part 9 A19 (Pokémon Trust). Numbers are the design's starting values.",
+  "ranks": [
+    {
+      "id": "hopeful",
+      "seats": 0,
+      "hq": 1,
+      "team": 1,
+      "lvPct": 50,
+      "bst": 300,
+      "aces": 0,
+      "aceCap": 0,
+      "band": 1,
+      "unlocks": "Rest, Train, Guard only. UNTRAINED."
+    },
+    {
+      "id": "recruit",
+      "seats": 0,
+      "hq": 1,
+      "team": 1,
+      "lvPct": 55,
+      "bst": 320,
+      "aces": 0,
+      "aceCap": 0,
+      "band": 1,
+      "unlocks": "All basic tasks. UNTRAINED until the first trait forms."
+    },
+    {
+      "id": "grunt",
+      "seats": 0,
+      "hq": 1,
+      "team": 2,
+      "lvPct": 60,
+      "bst": 340,
+      "aces": 0,
+      "aceCap": 0,
+      "band": 1,
+      "unlocks": "First Formed trait. Wears the full uniform."
+    },
+    {
+      "id": "senior-grunt",
+      "seats": 16,
+      "hq": 1,
+      "team": 2,
+      "lvPct": 65,
+      "bst": 360,
+      "aces": 0,
+      "aceCap": 0,
+      "band": 2,
+      "unlocks": "Can take 1 member along on a task."
+    },
+    {
+      "id": "veteran-grunt",
+      "seats": 12,
+      "hq": 2,
+      "team": 3,
+      "lvPct": 70,
+      "bst": 380,
+      "aces": 0,
+      "aceCap": 0,
+      "band": 2,
+      "unlocks": "Teaches: Hopefuls and Recruits on the same task gain +1 XP."
+    },
+    {
+      "id": "corporal",
+      "seats": 10,
+      "hq": 2,
+      "team": 3,
+      "lvPct": 75,
+      "bst": 400,
+      "aces": 0,
+      "aceCap": 0,
+      "band": 2,
+      "unlocks": "Leads a squad of 3 on Collect, Shake Down, Catch."
+    },
+    {
+      "id": "sergeant",
+      "seats": 8,
+      "hq": 3,
+      "team": 4,
+      "lvPct": 80,
+      "bst": 420,
+      "aces": 0,
+      "aceCap": 0,
+      "band": 3,
+      "unlocks": "Second Formed trait. Runs a district alone."
+    },
+    {
+      "id": "staff-sergeant",
+      "seats": 6,
+      "hq": 3,
+      "team": 4,
+      "lvPct": 85,
+      "bst": 440,
+      "aces": 0,
+      "aceCap": 0,
+      "band": 3,
+      "unlocks": "Runs a building's guard."
+    },
+    {
+      "id": "lieutenant",
+      "seats": 5,
+      "hq": 4,
+      "team": 5,
+      "lvPct": 90,
+      "bst": 460,
+      "aces": 1,
+      "aceCap": 520,
+      "band": 3,
+      "unlocks": "1 Ace. Leads raids without the Boss."
+    },
+    {
+      "id": "captain",
+      "seats": 4,
+      "hq": 4,
+      "team": 5,
+      "lvPct": 95,
+      "bst": 480,
+      "aces": 1,
+      "aceCap": 540,
+      "band": 4,
+      "unlocks": "Can Hold a taken region; runs a Gym takeover."
+    },
+    {
+      "id": "admin",
+      "seats": 3,
+      "hq": 5,
+      "team": 6,
+      "lvPct": 100,
+      "bst": 500,
+      "aces": 1,
+      "aceCap": 560,
+      "band": 4,
+      "unlocks": "Debate stand-in; sits at the end-of-day Court."
+    },
+    {
+      "id": "senior-admin",
+      "seats": 2,
+      "hq": 5,
+      "team": 6,
+      "lvPct": 100,
+      "bst": 515,
+      "aces": 1,
+      "aceCap": 570,
+      "band": 4,
+      "unlocks": "Runs a whole branch."
+    },
+    {
+      "id": "commander",
+      "seats": 2,
+      "hq": 6,
+      "team": 6,
+      "lvPct": 100,
+      "bst": 530,
+      "aces": 1,
+      "aceCap": 580,
+      "band": 5,
+      "unlocks": "Commands the HQ defense: the last battle before the Boss."
+    },
+    {
+      "id": "executive",
+      "seats": 2,
+      "hq": 6,
+      "team": 6,
+      "lvPct": 100,
+      "bst": 545,
+      "aces": 1,
+      "aceCap": 600,
+      "band": 5,
+      "unlocks": "Signature trait."
+    },
+    {
+      "id": "right-hand",
+      "seats": 1,
+      "hq": 6,
+      "team": 6,
+      "lvPct": 100,
+      "bst": 560,
+      "aces": 2,
+      "aceCap": 620,
+      "band": 5,
+      "unlocks": "Whispers at the Court; runs the region when the Boss is away."
+    }
+  ],
+  "bands": [
+    {
+      "n": 1,
+      "name": "Street",
+      "from": 1,
+      "to": 3,
+      "z": "z-st"
+    },
+    {
+      "n": 2,
+      "name": "Crew",
+      "from": 4,
+      "to": 6,
+      "z": "z-crew"
+    },
+    {
+      "n": 3,
+      "name": "Officers",
+      "from": 7,
+      "to": 9,
+      "z": "z-off"
+    },
+    {
+      "n": 4,
+      "name": "Command",
+      "from": 10,
+      "to": 12,
+      "z": "z-cmd"
+    },
+    {
+      "n": 5,
+      "name": "Inner Circle",
+      "from": 13,
+      "to": 15,
+      "z": "z-inner"
+    }
+  ],
+  "caps": {
+    "bstMax": 600,
+    "aceOver": 40,
+    "regionBonus": [
+      0,
+      20,
+      40,
+      60,
+      80,
+      100,
+      110,
+      120,
+      130
+    ],
+    "standing": [
+      {
+        "min": 0,
+        "word": "Nobody",
+        "bonus": 0
+      },
+      {
+        "min": 20,
+        "word": "Street Gang",
+        "bonus": 0
+      },
+      {
+        "min": 50,
+        "word": "Known",
+        "bonus": 15
+      },
+      {
+        "min": 100,
+        "word": "Feared",
+        "bonus": 30
+      },
+      {
+        "min": 200,
+        "word": "Feared",
+        "bonus": 30
+      },
+      {
+        "min": 400,
+        "word": "Legend",
+        "bonus": 50
+      },
+      {
+        "min": 700,
+        "word": "Legend",
+        "bonus": 50
+      }
+    ],
+    "neverTags": [
+      "legendary",
+      "mythical"
+    ],
+    "never": [
+      "nihilego",
+      "buzzwole",
+      "pheromosa",
+      "xurkitree",
+      "celesteela",
+      "kartana",
+      "guzzlord",
+      "poipole",
+      "naganadel",
+      "stakataka",
+      "blacephalon",
+      "great-tusk",
+      "scream-tail",
+      "brute-bonnet",
+      "flutter-mane",
+      "slither-wing",
+      "sandy-shocks",
+      "roaring-moon",
+      "walking-wake",
+      "gouging-fire",
+      "raging-bolt",
+      "iron-treads",
+      "iron-bundle",
+      "iron-hands",
+      "iron-jugulis",
+      "iron-moth",
+      "iron-thorns",
+      "iron-valiant",
+      "iron-leaves",
+      "iron-boulder",
+      "iron-crown"
+    ]
+  },
+  "moves": {
+    "promoteLoyalty": 10,
+    "promoteMorale": 15,
+    "passedAmbition": 10,
+    "resentfulAfter": 3,
+    "readyAmbition": 2,
+    "demoteLoyalty": -20,
+    "demoteMorale": -20,
+    "stripLoyalty": -40,
+    "stripQuitChance": 30
+  },
+  "reserve": {
+    "size": 20,
+    "takeLoyalty": -5,
+    "takeAceLoyalty": -10,
+    "selfLoyalty": 5,
+    "pensDays": 5,
+    "pensHeat": 2,
+    "battleFamilies": [
+      "guard",
+      "shake"
+    ],
+    "emptyPenalty": 30,
+    "onTypeMorale": 5,
+    "favourMorale": 10,
+    "trainXpPct": 10,
+    "startLevel": [
+      3,
+      5
+    ],
+    "startMaxBst": 330,
+    "escapeChance": 10,
+    "bugCap": 10,
+    "gentleTrust": 1,
+    "releasePay": [
+      20,
+      30,
+      50,
+      50,
+      60
+    ]
+  },
+  "trust": {
+    "start": {
+      "caught": 4,
+      "stolen": 2,
+      "snagged": 1,
+      "shadow": 0,
+      "own": 5,
+      "rescued": 7
+    },
+    "disobeyBelow": 4,
+    "loyalFrom": 7,
+    "max": 10,
+    "jobBonus": 5,
+    "disobeyPenalty": 5,
+    "gentleWeekly": 1,
+    "gentle": [
+      "gentle",
+      "calm"
+    ],
+    "winChance": 25,
+    "freedomStayPer": 10
+  },
+  "lines": {
+    "broom": "{name} has no Pokémon. {he} guarded the door with a broom.",
+    "noMon": "{name} has no Pokémon to send out.",
+    "kept": "{name} kept a {mon} \"for {self}\". Loyalty +{n}.",
+    "toReserve": "{mon} went into the Reserve.",
+    "full": "The Reserve is full ({size}). {mon} was let go.",
+    "pens": "Stolen {mon}: {days} days in the Pens.",
+    "pensOut": "{mon} is out of the Pens.",
+    "escaped": "{mon} slipped out of the Pens in the night.",
+    "given": "{mon} goes to {name}.",
+    "givenBoss": "{mon} joins your own team.",
+    "taken": "You take {mon} back from {name}. Loyalty {n}.",
+    "freeStay": "You open the Ball. {mon} doesn't move. It stays: Trust 10.",
+    "freeGone": "You open the Ball. {mon} looks back once, then goes.",
+    "autoNone": "Nothing in the Reserve fits an empty slot.",
+    "auto": "Auto-fill gave out {n} Pokémon.",
+    "promoted": "{name} is {rank} now. Loyalty +{loyalty}, Morale +{morale}.",
+    "passed": "{name} was passed over. Ambition +{n}.",
+    "resentful": "{name} has been passed over three times. Resentful.",
+    "demoted": "{name} is {rank} now. Loyalty {loyalty}, Morale {morale}.",
+    "stripped": "{name} is stripped back to Recruit. Loyalty {loyalty}.",
+    "strippedQuit": "{name} walked out in the night and took {mon} along.",
+    "ready": "{name} is ready for {rank}, but every seat is full.",
+    "seatOpen": "A {rank} seat is open. Ready for it: {names}.",
+    "trustUp": "{mon} trusts {name} more now (Trust {n}).",
+    "evolved": "{name}'s {from} evolved into {to}.",
+    "noEvolve": "No Pokémon is ready to evolve.",
+    "rescued": "{mon} limps after you. It joins the Reserve (Trust {n}).",
+    "tamed": "The alpha {mon} bows its head. It joins the Reserve.",
+    "ceremony": "The crew stands in a ring while {name} gets the new armband. Morale +{morale}, everyone Loyalty +{loyalty}.",
+    "noCeremony": "Nobody was promoted today.",
+    "mentor": "An evening of lessons: {names} +{n} member XP.",
+    "noPupil": "Bring a member to teach (B on the Card).",
+    "penWatch": "{name} sat up with the Pens all night.",
+    "tend": "{name} fed and cleaned the Pens. {mon} trusts the team more (Trust {n}).",
+    "feed": "{name} cooked for everyone's Pokémon. Morale +{n} all round.",
+    "release": "{name} let {mon} go behind the warehouse and sold the Ball: ₽{pay}.",
+    "releaseNone": "{name} found nothing in the Reserve worth letting go.",
+    "rehab": "{name} nursed a hurt {mon} back on its feet. It joins the Reserve (Trust {n}).",
+    "onType": "The whole crew runs the team's colours. Morale +{n}.",
+    "favour": "{name} lights up: a {mon}! Morale +{n}.",
+    "evolvedBoss": "Your {from} evolved into {to}."
+  },
+  "why": {
+    "offType": "Off-type",
+    "lv": "Lv {lv} > cap {cap}",
+    "bst": "BST {bst} > cap {cap}",
+    "never": "Never for crew",
+    "full": "Team full",
+    "pens": "In the Pens"
+  }
+}

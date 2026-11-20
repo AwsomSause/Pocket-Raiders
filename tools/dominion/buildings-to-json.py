@@ -61,15 +61,35 @@ FX = {
     'berry-garden': dict(items={'oran-berry': 2}), 'pharmacy': dict(items={'potion': 1}), 'ball-foundry': dict(items={'poke-ball': 5}),
     'first-aid-closet': dict(weeklyItems={'revive': 2}), 'canteen-kitchen': dict(fatigue=10), 'fix-it-corner': dict(repair=10),
     'counting-room': dict(incomePct=5), 'night-market-stall': dict(income=80),
+    # D9 (rivals.ts): intel shows the rival's weekly plan; spyCatch/cipher/fireCut/truceOff are %; raidDef counts as
+    # Defense in raids only; warn is days' warning of the Boss's raid.
+    'lounge-bar': dict(intel=1), 'aviary': dict(intel=1), 'wiretap-closet': dict(intel=1), 'informant-office': dict(intel=1),
+    'drone-bay': dict(intel=1), 'mountain-lookout': dict(intel=1), 'pokedex-archive': dict(intel=1), 'lookout-post': dict(intel=1),
+    'taxi-rank': dict(intel=1), 'security-room': dict(spyCatch=25, warn=1), 'surveillance-wall': dict(spyCatch=15),
+    'counterintel-office': dict(spyCatch=20), 'code-room': dict(cipher=10), 'spy-academy': dict(cipher=10),
+    'armory': dict(raidDef=1), 'mech-hangar': dict(raidDef=1), 'guard-post': dict(raidDef=1), 'gate-house': dict(raidDef=1),
+    'perimeter-wall': dict(raidDef=1), 'alarm-network': dict(raidDef=1), 'decoy-room': dict(raidDef=1), 'pitfall-corridor': dict(raidDef=1),
+    'reinforced-doors': dict(raidDef=1), 'guard-duty-hall': dict(raidDef=1), 'honor-guard-hall': dict(raidDef=1),
+    'watchtower': dict(warn=1), 'fire-suppression': dict(fireCut=50), 'ballroom': dict(truceOff=10), 'embassy-wing': dict(truceOff=10),
+}
+# D9 rows the rival rules don't reach yet: the slice that does (the keyword guess said D9).
+WAIT_OVERRIDE = {
+    'quarantine-ward': 'later', 'contraband-cellar': 'D10', 'interrogation-cell': 'D10', 'ledger-office': 'D6', 'investment-office': 'D10',
+    'machine-shop': 'later', 'test-chamber': 'later', 'panic-room': 'D14', 'escape-tunnel': 'D14', 'battle-arena': 'D10', 'hidden-lab': 'D10',
+    'pokemon-nap-house': 'later', 'type-dojo-fire': 'D4', 'cave-habitat': 'later', 'strike-breakers-office': 'later', 'drivers-pool': 'D10',
+    'assassins-guild': 'later', 'security-firm': 'D10',
 }
 # Effects that only part works now (the rest waits): shown on the room card.
 NOTE = {
     'barracks': None,
     'dojo': 'Stat classes come with ranks (D4).',
-    'treasury': 'Raids on the HQ (D9) take only what is above this.',
-    'kennel': 'Defense counts in raids on the HQ (D9).', 'trap-hall': 'Defense counts in raids on the HQ (D9).',
+    'treasury': None, 'kennel': None, 'trap-hall': None,
     'operations-room': 'Raid itself is D10.', 'front-office': 'Buy Out and Bribe are D10.',
-    'radio-room': 'Spread the Word and jamming spies are D9-D10.', 'workshop': 'Sabotage and gadgets are D9-D10.',
+    'radio-room': 'Spread the Word is D10.', 'workshop': 'Gadgets are D10.',
+    'taxi-rank': 'Taxi fares come with D10; the drivers bring Intel now.', 'spy-academy': 'Training moles waits for D22; your spies are caught less now.',
+    'mech-hangar': 'Mechs are drawn later; they count in raids now.', 'decoy-room': 'The fake vault counts as raid Defense.',
+    'honor-guard-hall': 'Guards the HQ in raids; the Boss\'s own escort waits for D14.', 'ballroom': 'Hosting a Boss in person waits for D13; tribute is cheaper now.',
+    'embassy-wing': 'Envoys come as Rival File cards; tribute is cheaper now.', 'watchtower': None, 'security-room': None,
     'garage': 'Smuggle is D10.', 'print-shop': 'Flyers are D10.', 'research-lab': 'Hit a Lab and breeding are D10.',
     'holding-pens': 'Cooling off stolen Pokémon comes with the Reserve (D4).', 'outpost': 'Its own 2 room slots come with many regions (D15).',
     'safehouse': None, 'luxury-suite': 'Debate +10% is D13; Executives\' Morale waits for ranks (D4).',
@@ -166,7 +186,7 @@ for r in rows:
         if note:
             r['note'] = note
     else:
-        r.update(status='disabled', waits='D14' if r['id'] == 'throne-room' else waits_for(' '.join([r['t1'], r['per'], r['cap']])), fx={})
+        r.update(status='disabled', waits='D14' if r['id'] == 'throne-room' else WAIT_OVERRIDE.get(r['id']) or waits_for(' '.join([r['t1'], r['per'], r['cap']])), fx={})
     if r['sub'] is None:
         del r['sub']
 

@@ -1,0 +1,132 @@
+{
+  "_source": "Slice D19 personality cards: /mnt/project-files/plans/claude-api/CLAUDE_API_DRAFT.md §5.3 A (Kice 2026-11-18) and mockup a3 (plans/claude-api/mockups/index.html #k3). Two traits from a fixed list, a speech quirk, a want, a fear and a home town, rolled once per person on stream dominion-card; Bosses use their canon sheet.",
+  "traits": [
+    { "id": "loyal", "name": "Loyal", "icon": "g-soothe-bell", "tone": "g", "effects": [
+      { "text": "Loyalty never falls below 30", "mods": { "loyaltyFloor": 30 } },
+      { "text": "a bribe won't turn them", "needs": "D22" } ] },
+    { "id": "greedy", "name": "Greedy", "icon": "g-amulet-coin", "tone": "y", "effects": [
+      { "text": "pay raises Loyalty ×2", "payLoy": 2 },
+      { "text": "a bribe can turn them", "needs": "D22" } ] },
+    { "id": "joker", "name": "Joker", "icon": "g-star-piece", "tone": "m", "effects": [
+      { "text": "+Morale for the squad", "squadMor": 1 },
+      { "text": "bad at keeping quiet (+1 Heat a job)", "mods": { "heat": 1 } } ] },
+    { "id": "hothead", "name": "Hothead", "icon": "g-fire-stone", "tone": "r", "effects": [
+      { "text": "+10 on Brawn jobs", "mods": { "pct": 10, "stat": "brawn" } },
+      { "text": "−10 on Charm jobs", "mods": { "pct": -10, "stat": "charm" } } ] },
+    { "id": "coward", "name": "Coward", "icon": "g-smoke-ball", "tone": "k", "effects": [
+      { "text": "−10 on Nerve jobs", "mods": { "pct": -10, "stat": "nerve" } },
+      { "text": "quick to run: +10 on Stealth jobs", "mods": { "pct": 10, "stat": "stealth" } } ] },
+    { "id": "zealot", "name": "Zealot", "icon": "g-comet-shard", "tone": "v", "effects": [
+      { "text": "Loyalty never falls below 40", "mods": { "loyaltyFloor": 40 } },
+      { "text": "an unpaid week costs 10 less Loyalty", "unpaidLoy": 10 } ] },
+    { "id": "proud", "name": "Proud", "icon": "g-relic-crown", "tone": "y", "effects": [
+      { "text": "+10 on Charm jobs", "mods": { "pct": 10, "stat": "charm" } },
+      { "text": "an unpaid week costs 15 more Loyalty", "unpaidLoy": -15 } ] },
+    { "id": "cautious", "name": "Cautious", "icon": "g-silph-scope", "tone": "b", "effects": [
+      { "text": "−1 Heat on every job", "mods": { "heat": -1 } },
+      { "text": "−10 on Brawn jobs", "mods": { "pct": -10, "stat": "brawn" } } ] },
+    { "id": "gossip", "name": "Gossip", "icon": "g-xtransceiver", "tone": "m", "effects": [
+      { "text": "+10 on Wits jobs", "mods": { "pct": 10, "stat": "wits" } },
+      { "text": "tells spies your plans", "needs": "D22" } ] },
+    { "id": "loner", "name": "Lone Wolf", "icon": "g-secret-key", "tone": "k", "effects": [
+      { "text": "+10 on Stealth jobs", "mods": { "pct": 10, "stat": "stealth" } },
+      { "text": "twice as quick to quit when unhappy", "mods": { "disloyal": 2 } } ] },
+    { "id": "kind", "name": "Kind", "icon": "g-tea", "tone": "g", "effects": [
+      { "text": "+Morale for the squad", "squadMor": 1 },
+      { "text": "−10 on shakedowns", "mods": { "pct": -10, "family": "shake" } } ] },
+    { "id": "schemer", "name": "Schemer", "icon": "g-devon-scope", "tone": "v", "effects": [
+      { "text": "+10 on Wits jobs", "mods": { "pct": 10, "stat": "wits" } },
+      { "text": "Loyalty never rises above 80", "mods": { "loyaltyCap": 80 } } ] }
+  ],
+  "clash": [["loyal", "schemer"], ["coward", "hothead"], ["kind", "hothead"], ["cautious", "hothead"], ["loner", "joker"], ["loyal", "loner"]],
+  "quirks": [
+    { "id": "capisce", "text": "Ends deals with “capisce?”", "end": "Capisce?" },
+    { "id": "listen", "text": "Starts with “Listen,”", "pre": "Listen, " },
+    { "id": "heh", "text": "Laughs at their own lines", "end": "Heh heh." },
+    { "id": "bossman", "text": "Calls you “Boss-man”", "swap": ["Boss", "Boss-man"] },
+    { "id": "chief", "text": "Calls you “Chief”", "swap": ["Boss", "Chief"] },
+    { "id": "sir", "text": "Overly formal: “with respect”", "pre": "With respect, " },
+    { "id": "trailing", "text": "Trails off…", "end": "…anyway." },
+    { "id": "yknow", "text": "Says “y'know” a lot", "end": "Y'know?" },
+    { "id": "shout", "text": "SHOUTS WHEN EXCITED", "upper": true },
+    { "id": "whisper", "text": "Whispers everything", "pre": "(whispering) " },
+    { "id": "rhymes", "text": "Rhymes when nervous", "end": "No fuss, no muss." },
+    { "id": "sighs", "text": "Sighs before talking", "pre": "*sigh* " },
+    { "id": "kiddo", "text": "Calls everyone “kiddo”", "end": "Kiddo." },
+    { "id": "promise", "text": "Swears on their mother", "end": "On my mother." },
+    { "id": "battle", "text": "Talks like a battle announcer", "pre": "And here it is! " },
+    { "id": "numbers", "text": "Quotes the odds", "end": "Odds were fair." },
+    { "id": "ofcourse", "text": "Starts with “Of course,”", "pre": "Of course, " },
+    { "id": "boss2", "text": "Says “big Boss” every time", "swap": ["Boss", "big Boss"] },
+    { "id": "hum", "text": "Hums the Game Corner tune", "end": "♪ Dum-da-dum." },
+    { "id": "nod", "text": "Answers with “Yep. Yep.”", "pre": "Yep. Yep. " },
+    { "id": "pokemon", "text": "Asks their Pokémon first", "pre": "My Pokémon says yes. " },
+    { "id": "grumble", "text": "Grumbles under their breath", "end": "Mutter, mutter." },
+    { "id": "sure", "text": "Ends with “for sure, for sure”", "end": "For sure, for sure." },
+    { "id": "boss3", "text": "Calls you “Your Bossness”", "swap": ["Boss", "Your Bossness"] }
+  ],
+  "wants": [
+    "A corner office with a window", "To own a Gyarados one day", "Enough money to quit", "A badge, any badge", "To be an Admin before winter",
+    "Their old Rattata back", "A real name on the door", "Respect from the old crew", "A bike that isn't stolen", "To beat a Gym Leader once",
+    "A night off every week", "To see the sea from the Airship", "Their mother never to find out", "A gold tooth", "The Boss's trust",
+    "A team of all one type", "To run their own district", "Free Lemonade for life", "To be on the front page", "A Master Ball, just to hold",
+    "To pay back a debt", "Their own squad", "A quiet farm in the end", "To sing at the Game Corner", "A shiny anything",
+    "To meet a Legendary", "A uniform that fits", "Revenge on a rival", "To learn every move", "A family that waits up"
+  ],
+  "fears": [
+    "Officer Jenny's Growlithe", "Ghost types after midnight", "Being forgotten", "Deep water", "The Boss's quiet voice",
+    "Losing their Pokémon", "Going back to jail", "Hospitals", "Heights", "Being found out at home",
+    "Thunderstorms", "The Hero's starter", "Running out of money", "Bug types in the dark", "Looker",
+    "Being alone at night", "A cell with no window", "Their old Gym Leader", "Getting old in this job", "Big crowds",
+    "Fire", "Gengar's grin", "Small rooms", "Being replaced", "Rival team grunts",
+    "Debts they can't pay", "Psychic types reading their mind", "The sea at night", "Their own temper", "A quiet phone"
+  ],
+  "towns": {
+    "kanto": ["Pallet Town", "Viridian City", "Pewter City", "Cerulean City", "Vermilion City", "Lavender Town", "Celadon City", "Fuchsia City", "Saffron City", "Cinnabar Island"],
+    "johto": ["New Bark Town", "Cherrygrove City", "Violet City", "Azalea Town", "Goldenrod City", "Ecruteak City", "Olivine City", "Cianwood City", "Mahogany Town", "Blackthorn City"],
+    "hoenn": ["Littleroot Town", "Oldale Town", "Petalburg City", "Rustboro City", "Dewford Town", "Slateport City", "Mauville City", "Lavaridge Town", "Fortree City", "Lilycove City"],
+    "sinnoh": ["Twinleaf Town", "Sandgem Town", "Jubilife City", "Oreburgh City", "Floaroma Town", "Eterna City", "Hearthome City", "Veilstone City", "Pastoria City", "Snowpoint City"],
+    "unova": ["Nuvema Town", "Accumula Town", "Striaton City", "Nacrene City", "Castelia City", "Nimbasa City", "Driftveil City", "Mistralton City", "Icirrus City", "Opelucid City"],
+    "kalos": ["Vaniville Town", "Santalune City", "Lumiose City", "Camphrier Town", "Cyllage City", "Shalour City", "Coumarine City", "Laverre City", "Anistar City", "Snowbelle City"],
+    "alola": ["Iki Town", "Hau'oli City", "Heahea City", "Konikoni City", "Malie City", "Po Town", "Seafolk Village", "Paniola Town", "Tapu Village", "Royal Avenue"],
+    "galar": ["Postwick", "Wedgehurst", "Motostoke", "Turffield", "Hulbury", "Hammerlocke", "Stow-on-Side", "Ballonlea", "Circhester", "Spikemuth"],
+    "paldea": ["Cabo Poco", "Mesagoza", "Artazon", "Levincia", "Cascarrafa", "Medali", "Montenevera", "Alfornada", "Porto Marinada", "Zapapico"]
+  },
+  "lines": {
+    "loyal": { "hello": ["Ready when you are, Boss.", "Whatever you need, Boss."], "done": ["Done, Boss. Like you asked.", "Job's done. For the crew."], "fail": ["I let you down, Boss. Won't happen twice.", "Didn't go right. I'll fix it."], "scared": ["I didn't talk, Boss. Not a word.", "They can lock me up. I'm still yours."], "pay": ["Pay's not why I'm here, Boss.", "Thanks, Boss. Same time next week."] },
+    "greedy": { "hello": ["What's the job pay, Boss?", "Got anything with a bonus in it?"], "done": ["Job's done, Boss. Pay's fair.", "Done. Now, about my cut."], "fail": ["No money in that one, Boss.", "Waste of a night. Unpaid, too."], "scared": ["Bail money better be coming, Boss.", "Cops took my wallet. My wallet!"], "pay": ["Pay day. Best day.", "Counted it twice. It's all there."] },
+    "joker": { "hello": ["Why did the Grimer cross the road? To get to the other slime.", "Boss! You look great. Terrible, but great."], "done": ["Done! Nobody even noticed. Mostly.", "Job's done. Tell the others how cool I was."], "fail": ["So that went great. In the bad way.", "Funny story. Not funny. Still a story."], "scared": ["The cop laughed at my joke. Still booked me.", "Jail's fine. Bad crowd, though."], "pay": ["Money! I'll spend it all on Lava Cookies.", "Pay day. Party at mine."] },
+    "hothead": { "hello": ["Point me at someone, Boss.", "Who's first?"], "done": ["Done. They won't forget me.", "Hit 'em hard, like you said."], "fail": ["They got lucky! Next time, they're mine.", "I'm not done with them."], "scared": ["Let me out and I'll show 'em!", "I'd have won if they fought fair."], "pay": ["Fine. Now let me hit something.", "Pay's okay. Fighting's better."] },
+    "coward": { "hello": ["Is it safe, Boss? Is it?", "Do I have to go out tonight?"], "done": ["I did it! I didn't even scream.", "Done, Boss. Can I sit down?"], "fail": ["I ran. I'm sorry. I ran.", "There was a noise, Boss. A big one."], "scared": ["Please don't let them keep me, Boss.", "I told them nothing! Mostly nothing."], "pay": ["Thank you, Boss. I'll hide it well.", "Pay's good. Safe is better."] },
+    "zealot": { "hello": ["For the cause, Boss.", "The team comes first. Always."], "done": ["Done. The cause grows.", "It was an honour, Boss."], "fail": ["The cause will forgive me. Will you?", "I'll pay for that failure."], "scared": ["They can't jail an idea, Boss.", "I'd do it again. For the team."], "pay": ["Keep it, Boss. Spend it on the team.", "I don't need much. The team does."] },
+    "proud": { "hello": ["You called for the best, Boss?", "I hope it's a job worth my time."], "done": ["Flawless. As usual.", "Done. Make sure the others hear."], "fail": ["That was not my fault.", "Bad luck. My skills were perfect."], "scared": ["Do you know who I am, officer?", "This is beneath me."], "pay": ["About time.", "Fair. Barely."] },
+    "cautious": { "hello": ["Checked the route twice, Boss.", "Let's plan it first."], "done": ["Done. No one saw. I checked.", "Quiet job, clean job."], "fail": ["Too risky. I backed off.", "Better a miss than a cell, Boss."], "scared": ["I followed the plan. The plan was wrong.", "I knew this would happen."], "pay": ["I'll save most of it.", "Into the jar it goes."] },
+    "gossip": { "hello": ["Did you hear about the Gym Leader?", "Boss! You'll never guess who I saw."], "done": ["Done. And guess what I heard on the way.", "Job's done. Oh, and big news."], "fail": ["Missed it. But I heard something good.", "Didn't work. Don't tell the others."], "scared": ["The cops gossip too, you know.", "I heard the cells are nicer upstairs."], "pay": ["Pay day! Who got a raise? Tell me.", "Thanks. Did the new one get more?"] },
+    "loner": { "hello": ["Just give me the job.", "Alone is fine."], "done": ["Done.", "Did it my way."], "fail": ["Didn't work. Leave it.", "My problem. I'll sort it."], "scared": ["Don't send anyone. I'll get out.", "Fine. Quiet in here."], "pay": ["Mm.", "Fine."] },
+    "kind": { "hello": ["Everyone eaten today, Boss?", "Your team looks tired. Rest them?"], "done": ["Done. Nobody got hurt.", "Job's done. I brought snacks back."], "fail": ["I couldn't. They had kids, Boss.", "Didn't go well. Is everyone okay?"], "scared": ["Feed my Pokémon while I'm in, please.", "I'm okay. Look after the others."], "pay": ["Thank you, Boss. Really.", "I'll get the crew dinner."] },
+    "schemer": { "hello": ["I have a little idea, Boss.", "What if we did it differently?"], "done": ["Done. Exactly as I planned.", "All according to plan."], "fail": ["A setback. Part of the plan.", "Interesting. I'll learn from that."], "scared": ["Cells have doors. Doors have keys.", "I planned for this. Mostly."], "pay": ["Pay is just the start.", "Noted. I'm counting, Boss."] }
+  },
+  "canon": {
+    "giovanni": { "name": "Giovanni", "team": "Team Rocket", "traits": ["proud", "schemer"], "quirk": { "text": "Never raises his voice", "end": "Do not make me repeat myself." }, "want": "Every region under one Rocket", "fear": "A child with a Pikachu", "home": "Viridian City" },
+    "archer": { "name": "Archer", "team": "Team Rocket", "traits": ["loyal", "schemer"], "quirk": { "text": "Speaks of Giovanni in every plan", "end": "For Giovanni." }, "want": "Giovanni back at the head of Rocket", "fear": "Rocket fading away", "home": "Goldenrod City" },
+    "maxie": { "name": "Maxie", "team": "Team Magma", "traits": ["zealot", "proud"], "quirk": { "text": "Pushes up his glasses and lectures", "pre": "Fu hu hu. " }, "want": "More land for people", "fear": "The sea taking everything", "home": "Lilycove City" },
+    "archie": { "name": "Archie", "team": "Team Aqua", "traits": ["hothead", "zealot"], "quirk": { "text": "Laughs like a sailor", "pre": "Wahahahaha! " }, "want": "More sea for Pokémon", "fear": "The land drying everything", "home": "Lilycove City" },
+    "cyrus": { "name": "Cyrus", "team": "Team Galactic", "traits": ["loner", "schemer"], "quirk": { "text": "Flat voice, no feeling", "end": "Feelings are incomplete." }, "want": "A new world with no spirit", "fear": "Feeling anything at all", "home": "Veilstone City" },
+    "ghetsis": { "name": "Ghetsis", "team": "Team Plasma", "traits": ["schemer", "proud"], "quirk": { "text": "Speaks in grand speeches", "pre": "Hear me! " }, "want": "To rule Unova alone", "fear": "N's goodness", "home": "Opelucid City" },
+    "lysandre": { "name": "Lysandre", "team": "Team Flare", "traits": ["zealot", "proud"], "quirk": { "text": "Talks of a beautiful world", "end": "How beautiful." }, "want": "A world only for the chosen", "fear": "A wasted future", "home": "Lumiose City" },
+    "lusamine": { "name": "Lusamine", "team": "Aether Foundation", "traits": ["proud", "zealot"], "quirk": { "text": "Calls everything \"my precious\"", "end": "My precious." }, "want": "Ultra Beasts all to herself", "fear": "Being unloved", "home": "Aether Paradise" },
+    "guzma": { "name": "Guzma", "team": "Team Skull", "traits": ["hothead", "loner"], "quirk": { "text": "Calls himself the destruction", "end": "Guzma is the hard-to-beat boss!" }, "want": "To prove Kukui wrong", "fear": "Being a nobody again", "home": "Hau'oli City" },
+    "rose": { "name": "Rose", "team": "Macro Cosmos", "traits": ["schemer", "kind"], "quirk": { "text": "Talks like a company chairman", "pre": "Splendid! " }, "want": "Galar's energy for a thousand years", "fear": "The Darkest Day a thousand years from now", "home": "Hammerlocke" },
+    "penny": { "name": "Penny", "team": "Team Star", "traits": ["cautious", "loyal"], "quirk": { "text": "Mumbles, then gets sharp", "pre": "Um... " }, "want": "Her friends safe from bullies", "fear": "Being alone again", "home": "Mesagoza" }
+  },
+  "report": {
+    "squad": "{name} kept the crew's spirits up: everyone else's Morale +{n}.",
+    "pay": "{name} counted the pay twice: Loyalty +{n}.",
+    "unpaid": "{name} shrugged off the empty pay packet: Loyalty {n}.",
+    "unpaidHurt": "{name} took the empty pay packet as an insult: Loyalty {n}."
+  },
+  "rotom": {
+    "off": "Rotom stays quiet: no Key-Card in the vault. The offline line above is the whole card.",
+    "note": "Same card, same facts. Rotom only voices it. Traits also set how {name} reacts to Morale, pay and danger in the offline rules."
+  }
+}

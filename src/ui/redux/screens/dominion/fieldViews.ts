@@ -94,7 +94,7 @@ export function mapView(m: MapModel, notice: string | null, garage: boolean): st
   </div>
   ${cta}
   ${garageBox}
-  ${tabs(1, [0, 1, 2, 5])}
+  ${tabs(1, [0, 1, 2, 3, 5])}
   <div class="a" style="left:12px;top:472px;z-index:8;font:600 12px var(--ui);color:#dfe5ff" data-testid="dom-map-note">${esc(m.note)} · <span class="kc">T</span> place · <span class="kc">V</span> vehicles</div>
   ${pings}
   ${flags.replace(/left:(\d+)px;top:(\d+)px/g, (_, x: string, yy: string) => `left:${Number(x) + 10}px;top:${Number(yy) + 12}px`)}
