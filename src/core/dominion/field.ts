@@ -18,6 +18,7 @@ import { addLoyalty, addMorale, addXp, monName } from './crew';
 import { hasBand } from './pyramid';
 import { evolveOne } from './reserve';
 import { buildingDef, hasRoom, hqFx, launderAction, roomFor, spend } from './hqFx';
+import { paced } from './rules';
 
 const F = () => DOMINION_DATA.field;
 const L = () => DOMINION_DATA.field.lines;
@@ -93,7 +94,8 @@ export function addHeat(b: DominionBlock, district: string, n: number): void {
   const d = b.field.districts[district];
   if (!d) return;
   const k = n > 0 && statusOf(d) === 'owned' ? F().control.ownedHeat : 1;
-  d.heat = clamp(d.heat + Math.round(n * k), 0, 100);
+  // D27: Day pace scales a rise (Normal and every run before D27 multiply by 1).
+  d.heat = clamp(d.heat + Math.round(paced(b, n) * k), 0, 100);
 }
 
 export const hottest = (f: Field): string | null => {

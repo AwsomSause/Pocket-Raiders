@@ -42,6 +42,8 @@ import { foundedLines, foundingOpen, initialOf, nameIdeas, newDraft, teamColours
 import { FOUNDING_ROWS, foundedView, foundingView, type FoundingUi } from '../ui/redux/screens/dominion/founding';
 import { heroModel, interruptModel } from '../core/dominion/heroScreens';
 import { heroView, interruptView, type MonFiles } from '../ui/redux/screens/dominion/heroViews';
+import { BossMenuController } from './dominion/bossMenuController';
+import { fxClasses, fxOf } from '../core/dominion/fx';
 import { JobController } from './dominion/jobController';
 
 type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'squads' | 'founding' | 'founded' | 'debate' | 'spy' | 'assign' | 'district';
@@ -102,6 +104,8 @@ export class DominionScene extends Phaser.Scene {
   /** D8: the Squads page (mockup 13, U on the Crew File). */
   private sq = new SquadController(this, this);
   /** D25: the Evening voices scene (mockup a10), an overlay on the HQ. */
+  /** D27: the Boss Menu (v4 m1, Esc from the HQ) and Settings (m2). */
+  private menu = new BossMenuController(this.menuHost());
   // D30: the job moments after Do it (m8-m10) and the morning paper (m12).
   private job = new JobController({
     refresh: () => this.view?.refresh(),
@@ -135,6 +139,7 @@ export class DominionScene extends Phaser.Scene {
     this.police = new PoliceController(this);
     this.desk = new DeskController(this);
     this.sq = new SquadController(this, this);
+    this.menu = new BossMenuController(this.menuHost());
     this.spy.destroy();
     this.spy = new SpyController(this);
     this.voices.close();
@@ -164,6 +169,8 @@ export class DominionScene extends Phaser.Scene {
     }
     // D11: the Hero stepped into a job and the tab closed before a choice (m11 waits).
     if (blk?.opened && this.heroPending()) this.screen = 'interrupt';
+    // D27: back from the battle that spent the Day's last action: the Day ends by itself when the setting says so.
+    else if (back && blk?.opened && !ch) this.autoEnd();
     const archetype = getArchetype(session.content, run.archetypeId);
     const level = run.party[0]?.level ?? 5;
     const d = DOMINION_DATA.start;
@@ -239,6 +246,7 @@ export class DominionScene extends Phaser.Scene {
         ...this.desk.acts(),
         desk: () => this.desk.open(),
         ...this.sq.acts(),
+        ...this.menu.acts(),
       },
       overs: {
         typeOver: (i) => { this.setup = { ...this.setup, at: Number(i) }; this.view?.refresh(); },
@@ -250,6 +258,7 @@ export class DominionScene extends Phaser.Scene {
         ...this.spy.overs(),
         ...this.desk.overs(),
         ...this.sq.overs(),
+        ...this.menu.overs(),
       },
     });
     const kb = this.input.keyboard;
@@ -264,6 +273,14 @@ export class DominionScene extends Phaser.Scene {
       // Round 4 (D26): End saves and quits to the title from any Dominion page (not mid-interrupt: the Hero's three
       // choices must be answered first; not while typing in the desk's Type box). Q stays free on every page for the hold-Q command wheel (D28): no screen reads it.
       if (e.code === 'End' && this.screen !== 'interrupt' && !typeBoxOpen()) return this.leave();
+      // D27: the Boss Menu and Settings read their letters and numbers first (S, R, D, 1-6); a move letter they take isn't also a move.
+      if (this.menu.owns()) {
+        if (this.menu.raw(e.code)) {
+          if (e.code === 'Tab') e.preventDefault();
+          this.ate = MOVE_LETTERS.has(e.code);
+        }
+        return;
+      }
       // D24: the interview room and the release page read their keys first (typing included).
       // D30: a job moment or the morning paper keeps every key while it is up (N is Next action on a result page).
       if (this.inRun() && this.job.raw(e.code)) return;
@@ -370,7 +387,24 @@ export class DominionScene extends Phaser.Scene {
     return this.screen !== 'title' && this.screen !== 'setup' && this.screen !== 'opening';
   }
 
+  /** D27: what the Boss Menu controller may reach. */
+  private menuHost() {
+    const sc = this;
+    return {
+      refresh: () => sc.view?.refresh(),
+      tabTo: (i: number) => { sc.screen = 'hq'; sc.notice = null; sc.tab(i); },
+      hide: () => sc.leave(),
+      bossFile: () => sc.files?.boss.file ?? null,
+    };
+  }
+
+  /** D27: every page wears the Effects & motion classes (fx.css turns the spectacle down; presentation only). */
   private render(): string {
+    return `<div class="domfx ${fxClasses(fxOf(services().session.settings))}">${this.renderPage()}</div>`;
+  }
+
+  private renderPage(): string {
+    if (this.menu.owns()) return this.menu.render();
     const b = this.block();
     if (b && this.inRun() && this.job.owns()) return this.job.render();
     if (b && this.inRun() && this.police.owns()) return this.police.render();
@@ -403,7 +437,7 @@ export class DominionScene extends Phaser.Scene {
         if (!b || !c) return '';
         const sp = c.battle?.species ? services().session.content.species.get(c.battle.species) : undefined;
         const file = sp ? rxFileOf(this.manifest, pokemonAssetIds(sp.assets).front)?.file ?? null : null;
-        return cardView(c, file, b.teamName?.[0]?.toUpperCase() ?? '');
+        return cardView(c, file, b.teamName?.[0]?.toUpperCase() ?? '', services().session.settings.expansion.dominionPrefs.showOdds);
       }
       case 'crew':
       case 'assign':
@@ -598,6 +632,7 @@ export class DominionScene extends Phaser.Scene {
   private key(a: InputAction): void {
     if (this.ate) return void (this.ate = false);
     if (this.leaving) return;
+    if (this.menu.key(a)) return void this.view?.refresh();
     if (this.spy.key(a)) return void this.view?.refresh();
     if (this.debate.key(a)) return void this.view?.refresh();
     if (this.inRun() && this.job.key(a)) return void this.view?.refresh();
@@ -796,6 +831,7 @@ export class DominionScene extends Phaser.Scene {
     const out = services().session.dominionStep(action);
     if (out.ok) {
       this.notice = out.notice;
+      if (action.t === 'do') this.autoEnd();
       const n = hqModel(this.block()!).orders.length;
       this.at = Math.min(this.at, Math.max(0, n - 1));
     } else if (out.notice) this.notice = out.notice;
@@ -1006,8 +1042,18 @@ export class DominionScene extends Phaser.Scene {
     if (out.ok && this.heroPending()) {
       this.screen = 'interrupt';
       this.intAt = 0;
-    }
+    } else if (out.ok) this.autoEnd();
     this.view?.refresh();
+  }
+
+  /** D27 (Settings · Dominion "End the day when no actions are left"): the last action spent ends the Day by itself. */
+  private autoEnd(): void {
+    const b = this.block();
+    if (!b || !services().session.settings.expansion.dominionPrefs.autoEndDay) return;
+    if (b.phase !== 'day' || b.actions > 0 || (b.field.fight && !b.field.fight.begun) || this.heroPending()) return;
+    const was = this.notice;
+    const out = services().session.dominionStep({ t: 'endDay' });
+    if (out.ok) this.notice = [was, out.notice].filter(Boolean).join(' ');
   }
 
   /** D30: a result page closed: back to the Map, or (`next`) straight to the Card of the next action on the board. */
@@ -1022,6 +1068,8 @@ export class DominionScene extends Phaser.Scene {
         return this.openCard();
       }
     }
+    // D27 x D30: with job moments on, the Day can only end itself once the result page closes.
+    this.autoEnd();
     this.view?.refresh();
   }
 
@@ -1194,6 +1242,11 @@ export class DominionScene extends Phaser.Scene {
     }
     if (this.screen === 'hq' && this.notice) {
       this.notice = null;
+      return this.view?.refresh();
+    }
+    // D27 (v4 m1): Esc at the top of a run page opens the Boss Menu (End still saves and quits from anywhere).
+    if (this.inRun() && this.block()?.opened) {
+      this.menu.open();
       return this.view?.refresh();
     }
     this.leave();
