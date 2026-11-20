@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ClipBuilder, clipEnd, EASES, fxAllowed, sampleClip, type ClipLevel, type MotionClip } from '../../src/core/presentation/motionClip';
-import { aceLandClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
+import { aceLandClip, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
 
 const ME: MonSpot = { x: 312, y: 428, h: 180, side: 'player' };
 const FOE: MonSpot = { x: 648, y: 240, h: 150, side: 'enemy' };
@@ -255,5 +255,25 @@ describe('foe trainer step-in (pass 4)', () => {
       expect(c.length).toBe(0);
       expect(c.fx).toEqual([{ kind: 'cue', at: 0, name: 'release' }]);
     }
+  });
+});
+
+describe('miss (pass 2)', () => {
+  const foe = { x: 648, y: 240 }, me = { x: 250, y: 420 };
+  it('the attacker dashes past where the target stood while the target steps away, then both are home', () => {
+    const c = missClip(foe, me, 'full');
+    expect(c.length).toBe(800);
+    expect(sampleClip(c, 160).atk!.dx).toBeCloseTo(18);
+    expect(sampleClip(c, 260).atk).toMatchObject({ dx: 250 + 150 - 648, dy: 420 - 60 - 240 });
+    expect(sampleClip(c, 240).tgt!.dx).toBeCloseTo(-70);
+    for (const part of ['atk', 'tgt']) expect(sampleClip(c, 800)[part]).toMatchObject({ dx: 0, dy: 0, sx: 1, sy: 1 });
+    const mine = missClip(me, foe, 'full');
+    expect(sampleClip(mine, 240).tgt!.dx).toBeCloseTo(70);
+  });
+  it('Reduced only side-steps a little; Off moves nothing', () => {
+    const r = missClip(foe, me, 'reduced');
+    expect(sampleClip(r, 130).tgt!.dx).toBeCloseTo(-28);
+    expect(sampleClip(r, 130).atk!.dx).toBe(0);
+    expect(missClip(foe, me, 'off').length).toBe(0);
   });
 });

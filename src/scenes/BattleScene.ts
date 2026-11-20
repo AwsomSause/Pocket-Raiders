@@ -128,7 +128,7 @@ import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel } from '../core/presentation/motionClip';
-import { aceLandClip, bigHit, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { aceLandClip, bigHit, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
@@ -3991,6 +3991,27 @@ export class BattleScene extends Phaser.Scene {
     });
   }
 
+  /** Miss (pass 2): the attacker dashes and overshoots, the target side-steps, both spring back to their spots. */
+  private async missMoment(side: Side): Promise<void> {
+    const other: Side = side === 'player' ? 'enemy' : 'player';
+    const atk = side === 'player' ? this.playerSprite : this.enemySprite;
+    const tgt = other === 'player' ? this.playerSprite : this.enemySprite;
+    const level = this.clipLevel();
+    if (tgt && level !== 'off') {
+      // Their breathing holds still while they move, and goes on after.
+      const held = [atk, tgt].flatMap((v) => (v ? this.tweens.getTweensOf(v) : [])).filter((t) => t.isPlaying());
+      held.forEach((t) => t.pause());
+      // Feet below the message bar's top (your Pokémon stands in the foreground) count as standing on its edge, so the
+      // dust and the dash stay on the field.
+      const onField = (p: Point): Point => ({ x: p.x, y: Math.min(p.y, MESSAGE_Y - 8) });
+      const run = playClip(this, missClip(this.spotXY(side), onField(this.spotXY(other)), level), this.clipHost({ atk: { kind: 'mon', get: () => atk }, tgt: { kind: 'mon', get: () => tgt } }));
+      await run.done;
+      run.rest('atk');
+      run.rest('tgt');
+      held.forEach((t) => t.resume());
+    }
+  }
+
   /** When the last trainer face chip went up (scene clock); chips stay at least `CHEER_GAP` apart. */
   private cheerAt = -Infinity;
 
@@ -6012,18 +6033,10 @@ export class BattleScene extends Phaser.Scene {
           }
           if (e.side === 'enemy' && mon && this.phTurnCards()) await this.phKoCard(mon, before, trainer, events.slice(0, index + 1).filter((x) => x.type === 'faint' && x.side === 'enemy').length);
           break;
-        case 'miss': {
-          // The target slips aside and back (presentation only; the miss itself is already decided).
-          const target = e.side === 'player' ? this.enemySprite : this.playerSprite;
-          if (target && battleAnimations !== 'off') {
-            const dx = (e.side === 'player' ? 36 : -36) * (battleAnimations === 'full' ? 1 : 0.4);
-            const x = target.x;
-            await tween(this, { targets: target, x: x + dx, alpha: 0.6, duration: 130, yoyo: true, ease: 'Sine.easeOut' });
-            target.x = x;
-            target.setAlpha(1);
-          }
+        case 'miss':
+          // The target sees it coming (redesign pass 2). Presentation only; the miss itself is already decided.
+          await this.missMoment(e.side);
           break;
-        }
         case 'switchOut': {
           if (sprite) this.tweens.killTweensOf(sprite);
           // Your trainer leans in holding the ball out, takes the Pokémon back and steps away.

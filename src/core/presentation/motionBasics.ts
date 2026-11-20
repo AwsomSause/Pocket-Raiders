@@ -264,3 +264,31 @@ export function foeThrowClip(spot: Point, level: ClipLevel): MotionClip {
   b.beat(0, 'The trainer slides in').beat(wind, 'Steps back, winds up').beat(FOE_RELEASE, 'Release').beat(FOE_RELEASE + 500, 'Steps out');
   return b.end(FOE_RELEASE + 800);
 }
+
+/**
+ * Miss (pass 2): the target sees it coming. The attacker leans back and dashes at it; the target ducks and side-steps
+ * away with a stretch, so the attacker overshoots and skids (dust at both feet); then both spring back to their spots.
+ * Reduced: only the side-step, smaller. Off: nothing moves. Positions are the two Pokémon's feet.
+ */
+export function missClip(attacker: Point, target: Point, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('miss', level);
+  const dir = target.x >= attacker.x ? 1 : -1;
+  const a = b.part('atk', { dx: 0, dy: 0, sx: 1, sy: 1 });
+  const t = b.part('tgt', { dx: 0, dy: 0, sx: 1, sy: 1 });
+  if (level === 'off') return b.end(0);
+  if (level === 'reduced') {
+    t.at(0).to(130, { dx: dir * 28 }, 'out').to(200, { dx: 0 }, 'io');
+    b.beat(0, 'Side-step');
+    return b.end(330);
+  }
+  // The attacker: wind-up away from the target, a dash to where the target stood, a held skid, back home.
+  a.at(0).to(160, { dx: -dir * 18 }, 'out').to(100, { dx: target.x - dir * 150 - attacker.x, dy: target.y - 60 - attacker.y }, 'in3').wait(120).to(300, { dx: 0, dy: 0 }, 'io');
+  a.at(160).to(100, { sx: 1.18, sy: 0.88 }).wait(120).to(250, { sx: 1, sy: 1 }, 'back');
+  // The target: a quick step away from the attacker with a squash and stretch, a beat, then back.
+  t.at(140).to(100, { dx: dir * 70 }, 'out3').wait(300).to(250, { dx: 0 }, 'back');
+  t.at(140).to(80, { sx: 1.15, sy: 0.86 }).to(120, { sx: 0.95, sy: 1.05 }).to(200, { sx: 1, sy: 1 });
+  b.fx({ kind: 'dust', at: 200, x: target.x + dir * 20, y: target.y, n: 5 });
+  b.fx({ kind: 'dust', at: 270, x: target.x - dir * 120, y: target.y - 20, n: 6 });
+  b.beat(0, 'The attacker winds up').beat(140, 'Side-step').beat(260, 'Overshoot and skid').beat(600, 'Reset');
+  return b.end(800);
+}

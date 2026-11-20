@@ -238,3 +238,23 @@ test('one damage number per hit: springs out at the mockup size, obeys Damage nu
   expect(await numbers()).toHaveLength(0);
   expect(errors).toEqual([]);
 });
+
+test('a miss: the attacker overshoots, the target side-steps, and both stand home again after', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'miss-e2e');
+  const before = { player: await look(page, 'player'), enemy: await look(page, 'enemy') };
+  await start(page, 'b.missMoment("enemy")');
+  await page.waitForTimeout(250);
+  const mid = { player: await look(page, 'player'), enemy: await look(page, 'enemy') };
+  // Mid-way the foe has left its spot and your Pokémon has stepped away from it (to the left).
+  expect(Math.abs(mid.enemy.x - before.enemy.x)).toBeGreaterThan(40);
+  expect(mid.player.x).toBeLessThan(before.player.x - 20);
+  await expect.poll(() => over(page), { timeout: 5_000 }).toBe(true);
+  for (const side of ['player', 'enemy'] as const) {
+    const now = await look(page, side);
+    expect(now).toMatchObject({ x: before[side].x, y: before[side].y, angle: before[side].angle, alpha: before[side].alpha, solid: 0 });
+    expect(now.sx).toBeCloseTo(before[side].sx, 2);
+  }
+  expect(errors).toEqual([]);
+});

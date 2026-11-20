@@ -57,3 +57,6 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
 - Damage number shown twice (REANIMATE #12, a need): every hit floated two numbers (BattleScene's own and the event's
   cue). Now one, from the cue, as the mockup's pass 5: springs out 0.4 to full in 140 ms, hangs 450 ms, lifts 54 px and
   fades; white 44 px, critical 60 px yellow, healing green "+". It obeys Damage numbers (off: none) and Damage popup size.
+- Miss (pass 2): the attacker leans back and dashes past where the target stood; the target side-steps away with a
+  squash and stretch; dust at both feet; both spring home (`missClip`). Reduced: a small side-step only. Off: nothing.
+  The MISS word is the existing badge.
