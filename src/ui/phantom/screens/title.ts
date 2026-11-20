@@ -19,15 +19,19 @@ function splash(ph: PhantomVersion, d: TitleModel): string {
 <div class="ver vv"${act('version')}><b>${esc(ph.colour)} VERSION</b>${esc(d.version.toUpperCase())} · FAN PROJECT<kbd>V</kbd>CHANGE VERSION</div>${keys(['Enter', 'Start', 'start'], ['V', 'Version', 'version'])}`);
 }
 
-function menu(ph: PhantomVersion, d: TitleModel): string {
+/** The inside of the main menu page, for the small live screen in Settings. */
+export const phMenuSample = (ph: PhantomVersion): string => menuBody(ph, { options: ['Continue', 'Enter the Hub', 'New Run', 'Story Run', 'Save Slots', 'Settings'].map((label) => ({ label })), index: 0, version: '', art: '', notes: [], subs: ['Your run is waiting'], save: { title: 'Last save', lines: ['Your trainer, your team and your place', 'in the region show here.'] } }, false);
+
+function menuBody(ph: PhantomVersion, d: TitleModel, live = true): string {
   const rows = d.options.map((o, k) => `<div class="blade${k === d.index ? ' on' : ''}${o.disabled ? ' off' : ''}" style="--i:${k}"${act('pick', k, 'over')}>${esc(o.label)}${k === d.index && d.subs?.[k] ? `<small>${esc(d.subs[k])}</small>` : ''}</div>`).join('');
   const card = d.notes.length
     ? `<div class="card warn"><b>Heads up</b>${d.notes.map(esc).join('<br>')}</div>`
     : d.save ? `<div class="card"><b>${esc(d.save.title)}</b>${d.save.lines.filter(Boolean).map(esc).join('<br>')}</div>` : '';
-  return page('menu', `<div class="bgk"></div><div class="shard" style="--c:var(--red);--cp:polygon(52% 0,100% 0,100% 100%,30% 100%);inset:0" aria-hidden="true"></div><div class="burst" style="--x:80%;--y:70%" aria-hidden="true"></div>
+  return `<div class="bgk"></div><div class="shard" style="--c:var(--red);--cp:polygon(52% 0,100% 0,100% 100%,30% 100%);inset:0" aria-hidden="true"></div><div class="burst" style="--x:80%;--y:70%" aria-hidden="true"></div>
 <div class="hd"><small>POCKET RAIDERS</small>Main menu</div><div class="list${d.options.length > 6 ? ' many' : ''}">${rows}</div>
-<div class="who">${hero(ph.hero, 8, 'sh', 'position:absolute;left:26px;top:22px')}${hero(ph.hero, 8, 'ol', 'position:relative')}</div>${card}
-${keys(['Enter', 'Confirm', 'pick', d.index], ['V', 'Version', 'version'])}`);
+<div class="who"><div class="ph-breathe">${hero(ph.hero, 8, 'sh', 'position:absolute;left:26px;top:22px')}${hero(ph.hero, 8, 'ol', 'position:relative')}</div></div>${card}
+${live ? keys(['Enter', 'Confirm', 'pick', d.index], ['V', 'Version', 'version']) : ''}`;
 }
+const menu = (ph: PhantomVersion, d: TitleModel): string => page('menu', menuBody(ph, d));
 
 export const phTitle = (ph: PhantomVersion, d: TitleModel): string => (d.press ? splash(ph, d) : menu(ph, d));

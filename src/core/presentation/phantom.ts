@@ -29,3 +29,23 @@ export const PHANTOM_VERSIONS: readonly PhantomVersion[] = [
 export const phantomVersion = (id: string | undefined): PhantomVersion => PHANTOM_VERSIONS.find((v) => v.id === id) ?? PHANTOM_VERSIONS[0]!;
 export const phantomVersionLabel = (id: string | undefined): string => { const v = phantomVersion(id); return `${v.colour} · ${v.n}`; };
 export const nextPhantomVersion = (id: PhantomVersionId): PhantomVersionId => PHANTOM_VERSION_IDS[(PHANTOM_VERSION_IDS.indexOf(id) + 1) % PHANTOM_VERSION_IDS.length]!;
+
+/**
+ * The Phantom UI's Settings pages, in the order of its rail: the game's own setting groups under the mock-ups' short
+ * names, plus Phone (the settings that matter on a phone, gathered on one page).
+ */
+export const PHANTOM_SETTINGS_PAGES = [
+  { id: 'gameplay', n: 'Game', letter: 'G', about: 'Run length, pace, what a run includes' },
+  { id: 'animations', n: 'Battle', letter: 'B', about: 'Animations, cut-ins, move scenes' },
+  { id: 'display', n: 'Look', letter: 'L', about: 'Style, version, screen, themes' },
+  { id: 'audio', n: 'Sound', letter: 'S', about: 'Music, effects, sound packs' },
+  { id: 'controls', n: 'Controls', letter: 'C', about: 'Gamepad, safeguards, hold to confirm' },
+  { id: 'accessibility', n: 'Access', letter: 'A', about: 'Presets, contrast, reading aids' },
+  { id: 'text', n: 'Text', letter: 'T', about: 'Speed, dialogue, messages' },
+  { id: 'phone', n: 'Phone', letter: 'P', about: 'Touch play, one-handed, screen size' },
+  { id: 'story', n: 'Story', letter: 'Y', about: 'Story scenes, subtitles, spoilers' },
+  { id: 'data', n: 'Save', letter: 'D', about: 'Export, import, credits, reset' },
+] as const;
+export type PhantomSettingsPageId = (typeof PHANTOM_SETTINGS_PAGES)[number]['id'];
+/** The settings on the Phone page (ids in core/settingsRegistry.ts). */
+export const PHANTOM_PHONE_SETTINGS = ['oneHanded', 'haptics', 'holdToConfirm', 'uiScale', 'fontSize', 'skipGuard'] as const;

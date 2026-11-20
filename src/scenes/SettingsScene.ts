@@ -23,11 +23,14 @@ import { screenStyleOf } from '../core/presentation/screenStyles';
 import { drawBackdrop, drawPanel, Menu, type MenuOption } from '../ui/widgets';
 import { Picker } from '../ui/partyPanel';
 import { gameSummary, type SummaryTopic } from '../core/encyclopedia';
-import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, phantomOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { PHANTOM_PHONE_SETTINGS, PHANTOM_SETTINGS_PAGES, type PhantomVersion } from '../core/presentation/phantom';
+import { applyPhantomPreset, PHANTOM_PRESETS, phantomPresetOf } from '../core/presentation/phantomPresets';
+import { phSettings } from '../ui/phantom/screens/settings';
 import { menuView, settingsView } from '../ui/redux/templates';
 import { confirmBox } from '../ui/redux/screens/saves';
 
-type Page = 'home' | 'search' | 'confirmReset' | 'summary' | SettingCategory;
+type Page = 'home' | 'search' | 'confirmReset' | 'summary' | 'phone' | SettingCategory;
 interface Row {
   option: MenuOption;
   hint: string;
@@ -90,7 +93,12 @@ export class SettingsScene extends Phaser.Scene {
       render: (c) => this.reduxHtml(c),
       acts: {
         pick: (i) => { this.menu?.focus(Number(i), false); this.menu?.confirm(); },
-        tab: (k) => this.go(SETTING_CATEGORIES[Number(k)]!.id),
+        tab: (k) => this.go(phantomOn() ? PHANTOM_SETTINGS_PAGES[Number(k)]!.id : SETTING_CATEGORIES[Number(k)]!.id),
+        // Phantom UI: the presets on the home page, and the key hints as buttons.
+        preset: (k) => this.usePreset(Number(k)),
+        presetNext: () => this.usePreset(),
+        resetPage: () => this.resetPage(),
+        back: () => this.back(),
       },
       overs: { over: (i) => { if (!this.shown[Number(i)]?.option.disabled) this.menu?.focus(Number(i), false); } },
     }) : null;
@@ -103,6 +111,14 @@ export class SettingsScene extends Phaser.Scene {
       else this.menu?.handle(a);
     });
     this.input.keyboard?.on('keydown', (e: KeyboardEvent) => this.typed(e));
+    // Phantom UI: Q and E turn the page, P uses the next preset (home), R puts the open page back to its defaults.
+    this.input.keyboard?.on('keydown', (e: KeyboardEvent) => {
+      if (!phantomOn() || this.picker || this.page === 'search' || this.remapping) return;
+      const at = PHANTOM_SETTINGS_PAGES.findIndex((p) => p.id === this.page), n = PHANTOM_SETTINGS_PAGES.length;
+      if (at >= 0 && (e.code === 'KeyQ' || e.code === 'KeyE')) this.go(PHANTOM_SETTINGS_PAGES[(at + (e.code === 'KeyE' ? 1 : n - 1)) % n]!.id);
+      else if (at >= 0 && e.code === 'KeyR') this.resetPage();
+      else if (this.page === 'home' && e.code === 'KeyP') this.usePreset();
+    });
     this.render(data?.focus ?? 0);
   }
 
@@ -154,7 +170,8 @@ export class SettingsScene extends Phaser.Scene {
     const back: Row = { option: { label: 'Back' }, hint: '', action: () => this.back() };
     if (this.page === 'home') {
       return [
-        ...SETTING_CATEGORIES.map((c): Row => ({ option: { label: c.label }, hint: c.blurb, action: () => this.go(c.id) })),
+        // Phantom UI: its own page order and names, with the Phone page among them.
+        ...(phantomOn() ? PHANTOM_SETTINGS_PAGES.map((c): Row => ({ option: { label: c.n }, hint: c.about, action: () => this.go(c.id) })) : SETTING_CATEGORIES.map((c): Row => ({ option: { label: c.label }, hint: c.blurb, action: () => this.go(c.id) }))),
         { option: { label: 'Game Summary' }, hint: 'A readable summary of everything in the game: Pokémon, moves, items, trainers, events, modes and systems.', action: () => this.go('summary') },
         { option: { label: 'Search settings…' }, hint: 'Type to find a setting by name.', action: () => this.go('search') },
         { option: { label: 'Reset to defaults' }, hint: 'Puts every setting back to how it started. Your saves are not touched.', action: () => this.go('confirmReset') },
@@ -189,6 +206,7 @@ export class SettingsScene extends Phaser.Scene {
         // Opened from a run (the pause menu): nothing that swaps the profile or leaves for another screen.
       ].filter((r) => this.from !== 'Map' || !IN_RUN_HIDDEN.has(r.option.label));
     }
+    if (this.page === 'phone') return [...PHANTOM_PHONE_SETTINGS.flatMap((id) => SETTINGS.find((d) => d.id === id) ?? []).map((d) => toggleRow(d)), back];
     const rows = settingsIn(this.page).map((d) => toggleRow(d));
     if (this.page === 'controls') rows.push({ option: { label: this.remapping ? `Press a button for: ${PAD_ACTION_LABEL[PAD_ACTIONS[this.remapStep]!]}…` : 'Remap by pressing buttons…' }, hint: 'Press the controller button you want for each action in turn (Up, Down, Left, Right, Confirm, Back). A button already in use swaps.', action: () => this.startRemap() });
     return [...rows, back];
@@ -330,7 +348,8 @@ export class SettingsScene extends Phaser.Scene {
         ui.add(gc);
       }
     } else ui.add(drawPanel(this, 40, top - 8, 560, 400 - (top - 78), { alpha: 0.95 }));
-    const cols = look?.columns && rows.length >= 6 ? look.columns : 1;
+    // Phantom UI: the home page is a grid of tiles, five across, so the arrows move the same way the tiles lie.
+    const cols = phantomOn() && this.page === 'home' ? 5 : look?.columns && rows.length >= 6 ? look.columns : 1;
     if (cols > 1) area = { ...area, w: Math.floor(area.w / cols) };
     const rowH = Math.min(40, Math.floor((380 - (top - 78)) / Math.max(Math.ceil(rows.length / cols), 1)));
     const mascot = look?.mascot ? services().session.content.species.get(look.mascot) : undefined;
@@ -367,6 +386,7 @@ export class SettingsScene extends Phaser.Scene {
 
   /** New UI: the page as the mock-ups draw it. The home list is a menu; a category is the tabbed Settings screen. */
   private reduxHtml(c: Parameters<typeof menuView>[0]): string {
+    if (c.ph) return this.phantomHtml(c.ph);
     const rows = this.shown, index = this.menu?.index ?? 0;
     const text = this.notice || rows[index]?.hint || 'Changes apply at once. Looks never change battle results.';
     const hints = [['Enter', 'choose'], ['Esc', 'back']] as const;
@@ -393,6 +413,83 @@ export class SettingsScene extends Phaser.Scene {
   }
 
   private homeItems: { label: string; note: string; disabled?: boolean; hint: string }[] = [];
+
+  /** The settings a Phantom page lists (the Phone page gathers its own). */
+  private pageSettings(page: Page): SettingDef[] {
+    if (page === 'phone') return PHANTOM_PHONE_SETTINGS.flatMap((id) => SETTINGS.find((d) => d.id === id) ?? []);
+    return SETTING_CATEGORIES.some((c) => c.id === page) && page !== 'data' ? settingsIn(page as SettingCategory) : [];
+  }
+
+  /** Phantom UI: the page as its mock-ups draw it (presets and tiles at home, rail + rows + live screen on a page). */
+  private phantomHtml(ph: PhantomVersion): string {
+    const { session } = services();
+    const s = session.settings, rows = this.shown, index = Math.min(this.menu?.index ?? 0, Math.max(0, rows.length - 1));
+    const at = PHANTOM_SETTINGS_PAGES.findIndex((p) => p.id === this.page);
+    const from = this.from === 'Hub' ? 'HUB' : this.from === 'Map' ? 'PAUSE' : 'TITLE';
+    // What "default" means here is what Reset to defaults would give this player.
+    const fresh = resetSettings(DEFAULT_SETTINGS, s);
+    const preset = phantomPresetOf(s, DEFAULT_SETTINGS);
+    const help = this.notice || rows[index]?.hint || '';
+    const list = rows.map((r) => ({ label: r.name ?? r.option.label, value: r.value ?? '', disabled: r.option.disabled }));
+    const base = { from, tiles: [], presets: PHANTOM_PRESETS.map((p) => ({ n: p.n, about: p.about, meters: p.meters })), preset: PHANTOM_PRESETS.findIndex((p) => p.id === preset), rail: PHANTOM_SETTINGS_PAGES.map((p) => ({ label: p.n, letter: p.letter })), at, rows: list, index, help, options: null };
+    if (this.page === 'home') {
+      const changed = (page: Page): number => this.pageSettings(page).filter((d) => d.show(s) !== d.show(fresh)).length;
+      return phSettings(ph, { ...base, kind: 'home', title: 'Settings', tiles: PHANTOM_SETTINGS_PAGES.map((p) => ({ label: p.n, letter: p.letter, about: p.about, changed: changed(p.id) })), help: this.notice });
+    }
+    if (at >= 0) {
+      // Every value the chosen setting can take, by pressing it round once; the list starts at the default where it has one.
+      const def = SETTINGS.find((d) => d.id === rows[index]?.id);
+      let options: { list: string[]; on: number } | null = null;
+      if (def && !def.disabled?.(s)) {
+        const seen = [def.show(s)];
+        for (let t = def.next(s), n = 0; n < 12 && def.show(t) !== seen[0]; t = def.next(t), n++) seen.push(def.show(t));
+        const first = Math.max(0, seen.indexOf(def.show(fresh)));
+        const all = [...seen.slice(first), ...seen.slice(0, first)], on = all.indexOf(seen[0]!);
+        const from5 = Math.max(0, Math.min(all.length - 5, on - 2));
+        options = seen.length <= 12 ? { list: all.slice(from5, from5 + 5), on: on - from5 } : null;
+      }
+      return phSettings(ph, { ...base, kind: 'page', title: PHANTOM_SETTINGS_PAGES[at]!.n, options });
+    }
+    const title = this.page === 'summary' ? 'Game Summary' : this.page === 'search' ? 'Find a setting' : 'Reset to defaults?';
+    return phSettings(ph, { ...base, kind: 'list', title, sub: this.page === 'search' ? `Find: ${this.query}▌` : '', help: this.page === 'search' && this.query && rows.length === 1 ? 'No setting matches.' : help || (this.page === 'confirmReset' ? 'Audio, display, animations and text all go back to their starting values. Your saves are not touched.' : '') });
+  }
+
+  /** Phantom UI: uses preset `k`, or the one after the preset in use. */
+  private usePreset(k?: number): void {
+    const { session } = services();
+    const before = session.settings;
+    const now = PHANTOM_PRESETS.findIndex((p) => p.id === phantomPresetOf(before, DEFAULT_SETTINGS));
+    const pick = PHANTOM_PRESETS[k ?? (now + 1) % PHANTOM_PRESETS.length];
+    if (!pick) return;
+    const after = applyPhantomPreset(before, pick.id, DEFAULT_SETTINGS);
+    session.saveSettings(after);
+    this.sideEffects(before, after);
+    this.notice = `${pick.n} preset in use.`;
+    this.render(this.menu?.index ?? 0);
+  }
+
+  private resetArmed = 0;
+  /** Phantom UI: R puts the open page's settings back to their defaults; it asks for a second press first. */
+  private resetPage(): void {
+    const defs = this.pageSettings(this.page);
+    if (!defs.length) return;
+    if (performance.now() - this.resetArmed > 4000) {
+      this.resetArmed = performance.now();
+      this.notice = 'Press R again to put this page back to its defaults.';
+      return this.render(this.menu?.index ?? 0);
+    }
+    this.resetArmed = 0;
+    const { session } = services();
+    const before = session.settings;
+    const fresh = resetSettings(DEFAULT_SETTINGS, before);
+    let after = before;
+    for (const d of defs) for (let n = 0; n < 64 && !d.disabled?.(after) && d.show(after) !== d.show(fresh); n++) after = d.next(after);
+    session.saveSettings(after);
+    this.sideEffects(before, after);
+    this.notice = 'This page is back to its defaults.';
+    if (before.uiStyle !== after.uiStyle) return void this.scene.restart({ from: this.from, page: this.page, focus: this.menu?.index ?? 0 });
+    this.render(this.menu?.index ?? 0);
+  }
 
   /** A live sample of the chosen theme, text size and popup size, drawn from the saved settings on the right. */
   private preview(ui: Phaser.GameObjects.Container): void {

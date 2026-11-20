@@ -90,7 +90,7 @@ export function rxTrim(file: string): [number, number, number, number] | undefin
   const hit = trims.get(file);
   if (hit !== undefined) return hit ?? undefined;
   const key = 'trim:' + file;
-  if (pending.has(key)) return undefined;
+  if (pending.has(key) || typeof Image === 'undefined') return undefined;
   pending.add(key);
   const im = new Image();
   const done = (box: [number, number, number, number] | null): void => { trims.set(file, box); pending.delete(key); arrived(); };

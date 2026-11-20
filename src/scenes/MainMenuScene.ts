@@ -26,6 +26,9 @@ import { clipsPlayable, runTitleClips, titleClipsHtml, titleClipsOnCanvas } from
 import { VERSION_LABEL } from '../ui/updateSplashGate';
 import { downloadText } from '../ui/files';
 
+/** Phantom UI: its "Press any button" splash has been passed once since the page loaded. */
+let splashSeen = false;
+
 export class MainMenuScene extends Phaser.Scene {
   private menu!: Menu;
   private pressWait = false;
@@ -190,8 +193,8 @@ export class MainMenuScene extends Phaser.Scene {
 
     // New UI: the mock-up's Title screen, drawn over this scene; the menu above stays the controller.
     if (reduxOn()) {
-      // Phantom UI: the splash waits for any button the first time the title opens; coming back from a menu goes straight to the list.
-      this.pressWait = phantomOn() && !data?.focus;
+      // Phantom UI: the splash waits for any button the first time the title opens; coming back from another screen goes straight to the list.
+      this.pressWait = phantomOn() && !splashSeen;
       this.menu.container.setVisible(true);
       // The backdrop is its own view: its markup never changes, so the clips keep playing while the menu redraws.
       // (A Phantom page paints its own backdrop, so the clips sit out.)
@@ -214,7 +217,7 @@ export class MainMenuScene extends Phaser.Scene {
         overs: { over: (i) => { if (!options[Number(i)]?.option.disabled) this.menu.focus(Number(i), false); } },
       });
       this.menu.onFocus = () => view.refresh();
-      this.events.on('pressStart', () => { this.pressWait = false; view.refresh(); });
+      this.events.on('pressStart', () => { this.pressWait = false; splashSeen = true; view.refresh(); });
       // V changes the Phantom version from the title (the mock-up's "Change version").
       this.input.keyboard?.on('keydown-V', () => { if (phantomOn()) view.el.querySelector<HTMLElement>('[data-act="version"]')?.click(); });
     }

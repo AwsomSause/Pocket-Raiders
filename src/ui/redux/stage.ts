@@ -316,7 +316,8 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
   // A view is drawn on the Phantom layer when its HTML is a Phantom page, and on the New layer otherwise; the same
   // view can change sides between two draws (Settings > UI style, or a screen whose pages are only partly built).
   const put = (pageId: string | null): void => {
-    const now = `${pageId !== null}|${k}|${phv?.id}|${calm}`;
+    const hc = services().session.settings.highContrast;
+    const now = `${pageId !== null}|${k}|${phv?.id}|${calm}|${hc}`;
     if (now !== wear) {
       wear = now;
       const side = pageId !== null ? phost! : root;
@@ -325,9 +326,14 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
         el.className = 'phs' + (o.clear ? ' clear' : '') + (calm ? ' still' : '');
         el.dataset.liv = phv!.id;
         el.dataset.pass = '25';
+        // The mock-ups' own High contrast and Reduced motion looks (pass 24).
+        el.toggleAttribute('data-hc', hc);
+        el.toggleAttribute('data-calm', calm);
       } else {
         delete el.dataset.scr;
         delete el.dataset.pass;
+        el.removeAttribute('data-hc');
+        el.removeAttribute('data-calm');
         el.className = lookClass(k, el) + (o.clear ? ' clear' : '') + (again ? ' noin' : '');
       }
     }
