@@ -9,6 +9,8 @@ function verb(pass, name, fn) { (AK.verbs[name] = AK.verbs[name] || []).push({ p
 function pick(list, P) { let b = null; for (const d of list || []) if (d.pass <= P && (!b || d.pass >= b.pass)) b = d; return b; }
 function V(name, ...a) { const d = pick(AK.verbs[name], AK.P); return d ? d.fn(...a) : null; }
 /* VP: the version of a verb from before `pass`, so a new version can build on the old one */
+/* CP(pass, id): the body of clip `id` as it was before `pass`, so a later pass can wrap it (set S.off to start it later) */
+function CP(pass, id) { return (AK.clips[id] || []).filter(c => c.pass < pass).sort((a, b) => b.pass - a.pass)[0].fn; }
 function VP(pass, name, ...a) { const d = pick((AK.verbs[name] || []).filter(x => x.pass < pass), pass); return d ? d.fn(...a) : null; }
 function clipsAt(P) {
   const out = [];
@@ -41,12 +43,12 @@ const cap = s => s[0].toUpperCase() + s.slice(1);
 /* ---------- an actor: one element with numeric tracks ---------- */
 class Act {
   constructor(S, el, init) { this.S = S; this.el = el; el.__act = this; this.c = 0; this.tr = {}; this.init = init || {}; this.sv = {}; this.last = {}; S.acts.push(this); }
-  at(t) { this.c = t; return this; }
+  at(t) { this.c = t + (this.S.off || 0); return this; }
   wait(d) { this.c += d; return this; }
   /* to(seconds, {prop: value}, ease): animate from wherever each prop is to the value; moves the cursor on */
   to(d, p, e) {
     for (const k in p) { if (k === 's') { this._seg('sx', d, p[k], e); this._seg('sy', d, p[k], e); } else this._seg(k, d, p[k], e); }
-    this.c += d; if (this.c > this.S.dur) this.S.dur = this.c; return this;
+    this.c += d; if (this.c > this.S.dur && d < 30) this.S.dur = this.c; return this; /* 30s and longer = background drift, does not lengthen the clip */
   }
   also(d, p, e) { const c = this.c; this.to(d, p, e); this.c = c; return this; }
   set(p) { return this.to(0, p); }
@@ -58,7 +60,7 @@ class Act {
   html(v) { return this.style('@html', v); }
   cls(name, on = true) { return this.style('@cls:' + name, on); }
   /* fn(seconds, {prop: u => value}): follow a curve (arcs, gravity) */
-  fn(d, p) { for (const k in p) (this.tr[k] = this.tr[k] || []).push({ t: this.c, d, fn: p[k], v: p[k](1), n: this.S.n++ }); this.sorted = 0; this.c += d; if (this.c > this.S.dur) this.S.dur = this.c; return this; }
+  fn(d, p) { for (const k in p) (this.tr[k] = this.tr[k] || []).push({ t: this.c, d, fn: p[k], v: p[k](1), n: this.S.n++ }); this.sorted = 0; this.c += d; if (d < 30 && this.c > this.S.dur) this.S.dur = this.c; return this; }
   type(str, cps = 40) { this.typed = this.typed || []; this.typed.push({ t: this.c, str, cps }); this.c += str.replace(/<[^>]+>/g, '').length / cps; if (this.c > this.S.dur) this.S.dur = this.c; return this; }
   count(d, a, b, fmt) { this.counts = this.counts || []; this.counts.push({ t: this.c, d, a, b, fmt: fmt || (v => Math.round(v)) }); this.c += d; if (this.c > this.S.dur) this.S.dur = this.c; return this; }
   _sort() { for (const k in this.tr) { const L = this.tr[k]; L.sort((a, b) => a.t - b.t || a.n - b.n); for (let i = 0; i < L.length; i++) L[i].f = this._ev(k, L, i - 1, L[i].t); } this.sorted = 1; }
@@ -155,8 +157,8 @@ class Scene {
     return m;
   }
   /* say where the timing strip under the screen puts its labels */
-  beat(t, label) { this.beats.push([t, label]); return this; }
-  end(t) { if (t > this.dur) this.dur = t; return this; }
+  beat(t, label) { this.beats.push([t + (this.off || 0), label]); return this; }
+  end(t) { t += this.off || 0; if (t > this.dur) this.dur = t; return this; }
 }
 
 /* ---------- viewer ---------- */
@@ -267,7 +269,7 @@ function __check() {
     if (parseFloat(cs.fontSize) < 12) out.push('tiny text ' + parseFloat(cs.fontSize) + 'px ' + name(el));
   }
   for (let i = 0; i < leaves.length; i++) for (let j = i + 1; j < leaves.length; j++) {
-    const a = leaves[i], b = leaves[j]; if (a.contains(b) || b.contains(a)) continue;
+    const a = leaves[i], b = leaves[j]; if (a.contains(b) || b.contains(a) || a.parentElement === b.parentElement) continue; /* siblings share one text flow */
     const x = a.getBoundingClientRect(), y = b.getBoundingClientRect();
     const ox = Math.min(x.right, y.right) - Math.max(x.left, y.left), oy = Math.min(x.bottom, y.bottom) - Math.max(x.top, y.top);
     if (ox > 3 && oy > 3) out.push('overlap ' + name(a) + ' × ' + name(b));

@@ -75,5 +75,107 @@
   "q3": "Five more clips and a Catching group. 24 clips in total after five passes.",
   "q4": "Damage numbers and battle text animations already have switches in Settings; stamps would share the damage numbers switch.",
   "q5": "Three ball shakes with a click and stars is the most recognisable animation in the series. The lamps make the count readable on a small screen."
+ },
+ "6": {
+  "name": "Power Surge",
+  "big": "The four gimmicks are re-staged around the game's own effect art: the Mega orb that cracks and shatters, Tera crystals that grow out of the ground, Dynamax storm clouds with the camera pulling back, and a Z-Move with its real title art. Their language also leaks into normal play: strong moves dim the arena as they charge, and big hits throw rays behind the target.",
+  "clips": [
+   "Mega Evolution",
+   "Terastallize",
+   "Dynamax",
+   "Dynamax Ends",
+   "Z-Move"
+  ],
+  "q1": "By a long way. These are the loudest moments in a battle and each now has a build-up, a break and a landing instead of one flash.",
+  "q2": "Pass 5 made the interface react. Pass 6 adds scale: the arena dims, the camera moves for the first time, the HP bar doubles on screen, and something stays behind afterwards (the Tera crown, the Mega mark on the bar, the turn lamps).",
+  "q3": "Five clips and a Gimmicks group. Dynamax ending gets its own clip because today it is a 0.65s shrink. Primal Reversion and Gigantamax come in the next pass and the lists.",
+  "q4": "The four Fast switches in Settings stay. Fast would play the last third of each clip: the break and the landing, without the build-up.",
+  "q5": "Each one follows the order from its home game: bracelet then orb for Mega, orb then crystals then crown for Tera, big ball over the shoulder for Dynamax, trainer and Pokémon together for Z-Moves."
+ },
+ "7": {
+  "name": "Galar",
+  "big": "Galar gets a stadium: stands with a crowd that bobs, jumps, flashes cameras and sinks, a Crowd meter, and floodlights in the gym's colour. Gigantamax is no longer a Dynamax copy, G-Max moves leave something on the field, raids get a den entry and a barrier, and the Champion and Eternatus each get a scene. Everywhere else the ground now answers: bases dip and flash under landings and hits.",
+  "clips": [
+   "Stadium Crowd",
+   "Gym Leader Entrance",
+   "Gigantamax",
+   "G-Max Move",
+   "Max Raid Den",
+   "Raid Barrier",
+   "Champion Time",
+   "Eternamax"
+  ],
+  "q1": "Yes. Until now every battle happened in a quiet field. A stadium that reacts to you is the biggest single jump in spectacle so far.",
+  "q2": "Pass 6 made the Pokémon bigger. Pass 7 makes the place bigger: there is an audience, the lights go out for the Champion, the sky cracks for Eternatus, and in ordinary battles the ground itself now moves under landings and hits.",
+  "q3": "Eight clips and a Galar group. The den entry and the barrier are new moments that deserve their own screens; today a raid starts with a plain fade.",
+  "q4": "Menu stays reachable during the entrances (they skip on a button press). Settings gets one new switch in this pass: Crowd reactions (On, Quiet, Off), next to Screen shake.",
+  "q5": "It is Sword and Shield's best trick: sport. Numbers on shirts, League Cards, chants, a Champion with a cape. The rest of the game keeps its routes and caves, so Galar feels like its own region."
+ },
+ "8": {
+  "name": "Conditions",
+  "big": "Things that stay. Each of the six conditions gets an arrival, a look that lasts and its own tick every turn, with a chip that flies onto the HP plate. Weather has an entrance, a layer and an exit. Terrains finally stay on the ground. Stat changes, abilities and Protect get their own shapes, and the end of the turn becomes a short parade with a turn counter. Outdoors, the air now moves in every battle.",
+  "clips": [
+   "Burn",
+   "Poison",
+   "Paralysis",
+   "Sleep",
+   "Freeze",
+   "Confusion",
+   "Rain",
+   "Harsh Sunlight",
+   "Sandstorm",
+   "Snow",
+   "Weather Clears",
+   "Terrain",
+   "Stat Changes",
+   "Ability Trigger",
+   "Protect",
+   "End of Turn"
+  ],
+  "q1": "Yes, in a quieter way. Passes 6 and 7 were about the loudest five seconds. This pass makes the other fifty turns look alive: something is always burning, snowing, drifting or humming.",
+  "q2": "Before this pass nothing lasted: an effect played and the screen went back to normal. Now you can read the state of a battle without any text, because a frozen Pokémon is in a block of ice and Electric Terrain is a grid under its feet.",
+  "q3": "Sixteen clips and a Conditions group. Terrain and the end-of-turn parade are new moments; the game shows nothing for them today.",
+  "q4": "Weather, terrain and status chips need no menu. Settings gets a Weather effects level (Full, Light, Off) because rain and sand cover the whole screen, and the turn counter can be hidden.",
+  "q5": "The BRN, PSN, PAR, SLP and FRZ chips, the Z's, the stars round a confused head and the weather lines are straight from the series. They are just given more than one frame."
+ },
+ "9": {
+  "name": "Story Time",
+  "big": "Events move for the first time, and they move on the real pass-25 event pages: each page from the UI redesign is photographed and cut into pieces that slide, flip and fly. An event opens through a camera iris, choices are dealt like cards, results change the place the way you travelled there, rewards wait for your button, and an event battle is wiped in on the slant. In battle, the bubble now points at whoever is acting.",
+  "clips": [
+   "Event Opens",
+   "Event Choice",
+   "Event Result",
+   "Event Reward",
+   "Event Stage Starts",
+   "Blessing",
+   "Pokémon Center",
+   "Starter Remembrance"
+  ],
+  "q1": "Yes. Events were the stillest part of the game: a picture and a text box. Now people walk on, cards are dealt, and the lighthouse stairs actually scroll.",
+  "q2": "Passes 6 to 8 were all battle. This is the first pass outside it, and the first that animates the redesigned pages themselves instead of a stand-in, so what you see is exactly the chosen look in motion.",
+  "q3": "Eight clips and an Events group. No new pages are needed; the four-step strip (Talk, Choose, Result, Reward) already splits an event into pages and every step now has its own entrance.",
+  "q4": "The journal key and Menu stay live through all of it. Text speed in Settings drives the typing; Hold to skip jumps every entrance to its last frame; rewards still never leave without a press.",
+  "q5": "Walking on from the side of the screen, an iris to change place, balls rolling in at the Professor's feet and the Center jingle lighting six balls are all things the series does."
+ },
+ "10": {
+  "name": "World Tour",
+  "big": "Everything between battles moves, on the real chosen pages: the pass-17 title assembles itself, Hub Town pops up like a pop-up book, the map draws its paths and you hop along them, a region arrives with a passport stamp, the team walks the road, the shop basket bumps, the Rotom Phone menu rises, and one transition ties it together: the screen shuts like a Poké Ball and opens on the next place.",
+  "clips": [
+   "Ball Wipe",
+   "Wild Encounter (redone)",
+   "Title Screen",
+   "Hub Town Arrives",
+   "Map: Moving On",
+   "Region Arrival",
+   "On the Road",
+   "Poké Mart: Buying",
+   "Pause Menu Opens",
+   "Next Stop Card"
+  ],
+  "q1": "Yes. These screens are where a run spends half its time and until now they simply appeared. Now each one builds in front of you in under two seconds.",
+  "q2": "Pass 9 moved events. Pass 10 moves the rest of the world and adds the first shared transition, the ball wipe, so going from map to battle to reward reads as one journey. Wild Encounter is re-cut to start on the map.",
+  "q3": "Ten clips, a World group and a Screens group. On the Road and the Next Stop card are short pages that exist only to be animated; they replace two plain fades.",
+  "q4": "This pass is where they live. The Menu is the Rotom Phone rising from the bottom edge on any screen, and closing is the same motion backwards at double speed. Settings gets Transition style (Ball, Fade, Cut).",
+  "q5": "A ball shutting over the screen, a passport stamp for each region, hopping along a route line and your team walking behind you are about as Pokémon as it gets."
  }
 }

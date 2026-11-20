@@ -7,6 +7,7 @@ const { chromium } = require('playwright'); const path = require('path'); const 
   const b = await chromium.launch(); const page = await b.newPage({ viewport: { width: 960, height: 540 }, deviceScaleFactor: 1 });
   const errs = []; page.on('pageerror', e => errs.push(String(e))); page.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
   page.on('requestfailed', r => errs.push('missing ' + r.url().split('/').pop()));
+  page.on('response', r => { if (r.status() === 404) errs.push('404 ' + r.url().split('/').pop()); });
   const root = path.resolve(__dirname, '..'), types = { html: 'text/html', png: 'image/png', js: 'text/javascript', json: 'application/json' };
   const srv = require('http').createServer((q, r) => { const f = path.join(root, decodeURIComponent(q.url.split('?')[0])); fs.readFile(f, (e, d) => { if (e) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'content-type': types[f.split('.').pop()] || 'application/octet-stream' }); r.end(d); }); });
   await new Promise(ok => srv.listen(0, ok));
