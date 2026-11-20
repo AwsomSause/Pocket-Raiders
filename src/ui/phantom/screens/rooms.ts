@@ -55,3 +55,12 @@ export function phLoading(_ph: PhantomVersion, d: BootModel): string {
     + (d.note ? `<div class="pn lt tilt ph-ld-note" style="--r:-1deg"><p class="txt" style="font-size:${d.note.length > 150 ? 17 : 20}px">${esc(d.note)}</p></div>` : '') + '</div>'
     + (d.splash ? `<div class="ph-ld-any"${act('next')}></div>` : ''));
 }
+
+/** A journal entry of the Memories room, over the list: the entry on a sheet; a click anywhere (or Enter, Esc) closes it. */
+export function phMemory(_ph: PhantomVersion, title: string, lines: readonly string[]): string {
+  const n = lines.join(' ').length;
+  return page('memory', `<div class="ph-shade" style="z-index:8" data-key="shade"${act('close')}></div>`
+    + `<div class="pn lt tilt ph-mem" style="--r:-.6deg" data-scroll${act('close')}><span class="lab">Memory</span><h3 class="tl1" style="font-size:${fit(title, 900, 40, 22)}px">${esc(title)}</h3>`
+    + `<div class="ph-mem-t" style="font-size:${n > 1400 ? 16 : n > 800 ? 18 : 20}px">${lines.map((l) => (l ? `<p>${esc(l)}</p>` : '<p class="gap"></p>')).join('')}</div></div>`
+    + keys(['Enter', 'Close', 'close']), false);
+}

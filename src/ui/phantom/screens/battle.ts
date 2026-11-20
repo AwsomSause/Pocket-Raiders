@@ -62,13 +62,17 @@ export function phLevel(d: BattleLevel): string {
   return `<div class="ph-shade" data-key="lv-shade"></div><div class="pn lt ph-bt-lv tilt" style="--r:-1.5deg" data-key="lv${d.to}"><span class="lab">Level up</span><div class="ph-bt-lvh">${d.file ? mon(d.file, 1.4, 'olk', '', true) : ''}<div><h3 class="tl1">${esc(d.name)}</h3><p class="ph-bt-lvn">Lv ${d.from}<i>▶</i><b>${d.to}</b></p></div></div>${rows}</div>`;
 }
 
-/** An evolution (mock-up `evolve`): black page, the burst, the old form until the new one is out, the words under it. */
-export function phEvolve(d: BattleEvolve, text: string): string {
+/**
+ * An evolution (mock-up `evolve`): black page, the burst, the old form until the new one is out, the words under it.
+ * `sil` false shows the form in colour before it changes (the evolution scene's first line); `tap`: a click anywhere moves on.
+ */
+export function phEvolve(d: BattleEvolve & { sil?: boolean; tap?: boolean }, text: string): string {
   const f = d.done ? d.to : d.from;
   return page('evolve', '<div class="bgk"></div><div class="burst ph-bt-evb" style="--x:50%;--y:46%" aria-hidden="true"></div>'
-    + `<div class="ph-bt-ev${d.done ? ' done' : ''}" data-key="ev${d.done ? 1 : 0}">${f ? mon(f, 4.4, d.done ? 'ol' : 'sil', '', true) : ''}</div>`
+    + `<div class="ph-bt-ev${d.done ? ' done' : ''}" data-key="ev${d.done ? 1 : 0}">${f ? mon(f, 4.4, d.done || d.sil === false ? 'ol' : 'sil', '', true) : ''}</div>`
     + (d.done ? '<div class="ph-bt-evt" aria-hidden="true">Evolved!</div>' : '')
-    + (text ? `<div class="say ph-bt-say" data-key="say">${lines(text)}</div>` : ''), false);
+    + (text ? `<div class="say ph-bt-say" data-key="say">${lines(text)}</div>` : '')
+    + (d.tap ? `<div class="ph-ld-any" data-key="tap"${act('next')}></div>` : ''), false);
 }
 
 const expRows = (rows: readonly BattleExp[]): string => {

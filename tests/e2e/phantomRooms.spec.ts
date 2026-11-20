@@ -106,6 +106,13 @@ test('Phantom UI: the Siege map is a ledger of districts; keys and clicks move o
   await expect(siege.locator('.ph-sg-card')).toContainText('Your rival');
   await fits(page, 'Siege', 'siege');
   await page.screenshot({ path: 'test-results/phantom-siege.png' });
+  // The page itself never scrolls, though its backdrop is far bigger than it: a "scroll into view" moves nothing.
+  expect(await page.evaluate(() => {
+    const sec = document.querySelector('#phx .phs[data-scene="Siege"] section') as HTMLElement;
+    sec.querySelector('.ph-sg-go .blade')!.scrollIntoView({ block: 'end', inline: 'end' });
+    sec.scrollTo(300, 200);
+    return [sec.scrollLeft, sec.scrollTop, sec.scrollWidth > sec.clientWidth];
+  })).toEqual([0, 0, true]);
   // Down the ledger: east, then south (a contested gate: one battle), then west, then the middle, which has no gate.
   await page.keyboard.press('ArrowDown');
   await page.waitForTimeout(150);

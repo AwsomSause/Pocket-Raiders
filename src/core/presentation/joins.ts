@@ -24,9 +24,9 @@ export const JOIN_MOTIONS: { id: JoinMotion; n: string }[] = [
 
 /** The mock-ups' page groups, by page id (ui/phantom `page(id, …)`). A page not listed is in no group. */
 const GROUPS: Record<string, string[]> = {
-  start: ['title', 'menu', 'version', 'quiz', 'starter', 'setup', 'seed', 'plan'],
-  run: ['event', 'map', 'choice', 'reward', 'shop', 'log', 'runover', 'side', 'sy-reward', 'trade', 'roll'],
-  town: ['town', 'place', 'pocket', 'heal', 'dock'],
+  start: ['title', 'menu', 'version', 'quiz', 'starter', 'setup', 'seed', 'plan', 'loading'],
+  run: ['event', 'map', 'choice', 'reward', 'shop', 'log', 'runover', 'side', 'sy-reward', 'trade', 'roll', 'rescue', 'siege', 'counterpick', 'wide', 'game', 'jigsaw', 'market', 'park'],
+  town: ['town', 'place', 'pocket', 'heal', 'dock', 'tree', 'counter', 'memory'],
   menus: ['pause', 'summary', 'dex', 'card', 'save', 'box', 'dexentry', 'types', 'party', 'bag', 'list', 'opts', 'tiles', 'wall', 'board', 'ask', 'notes', 'track'],
   settings: ['set', 'set-look', 'set-list', 'reel'],
   people: ['rivals', 'rankup', 'phone', 'dossier', 'bracket'],

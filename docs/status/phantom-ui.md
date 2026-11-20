@@ -26,6 +26,8 @@ A third UI style next to New and Old: **Settings > Display > UI style > Phantom*
 | 4b | Talk pages (prologue, story, tutorial), healing spot, the map's five pop pages, trades (quick trade and Honest Trade Card), tournament bracket, a rival's team page, department store floors, the card page (run card, hub Trainer Card, code-name card, Trainer card in the pause menu), the team's own event screens (briefing, Leader's Table, Final Choice, filed result, rank up), the partner quiz, the quick wheel, the run log, Seed & Codes | done (PR #1523) |
 | 5 | The battle page (fan, move cards, lists, info papers, log), the versus card, boss / ace / transformation cards, the Mega, Tera, Dynamax and Z-Move cut-ins, the wild, send-out, hit, knock-out, win, result and rival-loss cards, the gimmick page, the phase card, the side stage card, and the decision pages (a new move, a caught Pokémon, a plain choice, the yes/no box) | done |
 | 6 | Ending pages (Hall of Fame, run record, credits, run over), Regional forms, Next region, the pause menu's Pokédex and type chart, the Rotom Phone (new menu), the Town Map pages (Hub Town map, a place's rooms, Pocket Town directory: new menus), the page changes (Slash, Flare, Drop, Turn, Sweep, Carry) with their Settings page, and the page directory (new menu) | done |
+| 7 | The wild card's Pokédex key, the PC card's Summary and Give item | done |
+| 8 | Pages for the screens that wore the stand-in look: Research Tree, Exchange Counter, Rescue, Siege map, League counter-pick, mini-games, jigsaw, Spirit Market, walkable zones, the seven wide formats, expedition route, evolution scene, Memories entry, loading | done |
 
 ## Slice 1 notes
 
@@ -105,11 +107,24 @@ A third UI style next to New and Old: **Settings > Display > UI style > Phantom*
 - The PC card's Summary (I): the game's own Summary reading the PC's Pokémon. It only reads (no action menu, no reorder, no take-off); up and down go through the PC, Enter or Esc go back to the same slot.
 - The PC card's Give item (G): a list of the held items waiting in the Bag; Enter gives one to the lit PC Pokémon. **A rule the game did not have** (`giveHeld(…, 'box')` in `core/bag.ts`): before, a held item could only go to a party Pokémon. The same checks apply (free copy, stack limit, species), no save change. Phantom only; the button is dimmed when no held item is free.
 
+## Slice 8 notes (part 5: the screens that wore the stand-in look)
+The mock-ups have no page for these, so each is built from the mock-ups' own parts (slanted panels, blades, score tiles, the key row) and takes the New look's model unchanged, so the scene, its keys and its rules are the same in every look.
+- **Hub rooms:** Research Tree (`tree`), Exchange Counter (`counter`), a Memories entry (`memory`, a sheet over the list).
+- **Run:** Rescue (`rescue`), Siege map (`siege`), League counter-pick (`counterpick`), an expedition's route (the `map` page with the expedition's model), the evolution scene after a fight, a stone or an event (the `evolve` page; a click anywhere moves on, B still stops it).
+- **Mini-games:** the shared page (`game`: score tiles, the prompt on the stage's scenery, a tile per choice; the Arcade Cabinet's own screen sits in the field and its buttons still answer the press), the Museum jigsaw (`jigsaw`), the Spirit Market (`market`), the walkable zones (`park`: Safari Land, the Deep Savanna, the Lush Jungle).
+- **Wide formats** (`wide`): Breather, Blackout, Convoy, Front, Debate, Colossus plate and the plain card; P still opens the phase list in a longer climax.
+- **Loading** (`loading`): the word, a slanted bar, the tip; the update splash takes a click anywhere.
+- The jigsaw's board, the market's lane, the cabinet's screen and the zones' field are **the game's own drawings** (one source: `jigsawBoard`, `marketScene`, `boardView`, `parkField` in `ui/redux/screens/`), laid larger on the Phantom page inside `.ph-old`, which gives them the New look's helper classes and colours. The zones' `.pk-*` rules in `redux.css` now read `:is(.rx,.ph-old) .pk-…` (same weight as before) so they draw in both.
+- Page changes know the new pages (`core/presentation/joins.ts` groups). The Every page directory still lists the mock-ups' pages only.
+- **A page never scrolls as a whole** (`.phs` and its `.scr` are `overflow:clip`, in `phantom.css`): the turning burst behind a page is far bigger than the page, so a browser's "scroll into view" (a test's click on a jittering button, find on page) could slide every part off the screen. Lists inside a page still scroll. Checked in `phantomRooms.spec.ts` (Siege map).
+
 ## Known limits
 - The mock-up's "Change who leads" key on the send-out card is not there: the game has no rule for changing the lead once a battle has begun (the lead is set on the map), and this slice changes no rules.
 - The side stage card has Z Fight only: the mock-up's Party and Back out keys would need a rule for leaving a fight that has already begun, which the game does not have.
 - The phase card does not say "the music changes": it only states what is true in the battle.
-- Screens still on the stand-in look (next): League counter-pick, jigsaw, mini-games, ops, rival panels, Safari, Spirit Market, the tree and the wide pages.
+- Still on the stand-in look (the New drawing in Phantom colours): the toasts, notices and captions that lie over every screen, and the timing prompts' small window (its pointer maths is tied to the New layer). `ui/redux/screens/rivalPanels.ts` is not used by any scene.
+- Screens that are drawn on the canvas in every look (no New page either) are not Phantom pages.
+- The loading screen has no browser test (it is gone too quickly to catch reliably); its page is covered by the unit test.
 
 - The Phone page's rows from the mock-up that the game has no setting for yet (touch button size, swipe to switch, hold for details) are not built: each needs a new setting and a settings save version.
 - The Rotom Phone's Party door has no browser test of its own (its Rivals, log and Pokédex doors do).
@@ -117,6 +132,7 @@ A third UI style next to New and Old: **Settings > Display > UI style > Phantom*
 - Evil Mode pages of the mock-ups are not started (Evil Mode lives on its own branch).
 
 ## Tests
+- Slice 8: `tests/unit/phantomRooms.test.ts` (18 tests: every new page as a pure drawing, with its edges: no choices, closed choices, odd words, the clamped loading bar, the page-change groups); `tests/e2e/phantomRooms.spec.ts` (4: Research Tree and Exchange Counter, Siege, Rescue, League counter-pick) and `tests/e2e/phantomGames.spec.ts` (9: a mini-game, the Arcade Cabinet, the jigsaw, the Spirit Market, Safari Land, three wide pages with a Breather that rests, the evolution scene, an expedition's route, a Memories entry), each by keys and clicks with the text-fit check. `phantomUi.spec.ts`'s stand-in test now uses the achievement toast (the Research Tree has its own page).
 - Slice 7: `tests/unit/bag.test.ts` (one more: a held item for a PC Pokémon, its limits and failures); `phantomBattle.spec.ts` (the wild card's Pokédex key: opens, fits, closes, the card is still there); `phantomTeam.spec.ts` (the PC's Summary by keys, read-only, back to the same slot; Give item from the Bag to a PC Pokémon).
 
 - Slice 6: `tests/unit/phantomEnding.test.ts`, `phantomTravel.test.ts`, `phantomDexBook.test.ts`, `phantomPhone.test.ts` (14 tests), `phantomTownMap.test.ts` (15), `phantomJoins.test.ts` (10: which page change plays, the motion read from and written to settings, the Page changes page), `phantomPageIndex.test.ts` (6: the directory's data and page). `keyOnce.test.ts` (5: the engine's double hand-over, and the guard). In the browser: `phantomEnding.spec.ts`, `phantomTravel.spec.ts`, `phantomDex.spec.ts`, `phantomPhone.spec.ts` (2), `phantomTown.spec.ts` (2), `phantomJoins.spec.ts` (3: the Page changes page by keys and clicks with the settings it writes; a page that takes input while its change still plays and leaves nothing behind; Every page by keys and mouse, in five versions with the text-fit check), and `phantomWheel.spec.ts` for the wheel's new slots.

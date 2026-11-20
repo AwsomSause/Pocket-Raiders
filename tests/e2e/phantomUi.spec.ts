@@ -112,17 +112,14 @@ test('Phantom UI: Settings has presets, a tile per page, rows that change, and a
   expect(errors).toEqual([]);
 });
 
-test('Phantom UI: a screen without a Phantom page yet shows its New page in Phantom colours', async ({ page }) => {
+test('Phantom UI: a layer without a Phantom page yet (the achievement toast) shows its New drawing in Phantom colours', async ({ page }) => {
   const errors = watch(page);
   await start(page, 'ui=phantom');
   await onPage(page, 'MainMenu', 'title');
-  // The hub's Research Tree has no Phantom page yet (the credits, used here before, have theirs now).
-  await page.evaluate(() => void (window as any).__pkr.game.scene.getScene('MainMenu').scene.start('Hub'));
-  await waitForScene(page, 'Hub');
-  await onPage(page, 'Hub', 'dock');
-  await page.evaluate(() => void (window as any).__pkr.game.scene.getScene('Hub').enter('tree'));
-  const stand = page.locator('#rx .stage[data-scene="Hub"]').first();
+  // Every screen of the main game has its Phantom page now (the Research Tree, used here before, has its own:
+  // phantomRooms.spec.ts). The toasts and notices that lie over all of them still wear the stand-in look.
+  await page.evaluate(() => void (window as any).__pkr.achievementToast(1));
+  const stand = page.locator('#rx .stage.phfb', { hasText: /achievement/i }).first();
   await expect(stand).toBeVisible();
-  await expect(stand).toHaveClass(/phfb/);
   expect(errors).toEqual([]);
 });
