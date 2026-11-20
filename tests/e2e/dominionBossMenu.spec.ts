@@ -90,6 +90,16 @@ test('Boss Menu on Esc, Settings with the Dominion and Effects & motion tabs', a
   await s.getByTestId('dom-set-row-4').locator('.tg').click();
   await s.getByTestId('dom-set-row-5').locator('.tg').click();
   await expect.poll(async () => [(await prefs(page)).showOdds, (await prefs(page)).autoEndDay]).toEqual([false, true]);
+  // D12's Chair settings sit below (this run's, saved as a clock step): the list scrolls to them.
+  // (The taps left the cursor on row 5.)
+  for (let i = 0; i < 2; i++) await page.keyboard.press('ArrowDown');
+  await expect(s.getByTestId('dom-set-row-7')).toContainText('The Chair');
+  await expect(s.getByTestId('dom-set-row-7')).toHaveClass(/sel/);
+  const len = (await block(page)).chair?.opts.length ?? 'normal';
+  await page.keyboard.press('ArrowLeft');
+  await expect.poll(async () => (await block(page)).chair?.opts.length ?? 'normal').not.toBe(len);
+  for (let i = 0; i < 6; i++) await page.keyboard.press('ArrowUp');
+  await expect(s.getByTestId('dom-set-row-1')).toHaveClass(/sel/);
   // Boundary: Six regions stay locked until the Crossing.
   await s.getByTestId('dom-set-row-0').getByText('Six').click();
   expect((await prefs(page)).run.length).toBe('three');

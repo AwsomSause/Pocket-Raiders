@@ -104,3 +104,9 @@ Copied from the round-4 mockups (`plans/evil-mode-rework/mockups-v4/sprites/`, P
 | --- | --- |
 | `i-leaders_crest.png` | Item icon (Leader's Crest) from `images/items/` (PokeRogue pack), re-saved at the mockup's size by the round-4 mockup thread; copied from `plans/evil-mode-rework/mockups-v4/sprites/` (the Title photo) |
 | `c-mina.png` | Grunt sprite cut by the mockup thread from `images/trainer/` art in this repo (PokeRogue pack), one frame; copied from `plans/evil-mode-rework/mockups-v4/sprites/` (the Assign photo) |
+
+## Slice D30 (job moments and the morning paper, round-4 mockups m8-m10, m12)
+
+| File | From |
+| --- | --- |
+| `t-nate.png` (D30, the Boss's mug on the paper's WANTED poster) | Trainer sprite from the PokeRogue pack (`images/trainer/`), one frame, as in `plans/evil-mode-rework/mockups-v4/sprites/` |

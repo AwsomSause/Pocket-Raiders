@@ -197,6 +197,27 @@ export class BossMenuController {
       this.toggle('Show odds on the Card', 'The chance dial before every action', p.showOdds, (v) => this.setPrefs({ ...p, showOdds: v })),
       this.toggle('End the day when no actions are left', undefined, p.autoEndDay, (v) => this.setPrefs({ ...p, autoEndDay: v })),
       { view: { label: 'Charters 🔒', sub: 'Unlocks after you finish one run', kind: 'seg', opts: [{ label: 'Off', on: true }], lock: true }, press: () => { this.setNotice = 'Charters open once you finish one Dominion run.'; } },
+      ...this.chairRows(),
+    ];
+  }
+
+  /** D12's Chair settings (end-of-day-court.md §9), moved here from the Chair's O card (which still works). They belong
+   *  to this run: each change is a saved clock step (`chairOpt`), so they come back with the run. */
+  private chairRows(): Row[] {
+    const b = dominionBlock(services().session.run);
+    if (!b) return [];
+    const o = b.chair?.opts ?? { length: 'normal', numbers: 'arrows', speed: 'normal' };
+    const setTo = <K extends 'length' | 'numbers' | 'speed'>(key: K, want: string): void => {
+      for (let n = 0; n < 4; n++) {
+        const now = dominionBlock(services().session.run)?.chair?.opts[key] ?? null;
+        if (now === want) return;
+        if (!services().session.dominionStep({ t: 'chairOpt', key }).ok) return;
+      }
+    };
+    return [
+      this.seg('The Chair', 'This run: Off skips it; Short fewer visitors, Long more', [['off', 'Off'], ['short', 'Short'], ['normal', 'Normal'], ['long', 'Long']] as const, o.length, (v) => setTo('length', v)),
+      this.seg('Chair numbers', 'This run: Arrows show the way a number moves, Exact how much', [['arrows', 'Arrows'], ['exact', 'Exact']] as const, o.numbers, (v) => setTo('numbers', v)),
+      this.seg('Chair speed', 'This run: Fast drops the walk-in and reactions', [['normal', 'Normal'], ['fast', 'Fast']] as const, o.speed, (v) => setTo('speed', v)),
     ];
   }
 
@@ -297,7 +318,7 @@ export class BossMenuController {
       headNote: cat.id === 'saves' ? 'this slot' : 'the whole game',
       notice: this.setNotice,
     };
-    if (cat.id === 'dominion') m.run = rows.slice(0, 7);
+    if (cat.id === 'dominion') m.run = rows.slice(0, rows.length - fxRows.length);
     else if (cat.id !== 'fx') m.rows = rows;
     if (cat.id === 'saves') {
       const b = dominionBlock(services().session.run);

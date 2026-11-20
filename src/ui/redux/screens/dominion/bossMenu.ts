@@ -136,7 +136,11 @@ export function settingsPageView(m: SettingsPageModel): string {
     const fxSel = rowSel >= nRun ? rowSel - nRun : -1;
     body = `<div class="pnl" style="left:228px;top:76px;width:390px;height:448px" data-testid="dom-set-run">
       <div class="hd">${ic('g-relic-crown')}Your run<span class="r">new runs only</span></div>
-      ${rowsHtml(m.run, rowSel)}
+      ${(() => {
+        // Seven rows fit (mockup m2); the Chair's rows (D12) sit below and scroll in with the cursor.
+        const per = 7, top = rowSel >= per && rowSel < nRun ? rowSel - per + 1 : 0;
+        return `${rowsHtml(m.run.slice(top, top + per), rowSel, top)}${top + per < nRun ? '<div class="a xs dm" style="right:16px;bottom:3px" data-testid="dom-set-more">▼ The Chair</div>' : ''}`;
+      })()}
     </div>
     <div class="pnl gild" style="left:632px;top:76px;width:312px;height:448px" data-testid="dom-set-fx">
       <div class="hd y">${ic('g-star-piece')}Effects &amp; motion</div>
