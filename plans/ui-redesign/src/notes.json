@@ -143,5 +143,20 @@
   "q3": "Yes, five. Choice, result and reward pages, an Event Stage page for battles that happen inside an event, and a Run Journal that lists every stop of this run.",
   "q4": "The pause menu and the title show the next stop and open the Journal with J. The map's Story button opens it too. Speaker portraits also appear in the shop and in the battle bar.",
   "q5": "Yes. A character talks, you answer, something happens. It reads like the story scenes of the main games, and the Journal works like a trainer's diary."
+ },
+ "10": {
+  "name": "World Tour",
+  "big": "The run becomes a trip around the world. Every region gets its own two colours and a passport stamp, the stage map is drawn on the region's real town map, and the region's colours ride on the battle bars.",
+  "pages": [
+   "World Tour",
+   "Region Intro",
+   "Badge Case",
+   "Settings · Gameplay"
+  ],
+  "q1": "The title screen now sits on the Kanto town map with a tape of region colours behind the team. Entering a region gets a full-screen intro with a giant name and a stamp that thumps down.",
+  "q2": "Before, a region was just a word in the header. Now it has colours, a stamp and a map you can recognise at a glance, and each Pokémon shows where it was met.",
+  "q3": "Yes, four. World Tour shows all nine regions and what gets harder in each, Region Intro asks about regional forms, Badge Case shows the gyms and the League, and Gameplay settings holds stage length.",
+  "q4": "The pause menu gets the region stamp and a stage progress line. Settings gets a Gameplay page with stage length, regional forms, Blessings, Ultra Beasts and Evil Mode.",
+  "q5": "Yes. Town maps, gym badges in a case, the Elite Four and a new region with new rules are exactly how a Pokémon journey is measured."
  }
 }

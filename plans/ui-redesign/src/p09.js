@@ -3,7 +3,7 @@ const POR = { 'Keeper Amos': 't-acem', 'Clerk': 't-acef' };
 const por = (key, cls = '') => `<i class="por ${cls}">${spr(key, 2)}</i>`;
 comp(9, 'box', (who, txt, o = {}) => `<div class="tb${POR[who] ? ' sp' : ''}${who || o.to ? ' talk' : ''}" ${mm('tb')} ${o.to ? go(o.to) : ''}>${POR[who] ? por(POR[who]) : ''}${who ? `<b class="tb-w">${who}</b>` : ''}<p>${txt}</p>${who || o.to ? '<em class="tb-go"><kbd>Enter</kbd></em>' : ''}</div>`);
 const arena8 = pick(PR.comps.arena, 8).fn;
-comp(9, 'arena', (o = {}) => arena8(o).replace(/(<div class="say"[^>]*>)<p>/, `$1<i class="say-por">${spr('m-' + ((o.me && o.me.k) || PARTY[0].k), 1)}</i><p>`));
+comp(9, 'arena', (o = {}) => (arena8(o) + (!o.dim && !o.noorder && (o.foe || FOE).owner ? `<div class="banter"><b>Blue</b>"Hang in there, Blastoise!"</div>` : '')).replace(/(<div class="say"[^>]*>)<p>/, `$1<i class="say-por">${spr('m-' + ((o.me && o.me.k) || PARTY[0].k), 1)}</i><p>`));
 const beats = on => `<div class="beats">${['Talk', 'Choose', 'Result', 'Reward'].map((b, i) => `<i class="${i === on ? 'on' : i < on ? 'past' : ''}">${i + 1} ${b}</i>`).join('')}</div>`;
 const evScene = o => `<img class="px ar-bg${o.dim ? ' dim' : ''}" src="sprites/ev-${o.bg || 'water_eve'}.png" alt=""><i class="ev-vig"></i><div class="ev-where" ${mm('hdr')}><em>Event</em><b>${o.where || 'The Old Lighthouse'}</b><span>${o.sub || 'Kanto coast · Evening · Fog'}</span></div>${beats(o.beat)}`;
 def(9, 'event', { t: 'Event', g: 'Events' }, () => `<div class="scr event e9">${evScene({ beat: 0 })}
@@ -42,6 +42,6 @@ def(9, 'journal', { t: 'Run Journal', g: 'Events' }, () => `<div class="scr jour
   ${C('keys', [['↑↓', 'stop'], ['Enter', 'read'], ['Esc', 'back']])}</div>`);
 const BOND = [5, 3, 4, 2, 4, 3], hearts = n => `<i class="bond">${rep(5, j => `<u class="${j < n ? 'on' : ''}">♥</u>`)}</i>`;
 decor(9, 'party', { cls: 'p9', fn: h => { let i = 1; return h.replace('<div class="st-plate"><div class="pc-1"><b>Charizard</b>', `<div class="st-say">Fired up!</div><div class="st-plate"><div class="pc-1"><b>Charizard</b>${hearts(BOND[0])}`).replace(/(<div class="pc-b"><div class="pc-1"><b>[^<]+<\/b>)/g, m => m + hearts(BOND[i++])); } });
-decor(9, 'title', { cls: 't9', add: `<div class="teaser"><b>Next stop</b>The Old Lighthouse. Something is flashing at the top.</div>` });
-decor(9, 'menu', { cls: 'mn9', add: `<div class="mn-next" ${go('journal')}><b>Next stop</b><span>Event · The Old Lighthouse</span><em><kbd>J</kbd> Journal</em></div>` });
+decor(9, 'title', { cls: 't9', add: `<div class="ti-talk">${por('t-red')}<b>Red</b><p>"The Old Lighthouse is next. Something is flashing at the top."</p></div>` });
+decor(9, 'menu', { cls: 'mn9', add: `<div class="mn-say">Lighthouse next!</div><div class="mn-next" ${go('journal')}><b>Next stop</b><span>Event · The Old Lighthouse</span><em><kbd>J</kbd> Journal</em></div>` });
 decor(9, 'map', { fn: h => h.replace('><b>Story</b>', ` ${go('journal')}><b>Story</b>`) });

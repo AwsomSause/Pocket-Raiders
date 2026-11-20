@@ -99,6 +99,13 @@
 .ti-spiral{position:absolute;left:438px;top:12px;animation:spin 20s linear infinite}
 .ti-sigil{position:absolute;right:26px;top:82px;filter:drop-shadow(0 0 12px #fff);animation:hop 1.6s ease-in-out infinite}
 .pwr .lb-o>span:first-child,.pwr .xp{display:none}
+.b7 .ar-me .ar-mon,.f7 .ar-me .ar-mon{filter:drop-shadow(0 0 6px #fff) drop-shadow(0 0 14px #39b6ff) drop-shadow(0 0 26px #b06cff)}
+.b7 .lb.bot,.f7 .lb.bot{border-image:var(--surge) 1}
+.cb.pw i{width:66px;height:66px;margin-top:-26px}
+.cb.pw{width:84px}
+.mn7 .wheel::before{content:'';position:absolute;inset:-16px;border-radius:50%;background:conic-gradient(#ff7a3c,#ffd23c,#7ed957,#39b6ff,#b06cff,#ff7a3c);-webkit-mask:radial-gradient(circle,transparent 0 72.5%,#000 73% 76%,transparent 76.5%);mask:radial-gradient(circle,transparent 0 72.5%,#000 73% 76%,transparent 76.5%);animation:spin 12s linear infinite}
+.p7 .floor{height:64px;top:268px;background:radial-gradient(ellipse,rgba(255,255,255,.95) 0 26%,transparent 27%),conic-gradient(#ff7a3c,#ffd23c,#7ed957,#39b6ff,#b06cff,#ff7a3c)}
+.p7 .stagec{border:4px solid transparent;background:linear-gradient(180deg,#0d1530 0,#1b2752 70%,color-mix(in srgb,var(--t) 55%,#0d1530) 70%,color-mix(in srgb,var(--t) 25%,#0d1530)) padding-box,var(--surge) border-box}
 /*@top*/
 @keyframes sheen7{from{background-position:130% 0}to{background-position:-130% 0}}
 @keyframes glow7{50%{box-shadow:0 3px 0 #000,0 0 0 6px rgba(255,255,255,.22),0 0 18px 4px #39b6ff}}
