@@ -143,8 +143,9 @@ export function bagEntries(content: Content, run: RunState): BagEntry[] {
       iconAssetId: catalogIcon(content, id),
     });
   }
-  for (const [id, copies] of Object.entries(run.looseHeld ?? {})) {
+  for (const id of looseHeldIds(content, run)) {
     const entry = content.catalog.get(id);
+    const copies = looseCopies(content, run, id);
     if (!entry || copies <= 0) continue;
     out.push({
       key: `loose:${id}`,
@@ -256,12 +257,28 @@ export function takeOffHeld(content: Content, current: RunState, partyIndex: num
   return { run, message: `You took the ${entry.name}${copies > 1 ? ` ×${copies}` : ''} from ${name}. It is in your Bag.` };
 }
 
+/** A held item an event, market or rental put straight in the Bag (`run.inventory`, not a Bag item): it shows and is given like a loose one (save audit follow-up 2026-11-20). */
+function bagHeldItem(content: Content, id: string): boolean {
+  const entry = content.catalog.get(id);
+  return !content.items.has(id) && entry?.stacksOn === 'pokemon' && entry.effect?.kind === 'held';
+}
+
+/** Copies of a held item waiting in the Bag: taken off a Pokémon (looseHeld) plus any put straight in the Bag. */
+export function looseCopies(content: Content, run: RunState, id: string): number {
+  return (run.looseHeld?.[id] ?? 0) + (bagHeldItem(content, id) ? run.inventory[id] ?? 0 : 0);
+}
+
+/** Every held item id waiting in the Bag, loose ones first. */
+function looseHeldIds(content: Content, run: RunState): string[] {
+  return [...new Set([...Object.keys(run.looseHeld ?? {}), ...Object.keys(run.inventory).filter((id) => bagHeldItem(content, id))])];
+}
+
 /** Why a loose held item can't go to this Pokémon (no free slot, at its limit, wrong species), or null. */
 export function giveHeldProblem(content: Content, run: RunState, itemId: string, partyIndex: number): string | null {
   const entry = content.catalog.get(itemId);
   const mon = run.party[partyIndex];
   if (!entry || !mon) return 'Choose a Pokémon.';
-  if ((run.looseHeld?.[itemId] ?? 0) <= 0) return 'You have none of those in your Bag.';
+  if (looseCopies(content, run, itemId) <= 0) return 'You have none of those in your Bag.';
   return catalogTargetProblem(content, run, entry, mon);
 }
 
@@ -273,9 +290,11 @@ export function giveHeld(content: Content, current: RunState, itemId: string, pa
   const run = structuredClone(current);
   const mon = run.party[partyIndex]!;
   mon.held = { ...mon.held, [itemId]: (mon.held?.[itemId] ?? 0) + 1 };
-  const left = run.looseHeld![itemId]! - 1;
-  if (left > 0) run.looseHeld![itemId] = left;
-  else delete run.looseHeld![itemId];
+  // A copy taken off a Pokémon (looseHeld) goes first, then one an event put straight in the Bag (inventory).
+  const pool = (run.looseHeld?.[itemId] ?? 0) > 0 ? run.looseHeld! : run.inventory;
+  const left = pool[itemId]! - 1;
+  if (left > 0) pool[itemId] = left;
+  else delete pool[itemId];
   const name = content.species.get(mon.speciesId)?.name ?? mon.speciesId;
   return { run, message: `${name} is now holding the ${content.catalog.get(itemId)!.name}.` };
 }
