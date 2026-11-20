@@ -670,5 +670,46 @@
   "q3": "Eight new pages: Pocket Town's street, the door card, the town map, the Trainer Plaza, a Trade Post offer, the Tools room, Memories and a Legacy Gallery run. Walking up to a door opens its own card instead of squeezing a description onto the street.",
   "q4": "Tools is the Hub's back office: eight plain tiles next to Settings, with a line saying none of them changes a run. M opens the town map from anywhere in Pocket Town and Esc always walks back to the Hub.",
   "q5": "Yes. You walk a town with a partner Pokémon behind you, press one key at a door and trade over a counter, the way towns work in the handheld games."
+ },
+ "40": {
+  "name": "New areas 14 · Side Paths",
+  "label": "New areas · pass 14 of 25",
+  "big": "Minigames, mining, safari, camp and daycare, and numbers you can read across the room",
+  "pages": [
+   "sa-fish",
+   "sa-memory",
+   "sa-prize",
+   "sa-mine",
+   "sa-safari",
+   "sa-camp",
+   "sa-gadgets",
+   "sa-daycare"
+  ],
+  "q1": "A minigame is one huge prompt and four big buttons: \"A bite!\" with the Gyarados on the hook. The camp is a fire with your team sitting round it and four choices beside it.",
+  "q2": "Pass 13 gave each area its own material, but the status tab was still a row of small words. Now the numbers lead: a big 8 for turns, +1 for the aura, 62 for the crowd, ₽1,200 of loot, Heat 2. The evil team choices lost half their small print.",
+  "q3": "Eight new pages: two minigames on the one shared screen, the prize page, a Mining Spot, Safari Land, the Camp, its gadgets and the Daycare. Gadgets got their own page so the camp keeps four choices.",
+  "q4": "Every minigame shows the same two helper keys from Settings, S to slow the timer and T to pause it. Esc always leaves the side path and returns to the map or the street.",
+  "q5": "Yes. Fishing, a Safari with steps and balls, a memory game, digging for fossils, a camp with the team round the fire and an Egg at the Daycare are all things the main games do."
+ },
+ "41": {
+  "name": "New areas 15 · Special Days",
+  "label": "New areas · pass 15 of 25",
+  "big": "Daily runs, contracts, bounties, rescues and sieges, and the light is on the foe",
+  "pages": [
+   "sp-daily",
+   "sp-contracts",
+   "sp-bounty",
+   "sp-exhibit",
+   "sp-rescue",
+   "sp-siege",
+   "sp-breather",
+   "sp-share",
+   "sp-update"
+  ],
+  "q1": "The Daily Run is a calendar page with a huge 20 on it. The Siege Map is a ruled ledger with rubber stamps: Held, Contested, Lost. The bounty is a wanted poster.",
+  "q2": "Pass 14 made the numbers big, but the scenery was as bright as the foe. Now everything outside one soft spotlight is darker, so the raid boss, the Totem, the Gym Leader's Pokémon, your layer on the expedition and the grunt are the first thing you see. No part was added to the interface.",
+  "q3": "Nine new pages: Daily Run, Contract Board, Bounty, Exhibition match, Rival Rescue Plan, Siege ledger, Breather room, share card and update log. The Breather asks one question (who comes back?) on its own page.",
+  "q4": "The update log is the page Settings opens from Save and Data, with three big numbers before the full list. The share card saves a picture and is opened from the Run Report or the pause menu.",
+  "q5": "Yes. Gym Leaders facing off in an exhibition, your rival asking for help, a wanted poster for five Water types: these are side stories the series tells, drawn in its bright, chunky style."
  }
 }
