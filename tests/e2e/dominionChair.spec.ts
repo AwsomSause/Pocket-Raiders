@@ -69,6 +69,8 @@ test('the Chair: a visitor, the settings, Hand it off, a reload mid-sitting, the
   await expect(s.getByTestId('dom-chair-a0')).toContainText('♥');
   await expect(s.getByTestId('dom-chair-a1')).toContainText('✊');
   await expect(s.getByTestId('dom-chair-hand')).toContainText('1 left tonight');
+  // Round 4 (D26): the key strip starts with Q (the command wheel).
+  await expect(s.getByTestId('dom-chair-top')).toContainText('Wheel');
   expect((await block(page)).chair.open).toBe(true);
   await shot('c1-visitor');
   for (const [w, h] of [[1280, 720], [960, 540], [800, 600]] as const) {

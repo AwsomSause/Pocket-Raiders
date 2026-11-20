@@ -1,6 +1,7 @@
 // DOMINION slice D25: chatter, news, Hero and betrayal lines (Claude API draft §5.2; mockup a10). Written lines first;
 // Rotom only adds lines stored with the run. Covers the data, crew chatter, the weekly Ledger paper, the Hero's call
 // (Disillusion stays hidden), traitors' parting lines, the Rotom calls and stored answers, saves and determinism.
+import { freshChair } from '../../src/core/dominion/chair';
 import { describe, expect, it } from 'vitest';
 import voicesRaw from '../../src/data/dominion/voices.json';
 import { withCrew } from '../../src/core/dominion/crew';
@@ -22,8 +23,14 @@ const domRun = (seed = 'dv'): RunState => chooseStarter(content, createRun(conte
 const started = (seed = 'dv'): RunState => {
   const out = startInRun(content, domRun(seed), { types: ['poison', 'dark'], member: 'grunt', look: 0 });
   expect(out.problem).toBeNull();
-  return out.run;
+  return quiet(out.run);
 };
+/** D12: the Chair is switched off here, so these nights stay the same as before it. */
+function quiet(r: RunState): RunState {
+  const out = structuredClone(r);
+  out.expansion!.dominion!.chair = { ...freshChair(), opts: { length: 'off', numbers: 'arrows', speed: 'normal' } };
+  return out;
+}
 const blk = (r: RunState): DominionBlock => r.expansion!.dominion!;
 const go = (r: RunState, a: DominionAction): RunState => {
   const out = stepInRun(content, r, a);

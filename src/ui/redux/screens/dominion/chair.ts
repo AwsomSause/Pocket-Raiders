@@ -2,14 +2,15 @@
 // figures c1 a visitor at the Chair, c2 Hand it off, c3 the Tally), plus the Chair settings card in the same skin.
 // Plain data in from core/dominion/chairScreens.ts; the controller (scenes/dominion/chairController.ts) keeps the
 // cursors. Speed Fast drops the walk-in and the reactions; reduced motion is handled by dominion.css.
-// Not here yet: the Q command wheel chip and the round-4 livery classes (sig4, vl4): D26 adds both.
+// Round 4 (D26): `stage` adds the Nova livery (the sigil centred on c1, as the mockup puts it) and every key strip starts
+// with the Q Wheel key (D28 builds the wheel).
 
 import { monName } from '../../../../core/dominion/crew';
 import type { Chip, Face, HandModel, TallyModel, VisitorModel } from '../../../../core/dominion/chairScreens';
 import { act, esc, mini, tall } from '../../kit';
 import { rxUrl } from '../../assets';
 import { warehouseUrl } from './paint';
-import { stage } from './views';
+import { stage, WHEEL_KEY } from './views';
 
 const img = (f: string): string => rxUrl(`dominion/${f}.png`);
 export type MonFile = (species: string) => string | null;
@@ -39,7 +40,7 @@ function pokemon(species: string | null, mon: MonFile, box: string, cls = '', fl
 const said = (t: string): string => (t.startsWith('"') ? `“${esc(t.replace(/^"|"$/g, ''))}”` : esc(t));
 const chip = (c: Chip): string => `<span class="fx ${c.cls}">${esc(c.text)}</span>`;
 const keysStrip = (t: VisitorModel['top'], extra = ''): string =>
-  `<div class="keys" data-testid="dom-chair-top"><span class="key">${esc(t.funds)}</span><span class="key" style="color:#ff9a8f">Heat ${t.heat}</span><span class="key" style="color:#7fe0a0">♥ ${t.regard}</span><span class="key" style="color:#c9a6ff">✊ ${t.dread}</span>${extra}</div>`;
+  `<div class="keys" data-testid="dom-chair-top">${WHEEL_KEY}<span class="key">${esc(t.funds)}</span><span class="key" style="color:#ff9a8f">Heat ${t.heat}</span><span class="key" style="color:#7fe0a0">♥ ${t.regard}</span><span class="key" style="color:#c9a6ff">✊ ${t.dread}</span>${extra}</div>`;
 const tagPill = (f: Face, style: string): string =>
   f.tag ? `<div class="a pill ${f.tag === 'grudge' ? 'r' : 'g'}" style="${style};z-index:7;font-size:14px" data-testid="dom-chair-tag">${f.tag === 'grudge' ? 'GRUDGE' : 'FAVOUR'}</div>` : '';
 
@@ -126,7 +127,7 @@ export function visitorView(m: VisitorModel, mon: MonFile, initial: string, noti
   ${react}
   ${overlays('#ff9a7a', '#ffd38a', '<div class="focus" aria-hidden="true" style="left:264px;top:160px;--r:150px;--fc:255,120,100"></div>', fast ? '' : '<div class="rays turn finale" aria-hidden="true" style="left:99px;top:-5px;width:330px;height:330px;--rc:rgba(255,120,100,.30)"></div><i class="glint fg" style="left:346px;top:70px;--g:20px"></i>', parts)}
   ${notice ? `<div class="a" style="left:330px;width:300px;top:120px;z-index:20;background:rgba(10,14,30,.9);border:2px solid #8cc0ff;border-radius:8px;padding:8px 10px;font-size:14px;line-height:1.3" data-testid="dom-notice"${act('dismiss')}>${esc(notice)}</div>` : ''}
-  ${opts ? chairOptsCard(m.opts) : ''}`, '', 'kl-red vign grain');
+  ${opts ? chairOptsCard(m.opts) : ''}`, '', 'kl-red vign grain', 'c');
 }
 
 // ---------- c2: Hand it off ----------
@@ -196,7 +197,7 @@ export function tallyView(m: TallyModel, mon: MonFile): string {
   return stage(`<img class="cv" src="${warehouseUrl(false)}" alt="" style="position:absolute;inset:0;width:960px;height:540px;filter:brightness(.45) saturate(.75)">
   <div class="layer" style="background:linear-gradient(180deg,rgba(10,8,30,.2),rgba(10,8,30,.6))"></div>
   <div class="ttl" style="--t1:#1f8f86;--t2:#2bb3a5" data-testid="dom-tally">The Tally <span class="sub">· Day ${m.day}</span></div>
-  <div class="keys" style="right:96px"><span class="key">☾ Night next</span></div>
+  <div class="keys" style="right:96px">${WHEEL_KEY}<span class="key">☾ Night next</span></div>
   <div class="a" style="left:700px;top:334px;width:300px;height:130px;z-index:2;background:linear-gradient(180deg,rgba(150,180,255,.35),transparent);clip-path:polygon(38% 0,78% 0,100% 100%,0 100%);mix-blend-mode:screen"></div>
   <div class="a" style="left:812px;top:84px;width:120px;height:250px;z-index:3;background:linear-gradient(180deg,#2a3a78,#141c3e);box-shadow:0 0 0 4px #0b0f1e,inset 0 0 40px rgba(120,160,255,.35)"></div>
   <div class="moon" style="left:850px;top:100px;width:44px;height:44px;z-index:3"></div>

@@ -49,13 +49,14 @@ No version bump. `block.chair` is optional and is filled the same way every time
   - Close the doors; refusals; Chair Off.
   - Hand it off and the whisper; deals; the door fight; owed numbers and Press; new Leads; items and stores.
   - Save/reload mid-sitting; a D6 save; a damaged block is refused.
-- Older Dominion unit tests turn the Chair off (`quiet()`) so their nights stay the same.
+- Older Dominion unit tests (D4, D5, D9, D10, D11, D13, D21, D24, D25) turn the Chair off (`quiet()`) so their nights stay the same. With the Chair off a Crisis visitor still comes when a number is in the red, so the D11 test answers it.
 - Browser `tests/e2e/dominionChair.spec.ts`:
   - Day 2's sitting, three window sizes, settings (Exact numbers).
   - Hand it off (the named member is greyed out), reload mid-sitting.
   - The Tally, then the Night.
 
 ## Limits
-- The round-4 Q wheel chip and the livery layers (`sig4`, `vl4`) are not drawn yet: `dominion.css` doesn't have them until D26 re-ports the v4 CSS. Esc on the Chair does nothing until the Boss Menu (D27-D30), which will also move the Chair settings onto the Settings page.
+- Round 4 (D26): the Chair wears the Nova livery (`stage`, the sigil centred on c1) and every Chair key strip starts with the Q Wheel key; the wheel itself is D28. Esc on the Chair does nothing until the Boss Menu (D27-D30), which will also move the Chair settings onto the Settings page.
+- While a sitting is open, O is the Chair's settings (D7's Founding keeps O everywhere else).
 - The visitor has no walk-in of their own. The panels' shared entrance plays when Dominion opens (see D6).
 - The card text is copied word for word, so some answer labels keep the list's "he" for the member.
