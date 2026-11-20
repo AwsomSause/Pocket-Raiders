@@ -204,6 +204,7 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'deskAsk':
     case 'deskInspect':
     case 'deskStamp':
+    case 'found': // D7: handled by session.ts (founding.ts)
       return no(block);
   }
 }

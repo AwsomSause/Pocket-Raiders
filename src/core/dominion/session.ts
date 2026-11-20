@@ -18,6 +18,7 @@ import { fill } from './worldTurn';
 import { DominionBlockSchema, type DominionAction, type DominionBlock, type DominionSetup } from './schema';
 import { newBlock, typesProblem } from './start';
 import { afterStep, lineFor, weekSum } from './empire';
+import { found, foundingOpen } from './founding';
 import { afterStand, answerMeet, ensureHero, heroMember, heroTeam, startLegend } from './hero';
 import { escapeHero } from './field';
 import { hashSeed, Rng } from '../rng';
@@ -98,6 +99,8 @@ export function stepInRun(content: Content, run0: RunState, action: DominionActi
   // D6: the Ledger books what the step did to the money, the Boss's visit, and a new Notoriety step.
   const turned = !!before && b.day !== before.day;
   const lines = before ? afterStep(b, turned ? b.funds : before.funds, turned ? weekSum(b) : weekSum(before), lineFor(action), visitOf(action)) : [];
+  // D7: the step that opens the Founding says so (once: it stays open until the sign goes up).
+  if (before && !foundingOpen(before) && foundingOpen(b)) lines.push(DOMINION_DATA.founding.lines.ready);
   const block = DominionBlockSchema.parse(b);
   if (lines.length && turned) block.report = [...block.report, ...lines];
   const notice = lines.length && !turned ? [out.notice, ...lines].filter(Boolean).join(' ') : out.notice;
@@ -117,6 +120,10 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
   // D24: while the police question someone, only answers go through.
   const polOut = policeInRun(content, run, action);
   if (polOut) return polOut;
+  if (action.t === 'found') {
+    const out = found(block, action.team);
+    return { ok: out.ok, block: out.block, notice: out.notice, heal: false, run: out.ok ? withBlock(run, DominionBlockSchema.parse(out.block)) : run };
+  }
   const crewOut = crewInRun(content, run, action);
   if (crewOut) return crewOut;
   const resOut = reserveInRun(content, run, action);
