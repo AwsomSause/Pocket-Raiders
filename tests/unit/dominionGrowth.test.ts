@@ -11,6 +11,7 @@ import { endDominionFight } from '../../src/core/dominion/fightEnd';
 import { cardModel, gridPages, mapModel, newCursor } from '../../src/core/dominion/fieldScreens';
 import { freshGrowth, growthOf, ownedGyms } from '../../src/core/dominion/growth';
 import { addClean, cleanOf, hqFx } from '../../src/core/dominion/hqFx';
+import { policeOf } from '../../src/core/dominion/police';
 import { DominionBlockSchema, type DominionAction, type DominionBlock } from '../../src/core/dominion/schema';
 import { DOMINION_MODE_ID, startInRun, stepInRun } from '../../src/core/dominion/session';
 import { STANDARD_CHOICE } from '../../src/core/rules';
@@ -339,6 +340,8 @@ describe('DOMINION D10: flyers, bribes, the fence, smuggling, kidnap, the lab, s
     r = edit(r, (b) => {
       b.day = 13;
       for (const d of Object.values(b.field.districts)) d.heat = 80;
+      // D24: at this Heat the police would pick the Boss up at dawn; this test is about the flyers, so not tonight.
+      b.police = { ...policeOf(b), pickedUp: b.day };
     });
     r = night(go(go(r, { t: 'toDay' }), { t: 'endDay' }));
     expect(blk(r).growth!.flyers).toEqual({});

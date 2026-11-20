@@ -18,12 +18,13 @@ import pyramidRaw from '../../data/dominion/pyramid.json';
 import rivalsRaw from '../../data/dominion/rivals.json';
 import rivalActionsRaw from '../../data/dominion/rivalActions.json';
 import outsideRaw from '../../data/dominion/outside.json';
+import policeRaw from '../../data/dominion/police.json';
 import growthRaw from '../../data/dominion/growth.json';
 import growthActionsRaw from '../../data/dominion/growthActions.json';
 import {
   GrowthActionsSchema, GrowthFileSchema, type FieldFile as FieldFileT, type GrowthActions, type GrowthFile,
-  ActionsFileSchema, ArmbandsFileSchema, BuildingsFileSchema, FoundingFileSchema, EmpireFileSchema, OutsideFileSchema, RivalActionsFileSchema, RivalsFileSchema, CrewFileSchema, DeskFileSchema, HqFileSchema, PyramidFileSchema, FieldFileSchema, GruntTypesFileSchema, HeroFileSchema, PersonalityFileSchema, StartFileSchema, TasksFileSchema,
-  type ActionsFile, type ArmbandLook, type Building, type FoundingFile, type EmpireFile, type OutsideRow, type RivalActionsFile, type RivalsFile, type CrewFile, type DeskFile, type HqFile, type PyramidFile, type FieldFile, type GruntType, type HeroFile, type PersonalityFile, type StartFile, type Task,
+  ActionsFileSchema, ArmbandsFileSchema, BuildingsFileSchema, FoundingFileSchema, EmpireFileSchema, PoliceFileSchema, OutsideFileSchema, RivalActionsFileSchema, RivalsFileSchema, CrewFileSchema, DeskFileSchema, HqFileSchema, PyramidFileSchema, FieldFileSchema, GruntTypesFileSchema, HeroFileSchema, PersonalityFileSchema, StartFileSchema, TasksFileSchema,
+  type ActionsFile, type ArmbandLook, type Building, type FoundingFile, type EmpireFile, type PoliceFile, type OutsideRow, type RivalActionsFile, type RivalsFile, type CrewFile, type DeskFile, type HqFile, type PyramidFile, type FieldFile, type GruntType, type HeroFile, type PersonalityFile, type StartFile, type Task,
 } from './schema';
 
 const growth = GrowthFileSchema.parse(growthRaw);
@@ -38,7 +39,7 @@ function withGrowth(f: FieldFileT): FieldFileT {
   };
 }
 
-export const DOMINION_DATA: { growth: GrowthFile; growthActions: GrowthActions; start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; empire: EmpireFile; hq: HqFile; buildings: Building[]; pyramid: PyramidFile; rivals: RivalsFile; rivalActions: RivalActionsFile; outside: OutsideRow[]; personality: PersonalityFile; hero: HeroFile; desk: DeskFile; founding: FoundingFile; armbands: Record<string, ArmbandLook> } = {
+export const DOMINION_DATA: { growth: GrowthFile; growthActions: GrowthActions; start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; empire: EmpireFile; hq: HqFile; buildings: Building[]; pyramid: PyramidFile; rivals: RivalsFile; rivalActions: RivalActionsFile; outside: OutsideRow[]; personality: PersonalityFile; hero: HeroFile; desk: DeskFile; founding: FoundingFile; armbands: Record<string, ArmbandLook>; police: PoliceFile } = {
   start: StartFileSchema.parse(startRaw),
   actions: ActionsFileSchema.parse(actionsRaw),
   field: withGrowth(FieldFileSchema.parse(fieldRaw)),
@@ -56,6 +57,7 @@ export const DOMINION_DATA: { growth: GrowthFile; growthActions: GrowthActions; 
   rivalActions: RivalActionsFileSchema.parse(rivalActionsRaw),
   outside: OutsideFileSchema.parse(outsideRaw).rows,
   personality: PersonalityFileSchema.parse(personalityRaw),
+  police: PoliceFileSchema.parse(policeRaw),
   founding: FoundingFileSchema.parse(foundingRaw),
   armbands: ArmbandsFileSchema.parse(armbandsRaw).looks,
   desk: DeskFileSchema.parse(deskRaw),

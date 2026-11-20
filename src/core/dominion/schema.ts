@@ -311,6 +311,8 @@ const BlockSchema = z.object({
   hq: z.lazy(() => HqStateSchema).optional(),
   /** D9: the rival teams (Tension, plan, spies, truces, raids). Optional; `rivalsOf` fills it. */
   rivals: z.lazy(() => RivalsStateSchema).optional(),
+  /** D24: police questioning (the open case, the last release, the evidence log, what the police still hold). Optional. */
+  police: z.lazy(() => PoliceStateSchema).optional(),
   /** D10: businesses, Gyms, flyers, routes, contacts, the fight chain (Part 3 §5, Part 9 A10). Optional; `growthOf` fills it. */
   growth: z.lazy(() => GrowthStateSchema).optional(),
   /** D11: the Hero and the Heroic Legendaries (Part 4 §7-8, Part 9 A8-A9). Optional; `heroOf` (hero.ts) fills it. */
@@ -377,6 +379,9 @@ export type DominionAction =
   | { t: 'breakTruce'; team: string }
   | { t: 'card'; index: number; choice: number }
   | { t: 'ransom'; member: string }
+  // D24, police questioning (police.ts). A typed answer carries the judge its words got (Rotom's, or the rules').
+  | { t: 'answer'; kind: AnswerKind; text?: string; judge?: Judge; rotom?: boolean }
+  | { t: 'released' }
   // D11: the Hero steps into a job (m11: battle, run, Smoke Ball); an encounter card's answer; fighting a Legendary;
   // after the final stand, leave the Hero in their shame or try to recruit them
   | { t: 'interrupt'; how: 'fight' | 'run' | 'smoke' }
@@ -1210,6 +1215,129 @@ export const RivalsStateSchema = z.object({
 }).strict();
 export type RivalsState = z.infer<typeof RivalsStateSchema>;
 
+// ---------- D24: police questioning (Claude API draft §5.3 E, mockups a8 + a9). Data police.json; block `police` ----------
+
+export const ANSWER_KINDS = ['alibi', 'deny', 'blame', 'lawyer', 'bribe', 'silent', 'typed'] as const;
+export type AnswerKind = (typeof ANSWER_KINDS)[number];
+/** What a typed answer amounts to (the quick answers it is closest to, or none). */
+export const STANCES = ['alibi', 'deny', 'blame', 'other'] as const;
+export type Stance = (typeof STANCES)[number];
+export const EVIDENCE_KINDS = ['cctv', 'witness', 'statement', 'report', 'ledger'] as const;
+export type EvidenceKind = (typeof EVIDENCE_KINDS)[number];
+export const OUTCOMES = ['free', 'bail', 'held'] as const;
+export type Outcome = (typeof OUTCOMES)[number];
+export const CAUGHT_WHY = ['stealth', 'police', 'raid', 'pickup', 'crew'] as const;
+
+/** A judged answer: the stance, the evidence it contradicts (an id from the case), whether it fits the story so far, 0-3 persuasive. */
+export const JudgeSchema = z.object({
+  stance: z.enum(STANCES),
+  contradicts: S.nullable(),
+  consistent: z.boolean(),
+  persuasive: I.min(0).max(3),
+  reply: z.string().max(400),
+}).strict();
+export type Judge = z.infer<typeof JudgeSchema>;
+
+const OfficerLines = z.object({
+  open: S, good: S, bad: S, contradict: S, flip: S, inconsistent: S, repeat: S, bribeYes: S, bribeNo: S, lawyer: S, silent: S, free: S, bail: S, held: S, parting: S,
+}).strict();
+const OfficerSchema = z.object({
+  id: S, name: S, kind: S, sprite: S, mon: S, minHeat: I.min(0).max(100), maxHeat: I.min(0).max(100),
+  start: I, persuade: z.number().positive(), hard: z.number().positive(), bribe: I.min(0).max(100), sheet: S, lines: OfficerLines,
+}).strict();
+export type Officer = z.infer<typeof OfficerSchema>;
+const AnswerDef = z.object({ label: S, base: I, say: S.optional(), cost: N0.optional(), win: N0.optional(), lose: N0.optional() }).strict();
+const PoliceTags = z.object({ morale: S, trust: S, informant: S, leave: S, mon: S, raid: S, seized: S, bail: S, floor: S, watched: S, jail: S, lawyer: S }).strict();
+export type ReleaseTag = keyof z.infer<typeof PoliceTags>;
+
+const EvKind = z.object({ label: S, contradicts: z.array(z.enum(['alibi', 'deny', 'blame'])), text: S }).strict();
+export const PoliceFileSchema = z.object({
+  _source: S,
+  turns: I.min(1).max(12),
+  bands: z.object({ free: I.min(1).max(100), bail: I.min(0).max(100) }).strict(),
+  start: z.object({ base: I.min(0).max(100), heatPer: z.number().min(0), charmPer: z.number().min(0), charmMid: I.min(1).max(10) }).strict(),
+  caught: z.object({ stealthBase: I.min(0).max(100), stealthHeatPer: z.number().min(0), pickupAt: I.min(0).max(100), pickupBase: I.min(0).max(100), pickupPer: z.number().min(0), pickupGapDays: I.min(0), crew: z.boolean() }).strict(),
+  answers: z.object({ alibi: AnswerDef, deny: AnswerDef, blame: AnswerDef, lawyer: AnswerDef, bribe: AnswerDef, silent: AnswerDef, typed: AnswerDef }).strict(),
+  judge: z.object({ quick: I.min(0).max(3), persuadePer: N0, contradict: N0, faceDown: N0, inconsistent: N0, repeat: N0, noise: N0, maxText: I.min(20), maxReply: I.min(40).max(400) }).strict(),
+  typed: z.object({ keywords: z.object({ alibi: z.array(S).min(1), deny: z.array(S).min(1), blame: z.array(S).min(1) }).strict(), detail: z.array(S).min(1) }).strict(),
+  officers: z.array(OfficerSchema).min(1),
+  evidence: z.object({
+    keep: I.min(1), maxAge: I.min(1), perCase: I.min(1).max(6), faceDownFrom: I.min(1), actChance: I.min(0).max(100), heatPer: N0,
+    kinds: z.object({ cctv: EvKind, witness: EvKind, statement: EvKind, report: EvKind, ledger: EvKind }).strict(),
+  }).strict(),
+  release: z.object({
+    weightPer: I.min(1), maxWeight: I.min(1), heldAdds: N0, morale: N0, trust: N0, seizePct: N0, seizeMin: N0, bail: N0,
+    floorBase: N0, floorPer: N0, floorDays: I.min(1), watchDays: I.min(1), watchHeat: I.min(0).max(100), monExtra: N0, informantHeat: N0,
+    min: z.object({ seized: I.min(1), floor: I.min(1), watched: I.min(1), mon: I.min(1), informant: I.min(1), raid: I.min(1), trust: I.min(1), leave: I.min(1) }).strict(),
+  }).strict(),
+  lines: z.object({
+    seenBoss: S, caughtStealth: S, caughtFight: S, caughtRaid: S, pickup: S, crew: S, busy: S, noQ: S, noMoney: S, cell: S, cellHeld: S, cellMember: S, out: S,
+    rotomOff: S, rotomOn: S, monBack: S, roomBack: S, informantGone: S, informantNight: S,
+    tags: PoliceTags, say: PoliceTags, outcomes: z.object({ free: S, bail: S, held: S }).strict(),
+  }).strict(),
+}).strict();
+export type PoliceFile = z.infer<typeof PoliceFileSchema>;
+
+/** One thing the police know, built from what the run did (an act seen, a member who talked, a Racket's books). */
+export const EvidenceSchema = z.object({ id: S, kind: z.enum(EVIDENCE_KINDS), day: I.min(1), district: S, text: S, mon: S.optional() }).strict();
+export type Evidence = z.infer<typeof EvidenceSchema>;
+/** One answer given: what was said, how it was judged, what it did to the Belief meter and the officer's reply. */
+export const QTurnSchema = z.object({
+  kind: z.enum(ANSWER_KINDS), text: z.string().max(200), stance: z.enum(STANCES), contradicts: S.nullable(), consistent: z.boolean(),
+  persuasive: I.min(0).max(3), delta: I, reply: z.string().max(400), rotom: z.boolean(),
+}).strict();
+export type QTurn = z.infer<typeof QTurnSchema>;
+export const QuestioningSchema = z.object({
+  /** The questioning's number this run (its stream `dominion-q::<n>` and its Rotom ids). */
+  n: I.min(1),
+  /** 'boss', or the questioned member's id. */
+  who: S,
+  name: S,
+  officer: S,
+  district: S,
+  day: I.min(1),
+  why: z.enum(CAUGHT_WHY),
+  belief: I.min(0).max(100),
+  start: I.min(0).max(100),
+  /** The case file: copies of the evidence (so a trimmed log never empties it) and which still lie face down. */
+  evidence: z.array(EvidenceSchema),
+  down: z.array(S),
+  turns: z.array(QTurnSchema),
+}).strict();
+export type Questioning = z.infer<typeof QuestioningSchema>;
+export const ReleaseLineSchema = z.object({ tag: z.enum(['morale', 'trust', 'informant', 'leave', 'mon', 'raid', 'seized', 'bail', 'floor', 'watched', 'jail', 'lawyer']), group: z.enum(['crew', 'hq']), text: S, tone: z.enum(['r', 'y']), face: S.optional(), mon: S.optional() }).strict();
+export type ReleaseLine = z.infer<typeof ReleaseLineSchema>;
+export const ReleaseSchema = z.object({
+  n: I.min(1), who: S, name: S, officer: S, district: S, outcome: z.enum(OUTCOMES), belief: I.min(0).max(100), weight: I.min(1),
+  /** The day the questioned walked out. */
+  day: I.min(1),
+  lines: z.array(ReleaseLineSchema),
+  cell: S,
+  parting: S,
+  seen: z.boolean(),
+}).strict();
+export type Release = z.infer<typeof ReleaseSchema>;
+export const PoliceStateSchema = z.object({
+  /** Questionings so far this run. */
+  n: N0,
+  q: QuestioningSchema.nullable(),
+  last: ReleaseSchema.nullable(),
+  evidence: z.array(EvidenceSchema),
+  /** Evidence rolls made (stream `dominion-evidence::<rolls>`). */
+  rolls: N0,
+  /** The last day the Boss was picked up for high Heat. */
+  pickedUp: N0,
+  /** Heat can't drop below this until the day. */
+  floor: z.object({ heat: I.min(0).max(100), until: I.min(1) }).strict().nullable(),
+  watched: z.array(z.object({ district: S, until: I.min(1) }).strict()),
+  /** Pokémon held as evidence: where they came from and the day they come back. */
+  held: z.array(z.object({ mon: MonSchema, from: S, until: I.min(1) }).strict()),
+  /** A room raided and taped off until a day. */
+  raid: z.object({ room: S, until: I.min(1) }).strict().nullable(),
+  /** The member who talks to the police (a statement and some Heat each night). */
+  informant: S.nullable(),
+}).strict();
+export type PoliceState = z.infer<typeof PoliceStateSchema>;
 // ---------- D10 data: growth.json, growthActions.json (Part 1 §3.2, Part 3 §5, Part 9 A10) ----------
 
 export const GYM_WAYS = ['beat', 'buy', 'break', 'blackmail', 'convert'] as const;
