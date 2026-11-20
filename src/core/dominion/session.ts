@@ -27,8 +27,11 @@ import { autoFill, book, placeMon, reserveInRun, seedStart, withReserve } from '
 import { build, letGo, loan, rebuild, repay, sell, storageCap, tierUp, upgrade, launder, type HqOut } from './hq';
 import { withHq } from './hqFx';
 import { levelCap } from '../regions';
+import { hatchEggs, settleDojo, settleLesson } from './school';
 import './voices';
 import { answerCard, breakTruce, maybeStreet, noteTop, ransom, startTruce, withRivals, type RivalOut } from './rivals';
+import { answerMeet as answerTownMeet, maybeMeet } from './town';
+import { accuse, askSpy, dropTalk, startConfront, type SpyOut } from './spies';
 import { argue, chooseDeal, closeDebate, walkOut, type DebateOut } from './debate';
 import { answerQ, noteAct, releasedSeen, releaseQ, returnHeld } from './police';
 import './growth';
@@ -88,7 +91,7 @@ export function stepInRun(content: Content, run0: RunState, action: DominionActi
   if (!out.ok) return out;
   // D9: the rival tier reads the Boss's best level; a night ambush (rival action 135) hurts the Boss's team.
   const next = structuredClone(out.run);
-  const b = next.expansion!.dominion!;
+  let b = next.expansion!.dominion!;
   noteTop(b, next);
   if (b.flags.includes('ambushed')) {
     b.flags = b.flags.filter((f) => f !== 'ambushed');
@@ -177,6 +180,12 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
       const met = maybeStreet(blk, action.district, run.seed, blk.phase === 'night');
       blk = met.block;
       if (met.line) notice = [notice, met.line].filter(Boolean).join(' ');
+      // D6b: or someone from the town (outside.json sections A and J), answered on the Region Map.
+      else {
+        const town = maybeMeet(blk, action.district, run.seed, blk.phase === 'night');
+        blk = town.block;
+        if (town.line) notice = [notice, town.line].filter(Boolean).join(' ');
+      }
     }
     // D10: Pokémon an action took (Kidnap, a lab's rare one, the Swap Meet) wait in the crew's pending list: place them now.
     const next = settleCrew(content, withBlock(work, DominionBlockSchema.parse(blk)));
@@ -240,7 +249,13 @@ function rivalInRun(run: RunState, action: DominionAction): (StepOut & { run: Ru
     case 'truce': out = startTruce(b, action.team); break;
     case 'breakTruce': out = breakTruce(b, action.team); break;
     case 'card': out = answerCard(b, action.index, action.choice, run.seed); break;
+    case 'townMeet': out = answerTownMeet(b, action.choice, run.seed); break;
     case 'ransom': out = ransom(b, action.member); break;
+    // D22: the Confront talk (spies.ts). An accused spy who fights leaves `field.fight` waiting.
+    case 'spyStart': out = startConfront(b, action.member) as SpyOut; break;
+    case 'spyAsk': out = askSpy(b, action.q, run.seed, action.text); break;
+    case 'spyAccuse': out = accuse(b, run.seed); break;
+    case 'spyDrop': out = dropTalk(b); break;
     default: return null;
   }
   if (!out.ok) return { ok: false, block: b, notice: out.notice, heal: false, run };
@@ -430,6 +445,9 @@ export function settleCrew(content: Content, run: RunState): RunState {
   const out = structuredClone(run);
   const b = withReserve(content, out.expansion!.dominion!);
   const st = b.crew;
+  // D4b: eggs due this morning hatch into the Reserve.
+  const hatched = hatchEggs(content, out, b);
+  if (hatched.length) b.report = [...b.report, ...hatched];
   if (!st?.pending.length) {
     if (book(b).auto) autoFill(b);
     return out;
@@ -443,7 +461,9 @@ export function settleCrew(content: Content, run: RunState): RunState {
       // A member's Pokémon, or (Nurturer) one in the Reserve.
       const mon = b.members.find((m) => m.id === p.member)?.team.find((x) => x.uid === p.uid) ?? b.reserve?.box.find((x) => x.uid === p.uid);
       if (mon && p.level > mon.level) addLevels(content, mon, p.level - mon.level, p.level);
-    } else out.inventory[p.id] = (out.inventory[p.id] ?? 0) + p.n;
+    } else if (p.k === 'move') lines.push(...settleLesson(content, b, p));
+    else if (p.k === 'dojo') lines.push(...settleDojo(content, out, b, p));
+    else out.inventory[p.id] = (out.inventory[p.id] ?? 0) + p.n;
   }
   st.pending = [];
   if (lines.length) b.report = [...b.report, ...lines];

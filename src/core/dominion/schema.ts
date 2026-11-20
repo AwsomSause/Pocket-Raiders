@@ -89,10 +89,12 @@ const DistrictSchema = z.object({
 export type District = z.infer<typeof DistrictSchema>;
 export const BATTLE_FOES = ['target', 'police', 'wild', 'ghost', 'member', 'rival', 'hero'] as const;
 export const EFFECTS = ['scout', 'count', 'scoutDistrict', 'paper', 'catch', 'laylow', 'disguise', 'fine', 'exp', 'spar', 'train', 'plan', 'pamper', 'hide', 'rescue', 'evolve', 'ceremony', 'mentor', 'launder',
-  // D6 (field.ts)
-  'skim',
+  // D6 (field.ts) and D6b (town.ts: Hold a Rally, Chant Night)
+  'skim', 'rally', 'chant',
   // D9 (rivals.ts addActEffect)
   'rivalHit', 'rivalSpy', 'counterSpy', 'truceTalk', 'war', 'poach', 'court',
+  // D4b (school.ts): Egg Run, Breed, Move Tutor
+  'eggRun', 'breed', 'tutor',
   // D10 (growth.ts addActEffect)
   'buyOut', 'storm', 'gym', 'flyers', 'bribe', 'fence', 'smuggle', 'kidnap', 'labHit', 'loan', 'specialist', 'forge', 'dirt', 'swap',
   'stall', 'safehouse', 'jam', 'dodge', 'mercs', 'gymPress', 'gymCourt', 'gymRig', 'bigNight', 'crew',
@@ -100,6 +102,8 @@ export const EFFECTS = ['scout', 'count', 'scoutDistrict', 'paper', 'catch', 'la
   'heroShame', 'heroDuel', 'heroFriend', 'heroAmbush', 'heroItem',
   // D13 (debate.ts addActEffect)
   'debate', 'manifesto',
+  // D22 (spies.ts addActEffect)
+  'plantMole',
   // D14 (takeover.ts addActEffect)
   'league', 'plan', 'broadcast'] as const;
 const PlaySchema = z.object({
@@ -116,6 +120,8 @@ const PlaySchema = z.object({
   band: I.min(1).max(5).optional(),
   /** D4 'rescue': the Trust the Pokémon joins with, and levels above the team (an alpha). */
   trust: I.min(0).max(10).optional(), alpha: N0.optional(),
+  /** D4b: % off `cost` from the action's second mastery level ("the tutor is cheaper"). */
+  cheaper: I.min(0).max(100).optional(),
   /** D10: Morale and Loyalty for every member, Edge XP on the row's stat, the region's rival Tension (D9). */
   morale: I.optional(), loyalty: I.optional(), edge: N0.optional(), tension: I.optional(),
   /** D10: how many members may come (a Raid's squad, Part 3 §5.2); default `odds.maxBrought`. */
@@ -197,7 +203,7 @@ export type DistrictState = z.infer<typeof DistrictStateSchema>;
 /** A battle an action (or the police) is waiting on. The fight bridge (fight.ts) starts it; fightEnd settles it. */
 export const FieldFightSchema = z.object({
   /** D11: 'hero' a job the Hero stepped into (m11), 'challenge' an encounter's battle, 'heroRaid' the Hero at the HQ, 'stand' the final stand, 'legend' a Heroic Legendary. D10: 'growth' a fight of a chain (Raid, a Gym). D12: 'court' a Chair visitor at the door (`target` the card id, `action` the answer). */
-  why: z.enum(['fail', 'always', 'police', 'looker', 'raid', 'rival', 'hero', 'challenge', 'heroRaid', 'stand', 'legend', 'growth', 'court', 'takeover']),
+  why: z.enum(['fail', 'always', 'police', 'looker', 'raid', 'rival', 'hero', 'challenge', 'heroRaid', 'stand', 'legend', 'growth', 'court', 'spy', 'town', 'takeover']),
   foe: z.enum(['target', 'police', 'wild', 'ghost', 'member', 'looker', 'raid', 'rival', 'hero', 'sidekick', 'legend', 'growth', 'court', 'takeover']),
   begun: z.boolean(),
   action: S.nullable(),
@@ -327,6 +333,10 @@ const BlockSchema = z.object({
   hero: z.lazy(() => HeroStateSchema).optional(),
   /** D21: the applications desk (today's queue, the basement, who got in and what they really are). Optional; no bump. */
   desk: z.lazy(() => DeskStateSchema).optional(),
+  /** D8: Squads and Groups (Part 10). Optional; `squadsOf` fills it. */
+  squads: z.lazy(() => SquadsStateSchema).optional(),
+  /** D22: moles in the crew, Suspicion, clues and the Confront talk. Optional; `spiesOf` fills it. */
+  spies: z.lazy(() => SpiesStateSchema).optional(),
   /** D25: this week's news lines and the last few Ledger papers. Optional; `voicesOf` (voices.ts) fills it. */
   voices: z.lazy(() => VoicesStateSchema).optional(),
   /** D14: the takeover paths, the Goal Track, Holdings, the League, the broadcasts. Optional; `takeoverOf` (takeover.ts) fills it. */
@@ -367,6 +377,8 @@ export type DominionAction =
   | { t: 'patron'; patron: string }
   // D6: where a member's district task (Patrol, Hold, Chant...) is done
   | { t: 'where'; member: string; district: string }
+  // D6b: the answer to a street meeting (town.ts)
+  | { t: 'townMeet'; choice: number }
   // D12, the Chair: answer the visitor (0 or 1), hand the card to a member, read on, close the doors, the settings
   | { t: 'court'; choice: number }
   | { t: 'handOff'; member: string }
@@ -397,6 +409,12 @@ export type DominionAction =
   | { t: 'breakTruce'; team: string }
   | { t: 'card'; index: number; choice: number }
   | { t: 'ransom'; member: string }
+  // D22, spies on the crew (spies.ts)
+  | { t: 'spyStart'; member: string }
+  | { t: 'spyAsk'; q: string; text?: string }
+  | { t: 'spyAccuse' }
+  | { t: 'spyDrop' }
+
   // D24, police questioning (police.ts). A typed answer carries the judge its words got (Rotom's, or the rules').
   | { t: 'answer'; kind: AnswerKind; text?: string; judge?: Judge; rotom?: boolean }
   | { t: 'released' }
@@ -411,6 +429,14 @@ export type DominionAction =
   | { t: 'deskAsk'; q: string; text?: string }
   | { t: 'deskInspect'; field: string }
   | { t: 'deskStamp'; stamp: Verdict }
+  // D8, Squads and Groups
+  | { t: 'squadSave'; draft: SquadDraft }
+  | { t: 'squadDisband'; squad: string }
+  | { t: 'squadOrder'; squad: string; task: string | null }
+  | { t: 'squadTrait'; squad: string; trait: string }
+  | { t: 'groupSave'; draft: GroupDraft }
+  | { t: 'groupDisband'; group: string }
+  | { t: 'groupOrder'; group: string; task: string | null }
   // D7: the Founding (Part 9 A15)
   | { t: 'found'; team: TeamDraft }
 
@@ -423,6 +449,10 @@ export type DominionAction =
   // a broadcast watched, the next fight of a chain
   | { t: 'takeover'; op: 'seen' | 'moment' | 'storm' | 'take' | 'bcast'; id?: string };
 
+/** D8: what the Squads page's builder hands over (a new squad when `id` is null). `members` leaves out the leader. */
+export interface SquadDraft { id: string | null; codeName: string; leader: string; members: string[]; incentive: string; target: string | null; focus: string | null; mark: number }
+export interface GroupDraft { id: string | null; codeName: string; leader: string; squads: string[]; incentive: string }
+
 // ---------- D3 data: crew.json, tasks.json, gruntTypes.json ----------
 
 export const STAT = z.enum(STAT_IDS);
@@ -432,14 +462,18 @@ export const TaskEffectSchema = z.object({
   kind: z.enum(['guard', 'money', 'scout', 'recruit', 'train', 'trainMon', 'rest', 'catch', 'steal', 'berries', 'audit', 'welcome', 'interview', 'mentor', 'rally', 'drills', 'coach',
     // D4 (reserve.ts)
     'pens', 'tend', 'feed', 'release', 'rehab',
+    // D4b (school.ts)
+    'trade', 'tutor',
     // D9 (rivals.ts)
     'rivalSpy', 'rivalIntel', 'counterSpy', 'poachRival', 'rivalHit', 'rescue', 'rumours', 'truceTalk',
-    // D6 (empire.ts)
-    'district',
+    // D6 (empire.ts), D6b (town.ts: Pay the Wages)
+    'district', 'wages',
     // D10 (growth.ts)
     'haul', 'front', 'fence', 'flyers', 'revive', 'stock',
     // D11 (hero.ts)
     'hero',
+    // D8 (squads.ts)
+    'matchMake', 'runCrew',
     // D14 (takeover.ts)
     'takeover']),
   /** D6 district tasks (kind 'district'): what it does in the member's district, and how much (task Lv 1-2, Lv 3+). */
@@ -601,6 +635,8 @@ const TraitEffectSchema = z.object({
   payLoy: I.min(2).optional(),
   /** Loyalty change on a pay day they weren't paid (on top of D1's −15). */
   unpaidLoy: I.optional(),
+  /** D22: what the trait does around spies (spies.ts): never turned by a rival's bribe, easily turned, or leaks plans to moles. */
+  spy: z.enum(['noBribe', 'bribe', 'leak']).optional(),
   /** The slice that makes this effect work (shown on the card until then). */
   needs: S.optional(),
 }).strict();
@@ -739,6 +775,10 @@ export const CrewStateSchema = z.object({
     z.object({ k: z.literal('mon'), species: S, level: I.min(1), by: S.optional(), src: z.enum(['caught', 'stolen', 'rescued']).optional(), self: z.boolean().optional() }).strict(),
     z.object({ k: z.literal('level'), member: S, uid: S, level: I.min(1) }).strict(),
     z.object({ k: z.literal('item'), id: S, n: I.min(1) }).strict(),
+    /** D4b Teach a Move: `n` moves to the member's first Pokémon that can learn one (`team`: one to each), an egg move first (`egg`). */
+    z.object({ k: z.literal('move'), member: S, n: I.min(1), team: z.boolean(), egg: z.boolean() }).strict(),
+    /** D4b Type Dojo: Pokémon of these types (the Boss's, the crew's, the Reserve's) gain level x `xp` XP. */
+    z.object({ k: z.literal('dojo'), types: z.array(S).min(1), xp: I.min(1) }).strict(),
   ])),
 }).strict();
 export type CrewState = z.infer<typeof CrewStateSchema>;
@@ -801,6 +841,10 @@ export const EmpireStateSchema = z.object({
   collect: z.record(S, N0),
   /** Districts guarded by Hold the Line or Patrol today: Heat doesn't wear their Control down. */
   guarded: z.array(S),
+  /** D6b: a street meeting waiting for an answer (outside.json sections A and J, town.json), and the rows met this run. */
+  meet: z.object({ row: S, district: S, day: I.min(1) }).strict().nullable().optional(),
+  met: z.array(S).optional(),
+  metDay: N0.optional(),
 }).strict();
 export type EmpireState = z.infer<typeof EmpireStateSchema>;
 
@@ -986,17 +1030,19 @@ export const PyramidFileSchema = z.object({
     bugCap: N0, gentleTrust: N0,
   }).strict(),
   trust: z.object({
-    start: z.object({ caught: I.min(0).max(10), stolen: I.min(0).max(10), snagged: I.min(0).max(10), shadow: I.min(0).max(10), own: I.min(0).max(10), rescued: I.min(0).max(10) }).strict(),
+    start: z.object({ caught: I.min(0).max(10), stolen: I.min(0).max(10), snagged: I.min(0).max(10), shadow: I.min(0).max(10), own: I.min(0).max(10), rescued: I.min(0).max(10), hatched: I.min(0).max(10) }).strict(),
     disobeyBelow: I.min(0).max(10), loyalFrom: I.min(0).max(10), max: I.min(1).max(10), jobBonus: N0, disobeyPenalty: N0,
     gentleWeekly: N0, gentle: z.array(S), winChance: Pct, freedomStayPer: N0,
   }).strict(),
   lines: z.record(S, S),
   why: z.object({ offType: S, lv: S, bst: S, never: S, full: S, pens: S }).strict(),
+  /** D4b: trades, tutors, eggs and the rank and training rooms (school.ts). */
+  school: z.lazy(() => SchoolSchema),
 }).strict().refine((p) => p.ranks.every((r) => r.aces === 0 || r.aceCap > 0), { message: 'a rank with Aces has an Ace cap' });
 export type PyramidFile = z.infer<typeof PyramidFileSchema>;
 export type RankRow = z.infer<typeof RankRowSchema>;
 
-export const MON_SOURCES = ['own', 'caught', 'stolen', 'snagged', 'shadow', 'rescued'] as const;
+export const MON_SOURCES = ['own', 'caught', 'stolen', 'snagged', 'shadow', 'rescued', 'hatched'] as const;
 /** What the team knows about one Pokémon it holds (in the Reserve or on a member's team), by uid. */
 export const MonMetaSchema = z.object({
   /** Pokémon Trust 0-10 (Part 9 A19). */
@@ -1030,6 +1076,10 @@ export const ReserveStateSchema = z.object({
   promoted: z.array(z.object({ member: S, day: I.min(1) }).strict()),
   /** Members stripped back to Recruit today: the night may see them walk out. */
   stripped: z.array(S),
+  /** D4b: eggs waiting to hatch (Egg Run, Breed). Optional so a D4 save loads unchanged. */
+  eggs: z.array(z.lazy(() => EggSchema)).optional(),
+  /** D4b: members who retired to the Retiree Hall (newest last). */
+  retirees: z.array(z.object({ name: S, day: I.min(1) }).strict()).optional(),
 }).strict();
 export type ReserveState = z.infer<typeof ReserveStateSchema>;
 
@@ -1074,6 +1124,19 @@ export const BuildingFxSchema = z.object({
   // your spies being caught), raidDef (Defense in raids only), warn (days' warning of the Boss's raid), fireCut (% off
   // building damage), truceOff (% off tribute).
   intel: N0.optional(), spyCatch: Pct.optional(), cipher: Pct.optional(), raidDef: N0.optional(), warn: N0.optional(), fireCut: Pct.optional(), truceOff: Pct.optional(),
+  // D6b (hq.ts weekly): Regard and Dread each week in the building's district (the HQ's for a room).
+  regard: N0.optional(), dread: N0.optional(),
+  // D6b (field.ts): the Card shows the exact odds (the Ledger Office's Honest Card).
+  honest: N0.optional(),
+  // D4b (school.ts, pyramid.ts): seats (extra seats by rank id), promoTrait (a trait forms on promotion), spar (bouts a
+  // week), sneak (Stealth tenths a week), rankLv (member levels off ranks up to Sergeant), examStat (tenths of the best
+  // stat on promotion), cure (bad traits cured a week), retirees (retiree places), trustCure (anxious Pokémon helped a
+  // week), gruntSkill (tenths a week to a Grunt's task stat), taskXp (task XP a day), vets / pairs (mentoring a week),
+  // reveal (traits formed early a week), dojo (type -> level x XP a week); wageOff / buildOff (%, from the crew's trades).
+  seats: z.record(S, I.min(1)).optional(), promoTrait: N0.optional(), spar: N0.optional(), sneak: N0.optional(), rankLv: N0.optional(),
+  examStat: N0.optional(), cure: N0.optional(), retirees: N0.optional(), trustCure: N0.optional(), gruntSkill: N0.optional(),
+  taskXp: N0.optional(), vets: N0.optional(), pairs: N0.optional(), reveal: N0.optional(), dojo: z.record(S, I.min(1)).optional(),
+  wageOff: Pct.optional(), buildOff: Pct.optional(),
   // D13 (debate.ts): debate (Conviction at the start), debateFloor (the first turn moves the bar at least this much),
   // debateSee (each set line's marks show before you pick it).
   debate: N0.optional(), debateFloor: N0.optional(), debateSee: N0.optional(),
@@ -1407,6 +1470,142 @@ export const RivalsStateSchema = z.object({
 }).strict();
 export type RivalsState = z.infer<typeof RivalsStateSchema>;
 
+// ---------- D6b: street meetings (town.json; outside.json sections A and J) ----------
+
+const TownFxSchema = z.object({
+  rg: I.optional(), dr: I.optional(), h: I.optional(), ten: I.optional(), hero: I.optional(), money: I.optional(), wanted: I.optional(),
+  control: I.optional(), mor: I.optional(), lead: z.boolean().optional(), scout: z.boolean().optional(), intel: z.boolean().optional(), foil: z.boolean().optional(),
+}).strict();
+export type TownFx = z.infer<typeof TownFxSchema>;
+export const TownChoiceSchema = TownFxSchema.extend({
+  /** A battle first (town.ts starts it): the rest applies on a win, `lose` on a loss. */
+  fight: z.enum(['target', 'police', 'wild']).optional(),
+  fightChance: I.min(1).max(100).optional(),
+  lose: TownFxSchema.optional(),
+  /** A test of your best member's stat: the rest applies on a pass, `fail` on a miss. */
+  check: STAT.optional(),
+  fail: TownFxSchema.optional(),
+}).strict();
+export type TownChoice = z.infer<typeof TownChoiceSchema>;
+export const TownFileSchema = z.object({
+  _source: S,
+  /** No meetings below this Notoriety step (1 = Street Gang): the town notices you once you're known. */
+  meet: z.object({ minStep: N0, chance: I.min(0).max(100), night: I.min(0).max(100), maxPerDay: I.min(1), checkBase: N0, checkPer: N0, fightLose: TownFxSchema }).strict(),
+  lines: z.record(S, S),
+  rows: z.record(z.string().regex(/^O\d{3}$/), z.array(TownChoiceSchema).min(1)),
+  needs: z.record(z.string().regex(/^O\d{3}$/), z.object({ wanted: N0.optional(), rival: z.boolean().optional() }).strict()),
+}).strict();
+export type TownFile = z.infer<typeof TownFileSchema>;
+
+// ---------- D22: spies on the crew (spies.json, block `spies`) ----------
+
+export const SPY_ENDS = ['confess', 'double', 'run', 'battle'] as const;
+export const SPY_TELLS = ['nervous', 'contradiction', 'rehearsed'] as const;
+const Weights = z.object({ confess: I, double: I, run: I, battle: I }).strict();
+const SpyRange = z.tuple([N0, N0]);
+const Lines2 = z.object({ mole: z.array(S).min(2), innocent: z.array(S).min(2) }).strict();
+
+export const SpiesFileSchema = z.object({
+  _source: S,
+  suspicion: z.object({ confrontAt: Pct, high: Pct, coolAfter: I.min(1), coolPerNight: N0 }).strict(),
+  clues: z.object({ moleChance: Pct, moleGain: SpyRange, herringChance: Pct, herringGain: SpyRange, securityGain: N0, exposed: Pct, gossipIntel: N0, keep: I.min(1) }).strict(),
+  /** Who a rival turns into a mole: weights by trait and Loyalty (a weight of 0 can never be picked). */
+  pick: z.object({ base: N0, lowLoyaltyBelow: Pct, lowLoyalty: N0, newDays: N0, newMember: N0, traits: z.record(S, N0) }).strict(),
+  /** Clue texts. The same pool for a mole and for a red herring, so a clue alone proves nothing. */
+  pool: z.array(S).min(8),
+  talk: z.object({ turns: I.min(1), bribe: N0, threatLoyalty: I, typedMax: I.min(20) }).strict(),
+  questions: z.array(z.object({
+    id: S, label: S, short: S, sub: S, pressure: N0,
+    /** % chance a mole (or an innocent member) shows a tell on this question. */
+    tellMole: Pct, tellInnocent: Pct,
+    lines: Lines2,
+  }).strict()).min(4),
+  tells: z.record(z.enum(SPY_TELLS), z.object({ word: S, colour: S }).strict()),
+  /** Tells an innocent member can show (nerves, mostly). */
+  innocentTells: z.array(z.enum(SPY_TELLS)).min(1),
+  ends: z.record(z.enum(SPY_ENDS), z.object({ label: S, sub: S, colour: S, weight: N0, line: S }).strict()),
+  /** Trait id -> ending weight changes. */
+  traitEnds: z.record(S, Weights.partial()),
+  /** Each point of pressure adds this many tenths to Confess; a bribe adds to Double agent (×2 for a bribe-taker). */
+  pressureConfess: N0, bribeDouble: N0, loyalConfess: N0,
+  wrong: z.object({ loyalty: I, morale: I, crewMorale: I }).strict(),
+  drop: z.object({ suspicion: I }).strict(),
+  effects: z.object({ confessIntel: N0, runIntel: N0, doubleIntel: N0, battleDread: N0, confessLoyalty: I }).strict(),
+  lines: z.record(S, S),
+  ui: z.record(S, S),
+  rotom: z.object({ system: S, thinking: S, chip: S }).strict(),
+}).strict();
+export type SpiesFile = z.infer<typeof SpiesFileSchema>;
+
+export const SpyTurnSchema = z.object({
+  q: S,
+  /** What the player typed (a typed question), clamped. */
+  said: S.nullable(),
+  reply: S,
+  tell: z.enum(SPY_TELLS).nullable(),
+}).strict();
+export type SpyTurn = z.infer<typeof SpyTurnSchema>;
+
+export const SpiesStateSchema = z.object({
+  /** Members a rival turned. `turned`: flipped to your double agent; `exposed`: found by a counter-spy (no longer reports). */
+  moles: z.array(z.object({ member: S, team: S, day: I.min(1), turned: z.boolean(), exposed: z.boolean() }).strict()),
+  /** Member id -> Suspicion 0-100. */
+  sus: z.record(S, Pct),
+  /** Member id -> nights since their last clue. */
+  quiet: z.record(S, N0),
+  /** The newest clues (Suspicion's log), oldest first. */
+  clues: z.array(z.object({ member: S, day: I.min(1), text: S }).strict()),
+  /** The Confront talk in progress, or null. */
+  talk: z.object({ member: S, day: I.min(1), turns: z.array(SpyTurnSchema), pressure: N0, bribed: z.boolean() }).strict().nullable(),
+  /** How each confront ended. */
+  done: z.array(z.object({ member: S, name: S, day: I.min(1), end: z.enum([...SPY_ENDS, 'cleared', 'dropped']) }).strict()),
+}).strict();
+export type SpiesState = z.infer<typeof SpiesStateSchema>;
+
+// ---------- D4b: trades, tutors, eggs and the rank rooms (pyramid.json `school`) ----------
+
+export const EggSchema = z.object({
+  id: S,
+  species: S,
+  level: I.min(1),
+  /** The morning it hatches. */
+  hatch: I.min(1),
+  src: z.enum(['found', 'bred']),
+  /** The species shows on the egg (Egg Run's fourth level; a bred egg always shows). */
+  shown: z.boolean(),
+  /** Breed: a good nature, IVs of at least this, a move from the parent, the hidden ability. */
+  nature: S.nullable(),
+  ivMin: I.min(0).max(31),
+  move: S.nullable(),
+  hidden: z.boolean(),
+}).strict();
+export type Egg = z.infer<typeof EggSchema>;
+
+const TradeSchema = z.object({
+  id: S, name: S, stat: z.enum(['brawn', 'nerve', 'wits', 'charm', 'stealth']),
+  /** The discount the trade gives (task level 2; double at level 4, the blueprint). */
+  perk: z.enum(['wageOff', 'buildOff', 'hireOff']), pct: Pct,
+  /** The master craft (task level 5), once a week. */
+  craft: z.object({ items: z.record(S, I.min(1)).optional(), repair: N0.optional(), clean: N0.optional() }).strict(),
+}).strict();
+export const SchoolSchema = z.object({
+  trades: z.array(TradeSchema).length(3),
+  /** Learn a Trade: ₽ lost to an apprentice's mistake. */
+  mistake: N0,
+  /** Teach a Move: the tutor's fee, and % off from task level 2. */
+  tutorFee: N0, tutorOff: Pct,
+  /** Eggs: days to hatch, the hatch level under the Boss's team level, candidates rolled at Egg Run's top level, the IV floor
+   * at Breed's third level, and the chance of a good nature at its second. */
+  eggDays: I.min(1), eggUnder: N0, eggPick: I.min(1), ivMin: I.min(0).max(31), natureChance: Pct, maxEggs: I.min(1),
+  /** Rooms: XP a sparring bout, a veteran's lesson, a mentor pair (with Loyalty), Morale from a retiree each week, Trust a
+   * Comfort Ward cure gives, the Morale counselling gives when no one has a bad trait. */
+  sparXp: N0, vetXp: N0, pairXp: N0, pairLoyalty: N0, retireeMorale: N0, retireMinDays: N0, retireMinLoyalty: Pct, wardTrust: N0, counselMorale: N0,
+  /** Formed traits a Therapy Room cures. */
+  bad: z.array(S).min(1),
+  lines: z.record(S, S),
+}).strict();
+export type School = z.infer<typeof SchoolSchema>;
+
 // ---------- D24: police questioning (Claude API draft §5.3 E, mockups a8 + a9). Data police.json; block `police` ----------
 
 export const ANSWER_KINDS = ['alibi', 'deny', 'blame', 'lawyer', 'bribe', 'silent', 'typed'] as const;
@@ -1738,6 +1937,94 @@ export const DeskStateSchema = z.object({
   log: z.array(z.object({ day: I.min(1), name: S, truth: z.enum(TRUTHS), great: z.boolean(), verdict: z.enum(VERDICTS) }).strict()),
 }).strict();
 export type DeskState = z.infer<typeof DeskStateSchema>;
+
+// ---------- D8: Squads and Groups (squads.json; block `squads`) ----------
+
+const NeedsS = z.string().regex(/^D\d+$/);
+export const SquadsFileSchema = z.object({
+  _source: S,
+  unlock: z.object({ notoriety: N0, word: S, leaderMin: S }).strict(),
+  codeName: z.object({ max: I.min(4), allowed: S, badWords: z.array(S) }).strict(),
+  sizes: z.array(z.object({ rank: S, max: I.min(2).max(12), kind: z.enum(['squad', 'unit']) }).strict()).min(1),
+  minMembers: I.min(2),
+  groups: z.array(z.object({ kind: z.enum(['group', 'division']), word: S, from: S, to: S, min: I.min(2), max: I.min(2) }).strict()).length(2),
+  kinds: z.record(S, S),
+  cap: z.object({ perHq: N0, base: N0, opsRoom: N0 }).strict(),
+  incentives: z.array(z.object({ id: S, name: S, short: S, deal: S, bonus: S, cost: S, fits: z.array(S).min(1), live: z.boolean(), needs: NeedsS.optional(), note: S.optional() }).strict()).length(10),
+  numbers: z.record(S, z.union([I, z.array(I)])),
+  focus: z.array(z.object({ id: S, name: S, families: z.array(S), needs: NeedsS.optional() }).strict()).min(1),
+  marks: z.array(S).length(12),
+  colors: z.array(z.string().regex(/^#[0-9a-f]{6}$/i)).length(12),
+  cohesion: z.object({
+    start: Pct,
+    bands: z.array(z.object({ min: Pct, id: S, word: S, pill: S, pct: I, text: S }).strict()).length(4),
+    up: z.object({ job: N0, longShot: N0, matchWeek: N0, rescue: N0, night: N0 }).strict(),
+    down: z.object({ swapped: I.max(0), lost: I.max(0), demoted: I.max(0), punished: I.max(0), incentive: I.max(0) }).strict(),
+  }).strict(),
+  traits: z.array(z.object({ id: S, name: S, earned: z.array(S), warehouse: z.boolean().optional(), text: S, live: z.boolean(), needs: NeedsS.optional(), note: S.optional() }).strict()
+    .refine((t) => t.live || !!t.needs, { message: 'a trait that waits names its slice' })).length(20),
+  traitNumbers: z.record(S, N0),
+  suggest: z.object({ byFamily: z.record(S, S), byDistrict: z.record(S, S), warehouse: S, town: S, spare: z.array(S).min(6) }).strict(),
+  targets: z.array(z.object({ id: S, name: S, kind: z.enum(['rival', 'gym', 'police']), look: S, live: z.boolean(), needs: NeedsS.optional() }).strict()).min(1),
+  lines: z.record(S, S),
+  chatter: z.object({ strangers: z.array(S).min(1), workmates: z.array(S).min(1), tight: z.array(S).min(1), family: z.array(S).min(1) }).strict(),
+}).strict().refine((f) => f.incentives.every((i) => i.live || !!i.needs), { message: 'an incentive that waits names its slice' });
+export type SquadsFile = z.infer<typeof SquadsFileSchema>;
+
+export const SquadSchema = z.object({
+  id: S,
+  codeName: S,
+  /** The leader (Corporal to Captain); also in `members`. */
+  leader: S,
+  /** Everyone in the squad, leader first. A member is in one squad at a time. */
+  members: z.array(S).min(1).max(12),
+  incentive: S,
+  /** Vengeance: the named target id (squads.json targets), or null. */
+  target: S.nullable(),
+  focus: S.nullable(),
+  /** Index into squads.json marks (and colors). */
+  mark: I.min(0).max(11),
+  cohesion: Pct,
+  trait: S.nullable(),
+  /** Three Squad Traits offered on reaching Family, until one is picked. */
+  offered: z.array(S).max(3),
+  /** Tonight's squad order (a task id), or null: members keep their own tasks. */
+  order: S.nullable(),
+  /** The district the squad calls home (Glory, Money Hands, Street Legends). */
+  town: S,
+  formed: I.min(1),
+  /** Formed in the first Warehouse (HQ Lv 1): Old Warehouse can be offered. */
+  warehouse: z.boolean(),
+  /** The leader's rank when last seen (a demotion costs Cohesion). */
+  leaderRank: S,
+  /** Punishments counted so far, by member (one in front of the squad costs Cohesion). */
+  punished: z.record(S, N0),
+  /** The squad's own Ledger page (Part 10 §1 Record). */
+  record: z.object({
+    jobs: N0, wins: N0, losses: N0, hurt: N0,
+    /** Squad jobs by task family: the Squad Traits it is offered. */
+    fam: z.record(S, N0),
+    /** Notable nights, newest last (at most 12). */
+    legends: z.array(z.object({ day: I.min(1), line: S }).strict()).max(12),
+  }).strict(),
+}).strict();
+export type Squad = z.infer<typeof SquadSchema>;
+
+export const GroupSchema = z.object({ id: S, codeName: S, leader: S, incentive: S, squads: z.array(S).min(1), order: S.nullable(), mark: I.min(0).max(11) }).strict();
+export type Group = z.infer<typeof GroupSchema>;
+
+export const SquadsStateSchema = z.object({
+  list: z.array(SquadSchema),
+  groups: z.array(GroupSchema),
+  /** Next squad/group id number. */
+  next: I.min(1),
+  /** Match-Make pairs (they get a small bonus on the same task). */
+  pairs: z.array(z.tuple([S, S])),
+  /** Members who were on the crew at the last look (to spot new ones: Welcome Mat, Talkers). */
+  seen: z.array(S),
+}).strict();
+export type SquadsState = z.infer<typeof SquadsStateSchema>;
+
 
 // ---------- D13: the Debate (debate.json; the save block's `debate`, optional, no block bump) ----------
 

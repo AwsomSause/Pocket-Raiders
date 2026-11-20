@@ -5,6 +5,7 @@
 
 import './dominion.css';
 import './hero.css';
+import './takeover.css';
 import type { HeroModel } from '../../../../core/dominion/heroScreens';
 import type { BroadcastModel, HoldingsModel, TakeoverModel } from '../../../../core/dominion/takeoverScreens';
 import { act, esc, tall } from '../../kit';
@@ -118,7 +119,7 @@ export function holdingsView(m: HoldingsModel): string {
 // ---------- m13: the hijacked broadcast ----------
 
 function smallTv(x: number, y: number, tint: number, boss: string): string {
-  return `<div class="tv sm" style="left:${x}px;top:${y}px;width:170px;height:130px;padding:6px;border-radius:10px"><div class="scr" style="filter:hue-rotate(${tint}deg)"><div class="sig4 c" style="left:-10px;top:-6px;width:170px;height:130px;opacity:.5;animation:none"></div>${boss}</div></div>`;
+  return `<div class="tv sm" style="left:${x}px;top:${y}px;width:170px;height:130px;padding:6px;border-radius:10px"><div class="scr" style="filter:hue-rotate(${tint}deg)"><div class="tvsig" style="left:-10px;top:-6px;width:170px;height:130px;opacity:.5"></div>${boss}</div></div>`;
 }
 
 /** `look` is the Boss's sprite (atlas or png), or null for the stand-in. */
@@ -136,7 +137,7 @@ export function broadcastView(m: BroadcastModel, look: string | null): string {
   ${smallTv(24, 30, 0, small)}${smallTv(24, 176, 30, small)}${smallTv(24, 322, -20, small)}${smallTv(766, 30, 15, small)}${smallTv(766, 176, -35, small)}${smallTv(766, 322, 0, small)}
   <div class="tv" style="left:214px;top:28px;width:532px;height:404px" data-testid="dom-broadcast">
     <div class="scr">
-      <div class="sig4 c" style="left:110px;top:0;width:290px;height:320px;opacity:.35"></div>
+      <div class="tvsig" style="left:110px;top:0;width:290px;height:320px;opacity:.35"></div>
       ${pic(420, true)}
       <div class="onair">${esc(m.onAir)}</div>
       <div class="lower3" data-testid="dom-broadcast-head"><small>${esc(m.small)}</small>${esc(m.head)}</div>

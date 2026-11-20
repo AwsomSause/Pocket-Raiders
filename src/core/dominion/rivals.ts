@@ -163,7 +163,7 @@ function pickPlan(b: DominionBlock, team: RivalTeam, r: Rng): string[] {
   void b;
   return out;
 }
-const priorityName = (id: string): string => RV().plan.priorities.find((p) => p.id === id)?.name ?? id;
+export const priorityName = (id: string): string => RV().plan.priorities.find((p) => p.id === id)?.name ?? id;
 /** Whether the player can see this week's plan: one of their spies is inside, or an Operations Room at HQ Lv. 3+ (A7). */
 export function planSeen(b: DominionBlock, team: string): boolean {
   const r = rivalsOf(b);
