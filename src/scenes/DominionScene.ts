@@ -18,6 +18,9 @@ import { mountRedux, type ReduxView } from '../ui/redux/stage';
 import { hqView, openingView, setupView, titleView, type SetupFiles } from '../ui/redux/screens/dominion/views';
 import { CrewController } from './dominion/crewController';
 import { ReserveController } from './dominion/reserveController';
+import { typeBoxOpen } from '../ui/typeBox';
+import { DeskController } from './dominion/deskController';
+import { waiting as deskWaiting, deskOpen } from '../core/dominion/desk';
 import { HqController } from './dominion/hqController';
 import { RivalController } from './dominion/rivalController';
 import { threatRow } from '../core/dominion/rivalScreens';
@@ -28,7 +31,7 @@ import { ledgerView } from '../ui/redux/screens/dominion/ledger';
 import { heroModel, interruptModel } from '../core/dominion/heroScreens';
 import { heroView, interruptView, type MonFiles } from '../ui/redux/screens/dominion/heroViews';
 
-type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt';
+type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk';
 
 /** The screen to come back to after a battle (D2: the map the action was picked on, or the HQ for a fight at the door). */
 let resume: Screen | null = null;
@@ -65,6 +68,8 @@ export class DominionScene extends Phaser.Scene {
   private intAt = 0;
   /** D9: the Rival File (key R). */
   private rival = new RivalController(this);
+  /** D21: the applications desk (Rotom mockup k5). */
+  private desk = new DeskController(this);
 
   constructor() {
     super('Dominion');
@@ -81,6 +86,7 @@ export class DominionScene extends Phaser.Scene {
     this.hq = new HqController(this);
     this.res = new ReserveController(this);
     this.rival = new RivalController(this);
+    this.desk = new DeskController(this);
     const { session } = services();
     const run = session.run;
     if (!run) return void this.scene.start('MainMenu');
@@ -147,6 +153,8 @@ export class DominionScene extends Phaser.Scene {
         ...this.hq.acts(),
         ...this.rival.acts(),
         base: () => { this.hq.open(); this.view?.refresh(); },
+        ...this.desk.acts(),
+        desk: () => this.desk.open(),
       },
       overs: {
         typeOver: (i) => { this.setup = { ...this.setup, at: Number(i) }; this.view?.refresh(); },
@@ -154,14 +162,19 @@ export class DominionScene extends Phaser.Scene {
         ...this.crew.overs(),
         ...this.res.overs(),
         ...this.rival.overs(),
+        ...this.desk.overs(),
       },
     });
     const kb = this.input.keyboard;
     const raw = (e: KeyboardEvent): void => {
       if (this.leaving) return;
       // Round 4 (D26): End saves and quits to the title from any Dominion page (not mid-interrupt: the Hero's three
-      // choices must be answered first). Q stays free on every page for the hold-Q command wheel (D28): no screen reads it.
-      if (e.code === 'End' && this.screen !== 'interrupt') return this.leave();
+      // choices must be answered first; not while typing in the desk's Type box). Q stays free on every page for the hold-Q command wheel (D28): no screen reads it.
+      if (e.code === 'End' && this.screen !== 'interrupt' && !typeBoxOpen()) return this.leave();
+      if (this.screen === 'desk') {
+        this.desk.raw(e);
+        return;
+      }
       if (this.heroRaw(e.code)) return;
       if (this.screen === 'ledger') {
         if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
@@ -202,7 +215,8 @@ export class DominionScene extends Phaser.Scene {
       if (this.screen === 'hq' && e.code === 'KeyR' && !this.block()?.crew?.talks.length) return void (this.rival.open() && this.view?.refresh());
       // D5: B opens the HQ menu (mockup 6) from the HQ.
       if (this.screen === 'hq' && e.code === 'KeyB') return void (this.hq.open(), this.view?.refresh());
-      if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
+      if (e.code === 'KeyI') this.desk.open();
+      else if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
       else if (e.code === 'KeyN') this.step({ t: 'toNight' });
       else if (e.code === 'KeyE') this.step({ t: 'endDay' });
     };
@@ -212,9 +226,14 @@ export class DominionScene extends Phaser.Scene {
     // L is the Ledger on the HQ, the map and the Crew File (D6) and Money on the HQ menu (D5, mockup 6), so it doesn't
     // open the game's interaction log there (Shift+L still does).
     setLogKeyTaken(() => this.scene.isActive() && (this.screen === 'base' || (!!this.block()?.opened && ['hq', 'map', 'crew', 'ledger', 'hero'].includes(this.screen))));
+    // D21: the desk hears every key first, so A and D stamp there instead of moving (the game's key map has them as ◀ ▶).
+    const note = (e: KeyboardEvent): void => this.desk.note(e);
+    window.addEventListener('keydown', note, true);
     this.events.once('shutdown', () => {
       kb?.off('keydown', raw);
       setLogKeyTaken(null);
+      window.removeEventListener('keydown', note, true);
+      this.desk.shutdown();
     });
   }
 
@@ -239,7 +258,7 @@ export class DominionScene extends Phaser.Scene {
         return openingView(b ? openingLines(b) : [], this.shown, this.memberLook());
       case 'hq':
         if (b && this.crew.owns()) return this.crew.render(this.notice);
-        return b ? hqView(hqModel(b), this.notice, this.at, this.memberLook(), threatRow(b)) : '';
+        return b ? hqView(hqModel(b), this.notice, this.at, this.memberLook(), threatRow(b), deskOpen(b) ? deskWaiting(b) : null) : '';
       case 'map':
         return b && this.cursor ? mapView(mapModel(b, services().session.run!, this.cursor), this.notice, this.garage) : '';
       case 'card': {
@@ -271,6 +290,8 @@ export class DominionScene extends Phaser.Scene {
         return this.hq.render(this.notice);
       case 'rival':
         return this.rival.render();
+      case 'desk':
+        return this.desk.render(this.notice);
     }
   }
 
@@ -314,6 +335,7 @@ export class DominionScene extends Phaser.Scene {
     }
     if (this.res.key(a)) return void this.view?.refresh();
     if (this.rival.key(a)) return void this.view?.refresh();
+    if (this.desk.key(a)) return void this.view?.refresh();
     if (this.crew.key(a)) return void this.view?.refresh();
     if (this.screen === 'ledger') {
       if (a === 'back') return this.closeLedger();
@@ -696,6 +718,11 @@ export class DominionScene extends Phaser.Scene {
     }
     if (this.screen === 'card') {
       this.screen = 'map';
+      return this.view?.refresh();
+    }
+    if (this.screen === 'desk') {
+      this.screen = 'hq';
+      this.notice = null;
       return this.view?.refresh();
     }
     if (this.screen === 'map') {
