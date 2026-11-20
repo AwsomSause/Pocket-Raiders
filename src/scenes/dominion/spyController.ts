@@ -20,7 +20,7 @@ import { services } from '../../game/services';
 import type { InputAction } from '../../ui/input';
 import { spyView } from '../../ui/redux/screens/dominion/spy';
 
-type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'founding' | 'founded' | 'spy';
+type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'founding' | 'founded' | 'debate' | 'spy';
 interface Host {
   screenName: Screen;
   setNotice(n: string | null): void;
@@ -30,8 +30,10 @@ interface Host {
 }
 
 const TYPE = '[data-testid="dom-spy-type"]';
-/** A letter, digit or sign (not Space, which stays Confirm) with no Ctrl/Alt/Cmd starts a typed line. */
-const typeStarts = (e: KeyboardEvent): boolean => e.key.length === 1 && e.key !== ' ' && !e.ctrlKey && !e.metaKey && !e.altKey;
+/** A letter, digit or sign (not Space, which stays Confirm, and not Q, held for the command wheel, D26) with no
+ * Ctrl/Alt/Cmd starts a typed line. Inside the box every key types. */
+const typeStarts = (e: KeyboardEvent): boolean =>
+  e.key.length === 1 && e.key !== ' ' && e.code !== 'KeyQ' && !e.ctrlKey && !e.metaKey && !e.altKey;
 const ReplySchema = z.object({ reply: z.string().min(1).max(300) });
 
 export class SpyController {

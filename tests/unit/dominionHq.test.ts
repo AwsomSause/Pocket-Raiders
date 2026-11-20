@@ -1,6 +1,7 @@
 // DOMINION slice D5: the HQ (plans/evil-mode-rework BUILD_SLICES.md; Part 3 §3, Part 6 §3, Part 9 A21-A22;
 // lists/buildings.md and buildings-pokemon-and-grunt.md).
 import { describe, expect, it } from 'vitest';
+import { freshChair } from '../../src/core/dominion/chair';
 import { withCrew } from '../../src/core/dominion/crew';
 import { DOMINION_DATA } from '../../src/core/dominion/data';
 import { card } from '../../src/core/dominion/field';
@@ -19,10 +20,16 @@ import { content } from './helpers';
 
 const HQ = DOMINION_DATA.hq;
 const domRun = (seed = 'dm5'): RunState => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', rules: { ...STANDARD_CHOICE, modeId: DOMINION_MODE_ID } }), 0);
+/** D12: the Chair is switched off here, so these nights stay the same as before it. */
+const quiet = (r: RunState): RunState => {
+  const out = structuredClone(r);
+  out.expansion!.dominion!.chair = { ...freshChair(), opts: { length: 'off', numbers: 'arrows', speed: 'normal' } };
+  return out;
+};
 const started = (seed = 'dm5'): RunState => {
   const out = startInRun(content, domRun(seed), { types: ['poison', 'dark'], member: 'grunt', look: 0 });
   expect(out.problem).toBeNull();
-  return stepInRun(content, out.run, { t: 'open' }).run;
+  return quiet(stepInRun(content, out.run, { t: 'open' }).run);
 };
 const blk = (r: RunState): DominionBlock => r.expansion!.dominion!;
 const go = (r: RunState, a: DominionAction): RunState => {
@@ -82,8 +89,10 @@ describe('DOMINION D5: the lists as data', () => {
       else expect(Object.keys(b.fx).length, b.id).toBeGreaterThan(0);
     }
     // D5 opened 65; D9 (the rival team: intel, raid Defense, spy catching, truce discounts) opened 29 more.
-    expect(st.supported + st.limited).toBe(94);
-    expect(st.disabled).toBe(172);
+    // D10 (Growth: Operations Room, Front Office, Radio Room, Print Shop and the rest) opened 27 more; D13 opened 2 (the Debate Hall, the Briefing Theater); D4b (the rank
+    // and training rooms) 25 more: its 17, Type Dojo: Fire and the other seven Type Dojos.
+    expect(st.supported + st.limited).toBe(148);
+    expect(st.disabled).toBe(118);
   });
   it('the six HQ levels match Part 3 §3.1 and A21 (cost, level cap, crew cap, slots, Defense)', () => {
     expect(HQ.levels.map((l) => [l.name, l.cost, l.levelCap, l.crewCap, l.slots, l.defense])).toEqual([

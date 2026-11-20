@@ -1,0 +1,174 @@
+{
+  "_source": "DOMINION slice D24, police questioning: plans/claude-api/CLAUDE_API_DRAFT.md §5.3 E (Kice 2026-11-18: always some consequences, scaled by how low the meter went); mockups a8 (police room) + a9 (release on bail) in plans/claude-api/mockups/index.html #k8 #k9.",
+  "turns": 5,
+  "bands": { "free": 60, "bail": 30 },
+  "start": { "base": 52, "heatPer": 0.2, "charmPer": 2, "charmMid": 5 },
+  "caught": {
+    "stealthBase": 12,
+    "stealthHeatPer": 0.3,
+    "pickupAt": 60,
+    "pickupBase": 8,
+    "pickupPer": 0.6,
+    "pickupGapDays": 5,
+    "crew": true
+  },
+  "answers": {
+    "alibi": { "label": "Alibi", "base": 8, "say": "I was home all night. Ask anyone." },
+    "deny": { "label": "Deny", "base": 4, "say": "I don't know what you're talking about." },
+    "blame": { "label": "Blame {rival}", "base": 6, "say": "That's {rival}'s work. Not ours." },
+    "lawyer": { "label": "Lawyer up", "base": 0, "say": "I'm not saying another word without my lawyer.", "cost": 300 },
+    "bribe": { "label": "Bribe", "base": 0, "say": "Maybe this clears it up. (₽{cost} slides across the table)", "cost": 500, "win": 25, "lose": 20 },
+    "silent": { "label": "Stay silent", "base": -5, "say": "…" },
+    "typed": { "label": "Your words", "base": 4 }
+  },
+  "judge": { "quick": 1, "persuadePer": 4, "contradict": 22, "faceDown": 6, "inconsistent": 10, "repeat": 4, "noise": 3, "maxText": 140, "maxReply": 220 },
+  "typed": {
+    "keywords": {
+      "alibi": ["home", "sleep", "slept", "bed", "all night", "with my", "wasn't there", "was at", "elsewhere", "out of town", "watching tv", "at the mart"],
+      "deny": ["don't know", "no idea", "never", "not me", "nothing", "wasn't me", "no clue", "didn't do"],
+      "blame": ["rocket", "rival", "they did", "someone else", "framed", "set up", "another team", "copycat"]
+    },
+    "detail": ["sold", "every", "anyone", "proof", "receipt", "because", "camera", "jacket", "ticket", "witness", "check"]
+  },
+  "officers": [
+    {
+      "id": "rookie", "name": "Officer Pike", "kind": "Rookie", "sprite": "t-policeman", "mon": "growlithe", "minHeat": 0, "maxHeat": 39,
+      "start": 8, "persuade": 1.5, "hard": 0.8, "bribe": 45,
+      "sheet": "Officer Pike: a nervous rookie on his third week. Wants to impress the sergeant, easily talked round, apologises a lot, mixes up his notes.",
+      "lines": {
+        "open": "Um. Right. So. You know why you're here, yeah? Something happened in {district}.",
+        "good": "Oh. Okay, that… actually makes sense. I'll write that down.",
+        "bad": "Hmm. I don't think the sergeant's going to buy that.",
+        "contradict": "Wait, wait. That's not what our {evidence} says.",
+        "flip": "Oh! I forgot to show you this. We have {evidence}.",
+        "inconsistent": "Hang on, a minute ago you said something different?",
+        "repeat": "You, um, said that already.",
+        "bribeYes": "I… didn't see anything. Nobody saw anything.",
+        "bribeNo": "Is that… a bribe? I have to write that down too.",
+        "lawyer": "Oh. Right. Your lawyer. Okay, we're done, I think.",
+        "silent": "Not talking? That's… fine. I can wait. I think.",
+        "free": "You can go. Sorry about all this.",
+        "bail": "Bail's set. Please don't leave town, it makes paperwork.",
+        "held": "The sergeant says you're staying the night. Sorry.",
+        "parting": "Officer Pike: “Please don't make me arrest you again. It's a lot of forms.”"
+      }
+    },
+    {
+      "id": "jenny", "name": "Officer Jenny", "kind": "By the book", "sprite": "t-policeman", "mon": "growlithe", "minHeat": 0, "maxHeat": 100,
+      "start": 0, "persuade": 1, "hard": 1, "bribe": 0,
+      "sheet": "Officer Jenny: sharp, fair and by the book. Has seen every excuse in Kanto. Polite but never fooled twice; a bribe offends her.",
+      "lines": {
+        "open": "Sit down. We picked you up in {district}. Let's hear your side.",
+        "good": "Noted. That checks out, for now.",
+        "bad": "That's thin, and you know it.",
+        "contradict": "Funny. Our {evidence} says otherwise.",
+        "flip": "Then explain this: {evidence}.",
+        "inconsistent": "That isn't what you told me five minutes ago.",
+        "repeat": "You've said that. Try something new.",
+        "bribeYes": "…Put that away.",
+        "bribeNo": "A bribe? That goes in my report, word for word.",
+        "lawyer": "Fine. Your lawyer can talk to the judge.",
+        "silent": "Silence is an answer too. Not a good one.",
+        "free": "You're free to go. Don't make me regret it.",
+        "bail": "Bail's posted. Stay where we can find you.",
+        "held": "You're staying with us tonight.",
+        "parting": "Officer Jenny: “I'll be watching {district}. Don't give me a reason.”"
+      }
+    },
+    {
+      "id": "dalton", "name": "Officer Dalton", "kind": "Tough detective", "sprite": "t-off2", "mon": "growlithe", "minHeat": 50, "maxHeat": 100,
+      "start": -6, "persuade": 0.6, "hard": 1.4, "bribe": 10,
+      "sheet": "Officer Dalton: a tired, tough detective who has chased crews like yours for twenty years. Dry, patient, lets silences hang, loves catching a lie on camera.",
+      "lines": {
+        "open": "Long night in {district}. Yours or mine, we'll see. Start talking.",
+        "good": "Hm. Maybe. I've heard worse.",
+        "bad": "I've heard better lies from Magikarp.",
+        "contradict": "Then explain our {evidence}.",
+        "flip": "Here's one you didn't know we had: {evidence}.",
+        "inconsistent": "Your story just changed. They always do.",
+        "repeat": "Saying it twice doesn't make it true.",
+        "bribeYes": "…I'll pretend I didn't see that. Once.",
+        "bribeNo": "Bribing a detective. Add it to the pile.",
+        "lawyer": "Lawyer. Sure. We'll talk again, you and me.",
+        "silent": "Take your time. I've got all night.",
+        "free": "Walk. For now.",
+        "bail": "Bail's paid. Don't leave the region.",
+        "held": "You're not going anywhere tonight.",
+        "parting": "Officer Dalton: “Don't leave {district}. We'll be watching that place of yours.”"
+      }
+    }
+  ],
+  "evidence": {
+    "keep": 12,
+    "maxAge": 14,
+    "perCase": 4,
+    "faceDownFrom": 3,
+    "actChance": 20,
+    "heatPer": 3,
+    "kinds": {
+      "cctv": { "label": "CCTV", "contradicts": ["alibi", "blame"], "text": "{place} · {time}" },
+      "witness": { "label": "Witness", "contradicts": ["alibi"], "text": "“A {mon} ran out of {place}.”" },
+      "statement": { "label": "Statement", "contradicts": ["deny", "blame"], "text": "{who}: “ask the Boss.”" },
+      "report": { "label": "Report", "contradicts": ["alibi", "deny"], "text": "{officer} saw the Boss run from {district}." },
+      "ledger": { "label": "Ledger", "contradicts": ["deny"], "text": "Weekly cash from {place}." }
+    }
+  },
+  "release": {
+    "weightPer": 25,
+    "maxWeight": 4,
+    "heldAdds": 1,
+    "morale": 4,
+    "trust": 3,
+    "seizePct": 8,
+    "seizeMin": 200,
+    "bail": 400,
+    "floorBase": 5,
+    "floorPer": 10,
+    "floorDays": 7,
+    "watchDays": 7,
+    "watchHeat": 20,
+    "monExtra": 1,
+    "informantHeat": 3,
+    "min": { "seized": 2, "floor": 2, "watched": 1, "mon": 2, "informant": 2, "raid": 2, "trust": 3, "leave": 4 }
+  },
+  "lines": {
+    "seenBoss": "“The Boss ran out of {place}.”",
+    "caughtStealth": "Spotted! The police grab the Boss outside {place}. Questioning at the {district} station.",
+    "caughtFight": "The police take the Boss in. Questioning at the {district} station.",
+    "caughtRaid": "The raid ends with the Boss in cuffs. Questioning at the station.",
+    "pickup": "Heat {heat}%: the police pick the Boss up at dawn. Questioning at the {district} station.",
+    "crew": "{name} is questioned at the {district} station.",
+    "busy": "The police are questioning you. Answer first.",
+    "noQ": "Nobody is being questioned.",
+    "noMoney": "Not enough money (₽{cost}).",
+    "cell": "Day {day} was spent in a cell.",
+    "cellHeld": "Days {day} and {next} were spent in a cell.",
+    "cellMember": "{name} spent the night in a cell.",
+    "out": "{outcome}: belief ended at {belief}. Weight ×{w}.",
+    "rotomOff": "Checked by the rules · {n} facts",
+    "rotomOn": "✦ Rotom · checked vs {n} known facts",
+    "monBack": "The police gave {mon} back.",
+    "roomBack": "The police tape is off the {room}.",
+    "informantGone": "{name} is gone, and so is the police's ear in the crew.",
+    "informantNight": "{name} talked to the police again. Heat +{n}.",
+    "tags": {
+      "morale": "MORALE", "trust": "LOYALTY", "informant": "INFORMANT", "leave": "QUIT", "mon": "EVIDENCE",
+      "raid": "RAID", "seized": "SEIZED", "bail": "BAIL", "floor": "HEAT", "watched": "WATCHED", "jail": "CELL", "lawyer": "LAWYER"
+    },
+    "say": {
+      "morale": "−{n} for everyone",
+      "trust": "−{n} Loyalty for everyone",
+      "informant": "{name} now talks to the police",
+      "leave": "{name} walked out on the crew",
+      "mon": "{mon} held for {n} Days",
+      "raid": "{room} closed for {n} Days",
+      "seized": "₽{n}",
+      "bail": "₽{n} paid",
+      "floor": "Can't drop below {n}% now",
+      "watched": "{district} site",
+      "jail": "{name} stays in a cell for {n} Days",
+      "lawyer": "₽{n} on the lawyer"
+    },
+    "outcomes": { "free": "Released", "bail": "On bail", "held": "Held" }
+  }
+}

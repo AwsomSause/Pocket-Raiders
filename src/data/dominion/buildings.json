@@ -327,9 +327,13 @@
     "Palace Wing"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "seats": {
+     "admin": 1
+    }
+   },
+   "waits": null
   },
   {
    "n": "11",
@@ -554,7 +558,7 @@
     "unlock": true
    },
    "waits": null,
-   "note": "Stat classes come with ranks (D4)."
+   "note": "Stat classes come with ranks (later)."
   },
   {
    "n": "18",
@@ -707,9 +711,11 @@
     "Grand Academy"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "promoTrait": 1
+   },
+   "waits": null
   },
   {
    "n": "23",
@@ -738,9 +744,11 @@
     "Champion's Ring"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "spar": 1
+   },
+   "waits": null
   },
   {
    "n": "24",
@@ -898,9 +906,11 @@
     "Ghost Academy"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "sneak": 4
+   },
+   "waits": null
   },
   {
    "n": "29",
@@ -929,9 +939,12 @@
     "Hall of Voices"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D13",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "debateFloor": 5
+   },
+   "waits": null,
+   "note": "The first argument of each Debate moves the bar at least +5; the rhetoric die is the bar itself."
   },
   {
    "n": "30",
@@ -960,9 +973,11 @@
     "Dark Academy"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "rankLv": 2
+   },
+   "waits": null
   },
   {
    "n": "31",
@@ -1185,7 +1200,7 @@
    ],
    "minTier": 0,
    "status": "disabled",
-   "waits": "D10",
+   "waits": "later",
    "fx": {}
   },
   {
@@ -1308,9 +1323,11 @@
     "Mind Palace"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "cure": 1
+   },
+   "waits": null
   },
   {
    "n": "42",
@@ -1436,9 +1453,11 @@
     "Hall of Veterans"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "retirees": 1
+   },
+   "waits": null
   },
   {
    "n": "46",
@@ -1500,12 +1519,11 @@
     "Zoo"
    ],
    "minTier": 0,
-   "status": "limited",
+   "status": "supported",
    "fx": {
     "unlock": true
    },
-   "waits": null,
-   "note": "Cooling off stolen Pokémon comes with the Reserve (D4)."
+   "waits": null
   },
   {
    "n": "48",
@@ -1629,9 +1647,12 @@
     "Phantom Room"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "treasury": 2000
+   },
+   "waits": null,
+   "note": "Hidden goods count as money kept safe in a raid."
   },
   {
    "n": "52",
@@ -1724,9 +1745,12 @@
     "Abyss"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "storage": 10
+   },
+   "waits": null,
+   "note": "Sea scouting is later; it holds 10 more Pokémon."
   },
   {
    "n": "55",
@@ -1886,7 +1910,7 @@
    ],
    "minTier": 0,
    "status": "disabled",
-   "waits": "D10",
+   "waits": "later",
    "fx": {}
   },
   {
@@ -1947,13 +1971,12 @@
     "Supreme War Room"
    ],
    "minTier": 1,
-   "status": "limited",
+   "status": "supported",
    "fx": {
     "dayActions": 1,
     "unlock": true
    },
-   "waits": null,
-   "note": "Raid itself is D10."
+   "waits": null
   },
   {
    "n": "62",
@@ -1982,12 +2005,11 @@
     "Voice of the Boss"
    ],
    "minTier": 1,
-   "status": "limited",
+   "status": "supported",
    "fx": {
     "unlock": true
    },
-   "waits": null,
-   "note": "Spread the Word is D10."
+   "waits": null
   },
   {
    "n": "63",
@@ -2113,7 +2135,7 @@
    ],
    "minTier": 1,
    "status": "disabled",
-   "waits": "D10",
+   "waits": "D23",
    "fx": {}
   },
   {
@@ -2276,9 +2298,11 @@
     "Master Forger"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "papers": 1
+   },
+   "waits": null
   },
   {
    "n": "72",
@@ -2435,13 +2459,12 @@
     "Executive Floor"
    ],
    "minTier": 1,
-   "status": "limited",
+   "status": "supported",
    "fx": {
     "launder": 5,
     "unlock": true
    },
-   "waits": null,
-   "note": "Buy Out and Bribe are D10."
+   "waits": null
   },
   {
    "n": "77",
@@ -2534,9 +2557,12 @@
     "Banking House"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "weekly": 100
+   },
+   "waits": null,
+   "note": "Interest from locals as a weekly ₽100."
   },
   {
    "n": "80",
@@ -2565,9 +2591,12 @@
     "Grand Bazaar"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "contact": 1,
+    "fence": 5
+   },
+   "waits": null
   },
   {
    "n": "81",
@@ -2596,9 +2625,11 @@
     "Underworld Mall"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "contact": 1
+   },
+   "waits": null
   },
   {
    "n": "82",
@@ -2693,9 +2724,11 @@
     "Sea Gate"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "routes": 1
+   },
+   "waits": null
   },
   {
    "n": "85",
@@ -2724,9 +2757,12 @@
     "Sotheby's of Shadow"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "fence": 10
+   },
+   "waits": null,
+   "note": "Auctions sell through the Fence (+10%)."
   },
   {
    "n": "86",
@@ -2819,9 +2855,12 @@
     "Dragon Vault"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "treasury": 20000,
+    "interest": 1
+   },
+   "waits": null
   },
   {
    "n": "89",
@@ -2881,9 +2920,11 @@
     "Golden Exchange"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "interest": 1
+   },
+   "waits": null
   },
   {
    "n": "91",
@@ -2912,12 +2953,11 @@
     "Machine Hall"
    ],
    "minTier": 1,
-   "status": "limited",
+   "status": "supported",
    "fx": {
     "unlock": true
    },
-   "waits": null,
-   "note": "Gadgets are D10."
+   "waits": null
   },
   {
    "n": "92",
@@ -2946,12 +2986,11 @@
     "Grand Garage"
    ],
    "minTier": 1,
-   "status": "limited",
+   "status": "supported",
    "fx": {
     "unlock": true
    },
-   "waits": null,
-   "note": "Smuggle is D10."
+   "waits": null
   },
   {
    "n": "93",
@@ -2980,12 +3019,11 @@
     "Great Press"
    ],
    "minTier": 1,
-   "status": "limited",
+   "status": "supported",
    "fx": {
     "unlock": true
    },
-   "waits": null,
-   "note": "Flyers are D10."
+   "waits": null
   },
   {
    "n": "94",
@@ -3019,7 +3057,7 @@
     "unlock": true
    },
    "waits": null,
-   "note": "Hit a Lab and breeding are D10."
+   "note": "Breeding is the Breed action (D4b, in the Pens); Hit a Lab and Hack the Terminal are open."
   },
   {
    "n": "95",
@@ -3173,7 +3211,7 @@
    ],
    "minTier": 1,
    "status": "disabled",
-   "waits": "D10",
+   "waits": "later",
    "fx": {}
   },
   {
@@ -3687,9 +3725,12 @@
     "Dome of Judgement"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "trainXp": 1
+   },
+   "waits": null,
+   "note": "Battles on your terms are later; crew training +1 XP."
   },
   {
    "n": "116",
@@ -3851,9 +3892,12 @@
     "Command Core"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "raidDef": 2
+   },
+   "waits": null,
+   "note": "Counts as raid Defense."
   },
   {
    "n": "121",
@@ -4009,9 +4053,11 @@
     "Call to Arms"
    ],
    "minTier": 2,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "flyerPct": 10
+   },
+   "waits": null
   },
   {
    "n": "126",
@@ -4071,9 +4117,12 @@
     "Grand Theater"
    ],
    "minTier": 2,
-   "status": "disabled",
-   "waits": "D13",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "debateSee": 1
+   },
+   "waits": null,
+   "note": "Every set line's five marks show before you pick it; crew talks are D3's."
   },
   {
    "n": "128",
@@ -4197,10 +4246,11 @@
    "minTier": 2,
    "status": "limited",
    "fx": {
-    "truceOff": 10
+    "truceOff": 10,
+    "debate": 5
    },
    "waits": null,
-   "note": "Hosting a Boss in person waits for D13; tribute is cheaper now."
+   "note": "Hosting a Boss: +5 Conviction when a Debate starts; tribute is cheaper."
   },
   {
    "n": "132",
@@ -4557,7 +4607,7 @@
    ],
    "minTier": 0,
    "status": "disabled",
-   "waits": "D10",
+   "waits": "later",
    "fx": {}
   },
   {
@@ -4587,9 +4637,11 @@
     "Maritime Hub"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "routes": 1
+   },
+   "waits": null
   },
   {
    "n": "144",
@@ -4682,9 +4734,12 @@
     "Eye of the Sea"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "control": 5
+   },
+   "waits": null,
+   "note": "Sea control as Control in its district."
   },
   {
    "n": "147",
@@ -4744,9 +4799,12 @@
     "Underground City"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "heatWeek": 5
+   },
+   "waits": null,
+   "note": "Moving unseen: Heat −5 a week."
   },
   {
    "n": "149",
@@ -4775,9 +4833,12 @@
     "Palace"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "control": 10
+   },
+   "waits": null,
+   "note": "A local seat: Control +10 (badge power is later)."
   },
   {
    "n": "150",
@@ -4871,7 +4932,7 @@
    ],
    "minTier": 1,
    "status": "disabled",
-   "waits": "D10",
+   "waits": "later",
    "fx": {}
   },
   {
@@ -4998,9 +5059,11 @@
     "Healing Hall"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "trustCure": 1
+   },
+   "waits": null
   },
   {
    "n": "P7",
@@ -5162,9 +5225,13 @@
     "Sun Temple"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "fire": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P12",
@@ -5194,9 +5261,13 @@
     "Moon Temple"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "later",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "water": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P13",
@@ -5226,9 +5297,13 @@
     "World Tree Hall"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "later",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "grass": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P14",
@@ -5258,9 +5333,13 @@
     "Lightning Temple"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "later",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "electric": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P15",
@@ -5290,9 +5369,14 @@
     "Twilight Temple"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "later",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "psychic": 4,
+     "dark": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P16",
@@ -5322,9 +5406,14 @@
     "Titan Temple"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "later",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "fighting": 4,
+     "rock": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P17",
@@ -5354,9 +5443,14 @@
     "Phantom Temple"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "later",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "ghost": 4,
+     "poison": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P18",
@@ -5386,9 +5480,14 @@
     "Dragon Temple"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "later",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "steel": 4,
+     "dragon": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P19",
@@ -6026,9 +6125,11 @@
     "Sea Palace"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "routes": 1
+   },
+   "waits": null
   },
   {
    "n": "P39",
@@ -6412,9 +6513,11 @@
     "Gym Empire"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "weekly": 150
+   },
+   "waits": null
   },
   {
    "n": "G1",
@@ -6476,9 +6579,11 @@
     "Imperial Academy"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "gruntSkill": 1
+   },
+   "waits": null
   },
   {
    "n": "G3",
@@ -6572,9 +6677,11 @@
     "Master Hall"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "taskXp": 1
+   },
+   "waits": null
   },
   {
    "n": "G6",
@@ -6670,9 +6777,11 @@
     "Hall of Veterans"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "vets": 1
+   },
+   "waits": null
   },
   {
    "n": "G9",
@@ -6702,9 +6811,11 @@
     "Grand Exam"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "examStat": 1
+   },
+   "waits": null
   },
   {
    "n": "G10",
@@ -6734,9 +6845,11 @@
     "Mind Mirror"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "reveal": 1
+   },
+   "waits": null
   },
   {
    "n": "G11",
@@ -6800,9 +6913,11 @@
     "Hall"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "pairs": 1
+   },
+   "waits": null
   },
   {
    "n": "G13",
@@ -6866,9 +6981,11 @@
     "Hall"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "morale": 3
+   },
+   "waits": null
   },
   {
    "n": "G15",
@@ -7460,9 +7577,12 @@
     "Wing"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "heatWeek": 3
+   },
+   "waits": null,
+   "note": "Escape speed as Heat −3 a week."
   },
   {
    "n": "G33",
@@ -7558,9 +7678,12 @@
     "Council"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "income": 60
+   },
+   "waits": null,
+   "note": "Small plots as ₽60 a day."
   },
   {
    "n": "G36",
@@ -7590,9 +7713,11 @@
     "Court"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "weekly": 120
+   },
+   "waits": null
   },
   {
    "n": "G37",
@@ -7622,9 +7747,13 @@
     "Chamber"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "seats": {
+     "sergeant": 1
+    }
+   },
+   "waits": null
   },
   {
    "n": "G38",
@@ -7654,9 +7783,13 @@
     "Court"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "seats": {
+     "lieutenant": 1
+    }
+   },
+   "waits": null
   },
   {
    "n": "G39",
@@ -7686,9 +7819,13 @@
     "Throne"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "seats": {
+     "captain": 1
+    }
+   },
+   "waits": null
   },
   {
    "n": "G40",
@@ -7785,9 +7922,12 @@
     "Shadow Division"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "nightActions": 1
+   },
+   "waits": null,
+   "note": "Special missions as one more Night action."
   },
   {
    "n": "G43",
@@ -8154,7 +8294,7 @@
     "intel": 1
    },
    "waits": null,
-   "note": "Taxi fares come with D10; the drivers bring Intel now."
+   "note": "Taxi fares are later; the drivers bring Intel now."
   },
   {
    "n": "G54",
@@ -8184,9 +8324,12 @@
     "Empire"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "clean": 100,
+    "control": 5
+   },
+   "waits": null
   },
   {
    "n": "G55",
@@ -8316,9 +8459,11 @@
     "Empire"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "clean": 80
+   },
+   "waits": null
   },
   {
    "n": "G59",
@@ -8383,9 +8528,11 @@
     "Empire"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D10",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "control": 10
+   },
+   "waits": null
   },
   {
    "listName": "Pokémon Storage",
@@ -8484,10 +8631,11 @@
    "minTier": 0,
    "status": "limited",
    "fx": {
-    "restBonus": 1
+    "restBonus": 1,
+    "debate": 5
    },
    "waits": null,
-   "note": "Debate +10% is D13; Executives' Morale waits for ranks (D4)."
+   "note": "Debates start at +5 Conviction (the +10% meeting bonus); Executives' Morale waits for ranks (D4)."
   },
   {
    "listName": "Night Shift",

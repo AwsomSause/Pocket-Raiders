@@ -87,6 +87,11 @@ test('Confront a suspected member: Suspicion, questions, a typed line, the tell,
   await expect(input).toBeFocused();
   await page.keyboard.press('Escape');
   await expect(input).not.toBeFocused();
+  // Q is held for the command wheel (D26): it never starts a line.
+  await page.keyboard.press('KeyQ');
+  await expect(input).not.toBeFocused();
+  await expect(input).toHaveValue('');
+  await expect(s.getByText('Wheel')).toBeVisible();
   await page.keyboard.press('KeyW');
   await expect(input).toHaveValue('w');
   await expect(s.getByTestId('dom-spy-title')).toBeVisible();

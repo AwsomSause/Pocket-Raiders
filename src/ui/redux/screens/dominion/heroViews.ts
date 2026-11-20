@@ -9,7 +9,7 @@ import type { HeroModel, InterruptModel } from '../../../../core/dominion/heroSc
 import { act, esc, mini, tall } from '../../kit';
 import { rxUrl } from '../../assets';
 import { skylineUrl } from './paint';
-import { stage } from './views';
+import { stage, WHEEL_KEY } from './views';
 
 const img = (f: string): string => rxUrl(`dominion/${f}.png`);
 
@@ -68,7 +68,7 @@ export function heroView(m: HeroModel, files: MonFiles, notice: string | null): 
   <div class="layer" style="background:url(${skylineUrl()}) bottom/100% auto no-repeat;opacity:.75"></div>
   <div class="layer" style="background:linear-gradient(180deg,transparent 40%,rgba(6,8,22,.85))"></div>
   <div class="ttl" style="--t1:#3a2a8a;--t2:#7b3fa0" data-testid="dom-hero">The Hero <span class="sub">· ${esc(m.region)}</span></div>
-  <div class="keys"><span class="key"${act('back')}>H</span><span>close</span><span class="key">1-3</span><span>answer</span><span class="key">F</span><span>fight</span><span class="key">${esc(m.top.phaseWord)}</span><span>${esc(m.top.day.replace('DAY ', 'Day '))}</span></div>
+  <div class="keys">${WHEEL_KEY}<span class="key"${act('back')}>H</span><span>close</span><span class="key">1-3</span><span>answer</span><span class="key">F</span><span>fight</span><span class="key">${esc(m.top.phaseWord)}</span><span>${esc(m.top.day.replace('DAY ', 'Day '))}</span></div>
   ${cards}
   ${meet}
   ${cta}

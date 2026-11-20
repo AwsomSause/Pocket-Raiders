@@ -6,7 +6,7 @@ import { addLevels } from '../pokemon';
 import { healParty, newMon } from '../run';
 import type { RunState } from '../state';
 import { step, type StepOut } from './clock';
-import { addMorale, withCrew } from './crew';
+import { addMorale, freshCrewState, withCrew } from './crew';
 import { ask as deskAsk, inspect as deskInspect, rollQueue, stamp as deskStamp } from './desk';
 import { fillCards } from './personality';
 import { admit, approach, hire } from './recruit';
@@ -18,6 +18,7 @@ import { fill } from './worldTurn';
 import { DominionBlockSchema, type DominionAction, type DominionBlock, type DominionSetup } from './schema';
 import { newBlock, typesProblem } from './start';
 import { afterStep, lineFor, weekSum } from './empire';
+import { courtFightEnd } from './chair';
 import { found, foundingOpen } from './founding';
 import { afterStand, answerMeet, ensureHero, heroMember, heroTeam, startLegend } from './hero';
 import { escapeHero } from './field';
@@ -26,8 +27,13 @@ import { autoFill, book, placeMon, reserveInRun, seedStart, withReserve } from '
 import { build, letGo, loan, rebuild, repay, sell, storageCap, tierUp, upgrade, launder, type HqOut } from './hq';
 import { withHq } from './hqFx';
 import { levelCap } from '../regions';
+import { hatchEggs, settleDojo, settleLesson } from './school';
+import './voices';
 import { answerCard, breakTruce, maybeStreet, noteTop, ransom, startTruce, withRivals, type RivalOut } from './rivals';
 import { accuse, askSpy, dropTalk, startConfront, type SpyOut } from './spies';
+import { argue, chooseDeal, closeDebate, walkOut, type DebateOut } from './debate';
+import { answerQ, noteAct, releasedSeen, releaseQ, returnHeld } from './police';
+import './growth';
 
 export const DOMINION_MODE_ID = 'dominion';
 export const isDominionRun = (run: RunState | null | undefined): boolean => run?.rules.modeId === DOMINION_MODE_ID;
@@ -89,6 +95,9 @@ export function stepInRun(content: Content, run0: RunState, action: DominionActi
     b.flags = b.flags.filter((f) => f !== 'ambushed');
     for (const m of next.party) m.hp = Math.max(1, Math.round(m.hp * 0.75));
   }
+  // D24: Pokémon the police held as evidence come back on their day.
+  const back = returnHeld(content, next);
+  if (back.length) b.report = [...b.report, ...back];
   // D21: the Day's applicants queue at the desk the first time the Day is seen (their own stream, so nothing else moves).
   rollQueue(content, b, run.seed);
   // D19: anyone new gets their personality card.
@@ -114,6 +123,9 @@ function visitOf(a: DominionAction): string | null {
 function stepInner(content: Content, run: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean } {
   const block = run.expansion?.dominion;
   if (!block) return { ok: false, block: block as never, notice: null, heal: false, run };
+  // D24: while the police question someone, only answers go through.
+  const polOut = policeInRun(content, run, action);
+  if (polOut) return polOut;
   if (action.t === 'found') {
     const out = found(block, action.team);
     return { ok: out.ok, block: out.block, notice: out.notice, heal: false, run: out.ok ? withBlock(run, DominionBlockSchema.parse(out.block)) : run };
@@ -130,6 +142,8 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
   if (hqOut) return hqOut;
   const rivalOut = rivalInRun(run, action);
   if (rivalOut) return rivalOut;
+  const debateOut = debateInRun(content, run, action);
+  if (debateOut) return debateOut;
   const heroOut = heroInRun(content, run, action);
   if (heroOut) return heroOut;
   const deskOut = deskInRun(content, run, action);
@@ -137,8 +151,11 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
   if (action.t === 'act') {
     // D2: a Boss action (field.ts). A Pokémon lifted in a Ball (Thieve, a big success) joins the team or the box.
     const work = structuredClone(run);
+    const heatWas = block.field.districts[action.district]?.heat ?? 0;
     const out = act(content, work, action);
     if (!out.ok) return { ok: false, block, notice: out.notice, heal: false, run };
+    // D24: someone may have seen it (the police's evidence log).
+    noteAct(out.block, run.seed, action.district, action.target, (out.block.field.districts[action.district]?.heat ?? 0) - heatWas, run.party[0]?.speciesId ?? null);
     if (out.mon && out.mon.trust !== undefined) {
       // D4: a rescued or tamed Pokémon joins the Reserve, not the Boss's team.
       const line = placeMon(content, work, withReserve(content, out.block), { species: out.mon.species, level: out.mon.level, src: 'rescued', trust: out.mon.trust });
@@ -155,7 +172,8 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
       blk = met.block;
       if (met.line) notice = [notice, met.line].filter(Boolean).join(' ');
     }
-    const next = withBlock(work, DominionBlockSchema.parse(blk));
+    // D10: Pokémon an action took (Kidnap, a lab's rare one, the Swap Meet) wait in the crew's pending list: place them now.
+    const next = settleCrew(content, withBlock(work, DominionBlockSchema.parse(blk)));
     return { ok: true, block: next.expansion!.dominion!, notice, heal: false, run: next, fight: out.fight };
   }
   if (action.t === 'buy') {
@@ -170,7 +188,42 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
     healParty(content, next);
   }
   next = settleCrew(content, next);
+  next = settleChair(content, next);
   return { ...out, block: next.expansion!.dominion!, run: next };
+}
+
+/** D13: a turn at the Leader's Table, the deal a Convinced Boss makes, walking out, and reading the result (debate.ts). */
+function debateInRun(content: Content, run: RunState, action: DominionAction): (StepOut & { run: RunState }) | null {
+  let out: DebateOut;
+  switch (action.t) {
+    case 'argue': out = argue(content, run, action.line); break;
+    case 'deal': out = chooseDeal(content, run, action.kind); break;
+    case 'walkOut': out = walkOut(run); break;
+    case 'debateDone': out = closeDebate(run); break;
+    default: return null;
+  }
+  const b = run.expansion!.dominion!;
+  if (!out.ok) return { ok: false, block: b, notice: out.notice, heal: false, run };
+  const block = DominionBlockSchema.parse(out.run.expansion!.dominion!);
+  return { ok: true, block, notice: out.notice, heal: false, run: withBlock(out.run, block) };
+}
+
+/** D24: answers in the interview room, and the release page read (police.ts). Null for any other action with no case open. */
+function policeInRun(content: Content, run: RunState, action: DominionAction): (StepOut & { run: RunState; fight?: boolean }) | null {
+  const block = run.expansion!.dominion!;
+  const no = (notice: string | null) => ({ ok: false, block, notice, heal: false, run });
+  if (action.t === 'released') {
+    const b = releasedSeen(block);
+    return b ? { ok: true, block: b, notice: null, heal: false, run: withBlock(run, DominionBlockSchema.parse(b)) } : no(null);
+  }
+  // The Boss in the interview room holds the clock; a member's questioning waits on its screen without stopping the day.
+  if (action.t !== 'answer') return block.police?.q?.who === 'boss' ? no(DOMINION_DATA.police.lines.busy) : null;
+  const out = answerQ(block, action, run.seed);
+  if (!out.ok) return no(out.notice);
+  const next = withBlock(structuredClone(run), out.block);
+  if (out.over) releaseQ(content, next, run.seed);
+  const b = DominionBlockSchema.parse(next.expansion!.dominion!);
+  return { ok: true, block: b, notice: null, heal: false, run: withBlock(next, b) };
 }
 
 /** D9: the Rival File's answers (rivals.ts). A fight answered leaves `field.fight` for the scene to start. */
@@ -376,6 +429,9 @@ export function settleCrew(content: Content, run: RunState): RunState {
   const out = structuredClone(run);
   const b = withReserve(content, out.expansion!.dominion!);
   const st = b.crew;
+  // D4b: eggs due this morning hatch into the Reserve.
+  const hatched = hatchEggs(content, out, b);
+  if (hatched.length) b.report = [...b.report, ...hatched];
   if (!st?.pending.length) {
     if (book(b).auto) autoFill(b);
     return out;
@@ -389,7 +445,9 @@ export function settleCrew(content: Content, run: RunState): RunState {
       // A member's Pokémon, or (Nurturer) one in the Reserve.
       const mon = b.members.find((m) => m.id === p.member)?.team.find((x) => x.uid === p.uid) ?? b.reserve?.box.find((x) => x.uid === p.uid);
       if (mon && p.level > mon.level) addLevels(content, mon, p.level - mon.level, p.level);
-    } else out.inventory[p.id] = (out.inventory[p.id] ?? 0) + p.n;
+    } else if (p.k === 'move') lines.push(...settleLesson(content, b, p));
+    else if (p.k === 'dojo') lines.push(...settleDojo(content, out, b, p));
+    else out.inventory[p.id] = (out.inventory[p.id] ?? 0) + p.n;
   }
   st.pending = [];
   if (lines.length) b.report = [...b.report, ...lines];
@@ -401,6 +459,36 @@ export function settleCrew(content: Content, run: RunState): RunState {
     st.stores = st.stores.slice(0, cap);
     b.report = [...b.report, DOMINION_DATA.hq.lines.storageFull!.replace('{cap}', String(cap)).replace('{n}', String(n))];
   }
+  return out;
+}
+
+/** D12: what a Chair answer gave that needs the run: Pokémon (Stores or a member's team), Bag and held items, levels. */
+export function settleChair(content: Content, run: RunState): RunState {
+  const give = run.expansion?.dominion?.chair?.give;
+  if (!give?.length) return run;
+  const out = structuredClone(run);
+  const b = out.expansion!.dominion!;
+  const st = (b.crew ??= freshCrewState());
+  for (const g of b.chair!.give) {
+    if (g.k === 'mon') {
+      if (!content.species.has(g.species)) continue;
+      const mon = newMon(content, out, g.species, g.level, 'p');
+      const m = b.members.find((x) => x.id === g.member);
+      if (m && m.team.length < 6) m.team.push(mon);
+      else st.stores.push(mon);
+    } else if (g.k === 'levels') {
+      for (const m of b.members) for (const mon of m.team) {
+        const to = Math.min(b.levelCap, mon.level + g.n);
+        if (to > mon.level) addLevels(content, mon, to - mon.level, to);
+      }
+    } else if (g.id === '*') {
+      // A Bag item lost (the Vault): one of the most plentiful.
+      const id = Object.keys(out.inventory).filter((k) => (out.inventory[k] ?? 0) > 0).sort((x, y) => (out.inventory[y] ?? 0) - (out.inventory[x] ?? 0) || x.localeCompare(y))[0];
+      if (id) out.inventory[id] = Math.max(0, (out.inventory[id] ?? 0) + g.n);
+    } else if (g.held) out.looseHeld = { ...(out.looseHeld ?? {}), [g.id]: (out.looseHeld?.[g.id] ?? 0) + g.n };
+    else out.inventory[g.id] = (out.inventory[g.id] ?? 0) + g.n;
+  }
+  b.chair!.give = [];
   return out;
 }
 
@@ -420,6 +508,7 @@ export function settleStaleFight(content: Content, run: RunState): { run: RunSta
   const b = structuredClone(block);
   const funds = b.funds, sum = weekSum(b), why = block.field.fight.why;
   const lines = settle(content, b, out, 'fled', null);
+  if (why === 'court') lines.push(...courtFightEnd(b, 'fled', run.seed));
   lines.push(...afterStep(b, funds, sum, DOMINION_DATA.empire.ledger.byFight[why] ?? 'jobs', null));
   return { run: withBlock(out, DominionBlockSchema.parse(b)), lines };
 }

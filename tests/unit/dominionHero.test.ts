@@ -2,6 +2,7 @@
 // stages, the m11 interrupt (battle / run / Smoke Ball), encounter cards (O166-O185), the Legendaries, adapting, the
 // hidden Disillusion, the final stand and recruiting the Hero, the five Hero actions and their gates, saves.
 import { describe, expect, it } from 'vitest';
+import { freshChair } from '../../src/core/dominion/chair';
 import { withCrew } from '../../src/core/dominion/crew';
 import { DOMINION_DATA } from '../../src/core/dominion/data';
 import { actionDef, actionStatus, card } from '../../src/core/dominion/field';
@@ -24,8 +25,14 @@ const domRun = (seed = 'dh', trainer = 'red'): RunState => chooseStarter(content
 const started = (seed = 'dh', trainer = 'red'): RunState => {
   const out = startInRun(content, domRun(seed, trainer), { types: ['poison', 'dark'], member: 'grunt', look: 0 });
   expect(out.problem).toBeNull();
-  return out.run;
+  return quiet(out.run);
 };
+/** D12: the Chair is switched off here, so these nights stay the same as before it. */
+function quiet(r: RunState): RunState {
+  const out = structuredClone(r);
+  out.expansion!.dominion!.chair = { ...freshChair(), opts: { length: 'off', numbers: 'arrows', speed: 'normal' } };
+  return out;
+}
 const blk = (r: RunState): DominionBlock => r.expansion!.dominion!;
 const go = (r: RunState, a: DominionAction): RunState => {
   const out = stepInRun(content, r, a);
@@ -36,8 +43,16 @@ const answerAll = (r: RunState): RunState => {
   while (blk(r).crew?.talks.length) r = go(r, { t: 'talk', choice: 0 });
   return r;
 };
+/** D12: a Crisis visitor still comes with the Chair Off (a town in the red); answer it, then the Night starts. */
+const sit = (r: RunState): RunState => {
+  for (let guard = 0; blk(r).chair?.open && guard < 20; guard++) {
+    const at = blk(r).chair!;
+    r = at.at >= at.docket.length ? go(r, { t: 'toNight' }) : at.result ? go(r, { t: 'courtNext' }) : go(r, { t: 'court', choice: 0 });
+  }
+  return r;
+};
 /** Evening -> Night -> Morning (the World Turn ran). */
-const night = (r: RunState): RunState => answerAll(go(go(r, { t: 'toNight' }), { t: 'rest' }));
+const night = (r: RunState): RunState => answerAll(go(sit(go(r, { t: 'toNight' })), { t: 'rest' }));
 /** Day 2, the Day phase. */
 const day = (seed?: string, trainer?: string): RunState => go(night(go(started(seed, trainer), { t: 'open' })), { t: 'toDay' });
 const edit = (r: RunState, f: (b: DominionBlock) => void): RunState => {

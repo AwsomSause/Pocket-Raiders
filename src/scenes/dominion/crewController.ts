@@ -14,7 +14,7 @@ import { fileView, hireOverlay, leadsOverlay, morningView } from '../../ui/redux
 import { personaView } from '../../ui/redux/screens/dominion/persona';
 
 interface Host {
-  screenName: 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'founding' | 'founded' | 'spy';
+  screenName: 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'founding' | 'founded' | 'debate' | 'spy';
   setNotice(n: string | null): void;
   refresh(): void;
   step(a: DominionAction): boolean;
@@ -57,7 +57,7 @@ export class CrewController {
     this.sel = Math.min(this.sel, b.members.length - 1);
     if (this.host.screenName === 'crew') {
       const seed = services().session.run!.seed;
-      if (this.persona && !this.talking()) return personaView(personaModel(b, this.sel, seed), (s) => this.monFile(s));
+      if (this.persona && !this.talking()) return personaView(personaModel(b, this.sel, seed, services().session.run?.ai), (s) => this.monFile(s));
       const overlay = this.overlay === 'hire' ? hireOverlay(hireModel(b, seed), this.pickAt) : this.overlay === 'leads' ? leadsOverlay(leadsModel(b, seed), this.pickAt, this.pitchAt) : '';
       return fileView(fileModel(b, this.sel), (s) => this.monFile(s), notice, overlay, this.talkAt);
     }

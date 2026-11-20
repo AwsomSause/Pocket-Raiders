@@ -24,6 +24,6 @@ No block bump: `spies` is a new optional field on the block; a save without it r
 - Browser `tests/e2e/dominionSpies.spec.ts` (2): Suspicion on the Crew File, F opens Confront, a quick question, a typed line with Q/R/L/digits kept in the box, type-to-start with W not read as a move, three window sizes, reload mid-talk; accusing an innocent member.
 
 ## Limits
-- The round-4 Nova livery (sig4/vl4, the Q key cap) on this screen comes with D26's re-port, like the other screens.
+- Round 4 (D26): the Nova livery comes from stage() and the key strip starts with the Q Wheel key; Q never starts a typed line outside the box (inside it, Q types).
 - Two D9 rival-action notes still name D22 and stay limited: the day-by-day leak of your assignments (rival action "Knowing your assignments", shown as raid odds) and the sneak odds on hands-on Cards (watchers). The Spy Academy's "train moles" stays as its room effect (spies caught less); Plant a Mole doesn't need it.
 - Enemy grunts snatched and questioned are D23; police questioning is D24.

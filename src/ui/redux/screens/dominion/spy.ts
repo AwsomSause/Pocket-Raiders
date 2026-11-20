@@ -11,7 +11,7 @@ import './claude.css';
 import type { SpyModel } from '../../../../core/dominion/spyScreens';
 import { act, esc, tall } from '../../kit';
 import { rxUrl } from '../../assets';
-import { stage } from './views';
+import { stage, WHEEL_KEY } from './views';
 
 const img = (f: string): string => rxUrl(`dominion/${f}.png`);
 
@@ -57,7 +57,7 @@ export function spyView(m: SpyModel, draft: string, at: number, notice: string |
     <i class="a" style="left:27px;top:0;width:2px;height:62px;background:#111"></i><i class="a" style="left:6px;top:60px;width:44px;height:20px;border-radius:22px 22px 4px 4px;background:#3a3f4a;box-shadow:0 0 0 2px var(--ink)"></i><i class="a" style="left:20px;top:78px;width:16px;height:8px;border-radius:0 0 8px 8px;background:#fff3c4;box-shadow:0 0 18px 6px rgba(255,230,160,.6)"></i></div>
   <div class="cone flick" style="left:300px;top:80px;width:360px;height:420px;z-index:3;--cc:rgba(255,230,160,.30)"></div>
   <div class="ttl" style="--t1:#7a1c2c;--t2:#c43a52" data-testid="dom-spy-title">${esc(U.title!)} <span class="sub">· ${esc(m.name)}</span></div>
-  <div class="keys"><span class="key">▲▼</span><span>Choose</span><span class="key">Enter</span><span>Ask</span><span class="key"${act('back')}>Esc</span><span>${esc(U.end!)}</span></div>
+  <div class="keys">${WHEEL_KEY}<span class="key">▲▼</span><span>Choose</span><span class="key">Enter</span><span>Ask</span><span class="key"${act('back')}>Esc</span><span>${esc(U.end!)}</span></div>
 
   <div class="shd" style="left:410px;top:380px;width:150px;height:22px"></div>
   ${figure(m.look, m.name)}
