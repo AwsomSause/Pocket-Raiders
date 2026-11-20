@@ -10,7 +10,7 @@ import { addLoyalty, addMorale, crewOf, freshCrewState, leave, rankN, rng, trait
 import { addHeat, scoutHome, syncHeat } from './field';
 import { book } from './book';
 import { addClean, clampClean } from './hqFx';
-import type { ChairState, CourtCard, CourtFx, Crisis, DominionBlock, Lead, Lean, Member, TallyRow } from './schema';
+import type { ChairHook, ChairState, CourtCard, CourtFx, Crisis, DominionBlock, Lead, Lean, Member, TallyRow } from './schema';
 import { addWorldStep, fill } from './worldTurn';
 
 const R = () => DOMINION_DATA.courtRules;
@@ -300,6 +300,12 @@ export function setChairTension(f: (b: DominionBlock, n: number) => void): void 
   tension = f;
 }
 
+/** Answers whose rule another slice owns (`hook:id` in the SPEC): that slice registers it at load, like the Tension hook. */
+const hooks: Partial<Record<ChairHook, (b: DominionBlock) => string | null>> = {};
+export function setChairHook(id: ChairHook, f: (b: DominionBlock) => string | null): void {
+  hooks[id] = f;
+}
+
 const bump = (x: Ctx, k: string, n: number): void => {
   if (n) x.changes[k] = (x.changes[k] ?? 0) + n;
 };
@@ -431,6 +437,7 @@ function apply(x: Ctx, fx: CourtFx[]): void {
         bump(x, e.key, e.n);
         break;
       case 'note': x.lines.push(`${e.text} ${fill(L().waits!, { slice: e.slice })}`); break;
+      case 'hook': { const said = hooks[e.id]?.(b); if (said) x.lines.push(said); break; }
       case 'deal': {
         ch.deals.push({ card: x.card.id, n: scale(b, e.n), clean: !!e.clean, heat: e.heat ?? 0, risk: e.risk ?? 0, wanted: e.wanted ?? 0, mon: e.mon ?? 0, item: e.item ?? null, itemN: e.itemN ?? 0, ten: e.ten ?? 0 });
         bump(x, 'week', scale(b, e.n));
