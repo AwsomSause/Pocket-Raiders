@@ -21,6 +21,7 @@ import { build, letGo, loan, rebuild, repay, sell, storageCap, tierUp, upgrade, 
 import { withHq } from './hqFx';
 import { levelCap } from '../regions';
 import { answerCard, breakTruce, maybeStreet, noteTop, ransom, startTruce, withRivals, type RivalOut } from './rivals';
+import './growth';
 
 export const DOMINION_MODE_ID = 'dominion';
 export const isDominionRun = (run: RunState | null | undefined): boolean => run?.rules.modeId === DOMINION_MODE_ID;
@@ -132,7 +133,8 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
       blk = met.block;
       if (met.line) notice = [notice, met.line].filter(Boolean).join(' ');
     }
-    const next = withBlock(work, DominionBlockSchema.parse(blk));
+    // D10: Pokémon an action took (Kidnap, a lab's rare one, the Swap Meet) wait in the crew's pending list: place them now.
+    const next = settleCrew(content, withBlock(work, DominionBlockSchema.parse(blk)));
     return { ok: true, block: next.expansion!.dominion!, notice, heal: false, run: next, fight: out.fight };
   }
   if (action.t === 'buy') {

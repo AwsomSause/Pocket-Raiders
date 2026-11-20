@@ -19,19 +19,36 @@ export interface MapCursor {
   at: number;
   focus: 'map' | 'grid';
   bring: string[];
+  /** D10: the Card's chosen option (a Gym way, a bribe, a design, a specialist); null is the first. */
+  opt: string | null;
 }
 
-export const newCursor = (b: DominionBlock): MapCursor => ({ district: b.field.at, target: 0, page: pageFor(b), at: 0, focus: 'map', bring: [] });
+export const newCursor = (b: DominionBlock): MapCursor => ({ district: b.field.at, target: 0, page: pageFor(b), at: 0, focus: 'map', bring: [], opt: null });
 
-/** The grid's pages: the starting nine (mockup 3's order), then every other action D2 plays, by list number, for this phase. */
-export function gridPages(b: DominionBlock): string[][] {
+/**
+ * The grid's pages: the starting nine (mockup 3's order), then every other played action for this phase, a list section
+ * at a time (D10: 600 actions make some 25 pages a phase, so each page names its section), nine to a page, by list number.
+ */
+function gridBook(b: DominionBlock): { pages: string[][]; names: string[] } {
   const start = F().starting;
   const slot: Slot = b.phase === 'night' ? 'night' : b.phase === 'evening' ? 'evening' : 'day';
-  const rest = DOMINION_DATA.actions.actions.filter((a) => !start.includes(a.id) && playOf(a.id) && a.slot === slot).map((a) => a.id);
-  const pages = [start];
-  for (let i = 0; i < rest.length; i += 9) pages.push(rest.slice(i, i + 9));
-  return pages;
+  const pages = [start], names = ['Starting moves'];
+  const bySection = new Map<string, string[]>();
+  for (const a of DOMINION_DATA.actions.actions) {
+    if (start.includes(a.id) || !playOf(a.id) || a.slot !== slot) continue;
+    const list = bySection.get(a.section) ?? [];
+    list.push(a.id);
+    bySection.set(a.section, list);
+  }
+  for (const [name, ids] of bySection) {
+    for (let i = 0; i < ids.length; i += 9) {
+      pages.push(ids.slice(i, i + 9));
+      names.push(name);
+    }
+  }
+  return { pages, names };
 }
+export const gridPages = (b: DominionBlock): string[][] => gridBook(b).pages;
 
 /** Evening opens on the evening page; Day and Night on the starting nine. */
 export function pageFor(b: DominionBlock): number {
@@ -62,6 +79,8 @@ export interface MapModel {
   grid: GridButton[];
   page: number;
   pages: number;
+  /** D10: the list section this page shows. */
+  section: string;
   focus: 'map' | 'grid';
   cta: string | null;
   phase: string;
@@ -112,7 +131,7 @@ export function mapModel(b: DominionBlock, run: Pick<RunState, 'party'>, c: MapC
   else if (band.id !== 'unknown') alert = { text: `Wanted: ${band.word} (${b.heat}%).`, cls: 'y' };
   else if (f.at === d.id) alert = { text: 'You are here.', cls: 'g' };
   const targets = d.targets.map((t, i) => ({ id: t.id, name: t.name, on: i === c.target }));
-  const pages = gridPages(b);
+  const { pages, names } = gridBook(b);
   const page = Math.min(c.page, pages.length - 1);
   const phase: Slot = b.phase === 'night' ? 'night' : b.phase === 'evening' ? 'evening' : 'day';
   const grid = pages[page]!.map((id, i) => {
@@ -137,6 +156,7 @@ export function mapModel(b: DominionBlock, run: Pick<RunState, 'party'>, c: MapC
     grid,
     page,
     pages: pages.length,
+    section: names[page] ?? '',
     focus: c.focus,
     cta,
     phase: b.phase,
@@ -172,13 +192,19 @@ export interface CardModel {
   level: string;
   blocked: string | null;
   brought: string[];
+  /** D10: the choices on this Card (Left/Right), the chosen one, a line on what this choice means. */
+  opts: { id: string; label: string }[];
+  opt: string | null;
+  note: string;
+  /** How many crew the action takes along (B adds one more each press; Raid takes three). */
+  squad: number;
 }
 
 const signed = (n: number): string => (n > 0 ? `+${n}` : n < 0 ? `−${-n}` : '0');
 const money = (n: number): string => `₽${n.toLocaleString('en-US')}`;
 
-export function cardModel(b: DominionBlock, run: Pick<RunState, 'party'>, actionId: string, targetId: string | null, districtId: string, bring: readonly string[] = []): CardModel | null {
-  const c: Card | null = card(b, run, actionId, targetId, districtId, bring);
+export function cardModel(b: DominionBlock, run: Pick<RunState, 'party'>, actionId: string, targetId: string | null, districtId: string, bring: readonly string[] = [], opt: string | null = null): CardModel | null {
+  const c: Card | null = card(b, run, actionId, targetId, districtId, bring, opt);
   if (!c) return null;
   const p = c.play;
   const slotLine = c.def.slot === 'day' ? `Action ${Math.min(b.field.today, Math.max(1, b.field.today - b.actions + 1))} of ${b.field.today}` : c.def.slot === 'night' ? 'Night action' : 'Evening';
@@ -209,7 +235,7 @@ export function cardModel(b: DominionBlock, run: Pick<RunState, 'party'>, action
   if (c.weekly && p?.weekly) winBits.push('the shop pays weekly');
   if (c.weekly && p?.toll) winBits.push('maybe a weekly toll');
   if (c.heat < 0) winBits.push(`Heat ${c.heat}`);
-  if (!winBits.length) winBits.push(p?.win.split('.')[0] ?? 'it works');
+  if (!winBits.length) winBits.push(p?.win.split('.')[0]!.replace(/\{district\}/g, c.district.name).replace(/\{target\}/g, c.target?.name ?? c.district.name).replace(/\s*\{[a-z]+\}/g, '') ?? 'it works');
   const loseBits: string[] = [];
   if (c.failHeat) loseBits.push(`Heat +${c.failHeat}`);
   if (c.battle?.on === 'fail' || c.police) loseBits.push('maybe a fight');
@@ -240,6 +266,10 @@ export function cardModel(b: DominionBlock, run: Pick<RunState, 'party'>, action
     level: `${DOMINION_DATA.field.mastery.names[lvl - 1]} · Lv ${lvl} of 5`,
     blocked: c.blocked,
     brought: bring.map((id) => b.members.find((m) => m.id === id)?.name ?? id),
+    opts: c.opts,
+    opt: c.opt,
+    note: c.note ?? '',
+    squad: p?.squad ?? 1,
   };
 }
 

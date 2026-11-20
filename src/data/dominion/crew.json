@@ -611,8 +611,7 @@
       "from": [],
       "text": "Carries +50% cargo.",
       "mods": {},
-      "live": false,
-      "needs": "D10"
+      "live": true
     },
     {
       "id": "mentor",
@@ -639,8 +638,7 @@
       "from": [],
       "text": "Smuggle routes +1 stop.",
       "mods": {},
-      "live": false,
-      "needs": "D10"
+      "live": true
     },
     {
       "id": "iron-nerved",
@@ -700,7 +698,7 @@
       "text": "Opens any vault room one tier up.",
       "mods": {},
       "live": false,
-      "needs": "D10"
+      "needs": "later"
     },
     {
       "id": "burrower",
@@ -708,8 +706,7 @@
       "from": [],
       "text": "Smuggle route can't be seized once a week.",
       "mods": {},
-      "live": false,
-      "needs": "D10"
+      "live": true
     },
     {
       "id": "tinkerer",
@@ -726,8 +723,7 @@
       "from": [],
       "text": "Cheaper fake IDs and papers.",
       "mods": {},
-      "live": false,
-      "needs": "D10"
+      "live": true
     },
     {
       "id": "eavesdropper",
@@ -774,8 +770,7 @@
       "from": [],
       "text": "Flyers raise Regard +50%.",
       "mods": {},
-      "live": false,
-      "needs": "D10"
+      "live": true
     },
     {
       "id": "persuader",
@@ -898,8 +893,7 @@
       "from": [],
       "text": "Flyers reach a second district.",
       "mods": {},
-      "live": false,
-      "needs": "D10"
+      "live": true
     },
     {
       "id": "sea-legs",
@@ -908,7 +902,7 @@
       "text": "Smuggle by sea never fails in storms.",
       "mods": {},
       "live": false,
-      "needs": "D10"
+      "needs": "later"
     },
     {
       "id": "mirage",
@@ -1291,8 +1285,7 @@
       "jobText": "Show her six honest days of training.",
       "perk": "Gym takeovers +15%.",
       "mods": {},
-      "live": false,
-      "needs": "D10",
+      "live": true,
       "seat": "captain"
     },
     {
@@ -1674,8 +1667,7 @@
       },
       "fence": {
         "text": "Opens the Fence (sell stolen goods at full value).",
-        "live": false,
-        "needs": "D10"
+        "live": true
       }
     },
     "names": {

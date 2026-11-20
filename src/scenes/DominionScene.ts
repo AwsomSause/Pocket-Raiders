@@ -94,6 +94,11 @@ export class DominionScene extends Phaser.Scene {
       this.screen = back === 'card' ? 'map' : back;
       if (this.screen === 'map') this.cursor = newCursor(blk);
     }
+    // D10: back from one fight of a chain (a Raid, a Gym's trainers): the map says who's next; Enter starts it.
+    const ch = blk?.growth?.chain, nextSide = ch?.sides[ch.step];
+    if (ch && nextSide && blk?.field.fight && !blk.field.fight.begun && !this.notice) {
+      this.notice = `${DOMINION_DATA.growth.lines.chainNext!.replace('{n}', String(ch.step + 1)).replace('{of}', String(ch.sides.length)).replace('{name}', nextSide.name)} Enter to go on.`;
+    }
     const archetype = getArchetype(session.content, run.archetypeId);
     const level = run.party[0]?.level ?? 5;
     const d = DOMINION_DATA.start;
@@ -125,6 +130,7 @@ export class DominionScene extends Phaser.Scene {
         doit: () => this.doIt(),
         back: () => this.back(),
         bring: () => this.bring(),
+        opt: (id) => { if (this.cursor) this.cursor = { ...this.cursor, opt: String(id) }; this.view?.refresh(); },
         buy: (id) => this.buy(id),
         dismiss: () => { this.notice = null; this.rival.dismiss(); this.view?.refresh(); },
         ledgerTab: (i) => { this.spread = Number(i); this.view?.refresh(); },
@@ -282,6 +288,7 @@ export class DominionScene extends Phaser.Scene {
     if (this.screen === 'title' && (a === 'up' || a === 'down')) this.titleAt = this.titleAt ? 0 : 1;
     else if (this.screen === 'setup') this.setupMove(a);
     else if (this.screen === 'map') this.mapMove(a);
+    else if (this.screen === 'card' && (a === 'left' || a === 'right')) this.cycleOpt(a === 'left' ? -1 : 1);
     else if (this.screen === 'hq' && (a === 'up' || a === 'down')) {
       const n = hqModel(this.block()!).orders.length;
       if (n) this.at = (this.at + (a === 'up' ? -1 : 1) + n) % n;
@@ -319,6 +326,7 @@ export class DominionScene extends Phaser.Scene {
         this.screen = 'hq';
       }
     } else if (this.screen === 'map' && this.cursor) {
+      if (this.chainWaiting()) return this.fight('map');
       if (this.notice) this.notice = null;
       else if (this.cursor.focus === 'map') this.cursor = { ...this.cursor, focus: 'grid' };
       else return this.openCard();
@@ -433,7 +441,21 @@ export class DominionScene extends Phaser.Scene {
     const id = gridPages(b)[c.page]?.[c.at];
     const d = DOMINION_DATA.field.districts.find((x) => x.id === c.district);
     if (!id || !d) return null;
-    return cardModel(b, services().session.run!, id, d.targets[c.target]?.id ?? null, d.id, c.bring);
+    return cardModel(b, services().session.run!, id, d.targets[c.target]?.id ?? null, d.id, c.bring, c.opt);
+  }
+
+  /** D10: Left/Right on the Card picks the next choice (a Gym way, a bribe, a design, a specialist). */
+  private cycleOpt(dir: number): void {
+    const c = this.cursor, card = this.cardOf();
+    if (!c || !card || !card.opts.length) return;
+    const i = Math.max(0, card.opts.findIndex((o) => o.id === card.opt));
+    this.cursor = { ...c, opt: card.opts[(i + dir + card.opts.length) % card.opts.length]!.id };
+  }
+
+  /** D10: a Raid, a Gym's trainers, the Gauntlet: the chain's next fight waits on the map. */
+  private chainWaiting(): boolean {
+    const f = this.block()?.field.fight;
+    return !!f && !f.begun && f.why === 'growth';
   }
 
   private pickDistrict(id: string): void {
@@ -486,17 +508,25 @@ export class DominionScene extends Phaser.Scene {
 
   private openCard(): void {
     if (!this.cursor || !this.cardOf()) return;
+    if (this.chainWaiting()) return this.fight('map');
     this.notice = null;
     this.garage = false;
+    this.cursor = { ...this.cursor, opt: null, bring: [] };
     this.screen = 'card';
     this.view?.refresh();
   }
 
-  /** Bring crew (up to two): none, then each member in turn. D3 adds more members. */
+  /** Bring crew: none, then each member in turn. D10: a squad action (Raid: three) adds one more member each press. */
   private bring(): void {
     const b = this.block(), c = this.cursor;
     if (!b || !c) return;
     const ids = b.members.map((m) => m.id);
+    const squad = this.cardOf()?.squad ?? 1;
+    if (squad > 1) {
+      const next = ids.find((id) => !c.bring.includes(id));
+      this.cursor = { ...c, bring: next && c.bring.length < squad ? [...c.bring, next] : [] };
+      return this.view?.refresh();
+    }
     const now = c.bring[0];
     const i = now ? ids.indexOf(now) : -1;
     this.cursor = { ...c, bring: i + 1 < ids.length ? [ids[i + 1]!] : [] };
@@ -509,7 +539,7 @@ export class DominionScene extends Phaser.Scene {
     if (card.blocked) return this.view?.refresh();
     const id = gridPages(b)[c.page]![c.at]!;
     const d = DOMINION_DATA.field.districts.find((x) => x.id === c.district)!;
-    const out = services().session.dominionStep({ t: 'act', action: id, target: d.targets[c.target]?.id ?? null, district: d.id, bring: c.bring });
+    const out = services().session.dominionStep({ t: 'act', action: id, target: d.targets[c.target]?.id ?? null, district: d.id, bring: c.bring, opt: card.opt });
     this.screen = 'map';
     this.notice = out.notice;
     if (out.ok && out.fight) return this.fight('map');
