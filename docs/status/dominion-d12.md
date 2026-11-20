@@ -23,7 +23,8 @@
 - Ledger: "Press" (the Chair's fame) adds to Notoriety. Chair money is booked on the Ledger's Chair lines (dirty or clean).
 
 ## Card status (150)
-- **113 live.** 51 of them are limited: one part waits for a later slice, and the card shows it as a note ("waits for D9") or as a number that the later slice will use (Tension, Hero Threat, Goal, Stability, raid odds, Shadow, Wipe Out).
+- **113 live.** 51 of them are limited: one part waits for a later slice, and the card shows it as a note ("waits for D9") or as a number that the later slice will use (Hero Threat, Goal, Stability, raid odds, Shadow, Wipe Out).
+- **Tension** (28 answers and the Chair deals) now moves the region's rival team (D9, `addTension`), through a hook rivals.ts sets (`setChairTension`), so chair.ts doesn't import rivals.ts.
 - **37 waiting** (disabled, never drawn; each names its slice):
   - D10 (fence, gyms, bribes): 11
   - D11 (the Hero): 7
