@@ -1,0 +1,2884 @@
+{
+ "_source": "plans/evil-mode-rework/lists/rival-team-actions.md, word for word (tools/dominion/rivals-to-json.py)",
+ "categories": {
+  "A": "Spies and intel",
+  "B": "Sabotage of your buildings",
+  "C": "Raids on your holdings",
+  "D": "Poaching your crew",
+  "E": "Economy warfare",
+  "F": "Smears, news and fear",
+  "G": "Using the Hero, police and Gyms",
+  "H": "Territory",
+  "I": "Admin field battles",
+  "J": "Boss moves",
+  "K": "Their own house",
+  "L": "Diplomacy and alliances",
+  "M": "Pokémon schemes",
+  "N": "Covert ops and terror",
+  "O": "Finishers and desperate moves"
+ },
+ "ladders": {
+  "S": [
+   2,
+   3,
+   4,
+   5,
+   6,
+   8,
+   10,
+   12
+  ],
+  "M": [
+   300.0,
+   600.0,
+   1200.0,
+   2500.0,
+   5000.0,
+   9000.0,
+   16000.0,
+   30000.0
+  ],
+  "P": [
+   5,
+   8,
+   11,
+   15,
+   19,
+   24,
+   30,
+   36
+  ],
+  "D": [
+   1,
+   1,
+   2,
+   2,
+   3,
+   3,
+   4,
+   5
+  ],
+  "H": [
+   2,
+   3,
+   4,
+   6,
+   8,
+   10,
+   13,
+   16
+  ],
+  "C": [
+   -10,
+   -8,
+   -6,
+   -5,
+   -4,
+   -3,
+   -2,
+   -1
+  ],
+  "R": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "N": [
+   1,
+   1,
+   2,
+   2,
+   3,
+   3,
+   4,
+   5
+  ]
+ },
+ "actions": [
+  {
+   "n": 1,
+   "id": "plant-a-spy-in-the-waiting-list",
+   "name": "Plant a spy in the Waiting List",
+   "cat": "A",
+   "stage": "watching",
+   "text": "A fake recruit joins; leaks plans (raid odds +5/8/11/15/19/24/30/36%). Spies planted: 1/1/2/2/3/3/4/5.",
+   "uses": [
+    "P",
+    "N"
+   ],
+   "milestones": {
+    "3": "Spy has a cover job and survives one check",
+    "6": "Spy can read your Vault totals",
+    "8": "Spy is a canon-class Admin in disguise"
+   },
+   "status": "supported",
+   "kind": "spy"
+  },
+  {
+   "n": 2,
+   "id": "bug-the-warehouse",
+   "name": "Bug the warehouse",
+   "cat": "A",
+   "stage": "watching",
+   "text": "A listening device in one room; they know your assignments 1/1/2/2/3/3/4/5 day(s) early.",
+   "uses": [
+    "D"
+   ],
+   "milestones": {
+    "3": "Hidden in a crate",
+    "6": "Hides inside a Bunk Room radio",
+    "8": "Moves with you between regions"
+   },
+   "status": "limited",
+   "kind": "intel",
+   "note": "Knowing your assignments early shows as raid odds; the day-by-day leak is D22."
+  },
+  {
+   "n": 3,
+   "id": "tail-the-boss",
+   "name": "Tail the Boss",
+   "cat": "A",
+   "stage": "watching",
+   "text": "2/3/4/5/6/8/10/12 watchers follow you; your hands-on action Cards show them (−5/8/11/15/19/24/30/36% sneak odds).",
+   "uses": [
+    "S",
+    "P"
+   ],
+   "milestones": {
+    "3": "Only on foot",
+    "6": "Add Pokémon scouts",
+    "8": "Watchers use Psychic/Ghost eyes"
+   },
+   "status": "limited",
+   "kind": "intel",
+   "note": "Watchers lower raid defence; the sneak odds on hands-on Cards wait for D22."
+  },
+  {
+   "n": 4,
+   "id": "photograph-your-front-business",
+   "name": "Photograph your front business",
+   "cat": "A",
+   "stage": "watching",
+   "text": "Evidence of one Front is mailed to police. Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "H"
+   ],
+   "milestones": {
+    "3": "Blurry photos",
+    "6": "Clear photos with timestamps",
+    "8": "A full dossier with witnesses"
+   },
+   "status": "supported",
+   "kind": "heat"
+  },
+  {
+   "n": 5,
+   "id": "buy-your-landlord",
+   "name": "Buy your landlord",
+   "cat": "A",
+   "stage": "watching",
+   "text": "They purchase the building you rent; rent +5/8/11/15/19/24/30/36%.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "Rent only",
+    "6": "Eviction threat added",
+    "8": "Landlord is their Admin"
+   },
+   "status": "supported",
+   "kind": "rent"
+  },
+  {
+   "n": 6,
+   "id": "read-your-trash",
+   "name": "Read your trash",
+   "cat": "A",
+   "stage": "watching",
+   "text": "Steal a discarded note: reveals one of your planned jobs. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Pocket receipts",
+    "6": "Ledger pages",
+    "8": "A copy of your Goal plan"
+   },
+   "status": "supported",
+   "kind": "intel"
+  },
+  {
+   "n": 7,
+   "id": "fake-informant",
+   "name": "Fake informant",
+   "cat": "A",
+   "stage": "watching",
+   "text": "A \"friendly\" informant sells you a false tip worth ₽300/600/1.2k/2.5k/5k/9k/16k/30k; the job fails.",
+   "uses": [
+    "M"
+   ],
+   "milestones": {
+    "3": "Bad address",
+    "6": "Bad time of day",
+    "8": "Tip leads you into an ambush"
+   },
+   "status": "supported",
+   "kind": "money"
+  },
+  {
+   "n": 8,
+   "id": "infiltrate-your-training-yard",
+   "name": "Infiltrate your training yard",
+   "cat": "A",
+   "stage": "annoyed",
+   "text": "A Grunt joins your trainees; learns your team types. Your type advantage −5/8/11/15/19/24/30/36% in their next fight.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "One Pokémon seen",
+    "6": "Full team seen",
+    "8": "They copy your best strategy"
+   },
+   "status": "limited",
+   "kind": "intel",
+   "note": "Shown as raid odds; type advantage in fights waits for D10."
+  },
+  {
+   "n": 9,
+   "id": "count-your-crew",
+   "name": "Count your crew",
+   "cat": "A",
+   "stage": "watching",
+   "text": "They learn your crew size and Loyalty. Poaching odds +5/8/11/15/19/24/30/36%.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "Headcount only",
+    "6": "Loyalty seen",
+    "8": "Weak spots named"
+   },
+   "status": "limited",
+   "kind": "intel",
+   "note": "Poaching odds read the same intel."
+  },
+  {
+   "n": 10,
+   "id": "counter-spy-sweep",
+   "name": "Counter-spy sweep",
+   "cat": "A",
+   "stage": "annoyed",
+   "text": "They hunt your spies. Each of your Spies has a 5/8/11/15/19/24/30/36% chance to be caught.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "Only the cheapest Spy",
+    "6": "Any Spy",
+    "8": "A Spy under torture names your informants"
+   },
+   "status": "supported",
+   "kind": "sweep"
+  },
+  {
+   "n": 11,
+   "id": "cut-the-power",
+   "name": "Cut the power",
+   "cat": "B",
+   "stage": "annoyed",
+   "text": "One building loses 1/1/2/2/3/3/4/5 day(s) of income.",
+   "uses": [
+    "D"
+   ],
+   "milestones": {
+    "3": "Fuse box only",
+    "6": "Whole block",
+    "8": "Grid hack, three buildings at once"
+   },
+   "status": "supported",
+   "kind": "closed"
+  },
+  {
+   "n": 12,
+   "id": "smash-the-sign",
+   "name": "Smash the sign",
+   "cat": "B",
+   "stage": "annoyed",
+   "text": "Building loses 5/8/11/15/19/24/30/36% Condition and Regard −1.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "Spray paint",
+    "6": "Window smashed",
+    "8": "Sign burned"
+   },
+   "status": "supported",
+   "kind": "cond"
+  },
+  {
+   "n": 13,
+   "id": "poison-the-water",
+   "name": "Poison the water",
+   "cat": "B",
+   "stage": "annoyed",
+   "text": "Your crew in one building: Mood −1/2/3/4/5/6/7/8; stamina task halted 1/1/2/2/3/3/4/5 day(s).",
+   "uses": [
+    "D",
+    "R"
+   ],
+   "milestones": {
+    "3": "Cloudy water",
+    "6": "Sick Pokémon",
+    "8": "Whole district reports illness"
+   },
+   "status": "supported",
+   "kind": "mood"
+  },
+  {
+   "n": 14,
+   "id": "set-a-small-fire",
+   "name": "Set a small fire",
+   "cat": "B",
+   "stage": "annoyed",
+   "text": "Building loses 5/8/11/15/19/24/30/36% Condition; a room is closed 1/1/2/2/3/3/4/5 day(s).",
+   "uses": [
+    "P",
+    "D"
+   ],
+   "milestones": {
+    "3": "Trash can fire",
+    "6": "Back-room fire",
+    "8": "Fire spreads to the next lot"
+   },
+   "status": "supported",
+   "kind": "cond"
+  },
+  {
+   "n": 15,
+   "id": "block-the-supply-truck",
+   "name": "Block the supply truck",
+   "cat": "B",
+   "stage": "annoyed",
+   "text": "Next shop restock is skipped; items cost +5/8/11/15/19/24/30/36%.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "One road",
+    "6": "Two roads",
+    "8": "Harbor blocked"
+   },
+   "status": "limited",
+   "kind": "money",
+   "note": "Shops come with D10; the skipped restock is taken as money."
+  },
+  {
+   "n": 16,
+   "id": "clog-the-pipes",
+   "name": "Clog the pipes",
+   "cat": "B",
+   "stage": "annoyed",
+   "text": "A building costs ₽300/600/1.2k/2.5k/5k/9k/16k/30k to repair or it shuts.",
+   "uses": [
+    "M"
+   ],
+   "milestones": {
+    "3": "Leak",
+    "6": "Flood the basement",
+    "8": "Sewer collapse under it"
+   },
+   "status": "supported",
+   "kind": "money"
+  },
+  {
+   "n": 17,
+   "id": "jam-the-alarms",
+   "name": "Jam the alarms",
+   "cat": "B",
+   "stage": "annoyed",
+   "text": "Your building defense −5/8/11/15/19/24/30/36% for one night.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "One door",
+    "6": "All doors",
+    "8": "Plus fake alarms wake your crew"
+   },
+   "status": "supported",
+   "kind": "jam"
+  },
+  {
+   "n": 18,
+   "id": "rot-the-floor",
+   "name": "Rot the floor",
+   "cat": "B",
+   "stage": "annoyed",
+   "text": "Hidden damage; building Condition drops each week until repaired. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Soft boards",
+    "6": "Cracked beams",
+    "8": "Roof falls in"
+   },
+   "status": "supported",
+   "kind": "cond"
+  },
+  {
+   "n": 19,
+   "id": "turn-a-racket",
+   "name": "Turn a Racket",
+   "cat": "B",
+   "stage": "annoyed",
+   "text": "A Racket you run now pays them for 1/1/2/2/3/3/4/5 week(s).",
+   "uses": [
+    "D"
+   ],
+   "milestones": {
+    "3": "A small stall",
+    "6": "A larger racket",
+    "8": "A whole Front"
+   },
+   "status": "supported",
+   "kind": "racket"
+  },
+  {
+   "n": 20,
+   "id": "scorch-the-garden-yard",
+   "name": "Scorch the garden/yard",
+   "cat": "B",
+   "stage": "hostile",
+   "text": "A training yard is unusable 1/1/2/2/3/3/4/5 day(s); training XP −5/8/11/15/19/24/30/36%.",
+   "uses": [
+    "P",
+    "D"
+   ],
+   "milestones": {
+    "3": "Weeds",
+    "6": "Burn marks",
+    "8": "Yard sown with trap machines"
+   },
+   "status": "supported",
+   "kind": "closed"
+  },
+  {
+   "n": 21,
+   "id": "smash-and-grab",
+   "name": "Smash-and-grab",
+   "cat": "C",
+   "stage": "hostile",
+   "text": "2/3/4/5/6/8/10/12 Grunts hit a building; steal ₽300/600/1.2k/2.5k/5k/9k/16k/30k.",
+   "uses": [
+    "S",
+    "M"
+   ],
+   "milestones": {
+    "3": "Night only",
+    "6": "Day or night",
+    "8": "They bring a vehicle"
+   },
+   "status": "supported",
+   "kind": "smash"
+  },
+  {
+   "n": 22,
+   "id": "vault-job",
+   "name": "Vault job",
+   "cat": "C",
+   "stage": "hostile",
+   "text": "Raid on your Vault: steal up to 5/8/11/15/19/24/30/36% of its ₽.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "No lock-picking",
+    "6": "Safe-cracker joins",
+    "8": "Admin leads it"
+   },
+   "status": "supported",
+   "kind": "vault"
+  },
+  {
+   "n": 23,
+   "id": "stores-raid",
+   "name": "Stores raid",
+   "cat": "C",
+   "stage": "hostile",
+   "text": "Steal 1 Pokémon from your Stores (never your Boss team). Lv −10/−8/−6/−5/−4/−3/−2/−1.",
+   "uses": [
+    "C"
+   ],
+   "milestones": {
+    "3": "Weakest first",
+    "6": "Chosen by type",
+    "8": "Ace stolen"
+   },
+   "status": "supported",
+   "kind": "stealMon"
+  },
+  {
+   "n": 24,
+   "id": "warehouse-grab",
+   "name": "Warehouse grab",
+   "cat": "C",
+   "stage": "hostile",
+   "text": "Take your starting warehouse stock; you lose ₽300/600/1.2k/2.5k/5k/9k/16k/30k worth of goods.",
+   "uses": [
+    "M"
+   ],
+   "milestones": {
+    "3": "One shelf",
+    "6": "Half the stock",
+    "8": "All stock plus the door"
+   },
+   "status": "supported",
+   "kind": "smash"
+  },
+  {
+   "n": 25,
+   "id": "takeover-of-a-front",
+   "name": "Takeover of a Front",
+   "cat": "C",
+   "stage": "hostile",
+   "text": "Seize one business; its income goes to them until you retake it. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Stall",
+    "6": "Shop",
+    "8": "Large Front"
+   },
+   "status": "supported",
+   "kind": "racket"
+  },
+  {
+   "n": 26,
+   "id": "dawn-assault",
+   "name": "Dawn assault",
+   "cat": "C",
+   "stage": "hostile",
+   "text": "2/3/4/5/6/8/10/12 Grunts hit just before Morning. Your crew start the day Tired.",
+   "uses": [
+    "S"
+   ],
+   "milestones": {
+    "3": "One squad",
+    "6": "Two squads",
+    "8": "Squads plus a tamed Pokémon swarm"
+   },
+   "status": "supported",
+   "kind": "smash"
+  },
+  {
+   "n": 27,
+   "id": "hostage-in-the-lobby",
+   "name": "Hostage in the lobby",
+   "cat": "C",
+   "stage": "hostile",
+   "text": "A crew member is seized during a raid. Rescue mission opens. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Grunt-class",
+    "6": "Sergeant-class",
+    "8": "Admin-class"
+   },
+   "status": "supported",
+   "kind": "kidnap"
+  },
+  {
+   "n": 28,
+   "id": "decoy-raid",
+   "name": "Decoy raid",
+   "cat": "C",
+   "stage": "hostile",
+   "text": "A cheap raid pulls your team away from the real target. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "One block",
+    "6": "Across town",
+    "8": "Opposite coast"
+   },
+   "status": "supported",
+   "kind": "smash"
+  },
+  {
+   "n": 29,
+   "id": "siege-the-gate",
+   "name": "Siege the gate",
+   "cat": "C",
+   "stage": "war",
+   "text": "Two nights of attack on one building; defense drops 5/8/11/15/19/24/30/36% each night.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "Day 1 only",
+    "6": "Two nights",
+    "8": "Three nights and a ram"
+   },
+   "status": "supported",
+   "kind": "cond"
+  },
+  {
+   "n": 30,
+   "id": "burn-it-down",
+   "name": "Burn it down",
+   "cat": "C",
+   "stage": "war",
+   "text": "Destroy a building outright; rebuild at full cost. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Small lot",
+    "6": "Mid lot",
+    "8": "Compound wing"
+   },
+   "status": "supported",
+   "kind": "burn"
+  },
+  {
+   "n": 31,
+   "id": "whisper-an-offer",
+   "name": "Whisper an offer",
+   "cat": "D",
+   "stage": "hostile",
+   "text": "Offer ₽300/600/1.2k/2.5k/5k/9k/16k/30k/week to one member with Loyalty under 50.",
+   "uses": [
+    "M"
+   ],
+   "milestones": {
+    "3": "Grunt only",
+    "6": "Sergeant too",
+    "8": "Admins can be bought"
+   },
+   "status": "supported",
+   "kind": "poach"
+  },
+  {
+   "n": 32,
+   "id": "rival-aces-speech",
+   "name": "Rival Ace's speech",
+   "cat": "D",
+   "stage": "hostile",
+   "text": "A canon Admin visits; one member checks Loyalty at −5/8/11/15/19/24/30/36.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "Talk only",
+    "6": "A gift",
+    "8": "A threat"
+   },
+   "status": "supported",
+   "kind": "loyalty1"
+  },
+  {
+   "n": 33,
+   "id": "fake-your-bosss-reputation",
+   "name": "Fake your Boss's reputation",
+   "cat": "D",
+   "stage": "hostile",
+   "text": "A rumor drops crew Loyalty −1/2/3/4/5/6/7/8 team-wide.",
+   "uses": [
+    "R"
+   ],
+   "milestones": {
+    "3": "Whispers",
+    "6": "Flyers",
+    "8": "Newspaper ad"
+   },
+   "status": "supported",
+   "kind": "loyalty"
+  },
+  {
+   "n": 34,
+   "id": "steal-your-trainers-pok-mon",
+   "name": "Steal your trainer's Pokémon",
+   "cat": "D",
+   "stage": "hostile",
+   "text": "Steal a Pokémon a crew member owns. Lv −10/−8/−6/−5/−4/−3/−2/−1.",
+   "uses": [
+    "C"
+   ],
+   "milestones": {
+    "3": "Common",
+    "6": "Rare",
+    "8": "Signature"
+   },
+   "status": "limited",
+   "kind": "stealMon",
+   "note": "Takes from the Stores until members' own teams can be raided (D4)."
+  },
+  {
+   "n": 35,
+   "id": "kidnap-an-instructor",
+   "name": "Kidnap an instructor",
+   "cat": "D",
+   "stage": "war",
+   "text": "A trainer/instructor vanishes; training slot closed 1/1/2/2/3/3/4/5 day(s).",
+   "uses": [
+    "D"
+   ],
+   "milestones": {
+    "3": "Day trainer",
+    "6": "Night trainer",
+    "8": "Your Head Trainer"
+   },
+   "status": "supported",
+   "kind": "closed"
+  },
+  {
+   "n": 36,
+   "id": "offer-amnesty",
+   "name": "Offer amnesty",
+   "cat": "D",
+   "stage": "hostile",
+   "text": "Their offer lets your defector keep rank; defection odds +5/8/11/15/19/24/30/36%.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "Same rank",
+    "6": "Higher rank",
+    "8": "Rank plus a Pokémon"
+   },
+   "status": "supported",
+   "kind": "poach"
+  },
+  {
+   "n": 37,
+   "id": "scare-your-recruiter",
+   "name": "Scare your recruiter",
+   "cat": "D",
+   "stage": "hostile",
+   "text": "Recruiting is harder for 1/1/2/2/3/3/4/5 week(s): odds −5/8/11/15/19/24/30/36%.",
+   "uses": [
+    "P",
+    "D"
+   ],
+   "milestones": {
+    "3": "One alley",
+    "6": "One town",
+    "8": "Whole region"
+   },
+   "status": "supported",
+   "kind": "recruitCut"
+  },
+  {
+   "n": 38,
+   "id": "cut-your-payroll",
+   "name": "Cut your payroll",
+   "cat": "D",
+   "stage": "hostile",
+   "text": "Your wages are paid late (loan shark pressure); Mood −1/2/3/4/5/6/7/8.",
+   "uses": [
+    "R"
+   ],
+   "milestones": {
+    "3": "One week",
+    "6": "Two weeks",
+    "8": "Frozen account"
+   },
+   "status": "supported",
+   "kind": "mood"
+  },
+  {
+   "n": 39,
+   "id": "plant-a-betrayal-seed",
+   "name": "Plant a betrayal seed",
+   "cat": "D",
+   "stage": "war",
+   "text": "A secret mole in your crew; reveals a weak point at tier cost ₽300/600/1.2k/2.5k/5k/9k/16k/30k.",
+   "uses": [
+    "M"
+   ],
+   "milestones": {
+    "3": "Dormant",
+    "6": "Active",
+    "8": "Leader-level mole"
+   },
+   "status": "supported",
+   "kind": "spy"
+  },
+  {
+   "n": 40,
+   "id": "drown-your-heroes-in-debt",
+   "name": "Drown your heroes in debt",
+   "cat": "D",
+   "stage": "war",
+   "text": "Each crew member's family debt called in; Loyalty −1/2/3/4/5/6/7/8.",
+   "uses": [
+    "R"
+   ],
+   "milestones": {
+    "3": "One debt",
+    "6": "Three debts",
+    "8": "Everyone's debt"
+   },
+   "status": "supported",
+   "kind": "loyalty"
+  },
+  {
+   "n": 41,
+   "id": "undercut-your-prices",
+   "name": "Undercut your prices",
+   "cat": "E",
+   "stage": "annoyed",
+   "text": "Their stall opens next to yours; your income −5/8/11/15/19/24/30/36%.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "One stall",
+    "6": "A row of stalls",
+    "8": "A chain store"
+   },
+   "status": "supported",
+   "kind": "skim"
+  },
+  {
+   "n": 42,
+   "id": "starve-the-supply",
+   "name": "Starve the supply",
+   "cat": "E",
+   "stage": "annoyed",
+   "text": "A Shop you run can't stock best items for 1/1/2/2/3/3/4/5 day(s).",
+   "uses": [
+    "D"
+   ],
+   "milestones": {
+    "3": "Medium items",
+    "6": "Rare items",
+    "8": "Everything"
+   },
+   "status": "limited",
+   "kind": "money",
+   "note": "Shops come with D10; the lost stock is taken as money."
+  },
+  {
+   "n": 43,
+   "id": "bribe-your-supplier",
+   "name": "Bribe your supplier",
+   "cat": "E",
+   "stage": "annoyed",
+   "text": "Your supplier switches; stock costs +5/8/11/15/19/24/30/36%.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "One supplier",
+    "6": "All suppliers",
+    "8": "Port lease"
+   },
+   "status": "limited",
+   "kind": "money",
+   "note": "Shops come with D10; the dearer stock is taken as money."
+  },
+  {
+   "n": 44,
+   "id": "counterfeit-your-coin",
+   "name": "Counterfeit your coin",
+   "cat": "E",
+   "stage": "hostile",
+   "text": "Fake ₽ in your till; lose ₽300/600/1.2k/2.5k/5k/9k/16k/30k until spotted.",
+   "uses": [
+    "M"
+   ],
+   "milestones": {
+    "3": "Small notes",
+    "6": "Large notes",
+    "8": "Whole drawer"
+   },
+   "status": "supported",
+   "kind": "money"
+  },
+  {
+   "n": 45,
+   "id": "hijack-the-delivery",
+   "name": "Hijack the delivery",
+   "cat": "E",
+   "stage": "hostile",
+   "text": "A Collect task is ambushed; steal its yield. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Cart",
+    "6": "Truck",
+    "8": "Convoy"
+   },
+   "status": "supported",
+   "kind": "smash"
+  },
+  {
+   "n": 46,
+   "id": "poison-your-market",
+   "name": "Poison your market",
+   "cat": "E",
+   "stage": "annoyed",
+   "text": "A district's residents stop buying from you for 1/1/2/2/3/3/4/5 day(s).",
+   "uses": [
+    "D"
+   ],
+   "milestones": {
+    "3": "Rumor",
+    "6": "Boycott",
+    "8": "Whole region boycott"
+   },
+   "status": "supported",
+   "kind": "skim"
+  },
+  {
+   "n": 47,
+   "id": "seize-your-account",
+   "name": "Seize your account",
+   "cat": "E",
+   "stage": "war",
+   "text": "A frozen bank account: ₽300/600/1.2k/2.5k/5k/9k/16k/30k locked for 1/1/2/2/3/3/4/5 week(s).",
+   "uses": [
+    "M",
+    "D"
+   ],
+   "milestones": {
+    "3": "Partial",
+    "6": "Whole",
+    "8": "And your Vault"
+   },
+   "status": "limited",
+   "kind": "money",
+   "note": "Frozen money is taken outright until the Ledger can lock it (D6)."
+  },
+  {
+   "n": 48,
+   "id": "raise-your-protection-fee",
+   "name": "Raise your protection fee",
+   "cat": "E",
+   "stage": "hostile",
+   "text": "They squeeze the same shopkeeper; he pays them, not you. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "One shop",
+    "6": "A street",
+    "8": "A district"
+   },
+   "status": "supported",
+   "kind": "racket"
+  },
+  {
+   "n": 49,
+   "id": "business-buyout-race",
+   "name": "Business buyout race",
+   "cat": "E",
+   "stage": "hostile",
+   "text": "They bid against you for an empty lot; you pay 5/8/11/15/19/24/30/36% more.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "Cheap lot",
+    "6": "Good lot",
+    "8": "Landmark"
+   },
+   "status": "limited",
+   "kind": "money",
+   "note": "Buy Outs come with D10."
+  },
+  {
+   "n": 50,
+   "id": "sell-your-secrets",
+   "name": "Sell your secrets",
+   "cat": "E",
+   "stage": "war",
+   "text": "Your Honest Card data sold to police; Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "H"
+   ],
+   "milestones": {
+    "3": "A hint",
+    "6": "A report",
+    "8": "Your whole file"
+   },
+   "status": "supported",
+   "kind": "heat"
+  },
+  {
+   "n": 51,
+   "id": "slander-flyer",
+   "name": "Slander flyer",
+   "cat": "F",
+   "stage": "annoyed",
+   "text": "Your Regard −1/2/3/4/5/6/7/8 in one district.",
+   "uses": [
+    "R"
+   ],
+   "milestones": {
+    "3": "Typo-filled",
+    "6": "Printed",
+    "8": "Printed and mailed"
+   },
+   "status": "supported",
+   "kind": "regard"
+  },
+  {
+   "n": 52,
+   "id": "fake-news-report",
+   "name": "Fake news report",
+   "cat": "F",
+   "stage": "annoyed",
+   "text": "A newspaper blames you for a crime you did not do. Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "H"
+   ],
+   "milestones": {
+    "3": "Small paper",
+    "6": "Regional paper",
+    "8": "Region-wide broadcast"
+   },
+   "status": "supported",
+   "kind": "heat"
+  },
+  {
+   "n": 53,
+   "id": "smear-campaign",
+   "name": "Smear campaign",
+   "cat": "F",
+   "stage": "hostile",
+   "text": "Gym Leader hears of you as a thug; their stance −1/2/3/4/5/6/7/8.",
+   "uses": [
+    "R"
+   ],
+   "milestones": {
+    "3": "Rumor",
+    "6": "Letter",
+    "8": "Public statement"
+   },
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "n": 54,
+   "id": "pay-a-witness",
+   "name": "Pay a witness",
+   "cat": "F",
+   "stage": "hostile",
+   "text": "A paid witness testifies against you; police Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "H"
+   ],
+   "milestones": {
+    "3": "Cheap",
+    "6": "Credible",
+    "8": "Respected"
+   },
+   "status": "supported",
+   "kind": "heat"
+  },
+  {
+   "n": 55,
+   "id": "dig-up-your-grunts-past",
+   "name": "Dig up your Grunt's past",
+   "cat": "F",
+   "stage": "hostile",
+   "text": "Your starter Grunt's old trouble is exposed; he loses Loyalty −1/2/3/4/5/6/7/8.",
+   "uses": [
+    "R"
+   ],
+   "milestones": {
+    "3": "Teenage trouble",
+    "6": "Old gang",
+    "8": "A real crime"
+   },
+   "status": "supported",
+   "kind": "loyalty1"
+  },
+  {
+   "n": 56,
+   "id": "frame-job",
+   "name": "Frame job",
+   "cat": "F",
+   "stage": "war",
+   "text": "They commit a crime wearing your colors. Heat +2/+3/+4/+6/+8/+10/+13/+16, police raid within 1/1/2/2/3/3/4/5 day(s).",
+   "uses": [
+    "D",
+    "H"
+   ],
+   "milestones": {
+    "3": "Petty",
+    "6": "Serious",
+    "8": "Mass casualty scare"
+   },
+   "status": "supported",
+   "kind": "heat"
+  },
+  {
+   "n": 57,
+   "id": "paint-your-crew-as-monsters",
+   "name": "Paint your crew as monsters",
+   "cat": "F",
+   "stage": "hostile",
+   "text": "Dread +1/2/3/4/5/6/7/8 in towns but Regard −1/2/3/4/5/6/7/8; crowds avoid your tasks.",
+   "uses": [
+    "R"
+   ],
+   "milestones": {
+    "3": "Local",
+    "6": "Regional",
+    "8": "Multi-region"
+   },
+   "status": "supported",
+   "kind": "regard"
+  },
+  {
+   "n": 58,
+   "id": "sabotage-your-flyer-drive",
+   "name": "Sabotage your flyer drive",
+   "cat": "F",
+   "stage": "annoyed",
+   "text": "Your flyers torn down; recruiting −5/8/11/15/19/24/30/36%.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "A wall",
+    "6": "A town",
+    "8": "Printing press smashed"
+   },
+   "status": "supported",
+   "kind": "recruitCut"
+  },
+  {
+   "n": 59,
+   "id": "whisper-to-the-hero",
+   "name": "Whisper to the Hero",
+   "cat": "F",
+   "stage": "watching",
+   "text": "The Hero hears of you; Hero Threat +1/2/3/4/5/6/7/8.",
+   "uses": [
+    "R"
+   ],
+   "milestones": {
+    "3": "Hearsay",
+    "6": "Photo",
+    "8": "Full file"
+   },
+   "status": "supported",
+   "kind": "hero"
+  },
+  {
+   "n": 60,
+   "id": "leak-a-rivals-deed-to-you",
+   "name": "Leak a rival's deed to you",
+   "cat": "F",
+   "stage": "war",
+   "text": "They take credit for your raid and frame an ally. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Minor",
+    "6": "Moderate",
+    "8": "Ally breaks with you"
+   },
+   "status": "supported",
+   "kind": "heat"
+  },
+  {
+   "n": 61,
+   "id": "tip-off-the-police",
+   "name": "Tip off the police",
+   "cat": "G",
+   "stage": "annoyed",
+   "text": "Police sweep your hidden rooms; Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "H"
+   ],
+   "milestones": {
+    "3": "Anonymous",
+    "6": "Named tip",
+    "8": "Signed testimony"
+   },
+   "status": "supported",
+   "kind": "heat"
+  },
+  {
+   "n": 62,
+   "id": "pay-a-gym-leader",
+   "name": "Pay a Gym Leader",
+   "cat": "G",
+   "stage": "hostile",
+   "text": "A Leader refuses your Gym Takeover for 1/1/2/2/3/3/4/5 week(s).",
+   "uses": [
+    "D"
+   ],
+   "milestones": {
+    "3": "Just a letter",
+    "6": "A banquet",
+    "8": "A public alliance"
+   },
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "n": 63,
+   "id": "fund-the-hero",
+   "name": "Fund the Hero",
+   "cat": "G",
+   "stage": "hostile",
+   "text": "Hero gains a boost: +1/2/3/4/5/6/7/8 to attacks vs. you.",
+   "uses": [
+    "R"
+   ],
+   "milestones": {
+    "3": "A Potion",
+    "6": "A rare item",
+    "8": "A mentor"
+   },
+   "status": "supported",
+   "kind": "hero"
+  },
+  {
+   "n": 64,
+   "id": "sell-you-to-the-elite-four",
+   "name": "Sell you to the Elite Four",
+   "cat": "G",
+   "stage": "war",
+   "text": "An Elite Four member knows you; matches sharpen. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Rumor",
+    "6": "Scout",
+    "8": "Ambush"
+   },
+   "status": "disabled",
+   "waits": "D14"
+  },
+  {
+   "n": 65,
+   "id": "report-a-crime-you-did-not-commit",
+   "name": "Report a crime you did not commit",
+   "cat": "G",
+   "stage": "annoyed",
+   "text": "Police pull one crew member for questioning. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "A fine",
+    "6": "A night in cells",
+    "8": "A trial"
+   },
+   "status": "supported",
+   "kind": "heat"
+  },
+  {
+   "n": 66,
+   "id": "poison-the-officials",
+   "name": "Poison the officials",
+   "cat": "G",
+   "stage": "annoyed",
+   "text": "A mayor pulls a permit; a building closes 1/1/2/2/3/3/4/5 day(s).",
+   "uses": [
+    "D"
+   ],
+   "milestones": {
+    "3": "Permit",
+    "6": "License",
+    "8": "Land title"
+   },
+   "status": "supported",
+   "kind": "closed"
+  },
+  {
+   "n": 67,
+   "id": "steal-police-files",
+   "name": "Steal police files",
+   "cat": "G",
+   "stage": "hostile",
+   "text": "They fix your file; Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "H"
+   ],
+   "milestones": {
+    "3": "Tidy",
+    "6": "Padded",
+    "8": "Fabricated"
+   },
+   "status": "supported",
+   "kind": "heat"
+  },
+  {
+   "n": 68,
+   "id": "bribe-a-judge",
+   "name": "Bribe a judge",
+   "cat": "G",
+   "stage": "war",
+   "text": "A jury sides against you; fines ₽300/600/1.2k/2.5k/5k/9k/16k/30k.",
+   "uses": [
+    "M"
+   ],
+   "milestones": {
+    "3": "Fine",
+    "6": "Seizure",
+    "8": "Raid warrant"
+   },
+   "status": "supported",
+   "kind": "money"
+  },
+  {
+   "n": 69,
+   "id": "frame-your-gym-ally",
+   "name": "Frame your Gym ally",
+   "cat": "G",
+   "stage": "war",
+   "text": "Your Gym contact is arrested; their Takeover path locks. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "A rumor",
+    "6": "A charge",
+    "8": "A conviction"
+   },
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "n": 70,
+   "id": "make-you-the-heros-story",
+   "name": "Make you the Hero's story",
+   "cat": "G",
+   "stage": "boss",
+   "text": "They write you as the villain; Hero Threat leaps +1/2/3/4/5/6/7/8.",
+   "uses": [
+    "R"
+   ],
+   "milestones": {
+    "3": "Speech",
+    "6": "Rally",
+    "8": "Broadcast"
+   },
+   "status": "supported",
+   "kind": "hero"
+  },
+  {
+   "n": 71,
+   "id": "grab-a-district",
+   "name": "Grab a district",
+   "cat": "H",
+   "stage": "hostile",
+   "text": "Take Control of one district from you or a neutral. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Empty lot",
+    "6": "Mid district",
+    "8": "Rich district"
+   },
+   "status": "supported",
+   "kind": "control"
+  },
+  {
+   "n": 72,
+   "id": "flood-a-district-with-grunts",
+   "name": "Flood a district with Grunts",
+   "cat": "H",
+   "stage": "annoyed",
+   "text": "2/3/4/5/6/8/10/12 Grunts visibly patrol; your Control −5/8/11/15/19/24/30/36%.",
+   "uses": [
+    "S",
+    "P"
+   ],
+   "milestones": {
+    "3": "Visible",
+    "6": "Dominant",
+    "8": "Overwhelming"
+   },
+   "status": "supported",
+   "kind": "control"
+  },
+  {
+   "n": 73,
+   "id": "recruit-your-hot-spot",
+   "name": "Recruit your hot spot",
+   "cat": "H",
+   "stage": "annoyed",
+   "text": "Their recruiter works your recruiting spot; hires −5/8/11/15/19/24/30/36%.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "Corner",
+    "6": "Block",
+    "8": "Town"
+   },
+   "status": "supported",
+   "kind": "recruitCut"
+  },
+  {
+   "n": 74,
+   "id": "flip-your-loyal-shopkeeper",
+   "name": "Flip your loyal shopkeeper",
+   "cat": "H",
+   "stage": "hostile",
+   "text": "A shopkeeper who paid you now pays them. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "A stall",
+    "6": "A shop",
+    "8": "A boss-shop"
+   },
+   "status": "supported",
+   "kind": "racket"
+  },
+  {
+   "n": 75,
+   "id": "contest-a-landmark",
+   "name": "Contest a landmark",
+   "cat": "H",
+   "stage": "hostile",
+   "text": "Landmark site becomes disputed; both sides can fight there. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Tree",
+    "6": "Statue",
+    "8": "HQ gate"
+   },
+   "status": "supported",
+   "kind": "control"
+  },
+  {
+   "n": 76,
+   "id": "cut-the-road",
+   "name": "Cut the road",
+   "cat": "H",
+   "stage": "annoyed",
+   "text": "Travel in a region takes +1/1/2/2/3/3/4/5 day(s).",
+   "uses": [
+    "D"
+   ],
+   "milestones": {
+    "3": "One route",
+    "6": "Two routes",
+    "8": "Whole map"
+   },
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "n": 77,
+   "id": "plant-a-flag",
+   "name": "Plant a flag",
+   "cat": "H",
+   "stage": "annoyed",
+   "text": "They announce their colors in your district. Dread −1/2/3/4/5/6/7/8 for you.",
+   "uses": [
+    "R"
+   ],
+   "milestones": {
+    "3": "A banner",
+    "6": "A mural",
+    "8": "A tower"
+   },
+   "status": "supported",
+   "kind": "regard"
+  },
+  {
+   "n": 78,
+   "id": "seize-the-harbor",
+   "name": "Seize the harbor",
+   "cat": "H",
+   "stage": "war",
+   "text": "A port/rail/airport falls to them; your Collect tasks cost +5/8/11/15/19/24/30/36%.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "Dock",
+    "6": "Wharf",
+    "8": "Port"
+   },
+   "status": "supported",
+   "kind": "skim"
+  },
+  {
+   "n": 79,
+   "id": "annex-a-gym-town",
+   "name": "Annex a gym town",
+   "cat": "H",
+   "stage": "war",
+   "text": "Their influence covers a Gym town; Gym Takeover needs +1/2/3/4/5/6/7/8 more.",
+   "uses": [
+    "R"
+   ],
+   "milestones": {
+    "3": "Street",
+    "6": "Town",
+    "8": "City"
+   },
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "n": 80,
+   "id": "raise-a-wall",
+   "name": "Raise a wall",
+   "cat": "H",
+   "stage": "hostile",
+   "text": "A fortified wall slows your units; battles there start at −5/8/11/15/19/24/30/36% accuracy.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "Fence",
+    "6": "Wall",
+    "8": "Wall plus turret"
+   },
+   "status": "limited",
+   "kind": "control",
+   "note": "The wall is their Control; battle accuracy waits for D10."
+  },
+  {
+   "n": 81,
+   "id": "admin-ambush",
+   "name": "Admin ambush",
+   "cat": "I",
+   "stage": "war",
+   "text": "An Admin and 2/3/4/5/6/8/10/12 Grunts jump you on a Day action. Admin ace Lv −10/−8/−6/−5/−4/−3/−2/−1.",
+   "uses": [
+    "S",
+    "C"
+   ],
+   "milestones": {
+    "3": "Single Admin",
+    "6": "Two Admins",
+    "8": "Three Admins"
+   },
+   "status": "supported",
+   "kind": "fight"
+  },
+  {
+   "n": 82,
+   "id": "admin-duel-challenge",
+   "name": "Admin duel challenge",
+   "cat": "I",
+   "stage": "hostile",
+   "text": "An Admin challenges you in a public square; win = Regard +1/2/3/4/5/6/7/8.",
+   "uses": [
+    "R"
+   ],
+   "milestones": {
+    "3": "One Pokémon",
+    "6": "Three Pokémon",
+    "8": "Full team"
+   },
+   "status": "supported",
+   "kind": "fight"
+  },
+  {
+   "n": 83,
+   "id": "admin-holds-a-district",
+   "name": "Admin holds a district",
+   "cat": "I",
+   "stage": "hostile",
+   "text": "An Admin keeps a district; you must beat them to take it. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Weak Admin",
+    "6": "Strong Admin",
+    "8": "Top Admin"
+   },
+   "status": "supported",
+   "kind": "control"
+  },
+  {
+   "n": 84,
+   "id": "admin-hunts-your-grunt",
+   "name": "Admin hunts your Grunt",
+   "cat": "I",
+   "stage": "war",
+   "text": "Your starter Grunt is targeted; he fights or flees. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Chase",
+    "6": "Cornered",
+    "8": "Captured"
+   },
+   "status": "supported",
+   "kind": "fight"
+  },
+  {
+   "n": 85,
+   "id": "admin-demands-tribute",
+   "name": "Admin demands tribute",
+   "cat": "I",
+   "stage": "hostile",
+   "text": "Pay ₽300/600/1.2k/2.5k/5k/9k/16k/30k or they raid.",
+   "uses": [
+    "M"
+   ],
+   "milestones": {
+    "3": "Polite",
+    "6": "Rude",
+    "8": "Violent"
+   },
+   "status": "supported",
+   "kind": "demand"
+  },
+  {
+   "n": 86,
+   "id": "admin-offers-a-deal",
+   "name": "Admin offers a deal",
+   "cat": "I",
+   "stage": "annoyed",
+   "text": "An Admin proposes a trade: info for ₽300/600/1.2k/2.5k/5k/9k/16k/30k.",
+   "uses": [
+    "M"
+   ],
+   "milestones": {
+    "3": "Rumor",
+    "6": "Real info",
+    "8": "Top secret"
+   },
+   "status": "supported",
+   "kind": "deal"
+  },
+  {
+   "n": 87,
+   "id": "admin-duel-on-your-turf",
+   "name": "Admin duel on your turf",
+   "cat": "I",
+   "stage": "war",
+   "text": "An Admin storms your HQ lobby. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Test",
+    "6": "Siege",
+    "8": "Occupation"
+   },
+   "status": "supported",
+   "kind": "fight"
+  },
+  {
+   "n": 88,
+   "id": "admin-joins-the-hero",
+   "name": "Admin joins the Hero",
+   "cat": "I",
+   "stage": "war",
+   "text": "An Admin sides with the Hero for a day; he escorts them. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "A tip",
+    "6": "A battle",
+    "8": "A full takedown"
+   },
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "n": 89,
+   "id": "admin-recruits-an-enemy-of-yours",
+   "name": "Admin recruits an enemy of yours",
+   "cat": "I",
+   "stage": "hostile",
+   "text": "They hire a bounty hunter against you. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Local",
+    "6": "Famous",
+    "8": "Veteran/Frontier"
+   },
+   "status": "supported",
+   "kind": "fight"
+  },
+  {
+   "n": 90,
+   "id": "admin-burns-a-bridge",
+   "name": "Admin burns a bridge",
+   "cat": "I",
+   "stage": "hostile",
+   "text": "A rival Admin defects into your Waiting List for a price. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Offered",
+    "6": "Under cover",
+    "8": "Real defect"
+   },
+   "status": "supported",
+   "kind": "defect"
+  },
+  {
+   "n": 91,
+   "id": "boss-visits",
+   "name": "Boss visits",
+   "cat": "J",
+   "stage": "boss",
+   "text": "The rival Boss appears at your door. Talk, deal or fight. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Quick visit",
+    "6": "Long talk",
+    "8": "Armed escort"
+   },
+   "status": "supported",
+   "kind": "bossRaid"
+  },
+  {
+   "n": 92,
+   "id": "boss-demands-your-surrender",
+   "name": "Boss demands your surrender",
+   "cat": "J",
+   "stage": "boss",
+   "text": "An ultimatum with a deadline of 1/1/2/2/3/3/4/5 week(s).",
+   "uses": [
+    "D"
+   ],
+   "milestones": {
+    "3": "Words",
+    "6": "Words + gift",
+    "8": "Words + siege"
+   },
+   "status": "supported",
+   "kind": "demand"
+  },
+  {
+   "n": 93,
+   "id": "boss-challenges-you-to-a-duel",
+   "name": "Boss challenges you to a duel",
+   "cat": "J",
+   "stage": "boss",
+   "text": "One battle, no seconds; win = Dread +1/2/3/4/5/6/7/8.",
+   "uses": [
+    "R"
+   ],
+   "milestones": {
+    "3": "Boss Lv {C}",
+    "6": "Full team",
+    "8": "Full team + Legend"
+   },
+   "status": "supported",
+   "kind": "fight"
+  },
+  {
+   "n": 94,
+   "id": "boss-steals-your-pok-mon",
+   "name": "Boss steals your Pokémon",
+   "cat": "J",
+   "stage": "boss",
+   "text": "One Pokémon taken after a raid; fight to retrieve. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Common",
+    "6": "Rare",
+    "8": "Ace"
+   },
+   "status": "supported",
+   "kind": "bossRaid"
+  },
+  {
+   "n": 95,
+   "id": "boss-closes-the-door",
+   "name": "Boss closes the door",
+   "cat": "J",
+   "stage": "boss",
+   "text": "Your supply of recruits dries up for 1/1/2/2/3/3/4/5 week(s).",
+   "uses": [
+    "D"
+   ],
+   "milestones": {
+    "3": "Town",
+    "6": "Region",
+    "8": "Region + sea"
+   },
+   "status": "supported",
+   "kind": "recruitCut"
+  },
+  {
+   "n": 96,
+   "id": "boss-invites-a-truce",
+   "name": "Boss invites a truce",
+   "cat": "J",
+   "stage": "annoyed",
+   "text": "Truce offer: pay ₽ or give a member. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Cheap",
+    "6": "Dear",
+    "8": "Humiliating"
+   },
+   "status": "supported",
+   "kind": "truce"
+  },
+  {
+   "n": 97,
+   "id": "boss-broadcasts-a-challenge",
+   "name": "Boss broadcasts a challenge",
+   "cat": "J",
+   "stage": "boss",
+   "text": "Public call; refusing costs Regard. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Poster",
+    "6": "Radio",
+    "8": "TV"
+   },
+   "status": "supported",
+   "kind": "fight"
+  },
+  {
+   "n": 98,
+   "id": "boss-bets-on-you-losing",
+   "name": "Boss bets on you losing",
+   "cat": "J",
+   "stage": "boss",
+   "text": "They bet the whole HQ in a duel; both sides stake. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Small stake",
+    "6": "Big stake",
+    "8": "All-in"
+   },
+   "status": "supported",
+   "kind": "bossRaid"
+  },
+  {
+   "n": 99,
+   "id": "boss-opens-the-vault",
+   "name": "Boss opens the vault",
+   "cat": "J",
+   "stage": "boss",
+   "text": "They trade a rare item for a favor. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Potion",
+    "6": "TM",
+    "8": "Legendary clue"
+   },
+   "status": "supported",
+   "kind": "deal"
+  },
+  {
+   "n": 100,
+   "id": "boss-revokes-the-truce",
+   "name": "Boss revokes the truce",
+   "cat": "J",
+   "stage": "boss",
+   "text": "Tension +30, all lines open. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Warning",
+    "6": "Attack",
+    "8": "War"
+   },
+   "status": "supported",
+   "kind": "tension"
+  },
+  {
+   "n": 101,
+   "id": "recruit-drive",
+   "name": "Recruit drive",
+   "cat": "K",
+   "stage": "watching",
+   "text": "They add 2/3/4/5/6/8/10/12 Grunts across the region.",
+   "uses": [
+    "S"
+   ],
+   "milestones": {
+    "3": "One town",
+    "6": "Two towns",
+    "8": "Whole region"
+   },
+   "status": "supported",
+   "kind": "grow"
+  },
+  {
+   "n": 102,
+   "id": "promote-an-admin",
+   "name": "Promote an Admin",
+   "cat": "K",
+   "stage": "watching",
+   "text": "A new Admin; ace is one tier stronger. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Lieutenant",
+    "6": "Admin",
+    "8": "Executive"
+   },
+   "status": "supported",
+   "kind": "grow"
+  },
+  {
+   "n": 103,
+   "id": "train-in-the-open",
+   "name": "Train in the open",
+   "cat": "K",
+   "stage": "watching",
+   "text": "Their Grunts' level cap rises 1/2/3/4/5/6/7/8 this week.",
+   "uses": [
+    "R"
+   ],
+   "milestones": {
+    "3": "Basic",
+    "6": "Advanced",
+    "8": "Elite"
+   },
+   "status": "supported",
+   "kind": "grow"
+  },
+  {
+   "n": 104,
+   "id": "raise-a-tower",
+   "name": "Raise a tower",
+   "cat": "K",
+   "stage": "annoyed",
+   "text": "A new hideout rises in their territory. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Shed",
+    "6": "Warehouse",
+    "8": "Tower"
+   },
+   "status": "supported",
+   "kind": "grow"
+  },
+  {
+   "n": 105,
+   "id": "hire-mercenaries",
+   "name": "Hire mercenaries",
+   "cat": "K",
+   "stage": "hostile",
+   "text": "2/3/4/5/6/8/10/12 outside trainers hired for 1/1/2/2/3/3/4/5 week(s).",
+   "uses": [
+    "S",
+    "D"
+   ],
+   "milestones": {
+    "3": "Cheap",
+    "6": "Mid",
+    "8": "Famous"
+   },
+   "status": "supported",
+   "kind": "grow"
+  },
+  {
+   "n": 106,
+   "id": "open-a-lab",
+   "name": "Open a lab",
+   "cat": "K",
+   "stage": "watching",
+   "text": "A lab appears: new Pokémon schemes unlock. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Basement",
+    "6": "Lab",
+    "8": "Research campus"
+   },
+   "status": "supported",
+   "kind": "research"
+  },
+  {
+   "n": 107,
+   "id": "stockpile-arms",
+   "name": "Stockpile arms",
+   "cat": "K",
+   "stage": "annoyed",
+   "text": "Next raid gets 5/8/11/15/19/24/30/36% stronger.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "Shells",
+    "6": "Guns",
+    "8": "Armory"
+   },
+   "status": "supported",
+   "kind": "arm"
+  },
+  {
+   "n": 108,
+   "id": "fortify-the-hq",
+   "name": "Fortify the HQ",
+   "cat": "K",
+   "stage": "hostile",
+   "text": "Their HQ defense +5/8/11/15/19/24/30/36%.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "Fence",
+    "6": "Wall",
+    "8": "Citadel"
+   },
+   "status": "supported",
+   "kind": "grow"
+  },
+  {
+   "n": 109,
+   "id": "reorganize-cells",
+   "name": "Reorganize cells",
+   "cat": "K",
+   "stage": "annoyed",
+   "text": "They hide Admins; Spy reveal odds −5/8/11/15/19/24/30/36%.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "Rename",
+    "6": "Move",
+    "8": "Rebuild"
+   },
+   "status": "supported",
+   "kind": "hide"
+  },
+  {
+   "n": 110,
+   "id": "fund-a-secret-project",
+   "name": "Fund a secret project",
+   "cat": "K",
+   "stage": "hostile",
+   "text": "A big project that triggers a mid-game event. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Rumor",
+    "6": "Hints",
+    "8": "Reveal"
+   },
+   "status": "supported",
+   "kind": "research"
+  },
+  {
+   "n": 111,
+   "id": "offer-a-joint-raid",
+   "name": "Offer a joint raid",
+   "cat": "L",
+   "stage": "annoyed",
+   "text": "They propose attacking a third party together. Bound by Debate rules if you decline. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Small",
+    "6": "Medium",
+    "8": "Major"
+   },
+   "status": "limited",
+   "kind": "deal",
+   "note": "A joint raid is offered as paid work; the Debate rule is D13."
+  },
+  {
+   "n": 112,
+   "id": "demand-a-cut",
+   "name": "Demand a cut",
+   "cat": "L",
+   "stage": "annoyed",
+   "text": "Tribute: ₽300/600/1.2k/2.5k/5k/9k/16k/30k per week or Tension +10.",
+   "uses": [
+    "M"
+   ],
+   "milestones": {
+    "3": "Light",
+    "6": "Heavy",
+    "8": "Crushing"
+   },
+   "status": "supported",
+   "kind": "demand"
+  },
+  {
+   "n": 113,
+   "id": "share-rival-intel",
+   "name": "Share rival intel",
+   "cat": "L",
+   "stage": "watching",
+   "text": "They give you intel on their enemy for ₽300/600/1.2k/2.5k/5k/9k/16k/30k.",
+   "uses": [
+    "M"
+   ],
+   "milestones": {
+    "3": "Hint",
+    "6": "Map",
+    "8": "Boss schedule"
+   },
+   "status": "supported",
+   "kind": "deal"
+  },
+  {
+   "n": 114,
+   "id": "ask-for-your-help",
+   "name": "Ask for your help",
+   "cat": "L",
+   "stage": "annoyed",
+   "text": "They ask you to remove a pest; reward ₽300/600/1.2k/2.5k/5k/9k/16k/30k.",
+   "uses": [
+    "M"
+   ],
+   "milestones": {
+    "3": "Thief",
+    "6": "Gang",
+    "8": "Rival Boss"
+   },
+   "status": "supported",
+   "kind": "deal"
+  },
+  {
+   "n": 115,
+   "id": "marry-in",
+   "name": "Marry in",
+   "cat": "L",
+   "stage": "annoyed",
+   "text": "A pact between your Admin and theirs; truce 1/1/2/2/3/3/4/5 week(s).",
+   "uses": [
+    "D"
+   ],
+   "milestones": {
+    "3": "Bow",
+    "6": "Betrothal",
+    "8": "Wedding"
+   },
+   "status": "supported",
+   "kind": "truce"
+  },
+  {
+   "n": 116,
+   "id": "trade-members",
+   "name": "Trade members",
+   "cat": "L",
+   "stage": "annoyed",
+   "text": "Swap a member for a member; Loyalty tests. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Grunt",
+    "6": "Sergeant",
+    "8": "Admin"
+   },
+   "status": "limited",
+   "kind": "poach",
+   "note": "The swap is one way until D16 adds trades."
+  },
+  {
+   "n": 117,
+   "id": "form-a-coalition",
+   "name": "Form a coalition",
+   "cat": "L",
+   "stage": "hostile",
+   "text": "They band with police against you. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Tip",
+    "6": "Raid",
+    "8": "Combined strike"
+   },
+   "status": "supported",
+   "kind": "heat"
+  },
+  {
+   "n": 118,
+   "id": "break-a-coalition",
+   "name": "Break a coalition",
+   "cat": "L",
+   "stage": "hostile",
+   "text": "You see their allies; a Debate chance to flip them. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Weak",
+    "6": "Medium",
+    "8": "Strong"
+   },
+   "status": "disabled",
+   "waits": "D13"
+  },
+  {
+   "n": 119,
+   "id": "neutral-ground-summit",
+   "name": "Neutral ground summit",
+   "cat": "L",
+   "stage": "watching",
+   "text": "A meeting at a neutral site; Debate round possible. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Parley",
+    "6": "Banquet",
+    "8": "Summit"
+   },
+   "status": "disabled",
+   "waits": "D13"
+  },
+  {
+   "n": 120,
+   "id": "rescind-a-pact",
+   "name": "Rescind a pact",
+   "cat": "L",
+   "stage": "hostile",
+   "text": "They publicly break a truce; Tension +1/2/3/4/5/6/7/8.",
+   "uses": [
+    "R"
+   ],
+   "milestones": {
+    "3": "Quiet",
+    "6": "Loud",
+    "8": "Betrayal"
+   },
+   "status": "supported",
+   "kind": "tension"
+  },
+  {
+   "n": 121,
+   "id": "poison-your-pok-mon-feed",
+   "name": "Poison your Pokémon feed",
+   "cat": "M",
+   "stage": "hostile",
+   "text": "Your Pokémon lose 5/8/11/15/19/24/30/36% XP for 1/1/2/2/3/3/4/5 day(s).",
+   "uses": [
+    "P",
+    "D"
+   ],
+   "milestones": {
+    "3": "Mild",
+    "6": "Medium",
+    "8": "Severe"
+   },
+   "status": "limited",
+   "kind": "mood",
+   "note": "Pokémon XP loss waits for D10; the crew feel it as Morale."
+  },
+  {
+   "n": 122,
+   "id": "release-an-angry-horde",
+   "name": "Release an angry horde",
+   "cat": "M",
+   "stage": "hostile",
+   "text": "Wild Pokémon rush a building; battle there. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Small",
+    "6": "Mid",
+    "8": "Mass"
+   },
+   "status": "supported",
+   "kind": "fight"
+  },
+  {
+   "n": 123,
+   "id": "lure-your-wild-catch",
+   "name": "Lure your wild catch",
+   "cat": "M",
+   "stage": "annoyed",
+   "text": "Your Collect yield −5/8/11/15/19/24/30/36%.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "Fake call",
+    "6": "Bait",
+    "8": "Net"
+   },
+   "status": "supported",
+   "kind": "skim"
+  },
+  {
+   "n": 124,
+   "id": "block-your-evolutions",
+   "name": "Block your evolutions",
+   "cat": "M",
+   "stage": "hostile",
+   "text": "A stone shipment stolen; one evolution locked 1/1/2/2/3/3/4/5 week(s).",
+   "uses": [
+    "D"
+   ],
+   "milestones": {
+    "3": "Common",
+    "6": "Rare",
+    "8": "Special"
+   },
+   "status": "disabled",
+   "waits": "D4"
+  },
+  {
+   "n": 125,
+   "id": "steal-your-legendary-clue",
+   "name": "Steal your Legendary clue",
+   "cat": "M",
+   "stage": "war",
+   "text": "A clue for a Legendary stolen; they race you. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Rumor",
+    "6": "Map",
+    "8": "Artifact"
+   },
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "n": 126,
+   "id": "boost-their-grunts-with-an-item",
+   "name": "Boost their Grunts with an item",
+   "cat": "M",
+   "stage": "annoyed",
+   "text": "Their Grunts hold Lv-up items; level +1/2/3/4/5/6/7/8 this week.",
+   "uses": [
+    "R"
+   ],
+   "milestones": {
+    "3": "Candy",
+    "6": "Machine",
+    "8": "Rare Candy"
+   },
+   "status": "supported",
+   "kind": "grow"
+  },
+  {
+   "n": 127,
+   "id": "mass-breeding",
+   "name": "Mass breeding",
+   "cat": "M",
+   "stage": "annoyed",
+   "text": "More Grunts have Pokémon; roster +2/3/4/5/6/8/10/12.",
+   "uses": [
+    "S"
+   ],
+   "milestones": {
+    "3": "Egg",
+    "6": "Hatch",
+    "8": "Farm"
+   },
+   "status": "supported",
+   "kind": "grow"
+  },
+  {
+   "n": 128,
+   "id": "weaken-your-gym-allys-pok-mon",
+   "name": "Weaken your gym ally's Pokémon",
+   "cat": "M",
+   "stage": "hostile",
+   "text": "Your Gym contact's team weakened — the Takeover is harder. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Small",
+    "6": "Mid",
+    "8": "Big"
+   },
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "n": 129,
+   "id": "test-fire-a-weapon",
+   "name": "Test-fire a weapon",
+   "cat": "M",
+   "stage": "war",
+   "text": "A big weapon tested near you; building damage 5/8/11/15/19/24/30/36%.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "Test",
+    "6": "Show",
+    "8": "Strike"
+   },
+   "status": "supported",
+   "kind": "cond"
+  },
+  {
+   "n": 130,
+   "id": "turn-your-pok-mon-against-you",
+   "name": "Turn your Pokémon against you",
+   "cat": "M",
+   "stage": "war",
+   "text": "A trainer device; one of your Pokémon fights you once. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Short",
+    "6": "Long",
+    "8": "Full battle"
+   },
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "n": 131,
+   "id": "kidnap-a-shopkeeper-you-extort",
+   "name": "Kidnap a shopkeeper you extort",
+   "cat": "N",
+   "stage": "war",
+   "text": "A paying merchant vanishes; income gone 1/1/2/2/3/3/4/5 week(s).",
+   "uses": [
+    "D"
+   ],
+   "milestones": {
+    "3": "Small",
+    "6": "Mid",
+    "8": "Big"
+   },
+   "status": "supported",
+   "kind": "racket"
+  },
+  {
+   "n": 132,
+   "id": "blackmail-your-informant",
+   "name": "Blackmail your informant",
+   "cat": "N",
+   "stage": "hostile",
+   "text": "Your informant now feeds them. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Gossip",
+    "6": "Facts",
+    "8": "Everything"
+   },
+   "status": "supported",
+   "kind": "intel"
+  },
+  {
+   "n": 133,
+   "id": "sink-a-boat",
+   "name": "Sink a boat",
+   "cat": "N",
+   "stage": "war",
+   "text": "A boat of yours is lost; income −5/8/11/15/19/24/30/36%.",
+   "uses": [
+    "P"
+   ],
+   "milestones": {
+    "3": "Skiff",
+    "6": "Boat",
+    "8": "Ship"
+   },
+   "status": "supported",
+   "kind": "skim"
+  },
+  {
+   "n": 134,
+   "id": "take-over-a-radio-hour",
+   "name": "Take over a radio hour",
+   "cat": "N",
+   "stage": "hostile",
+   "text": "They broadcast their line; your Regard −1/2/3/4/5/6/7/8.",
+   "uses": [
+    "R"
+   ],
+   "milestones": {
+    "3": "Local",
+    "6": "City",
+    "8": "Region"
+   },
+   "status": "supported",
+   "kind": "regard"
+  },
+  {
+   "n": 135,
+   "id": "assassination-attempt",
+   "name": "Assassination attempt",
+   "cat": "N",
+   "stage": "war",
+   "text": "Ambush at night; your Boss team takes a hit. Lv −10/−8/−6/−5/−4/−3/−2/−1.",
+   "uses": [
+    "C"
+   ],
+   "milestones": {
+    "3": "Fright",
+    "6": "Fight",
+    "8": "Real danger"
+   },
+   "status": "supported",
+   "kind": "hurt"
+  },
+  {
+   "n": 136,
+   "id": "poison-the-cook",
+   "name": "Poison the cook",
+   "cat": "N",
+   "stage": "hostile",
+   "text": "Your crew's meals are spiked; Mood −1/2/3/4/5/6/7/8.",
+   "uses": [
+    "R"
+   ],
+   "milestones": {
+    "3": "Mild",
+    "6": "Medium",
+    "8": "Severe"
+   },
+   "status": "supported",
+   "kind": "mood"
+  },
+  {
+   "n": 137,
+   "id": "plant-a-bomb-scare",
+   "name": "Plant a bomb scare",
+   "cat": "N",
+   "stage": "hostile",
+   "text": "Fake bomb; a building evacuates 1/1/2/2/3/3/4/5 day(s).",
+   "uses": [
+    "D"
+   ],
+   "milestones": {
+    "3": "Hoax",
+    "6": "Real device",
+    "8": "Several"
+   },
+   "status": "supported",
+   "kind": "closed"
+  },
+  {
+   "n": 138,
+   "id": "stage-a-jailbreak",
+   "name": "Stage a jailbreak",
+   "cat": "N",
+   "stage": "annoyed",
+   "text": "They free an old ally from police custody. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Local",
+    "6": "Regional",
+    "8": "Mass"
+   },
+   "status": "supported",
+   "kind": "grow"
+  },
+  {
+   "n": 139,
+   "id": "seize-a-ferry",
+   "name": "Seize a ferry",
+   "cat": "N",
+   "stage": "war",
+   "text": "A ferry is hijacked; your Collect route cut. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Skiff",
+    "6": "Ferry",
+    "8": "Ship"
+   },
+   "status": "supported",
+   "kind": "skim"
+  },
+  {
+   "n": 140,
+   "id": "cut-the-pok-mon-center",
+   "name": "Cut the Pokémon Center",
+   "cat": "N",
+   "stage": "war",
+   "text": "A Center is closed; your party healing costs ₽300/600/1.2k/2.5k/5k/9k/16k/30k more.",
+   "uses": [
+    "M"
+   ],
+   "milestones": {
+    "3": "Hours",
+    "6": "Days",
+    "8": "Weeks"
+   },
+   "status": "supported",
+   "kind": "money"
+  },
+  {
+   "n": 141,
+   "id": "total-mobilization",
+   "name": "Total mobilization",
+   "cat": "O",
+   "stage": "boss",
+   "text": "Every Admin and 2/3/4/5/6/8/10/12 squads hit on the same night.",
+   "uses": [
+    "S"
+   ],
+   "milestones": {
+    "3": "Eight Grunts",
+    "6": "Squads",
+    "8": "Full war"
+   },
+   "status": "supported",
+   "kind": "bossRaid"
+  },
+  {
+   "n": 142,
+   "id": "scorched-earth",
+   "name": "Scorched earth",
+   "cat": "O",
+   "stage": "boss",
+   "text": "They destroy a building they hold rather than lose it. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Stall",
+    "6": "Shop",
+    "8": "Compound"
+   },
+   "status": "supported",
+   "kind": "burn"
+  },
+  {
+   "n": 143,
+   "id": "last-stand",
+   "name": "Last stand",
+   "cat": "O",
+   "stage": "boss",
+   "text": "If beaten, they leave with a trap in the HQ. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Smoke",
+    "6": "Gas",
+    "8": "Collapse"
+   },
+   "status": "limited",
+   "kind": "bossRaid",
+   "note": "The trap left behind waits for D14's Wipe Out."
+  },
+  {
+   "n": 144,
+   "id": "hostage-the-hero",
+   "name": "Hostage the Hero",
+   "cat": "O",
+   "stage": "boss",
+   "text": "They take the Hero hostage; save or trade. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Brief",
+    "6": "Long",
+    "8": "Dramatic"
+   },
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "n": 145,
+   "id": "release-a-legendary",
+   "name": "Release a Legendary",
+   "cat": "O",
+   "stage": "boss",
+   "text": "A dangerous Legendary freed; both sides panic. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Rumor",
+    "6": "Sighting",
+    "8": "Battle"
+   },
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "n": 146,
+   "id": "call-in-the-bosss-master",
+   "name": "Call in the Boss's master",
+   "cat": "O",
+   "stage": "boss",
+   "text": "A higher boss (Giovanni, Ghetsis, Rose...) calls in: another tier of fight. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Phone",
+    "6": "Visit",
+    "8": "Battle"
+   },
+   "status": "supported",
+   "kind": "fight"
+  },
+  {
+   "n": 147,
+   "id": "poison-the-well-of-a-region",
+   "name": "Poison the well of a region",
+   "cat": "O",
+   "stage": "boss",
+   "text": "A whole region's Regard −1/2/3/4/5/6/7/8.",
+   "uses": [
+    "R"
+   ],
+   "milestones": {
+    "3": "Town",
+    "6": "Region",
+    "8": "All held regions"
+   },
+   "status": "supported",
+   "kind": "regard"
+  },
+  {
+   "n": 148,
+   "id": "open-the-vault-of-debt",
+   "name": "Open the vault of debt",
+   "cat": "O",
+   "stage": "boss",
+   "text": "They call in every favor; everyone you know wavers. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Few",
+    "6": "Many",
+    "8": "All"
+   },
+   "status": "supported",
+   "kind": "loyalty"
+  },
+  {
+   "n": 149,
+   "id": "burn-the-safe-house",
+   "name": "Burn the safe house",
+   "cat": "O",
+   "stage": "boss",
+   "text": "They destroy your hidden room. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Small",
+    "6": "Big",
+    "8": "HQ wing"
+   },
+   "status": "supported",
+   "kind": "burn"
+  },
+  {
+   "n": 150,
+   "id": "surrender-and-swear",
+   "name": "Surrender and swear",
+   "cat": "O",
+   "stage": "boss",
+   "text": "They surrender; you can annex them: Debate or Wipe Out finish. Force used: 2/3/4/5/6/8/10/12 Grunts, Heat +2/+3/+4/+6/+8/+10/+13/+16.",
+   "uses": [
+    "S",
+    "H"
+   ],
+   "milestones": {
+    "3": "Quiet",
+    "6": "Open",
+    "8": "Full oath"
+   },
+   "status": "disabled",
+   "waits": "D14"
+  }
+ ]
+}

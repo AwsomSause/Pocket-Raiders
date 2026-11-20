@@ -1,0 +1,4232 @@
+{
+ "_source": "plans/evil-mode-rework/lists/outside-interactions.md, word for word (tools/dominion/rivals-to-json.py)",
+ "sections": {
+  "A": "Street And Townsfolk",
+  "B": "Shops And Businesses",
+  "C": "Police And The Law",
+  "D": "Gyms And The League",
+  "E": "Trainers On The Road",
+  "F": "Rival Evil Teams",
+  "G": "The Hero And Allies",
+  "H": "Professors, Labs And Science",
+  "I": "Wild Pokémon And Nature",
+  "J": "Media, Politics And Public Opinion",
+  "K": "Crime World And Black Market",
+  "L": "Festivals, Weather And Special Places"
+ },
+ "rows": [
+  {
+   "id": "O001",
+   "section": "A",
+   "what": "A lost wallet lies on the pavement",
+   "who": "Passer-by",
+   "choices": [
+    "Return it (Rg+3)",
+    "Keep it (₽+80, H+1)",
+    "Hold it for a favour later"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O002",
+   "section": "A",
+   "what": "A grandma cannot cross a busy road",
+   "who": "Old Lady",
+   "choices": [
+    "Help (Rg+2, she tells her neighbours)",
+    "Ignore",
+    "Use her as cover to scout"
+   ],
+   "marks": [
+    "day"
+   ],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O003",
+   "section": "A",
+   "what": "Kids ask what your armband means",
+   "who": "Youngster / Lass",
+   "choices": [
+    "Brag (Dr+2)",
+    "Lie",
+    "Walk on; kids repeat what you said all week"
+   ],
+   "marks": [
+    "minor"
+   ],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O004",
+   "section": "A",
+   "what": "A busker plays in the plaza",
+   "who": "Street Musician",
+   "choices": [
+    "Tip ₽50 (Rg+1)",
+    "Demand a cut (₽, Dr+2)",
+    "Recruit as a cheerful lookout"
+   ],
+   "marks": [
+    "scales"
+   ],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O005",
+   "section": "A",
+   "what": "A street vendor is being shouted at by a customer",
+   "who": "Vendor, Hiker",
+   "choices": [
+    "Step in (Rg+2, maybe battle)",
+    "Charge the vendor for \"peace\""
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O006",
+   "section": "A",
+   "what": "An informant offers a rumour for ₽100",
+   "who": "Informant",
+   "choices": [
+    "Buy (reveals one hidden target)",
+    "Squeeze (₽ back, Dr+)",
+    "Refuse"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O007",
+   "section": "A",
+   "what": "A drunk runs his mouth about the police rota",
+   "who": "Gambler",
+   "choices": [
+    "Listen (police patrol times shown for 2 days)",
+    "Rob him",
+    "Walk him home (Rg)"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O008",
+   "section": "A",
+   "what": "Someone has been following you",
+   "who": "Tail (rival spy or Jenny)",
+   "choices": [
+    "Lose them (Stealth)",
+    "Confront (battle)",
+    "Lead them to a decoy"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O009",
+   "section": "A",
+   "what": "A mother begs for help finding a lost Pokémon",
+   "who": "Mother",
+   "choices": [
+    "Find it (route search, Rg+4)",
+    "Demand pay",
+    "Refuse; the Pokémon turns up later regardless"
+   ],
+   "marks": [
+    "scales",
+    "chain"
+   ],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O010",
+   "section": "A",
+   "what": "A wanted poster of **you** goes up (needs Wanted 20+)",
+   "who": "Town",
+   "choices": [
+    "Tear it down (H+2)",
+    "Have a crew member redraw it flattering",
+    "Leave it"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O011",
+   "section": "A",
+   "what": "A flyer for **your** team gets torn down by a neighbour",
+   "who": "Shopkeeper",
+   "choices": [
+    "Confront (Dr+)",
+    "Reprint",
+    "Let it go"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O012",
+   "section": "A",
+   "what": "A hungry stray Pokémon follows you",
+   "who": "Wild Pokémon",
+   "choices": [
+    "Feed it (Rg+1, may join stores)",
+    "Shoo",
+    "Catch"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O013",
+   "section": "A",
+   "what": "Two neighbours argue over a fence",
+   "who": "Hiker, Bug Catcher",
+   "choices": [
+    "Judge it (Rg+3, both owe you)",
+    "Take a bribe from one",
+    "Walk on"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O014",
+   "section": "A",
+   "what": "A clerk drops a delivery receipt with a safe code",
+   "who": "Delivery Man",
+   "choices": [
+    "Pocket it (opens a later Steal at −15% risk)",
+    "Return it"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O015",
+   "section": "A",
+   "what": "A rich tourist asks for directions",
+   "who": "Gentleman",
+   "choices": [
+    "Direct him true (Rg)",
+    "Direct him to an ambush (Take, H+8)",
+    "Charm for a tip"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O016",
+   "section": "A",
+   "what": "A teacher marches a school trip past your warehouse",
+   "who": "Schoolkid",
+   "choices": [
+    "Close the door and stay quiet",
+    "Wave (Rg+1)",
+    "Never recruit, never target"
+   ],
+   "marks": [
+    "minor",
+    "day"
+   ],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O017",
+   "section": "A",
+   "what": "A fortune teller says she sees you",
+   "who": "Psychic (generic)",
+   "choices": [
+    "Pay ₽80 (one true hint about the Hero's next move)",
+    "Ignore",
+    "Threaten (curse chance, −luck 3 days)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O018",
+   "section": "A",
+   "what": "Street kids sell you \"intel\" on the cheap",
+   "who": "Kid",
+   "choices": [
+    "Buy (small intel)",
+    "Chase them off; no Take, no extort"
+   ],
+   "marks": [
+    "minor"
+   ],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O019",
+   "section": "A",
+   "what": "A man collapses in the street",
+   "who": "Passer-by",
+   "choices": [
+    "Help (Rg+3, Jenny sees you helping: H−3)",
+    "Rob him (H+6, Dr+)",
+    "Call Nurse Joy"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O020",
+   "section": "A",
+   "what": "Someone asks you to sign a petition",
+   "who": "Activist",
+   "choices": [
+    "Sign (Rg, town now tags you \"involved\")",
+    "Rip it up",
+    "Hire her to write yours"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O021",
+   "section": "A",
+   "what": "A cat-calling Biker blocks the road",
+   "who": "Biker",
+   "choices": [
+    "Battle (win: he owes you; lose: he takes ₽100)",
+    "Pay him ₽50"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O022",
+   "section": "A",
+   "what": "An old photograph in a bin shows a famous trainer",
+   "who": "Prop",
+   "choices": [
+    "Pick it up (tiny story unlock)",
+    "Leave"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O023",
+   "section": "A",
+   "what": "A food cart gives you a free sample",
+   "who": "Vendor",
+   "choices": [
+    "Accept (Rg+1)",
+    "Pay anyway (Rg+2)",
+    "Take the whole cart (H+8)"
+   ],
+   "marks": [
+    "day"
+   ],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O024",
+   "section": "A",
+   "what": "A pickpocket tries YOU",
+   "who": "Pickpocket",
+   "choices": [
+    "Catch him (battle; recruit option)",
+    "Let him (₽−60, he's now in your debt if you spotted it)"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O025",
+   "section": "A",
+   "what": "A homeless Hiker sleeps near your HQ",
+   "who": "Hiker",
+   "choices": [
+    "Feed him",
+    "Evict (Dr+)",
+    "Hire as a night watch"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O026",
+   "section": "A",
+   "what": "A child tags a wall with the rival team's mark",
+   "who": "Kid",
+   "choices": [
+    "Scare off (Dr+2)",
+    "Ask who gave him the paint (Ten intel)"
+   ],
+   "marks": [
+    "minor"
+   ],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O027",
+   "section": "A",
+   "what": "A radio plays a news line about you",
+   "who": "Radio",
+   "choices": [
+    "Spin it (Spread the Word, +Rg)",
+    "Ignore",
+    "Threaten the station"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O028",
+   "section": "A",
+   "what": "A runaway Pokémon bolts through the market",
+   "who": "Wild Pokémon",
+   "choices": [
+    "Catch it (shopkeepers owe Rg+2)",
+    "Let it wreck a stall",
+    "Frame a rival for it"
+   ],
+   "marks": [
+    "day"
+   ],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O029",
+   "section": "A",
+   "what": "A prankster steals your cap",
+   "who": "Youngster 🔒",
+   "choices": [
+    "Chase (small battle, he flees)",
+    "Laugh it off (Rg+1)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O030",
+   "section": "A",
+   "what": "The town holds a memorial for a past hero",
+   "who": "Crowd",
+   "choices": [
+    "Attend quietly",
+    "Stay home (no effect)",
+    "Disrupt (Dr+8, Hero+3, big H)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O031",
+   "section": "B",
+   "what": "A Poké Mart clerk charges tourist prices",
+   "who": "Clerk",
+   "choices": [
+    "Extort (₽ now, then weekly Racket)",
+    "Buy normally",
+    "Recruit a discount"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O032",
+   "section": "B",
+   "what": "A bakery's owner can't pay rent to a landlord",
+   "who": "Baker",
+   "choices": [
+    "Pay it (Rg+3, loyal supplier)",
+    "Buy the building later",
+    "Squeeze weekly"
+   ],
+   "marks": [
+    "scales"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O033",
+   "section": "B",
+   "what": "The Game Corner changes its prize list",
+   "who": "Game Corner staff",
+   "choices": [
+    "Scout the vault (Steal setup)",
+    "Play (₽ gamble)",
+    "Extort the manager"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O034",
+   "section": "B",
+   "what": "A pawn shop buys stolen goods at 40%",
+   "who": "Pawnbroker",
+   "choices": [
+    "Sell anyway",
+    "Take over as your Fence front (needs Black Market)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O035",
+   "section": "B",
+   "what": "A diner owner is scared of the rival team's visits",
+   "who": "Cook",
+   "choices": [
+    "Offer protection (Racket, Ten+3)",
+    "Ask who came (intel)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O036",
+   "section": "B",
+   "what": "A florist sells a rare berry bundle",
+   "who": "Florist",
+   "choices": [
+    "Buy",
+    "Take (H+6)",
+    "Trade a favour"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O037",
+   "section": "B",
+   "what": "The Pokémon Center is overcrowded",
+   "who": "Nurse Joy",
+   "choices": [
+    "Donate ₽200 (Rg+3, discounted Heal for the district)",
+    "Steal supplies (H+10, Dr, Joy remembers)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O038",
+   "section": "B",
+   "what": "An antique dealer hides a TM",
+   "who": "Antique Dealer",
+   "choices": [
+    "Buy",
+    "Steal at night",
+    "Appraise for a cut"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O039",
+   "section": "B",
+   "what": "A fishing-rod shop holds a secret stash",
+   "who": "Fisherman",
+   "choices": [
+    "Scout (finds a smuggling lead)",
+    "Extort"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O040",
+   "section": "B",
+   "what": "A battle school offers training for ₽400",
+   "who": "Teacher (Ace Trainer)",
+   "choices": [
+    "Pay (crew XP)",
+    "Recruit the teacher (Rank-3 type)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O041",
+   "section": "B",
+   "what": "A black-market dealer sells an unmarked Egg",
+   "who": "Fence (generic)",
+   "choices": [
+    "Buy ₽600 (unknown species)",
+    "Report (Rg, Jenny owes you)",
+    "Rob (H)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O042",
+   "section": "B",
+   "what": "A clothing store owner copies team armbands",
+   "who": "Tailor",
+   "choices": [
+    "Hire her (cheaper uniforms)",
+    "Fine her"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O043",
+   "section": "B",
+   "what": "A bar's regulars gossip about the Gym",
+   "who": "Bartender 🌙",
+   "choices": [
+    "Buy a round (Gym Leader intel)",
+    "Skip"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O044",
+   "section": "B",
+   "what": "A bank manager works late",
+   "who": "Banker",
+   "choices": [
+    "Scout (route to a vault job)",
+    "Bribe (₽, a loan option)",
+    "Leave"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O045",
+   "section": "B",
+   "what": "A casino host offers you a \"high-roller\" table",
+   "who": "Host",
+   "choices": [
+    "Gamble (variance ₽)",
+    "Cheat (Stealth check, H on fail)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O046",
+   "section": "B",
+   "what": "A mechanic's garage hides stolen bikes",
+   "who": "Mechanic",
+   "choices": [
+    "Blackmail (free Garage service)",
+    "Join (Smuggle contact)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O047",
+   "section": "B",
+   "what": "A ferry captain overcharges",
+   "who": "Sailor",
+   "choices": [
+    "Extort",
+    "Ride free by battling",
+    "Hire as a boat driver"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O048",
+   "section": "B",
+   "what": "A newspaper stand shows a story about you",
+   "who": "Vendor",
+   "choices": [
+    "Buy all copies (₽ vs Heat)",
+    "Let it run"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O049",
+   "section": "B",
+   "what": "A vending-machine technician leaves a ring of keys",
+   "who": "Worker",
+   "choices": [
+    "Take keys (Steal setup)",
+    "Return (Rg)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O050",
+   "section": "B",
+   "what": "A candy-shop owner won't say who supplies him",
+   "who": "Shopkeeper",
+   "choices": [
+    "Press (Dr, intel)",
+    "Charm (Rg)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O051",
+   "section": "B",
+   "what": "A jeweller's shop is closing for the day",
+   "who": "Jeweller",
+   "choices": [
+    "Steal (big, high Heat)",
+    "Buy ₽ gem for a bribe tool"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O052",
+   "section": "B",
+   "what": "A pharmacist hides a recall notice on a medicine",
+   "who": "Pharmacist",
+   "choices": [
+    "Expose (Rg+4, rival lab loses a front)",
+    "Blackmail"
+   ],
+   "marks": [
+    "scales"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O053",
+   "section": "B",
+   "what": "A hotel concierge sells room numbers",
+   "who": "Concierge",
+   "choices": [
+    "Buy (find a rival Admin)",
+    "Report"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O054",
+   "section": "B",
+   "what": "A theatre troupe needs a venue",
+   "who": "Actor",
+   "choices": [
+    "Lend your warehouse (Rg, they build a stage later)",
+    "Rent it out (₽)"
+   ],
+   "marks": [
+    "day"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O055",
+   "section": "B",
+   "what": "A shoeshine stand is a rival informant",
+   "who": "Vendor",
+   "choices": [
+    "Feed him lies (Ten−)",
+    "Remove him"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O056",
+   "section": "B",
+   "what": "A bike shop hosts a race",
+   "who": "Cyclist",
+   "choices": [
+    "Bet",
+    "Sabotage",
+    "Enter (Speed battle)"
+   ],
+   "marks": [
+    "chain"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O057",
+   "section": "B",
+   "what": "A salon owner holds a grudge against the Gym Leader",
+   "who": "Hairdresser",
+   "choices": [
+    "Fuel it (Gym wedge)",
+    "Ignore"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O058",
+   "section": "B",
+   "what": "A supermarket manager refuses to pay",
+   "who": "Manager",
+   "choices": [
+    "Raid the store (Take, H+8)",
+    "Boycott (Dr+, slow)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O059",
+   "section": "B",
+   "what": "A pet shop sells Poké Balls at a markup",
+   "who": "Shopkeeper",
+   "choices": [
+    "Extort",
+    "Hire to craft Apricorn Balls"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O060",
+   "section": "B",
+   "what": "A gift shop sells a **Hero** fan item",
+   "who": "Clerk",
+   "choices": [
+    "Buy for intel on the Hero's next stop",
+    "Smash the stock (Hero+2, Dr+)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O061",
+   "section": "C",
+   "what": "Officer Jenny asks what you carry",
+   "who": "Officer Jenny",
+   "choices": [
+    "Show papers (clean)",
+    "Run (chase)",
+    "Fight (battle, H+10)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O062",
+   "section": "C",
+   "what": "A police checkpoint closes the road",
+   "who": "Jenny",
+   "choices": [
+    "Go around (lose a day)",
+    "Bribe ₽150",
+    "Slip by (Stealth)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O063",
+   "section": "C",
+   "what": "A rookie cop is out of his depth",
+   "who": "Officer (generic)",
+   "choices": [
+    "Befriend (future tip-off)",
+    "Scare (Dr+)",
+    "Bribe"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O064",
+   "section": "C",
+   "what": "Looker tails you at dusk (needs Wanted 60)",
+   "who": "Looker",
+   "choices": [
+    "Lose him",
+    "Talk (he lays out his case, 3 clues)",
+    "Battle"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O065",
+   "section": "C",
+   "what": "A police informant pretends to join",
+   "who": "Informant",
+   "choices": [
+    "Spot him (Wits)",
+    "Feed him false plans",
+    "Expel"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O066",
+   "section": "C",
+   "what": "A cop offers to \"forget\" your last action",
+   "who": "Corrupt cop",
+   "choices": [
+    "Pay ₽300 (H−15)",
+    "Decline"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O067",
+   "section": "C",
+   "what": "A police station's evidence room is quiet",
+   "who": "Station",
+   "choices": [
+    "Scout",
+    "Raid (to free a member or take evidence, H+25)"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O068",
+   "section": "C",
+   "what": "Jenny's lost Growlithe needs finding",
+   "who": "Officer Jenny",
+   "choices": [
+    "Find it (H−10 for a week, Jenny owes you)",
+    "Keep it (Dr, H+15)"
+   ],
+   "marks": [
+    "chain"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O069",
+   "section": "C",
+   "what": "A detective trades a name for a name",
+   "who": "Detective",
+   "choices": [
+    "Give a rival Admin (Ten−, H−)",
+    "Refuse"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O070",
+   "section": "C",
+   "what": "A prosecutor wants testimony",
+   "who": "Attorney",
+   "choices": [
+    "Lie",
+    "Tell (Rg)",
+    "Bribe"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O071",
+   "section": "C",
+   "what": "Court date for an arrested crew member",
+   "who": "Judge, Lawyer",
+   "choices": [
+    "Pay bail",
+    "Break out",
+    "Plead (Lawyer needed)"
+   ],
+   "marks": [
+    "chain"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O072",
+   "section": "C",
+   "what": "A bounty notice names a crew member",
+   "who": "Notice",
+   "choices": [
+    "Pay it off",
+    "Shield",
+    "Hand him over"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O073",
+   "section": "C",
+   "what": "A beat cop drinks on duty",
+   "who": "Cop",
+   "choices": [
+    "Blackmail (free pass for a night)",
+    "Report"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O074",
+   "section": "C",
+   "what": "International Police agent in town (Wanted 70)",
+   "who": "Agent (generic)",
+   "choices": [
+    "Watch",
+    "Leave the district",
+    "Challenge"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O075",
+   "section": "C",
+   "what": "A police dog follows a scent",
+   "who": "Houndour (police)",
+   "choices": [
+    "Mask the scent",
+    "Distract",
+    "Battle"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O076",
+   "section": "C",
+   "what": "A cop recognises a Pokémon you stole",
+   "who": "Jenny",
+   "choices": [
+    "Return it (H−)",
+    "Run",
+    "Argue"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O077",
+   "section": "C",
+   "what": "A neighbourhood watch forms against you",
+   "who": "Citizens",
+   "choices": [
+    "Join to sabotage",
+    "Intimidate",
+    "Charm"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O078",
+   "section": "C",
+   "what": "Jenny's patrol route is posted by accident",
+   "who": "Notice",
+   "choices": [
+    "Memorise (patrols avoided 2 days)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O079",
+   "section": "C",
+   "what": "A cop asks you to testify against the rival team",
+   "who": "Detective",
+   "choices": [
+    "Agree (Ten+, rival weakened, Rg)",
+    "Refuse"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O080",
+   "section": "C",
+   "what": "A police auction sells seized gear",
+   "who": "Auctioneer",
+   "choices": [
+    "Buy back your stuff",
+    "Bid on Pokémon"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O081",
+   "section": "C",
+   "what": "Looker asks a favour: a stolen item found",
+   "who": "Looker",
+   "choices": [
+    "Help (H−15, his respect)",
+    "Decline"
+   ],
+   "marks": [
+    "chain"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O082",
+   "section": "C",
+   "what": "A fire at the police HQ (rival work?)",
+   "who": "Jenny",
+   "choices": [
+    "Help (Rg+, H−)",
+    "Use the chaos (Steal)"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O083",
+   "section": "C",
+   "what": "A traffic cop wants a bribe",
+   "who": "Cop",
+   "choices": [
+    "Pay",
+    "Talk",
+    "Battle"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O084",
+   "section": "C",
+   "what": "Jenny arrests a Youngster for graffiti",
+   "who": "Jenny",
+   "choices": [
+    "Say nothing",
+    "Speak for him (Rg)"
+   ],
+   "marks": [
+    "minor"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O085",
+   "section": "C",
+   "what": "A new curfew goes up",
+   "who": "Jenny",
+   "choices": [
+    "Obey",
+    "Break at night (extra risk)",
+    "Fight it with flyers"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O086",
+   "section": "D",
+   "what": "A Gym Leader walks the town square",
+   "who": "The region's canon Gym Leader (Brock, Misty, Lt. Surge… by town)",
+   "choices": [
+    "Greet",
+    "Challenge",
+    "Ignore (no effect)"
+   ],
+   "marks": [
+    "day"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O087",
+   "section": "D",
+   "what": "A Gym trainer is paid below fair wage",
+   "who": "Gym Trainer",
+   "choices": [
+    "Recruit",
+    "Spread the word",
+    "Join their union"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O088",
+   "section": "D",
+   "what": "The Gym's front door is guarded",
+   "who": "Gym Guide",
+   "choices": [
+    "Talk",
+    "Battle",
+    "Scout side door"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O089",
+   "section": "D",
+   "what": "A Leader's assistant takes bribes",
+   "who": "Assistant",
+   "choices": [
+    "Bribe (Gym Takeover odds +10)",
+    "Report"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O090",
+   "section": "D",
+   "what": "The Leader's sick Pokémon needs a medicine",
+   "who": "Canon Leader",
+   "choices": [
+    "Deliver (Gym deal +, Rg)",
+    "Hoard"
+   ],
+   "marks": [
+    "chain"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O091",
+   "section": "D",
+   "what": "A Gym challenger loses outside the door",
+   "who": "Trainer",
+   "choices": [
+    "Console",
+    "Recruit",
+    "Mock"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O092",
+   "section": "D",
+   "what": "A Leader holds a public test of skill",
+   "who": "Leader",
+   "choices": [
+    "Enter (prize ₽)",
+    "Watch (intel)"
+   ],
+   "marks": [
+    "day"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O093",
+   "section": "D",
+   "what": "A Leader refuses you entry (Dread too high)",
+   "who": "Leader",
+   "choices": [
+    "Wait",
+    "Disguise",
+    "Break in"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O094",
+   "section": "D",
+   "what": "A Leader hosts a charity match",
+   "who": "Leader",
+   "choices": [
+    "Donate",
+    "Cheat",
+    "Disrupt"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O095",
+   "section": "D",
+   "what": "A former Leader lives in retirement",
+   "who": "Retired Leader (canon, where one exists)",
+   "choices": [
+    "Visit",
+    "Hire as a mentor",
+    "Rob"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O096",
+   "section": "D",
+   "what": "The Gym's key staffer defects",
+   "who": "Gym staffer",
+   "choices": [
+    "Take him in",
+    "Return him"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O097",
+   "section": "D",
+   "what": "Gym fans cheer for the Leader",
+   "who": "Crowd",
+   "choices": [
+    "Join",
+    "Heckle (Dr+, Hero+2)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O098",
+   "section": "D",
+   "what": "A rival team pays off a Gym Leader",
+   "who": "Leader",
+   "choices": [
+    "Expose (Ten+)",
+    "Outbid (Gym ally)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O099",
+   "section": "D",
+   "what": "An Elite Four member visits town (Wanted 60+)",
+   "who": "Canon E4",
+   "choices": [
+    "Hide",
+    "Face",
+    "Parley"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O100",
+   "section": "D",
+   "what": "An E4 member's training camp",
+   "who": "Canon E4",
+   "choices": [
+    "Scout (Crackdown week odds)",
+    "Raid"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O101",
+   "section": "D",
+   "what": "The Champion shakes hands with townsfolk",
+   "who": "Canon Champion",
+   "choices": [
+    "Stay out of sight",
+    "Charm",
+    "Observe (intel)"
+   ],
+   "marks": [
+    "day"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O102",
+   "section": "D",
+   "what": "League entry forms are open",
+   "who": "League official",
+   "choices": [
+    "Enter (Monarch route flag)",
+    "Forge papers"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O103",
+   "section": "D",
+   "what": "A League rule inspector checks your team",
+   "who": "Inspector",
+   "choices": [
+    "Pass",
+    "Bribe",
+    "Withdraw"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O104",
+   "section": "D",
+   "what": "A Leader's family business is yours to take",
+   "who": "Leader's relative",
+   "choices": [
+    "Buy it (Buy Out)",
+    "Extort (Dr, Gym grudge)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O105",
+   "section": "D",
+   "what": "A Gym badge is on display behind glass",
+   "who": "Gym",
+   "choices": [
+    "Steal (very high H)",
+    "Respect it"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O106",
+   "section": "D",
+   "what": "A Leader asks if the rumours about you are true",
+   "who": "Leader",
+   "choices": [
+    "Deny",
+    "Admit (Dr+)",
+    "Offer a deal"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O107",
+   "section": "D",
+   "what": "A Gym trainer wants to battle for fun",
+   "who": "Gym Trainer",
+   "choices": [
+    "Battle (no stakes, small Rg)"
+   ],
+   "marks": [
+    "minor"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O108",
+   "section": "D",
+   "what": "An E4 member's retirement party",
+   "who": "E4",
+   "choices": [
+    "Crash (battle)",
+    "Send a gift"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O109",
+   "section": "D",
+   "what": "A Leader's apprentice trains in the park",
+   "who": "Trainer",
+   "choices": [
+    "Spar",
+    "Warn others",
+    "Leave"
+   ],
+   "marks": [
+    "minor"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O110",
+   "section": "D",
+   "what": "A Gym is under \"renovation\" and unguarded",
+   "who": "Gym",
+   "choices": [
+    "Scout",
+    "Raid",
+    "Move your HQ's influence in"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O111",
+   "section": "E",
+   "what": "A Bug Catcher blocks the grass",
+   "who": "Bug Catcher",
+   "choices": [
+    "Battle (small prize)",
+    "Detour"
+   ],
+   "marks": [
+    "minor"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O112",
+   "section": "E",
+   "what": "A Hiker offers a rock-solid deal",
+   "who": "Hiker",
+   "choices": [
+    "Join",
+    "Rob",
+    "Trade"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O113",
+   "section": "E",
+   "what": "An Ace Trainer demands a battle",
+   "who": "Ace Trainer",
+   "choices": [
+    "Fight",
+    "Recruit after the win"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O114",
+   "section": "E",
+   "what": "A Breeder's day-care has an Egg",
+   "who": "Breeder",
+   "choices": [
+    "Trade",
+    "Take (H+, adult only)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O115",
+   "section": "E",
+   "what": "A Ranger asks for your permit",
+   "who": "Ranger",
+   "choices": [
+    "Show",
+    "Battle"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O116",
+   "section": "E",
+   "what": "A Black Belt challenges you",
+   "who": "Black Belt",
+   "choices": [
+    "Fight (Brawn boost on win)",
+    "Decline"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O117",
+   "section": "E",
+   "what": "A Fisherman refuses to share the river",
+   "who": "Fisherman",
+   "choices": [
+    "Battle",
+    "Pay"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O118",
+   "section": "E",
+   "what": "A Hex Maniac predicts your downfall",
+   "who": "Hex Maniac",
+   "choices": [
+    "Pay to lift the curse",
+    "Fight"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O119",
+   "section": "E",
+   "what": "A Scientist demonstrates a gadget",
+   "who": "Scientist",
+   "choices": [
+    "Buy",
+    "Steal",
+    "Test"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O120",
+   "section": "E",
+   "what": "A Cooltrainer team wants a double battle",
+   "who": "Cooltrainers",
+   "choices": [
+    "Fight (doubles)",
+    "Hire"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O121",
+   "section": "E",
+   "what": "A Picnicker's lost Pokémon",
+   "who": "Picnicker",
+   "choices": [
+    "Find (Rg+2)",
+    "Ignore"
+   ],
+   "marks": [
+    "minor"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O122",
+   "section": "E",
+   "what": "A Swimmer dares you to cross a lake",
+   "who": "Swimmer",
+   "choices": [
+    "Race",
+    "Swim (boat needed)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O123",
+   "section": "E",
+   "what": "A Biker gang demands toll",
+   "who": "Bikers",
+   "choices": [
+    "Pay",
+    "Fight",
+    "Ally"
+   ],
+   "marks": [
+    "day"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O124",
+   "section": "E",
+   "what": "A Camper shares a campfire story",
+   "who": "Camper",
+   "choices": [
+    "Listen (lore)",
+    "Leave"
+   ],
+   "marks": [
+    "minor",
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O125",
+   "section": "E",
+   "what": "A Pokémon Trainer walks home with a rare Pokémon",
+   "who": "Trainer (adult)",
+   "choices": [
+    "Attack (Take)",
+    "Trade"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O126",
+   "section": "E",
+   "what": "A veteran says \"you're doing it wrong\"",
+   "who": "Veteran",
+   "choices": [
+    "Learn (+Edge XP)",
+    "Spar"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O127",
+   "section": "E",
+   "what": "A Tourist offers to buy a team photo",
+   "who": "Tourist",
+   "choices": [
+    "Sell (₽)",
+    "Pose"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O128",
+   "section": "E",
+   "what": "An Ace Duo ambushes you",
+   "who": "Ace Duo",
+   "choices": [
+    "Fight (hard)",
+    "Flee"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O129",
+   "section": "E",
+   "what": "A wandering Psychic reads your Pokémon",
+   "who": "Psychic",
+   "choices": [
+    "Pay (hints)",
+    "Refuse"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O130",
+   "section": "E",
+   "what": "A Rich Boy shows off",
+   "who": "Rich Boy",
+   "choices": [
+    "Battle only (no rob)"
+   ],
+   "marks": [
+    "minor"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O131",
+   "section": "E",
+   "what": "A Lass asks for an autograph",
+   "who": "Lass",
+   "choices": [
+    "Sign (Rg+1, Dr−)",
+    "Ignore"
+   ],
+   "marks": [
+    "minor"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O132",
+   "section": "E",
+   "what": "A Guitarist plays on a rooftop",
+   "who": "Guitarist",
+   "choices": [
+    "Listen",
+    "Join"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O133",
+   "section": "E",
+   "what": "A Cyclist races past",
+   "who": "Cyclist",
+   "choices": [
+    "Chase (Speed test)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O134",
+   "section": "E",
+   "what": "A Skier offers snow tracks",
+   "who": "Skier",
+   "choices": [
+    "Follow (hidden path)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O135",
+   "section": "E",
+   "what": "A Sailor bets on your next fight",
+   "who": "Sailor",
+   "choices": [
+    "Bet",
+    "Fight"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O136",
+   "section": "E",
+   "what": "A Gambler bets you ₽500",
+   "who": "Gambler",
+   "choices": [
+    "Fight (₽)",
+    "Walk"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O137",
+   "section": "E",
+   "what": "A Ruin Maniac points to an unmapped cave",
+   "who": "Ruin Maniac",
+   "choices": [
+    "Follow",
+    "Rob"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O138",
+   "section": "E",
+   "what": "A Juggler dares you",
+   "who": "Juggler",
+   "choices": [
+    "Fight",
+    "Pass"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O139",
+   "section": "E",
+   "what": "A Socialite hires you as bodyguard",
+   "who": "Lady",
+   "choices": [
+    "Accept (₽ + Rg)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O140",
+   "section": "E",
+   "what": "A Gentleman hosts a duelling night",
+   "who": "Gentleman",
+   "choices": [
+    "Enter",
+    "Watch"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O141",
+   "section": "F",
+   "what": "Rival grunts shake down a shop you wanted",
+   "who": "Rival Grunts",
+   "choices": [
+    "Fight (take the district's Racket, Ten+4)",
+    "Let them (Ten−, Rg−)"
+   ],
+   "marks": [],
+   "status": "supported"
+  },
+  {
+   "id": "O142",
+   "section": "F",
+   "what": "A rival Grunt is lost and scared",
+   "who": "Rival Grunt",
+   "choices": [
+    "Capture and interrogate",
+    "Recruit (he defects)",
+    "Send home"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "supported"
+  },
+  {
+   "id": "O143",
+   "section": "F",
+   "what": "A rival recruiter hands out flyers",
+   "who": "Rival Recruiter",
+   "choices": [
+    "Tear them",
+    "Out-flyer",
+    "Join (spy)"
+   ],
+   "marks": [],
+   "status": "supported"
+  },
+  {
+   "id": "O144",
+   "section": "F",
+   "what": "Rival spies photograph your HQ",
+   "who": "Spy",
+   "choices": [
+    "Chase (battle)",
+    "Feed false view",
+    "Ignore"
+   ],
+   "marks": [],
+   "status": "supported"
+  },
+  {
+   "id": "O145",
+   "section": "F",
+   "what": "A rival truck unloads at the docks",
+   "who": "Rival Grunts",
+   "choices": [
+    "Sabotage",
+    "Take (Ten+6)",
+    "Report"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "supported"
+  },
+  {
+   "id": "O146",
+   "section": "F",
+   "what": "A rival Admin tours the district",
+   "who": "Canon Admin (e.g., Archer, Proton, Petrel)",
+   "choices": [
+    "Hide",
+    "Parley",
+    "Challenge"
+   ],
+   "marks": [],
+   "status": "supported"
+  },
+  {
+   "id": "O147",
+   "section": "F",
+   "what": "A rival sells you cheap goods",
+   "who": "Rival Fence",
+   "choices": [
+    "Buy (small Ten−)",
+    "Refuse"
+   ],
+   "marks": [],
+   "status": "supported"
+  },
+  {
+   "id": "O148",
+   "section": "F",
+   "what": "A rival front business opens beside yours",
+   "who": "Rival Shop",
+   "choices": [
+    "Buy it out",
+    "Burn it (H+15, Ten+8)",
+    "Tolerate"
+   ],
+   "marks": [],
+   "status": "supported"
+  },
+  {
+   "id": "O149",
+   "section": "F",
+   "what": "A rival Grunt offers to change sides for ₽",
+   "who": "Rival Grunt",
+   "choices": [
+    "Pay",
+    "Test first",
+    "Refuse"
+   ],
+   "marks": [],
+   "status": "supported"
+  },
+  {
+   "id": "O150",
+   "section": "F",
+   "what": "A rival Admin proposes a truce",
+   "who": "Admin",
+   "choices": [
+    "Accept (Ten−10, 7 days)",
+    "Refuse",
+    "Trap"
+   ],
+   "marks": [],
+   "status": "supported"
+  },
+  {
+   "id": "O151",
+   "section": "F",
+   "what": "The rival team seizes an informant",
+   "who": "Rival Grunts",
+   "choices": [
+    "Rescue",
+    "Let them"
+   ],
+   "marks": [],
+   "status": "supported"
+  },
+  {
+   "id": "O152",
+   "section": "F",
+   "what": "A rival raid party heads for a neutral shop",
+   "who": "Rival Grunts",
+   "choices": [
+    "Intercept (Rg+)",
+    "Pick up after"
+   ],
+   "marks": [],
+   "status": "supported"
+  },
+  {
+   "id": "O153",
+   "section": "F",
+   "what": "A rival banner hangs from a bridge",
+   "who": "Banner",
+   "choices": [
+    "Cut it down",
+    "Replace"
+   ],
+   "marks": [],
+   "status": "supported"
+  },
+  {
+   "id": "O154",
+   "section": "F",
+   "what": "A mole in the rival team passes you notes",
+   "who": "Informant",
+   "choices": [
+    "Follow",
+    "Return"
+   ],
+   "marks": [
+    "chain"
+   ],
+   "status": "supported"
+  },
+  {
+   "id": "O155",
+   "section": "F",
+   "what": "A rival Executive demands tribute",
+   "who": "Canon Executive",
+   "choices": [
+    "Pay",
+    "Fight",
+    "Stall"
+   ],
+   "marks": [
+    "scales"
+   ],
+   "status": "supported"
+  },
+  {
+   "id": "O156",
+   "section": "F",
+   "what": "A rival Grunt tries to steal your Pokémon",
+   "who": "Rival Grunt",
+   "choices": [
+    "Fight (win: loot)",
+    "Flee"
+   ],
+   "marks": [],
+   "status": "supported"
+  },
+  {
+   "id": "O157",
+   "section": "F",
+   "what": "A rival hideout shows a hidden door",
+   "who": "Rival Hideout",
+   "choices": [
+    "Scout",
+    "Break in (Raid prep)"
+   ],
+   "marks": [],
+   "status": "supported"
+  },
+  {
+   "id": "O158",
+   "section": "F",
+   "what": "A rival Admin sends a threatening gift",
+   "who": "Package",
+   "choices": [
+    "Open (trap risk)",
+    "Return unopened"
+   ],
+   "marks": [],
+   "status": "supported"
+  },
+  {
+   "id": "O159",
+   "section": "F",
+   "what": "A rival bribe offer to leave the region",
+   "who": "Rival Admin",
+   "choices": [
+    "Accept (₽ big, run goes on weaker)",
+    "Counter"
+   ],
+   "marks": [
+    "scales"
+   ],
+   "status": "supported"
+  },
+  {
+   "id": "O160",
+   "section": "F",
+   "what": "Rival and police fight in the street",
+   "who": "Both",
+   "choices": [
+    "Watch",
+    "Help Jenny (Rg, H−)",
+    "Join the rival"
+   ],
+   "marks": [],
+   "status": "supported"
+  },
+  {
+   "id": "O161",
+   "section": "F",
+   "what": "A rival Grunt defects after losing to you",
+   "who": "Rival Grunt",
+   "choices": [
+    "Recruit",
+    "Free"
+   ],
+   "marks": [],
+   "status": "supported"
+  },
+  {
+   "id": "O162",
+   "section": "F",
+   "what": "A rival Boss's voice on the radio",
+   "who": "Rival Boss (canon)",
+   "choices": [
+    "Answer back (Ten+)",
+    "Debate (Part 4 §3)"
+   ],
+   "marks": [],
+   "status": "supported"
+  },
+  {
+   "id": "O163",
+   "section": "F",
+   "what": "A rival team's stolen Pokémon is for sale",
+   "who": "Rival Fence",
+   "choices": [
+    "Buy and return (Rg+6)",
+    "Keep"
+   ],
+   "marks": [],
+   "status": "supported"
+  },
+  {
+   "id": "O164",
+   "section": "F",
+   "what": "A rival hideout's lights go out",
+   "who": "Rival",
+   "choices": [
+    "Scout",
+    "Raid",
+    "Warn them (trap)"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "supported"
+  },
+  {
+   "id": "O165",
+   "section": "F",
+   "what": "A rival's kids' school drive",
+   "who": "Rival",
+   "choices": [
+    "Do not touch; Rival Grunts only"
+   ],
+   "marks": [
+    "minor"
+   ],
+   "status": "supported"
+  },
+  {
+   "id": "O166",
+   "section": "G",
+   "what": "The Hero is spotted in town",
+   "who": "The Hero",
+   "choices": [
+    "Avoid",
+    "Watch (intel)",
+    "Challenge"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "id": "O167",
+   "section": "G",
+   "what": "The Hero helps townsfolk",
+   "who": "The Hero",
+   "choices": [
+    "Cheer (Rg−1, Hero+0)",
+    "Disrupt (Dr+, Hero+3)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "id": "O168",
+   "section": "G",
+   "what": "The Hero's Pokémon is injured",
+   "who": "The Hero",
+   "choices": [
+    "Help (Hero grows doubtful, Rg+)",
+    "Ignore"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "id": "O169",
+   "section": "G",
+   "what": "The Hero asks directions",
+   "who": "The Hero",
+   "choices": [
+    "Lie (they lose a day)",
+    "Tell",
+    "Offer help"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "id": "O170",
+   "section": "G",
+   "what": "A letter from the Hero",
+   "who": "The Hero",
+   "choices": [
+    "Reply",
+    "Burn",
+    "Show the town"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "id": "O171",
+   "section": "G",
+   "what": "The Hero's mentor speaks to you",
+   "who": "Canon mentor (Oak etc.)",
+   "choices": [
+    "Listen",
+    "Taunt"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "id": "O172",
+   "section": "G",
+   "what": "The Hero's rival (not you) challenges them",
+   "who": "Another trainer",
+   "choices": [
+    "Watch",
+    "Interfere"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "id": "O173",
+   "section": "G",
+   "what": "The Hero fights a rival Admin",
+   "who": "Hero vs Admin",
+   "choices": [
+    "Help the Hero (Ten−, Hero's trust)",
+    "Help the Admin",
+    "Stay out"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "id": "O174",
+   "section": "G",
+   "what": "A kid asks the Hero to sign a hat",
+   "who": "Kid",
+   "choices": [
+    "Watch",
+    "Hide"
+   ],
+   "marks": [
+    "minor"
+   ],
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "id": "O175",
+   "section": "G",
+   "what": "The Hero visits a Gym",
+   "who": "Hero",
+   "choices": [
+    "Follow",
+    "Stop"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "id": "O176",
+   "section": "G",
+   "what": "A challenge: the Hero's team vs yours",
+   "who": "The Hero",
+   "choices": [
+    "Accept (fixed rules, no stakes)",
+    "Refuse"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "id": "O177",
+   "section": "G",
+   "what": "The Hero leaves a mark on a bridge",
+   "who": "Prop",
+   "choices": [
+    "Replace",
+    "Keep"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "id": "O178",
+   "section": "G",
+   "what": "The Hero's sidekick speaks to you",
+   "who": "Hero's friend 🔒",
+   "choices": [
+    "Battle only"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "id": "O179",
+   "section": "G",
+   "what": "The Hero saves a kidnapped Pokémon",
+   "who": "Hero",
+   "choices": [
+    "Interrupt",
+    "Applaud"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "id": "O180",
+   "section": "G",
+   "what": "The Hero faces the bounty hunters you hired",
+   "who": "Hero",
+   "choices": [
+    "Reinforce",
+    "Pull back"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "id": "O181",
+   "section": "G",
+   "what": "The Hero's badge count rises",
+   "who": "Hero",
+   "choices": [
+    "Counter by Gym plan"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "id": "O182",
+   "section": "G",
+   "what": "The Hero is cornered by Grunts",
+   "who": "Hero",
+   "choices": [
+    "Join the Grunts",
+    "Save them (turn the Hero)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "id": "O183",
+   "section": "G",
+   "what": "The Hero's champion father/mother calls",
+   "who": "Family (adult)",
+   "choices": [
+    "Talk",
+    "Mock"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "id": "O184",
+   "section": "G",
+   "what": "The Hero stands on your doorstep",
+   "who": "The Hero",
+   "choices": [
+    "Fight",
+    "Talk",
+    "Hide"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "id": "O185",
+   "section": "G",
+   "what": "The Hero's gift to a stranger",
+   "who": "Hero",
+   "choices": [
+    "Learn",
+    "Steal (very high Hero+)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D11"
+  },
+  {
+   "id": "O186",
+   "section": "H",
+   "what": "A Professor needs field samples",
+   "who": "Professor (canon: Oak, Elm, Birch…)",
+   "choices": [
+    "Deliver (Rg, grant)",
+    "Sell elsewhere"
+   ],
+   "marks": [
+    "day"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O187",
+   "section": "H",
+   "what": "A Lab runs late",
+   "who": "Lab staff",
+   "choices": [
+    "Hit a Lab (Part 1 §3.2)",
+    "Scout"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O188",
+   "section": "H",
+   "what": "An Aide asks for a courier",
+   "who": "Lab Aide",
+   "choices": [
+    "Accept",
+    "Intercept"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O189",
+   "section": "H",
+   "what": "A Scientist tests a new device",
+   "who": "Scientist",
+   "choices": [
+    "Join",
+    "Break"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O190",
+   "section": "H",
+   "what": "A fossil is up for auction",
+   "who": "Auctioneer",
+   "choices": [
+    "Bid",
+    "Steal"
+   ],
+   "marks": [
+    "day"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O191",
+   "section": "H",
+   "what": "An evolution stone sits in a vitrine",
+   "who": "Museum",
+   "choices": [
+    "Steal",
+    "Buy"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O192",
+   "section": "H",
+   "what": "A Pokémon Research Station seeks volunteers",
+   "who": "Station",
+   "choices": [
+    "Enlist",
+    "Rob"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O193",
+   "section": "H",
+   "what": "A Silph-style company announces a launch",
+   "who": "Executive",
+   "choices": [
+    "Sabotage",
+    "Partner"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O194",
+   "section": "H",
+   "what": "A hospital drug shipment arrives",
+   "who": "Nurse",
+   "choices": [
+    "Divert",
+    "Escort"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O195",
+   "section": "H",
+   "what": "A Professor's assistant defects",
+   "who": "Assistant",
+   "choices": [
+    "Take in",
+    "Return"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O196",
+   "section": "H",
+   "what": "A lab's security chief walks his rounds",
+   "who": "Guard",
+   "choices": [
+    "Bribe",
+    "Avoid"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O197",
+   "section": "H",
+   "what": "An experiment goes wrong",
+   "who": "Scientist",
+   "choices": [
+    "Rescue (Rg)",
+    "Exploit"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O198",
+   "section": "H",
+   "what": "A scientist builds you a gadget",
+   "who": "Scientist",
+   "choices": [
+    "Pay",
+    "Threaten"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O199",
+   "section": "H",
+   "what": "An observatory records a strange signal",
+   "who": "Astronomer",
+   "choices": [
+    "Investigate"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O200",
+   "section": "H",
+   "what": "A university posts a call for papers",
+   "who": "Professor",
+   "choices": [
+    "Submit (Rg, tiny)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O201",
+   "section": "H",
+   "what": "A rare Pokémon is under study",
+   "who": "Researcher",
+   "choices": [
+    "Kidnap it (Rank 3, adult staff only)",
+    "Respect"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O202",
+   "section": "H",
+   "what": "A power plant strikes",
+   "who": "Workers",
+   "choices": [
+    "Break (Dr)",
+    "Settle"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O203",
+   "section": "H",
+   "what": "A museum curator asks for protection",
+   "who": "Curator",
+   "choices": [
+    "Offer",
+    "Extort"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O204",
+   "section": "H",
+   "what": "A lab's discarded parts pile up",
+   "who": "Prop",
+   "choices": [
+    "Scavenge"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O205",
+   "section": "H",
+   "what": "A Professor asks about \"the thefts\"",
+   "who": "Professor",
+   "choices": [
+    "Confess",
+    "Lie",
+    "Blame rivals"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O206",
+   "section": "I",
+   "what": "A rare Pokémon (not on this route's normal list) crosses your path",
+   "who": "Wild Pokémon",
+   "choices": [
+    "Catch it (battle, +1 Stores slot)",
+    "Track it to its den (reveals a second rare spot, 1 action)",
+    "Leave it (no effect)"
+   ],
+   "marks": [
+    "day"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O207",
+   "section": "I",
+   "what": "A herd of Tauros or Miltank blocks the road",
+   "who": "Wild herd",
+   "choices": [
+    "Go round (lose half an action)",
+    "Battle one (XP)",
+    "Spook them into town (Rg−2, H+3, chaos covers a Steal)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O208",
+   "section": "I",
+   "what": "A shiny rumour spreads through town",
+   "who": "Villagers",
+   "choices": [
+    "Hunt it over 3 days (each step a battle; success: a shiny for Stores)",
+    "Sell the rumour to a rival (Ten−1, ₽100)"
+   ],
+   "marks": [
+    "chain"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O209",
+   "section": "I",
+   "what": "A Pokémon is caught in a snare",
+   "who": "Wild Pokémon, Poacher",
+   "choices": [
+    "Free it (Rg+3, it may follow you)",
+    "Catch it while it's weak",
+    "Spring the snare on the poacher (Dr+2)"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O210",
+   "section": "I",
+   "what": "A swarm surges out of the grass",
+   "who": "Wild swarm",
+   "choices": [
+    "Cull it (₽ bounty from the town, Rg+2)",
+    "Capture a few (Stores)",
+    "Lead it into a rival's shop (Ten+3, H+4)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O211",
+   "section": "I",
+   "what": "A cave collapses with people inside",
+   "who": "Miners, Hiker",
+   "choices": [
+    "Dig them out (Rg+5, free Hiker recruit)",
+    "Loot while they're trapped (H+8, Dr+4)",
+    "Call Nurse Joy"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O212",
+   "section": "I",
+   "what": "A storm drives wild Pokémon into town",
+   "who": "Wild Pokémon",
+   "choices": [
+    "Shelter them in your warehouse (Rg+3, Stores)",
+    "Round them up for catch XP",
+    "Use the confusion for a Take"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O213",
+   "section": "I",
+   "what": "A baby Pokémon follows you home",
+   "who": "Wild Pokémon",
+   "choices": [
+    "Adopt (joins Stores, bonds with crew)",
+    "Return it to its nest (Rg+1)",
+    "Sell it (₽300, Rg−2)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O214",
+   "section": "I",
+   "what": "An alpha Pokémon marks the route as its own",
+   "who": "Wild alpha",
+   "choices": [
+    "Battle (hard, rare drop)",
+    "Avoid the route 5 days",
+    "Lure it onto rival patrols"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O215",
+   "section": "I",
+   "what": "A fishing spot is overrun with Magikarp",
+   "who": "Wild Pokémon, Fisherman",
+   "choices": [
+    "Fish for a day (₽ from sales)",
+    "Hire the Fisherman as a lookout",
+    "Dump a rival's catch in the sea"
+   ],
+   "marks": [
+    "day"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O216",
+   "section": "I",
+   "what": "A berry tree drops its harvest",
+   "who": "Prop, Berry Master (generic)",
+   "choices": [
+    "Gather (berries for Stores)",
+    "Trade with the Berry Master",
+    "Guard it as a Racket"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O217",
+   "section": "I",
+   "what": "A Snorlax sleeps across a bridge",
+   "who": "Wild Snorlax",
+   "choices": [
+    "Battle (very hard, big prize)",
+    "Wake with a Poké Flute item (if owned)",
+    "Detour"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O218",
+   "section": "I",
+   "what": "A hidden cave opens after rain",
+   "who": "Wild Pokémon",
+   "choices": [
+    "Explore (random item or rare Pokémon, 1 action)",
+    "Mark it as a future stash",
+    "Tell Rangers (Rg+2)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O219",
+   "section": "I",
+   "what": "A low tide reveals a sea cove",
+   "who": "Wild Pokémon",
+   "choices": [
+    "Explore (Water-type finds)",
+    "Smuggle at night (a later Smuggle bonus)",
+    "Skip"
+   ],
+   "marks": [
+    "day"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O220",
+   "section": "I",
+   "what": "An abandoned Egg sits in a nest",
+   "who": "Prop",
+   "choices": [
+    "Take it (H−0, Stores egg)",
+    "Guard it until it hatches (Rg)",
+    "Sell it ₽500"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O221",
+   "section": "I",
+   "what": "A volcano rumbles and towns evacuate",
+   "who": "Villagers",
+   "choices": [
+    "Help evacuate (Rg+6)",
+    "Loot empty houses (H+10, Dr+5)",
+    "Claim the abandoned district's Racket later"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O222",
+   "section": "I",
+   "what": "A Meowth steals your lunch",
+   "who": "Wild Meowth",
+   "choices": [
+    "Chase (catch it)",
+    "Share the lunch (Meowth follows)",
+    "Retaliate on the stall it came from"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O223",
+   "section": "I",
+   "what": "A wild Pokémon leads you somewhere",
+   "who": "Wild Pokémon",
+   "choices": [
+    "Follow (finds a trainer, item or hideout)",
+    "Ignore",
+    "Catch it"
+   ],
+   "marks": [
+    "day"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O224",
+   "section": "I",
+   "what": "A flower field draws crowds",
+   "who": "Tourists",
+   "choices": [
+    "Run tours (₽ per day)",
+    "Pickpocket (H+2)",
+    "Prank rival stalls"
+   ],
+   "marks": [
+    "day"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O225",
+   "section": "I",
+   "what": "Fog rolls over the route",
+   "who": "Weather",
+   "choices": [
+    "Wait (lose an action)",
+    "Move unseen (Stealth +20% for the day)",
+    "Ambush trainers (Attack +10%)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O226",
+   "section": "I",
+   "what": "Lights glow in the forest",
+   "who": "Wild Pokémon",
+   "choices": [
+    "Investigate (Illumise swarm: Rg, items)",
+    "Avoid"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O227",
+   "section": "I",
+   "what": "A rumour that a legendary Pokémon was seen",
+   "who": "Villagers, Hero-aligned legendary (see Part 4 §8)",
+   "choices": [
+    "Investigate over 2–3 steps",
+    "Sell the tip to a rival",
+    "Warn the Hero (Hero+, Rg)"
+   ],
+   "marks": [
+    "chain"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O228",
+   "section": "I",
+   "what": "A traveler proposes a Pokémon trade",
+   "who": "Traveler",
+   "choices": [
+    "Accept (swap a spare for a rare)",
+    "Counter",
+    "Cheat (H+3)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O229",
+   "section": "I",
+   "what": "A poacher with a net is caught",
+   "who": "Poacher",
+   "choices": [
+    "Join (he hunts for you, Rg−3)",
+    "Hand him to a Ranger (Rg+3)",
+    "Take his catch"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O230",
+   "section": "I",
+   "what": "A sanctuary asks for funds",
+   "who": "Ranger",
+   "choices": [
+    "Donate ₽300 (Rg+4, tiny Hero−)",
+    "Rob the donation box (H+6, Dr+3)",
+    "Fund it later"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O231",
+   "section": "J",
+   "what": "A reporter wants a statement",
+   "who": "Reporter",
+   "choices": [
+    "Speak kindly (Rg+3)",
+    "Speak harshly (Dr+3, H+2)",
+    "Refuse (neutral, the story is written without you)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O232",
+   "section": "J",
+   "what": "A TV crew films a fight you started",
+   "who": "Camera Crew",
+   "choices": [
+    "Smash the camera (H+6, Dr+3)",
+    "Show off (Dr+4, Hero+2)",
+    "Hide your face (no effect)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O233",
+   "section": "J",
+   "what": "The mayor gives a speech about crime",
+   "who": "Mayor",
+   "choices": [
+    "Heckle (Dr+2, H+2)",
+    "Bribe him quietly (Mayor owes you; ₽300)",
+    "Stay away"
+   ],
+   "marks": [
+    "day"
+   ],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O234",
+   "section": "J",
+   "what": "A council hearing votes on a curfew",
+   "who": "Councilor",
+   "choices": [
+    "Testify against it (Rg+, curfew less likely)",
+    "Bribe votes (₽)",
+    "Support it (Wanted lower, Dr−)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O235",
+   "section": "J",
+   "what": "An election poster has your enemy's face",
+   "who": "Poster",
+   "choices": [
+    "Deface (Dr+1)",
+    "Endorse a rival candidate (₽ from them)",
+    "Ignore"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O236",
+   "section": "J",
+   "what": "A radio host mocks you on air",
+   "who": "Radio Host",
+   "choices": [
+    "Call in and win him over (Charm check)",
+    "Threaten him (H+3, Dr+3)",
+    "Ignore"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O237",
+   "section": "J",
+   "what": "A gossip columnist hears about your crew",
+   "who": "Columnist",
+   "choices": [
+    "Feed her a flattering story (Rg+2)",
+    "Feed her a rival's secret (Ten+2)",
+    "Silence her (H+5)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O238",
+   "section": "J",
+   "what": "A union calls a strike at the docks",
+   "who": "Dock Workers",
+   "choices": [
+    "Support them (Rg+4, free dock access)",
+    "Break it with muscle (Dr+4, ₽)",
+    "Stay out"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O239",
+   "section": "J",
+   "what": "A local election needs backers",
+   "who": "Candidate",
+   "choices": [
+    "Back him (he repays in later Bribes)",
+    "Sabotage the front-runner",
+    "Run a front man"
+   ],
+   "marks": [
+    "chain"
+   ],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O240",
+   "section": "J",
+   "what": "A tax collector visits your Rackets",
+   "who": "Official",
+   "choices": [
+    "Pay (clean)",
+    "Bribe (₽)",
+    "Evade (H+4, he returns)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O241",
+   "section": "J",
+   "what": "Citizens protest outside a shop you lean on",
+   "who": "Crowd",
+   "choices": [
+    "Join (Rg+2)",
+    "Disperse them (Dr+4, Hero+2)",
+    "Pay the shopkeeper to calm them"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O242",
+   "section": "J",
+   "what": "A paper plans to print a leak about you",
+   "who": "Editor",
+   "choices": [
+    "Buy the copies (₽400)",
+    "Burn the press at night 🌙 (H+10)",
+    "Let it run (Rg−3, Dr−1)"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O243",
+   "section": "J",
+   "what": "A pamphlet argues for justice",
+   "who": "Activist",
+   "choices": [
+    "Spread it (Rg+2)",
+    "Burn it (Dr+2)",
+    "Hire the author to write your own"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O244",
+   "section": "J",
+   "what": "A famous actor visits the town",
+   "who": "Actor",
+   "choices": [
+    "Charm (a photo with you, Rg+3)",
+    "Rob (H+6)",
+    "Hire for a day as a decoy"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O245",
+   "section": "J",
+   "what": "A charity gala is held in the hotel",
+   "who": "Gentleman, Lady",
+   "choices": [
+    "Attend as a donor (Rg+3, contacts)",
+    "Crash and rob (H+12)",
+    "Observe as scouting"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O246",
+   "section": "J",
+   "what": "A press conference by a rival Admin",
+   "who": "Spokesperson",
+   "choices": [
+    "Interrupt (Ten+3, Dr+2)",
+    "Plant a question",
+    "Skip"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O247",
+   "section": "J",
+   "what": "The mayor asks for private help",
+   "who": "Mayor",
+   "choices": [
+    "Accept (₽500, Rg, owed favour)",
+    "Decline",
+    "Blackmail"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O248",
+   "section": "J",
+   "what": "A scandal breaks about a Leader or the Champion",
+   "who": "Reporter",
+   "choices": [
+    "Leak more (Gym wedge)",
+    "Defend them (Rg, favour)",
+    "Stay quiet"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O249",
+   "section": "J",
+   "what": "A poll ranks your Notoriety",
+   "who": "Pollster",
+   "choices": [
+    "Spin it (Rg or Dr)",
+    "Ban it from your districts"
+   ],
+   "marks": [
+    "scales"
+   ],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O250",
+   "section": "J",
+   "what": "Rumours spread about your crew",
+   "who": "Gossips",
+   "choices": [
+    "Seed a good one (Rg+2)",
+    "Seed a bad one about a rival (Ten+2)",
+    "Ignore"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D6"
+  },
+  {
+   "id": "O251",
+   "section": "K",
+   "what": "A smuggler offers a night route",
+   "who": "Smuggler",
+   "choices": [
+    "Take it (Smuggle unlocked once; ₽600)",
+    "Rob him (H+6)",
+    "Report"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O252",
+   "section": "K",
+   "what": "A fence offers a fair price for your loot",
+   "who": "Fence",
+   "choices": [
+    "Sell (60% value, no Heat)",
+    "Haggle (Charm; up to 80%)",
+    "Shortchange him (he warns others)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O253",
+   "section": "K",
+   "what": "A pickpocket guild invites you in",
+   "who": "Guild",
+   "choices": [
+    "Join (Thieve +10%, they take a cut)",
+    "Refuse",
+    "Betray"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O254",
+   "section": "K",
+   "what": "A back-alley fight club",
+   "who": "Brawler",
+   "choices": [
+    "Battle for ₽",
+    "Bet",
+    "Raid"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O255",
+   "section": "K",
+   "what": "A forger sells fake papers",
+   "who": "Forger",
+   "choices": [
+    "Buy ₽200 (Heat −10 next time Jenny checks)",
+    "Blackmail",
+    "Refuse"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O256",
+   "section": "K",
+   "what": "A hidden gambling den",
+   "who": "Host",
+   "choices": [
+    "Play",
+    "Cheat (Stealth)",
+    "Extort (Racket)"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O257",
+   "section": "K",
+   "what": "A safehouse can be rented",
+   "who": "Landlord",
+   "choices": [
+    "Rent ₽100/wk (a hiding spot for Lay Low)",
+    "Buy",
+    "Skip"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O258",
+   "section": "K",
+   "what": "A hitman offers a contract on your enemy",
+   "who": "Assassin (generic, adults only)",
+   "choices": [
+    "Hire (target hurt, big H)",
+    "Refuse",
+    "Report"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O259",
+   "section": "K",
+   "what": "A blackmailer knows about one of your actions",
+   "who": "Blackmailer",
+   "choices": [
+    "Pay",
+    "Fight",
+    "Frame him"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O260",
+   "section": "K",
+   "what": "A debt collector chases an ally",
+   "who": "Collector",
+   "choices": [
+    "Pay the debt (loyal ally)",
+    "Fight",
+    "Let go"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O261",
+   "section": "K",
+   "what": "A runaway criminal asks for shelter",
+   "who": "Criminal",
+   "choices": [
+    "Hide him (a favour)",
+    "Report (Rg, Jenny owes you)"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O262",
+   "section": "K",
+   "what": "An auction of stolen goods",
+   "who": "Auctioneer",
+   "choices": [
+    "Bid",
+    "Raid it (H+10)"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O263",
+   "section": "K",
+   "what": "A back-street medic sells cheap Potions",
+   "who": "Medic",
+   "choices": [
+    "Buy",
+    "Hire (a crew healer)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O264",
+   "section": "K",
+   "what": "A rival street-gang boss claims turf",
+   "who": "Gang Boss",
+   "choices": [
+    "Ally (they pay tribute)",
+    "Fight",
+    "Divide them"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O265",
+   "section": "K",
+   "what": "An informant tips a burglary",
+   "who": "Informant",
+   "choices": [
+    "Act on it (Steal at −15% risk)",
+    "Sell the tip"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O266",
+   "section": "K",
+   "what": "A wrongfully accused man begs for help",
+   "who": "Accused",
+   "choices": [
+    "Help (Rg+3, Lawyer needed)",
+    "Ignore"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O267",
+   "section": "K",
+   "what": "A crooked judge accepts gifts",
+   "who": "Judge",
+   "choices": [
+    "Bribe (arrests dropped once)",
+    "Expose (Rg+4)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O268",
+   "section": "K",
+   "what": "A getaway driver offers a service",
+   "who": "Driver",
+   "choices": [
+    "Hire (Heat −5 on big jobs)",
+    "Refuse"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O269",
+   "section": "K",
+   "what": "A snitch sells your name",
+   "who": "Snitch",
+   "choices": [
+    "Silence him",
+    "Pay him",
+    "Feed him a trap"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O270",
+   "section": "K",
+   "what": "A heist crew offers a job",
+   "who": "Crew leader",
+   "choices": [
+    "Join a three-step heist (big ₽)",
+    "Decline"
+   ],
+   "marks": [
+    "chain"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O271",
+   "section": "K",
+   "what": "An ex-con asks for honest work",
+   "who": "Ex-con",
+   "choices": [
+    "Hire (a loyal Grunt type)",
+    "Refuse"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O272",
+   "section": "K",
+   "what": "Counterfeit bills spread through your Rackets",
+   "who": "Banker",
+   "choices": [
+    "Trace them (Ten+ if the rival printed them)",
+    "Pass them on (H+4)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O273",
+   "section": "K",
+   "what": "A stash is found under a floorboard",
+   "who": "Prop",
+   "choices": [
+    "Take",
+    "Report"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O274",
+   "section": "K",
+   "what": "A secret meeting of local bosses",
+   "who": "Cabal",
+   "choices": [
+    "Attend (contacts)",
+    "Eavesdrop (Stealth)",
+    "Raid"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O275",
+   "section": "K",
+   "what": "A kidnapping rumour",
+   "who": "Informant",
+   "choices": [
+    "Investigate (Rg if you help)",
+    "Join (Dr, H+15, adults only)"
+   ],
+   "marks": [
+    "chain"
+   ],
+   "status": "disabled",
+   "waits": "D10"
+  },
+  {
+   "id": "O276",
+   "section": "L",
+   "what": "A summer festival fills the square",
+   "who": "Crowd",
+   "choices": [
+    "Work the crowd (Thieve +15%, H lower)",
+    "Sell treats (₽)",
+    "Recruit performers"
+   ],
+   "marks": [
+    "day"
+   ],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O277",
+   "section": "L",
+   "what": "Fireworks night",
+   "who": "Crowd",
+   "choices": [
+    "Use noise as cover (Steal −10% risk)",
+    "Sponsor a firework (Rg+4)"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O278",
+   "section": "L",
+   "what": "A Pokémon Contest is held",
+   "who": "Coordinator, Beauty",
+   "choices": [
+    "Enter (appeal rank, prize)",
+    "Sabotage",
+    "Judge"
+   ],
+   "marks": [
+    "day"
+   ],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O279",
+   "section": "L",
+   "what": "A parade passes by",
+   "who": "Crowd",
+   "choices": [
+    "Join (Rg+2)",
+    "Disrupt (Dr+5, H+4)",
+    "Plant flyers"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O280",
+   "section": "L",
+   "what": "A snowstorm closes the road",
+   "who": "Weather",
+   "choices": [
+    "Wait",
+    "Hunt wild Ice types",
+    "Ambush stranded trainers"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O281",
+   "section": "L",
+   "what": "A heatwave drains the town",
+   "who": "Weather",
+   "choices": [
+    "Sell water (₽ + Rg+2)",
+    "Rest (+Pokémon heal)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O282",
+   "section": "L",
+   "what": "A flood hits the lower streets",
+   "who": "Villagers",
+   "choices": [
+    "Help (Rg+5)",
+    "Loot (H+8)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O283",
+   "section": "L",
+   "what": "A thunderstorm",
+   "who": "Weather",
+   "choices": [
+    "Use it as cover",
+    "Shelter",
+    "Fight under rain"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O284",
+   "section": "L",
+   "what": "A day market opens on the plaza",
+   "who": "Vendors",
+   "choices": [
+    "Work stalls (Extort Rackets)",
+    "Buy"
+   ],
+   "marks": [
+    "day"
+   ],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O285",
+   "section": "L",
+   "what": "A night market opens in the alleys",
+   "who": "Vendors",
+   "choices": [
+    "Fence goods",
+    "Hunt rare items"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O286",
+   "section": "L",
+   "what": "A travelling fair arrives",
+   "who": "Carnival folk",
+   "choices": [
+    "Play (small prizes)",
+    "Rob till (H+6)",
+    "Hire as couriers"
+   ],
+   "marks": [
+    "day"
+   ],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O287",
+   "section": "L",
+   "what": "A circus sets up outside town",
+   "who": "Performers",
+   "choices": [
+    "Watch (Rg, intel)",
+    "Recruit a clown (Stealth)",
+    "Steal the box office"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O288",
+   "section": "L",
+   "what": "An abandoned warehouse stands empty on the edge of the district",
+   "who": "Place",
+   "choices": [
+    "Explore (find scrap, a key or a squatter to recruit)",
+    "Claim it (a free extra room slot at your next HQ tier, H+2 from the owner's lawyer)",
+    "Report it (Rg+1)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O289",
+   "section": "L",
+   "what": "A haunted-house story circulates",
+   "who": "Place, Hex Maniac",
+   "choices": [
+    "Investigate (Ghost-type find, item)",
+    "Fake a haunting to scare a rival Racket off (Ten+2)",
+    "Sell tours (₽200, Rg+1)"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O290",
+   "section": "L",
+   "what": "A tower bell tolls at midnight",
+   "who": "Place",
+   "choices": [
+    "Climb (view of the whole district: reveals guard routes, Scout bonus next day)",
+    "Ring it as a signal to your crew",
+    "Leave"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O291",
+   "section": "L",
+   "what": "A bridge toll collector blocks the only road",
+   "who": "Place, Toll Collector",
+   "choices": [
+    "Pay ₽50",
+    "Battle him and take over the toll (a small Racket, H+3)",
+    "Cross at night 🌙 by boat (Stealth check)"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O292",
+   "section": "L",
+   "what": "A freight train waits at the station",
+   "who": "Place, Rail Worker",
+   "choices": [
+    "Ride it (move districts, saves an action)",
+    "Ambush a freight car 🌙 (Take, H+8)",
+    "Bribe the worker for the schedule (₽100)"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O293",
+   "section": "L",
+   "what": "An airport freight yard handles crates unchecked",
+   "who": "Place, Handler",
+   "choices": [
+    "Smuggle a crate (Smuggle, ₽600, H+4)",
+    "Scout the flight list (reveals a future region lift)",
+    "Report (Rg+2)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O294",
+   "section": "L",
+   "what": "The harbour wakes at dawn",
+   "who": "Place, Dockhand",
+   "choices": [
+    "Work a shift (₽120, learn the dock Rackets)",
+    "Fish for stores",
+    "Count rival ships (Ten intel)"
+   ],
+   "marks": [
+    "day"
+   ],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O295",
+   "section": "L",
+   "what": "A mountain pass opens after snow",
+   "who": "Place, Hiker",
+   "choices": [
+    "Cross it (trainers waiting, a rare find)",
+    "Block it with a toll (Dr+3, rival supply cut)",
+    "Escort a convoy (₽300, Rg+2)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O296",
+   "section": "L",
+   "what": "A desert caravan crosses the dunes",
+   "who": "Place, Trader",
+   "choices": [
+    "Trade (rare TMs for goods)",
+    "Rob it (H+6, Dr+3)",
+    "Escort it (₽, Rg+2)"
+   ],
+   "marks": [],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O297",
+   "section": "L",
+   "what": "A hot spring welcomes tired travellers",
+   "who": "Place, Guests",
+   "choices": [
+    "Rest (+1 action tomorrow, Pokémon heal)",
+    "Eavesdrop (intel on a Leader or Admin)",
+    "Close it for a \"private party\" (Dr+)"
+   ],
+   "marks": [
+    "day"
+   ],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O298",
+   "section": "L",
+   "what": "A graveyard sits quiet on a still night",
+   "who": "Place",
+   "choices": [
+    "Visit (a lore moment, Regard with the crew)",
+    "Hide a stash (safe from raids for 7 days)",
+    "Fake a ghost for a rival spy"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O299",
+   "section": "L",
+   "what": "A restless night leads you to an old photograph of your first Grunt",
+   "who": "Prop",
+   "choices": [
+    "Reflect (crew bonding line, small loyalty for him)",
+    "Burn it (cold Boss path, Dr+1)",
+    "Show it to the crew (Rg+)"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D15"
+  },
+  {
+   "id": "O300",
+   "section": "L",
+   "what": "A comet passes overhead",
+   "who": "Sky",
+   "choices": [
+    "Watch with the crew (once per run: +1 Regard for all crew, a bonding line)",
+    "Use the crowd outside to run a Steal (H−4 for the night)",
+    "Sleep"
+   ],
+   "marks": [
+    "night"
+   ],
+   "status": "disabled",
+   "waits": "D15"
+  }
+ ]
+}

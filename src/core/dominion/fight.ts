@@ -11,6 +11,7 @@ import type { PokemonInstance, RunState } from '../state';
 import { pickThemeSpecies } from '../themes';
 import { DOMINION_DATA } from './data';
 import { districtDef, foeOf, targetDef } from './field';
+import { rivalSide } from './rivals';
 
 /** Starts `field.fight` and marks it begun. Returns null when there's nothing to start or nobody can fight. */
 export function beginDominionFight(content: Content, current: RunState): RunState | null {
@@ -29,11 +30,16 @@ export function beginDominionFight(content: Content, current: RunState): RunStat
   const rng = new Rng(hashSeed(`${run.seed}::dominion-foe::${b.field.rolls}::${fight.foe}`));
   const make = (species: string, level: number): PokemonInstance | null => (content.species.has(species) ? newMon(content, run, species, level, 'e') : null);
   let team: PokemonInstance[] = [];
-  let trainer: { classId: string; name: string; leaderId: null } | null = null;
+  let trainer: { classId: string; name: string; leaderId: string | null } | null = null;
   if (fight.foe === 'wild' || fight.foe === 'ghost') {
     const theme = content.themes.get(district.wild);
     const species = fight.foe === 'ghost' ? DOMINION_DATA.field.foes.ghost[rng.int(0, DOMINION_DATA.field.foes.ghost.length - 1)]! : theme ? pickThemeSpecies(content, theme, rng, undefined, DOMINION_DATA.field.region, undefined, foe.level) : 'rattata';
     team = [make(species, foe.level)].filter((m): m is PokemonInstance => !!m);
+  } else if (fight.foe === 'rival') {
+    // D9: a rival Grunt squad, an Admin, or the Boss at the door (rivals.ts).
+    const side = rivalSide(b, run, fight);
+    team = side.species.map((s, i) => make(s, Math.max(2, side.level - (i ? 1 : 0)))).filter((m): m is PokemonInstance => !!m);
+    trainer = { classId: side.classId, name: side.name, leaderId: side.leaderId };
   } else if (fight.foe === 'member') {
     const m = b.members[0];
     team = (m?.team ?? []).map((x) => ({ ...structuredClone(x), uid: `${x.uid}-spar` }));

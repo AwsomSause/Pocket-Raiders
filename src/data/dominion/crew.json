@@ -803,8 +803,7 @@
       "from": [],
       "text": "Bug-types in his team +10 level cap.",
       "mods": {},
-      "live": false,
-      "needs": "D4"
+      "live": true
     },
     {
       "id": "clutch",
@@ -821,8 +820,7 @@
       "from": [],
       "text": "Caught Pokémon start +10 Loyalty.",
       "mods": {},
-      "live": false,
-      "needs": "D4"
+      "live": true
     },
     {
       "id": "nurturer",
@@ -830,8 +828,7 @@
       "from": [],
       "text": "Stored Pokémon level while he rests.",
       "mods": {},
-      "live": false,
-      "needs": "D4"
+      "live": true
     },
     {
       "id": "patient",
@@ -2079,13 +2076,50 @@
       "n": 13,
       "id": "promotion-day",
       "name": "Promotion Day",
-      "needs": "D4"
+      "when": "evening",
+      "trigger": {
+        "ready": true
+      },
+      "text": "{name} has met the bar for the next rank, and a seat is open. A short ceremony in the Mess: a new armband, a few words from you.",
+      "choices": [
+        {
+          "label": "Fancy (₽100)",
+          "funds": -100,
+          "promote": true,
+          "loy": 10,
+          "crewMor": 3
+        },
+        {
+          "label": "Plain",
+          "promote": true,
+          "loy": 6
+        },
+        {
+          "label": "Not yet",
+          "amb": 3
+        }
+      ]
     },
     {
       "n": 14,
       "id": "passed-over",
       "name": "Passed Over",
-      "needs": "D4"
+      "when": "morning",
+      "trigger": {
+        "passedOver": true
+      },
+      "text": "Someone else got the seat {name} wanted. {name} sulks by the door.",
+      "choices": [
+        {
+          "label": "Explain",
+          "loy": 3
+        },
+        {
+          "label": "Ignore it",
+          "loy": -10,
+          "amb": 8
+        }
+      ]
     },
     {
       "n": 15,
@@ -2354,7 +2388,24 @@
       "n": 27,
       "id": "the-oath",
       "name": "The Oath",
-      "needs": "D4"
+      "when": "evening",
+      "trigger": {
+        "rankAtLeast": "grunt"
+      },
+      "once": true,
+      "text": "{name} wears the full uniform now. You ask for the oath.",
+      "choices": [
+        {
+          "label": "Take the oath",
+          "loy": 8,
+          "flag": "sworn",
+          "memory": "I swore the oath to the Boss."
+        },
+        {
+          "label": "Skip it",
+          "mor": -2
+        }
+      ]
     },
     {
       "n": 28,
