@@ -20,6 +20,7 @@ import { CrewController } from './dominion/crewController';
 import { ReserveController } from './dominion/reserveController';
 import { HqController } from './dominion/hqController';
 import { RivalController } from './dominion/rivalController';
+import { PoliceController } from './dominion/policeController';
 import { threatRow } from '../core/dominion/rivalScreens';
 import { cardModel, gridPages, mapModel, newCursor, pageFor, type MapCursor } from '../core/dominion/fieldScreens';
 import { cardView, mapView } from '../ui/redux/screens/dominion/fieldViews';
@@ -55,6 +56,8 @@ export class DominionScene extends Phaser.Scene {
   private hq = new HqController(this);
   /** D9: the Rival File (key R). */
   private rival = new RivalController(this);
+  /** D24: police questioning (owns the screen while a case is open or its release page unread). */
+  private police = new PoliceController(this);
 
   constructor() {
     super('Dominion');
@@ -71,6 +74,7 @@ export class DominionScene extends Phaser.Scene {
     this.hq = new HqController(this);
     this.res = new ReserveController(this);
     this.rival = new RivalController(this);
+    this.police = new PoliceController(this);
     const { session } = services();
     const run = session.run;
     if (!run) return void this.scene.start('MainMenu');
@@ -126,6 +130,7 @@ export class DominionScene extends Phaser.Scene {
         ...this.res.acts(),
         ...this.hq.acts(),
         ...this.rival.acts(),
+        ...this.police.acts(),
         base: () => { this.hq.open(); this.view?.refresh(); },
       },
       overs: {
@@ -139,6 +144,8 @@ export class DominionScene extends Phaser.Scene {
     const kb = this.input.keyboard;
     const raw = (e: KeyboardEvent): void => {
       if (this.leaving) return;
+      // D24: the interview room and the release page read their keys first (typing included).
+      if (this.inRun() && this.police.raw(e)) return;
       if (this.screen === 'map') {
         if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
         else if (e.code === 'KeyT') this.nextTarget();
@@ -197,8 +204,14 @@ export class DominionScene extends Phaser.Scene {
     return { look, atlas: !look.endsWith('.png') };
   }
 
+  /** Past the title, the setup and the opening: a run page (where a police case can take over). */
+  private inRun(): boolean {
+    return this.screen !== 'title' && this.screen !== 'setup' && this.screen !== 'opening';
+  }
+
   private render(): string {
     const b = this.block();
+    if (b && this.inRun() && this.police.owns()) return this.police.render();
     switch (this.screen) {
       case 'title':
         return titleView({ at: this.titleAt, started: !!b, cont: b ? `${b.teamName ?? 'Unnamed Crew'} · Kanto · Day ${b.day}` : null });
@@ -233,6 +246,7 @@ export class DominionScene extends Phaser.Scene {
   private key(a: InputAction): void {
     if (this.ate) return void (this.ate = false);
     if (this.leaving) return;
+    if (this.inRun() && this.police.key(a)) return void this.view?.refresh();
     if (this.res.key(a)) return void this.view?.refresh();
     if (this.rival.key(a)) return void this.view?.refresh();
     if (this.crew.key(a)) return void this.view?.refresh();
@@ -338,6 +352,25 @@ export class DominionScene extends Phaser.Scene {
   }
   refresh(): void {
     this.view?.refresh();
+  }
+  /** D24: an answer in the interview room, or the release page read (saved). */
+  policeStep(action: DominionAction): { ok: boolean; notice: string | null } {
+    return services().session.dominionStep(action);
+  }
+  /** D24: the release page is read. */
+  toHq(): void {
+    this.screen = 'hq';
+    this.notice = null;
+    this.view?.refresh();
+  }
+  /** A species' front atlas (the CCTV still, a Pokémon held as evidence). */
+  monFile(species: string): string | null {
+    const sp = services().session.content.species.get(species);
+    return sp ? rxFileOf(this.manifest, pokemonAssetIds(sp.assets).front)?.file ?? null : null;
+  }
+  /** The Boss's sprite on the release page. */
+  bossLook(): string | null {
+    return this.files?.boss.file ?? null;
   }
   /** D9: an answer on the Rival File (saved). */
   rivalStep(action: DominionAction): { ok: boolean; fight: boolean; notice: string | null } {

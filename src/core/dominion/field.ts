@@ -390,6 +390,14 @@ const SETTLERS: Partial<Record<FieldFight['why'], Settler>> = {};
 export function addFightSettler(why: FieldFight['why'], f: Settler): void {
   SETTLERS[why] = f;
 }
+/** D24: the Boss is caught (a failed act, a lost police fight or raid); police.ts may open a questioning. */
+export interface CaughtEv { why: 'stealth' | 'police' | 'raid'; district: string; action: ActionDef | null; place: string | null; seed: string }
+type CaughtHook = (b: DominionBlock, ev: CaughtEv) => string[];
+const CAUGHT: CaughtHook[] = [];
+export function addCaughtHook(h: CaughtHook): void {
+  CAUGHT.push(h);
+}
+const caughtLines = (b: DominionBlock, ev: CaughtEv): string[] => CAUGHT.flatMap((h) => h(b, ev));
 /** D9: the rival foe on the Card (rivals.ts). */
 let RIVAL_FOE: ((b: DominionBlock, run: Pick<RunState, 'party'>) => Foe) | null = null;
 export function setRivalFoe(f: (b: DominionBlock, run: Pick<RunState, 'party'>) => Foe): void {
@@ -657,6 +665,7 @@ export function act(content: Content | null, run: RunState, a: { action: string;
     if (c.police && rng.int(1, 100) <= c.police && canBattle(run)) return wait('police', 'police');
     const lines = [...fail(b, x), ...grow(b, c.def, c.play!, false, false)];
     syncHeat(b);
+    lines.push(...caughtLines(b, { why: 'stealth', district: c.district.id, action: c.def, place: c.target?.name ?? null, seed: run.seed }));
     return { ok: true, block: b, notice: lines.join(' '), fight: false, mon: null };
   }
   const s = succeed(content, b, run, x, rng);
@@ -703,6 +712,8 @@ export function settle(content: Content | null, b: DominionBlock, run: RunState,
       const take = Math.max(0, Math.floor(Math.max(0, b.funds) * P.raidTake));
       spend(b, take);
       lines.push(fill(PL.raidLost!, { take }));
+      syncHeat(b);
+      lines.push(...caughtLines(b, { why: 'raid', district: district.id, action: null, place: null, seed: run.seed }));
     }
     syncHeat(b);
     return lines;
@@ -725,6 +736,10 @@ export function settle(content: Content | null, b: DominionBlock, run: RunState,
       lines.push(fill(PL.lost!, { name: P.jenny.name, fine, heat: P.lost.heat, district: district.name }));
     }
     lines.push(...grow(b, x.def, x.play, false, false));
+    if (!won) {
+      syncHeat(b);
+      lines.push(...caughtLines(b, { why: 'police', district: district.id, action: x.def, place: x.target?.name ?? null, seed: run.seed }));
+    }
   } else if (outcome === 'fled') {
     lines.push(L().fled!);
   } else if (won) {

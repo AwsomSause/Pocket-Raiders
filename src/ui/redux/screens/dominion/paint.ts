@@ -17,6 +17,7 @@ function rng(seed: number): () => number {
 const PAL = {
   night: { sky: ['#1a0f3a', '#3b1c66', '#5a2a7a'], far: '#2a1852', mid: '#1c1040', near: '#0e0822', win: ['#ffd36b', '#ff7ab8', '#9fe3ff', '#ffe9a8'], lit: 0.32 },
   day: { sky: ['#7cc4f0', '#a9dcf6', '#dff2fb'], far: '#8fb4cf', mid: '#6f93b0', near: '#4f6e88', win: ['#cfe9ff', '#e8f6ff'], lit: 0.5 },
+  dusk: { sky: ['#2a2050', '#7a3c6e', '#e0745a'], far: '#3a2a5a', mid: '#24183e', near: '#120c22', win: ['#ffd36b', '#ffb36b'], lit: 0.22 },
 };
 
 function canvas(w: number, h: number): [HTMLCanvasElement, CanvasRenderingContext2D] | null {
@@ -28,14 +29,14 @@ function canvas(w: number, h: number): [HTMLCanvasElement, CanvasRenderingContex
   return g ? [c, g] : null;
 }
 
-function skyline(seed: number, tall: number, pal: keyof typeof PAL = 'night'): string {
+function skyline(seed: number, tall: number, pal: keyof typeof PAL = 'night', sky = true): string {
   const out = canvas(960, 540), half = canvas(480, 270);
   if (!out || !half) return '';
   const [c, x] = out, [b, g] = half;
   const W = 480, H = 270, R = rng(seed), p = PAL[pal];
   const gr = g.createLinearGradient(0, 0, 0, H);
   gr.addColorStop(0, p.sky[0]!); gr.addColorStop(0.6, p.sky[1]!); gr.addColorStop(1, p.sky[2]!);
-  g.fillStyle = gr; g.fillRect(0, 0, W, H);
+  g.fillStyle = gr; if (sky) g.fillRect(0, 0, W, H);
   const base = H;
   ([[p.far, 0.55, 0.35, 10, 26], [p.mid, 0.42, 0.6, 14, 34], [p.near, 0.28, 0.9, 18, 46]] as const).forEach((L) => {
     let X = -10;
@@ -131,6 +132,8 @@ const once = (key: string, make: () => string): string => {
 export const skylineUrl = (): string => once('skyline', () => skyline(5, 1.25));
 /** Mockup 4's blurred daytime street behind the Card (seed 21, tall .9, the day palette). */
 export const skylineDayUrl = (): string => once('skyline-day', () => skyline(21, 0.9, 'day'));
+/** Rotom mockup a9's dusk street behind the police station (seed 31, tall .8, the dusk palette, no sky of its own). */
+export const skylineDuskUrl = (): string => once('skyline-dusk', () => skyline(31, 0.8, 'dusk', false));
 /** HQ Lv. 1, the leaking warehouse (mockup 1); the morning sky through the skylight and door when `morning`. */
 export const warehouseUrl = (morning: boolean): string => once(`warehouse-${morning}`, () => warehouse(morning));
 /** Film grain shared by every Dominion stage (the mockups' `--noise`). */
