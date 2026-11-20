@@ -12,17 +12,17 @@ import type { DominionBlock, GruntType, Hire, Lead, Member, StatId } from './sch
 import { STAT_IDS } from './schema';
 import { memberMonPool } from './start';
 import { fill } from './worldTurn';
+import { notorietyOf } from './empire';
 import { hirePrice, hqFx, spend } from './hqFx';
 
 const C = () => DOMINION_DATA.crew;
 const RC = () => DOMINION_DATA.crew.recruit;
 const clamp = (n: number, lo = 0, hi = 100): number => Math.max(lo, Math.min(hi, Math.round(n)));
 
-/**
- * Notoriety (Part 9 A14) as far as D3 can count it: +1 per member. D6 adds Regard, Dread and holdings, and with them
- * the Patrons' "after Crew" (50) gate opens.
- */
-export const notoriety = (b: DominionBlock): number => b.members.length;
+/** Notoriety (Part 9 A14, counted by empire.ts since D6): towns' Regard or Dread, holdings and members. Patrons need 50 (Crew). */
+export const notoriety = (b: DominionBlock): number => notorietyOf(b).total;
+/** What Notoriety adds to a pitch's odds, capped (empire.json notoriety.pitchCap). */
+const pitchNotoriety = (b: DominionBlock): number => Math.min(DOMINION_DATA.empire.notoriety.pitchCap, notoriety(b));
 
 /** A24: the one Gym Leader and one Elite Four member per region who never join. */
 export function alwaysRefuses(region: string, personId: string): boolean {
@@ -76,7 +76,7 @@ export function pitchOdds(b: DominionBlock, lead: Lead, pitch: string): number {
   const motive = C().motives.find((x) => x.id === lead.motive);
   const finder = b.members.find((m) => m.id === lead.foundBy);
   // D5: the Recruitment Center adds to every pitch.
-  let p = lead.chance + lead.bonus + b.hqLevel * rc.hqPer + (finder ? finder.stats.charm * rc.charmPer : 0) + notoriety(b) + hqFx(b).recruit;
+  let p = lead.chance + lead.bonus + b.hqLevel * rc.hqPer + (finder ? finder.stats.charm * rc.charmPer : 0) + pitchNotoriety(b) + hqFx(b).recruit;
   if (motive?.pitch === pitch) p += rc.matchBonus;
   // D9: a rival scaring your recruiter (rival actions 37, 58, 73, 95) takes its % off while it lasts.
   const cut = b.rivals?.recruit;

@@ -1,0 +1,92 @@
+{
+  "_source": "DOMINION slice D6: plans/evil-mode-rework Part 3 §1 (the Empire Ledger) and §2 (districts and holding them), Part 9 A14 (the Notoriety ladder); mockup 7 (the Ledger). Numbers are starting values, not playtested.",
+  "notoriety": {
+    "perHolding": 2,
+    "perMember": 1,
+    "pitchCap": 20,
+    "steps": [
+      { "id": "nobody", "word": "Nobody", "min": 0, "calls": "“That lot in the old warehouse”", "unlocks": ["The nine starting actions", "Handmade flyers"] },
+      { "id": "street-gang", "word": "Street Gang", "min": 20, "calls": "Your name, said quietly", "unlocks": ["The Founding", "Rackets, the Fence, Bribe, Smuggle", "Safehouses, printed flyers", "HQ Lv. 2", "A press contact"] },
+      { "id": "crew", "word": "Crew", "min": 50, "calls": "Your name, in the paper", "unlocks": ["Buy Out, Sabotage, Raids", "Outposts, uniforms in public", "HQ Lv. 3", "The Mayor, Jenny, Marry In, Secret Meetings"] },
+      { "id": "outfit", "word": "Outfit", "min": 100, "calls": "“The [Team] problem”", "unlocks": ["Gym takeovers", "The Radio, council seats", "The black market", "HQ Lv. 4"] },
+      { "id": "syndicate", "word": "Syndicate", "min": 200, "calls": "“Organised crime”", "unlocks": ["Lab heists, Legendary research", "Snagem and Cipher deals", "HQ Lv. 5"] },
+      { "id": "team", "word": "Team", "min": 400, "calls": "Named like the canon teams", "unlocks": ["The League answers", "Victory paths open", "HQ Lv. 6"] },
+      { "id": "empire", "word": "Empire", "min": 700, "calls": "“Them.”", "unlocks": ["The Citadel's Throne Room", "The Hero's Last Stand when a path completes"] }
+    ],
+    "oldWords": { "Rumoured": "street-gang", "Known": "crew", "Feared": "outfit", "Legend": "syndicate" },
+    "pressFrom": "street-gang",
+    "lines": {
+      "risen": "The town calls you a {word} now: {calls}.",
+      "press": "A reporter left a card at the warehouse door. You have a press contact.",
+      "gate": "Needs Notoriety: {word} ({min}).",
+      "noPress": "Needs a press contact (Notoriety: Street Gang)."
+    }
+  },
+  "control": {
+    "racketWeekly": 2,
+    "heatErodeAt": 40,
+    "heatErode": 1,
+    "holdLoss": 5,
+    "skimShare": 0.5,
+    "lines": {
+      "unheld": "Nobody held {district} this week. Control −{n}.",
+      "slipped": "{district} slipped to {word}.",
+      "rose": "{district} is {word} now.",
+      "erode": "Heat in {district} is wearing your hold thin. Control −{n}.",
+      "rackets": "Your Rackets dug in: Control +{n} in {districts}."
+    },
+    "short": { "out": "Outsider", "foot": "Foothold", "contested": "Contested", "held": "Held", "owned": "Owned", "rival": "Rivals'" },
+    "words": { "out": "an Outsider's town", "foot": "a Foothold", "contested": "Contested", "held": "Held", "owned": "Owned", "rival": "the rivals'" }
+  },
+  "ledger": {
+    "keep": 8,
+    "graph": 6,
+    "lines": {
+      "rackets": { "label": "Rackets ({n})", "clean": false },
+      "jobs": { "label": "The Boss's jobs", "clean": false },
+      "legit": { "label": "Shows and honest work", "clean": true },
+      "oddJobs": { "label": "Odd jobs", "clean": true },
+      "crew": { "label": "Crew jobs", "clean": false },
+      "hiring": { "label": "Hiring, bail and gifts", "clean": false },
+      "vehicles": { "label": "Vehicles", "clean": false },
+      "police": { "label": "Fines and thieves", "clean": false },
+      "wages": { "label": "Wages ({n} crew)", "clean": false },
+      "rent": { "label": "Rent and upkeep", "clean": false },
+      "other": { "label": "Other", "clean": false }
+    },
+    "byAction": { "act": "jobs", "buy": "vehicles", "hire": "hiring", "approach": "hiring", "admit": "hiring", "bail": "hiring", "gift": "hiring", "patron": "hiring", "endDay": "oddJobs", "do": "jobs", "talk": "crew", "evTalk": "crew" },
+    "byStep": { "crew": "crew", "police": "police", "rivals": "other", "hero": "other", "legends": "other", "world": "other" },
+    "byFight": { "police": "police", "looker": "police", "raid": "police", "fail": "jobs", "always": "jobs" },
+    "best": "best week yet! ↑{pct}%",
+    "bestFirst": "first good week!",
+    "due": "due Day {day}",
+    "rivalLook": "t-giovanni",
+    "noRival": "no word yet",
+    "heroWord": "not seen yet",
+    "tabs": [
+      { "id": "money", "word": "MONEY", "colour": "#2d7a3e" },
+      { "id": "empire", "word": "EMPIRE", "colour": "#5b34b0" },
+      { "id": "crew", "word": "CREW", "colour": "#a8322a" }
+    ]
+  },
+  "tasks": {
+    "lines": {
+      "regard": "{name}: {task} in {district}. Regard +{n}.",
+      "dread": "{name}: {task} in {district}. Dread +{n}.",
+      "cool": "{name}: {task} in {district}. Heat −{n}.",
+      "patrol": "{name} walked {district}'s streets. The rivals there lost ground.",
+      "collect": "{name} is collecting in {district}: Rackets there pay {pct}% this week.",
+      "noRackets": "{name} went collecting in {district}, but you have no Rackets there.",
+      "hold": "{name} held {district} for you.",
+      "notHeld": "{name} went to hold {district}, but it isn't held yet.",
+      "line": "{name} stood watch over {district}. Nobody moved on it.",
+      "eavesdrop": "{name} heard talk about {target} in {district}. It's scouted.",
+      "nothing": "{name} listened in {district} and heard nothing new.",
+      "poll": "{name} asked around {district}: Regard {regard}, Dread {dread}.",
+      "pollAll": "{name}'s poll: {list}.",
+      "face": "{name} stood in for you in {district}. Regard +{n}, and it counts as your visit.",
+      "party": "{name} threw a block party in {district} (−₽{cost}). Regard +{n}.",
+      "song": "{name} wrote a song about the team. Regard +{n} in {district}; the crew hums it (Morale +{mor})."
+    }
+  }
+}
