@@ -57,6 +57,8 @@ export interface FxOptions {
   recoil?: (side: Side, cue: Extract<Cue, { kind: 'impact' }>) => boolean;
   /** The screen's own heal (redesign pass 3: plus-signs, a green glow, a hop). False when it can't play (the pack's heal shows). */
   heal?: (side: Side) => boolean;
+  /** The screen's own status look (pass 8) arriving, ticking or stopping a move. False: the pack's animation plays. */
+  condition?: (side: Side, status: string, at: 'arrive' | 'tick' | 'cant') => boolean;
 }
 
 const BADGES: Record<string, { label: string; color: string }> = {
@@ -144,6 +146,7 @@ export class BattleFx {
         return this.pulse(cue.side, cue.color);
       case 'commonAnim':
         if (cue.heal && !this.skipping && this.opts.heal?.(cue.side)) return;
+        if (cue.cond && !this.skipping && this.opts.condition?.(cue.side, cue.cond.status, cue.cond.at)) return;
         return this.commonAnim(cue.side, cue.anim, cue.alt);
       case 'impact':
         return this.impact(cue);

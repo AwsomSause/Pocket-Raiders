@@ -16,6 +16,15 @@ export const EASES = {
   back: (u: number) => 1 + 2.70158 * (u - 1) ** 3 + 1.70158 * (u - 1) ** 2,
   back2: (u: number) => 1 + 4.2 * (u - 1) ** 3 + 3.2 * (u - 1) ** 2,
   el: (u: number) => (u === 0 || u === 1 ? u : 2 ** (-10 * u) * Math.sin((u * 10 - 0.75) * 2.0944) + 1),
+  /** Bounces to rest (the mockup's `bo`). */
+  bo: (u: number) => {
+    const n = 7.5625;
+    const d = 2.75;
+    if (u < 1 / d) return n * u * u;
+    if (u < 2 / d) return n * (u - 1.5 / d) ** 2 + 0.75;
+    if (u < 2.5 / d) return n * (u - 2.25 / d) ** 2 + 0.9375;
+    return n * (u - 2.625 / d) ** 2 + 0.984375;
+  },
 } as const;
 export type EaseName = keyof typeof EASES;
 
@@ -38,9 +47,11 @@ export interface MotionSeg {
 
 /** A one-shot effect at a moment of the clip. Positions are screen pixels (960×540). */
 export type MotionFx =
-  | { kind: 'dust'; at: number; x: number; y: number; n: number }
+  | { kind: 'dust'; at: number; x: number; y: number; n: number; /** Its own colours (ice shards, sparkles); dust colours when left out. */ cols?: number[]; /** Size and speed, 1 = dust. */ big?: number }
   | { kind: 'flash'; at: number; d: number; alpha: number; color?: number }
-  | { kind: 'ring'; at: number; x: number; y: number; r1: number; flat: number; d: number; color?: number; w?: number }
+  | { kind: 'ring'; at: number; x: number; y: number; r1: number; flat: number; d: number; color?: number; w?: number; /** Starts at this radius (a ring closing in when it is bigger than r1). */ r0?: number }
+  /** A jagged bolt from one point to the other, shown for `d` ms (and once more when `again`). */
+  | { kind: 'bolt'; at: number; x1: number; y1: number; x2: number; y2: number; n: number; j: number; color: number; color2: number; w: number; d: number; again?: boolean }
   /** A many-pointed burst of light that grows and fades (the ace's star). */
   | { kind: 'star'; at: number; x: number; y: number; size: number; points: number; d: number }
   | { kind: 'streak'; at: number; x1: number; y1: number; x2: number; y2: number; w: number; color: number; d: number; hold: number; out: number }
@@ -198,6 +209,6 @@ function lastStep(clip: MotionClip): number {
  */
 export function fxAllowed(fx: MotionFx, level: ClipLevel): boolean {
   if (level === 'off') return fx.kind === 'cue' || fx.kind === 'dim';
-  if (level === 'reduced') return fx.kind !== 'flash' && fx.kind !== 'dust' && fx.kind !== 'orbs' && fx.kind !== 'star';
+  if (level === 'reduced') return fx.kind !== 'flash' && fx.kind !== 'dust' && fx.kind !== 'orbs' && fx.kind !== 'star' && fx.kind !== 'bolt';
   return true;
 }

@@ -44,7 +44,7 @@ export type Cue =
   | { kind: 'number'; side: Side; amount: number; tone: 'damage' | 'crit' | 'super' | 'weak' | 'heal'; motion: boolean }
   | { kind: 'badge'; side: Side; badge: EffectivenessBadge | 'crit' }
   /** Status and healing animations (common-burn, common-health-up …). */
-  | { kind: 'commonAnim'; side: Side; anim: string; alt?: string; /** A heal: the screen may show its own (redesign pass 3) instead. */ heal?: true }
+  | { kind: 'commonAnim'; side: Side; anim: string; alt?: string; /** A heal: the screen may show its own (redesign pass 3) instead. */ heal?: true; /** A status arriving, ticking or stopping a move: the screen may show its own look (pass 8) instead. */ cond?: { at: 'arrive' | 'tick' | 'cant'; status: string } }
   | { kind: 'statArrows'; side: Side; up: boolean; motion: boolean }
   /** An ability triggering: banner with its name plus the category's flourish (registry id `ability.*`). */
   | { kind: 'abilityAnim'; side: Side; anim: string; label: string; ability: string }
@@ -190,7 +190,7 @@ export function planCues(
       case 'seedDamage': {
         const common = e.type === 'residual' ? `status.${e.status}` : e.type === 'confusionHit' ? 'confusion' : e.type === 'bindDamage' ? 'bind' : e.type === 'seedDamage' ? 'seed' : '';
         if (full && e.type === 'bindDamage') cues.push({ kind: 'commonAnim', side: e.side, ...bindChoice(anims, e.moveId) });
-        else if (full && common) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, common) });
+        else if (full && common) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, common), ...(e.type === 'residual' ? { cond: { at: 'tick' as const, status: e.status } } : {}) });
         cues.push({ kind: 'number', side: e.side, amount: e.amount, tone: 'damage', motion: full });
         break;
       }
@@ -229,11 +229,11 @@ export function planCues(
         if (full) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, 'seed') });
         break;
       case 'status':
-        if (full && anims.common[`status.${e.status}`]) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, `status.${e.status}`) });
+        if (full && anims.common[`status.${e.status}`]) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, `status.${e.status}`), cond: { at: 'arrive', status: e.status } });
         if (animated && STATUS_WORDS[e.status]) cues.push({ kind: 'textAnim', side: e.side, anim: 'text.status', label: STATUS_WORDS[e.status]! });
         break;
       case 'cant':
-        if (full && (e.reason === 'slp' || e.reason === 'frz' || e.reason === 'par')) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, `status.${e.reason}`) });
+        if (full && (e.reason === 'slp' || e.reason === 'frz' || e.reason === 'par')) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, `status.${e.reason}`), cond: { at: 'cant', status: e.reason } });
         break;
       case 'stat':
         if (animated) {

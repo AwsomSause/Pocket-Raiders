@@ -12,7 +12,7 @@ const LOOPS = 'standLoops';
 /** A hit's recoil playing on the sprite (`{ stop }`); `standStill` ends it so nothing else starts from mid-recoil. */
 export const HIT_RUN = 'hitRun';
 
-type Base = { y: number; sx: number; sy: number; angle: number };
+type Base = { y: number; sx: number; sy: number; angle: number; x?: number };
 
 /** Stops a sprite's standing loops and puts it back at its resting place, size and angle. */
 export function standStill(scene: Phaser.Scene, v: Phaser.GameObjects.Sprite): void {
@@ -21,10 +21,11 @@ export function standStill(scene: Phaser.Scene, v: Phaser.GameObjects.Sprite): v
   v.setData(HIT_RUN, undefined);
   hit?.stop();
   const loops = v.getData(LOOPS) as Phaser.Tweens.Tween[] | undefined;
-  loops?.forEach((t) => t.remove());
+  // stop(), not remove(): a TweenChain (the paralysis twitch) has its own remove(child) that throws without one.
+  loops?.forEach((t) => t.stop());
   v.setData(LOOPS, undefined);
   const base = v.getData(BASE) as Base | undefined;
-  if (base && v.active) v.setPosition(v.x, base.y).setScale(base.sx, base.sy).setAngle(base.angle);
+  if (base && v.active) v.setPosition(base.x ?? v.x, base.y).setScale(base.sx, base.sy).setAngle(base.angle);
   v.setData(BASE, undefined);
   void scene;
 }
@@ -52,4 +53,26 @@ export function stand(scene: Phaser.Scene, v: Phaser.GameObjects.GameObject, kin
     if (look.hop) loop({ y: { from: base.y, to: base.y - look.hop }, duration: look.hopEvery / 9, ease: 'Quad.easeOut', repeatDelay: look.hopEvery - (2 * look.hopEvery) / 9, delay: (look.hopEvery * 3) / 9 });
     v.setData(LOOPS, loops);
   });
+}
+
+/**
+ * Paralysis (pass 8): it stands locked, and every 1.1 s it twitches: 4 px one way, 3 px the other, back. The twitch is
+ * a standing loop, so `standStill` ends it and puts it back at `restX`.
+ */
+export function twitch(scene: Phaser.Scene, v: Phaser.GameObjects.GameObject, full: boolean, restX: number): void {
+  if (!full || !spritesAnimate() || !(v instanceof Phaser.GameObjects.Sprite) || !v.active) return;
+  standStill(scene, v);
+  v.setData(BASE, { y: v.y, sx: v.scaleX, sy: v.scaleY, angle: v.angle, x: restX } satisfies Base);
+  const step = 1100 / 6;
+  const chain = scene.tweens.chain({
+    targets: v,
+    loop: -1,
+    tweens: [
+      { x: restX, duration: step * 3 },
+      { x: restX + 4, duration: step },
+      { x: restX - 3, duration: step },
+      { x: restX, duration: step },
+    ],
+  });
+  v.setData(LOOPS, [chain]);
 }

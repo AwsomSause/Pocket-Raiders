@@ -403,12 +403,20 @@ test('a hit: the target goes white, is thrown back further for a super effective
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await startBattle(page, 'recoil-e2e');
-  const watch = () => page.evaluate(() => {
+  // Waits until the Pokémon stands still on its spot with no hit playing (the send-out and earlier hits are over).
+  const settled = () => expect.poll(() => page.evaluate(() => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    const v = b.enemySprite;
+    return !!v?.active && Math.abs(v.x - b.spotXY('enemy').x) < 0.5 && !v.getData('hitRun') && !b.field.list.some((o: any) => o.texture?.key === 'fx.glow');
+  }), { timeout: 15000 }).toBe(true);
+  const watch = async () => {
+    await settled();
+    await page.evaluate(() => {
     const w = window as any;
     const b = w.__pkr.game.scene.getScene('Battle');
     w.__hit = { away: 0, white: false, lights: 0 };
-    // A quarter speed, so every frame is sampled near the peak even on a slow machine.
-    b.time.timeScale = 0.25;
+    // Slow motion, so even a slow machine's long frames (the clip clock takes at most 100 ms of a frame) sample near the peak.
+    b.time.timeScale = 0.15;
     w.__hitWatch = () => {
       const v = b.enemySprite;
       if (!v?.active) return;
@@ -417,8 +425,13 @@ test('a hit: the target goes white, is thrown back further for a super effective
       w.__hit.white ||= b.field.list.some((o: any) => o.type === 'Sprite' && o !== v && o.tintFill && o.tintTopLeft === 0xffffff && o.visible && o.alpha > 0.5);
     };
     b.events.on('update', w.__hitWatch);
-  });
-  const seen = () => page.evaluate(() => { const w = window as any; const b = w.__pkr.game.scene.getScene('Battle'); b.events.off('update', w.__hitWatch); b.time.timeScale = 1; return w.__hit; });
+    });
+  };
+  // Reads what was seen once the hit has played out (no fixed wait: a slow machine just takes longer).
+  const seen = async () => {
+    await settled();
+    return page.evaluate(() => { const w = window as any; const b = w.__pkr.game.scene.getScene('Battle'); b.events.off('update', w.__hitWatch); b.time.timeScale = 1; return w.__hit; });
+  };
   const impact = (eff: number, n = 1) => page.evaluate(([e, k]) => {
     const b = (window as any).__pkr.game.scene.getScene('Battle');
     const cue = { kind: 'impact', side: 'enemy', amount: 1, crit: false, effectiveness: e, hitStopMs: 60, shake: 6, flash: null, flashAlpha: 0 };
@@ -426,7 +439,6 @@ test('a hit: the target goes white, is thrown back further for a super effective
   }, [eff, n] as const);
   await watch();
   await impact(1);
-  await page.waitForTimeout(2400);
   const plain = await seen();
   expect(plain.white).toBe(true);
   // The hit's light: one glow on the body, one pool on the floor; both gone after.
@@ -436,7 +448,6 @@ test('a hit: the target goes white, is thrown back further for a super effective
   expect(plain.away).toBeLessThan(40);
   await watch();
   await impact(2);
-  await page.waitForTimeout(2400);
   expect((await seen()).away).toBeGreaterThan(40);
   // Three quick hits in a row (a multi-hit move): it ends exactly on its spot, at its size, with nothing left over.
   const before = await look(page, 'enemy');
@@ -485,5 +496,102 @@ test('healing: green plus-signs rise, it glows green and hops, and it stands hom
   expect(seen.left).toBe(0);
   const me = await look(page, 'player');
   expect({ x: me.x, y: me.y, solid: me.solid }).toEqual({ x: me.homeX, y: me.homeY, solid: 0 });
+  expect(errors).toEqual([]);
+});
+
+test('conditions: each status arrives and stays on the Pokémon, burn ticks, paralysis stops it, it wakes and thaws, and nothing is left behind', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'cond-e2e');
+  // The Pokémon stands still on its spot with no condition clip playing.
+  const still = () => expect.poll(() => page.evaluate(() => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    const v = b.enemySprite;
+    return !!v?.active && Math.abs(v.x - b.spotXY('enemy').x) < 0.5 && !v.getData('hitRun');
+  }), { timeout: 15000 }).toBe(true);
+  // Gives the shown Pokémon a status and plays the battle's own cue for that moment, watching every frame meanwhile.
+  const moment = async (status: string | null, at: 'arrive' | 'tick' | 'cant' | null) => {
+    await still();
+    return page.evaluate(async ([st, when]) => {
+      const b = (window as any).__pkr.game.scene.getScene('Battle');
+      b.shown.enemy = { ...b.shown.enemy, status: st ? { id: st } : null };
+      const seen = { flames: 0, bubbles: 0, ember: 0, stamp: false };
+      const watch = () => {
+        seen.flames = Math.max(seen.flames, b.children.list.filter((c: any) => c.texture?.key === 'cond.flame' && c.visible && c.alpha > 0).length);
+        seen.bubbles = Math.max(seen.bubbles, b.children.list.filter((c: any) => c.texture?.key === 'cond.bubble' && c.visible && c.alpha > 0).length);
+        seen.ember = Math.max(seen.ember, ...(b.conds.enemy?.embers ?? []).map((e: any) => e.scaleX / (16 / 34 / 2)), 0);
+        seen.stamp ||= b.children.list.some((c: any) => String(c.texture?.key).startsWith("stamp.CAN'T MOVE") && c.alpha > 0.5);
+      };
+      b.events.on('update', watch);
+      if (when) await b.fx.play([{ kind: 'commonAnim', side: 'enemy', anim: `status.${st}`, cond: { at: when, status: st } }]);
+      await new Promise((r) => setTimeout(r, 1800));
+      b.events.off('update', watch);
+      return seen;
+    }, [status, at] as const);
+  };
+  const state = () => page.evaluate(() => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    const v = b.enemySprite;
+    const c = b.conds.enemy;
+    const at = b.spotXY('enemy');
+    return {
+      kind: c?.kind ?? null,
+      wash: !!c?.wash?.active && c.wash.visible && c.wash.alpha > 0,
+      ice: !!c?.ice?.active && c.ice.visible,
+      embers: c?.embers?.length ?? 0,
+      frozenFrame: v.anims?.timeScale === 0,
+      x: v.x - at.x,
+      angle: v.getData('standBase')?.angle ?? v.angle, // its resting angle (some Pokémon stand with a tilt loop)
+      icePictures: b.children.list.filter((o: any) => String(o.texture?.key).startsWith('cond.ice')).length,
+      flames: b.children.list.filter((o: any) => o.texture?.key === 'cond.flame').length,
+    };
+  });
+
+  // Burn: nine flames climb it, then an orange wash and two embers stay; the turn's tick flares the embers.
+  const brn = await moment('brn', 'arrive');
+  expect(brn.flames).toBeGreaterThanOrEqual(5);
+  await still();
+  expect(await state()).toMatchObject({ kind: 'brn', wash: true, embers: 2, x: 0, flames: 0 });
+  const tick = await moment('brn', 'tick');
+  expect(tick.ember).toBeGreaterThan(1.5);
+  await still();
+  expect(await state()).toMatchObject({ kind: 'brn', wash: true, embers: 2, x: 0 });
+
+  // Poison: bubbles rise through it.
+  expect((await moment('psn', 'arrive')).bubbles).toBeGreaterThanOrEqual(5);
+  await still();
+  expect(await state()).toMatchObject({ kind: 'psn', wash: true, embers: 0, x: 0 });
+
+  // Paralysis stopping a move: the dark CAN'T MOVE stamp, and it ends back on its spot.
+  await moment('par', 'arrive');
+  expect((await moment('par', 'cant')).stamp).toBe(true);
+  await still();
+  expect(await state()).toMatchObject({ kind: 'par', wash: true, x: 0 });
+
+  // Sleep: it slumps away from the other side, then wakes upright.
+  await moment('slp', 'arrive');
+  await still();
+  expect((await state()).kind).toBe('slp');
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').enemySprite.angle)).toBeCloseTo(16, 0);
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').condEnd('enemy', 'wake'));
+  await moment(null, null);
+  await still();
+  expect(await state()).toMatchObject({ kind: null, x: 0, angle: 0 });
+
+  // Freeze: ice grows over it and its frames stop; thawing shatters the ice and it moves again.
+  await moment('frz', 'arrive');
+  await still();
+  expect(await state()).toMatchObject({ kind: 'frz', wash: true, ice: true, frozenFrame: true, x: 0 });
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').condEnd('enemy', 'thaw'));
+  await moment(null, null);
+  await still();
+  expect(await state()).toMatchObject({ kind: null, frozenFrame: false, x: 0, icePictures: 0 });
+
+  // A cure with no moment (a Full Heal): the look comes off by itself.
+  await moment('brn', 'arrive');
+  await page.evaluate(() => { const b = (window as any).__pkr.game.scene.getScene('Battle'); b.shown.enemy = { ...b.shown.enemy, status: null }; b.condSync('enemy'); });
+  await page.waitForTimeout(400);
+  expect(await state()).toMatchObject({ kind: null, x: 0 });
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').field.list.filter((o: any) => o.type === 'Sprite' && o.tintFill && o.visible && o.alpha > 0).length)).toBe(0);
   expect(errors).toEqual([]);
 });

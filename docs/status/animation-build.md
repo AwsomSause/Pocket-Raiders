@@ -101,3 +101,13 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   pack's shared heal: ten green plus-signs rise through it one after another, it glows green and hops once, and a green
   ring spreads on the ground (`healClip`, `BattleScene.healMoment`, BattleFx `heal`). The HP bar now climbs with the
   number over 0.8 s (a drop still snaps in 0.28 s), on the canvas bar and the New UI's bar alike.
+- Conditions (pass 8): each status now arrives, stays on the Pokémon and ticks, as the mockup's numbers
+  (`src/core/presentation/motionConditions.ts`, `src/ui/battleFx/conditionLook.ts`, BattleFx `condition`). Burn: nine
+  flames climb it, an orange wash pulses and two embers flicker at its feet; each turn they flare 2.6x and it flinches
+  white. Poison (and Toxic): bubbles rise and pop, a purple wash; each turn a big bubble swells over its head and bursts.
+  Paralysis: bolts crawl over it, a faint yellow wash, its frames stop and it twitches; when it can't move it lunges,
+  locks up and a dark CAN'T MOVE stamp shows. Sleep: pink rings close in, it slumps away from the other side, breathes
+  slowly and Z's drift up; waking it jumps up with sparkles and a "!". Freeze: ice grows up over it with a spring, its
+  frames stop and glints flash; thawing cracks the ice and shatters it. A switch-in already statused wears its look at
+  once; a cure with no moment takes it off. Reduced: the lasting looks without particles; Off: none. Singles only.
+  Limits: poison's slight sag (the mockup's droop) is not built; the look sits over the sprite, not inside its outline.

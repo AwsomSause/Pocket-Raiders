@@ -231,12 +231,14 @@ export function drawFx(scene: Phaser.Scene, fx: MotionFx, o: FxOpts): void {
       if (!o.particles) return;
       // The mockup's dust: soft specks thrown up and outward that drift, swell and fade.
       for (let i = 0; i < fx.n; i++) {
+        const k0 = fx.big ?? 1;
         const a = Phaser.Math.DegToRad(rnd(185, 355));
-        const v = rnd(40, 150);
+        const v = rnd(40, 150) * k0;
         const life = rnd(0.35, 0.65);
-        const size = Math.max(3, Math.round(rnd(6, 15) / 3) * 3);
+        const size = Math.max(3, Math.round((rnd(6, 15) * k0) / 3) * 3);
         const x0 = fx.x + rnd(-22, 22);
-        const p = scene.add.circle(x0, fx.y, size / 2, DUST[i % DUST.length], 0.85).setDepth(o.depth);
+        const cols = fx.cols?.length ? fx.cols : DUST;
+        const p = scene.add.circle(x0, fx.y, size / 2, cols[i % cols.length], 0.85).setDepth(o.depth);
         const k = { u: 0 };
         scene.tweens.add({
           targets: k,
@@ -262,9 +264,27 @@ export function drawFx(scene: Phaser.Scene, fx: MotionFx, o: FxOpts): void {
     }
     case 'ring': {
       // A shockwave on the ground: it grows fast, then thins out.
-      const e = scene.add.ellipse(fx.x, fx.y, fx.r1 * 2, fx.r1 * 2 * fx.flat).setStrokeStyle(fx.w ?? 6, fx.color ?? 0xffffff, 1).setDepth(o.depth).setScale(8 / fx.r1);
+      const e = scene.add.ellipse(fx.x, fx.y, fx.r1 * 2, fx.r1 * 2 * fx.flat).setStrokeStyle(fx.w ?? 6, fx.color ?? 0xffffff, 1).setDepth(o.depth).setScale((fx.r0 ?? 8) / fx.r1);
       scene.tweens.add({ targets: e, scale: 1, duration: ms(fx.d), ease: EASES.out3 });
       scene.tweens.add({ targets: e, alpha: 0, delay: ms(fx.d * 0.45), duration: ms(fx.d * 0.55), onComplete: () => e.destroy() });
+      return;
+    }
+    case 'bolt': {
+      // A jagged line with a wide pale glow under it (the mockup's two polylines), on for a blink.
+      const pts: Phaser.Math.Vector2[] = [];
+      for (let i = 0; i <= fx.n; i++) {
+        const u = i / fx.n;
+        const j = i && i < fx.n ? fx.j : 0;
+        pts.push(new Phaser.Math.Vector2(fx.x1 + (fx.x2 - fx.x1) * u + rnd(-j, j), fx.y1 + (fx.y2 - fx.y1) * u + rnd(-j, j)));
+      }
+      const g = scene.add.graphics().setDepth(o.depth + 1);
+      g.lineStyle(fx.w * 2.2, fx.color2, 0.55).strokePoints(pts, false, false);
+      g.lineStyle(fx.w, fx.color, 1).strokePoints(pts, false, false);
+      scene.time.delayedCall(ms(fx.d), () => g.setVisible(false));
+      if (fx.again) {
+        scene.time.delayedCall(ms(fx.d + 50), () => g.active && g.setVisible(true));
+        scene.time.delayedCall(ms(fx.d + 110), () => g.destroy());
+      } else scene.time.delayedCall(ms(fx.d + 10), () => g.destroy());
       return;
     }
     case 'star': {

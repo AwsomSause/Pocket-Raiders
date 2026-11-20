@@ -121,14 +121,16 @@ import { pokemonHeightM, trainerHeightM } from '../core/heights';
 import { teraJewel } from '../ui/battleFx/teraJewel';
 import { megaGlass } from '../ui/battleFx/megaGlass';
 import { drawnBox, type GimmickPage } from '../ui/battleFx/gimmickStage';
-import { HIT_RUN, stand, standStill } from '../ui/battleFx/stance';
+import { HIT_RUN, stand, standStill, twitch } from '../ui/battleFx/stance';
+import { bubblePicture, ConditionLook, flamePicture, titlePicture } from '../ui/battleFx/conditionLook';
+import { BUBBLE_W, condArriveClip, condKind, condTickClip, FLAME_W, parCantClip, SLUMP, thawClip, wakeClip, type CondKind, type CondSpot } from '../core/presentation/motionConditions';
 import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture, GLOW_SIZE, glowPicture, PICTURE_SCALE, plusPicture, shinyChipPicture, stampPicture, starPicture } from '../ui/battleFx/cheerChip';
 import { dynamaxPan } from '../ui/battleFx/dynamaxPan';
 import { keyItemFor } from '../ui/battleFx/cineLook';
 import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
-import type { ClipLevel } from '../core/presentation/motionClip';
+import type { ClipLevel, MotionClip } from '../core/presentation/motionClip';
 import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_LIGHT, hitClip, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
@@ -459,6 +461,8 @@ export class BattleScene extends Phaser.Scene {
   private momentumText!: Phaser.GameObjects.Text;
   /** What the screen currently shows for each side (may lag the real state during playback). */
   private shown!: { player: PokemonInstance; enemy: PokemonInstance };
+  /** The status look each side's Pokémon wears (pass 8), or none. */
+  private conds: Record<Side, ConditionLook | null> = { player: null, enemy: null };
   /** The opposing Pokémon shown as riled up (warned, not yet unleashed or calmed). Presentation only. */
   private riledUid: string | null = null;
   /**
@@ -659,10 +663,12 @@ export class BattleScene extends Phaser.Scene {
       numbers: () => ({ show: services().session.settings.damageNumbers, scale: services().session.settings.popupScale }),
       recoil: (side, cue) => this.hitMoment(side, cue),
       heal: (side) => this.healMoment(side),
+      condition: (side, status, at) => this.condition(side, status, at),
     });
 
     this.shown = { player: structuredClone(run.party[battle.activeIndex]!), enemy: structuredClone(currentEnemy(battle)) };
     this.duo = null;
+    this.conds = { player: null, enemy: null };
     this.cmdSpot = 0;
     this.commands = [];
     if (battle.doubles) {
@@ -1539,6 +1545,18 @@ export class BattleScene extends Phaser.Scene {
     const sp = getSpecies(services().session.content, mon.speciesId);
     // It stands on its own spot (the entrance may still be settling it there).
     const restY = visual === this.playerSprite ? this.spotXY('player').y : visual === this.enemySprite ? this.spotXY('enemy').y : undefined;
+    // A status changes how it stands (pass 8): paralysis locks it up and it twitches, ice holds it still, sleep slumps it.
+    const side: Side | null = visual === this.playerSprite ? 'player' : visual === this.enemySprite ? 'enemy' : null;
+    const look = side ? this.conds[side] : null;
+    const kind = look && look.sprite === visual ? look.kind : null;
+    this.condPose(visual, kind);
+    if (side && visual instanceof Phaser.GameObjects.Sprite && (kind === 'par' || kind === 'frz' || kind === 'slp')) {
+      if (kind === 'frz') return standStill(this, visual);
+      if (kind === 'par') return twitch(this, visual, this.motion === 'full', this.spotXY(side).x);
+      standStill(this, visual);
+      this.slump(visual, side);
+      return stand(this, visual, 'steady', this.motion === 'full', delay, 2600, (restY ?? visual.y) + SLUMP.dy);
+    }
     // A Pokémon in danger keeps its sag and its fast, shallow breath.
     if (visual.getData('sag')) return stand(this, visual, 'steady', this.motion === 'full', delay, 750, restY);
     stand(this, visual, standKind(sp.dex, sp.types, !!mon.dynamaxed), this.motion === 'full', delay, undefined, restY);
@@ -1900,6 +1918,7 @@ export class BattleScene extends Phaser.Scene {
       this.tweens.chain({ targets: c, tweens: [{ y: y + 5, duration: 40 }, { y, duration: 250, ease: 'Elastic.easeOut', easeParams: [1, 0.4] }], onStop: () => c.setY(y) });
     }
     box.ratio = ratio;
+    if (!this.duo) this.condSync(box === this.playerBox ? 'player' : 'enemy');
     return box.hpBar.set(ratio, animate);
   }
 
@@ -4085,6 +4104,227 @@ export class BattleScene extends Phaser.Scene {
     return true;
   }
 
+  // ---------- conditions (redesign pass 8): each status arrives, stays on the Pokémon and ticks each turn ----------
+
+  /** Where a side's Pokémon stands and how big it is drawn, for the condition clips. */
+  private condSpot(side: Side, sprite: Phaser.GameObjects.Sprite): CondSpot {
+    const at = this.spotXY(side);
+    return { x: at.x, y: at.y, w: Math.max(60, sprite.displayWidth * 0.6), h: Math.max(60, sprite.displayHeight * sprite.originY), side };
+  }
+
+  /** The side's Pokémon, when it is one picture on the field that a look can sit on. */
+  private condSprite(side: Side): Phaser.GameObjects.Sprite | null {
+    const v = side === 'player' ? this.playerSprite : this.enemySprite;
+    return !this.duo && v instanceof Phaser.GameObjects.Sprite && v.active ? v : null;
+  }
+
+  /** Locked statuses stop its own picture moving; sleep slows it to a third and dims it. */
+  private condPose(visual: Visual, kind: CondKind | null): void {
+    if (!(visual instanceof Phaser.GameObjects.Sprite)) return;
+    const rate = kind === 'par' || kind === 'frz' ? 0 : kind === 'slp' ? 0.3 : 1;
+    if (rate !== 1 || visual.getData('condRate')) {
+      visual.anims.timeScale = rate;
+      visual.setData('condRate', rate !== 1);
+    }
+    const dim = kind === 'slp';
+    if (dim && !visual.getData('dimmed') && !visual.isTinted) {
+      visual.setTint(0xb8b8b8);
+      visual.setData('dimmed', true);
+    } else if (!dim && visual.getData('dimmed')) {
+      visual.clearTint();
+      visual.setData('dimmed', false);
+    }
+  }
+
+  /** Sleep's slump: it leans away from the other side, sinks 12 px and gets shorter. Once; `unslump` undoes it. */
+  private slump(sprite: Phaser.GameObjects.Sprite, side: Side): void {
+    if (sprite.getData('slumped')) return;
+    sprite.setAngle(SLUMP.rot * (side === 'enemy' ? 1 : -1)).setY(this.spotXY(side).y + SLUMP.dy).setScale(sprite.scaleX, sprite.scaleY * SLUMP.sy);
+    sprite.setData('slumped', true);
+  }
+
+  private unslump(sprite: Phaser.GameObjects.Sprite, side: Side): void {
+    if (!sprite.getData('slumped')) return;
+    standStill(this, sprite);
+    sprite.setAngle(0).setY(this.spotXY(side).y).setScale(sprite.scaleX, sprite.scaleY / SLUMP.sy);
+    sprite.setData('slumped', false);
+  }
+
+  /** Keeps the side's look in step with its status: a switch-in already burned wears it at once; a cure takes it off. */
+  private condSync(side: Side): void {
+    try {
+      const sprite = this.condSprite(side);
+      const kind = condKind(this.shown[side]?.status?.id);
+      const level = this.clipLevel();
+      const cur = this.conds[side];
+      if (cur && (cur.sprite !== sprite || cur.kind !== kind || level === 'off')) {
+        cur.destroy(cur.sprite === sprite ? 250 : 0);
+        this.conds[side] = null;
+        if (sprite && cur.sprite === sprite) {
+          if (cur.kind === 'slp') this.unslump(sprite, side);
+          this.condPose(sprite, null);
+          if (sprite.visible) this.standUp(sprite, this.shown[side]);
+        }
+      }
+      if (!kind || !sprite || this.conds[side] || level === 'off' || !sprite.visible) return;
+      const look = new ConditionLook(this, sprite, kind, this.condSpot(side, sprite), level, false);
+      this.conds[side] = look;
+      look.start();
+      this.standUp(sprite, this.shown[side]);
+    } catch {
+      /* presentation only */
+    }
+  }
+
+  /** BattleFx asks: show our own look for this status moment instead of the pack's animation? */
+  private condition(side: Side, status: string, at: 'arrive' | 'tick' | 'cant'): boolean {
+    const kind = condKind(status);
+    const sprite = this.condSprite(side);
+    if (!kind || !sprite || !sprite.visible || this.clipLevel() === 'off') return false;
+    try {
+      if (at === 'arrive') return this.condArrive(side, kind, sprite);
+      const look = this.conds[side];
+      if (!look || look.sprite !== sprite || look.kind !== kind) return false;
+      if (at === 'tick') return kind === 'brn' || kind === 'psn' ? this.condTick(side, kind, sprite, look) : false;
+      if (kind === 'par') return this.parCant(side, sprite, look);
+      // Asleep or frozen: the look already says it.
+      return kind === 'slp' || kind === 'frz';
+    } catch {
+      return false;
+    }
+  }
+
+  /** Plays a condition clip on the Pokémon; `after` runs when it ends (or is cut short by another moment). */
+  private condPlay(sprite: Phaser.GameObjects.Sprite, clip: MotionClip, parts: Record<string, ClipPart>, after: (cut: boolean) => void, cue?: (name: string) => void): void {
+    standStill(this, sprite);
+    const run = playClip(this, clip, this.clipHost({ mon: { kind: 'mon', get: () => sprite }, ...parts }, cue ? { cue } : {}));
+    let cut = false;
+    sprite.setData(HIT_RUN, { stop: () => ((cut = true), run.stop()) });
+    void run.done.then(() => {
+      if (!cut) sprite.setData(HIT_RUN, undefined);
+      after(cut);
+    });
+  }
+
+  /** A status arrives (pass 8): flames climb, bubbles rise, bolts crawl, rings close in, ice grows. */
+  private condArrive(side: Side, kind: CondKind, sprite: Phaser.GameObjects.Sprite): boolean {
+    this.conds[side]?.destroy();
+    const level = this.clipLevel() === 'full' ? 'full' : 'reduced';
+    const spot = this.condSpot(side, sprite);
+    const look = new ConditionLook(this, sprite, kind, spot, level, true);
+    this.conds[side] = look;
+    const temps: Phaser.GameObjects.Image[] = [];
+    const parts: Record<string, ClipPart> = { tint: { kind: 'free', get: () => look.wash }, ice: { kind: 'free', get: () => look.ice } };
+    const key = level === 'full' ? (kind === 'brn' ? flamePicture(this) : kind === 'psn' ? bubblePicture(this) : null) : null;
+    if (key) {
+      for (let i = 0; i < 9; i++) {
+        const img = this.add.image(spot.x, spot.y, key).setOrigin(0.5, kind === 'brn' ? 1 : 0.5).setScale(PICTURE_SCALE).setDepth(2900);
+        temps.push(img);
+        parts[`${kind === 'brn' ? 'f' : 'b'}${i}`] = { kind: 'free', get: () => img };
+      }
+    }
+    const mon = this.shown[side];
+    this.condPlay(sprite, condArriveClip(kind, spot, level), parts, () => {
+      temps.forEach((t) => t.destroy());
+      if (!sprite.active || this.conds[side] !== look) return;
+      // The slump is the clip's end state: it stays.
+      if (kind === 'slp') sprite.setData('slumped', true);
+      else this.restAt(sprite, side);
+      look.start();
+      if (sprite.visible) this.standUp(sprite, mon);
+    });
+    return true;
+  }
+
+  /** Puts a Pokémon back on its own spot, upright, at its own size (after a condition clip moved it). */
+  private restAt(sprite: Phaser.GameObjects.Sprite, side: Side): void {
+    const at = this.spotXY(side);
+    sprite.setPosition(at.x, sprite.getData('slumped') ? at.y + SLUMP.dy : at.y);
+  }
+
+  /** The turn's tick: burn's embers flare and it flinches white; poison swells a bubble over its head that bursts. */
+  private condTick(side: Side, kind: 'brn' | 'psn', sprite: Phaser.GameObjects.Sprite, look: ConditionLook): boolean {
+    look.hold();
+    const spot = this.condSpot(side, sprite);
+    const parts: Record<string, ClipPart> = {};
+    look.embers.forEach((e, i) => (parts[`e${i}`] = { kind: 'free', get: () => e }));
+    const key = kind === 'psn' && this.clipLevel() === 'full' ? bubblePicture(this) : null;
+    const big = key ? this.add.image(spot.x, spot.y - spot.h - 16, key).setScale(40 / BUBBLE_W / 2).setDepth(2900) : null;
+    if (big) parts.big = { kind: 'free', get: () => big };
+    const mon = this.shown[side];
+    this.condPlay(sprite, condTickClip(kind, spot, this.clipLevel()), parts, () => {
+      big?.destroy();
+      if (!sprite.active || this.conds[side] !== look) return;
+      this.restAt(sprite, side);
+      look.start();
+      if (sprite.visible) this.standUp(sprite, mon);
+    });
+    return true;
+  }
+
+  /** Paralysis stops it: a short lunge that locks up, a spark, and a dark CAN'T MOVE stamp. */
+  private parCant(side: Side, sprite: Phaser.GameObjects.Sprite, look: ConditionLook): boolean {
+    const spot = this.condSpot(side, sprite);
+    const level = this.clipLevel();
+    const mon = this.shown[side];
+    this.condPlay(sprite, parCantClip(spot, level), { tint: { kind: 'free', get: () => look.wash } }, () => {
+      if (!sprite.active) return;
+      this.restAt(sprite, side);
+      if (sprite.visible) this.standUp(sprite, mon);
+    });
+    const key = level === 'full' ? stampPicture(this, "CAN'T MOVE", '#131c36', '#ffffff') : null;
+    if (key) {
+      const y = Math.max(40, spot.y - spot.h - 30);
+      const st = this.add.image(spot.x, y, key).setScale(PICTURE_SCALE * 0.4).setAlpha(0).setDepth(4000);
+      this.tweens.chain({
+        targets: st,
+        tweens: [
+          { alpha: 1, duration: 1, delay: 350 },
+          { scale: PICTURE_SCALE, duration: 140, ease: 'Back.easeOut' },
+          { y: y - 40, alpha: 0, duration: 300, delay: 1000, ease: 'Quad.easeIn' },
+        ],
+        onComplete: () => st.destroy(),
+      });
+    }
+    return true;
+  }
+
+  /** Waking (it jumps up, the Z's pop, a "!") and thawing (cracks, the ice shatters): the look comes off. */
+  private condEnd(side: Side, how: 'wake' | 'thaw'): void {
+    const look = this.conds[side];
+    const sprite = this.condSprite(side);
+    if (!look || !sprite || look.sprite !== sprite || look.kind !== (how === 'wake' ? 'slp' : 'frz') || !sprite.visible) return;
+    const spot = this.condSpot(side, sprite);
+    const level = this.clipLevel();
+    const mon = this.shown[side];
+    const done = (): void => {
+      if (!sprite.active) return;
+      this.restAt(sprite, side);
+      this.condPose(sprite, null);
+      if (sprite.visible) this.standUp(sprite, mon);
+    };
+    if (how === 'wake') {
+      look.destroy();
+      this.conds[side] = null;
+      this.unslump(sprite, side);
+      this.condPlay(sprite, wakeClip(spot, level), {}, done, (name) => {
+        const key = name === 'bang' ? titlePicture(this, '!', 64, '#ffcb05') : null;
+        if (!key) return;
+        const y = spot.y - spot.h - 30;
+        const bang = this.add.image(spot.x + 20, y, key).setScale(PICTURE_SCALE * 0.4).setDepth(4000);
+        this.tweens.chain({ targets: bang, tweens: [{ scale: PICTURE_SCALE, duration: 140, ease: 'Back.easeOut' }, { y: y - 40, alpha: 0, delay: 500, duration: 300, ease: 'Quad.easeIn' }], onComplete: () => bang.destroy() });
+      });
+      return;
+    }
+    look.hold();
+    // The look is the clip's now: the cure that follows must not take it off mid-shatter.
+    this.conds[side] = null;
+    this.condPlay(sprite, thawClip(spot, level), { ice: { kind: 'free', get: () => look.ice }, tint: { kind: 'free', get: () => look.wash } }, () => {
+      look.destroy();
+      done();
+    });
+  }
+
   /**
    * Healing (pass 3): green plus-signs rise through the Pokémon, it glows green and hops once, a green ring on the
    * ground. Plays by itself while the bar climbs. False when it can't play here (the pack's heal shows instead).
@@ -6253,6 +6493,7 @@ export class BattleScene extends Phaser.Scene {
         case 'wake':
         case 'thaw':
         case 'cured':
+          if (e.type !== 'cured' && !this.duo) this.condEnd(e.side, e.type);
           mon!.status = null;
           void this.refreshInfoBox(box, mon!, false);
           break;
