@@ -60,6 +60,8 @@ export function defense(b: DominionBlock): number {
   if (h.upgrade) d = Math.floor(d / 2);
   if (h.rooms.some((r) => r.building || r.up)) d -= 1;
   if (h.broke) d -= H().rules.brokeDefense;
+  // D10: the cheap design a Chair visitor (the architect) left behind.
+  if (b.growth?.court?.weak) d -= DOMINION_DATA.growth.court.weakDefense;
   return Math.max(0, d);
 }
 
@@ -93,7 +95,9 @@ export function upgradeInfo(b: DominionBlock, regionCap: number): UpgradeInfo {
   const h = hqOf(b);
   const cur = levelDef(b.hqLevel);
   if (b.hqLevel >= 6) return { to: null, name: cur.name, cost: 0, needs: [], raises: { cap: [b.levelCap, null], crew: [cur.crewCap, cur.crewCap], slots: [cur.slots, cur.slots] }, ready: null, why: Ln().top! };
-  const nx = levelDef(b.hqLevel + 1);
+  const nx0 = levelDef(b.hqLevel + 1);
+  // D10: the architect's design (a Chair visitor) takes a share off the next level.
+  const nx = b.growth?.court?.architect ? { ...nx0, cost: Math.round((nx0.cost * (100 - DOMINION_DATA.growth.court.architect)) / 100) } : nx0;
   const held = heldDistricts(b).length;
   const clean = cleanOf(b);
   const needs: Need[] = [{ label: `${money(clean)} clean of ${money(nx.cost)}`, have: clean, need: nx.cost, ok: clean >= nx.cost }];
@@ -127,6 +131,7 @@ export function upgrade(block: DominionBlock, regionCap: number): HqOut {
   b.hq.clean = cleanOf(b) - info.cost;
   spend(b, info.cost);
   b.hq.upgrade = { to: info.to, ready: b.day + H().upgradeDays, cap: info.raises.cap[1] ?? b.levelCap };
+  if (b.growth?.court) b.growth.court.architect = false;
   recompute(b);
   return yes(b, fill(Ln().upgradeStart!, { name: info.name }));
 }
@@ -282,6 +287,9 @@ export function front(b: DominionBlock): { fee: number; name: string } | null {
     const fee = def.fx.launder !== undefined ? scaled('launder', def.fx.launder, r.tier) : r.at && def.fx.clean ? 10 : null;
     if (fee !== null && (!best || fee < best.fee)) best = { fee, name: def.name };
   }
+  // D10: a crooked accountant (a Chair visitor) launders at his own fee, front or not.
+  const acc = DOMINION_DATA.growth.court.accountantFee;
+  if (b.growth?.court?.accountant && (!best || acc < best.fee)) best = { fee: acc, name: 'the accountant' };
   return best;
 }
 

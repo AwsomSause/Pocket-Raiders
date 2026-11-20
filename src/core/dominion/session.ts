@@ -37,6 +37,7 @@ import { argue, chooseDeal, closeDebate, walkOut, type DebateOut } from './debat
 import { argueTyped, voiceTurn } from './debateTyped';
 import { answerQ, noteAct, releasedSeen, releaseQ, returnHeld } from './police';
 import './growth';
+import { settleCourt } from './growthCourt';
 import { endS, goalS, inRoom, sayS, stopS, type SOut } from './snatch';
 import { takeoverStep } from './takeover';
 
@@ -219,6 +220,7 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
   }
   next = settleCrew(content, next);
   next = settleChair(content, next);
+  next = settleCourt(content, next);
   return { ...out, block: next.expansion!.dominion!, run: next };
 }
 

@@ -38,6 +38,20 @@ No version bump: `block.growth` is optional and filled the same way every time (
 - `tests/unit/keyQueue.test.ts` (3): one key press reaches each screen once even when a slow frame holds several key events (Phaser re-read the queue and its neighbour-only duplicate check let Enter act twice; this made the Hero test flaky on CI). The fix is `src/ui/keyQueue.ts`, applied in `main.ts`.
 - Browser `tests/e2e/dominionGrowth.spec.ts`: page to "Gyms and Heroes", the Card's five ways with Left/Right, Buy refused, Break in two battles with the map between, three window sizes, reload keeps the Gym.
 
+## Follow-up 1: the Chair's cards (2026-11-20)
+- The 18 court cards that waited on D10, D5 and "quiz" now play: 29, 39, 45, 46, 65, 66, 78, 98, 100, 101, 130 (D10), 32, 37, 51, 53, 79, 131 (D5, handed over) and 99 (Blaine's quiz). The court is at 142 of 150 live; 8 wait (D8 2, D15 5, D16 1).
+- Rules in `src/core/dominion/growthCourt.ts` (each answer is a `hook:` in `tools/dominion/court-to-json.py`; numbers in growth.json `court`):
+  - the cab driver (+10 on every Card while his deal stands), Koga (+10 on Steal and Thieve for 14 days)
+  - the dockworkers (paid: routes pay 15% less, Smuggle's Heat halved; refused, 40%: a 3-day strike, no Smuggle, no route pay)
+  - the fence (60% now; 20% he skips town; back: 75% every week, or 90% once), sold from the Bag right after the answer (`settleCourt`)
+  - the judge (pick-ups 30% less likely for 14 days; 20% on a refusal: dirt on him, the same two weeks), the informant (no pick-up for 7 days), the council seat (pick-ups 20% less likely for good); police.ts `addPickupShare`
+  - a joint heist (a raid crate and ₽300 more), a bought Leader going public (the Gym is lost), the blackmailed Leader's card only with a blackmailed Gym
+  - gifts: the shop (Front Shop), the café (Front Café), the gambler's house (a Safehouse, won in a fight at the door); with no slot free, the gift is sold for its price, clean
+  - the accountant (launders at 5% with no front; 15% a week he talks, Heat +10), the lab machine (a room one tier up), the architect (next HQ level 20% cheaper; 25%: Defense -1)
+  - Blaine: three riddles on the Boss's Wits, two right wins the prize. The list says a TM; the game's TMs teach on the spot (item-catalog entries, not Bag items), so he pays a Fire Stone.
+- Tests: `tests/unit/dominionCourtGrowth.test.ts` (9): every card plays, each rule, determinism, save/reload and a block without the court state. Chair counts updated (142 live).
+- Saves: `growth.court` is optional, filled the same way every time (`courtOf`); no bump.
+
 ## Limits and what waits
 - **D10 follow-up** (handed to D10 by D9 after the plan was written, not done here):
   - 180 outside interactions (sections B, C, D, E, H, I, K in `outside.json`) still say `waits: D10`.

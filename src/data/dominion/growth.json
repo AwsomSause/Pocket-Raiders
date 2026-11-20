@@ -1488,6 +1488,94 @@
   "hauled": "{name} runs goods: ₽{n}.",
   "fronted": "{name} works the front: ₽{n}, clean.",
   "fencedTask": "{name} fences the day's loot: ₽{n}.",
-  "flyersTask": "{name} puts up flyers in {district}."
+  "flyersTask": "{name} puts up flyers in {district}.",
+  "union": "The docks keep quiet now: routes pay {cut}% less, Smuggle runs at half the Heat.",
+  "strike": "The dockworkers strike: no smuggling for {days} days.",
+  "struck": "The docks are on strike until day {day}.",
+  "courtFence": "The Fence takes the hot goods at {pct}% when you are next at your Bag.",
+  "courtFenceWeek": "The Fence will take your hot goods at {pct}% every week.",
+  "courtFenceNone": "You had no hot goods for the Fence.",
+  "judge": "The judge leans on the police: pick-ups {pct}% less likely for {days} days.",
+  "judgeDirt": "He made an enemy of you: there is dirt on the judge now (Blackmail him).",
+  "informant": "You know the sweep's date: no pick-up for {days} days.",
+  "council": "A council seat: the police budget is {pct}% lower for good.",
+  "heist": "The joint heist is on: the crate comes in when you are next at your Bag.",
+  "heistDone": "The joint heist pays out: {got}.",
+  "koga": "Koga trains the crew: Steal and Thieve +{n}% for {days} days.",
+  "gymLost": "The Leader goes public. {gym} is not yours any more.",
+  "gift": "{name} is yours (a building, ready now).",
+  "giftFull": "No room for {name}: it is sold for ₽{n}, clean.",
+  "accountant": "The accountant launders at {fee}% (no front needed).",
+  "accountantTalk": "The accountant talked to the police: Heat +{n}.",
+  "machine": "The lab machine goes into {room}: one tier up.",
+  "machineNone": "No room can use the lab machine yet; it waits in a cupboard.",
+  "architect": "The next HQ level costs {pct}% less.",
+  "weakSpot": "The cheaper design left a weak spot: Defense -{n}.",
+  "quizQ": "Blaine: \"{q}\" You say \"{a}\": {ok}.",
+  "quizWon": "Blaine pays up: {prize}.",
+  "quizLost": "Blaine laughs. \"Study harder!\"",
+  "cab": "The cab driver",
+  "kogaOdds": "Koga's training"
+ },
+ "court": {
+  "cab": 10,
+  "koga": 10,
+  "kogaDays": 14,
+  "unionCut": 15,
+  "unionHeat": 50,
+  "strikeDays": 3,
+  "fenceNow": 60,
+  "fenceWeek": 75,
+  "fenceLast": 90,
+  "judge": 30,
+  "judgeDays": 14,
+  "tipDays": 7,
+  "council": 20,
+  "heistCash": 150,
+  "heistCrate": "raid",
+  "accountantFee": 5,
+  "accountantTalk": 15,
+  "accountantHeat": 10,
+  "architect": 20,
+  "weakDefense": 1,
+  "gifts": {
+   "shop": "front-shop",
+   "cafe": "front-cafe",
+   "house": "safehouse"
+  },
+  "quiz": {
+   "prize": "fire-stone",
+   "prizeName": "a Fire Stone",
+   "base": 40,
+   "perWits": 5,
+   "cap": 90,
+   "right": 2,
+   "riddles": [
+    [
+     "What type is weak to Water, Ground and Rock?",
+     "Fire"
+    ],
+    [
+     "Which Pokémon evolves from Vulpix with a Fire Stone?",
+     "Ninetales"
+    ],
+    [
+     "Which burn cure is sold in every Poké Mart?",
+     "Burn Heal"
+    ],
+    [
+     "What does Magmar evolve into?",
+     "Magmortar"
+    ],
+    [
+     "Which Fire-type move has 90 power and may burn the target?",
+     "Flamethrower"
+    ],
+    [
+     "Which Kanto Gym stands on a volcano island?",
+     "Cinnabar Gym"
+    ]
+   ]
+  }
  }
 }

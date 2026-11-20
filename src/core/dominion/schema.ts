@@ -887,7 +887,12 @@ export const OWED_KEYS = ['ten', 'threat', 'goal', 'stab', 'raid', 'shadow', 'wi
  * Defense on your side), a town left alone, the Legendaries later, a Legendary hunt, a town lost. */
 export const HERO_COURT = ['intel', 'battle', 'letter', 'spare', 'late', 'hunt', 'lose'] as const;
 /** Chair answers whose rule lives in another slice's file (registered with setChairHook): D9 insure + double-agent, D13 debate-early. */
-export const CHAIR_HOOKS = ['insure', 'double-agent', 'debate-early'] as const;
+export const CHAIR_HOOKS = [
+  'insure', 'double-agent', 'debate-early',
+  // D10 (growth.ts, the court-card follow-up): the docks, the fence, the law, a joint heist, Koga, Gyms, the council, gifts and the HQ.
+  'union', 'strike', 'fence-now', 'fence-week', 'fence-last', 'judge', 'judge-dirt', 'informant', 'heist', 'koga', 'gym-lost',
+  'council', 'gift-shop', 'gift-cafe', 'gift-house', 'accountant', 'machine', 'architect', 'weak-spot', 'quiz',
+] as const;
 export type ChairHook = (typeof CHAIR_HOOKS)[number];
 export const LEANS = ['money', 'regard', 'dread', 'heat', 'self'] as const;
 export type Lean = (typeof LEANS)[number];
@@ -945,7 +950,7 @@ export const CourtCardSchema = z.object({
   named: z.union([z.enum(NAMED), z.string().regex(/^name:.+/)]).optional(),
   /** The person a Favour or Grudge sticks to. */
   who: S.optional(),
-  needs: z.enum(['racket', 'stores', 'stores2']).optional(),
+  needs: z.enum(['racket', 'stores', 'stores2', 'hot', 'routes', 'gym-blackmail', 'gym-bought']).optional(),
   foe: z.object({ name: S, cls: S, species: z.array(S).min(1), offset: I }).strict().optional(),
   /** Switched off until this slice builds what the answers need (status "disabled"). */
   wait: S.optional(),
@@ -1826,6 +1831,16 @@ export const GrowthFileSchema = z.object({
   mercs: z.object({ days: I.min(1), odds: N0 }).strict(),
   swap: z.object({ cost: N0, trust: I.min(0).max(10) }).strict(),
   lab: z.object({ rare: z.array(S).min(1) }).strict(),
+  /** D10 follow-up: the Chair's visitors (court cards) whose rules live here. */
+  court: z.object({
+    cab: N0, koga: N0, kogaDays: I.min(1), unionCut: I.min(0).max(100), unionHeat: I.min(0).max(100), strikeDays: I.min(1),
+    fenceNow: I.min(1).max(100), fenceWeek: I.min(1).max(100), fenceLast: I.min(1).max(100),
+    judge: I.min(0).max(100), judgeDays: I.min(1), tipDays: I.min(1), council: I.min(0).max(100),
+    heistCash: N0, heistCrate: S, accountantFee: I.min(0).max(100), accountantTalk: I.min(0).max(100), accountantHeat: N0,
+    architect: I.min(0).max(100), weakDefense: N0,
+    gifts: z.object({ shop: S, cafe: S, house: S }).strict(),
+    quiz: z.object({ prize: S, prizeName: S, base: I.min(0).max(100), perWits: N0, cap: I.min(1).max(100), right: I.min(1), riddles: z.array(z.tuple([S, S])).min(3) }).strict(),
+  }).strict(),
   revive: z.object({ species: z.array(S).min(1), level: Range }).strict(),
   lines: z.record(S, S),
 }).strict();
@@ -1854,6 +1869,20 @@ export const GymStateSchema = z.object({
   /** The Wall (A10): the member you made its Leader. */
   leader: S.nullable(),
 }).strict();
+export const GrowthCourtSchema = z.object({
+  /** The dockworkers paid (a cut of every route, Smuggle's Heat halved); a strike blocks Smuggle until this day. */
+  union: z.boolean(), strike: N0,
+  /** The Fence's weekly deal; goods to sell when the run is next at hand (rates in %), a joint heist's crate waiting. */
+  fence: z.boolean(), sell: z.array(I.min(1).max(100)), heist: N0,
+  /** The judge's two weeks (police pick-ups less likely), the informant's week (no pick-up), the council seat (for good). */
+  judge: N0, tip: N0, council: z.boolean(),
+  /** Koga's stealth training (Steal and Thieve odds up until this day). */
+  koga: N0,
+  /** The accountant (launders at his fee), the architect (the next HQ level cheaper), the weak spot he left (Defense down). */
+  accountant: z.boolean(), architect: z.boolean(), weak: z.boolean(),
+}).strict();
+export type GrowthCourt = z.infer<typeof GrowthCourtSchema>;
+
 export const GrowthStateSchema = z.object({
   biz: z.record(S, z.object({ day: I.min(1), forced: z.boolean() }).strict()),
   cornered: z.record(S, N0),
@@ -1878,6 +1907,8 @@ export const GrowthStateSchema = z.object({
   chain: GrowthChainSchema.nullable(),
   /** The week a Burrower last saved a route from seizure (once a week). */
   burrowed: N0.optional(),
+  /** D10 follow-up: what the Chair's visitors set going (days are the last day a thing holds). */
+  court: GrowthCourtSchema.optional(),
 }).strict();
 export type GrowthState = z.infer<typeof GrowthStateSchema>;
 
