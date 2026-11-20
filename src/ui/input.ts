@@ -60,14 +60,18 @@ function watchDroppedKeys(): void {
 }
 
 /** Calls `handler` with a game action for each key press while the scene is running. */
-export function onInputAction(scene: Phaser.Scene, handler: (action: InputAction) => void): void {
+export function onInputAction(scene: Phaser.Scene, handler: (action: InputAction) => void, opts: { onceEach?: boolean } = {}): void {
   const keyboard = scene.input.keyboard;
   if (!keyboard) return;
-  // Phaser re-reads its whole key queue for each new key event in the same frame, so one press can arrive twice.
-  const seen = new WeakSet<KeyboardEvent>();
+  // Phaser re-dispatches every key event still queued in the same frame each time a new one arrives, so two quick
+  // presses inside one frame can reach this listener three times. `onceEach` counts each DOM event once (opt-in: the
+  // older screens and their browser tests were tuned with the re-dispatch in place).
+  const seen = opts.onceEach ? new WeakSet<KeyboardEvent>() : null;
   const listener = (event: KeyboardEvent) => {
-    if (seen.has(event)) return;
-    seen.add(event);
+    if (seen) {
+      if (seen.has(event)) return;
+      seen.add(event);
+    }
     // Let the debug panel's text boxes receive typing.
     const target = event.target as HTMLElement | null;
     if (target && (target.tagName === 'INPUT' || target.tagName === 'SELECT' || target.tagName === 'TEXTAREA')) return;

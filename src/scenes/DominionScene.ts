@@ -228,7 +228,7 @@ export class DominionScene extends Phaser.Scene {
     };
     kb?.on('keydown', raw);
     // After `raw`, so a letter the HQ menu took (A, S) is not also read as a move.
-    onInputAction(this, (a) => this.key(a));
+    onInputAction(this, (a) => this.key(a), { onceEach: true });
     // L is the Ledger on the HQ, the map and the Crew File (D6) and Money on the HQ menu (D5, mockup 6), so it doesn't
     // open the game's interaction log there (Shift+L still does).
     setLogKeyTaken(() => this.scene.isActive() && (this.screen === 'base' || (!!this.block()?.opened && ['hq', 'map', 'crew', 'ledger', 'hero'].includes(this.screen))));
