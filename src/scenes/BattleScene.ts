@@ -72,7 +72,7 @@ import { addFollowedCue } from '../ui/battleFx/followedCue';
 import { followedCue } from '../core/greenneedle/followed';
 import { addContactShadows, addParallax, addVignette, ArenaLight, dressArena, type ShadowTarget } from '../ui/battleFx/arenaLife';
 import { pickUieArena } from '../core/arenaStyle';
-import { pokemonAssetIds, bossAnimId, bossBackId, uieArenaId, VS_SHARED, vsCardFor } from '../assets/catalog';
+import { zTitleAssetId, pokemonAssetIds, bossAnimId, bossBackId, uieArenaId, VS_SHARED, vsCardFor } from '../assets/catalog';
 import { vsScreen, vsScreenReady } from '../ui/battleFx/vsScreens';
 import { services } from '../game/services';
 import { launcherReady } from '../core/camp';
@@ -112,15 +112,16 @@ import '../core/presentation/storyAnims';
 import { rivalIntro } from '../ui/battleFx/storyFx';
 import { poseMoment } from '../ui/dialogue/poseMoment';
 import { poseForMoments } from '../core/presentation/poses';
-import { zMoveScene } from '../ui/battleFx/zMoveScene';
+import { zMoveSky } from '../ui/battleFx/zMoveSky';
 import { bossIntroMoment, defaultMoment, planMoment, rivalMoment, type MomentKind } from '../core/cinematic/moments';
 import { playMoment } from '../ui/cinematic/momentPlayer';
 /** Moments already played this session (repeatable ones play shorter next time). Not saved: presentation only. */
 const SEEN_MOMENTS = new Set<string>();
 import { pokemonHeightM, trainerHeightM } from '../core/heights';
-import { teraScene } from '../ui/battleFx/teraScene';
-import { megaScene } from '../ui/battleFx/megaScene';
-import { dynamaxScene } from '../ui/battleFx/dynamaxScene';
+import { teraJewel } from '../ui/battleFx/teraJewel';
+import { megaGlass } from '../ui/battleFx/megaGlass';
+import type { GimmickPage } from '../ui/battleFx/gimmickStage';
+import { dynamaxPan } from '../ui/battleFx/dynamaxPan';
 import { keyItemFor } from '../ui/battleFx/cineLook';
 import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
@@ -3900,6 +3901,75 @@ export class BattleScene extends Phaser.Scene {
     }
   }
 
+  /** The words the Mega Evolution cutscene locks on: stone and ring, the new type and ability, which stats rose. */
+  private megaPage(mon: PokemonInstance, toId: string, itemId: string | null): GimmickPage {
+    const { content } = services().session;
+    const from = getSpecies(content, mon.speciesId);
+    const to = content.species.get(toId) ?? from;
+    const stone = itemId ? content.items.get(itemId)?.name : undefined;
+    const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+    const ability = content.abilities.get(abilityOf(content, { ...mon, speciesId: to.id }) ?? '')?.name;
+    const STAT: Record<string, string> = { hp: 'HP', atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed' };
+    const up = (Object.keys(STAT) as (keyof typeof to.baseStats)[])
+      .filter((k) => to.baseStats[k] > from.baseStats[k])
+      .sort((a, b) => to.baseStats[b] - from.baseStats[b] - (to.baseStats[a] - from.baseStats[a]))
+      .slice(0, 3)
+      .map((k) => STAT[k]!);
+    const name = this.speciesName(mon);
+    return {
+      tag: stone ? `${stone} · Mega Ring` : 'Mega Evolution',
+      title: ['Mega', 'Evolution'],
+      facts: [`Type: ${to.types.map(cap).join(' / ')}`, ...(ability ? [`Ability: ${ability}`] : []), ...(up.length ? [`${up.join(', ')} up`] : []), 'Stays until the battle ends'],
+      line: stone ? `The ${stone} answers the Mega Ring. ${name} Mega Evolved!` : `${name} Mega Evolved!`,
+      accent: 0xff8a3c,
+    };
+  }
+
+  /** Loads Pokémon front pictures a cutscene draws (the battle itself only has the back of yours). Never throws. */
+  private async loadFronts(list: [string, boolean][]): Promise<void> {
+    const { content } = services().session;
+    const ids = list.flatMap(([id, shiny]) => {
+      const sp = content.species.get(id);
+      if (!sp) return [];
+      const a = pokemonAssetIds(sp.assets);
+      return shiny ? [a.front, a.shinyFront] : [a.front];
+    });
+    await loadAssets(this, ids.filter((id) => services().assets.has(id))).catch(() => undefined);
+  }
+
+  /** The words the Tera, Dynamax and Z-Move cutscenes lock on (the Mega one is `megaPage`). Read from the battle; nothing is decided here. */
+  private gimmickPage(kind: 'tera' | 'dynamax' | 'gigantamax' | 'zmove', mon: PokemonInstance, x: { type?: string; item?: string; from?: string; move?: string; hp?: [number, number]; turns?: number; gmax?: string }): GimmickPage {
+    const name = this.speciesName(mon);
+    const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+    if (kind === 'tera') {
+      const type = cap(x.type ?? 'normal');
+      return {
+        tag: `Tera Orb · Tera Type ${type}`,
+        title: ['Terastallize'],
+        facts: [`Now a ${type} type`, `${type} moves hit harder`, 'Old weaknesses are replaced', 'Stays until the battle ends'],
+        line: `${name} Terastallized into the ${type} type!`,
+        accent: 0x3fc8e8,
+      };
+    }
+    if (kind === 'zmove') {
+      return {
+        tag: x.item ? `Z-Ring · ${x.item}` : 'Z-Ring',
+        title: ['Z-Move'],
+        facts: [...(x.from && x.move ? [`${x.from} becomes ${x.move}`] : []), 'One all-out hit', 'The Z-Ring rests after this'],
+        line: `${name} unleashes its full-force Z-Move!`,
+        accent: 0xffb300,
+      };
+    }
+    const turns = x.turns ?? 3;
+    return {
+      tag: `Dynamax Band · ${turns} turn${turns === 1 ? '' : 's'}`,
+      title: [kind === 'gigantamax' ? 'Gigantamax' : 'Dynamax'],
+      facts: [...(x.hp && x.hp[1] !== x.hp[0] ? [`HP doubles: ${x.hp[0]} to ${x.hp[1]}`] : []), kind === 'gigantamax' && x.gmax ? `Its moves become G-Max ${x.gmax}'s` : 'Moves become Max Moves', `Lasts ${turns} turn${turns === 1 ? '' : 's'}`],
+      line: kind === 'gigantamax' ? `${name} grew enormous! It Gigantamaxed.` : `${name} grew huge with Dynamax energy!`,
+      accent: 0xff2d8a,
+    };
+  }
+
   private async gimmickBeat(b: Beat, recap?: string): Promise<void> {
     const back = this.hudAside();
     try {
@@ -5949,83 +6019,98 @@ export class BattleScene extends Phaser.Scene {
           const phCard = !!this.rx && phantomOn() && this.motion === 'full' && !!mon && !!cine && cine !== 'dynamaxEnd' && !quick;
           if (phCard) await this.phGimmickCard(e.side, mon!, cine as GimmickCard['kind'], { to: e.to, itemId: e.itemId ?? null, teraType: teraType ?? null, zBase: zBase ?? null, zMoveId: e.zMoveId ?? null });
           if (!phCard && cine === 'zmove' && this.motion === 'full' && !services().session.settings.fastZMove && mon) {
-            // The full reference scene (Fast Z-Move off): Pokémon turned to face you, trainer and Z-Ring, Z-Crystal, white-out, title.
+            // The remade scene (Fast Z-Move off), animation redesign pass 20: the Z rises, the Pokémon leaves the top of the
+            // screen, the sky looks down on the target as it arrives, the damage is counted out, and the title and facts hold.
             const zMove = e.zMoveId ? (content.moves.get(e.zMoveId) ?? null) : zBase ? zMoveFor(content, zBase) : null;
             const sp = content.species.get(mon.speciesId)!;
             const mine = e.side === 'player';
-            const art = mine ? this.playerArt() : (this.run.battle?.trainer ? (this.trainerArt()?.assetId ?? null) : null);
+            const other = this.shown[mine ? 'enemy' : 'player'];
+            const otherSp = other ? content.species.get(other.speciesId) : null;
             const crystalId = e.itemId ?? (zBase ? ownedZCrystal(content, this.run.inventory, zBase.type) : null);
             const feel = this.cineFeel('zmove');
+            const titleKey = zMove ? zTitleAssetId(zMove.id) : null;
+            if (titleKey && !this.textures.exists(titleKey) && services().assets.has(titleKey)) await loadAssets(this, [titleKey]).catch(() => undefined);
+            await this.loadFronts([[sp.id, !!mon.shiny], ...(other ? [[other.speciesId, !!other.shiny] as [string, boolean]] : [])]);
+            // What the hit did is already decided by the rules: the first damage to the other side before anyone else moves.
+            let hit: { damage: number; effectiveness: number } | null = null;
+            for (const later of events.slice(index + 1)) {
+              if (later.type === 'move' && later.side !== e.side) break;
+              if (later.type === 'damage' && later.side !== e.side) {
+                hit = { damage: later.amount, effectiveness: later.effectiveness };
+                break;
+              }
+            }
             await this.gimmickBeat(
-              zMoveScene(this, {
-                makeFront: (x, y) => pokemonVisual(this, sp, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
-                makeTrainer: art ? (x, y) => trainerVisual(this, art, '', x, y, 3.2) : null,
-                crystalKey: (crystalId ? content.items.get(crystalId)?.iconAssetId : null) ?? null,
-                ringKey: 'cine.key.zmove',
-                monHeightM: pokemonHeightM(sp),
-                trainerHeightM: art ? trainerHeightM(art) : undefined,
-                backdropKey: this.arenaBgKey,
-                baseKey: this.arenaBgKey && this.textures.exists(`${this.arenaBgKey}.enemy`) ? `${this.arenaBgKey}.enemy` : null,
-                tint: glowColor,
-                title: zMove?.name,
-                titleId: zMove?.id,
+              zMoveSky(this, {
+                field: () => (mine ? this.playerSprite : this.enemySprite),
+                makeFront: (x, y) => pokemonVisual(this, sp, 'front', x, y, PIXEL_SCALE, mon.shiny),
+                makeTarget: other && otherSp ? (x, y) => pokemonVisual(this, otherSp, 'front', x, y, PIXEL_SCALE, other.shiny) : null,
                 opposes: !mine,
+                tint: glowColor,
+                page: this.gimmickPage('zmove', mon, { item: crystalId ? content.items.get(crystalId)?.name : undefined, from: zBase?.name, move: zMove?.name }),
+                itemKey: 'cine.key.zmove',
+                titleKey,
+                title: zMove?.name ?? null,
+                hit,
                 intensity: feel.intensity,
                 shake: feel.shake,
                 speed: feel.speed,
+                particles: !services().session.settings.reduceParticles,
               }),
             );
             playSfx(this, 'se.level_up');
           } else if (!phCard && cine === 'tera' && this.motion === 'full' && !services().session.settings.fastTera && mon && teraType) {
-            // The full reference scene (Fast Tera off): Pokémon turned to face you, trainer and Tera Orb, crystals, white-out, shatter, rainbow pulse.
+            // The remade scene (Fast Tera off), animation redesign pass 20: one crystal closes over it, the camera goes inside,
+            // twelve mirrored slices turn like a kaleidoscope and fold into the crown, and the crystal breaks on the field.
             const sp = content.species.get(mon.speciesId)!;
             const mine = e.side === 'player';
-            const playerArt = mine ? this.playerArt() : (this.run.battle?.trainer ? (this.trainerArt()?.assetId ?? null) : null);
             const feel = this.cineFeel('tera');
-            const patternType = mon.speciesId.startsWith('terapagos') ? 'stellar' : teraType;
+            const stellar = mon.speciesId.startsWith('terapagos');
+            await this.loadFronts([[sp.id, !!mon.shiny]]);
             await this.gimmickBeat(
-              teraScene(this, {
-                makeFront: (x, y) => pokemonVisual(this, sp, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
-                backdropKey: this.arenaBgKey,
-                baseKey: this.arenaBgKey && this.textures.exists(`${this.arenaBgKey}.enemy`) ? `${this.arenaBgKey}.enemy` : null,
-                decorate: (v) => wearPattern(this, v, teraPatternKey(patternType), this.motion, () => undefined),
-                makeTrainer: playerArt ? (x, y) => trainerVisual(this, playerArt, '', x, y, 3.2) : null,
-                orbKey: 'cine.key.tera',
-                tint: glowColor,
+              teraJewel(this, {
+                field: () => (mine ? this.playerSprite : this.enemySprite),
+                makeFront: (x, y) => pokemonVisual(this, sp, 'front', x, y, PIXEL_SCALE, mon.shiny),
                 opposes: !mine,
+                tint: glowColor,
+                onReveal: () => this.applyTeraTint(e.side, mon),
+                page: this.gimmickPage('tera', mon, { type: teraType }),
+                itemKey: 'cine.key.tera',
+                jewel: this.textures.exists('ui.tera.types') ? { key: 'ui.tera.types', frame: TERA_ICON_ROW[stellar ? 'stellar' : teraType] ?? 0 } : null,
                 intensity: feel.intensity,
                 shake: feel.shake,
                 speed: feel.speed,
+                particles: !services().session.settings.reduceParticles,
               }),
             );
             playSfx(this, 'se.level_up');
           } else if (!phCard && cine === 'mega' && this.motion === 'full' && !services().session.settings.fastMega && mon) {
-            // The full reference scene (Fast Mega off): Pokémon turned to face you, trainer and Mega Ring, Mega Stone, white ball, crystal, blue rays.
-            const from = content.species.get(mon.speciesId)!;
-            const to = content.species.get(e.to) ?? from;
+            // The remade scene (Fast Mega off), animation redesign pass 20: a helix of colour, cracks to every edge,
+            // the new picture slams together from glass shards, locks with its title and facts, and shatters back to the field.
+            const to = content.species.get(e.to) ?? content.species.get(mon.speciesId)!;
             const mine = e.side === 'player';
-            const art = mine ? this.playerArt() : (this.trainerArt()?.assetId ?? null);
             const feel = this.cineFeel('mega');
-            // Both front pictures must be loaded before the scene measures them.
-            const fronts = [from, to].flatMap((sp) => { const ids = pokemonAssetIds(sp.assets); return mon.shiny ? [ids.front, ids.shinyFront] : [ids.front]; });
-            await loadAssets(this, fronts.filter((id) => services().assets.has(id))).catch(() => undefined);
+            const ids = pokemonAssetIds(to.assets);
+            await loadAssets(this, (mon.shiny ? [ids.front, ids.shinyFront] : [ids.front]).filter((id) => services().assets.has(id))).catch(() => undefined);
+            const plate = (mine ? this.playerBox : this.enemyBox).container;
             await this.gimmickBeat(
-              megaScene(this, {
-                makeFront: (x, y) => pokemonVisual(this, from, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
-                makeMegaFront: (x, y) => pokemonVisual(this, to, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
-                makeTrainer: art ? (x, y) => trainerVisual(this, art, '', x, y, 3.2) : null,
-                stoneKey: (e.itemId ? content.items.get(e.itemId)?.iconAssetId : null) ?? null,
-                ringKey: 'cine.key.mega',
-                backdropKey: this.arenaBgKey,
+              megaGlass(this, {
+                field: () => (mine ? this.playerSprite : this.enemySprite),
+                makeMegaFront: (x, y) => pokemonVisual(this, to, 'front', x, y, PIXEL_SCALE, mon.shiny),
                 opposes: !mine,
                 onSwap: () => void swapForm(),
+                page: this.megaPage(mon, e.to, e.itemId ?? null),
+                itemKey: 'cine.key.mega',
+                plate: plate ? { x: plate.x + 60, y: plate.y + 20 } : null,
                 intensity: feel.intensity,
                 shake: feel.shake,
                 speed: feel.speed,
+                particles: !services().session.settings.reduceParticles,
               }),
             );
           } else if (!phCard && (cine === 'dynamax' || cine === 'gigantamax') && this.motion === 'full' && !services().session.settings.fastDynamax && mon && (e.side === 'player' ? this.playerArt() : this.run.battle?.trainer ? this.trainerArt() : null)) {
-            // The full reference scene (Fast Dynamax off): bare arena, trainer and Dynamax Band, pink ball, blue burst, silhouette, red giant.
+            // The remade scene (Fast Dynamax off), animation redesign pass 20: recalled, the ball swells and is thrown out of
+            // the top of the screen, then one long camera climb from the trainer's shoes to the giant's face above the storm.
             const from = content.species.get(mon.speciesId)!;
             const to = content.species.get(e.to) ?? from;
             const mine = e.side === 'player';
@@ -6034,22 +6119,28 @@ export class BattleScene extends Phaser.Scene {
             await loadAssets(this, fronts.filter((id) => services().assets.has(id))).catch(() => undefined);
             const pArt = mine ? this.playerArt() : null;
             const fArt = mine ? null : this.trainerArt();
+            const other = this.shown[mine ? 'enemy' : 'player'];
+            const otherSp = other ? content.species.get(other.speciesId) : null;
+            if (other) await this.loadFronts([[other.speciesId, !!other.shiny]]);
+            const hpNow = mon.hp;
+            const hpBig = Math.max(1, Math.round((mon.hp * calcStats(content, { ...mon, speciesId: e.to, dynamaxed: true }).hp) / Math.max(1, calcStats(content, mon).hp)));
             await this.gimmickBeat(
-              dynamaxScene(this, {
+              dynamaxPan(this, {
                 kind: cine,
-                makeFront: (x, y) => pokemonVisual(this, from, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
-                makeGiantFront: (x, y) => pokemonVisual(this, to, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
-                makeTrainer: (x, y) => (pArt ? trainerVisual(this, pArt, 'Trainer', x, y, 2) : trainerVisual(this, fArt!.assetId, fArt!.label, x, y, 2)) as Phaser.GameObjects.GameObject,
+                field: () => (mine ? this.playerSprite : this.enemySprite),
+                makeGiantFront: (x, y) => pokemonVisual(this, to, 'front', x, y, PIXEL_SCALE, mon.shiny),
+                makeTrainer: pArt ? (x, y) => trainerVisual(this, pArt, 'Trainer', x, y, 2) : fArt ? (x, y) => trainerVisual(this, fArt.assetId, fArt.label, x, y, 2) : null,
+                makeOther: other && otherSp ? (x, y) => pokemonVisual(this, otherSp, 'front', x, y, PIXEL_SCALE, other.shiny) : null,
                 ballItem: mon.caughtBall ?? DEFAULT_BALL,
-                bandKey: keyItemFor(cine),
-                backdropKey: this.arenaBgKey,
                 opposes: !mine,
-                calyrex: mon.speciesId.startsWith('calyrex'),
-                ...(cine === 'gigantamax' ? { accent: TYPE_COLORS[to.types[0] ?? ''] ?? 0xffd24a, gmaxName: `G-MAX ${to.name.replace(/^Gigantamax /i, '').toUpperCase()}`.trim() } : {}),
-                onSwap: swapForm,
+                onSwap: () => void swapForm(),
+                page: this.gimmickPage(cine, mon, { hp: [hpNow, hpBig], turns: this.run.battle?.transform.dynamax[mon.uid] ?? content.balance.transformations.dynamaxTurns, gmax: cine === 'gigantamax' ? to.name.replace(/^Gigantamax /i, '') : undefined }),
+                itemKey: keyItemFor(cine),
+                cloudKey: dynamaxPatternKey(mon.speciesId),
                 intensity: feel.intensity,
                 shake: feel.shake,
                 speed: feel.speed,
+                particles: !services().session.settings.reduceParticles,
               }),
             );
           } else if (cine) {
