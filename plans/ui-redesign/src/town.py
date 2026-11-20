@@ -49,3 +49,5 @@ def first(path):  # first frame of a trainer atlas, trimmed
     return im.crop(im.getbbox())
 for n, src in [('t-clerk', 'trainer/pr/clerk_f'), ('t-clerkm', 'trainer/pr/clerk_m')]:
     im = first(src); print(n, im.size); im.save(OUT + n + '.png', optimize=True)
+im = first('pokemon/479'); print('m-479', im.size); im.save(OUT + 'm-479.png', optimize=True)
+Image.open(A + 'overworld/followers/ROTOM.png').convert('RGBA').save(OUT + 'fw-479.png', optimize=True)

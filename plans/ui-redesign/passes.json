@@ -212,5 +212,24 @@
   "q3": "Yes, five. Trainer Select and the Trainer Card leave the hub and menu clean, the Rival Board holds all four rivals, the Gym Leader File shows what a boss brings before you commit, and the League is a staircase of five rooms.",
   "q4": "The pause menu swaps its row of pills for a one-line Trainer Card that opens the full card. No new settings are needed.",
   "q5": "Yes: a Trainer Card with eight badge slots, a rival who is always one step ahead, and a Gym Leader with a title and an ace are the heart of a Pokémon journey. The trainer is still not drawn on the battlefield itself."
+ },
+ "14": {
+  "name": "Rotom Phone",
+  "big": "One helper, one device. The pause menu is now a Rotom Phone with eight apps, Rotom gives one short tip wherever you might be stuck, and finding your way gets pages of its own.",
+  "pages": [
+   "Pause Menu · Rotom Phone",
+   "Quick Wheel",
+   "Ask Rotom",
+   "Search",
+   "Controls Overlay",
+   "Notices",
+   "Confirm",
+   "Travel Screen"
+  ],
+  "q1": "The phone is a big orange device with Rotom's blinking eyes and a lightning ear, and its apps pop in two by two. Rotom itself floats and tilts on every page it speaks on. Between stops the whole team walks along a scrolling road.",
+  "q2": "The pause menu was a wheel that only held eight links. The phone holds the apps, the time, the next stop, a tip, your hand of cards and your powers in one tidy place. The old wheel stays as a quick pop-up on Tab.",
+  "q3": "Yes, seven. Ask Rotom, Search, a Controls overlay for the page you are on, Notices, a Confirm box, a Travel screen and the Quick Wheel. None of them add anything to the pages you already use.",
+  "q4": "The Menu is the phone. Settings is an app on it, Search can jump straight to one setting, and the Controls overlay points to Settings › Controls for changing keys.",
+  "q5": "Yes, the Rotom Phone comes straight from the newer games. In this game the helper is always called Rotom."
  }
 }
