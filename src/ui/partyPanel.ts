@@ -49,7 +49,7 @@ export interface PickerRow {
   /** A menu row said outright (the New UI's Camp): the words at the row's right, the detail card's text and its picture (atlas file). */
   menu?: { label: string; note: string; detail: string; sprite?: string | null; facts?: readonly (readonly [string, string])[] };
   /** A grid cell said outright (the New UI's Pokédex): its picture (atlas file) and the detail card's title and line. `off` is a "?" cell, `sil` a shadow. */
-  cell?: { file: string | null; title: string; body: string; off?: boolean; sil?: boolean };
+  cell?: { file: string | null; title: string; body: string; off?: boolean; sil?: boolean; got?: boolean };
   /** The row's picture by asset id, for a row that draws none (the New UI's grid cells show it). */
   art?: string;
 }

@@ -364,3 +364,33 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .gx-bag-party u{text-decoration:none;white-space:nowrap}
 .pkx .pks .gx-bag-say{position:absolute;left:652px;right:16px;top:466px;height:34px;display:flex;align-items:center}
 .pkx .pks .gx-bag-say p{line-height:1.3;font-weight:700;color:var(--ink)}
+
+/* Pokédex entry (mock-up `dex-entry`): an unknown species, shadows in the line, the base stats and the data page. */
+.pkx .pks .gx-de-q{font:400 120px/1 var(--fd);color:#fff;-webkit-text-stroke:5px var(--ink);paint-order:stroke fill;opacity:.8}
+.pkx .pks .de-evo i.gx-sil img{filter:brightness(0);opacity:.55}
+.pkx .pks .de-evo i>b{font-size:28px;color:var(--mute)}
+.pkx .pks .de-evo>div.gx-de-short{justify-content:space-around}
+.pkx .pks .gx-de-next{font-size:12px;font-weight:800;color:var(--mute);text-align:center}
+.pkx .pks .gx-de-stats>div{display:flex;flex-direction:column;justify-content:center;gap:4px}
+.pkx .pks .gx-de-stats p{display:grid;grid-template-columns:44px 30px 1fr;align-items:center;gap:6px;font-size:12px;font-weight:800}
+.pkx .pks .gx-de-stats p b{font-size:13px;text-align:right}
+.pkx .pks .gx-de-stats i{height:7px;border-radius:4px;background:#d8deea;overflow:hidden}
+.pkx .pks .gx-de-stats u{display:block;height:100%;background:linear-gradient(90deg,var(--t),var(--t2))}
+.pkx .pks .gx-de-facts>div{display:flex;flex-direction:column;gap:3px;overflow:hidden}
+.pkx .pks .gx-de-facts p{display:grid;grid-template-columns:84px 1fr;gap:6px;line-height:1.3}
+.pkx .pks .gx-de-facts em{font-style:normal;font-weight:800;color:var(--mute)}
+.pkx .pks .gx-de-moves>div{display:grid;grid-template-columns:1fr 1fr;gap:1px 10px;justify-items:start;align-content:start;overflow:hidden;line-height:1.3;white-space:pre}
+.pkx .pks .gx-de-moves span{font-size:inherit;font-weight:700}
+.pkx .pks .gx-de-flip{position:absolute;left:332px;right:16px;top:312px;height:178px;z-index:3;cursor:pointer}
+.pkx .pks .gx-de-facts em{display:block;font-size:inherit}
+.pkx .pks .gx-de-facts em::after{content:none}
+.pkx .pks .de-evo.gx-de-facts>div{align-items:stretch;justify-content:flex-start}
+.pkx .pks .gx-de-moves>div{white-space:nowrap}
+.pkx .pks .gx-de-moves>div{grid-auto-flow:row;grid-template-rows:none;grid-template-columns:1fr 1fr}
+/* Pokédex wall: the pictures sit in a fit box, so the grey of a seen-only Pokémon reaches into it. */
+.pkx .pks .gx-dexw .dx{cursor:pointer}
+.pkx .pks .gx-dexw .dx>.gx-fit{margin-top:10px}
+.pkx .pks .gx-dexw .dx.seen .gx-fit img{filter:grayscale(1);opacity:.5}
+.pkx .pks .gx-dexw .dx.gx-dx-sil .gx-fit img{filter:brightness(0);opacity:.35}
+.pkx .pks .gx-dexw .dx-tabs span{cursor:pointer}
+.pkx .pks .gx-dexw .gx-dx-unk span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}

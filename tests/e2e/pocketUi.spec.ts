@@ -409,3 +409,41 @@ test('Pocket look: the Bag is pockets, a grid of items and the item\'s card; loo
   expect(await runNow(page)).toBe(before);
   expect(errors).toEqual([]);
 });
+
+test('Pocket look: the Pokédex is a wall of squares and each entry has a species page and a data page; looking changes nothing', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=pk-dex');
+  await onPkPage(page, 'MainMenu', 'title');
+  await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    session.profile.speciesSeen.push('charmander', 'charizard', 'bulbasaur');
+    session.profile.speciesCaught.push('charizard');
+    for (const s of game.scene.getScenes(true)) game.scene.stop(s.scene.key);
+    game.scene.start('Hub');
+  });
+  await waitForScene(page, 'Hub');
+  await page.waitForTimeout(1500);
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Hub').openDexSet({ id: 'k', name: 'Generation 1 Pokédex', members: ['bulbasaur', 'ivysaur', 'charmander', 'charmeleon', 'charizard', 'squirtle'] }));
+  await onPkPage(page, 'Hub', 'dex');
+  const before = await page.evaluate(() => JSON.stringify((window as any).__pkr.session.profile));
+  const wall = pkView(page, 'Hub', 'dex');
+  await expect(wall.locator('.dx')).toHaveCount(6);
+  await expect(wall.locator('.dx.got')).toHaveCount(1);
+  await expect(wall.locator('.dx.unk')).toHaveCount(3);
+  await expect(wall.locator('.dx.on')).toHaveCount(1);
+  await fits(page, 'Hub', 'dex');
+  await step(page, 'ArrowRight', 4);
+  await expect(wall.locator('.dx.on')).toHaveAttribute('data-key', 'dex-c-4');
+  await expect(wall.locator('.dx-info')).toContainText('Charizard');
+  await step(page, 'Enter');
+  await onPkPage(page, 'Hub', 'dex-entry');
+  const entry = pkView(page, 'Hub', 'dex-entry');
+  await expect(entry.locator('[data-key="dex-stats"]')).toBeVisible();
+  await fits(page, 'Hub', 'dex-entry');
+  await step(page, 'ArrowRight');
+  await expect(entry.locator('[data-key="dex-moves"]')).toBeVisible();
+  await fits(page, 'Hub', 'dex-entry');
+  expect(await page.evaluate(() => JSON.stringify((window as any).__pkr.session.profile))).toBe(before);
+  expect(errors).toEqual([]);
+});

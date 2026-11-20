@@ -8,6 +8,8 @@ import { dealOf, dealWord, pageText, pkEvent, points } from '../../src/ui/pocket
 import { mapWindow, nodeState, pkMap, pkMiniMap, pkNodeMenu } from '../../src/ui/pocket/screens/map';
 import { pkPause } from '../../src/ui/pocket/screens/pause';
 import { pkBag, pocketIcon } from '../../src/ui/pocket/screens/bag';
+import { dexNo, movesSize, pkDex, pkDexWall, type PkDexCell } from '../../src/ui/pocket/screens/dex';
+import type { DexModel } from '../../src/ui/redux/screens/dex';
 import { pkParty } from '../../src/ui/pocket/screens/party';
 import { pkSummary, radar } from '../../src/ui/pocket/screens/summary';
 import type { PartyCard, SummaryModel } from '../../src/ui/redux/screens/party';
@@ -507,5 +509,71 @@ describe('Pocket look: the Bag', () => {
   });
   it('an empty pocket says so', () => {
     expect(pkBag({ ...d, n: 0, text: 'Nothing here yet.' })).toContain('Nothing here yet');
+  });
+});
+
+describe('Pocket look: the Pokédex', () => {
+  const card = { state: 'caught' as const, no: 'No. 0006', name: 'Charizard', types: ['fire', 'flying'], facts: [['Height', '1.7 m'], ['Weight', '90.5 kg'], ['Caught', '1'], ['Battles', '4']] as [string, string][], note: 'Caught. Research level 2 of 8.', stats: [{ label: 'HP', value: 78 }, { label: 'Spe', value: 100 }], line: [{ id: 'charmander', here: false, met: true }, { id: 'charmeleon', here: false, met: false }, { id: 'charizard', here: true, met: true }], next: 'Final form' };
+  const data = { state: 'caught' as const, title: 'No. 0006  Charizard', facts: ['Egg groups: monster, dragon', 'Catch rate: 45'], evolutions: [], moves: ['Lv  1  Scratch     Lv  4  Ember', 'Lv 17  Fire Fang'] };
+  const d: DexModel = { card, data, page: 0, art: 'pokemon/6', line: ['pokemon/4', null, 'pokemon/6'] };
+  it('the species page shows the number, name, types, size, the line with a shadow, and the base stats', () => {
+    const html = pkDex(d);
+    expect(pkPageOf(html)?.id).toBe('dex-entry');
+    expect(html).toContain('#006');
+    expect(html).toContain('No. 0006 · Caught');
+    expect(html).toContain('1.7 m · 90.5 kg');
+    expect(html).toContain('Battles <b>4</b>');
+    expect(html).toContain('gx-sil');
+    expect(html).toContain('Final form');
+    expect(html).toContain('Base stats');
+    expect(html).toContain('width:63%');
+  });
+  it('the data page swaps in the facts and the level-up moves, one each', () => {
+    const html = pkDex({ ...d, page: 1 });
+    expect(html).toContain('<em>Catch rate</em><span>45</span>');
+    expect(html.match(/<span>Lv/g)?.length).toBe(3);
+    expect(html).toContain('<span>Lv 4 Ember</span>');
+    expect(html).not.toContain('Base stats');
+  });
+  it('an unknown species is a question mark with no panels', () => {
+    const html = pkDex({ ...d, art: null, card: { ...card, state: 'unknown', name: '???', types: [], facts: [], stats: [], line: [], next: '' } });
+    expect(html).toContain('gx-de-q');
+    expect(html).not.toContain('dex-stats');
+  });
+  it('the moves get smaller as the list grows, within bounds', () => {
+    expect(movesSize(['Lv 1 Tackle'])).toBe(12);
+    expect(movesSize(Array.from({ length: 30 }, () => 'Lv 100 Draco Meteor'))).toBe(8);
+  });
+  const cells: PkDexCell[] = Array.from({ length: 50 }, (_, i) => {
+    const no = `No. ${String(i + 1).padStart(4, '0')}`;
+    if (i % 5 === 2) return { file: i === 7 ? 'pokemon/8' : null, title: no, body: 'Not met yet.', off: true, sil: i === 7 };
+    return { file: `pokemon/${i + 1}`, title: `Mon ${i + 1}`, body: `${no} · Seen 3 · Caught ${i % 2}`, got: i % 2 === 1 };
+  });
+  const w = { title: 'Generation 1 Pokédex', n: 50, index: 5, cell: (i: number) => cells[i], hint: 'Mon 6: fire / flying. Enter opens its page.', tabs: { labels: ['All', 'Seen', 'Owned', 'Mastered'], index: 0 }, back: true };
+  it('reads the number off a square', () => {
+    expect(dexNo('No. 0006 · Seen 1')).toBe('#006');
+    expect(dexNo('No. 1025')).toBe('#1025');
+    expect(dexNo('Charizard')).toBe('');
+  });
+  it('the wall is forty squares, caught ones with a ball, unknown ones a question mark, and the lit one\'s bar', () => {
+    const html = pkDexWall(w);
+    expect(pkPageOf(html)?.id).toBe('dex');
+    expect(html.match(/class="dx /g)?.length).toBe(40);
+    expect(html).toContain('class="dx got on"');
+    expect(html).toContain('dx unk gx-dx-sil');
+    expect(html).toContain('<b>?</b>');
+    expect(html).toContain('Seen 40');
+    expect(html).toContain('Caught 20');
+    expect(html).toContain('1–40 of 50');
+    expect(html).toContain('Gen 1');
+    expect(html).toContain('#006 Mon 6');
+    expect(html).toContain('Flying');
+    expect(html.match(/class="dx-tabs"/g)?.length).toBe(1);
+    const late = pkDexWall({ ...w, index: 49 });
+    expect(late).toContain('data-key="dex-c-49"');
+    expect(late).not.toContain('data-key="dex-c-0"');
+  });
+  it('an unknown lit square says how to find it', () => {
+    expect(pkDexWall({ ...w, index: 2 })).toContain('#003 ???');
   });
 });

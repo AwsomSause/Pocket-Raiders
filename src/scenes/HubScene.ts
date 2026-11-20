@@ -1340,7 +1340,7 @@ export class HubScene extends Phaser.Scene {
         cell: wall
           ? state === 'unknown'
             ? { file: shadow ? monFile(this, id, 'front') : null, title: no, body: shadow ? `A shadow from your field notes: ${shadow.join(' / ')} type.` : 'Not met yet.', off: true, sil: Boolean(shadow) }
-            : { file: monFile(this, id, 'front'), title: sp.name, body: `${no} · Seen ${tally.seen} · Caught ${tally.caught}` }
+            : { file: monFile(this, id, 'front'), title: sp.name, body: `${no} · Seen ${tally.seen} · Caught ${tally.caught}`, got: state === 'caught' }
           : undefined,
         hint: shadow ? `A silhouette from your field notes: ${shadow.join(' / ')} type. Not met yet.` : state === 'unknown' ? 'Not met yet.' : `${sp.name}: ${sp.types.join(' / ')}. Enter opens its page.`,
         draw: (scene, box, _w, h) => {

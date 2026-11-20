@@ -2,6 +2,7 @@
 // with the mock-ups' menu, grid or board template. The Picker stays the controller; this reads what each row drew
 // (its words and its picture) and lays it out again. Presentation only.
 
+import { PK_DEX_COLS, pkDexWall } from '../pocket/screens/dex';
 import Phaser from 'phaser';
 import type { AssetManifest } from '../../assets/catalog';
 import { rxFileOf } from './assets';
@@ -34,7 +35,7 @@ export interface PickerBridge {
   /** A menu row said outright (Camp): the words at its right, the detail card's text and picture. */
   menu?: (i: number) => { label: string; note: string; detail: string; sprite?: string | null; facts?: readonly (readonly [string, string])[] } | undefined;
   /** A grid cell said outright (the Pokédex): its picture, and the detail card's title and line. */
-  cell?: (i: number) => { file: string | null; title: string; body: string; off?: boolean; sil?: boolean } | undefined;
+  cell?: (i: number) => { file: string | null; title: string; body: string; off?: boolean; sil?: boolean; got?: boolean } | undefined;
   /** The item a row stands for, if any (Bag). */
   item?: (i: number) => string | undefined;
   /** A row's picture by asset id, for rows that draw none themselves (the Berry Bestiary's icons). */
@@ -114,6 +115,9 @@ function bagNotes(itemId: string | undefined): string[] | undefined {
   return run.party.map((m) => bagUseNote(m.held?.[item.id] ?? 0, !!item.usableOutside, item.usableOutside ? itemUseProblem(content, item, m, regionId) : null, m.hp));
 }
 
+/** A Pokédex wall: its squares are said outright and carry a number ("No. 0006"). */
+const isDexWall = (p: PickerBridge): boolean => { const x = p.cell?.(0); return !!x && /No\.\s*\d/.test(`${x.title} ${x.body}`); };
+
 /** The header band is a Back button for the mouse and touch. */
 const BACK_HIT = `<div class="abs hit" style="left:0;top:0;width:330px;height:48px;z-index:4"${act('back')}></div>`;
 
@@ -147,6 +151,8 @@ function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerK
   const back = p.canBack ? BACK_HIT : '';
   const sum = p.summary();
   const over = sum === null ? '' : '<div class="shade" style="z-index:8"></div>' + W(`<div style="white-space:pre-wrap;line-height:22px;font-size:16px">${esc(sum)}</div><div class="sm acc">Press I, Enter or Esc to go back to the list</div>`, 'position:absolute;left:120px;right:120px;top:40px;bottom:50px;display:flex;flex-direction:column;gap:10px;padding:16px 20px;overflow:hidden;z-index:9', '', act('back'));
+  // The Pokédex wall (its squares carry their numbers) has the Pocket look's own page, whatever the set is called.
+  if (c.pk && n && isDexWall(p)) return pkDexWall({ title: name, n, index, cell: (i) => p.cell?.(i), hint: p.hint(index), tabs: p.tabs ? { labels: p.tabs.labels, index: p.tabs.index } : null, back: p.canBack }) + back;
   let body: string;
   if (n === 0 && kind !== 'bag' && c.ph) body = phEmpty(name, AREA_WORD[area], text, hints);
   else if (n === 0 && kind !== 'bag') body = H(name, area, hints) + `<div class="abs cen" style="left:0;right:0;top:220px;display:flex;font-size:26px;opacity:.6">Nothing here yet</div>` + TX(esc(text));
@@ -209,7 +215,7 @@ export function mountPickerView(scene: Phaser.Scene, p: PickerBridge, kind: Pick
   const view = mountRedux(scene, {
     render: (c) => {
       // A room's own page has no list to steer across: the cursor steps one row at a time.
-      cols = p.page ? p.pageCols ?? 1 : pickerCols(kind, c);
+      cols = p.page ? p.pageCols ?? 1 : c.pk && kind !== 'window' && isDexWall(p) ? PK_DEX_COLS : pickerCols(kind, c);
       return p.page ? p.page(c, p.index()) + (p.canBack ? BACK_HIT : '') : render(c, scene, p, kind);
     },
     acts: { pick: (i) => p.pick(Number(i)), tab, bracketPage: tab, back: () => p.back(), extra: (k) => p.extra?.(Number(k)) },
