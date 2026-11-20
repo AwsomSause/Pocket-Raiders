@@ -249,5 +249,20 @@
   "q3": "Yes, seven. New Run is four small steps with a step bar on top, so no step is crowded, and Run Over is kept apart from the Run Report so the sad moment and the numbers do not fight.",
   "q4": "The four run choices on the New Run page (kind of run, stage length, first region, seed) are the same switches as Settings › Gameplay. The phone shows the route line on its home screen.",
   "q5": "Yes: a quiz from Professor Oak, three starters on Poké Balls, Legendary blessings and a Hall of Fame are all classic moments."
+ },
+ "16": {
+  "name": "Stage Lights",
+  "big": "Every screen is lit like a stage. In battle the two dark bars are gone: the foe's plate floats top-left, the command console lifts off the bottom, and light beams cross a full arena. Menus now sit over the place you are (the town, or the route) instead of a flat backdrop.",
+  "pages": [
+   "Battle · Info",
+   "Battle · Log",
+   "Battle · Auto",
+   "Shiny Encounter"
+  ],
+  "q1": "Yes. Sun rays on the title and hub, a spotlight on the picked party card, a glowing phone in the dark, light beams and a vignette in battle, a star ring for shinies.",
+  "q2": "Pass 15 added the journey line but kept flat bars and a flat backdrop. Here the battle shows far more arena, and every menu gains depth and a sense of place. The gimmick cut-ins also get their dark stage back, so the white titles read properly again.",
+  "q3": "Yes, four. Info and Auto were buttons with nowhere to go: Info now has its own page (weather, field, stat changes, enemy heals left), with the Battle Log one key away, and Auto has its own page for style, speed and when to stop.",
+  "q4": "The Rotom Phone glows over a dimmed world, so the pause reads as a pause. Settings sit over the town like every other out-of-run page.",
+  "q5": "Yes. Foe plate top-left with the arena wide open is the classic battle framing, and the shiny star ring is straight from the series."
  }
 }
