@@ -5,6 +5,7 @@ import { partyStrip, type PartyChip } from '../game';
 import type { ReduxCtx } from '../stage';
 import { figure, pic, type Art } from '../templates';
 import { phReward } from '../../phantom/screens/stops';
+import { phHonest, phTrade } from '../../phantom/screens/trade';
 
 const pickAttr = (k: number): string => `${act('pick', k)} data-over="over"`;
 
@@ -68,6 +69,7 @@ export interface TradeModel {
 }
 
 export function tradeView(c: ReduxCtx, d: TradeModel): string {
+  if (c.ph) return phTrade(c.ph, d);
   const v = c.v(2), swapped = d.done !== null;
   const side = (name: string, art: Art | null, m: TradeMon | null, empty: string, attr = ''): string =>
     W(`<div class="row">${figure(art, 104)}<b>${esc(name)}</b></div><div class="cell" style="height:150px;aspect-ratio:auto;align-self:stretch">${m?.file ? mon(m.file, 2.4, swapped ? 'rx-pop' : '', true) : `<span class="sm" style="padding:0 16px;text-align:center">${esc(m ? m.name : empty)}</span>`}</div>${m ? `<b style="font-size:20px">${esc(m.name)} <span class="sm">Lv ${m.level}</span></b><div class="row" style="gap:4px">${m.types.map(ty).join('')}</div>` : ''}`, 'flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0', '', attr);
@@ -151,6 +153,7 @@ export function honestVerdict(d: Pick<HonestModel, 'gift' | 'give' | 'warn' | 'w
 }
 
 export function honestView(c: ReduxCtx, d: HonestModel): string {
+  if (c.ph) return phHonest(c.ph, d);
   const v = c.v(2), verdict = honestVerdict(d), ok = d.gift || d.give !== null;
   const row = (label: string, value: string): string => `<div class="row" style="gap:6px;align-items:baseline"><span style="opacity:.7;flex:none">${label}</span><b style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${value}</b></div>`;
   const facts = (m: HonestSide): string =>
