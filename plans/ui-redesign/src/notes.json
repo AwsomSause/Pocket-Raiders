@@ -784,5 +784,22 @@
   "q3": "Six new pages: the crafting bench (three recipes and your six materials as big numbers), Berry plots, card frames, the Corner Nook with its fortune cookie, the Collection Books as a real shelf of spines, and species research with its two tasks.",
   "q4": "A new switch belongs in Settings > Display: Area dress, on or off. Off keeps the yellow Fight button everywhere for players who want one look. Card frames are picked on their own page from the Hub.",
   "q5": "Yes. The games change the frame for special places: the Battle Frontier, Contests and stadiums each have their own trim. Research levels come straight from Legends: Arceus."
+ },
+ "46": {
+  "name": "New areas 20 · Bottom Edge",
+  "label": "New areas · pass 20 of 25",
+  "big": "Everything you press sits on the bottom edge, and the five areas on a phone",
+  "pages": [
+   "ph-side",
+   "ph-up",
+   "dg-list",
+   "dg-room",
+   "mn-pick"
+  ],
+  "q1": "The battlefield now runs edge to edge with nothing floating on it: the raid boss, its shield and your four Pokémon share one clear picture. On a phone held upright the expedition becomes a climb you scroll up, with one big Go button.",
+  "q2": "Until now the Fight block covered the right-hand third of the field, and the expedition tag and the Rocket answers sat over the scenery. All of them moved to the bottom edge. The scenery gained about a third more room, and your thumbs no longer cross the picture to reach a button.",
+  "q3": "Five new pages: a raid on a phone held sideways, three areas on phones held upright, the Dungeon list, the inside of a dungeon as a cave you walk through, and the Mentor page with three teachers at a time.",
+  "q4": "Settings > Controls already has touch pads from the Final Cut. One new line belongs there: Button row, bottom (new) or side (the picked layout), so either hand position works.",
+  "q5": "Yes. The handheld games keep every command at the bottom of the screen and the Pokémon above it. This is that layout, stretched to a wide screen."
  }
 }

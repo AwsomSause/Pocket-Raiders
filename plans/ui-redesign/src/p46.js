@@ -1,0 +1,38 @@
+/* New areas · pass 20 of 25 · Bottom Edge. Two things. One: everything you press now sits on the bottom edge. In battles the Fight button and the four small buttons were a block floating over the right side of the field; they are now one row above your bar, so the whole field from the left edge to the right is scenery and Pokémon. The expedition's Next stop tag hangs at the bottom right, leaving the sky clear, and the evil team's answers sit beside the text box instead of above it. Two: the phone. A raid held sideways with the bottom row under both thumbs, and three upright phones (raid, expedition, Rocket stop) where the scene is on top and the buttons fill the bottom half. Plus two side systems that had no mockup: Dungeons and Mentors. */
+for (const id of ['rd-battle', 'tm-battle', 'ga-battle', 'xp-route', 'et-beat']) decor(46, id, { cls: 'be46' });
+
+def(46, 'ph-side', { t: 'Phone · A raid held sideways', g: 'Screens' }, () => `<div class="scr sz20">${szh('Phone · held sideways', 'Every button is on the bottom row, under your thumbs.')}
+  <div class="phl"><i class="notch"></i><div class="pad l"><u></u><b data-nocheck>✛</b><span>Move</span></div>${emb('rd-battle', .72)}<div class="pad r"><i class="a">A</i><i class="b">B</i><i class="m">Menu</i></div></div>
+  <div class="sz-n"><i>Tap</i>a button on the bottom row<i>Hold</i>the boss for its Info page<i>Swipe up</i>your party</div>${C('keys', [['Enter', 'open the raid'], ['Esc', 'back']])}</div>`);
+const PX46 = [[36, 300, 'wild', 'past'], [86, 246, 'trainer', 'on'], [150, 262, 'cache', ''], [60, 190, 'rest', ''], [146, 200, 'elite', ''], [80, 136, 'mega', ''], [156, 142, 'mystery', ''], [70, 84, 'finale', '']];
+def(46, 'ph-up', { t: 'Phone · Three areas held upright', g: 'Screens' }, () => `<div class="scr sz20">${szh('Phone · held upright', 'The scene on top, the buttons in the bottom half.')}
+  <div class="pps">
+   <div class="ph20 pu46 r"><i class="notch"></i><div class="sc46"><div class="pl46"><b>Corviknight</b><u><s style="width:68%"></s></u><em>8 turns</em></div><i class="bs46">${spr('m-823-gigantamax', 1.25)}</i><div class="tm46">${['mb-6', 'mb-448', 'mb-9', 'mb-113'].map(k => spr(k, .75)).join('')}</div></div>
+     <div class="cm46"><i class="f" ${go('rd-battle')}>Fight</i><i>Bag</i><i>Pokémon</i><i>Auto</i><i>Info</i></div></div>
+   <div class="ph20 pu46 x"><i class="notch"></i><div class="sc46"><svg viewBox="0 0 222 340" data-nocheck><polygon points="0,340 0,318 120,318 132,274 222,274 222,340" fill="#241a3c"/><polygon points="0,318 0,230 110,230 122,174 222,174 222,274 132,274 120,318" fill="#2c2046"/><polygon points="0,230 0,118 120,118 132,174 122,174 110,230" fill="#352850"/><polyline points="0,318 120,318 132,274 222,274" fill="none" stroke="#ffcf8a" stroke-width="3"/><polyline points="0,230 110,230 122,174 222,174" fill="none" stroke="#ffcf8a" stroke-width="3"/><polyline points="0,118 120,118 132,174" fill="none" stroke="#ffcf8a" stroke-width="3"/>
+       <path d="M36,300 L86,246 M36,300 L150,262 M86,246 L60,190 M86,246 L146,200 M150,262 L146,200 M60,190 L80,136 M60,190 L156,142 M146,200 L156,142 M80,136 L70,84 M156,142 L70,84" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="2 6" stroke-linecap="round" opacity=".8"/><path d="M36,300 L86,246" stroke="#ffcb05" stroke-width="4"/></svg>
+       ${PX46.map(n => `<i class="n46 ${n[3]}" style="left:${n[0]}px;top:${n[1]}px;--c:${XK[n[2]][1]}">${XK[n[2]][0]}</i>`).join('')}<i class="gc46">${spr('m-445-mega', 1)}</i><b class="t46">Ember Ridge</b><em class="l46">2 of 5</em></div>
+     <div class="cm46 one"><p><b>Next</b>Trainer battle: a Hiker with Rock types.</p><i class="f" ${go('xp-route')}>Go</i><i>Party</i><i>Extract</i></div></div>
+   <div class="ph20 pu46 e"><i class="notch"></i><div class="sc46"><b class="R46" data-nocheck>R</b><i class="gr46">${spr('t-grunt', 1.7)}</i><p class="say46"><b>Grunt</b>Hey! This is Team Rocket business. Scram!</p></div>
+     <div class="cm46 st"><i class="f" ${go('et-beat')}>Stand your ground<u>+1 Heat</u></i><i>Slip past<u>0 Heat</u></i><i>Follow them<u>+1 Evidence</u></i></div></div>
+  </div>${C('keys', [['←→', 'next phone'], ['Esc', 'back']])}</div>`);
+
+const DG46 = [['Abandoned Mine Shaft', 1, 'Rock', '#8a7f6a', 'm-143'], ['Haunted Mansion', 3, 'Ghost', '#7a4fd0', 'm-94'], ['Deep Ocean', 4, 'Water', '#2980ef', 'm-130']];
+def(46, 'dg-list', { t: 'Dungeons · Pick one', g: 'Side Activities' }, () => `<div class="scr nrun pg39">${C('hdr', 'Dungeons', ['18 found'], 'map', ['Map', 'Dungeons'])}
+  ${tile39('q3 dg46', DG46.map((d, i) => `<div class="pn${i ? '' : ' on'}" style="--c:${d[3]}" ${i ? '' : go('dg-room')}><i>${spr(d[4], fitS(d[4], 96, 90), 'sil46')}</i><b>${d[0]}</b><p>${d[2]} types · 5 rooms</p><em>${rep(4, s => `<s class="${s < d[1] ? 'on' : ''}"></s>`)}</em></div>`))}
+  <div class="nt39" ${mm('note')}>A dungeon is a side trip. It gives no badge and does not move the level cap.</div>
+  ${C('keys', [['←→', 'dungeon'], ['Enter', 'go in'], ['L R', 'more dungeons'], ['Esc', 'back to the map']])}</div>`);
+const RM46 = [[120, 300, 'wild', 'past', '?'], [300, 220, 'wild', 'on', '?'], [300, 380, 'den', '', 'D'], [520, 300, 'cache', '', '▣'], [740, 300, 'exit', '', '↑']];
+def(46, 'dg-room', { t: 'Dungeons · Inside', g: 'Side Activities' }, () => `<div class="scr sm22 dr46"><svg class="mt42" viewBox="0 0 960 540" preserveAspectRatio="none" data-nocheck><rect width="960" height="540" fill="#1a1512"/>
+    ${rep(9, i => `<polygon points="${i * 120 - 30},64 ${i * 120 + 10},${110 + (i % 3) * 16} ${i * 120 + 50},64" fill="#0e0b09"/>`)}
+    <path d="M120,300 L300,220 L520,300 L740,300 M120,300 L300,380 L520,300" fill="none" stroke="#4a3d30" stroke-width="54" stroke-linecap="round" stroke-linejoin="round"/>
+    ${RM46.map(r => `<ellipse cx="${r[0]}" cy="${r[1]}" rx="84" ry="58" fill="#4a3d30"/><ellipse cx="${r[0]}" cy="${r[1] + 30}" rx="66" ry="20" fill="#5e4e3c"/>`).join('')}
+    <polygon points="722,246 740,150 758,246" fill="#ffe9a8" opacity=".5"/><path d="M120,300 L300,220" stroke="#ffcb05" stroke-width="6"/></svg>
+  <div class="sm-top" ${mm('hdr')}><em>Dungeon</em><b>Abandoned Mine Shaft</b><span class="ls38"><strong>2</strong>of 5 rooms</span></div>
+  ${RM46.map(r => `<div class="nd42 ${r[3]}${r[3] === 'on' || r[2] === 'den' || r[2] === 'exit' ? ' lab' : ''}" style="left:${r[0]}px;top:${r[1]}px;--c:${{ wild: '#2f9e44', den: '#d6336c', cache: '#b97f00', exit: '#2a75bb' }[r[2]]}"><i>${r[4]}</i><b>${{ wild: 'Wild Pokémon', den: 'A den', cache: 'Item cache', exit: 'Way out' }[r[2]]}</b></div>`).join('')}
+  ${walker('ow-red', 2, 1, 'you42 dy46')}
+  ${C('keys', [['↑↓', 'pick a room'], ['Enter', 'go'], ['P', 'party check'], ['Esc', 'leave the dungeon']])}</div>`);
+const MN46 = [['Captain Ravi Ironhand', 'The Drill Captain', 'Drills that make your attacks land harder.', ['fighting', 'steel']], ['Marigold Hatch', 'The Nest Keeper', 'Care that grows bonds and speeds up hatching.', ['normal', 'grass', 'fairy']], ['Dr. Linden Vale', 'The Field Scholar', 'Ways of watching: previews and research.', ['psychic', 'bug']]];
+def(46, 'mn-pick', { t: 'Mentors · Pick a teacher', g: 'Side Activities' }, () => `<div class="scr nrun pg39">${C('hdr', 'Mentors', ['12 teachers'], 'town', ['Preparation Desk', 'Mentor'])}
+  ${tile39('q3 mn46', MN46.map((m, i) => `<div class="pn${i ? '' : ' on'}"><i>${m[3].map(t => C('medal', t, 1.5)).join('')}</i><em>${m[1]}</em><b>${m[0]}</b><p>${m[2]}</p>${i ? '' : '<div class="btn on"><b>Learn from Ravi</b></div>'}</div>`))}
+  ${C('keys', [['←→', 'teacher'], ['Enter', 'choose'], ['L R', 'more teachers'], ['Esc', 'back']])}</div>`);
