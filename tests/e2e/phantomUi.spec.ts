@@ -94,7 +94,8 @@ test('Phantom UI: Settings has presets, a tile per page, rows that change, and a
   await expect(hd).toContainText('Sound');
   await set.locator('.rl8 span', { hasText: 'P' }).click();
   await expect(hd).toContainText('Phone');
-  await expect(set.locator('.sr8 .sr').first()).toContainText('One-handed');
+  await expect(set.locator('.sr8 .sr').first()).toContainText('Touch buttons');
+  await expect(set.locator('.sr8 .sr').nth(2)).toContainText('One-handed');
   await page.waitForTimeout(700); // the live screen slides in
   expect(await fitProblems(page, 'Settings')).toEqual([]);
 
@@ -112,14 +113,16 @@ test('Phantom UI: Settings has presets, a tile per page, rows that change, and a
   expect(errors).toEqual([]);
 });
 
-test('Phantom UI: a layer without a Phantom page yet (the achievement toast) shows its New drawing in Phantom colours', async ({ page }) => {
+test('Phantom UI: the achievement toast is a Phantom page now; no layer falls back to the stand-in look', async ({ page }) => {
   const errors = watch(page);
   await start(page, 'ui=phantom');
   await onPage(page, 'MainMenu', 'title');
-  // Every screen of the main game has its Phantom page now (the Research Tree, used here before, has its own:
-  // phantomRooms.spec.ts). The toasts and notices that lie over all of them still wear the stand-in look.
+  // Every screen of the main game has its Phantom page, and since part 6 so do the toasts and notices over them
+  // (phantomExtras.spec.ts tests them in full). The stand-in look is left only as a safety net, so the toast must not show in it.
   await page.evaluate(() => void (window as any).__pkr.achievementToast(1));
-  const stand = page.locator('#rx .stage.phfb', { hasText: /achievement/i }).first();
-  await expect(stand).toBeVisible();
+  const pops = page.locator('#phx .phs[data-scene="overlay"][data-scr="pops"]');
+  await expect(pops).toBeVisible();
+  await expect(pops.locator('.ph-nt-t').first()).toBeVisible();
+  await expect(page.locator('#rx .stage.phfb:visible', { hasText: /achievement/i })).toHaveCount(0);
   expect(errors).toEqual([]);
 });

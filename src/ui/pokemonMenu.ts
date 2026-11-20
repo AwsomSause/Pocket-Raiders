@@ -10,6 +10,7 @@
 // run except for the party order (session.moveParty) and never rolls anything.
 
 import { embraceUnlocked } from '../core/story2/heartbond';
+import { setSwipeTarget } from './touchControls';
 import { fitLine } from './fitText';
 import Phaser from 'phaser';
 import { DRAG_MIN_PX, hotkeyIndex, LONG_PRESS_MS, MoveUndo, rowAt } from '../core/presentation/uiPrefs';
@@ -168,6 +169,14 @@ class PokemonScreen implements PickerLike {
     const { session } = services();
     this.motion = session.settings.battleAnimations;
     this.sel = Math.max(0, Math.min(start, this.party.length - 1));
+    // Touch (Settings > Phone): a sideways swipe goes to the next or previous Pokémon, round the party, as a number key does.
+    setSwipeTarget((dir) => {
+      if (this.closed || this.mode === 'menu' || this.party.length < 2) return false;
+      this.sel = (this.sel + (dir === 'next' ? 1 : -1) + this.party.length) % this.party.length;
+      this.cursor = 0;
+      this.render();
+      return true;
+    });
     this.root = scene.add.container(0, 0).setDepth(DEPTH);
     const shade = scene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.6).setOrigin(0).setInteractive();
     this.root.add(shade);
@@ -596,6 +605,7 @@ class PokemonScreen implements PickerLike {
   close(): void {
     if (this.closed) return;
     this.closed = true;
+    setSwipeTarget(null);
     this.host.scene.input.keyboard?.off('keydown', this.keys);
     this.host.scene.input.off('pointerup', this.up);
     this.rx?.destroy();
@@ -728,7 +738,7 @@ class PokemonScreen implements PickerLike {
             ['Evolution', grow.evolutions[0] ?? 'None'],
           ],
           note: `HP ${mon.hp} / ${maxHp}. ${status}. ${r.notes.join(' ')}${hf && hf.uid === mon.uid ? ' Heal this one first.' : ''}`.trim(),
-          moves: info.moves.map((m) => ({ name: mon.awakened?.includes(m.id) ? `★ ${m.name}` : m.name, type: m.type })),
+          moves: info.moves.map((m) => ({ name: mon.awakened?.includes(m.id) ? `★ ${m.name}` : m.name, type: m.type, pp: m.pp })),
         };
         break;
       }

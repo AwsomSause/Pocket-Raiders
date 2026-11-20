@@ -3,7 +3,9 @@
 // Pure functions from a model to HTML. Presentation only: nothing here reads or changes game state.
 
 import type { PhantomVersion } from '../../../core/presentation/phantom';
-import { act, esc, keys, page } from '../kit';
+import type { OverlayModel } from '../../redux/screens/overlay';
+import { act, esc, keys, page, pic } from '../kit';
+import { fit } from '../templates';
 
 // ---------- Run log ----------
 
@@ -65,6 +67,29 @@ export function phLog(_ph: PhantomVersion, d: PhLogModel): string {
     + `<div class="lg-bar ph-lg-bar" aria-hidden="true"><i style="${thumb};bottom:auto"></i></div>`
     + (n ? `<div class="ph-lg-n">${at + 1} / ${n}</div>` : '')
     + keys(['▲▼', 'Scroll'], ['Q E', 'Page'], ['X', 'Close', 'log']));
+}
+
+// ---------- What lies over every screen: achievement toasts, notices, the song caption ----------
+
+/** How many letters of a notice are drawn before it is cut with "…" (the stack must stay on the page). */
+export const POP_NOTE_ROOM = 150;
+const cutAt = (t: string, n: number): string => (t.length > n ? `${t.slice(0, n - 1).trimEnd()}…` : t);
+
+/**
+ * The pops (no mock-up had them: slanted cards from the mock-ups' parts). A toast is a light card that opens on a tap;
+ * the notices are dark cards under it, the newest bright; the song caption is a strip along the bottom. The page is
+ * see-through and only its cards take the pointer. Empty when nothing is showing.
+ */
+export function phPops(_ph: PhantomVersion, d: Pick<OverlayModel, 'notices' | 'toasts' | 'caption'>): string {
+  if (!d.notices.length && !d.toasts.length && !d.caption) return '';
+  const toasts = d.toasts.map((t, k) => `<div class="pn lt tilt ph-nt-t${t.open ? ' open' : ''}" style="--r:${k % 2 ? 1 : -1.2}deg" data-key="t${t.id}"${act('toast', t.id)}>`
+    + `<div class="ph-nt-h">${t.art ? `<i class="ph-nt-art">${pic(t.art, 1.5)}</i>` : ''}<div><span class="lab">${esc(t.kicker)}</span><b style="font-size:${fit(t.title, 300, 28, 16)}px">${esc(t.title)}</b></div></div>`
+    + (t.open ? t.lines.map((l) => `<p class="txt">${esc(l)}</p>`).join('') : '<u class="ph-nt-more" aria-hidden="true">▼</u>') + '</div>');
+  const notices = d.notices.map((n, q) => `<div class="pn ph-nt-n${q ? '' : ' new'}" style="--i:${q};opacity:${Math.max(0.7, 1 - q * 0.12).toFixed(2)}" data-key="n${n.id}"${act('notice', n.id)}>`
+    + `<span class="lab">${esc(n.head)}</span><p class="txt">${esc(cutAt(n.text, POP_NOTE_ROOM))}</p></div>`);
+  const stack = toasts.length || notices.length ? `<div class="ph-nt-stack">${toasts.join('')}${notices.join('')}</div>` : '';
+  const caption = d.caption ? `<div class="ph-nt-song" data-key="song"><b><i aria-hidden="true">♪</i><span>${esc(cutAt(d.caption, 64))}</span><i aria-hidden="true">♪</i></b></div>` : '';
+  return page('pops', stack + caption, false);
 }
 
 // ---------- Quick wheel ----------

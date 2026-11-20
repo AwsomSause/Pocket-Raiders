@@ -9,7 +9,7 @@ import { fitProblems, onPage, pview, toPhantomMap } from './helpers/phantomUi';
 const battle = (page: Page) => page.evaluate(() => {
   const s = (window as any).__pkr.game.scene.getScene('Battle');
   const run = (window as any).__pkr.session.run;
-  return { turn: (run.battle?.turn ?? -1) as number, tab: s.tabs.current as string | null, menu: (s.menu?.options.map((o: { label: string }) => o.label) ?? []) as string[], name: s.playerBox.name.text as string, hidden: s.playerBox.container.cameraFilter !== 0 && s.message.cameraFilter !== 0 };
+  return { turn: (run.battle?.turn ?? -1) as number, tab: s.tabs.current as string | null, menu: (s.menu?.options.map((o: { label: string }) => o.label) ?? []) as string[], name: s.playerBox.name.text as string, foe: s.speciesName(s.shown.enemy) as string, party: run.party.length as number, hidden: s.playerBox.container.cameraFilter !== 0 && s.message.cameraFilter !== 0 };
 });
 /** Stops (or restarts) the battle's own clock, so a card that ends by itself stays while it is measured. */
 const hold = (page: Page, on: boolean) => page.evaluate((on) => { (window as any).__pkr.game.scene.getScene('Battle').time.paused = on; }, on);
@@ -36,36 +36,56 @@ test('Phantom UI: the battle is a see-through Phantom page; the fan, the move ca
   await expect(hud.locator('.ph-bt-foe')).toHaveCount(1);
   await expect(hud.locator('.ph-bt-m')).toContainText(first.name.trim(), { ignoreCase: true });
   await expect(hud.locator('.ph-bt-say')).toContainText('What will');
-  await expect(hud.locator('.ph-bt-op')).toHaveCount(first.menu.length);
-  await expect(hud.locator('.ph-bt-op.on')).toContainText('Fight', { ignoreCase: true });
-  // The page tabs are the fan round your Pokémon, with their real keys.
-  await expect(hud.locator('.ph-bt-tab')).toHaveCount(5);
+  // The command menu stands in the fan round your Pokémon (mock-up `battle`): Info, the commands, then Auto.
+  await expect(hud.locator('.ph-bt-fan.cmd')).toHaveCount(1);
+  await expect(hud.locator('.ph-bt-cmd')).toHaveCount(first.menu.length);
+  await expect(hud.locator('.ph-bt-cmd.on')).toContainText('Fight', { ignoreCase: true });
+  await expect(hud.locator('.ph-bt-cmd.on kbd')).toHaveText('Z');
+  await expect(hud.locator('.ph-bt-menu')).toHaveCount(0);
+  await expect(hud.locator('.ph-bt-tab')).toHaveCount(2);
   await expect(hud.locator('.ph-bt-tab.on')).toHaveCount(0);
-  await expect(hud.locator('.ph-bt-tab', { hasText: /attack/i }).locator('kbd')).toHaveText('E');
   await expect(hud.locator('.ph-bt-tab', { hasText: /info/i }).locator('kbd')).toHaveText('I');
+  await expect(hud.locator('.ph-bt-tab', { hasText: /auto/i }).locator('kbd')).toHaveText('T');
+  // Your card and the rest of the party stand at the right; the turn ribbon at the top.
+  await expect(hud.locator('.ph-bt-stack.top .ph-bt-bn')).toHaveCount(first.party - 1);
+  await expect(hud.locator('.ph-bt-ord')).toContainText('Turn');
   expect(await fitProblems(page, 'Battle', 'battle')).toEqual([]);
-  // Fight: the moves are type cards with PP, and the fan lights Attack.
-  await hud.locator('.ph-bt-op', { hasText: /fight/i }).click();
+  // Pointing at a command lights it; the arrows move it back.
+  // (The text box is still typing, so the page may redraw under a still pointer: the hover is tried until it lands.)
+  await expect(async () => {
+    await hud.locator('.ph-bt-cmd').nth(1).hover();
+    await expect(hud.locator('.ph-bt-cmd').nth(1)).toHaveClass(/\bon\b/, { timeout: 1000 });
+  }).toPass({ timeout: 10_000 });
+  await press(page, 'ArrowDown');
+  const lit = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').menu.index as number);
+  expect(lit).not.toBe(1);
+  await expect(hud.locator('.ph-bt-cmd').nth(lit)).toHaveClass(/\bon\b/);
+  await expect(hud.locator('.ph-bt-cmd.on')).toHaveCount(1);
+  // Fight: the mock-up's cross of move cards with PP and the target's card; the fan and the boxes step aside.
+  await hud.locator('.ph-bt-cmd', { hasText: /fight/i }).click();
   await expect.poll(async () => (await battle(page)).tab).toBe('attack');
   const moves = hud.locator('.ph-bt-mv');
   await expect(moves.first()).toBeVisible();
   await expect(moves.first()).toContainText('PP');
-  await expect(hud.locator('.ph-bt-tab.on')).toContainText('Attack', { ignoreCase: true });
-  await expect(hud.locator('.ph-bt-say')).toContainText('Power');
+  await expect(hud.locator('.ph-bt-x')).toHaveCount(1);
+  await expect(hud.locator('.ph-bt-tg')).toContainText(first.foe.trim(), { ignoreCase: true });
+  await expect(hud.locator('.ph-bt-tg')).toContainText('Power');
+  await expect(hud.locator('.ph-bt-hd')).toContainText('Fight', { ignoreCase: true });
+  await expect(hud.locator('.ph-bt-fan')).toHaveCount(0);
+  await expect(hud.locator('.ph-bt-foe')).toHaveCount(0);
   await page.waitForTimeout(500);
   expect(await fitProblems(page, 'Battle', 'battle')).toEqual([]);
-  // The last tab of the fan stays above the cards.
-  const gap = await page.evaluate(() => {
-    const S = document.querySelector('#phx .phs[data-scene="Battle"][data-scr="battle"]')!;
-    const tabs = [...S.querySelectorAll('.ph-bt-tab')].map((e) => e.getBoundingClientRect().bottom);
-    return S.querySelector('.ph-bt-menu')!.getBoundingClientRect().top - Math.max(...tabs);
-  });
-  expect(gap).toBeGreaterThanOrEqual(0);
   // The arrows move the lit card; pointing at a card lights it.
   await press(page, 'ArrowRight');
   await expect(moves.nth(1)).toHaveClass(/\bon\b/);
   await moves.first().hover();
   await expect(moves.first()).toHaveClass(/\bon\b/);
+  // The page's Back key goes back to the commands.
+  await hud.locator('[data-act="back"]').click();
+  await expect.poll(async () => (await battle(page)).tab).toBeNull();
+  await expect(hud.locator('.ph-bt-fan.cmd')).toHaveCount(1);
+  await hud.locator('.ph-bt-cmd', { hasText: /fight/i }).click();
+  await expect.poll(async () => (await battle(page)).tab).toBe('attack');
   // E: the Party window, a Phantom list over the field. Esc steps back to the commands.
   await press(page, 'e');
   await expect.poll(async () => (await battle(page)).tab).toBe('party');
@@ -112,7 +132,7 @@ test('Phantom UI: the battle is a see-through Phantom page; the fan, the move ca
     expect(await fitProblems(page, 'Battle', 'battle'), `${id} at ${w}x${h}`).toEqual([]);
   }
   // A move chosen by click plays the turn.
-  await hud.locator('.ph-bt-op', { hasText: /fight/i }).click();
+  await hud.locator('.ph-bt-cmd', { hasText: /fight/i }).click();
   await expect(moves.first()).toBeVisible();
   await page.waitForTimeout(300);
   await moves.first().click();

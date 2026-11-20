@@ -68,6 +68,10 @@ export interface SendModel {
   /** The party in its order: who leads, who has fainted. */
   order: readonly { file: string | null; on: boolean; ko: boolean }[];
   backdrop: string | null;
+  /** "Change who leads" (free before the first turn): the order's healthy Pokémon take a click, and the key shows. */
+  lead?: boolean;
+  /** The lead was changed on this card: it waits for Z instead of moving on by itself. */
+  changed?: boolean;
 }
 
 const plate = (s: SendSide, side: 'l' | 'r', wild: boolean): string =>
@@ -80,8 +84,8 @@ export function phSend(_ph: PhantomVersion, d: SendModel): string {
     + `<div class="sn-me ph-sn-pk">${d.me.mon ? figure(d.me.mon, 300) : ''}</div>${d.foe ? `<div class="sn-foe ph-sn-pk">${d.foe.mon ? figure(d.foe.mon, 230) : ''}</div>` : ''}`
     + `<div class="sn-go">${ransom('GO!', 9)}</div>`
     + plate(d.me, 'l', false) + (d.foe ? plate(d.foe, 'r', !d.foe.by) : '')
-    + `<div class="sn-ord"><span>Your order</span>${d.order.slice(0, 6).map((o) => `<i class="${o.on ? 'on' : ''}${o.ko ? ' ko' : ''}">${icon(o.file, 42)}</i>`).join('')}</div>`
-    + tap() + keys(['Z', 'Fight', 'next']));
+    + `<div class="sn-ord${d.lead ? ' ph-sn-lead' : ''}"><span>${d.changed ? 'New lead' : 'Your order'}</span>${d.order.slice(0, 6).map((o, k) => `<i class="${o.on ? 'on' : ''}${o.ko ? ' ko' : ''}"${d.lead && !o.ko && !o.on ? act('lead', k) : ''}>${icon(o.file, 42)}</i>`).join('')}</div>`
+    + (d.changed ? '' : tap()) + keys(['Z', 'Fight', 'next'], ...(d.lead ? [['◀▶', 'Change who leads', 'lead', 'next'] as const] : [])));
 }
 
 export interface HitModel {

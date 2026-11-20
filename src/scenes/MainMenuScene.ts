@@ -204,7 +204,7 @@ export class MainMenuScene extends Phaser.Scene {
       const card = peek ? slotCard(session.content, peek) : null;
       const view = mountRedux(this, {
         clear: true,
-        render: (c) => titleView(c, { options: options.map((o) => o.option), index: this.menu.index, version: VERSION_LABEL, art: '', notes, press: this.pressWait, save: card ? { title: card.title, lines: card.lines } : null }),
+        render: (c) => titleView(c, { options: options.map((o) => o.option), subs: options.map((o) => menuSub(o.option.label, card?.lines[0])), index: this.menu.index, version: VERSION_LABEL, art: '', notes, press: this.pressWait, save: card ? { title: card.title, lines: card.lines } : null }),
         acts: {
           pick: (i) => { this.menu.focus(Number(i), false); this.menu.confirm(); },
           start: () => this.events.emit('pressStart'),
@@ -306,4 +306,21 @@ export class MainMenuScene extends Phaser.Scene {
     services().session.discardDamagedRun();
     this.scene.restart({});
   }
+}
+
+/** The small line under the chosen main menu entry (the Phantom look shows it, as in the mock-ups). */
+const MENU_SUBS: Record<string, string> = {
+  'Discard damaged save': 'A copy is kept first',
+  'Export damaged save': 'Download it to send in or fix',
+  'Enter the Hub': 'Your base between runs',
+  'New Run': 'Pick a starter and head out',
+  'Story Run': 'The story, one region at a time',
+  'Save Slots': 'Pick, copy or clear a slot',
+  Settings: 'Sound, controls, looks and more',
+  'Copy slot': 'Into the first empty slot',
+};
+function menuSub(label: string, saved: string | undefined): string | undefined {
+  if (label === 'Continue') return 'No run saved yet';
+  if (label.startsWith('Continue')) return saved?.replace(/^Run in progress · /, '') ?? 'Your run is waiting';
+  return MENU_SUBS[label];
 }

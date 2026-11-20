@@ -520,7 +520,10 @@ export class MapScene extends Phaser.Scene {
     if (p.dex) return p.dex.html(ph);
     if (p.card) return this.cardPhantom(ph, stage ?? '');
     const facts = model.chips.filter((x) => /^(₽|Badges\b|Level cap\b)/i.test(x)).map(dockFact);
-    const html = phPause(ph, { options: rows.map((label) => ({ label, off: label === 'End run' && !can })), index: p.index, note, where: [stage, model.title.split(' · ')[0]].filter(Boolean).join(' · '), facts, party: model.party });
+    const run = services().session.run!;
+    const down = run.party.filter((m) => m.hp <= 0).length;
+    const subs: Record<string, string> = { Resume: 'Back to the map', Party: `${run.party.length} Pokémon${down ? ` · ${down} fainted` : ''}`, Settings: 'Sound, controls, looks' };
+    const html = phPause(ph, { options: rows.map((label) => ({ label, off: label === 'End run' && !can, sub: subs[label] })), index: p.index, note, where: [stage, model.title.split(' · ')[0]].filter(Boolean).join(' · '), facts, party: model.party });
     return p.ask === null ? html : phInto(html, phConfirm({ title: 'End this run?', body: 'Your progress is banked as a defeat. This cannot be undone.', options: ['Keep playing', 'End run'], index: p.ask }));
   }
 

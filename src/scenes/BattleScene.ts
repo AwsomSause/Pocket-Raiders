@@ -3,6 +3,7 @@
 // choice (Fight / Bag / Pokémon) and plays back the events each turn produces.
 
 import { falseSlotFor } from '../core/expansion/labyrinth';
+import { canSwapLead, nextLead } from '../core/battle/openingLead';
 import { waitOffered } from '../core/greenneedle/fifth';
 import { askButtons, askDue, askOf, askPassing, type AskView } from '../core/greenneedle/ask';
 import { lastResortOffer, useLastResort } from '../core/battle/lastResort';
@@ -45,7 +46,7 @@ import { doublesSwitchProblem, indexAt, monAt, needsTarget, primarySpot, spotsOf
 import { isGuest } from '../core/battle/guests';
 import { commandPlan, shiftOptionProblem, targetChoices } from '../core/battle/fieldMenu';
 /** This screen draws double battles: spot 0 left, 1 right (triple battles get their own layout in Beta 0.6 T2). */
-import { canDynamax, hasKeyItem, maxMoveOptions, megaOption, ownedZCrystal, permanentForm, stoneForms, teraOption, transformProblem, zMoveFor, zMoveOptions, type TransformRequest } from '../core/battle/transform';
+import { battleTypes, canDynamax, hasKeyItem, maxMoveOptions, megaOption, ownedZCrystal, permanentForm, stoneForms, teraOption, transformProblem, zMoveFor, zMoveOptions, type TransformRequest } from '../core/battle/transform';
 import { runPerks } from '../core/archetypes';
 import { abilityOf, calcStats, maxHp, getSpecies, lookSpecies, maxPp, xpForLevel } from '../core/pokemon';
 import { heartStage } from '../core/shadow';
@@ -107,6 +108,7 @@ import { calmProblem } from '../core/blessings';
 import { partyPreviews, quickSummaryText } from '../ui/itemScreen';
 import { animationStrength, animationTimeScale, animSettingsFrom } from '../core/accessibility';
 import { transformAnimId } from '../core/presentation/transformAnims';
+import { weaknesses } from '../core/presentation/weakness';
 import { resolveAnim } from '../core/presentation/animRegistry';
 import '../core/presentation/storyAnims';
 import { rivalIntro } from '../ui/battleFx/storyFx';
@@ -372,6 +374,7 @@ export class BattleScene extends Phaser.Scene {
   private phWildKey: (() => void) | null = null;
   private phWildDex: DexInfo | null = null;
   private phGimInput: ((action: InputAction) => void) | null = null;
+  private phLeadInput: ((action: InputAction) => boolean) | null = null;
   /** New UI: the callout of the event being played (a boss's Rally brace, a signature trait going off). */
   private rxCall: { rally?: string; trait?: { file: string; name: string; text: string } } | null = null;
   /** New UI: the Shadow line of the Pokémon that is choosing (its tier, and what the shadow will do this turn). */
@@ -568,6 +571,7 @@ export class BattleScene extends Phaser.Scene {
     this.rxRingTold = new Set();
     this.phWildKey = null;
     this.phWildDex = null;
+    this.phLeadInput = null;
     this.advance = null;
     this.busy = true;
     this.riledUid = Object.entries(battle.hyper?.rage ?? {}).find(([, r]) => r.state === 'warned')?.[0] ?? null;
@@ -1836,12 +1840,21 @@ export class BattleScene extends Phaser.Scene {
         xp: box.isPlayer ? xpShown : null,
         tags: [mon.status ? STATUS_LABELS[mon.status.id]?.label ?? '' : '', word(box.teraBadge), word(box.roleBadge), word(box.rageBadge)].filter(Boolean),
         team: !box.isPlayer && battle?.trainer ? { n: battle.enemyTeam.length, out: battle.enemyTeam.filter((m) => m.hp <= 0).length } : null,
+        ...this.rxTypes(mon, box.isPlayer),
       };
       this.tweens.killTweensOf(box.rx);
       // The same drain the canvas bar plays, so the two never disagree about when the HP has settled.
       if (animate && from !== to) this.tweens.add({ targets: box.rx, hp: to, duration: Math.round(250 + 450 * Math.abs(to - from)), ease: 'Sine.easeOut' });
     }
     return box.hpBar.set(mon.hp / max, animate);
+  }
+
+  /** Phantom UI: a box's types (none for a hidden foe) and, for a foe, what hits it super effectively. Display only. */
+  private rxTypes(mon: PokemonInstance, mine: boolean): { types: string[]; weak?: { type: string; times: number }[]; file?: string | null } {
+    const content = services().session.content, battle = this.run.battle;
+    if (!battle || (!mine && this.foeHidden(mon))) return { types: [] };
+    const types = battleTypes(content, battle, mon);
+    return { types: [...types], file: monFile(this, mon.speciesId, 'front', !!mon.shiny), ...(mine ? {} : { weak: weaknesses(content.typeChart, types) }) };
   }
 
   /** New UI: mounts the mock-ups' battle HUD over the canvas and stops the canvas drawing its own. */
@@ -1853,6 +1866,8 @@ export class BattleScene extends Phaser.Scene {
         pick: (i) => { if (!this.picker && !this.infoPanel && !this.autoRunning) this.menu?.press(Number(i)); },
         confirm: () => { if (this.rxNotice) this.advance?.(); },
         tab: (i) => this.tabs.press(Number(i)),
+        // The Fight page's Back key (Phantom UI): the same as Esc.
+        back: () => this.handleInput('back'),
         auto: () => this.toggleAuto(),
         info: () => { if (this.infoPanel) this.closePanel(); },
         gims: () => this.phOpenGimmicks(),
@@ -1937,6 +1952,8 @@ export class BattleScene extends Phaser.Scene {
       note: this.note.alpha > 0.05 ? this.note.text : '',
       auto: this.autoRunning,
       party: { n: this.run.party.length, out: this.run.party.filter((m) => m.hp <= 0).length },
+      turn: this.run.battle?.turn,
+      bench: this.duo ? null : this.run.party.filter((m) => m.uid !== this.shown.player.uid).map((m) => ({ name: this.speciesName(m), level: `Lv ${m.level}`, hp: m.hp <= 0 ? 0 : Math.round((m.hp / Math.max(1, maxHp(services().session.content, m))) * 200) / 200, file: monFile(this, m.speciesId, 'front', !!m.shiny) })),
       gimPage: this.rxMoves && !!menu && phantomOn(),
       gim: this.rxGim && menu ? this.rxGim.choices.map((c) => ({ kind: c.kind, on: this.transformChoice?.kind === c.kind, ...(c.kind === 'tera' ? { row: TERA_ICON_ROW[this.rxGim!.tera] ?? 0 } : {}) })) : null,
       marks: [...(this.rxAim && menu ? [{ ...this.rxAim, text: 'TARGET' }] : []), ...this.reachTags.filter((t) => t.active).map((t) => ({ x: t.x, y: t.y - 10, text: 'OUT OF REACH' }))],
@@ -2172,6 +2189,8 @@ export class BattleScene extends Phaser.Scene {
       this.phGimInput(action);
       return;
     }
+    // "Change who leads" while the send-out card or the lead line shows (◀▶ picks; the rest falls through).
+    if (this.phLeadInput?.(action)) return;
     if (this.phWildDex) {
       if (action === 'confirm' || action === 'back') this.phWildDex.close();
       else if (action === 'left' || action === 'right') this.phWildDex.flip();
@@ -2913,7 +2932,8 @@ export class BattleScene extends Phaser.Scene {
         await this.showDuoSide('player', true);
         await this.say(`Go! ${this.nameList([this.shown.player, ...this.otherMons('player')])}!`);
       } else {
-        await this.phSendCard();
+        if (this.phCards()) await this.phSendCard();
+        else await this.leadLine();
         // The camera looks across to your side while your trainer throws.
         const playerRow = partyBallRow(this, 'player', this.run.party.map((m) => m.hp > 0), this.motion, MESSAGE_Y - 46);
         this.camPinned = true;
@@ -3415,7 +3435,7 @@ export class BattleScene extends Phaser.Scene {
    * Phantom UI: one full-screen card over the battle. It ends on a click or a key, or after `ms` (null: it waits for an
    * input, unless Settings > Auto-advance is on). Presentation only: a card that fails to draw is skipped.
    */
-  private async phMoment(draw: (ph: PhantomVersion) => string, ms: number | null, more?: { acts: Record<string, () => void>; held: () => boolean }): Promise<void> {
+  private async phMoment(draw: (ph: PhantomVersion) => string, ms: number | null, more?: { acts: Record<string, (arg: string) => void>; held: () => boolean; go?: () => void }): Promise<void> {
     if (!this.rx || !phantomOn()) return;
     try {
       const st = services().session.settings;
@@ -3435,7 +3455,7 @@ export class BattleScene extends Phaser.Scene {
         }
         finish();
       };
-      const view = mountRedux(this, { render: (c) => (c.ph ? draw(c.ph) : ''), acts: { ...more?.acts, next: () => end() }, card: true });
+      const view = mountRedux(this, { render: (c) => (c.ph ? draw(c.ph) : ''), acts: { ...more?.acts, next: () => { more?.go?.(); end(); } }, card: true });
       this.phMomentView = view;
       if (wait !== null) this.time.delayedCall(wait, () => end());
       this.events.once('shutdown', () => end(true));
@@ -3836,16 +3856,74 @@ export class BattleScene extends Phaser.Scene {
   /** Phantom UI: both sides send out (the mock-up's `send` card), just before the throw. */
   private async phSendCard(): Promise<void> {
     const battle = this.run.battle;
-    const me = this.shown.player, foe = this.shown.enemy;
-    if (!battle || !me || !this.phCards()) return;
+    const foe = this.shown.enemy;
+    if (!battle || !this.shown.player || !this.phCards()) return;
     const { content } = services().session;
     const side = (m: PokemonInstance, by: string, pic: 'front' | 'back'): SendSide => ({ by, name: this.speciesName(m), level: m.level, types: getSpecies(content, m.speciesId).types, mon: this.phArt(m, pic) });
-    await this.phMoment((ph) => phSend(ph, {
-      me: side(me, this.phPlayerName(), 'back'),
-      foe: foe ? side(foe, battle.trainer ? this.trainerTitle() ?? battle.trainer.name : '', 'front') : null,
-      order: this.run.party.map((m) => ({ file: monFile(this, m.speciesId, 'front', !!m.shiny), on: m.uid === me.uid, ko: m.hp <= 0 })),
-      backdrop: this.phBackdrop(),
-    }), 1900);
+    // "Change who leads" (free before the first turn): ◀▶ or a click on the order picks another lead; the card then
+    // waits for Z. Nothing else changes, and the throw that follows sends out the new lead.
+    let changed = false, go = false;
+    const lead = (k: number): void => {
+      if (this.changeLead(k)) changed = true;
+      this.phMomentView?.refresh();
+    };
+    this.phLeadInput = (a) => {
+      if (a === 'left' || a === 'right') { lead(nextLead(this.run, a === 'left' ? -1 : 1)); return true; }
+      if (a === 'confirm') go = true;
+      return false;
+    };
+    try {
+      await this.phMoment((ph) => {
+        const me = this.shown.player!;
+        return phSend(ph, {
+          me: side(me, this.phPlayerName(), 'back'),
+          foe: foe ? side(foe, battle.trainer ? this.trainerTitle() ?? battle.trainer.name : '', 'front') : null,
+          order: this.run.party.map((m) => ({ file: monFile(this, m.speciesId, 'front', !!m.shiny), on: m.uid === me.uid, ko: m.hp <= 0 })),
+          backdrop: this.phBackdrop(),
+          lead: canSwapLead(this.run),
+          changed,
+        });
+      }, 1900, { acts: { lead: (arg) => lead(arg === 'next' ? nextLead(this.run, 1) : Number(arg)) }, held: () => changed && !go, go: () => { go = true; } });
+    } finally {
+      this.phLeadInput = null;
+    }
+  }
+
+  /** "Change who leads": party slot `k` leads this battle instead (free before the first turn). True when it changed. */
+  private changeLead(k: number): boolean {
+    if (!canSwapLead(this.run) || this.run.battle!.activeIndex === k) return false;
+    try {
+      services().session.swapOpeningLead(k);
+    } catch {
+      return false;
+    }
+    this.shown.player = structuredClone(this.run.party[this.run.battle!.activeIndex]!);
+    return true;
+  }
+
+  /**
+   * "Change who leads" in a look with no send-out card (New, Old, or the Phantom UI with motion turned down): a line
+   * that moves on by itself names the lead, and ◀▶ while it shows picks another one (it then waits for Enter).
+   */
+  private async leadLine(): Promise<void> {
+    if (!canSwapLead(this.run)) return;
+    let moved = false;
+    for (let n = 0; n < 24; n++) {
+      let dir: 1 | -1 | 0 = 0;
+      this.phLeadInput = (a) => {
+        if (a !== 'left' && a !== 'right') return false;
+        dir = a === 'left' ? -1 : 1;
+        this.advance?.();
+        return true;
+      };
+      try {
+        await this.say(`${this.speciesName(this.shown.player!)} leads. ◀▶ to change who leads.`, !moved);
+      } finally {
+        this.phLeadInput = null;
+      }
+      if (!dir) return;
+      moved = this.changeLead(nextLead(this.run, dir)) || moved;
+    }
   }
 
   /**

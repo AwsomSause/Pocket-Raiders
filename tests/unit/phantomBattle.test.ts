@@ -38,16 +38,27 @@ describe('the Phantom battle screen', () => {
     expect(count(html, '<i class="out"></i>')).toBe(1);
   });
 
-  it('draws the tabs as the fan with their real keys: Q and E for the neighbours, T for Auto, I for Info', () => {
+  it('puts the command menu in the fan, as the mock-up draws it: Info, the commands with their keys, then Auto', () => {
     const none = phBattle(ph, model());
-    expect(count(none, 'ph-bt-tab')).toBe(5);
-    expect(count(none, 'data-act="tab"')).toBe(5);
-    // From no page, E opens the first page and Q the last.
-    expect(none).toMatch(/<kbd>E<\/kbd><b>Attack<\/b>/);
-    expect(none).toMatch(/<kbd>Q<\/kbd><b>Item<\/b>/);
+    // Info and Auto stay page tabs; the three commands stand between them, and the tray under the field is gone.
+    expect(count(none, 'ph-bt-tab')).toBe(2);
+    expect(count(none, 'ph-bt-cmd')).toBe(3);
+    expect(none).toContain('b3-fan ph-bt-fan cmd');
+    expect(none).not.toContain('ph-bt-menu');
+    // The lit command takes Z; Bag keeps Q (the Item page) and Fight keeps E when it is not lit.
+    expect(none).toMatch(/ph-bt-cmd on"[^>]*><kbd>Z<\/kbd><b>Fight<\/b>/);
+    expect(none).toMatch(/<kbd>Q<\/kbd><b>Bag<\/b>/);
     expect(none).toMatch(/<kbd>T<\/kbd><b>Auto<\/b><small>OFF<\/small>/);
     expect(none).toMatch(/<kbd>I<\/kbd><b>Info<\/b>/);
+    const bag = phBattle(ph, model({ menu: { options: [{ label: 'Fight' }, { label: 'Bag' }, { label: 'Pokémon' }], index: 1 } }));
+    expect(bag).toMatch(/<kbd>E<\/kbd><b>Fight<\/b>/);
+    expect(bag).toMatch(/ph-bt-cmd on"[^>]*><kbd>Z<\/kbd><b>Bag<\/b>/);
+    // Info first, Auto last, the commands between them in order.
+    const order = [...none.matchAll(/<b>(Info|Fight|Bag|Pokémon|Auto)<\/b>/g)].map((m) => m[1]);
+    expect(order).toEqual(['Info', 'Fight', 'Bag', 'Pokémon', 'Auto']);
+    // On a page (Party), the fan is the page tabs again, with Q and E for the neighbours.
     const party = phBattle(ph, model({ tabs: { ...TABS, index: 1, auto: true } }));
+    expect(count(party, 'ph-bt-tab')).toBe(5);
     expect(party).toMatch(/ph-bt-tab on"[^>]*><b>Party<\/b>/);
     expect(party).toMatch(/<kbd>Q<\/kbd><b>Attack<\/b>/);
     expect(party).toMatch(/<kbd>E<\/kbd><b>Item<\/b>/);
@@ -55,12 +66,37 @@ describe('the Phantom battle screen', () => {
     const off = phBattle(ph, model({ tabs: { ...TABS, autoOff: true } }));
     expect(off).toMatch(/ph-bt-tab g off"/);
     expect(off).toContain('<small>N/A</small>');
-    // No tabs, no fan.
-    expect(phBattle(ph, model({ tabs: null }))).not.toContain('ph-bt-fan');
+    // No tabs, no fan: the commands go back to the tray.
+    const bare = phBattle(ph, model({ tabs: null }));
+    expect(bare).not.toContain('ph-bt-fan');
+    expect(count(bare, 'ph-bt-op')).toBe(3);
     // The open info panel lights the Info tab.
     const info = phBattle(ph, model({ panels: [{ tag: 'Info', head: 'Battlefield', chips: [], facts: [['Momentum', '0']], lines: [] }], panelAt: 'left' }));
     expect(info).toMatch(/ph-bt-tab on"[^>]*><kbd>I<\/kbd><b>Info<\/b>/);
     expect(info).toContain('Battlefield');
+  });
+
+  it('stacks your card and the rest of the party at the right, shows the turn, and reads the foe: types and weak spots', () => {
+    const bench = [{ name: 'Pikachu', level: 'Lv 9', hp: 0.5, file: null }, { name: 'Gyarados', level: 'Lv 20', hp: 0, file: null }];
+    const foe = box('Garchomp', { types: ['dragon', 'ground'], weak: [{ type: 'ice', times: 4 }, { type: 'dragon', times: 2 }, { type: 'fairy', times: 2 }] });
+    const html = phBattle(ph, model({ foes: [foe], bench, turn: 3 }));
+    expect(html).toContain('ph-bt-stack top');
+    expect(count(html, 'ph-bt-bn')).toBe(2);
+    expect(html).toMatch(/ph-bt-bn out"[^>]*>.*Gyarados<span>KO<\/span>/);
+    expect(html).toContain('Pikachu<span>Lv 9</span>');
+    // With the party listed, the balls row is not needed.
+    expect(html).not.toContain('ph-bt-party');
+    expect(html).toContain('<b>Turn 3</b>');
+    expect(count(html, 'class="ty"')).toBe(2);
+    expect(html).toContain('Weak to');
+    const wk = /class="r wk">(.*?)<\/div>/.exec(html)![1]!;
+    expect(count(wk, /packs\/story\/badge\/(?:ice|dragon|fairy)\.png/)).toBe(3);
+    expect(html).toContain('Ice ×4');
+    // Out of the command menu (or with no bench) the stack goes back above the tray, with the balls.
+    const page2 = phBattle(ph, model({ bench, tabs: { ...TABS, index: 1 } }));
+    expect(page2).not.toContain('ph-bt-stack top');
+    expect(page2).toContain('ph-bt-party');
+    expect(page2).not.toContain('Turn 3');
   });
 
   it('spreads the fan evenly and lifts it clear of a tall menu', () => {
@@ -73,22 +109,35 @@ describe('the Phantom battle screen', () => {
     for (let k = 1; k < tight.length; k++) expect(tight[k]! - tight[k - 1]!).toBeGreaterThanOrEqual(17);
     // The fan stands round the Pokémon that is choosing.
     const at = phBattle(ph, model({ me: { x: 300, y: 300 } }));
-    expect(at).toContain('class="b3-fan ph-bt-fan" style="left:400px;top:300px"');
+    expect(at).toContain('class="b3-fan ph-bt-fan cmd" style="left:400px;top:300px"');
   });
 
-  it('deals the moves as type cards two to a row, lit and greyed as the menu says', () => {
-    const html = phBattle(ph, model({ text: 'Tackle · Normal · Physical · Power 40 · Acc 100\nPP 35/35', menu: { options: MOVES, index: 1 }, tabs: { ...TABS, index: 0 } }));
-    expect(html).toContain('ph-bt-menu mvs two');
+  it('lays four moves on the mock-up\'s cross with the target\'s card; more moves keep the tray', () => {
+    const text = 'Tackle · Normal · Physical · Power 40 · Acc 100\nPP 35/35';
+    const foe = box('Feebas', { level: 'Lv 4', hp: 0.4, file: 'pokemon/349' });
+    const html = phBattle(ph, model({ foes: [foe], text, menu: { options: MOVES, index: 1 }, tabs: { ...TABS, index: 0 }, turn: 2 }));
+    expect(html).toContain('b3-x ph-bt-x');
     expect(count(html, 'b3-m ph-bt-mv')).toBe(4);
-    expect(html).toMatch(/ph-bt-mv on"[^>]*data-key="mv1"/);
-    expect(html).toMatch(/ph-bt-mv off"[^>]*data-key="mv3"/);
+    for (const k of [0, 1, 2, 3]) expect(html).toContain(`ph-bt-mv d${k}`);
+    expect(html).toMatch(/ph-bt-mv d1 on"[^>]*data-key="mv1"/);
+    expect(html).toMatch(/ph-bt-mv d3 off"[^>]*data-key="mv3"/);
     expect(count(html, 'data-tip="move:')).toBe(4);
     expect(html).toContain('PP 0/40');
-    // The text box keeps its line break and steps down a size beside the cards.
+    // The target's card: its name and level, its HP, and the move's line (kept on two lines).
+    expect(html).toContain('ph-bt-tg');
+    expect(html).toMatch(/Feebas <small>Lv 4<\/small>/);
+    expect(html).toContain('<b>40%</b>');
     expect(html).toContain('Acc 100<br>PP 35/35');
-    expect(html).toMatch(/ph-bt-say half" style="font-size:22px"/);
-    // With the cards under the fan, the last tab stays above them.
-    const last = Number(/--a:(-?\d+)deg;--i:4/.exec(html)![1]);
+    // The page is Fight: the header, the keys; the fan, the boxes, the tray and the text box step aside.
+    expect(html).toContain('Rowlet · Turn 2</small>Fight');
+    expect(html).toContain('data-act="back"');
+    for (const gone of ['ph-bt-fan', 'ph-bt-foe', 'ph-bt-stack', 'ph-bt-menu', 'ph-bt-say']) expect(html).not.toContain(gone);
+    // A fifth move: the cards go back to the tray, two to a row, under the fan.
+    const five = phBattle(ph, model({ text, menu: { options: [...MOVES, { label: 'Hyper Beam', sub: 'PP 5/5', type: 'normal' }], index: 1 }, tabs: { ...TABS, index: 0 } }));
+    expect(five).toContain('ph-bt-menu mvs two');
+    expect(five).not.toContain('ph-bt-x');
+    expect(five).toMatch(/ph-bt-say half" style="font-size:22px"/);
+    const last = Number(/--a:(-?\d+)deg;--i:4/.exec(five)![1]);
     expect(last).toBeLessThan(10);
   });
 

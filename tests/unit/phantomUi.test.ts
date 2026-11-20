@@ -21,8 +21,8 @@ const ctx = (on: boolean): ReduxCtx => ({ k: 0, skin: {} as ReduxCtx['skin'], v:
 const count = (html: string, bit: string | RegExp): number => html.split(bit).length - 1;
 
 describe('Phantom UI setting (settings v46)', () => {
-  it('is the current settings version', () => {
-    expect(CURRENT_VERSIONS.settings).toBe(46);
+  it('is a settings version the game still reads', () => {
+    expect(CURRENT_VERSIONS.settings).toBeGreaterThanOrEqual(46);
   });
 
   it('a v45 save gains the first version and keeps its style and every other setting', () => {

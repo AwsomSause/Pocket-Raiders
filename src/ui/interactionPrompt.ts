@@ -16,7 +16,8 @@ import {
 import { MicMeter, ShoutDetector } from '../game/micInput';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from './theme';
 import { esc, W } from './redux/kit';
-import { mountRedux, reduxOn, type ReduxView } from './redux/stage';
+import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from './redux/stage';
+import { phPrompt, type PhPromptModel } from './phantom/screens/prompt';
 
 const BOX = { w: 360, h: 220 };
 const GRADE_COLOR: Record<string, string> = { miss: '#ff6a6a', ok: '#ffe08a', good: '#8affc0', perfect: '#9fe8ff' };
@@ -155,15 +156,33 @@ export function runInteractionPrompt(scene: Phaser.Scene, def: PromptDef, opts: 
       // The mock-ups' gold bar, with the zone to hit marked on it.
       const bar = (k: number, zone?: readonly [number, number]): string =>
         `<div class="hp gold" style="height:12px;position:relative;overflow:visible"><i style="width:${pct(k)};transition:none"></i>${zone ? `<u style="position:absolute;left:${pct(zone[0])};width:${pct(zone[1] - zone[0])};top:-4px;bottom:-4px;border-radius:4px;box-shadow:0 0 0 2px var(--acc);background:#fff3"></u>` : ''}</div>`;
-      const html = (): string => {
+      const wordsNow = (): string => {
+        const extra = /:\s*(.+)$/.exec(def.hint)?.[1] ?? '';
+        const words = def.kind === 'shout' ? (meter ? 'Speak, or press Enter to shout instead.' : 'Press Enter to shout.') : def.kind === 'timing' ? `Press Enter when the bar is in the gold zone.${extra ? ` ${extra.charAt(0).toUpperCase()}${extra.slice(1)}` : ''}` : def.kind === 'hold' ? 'Hold Enter, then let go when the bar is in the gold zone.' : def.hint;
+        return words;
+      };
+      // Phantom UI: the same prompt as a Phantom page (ui/phantom/screens/prompt.ts), from the same clock and state.
+      const phModel = (): PhPromptModel => {
+        const t = now(), box = { left, top, w: BOX.w, h: BOX.h };
+        const base = { label: def.label, words: wordsNow(), result: shown ? { word: shown.skipped ? 'Skipped' : shown.grade.toUpperCase(), color: GRADE_COLOR[shown.grade] ?? '#fff' } : null, box };
+        switch (def.kind) {
+          case 'tap': return { ...base, kind: 'tap', ready: t >= 400 };
+          case 'timing': { const len = promptLengthMs(def); return { ...base, kind: 'timing', k: t / len, zone: [(def.landMs - def.windowsMs.good) / len, (def.landMs + def.windowsMs.good) / len] }; }
+          case 'hold': { const len = promptLengthMs(def); return { ...base, kind: 'hold', k: pressAt === null ? 0 : (heldMs ?? t - pressAt) / len, zone: [(def.targetMs - def.windowsMs.good) / len, (def.targetMs + def.windowsMs.good) / len] }; }
+          case 'rhythm': { const last = Math.max(...def.beatsMs) + 400; return { ...base, kind: 'rhythm', beats: def.beatsMs.map((b) => b / last), at: t / last, hit: t < pulseUntil }; }
+          case 'shout': return { ...base, kind: 'shout', level: Math.min(1, level * 3), bars: SHOUT_BARS };
+          case 'drag': return { ...base, kind: 'drag', from: def.from, to: def.to, end: dragging && dragEnd ? dragEnd : null };
+        }
+      };
+      const html = (c: ReduxCtx): string => {
+        if (c.ph) return phPrompt(phModel());
         const t = now();
         const key = '<kbd>Enter</kbd>';
         const head = shown
           ? `<b style="font-size:26px;color:${GRADE_COLOR[shown.grade] ?? '#fff'};text-shadow:2px 2px 0 #0008">${shown.skipped ? 'Skipped' : shown.grade.toUpperCase()}</b>`
           : `<b class="acc${motion === 'full' ? ' pulse' : ''}" style="font-size:24px">${esc(def.label)}</b>`;
         // The data's hints describe the old ring; the bar gets the mock-up's words, keeping any extra context after a colon.
-        const extra = /:\s*(.+)$/.exec(def.hint)?.[1] ?? '';
-        const words = def.kind === 'shout' ? (meter ? 'Speak, or press Enter to shout instead.' : 'Press Enter to shout.') : def.kind === 'timing' ? `Press Enter when the bar is in the gold zone.${extra ? ` ${extra.charAt(0).toUpperCase()}${extra.slice(1)}` : ''}` : def.kind === 'hold' ? 'Hold Enter, then let go when the bar is in the gold zone.' : def.hint;
+        const words = wordsNow();
         const hintLine = `<div class="sm">${esc(words)} <span style="opacity:.7">(Esc skips)</span></div>`;
         const frame = (body: string, st = `left:${left}px;width:${BOX.w}px;top:${cy - 80}px`): string => '<div class="fill hit"></div>' + W(head + body + hintLine, `position:absolute;${st};display:flex;flex-direction:column;gap:10px;padding:16px 18px;text-align:center;z-index:2;pointer-events:none`);
         switch (def.kind) {

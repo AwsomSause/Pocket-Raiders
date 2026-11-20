@@ -3,9 +3,9 @@
 // or changes game state, and nothing uses a random stream.
 
 import type Phaser from 'phaser';
-import { agoWord, noticeOf, overlayView, type LogRow, type NoticeRow, type ToastRow } from './screens/overlay';
+import { agoWord, noticeOf, overlayView, type LogRow, type NoticeRow, type OverlayModel, type ToastRow } from './screens/overlay';
 import { mountOverlay, reduxCardUp } from './stage';
-import { phLog, type PhLogModel } from '../phantom/screens/system';
+import { phLog, phPops, type PhLogModel } from '../phantom/screens/system';
 
 interface Toast extends ToastRow { timer: ReturnType<typeof setTimeout> | null }
 
@@ -19,10 +19,14 @@ let logPage: PhLogModel | null = null;
 let onLogAt: (row: number) => void = () => undefined;
 let captionTimer: ReturnType<typeof setTimeout> | null = null;
 
+/** What is showing now. A versus or cutscene card fills the screen: notices and toasts wait behind it and show again when it leaves. */
+const pops = (none: boolean): Pick<OverlayModel, 'notices' | 'toasts' | 'caption'> =>
+  none ? { notices: [], toasts: [], caption: '' } : { notices: reduxCardUp() ? [] : state.notices, toasts: reduxCardUp() ? [] : state.toasts, caption: state.caption };
+
 function layer(game: Phaser.Game): { refresh(): void } {
   view ??= mountOverlay(game, {
-    // A versus or cutscene card fills the screen: notices and toasts wait behind it and show again when it leaves.
-    render: (c) => overlayView(c, { notices: reduxCardUp() ? [] : state.notices, toasts: reduxCardUp() ? [] : state.toasts, log: state.log, caption: state.caption }),
+    // The Phantom style draws the pops as its own page (`page` below); the New layer then keeps only its log.
+    render: (c) => overlayView(c, { ...pops(c.ph !== null), log: state.log }),
     acts: {
       // A tap sends a notice away.
       notice: (id) => onNotice(Number(id)),
@@ -41,7 +45,8 @@ function layer(game: Phaser.Game): { refresh(): void } {
       log: () => onLog(),
       logAt: (k) => onLogAt(Number(k)),
     },
-    page: (ph) => (logPage ? phLog(ph, logPage) : ''),
+    // The run log is a whole page: the pops wait behind it and show again when it shuts.
+    page: (ph) => (logPage ? phLog(ph, logPage) : phPops(ph, pops(false))),
   });
   return view;
 }

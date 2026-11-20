@@ -24,6 +24,11 @@ export interface BattleBox {
   team: { n: number; out: number } | null;
   /** The box's key for its hover card and its pin ("foe:0", "mine:1"); none leaves the box inert. */
   tip?: string;
+  /** Phantom UI: the Pokémon's types now (none while it is hidden), and for a foe what hits it super effectively. */
+  types?: readonly string[];
+  weak?: readonly { type: string; times: number }[];
+  /** Phantom UI: the Pokémon's picture (your card in the stack, the foe on the Fight page's target card). */
+  file?: string | null;
 }
 
 export interface BattleOption { label: string; sub?: string; type?: string; off?: boolean; /** Hover key for this choice's tooltip. */ tip?: string }
@@ -46,6 +51,9 @@ export interface BattleModel {
   note: string;
   /** Auto-Battle is playing: the AUTO pin shows. */
   auto: boolean;
+  /** Phantom UI: the turn number, and your Pokémon not on the field (the mock-ups' stack at the right). */
+  turn?: number;
+  bench?: readonly { name: string; level: string; hp: number; file: string | null }[] | null;
   /** Your own party as balls (the top-bar layout shows them under your name): how many, and how many have fainted. */
   party: { n: number; out: number } | null;
   /** Tags over the field: "TARGET" over the Pokémon being aimed at, "OUT OF REACH" over one a move can't reach. */

@@ -3,7 +3,7 @@
 
 import { padJustify } from '../core/presentation/uiPrefs';
 import type { Settings } from '../core/state';
-import { padMode, showRotateHint, type Viewport } from '../core/presentation/touchLayout';
+import { padMode, showRotateHint, swipeOf, TOUCH_SIZE, type Viewport } from '../core/presentation/touchLayout';
 
 const BUTTONS: { label: string; code: string; keyCode: number; grid: string }[] = [
   { label: '▲', code: 'ArrowUp', keyCode: 38, grid: '1 / 2' },
@@ -26,6 +26,22 @@ function press(code: string, keyCode: number): void {
   send('keyup', code, keyCode);
 }
 
+type TouchPrefs = Pick<Settings, 'touchButtons' | 'touchButtonSize' | 'swipeToSwitch'>;
+let prefs: TouchPrefs = { touchButtons: true, touchButtonSize: 'medium', swipeToSwitch: true };
+let refresh: () => void = () => undefined;
+/** Settings > Phone: whether the pad shows, how big it is, and whether a swipe switches Pokémon. */
+export function setTouchPrefs(s: TouchPrefs): void {
+  prefs = { touchButtons: s.touchButtons, touchButtonSize: s.touchButtonSize, swipeToSwitch: s.swipeToSwitch };
+  refresh();
+}
+
+/** What a swipe does on the open screen; none on most screens, where a drag is the game's own. It answers whether it took the swipe. */
+let swipeTarget: ((dir: 'next' | 'prev') => boolean) | null = null;
+/** The Pokémon screen takes sideways swipes while it is open (the next or previous Pokémon); null when it closes. */
+export function setSwipeTarget(fn: ((dir: 'next' | 'prev') => boolean) | null): void {
+  swipeTarget = fn;
+}
+
 /** One-handed layout (Settings > Controls): bunches the pad's two clusters to one edge. */
 export function setTouchLayout(mode: Settings['oneHanded']): void {
   const pad = typeof document === 'undefined' ? null : document.getElementById('touch-pad');
@@ -38,6 +54,7 @@ export function installTouchControls(): void {
   style.textContent = `
     #touch-pad{position:fixed;left:0;right:0;bottom:0;display:none;justify-content:space-between;align-items:center;padding:8px calc(14px + env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) calc(14px + env(safe-area-inset-left));gap:10px;background:rgba(20,16,30,.88);touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;z-index:5}
     #touch-pad .dpad,#touch-pad .acts{display:grid;gap:6px}
+    #touch-pad .dpad,#touch-pad .acts{zoom:var(--tps,1)}
     #touch-pad .dpad{grid-template-columns:repeat(3,48px);grid-template-rows:repeat(2,48px)}
     #touch-pad .acts{grid-template-columns:repeat(1,96px);grid-template-rows:repeat(2,48px)}
     #touch-pad button{font:600 18px system-ui,sans-serif;color:#fff;background:linear-gradient(#6fb7ff,#2f7fd8);border:0;border-radius:14px;min-width:48px;min-height:48px;touch-action:none;-webkit-tap-highlight-color:transparent}
@@ -147,7 +164,8 @@ export function installTouchControls(): void {
   document.body.append(pad, hint, fs, tog);
   const update = () => {
     const v = viewport();
-    const mode = padMode(v);
+    const mode = padMode(v, prefs.touchButtons);
+    pad.style.setProperty('--tps', String(TOUCH_SIZE[prefs.touchButtonSize]));
     pad.style.display = mode === 'off' ? 'none' : 'flex';
     document.body.classList.toggle('touch-pad-on', mode !== 'off');
     document.body.classList.toggle('touch-pad-side', mode === 'side');
@@ -164,6 +182,24 @@ export function installTouchControls(): void {
   };
   window.addEventListener('pointerdown', wake, true);
   wake();
+  refresh = update;
+  // Settings > Phone > Swipe to switch Pokémon: a quick sideways stroke of a finger goes to the next or previous
+  // Pokémon where the open screen takes swipes. The tap it ends with presses nothing.
+  let from: { id: number; x: number; y: number; t: number } | null = null;
+  window.addEventListener('pointerdown', (e) => {
+    from = e.pointerType === 'touch' && e.isPrimary && !(e.target instanceof Node && pad.contains(e.target)) ? { id: e.pointerId, x: e.clientX, y: e.clientY, t: performance.now() } : null;
+  }, true);
+  window.addEventListener('pointercancel', () => { from = null; }, true);
+  window.addEventListener('pointerup', (e) => {
+    const a = from;
+    from = null;
+    if (!a || a.id !== e.pointerId || !prefs.swipeToSwitch || !swipeTarget) return;
+    const dir = swipeOf(e.clientX - a.x, e.clientY - a.y, performance.now() - a.t);
+    if (!dir || !swipeTarget(dir)) return;
+    const stop = (ev: Event): void => { ev.stopPropagation(); ev.preventDefault(); };
+    window.addEventListener('click', stop, { capture: true, once: true });
+    setTimeout(() => window.removeEventListener('click', stop, true), 400);
+  }, true);
   window.addEventListener('resize', update);
   window.addEventListener('orientationchange', update);
   update();

@@ -44,11 +44,14 @@ test('Phantom UI: the stage map, its legend and its pause menu are Phantom pages
   await page.keyboard.press('Escape');
   await onPage(page, 'Map', 'pause');
   const pause = pview(page, 'Map', 'pause');
-  await expect(pause.locator('.hub .h.on')).toHaveText('Resume');
+  await expect(pause.locator('.hub .h.on')).toHaveText(/^Resume/);
+  // The lit word carries its small tag, as in the mock-up.
+  await expect(pause.locator('.hub .h.on small')).toHaveText('Back to the map');
   await expect(pause.locator('.hub .h')).toHaveCount(8);
   await fits(page, 'Map', 'pause');
   await page.keyboard.press('ArrowDown');
-  await expect(pause.locator('.hub .h.on')).toHaveText('Party');
+  await expect(pause.locator('.hub .h.on')).toHaveText(/^Party/);
+  await expect(pause.locator('.hub .h.on small')).toHaveText(/^\d+ Pokémon/);
   // The Trainer card (the mock-up's pause menu has one): Enter opens it, Esc comes back to the same word.
   await page.keyboard.press('ArrowDown');
   await expect(pause.locator('.hub .h.on')).toHaveText('Bag');
@@ -79,7 +82,7 @@ test('Phantom UI: the stage map, its legend and its pause menu are Phantom pages
   await page.keyboard.press('ArrowUp');
   await expect(pause.locator('.hub .h.on')).toHaveText('Bag');
   await page.keyboard.press('ArrowUp');
-  await expect(pause.locator('.hub .h.on')).toHaveText('Party');
+  await expect(pause.locator('.hub .h.on')).toHaveText(/^Party/);
   for (const [id, w, h] of [['midnight', 844, 390], ['channel', 1920, 1080], ['fantasia', 700, 900], ['velvet', 1280, 720]] as const) {
     await version(page, id);
     await page.setViewportSize({ width: w, height: h });

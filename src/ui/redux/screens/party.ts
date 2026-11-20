@@ -76,7 +76,7 @@ export interface SummaryFace {
   xpPct: number;
 }
 export type SummaryBody =
-  | { kind: 'overview'; ability: { name: string; text: string } | null; facts: [string, string][]; note: string; moves: { name: string; type: string }[] }
+  | { kind: 'overview'; ability: { name: string; text: string } | null; facts: [string, string][]; note: string; moves: { name: string; type: string; pp?: string }[] }
   | { kind: 'stats'; rows: { label: string; value: number; pct: number; iv: string; ev: number; up: boolean; perfect: boolean; delta: string }[]; foot: string; versus: string }
   | { kind: 'moves'; moves: { name: string; type: string; pp: string }[]; cursor: number; facts: [string, string][]; lines: string[] }
   | { kind: 'items'; summary: string; items: { name: string; art: Art | null; mode: string; text: string }[]; cursor: number; lines: string[]; takeOff: boolean }

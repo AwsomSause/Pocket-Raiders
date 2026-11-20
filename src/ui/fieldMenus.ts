@@ -467,6 +467,7 @@ function bagEntryRow(content: Content, run: RunState, r: BagRowData, problem: st
       problem,
       hint: bagEntryText(e),
       item: e.itemId,
+      art: e.iconAssetId ?? undefined,
       draw: (scene, box, w, h) => {
         if (e.iconAssetId) box.add(itemVisual(scene, e.iconAssetId, w / 2, h / 2 - 12, 3));
         box.add(scene.add.text(w / 2, h - 22, `${e.name}  ×${e.quantity}`, textStyle(18)).setOrigin(0.5));
@@ -478,6 +479,7 @@ function bagEntryRow(content: Content, run: RunState, r: BagRowData, problem: st
     return {
       problem,
       hint: m.text,
+      art: content.rewards.get(`item:${m.itemId}`)?.iconAssetId ?? undefined,
       draw: (scene, box, w, h) => {
         const icon = content.rewards.get(`item:${m.itemId}`)?.iconAssetId;
         if (icon) box.add(itemVisual(scene, icon, 26, h / 2, 2));
@@ -490,6 +492,8 @@ function bagEntryRow(content: Content, run: RunState, r: BagRowData, problem: st
   return {
     problem,
     item: e.itemId,
+    // The item's own picture for the page looks (the canvas row holds a grey placeholder until its texture loads).
+    art: e.iconAssetId ?? undefined,
     hint: r.map ? `${bagEntryText(e, { action: true })} Choose it: ${r.map.text}` : bagEntryText(e) + (canCashIn(content, run, e.itemId) ? ' Nobody can use it: choose it to cash it in.' : ''),
     draw: (scene, box, w, h) => {
       if (e.iconAssetId) box.add(itemVisual(scene, e.iconAssetId, 26, h / 2, 2));

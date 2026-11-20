@@ -47,7 +47,7 @@ function body(b: SummaryBody): string {
   if (b.kind === 'overview') {
     return `<div class="sm-side ph-sm-wide">${kv(0, 'Ability', esc(b.ability?.name ?? 'No ability'), b.ability?.text ?? '')}${b.facts.map(([a, v], k) => kv(k + 1, a, esc(v))).join('')}</div>`
       + (b.note ? `<div class="pn ph-sm-note"><p class="txt">${esc(b.note)}</p></div>` : '')
-      + `<div class="sm-moves ph-sm-moves">${b.moves.map((m, k) => `<span style="--tc:${tc(m.type)}" data-tip="move:${k}">${esc(m.name)}</span>`).join('')}</div>`;
+      + `<div class="sm-moves ph-sm-moves">${b.moves.map((m, k) => `<span style="--tc:${tc(m.type)}" data-tip="move:${k}">${esc(m.name)}${m.pp ? `<small>PP ${esc(m.pp)}</small>` : ''}</span>`).join('')}</div>`;
   }
   if (b.kind === 'stats') {
     const chart = b.rows.length === 6 ? radar(b.rows) : '';
@@ -85,7 +85,7 @@ export function phSummary(_ph: PhantomVersion, d: SummaryModel): string {
     menu = `<div class="ph-shade"${act('menuBack')}></div><div class="ph-smenu" data-key="menu">${m.options.slice(from, from + size).map((o, q) => `<div class="blade${from + q === m.index ? ' on' : ''}${o.off ? ' off' : ''}" style="--i:${q};--sh:#000;--r:${-4 + (q % 3) * 1.5}deg"${act('menu', from + q, 'menuOver')}>${esc(o.label)}</div>`).join('')}${m.options.length > size ? `<span class="ph-more2" style="position:static">${m.index + 1} of ${m.options.length}</span>` : ''}</div>`;
   }
   return page('summary', '<div class="bgr"></div><div class="burst" style="--x:20%;--y:50%" aria-hidden="true"></div><div class="dots" aria-hidden="true"></div><div class="shard" style="--cp:polygon(40% 0,100% 0,100% 100%,36% 100%);inset:0" aria-hidden="true"></div>'
-    + `<div class="sm-pic" data-key="pic${esc(f.name)}"><div>${f.file ? mon(f.file, 3.4, 'ol', '', true) : ''}</div></div><div class="sm-name" style="font-size:${f.name.length > 11 ? 40 : f.name.length > 8 ? 50 : 64}px" data-key="n${esc(f.name)}">${ransom(f.name.toUpperCase(), f.name.length * 7 + 3)}</div><div class="sm-lv">Lv.${f.level}${f.gender ? ` ${esc(f.gender)}` : ''}</div>`
+    + `<div class="sm-pic" data-key="pic${esc(f.name)}"><div>${f.file ? mon(f.file, 4, 'ol', '', true) : ''}</div></div><div class="sm-name" style="font-size:${f.name.length > 11 ? 40 : f.name.length > 8 ? 50 : 64}px" data-key="n${esc(f.name)}">${ransom(f.name.toUpperCase(), f.name.length * 7 + 3)}</div><div class="sm-lv">Lv.${f.level}${f.gender ? ` ${esc(f.gender)}` : ''}</div>`
     + `<div class="ph-face"><div class="ph-chips">${f.types.map(ty).join('')}<span class="ph-no">${esc(f.no)}</span></div><div class="ph-fb"><small>HP</small>${bar(Math.max(0, Math.min(100, f.hpPct)), 230)}</div><div class="ph-fb"><small>EXP</small>${bar(Math.max(0, Math.min(100, f.xpPct)), 230, 'xp')}</div><div class="ph-held2${d.tab === d.itemsTab ? ' on' : ''}"${act('tab', d.itemsTab)}>◆ ${esc(f.held)}</div></div>`
     + `<div class="sm-tabs ph-sm-tabs${n > 6 ? ' many' : n > 4 ? ' some' : ''}">${d.tabs.map((t, k) => `<span class="${k === d.tab ? 'on' : ''}"${act('tab', k)}>${esc(t)}</span>`).join('')}</div>`
     + `<div class="ph-sm-body k-${d.body.kind}" data-key="b${d.tab}">${body(d.body)}</div>`

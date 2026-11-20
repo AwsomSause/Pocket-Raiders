@@ -32,6 +32,23 @@
   & .ph-bt-tab.g.on b,& .ph-bt-tab.g.on small{color:var(--k)}
   & .ph-bt-tab.off{opacity:.5}
   & .ph-bt-tab:not(.on):hover{translate:8px -50%}
+  /* The command menu in the fan (mock-up `battle`): the commands at the mock-up's sizes, the lit one big and white. */
+  & .ph-bt-fan.cmd .b3-c{left:calc(cos(var(--a))*236px);top:calc(sin(var(--a))*236px);cursor:pointer}
+  & .ph-bt-fan.cmd .ph-bt-cmd b{font-size:32px}
+  & .ph-bt-fan.cmd .ph-bt-cmd.on b{font-size:56px}
+  & .ph-bt-fan.cmd .ph-bt-cmd.off{opacity:.5}
+  & .ph-bt-fan.cmd .ph-bt-cmd small{font-size:12px;color:var(--gold)}
+  & .ph-bt-fan.cmd .ph-bt-cmd:not(.on):hover{translate:8px -50%}
+  & .ph-bt-ord{z-index:2}
+  /* The Fight page (mock-up `moves`): the cross of move cards and the target's card. */
+  & .ph-bt-dim{z-index:1;pointer-events:none;animation:phx-fade .25s both}
+  & .ph-bt-hd{z-index:3}
+  & .ph-bt-x{z-index:3}
+  & .ph-bt-x .ph-bt-mv{position:absolute;width:340px;height:auto;min-height:112px;grid-template-columns:70px minmax(0,1fr);padding:10px 16px 10px 0;cursor:pointer}
+  & .ph-bt-x .ph-bt-mv h4{font-size:34px}
+  & .ph-bt-x .ph-bt-mv:not(.on):hover{translate:0 -4px}
+  & .ph-bt-tg{z-index:3}
+  & .ph-bt-gims.x{left:60px;right:auto;z-index:4}
 
   /* ---- your own card ---- */
   & .ph-bt-stack{top:auto;right:0;width:372px;gap:6px;z-index:2}
@@ -43,6 +60,12 @@
   & .ph-bt-stack .ph-bt-m .slash.xp{height:10px;padding:2px 10px 2px 2px;margin-top:3px}
   & .ph-bt-stack .ph-bt-m.sm{padding-block:5px 6px}
   & .ph-bt-stack .ph-bt-m.sm b{font-size:22px}
+  /* The stack at the top right in the command menu: your card with its picture, then the rest of the party. */
+  & .ph-bt-stack.top{top:112px;bottom:auto;width:330px}
+  & .ph-bt-stack .m.on.ph-bt-m.pic{grid-template-columns:66px minmax(0,1fr);padding-left:16px}
+  & .ph-bt-stack .ph-bt-bn.out{opacity:.6}
+  & .ph-bt-stack .ph-bt-bn .slash{height:12px}
+  & .ph-bt-say.cmd{max-width:520px}
   & .ph-bt-stack .ph-bt-m.sm b span{font-size:16px}
   & .ph-bt-mt{display:flex;gap:6px;align-items:center;margin-top:4px;min-height:16px}
   & .ph-bt-mt u{text-decoration:none;font:800 15px/1 var(--f-cond);letter-spacing:.08em;margin-right:auto}
@@ -67,15 +90,15 @@
   & .ph-bt-mv.sm{column-gap:10px;grid-template-columns:44px minmax(0,1fr)}
   & .ph-bt-mv.sm .t img{width:28px;height:28px}
   & .ph-bt-mv.sm p{font-size:13px;margin-top:2px}
-  & .ph-bt-mv.off,& .ph-bt-op.off{opacity:.5}
-  & .ph-bt-mv:not(.on):hover,& .ph-bt-op:not(.on):hover{translate:-6px 0}
-  & .ph-bt-op{position:relative;isolation:isolate;display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0;background:var(--w);color:var(--w);padding:0 22px 2px 26px;clip-path:polygon(5% 0,100% 0,96% 100%,0 100%);cursor:pointer;font-family:var(--f-disp);line-height:1;text-transform:uppercase;animation:ph-inR .3s both;animation-delay:calc(var(--i)*40ms)}
-  & .ph-bt-op::before{content:"";position:absolute;inset:2px 4px;background:var(--k);clip-path:polygon(5% 0,100% 0,96% 100%,0 100%);z-index:-1}
-  & .ph-bt-op.on::before{display:none}
-  & .ph-bt-op b{font-weight:400;white-space:nowrap}
-  & .ph-bt-op small{font:800 .56em/1 var(--f-cond);letter-spacing:.06em;color:var(--bone);white-space:nowrap}
-  & .ph-bt-op.on{background:var(--w);color:var(--k);filter:drop-shadow(7px 6px 0 var(--red))}
-  & .ph-bt-op.on small{color:#333}
+  & .ph-bt-mv.off,& .ph-bt-menu .ph-bt-op.off{opacity:.5}
+  & .ph-bt-mv:not(.on):hover,& .ph-bt-menu .ph-bt-op:not(.on):hover{translate:-6px 0}
+  & .ph-bt-menu .ph-bt-op{position:relative;isolation:isolate;display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0;background:var(--w);color:var(--w);padding:0 22px 2px 26px;clip-path:polygon(5% 0,100% 0,96% 100%,0 100%);cursor:pointer;font-family:var(--f-disp);line-height:1;text-transform:uppercase;animation:ph-inR .3s both;animation-delay:calc(var(--i)*40ms)}
+  & .ph-bt-menu .ph-bt-op::before{content:"";position:absolute;inset:2px 4px;background:var(--k);clip-path:polygon(5% 0,100% 0,96% 100%,0 100%);z-index:-1}
+  & .ph-bt-menu .ph-bt-op.on::before{display:none}
+  & .ph-bt-menu .ph-bt-op b{font-weight:400;white-space:nowrap}
+  & .ph-bt-menu .ph-bt-op small{font:800 .56em/1 var(--f-cond);letter-spacing:.06em;color:var(--bone);white-space:nowrap}
+  & .ph-bt-menu .ph-bt-op.on{background:var(--w);color:var(--k);filter:drop-shadow(7px 6px 0 var(--red))}
+  & .ph-bt-menu .ph-bt-op.on small{color:#333}
 
   /* ---- Mega, Tera, Dynamax, Z-Move ---- */
   & .ph-bt-gims{position:absolute;right:34px;display:flex;gap:18px;z-index:4;padding-bottom:6px}
@@ -218,12 +241,12 @@
   & .s-tera .tr-say .txt,& .s-dmax .dx-say .txt,& .s-zmove .zm-say .txt{margin:0;line-height:1.2}
 
   /* Other versions: rounder, calmer shapes where the mock-ups have them. */
-  &[data-liv="channel"] .ph-bt-op{clip-path:none;border-radius:16px;box-shadow:0 0 0 3px var(--w)}
-  &[data-liv="channel"] .ph-bt-op.on{filter:none;box-shadow:0 0 0 4px var(--k),6px 6px 0 4px var(--gold)}
-  &[data-liv="fantasia"] .ph-bt-op,&[data-liv="velvet"] .ph-bt-op{clip-path:none;box-shadow:inset 0 0 0 1px var(--gold)}
-  &[data-liv="fantasia"] .ph-bt-op.on,&[data-liv="velvet"] .ph-bt-op.on{filter:none;box-shadow:inset 0 0 0 2px var(--k),inset 0 0 0 4px var(--w),inset 0 0 0 5px var(--gold)}
-  &[data-liv="midnight"] .ph-bt-op{background:linear-gradient(90deg,rgba(6,28,92,.96),rgba(3,14,48,.96));box-shadow:inset 0 0 0 2px var(--cyan)}
-  &[data-liv="midnight"] .ph-bt-op.on{background:linear-gradient(90deg,#fff,#c7f3ff);filter:drop-shadow(0 0 14px var(--cyan))}
+  &[data-liv="channel"] .ph-bt-menu .ph-bt-op{clip-path:none;border-radius:16px;box-shadow:0 0 0 3px var(--w)}
+  &[data-liv="channel"] .ph-bt-menu .ph-bt-op.on{filter:none;box-shadow:0 0 0 4px var(--k),6px 6px 0 4px var(--gold)}
+  &[data-liv="fantasia"] .ph-bt-menu .ph-bt-op,&[data-liv="velvet"] .ph-bt-menu .ph-bt-op{clip-path:none;box-shadow:inset 0 0 0 1px var(--gold)}
+  &[data-liv="fantasia"] .ph-bt-menu .ph-bt-op.on,&[data-liv="velvet"] .ph-bt-menu .ph-bt-op.on{filter:none;box-shadow:inset 0 0 0 2px var(--k),inset 0 0 0 4px var(--w),inset 0 0 0 5px var(--gold)}
+  &[data-liv="midnight"] .ph-bt-menu .ph-bt-op{background:linear-gradient(90deg,rgba(6,28,92,.96),rgba(3,14,48,.96));box-shadow:inset 0 0 0 2px var(--cyan)}
+  &[data-liv="midnight"] .ph-bt-menu .ph-bt-op.on{background:linear-gradient(90deg,#fff,#c7f3ff);filter:drop-shadow(0 0 14px var(--cyan))}
 
   /* ---- battle moments: wild, send, hit, ko, win, result, rival loss ---- */
   & .ph-vs-ball.out{filter:grayscale(1) brightness(.45)}
@@ -237,6 +260,10 @@
   & .ph-wl-cant{font:700 18px/1.2 var(--f-cond)!important;text-transform:none!important;letter-spacing:0}
   & .ph-sn-ball{width:64px;height:64px;box-shadow:0 0 0 5px var(--k)}
   & .ph-sn-pk{display:grid;place-items:end center}
+  /* "Change who leads": the order takes a click, above the card's click-anywhere layer */
+  & .sn-ord.ph-sn-lead{z-index:7}
+  & .sn-ord.ph-sn-lead i[data-act]{cursor:pointer;transition:translate .15s,box-shadow .15s}
+  & .sn-ord.ph-sn-lead i[data-act]:hover{translate:0 -6px;box-shadow:inset 0 -4px 0 var(--red)}
   & .s-send .sn-me{left:70px;top:auto;bottom:86px;width:420px}
   & .s-send .sn-foe{right:90px;top:120px;width:320px;height:260px}
   & .s-send .sn-go{top:76px;font-size:150px}

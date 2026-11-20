@@ -28,6 +28,8 @@ A third UI style next to New and Old: **Settings > Display > UI style > Phantom*
 | 6 | Ending pages (Hall of Fame, run record, credits, run over), Regional forms, Next region, the pause menu's Pokédex and type chart, the Rotom Phone (new menu), the Town Map pages (Hub Town map, a place's rooms, Pocket Town directory: new menus), the page changes (Slash, Flare, Drop, Turn, Sweep, Carry) with their Settings page, and the page directory (new menu) | done |
 | 7 | The wild card's Pokédex key, the PC card's Summary and Give item | done |
 | 8 | Pages for the screens that wore the stand-in look: Research Tree, Exchange Counter, Rescue, Siege map, League counter-pick, mini-games, jigsaw, Spirit Market, walkable zones, the seven wide formats, expedition route, evolution scene, Memories entry, loading | done |
+| 9 | The pops over every screen (toasts, notices, song caption), the interaction prompt's window, the Phone page's touch rows (settings v47), "Change who leads" on the send-out card (a new battle rule in every look) | done |
+| 10 | Mock-up match pass, round 1 (Kice: "keep redoing until they look exactly like the mock-ups"): main menu tags, Bag item pictures, map stops as Poké Ball / Ultra Ball, Summary sizes and PP, Pause tags, the battle command screen and Fight page | in progress |
 
 ## Slice 1 notes
 
@@ -118,20 +120,36 @@ The mock-ups have no page for these, so each is built from the mock-ups' own par
 - Page changes know the new pages (`core/presentation/joins.ts` groups). The Every page directory still lists the mock-ups' pages only.
 - **A page never scrolls as a whole** (`.phs` and its `.scr` are `overflow:clip`, in `phantom.css`): the turning burst behind a page is far bigger than the page, so a browser's "scroll into view" (a test's click on a jittering button, find on page) could slide every part off the screen. Lists inside a page still scroll. Checked in `phantomRooms.spec.ts` (Siege map).
 
+## Slice 9 notes (part 6)
+- **Pops** (`phPops` in `screens/system.ts`, page `pops` on the overlay): achievement toasts stack on the right as slanted plates (a tap opens one, the art and lines show), notices fade the further back they are and leave on a tap, the song caption runs along the foot. The run log overlay keeps its own page.
+- **Prompt window** (`screens/prompt.ts`, page `prompt`): the same model as the New layer (tap, timing, hold, rhythm, shout, drag) as a slanted card with the bar, the gold zone, beats, mic bars and the verdict stamp. The drag field keeps the New layer's box, scaled to the page, so the pointer maths is unchanged.
+- **Phone page** gets four new settings (settings save **v47**, migration from 46 fills the defaults): Touch buttons (the on-screen pad on or off), Touch button size (small, medium, large), Swipe to switch (a quick sideways stroke on the Pokémon screen goes to the next or previous Pokémon), Hold for details (a long press on a touch screen shows a tip; letting go does not also press). Rules in `core/presentation/touchLayout.ts` (`swipeOf`, `TOUCH_SIZE`, `HOLD_MS`).
+- **Change who leads** (Kice chose "a free swap", 2026-11-20): before turn 1 of a single battle the player may pick another healthy Pokémon to lead at no cost (`core/battle/openingLead.ts`). Not in doubles, raids, calm battles, or event fights that fix the lead. Phantom: ◀▶ or a click on the send-out card's order; New and Old: a line "X leads. ◀▶ to change who leads." before the throw. The swap is a game rule saved with the run, the same in every look.
+
+## Slice 10 notes (mock-up match pass)
+Each built page is shot beside its mock-up (pass 25, Phantom version) and every difference is listed and fixed, page by page.
+- **Main menu:** the lit entry carries its small line (Continue shows the saved run's region and stage).
+- **Bag:** rows and the big picture show the item's own art (the page no longer waits for the canvas texture).
+- **Stage map:** a wild stop is a Poké Ball and a trainer an Ultra Ball, on the road and on the next-stop card, as in the mock-up.
+- **Summary:** a bigger Pokémon, bigger tabs, PP under each move. **Pause:** the lit word carries its tag ("6 Pokémon · 1 fainted").
+- **Battle, command menu:** the commands stand in the fan round your Pokémon (Info first, Auto last; the lit one takes Z, Bag shows Q, Fight E); your card and the rest of the party stack at the top right; the foe's box shows its types and a "Weak to" row (4x named; `core/presentation/weakness.ts`); a Turn ribbon at the top. With no tabs (or two foes) the commands stay in the tray.
+- **Battle, Fight page:** up to four moves on the mock-up's cross with the target's card (picture, HP, the move's line); the field dims; keys Z / Q E / I / X (Back is a click too). Five moves or two foes keep the tray.
+
 ## Known limits
-- The mock-up's "Change who leads" key on the send-out card is not there: the game has no rule for changing the lead once a battle has begun (the lead is set on the map), and this slice changes no rules.
 - The side stage card has Z Fight only: the mock-up's Party and Back out keys would need a rule for leaving a fight that has already begun, which the game does not have.
 - The phase card does not say "the music changes": it only states what is true in the battle.
-- Still on the stand-in look (the New drawing in Phantom colours): the toasts, notices and captions that lie over every screen, and the timing prompts' small window (its pointer maths is tied to the New layer). `ui/redux/screens/rivalPanels.ts` is not used by any scene.
+- No screen of the main game wears the stand-in look any more; it stays only as a safety net. `ui/redux/screens/rivalPanels.ts` is not used by any scene.
+- Hold for details has no browser test (a long press is checked by its rule in the unit test only).
 - Screens that are drawn on the canvas in every look (no New page either) are not Phantom pages.
 - The loading screen has no browser test (it is gone too quickly to catch reliably); its page is covered by the unit test.
 
-- The Phone page's rows from the mock-up that the game has no setting for yet (touch button size, swipe to switch, hold for details) are not built: each needs a new setting and a settings save version.
 - The Rotom Phone's Party door has no browser test of its own (its Rivals, log and Pokédex doors do).
 - Every page opens only Settings' own pages and Version Select; a page change's copy is not made for the run log overlay.
 - Evil Mode pages of the mock-ups are not started (Evil Mode lives on its own branch).
 
 ## Tests
+- Slice 10: `tests/unit/weakness.test.ts` (3), `phantomBattle.test.ts` (the fan commands and their keys, the stack, the foe's types and weak spots, the cross and the tray); `phantomBattle.spec.ts` checks the fan commands, the stack, the turn ribbon, the cross, the target card and Back; `phantomRoad.spec.ts` the pause tags.
+- Slice 9: `tests/unit/phantomTouch.test.ts` (settings v47 migration and reload, a bad size, the rows and Phone order, pad modes, swipe and hold rules, pops and prompt drawings) and `tests/unit/openingLead.test.ts` (7: when the swap is allowed, which Pokémon may lead, a fainted or same pick, after turn 1); `tests/e2e/phantomExtras.spec.ts` (5: pops, the prompt window, the Phone page with the pad and a swipe, the send-out card swap, the New look's lead line). `phantomUi.spec.ts`'s stand-in test now checks the toast is a Phantom page.
 - Slice 8: `tests/unit/phantomRooms.test.ts` (18 tests: every new page as a pure drawing, with its edges: no choices, closed choices, odd words, the clamped loading bar, the page-change groups); `tests/e2e/phantomRooms.spec.ts` (4: Research Tree and Exchange Counter, Siege, Rescue, League counter-pick) and `tests/e2e/phantomGames.spec.ts` (9: a mini-game, the Arcade Cabinet, the jigsaw, the Spirit Market, Safari Land, three wide pages with a Breather that rests, the evolution scene, an expedition's route, a Memories entry), each by keys and clicks with the text-fit check. `phantomUi.spec.ts`'s stand-in test now uses the achievement toast (the Research Tree has its own page).
 - Slice 7: `tests/unit/bag.test.ts` (one more: a held item for a PC Pokémon, its limits and failures); `phantomBattle.spec.ts` (the wild card's Pokédex key: opens, fits, closes, the card is still there); `phantomTeam.spec.ts` (the PC's Summary by keys, read-only, back to the same slot; Give item from the Bag to a PC Pokémon).
 
