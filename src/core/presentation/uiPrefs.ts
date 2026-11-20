@@ -114,6 +114,10 @@ export function padActions(pad: PadSnapshot, map: PadMap): Set<PadAction> {
   if ((pad.axes[0] ?? 0) > 0.6) out.add('right');
   return out;
 }
+/** Dominion D28: holding Select (button 8) opens the command wheel, the pad's hold-Q; never while a game action uses it. */
+export const WHEEL_BUTTON = 8;
+export const padWheelHeld = (pad: PadSnapshot, map: PadMap): boolean =>
+  pad.buttons[WHEEL_BUTTON] === true && !PAD_ACTIONS.some((a) => map[a] === WHEEL_BUTTON);
 export const PAD_KEY: Record<PadAction, { code: string; keyCode: number }> = {
   up: { code: 'ArrowUp', keyCode: 38 }, down: { code: 'ArrowDown', keyCode: 40 }, left: { code: 'ArrowLeft', keyCode: 37 },
   right: { code: 'ArrowRight', keyCode: 39 }, confirm: { code: 'Enter', keyCode: 13 }, back: { code: 'Escape', keyCode: 27 },

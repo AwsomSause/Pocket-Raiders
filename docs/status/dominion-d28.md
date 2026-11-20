@@ -1,0 +1,29 @@
+# Dominion D28: getting around
+
+Plan: BUILD_SLICES.md row D28. Mockups: `plans/evil-mode-rework/mockups-v4/` interval 3 (m5 the Boss's board, m6 the command wheel, m7 the crimson shutter; generator `src/i3.py`). Built on D27 (#1534: the Boss Menu and its Settings are pages the wheel and the board open).
+
+## What the player can do
+- **Hold Q** on any Dominion page for the **command wheel** (m6): eight places round the Nova eye (HQ 1, Region Map 2, Roster 3, Pokémon 4, Operations 5, Ledger 6, Rotom R, Boss Menu Esc). Point with the arrows (or the mouse) and let go of Q to jump; while it is up, the place's key jumps straight there. The middle says what waits on the place pointed at (actions left, roster size, Reserve size, funds and Heat). Left column: the **last three pages** (Backspace goes to the newest). Right column: **pinned**, what is waiting now (a crew talk, Rotom's desk, a rival move). A tap on the Q chip of any key strip opens it for the mouse; a tap on the middle closes it. On a **controller, hold Select**: the stick or d-pad points, letting go jumps (unless Select is remapped to a game action).
+- **M on the wheel** opens **the Board** (m5): the whole Dominion UI as a cork board, one pinned photo per page, red string for the normal way, gold dashed string for the Boss Menu. Sheet 1 is m5 exactly (14 photos); **Tab** turns to sheet 2, the back rooms (the 14 pages built after the mockup: HQ menu, Rival File, Hero file, Voices, Founding, Rotom desk, Crew File, Personality, Pyramid, Squads, Reserve, and the four that come to you). Arrows + Enter or a click jump to a photo; Esc goes back. It is also the in-game help m5 asks for: **Boss Menu · Settings · Controls · The Board** (a new Controls tab, which also lists the game's control settings and the wheel's keys).
+- **Every page you can walk into opens from both** the Board (its photo) and the wheel (its place, or the place it sits under and then that page's own key, as the Board's string says). Morning, Assign and The Chair are the HQ at that time of day; the District file, the Action Card and Takeover live on the Region Map; Settings and Rotom open D27's Settings (Rotom is its tab); Title is End (D26). Jumps go through the same code as the page's own key, so a closed page says why (the Founding before the first steps, the Operations tab, the Rival File while the crew waits for an answer).
+- **The crimson shutter** (m7) plays on every page change: the new page slides in from the right while a crimson blade with the Nova eye and the new page's name wipes the old page off to the left (~340 ms). Settings · Effects & motion: Lighter (or Reduced animation intensity, or the OS's reduced motion) makes it a plain fade; Calm turns it off. It never takes a key or a tap.
+
+## How it is built
+- `src/core/dominion/nav.ts` (pure): page ids, the Board's photos and strings, wheel places, pointer maths, last pages, hub lines, the pinned column, the Board's arrow walk.
+- `src/ui/redux/screens/dominion/navViews.ts` + `nav.css`: m5, m6 and m7 drawn with the round-4 classes already ported in `dominion.css` (`.cork .pol .wheel .wo .hub4 .shut .streak .eye4 .dest`); `nav.css` adds only the cursor, the dimmed page and the shutter's motion. The old page under the blade is a copy without its words, keys, ids or taps.
+- `src/scenes/dominion/navController.ts`: what is open and pointed at, the last pages, the shutter's timer. `DominionScene`: `navHere()` (which page is on screen), `navFree()` (the wheel stays shut on pages the game holds you on: the Hero stepping in, questioning, a Debate, a Confront, the Founding form, and while typing), `navJump()` (closes overlays and sub-pages, then calls the page's own opener). The wheel reads keys before D27's Boss Menu, so it opens over the menu too.
+- `WHEEL_KEY` chips are tappable (`data-act="wheel"`).
+- Controls tab: `SETTINGS_CATS` gets `controls` (the registry's controls rows, plus The Board and the wheel's keys first); with ten tabs the tab list is drawn a little tighter.
+- Pad: `src/ui/gamepad.ts` sends `pkr-pad-wheel` (true/false) when Select (`WHEEL_BUTTON` 8, `padWheelHeld` in `uiPrefs.ts`) goes down or up; the Dominion scene treats it as Q down/up. It is its own event, not a key, so Select does nothing new in other scenes.
+- Nothing is saved or rolled: the last pages live only while the scene is open. No block or save bump.
+
+## Tests
+- `tests/unit/dominionNav.test.ts` (14): sheet 1 equals m5's photos and strings read from `i3.py`; every page has a photo; only the four pages that come to you can't be walked into; every page you can walk into sits under a wheel place; pointer angles and turning; last pages; hub lines and the pinned column from a real block; the views; the shutter's three modes.
+- `tests/e2e/dominionNav.spec.ts` (3): hold Q, point, let go; digits, Backspace, Operations shut, the Q chip and the middle; the save unchanged by moving around; the Board's two sheets and every walk-in page opened from it (and back through the wheel), the Founding's not-yet notice and a comes-to-you photo; Rotom and Esc on the wheel open D27's Settings and Boss Menu; Lighter fades, Calm has no shutter; three window sizes; no console errors; no wheel before the run opens.
+- Unit (15): plus Select held is the pad's Q unless a game action is mapped to it. E2E: Settings · Controls opens the Board and Esc comes back; the pad's Select opens the wheel, arrows point, letting go jumps (and with nothing pointed it just closes).
+- `dominionPolish` and `dominionBossMenu` tests updated for the tappable Q chip.
+
+## Known limits
+- Operations (place 5) stays shut like its tab until its slice lands.
+- The game's stage turns CSS backdrop filters off, so the page behind the wheel is darkened, not blurred as in m6.
+- D29 (Assign and District pages) and D30 land before this slice: when they merge in, their pages get their own `navHere` ids and `OPENS` entries change (Assign, District).

@@ -145,6 +145,7 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
       return ok(endNight(block, seed, false));
     }
     case 'act':
+    case 'jobCaught':
     case 'buy':
     // D5: the HQ menu (hq.ts), sent there by session.ts.
     case 'upgrade':

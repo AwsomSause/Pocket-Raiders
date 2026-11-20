@@ -18,6 +18,7 @@ import { addLoyalty, addMorale, addXp, monName } from './crew';
 import { hasBand } from './pyramid';
 import { evolveOne } from './reserve';
 import { buildingDef, hasRoom, hqFx, launderAction, roomFor, spend } from './hqFx';
+import { paced } from './rules';
 
 const F = () => DOMINION_DATA.field;
 const L = () => DOMINION_DATA.field.lines;
@@ -93,7 +94,8 @@ export function addHeat(b: DominionBlock, district: string, n: number): void {
   const d = b.field.districts[district];
   if (!d) return;
   const k = n > 0 && statusOf(d) === 'owned' ? F().control.ownedHeat : 1;
-  d.heat = clamp(d.heat + Math.round(n * k), 0, 100);
+  // D27: Day pace scales a rise (Normal and every run before D27 multiply by 1).
+  d.heat = clamp(d.heat + Math.round(paced(b, n) * k), 0, 100);
 }
 
 export const hottest = (f: Field): string | null => {
@@ -542,6 +544,8 @@ export interface ActOut {
   fight: boolean;
   /** Thieve's big success: a Pokémon in a lifted Ball (the session makes it; core/run.ts isn't reachable from here). */
   mon: { species: string; level: number; trust?: number } | null;
+  /** D30: what the act rolled (the job moments show it). Null when it never got to the roll. */
+  roll?: { r: number; chance: number; rolled: boolean } | null;
 }
 
 const rngFor = (seed: string, f: Field): Rng => {
@@ -793,19 +797,20 @@ export function act(content: Content | null, run: RunState, a: { action: string;
   const r = rng.int(1, 100);
   const pass = !c.roll || r <= c.chance;
   const big = c.roll && pass && r <= Math.floor(c.chance * F().odds.bigShare);
+  const roll = { r, chance: c.chance, rolled: c.roll };
   const wager = c.play!.wager ? round10(rng.int(c.play!.wager[0], c.play!.wager[1])) : 0;
   const x: Ctx = { ...got.x, card: c, pass, big, wager };
   if (used) f.disguise = false;
   const wait = (why: FieldFight['why'], foe: FieldFight['foe']): ActOut => {
     f.fight = { why, foe, begun: false, action: c.def.id, target: c.target?.id ?? null, district: c.district.id, pass, big, wager, racket: null };
     syncHeat(b);
-    return { ok: true, block: b, notice: null, fight: true, mon: null };
+    return { ok: true, block: b, notice: null, fight: true, mon: null, roll };
   };
   // D11: the Hero steps in (the roll is kept; m11 offers battle, run or a Smoke Ball). The scene shows the page first.
   if (c.def.slot !== 'evening' && c.play!.battle?.foe !== 'hero' && HOOKS.interrupt?.(b, c.def, c.district)) {
     f.fight = { why: 'hero', foe: 'hero', begun: false, action: c.def.id, target: c.target?.id ?? null, district: c.district.id, pass, big, wager, racket: null };
     syncHeat(b);
-    return { ok: true, block: b, notice: null, fight: false, mon: null };
+    return { ok: true, block: b, notice: null, fight: false, mon: null, roll };
   }
   if (c.battle?.on === 'always') return wait('always', c.play!.battle!.foe);
   if (!pass) {
@@ -815,13 +820,13 @@ export function act(content: Content | null, run: RunState, a: { action: string;
     for (const h of HOOKS.acted) h(b, c.def, c.district, false);
     syncHeat(b);
     lines.push(...caughtLines(b, { why: 'stealth', district: c.district.id, action: c.def, place: c.target?.name ?? null, seed: run.seed }));
-    return { ok: true, block: b, notice: lines.join(' '), fight: false, mon: null };
+    return { ok: true, block: b, notice: lines.join(' '), fight: false, mon: null, roll };
   }
   const s = succeed(content, b, run, x, rng);
   const lines = [...s.lines, ...grow(b, c.def, c.play!, true, big)];
   syncHeat(b);
   // D10: an action can start a fight of its own when it works (a Raid's first fight, a Gym's Leader).
-  return { ok: true, block: b, notice: lines.join(' '), fight: !!f.fight && !f.fight.begun, mon: s.mon };
+  return { ok: true, block: b, notice: lines.join(' '), fight: !!f.fight && !f.fight.begun, mon: s.mon, roll };
 }
 
 /**

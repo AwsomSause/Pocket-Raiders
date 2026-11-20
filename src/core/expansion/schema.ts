@@ -9,7 +9,7 @@ import { CanonStateSchema } from './canonSpaces';
 import { TrackStateSchema } from './track';
 import { RescueStateSchema } from '../evil/rescueSchema';
 import { TeamSkyStateSchema } from '../evil/teamSkySchema';
-import { DominionBlockSchema } from '../dominion/schema';
+import { DominionBlockSchema, DominionPrefsSchema } from '../dominion/schema';
 import { EpilogueStateSchema, GrandArcStateSchema } from '../grandArc/schema';
 import { UltraRunStateSchema } from '../ultra/schema';
 import { StandWithStateSchema } from '../arc/standWithSchema';
@@ -79,6 +79,8 @@ export const ExpansionSettingsSchema = z.object({
   claudeAi: AiTierSchema.default('standard'),
   /** Dominion slice D18 (mockup a1, "Use Claude for"): single uses on or off; each later slice reads its own. */
   claudeUses: ClaudeUsesSchema.default(() => ({ ...CLAUDE_USES_DEFAULT })),
+  /** Dominion slice D27 (mockup m2, Settings · Dominion): the run rules (read when a Dominion starts), the Card's odds, ending the Day, and Effects & motion (presentation only). */
+  dominionPrefs: DominionPrefsSchema.default(() => DominionPrefsSchema.parse({})),
 });
 export type ExpansionSettings = z.infer<typeof ExpansionSettingsSchema>;
 export const EXPANSION_SETTINGS_DEFAULTS: ExpansionSettings = ExpansionSettingsSchema.parse({});
