@@ -6,6 +6,7 @@ import { act, AREA, bg, esc, foot, mini } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { type Art, figure } from '../templates';
 import { CUT_BEATS } from './cut';
+import { phVersus } from '../../phantom/screens/cutin';
 
 export interface VersusModel {
   /** The foe's name, drawn big. */
@@ -27,6 +28,10 @@ export interface VersusModel {
   party: readonly (string | null)[];
   /** The arena picture behind the letterboxed shot, or null for a plain dark one. */
   backdrop: string | null;
+  /** Where the battle is ("Stage 3 · Route 22"), for the Phantom card's heading. */
+  where?: string;
+  /** One true line on what the battle decides (the Phantom card's "What is at stake"); '' or none leaves the panel out. */
+  stake?: string;
 }
 
 const balls = (n: number, b: number): string => `<div class="row" style="gap:5px">${Array.from({ length: Math.max(0, Math.min(6, Math.floor(n))) }, () => `<i class="ball" style="--b:${b}px"></i>`).join('')}</div>`;
@@ -35,7 +40,7 @@ const letter = (h: string): string => `<div class="bars" style="top:0"></div><di
 const fit = (name: string, px: number): number => Math.round(px * (name.length > 14 ? 0.6 : name.length > 9 ? 0.78 : 1));
 
 /** The card, with a click anywhere moving on. */
-export const versusView = (c: ReduxCtx, d: VersusModel): string => card(c, d) + `<div class="fill" style="z-index:7;cursor:pointer"${act('next')}></div>`;
+export const versusView = (c: ReduxCtx, d: VersusModel): string => (c.ph ? phVersus(c.ph, d) : card(c, d) + `<div class="fill" style="z-index:7;cursor:pointer"${act('next')}></div>`);
 
 function card(c: ReduxCtx, d: VersusModel): string {
   const v = c.v(4);

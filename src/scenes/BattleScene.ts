@@ -135,7 +135,10 @@ import { battleSkinFor, type BattleFrameInfo, type BattleHud, type BattleSkin, t
 import { fallbackFoeArt } from '../core/presentation/foeArt';
 import { reduxLayout, reduxSkinIndex } from '../core/presentation/redux';
 import { useLookFont } from '../ui/redux/canvasFont';
-import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, phantomOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { phGimmick, type GimmickCard } from '../ui/phantom/screens/cutin';
+import { phHit, phKo, phResult, phRivalLoss, phSend, phWild, phWin, type ResultRow, type SendSide } from '../ui/phantom/screens/moments';
+import type { PhantomVersion } from '../core/presentation/phantom';
 import { playEvolution } from '../ui/evolutionScene';
 import { battleView, panelOf, splitChoice, type BattleBox, type BattleEvolve, type BattleLevel, type BattleModel, type BattlePanel } from '../ui/redux/screens/battle';
 import { artOf, monFile } from '../ui/redux/game';
@@ -369,6 +372,12 @@ export class BattleScene extends Phaser.Scene {
   private rxExp = new Map<string, { amount: number; level: number | null; was?: PokemonInstance }>();
   /** New UI: the level-up window and the evolution picture now showing. */
   private rxLevel: BattleLevel | null = null;
+  /** Phantom UI: what each party member earned over this battle, for the result page. Presentation only; never saved. */
+  private phTally = new Map<string, { gain: number; from: number; fromLevel: number; toLevel: number }>();
+  /** Phantom UI: the last move used, and how many hits the foe in front has taken, for the hit and knock-out cards. */
+  private phLast: { side: Side; by: string; move: string } | null = null;
+  private phHits = 0;
+  private phTallyKey = '';
   private rxLevels = new Map<string, number>();
   private rxEvolve: BattleEvolve | null = null;
   /** New UI: a notice box over the field that waits for an input (the Second Shot). */
@@ -1792,6 +1801,7 @@ export class BattleScene extends Phaser.Scene {
       text: list ? list.note || (this.message.visible ? this.message.text : '') : this.message.visible ? this.message.text : this.moveInfo.visible ? this.rxInfo || this.moveInfo.text : '',
       menu,
       tabs: tabs.shown ? { labels: tabs.labels, index: tabs.index, auto: tabs.auto, autoOff: tabs.autoOff } : null,
+      me: tabs.shown ? { ...this.spotXY('player') } : null,
       header: this.header.visible ? this.header.text : '',
       status: this.status.visible && !list ? this.status.text : '',
       momentum: this.momentumText.visible ? this.momentumText.text : '',
@@ -2682,6 +2692,11 @@ export class BattleScene extends Phaser.Scene {
     const battle = this.run.battle!;
     const title = this.trainerTitle();
     if (battle.turn === 1 && !battle.needsSwitch) {
+      this.phTally.clear();
+      this.phTallyKey = battle.enemyTeam[0]?.uid ?? '';
+      this.phHits = 0;
+      this.phLast = null;
+      interactionLog.tell('stage', battle.trainer ? (title ?? battle.trainer.name) : `Wild ${this.speciesName(battle.enemyTeam[0]!)}`, 'Battle');
       await this.playIntro();
       // The foe trainer waits on the platform (a black shape at first) while the camera sweeps over the arena.
       const openArt = this.trainerArt();
@@ -2753,10 +2768,12 @@ export class BattleScene extends Phaser.Scene {
       if (this.shown.enemy.shiny) await this.shinySparkle();
       await this.formIntroBeat(this.shown.enemy);
       if (this.duo) {
+        await this.phSendCard();
         await this.duoThrowPose();
         await this.showDuoSide('player', true);
         await this.say(`Go! ${this.nameList([this.shown.player, ...this.otherMons('player')])}!`);
       } else {
+        await this.phSendCard();
         // The camera looks across to your side while your trainer throws.
         const playerRow = partyBallRow(this, 'player', this.run.party.map((m) => m.hp > 0), this.motion, MESSAGE_Y - 46);
         this.camPinned = true;
@@ -2877,6 +2894,9 @@ export class BattleScene extends Phaser.Scene {
       playerName: v2?.protagonist?.name || content.archetypes.get(this.run.archetypeId)?.name || 'You',
       party: this.run.party.map((m) => monFile(this, m.speciesId, 'front', !!m.shiny)),
       backdrop: this.arenaBgKey ? rxFileOf(this.cache.json.get('manifest') as AssetManifest | undefined, this.arenaBgKey)?.file ?? null : null,
+      where: this.header.text.split('\n')[0]!.replace(/\s+·\s+₽.*$/, '').split(/\s+·\s+/).slice(0, 2).join(' · '),
+      // Kice's rule: a loss to a rival never ends the run.
+      stake: battle.rivalId || battle.rival ? 'Win and the rivalry grows. Lose and the run goes on: a loss to a rival never ends it.' : '',
     };
     let over = false;
     let finish!: () => void;
@@ -2888,7 +2908,8 @@ export class BattleScene extends Phaser.Scene {
       finish();
     };
     const view = mountRedux(this, { render: (c) => versusView(c, model), acts: { next: end }, card: true });
-    this.time.delayedCall(plain ? 1500 : this.motion === 'off' ? 1500 : 2600, end);
+    // The Phantom card has more on it to read (the line, the stake), so it stays a little longer.
+    this.time.delayedCall(plain ? 1500 : this.motion === 'off' ? 1500 : phantomOn() ? 3400 : 2600, end);
     return { done, skip: end };
   }
 
@@ -2921,6 +2942,8 @@ export class BattleScene extends Phaser.Scene {
     const card = this.rx && battle.trainer ? this.rxVersus(kind === 'trainer') : null;
     if (card) await this.playBeat(card, recap);
     if (kind === 'trainer' || kind === 'wild' || kind === 'wild-dark') {
+      // Phantom UI: a wild Pokémon steps out on its own card.
+      if (!battle.trainer) await this.phWildCard();
       await this.playContextMoment();
       return;
     }
@@ -3007,6 +3030,7 @@ export class BattleScene extends Phaser.Scene {
     const words = title.toLowerCase().replace(/(^|[\s-])\S/g, (c) => c.toUpperCase());
     const foe = this.shown.enemy ?? battle?.enemyTeam[0];
     const showsMon = kind === 'aceEntrance' || kind === 'raidIntro' || kind === 'raidDefeat';
+    const intro = kind === 'gymIntro' || kind === 'e4Intro' || kind === 'championIntro' || kind === 'evilTeam' || kind === 'rivalFirst' || kind === 'rivalRematch' || kind === 'rivalRevenge' || kind === 'rivalReunion';
     return {
       name: subtitle,
       role: words,
@@ -3016,6 +3040,11 @@ export class BattleScene extends Phaser.Scene {
       player: artOf(this, content.archetypes.get(this.run.archetypeId)?.spriteAssetId),
       backdrop: this.arenaBgKey ? rxFileOf(this.cache.json.get('manifest') as AssetManifest | undefined, this.arenaBgKey)?.file ?? null : null,
       evil: kind === 'evilTeam' || kind === 'evilBetrayal',
+      kind,
+      tag: title,
+      where: this.header.text.split('\n')[0]!.replace(/\s+·\s+₽.*$/, '').split(/\s+·\s+/).slice(0, 2).join(' · '),
+      // A Trainer's entrance says what they bring (the Phantom card's panel); only what is true of this fight.
+      brings: intro && battle?.trainer ? { team: battle.enemyTeam.length, notes: [...(battle.enemyTeam.some((m) => Object.keys(m.held ?? {}).length > 0) ? ['Their Pokémon hold items.'] : []), ...(this.boss() ? ['The ace is announced when it enters.'] : [])] } : null,
       ...cut,
     };
   }
@@ -3241,6 +3270,290 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** A Mega / Tera / Dynamax / Z cutscene takes the whole screen: the HUD steps aside, then returns. */
+  /**
+   * Phantom UI: one full-screen card over the battle. It ends on a click or a key, or after `ms` (null: it waits for an
+   * input, unless Settings > Auto-advance is on). Presentation only: a card that fails to draw is skipped.
+   */
+  private async phMoment(draw: (ph: PhantomVersion) => string, ms: number | null): Promise<void> {
+    if (!this.rx || !phantomOn()) return;
+    try {
+      const st = services().session.settings;
+      const wait = ms ?? (st.autoAdvance ? 2600 + MESSAGE_DELAYS[st.messageDelay] : null);
+      let over = false;
+      let finish!: () => void;
+      const done = new Promise<void>((r) => (finish = r));
+      const end = (): void => {
+        if (over) return;
+        over = true;
+        try {
+          view.destroy();
+        } catch {
+          // the scene may already be gone
+        }
+        finish();
+      };
+      const view = mountRedux(this, { render: (c) => (c.ph ? draw(c.ph) : ''), acts: { next: end }, card: true });
+      if (wait !== null) this.time.delayedCall(wait, end);
+      this.events.once('shutdown', end);
+      await this.playBeat({ done, skip: end });
+    } catch (e) {
+      console.warn('Phantom card failed', e);
+    }
+  }
+
+  /** Whether the Phantom look plays its short battle cards now (never with motion reduced or off). */
+  private phCards(): boolean {
+    return !!this.rx && phantomOn() && this.motion === 'full';
+  }
+
+  /** The splash cards inside a turn (a hard hit, a knock-out): left out while Auto-Battle plays or the battle speed is Fast or Quick. */
+  private phTurnCards(): boolean {
+    const st = services().session.settings;
+    return this.phCards() && !st.autoBattle && st.battleSpeed !== 'fast' && st.battleSpeed !== 'quick';
+  }
+
+  private phArt(mon: PokemonInstance | null | undefined, side: 'front' | 'back' = 'front'): Art | null {
+    if (!mon) return null;
+    const f = monFile(this, mon.speciesId, side, !!mon.shiny) ?? monFile(this, mon.speciesId, 'front', !!mon.shiny);
+    return f ? { file: f, atlas: true } : null;
+  }
+
+  private phBackdrop(): string | null {
+    return this.arenaBgKey ? rxFileOf(this.cache.json.get('manifest') as AssetManifest | undefined, this.arenaBgKey)?.file ?? null : null;
+  }
+
+  /** "Stage 14 · Route 22": the first two parts of the header, without the money. */
+  private phWhere(): string {
+    return this.header.text.split('\n')[0]!.replace(/\s+·\s+₽.*$/, '').split(/\s+·\s+/).slice(0, 2).join(' · ');
+  }
+
+  private phPlayerName(): string {
+    const { content } = services().session;
+    return this.run.story.v2?.protagonist?.name || content.archetypes.get(this.run.archetypeId)?.name || 'You';
+  }
+
+  /** How full a Pokémon's Exp bar is, in percent of its level. */
+  private xpPct(m: PokemonInstance): number {
+    const { content } = services().session;
+    const { maxLevel, highLevelXp } = content.balance.difficulty;
+    if (m.level >= maxLevel) return 100;
+    const rate = getSpecies(content, m.speciesId).growthRate;
+    const lo = xpForLevel(rate, m.level, highLevelXp), hi = xpForLevel(rate, m.level + 1, highLevelXp);
+    return Phaser.Math.Clamp(((m.xp - lo) / Math.max(1, hi - lo)) * 100, 0, 100);
+  }
+
+  /** Phantom UI: notes Exp or a level a party member earned, for the result page after the battle. */
+  private phTallyAdd(uid: string, before: RunState, amount: number, level: number | null): void {
+    // One tally per battle: another foe's team starts it again.
+    const key = before.battle?.enemyTeam[0]?.uid ?? '';
+    if (key !== this.phTallyKey) {
+      this.phTally.clear();
+      this.phTallyKey = key;
+    }
+    const was = before.party.find((m) => m.uid === uid);
+    const t = this.phTally.get(uid) ?? { gain: 0, from: was ? this.xpPct(was) : 0, fromLevel: was?.level ?? level ?? 0, toLevel: was?.level ?? level ?? 0 };
+    this.phTally.set(uid, { ...t, gain: t.gain + amount, toLevel: level ?? t.toLevel });
+  }
+
+  /** Phantom UI: a hit that lands hard (the mock-up's `hit` splash): the words, the damage, the bar draining. */
+  private async phHitCard(mon: PokemonInstance, hpAfter: number, strong: boolean, crit: boolean): Promise<void> {
+    const max = Math.max(1, calcStats(services().session.content, mon).hp);
+    const last = this.phLast?.side === 'player' ? this.phLast : null;
+    await this.phMoment((ph) => phHit(ph, {
+      words: strong ? ['SUPER', 'EFFECTIVE!'] : ['CRITICAL', 'HIT!'],
+      victim: this.phArt(mon),
+      name: this.speciesName(mon),
+      damage: mon.hp - hpAfter,
+      from: (mon.hp / max) * 100,
+      to: (hpAfter / max) * 100,
+      by: last?.by ?? '',
+      move: last?.move ?? '',
+    }), crit && strong ? 1250 : 1050);
+  }
+
+  /** Phantom UI: a foe goes down (the mock-up's `ko` card): who did it, and how many the Trainer has left. */
+  private async phKoCard(foe: PokemonInstance, before: RunState, trainer: string | null, faints: number): Promise<void> {
+    const team = before.battle?.enemyTeam ?? [];
+    const alive = Math.max(0, team.filter((m) => m.hp > 0).length - faints);
+    const last = this.phLast?.side === 'player' ? this.phLast : null;
+    const name = this.speciesName(foe);
+    await this.phMoment((ph) => phKo(ph, {
+      by: this.phArt(this.shown.player),
+      tag: !last?.move ? `${name} is down.` : this.phHits <= 1 ? `One ${last.move} was all it took.` : `${last.move} finished it.`,
+      foe: { name, file: monFile(this, foe.speciesId, 'front', !!foe.shiny) },
+      left: trainer && before.battle?.trainer ? { owner: trainer, alive, total: team.length } : null,
+    }), 1700);
+  }
+
+  /** Phantom UI: the win (the mock-up's `win` card), with what the foe says as they lose. */
+  private async phWinCard(trainer: string, before: RunState | undefined): Promise<void> {
+    const { content } = services().session;
+    const foe = before?.battle?.trainer;
+    const rival = !!before?.battle && !!(before.battle.rivalId || before.battle.rival);
+    const line = foe && !rival ? content.trainers.get(foe.classId)?.lines?.lose ?? '' : '';
+    await this.phMoment((ph) => phWin(ph, {
+      words: 'YOU WIN',
+      hero: artOf(this, content.archetypes.get(this.run.archetypeId)?.spriteAssetId),
+      mon: this.phArt(this.shown.player),
+      line,
+      by: line ? trainer : '',
+      sub: `${trainer} is out of Pokémon`,
+    }), 2800);
+  }
+
+  /** Phantom UI: the tally after a win (the mock-up's `result` page). True when it was shown: its lines need not be said again. */
+  private async phResultCard(result: TurnResult, before: RunState | undefined, boss: boolean): Promise<boolean> {
+    const end = result.end;
+    if (!end || !this.rx || !phantomOn()) return false;
+    const { content } = services().session;
+    if ((before?.battle?.enemyTeam[0]?.uid ?? '') !== this.phTallyKey) this.phTally.clear();
+    const rows: ResultRow[] = result.run.party.slice(0, 6).map((m) => {
+      const t = this.phTally.get(m.uid);
+      // The row shows the Pokémon as it fought (an evolution it earned plays on the next screen).
+      return { file: monFile(this, m.speciesId, 'front', !!m.shiny), name: this.speciesName(m), from: t ? t.from : this.xpPct(m), to: this.xpPct(m), gain: t && t.gain > 0 ? t.gain : null, level: t && t.toLevel > t.fromLevel ? [t.fromLevel, t.toLevel] : null, fainted: m.hp <= 0 };
+    });
+    const turns = before?.battle?.turn ?? 1;
+    const down = result.run.party.filter((m) => m.hp <= 0).length;
+    const gains: [string, string][] = [];
+    if (end.moneyGained > 0) gains.push([`+₽${end.moneyGained.toLocaleString('en-US')}`, 'prize money']);
+    gains.push([`${turns} TURN${turns === 1 ? '' : 'S'}`, down ? `${down} fainted` : 'no one fainted']);
+    if (end.itemsFound.length) gains.push([`${end.itemsFound.length} ITEM${end.itemsFound.length === 1 ? '' : 'S'}`, end.itemsFound.map((id) => content.items.get(id)?.name ?? id).join(', ')]);
+    if (result.run.phase === 'reward') gains.push(['REWARD PICK', 'coming up next']);
+    else if (end.outcome === 'caught') gains.push(['CAUGHT', 'it joins you next']);
+    const kind = !before?.battle?.trainer ? 'Wild battle' : this.role === 'rival' ? 'Rival battle' : boss ? 'Boss battle' : 'Trainer battle';
+    let shown = false;
+    await this.phMoment((ph) => {
+      shown = true;
+      return phResult(ph, { where: `${this.phWhere().split(' · ')[0]} · ${kind}`, rows, gains });
+    }, null);
+    return shown;
+  }
+
+  /** Phantom UI: lost to a rival (the mock-up's `rloss` page). Kice's rule: a loss to a rival never ends the run. */
+  private async phRivalLossCard(before: RunState, after: RunState): Promise<boolean> {
+    const battle = before.battle;
+    if (!battle?.trainer || !(battle.rivalId || battle.rival) || !this.rx || !phantomOn()) return false;
+    const { content } = services().session;
+    const name = battle.trainer.name;
+    const win = content.trainers.get(battle.trainer.classId)?.lines?.win ?? '';
+    let shown = false;
+    await this.phMoment((ph) => {
+      shown = true;
+      return phRivalLoss(ph, {
+        name,
+        cast: this.rxCast ?? artOf(this, this.lastFoe?.art.assetId),
+        where: `${this.phWhere().split(' · ')[0]} · Rival battle lost`,
+        line: win,
+        text: `Losing to a rival never ends a run. Your team is patched up, the story goes on, and ${name} will be waiting again further down the road.`,
+        party: after.party.map((m) => monFile(this, m.speciesId, 'front', !!m.shiny)),
+      });
+    }, null);
+    return shown;
+  }
+
+  /** Phantom UI: a wild Pokémon steps out (the mock-up's `wild` card). Raids, Totems and Legendaries have their own cards. */
+  private async phWildCard(): Promise<void> {
+    const battle = this.run.battle;
+    const foe = battle?.enemyTeam[0];
+    if (!battle || !foe || battle.trainer || battle.raid || battle.totem || !this.phCards()) return;
+    const { content, profile } = services().session;
+    const sp = getSpecies(content, foe.speciesId);
+    if (sp.tags?.includes('legendary') || sp.tags?.includes('mythical')) return;
+    const ballIds = Object.keys(this.run.inventory).filter((id) => (this.run.inventory[id] ?? 0) > 0 && content.items.get(id)?.category === 'ball');
+    // The same check the Bag makes: the first ball's problem, if any, is why none can be thrown.
+    let cant = '';
+    try {
+      cant = ballIds.length ? itemProblem(this.battleCtx(), ballIds[0]!) ?? '' : '';
+    } catch {
+      cant = '';
+    }
+    const others = battle.doubles ? battle.enemyTeam.slice(1, battle.doubles.trio ? 3 : 2).map((m) => this.speciesName(m)) : [];
+    const isNew = !profile.speciesCaught.includes(foe.speciesId);
+    await this.phMoment((ph) => phWild(ph, {
+      name: this.speciesName(foe),
+      mon: this.phArt(foe),
+      level: foe.level,
+      types: sp.types,
+      where: this.phWhere(),
+      lead: battle.nemesis ? 'Your nemesis,' : battle.monRival ? 'Your rival' : 'A wild',
+      tail: others.length ? `and ${others.join(' and ')} appeared!` : 'appeared!',
+      tag: battle.nemesis ? 'Nemesis' : 'Wild',
+      note: foe.shiny ? 'Shiny' : isNew ? 'New · not in your Pokédex' : '',
+      catchable: !cant,
+      cant,
+      balls: ballIds.map((id) => ({ name: content.items.get(id)!.name, n: this.run.inventory[id] ?? 0 })).sort((a, b) => b.n - a.n),
+      backdrop: this.phBackdrop(),
+      grass: ['grass', 'bug'].includes(this.arenaTypes[0] ?? ''),
+    }), 3000);
+  }
+
+  /** Phantom UI: both sides send out (the mock-up's `send` card), just before the throw. */
+  private async phSendCard(): Promise<void> {
+    const battle = this.run.battle;
+    const me = this.shown.player, foe = this.shown.enemy;
+    if (!battle || !me || !this.phCards()) return;
+    const { content } = services().session;
+    const side = (m: PokemonInstance, by: string, pic: 'front' | 'back'): SendSide => ({ by, name: this.speciesName(m), level: m.level, types: getSpecies(content, m.speciesId).types, mon: this.phArt(m, pic) });
+    await this.phMoment((ph) => phSend(ph, {
+      me: side(me, this.phPlayerName(), 'back'),
+      foe: foe ? side(foe, battle.trainer ? this.trainerTitle() ?? battle.trainer.name : '', 'front') : null,
+      order: this.run.party.map((m) => ({ file: monFile(this, m.speciesId, 'front', !!m.shiny), on: m.uid === me.uid, ko: m.hp <= 0 })),
+      backdrop: this.phBackdrop(),
+    }), 1900);
+  }
+
+  /**
+   * Phantom UI: a transformation's cut-in card. Presentation only: it reads the battle, changes nothing, and any
+   * failure (or a skip) just ends it. It stays about two and a half seconds; any key or a click moves on.
+   */
+  private async phGimmickCard(side: Side, mon: PokemonInstance, kind: GimmickCard['kind'], x: { to: string; itemId: string | null; teraType: string | null; zBase: Move | null; zMoveId: string | null }): Promise<void> {
+    try {
+      const { content } = services().session;
+      const battle = this.run.battle;
+      const mine = side === 'player';
+      const art = (id: string, shiny: boolean): Art | null => ((f) => (f ? { file: f, atlas: true } : null))(monFile(this, id, 'front', shiny));
+      const changes = kind === 'mega' || kind === 'primal' || kind === 'gigantamax';
+      const zMove = kind === 'zmove' ? (x.zMoveId ? (content.moves.get(x.zMoveId) ?? null) : x.zBase ? zMoveFor(content, x.zBase) : null) : null;
+      const crystal = kind === 'zmove' ? x.itemId ?? (x.zBase && mine ? ownedZCrystal(content, this.run.inventory, x.zBase.type) : null) : x.itemId;
+      const max = calcStats(content, mon).hp;
+      const big = kind === 'dynamax' || kind === 'gigantamax' ? calcStats(content, { ...mon, speciesId: x.to, dynamaxed: true }).hp : max;
+      const other = this.shown[mine ? 'enemy' : 'player'];
+      const v2 = this.run.story.v2;
+      const model: GimmickCard = {
+        kind,
+        name: this.speciesName(mon),
+        mon: art(changes ? x.to : mon.speciesId, !!mon.shiny),
+        trainer: mine ? v2?.protagonist?.name || content.archetypes.get(this.run.archetypeId)?.name || 'You' : battle?.trainer?.name ?? '',
+        cast: mine ? this.rxMe() : battle?.trainer ? artOf(this, this.trainerArt()?.assetId) : null,
+        item: crystal ? content.items.get(crystal)?.name : undefined,
+        type: kind === 'tera' ? x.teraType ?? undefined : kind === 'zmove' ? (zMove ?? x.zBase)?.type : undefined,
+        move: zMove ? { name: zMove.name, power: zMove.power ?? null } : undefined,
+        hp: big !== max && mon.hp > 0 ? [mon.hp, Math.max(1, Math.round((mon.hp * big) / max))] : undefined,
+        turns: kind === 'dynamax' || kind === 'gigantamax' ? battle?.transform.dynamax[mon.uid] ?? content.balance.transformations.dynamaxTurns : undefined,
+        foe: other ? art(other.speciesId, !!other.shiny) : null,
+      };
+      let over = false;
+      let finish!: () => void;
+      const done = new Promise<void>((r) => (finish = r));
+      const end = (): void => {
+        if (over) return;
+        over = true;
+        try {
+          view.destroy();
+        } catch {
+          // the scene may already be gone
+        }
+        finish();
+      };
+      const view = mountRedux(this, { render: (c) => (c.ph ? phGimmick(c.ph, model) : ''), acts: { next: end }, card: true });
+      this.time.delayedCall(3200, end);
+      this.events.once('shutdown', end);
+      await this.gimmickBeat({ done, skip: end });
+    } catch {
+      // A presentation failure must never block the battle.
+    }
+  }
+
   private async gimmickBeat(b: Beat, recap?: string): Promise<void> {
     const back = this.hudAside();
     try {
@@ -4478,7 +4791,7 @@ export class BattleScene extends Phaser.Scene {
       return;
     }
     if (result.end) {
-      await this.finish(result, trainer, bossWin);
+      await this.finish(result, trainer, bossWin, before);
       return;
     }
     if (result.escaped) {
@@ -4504,7 +4817,9 @@ export class BattleScene extends Phaser.Scene {
     }
     if (this.role === 'rival' && (result.narrativeDefeat || result.wiped || result.defeated)) await this.fx.flourish('enemy', 'rival.win', ENEMY_POS);
     if (result.storyLoss) {
-      await this.say('You lost this one, but the story goes on. Your team is patched up.');
+      // Phantom UI: a loss to a rival gets its own page, which says the same thing.
+      if (!(await this.phRivalLossCard(before, result.run))) await this.say('You lost this one, but the story goes on. Your team is patched up.');
+      interactionLog.tell('gain', 'Lost the battle. The run goes on.');
       // Extended Cut: a lost climax battle spends the Second Shot; the player is told what that means before the screen leaves.
       const shot = secondShotNotice(before, result.run);
       if (shot) await this.tellNotice(shot);
@@ -4591,7 +4906,7 @@ export class BattleScene extends Phaser.Scene {
     this.nextPrompt();
   }
 
-  private async finish(result: TurnResult, trainer: string | null, bossWin: { boss: BossInfo; art: { assetId: string; label: string } | null; turn: number; active: number } | null = null): Promise<void> {
+  private async finish(result: TurnResult, trainer: string | null, bossWin: { boss: BossInfo; art: { assetId: string; label: string } | null; turn: number; active: number } | null = null, before?: RunState): Promise<void> {
     const content = services().session.content;
     const end = result.end!;
     if (end.outcome === 'win') {
@@ -4609,7 +4924,9 @@ export class BattleScene extends Phaser.Scene {
     // The rival's victory and defeat poses (6.5); pure decoration after the battle is decided.
     if (this.role === 'rival' && end.outcome === 'win') void this.fx.flourish('enemy', 'rival.lose', ENEMY_POS);
     if (end.outcome === 'win' && trainer) {
-      await this.playBeat(stamp(this, 'VICTORY!', trainer, this.foeRim(), this.motion));
+      // Phantom UI: the win is its own card (it stands in for the stamp).
+      if (this.rx && phantomOn()) await this.phWinCard(trainer, before);
+      else await this.playBeat(stamp(this, 'VICTORY!', trainer, this.foeRim(), this.motion));
       if (bossWin) {
         const party = result.run.party;
         const v = bossVictory(content, bossWin.boss, party, bossWin.turn, party[bossWin.active] ?? null);
@@ -4648,8 +4965,11 @@ export class BattleScene extends Phaser.Scene {
     }
     // Galar: a reporter interviews a different random character about how the match went.
     if (this.stadium && end.outcome === 'win') await this.stadium.interview('post', true);
-    if (end.moneyGained > 0) await this.say(`You got ₽${end.moneyGained}!`);
-    for (const id of end.itemsFound) await this.say(`You found a ${content.items.get(id)?.name ?? id}!`);
+    // Phantom UI: the result page carries the Exp, the prize money and what was found; the Old and New looks say them.
+    const tallied = await this.phResultCard(result, before, !!bossWin);
+    if (end.moneyGained > 0 && !tallied) await this.say(`You got ₽${end.moneyGained}!`);
+    if (!tallied) for (const id of end.itemsFound) await this.say(`You found a ${content.items.get(id)?.name ?? id}!`);
+    interactionLog.tell('gain', `${end.outcome === 'caught' ? 'Caught it' : trainer ? `Beat ${trainer}` : 'Won the battle'}${end.moneyGained > 0 ? ` · +₽${end.moneyGained}` : ''}${end.itemsFound.length ? ` · ${end.itemsFound.map((id) => content.items.get(id)?.name ?? id).join(', ')}` : ''}`);
     const mats = Object.entries(end.materials ?? {});
     if (mats.length > 0) await this.say(`Materials: ${mats.map(([id, n]) => `${n} ${materialName(id)}`).join(', ')}.`);
     for (const reward of end.eventRewards) await this.say(`Event prize: ${reward}!`);
@@ -4923,6 +5243,7 @@ export class BattleScene extends Phaser.Scene {
   private async speak(speaker: string, text: string, voice: SpeechVoice = 'calm', shout = false, artOverride?: { assetId: string; look?: 'crowd' | 'champion' }): Promise<void> {
     const settings = services().session.settings;
     const content = services().session.content;
+    interactionLog.tell('say', text, speaker);
     // After the last blow the run's battle is gone: the foe's name and picture are kept from while it lasted, so the leader's closing lines still show them.
     const live = this.run.battle?.trainer;
     const liveArt = this.trainerArt();
@@ -4995,6 +5316,7 @@ export class BattleScene extends Phaser.Scene {
       if (e.type === 'move') {
         this.message.setText(eventText(content, this.names(trainer), e) ?? '');
         this.lastMoveType = content.moves.get(e.moveId)?.type ?? 'normal';
+        this.phLast = { side: e.side, by: this.shown[e.side] ? this.speciesName(this.shown[e.side]!) : '', move: content.moves.get(e.moveId)?.name ?? '' };
         this.storyBar?.accent(this.lastMoveType);
       }
       await this.fx.play(cues[index] ?? []);
@@ -5037,6 +5359,11 @@ export class BattleScene extends Phaser.Scene {
         case 'seedDamage':
         case 'weatherDamage':
         case 'seaOfFireDamage':
+          if (e.type === 'damage' && e.side === 'enemy' && e.hpAfter < mon!.hp) {
+            this.phHits++;
+            // Phantom UI: a hit that lands hard gets its splash (the knock-out card speaks for a hit that ends it).
+            if ((e.effectiveness >= 2 || e.crit) && e.hpAfter > 0 && this.phTurnCards()) await this.phHitCard(mon!, e.hpAfter, e.effectiveness >= 2, !!e.crit);
+          }
           if (e.hpAfter < mon!.hp && services().session.settings.damageNumbers) this.floatDamage(sprite, mon!.hp - e.hpAfter);
           if (e.type === 'damage' && e.hpAfter < mon!.hp) this.buzz(this.lastMoveType, e.effectiveness > 1);
           if (e.type === 'damage' && e.side === 'player' && (e.crit || e.effectiveness >= 2) && e.hpAfter < mon!.hp && this.trainerActor?.sprite.visible) void this.trainerActor.play('hit');
@@ -5137,6 +5464,7 @@ export class BattleScene extends Phaser.Scene {
           if (!this.cameraMove(e)) this.focusPush('ko');
           if (sprite) this.tweens.killTweensOf(sprite);
           if (sprite) await tween(this, { targets: sprite, alpha: 0, y: sprite.y + 30, duration: 400 });
+          if (e.side === 'enemy' && mon && this.phTurnCards()) await this.phKoCard(mon, before, trainer, events.slice(0, index + 1).filter((x) => x.type === 'faint' && x.side === 'enemy').length);
           break;
         case 'miss': {
           // The target slips aside and back (presentation only; the miss itself is already decided).
@@ -5181,6 +5509,7 @@ export class BattleScene extends Phaser.Scene {
           const incoming = this.findMon(before, e.uid);
           if (incoming) {
             this.shown[e.side] = structuredClone(incoming);
+            if (e.side === 'enemy') this.phHits = 0;
             if (e.side === 'player' && this.trainerActor) await this.sendOutMoment(this.shown.player);
             const lookAt = e.side === 'enemy' ? { x: 560, y: ENEMY_POS.y - 20 } : { x: 400, y: PLAYER_POS.y - 100 };
             if (!this.camBusy && !this.camPinned) {
@@ -5261,7 +5590,13 @@ export class BattleScene extends Phaser.Scene {
           };
           const at = this.spotXY(e.side);
           const cine: CineKind | null = e.kind === 'mega' || e.kind === 'primal' || e.kind === 'dynamax' || e.kind === 'gigantamax' || e.kind === 'dynamaxEnd' || e.kind === 'zmove' || e.kind === 'tera' ? e.kind : null;
-          if (cine === 'zmove' && this.motion === 'full' && !services().session.settings.fastZMove && mon) {
+          // Phantom UI: the transformation's own cut-in card (the mock-ups' mega / tera / dmax / zmove pages) stands in
+          // for the long reference scene; the short cinematic under it then swaps the form. The Fast settings skip it too.
+          const st0 = services().session.settings;
+          const quick = cine === 'zmove' ? st0.fastZMove : cine === 'tera' ? st0.fastTera : cine === 'dynamax' || cine === 'gigantamax' ? st0.fastDynamax : st0.fastMega;
+          const phCard = !!this.rx && phantomOn() && this.motion === 'full' && !!mon && !!cine && cine !== 'dynamaxEnd' && !quick;
+          if (phCard) await this.phGimmickCard(e.side, mon!, cine as GimmickCard['kind'], { to: e.to, itemId: e.itemId ?? null, teraType: teraType ?? null, zBase: zBase ?? null, zMoveId: e.zMoveId ?? null });
+          if (!phCard && cine === 'zmove' && this.motion === 'full' && !services().session.settings.fastZMove && mon) {
             // The full reference scene (Fast Z-Move off): Pokémon turned to face you, trainer and Z-Ring, Z-Crystal, white-out, title.
             const zMove = e.zMoveId ? (content.moves.get(e.zMoveId) ?? null) : zBase ? zMoveFor(content, zBase) : null;
             const sp = content.species.get(mon.speciesId)!;
@@ -5289,7 +5624,7 @@ export class BattleScene extends Phaser.Scene {
               }),
             );
             playSfx(this, 'se.level_up');
-          } else if (cine === 'tera' && this.motion === 'full' && !services().session.settings.fastTera && mon && teraType) {
+          } else if (!phCard && cine === 'tera' && this.motion === 'full' && !services().session.settings.fastTera && mon && teraType) {
             // The full reference scene (Fast Tera off): Pokémon turned to face you, trainer and Tera Orb, crystals, white-out, shatter, rainbow pulse.
             const sp = content.species.get(mon.speciesId)!;
             const mine = e.side === 'player';
@@ -5312,7 +5647,7 @@ export class BattleScene extends Phaser.Scene {
               }),
             );
             playSfx(this, 'se.level_up');
-          } else if (cine === 'mega' && this.motion === 'full' && !services().session.settings.fastMega && mon) {
+          } else if (!phCard && cine === 'mega' && this.motion === 'full' && !services().session.settings.fastMega && mon) {
             // The full reference scene (Fast Mega off): Pokémon turned to face you, trainer and Mega Ring, Mega Stone, white ball, crystal, blue rays.
             const from = content.species.get(mon.speciesId)!;
             const to = content.species.get(e.to) ?? from;
@@ -5337,7 +5672,7 @@ export class BattleScene extends Phaser.Scene {
                 speed: feel.speed,
               }),
             );
-          } else if ((cine === 'dynamax' || cine === 'gigantamax') && this.motion === 'full' && !services().session.settings.fastDynamax && mon && (e.side === 'player' ? this.playerArt() : this.run.battle?.trainer ? this.trainerArt() : null)) {
+          } else if (!phCard && (cine === 'dynamax' || cine === 'gigantamax') && this.motion === 'full' && !services().session.settings.fastDynamax && mon && (e.side === 'player' ? this.playerArt() : this.run.battle?.trainer ? this.trainerArt() : null)) {
             // The full reference scene (Fast Dynamax off): bare arena, trainer and Dynamax Band, pink ball, blue burst, silhouette, red giant.
             const from = content.species.get(mon.speciesId)!;
             const to = content.species.get(e.to) ?? from;
@@ -5412,6 +5747,7 @@ export class BattleScene extends Phaser.Scene {
           if (e.caught) await this.fx.flourish('enemy', 'interaction.catch', ENEMY_POS);
           break;
         case 'xp':
+          this.phTallyAdd(e.uid, before, e.amount, null);
           if (this.rx) this.rxExp.set(e.uid, { amount: (this.rxExp.get(e.uid)?.amount ?? 0) + e.amount, level: this.rxExp.get(e.uid)?.level ?? null, was: this.rxExp.get(e.uid)?.was ?? before.party.find((m) => m.uid === e.uid) });
           if (e.uid === this.shown.player.uid) {
             this.shown.player.xp += e.amount;
@@ -5421,6 +5757,7 @@ export class BattleScene extends Phaser.Scene {
           break;
         case 'levelUp':
           playSfx(this, 'se.level_up');
+          this.phTallyAdd(e.uid, before, 0, e.level);
           if (this.rx) this.rxExp.set(e.uid, { amount: this.rxExp.get(e.uid)?.amount ?? 0, level: e.level, was: this.rxExp.get(e.uid)?.was ?? before.party.find((m) => m.uid === e.uid) });
           if (this.rx) {
             // The step shown starts at the level it had before this Exp (several levels can come at once).

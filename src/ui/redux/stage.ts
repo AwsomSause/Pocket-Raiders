@@ -104,7 +104,7 @@ function phantomReady(): boolean {
     fonts.id = 'ph-fonts';
     fonts.textContent = PHANTOM_FONTS.map(([fam, w, st, f]) => `@font-face{font-family:"${fam}";font-style:${st};font-weight:${w};font-display:swap;src:url("assets/fonts/phantom/${f}.woff2") format("woff2")}`).join('\n');
     document.head.append(fonts);
-    void Promise.all([import('../phantom/phantom.gen.css'), import('../phantom/phantom.css'), import('../phantom/shared.css'), import('../phantom/run.css'), import('../phantom/party.css'), import('../phantom/pages.css'), import('../phantom/map.css'), import('../phantom/event.css'), import('../phantom/pops.css'), import('../phantom/teams.css')]).then(() => {
+    void Promise.all([import('../phantom/phantom.gen.css'), import('../phantom/phantom.css'), import('../phantom/shared.css'), import('../phantom/run.css'), import('../phantom/party.css'), import('../phantom/pages.css'), import('../phantom/map.css'), import('../phantom/event.css'), import('../phantom/pops.css'), import('../phantom/teams.css'), import('../phantom/battle.css')]).then(() => {
       phantomState = 'ready';
       lastBox = '';
       views.forEach((v) => v.redraw());
@@ -356,12 +356,15 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
       if (el.parentElement !== side) { el.textContent = ''; last = ''; side.append(el); }
       if (pageId !== null) {
         el.className = 'phs' + (o.clear ? ' clear' : '') + (calm ? ' still' : '');
+        // A full-screen card lies over the scene's other Phantom views, whichever was drawn first.
+        el.style.zIndex = o.card ? '5' : '';
         el.dataset.liv = phv!.id;
         el.dataset.pass = '25';
         // The mock-ups' own High contrast and Reduced motion looks (pass 24).
         el.toggleAttribute('data-hc', hc);
         el.toggleAttribute('data-calm', calm);
       } else {
+        el.style.zIndex = '';
         delete el.dataset.scr;
         delete el.dataset.pass;
         el.removeAttribute('data-hc');

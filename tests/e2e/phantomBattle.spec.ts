@@ -1,0 +1,419 @@
+import { expect, test, type Page } from '@playwright/test';
+import { start, toCommands, waitForScene, watch } from './helpers/newUi';
+import { fitProblems, onPage, pview, toPhantomMap } from './helpers/phantomUi';
+
+// Phantom UI: the battle. The Phantom page is see-through over the live field: the foe's box, the command fan round
+// your Pokémon, the slanted text box, the move cards, the Party and Item windows, the info papers and the log. The
+// full-screen cards (a boss, an ace, a Mega Evolution, a Terastallization, a Dynamax, a Z-Move) are Phantom pages too.
+
+const battle = (page: Page) => page.evaluate(() => {
+  const s = (window as any).__pkr.game.scene.getScene('Battle');
+  const run = (window as any).__pkr.session.run;
+  return { turn: (run.battle?.turn ?? -1) as number, tab: s.tabs.current as string | null, menu: (s.menu?.options.map((o: { label: string }) => o.label) ?? []) as string[], name: s.playerBox.name.text as string, hidden: s.playerBox.container.cameraFilter !== 0 && s.message.cameraFilter !== 0 };
+});
+/** Stops (or restarts) the battle's own clock, so a card that ends by itself stays while it is measured. */
+const hold = (page: Page, on: boolean) => page.evaluate((on) => { (window as any).__pkr.game.scene.getScene('Battle').time.paused = on; }, on);
+const press = async (page: Page, key: string) => { await page.keyboard.press(key); await page.waitForTimeout(300); };
+async function toBattle(page: Page, seed: string) {
+  await start(page, `ui=phantom&seed=${seed}`);
+  await toPhantomMap(page);
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'Battle');
+  await onPage(page, 'Battle', 'battle');
+  await toCommands(page);
+}
+
+test('Phantom UI: the battle is a see-through Phantom page; the fan, the move cards, the lists, the info papers and the log all work, and a move chosen by click plays the turn', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = watch(page);
+  await toBattle(page, 'newui-e2e');
+  const hud = pview(page, 'Battle', 'battle');
+  // The page is see-through: the canvas keeps the arena and the Pokémon, and leaves its own boxes out of the picture.
+  await expect(hud).toHaveClass(/clear/);
+  const first = await battle(page);
+  expect(first.hidden).toBe(true);
+  expect(first.tab).toBeNull();
+  await expect(hud.locator('.ph-bt-foe')).toHaveCount(1);
+  await expect(hud.locator('.ph-bt-m')).toContainText(first.name.trim(), { ignoreCase: true });
+  await expect(hud.locator('.ph-bt-say')).toContainText('What will');
+  await expect(hud.locator('.ph-bt-op')).toHaveCount(first.menu.length);
+  await expect(hud.locator('.ph-bt-op.on')).toContainText('Fight', { ignoreCase: true });
+  // The page tabs are the fan round your Pokémon, with their real keys.
+  await expect(hud.locator('.ph-bt-tab')).toHaveCount(5);
+  await expect(hud.locator('.ph-bt-tab.on')).toHaveCount(0);
+  await expect(hud.locator('.ph-bt-tab', { hasText: /attack/i }).locator('kbd')).toHaveText('E');
+  await expect(hud.locator('.ph-bt-tab', { hasText: /info/i }).locator('kbd')).toHaveText('I');
+  expect(await fitProblems(page, 'Battle', 'battle')).toEqual([]);
+  // Fight: the moves are type cards with PP, and the fan lights Attack.
+  await hud.locator('.ph-bt-op', { hasText: /fight/i }).click();
+  await expect.poll(async () => (await battle(page)).tab).toBe('attack');
+  const moves = hud.locator('.ph-bt-mv');
+  await expect(moves.first()).toBeVisible();
+  await expect(moves.first()).toContainText('PP');
+  await expect(hud.locator('.ph-bt-tab.on')).toContainText('Attack', { ignoreCase: true });
+  await expect(hud.locator('.ph-bt-say')).toContainText('Power');
+  await page.waitForTimeout(500);
+  expect(await fitProblems(page, 'Battle', 'battle')).toEqual([]);
+  // The last tab of the fan stays above the cards.
+  const gap = await page.evaluate(() => {
+    const S = document.querySelector('#phx .phs[data-scene="Battle"][data-scr="battle"]')!;
+    const tabs = [...S.querySelectorAll('.ph-bt-tab')].map((e) => e.getBoundingClientRect().bottom);
+    return S.querySelector('.ph-bt-menu')!.getBoundingClientRect().top - Math.max(...tabs);
+  });
+  expect(gap).toBeGreaterThanOrEqual(0);
+  // The arrows move the lit card; pointing at a card lights it.
+  await press(page, 'ArrowRight');
+  await expect(moves.nth(1)).toHaveClass(/\bon\b/);
+  await moves.first().hover();
+  await expect(moves.first()).toHaveClass(/\bon\b/);
+  // E: the Party window, a Phantom list over the field. Esc steps back to the commands.
+  await press(page, 'e');
+  await expect.poll(async () => (await battle(page)).tab).toBe('party');
+  const list = pview(page, 'Battle', 'blist');
+  await expect(list.locator('.ph-bl-r').first()).toBeVisible();
+  await expect(list.locator('.ph-bl-r.on')).toHaveCount(1);
+  await expect(hud.locator('.ph-bt-tab.on')).toContainText('Party', { ignoreCase: true });
+  expect(await fitProblems(page, 'Battle', 'blist')).toEqual([]);
+  // E again: the Item window, with its pocket tabs and the battle's item budget.
+  await press(page, 'e');
+  await expect.poll(async () => (await battle(page)).tab).toBe('item');
+  await expect(list.locator('.ph-bl-tabs span').first()).toBeVisible();
+  await expect(hud.locator('.ph-bt-fx.bud')).toContainText('Heals');
+  await page.waitForTimeout(400);
+  expect(await fitProblems(page, 'Battle', 'blist')).toEqual([]);
+  expect(await fitProblems(page, 'Battle', 'battle')).toEqual([]);
+  await press(page, 'Escape');
+  await expect.poll(async () => (await battle(page)).tab).toBeNull();
+  await expect(list).toHaveCount(0);
+  // I: the info papers, and the fan lights Info. A click on them shuts them.
+  await press(page, 'i');
+  const papers = hud.locator('.ph-bt-panels .ph-bt-paper');
+  await expect(papers.first()).toBeVisible();
+  expect(await papers.count()).toBeGreaterThanOrEqual(2);
+  await expect(hud.locator('.ph-bt-tab.on')).toContainText('Info', { ignoreCase: true });
+  await page.waitForTimeout(400);
+  expect(await fitProblems(page, 'Battle', 'battle')).toEqual([]);
+  await hud.locator('.ph-bt-panels').click();
+  await expect(papers).toHaveCount(0);
+  // H: the battle log with its filter tabs.
+  await press(page, 'h');
+  await expect(hud.locator('.ph-bt-log')).toContainText('appeared');
+  await hud.locator('.ph-bt-log [data-act="log"]').nth(1).click();
+  await expect(hud.locator('.ph-bt-log [data-act="log"].on')).toHaveCount(1);
+  await expect(hud.locator('.ph-bt-log [data-act="log"]').nth(1)).toHaveClass(/\bon\b/);
+  await press(page, 'h');
+  await expect(hud.locator('.ph-bt-log')).toHaveCount(0);
+  // Every version and several window sizes: nothing cut off.
+  for (const [id, w, h] of [['midnight', 844, 390], ['channel', 1920, 1080], ['fantasia', 1024, 768], ['velvet', 1280, 720], ['phantom', 1280, 720]] as const) {
+    await page.evaluate((id) => { const pkr = (window as any).__pkr; pkr.session.saveSettings({ ...pkr.session.settings, phantomVersion: id }); pkr.game.scene.getScene('Battle').rx.refresh(); }, id);
+    await page.setViewportSize({ width: w, height: h });
+    await expect(page.locator(`#phx .phs[data-scene="Battle"][data-scr="battle"][data-liv="${id}"]`)).toBeVisible();
+    await page.waitForTimeout(900);
+    expect(await fitProblems(page, 'Battle', 'battle'), `${id} at ${w}x${h}`).toEqual([]);
+  }
+  // A move chosen by click plays the turn.
+  await hud.locator('.ph-bt-op', { hasText: /fight/i }).click();
+  await expect(moves.first()).toBeVisible();
+  await page.waitForTimeout(300);
+  await moves.first().click();
+  await expect.poll(async () => { const b = await battle(page); return b.turn > first.turn || b.turn === -1; }, { timeout: 30_000 }).toBe(true);
+  expect(errors).toEqual([]);
+});
+
+test('Phantom UI: the full-screen battle cards are Phantom pages: an ace, a boss, and the Mega, Tera, Dynamax and Z-Move cut-ins; a click moves on', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = watch(page);
+  await toBattle(page, 'newui-e2e');
+  const gone = async (id: string) => { await pview(page, 'Battle', id).locator('.ph-ct-next').click(); await expect(pview(page, 'Battle', id)).toHaveCount(0); await page.waitForTimeout(300); };
+  // The ace is announced: its name in cut-out letters under the star.
+  await page.evaluate(() => { const s = (window as any).__pkr.game.scene.getScene('Battle'); void s.bigMoment('aceEntrance', `e2e.ace.${Date.now()}`, 'ACE!', 'Rival: Feebas', true, { name: 'Feebas', role: 'Rival ace', line: 'This is where you stop.' }); });
+  await hold(page, true);
+  await onPage(page, 'Battle', 'ace');
+  await page.waitForTimeout(700);
+  const ace = pview(page, 'Battle', 'ace');
+  await expect(ace.locator('.ac-t .rs')).toHaveAttribute('aria-label', 'FEEBAS');
+  await expect(ace.locator('.ac-star')).toHaveText('ACE');
+  await expect(ace.locator('.ac-say')).toContainText('This is where you stop.');
+  await expect(ace.locator('.ph-ct-beat i')).toHaveCount(5);
+  expect(await fitProblems(page, 'Battle', 'ace')).toEqual([]);
+  await gone('ace');
+  await hold(page, false);
+  // A boss's entrance: the name, the plate, the line.
+  await page.evaluate(() => { const s = (window as any).__pkr.game.scene.getScene('Battle'); void s.bigMoment('championIntro', `e2e.boss.${Date.now()}`, 'THE CHAMPION', 'Champion Lance', true, { name: 'Lance', role: 'Champion', line: 'You have earned this. See my true strength!' }); });
+  await hold(page, true);
+  await onPage(page, 'Battle', 'boss');
+  await page.waitForTimeout(700);
+  const boss = pview(page, 'Battle', 'boss');
+  await expect(boss.locator('.bs-t .rs')).toHaveAttribute('aria-label', 'LANCE');
+  await expect(boss.locator('.bs-t em')).toHaveText('Champion');
+  await expect(boss.locator('.bs-i')).toContainText('See my true strength!');
+  expect(await fitProblems(page, 'Battle', 'boss')).toEqual([]);
+  await gone('boss');
+  await hold(page, false);
+  // The four transformation cut-ins, each with its own facts.
+  const cutIn = (kind: string, x: Record<string, unknown>) => page.evaluate(([kind, x]) => {
+    const s = (window as any).__pkr.game.scene.getScene('Battle');
+    const mon = s.shown.player;
+    void s.phGimmickCard('player', mon, kind, { to: mon.speciesId, itemId: null, teraType: null, zBase: null, zMoveId: null, ...(x as object) });
+  }, [kind, x] as const);
+  const name = (await battle(page)).name.trim().replace(/\s*[♂♀]$/, '');
+  for (const [kind, id, x, text] of [['mega', 'mega', {}, 'Mega Evolving'], ['tera', 'tera', { teraType: 'dragon' }, 'Terastallized into the Dragon type'], ['dynamax', 'dmax', {}, 'Max Moves'], ['zmove', 'zmove', {}, 'Z-Power']] as const) {
+    await cutIn(kind, x);
+    await hold(page, true);
+    await onPage(page, 'Battle', id);
+    await page.waitForTimeout(700);
+    const view = pview(page, 'Battle', id);
+    await expect(view).toContainText(text, { ignoreCase: true });
+    await expect(view).toContainText(name, { ignoreCase: true });
+    expect(await fitProblems(page, 'Battle', id), kind).toEqual([]);
+    await gone(id);
+    await hold(page, false);
+  }
+  // Dynamax says how long it lasts.
+  await cutIn('dynamax', {});
+  await onPage(page, 'Battle', 'dmax');
+  await expect(pview(page, 'Battle', 'dmax').locator('.dx-turn')).toContainText('turn');
+  // Left alone, a cut-in ends by itself.
+  await expect(pview(page, 'Battle', 'dmax')).toHaveCount(0, { timeout: 8_000 });
+  // The battle is as it was: the commands are still up.
+  await expect(pview(page, 'Battle', 'battle').locator('.ph-bt-op').first()).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test('Phantom UI: a Trainer battle opens on the Phantom versus card, and a Gym Leader enters on the boss card that says what they bring', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = watch(page);
+  await start(page, 'ui=phantom&seed=newui-e2e');
+  await toPhantomMap(page);
+  const trainer = await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    const node = session.run.stage.map.nodes.find((n: any) => n.column === 1);
+    node.kind = 'trainer';
+    session.chooseNode(node.id);
+    game.scene.getScene('Map').scene.start('Battle');
+    return { name: session.run.battle.trainer.name as string, team: session.run.battle.enemyTeam.length as number, party: session.run.party.length as number };
+  });
+  await waitForScene(page, 'Battle');
+  const vs = pview(page, 'Battle', 'vs');
+  await expect(vs).toBeVisible({ timeout: 15_000 });
+  await hold(page, true);
+  await onPage(page, 'Battle', 'vs');
+  await page.waitForTimeout(700);
+  await expect(vs.locator('.vs-n.r .tl1')).toHaveText(trainer.name);
+  await expect(vs.locator('.vs-n.l .lab')).toContainText(`${trainer.party} Pokémon`);
+  await expect(vs.locator('.vs-v .rs')).toHaveAttribute('aria-label', 'VS');
+  await expect(vs.locator('.hd')).toContainText('battle', { ignoreCase: true });
+  // The foe's first Pokémon is shown, the rest stay as balls.
+  await expect(vs.locator('.vs-n.r .ph-vs-ball')).toHaveCount(Math.min(6, trainer.team) - 1);
+  expect(await fitProblems(page, 'Battle', 'vs')).toEqual([]);
+  // The battle's own page is not out yet; a click moves on to it.
+  await expect(pview(page, 'Battle', 'battle').locator('.ph-bt-foe')).toHaveCount(0);
+  await vs.locator('.ph-fill').click();
+  await expect(vs).toHaveCount(0);
+  await hold(page, false);
+  await toCommands(page);
+  await expect(pview(page, 'Battle', 'battle').locator('.ph-bt-op', { hasText: /fight/i })).toBeVisible();
+  // A Trainer's box counts their team as balls.
+  await expect(pview(page, 'Battle', 'battle').locator('.ph-bt-foe .ph-bt-balls i')).toHaveCount(Math.min(6, trainer.team));
+
+  // The stage's Gym Leader: the boss card first, then the versus card.
+  await start(page, 'ui=phantom&seed=newui-e2e');
+  await toPhantomMap(page);
+  const boss = await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    const last = Math.max(...session.run.stage.map.nodes.map((n: any) => n.column));
+    session.debugJumpToColumn(last);
+    const node = session.run.stage.map.nodes.find((n: any) => n.column === last);
+    session.chooseNode(node.id);
+    game.scene.getScene('Map').scene.start('Battle');
+    return { kind: node.kind as string, name: session.run.battle.trainer.name as string, team: session.run.battle.enemyTeam.length as number };
+  });
+  expect(boss.kind).toBe('gym');
+  await waitForScene(page, 'Battle');
+  const card = pview(page, 'Battle', 'boss');
+  await expect(card).toBeVisible({ timeout: 15_000 });
+  await hold(page, true);
+  await onPage(page, 'Battle', 'boss');
+  await page.waitForTimeout(700);
+  await expect(card.locator('.bs-t em')).toHaveText('Gym Leader');
+  await expect(card.locator('.bs-i')).toContainText(`${boss.team} Pokémon`);
+  await expect(card.locator('.bs-i')).toContainText('The ace is announced when it enters.');
+  await expect(card.locator('.ph-ct-beat i')).toHaveCount(5);
+  await expect(card.locator('.keys')).toContainText('skip', { ignoreCase: true });
+  expect(await fitProblems(page, 'Battle', 'boss')).toEqual([]);
+  // Esc skips it, once and for all; the versus card follows.
+  await hold(page, false);
+  await page.keyboard.press('Escape');
+  await expect(card).toHaveCount(0);
+  expect(await page.evaluate(() => (window as any).__pkr.session.settings.skippedIntros.length)).toBe(1);
+  await expect(pview(page, 'Battle', 'vs')).toBeVisible({ timeout: 15_000 });
+  await expect(pview(page, 'Battle', 'vs').locator('.hd')).toContainText('Gym Leader battle', { ignoreCase: true });
+  await pview(page, 'Battle', 'vs').locator('.ph-fill').click();
+  await toCommands(page);
+  await expect(pview(page, 'Battle', 'battle').locator('.ph-bt-op').first()).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test('Phantom UI: a wild battle opens on the wild card and the send-out card; a hard hit, a knock-out, the win, the tally and a loss to a rival are Phantom pages', async ({ page }) => {
+  test.setTimeout(240_000);
+  const errors = watch(page);
+  await start(page, 'ui=phantom&seed=newui-e2e');
+  await toPhantomMap(page);
+  const foe = await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    const node = session.run.stage.map.nodes.find((n: any) => n.column === 1);
+    node.kind = 'wild';
+    session.chooseNode(node.id);
+    game.scene.getScene('Map').scene.start('Battle');
+    const m = session.run.battle.enemyTeam[0];
+    return { name: session.content.species.get(m.speciesId).name as string, level: m.level as number, wild: !session.run.battle.trainer, me: session.content.species.get(session.run.party[0].speciesId).name as string };
+  });
+  expect(foe.wild).toBe(true);
+  await waitForScene(page, 'Battle');
+  // A card that ends by itself is held (the battle's clock stops) the moment it shows, so it can be measured.
+  await page.evaluate(() => {
+    const w = window as any;
+    w.__hold = ['wild'];
+    w.__holdT = setInterval(() => { for (const id of w.__hold) if (document.querySelector(`#phx .phs[data-scene="Battle"][data-scr="${id}"]`)) w.__pkr.game.scene.getScene('Battle').time.paused = true; }, 20);
+  });
+  const holdOn = (ids: string[]) => page.evaluate((ids) => { (window as any).__hold = ids; }, ids);
+  const measure = async (id: string) => {
+    await onPage(page, 'Battle', id);
+    await page.waitForTimeout(900);
+    expect(await fitProblems(page, 'Battle', id), id).toEqual([]);
+  };
+  // A click ends a card whatever its clock says (the short ones would end by themselves before a slow machine clicks).
+  const gone = async (id: string, next: string[] = []) => {
+    await holdOn(next);
+    await pview(page, 'Battle', id).locator('.ph-ct-next').click();
+    await expect(pview(page, 'Battle', id)).toHaveCount(0);
+    await hold(page, false);
+    await page.waitForTimeout(300);
+  };
+
+  // The wild Pokémon steps out: its name in cut-out letters, its level, and whether a ball will work.
+  const wild = pview(page, 'Battle', 'wild');
+  await expect(wild).toBeVisible({ timeout: 15_000 });
+  await measure('wild');
+  await expect(wild.locator('.wl-t .rs')).toHaveAttribute('aria-label', foe.name.toUpperCase());
+  await expect(wild.locator('.wl-tags')).toContainText(`Lv.${foe.level}`);
+  await expect(wild.locator('.wl-c')).toContainText(/It can(’|')?t? be caught|It can be caught/);
+  await expect(wild.locator('.keys')).toContainText('Send out', { ignoreCase: true });
+  await gone('wild', ['send']);
+
+  // Then both sides send out. The lines before it take Enter; the card itself is held when it shows.
+  const send = pview(page, 'Battle', 'send');
+  for (let n = 0; n < 40 && (await send.count()) === 0; n++) {
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(500);
+  }
+  await expect(send).toBeVisible();
+  await measure('send');
+  await expect(send.locator('.sn-go .rs')).toHaveAttribute('aria-label', 'GO!');
+  await expect(send.locator('.sn-n.l')).toContainText(foe.me);
+  await expect(send.locator('.sn-n.r')).toContainText(foe.name);
+  await expect(send.locator('.sn-n.r .lab')).toHaveText(/wild pokémon/i);
+  await expect(send.locator('.sn-ord i.on')).toHaveCount(1);
+  await gone('send');
+  await toCommands(page);
+
+  // A hard hit: the words, the damage and the bar.
+  await holdOn(['hit', 'ko', 'win', 'result', 'rloss']);
+  await page.evaluate(() => {
+    const s = (window as any).__pkr.game.scene.getScene('Battle');
+    s.phLast = { side: 'player', by: 'Rowlet', move: 'Leafage' };
+    void s.phHitCard(s.shown.enemy, Math.max(1, Math.floor(s.shown.enemy.hp * 0.23)), true, false);
+  });
+  const hit = pview(page, 'Battle', 'hit');
+  await expect(hit).toBeVisible();
+  await measure('hit');
+  await expect(hit.locator('.big .rs').first()).toHaveAttribute('aria-label', 'SUPER');
+  await expect(hit.locator('.dmg')).toContainText('−');
+  await expect(hit.locator('.foebar h3')).toContainText(foe.name);
+  await expect(hit.locator('.say')).toContainText('LEAFAGE');
+  await gone('hit');
+
+  // A knock-out: who fell, and how many the Trainer has left.
+  await holdOn(['ko', 'win', 'result', 'rloss']);
+  await page.evaluate(() => {
+    const s = (window as any).__pkr.game.scene.getScene('Battle');
+    s.phHits = 1;
+    void s.phKoCard(s.shown.enemy, { battle: { trainer: { name: 'Silver' }, enemyTeam: [{ hp: 1 }, { hp: 1 }, { hp: 1 }, { hp: 0 }] } }, 'Silver', 1);
+  });
+  const ko = pview(page, 'Battle', 'ko');
+  await expect(ko).toBeVisible();
+  await measure('ko');
+  await expect(ko.locator('.ko-tag')).toHaveText('One Leafage was all it took.');
+  await expect(ko.locator('.ko-foe')).toContainText(foe.name);
+  await expect(ko.locator('.ko-left b')).toHaveText('Silver has 2 left');
+  await expect(ko.locator('.ko-left .ph-vs-ball')).toHaveCount(4);
+  await gone('ko');
+
+  // The win, with what the foe says as they lose.
+  await holdOn(['win', 'result', 'rloss']);
+  const said = await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    const s = game.scene.getScene('Battle');
+    const cls = [...session.content.trainers.values()].find((t: any) => t.lines?.lose) as any;
+    void s.phWinCard('Youngster Joey', { battle: { trainer: { name: 'Joey', classId: cls.id } } });
+    return cls.lines.lose as string;
+  });
+  const win = pview(page, 'Battle', 'win');
+  await expect(win).toBeVisible();
+  await measure('win');
+  await expect(win.locator('.big .rs')).toHaveAttribute('aria-label', 'YOU WIN');
+  await expect(win.locator('.ph-wn-line')).toContainText(said.replace(/^["“]|["”]$/g, ''));
+  await expect(win.locator('.sub')).toHaveText('Youngster Joey is out of Pokémon');
+  await gone('win');
+
+  // The tally: it waits for an input (no clock ends it).
+  await holdOn([]);
+  await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    const s = game.scene.getScene('Battle');
+    const r = session.run;
+    s.phTallyKey = r.battle.enemyTeam[0].uid;
+    s.phTally.set(r.party[0].uid, { gain: 1420, from: 20, fromLevel: 5, toLevel: 6 });
+    void s.phResultCard({ end: { outcome: 'win', moneyGained: 1240, itemsFound: ['potion'] }, run: r }, r, false);
+  });
+  const result = pview(page, 'Battle', 'result');
+  await expect(result).toBeVisible();
+  await measure('result');
+  await page.waitForTimeout(3500);
+  await expect(result).toBeVisible();
+  await expect(result.locator('.tl')).toHaveCount(await page.evaluate(() => (window as any).__pkr.session.run.party.length));
+  await expect(result.locator('.tl').first()).toContainText('+1420');
+  await expect(result.locator('.lvup')).toHaveText('LEVEL UP! 5 → 6');
+  await expect(result.locator('.gains')).toContainText('+₽1,240');
+  await expect(result.locator('.gains')).toContainText('Potion');
+  await expect(result.locator('.hd')).toContainText('Wild battle', { ignoreCase: true });
+  await gone('result');
+
+  // A loss to a rival: the run goes on, and the page says so.
+  const lose = () => page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    const s = game.scene.getScene('Battle');
+    const cls = [...session.content.trainers.values()].find((t: any) => t.lines?.win) as any;
+    void s.phRivalLossCard({ battle: { trainer: { name: 'Silver', classId: cls.id }, rival: true } }, session.run);
+  });
+  await lose();
+  const loss = pview(page, 'Battle', 'rloss');
+  await expect(loss).toBeVisible();
+  await measure('rloss');
+  await expect(loss.locator('.rl-big .rs').first()).toHaveAttribute('aria-label', 'THE RUN');
+  await expect(loss.locator('.rl-i')).toContainText('Losing to a rival never ends a run.');
+  await expect(loss.locator('.rl-i')).toContainText('Silver');
+  await expect(loss.locator('.hd')).toContainText('Rival battle lost', { ignoreCase: true });
+  await gone('rloss');
+  // Every version and a small window: nothing cut off.
+  for (const [id, w, h] of [['midnight', 844, 390], ['fantasia', 1024, 768], ['velvet', 1920, 1080], ['channel', 1280, 720]] as const) {
+    await page.evaluate((id) => { const pkr = (window as any).__pkr; pkr.session.saveSettings({ ...pkr.session.settings, phantomVersion: id }); }, id);
+    await page.setViewportSize({ width: w, height: h });
+    await lose();
+    await expect(page.locator(`#phx .phs[data-scene="Battle"][data-scr="rloss"][data-liv="${id}"]`)).toBeVisible();
+    await page.waitForTimeout(900);
+    expect(await fitProblems(page, 'Battle', 'rloss'), `${id} at ${w}x${h}`).toEqual([]);
+    await gone('rloss');
+  }
+  expect(errors).toEqual([]);
+});

@@ -7,12 +7,15 @@ import { act, B, esc, H, mini, mon, tall, TX, TYPE_COLORS, ty, W, type Area } fr
 import type { ReduxCtx } from '../stage';
 import { type Art } from '../templates';
 import { partyStrip, type PartyChip } from '../game';
+import { phDecision } from '../../phantom/screens/decide';
 
 export interface DecisionOption { label: string; small: string; /** A move's type: the button gets that type's stripe. */ type: string | null; off: boolean; art?: Art | null }
 export interface DecisionCard {
   /** Big: the caught Pokémon in a frame. Small: a portrait beside "wants to learn". */
   big: boolean;
   file: string | null;
+  /** The Pokémon's whole picture, for a look that shows it large beside a small card. */
+  art?: string | null;
   /** A second, smaller Pokémon in the corner of a big card (the protégé beside its mentor). */
   second?: string | null;
   name: string;
@@ -43,7 +46,8 @@ export interface DecisionModel {
 const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
 const small = (lines: readonly string[], st = ''): string => lines.filter(Boolean).map((t) => `<div class="sm" style="line-height:${st ? 16 : 20}px;${st}">${esc(t)}</div>`).join('');
 
-export function decisionView(_c: ReduxCtx, d: DecisionModel): string {
+export function decisionView(c: ReduxCtx, d: DecisionModel): string {
+  if (c.ph) return phDecision(c.ph, d);
   const k = d.card, n = d.options.length;
   const pick = (i: number): string => `${act('pick', i)} data-over="over"`;
   const dim = (o: DecisionOption): string => (o.off ? 'opacity:.5;' : '');

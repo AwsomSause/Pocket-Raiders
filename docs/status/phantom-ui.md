@@ -24,7 +24,7 @@ A third UI style next to New and Old: **Settings > Display > UI style > Phantom*
 | 3 | Party, Summary (every tab, the action menu, the move tooltip), Bag, Pokédex entry (both pages), the town dock (Hub Town and a Plaza), the PC | done |
 | 4a | Stage map (legend, stage banner, node menu), its pause menu, events (talk, choice, outcome, reward), the reward draft, the shop | done |
 | 4b | Talk pages (prologue, story, tutorial), healing spot, the map's five pop pages, trades (quick trade and Honest Trade Card), tournament bracket, a rival's team page, department store floors, the card page (run card, hub Trainer Card, code-name card, Trainer card in the pause menu), the team's own event screens (briefing, Leader's Table, Final Choice, filed result, rank up), the partner quiz, the quick wheel, the run log, Seed & Codes | done (PR #1523) |
-| 5 | Battle screens and cut-ins | |
+| 5 | The battle page (fan, move cards, lists, info papers, log), the versus card, boss / ace / transformation cards, the Mega, Tera, Dynamax and Z-Move cut-ins, the wild, send-out, hit, knock-out, win, result and rival-loss cards, and the decision pages (a new move, a caught Pokémon, a plain choice, the yes/no box) | done |
 | 6 | Ceremonies, rivals, phone, ending pages, and the menus the game does not have yet | |
 
 ## Slice 1 notes
@@ -61,7 +61,7 @@ A third UI style next to New and Old: **Settings > Display > UI style > Phantom*
 - **Reward draft and shop** (`screens/stops.ts`): "PICK ONE" cards with who each helps, Party/Bag as gold tabs, the result card that stays until Enter. The shop has the clerk (the overworld Mart clerk; Kecleon and Meowth keep their own shops), the shelf, the lit good's card with Buy 1 / Buy 5 / Add to basket, Sell, the Depot's basket and checkout, and who can use the good.
 - Still in the stand-in look after 4a (see the 4b notes for what has since been built): the run end's first page is a stand-in until slice 6; its Run card button already opens the Phantom card.
 
-## Slice 4b notes (so far)
+## Slice 4b notes
 - Talk pages: the prologue, story chapters and the tutorial draw the event page without the step strip. A lone "Continue" keeps the text box as the button. Left and right move along the cards (the tutorial's left still turns back a lesson page).
 - Healing spot (`phHeal`, page `heal`): the rules heal at once; the page then shows each Pokémon's ball lighting and its HP filling from what it was, then "ALL BETTER!". It stays until Enter, Esc or a click, then the map shows the same notice as before.
 - Map pop pages (`screens/pops.ts`, `pops.css`): Rival Report (R), Dossier (D), Field Notes (F), Notebook (T) and the Town Roll, each a full page that closes on the same keys as before. Unknown rows stay hidden as "???".
@@ -76,12 +76,28 @@ A third UI style next to New and Old: **Settings > Display > UI style > Phantom*
 - Seed & Codes (`phSeed` in `screens/run.ts`): the letter keys of the name page with digits, dot and dash, the three buttons, the four kinds of code the old page lists, and the note that turns into what went wrong. The value window (`.rx-field`) is empty: `RunSeedScene` lays its real text box over it, as in the New look, so typing, paste and a phone's keyboard work.
 - Gotchas for later pages: the mock-up's `.dim` is a full-screen cover, never use it as a modifier; `.tabs` only has a place on the Settings page, use `pockets ph-tabs`.
 
+## Slice 5 notes
+- Battle page (`phBattle`, `phBattleList` in `screens/battle.ts`, `battle.css`): see-through over the live field. The command fan stands round the Pokémon that is choosing (its place comes from the scene, `BattleModel.me`); keys shown are the game's real ones (Q/E pages, T Auto, I Info). Moves are cards with type, power and PP; Party and Item are tilted paper lists; the info papers, the log and the level-up window are Phantom too. The battle styles setting is untouched.
+- Versus and cutscene cards (`screens/cutin.ts`): `phVersus` (both sides, the cut-out VS, the foe's line once, what is at stake: a rival card says a loss never ends the run), `phCut` in three cuts (a boss with what they bring, an ace or a Legendary under its star, a transformation), each with the five-beat strip and its skip key.
+- Transformation cut-ins (`phGimmick`): Mega / Primal, Terastallize (the Tera type, the word letter by letter), Dynamax / Gigantamax (turns and HP before and after) and a Z-Move (name, type, power, crystal). They play instead of the long reference scenes while Phantom is on, motion is full and that mechanic's Fast setting is off; the short canvas cinematic still swaps the form.
+- Battle moments (`screens/moments.ts`, played by `BattleScene.phMoment`): a wild Pokémon steps out (`wild`: name, level, types, new to the Pokédex or shiny, whether a ball works and which balls are in the Bag; raids, Totems and Legendaries keep their own cards), both sides send out (`send`, with the party order), a hard hit you land (`hit`: super effective or critical, the damage, the bar draining), a knock-out (`ko`: one-hit line, how many the Trainer has left), the win (`win`: the Trainer class's losing line), the tally (`result`: Exp bars from before to after, level-ups, prize money, turns, items; it waits for an input and stands in for the "You got" lines) and a loss to a rival (`rloss`: the run goes on).
+- When the short cards play: only with motion full. The hit and knock-out cards are also left out while Auto-Battle plays or Battle speed is Fast or Quick. Every card ends on a click or the confirm key; none of them reads or changes battle state (they are drawn from the finished turn).
+- Decisions (`screens/decide.ts`, `decisionView` hands over): a new move (`learn`: the move on its card, the known moves as the list, the way out as a blade; a long TM list goes to two columns), a caught, hatched or returning Pokémon (`capture`: the cut-out word, its card, where it goes, the party, the facts; I opens every detail), and a choice with no Pokémon (`choice`). The result line stays on a sheet until an input. The scene's yes/no box (`mountConfirm`) is the Phantom dialog and lies over the page.
+- Run log: a battle adds a heading ("Battle: who"), what Trainers say, and how it ended.
+
 ## Known limits
+- The mock-up's "Change who leads" key on the send-out card is not there: the game has no rule for changing the lead once a battle has begun (the lead is set on the map), and this slice changes no rules.
+- The mock-up's Pokédex key on the wild card waits for the Pokédex page of slice 6.
+- Screens still on the stand-in look (to do in slice 6): League counter-pick, jigsaw, mini-games, ops, rival panels, Safari, Spirit Market, the tree and the wide pages.
 
 - The Phone page's rows from the mock-up that the game has no setting for yet (touch button size, swipe to switch, hold for details) come with slice 6.
 - Evil Mode pages of the mock-ups are not started (Evil Mode lives on its own branch).
 
 ## Tests
+
+- `tests/unit/phantomBattle.test.ts` (10 tests), `tests/unit/phantomCutin.test.ts` (14 tests), `tests/unit/phantomMoments.test.ts` (12 tests): the battle page, the cards, the cut-ins, the moments and the decision pages as pure pages (what is shown, what is left out, escaping, limits).
+- `tests/e2e/phantomBattle.spec.ts` (4 tests): the battle page by keys and clicks in five versions at five sizes; the ace, boss and transformation cards; a Trainer's versus card and a Gym Leader's boss card; a wild battle from the wild card through the send-out, then the hit, knock-out, win, result and rival-loss cards, each with the text-fit check.
+- `tests/e2e/phantomDecision.spec.ts` (2 tests): learning a move (list, confirm, the answer that stays), a caught Pokémon (details sheet, joining the party) and a plain choice, across the versions and sizes.
 
 - `tests/unit/phantomUi.test.ts`: the settings upgrade to v46, the style and version rows, the presets, the Title and Settings pages, the generated rules file.
 - `tests/unit/phantomTemplates.test.ts`: the shared pages and the run pages (windows that follow the cursor, nothing cut with an ellipsis, the hand-over only while Phantom is on).

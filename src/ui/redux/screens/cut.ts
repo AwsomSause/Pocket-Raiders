@@ -6,6 +6,7 @@
 import { act, AREA, bg, esc, foot } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { type Art, figure } from '../templates';
+import { phCut } from '../../phantom/screens/cutin';
 
 export const CUT_BEATS = ['Situation', 'Anticipation', 'Moment', 'Reaction', 'Transition'] as const;
 
@@ -30,6 +31,14 @@ export interface CutModel {
   evil?: boolean;
   /** The key hint at the bottom right; null leaves it out (a moment that cannot be skipped). */
   skip?: readonly [string, string] | null;
+  /** Which moment this is (a `MomentKind`: "aceEntrance", "championIntro", "mega"...): the Phantom UI picks its cut by it. */
+  kind?: string;
+  /** The moment's short title ("ACE!", "RAID BOSS"): the Phantom card's moving band. */
+  tag?: string;
+  /** Where the scene is ("Stage 30 · Indigo Plateau"), over the name on the Phantom boss card. */
+  where?: string;
+  /** What a boss brings: how many Pokémon, and true lines about the fight. */
+  brings?: { team: number; notes: readonly string[] } | null;
 }
 
 const letter = (h: string): string => `<div class="bars" style="top:0"></div><div class="bars" style="bottom:0"></div>${h}`;
@@ -41,6 +50,7 @@ export const cutBeat = (i: number, n: number): number => (n <= 1 ? 4 : Math.max(
 const size = (len: number, base: number): number => (len > 260 ? base - 6 : len > 170 ? base - 4 : len > 110 ? base - 2 : base);
 
 export function cutView(c: ReduxCtx, d: CutModel): string {
+  if (c.ph) return phCut(c.ph, d);
   const v = c.v(3), on = Math.max(0, Math.min(4, Math.floor(d.beat)));
   const hint = d.skip === null ? null : d.skip ?? (['Esc', 'skip'] as const);
   const tag = `<div class="abs" style="left:60px;bottom:22px;z-index:6"><div class="beat">${CUT_BEATS.map((_, k) => `<i class="${k <= on ? 'on' : ''}"></i>`).join('')}<span>${CUT_BEATS[on]}</span></div></div>${hint ? `<div class="abs sm" style="right:60px;bottom:22px;z-index:6;color:#fff"><kbd>${esc(hint[0])}</kbd>${esc(hint[1])}</div>` : ''}`;
