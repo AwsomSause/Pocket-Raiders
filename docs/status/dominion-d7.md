@@ -13,7 +13,7 @@
   - `teamPic.ts` builds each crew picture in the team's colours on a canvas (cached; the plain picture shows until it's ready or if anything fails). Used on the HQ (Rook and his card), the Morning (strip and Grunt Info), the Crew File and the opening.
   - The emblem on the top bar (team colours, the chosen mark's shape) and on the title card's tower; the armband chip on member cards.
 
-- **Fix (all screens):** Phaser hands every key event still queued in a frame over again each time a new one arrives, so two quick presses inside one frame counted three times (seen when typing the name and stepping rows). `onInputAction` (`src/ui/input.ts`) and the Dominion scene's own key handler now count each DOM key event once.
+- **Fix (Dominion screens):** Phaser hands every key event still queued in a frame over again each time a new one arrives, so two quick presses inside one frame counted up to three times (seen when typing the name and stepping rows). The Dominion scene now counts each DOM key event once (`onInputAction(..., { onceEach: true })` in `src/ui/input.ts`, and its own key handler). Opt-in: switching it on for every screen broke older battle and event browser tests that were tuned with the re-dispatch, so other screens are unchanged.
 
 ## Saves
 No version bump: `block.team` is optional (absent until the Founding), `teamName` keeps the name as before. A D6 save loads unchanged and can still found (tested).
