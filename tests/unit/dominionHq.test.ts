@@ -89,9 +89,10 @@ describe('DOMINION D5: the lists as data', () => {
       else expect(Object.keys(b.fx).length, b.id).toBeGreaterThan(0);
     }
     // D5 opened 65; D9 (the rival team: intel, raid Defense, spy catching, truce discounts) opened 29 more.
-    // D10 (Growth: Operations Room, Front Office, Radio Room, Print Shop and the rest) opened 27 more; D13 opened 2 (the Debate Hall, the Briefing Theater).
-    expect(st.supported + st.limited).toBe(123);
-    expect(st.disabled).toBe(143);
+    // D10 (Growth: Operations Room, Front Office, Radio Room, Print Shop and the rest) opened 27 more; D13 opened 2 (the Debate Hall, the Briefing Theater); D4b (the rank
+    // and training rooms) 25 more: its 17, Type Dojo: Fire and the other seven Type Dojos.
+    expect(st.supported + st.limited).toBe(148);
+    expect(st.disabled).toBe(118);
   });
   it('the six HQ levels match Part 3 §3.1 and A21 (cost, level cap, crew cap, slots, Defense)', () => {
     expect(HQ.levels.map((l) => [l.name, l.cost, l.levelCap, l.crewCap, l.slots, l.defense])).toEqual([

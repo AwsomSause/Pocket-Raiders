@@ -327,9 +327,13 @@
     "Palace Wing"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "seats": {
+     "admin": 1
+    }
+   },
+   "waits": null
   },
   {
    "n": "11",
@@ -554,7 +558,7 @@
     "unlock": true
    },
    "waits": null,
-   "note": "Stat classes come with ranks (D4)."
+   "note": "Stat classes come with ranks (later)."
   },
   {
    "n": "18",
@@ -707,9 +711,11 @@
     "Grand Academy"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "promoTrait": 1
+   },
+   "waits": null
   },
   {
    "n": "23",
@@ -738,9 +744,11 @@
     "Champion's Ring"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "spar": 1
+   },
+   "waits": null
   },
   {
    "n": "24",
@@ -898,9 +906,11 @@
     "Ghost Academy"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "sneak": 4
+   },
+   "waits": null
   },
   {
    "n": "29",
@@ -963,9 +973,11 @@
     "Dark Academy"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "rankLv": 2
+   },
+   "waits": null
   },
   {
    "n": "31",
@@ -1311,9 +1323,11 @@
     "Mind Palace"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "cure": 1
+   },
+   "waits": null
   },
   {
    "n": "42",
@@ -1439,9 +1453,11 @@
     "Hall of Veterans"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "retirees": 1
+   },
+   "waits": null
   },
   {
    "n": "46",
@@ -1503,12 +1519,11 @@
     "Zoo"
    ],
    "minTier": 0,
-   "status": "limited",
+   "status": "supported",
    "fx": {
     "unlock": true
    },
-   "waits": null,
-   "note": "Cooling off stolen Pokémon comes with the Reserve (D4)."
+   "waits": null
   },
   {
    "n": "48",
@@ -3042,7 +3057,7 @@
     "unlock": true
    },
    "waits": null,
-   "note": "Breeding waits for D4b; Hit a Lab and Hack the Terminal are open."
+   "note": "Breeding is the Breed action (D4b, in the Pens); Hit a Lab and Hack the Terminal are open."
   },
   {
    "n": "95",
@@ -5044,9 +5059,11 @@
     "Healing Hall"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "trustCure": 1
+   },
+   "waits": null
   },
   {
    "n": "P7",
@@ -5208,9 +5225,13 @@
     "Sun Temple"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "fire": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P12",
@@ -5240,9 +5261,13 @@
     "Moon Temple"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "later",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "water": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P13",
@@ -5272,9 +5297,13 @@
     "World Tree Hall"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "later",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "grass": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P14",
@@ -5304,9 +5333,13 @@
     "Lightning Temple"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "later",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "electric": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P15",
@@ -5336,9 +5369,14 @@
     "Twilight Temple"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "later",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "psychic": 4,
+     "dark": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P16",
@@ -5368,9 +5406,14 @@
     "Titan Temple"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "later",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "fighting": 4,
+     "rock": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P17",
@@ -5400,9 +5443,14 @@
     "Phantom Temple"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "later",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "ghost": 4,
+     "poison": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P18",
@@ -5432,9 +5480,14 @@
     "Dragon Temple"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "later",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "steel": 4,
+     "dragon": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P19",
@@ -6526,9 +6579,11 @@
     "Imperial Academy"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "gruntSkill": 1
+   },
+   "waits": null
   },
   {
    "n": "G3",
@@ -6622,9 +6677,11 @@
     "Master Hall"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "taskXp": 1
+   },
+   "waits": null
   },
   {
    "n": "G6",
@@ -6720,9 +6777,11 @@
     "Hall of Veterans"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "vets": 1
+   },
+   "waits": null
   },
   {
    "n": "G9",
@@ -6752,9 +6811,11 @@
     "Grand Exam"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "examStat": 1
+   },
+   "waits": null
   },
   {
    "n": "G10",
@@ -6784,9 +6845,11 @@
     "Mind Mirror"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "reveal": 1
+   },
+   "waits": null
   },
   {
    "n": "G11",
@@ -6850,9 +6913,11 @@
     "Hall"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "pairs": 1
+   },
+   "waits": null
   },
   {
    "n": "G13",
@@ -7682,9 +7747,13 @@
     "Chamber"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "seats": {
+     "sergeant": 1
+    }
+   },
+   "waits": null
   },
   {
    "n": "G38",
@@ -7714,9 +7783,13 @@
     "Court"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "seats": {
+     "lieutenant": 1
+    }
+   },
+   "waits": null
   },
   {
    "n": "G39",
@@ -7746,9 +7819,13 @@
     "Throne"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "seats": {
+     "captain": 1
+    }
+   },
+   "waits": null
   },
   {
    "n": "G40",

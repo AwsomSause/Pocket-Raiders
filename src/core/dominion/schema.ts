@@ -93,6 +93,8 @@ export const EFFECTS = ['scout', 'count', 'scoutDistrict', 'paper', 'catch', 'la
   'skim',
   // D9 (rivals.ts addActEffect)
   'rivalHit', 'rivalSpy', 'counterSpy', 'truceTalk', 'war', 'poach', 'court',
+  // D4b (school.ts): Egg Run, Breed, Move Tutor
+  'eggRun', 'breed', 'tutor',
   // D10 (growth.ts addActEffect)
   'buyOut', 'storm', 'gym', 'flyers', 'bribe', 'fence', 'smuggle', 'kidnap', 'labHit', 'loan', 'specialist', 'forge', 'dirt', 'swap',
   'stall', 'safehouse', 'jam', 'dodge', 'mercs', 'gymPress', 'gymCourt', 'gymRig', 'bigNight', 'crew',
@@ -114,6 +116,8 @@ const PlaySchema = z.object({
   band: I.min(1).max(5).optional(),
   /** D4 'rescue': the Trust the Pokémon joins with, and levels above the team (an alpha). */
   trust: I.min(0).max(10).optional(), alpha: N0.optional(),
+  /** D4b: % off `cost` from the action's second mastery level ("the tutor is cheaper"). */
+  cheaper: I.min(0).max(100).optional(),
   /** D10: Morale and Loyalty for every member, Edge XP on the row's stat, the region's rival Tension (D9). */
   morale: I.optional(), loyalty: I.optional(), edge: N0.optional(), tension: I.optional(),
   /** D10: how many members may come (a Raid's squad, Part 3 §5.2); default `odds.maxBrought`. */
@@ -425,6 +429,8 @@ export const TaskEffectSchema = z.object({
   kind: z.enum(['guard', 'money', 'scout', 'recruit', 'train', 'trainMon', 'rest', 'catch', 'steal', 'berries', 'audit', 'welcome', 'interview', 'mentor', 'rally', 'drills', 'coach',
     // D4 (reserve.ts)
     'pens', 'tend', 'feed', 'release', 'rehab',
+    // D4b (school.ts)
+    'trade', 'tutor',
     // D9 (rivals.ts)
     'rivalSpy', 'rivalIntel', 'counterSpy', 'poachRival', 'rivalHit', 'rescue', 'rumours', 'truceTalk',
     // D6 (empire.ts)
@@ -728,6 +734,10 @@ export const CrewStateSchema = z.object({
     z.object({ k: z.literal('mon'), species: S, level: I.min(1), by: S.optional(), src: z.enum(['caught', 'stolen', 'rescued']).optional(), self: z.boolean().optional() }).strict(),
     z.object({ k: z.literal('level'), member: S, uid: S, level: I.min(1) }).strict(),
     z.object({ k: z.literal('item'), id: S, n: I.min(1) }).strict(),
+    /** D4b Teach a Move: `n` moves to the member's first Pokémon that can learn one (`team`: one to each), an egg move first (`egg`). */
+    z.object({ k: z.literal('move'), member: S, n: I.min(1), team: z.boolean(), egg: z.boolean() }).strict(),
+    /** D4b Type Dojo: Pokémon of these types (the Boss's, the crew's, the Reserve's) gain level x `xp` XP. */
+    z.object({ k: z.literal('dojo'), types: z.array(S).min(1), xp: I.min(1) }).strict(),
   ])),
 }).strict();
 export type CrewState = z.infer<typeof CrewStateSchema>;
@@ -975,17 +985,19 @@ export const PyramidFileSchema = z.object({
     bugCap: N0, gentleTrust: N0,
   }).strict(),
   trust: z.object({
-    start: z.object({ caught: I.min(0).max(10), stolen: I.min(0).max(10), snagged: I.min(0).max(10), shadow: I.min(0).max(10), own: I.min(0).max(10), rescued: I.min(0).max(10) }).strict(),
+    start: z.object({ caught: I.min(0).max(10), stolen: I.min(0).max(10), snagged: I.min(0).max(10), shadow: I.min(0).max(10), own: I.min(0).max(10), rescued: I.min(0).max(10), hatched: I.min(0).max(10) }).strict(),
     disobeyBelow: I.min(0).max(10), loyalFrom: I.min(0).max(10), max: I.min(1).max(10), jobBonus: N0, disobeyPenalty: N0,
     gentleWeekly: N0, gentle: z.array(S), winChance: Pct, freedomStayPer: N0,
   }).strict(),
   lines: z.record(S, S),
   why: z.object({ offType: S, lv: S, bst: S, never: S, full: S, pens: S }).strict(),
+  /** D4b: trades, tutors, eggs and the rank and training rooms (school.ts). */
+  school: z.lazy(() => SchoolSchema),
 }).strict().refine((p) => p.ranks.every((r) => r.aces === 0 || r.aceCap > 0), { message: 'a rank with Aces has an Ace cap' });
 export type PyramidFile = z.infer<typeof PyramidFileSchema>;
 export type RankRow = z.infer<typeof RankRowSchema>;
 
-export const MON_SOURCES = ['own', 'caught', 'stolen', 'snagged', 'shadow', 'rescued'] as const;
+export const MON_SOURCES = ['own', 'caught', 'stolen', 'snagged', 'shadow', 'rescued', 'hatched'] as const;
 /** What the team knows about one Pokémon it holds (in the Reserve or on a member's team), by uid. */
 export const MonMetaSchema = z.object({
   /** Pokémon Trust 0-10 (Part 9 A19). */
@@ -1019,6 +1031,10 @@ export const ReserveStateSchema = z.object({
   promoted: z.array(z.object({ member: S, day: I.min(1) }).strict()),
   /** Members stripped back to Recruit today: the night may see them walk out. */
   stripped: z.array(S),
+  /** D4b: eggs waiting to hatch (Egg Run, Breed). Optional so a D4 save loads unchanged. */
+  eggs: z.array(z.lazy(() => EggSchema)).optional(),
+  /** D4b: members who retired to the Retiree Hall (newest last). */
+  retirees: z.array(z.object({ name: S, day: I.min(1) }).strict()).optional(),
 }).strict();
 export type ReserveState = z.infer<typeof ReserveStateSchema>;
 
@@ -1063,6 +1079,15 @@ export const BuildingFxSchema = z.object({
   // your spies being caught), raidDef (Defense in raids only), warn (days' warning of the Boss's raid), fireCut (% off
   // building damage), truceOff (% off tribute).
   intel: N0.optional(), spyCatch: Pct.optional(), cipher: Pct.optional(), raidDef: N0.optional(), warn: N0.optional(), fireCut: Pct.optional(), truceOff: Pct.optional(),
+  // D4b (school.ts, pyramid.ts): seats (extra seats by rank id), promoTrait (a trait forms on promotion), spar (bouts a
+  // week), sneak (Stealth tenths a week), rankLv (member levels off ranks up to Sergeant), examStat (tenths of the best
+  // stat on promotion), cure (bad traits cured a week), retirees (retiree places), trustCure (anxious Pokémon helped a
+  // week), gruntSkill (tenths a week to a Grunt's task stat), taskXp (task XP a day), vets / pairs (mentoring a week),
+  // reveal (traits formed early a week), dojo (type -> level x XP a week); wageOff / buildOff (%, from the crew's trades).
+  seats: z.record(S, I.min(1)).optional(), promoTrait: N0.optional(), spar: N0.optional(), sneak: N0.optional(), rankLv: N0.optional(),
+  examStat: N0.optional(), cure: N0.optional(), retirees: N0.optional(), trustCure: N0.optional(), gruntSkill: N0.optional(),
+  taskXp: N0.optional(), vets: N0.optional(), pairs: N0.optional(), reveal: N0.optional(), dojo: z.record(S, I.min(1)).optional(),
+  wageOff: Pct.optional(), buildOff: Pct.optional(),
   // D13 (debate.ts): debate (Conviction at the start), debateFloor (the first turn moves the bar at least this much),
   // debateSee (each set line's marks show before you pick it).
   debate: N0.optional(), debateFloor: N0.optional(), debateSee: N0.optional(),
@@ -1395,6 +1420,50 @@ export const RivalsStateSchema = z.object({
   top: I.min(1),
 }).strict();
 export type RivalsState = z.infer<typeof RivalsStateSchema>;
+
+// ---------- D4b: trades, tutors, eggs and the rank rooms (pyramid.json `school`) ----------
+
+export const EggSchema = z.object({
+  id: S,
+  species: S,
+  level: I.min(1),
+  /** The morning it hatches. */
+  hatch: I.min(1),
+  src: z.enum(['found', 'bred']),
+  /** The species shows on the egg (Egg Run's fourth level; a bred egg always shows). */
+  shown: z.boolean(),
+  /** Breed: a good nature, IVs of at least this, a move from the parent, the hidden ability. */
+  nature: S.nullable(),
+  ivMin: I.min(0).max(31),
+  move: S.nullable(),
+  hidden: z.boolean(),
+}).strict();
+export type Egg = z.infer<typeof EggSchema>;
+
+const TradeSchema = z.object({
+  id: S, name: S, stat: z.enum(['brawn', 'nerve', 'wits', 'charm', 'stealth']),
+  /** The discount the trade gives (task level 2; double at level 4, the blueprint). */
+  perk: z.enum(['wageOff', 'buildOff', 'hireOff']), pct: Pct,
+  /** The master craft (task level 5), once a week. */
+  craft: z.object({ items: z.record(S, I.min(1)).optional(), repair: N0.optional(), clean: N0.optional() }).strict(),
+}).strict();
+export const SchoolSchema = z.object({
+  trades: z.array(TradeSchema).length(3),
+  /** Learn a Trade: ₽ lost to an apprentice's mistake. */
+  mistake: N0,
+  /** Teach a Move: the tutor's fee, and % off from task level 2. */
+  tutorFee: N0, tutorOff: Pct,
+  /** Eggs: days to hatch, the hatch level under the Boss's team level, candidates rolled at Egg Run's top level, the IV floor
+   * at Breed's third level, and the chance of a good nature at its second. */
+  eggDays: I.min(1), eggUnder: N0, eggPick: I.min(1), ivMin: I.min(0).max(31), natureChance: Pct, maxEggs: I.min(1),
+  /** Rooms: XP a sparring bout, a veteran's lesson, a mentor pair (with Loyalty), Morale from a retiree each week, Trust a
+   * Comfort Ward cure gives, the Morale counselling gives when no one has a bad trait. */
+  sparXp: N0, vetXp: N0, pairXp: N0, pairLoyalty: N0, retireeMorale: N0, retireMinDays: N0, retireMinLoyalty: Pct, wardTrust: N0, counselMorale: N0,
+  /** Formed traits a Therapy Room cures. */
+  bad: z.array(S).min(1),
+  lines: z.record(S, S),
+}).strict();
+export type School = z.infer<typeof SchoolSchema>;
 
 // ---------- D24: police questioning (Claude API draft §5.3 E, mockups a8 + a9). Data police.json; block `police` ----------
 

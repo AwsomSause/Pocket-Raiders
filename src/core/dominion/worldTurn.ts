@@ -15,6 +15,14 @@ export type WorldStep = (block: DominionBlock, seed: string) => string[];
 
 const fill = (t: string, v: Record<string, string | number>): string => t.replace(/\{(\w+)\}/g, (_, k: string) => String(v[k] ?? ''));
 
+/** D4b: % off wages (a cook's cheap meals); school.ts sets it, so this file needs no import of the HQ. */
+let wageOff: (b: DominionBlock) => number = () => 0;
+export function setWageOff(f: (b: DominionBlock) => number): void {
+  wageOff = f;
+}
+/** A member's wage this week, after the cook's discount. */
+export const wageOf = (b: DominionBlock, wage: number): number => Math.round((wage * (100 - wageOff(b))) / 100);
+
 /** D1 steps. Later slices add theirs to the same table under their own id. */
 const STEPS: Partial<Record<WorldStepId, WorldStep[]>> = {
   // crew: slice D3's step (crew.ts) registers itself.
@@ -26,7 +34,7 @@ const STEPS: Partial<Record<WorldStepId, WorldStep[]>> = {
       const c = DOMINION_DATA.start.clock;
       if (b.day % c.weekLength !== 0) return [];
       const r = DOMINION_DATA.start.report;
-      const wages = b.members.reduce((a, m) => a + m.wage, 0);
+      const wages = b.members.reduce((a, m) => a + wageOf(b, m.wage), 0);
       // D9: a rival who bought the landlord (rival action 5) puts the rent up while it lasts.
       const up = b.rivals?.rent && b.rivals.rent.until > b.day ? b.rivals.rent.pct : 0;
       const rent = Math.round((c.rent * (100 + up)) / 100);
@@ -37,9 +45,10 @@ const STEPS: Partial<Record<WorldStepId, WorldStep[]>> = {
       const clamp = (): void => void (b.hq && (b.hq.clean = Math.max(0, Math.min(b.hq.clean, b.funds))));
       clamp();
       for (const m of b.members) {
-        if (b.funds >= m.wage) {
-          b.funds -= m.wage;
-          book(b, 'wages', -m.wage);
+        const pay = wageOf(b, m.wage);
+        if (b.funds >= pay) {
+          b.funds -= pay;
+          book(b, 'wages', -pay);
           clamp();
           m.unpaid = 0;
         } else {

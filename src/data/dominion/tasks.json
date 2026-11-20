@@ -1630,8 +1630,10 @@
     "a master craft"
    ],
    "risk": "Apprentice mistakes",
-   "status": "disabled",
-   "needs": "D4"
+   "status": "supported",
+   "effect": {
+    "kind": "trade"
+   }
   },
   {
    "n": 68,
@@ -1673,8 +1675,10 @@
     "an egg move"
    ],
    "risk": "Move forgotten",
-   "status": "disabled",
-   "needs": "D4"
+   "status": "supported",
+   "effect": {
+    "kind": "tutor"
+   }
   },
   {
    "n": 70,

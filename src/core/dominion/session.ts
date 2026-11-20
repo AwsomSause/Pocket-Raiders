@@ -27,6 +27,7 @@ import { autoFill, book, placeMon, reserveInRun, seedStart, withReserve } from '
 import { build, letGo, loan, rebuild, repay, sell, storageCap, tierUp, upgrade, launder, type HqOut } from './hq';
 import { withHq } from './hqFx';
 import { levelCap } from '../regions';
+import { hatchEggs, settleDojo, settleLesson } from './school';
 import './voices';
 import { answerCard, breakTruce, maybeStreet, noteTop, ransom, startTruce, withRivals, type RivalOut } from './rivals';
 import { argue, chooseDeal, closeDebate, walkOut, type DebateOut } from './debate';
@@ -422,6 +423,9 @@ export function settleCrew(content: Content, run: RunState): RunState {
   const out = structuredClone(run);
   const b = withReserve(content, out.expansion!.dominion!);
   const st = b.crew;
+  // D4b: eggs due this morning hatch into the Reserve.
+  const hatched = hatchEggs(content, out, b);
+  if (hatched.length) b.report = [...b.report, ...hatched];
   if (!st?.pending.length) {
     if (book(b).auto) autoFill(b);
     return out;
@@ -435,7 +439,9 @@ export function settleCrew(content: Content, run: RunState): RunState {
       // A member's Pokémon, or (Nurturer) one in the Reserve.
       const mon = b.members.find((m) => m.id === p.member)?.team.find((x) => x.uid === p.uid) ?? b.reserve?.box.find((x) => x.uid === p.uid);
       if (mon && p.level > mon.level) addLevels(content, mon, p.level - mon.level, p.level);
-    } else out.inventory[p.id] = (out.inventory[p.id] ?? 0) + p.n;
+    } else if (p.k === 'move') lines.push(...settleLesson(content, b, p));
+    else if (p.k === 'dojo') lines.push(...settleDojo(content, out, b, p));
+    else out.inventory[p.id] = (out.inventory[p.id] ?? 0) + p.n;
   }
   st.pending = [];
   if (lines.length) b.report = [...b.report, ...lines];

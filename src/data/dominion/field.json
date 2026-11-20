@@ -156,6 +156,9 @@
     "tame-the-wild": { "kinds": ["route", "cave"], "chance": 35, "effect": "rescue", "trust": 4, "alpha": 5, "heat": 1, "dread": 1, "battle": { "chance": 100, "on": "fail", "foe": "wild" },
       "win": "The alpha stands down.", "lose": "The alpha doesn't back off. It charges." },
     "evolve-in-peace": { "effect": "evolve", "win": "A quiet evening." },
+    "egg-run": { "where": "hq", "chance": 70, "effect": "eggRun", "win": "You follow a tip to a nest nobody is watching.", "lose": "The nest was empty. Somebody got there first." },
+    "breed": { "effect": "breed", "win": "Two Pokémon from the Reserve share a quiet pen tonight." },
+    "move-tutor": { "cost": 200, "cheaper": 20, "effect": "tutor", "win": "The tutor sets up in the back room." },
     "promotion-ceremony": { "effect": "ceremony", "band": 3, "win": "The crew gathers." },
     "mentor": { "effect": "mentor", "band": 2, "xp": 1, "win": "An evening of lessons." },
     "toll-booth": { "kinds": ["route"], "chance": 45, "pay": [100, 220], "heat": 3, "failHeat": 6, "regard": -1, "dread": 2, "band": 2, "battle": { "chance": 50, "on": "fail", "foe": "target" }, "control": 2,
@@ -257,10 +260,10 @@
   "later": {
     "byAction": {
       "rest": "D1", "recruit": "D3", "street-recruit-drive": "D3", "talent-scout": "D3", "pay-the-families": "D3", "pick-a-fight-with-the-hiker": "D3",
-      "gym-takeover": "D10", "hire-a-specialist": "D10", "plant-a-mole": "D9",
+      "gym-takeover": "D10", "hire-a-specialist": "D10", "plant-a-mole": "D22",
       "three-on-one": "D10", "gauntlet": "D10", "rooftop-chase": "D10", "dig-the-dirt": "D10", "fossil-dig": "D10", "contraband-run": "D10", "air-drop": "D10", "fake-shipment": "D10", "evidence-locker-visit": "D10", "the-big-night": "D10",
       "pay-the-pilot": "D15", "reckoning": "D15",
-      "buy-out": "D10", "hold-a-rally": "D6", "forge-papers": "D10", "hack-the-terminal": "D10", "interrogate": "D10", "kidnap-a-pokemon": "D10", "hit-a-lab": "D10", "smuggle": "D10", "open-a-black-market-stall": "D10", "run-the-docks": "D10", "underground-auction": "D10", "tunnel": "D10", "safehouse-network": "D10", "post-flyers": "D10", "spread-the-word": "D10", "pirate-radio": "D14", "bribe": "D10", "sabotage-the-station": "D10", "sabotage": "D10", "raid": "D10", "hire-mercenaries": "D10", "chant-night": "D6", "blackout": "D10", "night-raid": "D10", "loan-shark": "D10", "egg-run": "D4", "breed": "D4", "move-tutor": "D4"
+      "buy-out": "D10", "hold-a-rally": "D6", "forge-papers": "D10", "hack-the-terminal": "D10", "interrogate": "D10", "kidnap-a-pokemon": "D10", "hit-a-lab": "D10", "smuggle": "D10", "open-a-black-market-stall": "D10", "run-the-docks": "D10", "underground-auction": "D10", "tunnel": "D10", "safehouse-network": "D10", "post-flyers": "D10", "spread-the-word": "D10", "pirate-radio": "D14", "bribe": "D10", "sabotage-the-station": "D10", "sabotage": "D10", "raid": "D10", "hire-mercenaries": "D10", "chant-night": "D6", "blackout": "D10", "night-raid": "D10", "loan-shark": "D10"
     },
     "byUnlock": [
       ["Front Office", "D10"], ["Workshop", "D10"], ["War Room", "D10"], ["Radio Room", "D10"], ["Print Shop", "D10"], ["Holding", "D10"], ["Garage", "D10"], ["Science Lab", "D10"], ["Library", "D10"], ["Dojo", "D10"], ["Night Shift", "D10"],
