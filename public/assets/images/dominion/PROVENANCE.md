@@ -70,6 +70,9 @@ Copied from the round-4 mockups (`plans/evil-mode-rework/mockups-v4/sprites/`), 
 | `t-giovanni.png` | Trainer sprite from the PokeRogue pack (`images/trainer/`), one frame (the Tension row's portrait; same file as D6's) |
 | `g-dire-hit.png` | Item icon from `images/items/` (PokeRogue pack): the raid row on the Rival File |
 | `p-moltres.png` | Pokémon sprite from the PokeRogue pack (the mockup's night-sky silhouette on the Rival File) |
+| `v-nate.png` | D13: the Boss's side of the Debate (mockup 8). Copied from the round-4 mockup sprites (`plans/evil-mode-rework/mockups-v4/sprites/`, trimmed from the director's PokeRogue pack VS art) |
+| `v-giovanni.png` | D13: Giovanni's side of the Debate (mockup 8), same source |
+| `p-persian.png` | D13: Giovanni's Persian at the Debate table (mockup 8), Pokémon sprite from the PokeRogue pack via the round-4 mockup sprites |
 
 ## D24 (police questioning, Rotom mockups a8 + a9)
 

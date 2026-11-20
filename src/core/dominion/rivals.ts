@@ -192,6 +192,8 @@ function canDo(b: DominionBlock, team: string, a: RivalAction): boolean {
     case 'fight': case 'demand': case 'deal': case 'defect': return r.cards.filter((c) => c.team === team).length < 3 && (a.kind !== 'defect' || t.admins.length > 1);
     case 'sweep': return r.mySpies.some((s) => s.team === team);
     case 'spy': return t.spies < RV().spy.max;
+    // D13: an invitation to a Debate, while talks are still open with them (debate.ts).
+    case 'debate': return !r.cards.some((c) => c.team === team && c.kind === 'debate') && !b.debate?.tries[team]?.closed && (a.id !== 'break-a-coalition' || t.admins.length > 0);
     default: return true;
   }
 }
@@ -244,6 +246,8 @@ export function rivalStep(block: DominionBlock, seed: string): string[] {
     return false;
   });
   for (const team of teamsHere()) {
+    // D13: a team that's your Branch or merged into you has stopped acting against you (debate.ts runs its Branch).
+    if (b.debate?.deals[team.id]) continue;
     const t = r.teams[team.id]!;
     if (t.truce?.until && t.truce.until <= b.day) t.truce = null;
     out.push(...teamNight(b, team, seed));
@@ -567,6 +571,11 @@ const KINDS: Record<RivalKind, (c: Ctx) => void> = {
     t.raid = c.b.day + Math.max(1, RV().bossRaid.warn + Math.floor(hqFx(c.b).warn));
     line(c, 'bossRaid', { nights: t.raid - c.b.day });
   },
+  debate: (c) => {
+    const who = c.a.id === 'break-a-coalition' ? adminName(c.team, ts(c.b, c.team.id), c.r) : c.team.boss.name;
+    card(c, 'debate', who, 0);
+    line(c, c.a.id === 'break-a-coalition' ? 'debateAdmin' : 'debateSummit', { who });
+  },
   truce: (c) => {
     const ask = c.r.int(1, 100) <= RV().truce.askChance ? (c.r.int(0, 1) ? 'member' : 'district') : 'money';
     card(c, 'truce', c.team.boss.name, tribute(c.b), ask as RivalCard['ask']);
@@ -701,6 +710,11 @@ addFightSettler('rival', (_content, block, _run, fight, outcome) => {
     log(b, team.id, out[0]!);
     return out;
   }
+  // D13: a win over their Boss or an Admin opens the Boss's Debate action (Part 4 §3.1).
+  if (won) {
+    const beat = fight.target === 'boss-duel' || fight.target === 'boss' ? 'boss' : fight.target?.startsWith('admin:') ? 'admin' : null;
+    if (beat && !b.flags.includes(`beat:${team.id}:${beat}`)) b.flags.push(`beat:${team.id}:${beat}`);
+  }
   // An answered challenge or a street fight: winning pushes them back; losing costs nothing more (a loss never ends a run).
   if (won) {
     t.power -= 1;
@@ -738,6 +752,12 @@ function streetAfterWin(b: DominionBlock & { rivals: RivalsState }, team: RivalT
 // ---------- the player's answers (the Rival File) ----------
 
 export interface RivalOut { ok: boolean; block: DominionBlock; notice: string | null; fight?: boolean }
+/** D13: a later slice answers its own card kinds (debate.ts: Debate invitations, the Branch Directive). */
+type CardHook = (b: DominionBlock & { rivals: RivalsState }, c: RivalCard, index: number, choice: number, seed: string) => RivalOut;
+const CARD_HOOKS: Partial<Record<RivalCard['kind'], { answer: CardHook; choices: (c: RivalCard) => string[] }>> = {};
+export function setCardHook(kind: RivalCard['kind'], answer: CardHook, choices: (c: RivalCard) => string[]): void {
+  CARD_HOOKS[kind] = { answer, choices };
+}
 const no = (block: DominionBlock, notice: string | null): RivalOut => ({ ok: false, block, notice });
 
 /** Offers a truce yourself (Part 4 §1): pay tribute weekly, Tension falls 10 a week. */
@@ -789,6 +809,7 @@ export function cardChoices(c: RivalCard): string[] {
     case 'defect': return [`Pay ₽${money(c.amount)}`, 'Send them back'];
     case 'truce': return [c.ask === 'member' ? 'Accept: give the newest member' : c.ask === 'district' ? 'Accept: give up a district' : `Accept: ₽${money(c.amount)} a week`, 'Refuse'];
     case 'street': return (RV().street.rows[c.ref] ?? []).map((x) => x.label);
+    default: return CARD_HOOKS[c.kind]?.choices(c) ?? [];
   }
 }
 /** The street row of a card (outside.json). */
@@ -799,6 +820,8 @@ export function answerCard(block: DominionBlock, index: number, choice: number, 
   const b = withRivals(structuredClone(block));
   const c = b.rivals.cards[index];
   if (!c) return no(block, null);
+  const hook = CARD_HOOKS[c.kind];
+  if (hook) return hook.answer(b, c, index, choice, seed);
   const team = teamDef(c.team)!, t = b.rivals.teams[c.team]!;
   const r = rngOf(seed, 'dominion-rival-card', b.rivals.rolls);
   b.rivals.rolls += 1;
@@ -894,6 +917,7 @@ export function answerCard(block: DominionBlock, index: number, choice: number, 
       notice = street(b, c, ch, r, false);
       break;
     }
+    default: return no(block, null);
   }
   b.rivals.cards = b.rivals.cards.filter((x) => x !== c);
   log(b, c.team, notice);
@@ -953,7 +977,10 @@ function street(b: DominionBlock & { rivals: RivalsState }, c: RivalCard, ch: St
   }
   if (ch.item) bits.push('the goods are yours');
   if (ch.mon) bits.push('a Pokémon for your stores');
-  if (ch.debate) bits.push('a Debate needs D13');
+  if (ch.debate && !b.rivals.cards.some((x) => x.team === c.team && x.kind === 'debate') && !b.debate?.deals[c.team]) {
+    b.rivals.cards.push({ kind: 'debate', team: c.team, ref: c.ref, who: teamDef(c.team)!.boss.name, amount: 0, district: null, ask: null, until: b.day + RV().cards.days });
+    bits.push(`${teamDef(c.team)!.boss.name} will sit down for a Debate (Rival File)`);
+  }
   if (fighting) return '';
   return `${ch.label}: ${bits.join(', ') || 'nothing more'}.`;
 }
