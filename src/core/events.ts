@@ -40,6 +40,7 @@ import { eventChanceScale, triplesOnly } from './rules';
 import { getArchetype, runPerks } from './archetypes';
 import { ATTRIBUTE_LABELS, addRunAttribute, effectiveAttributes, runAttributeEffects } from './attributes';
 import { createBattle } from './battle/engine';
+import { pickAceUid } from './battle/ace';
 import { EventEffectSchema, type Content, type EventBattle, type EventBattleFormat, type EventChoice, type EventCondition, type EventDef, type EventEffect, type EventOutcome, type TradeWant, type TypeName } from './contentSchema';
 import { curveLevel, enemyLevel, evolvedFormAt, levelScale, rollShiny, withPartyStrength } from './encounters';
 import { changeFriendship } from './friendship';
@@ -2505,6 +2506,8 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     // Any scene that sets `rival: true` (Route 22, the gate fights...) fights the run's real rival, not a stand-in.
     if (rival && rivalTeam.length > 0 && b.kind === 'trainer' && !b.quest?.as && !partner && !watching) {
       run.battle.rivalId = rival.id;
+      const rivalAce = pickAceUid(team, { named: true, matchesFamily: (m) => familyId(content, m.speciesId) === rival.ace });
+      if (rivalAce) run.battle.aceUid = rivalAce;
       beginRivalBrain(content, run, rival.id);
       starterRivalryStages(run, run.battle);
     }

@@ -25,6 +25,7 @@ import { friendlyRivalsOf } from './hyper';
 import { forgetMorality, nemesisById, rememberedMorality, rivalryBothWays } from './nemesis';
 import type { StoryEffectSpec, StoryTriggerKind } from './schema';
 import { momentCapped } from './momentCaps';
+import { isEnemyAce } from '../battle/ace';
 
 /** The one effect each moment trigger may carry (checked when content loads). */
 export const MOMENT_EFFECTS: Partial<Record<StoryTriggerKind, StoryEffectSpec['kind']>> = {
@@ -273,7 +274,7 @@ export function detectMoments(content: Content, before: RunState, run: RunState,
           }
         } else {
           enemyUid = e.uid;
-          const ace = battle.enemyTeam.length > 1 && battle.enemyTeam[battle.enemyTeam.length - 1]!.uid === e.uid;
+          const ace = isEnemyAce(battle, e.uid);
           if (boss && ace) fire('willNotLetDown', 'enemy', e.uid, i, { name: nameOf(e.speciesId) });
           if (trainerFight && flags[flagKey('enemyFell')]) fire('partnerFall', 'enemy', e.uid, i, { name: nameOf(e.speciesId) });
         }

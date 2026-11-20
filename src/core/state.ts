@@ -786,6 +786,8 @@ export type ExpeditionState = z.infer<typeof ExpeditionStateSchema>;
 
 export const BattleStateSchema = z.object({
   kind: z.enum(['wild', 'trainer']),
+  /** The enemy trainer's designated ace (battle/ace.ts); absent on wild fights and older saves. */
+  aceUid: z.string().optional(),
   /** The ball that caught the wild Pokémon (Friend, Luxury and Heal Ball change it afterwards). */
   ball: z.string().optional(),
   /** Shadow Pokémon snagged from the trainer this fight (Snag Ball); they join you when the battle is won. */

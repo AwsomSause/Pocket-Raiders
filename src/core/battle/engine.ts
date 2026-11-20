@@ -157,6 +157,7 @@ import { applyTransformations, battleMove, battleTypes, endDynamax, maxMoveExtra
 import { hiddenPowerType } from '../ivs';
 import { fieldIndexes, trioSpots } from './triples';
 import { addCalm, likedMove } from './calm';
+import { isEnemyAce, pickAceUid } from './ace';
 
 export type Side = 'player' | 'enemy';
 
@@ -440,8 +441,10 @@ export function createBattle(
   activeUid: string,
   trainer: BattleState['trainer'] = null,
 ): BattleState {
+  const ace = kind === 'trainer' ? pickAceUid(enemyTeam, { named: Boolean(trainer?.leaderId) }) : undefined;
   return {
     kind,
+    ...(ace ? { aceUid: ace } : {}),
     turn: 1,
     hype: 0,
     revivesUsed: 0,
@@ -600,7 +603,7 @@ function tier5Choose(enemy: PokemonInstance, scored: { i: number; score: number 
   const playerLeft = bench.length;
   return tier5Pick({
     brain: rb, turn: battle.turn, options, ownHp: enemy.hp, ownMaxHp: ownStats.hp, foeHp: target.hp, foeMaxHp: foeStats.hp, ownFaster, foeBestDamage: foeBest,
-    isAce: battle.enemyTeam[battle.enemyTeam.length - 1]?.uid === enemy.uid, ownReserves: enemyLeft, foeReserves: playerLeft, switchLikely: playerLeft > 0 && foeBest > 0 && options.some((o) => o.damage > 0) && rb.switchRate >= 0,
+    isAce: isEnemyAce(battle, enemy.uid), ownReserves: enemyLeft, foeReserves: playerLeft, switchLikely: playerLeft > 0 && foeBest > 0 && options.some((o) => o.damage > 0) && rb.switchRate >= 0,
   });
 }
 

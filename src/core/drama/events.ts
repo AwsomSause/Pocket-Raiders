@@ -244,7 +244,7 @@ export const CHECKS: Record<string, Check> = {
     return c.rival.adaptations.length > 0 ? { at: -1 } : null;
   },
   unexpectedRespect: (c) => {
-    const ace = c.battle.enemyTeam[c.battle.enemyTeam.length - 1]?.uid;
+    const ace = c.battle.aceUid ?? c.battle.enemyTeam[c.battle.enemyTeam.length - 1]?.uid;
     const f = c.drama.find((e) => e.kind === 'enemyFaint' && e.data.uid === ace);
     if (!f) return null;
     let foeMove = 'that move';
