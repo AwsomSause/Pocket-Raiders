@@ -372,5 +372,20 @@
   "q3": "Yes, six. The door, the side-road map and its prize are three separate pages so the choice to enter is never mixed with the map; the event has its own poster page; Ultra Wormholes and regional forms each get a page.",
   "q4": "The pause menu and party show the event chip, and it opens the event page. Settings › Game keeps the Ultra Beasts switch (on by default) and the page says so. Regional forms are asked once per region, not buried in Settings.",
   "q5": "Yes. Sevii and the Orange Islands, festivals, Ultra Wormholes and Alolan forms are all straight from the series, and the side road is drawn with the same stage map the main road uses."
+ },
+ "23": {
+  "name": "Breathing Room",
+  "big": "After twenty-two passes of adding, this pass takes things away. Every main screen keeps one job: the battle folds five separate strips into a single status bar and drops the bench, the title keeps only the menu and the face-off, the party shows full details for one Pokémon at a time, and the phone and the town tuck their extras behind one button.",
+  "pages": [
+   "Battle · Status",
+   "News",
+   "This Run",
+   "Before and After"
+  ],
+  "q1": "Yes, by subtraction. With the strips gone the two Pokémon, the weather and the big FIGHT button are what you see first, which makes the battle look bolder than any added effect did.",
+  "q2": "Pass 22's battle had thirteen separate things on screen; this one has seven. The title went from eleven to five. Nothing was deleted from the game: it moved one tap away.",
+  "q3": "Yes, four, and they exist only so the main screens can be emptier: Battle Status holds the folded strips, News holds the title's notices, This Run holds the phone's powers, score and Gym card, and a before / after sheet shows the rule.",
+  "q4": "The pause menu loses three strips and gains one This Run card. Battle gets Menu inside the status bar. Settings is untouched, but Settings › Display could offer 'Show everything' for players who liked the busy battle.",
+  "q5": "More than before. The classic battle screen is two Pokémon, two HP boxes and four big choices, and that is what this pass returns to."
  }
 }
