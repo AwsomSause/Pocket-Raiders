@@ -3,6 +3,7 @@
 // Town Map is a card per district; a door asks before you go in. It draws what TownScene hands it. Presentation only.
 
 import type { HubTownData } from '../../../core/hubTown/schema';
+import type { PocketRoad } from '../../../core/presentation/pocket';
 import { pkPic, propArt } from '../art';
 import { act, esc, hdr, keys, page, type PkKey, spr } from '../kit';
 import { fit, fitBody } from '../templates';
@@ -65,4 +66,32 @@ export function pkTownDoor(d: PkTownDoorModel): string {
   const a = propArt(d.prop ?? 'house_b'), c = pkPic(a), pic = spr(a, c ? Math.min(1.5, 250 / c.h, 260 / c.w) : 1);
   const line = d.shut ?? 'Nothing here changes your run.';
   return page('pt-door', 51, `<div class="scr pt39 dr39 gx-pt-door" data-key="pt-door"><i class="dim39" data-nocheck${act('doorBack')}></i><div class="dc39 pn"><i>${pic}</i><div><em>${esc(d.district || 'Pocket Town')}</em><b style="font-size:${fit(d.name, 360, 34, 20, 0.6)}px">${esc(d.name)}</b><p style="font-size:${fitBody(d.text, 360, 48, [17, 15, 14, 13], 1.35)}px">${esc(d.text)}</p><span>${esc(line)}</span><div class="go"><div class="btn on${d.shut ? ' gx-bl-off' : ''}"${act('doorGo')}><b>Go in</b></div><div class="btn sm"${act('doorBack')}><b>Keep walking</b></div></div></div></div>${keys([['Z', 'go in', 'doorGo'], ['Esc', 'keep walking', 'doorBack']])}</div>`, true);
+}
+
+/** The Trainer Plaza's districts as the mock-up draws them (`pt-plaza`). */
+const PLAZA_PROP: Record<string, string> = { market: 'parasol', trading: 'board', gathering: 'fountain', social: 'bench', services: 'pc', secret: 'lamp' };
+export const plazaProp = (id: string): string => PLAZA_PROP[id] ?? 'sign';
+/** A prop no bigger than a box (never past its own size). */
+function propIn(name: string, w: number, h: number): string {
+  const a = propArt(name), c = pkPic(a);
+  return spr(a, c ? Math.min(1, w / c.w, h / c.h) : 1);
+}
+
+export interface PkPlazaModel {
+  /** The header's pills (money, standing). */
+  pills: readonly string[];
+  road: PocketRoad | null;
+  districts: readonly { id: string; name: string; text: string; count: number; off: boolean }[];
+  index: number;
+  /** What the plaza says ('' for nothing). */
+  say: string;
+}
+
+/** The Trainer Plaza (mock-up `pt-plaza`): its districts as six cards three across; Esc goes back to the map. */
+export function pkPlaza(d: PkPlazaModel): string {
+  const n = d.districts.length, index = Math.max(0, Math.min(n - 1, d.index));
+  const head = hdr('Trainer Plaza', { area: 'town', crumb: ['Map', 'Trainer Plaza'], pills: d.pills, road: d.road });
+  const cards = d.districts.map((x, i) => `<div class="pn rw39${i === index ? ' on' : ''}${x.off ? ' gx-pz-off' : ''}" data-key="pz-${x.id}"${act('pick', i, 'over')}><i>${propIn(plazaProp(x.id), 110, 112)}</i><b style="font-size:${fit(x.name, 150, 18, 13, 0.55)}px">${esc(x.name)}</b><p style="font-size:${fitBody(x.text, 150, 60, [13, 12, 11], 1.35)}px">${esc(x.text)}</p>${x.count && !x.off ? `<u class="gx-pz-n">${x.count}</u>` : ''}</div>`).join('');
+  const say = d.say ? `<div class="pn gx-pz-say" data-key="pz-say"><p style="font-size:${fit(d.say, 600, 14, 11, 0.5)}px">${esc(d.say)}</p></div>` : '';
+  return page('pt-plaza', 51, `<div class="scr nrun pg39" data-key="pt-plaza">${head}<div class="gr39 q3" data-key="pz-grid">${cards}</div>${say}${keys([['←→↑↓', 'district'], ['Enter', 'visit', 'pick', index], ['Esc', 'back to the map', 'pick', n]])}</div>`);
 }

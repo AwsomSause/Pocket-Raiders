@@ -24,7 +24,7 @@ import type { MapModel, MapNodeView } from '../../src/ui/redux/screens/map';
 import type { EventModel } from '../../src/ui/redux/screens/event';
 import { pkSettingsHome } from '../../src/ui/pocket/screens/settings';
 import { doorSub, pkHub, type PkHubModel } from '../../src/ui/pocket/screens/hub';
-import { districtProp, pkTownDoor, pkTownHud, pkTownMap, placeProp } from '../../src/ui/pocket/screens/town';
+import { districtProp, pkPlaza, pkTownDoor, pkTownHud, pkTownMap, placeProp, plazaProp } from '../../src/ui/pocket/screens/town';
 import { POCKET_TOWN } from '../../src/core/hubTown/schema';
 import { firstThought, fitBody, pkBoard, pkConfirm, pkGrid, pkMenu, pkOptions, pkSaves, pkStats } from '../../src/ui/pocket/templates';
 
@@ -749,5 +749,19 @@ describe('Pocket Town', () => {
     const shut = pkTownDoor({ district: '', name: 'Time Machine', text: 'Old runs.', prop: null, shut: 'Finish a run first.' });
     expect(shut).toContain('Finish a run first.');
     expect(shut).toContain('Pocket Town');
+  });
+  it('the Trainer Plaza is six district cards; a shut one dims and Esc leaves for the map', () => {
+    const districts = ['market', 'trading', 'gathering', 'social', 'services', 'secret'].map((id, i) => ({ id, name: id, text: `${id} line`, count: i, off: id === 'secret' }));
+    const html = pkPlaza({ pills: ['₽ 500', 'Stranger (0)'], road: { n: 30, at: 11, gyms: [29] }, districts, index: 4, say: 'Welcome back.' });
+    expect(pkPageOf(html)?.id).toBe('pt-plaza');
+    expect(html.match(/class="pn rw39/g)?.length).toBe(6);
+    expect(html).toMatch(/class="pn rw39 on"[^>]*data-key="pz-services"/);
+    expect(html).toMatch(/gx-pz-off"[^>]*data-key="pz-secret"/);
+    expect(html).toContain('<u class="gx-pz-n">4</u>');
+    expect(html).not.toContain('<u class="gx-pz-n">0</u>');
+    expect(html).toContain('Welcome back.');
+    expect(html).toContain('data-act="pick" data-arg="6"');
+    expect(html.match(/<u class="(past|on|)( gym| lg)*"><\/u>/g)?.length).toBe(30);
+    expect(plazaProp('services')).toBe('pc');
   });
 });

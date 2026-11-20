@@ -654,3 +654,41 @@ test('Pocket look: Pocket Town has the street header, the Town Map and a door ca
   await expect(hud.locator('.hdr')).toContainText('Culture Quarter');
   expect(errors).toEqual([]);
 });
+
+test('Pocket look: the Trainer Plaza is six district cards three across; up and down move a row, Esc goes back', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=plaza-e2e');
+  await toPocketMap(page);
+  const sideId = await page.evaluate(() => {
+    const run = (window as any).__pkr.session.run;
+    const middle = Math.ceil(run.stage.map.columns / 2);
+    const nodes = run.stage.map.nodes.filter((n: any) => n.column === middle);
+    const node = nodes.find((n: any) => n.sides.some((s: any) => s.kind === 'plaza'));
+    if (!node) return null;
+    run.stage.current = node.id;
+    (window as any).__pkr.game.scene.getScene('Map').scene.restart({ focus: 0 });
+    return node.sides.find((s: any) => s.kind === 'plaza').id as string;
+  });
+  expect(sideId).not.toBeNull();
+  await waitForScene(page, 'Map');
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);
+  await page.evaluate((id) => (window as any).__pkr.game.scene.getScene('Map').openPlaza(id), sideId);
+  await waitForScene(page, 'Plaza');
+  await onPkPage(page, 'Plaza', 'pt-plaza');
+  const plaza = pkView(page, 'Plaza', 'pt-plaza');
+  await expect(plaza.locator('.gr39 .rw39')).toHaveCount(6);
+  await expect(plaza.locator('.rw39.on')).toHaveCount(1);
+  await fits(page, 'Plaza', 'pt-plaza');
+  const before = await runNow(page);
+  const lit = () => plaza.locator('.rw39.on').getAttribute('data-key');
+  const first = await lit();
+  await step(page, 'ArrowDown');
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Plaza').focus)).toBe(3);
+  await step(page, 'ArrowUp');
+  expect(await lit()).toBe(first);
+  expect(await runNow(page)).toBe(before);
+  await step(page, 'Escape');
+  await waitForScene(page, 'Map');
+  expect(errors).toEqual([]);
+});

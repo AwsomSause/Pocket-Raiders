@@ -541,3 +541,8 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .hub .gx-hb-tabs span.on{background:var(--yel)}
 .pkx .pks .hub .gx-hb-say{position:absolute;left:220px;right:220px;top:240px;display:flex;align-items:center;gap:8px;padding:6px 12px;z-index:7;animation:gx-fade .25s both}
 .pkx .pks .hub .gx-hb-say p{margin:0;font-weight:700}
+/* Trainer Plaza (mock-up pt-plaza): a shut district dims; a count of things to do; what the plaza says. */
+.pkx .pks .pg39 .gx-pz-off{filter:saturate(.3);opacity:.6}
+.pkx .pks .pg39 .gx-pz-n{position:absolute;right:14px;top:12px;min-width:22px;padding:0 6px;text-align:center;text-decoration:none;font:800 13px/22px var(--fb);color:#fff;background:var(--red);border:2px solid var(--ink);border-radius:999px}
+.pkx .pks .pg39 .gx-pz-say{position:absolute;left:160px;right:160px;bottom:44px;padding:6px 14px;z-index:6;animation:gx-fade .25s both}
+.pkx .pks .pg39 .gx-pz-say p{margin:0;font-weight:700;text-align:center}
