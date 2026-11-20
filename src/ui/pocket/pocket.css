@@ -1,0 +1,118 @@
+/* The Pocket look (the Pokémon-style UI redesign): the layer itself and what the game adds to the mock-ups' rules.
+   The pages' own rules are generated into pocket.gen.css (tools/build-pocket-css.mjs). Classes written by hand
+   for the game start with gx- (the mock-ups have a few pk- classes of their own). */
+.pkx{position:fixed;left:0;top:0;width:0;height:0;z-index:39;pointer-events:none}
+.pkx .pks{position:absolute;left:0;top:0;width:960px;height:540px;transform-origin:0 0;transform:scale(var(--s,.35));overflow:clip;contain:layout paint;pointer-events:auto;user-select:none;font-variant-ligatures:none;font-feature-settings:"liga" 0,"clig" 0}
+.pkx .pks,.pkx .pks *,.pkx .pks *::before,.pkx .pks *::after{box-sizing:border-box}
+.pkx .pks img{max-width:none;display:block;user-select:none}
+.pkx .pks img:not([src]){visibility:hidden}
+.pkx .px{image-rendering:pixelated}
+.pkx [data-act]{cursor:pointer}
+/* A view that lies over the game's own picture (a HUD, a prompt): no paper behind it, clicks only on its buttons. */
+.pkx .pks.clear{background:none;pointer-events:none}
+.pkx .pks.clear>.scr{background:none}
+.pkx .pks.clear [data-act],.pkx .pks.clear .hit{pointer-events:auto}
+/* Menu animations off: everything stands at the end of its entrance. */
+.pkx .pks.still *,.pkx .pks.still *::before,.pkx .pks.still *::after{animation-delay:-60s!important;animation-play-state:paused!important;transition:none!important}
+@media (prefers-reduced-motion:reduce){.pkx .pks *,.pkx .pks *::before,.pkx .pks *::after{animation:none!important;transition:none!important}}
+
+/* Page changes (ui/pocket/turn.ts): the mock-ups' view transitions. The rest of the window stays as it is. */
+html[data-pk-tr]::view-transition-group(*){animation-duration:.42s;animation-timing-function:cubic-bezier(.3,1.3,.5,1)}
+html[data-pk-tr]::view-transition-old(root){display:none}
+html[data-pk-tr]::view-transition-new(root){animation:none;mix-blend-mode:normal}
+html[data-pk-tr]::view-transition-old(pk-stage),html[data-pk-tr]::view-transition-new(pk-stage){mix-blend-mode:normal}
+html[data-pk-tr=page]::view-transition-old(pk-stage){animation:pk-vt-out .3s cubic-bezier(.4,0,.8,.4) both}
+html[data-pk-tr=page]::view-transition-new(pk-stage){animation:pk-vt-in .34s cubic-bezier(.2,1.2,.4,1) both}
+html[data-pk-tr=battle]::view-transition-old(pk-stage){animation:pk-vt-hold .7s both}
+html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s cubic-bezier(.7,0,.3,1) both}
+
+/* ---- What the game adds ---- */
+/* A row or button that cannot be chosen. */
+.pkx .pks .gx-off{opacity:.45;filter:grayscale(.6)}
+/* Save warnings on the Title, in the text box's own dress. */
+.pkx .pks .gx-notes{position:absolute;left:24px;bottom:44px;max-width:520px;padding:8px 14px;border-radius:12px;background:#fff;color:#b3261e;border:3px solid var(--ink);font-size:13px;line-height:17px;z-index:6}
+/* The Title's list with more than six choices (a damaged save adds two): rows a little lower. */
+.pkx .pks .tm17.gx-many{top:196px}
+.pkx .pks .tm17.gx-many .tm{height:30px}
+.pkx .pks .tm17.gx-many .tm.on{height:80px}
+
+/* ---- Shared pages (ui/pocket/templates.ts) ---- */
+/* A picture kept inside its window. */
+.pkx .pks .gx-fit{display:inline-flex;align-items:center;justify-content:center;flex:none;overflow:hidden}
+.pkx .pks .gx-fact{display:flex;justify-content:space-between;gap:12px;font-size:13px;line-height:1.25;border-top:2px dashed #cdd6e6;padding-top:4px}
+.pkx .pks .gx-fact b{text-align:right}
+.pkx .pks .gx-dim{opacity:.6}
+/* The menu: a list, the lit row's card, the text box. */
+.pkx .pks .gx-list{position:absolute;left:52px;top:74px;width:336px;display:flex;flex-direction:column;gap:9px}
+.pkx .pks .gx-menu.tabs .gx-list{top:116px}
+.pkx .pks .gx-list .btn{flex-direction:row;align-items:center;justify-content:space-between;gap:10px;height:40px;min-height:0;padding:0 14px}
+.pkx .pks .gx-list .btn b{min-width:0;white-space:nowrap}
+.pkx .pks .gx-list .btn span{flex:none;font-size:12px;font-weight:800;color:var(--mute);white-space:nowrap}
+.pkx .pks .gx-list .btn.on span{color:var(--ink)}
+.pkx .pks .gx-tabs{position:absolute;left:52px;right:26px;top:72px;display:flex;gap:8px;flex-wrap:nowrap}
+.pkx .pks .gx-tabs .btn{min-height:31px;white-space:nowrap}
+.pkx .pks .gx-det{position:absolute;left:424px;right:26px;top:74px;max-height:340px;padding:14px 18px;display:flex;flex-direction:column;gap:7px;overflow:hidden;animation:pk-pop .3s both}
+.pkx .pks .gx-menu.tabs .gx-det{top:116px;max-height:298px}
+.pkx .pks .gx-det.tall{max-height:416px}
+.pkx .pks .gx-menu.tabs .gx-det.tall{max-height:374px}
+.pkx .pks .gx-det>b{font:400 28px/1.05 var(--fd)}
+.pkx .pks .gx-det p{line-height:1.38;white-space:pre-line}
+.pkx .pks .gx-det-pic{position:absolute;right:14px;top:8px}
+/* Option rows. */
+.pkx .pks .gx-opts .set-rows{max-height:420px}
+.pkx .pks .gx-opts .srow{cursor:pointer;flex:none}
+.pkx .pks .gx-opts .srow>div>span{line-height:1.3}
+.pkx .pks .gx-opts .srow .btn.sm{min-height:28px;min-width:74px;flex:none;animation:none}
+.pkx .pks .gx-cyc i{padding:3px 8px}
+.pkx .pks .gx-cyc i.on{padding:3px 12px;white-space:nowrap}
+.pkx .pks .gx-opts .set-cats.gx-tight{gap:3px}
+.pkx .pks .gx-opts .set-cats.gx-tight .btn{min-height:28px}
+.pkx .pks .gx-opts .set-cats .btn{cursor:pointer}
+.pkx .pks .gx-opts .gx-find{white-space:normal;word-break:break-word}
+.pkx .pks .gx-note{top:auto;bottom:42px;right:24px;max-width:690px;border-radius:14px;z-index:4}
+.pkx .pks .gx-about{position:absolute;right:20px;top:292px;width:250px;padding:10px 14px;animation:pk-pop .3s both}
+.pkx .pks .gx-about p{line-height:1.36}
+/* Settings home: nine tiles and the rows that are not a category. */
+.pkx .pks .gx-home .sc-grid{top:70px;grid-auto-rows:80px;gap:10px 12px}
+.pkx .pks .gx-home .tile.sc{cursor:pointer}
+.pkx .pks .gx-more{position:absolute;left:20px;right:20px;top:342px;display:grid;grid-template-columns:repeat(3,1fr);gap:9px 12px}
+.pkx .pks .gx-more .btn{min-height:31px;cursor:pointer}
+.pkx .pks .gx-home .tb{min-height:54px;padding:9px 18px;font-size:14px}
+/* Number tiles. */
+.pkx .pks .gx-tiles{position:absolute;left:20px;right:20px;top:76px;display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:98px;gap:14px}
+.pkx .pks .gx-tiles.c3{grid-template-columns:repeat(3,1fr)}
+.pkx .pks .gx-tiles .tile span{font-size:12.5px;font-weight:800;color:var(--mute);text-transform:uppercase;letter-spacing:.06em}
+.pkx .pks .gx-tiles .tile.on span{color:var(--ink)}
+.pkx .pks .gx-tiles .tile b{font-family:var(--fd);font-weight:400;line-height:1.05;white-space:nowrap}
+/* The wall of pictures. */
+.pkx .pks .gx-wall .dx-grid{left:16px;right:330px;top:70px;grid-template-columns:repeat(6,1fr);gap:6px}
+.pkx .pks .gx-wall .dx{height:104px;cursor:pointer;align-content:center;gap:2px}
+.pkx .pks .gx-wall .dx .gx-fit{margin-top:2px}
+.pkx .pks .gx-wall .dx small{font-weight:800;white-space:nowrap;max-width:92px;overflow:hidden}
+.pkx .pks .gx-wall .dx.sil img{filter:brightness(0);opacity:.45}
+.pkx .pks .gx-wall .dx.on{background:var(--yel);outline:3px solid var(--ink);outline-offset:2px;z-index:1}
+.pkx .pks .gx-card{position:absolute;right:20px;top:70px;width:294px;max-height:338px;padding:12px 16px;display:flex;flex-direction:column;gap:5px;overflow:hidden;animation:pk-pop .3s both}
+.pkx .pks .gx-card-pic{align-self:center;height:96px}
+.pkx .pks .gx-card>b{font:400 28px/1.05 var(--fd);text-align:center}
+.pkx .pks .gx-card>em{font-style:normal;font-size:12.5px;font-weight:800;color:var(--mute);text-align:center}
+.pkx .pks .gx-card p{line-height:1.35}
+/* The board. */
+.pkx .pks .gx-rows{position:absolute;left:20px;right:26px;top:70px;display:flex;flex-direction:column;gap:9px}
+.pkx .pks .gx-rows .ac{height:60px;padding:4px 16px;display:flex;align-items:center;gap:14px;cursor:pointer}
+.pkx .pks .gx-rows .ac>div{flex:1;min-width:0}
+.pkx .pks .gx-rows .ac b,.pkx .pks .gx-rows .ac span{white-space:nowrap}
+.pkx .pks .gx-rows .ac-ic{width:48px;height:48px;flex:none}
+.pkx .pks .gx-rows .ac.gx-dim .ac-ic img{filter:none;opacity:1}
+.pkx .pks .gx-rows .ac em{flex:none}
+.pkx .pks .gx-bar{flex:none;width:150px}
+.pkx .pks .gx-none{font:400 30px/1 var(--fd);color:var(--mute);text-align:center;padding-top:130px}
+/* The confirm box, over a page. */
+.pkx .pks .gx-shade{position:absolute;inset:0;background:rgba(13,21,48,.55);z-index:8}
+.pkx .pks .gx-ask{z-index:9}
+.pkx .pks .gx-ask .row{flex-wrap:wrap;justify-content:center}
+.pkx .pks .gx-over{background:none}
+.pkx .pks .gx-over::before{content:none}
+/* Save slots. */
+.pkx .pks .gx-saves .slot{cursor:pointer}
+.pkx .pks .gx-del{position:absolute;right:-8px;top:-14px;min-height:28px;z-index:2}
+.pkx .pks .gx-del.on{background:var(--red);color:#fff}

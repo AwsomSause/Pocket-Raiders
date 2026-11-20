@@ -128,7 +128,9 @@ import { castSpriteId, drawDossier } from '../ui/dossier';
 import { dossierFolders } from '../core/expansion/cast/dossier';
 import { pokemonAssetIds, type AssetManifest } from '../assets/catalog';
 import { rxFileOf } from '../ui/redux/assets';
-import { mountRedux, phantomOn, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, phantomOn, pocketOn, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
+import { pkPauseModel } from '../ui/pocket/models';
+import { PK_PAUSE_COLS, pkPause } from '../ui/pocket/screens/pause';
 import { askText } from '../ui/redux/ask';
 import { hoverTips, ownAbilityCard } from '../ui/redux/tips';
 import type { BattlePanel } from '../ui/redux/screens/battle';
@@ -239,6 +241,14 @@ type Option =
   | { kind: 'endRun' };
 
 const PING_ICONS = ['⚑', '★', '❗', '?'];
+
+/** Why an app of the Rotom Phone (the Pocket pause menu) cannot be opened right now. */
+const PAUSE_OFF: Record<string, string> = {
+  'End run': 'Only an Adventure run can be ended here. Use Save to leave this one.',
+  'PC Box': 'This run has no PC.',
+  Rivals: 'No rival has found you yet.',
+  Journal: 'The journal opens once the story begins.',
+};
 
 export class MapScene extends Phaser.Scene {
   private options: Option[] = [];
@@ -399,8 +409,11 @@ export class MapScene extends Phaser.Scene {
   /** The Phantom pause page also has the mock-up's Trainer card. */
   private static readonly PAUSE_PH = ['Resume', 'Party', 'Bag', 'Pokédex', 'Trainer card', 'Settings', 'Save', 'End run'] as const;
 
+  /** The Pocket pause page is the Rotom Phone: its apps, four across (Esc resumes). */
+  private static readonly PAUSE_PK = ['Party', 'Bag', 'Journal', 'PC Box', 'Rivals', 'Save', 'Settings', 'End run'] as const;
+
   private pauseRows(): readonly string[] {
-    return phantomOn() ? MapScene.PAUSE_PH : MapScene.PAUSE;
+    return phantomOn() ? MapScene.PAUSE_PH : pocketOn() ? MapScene.PAUSE_PK : MapScene.PAUSE;
   }
 
   private pauseOpen(): void {
@@ -438,7 +451,9 @@ export class MapScene extends Phaser.Scene {
     if (action === 'back') return this.pauseClose();
     if (action === 'confirm') return this.pausePick(p.index);
     const n = this.pauseRows().length;
-    p.index = (p.index + (action === 'up' || action === 'left' ? n - 1 : 1)) % n;
+    // The Rotom Phone's apps lie in a grid: up and down move a whole line.
+    const step = pocketOn() && (action === 'up' || action === 'down') ? PK_PAUSE_COLS : 1;
+    p.index = (p.index + (action === 'up' || action === 'left' ? n - step : step)) % n;
     this.rxView?.refresh();
   }
 
@@ -471,9 +486,15 @@ export class MapScene extends Phaser.Scene {
       this.scene.start('Settings', { from: 'Map' });
       return;
     }
+    if (name === 'PC Box' && boxCapacity(runPerks(services().session.content, services().session.run!)) <= 0) return;
+    if (name === 'Rivals' && !rivalReport(services().session.run!).length) return;
+    if (name === 'Journal' && !hasJournal()) return;
     this.pauseClose();
     if (name === 'Party') openPokemonMenu(this.fieldHost());
     else if (name === 'Bag') openBagMenu(this.fieldHost());
+    else if (name === 'Journal') openJournalMenu(this.fieldHost());
+    else if (name === 'PC Box') openBoxMenu(this.fieldHost());
+    else if (name === 'Rivals') this.toggleRivalReport();
     else openSaveMenu(this.fieldHost(), (to) => {
       this.busy = true;
       this.scene.start(to);
@@ -511,6 +532,22 @@ export class MapScene extends Phaser.Scene {
   }
 
   /** The Phantom pause menu: the mock-up's Pause page, with the "End this run?" card over it while that is asked. */
+  /** Pocket look: the pause menu is the Rotom Phone, a page of its own. */
+  private pausePocket(model: MapModel): string {
+    const p = this.rxPause!, { session } = services(), run = session.run!;
+    const can = !!wipeStatus(run), pc = boxCapacity(runPerks(session.content, run)) > 0, rivals = rivalReport(run).length > 0;
+    const off = (label: string): boolean => (label === 'End run' && !can) || (label === 'PC Box' && !pc) || (label === 'Rivals' && !rivals) || (label === 'Journal' && !hasJournal());
+    return pkPause(pkPauseModel(this, run, {
+      apps: MapScene.PAUSE_PK.map((label) => ({ label, ...(off(label) ? { off: true } : {}) })),
+      index: p.index,
+      // The stop under the map's cursor ("Level 3: Trainer battle"), or the stage when the cursor is on a button.
+      next: model.info.split('  ·  ').find((t) => /^Level \d+: /.test(t)) ?? model.title,
+      why: PAUSE_OFF[MapScene.PAUSE_PK[p.index] ?? ''] && off(MapScene.PAUSE_PK[p.index]!) ? PAUSE_OFF[MapScene.PAUSE_PK[p.index]!]! : '',
+      names: run.party.map((m) => displayName(session.content, m)),
+      ask: p.ask === null ? null : { title: 'End this run?', body: 'Your progress is banked as a defeat. This cannot be undone.', options: ['Keep playing', 'End run'], index: p.ask },
+    }));
+  }
+
   private pausePhantom(ph: PhantomVersion, model: MapModel): string {
     const p = this.rxPause!;
     const can = !!wipeStatus(services().session.run!);
@@ -1551,6 +1588,7 @@ export class MapScene extends Phaser.Scene {
           if (this.rxHeal && c.ph) return phHeal(c.ph, this.rxHeal.model);
           if (this.rxPop) return this.popView(c, this.rxPop);
           const model: MapModel = { ...this.rxModel!, index: this.index, info: this.info?.text ?? '', notice: this.notice?.text ?? '', going: this.rxGoing, banner: this.rxBanner, legend: this.rxLegend, card: this.rxCardOf() };
+          if (c.pk && this.rxPause) return this.pausePocket(model);
           if (!c.ph) return mapView(c, model) + this.pauseHtml() + (this.rxMenu ? nodeMenuView(this.rxMenu) : '');
           // Phantom: the pause menu is a page of its own; the node menu stands over the map.
           if (this.rxForm) return this.formPhantom(c.ph, model.art);
@@ -1566,6 +1604,7 @@ export class MapScene extends Phaser.Scene {
           heal: () => this.rxHeal?.done(),
           pop: () => this.popClose(),
           pause: (k) => this.pausePick(Number(k)),
+          pauseGo: () => { if (this.rxPause) this.pausePick(this.rxPause.index); },
           menu: (k) => this.menuPick(Number(k)),
           confirm: (k) => this.pauseAsk(Number(k)),
           pauseCard: () => this.pauseCard(false),

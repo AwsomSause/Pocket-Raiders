@@ -1,0 +1,158 @@
+import { describe, expect, it } from 'vitest';
+import { pocketRoad, roadNext, roadStop, rotomNews, rotomTip, trainerId } from '../../src/core/presentation/pocket';
+import { changeSetting, SETTINGS } from '../../src/core/settingsRegistry';
+import { DEFAULT_SETTINGS } from '../../src/save/saveManager';
+import { page, pkPageOf, tierClass } from '../../src/ui/pocket/kit';
+import { pkPause } from '../../src/ui/pocket/screens/pause';
+import { pkSettingsHome } from '../../src/ui/pocket/screens/settings';
+import { firstThought, fitBody, pkBoard, pkConfirm, pkGrid, pkMenu, pkOptions, pkSaves, pkStats } from '../../src/ui/pocket/templates';
+
+const stage = (current: string | null) => ({
+  current,
+  map: { columns: 5, nodes: [
+    { id: 'a', column: 1, kind: 'wild' }, { id: 'b', column: 2, kind: 'trainer' }, { id: 'b2', column: 2, kind: 'wild' },
+    { id: 'c', column: 3, kind: 'wild' }, { id: 'd', column: 4, kind: 'trainer' }, { id: 'e', column: 5, kind: 'gym' },
+  ] },
+});
+
+describe('Pocket look: the progress ribbon', () => {
+  it('has one mark per column, the current stop and the boss stop', () => {
+    expect(pocketRoad(stage('b2'))).toEqual({ n: 5, at: 1, gyms: [4] });
+    expect(pocketRoad(null)).toBeNull();
+  });
+  it('before the first stop nothing is lit', () => {
+    const r = pocketRoad(stage(null))!;
+    expect(r.at).toBe(-1);
+    expect(roadStop(r)).toBe('Start of 5 stops');
+    expect(roadNext(r)).toBe('Gym in 5 stops');
+  });
+  it('says how far the Gym is', () => {
+    expect(roadStop(pocketRoad(stage('c'))!)).toBe('Stop 3 of 5');
+    expect(roadNext(pocketRoad(stage('c'))!)).toBe('Gym in 2 stops');
+    expect(roadNext(pocketRoad(stage('d'))!)).toBe('Gym next');
+    expect(roadNext(pocketRoad(stage('e'))!)).toBe('Gym now');
+    expect(roadNext({ n: 5, at: 3, gyms: [] })).toBe('');
+    expect(roadNext({ n: 5, at: 2, gyms: [4] }, 'League')).toBe('League in 2 stops');
+  });
+  it('a trainer ID is five digits and the same for the same seed', () => {
+    expect(trainerId('PIKA-7Q2M')).toMatch(/^\d{5}$/);
+    expect(trainerId('PIKA-7Q2M')).toBe(trainerId('PIKA-7Q2M'));
+    expect(trainerId('A')).not.toBe(trainerId('B'));
+  });
+});
+
+describe('Pocket look: the setting and the page mark', () => {
+  it('UI style has Pocket after New; New stays the default', () => {
+    expect(DEFAULT_SETTINGS.uiStyle).toBe('new');
+    expect(changeSetting(DEFAULT_SETTINGS, 'uiStyle').uiStyle).toBe('pocket');
+  });
+  it('a Pocket page carries its id and tier, and the tier picks the rule groups', () => {
+    const html = page('title', 17, '<div class="scr title"></div>');
+    expect(pkPageOf(html)).toEqual({ id: 'title', tier: 17, hud: false });
+    expect(pkPageOf(page('ask', 26, '<div></div>', true))).toEqual({ id: 'ask', tier: 26, hud: true });
+    expect(pkPageOf('<div></div>')).toBeNull();
+    expect(tierClass(17)).toBe('');
+    expect(tierClass(24)).toBe(' t24');
+    expect(tierClass(26)).toBe(' t24 t26');
+    expect(tierClass(51)).toBe(' t24 t26 t51');
+  });
+});
+
+describe('Pocket look: Rotom', () => {
+  it('reads out the event that ends first, or a plain line', () => {
+    expect(rotomNews([])).not.toBe('');
+    const line = rotomNews([{ event: { name: 'Homeland Week' }, endsIn: 3 }]);
+    expect(line).toContain('Homeland Week');
+  });
+  it('says what lies ahead and what the party needs', () => {
+    expect(rotomTip({ next: 'Gym in 3 stops', fainted: 0, hurt: 0, size: 6 })).toBe('"Bzzt! Gym in 3 stops. Your party is in good shape."');
+    expect(rotomTip({ next: 'Gym next', fainted: 1, hurt: 2, size: 6 })).toContain('1 of your 6 Pokémon has fainted');
+    expect(rotomTip({ next: '', fainted: 0, hurt: 2, size: 6 })).toBe('"Bzzt! The road is clear for now. 2 of your Pokémon are low on HP."');
+  });
+});
+
+describe('Pocket look: settings rows', () => {
+  it('a setting with a short fixed list names its values in pressing order', () => {
+    const ui = SETTINGS.find((d) => d.id === 'uiStyle')!;
+    expect(ui.values).toEqual(['New', 'Pocket', 'Phantom', 'Old']);
+    // The list is the same whatever the value is now, so a row never reshuffles as it is pressed.
+    expect(ui.values).toContain(ui.show(ui.next(DEFAULT_SETTINGS)));
+  });
+  const model = (rows: { label: string; value: string; disabled?: boolean }[], index = 0) => ({ title: 'Settings · Test', tabs: ['One', 'Two'], tab: 0, rows, index, text: '' });
+  it('draws a switch, a bar, the choices side by side, or the value between arrows', () => {
+    const html = pkOptions(model([{ label: 'A', value: 'On' }, { label: 'B', value: '70%' }, { label: 'C', value: 'Fast' }, { label: 'D', value: 'A very long value indeed' }, { label: 'E', value: '' }]), { rows: [{}, {}, { opts: ['Slow', 'Fast'] }, {}, {}] });
+    expect(html).toContain('class="tog on"');
+    expect(html).toContain('width:70%');
+    expect(html).toContain('<i class="">Slow</i><i class="on">Fast</i>');
+    expect(html).toContain('gx-cyc');
+    expect(html).toContain('<b>Choose</b>');
+  });
+  it('a bar never runs past its end, and a waiting change is said in words', () => {
+    const html = pkOptions(model([{ label: 'Zoom', value: '150%  · next battle' }]), { rows: [{ about: 'How big.' }] });
+    expect(html).toContain('width:100%');
+    expect(html).toContain('<b>150%</b>');
+    expect(html).toContain('How big. Applies next battle.');
+  });
+  it('shows a window of rows around the lit one and says where it is', () => {
+    const rows = Array.from({ length: 20 }, (_, k) => ({ label: `Row ${k}`, value: 'On' }));
+    const html = pkOptions(model(rows, 12));
+    expect(html).toContain('10–15 of 20');
+    expect(html).not.toContain('>Row 8<');
+    expect(html).toContain('>Row 12<');
+    expect(pkOptions(model(rows.slice(0, 4)))).not.toContain(' of 4');
+  });
+  it('text from the game is escaped', () => {
+    expect(pkOptions(model([{ label: '<b>x</b>', value: '<i>' }]))).not.toContain('<b>x</b>');
+    expect(pkConfirm({ title: '<script>', body: 'a & b', options: ['<1>'], index: 0 })).not.toContain('<script>');
+  });
+  it('the first thought of a description is its first sentence, or a clause of it', () => {
+    expect(firstThought('Short one. And more.', 60)).toBe('Short one.');
+    expect(firstThought('The look of the New interface: twenty themes, each with its own colours, frames, font and layouts. More.', 60)).toBe('The look of the New interface: twenty themes…');
+    expect(firstThought('', 60)).toBe('');
+  });
+  it('body text steps down until it fits, and stops at the smallest size', () => {
+    expect(fitBody('Hi', 400, 200)).toBe(14.5);
+    expect(fitBody('x'.repeat(900), 400, 200)).toBeLessThan(14.5);
+    expect(fitBody('x'.repeat(90000), 400, 200)).toBe(10);
+  });
+});
+
+describe('Pocket look: shared pages', () => {
+  it('every shared page is a Pocket page of the Final Cut', () => {
+    const menu = pkMenu({ title: 'Menu', items: [{ label: 'One' }, { label: 'Two', disabled: true }], index: 0 });
+    const stats = pkStats({ title: 'Stats', tiles: [['Runs', '3']], text: 'T' });
+    const grid = pkGrid({ title: 'Wall', n: 2, cell: (i) => ({ label: `C${i}`, off: i === 1 }), index: 0, detail: { title: 'C0' }, found: 1, total: 2, text: 'T' });
+    const board = pkBoard({ title: 'Board', area: 'hub', rows: [], index: 0, text: 'T' });
+    for (const html of [menu, stats, grid, board]) expect(pkPageOf(html)?.tier).toBe(26);
+    expect(menu).toContain('btn off');
+    expect(grid).toContain('Found 1 of 2');
+    expect(board).toContain('Nothing here yet');
+  });
+  it('a menu leaves the text box out when its card already says the same', () => {
+    const d = { title: 'Menu', items: [{ label: 'One' }], index: 0, detail: { body: 'Same words.' } };
+    expect(pkMenu({ ...d, text: 'Same words.' })).not.toContain('class="tb');
+    expect(pkMenu({ ...d, text: 'Other words.' })).toContain('class="tb');
+  });
+  it('save slots: an empty slot offers a start, a used one can be erased', () => {
+    const slot = { tag: 'Slot 1', name: 'Red', where: 'Kanto · Stage 2', time: '2026-11-20', party: ['pokemon/6'], empty: false };
+    const html = pkSaves({ slots: [slot, { tag: 'Slot 2', name: '', where: '', time: '', party: [], empty: true }], focus: 0, onDelete: true, note: 'N', confirm: null });
+    expect(html).toContain('gx-del on');
+    expect(html).toContain('Start a new journey here.');
+    expect(pkSaves({ slots: [slot], focus: 0, onDelete: false, note: 'N', confirm: { title: 'Delete slot 1?', body: '', options: ['Keep it', 'Delete'], index: 0 } })).toContain('cf-box');
+  });
+  it('the Settings home lights one tile or one of the rows under them', () => {
+    const d = { tiles: [{ id: 'display', label: 'Display', sub: 'UI style: New' }], more: [{ label: 'Back' }], text: 'T', crumb: ['Title', 'Settings'] };
+    expect(pkSettingsHome({ ...d, index: 0 })).toContain('tile sc on');
+    expect(pkSettingsHome({ ...d, index: 1 })).toContain('btn sm on');
+  });
+  it('the Pause menu is the Rotom Phone at pass 24, and a switched-off app is greyed', () => {
+    const base = { when: 'Day 1 · Morning', where: 'Kanto · Stop 1 of 30', money: '₽ 0', saved: 'Auto-save on', road: { n: 30, at: 0, gyms: [29] }, next: 'Level 1: Wild Pokémon', apps: [{ label: 'Party' }, { label: 'End run', off: true }], index: 0, rotom: '"Bzzt!"', hero: { art: null, name: 'Red', chips: ['Rank 0'] }, party: [{ art: null, name: 'Piplup', level: 5, hp: 0, type: 'water' }], run: ['Stop 1 of 30'], ask: null };
+    const html = pkPause(base);
+    expect(pkPageOf(html)).toEqual({ id: 'menu', tier: 24, hud: false });
+    expect(html).toContain('rapp on');
+    expect(html).toContain('rapp gx-off');
+    expect(html).toContain('pkm fnt');
+    // A long top bar steps its text down so the money and the save note stay on the phone's screen.
+    expect(pkPause({ ...base, where: 'Trial Archipelago · Stop 12 of 30', money: '₽ 1,234,567' })).toMatch(/rp-bar" style="font-size:(9\.5|10|11)px/);
+  });
+});

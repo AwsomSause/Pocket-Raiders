@@ -25,6 +25,9 @@ export function onRxAssets(fn: () => void): () => void {
   return () => listeners.delete(fn);
 }
 
+/** Tells every open view that a picture has been measured (also used by the Pocket look's own cut pictures, ui/pocket/art.ts). */
+export function rxArrived(): void { arrived(); }
+
 function arrived(): void {
   if (queued) return;
   queued = true;

@@ -47,14 +47,17 @@ export interface SettingDef {
   show: (s: Settings) => string;
   /** The settings after one press (cycles to the next value). */
   next: (s: Settings) => Settings;
+  /** Every value as text, in pressing order, where the setting has a short fixed list (a look may draw them side by side). */
+  values?: readonly string[];
 }
 
 type Key = keyof Settings;
 type StoryKey = keyof Settings['story'];
 
 /** A Story Run setting that cycles through `order`. Story settings never change the accessibility profile. */
-function storyChoice<K extends StoryKey>(key: K, labels: Record<string, string>, order: readonly Settings['story'][K][]): Pick<SettingDef, 'show' | 'next'> {
+function storyChoice<K extends StoryKey>(key: K, labels: Record<string, string>, order: readonly Settings['story'][K][]): Pick<SettingDef, 'show' | 'next' | 'values'> {
   return {
+    values: order.map((v) => labels[String(v)] ?? String(v)),
     show: (s) => labels[String(s.story[key])] ?? String(s.story[key]),
     next: (s) => ({ ...s, story: { ...s.story, [key]: order[(order.indexOf(s.story[key]) + 1) % order.length]! } }),
   };
@@ -63,8 +66,9 @@ function storyChoice<K extends StoryKey>(key: K, labels: Record<string, string>,
 const custom = (s: Settings): Settings => ({ ...s, accessibilityProfile: 'custom' });
 const pct = (v: number) => `${Math.round(v * 100)}%`;
 
-function choice<K extends Key>(key: K, labels: Record<string & Settings[K], string>, order: readonly Settings[K][]): Pick<SettingDef, 'show' | 'next'> {
+function choice<K extends Key>(key: K, labels: Record<string & Settings[K], string>, order: readonly Settings[K][]): Pick<SettingDef, 'show' | 'next' | 'values'> {
   return {
+    values: order.map((v) => labels[v as string & Settings[K]]),
     show: (s) => labels[s[key] as string & Settings[K]],
     next: (s) => custom({ ...s, [key]: order[(order.indexOf(s[key]) + 1) % order.length]! }),
   };
@@ -98,7 +102,7 @@ const ANIM_SWITCHES: [Key, string, string][] = [
 export const SETTINGS: SettingDef[] = [
   // Display
   // UI mock-ups: the New / Old switch comes first, then the New UI's look; every other look setting follows these two.
-  { id: 'uiStyle', label: 'UI style', description: 'New is the redesigned interface. Phantom is the stylish red, black and white interface with five versions. Old is the interface from before the redesign. Screens redraw as you open them.', category: 'display', applies: 'now', ...choice('uiStyle', { new: 'New', phantom: 'Phantom', old: 'Old' }, ['new', 'phantom', 'old']) },
+  { id: 'uiStyle', label: 'UI style', description: 'New is the redesigned interface. Pocket is the bright Pokémon-style interface with the Rotom Phone menu; pages it does not have yet show the New one. Phantom is the stylish red, black and white interface with five versions. Old is the interface from before the redesign. Screens redraw as you open them.', category: 'display', applies: 'now', ...choice('uiStyle', { new: 'New', pocket: 'Pocket', phantom: 'Phantom', old: 'Old' }, ['new', 'pocket', 'phantom', 'old']) },
   { id: 'reduxSkin', label: 'UI theme', description: 'The look of the New interface: twenty themes, each with its own colours, frames, font and layouts. Battle results never change.', category: 'display', applies: 'now', disabled: (s) => s.uiStyle !== 'new', show: (s) => reduxSkin(s.reduxSkin).n, next: (s) => custom({ ...s, reduxSkin: nextReduxSkin(s.reduxSkin) }) },
   { id: 'phantomVersion', label: 'Phantom version', description: 'The version of the Phantom interface: Red, Blue, Yellow, Green or Gold. Each has its own colours, shapes and trainer on the menus. Battle results never change.', category: 'display', applies: 'now', disabled: (s) => s.uiStyle !== 'phantom', show: (s) => phantomVersionLabel(s.phantomVersion), next: (s) => custom({ ...s, phantomVersion: nextPhantomVersion(s.phantomVersion) }) },
   { id: 'uiScale', label: 'Screen size', description: 'How much of the window the game fills.', category: 'display', applies: 'now', ...choice('uiScale', { full: '100%', medium: '90%', small: '80%' }, ['full', 'medium', 'small']) },

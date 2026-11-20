@@ -23,7 +23,9 @@ import { screenStyleOf } from '../core/presentation/screenStyles';
 import { drawBackdrop, drawPanel, Menu, type MenuOption } from '../ui/widgets';
 import { Picker } from '../ui/partyPanel';
 import { gameSummary, type SummaryTopic } from '../core/encyclopedia';
-import { mountRedux, phantomOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, phantomOn, pocketOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { PK_SETTINGS_COLS, pkSettingsHome } from '../ui/pocket/screens/settings';
+import { pkOptions } from '../ui/pocket/templates';
 import { PHANTOM_PHONE_SETTINGS, PHANTOM_SETTINGS_PAGES, type PhantomVersion } from '../core/presentation/phantom';
 import { applyPhantomPreset, PHANTOM_PRESETS, phantomPresetOf } from '../core/presentation/phantomPresets';
 import { phPageIndex, phReel, phSettings } from '../ui/phantom/screens/settings';
@@ -413,7 +415,8 @@ export class SettingsScene extends Phaser.Scene {
       }
     } else ui.add(drawPanel(this, 40, top - 8, 560, 400 - (top - 78), { alpha: 0.95 }));
     // Phantom UI: the home page is a grid of tiles, five across, so the arrows move the same way the tiles lie.
-    const cols = phantomOn() && this.page === 'home' ? 5 : look?.columns && rows.length >= 6 ? look.columns : 1;
+    // Pocket look: nine tiles, three across.
+    const cols = phantomOn() && this.page === 'home' ? 5 : pocketOn() && this.page === 'home' ? PK_SETTINGS_COLS : look?.columns && rows.length >= 6 ? look.columns : 1;
     if (cols > 1) area = { ...area, w: Math.floor(area.w / cols) };
     const rowH = Math.min(40, Math.floor((380 - (top - 78)) / Math.max(Math.ceil(rows.length / cols), 1)));
     const mascot = look?.mascot ? services().session.content.species.get(look.mascot) : undefined;
@@ -451,6 +454,7 @@ export class SettingsScene extends Phaser.Scene {
   /** New UI: the page as the mock-ups draw it. The home list is a menu; a category is the tabbed Settings screen. */
   private reduxHtml(c: Parameters<typeof menuView>[0]): string {
     if (c.ph) return this.phantomHtml(c.ph);
+    if (c.pk) { const pk = this.pocketHtml(); if (pk) return pk; }
     const rows = this.shown, index = this.menu?.index ?? 0;
     const text = this.notice || rows[index]?.hint || 'Changes apply at once. Looks never change battle results.';
     const hints = [['Enter', 'choose'], ['Esc', 'back']] as const;
@@ -477,6 +481,43 @@ export class SettingsScene extends Phaser.Scene {
   }
 
   private homeItems: { label: string; note: string; disabled?: boolean; hint: string }[] = [];
+
+  /** Pocket look: the home tiles, a category's rows with their small print and choices, and the Reset question. Empty: the shared pages draw it. */
+  private pocketHtml(): string {
+    const rows = this.shown, index = this.menu?.index ?? 0, s = services().session.settings;
+    const from = this.from === 'Hub' ? 'Hub' : this.from === 'Map' ? 'Menu' : 'Title';
+    const cats = SETTING_CATEGORIES.map((x) => x.id);
+    if (this.page === 'home' || this.page === 'confirmReset') {
+      const home = this.page === 'home' ? rows.map((r) => ({ label: r.option.label, note: '', disabled: r.option.disabled, hint: r.hint })) : this.homeItems;
+      if (this.page === 'home') this.homeItems = home;
+      const n = SETTING_CATEGORIES.length, at = this.page === 'home' ? index : 11;
+      const sub = (id: SettingCategory): string => { const d = id === 'data' ? undefined : settingsIn(id)[0]; return d ? `${d.label}: ${d.show(s)}` : SETTING_CATEGORIES.find((x) => x.id === id)!.blurb; };
+      return pkSettingsHome({
+        tiles: SETTING_CATEGORIES.map((x) => ({ id: x.id, label: x.label, sub: sub(x.id) })),
+        more: home.slice(n).map((r) => ({ label: r.label, ...(r.disabled ? { disabled: true } : {}) })),
+        index: Math.min(at, home.length - 1),
+        text: this.notice || home[Math.min(at, home.length - 1)]?.hint || 'Changes apply at once. Looks never change battle results.',
+        crumb: [from, 'Settings'],
+        ask: this.page === 'confirmReset' ? { title: 'Reset to defaults?', body: rows[index]?.hint || 'Audio, display, animations and text all go back to their starting values. Your saves are not touched.', options: rows.map((r) => r.option.label), index } : null,
+      });
+    }
+    if (!cats.includes(this.page as SettingCategory) && this.page !== 'search') return '';
+    const search = this.page === 'search', cat = SETTING_CATEGORIES.find((x) => x.id === this.page);
+    return pkOptions({
+      title: search ? 'Search settings' : `Settings · ${cat!.label}`,
+      tabs: search ? [`Find: ${this.query}▌`] : SETTING_CATEGORIES.map((x) => x.label),
+      tab: search ? 0 : cats.indexOf(this.page as SettingCategory),
+      rows: rows.map((r) => ({ label: r.name ?? r.option.label, value: r.value ?? '', disabled: r.option.disabled })),
+      index,
+      text: '',
+      hints: search ? [['Type', 'search'], ['Enter', 'change'], ['Esc', 'back']] : [['←→', 'change'], ['↑↓', 'move'], ['Enter', 'choose'], ['Esc', 'back']],
+    }, {
+      rows: rows.map((r) => { const def = r.id ? SETTINGS.find((d) => d.id === r.id) : undefined; return { about: r.hint, ...(def?.values ? { opts: def.values } : {}) }; }),
+      preview: this.page === 'display',
+      crumb: [from, 'Settings', search ? 'Search' : cat!.label],
+      note: search && this.query && rows.length === 1 ? 'No setting matches.' : this.notice,
+    });
+  }
 
   /** The settings a Phantom page lists (the Phone page gathers its own). */
   private pageSettings(page: Page): SettingDef[] {
