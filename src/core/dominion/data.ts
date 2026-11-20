@@ -5,6 +5,7 @@ import actionsRaw from '../../data/dominion/actions.json';
 import crewRaw from '../../data/dominion/crew.json';
 import fieldRaw from '../../data/dominion/field.json';
 import gruntTypesRaw from '../../data/dominion/gruntTypes.json';
+import personalityRaw from '../../data/dominion/personality.json';
 import tasksRaw from '../../data/dominion/tasks.json';
 import hqRaw from '../../data/dominion/hq.json';
 import buildingsRaw from '../../data/dominion/buildings.json';
@@ -14,11 +15,11 @@ import rivalActionsRaw from '../../data/dominion/rivalActions.json';
 import outsideRaw from '../../data/dominion/outside.json';
 import debateRaw from '../../data/dominion/debate.json';
 import {
-  ActionsFileSchema, BuildingsFileSchema, DebateFileSchema, OutsideFileSchema, RivalActionsFileSchema, RivalsFileSchema, CrewFileSchema, HqFileSchema, PyramidFileSchema, FieldFileSchema, GruntTypesFileSchema, StartFileSchema, TasksFileSchema,
-  type ActionsFile, type Building, type DebateFile, type OutsideRow, type RivalActionsFile, type RivalsFile, type CrewFile, type HqFile, type PyramidFile, type FieldFile, type GruntType, type StartFile, type Task,
+  ActionsFileSchema, BuildingsFileSchema, DebateFileSchema, OutsideFileSchema, RivalActionsFileSchema, RivalsFileSchema, CrewFileSchema, HqFileSchema, PyramidFileSchema, FieldFileSchema, GruntTypesFileSchema, PersonalityFileSchema, StartFileSchema, TasksFileSchema,
+  type ActionsFile, type Building, type DebateFile, type OutsideRow, type RivalActionsFile, type RivalsFile, type CrewFile, type HqFile, type PyramidFile, type FieldFile, type GruntType, type PersonalityFile, type StartFile, type Task,
 } from './schema';
 
-export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; hq: HqFile; buildings: Building[]; pyramid: PyramidFile; rivals: RivalsFile; rivalActions: RivalActionsFile; outside: OutsideRow[]; debate: DebateFile } = {
+export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; hq: HqFile; buildings: Building[]; pyramid: PyramidFile; rivals: RivalsFile; rivalActions: RivalActionsFile; outside: OutsideRow[]; personality: PersonalityFile; debate: DebateFile } = {
   start: StartFileSchema.parse(startRaw),
   actions: ActionsFileSchema.parse(actionsRaw),
   field: FieldFileSchema.parse(fieldRaw),
@@ -32,4 +33,5 @@ export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: Fie
   rivalActions: RivalActionsFileSchema.parse(rivalActionsRaw),
   outside: OutsideFileSchema.parse(outsideRaw).rows,
   debate: DebateFileSchema.parse(debateRaw),
+  personality: PersonalityFileSchema.parse(personalityRaw),
 };
