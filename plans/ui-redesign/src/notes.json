@@ -731,5 +731,22 @@
   "q3": "Eight new pages for the story opening: the cold open and the departure as wide cinema cards, the Station with five things to look at, the Professor's first question, the Field Notebook, the Field Trial with one arrow on one button, a backstory scene and the nine lessons.",
   "q4": "The lessons page is what Settings opens from Save and Data. The small choice list used for the grunt is the same one the story uses, so every question in the game can look alike.",
   "q5": "Yes. A small list of answers above the text box, a silhouette crossing the moon, a rival waiting for your first battle and a Professor handing you a notebook are how these games begin."
+ },
+ "43": {
+  "name": "New areas 17 · Set Design",
+  "label": "New areas · pass 17 of 25",
+  "big": "A painted set for every area, and how each one looks on the map",
+  "pages": [
+   "mp-raid",
+   "mp-totem",
+   "mp-galar",
+   "mp-xp",
+   "mp-evil"
+  ],
+  "q1": "The raid is inside a den crater with the pink light pillar rising into a storm. The Totem waits at a jungle shrine with the sun behind it. Galar is a floodlit stadium with a striped pitch. The expedition's ridge glows with lava. The grunt's letter is thrown on the sky by a searchlight.",
+  "q2": "Pass 16 moved the camera but kept the old scenery, a small game backdrop stretched until it blurred, so every place looked like the same field. Now each of the five has its own drawn set with a sky, a far layer, a near layer and a floor. The dotted crowd strip and the loose light rays are gone from the stadium because the set does their job.",
+  "q3": "Five new map pages, one for each area, show the special stop on the small eight-stop map: a den with a light pillar, a Totem site with a gold ring, a stadium with floodlights, an expedition gate with an arch and a black Rocket stop.",
+  "q4": "Nothing new is needed. The sets are scenery, so Settings > Display > Battle effects (already in the Final Cut) can dim them, and the map pages use the same menu row as the map.",
+  "q5": "Yes. A den's light pillar, Alola's trial sites, Galar's stadiums and a Rocket stop on a bridge are places from the games, and now each one is recognisable before a single panel is read."
  }
 }
