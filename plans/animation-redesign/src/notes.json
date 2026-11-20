@@ -1,0 +1,79 @@
+{
+ "1": {
+  "name": "First Motion",
+  "big": "The floor. Six basic battle beats (send out, recall, attack and hit, faint, HP bar, standing) each get one clean, readable tween. The game's own sprite frames keep playing underneath; everything here is the code-made motion around them.",
+  "clips": [
+   "Send Out",
+   "Recall",
+   "Attack and Hit",
+   "Faint",
+   "HP Bar",
+   "Standing"
+  ],
+  "q1": "Not yet. This pass is about order and clarity: one thing happens at a time and you can always tell what.",
+  "q2": "Compared with the game today: recall gets its red beam back, fainting sinks into the ground instead of fading, and the HP number counts down with the bar.",
+  "q3": "Yes. Switching, level-up, EXP and a missed attack have no clip yet. They come in pass 2.",
+  "q4": "Nothing to set yet. From pass 20 every clip here obeys the motion settings.",
+  "q5": "The ball arc, white flash and red recall beam are straight from the handheld games."
+ },
+ "2": {
+  "name": "Weight",
+  "big": "Everything gets mass. The ball squashes when it lands, attacks wind up before they go, hits freeze for a blink before the recoil, landings throw dust and the HP plate takes the blow too.",
+  "clips": [
+   "Switch",
+   "Miss",
+   "EXP and Level Up"
+  ],
+  "q1": "Yes. The same six beats now have bounce, stretch and dust, so even a plain Tackle looks like it hurts.",
+  "q2": "Pass 1 moved things from A to B. Pass 2 adds what happens before (wind-up) and after (recoil, settle, dust) each move, plus hit-stop: an 80ms freeze on contact that makes hits feel heavy.",
+  "q3": "Three more clips: switching as one unbroken move, a dodge for a missed attack, and EXP into level-up.",
+  "q4": "Hit-stop and screen shake already have sliders in Settings; these clips are drawn at their default strength.",
+  "q5": "The ball bounce before it opens and the two happy hops on level-up are small touches the 3D games use."
+ },
+ "3": {
+  "name": "Elements",
+  "big": "Type is now visible in the motion itself. Eighteen impact kits, a type-coloured glow before every move, and type sparks when a Pokémon lands. The game's move animations still play; this is the layer wrapped around them.",
+  "clips": [
+   "Type Reel",
+   "Wind-up Tells",
+   "End-of-turn Damage",
+   "Healing"
+  ],
+  "q1": "Yes. Hits went from a white blink to bolts, embers, splashes, shards and petals. The Type Reel alone is eighteen new effects.",
+  "q2": "Pass 2 made a hit feel heavy; pass 3 makes it look like what it is. You can now tell fire from water with the sound off and the text hidden.",
+  "q3": "Four more clips, and a new Conditions group for burn, poison and Leech Seed ticks, which had no animation at all in the game.",
+  "q4": "The type kits use particles, so they follow the existing Reduce particles setting: at Reduced they keep the star and ring and drop the sparks.",
+  "q5": "Type colours are the ones on the type pills in the UI redesign, so a Fire move matches its button."
+ },
+ "4": {
+  "name": "Trainers",
+  "big": "People join in. Trainers skid on with dust, wind up and throw from the hand, call out to their Pokémon, announce their ace before it lands and pay up when they lose. They step in for a moment and step out again, so the battle screen stays clear.",
+  "clips": [
+   "Trainer Intro",
+   "Ace Call",
+   "Trainer Defeated",
+   "Trainer Call-out"
+  ],
+  "q1": "Yes. A battle now opens with two people facing off, and the ace gets a full-screen banner and a double-size landing.",
+  "q2": "Passes 1 to 3 were only about the Pokémon. Now the ball leaves from a hand, the team size is shown as balls dropping onto the name plate, and the ace is announced before it appears instead of just being the last one left.",
+  "q3": "Four trainer clips and a new Trainers group. Gym Leaders, rivals and villains get their own passes later (13 and 14).",
+  "q4": "Trainer call-outs would sit under Settings, Battle, with Full, Short and Off.",
+  "q5": "Trainer slides in, throws, steps out is exactly how the handheld games open a battle. Your throw uses the game's own throw frames."
+ },
+ "5": {
+  "name": "Stagecraft",
+  "big": "The interface starts performing. Plates fly in on springs, damage numbers jump out of the hit, SUPER EFFECTIVE slams on like a rubber stamp, the message bubble pops for every line, and the three set pieces every Pokémon game is remembered for (the wild encounter, the catch and the break-out) get full choreography.",
+  "clips": [
+   "Numbers and Stamps",
+   "Danger",
+   "Wild Encounter",
+   "Catch",
+   "Break Out"
+  ],
+  "q1": "Yes. The catch alone has a bonk, two bounces, three lamps, a click, flying stars, a stamp and confetti.",
+  "q2": "Until now the plates and text sat still while the Pokémon moved. Now the whole screen reacts to a hit, and breaking out of a ball (which had no animation at all) is its own moment.",
+  "q3": "Five more clips and a Catching group. 24 clips in total after five passes.",
+  "q4": "Damage numbers and battle text animations already have switches in Settings; stamps would share the damage numbers switch.",
+  "q5": "Three ball shakes with a click and stars is the most recognisable animation in the series. The lamps make the count readable on a small screen."
+ }
+}

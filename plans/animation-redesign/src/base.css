@@ -1,0 +1,89 @@
+/* viewer chrome (single dark look on purpose: it frames game screens) */
+:root{color-scheme:dark;--vbg:#12141b;--vpanel:#1b1e28;--vfg:#eef0f6;--vmute:#9aa2b8;--vline:#2c3142;--vacc:#ffcb05}
+html,body{height:auto}
+body{margin:0;background:var(--vbg);color:var(--vfg);font:14px/1.5 'M PLUS Rounded 1c',system-ui,sans-serif}
+#app{max-width:1200px;margin:0 auto;padding-block:14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:12px}
+.vw-top{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}
+.vw-top h1{font:400 26px/1 'Jersey 15',sans-serif;letter-spacing:.04em;margin:0;color:var(--vacc)}
+.vw-passbar{display:flex;align-items:center;gap:8px;flex:1 1 320px;min-width:0}
+.vw-passbar b{font:400 20px/1 'Jersey 15',sans-serif;white-space:nowrap}
+.vw-passbar span{color:var(--vmute);min-width:0;overflow-wrap:anywhere}
+.vw-btn{font:inherit;color:var(--vfg);background:var(--vpanel);border:1px solid var(--vline);border-radius:8px;padding:6px 12px;cursor:pointer}
+.vw-btn.on{background:var(--vacc);color:#16181f;border-color:var(--vacc);font-weight:800}
+.vw-btn:hover,.vw-chip:hover{border-color:var(--vacc)}
+.vw-btn:focus-visible,.vw-chip:focus-visible,input:focus-visible{outline:2px solid var(--vacc);outline-offset:2px}
+#vw-range{flex:1 1 160px;min-width:120px;accent-color:var(--vacc)}
+#vw-wrap{position:relative;width:100%;overflow:hidden;border-radius:10px;background:#000;box-shadow:0 0 0 1px var(--vline)}
+#stage{position:absolute;left:0;top:0;width:960px;height:540px;transform-origin:0 0;overflow:hidden;view-transition-name:stage;contain:layout paint;background:#0b0d14;color:#fff;font:500 15px/1.3 'M PLUS Rounded 1c',sans-serif}
+.vw-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;color:var(--vmute)}
+#vw-scrub{flex:1 1 220px;min-width:140px;accent-color:var(--vacc)}
+#vw-time{font-variant-numeric:tabular-nums;min-width:11ch}
+#vw-cur{flex:1 1 200px;color:var(--vfg)}
+#vw-beats{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+#vw-beats li{background:var(--vpanel);border:1px solid var(--vline);border-radius:6px;padding:2px 9px;color:var(--vmute);font-size:13px}
+#vw-beats li b{color:var(--vfg);font-weight:800;margin-right:4px;font-variant-numeric:tabular-nums}
+#vw-beats li.on{background:var(--vacc);border-color:var(--vacc);color:#16181f}
+#vw-beats li.on b{color:#16181f}
+#vw-about p{margin:0 0 4px;max-width:90ch;color:var(--vmute)}
+#vw-about b{color:var(--vfg);margin-right:6px}
+#vw-clips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.vw-g{font:400 16px/1 'Jersey 15',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--vmute);margin:0 2px 0 8px}
+.vw-g:first-child{margin-left:0}
+.vw-chip{font:inherit;font-size:13px;color:var(--vfg);background:var(--vpanel);border:1px solid var(--vline);border-radius:999px;padding:3px 10px;cursor:pointer}
+.vw-chip.on{background:var(--vacc);color:#16181f;border-color:var(--vacc);font-weight:800}
+.vw-chip i{font-style:normal;font-size:10px;text-transform:uppercase;letter-spacing:.06em;margin-left:6px;padding:0 5px;border-radius:6px;background:#e3350d;color:#fff}
+.vw-chip i.ch{background:#2a75bb}
+#vw-review{background:var(--vpanel);border:1px solid var(--vline);border-radius:10px;padding:14px 18px}
+#vw-review h2{font:400 24px/1.1 'Jersey 15',sans-serif;margin:0 0 6px;color:var(--vacc);letter-spacing:.03em}
+#vw-review p{margin:0 0 8px;max-width:75ch}
+.vw-big{font-size:15px}
+.vw-new{color:var(--vmute)}
+#vw-review dl{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:6px 16px;margin:8px 0 0}
+#vw-review dt{color:var(--vmute)}
+#vw-review dd{margin:0;max-width:75ch}
+@media (max-width:640px){#vw-review dl{grid-template-columns:minmax(0,1fr)}#vw-review dd{margin-bottom:6px}}
+body.bare #app{padding:0;max-width:none;display:block}
+body.bare .vw-ui{display:none}
+body.bare #vw-wrap{width:960px;height:540px;border-radius:0;box-shadow:none}
+::view-transition-group(*){animation-duration:.3s}
+/* ---------- the stage ---------- */
+#stage,#stage *,#stage *::before,#stage *::after{box-sizing:border-box}
+#stage .wd,#stage .cam,#stage .shk,#stage .L{position:absolute;left:0;top:0;width:960px;height:540px}
+#stage .wd{overflow:hidden}
+#stage .cam,#stage .shk{transform-origin:50% 50%;will-change:transform}
+#stage .L{pointer-events:none}
+#stage .a{position:absolute;left:0;top:0;will-change:transform,opacity}
+.px{image-rendering:pixelated;image-rendering:crisp-edges}
+#stage .shd{background:#0a1020;border-radius:50%}
+#stage .tn{mix-blend-mode:normal}
+/* shared look, taken from pass 25 of the UI redesign: Raider Red, Pika Yellow, Ink, Paper, Sky */
+#stage{--red:#e3350d;--yel:#ffcb05;--ink:#1d2a4d;--ink2:#131c36;--paper:#fff;--sky:#2a75bb;--ok:#3ec46d;--mid:#f5b800;--low:#e3350d}
+#stage .dsp{font-family:'Jersey 15',sans-serif;font-weight:400;letter-spacing:.03em;line-height:1}
+#stage .plate{background:linear-gradient(180deg,#22325e,#16203f);border:3px solid var(--ink2);box-shadow:0 0 0 2px #2f4a8a inset,0 4px 0 #0008;border-radius:14px;color:#fff;padding:7px 14px 8px;overflow:hidden}
+#stage .plate .nm{font:400 25px/1 'Jersey 15',sans-serif;letter-spacing:.03em;white-space:nowrap}
+#stage .plate .lv{color:var(--yel);font:800 13px/1 'M PLUS Rounded 1c',sans-serif;margin-left:10px}
+#stage .plate .row{display:flex;align-items:center;gap:8px;margin-top:5px;white-space:nowrap}
+#stage .plate em{font:800 12px/1 'M PLUS Rounded 1c',sans-serif;color:var(--yel);font-style:normal}
+#stage .hp{position:relative;flex:1;height:11px;background:#dfe5f5;border:2px solid var(--ink2);transform:skewX(-20deg);overflow:hidden}
+#stage .hp i{position:absolute;left:0;top:0;bottom:0;display:block}
+#stage .hp .gh{background:#fff;opacity:.9;width:0}
+#stage .hp .fl{background:linear-gradient(180deg,#8fe6a8,var(--ok))}
+#stage .hp.mid .fl{background:linear-gradient(180deg,#ffe07a,var(--mid))}
+#stage .hp.low .fl{background:linear-gradient(180deg,#ff9a7a,var(--low))}
+#stage .plate .num{font:800 13px/1 'M PLUS Rounded 1c',sans-serif;min-width:58px;text-align:right;font-variant-numeric:tabular-nums}
+#stage .flag{position:absolute;right:-14px;top:-4px;bottom:-4px;width:112px;background:linear-gradient(105deg,transparent 0 18%,var(--red) 18% 52%,#fff 52% 58%,var(--ok) 58%);opacity:.95}
+#stage .xp{position:relative;height:5px;flex:0 0 150px;background:#0b1226;border-radius:3px;overflow:hidden}
+#stage .xp i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#4cc3ff,#9ae4ff)}
+#stage .msg{background:#131c36f2;border:3px solid var(--ink2);box-shadow:0 0 0 2px #2f4a8a inset,0 4px 0 #0008;border-radius:18px;color:#fff;padding:10px 18px;font:500 19px/1.25 'M PLUS Rounded 1c',sans-serif;display:flex;align-items:center}
+#stage .msg b{color:var(--yel);font-weight:800}
+#stage .pill{font:800 13px/1 'M PLUS Rounded 1c',sans-serif;padding:4px 10px;border-radius:99px;background:var(--yel);color:var(--ink);white-space:nowrap}
+#stage .ttl{font:400 64px/1 'Jersey 15',sans-serif;letter-spacing:.04em;color:#fff;text-shadow:4px 4px 0 var(--red),-2px -2px 0 var(--ink2),2px -2px 0 var(--ink2),-2px 2px 0 var(--ink2),6px 6px 0 var(--ink2);white-space:nowrap}
+#stage .ttl.y{color:var(--yel)}
+#stage .cap{font:800 15px/1.2 'M PLUS Rounded 1c',sans-serif;color:#fff;text-shadow:0 2px 0 #000a;white-space:nowrap}
+#stage .card{background:#fff;color:var(--ink);border-radius:16px;box-shadow:0 5px 0 #0006;padding:10px 16px;font:800 15px/1.3 'M PLUS Rounded 1c',sans-serif}
+#stage .dmg{font:400 44px/1 'Jersey 15',sans-serif;color:#fff;text-shadow:3px 3px 0 var(--ink2),-2px -2px 0 var(--ink2),2px -2px 0 var(--ink2),-2px 2px 0 var(--ink2);white-space:nowrap}
+#stage .stamp{font:400 30px/1 'Jersey 15',sans-serif;letter-spacing:.05em;padding:5px 14px 6px;border-radius:10px;background:var(--red);color:#fff;border:3px solid var(--ink2);white-space:nowrap}
+#stage .stamp.g{background:var(--ok);color:var(--ink2)} #stage .stamp.y{background:var(--yel);color:var(--ink2)} #stage .stamp.b{background:var(--sky)} #stage .stamp.k{background:var(--ink2)}
+#vw-capbar{display:none}
+body.cap #vw-capbar{display:block;width:960px;height:44px;background:#12141b;color:#eef0f6;font:500 17px/44px 'M PLUS Rounded 1c',sans-serif;padding:0 16px;white-space:nowrap;overflow:hidden}
+body.cap #vw-capbar b{color:#ffcb05;font:400 22px/44px 'Jersey 15',sans-serif;letter-spacing:.04em;margin-right:14px}
