@@ -34,6 +34,7 @@ Suggested order to build: the two rules (Reduced motion, Skip) first, then your 
 - **Redesign:** Pass 1: One clear order: ball leaves, ball lands, white flash and ring, the Pokémon grows out of the light and its colour fades in. Pass 2: The ball lands, squashes and bounces once before it opens. The Pokémon comes out tall and thin, lands flat and wide, and settles. Dust on both landings. Pass 3: The landing ring and a spray of sparks come in the Pokémon's own type colours: fire for Charizard, water for Blastoise. Pass 4: The rival skids in with dust, steps back and whips the ball. You slide in, wind up and release on the game's own throw frames, and the ball leaves from the hand. Each trainer steps out as their Pokémon lands. Pass 5: Plates fly in from their own sides with a spring instead of fading, and each line of text pops its bubble. Pass 7: The ground answers: the base dips and flashes under every landing. Pass 11: Entrances end with a cry sized to the Pokémon, and a heavy Pokémon shakes the screen and bounces the other side off its feet.
 - **See it:** pass 1, improved up to pass 21, clip "Send Out"
 - **In the game:** `src/ui/playerTrainer.ts:140, src/ui/aero.ts:76`
+- **Build:** Built into the game (build slice 1).
 
 ### 2. Recall (need)
 - **Today:** The Pokémon just fades out over 0.25s. No beam, no ball.
@@ -41,6 +42,7 @@ Suggested order to build: the two rules (Reduced motion, Skip) first, then your 
 - **See it:** pass 1, improved up to pass 4, clip "Recall"
 - **In the game:** `src/scenes/BattleScene.ts:5152`
 - **Note:** Gap in the survey: no ball-return picture exists.
+- **Build:** Built into the game (build slice 1).
 
 ### 3. Attack and Hit (want)
 - **Today:** A 24px lunge, a 60ms white fill, a colour flash and a 6-step shake. HP drains at the same time.
@@ -54,6 +56,7 @@ Suggested order to build: the two rules (Reduced motion, Skip) first, then your 
 - **See it:** pass 1, improved up to pass 23, clip "Faint"
 - **In the game:** `src/scenes/BattleScene.ts:5133`
 - **Note:** Gap in the survey: no last-hit moment.
+- **Build:** Built into the game (build slice 1). The exp lights (pass 23) are in too. The trainer face chip (pass 19) comes with the Together slice.
 
 ### 5. HP Bar (want)
 - **Today:** Drain time grows with the damage; a ghost bar follows. Colour changes snap.
@@ -72,6 +75,7 @@ Suggested order to build: the two rules (Reduced motion, Skip) first, then your 
 - **Redesign:** Pass 2: One unbroken move: beam back, the bar tucks down, the next ball is already in the air, the bar comes back with the new name. Pass 4: Your trainer steps in for the recall and again for the throw, so a switch reads as one person doing two things.
 - **See it:** pass 2, improved up to pass 11, clip "Switch"
 - **In the game:** `src/scenes/BattleScene.ts:1606, 5179`
+- **Build:** Built into the game (build slice 1). It plays as the recall followed by the send-out; the bar tuck comes with the battle bars.
 
 ### 8. Miss (want)
 - **Today:** The target slides 36px sideways and fades for 130ms.
@@ -119,6 +123,7 @@ Suggested order to build: the two rules (Reduced motion, Skip) first, then your 
 - **Redesign:** Eighteen impact kits, one per type, built from six shapes (sparks, rings, stars, streaks, bolts, chunks). They ride on top of every move animation so a hit always reads as its type, even on the fallback.
 - **See it:** pass 3, improved up to pass 12, clip "Type Reel"
 - **In the game:** `src/ui/battleFx/familyFx.ts:198`
+- **Build:** Kept from the redesign: the hit reaction on the Pokémon and the type colour of numbers and stamps. Not built, by your rule that specific move animations are not added or changed: type-shaped effects drawn for the move itself.
 
 ### 15. Wind-up Tells (want)
 - **Today:** A marker on the user before the move, in three styles: quick, normal, strong.
@@ -143,6 +148,7 @@ Suggested order to build: the two rules (Reduced motion, Skip) first, then your 
 - **Redesign:** The first turn is a build-up you can watch: light is pulled in from all over the arena, the glow grows, and a CHARGING chip sits on the Pokémon through the foe's turn. The second turn lets it all go as one beam wider than the Pokémon.
 - **See it:** pass 12, clip "Charge-Up Move"
 - **In the game:** `src/ui/battleFx/cinematics.ts:848`
+- **Build:** Kept from the redesign: the charge on the Pokémon (the pose, the gathering light, the arena dimming). Not built, by your rule that specific move animations are not added or changed: the beam.
 
 ### 19. Critical Hit (want)
 - **Today:** The same hit with a text line afterwards.
@@ -155,48 +161,56 @@ Suggested order to build: the two rules (Reduced motion, Skip) first, then your 
 - **Redesign:** The Pokémon acts the family out. A plain contact move is a shoulder dash and a ring. A bite closes two rows of teeth on the target and leaves claw marks. A punch lands as one fist-sized disc with six short lines. A heavy move crouches, glows, crosses nearly the whole field and leaves dust. You can tell the four apart with the sound off.
 - **See it:** pass 24, clip "Close Range, Four Ways"
 - **In the game:** `src/ui/battleFx/familyFx.ts:198, src/core/presentation/families.ts:39`
+- **Build:** Kept from the redesign: the wind-up of the user and the reaction of the target. Not built, by your rule that specific move animations are not added or changed: the family shape (the 26 shared move effects).
 
 ### 21. Shots, Beams and Breath (want)
 - **Today:** Projectile, beam, flame and dragon moves share two shapes: a dot that flies and a line that appears. Flame and dragon breath are the same line in two colours.
 - **Redesign:** Four different things leave the mouth. A projectile is a ball with a tail that arcs. A beam gathers light first, then holds as a three-layer bar that pushes the user back. A flame is a stream of growing puffs that takes time to arrive. Dragon breath is the same stream, but the body glows first and it ends in a burst.
 - **See it:** pass 24, clip "Shots, Beams and Breath"
 - **In the game:** `src/ui/battleFx/familyFx.ts:198`
+- **Build:** Kept from the redesign: the wind-up of the user and the reaction of the target. Not built, by your rule that specific move animations are not added or changed: the family shape (the 26 shared move effects).
 
 ### 22. Elements Have Shapes (want)
 - **Today:** Wind, water, ground and ice moves differ mostly by colour. A wave and a gust are the same arc; a quake is a screen shake.
 - **Redesign:** Each element gets a shape nothing else uses. Wind is three thin crescents and a cut. Water is three tall crescents that arrive as a ring. Ground never travels: rock teeth come up under the target, which hops. Ice arrives as a ball, grows a row of spikes from the floor, and the spikes shatter.
 - **See it:** pass 24, clip "Elements Have Shapes"
 - **In the game:** `src/ui/battleFx/familyFx.ts:198`
+- **Build:** Kept from the redesign: the wind-up of the user and the reaction of the target. Not built, by your rule that specific move animations are not added or changed: the family shape (the 26 shared move effects).
 
 ### 23. Sparks, Sludge, Mind and Shadow (want)
 - **Today:** Electric, poison, psychic, ghost and status moves are a dot or a ring in the type colour. A status move looks like a weak attack.
 - **Redesign:** Five families that never touch the target. Lightning comes from the sky, three times. Poison is a lobbed ball that opens into a cloud and drips. A psychic move lifts the target off the ground, tilts it, and drops it. A ghost move darkens the field and opens two eyes behind the target. A status move is slow, does no damage, and leaves stars circling the head.
 - **See it:** pass 24, clip "Sparks, Sludge, Mind and Shadow"
 - **In the game:** `src/ui/battleFx/familyFx.ts:198`
+- **Build:** Kept from the redesign: the wind-up of the user and the reaction of the target. Not built, by your rule that specific move animations are not added or changed: the family shape (the 26 shared move effects).
 
 ### 24. Care, Cover and Field (want)
 - **Today:** Healing, protection and field moves play a sparkle on the user. Protect shows nothing when it actually blocks a hit.
 - **Redesign:** Three families aimed at yourself. Healing rises from the feet and the bar fills as the lights pass the head. A barrier is a six-sided pane that stays up for the turn; when it blocks a hit it flashes, throws the hit back as sparks, and says so. A field move washes across the whole screen once and then changes the arena light for as long as it lasts.
 - **See it:** pass 24, clip "Care, Cover and Field"
 - **In the game:** `src/ui/battleFx/familyFx.ts:198`
+- **Build:** Kept from the redesign: the wind-up of the user and the reaction of the target. Not built, by your rule that specific move animations are not added or changed: the family shape (the 26 shared move effects).
 
 ### 25. Explosion (want)
 - **Today:** A charge glow, a burst on the user and a white wash. The user faints with the normal faint.
 - **Redesign:** The loudest family gets silence first. The body shrinks and flashes faster and faster while rings close in on it. Everything stops for a held breath. Then white, a ring that leaves the screen, a long shake, and a scorch where it stood. The user does not sink away: it is simply gone when the light clears.
 - **See it:** pass 24, clip "Explosion"
 - **In the game:** `src/ui/battleFx/familyFx.ts:198`
+- **Build:** Kept from the redesign: the wind-up of the user and the reaction of the target. Not built, by your rule that specific move animations are not added or changed: the family shape (the 26 shared move effects).
 
 ### 26. One Family, Four Types (want)
 - **Today:** The family picks the shape and the type picks one flat colour.
 - **Redesign:** The family decides how a move is built and the type dresses it. Here the beam family plays four times in a row: fighting, dark, water and normal. The gather, the held bar and the push-back never change. The three colours, the particles and what the hit leaves on the ground come from the type kit.
 - **See it:** pass 24, clip "One Family, Four Types"
 - **In the game:** `src/ui/battleFx/familyFx.ts:198`
+- **Build:** Kept from the redesign: the wind-up of the user and the reaction of the target. Not built, by your rule that specific move animations are not added or changed: the family shape (the 26 shared move effects).
 
 ### 27. Family Reel: All 26 (want)
 - **Today:** The 26 families are a table in the code: a startup, a travel and an impact for each. In play, most of them look alike.
 - **Redesign:** The same table, drawn so every row is different at a glance. Each tile shows a user dot on the left and a target dot on the right and plays its family on a loop: who moves, what crosses, and what shape lands. Families that act on the user (Burst, Healing, Barrier, Field) play on the left dot. The seven clips before this one are these tiles at full size.
 - **See it:** pass 24, clip "Family Reel: All 26"
 - **In the game:** `src/core/presentation/families.ts:39`
+- **Build:** Kept from the redesign: the wind-up of the user and the reaction of the target. Not built, by your rule that specific move animations are not added or changed: the family shape (the 26 shared move effects).
 
 ### 28. Mastery flourish (want)
 - **Today:** Sparks and a shine ring on the target when a mastered move hits.

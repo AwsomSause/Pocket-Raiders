@@ -33,7 +33,9 @@ export function addContactShadows(scene: Phaser.Scene, field: Phaser.GameObjects
       const v = t?.visual;
       if (!t || !v || !v.active || !v.visible || v.alpha < 0.05) return void e.setVisible(false);
       const look = shadowLook((v as Phaser.GameObjects.Sprite).displayWidth || 110, t.homeY - v.y, t.flyer);
-      e.setVisible(true).setPosition(v.x, t.homeY - 3 + look.dy).setSize(look.width, look.width * 0.2).setDisplaySize(look.width, look.width * 0.2).setAlpha(look.alpha);
+      // A motion clip (battleFx/motionPlayer) can fade the shadow while its Pokémon sinks or is called back.
+      const fade = (v.getData('motionShadow') as number | undefined) ?? 1;
+      e.setVisible(fade > 0.02).setPosition(v.x, t.homeY - 3 + look.dy).setSize(look.width, look.width * 0.2).setDisplaySize(look.width, look.width * 0.2).setAlpha(look.alpha * fade);
     });
   };
   scene.events.on(Phaser.Scenes.Events.UPDATE, tick);

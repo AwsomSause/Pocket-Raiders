@@ -1,0 +1,151 @@
+// Battle basics from the animation redesign (plans/animation-redesign, group "Battle basics"):
+// recall, faint and send-out, with the mockup's own beats and timings (ms).
+//
+//   recall    pass 2 + 4: the ball is held out, the Pokémon turns red, braces, is pulled thin up the beam,
+//             and the ball jolts as it catches.
+//   faint     pass 11 + 2 + 7: a stagger back, a sway, the knees give, then it sinks into the ground with
+//             dust, and its base goes dark until the next Pokémon lands.
+//   send-out  pass 2: the ball arcs in, lands, bounces once and bursts; the Pokémon pops out white,
+//             stretches up, lands flat and wide, and settles. Dust on both landings.
+//
+// One rule for every clip (pass 25): Reduced keeps the shapes that say what happened and drops the
+// wind-ups, flashes and particles; Off moves nothing and only leaves the end state.
+// Presentation only: these never touch battle state or gameplay RNG.
+
+import { ClipBuilder, type ClipLevel, type MotionClip } from './motionClip';
+
+/** Where a Pokémon stands: its feet, how tall it is drawn, and whose it is. */
+export interface MonSpot {
+  x: number;
+  y: number;
+  h: number;
+  side: 'player' | 'enemy';
+}
+
+export interface Point {
+  x: number;
+  y: number;
+}
+
+const RECALL_RED = 0xff3b30;
+
+/** Where the ball is held for a recall, and where a throw starts, when no trainer is on screen (the mockup's edges). */
+export const recallBallSpot = (side: 'player' | 'enemy'): Point => (side === 'player' ? { x: 40, y: 330 } : { x: 920, y: 120 });
+export const throwFromSpot = (side: 'player' | 'enemy'): Point => (side === 'player' ? { x: -30, y: 330 } : { x: 990, y: 110 });
+
+/** Recall: 800 ms at Full, 420 ms Reduced, nothing at Off. Ends with the Pokémon gone (sx = sy = 0). */
+export function recallClip(mon: MonSpot, ball: Point, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('recall', level);
+  const m = b.part('mon', { sx: 1, sy: 1, red: 0, lift: 0, shadow: 1 });
+  if (level === 'off') {
+    m.at(0).set({ sx: 0, sy: 0, shadow: 0 });
+    return b.end(0);
+  }
+  const k = b.part('ball', { x: ball.x, y: ball.y, sx: 1, sy: 1, alpha: 0 });
+  const beam = { kind: 'streak', x1: ball.x, y1: ball.y, x2: mon.x, y2: mon.y - mon.h / 2, w: 10, color: RECALL_RED } as const;
+  if (level === 'reduced') {
+    k.at(0).set({ alpha: 1 }).wait(300).to(120, { alpha: 0 });
+    m.at(0).to(100, { red: 1 });
+    b.fx({ ...beam, at: 60, d: 100, hold: 160, out: 100 });
+    m.at(120).to(200, { s: 0 }, 'in');
+    m.at(120).to(200, { shadow: 0 });
+    b.fx({ kind: 'cue', at: 320, name: 'catch' });
+    b.beat(0, 'Ball held out').beat(120, 'Shrinks into the beam');
+    return b.end(420);
+  }
+  k.at(0).set({ alpha: 1 }).to(120, { s: 1.25 }, 'back');
+  m.at(50).to(120, { red: 1 });
+  b.fx({ ...beam, at: 100, d: 120, hold: 220, out: 120 });
+  m.at(120).to(100, { sx: 1.1, sy: 0.9 }, 'out').to(200, { sx: 0.15, sy: 1.25, lift: 0.3 }, 'in3').to(50, { s: 0 });
+  m.at(200).to(200, { shadow: 0 });
+  k.at(460).to(60, { s: 0.85 }).to(200, { s: 1 }, 'el').wait(150).to(150, { alpha: 0 });
+  b.fx({ kind: 'cue', at: 460, name: 'catch' });
+  b.beat(0, 'Ball held out').beat(120, 'Braces, then stretches into the beam').beat(460, 'Ball catches it');
+  return b.end(800);
+}
+
+/** Faint: 1300 ms at Full, 400 ms Reduced, nothing at Off. Ends sunk into the ground (sink = 1). */
+export function faintClip(mon: MonSpot, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('faint', level);
+  const m = b.part('mon', { dx: 0, rot: 0, sx: 1, sy: 1, sink: 0, shadow: 1 });
+  const dim = { kind: 'dim', x: mon.x, y: mon.y, d: 400 } as const;
+  if (level === 'off') {
+    m.at(0).set({ sink: 1, shadow: 0 });
+    b.fx({ ...dim, at: 0, d: 0 });
+    return b.end(0);
+  }
+  if (level === 'reduced') {
+    m.at(0).to(350, { sink: 1 }, 'in3');
+    m.at(0).to(350, { shadow: 0 });
+    b.fx({ ...dim, at: 0 });
+    b.beat(0, 'Sinks away');
+    return b.end(400);
+  }
+  // Away from the other side: your Pokémon reels left, the foe reels right.
+  const d = mon.side === 'player' ? -1 : 1;
+  m.at(0).to(100, { dx: 14 * d, rot: 7 * d }, 'out').to(120, { dx: 8 * d, rot: 3 * d }).to(100, { dx: 16 * d, rot: 10 * d }, 'in');
+  m.at(300).to(120, { dx: 16 * d - 9, rot: -4 }).to(160, { dx: 16 * d + 9, rot: 4 }).to(120, { dx: 16 * d, rot: 0 }).to(200, { sy: 0.78, sx: 1.14 }, 'in');
+  m.at(900).to(350, { sink: 1 }, 'in3');
+  m.at(900).to(350, { shadow: 0 });
+  b.fx({ ...dim, at: 300 });
+  b.fx({ kind: 'dust', at: 920, x: mon.x + 16 * d, y: mon.y, n: 10 });
+  b.beat(0, 'Staggers back').beat(300, 'Sways').beat(700, 'Knees give').beat(900, 'Drops');
+  return b.end(1300);
+}
+
+/** When the new Pokémon bursts out of its ball, ms into the send-out clip (the screen shows the sprite then). */
+export const sendOpenAt = (level: ClipLevel): number => (level === 'full' ? 900 : level === 'reduced' ? 300 : 0);
+
+/**
+ * Send-out, from the moment the ball leaves the hand at `from`: 1500 ms at Full, 550 ms Reduced, nothing
+ * at Off. The cue "open" is when the Pokémon appears (its cry, the ball's own opening effect).
+ */
+export function sendClip(mon: MonSpot, from: Point, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('send', level);
+  const open = sendOpenAt(level);
+  const m = b.part('mon', { dy: 0, sx: 0, sy: 0, white: 0, shadow: 0 });
+  b.fx({ kind: 'cue', at: open, name: 'open' });
+  if (level === 'off') {
+    m.at(0).set({ sx: 1, sy: 1, shadow: 1 });
+    return b.end(0);
+  }
+  const gy = mon.y - 8;
+  const spin = mon.side === 'player' ? 540 : -540;
+  const k = b.part('ball', { x: from.x, y: from.y, sx: 1, sy: 1, rot: 0, alpha: 0 });
+  if (level === 'reduced') {
+    k.at(0).set({ alpha: 1 }).arc(open, from.x, from.y, mon.x, gy, 40).to(100, { alpha: 0 });
+    b.fx({ kind: 'ring', at: open, x: mon.x, y: gy - 6, r1: 110, flat: 0.4, d: 400 });
+    m.at(open).to(200, { s: 1 }, 'out');
+    m.at(open).to(200, { shadow: 1 });
+    b.beat(0, 'Ball thrown').beat(open, 'Appears');
+    return b.end(open + 250);
+  }
+  const land = 500;
+  k.at(0).set({ alpha: 1 }).also(land, { rot: spin }, 'lin').arc(land, from.x, from.y, mon.x, gy, 120);
+  k.to(50, { sy: 0.6, sx: 1.3 }).to(80, { sy: 1.1, sx: 0.95 }).arc(220, mon.x, gy, mon.x, gy, 26).to(50, { sy: 0.7, sx: 1.25 }).to(100, { s: 1.8, alpha: 0 }, 'out');
+  b.fx({ kind: 'cue', at: 0, name: 'throw' });
+  b.fx({ kind: 'cue', at: land, name: 'bounce' });
+  b.fx({ kind: 'dust', at: land, x: mon.x, y: gy + 8, n: 5 });
+  b.fx({ kind: 'flash', at: open, d: 160, alpha: 0.5 });
+  b.fx({ kind: 'ring', at: open, x: mon.x, y: gy - 6, r1: 110, flat: 0.4, d: 400 });
+  m.at(open).set({ white: 1 });
+  m.at(open).to(140, { sx: 0.78, sy: 1.26, dy: -34 }, 'out').to(100, { sx: 1.22, sy: 0.8, dy: 0 }, 'in').to(120, { sx: 0.95, sy: 1.06 }, 'out').to(140, { sx: 1, sy: 1 }, 'io');
+  m.at(open + 100).to(200, { white: 0 });
+  m.at(open).to(250, { shadow: 1 });
+  b.fx({ kind: 'dust', at: open + 240, x: mon.x, y: mon.y, n: 9 });
+  b.beat(0, 'Ball thrown').beat(land, 'Ball lands and bounces').beat(open, 'Bursts open').beat(open + 240, 'Lands');
+  return b.end(open + 600);
+}
+
+/** Exp lights (pass 23): a fallen foe's experience leaves it as lights and flies to your bar. The bar fills on "arrive". */
+export function expLightsClip(from: Point, bar: Point, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('expLights', level);
+  if (level !== 'full') {
+    b.fx({ kind: 'cue', at: 0, name: 'arrive' });
+    return b.end(0);
+  }
+  b.fx({ kind: 'orbs', at: 0, x0: from.x, y0: from.y - 30, x1: bar.x, y1: bar.y, n: 7, gap: 60, d: 550 });
+  b.fx({ kind: 'cue', at: 550, name: 'arrive' });
+  b.beat(0, 'Its experience flies to your bar').beat(550, 'The bar fills');
+  return b.end(910);
+}

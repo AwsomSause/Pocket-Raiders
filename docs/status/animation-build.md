@@ -1,0 +1,42 @@
+# Animation build (the redesign, in the real game)
+
+Kice 2026-11-20: build the animation redesign (`plans/animation-redesign/`, 25 passes) into the game, as close to
+the mockups as possible. The UI build owns how things look; this build owns how things move. Rule: specific move
+animations are never added or changed; the Pokémon and the surroundings may move.
+
+## How it is built
+
+- **A clip is data.** `src/core/presentation/motionClip.ts` holds the mockup kit's timeline (`at`, `to`, `wait`,
+  `also`, `arc`, the same easing curves) in milliseconds, and `sampleClip(clip, t)` gives every part's numbers at a
+  moment. No Phaser, no game state, no gameplay RNG, so the timings are unit-tested against the mockups.
+- **One player.** `src/ui/battleFx/motionPlayer.ts` samples the clip on the scene clock (so battle speed and the
+  Animation speed setting apply), puts the numbers on the sprites, and draws the one-shot effects (dust, ring, beam,
+  flash, exp lights). It always ends (a real-clock watchdog) and leaves the parts in the clip's end state.
+- **One rule for the settings** (pass 25): Full plays everything. Reduced keeps the shapes that say what happened and
+  drops wind-ups, flashes, particles. Off (or Disable all animations) moves nothing and takes no time. Flashes follow
+  the Flashes and Reduced flash settings, dust and lights follow Particle effects.
+
+## Slice 1: battle basics (done)
+
+| Clip | What the player sees | Where |
+|---|---|---|
+| Send-out | The ball arcs from the hand, lands, bounces once and bursts with a ring; the Pokémon pops out white, stretches up, lands flat and wide, settles; dust on both landings. Used for the opening throw and every switch-in, both sides. | `sendClip`, `BattleScene.sendMoment` |
+| Recall | The ball is held out, the Pokémon turns red, braces, is pulled thin up a red beam, the ball jolts as it catches. | `recallClip`, `BattleScene.recallMoment` |
+| Faint | A stagger away from the other side, a sway, the knees give, then it sinks into the ground at its feet with dust; its base stays dark until the next Pokémon lands. | `faintClip`, `BattleScene.faintMoment`, `dimBase` |
+| Exp lights | A fallen foe's experience leaves it as seven lights that fly to your Exp bar; the bar fills as they arrive. | `expLightsClip`, the `xp` event |
+
+Tests: `tests/unit/motionBasics.test.ts` (timings against the mockups, the Reduced and Off rule),
+`tests/e2e/motionBasics.spec.ts` (the clips in a real battle at Full, Reduced and Off; sprites left as the battle expects).
+
+## Known limits
+
+- The foe's ball comes from the screen edge (the mockup's pass 2); the foe trainer stepping in to throw (pass 4) comes
+  with the trainer intro slice.
+- The trainer face chip on a knock-out (pass 19) and the info bar tucking away during a switch (pass 2) are not in yet.
+- Double battles use the new faint, recall and send-out for the focused Pokémon; the dark base and exp lights are singles only.
+- The faint's camera push is still the game's own KO camera (it already follows the Battle camera setting).
+
+## Next
+
+Slice 2: Kice's six notes in motion (trainer intro, ace call, gimmick cutscenes, blessing, event choice, the small map).
+The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` carry a **Build** line per entry.
