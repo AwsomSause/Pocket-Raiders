@@ -235,3 +235,47 @@ test('Pocket look: the stage map is the small Town Map board; the cursor, the le
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.activeScene()), { timeout: 20_000 }).not.toBe('Map');
   expect(errors).toEqual([]);
 });
+
+test('Pocket look: the Poké Mart is two shelves and a counter; a basket checks out on a receipt and pays the same', async ({ page }) => {
+  test.setTimeout(240_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=pk-shop');
+  await toPocketMap(page);
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr, run = pkr.session.run;
+    run.money = 4820;
+    const node = run.stage.map.nodes.find((n: any) => n.column === 1);
+    node.sides.push({ id: 'pk-shop', kind: 'shop', used: false });
+    run.stage.current = node.id;
+    if (!run.stage.visited.includes(node.id)) run.stage.visited.push(node.id);
+    pkr.session.visitSide('pk-shop');
+    pkr.session.run.shop.type = 'depot';
+    pkr.game.scene.getScene('Map').scene.start('Shop', { type: 'depot' });
+  });
+  await waitForScene(page, 'Shop');
+  await onPkPage(page, 'Shop', 'shop');
+  const shop = pkView(page, 'Shop', 'shop');
+  await expect(shop.locator('.si').first()).toBeVisible();
+  expect(await shop.locator('.si').count()).toBeLessThanOrEqual(8);
+  await expect(shop.locator('[data-key="shop-keeper"]')).toBeVisible();
+  await expect(shop.locator('.basket')).toContainText('Nothing yet');
+  await fits(page, 'Shop', 'shop');
+
+  // Enter puts the lit good in the basket; C asks to check out on the receipt page.
+  await step(page, 'Enter', 2);
+  await expect(shop.locator('.basket')).not.toContainText('Nothing yet');
+  const money = await page.evaluate(() => (window as any).__pkr.session.run.money);
+  await step(page, 'c');
+  await onPkPage(page, 'Shop', 'shop-pay');
+  const pay = pkView(page, 'Shop', 'shop-pay');
+  await expect(pay.locator('.receipt')).toContainText('Total');
+  await expect(pay.locator('.pay-btns .btn')).toHaveCount(2);
+  await fits(page, 'Shop', 'shop-pay');
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.money)).toBe(money);
+
+  // Pay rings it up as before: the money goes down and the shop floor comes back.
+  await step(page, 'Enter');
+  await onPkPage(page, 'Shop', 'shop');
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.session.run.money)).toBeLessThan(money);
+  expect(errors).toEqual([]);
+});

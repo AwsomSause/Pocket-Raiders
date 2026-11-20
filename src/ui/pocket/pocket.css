@@ -271,3 +271,30 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .gx-nmenu .chc .gx-st.must{background:var(--yel)}
 .pkx .pks .gx-nmenu .gx-nm-t{margin:0;font-size:13px;overflow:hidden}
 .pkx .pks .gx-nmenu .chc.gx-off{opacity:.55;filter:grayscale(.7)}
+
+/* ---- Shop (ui/pocket/screens/shop.ts) ---- */
+.pkx .pks .gx-shop .si>b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.pkx .pks .gx-shop .si>em s{opacity:.6;font-weight:700}
+.pkx .pks .gx-shop .si.gx-off>em{background:#e4e7ef;color:var(--red)}
+.pkx .pks .gx-shop .si.gx-off .si-ic img{opacity:.55}
+.pkx .pks .gx-si-tag{position:absolute;left:4px;top:4px;text-decoration:none;font-size:10px;font-weight:800;color:var(--ink);background:var(--yel);border:1.5px solid var(--ink);border-radius:999px;padding:0 6px;max-width:80px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pkx .pks .gx-shop .sh-keep{z-index:1}
+.pkx .pks .gx-shop .sh-keep.gx-mon{left:690px;top:66px}
+.pkx .pks .gx-shop .sh-counter{z-index:2}
+.pkx .pks .gx-shop .basket{z-index:3;cursor:default}
+.pkx .pks .gx-shop .basket .gx-bk-l{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pkx .pks .gx-shop .basket>b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pkx .pks .gx-shop .bk-t{gap:6px}
+.pkx .pks .gx-shop .bk-t .btn{min-height:26px;padding:0 10px;cursor:pointer}
+.pkx .pks .gx-shop .bk-t .btn.gx-dim{opacity:.5}
+.pkx .pks .gx-shop .bk-t .btn.on::before,.pkx .pks .gx-shop .bk-t .btn.on::after{content:none}
+.pkx .pks .gx-shop .bk-go{cursor:pointer}
+.pkx .pks .gx-shop .bk-go.on{background:var(--red);color:#fff;box-shadow:0 0 0 2px var(--yel)}
+.pkx .pks .gx-bk-side{position:absolute;right:10px;top:8px;display:flex;gap:6px}
+.pkx .pks .gx-bk-x{font-style:normal;font-size:11px;font-weight:800;background:#fff;border:2px solid var(--ink);border-radius:999px;padding:0 9px;cursor:pointer}
+.pkx .pks .gx-bk-x.on{background:var(--yel)}
+.pkx .pks .gx-stock{position:absolute;left:656px;top:236px;z-index:3;font-style:normal;font-size:11px;font-weight:800;color:#fff;background:rgba(13,21,48,.8);border-radius:999px;padding:1px 10px}
+.pkx .pks .gx-shop .receipt .gx-save{color:#2f9e44;font-weight:800}
+.pkx .pks .gx-shop .receipt .gx-more{grid-template-columns:1fr;color:var(--mute)}
+.pkx .pks .gx-shop .rc-after .gx-bad{color:var(--red)}
+.pkx .pks .gx-shop .pay-btns .btn{cursor:pointer}

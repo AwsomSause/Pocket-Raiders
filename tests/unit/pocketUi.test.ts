@@ -7,6 +7,7 @@ import { pkAce, pkVersus } from '../../src/ui/pocket/screens/cards';
 import { dealOf, dealWord, pageText, pkEvent, points } from '../../src/ui/pocket/screens/event';
 import { mapWindow, nodeState, pkMap, pkMiniMap, pkNodeMenu } from '../../src/ui/pocket/screens/map';
 import { pkPause } from '../../src/ui/pocket/screens/pause';
+import { pkShop, pkShopPay, type PkShopGood, type PkShopModel } from '../../src/ui/pocket/screens/shop';
 import type { MapModel, MapNodeView } from '../../src/ui/redux/screens/map';
 import type { EventModel } from '../../src/ui/redux/screens/event';
 import { pkSettingsHome } from '../../src/ui/pocket/screens/settings';
@@ -299,5 +300,53 @@ describe('Pocket look: the stage map', () => {
     expect(html).toContain('class="chc safe on"');
     expect(html).toContain('gx-st must');
     expect(html.match(/gx-st/g)?.length).toBe(1);
+  });
+});
+
+describe('Pocket look: the Poké Mart', () => {
+  const good = (k: number, o: Partial<PkShopGood> = {}): PkShopGood => ({ name: `Good ${k}`, tag: '', price: 100 + k, was: null, off: false, have: 0, art: null, inBasket: 0, ...o });
+  const goods = Array.from({ length: 12 }, (_, k) => good(k));
+  goods[1] = good(1, { tag: 'on sale!', was: 200, price: 150, have: 3 });
+  const d: PkShopModel = { title: 'Poké Mart', crumb: ['Viridian'], clock: 'Day 3', money: 4820, goods, index: 1, buy: [{ label: 'Buy 1', act: 'buy1', on: true }, { label: 'Buy 5', act: 'buy5', on: false }], extras: ['Sell'], basket: null, pocket: 'Medicine', text: 'Heals 20 HP.', keeper: null, nextStock: null, ask: null };
+  it('shows two shelves of four, paging on to keep the lit good in sight', () => {
+    const html = pkShop(d);
+    expect(pkPageOf(html)?.id).toBe('shop');
+    expect(html.match(/class="si[ "]/g)?.length).toBe(8);
+    expect(html).toContain('data-key="shop-g-0"');
+    expect(html).not.toContain('data-key="shop-g-8"');
+    const late = pkShop({ ...d, index: 11 });
+    expect(late).toContain('data-key="shop-g-11"');
+    expect(late).not.toContain('data-key="shop-g-0"');
+    expect(late).toContain('5–12 of 12');
+  });
+  it('a good shows its tag, the old price struck, what you have, and the Buy buttons of the lit one', () => {
+    const html = pkShop(d);
+    expect(html).toContain('<u class="gx-si-tag">on sale!</u>');
+    expect(html).toContain('<s>₽ 200</s> ₽ 150');
+    expect(html).toContain('You have 3');
+    expect(html).toContain('In your Bag: 3 · Medicine');
+    expect(html).toContain('class="btn sm on"');
+    expect(html).toContain('Heals 20 HP.');
+  });
+  it('a shop with a basket counts what is in it, totals it and checks out on C', () => {
+    const html = pkShop({ ...d, goods: d.goods.map((g, k) => (k === 1 ? { ...g, inBasket: 2 } : g)), buy: [], extras: ['Sell', 'Checkout (2)', 'Empty basket'], basket: [{ name: 'Good 1', count: 2, total: 300, art: null, saving: 100 }] });
+    expect(html).toContain('<span class="qty"><kbd>×</kbd><b>2</b></span>');
+    expect(html).toContain('Good 1 ×2');
+    expect(html).toContain('Total ₽ 300');
+    expect(html).toContain('<kbd>C</kbd> Check out');
+    expect(html).toContain('data-act="pick" data-arg="13"');
+    expect(pkShop({ ...d, basket: [] })).toContain('Nothing yet');
+  });
+  it('Check Out shows the receipt, the money after paying, and Pay or Keep shopping', () => {
+    const lines = Array.from({ length: 7 }, (_, k) => ({ name: `Good ${k}`, count: 1, total: 1000, art: null, saving: k === 0 ? 50 : 0 }));
+    const html = pkShopPay({ ...d, basket: lines, ask: { title: 'That comes to ₽ 7,000.', options: ['Pay ₽ 7,000', 'Keep shopping'], index: 0 } });
+    expect(pkPageOf(html)?.id).toBe('shop-pay');
+    expect(html).toContain('…and 2 more');
+    expect(html).toContain('−₽ 50');
+    expect(html).toContain('<b class="gx-bad">₽ -2,180</b>');
+    expect(html).toContain('That comes to ₽ 7,000.');
+    expect(html.match(/data-act="confirm"/g)?.length).toBeGreaterThanOrEqual(2);
+    const ok = pkShopPay({ ...d, basket: lines.slice(0, 1), ask: { title: 'Pay?', options: ['Pay', 'Keep shopping'], index: 0 } });
+    expect(ok).toContain('<b class="new">₽ 3,820</b>');
   });
 });
