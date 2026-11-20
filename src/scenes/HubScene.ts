@@ -605,7 +605,8 @@ export class HubScene extends Phaser.Scene {
     dockSpot.index = Phaser.Math.Clamp(dockSpot.index, 0, DOCK[dockSpot.tab]!.buttons.length - 1);
     this.dock = mountRedux(this, {
       render: (c) => {
-        this.dockLayout = c.v(3);
+        // The Phantom dock is a column of words: Up and Down move, Left and Right change the tab.
+        this.dockLayout = c.ph ? 1 : c.v(3);
         const p = session.profile;
         const tab = DOCK[dockSpot.tab]!;
         return dockView(c, {

@@ -6,6 +6,7 @@ import { act, B, bg, esc, foot, hpb, mini, mon, TX, W } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { figure } from '../templates';
 import type { EventChoice, EventModel } from './event';
+import { phTalk } from '../../phantom/screens/event';
 
 const letter = (h: string): string => `<div class="bars" style="top:0"></div><div class="bars" style="bottom:0"></div>${h}`;
 const pickAttr = (k: number): string => `${act('pick', k)} data-over="over"`;
@@ -21,6 +22,7 @@ function changeRow(t: string): string {
 }
 
 export function talkView(c: ReduxCtx, d: EventModel): string {
+  if (c.ph) return phTalk(c.ph, d);
   const v = c.v(4), out = d.outcome, more = d.page.at < d.page.of - 1, ch = out || more ? [] : d.choices;
   const talk = d.lines.some((l) => l.who !== null);
   /** The page as HTML. `plated`: the layout shows the speaker on a name plate, so their own lines need no name. */

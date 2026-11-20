@@ -1,0 +1,77 @@
+/* Phantom UI: the stage map, its pause menu and the node menu (screens/map.ts). The mock-ups' rules draw the road,
+   the diamonds, the day, the wallet and the stop card; this file places the game's extra facts around them. */
+.phx .phs{
+  & .s-map svg{pointer-events:none}
+  & .s-map .ln2.far{opacity:.35;animation:none}
+  & .ph-nd{cursor:default;transition:width .16s,height .16s,margin .16s}
+  & .ph-nd[data-act]{cursor:pointer}
+  & .ph-nd::after{content:"";position:absolute;right:3px;bottom:3px;width:15px;height:15px;border-radius:50%;background:var(--c);box-shadow:0 0 0 2px var(--k)}
+  & .ph-nd.hard{outline:4px solid #b06cf0;outline-offset:5px}
+  & .ph-nd.skip{opacity:.5}
+  /* a diamond is a turned square: a point d below it on screen is (0.7d, 0.7d) inside it */
+  & .ph-side{position:absolute;left:50%;top:50%;margin:-13px;translate:calc(var(--k,0)*18px) calc(-56px - var(--k,0)*18px);width:26px;height:26px;border-radius:50%;background:var(--c);color:#fff;font:800 15px/26px var(--f-cond);text-align:center;text-decoration:none;box-shadow:0 0 0 3px var(--k)}
+  & .ph-side.used{opacity:.4}
+  & .ph-marks{position:absolute;left:50%;top:50%;width:0;height:0;translate:46px 46px}
+  & .ph-nd.sel .ph-marks{translate:58px 58px}
+  & .ph-marks>span{position:absolute;left:0;top:0;translate:-50% 0;display:flex;gap:4px;white-space:nowrap}
+  & .ph-marks i{font:800 12px/1 var(--f-cond);font-style:normal;background:var(--k);padding:2px 5px;letter-spacing:.04em}
+  & .ph-you{transition:left .38s ease-in-out,top .38s ease-in-out;pointer-events:none;z-index:4;filter:drop-shadow(5px 5px 0 rgba(0,0,0,.5))}
+  & .ph-youtag{pointer-events:none;z-index:3;font-size:16px;white-space:nowrap}
+  & .ph-cols{top:584px}
+  & .ph-day>i{white-space:nowrap}
+  & .ph-day>i.sm{font-size:14px}
+  & .ph-day{left:26px;top:20px}
+  & .ph-day>b{font-size:96px}
+  & .ph-mteam{left:330px;right:auto;top:16px;bottom:auto;z-index:3}
+  & .ph-mteam .u{cursor:help}
+  & .ph-mchips{position:absolute;left:330px;top:92px;right:330px;display:flex;flex-wrap:wrap;gap:6px 8px;z-index:3}
+  & .ph-mchips span{background:var(--k);color:var(--w);font:800 15px/1 var(--f-cond);letter-spacing:.05em;text-transform:uppercase;padding:5px 12px;transform:skewX(-12deg)}
+  & .ph-mchips .egg{background:var(--gold);color:var(--k)}
+  & .ph-stop{top:112px;height:auto;min-height:420px;max-height:500px;box-sizing:border-box;padding:22px 24px 30px 50px}
+  & .ph-stop .pic{height:96px;margin-top:8px}
+  & .ph-stop .pic b{font:400 64px/1 var(--f-disp);color:#fff;text-shadow:4px 4px 0 rgba(0,0,0,.45)}
+  & .ph-stop p{font-size:17px;line-height:1.18}
+  & .ph-stop p.info{color:var(--gold)}
+  & .ph-stage{margin-top:10px;border-top:2px solid #444;padding-top:8px}
+  & .ph-stage p{font:700 14px/1.2 var(--f-cond);color:var(--bone);margin:0 0 3px}
+  & .ph-mnote{left:26px;top:150px;bottom:auto;max-width:560px;z-index:5;rotate:-2deg}
+  & .ph-mnote .txt{font-size:17px}
+  & .ph-mbar{position:absolute;left:20px;right:330px;bottom:60px;display:flex;flex-wrap:wrap;gap:6px;z-index:5}
+  & .ph-mbar span{background:var(--k);color:var(--w);font:400 19px/1 var(--f-disp);text-transform:uppercase;padding:7px 15px 8px;transform:skewX(-12deg);cursor:pointer;white-space:nowrap;transition:translate .12s}
+  & .ph-mbar span.hot{box-shadow:inset 0 -4px 0 var(--gold)}
+  & .ph-mbar span.on{background:var(--w);color:var(--k);translate:0 -6px;box-shadow:5px 5px 0 var(--red)}
+  & .s-map .keys{z-index:6}
+  & .ph-mtip{right:330px;bottom:110px;z-index:9}
+  & .ph-mban{position:absolute;left:0;right:0;top:200px;z-index:21;background:var(--k);padding:26px 60px 30px;display:grid;justify-items:center;gap:8px;transform:rotate(-2deg) scale(1.04);box-shadow:0 10px 0 var(--red),0 -10px 0 var(--red);animation:ph-pop .3s cubic-bezier(.2,1.3,.4,1) both}
+  & .ph-mban small{font:800 18px/1 var(--f-cond);letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
+  & .ph-mban h2{margin:0;font-size:64px;line-height:1}
+  & .ph-mban p{margin:0;font:700 22px/1.2 var(--f-cond);color:var(--w);text-align:center}
+  & .ph-mban ul{margin:6px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:6px 10px}
+  & .ph-mban li{background:var(--w);color:var(--k);font:800 16px/1 var(--f-cond);padding:6px 12px;transform:skewX(-10deg)}
+  & .ph-mleg{position:absolute;left:330px;top:120px;width:620px;box-sizing:border-box;z-index:21;padding:22px 40px 28px 34px;animation:ph-pop .25s both}
+  & .ph-mleg.wide{left:90px;width:1100px}
+  & .ph-mleg>div{display:grid;grid-template-columns:1fr 1fr;gap:10px 22px;margin-top:8px;font:700 17px/1.1 var(--f-cond)}
+  & .ph-mleg.wide>div{grid-template-columns:repeat(4,1fr);font-size:15px}
+  & .ph-mleg>div>span{display:flex;align-items:center;gap:10px;min-width:0}
+  & .ph-mleg .ph-side{position:static;margin:0;translate:none;flex:none}
+
+  /* pause */
+  & .ph-resume{position:absolute;left:560px;right:0;top:0;bottom:0;cursor:pointer}
+  & .s-pause .hero{pointer-events:none}
+
+  /* node menu */
+  & .ph-nm{position:absolute;inset:0;z-index:21;pointer-events:none}
+  & .ph-nmh{left:60px;top:44px}
+  & .ph-nmr{position:absolute;left:40px;right:40px;top:190px;display:flex;justify-content:center;gap:18px;pointer-events:auto}
+  & .ph-nmc{width:230px;min-height:300px;box-sizing:border-box;padding:18px 24px 22px 22px;display:flex;flex-direction:column;gap:8px;cursor:pointer;rotate:var(--r);animation:ph-inUp .32s both;animation-delay:calc(var(--i)*50ms);transition:translate .16s cubic-bezier(.2,1.3,.4,1)}
+  & .ph-nm.n5 .ph-nmc,& .ph-nm.n6 .ph-nmc{width:186px;padding:14px 18px 18px 16px}
+  & .ph-nmc.on{translate:0 -18px}
+  & .ph-nmc.off{opacity:.5}
+  & .ph-nmk{align-self:flex-start;color:#fff;font:800 14px/1 var(--f-cond);letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;transform:skewX(-10deg)}
+  & .ph-nmc .tl1{margin:0;font-size:26px}
+  & .ph-nmc .txt{font-size:15px;flex:1}
+  & .ph-nmc em{align-self:flex-start;font:400 18px/1 var(--f-disp);font-style:normal;background:#444;color:#fff;padding:5px 12px 6px;transform:skewX(-12deg);text-transform:uppercase}
+  & .ph-nmc em.must{background:var(--red);color:var(--on)}
+}
+/* the serif versions draw the stage number taller: it starts a little lower so its top stays on the page */
+.phx .phs[data-liv=fantasia] .ph-day,.phx .phs[data-liv=velvet] .ph-day{top:30px}

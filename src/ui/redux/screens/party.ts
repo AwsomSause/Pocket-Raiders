@@ -7,6 +7,7 @@ import { act, type Area, B, esc, facts, H, hpb, mini, mon, TX, ty, TYPE_COLORS, 
 import type { ReduxCtx } from '../stage';
 import { pic, scrollStart, type Art } from '../templates';
 import { type BattlePanel, tipWindow } from './battle';
+import { phParty, phSummary } from '../../phantom/screens/party';
 
 type Hints = readonly (readonly [string, string])[];
 
@@ -32,7 +33,7 @@ export interface PartyCard {
 export interface PartyModel { title: string; mons: PartyCard[]; index: number; text: string; hints: Hints; /** Header colour; the party's green unless the page belongs to another part of the game (the run end's final team). */ area?: Area }
 
 /** How many cards the cursor moves across in the Party layout of this theme (the grid is three wide). */
-export const partyCols = (c: Pick<ReduxCtx, 'v'>): number => (c.v(3) === 1 ? 3 : 1);
+export const partyCols = (c: Pick<ReduxCtx, 'v'> & { ph?: unknown }): number => (c.ph ? 2 : c.v(3) === 1 ? 3 : 1);
 
 const pct = (p: { hp: number; maxHp: number }): number => (p.maxHp > 0 ? Math.max(0, Math.min(100, Math.round((p.hp / p.maxHp) * 100))) : 0);
 const one = 'white-space:nowrap;overflow:hidden;text-overflow:ellipsis';
@@ -40,6 +41,7 @@ const typeColor = (t: string): string => TYPE_COLORS[t.charAt(0).toUpperCase() +
 const pick = (k: number): string => `${act('pick', k)} data-over="over"`;
 
 export function partyView(c: ReduxCtx, d: PartyModel): string {
+  if (c.ph) return phParty(c.ph, d);
   const v = c.v(3), head = H(d.title, d.area ?? 'party', d.hints);
   const cls = (p: PartyCard, k: number): string => (k === d.index ? 'sel' : p.hp > 0 && !p.off ? '' : 'dim');
   const tag = (p: PartyCard): string => (p.tag ? `<span class="tg no" style="font-size:11px">${esc(p.tag)}</span>` : '');
@@ -119,6 +121,7 @@ function bodyOf(b: SummaryBody): string {
 }
 
 export function summaryView(c: ReduxCtx, d: SummaryModel): string {
+  if (c.ph) return phSummary(c.ph, d);
   const v = c.v(2), f = d.face;
   const backdrop = f.art ? `background:url(${rxUrl(f.art)}) 50% 60%/cover;image-rendering:pixelated` : '';
   const left = W(`<div class="cell" style="height:170px;aspect-ratio:auto;flex:none;${backdrop}">${f.file ? mon(f.file, 2, '', true) : ''}</div><div class="row"><b class="grow" style="font-size:21px;min-width:0;${one}">${esc(f.name)}</b><span class="sm">Lv ${f.level}${f.gender ? ' ' + esc(f.gender) : ''}</span></div><div class="row" style="gap:5px">${f.types.map(ty).join('')}<span class="grow"></span><span class="sm">${esc(f.no)}</span></div><div class="btn${d.tab === d.itemsTab ? ' on' : ''}" style="height:34px;font-size:14px;cursor:pointer"${act('tab', d.itemsTab)}>${esc(f.held)}<small>open</small></div>${hpb(f.hpPct)}${hpb(f.xpPct, 0, ' xp')}`, `position:absolute;left:24px;top:${v ? 74 : 72}px;width:280px;display:flex;flex-direction:column;gap:8px`);

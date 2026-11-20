@@ -21,8 +21,9 @@ A third UI style next to New and Old: **Settings > Display > UI style > Phantom*
 |---|---|---|
 | 1 | The style and version settings (settings v46), shared kit, Title splash, main menu, Settings (three presets, ten pages with a live screen, Phone page) | done |
 | 2 | Shared pages (menu, option rows, picture wall, board, number tiles, confirm), save files, Version Select (new page), and a new run: Trainer, Rules, Partner, Plan, name keys | done |
-| 3 | Town, pause menu, party, summary, bag, Pokédex, box | |
-| 4 | Stage map, events and talk pages (prologue, story, tutorial, the partner quiz), rewards, shop, quick wheel, log | |
+| 3 | Party, Summary (every tab, the action menu, the move tooltip), Bag, Pokédex entry (both pages), the town dock (Hub Town and a Plaza), the PC | done |
+| 4a | Stage map (legend, stage banner, node menu), its pause menu, events (talk, choice, outcome, reward), the reward draft, the shop | done |
+| 4b | Talk pages (prologue, story, tutorial, the partner quiz), heal, department store, trades, the map's pop pages, quick wheel, log, Seed & Codes | |
 | 5 | Battle screens and cut-ins | |
 | 6 | Ceremonies, rivals, phone, ending pages, and the menus the game does not have yet | |
 
@@ -41,6 +42,25 @@ A third UI style next to New and Old: **Settings > Display > UI style > Phantom*
 - A key hint that says Esc is a button on every Phantom page (it presses Esc for the scene).
 - Still in the stand-in look after this slice: Seed & Codes (its text box is a real input laid over the page) and the talk pages (prologue, story, tutorial), which come with the event pages in slice 4.
 
+## Slice 3 notes
+
+- **Party and Summary** (`screens/party.ts`, `party.css`): the Party is two cards wide (`partyCols` says 2 in Phantom), with the lit Pokémon's ability, nature, item and moves beside it. The Summary keeps every tab the game has; Stats draws the mock-up's six-point chart with the IV and EV rows next to it.
+- **Bag** (`screens/bag.ts`): pockets, seven rows, the item card and who in the team the lit item would help. The card shows what the game's line adds ("No Pokémon needs it right now") once, under the description.
+- **Pokédex entry** (`screens/dex.ts`): the mock-up's entry page plus the six base stats; the second page (facts and level-up moves) keeps the left side.
+- **Town dock** (`screens/town.ts`): Hub Town's menu and a Plaza's districts as slanted words beside the version's trainer, the crowd at their feet. In Phantom, Up and Down move and Left and Right change the tab.
+- **PC** (`screens/box.ts`): the mock-up's Reserve page with the game's one action per slot (move to the party, or put a party Pokémon in an empty slot).
+- **Around a Picker** (`picker.ts`): the chips beside a title, page tabs, the "more" sheet (I) and an empty list are drawn inside the Phantom page.
+- Still to come for these pages: the mock-up's Town Map directory and Summary / Give item buttons on the PC (slice 6), and the pause menu, which belongs to the map (slice 4).
+
+## Slice 4a notes
+
+- **Stage map** (`screens/map.ts`, `map.css`): six stops across, the window following the trainer. The mock-up's card at the right shows the lit stop (or the lit button) and under it every line the New map's header carries. Every chip, egg, side stop, mark, button and key of the New map is on the page. A column of four or more stops is drawn closer with smaller diamonds so none touch.
+- **Pause** is a page of its own (the mock-up's pause): the game's six choices as slanted words, money, badges, level cap and the team. A click beside the words resumes.
+- **Node menu**: one card per thing to do at a stop, the required one marked.
+- **Events** (`screens/event.ts`, `event.css`): the mock-ups' steps as Talk, Choose, Outcome, Reward ("Side stage" is the battle itself, slice 5). The event director's drawn scene is the backdrop; the speaker is the big bust, everyone else, the Pokémon and the named things stand beside. The text box waits (ALL EVENTS rule), choices are dealt as cards (up to four with their text; five or more in two rows with the lit one read out underneath), the outcome's text comes first with "What changed" sealed, then the changes open as cards and stay until Enter. Kept from the New page: tag, money, countdown and its bar, Trade card (T), Their team (R), tournament rounds (B), the big title, the standing panel, the trade picker, the black-screen scare. New in Phantom: number keys light a choice card (Enter still chooses).
+- **Reward draft and shop** (`screens/stops.ts`): "PICK ONE" cards with who each helps, Party/Bag as gold tabs, the result card that stays until Enter. The shop has the clerk (the overworld Mart clerk; Kecleon and Meowth keep their own shops), the shelf, the lit good's card with Buy 1 / Buy 5 / Add to basket, Sell, the Depot's basket and checkout, and who can use the good.
+- Still in the stand-in look after 4a: the team's own event screens (briefing, table, final, rank up), the Honest Trade Card, the bracket, the code-name card, a department store floor, and the map's pop pages (report, dossier, book, roll, track).
+
 ## Known limits
 
 - The Phone page's rows from the mock-up that the game has no setting for yet (touch button size, swipe to switch, hold for details) come with slice 6.
@@ -50,5 +70,7 @@ A third UI style next to New and Old: **Settings > Display > UI style > Phantom*
 
 - `tests/unit/phantomUi.test.ts`: the settings upgrade to v46, the style and version rows, the presets, the Title and Settings pages, the generated rules file.
 - `tests/unit/phantomTemplates.test.ts`: the shared pages and the run pages (windows that follow the cursor, nothing cut with an ellipsis, the hand-over only while Phantom is on).
+- `tests/unit/phantomPages.test.ts` and `tests/e2e/phantomTeam.spec.ts`: the slice 3 pages (models to HTML; in the browser from a run's map and from the hub, all five versions, four window sizes, text-fit check).
+- `tests/unit/phantomMap.test.ts`, `tests/unit/phantomEvent.test.ts` and `tests/e2e/phantomRoad.spec.ts`: the slice 4a pages (map, legend, pause in five versions at five sizes; an event from its first line to its reward with nothing given before its text is closed; shop buying; the reward draft and its result).
 - `tests/e2e/phantomRun.spec.ts`: save files, a whole new run from Trainer to Depart, and the shared pages in the other four versions at four window sizes, each with the text-fit check.
 - `tests/e2e/phantomUi.spec.ts`: splash, main menu by keys and mouse, Settings (presets, pages, changing a value, Phone, all five versions) with a check that no text is cut off or off the screen, and the stand-in look for a screen without a Phantom page.

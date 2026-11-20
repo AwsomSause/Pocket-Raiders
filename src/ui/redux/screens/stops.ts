@@ -4,6 +4,7 @@ import { act, B, esc, H, mon, TX, ty, W } from '../kit';
 import { partyStrip, type PartyChip } from '../game';
 import type { ReduxCtx } from '../stage';
 import { figure, pic, type Art } from '../templates';
+import { phReward } from '../../phantom/screens/stops';
 
 const pickAttr = (k: number): string => `${act('pick', k)} data-over="over"`;
 
@@ -22,6 +23,7 @@ export interface RewardModel {
 
 /** The mock-ups' `reward` template: A a row of cards, B a fanned hand, C a list with a detail window. */
 export function rewardView(c: ReduxCtx, d: RewardModel): string {
+  if (c.ph) return phReward(c.ph, d);
   const v = c.v(3), R = d.cards, n = R.length, on = Math.min(d.index, n - 1), cur = R[on]!;
   const inCards = d.index < n;
   const strip = partyStrip(d.party, 'left:24px;right:24px;bottom:66px');

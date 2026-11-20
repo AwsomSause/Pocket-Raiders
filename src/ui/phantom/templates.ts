@@ -11,7 +11,7 @@ import { type Art, type BoardModel, type GridModel, type MenuModel, type Setting
 import { act, keys, mon, page } from './kit';
 
 /** The small line over a page title, by the part of the game the page belongs to. */
-const AREA_WORD: Record<Area, string> = { sys: 'System', hub: 'Pocket Town', run: 'New run', map: 'On the road', story: 'Story', shop: 'Shop', reward: 'Reward', battle: 'Battle', party: 'Party', end: 'Results' };
+export const AREA_WORD: Record<Area, string> = { sys: 'System', hub: 'Pocket Town', run: 'New run', map: 'On the road', story: 'Story', shop: 'Shop', reward: 'Reward', battle: 'Battle', party: 'Party', end: 'Results' };
 type Hints = readonly (readonly [string, string])[] | undefined;
 
 /** The slanted page title. A long title is set smaller so it stays on the page. */

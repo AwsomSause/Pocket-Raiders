@@ -129,6 +129,11 @@ import { askText } from '../ui/redux/ask';
 import { hoverTips, ownAbilityCard } from '../ui/redux/tips';
 import type { BattlePanel } from '../ui/redux/screens/battle';
 import { mapView, type MapLegendRow, type MapModel, type MapNodeView } from '../ui/redux/screens/map';
+import type { PhantomVersion } from '../core/presentation/phantom';
+import { phInto } from '../ui/phantom/picker';
+import { phMap, phNodeMenu, phPause } from '../ui/phantom/screens/map';
+import { dockFact } from '../ui/phantom/screens/town';
+import { phConfirm } from '../ui/phantom/templates';
 import { bestMedalWord } from '../ui/redux/screens/minigame';
 import { confirmBox } from '../ui/redux/screens/saves';
 import { bookRows, bookView, dossierView, nodeMenuView, pauseView, reportView, rollView, trackView, type NodeMenuCard } from '../ui/redux/screens/popups';
@@ -369,6 +374,17 @@ export class MapScene extends Phaser.Scene {
     const note = MapScene.PAUSE[p.index] === 'End run' && !can ? 'Only an Adventure run can be ended here. Use Save to leave this one.' : '';
     if (p.ask === null) return pauseView({ options: MapScene.PAUSE.map((label) => ({ label, off: label === 'End run' && !can })), index: p.index, note });
     return confirmBox({ title: 'End this run?', body: 'Your progress is banked as a defeat. This cannot be undone.', options: ['Keep playing', 'End run'], index: p.ask }).replace('class="shade"', 'class="shade hit"');
+  }
+
+  /** The Phantom pause menu: the mock-up's Pause page, with the "End this run?" card over it while that is asked. */
+  private pausePhantom(ph: PhantomVersion, model: MapModel): string {
+    const p = this.rxPause!;
+    const can = !!wipeStatus(services().session.run!);
+    const note = MapScene.PAUSE[p.index] === 'End run' && !can ? 'Only an Adventure run can be ended here. Use Save to leave this one.' : '';
+    const stage = model.chips.find((x) => /^Stage\s+\d+/i.test(x));
+    const facts = model.chips.filter((x) => /^(₽|Badges\b|Level cap\b)/i.test(x)).map(dockFact);
+    const html = phPause(ph, { options: MapScene.PAUSE.map((label) => ({ label, off: label === 'End run' && !can })), index: p.index, note, where: [stage, model.title.split(' · ')[0]].filter(Boolean).join(' · '), facts, party: model.party });
+    return p.ask === null ? html : phInto(html, phConfirm({ title: 'End this run?', body: 'Your progress is banked as a defeat. This cannot be undone.', options: ['Keep playing', 'End run'], index: p.ask }));
   }
 
   private popClose(): void {
@@ -1257,7 +1273,14 @@ export class MapScene extends Phaser.Scene {
       };
       const keyActs: Record<string, () => void> = { C: doCry, H: doHand, N: doName, R: () => this.toggleRivalReport(), T: () => this.toggleTrackPage(), D: () => this.toggleDossier(), F: () => this.toggleFieldNotes(), O: () => this.popToggle('roll') };
       this.rxView = mountRedux(this, {
-        render: (c) => this.rxPop ? this.popView(c, this.rxPop) : mapView(c, { ...this.rxModel!, index: this.index, info: this.info?.text ?? '', notice: this.notice?.text ?? '', going: this.rxGoing, banner: this.rxBanner, legend: this.rxLegend, card: this.rxCardOf() }) + this.pauseHtml() + (this.rxMenu ? nodeMenuView(this.rxMenu) : ''),
+        render: (c) => {
+          if (this.rxPop) return this.popView(c, this.rxPop);
+          const model: MapModel = { ...this.rxModel!, index: this.index, info: this.info?.text ?? '', notice: this.notice?.text ?? '', going: this.rxGoing, banner: this.rxBanner, legend: this.rxLegend, card: this.rxCardOf() };
+          if (!c.ph) return mapView(c, model) + this.pauseHtml() + (this.rxMenu ? nodeMenuView(this.rxMenu) : '');
+          // Phantom: the pause menu is a page of its own; the node menu stands over the map.
+          if (this.rxPause) return this.pausePhantom(c.ph, model);
+          return phInto(phMap(c.ph, model), this.rxMenu ? phNodeMenu(this.rxMenu) : '');
+        },
         acts: {
           pick: (i) => { if (this.busy || this.picker) return; if (Number(i) !== this.index) this.focus(Number(i)); this.activate(Number(i)); },
           go: () => { if (!this.busy && !this.picker) this.activate(this.index); },

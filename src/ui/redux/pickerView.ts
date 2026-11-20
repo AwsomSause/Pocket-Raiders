@@ -8,12 +8,16 @@ import { rxFileOf } from './assets';
 import { mountRedux, type ReduxCtx, type ReduxView } from './stage';
 import { act, type Area, chipsLeft, esc, H, isArtPlaceholder, TX, W } from './kit';
 import { areaOf, pickerBand, pickerKind, type PickerKind } from './pickerNames';
-import { boardProgress, type BoardRow, boardView, gridStart, gridView, menuView, scrollStart, tabsBar } from './templates';
+import { boardProgress, type BoardRow, boardView, type GridModel, gridStart, gridView, menuView, scrollStart, tabsBar } from './templates';
 import { bagCols, bagUseNote, bagView } from './screens/bag';
 import { battleListView, windowTitle } from './screens/battle';
 import { monFile, partyChips, partyStrip } from './game';
 import { services } from '../../game/services';
 import { itemUseProblem } from '../../core/items';
+import { phChips, phEmpty, phInto, phSheet, phTabs } from '../phantom/picker';
+import { phBag } from '../phantom/screens/bag';
+import { phBox } from '../phantom/screens/box';
+import { AREA_WORD } from '../phantom/templates';
 
 export interface PickerBridge {
   title: string;
@@ -140,17 +144,22 @@ function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerK
   const sum = p.summary();
   const over = sum === null ? '' : '<div class="shade" style="z-index:8"></div>' + W(`<div style="white-space:pre-wrap;line-height:22px;font-size:16px">${esc(sum)}</div><div class="sm acc">Press I, Enter or Esc to go back to the list</div>`, 'position:absolute;left:120px;right:120px;top:40px;bottom:50px;display:flex;flex-direction:column;gap:10px;padding:16px 20px;overflow:hidden;z-index:9', '', act('back'));
   let body: string;
-  if (n === 0 && kind !== 'bag') body = H(name, area, hints) + `<div class="abs cen" style="left:0;right:0;top:220px;display:flex;font-size:26px;opacity:.6">Nothing here yet</div>` + TX(esc(text));
+  if (n === 0 && kind !== 'bag' && c.ph) body = phEmpty(name, AREA_WORD[area], text, hints);
+  else if (n === 0 && kind !== 'bag') body = H(name, area, hints) + `<div class="abs cen" style="left:0;right:0;top:220px;display:flex;font-size:26px;opacity:.6">Nothing here yet</div>` + TX(esc(text));
   else if (kind === 'grid') {
     // A cell the room said outright (the Pokédex) is not read off the canvas row.
     const said = p.cell?.(index), on = (i: number): boolean => { const x = p.cell?.(i); return x ? !x.off : p.problem(i) === null; };
     const cur = said ? null : row(index), found = Array.from({ length: n }, (_, i) => on(i)).filter(Boolean).length;
     const artOf = (file: string | null): { file: string; atlas: boolean } | null => (file ? { file, atlas: true } : null);
     const detail = said ? { title: said.title, body: said.body, art: said.off ? null : artOf(said.file) } : { title: cur!.label, body: cur!.note, facts: cur!.tag ? [['', cur!.tag] as const] : [], art: cur!.art };
-    body = gridView(c, { title: name, area, hints, n, cell: (i) => { const x = p.cell?.(i); if (x) return { art: artOf(x.file), label: x.off ? '' : x.title, off: x.off, sil: x.sil }; const r = row(i); return { art: r.art, label: r.label, off: p.problem(i) !== null }; }, index, detail, found, total: n, text });
+    const wall: GridModel = { title: name, area, hints, n, cell: (i) => { const x = p.cell?.(i); if (x) return { art: artOf(x.file), label: x.off ? '' : x.title, off: x.off, sil: x.sil }; const r = row(i); return { art: r.art, label: r.label, off: p.problem(i) !== null }; }, index, detail, found, total: n, text };
+    body = c.ph && /^PC\b/.test(name) ? phBox(c.ph, { ...wall, party: partyChips(scene) }) : gridView(c, wall);
   } else if (kind === 'bag') {
-    const strip = services().session.run ? partyStrip(partyChips(scene), 'left:24px;right:24px;bottom:100px', bagNotes(p.item?.(index))) : '';
-    body = bagView(c, { title: name, hints, pockets: p.tabs ? { labels: p.tabs.labels, index: p.tabs.index } : null, n, item: (i) => ({ ...row(i), off: p.problem(i) !== null }), index, strip, text });
+    const inRun = !!services().session.run, notes = bagNotes(p.item?.(index));
+    const bag = { title: name, hints, pockets: p.tabs ? { labels: p.tabs.labels, index: p.tabs.index } : null, n, item: (i: number) => ({ ...row(i), off: p.problem(i) !== null }), index, text };
+    body = c.ph
+      ? phBag(c.ph, { ...bag, strip: '', party: inRun ? partyChips(scene) : [], notes })
+      : bagView(c, { ...bag, strip: inRun ? partyStrip(partyChips(scene), 'left:24px;right:24px;bottom:100px', notes) : '' });
   } else if (kind === 'board') {
     // Only the rows near the cursor are on screen, so only those are read.
     const near = (i: number): boolean => Math.abs(i - index) < 8;
@@ -180,6 +189,8 @@ function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerK
     const detail = saidRow ? { title: saidRow.label, body: saidRow.detail, sprite: saidRow.sprite ?? undefined, facts: saidRow.facts } : { title: cur!.label, body: [cur!.note, cur!.tag].filter(Boolean).join(' · ') || p.hint(index), sprite: cur!.art?.atlas ? cur!.art.file : undefined };
     body = menuView(c, { title: name, area, hints, items, index, detail, text });
   }
+  // A Phantom page carries the chips, the tabs and the sheet inside itself; its Esc key hint is the Back button.
+  if (c.ph) return phInto(body, phChips(extra) + (kind === 'bag' ? '' : phTabs(p.tabs)) + phSheet(sum));
   return body + chips + tabs + back + over;
 }
 

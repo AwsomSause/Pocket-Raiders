@@ -7,7 +7,8 @@ import type { ShopView } from '../../shopLook';
 import type { ChoicePrompt } from '../../shopStyles/common';
 import type { BasketLine, ShopCtx, ShopHandles, ShopHooks } from '../../shopStyles/types';
 import { act, B, esc, H, TX, W } from '../kit';
-import { artOf, partyChips, partyStrip } from '../game';
+import { artOf, monFile, partyChips, partyStrip } from '../game';
+import { phShop, SHOP_CLERK } from '../../phantom/screens/stops';
 import { mountRedux } from '../stage';
 import { pic, scrollStart } from '../templates';
 import { confirmBox } from './saves';
@@ -59,6 +60,19 @@ export function reduxShop(ctx: ShopCtx, hooks: ShopHooks): ShopHandles {
       const text = message ?? (index >= n ? (ex[index - n] === 'Sell' ? 'Sell items from your Bag here.' : depot ? 'Nothing is bought until you check out. Five or more of one item is cheaper.' : '') : row && moved ? `${row.name}: ${row.who}.${row.problem ? ` ${row.problem}` : ''}` : 'Welcome! Take your time.');
       const up = text.length > 90 ? 126 : 100;
       const lines = basket.length ? `<div class="sm" style="line-height:17px;max-height:68px;overflow:hidden"><b class="acc">Basket</b> ${basket.map((l) => `${esc(l.name)} ×${l.count} ₽${l.total}${l.saving ? ` (−₽${l.saving})` : ''}`).join(' · ')}</div>` : '';
+      if (c.ph) {
+        const keeper = ctx.type === 'bazaar' ? monFile(scene, 'kecleon') : ctx.type === 'night' ? monFile(scene, 'meowth') : null;
+        return phShop(c.ph, {
+          title: ctx.title, small: 'Shop', chips: [ctx.clock, ...(view.nextStock ? [view.nextStock] : [])], money: view.money, text,
+          rows: R.map((r) => ({ label: r.label, price: r.price, was: r.wasPrice, off: !r.affordable, art: artOf(scene, r.iconAssetId) })),
+          index, lit: row ? { name: row.name, owned: row.owned, pocket: row.pocket.word, about: row.description, art: artOf(scene, row.iconAssetId) } : null,
+          buy: !row ? [] : depot ? [{ label: 'Add to basket', act: 'buy', on: index < n }] : [{ label: 'Buy 1', act: 'buy', on: index < n && !five }, ...(fiveOk(row) ? [{ label: 'Buy 5', act: 'buy5', on: index < n && five, dim: row.price * 5 > view.money }] : [])],
+          extras: ex, basket: basket.map((l) => `${l.name} ×${l.count} ₽${l.total}${l.saving ? ` (−₽${l.saving})` : ''}`), total: depot ? basket.reduce((sum, l) => sum + l.total, 0) : null,
+          party, notes, ask: ask ? { title: ask.question, body: '', options: ask.options, index: ask.index } : null,
+          hints: [['Enter', depot ? 'add' : 'buy'], ...(depot ? [] : [['←→', 'buy 1 or 5'] as const]), ['Esc', 'leave']],
+          keeper, clerk: keeper ? null : SHOP_CLERK,
+        });
+      }
       const head = H(ctx.title, 'shop', [['Enter', depot ? 'add' : 'buy'], ['Esc', 'leave']]) + money;
       const tail = partyStrip(party, `left:24px;right:24px;bottom:${up}px`, notes) + TX(esc(text), 'Clerk') + (ask ? confirmBox({ title: ask.question, body: '', options: ask.options, index: ask.index }) : '');
       if (v === 1) {

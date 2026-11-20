@@ -4,7 +4,18 @@ import { expect, type Page } from '@playwright/test';
 // canvas; these specs open the game with `?ui=phantom` (an automated browser gets Old otherwise).
 
 /** A scene's Phantom view. */
-export const pview = (page: Page, key: string) => page.locator(`#phx .phs[data-scene="${key}"]`);
+export const pview = (page: Page, key: string, id?: string) => page.locator(`#phx .phs[data-scene="${key}"]${id ? `[data-scr="${id}"]` : ''}`);
+
+/** Title to a new run's stage map by the keys (every step of starting a run takes Enter). */
+export async function toPhantomMap(page: Page) {
+  for (let n = 0; n < 40 && (await page.evaluate(() => (window as any).__pkr.activeScene())) !== 'Map'; n++) {
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(700);
+  }
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.activeScene()), { timeout: 20_000 }).toBe('Map');
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 15_000 }).toBe(false);
+  await page.waitForTimeout(400);
+}
 
 /** Waits until a scene's Phantom view shows mock-up page `id` (its rules and fonts load the first time). */
 export async function onPage(page: Page, key: string, id: string) {
@@ -18,9 +29,10 @@ export async function onPage(page: Page, key: string, id: string) {
  * Measured on the 1280 x 720 Phantom stage whatever the window size. Decorations (`aria-hidden`) are left out, and
  * so is the small live screen in Settings (a shrunken copy of another page).
  */
-export async function fitProblems(page: Page, key: string): Promise<string[]> {
-  return page.evaluate((key) => {
-    const S = document.querySelector<HTMLElement>(`#phx .phs[data-scene="${key}"]`);
+export async function fitProblems(page: Page, key: string, id?: string): Promise<string[]> {
+  return page.evaluate(([key, id]) => {
+    // A scene can have several views open over each other (a room over the dock): `id` picks the one showing that page.
+    const S = document.querySelector<HTMLElement>(`#phx .phs[data-scene="${key}"]${id ? `[data-scr="${id}"]` : ''}`);
     if (!S) return ['no Phantom view'];
     const box = S.getBoundingClientRect(), k = box.width / 1280, res: string[] = [];
     for (const el of S.querySelectorAll<HTMLElement>('*')) {
@@ -40,5 +52,5 @@ export async function fitProblems(page: Page, key: string): Promise<string[]> {
       if (el.scrollHeight > el.clientHeight + 4 && cs.overflowY !== 'visible' && cs.display !== 'inline') res.push(`CLIPPED-Y "${txt}"`);
     }
     return res;
-  }, key);
+  }, [key, id] as const);
 }
