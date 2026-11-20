@@ -29,6 +29,7 @@ import { POCKET_TOWN } from '../../src/core/hubTown/schema';
 import { leaderLine, pkBrief, pkStarter, regionOfGen, runSteps } from '../../src/ui/pocket/screens/run';
 import type { BriefModel } from '../../src/ui/redux/screens/run';
 import type { TradeModel } from '../../src/ui/redux/screens/stops';
+import { PK_TOOLS_PAGE, pkTools, toolShort } from '../../src/ui/pocket/screens/tools';
 import { pkGallery, pkMemories, shelfMon, type PkGalleryModel } from '../../src/ui/pocket/screens/memories';
 import { firstThought, fitBody, pkBoard, pkConfirm, pkGrid, pkMenu, pkOptions, pkSaves, pkStats } from '../../src/ui/pocket/templates';
 
@@ -898,5 +899,27 @@ describe('Pocket look: Memories and the Legacy Gallery', () => {
     expect(html).toContain('1 of 2');
     expect(html).toContain('next moment');
     expect(pkGallery(run({ relive: { label: 'x', text: 'y', file: null, at: 1, count: 2 } }))).toContain('done');
+  });
+});
+
+describe('Pocket look: the Tools room', () => {
+  const items = Array.from({ length: 22 }, (_, i) => ({ label: i === 0 ? "What's new" : `Tool ${i + 1}`, sub: `Does thing ${i + 1}. More words.`, tag: i === 21 ? 'Due' : '' }));
+  it('numbered cards, eight a page, the page holding the lit one', () => {
+    const html = pkTools({ items, index: 9 });
+    expect(pkPageOf(html)?.id).toBe('pt-tools');
+    expect(html.split('class="pn').length - 1).toBe(PK_TOOLS_PAGE);
+    expect(html).toContain('data-key="tl-8"');
+    expect(html).not.toContain('data-key="tl-7"');
+    expect(html).toMatch(/class="pn on" data-key="tl-9"/);
+    expect(html).toContain('Page 2 of 3');
+    expect(html).toContain('22 tools');
+  });
+  it('the last page is short and shows the Due tag; short lines come from the mock-up or the first clause', () => {
+    const html = pkTools({ items, index: 21 });
+    expect(html.split('class="pn').length - 1).toBe(6);
+    expect(html).toContain('gx-tl-tag');
+    expect(toolShort("What's new", 'x')).toBe("This update's notes");
+    expect(toolShort('Unknown', 'Does a thing. More.')).toBe('Does a thing');
+    expect(pkTools({ items: items.slice(0, 3), index: 0 })).not.toContain('Page 1 of 1');
   });
 });

@@ -616,6 +616,33 @@ test('Pocket look: the Hub is the town street; the doors walk, the tabs change a
   expect(errors).toEqual([]);
 });
 
+test('Pocket look: the Tools room is numbered cards a page at a time; a card opens its tool and Esc comes back', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=pk-tools');
+  await page.evaluate(() => {
+    const { game } = (window as any).__pkr;
+    for (const s of game.scene.getScenes(true)) game.scene.stop(s.scene.key);
+    game.scene.start('Hub');
+  });
+  await waitForScene(page, 'Hub');
+  await onPkPage(page, 'Hub', 'hub');
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Hub').enter('tools'));
+  await onPkPage(page, 'Hub', 'pt-tools');
+  const tools = pkView(page, 'Hub', 'pt-tools');
+  await expect(tools.locator('.tz39 > .pn')).toHaveCount(8);
+  await fits(page, 'Hub', 'pt-tools');
+  await step(page, 'ArrowDown', 2);
+  await expect(tools.locator('.pn.on')).toHaveAttribute('data-key', 'tl-8');
+  await expect(tools.locator('.hdr')).toContainText('Page 2 of');
+  await step(page, 'ArrowUp', 2);
+  await step(page, 'ArrowRight');
+  await expect(tools.locator('.pn.on')).toHaveAttribute('data-key', 'tl-1');
+  await step(page, 'Escape');
+  await onPkPage(page, 'Hub', 'hub');
+  expect(errors).toEqual([]);
+});
+
 test('Pocket look: Pocket Town has the street header, the Town Map and a door card; nothing opens without Go in', async ({ page }) => {
   test.setTimeout(180_000);
   const errors = watch(page);

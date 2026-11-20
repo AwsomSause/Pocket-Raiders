@@ -572,3 +572,5 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .lg39 .gx-lg-rl>small{font-size:12px;font-weight:800;opacity:.6}
 @keyframes gx-lg-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.pkx .pks .lg39 .gx-lg-rl{animation:none}}
+.pkx .pks .tz39>.pn{position:relative}
+.pkx .pks .tz39 .gx-tl-tag{position:absolute;right:14px;top:14px;font-style:normal;font-size:12px;font-weight:800;color:#fff;background:#e3350d;border-radius:999px;padding:1px 10px}

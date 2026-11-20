@@ -44,7 +44,8 @@ import { COLORS, textStyle } from '../ui/theme';
 import type { Picker, PickerRow } from '../ui/partyPanel';
 import type { AskOptions } from '../ui/redux/ask';
 import { bracketView, friendsPage, friendsPages } from '../ui/redux/screens/bracket';
-import type { ReduxCtx } from '../ui/redux/stage';
+import { pocketOn, type ReduxCtx } from '../ui/redux/stage';
+import { PK_TOOLS_COLS, pkTools } from '../ui/pocket/screens/tools';
 import { statsView } from '../ui/redux/templates';
 
 type PickerConfig = ConstructorParameters<typeof Picker>[1];
@@ -116,7 +117,15 @@ export function openTools(host: ToolsHost): void {
       : []),
     { label: 'Back up my save', sub: due ? 'You have not saved a copy in a while. Enter to download one.' : 'Download a copy of your profile and settings.', go: () => backup(host) },
   ];
-  page(host, 'Tools & Community', items.map((i, n) => row(i.label, i.sub, i.label === 'Back up my save' && due ? 'Due' : '')), (n) => items[n]!.go(), () => host.close());
+  const tag = (label: string): string => (label === 'Back up my save' && due ? 'Due' : '');
+  const rows = items.map((i) => row(i.label, i.sub, tag(i.label)));
+  // Pocket look: a numbered card per tool, four across (mock-up `pt-tools`).
+  if (pocketOn()) {
+    const cards = items.map((i) => ({ label: i.label, sub: i.sub, tag: tag(i.label) }));
+    host.open({ title: 'Tools & Community', rows, columns: 1, rowHeight: 56, onSelect: (n) => items[n]!.go(), onBack: () => host.close(), pageCols: PK_TOOLS_COLS, page: (c, index) => (c.pk ? pkTools({ items: cards, index }) : '') });
+    return;
+  }
+  page(host, 'Tools & Community', rows, (n) => items[n]!.go(), () => host.close());
 }
 
 export function openChangelog(host: ToolsHost): void {
