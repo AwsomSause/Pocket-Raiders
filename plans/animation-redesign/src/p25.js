@@ -7,11 +7,12 @@ const scene25 = (S, t0, what, o = {}) => {
   const root = document.createElement('div'); root.style.cssText = 'position:absolute;left:0;top:0;width:960px;height:540px;overflow:hidden';
   root.innerHTML = '<div class="wd"><div class="cam"><div class="shk"><div class="L L-bg"></div><div class="L L-mid"></div><div class="L L-fx"></div></div></div></div><div class="L L-ov"></div><div class="L L-ui"></div><div class="L L-top"></div>';
   S.root.insertBefore(root, [...S.root.children].find(e => e.classList.contains('L-ov')));
-  const vis = new Act(S, root, { o: 0 }), d0 = S.dur, b0 = S.beats; S.dur = 0; S.beats = [];
+  const vis = new Act(S, root), d0 = S.dur, b0 = S.beats, n0 = S.acts.length; S.dur = 0; S.beats = [];
   S.L = {}; for (const k of ['bg', 'mid', 'fx', 'ov', 'ui', 'top']) S.L[k] = root.querySelector('.L-' + k); S.cam = new Act(S, root.querySelector('.cam')); S.shk = new Act(S, root.querySelector('.shk'));
   S.off = t0 - (o.from || 0); (typeof what === 'string' ? CP(26, what) : what)(S);
   const len = o.len || S.dur - t0; for (const k of Object.keys(S)) if (!CORE25.includes(k)) delete S[k]; Object.assign(S, keep);
-  S.beats = b0; S.dur = Math.max(d0, t0 + len); vis.c = t0; vis.set({ o: 1 }); if (!o.last) { vis.c = t0 + len; vis.set({ o: 0 }); } return t0 + len;
+  S.beats = b0; S.dur = Math.max(d0, t0 + len); const t1 = o.last ? 1e9 : t0 + len; for (let i = n0; i < S.acts.length; i++) S.acts[i].win = [t0 - .05, t1 + .05];
+  vis.c = -1e9; vis.style('display', 'none'); vis.c = t0; vis.style('display', 'block'); if (!o.last) { vis.c = t1; vis.style('display', 'none'); } return t0 + len;
 };
 const wipe25 = (S, t) => { const w = S.box({ L: 'top', x: -900, y: 270, w: 1300, h: 760, kx: -14, bg: '#16203f', css: 'border-left:16px solid #ffcb05;border-right:16px solid #ffcb05;box-sizing:border-box' }); w.at(t - .2).to(.2, { x: 480 }, 'in').wait(.04).to(.22, { x: 1900 }, 'out').set({ o: 0 }); };
 const chain25 = (S, L) => { let t = 0; L.forEach(([id, len, label, from], i) => { if (i) wipe25(S, t); S.beat(t + .12, label); t = scene25(S, t, id, { len, from, last: i === L.length - 1 }); }); S.end(t); return t; };

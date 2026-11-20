@@ -173,7 +173,8 @@ function build(id) {
   const S = new Scene(st, id, AK.P); S.meta = d.meta; d.fn(S); S.beats.sort((a, b) => a[0] - b[0]);
   AK.S = S; AK.t = 0; render(0);
 }
-function render(t) { const S = AK.S; if (!S) return; for (const a of S.acts) a.apply(t); hud(t); }
+/* an actor with a window (a.win, set by a chained scene in pass 25) is left alone while its scene is off screen */
+function render(t) { const S = AK.S; if (!S) return; for (const a of S.acts) if (!a.win || (t >= a.win[0] && t <= a.win[1])) a.apply(t); hud(t); }
 function hud(t) {
   if (QS.has('cap') && AK.capFor !== AK.S) { AK.capFor = AK.S; const m = AK.S.meta; $('#vw-capbar').innerHTML = `<b>Pass ${AK.P} · ${esc((NOTES[AK.P] || {}).name || '')}</b> ${esc(m.g)} · ${esc(m.t)}`; }
   if (QS.has('bare')) return; const S = AK.S, sc = $('#vw-scrub');
