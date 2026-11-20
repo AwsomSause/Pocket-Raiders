@@ -83,6 +83,9 @@ export function pkCut(a: PkArt): PkCut | undefined {
   return undefined;
 }
 
+/** The picture's file was looked for and is not there. */
+export const pkGone = (a: PkArt): boolean => !a.whole && cuts.get(keyOf(a)) === null;
+
 /** The URL and size to draw a picture with: the whole file, or its cut-out. Undefined until measured. */
 export function pkPic(a: PkArt | null | undefined): PkCut | undefined {
   if (!a) return undefined;

@@ -150,3 +150,54 @@ test('Pocket look: the Pause menu is the Rotom Phone; it changes nothing and its
   expect(await runNow(page)).toBe(before);
   expect(errors).toEqual([]);
 });
+
+test('Pocket look: an event reads as the mock-ups (talk, choice cards, result, rewards) and plays the same', async ({ page }) => {
+  test.setTimeout(240_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=pk-event');
+  await toPocketMap(page);
+  await page.evaluate(() => {
+    const run = (window as any).__pkr.session.run;
+    const node = run.stage.map.nodes.find((n: any) => n.column === 1);
+    node.sides.push({ id: 'pk-ev', kind: 'event', used: false, eventId: 'an09-rusted-anchor' });
+    run.stage.current = node.id;
+    if (!run.stage.visited.includes(node.id)) run.stage.visited.push(node.id);
+    (window as any).__pkr.game.scene.getScene('Map').scene.start('Event', { sideId: 'pk-ev' });
+  });
+  await waitForScene(page, 'Event');
+  await onPkPage(page, 'Event', 'event');
+  const talk = pkView(page, 'Event', 'event');
+  await expect(talk.locator('.beats .on')).toHaveText('1 Talk');
+  await expect(talk.locator('[data-key="ev-tb"]')).toBeVisible();
+  await fits(page, 'Event', 'event');
+
+  // Every page of the talk waits for Enter; the last one brings the choice cards up over the text bar.
+  for (let n = 0; n < 8 && !(await pkView(page, 'Event', 'ev-choice').count()); n++) await step(page, 'Enter', 1), await page.waitForTimeout(500);
+  await onPkPage(page, 'Event', 'ev-choice');
+  const choice = pkView(page, 'Event', 'ev-choice');
+  await expect(choice.locator('.chc')).toHaveCount(3);
+  await expect(choice.locator('.chc.on')).toHaveCount(1);
+  await expect(choice.locator('.beats .on')).toHaveText('2 Choose');
+  await fits(page, 'Event', 'ev-choice');
+  await step(page, 'ArrowRight');
+  await expect(choice.locator('[data-key="ev-ch-1"]')).toHaveClass(/\bon\b/);
+  await step(page, 'ArrowLeft');
+
+  // Choosing: the outcome's text first, and what changed only after it.
+  await choice.locator('[data-key="ev-ch-0"]').click();
+  await onPkPage(page, 'Event', 'ev-result');
+  await expect(pkView(page, 'Event', 'ev-result').locator('.erc')).toHaveCount(0);
+  await fits(page, 'Event', 'ev-result');
+  for (let n = 0; n < 8 && !(await pkView(page, 'Event', 'ev-reward').count()); n++) await step(page, 'Enter', 1), await page.waitForTimeout(500);
+  await onPkPage(page, 'Event', 'ev-reward');
+  const reward = pkView(page, 'Event', 'ev-reward');
+  await expect(reward.locator('.erc').first()).toBeVisible();
+  await fits(page, 'Event', 'ev-reward');
+  // The rewards stay until Enter.
+  await page.waitForTimeout(1500);
+  await expect(reward).toBeVisible();
+  await step(page, 'Enter');
+  await waitForScene(page, 'Map');
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.stage.map.nodes.flatMap((n: any) => n.sides).find((s: any) => s.id === 'pk-ev')?.used)).toBe(true);
+  expect(errors).toEqual([]);
+});

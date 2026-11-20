@@ -4,7 +4,9 @@ import { changeSetting, SETTINGS } from '../../src/core/settingsRegistry';
 import { DEFAULT_SETTINGS } from '../../src/save/saveManager';
 import { page, pkPageOf, tierClass } from '../../src/ui/pocket/kit';
 import { pkAce, pkVersus } from '../../src/ui/pocket/screens/cards';
+import { dealOf, dealWord, pageText, pkEvent, points } from '../../src/ui/pocket/screens/event';
 import { pkPause } from '../../src/ui/pocket/screens/pause';
+import type { EventModel } from '../../src/ui/redux/screens/event';
 import { pkSettingsHome } from '../../src/ui/pocket/screens/settings';
 import { firstThought, fitBody, pkBoard, pkConfirm, pkGrid, pkMenu, pkOptions, pkSaves, pkStats } from '../../src/ui/pocket/templates';
 
@@ -178,5 +180,66 @@ describe('Pocket look: battle cards for the animations playback', () => {
     expect(html).toContain('>Water<');
     expect(html).toContain('<em>Lv 38</em>');
     for (const k of ['ace', 'ace-dim', 'ace-band', 'ace-name', 'ace-facts']) expect(html).toContain(`data-key="${k}"`);
+  });
+});
+
+describe('Pocket look: event pages', () => {
+  const base: EventModel = {
+    name: 'The Old Lighthouse', tag: 'Event', lines: [{ who: 'Keeper Amos', text: 'The lamp went dark an hour ago.' }], speaker: 'Keeper Amos', page: { at: 0, of: 2 },
+    art: 'packs/memories/eventbg/water_eve.png', tint: null, fx: null, cast: null, mon: null, look: null,
+    choices: [
+      { label: 'Climb to the lamp room', sub: 'A battle may start. You could find something rare.', chance: '', locked: false },
+      { label: 'Help fix the light', sub: 'Costs ₽300. Always works.', chance: '', locked: false },
+      { label: 'Walk on', sub: 'Nothing happens.', chance: '', locked: true },
+    ],
+    index: 1, money: 1200, outcome: null, pick: null, countdown: '', timer: null,
+  };
+  it('a talk page with more to read waits for Enter and turns the page', () => {
+    const html = pkEvent(base);
+    expect(pkPageOf(html)?.id).toBe('event');
+    expect(html).toContain('<i class="on">1 Talk</i>');
+    expect(html).toContain('data-act="page" data-arg="1"');
+    expect(html).toContain('1/2');
+    for (const k of ['ev', 'ev-bg', 'ev-where', 'ev-beats', 'ev-tb']) expect(html).toContain(`data-key="${k}"`);
+  });
+  it('on the last page the choices stand as cards over the text bar, one lit', () => {
+    const html = pkEvent({ ...base, page: { at: 1, of: 2 } }, 'hold');
+    expect(pkPageOf(html)?.id).toBe('ev-choice');
+    expect(html).toContain('gx-cue gx-ev is-hold');
+    expect(html.match(/class="chc /g)?.length).toBe(3);
+    expect(html).toContain('class="chc cost on"');
+    expect(html).toContain('Costs ₽ 300');
+    expect(html).toContain('gx-off');
+    for (const k of ['ev-row', 'ev-ch-0', 'ev-ch-2', 'ev-tb']) expect(html).toContain(`data-key="${k}"`);
+    expect(html).toContain('data-act="page" data-arg="-1"');
+    expect(html).not.toContain('<li>Costs ₽300</li>');
+  });
+  it('the outcome text comes first, and what changed shows only after it', () => {
+    const outcome = { step: 'text' as const, ok: false, changes: ['+₽600', 'Rare Candy ×1'], next: 'Continue' };
+    const text = pkEvent({ ...base, page: { at: 0, of: 1 }, outcome });
+    expect(pkPageOf(text)?.id).toBe('ev-result');
+    expect(text).toContain('It didn’t go your way');
+    expect(text).not.toContain('erc');
+    const won = pkEvent({ ...base, page: { at: 0, of: 1 }, outcome: { ...outcome, step: 'rewards', ok: true } });
+    expect(pkPageOf(won)?.id).toBe('ev-reward');
+    expect(won).toContain('You received');
+    expect(won.match(/class="erc[ "]/g)?.length).toBe(2);
+    expect(won).toContain('₽ 600');
+    expect(won).toContain('data-act="next"');
+  });
+  it('a long list of choices stands in rows of shorter cards', () => {
+    const many = Array.from({ length: 7 }, (_, k) => ({ label: `Choice ${k}`, sub: 'A note.', chance: '', locked: false }));
+    const html = pkEvent({ ...base, page: { at: 0, of: 1 }, choices: many });
+    expect(html).toContain('gx-many');
+    expect(html).toContain('repeat(4,');
+  });
+  it('a card says how risky or costly it is, and its notes are short points', () => {
+    expect(dealOf('danger', base.choices[0]!)).toBe('risk');
+    expect(dealOf('calm', base.choices[1]!)).toBe('cost');
+    expect(dealOf('calm', base.choices[0]!)).toBe('safe');
+    expect(dealWord('risk', base.choices[0]!, 60)).toBe('Risky · 60%');
+    expect(dealWord('safe', base.choices[2]!, null)).toBe('Locked');
+    expect(points('A battle may start. You could find something rare. And more. And more still.', 2)).toEqual(['A battle may start', 'You could find something rare']);
+    expect(pageText({ lines: [{ who: 'Amos', text: 'Hi.' }, { who: 'Lily', text: 'Yo.' }], speaker: 'Amos' })).toBe('Hi.\nLily: Yo.');
   });
 });

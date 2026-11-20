@@ -133,3 +133,81 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .gx-shade-in{position:absolute;inset:0;background:rgba(13,21,48,.5);animation:gx-fade .2s both}
 .pkx .pks .gx-ace .aceband,.pkx .pks .gx-ace .ab-mon,.pkx .pks .gx-ace .gx-hit{pointer-events:auto}
 @keyframes gx-fade{from{opacity:0}}
+
+/* ---- Event pages (ui/pocket/screens/event.ts) ---- */
+.pkx .pks .gx-ev .ev-where{max-width:640px;white-space:nowrap}
+.pkx .pks .gx-ev .ev-where span{overflow:hidden;text-overflow:ellipsis}
+.pkx .pks .gx-ev-chips{position:absolute;left:16px;top:72px;z-index:5;display:flex;gap:6px}
+.pkx .pks .gx-ev-chip{font-style:normal;font-size:12px;font-weight:800;background:rgba(13,21,48,.85);color:#fff;border:2px solid #fff;border-radius:12px;padding:1px 10px;display:flex;align-items:center;gap:6px}
+.pkx .pks .gx-ev-chip.hot{background:var(--red)}
+.pkx .pks .gx-ev-chip.urgent{animation:pk-blink .6s steps(2) infinite}
+.pkx .pks .gx-ev-chip.k{cursor:pointer;background:#fff;color:var(--ink);border-color:var(--ink)}
+.pkx .pks .gx-ev-chip kbd{font-size:11px}
+.pkx .pks .ech .gx-ev-chips{left:auto;right:16px;top:50px}
+.pkx .pks .gx-ev-timer{position:absolute;left:16px;top:66px;width:300px;height:5px;background:rgba(13,21,48,.6);z-index:5}
+.pkx .pks .gx-ev-timer i{display:block;height:100%;background:var(--yel)}
+.pkx .pks .gx-ev-timer.urgent i{background:var(--red)}
+.pkx .pks .gx-ev .ev-npc.hush,.pkx .pks .gx-ev .gx-ev-more{filter:brightness(.75) drop-shadow(10px 8px 0 rgba(13,21,48,.35))}
+.pkx .pks .gx-ev .gx-ev-more{right:40px;display:flex;align-items:flex-end;gap:6px}
+.pkx .pks .gx-ev .ev-mon{display:flex;align-items:flex-end;gap:8px}
+.pkx .pks .gx-ev .ev-mon.gx-ev-side{left:420px}
+.pkx .pks .gx-ev .ev-npc.gx-ev-far{right:50px}
+.pkx .pks .gx-ev .gx-ev-more.gx-ev-far{right:auto;left:300px}
+.pkx .pks .gx-ev .gx-fit{display:inline-flex;align-items:flex-end;justify-content:center}
+.pkx .pks .gx-ev .ev-you .gx-fit,.pkx .pks .gx-ev .ev-mon .gx-fit{position:relative}
+.pkx .pks .gx-ev-emo{position:absolute;left:50%;top:-72px;translate:-50% 0;z-index:2}
+.pkx .pks .gx-ev .ev-mon .gx-ev-emo{top:-40px}
+.pkx .pks .gx-ev-props{position:absolute;left:380px;bottom:186px;display:flex;gap:10px;z-index:2}
+.pkx .pks .gx-ev .tb{z-index:6;cursor:pointer}
+.pkx .pks .gx-ev.ech .tb{cursor:default}
+.pkx .pks .gx-ev .tb p{margin:0;max-height:88px;overflow:hidden}
+.pkx .pks .gx-ev .tb .por{z-index:1}
+.pkx .pks .gx-ev-who{color:var(--red)}
+.pkx .pks .gx-ev-fail{color:var(--red)}
+.pkx .pks .gx-ev-pg{font-size:12px;font-weight:800;color:var(--mute);margin-right:8px}
+.pkx .pks .gx-ev-hit{z-index:1}
+.pkx .pks .gx-ev .ch-row{align-items:start}
+.pkx .pks .gx-ev .ch-row.gx-low{top:128px}
+.pkx .pks .gx-ev .ch-row.gx-many{row-gap:12px}
+.pkx .pks .gx-ev .chc{min-width:0;overflow:hidden}
+.pkx .pks .gx-ev .chc>b{overflow-wrap:anywhere}
+.pkx .pks .gx-ev .chc .ch-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.pkx .pks .gx-ev .chc .ch-top em{font-style:normal;font-size:12px;font-weight:800;color:#fff;background:var(--tc);border-radius:12px;padding:2px 10px;white-space:nowrap}
+.pkx .pks .gx-ev .chc .ch-ic{flex:none;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#fff 0 30%,#ffe98a 31% 62%,var(--yel) 63%);border:3px solid var(--ink)}
+.pkx .pks .gx-ev .gx-many .chc{padding:8px 12px;gap:6px}
+.pkx .pks .gx-ev .gx-many .chc.on{translate:0 -4px}
+.pkx .pks .gx-ev .chc.gx-off{opacity:.55;filter:grayscale(.7)}
+.pkx .pks .gx-ev-note{position:absolute;left:28px;right:28px;top:352px;z-index:4;font-size:13px;font-weight:800;color:#fff;text-shadow:1px 1px 0 var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pkx .pks .gx-ev .erw-row{flex-wrap:wrap;padding:0 40px}
+.pkx .pks .gx-ev .erw-row.gx-small{top:160px;gap:12px}
+.pkx .pks .gx-ev .erw-row.gx-small .erc{width:160px;height:108px;gap:2px}
+.pkx .pks .gx-ev .erw-row.gx-small .erc-ic{width:56px;height:56px}
+.pkx .pks .gx-ev .erc{padding:0 10px;text-align:center;overflow:hidden}
+.pkx .pks .gx-ev .erc b,.pkx .pks .gx-ev .erc span{max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pkx .pks .gx-ev .erc.gx-bad b{color:var(--red)}
+.pkx .pks .gx-ev-rounds{position:absolute;left:28px;right:28px;top:62px;z-index:4;display:flex;gap:6px;cursor:pointer}
+.pkx .pks .gx-ev-rounds>div{flex:1;min-width:0;background:#fff;border:2px solid var(--ink);border-radius:4px 12px 4px 12px;padding:2px 10px;box-shadow:3px 3px 0 var(--ink)}
+.pkx .pks .gx-ev-rounds>.next{background:var(--yel)}
+.pkx .pks .gx-ev-rounds>.ahead{opacity:.7}
+.pkx .pks .gx-ev-rounds small{display:block;font-size:11px;font-weight:800;white-space:nowrap}
+.pkx .pks .gx-ev-rounds b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pkx .pks .gx-ev-title{position:absolute;left:0;right:0;top:150px;text-align:center;z-index:5;font:400 64px/1 var(--fd);color:var(--yel);-webkit-text-stroke:6px var(--ink);paint-order:stroke fill;pointer-events:none}
+.pkx .pks .gx-ev-stand{position:absolute;right:16px;top:56px;width:250px;z-index:5;padding:8px 12px;display:flex;flex-direction:column;gap:4px}
+.pkx .pks .gx-ev-meter{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:800}
+.pkx .pks .gx-ev-meter span{width:76px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pkx .pks .gx-ev-meter .hp{flex:1}
+.pkx .pks .gx-dark{background:#000}
+.pkx .pks .gx-dark::before{content:none}
+.pkx .pks .gx-ev-scare{position:absolute;inset:10px 30px 120px;display:grid;place-items:center}
+/* The trade or gift picker over an event. */
+.pkx .pks .gx-pick{position:absolute;left:250px;right:250px;top:60px;z-index:9;display:flex;flex-direction:column;gap:8px;padding:16px}
+.pkx .pks .gx-pick-t{font:400 24px/1 var(--fd)}
+.pkx .pks .gx-pick-list{display:flex;flex-direction:column;gap:6px}
+.pkx .pks .gx-pick.tight .btn{min-height:30px}
+.pkx .pks .gx-pick-k{font-size:12px;font-weight:800;display:flex;gap:6px;align-items:center}
+.pkx .pks .gx-pk-card{display:flex;align-items:center;gap:10px}
+.pkx .pks .gx-pk-card>i{font:400 28px/1 var(--fd);font-style:normal}
+.pkx .pks .gx-pk-side{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;border:2px solid var(--ink);border-radius:6px;padding:6px}
+.pkx .pks .gx-pk-side small{font-size:11px;font-weight:800}
+.pkx .pks .gx-pk-side b{max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pkx .pks .gx-q{font-size:40px;opacity:.6;height:80px}

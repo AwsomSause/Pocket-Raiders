@@ -24,7 +24,7 @@ Kice's picks decide which pass a page is drawn at: Title pass 17, Pause menu pas
 | Part | Pages | State |
 |---|---|---|
 | 1 | The style setting, the layer, the mock-ups' rules, sprites and page changes. Title (pass 17). Settings home (nine tiles) and every Settings page (rows with switches, bars and choices, the Display preview). Save Slots. The confirm box (Rotom asks). Pause menu: the Rotom Phone (pass 24). Shared pages every list screen uses: menu, option rows, number tiles, picture wall, board. Through those: Trainer Select, Preparation Desk, Run Setup, Modifiers, Game Summary, My stats, the quest boards, the Save menu. | done |
-| 2 | Stage map, events, shops, rewards | not started |
+| 2 | Events: talk, choice cards over the text bar, result, rewards (mock-ups `event`, `ev-choice`, `ev-result`, `ev-reward`), with the trade picker, tournament rounds, standing, timer and the dark scare page. Stage map, shops, rewards: next | events done |
 | 3 | Battle HUD and cards (trainer intro, ace call, the cards the animations thread moves) | not started |
 | 4 | Party, Summary, Bag, Pokédex, Trainer Card, Journal, Type Chart | not started |
 | 5 | Hub Town, Pocket Town, run setup pages of their own (starter pick, briefing) | not started |
@@ -33,11 +33,12 @@ Kice's picks decide which pass a page is drawn at: Title pass 17, Pause menu pas
 
 ## Tests
 
-- `tests/unit/pocketUi.test.ts`: the progress ribbon, Rotom's lines, the page mark and tiers, settings rows (switch, bar, choices, window, escaping), the shared pages, save slots, the Settings home, the Pause page.
-- `tests/e2e/pocketUi.spec.ts`: Title, Settings (home, a category, a change, Reset question, Game Summary), Save Slots and the Pause menu, each checked at three window sizes for text that is cut off or off the stage; the Pause menu changes nothing in the run; no console errors.
+- `tests/unit/pocketUi.test.ts`: the progress ribbon, Rotom's lines, the page mark and tiers, settings rows (switch, bar, choices, window, escaping), the shared pages, save slots, the Settings home, the Pause page, the battle cards, the event pages (talk, choice cards, result, rewards, many choices).
+- `tests/e2e/pocketUi.spec.ts`: Title, Settings (home, a category, a change, Reset question, Game Summary), Save Slots and the Pause menu, each checked at three window sizes for text that is cut off or off the stage; the Pause menu changes nothing in the run; a real event from talk to rewards (rewards stay until Enter, the event is used up); no console errors.
 
 ## Known limits
 
-- Part 1 only: every other screen still shows its New page in the Pocket style.
+- Parts 1 and 2 (events) only: every other screen still shows its New page in the Pocket style.
 - The Rotom Phone has the apps the map can open today (Party, Bag, Journal, PC Box, Rivals, Save, Settings, End run). The mock-up's Pokédex, Trainer Card and Type Chart apps come with their pages in part 4.
 - Page changes need a browser with view transitions (Chrome, Edge, Safari 18, Firefox 144); others change pages at once.
+- Event pages: a place the New UI draws (a room, a shop, a fair) gets the nearest Pokémon Memories backdrop, as the mock-ups do; the New UI's drawn weather and drifting motes are not on these pages. The bracket, Honest Trade Card, code-name card and rival team pages are still New pages.
