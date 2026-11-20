@@ -91,6 +91,11 @@ export interface PokemonPick {
   /** Why this party member can't be chosen, or null. */
   problemFor: (index: number) => string | null;
   onPick: (index: number) => void;
+  /**
+   * Read these Pokémon instead of the party (the PC's): the screen opens on the Summary and only reads. Enter and Esc
+   * both end in `onPick` with the Pokémon that was showing.
+   */
+  from?: () => PokemonInstance[];
 }
 
 class PokemonScreen implements PickerLike {
@@ -162,7 +167,7 @@ class PokemonScreen implements PickerLike {
     const { scene } = host;
     const { session } = services();
     this.motion = session.settings.battleAnimations;
-    this.sel = Math.max(0, Math.min(start, session.run!.party.length - 1));
+    this.sel = Math.max(0, Math.min(start, this.party.length - 1));
     this.root = scene.add.container(0, 0).setDepth(DEPTH);
     const shade = scene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.6).setOrigin(0).setInteractive();
     this.root.add(shade);
@@ -176,7 +181,7 @@ class PokemonScreen implements PickerLike {
     }
     // New UI: the Party page comes first (as with a look that has a roster); Enter opens the Summary.
     const newUi = reduxOn() && !this.skin;
-    this.roster = !!this.skin?.roster || newUi;
+    this.roster = (!!this.skin?.roster || newUi) && !pick?.from;
     const cap = runLevelCap(session.content, session.run!);
     this.root.add(scene.add.text(48, 47, pick ? `${pick.title}  ·  cap ${cap}` : `Pokémon  ·  Level cap ${cap}`, textStyle(30, COLORS.textLight)).setOrigin(0, 0.5).setName('pokemon-title'));
     const back = scene.add.text(GAME_WIDTH - 48, 47, '◀ Back', textStyle(22, COLORS.gold)).setOrigin(1, 0.5).setName('picker-back').setInteractive({ useHandCursor: true });
@@ -295,7 +300,7 @@ class PokemonScreen implements PickerLike {
     return services().session.content;
   }
   private get party(): PokemonInstance[] {
-    return this.run.party;
+    return this.pick?.from?.() ?? this.run.party;
   }
   private get mon(): PokemonInstance {
     return this.party[this.sel]!;
@@ -400,7 +405,12 @@ class PokemonScreen implements PickerLike {
     } else if (action === 'back') {
       if (this.mode === 'detail') this.mode = 'list';
       else if (this.hasRoster && !this.pick) this.roster = true;
-      else return this.leave();
+      else if (this.pick?.from) {
+        // A read-only Summary goes back to where it was opened from, on the Pokémon it was showing.
+        const at = this.sel;
+        this.close();
+        return this.pick.onPick(at);
+      } else return this.leave();
     }
     this.render();
   }
@@ -819,7 +829,7 @@ class PokemonScreen implements PickerLike {
     }
     return summaryView(c, {
       title: this.pick ? this.pick.title : 'Summary',
-      hints: [['←→', 'page'], ['↑↓', this.mode === 'detail' ? 'pick' : 'Pokémon'], ['Enter', this.pick ? 'choose' : 'actions'], ['Esc', 'back']],
+      hints: [['←→', 'page'], ['↑↓', this.mode === 'detail' ? 'pick' : 'Pokémon'], ...(this.pick?.from ? [] : [['Enter', this.pick ? 'choose' : 'actions'] as [string, string]]), ['Esc', 'back']],
       face: {
         name: `${info.name}${mon.shiny ? ' ★' : ''}`,
         file: monFile(scene, species.id, 'front', !!mon.shiny),
@@ -867,6 +877,7 @@ class PokemonScreen implements PickerLike {
     if (this.roster && !this.tap) return this.pick ? this.pick.problemFor(this.sel) ?? `Enter: choose ${this.nameOf(this.mon)}.  Arrows move.` : `${this.nameOf(this.mon)}: Enter opens the summary.  Arrows move · Esc back.`;
     if (this.tap) return `Tap Enter! ${this.tap.count}/${CARE.tap.goal} (Esc to stop)`;
     if (this.flash) return this.flash;
+    if (this.pick?.from) return `${this.nameOf(this.mon)}, in the PC.  Up/down Pokémon · left/right tab · Esc back.`;
     if (this.pick && this.mode === 'list') return this.pick.problemFor(this.sel) ?? `Enter: choose ${this.nameOf(this.mon)}.  Up/down Pokémon · left/right tab.`;
     const r = readiness(this.content, this.mon);
     if (this.mode === 'menu') {

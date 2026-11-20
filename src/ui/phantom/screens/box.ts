@@ -8,7 +8,11 @@ import { type GridModel, gridStart, pic as rxPic } from '../../redux/templates';
 import { act, esc, mon, page } from '../kit';
 import { phHead, phKeys } from '../templates';
 
-export interface PhBoxModel extends GridModel { party: readonly PartyChip[] }
+export interface PhBoxModel extends GridModel {
+  party: readonly PartyChip[];
+  /** The lit Pokémon's other buttons (the mock-up's Summary and Give item), each with its key. */
+  extras?: readonly { label: string; key: string; off: boolean }[];
+}
 
 /** The wall shows five lines of six slots. */
 export const BOX_SHOWN = 30;
@@ -22,7 +26,8 @@ export function phBox(_ph: PhantomVersion, d: PhBoxModel): string {
     return `<div class="bxc ph-bxc${i === d.index ? ' on' : ''}${r.art ? '' : ' e'}" style="--i:${q}" data-key="c${i}"${act('pick', i, 'over')}>${rxPic(r.art, 64)}</div>`;
   }).join('');
   const here = d.cell(Math.max(0, Math.min(n - 1, d.index))), full = !!here?.art;
-  const card = `<div class="pn bx-d ph-bx-d" data-key="d${d.index}"><span class="lab">${esc(det.sub ?? (full ? 'In the PC' : 'Empty slot'))}</span><div class="bx-pic">${rxPic(det.art, 190) || '<b class="ph-de-q">+</b>'}</div><h3 class="tl1">${esc(det.title)}</h3><p class="txt">${esc(det.body ?? '')}</p><div class="bx-acts"><div class="blade on${here?.off ? ' off' : ''}" style="--sh:#000;--r:-3deg"${act('pick', d.index)}>${full ? 'Move to party' : 'Put one here'}</div></div></div>`;
+  const more = (d.extras ?? []).map((x, k) => `<div class="blade ph-bx-x${x.off ? ' off' : ''}" style="--i:${k + 1};--sh:#000;--r:${-2 + k}deg"${act('extra', k)}><kbd>${esc(x.key)}</kbd>${esc(x.label)}</div>`).join('');
+  const card = `<div class="pn bx-d ph-bx-d" data-key="d${d.index}"><span class="lab">${esc(det.sub ?? (full ? 'In the PC' : 'Empty slot'))}</span><div class="bx-pic">${rxPic(det.art, 190) || '<b class="ph-de-q">+</b>'}</div><h3 class="tl1">${esc(det.title)}</h3><p class="txt">${esc(det.body ?? '')}</p><div class="bx-acts"><div class="blade on${here?.off ? ' off' : ''}" style="--sh:#000;--r:-3deg"${act('pick', d.index)}>${full ? 'Move to party' : 'Put one here'}</div>${more}</div></div>`;
   const where = n > BOX_SHOWN ? `<div class="ph-more2" style="left:170px;top:${138 + 5 * 94}px">${s > 0 ? '▲ ' : ''}${s + 1}–${Math.min(n, s + BOX_SHOWN)} of ${n}${s + BOX_SHOWN < n ? ' ▼' : ''}</div>` : '';
   return page('box', back + phHead(d.title, `PC · ${d.found} of ${d.total} in use`) + team + `<div class="bx ph-bx">${cells}</div>` + where + card
     + (d.text ? `<div class="pn ph-say ph-say-bx" data-key="t${d.index}"><p class="txt">${esc(d.text)}</p></div>` : '') + phKeys(d.hints, [['▲▼◀▶', 'move'], ['Enter', 'choose'], ['Esc', 'back']]));

@@ -299,6 +299,17 @@ test('Phantom UI: a wild battle opens on the wild card and the send-out card; a 
   await expect(wild.locator('.wl-tags')).toContainText(`Lv.${foe.level}`);
   await expect(wild.locator('.wl-c')).toContainText(/It can(’|')?t? be caught|It can be caught/);
   await expect(wild.locator('.keys')).toContainText('Send out', { ignoreCase: true });
+  // The Pokédex key opens the species' page over the card; the card waits under it and is still there afterwards.
+  await expect(wild.locator('.keys')).toContainText('Pokédex', { ignoreCase: true });
+  await page.keyboard.press('q');
+  const entry = pview(page, 'Battle', 'dexentry');
+  await expect(entry).toBeVisible();
+  await expect(entry.locator('.hd')).toContainText(foe.name, { ignoreCase: true });
+  await page.waitForTimeout(900);
+  expect(await fitProblems(page, 'Battle', 'dexentry'), 'dexentry').toEqual([]);
+  await page.keyboard.press('Escape');
+  await expect(entry).toHaveCount(0);
+  await expect(wild).toBeVisible();
   await gone('wild', ['send']);
 
   // Then both sides send out. The lines before it take Enter; the card itself is held when it shows.

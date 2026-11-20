@@ -100,9 +100,13 @@ A third UI style next to New and Old: **Settings > Display > UI style > Phantom*
 - Key presses (`src/ui/keyOnce.ts`, every UI style): the engine hands a scene the frame's whole key queue again at each new key event, so with three or more key events inside one slow frame an earlier press counted twice (Down moved the cursor two rows). Each scene now hears each key event once. Found by the Pokédex test when two tests ran side by side.
 - A page that slides in under a resting pointer does not move the cursor (hovers are ignored while its way in plays).
 
+## Slice 7 notes
+- The wild card's Pokédex key (Q, or a click on the key): the species' Pokédex page opens over the card and only reads. The card waits under it (its clock no longer ends it) and takes Z again once the page is closed.
+- The PC card's Summary (I): the game's own Summary reading the PC's Pokémon. It only reads (no action menu, no reorder, no take-off); up and down go through the PC, Enter or Esc go back to the same slot.
+- The PC card's Give item (G): a list of the held items waiting in the Bag; Enter gives one to the lit PC Pokémon. **A rule the game did not have** (`giveHeld(…, 'box')` in `core/bag.ts`): before, a held item could only go to a party Pokémon. The same checks apply (free copy, stack limit, species), no save change. Phantom only; the button is dimmed when no held item is free.
+
 ## Known limits
 - The mock-up's "Change who leads" key on the send-out card is not there: the game has no rule for changing the lead once a battle has begun (the lead is set on the map), and this slice changes no rules.
-- The mock-up's Pokédex key on the wild card is not there yet (the Pokédex page itself is built: pause menu and quick wheel).
 - The side stage card has Z Fight only: the mock-up's Party and Back out keys would need a rule for leaving a fight that has already begun, which the game does not have.
 - The phase card does not say "the music changes": it only states what is true in the battle.
 - Screens still on the stand-in look (next): League counter-pick, jigsaw, mini-games, ops, rival panels, Safari, Spirit Market, the tree and the wide pages.
@@ -110,10 +114,10 @@ A third UI style next to New and Old: **Settings > Display > UI style > Phantom*
 - The Phone page's rows from the mock-up that the game has no setting for yet (touch button size, swipe to switch, hold for details) are not built: each needs a new setting and a settings save version.
 - The Rotom Phone's Party door has no browser test of its own (its Rivals, log and Pokédex doors do).
 - Every page opens only Settings' own pages and Version Select; a page change's copy is not made for the run log overlay.
-- The PC's Summary and Give item buttons from the mock-up are not built.
 - Evil Mode pages of the mock-ups are not started (Evil Mode lives on its own branch).
 
 ## Tests
+- Slice 7: `tests/unit/bag.test.ts` (one more: a held item for a PC Pokémon, its limits and failures); `phantomBattle.spec.ts` (the wild card's Pokédex key: opens, fits, closes, the card is still there); `phantomTeam.spec.ts` (the PC's Summary by keys, read-only, back to the same slot; Give item from the Bag to a PC Pokémon).
 
 - Slice 6: `tests/unit/phantomEnding.test.ts`, `phantomTravel.test.ts`, `phantomDexBook.test.ts`, `phantomPhone.test.ts` (14 tests), `phantomTownMap.test.ts` (15), `phantomJoins.test.ts` (10: which page change plays, the motion read from and written to settings, the Page changes page), `phantomPageIndex.test.ts` (6: the directory's data and page). `keyOnce.test.ts` (5: the engine's double hand-over, and the guard). In the browser: `phantomEnding.spec.ts`, `phantomTravel.spec.ts`, `phantomDex.spec.ts`, `phantomPhone.spec.ts` (2), `phantomTown.spec.ts` (2), `phantomJoins.spec.ts` (3: the Page changes page by keys and clicks with the settings it writes; a page that takes input while its change still plays and leaves nothing behind; Every page by keys and mouse, in five versions with the text-fit check), and `phantomWheel.spec.ts` for the wheel's new slots.
 - `tests/unit/phantomBattle.test.ts` (10 tests), `tests/unit/phantomCutin.test.ts` (14 tests), `tests/unit/phantomMoments.test.ts` (12 tests), `tests/unit/phantomStages.test.ts` (8 tests): the battle page, the cards, the cut-ins, the moments and the decision pages as pure pages (what is shown, what is left out, escaping, limits).

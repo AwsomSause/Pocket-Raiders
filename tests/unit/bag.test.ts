@@ -80,6 +80,30 @@ describe('taking held items off and giving them back', () => {
     expect(() => takeOffHeld(content, run, 0, 'charcoal')).toThrow(/outside battle/);
   });
 
+  it('gives a loose held item to a Pokémon in the PC with the same checks (Phantom UI, the PC card)', () => {
+    const run = fresh();
+    run.phase = 'map';
+    run.box = [structuredClone(run.party[0]!), structuredClone(run.party[0]!)];
+    run.box[0]!.held = {};
+    run.box[1]!.held = { charcoal: 3 };
+    run.party[0]!.held = {};
+    run.looseHeld = { charcoal: 2 };
+    const given = giveHeld(content, run, 'charcoal', 0, 'box');
+    // The PC Pokémon holds it, the party is untouched and one copy is left; the input run is unchanged.
+    expect(given.run.box[0]!.held).toEqual({ charcoal: 1 });
+    expect(given.run.party[0]!.held).toEqual({});
+    expect(given.run.looseHeld).toEqual({ charcoal: 1 });
+    expect(run.box[0]!.held).toEqual({});
+    expect(given.message).toMatch(/is now holding the Charcoal/);
+    // Boundary: the stack limit counts for a PC Pokémon too. Failure: an empty PC slot, none left, in battle.
+    expect(giveHeldProblem(content, run, 'charcoal', 1, 'box')).toMatch(/holds the most/);
+    expect(giveHeldProblem(content, run, 'charcoal', 2, 'box')).toBe('Choose a Pokémon.');
+    expect(() => giveHeld(content, run, 'charcoal', 2, 'box')).toThrow(/Choose a Pokémon/);
+    const none = giveHeld(content, given.run, 'charcoal', 0, 'box').run;
+    expect(giveHeldProblem(content, none, 'charcoal', 0, 'box')).toMatch(/none of those/);
+    expect(() => giveHeld(content, { ...run, phase: 'battle' }, 'charcoal', 0, 'box')).toThrow(/outside battle/);
+  });
+
   it('a held item an event put straight in the Bag (a Sitrus Berry) shows and can be given (save audit follow-up)', () => {
     const run = fresh();
     run.inventory = { potion: 1, 'sitrus-berry': 2 };

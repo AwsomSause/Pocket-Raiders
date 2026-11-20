@@ -274,21 +274,24 @@ function looseHeldIds(content: Content, run: RunState): string[] {
 }
 
 /** Why a loose held item can't go to this Pokémon (no free slot, at its limit, wrong species), or null. */
-export function giveHeldProblem(content: Content, run: RunState, itemId: string, partyIndex: number): string | null {
+export function giveHeldProblem(content: Content, run: RunState, itemId: string, partyIndex: number, where: 'party' | 'box' = 'party'): string | null {
   const entry = content.catalog.get(itemId);
-  const mon = run.party[partyIndex];
+  const mon = (where === 'box' ? run.box : run.party)[partyIndex];
   if (!entry || !mon) return 'Choose a Pokémon.';
   if (looseCopies(content, run, itemId) <= 0) return 'You have none of those in your Bag.';
   return catalogTargetProblem(content, run, entry, mon);
 }
 
-/** Gives one loose copy of a held item to a party Pokémon. Returns a new run. */
-export function giveHeld(content: Content, current: RunState, itemId: string, partyIndex: number): { run: RunState; message: string } {
+/**
+ * Gives one loose copy of a held item to a party Pokémon, or to one in the PC (`where` 'box': the same checks; it
+ * keeps the item when it joins the party, as any PC Pokémon keeps what it holds). Returns a new run.
+ */
+export function giveHeld(content: Content, current: RunState, itemId: string, partyIndex: number, where: 'party' | 'box' = 'party'): { run: RunState; message: string } {
   checkPhase(current);
-  const problem = giveHeldProblem(content, current, itemId, partyIndex);
+  const problem = giveHeldProblem(content, current, itemId, partyIndex, where);
   if (problem) throw new Error(problem);
   const run = structuredClone(current);
-  const mon = run.party[partyIndex]!;
+  const mon = (where === 'box' ? run.box : run.party)[partyIndex]!;
   mon.held = { ...mon.held, [itemId]: (mon.held?.[itemId] ?? 0) + 1 };
   // A copy taken off a Pokémon (looseHeld) goes first, then one an event put straight in the Bag (inventory).
   const pool = (run.looseHeld?.[itemId] ?? 0) > 0 ? run.looseHeld! : run.inventory;

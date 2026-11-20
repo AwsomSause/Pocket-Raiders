@@ -79,6 +79,8 @@ import { launcherReady } from '../core/camp';
 import { moveBlockReason } from '../core/battle/moveBlock';
 import { cheerProblem, coopOwner, exposedWeakSpot, puzzlePattern, raidBot, raidDef, raidRole } from '../core/raid/raid';
 import { RETURN_MUSIC } from '../core/instrumentality/flightNorth';
+import { DexInfo } from '../ui/dexInfo';
+import { liveDexProfile } from '../core/presentation/dexInfo';
 import { playCry, playMusic, playMusicLazy, playSfx, playSfxLazy, setMusicIntensity, storyOr, playCue } from '../ui/audio';
 import { storyTeamTrack } from '../core/presentation/storyMusic';
 import { isStoryCampaign } from '../core/campaign/circuit';
@@ -363,6 +365,9 @@ export class BattleScene extends Phaser.Scene {
   private phGimView: ReduxView | null = null;
   /** The full-screen Phantom card that is up now (a card is drawn once; a change of version asks it to draw again). */
   private phMomentView: ReduxView | null = null;
+  /** Phantom UI: the wild card's Pokédex key, while that card is up, and the page it opened. */
+  private phWildKey: (() => void) | null = null;
+  private phWildDex: DexInfo | null = null;
   private phGimInput: ((action: InputAction) => void) | null = null;
   /** New UI: the callout of the event being played (a boss's Rally brace, a signature trait going off). */
   private rxCall: { rally?: string; trait?: { file: string; name: string; text: string } } | null = null;
@@ -554,6 +559,8 @@ export class BattleScene extends Phaser.Scene {
     this.rxRing = null;
     this.rxBag = null;
     this.rxRingTold = new Set();
+    this.phWildKey = null;
+    this.phWildDex = null;
     this.advance = null;
     this.busy = true;
     this.riledUid = Object.entries(battle.hyper?.rage ?? {}).find(([, r]) => r.state === 'warned')?.[0] ?? null;
@@ -707,7 +714,7 @@ export class BattleScene extends Phaser.Scene {
     this.tabs = new BattleTabs(this, { motion: this.motion, onPage: (p) => this.gotoPage(p), onAuto: () => this.toggleAuto(), onInfo: () => this.toggleInfo() }, this.tabsAt.x, this.tabsAt.y);
     this.tabs.show(false);
     this.note = this.add.text(12, 6, '', textStyle(18, COLORS.textLight, { stroke: '#181818', strokeThickness: 4, wordWrap: { width: 560 } })).setOrigin(0, 0).setDepth(130).setAlpha(0);
-    this.input.keyboard?.on('keydown-Q', () => this.gotoPage(this.tabs.neighbour(-1)));
+    this.input.keyboard?.on('keydown-Q', () => (this.phWildKey ? this.phWildKey() : this.gotoPage(this.tabs.neighbour(-1))));
     this.input.keyboard?.on('keydown-E', () => this.gotoPage(this.tabs.neighbour(1)));
     this.input.keyboard?.on('keydown-I', () => this.toggleInfo());
     this.input.keyboard?.on('keydown-T', () => this.toggleAuto());
@@ -2056,6 +2063,11 @@ export class BattleScene extends Phaser.Scene {
       this.phGimInput(action);
       return;
     }
+    if (this.phWildDex) {
+      if (action === 'confirm' || action === 'back') this.phWildDex.close();
+      else if (action === 'left' || action === 'right') this.phWildDex.flip();
+      return;
+    }
     if (this.infoPanel) {
       if (action === 'back' || action === 'confirm') this.closePanel();
       return;
@@ -3295,7 +3307,7 @@ export class BattleScene extends Phaser.Scene {
    * Phantom UI: one full-screen card over the battle. It ends on a click or a key, or after `ms` (null: it waits for an
    * input, unless Settings > Auto-advance is on). Presentation only: a card that fails to draw is skipped.
    */
-  private async phMoment(draw: (ph: PhantomVersion) => string, ms: number | null): Promise<void> {
+  private async phMoment(draw: (ph: PhantomVersion) => string, ms: number | null, more?: { acts: Record<string, () => void>; held: () => boolean }): Promise<void> {
     if (!this.rx || !phantomOn()) return;
     try {
       const st = services().session.settings;
@@ -3303,8 +3315,9 @@ export class BattleScene extends Phaser.Scene {
       let over = false;
       let finish!: () => void;
       const done = new Promise<void>((r) => (finish = r));
-      const end = (): void => {
-        if (over) return;
+      const end = (force = false): void => {
+        // A page that is open over the card (the Pokédex) keeps it up: it then waits for an input.
+        if (over || (!force && more?.held())) return;
         over = true;
         if (this.phMomentView === view) this.phMomentView = null;
         try {
@@ -3314,11 +3327,11 @@ export class BattleScene extends Phaser.Scene {
         }
         finish();
       };
-      const view = mountRedux(this, { render: (c) => (c.ph ? draw(c.ph) : ''), acts: { next: end }, card: true });
+      const view = mountRedux(this, { render: (c) => (c.ph ? draw(c.ph) : ''), acts: { ...more?.acts, next: () => end() }, card: true });
       this.phMomentView = view;
-      if (wait !== null) this.time.delayedCall(wait, end);
-      this.events.once('shutdown', end);
-      await this.playBeat({ done, skip: end });
+      if (wait !== null) this.time.delayedCall(wait, () => end());
+      this.events.once('shutdown', () => end(true));
+      await this.playBeat({ done, skip: () => end() });
     } catch (e) {
       console.warn('Phantom card failed', e);
     }
@@ -3685,6 +3698,13 @@ export class BattleScene extends Phaser.Scene {
     }
     const others = battle.doubles ? battle.enemyTeam.slice(1, battle.doubles.trio ? 3 : 2).map((m) => this.speciesName(m)) : [];
     const isNew = !profile.speciesCaught.includes(foe.speciesId);
+    // The mock-up's Pokédex key: the species' page opens over the card (it only reads), and the card waits under it.
+    const openDex = (): void => {
+      if (this.phWildDex) return;
+      playSfx(this, 'ui.select', 0.5);
+      this.phWildDex = new DexInfo(this, content, liveDexProfile(profile, this.run.log), foe.speciesId, () => (this.phWildDex = null), true);
+    };
+    this.phWildKey = openDex;
     await this.phMoment((ph) => phWild(ph, {
       name: this.speciesName(foe),
       mon: this.phArt(foe),
@@ -3700,7 +3720,9 @@ export class BattleScene extends Phaser.Scene {
       balls: ballIds.map((id) => ({ name: content.items.get(id)!.name, n: this.run.inventory[id] ?? 0 })).sort((a, b) => b.n - a.n),
       backdrop: this.phBackdrop(),
       grass: ['grass', 'bug'].includes(this.arenaTypes[0] ?? ''),
-    }), 3000);
+    }), 3000, { acts: { dex: openDex }, held: () => this.phWildDex !== null });
+    this.phWildKey = null;
+    this.phWildDex?.close();
   }
 
   /** Phantom UI: both sides send out (the mock-up's `send` card), just before the throw. */

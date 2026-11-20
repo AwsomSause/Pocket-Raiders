@@ -54,6 +54,8 @@ export interface PickerRow {
   art?: string;
 }
 
+export interface PickerExtra { label: string; key: string; off?: boolean; run: () => void }
+
 export interface PickerConfig {
   /** New UI: the room's own page, drawn in place of the rows (the Old look still draws the rows). */
   page?: (c: ReduxCtx, index: number) => string;
@@ -79,6 +81,11 @@ export interface PickerConfig {
   glass?: boolean;
   /** Press I (or click "I Summary") for a quick look at the focused row's Pokémon without leaving the list: returns the summary text. */
   inspect?: (index: number) => string;
+  /**
+   * More buttons for the focused row, beside what Enter does (the Phantom UI's PC: Summary, Give item). Each has a
+   * letter key; `off` dims it and a press only sounds. None for a row means that row has no such buttons.
+   */
+  extras?: (index: number) => PickerExtra[];
   /** A small picture in the header (a lazy asset id); it appears once loaded. */
   badge?: string;
   /** A full-screen picture (a lazy asset id) drawn instead of the panel and title band, once loaded. */
@@ -126,6 +133,10 @@ export class Picker implements PickerLike {
   /** The quick-summary panel while it is open. */
   private summary: Phaser.GameObjects.Container | null = null;
   private readonly onInspectKey = (): void => this.toggleSummary();
+  private readonly onExtraKey = (e: KeyboardEvent): void => {
+    const k = (this.config.extras?.(this.index) ?? []).findIndex((x) => x.key.toLowerCase() === e.key.toLowerCase());
+    if (k >= 0) this.extra(k);
+  };
   /** Where the list starts (lower when there are tabs) and ends. */
   private readonly top: number;
   private readonly bottom: number;
@@ -272,6 +283,7 @@ export class Picker implements PickerLike {
       this.root.add(scene.add.text(GAME_WIDTH / 2, (this.top + this.bottom) / 2, 'Nothing here yet', textStyle(32, skin?.light ? '#3a4a5a' : COLORS.textMuted)).setOrigin(0.5));
       this.footer.setText(config.onBack ? 'Press Esc to go back.' : '');
     }
+    if (config.extras) scene.input.keyboard?.on('keydown', this.onExtraKey);
     if (config.inspect) {
       scene.input.keyboard?.on('keydown-I', this.onInspectKey);
       const label = scene.add.text(dock ? GAME_WIDTH - 150 : GAME_WIDTH - 52, dock ? 410 : GAME_HEIGHT - 20, 'I  Summary', textStyle(dock ? 15 : 16, COLORS.gold)).setOrigin(1, 0.5).setName('picker-inspect').setInteractive({ useHandCursor: true });
@@ -306,6 +318,8 @@ export class Picker implements PickerLike {
         pageCols: config.pageCols,
         area: config.area,
         summary: () => (this.summary && config.inspect ? config.inspect(this.index) : null),
+        extras: config.extras ? (i) => config.extras!(i).map((x) => ({ label: x.label, key: x.key, off: !!x.off })) : undefined,
+        extra: (k) => this.extra(k),
         pick: (i) => { if (this.closed) return; this.focus(i); this.confirm(); },
         hover: (i) => { if (!this.closed && !this.summary && i !== this.index && !config.rows[i]?.problem) this.focus(i, false); },
         back: () => this.handle('back'),
@@ -363,6 +377,16 @@ export class Picker implements PickerLike {
     }
     playSfx(this.scene, 'ui.select');
     this.config.onSelect(this.index);
+  }
+
+  /** One of the focused row's extra buttons (a click or its key). */
+  private extra(k: number): void {
+    if (this.closed || this.summary) return;
+    const x = this.config.extras?.(this.index)[k];
+    if (!x) return;
+    if (x.off) return void playSfx(this.scene, 'ui.error');
+    playSfx(this.scene, 'ui.select');
+    x.run();
   }
 
   handle(action: InputAction): void {
@@ -480,6 +504,7 @@ export class Picker implements PickerLike {
     this.rx?.destroy();
     this.rx = null;
     this.scene.input.keyboard?.off('keydown-I', this.onInspectKey);
+    this.scene.input.keyboard?.off('keydown', this.onExtraKey);
     // Popup closing (spec §24): it stops taking input at once, then sinks and fades out.
     const root = this.root;
     const t = uiTiming('popupClose');

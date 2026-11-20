@@ -1066,9 +1066,9 @@ export class GameSession {
     return message;
   }
 
-  /** Gives a held item waiting in the Bag to a party Pokémon. */
-  giveHeld(itemId: string, partyIndex: number): string {
-    const result = giveHeld(this.content, this.requireRun(), itemId, partyIndex);
+  /** Gives a held item waiting in the Bag to a party Pokémon (or, with `where` 'box', to one in the PC). */
+  giveHeld(itemId: string, partyIndex: number, where: 'party' | 'box' = 'party'): string {
+    const result = giveHeld(this.content, this.requireRun(), itemId, partyIndex, where);
     this.run = result.run;
     this.persistRun();
     return result.message;
