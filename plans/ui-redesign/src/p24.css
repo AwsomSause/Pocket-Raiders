@@ -1,0 +1,83 @@
+/* Pass 24 · The Tilted Ball */
+.em24{--z:64px;position:relative;display:inline-block;flex:none;width:var(--z);height:var(--z);border-radius:50%;rotate:-14deg;border:calc(var(--z)*.07) solid var(--ink);background:radial-gradient(circle,#fff 0 12%,var(--ink) 13% 21%,transparent 22%),linear-gradient(180deg,var(--red) 0 44%,var(--ink) 44% 56%,#fff 56%);box-shadow:0 0 0 calc(var(--z)*.05) var(--yel);vertical-align:middle}
+/* capsules: every button */
+.btn,.cw,.cw.on,.cw.pw,.tm17 .tm,.tm17 .tm.on,.tm17 .tm.evil,.keys span{border-radius:999px}
+.tm17 .tm.on{padding-left:26px}
+/* title */
+.em24.lo{margin:0 3px 10px 3px;box-shadow:5px 5px 0 var(--red)}
+.em24.go{position:absolute;left:322px;top:222px;z-index:3;box-shadow:0 0 0 3px #fff,4px 6px 0 rgba(13,21,48,.5)}
+.tt24 .sun21{left:590px;top:96px;width:340px;height:340px;rotate:-14deg;border:16px solid var(--ink);background:radial-gradient(circle,#fff 0 11%,var(--ink) 12% 19%,transparent 20%),linear-gradient(180deg,var(--red) 0 45%,var(--ink) 45% 55%,#fff 55%);box-shadow:0 0 0 10px var(--yel),0 0 60px 30px rgba(255,170,80,.55);opacity:.92}
+.tt24 .loom19{display:none}
+/* battle: the court */
+.court24{position:absolute;left:120px;top:214px;width:720px;height:236px;border-radius:50%;pointer-events:none;border:7px solid rgba(255,255,255,.78);background:radial-gradient(ellipse 8.5% 15% at 50% 50%,rgba(255,255,255,.65) 0 55%,rgba(13,21,48,.5) 56% 78%,transparent 80%),linear-gradient(166deg,transparent 0 48.3%,rgba(255,255,255,.6) 48.3% 51.7%,transparent 51.7%),linear-gradient(166deg,rgba(227,53,13,.3) 0 48.3%,transparent 48.3%)}
+.nb19 .court24{border-color:rgba(232,178,58,.55)}
+/* page icon: a ball in the page's colour */
+.hdr-ic{rotate:-14deg;background:radial-gradient(circle,#fff 0 60%,var(--ink) 61% 68%,transparent 69%),linear-gradient(180deg,var(--red) 0 44%,var(--ink) 44% 56%,#fff 56%)}
+.hdr-ic img{rotate:14deg}
+/* party: every card wears the cap */
+.pk24 .pkc{padding-top:0}
+.pk24 .kc-h{margin:0 -7px 12px;padding:6px 9px 7px;color:#fff;background:linear-gradient(180deg,#f2502a,var(--red));border-bottom:6px solid var(--ink);border-radius:5px 19px 0 0;position:relative}
+.pk24 .kc-h b{text-shadow:1px 2px 0 rgba(13,21,48,.5)}
+.pk24 .pkc .lv{position:absolute;right:8px;bottom:-15px;z-index:2;color:var(--ink);background:#fff;border:3px solid var(--ink);padding:0 8px}
+.pk24 .pkc.fnt .kc-h{background:linear-gradient(180deg,#8b93a8,#56627f)}
+.pk24 .hand::before{display:none}
+/* phone: every app is a ball, the wallpaper is the mark */
+.rapp i{border-radius:50%;rotate:-14deg;background:radial-gradient(circle,#fff 0 50%,var(--ink) 51% 57%,transparent 58%),linear-gradient(180deg,var(--a) 0 45%,var(--ink) 45% 55%,#fff 55%)}
+.rapp i img{rotate:14deg}
+.em24.wall{position:absolute;left:640px;top:210px;z-index:0;opacity:.28}
+.em24.hb{position:absolute;left:580px;top:50px;z-index:3}
+/* The Signature */
+.br-big{position:absolute;left:44px;top:110px;width:230px;height:260px;display:grid;justify-items:center;align-content:center;gap:26px}
+.br-big span{font:400 30px/1 var(--fd);color:var(--yel)}
+.br-c{position:absolute;top:84px;left:300px;width:196px;display:grid;gap:9px;padding:12px 14px 14px;color:var(--ink);background:#fff;border-radius:8px 24px 8px 24px}
+.br-c.col{left:510px;width:168px}
+.br-c.wh{left:692px;width:244px}
+.br-c b{font:400 22px/1 var(--fd);text-transform:uppercase;color:#2a75bb}
+.br-c p{margin:0;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:800;line-height:1.3}
+.br-c p>i:not(.em24){width:38px;height:22px;flex:none;border:2px solid var(--ink)}
+.br-c .s1{border-radius:999px;background:var(--yel)}
+.br-c .s2{border-radius:4px 12px 4px 12px;background:#eef4ff}
+.br-c .s3{background:linear-gradient(104deg,var(--ink) 0 46%,var(--yel) 46% 58%,#fff 58%)}
+.br-c.col p>i{border-radius:50%;width:24px;height:24px}
+.br-use{position:absolute;left:300px;top:338px;display:flex;gap:9px}
+.br-use .emb{border:3px solid #fff;border-radius:6px}
+/* Save marks */
+.sv-row{position:absolute;left:24px;top:76px;display:flex;gap:14px}
+.sv-c{width:217px;height:270px;display:grid;justify-items:center;align-content:start;gap:8px;padding:18px 14px;text-align:center;color:var(--ink);background:#fff;border-radius:8px 26px 8px 26px}
+.sv-c>div{height:120px;display:grid;place-items:center}
+.sv-c b{font:400 26px/1 var(--fd);text-transform:uppercase}
+.sv-c p{margin:0;font-size:12px;font-weight:700;line-height:1.45}
+.em24.spin{animation:spin24 1s linear infinite}
+.em24.ok{rotate:0deg;background:radial-gradient(circle,#3ddc6c 0 12%,var(--ink) 13% 21%,transparent 22%),linear-gradient(180deg,var(--red) 0 44%,var(--ink) 44% 56%,#fff 56%)}
+.em24.load{rotate:-26deg;animation:rock24 .9s ease-in-out infinite}
+.em24.bad{background:radial-gradient(circle,#fff 0 12%,var(--ink) 13% 21%,transparent 22%),linear-gradient(180deg,var(--red) 0 30%,var(--ink) 30% 37%,#fff7c2 37% 63%,var(--ink) 63% 70%,#fff 70%)}
+.sv-toast{position:absolute;right:24px;top:366px;display:flex;align-items:center;gap:10px;padding:6px 18px 6px 10px;color:var(--ink);background:#fff;border:3px solid var(--ink);border-radius:999px;white-space:nowrap}
+.sv-toast b{font:400 18px/1 var(--fd);text-transform:uppercase}
+.sv-toast span{font-size:12px;font-weight:800}
+/* Screen wipe */
+.wp-row{position:absolute;left:24px;top:84px;display:flex;gap:21px}
+.wp-f{position:relative;width:290px;height:163px;border:3px solid #fff;border-radius:6px;background:#0d1530}
+.wp-f .emb{position:absolute;left:0;top:0}
+.wp-f>i.wp-t,.wp-f>i.wp-b{position:absolute;left:0;right:0;height:50%;z-index:2}
+.wp-t{top:0;background:var(--red);border-bottom:8px solid var(--ink);clip-path:polygon(0 0,100% 0,100% var(--r,56%),0 var(--l,100%))}
+.wp-b{bottom:0;background:#fff;border-top:8px solid var(--ink);clip-path:polygon(0 var(--l,44%),100% var(--r,0%),100% 100%,0 100%)}
+.wp-f{overflow:hidden}
+.wp-f.a .wp-t{height:30%;--r:20%}.wp-f.a .wp-b{height:30%;--l:80%}
+.wp-f.b .wp-t{height:56%;--r:78%}.wp-f.b .wp-b{height:56%;--l:22%}
+.wp-f.c .wp-t{height:18%;--r:10%}.wp-f.c .wp-b{height:18%;--l:90%}
+.em24.mid{position:absolute;left:110px;top:46px;z-index:3;rotate:0deg}
+.wp-f em{position:absolute;left:0;right:0;bottom:-34px;z-index:4;font-style:normal;font-size:12px;font-weight:800;color:#fff;text-align:center}
+.wp-row{overflow:visible}
+.wp24 .wp-f{overflow:visible}
+.wp24 .wp-f .emb{overflow:hidden}
+
+/* the mark as a backdrop: a giant tilted ball behind Party and Menu */
+.scr.pk24,.scr.mn24{isolation:isolate}
+.em24.bgp{position:absolute;left:590px;top:210px;z-index:-1;opacity:.9}
+.em24.bgm{position:absolute;left:500px;top:150px;z-index:-1;opacity:.9}
+.scr.pk24:not(.pk25),.scr.mn24:not(.mn25){background:repeating-linear-gradient(-70deg,#0d1530 0 26px,#14204a 26px 52px)}
+.pk24:not(.pk25)::before,.mn24:not(.mn25) :is(.ar-bg,.stars21){display:none}
+.pk24:not(.pk25) .wm17{display:none}
+/*@top*/
+@keyframes spin24{to{transform:rotate(360deg)}}
+@keyframes rock24{0%,100%{transform:rotate(0)}50%{transform:rotate(24deg)}}

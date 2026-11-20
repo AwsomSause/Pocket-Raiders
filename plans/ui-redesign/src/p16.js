@@ -1,0 +1,29 @@
+/* Pass 16 · Stage Lights: every screen is lit like a stage. Battle bars become floating plates over a full arena; menus sit over the place you are; new pages for Info, Auto, Log and a shiny encounter. */
+decor(16, 'battle', { cls: 'b16', fn: h => h.replace('style="--a:#56627f" ', `style="--a:#56627f" ${go('b-auto')}`).replace('style="--a:#2a75bb" ', `style="--a:#2a75bb" ${go('b-info')}`) });
+const over16 = (cls, title, sub, body) => `<div class="scr battle b6 ov16 ${cls}">${C('arena', { dim: 1 })}<div class="gp-h"><b>${title}</b><span>${sub}</span></div>${body}</div>`;
+const STG = (n, v) => `<span class="stg ${v > 0 ? 'up' : v < 0 ? 'dn' : ''}"><em>${n}</em><b>${v > 0 ? '+' + v : v}</b></span>`;
+const side16 = (cls, p, o) => `<div class="in-side ${cls}" style="${tgrad(p.ty)}"><div class="in-h"><i>${spr('m-' + p.k, 1)}</i><div><b>${p.n}</b><span>Lv ${p.lv} · ${o.who}</span></div></div><div class="in-ty">${p.ty.map(t => C('ty', t)).join('')}</div>
+  <dl><dt>Ability</dt><dd>${o.ab}</dd><dt>Held item</dt><dd>${o.item}</dd><dt>Status</dt><dd>${o.st}</dd></dl><div class="in-stg">${o.stg.map(s => STG(s[0], s[1])).join('')}</div><p>${o.note}</p></div>`;
+def(16, 'b-info', { t: 'Battle · Info', g: 'Battle' }, () => over16('inf', 'Battle Info', 'Everything in play this turn. Looking here does not use your turn.',
+  side16('foe', FOE, { who: 'Rival Blue', ab: 'Torrent', item: 'Not seen yet', st: 'Healthy', stg: [['Atk', 0], ['Def', 0], ['Sp. Atk', 0], ['Sp. Def', 0], ['Speed', 0]], note: 'Moves seen: Rain Dance, Icy Wind' }) +
+  `<div class="in-mid"><div class="in-c w"><em>Weather</em><b>Rain</b><span>3 turns left. Water moves hit harder, Fire moves hit softer.</span></div><div class="in-c"><em>Field</em><b>None</b><span>No terrain is up.</span></div><div class="in-c"><em>Your side</em><b>Clear</b><span>No traps on the ground.</span></div><div class="in-c"><em>Blue's side</em><b>3 of 4</b><span>Healing items Blue has left.</span></div></div>` +
+  side16('me', PARTY[0], { who: 'Your lead', ab: PARTY[0].ab, item: PARTY[0].item, st: 'Healthy', stg: [['Atk', 0], ['Def', 0], ['Sp. Atk', 0], ['Sp. Def', 0], ['Speed', -1]], note: 'Mega Evolution is ready' }) +
+  `<div class="in-foot"><div class="btn on" ${go('b-log')}><b>Battle Log</b></div><div class="btn" ${go('types')}><b>Type Chart</b></div><div class="btn" ${go('battle')}><b>Back</b></div></div>${C('keys', [['←→', 'move'], ['L', 'log'], ['Esc', 'back']])}`));
+const LOG16 = [[1, 'foe', 'Blastoise', 'Rain Dance', 'It started to rain.'], [1, 'me', 'Charizard', 'Flamethrower', 'Not very effective. Blastoise lost 12%.'], [2, 'foe', 'Blastoise', 'Icy Wind', 'Super effective. Charizard lost 26 HP. Speed fell.'], [2, 'me', 'Charizard', 'Thunder Punch', 'Super effective. Blastoise lost 14%.']];
+def(16, 'b-log', { t: 'Battle · Log', g: 'Battle' }, () => over16('lg', 'Battle Log', 'What happened so far, newest at the bottom.',
+  `<div class="lg-list">${[1, 2].map(t => `<div class="lg-t"><em>Turn ${t}</em>${LOG16.filter(l => l[0] === t).map(l => `<div class="lg-r ${l[1]}"><i>${spr('m-' + (l[1] === 'me' ? '6' : '9'), 1)}</i><b>${l[2]}</b><span>used <u>${l[3]}</u></span><p>${l[4]}</p></div>`).join('')}</div>`).join('')}<div class="lg-t now"><em>Turn 3</em><div class="lg-r now"><b>Your turn</b><p>Blastoise will move first.</p></div></div></div>
+  <div class="lg-sum"><b>So far</b><dl><dt>Turns</dt><dd>3</dd><dt>Damage dealt</dt><dd>26%</dd><dt>Damage taken</dt><dd>26 HP</dd><dt>Items used</dt><dd>0</dd><dt>Blue's heals left</dt><dd>3 of 4</dd></dl><div class="btn on" ${go('b-info')}><b>Back to Info</b></div><div class="btn" ${go('battle')}><b>Back to battle</b></div></div>${C('keys', [['↑↓', 'scroll'], ['Esc', 'back']])}`));
+const AUTO16 = [['Smart', 'Picks the strongest move that works.', 'i-wise_glasses', 'on'], ['Careful', 'Heals under 30% HP and swaps out of bad match-ups.', 'i-potion', ''], ['Fast', 'Always the first move, at 4× speed.', 'i-quick_claw', '']];
+const STOP16 = [['One of your Pokémon faints', 1], ['A boss, a rival or an ace comes out', 1], ['A shiny Pokémon appears', 1], ['Your lead drops under 25% HP', 0]];
+def(16, 'b-auto', { t: 'Battle · Auto', g: 'Battle' }, () => over16('au', 'Auto Battle', 'Let your team fight on its own. Press any key to take over again.',
+  `<div class="au-row">${AUTO16.map(a => `<div class="au-c ${a[3]}"><i>${spr(a[2], 2)}</i><b>${a[0]}</b><p>${a[1]}</p></div>`).join('')}</div>
+  <div class="au-stops"><b>Auto stops by itself when</b>${STOP16.map(s => `<div class="au-s"><span>${s[0]}</span>${C('tog', s[1])}</div>`).join('')}</div>
+  <div class="au-side"><b>Speed</b>${C('seg', ['×1', '×2', '×4'], 1)}<p>Bosses always play at ×1 so nothing is missed.</p><div class="btn on" ${go('battle')}><b>Start Auto</b></div><div class="btn" ${go('battle')}><b>Back</b></div></div>${C('keys', [['←→', 'style'], ['Enter', 'start'], ['Esc', 'back']])}`));
+def(16, 'shiny', { t: 'Shiny Encounter', g: 'Battle' }, () => `<div class="scr battle b6 shy">${C('arena', { foe: WILD, bg: 'forest', noorder: 1, foeTag: '<em class="shtag">★ Shiny</em>', text: 'A <b>shiny Hoothoot</b> appeared!', right: nextBtn('battle', 'Fight') }).replace('sprites/m-163.png', 'sprites/ms-163.png')}
+  <i class="shy-flash"></i><div class="shy-st">${[0, 1, 2, 3, 4, 5, 6, 7].map(i => `<i data-nocheck style="--i:${i}">★</i>`).join('')}</div>
+  <div class="shy-note">${spr('i-shiny_charm', 1)}<b>Rare find</b><span>Auto battle stopped · saved to the Journal</span></div>
+  ${C('tl', [['0.0s', 'Screen flashes white'], ['0.3s', 'Stars ring the Pokémon'], ['0.9s', 'Chime, colours shimmer'], ['1.4s', 'Text types']], 1)}</div>`);
+decor(16, 'title', { cls: 'tt16', add: '<i class="rays16"></i>' });
+decor(16, 'hub', { cls: 'hb16', add: '<i class="rays16 soft"></i>' });
+decor(16, 'party', { cls: 'pk16', add: '<i class="spot16"></i>' });
+decor(16, 'menu', { cls: 'mn16' });

@@ -1,0 +1,129 @@
+/* Pass 21 · Living World */
+/* it is evening: every backdrop turns to dusk */
+.scr{--v1:rgba(255,236,214,.95);--v2:rgba(255,206,160,.74);--v3:rgba(238,140,104,.5);--v4:linear-gradient(180deg,rgba(255,140,60,.2),rgba(70,40,120,.5))}
+.ar-bg,.tw-bg,.tt-bg{filter:sepia(.4) saturate(1.7) hue-rotate(-16deg) brightness(.8) contrast(1.05)}
+.tt21 .tt-bg{filter:sepia(.5) saturate(1.9) hue-rotate(-18deg) brightness(.78)}
+.tt21::after{background:linear-gradient(180deg,rgba(70,40,130,.5) 0,rgba(255,120,50,.28) 55%,transparent 80%)}
+.tt21 .rays16{opacity:.35}
+.sun21{position:absolute;left:640px;top:150px;width:300px;height:300px;z-index:0;border-radius:50%;pointer-events:none;background:radial-gradient(circle,#fff3b0 0 22%,#ffb347 23% 40%,rgba(255,120,60,.55) 41% 58%,transparent 70%)}
+.sky21{position:absolute;z-index:4;display:grid;grid-template-columns:30px auto;align-items:center;gap:0 8px;padding:4px 16px 5px 6px;color:#fff;background:rgba(40,22,70,.9);border:2px solid #ffb347;border-radius:999px;white-space:nowrap}
+.sky21 .wxi{grid-row:1/3}
+.sky21 b{font:400 18px/1 var(--fd);color:#ffd9a0;text-transform:uppercase;letter-spacing:.03em}
+.sky21 span{font-size:11px;font-weight:800;line-height:1.2}
+.sky21.tt{left:488px;top:276px}
+.sky21.hb{left:806px;top:194px}
+.sky21.mn{left:118px;top:6px}
+.sky21.nt{left:14px;top:92px;border-color:#9fb4ff;background:rgba(10,14,44,.92)}
+.sky21.nt b{color:#cfd9ff}
+/* weather and time icons, drawn not typed */
+.wxi{display:inline-block;flex:none;width:28px;height:28px;border-radius:50%;vertical-align:middle}
+.wxi.day,.wxi.sun{background:radial-gradient(circle,#ffe46b 0 38%,transparent 40%),repeating-conic-gradient(#ffb020 0 14deg,transparent 14deg 30deg)}
+.wxi.clear{background:radial-gradient(circle,#fff 0 30%,transparent 32%),radial-gradient(circle,#9fd0ff 0 62%,transparent 64%)}
+.wxi.eve{background:linear-gradient(180deg,transparent 0 62%,#7a3f9a 62%),radial-gradient(circle at 50% 62%,#ff8a3c 0 46%,transparent 48%)}
+.wxi.night{background:radial-gradient(circle at 66% 36%,transparent 0 40%,#ffe9a8 42% 100%)}
+.wxi.rain{border-radius:0;background:radial-gradient(circle at 34% 34%,#e6edff 0 24%,transparent 26%),radial-gradient(circle at 62% 30%,#e6edff 0 30%,transparent 32%),linear-gradient(#e6edff,#e6edff) 50% 46%/72% 20% no-repeat,repeating-linear-gradient(105deg,transparent 0 5px,#52c0ff 5px 8px) 50% 100%/64% 38% no-repeat}
+.wxi.sand{background:repeating-linear-gradient(168deg,#e2b168 0 3px,#a8743a 3px 6px)}
+.wxi.snow{background:radial-gradient(circle,#fff 0 24%,transparent 26%) 0 0/9px 9px,#6fb7e6}
+/* battle: rain over the arena, weather chip by the turn counter */
+.rain21{position:absolute;inset:0;z-index:3;pointer-events:none;background:repeating-linear-gradient(104deg,transparent 0 22px,rgba(200,226,255,.5) 22px 23.5px,transparent 23.5px 47px),repeating-linear-gradient(104deg,transparent 0 61px,rgba(255,255,255,.45) 61px 63px,transparent 63px 97px),linear-gradient(180deg,rgba(24,40,96,.42),rgba(24,40,96,.12));animation:rain21 .5s linear infinite}
+.wx21{position:absolute;left:14px;top:178px;z-index:4;display:flex;align-items:center;gap:8px;height:34px;padding:0 16px 0 5px;color:#fff;background:rgba(20,42,96,.92);border:2px solid #7fd0ff;border-radius:999px;white-space:nowrap;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.4)}
+.wx21 b{font:400 18px/1 var(--fd);text-transform:uppercase;color:#bfe6ff}
+.wx21 span{font-size:12px;font-weight:800}
+.wx21.big{left:50%;top:150px;transform:translateX(-50%);height:44px;padding-right:22px;animation:pop .4s both}
+.wx21.big b{font-size:26px}
+.wxm21{position:absolute;left:812px;top:336px;z-index:5;display:flex;align-items:center;gap:5px;font-size:12px;font-weight:800;color:#fff;background:rgba(20,42,96,.95);border:2px solid #7fd0ff;border-radius:999px;padding:0 10px;white-space:nowrap}
+.wxm21 u{text-decoration:none;color:#ff6b5d}
+/* town at dusk */
+.glow21{position:absolute;top:238px;width:120px;height:120px;z-index:1;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(255,236,150,.95) 0 8%,rgba(255,200,90,.5) 30%,transparent 68%);animation:glow21 2.4s ease-in-out infinite}
+.stars21{position:absolute;left:0;right:0;top:0;height:230px;z-index:0;pointer-events:none;background:radial-gradient(1.6px 1.6px at 24px 30px,#fff,transparent 60%),radial-gradient(2.2px 2.2px at 118px 74px,#fff,transparent 60%),radial-gradient(1.6px 1.6px at 190px 22px,#ffe9a8,transparent 60%),radial-gradient(1.6px 1.6px at 70px 120px,#fff,transparent 60%),radial-gradient(2px 2px at 232px 140px,#cfd9ff,transparent 60%);background-size:260px 170px;animation:tw21 3s ease-in-out infinite}
+.hb21 .stars21{top:52px;height:70px;opacity:.9}
+/* party: camp under the evening sky */
+.scr.pk21{background:linear-gradient(180deg,#1b1546 0,#4a2a72 38%,#b4503e 72%,#f2a04a 100%)}
+.pk21::before{opacity:.22}
+.pk21 .spot16{opacity:.55}
+.fire21{position:absolute;left:0;right:0;bottom:36px;height:150px;z-index:0;pointer-events:none;background:radial-gradient(ellipse 46% 100% at 50% 100%,rgba(255,196,90,.75),rgba(255,120,50,.3) 55%,transparent 75%);animation:glow21 1.8s ease-in-out infinite}
+/* Rotom phone at dusk */
+.scr.mn21{background:linear-gradient(180deg,#1b1546 0,#57307c 44%,#c85a3c 80%,#f2a04a 100%)}
+.mn21 .stars21{height:200px}
+/* explainer pages */
+.scr.lw21{color:var(--ink)}
+.tod{position:absolute;left:24px;top:74px;display:flex;gap:18px}
+.tod-c{width:292px;height:300px;padding:8px 8px 0;background:#fff;border:3px solid var(--ink);border-radius:8px 26px 8px 26px;box-shadow:5px 5px 0 rgba(13,21,48,.45)}
+.tod-c.on{outline:4px solid var(--yel);outline-offset:2px}
+.tod-v{position:relative;height:150px;border-radius:4px 20px 4px 4px;overflow:hidden;border:2px solid var(--ink)}
+.tod-v img{position:absolute;left:-220px;top:-170px;width:960px;height:540px;filter:none}
+.tod-c.eve .tod-v img{filter:sepia(.5) saturate(1.9) hue-rotate(-18deg) brightness(.8)}
+.tod-c.night .tod-v img{filter:brightness(.42) saturate(1.1) hue-rotate(30deg) contrast(1.15)}
+.tod-s{position:absolute;inset:0}
+.tod-c.eve .tod-s{background:linear-gradient(180deg,rgba(80,40,130,.45),rgba(255,120,50,.3) 70%)}
+.tod-c.night .tod-s{background:radial-gradient(circle 46px at 150px 96px,rgba(255,226,140,.75),transparent 100%),linear-gradient(180deg,rgba(8,10,50,.6),rgba(20,20,80,.35))}
+.tod-v .wxi{position:absolute;left:8px;top:8px;width:36px;height:36px;z-index:2;filter:drop-shadow(0 2px 0 rgba(0,0,0,.5))}
+.tod-v em{position:absolute;right:8px;top:8px;z-index:2;font-style:normal;font-size:12px;font-weight:800;color:var(--ink);background:var(--yel);border:2px solid var(--ink);border-radius:999px;padding:0 10px}
+.tod-v .stars21{height:90px;z-index:1}
+.tod-c>b{display:block;margin:8px 4px 4px;font:400 28px/1 var(--fd);text-transform:uppercase;letter-spacing:.03em}
+.tod-c.day>b{color:#c98a00}.tod-c.eve>b{color:#d4541e}.tod-c.night>b{color:#3a3fa8}
+.tod-c p{margin:0 4px;font-size:13px;font-weight:700;line-height:1.5}
+.tod-run{position:absolute;left:24px;right:24px;top:392px;display:grid;grid-template-columns:auto 1fr;align-items:center;gap:4px 14px;padding:8px 16px;color:#fff;background:rgba(13,21,48,.92);border-radius:6px 20px 6px 20px}
+.tod-run b{font:400 20px/1 var(--fd);color:var(--yel);text-transform:uppercase}
+.tod-dots{display:flex;gap:5px;align-items:center}
+.tod-dots i{width:22px;height:12px;border-radius:6px;background:#ffd23c}
+.tod-dots i.eve{background:#ff8a3c}.tod-dots i.night{background:#5a63d8}
+.tod-dots i.on{height:20px;outline:3px solid #fff}
+.tod-run>span:last-child{grid-column:1/3;font-size:12px;font-weight:700}
+.tod-n,.wx-n{position:absolute;left:24px;top:466px;display:flex;align-items:center;gap:10px;font-size:12px;font-weight:800;color:var(--ink);background:rgba(255,255,255,.9);border-radius:999px;padding:2px 14px 2px 3px}
+.tod-n i{font-style:normal;color:var(--ink);background:var(--yel);border-radius:999px;padding:0 10px}
+.wxs{position:absolute;left:24px;top:74px;display:flex;gap:12px}
+.wx-c{width:173px;height:262px;padding:6px 6px 0;background:#fff;border:3px solid var(--ink);border-radius:8px 22px 8px 22px;box-shadow:5px 5px 0 rgba(13,21,48,.45)}
+.wx-c.on{outline:4px solid var(--yel);outline-offset:2px}
+.wx-v{position:relative;height:120px;border-radius:4px 16px 4px 4px;overflow:hidden;border:2px solid var(--ink)}
+.wx-v img{position:absolute;left:-60px;top:-20px;width:320px;height:180px;filter:none}
+.wx-v em{position:absolute;right:6px;top:6px;font-style:normal;font-size:12px;font-weight:800;color:var(--ink);background:var(--yel);border:2px solid var(--ink);border-radius:999px;padding:0 10px}
+.wx-fx{position:absolute;inset:0}
+.sun .wx-fx{background:radial-gradient(circle at 80% 0,rgba(255,250,200,.95) 0 14%,rgba(255,220,120,.55) 30%,transparent 62%),linear-gradient(rgba(255,200,80,.18),rgba(255,200,80,.18))}
+.rain .wx-fx{background:repeating-linear-gradient(104deg,transparent 0 13px,rgba(210,232,255,.7) 13px 14.5px,transparent 14.5px 27px),linear-gradient(rgba(24,40,96,.45),rgba(24,40,96,.2))}
+.sand .wx-fx{background:repeating-linear-gradient(172deg,transparent 0 9px,rgba(226,177,104,.75) 9px 12px,transparent 12px 21px),linear-gradient(rgba(170,116,58,.4),rgba(170,116,58,.4))}
+.snow .wx-fx{background:radial-gradient(circle,#fff 0 16%,transparent 18%) 0 0/22px 22px,radial-gradient(circle,#fff 0 10%,transparent 12%) 11px 9px/30px 30px,linear-gradient(rgba(150,200,240,.3),rgba(150,200,240,.3))}
+.wx-c>b{display:flex;align-items:center;gap:6px;margin:8px 2px 6px;font:400 21px/1 var(--fd);text-transform:uppercase;white-space:nowrap}
+.wx-c>b .wxi{width:24px;height:24px}
+.wx-c p{margin:0 2px;font-size:12px;font-weight:700;line-height:1.45}
+.wx-how{position:absolute;left:24px;right:24px;top:352px;display:grid;grid-template-columns:repeat(3,1fr);gap:4px 16px;padding:8px 16px 10px;color:#fff;background:rgba(13,21,48,.92);border-radius:6px 20px 6px 20px}
+.wx-how b{grid-column:1/4;font:400 20px/1 var(--fd);color:var(--yel);text-transform:uppercase}
+.wx-how p{margin:0;display:grid;grid-template-columns:26px 1fr;gap:8px;font-size:12px;font-weight:700;line-height:1.4}
+.wx-how p>i{font-style:normal;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:var(--ink);background:var(--yel)}
+.wx-how u{text-decoration:none;font-size:12px}.wx-how .up{color:#3ddc6c}.wx-how .dn{color:#ff6b5d}
+/* weather rolls in */
+.cloud21{position:absolute;top:-84px;width:560px;height:170px;z-index:3;pointer-events:none;background:radial-gradient(ellipse 30% 50% at 22% 55%,#3c4a78 0 98%,transparent),radial-gradient(ellipse 34% 62% at 50% 45%,#4a5a8e 0 98%,transparent),radial-gradient(ellipse 28% 48% at 78% 58%,#34406c 0 98%,transparent);opacity:.92}
+.cloud21.c1{left:-80px;animation:cl21a .5s both}
+.cloud21.c2{right:-80px;animation:cl21b .5s both}
+.wxc21 .ar-bg{filter:sepia(.2) saturate(1.1) hue-rotate(160deg) brightness(.62)}
+.wxword{position:absolute;left:0;right:0;top:196px;z-index:3;text-align:center;font:400 150px/1 var(--fd);letter-spacing:.08em;color:transparent;-webkit-text-stroke:3px rgba(190,226,255,.6);pointer-events:none}
+.wxc21 .tl{top:auto;bottom:128px;left:16px}
+/* forecast */
+.fcs{position:absolute;left:24px;top:76px;display:flex;gap:10px}
+.fc{width:143px;height:252px;display:grid;justify-items:center;align-content:start;gap:3px;padding:8px 6px;text-align:center;color:#fff;border:3px solid var(--ink);border-radius:8px 22px 8px 22px;box-shadow:5px 5px 0 rgba(13,21,48,.45);background:linear-gradient(180deg,#58b7ff,#bfe6ff)}
+.fc.eve{background:linear-gradient(180deg,#57307c,#e2703c)}
+.fc.night{background:linear-gradient(180deg,#0f1240,#3a3f96)}
+.fc.day{color:var(--ink)}
+.fc.on{outline:4px solid var(--yel);outline-offset:2px}
+.fc em{font-style:normal;font-size:12px;font-weight:800;color:var(--ink);background:#fff;border-radius:999px;padding:0 12px}
+.fc>b{font:400 21px/1.1 var(--fd);text-transform:uppercase;margin-top:6px}
+.fc.gym>b{color:var(--ink);background:var(--yel);border:2px solid var(--ink);border-radius:4px 12px 4px 12px;padding:1px 12px}
+.fc>span{font-size:12px;font-weight:700;min-height:18px}
+.fc-i{display:flex;gap:10px;margin:12px 0 8px}
+.fc-i .wxi{width:46px;height:46px}
+.fc>u{text-decoration:none;font-size:13px;font-weight:800;line-height:1.35}
+.fc-rot{position:absolute;left:24px;right:24px;top:350px;height:104px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;padding:0 18px 0 10px;background:#fff;border:3px solid var(--ink);border-radius:8px 28px 8px 28px;box-shadow:5px 5px 0 rgba(13,21,48,.45)}
+.fc-rot p{margin:0;font-size:15px;line-height:1.4;font-weight:600}
+.fc-rot p>b:first-child{display:inline-block;margin-right:8px;font-size:12px;color:#fff;background:#f26a2a;border-radius:999px;padding:0 10px}
+/* night encounter */
+.nt21 .ar-bg{filter:brightness(.34) saturate(1) hue-rotate(28deg) contrast(1.2)}
+.nt21 .ar-me{filter:brightness(.55)}
+.dark21{position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(circle 150px at 728px 168px,rgba(255,236,170,.34) 0,rgba(255,236,170,.1) 60%,transparent 100%),radial-gradient(circle 250px at 728px 168px,transparent 0 55%,rgba(4,6,30,.5) 100%)}
+.nt21 .stars21{z-index:1;height:120px}
+.nt21 .tl{top:136px}
+/*@top*/
+@keyframes rain21{to{background-position:-14px 47px,-29px 97px,0 0}}
+@keyframes glow21{0%,100%{opacity:.85}50%{opacity:1}}
+@keyframes tw21{0%,100%{opacity:.8}50%{opacity:1}}
+@keyframes cl21a{0%{transform:translateX(-120px);opacity:.92}100%{transform:none;opacity:.92}}
+@keyframes cl21b{0%{transform:translateX(120px);opacity:.92}100%{transform:none;opacity:.92}}

@@ -1,0 +1,1 @@
+- UI redesign mockups (Pokémon-game style): all 25 passes done, 137 pages, in `plans/ui-redesign/` (open `index.html`; the slider picks a pass). Mockups only, nothing in the game changes. Pass 25 holds the style guide, page map, motion rules and a suggested build order. Waiting on Kice to pick which look and pages to build for real.
