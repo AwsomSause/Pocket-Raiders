@@ -158,5 +158,23 @@
   "q3": "Yes, four. World Tour shows all nine regions and what gets harder in each, Region Intro asks about regional forms, Badge Case shows the gyms and the League, and Gameplay settings holds stage length.",
   "q4": "The pause menu gets the region stamp and a stage progress line. Settings gets a Gameplay page with stage length, regional forms, Blessings, Ultra Beasts and Evil Mode.",
   "q5": "Yes. Town maps, gym badges in a case, the Elite Four and a new region with new rules are exactly how a Pokémon journey is measured."
+ },
+ "11": {
+  "name": "Town Square",
+  "big": "Places become places. The hub is a street built from the game's own buildings, your team walks beside you out of their balls, and the shop has real shelves and a counter.",
+  "pages": [
+   "Hub Town (street)",
+   "Title (in town)",
+   "Poké Mart (shelves)",
+   "Poké Mart · Check Out",
+   "Pokémon Center",
+   "Event Hall",
+   "Achievement Hall"
+  ],
+  "q1": "The title screen is now the town itself: a blue sky, the street, and Red leading the whole team along the road. In the hub, the building you are standing at glows and a big sign pops up over it.",
+  "q2": "The hub used to be a row of seven tiles under a line-up. Now you walk a street and each door is a building. In battle the rest of the team waits on the sideline with little HP bars, and the party stage and pause menu show the place you are in.",
+  "q3": "Yes, four. Check Out is its own page so the shelf stays clean, the Pokémon Center has its own healing page, and the Event Hall and Achievement Hall take the news and rewards off the hub.",
+  "q4": "Settings is the last door on the street and still opens the Settings hub. The pause menu's ball is now a window onto where you are, with your partner walking next to you.",
+  "q5": "More than any pass so far: Pokémon Center, Poké Mart, the route gate, a clerk behind the counter, the healing machine lighting up six balls one by one, and Pokémon following their trainer."
  }
 }
