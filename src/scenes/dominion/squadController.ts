@@ -72,7 +72,7 @@ export class SquadController {
     const b = this.block();
     if (!b) return '';
     this.sel = Math.min(this.sel, Math.max(0, this.list().length - 1));
-    const initial = b.teamName?.[0]?.toUpperCase() ?? 'N';
+    const initial = b.team?.initial ?? b.teamName?.[0]?.toUpperCase() ?? 'N';
     const rowId = this.rows()[Math.min(this.row, this.rows().length - 1)]!;
     const bm = this.mode === 'group'
       ? groupBuilder(b, this.gr(), rowId, this.candAt, this.focus === 'builder', initial)
