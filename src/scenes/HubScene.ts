@@ -3,6 +3,7 @@
 // Run History and save data. Everything
 // here reads and changes the permanent profile only.
 
+import { trainerId as cardId } from '../core/presentation/pocket';
 import { reliquary } from '../core/blessings';
 import { prologueGateActive } from '../core/story2/prologue';
 import { fitLine } from '../ui/fitText';
@@ -2365,7 +2366,8 @@ export class HubScene extends Phaser.Scene {
       title: 'Trainer Card', area: 'hub', save: false,
       name: p.story?.protagonist?.name || 'Trainer',
       rank: `Rank ${prestigeRank(p)}`,
-      facts: [['Title', p.activeTitle ?? 'Trainer'], ['Runs', String(p.stats.runsEnded)], ['Battles won', String(p.stats.battlesWon)], ['Best run', `${p.stats.bestEncounters} encounters`], ['Pokémon caught', String(p.speciesCaught.length)], ...stars],
+      facts: [['Title', p.activeTitle ?? 'Trainer'], ['Pokémon caught', String(p.speciesCaught.length)], ['Runs', String(p.stats.runsEnded)], ['Best run', `${p.stats.bestEncounters} encounters`], ['Battles won', String(p.stats.battlesWon)], ...stars],
+      id: cardId(`slot-${session.slot}`),
       trainer: playerPortrait(look),
       badges: Math.min(8, p.best.badges ?? 0),
       team: [],

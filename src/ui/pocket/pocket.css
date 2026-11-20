@@ -394,3 +394,7 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .gx-dexw .dx.gx-dx-sil .gx-fit img{filter:brightness(0);opacity:.35}
 .pkx .pks .gx-dexw .dx-tabs span{cursor:pointer}
 .pkx .pks .gx-dexw .gx-dx-unk span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Trainer Card: what is left of the record sits at the top of the side panel, the team, button and line at its foot. */
+.pkx .pks .tcp .gx-tc-gap{flex:1}
+.pkx .pks .tcp .gx-tc-team{display:flex;flex-wrap:wrap;justify-content:center;gap:4px}
+.pkx .pks .tcp .tkcard[data-act]{cursor:pointer}

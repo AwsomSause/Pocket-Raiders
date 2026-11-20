@@ -447,3 +447,28 @@ test('Pocket look: the Pokédex is a wall of squares and each entry has a specie
   expect(await page.evaluate(() => JSON.stringify((window as any).__pkr.session.profile))).toBe(before);
   expect(errors).toEqual([]);
 });
+
+test('Pocket look: the Trainer Card shows the ID, the record and the badges won', async ({ page }) => {
+  test.setTimeout(120_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=pk-card');
+  await onPkPage(page, 'MainMenu', 'title');
+  await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    session.profile.best.badges = 3;
+    for (const s of game.scene.getScenes(true)) game.scene.stop(s.scene.key);
+    game.scene.start('Hub');
+  });
+  await waitForScene(page, 'Hub');
+  await page.waitForTimeout(1500);
+  const before = await page.evaluate(() => JSON.stringify((window as any).__pkr.session.profile));
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Hub').openCard());
+  await onPkPage(page, 'Hub', 'tcard');
+  const card = pkView(page, 'Hub', 'tcard');
+  await expect(card.locator('.tk-top')).toContainText(/ID No\. \d{5}/);
+  await expect(card.locator('.tk-badges .got')).toHaveCount(3);
+  await expect(card.locator('.tk-side')).toContainText('Battles won', { ignoreCase: true });
+  await fits(page, 'Hub', 'tcard');
+  expect(await page.evaluate(() => JSON.stringify((window as any).__pkr.session.profile))).toBe(before);
+  expect(errors).toEqual([]);
+});

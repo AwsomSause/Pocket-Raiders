@@ -8,6 +8,7 @@ import { dealOf, dealWord, pageText, pkEvent, points } from '../../src/ui/pocket
 import { mapWindow, nodeState, pkMap, pkMiniMap, pkNodeMenu } from '../../src/ui/pocket/screens/map';
 import { pkPause } from '../../src/ui/pocket/screens/pause';
 import { pkBag, pocketIcon } from '../../src/ui/pocket/screens/bag';
+import { CARD_BADGES, pkCard, rankFact } from '../../src/ui/pocket/screens/card';
 import { dexNo, movesSize, pkDex, pkDexWall, type PkDexCell } from '../../src/ui/pocket/screens/dex';
 import type { DexModel } from '../../src/ui/redux/screens/dex';
 import { pkParty } from '../../src/ui/pocket/screens/party';
@@ -575,5 +576,36 @@ describe('Pocket look: the Pokédex', () => {
   });
   it('an unknown lit square says how to find it', () => {
     expect(pkDexWall({ ...w, index: 2 })).toContain('#003 ???');
+  });
+});
+
+describe('Pocket look: the Trainer Card', () => {
+  const d = { title: 'Trainer Card', name: 'Red', rank: 'Rank 4', facts: [['Title', 'Ace'], ['Pokémon caught', '96'], ['Runs', '12'], ['Best run', '40 encounters'], ['Battles won', '210'], ['★', 'First Gym']] as const, trainer: { file: 'trainer/red', atlas: true }, badges: 3, team: [], text: 'Frame: Classic.', hints: [['Esc', 'back']] as const, area: 'hub' as const, save: false, id: '04821' };
+  it('the rank tag becomes a fact, any other tag the outcome', () => {
+    expect(rankFact('Rank 4')).toEqual(['Rank', '4']);
+    expect(rankFact('Loss')).toEqual(['Outcome', 'Loss']);
+  });
+  it('shows the ID, six facts on the card, the rest in the side panel, and the badges won lit', () => {
+    const html = pkCard(d);
+    expect(pkPageOf(html)?.id).toBe('tcard');
+    expect(html).toContain('ID No. 04821');
+    expect(html.match(/<p><span>/g)?.length).toBe(8);
+    expect(html.match(/class="got"/g)?.length).toBe(3);
+    expect(html.match(/<i class="(got)?"><span class="gx-fit"/g)?.length).toBe(CARD_BADGES.length);
+    expect(html).toContain('<b>Record</b>');
+    expect(html).toContain('First Gym');
+    expect(html).not.toContain('Save as picture');
+    expect(html).not.toContain('data-act="save"');
+  });
+  it('the run card saves as a picture from its button and the card, and lists the team', () => {
+    const html = pkCard({ ...d, title: 'Run card', rank: 'Win', area: undefined, save: true, id: undefined, team: ['pokemon/25', null], hints: [['Enter', 'save'], ['Esc', 'back']] });
+    expect(html).toContain('Save as picture');
+    expect(html).toContain('<b>This run</b>');
+    expect(html).toContain('Outcome');
+    expect(html).not.toContain('ID No.');
+    expect(html.match(/data-act="save"/g)!.length).toBeGreaterThanOrEqual(2);
+  });
+  it('more than eight badges still lights eight', () => {
+    expect(pkCard({ ...d, badges: 12 }).match(/class="got"/g)?.length).toBe(8);
   });
 });
