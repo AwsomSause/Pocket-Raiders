@@ -259,7 +259,7 @@
  },
  "15": {
   "name": "Director's Notes",
-  "big": "Kice's notes on the first fourteen passes, built in. The Trainer Intro and the Ace Call are no longer drawn by the animation mockup: they are the UI mockups' own pages set in motion. The Blessing drops the three-card page and goes back to the game's original cutscene, remade as something holy. And the Event Choice is rebuilt from see-through pieces, which fixes the cut-out text bar and is now the way every page is photographed.",
+  "big": "Kice's notes on the first fourteen passes, built in. The Trainer Intro and the Ace Call are no longer drawn by the animation mockup: they are the UI mockups' own pages set in motion. The Blessing drops the three-card page and goes back to the game's original cutscene, remade as something holy. The Event Choice keeps the whole text box instead of a cut-down one. And every clip with a map in it now uses the smaller map that shows eight stops with room to spare.",
   "clips": [
    "Trainer Intro",
    "Ace Call",
@@ -267,8 +267,8 @@
    "Legendary Blessing"
   ],
   "q1": "The Blessing is: a bell in the dark, a rose window, a halo, the Legendary as a pale vision, scripture with an illuminated letter, candles, feathers, and your partner bowing under the light. The Ace Call now has the ace leap off its own banner onto the field.",
-  "q2": "Passes 13 and 14 added new moments. Pass 15 goes back and corrects four existing ones against the director's notes, and changes the method: pages are now photographed with a see-through background, so pieces move cleanly.",
-  "q3": "No new pages. The Blessing is one page again (the original), not a choice of three.",
+  "q2": "Passes 13 and 14 added new moments. Pass 15 goes back and corrects existing ones against the director's notes, and changes the method: pages are now photographed with a see-through background, so pieces move cleanly instead of dragging a cut-out along.",
+  "q3": "No new pages. The Blessing is one page again (the original), not a choice of three. The map shows eight stops, so each hop and each path is larger on screen and easier to follow.",
   "q4": "Unchanged. The Blessing still finishes at once on the first Enter and moves on with the second, as in the game today; with animations off everything is shown at once.",
   "q5": "Legendaries blessing a journey from a shaft of light, with bells and a tower-top hush, is how the series treats Ho-Oh and Lugia."
  }

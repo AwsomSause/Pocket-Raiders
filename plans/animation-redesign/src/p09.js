@@ -8,7 +8,7 @@ const walk = (a, t, d, x0, x1, y) => { a.at(t).to(d, { x: x1 }, 'out'); a.at(t).
 /* the event scene: place, header, tracker, cast */
 const evScene = (S, o = {}) => {
   const k = o.k || 'event'; S.bg = cut(S, o.bg || 'event-bg', 0, 0, 960, 540, { L: 'bg', org: '50% 60%' }); S.hd = cut(S, k, 0, 12, 564, 60); S.bt = cut(S, k, 630, 14, 326, 38); S.ky = cut(S, k, 0, 502, 960, 38);
-  S.you = S.img('t-red', { L: 'mid', x: 152, y: 400, ay: 1, sc: 3 }); S.pal = S.mon('6', { x: 286, y: 400, sc: 1.8, nosh: 1 }); if (!o.nonpc) S.npc = S.img('t-acem', { L: 'mid', x: 672, y: 400, ay: 1, sc: 4 }); return S;
+  S.you = S.img('t-red', { L: 'mid', x: 152, y: 364, ay: 1, sc: 3 }); S.pal = S.mon('6', { x: 286, y: 364, sc: 1.8, nosh: 1 }); if (!o.nonpc) S.npc = S.img('t-acem', { L: 'mid', x: 672, y: 364, ay: 1, sc: 4 }); return S;
 };
 verb(9, 'say', (S, t, str, o) => {
   const r = VP(9, 'say', S, t, str, o), m = S.msgA; if (!m || !S.me || !S.foe) return r; const n = (str.match(/^<b>([^<]+)<\/b>/) || [])[1], who = n === S.me.name || n === S.me.d?.n ? 1 : n === S.foe.name || n === S.foe.d?.n ? 2 : 0;
@@ -17,12 +17,12 @@ verb(9, 'say', (S, t, str, o) => {
 });
 
 clip(9, 'ev-open', { t: 'Event Opens', g: 'Events', now: 'The map fades out and the event page fades in with everything already in place.', idea: 'The view closes on the map stop like a camera iris and opens on the place. The scene settles, the title strip slides in, you and your partner walk on from the left, the other person from the right, and only then the dialogue box rises and starts to talk.' }, S => {
-  const mp = cut(S, 'map', 0, 0, 960, 540, { L: 'bg' }); for (let i = 0; i < 3; i++) S.ring(.2 + i * .25, { x: 554, y: 234, r0: 20, r1: 70, col: '#ffcb05', w: 5, d: .5, L: 'ui' }); iris(S, .8, 554, 234, 0, .45);
+  const mp = cut(S, 'map', 0, 0, 960, 540, { L: 'bg' }); for (let i = 0; i < 3; i++) S.ring(.2 + i * .25, { x: 520, y: 222, r0: 16, r1: 56, col: '#ffcb05', w: 5, d: .5, L: 'ui' }); iris(S, .8, 520, 222, 0, .45);
   evScene(S); for (const a of [S.bg, S.hd, S.bt, S.ky]) a.at(0).set({ o: 0 }); mp.at(1.3).set({ o: 0 }); S.bg.at(1.3).set({ o: 1, s: 1.14 }).to(1.6, { s: 1 }, 'out3'); iris(S, 1.3, 480, 300, 1, .5);
   S.hd.at(1.7).set({ o: 1, x: -570 }).to(.35, { x: 0 }, 'out3'); S.bt.at(1.9).set({ o: 1, y: -30 }).to(.3, { y: 14 }, 'back'); S.you.at(0).set({ x: -80 }); S.pal.at(0).set({ x: -200 }); S.npc.at(0).set({ x: 1060 });
-  walk(S.you, 1.9, .7, -80, 152, 400); walk(S.pal, 2.05, .7, -200, 286, 400); walk(S.npc, 2.3, .6, 1060, 672, 400); S.npc.at(2.9).to(.1, { sy: .96 }).to(.3, { sy: 1 }, 'el');
+  walk(S.you, 1.9, .7, -80, 152, 364); walk(S.pal, 2.05, .7, -200, 286, 364); walk(S.npc, 2.3, .6, 1060, 672, 364); S.npc.at(2.9).to(.1, { sy: .96 }).to(.3, { sy: 1 }, 'el');
   const tb = cut(S, 'event', 10, 366, 940, 136, { y: 560 }); tb.at(3).to(.35, { y: 366 }, 'back'); S.ky.at(3.2).set({ o: 1, y: 540 }).to(.25, { y: 502 }, 'out');
-  const tx = talk(S, 3.4, '"The lamp went dark an hour ago, and something up there keeps tapping on the glass. I have to stay by the door. Would you take a look?"', { x: 134, y: 409, w: 716 }); S.npc.at(3.4).cyc(2.8, .16, { y: [400, 397, 400] });
+  const tx = talk(S, 3.4, '"The lamp went dark an hour ago, and something up there keeps tapping on the glass. I have to stay by the door. Would you take a look?"', { x: 134, y: 409, w: 716 }); S.npc.at(3.4).cyc(2.8, .16, { y: [364, 361, 364] });
   S.beat(.2, 'The stop pulses on the map').beat(.8, 'Iris closes on it').beat(1.3, 'Opens on the place; the scene settles').beat(1.9, 'Everyone walks on').beat(3, 'Dialogue box rises').beat(3.4, 'The keeper talks').end(6.8);
 });
 clip(9, 'ev-choice', { t: 'Event Choice', g: 'Events', now: 'The choices appear as a list in place of the text.', idea: 'The scene dims and steps back. What was just said shrinks into a chip at the top so you can still read it, and the choices are dealt up from the bottom like cards. The one you pick lifts, flashes and flies into the progress strip; the others fall away.' }, S => {
@@ -35,12 +35,12 @@ clip(9, 'ev-choice', { t: 'Event Choice', g: 'Events', now: 'The choices appear 
   S.beat(.3, 'The scene steps back').beat(.55, 'What was said becomes a chip').beat(.8, 'Three cards are dealt').beat(T, 'Your pick lifts; the others fall').beat(T + 1.1, 'It flies into the progress strip').end(T + 2.4);
 });
 clip(9, 'ev-result', { t: 'Event Result', g: 'Events', now: 'The picture and text change in place.', idea: 'The place changes the way you got there: climbing the lighthouse scrolls the old room down and the lamp room in from above while you keep walking. Whatever was waiting drops into view, your side jumps, and the text carries on.' }, S => {
-  evScene(S, { nonpc: 1 }); const bg2 = cut(S, 'ev-result-bg', 0, 0, 960, 540, { L: 'bg', y: -540 }); S.bg.at(.3).to(1.1, { y: 540 }, 'io'); bg2.at(.3).to(1.1, { y: 0 }, 'io'); for (const a of [S.you, S.pal]) a.at(.3).cyc(1.1, .22, { y: [400, 393, 400] });
+  evScene(S, { nonpc: 1 }); const bg2 = cut(S, 'ev-result-bg', 0, 0, 960, 540, { L: 'bg', y: -540 }); S.bg.at(.3).to(1.1, { y: 540 }, 'io'); bg2.at(.3).to(1.1, { y: 0 }, 'io'); for (const a of [S.you, S.pal]) a.at(.3).cyc(1.1, .22, { y: [364, 357, 364] });
   for (let i = 0; i < 8; i++) { const l = S.box({ L: 'mid', x: S.rnd(40, 920), y: -40, w: 4, h: S.rnd(40, 110), bg: '#fff3', o: 0 }); l.at(.3 + S.rnd(0, .7)).set({ o: 1 }).to(.4, { y: 600 }, 'lin'); }
   const hd2 = cut(S, 'ev-result', 0, 12, 564, 60, { x: -570 }); S.hd.at(.3).to(.25, { x: -570 }, 'in3'); hd2.at(1.3).to(.35, { x: 0 }, 'out3'); const bt2 = cut(S, 'ev-result', 630, 14, 326, 38); S.bt.at(0).set({ o: 0 });
   const tb = cut(S, 'ev-result', 10, 388, 940, 114, { y: 560 }); tb.at(1.6).to(.35, { y: 388 }, 'back'); talk(S, 1.9, 'You climb the spiral stairs. The great lamp is dark, and a small round shape is pecking at the glass.', { y: 410 });
   const T = 4.2, gl = S.box({ L: 'mid', x: 606, y: 304, w: 340, h: 340, rad: '50%', css: 'background:radial-gradient(circle,#fff6c9aa,#ffcb0533 45%,transparent 68%)', s: 0 }), h = S.img('m-163', { L: 'mid', x: 606, y: -80, ay: 1, sc: 4 }); h.at(T).to(.4, { y: 390 }, 'in').to(.08, { sy: .8, sx: 1.15 }).to(.3, { sy: 1, sx: 1 }, 'el').cyc(999, .5, { y: [390, 384, 390] }); gl.at(T + .4).to(.4, { s: 1 }, 'back').cyc(999, 1.6, { s: [1, 1.1, 1] }); dust(S, T + .4, 606, 390, 8);
-  for (const [a, x] of [[S.you, 152], [S.pal, 286]]) { a.at(T + .45).to(.1, { x: x - 22, y: 384 }, 'out').to(.2, { y: 400 }, 'bo'); S.pop(T + .45, '!', { x: x + 10, y: 180 + (x > 200 ? 40 : 0), cls: 'ttl y', hold: .6 }); } S.shake(T + .4, .15, 4);
+  for (const [a, x] of [[S.you, 152], [S.pal, 286]]) { a.at(T + .45).to(.1, { x: x - 22, y: 348 }, 'out').to(.2, { y: 364 }, 'bo'); S.pop(T + .45, '!', { x: x + 10, y: 180 + (x > 200 ? 40 : 0), cls: 'ttl y', hold: .6 }); } S.shake(T + .4, .15, 4);
   talk(S, T + .7, 'It is a Hoothoot, and it does not look happy to see you.', { y: 434 });
   S.beat(.3, 'The room scrolls down as you climb').beat(1.3, 'New place name').beat(1.9, 'Text').beat(T, 'Something drops in').beat(T + .45, 'Your side jumps').end(T + 2.6);
 });
