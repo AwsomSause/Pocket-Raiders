@@ -4,10 +4,10 @@
 // private copy of the block and returns it with a notice. The HQ's World Turn step finishes works, pays the buildings and
 // the bills, and runs the loan.
 
-import { rankN, withCrew } from './crew';
+import { leave, rankN, withCrew } from './crew';
 import { DOMINION_DATA } from './data';
 import { addHeat, districtDef, statusOf, syncHeat } from './field';
-import { addClean, buildingDef, clampClean, cleanOf, spend, dirtyOf, hqFx, hqOf, levelDef, scaled, withHq, working } from './hqFx';
+import { addClean, buildPrice, buildingDef, clampClean, cleanOf, spend, dirtyOf, hqFx, hqOf, levelDef, scaled, withHq, working } from './hqFx';
 import type { Building, DominionBlock, HqState, Room } from './schema';
 import { addWorldStep, fill } from './worldTurn';
 
@@ -168,7 +168,7 @@ export function buildWhy(b: DominionBlock, def: Building, district: string | nul
     if (!district || !heldDistricts(b).includes(district)) return Ln().needsHeld!;
     if (hqOf(b).rooms.some((r) => r.id === def.id && r.at === district)) return 'You have one there.';
   } else if (def.slots > slotsFree(b)) return Ln().noSlot!;
-  if (b.funds < def.cost) return fill(Ln().noMoney!, { cost: def.cost });
+  if (b.funds < buildPrice(b, def.cost)) return fill(Ln().noMoney!, { cost: buildPrice(b, def.cost) });
   return null;
 }
 
@@ -182,7 +182,7 @@ export function buildRows(b: DominionBlock, district: string | null): BuildRow[]
   return order.map((def) => {
     const where = def.outside ? (district && held.includes(district) ? district : held[0] ?? null) : null;
     const why = buildWhy(b, def, where);
-    return { def, cost: def.cost, ok: !why, why, outside: def.outside, where };
+    return { def, cost: buildPrice(b, def.cost), ok: !why, why, outside: def.outside, where };
   });
 }
 
@@ -195,8 +195,9 @@ export function build(block: DominionBlock, id: string, district: string | null)
   if (why) return no(block, why);
   const b = copy(block);
   const days = H().tiers[0]!.days;
-  spend(b, def.cost);
-  b.hq.rooms.push({ uid: `r${b.hq.next++}`, id, tier: 1, cond: 100, spent: def.cost, building: true, up: false, ready: b.day + days, shut: false, ruined: false, at: where });
+  const price = buildPrice(block, def.cost);
+  spend(b, price);
+  b.hq.rooms.push({ uid: `r${b.hq.next++}`, id, tier: 1, cond: 100, spent: price, building: true, up: false, ready: b.day + days, shut: false, ruined: false, at: where });
   recompute(b);
   return yes(b, fill(Ln().building!, { name: def.name, days, s: s(days) }));
 }
@@ -217,7 +218,7 @@ export function tierUp(block: DominionBlock, uid: string): HqOut {
   const t = r0.tier + 1;
   const top = maxTier(block);
   if (t > 8 || t > top) return no(block, fill(Ln().maxTier!, { name: def.name, lv: block.hqLevel, region: regionsReached(block), t: Math.min(8, Math.max(1, top)) }));
-  const cost = tierCost(def, t);
+  const cost = buildPrice(block, tierCost(def, t));
   if (block.funds < cost) return no(block, fill(Ln().noMoney!, { cost }));
   const b = copy(block);
   const r = roomOf(b, uid)!;
@@ -332,11 +333,12 @@ export function letGo(block: DominionBlock, memberId: string): HqOut {
   if (!m0) return no(block, null);
   if (block.members.length <= 1) return no(block, Ln().lastMember!);
   const b = copy(block);
-  b.members = b.members.filter((m) => m.id !== memberId);
-  b.crew!.gone.push({ id: m0.id, name: m0.name, day: b.day, why: 'let go' });
+  // D4b: leaving through `leave` lets the Retiree Hall take them in (its line comes after the goodbye).
+  const lines: string[] = [];
+  leave(b, b.members.find((m) => m.id === memberId)!, 'let go', null, '', lines);
   b.crew!.talks = b.crew!.talks.filter((t) => t.member !== memberId);
   recompute(b);
-  return yes(b, fill(Ln().letGo!, { name: m0.name, wage: m0.wage }));
+  return yes(b, [fill(Ln().letGo!, { name: m0.name, wage: m0.wage }), ...lines].join(' '));
 }
 
 // ---------- the World Turn step ----------
@@ -424,6 +426,22 @@ function weekly(b: DominionBlock & { hq: HqState }, fx: ReturnType<typeof hqFx>)
     const st = b.field.districts[d];
     if (st) st.control = Math.min(100, st.control + n);
     out.push(fill(Ln().control!, { n, where: districtDef(d)?.name ?? d }));
+  }
+  // D6b: Regard and Dread from buildings (uniforms, banners, galleries...), the same way: own district, or the HQ's.
+  const face: Record<string, { rg: number; dr: number }> = {};
+  for (const r of h.rooms) {
+    const fxr = buildingDef(r.id)?.fx;
+    if (!fxr || !working(r) || (!fxr.regard && !fxr.dread)) continue;
+    const at = (face[r.at ?? F().hq] ??= { rg: 0, dr: 0 });
+    if (fxr.regard) at.rg += scaled('regard', fxr.regard, r.tier);
+    if (fxr.dread) at.dr += scaled('dread', fxr.dread, r.tier);
+  }
+  for (const [d, v] of Object.entries(face)) {
+    const st = b.field.districts[d];
+    if (!st) continue;
+    st.regard += v.rg;
+    st.dread += v.dr;
+    out.push(fill(Ln().face!, { rg: v.rg, dr: v.dr, where: districtDef(d)?.name ?? d }));
   }
   if (fx.heatWeek) addHeat(b, F().hq, -fx.heatWeek);
   if (fx.repair) {

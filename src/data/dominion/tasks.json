@@ -614,8 +614,10 @@
     "no late pay penalty"
    ],
    "risk": "Mistakes anger crew",
-   "status": "disabled",
-   "needs": "D6"
+   "status": "supported",
+   "effect": {
+    "kind": "wages"
+   }
   },
   {
    "n": 24,
@@ -1427,8 +1429,11 @@
     "a duo that fights better"
    ],
    "risk": "Rivalry",
-   "status": "disabled",
-   "needs": "D8"
+   "status": "limited",
+   "note": "The bond trait (level 3) and swapping Pokémon in a doubles battle (level 4) wait for squads in battle (D10).",
+   "effect": {
+    "kind": "matchMake"
+   }
   },
   {
    "n": 59,
@@ -1630,8 +1635,10 @@
     "a master craft"
    ],
    "risk": "Apprentice mistakes",
-   "status": "disabled",
-   "needs": "D4"
+   "status": "supported",
+   "effect": {
+    "kind": "trade"
+   }
   },
   {
    "n": 68,
@@ -1673,8 +1680,10 @@
     "an egg move"
    ],
    "risk": "Move forgotten",
-   "status": "disabled",
-   "needs": "D4"
+   "status": "supported",
+   "effect": {
+    "kind": "tutor"
+   }
   },
   {
    "n": 70,
@@ -3401,8 +3410,11 @@
     "bonus XP"
    ],
    "risk": "Splits",
-   "status": "disabled",
-   "needs": "D8"
+   "status": "limited",
+   "note": "Level 4 (no failures from miscommunication) has nothing to stop yet: crew tasks have no miscommunication roll.",
+   "effect": {
+    "kind": "runCrew"
+   }
   },
   {
    "n": 142,

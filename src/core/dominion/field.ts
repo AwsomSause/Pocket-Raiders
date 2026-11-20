@@ -17,7 +17,8 @@ import { addWorldStep, fill } from './worldTurn';
 import { addLoyalty, addMorale, addXp, monName } from './crew';
 import { hasBand } from './pyramid';
 import { evolveOne } from './reserve';
-import { buildingDef, hasRoom, launderAction, roomFor, spend } from './hqFx';
+import { buildingDef, hasRoom, hqFx, launderAction, roomFor, spend } from './hqFx';
+import { paced } from './rules';
 
 const F = () => DOMINION_DATA.field;
 const L = () => DOMINION_DATA.field.lines;
@@ -93,7 +94,8 @@ export function addHeat(b: DominionBlock, district: string, n: number): void {
   const d = b.field.districts[district];
   if (!d) return;
   const k = n > 0 && statusOf(d) === 'owned' ? F().control.ownedHeat : 1;
-  d.heat = clamp(d.heat + Math.round(n * k), 0, 100);
+  // D27: Day pace scales a rise (Normal and every run before D27 multiply by 1).
+  d.heat = clamp(d.heat + Math.round(paced(b, n) * k), 0, 100);
 }
 
 export const hottest = (f: Field): string | null => {
@@ -315,6 +317,13 @@ const crewStat = (b: DominionBlock, bring: readonly string[], stat: StatId, most
   bring.map((id) => b.members.find((m) => m.id === id)).filter((m) => !!m).slice(0, most).map((m) => [`${m!.name} brought along`, m!.stats[stat] * F().odds.crewPer]);
 
 /** The Card (Part 1 §3, mockup 4): everything the action risks and pays, worked out from the block. Never rolls. */
+/** D8: odds parts from later slices on the Boss's Card (a squad's Vengeance target, Glory on Attack and Raid). */
+type OddsPartHook = (b: DominionBlock, actionId: string, targetId: string | null, bring: readonly string[]) => [string, number][];
+const ODDS_PART_HOOKS: OddsPartHook[] = [];
+export function addOddsPartHook(h: OddsPartHook): void {
+  ODDS_PART_HOOKS.push(h);
+}
+
 export function card(b: DominionBlock, run: Pick<RunState, 'party'>, actionId: string, targetId: string | null, districtId: string, bring: readonly string[] = [], opt: string | null = null): Card | null {
   const def = actionDef(actionId);
   const play = def ? playOf(def.id) ?? null : null;
@@ -337,6 +346,7 @@ export function card(b: DominionBlock, run: Pick<RunState, 'party'>, actionId: s
   if (roll) {
     if (stat) parts.push([`Boss ${cap(stat)} ${f.edge.stats[stat]}`, f.edge.stats[stat] * O.statPer]);
     if (stat) parts.push(...crewStat(b, bring, stat, play?.squad ?? O.maxBrought));
+    for (const h of ODDS_PART_HOOKS) parts.push(...h(b, def.id, target?.id ?? null, bring));
     const intel = target ? f.scouted[target.id] ?? 0 : 0;
     if (target && intel >= b.day) parts.push([intel - O.scoutDays >= b.day - 1 ? 'Scouted yesterday' : 'Scouted', O.scouted]);
     if (ds.heat >= O.heatPer) parts.push([`Heat in ${district.name}`, -Math.floor(ds.heat / O.heatPer)]);
@@ -346,7 +356,8 @@ export function card(b: DominionBlock, run: Pick<RunState, 'party'>, actionId: s
     if (M.odds[level - 1]) parts.push([`${M.names[level - 1]} (Lv ${level})`, M.odds[level - 1]!]);
   }
   const chance = roll ? clamp(base + parts.reduce((a, [, n]) => a + n, 0), O.min, O.max) : 100;
-  const exact = !roll || (target ? (f.scouted[target.id] ?? 0) >= b.day : true) || level >= M.intelFrom;
+  // D6b: the Ledger Office's Honest Card shows the exact odds.
+  const exact = !roll || (target ? (f.scouted[target.id] ?? 0) >= b.day : true) || level >= M.intelFrom || hqFx(b).honest > 0;
   const range: [number, number] = exact ? [chance, chance] : [clamp(chance - O.rangeHalf, O.min, O.max), clamp(chance + O.rangeHalf, O.min, O.max)];
 
   // what's at stake
@@ -387,7 +398,8 @@ export function card(b: DominionBlock, run: Pick<RunState, 'party'>, actionId: s
   police = Math.min(100, police);
 
   const cost = def.slot === 'day' ? tr.cost + 1 : 0;
-  const money = play?.cost ?? 0;
+  // D4b: an action that gets cheaper with mastery (Move Tutor) takes `cheaper`% off from the second level.
+  const money = Math.round(((play?.cost ?? 0) * (100 - (level >= 2 ? play?.cheaper ?? 0 : 0))) / 100);
   const out: Card = {
     def, play, district, target, blocked: null, roll, chance, parts, base, exact, range, pay, bring: [...bring], weekly, crate: play?.crate ?? null,
     heat, failHeat, regard: play?.regard ?? 0, dread: play?.dread ?? 0, cost, money, travel: tr, battle, police, level, opt, opts: [], note: null,
@@ -462,6 +474,13 @@ export interface ActFx {
 }
 type ActEffect = (b: DominionBlock, x: ActFx) => string[];
 const ACT_EFFECTS: Partial<Record<string, ActEffect>> = {};
+/** D4b: an effect that needs the content, the run and the action's mastery level (school.ts: Egg Run, Breed, Move Tutor). */
+export interface PlayFx { content: Content; b: DominionBlock; run: RunState; level: number; rng: Rng }
+type PlayEffect = (x: PlayFx) => string[];
+const PLAY_EFFECTS: Partial<Record<string, PlayEffect>> = {};
+export function addPlayEffect(effect: string, f: PlayEffect): void {
+  PLAY_EFFECTS[effect] = f;
+}
 export function addActEffect(effect: string, f: ActEffect): void {
   ACT_EFFECTS[effect] = f;
 }
@@ -518,6 +537,8 @@ export interface ActOut {
   fight: boolean;
   /** Thieve's big success: a Pokémon in a lifted Ball (the session makes it; core/run.ts isn't reachable from here). */
   mon: { species: string; level: number; trust?: number } | null;
+  /** D30: what the act rolled (the job moments show it). Null when it never got to the roll. */
+  roll?: { r: number; chance: number; rolled: boolean } | null;
 }
 
 const rngFor = (seed: string, f: Field): Rng => {
@@ -684,6 +705,9 @@ function succeed(content: Content | null, b: DominionBlock, run: RunState, x: Ct
     default: {
       const fx = play.effect ? ACT_EFFECTS[play.effect] : undefined;
       if (fx) lines.push(...fx(b, { action: def.id, district: district.id, target: target?.id ?? null, big: x.big, opt: x.opt, bring: c.bring, run, content, card: c }));
+      const pfx = play.effect ? PLAY_EFFECTS[play.effect] : undefined;
+      // The line the effect writes replaces the win line (as Evolve in Peace's does).
+      if (pfx && content) lines.splice(lines.length - 1, 1, ...pfx({ content, b, run, level: masteryLevel(f.mastery[def.id] ?? 0), rng }));
       // D11: the Hero actions' effects (hero.ts).
       if (play.effect) HOOKS.effects[play.effect]?.(b, run, { district, target, big: x.big }, lines);
       break;
@@ -766,19 +790,20 @@ export function act(content: Content | null, run: RunState, a: { action: string;
   const r = rng.int(1, 100);
   const pass = !c.roll || r <= c.chance;
   const big = c.roll && pass && r <= Math.floor(c.chance * F().odds.bigShare);
+  const roll = { r, chance: c.chance, rolled: c.roll };
   const wager = c.play!.wager ? round10(rng.int(c.play!.wager[0], c.play!.wager[1])) : 0;
   const x: Ctx = { ...got.x, card: c, pass, big, wager };
   if (used) f.disguise = false;
   const wait = (why: FieldFight['why'], foe: FieldFight['foe']): ActOut => {
     f.fight = { why, foe, begun: false, action: c.def.id, target: c.target?.id ?? null, district: c.district.id, pass, big, wager, racket: null };
     syncHeat(b);
-    return { ok: true, block: b, notice: null, fight: true, mon: null };
+    return { ok: true, block: b, notice: null, fight: true, mon: null, roll };
   };
   // D11: the Hero steps in (the roll is kept; m11 offers battle, run or a Smoke Ball). The scene shows the page first.
   if (c.def.slot !== 'evening' && c.play!.battle?.foe !== 'hero' && HOOKS.interrupt?.(b, c.def, c.district)) {
     f.fight = { why: 'hero', foe: 'hero', begun: false, action: c.def.id, target: c.target?.id ?? null, district: c.district.id, pass, big, wager, racket: null };
     syncHeat(b);
-    return { ok: true, block: b, notice: null, fight: false, mon: null };
+    return { ok: true, block: b, notice: null, fight: false, mon: null, roll };
   }
   if (c.battle?.on === 'always') return wait('always', c.play!.battle!.foe);
   if (!pass) {
@@ -788,13 +813,13 @@ export function act(content: Content | null, run: RunState, a: { action: string;
     for (const h of HOOKS.acted) h(b, c.def, c.district, false);
     syncHeat(b);
     lines.push(...caughtLines(b, { why: 'stealth', district: c.district.id, action: c.def, place: c.target?.name ?? null, seed: run.seed }));
-    return { ok: true, block: b, notice: lines.join(' '), fight: false, mon: null };
+    return { ok: true, block: b, notice: lines.join(' '), fight: false, mon: null, roll };
   }
   const s = succeed(content, b, run, x, rng);
   const lines = [...s.lines, ...grow(b, c.def, c.play!, true, big)];
   syncHeat(b);
   // D10: an action can start a fight of its own when it works (a Raid's first fight, a Gym's Leader).
-  return { ok: true, block: b, notice: lines.join(' '), fight: !!f.fight && !f.fight.begun, mon: s.mon };
+  return { ok: true, block: b, notice: lines.join(' '), fight: !!f.fight && !f.fight.begun, mon: s.mon, roll };
 }
 
 /**

@@ -1,0 +1,14 @@
+/* DOMINION D30: the mockups' looping animations (m8 bands, m9/m10 stamp) play once in the game, from when the page
+   first showed (data-once, --t0). `.still` (cut-ins skipped, or reduced motion in the game's settings) stops them. */
+@media (prefers-reduced-motion:no-preference){
+  #rx .dom .d30 .band.boss{animation:dm-bandin4 6s var(--t0,0s) ease-out 1 both}
+  #rx .dom .d30 .band.crew{animation:dm-bandin4b 6s var(--t0,0s) ease-out 1 both}
+  #rx .dom .d30 .bigstamp{animation:dm-stamp4 4s var(--t0,0s) ease-out 1 both}
+  #rx .dom .d30 .order{animation:dm-order30 .5s var(--t0,0s) ease-out 1 both}
+  @keyframes dm-order30{0%{transform:rotate(-8deg) scale(1.8);opacity:0}60%{transform:rotate(-8deg) scale(.96);opacity:1}100%{transform:rotate(-8deg) scale(1)}}
+}
+#rx .dom .d30.still .band,#rx .dom .d30.still .bigstamp,#rx .dom .d30.still .order,#rx .dom .d30.still .speed,
+#rx .dom .d30.still .rays4,#rx .dom .d30.still .sirenL,#rx .dom .d30.still .sirenR,#rx .dom .d30.still .tape4{animation:none!important}
+#rx .dom .d30 .paper .cv{animation:none}
+/* m12's masthead: in the mockup's pass-21 CSS, but the port tool left it out of dominion.css. */
+#rx .dom .mast4{font:700 40px/1 var(--regal);letter-spacing:.06em;text-align:center;border-bottom:3px double #231a10;padding-bottom:4px}

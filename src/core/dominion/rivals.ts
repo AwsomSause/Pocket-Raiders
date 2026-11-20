@@ -19,6 +19,7 @@ import { buildingDef, hqFx, hqOf, spend, working } from './hqFx';
 import { defense, roomName, wear } from './hq';
 import { makeLead } from './recruit';
 import { setChairHook, setChairTension } from './chair';
+import { paced } from './rules';
 
 const RV = () => DOMINION_DATA.rivals;
 const RA = () => DOMINION_DATA.rivalActions;
@@ -99,7 +100,8 @@ const log = (b: DominionBlock, team: string, text: string): void => {
 export function addTension(b: DominionBlock, team: string, n: number): number {
   const t = ts(b, team);
   const was = t.tension;
-  t.tension = clamp(t.tension + n);
+  // D27: Day pace scales a rise.
+  t.tension = clamp(t.tension + paced(b, n));
   t.peak = Math.max(t.peak, t.tension);
   if (t.tension > was) t.quiet = 0;
   return t.tension - was;
@@ -163,7 +165,7 @@ function pickPlan(b: DominionBlock, team: RivalTeam, r: Rng): string[] {
   void b;
   return out;
 }
-const priorityName = (id: string): string => RV().plan.priorities.find((p) => p.id === id)?.name ?? id;
+export const priorityName = (id: string): string => RV().plan.priorities.find((p) => p.id === id)?.name ?? id;
 /** Whether the player can see this week's plan: one of their spies is inside, or an Operations Room at HQ Lv. 3+ (A7). */
 export function planSeen(b: DominionBlock, team: string): boolean {
   const r = rivalsOf(b);
@@ -173,7 +175,7 @@ export function planSeen(b: DominionBlock, team: string): boolean {
 }
 /** A flag that the plan was learned this week (a deal, a tail, a wire). */
 const planFlag = (b: DominionBlock, team: string): string => `plan:${team}:${b.day - ((b.day - 1) % WEEK())}`;
-const learnPlan = (b: DominionBlock, team: string): void => {
+export const learnPlan = (b: DominionBlock, team: string): void => {
   b.flags = [...b.flags.filter((f) => !f.startsWith(`plan:${team}:`)), planFlag(b, team)];
 };
 

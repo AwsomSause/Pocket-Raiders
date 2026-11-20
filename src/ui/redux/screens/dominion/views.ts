@@ -24,8 +24,8 @@ export function stage(inner: string, style = '', cls = 'vign grain', sig: '' | '
   ${nova}</div></div>`;
 }
 
-/** Round 4 (D26): every in-game key strip starts with Q, held for the command wheel (D28 builds the wheel). */
-export const WHEEL_KEY = '<span class="key q4">Q</span><span>Wheel</span>';
+/** Round 4 (D26): every in-game key strip starts with Q, held for the command wheel (D28); a tap on the chip opens it too. */
+export const WHEEL_KEY = '<span class="key q4" data-act="wheel" data-arg="" style="cursor:pointer">Q</span><span>Wheel</span>';
 
 /** D7: the mark's outline for each logo (the emblem on the top bar, the door, the title tower). */
 const LOGO_CLIP: Record<string, string> = {
@@ -60,7 +60,7 @@ export function topBar(t: TopModel): string {
     <div><img class="ic l" src="${img('g-amulet-coin')}" alt=""><div><span class="l">FUNDS</span><span class="v y" data-testid="dom-funds">${esc(t.funds)}</span></div></div>
     <div><img class="ic l" src="${img('g-fire-stone')}" alt=""><div><span class="l">HEAT</span><span class="v rd" data-testid="dom-heat">${esc(t.heat)}</span></div></div>
     <div><img class="ic l" src="${img('g-fame-checker')}" alt=""><div><span class="l">ROSTER</span><span class="v" data-testid="dom-roster">${esc(t.roster)}</span></div></div>
-    <div style="flex:1"><img class="ic l" src="${img('g-town-map')}" alt=""><div><span class="l">${esc(t.regionLabel ?? 'REGION:')}</span><span class="v cy" data-testid="dom-region">${esc(t.region)}</span></div></div>
+    <div style="flex:1"><img class="ic l" src="${img('g-town-map')}" alt=""><div><span class="l">${esc(t.regionLabel ?? 'REGION:')}</span><span class="v cy"${t.region.includes('›') ? ' style="font-size:16px;white-space:nowrap"' : ''} data-testid="dom-region">${esc(t.region)}</span></div></div>
   </div>`;
 }
 
