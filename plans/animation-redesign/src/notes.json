@@ -271,5 +271,86 @@
   "q3": "No new pages. The Blessing is one page again (the original), not a choice of three. The map shows eight stops, so each hop and each path is larger on screen and easier to follow.",
   "q4": "Unchanged. The Blessing still finishes at once on the first Enter and moves on with the second, as in the game today; with animations off everything is shown at once.",
   "q5": "Legendaries blessing a journey from a shaft of light, with bells and a tower-top hush, is how the series treats Ho-Oh and Lugia."
+ },
+ "16": {
+  "name": "Gimmicks, Remake 1: Scale",
+  "big": "The first of five remakes of the gimmick cutscenes, each with a new goal. Goal one is scale. Mega Evolution, Terastallizing, Dynamax and the Z-Move stop being effects on the battle screen and become the whole screen: the camera pushes in, the UI mockups' own cut-in page opens out of the Pokémon, the change happens at five times battle size, and the page closes back onto the field. The camera also joins normal play: hard hits punch in, knock-outs get a slow push.",
+  "clips": [
+   "Mega Evolution",
+   "Terastallize",
+   "Dynamax",
+   "Z-Move",
+   "Knock-out Camera",
+   "Entrance Camera"
+  ],
+  "q1": "Much more. An orb that fills the screen and shatters across its full width, crystals as tall as the screen, a Charizard that grows past the top of the picture, a Z taller than the screen.",
+  "q2": "Until now the gimmicks were effects placed on the battle screen (pass 6). Now each one is a full-screen cutscene that ends on the UI mockups' own cut-in page, and the camera moves for the first time anywhere in the mockups.",
+  "q3": "No new pages: the cut-in pages already exist in the UI mockups and are used as they are. Two new camera clips.",
+  "q4": "Settings: Fast gimmick switches play only the last second (the new form landing on the field). Camera movement (On, Reduced, Off) is a new line under Motion.",
+  "q5": "A gimmick that takes over the screen is exactly how the main games stage Mega Evolution, Dynamax and Z-Moves."
+ },
+ "17": {
+  "name": "Gimmicks, Remake 2: Impact",
+  "big": "Remake 1 made the gimmick cutscenes big. Remake 2 makes them hit. Nothing eases any more: each cutscene is told in hard cuts and held frames, like a fighting-game super or an anime impact frame. A black frame with the item in white, the battle in negative, three comic panels slammed on at an angle (the Pokémon's eyes, your raised arm, the word), a black-and-white frame of the Pokémon, the change in three or four hard beats, and only then colour. In normal play the hits that matter now get one negative frame, and the hit that ends a battle gets a Finishing Blow.",
+  "clips": [
+   "Mega Evolution",
+   "Terastallize",
+   "Dynamax",
+   "Z-Move",
+   "Finishing Blow"
+  ],
+  "q1": "Yes, in a different way from remake 1: less on screen at any moment, but every frame is a poster. Negative frames, black and white, comic panels and a K.O. stamp are new to the mockups.",
+  "q2": "Remake 1 was smooth and enormous. Remake 2 keeps the full-screen staging and throws out the smoothness: it is roughly two seconds shorter and reads as a series of hits. It also changes ordinary battles (negative frame on big hits).",
+  "q3": "No new pages; one new clip (Finishing Blow).",
+  "q4": "Settings: Flashing effects (Full, Soft, Off) is required for this remake. Soft replaces negative frames with a dim; Off removes them and the black-and-white frames. This must exist before any of this is built.",
+  "q5": "The panels and held frames are how the anime and the newer games cut their big moments, and K.O. stamps are straight out of Stadium."
+ },
+ "18": {
+  "name": "Gimmicks, Remake 3: Light",
+  "big": "Remake 1 was big and remake 2 hit hard. Remake 3 is lit. The arena goes dark and the item is the only light in it; a beam carries that light to the Pokémon; the light swallows the screen; the change itself is drawn in light (a prism for Mega, a refraction for Tera, a storm pillar for Dynamax, a sunrise for the Z-Move); the new form arrives as the exposure settles; and when the cutscene ends the arena stays lit in the gimmick's colour. In normal play every hit now throws its type's colour onto the floor.",
+  "clips": [
+   "Mega Evolution",
+   "Terastallize",
+   "Dynamax",
+   "Z-Move",
+   "Move Light"
+  ],
+  "q1": "Yes. Darkness, beams, rainbow shafts, god rays, lens flares and a white-out are all new, and the cutscene now changes the battle screen after it ends.",
+  "q2": "Remake 2 was hard cuts in black and white. Remake 3 goes the other way: no cuts at all, everything is one continuous change of light from dark to white to colour. It is also the first remake where the field looks different afterwards.",
+  "q3": "No new pages; one new clip (Move Light).",
+  "q4": "Settings: a Lighting effects switch (On, Simple, Off). Simple keeps the item glow and the floor colour and drops the blend effects, for slower computers. The white-out follows the Flashing effects setting from remake 2.",
+  "q5": "The glowing item and the beam are how Sword and Shield and Scarlet and Violet start their gimmicks, and the rainbow light is the Mega Evolution symbol used as actual light."
+ },
+ "19": {
+  "name": "Gimmicks, Remake 4: Together",
+  "big": "The first three remakes were about the Pokémon alone. Remake 4 is about the two of you. The screen splits, you on one side and your Pokémon on the other, with heartbeats that speed up; the halves open like doors and you are standing side by side; and each gimmick is something you do together: the Key Stone calls and the Mega Stone answers, you throw the Tera Orb, you hurl the giant ball and stand in front of the giant, you strike the Z-pose in step. Afterwards you call out and your partner answers. In normal play your trainer now reacts with a face and one word.",
+  "clips": [
+   "Mega Evolution",
+   "Terastallize",
+   "Dynamax",
+   "Z-Move",
+   "Trainer Reactions"
+  ],
+  "q1": "Yes, and for the first time with a person in it. The split screen, the heartbeats, the throw and the size comparison in Dynamax are the most staged moments so far.",
+  "q2": "Remake 3 was about light and had nobody in it. Remake 4 puts your trainer in every beat, gives each gimmick its own action instead of one shared shape, and adds a spoken line and an answer at the end.",
+  "q3": "No new pages; one new clip (Trainer Reactions). The cut-in page gains your face in its corner.",
+  "q4": "Settings: Trainer reactions (On, Off). Menu: the trainer shown is the one you picked (Red, Blue, Green, Hilda or Nate), so every one of the five needs these poses.",
+  "q5": "This is the anime's version of every gimmick: the trainer touches the Key Stone, throws the orb, hurls the giant ball, does the Z-pose. The games show it too, from X and Y onward."
+ },
+ "20": {
+  "name": "Gimmicks, Remake 5: Signature",
+  "big": "Remakes 1 to 4 each gave all four gimmicks the same new idea: scale, impact, light, together. The last remake does the opposite. The four cutscenes stop sharing a shape and each gets one picture nobody could mistake for another. Mega Evolution is glass: the new picture slams together out of shards and shatters back to the field. Terastallizing goes inside the jewel, a kaleidoscope. Dynamax is one long pan up the giant, from your shoes to its face above the clouds. The Z-Move is the move itself, seen from the sky, with the damage counted out. Each one also has a one-second short cut for when you have already seen it this run.",
+  "clips": [
+   "Mega Evolution",
+   "Terastallize",
+   "Dynamax",
+   "Z-Move",
+   "Short Cut (Seen Before)"
+  ],
+  "q1": "Yes. The shard assembly, the kaleidoscope and the pan are each the single most elaborate thing in the mockups, and none of them is reused by another gimmick.",
+  "q2": "Remake 4 still used one template four times. Remake 5 has four different structures and four different lengths, and it is the first to deal with repetition: a full version once per run and a short cut after that.",
+  "q3": "No new pages; one new clip (the short cut).",
+  "q4": "Settings: Gimmick cutscenes (Full every time, Full once per run, Always short). This replaces the Fast Mega switch and covers all four. Menu: nothing new.",
+  "q5": "The shatter is the Mega Evolution sting from X and Y, the jewel is Scarlet and Violet, the towering pan is how Sword and Shield frame a Dynamax, and counting out the damage after a finisher is pure Stadium."
  }
 }
