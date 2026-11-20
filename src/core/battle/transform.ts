@@ -55,6 +55,7 @@ import { grantMegaMove, endMegaMoves } from './megaMove';
 import { gimmickLevel, stoneKey, type GimmickContext } from '../gimmicks';
 import { variantGimmickDue } from '../expansion/variantLines';
 import { endRevivalStatus } from './revivalStatus';
+import { isEnemyAce } from './ace';
 
 type Side = 'player' | 'enemy';
 export type FormChangeKind = 'mega' | 'primal' | 'gigantamax' | 'tera' | 'ability';
@@ -419,7 +420,7 @@ export function applyTransformations(ctx: TransformContext, request: TransformRe
   if (!player || !enemy) return;
   const megaOn = !ctx.disabledMechanics?.includes('mega');
   const enemyMay = (mon: PokemonInstance) =>
-    megaOn && battle.transform.enemyMechanics.includes('mega') && battle.enemyTeam.indexOf(mon) === battle.enemyTeam.length - 1;
+    megaOn && battle.transform.enemyMechanics.includes('mega') && (isEnemyAce(battle, mon.uid) || battle.enemyTeam.length === 1);
 
   // 1. Forms that happen by themselves: Primal Reversion, then Mega Evolution or Gigantamax.
   if (player.hp > 0 && !battle.transform.forms[player.uid]) {
@@ -481,7 +482,7 @@ export function applyTransformations(ctx: TransformContext, request: TransformRe
   // 3. The opponent's: a boss's ace Mega Evolves if it can, otherwise Terastallizes, as soon as it is out.
   const may = (kind: TransformKind) =>
     !ctx.disabledMechanics?.includes(kind) && battle.transform.enemyMechanics.includes(kind) && !battle.transform.used.enemy.includes(kind);
-  const isAce = battle.enemyTeam.indexOf(enemy) === battle.enemyTeam.length - 1;
+  const isAce = isEnemyAce(battle, enemy.uid) || battle.enemyTeam.length === 1; // a lone boss (raid, guardian) is its own ace
   // Advanced AI timing: Tera, a Z-Move or Dynamax waits until it helps (a Mega Evolution never waits).
   const ready = (kind: 'tera' | 'zmove' | 'dynamax', extra: { teraType?: TypeName; zMoveType?: TypeName }) =>
     aaiGimmickReady(content, kind, enemy, player, {

@@ -17,6 +17,7 @@ import { helperButtons } from '../core/greenneedle/reunion';
 import { FINALE_ASK, chunkLines } from '../core/sky/text';
 import { HazardFloor, bossCinematic, critFreeze, critLetterbox, runScan, tossArc, weaknessesOf } from '../ui/battleFx/skillMoments';
 import { defaultMoveIndex } from '../core/battle/rememberChoice';
+import { isEnemyAce } from '../core/battle/ace';
 import { aimable, dealOffer, foeStake, type SkillInput } from '../core/battle/w1Play';
 import { promptById } from '../core/interaction/prompt';
 import { runInteractionPrompt } from '../ui/interactionPrompt';
@@ -2937,7 +2938,7 @@ export class BattleScene extends Phaser.Scene {
     const cinematic = !!boss && !!battle.trainer && this.motion !== 'off' && !services().session.settings.skippedIntros.includes(boss.title);
     if (boss && battle.trainer && !services().session.settings.skippedIntros.includes(boss.title)) {
       // A genuine boss entrance; skipping it once remembers the choice for this boss.
-      const aceId = battle.enemyTeam[battle.enemyTeam.length - 1]?.speciesId;
+      const aceId = (battle.aceUid ? battle.enemyTeam.find((m) => m.uid === battle.aceUid) : battle.enemyTeam[battle.enemyTeam.length - 1])?.speciesId;
       await bossCinematic(
         this,
         { name: boss.title, subtitle: boss.types.length ? `${boss.types.map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' / ')} specialist` : '', ace: aceId ? getSpecies(services().session.content, aceId).name : '', at: { x: ENEMY_POS.x, y: ENEMY_POS.y }, motion: this.motion, figure: art ? (x, y) => trainerVisual(this, art.assetId, art.label, x, y, 2.5) : undefined },
@@ -5195,9 +5196,8 @@ export class BattleScene extends Phaser.Scene {
               this.camPinned = false;
             }
             await this.refreshInfoBox(e.side === 'enemy' ? this.enemyBox : this.playerBox, this.shown[e.side], false);
-            // A trainer's last Pokémon is their ace: one special beat when it comes out.
-            const team = this.run.battle?.enemyTeam ?? [];
-            if (e.side === 'enemy' && this.run.battle?.trainer && team.length > 1 && team[team.length - 1]!.uid === e.uid) {
+            // A trainer's designated ace (battle.aceUid, not the last slot): one special beat when it comes out.
+            if (e.side === 'enemy' && this.run.battle?.trainer && isEnemyAce(this.run.battle, e.uid)) {
               void burstReveal(this, ENEMY_POS.x, ENEMY_POS.y - 80, this.foeRim(), this.motion);
               // Kice: the ace is announced in words (both looks), not just their last Pokémon. Presentation only.
               await this.say(`${this.trainerTitle() ?? this.run.battle.trainer.name} sends out their ace, ${this.speciesName(this.shown.enemy!)}!`);

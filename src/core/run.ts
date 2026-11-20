@@ -26,6 +26,7 @@ import { FOE_WAITS, gnAfterTurn, gnShape, gnShapeDouble } from './greenneedle';
 import { answerAsk } from './greenneedle/ask';
 import { bidoofPeace } from './greenneedle/bidoof';
 import { aceBows } from './greenneedle/missingAce';
+import { pickAceUid } from './battle/ace';
 import { ofAssist, ofGuestLeaves, ofShadow, recordRelease } from './greenneedle/oldfriend';
 import { prisonWouldOpen } from './greenneedle/prison';
 import { ferrisBossMark, ferrisCatch, ferrisFree, ferrisFreeEnd } from './greenneedle/ferris';
@@ -2576,6 +2577,8 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     const order = plan.leaderId || isRival || rivalBack || nemesis || bossBack || trainingIndex >= 0 ? built.map((_, i) => i) : roleOrder(content, built);
     const team = order.map((i) => built[i]!);
     run.battle = createBattle('trainer', team, activeIndex, activeUid, { classId: plan.classId, name: plan.name, leaderId: plan.leaderId });
+    // A Gym Leader/Elite Four/Champion's ace is the member their strategy shaped to go last (bossStrategy.ts).
+    if (plan.leaderId && team.length > 1) run.battle.aceUid = team[team.length - 1]!.uid;
     applyTrackToBattle(content, run);
     assignField(content, run, !!plan.leaderId);
     run.battle.ai = plan.ai;
@@ -2652,6 +2655,9 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     if (trainingIndex >= 0) run.battle.drama.evolvable.push(team[trainingIndex]!.uid);
     if (rivalBack) {
       run.battle.rivalId = rivalBack.id;
+      // The rival's named ace (its family), not whoever it caught last and keeps at the back.
+      const rivalAce = pickAceUid(team, { named: true, matchesFamily: (m) => familyId(content, m.speciesId) === rivalBack.ace });
+      if (rivalAce) run.battle.aceUid = rivalAce;
       beginRivalBrain(content, run, rivalBack.id);
       aceBows(content, run, run.battle, rivalBack.name, rivalBack.ace);
       const bankLines = rivalBattleLines(content, run, rivalBack.id, node.kind, activeIndex);
