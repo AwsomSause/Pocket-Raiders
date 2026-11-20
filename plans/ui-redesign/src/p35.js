@@ -1,0 +1,31 @@
+/* New areas · pass 9 of 25 · Loud and Clear. The special fights finally make noise. Bosses get comic-book cries stamped over the field, Leaders and grunts talk in speech balloons that point at them, and the expedition guardian growls from the ridge. The expedition gets the rest of its pages: Draft, Rentals, Recruit, Mega-energy Deposit, Research Station, and a clear Extract or Keep Going choice. */
+const cry35 = (cls, txt) => `<b class="cry35 ${cls}" data-nocheck><i></i>${txt}</b>`;
+const say35 = (cls, who, txt) => `<div class="say35 ${cls}"><em>${who}</em><p>${txt}</p></div>`;
+const vo35 = (id, add, fn) => decor(35, id, { cls: 'vo35', add, fn });
+vo35('rd-battle', cry35('rd', 'Kraaaw!'));
+vo35('tm-battle', cry35('tm', 'Grrah!'));
+vo35('ga-battle', say35('ga', 'Raihan', 'Tower over them, Duraludon!'));
+vo35('xp-route', cry35('gx', 'Grrrr…'), h => h.replace(`<div class="btn" ${go('map')}><b>Extract now</b></div>`, `<div class="btn" ${go('xp-extract')}><b>Extract now</b></div>`));
+vo35('et-beat', say35('et1', 'Grunt 2', 'Heh heh… nowhere to run.') + say35('et2', 'Grunt 3', 'The Boss will hear of this!'));
+const xs35 = (cls, where, title, sub, rows, ch, box) => stop27('ar28 a-xp hg33 ' + cls, { beat: 1, dim: 1, bg: 'mountain', where, sub: 'Ember Ridge · Layer 3 of 5' }, 'Expedition', title, sub, rows, ch, box, [['↑↓', 'choose'], ['Enter', 'confirm'], ['Esc', 'route']]).replace('<em>Event</em>', '<em>Expedition</em>').replace('<div class="dr-card">', '<div class="dr-card">' + emb28('xp', 'card')).replace(/<\/div>$/, fr33 + '</div>');
+const DK35 = [['445', 'Garchomp', 'Dragon / Ground', 'Fast attacker', 1], ['130', 'Gyarados', 'Water / Flying', 'Sets up, then sweeps', 2], ['448', 'Lucario', 'Fighting / Steel', 'Hits hard both ways', 0], ['94', 'Gengar', 'Ghost / Poison', 'Fast and frail', 0], ['143', 'Snorlax', 'Normal', 'Takes hits all day', 3], ['9', 'Blastoise', 'Water', 'Sturdy all-rounder', 0]];
+def(35, 'xp-draft', { t: 'Expedition · Draft', g: 'Expeditions' }, () => pg28('xp', 'Draft', 'Draft three Pokémon from six offered; your party waits at the gate.',
+  `<div class="dk35">${DK35.map(d => `<p class="${d[4] ? 'on' : ''}"><span>${spr('m-' + d[0], fitS('m-' + d[0], 96, 84))}</span><b>${d[1]}</b><em>${d[2]}</em><i>${d[3]}</i>${d[4] ? `<u>${d[4]}</u>` : ''}</p>`).join('')}</div>
+  <div class="dkn35"><b>3 of 3 picked</b><p>Garchomp leads. Gyarados and Snorlax follow.</p><div class="btn on nx" ${go('xp-route')}><b>Set out</b></div></div>`, [['←→', 'look'], ['Enter', 'pick or drop'], ['Esc', 'gate']]));
+const RN35 = [['330', 'Flygon', 'Lv 50 · Ground / Dragon', ['Earthquake', 'Dragon Claw', 'U-turn', 'Roost']], ['526', 'Gigalith', 'Lv 50 · Rock', ['Stone Edge', 'Earthquake', 'Stealth Rock', 'Explosion']], ['324', 'Torkoal', 'Lv 50 · Fire', ['Lava Plume', 'Yawn', 'Rapid Spin', 'Solar Beam']]];
+def(35, 'xp-rental', { t: 'Expedition · Rentals', g: 'Expeditions' }, () => pg28('xp', 'Rental team', 'Your party stays behind: you borrow three rental Pokémon.',
+  `<div class="rn35">${RN35.map((r, i) => `<div class="${i ? '' : 'on'}"><span>${spr('m-' + r[0], fitS('m-' + r[0], 120, 104))}</span><b>${r[1]}</b><em>${r[2]}</em><ul>${r[3].map(m => `<li>${m}</li>`).join('')}</ul></div>`).join('')}</div>
+  <div class="dkn35 low"><b>Borrowed, not kept</b><p>Rentals go back at the end. Loot and the Mega Stone are yours.</p><div class="btn on nx" ${go('xp-route')}><b>Set out</b></div></div>`, [['←→', 'look'], ['Enter', 'set out'], ['Esc', 'gate']]));
+def(35, 'xp-recruit', { t: 'Expedition · Recruit', g: 'Expeditions' }, () => xs35('rc35', 'Recruit', 'A Lucario', 'It watched your last battle from the rocks.',
+  [['Recruit', 'Lucario · Fighting / Steel'], ['Team', '4 of 6 can fight'], ['Stays', 'Until the expedition ends']],
+  [['Take it along', 'It joins your team now', 'xp-route'], ['Leave it', 'It nods and goes', 'xp-route']], 'Lucario steps onto the path and falls in beside you, as if it had always been there.').replace('<div class="dr-ch">', `<i class="rec35" data-nocheck>${spr('m-448', 3.2)}</i><div class="dr-ch">`));
+def(35, 'xp-mega', { t: 'Expedition · Mega-energy Deposit', g: 'Expeditions' }, () => xs35('mg35', 'Mega-energy Deposit', 'Mega energy', 'A seam of glowing stone runs through the ridge.',
+  [['Charge', '<u class="mgm35"><s style="width:66%"></s></u> 2 of 3'], ['Finale', 'A full charge lets you Mega Evolve there'], ['Who', 'Charizard · Charizardite X']],
+  [['Gather it', 'Charge goes to 3 of 3', 'xp-route'], ['Leave it', 'Keep moving', 'xp-route']], 'The stone hums when Charizard steps close. Its Mega Stone glows back.').replace('<div class="dr-ch">', `<i class="rec35 glow" data-nocheck>${spr('i-mega_bracelet', 5)}</i><div class="dr-ch">`));
+def(35, 'xp-research', { t: 'Expedition · Research Station', g: 'Expeditions' }, () => xs35('rs35', 'Research Station', 'Field notes', 'An empty tent, a lamp still on, and a notebook.',
+  [['Notes', '2 of 3 found on this route'], ['All 3', 'A bonus item at the end'], ['Says', 'The guardian is weak to Ice']],
+  [['Take the notes', 'Adds to your haul', 'xp-route'], ['Move on', 'Leave them', 'xp-route']], 'The last page is a sketch of something huge with fins on its arms. Under it: "Ice. Bring Ice."'));
+def(35, 'xp-extract', { t: 'Expedition · Extract or Keep Going', g: 'Expeditions' }, () => vs32('xp', 'Extract now?', 'Extract now: keep the loot, skip the finale.',
+  side32('a', 'Extract now', 'Walk out', [['', '₽1,200', 'All the money so far', 'Kept', 'me'], ['', '2 items', 'Rare Candy, research notes', 'Kept'], ['', 'Garchompite', 'Stays on the ridge', 'Missed', 'out']]).replace('<q>?</q>', spr('i-nugget', 2)).replace('<q>?</q>', spr('i-rare_candy', 2)).replace('<q>?</q>', spr('i-mega_bracelet', 2)),
+  side32('b', 'Keep going', '3 layers left', [['m-445-mega', 'Win the finale', 'Everything, and a Garchompite', 'Best', 'boss'], ['', 'Lose on the way', 'Keep ₽300, items lost', 'Risk'], ['', 'Either way', 'Your team is safe']]), 'Extract now', 'xp-result', [['Enter', 'extract'], ['Esc', 'keep going']]).replace('>VS<', '>or<'));
+decor(35, 'xp-party', { fn: h => h.replace('<b>Draft</b>', `<b ${go('xp-draft')}>Draft</b>`).replace('<b>Rental</b>', `<b ${go('xp-rental')}>Rental</b>`) });

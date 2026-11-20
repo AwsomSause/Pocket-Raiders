@@ -577,5 +577,23 @@
   "q3": "Yes. The tournament was one list page; it is now six pages: the gym road, a bracket you can read left to right with heal and shop stops marked, a round card, the shop, the final against Leon and the champion page.",
   "q4": "Unchanged. The bracket opens with B from any tournament page, as it does in the game.",
   "q5": "Yes. A gym road with eight faces and a tournament bracket with the Champion waiting at the end is the Galar story in two pages."
+ },
+ "35": {
+  "name": "New areas 9 · Loud and Clear",
+  "label": "New areas · pass 9 of 25",
+  "big": "The special fights finally make noise. Bosses get comic-book cries stamped over the field, the Gym Leader and the grunts talk in speech balloons that point at them, and the expedition's guardian growls from the ridge. The expedition also gets the rest of its pages.",
+  "pages": [
+   "Expedition · Draft",
+   "Expedition · Rentals",
+   "Expedition · Recruit",
+   "Expedition · Mega-energy Deposit",
+   "Expedition · Research Station",
+   "Expedition · Extract or Keep Going"
+  ],
+  "q1": "Yes. A jagged KRAAAW! burst over a raid boss is the loudest single thing added so far.",
+  "q2": "Passes 6 to 8 organised the screen. This pass gives the other side a voice, so a Totem, a Leader and a grunt no longer feel like the same enemy in a different colour.",
+  "q3": "Yes, six for the expedition: drafting three from six, the rental team with its moves, a recruit stop, the Mega-energy deposit with its charge meter, the research station, and a side-by-side page for Extract now against Keep going.",
+  "q4": "Unchanged.",
+  "q5": "Yes. Cries are how Pokémon speak, and rental teams and drafts come straight from the series' battle facilities."
  }
 }
