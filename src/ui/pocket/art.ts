@@ -14,6 +14,8 @@ export interface PkArt {
   whole?: boolean;
   /** One cell of a plain sheet: x, y, w, h. */
   crop?: readonly [number, number, number, number];
+  /** One named frame of an atlas (the Hub Town props), instead of its first. */
+  frame?: string;
 }
 export interface PkCut { url: string; w: number; h: number }
 
@@ -37,7 +39,7 @@ async function firstFrame(a: PkArt): Promise<{ im: HTMLImageElement; box: readon
     const [json, im] = await Promise.all([fetch(rxUrl(a.file + '.json')).then((r) => (r.ok ? r.json() : Promise.reject(new Error(a.file)))), load(rxUrl(a.file + '.png'))]);
     const d = json as { textures?: { frames: RawFrame[] }[]; frames?: RawFrame[] | Record<string, Omit<RawFrame, 'filename'>> };
     const list: RawFrame[] = d.textures ? d.textures[0]!.frames : Array.isArray(d.frames) ? d.frames : Object.entries(d.frames ?? {}).map(([filename, v]) => ({ filename, ...v }));
-    const f = [...list].sort((x, y) => x.filename.localeCompare(y.filename))[0];
+    const f = a.frame ? list.find((x) => x.filename === a.frame) : [...list].sort((x, y) => x.filename.localeCompare(y.filename))[0];
     if (!f) throw new Error(a.file);
     return { im, box: [f.frame.x, f.frame.y, f.frame.w, f.frame.h] };
   }
@@ -70,7 +72,7 @@ async function cutOut(a: PkArt): Promise<PkCut> {
   return { url: URL.createObjectURL(blob), w, h };
 }
 
-const keyOf = (a: PkArt): string => `${a.file}|${a.atlas ? 'a' : ''}|${a.crop?.join(',') ?? ''}`;
+const keyOf = (a: PkArt): string => `${a.file}|${a.atlas ? 'a' : ''}|${a.crop?.join(',') ?? ''}|${a.frame ?? ''}`;
 
 /** A picture cut down to its drawing. Undefined until it is ready (and for good when its file is missing). */
 export function pkCut(a: PkArt): PkCut | undefined {
@@ -104,8 +106,12 @@ export const badgeArt = (type: string): PkArt => ({ file: `packs/story/badge/${t
 const TERA_TYPES = ['normal', 'fighting', 'flying', 'poison', 'ground', 'rock', 'bug', 'ghost', 'steel', 'fire', 'water', 'grass', 'electric', 'psychic', 'ice', 'dragon', 'dark', 'fairy'];
 /** The crystal type icon (the mock-ups' `ty-<type>`). */
 export const typeArt = (type: string): PkArt => ({ file: 'packs/dbk/tera/types.png', crop: [0, Math.max(0, TERA_TYPES.indexOf(type.toLowerCase())) * 32, 32, 32] });
+/** A Hub Town building or prop by its frame name (the mock-ups' `tw-<name>`). */
+export const propArt = (name: string): PkArt => ({ file: 'overworld/hubtown_props', atlas: true, frame: name });
 /** A walking sheet of the Hub Town (four rows of four 64 px steps): a Pokémon follower by its sheet name. */
 export const followerUrl = (name: string): string => rxUrl(`overworld/followers/${name}.png`);
+/** A walking sheet of a town person (`NPC_B2W2_Lass`). */
+export const walkerUrl = (name: string): string => rxUrl(`overworld/trainers/${name}.png`);
 
 /** Pictures the mock-ups' rules name (`url(sprites/<key>.png)`), as CSS variables on the Pocket layer. */
 const CSS_FILES: Record<string, string> = {

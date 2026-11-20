@@ -535,3 +535,9 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 /* While a battle list is open the field shows bare behind it, as the mock-ups draw it (no plates, no message line). */
 .pkx:has(.gx-bl-scr) .pks .scr.gx-bt:not(.gx-bl-scr){visibility:hidden}
 .pkx .pks .gx-bl-scr .gx-bl-why{display:block;font:700 12px/1.3 var(--fb);color:var(--red);white-space:normal}
+/* Hub Town street (mock-up hub): the dock's two tabs over the doors, and what the town says. */
+.pkx .pks .hub .gx-hb-tabs{position:absolute;left:16px;bottom:86px;display:flex;gap:6px;z-index:6}
+.pkx .pks .hub .gx-hb-tabs span{padding:2px 12px;border:2px solid var(--ink);border-radius:999px;background:#fff;font:800 12px/18px var(--fb);cursor:pointer;box-shadow:2px 2px 0 var(--ink)}
+.pkx .pks .hub .gx-hb-tabs span.on{background:var(--yel)}
+.pkx .pks .hub .gx-hb-say{position:absolute;left:220px;right:220px;top:240px;display:flex;align-items:center;gap:8px;padding:6px 12px;z-index:7;animation:gx-fade .25s both}
+.pkx .pks .hub .gx-hb-say p{margin:0;font-weight:700}

@@ -4,6 +4,10 @@
 // here reads and changes the permanent profile only.
 
 import { trainerId as cardId } from '../core/presentation/pocket';
+import { pkTitleModel } from '../ui/pocket/models';
+import { followerKey } from '../core/hubTown/world';
+import { pkHub } from '../ui/pocket/screens/hub';
+import type { PkTitle } from '../ui/pocket/screens/title';
 import { reliquary } from '../core/blessings';
 import { prologueGateActive } from '../core/story2/prologue';
 import { fitLine } from '../ui/fitText';
@@ -616,6 +620,14 @@ export class HubScene extends Phaser.Scene {
     return out;
   }
 
+  /** Pocket street without a saved run: the Pokémon you walk as, your last team, then the welcome line-up, walking. */
+  private streetWalkers(): { sheet: string; ko: boolean }[] {
+    const p = services().session.profile;
+    const ids = [hubPokemon(p).speciesId, ...(p.legacyRuns[0]?.team ?? []).map((m) => m.speciesId), ...DOCK_WELCOME];
+    const sheets = [...new Set(ids.flatMap((id) => { const k = id ? followerKey(id) : null; return k ? [k] : []; }))];
+    return sheets.slice(0, 6).map((sheet) => ({ sheet, ko: false }));
+  }
+
   private buildDock(notice: string | undefined, ready: number): void {
     const { session } = services();
     const lineup = this.dockLineup();
@@ -623,12 +635,23 @@ export class HubScene extends Phaser.Scene {
     if (this.dockSay) this.time.delayedCall(7000, () => { this.dockSay = ''; this.dock?.refresh(); });
     dockSpot.tab = Phaser.Math.Clamp(dockSpot.tab, 0, DOCK.length - 1);
     dockSpot.index = Phaser.Math.Clamp(dockSpot.index, 0, DOCK[dockSpot.tab]!.buttons.length - 1);
+    let pk: PkTitle | undefined;
     this.dock = mountRedux(this, {
       render: (c) => {
         // The Phantom dock is a column of words: Up and Down move, Left and Right change the tab.
-        this.dockLayout = c.ph ? 1 : c.v(3);
+        // The Pocket street is a row of doors: Left and Right walk it, Down changes the tab.
+        this.dockLayout = c.ph ? 1 : c.pk ? 0 : c.v(3);
         const p = session.profile;
         const tab = DOCK[dockSpot.tab]!;
+        if (c.pk) {
+          pk ??= pkTitleModel(this, (() => { const peek = session.slotPeeks().find((x) => x.slot === session.slot); return peek?.run.status === 'ok' ? peek.run.data : null; })());
+          const events = activeGameEvents(session.content, new Date()).length, stops = 30 + session.settings.expansion.stageLength;
+          return pkHub({
+            money: `₽ ${p.bankCredits.toLocaleString('en-US')}`, rank: `Rank ${prestigeRank(p)}`, tabs: DOCK.map((t) => t.tab), tab: dockSpot.tab,
+            doors: tab.buttons.map((x) => ({ label: x.label, count: x.label === 'Trainers' ? ready : x.label === 'Events' ? events : 0 })), index: dockSpot.index,
+            hero: { ...pk.hero, where: pk.where }, gate: { line: `${stops} stops a stage · 8 Gyms`, road: null, stops }, walkers: pk.walkers.length ? pk.walkers : this.streetWalkers(), notices: events, say: this.dockSay,
+          });
+        }
         return dockView(c, {
           town: 'Hub Town',
           chips: [`₽ ${p.bankCredits.toLocaleString('en-US')}`, `Rank ${prestigeRank(p)}`],
@@ -646,6 +669,10 @@ export class HubScene extends Phaser.Scene {
       acts: {
         pick: (k) => { if (this.dockFree()) { dockSpot.index = Phaser.Math.Clamp(Number(k), 0, DOCK[dockSpot.tab]!.buttons.length - 1); this.dockOpen(); } },
         tab: (k) => { if (this.dockFree()) this.dockTab(Number(k)); },
+        // Pocket street: the Trainer's card, the notice board and Esc's key chip.
+        card: () => { if (this.dockFree()) this.enter('card'); },
+        news: () => { if (this.dockFree()) this.enter('events'); },
+        back: () => { if (this.dockFree()) this.scene.start('MainMenu'); },
       },
       overs: { over: (k) => { const i = Number(k); if (this.dockFree() && i !== dockSpot.index && i >= 0 && i < DOCK[dockSpot.tab]!.buttons.length) { dockSpot.index = i; this.dock?.refresh(); } } },
     });

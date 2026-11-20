@@ -23,6 +23,7 @@ import { pkShop, pkShopPay, type PkShopGood, type PkShopModel } from '../../src/
 import type { MapModel, MapNodeView } from '../../src/ui/redux/screens/map';
 import type { EventModel } from '../../src/ui/redux/screens/event';
 import { pkSettingsHome } from '../../src/ui/pocket/screens/settings';
+import { doorSub, pkHub, type PkHubModel } from '../../src/ui/pocket/screens/hub';
 import { firstThought, fitBody, pkBoard, pkConfirm, pkGrid, pkMenu, pkOptions, pkSaves, pkStats } from '../../src/ui/pocket/templates';
 
 const stage = (current: string | null) => ({
@@ -670,5 +671,42 @@ describe('Pocket look: the Journal', () => {
   it('a thread with steps shows how far it has come; an empty journal is a blank page', () => {
     expect(pkJournal({ ...d, index: 1 })).toContain('width:40%');
     expect(pkJournal({ ...d, rows: [], index: 0, text: '' })).toContain('A blank page');
+  });
+});
+
+describe('Pocket Hub Town street', () => {
+  const doors = ['Settings', 'Trainers', 'New Run', 'Events', 'Unlocks', 'Town'].map((label) => ({ label, count: label === 'Events' ? 2 : 0 }));
+  const d: PkHubModel = {
+    money: '₽ 4,820', rank: 'Rank 4', tabs: ['Town', 'Last run'], tab: 0, doors, index: 2,
+    hero: { art: null, name: 'Red', tag: 'Rank 4 · ID 04821', where: 'Kanto · Stop 12 of 30' },
+    gate: { line: '30 stops a stage · 8 Gyms', road: null, stops: 30 }, walkers: [{ sheet: 'PIKACHU', ko: false }, { sheet: 'GENGAR', ko: true }], notices: 4, say: '',
+  };
+  it('a street of buildings over a row of doors; the lit door lights its building', () => {
+    const html = pkHub(d);
+    expect(pkPageOf(html)?.id).toBe('hub');
+    expect(html.match(/class="door[ "]/g)?.length).toBe(6);
+    expect(html).toMatch(/class="door on"[^>]*data-key="hub-d-2"/);
+    expect(html.match(/class="bld /g)?.length).toBe(5);
+    expect(html).toMatch(/class="bld  on"[^>]*data-key="hub-b-arch"/);
+    expect(html).toContain('Fresh journey');
+    expect(html).toContain('<u>2</u>');
+    expect(html).toContain('Kanto · Stop 12 of 30');
+    expect(html).toContain('30 stops a stage · 8 Gyms');
+    expect(html.match(/<u class=/g)?.length).toBe(30);
+    expect(html.match(/class="wk /g)?.length).toBe(2 + 2);
+    expect(html).toContain('wk ko');
+    expect(html).toContain('Notice board</b><u>4</u>');
+  });
+  it('the Last run tab keeps the street but lights no building; the town can speak', () => {
+    const html = pkHub({ ...d, tab: 1, doors: [{ label: 'Hall of Fame' }, { label: 'Seeds' }], index: 0, say: 'Blue is waiting at the gate.', hero: { ...d.hero, where: '' } });
+    expect(html).not.toMatch(/class="bld [^"]*on"/);
+    expect(html).toContain('Past champions');
+    expect(html).toContain('Blue is waiting at the gate.');
+    expect(html).toContain('Trainer Card');
+    expect(html).toMatch(/<kbd>↓<\/kbd>Town/);
+  });
+  it('each door has its small line; an unknown one has none', () => {
+    expect(doorSub('Seeds')).toBe('Play a seed again');
+    expect(doorSub('Nowhere')).toBe('');
   });
 });

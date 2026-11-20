@@ -579,3 +579,39 @@ test('Pocket look: a battle is the mock-up HUD; Party and Bag open as pills and 
   expect(await runNow(page)).toBe(before);
   expect(errors).toEqual([]);
 });
+
+test('Pocket look: the Hub is the town street; the doors walk, the tabs change and a door opens its rooms', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=pk-hub');
+  await page.evaluate(() => {
+    const { game } = (window as any).__pkr;
+    for (const s of game.scene.getScenes(true)) game.scene.stop(s.scene.key);
+    game.scene.start('Hub');
+  });
+  await waitForScene(page, 'Hub');
+  await onPkPage(page, 'Hub', 'hub');
+  const hub = pkView(page, 'Hub', 'hub');
+  await expect(hub.locator('.door')).toHaveCount(6);
+  await expect(hub.locator('.bld')).toHaveCount(5);
+  await expect(hub.locator('.plaque')).toContainText('New Run');
+  await expect(hub.locator('.walkrow .wk').first()).toBeVisible();
+  await fits(page, 'Hub', 'hub');
+  const before = await page.evaluate(() => JSON.stringify((window as any).__pkr.session.profile));
+  const lit = () => hub.locator('.door.on b').innerText();
+  const first = await lit();
+  await step(page, 'ArrowRight');
+  expect(await lit()).not.toBe(first);
+  await step(page, 'ArrowDown');
+  await expect(hub.locator('.gx-hb-tabs .on')).toHaveText('Last run');
+  await expect(hub.locator('.door').first()).toContainText('Hall of Fame');
+  await step(page, 'ArrowDown');
+  await expect(hub.locator('.gx-hb-tabs .on')).toHaveText('Town');
+  expect(await page.evaluate(() => JSON.stringify((window as any).__pkr.session.profile))).toBe(before);
+  // Trainers opens its rooms; Esc comes back to the street.
+  await hub.locator('.door', { hasText: 'Trainers' }).click();
+  await onPkPage(page, 'Hub', 'list');
+  await step(page, 'Escape');
+  await onPkPage(page, 'Hub', 'hub');
+  expect(errors).toEqual([]);
+});
