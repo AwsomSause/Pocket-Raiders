@@ -48,7 +48,7 @@ describe('DOMINION D19: the card data', () => {
       expect(t.effects).toHaveLength(2);
       for (const k of ['hello', 'done', 'fail', 'scared', 'pay'] as const) expect(P.lines[t.id]![k].length).toBeGreaterThan(0);
       // Each effect either works now (a live rule) or names the slice that turns it on.
-      for (const e of t.effects) expect(!!(e.mods || e.squadMor || e.payLoy || e.unpaidLoy) !== !!e.needs).toBe(true);
+      for (const e of t.effects) expect(!!(e.mods || e.squadMor || e.payLoy || e.unpaidLoy || e.spy) !== !!e.needs).toBe(true);
     }
     expect(P.quirks).toHaveLength(24);
     expect(P.wants.length).toBeGreaterThanOrEqual(30);
@@ -142,7 +142,7 @@ describe('DOMINION D19: offline lines read the card', () => {
 });
 
 describe('DOMINION D19: traits are live rules (pay, Morale, danger)', () => {
-  it('Hothead: +10 on Brawn jobs; the D22 effects (bribes, spies) are not live yet', () => {
+  it('Hothead: +10 on Brawn jobs; the spy effects (D22) are not job modifiers', () => {
     const b = two();
     const m = b.members[0]!;
     const task = taskById('guard-hq')!;
@@ -153,7 +153,7 @@ describe('DOMINION D19: traits are live rules (pay, Morale, danger)', () => {
     expect(odds(b, m, task)).toBe(base + 10);
     crewOf(m).card = card('greedy', 'gossip');
     expect(modsOf(b, m).some((x) => x.pct === 10 && x.stat === 'wits')).toBe(true);
-    expect(modsOf(b, m)).toHaveLength(1); // Greedy's and Gossip's D22 effects wait.
+    expect(modsOf(b, m)).toHaveLength(1); // Greedy's and Gossip's spy effects live in spies.ts (D22), not in the odds.
   });
   it('Schemer caps Loyalty at 80; Loyal keeps it at 30 or more (boundary)', () => {
     const b = two();
@@ -253,7 +253,7 @@ describe('DOMINION D19: the card on the Crew File (mockup a3)', () => {
     expect(p.quirk).toBe('Ends deals with “capisce?”');
     expect(p.home).toBe('Celadon City');
     expect(p.effects.map((e) => `${e.trait} · ${e.text}`)).toContain('Greedy · pay raises Loyalty ×2');
-    expect(p.effects.find((e) => e.text.includes('bribe'))!.needs).toBe('D22');
+    expect(p.effects.find((e) => e.text.includes('bribe'))!.needs).toBeNull(); // live since D22
     expect(p.memory.map((x) => x.day)).toEqual([2, 3, 4]);
     expect(p.others).toEqual([{ name: 'Gus', look: b.members[1]!.look, traits: traitWords(rollCard('d19', 'Gus')) }]);
     expect(p.offline.endsWith('Capisce?')).toBe(true);

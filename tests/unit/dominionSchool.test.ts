@@ -61,12 +61,13 @@ const reserveMon = (r: RunState, b: DominionBlock, species: string, level: numbe
 const R = (key: string): Rng => new Rng(hashSeed(key));
 
 describe('DOMINION D4b: the data', () => {
-  it('nothing waits for D4 any more: the two tasks, three actions and 18 rooms are live; Plant a Mole waits for D22', () => {
+  it('nothing waits for D4 any more: the two tasks, three actions and 18 rooms are live; Plant a Mole is played (D22)', () => {
     for (const id of ['learn-a-trade', 'teach-a-move']) expect(taskById(id), id).toMatchObject({ status: 'supported' });
     expect(taskById('learn-a-trade')!.effect).toEqual({ kind: 'trade' });
     expect(taskById('teach-a-move')!.effect).toEqual({ kind: 'tutor' });
     for (const id of ['egg-run', 'breed', 'move-tutor']) expect(actionStatus(actionDef(id)!), id).toMatchObject({ play: true, slice: null });
-    expect(DOMINION_DATA.field.later.byAction['plant-a-mole']).toBe('D22');
+    expect(DOMINION_DATA.field.later.byAction['plant-a-mole']).toBeUndefined();
+    expect(actionStatus(actionDef('plant-a-mole')!).play).toBe(true);
     const rooms = ['admin-quarters', 'classroom', 'sparring-ring', 'stealth-school', 'officer-academy', 'therapy-room', 'retiree-hall', 'comfort-ward',
       'grunt-academy', 'skill-booth', 'veterans-corner', 'skill-exam-hall', 'personality-lab', 'mentoring-office', 'sergeants-post',
       'lieutenants-office', 'captains-hall', 'type-dojo-fire'];

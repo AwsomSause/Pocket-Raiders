@@ -159,6 +159,10 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'breakTruce':
     case 'card':
     case 'ransom':
+    case 'spyStart':
+    case 'spyAsk':
+    case 'spyAccuse':
+    case 'spyDrop':
     // D13: the Debate (debate.ts, sent there by session.ts).
     case 'argue':
     case 'deal':

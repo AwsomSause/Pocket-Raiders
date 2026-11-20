@@ -30,6 +30,7 @@ import { levelCap } from '../regions';
 import { hatchEggs, settleDojo, settleLesson } from './school';
 import './voices';
 import { answerCard, breakTruce, maybeStreet, noteTop, ransom, startTruce, withRivals, type RivalOut } from './rivals';
+import { accuse, askSpy, dropTalk, startConfront, type SpyOut } from './spies';
 import { argue, chooseDeal, closeDebate, walkOut, type DebateOut } from './debate';
 import { answerQ, noteAct, releasedSeen, releaseQ, returnHeld } from './police';
 import './growth';
@@ -88,7 +89,7 @@ export function stepInRun(content: Content, run0: RunState, action: DominionActi
   if (!out.ok) return out;
   // D9: the rival tier reads the Boss's best level; a night ambush (rival action 135) hurts the Boss's team.
   const next = structuredClone(out.run);
-  const b = next.expansion!.dominion!;
+  let b = next.expansion!.dominion!;
   noteTop(b, next);
   if (b.flags.includes('ambushed')) {
     b.flags = b.flags.filter((f) => f !== 'ambushed');
@@ -234,6 +235,11 @@ function rivalInRun(run: RunState, action: DominionAction): (StepOut & { run: Ru
     case 'breakTruce': out = breakTruce(b, action.team); break;
     case 'card': out = answerCard(b, action.index, action.choice, run.seed); break;
     case 'ransom': out = ransom(b, action.member); break;
+    // D22: the Confront talk (spies.ts). An accused spy who fights leaves `field.fight` waiting.
+    case 'spyStart': out = startConfront(b, action.member) as SpyOut; break;
+    case 'spyAsk': out = askSpy(b, action.q, run.seed, action.text); break;
+    case 'spyAccuse': out = accuse(b, run.seed); break;
+    case 'spyDrop': out = dropTalk(b); break;
     default: return null;
   }
   if (!out.ok) return { ok: false, block: b, notice: out.notice, heal: false, run };

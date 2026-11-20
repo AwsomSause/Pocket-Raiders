@@ -101,7 +101,9 @@ export const EFFECTS = ['scout', 'count', 'scoutDistrict', 'paper', 'catch', 'la
   // D11 (hero.ts addEffectHook)
   'heroShame', 'heroDuel', 'heroFriend', 'heroAmbush', 'heroItem',
   // D13 (debate.ts addActEffect)
-  'debate', 'manifesto'] as const;
+  'debate', 'manifesto',
+  // D22 (spies.ts addActEffect)
+  'plantMole'] as const;
 const PlaySchema = z.object({
   kinds: z.array(z.union([z.enum(TARGET_KINDS), z.literal('any')])).min(1).optional(),
   chance: I.min(0).max(100).optional(),
@@ -199,7 +201,7 @@ export type DistrictState = z.infer<typeof DistrictStateSchema>;
 /** A battle an action (or the police) is waiting on. The fight bridge (fight.ts) starts it; fightEnd settles it. */
 export const FieldFightSchema = z.object({
   /** D11: 'hero' a job the Hero stepped into (m11), 'challenge' an encounter's battle, 'heroRaid' the Hero at the HQ, 'stand' the final stand, 'legend' a Heroic Legendary. D10: 'growth' a fight of a chain (Raid, a Gym). D12: 'court' a Chair visitor at the door (`target` the card id, `action` the answer). */
-  why: z.enum(['fail', 'always', 'police', 'looker', 'raid', 'rival', 'hero', 'challenge', 'heroRaid', 'stand', 'legend', 'growth', 'court']),
+  why: z.enum(['fail', 'always', 'police', 'looker', 'raid', 'rival', 'hero', 'challenge', 'heroRaid', 'stand', 'legend', 'growth', 'court', 'spy']),
   foe: z.enum(['target', 'police', 'wild', 'ghost', 'member', 'looker', 'raid', 'rival', 'hero', 'sidekick', 'legend', 'growth', 'court']),
   begun: z.boolean(),
   action: S.nullable(),
@@ -329,6 +331,8 @@ const BlockSchema = z.object({
   hero: z.lazy(() => HeroStateSchema).optional(),
   /** D21: the applications desk (today's queue, the basement, who got in and what they really are). Optional; no bump. */
   desk: z.lazy(() => DeskStateSchema).optional(),
+  /** D22: moles in the crew, Suspicion, clues and the Confront talk. Optional; `spiesOf` fills it. */
+  spies: z.lazy(() => SpiesStateSchema).optional(),
   /** D25: this week's news lines and the last few Ledger papers. Optional; `voicesOf` (voices.ts) fills it. */
   voices: z.lazy(() => VoicesStateSchema).optional(),
 }).strict();
@@ -397,6 +401,12 @@ export type DominionAction =
   | { t: 'breakTruce'; team: string }
   | { t: 'card'; index: number; choice: number }
   | { t: 'ransom'; member: string }
+  // D22, spies on the crew (spies.ts)
+  | { t: 'spyStart'; member: string }
+  | { t: 'spyAsk'; q: string; text?: string }
+  | { t: 'spyAccuse' }
+  | { t: 'spyDrop' }
+
   // D24, police questioning (police.ts). A typed answer carries the judge its words got (Rotom's, or the rules').
   | { t: 'answer'; kind: AnswerKind; text?: string; judge?: Judge; rotom?: boolean }
   | { t: 'released' }
@@ -596,6 +606,8 @@ const TraitEffectSchema = z.object({
   payLoy: I.min(2).optional(),
   /** Loyalty change on a pay day they weren't paid (on top of D1's −15). */
   unpaidLoy: I.optional(),
+  /** D22: what the trait does around spies (spies.ts): never turned by a rival's bribe, easily turned, or leaks plans to moles. */
+  spy: z.enum(['noBribe', 'bribe', 'leak']).optional(),
   /** The slice that makes this effect work (shown on the card until then). */
   needs: S.optional(),
 }).strict();
@@ -1420,6 +1432,71 @@ export const RivalsStateSchema = z.object({
   top: I.min(1),
 }).strict();
 export type RivalsState = z.infer<typeof RivalsStateSchema>;
+
+// ---------- D22: spies on the crew (spies.json, block `spies`) ----------
+
+export const SPY_ENDS = ['confess', 'double', 'run', 'battle'] as const;
+export const SPY_TELLS = ['nervous', 'contradiction', 'rehearsed'] as const;
+const Weights = z.object({ confess: I, double: I, run: I, battle: I }).strict();
+const SpyRange = z.tuple([N0, N0]);
+const Lines2 = z.object({ mole: z.array(S).min(2), innocent: z.array(S).min(2) }).strict();
+
+export const SpiesFileSchema = z.object({
+  _source: S,
+  suspicion: z.object({ confrontAt: Pct, high: Pct, coolAfter: I.min(1), coolPerNight: N0 }).strict(),
+  clues: z.object({ moleChance: Pct, moleGain: SpyRange, herringChance: Pct, herringGain: SpyRange, securityGain: N0, exposed: Pct, gossipIntel: N0, keep: I.min(1) }).strict(),
+  /** Who a rival turns into a mole: weights by trait and Loyalty (a weight of 0 can never be picked). */
+  pick: z.object({ base: N0, lowLoyaltyBelow: Pct, lowLoyalty: N0, newDays: N0, newMember: N0, traits: z.record(S, N0) }).strict(),
+  /** Clue texts. The same pool for a mole and for a red herring, so a clue alone proves nothing. */
+  pool: z.array(S).min(8),
+  talk: z.object({ turns: I.min(1), bribe: N0, threatLoyalty: I, typedMax: I.min(20) }).strict(),
+  questions: z.array(z.object({
+    id: S, label: S, short: S, sub: S, pressure: N0,
+    /** % chance a mole (or an innocent member) shows a tell on this question. */
+    tellMole: Pct, tellInnocent: Pct,
+    lines: Lines2,
+  }).strict()).min(4),
+  tells: z.record(z.enum(SPY_TELLS), z.object({ word: S, colour: S }).strict()),
+  /** Tells an innocent member can show (nerves, mostly). */
+  innocentTells: z.array(z.enum(SPY_TELLS)).min(1),
+  ends: z.record(z.enum(SPY_ENDS), z.object({ label: S, sub: S, colour: S, weight: N0, line: S }).strict()),
+  /** Trait id -> ending weight changes. */
+  traitEnds: z.record(S, Weights.partial()),
+  /** Each point of pressure adds this many tenths to Confess; a bribe adds to Double agent (×2 for a bribe-taker). */
+  pressureConfess: N0, bribeDouble: N0, loyalConfess: N0,
+  wrong: z.object({ loyalty: I, morale: I, crewMorale: I }).strict(),
+  drop: z.object({ suspicion: I }).strict(),
+  effects: z.object({ confessIntel: N0, runIntel: N0, doubleIntel: N0, battleDread: N0, confessLoyalty: I }).strict(),
+  lines: z.record(S, S),
+  ui: z.record(S, S),
+  rotom: z.object({ system: S, thinking: S, chip: S }).strict(),
+}).strict();
+export type SpiesFile = z.infer<typeof SpiesFileSchema>;
+
+export const SpyTurnSchema = z.object({
+  q: S,
+  /** What the player typed (a typed question), clamped. */
+  said: S.nullable(),
+  reply: S,
+  tell: z.enum(SPY_TELLS).nullable(),
+}).strict();
+export type SpyTurn = z.infer<typeof SpyTurnSchema>;
+
+export const SpiesStateSchema = z.object({
+  /** Members a rival turned. `turned`: flipped to your double agent; `exposed`: found by a counter-spy (no longer reports). */
+  moles: z.array(z.object({ member: S, team: S, day: I.min(1), turned: z.boolean(), exposed: z.boolean() }).strict()),
+  /** Member id -> Suspicion 0-100. */
+  sus: z.record(S, Pct),
+  /** Member id -> nights since their last clue. */
+  quiet: z.record(S, N0),
+  /** The newest clues (Suspicion's log), oldest first. */
+  clues: z.array(z.object({ member: S, day: I.min(1), text: S }).strict()),
+  /** The Confront talk in progress, or null. */
+  talk: z.object({ member: S, day: I.min(1), turns: z.array(SpyTurnSchema), pressure: N0, bribed: z.boolean() }).strict().nullable(),
+  /** How each confront ended. */
+  done: z.array(z.object({ member: S, name: S, day: I.min(1), end: z.enum([...SPY_ENDS, 'cleared', 'dropped']) }).strict()),
+}).strict();
+export type SpiesState = z.infer<typeof SpiesStateSchema>;
 
 // ---------- D4b: trades, tutors, eggs and the rank rooms (pyramid.json `school`) ----------
 
