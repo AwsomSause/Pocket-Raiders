@@ -229,3 +229,38 @@ export function cheerClip(face: Point, level: ClipLevel): MotionClip {
   b.beat(0, 'Your trainer pops in').beat(200, 'A little hop').beat(900, 'Gone again');
   return b.end(1050);
 }
+
+/** Where the foe trainer comes from and goes back to: just off the right edge (pass 4). */
+export const FOE_TRAINER_OFF = 1090;
+/** When the foe trainer's ball leaves the hand, from the start of `foeThrowClip`. */
+export const FOE_RELEASE = 550 + 430;
+
+/** The foe trainer's hand at the release, for a trainer `h` px tall standing at `spot` (the ball starts here). */
+export function foeHand(spot: Point, h: number): Point {
+  return { x: spot.x + 50, y: spot.y + 8 - h * 0.7 };
+}
+
+/**
+ * Foe trainer step-in (pass 4, trainers): the trainer skids in from the right onto the empty spot with a little dust,
+ * steps back, leans into the wind-up and whips the ball (cue "release" at the hand), then leaves to the right while
+ * the ball is still in the air. The trainer is never on screen during a turn. Full only; Reduced and Off throw as
+ * before (no trainer).
+ */
+export function foeThrowClip(spot: Point, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('foeThrow', level);
+  const X = spot.x;
+  const Y = spot.y + 8;
+  const tr = b.part('tr', { x: FOE_TRAINER_OFF, y: Y, rot: 0, alpha: 1 });
+  if (level !== 'full') {
+    b.fx({ kind: 'cue', at: 0, name: 'release' });
+    return b.end(0);
+  }
+  tr.at(0).to(420, { x: X }, 'out3');
+  b.fx({ kind: 'dust', at: 360, x: X + 30, y: Y - 4, n: 6 });
+  const wind = 550;
+  tr.at(wind).to(200, { x: X + 110 }, 'out').to(140, { x: X + 126, rot: 9 }, 'out').to(90, { x: X + 92, rot: -12 }, 'in3').to(300, { rot: 0 }, 'back');
+  b.fx({ kind: 'cue', at: FOE_RELEASE, name: 'release' });
+  tr.at(FOE_RELEASE + 400).wait(100).to(300, { x: FOE_TRAINER_OFF + 20 }, 'in3');
+  b.beat(0, 'The trainer slides in').beat(wind, 'Steps back, winds up').beat(FOE_RELEASE, 'Release').beat(FOE_RELEASE + 500, 'Steps out');
+  return b.end(FOE_RELEASE + 800);
+}

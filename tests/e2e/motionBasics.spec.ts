@@ -168,3 +168,35 @@ test('the trainer face chip pops in with its word, keeps its distance, obeys Off
   expect(await chips()).toHaveLength(0);
   expect(errors).toEqual([]);
 });
+
+test('the foe trainer steps in to throw, the ball leaves the hand, and the trainer is gone when the Pokémon lands', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'foe-throw-e2e');
+  const trainers = () => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').field.list.filter((c: any) => /^(trainer|boss)\./.test(String(c.texture?.key))).length);
+  await page.evaluate(() => {
+    const w = window as any;
+    const b = w.__pkr.game.scene.getScene('Battle');
+    w.__hand = undefined;
+    w.__sent = false;
+    void b.foeThrowMoment().then((h: any) => {
+      w.__hand = h;
+      w.__inHand = b.field.list.some((c: any) => /^(trainer|boss)\./.test(String(c.texture?.key)));
+      return b.sendMoment('enemy', b.shown.enemy, h).then(() => (w.__sent = true));
+    });
+  });
+  await expect.poll(() => page.evaluate(() => (window as any).__hand !== undefined), { timeout: 5_000 }).toBe(true);
+  const hand = await page.evaluate(() => (window as any).__hand);
+  // Released from the hand above the foe's spot, while the trainer is still on the field.
+  expect(hand).not.toBeNull();
+  expect(hand.x).toBeGreaterThan(600);
+  expect(hand.y).toBeLessThan(240);
+  expect(await page.evaluate(() => (window as any).__inHand)).toBe(true);
+  await expect.poll(() => page.evaluate(() => (window as any).__sent), { timeout: 5_000 }).toBe(true);
+  await expect.poll(trainers, { timeout: 2_000 }).toBe(0);
+  // Reduced animations: no trainer, the ball comes from its usual place.
+  await page.evaluate(() => ((window as any).__pkr.session.settings.battleAnimations = 'reduced'));
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').foeThrowMoment())).toBeNull();
+  expect(await trainers()).toBe(0);
+  expect(errors).toEqual([]);
+});

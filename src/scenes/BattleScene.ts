@@ -120,7 +120,7 @@ const SEEN_MOMENTS = new Set<string>();
 import { pokemonHeightM, trainerHeightM } from '../core/heights';
 import { teraJewel } from '../ui/battleFx/teraJewel';
 import { megaGlass } from '../ui/battleFx/megaGlass';
-import type { GimmickPage } from '../ui/battleFx/gimmickStage';
+import { drawnBox, type GimmickPage } from '../ui/battleFx/gimmickStage';
 import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture } from '../ui/battleFx/cheerChip';
 import { dynamaxPan } from '../ui/battleFx/dynamaxPan';
 import { keyItemFor } from '../ui/battleFx/cineLook';
@@ -128,7 +128,7 @@ import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel } from '../core/presentation/motionClip';
-import { aceLandClip, bigHit, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { aceLandClip, bigHit, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
@@ -3962,6 +3962,41 @@ export class BattleScene extends Phaser.Scene {
     if (visual.active) breathe(this, visual, this.motion);
   }
 
+  /**
+   * The foe trainer steps in to throw (pass 4): only in a trainer battle, in singles, with full animations. Resolves
+   * with the hand's place the moment the ball leaves it (null: no trainer here, and the ball comes from its usual spot).
+   * The trainer leaves by itself while the ball flies.
+   */
+  private async foeThrowMoment(): Promise<Point | null> {
+    const art = this.trainerArt();
+    if (!art || this.duo || this.clipLevel() !== 'full') return null;
+    const at = this.spotXY('enemy');
+    const v = trainerVisual(this, art.assetId, art.label, 1090, at.y + 8, 2);
+    if (!(v instanceof Phaser.GameObjects.Sprite)) {
+      v.destroy();
+      return null;
+    }
+    // Sized and stood by what is drawn (the frames carry empty borders), feet on the spot: at most 208 px tall and
+    // 176 px wide, the mockup's standing trainer (a crouching or wide pose comes out lower, not bigger).
+    const box = drawnBox(v);
+    v.setOrigin((box.x + box.w / 2) / Math.max(1, v.frame.cutWidth), (box.y + box.h) / Math.max(1, v.frame.cutHeight));
+    const k = Math.min(208 / Math.max(1, box.h), 176 / Math.max(1, box.w));
+    v.setScale(k);
+    const h = box.h * k;
+    this.field.addAt(v, this.fieldBase);
+    return new Promise<Point | null>((resolve) => {
+      const run = playClip(this, foeThrowClip(at, 'full'), this.clipHost({ tr: { kind: 'free', get: () => v } }, {
+        cue: (name) => {
+          if (name === 'release') resolve(foeHand(at, h));
+        },
+      }));
+      void run.done.then(() => {
+        v.destroy();
+        resolve(null);
+      });
+    });
+  }
+
   /** When the last trainer face chip went up (scene clock); chips stay at least `CHEER_GAP` apart. */
   private cheerAt = -Infinity;
 
@@ -6030,6 +6065,7 @@ export class BattleScene extends Phaser.Scene {
           if (incoming) {
             this.shown[e.side] = structuredClone(incoming);
             if (e.side === 'enemy') this.phHits = 0;
+            const ace = e.side === 'enemy' && !!this.run.battle?.trainer && isEnemyAce(this.run.battle, e.uid);
             const hand = e.side === 'player' && this.trainerActor ? await this.throwMoment() : null;
             const lookAt = e.side === 'enemy' ? { x: 560, y: ENEMY_POS.y - 20 } : { x: 400, y: PLAYER_POS.y - 100 };
             if (!this.camBusy && !this.camPinned) {
@@ -6040,7 +6076,6 @@ export class BattleScene extends Phaser.Scene {
             // A trainer's designated ace (battle.aceUid, not the last slot) is announced BEFORE it lands (Kice: an ace
             // must be announced when sent out; animation redesign pass 15, Ace Call): the trainer speaks, the ace's
             // card plays, and then the ace leaps onto the field. Presentation only.
-            const ace = e.side === 'enemy' && !!this.run.battle?.trainer && isEnemyAce(this.run.battle, e.uid);
             if (ace) {
               await this.say(`${this.trainerTitle() ?? this.run.battle!.trainer!.name} sends out their ace, ${this.speciesName(this.shown.enemy!)}!`);
               await this.aceCall();
@@ -6048,7 +6083,8 @@ export class BattleScene extends Phaser.Scene {
               if (this.role === 'rival') void this.fx.flourish('enemy', 'rival.ace');
             } else {
               const sentMon = this.shown[e.side]!;
-              await this.sendMoment(e.side, sentMon, hand, () => void this.refreshInfoBox(e.side === 'enemy' ? this.enemyBox : this.playerBox, sentMon, false));
+              const from = e.side === 'enemy' ? await this.foeThrowMoment() : hand;
+              await this.sendMoment(e.side, sentMon, from, () => void this.refreshInfoBox(e.side === 'enemy' ? this.enemyBox : this.playerBox, sentMon, false));
             }
             this.applyTeraTint(e.side, this.shown[e.side]);
             if (this.camPinned) {

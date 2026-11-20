@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ClipBuilder, clipEnd, EASES, fxAllowed, sampleClip, type ClipLevel, type MotionClip } from '../../src/core/presentation/motionClip';
-import { aceLandClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
+import { aceLandClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
 
 const ME: MonSpot = { x: 312, y: 428, h: 180, side: 'player' };
 const FOE: MonSpot = { x: 648, y: 240, h: 150, side: 'enemy' };
@@ -233,5 +233,27 @@ describe('trainer face chip (pass 19)', () => {
     expect(sampleClip(reduced, 500).face).toMatchObject({ sx: 1, alpha: 1, y: 424 });
     expect(cheerClip({ x: 902, y: 424 }, 'off').length).toBe(0);
     expect(CHEER_GAP).toBe(1200);
+  });
+});
+
+describe('foe trainer step-in (pass 4)', () => {
+  const spot = { x: 648, y: 240 };
+  it('slides in onto the spot, steps back to throw, releases at the hand, and leaves before the clip ends', () => {
+    const c = foeThrowClip(spot, 'full');
+    expect(sampleClip(c, 0).tr).toMatchObject({ x: FOE_TRAINER_OFF, y: 248, rot: 0 });
+    expect(sampleClip(c, 420).tr!.x).toBeCloseTo(648);
+    expect(sampleClip(c, 890).tr).toMatchObject({ x: 648 + 126 });
+    expect(sampleClip(c, 890).tr!.rot).toBeCloseTo(9);
+    expect(c.fx.find((f) => f.kind === 'cue' && f.name === 'release')!.at).toBe(FOE_RELEASE);
+    expect(sampleClip(c, c.length).tr!.x).toBeGreaterThan(960);
+    expect(sampleClip(c, c.length).tr!.rot).toBeCloseTo(0);
+    expect(foeHand(spot, 208)).toEqual({ x: 698, y: 248 - 208 * 0.7 });
+  });
+  it('Reduced and Off bring no trainer: the release cue fires at once', () => {
+    for (const level of ['reduced', 'off'] as const) {
+      const c = foeThrowClip(spot, level);
+      expect(c.length).toBe(0);
+      expect(c.fx).toEqual([{ kind: 'cue', at: 0, name: 'release' }]);
+    }
   });
 });
