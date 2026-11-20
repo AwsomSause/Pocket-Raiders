@@ -6,7 +6,7 @@
 // core/dominion/debateScreens.ts; the scene's DebateController keeps the cursor.
 
 import './dominion.css';
-import type { DebateModel } from '../../../../core/dominion/debateScreens';
+import type { DebateModel, TypedModel } from '../../../../core/dominion/debateScreens';
 import { act, esc } from '../../kit';
 import { rxUrl } from '../../assets';
 import { stage, WHEEL_KEY } from './views';
@@ -39,7 +39,7 @@ export function debateView(m: DebateModel): string {
   <div class="layer" style="background:radial-gradient(460px 320px at 150px 150px,rgba(123,63,160,.55),transparent 70%),radial-gradient(460px 320px at 810px 150px,rgba(200,40,40,.45),transparent 70%)"></div>
   <div class="a" style="left:-20px;top:284px;width:1000px;height:280px;z-index:1;background:repeating-linear-gradient(90deg,#4a2c18 0 120px,#42271450 120px 122px,#55331d 122px 240px),linear-gradient(180deg,#5a3720,#2e1b0e);border-top:6px solid #e3b955;box-shadow:0 -3px 0 #7a5208,0 -16px 30px rgba(0,0,0,.5)"></div>
   <div class="ttl" style="--t1:#1f8f86;--t2:#2bb3a5" data-testid="dom-debate-title">The Debate <span class="sub">· vs. ${esc(m.boss)}</span></div>
-  <div class="keys">${WHEEL_KEY}<span class="key">Round ${esc(m.round.num)}</span><span data-testid="dom-debate-round">${esc(m.round.name)}</span><span class="key">${m.turn}/${m.turns}</span><span class="key"${act('back')} style="cursor:pointer">Esc</span><span>Walk out</span></div>
+  <div class="keys">${WHEEL_KEY}<span class="key">Round ${esc(m.round.num)}</span><span data-testid="dom-debate-round">${esc(m.round.name)}</span><span class="key">${m.turn}/${m.turns}</span>${m.phase === 'argue' ? `<span class="key"${act('debType')} style="cursor:pointer" data-testid="dom-debate-type">T</span><span>Your words</span>` : ''}<span class="key"${act('back')} style="cursor:pointer">Esc</span><span>Walk out</span></div>
   <div class="cone" style="left:24px;top:-30px;width:300px;height:330px;z-index:2;--cc:rgba(190,140,255,.38)"></div>
   <div class="cone" style="left:636px;top:-30px;width:300px;height:330px;z-index:2;--cc:rgba(255,120,110,.34)"></div>
   <div class="pool flick" style="left:330px;top:250px;width:300px;height:110px;z-index:2;--pc:rgba(255,200,110,.45)"></div>
@@ -100,4 +100,77 @@ function resultView(m: DebateModel): string {
     ${r.outcome.length ? `<div class="sm" style="margin-top:8px;line-height:1.35;color:#ffe28a" data-testid="dom-debate-outcome">${esc(r.outcome.join(' '))}</div>` : ''}
     ${buttons}
   </div>`;
+}
+
+/** D20: the Rotom path (Rotom mockup a4, round 4 `mockups-v4` #k4), ported nearly line for line: the two sides with
+ *  their crests, your words on a taped note, the judge's bars on the Boss's five values, the raw move with the red CAPPED
+ *  stamp and the clamped move in gold, the Conviction bar, the reply typing itself in the text box with Rotom's chip,
+ *  and the "still talking" row with Skip text (B). Without a Key-Card the rules read the words and the set reply plays. */
+export function debateTypedView(m: TypedModel): string {
+  const c = m.conviction;
+  const fill = c >= 0 ? `left:50%;width:${c / 2}%` : `left:${at(c)}%;width:${-c / 2}%`;
+  const L = m.lines;
+  const COL = ['#ff8a7a', '#ffd23f', '#7fd6ff', '#c9a6ff', '#43cf78'];
+  const bars = m.values
+    ? m.values.map((v, i) => `<span>${esc(v.name)}</span><span class="bar10" style="--v:${v.n};--c:${COL[i]}"></span><b class="num" data-testid="dom-debate-value-${i}">${v.n}</b>`).join('')
+    : `<span style="grid-column:1/-1" class="row" data-testid="dom-debate-judging"><span class="dots"><i></i><i></i><i></i></span>${esc(L.reading!)}</span>`;
+  const verdict = m.move === null ? '' : m.capped
+    ? `<span style="position:relative"><s class="num dm" style="font-size:24px" data-testid="dom-debate-raw">${signed(m.raw!)}</s><span class="inked jolt" style="left:-8px;top:-20px;color:#ff5a4f;font-size:11px;padding:0 4px;border-width:2px;mix-blend-mode:normal;letter-spacing:.08em" data-testid="dom-debate-capped">CAPPED</span></span><span class="y">▶</span><b class="num y pulse n3d" style="font-size:34px;line-height:.8" data-testid="dom-debate-move">${signed(m.move)}</b><span class="xs mu">${esc(L.kept!)}</span>`
+    : `<b class="num y pulse n3d" style="font-size:34px;line-height:.8" data-testid="dom-debate-move">${signed(m.move)}</b><span class="xs mu">${esc(L.inside!)}</span>`;
+  const pic = m.portrait
+    ? `<img class="spr" src="${img(m.portrait)}" alt="${esc(m.boss)}" style="left:40px;top:0;width:198px;height:132px">`
+    : `<div class="crest" style="left:80px;top:20px;--s:90px;background:linear-gradient(180deg,${m.colour},#5a0e0e)">${esc(m.crest)}</div>`;
+  const reading = m.stage === 'read';
+  const row = reading
+    ? esc(L.done!)
+    : m.stage === 'judging' ? `<span class="dots"><i></i><i></i><i></i></span>${esc(L.reading!)}` : `<span class="dots"><i></i><i></i><i></i></span>${esc(m.shown ? L.talking! : L.thinking!)}`;
+  const chip = (t: string | null, cost = ''): string => `<i></i>${t ? `${esc(t)}${cost}` : esc(L.rules!)}`;
+  return stage(`
+  <div class="layer" style="background:radial-gradient(460px 320px at 130px 160px,rgba(123,63,160,.55),transparent 70%),radial-gradient(460px 320px at 830px 160px,rgba(200,40,40,.45),transparent 70%)"></div>
+  <div class="a" style="left:-20px;top:300px;width:1000px;height:260px;z-index:1;background:repeating-linear-gradient(90deg,#4a2c18 0 120px,#42271450 120px 122px,#55331d 122px 240px),linear-gradient(180deg,#5a3720,#2e1b0e);border-top:6px solid #e3b955;box-shadow:0 -3px 0 #7a5208,0 -16px 30px rgba(0,0,0,.5)"></div>
+  <div class="cone" style="left:10px;top:-30px;width:260px;height:340px;z-index:2;--cc:rgba(190,140,255,.38)"></div>
+  <div class="cone" style="left:690px;top:-30px;width:260px;height:340px;z-index:2;--cc:rgba(255,120,110,.34)"></div>
+  <div class="pool flick" style="left:300px;top:250px;width:360px;height:110px;z-index:2;--pc:rgba(255,200,110,.45)"></div>
+  <div class="ttl" style="--t1:#1f8f86;--t2:#2bb3a5" data-testid="dom-debate-title">The Debate <span class="sub">· vs. ${esc(m.boss)}</span></div>
+  <div class="crest-rim" style="left:226px;top:60px;--s:34px"></div><div class="crest" style="left:231px;top:65px;--s:34px">${esc(m.myCrest)}</div>
+  <div class="crest-rim" style="left:690px;top:60px;--s:34px;filter:drop-shadow(0 4px 0 rgba(0,0,0,.45)) drop-shadow(0 0 12px rgba(255,90,79,.6))"></div><div class="crest" style="left:695px;top:65px;--s:34px;background:linear-gradient(180deg,${m.colour},#b02a20 55%,#5a0e0e)">${esc(m.crest)}</div>
+  ${m.mon ? '<i class="glint" style="left:752px;top:160px;--g:12px;--gc:#ffe066"></i>' : ''}
+  <span class="spark twinkle a" style="left:930px;top:338px;z-index:34;--z:14px"></span><span class="spark twinkle a" style="left:690px;top:330px;z-index:34;--z:10px;animation-delay:-1s"></span>
+  <div class="keys">${WHEEL_KEY}<span class="key">Round ${esc(m.round.num)} of ${esc(m.round.of)}</span><span class="pips" style="width:54px;--n:${m.roundPips}"></span></div>
+  <div class="a" style="left:20px;top:72px;width:232px;height:132px;z-index:5;border-radius:10px;overflow:hidden;background:#120c1c;box-shadow:0 0 0 3px #c9a6ff,0 0 0 6px var(--ink),0 0 26px rgba(166,120,255,.55)">
+    <img class="spr" src="${img('v-nate')}" alt="The Boss" style="left:-14px;top:0;width:264px;height:132px"></div>
+  <div class="a pill v" style="left:30px;top:192px;z-index:6;font-size:13px">YOU · ${esc(m.myTag)}</div>
+  <div class="a" style="left:708px;top:72px;width:232px;height:132px;z-index:5;border-radius:10px;overflow:hidden;background:#0d0d10;box-shadow:0 0 0 3px #ff8a7a,0 0 0 6px var(--ink),0 0 26px rgba(255,90,79,.5)">
+    ${pic}</div>
+  ${m.mon ? `<img class="spr" src="${img(m.mon)}" alt="" style="left:704px;top:146px;width:76px;height:68px;z-index:6">` : ''}
+  <div class="a pill r" style="right:20px;top:192px;z-index:6;font-size:13px">${esc(m.boss.toUpperCase())} · ${esc(m.tag)}</div>
+  <div class="doc" style="left:20px;top:218px;width:232px;height:108px;z-index:7;transform:rotate(-1.5deg)" data-testid="dom-debate-words"><div class="dh"><img class="ic s" src="${img('g-letter')}" alt="">Your words</div>
+    <span style="font-size:13.5px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">“${esc(m.words)}”</span><div class="xs" style="margin-top:4px;color:#9a5a20">${esc(L.sent!)}</div></div>
+  <span class="tape" style="left:100px;top:208px;transform:rotate(4deg)"></span>
+  <div class="pnl gild" style="left:270px;top:72px;width:420px;height:222px;padding:12px 18px" data-testid="dom-debate-judge">
+    <div class="row sp"><b class="caps" style="font-size:14px;color:var(--ribbon);letter-spacing:.1em">${esc(L.head!)}</b><span class="aichip" style="position:relative;font-size:11.5px;padding:2px 9px 2px 5px" data-testid="dom-debate-judge-chip"><i style="width:14px;height:14px"></i>${esc(m.judgeChip ?? L.rules!)}</span></div>
+    <div class="caps xs dm" style="margin:4px 0 8px;letter-spacing:.12em">${esc(L.against!)}</div>
+    <div class="bars" style="position:static;height:auto;background:none;z-index:auto">${bars}</div>
+    <div class="row" style="gap:10px;margin-top:10px;font-size:15px"><span class="mu">Conviction</span>${verdict}</div>
+  </div>
+  <div class="a" style="left:270px;top:306px;width:420px;z-index:6">
+    <div style="position:relative;height:16px;border-radius:6px;background:linear-gradient(90deg,#5a1818,#2a2440 38%,#2a2440 62%,#1c4a2c);box-shadow:0 0 0 3px var(--ink)">
+      <i class="flow" style="position:absolute;${fill};top:0;bottom:0;background:repeating-linear-gradient(90deg,#ffd23f 0 14px,#ffe98a 14px 28px);box-shadow:0 0 14px #ffd23f;transition:left .5s,width .5s"></i>
+      <i style="position:absolute;left:${at(c)}%;top:-6px;width:3px;height:28px;margin-left:-1px;background:#fff;transition:left .5s" data-testid="dom-debate-marker"></i>
+      <i style="position:absolute;left:80%;top:-5px;width:3px;height:26px;background:#43cf78"></i></div>
+  </div>
+  <div class="a" style="left:262px;top:322px;width:12px;height:22px;z-index:6;background:linear-gradient(90deg,#e9dcc0,#fff6df 40%,#cdbd9a);border-radius:3px;box-shadow:0 0 0 2px #1a0f08"></div><div class="a flick" style="left:260px;top:306px;width:16px;height:20px;z-index:6;border-radius:50% 50% 40% 40%/60% 60% 40% 40%;background:radial-gradient(circle at 50% 70%,#fff8d0,#ffd23f 40%,#ff7a1c 75%,transparent);box-shadow:0 0 22px 8px rgba(255,180,60,.45)"></div>
+  <div class="a" style="left:686px;top:322px;width:12px;height:22px;z-index:6;background:linear-gradient(90deg,#e9dcc0,#fff6df 40%,#cdbd9a);border-radius:3px;box-shadow:0 0 0 2px #1a0f08"></div><div class="a flick" style="left:684px;top:306px;width:16px;height:20px;z-index:6;border-radius:50% 50% 40% 40%/60% 60% 40% 40%;background:radial-gradient(circle at 50% 70%,#fff8d0,#ffd23f 40%,#ff7a1c 75%,transparent);box-shadow:0 0 22px 8px rgba(255,180,60,.45);animation-delay:-1.7s"></div>
+  <div class="tbox" style="left:20px;top:354px;width:920px;height:110px;padding:18px 22px;font-size:19px" data-testid="dom-debate-reply"><span class="who">${esc(m.boss.toUpperCase())}</span><span class="${reading ? '' : 'typing'}">${m.shown ? `“${esc(m.shown)}${reading ? '”' : ''}` : ''}</span></div>
+  ${m.stage === 'judging' ? '' : `<div class="aichip" style="left:700px;top:344px;z-index:33" data-testid="dom-debate-reply-chip">${chip(m.replyChip, m.replyChip ? ' <span class="dm2">· saved for replay</span>' : '')}</div>`}
+  <div class="a row" style="left:20px;top:478px;width:920px;z-index:8;gap:10px">
+    <div class="row" style="gap:8px;padding:8px 14px;border-radius:9px;background:#0b1020;box-shadow:0 0 0 3px var(--ink),inset 0 0 0 2px #56679d;font-size:15px;flex:1" data-testid="dom-debate-status">${row}<span class="xs dm" style="margin-left:auto">${esc(L.noKey!)}</span></div>
+    <div class="bt ghost" style="font-size:14px"${act(reading ? 'debTypedDone' : 'debSkip')} data-testid="dom-debate-skip">${reading ? 'Back to the table <span class="kc">Enter</span>' : 'Skip text <span class="kc">B</span>'}</div>
+  </div>
+  <div class="haze" style="--hz:#ff8a8a;--hz2:#b48cff" aria-hidden="true"></div>
+  <div class="grade" aria-hidden="true" style="--g1:#ff8a8a;--g2:#b48cff"></div>
+  ${m.move !== null ? '<div class="focus" aria-hidden="true" style="left:462px;top:268px;--r:110px;--fc:255,215,90"></div>' : ''}
+  <div class="edgeglow" aria-hidden="true" style="--eg:#ff8a8a"></div>
+  <div class="orn" aria-hidden="true"></div>
+  ${m.move !== null ? '<div class="rays turn finale" aria-hidden="true" style="left:341px;top:147px;width:242px;height:242px;--rc:rgba(255,215,90,.30)"></div><i class="glint fg" style="left:522px;top:202px;--g:20px"></i><i class="glint fg" style="left:385px;top:306px;--g:14px;animation-delay:-1.4s"></i>' : ''}`, 'background:#140f1e', 'kl-red vign grain', 'l');
 }

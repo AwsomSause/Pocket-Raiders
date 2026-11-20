@@ -11,6 +11,7 @@ import type { Alert, DominionBlock, Member } from './schema';
 import { STAT_IDS } from './schema';
 import { topModel, type TopModel } from './screens';
 import { topTalk } from './talk';
+import { cantConfront, isDouble, suspicion } from './spies';
 import { whereOf } from './empire';
 import { cardFor, cardLine, lineKind, sheet, traitWords } from './personality';
 import { usable } from './reserve';
@@ -48,11 +49,11 @@ export interface MorningModel {
 /** Skill (Part 2 §1): the average of the five stats ×10, plus level. */
 export const skillOf = (m: Member): number => Math.min(100, Math.round((STAT_IDS.reduce((a, k) => a + m.stats[k], 0) / 5) * 10 + m.level));
 
-const label = (id: string): string => C().quickLabels[id] ?? taskById(id)?.name ?? id;
+export const taskLabel = (id: string): string => C().quickLabels[id] ?? taskById(id)?.name ?? id;
 /** D6: a district task's district, for the strip and the Assign panel. */
 const placeOf = (m: Member): string | null => (taskById(crewOf(m).task)?.effect?.kind === 'district' ? DOMINION_DATA.field.districts.find((d) => d.id === whereOf(m))?.name ?? null : null);
-const withPlace = (m: Member): string => { const p = placeOf(m); return p ? `${label(crewOf(m).task)} · ${p}` : label(crewOf(m).task); };
-const oddsText = (b: DominionBlock, m: Member, id: string): { odds: string; tone: TaskRow['tone'] } => {
+export const withPlace = (m: Member): string => { const p = placeOf(m); return p ? `${taskLabel(crewOf(m).task)} · ${p}` : taskLabel(crewOf(m).task); };
+export const taskOdds = (b: DominionBlock, m: Member, id: string): { odds: string; tone: TaskRow['tone'] } => {
   const t = taskById(id)!;
   const p = odds(b, m, t);
   return t.effect?.sure ? { odds: 'sure', tone: 'gn' } : { odds: `${p}%`, tone: p >= 60 ? 'gn' : p >= 35 ? 'y' : 'rd' };
@@ -81,8 +82,8 @@ export function morningModel(block: DominionBlock, sel: number, at: number, all:
   const tasks = ids.map((id, i) => {
     const t = taskById(id)!;
     const locked = cantTake(m, t);
-    const o = locked ? { odds: '—', tone: 'mu' as const } : oddsText(b, m, id);
-    return { id, label: label(id), icon: C().taskIcons[id] ?? null, ...o, locked, on: i === at };
+    const o = locked ? { odds: '—', tone: 'mu' as const } : taskOdds(b, m, id);
+    return { id, label: taskLabel(id), icon: C().taskIcons[id] ?? null, ...o, locked, on: i === at };
   });
   const report = b.report;
   // The crew's alerts carry their times; the rest of the Night Report (bills, police, cooling) shows after them.
@@ -106,7 +107,7 @@ export function morningModel(block: DominionBlock, sel: number, at: number, all:
     all,
     strip: b.members.map((x, i) => {
       const xc = crewOf(x);
-      const o = xc.out ? { odds: xc.out.why === 'jail' ? 'cell' : xc.out.why === 'held' ? 'held' : 'hurt', tone: 'rd' } : oddsText(b, x, xc.task);
+      const o = xc.out ? { odds: xc.out.why === 'jail' ? 'cell' : xc.out.why === 'held' ? 'held' : 'hurt', tone: 'rd' } : taskOdds(b, x, xc.task);
       return { id: x.id, name: x.name, look: x.look, task: withPlace(x), odds: o.odds === 'sure' ? '' : o.odds, tone: o.tone, sel: i === sel, out: !!xc.out };
     }),
     talk: card ? { name: card.name, title: card.talk.name, text: card.text, choices: card.talk.choices!.map((x) => x.label) } : null,
@@ -137,6 +138,8 @@ export interface FileModel {
   then: { day: number; line: string }; now: { day: number; line: string };
   task: string; taskLevel: string; out: string | null; xp: string; points: number;
   keys: { key: string; label: string }[];
+  /** D22: Suspicion (0 hides it) and whether F can confront them now. */
+  suspicion: number; double: boolean;
   talk: TalkModel | null;
   /** D7: the team's colours for the recoloured picture (null: own colours, grey band). */
   colours: TeamColours | null;
@@ -161,10 +164,13 @@ export function fileModel(block: DominionBlock, sel: number): FileModel {
   const greenLines = C().lines[c.green] ?? [];
   const card = topTalk(b);
   const t = taskById(c.task);
-  const keys = [{ key: 'C', label: 'Card' }, { key: 'G', label: 'Gift' }, { key: 'H', label: 'Hire' }, { key: 'R', label: `Leads (${b.crew!.leads.length})` }, { key: 'P', label: 'Pyramid' }];
+  const keys = [{ key: 'C', label: 'Card' }, { key: 'G', label: 'Gift' }, { key: 'H', label: 'Hire' }, { key: 'R', label: `Leads (${b.crew!.leads.length})` }, { key: 'P', label: 'Pyramid' }, { key: 'U', label: 'Squads' }];
   if (b.phase === 'evening') keys.unshift({ key: 'T', label: 'Talk' });
   if (c.out?.why === 'jail') keys.unshift({ key: 'B', label: `Bail ₽${C().rules.bail}` });
+  // D22: F confronts a suspected member (spies.ts).
+  if (!cantConfront(b, m.id)) keys.unshift({ key: 'F', label: 'Confront' });
   return {
+    suspicion: suspicion(b, m.id), double: isDouble(b, m.id),
     name: m.name.toUpperCase(), rank: rankWord(m.rank), rankN: rankN(m.rank), level: m.level, wage: m.wage, chevrons: Math.min(5, Math.ceil(rankN(m.rank) / 3)),
     joined: m.joinedDay, look: m.look,
     prev: b.members.length > 1 ? b.members[(i - 1 + b.members.length) % b.members.length]!.name : null,
@@ -187,7 +193,7 @@ export function fileModel(block: DominionBlock, sel: number): FileModel {
     team: m.team.map((x) => ({ species: x.speciesId, level: x.level, dim: !usable(b, m, x) })),
     then: { day: m.joinedDay, line: greenLines[0] ?? memberLine(m, m.joinedDay) },
     now: { day: b.day, line: memberLine(m, b.day) },
-    task: label(c.task), taskLevel: t ? `${taskLevelWord(taskLevel(m, t.id))} (task Lv ${taskLevel(m, t.id)})` : '',
+    task: taskLabel(c.task), taskLevel: t ? `${taskLevelWord(taskLevel(m, t.id))} (task Lv ${taskLevel(m, t.id)})` : '',
     out: c.out ? (c.out.why === 'held' ? 'Held by a rival team: pay the ransom on the Rival File (R) or send a rescue' : c.out.why === 'jail' ? `In a cell: ${c.out.days} day${c.out.days === 1 ? '' : 's'} left` : `Hurt: ${c.out.days} day${c.out.days === 1 ? '' : 's'}`) : null,
     xp: `${c.xp}/${xpToNext(m.level)} XP`, points: m.traitPoints,
     keys,
@@ -208,7 +214,7 @@ export function hireModel(block: DominionBlock, seed: string): { rows: HireRow[]
       return {
         name: h.name, type: t.name, group: t.group, price: h.price, sold: h.sold, rarity: t.rarity,
         temperament: C().temperaments.find((x) => x.id === h.temperament)?.word ?? h.temperament,
-        green: greenById(h.green)?.name ?? h.green, best: label(t.bestAt),
+        green: greenById(h.green)?.name ?? h.green, best: taskLabel(t.bestAt),
       };
     }),
     room: `${b.members.length}/${b.rosterCap}`,

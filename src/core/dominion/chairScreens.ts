@@ -51,6 +51,11 @@ function top(b: DominionBlock): Top {
   return { funds: `₽${b.funds.toLocaleString('en-US')}`, heat: b.heat, regard: d.regard, dread: d.dread };
 }
 
+/** D11: what a Hero answer shows before it's picked. */
+const HERO_CHIP: Record<Extract<CourtFx, { k: 'hero' }>['what'], string> = {
+  intel: "the Hero's route", battle: '⚔ the Hero', letter: '⚔ the Hero', spare: 'a town spared', late: 'Legendaries later', hunt: 'a Legendary hunt', lose: '−1 town',
+};
+
 /** The word on a chip for one number. */
 function word(b: DominionBlock, k: string): string {
   if (k.startsWith('loy:')) return `${memberOf(b, k.slice(4))?.name ?? 'Member'} Loyalty`;
@@ -98,6 +103,7 @@ export function answerChips(b: DominionBlock, c: CourtCard, fx: CourtFx[], membe
       case 'tag': out.push({ text: e.tag === 'favour' ? 'Favour' : 'Grudge', cls: e.tag === 'favour' ? 'up' : 'dn' }); break;
       case 'follow': case 'later': out.push({ text: '? comes back', cls: 'q' }); break;
       case 'fight': out.push({ text: '⚔ a fight', cls: 'q' }); break;
+      case 'hero': out.push({ text: HERO_CHIP[e.what], cls: e.what === 'lose' ? 'dn' : 'q' }); break;
       case 'chance': out.push(...answerChips(b, c, e.yes, memberId, showExact, true)); break;
     }
   }

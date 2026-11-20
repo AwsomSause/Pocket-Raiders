@@ -12,6 +12,7 @@ import { skyAct, type SkyAction } from '../core/evil/teamSky';
 import { charterInRun, ensureEvil, finishEvil, foundInRun, stepInRun } from '../core/evilMode/session';
 import { fightInRun as dominionFightInRun, settleStaleFight as dominionSettleStale, startInRun as dominionStartInRun, stepInRun as dominionStepInRun } from '../core/dominion/session';
 import type { DominionAction, DominionSetup } from '../core/dominion/schema';
+import { rulesFromPrefs } from '../core/dominion/rules';
 import { turnOffer, turnRun, walkAway, type TurnOffer } from '../core/evilMode/turn';
 import { beginEvilFight } from '../core/evilMode/fight';
 import type { FoundingChoice } from '../core/evilMode/start';
@@ -1123,7 +1124,8 @@ export class GameSession {
   /** Evil Mode: a block saved before slice 2 gets its district (laid from the run's seed) and is saved once. */
   /** DOMINION (Evil Mode rework, D1): sets the run up from the setup pages and saves. Returns why it couldn't, or null. */
   dominionStart(setup: DominionSetup): string | null {
-    const out = dominionStartInRun(this.content, this.requireRun(), setup);
+    // D27: the run keeps the rules Settings · Dominion had when it began.
+    const out = dominionStartInRun(this.content, this.requireRun(), { ...setup, rules: setup.rules ?? rulesFromPrefs(this.settings.expansion.dominionPrefs) });
     if (out.problem) return out.problem;
     this.run = out.run;
     this.persistRun();
@@ -1131,13 +1133,13 @@ export class GameSession {
   }
 
   /** DOMINION: one clock step, saved when it happened. Returns whether it happened and the line to show. */
-  dominionStep(action: DominionAction): { ok: boolean; notice: string | null; fight: boolean } {
+  dominionStep(action: DominionAction): { ok: boolean; notice: string | null; fight: boolean; roll: { r: number; chance: number; rolled: boolean } | null } {
     const out = dominionStepInRun(this.content, this.requireRun(), action);
     if (out.ok) {
       this.run = out.run;
       this.persistRun();
     }
-    return { ok: out.ok, notice: out.notice, fight: !!out.fight };
+    return { ok: out.ok, notice: out.notice, fight: !!out.fight, roll: out.roll ?? null };
   }
 
   /** DOMINION (D2): starts the battle an action (or the police) waits on and saves. False when there's none to start. */

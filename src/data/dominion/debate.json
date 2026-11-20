@@ -91,6 +91,7 @@
     "rocket": {
       "values": "power and profit", "them": "him", "portrait": "v-giovanni", "mon": "p-persian", "crest": "R", "colour": "#e05a4a",
       "lean": { "partnership": 1, "merger": 1, "recruit": -1, "threaten": 0 }, "demands": ["hq", "towns"], "order": "expand",
+      "weighs": ["Power", "Profit", "Order", "Legacy", "Respect"], "voice": "Calm, cold and businesslike. Talks of money and power, quietly menacing, never shouts; strokes Persian.",
       "creed": "Power is the only honest currency. Rocket earns it, keeps it, and answers to nobody. What do you answer to?",
       "judge": "{sin}. Is that your 'order'? Even Rocket counts what it takes.",
       "clean": "Your Ledger is spotless. Either you're careful, or you've done nothing worth writing down.",
@@ -105,6 +106,7 @@
     "rocket-remnants": {
       "values": "bringing Giovanni back", "them": "him", "portrait": null, "mon": null, "crest": "R", "colour": "#c0392b",
       "lean": { "partnership": 0, "merger": -1, "recruit": 0, "threaten": -1 }, "demands": ["hq", "goal"], "order": "defend",
+      "weighs": ["Loyalty", "Legacy", "Power", "Order", "Respect"], "voice": "Stiff, formal and devoted. Everything comes back to the Boss's return and Rocket's old glory.",
       "creed": "Rocket isn't finished. It's waiting for its Boss to come home. Are you here to help, or to take his chair?",
       "judge": "{sin}. Giovanni would never have been that clumsy.",
       "clean": "No mess on your Ledger. Giovanni liked tidy people.",
@@ -119,6 +121,7 @@
     "magma": {
       "values": "more land for people", "them": "him", "portrait": null, "mon": null, "crest": "M", "colour": "#d0452c",
       "lean": { "partnership": 1, "merger": 0, "recruit": 0, "threaten": -1 }, "demands": ["towns", "goal"], "order": "expand",
+      "weighs": ["People", "Land", "Progress", "Strength", "Respect"], "voice": "Precise and proud, a scientist who leads. Speaks of humanity, ground to stand on and progress.",
       "creed": "People need ground to stand on. Magma will give them more of it, sea or no sea. Where do you stand?",
       "judge": "{sin}. That builds nothing for anyone.",
       "clean": "Your Ledger builds more than it breaks. I noticed.",
@@ -133,6 +136,7 @@
     "aqua": {
       "values": "the sea for Pokémon", "them": "him", "portrait": null, "mon": null, "crest": "A", "colour": "#2e6fd0",
       "lean": { "partnership": 1, "merger": -1, "recruit": 0, "threaten": 0 }, "demands": ["towns", "hq"], "order": "defend",
+      "weighs": ["Nature", "Pokémon", "Freedom", "Loyalty", "Respect"], "voice": "Loud, hearty and passionate. Speaks for the sea and the Pokémon in it, with a sailor's bluntness.",
       "creed": "The sea was here first, and so were the Pokémon in it. Aqua stands with them. Who do you stand with?",
       "judge": "{sin}. The tide doesn't forget, mate.",
       "clean": "Clean wake behind you. Respect.",
@@ -147,6 +151,7 @@
     "galactic": {
       "values": "a world without spirit", "them": "him", "portrait": null, "mon": null, "crest": "G", "colour": "#4fa3c8",
       "lean": { "partnership": -1, "merger": 1, "recruit": 0, "threaten": -1 }, "demands": ["hq", "goal"], "order": "hold",
+      "weighs": ["Order", "Science", "Control", "Vision", "Respect"], "voice": "Flat and emotionless. Short, cold sentences; treats feelings as flaws and spirit as noise.",
       "creed": "Spirit is noise. Galactic will build a world without it, quiet and complete. Why should noise like you join?",
       "judge": "{sin}. Emotion, again. Inefficient.",
       "clean": "Your record is orderly. That is the only compliment I give.",
@@ -161,6 +166,7 @@
     "plasma": {
       "values": "control dressed as liberation", "them": "him", "portrait": null, "mon": null, "crest": "P", "colour": "#5a6fa8",
       "lean": { "partnership": 0, "merger": 1, "recruit": -1, "threaten": 0 }, "demands": ["hq", "goal"], "order": "recruit",
+      "weighs": ["Control", "Ideals", "Power", "Image", "Respect"], "voice": "A grand, scheming orator. Dresses control up as liberation and talks down to everyone.",
       "creed": "Plasma frees Pokémon from people. Or so the crowds believe. Tell me what you'd free, and who would hold the key.",
       "judge": "{sin}. Clumsy. People saw.",
       "clean": "No witnesses on your Ledger. You learn quickly.",
@@ -175,6 +181,7 @@
     "flare": {
       "values": "beauty for the few", "them": "him", "portrait": null, "mon": null, "crest": "F", "colour": "#e8452c",
       "lean": { "partnership": 0, "merger": 1, "recruit": 0, "threaten": -1 }, "demands": ["towns", "goal"], "order": "hold",
+      "weighs": ["Beauty", "Style", "Power", "Legacy", "Respect"], "voice": "Elegant and intense. Obsessed with beauty and a world worth keeping; polite with an edge.",
       "creed": "The world is ugly because it is crowded. Flare will keep only what is beautiful. Are you beautiful?",
       "judge": "{sin}. How very ugly.",
       "clean": "An elegant Ledger. I approve.",
@@ -189,6 +196,7 @@
     "skull-aether": {
       "values": "a home for the ones nobody wants", "them": "him", "portrait": null, "mon": null, "crest": "S", "colour": "#8a8a96",
       "lean": { "partnership": 1, "merger": 0, "recruit": -1, "threaten": 1 }, "demands": ["hq", "towns"], "order": "defend",
+      "weighs": ["Family", "Loyalty", "Freedom", "Strength", "Respect"], "voice": "Brash, defensive tough talk. Protects the outcasts who follow; hates being looked down on.",
       "creed": "Skull takes in the kids nobody wanted. Bet you never got turned away from anything. Prove me wrong.",
       "judge": "{sin}. Ha. You're one of us after all.",
       "clean": "Squeaky clean, huh? Bet nobody ever slammed a door on you.",
@@ -203,6 +211,7 @@
     "macro-cosmos": {
       "values": "energy at any cost", "them": "him", "portrait": null, "mon": null, "crest": "M", "colour": "#c8a24a",
       "lean": { "partnership": 1, "merger": 1, "recruit": -1, "threaten": -1 }, "demands": ["hq", "goal"], "order": "expand",
+      "weighs": ["Progress", "Profit", "Order", "Legacy", "Respect"], "voice": "Cheerful, polished executive. Talks in plans, energy and the next thousand years.",
       "creed": "Galar will need energy for a thousand years. I plan for that. What are you planning for, next Tuesday?",
       "judge": "{sin}. Short-term thinking. Terrible for the brand.",
       "clean": "Your record would pass an audit. Impressive.",
@@ -217,6 +226,7 @@
     "area-zero": {
       "values": "a past or future without limits", "them": "them", "portrait": null, "mon": null, "crest": "Z", "colour": "#7a5ad0",
       "lean": { "partnership": 0, "merger": 0, "recruit": 1, "threaten": -1 }, "demands": ["hq", "goal"], "order": "hold",
+      "weighs": ["Science", "Freedom", "Progress", "Vision", "Respect"], "voice": "Detached researcher. Talks of discovery and time without limits; curious, never warm.",
       "creed": "The crater holds a world without limits. Research needs no team, only time. Why should it need yours?",
       "judge": "{sin}. A poor experiment.",
       "clean": "Your data is clean. Unusual.",
@@ -227,6 +237,352 @@
         "weak": ["That does not follow.", "Error.", "Rejected."],
         "insult": ["Hostility noted.", "Threat logged. It changes nothing."]
       }
+    }
+  },
+  "typed": {
+    "_note": "DOMINION slice D20: typed arguments (CLAUDE_API_DRAFT §5.1, Rotom mockup a4 / v4 k4). Rotom (or, without a Key-Card, these word lists) scores the words 0-10 on the Boss's five values; the move is clamped to what a set line could do right now.",
+    "mid": 25,
+    "k": 1.5,
+    "falseClaim": 10,
+    "maxText": 300,
+    "maxReply": 420,
+    "minText": 8,
+    "base": 3,
+    "perHit": 2,
+    "respectBase": 5,
+    "threatenRespect": 2,
+    "longText": 60,
+    "longerText": 140,
+    "stanceWords": {
+      "partnership": [
+        "partner",
+        "together",
+        "alliance",
+        "ally",
+        "split",
+        "share",
+        "equal",
+        "side by side",
+        "both of us",
+        "deal",
+        "shake"
+      ],
+      "merger": [
+        "merge",
+        "merger",
+        "fold",
+        "join forces",
+        "one team",
+        "combine",
+        "under one",
+        "absorb",
+        "unite"
+      ],
+      "recruit": [
+        "join me",
+        "your people",
+        "your grunts",
+        "your admins",
+        "come work",
+        "recruit",
+        "switch sides",
+        "better life",
+        "pay them",
+        "welcome"
+      ],
+      "threaten": [
+        "or else",
+        "crush",
+        "destroy",
+        "regret",
+        "last chance",
+        "force",
+        "make you",
+        "bury",
+        "wipe",
+        "threat",
+        "end you",
+        "fear"
+      ]
+    },
+    "claimWords": {
+      "towns": [
+        "towns",
+        "cities",
+        "districts",
+        "territory",
+        "streets are mine",
+        "i hold",
+        "i run",
+        "i control"
+      ],
+      "rich": [
+        "money",
+        "rich",
+        "cash",
+        "fortune",
+        "pay you",
+        "funds",
+        "wealth"
+      ],
+      "army": [
+        "army",
+        "crew",
+        "grunts",
+        "members",
+        "soldiers",
+        "numbers"
+      ],
+      "clean": [
+        "clean",
+        "spotless",
+        "no crimes",
+        "law-abiding",
+        "honest record",
+        "never broke"
+      ],
+      "strong": [
+        "stronger",
+        "beat you",
+        "beaten",
+        "defeated",
+        "win",
+        "powerful",
+        "outmatch"
+      ]
+    },
+    "valueWords": {
+      "Power": [
+        "power",
+        "strong",
+        "control",
+        "rule",
+        "command",
+        "dominate",
+        "crown"
+      ],
+      "Profit": [
+        "profit",
+        "money",
+        "cash",
+        "rich",
+        "pay",
+        "income",
+        "trade",
+        "business",
+        "deal",
+        "split",
+        "cut"
+      ],
+      "Order": [
+        "order",
+        "rules",
+        "discipline",
+        "plan",
+        "structure",
+        "stable",
+        "quiet streets",
+        "organised",
+        "organized"
+      ],
+      "Legacy": [
+        "legacy",
+        "history",
+        "remember",
+        "future",
+        "name",
+        "forever",
+        "generations",
+        "build"
+      ],
+      "Respect": [
+        "respect",
+        "honour",
+        "honor",
+        "admire",
+        "your way",
+        "you built",
+        "credit"
+      ],
+      "Loyalty": [
+        "loyal",
+        "loyalty",
+        "trust",
+        "stand by",
+        "never betray",
+        "faithful",
+        "together"
+      ],
+      "People": [
+        "people",
+        "humans",
+        "families",
+        "folks",
+        "everyone",
+        "towns"
+      ],
+      "Land": [
+        "land",
+        "ground",
+        "volcano",
+        "earth",
+        "mountain",
+        "room to live"
+      ],
+      "Progress": [
+        "progress",
+        "advance",
+        "future",
+        "growth",
+        "build",
+        "develop",
+        "energy"
+      ],
+      "Strength": [
+        "strength",
+        "strong",
+        "tough",
+        "battle",
+        "fight",
+        "power"
+      ],
+      "Nature": [
+        "nature",
+        "sea",
+        "ocean",
+        "wild",
+        "forest",
+        "water"
+      ],
+      "Pokémon": [
+        "pokémon",
+        "pokemon",
+        "partners",
+        "creatures"
+      ],
+      "Freedom": [
+        "free",
+        "freedom",
+        "choice",
+        "no limits",
+        "no rules",
+        "independent"
+      ],
+      "Science": [
+        "science",
+        "research",
+        "study",
+        "data",
+        "discover",
+        "experiment",
+        "lab"
+      ],
+      "Control": [
+        "control",
+        "command",
+        "obey",
+        "order",
+        "guide"
+      ],
+      "Vision": [
+        "vision",
+        "dream",
+        "future",
+        "new world",
+        "plan",
+        "goal"
+      ],
+      "Ideals": [
+        "ideal",
+        "truth",
+        "justice",
+        "liberate",
+        "liberation",
+        "cause",
+        "believe"
+      ],
+      "Image": [
+        "image",
+        "crowd",
+        "public",
+        "reputation",
+        "seen",
+        "speech"
+      ],
+      "Beauty": [
+        "beauty",
+        "beautiful",
+        "elegant",
+        "perfect",
+        "clean world",
+        "art"
+      ],
+      "Style": [
+        "style",
+        "class",
+        "taste",
+        "fashion",
+        "grace"
+      ],
+      "Family": [
+        "family",
+        "home",
+        "belong",
+        "brothers",
+        "sisters",
+        "kids",
+        "nobody wanted"
+      ]
+    },
+    "detailWords": [
+      "celadon",
+      "saffron",
+      "vermilion",
+      "cerulean",
+      "pewter",
+      "fuchsia",
+      "lavender",
+      "cinnabar",
+      "viridian",
+      "pallet",
+      "game corner",
+      "silph",
+      "₽",
+      "percent",
+      "%",
+      "week",
+      "every month"
+    ],
+    "insultWords": [
+      "idiot",
+      "stupid",
+      "loser",
+      "pathetic",
+      "fool",
+      "coward",
+      "worthless",
+      "weakling",
+      "shut up",
+      "clown",
+      "joke"
+    ],
+    "text": {
+      "type": "Type your own words to {boss}",
+      "placeholder": "Rocket keeps the old money scared. My crew keeps the streets. Split Celadon.",
+      "hint": "T: type your own words. Rotom's judge scores them against {boss}'s values; the bar stays inside the set lines' range.",
+      "head": "The judge read your words",
+      "against": "Against {boss}'s values",
+      "reading": "The judge is reading your words…",
+      "sent": "Sent as data: scored, never obeyed.",
+      "kept": "kept inside the offline range ({lo} to {hi})",
+      "inside": "inside the offline range ({lo} to {hi})",
+      "talking": "{boss} is still talking. Your next argument opens when {they} {finishes}.",
+      "thinking": "{boss} is thinking…",
+      "done": "{boss} has finished. Your next argument is open.",
+      "noKey": "no key: {their} set line plays",
+      "rules": "Read by the rules (no Key-Card)",
+      "callout": "Claim not backed by the Ledger",
+      "insult": "Insult: the next turn is soured"
     }
   },
   "admin": {
@@ -240,6 +596,7 @@
     }
   },
   "text": {
+    "early": "The assistant puts a word in: {boss} will sit down for a Debate early (Rival File).",
     "noTeam": "No rival Boss to talk to.",
     "yours": "{team} is already yours.",
     "closed": "{boss} will never talk to you again this region.",

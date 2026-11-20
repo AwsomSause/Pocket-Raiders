@@ -57,7 +57,8 @@ play('blackout', kinds=ANYK, chance=60, heat=-6, failHeat=6, effect='jam', win='
 play('night-raid', kinds=['site', 'dock', 'shop', 'street'], effect='storm', squad=3, win='A night raid on {target}.')
 play('the-big-night', kinds=ANYK, effect='bigNight', win='The Big Night: three more night jobs before dawn.')
 
-later = {'interrogate': 'D23', 'hostage-trade': 'D23'}
+# D23 (snatch.json) plays Interrogate and Hostage Trade now.
+later = {}
 crates = {
     'museum': dict(picks=1, cash=[100, 300], items=[['moon-stone', 2], ['sun-stone', 1], ['shiny-stone', 1], ['dusk-stone', 1], ['dragon-scale', 1], ['oval-stone', 2]]),
     'lab': dict(picks=2, cash=[0, 200], items=[['up-grade', 1], ['metal-coat', 1], ['thunder-stone', 1], ['lucky-egg', 1], ['timer-ball', 2], ['quick-ball', 2]]),

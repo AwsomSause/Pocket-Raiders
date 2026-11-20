@@ -4,6 +4,7 @@
 import { DOMINION_DATA } from './data';
 import type { DominionAction, DominionBlock } from './schema';
 import { addHeat, scoutHome, syncHeat } from './field';
+import { squadStep, rescued } from './squads';
 import { fill, runWorldTurn } from './worldTurn';
 import { addClean, hqFx } from './hqFx';
 import { assign, bail } from './crew';
@@ -144,6 +145,7 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
       return ok(endNight(block, seed, false));
     }
     case 'act':
+    case 'jobCaught':
     case 'buy':
     // D5: the HQ menu (hq.ts), sent there by session.ts.
     case 'upgrade':
@@ -159,13 +161,24 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'breakTruce':
     case 'card':
     case 'ransom':
+    case 'townMeet':
+    case 'spyStart':
+    case 'spyAsk':
+    case 'spyAccuse':
+    case 'spyDrop':
     // D13: the Debate (debate.ts, sent there by session.ts).
     case 'argue':
+    case 'argueTyped':
+    case 'debateVoice':
     case 'deal':
     case 'walkOut':
     case 'debateDone':
     case 'answer':
     case 'released':
+    case 'sGoal':
+    case 'sSay':
+    case 'sStop':
+    case 'sEnd':
       // The Boss's hands need the run (party, bag): session.ts sends them to field.ts.
       return no(block);
     case 'toDay': {
@@ -205,7 +218,10 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     }
     case 'bail': {
       const out = bail(block, action.member);
-      return out.ok ? ok(out.block, out.notice) : { ...no(block), notice: out.notice };
+      if (!out.ok) return { ...no(block), notice: out.notice };
+      // D8: bailing a squad member out is a rescue of one of their own.
+      const line = rescued(out.block, action.member);
+      return ok(out.block, line ? `${out.notice} ${line}` : out.notice);
     }
     case 'patron': {
       const out = payPatron(block, action.patron);
@@ -239,6 +255,18 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'deskInspect':
     case 'deskStamp':
     case 'found': // D7: handled by session.ts (founding.ts)
+    case 'takeover': // D14: handled by session.ts (takeover.ts)
       return no(block);
+    // D8, Squads and Groups (squads.ts): the block only.
+    case 'squadSave':
+    case 'squadDisband':
+    case 'squadOrder':
+    case 'squadTrait':
+    case 'groupSave':
+    case 'groupDisband':
+    case 'groupOrder': {
+      const out = squadStep(block, action, seed)!;
+      return out.ok ? ok(out.block, out.notice) : { ...no(block), notice: out.notice };
+    }
   }
 }

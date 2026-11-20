@@ -327,9 +327,13 @@
     "Palace Wing"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "seats": {
+     "admin": 1
+    }
+   },
+   "waits": null
   },
   {
    "n": "11",
@@ -453,9 +457,12 @@
     "Imperial Tailor"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "dread": 2
+   },
+   "waits": null,
+   "note": "New looks wait for team colours (D7)."
   },
   {
    "n": "15",
@@ -554,7 +561,7 @@
     "unlock": true
    },
    "waits": null,
-   "note": "Stat classes come with ranks (D4)."
+   "note": "Stat classes come with ranks (later)."
   },
   {
    "n": "18",
@@ -707,9 +714,11 @@
     "Grand Academy"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "promoTrait": 1
+   },
+   "waits": null
   },
   {
    "n": "23",
@@ -738,9 +747,11 @@
     "Champion's Ring"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "spar": 1
+   },
+   "waits": null
   },
   {
    "n": "24",
@@ -898,9 +909,11 @@
     "Ghost Academy"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "sneak": 4
+   },
+   "waits": null
   },
   {
    "n": "29",
@@ -963,9 +976,11 @@
     "Dark Academy"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "rankLv": 2
+   },
+   "waits": null
   },
   {
    "n": "31",
@@ -1311,9 +1326,11 @@
     "Mind Palace"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "cure": 1
+   },
+   "waits": null
   },
   {
    "n": "42",
@@ -1439,9 +1456,11 @@
     "Hall of Veterans"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "retirees": 1
+   },
+   "waits": null
   },
   {
    "n": "46",
@@ -1503,12 +1522,11 @@
     "Zoo"
    ],
    "minTier": 0,
-   "status": "limited",
+   "status": "supported",
    "fx": {
     "unlock": true
    },
-   "waits": null,
-   "note": "Cooling off stolen Pokémon comes with the Reserve (D4)."
+   "waits": null
   },
   {
    "n": "48",
@@ -1925,9 +1943,13 @@
     "Hall of Conquest"
    ],
    "minTier": 0,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "dread": 1,
+    "recruit": 5
+   },
+   "waits": null,
+   "note": "Visitors surrendering at the door comes later."
   },
   {
    "n": "61",
@@ -2119,9 +2141,11 @@
     "Truth Chamber"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D23",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "talk": 10
+   },
+   "waits": null
   },
   {
    "n": "67",
@@ -2511,9 +2535,11 @@
     "Book of Gold"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "honest": 1
+   },
+   "waits": null
   },
   {
    "n": "79",
@@ -3042,7 +3068,7 @@
     "unlock": true
    },
    "waits": null,
-   "note": "Breeding waits for D4b; Hit a Lab and Hack the Terminal are open."
+   "note": "Breeding is the Breed action (D4b, in the Pens); Hit a Lab and Hack the Terminal are open."
   },
   {
    "n": "95",
@@ -4007,9 +4033,12 @@
     "Voice of the Empire"
    ],
    "minTier": 2,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "dread": 2
+   },
+   "waits": null,
+   "note": "Spread the Word is D10; broadcasting to the next region waits for many regions (D15)."
   },
   {
    "n": "125",
@@ -4071,9 +4100,13 @@
     "Empire Press"
    ],
    "minTier": 2,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "regard": 1,
+    "dread": 1
+   },
+   "waits": null,
+   "note": "Choosing the Morning Report headline comes later; the press work on the town now."
   },
   {
    "n": "127",
@@ -4136,9 +4169,11 @@
     "Sky Emblem"
    ],
    "minTier": 2,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dread": 3
+   },
+   "waits": null
   },
   {
    "n": "129",
@@ -4167,9 +4202,12 @@
     "Palace"
    ],
    "minTier": 2,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "regard": 1,
+    "dread": 1
+   },
+   "waits": null
   },
   {
    "n": "130",
@@ -4198,9 +4236,13 @@
     "Court Academy"
    ],
    "minTier": 2,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "regard": 1,
+    "recruit": 5
+   },
+   "waits": null,
+   "note": "The Boss has no Charm stat of their own yet: the school helps your pitches and Regard."
   },
   {
    "n": "131",
@@ -4360,9 +4402,11 @@
     "Cultural Palace"
    ],
    "minTier": 2,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "regard": 2
+   },
+   "waits": null
   },
   {
    "n": "136",
@@ -5044,9 +5088,11 @@
     "Healing Hall"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "trustCure": 1
+   },
+   "waits": null
   },
   {
    "n": "P7",
@@ -5208,9 +5254,13 @@
     "Sun Temple"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "fire": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P12",
@@ -5240,9 +5290,13 @@
     "Moon Temple"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "later",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "water": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P13",
@@ -5272,9 +5326,13 @@
     "World Tree Hall"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "later",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "grass": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P14",
@@ -5304,9 +5362,13 @@
     "Lightning Temple"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "later",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "electric": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P15",
@@ -5336,9 +5398,14 @@
     "Twilight Temple"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "later",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "psychic": 4,
+     "dark": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P16",
@@ -5368,9 +5435,14 @@
     "Titan Temple"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "later",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "fighting": 4,
+     "rock": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P17",
@@ -5400,9 +5472,14 @@
     "Phantom Temple"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "later",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "ghost": 4,
+     "poison": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P18",
@@ -5432,9 +5509,14 @@
     "Dragon Temple"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "later",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dojo": {
+     "steel": 4,
+     "dragon": 4
+    }
+   },
+   "waits": null
   },
   {
    "n": "P19",
@@ -6138,9 +6220,12 @@
     "Great Museum"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "dread": 3
+   },
+   "waits": null,
+   "note": "The fossil stat aura comes later."
   },
   {
    "n": "P41",
@@ -6202,9 +6287,13 @@
     "Wonder Zoo"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "dread": 2,
+    "income": 100
+   },
+   "waits": null,
+   "note": "Pokémon on display never rebelling waits for rebellions (later)."
   },
   {
    "n": "P43",
@@ -6526,9 +6615,11 @@
     "Imperial Academy"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "gruntSkill": 1
+   },
+   "waits": null
   },
   {
    "n": "G3",
@@ -6590,9 +6681,11 @@
     "Imperial Wardrobe"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dread": 2
+   },
+   "waits": null
   },
   {
    "n": "G5",
@@ -6622,9 +6715,11 @@
     "Master Hall"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "taskXp": 1
+   },
+   "waits": null
   },
   {
    "n": "G6",
@@ -6720,9 +6815,11 @@
     "Hall of Veterans"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "vets": 1
+   },
+   "waits": null
   },
   {
    "n": "G9",
@@ -6752,9 +6849,11 @@
     "Grand Exam"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "examStat": 1
+   },
+   "waits": null
   },
   {
    "n": "G10",
@@ -6784,9 +6883,11 @@
     "Mind Mirror"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "reveal": 1
+   },
+   "waits": null
   },
   {
    "n": "G11",
@@ -6850,9 +6951,11 @@
     "Hall"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "pairs": 1
+   },
+   "waits": null
   },
   {
    "n": "G13",
@@ -7182,9 +7285,11 @@
     "Standard"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "dread": 2
+   },
+   "waits": null
   },
   {
    "n": "G23",
@@ -7682,9 +7787,13 @@
     "Chamber"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "seats": {
+     "sergeant": 1
+    }
+   },
+   "waits": null
   },
   {
    "n": "G38",
@@ -7714,9 +7823,13 @@
     "Court"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "seats": {
+     "lieutenant": 1
+    }
+   },
+   "waits": null
   },
   {
    "n": "G39",
@@ -7746,9 +7859,13 @@
     "Throne"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D4",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "seats": {
+     "captain": 1
+    }
+   },
+   "waits": null
   },
   {
    "n": "G40",
@@ -8010,9 +8127,12 @@
     "Imperial Hall"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "morale": 2
+   },
+   "waits": null,
+   "note": "Crew never routing waits for squads (D8)."
   },
   {
    "n": "G48",
@@ -8350,9 +8470,13 @@
     "Empire"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D6",
-   "fx": {}
+   "status": "limited",
+   "fx": {
+    "intel": 1,
+    "regard": 1
+   },
+   "waits": null,
+   "note": "Controlling the Morning Report comes later."
   },
   {
    "n": "G58",
@@ -8517,13 +8641,12 @@
     "Grand Hall"
    ],
    "minTier": 0,
-   "status": "limited",
+   "status": "supported",
    "fx": {
     "recruit": 10,
     "hireOff": 25
    },
-   "waits": null,
-   "note": "The weekly walk-in is D6."
+   "waits": null
   },
   {
    "listName": "Luxury Suite",

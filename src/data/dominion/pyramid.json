@@ -1,5 +1,5 @@
 {
-  "_source": "plans/evil-mode-rework Part 7 (Team Types and the Reserve), Part 8 (the Rank Pyramid), Part 9 A19 (Pokémon Trust). Numbers are the design's starting values.",
+  "_source": "plans/evil-mode-rework Part 7 (Team Types and the Reserve), Part 8 (the Rank Pyramid), Part 9 A19 (Pokémon Trust). Numbers are the design's starting values. D4b school: lists/team-actions.md 67 and 69, lists/player-actions.md 63, 68 and 72, lists/buildings.md and buildings-pokemon-and-grunt.md (the rank and training rooms).",
   "ranks": [
     {
       "id": "hopeful",
@@ -357,7 +357,8 @@
       "snagged": 1,
       "shadow": 0,
       "own": 5,
-      "rescued": 7
+      "rescued": 7,
+      "hatched": 8
     },
     "disobeyBelow": 4,
     "loyalFrom": 7,
@@ -422,5 +423,99 @@
     "never": "Never for crew",
     "full": "Team full",
     "pens": "In the Pens"
+  },
+  "school": {
+    "trades": [
+      {
+        "id": "forger",
+        "name": "forger",
+        "stat": "wits",
+        "perk": "hireOff",
+        "pct": 5,
+        "craft": {
+          "clean": 100
+        }
+      },
+      {
+        "id": "mechanic",
+        "name": "mechanic",
+        "stat": "brawn",
+        "perk": "buildOff",
+        "pct": 5,
+        "craft": {
+          "repair": 10
+        }
+      },
+      {
+        "id": "cook",
+        "name": "cook",
+        "stat": "charm",
+        "perk": "wageOff",
+        "pct": 5,
+        "craft": {
+          "items": {
+            "oran-berry": 2
+          }
+        }
+      }
+    ],
+    "mistake": 20,
+    "tutorFee": 100,
+    "tutorOff": 20,
+    "eggDays": 3,
+    "eggUnder": 5,
+    "eggPick": 3,
+    "ivMin": 15,
+    "natureChance": 50,
+    "maxEggs": 6,
+    "sparXp": 3,
+    "vetXp": 2,
+    "pairXp": 2,
+    "pairLoyalty": 2,
+    "retireeMorale": 1,
+    "retireMinDays": 14,
+    "retireMinLoyalty": 50,
+    "wardTrust": 2,
+    "counselMorale": 10,
+    "bad": [
+      "resentful",
+      "embezzler"
+    ],
+    "lines": {
+      "tradeLearned": "{name} learned the {trade} trade.",
+      "tradeStudy": "{name} studied the {trade} trade.",
+      "tradeMistake": "{name} made an apprentice mistake. ₽{n} of materials ruined.",
+      "perk_hireOff": "Forged papers: Hire Grunt costs {pct}% less.",
+      "perk_buildOff": "Handy work: rooms cost {pct}% less to build and raise.",
+      "perk_wageOff": "Cheap meals: wages cost {pct}% less.",
+      "craft": "{name}'s master craft this week: {what}.",
+      "tutorFee": "{name} paid the tutor ₽{fee}.",
+      "tutorBroke": "{name} could not pay the tutor (₽{fee}).",
+      "tutorLearned": "{name}'s {mon} learned {move}.",
+      "tutorNone": "{name}'s Pokémon had nothing new to learn.",
+      "tutorForgot": "{name}'s lesson didn't stick. The move was forgotten by morning.",
+      "bossTutor": "{mon} learned {move} from the tutor.",
+      "bossTutorNone": "None of your Pokémon has a move left to learn.",
+      "eggFound": "You found an egg{species}. It hatches in {days} days.",
+      "eggBred": "{a} and {b} left an egg ({species}). It hatches in {days} days.",
+      "eggFull": "There is no room for another egg ({n} waiting).",
+      "noPair": "Breeding needs two Pokémon in the Reserve, out of the Pens.",
+      "hatched": "An egg hatched: {mon}!",
+      "spar": "Sparring Ring: {a} and {b} went three rounds. XP +{n} each.",
+      "sneak": "Stealth School: the crew's Stealth grows.",
+      "vets": "{a} showed {b} the ropes. XP +{n}.",
+      "pair": "{a} mentored {b}. XP +{n}, Loyalty +{l}.",
+      "reveal": "Personality Lab: {name}'s trait shows: {trait}.",
+      "cure": "Therapy Room: {name} is no longer {trait}.",
+      "counsel": "Therapy Room: {name} talked it out. Morale +{n}.",
+      "ward": "Comfort Ward: {mon} calms down (Trust {n}).",
+      "gruntSkill": "Grunt Academy: {name} practised {stat}.",
+      "classTrait": "Classroom: {name} chose a trait at promotion: {trait}.",
+      "classPoint": "Classroom: {name} gains a trait point.",
+      "exam": "Skill Exam Hall: {name} passed the exam. {stat} {value}.",
+      "retired": "{name} retires to the Retiree Hall.",
+      "retirees": "The retirees cheer the crew on. Morale +{n}.",
+      "dojo": "Type Dojo: {types} Pokémon trained hard this week."
+    }
   }
 }

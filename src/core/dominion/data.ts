@@ -17,37 +17,53 @@ import heroRaw from '../../data/dominion/hero.json';
 import hqRaw from '../../data/dominion/hq.json';
 import buildingsRaw from '../../data/dominion/buildings.json';
 import pyramidRaw from '../../data/dominion/pyramid.json';
+import squadsRaw from '../../data/dominion/squads.json';
 import rivalsRaw from '../../data/dominion/rivals.json';
+import spiesRaw from '../../data/dominion/spies.json';
 import rivalActionsRaw from '../../data/dominion/rivalActions.json';
 import outsideRaw from '../../data/dominion/outside.json';
+import townRaw from '../../data/dominion/town.json';
 import debateRaw from '../../data/dominion/debate.json';
 import policeRaw from '../../data/dominion/police.json';
 import growthRaw from '../../data/dominion/growth.json';
 import growthActionsRaw from '../../data/dominion/growthActions.json';
+import snatchRaw from '../../data/dominion/snatch.json';
+import takeoverRaw from '../../data/dominion/takeover.json';
 import {
-  GrowthActionsSchema, GrowthFileSchema, type FieldFile as FieldFileT, type GrowthActions, type GrowthFile,
-  ActionsFileSchema, ArmbandsFileSchema, BuildingsFileSchema, CourtFileSchema, CourtRulesSchema, DebateFileSchema, FoundingFileSchema, EmpireFileSchema, PoliceFileSchema, OutsideFileSchema, RivalActionsFileSchema, RivalsFileSchema, CrewFileSchema, DeskFileSchema, HqFileSchema, PyramidFileSchema, FieldFileSchema, GruntTypesFileSchema, HeroFileSchema, PersonalityFileSchema, StartFileSchema, TasksFileSchema,
-  type ActionsFile, type ArmbandLook, type Building, type CourtCard, type CourtRules, type DebateFile, type FoundingFile, type EmpireFile, type PoliceFile, type OutsideRow, type RivalActionsFile, type RivalsFile, type CrewFile, type DeskFile, type HqFile, type PyramidFile, type FieldFile, type GruntType, type HeroFile, type PersonalityFile, type StartFile, type Task,
+  GrowthActionsSchema, GrowthFileSchema, SnatchFileSchema, TakeoverFileSchema, type TakeoverFile, type FieldFile as FieldFileT, type GrowthActions, type GrowthFile, type SnatchFile,
+  ActionsFileSchema, ArmbandsFileSchema, BuildingsFileSchema, CourtFileSchema, CourtRulesSchema, DebateFileSchema, FoundingFileSchema, EmpireFileSchema, PoliceFileSchema, OutsideFileSchema, RivalActionsFileSchema, RivalsFileSchema, CrewFileSchema, DeskFileSchema, HqFileSchema, PyramidFileSchema, SquadsFileSchema, FieldFileSchema, GruntTypesFileSchema, HeroFileSchema, PersonalityFileSchema, SpiesFileSchema, StartFileSchema, TasksFileSchema, TownFileSchema,
+  type ActionsFile, type ArmbandLook, type Building, type CourtCard, type CourtRules, type DebateFile, type FoundingFile, type EmpireFile, type PoliceFile, type OutsideRow, type RivalActionsFile, type RivalsFile, type CrewFile, type DeskFile, type HqFile, type PyramidFile, type SquadsFile, type FieldFile, type GruntType, type HeroFile, type PersonalityFile, type SpiesFile, type StartFile, type Task, type TownFile,
 } from './schema';
 
 const growth = GrowthFileSchema.parse(growthRaw);
-const growthActions = GrowthActionsSchema.parse(growthActionsRaw);
-/** D10: Growth's plays (its own rows 1-150 and the list's rows 151-600) and crates join the field data; the rows that wait name their slice. */
+const takeover = TakeoverFileSchema.parse(takeoverRaw);
+/** D14: the 30 League and Plan actions the list left waiting for D14 are played now; their honest statuses replace the waiting ones. */
+const growthActionsRawParsed = GrowthActionsSchema.parse(growthActionsRaw);
+const growthActions: GrowthActions = {
+  ...growthActionsRawParsed,
+  later: Object.fromEntries(Object.entries(growthActionsRawParsed.later).filter(([id]) => !takeover.play[id])),
+  status: { ...growthActionsRawParsed.status, ...Object.fromEntries(Object.entries(takeover.status).filter(([id]) => id in growthActionsRawParsed.status)) },
+};
+const snatch = SnatchFileSchema.parse(snatchRaw);
+/** D10: Growth's plays (its own rows 1-150 and the list's rows 151-600) and crates join the field data; the rows that wait name their slice.
+ * D23: Interrogate (the Snatch Operation) and Hostage Trade join too. */
 function withGrowth(f: FieldFileT): FieldFileT {
   return {
     ...f,
-    play: { ...f.play, ...growthActions.play, ...growth.play },
+    play: { ...f.play, ...growthActions.play, ...growth.play, ...snatch.play, ...takeover.play },
     crates: { ...f.crates, ...growth.crates },
     later: { ...f.later, byAction: { ...f.later.byAction, ...growthActions.later, ...growth.later } },
   };
 }
 
-export const DOMINION_DATA: { growth: GrowthFile; growthActions: GrowthActions; start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; empire: EmpireFile; hq: HqFile; buildings: Building[]; pyramid: PyramidFile; rivals: RivalsFile; rivalActions: RivalActionsFile; outside: OutsideRow[]; personality: PersonalityFile; court: CourtCard[]; courtRules: CourtRules; hero: HeroFile; desk: DeskFile; founding: FoundingFile; armbands: Record<string, ArmbandLook>; police: PoliceFile; debate: DebateFile } = {
+export const DOMINION_DATA: { snatch: SnatchFile; takeover: TakeoverFile; growth: GrowthFile; growthActions: GrowthActions; start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; empire: EmpireFile; hq: HqFile; buildings: Building[]; pyramid: PyramidFile; rivals: RivalsFile; rivalActions: RivalActionsFile; outside: OutsideRow[]; personality: PersonalityFile; court: CourtCard[]; courtRules: CourtRules; hero: HeroFile; desk: DeskFile; squads: SquadsFile; founding: FoundingFile; armbands: Record<string, ArmbandLook>; police: PoliceFile; debate: DebateFile; spies: SpiesFile; town: TownFile } = {
   start: StartFileSchema.parse(startRaw),
   actions: ActionsFileSchema.parse(actionsRaw),
   field: withGrowth(FieldFileSchema.parse(fieldRaw)),
   growth,
   growthActions,
+  snatch,
+  takeover,
   crew: CrewFileSchema.parse(crewRaw),
   tasks: TasksFileSchema.parse(tasksRaw).tasks,
   gruntTypes: GruntTypesFileSchema.parse(gruntTypesRaw).types,
@@ -63,8 +79,11 @@ export const DOMINION_DATA: { growth: GrowthFile; growthActions: GrowthActions; 
   outside: OutsideFileSchema.parse(outsideRaw).rows,
   debate: DebateFileSchema.parse(debateRaw),
   personality: PersonalityFileSchema.parse(personalityRaw),
+  town: TownFileSchema.parse(townRaw),
   police: PoliceFileSchema.parse(policeRaw),
   founding: FoundingFileSchema.parse(foundingRaw),
   armbands: ArmbandsFileSchema.parse(armbandsRaw).looks,
   desk: DeskFileSchema.parse(deskRaw),
+  squads: SquadsFileSchema.parse(squadsRaw),
+  spies: SpiesFileSchema.parse(spiesRaw),
 };

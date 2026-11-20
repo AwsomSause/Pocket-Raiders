@@ -11,13 +11,17 @@ import { services } from '../../game/services';
 import type { InputAction } from '../../ui/input';
 import { rxFileOf } from '../../ui/redux/assets';
 import { fileView, hireOverlay, leadsOverlay, morningView } from '../../ui/redux/screens/dominion/crew';
+import { assignCount, assignModel, assignTaskAt, ASSIGN_PAGE } from '../../core/dominion/assignScreen';
+import { assignView } from '../../ui/redux/screens/dominion/assign';
 import { personaView } from '../../ui/redux/screens/dominion/persona';
 
 interface Host {
-  screenName: 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'founding' | 'founded' | 'debate';
+  screenName: 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'squads' | 'founding' | 'founded' | 'debate' | 'spy' | 'takeover' | 'broadcast' | 'assign' | 'district';
   setNotice(n: string | null): void;
   refresh(): void;
   step(a: DominionAction): boolean;
+  /** D22: F opens the Confront room for this member. */
+  confront(member: string): void;
   cache: { json: { get(k: string): unknown } };
 }
 
@@ -32,6 +36,8 @@ export class CrewController {
   private pitchAt = 0;
   /** D19: the personality card page of the Crew File (C opens it, Esc goes back to the file). */
   private persona = false;
+  /** D29: the task under the cursor on the Assign page (an index into the whole list it shows). */
+  private asAt = 0;
 
   constructor(private readonly host: Host) {}
 
@@ -41,18 +47,23 @@ export class CrewController {
   private talking(): boolean {
     return !!this.block()?.crew?.talks.length;
   }
+  /** D28: the personality card is up (its own page on the board and the shutter). */
+  personaOn(): boolean {
+    return this.persona && this.host.screenName === 'crew' && !this.talking();
+  }
   /** The HQ draws the Morning while it's morning (D3 replaces D1's Night Report panel). */
   owns(): boolean {
     return this.host.screenName === 'hq' && this.block()?.phase === 'morning';
   }
   private active(): boolean {
-    return this.owns() || this.host.screenName === 'crew';
+    return this.owns() || this.host.screenName === 'crew' || this.host.screenName === 'assign';
   }
 
   render(notice: string | null): string {
     const b = this.block();
     if (!b) return '';
     this.sel = Math.min(this.sel, b.members.length - 1);
+    if (this.host.screenName === 'assign') return assignView(assignModel(b, this.sel, this.asAt, this.all), notice);
     if (this.host.screenName === 'crew') {
       const seed = services().session.run!.seed;
       if (this.persona && !this.talking()) return personaView(personaModel(b, this.sel, seed, services().session.run?.ai), (s) => this.monFile(s));
@@ -79,19 +90,56 @@ export class CrewController {
   private answer(i: number): void {
     if (this.host.step({ t: 'talk', choice: i })) this.talkAt = 0;
   }
-  private assign(i: number): void {
-    const id = this.tasks()[i];
-    const m = this.member();
-    if (!id || !m) return;
+  /**
+   * D29 (round-4 mockup m3): picking a task on the Morning opens the Assign a task page on it; the order is given there.
+   * The order itself is D3's 'assign' step, unchanged.
+   */
+  private openAssign(i: number): void {
+    const b = this.block();
+    if (!b || this.talking()) return;
+    this.asAt = Math.max(0, i);
     this.taskAt = i;
+    this.host.screenName = 'assign';
+    this.host.setNotice(null);
+    this.host.refresh();
+  }
+  private closeAssign(): void {
+    this.host.screenName = 'hq';
+    this.taskAt = this.asAt < this.tasks().length ? this.asAt : -1;
+    this.host.setNotice(null);
+  }
+  /** Give the order: the member under the page takes the task under the cursor (D3's 'assign'). */
+  private give(): void {
+    const b = this.block();
+    const m = this.member();
+    const id = b ? assignTaskAt(b, this.sel, this.all, this.asAt) : null;
+    if (!id || !m) return;
     if (this.host.step({ t: 'assign', member: m, task: id })) this.host.setNotice(null);
+  }
+  private asPick(k: number): void {
+    const at = Math.floor(this.asAt / ASSIGN_PAGE) * ASSIGN_PAGE + k;
+    if (at === this.asAt) return this.give();
+    this.asAt = at;
+    this.host.refresh();
+  }
+  private asToggleAll(): void {
+    this.all = !this.all;
+    this.asAt = 0;
+    this.host.setNotice(null);
+    this.host.refresh();
   }
 
   /** Tap targets (data-act). */
   acts(): Record<string, (arg: string) => void> {
     return {
       talk: (i) => this.answer(Number(i)),
-      task: (i) => this.assign(Number(i)),
+      task: (i) => this.openAssign(Number(i)),
+      asTask: (k) => this.asPick(Number(k)),
+      asGive: () => this.give(),
+      asAll: () => this.asToggleAll(),
+      asWhere: () => this.cycleWhere(),
+      asMember: (i) => { this.sel = Number(i); this.host.setNotice(null); this.host.refresh(); },
+      asFlip: (d) => this.flip(Number(d)),
       crewMember: (i) => { this.sel = Number(i); this.taskAt = -1; this.host.refresh(); },
       moreTasks: () => { this.all = !this.all; this.taskAt = 0; this.host.refresh(); },
       flip: (d) => this.flip(Number(d)),
@@ -107,6 +155,7 @@ export class CrewController {
     return {
       talkOver: (i) => { this.talkAt = Number(i); this.host.refresh(); },
       taskOver: (i) => { this.taskAt = Number(i); this.host.refresh(); },
+      asOver: (k) => { this.asAt = Math.floor(this.asAt / ASSIGN_PAGE) * ASSIGN_PAGE + Number(k); this.host.refresh(); },
       pickOver: (i) => { this.pickAt = Number(i); this.host.refresh(); },
     };
   }
@@ -147,6 +196,10 @@ export class CrewController {
       this.host.setNotice(null);
       return true;
     }
+    if (i === 0 && this.host.screenName === 'assign') {
+      this.closeAssign();
+      return true;
+    }
     if (i === 0 && this.host.screenName === 'crew') {
       this.host.screenName = 'hq';
       this.overlay = null;
@@ -161,6 +214,11 @@ export class CrewController {
   raw(code: string): boolean {
     const b = this.block();
     if (!b || !this.active()) return false;
+    if (this.host.screenName === 'assign') {
+      if (code === 'KeyP') return this.cycleWhere(), true;
+      if (code === 'KeyM') return this.asToggleAll(), true;
+      return false;
+    }
     if (this.owns() && code === 'KeyP' && !this.talking()) return this.cycleWhere(), true;
     if (this.owns() && code === 'KeyM' && !this.talking()) {
       this.all = !this.all;
@@ -176,6 +234,8 @@ export class CrewController {
     if (this.persona) return false;
     const go = (a: DominionAction): boolean => (this.host.step(a), true);
     switch (code) {
+      case 'KeyF':
+        return this.host.confront(m.id), true;
       case 'KeyT':
         return go({ t: 'evTalk', member: m.id });
       case 'KeyB':
@@ -217,6 +277,14 @@ export class CrewController {
       else if (a === 'confirm') this.answer(this.talkAt);
       return a !== 'back';
     }
+    if (this.host.screenName === 'assign') {
+      const n = assignCount(b, this.sel, this.all);
+      if (a === 'left' || a === 'right') this.flip(a === 'left' ? -1 : 1);
+      else if ((a === 'up' || a === 'down') && n) this.asAt = (this.asAt + (a === 'up' ? -1 : 1) + n) % n;
+      else if (a === 'confirm') this.give();
+      else if (a === 'back') this.closeAssign();
+      return true;
+    }
     if (this.host.screenName === 'crew') {
       if (this.overlay) {
         const rows = this.overlay === 'hire' ? hireModel(b, services().session.run!.seed).rows.length : b.crew?.leads.length ?? 0;
@@ -247,7 +315,7 @@ export class CrewController {
       return true;
     }
     if (a === 'confirm' && this.taskAt >= 0) {
-      this.assign(this.taskAt);
+      this.openAssign(this.taskAt);
       return true;
     }
     if (a === 'back' && this.all) {
