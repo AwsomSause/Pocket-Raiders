@@ -17,7 +17,7 @@ import { addWorldStep, fill } from './worldTurn';
 import { addLoyalty, addMorale, addXp, monName } from './crew';
 import { hasBand } from './pyramid';
 import { evolveOne } from './reserve';
-import { buildingDef, hasRoom, launderAction, roomFor, spend } from './hqFx';
+import { buildingDef, hasRoom, hqFx, launderAction, roomFor, spend } from './hqFx';
 
 const F = () => DOMINION_DATA.field;
 const L = () => DOMINION_DATA.field.lines;
@@ -248,9 +248,14 @@ export function addCardGate(g: (b: DominionBlock, run: Pick<RunState, 'party'>, 
 const teamLevel = (run: Pick<RunState, 'party'>): number => (run.party.length ? Math.round(run.party.reduce((a, m) => a + m.level, 0) / run.party.length) : 5);
 export const foeLevel = (b: DominionBlock, run: Pick<RunState, 'party'>, offset: number): number => clamp(teamLevel(run) + offset, F().levels.min, b.levelCap + F().levels.overCap);
 
-export function foeOf(b: DominionBlock, run: Pick<RunState, 'party'>, kind: FieldFight['foe'], district: District, target: Target | null): Foe {
+export function foeOf(b: DominionBlock, run: Pick<RunState, 'party'>, kind: FieldFight['foe'], district: District, target: Target | null, card: string | null = null): Foe {
   const P = F().police;
   switch (kind) {
+    case 'court': {
+      // D12: a Chair visitor at the door (court.json card `card`).
+      const f = DOMINION_DATA.court.find((c) => String(c.id) === card)?.foe ?? P.raid;
+      return { name: f.name, species: f.species[0]!, level: foeLevel(b, run, f.offset), wild: false };
+    }
     case 'police': return { name: P.jenny.name, species: P.jenny.species[0]!, level: foeLevel(b, run, P.jenny.offset), wild: false };
     case 'looker': return { name: P.looker.name, species: P.looker.species[0]!, level: foeLevel(b, run, P.looker.offset), wild: false };
     case 'raid': return { name: P.raid.name, species: P.raid.species[0]!, level: foeLevel(b, run, P.raid.offset), wild: false };
@@ -349,7 +354,8 @@ export function card(b: DominionBlock, run: Pick<RunState, 'party'>, actionId: s
     if (M.odds[level - 1]) parts.push([`${M.names[level - 1]} (Lv ${level})`, M.odds[level - 1]!]);
   }
   const chance = roll ? clamp(base + parts.reduce((a, [, n]) => a + n, 0), O.min, O.max) : 100;
-  const exact = !roll || (target ? (f.scouted[target.id] ?? 0) >= b.day : true) || level >= M.intelFrom;
+  // D6b: the Ledger Office's Honest Card shows the exact odds.
+  const exact = !roll || (target ? (f.scouted[target.id] ?? 0) >= b.day : true) || level >= M.intelFrom || hqFx(b).honest > 0;
   const range: [number, number] = exact ? [chance, chance] : [clamp(chance - O.rangeHalf, O.min, O.max), clamp(chance + O.rangeHalf, O.min, O.max)];
 
   // what's at stake
@@ -390,7 +396,8 @@ export function card(b: DominionBlock, run: Pick<RunState, 'party'>, actionId: s
   police = Math.min(100, police);
 
   const cost = def.slot === 'day' ? tr.cost + 1 : 0;
-  const money = play?.cost ?? 0;
+  // D4b: an action that gets cheaper with mastery (Move Tutor) takes `cheaper`% off from the second level.
+  const money = Math.round(((play?.cost ?? 0) * (100 - (level >= 2 ? play?.cheaper ?? 0 : 0))) / 100);
   const out: Card = {
     def, play, district, target, blocked: null, roll, chance, parts, base, exact, range, pay, bring: [...bring], weekly, crate: play?.crate ?? null,
     heat, failHeat, regard: play?.regard ?? 0, dread: play?.dread ?? 0, cost, money, travel: tr, battle, police, level, opt, opts: [], note: null,
@@ -465,6 +472,13 @@ export interface ActFx {
 }
 type ActEffect = (b: DominionBlock, x: ActFx) => string[];
 const ACT_EFFECTS: Partial<Record<string, ActEffect>> = {};
+/** D4b: an effect that needs the content, the run and the action's mastery level (school.ts: Egg Run, Breed, Move Tutor). */
+export interface PlayFx { content: Content; b: DominionBlock; run: RunState; level: number; rng: Rng }
+type PlayEffect = (x: PlayFx) => string[];
+const PLAY_EFFECTS: Partial<Record<string, PlayEffect>> = {};
+export function addPlayEffect(effect: string, f: PlayEffect): void {
+  PLAY_EFFECTS[effect] = f;
+}
 export function addActEffect(effect: string, f: ActEffect): void {
   ACT_EFFECTS[effect] = f;
 }
@@ -492,6 +506,14 @@ const SETTLERS: Partial<Record<FieldFight['why'], Settler>> = {};
 export function addFightSettler(why: FieldFight['why'], f: Settler): void {
   SETTLERS[why] = f;
 }
+/** D24: the Boss is caught (a failed act, a lost police fight or raid); police.ts may open a questioning. */
+export interface CaughtEv { why: 'stealth' | 'police' | 'raid'; district: string; action: ActionDef | null; place: string | null; seed: string }
+type CaughtHook = (b: DominionBlock, ev: CaughtEv) => string[];
+const CAUGHT: CaughtHook[] = [];
+export function addCaughtHook(h: CaughtHook): void {
+  CAUGHT.push(h);
+}
+const caughtLines = (b: DominionBlock, ev: CaughtEv): string[] => CAUGHT.flatMap((h) => h(b, ev));
 /** D9: the rival foe on the Card (rivals.ts). */
 let RIVAL_FOE: ((b: DominionBlock, run: Pick<RunState, 'party'>) => Foe) | null = null;
 export function setRivalFoe(f: (b: DominionBlock, run: Pick<RunState, 'party'>) => Foe): void {
@@ -679,6 +701,9 @@ function succeed(content: Content | null, b: DominionBlock, run: RunState, x: Ct
     default: {
       const fx = play.effect ? ACT_EFFECTS[play.effect] : undefined;
       if (fx) lines.push(...fx(b, { action: def.id, district: district.id, target: target?.id ?? null, big: x.big, opt: x.opt, bring: c.bring, run, content, card: c }));
+      const pfx = play.effect ? PLAY_EFFECTS[play.effect] : undefined;
+      // The line the effect writes replaces the win line (as Evolve in Peace's does).
+      if (pfx && content) lines.splice(lines.length - 1, 1, ...pfx({ content, b, run, level: masteryLevel(f.mastery[def.id] ?? 0), rng }));
       // D11: the Hero actions' effects (hero.ts).
       if (play.effect) HOOKS.effects[play.effect]?.(b, run, { district, target, big: x.big }, lines);
       break;
@@ -782,6 +807,7 @@ export function act(content: Content | null, run: RunState, a: { action: string;
     const lines = [...fail(b, x), ...grow(b, c.def, c.play!, false, false)];
     for (const h of HOOKS.acted) h(b, c.def, c.district, false);
     syncHeat(b);
+    lines.push(...caughtLines(b, { why: 'stealth', district: c.district.id, action: c.def, place: c.target?.name ?? null, seed: run.seed }));
     return { ok: true, block: b, notice: lines.join(' '), fight: false, mon: null };
   }
   const s = succeed(content, b, run, x, rng);
@@ -828,6 +854,8 @@ function settleFight(content: Content | null, b: DominionBlock, run: RunState, o
   const f = b.field, fight = f.fight;
   if (!fight) return [];
   f.fight = null;
+  // D12: a Chair visitor's fight: its stakes are the Chair's (chair.ts courtFightEnd, called by fightEnd.ts).
+  if (fight.why === 'court') return [];
   const P = F().police, PL = P.lines;
   const district = districtDef(fight.district) ?? districtDef(F().hq)!;
   const won = outcome === 'win';
@@ -858,6 +886,8 @@ function settleFight(content: Content | null, b: DominionBlock, run: RunState, o
       const take = Math.max(0, Math.floor(Math.max(0, b.funds) * P.raidTake));
       spend(b, take);
       lines.push(fill(PL.raidLost!, { take }));
+      syncHeat(b);
+      lines.push(...caughtLines(b, { why: 'raid', district: district.id, action: null, place: null, seed: run.seed }));
     }
     syncHeat(b);
     return lines;
@@ -880,6 +910,10 @@ function settleFight(content: Content | null, b: DominionBlock, run: RunState, o
       lines.push(fill(PL.lost!, { name: P.jenny.name, fine, heat: P.lost.heat, district: district.name }));
     }
     lines.push(...grow(b, x.def, x.play, false, false));
+    if (!won) {
+      syncHeat(b);
+      lines.push(...caughtLines(b, { why: 'police', district: district.id, action: x.def, place: x.target?.name ?? null, seed: run.seed }));
+    }
   } else if (outcome === 'fled') {
     lines.push(L().fled!);
   } else if (fight.why === 'hero') {

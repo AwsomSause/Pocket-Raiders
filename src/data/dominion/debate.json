@@ -1,0 +1,266 @@
+{
+  "_source": "DOMINION slice D13, the Debate offline (plans/evil-mode-rework Part 4 §3, Part 9 A2-A4 and A6; Part 0 §6.1 Q2: offline first, set lines with fixed scores). Lines, replies and demands written for D13 from each Boss's canon values (Part 4 §3.2).",
+  "rounds": [
+    { "id": "values", "num": "I", "name": "Values", "what": "What each of you thinks the world should be" },
+    { "id": "methods", "num": "II", "name": "Methods", "what": "How you each work, and what you won't do" },
+    { "id": "future", "num": "III", "name": "The Future", "what": "What their team becomes under you" }
+  ],
+  "turnsPerRound": 2,
+  "adminRounds": ["values", "future"],
+  "marks": [
+    { "id": "values", "name": "Values", "what": "Speaking to what they care about" },
+    { "id": "record", "name": "Record", "what": "Claims that match the Ledger" },
+    { "id": "substance", "name": "Substance", "what": "Real offers, not slogans" },
+    { "id": "respect", "name": "Respect", "what": "Arguing with them, not at them" },
+    { "id": "honesty", "name": "Honesty", "what": "Not bluffing about what the game knows" }
+  ],
+  "move": { "base": 10, "k": 2, "min": -15, "max": 20, "threaten": 5, "merger": 5, "sour": 5 },
+  "start": { "cap": 20, "hot": 65, "hotCut": 10, "cool": 35, "coolAdd": 5, "beatBoss": 10, "beatAdmin": 5, "perAdminGone": 5, "perPage": 2, "maxPages": 5, "perMastery": 2 },
+  "results": [
+    { "id": "convinced", "min": 60, "name": "Convinced", "word": "CONVINCED", "text": "A Merger or a loyal Branch: your choice. Betrayal risk halved." },
+    { "id": "persuaded", "min": 25, "name": "Persuaded, on conditions", "word": "PERSUADED", "text": "A Branch, with one demand. Breaking it: betrayal risk +25 and the Branch may walk." },
+    { "id": "unmoved", "min": -24, "name": "Unmoved", "word": "UNMOVED", "text": "Nothing changes. Tension −10: they respect that you came." },
+    { "id": "offended", "min": -100, "name": "Offended", "word": "OFFENDED", "text": "Tension +15. Only a forced takeover is left." }
+  ],
+  "rules": {
+    "minTension": 40, "maxFails": 3, "unmoved": -10, "offended": 15, "adminWin": 5, "adminLose": 10,
+    "risk": 20, "breakRisk": 25, "walk": 50, "walkTension": 50, "hqSlack": 10, "townsTaken": 40
+  },
+  "strength": { "base": 6, "perAdmin": 2, "perPower": 1, "perHeld": 2, "fearBase": 10, "fearPerAdmin": 5, "fearPerPower": 2 },
+  "branch": { "members": 10, "perAdmin": 3, "tributeK": 1.2, "perMember": 5, "recruit": 3, "expand": 2, "defend": 2 },
+  "stances": [
+    { "id": "partnership", "name": "Partnership", "full": "Offer a partnership", "key": 1, "stripe": "#3fcf74", "aims": "Aims at a Branch" },
+    { "id": "merger", "name": "Merger", "full": "Propose a merger", "key": 2, "stripe": "#4fa3ff", "aims": "Aims at a Merger. −5 unless you're stronger" },
+    { "id": "recruit", "name": "Recruit {them}", "full": "Recruit them", "key": 3, "stripe": "#7b3fa0", "aims": "Aims at the Boss alone" },
+    { "id": "threaten", "name": "Threaten", "full": "Threaten them", "key": 4, "stripe": "#ef4a3a", "aims": "Fast, scores low. −5 unless your Dread is twice their Fear" }
+  ],
+  "lines": [
+    { "id": "p1", "stance": "partnership", "marks": [4, 3, 4, 4, 3], "text": "You won't kneel. You'll own half of what I build. {team} keeps the old money afraid; my crew keeps the streets." },
+    { "id": "p2", "stance": "partnership", "marks": [3, 3, 4, 3, 3], "text": "We split the region down the middle. Your rackets stay yours, mine stay mine, and the police chase shadows." },
+    { "id": "p3", "stance": "partnership", "marks": [3, 4, 3, 3, 4], "claim": "towns", "text": "My crew already runs more towns than you think. Stand with us now, while it's still a partnership." },
+    { "id": "m1", "stance": "merger", "marks": [2, 3, 4, 3, 3], "claim": "rich", "text": "One team, one name, one ledger. Your people get paid more than you ever paid them." },
+    { "id": "m2", "stance": "merger", "marks": [3, 2, 4, 4, 3], "text": "Fold {team} into mine and you keep your Admins, your old HQ and a seat at my table." },
+    { "id": "m3", "stance": "merger", "marks": [2, 4, 3, 3, 4], "claim": "army", "text": "I have the numbers now. Merge, and nobody on either side has to bleed for it." },
+    { "id": "r1", "stance": "recruit", "marks": [3, 3, 3, 4, 3], "text": "You're wasted on {team}, {boss}. Come and run my operations as my right hand." },
+    { "id": "r2", "stance": "recruit", "marks": [2, 2, 3, 2, 3], "text": "Your team is a weight on your back. Put it down and work for me; I'll give you the work you deserve." },
+    { "id": "r3", "stance": "recruit", "marks": [2, 4, 2, 3, 4], "claim": "clean", "text": "I've never robbed a family or a shop. Join a team whose hands are clean." },
+    { "id": "t1", "stance": "threaten", "marks": [1, 3, 2, 1, 3], "claim": "strong", "text": "Your people already lose to mine. Join me before there's nothing left of {team} to join." },
+    { "id": "t2", "stance": "threaten", "marks": [1, 2, 1, 0, 2], "text": "I can burn every site {team} has by Sunday. Kneel, or watch." },
+    { "id": "t3", "stance": "threaten", "marks": [0, 1, 0, 0, 2], "text": "You're old news, {boss}. Step aside or be stepped on." }
+  ],
+  "claims": {
+    "towns": { "what": "you hold 2+ towns (Held or Owned)", "min": 2, "callout": "{boss} laughs. \"You hold {towns} town{s}. Don't sell me a map you haven't coloured in.\"" },
+    "rich": { "what": "₽5,000+ in funds", "min": 5000, "callout": "{boss} raises an eyebrow. \"₽{funds}? That isn't a war chest, it's a wallet.\"" },
+    "army": { "what": "8+ members", "min": 8, "callout": "{boss} counts on their fingers. \"You have {members} people. I've met bigger picnics.\"" },
+    "clean": { "what": "no robbery on the Ledger", "min": 0, "callout": "{boss} slides a page across the table. \"{sin}. Clean hands, you said?\"" },
+    "strong": { "what": "you've beaten one of their Admins or their Boss", "min": 1, "callout": "{boss} doesn't blink. \"Mine lose to you? Name one. You can't.\"" }
+  },
+  "sins": [
+    { "action": "bank-job", "text": "You robbed a bank branch" },
+    { "action": "armored-car-ambush", "text": "You stopped a cash transport on the open road" },
+    { "action": "moonlit-heist", "text": "You pulled a heist by moonlight" },
+    { "action": "safe-crack", "text": "You opened a family's safe" },
+    { "action": "thieve", "text": "You lifted wallets in a crowd" },
+    { "action": "shake-the-jar", "text": "You emptied a Pokémon Center donation box" },
+    { "action": "rig-the-rent", "text": "You put up the rent on working families" },
+    { "action": "fines-scam", "text": "You fined tourists for nothing" },
+    { "action": "counterfeit", "text": "You printed forged money" },
+    { "action": "loot-the-dock", "text": "You looted the harbour warehouses" },
+    { "action": "steal", "text": "You broke into a closed shop" },
+    { "action": "smash-and-grab", "text": "You smashed a shop window and ran" },
+    { "action": "take", "text": "You grabbed a trader's goods in broad daylight" },
+    { "action": "extort", "text": "You leaned on a shopkeeper for \"protection\"" },
+    { "action": "ambush-a-patrol", "text": "You jumped a police patrol" },
+    { "action": "collect-debt", "text": "You collected a dead man's debts" },
+    { "action": "attack", "text": "You ambushed a route trainer for their prize money" }
+  ],
+  "demands": [
+    { "id": "towns", "text": "Keep two towns: {towns} stay theirs", "status": "supported", "broken": "You moved in on {town}, a town you promised them." },
+    { "id": "hq", "text": "Never touch their old HQ in {town}", "status": "supported", "broken": "You pushed into {town}, around their old HQ." },
+    { "id": "goal", "text": "Pursue their Goal too", "status": "limited", "note": "Kept until Goals arrive (D14): nothing can break it yet." },
+    { "id": "shadow", "text": "Never use Shadow Pokémon", "status": "limited", "note": "Kept until Shadow Pokémon arrive (D16): nothing can break it yet." }
+  ],
+  "directives": [
+    { "id": "expand", "name": "Expand", "what": "New rackets in a weak town: +{n} Control a night in your weakest town", "status": "supported" },
+    { "id": "defend", "name": "Defend", "what": "Guards up: HQ Heat −{n} a night", "status": "supported" },
+    { "id": "recruit", "name": "Recruit", "what": "+{n} members to the Branch at the week's end (more tribute)", "status": "supported" },
+    { "id": "hero", "name": "Pressure the Hero", "what": "Delays the Hero a day a week", "status": "limited", "note": "Counted now; the Hero (D11) reads it." },
+    { "id": "hold", "name": "Hold a town", "what": "Your best town can't lose Control this week", "status": "supported" }
+  ],
+  "bosses": {
+    "rocket": {
+      "values": "power and profit", "them": "him", "portrait": "v-giovanni", "mon": "p-persian", "crest": "R", "colour": "#e05a4a",
+      "lean": { "partnership": 1, "merger": 1, "recruit": -1, "threaten": 0 }, "demands": ["hq", "towns"], "order": "expand",
+      "creed": "Power is the only honest currency. Rocket earns it, keeps it, and answers to nobody. What do you answer to?",
+      "judge": "{sin}. Is that your 'order'? Even Rocket counts what it takes.",
+      "clean": "Your Ledger is spotless. Either you're careful, or you've done nothing worth writing down.",
+      "price": "Rocket kneels to nobody for free. Silph stays mine, and so does the Game Corner. What's left, you can rule.",
+      "replies": {
+        "strong": ["Hm. You understand money. That's rarer than courage.", "Now you're speaking my language. Go on.", "A real offer. Rocket remembers those."],
+        "fair": ["Not bad. Not enough, either.", "I've heard that pitch before, from better tailors.", "Interesting. Persian isn't bored yet."],
+        "weak": ["You came all this way to say that?", "Slogans. I don't buy slogans.", "Try again, and this time bring numbers."],
+        "insult": ["Careful. My Persian has better manners than you.", "Threats, at my own table? How small."]
+      }
+    },
+    "rocket-remnants": {
+      "values": "bringing Giovanni back", "them": "him", "portrait": null, "mon": null, "crest": "R", "colour": "#c0392b",
+      "lean": { "partnership": 0, "merger": -1, "recruit": 0, "threaten": -1 }, "demands": ["hq", "goal"], "order": "defend",
+      "creed": "Rocket isn't finished. It's waiting for its Boss to come home. Are you here to help, or to take his chair?",
+      "judge": "{sin}. Giovanni would never have been that clumsy.",
+      "clean": "No mess on your Ledger. Giovanni liked tidy people.",
+      "price": "The radio tower stays ours, and the day Giovanni calls, we answer him first.",
+      "replies": {
+        "strong": ["You talk like him, a little.", "That would keep the lights on until he returns.", "Fine. That's worth thinking about."],
+        "fair": ["Maybe. The others won't like it.", "You're not him. But you're not nothing.", "Hm. Go on."],
+        "weak": ["That's not how Rocket does things.", "You don't understand what we're waiting for.", "No."],
+        "insult": ["Giovanni would have had you thrown out.", "We've been threatened by better."]
+      }
+    },
+    "magma": {
+      "values": "more land for people", "them": "him", "portrait": null, "mon": null, "crest": "M", "colour": "#d0452c",
+      "lean": { "partnership": 1, "merger": 0, "recruit": 0, "threaten": -1 }, "demands": ["towns", "goal"], "order": "expand",
+      "creed": "People need ground to stand on. Magma will give them more of it, sea or no sea. Where do you stand?",
+      "judge": "{sin}. That builds nothing for anyone.",
+      "clean": "Your Ledger builds more than it breaks. I noticed.",
+      "price": "Mt. Chimney stays Magma's, and every new shore we raise is ours to settle.",
+      "replies": {
+        "strong": ["Now that is a plan with a foundation.", "You see it too. Good.", "Practical. I like practical."],
+        "fair": ["Close, but the numbers don't settle.", "There's ground in that. Not much.", "Perhaps."],
+        "weak": ["That's sand, not stone.", "You haven't thought this through.", "No foundation at all."],
+        "insult": ["Threats are what people use when they have no plan.", "I don't negotiate with tremors."]
+      }
+    },
+    "aqua": {
+      "values": "the sea for Pokémon", "them": "him", "portrait": null, "mon": null, "crest": "A", "colour": "#2e6fd0",
+      "lean": { "partnership": 1, "merger": -1, "recruit": 0, "threaten": 0 }, "demands": ["towns", "hq"], "order": "defend",
+      "creed": "The sea was here first, and so were the Pokémon in it. Aqua stands with them. Who do you stand with?",
+      "judge": "{sin}. The tide doesn't forget, mate.",
+      "clean": "Clean wake behind you. Respect.",
+      "price": "The coast stays ours, start to finish. Touch the water and the deal sinks.",
+      "replies": {
+        "strong": ["Ha! Now that's a proper offer!", "You've got salt in you after all.", "Aye, that I can drink to."],
+        "fair": ["Hm, choppy, but sailable.", "Not bad for a landlubber.", "Keep paddling."],
+        "weak": ["That's bilge water.", "You're all talk and no boat.", "Nope. Next!"],
+        "insult": ["Say that again and you'll swim home.", "Big words from someone this far from the sea."]
+      }
+    },
+    "galactic": {
+      "values": "a world without spirit", "them": "him", "portrait": null, "mon": null, "crest": "G", "colour": "#4fa3c8",
+      "lean": { "partnership": -1, "merger": 1, "recruit": 0, "threaten": -1 }, "demands": ["hq", "goal"], "order": "hold",
+      "creed": "Spirit is noise. Galactic will build a world without it, quiet and complete. Why should noise like you join?",
+      "judge": "{sin}. Emotion, again. Inefficient.",
+      "clean": "Your record is orderly. That is the only compliment I give.",
+      "price": "Spear Pillar is Galactic's. My work continues, and no one interrupts it.",
+      "replies": {
+        "strong": ["Logical. Continue.", "That is efficient.", "Acceptable."],
+        "fair": ["Partially correct.", "Incomplete.", "Noted."],
+        "weak": ["Noise.", "That is a feeling, not an argument.", "Irrelevant."],
+        "insult": ["Anger. How predictable.", "You are wasting my time."]
+      }
+    },
+    "plasma": {
+      "values": "control dressed as liberation", "them": "him", "portrait": null, "mon": null, "crest": "P", "colour": "#5a6fa8",
+      "lean": { "partnership": 0, "merger": 1, "recruit": -1, "threaten": 0 }, "demands": ["hq", "goal"], "order": "recruit",
+      "creed": "Plasma frees Pokémon from people. Or so the crowds believe. Tell me what you'd free, and who would hold the key.",
+      "judge": "{sin}. Clumsy. People saw.",
+      "clean": "No witnesses on your Ledger. You learn quickly.",
+      "price": "The castle stays mine, and Plasma's banners keep flying in every town you take.",
+      "replies": {
+        "strong": ["Ah. You understand how the world really works.", "Yes. That could be useful.", "Shrewd."],
+        "fair": ["You're almost interesting.", "Hm. Keep going.", "Perhaps."],
+        "weak": ["Naïve.", "The crowds would see through that.", "Dull."],
+        "insult": ["You threaten me? How liberating.", "Bluster. Plasma has buried louder men."]
+      }
+    },
+    "flare": {
+      "values": "beauty for the few", "them": "him", "portrait": null, "mon": null, "crest": "F", "colour": "#e8452c",
+      "lean": { "partnership": 0, "merger": 1, "recruit": 0, "threaten": -1 }, "demands": ["towns", "goal"], "order": "hold",
+      "creed": "The world is ugly because it is crowded. Flare will keep only what is beautiful. Are you beautiful?",
+      "judge": "{sin}. How very ugly.",
+      "clean": "An elegant Ledger. I approve.",
+      "price": "Lumiose's best streets stay ours, and Flare chooses who may walk them.",
+      "replies": {
+        "strong": ["Exquisite.", "Now that has style.", "Yes. That is beautiful."],
+        "fair": ["Acceptable, but plain.", "It lacks a certain flair.", "Mm."],
+        "weak": ["Tasteless.", "How ordinary.", "Pass."],
+        "insult": ["Crude. And in that coat.", "Threats are so unfashionable."]
+      }
+    },
+    "skull-aether": {
+      "values": "a home for the ones nobody wants", "them": "him", "portrait": null, "mon": null, "crest": "S", "colour": "#8a8a96",
+      "lean": { "partnership": 1, "merger": 0, "recruit": -1, "threaten": 1 }, "demands": ["hq", "towns"], "order": "defend",
+      "creed": "Skull takes in the kids nobody wanted. Bet you never got turned away from anything. Prove me wrong.",
+      "judge": "{sin}. Ha. You're one of us after all.",
+      "clean": "Squeaky clean, huh? Bet nobody ever slammed a door on you.",
+      "price": "Po Town stays Skull's. Nobody touches my kids, and I don't take orders in front of them.",
+      "replies": {
+        "strong": ["Huh. Didn't see that coming.", "...Okay. That's real.", "Respect. Big respect."],
+        "fair": ["Eh. Could be worse.", "Yeah, yeah, keep talking.", "Maybe."],
+        "weak": ["Lame.", "Boring. Next.", "Nah."],
+        "insult": ["Ha! At least you got guts.", "You wanna go? 'Cause we can go."]
+      }
+    },
+    "macro-cosmos": {
+      "values": "energy at any cost", "them": "him", "portrait": null, "mon": null, "crest": "M", "colour": "#c8a24a",
+      "lean": { "partnership": 1, "merger": 1, "recruit": -1, "threaten": -1 }, "demands": ["hq", "goal"], "order": "expand",
+      "creed": "Galar will need energy for a thousand years. I plan for that. What are you planning for, next Tuesday?",
+      "judge": "{sin}. Short-term thinking. Terrible for the brand.",
+      "clean": "Your record would pass an audit. Impressive.",
+      "price": "The towers stay Macro Cosmos property, and our name goes on the door beside yours.",
+      "replies": {
+        "strong": ["Splendid! That's a proposal I could take to the board.", "Now you're thinking in decades.", "Marvellous."],
+        "fair": ["Promising, but the margins are thin.", "Let's call it a first draft.", "Hm, perhaps."],
+        "weak": ["That won't survive a meeting.", "Dear me, no.", "Not investable."],
+        "insult": ["Threats are terribly bad for business.", "I'll pretend I didn't hear that."]
+      }
+    },
+    "area-zero": {
+      "values": "a past or future without limits", "them": "them", "portrait": null, "mon": null, "crest": "Z", "colour": "#7a5ad0",
+      "lean": { "partnership": 0, "merger": 0, "recruit": 1, "threaten": -1 }, "demands": ["hq", "goal"], "order": "hold",
+      "creed": "The crater holds a world without limits. Research needs no team, only time. Why should it need yours?",
+      "judge": "{sin}. A poor experiment.",
+      "clean": "Your data is clean. Unusual.",
+      "price": "The Zero Lab stays sealed and mine. You may have everything above the crater.",
+      "replies": {
+        "strong": ["Your hypothesis holds.", "Fascinating. Continue.", "That result is significant."],
+        "fair": ["Inconclusive.", "Insufficient data.", "Possibly."],
+        "weak": ["That does not follow.", "Error.", "Rejected."],
+        "insult": ["Hostility noted.", "Threat logged. It changes nothing."]
+      }
+    }
+  },
+  "admin": {
+    "creed": "{boss} gave me a place when nobody else would. What would you give me?",
+    "price": "If I leave {team}, I need to know I won't be hunted. And I want my own crew.",
+    "replies": {
+      "strong": ["...That's more than {boss} ever offered.", "You mean that? Huh.", "I could work with that."],
+      "fair": ["Maybe. I'll think about it.", "Not bad.", "Keep talking."],
+      "weak": ["That's it? I'll stay where I am.", "No.", "You're wasting my break."],
+      "insult": ["You think I scare easy?", "{boss} will hear about this."]
+    }
+  },
+  "text": {
+    "noTeam": "No rival Boss to talk to.",
+    "yours": "{team} is already yours.",
+    "closed": "{boss} will never talk to you again this region.",
+    "week": "One Debate with {boss} a week. Try again next week.",
+    "live": "A Debate is already on.",
+    "needBeat": "{boss} won't meet a nobody: beat one of their Admins first (answer a challenge on the Rival File).",
+    "meet": "{boss} agrees to sit down at the Leader's Table.",
+    "walkOut": "You walk out on {boss}. It counts as a failed Debate.",
+    "inviteBoss": "{boss} will sit down for a Debate at neutral ground.",
+    "inviteAdmin": "{who} might be talked out of {team}.",
+    "merger": "{team} folds into yours. {joined}Their sites are yours.",
+    "branch": "{team} becomes your Branch. It pays {tribute} a week and takes an order every Monday (Rival File).",
+    "demand": "Their demand: {demand}.",
+    "adminWon": "{who} leaves {team} for you.{joined}",
+    "adminLost": "{who} storms off. Tension +{n}.",
+    "adminUnmoved": "{who} stays put.",
+    "tribute": "{team}'s Branch pays its tribute: +{amount}.",
+    "order": "{team}'s Branch: {order}.",
+    "broken": "{line} {team}'s betrayal risk +{n}.",
+    "walked": "{team} walks out of the deal. Tension is back to {tension}.",
+    "noRoom": " No room at the HQ for {names}: they stay to run the old sites.",
+    "joined": "{names} join{s} you. "
+  }
+}

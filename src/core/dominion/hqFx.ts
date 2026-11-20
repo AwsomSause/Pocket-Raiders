@@ -30,9 +30,12 @@ export function scaled(key: keyof BuildingFx, v: number, t: number): number {
   return Math.round(v * H().tiers[t - 1]!.effect);
 }
 
-export type HqFx = Required<Omit<BuildingFx, 'items' | 'weeklyItems' | 'unlock' | 'launder' | 'heatOnce'>> & {
+export type HqFx = Required<Omit<BuildingFx, 'items' | 'weeklyItems' | 'unlock' | 'launder' | 'heatOnce' | 'seats' | 'dojo'>> & {
   items: Record<string, number>;
   weeklyItems: Record<string, number>;
+  /** D4b: extra seats by rank id, and Type Dojo XP by type. */
+  seats: Record<string, number>;
+  dojo: Record<string, number>;
   /** The best laundering fee (%), or null with no Front. */
   launder: number | null;
 };
@@ -43,9 +46,26 @@ const ZERO = (): HqFx => ({
   incomePct: 0, items: {}, weeklyItems: {}, launder: null,
   // D9 (rivals.ts)
   intel: 0, spyCatch: 0, cipher: 0, raidDef: 0, warn: 0, fireCut: 0, truceOff: 0,
+  // D6b: regard/dread are per district (hq.ts weekly); honest is the Ledger Office's Honest Card (field.ts).
+  regard: 0, dread: 0, honest: 0,
+  // D4b (school.ts, pyramid.ts)
+  seats: {}, promoTrait: 0, spar: 0, sneak: 0, rankLv: 0, examStat: 0, cure: 0, retirees: 0, trustCure: 0, gruntSkill: 0,
+  taskXp: 0, vets: 0, pairs: 0, reveal: 0, dojo: {}, wageOff: 0, buildOff: 0,
+  // D13 (debate.ts)
+  debate: 0, debateFloor: 0, debateSee: 0,
   // D10 (growth.ts)
   contact: 0, routes: 0, papers: 0, flyerPct: 0, interest: 0, fence: 0,
 });
+
+/** D4b: a seat room gives +1 at T1 and one more every three tiers (Admin Quarters: "+1 Admin per 3 tiers"). */
+export const seatsAt = (n: number, t: number): number => n + Math.floor((t - 1) / 3);
+
+/** Things outside the rooms that add to the same totals (D4b: the crew's trades). Registered by later modules. */
+type FxHook = (b: DominionBlock, out: HqFx) => void;
+const FX_HOOKS: FxHook[] = [];
+export function addFxHook(h: FxHook): void {
+  FX_HOOKS.push(h);
+}
 
 /** Everything the working rooms and buildings add, in one place. Percentages are capped at 90. */
 export function hqFx(b: DominionBlock): HqFx {
@@ -55,8 +75,10 @@ export function hqFx(b: DominionBlock): HqFx {
     const def = BY_ID.get(r.id);
     if (!def) continue;
     for (const [k, v] of Object.entries(def.fx) as [keyof BuildingFx, unknown][]) {
-      if (k === 'unlock' || k === 'heatOnce' || k === 'control') continue;
-      if (k === 'items' || k === 'weeklyItems') {
+      if (k === 'unlock' || k === 'heatOnce' || k === 'control' || k === 'regard' || k === 'dread') continue;
+      if (k === 'seats') {
+        for (const [id, n] of Object.entries(v as Record<string, number>)) out.seats[id] = (out.seats[id] ?? 0) + seatsAt(n, r.tier);
+      } else if (k === 'items' || k === 'weeklyItems' || k === 'dojo') {
         for (const [id, n] of Object.entries(v as Record<string, number>)) out[k][id] = (out[k][id] ?? 0) + scaled('income', n, r.tier);
       } else if (k === 'launder') {
         const fee = scaled(k, v as number, r.tier);
@@ -69,6 +91,9 @@ export function hqFx(b: DominionBlock): HqFx {
     // A Front business launders at 10% (Part 3 §1).
     if (r.at && def.fx.clean) out.launder = out.launder === null ? 10 : Math.min(out.launder, 10);
   }
+  for (const h of FX_HOOKS) h(b, out);
+  out.wageOff = Math.min(90, out.wageOff);
+  out.buildOff = Math.min(90, out.buildOff);
   out.injury = Math.min(90, out.injury);
   out.spyCatch = Math.min(90, out.spyCatch);
   out.fireCut = Math.min(90, out.fireCut);
@@ -106,6 +131,9 @@ export function spend(b: DominionBlock, n: number): void {
 export function clampClean(b: DominionBlock): void {
   if (b.hq) b.hq.clean = Math.max(0, Math.min(b.hq.clean, b.funds));
 }
+
+/** D4b: a room's price with the crew's mechanic discount (building, raising a tier). */
+export const buildPrice = (b: DominionBlock, base: number): number => Math.round((base * (100 - hqFx(b).buildOff)) / 100);
 
 /** Hire Grunt's price with the Recruitment Center's discount. */
 export const hirePrice = (b: DominionBlock, base: number): number => Math.round((base * (100 - hqFx(b).hireOff)) / 100);

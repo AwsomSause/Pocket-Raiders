@@ -7,7 +7,7 @@ import type { FileModel, HireRow, LeadRow, MorningModel, TalkModel } from '../..
 import { act, esc, mini, tall } from '../../kit';
 import { rxUrl } from '../../assets';
 import { warehouseUrl } from './paint';
-import { bandChip, foundingBanner, stage, tabs, topBar } from './views';
+import { bandChip, foundingBanner, stage, tabs, topBar, WHEEL_KEY } from './views';
 import type { TeamColours } from '../../../../core/dominion/founding';
 import { memberPic, pngSrc, tallTeam } from './teamPic';
 
@@ -138,7 +138,7 @@ export function fileView(f: FileModel, monFile: (species: string) => string | nu
   const keys = f.keys.map((k) => `<span class="kc">${esc(k.key)}</span><span class="dm" style="margin-right:6px">${esc(k.label)}</span>`).join('');
   return stage(`<div class="layer" style="background:radial-gradient(420px 380px at 150px 300px,rgba(140,80,220,.45),transparent 70%)"></div>
   <div class="ttl">Crew File <span class="sub">· ${esc(f.name[0] + f.name.slice(1).toLowerCase())}</span></div>
-  <div class="keys"><span class="kc"${act('flip', -1)}>◀</span><span class="dm">${f.prev ? `${esc(f.prev)} · ${esc(f.next)}` : esc(f.count)}</span><span class="kc"${act('flip', 1)}>▶</span><span class="dm" style="margin-left:8px">joined</span><span class="key">Day ${f.joined}</span></div>
+  <div class="keys">${WHEEL_KEY}<span class="kc"${act('flip', -1)}>◀</span><span class="dm">${f.prev ? `${esc(f.prev)} · ${esc(f.next)}` : esc(f.count)}</span><span class="kc"${act('flip', 1)}>▶</span><span class="dm" style="margin-left:8px">joined</span><span class="key">Day ${f.joined}</span></div>
   <div class="a row" style="right:16px;top:44px;z-index:9;gap:4px;font:600 12px var(--ui);color:#dfe5ff" data-testid="dom-file-keys">${keys}<span class="kc">Esc</span><span class="dm">HQ</span></div>
   <div class="drape" style="left:0;top:58px;height:482px;--w:46px;clip-path:polygon(0 0,100% 0,60% 100%,0 100%)"></div>
   <div class="drape" style="left:248px;top:58px;height:482px;--w:46px;clip-path:polygon(0 0,100% 0,100% 100%,40% 100%);box-shadow:inset 8px 0 14px rgba(0,0,0,.45)"></div>
@@ -167,7 +167,7 @@ export function fileView(f: FileModel, monFile: (species: string) => string | nu
     <div class="a col" style="left:14px;right:14px;top:222px;gap:2px;font-size:15px">
       <div class="row sp"><span>♥ Loyalty</span><b class="gn">${f.loyalty}</b></div><div class="mt g t" style="--v:${f.loyalty}"></div>
       <div class="row sp"><span>☺ Morale</span><b class="cy">${f.morale}</b></div><div class="mt c t" style="--v:${f.morale}"></div>
-      <div class="row sp xs mu" style="margin-top:2px" data-testid="dom-file-a17"><span>Motive: ${esc(f.motive)}</span><span>Fatigue ${f.fatigue}</span><span>Heat ${f.pHeat}</span></div>
+      <div class="row sp xs mu" style="margin-top:2px" data-testid="dom-file-a17"><span>Motive: ${esc(f.motive)}</span><span>Fatigue ${f.fatigue}</span><span>Heat ${f.pHeat}</span>${f.double ? '<span class="pill b" style="font-size:10px;padding:0 6px" data-testid="dom-file-double">DOUBLE AGENT</span>' : f.suspicion ? `<span style="color:${f.suspicion >= 70 ? '#ff6a7a' : '#ffb238'};font-weight:700" data-testid="dom-file-suspicion">Suspicion ${f.suspicion}</span>` : ''}</div>
     </div>
   </div>
   <div class="pnl" style="left:622px;top:72px;width:328px;height:316px" data-testid="dom-file-personality">

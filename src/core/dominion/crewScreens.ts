@@ -1,6 +1,8 @@
 // DOMINION slice D3 view models: the Morning (mockup 2) and the Crew File (mockup 5), the hire list, the leads and the
 // talk card. Plain data for ui/redux/screens/dominion/crew.ts. Pure: no Phaser, no RNG beyond reading today's hire list.
 
+import type { AiLog } from '../ai/schema';
+import { lastRotomFor } from './voices';
 import { teamColours, type TeamColours } from './founding';
 import { crewOf, familyOf, memberLine, odds, rankN, rankWord, taskById, taskLevel, taskLevelWord, traitName, withCrew, xpToNext, cantTake, formedById, greenById, gruntType } from './crew';
 import { DOMINION_DATA } from './data';
@@ -9,6 +11,7 @@ import type { Alert, DominionBlock, Member } from './schema';
 import { STAT_IDS } from './schema';
 import { topModel, type TopModel } from './screens';
 import { topTalk } from './talk';
+import { cantConfront, isDouble, suspicion } from './spies';
 import { whereOf } from './empire';
 import { cardFor, cardLine, lineKind, sheet, traitWords } from './personality';
 import { usable } from './reserve';
@@ -135,6 +138,8 @@ export interface FileModel {
   then: { day: number; line: string }; now: { day: number; line: string };
   task: string; taskLevel: string; out: string | null; xp: string; points: number;
   keys: { key: string; label: string }[];
+  /** D22: Suspicion (0 hides it) and whether F can confront them now. */
+  suspicion: number; double: boolean;
   talk: TalkModel | null;
   /** D7: the team's colours for the recoloured picture (null: own colours, grey band). */
   colours: TeamColours | null;
@@ -162,7 +167,10 @@ export function fileModel(block: DominionBlock, sel: number): FileModel {
   const keys = [{ key: 'C', label: 'Card' }, { key: 'G', label: 'Gift' }, { key: 'H', label: 'Hire' }, { key: 'R', label: `Leads (${b.crew!.leads.length})` }, { key: 'P', label: 'Pyramid' }, { key: 'U', label: 'Squads' }];
   if (b.phase === 'evening') keys.unshift({ key: 'T', label: 'Talk' });
   if (c.out?.why === 'jail') keys.unshift({ key: 'B', label: `Bail ₽${C().rules.bail}` });
+  // D22: F confronts a suspected member (spies.ts).
+  if (!cantConfront(b, m.id)) keys.unshift({ key: 'F', label: 'Confront' });
   return {
+    suspicion: suspicion(b, m.id), double: isDouble(b, m.id),
     name: m.name.toUpperCase(), rank: rankWord(m.rank), rankN: rankN(m.rank), level: m.level, wage: m.wage, chevrons: Math.min(5, Math.ceil(rankN(m.rank) / 3)),
     joined: m.joinedDay, look: m.look,
     prev: b.members.length > 1 ? b.members[(i - 1 + b.members.length) % b.members.length]!.name : null,
@@ -250,7 +258,7 @@ export interface PersonaModel {
   others: { name: string; look: string; traits: string }[];
 }
 
-export function personaModel(block: DominionBlock, sel: number, seed: string): PersonaModel {
+export function personaModel(block: DominionBlock, sel: number, seed: string, log?: AiLog): PersonaModel {
   const b = withCrew(block);
   const i = Math.min(sel, b.members.length - 1);
   const m = b.members[i]!;
@@ -268,7 +276,7 @@ export function personaModel(block: DominionBlock, sel: number, seed: string): P
     quirk: s.quirk.text, want: s.want, fear: s.fear, home: s.home,
     memory: c.memory.slice(-3),
     offline: cardLine(card, lineKind(payDay && !m.unpaid ? 'pay' : c.last), b.day),
-    rotom: null,
+    rotom: lastRotomFor(log, m.id),
     rotomOff: P.rotom.off,
     note: P.rotom.note.replace('{name}', m.name),
     others: b.members.filter((x) => x.id !== m.id).slice(0, 2).map((x) => ({ name: x.name, look: x.look, traits: traitWords(cardFor(seed, x)) })),

@@ -17,13 +17,20 @@ import type { RunState } from '../../src/core/state';
 import { CURRENT_VERSIONS, SaveManager } from '../../src/save/saveManager';
 import { MemoryStorageProvider } from '../../src/save/storage';
 import { content } from './helpers';
+import { freshChair } from '../../src/core/dominion/chair';
 
 const FD = DOMINION_DATA.field;
 const domRun = (seed = 'dm2'): RunState => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', rules: { ...STANDARD_CHOICE, modeId: DOMINION_MODE_ID } }), 0);
+/** D12: these tests are about other systems: the Chair is set to Off (a Crisis card still comes; none does here). */
+const quiet = (r: RunState): RunState => {
+  const out = structuredClone(r);
+  out.expansion!.dominion!.chair = { ...freshChair(), opts: { length: 'off', numbers: 'arrows', speed: 'normal' } };
+  return out;
+};
 const started = (seed = 'dm2'): RunState => {
   const out = startInRun(content, domRun(seed), { types: ['poison', 'dark'], member: 'grunt', look: 0 });
   expect(out.problem).toBeNull();
-  return out.run;
+  return quiet(out.run);
 };
 const blk = (r: RunState): DominionBlock => r.expansion!.dominion!;
 const go = (r: RunState, a: DominionAction): RunState => {
@@ -48,9 +55,10 @@ describe('DOMINION D2: the data', () => {
     expect(all).toHaveLength(600);
     expect(all.map((a) => a.n)).toEqual(Array.from({ length: 600 }, (_, i) => i + 1));
     const played = all.filter((a) => a.n <= 150 && actionStatus(a).play);
-    // Rows 1-150: 42 from D10 (Growth), 32 from D2, 10 from D6, 13 more that D5's rooms open (each also needs its room built), 9 from D4, 17 more from D9 (the rival team), 5 Hero actions (D11).
-    expect(played.length).toBe(128);
-    expect(all.filter((a) => actionStatus(a).play)).toHaveLength(445);
+    // Rows 1-150: 42 from D10 (Growth), 32 from D2, 10 from D6, 13 more that D5's rooms open (each also needs its room built), 9 from D4, 17 more from D9 (the rival team), 5 Hero actions (D11), 2 from D13 (Debate, Write a Manifesto),
+    // 3 from D4b (Egg Run, Breed, Move Tutor), Plant a Mole (D22), Hold a Rally and Chant Night (D6b).
+    expect(played.length).toBe(136);
+    expect(all.filter((a) => actionStatus(a).play)).toHaveLength(453);
     for (const a of all) {
       const s = actionStatus(a);
       expect(s.play || /^D\d+$/.test(s.slice ?? ''), a.id).toBe(true);

@@ -1,0 +1,6799 @@
+{
+ "_source": "plans/evil-mode-rework/lists/dilemmas.md (made by tools/dominion/court-to-json.py; do not edit by hand)",
+ "cards": [
+  {
+   "id": 1,
+   "sect": "crew",
+   "visitor": "Your first member's mum",
+   "name": "Your first member's mum",
+   "role": "{name}'s mum",
+   "look": "trainer/pr/pokefan_f",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "\"{He} told me {he} works at a recycling plant. Is my {boy} safe here?\"",
+   "a": {
+    "label": "\"He's safe with me.\"",
+    "does": "Reg +3, member Loy +8, → #2 in 6d",
+    "fx": [
+     {
+      "k": "regard",
+      "n": 3
+     },
+     {
+      "k": "loyalty",
+      "n": 8,
+      "who": "named"
+     },
+     {
+      "k": "follow",
+      "card": 2,
+      "days": 6
+     }
+    ]
+   },
+   "b": {
+    "label": "\"He's a criminal, ma'am.\"",
+    "does": "Dread +3, member Loy −6, Mor −2",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 3
+     },
+     {
+      "k": "loyalty",
+      "n": -6,
+      "who": "named"
+     },
+     {
+      "k": "morale",
+      "n": -2
+     }
+    ]
+   },
+   "named": "first",
+   "who": "mum",
+   "once": true,
+   "first": true
+  },
+  {
+   "id": 2,
+   "sect": "crew",
+   "visitor": "The mum again",
+   "name": "The mum again",
+   "role": "{name}'s mum",
+   "look": "trainer/pr/pokefan_f",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "She brings a casserole and asks you to give {him} Sundays off",
+   "a": {
+    "label": "Sundays off",
+    "does": "Loy +10, member skips every 7th day's task",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": 10,
+      "who": "named"
+     },
+     {
+      "k": "note",
+      "slice": "D3",
+      "text": "skipping every 7th day's task waits for the crew rota"
+     }
+    ]
+   },
+   "b": {
+    "label": "\"No days off in this business.\"",
+    "does": "₽ +0, Loy −4, she leaves the casserole anyway (Item: Big Malasada ×2)",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": -4,
+      "who": "named"
+     },
+     {
+      "k": "item",
+      "id": "camp-curry",
+      "n": 2
+     }
+    ]
+   },
+   "named": "first",
+   "who": "mum",
+   "once": true,
+   "followOnly": true
+  },
+  {
+   "id": 3,
+   "sect": "crew",
+   "visitor": "A Grunt",
+   "name": "A Grunt",
+   "role": null,
+   "look": "member",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "Wants an advance on wages: \"My Rattata needs a vet\"",
+   "a": {
+    "label": "Pay the advance",
+    "does": "₽ −80, Loy +8, Favour",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -80
+     },
+     {
+      "k": "loyalty",
+      "n": 8,
+      "who": "named"
+     },
+     {
+      "k": "tag",
+      "tag": "favour"
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "Loy −6, 30%: he Thieves from the Vault tonight (₽ −50)",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": -6,
+      "who": "named"
+     },
+     {
+      "k": "chance",
+      "p": 30,
+      "yes": [
+       {
+        "k": "funds",
+        "n": -50
+       }
+      ],
+      "no": []
+     }
+    ]
+   },
+   "named": "any",
+   "who": "member"
+  },
+  {
+   "id": 4,
+   "sect": "crew",
+   "visitor": "A Grunt",
+   "name": "A Grunt",
+   "role": null,
+   "look": "member",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "Asks to keep a Pokémon he stole on a job",
+   "a": {
+    "label": "Keep it",
+    "does": "Loy +6, crew Pkmn +1, Heat +2",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": 6,
+      "who": "named"
+     },
+     {
+      "k": "monMember",
+      "n": 1
+     },
+     {
+      "k": "heat",
+      "n": 2
+     }
+    ]
+   },
+   "b": {
+    "label": "Hand it over",
+    "does": "Stores Pkmn +1, Loy −3",
+    "fx": [
+     {
+      "k": "mon",
+      "n": 1
+     },
+     {
+      "k": "loyalty",
+      "n": -3,
+      "who": "named"
+     }
+    ]
+   },
+   "named": "any"
+  },
+  {
+   "id": 5,
+   "sect": "crew",
+   "visitor": "Two Grunts, shouting",
+   "name": "Two Grunts, shouting",
+   "role": null,
+   "look": "member",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Both want the same bunk by the heater",
+   "a": {
+    "label": "Pick the senior one",
+    "does": "Mor +1, junior Loy −5",
+    "fx": [
+     {
+      "k": "morale",
+      "n": 1
+     },
+     {
+      "k": "loyalty",
+      "n": -5,
+      "who": "named"
+     }
+    ]
+   },
+   "b": {
+    "label": "Make them battle for it",
+    "does": "Dread +2, both gain 1 training XP, loser Loy −3",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 2
+     },
+     {
+      "k": "xp",
+      "n": 1,
+      "who": "named"
+     },
+     {
+      "k": "xp",
+      "n": 1,
+      "who": "second"
+     },
+     {
+      "k": "chance",
+      "p": 50,
+      "yes": [
+       {
+        "k": "loyalty",
+        "n": -3,
+        "who": "named"
+       }
+      ],
+      "no": [
+       {
+        "k": "loyalty",
+        "n": -3,
+        "who": "second"
+       }
+      ]
+     }
+    ]
+   },
+   "named": "two"
+  },
+  {
+   "id": 6,
+   "sect": "crew",
+   "visitor": "A Grunt",
+   "name": "A Grunt",
+   "role": null,
+   "look": "member",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "Wants a cooler uniform: \"Nobody's scared of tracksuits\"",
+   "a": {
+    "label": "New uniforms",
+    "does": "₽ −150, Mor +6, Dread +2",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -150
+     },
+     {
+      "k": "morale",
+      "n": 6
+     },
+     {
+      "k": "dread",
+      "n": 2
+     }
+    ]
+   },
+   "b": {
+    "label": "\"Tracksuits are the brand.\"",
+    "does": "Mor −3, Reg +1 (people find it funny)",
+    "fx": [
+     {
+      "k": "morale",
+      "n": -3
+     },
+     {
+      "k": "regard",
+      "n": 1
+     }
+    ]
+   },
+   "named": "any"
+  },
+  {
+   "id": 7,
+   "sect": "crew",
+   "visitor": "A Grunt with a black eye",
+   "name": "A Grunt with a black eye",
+   "role": null,
+   "look": "member",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "Was beaten by a rival Grunt; wants revenge tonight",
+   "a": {
+    "label": "\"Go get him.\"",
+    "does": "Opens a free Attack vs. Rival tonight, Ten +6, Loy +6",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D9",
+      "text": "the free Attack on the Rival"
+     },
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": 6
+     },
+     {
+      "k": "loyalty",
+      "n": 6,
+      "who": "named"
+     }
+    ]
+   },
+   "b": {
+    "label": "\"Not worth it.\"",
+    "does": "Loy −5, Mor −2, Ten +0",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": -5,
+      "who": "named"
+     },
+     {
+      "k": "morale",
+      "n": -2
+     }
+    ]
+   },
+   "named": "any"
+  },
+  {
+   "id": 8,
+   "sect": "crew",
+   "visitor": "An Admin",
+   "name": "An Admin",
+   "role": null,
+   "look": "member",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Demands a bigger cut of what their squad brings in",
+   "a": {
+    "label": "10% cut",
+    "does": "₽ −10% from that squad's tasks, Loy +12",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": 12,
+      "who": "named"
+     },
+     {
+      "k": "note",
+      "slice": "D8",
+      "text": "a 10% cut of their squad's take"
+     }
+    ]
+   },
+   "b": {
+    "label": "\"You get wages.\"",
+    "does": "Loy −10, Ambition +1, 20%: → #9 in 7d",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": -10,
+      "who": "named"
+     },
+     {
+      "k": "chance",
+      "p": 20,
+      "yes": [
+       {
+        "k": "follow",
+        "card": 9,
+        "days": 7
+       }
+      ],
+      "no": []
+     }
+    ]
+   },
+   "named": "admin",
+   "wait": "D8"
+  },
+  {
+   "id": 9,
+   "sect": "crew",
+   "visitor": "The same Admin",
+   "name": "The same Admin",
+   "role": null,
+   "look": "member",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "\"I've had an offer from the Rival. Match it, or I walk.\"",
+   "a": {
+    "label": "Match it",
+    "does": "₽ −300 now, Loy +15",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -300
+     },
+     {
+      "k": "loyalty",
+      "n": 15,
+      "who": "named"
+     }
+    ]
+   },
+   "b": {
+    "label": "Let them walk",
+    "does": "−Member, Ten −5 (they take your secrets: Rival raid odds +10% for 2 weeks)",
+    "fx": [
+     {
+      "k": "leave"
+     },
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": -5
+     },
+     {
+      "k": "owed",
+      "key": "raid",
+      "n": 10
+     }
+    ]
+   },
+   "named": "admin",
+   "wait": "D8",
+   "followOnly": true
+  },
+  {
+   "id": 10,
+   "sect": "crew",
+   "visitor": "A Grunt",
+   "name": "A Grunt",
+   "role": null,
+   "look": "member",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "Wants to name the team's mascot Pokémon",
+   "a": {
+    "label": "Let the crew vote",
+    "does": "Mor +5, a mascot name is saved for the run",
+    "fx": [
+     {
+      "k": "morale",
+      "n": 5
+     }
+    ]
+   },
+   "b": {
+    "label": "\"I name things.\"",
+    "does": "Mor −1, Dread +1",
+    "fx": [
+     {
+      "k": "morale",
+      "n": -1
+     },
+     {
+      "k": "dread",
+      "n": 1
+     }
+    ]
+   },
+   "named": "any"
+  },
+  {
+   "id": 11,
+   "sect": "crew",
+   "visitor": "A nervous recruit",
+   "name": "A nervous recruit",
+   "role": null,
+   "look": "member",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "Confesses he's scared of the dark and can't do night jobs",
+   "a": {
+    "label": "Day jobs only",
+    "does": "member can't take Night tasks, Loy +6",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": 6,
+      "who": "named"
+     },
+     {
+      "k": "note",
+      "slice": "D8",
+      "text": "day jobs only"
+     }
+    ]
+   },
+   "b": {
+    "label": "\"Get over it.\"",
+    "does": "member does Night tasks at −10%, 25%: trait grows toward Steady faster",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D8",
+      "text": "night tasks at -10%; grows toward Steady"
+     }
+    ]
+   },
+   "named": "any"
+  },
+  {
+   "id": 12,
+   "sect": "crew",
+   "visitor": "A Grunt",
+   "name": "A Grunt",
+   "role": null,
+   "look": "member",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "His brother wants to join, but he's useless",
+   "a": {
+    "label": "Hire him",
+    "does": "+Member (2 trait points, Clumsy), Loy +5",
+    "fx": [
+     {
+      "k": "join",
+      "green": "clumsy",
+      "name": "brother"
+     },
+     {
+      "k": "loyalty",
+      "n": 5,
+      "who": "named"
+     }
+    ]
+   },
+   "b": {
+    "label": "Turn him away",
+    "does": "Loy −4",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": -4,
+      "who": "named"
+     }
+    ]
+   },
+   "named": "any"
+  },
+  {
+   "id": 13,
+   "sect": "crew",
+   "visitor": "The crew cook",
+   "name": "The crew cook",
+   "role": "if any member has the Cook task",
+   "look": "member",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Wants ₽ for real ingredients, not Berries off the floor",
+   "a": {
+    "label": "Fund the kitchen",
+    "does": "₽ −100 weekly, Mor +8",
+    "fx": [
+     {
+      "k": "deal",
+      "n": -100
+     },
+     {
+      "k": "morale",
+      "n": 8
+     }
+    ]
+   },
+   "b": {
+    "label": "\"Floor Berries are fine.\"",
+    "does": "Mor −4, Heat +0",
+    "fx": [
+     {
+      "k": "morale",
+      "n": -4
+     }
+    ]
+   },
+   "named": "any"
+  },
+  {
+   "id": 14,
+   "sect": "crew",
+   "visitor": "A Grunt",
+   "name": "A Grunt",
+   "role": null,
+   "look": "member",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Got a tattoo of your emblem; wants you to see it",
+   "a": {
+    "label": "Admire it",
+    "does": "Loy +6, Mor +2",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": 6,
+      "who": "named"
+     },
+     {
+      "k": "morale",
+      "n": 2
+     }
+    ]
+   },
+   "b": {
+    "label": "\"That's evidence.\"",
+    "does": "Heat −2, Loy −8",
+    "fx": [
+     {
+      "k": "heat",
+      "n": -2
+     },
+     {
+      "k": "loyalty",
+      "n": -8,
+      "who": "named"
+     }
+    ]
+   },
+   "named": "any"
+  },
+  {
+   "id": 15,
+   "sect": "crew",
+   "visitor": "A crew member's Pokémon",
+   "name": "A crew member's Pokémon",
+   "role": "brought in by its trainer",
+   "look": "member",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "It's sick; the trainer wants to skip tomorrow's task for the Center",
+   "a": {
+    "label": "Go to the Center",
+    "does": "member skips 1 task, Loy +5, Reg +1",
+    "fx": [
+     {
+      "k": "rest"
+     },
+     {
+      "k": "loyalty",
+      "n": 5,
+      "who": "named"
+     },
+     {
+      "k": "regard",
+      "n": 1
+     }
+    ]
+   },
+   "b": {
+    "label": "\"Work first.\"",
+    "does": "member's Pokémon −1 level of mood, Loy −5",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": -5,
+      "who": "named"
+     }
+    ]
+   },
+   "named": "any"
+  },
+  {
+   "id": 16,
+   "sect": "crew",
+   "visitor": "A Sergeant",
+   "name": "A Sergeant",
+   "role": null,
+   "look": "member",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Wants to train the new recruits their own way (harsh)",
+   "a": {
+    "label": "Their way",
+    "does": "new recruits train +20%, Mor −3, Dread +3",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D8",
+      "text": "new recruits train +20%"
+     },
+     {
+      "k": "morale",
+      "n": -3
+     },
+     {
+      "k": "dread",
+      "n": 3
+     }
+    ]
+   },
+   "b": {
+    "label": "Your way",
+    "does": "Loy −4, Mor +2",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": -4,
+      "who": "named"
+     },
+     {
+      "k": "morale",
+      "n": 2
+     }
+    ]
+   },
+   "named": "sergeant"
+  },
+  {
+   "id": 17,
+   "sect": "crew",
+   "visitor": "A Grunt",
+   "name": "A Grunt",
+   "role": null,
+   "look": "member",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Found the Vault key under a mat; asks who put it there",
+   "a": {
+    "label": "Change the locks",
+    "does": "₽ −120, spy odds −20% this week",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -120
+     },
+     {
+      "k": "note",
+      "slice": "D9",
+      "text": "spy odds -20% this week"
+     }
+    ]
+   },
+   "b": {
+    "label": "Laugh it off",
+    "does": "25%: Vault loses an item tonight",
+    "fx": [
+     {
+      "k": "chance",
+      "p": 25,
+      "yes": [
+       {
+        "k": "item",
+        "id": "*",
+        "n": -1
+       }
+      ],
+      "no": []
+     }
+    ]
+   },
+   "named": "any"
+  },
+  {
+   "id": 18,
+   "sect": "crew",
+   "visitor": "An Admin",
+   "name": "An Admin",
+   "role": null,
+   "look": "member",
+   "tier": [
+    3,
+    5
+   ],
+   "ask": "Wants to recruit their old friend, a known Rival member",
+   "a": {
+    "label": "Allow it",
+    "does": "+Member (spy check on `evil-court`: 40% they're a spy), Ten +5",
+    "fx": [
+     {
+      "k": "join",
+      "look": "trainer/pr/rocket_grunt_f"
+     },
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": 5
+     },
+     {
+      "k": "note",
+      "slice": "D9",
+      "text": "40% they're a spy"
+     }
+    ]
+   },
+   "b": {
+    "label": "Forbid it",
+    "does": "Loy −6",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": -6,
+      "who": "named"
+     }
+    ]
+   },
+   "named": "admin"
+  },
+  {
+   "id": 19,
+   "sect": "crew",
+   "visitor": "The whole crew",
+   "name": "The whole crew",
+   "role": null,
+   "look": "member",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "They want a party for the team's founding day",
+   "a": {
+    "label": "Throw a party",
+    "does": "₽ −400, Mor +15, Heat +4 (noise)",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -400
+     },
+     {
+      "k": "morale",
+      "n": 15
+     },
+     {
+      "k": "heat",
+      "n": 4
+     }
+    ]
+   },
+   "b": {
+    "label": "Cancel",
+    "does": "Mor −8, ₽ +0",
+    "fx": [
+     {
+      "k": "morale",
+      "n": -8
+     }
+    ]
+   },
+   "named": "any",
+   "oncePerRegion": true,
+   "once": true
+  },
+  {
+   "id": 20,
+   "sect": "crew",
+   "visitor": "A Grunt",
+   "name": "A Grunt",
+   "role": null,
+   "look": "member",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "Asks to quit, politely, because he's getting married",
+   "a": {
+    "label": "Let him go, with a gift",
+    "does": "−Member, ₽ −100, Reg +5, Favour (in 14 days he sends a tip: one free Scout)",
+    "fx": [
+     {
+      "k": "leave"
+     },
+     {
+      "k": "funds",
+      "n": -100
+     },
+     {
+      "k": "regard",
+      "n": 5
+     },
+     {
+      "k": "tag",
+      "tag": "favour"
+     },
+     {
+      "k": "later",
+      "days": 14,
+      "fx": [
+       {
+        "k": "scout"
+       }
+      ]
+     }
+    ]
+   },
+   "b": {
+    "label": "\"Nobody quits.\"",
+    "does": "Loy −10, Dread +4, Mor −4",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": -10,
+      "who": "named"
+     },
+     {
+      "k": "dread",
+      "n": 4
+     },
+     {
+      "k": "morale",
+      "n": -4
+     }
+    ]
+   },
+   "named": "any",
+   "who": "member"
+  },
+  {
+   "id": 21,
+   "sect": "crew",
+   "visitor": "A wounded member",
+   "name": "A wounded member",
+   "role": null,
+   "look": "member",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Hurt in a raid; wants to retire to guard the gate",
+   "a": {
+    "label": "Make them the gatekeeper",
+    "does": "member's task locked to Guard, HQ defense +1 battle, Loy +10",
+    "fx": [
+     {
+      "k": "guard",
+      "n": 999
+     },
+     {
+      "k": "loyalty",
+      "n": 10,
+      "who": "named"
+     },
+     {
+      "k": "note",
+      "slice": "D5",
+      "text": "HQ defense +1 battle"
+     }
+    ]
+   },
+   "b": {
+    "label": "\"Heal up and get back out.\"",
+    "does": "Loy −6, they return to field tasks in 5 days",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": -6,
+      "who": "named"
+     },
+     {
+      "k": "out",
+      "n": 5
+     }
+    ]
+   },
+   "named": "hurt"
+  },
+  {
+   "id": 22,
+   "sect": "crew",
+   "visitor": "Two Admins",
+   "name": "Two Admins",
+   "role": null,
+   "look": "member",
+   "tier": [
+    4,
+    5
+   ],
+   "ask": "Each wants to be your official second",
+   "a": {
+    "label": "Pick the loyal one",
+    "does": "loser Loy −12, winner Loy +10",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": -12,
+      "who": "second"
+     },
+     {
+      "k": "loyalty",
+      "n": 10,
+      "who": "named"
+     }
+    ]
+   },
+   "b": {
+    "label": "Pick the strong one",
+    "does": "loser Loy −12, winner gains a field bonus, Dread +3",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": -12,
+      "who": "named"
+     },
+     {
+      "k": "loyalty",
+      "n": 10,
+      "who": "second"
+     },
+     {
+      "k": "dread",
+      "n": 3
+     },
+     {
+      "k": "note",
+      "slice": "D8",
+      "text": "the field bonus"
+     }
+    ]
+   },
+   "named": "admins"
+  },
+  {
+   "id": 23,
+   "sect": "town",
+   "visitor": "A shopkeeper",
+   "name": "A shopkeeper",
+   "role": null,
+   "look": "trainer/pr/clerk_m",
+   "tier": [
+    0,
+    2
+   ],
+   "ask": "\"Protection money's killing me. Can I pay half this week?\"",
+   "a": {
+    "label": "Half this week",
+    "does": "₽ −half of that Racket, Reg +4, Favour",
+    "fx": [
+     {
+      "k": "racket",
+      "share": -0.5
+     },
+     {
+      "k": "regard",
+      "n": 4
+     },
+     {
+      "k": "tag",
+      "tag": "favour"
+     }
+    ]
+   },
+   "b": {
+    "label": "Full or else",
+    "does": "₽ +0, Dread +4, 30%: shop calls the police (Heat +8)",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 4
+     },
+     {
+      "k": "chance",
+      "p": 30,
+      "yes": [
+       {
+        "k": "heat",
+        "n": 8
+       }
+      ],
+      "no": []
+     }
+    ]
+   },
+   "who": "shopkeeper",
+   "needs": "racket"
+  },
+  {
+   "id": 24,
+   "sect": "town",
+   "visitor": "A baker",
+   "name": "A baker",
+   "role": null,
+   "look": "trainer/pr/baker",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "Offers free bread for the crew instead of cash",
+   "a": {
+    "label": "Take the bread",
+    "does": "₽ −Racket, Mor +5",
+    "fx": [
+     {
+      "k": "racket",
+      "share": -1.0
+     },
+     {
+      "k": "morale",
+      "n": 5
+     }
+    ]
+   },
+   "b": {
+    "label": "Cash only",
+    "does": "Dread +2, Reg −2",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 2
+     },
+     {
+      "k": "regard",
+      "n": -2
+     }
+    ]
+   },
+   "who": "baker",
+   "needs": "racket"
+  },
+  {
+   "id": 25,
+   "sect": "town",
+   "visitor": "A landlord",
+   "name": "A landlord",
+   "role": null,
+   "look": "trainer/pr/rich_m",
+   "tier": [
+    0,
+    1
+   ],
+   "ask": "Wants rent doubled: \"I know what you do in there\"",
+   "a": {
+    "label": "Pay it",
+    "does": "₽ −weekly rent ×1 extra, Heat −3",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -200
+     },
+     {
+      "k": "heat",
+      "n": -3
+     }
+    ]
+   },
+   "b": {
+    "label": "Lean on him",
+    "does": "Dread +5, Heat +6, 50%: rent drops instead",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 5
+     },
+     {
+      "k": "heat",
+      "n": 6
+     },
+     {
+      "k": "chance",
+      "p": 50,
+      "yes": [
+       {
+        "k": "funds",
+        "n": 100
+       }
+      ],
+      "no": []
+     }
+    ]
+   },
+   "who": "landlord"
+  },
+  {
+   "id": 26,
+   "sect": "town",
+   "visitor": "A busker with a Jigglypuff",
+   "name": "A busker with a Jigglypuff",
+   "role": null,
+   "look": "trainer/pr/musician",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "Wants to play outside the HQ for tips",
+   "a": {
+    "label": "Let her play",
+    "does": "Reg +3, crew Mor +2, Heat +1",
+    "fx": [
+     {
+      "k": "regard",
+      "n": 3
+     },
+     {
+      "k": "morale",
+      "n": 2
+     },
+     {
+      "k": "heat",
+      "n": 1
+     }
+    ]
+   },
+   "b": {
+    "label": "Move her on",
+    "does": "Dread +1, Reg −2",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 1
+     },
+     {
+      "k": "regard",
+      "n": -2
+     }
+    ]
+   },
+   "who": "busker"
+  },
+  {
+   "id": 27,
+   "sect": "town",
+   "visitor": "A widow",
+   "name": "A widow",
+   "role": null,
+   "look": "trainer/pr/parasol_lady",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Her late husband owed the old loan shark; asks you to take the debt over and forgive it",
+   "a": {
+    "label": "Forgive it",
+    "does": "₽ −200, Reg +10, Favour",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -200
+     },
+     {
+      "k": "regard",
+      "n": 10
+     },
+     {
+      "k": "tag",
+      "tag": "favour"
+     }
+    ]
+   },
+   "b": {
+    "label": "Collect it",
+    "does": "₽ +200, Reg −6, Dread +3",
+    "fx": [
+     {
+      "k": "funds",
+      "n": 200
+     },
+     {
+      "k": "regard",
+      "n": -6
+     },
+     {
+      "k": "dread",
+      "n": 3
+     }
+    ]
+   },
+   "who": "widow"
+  },
+  {
+   "id": 28,
+   "sect": "town",
+   "visitor": "A Pokémon Center nurse",
+   "name": "A Pokémon Center nurse",
+   "role": "generic, night shift",
+   "look": "trainer/pr/doctor_f",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Asks your crew to stop scaring patients in the waiting room",
+   "a": {
+    "label": "Agree",
+    "does": "Reg +5, crew can't Thieve in Centers for 14 days",
+    "fx": [
+     {
+      "k": "regard",
+      "n": 5
+     },
+     {
+      "k": "note",
+      "slice": "D10",
+      "text": "no Thieving in Centers for 14 days"
+     }
+    ]
+   },
+   "b": {
+    "label": "Ignore",
+    "does": "Dread +2, Reg −4, Heal costs +10% in that district",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 2
+     },
+     {
+      "k": "regard",
+      "n": -4
+     },
+     {
+      "k": "note",
+      "slice": "D10",
+      "text": "Heal costs +10% there"
+     }
+    ]
+   },
+   "who": "nurse"
+  },
+  {
+   "id": 29,
+   "sect": "town",
+   "visitor": "A cab driver with a Doduo",
+   "name": "A cab driver with a Doduo",
+   "role": null,
+   "look": "trainer/pr/pilot",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "Offers rides for crew jobs for ₽20 a run",
+   "a": {
+    "label": "Hire him",
+    "does": "₽ −20/day, all field actions' chase odds +10%",
+    "fx": [
+     {
+      "k": "deal",
+      "n": -140
+     },
+     {
+      "k": "note",
+      "slice": "D10",
+      "text": "chase odds +10%"
+     }
+    ]
+   },
+   "b": {
+    "label": "No",
+    "does": "₽ +0",
+    "fx": []
+   },
+   "who": "cabbie",
+   "wait": "D10"
+  },
+  {
+   "id": 30,
+   "sect": "town",
+   "visitor": "A school caretaker",
+   "name": "A school caretaker",
+   "role": null,
+   "look": "trainer/pr/janitor",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Your flyers are near the school; parents are upset",
+   "a": {
+    "label": "Take them down there",
+    "does": "Reg +6, flyer recruits −1 that district",
+    "fx": [
+     {
+      "k": "regard",
+      "n": 6
+     },
+     {
+      "k": "note",
+      "slice": "D10",
+      "text": "flyer recruits -1 there"
+     }
+    ]
+   },
+   "b": {
+    "label": "Leave them",
+    "does": "Heat +5, Reg −6",
+    "fx": [
+     {
+      "k": "heat",
+      "n": 5
+     },
+     {
+      "k": "regard",
+      "n": -6
+     }
+    ]
+   },
+   "who": "caretaker"
+  },
+  {
+   "id": 31,
+   "sect": "town",
+   "visitor": "A fisherman",
+   "name": "A fisherman",
+   "role": null,
+   "look": "trainer/fisherman",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "Wants you to chase off a Gyarados poacher from the pier",
+   "a": {
+    "label": "Chase them off",
+    "does": "Opens a battle tomorrow (Lv cap −2), Reg +6, Favour",
+    "fx": [
+     {
+      "k": "fight",
+      "win": [
+       {
+        "k": "regard",
+        "n": 6
+       },
+       {
+        "k": "tag",
+        "tag": "favour"
+       }
+      ],
+      "lose": [
+       {
+        "k": "regard",
+        "n": 2
+       }
+      ]
+     }
+    ]
+   },
+   "b": {
+    "label": "\"Not my pier.\"",
+    "does": "Reg −2",
+    "fx": [
+     {
+      "k": "regard",
+      "n": -2
+     }
+    ]
+   },
+   "who": "fisherman",
+   "foe": {
+    "name": "The poacher",
+    "cls": "fisherman",
+    "species": [
+     "magikarp",
+     "gyarados"
+    ],
+    "offset": -2
+   }
+  },
+  {
+   "id": 32,
+   "sect": "town",
+   "visitor": "A shop owner",
+   "name": "A shop owner",
+   "role": null,
+   "look": "trainer/pr/clerk_f",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Offers to sell you the shop if you stop the protection racket on the street",
+   "a": {
+    "label": "Buy it",
+    "does": "clean ₽ −1,500, +Building (Shop), Reg +5",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -1500,
+      "clean": true
+     },
+     {
+      "k": "note",
+      "slice": "D5",
+      "text": "+Building (Shop)"
+     },
+     {
+      "k": "regard",
+      "n": 5
+     }
+    ]
+   },
+   "b": {
+    "label": "No",
+    "does": "keep the racket, Dread +2",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 2
+     }
+    ]
+   },
+   "who": "shop-owner",
+   "wait": "D5"
+  },
+  {
+   "id": 33,
+   "sect": "town",
+   "visitor": "A housing association rep",
+   "name": "A housing association rep",
+   "role": null,
+   "look": "trainer/pr/worker_f",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Asks you to fix the street lights you broke",
+   "a": {
+    "label": "Fix them",
+    "does": "₽ −250, Reg +8, Night actions −5% that district",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -250
+     },
+     {
+      "k": "regard",
+      "n": 8
+     },
+     {
+      "k": "note",
+      "slice": "D10",
+      "text": "Night actions -5% there"
+     }
+    ]
+   },
+   "b": {
+    "label": "Leave them dark",
+    "does": "Night actions +5%, Reg −5",
+    "fx": [
+     {
+      "k": "regard",
+      "n": -5
+     },
+     {
+      "k": "note",
+      "slice": "D10",
+      "text": "Night actions +5% there"
+     }
+    ]
+   },
+   "who": "housing"
+  },
+  {
+   "id": 34,
+   "sect": "town",
+   "visitor": "A grandmother with a Chansey",
+   "name": "A grandmother with a Chansey",
+   "role": null,
+   "look": "trainer/pr/pokefan_f",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "Her Chansey's egg was taken by \"someone in a uniform\"",
+   "a": {
+    "label": "Find it and return it",
+    "does": "Opens a Scout, crew Loy −2 for the thief (if yours), Reg +10",
+    "fx": [
+     {
+      "k": "scout"
+     },
+     {
+      "k": "regard",
+      "n": 10
+     }
+    ]
+   },
+   "b": {
+    "label": "\"Not us.\"",
+    "does": "Reg −4, 30%: it was one of yours → Grunt Loy +3 (covered for)",
+    "fx": [
+     {
+      "k": "regard",
+      "n": -4
+     },
+     {
+      "k": "chance",
+      "p": 30,
+      "yes": [
+       {
+        "k": "loyalty",
+        "n": 1,
+        "who": "all"
+       }
+      ],
+      "no": []
+     }
+    ]
+   },
+   "who": "grandmother"
+  },
+  {
+   "id": 35,
+   "sect": "town",
+   "visitor": "A street vendor",
+   "name": "A street vendor",
+   "role": null,
+   "look": "trainer/pr/waiter_m",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "Wants a stall next to your HQ: free food for crew, you keep the street safe",
+   "a": {
+    "label": "Deal",
+    "does": "Mor +4, Reg +3, Heat +1",
+    "fx": [
+     {
+      "k": "morale",
+      "n": 4
+     },
+     {
+      "k": "regard",
+      "n": 3
+     },
+     {
+      "k": "heat",
+      "n": 1
+     }
+    ]
+   },
+   "b": {
+    "label": "No",
+    "does": "₽ +0",
+    "fx": []
+   },
+   "who": "vendor"
+  },
+  {
+   "id": 36,
+   "sect": "town",
+   "visitor": "A Game Corner regular",
+   "name": "A Game Corner regular",
+   "role": null,
+   "look": "trainer/pr/rich_kid_m",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Offers a \"system\" for the slots in exchange for a Pokémon",
+   "a": {
+    "label": "Buy the system",
+    "does": "Stores Pkmn −1, 50%: ₽ +600 / 50%: ₽ +0",
+    "fx": [
+     {
+      "k": "mon",
+      "n": -1
+     },
+     {
+      "k": "chance",
+      "p": 50,
+      "yes": [
+       {
+        "k": "funds",
+        "n": 600
+       }
+      ],
+      "no": []
+     }
+    ]
+   },
+   "b": {
+    "label": "Laugh him out",
+    "does": "Dread +1",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 1
+     }
+    ]
+   },
+   "who": "gambler-slots",
+   "needs": "stores"
+  },
+  {
+   "id": 37,
+   "sect": "town",
+   "visitor": "A café owner",
+   "name": "A café owner",
+   "role": null,
+   "look": "trainer/pr/waiter_f",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Wants your crew to stop meeting in her café (it scares customers)",
+   "a": {
+    "label": "Find a new spot",
+    "does": "Mor −2, Reg +4",
+    "fx": [
+     {
+      "k": "morale",
+      "n": -2
+     },
+     {
+      "k": "regard",
+      "n": 4
+     }
+    ]
+   },
+   "b": {
+    "label": "Buy her café",
+    "does": "clean ₽ −2,000, +Building (Café Front)",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -2000,
+      "clean": true
+     },
+     {
+      "k": "note",
+      "slice": "D5",
+      "text": "+Building (Café Front)"
+     }
+    ]
+   },
+   "who": "cafe",
+   "wait": "D5"
+  },
+  {
+   "id": 38,
+   "sect": "town",
+   "visitor": "A florist",
+   "name": "A florist",
+   "role": null,
+   "look": "trainer/aroma_lady",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Asks you to protect her shop from a rival racket",
+   "a": {
+    "label": "Protect her",
+    "does": "+Racket, Ten +6",
+    "fx": [
+     {
+      "k": "racketAdd"
+     },
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": 6
+     }
+    ]
+   },
+   "b": {
+    "label": "Stay out",
+    "does": "Reg −2, Ten +0",
+    "fx": [
+     {
+      "k": "regard",
+      "n": -2
+     }
+    ]
+   },
+   "who": "florist"
+  },
+  {
+   "id": 39,
+   "sect": "town",
+   "visitor": "A dockworker union boss",
+   "name": "A dockworker union boss",
+   "role": null,
+   "look": "trainer/worker_m",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Offers the docks' silence for a cut of smuggling",
+   "a": {
+    "label": "Pay the cut",
+    "does": "₽ −15% smuggling, Smuggle Heat −50%",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D10",
+      "text": "Smuggle: -15% cut, Heat -50%"
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "40%: strike, Smuggle blocked 3 days",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D10",
+      "text": "40%: Smuggle blocked 3 days"
+     }
+    ]
+   },
+   "who": "union",
+   "wait": "D10"
+  },
+  {
+   "id": 40,
+   "sect": "town",
+   "visitor": "A Pokémon Daycare couple",
+   "name": "A Pokémon Daycare couple",
+   "role": null,
+   "look": "trainer/pr/breeder_f",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Your Grunt left three Pokémon at their Daycare and never paid",
+   "a": {
+    "label": "Pay the bill",
+    "does": "₽ −180, Reg +3, Pkmn +3 back",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -180
+     },
+     {
+      "k": "regard",
+      "n": 3
+     },
+     {
+      "k": "mon",
+      "n": 3
+     }
+    ]
+   },
+   "b": {
+    "label": "\"Keep them.\"",
+    "does": "Reg −4, Pkmn −0 (lost), Grunt Loy −2",
+    "fx": [
+     {
+      "k": "regard",
+      "n": -4
+     },
+     {
+      "k": "loyalty",
+      "n": -1,
+      "who": "all"
+     }
+    ]
+   },
+   "who": "daycare"
+  },
+  {
+   "id": 41,
+   "sect": "town",
+   "visitor": "A wedding planner",
+   "name": "A wedding planner",
+   "role": null,
+   "look": "trainer/pr/rich_f",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Wants to rent your arena for a wedding",
+   "a": {
+    "label": "Rent it",
+    "does": "clean ₽ +600, Reg +6, Heat −2",
+    "fx": [
+     {
+      "k": "funds",
+      "n": 600,
+      "clean": true
+     },
+     {
+      "k": "regard",
+      "n": 6
+     },
+     {
+      "k": "heat",
+      "n": -2
+     }
+    ]
+   },
+   "b": {
+    "label": "\"It's an arena.\"",
+    "does": "Dread +2",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 2
+     }
+    ]
+   },
+   "who": "planner"
+  },
+  {
+   "id": 42,
+   "sect": "town",
+   "visitor": "A local artist",
+   "name": "A local artist",
+   "role": null,
+   "look": "trainer/pr/artist",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Painted a mural of your emblem on the town hall",
+   "a": {
+    "label": "Pay her",
+    "does": "₽ −200, Not +2, Heat +6",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -200
+     },
+     {
+      "k": "fame",
+      "n": 2
+     },
+     {
+      "k": "heat",
+      "n": 6
+     }
+    ]
+   },
+   "b": {
+    "label": "Paint over it",
+    "does": "Heat −2, Reg +2",
+    "fx": [
+     {
+      "k": "heat",
+      "n": -2
+     },
+     {
+      "k": "regard",
+      "n": 2
+     }
+    ]
+   },
+   "who": "artist"
+  },
+  {
+   "id": 43,
+   "sect": "town",
+   "visitor": "A Hiker",
+   "name": "A Hiker",
+   "role": null,
+   "look": "trainer/hiker",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Lost in the city; asks for directions to Mt. Moon (or region's mountain)",
+   "a": {
+    "label": "Have a Grunt walk him there",
+    "does": "member skips task, Reg +4, 30%: he joins (+Member)",
+    "fx": [
+     {
+      "k": "rest"
+     },
+     {
+      "k": "chance",
+      "p": 30,
+      "yes": [
+       {
+        "k": "join",
+        "look": "trainer/hiker",
+        "green": "lost"
+       }
+      ],
+      "no": []
+     },
+     {
+      "k": "regard",
+      "n": 4
+     }
+    ]
+   },
+   "b": {
+    "label": "Point vaguely",
+    "does": "nothing",
+    "fx": []
+   },
+   "named": "any",
+   "who": "hiker"
+  },
+  {
+   "id": 44,
+   "sect": "town",
+   "visitor": "A blackout-struck shop owner",
+   "name": "A blackout-struck shop owner",
+   "role": null,
+   "look": "trainer/pr/clerk_m_2",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "The power's out; asks to borrow your generator",
+   "a": {
+    "label": "Lend it",
+    "does": "HQ defense −1 battle tonight, Reg +6",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D5",
+      "text": "HQ defense -1 battle tonight"
+     },
+     {
+      "k": "regard",
+      "n": 6
+     }
+    ]
+   },
+   "b": {
+    "label": "No",
+    "does": "Reg −3",
+    "fx": [
+     {
+      "k": "regard",
+      "n": -3
+     }
+    ]
+   },
+   "who": "blackout"
+  },
+  {
+   "id": 45,
+   "sect": "money",
+   "visitor": "A fence",
+   "name": "A fence",
+   "role": null,
+   "look": "trainer/pr/collector",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "Will buy your stolen goods at 60% now, or 90% if you wait a week",
+   "a": {
+    "label": "60% now",
+    "does": "₽ +60% of Holding value",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D10",
+      "text": "60% of the Holding value"
+     }
+    ]
+   },
+   "b": {
+    "label": "90% in a week",
+    "does": "→ #46 in 7d, 20%: he skips town",
+    "fx": [
+     {
+      "k": "follow",
+      "card": 46,
+      "days": 7
+     }
+    ]
+   },
+   "who": "fence",
+   "wait": "D10"
+  },
+  {
+   "id": 46,
+   "sect": "money",
+   "visitor": "The fence, back",
+   "name": "The fence, back",
+   "role": null,
+   "look": "trainer/pr/collector",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "Pays up, offers to fence for you every week",
+   "a": {
+    "label": "Regular deal",
+    "does": "Holding sells 75% weekly, Heat −1",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D10",
+      "text": "Holding sells at 75% weekly"
+     },
+     {
+      "k": "heat",
+      "n": -1
+     }
+    ]
+   },
+   "b": {
+    "label": "One-off",
+    "does": "₽ +90% value, done",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D10",
+      "text": "90% of the Holding value"
+     }
+    ]
+   },
+   "who": "fence",
+   "wait": "D10",
+   "followOnly": true
+  },
+  {
+   "id": 47,
+   "sect": "money",
+   "visitor": "A loan shark",
+   "name": "A loan shark",
+   "role": null,
+   "look": "trainer/roughneck",
+   "tier": [
+    0,
+    2
+   ],
+   "ask": "Offers ₽1,000 now, ₽1,500 back in 14 days",
+   "a": {
+    "label": "Take it",
+    "does": "₽ +1,000, → #48 in 14d",
+    "fx": [
+     {
+      "k": "funds",
+      "n": 1000
+     },
+     {
+      "k": "follow",
+      "card": 48,
+      "days": 14
+     }
+    ]
+   },
+   "b": {
+    "label": "\"I don't borrow.\"",
+    "does": "Dread +1",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 1
+     }
+    ]
+   },
+   "who": "shark"
+  },
+  {
+   "id": 48,
+   "sect": "money",
+   "visitor": "The loan shark, collecting",
+   "name": "The loan shark, collecting",
+   "role": null,
+   "look": "trainer/roughneck",
+   "tier": [
+    0,
+    2
+   ],
+   "ask": "Wants his ₽1,500",
+   "a": {
+    "label": "Pay",
+    "does": "₽ −1,500, Favour",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -1500
+     },
+     {
+      "k": "tag",
+      "tag": "favour"
+     }
+    ]
+   },
+   "b": {
+    "label": "Don't pay",
+    "does": "Dread +4, Heat +5, 50%: battle with his Machoke tonight",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 4
+     },
+     {
+      "k": "heat",
+      "n": 5
+     },
+     {
+      "k": "chance",
+      "p": 50,
+      "yes": [
+       {
+        "k": "fight",
+        "win": [],
+        "lose": [
+         {
+          "k": "funds",
+          "n": -1500
+         }
+        ]
+       }
+      ],
+      "no": []
+     }
+    ]
+   },
+   "who": "shark",
+   "foe": {
+    "name": "The loan shark",
+    "cls": "roughneck",
+    "species": [
+     "machoke"
+    ],
+    "offset": 1
+   },
+   "followOnly": true
+  },
+  {
+   "id": 49,
+   "sect": "money",
+   "visitor": "A counterfeiter",
+   "name": "A counterfeiter",
+   "role": null,
+   "look": "trainer/pr/scientist_m",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Offers fake Poké Dollars at a third of the price",
+   "a": {
+    "label": "Buy a stack",
+    "does": "₽ +500, 30%: Heat +15 (found out)",
+    "fx": [
+     {
+      "k": "funds",
+      "n": 500
+     },
+     {
+      "k": "chance",
+      "p": 30,
+      "yes": [
+       {
+        "k": "heat",
+        "n": 15
+       }
+      ],
+      "no": []
+     }
+    ]
+   },
+   "b": {
+    "label": "Turn him in",
+    "does": "Heat −8, Reg +3, Dread −2",
+    "fx": [
+     {
+      "k": "heat",
+      "n": -8
+     },
+     {
+      "k": "regard",
+      "n": 3
+     },
+     {
+      "k": "dread",
+      "n": -2
+     }
+    ]
+   },
+   "who": "counterfeiter"
+  },
+  {
+   "id": 50,
+   "sect": "money",
+   "visitor": "A smuggler with a boat",
+   "name": "A smuggler with a boat",
+   "role": null,
+   "look": "trainer/pr/scuba_diver_m",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Wants to run rare Pokémon through your docks",
+   "a": {
+    "label": "Let him",
+    "does": "₽ +400/week, Heat +3/week, Threat +2",
+    "fx": [
+     {
+      "k": "deal",
+      "n": 400,
+      "heat": 3
+     },
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": 2
+     }
+    ]
+   },
+   "b": {
+    "label": "Run him off",
+    "does": "Reg +2, Dread +2",
+    "fx": [
+     {
+      "k": "regard",
+      "n": 2
+     },
+     {
+      "k": "dread",
+      "n": 2
+     }
+    ]
+   },
+   "who": "smuggler"
+  },
+  {
+   "id": 51,
+   "sect": "money",
+   "visitor": "A gambler",
+   "name": "A gambler",
+   "role": null,
+   "look": "trainer/pr/rich_m",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Bets his house against your best Pokémon in one battle",
+   "a": {
+    "label": "Accept",
+    "does": "Battle now: win +Building (House), lose Stores Pkmn −1 (your pick)",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D5",
+      "text": "win: +Building (House)"
+     },
+     {
+      "k": "mon",
+      "n": -1
+     }
+    ]
+   },
+   "b": {
+    "label": "Decline",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "gambler",
+   "wait": "D5"
+  },
+  {
+   "id": 52,
+   "sect": "money",
+   "visitor": "A Black Market dealer",
+   "name": "A Black Market dealer",
+   "role": null,
+   "look": "trainer/pr/collector",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Offers a rare TM, but says it's \"hot\"",
+   "a": {
+    "label": "Buy it",
+    "does": "₽ −600, Item (rare TM), Heat +6",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -600
+     },
+     {
+      "k": "item",
+      "id": "ability-urge",
+      "n": 1
+     },
+     {
+      "k": "heat",
+      "n": 6
+     }
+    ]
+   },
+   "b": {
+    "label": "Pass",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "black-market"
+  },
+  {
+   "id": 53,
+   "sect": "money",
+   "visitor": "A crooked accountant",
+   "name": "A crooked accountant",
+   "role": null,
+   "look": "trainer/pr/rich_m",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Can launder ₽ at 5%, but wants to know everything",
+   "a": {
+    "label": "Hire him",
+    "does": "laundering 5%, 15%/week: he talks to police (Heat +10)",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D5",
+      "text": "laundering at 5%"
+     }
+    ]
+   },
+   "b": {
+    "label": "No",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "accountant",
+   "wait": "D5"
+  },
+  {
+   "id": 54,
+   "sect": "money",
+   "visitor": "A rich collector",
+   "name": "A rich collector",
+   "role": null,
+   "look": "trainer/pr/rich_f",
+   "tier": [
+    3,
+    5
+   ],
+   "ask": "Will pay a fortune for a Pokémon from your Holding Pens, no questions",
+   "a": {
+    "label": "Sell it",
+    "does": "₽ +1,200, Pkmn −1, Threat +3",
+    "fx": [
+     {
+      "k": "funds",
+      "n": 1200
+     },
+     {
+      "k": "mon",
+      "n": -1
+     },
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": 3
+     }
+    ]
+   },
+   "b": {
+    "label": "Release it",
+    "does": "Reg +6, Threat −2",
+    "fx": [
+     {
+      "k": "mon",
+      "n": -1
+     },
+     {
+      "k": "regard",
+      "n": 6
+     },
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": -2
+     }
+    ]
+   },
+   "who": "collector",
+   "needs": "stores"
+  },
+  {
+   "id": 55,
+   "sect": "money",
+   "visitor": "A Game Corner manager",
+   "name": "A Game Corner manager",
+   "role": null,
+   "look": "trainer/pr/harlequin",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Offers to rig the prize machine for a share",
+   "a": {
+    "label": "Rig it",
+    "does": "₽ +300/week, 10%/week: exposure (Heat +12)",
+    "fx": [
+     {
+      "k": "deal",
+      "n": 300,
+      "risk": 10,
+      "heat": 12
+     }
+    ]
+   },
+   "b": {
+    "label": "No",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "corner-manager"
+  },
+  {
+   "id": 56,
+   "sect": "money",
+   "visitor": "An insurance man",
+   "name": "An insurance man",
+   "role": null,
+   "look": "trainer/pr/rich_m",
+   "tier": [
+    3,
+    5
+   ],
+   "ask": "Will insure your buildings against raids for a weekly fee",
+   "a": {
+    "label": "Insure",
+    "does": "₽ −150/week, raid losses halved",
+    "fx": [
+     {
+      "k": "deal",
+      "n": -150
+     },
+     {
+      "k": "note",
+      "slice": "D9",
+      "text": "raid losses halved"
+     }
+    ]
+   },
+   "b": {
+    "label": "\"I am the insurance.\"",
+    "does": "Dread +2",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 2
+     }
+    ]
+   },
+   "who": "insurance",
+   "wait": "D9"
+  },
+  {
+   "id": 57,
+   "sect": "money",
+   "visitor": "A thief from out of town",
+   "name": "A thief from out of town",
+   "role": null,
+   "look": "trainer/pr/hooligans",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Wants to work your turf and pay you a share",
+   "a": {
+    "label": "Allow it",
+    "does": "₽ +100/week, Heat +2/week",
+    "fx": [
+     {
+      "k": "deal",
+      "n": 100,
+      "heat": 2
+     }
+    ]
+   },
+   "b": {
+    "label": "\"My streets.\"",
+    "does": "Battle tomorrow, win Dread +4",
+    "fx": [
+     {
+      "k": "fight",
+      "win": [
+       {
+        "k": "dread",
+        "n": 4
+       }
+      ],
+      "lose": []
+     }
+    ]
+   },
+   "who": "thief",
+   "foe": {
+    "name": "The out-of-town thief",
+    "cls": "roughneck",
+    "species": [
+     "ekans",
+     "koffing"
+    ],
+    "offset": 0
+   }
+  },
+  {
+   "id": 58,
+   "sect": "money",
+   "visitor": "A courier",
+   "name": "A courier",
+   "role": null,
+   "look": "trainer/pr/depot_agent",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Carries an unmarked case: \"Don't open it. Hold it for three days.\"",
+   "a": {
+    "label": "Hold it",
+    "does": "in 3 days: ₽ +500 (80%) or Heat +20 (20%)",
+    "fx": [
+     {
+      "k": "later",
+      "days": 3,
+      "fx": [
+       {
+        "k": "chance",
+        "p": 80,
+        "yes": [
+         {
+          "k": "funds",
+          "n": 500
+         }
+        ],
+        "no": [
+         {
+          "k": "heat",
+          "n": 20
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "b": {
+    "label": "Open it",
+    "does": "Item (Rare Candy ×3), Grudge (the courier's boss)",
+    "fx": [
+     {
+      "k": "item",
+      "id": "rare-candy",
+      "n": 3
+     },
+     {
+      "k": "tag",
+      "tag": "grudge",
+      "who": "courier-boss"
+     }
+    ]
+   },
+   "who": "courier"
+  },
+  {
+   "id": 59,
+   "sect": "law",
+   "visitor": "Officer Jenny",
+   "name": "Officer Jenny",
+   "role": "off duty",
+   "look": "trainer/pr/officer",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "\"Give me one name. Any name. And I stop looking at you.\"",
+   "a": {
+    "label": "Give up a rival Grunt",
+    "does": "Heat −12, Ten +8",
+    "fx": [
+     {
+      "k": "heat",
+      "n": -12
+     },
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": 8
+     }
+    ]
+   },
+   "b": {
+    "label": "\"I don't know anyone.\"",
+    "does": "Heat +4, Dread +1",
+    "fx": [
+     {
+      "k": "heat",
+      "n": 4
+     },
+     {
+      "k": "dread",
+      "n": 1
+     }
+    ]
+   },
+   "who": "jenny"
+  },
+  {
+   "id": 60,
+   "sect": "law",
+   "visitor": "Officer Jenny",
+   "name": "Officer Jenny",
+   "role": null,
+   "look": "trainer/pr/officer",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Asks for a donation to the police charity",
+   "a": {
+    "label": "Donate",
+    "does": "clean ₽ −300, Heat −8, Reg +3",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -300,
+      "clean": true
+     },
+     {
+      "k": "heat",
+      "n": -8
+     },
+     {
+      "k": "regard",
+      "n": 3
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "Heat +3",
+    "fx": [
+     {
+      "k": "heat",
+      "n": 3
+     }
+    ]
+   },
+   "who": "jenny"
+  },
+  {
+   "id": 61,
+   "sect": "law",
+   "visitor": "A young cop",
+   "name": "A young cop",
+   "role": "adult rookie",
+   "look": "trainer/pr/officer",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Wants a bribe to \"lose\" a report on your crew",
+   "a": {
+    "label": "Pay",
+    "does": "₽ −200, Heat −10, → #62 in 10d",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -200
+     },
+     {
+      "k": "heat",
+      "n": -10
+     },
+     {
+      "k": "follow",
+      "card": 62,
+      "days": 10
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "Heat +5",
+    "fx": [
+     {
+      "k": "heat",
+      "n": 5
+     }
+    ]
+   },
+   "who": "rookie"
+  },
+  {
+   "id": 62,
+   "sect": "law",
+   "visitor": "The rookie, back",
+   "name": "The rookie, back",
+   "role": null,
+   "look": "trainer/pr/officer",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Wants twice as much now",
+   "a": {
+    "label": "Pay",
+    "does": "₽ −400, Heat −10",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -400
+     },
+     {
+      "k": "heat",
+      "n": -10
+     }
+    ]
+   },
+   "b": {
+    "label": "Report him to Jenny",
+    "does": "Heat −5, Grudge, he's fired",
+    "fx": [
+     {
+      "k": "heat",
+      "n": -5
+     },
+     {
+      "k": "tag",
+      "tag": "grudge"
+     }
+    ]
+   },
+   "who": "rookie",
+   "followOnly": true
+  },
+  {
+   "id": 63,
+   "sect": "law",
+   "visitor": "Looker",
+   "name": "Looker",
+   "role": "International Police",
+   "look": "trainer/pr/veteran_m",
+   "tier": [
+    3,
+    5
+   ],
+   "ask": "Offers you immunity in this region if you inform on Team Cipher or Snagem",
+   "a": {
+    "label": "Inform",
+    "does": "Wanted −15, Snagem/Cipher deals closed for the run",
+    "fx": [
+     {
+      "k": "wanted",
+      "n": -15
+     },
+     {
+      "k": "note",
+      "slice": "D16",
+      "text": "Snagem and Cipher deals closed for the run"
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "Wanted +5, Looker watches (Heat +2 per Night action for 7 days)",
+    "fx": [
+     {
+      "k": "wanted",
+      "n": 5
+     },
+     {
+      "k": "note",
+      "slice": "D2",
+      "text": "Looker watches: Heat +2 per Night action for 7 days"
+     }
+    ]
+   },
+   "who": "looker"
+  },
+  {
+   "id": 64,
+   "sect": "law",
+   "visitor": "A defense lawyer",
+   "name": "A defense lawyer",
+   "role": null,
+   "look": "trainer/pr/rich_f",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Can get your jailed member out for a fee",
+   "a": {
+    "label": "Hire her",
+    "does": "₽ −500, jailed member returns tomorrow, Loy +10",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -500
+     },
+     {
+      "k": "free"
+     },
+     {
+      "k": "loyalty",
+      "n": 10,
+      "who": "named"
+     }
+    ]
+   },
+   "b": {
+    "label": "Let them sit",
+    "does": "member back in 7 days, Loy −10",
+    "fx": [
+     {
+      "k": "out",
+      "n": 7
+     },
+     {
+      "k": "loyalty",
+      "n": -10,
+      "who": "named"
+     }
+    ]
+   },
+   "named": "jailed",
+   "who": "lawyer"
+  },
+  {
+   "id": 65,
+   "sect": "law",
+   "visitor": "A judge",
+   "name": "A judge",
+   "role": null,
+   "look": "trainer/pr/rich_m",
+   "tier": [
+    3,
+    5
+   ],
+   "ask": "Will go easy on your crew for a \"campaign donation\"",
+   "a": {
+    "label": "Donate",
+    "does": "clean ₽ −1,500, police sweeps −30% for 2 weeks",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -1500,
+      "clean": true
+     },
+     {
+      "k": "note",
+      "slice": "D10",
+      "text": "police sweeps -30% for 2 weeks"
+     }
+    ]
+   },
+   "b": {
+    "label": "No",
+    "does": "nothing; 20%: he becomes a target (Opens Blackmail on him)",
+    "fx": [
+     {
+      "k": "chance",
+      "p": 20,
+      "yes": [
+       {
+        "k": "note",
+        "slice": "D10",
+        "text": "Blackmail on him opens"
+       }
+      ],
+      "no": []
+     }
+    ]
+   },
+   "who": "judge",
+   "wait": "D10"
+  },
+  {
+   "id": 66,
+   "sect": "law",
+   "visitor": "A police informant",
+   "name": "A police informant",
+   "role": null,
+   "look": "trainer/pr/hooligans",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Sells the date of next week's sweep",
+   "a": {
+    "label": "Buy it",
+    "does": "₽ −150, this week's sweep can't catch anyone",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -150
+     },
+     {
+      "k": "note",
+      "slice": "D10",
+      "text": "this week's sweep can't catch anyone"
+     }
+    ]
+   },
+   "b": {
+    "label": "Pass",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "informant",
+   "wait": "D10"
+  },
+  {
+   "id": 67,
+   "sect": "law",
+   "visitor": "A crew member's cousin, a cop",
+   "name": "A crew member's cousin, a cop",
+   "role": null,
+   "look": "trainer/pr/officer",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Wants the member to quit the team",
+   "a": {
+    "label": "Let them quit",
+    "does": "−Member, Heat −10",
+    "fx": [
+     {
+      "k": "leave"
+     },
+     {
+      "k": "heat",
+      "n": -10
+     }
+    ]
+   },
+   "b": {
+    "label": "Keep them",
+    "does": "Heat +6, Loy +4",
+    "fx": [
+     {
+      "k": "heat",
+      "n": 6
+     },
+     {
+      "k": "loyalty",
+      "n": 4,
+      "who": "named"
+     }
+    ]
+   },
+   "named": "any",
+   "who": "cousin"
+  },
+  {
+   "id": 68,
+   "sect": "law",
+   "visitor": "A journalist",
+   "name": "A journalist",
+   "role": null,
+   "look": "trainer/pr/interviewers",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Writing a story on \"the warehouse gang\"; wants a quote",
+   "a": {
+    "label": "Give a quote",
+    "does": "Not +3, Heat +5",
+    "fx": [
+     {
+      "k": "fame",
+      "n": 3
+     },
+     {
+      "k": "heat",
+      "n": 5
+     }
+    ]
+   },
+   "b": {
+    "label": "Threaten him",
+    "does": "Dread +3, 50%: the story runs anyway (Heat +8)",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 3
+     },
+     {
+      "k": "chance",
+      "p": 50,
+      "yes": [
+       {
+        "k": "heat",
+        "n": 8
+       }
+      ],
+      "no": []
+     }
+    ]
+   },
+   "who": "journalist"
+  },
+  {
+   "id": 69,
+   "sect": "law",
+   "visitor": "A tired Jenny",
+   "name": "A tired Jenny",
+   "role": null,
+   "look": "trainer/pr/officer",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Asks you to keep crime out of one street (her mother lives there)",
+   "a": {
+    "label": "Agree",
+    "does": "That street: no actions, Heat −1/day in the district, Favour",
+    "fx": [
+     {
+      "k": "cool",
+      "n": 1
+     },
+     {
+      "k": "tag",
+      "tag": "favour"
+     },
+     {
+      "k": "note",
+      "slice": "D10",
+      "text": "that street: no actions"
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "Heat +4, Grudge",
+    "fx": [
+     {
+      "k": "heat",
+      "n": 4
+     },
+     {
+      "k": "tag",
+      "tag": "grudge"
+     }
+    ]
+   },
+   "who": "jenny"
+  },
+  {
+   "id": 70,
+   "sect": "law",
+   "visitor": "A prison guard",
+   "name": "A prison guard",
+   "role": null,
+   "look": "trainer/pr/veteran_m",
+   "tier": [
+    3,
+    5
+   ],
+   "ask": "Offers to pass a message to your jailed member, for a price",
+   "a": {
+    "label": "Send it",
+    "does": "₽ −100, jailed member Loy +10",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -100
+     },
+     {
+      "k": "loyalty",
+      "n": 10,
+      "who": "named"
+     }
+    ]
+   },
+   "b": {
+    "label": "No",
+    "does": "jailed member Loy −5",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": -5,
+      "who": "named"
+     }
+    ]
+   },
+   "named": "jailed",
+   "who": "guard"
+  },
+  {
+   "id": 71,
+   "sect": "rival",
+   "visitor": "A Rival Grunt",
+   "name": "A Rival Grunt",
+   "role": null,
+   "look": "trainer/pr/rocket_grunt_m",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "Has defected and wants to join you",
+   "a": {
+    "label": "Take him in",
+    "does": "+Member (40% spy), Ten +5",
+    "fx": [
+     {
+      "k": "join",
+      "look": "trainer/pr/rocket_grunt_m"
+     },
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": 5
+     },
+     {
+      "k": "note",
+      "slice": "D9",
+      "text": "40% he's a spy"
+     }
+    ]
+   },
+   "b": {
+    "label": "Send him back",
+    "does": "Ten −3",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": -3
+     }
+    ]
+   },
+   "who": "rival",
+   "rival": true
+  },
+  {
+   "id": 72,
+   "sect": "rival",
+   "visitor": "A Rival Grunt, bruised",
+   "name": "A Rival Grunt, bruised",
+   "role": null,
+   "look": "trainer/pr/rocket_grunt_m",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "Says his Boss beat him up for failing; wants shelter",
+   "a": {
+    "label": "Shelter him",
+    "does": "Reg +4, Ten +4, +Member if room",
+    "fx": [
+     {
+      "k": "regard",
+      "n": 4
+     },
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": 4
+     },
+     {
+      "k": "join",
+      "look": "trainer/pr/rocket_grunt_m"
+     }
+    ]
+   },
+   "b": {
+    "label": "Turn him away",
+    "does": "Dread +1",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 1
+     }
+    ]
+   },
+   "who": "rival",
+   "rival": true
+  },
+  {
+   "id": 73,
+   "sect": "rival",
+   "visitor": "A Rival messenger",
+   "name": "A Rival messenger",
+   "role": null,
+   "look": "trainer/pr/rocket_grunt_f",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Delivers an offer: pay tribute and they'll leave you alone",
+   "a": {
+    "label": "Pay",
+    "does": "₽ −200/week, Ten −10/week (truce)",
+    "fx": [
+     {
+      "k": "deal",
+      "n": -200,
+      "ten": -10
+     }
+    ]
+   },
+   "b": {
+    "label": "Tear it up",
+    "does": "Ten +10, Dread +3",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": 10
+     },
+     {
+      "k": "dread",
+      "n": 3
+     }
+    ]
+   },
+   "who": "rival",
+   "rival": true
+  },
+  {
+   "id": 74,
+   "sect": "rival",
+   "visitor": "A Rival spy, caught",
+   "name": "A Rival spy, caught",
+   "role": "needs Security Room or a caught spy",
+   "look": "trainer/pr/rocket_grunt_m",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Begs you not to hand him back",
+   "a": {
+    "label": "Turn him",
+    "does": "he becomes your double agent (Rival plans visible), Ten +0",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D9",
+      "text": "a double agent: Rival plans visible"
+     }
+    ]
+   },
+   "b": {
+    "label": "Hand him back",
+    "does": "Ten −8, Reg −2",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": -8
+     },
+     {
+      "k": "regard",
+      "n": -2
+     }
+    ]
+   },
+   "who": "rival",
+   "wait": "D9",
+   "rival": true
+  },
+  {
+   "id": 75,
+   "sect": "rival",
+   "visitor": "A Rival Admin's go-between",
+   "name": "A Rival Admin's go-between",
+   "role": null,
+   "look": "trainer/pr/rocket_grunt_m",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Wants to rent your docks for one night",
+   "a": {
+    "label": "Rent them",
+    "does": "₽ +500, Ten −5, Heat +5",
+    "fx": [
+     {
+      "k": "funds",
+      "n": 500
+     },
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": -5
+     },
+     {
+      "k": "heat",
+      "n": 5
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "Ten +5",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": 5
+     }
+    ]
+   },
+   "who": "rival",
+   "rival": true
+  },
+  {
+   "id": 76,
+   "sect": "rival",
+   "visitor": "Archer",
+   "name": "Archer",
+   "role": "Rocket Admin",
+   "look": "trainer/pr/archer",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "\"The Boss sends his regards. Viridian, or your teeth?\"",
+   "a": {
+    "label": "Give up one district's back alley",
+    "does": "lose 1 Racket, Ten −12",
+    "fx": [
+     {
+      "k": "racketLose"
+     },
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": -12
+     }
+    ]
+   },
+   "b": {
+    "label": "Smile and say no",
+    "does": "Ten +10, Dread +5, → #77 in 3d",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": 10
+     },
+     {
+      "k": "dread",
+      "n": 5
+     },
+     {
+      "k": "follow",
+      "card": 77,
+      "days": 3
+     }
+    ]
+   },
+   "who": "archer",
+   "needs": "racket",
+   "rival": true
+  },
+  {
+   "id": 77,
+   "sect": "rival",
+   "visitor": "The same Admin, back",
+   "name": "Archer",
+   "role": "Rocket Admin",
+   "look": "trainer/pr/archer",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Brings three Grunts this time",
+   "a": {
+    "label": "Fight them at the door",
+    "does": "HQ battle tonight (doubles), win: Dread +8, Ten +5",
+    "fx": [
+     {
+      "k": "fight",
+      "win": [
+       {
+        "k": "dread",
+        "n": 8
+       },
+       {
+        "k": "owed",
+        "key": "ten",
+        "n": 5
+       }
+      ],
+      "lose": []
+     }
+    ]
+   },
+   "b": {
+    "label": "Pay them off",
+    "does": "₽ −400, Ten −6, Mor −4",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -400
+     },
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": -6
+     },
+     {
+      "k": "morale",
+      "n": -4
+     }
+    ]
+   },
+   "who": "archer",
+   "foe": {
+    "name": "Archer",
+    "cls": "rival",
+    "species": [
+     "houndour",
+     "zubat",
+     "koffing"
+    ],
+    "offset": 2
+   },
+   "followOnly": true,
+   "rival": true
+  },
+  {
+   "id": 78,
+   "sect": "rival",
+   "visitor": "A Rival Admin",
+   "name": "A Rival Admin",
+   "role": "Courtney, Shelly, Mars, Zinzolin, Plumeria…",
+   "look": "trainer/pr/ariana",
+   "tier": [
+    3,
+    5
+   ],
+   "ask": "Proposes a joint heist on a third party",
+   "a": {
+    "label": "Join",
+    "does": "Opens Heist (shared loot, ×1.5), Ten −10, 25%: they double-cross you (Ten +20)",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D10",
+      "text": "a joint Heist"
+     },
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": -10
+     },
+     {
+      "k": "chance",
+      "p": 25,
+      "yes": [
+       {
+        "k": "owed",
+        "key": "ten",
+        "n": 20
+       }
+      ],
+      "no": []
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "Ten +4",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": 4
+     }
+    ]
+   },
+   "who": "rival",
+   "wait": "D10",
+   "rival": true
+  },
+  {
+   "id": 79,
+   "sect": "rival",
+   "visitor": "A Rival scientist",
+   "name": "A Rival scientist",
+   "role": "Charon, Xerosic, Faba…",
+   "look": "trainer/pr/scientist_m",
+   "tier": [
+    3,
+    5
+   ],
+   "ask": "Offers a machine in exchange for one of your Pokémon",
+   "a": {
+    "label": "Trade",
+    "does": "Item (a lab machine: +1 Room effect), Stores Pkmn −1, Threat +4",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D5",
+      "text": "a lab machine: +1 Room effect"
+     },
+     {
+      "k": "mon",
+      "n": -1
+     },
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": 4
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "rival",
+   "wait": "D5",
+   "rival": true
+  },
+  {
+   "id": 80,
+   "sect": "rival",
+   "visitor": "Two rival teams' messengers",
+   "name": "Two rival teams' messengers",
+   "role": "Hoenn: Magma + Aqua",
+   "look": "trainer/pr/magma_grunt_m",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Each asks you to side with them",
+   "a": {
+    "label": "Magma",
+    "does": "Magma Ten −15, Aqua Ten +15",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D9",
+      "text": "Magma Tension -15, Aqua +15"
+     }
+    ]
+   },
+   "b": {
+    "label": "Aqua",
+    "does": "Aqua Ten −15, Magma Ten +15",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D9",
+      "text": "Aqua Tension -15, Magma +15"
+     }
+    ]
+   },
+   "who": "rival",
+   "wait": "D15",
+   "region": "hoenn",
+   "rival": true
+  },
+  {
+   "id": 81,
+   "sect": "rival",
+   "visitor": "A Rival Boss's assistant",
+   "name": "A Rival Boss's assistant",
+   "role": null,
+   "look": "trainer/pr/proton",
+   "tier": [
+    4,
+    5
+   ],
+   "ask": "Asks for a meeting with you and their Boss",
+   "a": {
+    "label": "Meet",
+    "does": "Opens the Debate (Part 4 §3) early, Ten −5",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D13",
+      "text": "the Debate opens early"
+     },
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": -5
+     }
+    ]
+   },
+   "b": {
+    "label": "Decline",
+    "does": "Ten +8, Dread +3",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": 8
+     },
+     {
+      "k": "dread",
+      "n": 3
+     }
+    ]
+   },
+   "who": "rival",
+   "wait": "D13",
+   "rival": true
+  },
+  {
+   "id": 82,
+   "sect": "rival",
+   "visitor": "A Rival deserter Admin",
+   "name": "A Rival deserter Admin",
+   "role": null,
+   "look": "trainer/pr/proton",
+   "tier": [
+    4,
+    5
+   ],
+   "ask": "Will hand you their Boss's HQ plans for protection",
+   "a": {
+    "label": "Protect them",
+    "does": "Wipe Out progress +1 site, Ten +20, +Member (Admin)",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "wipe",
+      "n": 1
+     },
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": 20
+     },
+     {
+      "k": "join"
+     }
+    ]
+   },
+   "b": {
+    "label": "Sell them back",
+    "does": "₽ +1,000, Ten −10, Grudge",
+    "fx": [
+     {
+      "k": "funds",
+      "n": 1000
+     },
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": -10
+     },
+     {
+      "k": "tag",
+      "tag": "grudge"
+     }
+    ]
+   },
+   "who": "rival",
+   "wait": "D14",
+   "rival": true
+  },
+  {
+   "id": 83,
+   "sect": "rival",
+   "visitor": "A Rival Grunt with a Pokémon",
+   "name": "A Rival Grunt with a Pokémon",
+   "role": null,
+   "look": "trainer/pr/rocket_grunt_m",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Wants to trade Pokémon \"to make friends between teams\"",
+   "a": {
+    "label": "Trade",
+    "does": "Pkmn swap (random from their pool), Ten −3",
+    "fx": [
+     {
+      "k": "mon",
+      "n": -1
+     },
+     {
+      "k": "mon",
+      "n": 1
+     },
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": -3
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "rival",
+   "needs": "stores",
+   "rival": true
+  },
+  {
+   "id": 84,
+   "sect": "rival",
+   "visitor": "A Rival recruiter",
+   "name": "A Rival recruiter",
+   "role": null,
+   "look": "trainer/pr/rocket_grunt_f",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Openly tries to recruit your crew in your lobby",
+   "a": {
+    "label": "Throw them out",
+    "does": "Dread +3, Ten +4",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 3
+     },
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": 4
+     }
+    ]
+   },
+   "b": {
+    "label": "Let your crew decide",
+    "does": "each member with Loy < 30 rolls to leave (40%), Reg +2",
+    "fx": [
+     {
+      "k": "poach",
+      "below": 30,
+      "p": 40
+     },
+     {
+      "k": "regard",
+      "n": 2
+     }
+    ]
+   },
+   "who": "rival",
+   "rival": true
+  },
+  {
+   "id": 85,
+   "sect": "rival",
+   "visitor": "A rival team defector's mother",
+   "name": "A rival team defector's mother",
+   "role": null,
+   "look": "trainer/pr/pokefan_f",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Her son quit the Rival for you; now they're threatening her",
+   "a": {
+    "label": "Guard her house",
+    "does": "member's task locked to Guard for 5 days, Reg +6, Ten +4",
+    "fx": [
+     {
+      "k": "guard",
+      "n": 5
+     },
+     {
+      "k": "regard",
+      "n": 6
+     },
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": 4
+     }
+    ]
+   },
+   "b": {
+    "label": "\"Not my problem.\"",
+    "does": "defector Loy −15",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": -15,
+      "who": "named"
+     }
+    ]
+   },
+   "named": "any",
+   "who": "defector-mum",
+   "rival": true
+  },
+  {
+   "id": 86,
+   "sect": "rival",
+   "visitor": "The Rival's banker",
+   "name": "The Rival's banker",
+   "role": null,
+   "look": "trainer/pr/rich_m",
+   "tier": [
+    4,
+    5
+   ],
+   "ask": "Offers to move the Rival's money through your Front for a fee",
+   "a": {
+    "label": "Accept",
+    "does": "₽ +800/week, Ten −10, 10%/week: police link you both (Wanted +10)",
+    "fx": [
+     {
+      "k": "deal",
+      "n": 800,
+      "ten": -10,
+      "risk": 10,
+      "wanted": 10
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse and leak it",
+    "does": "Ten +15, Heat on Rival districts +20",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": 15
+     },
+     {
+      "k": "note",
+      "slice": "D9",
+      "text": "Heat on Rival districts +20"
+     }
+    ]
+   },
+   "who": "rival",
+   "rival": true
+  },
+  {
+   "id": 87,
+   "sect": "hero",
+   "visitor": "The region's Professor",
+   "name": "The region's Professor",
+   "role": "Oak, Elm, Birch…",
+   "look": "trainer/pr/scientist_m",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "\"I'm told you're the one in the warehouse. Please stay away from the young trainers.\"",
+   "a": {
+    "label": "Promise",
+    "does": "Threat −5, Reg +4, Attack on routes −10% for 7 days",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": -5
+     },
+     {
+      "k": "regard",
+      "n": 4
+     },
+     {
+      "k": "note",
+      "slice": "D11",
+      "text": "Attack on routes -10% for 7 days"
+     }
+    ]
+   },
+   "b": {
+    "label": "\"No promises.\"",
+    "does": "Threat +5, Dread +2",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": 5
+     },
+     {
+      "k": "dread",
+      "n": 2
+     }
+    ]
+   },
+   "who": "professor"
+  },
+  {
+   "id": 88,
+   "sect": "hero",
+   "visitor": "The Hero's mum",
+   "name": "The Hero's mum",
+   "role": null,
+   "look": "trainer/pr/pokefan_f",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Brings you a pie and asks you not to hurt her child",
+   "a": {
+    "label": "Accept the pie",
+    "does": "Item (Leftovers), Threat −3, Reg +3",
+    "fx": [
+     {
+      "k": "item",
+      "id": "leftovers",
+      "n": 1,
+      "held": true
+     },
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": -3
+     },
+     {
+      "k": "regard",
+      "n": 3
+     }
+    ]
+   },
+   "b": {
+    "label": "Return it",
+    "does": "Dread +3, Threat +3",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 3
+     },
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": 3
+     }
+    ]
+   },
+   "who": "hero-mum"
+  },
+  {
+   "id": 89,
+   "sect": "hero",
+   "visitor": "The Hero's friend",
+   "name": "The Hero's friend",
+   "role": "the canon rival character, adult",
+   "look": "trainer/blue",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Wants to fight you for the Hero's sake",
+   "a": {
+    "label": "Battle now",
+    "does": "win: Threat −4, Dread +4; lose: Threat +6",
+    "fx": [
+     {
+      "k": "fight",
+      "win": [
+       {
+        "k": "owed",
+        "key": "threat",
+        "n": -4
+       },
+       {
+        "k": "dread",
+        "n": 4
+       }
+      ],
+      "lose": [
+       {
+        "k": "owed",
+        "key": "threat",
+        "n": 6
+       }
+      ]
+     }
+    ]
+   },
+   "b": {
+    "label": "Laugh",
+    "does": "Threat +3",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": 3
+     }
+    ]
+   },
+   "who": "hero-friend",
+   "foe": {
+    "name": "The Hero's friend",
+    "cls": "rival",
+    "species": [
+     "pidgeotto",
+     "kadabra",
+     "ivysaur"
+    ],
+    "offset": 3
+   }
+  },
+  {
+   "id": 90,
+   "sect": "hero",
+   "visitor": "A reporter",
+   "name": "A reporter",
+   "role": null,
+   "look": "trainer/pr/interviewers",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Wants to interview you about the Hero",
+   "a": {
+    "label": "Praise the Hero",
+    "does": "Reg +4, Threat −2",
+    "fx": [
+     {
+      "k": "regard",
+      "n": 4
+     },
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": -2
+     }
+    ]
+   },
+   "b": {
+    "label": "Mock the Hero",
+    "does": "Dread +4, Threat +6",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 4
+     },
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": 6
+     }
+    ]
+   },
+   "who": "reporter"
+  },
+  {
+   "id": 91,
+   "sect": "hero",
+   "visitor": "A crew member",
+   "name": "A crew member",
+   "role": null,
+   "look": "member",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Was beaten by the Hero today; wants to know what to do",
+   "a": {
+    "label": "\"Leave them be.\"",
+    "does": "member Loy +3, Threat −2",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": 3,
+      "who": "named"
+     },
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": -2
+     }
+    ]
+   },
+   "b": {
+    "label": "\"Next time, take a friend.\"",
+    "does": "Threat +4, member gets +10% vs. Hero",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": 4
+     },
+     {
+      "k": "note",
+      "slice": "D11",
+      "text": "+10% vs. the Hero"
+     }
+    ]
+   },
+   "named": "any"
+  },
+  {
+   "id": 92,
+   "sect": "hero",
+   "visitor": "A Gym trainer",
+   "name": "A Gym trainer",
+   "role": null,
+   "look": "trainer/pr/ace_trainer_m",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Tips you off to the Hero's route tomorrow",
+   "a": {
+    "label": "Pay",
+    "does": "₽ −100, you know the Hero's district tomorrow",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -100
+     },
+     {
+      "k": "note",
+      "slice": "D11",
+      "text": "the Hero's district tomorrow"
+     }
+    ]
+   },
+   "b": {
+    "label": "Ignore",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "gym-trainer",
+   "wait": "D11"
+  },
+  {
+   "id": 93,
+   "sect": "hero",
+   "visitor": "The Hero",
+   "name": "The Hero",
+   "role": null,
+   "look": "trainer/red",
+   "tier": [
+    3,
+    5
+   ],
+   "ask": "Comes to warn you, alone",
+   "a": {
+    "label": "Listen",
+    "does": "Threat −8, Reg +4, Dread −4",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": -8
+     },
+     {
+      "k": "regard",
+      "n": 4
+     },
+     {
+      "k": "dread",
+      "n": -4
+     }
+    ]
+   },
+   "b": {
+    "label": "Lock the door",
+    "does": "Threat +10, Hero battle tomorrow",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": 10
+     },
+     {
+      "k": "note",
+      "slice": "D11",
+      "text": "Hero battle tomorrow"
+     }
+    ]
+   },
+   "who": "hero",
+   "wait": "D11"
+  },
+  {
+   "id": 94,
+   "sect": "hero",
+   "visitor": "The Hero",
+   "name": "The Hero",
+   "role": null,
+   "look": "trainer/red",
+   "tier": [
+    3,
+    5
+   ],
+   "ask": "Asks you to release the Pokémon in your Holding Pens",
+   "a": {
+    "label": "Release them",
+    "does": "Pkmn −all Holding, Reg +12, Threat −15",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D10",
+      "text": "release the Holding Pens"
+     },
+     {
+      "k": "regard",
+      "n": 12
+     },
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": -15
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "Threat +12",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": 12
+     }
+    ]
+   },
+   "who": "hero",
+   "wait": "D11"
+  },
+  {
+   "id": 95,
+   "sect": "hero",
+   "visitor": "The Hero",
+   "name": "The Hero",
+   "role": null,
+   "look": "trainer/red",
+   "tier": [
+    4,
+    5
+   ],
+   "ask": "Offers to stop chasing you if you leave one city alone forever",
+   "a": {
+    "label": "Agree",
+    "does": "that district is locked to you, Threat −20",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D11",
+      "text": "that district is locked to you"
+     },
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": -20
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "Threat +15, Dread +5",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": 15
+     },
+     {
+      "k": "dread",
+      "n": 5
+     }
+    ]
+   },
+   "who": "hero",
+   "wait": "D11"
+  },
+  {
+   "id": 96,
+   "sect": "hero",
+   "visitor": "The Hero",
+   "name": "The Hero",
+   "role": null,
+   "look": "trainer/red",
+   "tier": [
+    4,
+    5
+   ],
+   "ask": "Asks you, honestly, why you do this",
+   "a": {
+    "label": "\"For the team.\"",
+    "does": "Mor +8, Reg +4",
+    "fx": [
+     {
+      "k": "morale",
+      "n": 8
+     },
+     {
+      "k": "regard",
+      "n": 4
+     }
+    ]
+   },
+   "b": {
+    "label": "\"For me.\"",
+    "does": "Dread +8, Goal +5, Threat +5",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 8
+     },
+     {
+      "k": "owed",
+      "key": "goal",
+      "n": 5
+     },
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": 5
+     }
+    ]
+   },
+   "who": "hero",
+   "wait": "D11",
+   "once": true
+  },
+  {
+   "id": 97,
+   "sect": "gyms",
+   "visitor": "Lt. Surge",
+   "name": "Lt. Surge",
+   "role": "Gym Leader",
+   "look": "trainer/pr/veteran_m",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Offers a Gym exhibition match: winner takes the other's gate fees for a week",
+   "a": {
+    "label": "Accept",
+    "does": "Battle tomorrow (Gym-level), win ₽ +600/week",
+    "fx": [
+     {
+      "k": "fight",
+      "win": [
+       {
+        "k": "funds",
+        "n": 600
+       }
+      ],
+      "lose": []
+     }
+    ]
+   },
+   "b": {
+    "label": "Decline",
+    "does": "Dread −1",
+    "fx": [
+     {
+      "k": "dread",
+      "n": -1
+     }
+    ]
+   },
+   "who": "surge",
+   "foe": {
+    "name": "Lt. Surge",
+    "cls": "veteran",
+    "species": [
+     "voltorb",
+     "pikachu",
+     "raichu"
+    ],
+    "offset": 3
+   }
+  },
+  {
+   "id": 98,
+   "sect": "gyms",
+   "visitor": "Koga",
+   "name": "Koga",
+   "role": "or a ninja-type Leader",
+   "look": "trainer/pr/striker",
+   "tier": [
+    3,
+    5
+   ],
+   "ask": "Offers to train your crew in stealth",
+   "a": {
+    "label": "Pay",
+    "does": "₽ −800, all crew +10% Steal/Thieve for 14 days",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -800
+     },
+     {
+      "k": "note",
+      "slice": "D10",
+      "text": "+10% Steal/Thieve for 14 days"
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "koga",
+   "wait": "D10"
+  },
+  {
+   "id": 99,
+   "sect": "gyms",
+   "visitor": "Blaine",
+   "name": "Blaine",
+   "role": "or a quiz-loving Leader",
+   "look": "trainer/firebreather",
+   "tier": [
+    3,
+    5
+   ],
+   "ask": "Bets a TM on a riddle",
+   "a": {
+    "label": "Answer",
+    "does": "Opens a quiz event (3 questions, TM if 2 right)",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "quiz",
+      "text": "a quiz: 3 questions, a TM if 2 are right"
+     }
+    ]
+   },
+   "b": {
+    "label": "Decline",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "blaine",
+   "wait": "quiz"
+  },
+  {
+   "id": 100,
+   "sect": "gyms",
+   "visitor": "A Gym Leader you blackmailed",
+   "name": "A Gym Leader you blackmailed",
+   "role": null,
+   "look": "trainer/roark",
+   "tier": [
+    3,
+    5
+   ],
+   "ask": "Asks you to burn the evidence",
+   "a": {
+    "label": "Burn it",
+    "does": "Shadow progress −1 Leader, Reg +10, Favour",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "shadow",
+      "n": -1
+     },
+     {
+      "k": "regard",
+      "n": 10
+     },
+     {
+      "k": "tag",
+      "tag": "favour"
+     }
+    ]
+   },
+   "b": {
+    "label": "Keep it",
+    "does": "Dread +4, Grudge",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 4
+     },
+     {
+      "k": "tag",
+      "tag": "grudge"
+     }
+    ]
+   },
+   "who": "gym-leader",
+   "wait": "D10"
+  },
+  {
+   "id": 101,
+   "sect": "gyms",
+   "visitor": "A Gym Leader you bought",
+   "name": "A Gym Leader you bought",
+   "role": null,
+   "look": "trainer/roark",
+   "tier": [
+    3,
+    5
+   ],
+   "ask": "Wants a bigger payment, or the deal's off",
+   "a": {
+    "label": "Pay",
+    "does": "₽ −1,000 once",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -1000
+     }
+    ]
+   },
+   "b": {
+    "label": "Threaten",
+    "does": "Dread +6, 40%: they go public (Heat +20, lose the Gym)",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 6
+     },
+     {
+      "k": "chance",
+      "p": 40,
+      "yes": [
+       {
+        "k": "heat",
+        "n": 20
+       },
+       {
+        "k": "note",
+        "slice": "D10",
+        "text": "lose the Gym"
+       }
+      ],
+      "no": []
+     }
+    ]
+   },
+   "who": "gym-leader",
+   "wait": "D10"
+  },
+  {
+   "id": 102,
+   "sect": "gyms",
+   "visitor": "An Elite Four member",
+   "name": "An Elite Four member",
+   "role": "Bruno, Bertha, Chuck-type fighting master",
+   "look": "trainer/black_belt_m",
+   "tier": [
+    4,
+    5
+   ],
+   "ask": "Will join your crew if you beat them in one battle, no items",
+   "a": {
+    "label": "Battle",
+    "does": "win: +Member (E4-level), lose: Dread −5",
+    "fx": [
+     {
+      "k": "fight",
+      "win": [
+       {
+        "k": "join",
+        "look": "trainer/black_belt_m",
+        "name": "Bruno"
+       }
+      ],
+      "lose": [
+       {
+        "k": "dread",
+        "n": -5
+       }
+      ]
+     }
+    ]
+   },
+   "b": {
+    "label": "Decline",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "bruno",
+   "foe": {
+    "name": "The fighting master",
+    "cls": "black-belt",
+    "species": [
+     "onix",
+     "hitmonchan",
+     "hitmonlee",
+     "machamp"
+    ],
+    "offset": 4
+   }
+  },
+  {
+   "id": 103,
+   "sect": "gyms",
+   "visitor": "A Champion's aide",
+   "name": "A Champion's aide",
+   "role": null,
+   "look": "trainer/pr/ace_trainer_f",
+   "tier": [
+    4,
+    5
+   ],
+   "ask": "Offers a League tournament seat for your best member",
+   "a": {
+    "label": "Send them",
+    "does": "member gone 3 days, return with Not +5, Loy +10",
+    "fx": [
+     {
+      "k": "rest"
+     },
+     {
+      "k": "fame",
+      "n": 5
+     },
+     {
+      "k": "loyalty",
+      "n": 10,
+      "who": "named"
+     },
+     {
+      "k": "note",
+      "slice": "D11",
+      "text": "gone 3 days at the tournament"
+     }
+    ]
+   },
+   "b": {
+    "label": "Decline",
+    "does": "nothing",
+    "fx": []
+   },
+   "named": "any",
+   "who": "aide"
+  },
+  {
+   "id": 104,
+   "sect": "gyms",
+   "visitor": "A Battle Frontier recruiter",
+   "name": "A Battle Frontier recruiter",
+   "role": "Scott-type, adult",
+   "look": "trainer/pr/ace_trainer_m",
+   "tier": [
+    3,
+    5
+   ],
+   "ask": "Wants to sign your strongest crew member",
+   "a": {
+    "label": "Let them go",
+    "does": "−Member, clean ₽ +2,000",
+    "fx": [
+     {
+      "k": "leave"
+     },
+     {
+      "k": "funds",
+      "n": 2000,
+      "clean": true
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "Loy +6 (they're flattered)",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": 6,
+      "who": "named"
+     }
+    ]
+   },
+   "named": "best",
+   "who": "frontier"
+  },
+  {
+   "id": 105,
+   "sect": "gyms",
+   "visitor": "A famous Coordinator",
+   "name": "A famous Coordinator",
+   "role": null,
+   "look": "trainer/pr/beauty_2",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Wants to hold a Contest in your district (you get a cut)",
+   "a": {
+    "label": "Host it",
+    "does": "clean ₽ +400, Reg +6, Heat −2",
+    "fx": [
+     {
+      "k": "funds",
+      "n": 400,
+      "clean": true
+     },
+     {
+      "k": "regard",
+      "n": 6
+     },
+     {
+      "k": "heat",
+      "n": -2
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "coordinator"
+  },
+  {
+   "id": 106,
+   "sect": "gyms",
+   "visitor": "A retired Champion",
+   "name": "A retired Champion",
+   "role": "Cynthia/Lance-level, rare",
+   "look": "trainer/dragon_tamer",
+   "tier": [
+    5,
+    5
+   ],
+   "ask": "\"You're good. That's what scares me.\" Offers a duel for your Citadel's flag",
+   "a": {
+    "label": "Duel",
+    "does": "Extreme battle, win: Not +10, Dread +10; lose: Threat +10",
+    "fx": [
+     {
+      "k": "fight",
+      "win": [
+       {
+        "k": "fame",
+        "n": 10
+       },
+       {
+        "k": "dread",
+        "n": 10
+       }
+      ],
+      "lose": [
+       {
+        "k": "owed",
+        "key": "threat",
+        "n": 10
+       }
+      ]
+     }
+    ]
+   },
+   "b": {
+    "label": "Decline",
+    "does": "Reg +2",
+    "fx": [
+     {
+      "k": "regard",
+      "n": 2
+     }
+    ]
+   },
+   "who": "champion",
+   "foe": {
+    "name": "The retired Champion",
+    "cls": "ace-trainer",
+    "species": [
+     "dragonair",
+     "gyarados",
+     "aerodactyl",
+     "dragonite"
+    ],
+    "offset": 6
+   }
+  },
+  {
+   "id": 107,
+   "sect": "gyms",
+   "visitor": "A bounty hunter",
+   "name": "A bounty hunter",
+   "role": "Part 4 §6, extreme trainer",
+   "look": "trainer/pr/veteran_f",
+   "tier": [
+    3,
+    5
+   ],
+   "ask": "Hired to bring you in; offers to switch sides for double",
+   "a": {
+    "label": "Pay double",
+    "does": "₽ −1,500, +Member (temporary 14 days)",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -1500
+     },
+     {
+      "k": "join",
+      "look": "trainer/pr/veteran_f",
+      "name": "Kestrel"
+     },
+     {
+      "k": "note",
+      "slice": "D8",
+      "text": "temporary: 14 days"
+     }
+    ]
+   },
+   "b": {
+    "label": "Fight now",
+    "does": "Extreme battle, win: Dread +8",
+    "fx": [
+     {
+      "k": "fight",
+      "win": [
+       {
+        "k": "dread",
+        "n": 8
+       }
+      ],
+      "lose": []
+     }
+    ]
+   },
+   "who": "hunter",
+   "foe": {
+    "name": "The bounty hunter",
+    "cls": "ace-trainer",
+    "species": [
+     "arcanine",
+     "nidoking",
+     "scyther"
+    ],
+    "offset": 5
+   }
+  },
+  {
+   "id": 108,
+   "sect": "gyms",
+   "visitor": "A Gym trainer",
+   "name": "A Gym trainer",
+   "role": null,
+   "look": "trainer/pr/ace_trainer_f",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Wants to defect from their Gym to your crew",
+   "a": {
+    "label": "Take them",
+    "does": "+Member (good battler), Gym Leader Grudge",
+    "fx": [
+     {
+      "k": "join",
+      "look": "trainer/pr/ace_trainer_f"
+     },
+     {
+      "k": "tag",
+      "tag": "grudge",
+      "who": "gym-leader"
+     }
+    ]
+   },
+   "b": {
+    "label": "Send them back",
+    "does": "Gym Leader Favour",
+    "fx": [
+     {
+      "k": "tag",
+      "tag": "favour",
+      "who": "gym-leader"
+     }
+    ]
+   },
+   "who": "gym-trainer"
+  },
+  {
+   "id": 109,
+   "sect": "pokemon",
+   "visitor": "A Pokémon Ranger",
+   "name": "A Pokémon Ranger",
+   "role": null,
+   "look": "trainer/pr/ranger_f",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Your crew trapped a wild Pokémon nest; asks you to free it",
+   "a": {
+    "label": "Free it",
+    "does": "Reg +6, Threat −3",
+    "fx": [
+     {
+      "k": "regard",
+      "n": 6
+     },
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": -3
+     }
+    ]
+   },
+   "b": {
+    "label": "Keep it",
+    "does": "Stores Pkmn +2, Threat +3",
+    "fx": [
+     {
+      "k": "mon",
+      "n": 2
+     },
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": 3
+     }
+    ]
+   },
+   "who": "ranger"
+  },
+  {
+   "id": 110,
+   "sect": "pokemon",
+   "visitor": "A breeder",
+   "name": "A breeder",
+   "role": null,
+   "look": "trainer/pr/breeder_m",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Offers to breed your Pokémon for a share of the eggs",
+   "a": {
+    "label": "Deal",
+    "does": "Stores Pkmn +1 egg every 7 days, ₽ −50/week",
+    "fx": [
+     {
+      "k": "deal",
+      "n": -50,
+      "mon": 1
+     }
+    ]
+   },
+   "b": {
+    "label": "No",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "breeder"
+  },
+  {
+   "id": 111,
+   "sect": "pokemon",
+   "visitor": "A stolen Pokémon's trainer",
+   "name": "A stolen Pokémon's trainer",
+   "role": "adult",
+   "look": "trainer/pr/ace_trainer_m",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Begs for their Pokémon back",
+   "a": {
+    "label": "Return it",
+    "does": "Pkmn −1, Reg +8, Threat −4",
+    "fx": [
+     {
+      "k": "mon",
+      "n": -1
+     },
+     {
+      "k": "regard",
+      "n": 8
+     },
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": -4
+     }
+    ]
+   },
+   "b": {
+    "label": "\"Finders keepers.\"",
+    "does": "Dread +4, Threat +4",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 4
+     },
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": 4
+     }
+    ]
+   },
+   "who": "owner",
+   "needs": "stores"
+  },
+  {
+   "id": 112,
+   "sect": "pokemon",
+   "visitor": "A crew member",
+   "name": "A crew member",
+   "role": null,
+   "look": "member",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Their Pokémon won't evolve while it's unhappy here; asks for a better kennel",
+   "a": {
+    "label": "Build a kennel",
+    "does": "₽ −300, crew Pokémon happiness +, Mor +3",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -300
+     },
+     {
+      "k": "happy",
+      "n": 20
+     },
+     {
+      "k": "morale",
+      "n": 3
+     }
+    ]
+   },
+   "b": {
+    "label": "\"Toughen it up.\"",
+    "does": "Dread +1, Loy −3",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 1
+     },
+     {
+      "k": "loyalty",
+      "n": -3,
+      "who": "named"
+     }
+    ]
+   },
+   "named": "any"
+  },
+  {
+   "id": 113,
+   "sect": "pokemon",
+   "visitor": "A scientist",
+   "name": "A scientist",
+   "role": null,
+   "look": "trainer/pr/scientist_f",
+   "tier": [
+    3,
+    5
+   ],
+   "ask": "Wants to \"test\" your Pokémon in a lab",
+   "a": {
+    "label": "Allow",
+    "does": "₽ +800, Stores Pkmn −1 (lost), Threat +6",
+    "fx": [
+     {
+      "k": "funds",
+      "n": 800
+     },
+     {
+      "k": "mon",
+      "n": -1
+     },
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": 6
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "Reg +2",
+    "fx": [
+     {
+      "k": "regard",
+      "n": 2
+     }
+    ]
+   },
+   "who": "scientist",
+   "needs": "stores"
+  },
+  {
+   "id": 114,
+   "sect": "pokemon",
+   "visitor": "Mr. Fuji-type carer",
+   "name": "Mr. Fuji-type carer",
+   "role": "Pokémon House",
+   "look": "trainer/pr/expert_pokemon_breeder",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Asks you to donate unwanted Pokémon to his home",
+   "a": {
+    "label": "Donate",
+    "does": "Pkmn −2 (your pick), Reg +10",
+    "fx": [
+     {
+      "k": "mon",
+      "n": -2
+     },
+     {
+      "k": "regard",
+      "n": 10
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "fuji",
+   "needs": "stores2"
+  },
+  {
+   "id": 115,
+   "sect": "pokemon",
+   "visitor": "A Day-Care owner",
+   "name": "A Day-Care owner",
+   "role": null,
+   "look": "trainer/pr/nursery_aide",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Offers to raise your crew's Pokémon by 5 levels for ₽",
+   "a": {
+    "label": "Pay",
+    "does": "₽ −600, crew Pokémon +5 levels (cap applies)",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -600
+     },
+     {
+      "k": "levels",
+      "n": 5
+     }
+    ]
+   },
+   "b": {
+    "label": "No",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "daycare"
+  },
+  {
+   "id": 116,
+   "sect": "pokemon",
+   "visitor": "A crew member",
+   "name": "A crew member",
+   "role": null,
+   "look": "member",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Wants to release their old Pokémon into the wild",
+   "a": {
+    "label": "Let them",
+    "does": "member Loy +6, Reg +2",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": 6,
+      "who": "named"
+     },
+     {
+      "k": "regard",
+      "n": 2
+     }
+    ]
+   },
+   "b": {
+    "label": "\"It's team property.\"",
+    "does": "Loy −6, Stores Pkmn +1",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": -6,
+      "who": "named"
+     },
+     {
+      "k": "mon",
+      "n": 1
+     }
+    ]
+   },
+   "named": "any"
+  },
+  {
+   "id": 117,
+   "sect": "pokemon",
+   "visitor": "A Poké Ball maker",
+   "name": "A Poké Ball maker",
+   "role": "Kurt-type",
+   "look": "trainer/pr/ruin_maniac",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Offers handmade Balls if you leave his forest alone",
+   "a": {
+    "label": "Agree",
+    "does": "Item (special Balls ×5/week), that forest is off-limits",
+    "fx": [
+     {
+      "k": "deal",
+      "n": 0,
+      "item": "luxury-ball",
+      "itemN": 5
+     },
+     {
+      "k": "note",
+      "slice": "D10",
+      "text": "that forest is off-limits"
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "Dread +2",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 2
+     }
+    ]
+   },
+   "who": "ballmaker"
+  },
+  {
+   "id": 118,
+   "sect": "pokemon",
+   "visitor": "A wild Pokémon",
+   "name": "A wild Pokémon",
+   "role": "it wandered in and won't leave",
+   "look": "mon:meowth",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "It just sits by your Chair and looks at you",
+   "a": {
+    "label": "Feed it",
+    "does": "50%: it joins your Stores, Mor +3",
+    "fx": [
+     {
+      "k": "chance",
+      "p": 50,
+      "yes": [
+       {
+        "k": "mon",
+        "n": 1
+       }
+      ],
+      "no": []
+     },
+     {
+      "k": "morale",
+      "n": 3
+     }
+    ]
+   },
+   "b": {
+    "label": "Shoo it out",
+    "does": "nothing; your lead Pokémon looks sad",
+    "fx": []
+   },
+   "who": "stray"
+  },
+  {
+   "id": 119,
+   "sect": "pokemon",
+   "visitor": "A Shadow Pokémon dealer",
+   "name": "A Shadow Pokémon dealer",
+   "role": "Cipher, if met",
+   "look": "trainer/pr/scientist_m",
+   "tier": [
+    3,
+    5
+   ],
+   "ask": "Offers a Shadow Pokémon that \"never disobeys\"",
+   "a": {
+    "label": "Buy",
+    "does": "₽ −1,000, Pkmn +1 (Shadow), Threat +8",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -1000
+     },
+     {
+      "k": "note",
+      "slice": "D16",
+      "text": "a Shadow Pokémon"
+     },
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": 8
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "Reg +3",
+    "fx": [
+     {
+      "k": "regard",
+      "n": 3
+     }
+    ]
+   },
+   "who": "cipher",
+   "wait": "D16"
+  },
+  {
+   "id": 120,
+   "sect": "pokemon",
+   "visitor": "A Legendary watcher",
+   "name": "A Legendary watcher",
+   "role": "old hermit",
+   "look": "trainer/pr/ruin_maniac",
+   "tier": [
+    3,
+    5
+   ],
+   "ask": "Says a Legendary is stirring; asks you not to hunt it",
+   "a": {
+    "label": "Promise",
+    "does": "Reg +6, heroic Legendaries come 7 days later",
+    "fx": [
+     {
+      "k": "regard",
+      "n": 6
+     },
+     {
+      "k": "note",
+      "slice": "D11",
+      "text": "heroic Legendaries come 7 days later"
+     }
+    ]
+   },
+   "b": {
+    "label": "Hunt it",
+    "does": "Opens a Legendary hunt (Part 4 §8), Threat +10",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D11",
+      "text": "a Legendary hunt opens"
+     },
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": 10
+     }
+    ]
+   },
+   "who": "hermit",
+   "wait": "D11"
+  },
+  {
+   "id": 121,
+   "sect": "pokemon",
+   "visitor": "A crew member",
+   "name": "A crew member",
+   "role": null,
+   "look": "member",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Wants to enter their Pokémon in a beauty contest",
+   "a": {
+    "label": "Let them",
+    "does": "member skips 1 task, 50%: ₽ +200 and Not +1",
+    "fx": [
+     {
+      "k": "rest"
+     },
+     {
+      "k": "chance",
+      "p": 50,
+      "yes": [
+       {
+        "k": "funds",
+        "n": 200
+       },
+       {
+        "k": "fame",
+        "n": 1
+       }
+      ],
+      "no": []
+     }
+    ]
+   },
+   "b": {
+    "label": "No",
+    "does": "Loy −3",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": -3,
+      "who": "named"
+     }
+    ]
+   },
+   "named": "any"
+  },
+  {
+   "id": 122,
+   "sect": "pokemon",
+   "visitor": "A trainer whose Pokémon you knocked out",
+   "name": "A trainer whose Pokémon you knocked out",
+   "role": null,
+   "look": "trainer/pr/camper_m",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Wants money for the Center bill",
+   "a": {
+    "label": "Pay",
+    "does": "₽ −60, Reg +3",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -60
+     },
+     {
+      "k": "regard",
+      "n": 3
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "Dread +2, Reg −2",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 2
+     },
+     {
+      "k": "regard",
+      "n": -2
+     }
+    ]
+   },
+   "who": "trainer"
+  },
+  {
+   "id": 123,
+   "sect": "empire",
+   "visitor": "A city mayor",
+   "name": "A city mayor",
+   "role": null,
+   "look": "trainer/pr/rich_m",
+   "tier": [
+    3,
+    5
+   ],
+   "ask": "Wants you to fund a new bridge in exchange for \"looking away\"",
+   "a": {
+    "label": "Fund it",
+    "does": "clean ₽ −3,000, Heat −10 in all districts, Reg +8",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -3000,
+      "clean": true
+     },
+     {
+      "k": "heatAll",
+      "n": -10
+     },
+     {
+      "k": "regard",
+      "n": 8
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "Wanted +5",
+    "fx": [
+     {
+      "k": "wanted",
+      "n": 5
+     }
+    ]
+   },
+   "who": "mayor"
+  },
+  {
+   "id": 124,
+   "sect": "empire",
+   "visitor": "A Silph-style company rep",
+   "name": "A Silph-style company rep",
+   "role": null,
+   "look": "trainer/pr/rich_m",
+   "tier": [
+    4,
+    5
+   ],
+   "ask": "Offers shares for protection",
+   "a": {
+    "label": "Accept",
+    "does": "clean ₽ +1,000/week, Shadow pillar progress +1",
+    "fx": [
+     {
+      "k": "deal",
+      "n": 1000,
+      "clean": true
+     },
+     {
+      "k": "owed",
+      "key": "shadow",
+      "n": 1
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "company"
+  },
+  {
+   "id": 125,
+   "sect": "empire",
+   "visitor": "A TV producer",
+   "name": "A TV producer",
+   "role": null,
+   "look": "trainer/pr/interviewers",
+   "tier": [
+    4,
+    5
+   ],
+   "ask": "Wants a reality show about your team",
+   "a": {
+    "label": "Yes",
+    "does": "Not +8, Reg +6, Heat +10",
+    "fx": [
+     {
+      "k": "fame",
+      "n": 8
+     },
+     {
+      "k": "regard",
+      "n": 6
+     },
+     {
+      "k": "heat",
+      "n": 10
+     }
+    ]
+   },
+   "b": {
+    "label": "No",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "producer"
+  },
+  {
+   "id": 126,
+   "sect": "empire",
+   "visitor": "The governor of a held region",
+   "name": "The governor of a held region",
+   "role": "your Holder",
+   "look": "trainer/pr/veteran_m",
+   "tier": [
+    4,
+    5
+   ],
+   "ask": "Asks for more crew to hold the region",
+   "a": {
+    "label": "Send two members",
+    "does": "−2 members here, held region Stability +15",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "stab",
+      "n": 15
+     },
+     {
+      "k": "note",
+      "slice": "D15",
+      "text": "two members go to the held region"
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "Stability −10",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "stab",
+      "n": -10
+     }
+    ]
+   },
+   "who": "governor",
+   "wait": "D15"
+  },
+  {
+   "id": 127,
+   "sect": "empire",
+   "visitor": "A held region's rebel envoy",
+   "name": "A held region's rebel envoy",
+   "role": null,
+   "look": "trainer/pr/hooligans",
+   "tier": [
+    4,
+    5
+   ],
+   "ask": "Wants local self-rule in one city",
+   "a": {
+    "label": "Grant it",
+    "does": "Stability +10, tribute −20%",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "stab",
+      "n": 10
+     },
+     {
+      "k": "note",
+      "slice": "D15",
+      "text": "tribute -20%"
+     }
+    ]
+   },
+   "b": {
+    "label": "Crush it",
+    "does": "Stability −5, Dread +10",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "stab",
+      "n": -5
+     },
+     {
+      "k": "dread",
+      "n": 10
+     }
+    ]
+   },
+   "who": "rebel",
+   "wait": "D15"
+  },
+  {
+   "id": 128,
+   "sect": "empire",
+   "visitor": "A shipping magnate",
+   "name": "A shipping magnate",
+   "role": "Mr. Briney's boss-type",
+   "look": "trainer/pr/rich_m",
+   "tier": [
+    4,
+    5
+   ],
+   "ask": "Offers a fleet for region-to-region smuggling",
+   "a": {
+    "label": "Deal",
+    "does": "₽ +1,500/week, Wanted +5",
+    "fx": [
+     {
+      "k": "deal",
+      "n": 1500
+     },
+     {
+      "k": "wanted",
+      "n": 5
+     },
+     {
+      "k": "note",
+      "slice": "D15",
+      "text": "region-to-region smuggling"
+     }
+    ]
+   },
+   "b": {
+    "label": "No",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "magnate"
+  },
+  {
+   "id": 129,
+   "sect": "empire",
+   "visitor": "A union of Gym trainers",
+   "name": "A union of Gym trainers",
+   "role": null,
+   "look": "trainer/pr/ace_trainer_m",
+   "tier": [
+    5,
+    5
+   ],
+   "ask": "Ask for wages under your rule",
+   "a": {
+    "label": "Pay them",
+    "does": "₽ −2,000/week, Monarch Uprising check −50%",
+    "fx": [
+     {
+      "k": "deal",
+      "n": -2000
+     },
+     {
+      "k": "note",
+      "slice": "D14",
+      "text": "Monarch Uprising check -50%"
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "Uprising check +25%",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D14",
+      "text": "Uprising check +25%"
+     }
+    ]
+   },
+   "who": "gym-union",
+   "wait": "D14"
+  },
+  {
+   "id": 130,
+   "sect": "empire",
+   "visitor": "A city council member",
+   "name": "A city council member",
+   "role": null,
+   "look": "trainer/pr/rich_f",
+   "tier": [
+    4,
+    5
+   ],
+   "ask": "Offers to sell you their seat",
+   "a": {
+    "label": "Buy",
+    "does": "clean ₽ −50,000, police budget −20% (the \"Political influence\" growth)",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -50000,
+      "clean": true
+     },
+     {
+      "k": "note",
+      "slice": "D10",
+      "text": "police budget -20%"
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "council",
+   "wait": "D10"
+  },
+  {
+   "id": 131,
+   "sect": "empire",
+   "visitor": "An architect",
+   "name": "An architect",
+   "role": null,
+   "look": "trainer/worker_m",
+   "tier": [
+    3,
+    5
+   ],
+   "ask": "Offers a cheaper HQ upgrade design",
+   "a": {
+    "label": "Hire",
+    "does": "next HQ tier −20% cost, 25%: a weak spot (raid odds +10%)",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D5",
+      "text": "next HQ tier -20% cost"
+     }
+    ]
+   },
+   "b": {
+    "label": "No",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "architect",
+   "wait": "D5"
+  },
+  {
+   "id": 132,
+   "sect": "empire",
+   "visitor": "A former member",
+   "name": "A former member",
+   "role": "from a past region, held",
+   "look": "member",
+   "tier": [
+    4,
+    5
+   ],
+   "ask": "Wants to come back to your side",
+   "a": {
+    "label": "Take them",
+    "does": "+Member, held region Stability −5",
+    "fx": [
+     {
+      "k": "join"
+     },
+     {
+      "k": "owed",
+      "key": "stab",
+      "n": -5
+     }
+    ]
+   },
+   "b": {
+    "label": "Leave them",
+    "does": "held region Stability +5",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "stab",
+      "n": 5
+     }
+    ]
+   },
+   "who": "former",
+   "wait": "D15"
+  },
+  {
+   "id": 133,
+   "sect": "regular",
+   "visitor": "Sal the clerk",
+   "name": "Sal",
+   "role": "Mart clerk",
+   "look": "trainer/pr/clerk_m",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "\"Lower the protection money, or the store closes.\"",
+   "a": {
+    "label": "Lower it",
+    "does": "₽ −40/week, Reg +4, Favour",
+    "fx": [
+     {
+      "k": "deal",
+      "n": -40
+     },
+     {
+      "k": "regard",
+      "n": 4
+     },
+     {
+      "k": "tag",
+      "tag": "favour"
+     }
+    ]
+   },
+   "b": {
+    "label": "Raise it",
+    "does": "₽ +60 now, Dread +4, 50%: store closes",
+    "fx": [
+     {
+      "k": "funds",
+      "n": 60
+     },
+     {
+      "k": "dread",
+      "n": 4
+     },
+     {
+      "k": "chance",
+      "p": 50,
+      "yes": [
+       {
+        "k": "racketLose"
+       }
+      ],
+      "no": []
+     }
+    ]
+   },
+   "who": "sal",
+   "once": true,
+   "regular": 1,
+   "step": 1
+  },
+  {
+   "id": 134,
+   "sect": "regular",
+   "visitor": "Sal the clerk",
+   "name": "Sal",
+   "role": "Mart clerk",
+   "look": "trainer/pr/clerk_m",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Sal says the manager is skimming; asks you to scare him off",
+   "a": {
+    "label": "Scare him",
+    "does": "Opens Extort on the manager, Reg +4",
+    "fx": [
+     {
+      "k": "regard",
+      "n": 4
+     },
+     {
+      "k": "note",
+      "slice": "D10",
+      "text": "Extort on the manager opens"
+     }
+    ]
+   },
+   "b": {
+    "label": "\"Not my business.\"",
+    "does": "Sal stays nervous",
+    "fx": []
+   },
+   "who": "sal",
+   "once": true,
+   "regular": 1,
+   "step": 2
+  },
+  {
+   "id": 135,
+   "sect": "regular",
+   "visitor": "Sal the clerk",
+   "name": "Sal",
+   "role": "Mart manager",
+   "look": "trainer/pr/clerk_m",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Sal becomes manager and offers you the store",
+   "a": {
+    "label": "Take it",
+    "does": "+Building (Mart Front), Reg +6",
+    "fx": [
+     {
+      "k": "regard",
+      "n": 6
+     },
+     {
+      "k": "note",
+      "slice": "D5",
+      "text": "+Building (Mart Front)"
+     }
+    ]
+   },
+   "b": {
+    "label": "Let Sal run it",
+    "does": "₽ +100/week clean, Favour",
+    "fx": [
+     {
+      "k": "deal",
+      "n": 100,
+      "clean": true
+     },
+     {
+      "k": "tag",
+      "tag": "favour"
+     }
+    ]
+   },
+   "who": "sal",
+   "once": true,
+   "regular": 1,
+   "step": 3
+  },
+  {
+   "id": 136,
+   "sect": "regular",
+   "visitor": "Gilda the Gym groupie",
+   "name": "Gilda",
+   "role": "Gym groupie",
+   "look": "trainer/pr/ace_trainer_f",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Wants to join your crew to fight the Gym Leader",
+   "a": {
+    "label": "Hire her",
+    "does": "+Member (Starstruck)",
+    "fx": [
+     {
+      "k": "join",
+      "look": "trainer/pr/ace_trainer_f",
+      "name": "Gilda",
+      "green": "starstruck"
+     }
+    ]
+   },
+   "b": {
+    "label": "No",
+    "does": "Grudge",
+    "fx": [
+     {
+      "k": "tag",
+      "tag": "grudge"
+     }
+    ]
+   },
+   "who": "gilda",
+   "once": true,
+   "regular": 2,
+   "step": 1
+  },
+  {
+   "id": 137,
+   "sect": "regular",
+   "visitor": "Gilda the Gym groupie",
+   "name": "Gilda",
+   "role": "Gym groupie",
+   "look": "trainer/pr/ace_trainer_f",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Begs to fight the Gym Leader alone",
+   "a": {
+    "label": "Let her",
+    "does": "50%: Gym Leader Favour or her Loy −10",
+    "fx": [
+     {
+      "k": "chance",
+      "p": 50,
+      "yes": [
+       {
+        "k": "tag",
+        "tag": "favour",
+        "who": "gym-leader"
+       }
+      ],
+      "no": [
+       {
+        "k": "loyalty",
+        "n": -10,
+        "who": "named"
+       }
+      ]
+     }
+    ]
+   },
+   "b": {
+    "label": "Forbid",
+    "does": "Loy −5",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": -5,
+      "who": "named"
+     }
+    ]
+   },
+   "named": "name:Gilda",
+   "who": "gilda",
+   "once": true,
+   "regular": 2,
+   "step": 2
+  },
+  {
+   "id": 138,
+   "sect": "regular",
+   "visitor": "Gilda the Gym groupie",
+   "name": "Gilda",
+   "role": "Gym groupie",
+   "look": "trainer/pr/ace_trainer_f",
+   "tier": [
+    3,
+    5
+   ],
+   "ask": "Wants to replace the Gym Leader",
+   "a": {
+    "label": "Make her Leader",
+    "does": "Gym taken (her), Shadow/Monarch +1",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "shadow",
+      "n": 1
+     },
+     {
+      "k": "note",
+      "slice": "D10",
+      "text": "Gym taken (her)"
+     }
+    ]
+   },
+   "b": {
+    "label": "Keep her in crew",
+    "does": "Loy +10",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": 10,
+      "who": "named"
+     }
+    ]
+   },
+   "named": "name:Gilda",
+   "who": "gilda",
+   "once": true,
+   "regular": 2,
+   "step": 3
+  },
+  {
+   "id": 139,
+   "sect": "regular",
+   "visitor": "Old Rocket \"Pops\"",
+   "name": "Pops",
+   "role": "old Rocket",
+   "look": "trainer/pr/veteran_m",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "An old ex-Rocket wants a job",
+   "a": {
+    "label": "Hire him",
+    "does": "+Member (Steady, slow), Mor +2",
+    "fx": [
+     {
+      "k": "join",
+      "look": "trainer/pr/veteran_m",
+      "name": "Pops",
+      "green": "lazy"
+     },
+     {
+      "k": "morale",
+      "n": 2
+     }
+    ]
+   },
+   "b": {
+    "label": "No",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "pops",
+   "once": true,
+   "regular": 3,
+   "step": 1
+  },
+  {
+   "id": 140,
+   "sect": "regular",
+   "visitor": "Old Rocket \"Pops\"",
+   "name": "Pops",
+   "role": "old Rocket",
+   "look": "trainer/pr/veteran_m",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "He offers to teach your crew old-school tricks",
+   "a": {
+    "label": "Let him",
+    "does": "crew +10% Take, Mor +4",
+    "fx": [
+     {
+      "k": "morale",
+      "n": 4
+     },
+     {
+      "k": "note",
+      "slice": "D10",
+      "text": "crew +10% Take"
+     }
+    ]
+   },
+   "b": {
+    "label": "No",
+    "does": "Loy −4",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": -4,
+      "who": "named"
+     }
+    ]
+   },
+   "named": "name:Pops",
+   "who": "pops",
+   "once": true,
+   "regular": 3,
+   "step": 2
+  },
+  {
+   "id": 141,
+   "sect": "regular",
+   "visitor": "Old Rocket \"Pops\"",
+   "name": "Pops",
+   "role": "old Rocket",
+   "look": "trainer/pr/veteran_m",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "He wants to go back to Rocket to spy for you",
+   "a": {
+    "label": "Send him",
+    "does": "Rocket plans visible 4 weeks, 30%: he never returns",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D9",
+      "text": "Rocket plans visible 4 weeks"
+     },
+     {
+      "k": "chance",
+      "p": 30,
+      "yes": [
+       {
+        "k": "leave"
+       }
+      ],
+      "no": []
+     }
+    ]
+   },
+   "b": {
+    "label": "Keep him home",
+    "does": "Loy +8",
+    "fx": [
+     {
+      "k": "loyalty",
+      "n": 8,
+      "who": "named"
+     }
+    ]
+   },
+   "named": "name:Pops",
+   "who": "pops",
+   "once": true,
+   "regular": 3,
+   "step": 3
+  },
+  {
+   "id": 142,
+   "sect": "regular",
+   "visitor": "Dex the reporter",
+   "name": "Dex",
+   "role": "reporter",
+   "look": "trainer/pr/interviewers",
+   "tier": [
+    1,
+    5
+   ],
+   "ask": "Wants a story on your team",
+   "a": {
+    "label": "Talk",
+    "does": "Not +3, Heat +4",
+    "fx": [
+     {
+      "k": "fame",
+      "n": 3
+     },
+     {
+      "k": "heat",
+      "n": 4
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "dex",
+   "once": true,
+   "regular": 4,
+   "step": 1
+  },
+  {
+   "id": 143,
+   "sect": "regular",
+   "visitor": "Dex the reporter",
+   "name": "Dex",
+   "role": "reporter",
+   "look": "trainer/pr/interviewers",
+   "tier": [
+    2,
+    5
+   ],
+   "ask": "Wants proof the Rival is worse than you",
+   "a": {
+    "label": "Give proof",
+    "does": "Ten +10, Reg +6",
+    "fx": [
+     {
+      "k": "owed",
+      "key": "ten",
+      "n": 10
+     },
+     {
+      "k": "regard",
+      "n": 6
+     }
+    ]
+   },
+   "b": {
+    "label": "Refuse",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "dex",
+   "once": true,
+   "regular": 4,
+   "step": 2
+  },
+  {
+   "id": 144,
+   "sect": "regular",
+   "visitor": "Dex the reporter",
+   "name": "Dex",
+   "role": "reporter",
+   "look": "trainer/pr/interviewers",
+   "tier": [
+    3,
+    5
+   ],
+   "ask": "Offers to run your side of the story on TV",
+   "a": {
+    "label": "Yes",
+    "does": "Reg +10, Heat −5",
+    "fx": [
+     {
+      "k": "regard",
+      "n": 10
+     },
+     {
+      "k": "heat",
+      "n": -5
+     }
+    ]
+   },
+   "b": {
+    "label": "No",
+    "does": "nothing",
+    "fx": []
+   },
+   "who": "dex",
+   "once": true,
+   "regular": 4,
+   "step": 3
+  },
+  {
+   "id": 145,
+   "sect": "crisis",
+   "visitor": "The Bailiff",
+   "name": "The Bailiff",
+   "role": null,
+   "look": "trainer/pr/rich_m",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "\"Pay, or we take the building.\"",
+   "a": {
+    "label": "Sell a room",
+    "does": "lose the newest room, ₽ back to ₽0",
+    "fx": [
+     {
+      "k": "zero"
+     },
+     {
+      "k": "note",
+      "slice": "D5",
+      "text": "lose the newest room"
+     }
+    ]
+   },
+   "b": {
+    "label": "Sell a member's Pokémon",
+    "does": "Stores Pkmn −2 (best), ₽ back to ₽0, Mor −8",
+    "fx": [
+     {
+      "k": "mon",
+      "n": -2
+     },
+     {
+      "k": "zero"
+     },
+     {
+      "k": "morale",
+      "n": -8
+     }
+    ]
+   },
+   "who": "bailiff",
+   "crisis": "money",
+   "red": "Money below ₽0"
+  },
+  {
+   "id": 146,
+   "sect": "crisis",
+   "visitor": "Jenny at the Door",
+   "name": "Jenny at the Door",
+   "role": null,
+   "look": "trainer/pr/officer",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "\"Hand someone over or we raid tonight.\"",
+   "a": {
+    "label": "Hand over a member",
+    "does": "−Member (jailed), Heat −30",
+    "fx": [
+     {
+      "k": "jail"
+     },
+     {
+      "k": "heat",
+      "n": -30
+     }
+    ]
+   },
+   "b": {
+    "label": "Let them raid",
+    "does": "HQ battle tonight vs. police, Heat −20, lose 1 room on a loss",
+    "fx": [
+     {
+      "k": "heat",
+      "n": -20
+     },
+     {
+      "k": "fight",
+      "win": [],
+      "lose": [
+       {
+        "k": "note",
+        "slice": "D5",
+        "text": "lose 1 room"
+       }
+      ]
+     }
+    ]
+   },
+   "named": "lowLoy",
+   "who": "jenny",
+   "foe": {
+    "name": "International Police",
+    "cls": "veteran",
+    "species": [
+     "growlithe",
+     "machoke",
+     "croagunk"
+    ],
+    "offset": 4
+   },
+   "crisis": "heat",
+   "red": "Heat 90+"
+  },
+  {
+   "id": 147,
+   "sect": "crisis",
+   "visitor": "The Walkout",
+   "name": "The Walkout",
+   "role": null,
+   "look": "member",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "The whole crew stands in the doorway",
+   "a": {
+    "label": "Pay a bonus",
+    "does": "₽ −300 per member, Mor +30",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -300,
+      "each": true
+     },
+     {
+      "k": "morale",
+      "n": 30
+     }
+    ]
+   },
+   "b": {
+    "label": "Give a speech",
+    "does": "Mor +20, Dread −5, Reg +5",
+    "fx": [
+     {
+      "k": "morale",
+      "n": 20
+     },
+     {
+      "k": "dread",
+      "n": -5
+     },
+     {
+      "k": "regard",
+      "n": 5
+     }
+    ]
+   },
+   "named": "first",
+   "who": "crew",
+   "crisis": "morale",
+   "red": "Morale below 10"
+  },
+  {
+   "id": 148,
+   "sect": "crisis",
+   "visitor": "Torches Outside",
+   "name": "Torches Outside",
+   "role": null,
+   "look": "trainer/pr/pokefan_m",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "The townsfolk gathered outside",
+   "a": {
+    "label": "Give money back",
+    "does": "₽ −1,000, Reg +15, Dread −10",
+    "fx": [
+     {
+      "k": "funds",
+      "n": -1000
+     },
+     {
+      "k": "regard",
+      "n": 15
+     },
+     {
+      "k": "dread",
+      "n": -10
+     }
+    ]
+   },
+   "b": {
+    "label": "Scatter them",
+    "does": "Dread +5, Heat +15, Reg +10 (fear makes them \"respect\" you)",
+    "fx": [
+     {
+      "k": "dread",
+      "n": 5
+     },
+     {
+      "k": "heat",
+      "n": 15
+     },
+     {
+      "k": "regard",
+      "n": 10
+     }
+    ]
+   },
+   "who": "town",
+   "crisis": "regard",
+   "red": "Regard below 5 and Dread 60+"
+  },
+  {
+   "id": 149,
+   "sect": "crisis",
+   "visitor": "The Ultimatum",
+   "name": "The Ultimatum",
+   "role": null,
+   "look": "member",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "\"Raise my pay, or I tell everyone where the Vault is.\"",
+   "a": {
+    "label": "Raise pay",
+    "does": "₽ −200/week to them, Loy +30",
+    "fx": [
+     {
+      "k": "wage",
+      "n": 200
+     },
+     {
+      "k": "loyalty",
+      "n": 30,
+      "who": "named"
+     }
+    ]
+   },
+   "b": {
+    "label": "Fire them",
+    "does": "−Member, Grudge, Rival raid odds +20% for 2 weeks",
+    "fx": [
+     {
+      "k": "leave"
+     },
+     {
+      "k": "tag",
+      "tag": "grudge"
+     },
+     {
+      "k": "owed",
+      "key": "raid",
+      "n": 20
+     }
+    ]
+   },
+   "named": "lowLoy",
+   "who": "member",
+   "crisis": "loyalty",
+   "red": "A member's Loyalty below 10"
+  },
+  {
+   "id": 150,
+   "sect": "crisis",
+   "visitor": "The Hero's Letter",
+   "name": "The Hero's Letter",
+   "role": null,
+   "look": "trainer/red",
+   "tier": [
+    0,
+    5
+   ],
+   "ask": "A letter: \"I'm coming. Tomorrow.\"",
+   "a": {
+    "label": "Prepare",
+    "does": "Hero battle tomorrow with HQ defense bonus, Threat −20 after",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D11",
+      "text": "Hero battle tomorrow, HQ defense bonus"
+     },
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": -20
+     }
+    ]
+   },
+   "b": {
+    "label": "Flee town",
+    "does": "lose 1 district, Threat −30",
+    "fx": [
+     {
+      "k": "note",
+      "slice": "D11",
+      "text": "lose 1 district"
+     },
+     {
+      "k": "owed",
+      "key": "threat",
+      "n": -30
+     }
+    ]
+   },
+   "who": "hero",
+   "wait": "D11",
+   "crisis": "threat",
+   "red": "Hero Threat 90+"
+  }
+ ]
+}

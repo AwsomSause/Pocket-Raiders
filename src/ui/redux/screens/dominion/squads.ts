@@ -7,12 +7,12 @@ import type { BuilderModel, PickerModel, SquadCardModel, SquadsModel } from '../
 import { act, esc } from '../../kit';
 import { rxUrl } from '../../assets';
 import { face } from './crew';
-import { stage } from './views';
+import { stage, WHEEL_KEY } from './views';
 
 const img = (f: string): string => rxUrl(`dominion/${f}.png`);
 const POS = [[16, 70], [290, 70], [16, 300], [290, 300]] as const;
 
-/** Mockup 13's overlays (passes 4, 7, 9, 10, 17, 18, 20, 25 and the v4 sigil + vignette); no clicks, calm with motion off. */
+/** Mockup 13's overlays (passes 4, 7, 9, 10, 17, 18, 20, 25 the v4 sigil and underlight come from stage(), D26); no clicks, calm with motion off. */
 const FX = `<div class="haze" style="--hz:#c9a0ff;--hz2:#ffd23f" aria-hidden="true"></div>
   <div class="bokeh" aria-hidden="true" style="background:radial-gradient(circle 34px at 152px 468px,color-mix(in srgb,#ffd23f 34%,transparent),color-mix(in srgb,#ffd23f 18%,transparent) 70%,transparent 100%),radial-gradient(circle 26px at 801px 398px,color-mix(in srgb,#c9a0ff 34%,transparent),color-mix(in srgb,#c9a0ff 18%,transparent) 70%,transparent 100%),radial-gradient(circle 32px at 854px 143px,color-mix(in srgb,#ffd23f 34%,transparent),color-mix(in srgb,#ffd23f 18%,transparent) 70%,transparent 100%),radial-gradient(circle 25px at 744px 149px,color-mix(in srgb,#c9a0ff 34%,transparent),color-mix(in srgb,#c9a0ff 18%,transparent) 70%,transparent 100%),radial-gradient(circle 24px at 107px 169px,color-mix(in srgb,#ffd23f 34%,transparent),color-mix(in srgb,#ffd23f 18%,transparent) 70%,transparent 100%),radial-gradient(circle 18px at 59px 110px,color-mix(in srgb,#c9a0ff 34%,transparent),color-mix(in srgb,#c9a0ff 18%,transparent) 70%,transparent 100%),radial-gradient(circle 25px at 188px 103px,color-mix(in srgb,#ffd23f 34%,transparent),color-mix(in srgb,#ffd23f 18%,transparent) 70%,transparent 100%),radial-gradient(circle 51px at 918px 143px,color-mix(in srgb,#c9a0ff 34%,transparent),color-mix(in srgb,#c9a0ff 18%,transparent) 70%,transparent 100%)"></div>
   <div class="pts" aria-hidden="true"><i class="pt star f" style="left:473px;top:267px;--dl:-3.3s;--t:2.5s;--c:#fff"></i><i class="pt star f" style="left:472px;top:229px;--dl:-4.8s;--t:5.5s;--c:#ffd23f"></i><i class="pt star f" style="left:428px;top:236px;--dl:-1.8s;--t:4.5s;--c:#fff"></i><i class="pt star f" style="left:442px;top:224px;--dl:-1.5s;--t:4.7s;--c:#fff"></i><i class="pt star f" style="left:466px;top:241px;--dl:-4.9s;--t:3.9s;--c:#c9a0ff"></i><i class="pt star f" style="left:423px;top:270px;--dl:-4.4s;--t:3.4s;--c:#c9a0ff"></i></div>
@@ -20,8 +20,7 @@ const FX = `<div class="haze" style="--hz:#c9a0ff;--hz2:#ffd23f" aria-hidden="tr
   <div class="focus" aria-hidden="true" style="left:648px;top:474px;--r:90px;--fc:200,150,255"></div>
   <div class="edgeglow" aria-hidden="true" style="--eg:#c9a0ff"></div>
   <div class="orn" aria-hidden="true"></div>
-  <div class="rays turn finale" aria-hidden="true" style="left:549px;top:375px;width:198px;height:198px;--rc:rgba(200,150,255,.30)"></div><i class="glint fg" style="left:697px;top:420px;--g:20px"></i><i class="glint fg" style="left:586px;top:505px;--g:14px;animation-delay:-1.4s"></i>
-  <div class="sig4" aria-hidden="true"></div><div class="vl4" aria-hidden="true"></div>`;
+  <div class="rays turn finale" aria-hidden="true" style="left:549px;top:375px;width:198px;height:198px;--rc:rgba(200,150,255,.30)"></div><i class="glint fg" style="left:697px;top:420px;--g:20px"></i><i class="glint fg" style="left:586px;top:505px;--g:14px;animation-delay:-1.4s"></i>`;
 
 function sqCard(c: SquadCardModel, i: number): string {
   const [left, top] = POS[i]!;
@@ -99,7 +98,7 @@ export function squadsView(m: SquadsModel, notice: string | null): string {
   const keys = `<div class="a row xs" style="left:16px;bottom:4px;gap:4px;z-index:9;color:#dfe5ff" data-testid="dom-sq-keys"><span class="kc">←↑↓→</span>squad<span class="kc">Enter</span>order<span class="kc">E</span>edit<span class="kc">T</span>trait<span class="kc">X</span>break up<span class="kc">Tab</span>builder<span class="kc">G</span>group<span class="kc">N</span>name<span class="kc">F</span>focus<span class="kc">Esc</span>back</div>`;
   return stage(`<div class="layer" style="background:radial-gradient(420px 300px at 280px 300px,rgba(123,63,160,.3),transparent 70%)"></div>
   <div class="ttl" style="--t1:#7b3fa0;--t2:#b04ad0">Roster <span class="sub">· Squads</span></div>
-  <div class="keys"><span class="key q4">Q</span><span>Wheel</span>${paging}<span class="key" data-testid="dom-sq-count">${esc(m.count)}</span><span class="key">${esc(m.hq)}</span></div>
+  <div class="keys">${WHEEL_KEY}${paging}<span class="key" data-testid="dom-sq-count">${esc(m.count)}</span><span class="key">${esc(m.hq)}</span></div>
   ${groups}
   ${cards}${empty}
   ${m.picker ? picker(m.picker) : builder(m.builder)}

@@ -28,5 +28,5 @@ No version bump. `block.squads` is optional and is filled by `squadsOf` on first
 - Cause Incentive needs D14. Betrayal from squads needs D15. Poaching, rival-admin targets and Shield Wall need D9. Squad-only jobs, Raid / Smuggle focus, Breach Team and Tunnel Rats need D10. Hero's Shadow needs D11.
 - Mishap reductions from traits are not modelled yet. Battles as doubles wait for D10.
 - Operations Rooms (extra squad cap) wait for D5; Divisions by region and companion squads wait for D15. A Unit holding a squad is not built.
-- The round-4 villain look classes are in the markup but the CSS comes with D26's re-port. Armband colours wait for D7.
+- The Nova livery (sigil, underlight) and the Q Wheel key come from D26's `stage()` and `WHEEL_KEY`. Squad Marks use the Founding's initial (D7).
 - Browser tests must space key presses (~120 ms): two presses inside one frame can be read twice.

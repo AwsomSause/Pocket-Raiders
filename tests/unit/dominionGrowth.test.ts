@@ -1,6 +1,7 @@
 // DOMINION D10, Growth (Part 1 §3.2, Part 3 §5, Part 9 A10): Buy Out, Raid, Gym Takeover (five ways, Defiance, the
 // Wall), Post Flyers, Bribe, Fence, Smuggle, Kidnap, Hit a Lab, specialists; the 450 actions and 450 crew tasks of
 // lists 151-600 as data; save/reload; determinism.
+import { freshChair } from '../../src/core/dominion/chair';
 import { describe, expect, it } from 'vitest';
 import { empireOf } from '../../src/core/dominion/book';
 import { DOMINION_DATA } from '../../src/core/dominion/data';
@@ -11,6 +12,7 @@ import { endDominionFight } from '../../src/core/dominion/fightEnd';
 import { cardModel, gridPages, mapModel, newCursor } from '../../src/core/dominion/fieldScreens';
 import { freshGrowth, growthOf, ownedGyms } from '../../src/core/dominion/growth';
 import { addClean, cleanOf, hqFx } from '../../src/core/dominion/hqFx';
+import { policeOf } from '../../src/core/dominion/police';
 import { DominionBlockSchema, type DominionAction, type DominionBlock } from '../../src/core/dominion/schema';
 import { DOMINION_MODE_ID, startInRun, stepInRun } from '../../src/core/dominion/session';
 import { STANDARD_CHOICE } from '../../src/core/rules';
@@ -27,8 +29,14 @@ const domRun = (seed: string): RunState => chooseStarter(content, createRun(cont
 const started = (seed = 'd10'): RunState => {
   const out = startInRun(content, domRun(seed), { types: ['poison', 'dark'], member: 'grunt', look: 0 });
   expect(out.problem).toBeNull();
-  return stepInRun(content, out.run, { t: 'open' }).run;
+  return quiet(stepInRun(content, out.run, { t: 'open' }).run);
 };
+/** D12: the Chair is switched off here, so these nights stay the same as before it. */
+function quiet(r: RunState): RunState {
+  const out = structuredClone(r);
+  out.expansion!.dominion!.chair = { ...freshChair(), opts: { length: 'off', numbers: 'arrows', speed: 'normal' } };
+  return out;
+}
 const blk = (r: RunState): DominionBlock => r.expansion!.dominion!;
 const go = (r: RunState, a: DominionAction): RunState => {
   const out = stepInRun(content, r, a);
@@ -339,6 +347,8 @@ describe('DOMINION D10: flyers, bribes, the fence, smuggling, kidnap, the lab, s
     r = edit(r, (b) => {
       b.day = 13;
       for (const d of Object.values(b.field.districts)) d.heat = 80;
+      // D24: at this Heat the police would pick the Boss up at dawn; this test is about the flyers, so not tonight.
+      b.police = { ...policeOf(b), pickedUp: b.day };
     });
     r = night(go(go(r, { t: 'toDay' }), { t: 'endDay' }));
     expect(blk(r).growth!.flyers).toEqual({});

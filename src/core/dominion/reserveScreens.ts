@@ -5,7 +5,7 @@ import { squadOf } from './squads';
 import { crewOf, monName, rankN, rankWord } from './crew';
 import { DOMINION_DATA } from './data';
 import {
-  aceCapOf, acesOf, bandOf, bstCapOf, levelCapOf, promoteProblem, rankLevel, rankRow, readyFor, regionBonus, seatsOpen, seatsTaken, standingOf, teamSizeOf,
+  aceCapOf, acesOf, bandOf, bstCapOf, levelCapOf, levelFor, promoteProblem, rankRow, readyFor, regionBonus, seatsOf, seatsOpen, seatsTaken, standingOf, teamSizeOf,
 } from './pyramid';
 import { book, fitsMember, reserveSize, usable } from './reserve';
 import type { DominionBlock, Member } from './schema';
@@ -100,12 +100,20 @@ export function reserveModel(b: DominionBlock, whoId: string, at: number, page: 
   const kept = b.report.find((l) => l.includes('“for') || l.includes('"for'));
   if (kept) notes.unshift(kept);
   return {
-    types: b.types, count: `${r.box.length} / ${reserveSize(b)}`, hq: `HQ Lv ${b.hqLevel} · cap ${b.levelCap}`, who, other, page: pg, pages, fitsOnly,
+    types: b.types, count: `${r.box.length} / ${reserveSize(b)}${eggLabel(b)}`, hq: `HQ Lv ${b.hqLevel} · cap ${b.levelCap}`, who, other, page: pg, pages, fitsOnly,
     auto: r.auto, tiles, pick, cta, notes: notes.slice(0, 2),
   };
 }
 
 // ---------- mockup 12: the Rank Pyramid ----------
+
+/** D4b: eggs waiting to hatch, beside the Reserve's count ("· 2 eggs, next on Day 9"). */
+function eggLabel(b: DominionBlock): string {
+  const eggs = b.reserve?.eggs ?? [];
+  if (!eggs.length) return '';
+  const next = Math.min(...eggs.map((e) => e.hatch));
+  return ` · ${eggs.length} egg${eggs.length === 1 ? '' : 's'}, next on Day ${next}`;
+}
 
 export interface TierModel { n: number; label: string; z: string; seats: ('f' | 'o' | 'w')[]; count: string | null; hot: boolean; locked: boolean; left: number; top: number; width: number }
 export interface CandModel { id: string; name: string; look: string; rank: string; level: number; loyalty: number; ambition: number; z: string; stripe: string; mark: { ch: string; colour: string; squad: string } | null }
@@ -146,7 +154,7 @@ export function pyramidModel(b: DominionBlock, sel: number, hqName: string): Pyr
     let seats: TierModel['seats'] = [];
     let count: string | null = null;
     if (row.seats) {
-      seats = Array.from({ length: row.seats }, (_, i) => (i < taken ? 'f' : 'o'));
+      seats = Array.from({ length: seatsOf(b, row.id) }, (_, i) => (i < taken ? 'f' : 'o'));
       if (hot && seatsOpen(b, row.id)) seats[taken] = 'w';
     } else count = `${taken} member${taken === 1 ? '' : 's'}`;
     tiers.push({ n, label: rankWord(row.id), z: bandOf(row.id).z, seats, count, hot, locked: row.hq > b.hqLevel, ...geo(16 - n) });
@@ -168,10 +176,10 @@ export function pyramidModel(b: DominionBlock, sel: number, hqName: string): Pyr
     }
     const row = rankRow(target.id);
     head = row.seats ? (seatsOpen(b, target.id) ? `${rankWord(target.id)} SEAT OPEN` : `${rankWord(target.id)} SEATS FULL`) : `NEXT: ${rankWord(target.id)}`;
-    headRight = row.seats ? `${seatsTaken(b, target.id)} of ${row.seats} filled` : 'open rank';
+    headRight = row.seats ? `${seatsTaken(b, target.id)} of ${seatsOf(b, target.id)} filled` : 'open rank';
     const rival = cands[1];
     if (rival && row.seats && seatsOpen(b, target.id) === 1) alert = `Pass ${rival.name} over and their Ambition goes up ${P().moves.passedAmbition}.`;
-    if (!ready) info.push(`${rankWord(target.id)} needs member Lv ${rankLevel(target.id)} (${m.name} is Lv ${m.level}) and HQ Lv ${row.hq}.`);
+    if (!ready) info.push(`${rankWord(target.id)} needs member Lv ${levelFor(b, target.id)} (${m.name} is Lv ${m.level}) and HQ Lv ${row.hq}.`);
     info.push(row.unlocks);
   } else if (m) {
     head = `${rankWord(m.rank)}`;
