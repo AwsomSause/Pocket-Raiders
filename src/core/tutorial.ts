@@ -5,7 +5,7 @@
 import type { Settings } from './state';
 
 /** The version whose patch notes are the newest. Bump it (and add an UPDATE_LOG entry) to show notes again. */
-export const GAME_UPDATE_ID = 'beta-0.4';
+export const GAME_UPDATE_ID = 'new-ui-catalog';
 
 export interface TutorialCategory {
   id: string;
@@ -107,6 +107,17 @@ export interface UpdateLogEntry {
 
 /** Newest first. The first entry's id must equal GAME_UPDATE_ID. */
 export const UPDATE_LOG: readonly UpdateLogEntry[] = [
+  {
+    id: 'new-ui-catalog',
+    title: 'The New Look + the Catalog Overhaul',
+    intro: 'Every screen redrawn in a bright new look, and every event in the game rebuilt with fuller stories. Settings > UI style brings back the Old look any time.',
+    sections: [
+      { heading: 'The New Look', lines: ['Title, Hub, map, battle, events, shops, Party, Summary, Bag and Settings all redrawn as one bright style.', 'Gym Leaders, Champions and the Betrayal get cutscene cards; evolutions now play their own scene.'] },
+      { heading: 'Events rebuilt', lines: ['Map stops, road people, shops, puzzles and seasons rewritten with fuller text; small kindnesses come back later in the run.', 'Questline families, Delves, Safari Land, the Battle Frontier, mentors, markets, rivals and Legendary questlines.'] },
+      { heading: 'Evil Teams and legends', lines: ['Join or fight every Evil Team from the inside, with Operations, a Hideout map and their own endings.', 'Alphas you can calm, Mega and Z Anomalies, Island Trials, Legendary Blessings and Ultra Beast Incursions.'] },
+      { heading: 'Earlier updates', lines: ['Beta 0.7: node menus at every map stop, Rewinds, Second Chance, Mythical Promises and Evil Team sagas in every region.', 'Beta 0.6: INSTRUMENTALITY, raids, the Rival Rescue Plan and the cast Dossier. Beta 0.5: the Galar stadium and tournament.'] },
+    ],
+  },
   {
     id: 'beta-0.4',
     title: 'Beta 0.4: The Big Glow-Up',

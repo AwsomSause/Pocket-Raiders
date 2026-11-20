@@ -5,7 +5,7 @@
 .rx .stage.clear{background:none;pointer-events:none}.rx .stage.clear .hit,.rx .stage.clear [data-act]{pointer-events:auto}
 .rx [data-act]{cursor:pointer}
 /* ---- the 960 x 540 game stage ---- */
-.rx .stage{position:absolute;left:0;top:0;width:960px;height:540px;transform-origin:0 0;transform:scale(var(--s,.35));overflow:hidden;line-height:1.15;background:var(--pat,var(--g));color:var(--ink);font-family:var(--font),"Pixelify Sans","PRMain",sans-serif;font-size:var(--fs);font-weight:var(--fw);user-select:none}
+.rx .stage{position:absolute;left:0;top:0;width:960px;height:540px;transform-origin:0 0;transform:scale(var(--s,.35));overflow:hidden;line-height:1.15;background:var(--pat,var(--g));color:var(--ink);font-family:var(--font),"Pixelify Sans","PRMain",sans-serif;font-size:var(--fs);font-weight:var(--fw);user-select:none;font-variant-ligatures:none;font-feature-settings:"liga" 0,"clig" 0}
 .rx .stage *{box-sizing:border-box}
 .rx .stage b{font-weight:700}
 .rx .abs,.rx .win.abs,.rx .txt.abs,.rx .btn.abs{position:absolute}.rx .fill{position:absolute;inset:0}.rx .row{display:flex;align-items:center;gap:10px}.rx .col{display:flex;flex-direction:column;gap:8px}.rx .grow{flex:1;min-width:0}.rx .cen{align-items:center;justify-content:center;text-align:center}
@@ -327,3 +327,7 @@
 @media (prefers-reduced-motion:no-preference){.rx .evo-more{animation:evo-bob .8s ease-in-out infinite alternate}.rx .evo-glow{animation:evo-pulse .5s ease-in-out infinite alternate}}
 @keyframes evo-bob{to{transform:translateY(4px)}}
 @keyframes evo-pulse{to{opacity:.6;transform:scale(1.08)}}
+
+/* Four info windows side by side are narrow: a long fact wraps under its label instead of running over it. */
+.rx .bp4 .row.sm{flex-wrap:wrap;column-gap:6px}.rx .bp4 .row.sm .grow{flex:0 0 auto}
+.rx .bp4 .row.sm b{white-space:normal;text-align:right;margin-left:auto}

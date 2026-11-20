@@ -239,7 +239,7 @@ describe('New UI battle info panel, log and transform buttons', () => {
       for (const t of ['Battlefield', 'Momentum 0', 'Your Pokémon', 'Lucario Lv.50', 'Inner Focus', 'Fighting', 'Steel']) expect(html).toContain(t);
       expect(count(html, 'data-act="info"')).toBe(1);
       expect(count(html, 'class="ty"')).toBe(2);
-      expect(html).toContain('left:20px;top:92px');
+      expect(html).toContain('left:20px;right:20px;top:92px');
     });
 
     it(`layout ${layout}: the log shows its filter tabs, the open one lit, and its lines`, () => {
@@ -266,7 +266,7 @@ describe('New UI battle info panel, log and transform buttons', () => {
     expect(html).toContain('right:60px;bottom:');
     expect(html).toContain('width:330px');
     for (const t of ['Flamethrower', 'Fire', 'Special', '90 / 100', 'May burn the target.']) expect(html).toContain(t);
-    expect(html).not.toContain('left:20px;top:92px;height');
+    expect(html).not.toContain('left:20px;right:20px;top:92px;height');
   });
 
   it('draws nothing extra when no panel, log or transformation is open, and never lets their text in as HTML', () => {

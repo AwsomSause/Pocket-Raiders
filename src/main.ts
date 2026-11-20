@@ -72,6 +72,7 @@ import { loadStoredPacks } from './core/tools/modPacks';
 import { hookNames, registerCueHook, unregisterCueHook } from './core/presentation/hooks';
 import './style.css';
 import { installPortraitRotate } from './ui/portraitRotate';
+import { turnOffCanvasLigatures } from './ui/noLigatures';
 
 function showFatalError(message: string): void {
   const el = document.getElementById('fatal-error');
@@ -98,6 +99,7 @@ function openStorage(): { storage: StorageProvider; warning?: string } {
 }
 
 function start(): void {
+  turnOffCanvasLigatures();
   installErrorLog();
   const packs = loadStoredPacks(packStore, getContent());
   for (const p of packs.problems) console.warn(`A stored mod pack was skipped: ${p}`);

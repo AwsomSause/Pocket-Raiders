@@ -35,7 +35,7 @@ describe('New UI system overlays', () => {
 
   it('the notification stack sits at the top right; the newest is bright and the older ones fade back', () => {
     const html = overlayView(ctx, model({ notices: [{ id: 3, head: 'Egg', text: 'Your egg hatches in 2 stops.' }, { id: 2, head: 'Rival', text: 'Kieran beat Gym 2 before you.' }, { id: 1, head: 'Bond', text: 'Lucario trusts you more.' }] }));
-    expect(html).toContain('right:20px;top:20px;width:330px;gap:8px');
+    expect(html).toContain('right:20px;top:56px;width:330px;gap:8px');
     expect(count(html, 'data-act="notice"')).toBe(3);
     expect(html).toContain('<b class="acc" style="font-size:14px">Egg</b>');
     expect(html).toContain('<b class="" style="font-size:14px">Rival</b>');
@@ -61,7 +61,7 @@ describe('New UI system overlays', () => {
   it('toasts stand over the notices in one column', () => {
     const html = overlayView(ctx, model({ toasts: [{ id: 1, kicker: 'Achievement', title: 'T', art: null, lines: [], open: false }], notices: [{ id: 1, head: 'Egg', text: 'x' }] }));
     expect(html.indexOf('data-act="toast"')).toBeLessThan(html.indexOf('data-act="notice"'));
-    expect(count(html, 'right:20px;top:20px')).toBe(1);
+    expect(count(html, 'right:20px;top:56px')).toBe(1);
   });
 
   it('the interaction log is the mock-up window down the left side; empty, it says so; a click closes it', () => {

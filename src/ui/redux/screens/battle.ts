@@ -288,7 +288,7 @@ export function battleView(c: ReduxCtx, d: BattleModel): string {
   const panels = !d.panels?.length ? ''
     : d.panelAt === 'tip'
       ? W(panelBody(d.panels[0]!, true), tipAt, '', act('info'))
-      : `<div class="abs" style="left:20px;top:92px;height:${room}px;display:flex;flex-direction:column;flex-wrap:wrap;align-content:flex-start;gap:8px 6px;z-index:8"${act('info')}>${d.panels.map((p) => W(panelBody(p, false), `width:${d.panels!.length > 2 ? 284 : 310}px;${win}`)).join('')}</div>`;
+      : `<div class="abs${d.panels.length > 3 ? ' bp4' : ''}" style="left:20px;right:20px;top:92px;height:${room}px;display:flex;flex-direction:column;flex-wrap:wrap;align-content:flex-start;gap:8px 6px;overflow:hidden;z-index:8"${act('info')}>${d.panels.map((p) => W(panelBody(p, false), `width:${d.panels!.length > 3 ? 225 : d.panels!.length > 2 ? 284 : 310}px;${win}`)).join('')}</div>`;
   const tip = d.tip && !d.panels?.length ? tipWindow(d.tip, Math.max(150, top + (d.tabs ? 42 : 8) + 34)) : '';
   const card = d.card ? cardWindow(d.card, !!d.card.pinned) : '';
   const log = d.log ? W(`<div class="tabs" style="margin-bottom:6px">${d.log.tabs.map((t, k) => `<span class="${k === d.log!.index ? 'on' : ''}" style="cursor:pointer"${act('log', k)}>${esc(t)}</span>`).join('')}</div>${d.log.lines.length ? d.log.lines.map((l) => `<span class="sm">${esc(l)}</span>`).join('') : '<span class="sm" style="opacity:.7">Nothing here yet.</span>'}`, `position:absolute;left:20px;top:92px;width:430px;max-height:${room}px;overflow:hidden;${win.replace(';cursor:pointer', '')};z-index:8`) : '';
