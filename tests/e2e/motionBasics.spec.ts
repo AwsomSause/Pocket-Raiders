@@ -67,9 +67,16 @@ test('send-out, faint and recall play like the mockups and leave the sprites as 
   const foeRest = await look(page, 'enemy');
 
   // Faint: the foe staggers away from you, then sinks into the ground at its feet and its base goes dark.
+  // The sink lasts about 350 ms, shorter than a poll's gap on a slow runner, so a frame watcher notes when the crop shows.
+  await page.evaluate(() => {
+    const w = window as any, b = w.__pkr.game.scene.getScene('Battle');
+    w.__cropSeen = false;
+    const tick = () => { if (b.enemySprite?.isCropped) w.__cropSeen = true; if (!w.__cropSeen) requestAnimationFrame(tick); };
+    requestAnimationFrame(tick);
+  });
   await start(page, `b.faintMoment('enemy', b.enemySprite)`);
   await expect.poll(async () => (await look(page, 'enemy')).x, { timeout: 3000 }).toBeGreaterThan(foeRest.x + 6);
-  await expect.poll(async () => (await look(page, 'enemy')).cropped, { timeout: 4000 }).toBe(true);
+  await expect.poll(() => page.evaluate(() => (window as any).__cropSeen === true), { timeout: 4000 }).toBe(true);
   expect((await look(page, 'enemy')).shade).toBe(true);
   await expect.poll(() => over(page), { timeout: 5000 }).toBe(true);
   expect(await page.evaluate(() => (window as any).__ms)).toBeGreaterThan(900);

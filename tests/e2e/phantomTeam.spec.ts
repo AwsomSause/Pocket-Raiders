@@ -28,7 +28,8 @@ const mapButton = (page: Page, label: string) =>
 const fits = async (page: Page, key: string, id?: string) => { await page.waitForTimeout(900); expect(await fitProblems(page, key, id)).toEqual([]); };
 
 test('Phantom UI: Party, Summary, Bag and PC of a run are Phantom pages', async ({ page }) => {
-  test.setTimeout(120_000);
+  // A long walk through four pages; GitHub's runners take about twice as long as a local run (2 min there).
+  test.setTimeout(240_000);
   const errors = watch(page);
   await start(page, 'ui=phantom&seed=phantom-team');
   await onPage(page, 'MainMenu', 'title');
