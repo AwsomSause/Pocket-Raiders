@@ -114,6 +114,8 @@ function phantomReady(): boolean {
 }
 /** The version to draw Phantom pages in, or null (style not chosen, or its rules still loading). */
 const phantomNow = (): PhantomVersion | null => (phantomOn() && phantomReady() ? phantomVersion(services().session.settings.phantomVersion) : null);
+/** The Phantom version being drawn right now: null in the other looks, and until the Phantom rules have loaded. */
+export const phantomLive = (): PhantomVersion | null => phantomNow();
 /** Extra classes for a New view while the Phantom style is on: it wears Phantom colours until its own page is built. */
 const phantomDress = (el: HTMLElement): string => {
   const ph = phantomNow();
@@ -237,15 +239,48 @@ function shield(el: HTMLElement): void {
  * One layer over every scene's view, for what belongs to no screen: notifications, toasts, the interaction log.
  * It lives as long as the game, wears the current look, takes clicks only on `[data-act]`, and draws nothing in Old.
  */
-export function mountOverlay(game: Phaser.Game, o: Pick<ReduxOptions, 'render' | 'acts'>): { refresh(): void; readonly el: HTMLElement } {
+export function mountOverlay(game: Phaser.Game, o: Pick<ReduxOptions, 'render' | 'acts'> & { page?: (ph: PhantomVersion) => string }): { refresh(): void; readonly el: HTMLElement } {
   const root = ensureHost(game);
   const el = document.createElement('div');
   el.dataset.scene = 'overlay';
   el.style.zIndex = '60';
   el.style.display = 'none';
   root.append(el);
+  const click = (box: HTMLElement) => (e: Event): void => {
+    const t = (e.target as HTMLElement).closest<HTMLElement>('[data-act]');
+    const fn = t && box.contains(t) ? o.acts?.[t.dataset.act!] : undefined;
+    if (fn) fn(t!.dataset.arg ?? '');
+  };
+  // Phantom UI: `page` is a whole Phantom page over every view (the run log), on the Phantom layer while it has one.
+  let pel: HTMLElement | null = null, plast = '';
+  const pageDraw = (): void => {
+    const ph = o.page && reduxOn() ? phantomNow() : null;
+    const html = ph ? o.page!(ph) : '';
+    const settings = services().session.settings;
+    const calm = !settings.menuAnimations || settings.disableAllAnimations;
+    const wear = html ? `${ph!.id}|${calm}|${settings.highContrast}|${html}` : '';
+    if (wear === plast) return;
+    plast = wear;
+    if (!html) { pel?.remove(); pel = null; return; }
+    if (!pel) {
+      pel = document.createElement('div');
+      pel.dataset.scene = 'overlay';
+      pel.style.zIndex = '60';
+      pel.addEventListener('click', click(pel));
+      shield(pel);
+      phost!.append(pel);
+    }
+    pel.className = 'phs' + (calm ? ' still' : '');
+    pel.dataset.liv = ph!.id;
+    pel.dataset.pass = '25';
+    pel.dataset.scr = pageOf(html) ?? '';
+    pel.toggleAttribute('data-hc', settings.highContrast);
+    pel.toggleAttribute('data-calm', calm);
+    morph(pel, html);
+  };
   let last = '';
   const redraw = (): void => {
+    pageDraw();
     const k = reduxSkinIndex(services().session.settings.reduxSkin);
     el.className = `${lookClass(k, el)} clear noin`;
     const html = reduxOn() ? o.render({ k, skin: REDUX_SKINS[k]!, v: (n) => reduxLayout(k, n), ph: null }) : '';
@@ -254,11 +289,7 @@ export function mountOverlay(game: Phaser.Game, o: Pick<ReduxOptions, 'render' |
     el.innerHTML = html;
     el.style.display = html ? '' : 'none';
   };
-  el.addEventListener('click', (e) => {
-    const t = (e.target as HTMLElement).closest<HTMLElement>('[data-act]');
-    const fn = t && el.contains(t) ? o.acts?.[t.dataset.act!] : undefined;
-    if (fn) fn(t!.dataset.arg ?? '');
-  });
+  el.addEventListener('click', click(el));
   shield(el);
   views.add({ redraw });
   lastBox = '';

@@ -7,8 +7,11 @@ import { chestReady, idleHintDue, interactionLog, isShake, loadingTip, NoticeSta
 import type { Settings } from '../core/state';
 import { AERO } from './aero';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from './theme';
-import { reduxOn } from './redux/stage';
-import { rxCaption, rxLog, rxNotices } from './redux/system';
+import { swallowInput } from './input';
+import { noticeOf } from './redux/screens/overlay';
+import { phantomLive, reduxOn } from './redux/stage';
+import { rxCaption, rxLog, rxLogPage, rxNotices } from './redux/system';
+import { logWindow, type PhLogRow } from './phantom/screens/system';
 
 const stack = new NoticeStack();
 let game: Phaser.Game | null = null;
@@ -88,7 +91,64 @@ let logKeyTaken: (() => boolean) | null = null;
 export function setLogKeyTaken(fn: (() => boolean) | null): void {
   logKeyTaken = fn;
 }
+// Phantom UI: the log is a whole page (mock-up `log`) that reads back the run and takes the keys while it is open.
+let phLogAt: { cursor: number; top: number } | null = null;
+const SCENE_WORD: Record<string, string> = { Map: 'Stage map', Event: 'Event', Battle: 'Battle', Hub: 'Hub', MainMenu: 'Title', Reward: 'Reward', Shop: 'Shop' };
+
+/** The run log's rows, oldest first: a plain note keeps the heading its notice had ("Tip: ..."). */
+export function runLogRows(): PhLogRow[] {
+  return interactionLog.backlog().map((e) => {
+    if (e.kind) return { who: e.who ?? '', text: e.text, kind: e.kind };
+    const n = noticeOf(e.text);
+    return { who: n.head === 'Notice' ? '' : n.head, text: n.text, kind: 'note' };
+  });
+}
+
+function drawRunLog(): void {
+  if (!game) return;
+  const close = (): void => { phLogAt = null; drawRunLog(); };
+  if (!phLogAt) return rxLogPage(game, null, close, () => undefined);
+  const rows = runLogRows(), at = phLogAt;
+  at.cursor = Math.max(0, Math.min(rows.length - 1, at.cursor));
+  at.top = logWindow(rows, at.top, at.cursor).top;
+  rxLogPage(game, { where: SCENE_WORD[activeScene()?.scene.key ?? ''] ?? activeScene()?.scene.key ?? '', rows, cursor: at.cursor, top: at.top }, close, (row) => { at.cursor = row; drawRunLog(); });
+}
+
+/** True while the Phantom run log page is open. */
+export const runLogOpen = (): boolean => phLogAt !== null;
+
+/** Opens the log (the Phantom page reads from its newest row); does nothing when it is open already. */
+export function openLog(): void {
+  if (!phLogAt && !rxLogOpen && !logView?.active) toggleLog();
+}
+
+/** The Phantom run log's keys. True when the key was the log's (every plain key is, while it is open). */
+function runLogKey(e: KeyboardEvent): boolean {
+  const at = phLogAt;
+  if (!at || e.ctrlKey || e.metaKey || e.altKey || /^F\d+$/.test(e.code)) return false;
+  const move = (by: number): void => { at.cursor += by; drawRunLog(); };
+  switch (e.code) {
+    case 'ArrowUp': case 'KeyW': move(-1); break;
+    case 'ArrowDown': case 'KeyS': move(1); break;
+    case 'KeyQ': case 'PageUp': case 'ArrowLeft': move(-6); break;
+    case 'KeyE': case 'PageDown': case 'ArrowRight': move(6); break;
+    case 'Home': move(-1e6); break;
+    case 'End': move(1e6); break;
+    case 'Escape': case 'KeyX': case 'KeyL': case 'Backspace': case 'Enter': case 'NumpadEnter': case 'Space': case 'KeyZ':
+      if (!e.repeat) { phLogAt = null; drawRunLog(); }
+      break;
+    default:
+  }
+  return true;
+}
+
 function toggleLog(): void {
+  if (game && !rxLogOpen && (phLogAt || phantomLive())) {
+    const n = interactionLog.backlog().length;
+    phLogAt = phLogAt ? null : { cursor: Math.max(0, n - 1), top: Math.max(0, n - 1) };
+    drawRunLog();
+    return;
+  }
   if (game && (rxLogOpen || reduxOn())) {
     rxLogOpen = !rxLogOpen && reduxOn();
     rxLog(game, rxLogOpen ? interactionLog.recent(14) : null, () => { if (rxLogOpen) toggleLog(); });
@@ -118,6 +178,14 @@ export function installOverlays(g: Phaser.Game, get: () => Settings): void {
   const touch = (): void => {
     lastInput = performance.now();
   };
+  // The Phantom run log is a whole page: while it is open the keys are its own and never reach the screen under it.
+  window.addEventListener('keydown', (e) => {
+    if (!runLogKey(e)) return;
+    touch();
+    swallowInput();
+    e.preventDefault();
+    e.stopImmediatePropagation();
+  }, true);
   window.addEventListener('keydown', (e) => {
     touch();
     const t = e.target as HTMLElement | null;

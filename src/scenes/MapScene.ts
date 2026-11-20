@@ -71,7 +71,8 @@ import { storyRegionTrack } from '../core/presentation/storyMusic';
 import { isStoryCampaign } from '../core/campaign/circuit';
 import { badgeIconId } from '../assets/storyIcons';
 import { storyIcon } from '../ui/storyIcon';
-import { notify, setLogKeyTaken } from '../ui/overlays';
+import { notify, openLog, runLogOpen, setLogKeyTaken } from '../ui/overlays';
+import { interactionLog } from '../core/presentation/uiPrefs';
 import { mapTrack, storyRegionMusic } from '../core/presentation/battleMusic';
 import { openBondMenu } from '../ui/bondMenu';
 import { openPartyScene, openScrapbook } from '../ui/partyLifeUi';
@@ -135,6 +136,7 @@ import { mapView, type MapLegendRow, type MapModel, type MapNodeView } from '../
 import type { PhantomVersion } from '../core/presentation/phantom';
 import { phInto } from '../ui/phantom/picker';
 import { phMap, phNodeMenu, phPause } from '../ui/phantom/screens/map';
+import { phWheel, wheelStep } from '../ui/phantom/screens/system';
 import { phCard } from '../ui/phantom/screens/ending';
 import { phHeal, type PhHealModel } from '../ui/phantom/screens/stops';
 import { dockFact } from '../ui/phantom/screens/town';
@@ -296,6 +298,86 @@ export class MapScene extends Phaser.Scene {
     this.rxCard = null;
     this.busy = true;
     this.rxView?.refresh();
+  }
+
+  // ---- Phantom UI: the quick wheel (mock-up `wheel`): hold TAB on the map, point, and let go ----
+
+  private rxWheel: { index: number; spin: number; held: boolean; since: number } | null = null;
+
+  /** The wheel's slots, the first at the top. Each one is an action the map already has. */
+  private wheelItems(): { label: string; note: string; off?: boolean; go: () => void }[] {
+    const { session } = services();
+    const run = session.run!, content = session.content;
+    const rivals = rivalReport(run);
+    const down = run.party.filter((m) => m.hp <= 0).length;
+    const pc = boxCapacity(runPerks(content, run));
+    const lines = interactionLog.backlog().length;
+    return [
+      { label: 'Party', note: `${run.party.length} Pokémon${down ? ` · ${down} fainted` : ''}`, go: () => openPokemonMenu(this.fieldHost()) },
+      { label: 'Bag', note: `₽${run.money.toLocaleString('en-US')} in your wallet`, go: () => openBagMenu(this.fieldHost()) },
+      { label: 'Rivals', note: rivals.length ? `${rivals[0]!.name}: ${rivals[0]!.leadText}` : 'No rival has found you yet', off: rivals.length === 0, go: () => this.toggleRivalReport() },
+      { label: 'Log', note: lines ? `${lines} ${lines === 1 ? 'line' : 'lines'} of this run` : 'Nothing said yet', go: () => openLog() },
+      { label: 'Trainer card', note: `Known as ${protagonistTitle(run).name}`, go: () => { this.pauseOpen(); this.pausePick(MapScene.PAUSE_PH.indexOf('Trainer card')); } },
+      { label: 'Reserve', note: pc > 0 ? `${run.box.length} of ${pc} in the PC` : 'This run has no PC', off: pc <= 0, go: () => openBoxMenu(this.fieldHost()) },
+      { label: 'Save', note: 'Save, then stay or leave', go: () => openSaveMenu(this.fieldHost(), (to) => { this.busy = true; this.scene.start(to); }) },
+      { label: 'Settings', note: 'Sound, text and the look', go: () => this.scene.start('Settings', { from: 'Map' }) },
+    ];
+  }
+
+  /** Opens the wheel. `held`: TAB is down (letting go opens the lit slot); otherwise it stays until Enter, a click or Esc. */
+  private wheelOpen(held: boolean): void {
+    if (!this.rxView || !phantomOn() || this.rxWheel || this.rxPause || this.rxPop || this.rxMenu || this.rxHeal || this.busy || this.picker || this.legend) return;
+    this.rxWheel = { index: 0, spin: 0, held, since: this.time.now };
+    this.rxCard = null;
+    this.busy = true;
+    playSfx(this, 'ui.select', 0.4);
+    this.rxView.refresh();
+  }
+
+  /** Shuts the wheel; with `go`, the lit slot opens (a slot that is off only shuts it). */
+  private wheelClose(go: boolean): void {
+    const w = this.rxWheel;
+    if (!w) return;
+    const item = this.wheelItems()[w.index];
+    this.rxWheel = null;
+    this.busy = false;
+    this.rxView?.refresh();
+    if (go && item && !item.off) { playSfx(this, 'ui.confirm', 0.4); item.go(); }
+  }
+
+  /** Lights slot `to`; the needle turns the short way round. */
+  private wheelPoint(to: number): void {
+    const w = this.rxWheel, n = this.wheelItems().length;
+    if (!w || to < 0 || to >= n || to === w.index) return;
+    const d = (to - w.index + n) % n;
+    w.spin += d <= n - d ? d : d - n;
+    w.index = to;
+    playSfx(this, 'ui.select', 0.3);
+    this.rxView?.refresh();
+  }
+
+  private wheelInput(action: InputAction): void {
+    const w = this.rxWheel;
+    if (!w) return;
+    if (action === 'back') return this.wheelClose(false);
+    if (action === 'confirm') return this.wheelClose(true);
+    this.wheelPoint(wheelStep(w.index, this.wheelItems().length, action));
+  }
+
+  /** TAB let go: a quick tap leaves the wheel up (Enter or a click opens); after a hold, the lit slot opens. */
+  private wheelRelease(): void {
+    const w = this.rxWheel;
+    if (!w || !w.held) return;
+    if (this.time.now - w.since < 220 && w.index === 0) { w.held = false; this.rxView?.refresh(); return; }
+    this.wheelClose(true);
+  }
+
+  /** A click on the wheel: a slot opens it, anywhere else shuts the wheel. */
+  private wheelPick(k: number): void {
+    if (!this.rxWheel) return;
+    if (k < 0) return this.wheelClose(false);
+    this.wheelPoint(k);
+    this.wheelClose(true);
   }
 
   // ---- New UI: the pause menu (the mock-ups' "Paused" overlay) ----
@@ -1306,9 +1388,13 @@ export class MapScene extends Phaser.Scene {
     this.rxLegend = null;
     this.rxPop = null;
     this.rxPause = null;
+    this.rxWheel = null;
     this.rxMenu = null;
     this.rxHeal = null;
     this.rxWatching = false;
+    // The run log (the Phantom Log page) belongs to this run, and opens each stage with a heading.
+    interactionLog.scope(`${run.seed}#${session.profile.stats.runsStarted}`);
+    interactionLog.tell('stage', league ? `${region.name} Pokémon League` : stage.pseudo ? stage.pseudo.name : blindMap(run.rules) ? region.name : `${region.name} · ${theme.name}`, `Stage ${stage.index + 1}`);
     if (reduxOn() && !mapSkin) {
       const manifest = this.cache.json.get('manifest') as AssetManifest | undefined;
       const stages = runCampaign(content, run).stagesPerRegion;
@@ -1329,7 +1415,7 @@ export class MapScene extends Phaser.Scene {
         keys: [['C', 'cry'], ['H', 'paw'], ['N', 'name']],
         hints: [['L', 'legend'], ['Enter', 'go']],
       };
-      const keyActs: Record<string, () => void> = { C: doCry, H: doHand, N: doName, R: () => this.toggleRivalReport(), T: () => this.toggleTrackPage(), D: () => this.toggleDossier(), F: () => this.toggleFieldNotes(), O: () => this.popToggle('roll') };
+      const keyActs: Record<string, () => void> = { Tab: () => this.wheelOpen(false), C: doCry, H: doHand, N: doName, R: () => this.toggleRivalReport(), T: () => this.toggleTrackPage(), D: () => this.toggleDossier(), F: () => this.toggleFieldNotes(), O: () => this.popToggle('roll') };
       this.rxView = mountRedux(this, {
         render: (c) => {
           if (this.rxHeal && c.ph) return phHeal(c.ph, this.rxHeal.model);
@@ -1338,6 +1424,7 @@ export class MapScene extends Phaser.Scene {
           if (!c.ph) return mapView(c, model) + this.pauseHtml() + (this.rxMenu ? nodeMenuView(this.rxMenu) : '');
           // Phantom: the pause menu is a page of its own; the node menu stands over the map.
           if (this.rxPause) return this.pausePhantom(c.ph, model);
+          if (this.rxWheel) return phInto(phMap(c.ph, model), phWheel({ items: this.wheelItems(), index: this.rxWheel.index, held: this.rxWheel.held, spin: this.rxWheel.spin }));
           return phInto(phMap(c.ph, model), this.rxMenu ? phNodeMenu(this.rxMenu) : '');
         },
         acts: {
@@ -1351,16 +1438,30 @@ export class MapScene extends Phaser.Scene {
           menu: (k) => this.menuPick(Number(k)),
           confirm: (k) => this.pauseAsk(Number(k)),
           pauseCard: () => this.pauseCard(false),
+          wheel: (k) => this.wheelPick(Number(k)),
           popTab: (i) => this.popPick('tab', Number(i)),
           popPick: (i) => this.popPick('pick', Number(i)),
           bracket: () => this.popClose(),
           bracketPage: (i) => { if (this.rxPop?.kind === 'bracket') { this.rxPop.page = Math.max(0, Math.min(4, Number(i) || 0)); this.rxView?.refresh(); } },
           bracketWatch: () => this.watchLast(),
         },
-        overs: { menuOver: (i) => this.menuFocus(Number(i)), over: (i) => { if (!this.busy && !this.picker && Number(i) !== this.index) this.focus(Number(i)); }, popOver: (i) => this.popPick('pick', Number(i)), pauseOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask === null && k >= 0 && k !== p.index) { p.index = k; this.rxView?.refresh(); } }, confirmOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask !== null && (k === 0 || k === 1) && k !== p.ask) { p.ask = k; this.rxView?.refresh(); } } },
+        overs: { wheelOver: (i) => this.wheelPoint(Number(i)), menuOver: (i) => this.menuFocus(Number(i)), over: (i) => { if (!this.busy && !this.picker && Number(i) !== this.index) this.focus(Number(i)); }, popOver: (i) => this.popPick('pick', Number(i)), pauseOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask === null && k >= 0 && k !== p.index) { p.index = k; this.rxView?.refresh(); } }, confirmOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask !== null && (k === 0 || k === 1) && k !== p.ask) { p.ask = k; this.rxView?.refresh(); } } },
         // Resting the pointer on a party Pokémon shows its Ability card (the mock-ups' Pokémon info card).
         tip: hoverTips((key) => { if (this.rxPop) return; this.rxCard = key; this.rxView?.refresh(); }),
       });
+      // Phantom UI: the quick wheel. TAB down opens it, TAB up opens the lit slot; the key never moves the browser's focus.
+      if (phantomOn()) {
+        this.rxModel.keys = [...this.rxModel.keys, ['Tab', 'wheel']];
+        const kb = this.input.keyboard;
+        const tabDown = (e: KeyboardEvent): void => { if (!e.repeat && !runLogOpen()) this.wheelOpen(true); };
+        const tabUp = (): void => this.wheelRelease();
+        const lost = (): void => this.wheelClose(false);
+        kb?.addCapture('TAB');
+        kb?.on('keydown-TAB', tabDown);
+        kb?.on('keyup-TAB', tabUp);
+        window.addEventListener('blur', lost);
+        this.events.once('shutdown', () => { kb?.off('keydown-TAB', tabDown); kb?.off('keyup-TAB', tabUp); kb?.removeCapture('TAB'); window.removeEventListener('blur', lost); });
+      }
       // The old pop-ups (legend, reports, the node menu, the bracket) still draw on the canvas: show it while one is open.
       const sync = (): void => this.rxView?.visible(!(this.report || this.fieldNotes || this.nodeMenuPanel || this.bracket || this.rxWatching));
       this.events.on('postupdate', sync);
@@ -1372,6 +1473,7 @@ export class MapScene extends Phaser.Scene {
     onInputAction(this, (action) => {
       if (this.rxView && this.time.now === this.rxPopAt && action !== 'back' && action !== 'confirm') return;
       if (this.rxHeal) { if (action === 'confirm' || action === 'back') this.rxHeal.done(); return; }
+      if (this.rxWheel) return this.wheelInput(action);
       if (this.rxPause) return this.pauseInput(action);
       if (this.rxMenu) return this.menuInput(action);
       if (this.rxPop) {

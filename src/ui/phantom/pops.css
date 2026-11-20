@@ -176,3 +176,27 @@
 @keyframes ph-tc-badge{from{transform:rotate(45deg) scale(0)}to{transform:rotate(45deg) scale(.8)}}
 .phx .phs[data-liv=fantasia],.phx .phs[data-liv=velvet]{ & .ph-tc-stamp{rotate:0deg;background:none;color:var(--k);box-shadow:inset 0 0 0 1px var(--k)} }
 .phx .phs[data-liv=channel]{ & .ph-tc-stamp{border-radius:10px} }
+
+/* The run log page and the map's quick wheel (screens/system.ts). */
+.phx .phs{
+  & .ph-lg{top:128px}
+  & .ph-lr{cursor:pointer}
+  & .ph-lr-st{border-bottom-color:var(--red)} & .ph-lr-st b{color:var(--gold)} & .ph-lr-st .txt{font:400 26px/1.05 var(--f-disp);text-transform:uppercase;letter-spacing:.02em}
+  & .ph-lr.on.ph-lr-st b{color:var(--accw)}
+  & .ph-lr.on.pick .txt{color:var(--k)} & .ph-lr.on.gain .txt{color:var(--k)}
+  & .ph-lg-bar i{transition:top .18s,height .18s}
+  & .ph-lg-n{position:absolute;right:60px;top:572px;font:800 15px/1 var(--f-cond);letter-spacing:.14em;color:var(--w);opacity:.8;animation:ph-inUp .3s .2s both}
+  & .ph-wh{position:absolute;inset:0;z-index:90}
+  & .ph-wh-dim{position:absolute;inset:0;background:color-mix(in srgb,var(--k) 82%,transparent);animation:ph-wh-dim .2s both}
+  & .ph-wi{transition:scale .12s,background-color .12s}
+  & .ph-wi.off{opacity:.5} & .ph-wi.off.on{background:var(--k);color:var(--w)}
+  & .ph-wh-c .txt{font-size:19px;line-height:1.2}
+  & .ph-wh-needle{position:absolute;left:640px;top:352px;width:0;height:0;transition:rotate .16s cubic-bezier(.2,1.3,.4,1);animation:ph-wh-dim .25s .1s both}
+  & .ph-wh-needle i{position:absolute;left:170px;top:-13px;width:52px;height:26px;background:var(--red);clip-path:polygon(0 0,100% 50%,0 100%,22% 50%);animation:ph-wh-nudge 1s ease-in-out infinite}
+  & .ph-wh-hint{z-index:1}
+  & .ph-wh .burst,& .ph-wh .wh-ring,& .ph-wh-needle,& .ph-wh-c,& .ph-wh-hint{pointer-events:none}
+}
+.phx .phs[data-liv=fantasia] .ph-wh-needle i,.phx .phs[data-liv=velvet] .ph-wh-needle i{background:var(--gold);left:150px}
+.phx .phs.still .ph-wh-needle i{animation:none}
+@keyframes ph-wh-dim{from{opacity:0}}
+@keyframes ph-wh-nudge{0%,100%{translate:0 0}50%{translate:7px 0}}
