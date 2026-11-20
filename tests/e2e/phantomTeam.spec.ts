@@ -100,7 +100,8 @@ test('Phantom UI: Party, Summary, Bag and PC of a run are Phantom pages', async 
   // PC: the party down the side, a slot per place, and the lit Pokémon's card.
   await mapButton(page, 'PC');
   await onPage(page, 'Map', 'box');
-  await expect(map.locator('.bx-party .bxc')).toHaveCount(4);
+  await expect(map.locator('.bx-party .bxc:not(.e)')).toHaveCount(4);
+  await expect(map.locator('.bx-party .bxc.e')).toHaveCount(2);
   await expect(map.locator('.bx .bxc.on')).toHaveCount(1);
   await expect(map.locator('.bx-d .blade.on')).toHaveText('Move to party');
   // The lit Pokémon's other buttons: its Summary, and a held item for it (none is free in the Bag yet).
