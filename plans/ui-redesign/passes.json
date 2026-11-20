@@ -595,5 +595,25 @@
   "q3": "Yes, six for the expedition: drafting three from six, the rental team with its moves, a recruit stop, the Mega-energy deposit with its charge meter, the research station, and a side-by-side page for Extract now against Keep going.",
   "q4": "Unchanged.",
   "q5": "Yes. Cries are how Pokémon speak, and rental teams and drafts come straight from the series' battle facilities."
+ },
+ "36": {
+  "name": "New areas 10 · Case File",
+  "label": "New areas · pass 10 of 25",
+  "big": "Know your enemy. Every special screen carries an intel chip with what the foe is weak to, and the helper's strip becomes a paper field note clipped to the screen. The evil team gets its whole story as pages, pinned to a cork board you can open from any of its stops.",
+  "pages": [
+   "Evil Team · Case File",
+   "Evil Team · Evidence",
+   "Evil Team · An Executive",
+   "Evil Team · The Offer",
+   "Evil Team · The Inside Route",
+   "Evil Team · Final Choice",
+   "Evil Team · The Hideout",
+   "Evil Team · The Boss"
+  ],
+  "q1": "Yes. A cork board with seven pinned cards and red pins is the most characterful page in the set, and the paper notes break up all the glossy panels.",
+  "q2": "Pass 9 let the enemy talk. This pass lets you study them: weaknesses on every screen and one board that shows the whole seven-encounter story at a glance.",
+  "q3": "Yes, eight. The evil team had three pages; it now has a page for each turning point, including the Offer and the Inside route with its Acts, Operations, Trust and four endings.",
+  "q4": "The Case File is the evil team's own menu page: J opens it from any of their stops, the same key as the journal.",
+  "q5": "Yes. A grunt, an executive who comes back, a hideout cleared room by room and the Boss in his office is the classic evil-team arc."
  }
 }
