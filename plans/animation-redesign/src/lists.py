@@ -109,6 +109,9 @@ XN = [
  ('Screens', 'Update log and tutorial', 'The update log unrolls from the top. In the tutorial a Rotom arrow hops to whatever it is talking about.'),
  ('World', 'Safari Park', 'Walking uses the Hub Town rules. A thrown ball uses the Catch arc, and bait and rocks get their own small arcs.'),
 ]
+def steps(c):
+    I = c.get('ideas') or [[c['first'], c['idea']]]
+    return I[0][1] if len(I) == 1 else ' '.join('Pass %d: %s' % (p, t) for p, t in I)
 def passes(c): return 'pass %d' % c['first'] if c['first'] == c['last'] else 'pass %d, improved up to pass %d' % (c['first'], c['last'])
 def build(kind):
     by = collections.OrderedDict((g, []) for g in GROUPS)
@@ -117,12 +120,13 @@ def build(kind):
         isR = c['id'] in R
         if (kind == 'R') != isR: continue
         tag, where = R.get(c['id'], ('', ''))
-        by[c['g']].append(dict(t=c['t'], today=c['now'], idea=c['idea'], see='%s, clip "%s"' % (passes(c), c['t']), tag=tag, where=where, note=NOTE.get(c['id'], '')))
+        by[c['g']].append(dict(id=c['id'], t=c['t'], today=c['now'], idea=steps(c), see='%s, clip "%s"' % (passes(c), c['t']), tag=tag, where=where, note=NOTE.get(c['id'], '')))
     if kind == 'R':
         for g, t, today, idea, tag, where in XR: by[g].append(dict(t=t, today=today, idea=idea, see='', tag=tag, where=where, note=''))
     else:
         for g, t, idea in XN: by[g].append(dict(t=t, today='No motion of its own was found in the survey.', idea=idea, see='', tag='', where='', note=''))
     return collections.OrderedDict((g, v) for g, v in by.items() if v)
+PAGE = {}
 def write(kind, name, title, intro):
     by = build(kind); n = sum(len(v) for v in by.values()); need = sum(1 for v in by.values() for e in v if e['tag'] == 'need'); mock = sum(1 for v in by.values() for e in v if e['see'])
     L = ['# ' + title, '', intro.format(n=n, need=need, want=n - need, mock=mock, nomock=n - mock), '', '| Section | Entries |', '|---|---|']
@@ -137,7 +141,8 @@ def write(kind, name, title, intro):
             if e['where']: L.append('- **In the game:** `' + e['where'] + '`')
             if e['note']: L.append('- **Note:** ' + e['note'])
             L.append('')
-    open(OUT + name, 'w', encoding='utf8').write('\n'.join(L).rstrip() + '\n'); return n, need, mock
+    open(OUT + name, 'w', encoding='utf8').write('\n'.join(L).rstrip() + '\n'); PAGE[kind] = [[GNAME.get(g, g), v] for g, v in by.items()]; return n, need, mock
 r = write('R', 'REANIMATE.md', 'What to reanimate', 'Everything in the main game that already moves and should be animated again. {n} entries. Evil Mode and Dominion are left out, and so are Pokémon sprite frames, trainer throw frames and the move animation packs, which are kept as they are.\n\nEach entry says what the game does today, what the redesign does, where to watch it in the mockups (`index.html`, or the live page), and where the code is. **(need)** marks the {need} entries that have to change: your six notes, gaps where the game shows nothing useful, and the two rules everything else depends on. **(want)** marks the {want} that work today and would simply be better. {mock} entries have a mockup clip; {nomock} are described only.\n\nSuggested order to build: the two rules (Reduced motion, Skip) first, then your six notes, then Battle basics, then the rest in the order of this page.')
 n = write('N', 'NEW_ANIMATIONS.md', 'New animations', 'Moments in the main game that have no animation of their own today: a line of text, a number, a hard cut, or nothing. {n} entries. Evil Mode and Dominion are left out.\n\nEach entry says what happens today, what the new animation is, and where to watch it in the mockups. {mock} entries have a mockup clip; {nomock} are described only. None of these changes a battle result: they only show what the game already decided. The one exception is marked with a note (Raid Barrier), because it would need a new rule.')
 print(r, n, r[0] + n[0])
+json.dump(PAGE, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'lists.json'), 'w', encoding='utf8'), ensure_ascii=False)

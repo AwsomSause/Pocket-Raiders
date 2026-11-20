@@ -87,3 +87,15 @@ body.bare #vw-wrap{width:960px;height:540px;border-radius:0;box-shadow:none}
 #vw-capbar{display:none}
 body.cap #vw-capbar{display:block;width:960px;height:44px;background:#12141b;color:#eef0f6;font:500 17px/44px 'M PLUS Rounded 1c',sans-serif;padding:0 16px;white-space:nowrap;overflow:hidden}
 body.cap #vw-capbar b{color:#ffcb05;font:400 22px/44px 'Jersey 15',sans-serif;letter-spacing:.04em;margin-right:14px}
+#vw-lists{display:grid;gap:10px;margin-top:12px}
+#vw-lists details{background:var(--vpanel);border:1px solid var(--vline);border-radius:10px;padding:10px 18px}
+#vw-lists summary{font:400 24px/1.2 'Jersey 15',sans-serif;color:var(--vacc);cursor:pointer;letter-spacing:.03em}
+#vw-lists h3{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--vmute);margin:18px 0 6px}
+#vw-lists ol{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+#vw-lists li{border-top:1px solid var(--vline);padding-top:8px;max-width:90ch}
+#vw-lists p{margin:2px 0;color:var(--vmute)}
+#vw-lists p b{color:var(--vfg);margin-right:6px}
+#vw-lists p.t{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+#vw-lists p.t i{font-style:normal;font-size:11px;text-transform:uppercase;letter-spacing:.06em;border:1px solid var(--vline);border-radius:9px;padding:1px 7px}
+#vw-lists p.t i.need{color:var(--vacc);border-color:var(--vacc)}
+

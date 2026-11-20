@@ -146,7 +146,7 @@ Each entry says what happens today, what the new animation is, and where to watc
 
 ### 22. End-of-turn Damage
 - **Today:** Burn, poison, Leech Seed, recoil and weather damage only show a number. Nothing plays on the Pokémon.
-- **New animation:** Residual damage now has a look for each cause; see Burn, Poison and End of Turn.
+- **New animation:** Pass 3: A small version of the type impact, a flinch and a short drain. Fast, because it happens every turn: 0.5s each. Pass 8: Residual damage now has a look for each cause; see Burn, Poison and End of Turn.
 - **See it:** pass 3, improved up to pass 8, clip "End-of-turn Damage"
 
 ### 23. Weather Clears

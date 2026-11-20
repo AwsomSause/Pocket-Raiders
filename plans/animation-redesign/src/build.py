@@ -21,6 +21,7 @@ def main():
     notes = json.load(open(os.path.join(HERE, 'notes.json'), encoding='utf8'))
     maxp = max(int(k) for k in notes)
     js = 'const SPR=%s;\nconst NOTES=%s;\n' % (read('sprites.json'), json.dumps(notes, ensure_ascii=False))
+    js += 'const LISTS=%s;\n' % (read('lists.json') if os.path.exists(os.path.join(HERE, 'lists.json')) else 'null')
     js += read('kit.js') + '\n' + read('fx.js')
     for n in range(1, maxp + 1):
         p = 'p%02d.js' % n
@@ -39,7 +40,7 @@ def main():
             '<ol id="vw-beats" class="vw-ui" aria-label="Timing"></ol>\n'
             '<div class="vw-row vw-ui"><span id="vw-cur"></span><span>Arrow keys change clip, [ and ] change pass, Space pauses.</span></div>\n'
             '<div id="vw-about" class="vw-ui"></div>\n'
-            '<nav id="vw-clips" class="vw-ui" aria-label="Clips"></nav>\n<section id="vw-review" class="vw-ui"></section>\n</div>\n')
+            '<nav id="vw-clips" class="vw-ui" aria-label="Clips"></nav>\n<section id="vw-review" class="vw-ui"></section>\n<section id="vw-lists" class="vw-ui"></section>\n</div>\n')
     open(os.path.join(ROOT, 'index.html'), 'w', encoding='utf8').write('<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">\n' + head + styles + '</head><body>\n' + body + '<script>\n' + js + '</script>\n</body></html>\n')
     if len(sys.argv) > 1: open(sys.argv[1], 'w', encoding='utf8').write(head + styles + body + '<script>\n' + js + '</script>\n')
     json.dump(notes, open(os.path.join(ROOT, 'passes.json'), 'w', encoding='utf8'), ensure_ascii=False, indent=1)

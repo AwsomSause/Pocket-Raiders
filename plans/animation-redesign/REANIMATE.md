@@ -30,46 +30,46 @@ Suggested order to build: the two rules (Reduced motion, Skip) first, then your 
 ## Battle basics
 
 ### 1. Send Out (want)
-- **Today:** The trainer slides in 0.52s, plays its throw frames, the ball flies 0.7s, the trainer fades off to the side.
-- **Redesign:** Entrances end with a cry sized to the Pokémon, and a heavy Pokémon shakes the screen and bounces the other side off its feet.
+- **Today:** The ball flies a fixed 0.7s arc, then the Pokémon scales up from 60% with a bounce. Both sides look the same.
+- **Redesign:** Pass 1: One clear order: ball leaves, ball lands, white flash and ring, the Pokémon grows out of the light and its colour fades in. Pass 2: The ball lands, squashes and bounces once before it opens. The Pokémon comes out tall and thin, lands flat and wide, and settles. Dust on both landings. Pass 3: The landing ring and a spray of sparks come in the Pokémon's own type colours: fire for Charizard, water for Blastoise. Pass 4: The rival skids in with dust, steps back and whips the ball. You slide in, wind up and release on the game's own throw frames, and the ball leaves from the hand. Each trainer steps out as their Pokémon lands. Pass 5: Plates fly in from their own sides with a spring instead of fading, and each line of text pops its bubble. Pass 7: The ground answers: the base dips and flashes under every landing. Pass 11: Entrances end with a cry sized to the Pokémon, and a heavy Pokémon shakes the screen and bounces the other side off its feet.
 - **See it:** pass 1, improved up to pass 21, clip "Send Out"
 - **In the game:** `src/ui/playerTrainer.ts:140, src/ui/aero.ts:76`
 
 ### 2. Recall (need)
 - **Today:** The Pokémon just fades out over 0.25s. No beam, no ball.
-- **Redesign:** Your trainer leans in from the edge holding the ball out, takes the Pokémon back and steps away.
+- **Redesign:** Pass 1: The classic red beam: the Pokémon turns red, a beam snaps back to your side and it shrinks away along it. Pass 2: The trainer side holds the ball out first. The Pokémon braces, then is pulled thin up the beam, and the ball jolts as it catches. Pass 4: Your trainer leans in from the edge holding the ball out, takes the Pokémon back and steps away.
 - **See it:** pass 1, improved up to pass 4, clip "Recall"
 - **In the game:** `src/scenes/BattleScene.ts:5152`
 - **Note:** Gap in the survey: no ball-return picture exists.
 
 ### 3. Attack and Hit (want)
 - **Today:** A 24px lunge, a 60ms white fill, a colour flash and a 6-step shake. HP drains at the same time.
-- **Redesign:** Every battle now has its arena's life behind it, and big hits leave a mark on the ground.
+- **Redesign:** Pass 1: Lunge in, two white blinks and a knock-back on the target, then the HP bar drains while the number counts down. Pass 2: A wind-up lean back, a stretched dash, an 80ms freeze on contact, then the target squashes, is thrown back and springs upright. The HP plate jolts and a ghost bar shows what was lost. Pass 3: The user glows in the move's type before it goes, and the hit bursts in that type: electric bolts for Thunder Punch. Pass 5: The damage number springs out of the hit and a red SUPER EFFECTIVE! stamp slams on at an angle. The message bubble pops and shows a bouncing arrow when it is done. Pass 6: A super effective or critical hit now throws type-coloured rays behind the target (the game's own burst art, re-coloured). Pass 7: The target's base jolts with the hit, harder for a super effective or critical one. Pass 8: The air moves: pollen drifts through every outdoor battle and a cloud shadow slides across the ground. Pass 9: The message bubble grows a pointer that slides to whoever is acting: left for your Pokémon, right for the foe. Pass 12: Special moves are now fired, not lunged: the user rears back and a shot in the move's colour crosses the field. Big hits throw the target further. Pass 16: Hard hits now punch the camera in toward the target, and a knock-out gets a slow push. Pass 18: Every hit now lights the floor in its type's colour, and a big hit lights the other Pokémon too. Pass 19: Your trainer now reacts with a face and one word when a big hit lands, either way. Pass 21: Every battle now has its arena's life behind it, and big hits leave a mark on the ground.
 - **See it:** pass 1, improved up to pass 21, clip "Attack and Hit"
 - **In the game:** `src/ui/battleFx/battleFx.ts:367-424`
 
 ### 4. Faint (need)
 - **Today:** The sprite slides down 30px and fades in 0.4s. No last hit moment.
-- **Redesign:** When a foe falls, its experience now leaves it as lights and flies to your bar.
+- **Redesign:** Pass 1: The last hit lands, the bar empties, then the Pokémon sinks into the ground at its feet. Pass 2: A stagger left and right, the knees give, then the drop with a dust cloud. Pass 3: The last hit carries its type: embers for Flamethrower. Pass 7: The fainted side's base goes dark until the next Pokémon lands. Pass 11: It staggers back before it sinks. Pass 19: Your trainer cheers a knock-out and thanks a fallen partner. Pass 23: When a foe falls, its experience now leaves it as lights and flies to your bar.
 - **See it:** pass 1, improved up to pass 23, clip "Faint"
 - **In the game:** `src/scenes/BattleScene.ts:5133`
 - **Note:** Gap in the survey: no last-hit moment.
 
 ### 5. HP Bar (want)
 - **Today:** Drain time grows with the damage; a ghost bar follows. Colour changes snap.
-- **Redesign:** The bar flashes as it crosses into yellow and into red, and in the red it pulses with a slow glow around the plate.
+- **Redesign:** Pass 1: One steady 0.6s drain with an ease at both ends, and the number counts with it. Green, yellow and red change as the bar passes each mark. Pass 2: The bar snaps down fast, a white ghost bar holds for a beat and then catches up. The whole plate takes a small jolt. Pass 5: The bar flashes as it crosses into yellow and into red, and in the red it pulses with a slow glow around the plate.
 - **See it:** pass 1, improved up to pass 11, clip "HP Bar"
 - **In the game:** `src/ui/widgets.ts:547`
 
 ### 6. Standing (want)
 - **Today:** The game plays each Pokémon's own sprite frames and adds a small 0.9s up-down stretch.
-- **Redesign:** Each Pokémon now stands in its own way: Charizard hovers over a shrinking shadow, Blastoise breathes slow and deep.
+- **Redesign:** Pass 1: Keep the sprite frames. Slow the breath to 1.9s and squeeze the width a little as the body rises, so it reads as breathing, not bobbing. Pass 2: The breath is a little deeper and the shadow shrinks as the body rises. Pass 11: Each Pokémon now stands in its own way: Charizard hovers over a shrinking shadow, Blastoise breathes slow and deep.
 - **See it:** pass 1, improved up to pass 21, clip "Standing"
 - **In the game:** `src/ui/aero.ts:108`
 
 ### 7. Switch (want)
 - **Today:** The old Pokémon fades, the new one bounces in, and the info box slides 420px.
-- **Redesign:** Your trainer steps in for the recall and again for the throw, so a switch reads as one person doing two things.
+- **Redesign:** Pass 2: One unbroken move: beam back, the bar tucks down, the next ball is already in the air, the bar comes back with the new name. Pass 4: Your trainer steps in for the recall and again for the throw, so a switch reads as one person doing two things.
 - **See it:** pass 2, improved up to pass 11, clip "Switch"
 - **In the game:** `src/scenes/BattleScene.ts:1606, 5179`
 
@@ -87,7 +87,7 @@ Suggested order to build: the two rules (Reduced motion, Skip) first, then your 
 
 ### 10. Wild Encounter (want)
 - **Today:** Glass shutters close and open in 0.36s with a ball bloom, then the Pokémon is simply there.
-- **Redesign:** Now starts on the map: the stop pulses, the ball wipe shuts over it and opens on the arena, and the pass-5 entrance (dark shape, colour floods in with the cry, plate flies in) follows without a cut.
+- **Redesign:** Pass 5: Two flashes, the screen splits into bars that pull apart, and the wild Pokémon slides in as a dark shape. Its colour floods in with its cry, its plate flies in, and only then do you throw. Pass 10: Now starts on the map: the stop pulses, the ball wipe shuts over it and opens on the arena, and the pass-5 entrance (dark shape, colour floods in with the cry, plate flies in) follows without a cut.
 - **See it:** pass 5, improved up to pass 21, clip "Wild Encounter"
 - **In the game:** `src/ui/battleFx/spectacle.ts:51`
 
@@ -122,7 +122,7 @@ Suggested order to build: the two rules (Reduced motion, Skip) first, then your 
 
 ### 15. Wind-up Tells (want)
 - **Today:** A marker on the user before the move, in three styles: quick, normal, strong.
-- **Redesign:** A strong move dims the arena and wraps the user in a rising aura while it charges, so you can feel the size of what is coming.
+- **Redesign:** Pass 3: The user glows in the move's type colour while a ring closes in at its feet. Quick moves barely flicker, strong moves pull sparks inward and make the ground tremble. Pass 6: A strong move dims the arena and wraps the user in a rising aura while it charges, so you can feel the size of what is coming.
 - **See it:** pass 3, improved up to pass 12, clip "Wind-up Tells"
 - **In the game:** `src/core/presentation/cues.ts (telegraph cue)`
 
@@ -146,7 +146,7 @@ Suggested order to build: the two rules (Reduced motion, Skip) first, then your 
 
 ### 19. Critical Hit (want)
 - **Today:** The same hit with a text line afterwards.
-- **Redesign:** A critical or super effective hit now gets one negative frame and a white star at the point of contact.
+- **Redesign:** Pass 12: At the moment of contact everything stops. Black bars close in from top and bottom, the camera jumps to the target, the colour drains for a quarter of a second, and then the hit lands with the yellow CRITICAL HIT stamp and a number half as big again. Pass 17: A critical or super effective hit now gets one negative frame and a white star at the point of contact.
 - **See it:** pass 12, improved up to pass 19, clip "Critical Hit"
 - **In the game:** `src/ui/battleFx/skillMoments.ts:67`
 
@@ -314,14 +314,14 @@ Suggested order to build: the two rules (Reduced motion, Skip) first, then your 
 
 ### 46. Trainer Intro (need)
 - **Today:** Bars scale in, the trainer slides 0.48s and a VS card shows.
-- **Redesign:** The Trainer Intro page from the UI mockups, moving: the two colours slam together, both trainers slide in, the VS badge spins in and thumps, the name tags rise with each team's balls and the trainer says their line. Then the page splits down its own slant and the first Pokémon are thrown out behind it without a cut.
+- **Redesign:** Pass 4: The trainer skids in, their name plate snaps out from behind them, and their Poké Balls drop onto the plate one by one with a bounce, so you can count the team before the fight. Pass 13: Every opposing trainer now arrives on a red and gold banner with speed lines. Pass 15: The Trainer Intro page from the UI mockups, moving: the two colours slam together, both trainers slide in, the VS badge spins in and thumps, the name tags rise with each team's balls and the trainer says their line. Then the page splits down its own slant and the first Pokémon are thrown out behind it without a cut.
 - **See it:** pass 4, improved up to pass 15, clip "Trainer Intro"
 - **In the game:** `src/ui/battleFx/spectacle.ts:51, src/ui/battleFx/vsScreens.ts:37`
 - **Note:** Kice note: use the trainer intro from the UI mockups.
 
 ### 47. Ace Call (need)
 - **Today:** A burst at the foe and the line "sends out their ace". The ace is just the last one standing.
-- **Redesign:** The Ace Call from the UI mockups, moving: the trainer speaks first, then the navy band slams across on its slant, their portrait pops, the ace's name wipes on with its chips, and the ace itself arrives on the band as a dark shape that flashes into colour under a star. The band leaves and the ace leaps off it onto the field.
+- **Redesign:** Pass 4: The ace is announced before it lands. The trainer comes back on, an ACE banner slams across, the ball is thrown higher and slower, and the landing is twice as big, with a star and an Ace tag on its plate. Pass 14: When a trainer speaks, the bubble gets a name tab and their face in their own colour. Pass 15: The Ace Call from the UI mockups, moving: the trainer speaks first, then the navy band slams across on its slant, their portrait pops, the ace's name wipes on with its chips, and the ace itself arrives on the band as a dark shape that flashes into colour under a star. The band leaves and the ace leaps off it onto the field.
 - **See it:** pass 4, improved up to pass 15, clip "Ace Call"
 - **In the game:** `src/scenes/BattleScene.ts:5200`
 - **Note:** Kice note: use the ace call from the UI mockups. Also the Ace rule: an ace must be announced.
@@ -364,21 +364,21 @@ Suggested order to build: the two rules (Reduced motion, Skip) first, then your 
 
 ### 53. Mega Evolution (need)
 - **Today:** A 4.3s scene: pink crystal, shatter, white flash. With Fast Mega on, a short generic cut-in.
-- **Redesign:** Remake 5, goal: one signature picture. Mega Evolution is glass. A double helix of colour climbs Charizard on the field, cracks run from it to every edge of the battle screen, and the screen goes black. Then the new picture slams together out of twenty-four shards, the corners first and Mega Charizard X's face last. When it is over the picture shatters again, and the pieces fall away from the field.
+- **Redesign:** Pass 6: The bracelet throws six colours into the Pokémon, the game's orb closes around it and cracks while the arena dims, then it shatters outward and the Mega form lands with a roar. The Mega mark spins up and drops onto the name bar. 3.6s. Pass 16: Remake 1, goal: scale. The camera pushes in on Charizard and the cut-in page opens out of it until it is the whole screen. The orb closes around a Charizard five times its battle size while twelve streaks of colour drive in from every edge, cracks, and blows apart across the full width. Mega Charizard X lands on the page, the title slams, the four facts are dealt, and the page closes back onto the field where the Mega now stands. Pass 17: Remake 2, goal: impact. No easing, only cuts. Black frame: the bracelet in white. The battle in negative for three frames. Three comic panels slam on at an angle: Charizard's eyes, your raised arm, the word MEGA. Then a black-and-white frame of Charizard, the orb already cracked, three hard cracks with lightning, and it blows out in black and white shards before the colour arrives with the Mega form. Pass 18: Remake 3, goal: light. The arena goes dark and the Mega Bracelet is the only light in it. A beam carries that light to Charizard, who starts to glow, and the glow swallows the screen. Inside it the orb is a lamp: the Mega rainbow fans out of it as six real shafts of light, turning, and white needles leak out through the cracks. Mega Charizard X arrives as the exposure settles, and back on the field the arena stays lit in its colour. Pass 19: Remake 4, goal: together. The screen splits: you on the left raising the Mega Bracelet, Charizard on the right, a white seam between you and five heartbeats that speed up. The halves open like doors and you are standing side by side. The Key Stone lights in your hand, the Mega Stone answers on Charizard's chest, and six strands of colour run between the two before the orb closes. Afterwards you call out and Mega Charizard X answers. Pass 20: Remake 5, goal: one signature picture. Mega Evolution is glass. A double helix of colour climbs Charizard on the field, cracks run from it to every edge of the battle screen, and the screen goes black. Then the new picture slams together out of twenty-four shards, the corners first and Mega Charizard X's face last. When it is over the picture shatters again, and the pieces fall away from the field.
 - **See it:** pass 6, improved up to pass 20, clip "Mega Evolution"
 - **In the game:** `src/ui/battleFx/megaScene.ts:42, src/ui/battleFx/cinematics.ts:331`
 - **Note:** Kice note: remade five times (passes 16 to 20).
 
 ### 54. Terastallize (need)
 - **Today:** A 2.2s scene: the crystal shakes and breaks; afterwards a jewel bobs 4px above the Pokémon.
-- **Redesign:** Remake 5, goal: one signature picture. Terastallizing goes inside the jewel. One crystal closes over Charizard on the field, and the camera goes into it: twelve mirrored slices of Charizard turn like a kaleidoscope, changing colour as they go, then fold into a single point of light that becomes the crown.
+- **Redesign:** Pass 6: Crystals from the game's Tera art grow out of the ground around the Pokémon one after another, rainbow rings pass through, and it all bursts into shards. The Tera crown drops onto its head in the new type's colour and stays, bobbing, with a soft glint on the sprite. Pass 16: Remake 1, goal: scale. Five crystals as tall as the screen punch up from the bottom edge one after another, each one jolting the picture, until Charizard is walled in. Pulse rings pass through, everything shatters across the whole screen, and the Terastallized form lands on the cut-in page under its jewel. Pass 17: Remake 2, goal: impact. The same hard-cut language: item in white on black, the battle in negative, three panels with the word TERA. The five crystals do not grow, they are simply there, one every two frames, each with a flash; one negative frame, and they are gone in shards. Pass 18: Remake 3, goal: light. Lights out, the Tera Orb glows, a beam reaches Charizard. Five crystals rise as dark shapes. One white beam comes in from the corner, enters the middle crystal and leaves the other side as a rainbow; the crystals light up one after another, and everything shatters into coloured facets. Afterwards the field is lit pale blue. Pass 19: Remake 4, goal: together. After the split screen and the heartbeats, you throw the Tera Orb: it arcs over Charizard's head, bursts into a beam of light, and the crystals grow where it lands, lighting you from the side. Afterwards you call out and Charizard answers. Pass 20: Remake 5, goal: one signature picture. Terastallizing goes inside the jewel. One crystal closes over Charizard on the field, and the camera goes into it: twelve mirrored slices of Charizard turn like a kaleidoscope, changing colour as they go, then fold into a single point of light that becomes the crown.
 - **See it:** pass 6, improved up to pass 20, clip "Terastallize"
 - **In the game:** `src/ui/battleFx/teraScene.ts:42`
 - **Note:** Kice note: remade five times (passes 16 to 20).
 
 ### 55. Dynamax (need)
 - **Today:** A 2.4s scene: recall, the band rises, the ball falls and shakes four times, a silhouette grows, the red giant roars.
-- **Redesign:** Remake 5, goal: one signature picture. Dynamax is one long camera move. You throw the swollen ball up out of the top of the screen and the camera follows it. Cut: your shoes, and a foot the size of a house. The camera climbs the giant without a cut, through two layers of storm cloud, and stops at its face above the weather as it roars.
+- **Redesign:** Pass 6: The ball swells in your hand until it is too big to hold, you heave it up and over, and where it lands the Pokémon rises through red storm clouds while the camera pulls back to fit it. Its HP bar doubles in front of you and three turn lamps light. Pass 7: The game's raid storm spiral now turns behind the giant. Pass 16: Remake 1, goal: scale. Storm clouds roll in at the top and Charizard simply keeps growing: past the title, past the top of the screen, while the camera tilts up to follow and lightning walks across behind it. It lands on the cut-in page as the giant, and back on the field the camera has pulled out to fit it. Pass 17: Remake 2, goal: impact. After the panels and the word MAX, Charizard does not swell, it jumps: three sizes in three cuts, each with a shock ring across the floor and a bolt behind it, the third one past the top of the screen. One negative frame and the giant is on the page. Pass 18: Remake 3, goal: light. Lights out, the Dynamax Band glows. A column of red light comes down out of the storm cloud and Charizard's silhouette grows inside it while lightning lights the cloud from within. The column widens until it is the whole screen. Afterwards the arena is lit red from the giant. Pass 19: Remake 4, goal: together. After the split screen, you call Charizard back, the ball swells in your hand, and you hurl it over your shoulder. It bursts behind you and the giant rises with you standing small in front of it, in its shadow. That picture of the two sizes is the cutscene. Pass 20: Remake 5, goal: one signature picture. Dynamax is one long camera move. You throw the swollen ball up out of the top of the screen and the camera follows it. Cut: your shoes, and a foot the size of a house. The camera climbs the giant without a cut, through two layers of storm cloud, and stops at its face above the weather as it roars.
 - **See it:** pass 6, improved up to pass 20, clip "Dynamax"
 - **In the game:** `src/ui/battleFx/dynamaxScene.ts:52, src/ui/battleFx/cinematics.ts:516`
 - **Note:** Kice note: remade five times (passes 16 to 20).
@@ -391,7 +391,7 @@ Suggested order to build: the two rules (Reduced motion, Skip) first, then your 
 
 ### 57. Z-Move (need)
 - **Today:** A 1.9s cut-in: white silhouette, speed lines, a rainbow Z ring and the move title sliding in.
-- **Redesign:** Remake 5, goal: one signature picture. The Z-Move is the cutscene. Charizard leaves the top of the screen. Cut to the sky looking down: Blastoise small on the field, a shadow growing around it, and a fireball the size of the screen coming down. The damage is counted out in huge numbers, the move's title card holds, and Charizard lands back on a scorched field.
+- **Redesign:** Pass 6: Trainer and Pokémon charge together: light flows from your Z-Ring into the Pokémon, a giant Z burns in behind it, the move's own title art slams across, and the hit lands as three blasts with the whole screen shaking. Pass 16: Remake 1, goal: scale. A rainbow Z spins in until it is taller than the screen, Z-Power streams in from every side, and Charizard burns white in the middle of it. The cut-in page shows the pose, the ring and the move's own title art, then closes onto the field for the hit. Pass 17: Remake 2, goal: impact. After the panels, the Z is not a shape that spins in: it is cut into the screen in three slashes, each with a flash, and holds for a breath over the black-and-white Charizard before the colour and the title art hit. Pass 18: Remake 3, goal: light. Lights out, the Z-Ring glows. A sun rises behind Charizard's silhouette, its rays turning, and the Z is written across it in three strokes of light. A lens flare cuts the screen and the silhouette burns white. The hit lands in a gold-lit arena. Pass 19: Remake 4, goal: together. After the split screen, you and Charizard strike the Z-pose in step: One, Two, Z. Each beat draws one stroke of the Z behind you both, and your Z-Power streams from your hand across to Charizard until it burns gold. Pass 20: Remake 5, goal: one signature picture. The Z-Move is the cutscene. Charizard leaves the top of the screen. Cut to the sky looking down: Blastoise small on the field, a shadow growing around it, and a fireball the size of the screen coming down. The damage is counted out in huge numbers, the move's title card holds, and Charizard lands back on a scorched field.
 - **See it:** pass 6, improved up to pass 20, clip "Z-Move"
 - **In the game:** `src/ui/battleFx/zMoveScene.ts:47, src/ui/battleFx/cinematics.ts:742`
 - **Note:** Kice note: remade five times (passes 16 to 20).
@@ -518,7 +518,7 @@ Suggested order to build: the two rules (Reduced motion, Skip) first, then your 
 
 ### 75. Event Choice (need)
 - **Today:** The choices appear as a list in place of the text.
-- **Redesign:** On the corrected Event Choice page: the whole text box stays where it is, so you can still read what you were asked. The scene dims, the people step back into it, and the three choices are dealt in above the box like a hand of cards. The one you pick lifts, flashes and flies into the progress strip; the others fall away. Every piece is see-through, so nothing drags a cut-out along with it.
+- **Redesign:** Pass 9: The scene dims and steps back. What was just said shrinks into a chip at the top so you can still read it, and the choices are dealt up from the bottom like cards. The one you pick lifts, flashes and flies into the progress strip; the others fall away. Pass 15: On the corrected Event Choice page: the whole text box stays where it is, so you can still read what you were asked. The scene dims, the people step back into it, and the three choices are dealt in above the box like a hand of cards. The one you pick lifts, flashes and flies into the progress strip; the others fall away. Every piece is see-through, so nothing drags a cut-out along with it.
 - **See it:** pass 9, improved up to pass 15, clip "Event Choice"
 - **In the game:** `src/ui/redux/screens/event.ts`
 - **Note:** Kice note: the choice has a cutout of a text bar.
@@ -536,8 +536,8 @@ Suggested order to build: the two rules (Reduced motion, Skip) first, then your 
 - **In the game:** `src/ui/redux/screens/event.ts`
 
 ### 78. Legendary Blessing (need)
-- **Today:** The game's own cutscene: a black screen, the blessing's object fades in on the left and bobs, and the tier, name, passage and effect fade in one after another over 13 seconds.
-- **Redesign:** The original cutscene, kept in its order and made holy. A bell tolls three times in the dark. Light comes down from above through a rose window, the object descends in it under a halo, and the Legendary appears behind it, vast and pale. The passage is written like scripture, one line at a time after an illuminated letter. Candles light, feathers fall, and at the end the light comes down on your partner, who bows under its own small halo.
+- **Today:** Three cards appear; the chosen one is highlighted.
+- **Redesign:** Pass 9: Three beams of light come down first and the cards descend inside them. The one you take rises and burns gold while feathers fall; the other two tip back into the dark. Its line of legend appears underneath, and the card flies up into the run strip. Pass 15: The original cutscene, kept in its order and made holy. A bell tolls three times in the dark. Light comes down from above through a rose window, the object descends in it under a halo, and the Legendary appears behind it, vast and pale. The passage is written like scripture, one line at a time after an illuminated letter. Candles light, feathers fall, and at the end the light comes down on your partner, who bows under its own small halo.
 - **See it:** pass 9, improved up to pass 15, clip "Legendary Blessing"
 - **In the game:** `src/scenes/BlessingScene.ts`
 - **Note:** Kice note: the original cutscene, remade holy. Overrides the UI mockups.
