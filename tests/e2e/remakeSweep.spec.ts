@@ -355,6 +355,8 @@ test('event choices: pick every choice of a sample of events', async ({ page }) 
   }, step);
   for (const [n, id] of ids.entries()) {
     for (let pick = 0; pick < 4; pick++) {
+      const here = await active(page);
+      if (here !== 'Event' && here !== 'Map') await restore(page, 'Map', undefined, []).catch(() => undefined);
       const ok = await page.evaluate(([id]) => {
         const p = (window as any).__pkr; const w = window as any;
         p.session.run = JSON.parse(w.__snap);
@@ -368,7 +370,7 @@ test('event choices: pick every choice of a sample of events', async ({ page }) 
       await page.waitForTimeout(500);
       for (let i = 0; i < 10 && (await page.locator('#rx .stage [data-act="pick"]').count()) === 0; i++) { await page.keyboard.press('Enter'); await page.waitForTimeout(300); }
       const choices = await page.locator('#rx .stage [data-act="pick"]').count();
-      if (pick >= choices) break;
+      if (pick >= choices) { if (pick === 0) log({ label: `choice ${id} none`, event: id, choices, now: await active(page), errors: errs.splice(0) }); break; }
       await page.locator('#rx .stage [data-act="pick"]').nth(pick).dispatchEvent('click');
       let shots = 0;
       const end = Date.now() + 20_000;
