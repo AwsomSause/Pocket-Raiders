@@ -156,7 +156,7 @@ test('the Boss\'s board: every page has a photo, and every page you can walk int
   // Every photo you can walk into, from the board (a click) and from the wheel (its place, then the page's own key).
   // It is the first evening of a new run.
   const want: Record<string, RegExp> = {
-    hq: /^hq$/, morning: /^hq$/, assign: /^hq$/, chair: /^hq$/, crew: /^crew$/, ledger: /^ledger$/, map: /^map$/, district: /^map$/,
+    hq: /^hq$/, morning: /^hq$/, assign: /^hq$/, chair: /^hq$/, crew: /^crew$/, ledger: /^ledger$/, map: /^map$/, district: /^district$/,
     card: /^map$/, takeover: /^map$/, base: /^base$/, rival: /^rival$/, hero: /^hero$/, voices: /^voices$/,
     persona: /^persona$/, pyramid: /^pyramid$/, squads: /^squads$/, reserve: /^reserve$/, desk: /^desk$/,
     menu: /^menu$/, settings: /^settings$/, rotom: /^settings$/,
@@ -192,6 +192,33 @@ test('the Boss\'s board: every page has a photo, and every page you can walk int
   await s.getByTestId('dom-pin-police').click();
   await expect(s.getByText('That page comes to you')).toBeVisible();
   await hereIs(page, 'hq');
+
+  // D29's Assign page: in the evening its photo says orders wait for the Morning; in the Morning it opens on a task.
+  await board();
+  await s.getByTestId('dom-pin-assign').click();
+  await expect(s.getByText('Orders are given in the Morning')).toBeVisible();
+  await hereIs(page, 'hq');
+  await s.getByTestId('dom-next').click();
+  await expect(s.getByTestId('dom-phase')).toHaveText('NIGHT');
+  await s.getByTestId('dom-next').click();
+  await expect(s.getByTestId('dom-phase')).toHaveText('MORNING');
+  for (let n = (await page.evaluate(() => (window as any).__pkr.session.run.expansion.dominion.crew.talks.length)); n > 0; n--) {
+    await s.getByTestId('dom-talk-0').click();
+    await expect.poll(() => page.evaluate(() => (window as any).__pkr.session.run.expansion.dominion.crew.talks.length)).toBe(n - 1);
+  }
+  await hereIs(page, 'morning');
+  await board();
+  await s.getByTestId('dom-pin-assign').click();
+  await hereIs(page, 'assign');
+  await expect(s.getByTestId('dom-as-give')).toBeVisible();
+  // From the Assign page the wheel's Region Map, then the District photo from there.
+  await holdQ(page, s);
+  await page.keyboard.press('Digit2');
+  await page.keyboard.up('KeyQ');
+  await hereIs(page, 'map');
+  await board();
+  await s.getByTestId('dom-pin-district').click();
+  await hereIs(page, 'district');
   expect(errors).toEqual([]);
 });
 

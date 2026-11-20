@@ -97,7 +97,7 @@ export const jumpable = (p: PageId): boolean => PINS.some((x) => x.id === p && x
 
 /** The page a wheel place or a board photo actually opens (Morning, Assign and The Chair are the HQ at that time of
  *  day; the District file and the Action Card live on the Region Map until D29 splits them out; Takeover is a card). */
-export const OPENS: Partial<Record<PageId, PageId>> = { morning: 'hq', assign: 'hq', chair: 'hq', district: 'map', card: 'map', takeover: 'map' };
+export const OPENS: Partial<Record<PageId, PageId>> = { morning: 'hq', chair: 'hq', card: 'map', takeover: 'map' };
 
 // ---------- the command wheel (m6) ----------
 
@@ -130,7 +130,7 @@ export function spotAt(dx: number, dy: number, hub: number): number | null {
 /** The spot a page sits under (Morning is the HQ, the Pyramid the Roster...), for the pointer's starting place. */
 export function spotOf(p: PageId | null): number | null {
   if (!p) return null;
-  const home: Partial<Record<PageId, PageId>> = { ...OPENS, base: 'hq', rival: 'hq', hero: 'hq', voices: 'hq', founding: 'hq', desk: 'rotom', persona: 'crew', pyramid: 'crew', squads: 'crew', settings: 'menu' };
+  const home: Partial<Record<PageId, PageId>> = { ...OPENS, assign: 'hq', district: 'map', base: 'hq', rival: 'hq', hero: 'hq', voices: 'hq', founding: 'hq', desk: 'rotom', persona: 'crew', pyramid: 'crew', squads: 'crew', settings: 'menu' };
   const i = SPOTS.findIndex((s) => s.id === (home[p] ?? p));
   return i < 0 ? null : i;
 }

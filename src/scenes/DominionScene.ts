@@ -888,7 +888,7 @@ export class DominionScene extends Phaser.Scene {
     this.menu.close();
     // Leave the page you are on the way its own keys would (overlays and sub-pages closed), from the HQ.
     if (this.voices.on) this.voices.close();
-    if (this.screen === 'crew') this.crew.tab(0);
+    if (this.screen === 'crew' || this.screen === 'assign') this.crew.tab(0);
     else if (this.res.owns()) this.res.tab(0);
     else if (this.sq.owns()) this.sq.tab(0);
     this.screen = 'hq';
@@ -896,6 +896,9 @@ export class DominionScene extends Phaser.Scene {
     this.garage = false;
     switch (to) {
       case 'map': return this.tab(1);
+      // D29's pages: the District file for the district under the map's cursor, and Assign on the Morning's task.
+      case 'district': this.tab(1); return this.openDistrict();
+      case 'assign': this.notice = this.crew.assignHere(); break;
       case 'crew': return this.tab(2);
       case 'reserve': return this.tab(3);
       case 'ledger': return this.openLedger();
