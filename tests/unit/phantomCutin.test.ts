@@ -82,7 +82,7 @@ describe('the Phantom cutscene card', () => {
     expect(count(html, '<i class="on"></i>')).toBe(3);
     expect(html).toContain('<span>Moment</span>');
     expect(html).toContain('data-act="next"');
-    expect(html).toMatch(/<b class="w">Esc<\/b>skip/);
+    expect(html).toMatch(/<b>X<\/b>skip/);
   });
 
   it('a moment that cannot be skipped shows no key, and an empty one no empty panel', () => {

@@ -158,7 +158,7 @@ describe('the quick wheel', () => {
     const tap = phWheel(wheel({ held: false, index: 2 }));
     expect(tap).toContain('Not yet');
     expect(tap).toContain('Rivals note');
-    expect(tap).toMatch(/data-act="wheel" data-arg="2"><b[^>]*>Enter<\/b>/);
+    expect(tap).toMatch(/data-act="wheel" data-arg="2"><b[^>]*>Z<\/b>/);
     expect(phWheel(wheel({ held: false }))).toContain('Enter to open');
     // From the top one step left: the needle turns back 45 degrees, not forward 315.
     expect(phWheel(wheel({ index: 7, spin: -1 }))).toContain('rotate:-135.0deg');
