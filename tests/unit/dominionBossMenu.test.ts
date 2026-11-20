@@ -163,7 +163,7 @@ describe('D27 Boss Menu', () => {
     const html = bossMenuView(m, null);
     expect(html).toContain('Boss Menu');
     expect(html).toContain('class="blade on"');
-    expect(html).toContain('<span class="key q4">Q</span>');
+    expect(html).toContain('<span class="key q4" data-act="wheel" data-arg="" style="cursor:pointer">Q</span>');
     expect(html).not.toMatch(/Claude|\bAI\b/);
   });
 

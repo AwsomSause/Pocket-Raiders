@@ -47,6 +47,10 @@ export class CrewController {
   private talking(): boolean {
     return !!this.block()?.crew?.talks.length;
   }
+  /** D28: the personality card is up (its own page on the board and the shutter). */
+  personaOn(): boolean {
+    return this.persona && this.host.screenName === 'crew' && !this.talking();
+  }
   /** The HQ draws the Morning while it's morning (D3 replaces D1's Night Report panel). */
   owns(): boolean {
     return this.host.screenName === 'hq' && this.block()?.phase === 'morning';

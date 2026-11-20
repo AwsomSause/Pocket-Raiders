@@ -24,8 +24,8 @@ export function stage(inner: string, style = '', cls = 'vign grain', sig: '' | '
   ${nova}</div></div>`;
 }
 
-/** Round 4 (D26): every in-game key strip starts with Q, held for the command wheel (D28 builds the wheel). */
-export const WHEEL_KEY = '<span class="key q4">Q</span><span>Wheel</span>';
+/** Round 4 (D26): every in-game key strip starts with Q, held for the command wheel (D28); a tap on the chip opens it too. */
+export const WHEEL_KEY = '<span class="key q4" data-act="wheel" data-arg="" style="cursor:pointer">Q</span><span>Wheel</span>';
 
 /** D7: the mark's outline for each logo (the emblem on the top bar, the door, the title tower). */
 const LOGO_CLIP: Record<string, string> = {

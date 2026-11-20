@@ -31,6 +31,9 @@ import { SpyController } from './dominion/spyController';
 import { DebateController } from './dominion/debateController';
 import { PoliceController } from './dominion/policeController';
 import { VoicesController } from './dominion/voicesController';
+import { NavController, type Here } from './dominion/navController';
+import { PAD_WHEEL_EVENT } from '../ui/gamepad';
+import { jumpable, OPENS, type PageId } from '../core/dominion/nav';
 import { paperNote } from '../core/dominion/voices';
 import { threatRow } from '../core/dominion/rivalScreens';
 import { cardModel, gridPages, mapModel, newCursor, pageFor, type MapCursor } from '../core/dominion/fieldScreens';
@@ -42,7 +45,7 @@ import { foundedLines, foundingOpen, initialOf, nameIdeas, newDraft, teamColours
 import { FOUNDING_ROWS, foundedView, foundingView, type FoundingUi } from '../ui/redux/screens/dominion/founding';
 import { heroModel, interruptModel } from '../core/dominion/heroScreens';
 import { heroView, interruptView, type MonFiles } from '../ui/redux/screens/dominion/heroViews';
-import { BossMenuController } from './dominion/bossMenuController';
+import { BossMenuController, SETTINGS_CATS } from './dominion/bossMenuController';
 import { fxClasses, fxOf } from '../core/dominion/fx';
 import { JobController } from './dominion/jobController';
 
@@ -106,6 +109,8 @@ export class DominionScene extends Phaser.Scene {
   /** D25: the Evening voices scene (mockup a10), an overlay on the HQ. */
   /** D27: the Boss Menu (v4 m1, Esc from the HQ) and Settings (m2). */
   private menu = new BossMenuController(this.menuHost());
+  /** D28: the hold-Q command wheel, the Boss's board and the shutter between pages. */
+  private nav = new NavController(this.navHost());
   // D30: the job moments after Do it (m8-m10) and the morning paper (m12).
   private job = new JobController({
     refresh: () => this.view?.refresh(),
@@ -143,6 +148,7 @@ export class DominionScene extends Phaser.Scene {
     this.spy.destroy();
     this.spy = new SpyController(this);
     this.voices.close();
+    this.nav = new NavController(this.navHost());
     const { session } = services();
     const run = session.run;
     if (!run) return void this.scene.start('MainMenu');
@@ -246,6 +252,7 @@ export class DominionScene extends Phaser.Scene {
         ...this.desk.acts(),
         desk: () => this.desk.open(),
         ...this.sq.acts(),
+        ...this.nav.acts(),
         ...this.menu.acts(),
       },
       overs: {
@@ -258,6 +265,7 @@ export class DominionScene extends Phaser.Scene {
         ...this.spy.overs(),
         ...this.desk.overs(),
         ...this.sq.overs(),
+        ...this.nav.overs(),
         ...this.menu.overs(),
       },
     });
@@ -273,6 +281,9 @@ export class DominionScene extends Phaser.Scene {
       // Round 4 (D26): End saves and quits to the title from any Dominion page (not mid-interrupt: the Hero's three
       // choices must be answered first; not while typing in the desk's Type box). Q stays free on every page for the hold-Q command wheel (D28): no screen reads it.
       if (e.code === 'End' && this.screen !== 'interrupt' && !typeBoxOpen()) return this.leave();
+      // D28: hold Q for the command wheel; while the wheel or the board is up it reads every key first.
+      const wheelUp = this.nav.wheel;
+      if (this.nav.raw(e)) return void (this.ate = wheelUp && (e.code === 'Backspace' || e.code === 'KeyX'));
       // D27: the Boss Menu and Settings read their letters and numbers first (S, R, D, 1-6); a move letter they take isn't also a move.
       if (this.menu.owns()) {
         if (this.menu.raw(e.code)) {
@@ -352,6 +363,11 @@ export class DominionScene extends Phaser.Scene {
       else if (e.code === 'KeyE') this.step({ t: 'endDay' });
     };
     kb?.on('keydown', raw);
+    const up = (e: KeyboardEvent): void => this.nav.up(e);
+    kb?.on('keyup', up);
+    // D28: a controller's Select held is the hold-Q of the pad.
+    const pad = (e: Event): void => { if (!this.leaving && this.scene.isActive()) this.nav.pad(!!(e as CustomEvent<boolean>).detail); };
+    window.addEventListener(PAD_WHEEL_EVENT, pad);
     // After `raw`, so a letter the HQ menu took (A, S) is not also read as a move.
     onInputAction(this, (a) => this.key(a), { onceEach: true });
     // L is the Ledger on the HQ, the map and the Crew File (D6) and Money on the HQ menu (D5, mockup 6), so it doesn't
@@ -362,6 +378,8 @@ export class DominionScene extends Phaser.Scene {
     window.addEventListener('keydown', note, true);
     this.events.once('shutdown', () => {
       kb?.off('keydown', raw);
+      kb?.off('keyup', up);
+      window.removeEventListener(PAD_WHEEL_EVENT, pad);
       setLogKeyTaken(null);
       window.removeEventListener('keydown', this.typeKey, true);
       if (kb) kb.enabled = true;
@@ -394,13 +412,16 @@ export class DominionScene extends Phaser.Scene {
       refresh: () => sc.view?.refresh(),
       tabTo: (i: number) => { sc.screen = 'hq'; sc.notice = null; sc.tab(i); },
       hide: () => sc.leave(),
+      openBoard: () => sc.nav.openBoard(),
       bossFile: () => sc.files?.boss.file ?? null,
     };
   }
 
   /** D27: every page wears the Effects & motion classes (fx.css turns the spectacle down; presentation only). */
   private render(): string {
-    return `<div class="domfx ${fxClasses(fxOf(services().session.settings))}">${this.renderPage()}</div>`;
+    const fx = fxOf(services().session.settings);
+    const page = this.nav.boardOn() && this.navHere() ? this.nav.wrap(this.nav.boardRender(), 'board', fx.level) : this.nav.wrap(this.renderPage(), this.navHere() as Here, fx.level);
+    return `<div class="domfx ${fxClasses(fx)}">${page}</div>`;
   }
 
   private renderPage(): string {
@@ -632,6 +653,7 @@ export class DominionScene extends Phaser.Scene {
   private key(a: InputAction): void {
     if (this.ate) return void (this.ate = false);
     if (this.leaving) return;
+    if (this.nav.key(a)) return;
     if (this.menu.key(a)) return void this.view?.refresh();
     if (this.spy.key(a)) return void this.view?.refresh();
     if (this.debate.key(a)) return void this.view?.refresh();
@@ -767,6 +789,92 @@ export class DominionScene extends Phaser.Scene {
     }
     const by: Record<string, DominionAction> = { evening: { t: 'toNight' }, night: { t: b.nightActions < 1 ? 'skipNight' : 'rest' }, morning: { t: 'toDay' }, day: { t: 'endDay' } };
     this.step(by[b.phase]!);
+  }
+
+  // ---------- D28: getting around (the wheel, the board, the shutter) ----------
+
+  private navHost() {
+    const scene = (): DominionScene => this; // the scene's clock is set up after the fields
+    return {
+      get time() { return scene().time; },
+      refresh: () => this.view?.refresh(),
+      navBlock: () => this.block() ?? null,
+      navHere: () => this.navHere(),
+      navFree: () => this.navFree(),
+      navJump: (p: PageId) => this.navJump(p),
+      setNotice: (n: string | null) => { this.notice = n; },
+    };
+  }
+
+  /** The page on screen, as the board and the wheel name it (null before the run opens). */
+  private navHere(): PageId | null {
+    const b = this.block();
+    if (!b?.opened || !this.inRun()) return null;
+    if (this.menu.owns()) return this.menu.page!;
+    if (this.police.owns()) return 'police';
+    switch (this.screen) {
+      case 'hq':
+        if (this.voices.on) return 'voices';
+        if (this.chair.owns()) return 'chair';
+        return this.crew.owns() ? 'morning' : 'hq';
+      case 'crew': return this.crew.personaOn() ? 'persona' : 'crew';
+      case 'founded': return 'founding';
+      case 'title': case 'setup': case 'opening': return null;
+      default: return this.screen;
+    }
+  }
+
+  /** The wheel and the board stay shut where the game holds you: the Hero stepping in, questioning, a Debate, a
+   *  Confront, the Founding form, and while typing (the desk's Type box). */
+  private navFree(): boolean {
+    const p = this.navHere();
+    if (!p || this.leaving || typeBoxOpen()) return false;
+    if (this.block()?.debate?.live) return false;
+    return !['interrupt', 'police', 'debate', 'spy', 'founding'].includes(p);
+  }
+
+  /** D28: go to a page the way its own key would, from wherever you are. */
+  private navJump(p: PageId): void {
+    const b = this.block();
+    if (!b?.opened || !jumpable(p)) return;
+    const to = OPENS[p] ?? p;
+    if (to === 'title') return this.leave();
+    // D27: the Boss Menu and its Settings open over the page you are on (Rotom is a tab of Settings).
+    if (to === 'menu') return this.menu.open();
+    if (to === 'settings' || to === 'rotom') return this.menu.openSettings(to === 'rotom' ? SETTINGS_CATS.findIndex((c) => c.id === 'rotom') : 0);
+    this.menu.close();
+    // Leave the page you are on the way its own keys would (overlays and sub-pages closed), from the HQ.
+    if (this.voices.on) this.voices.close();
+    if (this.screen === 'crew') this.crew.tab(0);
+    else if (this.res.owns()) this.res.tab(0);
+    else if (this.sq.owns()) this.sq.tab(0);
+    this.screen = 'hq';
+    this.notice = null;
+    this.garage = false;
+    switch (to) {
+      case 'map': return this.tab(1);
+      case 'crew': return this.tab(2);
+      case 'reserve': return this.tab(3);
+      case 'ledger': return this.openLedger();
+      case 'persona': this.tab(2); this.crew.raw('KeyC'); break;
+      case 'pyramid': this.tab(2); this.res.raw('KeyP'); break;
+      case 'squads': this.tab(2); this.sq.raw('KeyU'); break;
+      case 'base': this.hq.open(); break;
+      case 'rival':
+        if (b.crew?.talks.length) this.notice = 'Answer the crew first.';
+        else this.rival.open();
+        break;
+      case 'hero': return this.openHero();
+      case 'desk': return this.desk.open();
+      case 'voices': if (!this.voices.raw('KeyV')) this.notice = 'The voices come in the evening, at the HQ.'; break;
+      case 'founding': return this.openFounding();
+    }
+    this.view?.refresh();
+  }
+
+  /** D28: the Boss's board (M on the wheel; public so a Controls page can open it too). */
+  openBoard(): void {
+    this.nav.openBoard();
   }
 
   /** Exposed for the crew controller. */

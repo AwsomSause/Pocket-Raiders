@@ -121,9 +121,11 @@ const PREVIEW = `<div class="a" style="left:14px;right:14px;top:58px;height:150p
 </div>`;
 
 export function settingsPageView(m: SettingsPageModel): string {
-  const cats = m.cats.map((c, i) => `<div class="cat${i === m.cat ? ' on' : ''}"${act('setCat', i)} style="cursor:pointer${i === m.cat && m.focus === 'cats' ? '' : ''}" data-testid="dom-set-cat-${c.id}">${ic(c.icon, 'ic s')}${esc(c.label)}</div>`).join('');
+  // Ten tabs (D28 added Controls) are a row more than the mockup's list holds above its footer: draw them a little tighter.
+  const tight = m.cats.length > 9 ? ';padding:4px 10px' : '';
+  const cats = m.cats.map((c, i) => `<div class="cat${i === m.cat ? ' on' : ''}"${act('setCat', i)} style="cursor:pointer${tight}" data-testid="dom-set-cat-${c.id}">${ic(c.icon, 'ic s')}${esc(c.label)}</div>`).join('');
   const catPanel = `<div class="pnl dim" style="left:16px;top:76px;width:196px;height:448px;padding:10px${m.focus === 'cats' ? ';box-shadow:0 0 0 3px var(--ink),0 0 0 6px rgba(255,210,63,.45)' : ''}" data-testid="dom-set-cats">
-    <div class="col" style="gap:5px">${cats}</div>
+    <div class="col" style="gap:${tight ? 2 : 5}px">${cats}</div>
     <div class="a xs dm" style="left:12px;right:12px;bottom:12px;line-height:1.35">Changes save at once. <span class="kc">D</span> resets this tab.</div>
   </div>`;
   const cat = m.cats[m.cat]!;

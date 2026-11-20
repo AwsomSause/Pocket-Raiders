@@ -26,6 +26,8 @@ interface Host {
   /** Saves and quits to the title. */
   hide(): void;
   bossFile(): string | null;
+  /** D28: the Boss's board (page map, mockup m5), the Controls tab's help page. */
+  openBoard(): void;
 }
 
 export const SETTINGS_CATS: SettingsCat[] = [
@@ -38,6 +40,8 @@ export const SETTINGS_CATS: SettingsCat[] = [
   { id: 'runs', label: 'Runs', icon: 'g-town-map' },
   { id: 'access', label: 'Accessibility', icon: 'g-soothe-bell' },
   { id: 'saves', label: 'Saves', icon: 'g-storage-key' },
+  // D28 (m5: the board "doubles as an in-game help page under Boss Menu, then Settings, then Controls").
+  { id: 'controls', label: 'Controls', icon: 'g-xtransceiver' },
 ];
 
 const BATTLE_IDS = ['battleSpeed', 'autoBattle', 'autoExplain', 'skillPrompts', 'damageDetails', 'battleAnimations', 'battleCamera', 'textSpeed', 'speechSpeed', 'dialogueFrequency'];
@@ -51,6 +55,7 @@ function registryRows(cat: string): SettingDef[] {
   if (cat === 'battle') return BATTLE_IDS.map((id) => SETTINGS.find((d) => d.id === id)).filter((d): d is SettingDef => !!d);
   if (cat === 'runs') return settingsIn('gameplay').filter((d) => !RUN_SKIP.has(d.id));
   if (cat === 'rotom') return SETTINGS.filter((d) => d.id === 'claudeAi' || d.id.startsWith('claudeUse.'));
+  if (cat === 'controls') return settingsIn('controls');
   return [];
 }
 
@@ -259,6 +264,13 @@ export class BossMenuController {
       ];
     }
     const rows = registryRows(id).map((d) => this.gameRow(d));
+    if (id === 'controls') {
+      // D28: the page map and how to open the command wheel, above the game's own control settings.
+      rows.unshift(
+        { view: { label: 'The Board', sub: 'How every page connects: a photo for each, Enter to go there', kind: 'btn', value: 'Open' }, press: () => this.host.openBoard() },
+        { view: { label: 'Command wheel', sub: 'Hold Q, or hold Select on a controller; point, then let go to jump', kind: 'pill', value: 'Q · Select' } },
+      );
+    }
     if (id === 'rotom') {
       rows.push({ view: { label: 'Key-Card', sub: this.cardLine() ?? 'No card: every line is the game\'s own and nothing is sent anywhere.', kind: 'btn', value: 'Open the vault' }, press: () => { const st = this.settings(); openKeyVault({ calm: !st.menuAnimations || st.disableAllAnimations, onClose: () => this.host.refresh() }); } });
     }
