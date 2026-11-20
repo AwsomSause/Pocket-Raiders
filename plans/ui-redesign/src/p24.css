@@ -70,6 +70,14 @@
 .wp-row{overflow:visible}
 .wp24 .wp-f{overflow:visible}
 .wp24 .wp-f .emb{overflow:hidden}
+
+/* the mark as a backdrop: a giant tilted ball behind Party and Menu */
+.scr.pk24,.scr.mn24{isolation:isolate}
+.em24.bgp{position:absolute;left:590px;top:210px;z-index:-1;opacity:.9}
+.em24.bgm{position:absolute;left:500px;top:150px;z-index:-1;opacity:.9}
+.scr.pk24:not(.pk25),.scr.mn24:not(.mn25){background:repeating-linear-gradient(-70deg,#0d1530 0 26px,#14204a 26px 52px)}
+.pk24:not(.pk25)::before,.mn24:not(.mn25) :is(.ar-bg,.stars21){display:none}
+.pk24:not(.pk25) .wm17{display:none}
 /*@top*/
 @keyframes spin24{to{transform:rotate(360deg)}}
 @keyframes rock24{0%,100%{transform:rotate(0)}50%{transform:rotate(24deg)}}

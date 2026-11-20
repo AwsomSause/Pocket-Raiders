@@ -5,8 +5,8 @@ comp(24, 'arena', (o = {}) => { const h = arena23(o); return o.dim ? h : h.repla
 decor(24, 'title', { cls: 'tt24', add: em24(54, 'go'), fn: h => h.replace('<b>Pocket</b>', `<b>P${em24(62, 'lo')}cket</b>`) });
 decor(24, 'ev-title', { fn: h => h.replace('<b>Pocket</b>', `<b>P${em24(62, 'lo')}cket</b>`) });
 decor(24, 'hub', { cls: 'hb24', add: em24(44, 'hb') });
-decor(24, 'party', { cls: 'pk24' });
-decor(24, 'menu', { cls: 'mn24' });
+decor(24, 'party', { cls: 'pk24', add: em24(430, 'bgp') });
+decor(24, 'menu', { cls: 'mn24', add: em24(560, 'bgm') });
 
 const SW = [['Raider Red', '#e3350d'], ['Pika Yellow', '#ffcb05'], ['Ink', '#1d2a4d'], ['Paper', '#ffffff'], ['Sky', '#2a75bb']];
 const LIVES = ['The O in the logo', 'The sun behind the hero', 'The court on every battlefield', 'The cap on every party card', 'Every app on the Rotom Phone', 'Every page icon', 'Saving, loading and the screen wipe'];

@@ -1,6 +1,6 @@
 /* Pass 23 · Breathing Room */
 /* battle: five strips fold into one bar */
-.order,.prizec,.wx21:not(.big),.evb22,.tb20,.bench,.wxm21{display:none}
+.order,.prizec,.wx21:not(.big),.evb22,.tb20,.bench,.wxm21,.scr .cf22,.scr .bunt22.ar,.scr .bunt22.mn{display:none}
 .bar23{position:absolute;left:12px;top:92px;z-index:4;display:flex;align-items:center;gap:12px;height:34px;padding:0 5px 0 5px;color:#fff;background:rgba(13,21,48,.9);border:2px solid #fff;border-radius:999px;white-space:nowrap;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.4)}
 .bar23 b{font:400 16px/24px var(--fd);text-transform:uppercase;color:var(--ink);background:var(--yel);border-radius:999px;padding:0 12px}
 .bar23 span{font-size:12px;font-weight:800}

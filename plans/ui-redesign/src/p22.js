@@ -1,13 +1,14 @@
 /* Pass 22 · Festivals & Side Roads: the game event of the week dresses every screen in its colour (bunting, banner, goal chip), and side roads get pages of their own. New pages: the Door, the side-road map, its prize, the Game Event page, an Ultra Wormhole and Regional Forms. */
 const HW = { n: 'Homeland Week', c: '#4aa3df', left: '3 days left', rule: 'For one week, Kanto, Hoenn and Galar are 3x as likely to be your first region.' };
 const bunt = (cls = '') => `<i class="bunt22 ${cls}" data-nocheck></i>`;
+const cf22 = (cls = '') => `<i class="cf22 ${cls}" data-nocheck></i>`;
 const hdr17 = pick(PR.comps.hdr, 17).fn, arena21 = pick(PR.comps.arena, 21).fn;
 comp(22, 'hdr', (t, pills, area, crumb) => hdr17(t, pills, area, crumb) + bunt('hd'));
-comp(22, 'arena', (o = {}) => { const h = arena21(o); return o.dim || o.noorder || o.bg ? h : h + `<div class="evb22" ${go('homeland')}><b>${HW.n}</b><span>Gym Leaders 2 of 3</span></div>`; });
-decor(22, 'title', { cls: 'tt22', add: bunt('tt a') + bunt('tt b'), fn: h => h.replace('<div class="rot17">', `<div class="rot17 hw" ${go('homeland')}>`).replace('Bzzt! Homeland Week ends in 3 days.', 'Homeland Week: 3 days left. Goals 2 of 3.') });
-decor(22, 'hub', { cls: 'hb22', add: bunt('hb a') + bunt('hb b') });
-decor(22, 'menu', { cls: 'mn22', add: `<div class="evc22" ${go('homeland')}><i></i><b>${HW.n}</b><span>${HW.left} · Goals 2 of 3</span></div>` });
-decor(22, 'party', { cls: 'pk22', add: `<div class="evc22 pk" ${go('homeland')}><i></i><b>${HW.n}</b><span>Catch 10 Pokémon · 7 of 10</span></div>` });
+comp(22, 'arena', (o = {}) => { const h = arena21(o); return o.dim || o.noorder || o.bg ? h : h + bunt('ar') + cf22('ar') + `<div class="evb22" ${go('homeland')}><b>${HW.n}</b><span>Gym Leaders 2 of 3</span></div>`; });
+decor(22, 'title', { cls: 'tt22', add: bunt('tt a') + bunt('tt b') + cf22('tt'), fn: h => h.replace('<div class="rot17">', `<div class="rot17 hw" ${go('homeland')}>`).replace('Bzzt! Homeland Week ends in 3 days.', 'Homeland Week: 3 days left. Goals 2 of 3.') });
+decor(22, 'hub', { cls: 'hb22', add: bunt('hb a') + bunt('hb b') + cf22('hb') });
+decor(22, 'menu', { cls: 'mn22', add: bunt('mn') + cf22('mn') + `<div class="evc22" ${go('homeland')}><i></i><b>${HW.n}</b><span>${HW.left} · Goals 2 of 3</span></div>` });
+decor(22, 'party', { cls: 'pk22', add: cf22('pk') + `<div class="evc22 pk" ${go('homeland')}><i></i><b>${HW.n}</b><span>Catch 10 Pokémon · 7 of 10</span></div>` });
 
 /* the game event page */
 const HWG = [['Defeat 3 Gym Leaders', 2, 3, 40], ['Catch 10 Pokémon', 7, 10, 60], ['Finish 6 map events', 6, 6, 80]];

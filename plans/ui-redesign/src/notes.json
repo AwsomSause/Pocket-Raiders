@@ -401,5 +401,21 @@
   "q3": "Yes, three: The Signature (the mark, three shapes, five colours, where it lives), Save Marks (saving, saved, loading, could not save) and Screen Wipe (the ball-shut change of place).",
   "q4": "Menu apps are now balls in each app's colour, and the phone wallpaper is the mark. Settings › Save & Data gains 'Show save mark'. Reduced motion swaps the wipe for a fade.",
   "q5": "Yes, as directly as it can: the Poké Ball is the most Pokémon shape there is, and the tilt and the capsule buttons make it this game's own."
+ },
+ "25": {
+  "name": "Master Cut",
+  "big": "The final frames. A showtime finish on the main screens (a ray burst behind the giant ball, type-coloured auras and a soft vignette in battle, a holo foil on the chosen party card), the party and the phone now sit on the ball's own two halves, every page header joins the morph so each page grows out of the last, and the hand-over pages are in: Master Cut, Style Guide, Page Map, Motion Rules and Build Order.",
+  "pages": [
+   "Master Cut",
+   "Style Guide",
+   "Page Map",
+   "Motion Rules",
+   "Build Order"
+  ],
+  "q1": "Yes, this is the loudest version: spinning rays and sparkles on the title, glowing rings under both Pokémon, a rainbow foil card in the party, and a glow around FIGHT.",
+  "q2": "Pass 24 gave the game its mark; this pass finishes the frames around it and adds what is needed to build it: the rules written down, every page listed, and an order to build in.",
+  "q3": "Yes, five hand-over pages: Master Cut (the journey from pass 1), Style Guide, Page Map (every page by group), Motion Rules (six kinds of movement with timings) and Build Order.",
+  "q4": "The pause menu and party now share one backdrop idea (the ball's two halves, belt in the middle), so opening the menu from anywhere feels like the same place. Settings is listed in the Page Map with all ten of its pages.",
+  "q5": "Yes. Rays, sparkles, foil cards and a ball in the logo are the title-screen language of the series, and nothing here needs art the game does not already have."
  }
 }
