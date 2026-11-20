@@ -681,7 +681,7 @@ export class SaveManager {
     // Beta 0.5: only Nate and Hilda are player characters; a run saved as anyone else carries on as one of them.
     // Only saves from before the current format (every pre-Beta 0.5 save, since run v42 is Beta 0.5) are converted, so a save and reload of a current run never changes it.
     if (result.migratedFrom !== undefined && !isPlayerTrainer(result.data.archetypeId) && this.content.archetypes.has(result.data.archetypeId)) result.data = { ...result.data, archetypeId: playerTrainerFor(result.data.archetypeId) };
-    // A catalog item in the Bag (saved by an older build) moves where it belongs instead of failing the save (save audit 2026-11-19).
+    // An item id the game no longer knows is sold instead of failing the save (save audit 2026-11-19).
     tidyBag(this.content, result.data);
     const problem = this.findRunReferenceProblem(result.data);
     if (problem) return { status: 'corrupt', reason: problem };
@@ -699,7 +699,7 @@ export class SaveManager {
       for (const slot of mon.moves) if (!c.moves.has(slot.id)) return `Unknown move "${slot.id}" in save.`;
     }
     for (const id of run.draft ?? []) if (!c.rewards.has(id)) return `Unknown reward "${id}" in save.`;
-    for (const id of Object.keys(run.inventory)) if (!c.items.has(id)) return `Unknown item "${id}" in save.`;
+    for (const id of Object.keys(run.inventory)) if (!c.items.has(id) && !c.catalog.has(id)) return `Unknown item "${id}" in save.`;
     for (const d of run.pending) if (d.kind === 'learnMove' && !c.moves.has(d.moveId)) return `Unknown move "${d.moveId}" in save.`;
     if (run.battle) {
       if (!run.battle.enemyTeam[run.battle.enemyIndex]) return 'Battle data is damaged in the save.';
@@ -735,7 +735,7 @@ export class SaveManager {
 
   saveRun(run: RunState): SaveResult {
     // An Evil Mode block is written in its save form (core/evilMode/saveForm.ts); reading makes it whole again.
-    // A catalog item that landed in the Bag would make this save fail its checks on the next load: move it first.
+    // An item id the game no longer knows would make this save fail its checks on the next load: sell it first.
     tidyBag(this.content, run);
     return this.write('run', runToSaveForm(run));
   }

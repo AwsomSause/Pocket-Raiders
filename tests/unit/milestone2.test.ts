@@ -440,7 +440,7 @@ describe('save upgrades (v1 → v2)', () => {
     expect(loaded.data.money).toBe(content.balance.events.soldGift);
   });
 
-  it('a catalog item in the Bag is moved where it belongs on save, not thrown away on load (save audit 2026-11-19)', () => {
+  it('a catalog item in the Bag (a Sitrus Berry from an event) saves and loads as it is (save audit 2026-11-19)', () => {
     const storage = new MemoryStorageProvider();
     const saves = new SaveManager(storage, content);
     const run = { ...newRun('berry'), inventory: { 'sitrus-berry': 2, 'no-such-ball': 1 }, money: 0 };
@@ -448,8 +448,7 @@ describe('save upgrades (v1 → v2)', () => {
     const loaded = new SaveManager(storage, content).loadRun();
     expect(loaded.status).toBe('ok');
     if (loaded.status !== 'ok') return;
-    expect(loaded.data.inventory).toEqual({});
-    expect(loaded.data.looseHeld?.['sitrus-berry']).toBe(2);
+    expect(loaded.data.inventory).toEqual({ 'sitrus-berry': 2 });
     expect(loaded.data.money).toBe(content.balance.events.soldGift);
   });
 

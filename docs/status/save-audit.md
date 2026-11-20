@@ -8,7 +8,7 @@ Every event choice (~21,000, choices the player can't take yet are skipped), eve
 ## Found and fixed
 1. **Event trainer battles** with no class in their data use class `event`; the save check didn't know it, so closing the game mid-fight lost the run (1,281 event choices). Now allowed.
 2. **Pseudo-stages** (places with their own map) were checked with full-stage rules (gym in the last column, two trainer columns), so a save inside one was rejected (226 choices). They now get their own check (`validatePseudoMap`: unique ids, links lead somewhere).
-3. **Catalog items put straight in the Bag** (Sitrus Berry, Focus Sash rentals, Rare Candy from boxes, Sticky Barb...) were invisible in the Bag and made the save fail. `tidyBag` (core/bag.ts) runs on every save and load: held items go to the loose held items, team passives to passives, anything else is sold for the event gift price. A rented item kept there can still be returned.
+3. **Catalog items in the Bag** (Sitrus Berry, Focus Sash rentals, Rare Candy from boxes...): events, markets and rentals put them there, and the save check called them unknown. They are now accepted. Only ids the game no longer knows at all are sold on save/load (`tidyBag`, core/bag.ts, event gift price). Limit: the Bag screen still hides catalog items kept this way (they were hidden before too).
 4. **Events that take the whole team away** (Battle Factory, prison cell, draft) left an empty party, which the save check rejected. Allowed while the team waits in the box or stash.
 5. **Two pseudo-stages named themes that don't exist** (`fairy-ghost`, `ground-fire`): now `ghost-fairy`, `fire-ground`.
 
