@@ -196,5 +196,21 @@
   "q3": "Yes, six: Moves and Bond pages for the summary, a Pokédex and its entry page, the Reserve, and a Use On page so picking who gets a potion never covers the bag.",
   "q4": "The pause menu's party panel is now six small cards, and the wheel opens the Pokédex. Nothing new is needed in Settings; card shine follows the Animations setting from pass 7.",
   "q5": "Yes. Collecting cards is as Pokémon as it gets, and the Pokédex grid with grey unseen slots and Poké Ball marks is straight from the games."
+ },
+ "13": {
+  "name": "Trainers",
+  "big": "People get faces and colours. Each trainer has a colour that fills their banner, their Trainer Card and their side of the battle bars. Five new pages cover who you play as, your rivals, the next Gym Leader and the League.",
+  "pages": [
+   "Trainer Select",
+   "Trainer Card",
+   "Rival Board",
+   "Gym Leader File",
+   "Pokémon League"
+  ],
+  "q1": "The title screen now has Red standing large in front of the town with a name plate. Trainer Select is a row of tall coloured banners, and the Trainer Card is a real card with a photo, a badge strip and a foil shine.",
+  "q2": "Before, trainers were only a name on a bar. Now Blue's battle bar is blue and yours is red, so you can tell the sides apart before reading a word, and rivals have a board that shows the score between you.",
+  "q3": "Yes, five. Trainer Select and the Trainer Card leave the hub and menu clean, the Rival Board holds all four rivals, the Gym Leader File shows what a boss brings before you commit, and the League is a staircase of five rooms.",
+  "q4": "The pause menu swaps its row of pills for a one-line Trainer Card that opens the full card. No new settings are needed.",
+  "q5": "Yes: a Trainer Card with eight badge slots, a rival who is always one step ahead, and a Gym Leader with a title and an ace are the heart of a Pokémon journey. The trainer is still not drawn on the battlefield itself."
  }
 }
