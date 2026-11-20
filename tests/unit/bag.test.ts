@@ -79,4 +79,21 @@ describe('taking held items off and giving them back', () => {
     run.phase = 'battle';
     expect(() => takeOffHeld(content, run, 0, 'charcoal')).toThrow(/outside battle/);
   });
+
+  it('a held item an event put straight in the Bag (a Sitrus Berry) shows and can be given (save audit follow-up)', () => {
+    const run = fresh();
+    run.inventory = { potion: 1, 'sitrus-berry': 2 };
+    run.looseHeld = { 'sitrus-berry': 1 };
+    const berry = bagEntries(content, run).find((e) => e.itemId === 'sitrus-berry')!;
+    expect(berry).toMatchObject({ key: 'loose:sitrus-berry', source: 'loose', quantity: 3, use: 'use' });
+    // The copy taken off a Pokémon goes first, then the Bag's.
+    const one = giveHeld(content, run, 'sitrus-berry', 0).run;
+    expect(one.looseHeld?.['sitrus-berry']).toBeUndefined();
+    expect(one.inventory['sitrus-berry']).toBe(2);
+    const two = giveHeld(content, one, 'sitrus-berry', 0).run;
+    expect(two.inventory['sitrus-berry']).toBe(1);
+    expect(two.party[0]!.held?.['sitrus-berry']).toBe(2);
+    // A plain Bag item never shows as a held one.
+    expect(bagEntries(content, two).filter((e) => e.itemId === 'potion').map((e) => e.key)).toEqual(['bag:potion']);
+  });
 });
