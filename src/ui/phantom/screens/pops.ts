@@ -6,8 +6,10 @@
 import type { PhantomVersion } from '../../../core/presentation/phantom';
 import { rxAtlas } from '../../redux/assets';
 import { figure } from '../../redux/templates';
+import type { BracketModel, BracketSlot } from '../../redux/screens/bracket';
 import { leadLine, listWindow, type BookModel, type DossierModel, type DossierPerson, type ReportModel, type RollCard, type RollModel, type TrackModel } from '../../redux/screens/popups';
-import { act, esc, keys, mon, page, ransom } from '../kit';
+import type { TeamCard, TeamModel } from '../../redux/screens/team';
+import { act, esc, keys, mon, page, ransom, ty } from '../kit';
 
 /** A sprite fitted inside a square box, or scaled to a height. */
 const boxed = (file: string, box: number, cls = ''): string => { const a = rxAtlas(file); return a ? mon(file, Math.round((box / Math.max(a.sw, a.sh)) * 100) / 100, cls) : ''; };
@@ -120,4 +122,40 @@ export function phRoll(_ph: PhantomVersion, d: RollModel): string {
     + `<div class="ph-rl-cs${slim ? ' two' : ''}" style="--n:${Math.min(4, Math.max(1, on.length))}">${cards}</div>${left}`
     + `<div class="ph-rl-count">${esc(count)}</div><div class="pn lt ph-rl-say"><p class="txt" style="font-size:${d.text.length > 150 ? 16 : 20}px">${esc(d.text)}</p></div>`
     + keys(['◀▶', 'Space'], ['Enter', 'To the map', 'pop']));
+}
+
+// ---------- Bracket ----------
+
+/** A tournament bracket: four columns of 8, 4, 2 and 1 names, the groups as tabs, and what happens next in the box. */
+export function phBracket(_ph: PhantomVersion, d: BracketModel): string {
+  const slot = (s: BracketSlot | null, last: boolean, k: number): string =>
+    s
+      ? `<div class="ph-bk-s${s.you ? ' you' : ''}${s.out ? ' out' : ''}${last ? ' win' : ''}" style="--i:${k}"><i>${s.file ? boxed(s.file, last ? 44 : 30) : ''}</i><b>${s.you ? '★ ' : ''}${esc(s.name)}</b></div>`
+      : `<div class="ph-bk-s q" style="--i:${k}"><i></i><b>?</b></div>`;
+  const cut = d.columns.slice(0, 4);
+  const cols = cut.map((col, i) => `<div class="ph-bk-col c${i}${col.now ? ' now' : ''}"><small>${esc(col.name)}</small><div>${col.slots.map((s, k) => slot(s, i === cut.length - 1 && col.slots.length === 1, k)).join('')}</div></div>`).join('');
+  const chips = d.pages.length > 1 ? `<div class="pockets ph-tabs ph-pop-tabs">${d.pages.map((t, k) => `<span class="${k === d.page ? 'on' : ''}"${act('bracketPage', k)}>${esc(t)}</span>`).join('')}</div>` : '';
+  const hints = d.hints ?? [['◀ ▶', 'group'], ['B', 'close']];
+  return page('bracket', ground('0 0,100% 0,100% 22%,0 40%', 82, 50) + `<div class="ph-pop-shut"${act('bracket')}></div>`
+    + head(d.pages[d.page] ?? 'Tournament', d.title) + chips
+    + `<div class="ph-bk" data-key="bk${d.page}">${cols}</div>`
+    + (d.extra ? `<div class="ph-bk-x"${act('bracketWatch')}>${esc(d.extra)}</div>` : '')
+    + `<div class="pn lt ph-bk-say"><p class="txt" style="font-size:${d.text.length > 150 ? 15 : d.text.length > 92 ? 17 : 20}px">${esc(d.text)}</p></div>`
+    + keys(...hints.map(([k, t]) => (/close|back/i.test(t) ? [k, t.charAt(0).toUpperCase() + t.slice(1), 'bracket'] as const : [k, t.charAt(0).toUpperCase() + t.slice(1)] as const))));
+}
+
+// ---------- A rival's team ----------
+
+/** The rival's team (mock-up `scout`): the team you commanded from behind their hat, each with its level, types and real moves. */
+export function phScout(_ph: PhantomVersion, d: TeamModel): string {
+  const card = (m: TeamCard, k: number): string => {
+    const file = m.front ?? m.file;
+    return `<div class="pn sc-c ph-sc-c" style="--i:${k}" data-testid="team-card"><div class="sc-pic">${file ? boxed(file, 100, 'ol') : ''}</div><h3 class="tl1" style="font-size:${m.name.length > 10 ? 22 : 30}px">${esc(m.name)}${m.level ? ` <small>Lv.${m.level}</small>` : ''}</h3><div class="sc-ty">${m.types.map(ty).join('')}</div><div class="ph-sc-mv">${[0, 1, 2, 3].map((q) => `<span>${m.moves[q] ? esc(m.moves[q]!) : '—'}</span>`).join('')}</div></div>`;
+  };
+  return page('scout', ground('0 0,34% 0,18% 100%,0 100%', 10, 70)
+    + head(`${d.cards.length} Pokémon · you commanded every one`, `${d.rival}'s team`)
+    + (d.who ? `<div class="sc-who ph-sc-who" aria-hidden="true">${figure(d.who, 420)}</div>` : '')
+    + `<div class="sc-g ph-sc-g${d.who ? '' : ' wide'}"${act('back')}>${d.cards.map(card).join('')}</div>`
+    + `<div class="pn lt sc-tip ph-sc-tip"><span class="lab">${esc(d.rival)}</span><p class="txt">You commanded every one of these. Their moves, their habits. You will not forget them.</p></div>`
+    + keys(['Enter', 'Close', 'back']));
 }

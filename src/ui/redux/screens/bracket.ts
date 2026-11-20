@@ -6,6 +6,7 @@ import type { TourneyView } from '../../../core/expansion/tourney';
 import type { BracketTree } from '../../../core/galarTournament';
 import { act, esc, H, mini, W } from '../kit';
 import type { ReduxCtx } from '../stage';
+import { phBracket } from '../../phantom/screens/pops';
 
 export interface BracketSlot { name: string; file: string | null; you: boolean; out: boolean; named: boolean }
 export interface BracketModel {
@@ -23,7 +24,8 @@ export interface BracketModel {
 
 const X = [24, 260, 496, 732] as const;
 
-export function bracketView(_c: ReduxCtx, d: BracketModel): string {
+export function bracketView(c: ReduxCtx, d: BracketModel): string {
+  if (c.ph) return phBracket(c.ph, d);
   const slot = (s: BracketSlot | null, last: boolean): string =>
     s
       ? W(`<div class="row" style="gap:6px"><span style="width:28px;height:28px;flex:none;display:flex;align-items:center;justify-content:center">${s.file ? mini(s.file, 28) : ''}</span><b style="font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0"${s.you && !last ? ' class="acc"' : ''}>${s.you ? '★ ' : ''}${esc(s.name)}</b></div>`, `padding:5px 10px${s.out ? ';opacity:.45' : ''}`, last ? 'sel' : '')

@@ -173,3 +173,43 @@ test('Phantom UI: the Town Roll opens with O as a Phantom page: cards for the sp
   expect(await page.evaluate(() => JSON.stringify((window as any).__pkr.session.run.expansion.canon))).toBe(before);
   expect(errors).toEqual([]);
 });
+
+test('Phantom UI: a rival scene shows their team with R as a Phantom page; Enter closes it', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=phantom&seed=e2e-borrow&campaign=dev&debug=1');
+  await onPage(page, 'MainMenu', 'title');
+  await toPhantomMap(page);
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr;
+    const run = pkr.session.run;
+    run.story.rivals.push({
+      id: 'r1', classId: 'rival', name: 'Okafor', state: 'active', rivalPotential: 5, encounters: 2, setbacks: 0,
+      memory: { lastBattle: { eventId: 'e', result: 'win', hpLeftShare: 0.5, turns: 4, team: ['growlithe', 'pidgeotto'], levels: [31, 29], moves: [['ember', 'bite', 'flamethrower', 'agility'], ['gust', 'quick-attack']] } },
+    });
+    run.story.flags['ev:borrow-knows'] = 1;
+    const node = run.stage.map.nodes.find((n: any) => n.column === 1);
+    node.sides.push({ id: 'bt-side', kind: 'event', used: false, eventId: 'gn-new-29-after' });
+    run.stage.current = node.id;
+    run.stage.visited = [node.id];
+    pkr.game.scene.getScene('Map').scene.start('Event', { sideId: 'bt-side' });
+  });
+  await waitForScene(page, 'Event');
+  await page.waitForTimeout(1200);
+  const before = await page.evaluate(() => document.querySelector('#phx .phs[data-scene="Event"]')?.getAttribute('data-scr'));
+  await page.keyboard.press('r');
+  await onPage(page, 'Event', 'scout');
+  const sc = pview(page, 'Event', 'scout');
+  await expect(sc.getByTestId('team-card')).toHaveCount(2);
+  await expect(sc.getByTestId('team-card').first()).toContainText('Lv.31');
+  for (const t of ['Okafor', 'Growlithe', 'Flamethrower', 'Pidgeotto', 'Quick Attack']) await expect(sc).toContainText(t, { ignoreCase: true });
+  await page.waitForTimeout(900);
+  expect(await fitProblems(page, 'Event', 'scout')).toEqual([]);
+  await page.setViewportSize({ width: 844, height: 390 });
+  await page.waitForTimeout(900);
+  expect(await fitProblems(page, 'Event', 'scout')).toEqual([]);
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.keyboard.press('Enter');
+  await onPage(page, 'Event', before ?? 'choice');
+  await expect(page.getByTestId('team-card')).toHaveCount(0);
+  expect(errors).toEqual([]);
+});

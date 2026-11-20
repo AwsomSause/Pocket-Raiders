@@ -116,3 +116,40 @@
 .phx .phs[data-liv=channel]{ & .ph-dos-p,& .ph-rl-c,& .ph-nb-row{border-radius:12px} & .ph-rl-c i,& .ph-dos-top>i{border-radius:10px} & .ph-nb-row,& .ph-nb-row>*{transform:none} }
 .phx .phs[data-liv=fantasia],.phx .phs[data-liv=velvet]{ & .ph-dl dt,& .ph-tk-civ b{color:var(--gold)} & .ph-rl-c{rotate:0deg;box-shadow:inset 0 0 0 1px var(--gold)} & .ph-rl-c.on{box-shadow:0 0 0 2px var(--gold),0 0 0 6px var(--k),0 0 0 7px var(--gold)} & .ph-dos-p.on{rotate:0deg;box-shadow:0 0 0 2px var(--gold)} & .ph-nb-row,& .ph-nb-row>*{transform:none} & .ph-nb-row.on{box-shadow:0 0 0 2px var(--gold)} & .ph-stamp{rotate:0deg} & .ph-tk-ttl,& .ph-rl-ttl{rotate:0deg} }
 .phx .phs[data-liv=velvet]{ & .ph-rv-list .rv b{font-size:20px} & .ph-rv-list .rv.on b{font-size:24px} & .ph-rl-c b{font-size:19px} & .ph-rl-c.slim b{font-size:15px} & .ph-nb-row b{font-size:16px} & .ph-tk-b .tl1{font-size:26px} & .ph-rv-av{font-size:24px} & .ph-tk-ttl,& .ph-rl-ttl{font-size:40px} }
+
+/* Bracket */
+.phx .phs{
+  & .ph-bk{position:absolute;left:44px;right:44px;top:122px;bottom:126px;display:grid;grid-template-columns:1fr 1fr 1fr 1.1fr;gap:34px;z-index:2}
+  & .ph-bk-col{display:flex;flex-direction:column;min-height:0}
+  & .ph-bk-col>small{align-self:flex-start;font:800 14px/1 var(--f-cond);letter-spacing:.16em;text-transform:uppercase;background:var(--k);color:var(--bone);padding:5px 14px;transform:skewX(-12deg)}
+  & .ph-bk-col.now>small{background:var(--gold);color:#000}
+  & .ph-bk-col>div{flex:1;display:flex;flex-direction:column;justify-content:space-around;min-height:0}
+  & .ph-bk-s{position:relative;display:grid;grid-template-columns:34px 1fr;align-items:center;gap:8px;height:40px;padding:0 14px 0 6px;background:var(--k);color:var(--w);transform:skewX(-8deg);animation:ph-inL .25s both;animation-delay:calc(var(--i)*25ms)}
+  & .ph-bk-s>*{transform:skewX(8deg)}
+  & .ph-bk-s i{display:grid;place-items:center;height:36px;overflow:hidden}
+  & .ph-bk-s b{font:400 20px/1.15 var(--f-disp);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  & .ph-bk-s::after{content:"";position:absolute;left:100%;top:50%;width:34px;height:3px;background:color-mix(in srgb,var(--w) 55%,transparent)}
+  & .ph-bk-s.you{background:var(--gold);color:#000;box-shadow:5px 5px 0 var(--k)}
+  & .ph-bk-s.out{opacity:.45} & .ph-bk-s.out b{text-decoration:line-through}
+  & .ph-bk-s.q{background:none;box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--w) 40%,transparent);opacity:.6}
+  & .ph-bk-s.win{height:74px;grid-template-columns:52px 1fr;background:var(--w);color:var(--k);box-shadow:8px 8px 0 var(--red);animation:ph-pop .35s .2s cubic-bezier(.2,1.6,.4,1) both}
+  & .ph-bk-s.win i{height:60px} & .ph-bk-s.win b{font-size:28px} & .ph-bk-s.win::after,& .c3 .ph-bk-s::after{content:none}
+  & .ph-bk-x{position:absolute;right:44px;bottom:132px;font:400 22px/1 var(--f-disp);text-transform:uppercase;background:var(--gold);color:#000;padding:7px 18px;transform:skewX(-10deg);cursor:pointer;z-index:3;box-shadow:5px 5px 0 var(--k)}
+  & .ph-bk-say{position:absolute;left:44px;bottom:62px;width:820px;padding:10px 26px 12px;z-index:2} & .ph-bk-say .txt{margin:0;line-height:1.25}
+}
+.phx .phs[data-liv=channel]{ & .ph-bk-s{border-radius:10px;transform:none} & .ph-bk-s>*{transform:none} }
+.phx .phs[data-liv=fantasia],.phx .phs[data-liv=velvet]{ & .ph-bk-s{transform:none;box-shadow:inset 0 0 0 1px var(--gold)} & .ph-bk-s>*{transform:none} & .ph-bk-s.you{box-shadow:0 0 0 2px var(--k),0 0 0 3px var(--gold)} & .ph-bk-s.win{box-shadow:0 0 0 2px var(--gold),0 0 0 6px var(--k),0 0 0 7px var(--gold)} }
+.phx .phs[data-liv=velvet]{ & .ph-bk-s b{font-size:14px} & .ph-bk-s.win b{font-size:20px} & .ph-bk-x{font-size:16px} }
+
+/* A rival's team (mock-up `scout`) */
+.phx .phs{
+  & .ph-sc-g{cursor:pointer;z-index:2;top:122px;gap:12px 18px}
+  & .ph-sc-g.wide{left:70px;grid-template-columns:repeat(3,366px)}
+  & .ph-sc-c{min-height:176px;grid-template-columns:106px 1fr}
+  & .ph-sc-c .sc-pic{overflow:hidden;height:110px}
+  & .ph-sc-mv{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:2px}
+  & .ph-sc-mv span{font:700 14px/1 var(--f-cond);padding:5px 7px;background:color-mix(in srgb,currentColor 16%,transparent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  & .ph-sc-who{pointer-events:none;filter:drop-shadow(10px 10px 0 var(--k))}
+  & .ph-sc-tip{top:auto;bottom:62px;padding:10px 26px 12px;z-index:3} & .ph-sc-tip .txt{margin:2px 0 0;font-size:18px;line-height:1.25}
+  & .ph-sc-g.wide+.ph-sc-tip{left:70px}
+}

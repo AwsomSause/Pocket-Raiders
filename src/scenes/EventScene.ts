@@ -289,7 +289,7 @@ export class EventScene extends Phaser.Scene {
       // The job offer's chip says what joining is worth, as on the mock-up.
       const groupTag = `${view.event.group} · ${view.event.rarity.charAt(0).toUpperCase()}${view.event.rarity.slice(1)}`;
       const tag = view.event.id === 'stand-with-recruiter' && !standWithOf(run) ? `Reputation +${STAND.joinRep} if you join` : groupTag;
-      const teamPage = (): TeamModel | null => (view.team && this.rxTeam && this.phase === 'choose' ? { rival: view.team.rival, cards: view.team.mons.map((m) => ({ name: m.name, file: monFile(this, m.speciesId, 'icon'), level: m.level, types: m.types, moves: m.moves })) } : null);
+      const teamPage = (): TeamModel | null => (view.team && this.rxTeam && this.phase === 'choose' ? { rival: view.team.rival, who: phantomOn() ? cast : null, cards: view.team.mons.map((m) => ({ name: m.name, file: monFile(this, m.speciesId, 'icon'), front: phantomOn() ? monFile(this, m.speciesId, 'front') : null, level: m.level, types: m.types, moves: m.moves })) } : null);
       if (view.team) {
         this.toggleTeam = (): void => {
           if (this.phase !== 'choose' || this.rxBracket !== null || this.rxCard) return;
