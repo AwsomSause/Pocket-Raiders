@@ -91,3 +91,9 @@ Copied from the round-4 mockups (`plans/evil-mode-rework/mockups-v4/sprites/`, P
 | --- | --- |
 | `t-applicant.png`, `t-hex.png`, `t-biker.png`, `t-backpacker.png` | Trainer sprites from `images/trainer/pr/` (PokeRogue pack), first frame; the applicant's stand-in and the queue in the rain |
 | `g-idcard.png`, `g-badgecard.png` | Item icons from `images/items/` (PokeRogue pack), re-saved at the mockup's size |
+
+## Slice D8 (Squads and Groups, mockup 13)
+
+| File | From |
+| --- | --- |
+| `t-proton.png`, `t-petrel.png`, `t-misty.png` (D8, the Squads page's Vengeance targets) | Trainer sprites from the PokeRogue pack (`images/trainer/`), one frame, as in `plans/evil-mode-rework/mockups-v3/sprites/` |

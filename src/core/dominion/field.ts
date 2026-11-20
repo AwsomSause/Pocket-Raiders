@@ -17,7 +17,7 @@ import { addWorldStep, fill } from './worldTurn';
 import { addLoyalty, addMorale, addXp, monName } from './crew';
 import { hasBand } from './pyramid';
 import { evolveOne } from './reserve';
-import { buildingDef, hasRoom, launderAction, roomFor, spend } from './hqFx';
+import { buildingDef, hasRoom, hqFx, launderAction, roomFor, spend } from './hqFx';
 
 const F = () => DOMINION_DATA.field;
 const L = () => DOMINION_DATA.field.lines;
@@ -317,6 +317,13 @@ const crewStat = (b: DominionBlock, bring: readonly string[], stat: StatId, most
   bring.map((id) => b.members.find((m) => m.id === id)).filter((m) => !!m).slice(0, most).map((m) => [`${m!.name} brought along`, m!.stats[stat] * F().odds.crewPer]);
 
 /** The Card (Part 1 §3, mockup 4): everything the action risks and pays, worked out from the block. Never rolls. */
+/** D8: odds parts from later slices on the Boss's Card (a squad's Vengeance target, Glory on Attack and Raid). */
+type OddsPartHook = (b: DominionBlock, actionId: string, targetId: string | null, bring: readonly string[]) => [string, number][];
+const ODDS_PART_HOOKS: OddsPartHook[] = [];
+export function addOddsPartHook(h: OddsPartHook): void {
+  ODDS_PART_HOOKS.push(h);
+}
+
 export function card(b: DominionBlock, run: Pick<RunState, 'party'>, actionId: string, targetId: string | null, districtId: string, bring: readonly string[] = [], opt: string | null = null): Card | null {
   const def = actionDef(actionId);
   const play = def ? playOf(def.id) ?? null : null;
@@ -339,6 +346,7 @@ export function card(b: DominionBlock, run: Pick<RunState, 'party'>, actionId: s
   if (roll) {
     if (stat) parts.push([`Boss ${cap(stat)} ${f.edge.stats[stat]}`, f.edge.stats[stat] * O.statPer]);
     if (stat) parts.push(...crewStat(b, bring, stat, play?.squad ?? O.maxBrought));
+    for (const h of ODDS_PART_HOOKS) parts.push(...h(b, def.id, target?.id ?? null, bring));
     const intel = target ? f.scouted[target.id] ?? 0 : 0;
     if (target && intel >= b.day) parts.push([intel - O.scoutDays >= b.day - 1 ? 'Scouted yesterday' : 'Scouted', O.scouted]);
     if (ds.heat >= O.heatPer) parts.push([`Heat in ${district.name}`, -Math.floor(ds.heat / O.heatPer)]);
@@ -348,7 +356,8 @@ export function card(b: DominionBlock, run: Pick<RunState, 'party'>, actionId: s
     if (M.odds[level - 1]) parts.push([`${M.names[level - 1]} (Lv ${level})`, M.odds[level - 1]!]);
   }
   const chance = roll ? clamp(base + parts.reduce((a, [, n]) => a + n, 0), O.min, O.max) : 100;
-  const exact = !roll || (target ? (f.scouted[target.id] ?? 0) >= b.day : true) || level >= M.intelFrom;
+  // D6b: the Ledger Office's Honest Card shows the exact odds.
+  const exact = !roll || (target ? (f.scouted[target.id] ?? 0) >= b.day : true) || level >= M.intelFrom || hqFx(b).honest > 0;
   const range: [number, number] = exact ? [chance, chance] : [clamp(chance - O.rangeHalf, O.min, O.max), clamp(chance + O.rangeHalf, O.min, O.max)];
 
   // what's at stake
@@ -389,7 +398,8 @@ export function card(b: DominionBlock, run: Pick<RunState, 'party'>, actionId: s
   police = Math.min(100, police);
 
   const cost = def.slot === 'day' ? tr.cost + 1 : 0;
-  const money = play?.cost ?? 0;
+  // D4b: an action that gets cheaper with mastery (Move Tutor) takes `cheaper`% off from the second level.
+  const money = Math.round(((play?.cost ?? 0) * (100 - (level >= 2 ? play?.cheaper ?? 0 : 0))) / 100);
   const out: Card = {
     def, play, district, target, blocked: null, roll, chance, parts, base, exact, range, pay, bring: [...bring], weekly, crate: play?.crate ?? null,
     heat, failHeat, regard: play?.regard ?? 0, dread: play?.dread ?? 0, cost, money, travel: tr, battle, police, level, opt, opts: [], note: null,
@@ -464,6 +474,13 @@ export interface ActFx {
 }
 type ActEffect = (b: DominionBlock, x: ActFx) => string[];
 const ACT_EFFECTS: Partial<Record<string, ActEffect>> = {};
+/** D4b: an effect that needs the content, the run and the action's mastery level (school.ts: Egg Run, Breed, Move Tutor). */
+export interface PlayFx { content: Content; b: DominionBlock; run: RunState; level: number; rng: Rng }
+type PlayEffect = (x: PlayFx) => string[];
+const PLAY_EFFECTS: Partial<Record<string, PlayEffect>> = {};
+export function addPlayEffect(effect: string, f: PlayEffect): void {
+  PLAY_EFFECTS[effect] = f;
+}
 export function addActEffect(effect: string, f: ActEffect): void {
   ACT_EFFECTS[effect] = f;
 }
@@ -692,6 +709,9 @@ function succeed(content: Content | null, b: DominionBlock, run: RunState, x: Ct
     default: {
       const fx = play.effect ? ACT_EFFECTS[play.effect] : undefined;
       if (fx) lines.push(...fx(b, { action: def.id, district: district.id, target: target?.id ?? null, big: x.big, opt: x.opt, bring: c.bring, run, content, card: c }));
+      const pfx = play.effect ? PLAY_EFFECTS[play.effect] : undefined;
+      // The line the effect writes replaces the win line (as Evolve in Peace's does).
+      if (pfx && content) lines.splice(lines.length - 1, 1, ...pfx({ content, b, run, level: masteryLevel(f.mastery[def.id] ?? 0), rng }));
       // D11: the Hero actions' effects (hero.ts).
       if (play.effect) HOOKS.effects[play.effect]?.(b, run, { district, target, big: x.big }, lines);
       break;

@@ -14,10 +14,12 @@ import { fileView, hireOverlay, leadsOverlay, morningView } from '../../ui/redux
 import { personaView } from '../../ui/redux/screens/dominion/persona';
 
 interface Host {
-  screenName: 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'founding' | 'founded' | 'debate';
+  screenName: 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'squads' | 'founding' | 'founded' | 'debate' | 'spy';
   setNotice(n: string | null): void;
   refresh(): void;
   step(a: DominionAction): boolean;
+  /** D22: F opens the Confront room for this member. */
+  confront(member: string): void;
   cache: { json: { get(k: string): unknown } };
 }
 
@@ -176,6 +178,8 @@ export class CrewController {
     if (this.persona) return false;
     const go = (a: DominionAction): boolean => (this.host.step(a), true);
     switch (code) {
+      case 'KeyF':
+        return this.host.confront(m.id), true;
       case 'KeyT':
         return go({ t: 'evTalk', member: m.id });
       case 'KeyB':

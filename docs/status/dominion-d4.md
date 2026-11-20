@@ -34,13 +34,22 @@ No version bump. `block.reserve` is optional and filled the same way every time 
 ## Limits and what's left
 - Merged with D9: the rival team's task kinds and D4's share one `addTaskKind` hook (D9's signature, plus the task level `lv`). The Rival File (R from the HQ) and the Reserve / Pyramid live side by side.
 - Merged with D5: the Reserve holds D5's 20 plus each Pokémon Storage room's places, and Pokémon over the cap are let go with D5's report line. D5's stores test now checks the Reserve.
-- **Left, pointed at D4 by D5 and D9 and not built yet** (pinned in `dominionReserve.test.ts` so nothing joins quietly), for a D4 follow-up:
-  - Crew tasks: Learn a Trade (67), Teach a Move (69).
-  - Actions: Egg Run, Breed, Move Tutor.
-  - 18 buildings: Type Dojo: Fire (from D9), Admin Quarters, Classroom, Sparring Ring, Stealth School, Officer Academy, Therapy Room, Retiree Hall, Comfort Ward, Grunt Academy, Skill Booth, Veteran's Corner, Skill Exam Hall, Personality Lab, Mentoring Office, Sergeant's Post, Lieutenant's Office, Captain's Hall.
+- The 23 items D5 and D9 pointed at D4 are built in **D4b** (below). Nothing waits for D4 now (`dominionReserve.test.ts` checks it).
 - Safari Patrol, Hatch Eggs and Heal the Team wait for the slices D5 named.
-- Moved: Hire a Specialist to D10, Plant a Mole to D9.
+- Moved: Hire a Specialist to D10, Plant a Mole to D22 (spies; D9 merged without it).
 - Not built yet: Train's +10% XP for on-type Pokémon; named recruits' 7-day off-type rule; the Morale hit for "favours a type you don't run"; the Flyer recruit bonus; rivals or the Hero scouting your types (D9, D11).
 - The region bonus to caps reads region 0 until D15 adds regions; the Sworn flag's effect waits for D15.
 - Disobeying in battle is modelled through job odds, not in the battle engine.
 - The Boss's own catches in battle still go to the party (the Reserve only takes crew catches and gifts back).
+
+## D4b: what later slices pointed at D4 (follow-up PR)
+Rules in `src/core/dominion/school.ts` (plus small hooks in `pyramid.ts`, `crew.ts`, `hqFx.ts`, `hq.ts`, `worldTurn.ts`, `field.ts`, `session.ts`); numbers and lines in `pyramid.json` `school`; rooms in `tools/dominion/buildings-to-json.py`. No new RNG stream (Egg Run and Breed roll on the action's own stream). No block bump: `reserve.eggs` and `reserve.retirees` are optional.
+- **Learn a Trade** (task 67): learns the trade their best stat fits (forger: Wits, mechanic: Brawn, cook: Charm); level 2 the trade's discount (forger 5% off Hire Grunt, mechanic 5% off building and raising rooms, cook 5% off wages); level 3 a second trade; level 4 the blueprint doubles the discount; level 5 a weekly master craft (₽100 clean, rooms repaired +10, or 2 Oran Berries). A fail costs ₽20.
+- **Teach a Move** (task 69, Sergeant and up): the tutor costs ₽100 (₽80 from level 2); the member's Pokémon learns its strongest move of its own type; level 3 two moves, level 4 one to each of their Pokémon, level 5 an egg move first. A fail teaches nothing.
+- **Egg Run** (action 63, Day, needs Holding Pens, 70%): an egg that hatches in 3 days (2 from level 2) into the Reserve at Trust 8, at the Boss's team level −5; level 3 a species the team has, level 4 the species shows, level 5 the best of three. Six eggs at most.
+- **Breed** (action 68, Evening, needs Holding Pens): two Reserve Pokémon out of the Pens (a same-family pair first, then the most trusting) leave an egg of the first one's family; level 2 a 50% chance of a good nature, level 3 IVs at least 15, level 4 an egg move a parent knows, level 5 the hidden ability.
+- **Move Tutor** (action 72, Evening, needs the Dojo, ₽200, 20% less from level 2): the Boss's first Pokémon with something to learn: a move it missed by level; from level 3 any TM or tutor move; level 4 two; level 5 an egg move.
+- **Rooms** (all on, each T1 effect, scaled by tier): Admin Quarters, Sergeant's Post, Lieutenant's Office, Captain's Hall add a seat in their rank (+1 more every 3 tiers); Officer Academy takes 2 member levels off every rank up to Sergeant; Classroom forms the member's next trait at promotion (a trait point once two have formed); Skill Exam Hall +1 to the best stat at promotion; Skill Booth +1 task XP every working day. Weekly: Sparring Ring (paired bouts, +3 XP), Stealth School (+0.4 Stealth to all), Grunt Academy (+1 point on a Grunt's task stat), Veteran's Corner (+2 XP to the newest), Mentoring Office (an Admin and a Grunt: +2 XP, +2 Loyalty), Personality Lab (a trait forms early), Therapy Room (cures Resentful or Embezzler; else +10 Morale to the unhappiest), Comfort Ward (+2 Trust to the most anxious Pokémon), Retiree Hall (a member let go or seen off after 14+ days at Loyalty 50+ retires there; each retiree +1 Morale to all a week), Type Dojo: Fire (Fire Pokémon of the Boss, the crew and the Reserve gain level x 4 XP a week). The other seven Type Dojos share the rule and are on too.
+- The Reserve's count shows waiting eggs ("· 2 eggs, next on Day 9").
+- Not built (capstones): T8 capstones of these rooms (two traits on promotion, regions held, raids led) wait like D5's.
+- Tests: `tests/unit/dominionSchool.test.ts` (21 tests).
