@@ -59,7 +59,10 @@ function paint(id) {
   if (!list.find(s => s.id === id)) id = (list.find(s => s.changed) || list[0]).id;
   PR.cur = id;
   const d = pick(PR.defs[id], PR.P);
-  st.dataset.pass = PR.P; st.dataset.scr = id;
+  /* a page can be locked to the look of an earlier pass: meta.as */
+  const as = (d.meta && d.meta.as) || PR.P;
+  for (const x of document.querySelectorAll('style[data-pass]')) x.media = (+x.dataset.pass <= as) ? 'all' : 'not all';
+  st.dataset.pass = as; st.dataset.scr = id;
   st.innerHTML = d.fn(PR.P);
   nameMorphs();
 }
@@ -90,7 +93,7 @@ function setPass(P, kind) {
 function chrome() {
   if (QS.has('bare')) return;
   const P = PR.P, n = NOTES[P] || {}, list = screensAt(P);
-  $('#vw-pass').textContent = 'Pass ' + P + ' of ' + PR.maxPass;
+  $('#vw-pass').textContent = n.label || ('Pass ' + P + ' of ' + PR.maxPass);
   $('#vw-name').textContent = n.name || '';
   $('#vw-range').max = PR.maxPass; $('#vw-range').value = P;
   let html = '', g = '';

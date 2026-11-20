@@ -417,5 +417,18 @@
   "q3": "Yes, five hand-over pages: Master Cut (the journey from pass 1), Style Guide, Page Map (every page by group), Motion Rules (six kinds of movement with timings) and Build Order.",
   "q4": "The pause menu and party now share one backdrop idea (the ball's two halves, belt in the middle), so opening the menu from anywhere feels like the same place. Settings is listed in the Page Map with all ten of its pages.",
   "q5": "Yes. Rays, sparkles, foil cards and a ball in the logo are the title-screen language of the series, and nothing here needs art the game does not already have."
+ },
+ "26": {
+  "name": "Final Cut",
+  "label": "Final Cut · Kice's picks",
+  "big": "Kice's picks in one set: the Title from pass 17, the Pause menu from pass 24, and every other screen from pass 25. Evil Mode pages are left out. Three fixes Kice asked for are in: no light rays over the Pokémon in Hub Town, a smaller status bar under the foe in battle, and the \"What will Charizard do?\" box moved clear of the EXP bar.",
+  "pages": [
+   "Final Cut"
+  ],
+  "q1": "It keeps the loudest pass (25) for almost everything, and takes the calmer word-menu Title from pass 17 that Kice preferred.",
+  "q2": "Nothing new is invented here. It is the chosen mix, with the three things Kice pointed at fixed.",
+  "q3": "One: the Final Cut page lists which pass each screen comes from and what was fixed.",
+  "q4": "Pause is the pass 24 phone with the giant ball behind it. Settings is the pass 25 set of ten pages.",
+  "q5": "Yes. These are the screens Kice picked as the game's look."
  }
 }
