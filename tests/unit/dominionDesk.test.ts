@@ -5,6 +5,7 @@ import { fakeTransport } from '../../src/ai/client';
 import { KeyStore, type KeyValueStore } from '../../src/ai/keyStore';
 import { wrapPlayerText } from '../../src/core/ai/rules';
 import type { AiLog } from '../../src/core/ai/schema';
+import { freshChair } from '../../src/core/dominion/chair';
 import { crewOf } from '../../src/core/dominion/crew';
 import { DOMINION_DATA } from '../../src/core/dominion/data';
 import {
@@ -37,7 +38,13 @@ function go(r: RunState, ...actions: Parameters<typeof stepInRun>[2][]): RunStat
 function day1(seed = 'd21'): RunState {
   const out = startInRun(content, domRun(seed), { types: ['poison', 'dark'], member: 'grunt', look: 0 });
   expect(out.problem).toBeNull();
-  return go(out.run, { t: 'open' });
+  return quiet(go(out.run, { t: 'open' }));
+}
+/** D12: the Chair is switched off here, so these nights stay the same as before it. */
+function quiet(r: RunState): RunState {
+  const out = structuredClone(r);
+  out.expansion!.dominion!.chair = { ...freshChair(), opts: { length: 'off', numbers: 'arrows', speed: 'normal' } };
+  return out;
 }
 /** The Day phase of Day 2 (the first Day, and the desk's first). */
 function day2(seed = 'd21'): RunState {

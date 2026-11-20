@@ -17,6 +17,7 @@ import { rxFileOf } from '../ui/redux/assets';
 import { mountRedux, type ReduxView } from '../ui/redux/stage';
 import { hqView, openingView, setupView, titleView, type SetupFiles } from '../ui/redux/screens/dominion/views';
 import { CrewController } from './dominion/crewController';
+import { ChairController } from './dominion/chairController';
 import { ReserveController } from './dominion/reserveController';
 import { typeBoxOpen } from '../ui/typeBox';
 import { DeskController } from './dominion/deskController';
@@ -63,6 +64,8 @@ export class DominionScene extends Phaser.Scene {
   private manifest: AssetManifest | undefined;
   /** D3: the Morning (mockup 2) and the Crew File (mockup 5). */
   private crew = new CrewController(this);
+  /** D12: the Chair (mockups c1-c3), open in the Evening before the Night. */
+  private chair = new ChairController(this);
   /** D6: the Ledger's open spread (0 Money | Empire, 1 Territory | Notoriety, 2 Crew | Stores) and where L goes back to. */
   private spread = 0;
   private ledgerFrom: Screen = 'hq';
@@ -99,6 +102,7 @@ export class DominionScene extends Phaser.Scene {
     this.notice = null;
     this.leaving = false;
     this.crew = new CrewController(this);
+    this.chair = new ChairController(this);
     this.founding = null;
     this.foundedShown = 1;
     this.hq = new HqController(this);
@@ -190,6 +194,7 @@ export class DominionScene extends Phaser.Scene {
         after: (how) => this.heroAct({ t: 'after', how: how === 'recruit' ? 'recruit' : 'leave' }),
         interrupt: (i) => this.interrupt(Number(i)),
         ...this.crew.acts(),
+        ...this.chair.acts(),
         ...this.res.acts(),
         ...this.hq.acts(),
         ...this.rival.acts(),
@@ -204,6 +209,7 @@ export class DominionScene extends Phaser.Scene {
         typeOver: (i) => { this.setup = { ...this.setup, at: Number(i) }; this.view?.refresh(); },
         orderOver: (i) => { this.at = Number(i); this.view?.refresh(); },
         ...this.crew.overs(),
+        ...this.chair.overs(),
         ...this.res.overs(),
         ...this.rival.overs(),
         ...this.desk.overs(),
@@ -222,7 +228,8 @@ export class DominionScene extends Phaser.Scene {
       if (this.inRun() && this.police.raw(e)) return;
       if (this.screen === 'founding') return;
       if (this.debate.raw(e.code)) return;
-      if (e.code === 'KeyO' && (this.screen === 'hq' || this.screen === 'map' || this.screen === 'crew')) return this.openFounding();
+      // D12: while the Chair sits, O is its settings, not the Founding.
+      if (e.code === 'KeyO' && (this.screen === 'hq' || this.screen === 'map' || this.screen === 'crew') && !this.chair.owns()) return this.openFounding();
       if (this.screen === 'desk') {
         this.desk.raw(e);
         return;
@@ -258,6 +265,7 @@ export class DominionScene extends Phaser.Scene {
         return;
       }
       if (this.screen !== 'hq' && this.screen !== 'crew' && this.screen !== 'reserve' && this.screen !== 'pyramid') return;
+      if (this.chair.raw(e.code)) return;
       // D4: the Reserve and the Pyramid read their letters first; a move letter they use (W, A, S, D, X) isn't also a move.
       if (this.res.raw(e.code)) {
         if (e.code === 'Tab') e.preventDefault();
@@ -329,6 +337,7 @@ export class DominionScene extends Phaser.Scene {
       case 'opening':
         return openingView(b ? openingLines(b) : [], this.shown, this.memberLook());
       case 'hq':
+        if (b && this.chair.owns()) return this.chair.render(this.notice);
         if (b && this.crew.owns()) return this.crew.render(this.notice);
         return b ? hqView(hqModel(b), this.notice, this.at, this.memberLook(), threatRow(b), deskOpen(b) ? deskWaiting(b) : null, paperNote(b)) : '';
       case 'map':
@@ -546,6 +555,7 @@ export class DominionScene extends Phaser.Scene {
       if (a === 'confirm') return this.heroCta();
       return;
     }
+    if (this.chair.key(a)) return void this.view?.refresh();
     if (this.res.key(a)) return void this.view?.refresh();
     if (this.rival.key(a)) return void this.view?.refresh();
     if (this.desk.key(a)) return void this.view?.refresh();

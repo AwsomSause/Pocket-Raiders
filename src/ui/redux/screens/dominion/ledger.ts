@@ -86,7 +86,7 @@ function ladderPage(m: LedgerModel): string {
   const p = l.parts;
   return `<div class="a" style="${RIGHT}" data-testid="dom-ledger-ladder">
     ${pageHead('Notoriety', m.pages[1])}
-    <div class="row sp" style="margin-top:6px;font-size:15px"><span>Towns ${p.towns} · Holdings ${p.holdings} · Crew ${p.members}</span><b class="num" style="font-size:22px;color:${RED}" data-testid="dom-ledger-notoriety">${p.total}</b></div>
+    <div class="row sp" style="margin-top:6px;font-size:15px"><span>Towns ${p.towns} · Holdings ${p.holdings} · Crew ${p.members}${p.press ? ` · Press ${p.press}` : ''}</span><b class="num" style="font-size:22px;color:${RED}" data-testid="dom-ledger-notoriety">${p.total}</b></div>
     <div class="col" style="gap:2px;margin-top:6px">${steps}</div>
     <b style="display:block;margin-top:8px;font:700 14px var(--regal);letter-spacing:.08em;color:${HEAD}">${l.next ? `${esc(l.next.word.toUpperCase())} IN ${l.next.need}` : 'AT THE TOP'}</b>
     <div style="font-size:13px;line-height:1.3;margin-top:2px">${l.opens.map((o) => `· ${esc(o)}`).join('<br>')}</div>

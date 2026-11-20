@@ -6,7 +6,7 @@ import { addLevels } from '../pokemon';
 import { healParty, newMon } from '../run';
 import type { RunState } from '../state';
 import { step, type StepOut } from './clock';
-import { addMorale, withCrew } from './crew';
+import { addMorale, freshCrewState, withCrew } from './crew';
 import { ask as deskAsk, inspect as deskInspect, rollQueue, stamp as deskStamp } from './desk';
 import { fillCards } from './personality';
 import { admit, approach, hire } from './recruit';
@@ -18,6 +18,7 @@ import { fill } from './worldTurn';
 import { DominionBlockSchema, type DominionAction, type DominionBlock, type DominionSetup } from './schema';
 import { newBlock, typesProblem } from './start';
 import { afterStep, lineFor, weekSum } from './empire';
+import { courtFightEnd } from './chair';
 import { found, foundingOpen } from './founding';
 import { afterStand, answerMeet, ensureHero, heroMember, heroTeam, startLegend } from './hero';
 import { escapeHero } from './field';
@@ -185,6 +186,7 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
     healParty(content, next);
   }
   next = settleCrew(content, next);
+  next = settleChair(content, next);
   return { ...out, block: next.expansion!.dominion!, run: next };
 }
 
@@ -448,6 +450,36 @@ export function settleCrew(content: Content, run: RunState): RunState {
   return out;
 }
 
+/** D12: what a Chair answer gave that needs the run: Pokémon (Stores or a member's team), Bag and held items, levels. */
+export function settleChair(content: Content, run: RunState): RunState {
+  const give = run.expansion?.dominion?.chair?.give;
+  if (!give?.length) return run;
+  const out = structuredClone(run);
+  const b = out.expansion!.dominion!;
+  const st = (b.crew ??= freshCrewState());
+  for (const g of b.chair!.give) {
+    if (g.k === 'mon') {
+      if (!content.species.has(g.species)) continue;
+      const mon = newMon(content, out, g.species, g.level, 'p');
+      const m = b.members.find((x) => x.id === g.member);
+      if (m && m.team.length < 6) m.team.push(mon);
+      else st.stores.push(mon);
+    } else if (g.k === 'levels') {
+      for (const m of b.members) for (const mon of m.team) {
+        const to = Math.min(b.levelCap, mon.level + g.n);
+        if (to > mon.level) addLevels(content, mon, to - mon.level, to);
+      }
+    } else if (g.id === '*') {
+      // A Bag item lost (the Vault): one of the most plentiful.
+      const id = Object.keys(out.inventory).filter((k) => (out.inventory[k] ?? 0) > 0).sort((x, y) => (out.inventory[y] ?? 0) - (out.inventory[x] ?? 0) || x.localeCompare(y))[0];
+      if (id) out.inventory[id] = Math.max(0, (out.inventory[id] ?? 0) + g.n);
+    } else if (g.held) out.looseHeld = { ...(out.looseHeld ?? {}), [g.id]: (out.looseHeld?.[g.id] ?? 0) + g.n };
+    else out.inventory[g.id] = (out.inventory[g.id] ?? 0) + g.n;
+  }
+  b.chair!.give = [];
+  return out;
+}
+
 /** D2: starts the battle the block is waiting on (an action's, or Looker's or the raid's at the door). Null if none. */
 export function fightInRun(content: Content, run: RunState): RunState | null {
   return beginDominionFight(content, run);
@@ -464,6 +496,7 @@ export function settleStaleFight(content: Content, run: RunState): { run: RunSta
   const b = structuredClone(block);
   const funds = b.funds, sum = weekSum(b), why = block.field.fight.why;
   const lines = settle(content, b, out, 'fled', null);
+  if (why === 'court') lines.push(...courtFightEnd(b, 'fled', run.seed));
   lines.push(...afterStep(b, funds, sum, DOMINION_DATA.empire.ledger.byFight[why] ?? 'jobs', null));
   return { run: withBlock(out, DominionBlockSchema.parse(b)), lines };
 }

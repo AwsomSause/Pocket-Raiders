@@ -18,6 +18,7 @@ import { addLoyalty, addMorale, addTaskKind, crewOf, freshCrewState, leave, type
 import { buildingDef, hqFx, hqOf, spend, working } from './hqFx';
 import { defense, roomName, wear } from './hq';
 import { makeLead } from './recruit';
+import { setChairTension } from './chair';
 
 const RV = () => DOMINION_DATA.rivals;
 const RA = () => DOMINION_DATA.rivalActions;
@@ -1205,3 +1206,6 @@ export const rivalDistricts = (b: DominionBlock): string[] => Object.keys(b.fiel
 /** The building named, for lines. */
 export const buildingName = (id: string): string => buildingDef(id)?.name ?? id;
 export { hqOf };
+
+// D12: Tension a Chair answer or deal moves goes to the region's rival team.
+setChairTension((b, n) => void addTension(b, teamAt(b, null), n));

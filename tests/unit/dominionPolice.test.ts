@@ -2,6 +2,7 @@
 // opens (failed Stealth, a lost police fight or raid, a dawn pick-up at high Heat, an arrested member), the Belief
 // meter's rules, the Rotom judge's checks, the release (always some consequences, scaled by the meter), the models,
 // determinism and save/reload.
+import { freshChair } from '../../src/core/dominion/chair';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { DOMINION_DATA } from '../../src/core/dominion/data';
@@ -36,8 +37,14 @@ const domRun = (seed: string): RunState => chooseStarter(content, createRun(cont
 const started = (seed = 'd24', member: 'grunt' | 'admin' = 'grunt'): RunState => {
   const out = startInRun(content, domRun(seed), { types: ['poison', 'dark'], member, look: 0 });
   expect(out.problem).toBeNull();
-  return out.run;
+  return quiet(out.run);
 };
+/** D12: the Chair is switched off here, so these nights stay the same as before it. */
+function quiet(r: RunState): RunState {
+  const out = structuredClone(r);
+  out.expansion!.dominion!.chair = { ...freshChair(), opts: { length: 'off', numbers: 'arrows', speed: 'normal' } };
+  return out;
+}
 const blk = (r: RunState): DominionBlock => r.expansion!.dominion!;
 const go = (r: RunState, a: DominionAction): RunState => {
   const out = stepInRun(content, r, a);

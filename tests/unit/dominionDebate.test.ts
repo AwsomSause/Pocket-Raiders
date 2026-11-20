@@ -1,4 +1,5 @@
 // DOMINION slice D13: the Debate, offline (plans/evil-mode-rework BUILD_SLICES.md; Part 4 §3, Part 9 A2-A4 and A6).
+import { freshChair } from '../../src/core/dominion/chair';
 import { describe, expect, it } from 'vitest';
 import { withCrew } from '../../src/core/dominion/crew';
 import { DOMINION_DATA } from '../../src/core/dominion/data';
@@ -26,8 +27,14 @@ const domRun = (seed: string): RunState => chooseStarter(content, createRun(cont
 const started = (seed = 'dm13'): RunState => {
   const out = startInRun(content, domRun(seed), { types: ['poison', 'dark'], member: 'grunt', look: 0 });
   expect(out.problem).toBeNull();
-  return stepInRun(content, out.run, { t: 'open' }).run;
+  return quiet(stepInRun(content, out.run, { t: 'open' }).run);
 };
+/** D12: the Chair is switched off here, so these nights stay the same as before it. */
+function quiet(r: RunState): RunState {
+  const out = structuredClone(r);
+  out.expansion!.dominion!.chair = { ...freshChair(), opts: { length: 'off', numbers: 'arrows', speed: 'normal' } };
+  return out;
+}
 const blk = (r: RunState): DominionBlock => r.expansion!.dominion!;
 const go = (r: RunState, a: DominionAction): RunState => {
   const out = stepInRun(content, r, a);
