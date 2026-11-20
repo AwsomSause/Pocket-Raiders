@@ -1,0 +1,2554 @@
+[
+ {
+  "id": "sendout",
+  "first": 1,
+  "last": 21,
+  "n": 13,
+  "t": "Send Out",
+  "g": "Battle basics",
+  "now": "The ball flies a fixed 0.7s arc, then the Pokémon scales up from 60% with a bounce. Both sides look the same.",
+  "idea": "Entrances end with a cry sized to the Pokémon, and a heavy Pokémon shakes the screen and bounces the other side off its feet.",
+  "ideas": [
+   [
+    1,
+    "One clear order: ball leaves, ball lands, white flash and ring, the Pokémon grows out of the light and its colour fades in."
+   ],
+   [
+    2,
+    "The ball lands, squashes and bounces once before it opens. The Pokémon comes out tall and thin, lands flat and wide, and settles. Dust on both landings."
+   ],
+   [
+    3,
+    "The landing ring and a spray of sparks come in the Pokémon's own type colours: fire for Charizard, water for Blastoise."
+   ],
+   [
+    4,
+    "The rival skids in with dust, steps back and whips the ball. You slide in, wind up and release on the game's own throw frames, and the ball leaves from the hand. Each trainer steps out as their Pokémon lands."
+   ],
+   [
+    5,
+    "Plates fly in from their own sides with a spring instead of fading, and each line of text pops its bubble."
+   ],
+   [
+    7,
+    "The ground answers: the base dips and flashes under every landing."
+   ],
+   [
+    11,
+    "Entrances end with a cry sized to the Pokémon, and a heavy Pokémon shakes the screen and bounces the other side off its feet."
+   ]
+  ]
+ },
+ {
+  "id": "recall",
+  "first": 1,
+  "last": 4,
+  "n": 3,
+  "t": "Recall",
+  "g": "Battle basics",
+  "now": "The Pokémon just fades out over 0.25s. No beam, no ball.",
+  "idea": "Your trainer leans in from the edge holding the ball out, takes the Pokémon back and steps away.",
+  "ideas": [
+   [
+    1,
+    "The classic red beam: the Pokémon turns red, a beam snaps back to your side and it shrinks away along it."
+   ],
+   [
+    2,
+    "The trainer side holds the ball out first. The Pokémon braces, then is pulled thin up the beam, and the ball jolts as it catches."
+   ],
+   [
+    4,
+    "Your trainer leans in from the edge holding the ball out, takes the Pokémon back and steps away."
+   ]
+  ]
+ },
+ {
+  "id": "attack",
+  "first": 1,
+  "last": 21,
+  "n": 15,
+  "t": "Attack and Hit",
+  "g": "Battle basics",
+  "now": "A 24px lunge, a 60ms white fill, a colour flash and a 6-step shake. HP drains at the same time.",
+  "idea": "Every battle now has its arena's life behind it, and big hits leave a mark on the ground.",
+  "ideas": [
+   [
+    1,
+    "Lunge in, two white blinks and a knock-back on the target, then the HP bar drains while the number counts down."
+   ],
+   [
+    2,
+    "A wind-up lean back, a stretched dash, an 80ms freeze on contact, then the target squashes, is thrown back and springs upright. The HP plate jolts and a ghost bar shows what was lost."
+   ],
+   [
+    3,
+    "The user glows in the move's type before it goes, and the hit bursts in that type: electric bolts for Thunder Punch."
+   ],
+   [
+    5,
+    "The damage number springs out of the hit and a red SUPER EFFECTIVE! stamp slams on at an angle. The message bubble pops and shows a bouncing arrow when it is done."
+   ],
+   [
+    6,
+    "A super effective or critical hit now throws type-coloured rays behind the target (the game's own burst art, re-coloured)."
+   ],
+   [
+    7,
+    "The target's base jolts with the hit, harder for a super effective or critical one."
+   ],
+   [
+    8,
+    "The air moves: pollen drifts through every outdoor battle and a cloud shadow slides across the ground."
+   ],
+   [
+    9,
+    "The message bubble grows a pointer that slides to whoever is acting: left for your Pokémon, right for the foe."
+   ],
+   [
+    12,
+    "Special moves are now fired, not lunged: the user rears back and a shot in the move's colour crosses the field. Big hits throw the target further."
+   ],
+   [
+    16,
+    "Hard hits now punch the camera in toward the target, and a knock-out gets a slow push."
+   ],
+   [
+    18,
+    "Every hit now lights the floor in its type's colour, and a big hit lights the other Pokémon too."
+   ],
+   [
+    19,
+    "Your trainer now reacts with a face and one word when a big hit lands, either way."
+   ],
+   [
+    21,
+    "Every battle now has its arena's life behind it, and big hits leave a mark on the ground."
+   ]
+  ]
+ },
+ {
+  "id": "faint",
+  "first": 1,
+  "last": 23,
+  "n": 11,
+  "t": "Faint",
+  "g": "Battle basics",
+  "now": "The sprite slides down 30px and fades in 0.4s. No last hit moment.",
+  "idea": "When a foe falls, its experience now leaves it as lights and flies to your bar.",
+  "ideas": [
+   [
+    1,
+    "The last hit lands, the bar empties, then the Pokémon sinks into the ground at its feet."
+   ],
+   [
+    2,
+    "A stagger left and right, the knees give, then the drop with a dust cloud."
+   ],
+   [
+    3,
+    "The last hit carries its type: embers for Flamethrower."
+   ],
+   [
+    7,
+    "The fainted side's base goes dark until the next Pokémon lands."
+   ],
+   [
+    11,
+    "It staggers back before it sinks."
+   ],
+   [
+    19,
+    "Your trainer cheers a knock-out and thanks a fallen partner."
+   ],
+   [
+    23,
+    "When a foe falls, its experience now leaves it as lights and flies to your bar."
+   ]
+  ]
+ },
+ {
+  "id": "hpbar",
+  "first": 1,
+  "last": 11,
+  "n": 6,
+  "t": "HP Bar",
+  "g": "Battle basics",
+  "now": "Drain time grows with the damage; a ghost bar follows. Colour changes snap.",
+  "idea": "The bar flashes as it crosses into yellow and into red, and in the red it pulses with a slow glow around the plate.",
+  "ideas": [
+   [
+    1,
+    "One steady 0.6s drain with an ease at both ends, and the number counts with it. Green, yellow and red change as the bar passes each mark."
+   ],
+   [
+    2,
+    "The bar snaps down fast, a white ghost bar holds for a beat and then catches up. The whole plate takes a small jolt."
+   ],
+   [
+    5,
+    "The bar flashes as it crosses into yellow and into red, and in the red it pulses with a slow glow around the plate."
+   ]
+  ]
+ },
+ {
+  "id": "idle",
+  "first": 1,
+  "last": 21,
+  "n": 5,
+  "t": "Standing",
+  "g": "Battle basics",
+  "now": "The game plays each Pokémon's own sprite frames and adds a small 0.9s up-down stretch.",
+  "idea": "Each Pokémon now stands in its own way: Charizard hovers over a shrinking shadow, Blastoise breathes slow and deep.",
+  "ideas": [
+   [
+    1,
+    "Keep the sprite frames. Slow the breath to 1.9s and squeeze the width a little as the body rises, so it reads as breathing, not bobbing."
+   ],
+   [
+    2,
+    "The breath is a little deeper and the shadow shrinks as the body rises."
+   ],
+   [
+    11,
+    "Each Pokémon now stands in its own way: Charizard hovers over a shrinking shadow, Blastoise breathes slow and deep."
+   ]
+  ]
+ },
+ {
+  "id": "switch",
+  "first": 2,
+  "last": 11,
+  "n": 8,
+  "t": "Switch",
+  "g": "Battle basics",
+  "now": "The old Pokémon fades, the new one bounces in, and the info box slides 420px.",
+  "idea": "Your trainer steps in for the recall and again for the throw, so a switch reads as one person doing two things.",
+  "ideas": [
+   [
+    2,
+    "One unbroken move: beam back, the bar tucks down, the next ball is already in the air, the bar comes back with the new name."
+   ],
+   [
+    4,
+    "Your trainer steps in for the recall and again for the throw, so a switch reads as one person doing two things."
+   ]
+  ]
+ },
+ {
+  "id": "miss",
+  "first": 2,
+  "last": 5,
+  "n": 3,
+  "t": "Miss",
+  "g": "Battle basics",
+  "now": "The target slides 36px sideways and fades for 130ms.",
+  "idea": "The target sees it coming: a quick duck and side-step with a stretch, the attacker overshoots and skids, then both reset.",
+  "ideas": [
+   [
+    2,
+    "The target sees it coming: a quick duck and side-step with a stretch, the attacker overshoots and skids, then both reset."
+   ]
+  ]
+ },
+ {
+  "id": "levelup",
+  "first": 2,
+  "last": 23,
+  "n": 3,
+  "t": "EXP and Level Up",
+  "g": "After battle",
+  "now": "The EXP bar fills, then a \"Level up\" banner scales in and rises with a gold burst.",
+  "idea": "The bar fills fast and overshoots into a flash, the level number ticks over on the bar, and the Pokémon does two happy hops with dust on each landing.",
+  "ideas": [
+   [
+    2,
+    "The bar fills fast and overshoots into a flash, the level number ticks over on the bar, and the Pokémon does two happy hops with dust on each landing."
+   ]
+  ]
+ },
+ {
+  "id": "types",
+  "first": 3,
+  "last": 12,
+  "n": 2,
+  "t": "Type Reel",
+  "g": "Moves",
+  "now": "When a move has no animation file the game falls back to one of 26 shared effects, or a 24px lunge with a colour tint.",
+  "idea": "Eighteen impact kits, one per type, built from six shapes (sparks, rings, stars, streaks, bolts, chunks). They ride on top of every move animation so a hit always reads as its type, even on the fallback.",
+  "ideas": [
+   [
+    3,
+    "Eighteen impact kits, one per type, built from six shapes (sparks, rings, stars, streaks, bolts, chunks). They ride on top of every move animation so a hit always reads as its type, even on the fallback."
+   ]
+  ]
+ },
+ {
+  "id": "telegraph",
+  "first": 3,
+  "last": 12,
+  "n": 4,
+  "t": "Wind-up Tells",
+  "g": "Moves",
+  "now": "A marker on the user before the move, in three styles: quick, normal, strong.",
+  "idea": "A strong move dims the arena and wraps the user in a rising aura while it charges, so you can feel the size of what is coming.",
+  "ideas": [
+   [
+    3,
+    "The user glows in the move's type colour while a ring closes in at its feet. Quick moves barely flicker, strong moves pull sparks inward and make the ground tremble."
+   ],
+   [
+    6,
+    "A strong move dims the arena and wraps the user in a rising aura while it charges, so you can feel the size of what is coming."
+   ]
+  ]
+ },
+ {
+  "id": "tick",
+  "first": 3,
+  "last": 8,
+  "n": 3,
+  "t": "End-of-turn Damage",
+  "g": "Conditions",
+  "now": "Burn, poison, Leech Seed, recoil and weather damage only show a number. Nothing plays on the Pokémon.",
+  "idea": "Residual damage now has a look for each cause; see Burn, Poison and End of Turn.",
+  "ideas": [
+   [
+    3,
+    "A small version of the type impact, a flinch and a short drain. Fast, because it happens every turn: 0.5s each."
+   ],
+   [
+    8,
+    "Residual damage now has a look for each cause; see Burn, Poison and End of Turn."
+   ]
+  ]
+ },
+ {
+  "id": "heal",
+  "first": 3,
+  "last": 12,
+  "n": 3,
+  "t": "Healing",
+  "g": "Conditions",
+  "now": "A shared \"heal\" effect from the move pack and a green number.",
+  "idea": "Green plus-signs rise through the Pokémon, it brightens and gives one small hop, and the bar climbs with the number.",
+  "ideas": [
+   [
+    3,
+    "Green plus-signs rise through the Pokémon, it brightens and gives one small hop, and the bar climbs with the number."
+   ]
+  ]
+ },
+ {
+  "id": "t-intro",
+  "first": 4,
+  "last": 15,
+  "n": 7,
+  "t": "Trainer Intro",
+  "g": "Trainers",
+  "now": "Bars scale in, the trainer slides 0.48s and a VS card shows.",
+  "idea": "The Trainer Intro page from the UI mockups, moving: the two colours slam together, both trainers slide in, the VS badge spins in and thumps, the name tags rise with each team's balls and the trainer says their line. Then the page splits down its own slant and the first Pokémon are thrown out behind it without a cut.",
+  "ideas": [
+   [
+    4,
+    "The trainer skids in, their name plate snaps out from behind them, and their Poké Balls drop onto the plate one by one with a bounce, so you can count the team before the fight."
+   ],
+   [
+    13,
+    "Every opposing trainer now arrives on a red and gold banner with speed lines."
+   ],
+   [
+    15,
+    "The Trainer Intro page from the UI mockups, moving: the two colours slam together, both trainers slide in, the VS badge spins in and thumps, the name tags rise with each team's balls and the trainer says their line. Then the page splits down its own slant and the first Pokémon are thrown out behind it without a cut."
+   ]
+  ]
+ },
+ {
+  "id": "t-ace",
+  "first": 4,
+  "last": 15,
+  "n": 7,
+  "t": "Ace Call",
+  "g": "Trainers",
+  "now": "A burst at the foe and the line \"sends out their ace\". The ace is just the last one standing.",
+  "idea": "The Ace Call from the UI mockups, moving: the trainer speaks first, then the navy band slams across on its slant, their portrait pops, the ace's name wipes on with its chips, and the ace itself arrives on the band as a dark shape that flashes into colour under a star. The band leaves and the ace leaps off it onto the field.",
+  "ideas": [
+   [
+    4,
+    "The ace is announced before it lands. The trainer comes back on, an ACE banner slams across, the ball is thrown higher and slower, and the landing is twice as big, with a star and an Ace tag on its plate."
+   ],
+   [
+    14,
+    "When a trainer speaks, the bubble gets a name tab and their face in their own colour."
+   ],
+   [
+    15,
+    "The Ace Call from the UI mockups, moving: the trainer speaks first, then the navy band slams across on its slant, their portrait pops, the ace's name wipes on with its chips, and the ace itself arrives on the band as a dark shape that flashes into colour under a star. The band leaves and the ace leaps off it onto the field."
+   ]
+  ]
+ },
+ {
+  "id": "t-lose",
+  "first": 4,
+  "last": 14,
+  "n": 4,
+  "t": "Trainer Defeated",
+  "g": "Trainers",
+  "now": "The trainer slides back and the prize money line shows.",
+  "idea": "The beaten trainer walks back on, drops their shoulders, and the prize money flips out as coins that arc across to your side while the total counts up.",
+  "ideas": [
+   [
+    4,
+    "The beaten trainer walks back on, drops their shoulders, and the prize money flips out as coins that arc across to your side while the total counts up."
+   ]
+  ]
+ },
+ {
+  "id": "t-call",
+  "first": 4,
+  "last": 13,
+  "n": 2,
+  "t": "Trainer Call-out",
+  "g": "Trainers",
+  "now": "Trainer lines appear in the normal message box.",
+  "idea": "A small portrait card pops in at the edge with a speech bubble on a springy tail, the Pokémon it is aimed at perks up, and the card tucks away. It never covers the plates.",
+  "ideas": [
+   [
+    4,
+    "A small portrait card pops in at the edge with a speech bubble on a springy tail, the Pokémon it is aimed at perks up, and the card tucks away. It never covers the plates."
+   ]
+  ]
+ },
+ {
+  "id": "stamps",
+  "first": 5,
+  "last": 17,
+  "n": 4,
+  "t": "Numbers and Stamps",
+  "g": "Moves",
+  "now": "A floating number (scale 0.6 to 1, rises 46px) and a small SUPER / WEAK / IMMUNE / CRIT badge.",
+  "idea": "The number springs out of the hit and lifts away. Super effective is a red stamp that slams on at an angle and shakes the screen; not very effective settles in softly in blue; a critical hit turns the number gold and bigger.",
+  "ideas": [
+   [
+    5,
+    "The number springs out of the hit and lifts away. Super effective is a red stamp that slams on at an angle and shakes the screen; not very effective settles in softly in blue; a critical hit turns the number gold and bigger."
+   ]
+  ]
+ },
+ {
+  "id": "lowhp",
+  "first": 5,
+  "last": 12,
+  "n": 4,
+  "t": "Danger",
+  "g": "Battle basics",
+  "now": "The bar turns red. Nothing else changes.",
+  "idea": "When HP drops under a fifth the bar pulses, the whole plate gets a slow red glow and the Pokémon breathes faster and sags. It stops the moment it is healed.",
+  "ideas": [
+   [
+    5,
+    "When HP drops under a fifth the bar pulses, the whole plate gets a slow red glow and the Pokémon breathes faster and sags. It stops the moment it is healed."
+   ]
+  ]
+ },
+ {
+  "id": "encounter",
+  "first": 5,
+  "last": 21,
+  "n": 4,
+  "t": "Wild Encounter",
+  "g": "Battle basics",
+  "now": "Glass shutters close and open in 0.36s with a ball bloom, then the Pokémon is simply there.",
+  "idea": "Now starts on the map: the stop pulses, the ball wipe shuts over it and opens on the arena, and the pass-5 entrance (dark shape, colour floods in with the cry, plate flies in) follows without a cut.",
+  "ideas": [
+   [
+    5,
+    "Two flashes, the screen splits into bars that pull apart, and the wild Pokémon slides in as a dark shape. Its colour floods in with its cry, its plate flies in, and only then do you throw."
+   ],
+   [
+    10,
+    "Now starts on the map: the stop pulses, the ball wipe shuts over it and opens on the arena, and the pass-5 entrance (dark shape, colour floods in with the cry, plate flies in) follows without a cut."
+   ]
+  ]
+ },
+ {
+  "id": "catch",
+  "first": 5,
+  "last": 5,
+  "n": 1,
+  "t": "Catch",
+  "g": "Catching",
+  "now": "Ball flies 0.45s, the foe shrinks and fades, the ball bounces, each shake is a 120ms rock, then a burst.",
+  "idea": "The ball bonks the Pokémon and pops up before it opens, drops and bounces twice with dust, and three lamps above it light one per shake. On the click it squashes, three stars fly, and GOTCHA! stamps on.",
+  "ideas": [
+   [
+    5,
+    "The ball bonks the Pokémon and pops up before it opens, drops and bounces twice with dust, and three lamps above it light one per shake. On the click it squashes, three stars fly, and GOTCHA! stamps on."
+   ]
+  ]
+ },
+ {
+  "id": "breakout",
+  "first": 5,
+  "last": 5,
+  "n": 1,
+  "t": "Break Out",
+  "g": "Catching",
+  "now": "The ball vanishes and the Pokémon is back in the same frame. No burst at all.",
+  "idea": "The ball rattles faster and faster, splits into two halves that spin away, and the Pokémon bursts back out bigger than life before it settles with an angry hop. The unlit lamp falls off.",
+  "ideas": [
+   [
+    5,
+    "The ball rattles faster and faster, splits into two halves that spin away, and the Pokémon bursts back out bigger than life before it settles with an angry hop. The unlit lamp falls off."
+   ]
+  ]
+ },
+ {
+  "id": "mega",
+  "first": 6,
+  "last": 20,
+  "n": 6,
+  "t": "Mega Evolution",
+  "g": "Gimmicks",
+  "now": "A 4.3s scene: pink crystal, shatter, white flash. With Fast Mega on, a short generic cut-in.",
+  "idea": "Remake 5, goal: one signature picture. Mega Evolution is glass. A double helix of colour climbs Charizard on the field, cracks run from it to every edge of the battle screen, and the screen goes black. Then the new picture slams together out of twenty-four shards, the corners first and Mega Charizard X's face last. When it is over the picture shatters again, and the pieces fall away from the field.",
+  "ideas": [
+   [
+    6,
+    "The bracelet throws six colours into the Pokémon, the game's orb closes around it and cracks while the arena dims, then it shatters outward and the Mega form lands with a roar. The Mega mark spins up and drops onto the name bar. 3.6s."
+   ],
+   [
+    16,
+    "Remake 1, goal: scale. The camera pushes in on Charizard and the cut-in page opens out of it until it is the whole screen. The orb closes around a Charizard five times its battle size while twelve streaks of colour drive in from every edge, cracks, and blows apart across the full width. Mega Charizard X lands on the page, the title slams, the four facts are dealt, and the page closes back onto the field where the Mega now stands."
+   ],
+   [
+    17,
+    "Remake 2, goal: impact. No easing, only cuts. Black frame: the bracelet in white. The battle in negative for three frames. Three comic panels slam on at an angle: Charizard's eyes, your raised arm, the word MEGA. Then a black-and-white frame of Charizard, the orb already cracked, three hard cracks with lightning, and it blows out in black and white shards before the colour arrives with the Mega form."
+   ],
+   [
+    18,
+    "Remake 3, goal: light. The arena goes dark and the Mega Bracelet is the only light in it. A beam carries that light to Charizard, who starts to glow, and the glow swallows the screen. Inside it the orb is a lamp: the Mega rainbow fans out of it as six real shafts of light, turning, and white needles leak out through the cracks. Mega Charizard X arrives as the exposure settles, and back on the field the arena stays lit in its colour."
+   ],
+   [
+    19,
+    "Remake 4, goal: together. The screen splits: you on the left raising the Mega Bracelet, Charizard on the right, a white seam between you and five heartbeats that speed up. The halves open like doors and you are standing side by side. The Key Stone lights in your hand, the Mega Stone answers on Charizard's chest, and six strands of colour run between the two before the orb closes. Afterwards you call out and Mega Charizard X answers."
+   ],
+   [
+    20,
+    "Remake 5, goal: one signature picture. Mega Evolution is glass. A double helix of colour climbs Charizard on the field, cracks run from it to every edge of the battle screen, and the screen goes black. Then the new picture slams together out of twenty-four shards, the corners first and Mega Charizard X's face last. When it is over the picture shatters again, and the pieces fall away from the field."
+   ]
+  ]
+ },
+ {
+  "id": "tera",
+  "first": 6,
+  "last": 20,
+  "n": 6,
+  "t": "Terastallize",
+  "g": "Gimmicks",
+  "now": "A 2.2s scene: the crystal shakes and breaks; afterwards a jewel bobs 4px above the Pokémon.",
+  "idea": "Remake 5, goal: one signature picture. Terastallizing goes inside the jewel. One crystal closes over Charizard on the field, and the camera goes into it: twelve mirrored slices of Charizard turn like a kaleidoscope, changing colour as they go, then fold into a single point of light that becomes the crown.",
+  "ideas": [
+   [
+    6,
+    "Crystals from the game's Tera art grow out of the ground around the Pokémon one after another, rainbow rings pass through, and it all bursts into shards. The Tera crown drops onto its head in the new type's colour and stays, bobbing, with a soft glint on the sprite."
+   ],
+   [
+    16,
+    "Remake 1, goal: scale. Five crystals as tall as the screen punch up from the bottom edge one after another, each one jolting the picture, until Charizard is walled in. Pulse rings pass through, everything shatters across the whole screen, and the Terastallized form lands on the cut-in page under its jewel."
+   ],
+   [
+    17,
+    "Remake 2, goal: impact. The same hard-cut language: item in white on black, the battle in negative, three panels with the word TERA. The five crystals do not grow, they are simply there, one every two frames, each with a flash; one negative frame, and they are gone in shards."
+   ],
+   [
+    18,
+    "Remake 3, goal: light. Lights out, the Tera Orb glows, a beam reaches Charizard. Five crystals rise as dark shapes. One white beam comes in from the corner, enters the middle crystal and leaves the other side as a rainbow; the crystals light up one after another, and everything shatters into coloured facets. Afterwards the field is lit pale blue."
+   ],
+   [
+    19,
+    "Remake 4, goal: together. After the split screen and the heartbeats, you throw the Tera Orb: it arcs over Charizard's head, bursts into a beam of light, and the crystals grow where it lands, lighting you from the side. Afterwards you call out and Charizard answers."
+   ],
+   [
+    20,
+    "Remake 5, goal: one signature picture. Terastallizing goes inside the jewel. One crystal closes over Charizard on the field, and the camera goes into it: twelve mirrored slices of Charizard turn like a kaleidoscope, changing colour as they go, then fold into a single point of light that becomes the crown."
+   ]
+  ]
+ },
+ {
+  "id": "dynamax",
+  "first": 6,
+  "last": 20,
+  "n": 7,
+  "t": "Dynamax",
+  "g": "Gimmicks",
+  "now": "A 2.4s scene: recall, the band rises, the ball falls and shakes four times, a silhouette grows, the red giant roars.",
+  "idea": "Remake 5, goal: one signature picture. Dynamax is one long camera move. You throw the swollen ball up out of the top of the screen and the camera follows it. Cut: your shoes, and a foot the size of a house. The camera climbs the giant without a cut, through two layers of storm cloud, and stops at its face above the weather as it roars.",
+  "ideas": [
+   [
+    6,
+    "The ball swells in your hand until it is too big to hold, you heave it up and over, and where it lands the Pokémon rises through red storm clouds while the camera pulls back to fit it. Its HP bar doubles in front of you and three turn lamps light."
+   ],
+   [
+    7,
+    "The game's raid storm spiral now turns behind the giant."
+   ],
+   [
+    16,
+    "Remake 1, goal: scale. Storm clouds roll in at the top and Charizard simply keeps growing: past the title, past the top of the screen, while the camera tilts up to follow and lightning walks across behind it. It lands on the cut-in page as the giant, and back on the field the camera has pulled out to fit it."
+   ],
+   [
+    17,
+    "Remake 2, goal: impact. After the panels and the word MAX, Charizard does not swell, it jumps: three sizes in three cuts, each with a shock ring across the floor and a bolt behind it, the third one past the top of the screen. One negative frame and the giant is on the page."
+   ],
+   [
+    18,
+    "Remake 3, goal: light. Lights out, the Dynamax Band glows. A column of red light comes down out of the storm cloud and Charizard's silhouette grows inside it while lightning lights the cloud from within. The column widens until it is the whole screen. Afterwards the arena is lit red from the giant."
+   ],
+   [
+    19,
+    "Remake 4, goal: together. After the split screen, you call Charizard back, the ball swells in your hand, and you hurl it over your shoulder. It bursts behind you and the giant rises with you standing small in front of it, in its shadow. That picture of the two sizes is the cutscene."
+   ],
+   [
+    20,
+    "Remake 5, goal: one signature picture. Dynamax is one long camera move. You throw the swollen ball up out of the top of the screen and the camera follows it. Cut: your shoes, and a foot the size of a house. The camera climbs the giant without a cut, through two layers of storm cloud, and stops at its face above the weather as it roars."
+   ]
+  ]
+ },
+ {
+  "id": "dmax-end",
+  "first": 6,
+  "last": 7,
+  "n": 2,
+  "t": "Dynamax Ends",
+  "g": "Gimmicks",
+  "now": "A 0.65s shrink.",
+  "idea": "The third lamp goes out, steam vents from the giant as it shrinks past its normal size and springs back, the clouds blow away and the camera settles. 1.4s.",
+  "ideas": [
+   [
+    6,
+    "The third lamp goes out, steam vents from the giant as it shrinks past its normal size and springs back, the clouds blow away and the camera settles. 1.4s."
+   ]
+  ]
+ },
+ {
+  "id": "zmove",
+  "first": 6,
+  "last": 20,
+  "n": 7,
+  "t": "Z-Move",
+  "g": "Gimmicks",
+  "now": "A 1.9s cut-in: white silhouette, speed lines, a rainbow Z ring and the move title sliding in.",
+  "idea": "Remake 5, goal: one signature picture. The Z-Move is the cutscene. Charizard leaves the top of the screen. Cut to the sky looking down: Blastoise small on the field, a shadow growing around it, and a fireball the size of the screen coming down. The damage is counted out in huge numbers, the move's title card holds, and Charizard lands back on a scorched field.",
+  "ideas": [
+   [
+    6,
+    "Trainer and Pokémon charge together: light flows from your Z-Ring into the Pokémon, a giant Z burns in behind it, the move's own title art slams across, and the hit lands as three blasts with the whole screen shaking."
+   ],
+   [
+    16,
+    "Remake 1, goal: scale. A rainbow Z spins in until it is taller than the screen, Z-Power streams in from every side, and Charizard burns white in the middle of it. The cut-in page shows the pose, the ring and the move's own title art, then closes onto the field for the hit."
+   ],
+   [
+    17,
+    "Remake 2, goal: impact. After the panels, the Z is not a shape that spins in: it is cut into the screen in three slashes, each with a flash, and holds for a breath over the black-and-white Charizard before the colour and the title art hit."
+   ],
+   [
+    18,
+    "Remake 3, goal: light. Lights out, the Z-Ring glows. A sun rises behind Charizard's silhouette, its rays turning, and the Z is written across it in three strokes of light. A lens flare cuts the screen and the silhouette burns white. The hit lands in a gold-lit arena."
+   ],
+   [
+    19,
+    "Remake 4, goal: together. After the split screen, you and Charizard strike the Z-pose in step: One, Two, Z. Each beat draws one stroke of the Z behind you both, and your Z-Power streams from your hand across to Charizard until it burns gold."
+   ],
+   [
+    20,
+    "Remake 5, goal: one signature picture. The Z-Move is the cutscene. Charizard leaves the top of the screen. Cut to the sky looking down: Blastoise small on the field, a shadow growing around it, and a fireball the size of the screen coming down. The damage is counted out in huge numbers, the move's title card holds, and Charizard lands back on a scorched field."
+   ]
+  ]
+ },
+ {
+  "id": "stadium",
+  "first": 7,
+  "last": 7,
+  "n": 1,
+  "t": "Stadium Crowd",
+  "g": "Galar",
+  "now": "Galar gym battles use a normal arena. The crowd is only in the music.",
+  "idea": "A stadium built for these battles: four rows of stands that bob to the beat, a banner wall in the gym's colour, floodlights. The crowd jumps and cameras flash on a super effective hit, sinks when you take one, and a Crowd meter swings between the two sides.",
+  "ideas": [
+   [
+    7,
+    "A stadium built for these battles: four rows of stands that bob to the beat, a banner wall in the gym's colour, floodlights. The crowd jumps and cameras flash on a super effective hit, sinks when you take one, and a Crowd meter swings between the two sides."
+   ]
+  ]
+ },
+ {
+  "id": "gym-galar",
+  "first": 7,
+  "last": 7,
+  "n": 1,
+  "t": "Gym Leader Entrance",
+  "g": "Galar",
+  "now": "The same slide-in as any trainer, then the battle starts.",
+  "idea": "The leader walks out of the tunnel as a shadow against the light, their number fills the screen, the stadium lights snap on in their colour and their League Card flips over to show the team size. Then both sides take the pitch.",
+  "ideas": [
+   [
+    7,
+    "The leader walks out of the tunnel as a shadow against the light, their number fills the screen, the stadium lights snap on in their colour and their League Card flips over to show the team size. Then both sides take the pitch."
+   ]
+  ]
+ },
+ {
+  "id": "gmax",
+  "first": 7,
+  "last": 7,
+  "n": 1,
+  "t": "Gigantamax",
+  "g": "Galar",
+  "now": "Plays the Dynamax scene; the form just swaps.",
+  "idea": "Its own show. The swollen ball bursts in the sky, the Pokémon's shadow grows up through the storm past the top of the screen, the camera pulls back to find the new shape, and its special feature (here the burning wings) ignites last. The G-Max mark stamps the name bar.",
+  "ideas": [
+   [
+    7,
+    "Its own show. The swollen ball bursts in the sky, the Pokémon's shadow grows up through the storm past the top of the screen, the camera pulls back to find the new shape, and its special feature (here the burning wings) ignites last. The G-Max mark stamps the name bar."
+   ]
+  ]
+ },
+ {
+  "id": "gmax-move",
+  "first": 7,
+  "last": 7,
+  "n": 1,
+  "t": "G-Max Move",
+  "g": "Galar",
+  "now": "Max and G-Max moves share one generic animation.",
+  "idea": "The giant fires across the whole pitch: the title slams in, a wall of the move's type rolls from one side to the other, and what the move leaves behind stays on the field (here G-Max Wildfire's flames, with a 4-turn counter).",
+  "ideas": [
+   [
+    7,
+    "The giant fires across the whole pitch: the title slams in, a wall of the move's type rolls from one side to the other, and what the move leaves behind stays on the field (here G-Max Wildfire's flames, with a 4-turn counter)."
+   ]
+  ]
+ },
+ {
+  "id": "raid-den",
+  "first": 7,
+  "last": 7,
+  "n": 1,
+  "t": "Max Raid Den",
+  "g": "Galar",
+  "now": "A raid starts like any other battle, with a screen fade.",
+  "idea": "A red pillar of light stands over the den. Step in and the light swallows the screen, the storm spiral opens, and a giant shadow rises out of it while the star rating counts up. Your team of four lines up underneath it, tiny.",
+  "ideas": [
+   [
+    7,
+    "A red pillar of light stands over the den. Step in and the light swallows the screen, the storm spiral opens, and a giant shadow rises out of it while the star rating counts up. Your team of four lines up underneath it, tiny."
+   ]
+  ]
+ },
+ {
+  "id": "raid-shield",
+  "first": 7,
+  "last": 7,
+  "n": 1,
+  "t": "Raid Barrier",
+  "g": "Galar",
+  "now": "Not in the game: raid bosses have no barrier.",
+  "idea": "At half HP the boss throws up a barrier of six plates. Each hit cracks one off, the counter under its HP bar empties, and when the last one goes the whole barrier shatters and the boss staggers, wide open.",
+  "ideas": [
+   [
+    7,
+    "At half HP the boss throws up a barrier of six plates. Each hit cracks one off, the counter under its HP bar empties, and when the last one goes the whole barrier shatters and the boss staggers, wide open."
+   ]
+  ]
+ },
+ {
+  "id": "champion",
+  "first": 7,
+  "last": 7,
+  "n": 1,
+  "t": "Champion Time",
+  "g": "Galar",
+  "now": "The Champion uses the same intro as a gym leader.",
+  "idea": "The stadium goes dark. One spotlight, the cape, the pose. The stands turn red and gold row by row, his Charizard's shadow sweeps over the pitch, and the title card lands: undefeated.",
+  "ideas": [
+   [
+    7,
+    "The stadium goes dark. One spotlight, the cape, the pose. The stands turn red and gold row by row, his Charizard's shadow sweeps over the pitch, and the title card lands: undefeated."
+   ]
+  ]
+ },
+ {
+  "id": "eternamax",
+  "first": 7,
+  "last": 7,
+  "n": 1,
+  "t": "Eternamax",
+  "g": "Galar",
+  "now": "Eternatus changes form with the Dynamax scene.",
+  "idea": "The sky cracks. Eternatus is pulled up into the storm, the screen goes black except for the red core, and the Eternamax form uncoils above the arena, too big for the frame. The HP bar grows a second layer.",
+  "ideas": [
+   [
+    7,
+    "The sky cracks. Eternatus is pulled up into the storm, the screen goes black except for the red core, and the Eternamax form uncoils above the arena, too big for the frame. The HP bar grows a second layer."
+   ]
+  ]
+ },
+ {
+  "id": "st-brn",
+  "first": 8,
+  "last": 12,
+  "n": 2,
+  "t": "Burn",
+  "g": "Conditions",
+  "now": "The shared burn animation plays once, then a text banner. The end-of-turn damage is a number only.",
+  "idea": "Flames climb the body from the feet, the BRN chip lands on the plate, and the Pokémon keeps a warm flicker. Each turn the flames flare up as the HP drops.",
+  "ideas": [
+   [
+    8,
+    "Flames climb the body from the feet, the BRN chip lands on the plate, and the Pokémon keeps a warm flicker. Each turn the flames flare up as the HP drops."
+   ]
+  ]
+ },
+ {
+  "id": "st-psn",
+  "first": 8,
+  "last": 8,
+  "n": 1,
+  "t": "Poison",
+  "g": "Conditions",
+  "now": "The shared poison animation plays once. The end-of-turn damage is a number only.",
+  "idea": "Purple bubbles rise through the body and pop, the Pokémon sags and takes on a sick tint. Each turn one big bubble swells over its head and bursts as the HP drops.",
+  "ideas": [
+   [
+    8,
+    "Purple bubbles rise through the body and pop, the Pokémon sags and takes on a sick tint. Each turn one big bubble swells over its head and bursts as the HP drops."
+   ]
+  ]
+ },
+ {
+  "id": "st-par",
+  "first": 8,
+  "last": 8,
+  "n": 1,
+  "t": "Paralysis",
+  "g": "Conditions",
+  "now": "The shared paralysis animation plays once; when it cannot move the same animation replays.",
+  "idea": "Bolts crawl over the body and it locks up: its idle animation stops and it twitches instead. When it fails to move it lunges a few pixels, snaps back and sparks.",
+  "ideas": [
+   [
+    8,
+    "Bolts crawl over the body and it locks up: its idle animation stops and it twitches instead. When it fails to move it lunges a few pixels, snaps back and sparks."
+   ]
+  ]
+ },
+ {
+  "id": "st-slp",
+  "first": 8,
+  "last": 8,
+  "n": 1,
+  "t": "Sleep",
+  "g": "Conditions",
+  "now": "No shared animation beyond a short one; the sprite keeps its normal idle while asleep.",
+  "idea": "It slumps, its breathing slows to a third, and Z's drift up from its head for as long as it sleeps. Waking up is a jump, a \"!\" and the Z's popping.",
+  "ideas": [
+   [
+    8,
+    "It slumps, its breathing slows to a third, and Z's drift up from its head for as long as it sleeps. Waking up is a jump, a \"!\" and the Z's popping."
+   ]
+  ]
+ },
+ {
+  "id": "st-frz",
+  "first": 8,
+  "last": 8,
+  "n": 1,
+  "t": "Freeze",
+  "g": "Conditions",
+  "now": "The shared freeze animation plays once; the sprite keeps moving afterwards.",
+  "idea": "Ice grows up from the ground and closes over the Pokémon, which stops dead inside it. Glints run over the block while it is frozen. Thawing cracks it, then it shatters and steams.",
+  "ideas": [
+   [
+    8,
+    "Ice grows up from the ground and closes over the Pokémon, which stops dead inside it. Glints run over the block while it is frozen. Thawing cracks it, then it shatters and steams."
+   ]
+  ]
+ },
+ {
+  "id": "st-cnf",
+  "first": 8,
+  "last": 8,
+  "n": 1,
+  "t": "Confusion",
+  "g": "Conditions",
+  "now": "The shared confusion animation plays; hitting itself is a number and a text line.",
+  "idea": "Three stars circle its head and it sways under them for as long as it is confused. When it hurts itself it swings at nothing, the stars scatter and a bump star lands on its own head.",
+  "ideas": [
+   [
+    8,
+    "Three stars circle its head and it sways under them for as long as it is confused. When it hurts itself it swings at nothing, the stars scatter and a bump star lands on its own head."
+   ]
+  ]
+ },
+ {
+  "id": "w-rain",
+  "first": 8,
+  "last": 21,
+  "n": 3,
+  "t": "Rain",
+  "g": "Conditions",
+  "now": "The move animation plays, then falling rain sprites loop until it ends.",
+  "idea": "Clouds roll in across the top and thunder flashes once before the first drops. Rain slants across in front of everything, puddle rings open on the ground, and a boosted Water move is called out by the weather chip.",
+  "ideas": [
+   [
+    8,
+    "Clouds roll in across the top and thunder flashes once before the first drops. Rain slants across in front of everything, puddle rings open on the ground, and a boosted Water move is called out by the weather chip."
+   ]
+  ]
+ },
+ {
+  "id": "w-sun",
+  "first": 8,
+  "last": 21,
+  "n": 4,
+  "t": "Harsh Sunlight",
+  "g": "Conditions",
+  "now": "The move animation plays, then a glow sits over the arena.",
+  "idea": "The light sweeps across the field from the top corner, a turning sun and lens circles stay in the sky, colours get richer and every shadow shrinks under its Pokémon.",
+  "ideas": [
+   [
+    8,
+    "The light sweeps across the field from the top corner, a turning sun and lens circles stay in the sky, colours get richer and every shadow shrinks under its Pokémon."
+   ]
+  ]
+ },
+ {
+  "id": "w-sand",
+  "first": 8,
+  "last": 8,
+  "n": 1,
+  "t": "Sandstorm",
+  "g": "Conditions",
+  "now": "A scrolling sand layer; the end-of-turn damage is a number only.",
+  "idea": "A wall of sand crosses the screen and stays as two layers moving at different speeds with grit flying past. At the end of the turn the wind gusts, both Pokémon lean into it and take their chip damage together.",
+  "ideas": [
+   [
+    8,
+    "A wall of sand crosses the screen and stays as two layers moving at different speeds with grit flying past. At the end of the turn the wind gusts, both Pokémon lean into it and take their chip damage together."
+   ]
+  ]
+ },
+ {
+  "id": "w-snow",
+  "first": 8,
+  "last": 8,
+  "n": 1,
+  "t": "Snow",
+  "g": "Conditions",
+  "now": "Falling snow sprites loop until it ends.",
+  "idea": "One flake lands first. Then the snow comes down slowly with a side-to-side drift, frost creeps in from the edges of the screen, and Ice types get a cold shimmer when their Defense rises.",
+  "ideas": [
+   [
+    8,
+    "One flake lands first. Then the snow comes down slowly with a side-to-side drift, frost creeps in from the edges of the screen, and Ice types get a cold shimmer when their Defense rises."
+   ]
+  ]
+ },
+ {
+  "id": "w-end",
+  "first": 8,
+  "last": 8,
+  "n": 1,
+  "t": "Weather Clears",
+  "g": "Conditions",
+  "now": "The layer disappears with a text line.",
+  "idea": "The chip counts its last turn and pops. The rain thins out, one beam of light breaks through the clouds and travels across the field, and the colours come back.",
+  "ideas": [
+   [
+    8,
+    "The chip counts its last turn and pops. The rain thins out, one beam of light breaks through the clouds and travels across the field, and the colours come back."
+   ]
+  ]
+ },
+ {
+  "id": "terrain",
+  "first": 8,
+  "last": 8,
+  "n": 1,
+  "t": "Terrain",
+  "g": "Conditions",
+  "now": "Only the move animation plays. Nothing stays on the ground, so you cannot see that a terrain is active.",
+  "idea": "A terrain is a carpet that rolls out from the user's feet and stays under both Pokémon: a humming grid for Electric, growing flowers for Grassy, slow rings for Psychic, drifting mist for Misty. Each has its own chip and turn count.",
+  "ideas": [
+   [
+    8,
+    "A terrain is a carpet that rolls out from the user's feet and stays under both Pokémon: a humming grid for Electric, growing flowers for Grassy, slow rings for Psychic, drifting mist for Misty. Each has its own chip and turn count."
+   ]
+  ]
+ },
+ {
+  "id": "statup",
+  "first": 8,
+  "last": 8,
+  "n": 1,
+  "t": "Stat Changes",
+  "g": "Conditions",
+  "now": "Three arrows drift 60px and fade, with a word banner.",
+  "idea": "Chevrons in the stat's own colour sweep the whole body, up for a boost and down for a drop. A two-stage change sends two waves and bigger chevrons. A row of six pips next to the Pokémon shows where the stat stands.",
+  "ideas": [
+   [
+    8,
+    "Chevrons in the stat's own colour sweep the whole body, up for a boost and down for a drop. A two-stage change sends two waves and bigger chevrons. A row of six pips next to the Pokémon shows where the stat stands."
+   ]
+  ]
+ },
+ {
+  "id": "ability",
+  "first": 8,
+  "last": 8,
+  "n": 1,
+  "t": "Ability Trigger",
+  "g": "Conditions",
+  "now": "A word banner with a few sparks.",
+  "idea": "The ability gets a flag that unrolls from its owner's side of the screen, and the Pokémon acts it out. Here Intimidate: Gyarados leans in, its glare crosses the field, and your Pokémon shrinks back as its Attack drops.",
+  "ideas": [
+   [
+    8,
+    "The ability gets a flag that unrolls from its owner's side of the screen, and the Pokémon acts it out. Here Intimidate: Gyarados leans in, its glare crosses the field, and your Pokémon shrinks back as its Attack drops."
+   ]
+  ]
+ },
+ {
+  "id": "protect",
+  "first": 8,
+  "last": 12,
+  "n": 2,
+  "t": "Protect",
+  "g": "Conditions",
+  "now": "The Protect move animation, then \"protected itself\" text.",
+  "idea": "A shield of plates snaps together in front of the Pokémon and holds. The attack hits it, not the Pokémon: the plates flash where it lands, ripple, push the attacker back and then fold away.",
+  "ideas": [
+   [
+    8,
+    "A shield of plates snaps together in front of the Pokémon and holds. The attack hits it, not the Pokémon: the plates flash where it lands, ripple, push the attacker back and then fold away."
+   ]
+  ]
+ },
+ {
+  "id": "endturn",
+  "first": 8,
+  "last": 8,
+  "n": 1,
+  "t": "End of Turn",
+  "g": "Conditions",
+  "now": "Leftovers, poison and weather each print a number one after another, then the next turn starts.",
+  "idea": "The end of a turn becomes a short parade: a row of chips shows what is about to happen, each lights up as its tick plays on the field, and then a line sweeps the screen and the turn counter flips over.",
+  "ideas": [
+   [
+    8,
+    "The end of a turn becomes a short parade: a row of chips shows what is about to happen, each lights up as its tick plays on the field, and then a line sweeps the screen and the turn counter flips over."
+   ]
+  ]
+ },
+ {
+  "id": "ev-open",
+  "first": 9,
+  "last": 9,
+  "n": 1,
+  "t": "Event Opens",
+  "g": "Events",
+  "now": "The map fades out and the event page fades in with everything already in place.",
+  "idea": "The view closes on the map stop like a camera iris and opens on the place. The scene settles, the title strip slides in, you and your partner walk on from the left, the other person from the right, and only then the dialogue box rises and starts to talk.",
+  "ideas": [
+   [
+    9,
+    "The view closes on the map stop like a camera iris and opens on the place. The scene settles, the title strip slides in, you and your partner walk on from the left, the other person from the right, and only then the dialogue box rises and starts to talk."
+   ]
+  ]
+ },
+ {
+  "id": "ev-choice",
+  "first": 9,
+  "last": 15,
+  "n": 2,
+  "t": "Event Choice",
+  "g": "Events",
+  "now": "The choices appear as a list in place of the text.",
+  "idea": "On the corrected Event Choice page: the whole text box stays where it is, so you can still read what you were asked. The scene dims, the people step back into it, and the three choices are dealt in above the box like a hand of cards. The one you pick lifts, flashes and flies into the progress strip; the others fall away. Every piece is see-through, so nothing drags a cut-out along with it.",
+  "ideas": [
+   [
+    9,
+    "The scene dims and steps back. What was just said shrinks into a chip at the top so you can still read it, and the choices are dealt up from the bottom like cards. The one you pick lifts, flashes and flies into the progress strip; the others fall away."
+   ],
+   [
+    15,
+    "On the corrected Event Choice page: the whole text box stays where it is, so you can still read what you were asked. The scene dims, the people step back into it, and the three choices are dealt in above the box like a hand of cards. The one you pick lifts, flashes and flies into the progress strip; the others fall away. Every piece is see-through, so nothing drags a cut-out along with it."
+   ]
+  ]
+ },
+ {
+  "id": "ev-result",
+  "first": 9,
+  "last": 9,
+  "n": 1,
+  "t": "Event Result",
+  "g": "Events",
+  "now": "The picture and text change in place.",
+  "idea": "The place changes the way you got there: climbing the lighthouse scrolls the old room down and the lamp room in from above while you keep walking. Whatever was waiting drops into view, your side jumps, and the text carries on.",
+  "ideas": [
+   [
+    9,
+    "The place changes the way you got there: climbing the lighthouse scrolls the old room down and the lamp room in from above while you keep walking. Whatever was waiting drops into view, your side jumps, and the text carries on."
+   ]
+  ]
+ },
+ {
+  "id": "ev-reward",
+  "first": 9,
+  "last": 9,
+  "n": 1,
+  "t": "Event Reward",
+  "g": "Events",
+  "now": "Rewards appear after the text is dismissed and stay until you press a button.",
+  "idea": "Same rule, with a show: the heading drops in, each reward card flips over with a ring of light, and they wait. When you press Enter they fly off one at a time to where they now live: the wallet, the bag, the Reserve.",
+  "ideas": [
+   [
+    9,
+    "Same rule, with a show: the heading drops in, each reward card flips over with a ring of light, and they wait. When you press Enter they fly off one at a time to where they now live: the wallet, the bag, the Reserve."
+   ]
+  ]
+ },
+ {
+  "id": "ev-stage",
+  "first": 9,
+  "last": 9,
+  "n": 1,
+  "t": "Event Stage Starts",
+  "g": "Events",
+  "now": "The event page is replaced by the battle screen.",
+  "idea": "A battle inside an event does not feel like leaving it. The creature cries, a purple band with the place name cuts across, and the event picture is wiped away on the slant to show the same place as an arena. The band stays a second so you know this stop does not count as a new stage.",
+  "ideas": [
+   [
+    9,
+    "A battle inside an event does not feel like leaving it. The creature cries, a purple band with the place name cuts across, and the event picture is wiped away on the slant to show the same place as an arena. The band stays a second so you know this stop does not count as a new stage."
+   ]
+  ]
+ },
+ {
+  "id": "blessing",
+  "first": 9,
+  "last": 15,
+  "n": 2,
+  "t": "Legendary Blessing",
+  "g": "Events",
+  "now": "Three cards appear; the chosen one is highlighted.",
+  "idea": "The original cutscene, kept in its order and made holy. A bell tolls three times in the dark. Light comes down from above through a rose window, the object descends in it under a halo, and the Legendary appears behind it, vast and pale. The passage is written like scripture, one line at a time after an illuminated letter. Candles light, feathers fall, and at the end the light comes down on your partner, who bows under its own small halo.",
+  "ideas": [
+   [
+    9,
+    "Three beams of light come down first and the cards descend inside them. The one you take rises and burns gold while feathers fall; the other two tip back into the dark. Its line of legend appears underneath, and the card flies up into the run strip."
+   ],
+   [
+    15,
+    "The original cutscene, kept in its order and made holy. A bell tolls three times in the dark. Light comes down from above through a rose window, the object descends in it under a halo, and the Legendary appears behind it, vast and pale. The passage is written like scripture, one line at a time after an illuminated letter. Candles light, feathers fall, and at the end the light comes down on your partner, who bows under its own small halo."
+   ]
+  ]
+ },
+ {
+  "id": "center",
+  "first": 9,
+  "last": 9,
+  "n": 1,
+  "t": "Pokémon Center",
+  "g": "Events",
+  "now": "A heal sound and the party is restored.",
+  "idea": "The six balls on the machine light up one after another in time with the jingle, flash together, and then the team list slides in with each row popping as its HP is restored. Nurse Joy only speaks once it is done.",
+  "ideas": [
+   [
+    9,
+    "The six balls on the machine light up one after another in time with the jingle, flash together, and then the team list slides in with each row popping as its HP is restored. Nurse Joy only speaks once it is done."
+   ]
+  ]
+ },
+ {
+  "id": "starter",
+  "first": 9,
+  "last": 9,
+  "n": 1,
+  "t": "Starter Remembrance",
+  "g": "Events",
+  "now": "The three starter cards are shown at once.",
+  "idea": "Three Poké Balls roll in and stop under the Professor's words. They open one at a time, left to right, and each one turns into its card with the region stamp already on it. The first one you look at grows; the others wait their turn.",
+  "ideas": [
+   [
+    9,
+    "Three Poké Balls roll in and stop under the Professor's words. They open one at a time, left to right, and each one turns into its card with the region stamp already on it. The first one you look at grows; the others wait their turn."
+   ]
+  ]
+ },
+ {
+  "id": "wipe",
+  "first": 10,
+  "last": 10,
+  "n": 1,
+  "t": "Ball Wipe",
+  "g": "Screens",
+  "now": "Screens change with a fade, or glass shutters for battles.",
+  "idea": "Every big change of place shuts like a Poké Ball and opens on the next screen: two halves slide in on the slant, meet, the button flashes, and they part. 0.8s, used for map to battle, battle to reward and town to road.",
+  "ideas": [
+   [
+    10,
+    "Every big change of place shuts like a Poké Ball and opens on the next screen: two halves slide in on the slant, meet, the button flashes, and they part. 0.8s, used for map to battle, battle to reward and town to road."
+   ]
+  ]
+ },
+ {
+  "id": "title",
+  "first": 10,
+  "last": 10,
+  "n": 1,
+  "t": "Title Screen",
+  "g": "Screens",
+  "now": "The title appears complete after loading.",
+  "idea": "The title builds itself in under two seconds: the navy slab slides in on its slant, POCKET drops and RAIDERS slides under it, your trainer steps in from the right, the menu deals out row by row, Rotom's note and the Best badge pop, and your last team walks along the bottom.",
+  "ideas": [
+   [
+    10,
+    "The title builds itself in under two seconds: the navy slab slides in on its slant, POCKET drops and RAIDERS slides under it, your trainer steps in from the right, the menu deals out row by row, Rotom's note and the Best badge pop, and your last team walks along the bottom."
+   ]
+  ]
+ },
+ {
+  "id": "hub",
+  "first": 10,
+  "last": 10,
+  "n": 1,
+  "t": "Hub Town Arrives",
+  "g": "World",
+  "now": "Hub Town appears complete.",
+  "idea": "The town builds up from left to right like a pop-up book, bunting unrolls across the street, your card and the New Run sign drop in, and the door row rises last. Your team walks the street with you; nothing glows over them any more.",
+  "ideas": [
+   [
+    10,
+    "The town builds up from left to right like a pop-up book, bunting unrolls across the street, your card and the New Run sign drop in, and the door row rises last. Your team walks the street with you; nothing glows over them any more."
+   ]
+  ]
+ },
+ {
+  "id": "map-travel",
+  "first": 10,
+  "last": 10,
+  "n": 1,
+  "t": "Map: Moving On",
+  "g": "World",
+  "now": "Path lines are static; the marker jumps to the stop you pick.",
+  "idea": "The stop you just cleared gets a stamp. The paths to the next stops draw themselves outward and those stops start to pulse. Pick one and you hop along the line in three bounces, land with a puff, and the view closes on the stop.",
+  "ideas": [
+   [
+    10,
+    "The stop you just cleared gets a stamp. The paths to the next stops draw themselves outward and those stops start to pulse. Pick one and you hop along the line in three bounces, land with a puff, and the view closes on the stop."
+   ]
+  ]
+ },
+ {
+  "id": "region",
+  "first": 10,
+  "last": 10,
+  "n": 1,
+  "t": "Region Arrival",
+  "g": "World",
+  "now": "A text panel names the new region.",
+  "idea": "The map of the region zooms out, its two colours wipe across on the slant, the name slams in, and a passport stamp thumps down beside it. The four facts pop up as tiles and the regional forms question slides in last.",
+  "ideas": [
+   [
+    10,
+    "The map of the region zooms out, its two colours wipe across on the slant, the name slams in, and a passport stamp thumps down beside it. The four facts pop up as tiles and the regional forms question slides in last."
+   ]
+  ]
+ },
+ {
+  "id": "travel",
+  "first": 10,
+  "last": 10,
+  "n": 1,
+  "t": "On the Road",
+  "g": "World",
+  "now": "A fade between the map and the next stop.",
+  "idea": "Between stops you see the walk: your whole team in a line behind you, hopping in step while the road runs under them. A signpost drops in with where you are headed, a Rotom tip slides up, and the ball wipe takes you in.",
+  "ideas": [
+   [
+    10,
+    "Between stops you see the walk: your whole team in a line behind you, hopping in step while the road runs under them. A signpost drops in with where you are headed, a Rotom tip slides up, and the ball wipe takes you in."
+   ]
+  ]
+ },
+ {
+  "id": "shop",
+  "first": 10,
+  "last": 10,
+  "n": 1,
+  "t": "Poké Mart: Buying",
+  "g": "World",
+  "now": "The count changes and the money number updates.",
+  "idea": "What you buy hops off its shelf and lands in the basket, which bumps and adds up. At check-out your coins fly to the counter, a SOLD stamp lands, and the clerk thanks you.",
+  "ideas": [
+   [
+    10,
+    "What you buy hops off its shelf and lands in the basket, which bumps and adds up. At check-out your coins fly to the counter, a SOLD stamp lands, and the clerk thanks you."
+   ]
+  ]
+ },
+ {
+  "id": "menu",
+  "first": 10,
+  "last": 10,
+  "n": 1,
+  "t": "Pause Menu Opens",
+  "g": "Screens",
+  "now": "The menu appears over the screen.",
+  "idea": "The Rotom Phone rises from the bottom edge with a little tilt and settles. The screen behind steps back. Your trainer strip slides in from the right, the six party tiles pop in reading order and the run card follows. Closing plays it backwards in half the time.",
+  "ideas": [
+   [
+    10,
+    "The Rotom Phone rises from the bottom edge with a little tilt and settles. The screen behind steps back. Your trainer strip slides in from the right, the six party tiles pop in reading order and the run card follows. Closing plays it backwards in half the time."
+   ]
+  ]
+ },
+ {
+  "id": "loading",
+  "first": 10,
+  "last": 10,
+  "n": 1,
+  "t": "Next Stop Card",
+  "g": "Screens",
+  "now": "A plain loading moment between stops.",
+  "idea": "The stop number flips over like a departure board, the name of what is next slides in, the route strip fills up to where you are, a tip rises, and your team walks along the bottom until you press a key.",
+  "ideas": [
+   [
+    10,
+    "The stop number flips over like a departure board, the name of what is next slides in, the route strip fills up to where you are, a tip rises, and your team walks along the bottom until you press a key."
+   ]
+  ]
+ },
+ {
+  "id": "p-idles",
+  "first": 11,
+  "last": 11,
+  "n": 1,
+  "t": "Idle Styles",
+  "g": "Battle basics",
+  "now": "Every Pokémon plays its sprite loop and nothing else; they all stand the same way.",
+  "idea": "Six ways of standing, chosen by body type and layered on top of the sprite loop: fliers hover over a shrinking shadow, ghosts drift and flicker, heavy ones breathe slow and deep, electric ones twitch and hop, long ones sway, the rest stand steady.",
+  "ideas": [
+   [
+    11,
+    "Six ways of standing, chosen by body type and layered on top of the sprite loop: fliers hover over a shrinking shadow, ghosts drift and flicker, heavy ones breathe slow and deep, electric ones twitch and hop, long ones sway, the rest stand steady."
+   ]
+  ]
+ },
+ {
+  "id": "p-size",
+  "first": 11,
+  "last": 11,
+  "n": 1,
+  "t": "Light and Heavy",
+  "g": "Battle basics",
+  "now": "Every Pokémon lands the same way.",
+  "idea": "Weight is a character trait. A small Pokémon lands, bounces twice and squeaks out a little cry. A heavy one comes down like a dropped piano: the screen jolts, dust goes both ways, the HP plates rattle and the Pokémon across the field is bounced off its feet.",
+  "ideas": [
+   [
+    11,
+    "Weight is a character trait. A small Pokémon lands, bounces twice and squeaks out a little cry. A heavy one comes down like a dropped piano: the screen jolts, dust goes both ways, the HP plates rattle and the Pokémon across the field is bounced off its feet."
+   ]
+  ]
+ },
+ {
+  "id": "p-tired",
+  "first": 11,
+  "last": 11,
+  "n": 1,
+  "t": "Worn Out",
+  "g": "Battle basics",
+  "now": "The HP bar turns red and pulses. The Pokémon stands exactly as before.",
+  "idea": "Below a fifth of its HP the Pokémon itself shows it: it slumps, breathes fast and shallow, and sweat flicks off. Heal it and it straightens up with a shake and goes back to its normal stance.",
+  "ideas": [
+   [
+    11,
+    "Below a fifth of its HP the Pokémon itself shows it: it slumps, breathes fast and shallow, and sweat flicks off. Heal it and it straightens up with a shake and goes back to its normal stance."
+   ]
+  ]
+ },
+ {
+  "id": "p-victory",
+  "first": 11,
+  "last": 16,
+  "n": 2,
+  "t": "Winner's Moment",
+  "g": "After battle",
+  "now": "After a knock-out the winner keeps idling until the EXP bar moves.",
+  "idea": "The winner gets a second to itself. It hops twice, spins once on the spot, a note pops out, and it leans toward you. Different body types celebrate differently: fliers loop, heavy ones stamp once.",
+  "ideas": [
+   [
+    11,
+    "The winner gets a second to itself. It hops twice, spins once on the spot, a note pops out, and it leans toward you. Different body types celebrate differently: fliers loop, heavy ones stamp once."
+   ]
+  ]
+ },
+ {
+  "id": "p-bond",
+  "first": 11,
+  "last": 19,
+  "n": 2,
+  "t": "Toughed It Out",
+  "g": "Battle basics",
+  "now": "A text line says it held on; the HP bar stops at 1.",
+  "idea": "The bar drains to a single point and catches there with a spark. The Pokémon skids back, drops to one knee, shakes, then plants its feet and glows for a heartbeat. A HUNG ON stamp lands and a heart floats up toward you.",
+  "ideas": [
+   [
+    11,
+    "The bar drains to a single point and catches there with a spark. The Pokémon skids back, drops to one knee, shakes, then plants its feet and glows for a heartbeat. A HUNG ON stamp lands and a heart floats up toward you."
+   ]
+  ]
+ },
+ {
+  "id": "p-shiny",
+  "first": 11,
+  "last": 11,
+  "n": 1,
+  "t": "Shiny Entrance",
+  "g": "Battle basics",
+  "now": "A sparkle animation plays once over the sprite.",
+  "idea": "A shiny announces itself. Stars circle in and collapse onto it, a glint runs across the sprite, the whole arena brightens for a beat, and a star chip pins itself to the name plate so you cannot miss what you just found.",
+  "ideas": [
+   [
+    11,
+    "A shiny announces itself. Stars circle in and collapse onto it, a glint runs across the sprite, the whole arena brightens for a beat, and a star chip pins itself to the name plate so you cannot miss what you just found."
+   ]
+  ]
+ },
+ {
+  "id": "p-flinch",
+  "first": 11,
+  "last": 11,
+  "n": 1,
+  "t": "Flinch",
+  "g": "Battle basics",
+  "now": "A text line: \"flinched and couldn't move\".",
+  "idea": "The Pokémon starts its lunge, jerks to a stop, pulls its head down and backs up two steps with a sweat drop. The move never comes out, and you can see why.",
+  "ideas": [
+   [
+    11,
+    "The Pokémon starts its lunge, jerks to a stop, pulls its head down and backs up two steps with a sweat drop. The move never comes out, and you can see why."
+   ]
+  ]
+ },
+ {
+  "id": "p-wait",
+  "first": 11,
+  "last": 11,
+  "n": 1,
+  "t": "Waiting on You",
+  "g": "Battle basics",
+  "now": "Nothing happens while you think.",
+  "idea": "Take more than a few seconds over your move and your Pokémon notices: it glances round with a \"?\", bounces on its feet twice, and settles again. It never repeats within a turn and never blocks input.",
+  "ideas": [
+   [
+    11,
+    "Take more than a few seconds over your move and your Pokémon notices: it glances round with a \"?\", bounces on its feet twice, and settles again. It never repeats within a turn and never blocks input."
+   ]
+  ]
+ },
+ {
+  "id": "bh-tiers",
+  "first": 12,
+  "last": 21,
+  "n": 5,
+  "t": "Power Tiers",
+  "g": "Moves",
+  "now": "Every damaging move shakes the screen by the same amount and knocks the target back the same 30px.",
+  "idea": "Three sizes of hit. A weak move is a tap: small spark, no shake. A normal move throws the target a body-width. A heavy move stops time for a moment, throws it most of the way off its base with two dust clouds, and the damage number is twice the size.",
+  "ideas": [
+   [
+    12,
+    "Three sizes of hit. A weak move is a tap: small spark, no shake. A normal move throws the target a body-width. A heavy move stops time for a moment, throws it most of the way off its base with two dust clouds, and the damage number is twice the size."
+   ]
+  ]
+ },
+ {
+  "id": "bh-charge",
+  "first": 12,
+  "last": 12,
+  "n": 1,
+  "t": "Charge-Up Move",
+  "g": "Moves",
+  "now": "A text line on the first turn, the move animation on the second.",
+  "idea": "The first turn is a build-up you can watch: light is pulled in from all over the arena, the glow grows, and a CHARGING chip sits on the Pokémon through the foe's turn. The second turn lets it all go as one beam wider than the Pokémon.",
+  "ideas": [
+   [
+    12,
+    "The first turn is a build-up you can watch: light is pulled in from all over the arena, the glow grows, and a CHARGING chip sits on the Pokémon through the foe's turn. The second turn lets it all go as one beam wider than the Pokémon."
+   ]
+  ]
+ },
+ {
+  "id": "bh-multi",
+  "first": 12,
+  "last": 12,
+  "n": 1,
+  "t": "Multi-Hit",
+  "g": "Moves",
+  "now": "The move animation plays once and the damage is shown as separate numbers.",
+  "idea": "Each hit is a quick jab with its own spark and its own notch off the HP bar, and a combo counter in the corner ticks up and grows with every one. It ends by slamming the total.",
+  "ideas": [
+   [
+    12,
+    "Each hit is a quick jab with its own spark and its own notch off the HP bar, and a combo counter in the corner ticks up and grows with every one. It ends by slamming the total."
+   ]
+  ]
+ },
+ {
+  "id": "bh-crit",
+  "first": 12,
+  "last": 19,
+  "n": 5,
+  "t": "Critical Hit",
+  "g": "Moves",
+  "now": "The same hit with a text line afterwards.",
+  "idea": "A critical or super effective hit now gets one negative frame and a white star at the point of contact.",
+  "ideas": [
+   [
+    12,
+    "At the moment of contact everything stops. Black bars close in from top and bottom, the camera jumps to the target, the colour drains for a quarter of a second, and then the hit lands with the yellow CRITICAL HIT stamp and a number half as big again."
+   ],
+   [
+    17,
+    "A critical or super effective hit now gets one negative frame and a white star at the point of contact."
+   ]
+  ]
+ },
+ {
+  "id": "bh-recoil",
+  "first": 12,
+  "last": 12,
+  "n": 1,
+  "t": "Recoil",
+  "g": "Moves",
+  "now": "A number on the user and a text line.",
+  "idea": "The force comes back. A crack of the move's own colour runs from the target back along the ground to the user, who winces, flashes and loses its bit of HP. You see why it hurt.",
+  "ideas": [
+   [
+    12,
+    "The force comes back. A crack of the move's own colour runs from the target back along the ground to the user, who winces, flashes and loses its bit of HP. You see why it hurt."
+   ]
+  ]
+ },
+ {
+  "id": "bh-drain",
+  "first": 12,
+  "last": 12,
+  "n": 1,
+  "t": "Drain",
+  "g": "Moves",
+  "now": "Two numbers: damage on the target, healing on the user.",
+  "idea": "After the hit, what was taken travels: green lights lift off the target one by one, cross the field in an arc and sink into the user, whose HP bar steps up as each arrives.",
+  "ideas": [
+   [
+    12,
+    "After the hit, what was taken travels: green lights lift off the target one by one, cross the field in an arc and sink into the user, whose HP bar steps up as each arrives."
+   ]
+  ]
+ },
+ {
+  "id": "bh-ohko",
+  "first": 12,
+  "last": 23,
+  "n": 2,
+  "t": "One-Hit KO",
+  "g": "Moves",
+  "now": "A normal hit animation and the bar empties.",
+  "idea": "The ground opens. A crack races from the user to the target, the target's base splits and it drops straight down out of sight, and the bar empties in one frame under a ONE-HIT KO stamp.",
+  "ideas": [
+   [
+    12,
+    "The ground opens. A crack races from the user to the target, the target's base splits and it drops straight down out of sight, and the bar empties in one frame under a ONE-HIT KO stamp."
+   ]
+  ]
+ },
+ {
+  "id": "bh-beam",
+  "first": 12,
+  "last": 18,
+  "n": 2,
+  "t": "Recharge Turn",
+  "g": "Moves",
+  "now": "A text line: \"must recharge!\".",
+  "idea": "After the biggest moves the user is spent, and looks it: steam pours off it, it sags with a grey tint and a RECHARGE chip hangs over it while the foe takes a free turn. When the turn ends the chip pops and it stands back up.",
+  "ideas": [
+   [
+    12,
+    "After the biggest moves the user is spent, and looks it: steam pours off it, it sags with a grey tint and a RECHARGE chip hangs over it while the foe takes a free turn. When the turn ends the chip pops and it stands back up."
+   ]
+  ]
+ },
+ {
+  "id": "bh-contact",
+  "first": 12,
+  "last": 12,
+  "n": 1,
+  "t": "Contact Punish",
+  "g": "Moves",
+  "now": "A number on the attacker and a text line (Rocky Helmet, Rough Skin).",
+  "idea": "Touching the wrong thing bites back at the moment of contact: spikes jab out of the target, the attacker bounces off further than it came in with a star on its nose, and the item or ability flag slides out to say why.",
+  "ideas": [
+   [
+    12,
+    "Touching the wrong thing bites back at the moment of contact: spikes jab out of the target, the attacker bounces off further than it came in with a star on its nose, and the item or ability flag slides out to say why."
+   ]
+  ]
+ },
+ {
+  "id": "bh-priority",
+  "first": 12,
+  "last": 12,
+  "n": 1,
+  "t": "Priority Move",
+  "g": "Moves",
+  "now": "Plays like any other move; only the turn order tells you it went first.",
+  "idea": "A FIRST! tag snaps onto the user before anything else on the turn can start. It does not wind up: it blurs, leaves three after-images across the field, and the hit lands before the tag has faded.",
+  "ideas": [
+   [
+    12,
+    "A FIRST! tag snaps onto the user before anything else on the turn can start. It does not wind up: it blurs, leaves three after-images across the field, and the hit lands before the tag has faded."
+   ]
+  ]
+ },
+ {
+  "id": "bh-hazard",
+  "first": 12,
+  "last": 12,
+  "n": 1,
+  "t": "Entry Hazards",
+  "g": "Moves",
+  "now": "The move animation plays; nothing stays on the field and the switch-in damage is a number.",
+  "idea": "Hazards stay where you can see them. Stealth Rock throws five stones that plant themselves around your side and hover there with a ROCKS chip. When your next Pokémon comes in they all stab inward at once.",
+  "ideas": [
+   [
+    12,
+    "Hazards stay where you can see them. Stealth Rock throws five stones that plant themselves around your side and hover there with a ROCKS chip. When your next Pokémon comes in they all stab inward at once."
+   ]
+  ]
+ },
+ {
+  "id": "vs",
+  "first": 13,
+  "last": 13,
+  "n": 1,
+  "t": "VS Screen",
+  "g": "Bosses",
+  "now": "Bars scale in and a VS card shows for a moment.",
+  "idea": "The two colours slam in from either side and meet on the slant with a spark. Both trainers slide in leaning forward, the VS badge spins in between them and thumps, the name tags drop with each team's balls, and the rival gets a line before the screen splits open on the battle.",
+  "ideas": [
+   [
+    13,
+    "The two colours slam in from either side and meet on the slant with a spark. Both trainers slide in leaning forward, the VS badge spins in between them and thumps, the name tags drop with each team's balls, and the rival gets a line before the screen splits open on the battle."
+   ]
+  ]
+ },
+ {
+  "id": "gym-intro",
+  "first": 13,
+  "last": 13,
+  "n": 1,
+  "t": "Gym Leader",
+  "g": "Bosses",
+  "now": "A trainer intro with a longer text line.",
+  "idea": "The gym's rays open behind an empty stage. The badge at stake drops in glowing, the Leader strides in from the right and hits their pose, the name is stamped across, and what you are up against is dealt out line by line: type, team, boss power, prize.",
+  "ideas": [
+   [
+    13,
+    "The gym's rays open behind an empty stage. The badge at stake drops in glowing, the Leader strides in from the right and hits their pose, the name is stamped across, and what you are up against is dealt out line by line: type, team, boss power, prize."
+   ]
+  ]
+ },
+ {
+  "id": "legend",
+  "first": 13,
+  "last": 13,
+  "n": 1,
+  "t": "Legendary Encounter",
+  "g": "Bosses",
+  "now": "The Legendary has a transformation-style intro; the encounter itself starts like a wild battle.",
+  "idea": "Silence first: the screen is nearly black and the text arrives slowly. A shape is there before you can see it. Two eyes light, pressure lines push outward, and then the colour floods in with one shock ring that rattles the whole screen. Only then does the name appear.",
+  "ideas": [
+   [
+    13,
+    "Silence first: the screen is nearly black and the text arrives slowly. A shape is there before you can see it. Two eyes light, pressure lines push outward, and then the colour floods in with one shock ring that rattles the whole screen. Only then does the name appear."
+   ]
+  ]
+ },
+ {
+  "id": "ub",
+  "first": 13,
+  "last": 13,
+  "n": 1,
+  "t": "Ultra Beast",
+  "g": "Bosses",
+  "now": "No presentation: an Ultra Beast appears like any wild Pokémon.",
+  "idea": "The sky tears. A crack splits the picture, the screen glitches in strips, and the hole widens with something drifting out of it that does not move like a Pokémon. Its name flickers as if the game is not sure of it.",
+  "ideas": [
+   [
+    13,
+    "The sky tears. A crack splits the picture, the screen glitches in strips, and the hole widens with something drifting out of it that does not move like a Pokémon. Its name flickers as if the game is not sure of it."
+   ]
+  ]
+ },
+ {
+  "id": "badge",
+  "first": 13,
+  "last": 13,
+  "n": 1,
+  "t": "Badge Get",
+  "g": "Bosses",
+  "now": "A badge screen appears.",
+  "idea": "The badge falls from the top turning like a coin, lands with a ring of light and a shine that sweeps across it. Its name slams in, the extras you won pop up one by one, and confetti keeps falling until you move on.",
+  "ideas": [
+   [
+    13,
+    "The badge falls from the top turning like a coin, lands with a ring of light and a shine that sweeps across it. Its name slams in, the extras you won pop up one by one, and confetti keeps falling until you move on."
+   ]
+  ]
+ },
+ {
+  "id": "boss-phase",
+  "first": 13,
+  "last": 14,
+  "n": 2,
+  "t": "Boss Phase Change",
+  "g": "Bosses",
+  "now": "Boss phases follow the game state with a text line.",
+  "idea": "When a boss ace drops to half, the fight visibly changes gear: the HP plate cracks and re-forms with a red edge, the arena darkens to the boss's colour, the ace flares and roars, and a PHASE 2 stamp lands. Nothing about the rules changes; you just cannot miss it.",
+  "ideas": [
+   [
+    13,
+    "When a boss ace drops to half, the fight visibly changes gear: the HP plate cracks and re-forms with a red edge, the arena darkens to the boss's colour, the ace flares and roars, and a PHASE 2 stamp lands. Nothing about the rules changes; you just cannot miss it."
+   ]
+  ]
+ },
+ {
+  "id": "totem",
+  "first": 13,
+  "last": 13,
+  "n": 1,
+  "t": "Totem Aura",
+  "g": "Bosses",
+  "now": "A text line: the Totem's aura flared.",
+  "idea": "A Totem is half as big again and looks it. Its aura bursts upward like a bonfire, rainbow chevrons climb it as every stat rises, and when it calls for help the ally drops in beside it with a thump.",
+  "ideas": [
+   [
+    13,
+    "A Totem is half as big again and looks it. Its aura bursts upward like a bonfire, rainbow chevrons climb it as every stat rises, and when it calls for help the ally drops in beside it with a thump."
+   ]
+  ]
+ },
+ {
+  "id": "boss-heal",
+  "first": 13,
+  "last": 13,
+  "n": 1,
+  "t": "Enemy Heal",
+  "g": "Bosses",
+  "now": "A text line and the bar refills.",
+  "idea": "The trainer leans in from the edge and tosses the item. It arcs across, bursts into green light over their Pokémon, the bar climbs with a count, and one of the four heal pips on their plate goes dark so you always know how many they have left.",
+  "ideas": [
+   [
+    13,
+    "The trainer leans in from the edge and tosses the item. It arcs across, bursts into green light over their Pokémon, the bar climbs with a count, and one of the four heal pips on their plate goes dark so you always know how many they have left."
+   ]
+  ]
+ },
+ {
+  "id": "rv-spot",
+  "first": 14,
+  "last": 14,
+  "n": 1,
+  "t": "Rival Spots You",
+  "g": "Rivals",
+  "now": "A rival battle is a stop like any other. You learn who it is when the battle starts.",
+  "idea": "You are spotted. A ! pops over your marker, the rival's marker leaves its stop and races back down the path toward you leaving a trail in their colour, the two bump, and the map is slashed open in their colour straight into the VS screen.",
+  "ideas": [
+   [
+    14,
+    "You are spotted. A ! pops over your marker, the rival's marker leaves its stop and races back down the path toward you leaving a trail in their colour, the two bump, and the map is slashed open in their colour straight into the VS screen."
+   ]
+  ]
+ },
+ {
+  "id": "rv-board",
+  "first": 14,
+  "last": 14,
+  "n": 1,
+  "t": "Rival Board",
+  "g": "Rivals",
+  "now": "The rivals list appears complete.",
+  "idea": "Four cards are dealt from the right and land one after another. The rival who is closest lifts with a gold ring, the one you have not met yet rattles behind its question mark, and each \"next\" line ticks so you can see when they are coming.",
+  "ideas": [
+   [
+    14,
+    "Four cards are dealt from the right and land one after another. The rival who is closest lifts with a gold ring, the one you have not met yet rattles behind its question mark, and each \"next\" line ticks so you can see when they are coming."
+   ]
+  ]
+ },
+ {
+  "id": "rv-win",
+  "first": 14,
+  "last": 14,
+  "n": 1,
+  "t": "Rival Beaten",
+  "g": "Rivals",
+  "now": "The rival's defeat line shows and the battle ends like any other.",
+  "idea": "The rival walks back on with a line of their own. Their card slides in with the record changing in front of you and the stop where you will meet next, the rival bonus pops, and they turn to leave, stop, look back once, and go.",
+  "ideas": [
+   [
+    14,
+    "The rival walks back on with a line of their own. Their card slides in with the record changing in front of you and the stop where you will meet next, the rival bonus pops, and they turn to leave, stop, look back once, and go."
+   ]
+  ]
+ },
+ {
+  "id": "rival-loss",
+  "first": 14,
+  "last": 14,
+  "n": 1,
+  "t": "Losing to a Rival",
+  "g": "Rivals",
+  "now": "The loss is reported with the same fade as any defeat.",
+  "idea": "No fade to black, because the run is not over. The rival's colour sweeps across, they stride in, the headline slams down in two beats, and then the important part: a green \"Your run goes on\" pops and pulses, and what you keep is ticked off line by line.",
+  "ideas": [
+   [
+    14,
+    "No fade to black, because the run is not over. The rival's colour sweeps across, they stride in, the headline slams down in two beats, and then the important part: a green \"Your run goes on\" pops and pulses, and what you keep is ticked off line by line."
+   ]
+  ]
+ },
+ {
+  "id": "grunt",
+  "first": 14,
+  "last": 14,
+  "n": 1,
+  "t": "Evil Team Ambush",
+  "g": "Villains",
+  "now": "Grunt battles start like any trainer battle.",
+  "idea": "An alarm: the screen pulses red twice and the lights drop. Two shapes step out of the dark, the lights snap back on them, the team's letter is stamped on the floor, and the one who challenges you steps forward while the other backs off to wait their turn. A counter shows how many are left.",
+  "ideas": [
+   [
+    14,
+    "An alarm: the screen pulses red twice and the lights drop. Two shapes step out of the dark, the lights snap back on them, the team's letter is stamped on the floor, and the one who challenges you steps forward while the other backs off to wait their turn. A counter shows how many are left."
+   ]
+  ]
+ },
+ {
+  "id": "boss-team",
+  "first": 14,
+  "last": 14,
+  "n": 1,
+  "t": "Team Boss Entrance",
+  "g": "Villains",
+  "now": "The team's leader appears like any other trainer.",
+  "idea": "The room is dark. One spotlight flickers on over an empty floor. A tall shadow walks into it without hurrying, the light widens and gives him his colour, the grunts on both sides jump to attention and step back, and his name lands on a red band. His line arrives slowly.",
+  "ideas": [
+   [
+    14,
+    "The room is dark. One spotlight flickers on over an empty floor. A tall shadow walks into it without hurrying, the light widens and gives him his colour, the grunts on both sides jump to attention and step back, and his name lands on a red band. His line arrives slowly."
+   ]
+  ]
+ },
+ {
+  "id": "betrayal",
+  "first": 14,
+  "last": 14,
+  "n": 1,
+  "t": "The Betrayal",
+  "g": "Villains",
+  "now": "The betrayal is a text scene before the Legendary battle.",
+  "idea": "The beaten Boss sags and loses his colour. A grunt walks past him to the switch, says what the team really thinks, and throws it: the screen cracks from top to bottom, the title slams in, the four steps of what happens next are dealt out, and something behind the sealed door opens its eyes.",
+  "ideas": [
+   [
+    14,
+    "The beaten Boss sags and loses his colour. A grunt walks past him to the switch, says what the team really thinks, and throws it: the screen cracks from top to bottom, the title slams in, the four steps of what happens next are dealt out, and something behind the sealed door opens its eyes."
+   ]
+  ]
+ },
+ {
+  "id": "leg-free",
+  "first": 14,
+  "last": 14,
+  "n": 1,
+  "t": "The Legendary Breaks Loose",
+  "g": "Villains",
+  "now": "The Legendary battle after a betrayal starts like a wild battle.",
+  "idea": "It is held by four chains and it is pulling. They snap one at a time, each with a crack and flying links. On the last one it roars, the grunt runs for his life across the front of the screen, and the plate arrives with a gold tag: catch it or beat it.",
+  "ideas": [
+   [
+    14,
+    "It is held by four chains and it is pulling. They snap one at a time, each with a crack and flying links. On the last one it roars, the grunt runs for his life across the front of the screen, and the plate arrives with a gold tag: catch it or beat it."
+   ]
+  ]
+ },
+ {
+  "id": "cam-ko",
+  "first": 16,
+  "last": 23,
+  "n": 2,
+  "t": "Knock-out Camera",
+  "g": "Camera",
+  "now": "The camera never moves in a normal battle.",
+  "idea": "The camera is now part of every fight. A hard hit punches in toward the target for a few frames; a knock-out gets a slow push toward the falling Pokémon and eases back out as the winner settles.",
+  "ideas": [
+   [
+    16,
+    "The camera is now part of every fight. A hard hit punches in toward the target for a few frames; a knock-out gets a slow push toward the falling Pokémon and eases back out as the winner settles."
+   ]
+  ]
+ },
+ {
+  "id": "cam-send",
+  "first": 16,
+  "last": 16,
+  "n": 1,
+  "t": "Entrance Camera",
+  "g": "Camera",
+  "now": "The camera never moves in a normal battle.",
+  "idea": "When a Pokémon comes in, the camera leans toward its side as the ball lands, gives it a beat alone in the frame, and settles back to the two-shot as its plate arrives.",
+  "ideas": [
+   [
+    16,
+    "When a Pokémon comes in, the camera leans toward its side as the ball lands, gives it a beat alone in the frame, and settles back to the two-shot as its plate arrives."
+   ]
+  ]
+ },
+ {
+  "id": "if-finish",
+  "first": 17,
+  "last": 23,
+  "n": 2,
+  "t": "Finishing Blow",
+  "g": "Impact",
+  "now": "The last knock-out of a battle looks like every other.",
+  "idea": "The hit that ends a battle gets the full treatment: time stops on a negative frame, the screen goes black and white with lines racing in on the target, one beat of silence, and then colour snaps back as it is thrown clear off its base. K.O. is stamped across the screen.",
+  "ideas": [
+   [
+    17,
+    "The hit that ends a battle gets the full treatment: time stops on a negative frame, the screen goes black and white with lines racing in on the target, one beat of silence, and then colour snaps back as it is thrown clear off its base. K.O. is stamped across the screen."
+   ]
+  ]
+ },
+ {
+  "id": "lt-move",
+  "first": 18,
+  "last": 18,
+  "n": 1,
+  "t": "Move Light",
+  "g": "Light",
+  "now": "Moves never light the arena. A Flamethrower in a cave looks the same as one at noon.",
+  "idea": "Moves are light sources. In a dark place you can see it best: the charge lights the user from below, the hit throws the type's colour across the floor and onto the other Pokémon, and the glow takes a moment to die. A fire hit is orange, an electric one is yellow, a water one is blue.",
+  "ideas": [
+   [
+    18,
+    "Moves are light sources. In a dark place you can see it best: the charge lights the user from below, the hit throws the type's colour across the floor and onto the other Pokémon, and the glow takes a moment to die. A fire hit is orange, an electric one is yellow, a water one is blue."
+   ]
+  ]
+ },
+ {
+  "id": "tg-react",
+  "first": 19,
+  "last": 19,
+  "n": 1,
+  "t": "Trainer Reactions",
+  "g": "Together",
+  "now": "You are never seen or heard in a battle.",
+  "idea": "Your trainer stays off the field, as decided, but is no longer silent. At the moments that matter a small face pops up at the right of your bar with one word: a wince when your Pokémon takes a big hit, a shout when yours lands, and a cheer on the knock-out. It never covers the message or the plates and is gone in a second.",
+  "ideas": [
+   [
+    19,
+    "Your trainer stays off the field, as decided, but is no longer silent. At the moments that matter a small face pops up at the right of your bar with one word: a wince when your Pokémon takes a big hit, a shout when yours lands, and a cheer on the knock-out. It never covers the message or the plates and is gone in a second."
+   ]
+  ]
+ },
+ {
+  "id": "sg-short",
+  "first": 20,
+  "last": 20,
+  "n": 1,
+  "t": "Short Cut (Seen Before)",
+  "g": "Signature",
+  "now": "Fast Mega is a setting that swaps the scene for a generic cut-in. Tera, Dynamax and Z-Moves always play in full.",
+  "idea": "A roguelike shows you the same gimmick many times. The first time in a run you get the full cutscene. After that each one plays a one-second cut that keeps only its signature: for Mega Evolution, the cracks, one white frame, and the glass falling away from a Mega that is already standing there.",
+  "ideas": [
+   [
+    20,
+    "A roguelike shows you the same gimmick many times. The first time in a run you get the full cutscene. After that each one plays a one-second cut that keeps only its signature: for Mega Evolution, the cracks, one white frame, and the glass falling away from a Mega that is already standing there."
+   ]
+  ]
+ },
+ {
+  "id": "ar-grass",
+  "first": 21,
+  "last": 21,
+  "n": 1,
+  "t": "Meadow",
+  "g": "Arenas",
+  "now": "A flat striped backdrop. Since pass 8 a cloud shadow and a few motes drift over it.",
+  "idea": "Clouds cross the sky, twelve tufts of grass sway out of step, two butterflies wander through. Every few seconds a gust runs across: the tufts bend in a wave from left to right and three white wind lines pass.",
+  "ideas": [
+   [
+    21,
+    "Clouds cross the sky, twelve tufts of grass sway out of step, two butterflies wander through. Every few seconds a gust runs across: the tufts bend in a wave from left to right and three white wind lines pass."
+   ]
+  ]
+ },
+ {
+  "id": "ar-cave",
+  "first": 21,
+  "last": 21,
+  "n": 1,
+  "t": "Cave",
+  "g": "Arenas",
+  "now": "A flat brown backdrop.",
+  "idea": "A ragged ceiling of rock hangs over the top of the screen. One shaft of daylight leans in from the left with dust turning in it, and water drips from three points, each drop opening a ring where it lands. Now and then something small flies across.",
+  "ideas": [
+   [
+    21,
+    "A ragged ceiling of rock hangs over the top of the screen. One shaft of daylight leans in from the left with dust turning in it, and water drips from three points, each drop opening a ring where it lands. Now and then something small flies across."
+   ]
+  ]
+ },
+ {
+  "id": "ar-sea",
+  "first": 21,
+  "last": 21,
+  "n": 1,
+  "t": "Open Sea",
+  "g": "Arenas",
+  "now": "A flat blue backdrop; both Pokémon stand on still platforms.",
+  "idea": "Six lines of swell slide past at different speeds and the two platforms ride them. Gulls cross the sky and the sun glints off the water. When a big wave comes through, everything lifts and drops together and spray comes off both platforms.",
+  "ideas": [
+   [
+    21,
+    "Six lines of swell slide past at different speeds and the two platforms ride them. Gulls cross the sky and the sun glints off the water. When a big wave comes through, everything lifts and drops together and spray comes off both platforms."
+   ]
+  ]
+ },
+ {
+  "id": "ar-volcano",
+  "first": 21,
+  "last": 21,
+  "n": 1,
+  "t": "Volcano",
+  "g": "Arenas",
+  "now": "A flat red backdrop.",
+  "idea": "The horizon glows and pulses, ash clouds crawl the other way across the sky, and embers rise through the whole frame. Every so often the mountain behind coughs: a flash on the horizon, a shake, and three lava bombs arc across the sky.",
+  "ideas": [
+   [
+    21,
+    "The horizon glows and pulses, ash clouds crawl the other way across the sky, and embers rise through the whole frame. Every so often the mountain behind coughs: a flash on the horizon, a shake, and three lava bombs arc across the sky."
+   ]
+  ]
+ },
+ {
+  "id": "ar-ice",
+  "first": 21,
+  "last": 21,
+  "n": 1,
+  "t": "Ice Cave",
+  "g": "Arenas",
+  "now": "A flat grey-blue backdrop.",
+  "idea": "Icicles hang across the top, the ice glints at random, fine snow falls through the frame, and both Pokémon breathe out small clouds. A cold place should look cold before anyone uses an Ice move.",
+  "ideas": [
+   [
+    21,
+    "Icicles hang across the top, the ice glints at random, fine snow falls through the frame, and both Pokémon breathe out small clouds. A cold place should look cold before anyone uses an Ice move."
+   ]
+  ]
+ },
+ {
+  "id": "ar-time",
+  "first": 21,
+  "last": 21,
+  "n": 1,
+  "t": "Time of Day",
+  "g": "Arenas",
+  "now": "Hub Town has a day and night clock. Battles are always lit the same.",
+  "idea": "The run's clock reaches into battle. At dusk the whole picture warms and the shadows stretch; at night it turns blue, stars come out in the sky strip, the moon climbs, and fireflies drift over the grass. It is one tint layer and a handful of sprites, so it costs almost nothing.",
+  "ideas": [
+   [
+    21,
+    "The run's clock reaches into battle. At dusk the whole picture warms and the shadows stretch; at night it turns blue, stars come out in the sky strip, the moon climbs, and fireflies drift over the grass. It is one tint layer and a handful of sprites, so it costs almost nothing."
+   ]
+  ]
+ },
+ {
+  "id": "ar-scar",
+  "first": 21,
+  "last": 21,
+  "n": 1,
+  "t": "The Field Remembers",
+  "g": "Arenas",
+  "now": "A move leaves nothing behind. The ground looks the same on turn ten as on turn one.",
+  "idea": "A big hit leaves its type's mark under the target and the mark stays: a scorch that smokes, a patch of ice that glints, a puddle with rings, cracks in the ground. By the end of a long fight the arena tells you what happened in it. Marks are only pictures and never change the rules.",
+  "ideas": [
+   [
+    21,
+    "A big hit leaves its type's mark under the target and the mark stays: a scorch that smokes, a patch of ice that glints, a puddle with rings, cracks in the ground. By the end of a long fight the arena tells you what happened in it. Marks are only pictures and never change the rules."
+   ]
+  ]
+ },
+ {
+  "id": "ar-build",
+  "first": 21,
+  "last": 21,
+  "n": 1,
+  "t": "Arena Arrival",
+  "g": "Arenas",
+  "now": "The battle screen appears complete after the transition.",
+  "idea": "The place arrives before the fight does. The sky drops in from the top and the ground rolls up from the bottom, the two platforms slide in from opposite sides, the grass pops up tuft by tuft, and only then does the Pokémon step in. It takes under a second and a half.",
+  "ideas": [
+   [
+    21,
+    "The place arrives before the fight does. The sky drops in from the top and the ground rolls up from the bottom, the two platforms slide in from opposite sides, the grass pops up tuft by tuft, and only then does the Pokémon step in. It takes under a second and a half."
+   ]
+  ]
+ },
+ {
+  "id": "evolve",
+  "first": 22,
+  "last": 22,
+  "n": 1,
+  "t": "Evolution",
+  "g": "Side roads",
+  "now": "A full scene already: the silhouette flickers faster and faster for 4.2s, a white flash, and the new form scales from 1.15 to 1.",
+  "idea": "The flicker stays, because that flicker is Pokémon. Everything around it is new. The room goes dark to one spotlight, two ribbons of light climb the Pokémon, each swap is bigger than the last and sends a ring across the floor, and when the new shape holds, the colour rises through it from the feet up. Then the name slams in, the stat gains count up in a column, and a new move drops in last. The B button hint pulses the whole time.",
+  "ideas": [
+   [
+    22,
+    "The flicker stays, because that flicker is Pokémon. Everything around it is new. The room goes dark to one spotlight, two ribbons of light climb the Pokémon, each swap is bigger than the last and sends a ring across the floor, and when the new shape holds, the colour rises through it from the feet up. Then the name slams in, the stat gains count up in a column, and a new move drops in last. The B button hint pulses the whole time."
+   ]
+  ]
+ },
+ {
+  "id": "egg",
+  "first": 22,
+  "last": 22,
+  "n": 1,
+  "t": "Egg Hatch",
+  "g": "Side roads",
+  "now": "The caption rises, the egg hops once, wobbles three times with cracks and a small shake, then a burst and a white flash.",
+  "idea": "The egg is given a little stage and a little patience. It rocks, stops, rocks harder; each crack is drawn as a line with light behind it; it jumps clean off the ground before it goes. The baby does not just appear: it sits in the bottom half of the shell, blinks at you, hops out, and the shell halves rock on the floor behind it.",
+  "ideas": [
+   [
+    22,
+    "The egg is given a little stage and a little patience. It rocks, stops, rocks harder; each crack is drawn as a line with light behind it; it jumps clean off the ground before it goes. The baby does not just appear: it sits in the bottom half of the shell, blinks at you, hops out, and the shell halves rock on the floor behind it."
+   ]
+  ]
+ },
+ {
+  "id": "trade",
+  "first": 22,
+  "last": 22,
+  "n": 1,
+  "t": "Trade",
+  "g": "Side roads",
+  "now": "Thirteen trade screen styles with two to seven small tweens each: cards slide, a fade, the new Pokémon is shown.",
+  "idea": "One trade animation for all thirteen screens. Both Pokémon are called back, the two balls rise onto a pair of rails, and they pass each other in the middle of the screen in a flash, each leaving a trail in its trainer's colour. They drop on the far side and open. The two trainers stay on screen the whole time, because a trade is between people.",
+  "ideas": [
+   [
+    22,
+    "One trade animation for all thirteen screens. Both Pokémon are called back, the two balls rise onto a pair of rails, and they pass each other in the middle of the screen in a flash, each leaving a trail in its trainer's colour. They drop on the far side and open. The two trainers stay on screen the whole time, because a trade is between people."
+   ]
+  ]
+ },
+ {
+  "id": "xp",
+  "first": 22,
+  "last": 22,
+  "n": 1,
+  "t": "Expedition: Out and Back",
+  "g": "Side roads",
+  "now": "No motion of its own was found for expeditions.",
+  "idea": "Sending three Pokémon away should feel like sending them somewhere. A route draws itself across a field map dot by dot, the three set off along it in single file and shrink into the distance, and a small clock turns while you play on. When they come home they are carrying a chest between them; it drops, pops open, and what they found flies out into a row and is counted.",
+  "ideas": [
+   [
+    22,
+    "Sending three Pokémon away should feel like sending them somewhere. A route draws itself across a field map dot by dot, the three set off along it in single file and shrink into the distance, and a small clock turns while you play on. When they come home they are carrying a chest between them; it drops, pops open, and what they found flies out into a row and is counted."
+   ]
+  ]
+ },
+ {
+  "id": "reward",
+  "first": 22,
+  "last": 22,
+  "n": 1,
+  "t": "Battle Reward",
+  "g": "Side roads",
+  "now": "Nine reward screen styles; a card reveals in 0.16s, a gift lid opens, a sheen sweeps.",
+  "idea": "Three cards are dealt face down onto the dimmed field, flip over one by one and lean toward your cursor as it passes. The one you pick lifts, flashes, and its item flies to your bag, where the count ticks up. The two you left tip over and fall off the bottom of the screen.",
+  "ideas": [
+   [
+    22,
+    "Three cards are dealt face down onto the dimmed field, flip over one by one and lean toward your cursor as it passes. The one you pick lifts, flashes, and its item flies to your bag, where the count ticks up. The two you left tip over and fall off the bottom of the screen."
+   ]
+  ]
+ },
+ {
+  "id": "second",
+  "first": 22,
+  "last": 22,
+  "n": 1,
+  "t": "Second Chance",
+  "g": "Side roads",
+  "now": "Two lines of text, then the battle restarts with a hard cut. No motion.",
+  "idea": "Losing should stop the world for a second. The colour drains out of the battle and everything hangs. A single Revive falls slowly through the grey, turning, and where it lands a ring of gold runs out across the field putting the colour back. Your Pokémon rises the way it fell, its bar refills, and the counter of chances ticks down so you know it will not happen twice.",
+  "ideas": [
+   [
+    22,
+    "Losing should stop the world for a second. The colour drains out of the battle and everything hangs. A single Revive falls slowly through the grey, turning, and where it lands a ring of gold runs out across the field putting the colour back. Your Pokémon rises the way it fell, its bar refills, and the counter of chances ticks down so you know it will not happen twice."
+   ]
+  ]
+ },
+ {
+  "id": "rewind",
+  "first": 22,
+  "last": 22,
+  "n": 1,
+  "t": "Rewind",
+  "g": "Side roads",
+  "now": "A text menu. The turn is simply restored.",
+  "idea": "A rewind should look like one. Press it and the last turn runs backwards at four times speed under tape lines: the damage number drops back into the Pokémon, the bar climbs back up, both Pokémon slide back to where they stood. A clock hand spins the wrong way in the middle of the screen, the turn counter flips from 6 back to 5, and the tape lines snap off.",
+  "ideas": [
+   [
+    22,
+    "A rewind should look like one. Press it and the last turn runs backwards at four times speed under tape lines: the damage number drops back into the Pokémon, the bar climbs back up, both Pokémon slide back to where they stood. A clock hand spins the wrong way in the middle of the screen, the turn counter flips from 6 back to 5, and the tape lines snap off."
+   ]
+  ]
+ },
+ {
+  "id": "exp-team",
+  "first": 23,
+  "last": 23,
+  "n": 1,
+  "t": "EXP for the Whole Team",
+  "g": "Flow",
+  "now": "Only the active Pokémon's bar fills. The rest of the party gains experience in a text line.",
+  "idea": "The fallen Pokémon's experience leaves it as lights. Most fly to the bar of the one that fought; the rest split off to five small portraits that slide in on the right, each with its own little bar. The bars fill in order, top to bottom, and the one that levels up flashes, hops, and shows its new level.",
+  "ideas": [
+   [
+    23,
+    "The fallen Pokémon's experience leaves it as lights. Most fly to the bar of the one that fought; the rest split off to five small portraits that slide in on the right, each with its own little bar. The bars fill in order, top to bottom, and the one that levels up flashes, hops, and shows its new level."
+   ]
+  ]
+ },
+ {
+  "id": "move-learn",
+  "first": 23,
+  "last": 23,
+  "n": 1,
+  "t": "New Move",
+  "g": "Flow",
+  "now": "A text prompt and a list. The old move is replaced without motion.",
+  "idea": "The four moves are four tiles in their type colours. The new move comes down from above as a fifth tile, glowing, and waits. You pick the one to lose: it counts One, Two, and with a Poof it turns white, cracks and drops out of the frame, and the new tile swings into the gap and locks with a ring.",
+  "ideas": [
+   [
+    23,
+    "The four moves are four tiles in their type colours. The new move comes down from above as a fifth tile, glowing, and waits. You pick the one to lose: it counts One, Two, and with a Poof it turns white, cracks and drops out of the frame, and the new tile swings into the gap and locks with a ring."
+   ]
+  ]
+ },
+ {
+  "id": "bag-item",
+  "first": 23,
+  "last": 23,
+  "n": 1,
+  "t": "Using an Item",
+  "g": "Flow",
+  "now": "A heal animation from the move pack and a green number.",
+  "idea": "The item is shown being used. It leaves the bag chip, hangs over the Pokémon, tips, and sprays; the green rises through the Pokémon from the feet up while the bar refills behind a white leading edge. The bag chip counts one down. A Revive, an X Attack and a status heal would use the same four beats with their own colour.",
+  "ideas": [
+   [
+    23,
+    "The item is shown being used. It leaves the bag chip, hangs over the Pokémon, tips, and sprays; the green rises through the Pokémon from the feet up while the bar refills behind a white leading edge. The bag chip counts one down. A Revive, an X Attack and a status heal would use the same four beats with their own colour."
+   ]
+  ]
+ },
+ {
+  "id": "held",
+  "first": 23,
+  "last": 23,
+  "n": 1,
+  "t": "Held Items Speak Up",
+  "g": "Flow",
+  "now": "A held item that triggers gets a text line.",
+  "idea": "When a held item does its job you see the item. A Focus Sash appears across the Pokémon, pulls tight as the bar stops one point short of empty, and snaps in two. A Shell Bell pops up beside the attacker after its hit, swings twice with two rings of sound, and a small green number follows. Every held item gets a two-beat cameo like these.",
+  "ideas": [
+   [
+    23,
+    "When a held item does its job you see the item. A Focus Sash appears across the Pokémon, pulls tight as the bar stops one point short of empty, and snaps in two. A Shell Bell pops up beside the attacker after its hit, swings twice with two rings of sound, and a small green number follows. Every held item gets a two-beat cameo like these."
+   ]
+  ]
+ },
+ {
+  "id": "order",
+  "first": 23,
+  "last": 23,
+  "n": 1,
+  "t": "Who Goes First",
+  "g": "Flow",
+  "now": "Turn order is never shown. The faster Pokémon simply acts first.",
+  "idea": "For half a second at the top of each turn, two small portraits race along a strip. The faster one gets there first and its Pokémon gives a little hop on the field. When something changes the order, you see why: a Quick Claw flashes on the slower portrait and it leaps the other. Then the strip folds away and the turn plays.",
+  "ideas": [
+   [
+    23,
+    "For half a second at the top of each turn, two small portraits race along a strip. The faster one gets there first and its Pokémon gives a little hop on the field. When something changes the order, you see why: a Quick Claw flashes on the slower portrait and it leaps the other. Then the strip folds away and the turn plays."
+   ]
+  ]
+ },
+ {
+  "id": "msg",
+  "first": 23,
+  "last": 23,
+  "n": 1,
+  "t": "Message Rhythm",
+  "g": "Flow",
+  "now": "Battle text appears instantly by default. With typing on, every letter takes the same 30 ms.",
+  "idea": "Typing is on, fast, and has rhythm. A comma is a short breath and a full stop a longer one. Moving on makes the bubble dip like a button being pressed. An important line punches the bubble and flashes its border; a quiet one types its dots slowly. The arrow bounces only when the game is waiting for you.",
+  "ideas": [
+   [
+    23,
+    "Typing is on, fast, and has rhythm. A comma is a short breath and a full stop a longer one. Moving on makes the bubble dip like a button being pressed. An important line punches the bubble and flashes its border; a quiet one types its dots slowly. The arrow bounces only when the game is waiting for you."
+   ]
+  ]
+ },
+ {
+  "id": "toast",
+  "first": 23,
+  "last": 23,
+  "n": 1,
+  "t": "Saving and Notices",
+  "g": "Flow",
+  "now": "Saving shows nothing. Notices are plain text lines.",
+  "idea": "A small Poké Ball spins in the corner while the game saves and stops with a tick when it is safe to close. Notices slide in from the top as a card with an icon, shine once, and leave the same way; two at once stack and take turns. Nothing here ever covers the middle of the screen.",
+  "ideas": [
+   [
+    23,
+    "A small Poké Ball spins in the corner while the game saves and stops with a tick when it is safe to close. Notices slide in from the top as a card with an icon, shine once, and leave the same way; two at once stack and take turns. Nothing here ever covers the middle of the screen."
+   ]
+  ]
+ },
+ {
+  "id": "mf-close",
+  "first": 24,
+  "last": 24,
+  "n": 1,
+  "t": "Close Range, Four Ways",
+  "g": "Moves",
+  "now": "A move with no animation file plays one of 26 shared effects. For the four close-range families that is the same 24-pixel lunge, with a ring, a slash line or a burst drawn on the target.",
+  "idea": "The Pokémon acts the family out. A plain contact move is a shoulder dash and a ring. A bite closes two rows of teeth on the target and leaves claw marks. A punch lands as one fist-sized disc with six short lines. A heavy move crouches, glows, crosses nearly the whole field and leaves dust. You can tell the four apart with the sound off.",
+  "ideas": [
+   [
+    24,
+    "The Pokémon acts the family out. A plain contact move is a shoulder dash and a ring. A bite closes two rows of teeth on the target and leaves claw marks. A punch lands as one fist-sized disc with six short lines. A heavy move crouches, glows, crosses nearly the whole field and leaves dust. You can tell the four apart with the sound off."
+   ]
+  ]
+ },
+ {
+  "id": "mf-shot",
+  "first": 24,
+  "last": 24,
+  "n": 1,
+  "t": "Shots, Beams and Breath",
+  "g": "Moves",
+  "now": "Projectile, beam, flame and dragon moves share two shapes: a dot that flies and a line that appears. Flame and dragon breath are the same line in two colours.",
+  "idea": "Four different things leave the mouth. A projectile is a ball with a tail that arcs. A beam gathers light first, then holds as a three-layer bar that pushes the user back. A flame is a stream of growing puffs that takes time to arrive. Dragon breath is the same stream, but the body glows first and it ends in a burst.",
+  "ideas": [
+   [
+    24,
+    "Four different things leave the mouth. A projectile is a ball with a tail that arcs. A beam gathers light first, then holds as a three-layer bar that pushes the user back. A flame is a stream of growing puffs that takes time to arrive. Dragon breath is the same stream, but the body glows first and it ends in a burst."
+   ]
+  ]
+ },
+ {
+  "id": "mf-element",
+  "first": 24,
+  "last": 24,
+  "n": 1,
+  "t": "Elements Have Shapes",
+  "g": "Moves",
+  "now": "Wind, water, ground and ice moves differ mostly by colour. A wave and a gust are the same arc; a quake is a screen shake.",
+  "idea": "Each element gets a shape nothing else uses. Wind is three thin crescents and a cut. Water is three tall crescents that arrive as a ring. Ground never travels: rock teeth come up under the target, which hops. Ice arrives as a ball, grows a row of spikes from the floor, and the spikes shatter.",
+  "ideas": [
+   [
+    24,
+    "Each element gets a shape nothing else uses. Wind is three thin crescents and a cut. Water is three tall crescents that arrive as a ring. Ground never travels: rock teeth come up under the target, which hops. Ice arrives as a ball, grows a row of spikes from the floor, and the spikes shatter."
+   ]
+  ]
+ },
+ {
+  "id": "mf-mind",
+  "first": 24,
+  "last": 24,
+  "n": 1,
+  "t": "Sparks, Sludge, Mind and Shadow",
+  "g": "Moves",
+  "now": "Electric, poison, psychic, ghost and status moves are a dot or a ring in the type colour. A status move looks like a weak attack.",
+  "idea": "Five families that never touch the target. Lightning comes from the sky, three times. Poison is a lobbed ball that opens into a cloud and drips. A psychic move lifts the target off the ground, tilts it, and drops it. A ghost move darkens the field and opens two eyes behind the target. A status move is slow, does no damage, and leaves stars circling the head.",
+  "ideas": [
+   [
+    24,
+    "Five families that never touch the target. Lightning comes from the sky, three times. Poison is a lobbed ball that opens into a cloud and drips. A psychic move lifts the target off the ground, tilts it, and drops it. A ghost move darkens the field and opens two eyes behind the target. A status move is slow, does no damage, and leaves stars circling the head."
+   ]
+  ]
+ },
+ {
+  "id": "mf-self",
+  "first": 24,
+  "last": 24,
+  "n": 1,
+  "t": "Care, Cover and Field",
+  "g": "Moves",
+  "now": "Healing, protection and field moves play a sparkle on the user. Protect shows nothing when it actually blocks a hit.",
+  "idea": "Three families aimed at yourself. Healing rises from the feet and the bar fills as the lights pass the head. A barrier is a six-sided pane that stays up for the turn; when it blocks a hit it flashes, throws the hit back as sparks, and says so. A field move washes across the whole screen once and then changes the arena light for as long as it lasts.",
+  "ideas": [
+   [
+    24,
+    "Three families aimed at yourself. Healing rises from the feet and the bar fills as the lights pass the head. A barrier is a six-sided pane that stays up for the turn; when it blocks a hit it flashes, throws the hit back as sparks, and says so. A field move washes across the whole screen once and then changes the arena light for as long as it lasts."
+   ]
+  ]
+ },
+ {
+  "id": "mf-burst",
+  "first": 24,
+  "last": 24,
+  "n": 1,
+  "t": "Explosion",
+  "g": "Moves",
+  "now": "A charge glow, a burst on the user and a white wash. The user faints with the normal faint.",
+  "idea": "The loudest family gets silence first. The body shrinks and flashes faster and faster while rings close in on it. Everything stops for a held breath. Then white, a ring that leaves the screen, a long shake, and a scorch where it stood. The user does not sink away: it is simply gone when the light clears.",
+  "ideas": [
+   [
+    24,
+    "The loudest family gets silence first. The body shrinks and flashes faster and faster while rings close in on it. Everything stops for a held breath. Then white, a ring that leaves the screen, a long shake, and a scorch where it stood. The user does not sink away: it is simply gone when the light clears."
+   ]
+  ]
+ },
+ {
+  "id": "mf-type",
+  "first": 24,
+  "last": 24,
+  "n": 1,
+  "t": "One Family, Four Types",
+  "g": "Moves",
+  "now": "The family picks the shape and the type picks one flat colour.",
+  "idea": "The family decides how a move is built and the type dresses it. Here the beam family plays four times in a row: fighting, dark, water and normal. The gather, the held bar and the push-back never change. The three colours, the particles and what the hit leaves on the ground come from the type kit.",
+  "ideas": [
+   [
+    24,
+    "The family decides how a move is built and the type dresses it. Here the beam family plays four times in a row: fighting, dark, water and normal. The gather, the held bar and the push-back never change. The three colours, the particles and what the hit leaves on the ground come from the type kit."
+   ]
+  ]
+ },
+ {
+  "id": "mf-reel",
+  "first": 24,
+  "last": 24,
+  "n": 1,
+  "t": "Family Reel: All 26",
+  "g": "Moves",
+  "now": "The 26 families are a table in the code: a startup, a travel and an impact for each. In play, most of them look alike.",
+  "idea": "The same table, drawn so every row is different at a glance. Each tile shows a user dot on the left and a target dot on the right and plays its family on a loop: who moves, what crosses, and what shape lands. Families that act on the user (Burst, Healing, Barrier, Field) play on the left dot. The seven clips before this one are these tiles at full size.",
+  "ideas": [
+   [
+    24,
+    "The same table, drawn so every row is different at a glance. Each tile shows a user dot on the left and a target dot on the right and plays its family on a loop: who moves, what crosses, and what shape lands. Families that act on the user (Burst, Healing, Barrier, Field) play on the left dot. The seven clips before this one are these tiles at full size."
+   ]
+  ]
+ },
+ {
+  "id": "mc-battle",
+  "first": 25,
+  "last": 25,
+  "n": 1,
+  "t": "One Whole Battle",
+  "g": "Master Cut",
+  "now": "Each of these moments exists in the game today, but they were made at different times and do not share timing, colours or camera.",
+  "idea": "Nine clips from this set, back to back, as one trainer battle: pick the stop on the map, the trainer intro from the UI mockups, who goes first and the first hit, the ace call, a Mega in its one-second cut, the finishing blow, experience for the whole team, the trainer paying up, and the reward. Watch for whether it feels like one game.",
+  "ideas": [
+   [
+    25,
+    "Nine clips from this set, back to back, as one trainer battle: pick the stop on the map, the trainer intro from the UI mockups, who goes first and the first hit, the ace call, a Mega in its one-second cut, the finishing blow, experience for the whole team, the trainer paying up, and the reward. Watch for whether it feels like one game."
+   ]
+  ]
+ },
+ {
+  "id": "mc-event",
+  "first": 25,
+  "last": 25,
+  "n": 1,
+  "t": "One Whole Event",
+  "g": "Master Cut",
+  "now": "An event is a text box over a picture, a list of choices, sometimes a battle, then a result line.",
+  "idea": "Six clips as one event stop: the iris opens on the place, the choice cards are dealt above a whole text box, the choice turns into a battle stage, one critical hit, the result scrolls the room, and the rewards fly to where they live before the iris returns you to the map.",
+  "ideas": [
+   [
+    25,
+    "Six clips as one event stop: the iris opens on the place, the choice cards are dealt above a whole text box, the choice turns into a battle stage, one critical hit, the result scrolls the room, and the rewards fly to where they live before the iris returns you to the map."
+   ]
+  ]
+ },
+ {
+  "id": "mc-run",
+  "first": 25,
+  "last": 25,
+  "n": 1,
+  "t": "One Run in a Minute",
+  "g": "Master Cut",
+  "now": "Screens change with a fade or a hard cut. Each screen starts its own motion from nothing.",
+  "idea": "Ten clips as the first stretch of a run: title, starter, Hub Town, the road, a wild encounter, the catch, the Pokémon Center, a Gym Leader, the badge, and the next region. Every screen arrives with the same family of moves: things drop in, pop in order, and leave the way they came.",
+  "ideas": [
+   [
+    25,
+    "Ten clips as the first stretch of a run: title, starter, Hub Town, the road, a wild encounter, the catch, the Pokémon Center, a Gym Leader, the badge, and the next region. Every screen arrives with the same family of moves: things drop in, pop in order, and leave the way they came."
+   ]
+  ]
+ },
+ {
+  "id": "mc-calm",
+  "first": 25,
+  "last": 25,
+  "n": 1,
+  "t": "Reduced Motion: Three Levels",
+  "g": "Master Cut",
+  "now": "The game has a Reduced motion setting. It shortens some tweens and leaves others alone, case by case.",
+  "idea": "One rule for the whole set, shown on one hit. Full: wind-up, hit-stop, shake, flash, particles and camera. Reduced: the screen never shakes, flashes or moves; the wind-up is short; the shapes, the number and the bar stay. Off: the bar, the number and the text change, and nothing else moves. What happened is readable at every level, because no clip in this set uses motion as the only way to say something.",
+  "ideas": [
+   [
+    25,
+    "One rule for the whole set, shown on one hit. Full: wind-up, hit-stop, shake, flash, particles and camera. Reduced: the screen never shakes, flashes or moves; the wind-up is short; the shapes, the number and the bar stay. Off: the bar, the number and the text change, and nothing else moves. What happened is readable at every level, because no clip in this set uses motion as the only way to say something."
+   ]
+  ]
+ },
+ {
+  "id": "mc-skip",
+  "first": 25,
+  "last": 25,
+  "n": 1,
+  "t": "Hold to Skip, and Short Cuts",
+  "g": "Master Cut",
+  "now": "Some cutscenes can be skipped with a key press and some cannot. A skipped cutscene cuts to black and back.",
+  "idea": "Two rules. First: every cutscene over two seconds can be skipped by holding a button. A small bar fills while you hold, so one stray press never loses a scene, and the skip is one white frame straight to the last picture of the cutscene, never to black. Second: the Cutscene length setting swaps a long cutscene for its own short cut, made for it, like the one-second Mega.",
+  "ideas": [
+   [
+    25,
+    "Two rules. First: every cutscene over two seconds can be skipped by holding a button. A small bar fills while you hold, so one stray press never loses a scene, and the skip is one white frame straight to the last picture of the cutscene, never to black. Second: the Cutscene length setting swaps a long cutscene for its own short cut, made for it, like the one-second Mega."
+   ]
+  ]
+ }
+]

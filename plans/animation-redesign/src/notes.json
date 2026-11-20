@@ -1,0 +1,446 @@
+{
+ "1": {
+  "name": "First Motion",
+  "big": "The floor. Six basic battle beats (send out, recall, attack and hit, faint, HP bar, standing) each get one clean, readable tween. The game's own sprite frames keep playing underneath; everything here is the code-made motion around them.",
+  "clips": [
+   "Send Out",
+   "Recall",
+   "Attack and Hit",
+   "Faint",
+   "HP Bar",
+   "Standing"
+  ],
+  "q1": "Not yet. This pass is about order and clarity: one thing happens at a time and you can always tell what.",
+  "q2": "Compared with the game today: recall gets its red beam back, fainting sinks into the ground instead of fading, and the HP number counts down with the bar.",
+  "q3": "Yes. Switching, level-up, EXP and a missed attack have no clip yet. They come in pass 2.",
+  "q4": "Nothing to set yet. From pass 20 every clip here obeys the motion settings.",
+  "q5": "The ball arc, white flash and red recall beam are straight from the handheld games."
+ },
+ "2": {
+  "name": "Weight",
+  "big": "Everything gets mass. The ball squashes when it lands, attacks wind up before they go, hits freeze for a blink before the recoil, landings throw dust and the HP plate takes the blow too.",
+  "clips": [
+   "Switch",
+   "Miss",
+   "EXP and Level Up"
+  ],
+  "q1": "Yes. The same six beats now have bounce, stretch and dust, so even a plain Tackle looks like it hurts.",
+  "q2": "Pass 1 moved things from A to B. Pass 2 adds what happens before (wind-up) and after (recoil, settle, dust) each move, plus hit-stop: an 80ms freeze on contact that makes hits feel heavy.",
+  "q3": "Three more clips: switching as one unbroken move, a dodge for a missed attack, and EXP into level-up.",
+  "q4": "Hit-stop and screen shake already have sliders in Settings; these clips are drawn at their default strength.",
+  "q5": "The ball bounce before it opens and the two happy hops on level-up are small touches the 3D games use."
+ },
+ "3": {
+  "name": "Elements",
+  "big": "Type is now visible in the motion itself. Eighteen impact kits, a type-coloured glow before every move, and type sparks when a Pokémon lands. The game's move animations still play; this is the layer wrapped around them.",
+  "clips": [
+   "Type Reel",
+   "Wind-up Tells",
+   "End-of-turn Damage",
+   "Healing"
+  ],
+  "q1": "Yes. Hits went from a white blink to bolts, embers, splashes, shards and petals. The Type Reel alone is eighteen new effects.",
+  "q2": "Pass 2 made a hit feel heavy; pass 3 makes it look like what it is. You can now tell fire from water with the sound off and the text hidden.",
+  "q3": "Four more clips, and a new Conditions group for burn, poison and Leech Seed ticks, which had no animation at all in the game.",
+  "q4": "The type kits use particles, so they follow the existing Reduce particles setting: at Reduced they keep the star and ring and drop the sparks.",
+  "q5": "Type colours are the ones on the type pills in the UI redesign, so a Fire move matches its button."
+ },
+ "4": {
+  "name": "Trainers",
+  "big": "People join in. Trainers skid on with dust, wind up and throw from the hand, call out to their Pokémon, announce their ace before it lands and pay up when they lose. They step in for a moment and step out again, so the battle screen stays clear.",
+  "clips": [
+   "Trainer Intro",
+   "Ace Call",
+   "Trainer Defeated",
+   "Trainer Call-out"
+  ],
+  "q1": "Yes. A battle now opens with two people facing off, and the ace gets a full-screen banner and a double-size landing.",
+  "q2": "Passes 1 to 3 were only about the Pokémon. Now the ball leaves from a hand, the team size is shown as balls dropping onto the name plate, and the ace is announced before it appears instead of just being the last one left.",
+  "q3": "Four trainer clips and a new Trainers group. Gym Leaders, rivals and villains get their own passes later (13 and 14).",
+  "q4": "Trainer call-outs would sit under Settings, Battle, with Full, Short and Off.",
+  "q5": "Trainer slides in, throws, steps out is exactly how the handheld games open a battle. Your throw uses the game's own throw frames."
+ },
+ "5": {
+  "name": "Stagecraft",
+  "big": "The interface starts performing. Plates fly in on springs, damage numbers jump out of the hit, SUPER EFFECTIVE slams on like a rubber stamp, the message bubble pops for every line, and the three set pieces every Pokémon game is remembered for (the wild encounter, the catch and the break-out) get full choreography.",
+  "clips": [
+   "Numbers and Stamps",
+   "Danger",
+   "Wild Encounter",
+   "Catch",
+   "Break Out"
+  ],
+  "q1": "Yes. The catch alone has a bonk, two bounces, three lamps, a click, flying stars, a stamp and confetti.",
+  "q2": "Until now the plates and text sat still while the Pokémon moved. Now the whole screen reacts to a hit, and breaking out of a ball (which had no animation at all) is its own moment.",
+  "q3": "Five more clips and a Catching group. 24 clips in total after five passes.",
+  "q4": "Damage numbers and battle text animations already have switches in Settings; stamps would share the damage numbers switch.",
+  "q5": "Three ball shakes with a click and stars is the most recognisable animation in the series. The lamps make the count readable on a small screen."
+ },
+ "6": {
+  "name": "Power Surge",
+  "big": "The four gimmicks are re-staged around the game's own effect art: the Mega orb that cracks and shatters, Tera crystals that grow out of the ground, Dynamax storm clouds with the camera pulling back, and a Z-Move with its real title art. Their language also leaks into normal play: strong moves dim the arena as they charge, and big hits throw rays behind the target.",
+  "clips": [
+   "Mega Evolution",
+   "Terastallize",
+   "Dynamax",
+   "Dynamax Ends",
+   "Z-Move"
+  ],
+  "q1": "By a long way. These are the loudest moments in a battle and each now has a build-up, a break and a landing instead of one flash.",
+  "q2": "Pass 5 made the interface react. Pass 6 adds scale: the arena dims, the camera moves for the first time, the HP bar doubles on screen, and something stays behind afterwards (the Tera crown, the Mega mark on the bar, the turn lamps).",
+  "q3": "Five clips and a Gimmicks group. Dynamax ending gets its own clip because today it is a 0.65s shrink. Primal Reversion and Gigantamax come in the next pass and the lists.",
+  "q4": "The four Fast switches in Settings stay. Fast would play the last third of each clip: the break and the landing, without the build-up.",
+  "q5": "Each one follows the order from its home game: bracelet then orb for Mega, orb then crystals then crown for Tera, big ball over the shoulder for Dynamax, trainer and Pokémon together for Z-Moves."
+ },
+ "7": {
+  "name": "Galar",
+  "big": "Galar gets a stadium: stands with a crowd that bobs, jumps, flashes cameras and sinks, a Crowd meter, and floodlights in the gym's colour. Gigantamax is no longer a Dynamax copy, G-Max moves leave something on the field, raids get a den entry and a barrier, and the Champion and Eternatus each get a scene. Everywhere else the ground now answers: bases dip and flash under landings and hits.",
+  "clips": [
+   "Stadium Crowd",
+   "Gym Leader Entrance",
+   "Gigantamax",
+   "G-Max Move",
+   "Max Raid Den",
+   "Raid Barrier",
+   "Champion Time",
+   "Eternamax"
+  ],
+  "q1": "Yes. Until now every battle happened in a quiet field. A stadium that reacts to you is the biggest single jump in spectacle so far.",
+  "q2": "Pass 6 made the Pokémon bigger. Pass 7 makes the place bigger: there is an audience, the lights go out for the Champion, the sky cracks for Eternatus, and in ordinary battles the ground itself now moves under landings and hits.",
+  "q3": "Eight clips and a Galar group. The den entry and the barrier are new moments that deserve their own screens; today a raid starts with a plain fade.",
+  "q4": "Menu stays reachable during the entrances (they skip on a button press). Settings gets one new switch in this pass: Crowd reactions (On, Quiet, Off), next to Screen shake.",
+  "q5": "It is Sword and Shield's best trick: sport. Numbers on shirts, League Cards, chants, a Champion with a cape. The rest of the game keeps its routes and caves, so Galar feels like its own region."
+ },
+ "8": {
+  "name": "Conditions",
+  "big": "Things that stay. Each of the six conditions gets an arrival, a look that lasts and its own tick every turn, with a chip that flies onto the HP plate. Weather has an entrance, a layer and an exit. Terrains finally stay on the ground. Stat changes, abilities and Protect get their own shapes, and the end of the turn becomes a short parade with a turn counter. Outdoors, the air now moves in every battle.",
+  "clips": [
+   "Burn",
+   "Poison",
+   "Paralysis",
+   "Sleep",
+   "Freeze",
+   "Confusion",
+   "Rain",
+   "Harsh Sunlight",
+   "Sandstorm",
+   "Snow",
+   "Weather Clears",
+   "Terrain",
+   "Stat Changes",
+   "Ability Trigger",
+   "Protect",
+   "End of Turn"
+  ],
+  "q1": "Yes, in a quieter way. Passes 6 and 7 were about the loudest five seconds. This pass makes the other fifty turns look alive: something is always burning, snowing, drifting or humming.",
+  "q2": "Before this pass nothing lasted: an effect played and the screen went back to normal. Now you can read the state of a battle without any text, because a frozen Pokémon is in a block of ice and Electric Terrain is a grid under its feet.",
+  "q3": "Sixteen clips and a Conditions group. Terrain and the end-of-turn parade are new moments; the game shows nothing for them today.",
+  "q4": "Weather, terrain and status chips need no menu. Settings gets a Weather effects level (Full, Light, Off) because rain and sand cover the whole screen, and the turn counter can be hidden.",
+  "q5": "The BRN, PSN, PAR, SLP and FRZ chips, the Z's, the stars round a confused head and the weather lines are straight from the series. They are just given more than one frame."
+ },
+ "9": {
+  "name": "Story Time",
+  "big": "Events move for the first time, and they move on the real pass-25 event pages: each page from the UI redesign is photographed and cut into pieces that slide, flip and fly. An event opens through a camera iris, choices are dealt like cards, results change the place the way you travelled there, rewards wait for your button, and an event battle is wiped in on the slant. In battle, the bubble now points at whoever is acting.",
+  "clips": [
+   "Event Opens",
+   "Event Choice",
+   "Event Result",
+   "Event Reward",
+   "Event Stage Starts",
+   "Blessing",
+   "Pokémon Center",
+   "Starter Remembrance"
+  ],
+  "q1": "Yes. Events were the stillest part of the game: a picture and a text box. Now people walk on, cards are dealt, and the lighthouse stairs actually scroll.",
+  "q2": "Passes 6 to 8 were all battle. This is the first pass outside it, and the first that animates the redesigned pages themselves instead of a stand-in, so what you see is exactly the chosen look in motion.",
+  "q3": "Eight clips and an Events group. No new pages are needed; the four-step strip (Talk, Choose, Result, Reward) already splits an event into pages and every step now has its own entrance.",
+  "q4": "The journal key and Menu stay live through all of it. Text speed in Settings drives the typing; Hold to skip jumps every entrance to its last frame; rewards still never leave without a press.",
+  "q5": "Walking on from the side of the screen, an iris to change place, balls rolling in at the Professor's feet and the Center jingle lighting six balls are all things the series does."
+ },
+ "10": {
+  "name": "World Tour",
+  "big": "Everything between battles moves, on the real chosen pages: the pass-17 title assembles itself, Hub Town pops up like a pop-up book, the map draws its paths and you hop along them, a region arrives with a passport stamp, the team walks the road, the shop basket bumps, the Rotom Phone menu rises, and one transition ties it together: the screen shuts like a Poké Ball and opens on the next place.",
+  "clips": [
+   "Ball Wipe",
+   "Wild Encounter (redone)",
+   "Title Screen",
+   "Hub Town Arrives",
+   "Map: Moving On",
+   "Region Arrival",
+   "On the Road",
+   "Poké Mart: Buying",
+   "Pause Menu Opens",
+   "Next Stop Card"
+  ],
+  "q1": "Yes. These screens are where a run spends half its time and until now they simply appeared. Now each one builds in front of you in under two seconds.",
+  "q2": "Pass 9 moved events. Pass 10 moves the rest of the world and adds the first shared transition, the ball wipe, so going from map to battle to reward reads as one journey. Wild Encounter is re-cut to start on the map.",
+  "q3": "Ten clips, a World group and a Screens group. On the Road and the Next Stop card are short pages that exist only to be animated; they replace two plain fades.",
+  "q4": "This pass is where they live. The Menu is the Rotom Phone rising from the bottom edge on any screen, and closing is the same motion backwards at double speed. Settings gets Transition style (Ball, Fade, Cut).",
+  "q5": "A ball shutting over the screen, a passport stamp for each region, hopping along a route line and your team walking behind you are about as Pokémon as it gets."
+ },
+ "11": {
+  "name": "Personality",
+  "big": "The sprite frames are untouched, but every Pokémon now carries itself differently around them. There are six idle styles by body type, cries sized to the Pokémon, light landings that bounce and heavy ones that shake the screen and knock the other side off its feet, a stagger before fainting, and small character moments: worn out, a winner's hop, hanging on for you, flinching, getting impatient while you think.",
+  "clips": [
+   "Idle Styles",
+   "Light and Heavy",
+   "Worn Out",
+   "Winner's Moment",
+   "Toughed It Out",
+   "Shiny Entrance",
+   "Flinch",
+   "Waiting on You"
+  ],
+  "q1": "In a different way from the last five passes: not louder, more alive. A battle screen with two Pokémon that stand differently is more eye-catching for the whole fight, not just for a second.",
+  "q2": "Until now the Pokémon were pieces that effects happened to. From this pass they act: they cry out, stagger, slump, celebrate and look round at you. Every earlier clip changes because idle, send-out and fainting are all re-animated.",
+  "q3": "Eight clips. No new pages; these all live on the battle screen and take no space on it.",
+  "q4": "Nothing new in the Menu. Settings: the character moments (Winner's Moment, Waiting on You) follow the existing Battle animations level, so Reduced keeps the idles and drops the extras.",
+  "q5": "This is the anime's half of Pokémon: a Pikachu that bounces and a Snorlax that lands like a boulder. It is also what Pokémon-Amie and camp did for the series."
+ },
+ "12": {
+  "name": "Big Hits",
+  "big": "How a move is delivered now depends on what it is. Special moves are fired across the field with a shot in the move's colour instead of a lunge; how far the target is thrown depends on how hard it was hit. And the moves that deserve a shape of their own get one: charge-ups, multi-hits with a combo counter, criticals that stop time, recoil, drain, one-hit KOs, recharge turns, contact punishers, priority moves and entry hazards that stay on the field.",
+  "clips": [
+   "Power Tiers",
+   "Charge-Up Move",
+   "Multi-Hit",
+   "Critical Hit",
+   "Recoil",
+   "Drain",
+   "One-Hit KO",
+   "Recharge Turn",
+   "Contact Punish",
+   "Priority Move",
+   "Entry Hazards"
+  ],
+  "q1": "Yes. The single most repeated action in the game, using a move, now has three sizes and two deliveries, and the critical hit finally looks like the best thing that can happen on a turn.",
+  "q2": "Pass 3 gave hits a type. Pass 12 gives them a size and a kind. Flamethrower and Slash no longer move the same way, and every earlier clip with a special move in it now fires a shot.",
+  "q3": "Eleven clips in Moves. Entry hazards and the recharge turn show things the game only says in text today.",
+  "q4": "No menu changes. Settings: the critical-hit freeze counts as hit-stop and follows the Hit-stop switch; shots and knockback follow Battle animations (Reduced keeps the flash and number only).",
+  "q5": "Beams across the field, a Pokémon thrown back by a strong hit, stones circling a team: this is how the anime and the 3D games show the same moves."
+ },
+ "13": {
+  "name": "Showdown",
+  "big": "The fights that matter get an entrance, played on the real pass-25 pages: the VS screen slams together, Gym Leaders stride in under their badge, a Legendary is felt before it is seen, an Ultra Beast tears the sky, and the badge falls like a coin. In battle, bosses visibly change phase, Totems flare, and enemy healing is thrown where you can see and count it. Every opposing trainer now arrives on a banner.",
+  "clips": [
+   "VS Screen",
+   "Gym Leader",
+   "Legendary Encounter",
+   "Ultra Beast",
+   "Badge Get",
+   "Boss Phase Change",
+   "Totem Aura",
+   "Enemy Heal"
+  ],
+  "q1": "Yes. These are the five or six moments a run is remembered for, and each now has its own staging instead of sharing one intro.",
+  "q2": "Pass 12 was about single moves. Pass 13 is about occasions: it changes how a fight starts and how it turns. The Legendary and Ultra Beast intros are built on silence and glitch, which nothing before this pass used.",
+  "q3": "Eight clips in Bosses. Boss Phase Change and Enemy Heal are new on-screen moments; the heal pips are a small permanent addition to a boss trainer's plate.",
+  "q4": "Menu stays reachable; every intro skips on a press. Settings: Boss intros (Full, Short, Off) joins the Fast gimmick switches. Short keeps the name stamp only.",
+  "q5": "A VS screen, a Leader's pose under their badge, a Legendary waiting at the back of a cave and a badge you actually receive are core series moments."
+ },
+ "14": {
+  "name": "Rivals and Villains",
+  "big": "The people who keep coming back get staging of their own. A rival spots you on the map and races down the path at you, the Rival Board deals its cards, beating a rival changes their record in front of you, and losing to one says in green that the run goes on. The evil team ambushes under an alarm, its Boss walks into a spotlight, the Betrayal cracks the screen and the Legendary snaps its chains. And whoever is speaking now gets a name tab and their face on the bubble, in every battle.",
+  "clips": [
+   "Rival Spots You",
+   "Rival Board",
+   "Rival Beaten",
+   "Losing to a Rival",
+   "Evil Team Ambush",
+   "Team Boss Entrance",
+   "The Betrayal",
+   "The Legendary Breaks Loose"
+  ],
+  "q1": "Yes. Rivals and the evil team are the story of a run, and until now they borrowed the plain trainer intro. The spotlight walk, the cracked screen and the snapping chains are the biggest set pieces so far.",
+  "q2": "Pass 13 staged one-off bosses. Pass 14 stages relationships: the same four rivals and one team across a whole run, so the animations carry memory (records that change, a counter of grunts left, the Boss losing his colour). Speaker tabs change every trainer line in the game.",
+  "q3": "Eight clips in two new groups, Rivals and Villains. Rival Spots You and The Legendary Breaks Loose are moments the game does not show at all today.",
+  "q4": "Menu: the Rival Board is one press from Pause, and its cards deal in the same way there. Settings: Speaker faces (On, Off) joins Text options; Boss intros (Full, Short, Off) from pass 13 also covers these entrances.",
+  "q5": "A rival who says \"Smell ya later\" and looks back, a team in black that shows up under an alarm, and a Boss in a dark room are as Pokémon as it gets."
+ },
+ "15": {
+  "name": "Director's Notes",
+  "big": "Kice's notes on the first fourteen passes, built in. The Trainer Intro and the Ace Call are no longer drawn by the animation mockup: they are the UI mockups' own pages set in motion. The Blessing drops the three-card page and goes back to the game's original cutscene, remade as something holy. The Event Choice keeps the whole text box instead of a cut-down one. And every clip with a map in it now uses the smaller map that shows eight stops with room to spare.",
+  "clips": [
+   "Trainer Intro",
+   "Ace Call",
+   "Event Choice",
+   "Legendary Blessing"
+  ],
+  "q1": "The Blessing is: a bell in the dark, a rose window, a halo, the Legendary as a pale vision, scripture with an illuminated letter, candles, feathers, and your partner bowing under the light. The Ace Call now has the ace leap off its own banner onto the field.",
+  "q2": "Passes 13 and 14 added new moments. Pass 15 goes back and corrects existing ones against the director's notes, and changes the method: pages are now photographed with a see-through background, so pieces move cleanly instead of dragging a cut-out along.",
+  "q3": "No new pages. The Blessing is one page again (the original), not a choice of three. The map shows eight stops, so each hop and each path is larger on screen and easier to follow.",
+  "q4": "Unchanged. The Blessing still finishes at once on the first Enter and moves on with the second, as in the game today; with animations off everything is shown at once.",
+  "q5": "Legendaries blessing a journey from a shaft of light, with bells and a tower-top hush, is how the series treats Ho-Oh and Lugia."
+ },
+ "16": {
+  "name": "Gimmicks, Remake 1: Scale",
+  "big": "The first of five remakes of the gimmick cutscenes, each with a new goal. Goal one is scale. Mega Evolution, Terastallizing, Dynamax and the Z-Move stop being effects on the battle screen and become the whole screen: the camera pushes in, the UI mockups' own cut-in page opens out of the Pokémon, the change happens at five times battle size, and the page closes back onto the field. The camera also joins normal play: hard hits punch in, knock-outs get a slow push.",
+  "clips": [
+   "Mega Evolution",
+   "Terastallize",
+   "Dynamax",
+   "Z-Move",
+   "Knock-out Camera",
+   "Entrance Camera"
+  ],
+  "q1": "Much more. An orb that fills the screen and shatters across its full width, crystals as tall as the screen, a Charizard that grows past the top of the picture, a Z taller than the screen.",
+  "q2": "Until now the gimmicks were effects placed on the battle screen (pass 6). Now each one is a full-screen cutscene that ends on the UI mockups' own cut-in page, and the camera moves for the first time anywhere in the mockups.",
+  "q3": "No new pages: the cut-in pages already exist in the UI mockups and are used as they are. Two new camera clips.",
+  "q4": "Settings: Fast gimmick switches play only the last second (the new form landing on the field). Camera movement (On, Reduced, Off) is a new line under Motion.",
+  "q5": "A gimmick that takes over the screen is exactly how the main games stage Mega Evolution, Dynamax and Z-Moves."
+ },
+ "17": {
+  "name": "Gimmicks, Remake 2: Impact",
+  "big": "Remake 1 made the gimmick cutscenes big. Remake 2 makes them hit. Nothing eases any more: each cutscene is told in hard cuts and held frames, like a fighting-game super or an anime impact frame. A black frame with the item in white, the battle in negative, three comic panels slammed on at an angle (the Pokémon's eyes, your raised arm, the word), a black-and-white frame of the Pokémon, the change in three or four hard beats, and only then colour. In normal play the hits that matter now get one negative frame, and the hit that ends a battle gets a Finishing Blow.",
+  "clips": [
+   "Mega Evolution",
+   "Terastallize",
+   "Dynamax",
+   "Z-Move",
+   "Finishing Blow"
+  ],
+  "q1": "Yes, in a different way from remake 1: less on screen at any moment, but every frame is a poster. Negative frames, black and white, comic panels and a K.O. stamp are new to the mockups.",
+  "q2": "Remake 1 was smooth and enormous. Remake 2 keeps the full-screen staging and throws out the smoothness: it is roughly two seconds shorter and reads as a series of hits. It also changes ordinary battles (negative frame on big hits).",
+  "q3": "No new pages; one new clip (Finishing Blow).",
+  "q4": "Settings: Flashing effects (Full, Soft, Off) is required for this remake. Soft replaces negative frames with a dim; Off removes them and the black-and-white frames. This must exist before any of this is built.",
+  "q5": "The panels and held frames are how the anime and the newer games cut their big moments, and K.O. stamps are straight out of Stadium."
+ },
+ "18": {
+  "name": "Gimmicks, Remake 3: Light",
+  "big": "Remake 1 was big and remake 2 hit hard. Remake 3 is lit. The arena goes dark and the item is the only light in it; a beam carries that light to the Pokémon; the light swallows the screen; the change itself is drawn in light (a prism for Mega, a refraction for Tera, a storm pillar for Dynamax, a sunrise for the Z-Move); the new form arrives as the exposure settles; and when the cutscene ends the arena stays lit in the gimmick's colour. In normal play every hit now throws its type's colour onto the floor.",
+  "clips": [
+   "Mega Evolution",
+   "Terastallize",
+   "Dynamax",
+   "Z-Move",
+   "Move Light"
+  ],
+  "q1": "Yes. Darkness, beams, rainbow shafts, god rays, lens flares and a white-out are all new, and the cutscene now changes the battle screen after it ends.",
+  "q2": "Remake 2 was hard cuts in black and white. Remake 3 goes the other way: no cuts at all, everything is one continuous change of light from dark to white to colour. It is also the first remake where the field looks different afterwards.",
+  "q3": "No new pages; one new clip (Move Light).",
+  "q4": "Settings: a Lighting effects switch (On, Simple, Off). Simple keeps the item glow and the floor colour and drops the blend effects, for slower computers. The white-out follows the Flashing effects setting from remake 2.",
+  "q5": "The glowing item and the beam are how Sword and Shield and Scarlet and Violet start their gimmicks, and the rainbow light is the Mega Evolution symbol used as actual light."
+ },
+ "19": {
+  "name": "Gimmicks, Remake 4: Together",
+  "big": "The first three remakes were about the Pokémon alone. Remake 4 is about the two of you. The screen splits, you on one side and your Pokémon on the other, with heartbeats that speed up; the halves open like doors and you are standing side by side; and each gimmick is something you do together: the Key Stone calls and the Mega Stone answers, you throw the Tera Orb, you hurl the giant ball and stand in front of the giant, you strike the Z-pose in step. Afterwards you call out and your partner answers. In normal play your trainer now reacts with a face and one word.",
+  "clips": [
+   "Mega Evolution",
+   "Terastallize",
+   "Dynamax",
+   "Z-Move",
+   "Trainer Reactions"
+  ],
+  "q1": "Yes, and for the first time with a person in it. The split screen, the heartbeats, the throw and the size comparison in Dynamax are the most staged moments so far.",
+  "q2": "Remake 3 was about light and had nobody in it. Remake 4 puts your trainer in every beat, gives each gimmick its own action instead of one shared shape, and adds a spoken line and an answer at the end.",
+  "q3": "No new pages; one new clip (Trainer Reactions). The cut-in page gains your face in its corner.",
+  "q4": "Settings: Trainer reactions (On, Off). Menu: the trainer shown is the one you picked (Red, Blue, Green, Hilda or Nate), so every one of the five needs these poses.",
+  "q5": "This is the anime's version of every gimmick: the trainer touches the Key Stone, throws the orb, hurls the giant ball, does the Z-pose. The games show it too, from X and Y onward."
+ },
+ "20": {
+  "name": "Gimmicks, Remake 5: Signature",
+  "big": "Remakes 1 to 4 each gave all four gimmicks the same new idea: scale, impact, light, together. The last remake does the opposite. The four cutscenes stop sharing a shape and each gets one picture nobody could mistake for another. Mega Evolution is glass: the new picture slams together out of shards and shatters back to the field. Terastallizing goes inside the jewel, a kaleidoscope. Dynamax is one long pan up the giant, from your shoes to its face above the clouds. The Z-Move is the move itself, seen from the sky, with the damage counted out. Each one also has a one-second short cut for when you have already seen it this run.",
+  "clips": [
+   "Mega Evolution",
+   "Terastallize",
+   "Dynamax",
+   "Z-Move",
+   "Short Cut (Seen Before)"
+  ],
+  "q1": "Yes. The shard assembly, the kaleidoscope and the pan are each the single most elaborate thing in the mockups, and none of them is reused by another gimmick.",
+  "q2": "Remake 4 still used one template four times. Remake 5 has four different structures and four different lengths, and it is the first to deal with repetition: a full version once per run and a short cut after that.",
+  "q3": "No new pages; one new clip (the short cut).",
+  "q4": "Settings: Gimmick cutscenes (Full every time, Full once per run, Always short). This replaces the Fast Mega switch and covers all four. Menu: nothing new.",
+  "q5": "The shatter is the Mega Evolution sting from X and Y, the jewel is Scarlet and Violet, the towering pan is how Sword and Shield frame a Dynamax, and counting out the damage after a finisher is pure Stadium."
+ },
+ "21": {
+  "name": "Living Arenas",
+  "big": "Twenty passes moved the Pokémon, the camera, the light and the trainers. The ground they stand on had not moved once: every arena was a flat striped backdrop. This pass makes each place a place. Clouds and wind in the meadow, drips and a shaft of light in the cave, swell on the sea, embers on the volcano, breath in the ice cave. The run's time of day now reaches into battle, the arena builds itself when a fight starts, and the field remembers what was done to it: scorch marks, ice, puddles and cracks stay until the battle ends.",
+  "clips": [
+   "Meadow",
+   "Cave",
+   "Open Sea",
+   "Volcano",
+   "Ice Cave",
+   "Time of Day",
+   "The Field Remembers",
+   "Arena Arrival"
+  ],
+  "q1": "Yes, in the opposite direction from the gimmick remakes: nothing here is loud, but it is on screen for every second of every battle, which the cutscenes are not.",
+  "q2": "Passes 16 to 20 remade four cutscenes five times. This pass adds eight clips and changes every battle clip at once: each one now has its arena's life behind it and leaves marks on the ground.",
+  "q3": "Eight new clips. No new pages.",
+  "q4": "Settings: Arena life (Full, Light, Off) and Ground marks (On, Off), both under Battle effects. Light keeps clouds and time of day and drops the small moving pieces. Menu: the pause menu dims the arena but lets it keep moving behind it.",
+  "q5": "Swaying grass, cave ceilings, bobbing platforms on water and day and night in battle are all things the main series has done since Diamond and Pearl. The backdrops themselves are untouched."
+ },
+ "22": {
+  "name": "Side Roads",
+  "big": "Everything so far happened in a battle, on the map or in an event. This pass goes to the places in between: an evolution, an egg hatching, a trade, an expedition leaving and coming home, and the reward you pick after a fight. It also gives motion to the two moments the game plays today as a hard cut and a text menu: Second Chance and Rewind.",
+  "clips": [
+   "Evolution",
+   "Egg Hatch",
+   "Trade",
+   "Expedition: Out and Back",
+   "Battle Reward",
+   "Second Chance",
+   "Rewind"
+  ],
+  "q1": "Yes. These are the moments players remember from a run, and five of the seven had almost no motion of their own. Second Chance and Rewind go from nothing to a full sequence.",
+  "q2": "Pass 21 added quiet motion to every battle. Pass 22 is seven set pieces that have nothing to do with battle effects: rooms, routes, cards and clocks.",
+  "q3": "Seven new clips. They would sit on the existing Evolution, Egg, Trade, Expedition and Reward pages.",
+  "q4": "Settings: Evolution, Egg and Trade each follow the existing Cutscene length setting (Full, Short). Rewind and Second Chance ignore Skip, because they tell you something you need to know. Menu: the Expedition clock sits on the pause menu while a team is away.",
+  "q5": "The flicker in the evolution, the rocking egg and the two balls crossing in a trade are the series' own pictures; they are kept and given more room."
+ },
+ "23": {
+  "name": "Reactions and Flow",
+  "big": "The big moments are done. This pass is the small ones that happen dozens of times an hour: experience arriving, a new move replacing an old one, an item being used, a held item doing its job, who moves first, how the text is typed, and the game telling you it has saved. None of these had motion that explained what happened.",
+  "clips": [
+   "EXP for the Whole Team",
+   "New Move",
+   "Using an Item",
+   "Held Items Speak Up",
+   "Who Goes First",
+   "Message Rhythm",
+   "Saving and Notices"
+  ],
+  "q1": "In a quieter way. Nothing here fills the screen, but every one replaces a line of text with something you can watch, and the experience lights now follow every knock-out in the whole set.",
+  "q2": "Pass 22 was seven set pieces you see once or twice a run. Pass 23 is seven small motions you see every few seconds, so each one is under two seconds and never blocks input.",
+  "q3": "Seven new clips, and one change (experience lights) that plays inside every earlier clip where a foe faints.",
+  "q4": "Settings: Message Rhythm becomes the Text speed setting (Instant, Fast, Story). Who Goes First has its own on and off switch under Battle. Menu: the save ball and the notices also show on the pause menu, in the same corner.",
+  "q5": "The item spray, the Focus Sash holding on at one point, and the move being forgotten with a puff are all things the series tells you in text. Here you see them."
+ },
+ "24": {
+  "name": "Move Families",
+  "big": "When a move has no animation of its own, the game plays one of 26 shared effects called families. Today most of them are the same lunge or the same dot in a different colour. This pass rebuilds all 26 so that each one has its own startup, its own way of crossing the field and its own shape when it lands, and the Pokémon acts it out.",
+  "clips": [
+   "Close Range, Four Ways",
+   "Shots, Beams and Breath",
+   "Elements Have Shapes",
+   "Sparks, Sludge, Mind and Shadow",
+   "Care, Cover and Field",
+   "Explosion",
+   "One Family, Four Types",
+   "Family Reel: All 26"
+  ],
+  "q1": "Yes, and it is the widest change in the set: these effects cover every move that has no animation file, in every battle. Explosion alone goes from a glow and a wash to a held breath and a white-out.",
+  "q2": "Pass 23 was about small moments between moves. Pass 24 is the moves themselves, and it is built as a system (startup, travel, impact) so one table drives all 26.",
+  "q3": "Eight new clips. The reel shows all 26 families on one page.",
+  "q4": "Settings: the existing Battle effects setting (Full, Reduced, Off) applies. Reduced keeps the impact shape and drops the startup and the travel. Menu: the Family Reel could sit in the Pokédex help pages as a guide to reading moves.",
+  "q5": "Teeth for a bite, a pane for Protect, spikes for ice and stars round the head for confusion are the pictures the series has always used. The type colours and particles from pass 3 still dress every one."
+ },
+ "25": {
+  "name": "Master Cut",
+  "big": "The last pass draws almost nothing new. It plays the clips back to back, the way a player meets them: one whole trainer battle, one whole event, and the first stretch of a run from the title to the second region. Then it sets the two rules every clip has to follow: what Reduced motion keeps and drops, and how a cutscene is skipped or shortened.",
+  "clips": [
+   "One Whole Battle",
+   "One Whole Event",
+   "One Run in a Minute",
+   "Reduced Motion: Three Levels",
+   "Hold to Skip, and Short Cuts"
+  ],
+  "q1": "It is the whole set at once. One Whole Battle runs nine clips in 48 seconds without a single screen that was not redesigned.",
+  "q2": "Every pass before this made single moments better. Pass 25 checks that they belong together, and writes down the two rules that make the set safe to build.",
+  "q3": "Five new clips, 144 in the set. The three chains reuse 25 earlier clips exactly as they are.",
+  "q4": "This pass is the Settings answer. Battle effects (Full, Reduced, Off) and Cutscene length (Full, Short) are shown working, and Hold to skip gets one behaviour everywhere. The pause menu can open at any point of any chain; the clip under it holds its frame.",
+  "q5": "Played end to end it reads as one Pokémon game: the map, the VS screen, the send-out, the ace, the knock-out, the reward. That is the test this pass exists to run."
+ }
+}

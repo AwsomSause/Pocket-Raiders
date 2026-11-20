@@ -1,0 +1,89 @@
+/* Pass 16: Gimmick Remake 1 of 5, goal SCALE. Kice: "Remake the gimmick cutscenes to be wayyy more extravagant (remake five times, each remaking
+   the last with an entirely new goal in mind)". The four cutscenes stop being effects on the battle screen and become the whole screen: the camera
+   pushes in, the UI mockups' own cut-in page opens out of the Pokémon, the change happens at full-screen size, and the page closes back onto the field.
+   The camera also joins normal play: big hits punch in toward the target and a knock-out gets a slow push. */
+const GIM = {
+  mega: { k: 'mega', col: '#e84fa0', c2: '#7b3fb3', item: 'i-mega_bracelet', mon: [482, 80, 408, 356], ti: [8, 54, 500, 210], ch: 4, cy: 303, cw: 280, x: [456, 60, 132, 228], s1: '<b>Charizard</b>\'s Charizardite X reacts to the <b>Mega Bracelet</b>!', bar: 'The <b>Charizardite X</b> answers the <b>Mega Bracelet</b>. Charizard Mega Evolved!' },
+  tera: { k: 'tera', col: '#3fc8e8', c2: '#ffffff', item: 'i-tera_orb', mon: [594, 112, 296, 324], ti: [8, 54, 450, 128], ch: 4, cy: 303, cw: 250, x: [634, 38, 140, 140], s1: '<b>Charizard</b> is storing energy in the <b>Tera Orb</b>!', bar: 'Charizard <b>Terastallized</b> into the <b>Dragon</b> type!' },
+  dmax: { k: 'dmax', col: '#ff2d8a', c2: '#7a1040', item: 'i-dynamax_band', mon: [487, 43, 465, 403], ti: [8, 54, 350, 128], ch: 4, cy: 303, cw: 420, s1: '<b>Charizard</b>, come back… and <b>grow!</b>', bar: 'Charizard grew enormous! It <b>Gigantamaxed</b>. Its moves are Max Moves for 3 turns.' },
+  z: { k: 'z', col: '#ffb300', c2: '#ff5a1f', item: 'i-z_ring', mon: [594, 112, 296, 324], ti: [8, 54, 300, 128], ch: 3, cy: 335, cw: 340, x: [464, 90, 108, 108], zt: [350, 306, 610, 142], s1: '<b>Charizard</b> surrounds itself with its <b>Z-Power</b>!', bar: 'Charizard unleashes its full-force <b>Z-Move</b>!' },
+};
+const jolt = (a, t, k = 8, x0 = 0) => a.at(t).to(.04, { x: x0 + k }).to(.04, { x: x0 - k * .7 }).to(.04, { x: x0 + k * .4 }).to(.05, { x: x0 });
+const ZSVG = `<svg width="300" height="400" viewBox="0 0 300 400"><defs><linearGradient id="zg2" x1="0" y1="0" x2="1" y2="1">${RB.map((c, i) => `<stop offset="${i / 5}" stop-color="${c}"/>`).join('')}</linearGradient></defs><path d="M30 30H270V95L125 305H270V370H30V305L175 95H30Z" fill="url(#zg2)" stroke="#fff" stroke-width="10" stroke-linejoin="round"/></svg>`;
+/* the battle before the gimmick: returns what the cutscene needs */
+const gOpen = (S, g, o = {}) => {
+  V('stage', S, { msg: 1, foe: g.k === 'z' ? { hp: 88 } : undefined }); const C = { m: S.me, f: S.foe, g };
+  if (g.k === 'mega') { C.mg = S.mon('6-mega-x', { x: PME.x, y: PME.y, back: 1, n: 'Mega Charizard X', ty: 'dragon' }); C.mg.side = 'me'; C.mg.b.at(0).set({ s: 0 }); C.mg.sh.at(0).set({ o: 0 }); V('idle', S, C.mg); }
+  V('say', S, .1, g.s1); if (!o.noitem) { C.it = item(S, g.item, .45); C.it.at(o.itemOut || 1.5).to(.2, { s: 0 }, 'in'); } return C;
+};
+/* the UI mockups' cut-in page assembling on top of its background: mon, extras, title, chips, bar. Returns the pieces. */
+const gPage = (S, g, t, o = {}) => {
+  const pg = 'g-' + g.k, P = { all: [] }, add = a => (P.all.push(a), a), [mx, my, mw, mh] = g.mon;
+  if (g.x) { const [x, y, w, h] = g.x; P.x = add(cut(S, pg + '-x', x, y, w, h, { L: 'top', s: 0, r: -180 })); P.x.at(t + .2).to(.35, { s: 1, r: 0 }, 'back').cyc(999, 2, { y: [y, y - 8, y] }, 'sin'); }
+  P.mon = add(cut(S, pg + '-mon', mx, my, mw, mh, { L: 'top', o: 0, s: o.ms || 1.5 })); P.mon.at(t).set({ o: 1 }).to(.22, { s: 1 }, 'in3').to(.05, { sy: .96 }).to(.3, { sy: 1 }, 'el');
+  if (g.zt) { const [x, y, w, h] = g.zt; P.zt = add(cut(S, pg + '-x', x, y, w, h, { L: 'top', x: 1000, kx: -16 })); P.zt.at(t + .45).to(.22, { x, kx: 0 }, 'out3'); }
+  const [tx, ty, tw, th] = g.ti; P.ti = add(cut(S, pg + '-a', tx, ty, tw, th, { L: 'top', o: 0, s: 1.9, org: '25% 50%' })); P.ti.at(t + .3).set({ o: 1 }).to(.14, { s: 1 }, 'in3'); S.flash(t + .44, .15, '#fff', .35, 'top');
+  P.ch = []; for (let i = 0; i < g.ch; i++) { const c = add(cut(S, pg + '-a', 26, g.cy + i * 32, g.cw, 31, { L: 'top', x: -g.cw - 30 })); c.at(t + .6 + i * .09).to(.3, { x: 26 }, 'out3'); P.ch.push(c); }
+  P.sb = sayBar(S, pg + '-a', t + .9, g.bar, 'top'); P.T = t; return P;
+};
+const gPageOut = (P, t) => { P.all.forEach(a => a.at(t).to(.15, { o: 0 })); P.sb.out(t); };
+/* the field after the gimmick (set under cover at t, with a landing flourish) */
+const gAfter = {
+  mega(S, C, t) { const m = C.m, mg = C.mg; m.b.at(t - .1).set({ s: 0 }); m.sh.at(t - .1).set({ o: 0 }); mg.b.at(t).set({ sx: 1.25, sy: 1.25 }).to(.45, { sx: 1, sy: 1 }, 'back'); mg.sh.at(t).to(.2, { o: .32 }); dust(S, t + .3, m.X, m.FY, 10);
+    const ic = S.img('x-mega-icon', { L: 'ov', x: m.X + 20, y: m.Y - 190, sc: 2.2, s: 0 }); ic.at(t + .25).to(.35, { s: 1, r: 360 }, 'back').wait(.4).to(.35, { x: 300, y: 506, s: .5 }, 'io3'); S.N.me.at(t).html('Mega Charizard X'); S.pp.at(t + 1.1).to(.05, { y: 479 }).to(.3, { y: 484 }, 'el'); roar(S, mg, t + .6, '#b6c2ff'); V('say', S, t + .2, '<b>Charizard</b> Mega Evolved into <b>Mega Charizard X</b>!'); return t + 2; },
+  tera(S, C, t) { const m = C.m; m.tn.el.style.background = 'linear-gradient(160deg,#fff,#bff3ff 40%,#3fc8e8)'; m.tn.at(t).set({ o: .5 }).to(.4, { o: .22 }).cyc(999, 1.6, { o: [.22, .4, .22] }); m.b.at(t).set({ sx: 1.15, sy: 1.15 }).to(.4, { sx: 1, sy: 1 }, 'back');
+    const y0 = m.Y - m.H * .5 - 30, cw = S.box({ x: m.X - 14, y: y0 - 210, w: 92, h: 112, o: 0, css: '-webkit-mask:url(sprites/x-tera-icon.png) center/contain no-repeat;mask:url(sprites/x-tera-icon.png) center/contain no-repeat;background:linear-gradient(#e8fbff,#3fc8e8 55%,#2a75bb)' }); cw.at(t + .15).set({ o: 1 }).to(.28, { y: y0 }, 'in').to(.06, { sy: .8 }).to(.25, { sy: 1 }, 'el').cyc(999, 1.4, { y: [y0, y0 - 8, y0] });
+    const pill = S.box({ L: 'ui', x: 846, y: 462, cls: 'pill', html: 'TERA · DRAGON', s: 0, css: 'background:linear-gradient(90deg,#bff3ff,#3fc8e8);' }); pill.at(t + .5).to(.3, { s: 1 }, 'back2'); for (let i = 0; i < 8; i++) S.star(t + .2 + i * .07, { x: m.X + S.rnd(-110, 110), y: m.Y + S.rnd(-120, 60), z: 30, pts: 4, inner: .15, col: '#e8fbff', d: .4 }); V('say', S, t + .2, '<b>Charizard</b> Terastallized into the <b>Dragon</b> type!'); return t + 2; },
+  dmax(S, C, t) { const m = C.m; V('giant', S, m, t, 1); m.b.at(t).set({ sx: 1.9, sy: 1.9 }).to(.4, { sx: 1.62, sy: 1.62 }, 'el'); m.sh.at(t).set({ o: .4, sx: 1.6, sy: 1.6 }); S.shake(t, .5, 18); dust(S, t, m.X - 80, m.FY, 10, { z1: 26 }); dust(S, t, m.X + 90, m.FY, 10, { z1: 26 }); S.ring(t, { x: m.X, y: m.FY, r1: 330, col: '#ff2d8a', flat: .35, w: 10, d: .6 });
+    S.N.me.at(t).html('Dynamax Charizard'); S.H.me.num.at(t + .2).count(.5, 98, 196, v => Math.round(v) + '/' + Math.round(v * 248 / 196)); S.pp.at(t + .2).to(.06, { sy: 1.25 }).to(.3, { sy: 1 }, 'el'); [0, 1, 2].forEach(i => { const p = S.box({ L: 'ui', x: 800 + i * 34, y: 462, w: 24, h: 24, rad: '50%', bg: '#ff2d8a', s: 0, css: 'border:3px solid #fff' }); p.at(t + .5 + i * .12).to(.25, { s: 1 }, 'back2'); }); V('say', S, t + .2, '<b>Charizard</b> grew huge with <b>Dynamax</b> energy!'); return t + 2; },
+  z(S, C, t) { const m = C.m, f = C.f, T = t + .5; m.at(T - .25).to(.14, { x: m.X - 24 }, 'out').to(.08, { x: m.X + 80, y: m.FY - 26 }, 'in3').wait(.3).to(.3, { x: m.X, y: m.FY }, 'back'); S.flash(T, .3, '#fff', 1); V('hit', S, f, T, { ty: 'fire', to: 0, dmg: 212, eff: 1, big: 1.9 }); V('spark', S, T + .18, 'fire', f.X - 40, f.Y + 20, 1.5); V('spark', S, T + .34, 'fire', f.X + 40, f.Y - 30, 1.7); S.shake(T + .1, .7, 20); V('faint', S, f, T + 1.4); V('say', S, T + .2, 'It\'s super effective!'); return T + 2.4; },
+};
+/* Tera crystals: the sprites have wide empty borders, so each is cropped to its drawn part and stood on the bottom edge */
+const CRB = { 'x-tera-c1': [81, 9, 318, 229], 'x-tera-c2': [140, 14, 138, 197], 'x-tera-c3': [140, 118, 234, 164] };
+const crys = (S, k, x, sc, o = {}) => { const [bx, by, bw, bh] = CRB[k]; return S.box(Object.assign({ L: 'top', x, y: 556, w: bw * sc, h: bh * sc, ax: .5, ay: 1, o: 0, css: `background:url(sprites/${k}.png) ${-bx * sc}px ${-by * sc}px/${512 * sc}px ${384 * sc}px no-repeat;` }, o)); };
+const CRL = [['x-tera-c2', 250, 2.1, 1, 6], ['x-tera-c2', 715, 2.2, -1, 6], ['x-tera-c2', 95, 1.6, 1, 6], ['x-tera-c2', 870, 1.7, -1, 6], ['x-tera-c3', 480, 2.8, 1, 4]];
+/* the big base-form Pokémon the cutscene works on */
+const gBig = (S, x = 480, y = 300, sc = 5) => S.img('m-6', { L: 'top', x, y, sc, o: 0, z: 5 });
+
+/* ---- remake 1: SCALE ---- */
+const core16 = {
+  mega(S, g, bm, bg, t) { const orb = S.img('x-mega-orb1', { L: 'top', x: 480, y: 290, sc: 2, o: 0, z: 6 }), crk = S.img('x-mega-orb2', { L: 'top', x: 480, y: 290, sc: 2, o: 0, z: 6 }); RB.forEach((c, i) => [0, 1].forEach(j => { const a = (i * 60 + j * 30) * Math.PI / 180; S.streak(t + i * .05 + j * .1, { L: 'top', x1: 480 + Math.cos(a) * 700, y1: 290 + Math.sin(a) * 700, x2: 480 + Math.cos(a) * 60, y2: 290 + Math.sin(a) * 60, w: 14, col: c, d: .16, hold: .08, out: .2 }); }));
+    bm.at(t + .3).to(.35, { wh: 1 }); orb.at(t + .5).set({ o: .95, s: 2.4 }).to(.3, { s: 1 }, 'in3'); jolt(bg, t + .8, 10); crk.at(t + .9).to(.5, { o: 1 }); for (let i = 0; i < 4; i++) jolt(bg, t + 1 + i * .12, 4 + i * 2); const K = t + 1.55; orb.at(K).set({ o: 0 }); crk.at(K).set({ o: 0 });
+    S.burst(K, { L: 'top', x: 480, y: 290, n: 36, cols: ['#7a1f2b', '#b23a4a', '#fff', '#e84fa0'], v0: 380, v1: 980, g: 300, z0: 16, z1: 44, spin: 500, l0: .5, l1: .9, css: 'clip-path:polygon(15% 0,100% 20%,80% 100%,0 70%)' }); RB.forEach((c, i) => S.ring(K + i * .04, { L: 'top', x: 686, y: 258, r1: 260 + i * 60, col: c, w: 8, d: .6 })); return K; },
+  tera(S, g, bm, bg, t) { const cr = CRL.map(([k, x, sc, fl, z], i) => { const c = crys(S, k, x, sc, { sx: fl, sy: 0, z }); c.at(t + i * .18).set({ o: .96 }).to(.24, { sy: 1 }, 'back2'); jolt(bg, t + i * .18 + .2, 6); S.star(t + i * .18 + .2, { L: 'top', x, y: 300 - i * 20, z: 110, pts: 4, inner: .15, turn: 45 }); return c; });
+    bm.at(t + .5).to(.5, { wh: .85 }); for (let i = 0; i < 3; i++) { const p = S.img('x-tera-pulse', { L: 'top', x: 480, y: 290, sc: 1, s: .5, o: 0 }); p.at(t + 1 + i * .15).set({ o: 1 }).to(.6, { s: 12, o: 0 }, 'out'); } const K = t + 1.6; cr.forEach(c => c.at(K).set({ o: 0 }));
+    S.burst(K, { L: 'top', x: 480, y: 300, n: 44, cols: ['#fff', '#e8fbff', '#bff3ff', '#3fc8e8'], v0: 300, v1: 1000, g: 400, z0: 14, z1: 46, spin: 500, l0: .6, l1: 1, jx: 300, jy: 120, css: 'clip-path:polygon(50% 0,100% 60%,60% 100%,0 70%)' }); return K; },
+  dmax(S, g, bm, bg, t) { const cl = [0, 1, 2].map(i => { const c = S.box({ L: 'top', x: 480, y: -90 + i * 20, w: 2400, h: 190, o: 0, css: 'background:url(sprites/x-dmax-pattern.png) 0 0/800px 190px repeat-x;image-rendering:pixelated;-webkit-mask:linear-gradient(#000 40%,transparent);mask:linear-gradient(#000 40%,transparent)' }); c.at(t).to(.4, { o: .9 - i * .2, y: 60 + i * 56 }, 'out3'); c.at(t).also(60, { x: 480 + (i % 2 ? 1500 : -1500) }, 'lin'); return c; });
+    bm.at(t).set({ org: '50% 100%' }); bm.at(t + .2).to(1.3, { s: 2.7, y: 520 }, 'in'); bg.at(t + .2).to(1.3, { y: 70 }, 'in'); for (let i = 0; i < 4; i++) { S.bolt(t + .4 + i * .25, { L: 'top', x1: 200 + i * 190, y1: 0, x2: 260 + i * 150, y2: 420, n: 7, j: 34, col: '#fff', col2: '#ff2d8a', w: 6, again: .2 }); jolt(bg, t + .4 + i * .25, 6 + i * 3); }
+    bm.at(t + .6).to(.6, { wh: 1 }); const K = t + 1.55; cl.forEach(c => c.at(K).to(.3, { o: 0 })); bg.at(K).set({ y: 0 }); return K; },
+  z(S, g, bm, bg, t) { const Z = S.box({ L: 'top', x: 480, y: 280, w: 300, h: 400, s: 0, r: -200, o: 0, html: ZSVG }); Z.at(t).set({ o: .95 }).to(.5, { s: 1.5, r: 0 }, 'back').cyc(.8, .2, { s: [1.5, 1.58, 1.5] }); jolt(bg, t + .45, 10);
+    for (let i = 0; i < 26; i++) { const a = S.rnd(0, 6.28), p = S.img('x-z-particle', { L: 'top', x: 480, y: 290, sc: S.rnd(.8, 1.6), o: 0 }); p.at(t + .3 + i * .035).set({ o: 1 }); arc(p, .45, 480 + Math.cos(a) * 620, 290 + Math.sin(a) * 400, 480 + S.rnd(-40, 40), 300 + S.rnd(-50, 50), S.rnd(-80, 80)); p.set({ o: 0 }); }
+    S.lines(t + .5, 1, { col: '#ffe9a8', n: 26, L: 'top' }); bm.gc = '#fff04d'; bm.at(t + .5).to(.3, { glow: 26 }).to(.5, { wh: 1 }); const K = t + 1.5; Z.at(K).to(.2, { s: 4, o: 0 }); return K; },
+};
+const IDEA16 = {
+  mega: 'Remake 1, goal: scale. The camera pushes in on Charizard and the cut-in page opens out of it until it is the whole screen. The orb closes around a Charizard five times its battle size while twelve streaks of colour drive in from every edge, cracks, and blows apart across the full width. Mega Charizard X lands on the page, the title slams, the four facts are dealt, and the page closes back onto the field where the Mega now stands.',
+  tera: 'Remake 1, goal: scale. Five crystals as tall as the screen punch up from the bottom edge one after another, each one jolting the picture, until Charizard is walled in. Pulse rings pass through, everything shatters across the whole screen, and the Terastallized form lands on the cut-in page under its jewel.',
+  dmax: 'Remake 1, goal: scale. Storm clouds roll in at the top and Charizard simply keeps growing: past the title, past the top of the screen, while the camera tilts up to follow and lightning walks across behind it. It lands on the cut-in page as the giant, and back on the field the camera has pulled out to fit it.',
+  z: 'Remake 1, goal: scale. A rainbow Z spins in until it is taller than the screen, Z-Power streams in from every side, and Charizard burns white in the middle of it. The cut-in page shows the pose, the ring and the move\'s own title art, then closes onto the field for the hit.',
+};
+const NOW6 = { mega: 'A 4.3s scene: pink crystal, shatter, white flash. With Fast Mega on, a short generic cut-in.', tera: 'A 2.2s scene: the crystal shakes and breaks; afterwards a jewel bobs 4px above the Pokémon.', dmax: 'A 2.4s scene: recall, the band rises, the ball falls and shakes four times, a silhouette grows, the red giant roars.', z: 'A 1.9s cut-in: white silhouette, speed lines, a rainbow Z ring and the move title sliding in.' };
+const GID = { mega: ['mega', 'Mega Evolution'], tera: ['tera', 'Terastallize'], dmax: ['dynamax', 'Dynamax'], z: ['zmove', 'Z-Move'] };
+for (const k of ['mega', 'tera', 'dmax', 'z']) clip(16, GID[k][0], { t: GID[k][1], g: 'Gimmicks', now: NOW6[k], idea: IDEA16[k] }, S => {
+  const g = GIM[k], C = gOpen(S, g), m = C.m; V('dim', S, .8, .4, .35, m); S.cam.at(.8).to(.6, { s: 1.5, x: 300, y: -150 }, 'io'); V('aura', S, m, .8, .8, g.col);
+  const bg = cut(S, 'g-' + k + '-bg', 0, 0, 960, 540, { L: 'top', css3: 'clip-path:circle(calc(var(--a)*1%) at calc(var(--cx)*1%) 62%)' }); bg.at(0).set({ '--a': 0, '--cx': 50 }).at(1.4).to(.4, { '--a': 110 }, 'in3'); S.flash(1.4, .25, g.col, .5, 'top'); S.cam.at(1.85).set({ s: 1, x: 0, y: 0 }); V('undim', S, 1.85, .01);
+  const bm = gBig(S); bm.at(1.5).set({ o: 1, s: .5 }).to(.35, { s: 1 }, 'back'); const K = core16[k](S, g, bm, bg, 2.1); bm.at(K).set({ o: 0 }); S.flash(K, .35, '#fff', .95, 'top'); jolt(bg, K, 16);
+  const P = gPage(S, g, K + .05), X = K + 3.2; gPageOut(P, X); bg.at(X).set({ '--a': 130, '--cx': 26 }).to(.4, { '--a': 0 }, 'out3'); const e = gAfter[k](S, C, X + .3);
+  S.beat(.45, 'The item answers').beat(.8, 'Camera pushes in').beat(1.4, 'The cut-in page opens out of the Pokémon').beat(2.1, 'The change, at full-screen size').beat(K, 'The new form lands; title and facts').beat(X, 'The page closes back onto the field').end(e);
+});
+/* the camera in normal play */
+verb(16, 'hit', (S, m, t, o = {}) => { const e = VP(16, 'hit', S, m, t, o); if (S.nocam || !((o.dmg || 0) >= 40 || o.eff === 1 || o.crit)) return e; const d = m.side === 'foe' ? -1 : 1; S.cam.at(t).to(.08, { s: 1.07, x: d * 26, y: m.side === 'foe' ? 12 : -12 }, 'out3').wait(.12).to(.35, { s: 1, x: 0, y: 0 }, 'io'); return e; });
+verb(16, 'faint', (S, m, t) => { const e = VP(16, 'faint', S, m, t); if (S.nocam) return e; const d = m.side === 'foe' ? -1 : 1; S.cam.at(t).to(.5, { s: 1.12, x: d * 44, y: m.side === 'foe' ? 20 : -20 }, 'out').wait(.15).to(.4, { s: 1, x: 0, y: 0 }, 'io'); return e; });
+clip(16, 'cam-ko', { t: 'Knock-out Camera', g: 'Camera', now: 'The camera never moves in a normal battle.', idea: 'The camera is now part of every fight. A hard hit punches in toward the target for a few frames; a knock-out gets a slow push toward the falling Pokémon and eases back out as the winner settles.' }, S => {
+  V('stage', S, { msg: 1, foe: { hp: 46 } }); const m = S.me, f = S.foe; V('say', S, .1, '<b>Charizard</b> used <b>Thunder Punch</b>!'); const h = V('strike', S, m, .3, { ty: 'electric', cat: 'phys' }), e = V('hit', S, f, h, { ty: 'electric', to: 0, dmg: 57, eff: 1, ko: 1 }), x = V('faint', S, f, e + .1); V('say', S, e + .2, 'The foe\'s <b>Blastoise</b> fainted!');
+  S.beat(h, 'The hit: camera punches in').beat(e + .1, 'Knock-out: slow push toward the fall').beat(x, 'Eases back out').end(x + 1);
+});
+clip(16, 'cam-send', { t: 'Entrance Camera', g: 'Camera', now: 'The camera never moves in a normal battle.', idea: 'When a Pokémon comes in, the camera leans toward its side as the ball lands, gives it a beat alone in the frame, and settles back to the two-shot as its plate arrives.' }, S => {
+  V('stage', S, { msg: 1 }); const m = S.me; m.b.at(0).set({ s: 0 }); V('say', S, .1, 'Go! <b>Charizard</b>!'); const e = V('send', S, m, .3, { first: 1 }); S.cam.at(e - .7).to(.4, { s: 1.14, x: 70, y: -40 }, 'out').wait(.6).to(.5, { s: 1, x: 0, y: 0 }, 'io'); V('plates', S, 'me', e - .2);
+  S.beat(e - .7, 'Camera leans to your side').beat(e - .3, 'A beat alone in the frame').beat(e + .3, 'Back to the two-shot').end(e + 1.2);
+});
+touch(16, { attack: 'Hard hits now punch the camera in toward the target, and a knock-out gets a slow push.', faint: 0, 'bh-tiers': 0, 'bh-crit': 0, 'p-victory': 0 });
