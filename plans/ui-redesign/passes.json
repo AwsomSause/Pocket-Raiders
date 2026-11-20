@@ -176,5 +176,25 @@
   "q3": "Yes, four. Check Out is its own page so the shelf stays clean, the Pokémon Center has its own healing page, and the Event Hall and Achievement Hall take the news and rewards off the hub.",
   "q4": "Settings is the last door on the street and still opens the Settings hub. The pause menu's ball is now a window onto where you are, with your partner walking next to you.",
   "q5": "More than any pass so far: Pokémon Center, Poké Mart, the route gate, a clerk behind the counter, the healing machine lighting up six balls one by one, and Pokémon following their trainer."
+ },
+ "12": {
+  "name": "Collector's Cards",
+  "big": "Every Pokémon is now a card you hold. The party is a hand of six shiny cards, the summary is one big card with a page for each tab, and the same card shows up in the Reserve, the pause menu and on the battle sideline.",
+  "pages": [
+   "Party (hand of cards)",
+   "Summary · Stats",
+   "Summary · Moves",
+   "Summary · Bond",
+   "Pokédex",
+   "Pokédex Entry",
+   "Reserve",
+   "Bag (pockets)",
+   "Bag · Use On"
+  ],
+  "q1": "Cards have a type-coloured frame, a foil shine that sweeps across the picture and a gold level pill. They deal onto the table one after another. The stats page draws a six-point radar that grows out from the middle.",
+  "q2": "The party was a big stage plus five rows. Now all six are equal cards side by side, so you can compare them at a glance. The summary used to cram seven tabs on one page; now there are three pages with room to breathe.",
+  "q3": "Yes, six: Moves and Bond pages for the summary, a Pokédex and its entry page, the Reserve, and a Use On page so picking who gets a potion never covers the bag.",
+  "q4": "The pause menu's party panel is now six small cards, and the wheel opens the Pokédex. Nothing new is needed in Settings; card shine follows the Animations setting from pass 7.",
+  "q5": "Yes. Collecting cards is as Pokémon as it gets, and the Pokédex grid with grey unseen slots and Poké Ball marks is straight from the games."
  }
 }
