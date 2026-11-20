@@ -352,5 +352,95 @@
   "q3": "No new pages; one new clip (the short cut).",
   "q4": "Settings: Gimmick cutscenes (Full every time, Full once per run, Always short). This replaces the Fast Mega switch and covers all four. Menu: nothing new.",
   "q5": "The shatter is the Mega Evolution sting from X and Y, the jewel is Scarlet and Violet, the towering pan is how Sword and Shield frame a Dynamax, and counting out the damage after a finisher is pure Stadium."
+ },
+ "21": {
+  "name": "Living Arenas",
+  "big": "Twenty passes moved the Pokémon, the camera, the light and the trainers. The ground they stand on had not moved once: every arena was a flat striped backdrop. This pass makes each place a place. Clouds and wind in the meadow, drips and a shaft of light in the cave, swell on the sea, embers on the volcano, breath in the ice cave. The run's time of day now reaches into battle, the arena builds itself when a fight starts, and the field remembers what was done to it: scorch marks, ice, puddles and cracks stay until the battle ends.",
+  "clips": [
+   "Meadow",
+   "Cave",
+   "Open Sea",
+   "Volcano",
+   "Ice Cave",
+   "Time of Day",
+   "The Field Remembers",
+   "Arena Arrival"
+  ],
+  "q1": "Yes, in the opposite direction from the gimmick remakes: nothing here is loud, but it is on screen for every second of every battle, which the cutscenes are not.",
+  "q2": "Passes 16 to 20 remade four cutscenes five times. This pass adds eight clips and changes every battle clip at once: each one now has its arena's life behind it and leaves marks on the ground.",
+  "q3": "Eight new clips. No new pages.",
+  "q4": "Settings: Arena life (Full, Light, Off) and Ground marks (On, Off), both under Battle effects. Light keeps clouds and time of day and drops the small moving pieces. Menu: the pause menu dims the arena but lets it keep moving behind it.",
+  "q5": "Swaying grass, cave ceilings, bobbing platforms on water and day and night in battle are all things the main series has done since Diamond and Pearl. The backdrops themselves are untouched."
+ },
+ "22": {
+  "name": "Side Roads",
+  "big": "Everything so far happened in a battle, on the map or in an event. This pass goes to the places in between: an evolution, an egg hatching, a trade, an expedition leaving and coming home, and the reward you pick after a fight. It also gives motion to the two moments the game plays today as a hard cut and a text menu: Second Chance and Rewind.",
+  "clips": [
+   "Evolution",
+   "Egg Hatch",
+   "Trade",
+   "Expedition: Out and Back",
+   "Battle Reward",
+   "Second Chance",
+   "Rewind"
+  ],
+  "q1": "Yes. These are the moments players remember from a run, and five of the seven had almost no motion of their own. Second Chance and Rewind go from nothing to a full sequence.",
+  "q2": "Pass 21 added quiet motion to every battle. Pass 22 is seven set pieces that have nothing to do with battle effects: rooms, routes, cards and clocks.",
+  "q3": "Seven new clips. They would sit on the existing Evolution, Egg, Trade, Expedition and Reward pages.",
+  "q4": "Settings: Evolution, Egg and Trade each follow the existing Cutscene length setting (Full, Short). Rewind and Second Chance ignore Skip, because they tell you something you need to know. Menu: the Expedition clock sits on the pause menu while a team is away.",
+  "q5": "The flicker in the evolution, the rocking egg and the two balls crossing in a trade are the series' own pictures; they are kept and given more room."
+ },
+ "23": {
+  "name": "Reactions and Flow",
+  "big": "The big moments are done. This pass is the small ones that happen dozens of times an hour: experience arriving, a new move replacing an old one, an item being used, a held item doing its job, who moves first, how the text is typed, and the game telling you it has saved. None of these had motion that explained what happened.",
+  "clips": [
+   "EXP for the Whole Team",
+   "New Move",
+   "Using an Item",
+   "Held Items Speak Up",
+   "Who Goes First",
+   "Message Rhythm",
+   "Saving and Notices"
+  ],
+  "q1": "In a quieter way. Nothing here fills the screen, but every one replaces a line of text with something you can watch, and the experience lights now follow every knock-out in the whole set.",
+  "q2": "Pass 22 was seven set pieces you see once or twice a run. Pass 23 is seven small motions you see every few seconds, so each one is under two seconds and never blocks input.",
+  "q3": "Seven new clips, and one change (experience lights) that plays inside every earlier clip where a foe faints.",
+  "q4": "Settings: Message Rhythm becomes the Text speed setting (Instant, Fast, Story). Who Goes First has its own on and off switch under Battle. Menu: the save ball and the notices also show on the pause menu, in the same corner.",
+  "q5": "The item spray, the Focus Sash holding on at one point, and the move being forgotten with a puff are all things the series tells you in text. Here you see them."
+ },
+ "24": {
+  "name": "Move Families",
+  "big": "When a move has no animation of its own, the game plays one of 26 shared effects called families. Today most of them are the same lunge or the same dot in a different colour. This pass rebuilds all 26 so that each one has its own startup, its own way of crossing the field and its own shape when it lands, and the Pokémon acts it out.",
+  "clips": [
+   "Close Range, Four Ways",
+   "Shots, Beams and Breath",
+   "Elements Have Shapes",
+   "Sparks, Sludge, Mind and Shadow",
+   "Care, Cover and Field",
+   "Explosion",
+   "One Family, Four Types",
+   "Family Reel: All 26"
+  ],
+  "q1": "Yes, and it is the widest change in the set: these effects cover every move that has no animation file, in every battle. Explosion alone goes from a glow and a wash to a held breath and a white-out.",
+  "q2": "Pass 23 was about small moments between moves. Pass 24 is the moves themselves, and it is built as a system (startup, travel, impact) so one table drives all 26.",
+  "q3": "Eight new clips. The reel shows all 26 families on one page.",
+  "q4": "Settings: the existing Battle effects setting (Full, Reduced, Off) applies. Reduced keeps the impact shape and drops the startup and the travel. Menu: the Family Reel could sit in the Pokédex help pages as a guide to reading moves.",
+  "q5": "Teeth for a bite, a pane for Protect, spikes for ice and stars round the head for confusion are the pictures the series has always used. The type colours and particles from pass 3 still dress every one."
+ },
+ "25": {
+  "name": "Master Cut",
+  "big": "The last pass draws almost nothing new. It plays the clips back to back, the way a player meets them: one whole trainer battle, one whole event, and the first stretch of a run from the title to the second region. Then it sets the two rules every clip has to follow: what Reduced motion keeps and drops, and how a cutscene is skipped or shortened.",
+  "clips": [
+   "One Whole Battle",
+   "One Whole Event",
+   "One Run in a Minute",
+   "Reduced Motion: Three Levels",
+   "Hold to Skip, and Short Cuts"
+  ],
+  "q1": "It is the whole set at once. One Whole Battle runs nine clips in 48 seconds without a single screen that was not redesigned.",
+  "q2": "Every pass before this made single moments better. Pass 25 checks that they belong together, and writes down the two rules that make the set safe to build.",
+  "q3": "Five new clips, 144 in the set. The three chains reuse 25 earlier clips exactly as they are.",
+  "q4": "This pass is the Settings answer. Battle effects (Full, Reduced, Off) and Cutscene length (Full, Short) are shown working, and Hold to skip gets one behaviour everywhere. The pause menu can open at any point of any chain; the clip under it holds its frame.",
+  "q5": "Played end to end it reads as one Pokémon game: the map, the VS screen, the send-out, the ace, the knock-out, the reward. That is the test this pass exists to run."
  }
 }

@@ -13,3 +13,6 @@ Kice asked (2026-11-19) for the same 25-pass mockup process as the UI redesign, 
 
 These are mockups only. Nothing here changes the game.
 - Pieces that move are photographed with a see-through background: `node src/uishots.cjs 25 "@page=name-a:.bg-selectors|to|hide"` (the `@`), so a cut piece does not carry a rectangle of background with it. Run `@` shots in their own command.
+- `node src/durs.cjs <pass> <id,id>` prints how long each clip runs, how many pieces it has and its beats.
+- Pass 25 (Master Cut) draws almost nothing new: `scene25()` in `p25.js` plays earlier clips back to back, each on its own stage and camera, so a whole battle, a whole event and the start of a run can be watched in one go.
+- All 25 passes are done: 144 clips. `REANIMATE.md` has 115 entries and `NEW_ANIMATIONS.md` has 94 (209 together). Both are written by a script from the clips' own notes plus the survey, so if a clip's text changes, regenerate them.
