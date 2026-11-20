@@ -90,7 +90,14 @@ export function modsOf(b: DominionBlock, m: Member): Mods[] {
   const card = mc(m).card;
   if (card) for (const t of sheet(card).traits) for (const e of t.effects) if (e.mods && !e.needs) out.push(e.mods);
   for (const p of C().patrons) if (p.live && cs(b).patrons[p.id]?.state === 'won') out.push(p.mods);
+  for (const h of MOD_HOOKS) out.push(...h(b, m));
   return out;
+}
+/** Modifiers from later slices (D8: a squad's Incentive and Squad Trait). */
+type ModHook = (b: DominionBlock, m: Member) => Mods[];
+const MOD_HOOKS: ModHook[] = [];
+export function addModHook(h: ModHook): void {
+  MOD_HOOKS.push(h);
 }
 const appliesTo = (mod: Mods, task: Task): boolean =>
   (!mod.family && !mod.task && !mod.stat) || (!!mod.family && familyOf(task.id) === mod.family) || mod.task === task.id || (!!mod.stat && task.stat === mod.stat);
@@ -124,7 +131,7 @@ export function addXp(m: Member, xp: number, lines: string[]): void {
     lines.push(fill(C().report.level!, { name: m.name, level: m.level }));
   }
 }
-function growStat(m: Member, stat: StatId, tenths: number, lines: string[]): void {
+export function growStat(m: Member, stat: StatId, tenths: number, lines: string[]): void {
   const c = mc(m);
   c.statXp[stat] += tenths;
   while (c.statXp[stat] >= R().statStep) {
@@ -472,7 +479,8 @@ function runTask(b: DominionBlock, m: Member, seed: string, n: Night): void {
   // After the task: XP, task XP, Fatigue (A18), Thrill.
   addXp(m, xp, n.lines);
   const before = taskLevel(m, task.id);
-  c.taskXp[task.id] = (c.taskXp[task.id] ?? 0) + (ok ? 2 : 1);
+  // D4b: the Skill Booth adds task XP on every working day (not Rest).
+  c.taskXp[task.id] = (c.taskXp[task.id] ?? 0) + (ok ? 2 : 1) + (e.kind !== 'rest' ? hqFx(b).taskXp : 0);
   const after = taskLevel(m, task.id);
   if (after > before) n.lines.push(fill(C().report.taskLevel!, { name: m.name, word: taskLevelWord(after), task: label, level: after }));
   if (e.kind !== 'rest') {
@@ -548,6 +556,16 @@ export function addOddsHook(h: OddsHook): void {
   ODDS_HOOKS.push(h);
 }
 type DayHook = (b: DominionBlock, seed: string, n: { lines: string[]; say: (kind: Alert['kind'], text: string) => void }) => void;
+/** D8: around each member's task: skip it (a squad follower), note the state before, settle after (the squad job). */
+export interface RunHook {
+  skip?(b: DominionBlock, m: Member): boolean;
+  before?(b: DominionBlock, m: Member): void;
+  after?(b: DominionBlock, m: Member, seed: string, n: { lines: string[]; say: (kind: Alert['kind'], text: string) => void }): void;
+}
+const RUN_HOOKS: RunHook[] = [];
+export function addRunHook(h: RunHook): void {
+  RUN_HOOKS.push(h);
+}
 const DAY_HOOKS: DayHook[] = [];
 /** recruit.ts and talk.ts add their nightly upkeep here (leads leaving, Patrons, the talk cards). */
 export function addCrewHook(h: DayHook): void {
@@ -566,7 +584,11 @@ export function crewStep(block: DominionBlock, seed: string): string[] {
   if (b.day % 7 === 1) st.rerolled = [];
   for (const m of b.members) {
     mc(m);
+    // D8: a squad's members follow their leader on a squad job (squads.ts runs them after the leader's task).
+    if (RUN_HOOKS.some((h) => h.skip?.(b, m))) continue;
+    for (const h of RUN_HOOKS) h.before?.(b, m);
     runTask(b, m, seed, n);
+    for (const h of RUN_HOOKS) h.after?.(b, m, seed, { lines: n.lines, say: (k, t) => say(n, k, t) });
   }
   // A thief tries the door (Part 2 §2: Guard defends against thieves).
   const r = rng(seed, 'dominion-crew', b.day, 'thief');
@@ -661,10 +683,18 @@ function weekly(b: DominionBlock, seed: string, n: Night): void {
 }
 
 /** A member leaves the crew for good (quit, stole, dismissed). The Goodbye talk can see them off. */
-export function leave(b: DominionBlock, m: Member, why: string, n: Night | null, line: string): void {
+export function leave(b: DominionBlock, m: Member, why: string, n: Night | null, line: string, out?: string[]): void {
   b.members = b.members.filter((x) => x.id !== m.id);
   cs(b).gone.push({ id: m.id, name: m.name, day: b.day, why });
   if (n) say(n, 'crew', line);
+  const lines = n ? n.lines : out ?? b.report;
+  for (const h of LEAVE_HOOKS) h(b, m, why, lines);
+}
+/** D4b: someone leaving (the Retiree Hall takes a member who leaves on good terms). */
+type LeaveHook = (b: DominionBlock, m: Member, why: string, lines: string[]) => void;
+const LEAVE_HOOKS: LeaveHook[] = [];
+export function addLeaveHook(h: LeaveHook): void {
+  LEAVE_HOOKS.push(h);
 }
 
 /** Green traits mature (Part 2 §4.2): the first at Grunt rank and level, the second at Sergeant. */

@@ -2561,9 +2561,8 @@
       "n": -150
      },
      {
-      "k": "note",
-      "slice": "D9",
-      "text": "raid losses halved"
+      "k": "hook",
+      "id": "insure"
      }
     ]
    },
@@ -2577,8 +2576,7 @@
      }
     ]
    },
-   "who": "insurance",
-   "wait": "D9"
+   "who": "insurance"
   },
   {
    "id": 57,
@@ -3364,9 +3362,8 @@
     "does": "he becomes your double agent (Rival plans visible), Ten +0",
     "fx": [
      {
-      "k": "note",
-      "slice": "D9",
-      "text": "a double agent: Rival plans visible"
+      "k": "hook",
+      "id": "double-agent"
      }
     ]
    },
@@ -3386,7 +3383,6 @@
     ]
    },
    "who": "rival",
-   "wait": "D9",
    "rival": true
   },
   {
@@ -3702,9 +3698,8 @@
     "does": "Opens the Debate (Part 4 §3) early, Ten −5",
     "fx": [
      {
-      "k": "note",
-      "slice": "D13",
-      "text": "the Debate opens early"
+      "k": "hook",
+      "id": "debate-early"
      },
      {
       "k": "owed",
@@ -3729,7 +3724,6 @@
     ]
    },
    "who": "rival",
-   "wait": "D13",
    "rival": true
   },
   {

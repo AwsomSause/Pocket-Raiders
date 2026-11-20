@@ -27,8 +27,12 @@ import { autoFill, book, placeMon, reserveInRun, seedStart, withReserve } from '
 import { build, letGo, loan, rebuild, repay, sell, storageCap, tierUp, upgrade, launder, type HqOut } from './hq';
 import { withHq } from './hqFx';
 import { levelCap } from '../regions';
+import { hatchEggs, settleDojo, settleLesson } from './school';
 import './voices';
+import { answerCaught, collar, noteJob, type Roll } from './moments';
 import { answerCard, breakTruce, maybeStreet, noteTop, ransom, startTruce, withRivals, type RivalOut } from './rivals';
+import { answerMeet as answerTownMeet, maybeMeet } from './town';
+import { accuse, askSpy, dropTalk, startConfront, type SpyOut } from './spies';
 import { argue, chooseDeal, closeDebate, walkOut, type DebateOut } from './debate';
 import { answerQ, noteAct, releasedSeen, releaseQ, returnHeld } from './police';
 import './growth';
@@ -78,7 +82,7 @@ export function startInRun(content: Content, run: RunState, setup: DominionSetup
  * D6: the money it moved goes on the Ledger's line for it (the World Turn books its own),
  * the district the Boss worked in counts as this week's visit, and a new Notoriety step is announced.
  */
-export function stepInRun(content: Content, run0: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean } {
+export function stepInRun(content: Content, run0: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean; roll?: Roll | null } {
   // D11: a save from before the Hero gets theirs on the first step (picked by the Boss's trainer, Q5).
   const b0 = run0.expansion?.dominion;
   const run = b0 && !b0.hero ? withBlock(run0, ensureHero(b0, run0.archetypeId, run0.seed)) : run0;
@@ -87,7 +91,7 @@ export function stepInRun(content: Content, run0: RunState, action: DominionActi
   if (!out.ok) return out;
   // D9: the rival tier reads the Boss's best level; a night ambush (rival action 135) hurts the Boss's team.
   const next = structuredClone(out.run);
-  const b = next.expansion!.dominion!;
+  let b = next.expansion!.dominion!;
   noteTop(b, next);
   if (b.flags.includes('ambushed')) {
     b.flags = b.flags.filter((f) => f !== 'ambushed');
@@ -118,7 +122,7 @@ function visitOf(a: DominionAction): string | null {
 }
 
 /** Rest heals the Boss's team for free (Part 1 §2.1). */
-function stepInner(content: Content, run: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean } {
+function stepInner(content: Content, run: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean; roll?: Roll | null } {
   const block = run.expansion?.dominion;
   if (!block) return { ok: false, block: block as never, notice: null, heal: false, run };
   // D24: while the police question someone, only answers go through.
@@ -146,6 +150,10 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
   if (heroOut) return heroOut;
   const deskOut = deskInRun(content, run, action);
   if (deskOut) return deskOut;
+  if (action.t === 'jobCaught') {
+    const out = answerCaught(block, action.choice, run.seed);
+    return { ok: out.ok, block: out.ok ? out.block : block, notice: out.notice, heal: false, run: out.ok ? withBlock(run, DominionBlockSchema.parse(out.block)) : run };
+  }
   if (action.t === 'act') {
     // D2: a Boss action (field.ts). A Pokémon lifted in a Ball (Thieve, a big success) joins the team or the box.
     const work = structuredClone(run);
@@ -154,6 +162,11 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
     if (!out.ok) return { ok: false, block, notice: out.notice, heal: false, run };
     // D24: someone may have seen it (the police's evidence log).
     noteAct(out.block, run.seed, action.district, action.target, (out.block.field.districts[action.district]?.heat ?? 0) - heatWas, run.party[0]?.speciesId ?? null);
+    // D30: a note for tomorrow's morning paper.
+    noteJob(out.block, block, action, out.roll ?? null, out.fight);
+    // D30 (m10): a member brought along may be grabbed on a botched job (Bail / Break out / Leave on the result page).
+    const grabbed = collar(out.block, block, action, out.roll ?? null, out.fight, run.seed);
+    if (grabbed.length) out.notice = [out.notice, ...grabbed].filter(Boolean).join(' ');
     if (out.mon && out.mon.trust !== undefined) {
       // D4: a rescued or tamed Pokémon joins the Reserve, not the Boss's team.
       const line = placeMon(content, work, withReserve(content, out.block), { species: out.mon.species, level: out.mon.level, src: 'rescued', trust: out.mon.trust });
@@ -169,10 +182,16 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
       const met = maybeStreet(blk, action.district, run.seed, blk.phase === 'night');
       blk = met.block;
       if (met.line) notice = [notice, met.line].filter(Boolean).join(' ');
+      // D6b: or someone from the town (outside.json sections A and J), answered on the Region Map.
+      else {
+        const town = maybeMeet(blk, action.district, run.seed, blk.phase === 'night');
+        blk = town.block;
+        if (town.line) notice = [notice, town.line].filter(Boolean).join(' ');
+      }
     }
     // D10: Pokémon an action took (Kidnap, a lab's rare one, the Swap Meet) wait in the crew's pending list: place them now.
     const next = settleCrew(content, withBlock(work, DominionBlockSchema.parse(blk)));
-    return { ok: true, block: next.expansion!.dominion!, notice, heal: false, run: next, fight: out.fight };
+    return { ok: true, block: next.expansion!.dominion!, notice, heal: false, run: next, fight: out.fight, roll: out.roll ?? null };
   }
   if (action.t === 'buy') {
     const out = buy(block, action.vehicle);
@@ -232,7 +251,13 @@ function rivalInRun(run: RunState, action: DominionAction): (StepOut & { run: Ru
     case 'truce': out = startTruce(b, action.team); break;
     case 'breakTruce': out = breakTruce(b, action.team); break;
     case 'card': out = answerCard(b, action.index, action.choice, run.seed); break;
+    case 'townMeet': out = answerTownMeet(b, action.choice, run.seed); break;
     case 'ransom': out = ransom(b, action.member); break;
+    // D22: the Confront talk (spies.ts). An accused spy who fights leaves `field.fight` waiting.
+    case 'spyStart': out = startConfront(b, action.member) as SpyOut; break;
+    case 'spyAsk': out = askSpy(b, action.q, run.seed, action.text); break;
+    case 'spyAccuse': out = accuse(b, run.seed); break;
+    case 'spyDrop': out = dropTalk(b); break;
     default: return null;
   }
   if (!out.ok) return { ok: false, block: b, notice: out.notice, heal: false, run };
@@ -422,6 +447,9 @@ export function settleCrew(content: Content, run: RunState): RunState {
   const out = structuredClone(run);
   const b = withReserve(content, out.expansion!.dominion!);
   const st = b.crew;
+  // D4b: eggs due this morning hatch into the Reserve.
+  const hatched = hatchEggs(content, out, b);
+  if (hatched.length) b.report = [...b.report, ...hatched];
   if (!st?.pending.length) {
     if (book(b).auto) autoFill(b);
     return out;
@@ -435,7 +463,9 @@ export function settleCrew(content: Content, run: RunState): RunState {
       // A member's Pokémon, or (Nurturer) one in the Reserve.
       const mon = b.members.find((m) => m.id === p.member)?.team.find((x) => x.uid === p.uid) ?? b.reserve?.box.find((x) => x.uid === p.uid);
       if (mon && p.level > mon.level) addLevels(content, mon, p.level - mon.level, p.level);
-    } else out.inventory[p.id] = (out.inventory[p.id] ?? 0) + p.n;
+    } else if (p.k === 'move') lines.push(...settleLesson(content, b, p));
+    else if (p.k === 'dojo') lines.push(...settleDojo(content, out, b, p));
+    else out.inventory[p.id] = (out.inventory[p.id] ?? 0) + p.n;
   }
   st.pending = [];
   if (lines.length) b.report = [...b.report, ...lines];

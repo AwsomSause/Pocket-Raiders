@@ -3,10 +3,10 @@
   "traits": [
     { "id": "loyal", "name": "Loyal", "icon": "g-soothe-bell", "tone": "g", "effects": [
       { "text": "Loyalty never falls below 30", "mods": { "loyaltyFloor": 30 } },
-      { "text": "a bribe won't turn them", "needs": "D22" } ] },
+      { "text": "a rival's bribe won't turn them", "spy": "noBribe" } ] },
     { "id": "greedy", "name": "Greedy", "icon": "g-amulet-coin", "tone": "y", "effects": [
       { "text": "pay raises Loyalty ×2", "payLoy": 2 },
-      { "text": "a bribe can turn them", "needs": "D22" } ] },
+      { "text": "a bribe can turn them", "spy": "bribe" } ] },
     { "id": "joker", "name": "Joker", "icon": "g-star-piece", "tone": "m", "effects": [
       { "text": "+Morale for the squad", "squadMor": 1 },
       { "text": "bad at keeping quiet (+1 Heat a job)", "mods": { "heat": 1 } } ] },
@@ -27,7 +27,7 @@
       { "text": "−10 on Brawn jobs", "mods": { "pct": -10, "stat": "brawn" } } ] },
     { "id": "gossip", "name": "Gossip", "icon": "g-xtransceiver", "tone": "m", "effects": [
       { "text": "+10 on Wits jobs", "mods": { "pct": 10, "stat": "wits" } },
-      { "text": "tells spies your plans", "needs": "D22" } ] },
+      { "text": "tells spies your plans", "spy": "leak" } ] },
     { "id": "loner", "name": "Lone Wolf", "icon": "g-secret-key", "tone": "k", "effects": [
       { "text": "+10 on Stealth jobs", "mods": { "pct": 10, "stat": "stealth" } },
       { "text": "twice as quick to quit when unhappy", "mods": { "disloyal": 2 } } ] },

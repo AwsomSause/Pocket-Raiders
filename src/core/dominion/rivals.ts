@@ -18,7 +18,8 @@ import { addLoyalty, addMorale, addTaskKind, crewOf, freshCrewState, leave, type
 import { buildingDef, hqFx, hqOf, spend, working } from './hqFx';
 import { defense, roomName, wear } from './hq';
 import { makeLead } from './recruit';
-import { setChairTension } from './chair';
+import { setChairHook, setChairTension } from './chair';
+import { paced } from './rules';
 
 const RV = () => DOMINION_DATA.rivals;
 const RA = () => DOMINION_DATA.rivalActions;
@@ -99,7 +100,8 @@ const log = (b: DominionBlock, team: string, text: string): void => {
 export function addTension(b: DominionBlock, team: string, n: number): number {
   const t = ts(b, team);
   const was = t.tension;
-  t.tension = clamp(t.tension + n);
+  // D27: Day pace scales a rise.
+  t.tension = clamp(t.tension + paced(b, n));
   t.peak = Math.max(t.peak, t.tension);
   if (t.tension > was) t.quiet = 0;
   return t.tension - was;
@@ -163,17 +165,17 @@ function pickPlan(b: DominionBlock, team: RivalTeam, r: Rng): string[] {
   void b;
   return out;
 }
-const priorityName = (id: string): string => RV().plan.priorities.find((p) => p.id === id)?.name ?? id;
+export const priorityName = (id: string): string => RV().plan.priorities.find((p) => p.id === id)?.name ?? id;
 /** Whether the player can see this week's plan: one of their spies is inside, or an Operations Room at HQ Lv. 3+ (A7). */
 export function planSeen(b: DominionBlock, team: string): boolean {
   const r = rivalsOf(b);
-  if (r.mySpies.some((s) => s.team === team) || hqFx(b).intel > 0) return true;
+  if (r.mySpies.some((s) => s.team === team) || hqFx(b).intel > 0 || b.flags.includes(`agent:${team}`)) return true;
   if (b.hqLevel >= RV().plan.seeHq && (b.hq?.rooms ?? []).some((x) => x.id === 'operations-room' && working(x))) return true;
   return b.flags.includes(planFlag(b, team));
 }
 /** A flag that the plan was learned this week (a deal, a tail, a wire). */
 const planFlag = (b: DominionBlock, team: string): string => `plan:${team}:${b.day - ((b.day - 1) % WEEK())}`;
-const learnPlan = (b: DominionBlock, team: string): void => {
+export const learnPlan = (b: DominionBlock, team: string): void => {
   b.flags = [...b.flags.filter((f) => !f.startsWith(`plan:${team}:`)), planFlag(b, team)];
 };
 
@@ -453,14 +455,14 @@ const KINDS: Record<RivalKind, (c: Ctx) => void> = {
   smash: (c) => {
     if (!raidGetsIn(c)) return;
     const room = pickOf(c.r, workingRooms(c.b));
-    const amount = Math.max(0, Math.min(num(c, 'M'), Math.max(0, c.b.funds - safeMoney(c.b))));
+    const amount = insured(c, Math.max(0, Math.min(num(c, 'M'), Math.max(0, c.b.funds - safeMoney(c.b)))));
     spend(c.b, amount);
     line(c, 'smash', { n: num(c, 'S'), room: room ? roomName(room) : 'warehouse', amount: money(amount) });
     if (c.a.n === 26) for (const m of c.b.members) crewOf(m).fatigue = clamp(crewOf(m).fatigue + 20);
   },
   vault: (c) => {
     if (!raidGetsIn(c)) return;
-    const amount = Math.max(0, Math.round((Math.max(0, c.b.funds - safeMoney(c.b)) * num(c, 'P')) / 100));
+    const amount = insured(c, Math.max(0, Math.round((Math.max(0, c.b.funds - safeMoney(c.b)) * num(c, 'P')) / 100)));
     spend(c.b, amount);
     line(c, 'vault', { amount: money(amount) });
   },
@@ -622,6 +624,13 @@ const cut = (c: Ctx, pct: number): number => Math.max(1, Math.round((pct * (100 
 function regard(c: Ctx, d: string, n: number): void {
   const ds = c.b.field.districts[d];
   if (ds) ds.regard += n;
+}
+/** The Chair's insurance (card 56): while it's paid, a raid takes `raid.insured`% less money. Returns what is still taken. */
+function insured(c: Ctx, amount: number): number {
+  if (!c.b.flags.includes('insured') || amount <= 0) return amount;
+  const back = Math.round((amount * RV().raid.insured) / 100);
+  if (back) line(c, 'insuredPaid', { amount: money(back) });
+  return amount - back;
 }
 /** What a raid can't touch: the Treasury's safe money. */
 const safeMoney = (b: DominionBlock): number => hqFx(b).treasury;
@@ -1209,3 +1218,14 @@ export { hqOf };
 
 // D12: Tension a Chair answer or deal moves goes to the region's rival team.
 setChairTension((b, n) => void addTension(b, teamAt(b, null), n));
+// The Chair's D9 answers: the insurance man (card 56) and the double agent (card 74).
+setChairHook('insure', (b) => {
+  if (!b.flags.includes('insured')) b.flags = [...b.flags, 'insured'];
+  return fill(L().insured!, { pct: RV().raid.insured });
+});
+setChairHook('double-agent', (b) => {
+  const team = teamAt(b, null), def = teamDef(team);
+  if (!def) return null;
+  if (!b.flags.includes(`agent:${team}`)) b.flags = [...b.flags, `agent:${team}`];
+  return fill(L().agent!, { team: def.name });
+});

@@ -100,7 +100,7 @@ export function pyramidView(m: PyramidModel, notice: string | null): string {
   }).join('');
   const cands = m.cands.map((c, i) => `<div class="ch${i === 0 ? ' on' : ''}" style="--stripe:${c.stripe};padding:8px 10px 8px 22px;${i ? 'margin-top:10px' : ''}" data-testid="dom-cand-${c.id}">
       <div class="row" style="gap:10px">${face(c.look, 64, 'width:44px;height:64px;object-fit:contain;flex:none')}<div class="col" style="gap:3px;flex:1;min-width:0">
-        <div class="row sp"><b style="font-size:19px">${esc(c.name)}</b><span class="pill ${i === 0 ? 'v' : 'k'}">${esc(c.rank)}</span></div>
+        <div class="row sp"><b style="font-size:19px">${esc(c.name)}${c.mark ? ` <span class="mkp" style="display:inline-grid;width:22px;height:22px;font-size:12px;color:${c.mark.colour}" title="${esc(c.mark.squad)}" data-testid="dom-cand-mark">${esc(c.mark.ch)}</span>` : ''}</b><span class="pill ${i === 0 ? 'v' : 'k'}">${esc(c.rank)}</span></div>
         <span class="sub">Lv ${c.level} · Loyalty <b>${c.loyalty}</b> · Ambition <b class="${c.ambition >= 50 ? 'rd' : ''}">${c.ambition}</b></span>
         <div class="mt ${i === 0 ? 'g' : 'r'} t" style="--v:${i === 0 ? c.loyalty : c.ambition}"></div></div></div>
     </div>`).join('');

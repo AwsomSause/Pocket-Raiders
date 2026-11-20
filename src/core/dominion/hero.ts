@@ -24,6 +24,7 @@ import { setChairHero } from './chair';
 import { hqFx, levelDef } from './hqFx';
 import type { ActionDef, Alert, CourtFx, DominionBlock, Encounter, FieldFight, HeroDef, HeroState, Member } from './schema';
 import { addWorldStep, fill } from './worldTurn';
+import { heroFactor } from './rules';
 
 const H = () => DOMINION_DATA.hero;
 const F = () => DOMINION_DATA.field;
@@ -80,8 +81,11 @@ export function threatOf(b: DominionBlock): number {
   const dread = Object.values(b.field.districts).reduce((a, d) => a + Math.max(0, d.dread), 0);
   // Buildings: the HQ's levels for now; D5 adds the buildings outside it.
   const buildings = b.hqLevel - 1;
-  // D12's Chair answers move Threat too (`nudge`, either way).
-  return clamp(wanted(b.field) * w.wanted + dread * w.dread + h.stolen * w.stolen + buildings * w.building + (h.harm + b.field.hero) * w.harm + (h.nudge ?? 0));
+  const raw = wanted(b.field) * w.wanted + dread * w.dread + h.stolen * w.stolen + buildings * w.building + (h.harm + b.field.hero) * w.harm;
+  // D27: Hero pressure (Normal, and every run before D27, multiplies by 1 and keeps the old value exactly).
+  const k = heroFactor(b);
+  // D12's Chair answers move Threat too (`nudge`, either way), after the pressure factor.
+  return clamp((k === 1 ? raw : Math.round(raw * k)) + (h.nudge ?? 0));
 }
 
 export function stageIndex(threat: number): number {

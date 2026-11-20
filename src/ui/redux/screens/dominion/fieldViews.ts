@@ -34,7 +34,10 @@ const flag = (x: number, y: number): string => `<div class="a" style="left:${x}p
 
 // ---------- mockup 3: the Region Map ----------
 
-export function mapView(m: MapModel, notice: string | null, garage: boolean): string {
+/** D6b: a street meeting waiting on the map (town.ts), and the picked answer. */
+export interface MeetPanel { what: string; who: string; district: string; choices: string[]; at: number; title: string; hint: string }
+
+export function mapView(m: MapModel, notice: string | null, garage: boolean, meet: MeetPanel | null = null): string {
   const W = (d: MapModel['districts'][number]): number => d.w ?? 124;
   const zones = m.districts.map((d) => {
     const cls = `dz ${d.cls}${d.home ? ' home' : ''}${d.sel ? ' sel' : ''}`;
@@ -68,6 +71,13 @@ export function mapView(m: MapModel, notice: string | null, garage: boolean): st
       <div class="hd y"><img class="ic" src="${img('g-bicycle')}" alt="">VEHICLES<span class="r"><span class="kc">V</span> close</span></div>
       <div class="col sm" style="gap:6px">${m.vehicles.map((v) => `<div class="row sp" style="gap:8px;align-items:flex-start"${act('buy', v.id)} data-testid="dom-buy-${v.id}"><div><b>${esc(v.name)}</b> <span class="mu xs">${esc(v.does)}</span></div>${v.owned ? '<span class="pill g">OWNED</span>' : `<span class="bt" style="font-size:13px;padding:2px 8px;white-space:nowrap">${esc(v.price)}</span>`}</div>`).join('')}</div>
     </div>` : '';
+  const meetBox = meet ? `<div class="pnl glass" style="left:616px;top:84px;width:334px;height:330px;z-index:32" data-testid="dom-town">
+      <div class="hd y"><img class="ic" src="${img('g-tea')}" alt="">${esc(meet.title)}<span class="r xs mu">${esc(meet.district)}</span></div>
+      <div class="sm" style="line-height:1.3;margin-bottom:4px">${esc(meet.what)}</div>
+      <div class="xs mu" style="margin-bottom:8px">${esc(meet.who)}</div>
+      <div class="col sm" style="gap:6px">${meet.choices.map((c, i) => `<div class="bt${i === meet.at ? ' y shine' : ''}" style="font-size:13px;padding:4px 8px;text-align:left;white-space:normal;line-height:1.25"${act('townMeet', i)} data-testid="dom-town-${i}">${esc(c)}</div>`).join('')}</div>
+      <div class="xs mu" style="position:absolute;left:12px;bottom:8px">${esc(meet.hint)}</div>
+    </div>` : '';
   return stage(`${topBar(m.top)}
   <div class="a" style="left:10px;top:84px;width:596px;height:384px;z-index:6;pointer-events:none"><span class="brk" style="--L:30px"></span></div>
   <div class="pnl mapgrid" style="left:10px;top:84px;width:596px;height:384px;padding:0;overflow:hidden;border-color:#7f90c8" data-testid="dom-map">
@@ -78,7 +88,7 @@ export function mapView(m: MapModel, notice: string | null, garage: boolean): st
     ${wanted}
     ${compass}
   </div>
-  <div class="pnl" style="left:616px;top:84px;width:334px;height:196px" data-testid="dom-file">
+  <div class="pnl" style="left:616px;top:84px;width:334px;height:196px;cursor:pointer"${act('dfile')} title="District file (Enter)" data-testid="dom-file">
     <div class="row" style="gap:10px"><b class="y" style="font-size:26px">${esc(f.name)}</b><span class="xs" style="color:#ff9ab0" data-testid="dom-regard" title="Regard">♥ ${f.regard}</span><span class="xs" style="color:#b9a0ff" data-testid="dom-dread" title="Dread">✊ ${f.dread}</span></div>
     <div class="stamp" style="right:14px;top:10px;color:${f.stamp.colour};text-shadow:0 0 8px ${f.stamp.colour}99;box-shadow:0 0 12px ${f.stamp.colour}4d">${esc(f.stamp.word)}</div>
     <div class="col" style="gap:3px;margin-top:8px;font-size:15px">
@@ -92,10 +102,11 @@ export function mapView(m: MapModel, notice: string | null, garage: boolean): st
     <div class="row xs mu" style="margin-bottom:7px;gap:4px;white-space:nowrap;overflow:hidden"><img class="ic s" src="${img('g-relic-gold')}" alt=""><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis">${targets}</span>${pager}</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px 7px">${grid}</div>
   </div>
-  ${cta}
+  ${meet ? '' : cta}
   ${garageBox}
+  ${meetBox}
   ${tabs(1, [0, 1, 2, 3, 5])}
-  <div class="a" style="left:12px;top:472px;z-index:8;font:600 12px var(--ui);color:#dfe5ff" data-testid="dom-map-note">${esc(m.note)} · <span class="kc">T</span> place · <span class="kc">V</span> vehicles</div>
+  <div class="a" style="left:12px;top:472px;z-index:8;font:600 12px var(--ui);color:#dfe5ff" data-testid="dom-map-note">${esc(m.note)} · <span class="kc">Enter</span> file · <span class="kc">T</span> place · <span class="kc">V</span> vehicles</div>
   ${pings}
   ${flags.replace(/left:(\d+)px;top:(\d+)px/g, (_, x: string, yy: string) => `left:${Number(x) + 10}px;top:${Number(yy) + 12}px`)}
   ${notice ? `<div class="a" style="left:180px;width:300px;top:120px;z-index:40;background:rgba(10,14,30,.92);border:2px solid #8cc0ff;border-radius:8px;padding:8px 10px;font-size:14px;line-height:1.3"${act('dismiss')} data-testid="dom-notice">${esc(notice)}</div>` : ''}`, '', 'check vign grain');
@@ -103,10 +114,14 @@ export function mapView(m: MapModel, notice: string | null, garage: boolean): st
 
 // ---------- mockup 4: the Card ----------
 
-export function cardView(c: CardModel, monFile: string | null, initial: string): string {
+/** `showOdds` (D27, Settings · Dominion "Show odds on the Card"): off draws the dial as "?" and hides how the odds are made. Drawing only: the roll is the same. */
+export function cardView(c: CardModel, monFile: string | null, initial: string, showOdds = true): string {
+  const hide = !showOdds && c.roll;
+  if (hide) c = { ...c, dial: '?', bar: 0, chance: 0, exact: false, parts: [] };
   const pct = c.roll ? c.bar : c.chance;
   const parts = c.parts.map(([k, n]) => `<div class="row sp"><span>${esc(k)}</span><b style="color:${n >= 0 ? '#1f8a49' : '#c0392b'}">${n >= 0 ? '+' : '−'}${Math.abs(n)}</b></div>`).join('');
-  const odds = c.roll ? `<b style="font-size:15px;color:#5d6a90;letter-spacing:.08em">HOW THE ODDS ARE MADE</b>${parts}
+  const odds = hide ? `<b style="font-size:15px;color:#5d6a90;letter-spacing:.08em">ODDS HIDDEN</b><div data-testid="dom-card-odds-hidden">Settings · Dominion has the odds turned off. The roll is the same either way.</div>`
+    : c.roll ? `<b style="font-size:15px;color:#5d6a90;letter-spacing:.08em">HOW THE ODDS ARE MADE</b>${parts}
         <div class="row sp" style="border-top:2px solid #28314b;padding-top:3px"><b>Total</b><b data-testid="dom-card-total">${esc(c.dial)}</b></div>`
     : `<b style="font-size:15px;color:#5d6a90;letter-spacing:.08em">NO ROLL</b><div>A sure thing: it just takes the time.</div>`;
   const heatRow = c.heat > 0 || c.failHeat > 0 ? `<div class="row" style="gap:6px;margin-top:6px;white-space:nowrap"><img class="ic" src="${img('g-fire-stone')}" alt="">Heat <b style="color:#c0392b">+${c.heat}</b> here ${c.failHeat ? `<span style="color:#5d6a90">· +${c.failHeat} if it fails</span>` : ''}</div>`
@@ -143,7 +158,7 @@ export function cardView(c: CardModel, monFile: string | null, initial: string):
         <div class="rays turn" style="position:absolute;left:${100 - (dial + 76) / 2}px;top:-6px;width:${dial + 76}px;height:${dial + 76}px;--rc:rgba(245,180,30,.35)"></div><div style="position:relative;width:${dial}px;height:${dial}px;border-radius:50%;background:conic-gradient(#f5c927 0 ${pct}%,#dfe4f2 0);box-shadow:0 0 0 4px #28314b,0 0 22px rgba(245,201,39,.5);display:grid;place-items:center">
           <div style="width:${dial - 44}px;height:${dial - 44}px;border-radius:50%;background:var(--paper);box-shadow:inset 0 0 0 4px #28314b;display:grid;place-items:center;text-align:center"><div><div class="num" style="font-size:${Math.round((c.dial.length > 4 ? 38 : 62) * (dial - 44) / 124)}px;line-height:.9;color:#28314b" data-testid="dom-card-chance">${esc(c.dial)}</div><div style="font-size:15px;color:#5d6a90">chance</div></div></div>
         </div>
-        <span class="pill ${c.exact ? 'g' : 'k'}" style="font-size:14px">${c.roll ? (c.exact ? 'SCOUTED' : 'UNSCOUTED') : 'NO ROLL'}</span>
+        <span class="pill ${c.exact ? 'g' : 'k'}" style="font-size:14px">${c.roll ? (hide ? 'HIDDEN' : c.exact ? 'SCOUTED' : 'UNSCOUTED') : 'NO ROLL'}</span>
       </div>
       <div class="col" style="gap:5px;font-size:16px">
         ${odds}

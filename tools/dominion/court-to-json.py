@@ -16,6 +16,7 @@ does with an answer is the SPEC table below, written in a small effect language 
   ten:N threat:N goal:N stab:N raid:N shadow:N wipe:N   (kept for the slice that builds them: owed)
   note:SLICE:"text"  (a part that waits for a later slice: the answer is "limited")
   hero:intel:N  hero:battle  hero:letter  hero:spare  hero:late:N  hero:hunt  hero:lose   (D11: the Hero, hero.ts)
+  hook:ID      (a rule another slice owns, registered with setChairHook: insure, double-agent (D9), debate-early (D13))
 
 A card with `wait` is switched off (status "disabled") until the named slice builds what its answers need.
 Re-run after the list changes:  python3 tools/dominion/court-to-json.py <plans/evil-mode-rework/lists> src/data/dominion
@@ -142,6 +143,9 @@ def fx(s):
         if t.startswith('note:'):
             _, slice_, text = t.split(':', 2)
             res.append({'k': 'note', 'slice': slice_, 'text': text.strip('"')})
+            continue
+        if t.startswith('hook:'):
+            res.append({'k': 'hook', 'id': t[5:]})
             continue
         if t.startswith('c$'):
             res.append({'k': 'funds', 'n': int(t[2:]), 'clean': True})
@@ -299,7 +303,7 @@ SPEC = {
     53: dict(look='trainer/pr/rich_m', who='accountant', wait='D5', a='note:D5:"laundering at 5%"', b=''),
     54: dict(look='trainer/pr/rich_f', who='collector', needs='stores', a='$1200 mon:-1 threat:3', b='mon:-1 reg:6 threat:-2'),
     55: dict(look='trainer/pr/harlequin', who='corner-manager', a='deal:300:risk=10:heat=12', b=''),
-    56: dict(look='trainer/pr/rich_m', who='insurance', wait='D9', a='deal:-150 note:D9:"raid losses halved"', b='dread:2'),
+    56: dict(look='trainer/pr/rich_m', who='insurance', a='deal:-150 hook:insure', b='dread:2'),
     57: dict(look='trainer/pr/hooligans', who='thief', foe='thief', a='deal:100:heat=2', b='fight{dread:4}'),
     58: dict(look='trainer/pr/depot_agent', who='courier', a='in:3{chance:80{$500}{heat:20}}', b='item:rare-candy:3 grudge=courier-boss'),
     # D. police and the law
@@ -319,14 +323,14 @@ SPEC = {
     71: dict(look=GR, who='rival', rival=True, a='join:look=trainer/pr/rocket_grunt_m ten:5 note:D9:"40% he\'s a spy"', b='ten:-3'),
     72: dict(look=GR, who='rival', rival=True, a='reg:4 ten:4 join:look=trainer/pr/rocket_grunt_m', b='dread:1'),
     73: dict(look='trainer/pr/rocket_grunt_f', who='rival', rival=True, a='deal:-200:ten=-10', b='ten:10 dread:3'),
-    74: dict(look=GR, who='rival', rival=True, wait='D9', a='note:D9:"a double agent: Rival plans visible"', b='ten:-8 reg:-2'),
+    74: dict(look=GR, who='rival', rival=True, a='hook:double-agent', b='ten:-8 reg:-2'),
     75: dict(look=GR, who='rival', rival=True, a='$500 ten:-5 heat:5', b='ten:5'),
     76: dict(look='trainer/pr/archer', who='archer', rival=True, name='Archer', role='Rocket Admin', needs='racket', a='racket- ten:-12', b='ten:10 dread:5 follow:77:3'),
     77: dict(look='trainer/pr/archer', who='archer', rival=True, name='Archer', role='Rocket Admin', followOnly=True, foe='archer', a='fight{dread:8 ten:5}', b='$-400 ten:-6 mor:-4'),
     78: dict(look='trainer/pr/ariana', who='rival', rival=True, wait='D10', a='note:D10:"a joint Heist" ten:-10 chance:25{ten:20}', b='ten:4'),
     79: dict(look='trainer/pr/scientist_m', who='rival', rival=True, wait='D5', a='note:D5:"a lab machine: +1 Room effect" mon:-1 threat:4', b=''),
     80: dict(look='trainer/pr/magma_grunt_m', who='rival', rival=True, region='hoenn', wait='D15', a='note:D9:"Magma Tension -15, Aqua +15"', b='note:D9:"Aqua Tension -15, Magma +15"'),
-    81: dict(look='trainer/pr/proton', who='rival', rival=True, wait='D13', a='note:D13:"the Debate opens early" ten:-5', b='ten:8 dread:3'),
+    81: dict(look='trainer/pr/proton', who='rival', rival=True, a='hook:debate-early ten:-5', b='ten:8 dread:3'),
     82: dict(look='trainer/pr/proton', who='rival', rival=True, wait='D14', a='wipe:1 ten:20 join', b='$1000 ten:-10 grudge'),
     83: dict(look=GR, who='rival', rival=True, needs='stores', a='mon:-1 mon:1 ten:-3', b=''),
     84: dict(look='trainer/pr/rocket_grunt_f', who='rival', rival=True, a='dread:3 ten:4', b='poach:30:40 reg:2'),
