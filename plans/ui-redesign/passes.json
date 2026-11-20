@@ -339,5 +339,21 @@
   "q3": "Yes, seven: three for screen shapes, four for accessibility. Each is linked to the setting that switches it on.",
   "q4": "Battle now has an on-screen Menu button, because a phone has no Esc key. Settings › Display gains Wide screen (Wings, Scenery, Black bars). The button bar colours confirm green and back red on every page.",
   "q5": "Yes. The upright phone layout is the handheld layout the series grew up on: scene on top, big buttons underneath."
+ },
+ "21": {
+  "name": "Living World",
+  "big": "The world now has a clock and a sky. Every stop has a time of day (day, evening or night) and battles carry weather, and every screen shows it: it is evening with rain, so the title, the town, the menus and the party camp all turn to dusk, lamps come on, and rain falls across the battle.",
+  "pages": [
+   "Time of Day",
+   "Weather",
+   "Weather Rolls In",
+   "Rotom Forecast",
+   "Night Encounter"
+  ],
+  "q1": "Yes. A setting sun behind Red on the title, lamp glow and first stars in Hub Town, a campfire glow under the party, rain streaking across the whole arena, and a lantern-lit night encounter.",
+  "q2": "Passes 1 to 20 were always the same sunny afternoon. Now the light on every screen follows the run, so stop 12 in the evening rain looks nothing like stop 16 at noon.",
+  "q3": "Yes, five. Time of Day and Weather each get an explainer page instead of a tooltip, the weather change gets its own moment, the forecast gets a page, and night gets its own encounter.",
+  "q4": "The pause menu shows the time and how long the rain lasts, and its backdrop follows the sky. Battle Info already lists the weather; the new chip links to the Weather page. Settings › Display can gain a 'Time of day lighting' switch for players who want the bright look.",
+  "q5": "Yes. Day and night, weather that changes which moves hit hard, and Pokémon that only come out after dark are core to the series since Gold and Silver."
  }
 }

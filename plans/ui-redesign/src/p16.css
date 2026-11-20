@@ -1,7 +1,7 @@
 /* Pass 16 · Stage Lights */
 /* menus sit over the place you are, under a soft light */
-.scr{background:radial-gradient(ellipse 75% 70% at 50% -8%,rgba(255,255,255,.97) 0,rgba(255,255,255,.8) 55%,rgba(255,255,255,.58) 100%),linear-gradient(180deg,transparent 60%,rgba(13,21,48,.2)),url(sprites/town-street.png) center/cover no-repeat;image-rendering:pixelated}
-&:where([data-scr="party"],[data-scr^="summary"],[data-scr^="bag"],[data-scr="reserve"],[data-scr="journal"],[data-scr="types"],[data-scr^="dex"],[data-scr="badges"],[data-scr="map"],[data-scr="moveinfo"],[data-scr="rivals"],[data-scr="boss"],[data-scr="league"]) .scr{background:radial-gradient(ellipse 75% 70% at 50% -8%,rgba(255,255,255,.97) 0,rgba(255,255,255,.8) 55%,rgba(255,255,255,.56) 100%),linear-gradient(180deg,transparent 60%,rgba(13,21,48,.2)),url(sprites/a-grass-bg.png) center/cover no-repeat}
+.scr{background:radial-gradient(ellipse 75% 70% at 50% -8%,var(--v1,rgba(255,255,255,.97)) 0,var(--v2,rgba(255,255,255,.8)) 55%,var(--v3,rgba(255,255,255,.58)) 100%),var(--v4,linear-gradient(180deg,transparent 60%,rgba(13,21,48,.2))),url(sprites/town-street.png) center/cover no-repeat;image-rendering:pixelated}
+&:where([data-scr="party"],[data-scr^="summary"],[data-scr^="bag"],[data-scr="reserve"],[data-scr="journal"],[data-scr="types"],[data-scr^="dex"],[data-scr="badges"],[data-scr="map"],[data-scr="moveinfo"],[data-scr="rivals"],[data-scr="boss"],[data-scr="league"]) .scr{background:radial-gradient(ellipse 75% 70% at 50% -8%,var(--v1,rgba(255,255,255,.97)) 0,var(--v2,rgba(255,255,255,.8)) 55%,var(--v3,rgba(255,255,255,.56)) 100%),var(--v4,linear-gradient(180deg,transparent 60%,rgba(13,21,48,.2))),url(sprites/a-grass-bg.png) center/cover no-repeat}
 /* pages with their own backdrop keep it */
 .scr.res{background:repeating-linear-gradient(-70deg,#0d1530 0 26px,#111b3b 26px 52px)}
 .scr.blessp{background:radial-gradient(ellipse at 50% 30%,#2a3566,#0d1530 75%)}
