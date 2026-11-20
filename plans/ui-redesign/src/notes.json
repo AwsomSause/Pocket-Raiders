@@ -430,5 +430,45 @@
   "q3": "One: the Final Cut page lists which pass each screen comes from and what was fixed.",
   "q4": "Pause is the pass 24 phone with the giant ball behind it. Settings is the pass 25 set of ten pages.",
   "q5": "Yes. These are the screens Kice picked as the game's look."
+ },
+ "27": {
+  "name": "New areas 1 · First Draft",
+  "label": "New areas · pass 1 of 25",
+  "big": "The first drawing of five areas the 25 passes never covered: Raids, Totems, the Galar Gym Challenge, Mega-Expeditions and the main game's evil teams. All eleven pages use the Final Cut look as it is, with words and numbers taken from the game's own files.",
+  "pages": [
+   "Raid · The Den",
+   "Raid · Battle",
+   "Totem · Territory",
+   "Totem · Battle",
+   "Galar · Gym Challenge Intro",
+   "Galar · Stadium Battle",
+   "Galar · Tournament Bracket",
+   "Expedition · The Gate",
+   "Expedition · Route",
+   "Evil Team · They Are Here",
+   "Evil Team · Encounter"
+  ],
+  "q1": "Not yet. This pass borrows the existing battle, event and map parts so each area can be judged on what it needs to show. The loud versions start next pass.",
+  "q2": "These areas had no mockups at all before. Now each has a first screen for its key moment and one for the choice that leads into it.",
+  "q3": "Yes, eleven: a den page before a raid, a territory page before a totem, a gate before an expedition, and a reveal before the first evil team stop, so the battle screens stay clean.",
+  "q4": "Unchanged. Pause and Settings from the Final Cut open the same way from all of these.",
+  "q5": "Yes. Dens, totems, the stadium crowd and a villain team with a red R are straight from the series, drawn with the game's own sprites."
+ },
+ "28": {
+  "name": "New areas 2 · Five Flags",
+  "label": "New areas · pass 2 of 25",
+  "big": "Each area now has its own colour and emblem. Raids are Dynamax pink with the storm spiral behind the boss, totems are amber with a carved band, the Gym Challenge is league blue with a scoreboard, expeditions are teal on a map grid, and the evil team stamps a giant R in its own colour. Five reference pages join.",
+  "pages": [
+   "Raid · Tiers",
+   "Totem · Totems of the Region",
+   "Galar · The Dynamax Band",
+   "Expedition · Party",
+   "Evil Team · Teams by Region"
+  ],
+  "q1": "Yes. Pass 1 borrowed the normal battle and event look; now a raid, a totem fight and a stadium match can be told apart from across the room by colour alone.",
+  "q2": "Pass 1 was one look for five different things. This pass gives each a flag: colour, emblem, and one prop that only it has (spiral, carved band, scoreboard, map grid, the R).",
+  "q3": "Yes, five reference pages so the den, territory and gate pages do not have to explain everything: tiers, the list of totems, the Dynamax Band, party rules and which team belongs to which region.",
+  "q4": "Unchanged. The emblem in the page header also shows on the pause menu's Next Stop line when one of these stops is next.",
+  "q5": "Yes. The pink Dynamax symbol, the red R and a stadium scoreboard are the series' own signals."
  }
 }
