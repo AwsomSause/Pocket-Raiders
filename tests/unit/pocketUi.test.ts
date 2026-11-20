@@ -3,6 +3,7 @@ import { pocketRoad, roadNext, roadStop, rotomNews, rotomTip, trainerId } from '
 import { changeSetting, SETTINGS } from '../../src/core/settingsRegistry';
 import { DEFAULT_SETTINGS } from '../../src/save/saveManager';
 import { page, pkPageOf, tierClass } from '../../src/ui/pocket/kit';
+import { pkAce, pkVersus } from '../../src/ui/pocket/screens/cards';
 import { pkPause } from '../../src/ui/pocket/screens/pause';
 import { pkSettingsHome } from '../../src/ui/pocket/screens/settings';
 import { firstThought, fitBody, pkBoard, pkConfirm, pkGrid, pkMenu, pkOptions, pkSaves, pkStats } from '../../src/ui/pocket/templates';
@@ -154,5 +155,28 @@ describe('Pocket look: shared pages', () => {
     expect(html).toContain('pkm fnt');
     // A long top bar steps its text down so the money and the save note stay on the phone's screen.
     expect(pkPause({ ...base, where: 'Trial Archipelago · Stop 12 of 30', money: '₽ 1,234,567' })).toMatch(/rp-bar" style="font-size:(9\.5|10|11)px/);
+  });
+});
+
+describe('Pocket look: battle cards for the animations playback', () => {
+  const vs = { name: 'Gretel', role: 'Fairy Tale Girl', cast: null, line: 'Hope you brought your best!', evil: false, team: 2, lead: null, player: null, playerName: 'Red', party: ['a'], backdrop: null };
+  it('the Trainer Intro has a root with its state and times, and keyed parts', () => {
+    const html = pkVersus(vs);
+    expect(pkPageOf(html)).toEqual({ id: 'vs', tier: 26, hud: false });
+    expect(html).toContain('gx-cue is-in');
+    expect(html).toMatch(/--pk-in:[\d.]+s;--pk-out:[\d.]+s/);
+    for (const k of ['vs', 'vs-l', 'vs-r', 'vs-n-me', 'vs-n-foe', 'vs-mark', 'vs-say']) expect(html).toContain(`data-key="${k}"`);
+    expect(html).toContain('Gretel: &quot;Hope you brought your best!&quot;');
+    expect(pkVersus(vs, 'hold')).toContain('gx-cue is-hold');
+    // Six ball slots each side: the rest of the player's six are empty slots.
+    expect(html.match(/class="px none"/g)?.length).toBe(5 + 4);
+  });
+  it('the Ace Announcement lies over the battle and names the ace with its facts', () => {
+    const html = pkAce({ name: 'Blastoise', role: 'Rival Blue sends out his ace', line: '', cast: null, mon: null, backdrop: null, beat: 2, types: ['water'], facts: ['Lv 38'] }, 'out');
+    expect(pkPageOf(html)).toEqual({ id: 'ace', tier: 26, hud: true });
+    expect(html).toContain('gx-cue is-out');
+    expect(html).toContain('>Water<');
+    expect(html).toContain('<em>Lv 38</em>');
+    for (const k of ['ace', 'ace-dim', 'ace-band', 'ace-name', 'ace-facts']) expect(html).toContain(`data-key="${k}"`);
   });
 });

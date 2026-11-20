@@ -116,3 +116,20 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .gx-saves .slot{cursor:pointer}
 .pkx .pks .gx-del{position:absolute;right:-8px;top:-14px;min-height:28px;z-index:2}
 .pkx .pks .gx-del.on{background:var(--red);color:#fff}
+
+/* ---- Battle cards (ui/pocket/screens/cards.ts) ---- */
+/* Playback states for the animations thread: is-in plays the entrance, is-hold stands every part at its end, is-out leaves. */
+.pkx .pks .gx-cue.is-hold *,.pkx .pks .gx-cue.is-hold *::before,.pkx .pks .gx-cue.is-hold *::after{animation-delay:-60s!important;animation-play-state:paused!important}
+.pkx .pks .gx-cue.is-out{opacity:0;transition:opacity var(--pk-out,.3s) ease-in}
+.pkx .pks .gx-hit{position:absolute;inset:0;z-index:9;cursor:pointer}
+.pkx .pks .vsp .vs-say{z-index:5}
+.pkx .pks .vsp.gx-evil .vs-r{background:repeating-linear-gradient(-70deg,#5a1020 0 30px,#6e1628 30px 60px)}
+.pkx .pks .vs-n .balls{display:flex;gap:3px}
+.pkx .pks .vs-n .balls .ko{filter:grayscale(1);opacity:.55}
+.pkx .pks .vs-n .balls .none{opacity:.35}
+/* The ace card lies over the battle: the arena dims behind it. */
+.pkx .pks .gx-ace{background:none}
+.pkx .pks .gx-ace::before{content:none}
+.pkx .pks .gx-shade-in{position:absolute;inset:0;background:rgba(13,21,48,.5);animation:gx-fade .2s both}
+.pkx .pks .gx-ace .aceband,.pkx .pks .gx-ace .ab-mon,.pkx .pks .gx-ace .gx-hit{pointer-events:auto}
+@keyframes gx-fade{from{opacity:0}}
