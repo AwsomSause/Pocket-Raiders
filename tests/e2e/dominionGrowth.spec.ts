@@ -35,7 +35,7 @@ async function dayOne(page: Page) {
 
 const block = (page: Page) => page.evaluate(() => (window as any).__pkr.session.run.expansion.dominion);
 
-/** Wins the battle on screen: every foe at 1 HP and only Splash to use (a Leader may heal up to four times). */
+/** Wins the battle on screen: every foe at 1 HP, only Splash to use and no healing items left. */
 async function winBattle(page: Page) {
   await waitForScene(page, 'Battle');
   await page.waitForTimeout(250);
@@ -44,6 +44,7 @@ async function winBattle(page: Page) {
     const run = (window as any).__pkr.session.run;
     run.party[0].moves = [{ ...run.party[0].moves[0], id: 'tackle', pp: 35 }];
     run.battle.enemyTeam.forEach((m: any) => { m.hp = 1; m.moves = [{ ...m.moves[0], id: 'splash', pp: 40 }]; });
+    run.battle.enemyItemsUsed = 99; // no healing items: one hit each
   });
   const b = view(page, 'Battle');
   const atDom = async () => (await scene(page)) === 'Dominion';
@@ -73,14 +74,25 @@ test('Growth: the section pages, the Card\'s five Gym ways, Break in a chain of 
   await expect(s.getByTestId('dom-map')).toBeVisible();
   await expect(s.getByTestId('dom-section')).toHaveText('Starting moves');
   await expect(s.getByTestId('dom-section')).toBeVisible();
-  // ] turns the pages; each names its list section. Find Gym Takeover.
+  // ] turns the pages; each names its list section.
   await s.getByTestId('dom-grid').click();
-  for (let i = 0; i < 40 && !(await s.getByTestId('dom-act-gym-takeover').isVisible()); i++) {
-    const was = await s.getByTestId('dom-section').textContent();
+  for (let i = 0; i < 2; i++) {
+    const was = `${await s.getByTestId('dom-section').textContent()}|${await s.getByTestId('dom-pager').textContent()}`;
     await page.keyboard.press('BracketRight');
-    await expect.poll(async () => `${await s.getByTestId('dom-section').textContent()}|${await s.getByTestId('dom-pager').textContent()}`).not.toBe(`${was}|`);
-    await page.waitForTimeout(120);
+    await expect.poll(async () => `${await s.getByTestId('dom-section').textContent()}|${await s.getByTestId('dom-pager').textContent()}`).not.toBe(was);
   }
+  // Straight to the page with Gym Takeover (paging all 40 pages by key is slow on a loaded runner).
+  const found = await page.evaluate(async () => {
+    const sc = (window as any).__pkr.game.scene.getScene('Dominion');
+    for (let i = 0; i < 80; i++) {
+      sc.cursor = { ...sc.cursor, page: i, at: 0 };
+      sc.view.refresh();
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+      if (document.querySelector('#rx [data-testid="dom-act-gym-takeover"]')) return i;
+    }
+    return -1;
+  });
+  expect(found).toBeGreaterThan(0);
   await expect(s.getByTestId('dom-section')).toHaveText('Gyms and Heroes');
   await shot('s3-gyms-page');
   // The page opens with Gym Takeover picked, so a tap on it opens the Card.
