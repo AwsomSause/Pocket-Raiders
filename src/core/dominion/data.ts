@@ -19,15 +19,32 @@ import squadsRaw from '../../data/dominion/squads.json';
 import rivalsRaw from '../../data/dominion/rivals.json';
 import rivalActionsRaw from '../../data/dominion/rivalActions.json';
 import outsideRaw from '../../data/dominion/outside.json';
+import growthRaw from '../../data/dominion/growth.json';
+import growthActionsRaw from '../../data/dominion/growthActions.json';
 import {
+  GrowthActionsSchema, GrowthFileSchema, type FieldFile as FieldFileT, type GrowthActions, type GrowthFile,
   ActionsFileSchema, ArmbandsFileSchema, BuildingsFileSchema, FoundingFileSchema, EmpireFileSchema, OutsideFileSchema, RivalActionsFileSchema, RivalsFileSchema, CrewFileSchema, DeskFileSchema, HqFileSchema, PyramidFileSchema, SquadsFileSchema, FieldFileSchema, GruntTypesFileSchema, HeroFileSchema, PersonalityFileSchema, StartFileSchema, TasksFileSchema,
   type ActionsFile, type ArmbandLook, type Building, type FoundingFile, type EmpireFile, type OutsideRow, type RivalActionsFile, type RivalsFile, type CrewFile, type DeskFile, type HqFile, type PyramidFile, type SquadsFile, type FieldFile, type GruntType, type HeroFile, type PersonalityFile, type StartFile, type Task,
 } from './schema';
 
-export const DOMINION_DATA: { start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; empire: EmpireFile; hq: HqFile; buildings: Building[]; pyramid: PyramidFile; rivals: RivalsFile; rivalActions: RivalActionsFile; outside: OutsideRow[]; personality: PersonalityFile; hero: HeroFile; desk: DeskFile; squads: SquadsFile; founding: FoundingFile; armbands: Record<string, ArmbandLook> } = {
+const growth = GrowthFileSchema.parse(growthRaw);
+const growthActions = GrowthActionsSchema.parse(growthActionsRaw);
+/** D10: Growth's plays (its own rows 1-150 and the list's rows 151-600) and crates join the field data; the rows that wait name their slice. */
+function withGrowth(f: FieldFileT): FieldFileT {
+  return {
+    ...f,
+    play: { ...f.play, ...growthActions.play, ...growth.play },
+    crates: { ...f.crates, ...growth.crates },
+    later: { ...f.later, byAction: { ...f.later.byAction, ...growthActions.later, ...growth.later } },
+  };
+}
+
+export const DOMINION_DATA: { growth: GrowthFile; growthActions: GrowthActions; start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; empire: EmpireFile; hq: HqFile; buildings: Building[]; pyramid: PyramidFile; rivals: RivalsFile; rivalActions: RivalActionsFile; outside: OutsideRow[]; personality: PersonalityFile; hero: HeroFile; desk: DeskFile; squads: SquadsFile; founding: FoundingFile; armbands: Record<string, ArmbandLook> } = {
   start: StartFileSchema.parse(startRaw),
   actions: ActionsFileSchema.parse(actionsRaw),
-  field: FieldFileSchema.parse(fieldRaw),
+  field: withGrowth(FieldFileSchema.parse(fieldRaw)),
+  growth,
+  growthActions,
   crew: CrewFileSchema.parse(crewRaw),
   tasks: TasksFileSchema.parse(tasksRaw).tasks,
   gruntTypes: GruntTypesFileSchema.parse(gruntTypesRaw).types,

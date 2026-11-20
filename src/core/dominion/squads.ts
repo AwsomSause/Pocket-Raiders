@@ -11,7 +11,7 @@ import {
   addCrewHook, addLoyalty, addModHook, addMorale, addOddsHook, addRunHook, addTaskKind, addXp, cantTake, crewOf, familyOf, leave, odds, rankN, rankWord, rng, taskById, taskLevel,
 } from './crew';
 import { notoriety } from './recruit';
-import { addCardHook } from './field';
+import { addOddsPartHook } from './field';
 import { fill } from './worldTurn';
 
 const Q = () => DOMINION_DATA.squads;
@@ -507,7 +507,7 @@ addTaskKind('runCrew', (b0, m0, ok0, ctx) => {
 
 // ---------- the Boss's Card: Vengeance and Glory travel with the members brought along ----------
 
-addCardHook((b, actionId, targetId, bring) => {
+addOddsPartHook((b, actionId, targetId, bring) => {
   if (!b.squads) return [];
   const parts: [string, number][] = [];
   const seen = new Set<string>();

@@ -11,7 +11,7 @@
   - Groups and Divisions: form, order every squad at once, break up.
   - Crew tasks now live: Match-Make (58) and Run a Crew (141). Both are counted in `tasks.json`'s live list (the total moves as other slices land).
   - Bail out a squad member: Cohesion +15.
-  - New hooks: `addModHook` and `addRunHook` in `crew.ts`, `addCardHook` in `field.ts`. New RNG stream `dominion-squad`; no old roll moves.
+  - New hooks: `addModHook` and `addRunHook` in `crew.ts`, `addOddsPartHook` in `field.ts` (D10 owns `addCardHook`). New RNG stream `dominion-squad`; no old roll moves.
 - **Screens**: `src/ui/redux/screens/dominion/squads.ts` draws mockup 13 (cards on the left, the builder on the right, the order and trait picker); `src/scenes/dominion/squadController.ts` keeps the cursors. The Rank Pyramid shows each member's squad Mark.
 - **Keys** (U on the Crew File opens it): arrows pick, Enter gives an order, Tab moves to the builder, E edit, N name (typing form), F focus, G group mode, T trait, X break up (press twice), [ ] page, Esc back. Q (command wheel), End (quit) and the number keys pass through.
 - Three target portraits added (see PROVENANCE.md).
