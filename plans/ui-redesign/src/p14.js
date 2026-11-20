@@ -51,3 +51,4 @@ const arena13 = pick(PR.comps.arena, 13).fn;
 comp(14, 'arena', (o = {}) => { const h = arena13(o); return o.dim || o.noorder || o.bottom || (o.text && !/What will/.test(o.text)) ? h : h.replace(/(<div class="say"[^>]*>.*?<\/p>)/s, `$1<small class="rtip">${rotom(.5)}<b>Rotom</b>Thunder Punch is super effective here.</small>`); });
 decor(14, 'title', { cls: 'tt14', add: `<div class="tt-rot">${rotom(2)}<p><b>Rotom</b>Bzzt! Homeland Week ends in 3 days.</p></div>` });
 decor(14, 'party', { cls: 'pk14', add: `<div class="pk-rot">${rotom(1)}<p><b>Rotom</b>Lucario has fainted. Use a Revive or visit a Pokémon Center.</p><i ${go('bag')}><kbd>B</kbd> Bag</i></div>` });
+decor(14, 'hub', { cls: 'hb14', add: `<div class="hb-rot">${rotom(.8)}<p><em>Rotom</em>Bzzt! 3 rewards are waiting.</p></div>`, fn: h => h.replace('<b>Achievements</b>', '<b>Achievements<u>3</u></b>').replace('<b>Events</b>', '<b>Events<u>1</u></b>') });

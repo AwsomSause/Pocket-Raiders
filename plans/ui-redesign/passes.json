@@ -231,5 +231,23 @@
   "q3": "Yes, seven. Ask Rotom, Search, a Controls overlay for the page you are on, Notices, a Confirm box, a Travel screen and the Quick Wheel. None of them add anything to the pages you already use.",
   "q4": "The Menu is the phone. Settings is an app on it, Search can jump straight to one setting, and the Controls overlay points to Settings › Controls for changing keys.",
   "q5": "Yes, the Rotom Phone comes straight from the newer games. In this game the helper is always called Rotom."
+ },
+ "15": {
+  "name": "The Journey",
+  "big": "A run now has a clear beginning and a clear end. A route line with the eight gyms on it rides on every screen, and starting a run, picking a starter and a Blessing, losing and winning each get their own pages.",
+  "pages": [
+   "New Run",
+   "Starter Quiz",
+   "Starter Pick",
+   "Blessing",
+   "Run Over",
+   "Run Report",
+   "Hall of Fame"
+  ],
+  "q1": "The Hall of Fame puts each team member in its own spotlight with confetti. Blessings are dealt out as three tall cards with the Legendary on them, and Run Over draws the route line up to the stop where you fell.",
+  "q2": "Before, a run just started and the only sign of progress was a 12 of 30 label. Now a thin route line sits under every header, under the battle bar, on the Continue ticket and inside the Rotom Phone, with a red diamond for every Gym.",
+  "q3": "Yes, seven. New Run is four small steps with a step bar on top, so no step is crowded, and Run Over is kept apart from the Run Report so the sad moment and the numbers do not fight.",
+  "q4": "The four run choices on the New Run page (kind of run, stage length, first region, seed) are the same switches as Settings › Gameplay. The phone shows the route line on its home screen.",
+  "q5": "Yes: a quiz from Professor Oak, three starters on Poké Balls, Legendary blessings and a Hall of Fame are all classic moments."
  }
 }

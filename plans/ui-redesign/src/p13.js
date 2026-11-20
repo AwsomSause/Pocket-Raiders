@@ -37,3 +37,4 @@ comp(13, 'arena', (o = {}) => { const f = o.foe || FOE, c = f.owner ? TRC[f.owne
 decor(13, 'title', { cls: 'tt13', add: `<div class="tt-hero">${spr('t-red', 4)}<b>Red</b><span>Rank 4 · ID 04821</span></div>` });
 decor(13, 'menu', { cls: 'mn13', fn: h => h.replace(/<div class="mn-strip">.*?<\/div>/s, `<div class="mn-id" ${go('tcard')}><i></i><b>Red</b><span>Kanto · Stage 12 of 30</span><span>₽ ${RUN.money}</span><span>2 badges</span><span>1:42</span></div>`).replace(/(--a:#b97f00" )/, '$1' + go('tcard') + ' ') });
 decor(13, 'party', { cls: 'pk13' });
+decor(13, 'hub', { cls: 'hb13', fn: h => h.replace(/<div class="hub-cap">.*?<\/div>/, `<div class="hb-card" ${go('tcard')}><i>${spr('t-red', 1.3)}</i><b>Red</b><span>Rank 4 · ID 04821 · 2 badges</span><em>Trainer Card</em></div>`), add: `<div class="hb-riv" ${go('rivals')}><b>Rivals on the road</b>${RIV.map(r => `<span style="--sc:${TRC[r[0]] || '#888'}"><i>${spr(r[1], 1)}</i>${r[0]}</span>`).join('')}</div>` });

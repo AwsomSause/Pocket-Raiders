@@ -51,3 +51,4 @@ for n, src in [('t-clerk', 'trainer/pr/clerk_f'), ('t-clerkm', 'trainer/pr/clerk
     im = first(src); print(n, im.size); im.save(OUT + n + '.png', optimize=True)
 im = first('pokemon/479'); print('m-479', im.size); im.save(OUT + 'm-479.png', optimize=True)
 Image.open(A + 'overworld/followers/ROTOM.png').convert('RGBA').save(OUT + 'fw-479.png', optimize=True)
+im = Image.open(A + 'bosses/oak.png').convert('RGBA'); im = im.crop(im.getbbox()); print('t-oak', im.size); im.save(OUT + 't-oak.png', optimize=True)
