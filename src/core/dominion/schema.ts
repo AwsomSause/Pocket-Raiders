@@ -160,6 +160,16 @@ export const FieldFileSchema = z.object({
     vehicles: z.array(z.object({ id: S, name: S, price: N0, hq: I.min(1).max(6), does: S }).strict()).min(1),
   }).strict(),
   later: z.object({ byAction: z.record(S, S), byUnlock: z.array(z.tuple([S, S])) }).strict(),
+  /** D29: the District file page (mockup v4 m4): Money, Muscle and Shadow groups, action and target icons, its words. */
+  file: z.object({
+    _note: S.optional(),
+    groups: z.array(z.object({ id: z.enum(['money', 'muscle', 'shadow']), name: S, colour: S, icon: S }).strict()).length(3),
+    sections: z.record(S, z.enum(['money', 'muscle', 'shadow'])),
+    byAction: z.record(S, z.enum(['money', 'muscle', 'shadow'])),
+    icons: z.record(S, S),
+    kindIcons: z.record(S, S),
+    lines: z.record(S, S),
+  }).strict(),
   lines: z.object({ wrongPhase: z.object({ day: S, night: S, evening: S }).strict() }).catchall(S),
 }).strict();
 export type FieldFile = z.infer<typeof FieldFileSchema>;
