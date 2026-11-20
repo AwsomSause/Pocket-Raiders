@@ -24,7 +24,7 @@ import { typeSoundFor } from '../../core/presentation/typeSound';
 import { playSfx } from '../audio';
 import { loadAssets } from '../lazyAssets';
 import type { Visual } from '../sprites';
-import { textStyle } from '../theme';
+import { FONT_FAMILY, textStyle } from '../theme';
 import { animSettingsFrom } from '../../core/accessibility';
 import { resolveAnim, type AnimPlan } from '../../core/presentation/animRegistry';
 import { abilityPackAnim } from '../../core/presentation/abilityAnims';
@@ -48,6 +48,8 @@ export interface FxOptions {
   mastery?: (moveId: string) => MoveRank;
   /** A scene that takes the whole screen is starting (true) or over (false): the battle clears whatever it draws over the canvas. */
   fullScreen?: (on: boolean) => void;
+  /** Settings > Damage numbers (off: none) and Damage popup size. Shown at size 1 when left out. */
+  numbers?: () => { show: boolean; scale: number };
 }
 
 const BADGES: Record<string, { label: string; color: string }> = {
@@ -55,14 +57,6 @@ const BADGES: Record<string, { label: string; color: string }> = {
   weak: { label: 'NOT VERY EFFECTIVE', color: '#a0a8b8' },
   immune: { label: 'NO EFFECT', color: '#707888' },
   crit: { label: 'CRITICAL HIT!', color: '#f8e050' },
-};
-
-const NUMBER_COLORS: Record<string, string> = {
-  damage: '#f8f8f8',
-  crit: '#f8e050',
-  super: '#f8a030',
-  weak: '#c0c8d8',
-  heal: '#78f090',
 };
 
 const hex = (color: string) => Phaser.Display.Color.HexStringToColor(color).color;
@@ -423,19 +417,36 @@ export class BattleFx {
     });
   }
 
+  /**
+   * The one number per hit (redesign pass 5, Numbers and Stamps): it springs out of the hit (0.4 to full size), hangs,
+   * then lifts away. White, a bigger yellow one for a critical hit, green "+" for healing; beside the Pokémon's middle.
+   */
   private number(side: Side, amount: number, tone: string, motion: boolean): void {
     const visual = this.opts.sprite(side);
-    if (!visual || amount <= 0) return;
-    const { x, y } = this.top(visual);
+    const look = this.opts.numbers?.() ?? { show: true, scale: 1 };
+    if (!visual || amount <= 0 || !look.show) return;
+    const h = visual instanceof Phaser.GameObjects.Sprite ? visual.displayHeight * visual.originY : visual.getBounds().height || 120;
+    const x = visual.x + (side === 'enemy' ? -20 : 40);
+    const y = visual.y - h * 0.5 - 6;
     const sign = tone === 'heal' ? '+' : '-';
+    const color = tone === 'crit' ? '#ffcb05' : tone === 'heal' ? '#7dffa0' : '#ffffff';
     const text = this.scene.add
-      .text(x + (side === 'enemy' ? 60 : -60), y, `${sign}${amount}`, textStyle(tone === 'crit' ? 40 : 34, NUMBER_COLORS[tone] ?? '#ffffff', { stroke: '#181818', strokeThickness: 6 }))
-      .setOrigin(0.5);
+      .text(x, y, `${sign}${amount}`, textStyle(tone === 'crit' ? 60 : 44, color, { fontFamily: `"Jersey 15", ${FONT_FAMILY}`, fontSize: `${tone === 'crit' ? 60 : 44}px`, stroke: '#131c36', strokeThickness: 5, shadow: { offsetX: 3, offsetY: 3, color: '#131c36', fill: true, stroke: true, blur: 0 } }))
+      .setOrigin(0.5)
+      .setDepth(900);
+    const size = look.scale;
     if (motion) {
-      text.setScale(0.6);
-      this.scene.tweens.add({ targets: text, scale: 1, duration: 120, ease: 'Back.easeOut' });
-      this.scene.tweens.add({ targets: text, y: y - 46, alpha: 0, delay: 500, duration: 500, onComplete: () => text.destroy() });
+      text.setScale(0.4 * size).setAlpha(1);
+      this.scene.tweens.chain({
+        targets: text,
+        tweens: [
+          { scale: size, duration: 140, ease: 'Back.easeOut' },
+          { y: y - 54, alpha: 0, delay: 450, duration: 300, ease: 'Cubic.easeIn' },
+        ],
+        onComplete: () => text.destroy(),
+      });
     } else {
+      text.setScale(size);
       this.scene.tweens.add({ targets: text, alpha: 0, delay: 700, duration: 300, onComplete: () => text.destroy() });
     }
   }

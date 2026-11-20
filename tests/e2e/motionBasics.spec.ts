@@ -220,3 +220,21 @@ test('the foe trainer steps in to throw, the ball leaves the hand, and the train
   expect(await trainers()).toBe(0);
   expect(errors).toEqual([]);
 });
+
+test('one damage number per hit: springs out at the mockup size, obeys Damage numbers and the popup size', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'numbers-e2e');
+  const numbers = () => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.list.filter((c: any) => c.type === 'Text' && /^[-+]\d+$/.test(c.text)).map((c: any) => ({ text: c.text, size: c.style.fontSize, color: c.style.color })));
+  const hit = (tone: string) => page.evaluate((t) => (window as any).__pkr.game.scene.getScene('Battle').fx.play([{ kind: 'number', side: 'enemy', amount: 25, tone: t, motion: true }]), tone);
+  await hit('super');
+  expect(await numbers()).toEqual([{ text: '-25', size: '44px', color: '#ffffff' }]);
+  await expect.poll(numbers, { timeout: 3_000 }).toHaveLength(0);
+  await hit('crit');
+  expect(await numbers()).toEqual([{ text: '-25', size: '60px', color: '#ffcb05' }]);
+  await expect.poll(numbers, { timeout: 3_000 }).toHaveLength(0);
+  await page.evaluate(() => ((window as any).__pkr.session.settings.damageNumbers = false));
+  await hit('damage');
+  expect(await numbers()).toHaveLength(0);
+  expect(errors).toEqual([]);
+});

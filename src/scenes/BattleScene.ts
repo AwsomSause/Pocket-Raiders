@@ -649,6 +649,7 @@ export class BattleScene extends Phaser.Scene {
       sprite: (side) => (side === 'player' ? this.playerSprite : this.enemySprite),
       mastery: (moveId) => moveRank(session.profile.moveUses?.[moveId] ?? 0),
       fullScreen: (on) => this.rx?.visible(!on),
+      numbers: () => ({ show: services().session.settings.damageNumbers, scale: services().session.settings.popupScale }),
     });
 
     this.shown = { player: structuredClone(run.party[battle.activeIndex]!), enemy: structuredClone(currentEnemy(battle)) };
@@ -2399,13 +2400,6 @@ export class BattleScene extends Phaser.Scene {
     const f = cameraFocus(kind, animationStrength(st));
     const cam = this.cameras.main;
     this.tweens.add({ targets: cam, zoom: 1 + f.zoom, duration: f.ms / 2, yoyo: true, ease: 'Sine.easeInOut' });
-  }
-
-  private floatDamage(sprite: { x: number; y: number } | null | undefined, amount: number): void {
-    if (!sprite || this.motion === 'off') return;
-    const text = this.add.text(sprite.x, sprite.y - 60, `-${amount}`, textStyle(24, '#ffe9a8')).setOrigin(0.5).setDepth(900).setScale(services().session.settings.popupScale);
-    text.setStroke('#201020', 4);
-    this.tweens.add({ targets: text, y: text.y - 36, alpha: 0, duration: this.motion === 'full' ? 900 : 500, ease: 'Cubic.easeOut', onComplete: () => text.destroy() });
   }
 
 
@@ -5913,7 +5907,7 @@ export class BattleScene extends Phaser.Scene {
           if (e.type === 'damage' && e.hpAfter > 0 && e.hpAfter < mon!.hp && bigHit(mon!.hp - e.hpAfter, maxHp(services().session.content, mon!), e.effectiveness, !!e.crit)) {
             this.cheer({ kind: 'hit', on: e.side === 'enemy' ? 'foe' : 'you', superEffective: e.effectiveness >= 2 }, 120);
           }
-          if (e.hpAfter < mon!.hp && services().session.settings.damageNumbers) this.floatDamage(sprite, mon!.hp - e.hpAfter);
+          // The number itself comes from the event's cue (BattleFx, one per hit: pass 5); this used to float a second one.
           if (e.type === 'damage' && e.hpAfter < mon!.hp) this.buzz(this.lastMoveType, e.effectiveness > 1);
           if (e.type === 'damage' && e.side === 'player' && (e.crit || e.effectiveness >= 2) && e.hpAfter < mon!.hp && this.trainerActor?.sprite.visible) void this.trainerActor.play('hit');
           if (e.type === 'damage' && e.crit) critLetterbox(this, session.settings.critLetterbox, this.motion);

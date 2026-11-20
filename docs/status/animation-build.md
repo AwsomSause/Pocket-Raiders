@@ -54,3 +54,6 @@ Limits: the Z-Move mockup drops a fireball; by Kice's move rule the move's own e
 
 The rest of slice 2, then conditions, arenas, side roads, screens and flow from the two lists.
 The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` carry a **Build** line per entry.
+- Damage number shown twice (REANIMATE #12, a need): every hit floated two numbers (BattleScene's own and the event's
+  cue). Now one, from the cue, as the mockup's pass 5: springs out 0.4 to full in 140 ms, hangs 450 ms, lifts 54 px and
+  fades; white 44 px, critical 60 px yellow, healing green "+". It obeys Damage numbers (off: none) and Damage popup size.
