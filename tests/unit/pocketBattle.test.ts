@@ -1,0 +1,105 @@
+import { describe, expect, it } from 'vitest';
+import { pkPageOf } from '../../src/ui/pocket/kit';
+import { isBagList, PK_BAG_SIZE, pkBattle, pkBattleList } from '../../src/ui/pocket/screens/battle';
+import type { BattleBox, BattleListModel, BattleListRow, BattleModel } from '../../src/ui/redux/screens/battle';
+
+// The Pocket look's battle screen (mock-ups `battle`, `b-switch`, `b-bag`): the foe's plate, the move cards, the
+// command pills and the speech line, then the Party and Bag windows laid over the bare field.
+
+const count = (html: string, bit: string | RegExp): number => html.split(bit).length - 1;
+const box = (name: string, over: Partial<BattleBox> = {}): BattleBox => ({ name, level: 'Lv 5', hp: 1, hpText: '', xp: null, tags: [], team: null, ...over });
+const TABS = { labels: ['Attack', 'Party', 'Item', 'Auto', 'i'], index: -1, auto: false, autoOff: false };
+const model = (over: Partial<BattleModel> = {}): BattleModel => ({
+  foes: [box('Starly', { level: 'Lv 4', hp: 0.5, types: ['normal', 'flying'], tip: 'foe:0' })],
+  mine: [box('Turtwig', { hpText: '25 / 25', xp: 0.4, types: ['grass'], tip: 'mine:0' })],
+  text: 'What will Turtwig do?', menu: null, tabs: TABS,
+  header: 'Stage 1', status: '', momentum: '', note: '', auto: false, party: { n: 3, out: 1 }, ...over,
+});
+const MOVES = [{ label: 'Tackle', sub: 'PP 35/35', type: 'normal', tip: 'move:0' }, { label: 'Absorb', sub: 'PP 25/25', type: 'grass', tip: 'move:1' }, { label: 'Withdraw', sub: 'PP 0/40', type: 'water', off: true, tip: 'move:2' }];
+
+describe('the Pocket battle screen', () => {
+  it('is a see-through page with both plates, the words and the command pills', () => {
+    const html = pkBattle(model());
+    expect(pkPageOf(html)).toEqual({ id: 'battle', tier: 26, hud: true });
+    expect(html).toContain('Starly');
+    expect(html).toContain('Turtwig');
+    expect(html).toContain('25/25');
+    expect(html).toContain('What will Turtwig do?');
+    // The tabs are the mock-up's pills, with its words: Fight, Pokémon, Bag.
+    expect(html).toContain('Fight');
+    expect(html).toContain('Pokémon');
+    expect(html).toContain('Bag');
+    expect(count(html, 'data-act="tab"')).toBeGreaterThanOrEqual(5);
+    // The foe's half-gone HP shows as a number too.
+    expect(html).toContain('50%');
+  });
+  it('draws the moves as typed cards, the spent one dimmed, each one a pick', () => {
+    const html = pkBattle(model({ tabs: { ...TABS, index: 0 }, menu: { options: MOVES, index: 1 } }));
+    expect(count(html, /class="mv3[ "]/g)).toBe(3);
+    expect(count(html, 'data-act="pick"')).toBe(3);
+    expect(html).toContain('Absorb');
+    expect(html).toContain('PP 0/40');
+    expect(html).toMatch(/mv3[^"]*gx-bt-off|gx-bt-off[^"]*mv3/);
+  });
+  it('a battle with no tabs and no menu still draws, with nothing to press', () => {
+    const html = pkBattle(model({ tabs: null, text: 'Starly used Growl!' }));
+    expect(html).toContain('Starly used Growl!');
+    expect(count(html, 'data-act="pick"')).toBe(0);
+  });
+});
+
+const mon = (label: string, hp: number, over: Partial<BattleListRow> = {}): BattleListRow => ({ label, art: null, hp, tag: '', off: false, level: 5, types: ['grass'], ...over });
+const item = (label: string, tag: string, off = false): BattleListRow => ({ label, art: null, hp: null, tag, off });
+const list = (rows: BattleListRow[], over: Partial<BattleListModel> = {}): BattleListModel => ({ title: 'Switch to…', note: '', tabs: null, n: rows.length, index: 0, row: (i) => rows[i]!, back: true, ...over });
+
+describe('the Pocket battle Party and Bag windows', () => {
+  it('the party stands as pills with the lit one on a card and a Send out button', () => {
+    const rows = [mon('Turtwig', 1, { tag: 'IN BATTLE' }), mon('Starly', 0.3, { types: ['normal', 'flying'] }), mon('Shinx', 0, { tag: 'FNT', off: true, types: ['electric'] })];
+    const html = pkBattleList(list(rows, { index: 1, hint: 'Keen Eye: its accuracy can’t be lowered.' }));
+    expect(pkPageOf(html)?.id).toBe('b-switch');
+    expect(count(html, /class="sw btn typed/g)).toBe(3);
+    expect(html).toMatch(/class="sw btn typed on"[^>]*data-key="bl-1"/);
+    expect(html).toContain('Fainted');
+    expect(html).toContain('Lv 5');
+    expect(html).toContain('Keen Eye');
+    expect(html).toContain('<b>Send out</b>');
+    expect(html).toContain('<b>Back</b>');
+    expect(count(html, 'data-act="pick"')).toBe(4);
+  });
+  it('a fainted pick says why it can’t go, and the button is dimmed', () => {
+    const rows = [mon('Turtwig', 1), mon('Shinx', 0, { tag: 'FNT', off: true })];
+    const html = pkBattleList(list(rows, { index: 1, why: 'Shinx has fainted.' }));
+    expect(html).toContain('Shinx has fainted.');
+    expect(html).toMatch(/btn on gx-bl-off/);
+  });
+  it('the Bag is pocket tabs over a grid of tiles, with the lit item’s card', () => {
+    const rows = Array.from({ length: 12 }, (_, i) => item(`Potion ${i + 1}`, `×${i + 1}`, i === 2));
+    const d = list(rows, { title: 'Bag', tabs: { labels: ['Medicine', 'Balls'], index: 0 }, index: 10, hint: 'Restores 20 HP.' });
+    expect(isBagList(d)).toBe(true);
+    const html = pkBattleList(d);
+    expect(pkPageOf(html)?.id).toBe('b-bag');
+    // Nine tiles at a time, scrolled a row at a time so the lit one (11th) shows.
+    expect(count(html, /class="it pn/g)).toBe(PK_BAG_SIZE);
+    expect(html).toContain('data-key="bl-10"');
+    expect(html).not.toContain('data-key="bl-0"');
+    expect(html).toContain('4–12 of 12');
+    expect(html).toContain('× 11');
+    expect(html).toContain('Restores 20 HP.');
+    expect(html).toContain('<b>Use</b>');
+    expect(count(html, 'data-act="tab"')).toBe(2);
+  });
+  it('a map stop’s quick choice stays one window in the middle; an empty list says so', () => {
+    const d = list([item('Old Rod', ''), item('Leave', '')], { center: true, lead: '! A bite !' });
+    expect(isBagList(d)).toBe(false);
+    const html = pkBattleList(d);
+    expect(pkPageOf(html)?.id).toBe('b-list');
+    expect(html).toContain('gx-mid');
+    expect(html).toContain('! A bite !');
+    expect(pkBattleList(list([]))).toContain('Nothing here.');
+  });
+  it('the summary sheet lies over the list and goes back on a click', () => {
+    const html = pkBattleList(list([mon('Turtwig', 1)]), 'Turtwig\nLv 5');
+    expect(html).toContain('gx-bl-sheet');
+    expect(html).toContain('Turtwig<br>Lv 5');
+  });
+});

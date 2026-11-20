@@ -7,6 +7,7 @@ import type { ReduxCtx } from '../stage';
 import { type Art, pic, scrollStart } from '../templates';
 import { confirmBox } from './saves';
 import { phBattle, phBattleList } from '../../phantom/screens/battle';
+import { pkBattle, pkBattleList } from '../../pocket/screens/battle';
 
 export interface BattleBox {
   name: string;
@@ -24,6 +25,10 @@ export interface BattleBox {
   team: { n: number; out: number } | null;
   /** The box's key for its hover card and its pin ("foe:0", "mine:1"); none leaves the box inert. */
   tip?: string;
+  /** The Pokémon's types (none while it is hidden): the Pocket look colours its plate by them. */
+  types?: readonly string[];
+  /** Its picture (front sprite file), for the speech panel's face. */
+  file?: string | null;
 }
 
 export interface BattleOption { label: string; sub?: string; type?: string; off?: boolean; /** Hover key for this choice's tooltip. */ tip?: string }
@@ -230,6 +235,7 @@ export function trayHeight(v: number, n: number): number {
 
 export function battleView(c: ReduxCtx, d: BattleModel): string {
   if (c.ph) return phBattle(c.ph, d);
+  if (c.pk) return pkBattle(d);
   if (d.evolve) return evolveView(c, d.evolve, d.text);
   const v = c.v(4), opts = d.menu?.options ?? [], n = opts.length, on = d.menu?.index ?? -1;
   const many = v === 3 ? n > 4 : Math.ceil(n / 2) > 2;
@@ -330,6 +336,9 @@ export interface BattleListRow {
   /** A short mark for a Pokémon ("IN BATTLE", "FNT", "✔ +20 HP"), or the count of an item ("×3"). */
   tag: string;
   off: boolean;
+  /** Its level and types, for a Pokémon (the Pocket look's party pills). */
+  level?: number;
+  types?: readonly string[];
 }
 
 export interface BattleListModel {
@@ -349,6 +358,10 @@ export interface BattleListModel {
   center?: boolean;
   /** A big pulsing headline over a gold bar ("! A bite !"), above the title. */
   lead?: string;
+  /** The lit row's line (what the item does, the Pokémon's ability), for the Pocket look's side card. */
+  hint?: string;
+  /** Why the lit row can't be picked now ("No Pokémon can use the Potion right now."), or ''. */
+  why?: string;
 }
 
 /** "Bag  (P pins to the hotbar)": the title, and the words in brackets as a small note. */
@@ -366,6 +379,7 @@ const countText = (t: string): string => t.replace(/^[×x]\s*(\d+)$/, '× $1');
 /** The battle's Party and Item windows (the mock-ups' overlays): a small window over the field, left of the arena. */
 export function battleListView(c: ReduxCtx, d: BattleListModel): string {
   if (c.ph) return phBattleList(c.ph, d);
+  if (c.pk) return pkBattleList(d);
   const n = Math.max(0, d.n), index = Math.max(0, Math.min(n - 1, d.index));
   const s = scrollStart(n, index, BATTLE_LIST_ROWS), end = Math.min(n, s + BATTLE_LIST_ROWS);
   const items = d.tabs !== null;

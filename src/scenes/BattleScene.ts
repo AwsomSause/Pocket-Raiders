@@ -1836,6 +1836,8 @@ export class BattleScene extends Phaser.Scene {
         xp: box.isPlayer ? xpShown : null,
         tags: [mon.status ? STATUS_LABELS[mon.status.id]?.label ?? '' : '', word(box.teraBadge), word(box.roleBadge), word(box.rageBadge)].filter(Boolean),
         team: !box.isPlayer && battle?.trainer ? { n: battle.enemyTeam.length, out: battle.enemyTeam.filter((m) => m.hp <= 0).length } : null,
+        types: this.foeHidden(mon) ? [] : getSpecies(content, mon.speciesId).types,
+        file: box.isPlayer ? monFile(this, mon.speciesId, 'front', !!mon.shiny) : null,
       };
       this.tweens.killTweensOf(box.rx);
       // The same drain the canvas bar plays, so the two never disagree about when the HP has settled.

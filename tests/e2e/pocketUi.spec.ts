@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { start, waitForScene, watch } from './helpers/newUi';
+import { start, toCommands, waitForScene, watch } from './helpers/newUi';
 import { onPkPage, pkFitProblems, pkView, toPocketMap } from './helpers/pocketUi';
 
 // The Pocket look (the Pokémon-style UI redesign, built from the mock-ups in plans/ui-redesign), part 1: the Title,
@@ -531,6 +531,50 @@ test('Pocket look: the Story Journal is a numbered list with the lit entry read 
     await step(page, 'ArrowDown');
     expect(await jr.locator('.jr.on').getAttribute('data-key')).not.toBe(first);
   }
+  await step(page, 'Escape');
+  expect(await runNow(page)).toBe(before);
+  expect(errors).toEqual([]);
+});
+
+test('Pocket look: a battle is the mock-up HUD; Party and Bag open as pills and tiles, and looking changes nothing', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=pk-bt2');
+  await toPocketMap(page);
+  await page.evaluate(() => { Object.assign((window as any).__pkr.session.run.inventory, { potion: 2 }); });
+  await page.evaluate(() => {
+    const map = (window as any).__pkr.game.scene.getScene('Map');
+    map.activate(map.options.findIndex((o: any) => o.kind === 'node'));
+  });
+  await waitForScene(page, 'Battle');
+  await onPkPage(page, 'Battle', 'battle');
+  await toCommands(page);
+  const hud = pkView(page, 'Battle', 'battle');
+  await expect(hud.locator('.lb.top')).toHaveCount(1);
+  await expect(hud.locator('.lb-me').first()).toBeVisible();
+  await fits(page, 'Battle', 'battle');
+  const before = await runNow(page);
+  // Fight: the moves are typed cards.
+  await hud.locator('[data-act="tab"]').first().click();
+  await expect(hud.locator('.mv3').first()).toBeVisible();
+  await step(page, 'Escape');
+  // Pokémon: the party pills and the lit one's card; the HUD hides behind it.
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').tabs.press(1));
+  await onPkPage(page, 'Battle', 'b-switch');
+  const sw = pkView(page, 'Battle', 'b-switch');
+  await expect(sw.locator('.sw.on')).toHaveCount(1);
+  await expect(sw.locator('.sw-pick')).toContainText('Send out');
+  await expect(hud.locator('.lb.top')).toBeHidden();
+  await fits(page, 'Battle', 'b-switch');
+  await step(page, 'Escape');
+  // Bag: pocket tabs, the tiles and the item's card.
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').tabs.press(2));
+  await onPkPage(page, 'Battle', 'b-bag');
+  const bag = pkView(page, 'Battle', 'b-bag');
+  await expect(bag.locator('.bb-tabs .btn.on')).toHaveCount(1);
+  await expect(bag.locator('.it.on')).toHaveCount(1);
+  await expect(bag.locator('.bb-use')).toContainText('Use');
+  await fits(page, 'Battle', 'b-bag');
   await step(page, 'Escape');
   expect(await runNow(page)).toBe(before);
   expect(errors).toEqual([]);

@@ -43,7 +43,7 @@ export interface PickerRow {
   /** The item this row stands for, when it is one (the New UI's Bag shows who in the party it would help). */
   item?: string;
   /** A Pokémon row: its look, its HP left (0 to 1) and a short mark ("IN BATTLE", "FNT"). The New UI's battle window draws these. */
-  mon?: { speciesId: string; shiny: boolean; hp: number; mark: string };
+  mon?: { speciesId: string; shiny: boolean; hp: number; mark: string; level?: number; types?: readonly string[] };
   /** A board row said outright (the New UI's Bond screen): the line under the name, a bar (0 to 100) and a tag. */
   board?: { title: string; sub: string; pct: number | null; tag: string };
   /** A menu row said outright (the New UI's Camp): the words at the row's right, the detail card's text and its picture (atlas file). */
@@ -579,6 +579,8 @@ export function partyRow(content: Content, mon: PokemonInstance, problem: string
     hint: [opts.hint ?? abilityHint(content, mon), extra].filter(Boolean).join('  ') || undefined,
     mon: {
       speciesId: lookSpecies(content, mon).id,
+      level: mon.level,
+      types: lookSpecies(content, mon).types,
       shiny: !!mon.shiny,
       hp: Math.max(0, Math.min(1, mon.hp / Math.max(1, calcStats(content, mon).hp))),
       mark: opts.preview ? `${sign} ${opts.preview.short}` : [mon.hp <= 0 ? 'FNT' : mon.status ? STATUS_LABELS[mon.status.id]?.label : undefined, opts.tag].filter(Boolean).join(' · '),

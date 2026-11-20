@@ -416,3 +416,122 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .journal .gx-jr-bar i{position:absolute;left:0;top:0;bottom:0;background:var(--yel)}
 .pkx .pks .journal .gx-jr-bar em{position:relative;display:block;text-align:center;font:800 10px/10px var(--fb);font-style:normal}
 .pkx .pks .journal .jr b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:290px}
+/* Battle HUD: it lies over the canvas (a clear page); only its plates, buttons and windows take clicks. */
+.pkx .pks .gx-bt{background:none}
+.pkx .pks .gx-bt .lb.top{cursor:default}
+.pkx .pks .gx-bt .lb.top[data-act]{cursor:pointer}
+.pkx .pks .gx-bt .lb.top.gx-bt-more{height:52px}
+.pkx .pks .gx-bt .gx-bt-tag{text-decoration:none;font-size:11px;font-weight:800;color:var(--ink);background:var(--yel);border-radius:999px;padding:0 8px}
+.pkx .pks .gx-bt .balls img.gx-bt-out{filter:grayscale(1) brightness(.6)}
+.pkx .pks .gx-bt .gx-bt-bar{position:absolute;left:12px;z-index:4}
+.pkx .pks .gx-bt .gx-bt-lines{position:absolute;left:16px;z-index:3;max-width:470px;display:flex;flex-direction:column;gap:2px;pointer-events:none}
+.pkx .pks .gx-bt .gx-bt-lines p{margin:0;font-size:13px;font-weight:800;color:#fff;text-shadow:2px 2px 0 #0d1530,-1px -1px 0 #0d1530;white-space:pre-line}
+.pkx .pks .gx-bt .lb.bot.gx-bt-low{height:58px}
+.pkx .pks .gx-bt .lb-me.gx-bt-ally{height:30px;opacity:.9}
+.pkx .pks .gx-bt .lb-me.gx-bt-ally .lb-n b{font-size:18px !important}
+.pkx .pks .gx-bt .lb-me[data-act]{cursor:pointer}
+.pkx .pks .gx-bt .mv3{cursor:pointer}
+.pkx .pks .gx-bt .mv3 .gx-bt-ty{position:absolute;right:8px;top:6px;opacity:.9}
+.pkx .pks .gx-bt .mv3 .mv-r{display:flex;gap:8px;font-size:12px;font-weight:800}
+.pkx .pks .gx-bt .mv3 .mv-r i{font-style:normal}
+.pkx .pks .gx-bt .moves.gx-bt-many{grid-template-columns:repeat(3,1fr);gap:6px}
+.pkx .pks .gx-bt .moves.gx-bt-many .mv3{height:30px}
+.pkx .pks .gx-bt .gx-bt-off{opacity:.45}
+.pkx .pks .gx-bt .gx-bt-opts{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.pkx .pks .gx-bt .gx-bt-opts.gx-bt-many{grid-template-columns:repeat(4,1fr);gap:4px}
+.pkx .pks .gx-bt .gx-bt-opts .btn{height:52px;justify-content:center;flex-direction:column;gap:0;cursor:pointer;min-width:0}
+.pkx .pks .gx-bt .gx-bt-opts.gx-bt-many .btn{height:30px}
+.pkx .pks .gx-bt .gx-bt-opts .btn small{font-size:11px;font-weight:800;opacity:.8}
+.pkx .pks .gx-bt .gx-bt-tabs{position:absolute;right:12px;bottom:132px;z-index:6;display:flex;gap:6px}
+.pkx .pks .gx-bt .gx-bt-tabs .cw{flex:none;width:auto;height:30px;padding:0 12px;border-radius:10px;outline:none}
+.pkx .pks .gx-bt .gx-bt-tabs .cw b{font-size:15px}
+.pkx .pks .gx-bt .gx-bt-tabs .cw.on{grid-column:auto;height:30px;border-radius:10px;animation:none}
+.pkx .pks .gx-bt .gx-bt-tabs .cw.on b{font-size:15px}
+.pkx .pks .gx-bt .gx-bt-tabs kbd{display:none}
+.pkx .pks .gx-bt .say17.gx-bt-say{top:auto;bottom:72px;max-width:600px}
+.pkx .pks .gx-bt .say17.gx-bt-say.gx-up{bottom:134px}
+.pkx .pks .gx-bt .say17.gx-bt-say>i{grid-row:1}
+.pkx .pks .gx-bt .say17.gx-bt-say p{white-space:normal;max-width:520px}
+.pkx .pks .gx-bt .gx-bt-note{position:absolute;left:0;right:0;top:118px;display:flex;justify-content:center;z-index:5;pointer-events:none}
+.pkx .pks .gx-bt .gx-bt-note span{max-width:560px;font-size:14px;font-weight:800;color:var(--ink);background:var(--yel);border:2px solid var(--ink);border-radius:999px;padding:2px 14px;text-align:center}
+.pkx .pks .gx-bt .gx-bt-auto{position:absolute;left:50%;top:70px;translate:-50% 0;z-index:6;cursor:pointer;color:#fff;background:#56627f;border:3px solid #fff;border-radius:999px;padding:2px 16px;font:400 18px/1.4 var(--fd)}
+.pkx .pks .gx-bt .gx-bt-mark{position:absolute;translate:-50% 0;z-index:3;text-decoration:none;font-size:11px;font-weight:800;color:#fff;background:var(--red);border-radius:999px;padding:0 8px;pointer-events:none}
+.pkx .pks .gx-bt .gx-bt-exp{position:absolute;right:12px;top:64px;width:320px;display:flex;flex-direction:column;gap:6px;z-index:5;pointer-events:none}
+.pkx .pks .gx-bt .gx-bt-exp>.pn{display:flex;align-items:center;gap:8px;padding:5px 10px}
+.pkx .pks .gx-bt .gx-bt-exp>.pn.on{background:#fff8d6}
+.pkx .pks .gx-bt .gx-bt-exp>.pn>div{flex:1;display:flex;flex-direction:column;gap:4px}
+.pkx .pks .gx-bt .gx-bt-exp p{margin:0;display:flex;justify-content:space-between;font-size:13px}
+.pkx .pks .gx-bt .gx-bt-exp .xp{display:block;height:6px;border-radius:999px;background:#d8deea;overflow:hidden}
+.pkx .pks .gx-bt .gx-bt-exp .xp i{display:block;height:100%;background:#59b7ff}
+.pkx .pks .gx-bt .gx-bt-level{position:absolute;right:30px;top:64px;width:320px;z-index:7;display:flex;flex-direction:column;gap:5px;padding:12px 16px}
+.pkx .pks .gx-bt .gx-bt-lvh{display:flex;align-items:center;gap:10px}
+.pkx .pks .gx-bt .gx-bt-lvh div{display:flex;flex-direction:column}
+.pkx .pks .gx-bt .gx-bt-lvh b{font:400 24px/1 var(--fd)}
+.pkx .pks .gx-bt .gx-bt-lvh span{font-weight:800;color:var(--red)}
+.pkx .pks .gx-bt .gx-bt-level p{margin:0;display:grid;grid-template-columns:1fr 50px 44px;font-size:14px;border-bottom:2px dashed rgba(29,42,77,.2)}
+.pkx .pks .gx-bt .gx-bt-level p em{font-style:normal;font-weight:800;color:#2f9e44;text-align:right}
+.pkx .pks .gx-bt .gx-bt-pn{display:flex;flex-direction:column;gap:4px;padding:10px 14px;font-size:13px}
+.pkx .pks .gx-bt .gx-bt-ph{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.pkx .pks .gx-bt .gx-bt-ph b{font:400 20px/1.1 var(--fd);margin-right:auto}
+.pkx .pks .gx-bt .gx-bt-ph u{text-decoration:none;font-size:11px;font-weight:800;background:var(--ink);color:#fff;border-radius:999px;padding:0 8px}
+.pkx .pks .gx-bt .gx-bt-pn p{margin:0;display:flex;justify-content:space-between;gap:10px;border-bottom:2px dashed rgba(29,42,77,.18)}
+.pkx .pks .gx-bt .gx-bt-pn p span{font-size:12px;font-weight:800;color:var(--mute)}
+.pkx .pks .gx-bt .gx-bt-pn p em{font-style:normal;font-weight:800}
+.pkx .pks .gx-bt .gx-bt-pn small{font-size:12.5px;line-height:1.35}
+.pkx .pks .gx-bt .gx-bt-tip{position:absolute;right:40px;bottom:150px;width:330px;z-index:8}
+.pkx .pks .gx-bt .gx-bt-card{position:absolute;left:330px;top:150px;width:320px;z-index:8}
+.pkx .pks .gx-bt .gx-still{pointer-events:none}
+.pkx .pks .gx-bt .gx-bt-panels{position:absolute;left:16px;right:16px;top:96px;bottom:150px;display:flex;flex-direction:column;flex-wrap:wrap;align-content:flex-start;gap:8px;overflow:hidden;z-index:8;cursor:pointer}
+.pkx .pks .gx-bt .gx-bt-panels>.pn{width:300px}
+.pkx .pks .gx-bt .gx-bt-panels.gx-many>.pn{width:224px}
+.pkx .pks .gx-bt .gx-bt-log{position:absolute;left:16px;top:96px;width:440px;bottom:150px;z-index:8;display:flex;flex-direction:column;gap:3px;padding:10px 14px;overflow:hidden}
+.pkx .pks .gx-bt .gx-bt-logt{display:flex;gap:6px;margin-bottom:4px}
+.pkx .pks .gx-bt .gx-bt-logt span{font-size:12px;font-weight:800;border:2px solid var(--ink);border-radius:999px;padding:0 10px;cursor:pointer}
+.pkx .pks .gx-bt .gx-bt-logt span.on{background:var(--yel)}
+.pkx .pks .gx-bt .gx-bt-log small{font-size:12.5px;line-height:1.35}
+.pkx .pks .gx-bt .gx-bt-fx{position:absolute;z-index:5;pointer-events:none;display:flex;flex-direction:column;gap:3px;padding:8px 12px;font-size:13px}
+.pkx .pks .gx-bt .gx-bt-budget{right:12px;top:64px;width:310px}
+.pkx .pks .gx-bt .gx-bt-budget p{margin:0;display:grid;grid-template-columns:64px 1fr 54px;align-items:center;gap:6px}
+.pkx .pks .gx-bt .gx-bt-rule{left:50%;top:64px;translate:-50% 0;max-width:520px}
+.pkx .pks .gx-bt .gx-bt-variant{right:12px;top:64px;width:250px}
+.pkx .pks .gx-bt .gx-bt-trait{left:330px;top:70px;max-width:600px;flex-direction:row;align-items:center;gap:10px}
+.pkx .pks .gx-bt .gx-bt-trait div{display:flex;flex-direction:column}
+.pkx .pks .gx-bt .gx-bt-shadow{left:16px;bottom:200px;width:470px;background:#1c0a2c;color:#f0e0ff}
+.pkx .pks .gx-bt .gx-bt-rally{position:absolute;left:420px;top:150px;z-index:5;pointer-events:none;color:var(--ink);background:var(--yel);border:3px solid var(--ink);border-radius:999px;padding:2px 16px;font-weight:800}
+.pkx .pks .gx-bt.gx-bt-shadow .lb.bot{--t:#8a40c8;--t2:#c070ff}
+.pkx .pks .gx-bt-evo{background:radial-gradient(circle at 50% 46%,#ffe46b,#e8791a 40%,#0d1530 75%)}
+.pkx .pks .gx-bt-evo .gx-bt-evo-pics{position:absolute;left:0;right:0;top:100px;display:flex;justify-content:center;align-items:center;gap:40px}
+.pkx .pks .gx-bt-evo .gx-bt-evo-pics>b{font:400 64px/1 var(--fd);color:#fff}
+.pkx .pks .gx-bt-evo .gx-sil img{filter:brightness(0) invert(1)}
+.pkx .pks .gx-bt .lb.top .gx-bt-o{margin-right:118px}
+/* Battle Party and Bag windows (mock-ups b-switch, b-bag): the mock-up's own markup over a dimmed field. */
+.pkx .pks .gx-bl-scr .gx-bl-dim{position:absolute;inset:0;background:rgba(13,21,48,.38);pointer-events:none}
+.pkx .pks .gx-bl-scr .gx-bl-off{filter:saturate(.35);opacity:.6}
+.pkx .pks .gx-bl-scr .gx-bl-nopic{display:inline-block;width:64px;height:56px}
+.pkx .pks .gx-bl-scr .gx-bl-where{position:absolute;left:30px;bottom:6px;font:700 12px var(--fb);color:#fff;text-shadow:0 1px 2px #000}
+.pkx .pks .gx-bl-scr .gx-bl-bagw{left:auto;right:30px;bottom:auto;top:388px}
+.pkx .pks .gx-bl-scr .sw .gx-fit,.pkx .pks .gx-bl-scr .it .gx-fit{flex:none}
+/* A map stop's quick choice (fishing, a short pick): one window in the middle. */
+.pkx .pks .gx-bl{position:absolute;left:16px;width:340px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;z-index:5}
+.pkx .pks .gx-bl.gx-mid{left:50%;transform:translateX(-50%);width:420px}
+.pkx .pks .gx-bl-tabs{display:flex;gap:6px}
+.pkx .pks .gx-bl-tabs span{flex:1;text-align:center;padding:4px 8px;border:2px solid var(--ink);border-radius:14px;background:#fff;font:700 13px var(--fb);cursor:pointer}
+.pkx .pks .gx-bl-tabs span.on{background:var(--yel)}
+.pkx .pks .gx-bl-lead{display:block;text-align:center;font:400 30px var(--fd);color:var(--red);background:var(--yel);border-radius:10px;animation:gx-bl-beat .6s ease-in-out infinite alternate}
+.pkx .pks .gx-bl-t{font:800 16px var(--fb)}
+.pkx .pks .gx-bl-r{display:flex;align-items:center;gap:8px;height:40px;padding:0 10px;border:2px solid var(--ink);border-radius:20px;background:#fff;cursor:pointer}
+.pkx .pks .gx-bl-r.on{background:var(--yel);box-shadow:0 0 0 3px #fff,0 0 0 5px var(--ink)}
+.pkx .pks .gx-bl-r i{width:34px;display:flex;justify-content:center}
+.pkx .pks .gx-bl-r b{flex:1;white-space:nowrap;overflow:hidden}
+.pkx .pks .gx-bl-r u{text-decoration:none;font:700 11px var(--fb);color:var(--mute)}
+.pkx .pks .gx-bl-r em{font:700 13px var(--fb);font-style:normal;color:var(--mute)}
+.pkx .pks .gx-bl-r .hp{flex:none;width:90px}
+.pkx .pks .gx-bl-foot{display:flex;justify-content:space-between;font:600 12px var(--fb);color:var(--mute)}
+.pkx .pks .gx-bl-back{cursor:pointer}
+.pkx .pks .gx-bl-sheet{position:absolute;left:120px;right:120px;top:40px;bottom:50px;padding:16px 20px;z-index:9;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+.pkx .pks .gx-bl-sheet p{white-space:pre-wrap;font:500 15px/1.45 var(--fb);margin:0}
+.pkx .pks .gx-bl-sheet small{margin-top:auto;color:var(--blu);font-weight:700}
+@keyframes gx-bl-beat{from{transform:scale(1)}to{transform:scale(1.06)}}
+/* While a battle list is open the field shows bare behind it, as the mock-ups draw it (no plates, no message line). */
+.pkx:has(.gx-bl-scr) .pks .scr.gx-bt:not(.gx-bl-scr){visibility:hidden}
+.pkx .pks .gx-bl-scr .gx-bl-why{display:block;font:700 12px/1.3 var(--fb);color:var(--red);white-space:normal}
