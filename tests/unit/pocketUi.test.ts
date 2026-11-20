@@ -24,6 +24,8 @@ import type { MapModel, MapNodeView } from '../../src/ui/redux/screens/map';
 import type { EventModel } from '../../src/ui/redux/screens/event';
 import { pkSettingsHome } from '../../src/ui/pocket/screens/settings';
 import { doorSub, pkHub, type PkHubModel } from '../../src/ui/pocket/screens/hub';
+import { districtProp, pkTownDoor, pkTownHud, pkTownMap, placeProp } from '../../src/ui/pocket/screens/town';
+import { POCKET_TOWN } from '../../src/core/hubTown/schema';
 import { firstThought, fitBody, pkBoard, pkConfirm, pkGrid, pkMenu, pkOptions, pkSaves, pkStats } from '../../src/ui/pocket/templates';
 
 const stage = (current: string | null) => ({
@@ -708,5 +710,44 @@ describe('Pocket Hub Town street', () => {
   it('each door has its small line; an unknown one has none', () => {
     expect(doorSub('Seeds')).toBe('Play a seed again');
     expect(doorSub('Nowhere')).toBe('');
+  });
+});
+
+describe('Pocket Town', () => {
+  it('a place is drawn by the building at its door; a door with none near has no picture', () => {
+    expect(placeProp(POCKET_TOWN, { x: 14, y: 11 })).toBe('dojo');
+    expect(placeProp({ tile: 32, props: [['pine', 400, 200, 384]] }, { x: 14, y: 11 })).toBeNull();
+    expect(placeProp({ tile: 32, props: [] }, { x: 1, y: 1 })).toBeNull();
+    expect(districtProp('play')).toBe('parasol');
+    expect(districtProp('nowhere')).toBe('house_b');
+  });
+  it('the street is a see-through header with the time and district, the line for what you face, and the keys', () => {
+    const html = pkTownHud({ time: 'Evening', district: 'Training Grounds', prompt: { verb: 'Enter', name: 'Training Dojo', text: 'Spar with a dummy.' } });
+    expect(pkPageOf(html)).toEqual({ id: 'pt-town', tier: 51, hud: true });
+    expect(html).toContain('Evening');
+    expect(html).toContain('Training Grounds');
+    expect(html).toContain('Training Dojo');
+    expect(html).toContain('<kbd>Z</kbd>enter');
+    const none = pkTownHud({ time: 'Night', district: '', prompt: null });
+    expect(none).not.toContain('zp39');
+  });
+  it('the Town Map is a card per district, the one you stand in marked', () => {
+    const districts = POCKET_TOWN.districts.map((d) => ({ id: d.id, name: d.name, text: d.blurb, color: d.color }));
+    const html = pkTownMap({ districts, index: 2, here: 0 });
+    expect(pkPageOf(html)?.id).toBe('pt-map');
+    expect(html.match(/data-act="mapPick"/g)?.length).toBe(districts.length + 1);
+    expect(html).toMatch(/class="pn on"[^>]*data-key="pt-d-home"/);
+    expect(html.match(/You are here/g)?.length).toBe(1);
+    expect(html).toContain(`${districts.length} districts`);
+  });
+  it('a door asks first; a shut one says why', () => {
+    const open = pkTownDoor({ district: 'Training Grounds', name: 'Training Dojo', text: 'Spar.', prop: 'dojo', shut: null });
+    expect(pkPageOf(open)?.id).toBe('pt-door');
+    expect(open).toContain('Nothing here changes your run.');
+    expect(open).toContain('data-act="doorGo"');
+    expect(open).toContain('Keep walking');
+    const shut = pkTownDoor({ district: '', name: 'Time Machine', text: 'Old runs.', prop: null, shut: 'Finish a run first.' });
+    expect(shut).toContain('Finish a run first.');
+    expect(shut).toContain('Pocket Town');
   });
 });

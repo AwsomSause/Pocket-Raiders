@@ -615,3 +615,42 @@ test('Pocket look: the Hub is the town street; the doors walk, the tabs change a
   await onPkPage(page, 'Hub', 'hub');
   expect(errors).toEqual([]);
 });
+
+test('Pocket look: Pocket Town has the street header, the Town Map and a door card; nothing opens without Go in', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=pk-town');
+  await page.evaluate(() => {
+    const { game } = (window as any).__pkr;
+    for (const s of game.scene.getScenes(true)) game.scene.stop(s.scene.key);
+    game.scene.start('Town');
+  });
+  await waitForScene(page, 'Town');
+  await onPkPage(page, 'Town', 'pt-town');
+  const hud = pkView(page, 'Town', 'pt-town');
+  await expect(hud.locator('.hdr')).toContainText('Pocket Town');
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Town').town.moveTo({ x: 14, y: 12, facing: 'up' }));
+  await expect(hud.locator('.zp39')).toContainText('Training Dojo');
+  await fits(page, 'Town', 'pt-town');
+  const before = await page.evaluate(() => JSON.stringify((window as any).__pkr.session.profile));
+  // Z at the door asks first; Esc keeps walking.
+  await step(page, 'Enter');
+  await onPkPage(page, 'Town', 'pt-door');
+  await expect(pkView(page, 'Town', 'pt-door').locator('.dc39')).toContainText('Training Dojo');
+  await fits(page, 'Town', 'pt-door');
+  await step(page, 'Escape');
+  await expect(pkView(page, 'Town', 'pt-door')).toHaveCount(0);
+  expect(await page.evaluate(() => JSON.stringify((window as any).__pkr.session.profile))).toBe(before);
+  // M opens the Town Map; Right and Enter walk to the next district.
+  await step(page, 'm');
+  await onPkPage(page, 'Town', 'pt-map');
+  const map = pkView(page, 'Town', 'pt-map');
+  await expect(map.locator('.gr39 .pn')).toHaveCount(5);
+  await expect(map.locator('.gr39 .pn.on')).toContainText('You are here');
+  await fits(page, 'Town', 'pt-map');
+  await step(page, 'ArrowRight');
+  await step(page, 'Enter');
+  await expect(pkView(page, 'Town', 'pt-map')).toHaveCount(0);
+  await expect(hud.locator('.hdr')).toContainText('Culture Quarter');
+  expect(errors).toEqual([]);
+});
