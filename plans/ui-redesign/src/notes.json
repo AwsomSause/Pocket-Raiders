@@ -298,5 +298,27 @@
   "q3": "Yes, six. Each big moment has its own page instead of sharing the normal battle or victory screens. Losing to a rival has a page that says clearly the run goes on.",
   "q4": "The phone carries a Next Gym poster under the run score and Rotom talks about it. Nothing new is needed in Settings; boss scenes follow the Animations page.",
   "q5": "Yes. Gym intro, badge ceremony, a Legendary waiting in a cave and a rival who says 'Smell ya later' are the heart of the series."
+ },
+ "19": {
+  "name": "The Other Side",
+  "big": "Evil Mode joins the redesign. The same big type, cards and word menus, but in Team Nova's black, crimson and gold, so it is clearly the same game seen from the other side. Evil Mode gets its own row on the title.",
+  "pages": [
+   "Evil Mode · Title",
+   "Evil Mode · The Hideout",
+   "Evil Mode · Give an Order",
+   "Evil Mode · Region Map",
+   "Evil Mode · The Card",
+   "Evil Mode · Boss Order",
+   "Evil Mode · Job Done",
+   "Evil Mode · A Hero Appears",
+   "Evil Mode · Crew File",
+   "Evil Mode · The Chair",
+   "Evil Mode · Boss Menu"
+  ],
+  "q1": "Yes. Lacquer black with crimson seams and gold numbers, a giant N behind the crew, a glass-crack split when the Hero walks in, a PAID IN FULL stamp.",
+  "q2": "Until now the redesign only covered the hero's game. Evil Mode now has the same parts (word menu, panels, cut-ins, key strip) in its own livery, following the approved Dominion mockups for content.",
+  "q3": "Yes, eleven. Giving an order, the odds Card, the Boss order, the result and the Hero interrupt are each their own page, so no screen has to hold a whole day.",
+  "q4": "Esc opens the Boss Menu: the title's word menu in black, with the empire at a glance beside it. Settings is the same Settings, with a Dominion category.",
+  "q5": "Yes, the villain side of one: grunts with ranks, Persian by the Boss, Rocket as the rival gang, and Red as the trainer you do not want to meet."
  }
 }
