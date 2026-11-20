@@ -8,6 +8,7 @@ import { DOMINION_DATA } from './data';
 import { heldIds, notorietyOf, peakOf, stepNow, type NotorietyParts } from './empire';
 import { bandOf, statusOf } from './field';
 import { cleanOf } from './hqFx';
+import { rivalsOf, stageDef, stageIndex, teamsHere } from './rivals';
 import type { DominionBlock } from './schema';
 import { fill } from './worldTurn';
 
@@ -101,6 +102,13 @@ export function ledgerModel(b: DominionBlock, run: Pick<RunState, 'party' | 'inv
   const band = bandOf(b.heat);
   const towns = Object.values(b.field.districts);
 
+  // D9: the region's first rival team and its Tension (the stage's word), or "no word yet" with no team on.
+  const team = teamsHere()[0];
+  const tn = team ? rivalsOf(b).teams[team.id]?.tension ?? 0 : null;
+  const tension = team && tn !== null
+    ? { name: team.name, word: stageDef(stageIndex(tn)).word, n: tn, look: L.rivalLook }
+    : { name: F().rivalTeam, word: L.noRival, n: null, look: L.rivalLook };
+
   // the ladder
   const parts = notorietyOf(b);
   const now = stepNow(b), peak = peakOf(b);
@@ -127,8 +135,8 @@ export function ledgerModel(b: DominionBlock, run: Pick<RunState, 'party' | 'inv
       regard: towns.reduce((a, d) => a + Math.max(0, d.regard), 0),
       dread: towns.reduce((a, d) => a + Math.max(0, d.dread), 0),
       wanted: { word: band.word, n: b.heat },
-      // Tension with the rival team arrives with D9; the Hero's Threat with D11 (the Boss's Attacks already count).
-      tension: { name: F().rivalTeam, word: L.noRival, n: null, look: L.rivalLook },
+      // Tension with the region's first rival team (D9); the Hero's Threat waits for D11 (the Boss's Attacks already count).
+      tension,
       hero: { word: L.heroWord, n: Math.min(100, b.field.hero) },
     },
     territory: F().districts.map((d) => {

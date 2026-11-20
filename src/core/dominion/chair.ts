@@ -294,6 +294,12 @@ export function wouldPick(b: DominionBlock, c: CourtCard, m: Member, r: Roll | n
 
 interface Ctx { b: DominionBlock; pick: 0 | 1; card: CourtCard; member: string | null; second: string | null; r: Roll; changes: Record<string, number>; lines: string[]; tag: 'favour' | 'grudge' | null; back: boolean }
 
+/** D9 (rivals.ts) registers how Tension moves: the region's rival team. Set at load, so chair.ts doesn't import rivals.ts (an import cycle through field.ts). */
+let tension: ((b: DominionBlock, n: number) => void) | null = null;
+export function setChairTension(f: (b: DominionBlock, n: number) => void): void {
+  tension = f;
+}
+
 const bump = (x: Ctx, k: string, n: number): void => {
   if (n) x.changes[k] = (x.changes[k] ?? 0) + n;
 };
@@ -418,7 +424,12 @@ function apply(x: Ctx, fx: CourtFx[]): void {
         break;
       }
       case 'follow': ch.follow.push({ card: e.card, day: b.day + e.days, member: x.member }); x.back = true; break;
-      case 'owed': ch.owed[e.key] = (ch.owed[e.key] ?? 0) + e.n; bump(x, e.key, e.n); break;
+      case 'owed':
+        // D9 built the rival team: Tension now moves the region's rival for real. The rest wait for their slice.
+        if (e.key === 'ten' && tension) tension(b, e.n);
+        else ch.owed[e.key] = (ch.owed[e.key] ?? 0) + e.n;
+        bump(x, e.key, e.n);
+        break;
       case 'note': x.lines.push(`${e.text} ${fill(L().waits!, { slice: e.slice })}`); break;
       case 'deal': {
         ch.deals.push({ card: x.card.id, n: scale(b, e.n), clean: !!e.clean, heat: e.heat ?? 0, risk: e.risk ?? 0, wanted: e.wanted ?? 0, mon: e.mon ?? 0, item: e.item ?? null, itemN: e.itemN ?? 0, ten: e.ten ?? 0 });
@@ -581,7 +592,10 @@ function chairStep(b: DominionBlock, seed: string): string[] {
       pay(b, deal.n, deal.clean);
       net += deal.n;
       if (deal.heat) addHeat(b, HQ(), deal.heat);
-      if (deal.ten) ch.owed.ten = (ch.owed.ten ?? 0) + deal.ten;
+      if (deal.ten) {
+        if (tension) tension(b, deal.ten);
+        else ch.owed.ten = (ch.owed.ten ?? 0) + deal.ten;
+      }
       for (let i = 0; i < deal.mon; i++) ch.give.push({ k: 'mon', species: pickMon(b, r), level: R().strayLevel, member: null });
       if (deal.item) ch.give.push({ k: 'item', id: deal.item, n: deal.itemN, held: false });
       if (deal.risk && r.int(1, 100) <= deal.risk) {

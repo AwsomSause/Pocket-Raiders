@@ -3,6 +3,7 @@
 // answers and what they move, Hand it off, the whisper, Close the doors, the Tally, deals, fights at the door, and
 // save/reload in the middle of a sitting.
 import { describe, expect, it } from 'vitest';
+import { rivalsOf, teamAt } from '../../src/core/dominion/rivals';
 import trainersRaw from '../../src/data/trainers.json';
 import {
   atDoor, canDraw, cardById, cardStatus, chairOf, courtFightEnd, handOffCrew, leanOf, openSitting, redZones, rightHand, visitorsTonight, whisper, wouldPick,
@@ -366,15 +367,18 @@ describe('DOMINION D12: what answers do over time', () => {
     expect(b.chair!.tags.fisherman).toBe('favour');
     expect(b.chair!.stake).toBeNull();
   });
-  it('numbers later slices build are kept (Tension for D9, Threat for D11); press adds to Notoriety', () => {
+  it('Tension reaches the rival team (D9); numbers later slices build are kept (Threat for D11); press adds to Notoriety', () => {
     let r = day2();
     r = go(r, { t: 'toNight' });
+    const team = teamAt(blk(r), null);
+    const ten0 = rivalsOf(blk(r)).teams[team]!.tension;
     r = edit(r, (b) => {
       b.chair!.docket = [{ card: 76, member: null, second: null }, { card: 125, member: null, second: null }];
     });
     r = go(go(go(r, { t: 'court', choice: 1 }), { t: 'courtNext' }), { t: 'court', choice: 0 });
     const ch = blk(r).chair!;
-    expect(ch.owed.ten).toBe(10);
+    expect(rivalsOf(blk(r)).teams[team]!.tension).toBe(ten0 + 10);
+    expect(ch.owed.ten).toBeUndefined();
     expect(ch.follow.some((f) => f.card === 77)).toBe(true);
     expect(ch.fame).toBe(8);
     expect(notorietyOf(blk(r)).press).toBe(8);

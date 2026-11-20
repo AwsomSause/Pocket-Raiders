@@ -114,11 +114,11 @@ describe('DOMINION D3: members', () => {
     expect(cantTake(m, taskById('pickpocket')!)).toBeNull();
     expect(cantTake(m, taskById('shake-down')!)).toBeNull();
     expect(cantTake(m, taskById('rally-the-troops')!)).toMatch(/SENIOR GRUNT/);
-    expect(cantTake(m, taskById('man-the-gate')!)).toMatch(/D9/);
+    expect(cantTake(m, taskById('stock-the-stores')!)).toMatch(/D10/);
   });
   it('assigning is a Morning/Evening step, refused for a task they can\'t take', () => {
     let r = started();
-    expect(stepInRun(content, r, { t: 'assign', member: 'm1', task: 'man-the-gate' }).ok).toBe(false);
+    expect(stepInRun(content, r, { t: 'assign', member: 'm1', task: 'stock-the-stores' }).ok).toBe(false);
     r = go(r, { t: 'assign', member: 'm1', task: 'pickpocket' });
     expect(crewOf(rook(blk(r))).task).toBe('pickpocket');
     r = go(go(night(r), { t: 'toDay' }), { t: 'endDay' });
@@ -210,7 +210,7 @@ describe('DOMINION D3: the crew step', () => {
     expect(took).toBeGreaterThan(0);
     expect(took).toBeLessThanOrEqual(CR.rules.thiefMax);
   });
-  it('Catch and Steal Pokémon fill the stores through the session, once', () => {
+  it('Catch and Steal Pokémon fill the Reserve through the session, once (D4 took over the stores)', () => {
     let r = started('catch');
     r = withRun(r, (b) => {
       crewOf(rook(b)).task = 'catch';
@@ -218,10 +218,12 @@ describe('DOMINION D3: the crew step', () => {
     });
     for (let i = 0; i < 4; i++) r = round(r);
     const st = blk(r).crew!;
-    expect(st.stores.length).toBeGreaterThan(0);
+    const box = blk(r).reserve!.box;
+    expect(st.stores).toEqual([]);
+    expect(box.length).toBeGreaterThan(1); // Day 1's Reserve Pokémon + the catches
     expect(st.pending).toEqual([]);
-    expect(settleCrew(content, r)).toBe(r);
-    for (const mon of st.stores) expect(mon.level).toBeLessThanOrEqual(blk(r).levelCap);
+    expect(blk(settleCrew(content, r)).reserve!.box).toEqual(box);
+    for (const mon of box) expect(mon.level).toBeLessThanOrEqual(blk(r).levelCap);
   });
 });
 

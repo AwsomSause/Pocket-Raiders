@@ -27,9 +27,12 @@ const STEPS: Partial<Record<WorldStepId, WorldStep[]>> = {
       if (b.day % c.weekLength !== 0) return [];
       const r = DOMINION_DATA.start.report;
       const wages = b.members.reduce((a, m) => a + m.wage, 0);
-      const lines = [fill(r.week, { week: b.day / c.weekLength, rent: c.rent, wages })];
-      b.funds -= c.rent;
-      book(b, 'rent', -c.rent);
+      // D9: a rival who bought the landlord (rival action 5) puts the rent up while it lasts.
+      const up = b.rivals?.rent && b.rivals.rent.until > b.day ? b.rivals.rent.pct : 0;
+      const rent = Math.round((c.rent * (100 + up)) / 100);
+      const lines = [fill(r.week, { week: b.day / c.weekLength, rent, wages })];
+      b.funds -= rent;
+      book(b, 'rent', -rent);
       // D5: bills take dirty money first (the clean part can't be more than what's left).
       const clamp = (): void => void (b.hq && (b.hq.clean = Math.max(0, Math.min(b.hq.clean, b.funds))));
       clamp();
