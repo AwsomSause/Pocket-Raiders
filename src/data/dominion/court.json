@@ -395,9 +395,8 @@
       "who": "named"
      },
      {
-      "k": "note",
-      "slice": "D8",
-      "text": "a 10% cut of their squad's take"
+      "k": "hook",
+      "id": "squad-cut"
      }
     ]
    },
@@ -424,8 +423,7 @@
      }
     ]
    },
-   "named": "admin",
-   "wait": "D8"
+   "named": "admin"
   },
   {
    "id": 9,
@@ -474,7 +472,6 @@
     ]
    },
    "named": "admin",
-   "wait": "D8",
    "followOnly": true
   },
   {

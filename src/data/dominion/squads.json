@@ -212,6 +212,7 @@
   "numbers": {
     "cutOdds": 15,
     "cutKeepPct": 10,
+    "adminCutPct": 10,
     "gloryDread": 2,
     "gloryOdds": 10,
     "gloryHeatPct": 125,
@@ -673,6 +674,8 @@
     "cleared": "{squad} has no order: each member keeps their own task.",
     "refuse": "{squad} won't do it, Boss. {name}'s line, and they stand with {them}.",
     "cut": "{squad} (Cut of the Take) brought back ₽{amount}. They kept ₽{kept}. Nobody's complaining.",
+    "adminCut": "{name} took their cut of {squad}'s job: ₽{cut}.",
+    "adminCutGranted": "{name} now takes {pct}% of whatever their squad brings in.",
     "job": "{squad} went out together on {task}.",
     "longShot": "{squad} pulled it off against the odds ({odds}%). Cohesion +{n}.",
     "family": "{squad} is Family now: pick their Squad Trait on the Squads page.",

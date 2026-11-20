@@ -23,14 +23,13 @@
 - Ledger: "Press" (the Chair's fame) adds to Notoriety. Chair money is booked on the Ledger's Chair lines (dirty or clean).
 
 ## Card status (150)
-- **124 live** (113 at D12; cards 56, 74 and 81 in the D13 follow-up; D11's seven in the D11 follow-up; 82 in D14, below). Some of them are limited: one part waits for a later slice, and the card shows it as a note ("waits for D9") or as a number that the later slice will use (Hero Threat, Goal, Stability, raid odds, Shadow, Wipe Out).
+- **126 live** (113 at D12; cards 56, 74 and 81 in the D13 follow-up; D11's seven in the D11 follow-up; 82 in D14, below; 8 and 9 in the D8 follow-up). Some of them are limited: one part waits for a later slice, and the card shows it as a note ("waits for D9") or as a number that the later slice will use (Hero Threat, Goal, Stability, raid odds, Shadow, Wipe Out).
 - **Hero Threat** (D11 follow-up): `threat:N` answers now move the Hero's Threat (`hero.nudge`, through `setChairHero`, so chair.ts doesn't import hero.ts). Threat a D12 save kept in `chair.owed.threat` is added once on the next night. The Threat crisis (card 150) comes at Hero Threat 90+. The seven cards that waited for D11 play: 92 (the Hero's route tomorrow), 93 (Listen, or the Hero at the door tomorrow), 94 (still a D10 part: the Holding Pens), 95 (a town left alone: no Boss actions there), 96 (Goal still waits for D14), 120 (Legendaries 7 days later, or a Legendary hunt) and 150 (the Letter: the Hero at the door with the HQ's Defense as levels off their team and Threat −20 the next day, or flee: Control in one town gone). They use a new `hero:` effect (`hero:intel:N`, `battle`, `letter`, `spare`, `late:N`, `hunt`, `lose`).
 - **Tension** (28 answers and the Chair deals) now moves the region's rival team (D9, `addTension`), through a hook rivals.ts sets (`setChairTension`), so chair.ts doesn't import rivals.ts.
-- **26 waiting** (disabled, never drawn; each names its slice):
+- **24 waiting** (disabled, never drawn; each names its slice):
   - D10 (fence, gyms, bribes): 11
   - D5 (buildings): 6
   - D15 (held regions): 4
-  - D8 (squads): 2
   - D14: 2
   - D16 (Cipher): 1
   - Blaine's quiz: 1
@@ -38,6 +37,7 @@
 - **`hook:` answers** (D13 follow-up): an answer whose rule lives in another slice's file says `hook:id`, and that slice registers it with `setChairHook` (like the Tension hook).
   - 56, the insurance man: the weekly deal, plus flag `insured`: a raid that gets into the Warehouse or the vault takes `rivals.raid.insured` (50)% less (rivals.ts).
   - 74, the caught Rival spy: flag `agent:<team>`; that team's weekly plan always shows (`planSeen`).
+  - 8, the Admin who wants a cut (D8 follow-up): `hook:squad-cut` puts the Admin in `squads.cuts`; each paying job of a squad they're in, or of a squad in the Group they lead, gives up `adminCutPct` (10)% of what it brought in (squads.ts). Card 9 (the same Admin, the Rival's offer) follows from it and plays too.
   - 81, the Rival Boss's assistant: a Debate card for the region's rival Boss right now (an invitation, so no Tension 40+ or win needed), one per team, none once they're your Branch or Merger (debate.ts).
 
 ## Saves

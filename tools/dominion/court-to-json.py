@@ -16,7 +16,7 @@ does with an answer is the SPEC table below, written in a small effect language 
   ten:N threat:N goal:N stab:N raid:N shadow:N wipe:N   (kept for the slice that builds them: owed)
   note:SLICE:"text"  (a part that waits for a later slice: the answer is "limited")
   hero:intel:N  hero:battle  hero:letter  hero:spare  hero:late:N  hero:hunt  hero:lose   (D11: the Hero, hero.ts)
-  hook:ID      (a rule another slice owns, registered with setChairHook: insure, double-agent (D9), debate-early (D13))
+  hook:ID      (a rule another slice owns, registered with setChairHook: insure, double-agent (D9), debate-early (D13), squad-cut (D8))
 
 A card with `wait` is switched off (status "disabled") until the named slice builds what its answers need.
 Re-run after the list changes:  python3 tools/dominion/court-to-json.py <plans/evil-mode-rework/lists> src/data/dominion
@@ -253,8 +253,8 @@ SPEC = {
     5: dict(look='member', named='two', a='mor:1 loy:-5', b='dread:2 xp:1 xp2:1 chance:50{loy:-3}{loy2:-3}'),
     6: dict(look='member', named='any', a='$-150 mor:6 dread:2', b='mor:-3 reg:1'),
     7: dict(look='member', named='any', a='note:D9:"the free Attack on the Rival" ten:6 loy:6', b='loy:-5 mor:-2'),
-    8: dict(look='member', named='admin', wait='D8', a='loy:12 note:D8:"a 10% cut of their squad\'s take"', b='loy:-10 chance:20{follow:9:7}'),
-    9: dict(look='member', named='admin', wait='D8', followOnly=True, a='$-300 loy:15', b='leave ten:-5 raid:10'),
+    8: dict(look='member', named='admin', a='loy:12 hook:squad-cut', b='loy:-10 chance:20{follow:9:7}'),
+    9: dict(look='member', named='admin', followOnly=True, a='$-300 loy:15', b='leave ten:-5 raid:10'),
     10: dict(look='member', named='any', a='mor:5', b='mor:-1 dread:1'),
     11: dict(look='member', named='any', a='loy:6 note:D8:"day jobs only"', b='note:D8:"night tasks at -10%; grows toward Steady"'),
     12: dict(look='member', named='any', a='join:green=clumsy:name=brother loy:5', b='loy:-4'),

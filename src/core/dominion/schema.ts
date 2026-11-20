@@ -886,8 +886,8 @@ export const OWED_KEYS = ['ten', 'threat', 'goal', 'stab', 'raid', 'shadow', 'wi
 /** D11: what a Chair answer does to the Hero (hero.ts): the route tomorrow, the Hero at the door (the Letter with the HQ's
  * Defense on your side), a town left alone, the Legendaries later, a Legendary hunt, a town lost. */
 export const HERO_COURT = ['intel', 'battle', 'letter', 'spare', 'late', 'hunt', 'lose'] as const;
-/** Chair answers whose rule lives in another slice's file (registered with setChairHook): D9 insure + double-agent, D13 debate-early. */
-export const CHAIR_HOOKS = ['insure', 'double-agent', 'debate-early'] as const;
+/** Chair answers whose rule lives in another slice's file (registered with setChairHook): D9 insure + double-agent, D13 debate-early, D8 squad-cut. */
+export const CHAIR_HOOKS = ['insure', 'double-agent', 'debate-early', 'squad-cut'] as const;
 export type ChairHook = (typeof CHAIR_HOOKS)[number];
 export const LEANS = ['money', 'regard', 'dread', 'heat', 'self'] as const;
 export type Lean = (typeof LEANS)[number];
@@ -2073,6 +2073,8 @@ export const SquadsStateSchema = z.object({
   pairs: z.array(z.tuple([S, S])),
   /** Members who were on the crew at the last look (to spot new ones: Welcome Mat, Talkers). */
   seen: z.array(S),
+  /** Members the Boss granted a cut of their squad's take at the Chair (court card 8): 10% off each paying squad job they're on. Optional (added after D8). */
+  cuts: z.array(S).optional(),
 }).strict();
 export type SquadsState = z.infer<typeof SquadsStateSchema>;
 
