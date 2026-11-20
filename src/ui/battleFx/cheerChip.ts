@@ -182,6 +182,34 @@ export function starPicture(scene: Phaser.Scene): string | null {
   }
 }
 
+/**
+ * The heal's plus-sign: the mockup's `.dmg` letters (Jersey 15) in green with the dark outline, at `HEAL_PLUS_SIZE`.
+ */
+export function plusPicture(scene: Phaser.Scene, size: number): string | null {
+  const key = `fx.plus.${size}`;
+  if (scene.textures.exists(key)) return key;
+  try {
+    const z = size * HI;
+    const c = document.createElement('canvas');
+    c.width = c.height = Math.ceil(z * 1.2);
+    const ctx = c.getContext('2d');
+    if (!ctx) return null;
+    ctx.font = `400 ${z}px "Jersey 15", ${FONT_FAMILY}`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const mx = c.width / 2;
+    const my = c.height / 2;
+    ctx.fillStyle = '#131c36';
+    for (const [ox, oy] of [[3, 3], [-2, -2], [2, -2], [-2, 2]] as const) ctx.fillText('+', mx + ox * HI, my + oy * HI);
+    ctx.fillStyle = '#7dffa0';
+    ctx.fillText('+', mx, my);
+    scene.textures.addCanvas(key, c);
+    return key;
+  } catch {
+    return null;
+  }
+}
+
 /** The size of `glowPicture` (px across). */
 export const GLOW_SIZE = 256;
 

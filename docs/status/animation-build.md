@@ -97,3 +97,7 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   default; the negative frame (pass 17) and the base jolt (pass 7, our platform is part of the arena picture) are not in. When a move's own
   animation is moving the target, it is left alone. Reduced/Off keep the battle's own blink. The attacker's side
   (wind-up and dash) is the move's own animation and is not changed (Kice's move rule).
+- Healing (pass 3): a heal or drain on a Pokémon (full animations) shows the redesign's own heal instead of the
+  pack's shared heal: ten green plus-signs rise through it one after another, it glows green and hops once, and a green
+  ring spreads on the ground (`healClip`, `BattleScene.healMoment`, BattleFx `heal`). The HP bar now climbs with the
+  number over 0.8 s (a drop still snaps in 0.28 s), on the canvas bar and the New UI's bar alike.

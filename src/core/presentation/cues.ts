@@ -44,7 +44,7 @@ export type Cue =
   | { kind: 'number'; side: Side; amount: number; tone: 'damage' | 'crit' | 'super' | 'weak' | 'heal'; motion: boolean }
   | { kind: 'badge'; side: Side; badge: EffectivenessBadge | 'crit' }
   /** Status and healing animations (common-burn, common-health-up …). */
-  | { kind: 'commonAnim'; side: Side; anim: string; alt?: string }
+  | { kind: 'commonAnim'; side: Side; anim: string; alt?: string; /** A heal: the screen may show its own (redesign pass 3) instead. */ heal?: true }
   | { kind: 'statArrows'; side: Side; up: boolean; motion: boolean }
   /** An ability triggering: banner with its name plus the category's flourish (registry id `ability.*`). */
   | { kind: 'abilityAnim'; side: Side; anim: string; label: string; ability: string }
@@ -197,7 +197,7 @@ export function planCues(
       case 'drain':
       case 'heal':
         if (e.amount <= 0) break;
-        if (full) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, 'heal') });
+        if (full) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, 'heal'), heal: true });
         cues.push({ kind: 'number', side: e.side, amount: e.amount, tone: 'heal', motion: full });
         break;
       case 'charge': {

@@ -617,8 +617,9 @@ export class Bar {
       this.scene.tweens.add({
         targets: from,
         r: target,
-        duration: 280,
-        ease: 'Quad.easeOut',
+        // A drop snaps down in 0.28 s; a heal climbs with its number over 0.8 s (pass 2, pass 3).
+        duration: dropping || !this.gauge ? 280 : 800,
+        ease: dropping || !this.gauge ? 'Quad.easeOut' : 'Sine.easeInOut',
         onUpdate: () => this.apply(from.r, !dropping),
         onComplete: () => {
           this.apply(target, !dropping);

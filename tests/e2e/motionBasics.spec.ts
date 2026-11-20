@@ -452,3 +452,38 @@ test('a hit: the target goes white, is thrown back further for a super effective
   expect((await seen()).away).toBeLessThan(1);
   expect(errors).toEqual([]);
 });
+
+test('healing: green plus-signs rise, it glows green and hops, and it stands home after with nothing left over', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'heal-e2e');
+  await page.evaluate(() => {
+    const w = window as any;
+    const b = w.__pkr.game.scene.getScene('Battle');
+    w.__heal = { pluses: 0, green: false, up: 0 };
+    w.__healWatch = () => {
+      const v = b.playerSprite;
+      w.__heal.pluses = Math.max(w.__heal.pluses, b.children.list.filter((c: any) => c.texture?.key === 'fx.plus.46' && c.alpha > 0).length);
+      w.__heal.green ||= b.field.list.some((o: any) => o.type === 'Sprite' && o !== v && o.tintFill && o.tintTopLeft === 0x7dffa0 && o.visible && o.alpha > 0.3);
+      if (v?.active) w.__heal.up = Math.max(w.__heal.up, b.spotXY('player').y - v.y);
+    };
+    b.events.on('update', w.__healWatch);
+    b.time.timeScale = 0.5;
+    return b.fx.play([{ kind: 'commonAnim', side: 'player', anim: 'heal', heal: true }]);
+  });
+  await page.waitForTimeout(3200);
+  const seen = await page.evaluate(() => {
+    const w = window as any;
+    const b = w.__pkr.game.scene.getScene('Battle');
+    b.events.off('update', w.__healWatch);
+    b.time.timeScale = 1;
+    return { ...w.__heal, left: b.children.list.filter((c: any) => String(c.texture?.key).startsWith('fx.plus')).length };
+  });
+  expect(seen.pluses).toBeGreaterThanOrEqual(8);
+  expect(seen.green).toBe(true);
+  expect(seen.up).toBeGreaterThan(15);
+  expect(seen.left).toBe(0);
+  const me = await look(page, 'player');
+  expect({ x: me.x, y: me.y, solid: me.solid }).toEqual({ x: me.homeX, y: me.homeY, solid: 0 });
+  expect(errors).toEqual([]);
+});

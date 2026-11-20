@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ClipBuilder, clipEnd, EASES, fxAllowed, sampleClip, type ClipLevel, type MotionClip } from '../../src/core/presentation/motionClip';
-import { aceLandClip, HIT_KNOCK, HIT_KNOCK_BIG, hitClip, levelUpClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_KNOCK, HIT_KNOCK_BIG, hitClip, levelUpClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
 
 const ME: MonSpot = { x: 312, y: 428, h: 180, side: 'player' };
 const FOE: MonSpot = { x: 648, y: 240, h: 150, side: 'enemy' };
@@ -417,5 +417,34 @@ describe('motion clips: the target takes a hit (pass 2, 12, 17, 18)', () => {
       const c = hitClip(at, 1, { big: true, sharp: true }, level);
       expect([c.length, c.segs.length, c.fx.length]).toEqual([0, 0, 0]);
     }
+  });
+});
+
+describe('motion clips: healing (pass 3)', () => {
+  const me = { x: 312, y: 428 };
+  it('ten green plus-signs rise through it one by one, it glows green and hops once, a green ring spreads', () => {
+    const c = healClip(me, 'full');
+    expect(HEAL_PLUSES).toHaveLength(10);
+    for (const p of HEAL_PLUSES) {
+      expect(Math.abs(p.dx)).toBeLessThanOrEqual(90);
+      expect(p.size).toBeGreaterThanOrEqual(26);
+      expect(p.size).toBeLessThanOrEqual(HEAL_PLUS_SIZE);
+      expect(p.y1).toBeGreaterThanOrEqual(170);
+      expect(p.y1).toBeLessThanOrEqual(260);
+    }
+    expect(sampleClip(c, 0).plus0).toMatchObject({ x: me.x + HEAL_PLUSES[0]!.dx, y: me.y - HEAL_PLUSES[0]!.y0, alpha: 1 });
+    expect(sampleClip(c, 0).plus9!.alpha).toBe(0);
+    expect(sampleClip(c, 540).plus9!.alpha).toBe(1);
+    expect(sampleClip(c, 700).plus0!.y).toBeCloseTo(me.y - HEAL_PLUSES[0]!.y1);
+    expect(sampleClip(c, 250).mon!.green).toBeCloseTo(0.6);
+    expect(sampleClip(c, 520).mon!.dy).toBeCloseTo(-22);
+    expect(c.fx).toEqual([{ kind: 'ring', at: 0, x: me.x, y: me.y - 8, r1: 120, flat: 0.4, d: 400, color: 0x7dffa0, w: 4 }]);
+    expect(clipEnd(c)).toMatchObject({ mon: { dy: 0, sx: 1, sy: 1, green: 0 }, plus0: { alpha: 0 }, plus9: { alpha: 0 } });
+  });
+  it('Reduced: the green glow and the ring; Off: nothing', () => {
+    const r = healClip(me, 'reduced');
+    expect(r.segs.some((s) => s.part.startsWith('plus') || s.prop === 'dy')).toBe(false);
+    expect(sampleClip(r, 250).mon!.green).toBeCloseTo(0.6);
+    expect(healClip(me, 'off').length).toBe(0);
   });
 });

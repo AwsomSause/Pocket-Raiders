@@ -122,14 +122,14 @@ import { teraJewel } from '../ui/battleFx/teraJewel';
 import { megaGlass } from '../ui/battleFx/megaGlass';
 import { drawnBox, type GimmickPage } from '../ui/battleFx/gimmickStage';
 import { HIT_RUN, stand, standStill } from '../ui/battleFx/stance';
-import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture, GLOW_SIZE, glowPicture, PICTURE_SCALE, shinyChipPicture, stampPicture, starPicture } from '../ui/battleFx/cheerChip';
+import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture, GLOW_SIZE, glowPicture, PICTURE_SCALE, plusPicture, shinyChipPicture, stampPicture, starPicture } from '../ui/battleFx/cheerChip';
 import { dynamaxPan } from '../ui/battleFx/dynamaxPan';
 import { keyItemFor } from '../ui/battleFx/cineLook';
 import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel } from '../core/presentation/motionClip';
-import { aceLandClip, HIT_LIGHT, hitClip, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_LIGHT, hitClip, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
@@ -658,6 +658,7 @@ export class BattleScene extends Phaser.Scene {
       fullScreen: (on) => this.rx?.visible(!on),
       numbers: () => ({ show: services().session.settings.damageNumbers, scale: services().session.settings.popupScale }),
       recoil: (side, cue) => this.hitMoment(side, cue),
+      heal: (side) => this.healMoment(side),
     });
 
     this.shown = { player: structuredClone(run.party[battle.activeIndex]!), enemy: structuredClone(currentEnemy(battle)) };
@@ -1889,7 +1890,7 @@ export class BattleScene extends Phaser.Scene {
       };
       this.tweens.killTweensOf(box.rx);
       // The same drain the canvas bar plays, so the two never disagree about when the HP has settled.
-      if (animate && from !== to) this.tweens.add({ targets: box.rx, hp: to, duration: 280, ease: 'Quad.easeOut' });
+      if (animate && from !== to) this.tweens.add({ targets: box.rx, hp: to, duration: to < from ? 280 : 800, ease: to < from ? 'Quad.easeOut' : 'Sine.easeInOut' });
     }
     // A hit jolts the plate (pass 2): down 5 px and back with a spring.
     const ratio = Math.max(0, mon.hp) / max;
@@ -4076,6 +4077,35 @@ export class BattleScene extends Phaser.Scene {
     void run.done.then(() => {
       light?.destroy();
       floor?.destroy();
+      if (cut || !sprite.active) return;
+      sprite.setData(HIT_RUN, undefined);
+      run.rest('mon');
+      if (sprite === (side === 'player' ? this.playerSprite : this.enemySprite)) this.standUp(sprite, mon);
+    });
+    return true;
+  }
+
+  /**
+   * Healing (pass 3): green plus-signs rise through the Pokémon, it glows green and hops once, a green ring on the
+   * ground. Plays by itself while the bar climbs. False when it can't play here (the pack's heal shows instead).
+   */
+  private healMoment(side: Side): boolean {
+    const sprite = side === 'player' ? this.playerSprite : this.enemySprite;
+    const lv = this.clipLevel();
+    if (!(sprite instanceof Phaser.GameObjects.Sprite) || !sprite.active || !sprite.visible || lv === 'off') return false;
+    const at = this.spotXY(side);
+    if (Math.abs(sprite.x - at.x) > 1) return false;
+    standStill(this, sprite);
+    const mon = this.shown[side];
+    const key = lv === 'full' ? plusPicture(this, HEAL_PLUS_SIZE) : null;
+    const pluses = key ? HEAL_PLUSES.map(() => this.add.image(at.x, at.y, key).setScale(PICTURE_SCALE).setAlpha(0).setDepth(3000)) : [];
+    const parts: Record<string, ClipPart> = { mon: { kind: 'mon', get: () => sprite } };
+    pluses.forEach((p, i) => (parts[`plus${i}`] = { kind: 'free', get: () => p }));
+    const run = playClip(this, healClip({ x: at.x, y: at.y }, lv), this.clipHost(parts));
+    let cut = false;
+    sprite.setData(HIT_RUN, { stop: () => ((cut = true), run.stop()) });
+    void run.done.then(() => {
+      pluses.forEach((p) => p.destroy());
       if (cut || !sprite.active) return;
       sprite.setData(HIT_RUN, undefined);
       run.rest('mon');

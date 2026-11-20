@@ -491,3 +491,45 @@ export function hitClip(target: Point & { h: number }, away: 1 | -1, o: { big: b
   b.beat(0, 'Hit-stop: white, squash, the light').beat(70, 'Thrown back').beat(160, 'Springs home');
   return b.end(600);
 }
+
+/** The heal's ten plus-signs (pass 3): where each starts and ends, against the Pokémon's feet, and its size in px. */
+export const HEAL_PLUSES: readonly { dx: number; y0: number; y1: number; size: number }[] = [
+  { dx: -62, y0: 12, y1: 214, size: 38 },
+  { dx: 48, y0: 40, y1: 182, size: 30 },
+  { dx: -18, y0: 4, y1: 248, size: 44 },
+  { dx: 84, y0: 26, y1: 230, size: 28 },
+  { dx: -88, y0: 52, y1: 176, size: 34 },
+  { dx: 12, y0: 30, y1: 260, size: 40 },
+  { dx: 66, y0: 8, y1: 200, size: 46 },
+  { dx: -40, y0: 58, y1: 238, size: 26 },
+  { dx: 30, y0: 18, y1: 172, size: 36 },
+  { dx: -74, y0: 36, y1: 252, size: 32 },
+];
+/** The size the plus-sign picture is drawn at; each plus is scaled from it. */
+export const HEAL_PLUS_SIZE = 46;
+
+/**
+ * Healing (pass 3): green plus-signs rise through the Pokémon, it brightens green and gives one small hop, and a green
+ * ring spreads on the ground. `me` is its feet. Parts: `mon` (`green` is its tint), `plus0`..`plus9` (x, y, sx, sy, alpha).
+ * Reduced: the green glow and the ring. Off: nothing.
+ */
+export function healClip(me: Point, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('heal', level);
+  const m = b.part('mon', { dx: 0, dy: 0, sx: 1, sy: 1, green: 0 });
+  const pluses = HEAL_PLUSES.map((p, i) => b.part(`plus${i}`, { x: me.x + p.dx, y: me.y - p.y0, sx: p.size / HEAL_PLUS_SIZE, sy: p.size / HEAL_PLUS_SIZE, alpha: 0 }));
+  if (level === 'off') return b.end(0);
+  m.at(0).to(250, { green: 0.6 }).to(500, { green: 0 });
+  b.fx({ kind: 'ring', at: 0, x: me.x, y: me.y - 8, r1: 120, flat: 0.4, d: 400, color: 0x7dffa0, w: 4 });
+  if (level === 'reduced') {
+    b.beat(0, 'Green glow');
+    return b.end(750);
+  }
+  pluses.forEach((p, i) => {
+    const d = HEAL_PLUSES[i]!;
+    p.at(i * 60).set({ alpha: 1 }).to(700, { y: me.y - d.y1 }, 'out');
+    p.at(400 + i * 60).to(300, { alpha: 0 });
+  });
+  m.at(300).to(70, { sy: 0.9, sx: 1.07 }).to(150, { dy: -22, sy: 1.05, sx: 0.97 }, 'out').to(130, { dy: 0 }, 'in').to(200, { sy: 1, sx: 1 }, 'el');
+  b.beat(0, 'Plus-signs rise').beat(300, 'Hop');
+  return b.end(1300);
+}

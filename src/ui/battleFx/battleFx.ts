@@ -55,6 +55,8 @@ export interface FxOptions {
    * hit lands with full animations; it plays by itself while the battle goes on. Left out: the plain white hit-stop.
    */
   recoil?: (side: Side, cue: Extract<Cue, { kind: 'impact' }>) => boolean;
+  /** The screen's own heal (redesign pass 3: plus-signs, a green glow, a hop). False when it can't play (the pack's heal shows). */
+  heal?: (side: Side) => boolean;
 }
 
 const BADGES: Record<string, { label: string; color: string }> = {
@@ -141,6 +143,7 @@ export class BattleFx {
       case 'pulse':
         return this.pulse(cue.side, cue.color);
       case 'commonAnim':
+        if (cue.heal && !this.skipping && this.opts.heal?.(cue.side)) return;
         return this.commonAnim(cue.side, cue.anim, cue.alt);
       case 'impact':
         return this.impact(cue);
