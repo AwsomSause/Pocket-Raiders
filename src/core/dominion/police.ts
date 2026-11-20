@@ -50,6 +50,11 @@ function addEvidence(p: PoliceState, e: Evidence, day: number): void {
   const E = P().evidence;
   p.evidence = p.evidence.filter((x) => day - x.day <= E.maxAge).slice(-E.keep);
 }
+/** D23: a captive who talked (a release, an escape, a snatch gone wrong) goes on the police's log. Mutates `b`. */
+export function addCaseEvidence(b: DominionBlock, _seed: string, e: Omit<Evidence, 'id' | 'day'>): void {
+  const p = policeOf(b);
+  addEvidence(p, { ...e, id: `k${b.day}-${p.evidence.length}-${b.snatch?.n ?? 0}`, day: b.day }, b.day);
+}
 function evText(kind: EvidenceKind, v: Record<string, string | number>): string {
   return fill(P().evidence.kinds[kind].text, v);
 }

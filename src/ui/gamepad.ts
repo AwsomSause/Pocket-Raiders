@@ -1,11 +1,13 @@
 // Gamepad support (F187): the d-pad / left stick and two face buttons send the same key events as the keyboard and the
 // on-screen pad, so every screen works with a controller. Which buttons confirm and go back is set in Settings > Controls.
 
-import { buttonGlyph, glyphFamily, PAD_KEY, padActions, type PadAction } from '../core/presentation/uiPrefs';
+import { buttonGlyph, glyphFamily, PAD_KEY, padActions, padWheelHeld, type PadAction } from '../core/presentation/uiPrefs';
 import { notify } from './overlays';
 import type { Settings } from '../core/state';
 
 const REPEAT_MS = 220;
+/** Dominion D28: Select held / let go, sent as its own event (not a Q key, which other scenes use for other things). */
+export const PAD_WHEEL_EVENT = 'pkr-pad-wheel';
 
 function press(action: PadAction): void {
   const k = PAD_KEY[action];
@@ -21,6 +23,7 @@ export function installGamepad(get: () => Settings): void {
     notify(`Controller connected: ${buttonGlyph(family, s.gamepadMap.confirm)} confirms, ${buttonGlyph(family, s.gamepadMap.back)} goes back.`);
   });
   const held = new Map<PadAction, number>();
+  let wheel = false;
   const loop = (): void => {
     const now = performance.now();
     const pad = [...(navigator.getGamepads() ?? [])].find((p) => p?.connected);
@@ -39,7 +42,12 @@ export function installGamepad(get: () => Settings): void {
         }
       }
       for (const a of [...held.keys()]) if (!down.has(a)) held.delete(a);
-    } else held.clear();
+      const w = padWheelHeld({ buttons: pad.buttons.map((b) => b.pressed), axes: [] }, s.gamepadMap);
+      if (w !== wheel) window.dispatchEvent(new CustomEvent(PAD_WHEEL_EVENT, { detail: (wheel = w) }));
+    } else {
+      held.clear();
+      if (wheel) window.dispatchEvent(new CustomEvent(PAD_WHEEL_EVENT, { detail: (wheel = false) }));
+    }
     requestAnimationFrame(loop);
   };
   requestAnimationFrame(loop);

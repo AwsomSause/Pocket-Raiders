@@ -30,3 +30,6 @@
 - Joiners from a Merger get a stock look and one Pokémon from their canon team; "fight beside you" for Branches waits for D14 takeovers; betrayal itself is D15 (`deal.risk` is kept for it).
 - No Q command wheel on this screen (the wheel isn't built yet); End-to-quit is D26's re-key.
 - D12's court card that waits on D13 is in PR #1502 (not merged); that thread flips it.
+
+## Follow-up: Chair cards
+The Chair's card 81 (the Rival Boss's assistant: "the Debate opens early") is live: answer A puts a Debate card for the rival Boss in the Rival File at once, plus Tension −5. D9's two waiting cards came with it (56 insurance, 74 double agent). See `docs/status/dominion-d12.md`, Card status.

@@ -3302,8 +3302,10 @@
     "turn them"
    ],
    "risk": "Escape",
-   "status": "disabled",
-   "needs": "D23"
+   "status": "supported",
+   "effect": {
+    "kind": "captive"
+   }
   },
   {
    "n": 137,
@@ -3456,8 +3458,11 @@
     "ally"
    ],
    "risk": "Offends",
-   "status": "disabled",
-   "needs": "D14"
+   "status": "limited",
+   "note": "Runs as truce talk with the rival's envoy; better deal terms aren't acted on.",
+   "effect": {
+    "kind": "truceTalk"
+   }
   },
   {
    "n": 144,
@@ -3476,8 +3481,12 @@
     "silent ops"
    ],
    "risk": "Burned",
-   "status": "disabled",
-   "needs": "D14"
+   "status": "limited",
+   "note": "Runs as a covert hit on the rival team; linked ops are one hit each.",
+   "effect": {
+    "kind": "rivalHit",
+    "risky": true
+   }
   },
   {
    "n": 145,
@@ -3550,7 +3559,7 @@
    ],
    "risk": "Coup",
    "status": "disabled",
-   "needs": "D14"
+   "needs": "D15"
   },
   {
    "n": 148,
@@ -3570,7 +3579,7 @@
    ],
    "risk": "Discovered",
    "status": "disabled",
-   "needs": "D14"
+   "needs": "D22"
   },
   {
    "n": 149,
@@ -3589,8 +3598,12 @@
     "an exact plan the Boss can run"
    ],
    "risk": "Leaks",
-   "status": "disabled",
-   "needs": "D14"
+   "status": "limited",
+   "note": "A plan is one Plan point for the takeover (and Goal Track +1 with a Goal).",
+   "effect": {
+    "kind": "takeover",
+    "does": "plan"
+   }
   },
   {
    "n": 150,
@@ -3609,8 +3622,13 @@
     "take their chair"
    ],
    "risk": "Backfires",
-   "status": "disabled",
-   "needs": "D14"
+   "status": "limited",
+   "note": "Each step weakens the rival Boss's circle (their power −1); taking the chair is the Wipe Out path's HQ fight.",
+   "effect": {
+    "kind": "takeover",
+    "does": "coup",
+    "risky": true
+   }
   },
   {
    "n": 151,
@@ -14893,8 +14911,12 @@
    ],
    "risk": "Delays",
    "source": "team-actions-451-600.md",
-   "status": "disabled",
-   "needs": "D14"
+   "status": "limited",
+   "note": "Each project is Goal Track +1 (a Rule team: one Plan point).",
+   "effect": {
+    "kind": "takeover",
+    "does": "track"
+   }
   },
   {
    "n": 587,
@@ -14914,8 +14936,12 @@
    ],
    "risk": "Flaws",
    "source": "team-actions-451-600.md",
-   "status": "disabled",
-   "needs": "D14"
+   "status": "limited",
+   "note": "A plan is one Plan point for the takeover (and Goal Track +1 with a Goal).",
+   "effect": {
+    "kind": "takeover",
+    "does": "plan"
+   }
   },
   {
    "n": 588,
@@ -14935,8 +14961,10 @@
    ],
    "risk": "Offends",
    "source": "team-actions-451-600.md",
-   "status": "disabled",
-   "needs": "D14"
+   "status": "supported",
+   "effect": {
+    "kind": "audit"
+   }
   },
   {
    "n": 589,
@@ -14956,8 +14984,11 @@
    ],
    "risk": "Splits",
    "source": "team-actions-451-600.md",
-   "status": "disabled",
-   "needs": "D14"
+   "status": "supported",
+   "effect": {
+    "kind": "takeover",
+    "does": "loyalty"
+   }
   },
   {
    "n": 590,
@@ -14978,7 +15009,7 @@
    "risk": "Coup",
    "source": "team-actions-451-600.md",
    "status": "disabled",
-   "needs": "D14"
+   "needs": "D15"
   },
   {
    "n": 591,
@@ -14998,8 +15029,11 @@
    ],
    "risk": "Moles",
    "source": "team-actions-451-600.md",
-   "status": "disabled",
-   "needs": "D14"
+   "status": "limited",
+   "note": "Runs as a hunt for recruits; recruits at scale are one lead each.",
+   "effect": {
+    "kind": "recruit"
+   }
   },
   {
    "n": 592,
@@ -15019,8 +15053,12 @@
    ],
    "risk": "Strain",
    "source": "team-actions-451-600.md",
-   "status": "disabled",
-   "needs": "D14"
+   "status": "limited",
+   "note": "Runs as the member's training; the whole crew's XP isn't acted on.",
+   "effect": {
+    "kind": "train",
+    "xp": 2
+   }
   },
   {
    "n": 593,
@@ -15040,8 +15078,17 @@
    ],
    "risk": "Leak",
    "source": "team-actions-451-600.md",
-   "status": "disabled",
-   "needs": "D14"
+   "status": "supported",
+   "effect": {
+    "kind": "money",
+    "funds": [
+     400,
+     1600
+    ],
+    "risky": true,
+    "heat": 3,
+    "caughtHeat": 6
+   }
   },
   {
    "n": 594,
@@ -15061,8 +15108,10 @@
    ],
    "risk": "Loss",
    "source": "team-actions-451-600.md",
-   "status": "disabled",
-   "needs": "D14"
+   "status": "supported",
+   "effect": {
+    "kind": "guard"
+   }
   },
   {
    "n": 595,
@@ -15082,8 +15131,15 @@
    ],
    "risk": "Flat",
    "source": "team-actions-451-600.md",
-   "status": "disabled",
-   "needs": "D14"
+   "status": "supported",
+   "effect": {
+    "kind": "district",
+    "does": "regard",
+    "n": [
+     3,
+     4
+    ]
+   }
   },
   {
    "n": 596,
@@ -15103,8 +15159,11 @@
    ],
    "risk": "Insult",
    "source": "team-actions-451-600.md",
-   "status": "disabled",
-   "needs": "D14"
+   "status": "limited",
+   "note": "Runs as truce talk; Tension −3 comes with a truce, not from the task.",
+   "effect": {
+    "kind": "truceTalk"
+   }
   },
   {
    "n": 597,
@@ -15124,8 +15183,15 @@
    ],
    "risk": "Loss",
    "source": "team-actions-451-600.md",
-   "status": "disabled",
-   "needs": "D14"
+   "status": "supported",
+   "effect": {
+    "kind": "rivalHit",
+    "funds": [
+     300,
+     750
+    ],
+    "risky": true
+   }
   },
   {
    "n": 598,
@@ -15145,8 +15211,15 @@
    ],
    "risk": "Caught",
    "source": "team-actions-451-600.md",
-   "status": "disabled",
-   "needs": "D14"
+   "status": "supported",
+   "effect": {
+    "kind": "district",
+    "does": "cool",
+    "n": [
+     5,
+     8
+    ]
+   }
   },
   {
    "n": 599,
@@ -15166,8 +15239,10 @@
    ],
    "risk": "Loss",
    "source": "team-actions-451-600.md",
-   "status": "disabled",
-   "needs": "D14"
+   "status": "supported",
+   "effect": {
+    "kind": "guard"
+   }
   },
   {
    "n": 600,
@@ -15187,8 +15262,12 @@
    ],
    "risk": "Left behind",
    "source": "team-actions-451-600.md",
-   "status": "disabled",
-   "needs": "D14"
+   "status": "limited",
+   "note": "Loyalty +3; coming along to the next region is D15's (bring one member).",
+   "effect": {
+    "kind": "takeover",
+    "does": "loyalty"
+   }
   }
  ]
 }

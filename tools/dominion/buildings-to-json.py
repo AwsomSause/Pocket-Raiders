@@ -12,9 +12,24 @@ can't be built yet: it names the slice its effect waits for (WAITS, by keyword).
 renamed a room (Training Room, Research Lab, Treasury, Operations Room). Re-run after a list changes:
   python3 -I tools/dominion/buildings-to-json.py <plans/evil-mode-rework/lists> src/data/dominion/buildings.json
 """
+import ast
 import json
 import re
 import sys
+
+# A dict literal with the same key twice keeps only the last one, silently (two slices' merges did that to
+# WAIT_OVERRIDE). Refuse to run while any dict literal in this script repeats a key.
+_dupes = []
+for _node in ast.walk(ast.parse(open(__file__, encoding='utf-8').read())):
+    if isinstance(_node, ast.Dict):
+        _seen = set()
+        for _k in _node.keys:
+            if isinstance(_k, ast.Constant):
+                if _k.value in _seen:
+                    _dupes.append(f'line {_k.lineno}: {_k.value!r}')
+                _seen.add(_k.value)
+if _dupes:
+    sys.exit('buildings-to-json.py: duplicate keys in a dict: ' + ', '.join(_dupes))
 
 lists, out = sys.argv[1], sys.argv[2]
 
@@ -48,6 +63,8 @@ FX = {
     'casino-floor': dict(income=300), 'laundering-room': dict(launder=10), 'protection-desk': dict(weekly=100),
     'workshop': dict(unlock=True), 'garage': dict(unlock=True), 'print-shop': dict(unlock=True), 'research-lab': dict(unlock=True),
     'trap-hall': dict(defense=1), 'executive-office': dict(dayActions=1), 'holding-cell': dict(unlock=True),
+    # D23 (snatch.ts): talk (% more Resolve each line breaks).
+    'interrogation-cell': dict(talk=10),
     'safehouse': dict(control=10, heatOnce=15), 'outpost': dict(crewCap=2), 'front-shop': dict(clean=150),
     'front-cafe': dict(clean=100), 'front-arcade': dict(clean=100), 'second-warehouse': dict(storage=100),
     'pet-corner': dict(morale=2), 'portrait-studio': dict(morale=1),
@@ -109,12 +126,13 @@ FX = {
 }
 # D9 rows the rival rules don't reach yet: the slice that does (the keyword guess said D9).
 WAIT_OVERRIDE = {
-    'quarantine-ward': 'later', 'contraband-cellar': 'D10', 'interrogation-cell': 'D10', 'ledger-office': 'D6', 'investment-office': 'D10',
-    'machine-shop': 'later', 'test-chamber': 'later', 'panic-room': 'D14', 'escape-tunnel': 'D14', 'battle-arena': 'D10', 'hidden-lab': 'D10',
+    'quarantine-ward': 'later', 'contraband-cellar': 'D10', 'ledger-office': 'D6', 'investment-office': 'D10',
+    'machine-shop': 'later', 'test-chamber': 'later', 'panic-room': 'D14', 'escape-tunnel': 'D14', 'battle-arena': 'D10',
     'pokemon-nap-house': 'later', 'cave-habitat': 'later', 'strike-breakers-office': 'later', 'drivers-pool': 'D10',
     'assassins-guild': 'later', 'security-firm': 'D10',
-    # D10 read these and found they need other systems: Pokémon friendship rooms and TMs (later), captives (D23).
-    'pokemon-spa': 'later', 'tm-library': 'later', 'interrogation-cell': 'D23', 'research-library': 'later', 'hidden-lab': 'later',
+    # D10 read these and found they need other systems: Pokémon friendship rooms and TMs (later). Captives are D23's (live,
+    # in FX). The hidden lab was listed twice (D10, then later): the later one always won, so it is kept once as 'later'.
+    'pokemon-spa': 'later', 'tm-library': 'later', 'research-library': 'later', 'hidden-lab': 'later',
     'friendship-meadow': 'later',
 }
 # Effects that only part works now (the rest waits): shown on the room card.

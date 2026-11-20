@@ -32,6 +32,13 @@ export const squadOf = (b: DominionBlock, memberId: string): Squad | undefined =
 export const squadById = (b: DominionBlock, id: string): Squad | undefined => b.squads?.list.find((s) => s.id === id);
 export const groupOf = (b: DominionBlock, squadId: string) => b.squads?.groups.find((g) => g.squads.includes(squadId));
 export const incentiveById = (id: string) => Q().incentives.find((i) => i.id === id);
+
+/** D14 (takeover.ts) registers the Goal for The Cause, so this file doesn't import the takeover rules. */
+interface CauseHooks { fits(b: DominionBlock, actionId: string): boolean; track(b: DominionBlock): number | null; feed(b: DominionBlock, n: number): void }
+let CAUSE: CauseHooks | null = null;
+export function setSquadCause(h: CauseHooks): void {
+  CAUSE = h;
+}
 export const traitById = (id: string | null) => (id ? Q().traits.find((t) => t.id === id) : undefined);
 export const focusById = (id: string | null) => (id ? Q().focus.find((f) => f.id === id) : undefined);
 export const targetById = (id: string | null) => (id ? Q().targets.find((t) => t.id === id) : undefined);
@@ -148,6 +155,7 @@ export function squadParts(b: DominionBlock, s: Squad, task: Task): [string, num
   const f = focusById(s.focus);
   if (f) parts.push([`Focus ${f.name}`, f.families.includes(familyOf(task.id) ?? '') ? N('focusOn') : N('focusOff')]);
   if (s.incentive === 'cut' && task.effect?.kind === 'money') parts.push(['Cut of the Take', N('cutOdds')]);
+  if (s.incentive === 'cause' && task.effect?.kind === 'takeover' && CAUSE && CAUSE.track(b) !== null) parts.push(['The Cause', N('causeOdds')]);
   return parts;
 }
 
@@ -442,6 +450,20 @@ function weekly(b: DominionBlock, lines: string[]): void {
       b.funds -= amount;
       lines.push(L('upkeep', { squad: s.codeName, amount }));
     }
+    if (s.incentive === 'cause' && ms.length && CAUSE) {
+      // D14: they push the Goal a little each week; if it stalls for two weeks, Morale drops.
+      const now = CAUSE.track(b);
+      if (now !== null) {
+        CAUSE.feed(b, N('causeTrack'));
+        const was = s.cause;
+        const stalled = !!was && now <= was.track;
+        s.cause = { track: CAUSE.track(b) ?? now, weeks: stalled ? was!.weeks + 1 : 0 };
+        if (s.cause.weeks >= N('causeStallWeeks')) {
+          for (const m of ms) addMorale(m, N('causeMorale'));
+          lines.push(L('causeStall', { squad: s.codeName, n: -N('causeMorale') }));
+        }
+      }
+    }
     if (s.incentive === 'purse' && ms.length) {
       const amount = ms.reduce((a, m) => a + m.wage * (N('purseWageX') - 1), 0);
       b.funds -= amount;
@@ -517,6 +539,7 @@ addOddsPartHook((b, actionId, targetId, bring) => {
     seen.add(s.id);
     if (s.incentive === 'vengeance' && s.target && s.target === targetId && targetById(s.target)?.live) parts.push([`${s.codeName}'s Vengeance`, N('vengeanceOdds')]);
     if (s.incentive === 'glory' && /(^|-)(attack|raid)$/.test(actionId)) parts.push([`${s.codeName}'s Glory`, N('gloryOdds')]);
+    if (s.incentive === 'cause' && CAUSE?.fits(b, actionId)) parts.push([`${s.codeName}'s Cause`, N('causeOdds')]);
   }
   return parts;
 });

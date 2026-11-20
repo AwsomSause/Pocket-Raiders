@@ -85,6 +85,8 @@ export function newBlock(content: Content, run: RunState, setup: DominionSetup):
     levelCap: s.levelCap,
     teamName: null,
     types: [setup.types[0], setup.types[1]],
+    // D27: the run rules from Settings · Dominion (none = Normal).
+    ...(setup.rules ? { rules: { ...setup.rules } } : {}),
     members: [firstMember(content, run, setup)],
     keyItems: [...s.keyItems],
     orders: [],

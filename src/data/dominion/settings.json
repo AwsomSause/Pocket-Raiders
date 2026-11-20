@@ -1,0 +1,13 @@
+{
+  "_source": "plans/evil-mode-rework/mockups-v4 m1 (Boss Menu) and m2 (Settings · Dominion); build slice D27. Factors are D27's balance numbers.",
+  "pace": { "calm": 0.75, "normal": 1, "ruthless": 1.3 },
+  "hero": { "low": 0.8, "normal": 1, "high": 1.25 },
+  "betrayals": { "off": 0, "rare": 0.5, "normal": 1 },
+  "quotes": [
+    "Kanto doesn't need a hero. It needs a landlord.",
+    "Every Gym badge is a receipt. I keep receipts.",
+    "The rain hides footprints. Work while it falls.",
+    "Fear is rent. Collect it every week.",
+    "A crew that waits for orders is a crew that gets caught."
+  ]
+}

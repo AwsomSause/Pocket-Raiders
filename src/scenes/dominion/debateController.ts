@@ -19,7 +19,7 @@ import { services } from '../../game/services';
 import type { InputAction } from '../../ui/input';
 import { debateTypedView, debateView } from '../../ui/redux/screens/dominion/debate';
 
-type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'squads' | 'founding' | 'founded' | 'debate' | 'spy';
+type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'squads' | 'founding' | 'founded' | 'debate' | 'spy' | 'takeover' | 'broadcast' | 'assign' | 'district';
 interface Host {
   screenName: Screen;
   setNotice(n: string | null): void;

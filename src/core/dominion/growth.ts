@@ -72,7 +72,7 @@ const lvOf = (b: DominionBlock, id: string): number => {
 // ---------- the Card ----------
 
 /** Adds a part to the odds and works the chance out again (the Card's own rule: capped, floored, a range if unscouted). */
-function addPart(c: Card, label: string, n: number): void {
+export function addPart(c: Card, label: string, n: number): void {
   if (!c.roll || !n) return;
   c.parts.push([label, n]);
   const O = F().odds;

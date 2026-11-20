@@ -3,7 +3,8 @@
 // answers and what they move, Hand it off, the whisper, Close the doors, the Tally, deals, fights at the door, and
 // save/reload in the middle of a sitting.
 import { describe, expect, it } from 'vitest';
-import { rivalsOf, teamAt } from '../../src/core/dominion/rivals';
+import { forceAction, planSeen, rivalsOf, teamAt } from '../../src/core/dominion/rivals';
+import { whyNot } from '../../src/core/dominion/debate';
 import trainersRaw from '../../src/data/trainers.json';
 import {
   atDoor, canDraw, cardById, cardStatus, chairOf, courtFightEnd, handOffCrew, leanOf, openSitting, redZones, rightHand, visitorsTonight, whisper, wouldPick,
@@ -90,9 +91,9 @@ describe('DOMINION D12: the 150 cards', () => {
     const n = (s: string) => CARDS.filter((c) => c.sect === s).length;
     expect([n('crew'), n('town'), n('money'), n('law'), n('rival'), n('hero'), n('gyms'), n('pokemon'), n('empire'), n('regular'), n('crisis')]).toEqual([22, 22, 14, 12, 16, 10, 12, 14, 10, 12, 6]);
   });
-  it('every card has a status: 113 play now (some limited), 37 wait and name the slice', () => {
+  it('every card has a status: 124 play now (some limited), 26 wait and name the slice (D14 opened card 82)', () => {
     const st = CARDS.map(cardStatus);
-    expect(st.filter((s) => s !== 'disabled')).toHaveLength(113);
+    expect(st.filter((s) => s !== 'disabled')).toHaveLength(124);
     expect(st.filter((s) => s === 'supported').length).toBeGreaterThan(50);
     for (const c of CARDS.filter((x) => x.wait)) expect(c.wait).toMatch(/^(D\d+|quiz)$/);
   });
@@ -207,7 +208,7 @@ describe('DOMINION D12: the sitting', () => {
     b.hqLevel = 4;
     expect(canDraw(b, cardById(23)!)).toBe(false); // shopkeeper stops after Compound (and needs a Racket)
     expect(canDraw(b, cardById(2)!)).toBe(false);
-    expect(canDraw(b, cardById(93)!)).toBe(false);
+    expect(canDraw(b, cardById(29)!)).toBe(false); // waits for D10
     expect(canDraw(b, cardById(145)!)).toBe(false);
   });
   it('a red zone puts its Crisis card first; no Hand it off, no Close the doors (Kice: a red zone never ends the run)', () => {
@@ -436,5 +437,77 @@ describe('DOMINION D12: saves', () => {
     const c = structuredClone(blk(go(day2(), { t: 'toNight' })));
     (c.chair!.opts as unknown as { length: string }).length = 'forever';
     expect(DominionBlockSchema.safeParse(c).success).toBe(false);
+  });
+});
+
+describe('DOMINION D13/D9 follow-up: Chair answers other slices own (hook:)', () => {
+  /** Puts one card at the door in the Evening and answers it. */
+  const answer = (card: number, pick: 0 | 1, r = day2()): RunState => {
+    r = go(r, { t: 'toNight' });
+    r = edit(r, (b) => void (b.chair!.docket = [{ card, member: null, second: null }]));
+    return go(r, { t: 'court', choice: pick });
+  };
+  it('the three cards play now; none waits or says "waits for a later slice"', () => {
+    for (const id of [56, 74, 81]) {
+      const c = cardById(id)!;
+      expect(c.wait).toBeUndefined();
+      expect(cardStatus(c)).not.toBe('disabled');
+      expect([...c.a.fx, ...c.b.fx].some((e) => e.k === 'note')).toBe(false);
+    }
+  });
+  it('card 56, the insurance man: a weekly deal, and a raid on the Warehouse takes half', () => {
+    const r = answer(56, 0);
+    const b = blk(r);
+    expect(b.flags).toContain('insured');
+    expect(chairOf(b).deals.some((d) => d.card === 56 && d.n < 0)).toBe(true);
+    // Same seed with and without the insurance: the same raid, half the money gone.
+    const team = teamAt(b, null);
+    let checked = 0;
+    for (let i = 0; i < 20 && checked < 3; i++) {
+      const rich = structuredClone(b);
+      rich.funds = 50000;
+      const bare = structuredClone(rich);
+      bare.flags = bare.flags.filter((f) => f !== 'insured');
+      const a = forceAction(rich, team, 'vault-job', `ins${i}`), z = forceAction(bare, team, 'vault-job', `ins${i}`);
+      if (!a.block.flags.some((f) => f.startsWith('raided:'))) continue;
+      const lostBare = 50000 - z.block.funds, lostIns = 50000 - a.block.funds;
+      expect(lostBare).toBeGreaterThan(0);
+      expect(lostIns).toBe(lostBare - Math.round((lostBare * DOMINION_DATA.rivals.raid.insured) / 100));
+      expect(a.lines.join(' ')).toContain('insurance');
+      checked += 1;
+    }
+    expect(checked).toBeGreaterThan(0);
+  });
+  it('card 56 turned away: no insurance (failure case)', () => {
+    expect(blk(answer(56, 1)).flags).not.toContain('insured');
+  });
+  it('card 74, the caught spy: taken on, the rival plan shows every week; let go, it stays hidden', () => {
+    const before = day2();
+    const team = teamAt(blk(before), null);
+    expect(planSeen(blk(before), team)).toBe(false);
+    const yes = blk(answer(74, 0, before));
+    expect(planSeen(yes, team)).toBe(true);
+    expect(planSeen({ ...yes, day: yes.day + 14 }, team)).toBe(true);
+    expect(planSeen(blk(answer(74, 1, before)), team)).toBe(false);
+  });
+  it('card 81, the Boss\'s assistant: a Debate card for the rival Boss now (no Tension 40 or win needed), Tension -5', () => {
+    const before = go(day2(), { t: 'toNight' });
+    const team = teamAt(blk(before), null);
+    const ten0 = rivalsOf(blk(before)).teams[team]!.tension;
+    const r = answer(81, 0, day2());
+    const b = blk(r);
+    const cards = b.rivals!.cards.filter((c) => c.kind === 'debate' && c.team === team);
+    expect(cards).toHaveLength(1);
+    expect(cards[0]).toMatchObject({ ref: 'chair-81', who: DOMINION_DATA.rivals.teams.find((t) => t.id === team)!.boss.name });
+    expect(whyNot(b, team, 'action')).not.toBeNull();
+    expect(whyNot(b, team, 'invite')).toBeNull();
+    expect(rivalsOf(b).teams[team]!.tension).toBe(Math.max(0, ten0 - 5));
+  });
+  it('card 81 again: never two Debate cards for one team (boundary)', () => {
+    let r = answer(81, 0, day2());
+    r = edit(r, (b) => void (b.chair!.docket = [{ card: 81, member: null, second: null }], b.chair!.open = true));
+    const out = stepInRun(content, r, { t: 'court', choice: 0 });
+    const b = blk(out.ok ? out.run : r);
+    expect(b.rivals!.cards.filter((c) => c.kind === 'debate').length).toBe(1);
   });
 });
