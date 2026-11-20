@@ -22,6 +22,7 @@ import { ReserveController } from './dominion/reserveController';
 import { typeBoxOpen } from '../ui/typeBox';
 import { DeskController } from './dominion/deskController';
 import { waiting as deskWaiting, deskOpen } from '../core/dominion/desk';
+import { SquadController } from './dominion/squadController';
 import { HqController } from './dominion/hqController';
 import { RivalController } from './dominion/rivalController';
 import { SpyController } from './dominion/spyController';
@@ -40,7 +41,7 @@ import { FOUNDING_ROWS, foundedView, foundingView, type FoundingUi } from '../ui
 import { heroModel, interruptModel } from '../core/dominion/heroScreens';
 import { heroView, interruptView, type MonFiles } from '../ui/redux/screens/dominion/heroViews';
 
-type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'founding' | 'founded' | 'debate' | 'spy';
+type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'squads' | 'founding' | 'founded' | 'debate' | 'spy';
 
 /** The screen to come back to after a battle (D2: the map the action was picked on, or the HQ for a fight at the door). */
 let resume: Screen | null = null;
@@ -93,6 +94,8 @@ export class DominionScene extends Phaser.Scene {
   private police = new PoliceController(this);
   /** D21: the applications desk (Rotom mockup k5). */
   private desk = new DeskController(this);
+  /** D8: the Squads page (mockup 13, U on the Crew File). */
+  private sq = new SquadController(this, this);
   /** D25: the Evening voices scene (mockup a10), an overlay on the HQ. */
   private voices = new VoicesController({ refresh: () => this.view?.refresh(), onHq: () => this.screen === 'hq' && !this.crew.owns() && !this.police.owns() && !this.block()?.crew?.talks.length });
 
@@ -117,6 +120,7 @@ export class DominionScene extends Phaser.Scene {
     this.debate = new DebateController(this);
     this.police = new PoliceController(this);
     this.desk = new DeskController(this);
+    this.sq = new SquadController(this, this);
     this.spy.destroy();
     this.spy = new SpyController(this);
     this.voices.close();
@@ -214,6 +218,7 @@ export class DominionScene extends Phaser.Scene {
         base: () => { this.hq.open(); this.view?.refresh(); },
         ...this.desk.acts(),
         desk: () => this.desk.open(),
+        ...this.sq.acts(),
       },
       overs: {
         typeOver: (i) => { this.setup = { ...this.setup, at: Number(i) }; this.view?.refresh(); },
@@ -224,6 +229,7 @@ export class DominionScene extends Phaser.Scene {
         ...this.rival.overs(),
         ...this.spy.overs(),
         ...this.desk.overs(),
+        ...this.sq.overs(),
       },
     });
     const kb = this.input.keyboard;
@@ -278,8 +284,13 @@ export class DominionScene extends Phaser.Scene {
         if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
         return;
       }
-      if (this.screen !== 'hq' && this.screen !== 'crew' && this.screen !== 'reserve' && this.screen !== 'pyramid') return;
+      if (this.screen !== 'hq' && this.screen !== 'crew' && this.screen !== 'reserve' && this.screen !== 'pyramid' && this.screen !== 'squads') return;
       if (this.chair.raw(e.code)) return;
+      // D8: the Squads page reads its letters first. WASD stay moves; X (break up) is not also Back.
+      if (this.sq.raw(e.code)) {
+        if (e.code === 'Tab') e.preventDefault();
+        return void (this.ate = e.code === 'KeyX');
+      }
       // D4: the Reserve and the Pyramid read their letters first; a move letter they use (W, A, S, D, X) isn't also a move.
       if (this.res.raw(e.code)) {
         if (e.code === 'Tab') e.preventDefault();
@@ -382,6 +393,8 @@ export class DominionScene extends Phaser.Scene {
       case 'reserve':
       case 'pyramid':
         return this.res.render(this.notice);
+      case 'squads':
+        return this.sq.render(this.notice);
       case 'base':
         return this.hq.render(this.notice);
       case 'rival':
@@ -574,6 +587,7 @@ export class DominionScene extends Phaser.Scene {
       return;
     }
     if (this.chair.key(a)) return void this.view?.refresh();
+    if (this.sq.key(a)) return void this.view?.refresh();
     if (this.res.key(a)) return void this.view?.refresh();
     if (this.rival.key(a)) return void this.view?.refresh();
     if (this.desk.key(a)) return void this.view?.refresh();
@@ -751,7 +765,8 @@ export class DominionScene extends Phaser.Scene {
 
   private tab(i: number): void {
     if (this.screen === 'rival') this.screen = 'hq';
-    if (this.screen !== 'hq' && this.screen !== 'map' && this.screen !== 'crew' && this.screen !== 'reserve' && this.screen !== 'pyramid' && this.screen !== 'ledger' && this.screen !== 'base') return;
+    if (this.screen !== 'hq' && this.screen !== 'map' && this.screen !== 'crew' && this.screen !== 'reserve' && this.screen !== 'pyramid' && this.screen !== 'ledger' && this.screen !== 'base' && this.screen !== 'squads') return;
+    if (this.sq.tab(i)) return void this.view?.refresh();
     if (i === 5) return this.openLedger();
     if (this.screen === 'ledger') this.screen = 'hq';
     if (this.screen === 'base' && i === 0) {

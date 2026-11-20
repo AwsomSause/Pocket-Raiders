@@ -106,6 +106,9 @@ ENGINE = {
     135: dict(kind='rescue', risky=True),
     139: dict(kind='rumours'),
     140: dict(kind='truceTalk'),
+    # D8 (squads.ts): pairs two members; an Executive leads five on their tasks.
+    58: dict(kind='matchMake', note='The bond trait (level 3) and swapping Pokémon in a doubles battle (level 4) wait for squads in battle (D10).'),
+    141: dict(kind='runCrew', note='Level 4 (no failures from miscommunication) has nothing to stop yet: crew tasks have no miscommunication roll.'),
     # D4b (school.ts): Learn a Trade, Teach a Move.
     67: dict(kind='trade'), 69: dict(kind='tutor'),
     # D10 (growth.ts): hauls, fronts, the Fence, flyers, fossils, the stores.
@@ -147,8 +150,8 @@ ENGINE = {
 NEEDS_SECTION = {'A': 'D5', 'B': 'D10', 'C': 'D2', 'D': 'D9', 'E': 'D9', 'F': 'D5', 'G': 'D5', 'H': 'D10', 'I': 'D10', 'J': 'D6', 'K': 'D15', 'L': 'D9', 'M': 'D14'}
 NEEDS_ROW = {
     4: 'D9', 5: 'D6', 6: 'D2', 8: 'D10', 9: 'D2', 11: 'D9', 13: 'D6', 2: 'D9', 10: 'D9', 32: 'D6', 33: 'D10',
-    40: 'D6', 46: 'D2', 47: 'D6', 42: 'D2', 45: 'D11', 50: 'D10', 53: 'D6', 55: 'D2', 58: 'D8', 70: 'D9', 71: 'D7',
-    83: 'D10', 84: 'D15', 89: 'D10', 90: 'D9', 91: 'D10', 109: 'D10', 118: 'D11', 119: 'D6', 124: 'D6', 128: 'D6', 141: 'D8',
+    40: 'D6', 46: 'D2', 47: 'D6', 42: 'D2', 45: 'D11', 50: 'D10', 53: 'D6', 55: 'D2', 70: 'D9', 71: 'D7',
+    83: 'D10', 84: 'D15', 89: 'D10', 90: 'D9', 91: 'D10', 109: 'D10', 118: 'D11', 119: 'D6', 124: 'D6', 128: 'D6',
     142: 'D9', 145: 'D11', 146: 'D6', 136: 'D23',
 }
 
