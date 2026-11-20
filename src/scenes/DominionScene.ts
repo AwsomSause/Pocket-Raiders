@@ -40,6 +40,7 @@ import { foundedLines, foundingOpen, initialOf, nameIdeas, newDraft, teamColours
 import { FOUNDING_ROWS, foundedView, foundingView, type FoundingUi } from '../ui/redux/screens/dominion/founding';
 import { heroModel, interruptModel } from '../core/dominion/heroScreens';
 import { heroView, interruptView, type MonFiles } from '../ui/redux/screens/dominion/heroViews';
+import { JobController } from './dominion/jobController';
 
 type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'squads' | 'founding' | 'founded' | 'debate' | 'spy';
 
@@ -97,6 +98,15 @@ export class DominionScene extends Phaser.Scene {
   /** D8: the Squads page (mockup 13, U on the Crew File). */
   private sq = new SquadController(this, this);
   /** D25: the Evening voices scene (mockup a10), an overlay on the HQ. */
+  // D30: the job moments after Do it (m8-m10) and the morning paper (m12).
+  private job = new JobController({
+    refresh: () => this.view?.refresh(),
+    later: (ms, fn) => void this.time.delayedCall(ms, fn),
+    fight: () => this.fight('map'),
+    interrupt: () => { this.screen = 'interrupt'; this.intAt = 0; this.view?.refresh(); },
+    toMap: (next) => this.afterJob(next),
+    onMorningHq: () => this.screen === 'hq' && !this.police.owns() && !this.voices.on,
+  });
   private voices = new VoicesController({ refresh: () => this.view?.refresh(), onHq: () => this.screen === 'hq' && !this.crew.owns() && !this.police.owns() && !this.block()?.crew?.talks.length });
 
   constructor() {
@@ -166,6 +176,7 @@ export class DominionScene extends Phaser.Scene {
     this.view = mountRedux(this, {
       render: () => this.render(),
       acts: {
+        ...this.job.acts(),
         title: (i) => { this.titleAt = Number(i); this.confirm(); },
         type: (i) => { this.setup = toggleType({ ...this.setup, at: Number(i) }); this.view?.refresh(); },
         member: (i) => { this.setup = { ...this.setup, member: i === '0' ? 'grunt' : 'admin', problem: null }; this.view?.refresh(); },
@@ -245,6 +256,8 @@ export class DominionScene extends Phaser.Scene {
       // choices must be answered first; not while typing in the desk's Type box). Q stays free on every page for the hold-Q command wheel (D28): no screen reads it.
       if (e.code === 'End' && this.screen !== 'interrupt' && !typeBoxOpen()) return this.leave();
       // D24: the interview room and the release page read their keys first (typing included).
+      // D30: a job moment or the morning paper keeps every key while it is up (N is Next action on a result page).
+      if (this.inRun() && this.job.raw(e.code)) return;
       if (this.inRun() && this.police.raw(e)) return;
       if (this.screen === 'founding') return;
       if (this.debate.raw(e.code)) return;
@@ -344,7 +357,9 @@ export class DominionScene extends Phaser.Scene {
 
   private render(): string {
     const b = this.block();
+    if (b && this.inRun() && this.job.owns()) return this.job.render();
     if (b && this.inRun() && this.police.owns()) return this.police.render();
+    if (b && this.inRun() && this.job.paperOwns()) return this.job.renderPaper();
     if (this.voices.on && this.screen === 'hq') return this.voices.render();
     // D13: a Debate on the table takes the screen (after the Debate action, a card answered, or a reload).
     if (b?.debate?.live && (this.screen === 'hq' || this.screen === 'map' || this.screen === 'card' || this.screen === 'rival' || this.screen === 'crew' || this.screen === 'reserve' || this.screen === 'pyramid' || this.screen === 'ledger' || this.screen === 'base')) this.debate.claim();
@@ -567,6 +582,7 @@ export class DominionScene extends Phaser.Scene {
     if (this.leaving) return;
     if (this.spy.key(a)) return void this.view?.refresh();
     if (this.debate.key(a)) return void this.view?.refresh();
+    if (this.inRun() && this.job.key(a)) return void this.view?.refresh();
     if (this.inRun() && this.police.key(a)) return void this.view?.refresh();
     if (this.screen === 'founding') return this.foundingKey(a);
     if (this.voices.key(a)) return void this.view?.refresh();
@@ -895,14 +911,35 @@ export class DominionScene extends Phaser.Scene {
     if (card.blocked) return this.view?.refresh();
     const id = gridPages(b)[c.page]![c.at]!;
     const d = DOMINION_DATA.field.districts.find((x) => x.id === c.district)!;
-    const out = services().session.dominionStep({ t: 'act', action: id, target: d.targets[c.target]?.id ?? null, district: d.id, bring: c.bring, opt: card.opt });
+    const input = { action: id, target: d.targets[c.target]?.id ?? null, district: d.id, bring: c.bring, opt: card.opt };
+    const before = structuredClone(b);
+    const out = services().session.dominionStep({ t: 'act', ...input });
     this.screen = 'map';
     this.notice = out.notice;
+    // D30: the act is played and saved; the Boss order cut-in and the result page only show it.
+    if (out.ok && this.job.start(before, input, out.roll, out.notice, out.fight ? 'fight' : this.heroPending() ? 'hero' : 'result')) {
+      this.notice = null;
+      return;
+    }
     if (out.ok && out.fight) return this.fight('map');
     // D11 (m11): the Hero stepped into the job; the choice comes before any battle.
     if (out.ok && this.heroPending()) {
       this.screen = 'interrupt';
       this.intAt = 0;
+    }
+    this.view?.refresh();
+  }
+
+  /** D30: a result page closed: back to the Map, or (`next`) straight to the Card of the next action on the board. */
+  private afterJob(next: boolean): void {
+    this.screen = 'map';
+    const b = this.block(), c = this.cursor;
+    if (next && b && c) {
+      const n = gridPages(b)[c.page]?.length ?? 0;
+      if (n) {
+        this.cursor = { ...c, focus: 'grid', at: (c.at + 1) % n };
+        return this.openCard();
+      }
     }
     this.view?.refresh();
   }

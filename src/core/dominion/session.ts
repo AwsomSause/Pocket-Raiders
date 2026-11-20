@@ -29,6 +29,7 @@ import { withHq } from './hqFx';
 import { levelCap } from '../regions';
 import { hatchEggs, settleDojo, settleLesson } from './school';
 import './voices';
+import { noteJob, type Roll } from './moments';
 import { answerCard, breakTruce, maybeStreet, noteTop, ransom, startTruce, withRivals, type RivalOut } from './rivals';
 import { answerMeet as answerTownMeet, maybeMeet } from './town';
 import { accuse, askSpy, dropTalk, startConfront, type SpyOut } from './spies';
@@ -81,7 +82,7 @@ export function startInRun(content: Content, run: RunState, setup: DominionSetup
  * D6: the money it moved goes on the Ledger's line for it (the World Turn books its own),
  * the district the Boss worked in counts as this week's visit, and a new Notoriety step is announced.
  */
-export function stepInRun(content: Content, run0: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean } {
+export function stepInRun(content: Content, run0: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean; roll?: Roll | null } {
   // D11: a save from before the Hero gets theirs on the first step (picked by the Boss's trainer, Q5).
   const b0 = run0.expansion?.dominion;
   const run = b0 && !b0.hero ? withBlock(run0, ensureHero(b0, run0.archetypeId, run0.seed)) : run0;
@@ -121,7 +122,7 @@ function visitOf(a: DominionAction): string | null {
 }
 
 /** Rest heals the Boss's team for free (Part 1 §2.1). */
-function stepInner(content: Content, run: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean } {
+function stepInner(content: Content, run: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean; roll?: Roll | null } {
   const block = run.expansion?.dominion;
   if (!block) return { ok: false, block: block as never, notice: null, heal: false, run };
   // D24: while the police question someone, only answers go through.
@@ -157,6 +158,8 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
     if (!out.ok) return { ok: false, block, notice: out.notice, heal: false, run };
     // D24: someone may have seen it (the police's evidence log).
     noteAct(out.block, run.seed, action.district, action.target, (out.block.field.districts[action.district]?.heat ?? 0) - heatWas, run.party[0]?.speciesId ?? null);
+    // D30: a note for tomorrow's morning paper.
+    noteJob(out.block, block, action, out.roll ?? null, out.fight);
     if (out.mon && out.mon.trust !== undefined) {
       // D4: a rescued or tamed Pokémon joins the Reserve, not the Boss's team.
       const line = placeMon(content, work, withReserve(content, out.block), { species: out.mon.species, level: out.mon.level, src: 'rescued', trust: out.mon.trust });
@@ -181,7 +184,7 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
     }
     // D10: Pokémon an action took (Kidnap, a lab's rare one, the Swap Meet) wait in the crew's pending list: place them now.
     const next = settleCrew(content, withBlock(work, DominionBlockSchema.parse(blk)));
-    return { ok: true, block: next.expansion!.dominion!, notice, heal: false, run: next, fight: out.fight };
+    return { ok: true, block: next.expansion!.dominion!, notice, heal: false, run: next, fight: out.fight, roll: out.roll ?? null };
   }
   if (action.t === 'buy') {
     const out = buy(block, action.vehicle);

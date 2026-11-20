@@ -97,3 +97,9 @@ Copied from the round-4 mockups (`plans/evil-mode-rework/mockups-v4/sprites/`, P
 | File | From |
 | --- | --- |
 | `t-proton.png`, `t-petrel.png`, `t-misty.png` (D8, the Squads page's Vengeance targets) | Trainer sprites from the PokeRogue pack (`images/trainer/`), one frame, as in `plans/evil-mode-rework/mockups-v3/sprites/` |
+
+## Slice D30 (job moments and the morning paper, round-4 mockups m8-m10, m12)
+
+| File | From |
+| --- | --- |
+| `t-nate.png` (D30, the Boss's mug on the paper's WANTED poster) | Trainer sprite from the PokeRogue pack (`images/trainer/`), one frame, as in `plans/evil-mode-rework/mockups-v4/sprites/` |

@@ -1,0 +1,99 @@
+{
+  "_source": "Round-4 mockups m8 (Boss order cut-in), m9 (Job done), m10 (Job botched), m12 (The morning paper): plans/evil-mode-rework/mockups-v4/src/i4.py and i5.py. Lines written for D30 in the mockups' voice. {member} is the member on the job, {target} the place or person, {district} the town, {owner} the owner, {pay} the take, {hero} the Hero, {team} the crew's name, {rival} the rival team.",
+  "order": {
+    "boss": {
+      "brawn": ["Break whatever needs breaking. Then break one more thing.", "Hit them hard enough that they remember my name.", "No speeches. Fists first, questions never.", "If anyone stands up, put them back down."],
+      "nerve": ["Remind {owner} who keeps the windows in one piece.", "Walk in like you own it. Soon we will.", "Look them in the eye until they look away.", "Smile while you say it. It frightens them more."],
+      "wits": ["Read everything. Forget nothing. Bring me the rest.", "Find the crack in {target} and put a finger in it.", "Think three moves ahead, then make the fourth.", "Count the doors, the guards and the excuses."],
+      "charm": ["Make them like us. Then make them need us.", "Shake every hand in {district}. Remember every name.", "Be the nicest person they've ever been afraid of.", "Sell them the dream. We'll keep the change."],
+      "stealth": ["In and out. Nobody saw you. Nobody ever does.", "Leave nothing behind but rumours.", "If a light comes on, you were never there.", "Quiet feet, empty hands, full pockets."],
+      "any": ["Do it the way I would. Better, if you can.", "I don't want excuses tonight. I want results.", "Make {district} talk about us in whispers.", "This is how empires start. Small, and mean."]
+    },
+    "crew": {
+      "brawn": ["With pleasure, Boss. I've been itching for this.", "They won't know what hit them. I will, though.", "Say no more. My knuckles heard you."],
+      "nerve": ["Consider it done, Boss. They'll pay by noon.", "I'll make them sweat before I say a word.", "They'll thank us for the privilege."],
+      "wits": ["Already on it. I made a list.", "Give me an hour and I'll know their secrets.", "Leave the thinking to me, Boss."],
+      "charm": ["I'll have them eating out of my hand.", "Everyone likes me. That's the trick.", "One smile, Boss. That's all it takes."],
+      "stealth": ["You won't hear from me until it's done.", "Shadows are my best friends.", "They'll never know we were there."],
+      "any": ["Right away, Boss.", "For the crew. For you.", "You can count on me, Boss."]
+    },
+    "alone": ["I'll handle this one myself.", "If you want it done right...", "Nobody does it like the Boss."],
+    "sub": "{target} · {chance}% · {member}{more}",
+    "sure": "{target} · SURE THING · {member}{more}"
+  },
+  "done": {
+    "stamp": { "paid": "PAID IN FULL", "done": "JOB DONE", "big": "BIG SCORE" },
+    "weekly": "{target} now pays ₽{weekly} every week",
+    "rolled": "rolled {r} under {chance}",
+    "sure": "a sure thing"
+  },
+  "botched": {
+    "stamp": "BOTCHED",
+    "rolled": "rolled {r} over {chance}",
+    "tape": "POLICE LINE · DO NOT CROSS",
+    "cost": "What it cost",
+    "caught": "{who} was caught. What now?",
+    "caughtBoss": "You were caught. What now?",
+    "free": "{who} got away. What now?",
+    "police": "Face the police",
+    "policeSub": "Questioning starts now · say the right things",
+    "map": "Back to the Map",
+    "mapSub": "Heat cools a little each night",
+    "next": "Try the next action",
+    "nextSub": "Same town, the next job on the board",
+    "quote": {
+      "caught": ["Boss... you're coming for me, right?", "I didn't say anything. I swear I didn't.", "Tell my Pokémon I'll be back soon."],
+      "free": ["That was too close, Boss. Way too close.", "Next time I bring a bigger bag. And better shoes.", "They saw my face. I think. Maybe."]
+    }
+  },
+  "paper": {
+    "masthead": "The {region} Ledger",
+    "edition": "Day {day} · Morning edition",
+    "price": "₽2",
+    "heads": {
+      "done": ["GANG HITS {TARGET}", "{TARGET}: \"WE PAID. WHAT ELSE COULD WE DO?\"", "NEW CREW LEAVES ITS MARK ON {DISTRICT}"],
+      "big": ["BOLD GANG CLEANS OUT {TARGET}", "\"BIGGEST HAUL IN YEARS\": {DISTRICT} IN SHOCK", "{TEAM} STRIKES {DISTRICT} IN BROAD DAYLIGHT"],
+      "botched": ["BOTCHED JOB AT {TARGET}", "POLICE FOIL GANG IN {DISTRICT}", "THUGS FLEE {TARGET} EMPTY-HANDED"],
+      "won": ["STREET BATTLE IN {DISTRICT}: GANG WINS", "{TARGET} DEFENDERS BEATEN BY MASKED CREW"],
+      "lost": ["GANG ROUTED AT {TARGET}", "{DISTRICT} FIGHTS BACK AND WINS"],
+      "quiet": ["A QUIET NIGHT IN {REGION}", "POLICE REPORT NO NEW INCIDENTS", "CALM BEFORE THE STORM?"]
+    },
+    "decks": {
+      "done": "{owner} \"too scared to talk\"; police have no leads; witnesses describe {colour} armbands.",
+      "big": "Residents of {district} lock their doors; Officer Jenny promises \"answers by the weekend\".",
+      "botched": "Officers arrive within minutes; one suspect seen running toward {district}'s back streets.",
+      "won": "Onlookers describe Pokémon \"like nothing seen in {district}\".",
+      "lost": "Locals cheer as the crew retreats; the police are still looking for them.",
+      "quiet": "Officers enjoy a night without calls; shopkeepers are not so sure it will last."
+    },
+    "column": {
+      "done": "{owner} handed over ₽{pay} yesterday, according to neighbours. \"He just handed it over,\" said one. Officer Jenny called it \"an isolated case\". It is report number {n} this week.",
+      "big": "Witnesses say the crew walked out of {target} with ₽{pay} and more. \"They knew exactly where to look,\" said a clerk. It is report number {n} this week.",
+      "botched": "A suspect was chased from {target} late yesterday. Nothing was taken. \"They looked like amateurs,\" said Officer Jenny. It is report number {n} this week.",
+      "won": "A battle broke out at {target}. The defenders lost. Nobody would give their name to this paper. It is report number {n} this week.",
+      "lost": "Trainers at {target} drove off a gang with armbands. \"We won't be pushed around,\" said one. It is report number {n} this week.",
+      "quiet": "No crimes were reported in {region} yesterday. The Ledger asks its readers to stay alert all the same."
+    },
+    "caption": "A figure leaves {target}. Photo: K. Ledger",
+    "captionQuiet": "{district} at dawn. Photo: K. Ledger",
+    "side": {
+      "hero": ["Hero watch: {hero}", "{hero} on the trail"],
+      "police": ["On the police beat", "From the station"],
+      "rivals": ["{rival} watch", "Gang war notes"],
+      "legends": ["Strange sightings", "Legends in the hills"],
+      "crew": ["Gang news", "Overheard on the street"]
+    },
+    "sideQuiet": ["Gym Leaders meet to talk about \"the new crew\"", "\"Lock your bikes\", says Cycling Road committee"],
+    "sideQuietBody": ["The meeting was held behind closed doors.", "Thefts are down, but nobody believes it."],
+    "wanted": "WANTED",
+    "who": "\"THE BOSS\" OF {TEAM}",
+    "by": "was ₽{was} · {region} Police",
+    "byNew": "first notice · {region} Police",
+    "bySame": "unchanged since yesterday · {region} Police",
+    "bounty": { "base": 1000, "perWanted": 100, "perStep": 2000 },
+    "news": "The news",
+    "fold": "Fold the paper",
+    "rows": { "notoriety": "Notoriety", "bounty": "Bounty", "regard": "Regard · {district}", "dread": "Dread · {district}", "threat": "Hero Threat", "tension": "{rival} Tension" },
+    "noRows": "Nothing in the paper changes the street yet."
+  }
+}

@@ -337,6 +337,8 @@ const BlockSchema = z.object({
   spies: z.lazy(() => SpiesStateSchema).optional(),
   /** D25: this week's news lines and the last few Ledger papers. Optional; `voicesOf` (voices.ts) fills it. */
   voices: z.lazy(() => VoicesStateSchema).optional(),
+  /** D30: yesterday's jobs and the morning snapshots the morning paper reads. Optional; `paperOf` (moments.ts) fills it. */
+  paper: z.lazy(() => PaperStateSchema).optional(),
 }).strict();
 export const DominionBlockSchema = z.preprocess(migrateDominion, BlockSchema);
 export type DominionBlock = z.infer<typeof BlockSchema>;
@@ -2139,6 +2141,29 @@ export const VoicesStateSchema = z.object({
   papers: z.array(PaperSchema),
 }).strict();
 export type VoicesState = z.infer<typeof VoicesStateSchema>;
+
+// ---------- D30: job moments and the morning paper (the save block's `paper`; optional, no block bump) ----------
+
+/** How a job ended: done / big / botched settle at once; fight and hero wait on a battle, which turns them into won or lost. */
+export const JOB_RESULTS = ['done', 'big', 'botched', 'fight', 'hero', 'won', 'lost'] as const;
+export type JobResult = (typeof JOB_RESULTS)[number];
+export const JobNoteSchema = z.object({
+  d: I.min(1), a: S, t: S.nullable(), at: S, res: z.enum(JOB_RESULTS), pay: N0, heat: I, who: S.nullable(),
+}).strict();
+export type JobNote = z.infer<typeof JobNoteSchema>;
+/** What the paper compares morning to morning (the news panel). */
+export const NewsSnapSchema = z.object({
+  d: I.min(1), notoriety: N0, wanted: N0, threat: N0, tension: N0, regard: z.record(S, I), dread: z.record(S, I),
+}).strict();
+export type NewsSnap = z.infer<typeof NewsSnapSchema>;
+export const PaperStateSchema = z.object({
+  /** Jobs from yesterday and today (older ones drop at the World Turn). */
+  jobs: z.array(JobNoteSchema),
+  /** The snapshot from the morning before, and this morning's. */
+  prev: NewsSnapSchema.nullable(),
+  snap: NewsSnapSchema.nullable(),
+}).strict();
+export type PaperState = z.infer<typeof PaperStateSchema>;
 // ---------- D7: the Founding and team colours (founding.json, armbands.json, block `team`) ----------
 
 const HEX = z.string().regex(/^#[0-9a-f]{6}$/);
