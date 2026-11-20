@@ -71,6 +71,15 @@ Copied from the round-4 mockups (`plans/evil-mode-rework/mockups-v4/sprites/`), 
 | `g-dire-hit.png` | Item icon from `images/items/` (PokeRogue pack): the raid row on the Rival File |
 | `p-moltres.png` | Pokémon sprite from the PokeRogue pack (the mockup's night-sky silhouette on the Rival File) |
 
+## Slice D21 (the applications desk, Rotom mockup k5)
+
+Copied from the round-4 mockups (`plans/evil-mode-rework/mockups-v4/sprites/`, PR #1496), which cut them from art already in this repo (director's packs: PokeRogue, AGPL-3.0, Nintendo material):
+
+| File | From |
+| --- | --- |
+| `t-applicant.png`, `t-hex.png`, `t-biker.png`, `t-backpacker.png` | Trainer sprites from `images/trainer/pr/` (PokeRogue pack), first frame; the applicant's stand-in and the queue in the rain |
+| `g-idcard.png`, `g-badgecard.png` | Item icons from `images/items/` (PokeRogue pack), re-saved at the mockup's size |
+
 ## Slice D8 (Squads and Groups, mockup 13)
 
 | File | From |

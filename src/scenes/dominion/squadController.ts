@@ -16,7 +16,8 @@ import type { InputAction } from '../../ui/input';
 import { askText } from '../../ui/redux/ask';
 import { squadsView } from '../../ui/redux/screens/dominion/squads';
 
-type ScreenName = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'squads';
+/** Any Dominion screen name (the scene's own union; kept loose so new screens need no edit here). */
+type ScreenName = string;
 interface Host {
   screenName: ScreenName;
   setNotice(n: string | null): void;
