@@ -56,8 +56,8 @@ describe('DOMINION D2: the data', () => {
     expect(all.map((a) => a.n)).toEqual(Array.from({ length: 600 }, (_, i) => i + 1));
     const played = all.filter((a) => a.n <= 150 && actionStatus(a).play);
     // Rows 1-150: 42 from D10 (Growth), 32 from D2, 10 from D6, 13 more that D5's rooms open (each also needs its room built), 9 from D4, 17 more from D9 (the rival team), 5 Hero actions (D11), 2 from D13 (Debate, Write a Manifesto).
-    expect(played.length).toBe(130);
-    expect(all.filter((a) => actionStatus(a).play)).toHaveLength(447);
+    expect(played.length).toBe(132); // D14 adds Pirate Radio (87) and Meet the Champion (128)
+    expect(all.filter((a) => actionStatus(a).play)).toHaveLength(479); // D14: +32 (the League, the Plans, Pirate Radio, Meet the Champion)
     for (const a of all) {
       const s = actionStatus(a);
       expect(s.play || /^D\d+$/.test(s.slice ?? ''), a.id).toBe(true);

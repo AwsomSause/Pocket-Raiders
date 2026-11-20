@@ -32,6 +32,7 @@ import { answerCard, breakTruce, maybeStreet, noteTop, ransom, startTruce, withR
 import { argue, chooseDeal, closeDebate, walkOut, type DebateOut } from './debate';
 import { answerQ, noteAct, releasedSeen, releaseQ, returnHeld } from './police';
 import './growth';
+import { takeoverStep } from './takeover';
 
 export const DOMINION_MODE_ID = 'dominion';
 export const isDominionRun = (run: RunState | null | undefined): boolean => run?.rules.modeId === DOMINION_MODE_ID;
@@ -140,6 +141,13 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
   if (hqOut) return hqOut;
   const rivalOut = rivalInRun(run, action);
   if (rivalOut) return rivalOut;
+  if (action.t === 'takeover') {
+    // D14: the Takeover page (takeover.ts): Holdings, the Moment, storming a rival HQ, the broadcast.
+    const out = takeoverStep(block, action.op, action.id);
+    if (!out.ok) return { ok: false, block, notice: out.notice, heal: false, run };
+    const next = withBlock(run, DominionBlockSchema.parse(out.block));
+    return { ok: true, block: next.expansion!.dominion!, notice: out.notice, heal: false, run: next, fight: out.fight };
+  }
   const debateOut = debateInRun(content, run, action);
   if (debateOut) return debateOut;
   const heroOut = heroInRun(content, run, action);

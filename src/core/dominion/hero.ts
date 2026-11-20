@@ -128,7 +128,8 @@ export function heroTeam(b: DominionBlock, run: Pick<RunState, 'party'>, kind: '
   }
   const stand = why === 'stand';
   const lv = stand ? b.levelCap : heroLevel(b, run);
-  const size = stand ? 6 : T.sizeByBadges[Math.min(8, h.badges)]!;
+  // D14: each Plan point (Wipe Out / Shadow / Monarch / Goal Plan) takes one Pokémon off the final stand, down to the floor.
+  const size = stand ? Math.max(DOMINION_DATA.takeover.league.standMin, 6 - (b.takeover?.plan ?? 0)) : T.sizeByBadges[Math.min(8, h.badges)]!;
   const species = def.lines.slice(0, size).map((l) => stageFor(l, lv));
   // Counters replace the newest catches, never the starter.
   h.counters.slice(0, Math.max(0, species.length - 1)).forEach((type, i) => {

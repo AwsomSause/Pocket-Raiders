@@ -239,6 +239,7 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'deskInspect':
     case 'deskStamp':
     case 'found': // D7: handled by session.ts (founding.ts)
+    case 'takeover': // D14: handled by session.ts (takeover.ts)
       return no(block);
   }
 }
