@@ -29,7 +29,8 @@ test('Phantom UI: the pause menu has a Pokédex: the list, an entry and the type
   await page.keyboard.press('Escape');
   await onPage(page, 'Map', 'pause');
   const pause = pview(page, 'Map', 'pause');
-  for (let i = 0; i < 3; i++) await page.keyboard.press('ArrowDown');
+  // One press at a time: three key events inside one slow frame are handed to the scene twice by the engine.
+  for (let i = 0; i < 3; i++) { await page.keyboard.press('ArrowDown'); await page.waitForTimeout(250); }
   await expect(pause.locator('.hub .h.on')).toHaveText('Pokédex');
   await page.keyboard.press('Enter');
   await onPage(page, 'Map', 'dex');
@@ -105,6 +106,7 @@ test('Phantom UI: the pause menu has a Pokédex: the list, an entry and the type
     await version(page, id);
     await page.setViewportSize({ width: w, height: h });
     await page.keyboard.press('ArrowUp');
+    await page.waitForTimeout(250);
     await page.keyboard.press('ArrowDown');
     await expect(page.locator(`#phx .phs[data-scene="Map"][data-scr="types"][data-liv="${id}"]`)).toBeVisible();
     await fits(page, 'Map', 'types');

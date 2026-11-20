@@ -74,6 +74,7 @@ import { hookNames, registerCueHook, unregisterCueHook } from './core/presentati
 import './style.css';
 import { installPortraitRotate } from './ui/portraitRotate';
 import { turnOffCanvasLigatures } from './ui/noLigatures';
+import { installKeyOnce } from './ui/keyOnce';
 
 function showFatalError(message: string): void {
   const el = document.getElementById('fatal-error');
@@ -118,6 +119,8 @@ function start(): void {
   (window as unknown as { pkrPlugins: unknown }).pkrPlugins = { onCues: registerCueHook, remove: unregisterCueHook, list: hookNames };
 
   installTouchControls();
+  // A key press reaches a scene once, however slow the frame it lands in (ui/keyOnce.ts).
+  installKeyOnce(Phaser.Input.Keyboard.KeyboardPlugin.prototype as unknown as { update: () => void });
   const game = new Phaser.Game({
     type: Phaser.AUTO,
     parent: 'game',
