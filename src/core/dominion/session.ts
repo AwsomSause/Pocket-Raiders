@@ -34,6 +34,7 @@ import { answerCard, breakTruce, maybeStreet, noteTop, ransom, startTruce, withR
 import { answerMeet as answerTownMeet, maybeMeet } from './town';
 import { accuse, askSpy, dropTalk, startConfront, type SpyOut } from './spies';
 import { argue, chooseDeal, closeDebate, walkOut, type DebateOut } from './debate';
+import { argueTyped, voiceTurn } from './debateTyped';
 import { answerQ, noteAct, releasedSeen, releaseQ, returnHeld } from './police';
 import './growth';
 import { endS, goalS, inRoom, sayS, stopS, type SOut } from './snatch';
@@ -226,6 +227,8 @@ function debateInRun(content: Content, run: RunState, action: DominionAction): (
   let out: DebateOut;
   switch (action.t) {
     case 'argue': out = argue(content, run, action.line); break;
+    case 'argueTyped': out = argueTyped(content, run, action); break;
+    case 'debateVoice': out = voiceTurn(run, action.turn, action.text); break;
     case 'deal': out = chooseDeal(content, run, action.kind); break;
     case 'walkOut': out = walkOut(run); break;
     case 'debateDone': out = closeDebate(run); break;

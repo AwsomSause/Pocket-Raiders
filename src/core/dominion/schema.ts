@@ -469,6 +469,9 @@ export type DominionAction =
 
   // D13, the Debate (debate.ts)
   | { t: 'argue'; line: string }
+  // D20: typed words; `judge` is Rotom's (checked again by the rules) or absent for the rules' own reading
+  | { t: 'argueTyped'; text: string; judge?: unknown; rotom?: boolean }
+  | { t: 'debateVoice'; turn: number; text: string }
   | { t: 'deal'; kind: 'merger' | 'branch' }
   | { t: 'debateDone' }
   | { t: 'walkOut' }
@@ -2088,6 +2091,8 @@ export const DebateBossSchema = z.object({
   values: S, them: S, portrait: S.nullable(), mon: S.nullable(), crest: z.string().length(1), colour: S,
   lean: LeanSchema, demands: z.array(z.enum(DEMANDS)).min(1), order: z.enum(DIRECTIVES),
   creed: S, judge: S, clean: S, price: S, replies: Replies,
+  /** D20: the five values Rotom's judge scores typed words on (the last is always Respect), and how they talk. */
+  weighs: z.array(S).length(5), voice: S,
 }).strict();
 export type DebateBoss = z.infer<typeof DebateBossSchema>;
 export const DebateFileSchema = z.object({
@@ -2110,8 +2115,18 @@ export const DebateFileSchema = z.object({
   directives: z.array(z.object({ id: z.enum(DIRECTIVES), name: S, what: S, status: z.enum(['supported', 'limited']), note: S.optional() }).strict()).length(5),
   bosses: z.record(S, DebateBossSchema),
   admin: z.object({ creed: S, price: S, replies: Replies }).strict(),
+  /** D20: typed arguments (Rotom's judge, or these word lists without a Key-Card). */
+  typed: z.object({
+    _note: S, mid: N0, k: z.number().positive(), falseClaim: N0, maxText: I.min(20), maxReply: I.min(40), minText: I.min(1),
+    base: N0, perHit: N0, respectBase: N0, threatenRespect: N0, longText: N0, longerText: N0,
+    stanceWords: z.record(z.enum(DEBATE_STANCES), z.array(S).min(1)),
+    claimWords: z.record(z.enum(CLAIMS), z.array(S).min(1)),
+    valueWords: z.record(S, z.array(S).min(1)),
+    detailWords: z.array(S), insultWords: z.array(S).min(1),
+    text: z.record(S, S),
+  }).strict(),
   text: z.record(S, S),
-}).strict().refine((f) => DEBATE_STANCES.every((st) => f.lines.filter((l) => l.stance === st).length === 3), { message: 'three set lines per stance' });
+}).strict().refine((f) => Object.values(f.bosses).every((b) => b.weighs.every((w) => w in f.typed.valueWords) && b.weighs[4] === 'Respect'), { message: 'every Boss value needs words, and the fifth is Respect' }).refine((f) => DEBATE_STANCES.every((st) => f.lines.filter((l) => l.stance === st).length === 3), { message: 'three set lines per stance' });
 export type DebateFile = z.infer<typeof DebateFileSchema>;
 
 export const DebateTurnSchema = z.object({
@@ -2126,6 +2141,11 @@ export const DebateTurnSchema = z.object({
   held: z.boolean(),
   /** What they said back (stored the moment it's picked, so a reload replays it). */
   reply: S,
+  /** D20: a typed argument: the words, the judge's 0-10 on the Boss's five values, the unclamped move and the offline
+   *  range it was clamped to, and whether Rotom judged it (else the rules did). */
+  typed: z.object({ text: S, values: z.array(I.min(0).max(10)).length(5), raw: I, lo: I, hi: I, rotom: z.boolean() }).strict().optional(),
+  /** D20: Rotom's spoken reply for a typed turn (also in `run.ai`); shown in place of `reply`. */
+  voice: S.optional(),
 }).strict();
 export type DebateTurn = z.infer<typeof DebateTurnSchema>;
 export const LiveDebateSchema = z.object({

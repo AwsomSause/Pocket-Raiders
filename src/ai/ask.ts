@@ -38,6 +38,8 @@ export interface AskSpec<T> {
   schema?: z.ZodType<T>;
   /** The offline answer: the game's own written line or choice. */
   offline: () => T;
+  /** D20: a text answer (no schema) streams: called with the text so far. Presentation only; the stored answer is the whole text. */
+  onText?: (soFar: string) => void;
 }
 
 export interface AskEnv {
@@ -118,6 +120,7 @@ async function ask<T>(spec: AskSpec<T>, env: AskEnv): Promise<AskResult<T>> {
     thinkingOff: model.thinkingOff,
     ...(spec.schema ? { schema: spec.schema } : {}),
     timeoutMs: AI_DATA.timeoutMs[spec.role],
+    ...(spec.onText && !spec.schema ? { onText: spec.onText } : {}),
   };
   let lastBad = '', lastError = '';
   for (let attempt = 0; attempt < 2; attempt++) {

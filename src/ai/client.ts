@@ -26,6 +26,8 @@ export interface WireRequest {
   /** Second try after an answer that didn't fit the schema. */
   repair?: { bad: string; error: string };
   timeoutMs: number;
+  /** D20: stream a text answer; called with the text so far as it arrives (presentation only). */
+  onText?: (soFar: string) => void;
 }
 
 export interface WireResult {
@@ -73,18 +75,24 @@ export function sdkTransport(): ClaudeTransport {
       }
       const ctrl = new AbortController();
       const timer = setTimeout(() => ctrl.abort(), req.timeoutMs);
+      const params = {
+        model: req.model,
+        max_tokens: req.maxTokens,
+        system,
+        messages,
+        ...(req.thinkingOff ? { thinking: { type: 'disabled' as const } } : {}),
+        output_config: { effort: req.effort, ...(req.schema ? { format: zodOutputFormat(zodHelper, req.schema) } : {}) },
+      };
+      const opts = { signal: ctrl.signal, timeout: req.timeoutMs, maxRetries: 0 };
       try {
-        const res = await client.messages.create(
-          {
-            model: req.model,
-            max_tokens: req.maxTokens,
-            system,
-            messages,
-            ...(req.thinkingOff ? { thinking: { type: 'disabled' as const } } : {}),
-            output_config: { effort: req.effort, ...(req.schema ? { format: zodOutputFormat(zodHelper, req.schema) } : {}) },
-          },
-          { signal: ctrl.signal, timeout: req.timeoutMs, maxRetries: 0 },
-        );
+        let res;
+        if (req.onText && !req.schema) {
+          // D20: a streamed text answer (the Debate's Boss reply); the snapshot is the text so far.
+          const onText = req.onText;
+          const stream = client.messages.stream(params, opts);
+          stream.on('text', (_delta, snapshot) => { try { onText(snapshot); } catch { /* presentation only */ } });
+          res = await stream.finalMessage();
+        } else res = await client.messages.create(params, opts);
         const text = res.content.map((b) => (b.type === 'text' ? b.text : '')).join('');
         return { text, stop: res.stop_reason ?? null, usage: res.usage };
       } catch (err) {
@@ -118,7 +126,7 @@ export type FakeAnswer = string | { text?: string; stop?: string; fail?: WireFai
  * No network: answers by tag (exact, then the part before the first ':'), else `fallback`. Records every request in
  * `calls` so tests can check prompts (and that the key went nowhere but the transport).
  */
-export function fakeTransport(answers: Record<string, FakeAnswer | FakeAnswer[]> = {}, fallback: FakeAnswer = 'OK'): ClaudeTransport & { calls: WireRequest[]; keys: string[] } {
+export function fakeTransport(answers: Record<string, FakeAnswer | FakeAnswer[]> = {}, fallback: FakeAnswer = 'OK', streamDelayMs = 0): ClaudeTransport & { calls: WireRequest[]; keys: string[] } {
   const calls: WireRequest[] = [];
   const keys: string[] = [];
   const used = new Map<string, number>();
@@ -140,6 +148,16 @@ export function fakeTransport(answers: Record<string, FakeAnswer | FakeAnswer[]>
       if (typeof a === 'function') a = a(req);
       const o = typeof a === 'string' ? { text: a } : a;
       if (o.fail) throw new AiCallError(o.fail, `fake ${o.fail}`);
+      if (req.onText && !req.schema && o.text) {
+        // Streams word by word, like the real thing (a test can watch the text grow).
+        const words = o.text.split(/(?<=\s)/);
+        let so = '';
+        for (const w of words) {
+          so += w;
+          await new Promise((r) => setTimeout(r, streamDelayMs));
+          req.onText(so);
+        }
+      }
       return { text: o.text ?? '', stop: o.stop ?? 'end_turn', usage: { input_tokens: 40, output_tokens: 8, cache_read_input_tokens: 0, cache_creation_input_tokens: 0, ...o.usage } };
     },
   };
