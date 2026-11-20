@@ -1,0 +1,441 @@
+[
+ {
+  "n": 1,
+  "name": "The Phantom kit",
+  "change": "The first cut of the style, taken from Persona 5: red, black and white only, every panel cut on a slant, cut-out ransom letters for the logo, a turning sunburst and halftone dots behind everything. Six core screens: Title, Main menu, Battle command, Event, Pause and Settings.",
+  "pages": [
+   "Title",
+   "Main menu",
+   "Battle command",
+   "Event",
+   "Pause menu",
+   "Settings"
+  ],
+  "q": {
+   "x": "It is loud already, but flat: panels sit on the page and nothing overlaps or moves much yet. Battle is still a normal Pokémon layout with slanted boxes.",
+   "b": "First pass, so there is nothing to beat. It sets the rules every later pass has to top.",
+   "p": "Yes. Battle only has the command list; moves, party, bag and targets each need a page. That is pass 2.",
+   "m": "Pause is one list with the party beside it, and Settings is one page with six tabs. Both work but both are crowded; they get split up in pass 4.",
+   "k": "Only because of the sprites. Types and Poké Balls are tiny; later passes have to pull Pokémon things into the style itself."
+  }
+ },
+ {
+  "n": 2,
+  "name": "Battle leaves the box",
+  "change": "Battle stops being a Pokémon layout with slanted boxes. Commands burst out of your Pokémon in a jagged star, each on its own key, the way Persona 5 puts orders around the hero. Your party stands in a stack down the right edge with live HP. Black slanted bars frame the field like a film shot. Fight, Pokémon and Bag each open their own page, and a hit gets a full-screen splash.",
+  "pages": [
+   "Moves",
+   "Party (switch)",
+   "Bag",
+   "Hit splash"
+  ],
+  "q": {
+   "x": "Much more. The command burst and the Super Effective splash are the first things on the page that could not be mistaken for any other Pokémon game.",
+   "b": "Pass 1 had four words in a column. Now each command has a key, a size and an angle, the party is always in view, and moves show their type, power, PP and how well they hit before you choose.",
+   "p": "Four added. Moves, party and bag used to be nowhere; they are full pages now so the battle screen holds only the fight.",
+   "m": "Not touched this pass. In battle, X on the burst is Run and Info opens foe details; Pause still needs its own pass.",
+   "k": "Better: type colours carry the move cards, HP bars keep green, yellow and red, Poké Balls count the foe's team, and the run's real limits (10 heals, 6 revives) sit on the Bag page."
+  }
+ },
+ {
+  "n": 3,
+  "name": "The run gets a calendar",
+  "change": "Outside battle, every screen now carries a stage stamp in the top corner, built like Persona 5's date: a huge stage number, the region on a red tag and the time and weather in marker pen. The route is a subway-style map of diamond stops over the region's town map. Events are split in two: the character leans in from the side and talks, and only after you press does the choice page appear, with what each choice costs. Rewards are dealt as three cards. The Mart has a clerk, a wallet and a running cart total.",
+  "pages": [
+   "Route map",
+   "Event · choice",
+   "Reward",
+   "Poké Mart"
+  ],
+  "q": {
+   "x": "Yes. Big character art leaning into frame, dealt cards and the outlined stage number give each page one loud thing to look at.",
+   "b": "Pass 2 only fixed battle. This pass covers the other half of a run, and the old one-page event (text and choices on top of each other) is replaced by talk then choice.",
+   "p": "Four added. Splitting talk from choice also follows the rule that text stays until you press and rewards only come after.",
+   "m": "Esc on the map opens the menu and C jumps straight to the party. The menu itself is still the pass 1 list; it is the next pass.",
+   "k": "More than before: the route sits on the real region map, stops use Poké Balls, the Mart clerk is the game's own sprite, and the stage stamp shows time and weather, which matter for evolutions."
+  }
+ },
+ {
+  "n": 4,
+  "name": "Menus get rooms",
+  "change": "The pause list becomes a hub: your trainer stands huge on the right, the chosen word swells to twice the size, and each word opens its own page. New pages for the Pokémon summary (with a six-point stat web, the Pokémon answer to Persona's stat star), the Pokédex, a Trainer card laid out like a calling card, and Save slots. Settings stops being one crowded page: a hub of six big tiles, then one short page each, never more than six rows.",
+  "pages": [
+   "Pokémon summary",
+   "Pokédex",
+   "Trainer card",
+   "Save",
+   "Settings hub",
+   "Game",
+   "Battle",
+   "Look",
+   "Sound",
+   "Controls",
+   "Access"
+  ],
+  "q": {
+   "x": "Yes. The trainer filling the pause screen and the stat web give the menus the big-art feel the battle already had.",
+   "b": "Pass 1 squeezed seven jobs and the whole party onto one pause page and all settings behind six tiny tabs. Every job now has room, and Settings rows are big enough to read from the couch.",
+   "p": "Eleven added. Settings alone went from one page to seven.",
+   "m": "This pass is the answer: Esc opens the hub anywhere outside battle, Settings is the sixth word, and Q/E flips between its pages without going back.",
+   "k": "The summary keeps what players expect (types, ability, nature, held item, four moves, Exp bar); the Pokédex shows dark shapes for unseen Pokémon and the game's Mastery ranks."
+  }
+ },
+ {
+  "n": 5,
+  "name": "Everything moves into everything",
+  "change": "Motion pass. Changing page is now a morph: the header, the stage stamp, your trainer, your Pokémon, the party strip and the key hints each slide and resize from where they were to where they belong on the next page, while a red, black and white blade wipes the rest. Idle screens loop without a seam: the chosen item jitters, trainers breathe, the dots drift. Three new battle moments: a Mega Evolution cut-in across the eyes, a win splash with a line from your trainer, and a result tally where Exp bars fill and numbers punch in.",
+  "pages": [
+   "Mega cut-in",
+   "Win splash",
+   "Result"
+  ],
+  "q": {
+   "x": "This is the pass that makes it feel like Persona rather than look like it. The cut-in and the win splash are the showiest pages so far.",
+   "b": "Passes 1 to 4 were still pictures with slide-ins. Now nothing just appears: each page grows out of the one before, and each loop returns to its first frame.",
+   "p": "Three added. Win and Result are separate on purpose, so the splash stays clean and the numbers get room.",
+   "m": "Opening Pause, picking a word and landing on its page is one unbroken move; the trainer shrinks from the hub into the Trainer card. Settings pages slide along the rail the same way.",
+   "k": "Mega Evolution uses the game's own Mega ring and stone art, Exp bars fill the way they always have, and Red's victory line is six dots, because Red never talks."
+  }
+ },
+ {
+  "n": 6,
+  "name": "Blue version: Midnight",
+  "change": "The style stops being one skin. Pokémon games come as versions, and so do Persona games, so each trainer now gets a version that borrows a different Persona. First is Blue version, taken from Persona 3 Reload: deep water blue, cyan light and glow instead of red and black, one clean slant instead of jagged cuts, bubbles rising where the dots were, a moon beside the stage stamp. The battle command star becomes a ring with a turning dashed rim. Blue stands where Red stood on every screen, with his own win line. Use the Version buttons above the stage to switch; all 27 screens have both.",
+  "pages": [],
+  "q": {
+   "x": "It is calmer than Phantom on purpose, but the glow, the moon and the water give it its own kind of show. Having two looks at all is the big jump.",
+   "b": "Passes 1 to 5 were one look with no way to tell runs apart. Now the look itself says whose run it is. Colours were also pulled out into named tokens, which is what makes versions possible.",
+   "p": "No new pages this pass; every existing page gained a second look. A Version select page comes in pass 9.",
+   "m": "Same pages, same keys. Settings › Look will get a Version row in pass 9.",
+   "k": "More than any pass so far: Red and Blue versions are the oldest Pokémon idea there is, and the rival finally has his own look."
+  }
+ },
+ {
+  "n": 7,
+  "name": "Yellow version: Channel",
+  "change": "The third version, taken from Persona 4 Golden. Where Phantom cuts and Midnight glows, Channel is a TV set: bright yellow with moving colour bars and scan lines, every panel rounded with a thick black outline and a drop shadow, chunky friendly lettering, a spinning sun as the weather forecast beside the stage stamp, and the battle command star turned into a rounded TV screen. Hilda is the trainer. All 27 screens.",
+  "pages": [],
+  "q": {
+   "x": "It is the loudest of the three and the most cheerful. The colour bars and the thick outlines read from across a room.",
+   "b": "Pass 6 proved a second version could work by changing colour and glow. This one changes shape as well: slanted cut panels become rounded outlined ones, which the token work in pass 6 did not cover, so accent text got its own token too.",
+   "p": "No new pages; every page gained a third look.",
+   "m": "Unchanged. The Settings rows turn into rounded switches and sliders here, which suits them better than slants did.",
+   "k": "Yes. Yellow version was the Pikachu one, and this is the look where the sprites feel most at home: bright, toy-like, sunny."
+  }
+ },
+ {
+  "n": 8,
+  "name": "Green version: Fantasia",
+  "change": "The fourth version, taken from Metaphor: ReFantazio. Nothing here is flat colour: backgrounds are grainy verdigris paint, the black shapes have torn, brushed edges, and thin gilt lines frame every panel. Lettering is a tall serif with a gold drop capital and italics. The slant is gone; everything sits upright and is built on circles: an astrolabe turns behind the pages, map stops are ringed medals, and the battle commands sit around a turning wheel instead of a star. Green is the trainer. All 27 screens.",
+  "pages": [],
+  "q": {
+   "x": "In a different way from the others: rich instead of loud. The turning gilt rings, the paint grain and the serif capitals make it look like a storybook.",
+   "b": "Midnight and Channel changed colour and panel shape. Fantasia changes the material (paint and paper instead of flat ink), the lettering and the geometry, and moves the six battle commands onto a wheel.",
+   "p": "No new pages; every page gained a fourth look.",
+   "m": "Unchanged in structure. The pause words stand upright with diamond bullets, and Settings rows read like a ledger with gilt rules.",
+   "k": "Green version was the very first Pokémon game in Japan, so it suits the old-book look. Types sit on small heraldic ribbons and HP bars keep their colours inside gilt frames."
+  }
+ },
+ {
+  "n": 9,
+  "name": "Pick your version",
+  "change": "The four looks stop being a hidden switch and become a choice the player makes. A new Version Select page lines the trainers up in five slanted columns, each drawn in its own style, and the one you pick opens wide. A fifth version arrives, Gold, in the style of the Velvet Room: blue curtains, gold trim, arched windows, and titles dealt out as playing cards. Settings › Look now names your version, the title screen wears a version tag, and switching plays a full-screen flash with the version's name.",
+  "pages": [
+   "Version select"
+  ],
+  "q": {
+   "x": "Yes. The select page shows all five styles side by side at once, which no earlier pass could, and the Gold version adds a rich, quiet look to contrast the loud ones.",
+   "b": "Passes 6 to 8 added looks you could only reach from the viewer. Now the game itself has a page and a setting for them, a trainer tied to each, and a proper switch animation.",
+   "p": "One new page, Version Select, so the choice is not buried in a settings row.",
+   "m": "Settings › Look gets a Version row and a preview that opens the select page. The Main Menu title carries the version tag with a key to change it.",
+   "k": "Very much: Red, Blue, Yellow, Green and Gold versions are how Pokémon games have always been sold, each with a cover Pokémon."
+  }
+ },
+ {
+  "n": 10,
+  "name": "Every version gets its own stage",
+  "change": "Until now the versions shared one layout and changed its paint. This pass gives each one its own staging for the two screens you see most, the title and the pause hub. Blue rises out of a tide under a full moon, with the menu as a staircase of slanted words. Yellow has the trainer climbing out of a TV set, with the menu as a stack of colourful show cards. Green sets the trainer inside an astrolabe ring with the menu running around its rim. Gold deals the menu as seven tarot cards under a spotlight. Each title also shows that version's own cover Pokémon. Red keeps the angled Phantom layout as the baseline. All five versions were checked on every page for cut-off or overlapping text.",
+  "pages": [],
+  "q": {
+   "x": "Yes. The five title screens no longer look like recolours of each other; each has its own scene, shapes and movement.",
+   "b": "Passes 6 to 9 changed colours, lettering and panel shapes. This one changes where things stand and how the menu is built, so a version is recognisable even as a silhouette.",
+   "p": "No new pages. Instead the same two pages exist in five different layouts.",
+   "m": "The pause hub is the menu, and it is the page that changes most: a staircase, show cards, a ring, or a card spread. Settings is one of its seven entries in every version.",
+   "k": "Each version has its own cover Pokémon on the title (Charizard, Gyarados, Pikachu, Venusaur, Gengar), the way each Pokémon game has its own box art."
+  }
+ },
+ {
+  "n": 11,
+  "name": "A road into every run",
+  "change": "Starting a run used to be one menu line. Now it is four short pages joined by a step ribbon in the corner: pick a version, answer Prof. Oak's partner quiz, choose one of three partners from three different regions, then sign off the run's rules on a calling card. Each partner card shows its Remembrance, the record you have with it from past runs. This pass also adds a shared panel that every version dresses its own way, so all later pages arrive finished in all five versions.",
+  "pages": [
+   "Partner quiz",
+   "Choose partner",
+   "Run rules"
+  ],
+  "q": {
+   "x": "Yes. The partner cards flip in and the chosen one lifts with a gold frame, and the rules page is a signed calling card instead of a list.",
+   "b": "Interval 2 was about looks. This pass is about flow: a new run is now a small ceremony with a clear start and end, instead of dropping the player straight onto the map.",
+   "p": "Three new pages. The quiz, the partner pick and the rules each get a whole screen, so none of them has to share space.",
+   "m": "New Run on the Main Menu leads into this road. The rules page reuses the Settings rows, so it reads the same as Settings, but only holds the five rules that lock when a run begins.",
+   "k": "A professor's quiz and three starters to choose from is the most Pokémon opening there is, and the three always come from different regions as the game's rules say."
+  }
+ },
+ {
+  "n": 12,
+  "name": "The world gets a map",
+  "change": "Hub Town and Pocket Town become places you can see at a glance. The Hub Town map is drawn from the game's real town layout, tipped on a slant, with the five districts named, all 18 places pinned and a numbered list beside it so any building is two presses away. Going inside a place now has its own page: the keeper stands on the left, the rooms are big slanted choices, and a preview shows what the chosen room holds. Pocket Town's 54 places are sorted into its five hamlets as a directory of tiles, with tags for what is ready today.",
+  "pages": [
+   "Hub Town map",
+   "Inside a place",
+   "Pocket Town"
+  ],
+  "q": {
+   "x": "Yes. A real map with pulsing pins and district colours is far more striking than a list of buildings, and the keeper busts make each place feel staffed.",
+   "b": "Pass 11 built the road into a run. This pass builds everything around the run: the town between runs, which until now had no page in this redesign at all.",
+   "p": "Three new pages: the map, the inside of a building, and the Pocket Town directory. Each building's rooms get space instead of sharing one crowded hub menu.",
+   "m": "The map is reached from Hub Town on the Main Menu and by pressing M in town. Settings keeps Hub style, so players who prefer to walk can still walk.",
+   "k": "A town map with a fly-to list is straight out of the Pokémon Town Map, and the Pokémon Center, Bank and Day-care style places are all there by name."
+  }
+ },
+ {
+  "n": 13,
+  "name": "People remember you",
+  "change": "The run now has faces. The four rivals who are always on your trail get a board of their own, each with a rivalry rank from 1 to 10, your record against them, where you meet next and the ace they will announce. When a rivalry deepens the game stops for a full-screen Rank Up moment with a falling-paper burst and a card for the rival. Between stages, the Rotom Phone shows messages from rivals, Prof. Oak and even your Pokémon as slanted chat bubbles, and Rotom chips in with tips. (The rank is a new idea shown here for the director to accept or drop.)",
+  "pages": [
+   "Rivals",
+   "Rank up",
+   "Rotom Phone"
+  ],
+  "q": {
+   "x": "Yes. A giant outlined rank number behind the rival, the Rank Up splash and the chat bubbles are the loudest pages since the battle cut-ins.",
+   "b": "Passes 11 and 12 built the road and the town. This pass adds the people on it, which makes the run feel like a story with a cast instead of a list of fights.",
+   "p": "Three new pages. Rival details used to be one line on the route map; now they have room for records, aces and what changes at the next rank.",
+   "m": "Rivals and the Rotom Phone are both entries on the pause hub. Settings › Game can turn phone messages off for players who want fewer interruptions.",
+   "k": "Rivals who text you and brag are pure Pokémon, the phone is the Rotom Phone, and each rival's ace is called out by name, as the game's ace rule asks."
+  }
+ },
+ {
+  "n": 14,
+  "name": "Ceremonies",
+  "change": "The big moments of a run stop being pop-ups. Evolution, learning a move, a capture and a Legendary Blessing each get a staged page with black bars sliding in top and bottom and the moment's name running along them like a film strip. Evolution shows the old shape as a white silhouette, three pulsing arrows and the new Pokémon bursting in with its stat gains counting up, and it says that B stops it. A new move is offered as a tilted card beside the four it could replace, with a plain line on what you would gain. A capture shakes the ball three times before the card flips in. A Blessing floats as a single card on pure black, with no spotlight and no podium.",
+  "pages": [
+   "Evolution",
+   "New move",
+   "Capture",
+   "Legendary Blessing"
+  ],
+  "q": {
+   "x": "Yes. The letterbox bars, the running ticker and the cards flipping in make these the most theatrical pages so far.",
+   "b": "Passes 11 to 13 added places and people. This pass adds time: the game now slows down and frames its own best moments, which is what makes Persona's battles and rank-ups memorable.",
+   "p": "Four new pages. Learning a move in particular used to share the result screen; alone, it has room to compare the old move with the new one.",
+   "m": "Settings › Battle already has cut-ins Every time, Once per battle or Off; the same switch shortens these pages to their last frame. None of them is reachable from the menu, they only happen.",
+   "k": "\"What? Charmeleon is evolving!\", \"Gotcha!\" and choosing which of four moves to forget are the most familiar Pokémon moments there are, kept word for word."
+  }
+ },
+ {
+  "n": 15,
+  "name": "One press from anywhere",
+  "change": "With 44 pages, finding your way matters more than adding another. Hold Tab anywhere in a run and a quick wheel pops over the map with eight places to jump to; point and let go. Menu pages now carry a trail strip in the bottom corner that says where you are (Pause, Settings, Look) and which pages sit either side on Q and E. Two pages that were only promised by a button now exist: the text log, which keeps every line and choice of the stage, and the Reserve box, where a seventh catch waits. Every page was re-checked in all five versions.",
+  "pages": [
+   "Quick wheel",
+   "Text log",
+   "Reserve"
+  ],
+  "q": {
+   "x": "The quick wheel is the showpiece: eight slanted plates spring out in a ring and the chosen one swells in the accent colour.",
+   "b": "Passes 11 to 14 each added pages. This one ties them together, so the redesign reads as one game with a clear spine instead of a pile of screens.",
+   "p": "Three new pages, and both the log and the Reserve take jobs away from crowded ones (the event page and the party page).",
+   "m": "The wheel is the menu when you are in a hurry, and the pause hub is the menu when you are not. Settings is on both, and the trail strip always shows the way back to it.",
+   "k": "The Reserve is the PC Box by another name, with the same grid of sprites, and the wheel uses plain Pokémon words: Party, Bag, Pokédex, Save."
+  }
+ },
+ {
+  "n": 16,
+  "name": "The fight gets a cast",
+  "change": "Until now a battle simply began. Now it is introduced. A Versus page splits the screen down a slanted line with your trainer on one side and the rival on the other, their Poké Balls counted out and the stakes written underneath. One press opens a scouting page that shows what you have seen of their team this run, and nothing you have not. When a trainer sends out their ace it is announced with its own cut-in, the trainer's eyes across the screen and an ACE star, so the ace rule is impossible to miss. Bosses get a title card that lists the gimmicks they carry.",
+  "pages": [
+   "Versus",
+   "Scout the team",
+   "Ace announcement",
+   "Boss title card"
+  ],
+  "q": {
+   "x": "Yes. The Versus slam and the ace cut-in are the loudest things in the game so far: the screen tears in two, the letters land with a thud, and a star spins in.",
+   "b": "Interval 3 added calm pages around the battle. This pass adds drama in front of it, so a rival or a Champion feels like an event before a single move is chosen.",
+   "p": "Four new pages. Scouting is its own page so the Versus page stays a poster, and the ace gets a page to itself because the rule says it must be announced.",
+   "m": "The pause menu and the quick wheel are closed while these play, since they last a second or two. Settings › Battle already has an Ace announcement switch and a cut-in length setting that these pages obey.",
+   "k": "Poké Balls count the teams exactly as the old games did, the foes are canon (Silver with Sneasel and Gengar, Lance with his dragons), and the wording is plain trainer talk."
+  }
+ },
+ {
+  "n": 17,
+  "name": "The command screen reads the fight",
+  "change": "The battle screen itself is rebuilt. Commands no longer sit in a burst in the middle; they fan out in an arc around your own Pokémon, the way Persona hangs its menu on the hero, and the chosen one grows. A turn ribbon across the top shows who moves next. The foe panel now shows what you actually know: status, stat changes and the types it is weak to. Moves moved onto a four-way cross, one press each, beside a target card that previews how much HP the move should take. Two new pages hold the detail so the main screen stays clean: Battle info and the Battle log.",
+  "pages": [
+   "Battle info",
+   "Battle log"
+  ],
+  "q": {
+   "x": "The fan springs open plate by plate and the damage preview pulses on the foe's HP bar. It is flashier and it tells you more at the same time.",
+   "b": "Pass 16 dressed up the start of a fight. This pass changes the part you look at most: fewer presses to pick a move, and the answers to “who goes first” and “will this hurt” are on screen before you ask.",
+   "p": "Two new pages. Stat stages, weather and hazards went to Battle info, and the turn-by-turn record went to Battle log, instead of being squeezed around the arena.",
+   "m": "Pause and the quick wheel still open from here. Settings › Battle decides whether the damage preview and weakness icons show, for players who want the old guessing game.",
+   "k": "Fight, Pokémon, Bag and Run are all still there in the classic order, with type icons, PP and status tags like PAR exactly as the series writes them."
+  }
+ },
+ {
+  "n": 18,
+  "name": "Four gimmicks, four different shows",
+  "change": "Mega Evolution had a cut-in since pass 5 and the other three gimmicks had nothing. Now each has its own show, built so you could tell them apart with the sound off. Terastallize fills the screen with moving prism light, crowns the Pokémon and spells its name in cut gems. Dynamax makes the Pokémon tower out of frame over a tiny foe while the letters stack up the side like a building. The Z-Move is a gold flare with a huge Z and the trainer in silhouette. Because a battle allows only one, a new Gimmick page deals the four as cards and says which are ready.",
+  "pages": [
+   "Choose a gimmick",
+   "Terastallize cut-in",
+   "Dynamax cut-in",
+   "Z-Move cut-in"
+  ],
+  "q": {
+   "x": "By a long way. These are the most over-the-top pages in the set, and each one has its own colours and its own kind of lettering instead of sharing one template.",
+   "b": "Pass 17 was about reading the fight calmly. This is the opposite: the reward for pressing the big button. It also fixes a gap, since three of the four gimmicks had no page at all.",
+   "p": "Four new pages. The chooser keeps a four-way decision off the command screen, where it would have meant four extra buttons.",
+   "m": "Settings › Battle has a Gimmick cut-ins row (every time, first time each battle, off). With cut-ins off the battle shows a one-line banner instead, so nothing here is forced on anyone.",
+   "k": "These are the series' own four gimmicks with their own icons from the game files, the Tera crown, the Dynamax turn count and Max Moves, and a real Z-Move name."
+  }
+ },
+ {
+  "n": 19,
+  "name": "Every fight gets an ending",
+  "change": "Battles had a start and a middle but only one way to end: You Win. Now the ending depends on what happened. A knockout gets its own splash in the Persona finishing-blow style, with the winner posed large and the loser tipped over. A boss who is nearly beaten gets a Last Stand page, two shutters closing on the screen with a phase meter between them. Losing to a rival shows Not Over, which says in plain words that the run goes on. And when a run really does end, the Run Over page is quiet instead of loud: the road you travelled, your best Pokémon, and what you keep.",
+  "pages": [
+   "Knockout splash",
+   "Boss last stand",
+   "Rival loss",
+   "Run over"
+  ],
+  "q": {
+   "x": "The knockout and Last Stand pages are as loud as anything so far. Run Over is deliberately the opposite, and the contrast makes both land harder.",
+   "b": "Passes 16 to 18 built the fight up. This one pays it off, and it closes two gaps: nothing told you a rival loss was safe, and nothing marked the end of a run.",
+   "p": "Four new pages. Each is a moment that used to be a single line of text in the battle box.",
+   "m": "Run Over is the one place where the menu is the page: New run, Back to Hub Town, Look back at the run. Settings stays reachable from Hub Town a press later.",
+   "k": "A fainted Pokémon tips over the way it always has, the rival is still rude about winning, and what you keep is counted in Pokédex pages and Remembrances."
+  }
+ },
+ {
+  "n": 20,
+  "name": "The joins between pages",
+  "change": "Since pass 5 every page change used the same slanted sweep. With 60 pages that became wallpaper, so now the join tells you what kind of thing is happening. Going into a fight slashes the screen open. Cut-ins and big moments open from the middle like a flashbulb. Menus drop in over a dimmed game. Moving to a new place pushes the old one away. Pages inside one menu keep the quick sweep. Two missing beats at the start of a battle were added: a wild Pokémon bursting out of the grass, and both sides sending out. A Page changes page in Settings shows all of the joins looping side by side.",
+  "pages": [
+   "Wild Pokémon appears",
+   "Send out",
+   "Page changes"
+  ],
+  "q": {
+   "x": "Yes, and this one is felt more than seen: click from the map into a fight and the whole screen tears open, where before it only slid.",
+   "b": "Passes 16 to 19 made single pages louder. This pass works on the gaps between them, which is what makes 60 separate pages feel like one moving game.",
+   "p": "Three new pages. The wild entrance and the send-out used to be one line of text each, and the joins get a page of their own so they can be judged without hunting for them.",
+   "m": "Menus have their own join (the drop), so opening Pause or Settings never looks like starting a battle. The Page changes page lives in Settings › Look beside Motion, with Full, Reduced and Off.",
+   "k": "A wild Pokémon appearing out of tall grass with a “!” and a thrown Poké Ball opening are the two oldest animations in the series. They are both here, just drawn in this style."
+  }
+ },
+ {
+  "n": 21,
+  "name": "A Pokémon game first",
+  "change": "Twenty passes of Persona style risked burying the game underneath. This pass puts Pokémon back on top. Every page title now carries a spinning Poké Ball in the version's own colour, so the franchise's best-known shape is on all 65 pages. A full Pokédex entry page takes the colour of the Pokémon's type, with height, weight, a description and its evolution line. A type chart answers the question players look up most. The nickname keyboard and the Pokémon Center, two of the most familiar screens in the series, now exist in this style.",
+  "pages": [
+   "Pokédex entry",
+   "Type chart",
+   "Nickname",
+   "Pokémon Center"
+  ],
+  "q": {
+   "x": "The Pokédex entry is the showpiece: the whole left side floods with the type's colour behind a giant turning Poké Ball outline.",
+   "b": "Interval 4 was all Persona drama. This pass changes the balance: it adds the pages only a Pokémon game has, and stamps a Poké Ball on everything that was already there.",
+   "p": "Four new pages. The Pokédex list keeps its grid and the detail moves to an entry page; the type chart leaves Battle info free for the current fight only.",
+   "m": "Pokédex is already on the pause hub and the quick wheel, and the type chart is one press from an entry or from Battle info. Settings › Access has the shapes-on-type-colours switch these pages obey.",
+   "k": "Yes, more than any pass so far: Poké Balls, type colours, No. 149, height and weight, a nurse saying she hopes to see you again."
+  }
+ },
+ {
+  "n": 22,
+  "name": "Evil Mode wears the same clothes",
+  "change": "Evil Mode has to use the new UI, so this pass draws Dominion in it. The rule is simple: the same five versions turned to night. Black comes first and the version's colour second, an eye blinks in the corner, and a top bar carries the crew name, the day, funds and Heat above six tabs. Seven pages cover a full day: founding an Unnamed Crew from a leaking warehouse, the HQ with your hands-on actions, the Crew File with the rank pyramid and Team Types, the Region Map with district files and operations, a Debate with the rival Boss through Rotom, a Hero interrupting a job, and the morning paper that tells you how the night went.",
+  "pages": [
+   "Dominion · begin",
+   "Dominion · HQ",
+   "Dominion · Crew File",
+   "Dominion · Region Map",
+   "Dominion · Debate",
+   "Dominion · Hero interrupt",
+   "Dominion · morning paper"
+  ],
+  "q": {
+   "x": "The morning paper is the most eye-catching page in the set: a whole tilted front page of The Kanto Ledger dealt onto the screen, with your grunt as the wanted photo.",
+   "b": "Until now the redesign only covered the hero's game. This pass shows the style can carry a management game as well, and gives the Dominion build one look to follow in all five versions.",
+   "p": "Seven new pages. District details, the Crew File and the paper each get their own page, so the HQ page only has to answer one question: what do I do tonight?",
+   "m": "The six tabs across the top are Evil Mode's menu, and the quick wheel still opens on hold. Settings is the same Settings as the main game, reached from the wheel, so nothing is duplicated.",
+   "k": "Team Rocket and Giovanni are the rivals, grunts have Koffing and Zubat, Officer Jenny is in the paper, and a kid Hero turns up to ruin your plan. It is the villains' side of a Pokémon game."
+  }
+ },
+ {
+  "n": 23,
+  "name": "Events become scenes that wait for you",
+  "change": "Events had not moved since pass 3: one text box, three rows, a reward page. This pass turns an event into a five-step scene and shows the steps on every page: Talk, Choose, Side stage, Outcome, Reward. The text box is rebuilt with a name plate, a line counter and a round Z pin that pulses to say the text will not move on without you. Choices become three cards dealt face up, each tagged Fight, Cost or Safe with what you risk. A fight inside an event is drawn as a Side stage that does not use up a stage. The outcome page keeps the reward as a sealed card until you close the text, and the reward page stays until you press Z.",
+  "pages": [
+   "Event · talk",
+   "Event · choice",
+   "Side stage",
+   "Event · outcome",
+   "Event · reward"
+  ],
+  "q": {
+   "x": "The reward is now a small show: a striped sealed card bobs on the outcome page, then three cards flip over one at a time under a cut-out YOURS.",
+   "b": "Pass 3 had the look but not the rules. Now the page itself shows Kice's event rules: text stays until you press a key, the reward only appears after the text is closed, and it only leaves when you say so.",
+   "p": "Three new pages (Side stage, outcome, reward) and two rebuilt ones. Splitting outcome and reward means neither has to share space with the other.",
+   "m": "Read back and Skip sit on the key row of every event page, and the Settings page for text speed and skipping applies here. Party opens from the Side stage before you commit to the fight.",
+   "k": "Prof. Oak, a Dragonite stealing berries for three hungry Dratini, a Lucky Egg as thanks, and your lead Pokémon reacting to the choice. It could not be any other game."
+  }
+ },
+ {
+  "n": 24,
+  "name": "Settings you can see",
+  "change": "Settings were lists of switches with one line of help. This pass rebuilds all of them around a preview pane: the left half is the list, the right half shows what the highlighted row does on a real page of the game. Battle shows a hit, Look shows the version, Sound shows the mix, Controls shows the keyboard, Text shows three sizes side by side. Two new pages, Text and Phone, bring the count to eight, so the side rail shrinks to eight letters. The Settings hub gains three one-press presets: Showtime, Standard and Calm. And two Access switches now really work in this mockup: turn on High contrast or Reduced motion and every page from here on obeys.",
+  "pages": [
+   "Settings (rebuilt)",
+   "Game",
+   "Battle",
+   "Look",
+   "Sound",
+   "Controls",
+   "Access",
+   "Text",
+   "Phone"
+  ],
+  "q": {
+   "x": "The preview pane puts a small live page of the game inside every settings page, framed and tilted like a photo pinned to the wall. Settings stop being the dull part.",
+   "b": "Before, you had to change a setting and go and look. Now you see it before you leave the page, and High contrast and Reduced motion can be tried for real on all 77 pages.",
+   "p": "Two new pages. Text size, speed and the easy-read font move out of Look into their own Text page, and phones get their own page instead of squeezing into Controls.",
+   "m": "This pass is the Settings answer: a hub with presets, eight pages one press apart with Q and E, a Reset page key on each, and X always goes back to the hub.",
+   "k": "The previews use the game's own pages: the route map, a Charizard hit, the five versions named for Red, Blue, Yellow, Green and Gold, and a Dragonite line as the sample text."
+  }
+ },
+ {
+  "n": 25,
+  "name": "The curtain call",
+  "change": "The last pass gives the game an ending and then checks everything. Until now a run could only be lost on screen; winning stopped at the last battle. Five new pages play in order, with their own five-step strip: a Hall of Fame where your six drop in as type-coloured banners, a Run record with a grade stamp, Credits with snapshots of your own run pinned up beside the roll, a ticket counter for the next region, and the regional forms question shown with the real before-and-after Pokémon. A sixth page, Every page, lists every other page in one place, 82 names, and each name is a link. Then the audit: all five versions were shot at every page and checked for cut-off or overlapping text, every button link was checked to land on a real page, every page was checked to be reachable from the title screen by pressing keys, and the viewer was tested at phone, laptop and desktop widths and with motion turned off.",
+  "pages": [
+   "Hall of Fame",
+   "Run record",
+   "Credits",
+   "Next region",
+   "Regional forms",
+   "Every page"
+  ],
+  "q": {
+   "x": "The Hall of Fame is the loudest page in the set: six banners drop from the top one after another, confetti falls in the version colours, and HALL OF FAME lands in cut-out letters over the top.",
+   "b": "The game now has a way to finish well, not only a way to fail. And after 25 passes the whole set has been checked page by page, so nothing is cut off, hidden or left without a way back.",
+   "p": "Six new pages, 83 in all. The ending is five short pages instead of one crowded one, and Every page is a map of the whole redesign so nothing gets lost.",
+   "m": "The ending pages keep the same key row as the rest of the game. The regional forms answer points to its row in Settings, Game, and the Run record links to the Run log from the pause wheel.",
+   "k": "A Hall of Fame, a Champion title, an S.S. Aqua ticket to the next region and Alolan Vulpix, Raichu and Exeggutor beside the forms you know. That is the ending of a Pokémon game."
+  }
+ }
+]
