@@ -45,9 +45,11 @@ import { leadStarEvent, skyBirdStaging } from '../core/presentation/eventStars';
 import { tourneyHome, tourneyPage, tourneyRounds } from '../ui/redux/screens/bracket';
 import { eventView as rxEventView, type EventLook } from '../ui/redux/screens/event';
 import { ghostScareFor } from '../core/presentation/ghostScare';
+import { interactionLog } from '../core/presentation/uiPrefs';
 import type { HonestModel, HonestSide } from '../ui/redux/screens/stops';
 import type { TeamModel } from '../ui/redux/screens/team';
 import { briefingView, finalView, rankUpView, resultView, tableView } from '../ui/redux/screens/evilLooks';
+import { phBriefing, phFiled, phFinal, phTable, phTeamRank } from '../ui/phantom/screens/teams';
 import { evilLook, rankUpLook, resultLook, type EvilLook } from '../core/evil/screens';
 
 
@@ -78,6 +80,8 @@ export class EventScene extends Phaser.Scene {
   /** New UI: the intro and the outcome text as pages (each waits for the player), and the page on show. */
   private rxPages: ScriptPage[] = [];
   private rxAt = 0;
+  private logName = '';
+  private logAt = -1;
   private rxOutPages: ScriptPage[] = [];
   private rxOutAt = 0;
   /** New UI: a split-second countdown waits here until the last intro page (the choices) is on show. */
@@ -248,6 +252,10 @@ export class EventScene extends Phaser.Scene {
       };
       this.rxPages = scriptPages(view.event.intro);
       this.rxAt = ctx.introSeen ? this.rxPages.length - 1 : 0;
+      // The run log (the Phantom Log page) keeps what is read here: the event's name, then each page as it is shown.
+      this.logName = view.event.name;
+      this.logAt = -1;
+      this.logTo(this.rxAt);
       const star = champion ? monFile(this, champion) : ctx.species ? monFile(this, ctx.species.id) : mine ? monFile(this, mine, 'front', run.party.find((m) => m.speciesId === mine)?.shiny ?? false) : null;
       const rounds = tv ? tourneyRounds(tv) : null;
       // A swap shows both sides before the player commits: the Pokémon that goes, and the one that comes back when the trade says so.
@@ -289,7 +297,7 @@ export class EventScene extends Phaser.Scene {
       // The job offer's chip says what joining is worth, as on the mock-up.
       const groupTag = `${view.event.group} · ${view.event.rarity.charAt(0).toUpperCase()}${view.event.rarity.slice(1)}`;
       const tag = view.event.id === 'stand-with-recruiter' && !standWithOf(run) ? `Reputation +${STAND.joinRep} if you join` : groupTag;
-      const teamPage = (): TeamModel | null => (view.team && this.rxTeam && this.phase === 'choose' ? { rival: view.team.rival, cards: view.team.mons.map((m) => ({ name: m.name, file: monFile(this, m.speciesId, 'icon'), level: m.level, types: m.types, moves: m.moves })) } : null);
+      const teamPage = (): TeamModel | null => (view.team && this.rxTeam && this.phase === 'choose' ? { rival: view.team.rival, who: phantomOn() ? cast : null, cards: view.team.mons.map((m) => ({ name: m.name, file: monFile(this, m.speciesId, 'icon'), front: phantomOn() ? monFile(this, m.speciesId, 'front') : null, level: m.level, types: m.types, moves: m.moves })) } : null);
       if (view.team) {
         this.toggleTeam = (): void => {
           if (this.phase !== 'choose' || this.rxBracket !== null || this.rxCard) return;
@@ -362,15 +370,15 @@ export class EventScene extends Phaser.Scene {
           const lookChoices = view.choices.map((x) => ({ label: x.label, sub: sub(x), chance: pct(x), locked: x.locked !== null }));
           if (look && !out && !this.picker && this.rxAt >= this.rxPages.length - 1) {
             const text = pages[at]!.map((l) => (l.who ? `${l.who}: ${l.text}` : l.text)).join(' ');
-            if (look.kind === 'final') return finalView({ look, choices: lookChoices, index: this.index, hold: this.holdPct, files: lookFiles, title: view.event.name });
-            if (look.kind === 'briefing') return briefingView({ look, choices: lookChoices, index: this.index, text });
-            if (look.kind === 'table') return tableView({ look, choices: lookChoices, index: this.index, files: lookFiles, text });
+            if (look.kind === 'final') { const m = { look, choices: lookChoices, index: this.index, hold: this.holdPct, files: lookFiles, title: view.event.name }; return c.ph ? phFinal(c.ph, m) : finalView(m); }
+            if (look.kind === 'briefing') { const m = { look, choices: lookChoices, index: this.index, text }; return c.ph ? phBriefing(c.ph, m) : briefingView(m); }
+            if (look.kind === 'table') { const m = { look, choices: lookChoices, index: this.index, files: lookFiles, text }; return c.ph ? phTable(c.ph, m) : tableView(m); }
           }
           if (out && r && out.step === 'rewards') {
             const up = rankUpLook(content, r.run, r.changes);
-            if (up) return rankUpView(up, { leader: fileOf(up.leader), lt: fileOf(up.lt), grunt: fileOf(up.grunt) }, out.next);
+            if (up) { const files = { leader: fileOf(up.leader), lt: fileOf(up.lt), grunt: fileOf(up.grunt) }; return c.ph ? phTeamRank(c.ph, up, files, out.next) : rankUpView(up, files, out.next); }
             const form = resultLook(content, view.event.id, this.index, view.choices[this.index]?.label ?? '', r.changes, r.text);
-            if (form) return resultView(form, out.next);
+            if (form) return c.ph ? phFiled(c.ph, form, out.next) : resultView(form, out.next);
           }
           const speaker = pageSpeaker(pages[at]!);
           return rxEventView(c, {
@@ -433,9 +441,11 @@ export class EventScene extends Phaser.Scene {
       // 7.7: press and hold a corner (or Enter) to choose; letting go cancels.
       if (this.rxLook?.kind === 'final') {
         const el = this.rx.el;
-        const down = (e: Event): void => { const t = (e.target as HTMLElement).closest<HTMLElement>('[data-hold]'); if (t && el.contains(t)) this.startHold(Number(t.dataset.hold)); };
+        // The Phantom page is drawn on its own layer, which keeps presses to itself: hear them on the way down (capture) and check both layers.
+        const down = (e: Event): void => { const t = (e.target as HTMLElement).closest<HTMLElement>('[data-hold]'); if (t && (el.contains(t) || t.closest('#phx .phs[data-scene="Event"]'))) this.startHold(Number(t.dataset.hold)); };
         const up = (): void => this.cancelHold();
-        el.addEventListener('pointerdown', down);
+        document.addEventListener('pointerdown', down, true);
+        this.events.once('shutdown', () => document.removeEventListener('pointerdown', down, true));
         window.addEventListener('pointerup', up);
         this.input.keyboard?.on('keyup', (e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') up(); });
         this.events.once('shutdown', () => window.removeEventListener('pointerup', up));
@@ -484,6 +494,13 @@ export class EventScene extends Phaser.Scene {
     else startClock();
   }
 
+  /** Tells the run log the intro pages up to `to` that it has not been told yet (a page turned back is not told twice). */
+  private logTo(to: number): void {
+    if (this.logAt < 0 && this.logName) interactionLog.tell('stage', this.logName, 'Event');
+    for (let k = Math.max(0, this.logAt + 1); k <= to && k < this.rxPages.length; k++) for (const l of this.rxPages[k]!) interactionLog.tell('say', l.text, l.who ?? '');
+    this.logAt = Math.max(this.logAt, to);
+  }
+
   /** New UI: next (or previous) page of the intro. The choices, and a countdown if the event has one, come with the last page. */
   private turnPage(by: 1 | -1): void {
     if (!this.rx || this.phase !== 'choose' || this.busy) return;
@@ -491,6 +508,7 @@ export class EventScene extends Phaser.Scene {
     // No turning back once a countdown runs: the choices stay up.
     if (to < 0 || to >= this.rxPages.length || (by < 0 && this.rxClock)) return;
     this.rxAt = to;
+    this.logTo(to);
     playSfx(this, 'ui.select', 0.3);
     if (to === this.rxPages.length - 1 && this.rxStartClock) {
       const go = this.rxStartClock;
@@ -752,7 +770,9 @@ export class EventScene extends Phaser.Scene {
       this.busy = false;
     }
     const before = partyBefore();
+    const chose = eventView(session.content, session.run!, this.sideId).choices[this.index]?.label;
     this.result = session.chooseEvent(this.sideId, this.index, tradeUid, grade);
+    if (chose) interactionLog.tell('pick', chose, 'You');
     this.phase = 'outcome';
     // A choice that evolved a party Pokémon plays the evolution scene before its outcome text.
     const evolved = evolutionsAfter(before);
@@ -777,6 +797,8 @@ export class EventScene extends Phaser.Scene {
     this.outcomeStep = 'text';
     this.rxOutPages = scriptPages(r.text);
     this.rxOutAt = 0;
+    for (const page of this.rxOutPages) for (const l of page) interactionLog.tell('say', l.text, l.who ?? '');
+    for (const c of r.changes) interactionLog.tell('gain', c);
     this.inputReady = false;
     this.rxClock = '';
     this.rx?.refresh();

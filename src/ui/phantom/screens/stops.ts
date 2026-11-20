@@ -4,7 +4,9 @@
 
 import type { PhantomVersion } from '../../../core/presentation/phantom';
 import type { PartyChip } from '../../redux/game';
+import type { EventModel } from '../../redux/screens/event';
 import type { RewardModel } from '../../redux/screens/stops';
+import { priceOf } from '../../redux/storeFloors';
 import type { ConfirmModel } from '../../redux/screens/saves';
 import { rxAtlas } from '../../redux/assets';
 import { figure, pic as rxPic, scrollStart, type Art } from '../../redux/templates';
@@ -38,7 +40,7 @@ export function phReward(_ph: PhantomVersion, d: RewardModel): string {
 }
 
 /** A good on the shop's shelf. */
-export interface PhShopRow { label: string; price: number; was: number | null; off: boolean; art: Art | null }
+export interface PhShopRow { label: string; /** null: this row is not for sale (a way out, a talk); `note` shows in its place. */ price: number | null; note?: string; was: number | null; off: boolean; art: Art | null }
 export interface PhShopModel {
   title: string;
   /** The small word over the title, and the chips beside it (the hour, "New stock at 3 badges"). */
@@ -51,9 +53,9 @@ export interface PhShopModel {
   /** The cursor: goods first, then `extras`. */
   index: number;
   /** The lit good (the last one while the cursor is on a button), or null when the shelf is empty. */
-  lit: { name: string; owned: number; pocket: string; about: string; art: Art | null } | null;
+  lit: { name: string; owned: number; pocket: string; about: string; art: Art | null; /** Shown in place of "IN BAG n" and the pocket (a store floor's goods are event choices, not bag items). */ tags?: readonly string[]; /** Drawn large in the picture frame when the good has no picture (a store floor's "5F"). */ mark?: string } | null;
   /** The buttons that buy the lit good: label, the handler it calls, lit, dimmed. */
-  buy: readonly { label: string; act: string; on: boolean; dim?: boolean }[];
+  buy: readonly { label: string; act: string; arg?: number; on: boolean; dim?: boolean }[];
   /** Cursor stops after the goods (Sell, Checkout, Empty basket). */
   extras: readonly string[];
   /** The Depot's basket, one line per good, and what it comes to. */
@@ -76,17 +78,17 @@ export function phShop(_ph: PhantomVersion, d: PhShopModel): string {
   const cash = (v: number): string => `₽${v.toLocaleString('en-US')}`;
   const rows = d.rows.slice(s, s + size).map((r, q) => {
     const k = s + q;
-    return `<div class="it ph-bi ph-si${k === d.index ? ' on' : ''}${r.off ? ' off' : ''}" style="--i:${q};font-size:${Math.max(16, Math.min(32, Math.floor(300 / Math.max(1, r.label.length * 0.56))))}px" data-key="s${k}"${act('pick', k, 'over')}>${rxPic(r.art, 44) || '<i></i>'}<div>${esc(r.label)}</div><span>${r.was !== null ? `<s>${cash(r.was)}</s> ` : ''}${cash(r.price)}</span></div>`;
+    return `<div class="it ph-bi ph-si${k === d.index ? ' on' : ''}${r.off ? ' off' : ''}" style="--i:${q};font-size:${Math.max(16, Math.min(32, Math.floor(300 / Math.max(1, r.label.length * 0.56))))}px" data-key="s${k}"${act('pick', k, 'over')}>${rxPic(r.art, 44) || '<i></i>'}<div>${esc(r.label)}</div><span>${r.was !== null ? `<s>${cash(r.was)}</s> ` : ''}${r.price === null ? esc(r.note ?? '') : cash(r.price)}</span></div>`;
   }).join('');
   const where = n > size ? `<div class="ph-more2" style="left:320px;top:${126 + size * 68}px">${s > 0 ? '▲ ' : ''}${s + 1}–${Math.min(n, s + size)} of ${n}${s + size < n ? ' ▼' : ''}</div>` : '';
-  const L = d.lit, price = n ? d.rows[Math.max(0, at)]!.price : 0;
-  const buttons = [...d.buy.map((b) => `<div class="blade${b.on ? ' on' : ''}${b.dim ? ' off' : ''}" style="--sh:#000"${act(b.act)}>${esc(b.label)}</div>`), ...d.extras.map((t, k) => `<div class="blade${d.index === n + k ? ' on' : ''}" style="--sh:#000"${act('pick', n + k, 'over')}>${esc(t)}</div>`)].join('');
+  const L = d.lit, price = n ? d.rows[Math.max(0, at)]!.price : 0, free = price === null;
+  const buttons = [...d.buy.map((b) => `<div class="blade${b.on ? ' on' : ''}${b.dim ? ' off' : ''}" style="--sh:#000"${act(b.act, b.arg ?? '')}>${esc(b.label)}</div>`), ...d.extras.map((t, k) => `<div class="blade${d.index === n + k ? ' on' : ''}" style="--sh:#000"${act('pick', n + k, 'over')}>${esc(t)}</div>`)].join('');
   const card = `<div class="idet ph-idet ph-sdet" data-key="sd${L ? at : -1}">${L
-    ? `<div class="big">${rxPic(L.art, 132)}</div><h3 style="font-size:${Math.max(24, Math.min(46, Math.floor(300 / Math.max(1, L.name.length * 0.5))))}px">${esc(L.name)}</h3><p${L.about.length > 190 ? ' class="xs"' : L.about.length > 110 ? ' class="sm"' : ''}>${esc(L.about)}</p><div class="lim"><span>IN BAG ${L.owned}</span><span>${esc(L.pocket.toUpperCase())}</span></div>`
+    ? `<div class="big">${rxPic(L.art, 132) || (L.mark ? `<b class="ph-smark">${esc(L.mark)}</b>` : '')}</div><h3 style="font-size:${Math.max(24, Math.min(46, Math.floor(300 / Math.max(1, L.name.length * 0.5))))}px">${esc(L.name)}</h3><p${L.about.length > 190 ? ' class="xs"' : L.about.length > 110 ? ' class="sm"' : ''}>${esc(L.about)}</p><div class="lim">${L.tags ? L.tags.map((t) => `<span>${esc(t.toUpperCase())}</span>`).join('') : `<span>IN BAG ${L.owned}</span><span>${esc(L.pocket.toUpperCase())}</span>`}</div>`
     : '<h3 style="position:static">Sold out</h3>'}${d.basket.length ? `<div class="ph-basket"><b>Basket</b>${d.basket.map((t) => `<span>${esc(t)}</span>`).join('')}</div>` : ''}<div class="ph-sbtn">${buttons}</div></div>`;
   const till = d.total !== null
     ? `<span>IN BASKET <b>${d.basket.length}</b></span><span>TOTAL <b>${cash(d.total)}</b></span><span>LEFT AFTER <b>${cash(d.money - d.total)}</b></span>`
-    : L ? `<span>IN BAG <b>${L.owned}</b></span><span>PRICE <b>${cash(price)}</b></span><span>LEFT AFTER <b>${cash(d.money - price)}</b></span>` : '';
+    : L && !free ? `${L.tags ? '' : `<span>IN BAG <b>${L.owned}</b></span>`}<span>PRICE <b>${cash(price ?? 0)}</b></span><span>LEFT AFTER <b>${cash(d.money - (price ?? 0))}</b></span>` : '';
   return page('shop', '<div class="bgk"></div><div class="shard" style="--c:var(--red);--cp:polygon(0 0,26% 0,18% 100%,0 100%);inset:0" aria-hidden="true"></div><div class="shard" style="--c:var(--red);--cp:polygon(62% 100%,100% 60%,100% 100%);inset:0" aria-hidden="true"></div>'
     + `<div class="hd" style="top:14px${d.title.length > 18 ? ';font-size:40px' : ''}"><small>${esc(d.small)}</small>${esc(d.title)}</div><div class="wallet"><small>MONEY</small>${cash(d.money)}</div>`
     + (d.chips.length ? `<div class="ph-xchips ph-schips">${d.chips.map((x) => `<span>${esc(x)}</span>`).join('')}</div>` : '')
@@ -118,4 +120,25 @@ export function phHeal(_ph: PhantomVersion, d: PhHealModel): string {
     + `<div class="hc-t" style="animation-delay:${(n * 0.28 + 0.6).toFixed(2)}s">${ransom('ALL', 4)}${ransom('BETTER!', 12)}</div>`
     + `<div class="pn lt hc-say ph-hc-say tilt" style="--r:-2deg"${act('heal')}><p class="txt" style="font-size:${d.text.length > 200 ? 16 : d.text.length > 120 ? 19 : 24}px">${esc(d.text)}</p><i class="nx" aria-hidden="true">▼</i></div>`
     + keys(['Enter', 'Thank you', 'heal']));
+}
+
+/**
+ * A department store floor: an event whose choices are the goods on the shelf. While the player is choosing it is drawn
+ * as the shop page (the shelf, the lit good's card, who it helps) with the floor directory as chips; its talk and its
+ * outcome are the event's own pages, so the words still come first and what changed after them.
+ */
+export function phStore(ph: PhantomVersion, d: EventModel): string {
+  const S = d.store!, n = d.choices.length, at = Math.max(0, Math.min(n - 1, d.index)), cur = d.choices[at];
+  const good = cur ? priceOf(cur.label) : null;
+  const line = d.lines.map((l) => l.text).join(' ');
+  return phShop(ph, {
+    title: S.title, small: S.floors.find((f) => f.on)?.name ?? d.tag, chips: S.floors.map((f) => (f.on ? `▶ ${f.tag}` : f.tag)), money: d.money ?? 0,
+    text: cur?.locked && cur.sub ? `${line} ${cur.sub}`.trim() : line,
+    rows: d.choices.map((x) => { const g = priceOf(x.label); return { label: g ? g.name : x.label, price: g ? Number(g.price.replace(/\D/g, '')) || 0 : null, note: x.chance, was: null, off: x.locked, art: null }; }),
+    index: at,
+    lit: cur ? { name: good ? good.name : cur.label, owned: 0, pocket: '', about: cur.sub, art: null, tags: [d.tag, ...(cur.locked ? ['Locked'] : [])], mark: S.floors.find((f) => f.on)?.tag ?? '' } : null,
+    buy: cur ? [{ label: good ? 'Buy' : 'Choose', act: 'pick', arg: at, on: true, dim: cur.locked }] : [],
+    extras: [], basket: [], total: null, party: S.party, notes: S.notes[at] ?? [], ask: null,
+    hints: [['Enter', good ? 'buy' : 'choose'], ['▲▼', 'goods']], keeper: null, clerk: SHOP_CLERK,
+  });
 }

@@ -84,6 +84,7 @@ export class RunSeedScene extends Phaser.Scene {
       acts: {
         key: (ch) => { this.lit = ch; this.setText((this.input_?.value ?? '') + ch); this.view?.refresh(); },
         btn: (b) => (b === 'apply' ? this.apply() : b === 'paste' ? void this.paste() : this.setText('')),
+        back: () => this.leave(this.desk),
       },
     }) : null;
     if (this.view) {

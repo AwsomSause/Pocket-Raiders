@@ -2,7 +2,7 @@
 
 import { act, B, bg, esc, facts, foot, H, mini, mon, nodeDot, TX, ty, TYPE_COLORS, W, type Area } from '../kit';
 import type { ReduxCtx } from '../stage';
-import { phBrief, phStarter } from '../../phantom/screens/run';
+import { phBrief, phSeed, phStarter } from '../../phantom/screens/run';
 
 export interface FormModel {
   title: string;
@@ -23,7 +23,8 @@ const over = (_i: number): string => ' data-over="over"';
 export const FORM_KEYS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123'.split('');
 
 /** The mock-ups' `form` template. The value box is left empty: the scene lays its real text box over `.rx-field`. */
-export function formView(_c: ReduxCtx, d: FormModel): string {
+export function formView(c: ReduxCtx, d: FormModel): string {
+  if (c.ph) return phSeed(c.ph, d);
   return H(d.title, d.area ?? 'run', d.hints) + `<div class="abs col cen" style="left:0;right:0;top:86px;gap:16px"><b style="font-size:21px">${esc(d.heading)}</b>${W('<b style="font-size:26px;line-height:40px;letter-spacing:.12em;visibility:hidden">X</b>', 'width:520px;display:flex;justify-content:center;gap:4px;padding:14px', 'rx-field')}<div style="display:grid;grid-template-columns:repeat(10,34px);gap:7px">${FORM_KEYS.map((ch) => `<span class="key"${ch === d.lit ? ' style="background:var(--acc);color:#14161e"' : ''}${act('key', ch)}>${ch}</span>`).join('')}</div><div class="row">${d.buttons.map(([label, arg], k) => B(esc(label), k === d.primary, '', '', act('btn', arg))).join('')}</div></div>` + TX(esc(d.text));
 }
 

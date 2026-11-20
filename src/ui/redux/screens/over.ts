@@ -4,6 +4,7 @@
 import { act, type Area, B, bg, esc, facts, H, keys, mini, TX, W } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { type Art, figure, pic } from '../templates';
+import { phCard } from '../../phantom/screens/ending';
 
 export type Fact = readonly [string, string];
 
@@ -59,11 +60,15 @@ export interface RunCardModel {
   save?: boolean;
   /** What a click beside the card does (default: back). */
   tap?: string;
+  /** Phantom UI: the small word over the title ("Pause"), and the notes that stand beside the card. */
+  small?: string;
+  side?: readonly { small: string; title: string; text: string }[];
 }
 
 const BADGE_COLORS = ['#e8622a', '#3d8bea', '#3fae5a', '#d8a810', '#7a5ad8', '#d8483a', '#2aa6a0', '#c85aa8'] as const;
 
 export function runCardView(c: ReduxCtx, d: RunCardModel): string {
+  if (c.ph) return phCard(c.ph, d);
   const v = c.v(2), side = v ? 60 : 150, cell = v ? 190 : 170;
   const lit = Math.max(0, Math.min(8, Math.floor(d.badges)));
   const discs = `<div class="row" style="gap:6px;margin-top:4px">${Array.from({ length: 8 }, (_, k) => `<i style="width:26px;height:26px;border-radius:50%;background:${k < lit ? BADGE_COLORS[k] : 'var(--p2)'};box-shadow:0 0 0 2px var(--l)"></i>`).join('')}</div>`;

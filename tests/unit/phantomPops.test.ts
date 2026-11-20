@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { PHANTOM_VERSIONS } from '../../src/core/presentation/phantom';
 import { pageOf } from '../../src/ui/phantom/kit';
-import { PH_BOOK_ROWS, phBook, phDossier, phReport, phRoll, phTrack } from '../../src/ui/phantom/screens/pops';
+import { PH_BOOK_ROWS, phBook, phBracket, phDossier, phReport, phRoll, phScout, phTrack } from '../../src/ui/phantom/screens/pops';
+import type { BracketModel } from '../../src/ui/redux/screens/bracket';
 import type { BookModel, DossierModel, ReportModel, RollModel, TrackModel } from '../../src/ui/redux/screens/popups';
 
 // The Phantom UI's map pop pages: pure functions from the New UI pop-ups' models to HTML.
@@ -141,5 +142,62 @@ describe('Phantom Town Roll', () => {
     expect(short).toContain('class="ph-rl-c off on"');
     expect(short).not.toContain('ph-rl-off');
     expect(short).toContain('Pewter City · Town 2 of 2');
+  });
+});
+
+describe('Phantom bracket', () => {
+  const who = (name: string, over = {}) => ({ name, file: null, you: false, out: false, named: true, ...over });
+  const bracket = (over: Partial<BracketModel> = {}): BracketModel => ({
+    title: 'Tournament bracket', pages: ['Group A', 'Group B', 'Finals'], page: 0, text: '11 players, seed fixed.',
+    columns: [
+      { name: 'Round of 16', now: true, slots: [who('Hal'), who('(bye)', { out: true }), who('Cy'), who('Red', { you: true })] },
+      { name: 'Quarterfinal', now: false, slots: [who('Hal'), null] },
+      { name: 'Semifinal', now: false, slots: [null] },
+    ], ...over,
+  });
+
+  it('draws each column with its slots: you in gold, the beaten struck out, an unplayed match as a question mark', () => {
+    const html = phBracket(ph, bracket());
+    expect(pageOf(html)).toBe('bracket');
+    expect(count(html, /class="ph-bk-col /)).toBe(3);
+    expect(count(html, 'class="ph-bk-col c0 now"')).toBe(1);
+    expect(count(html, /class="ph-bk-s[ "]/)).toBe(7);
+    expect(html).toContain('class="ph-bk-s you"');
+    expect(html).toContain('★ Red');
+    expect(count(html, 'class="ph-bk-s out"')).toBe(1);
+    expect(count(html, 'class="ph-bk-s q"')).toBe(2);
+    expect(count(html, 'data-act="bracketPage"')).toBe(3);
+    expect(html).toMatch(/<span class="on" data-act="bracketPage" data-arg="0">Group A/);
+    expect(html).toContain('11 players, seed fixed.');
+    expect(html).toMatch(/class="key" data-act="bracket"/);
+  });
+
+  it('the last column of one name is the winner card; a watch chip and custom keys are kept; one page has no tabs', () => {
+    const html = phBracket(ph, bracket({ pages: [], columns: [{ name: 'Final', now: false, slots: [who('Hal'), who('Cy', { out: true })] }, { name: 'Winner', now: true, slots: [who('Hal')] }], extra: 'W: watch a round 1 match', hints: [['Enter', 'copy'], ['Esc', 'back']] }));
+    expect(count(html, /class="ph-bk-s win"/)).toBe(1);
+    expect(html).not.toContain('data-act="bracketPage"');
+    expect(html).toMatch(/class="ph-bk-x" data-act="bracketWatch"/);
+    expect(html).toContain('Copy');
+    expect(html).toMatch(/data-act="bracket" data-arg=""><b[^>]*>Esc<\/b>Back/);
+  });
+});
+
+describe('Phantom rival team', () => {
+  const cards = [{ name: 'Growlithe', file: null, level: 31, types: ['fire'], moves: ['Ember', 'Bite'] }, { name: 'Pidgeotto', file: null, level: 0, types: ['normal', 'flying'], moves: [] }];
+
+  it('gives each Pokémon a card with its level, types and four move slots, and closes on a click or Enter', () => {
+    const html = phScout(ph, { rival: 'Okafor', cards });
+    expect(pageOf(html)).toBe('scout');
+    expect(count(html, 'data-testid="team-card"')).toBe(2);
+    expect(html).toContain('Okafor&#39;s team');
+    expect(html).toContain('Lv.31');
+    // No level known: none is shown.
+    expect(count(html, 'Lv.')).toBe(1);
+    expect(count(html, '<span>—</span>')).toBe(6);
+    expect(html).toContain('You will not forget them.');
+    expect(count(html, 'data-act="back"')).toBe(2);
+    // Without a picture of the rival the cards take the full width.
+    expect(html).toContain('class="sc-g ph-sc-g wide"');
+    expect(html).not.toContain('sc-who');
   });
 });

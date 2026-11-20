@@ -188,6 +188,8 @@ function start(): void {
   (window as unknown as { __pkr: unknown }).__pkr = {
     session,
     game,
+    /** The interaction log and the run log (presentation only), for the browser tests. */
+    log: interactionLog,
     activeScene: () => game.scene.getScenes(true).map((s) => s.scene.key)[0] ?? null,
     /**
      * Dev hook: jump the current run into the Extended Cut climax (Kanto phases), then open the map so the director plays them.

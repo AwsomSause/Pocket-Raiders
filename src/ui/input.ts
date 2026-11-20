@@ -59,6 +59,11 @@ function watchDroppedKeys(): void {
   );
 }
 
+/** A page over every screen (the Phantom run log) took this key press: it is not kept for the next screen. */
+export function swallowInput(): void {
+  handled = true;
+}
+
 /** Calls `handler` with a game action for each key press while the scene is running. */
 export function onInputAction(scene: Phaser.Scene, handler: (action: InputAction) => void): void {
   const keyboard = scene.input.keyboard;

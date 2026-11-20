@@ -131,3 +131,74 @@ test('Phantom UI: the shared pages fit in all five versions and at a phone-wide 
   }
   expect(errors).toEqual([]);
 });
+
+test('Phantom UI: Seed & Codes is a Phantom page with the real text box in its window; keys, buttons, a bad code and Confirm', async ({ page }) => {
+  test.setTimeout(120_000);
+  const errors = watch(page);
+  await start(page, 'ui=phantom&seed=ph-seed');
+  await onPage(page, 'MainMenu', 'title');
+  for (let n = 0; n < 12 && (await page.evaluate(() => (window as any).__pkr.activeScene())) !== 'RunPrep'; n++) { await page.keyboard.press('Enter'); await page.waitForTimeout(700); }
+  await waitForScene(page, 'RunPrep');
+  await page.waitForTimeout(250);
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').openSeed());
+  await waitForScene(page, 'RunSeed');
+  await onPage(page, 'RunSeed', 'seed');
+  const seed = pview(page, 'RunSeed', 'seed');
+  const box = page.getByTestId('seed-input');
+  await expect(box).toBeVisible();
+  await expect(seed.locator('.ph-sd-kb i')).toHaveCount(38);
+  await expect(seed.locator('.ph-sd-code')).toHaveCount(4);
+  await expect(seed.locator('.ph-sd-b')).toHaveText(['Paste', 'Confirm', 'Clear'], { ignoreCase: true });
+  await page.waitForTimeout(600);
+  expect(await fitProblems(page, 'RunSeed', 'seed')).toEqual([]);
+  // The real box lies inside the page's window, whatever the window's size.
+  const inside = () => page.evaluate(() => {
+    const b = document.querySelector<HTMLElement>('[data-testid="seed-input"]')!.getBoundingClientRect();
+    const f = document.querySelector<HTMLElement>('#phx .phs[data-scene="RunSeed"] .rx-field')!.getBoundingClientRect();
+    return Math.abs(b.left - f.left) < 3 && Math.abs(b.top - f.top) < 3 && Math.abs(b.width - f.width) < 3 && Math.abs(b.height - f.height) < 3 && b.height >= 20;
+  });
+  await expect.poll(inside).toBe(true);
+  // Typing lights the key just typed; a click on a key types it; Clear empties the box.
+  // The box opens with the desk's seed in it.
+  await expect(box).toHaveValue('ph-seed');
+  await box.pressSequentially('ab');
+  await expect(seed.locator('.ph-sd-kb i.on')).toHaveText('B');
+  await seed.locator('.ph-sd-kb i', { hasText: /^7$/ }).click();
+  await expect(box).toHaveValue('ph-seedab7');
+  await expect(seed.locator('.ph-sd-kb i.on')).toHaveText('7');
+  await seed.locator('.ph-sd-b', { hasText: /clear/i }).click();
+  await expect(box).toHaveValue('');
+  // A share code that is not one stays here and says why.
+  const note = await seed.locator('.ph-sd-say').textContent();
+  await box.fill('PR1.not-a-code');
+  await box.press('Enter');
+  await page.waitForTimeout(400);
+  expect(await page.evaluate(() => (window as any).__pkr.activeScene())).toBe('RunSeed');
+  await expect(seed.locator('.ph-sd-say')).not.toHaveText(note!);
+  expect(await fitProblems(page, 'RunSeed', 'seed')).toEqual([]);
+  for (const [id, w, h] of [['midnight', 844, 390], ['channel', 700, 900], ['fantasia', 1920, 1080], ['velvet', 1024, 768]] as const) {
+    await setVersion(page, id);
+    await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunSeed').view.refresh());
+    await page.setViewportSize({ width: w, height: h });
+    await expect(page.locator(`#phx .phs[data-scene="RunSeed"][data-scr="seed"][data-liv="${id}"]`)).toBeVisible();
+    await page.waitForTimeout(1000);
+    expect(await fitProblems(page, 'RunSeed', 'seed'), `${id} at ${w}x${h}`).toEqual([]);
+    await expect.poll(inside, { message: `${id} at ${w}x${h}` }).toBe(true);
+  }
+  await page.setViewportSize({ width: 1280, height: 720 });
+  // Confirm takes a plain seed back to the desk; from there Esc on the page's key hint would have left it unchanged.
+  await box.fill('my-seed-7');
+  await seed.locator('.ph-sd-b', { hasText: /confirm/i }).click();
+  await waitForScene(page, 'RunPrep');
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').seed)).toBe('my-seed-7');
+  expect(await page.getByTestId('seed-input').count()).toBe(0);
+  await page.waitForTimeout(250);
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').openSeed());
+  await waitForScene(page, 'RunSeed');
+  await onPage(page, 'RunSeed', 'seed');
+  await page.getByTestId('seed-input').fill('other');
+  await pview(page, 'RunSeed', 'seed').locator('.keys [data-act="back"]').click();
+  await waitForScene(page, 'RunPrep');
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').seed)).toBe('my-seed-7');
+  expect(errors).toEqual([]);
+});

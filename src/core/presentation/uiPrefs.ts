@@ -198,20 +198,54 @@ export function tiltFor(dx: number, dy: number, max = 0.12): { rotation: number;
 export interface LogEntry {
   at: number;
   text: string;
+  /** Who said it, or the heading of a stage row (run log page only). */
+  who?: string;
+  /** What kind of line the run log page draws; a plain note has none. */
+  kind?: 'say' | 'pick' | 'gain' | 'stage';
 }
-/** A short log of recent choices and results (a ring buffer; never saved, never used by the game). */
+/**
+ * A short log of recent choices and results (a ring buffer; never saved, never used by the game). Beside it, the
+ * longer run log: the same notes plus what was said, chosen and gained (`tell`), for the page that reads back a run.
+ * The run log belongs to one run: `scope` empties it when another run (or no run) is on.
+ */
 export class InteractionLog {
   private entries: LogEntry[] = [];
-  constructor(private readonly capacity = 40) {}
+  private story: LogEntry[] = [];
+  private scopeKey = '';
+  constructor(private readonly capacity = 40, private readonly long = 160) {}
+  private keep(e: LogEntry): void {
+    this.story.push(e);
+    if (this.story.length > this.long) this.story.shift();
+  }
   add(text: string, at = Date.now()): void {
     this.entries.push({ at, text });
     if (this.entries.length > this.capacity) this.entries.shift();
+    this.keep({ at, text });
+  }
+  /** A line for the run log only. Empty text is not kept, and neither is the same line twice in a row. */
+  tell(kind: NonNullable<LogEntry['kind']>, text: string, who = '', at = Date.now()): void {
+    const t = text.trim();
+    if (!t) return;
+    const last = this.story[this.story.length - 1];
+    if (last && last.kind === kind && last.text === t && (last.who ?? '') === who) return;
+    this.keep({ at, text: t, who, kind });
   }
   recent(n = 12): LogEntry[] {
     return this.entries.slice(-n).reverse();
   }
+  /** The run log, oldest first. */
+  backlog(): LogEntry[] {
+    return [...this.story];
+  }
+  /** Names whose log this is (a run's own key, or '' outside a run): a different name starts the run log empty. */
+  scope(key: string): void {
+    if (key === this.scopeKey) return;
+    this.scopeKey = key;
+    this.story = [];
+  }
   clear(): void {
     this.entries = [];
+    this.story = [];
   }
 }
 export const interactionLog = new InteractionLog();

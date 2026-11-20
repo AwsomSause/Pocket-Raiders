@@ -356,6 +356,7 @@ export class DecisionScene extends Phaser.Scene {
       },
     });
     const file = monFile(this, mon.speciesId, 'icon', mon.shiny) ?? monFile(this, mon.speciesId, 'front', mon.shiny);
+    const art = monFile(this, mon.speciesId, 'front', mon.shiny);
     const newPower = newMove.power ?? fixedDamageLabel(newMove.effects.fixedDamage);
     this.rxShow(() => {
       const i = (this.menu?.index ?? 0) - room;
@@ -363,7 +364,7 @@ export class DecisionScene extends Phaser.Scene {
       const old = slot ? content.moves.get(slot.id)! : null;
       return {
         title: 'New move',
-        card: { big: false, file, name, level: '', tag: '', sub: 'wants to learn', accent: newMove.name, types: [newMove.type], lines: [`${capWord(newMove.category)}${newMove.power ? ` · Power ${newPower}` : ''} · PP ${newMove.pp}. ${moveBrief(moveFullDescription(newMove))}`] },
+        card: { big: false, file, art, name, level: '', tag: '', sub: 'wants to learn', accent: newMove.name, types: [newMove.type], lines: [`${capWord(newMove.category)}${newMove.power ? ` · Power ${newPower}` : ''} · PP ${newMove.pp}. ${moveBrief(moveFullDescription(newMove))}`] },
         options: [...(room ? [plain(`Learn ${newMove.name}`, 'Free move slot')] : []), ...mon.moves.map((m) => rxMove(content, m.id, m.pp, m)), plain(`Do not learn ${newMove.name}`)],
         details: [],
         party: null,
@@ -512,12 +513,13 @@ export class DecisionScene extends Phaser.Scene {
       },
     });
     const file = monFile(this, mon.speciesId, 'icon', mon.shiny) ?? monFile(this, mon.speciesId, 'front', mon.shiny);
+    const art = monFile(this, mon.speciesId, 'front', mon.shiny);
     this.rxShow(() => {
       const id = shown[this.menu?.index ?? 0];
       const m = id ? content.moves.get(id)! : null;
       return {
         title: itemName,
-        card: { big: false, file, name: species.name, level: '', tag: '', sub: 'can learn a move from the', accent: itemName, types: m ? [m.type] : [], lines: [m ? `${m.name}: ${moveBrief(moveFullDescription(m))}` : `Keep the ${itemName} unused.`] },
+        card: { big: false, file, art, name: species.name, level: '', tag: '', sub: 'can learn a move from the', accent: itemName, types: m ? [m.type] : [], lines: [m ? `${m.name}: ${moveBrief(moveFullDescription(m))}` : `Keep the ${itemName} unused.`] },
         options: [...shown.map((x) => rxMove(content, x)), plain("Don't teach a move")],
         details: [],
         party: null,
@@ -680,9 +682,10 @@ export class DecisionScene extends Phaser.Scene {
       onSelect: (i) => this.resolve({ kind: 'ppUpMove', moveIndex: i }),
     });
     const file = monFile(this, mon.speciesId, 'icon', mon.shiny) ?? monFile(this, mon.speciesId, 'front', mon.shiny);
+    const art = monFile(this, mon.speciesId, 'front', mon.shiny);
     this.rxShow(() => ({
       title: itemName,
-      card: { big: false, file, name: species.name, level: '', tag: '', sub: 'gets more PP from the', accent: itemName, types: [], lines: [`Each PP Up adds a fifth of the move's PP (at most ${MAX_PP_UPS}).${ups > 1 ? ` This counts as ${ups}.` : ''}`] },
+      card: { big: false, file, art, name: species.name, level: '', tag: '', sub: 'gets more PP from the', accent: itemName, types: [], lines: [`Each PP Up adds a fifth of the move's PP (at most ${MAX_PP_UPS}).${ups > 1 ? ` This counts as ${ups}.` : ''}`] },
       options: mon.moves.map((slot) => ({ ...rxMove(content, slot.id, slot.pp, slot), small: `PP ${slot.pp}/${maxPp(content, slot)} · PP Ups ${slot.ppUps ?? 0}/${MAX_PP_UPS}`, off: (slot.ppUps ?? 0) >= MAX_PP_UPS })),
       details: [],
       party: null,

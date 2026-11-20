@@ -19,6 +19,7 @@ import { runCardView, type RunCardModel } from './over';
 import { honestView, type HonestModel } from './stops';
 import { teamView, type TeamModel } from './team';
 import { phEvent } from '../../phantom/screens/event';
+import { phStore } from '../../phantom/screens/stops';
 
 export interface EventChoice { label: string; sub: string; chance: string; locked: boolean }
 /** What the event director decided for this event, and how the page on show reacts (EventScene fills it in). */
@@ -215,7 +216,8 @@ export function eventView(c: ReduxCtx, d: EventModel): string {
     return runCardView(c, { ...d.codeCard, title: 'Code Name', team: [], text, hints: [['Enter', 'next']], area: 'story', save: false, tap: 'next' });
   }
   if (d.team) return teamView(c, d.team);
-  if (c.ph && !d.store) return phEvent(c.ph, d);
+  // Phantom UI: a store floor is the shop page while choosing; its talk and its outcome are the event's own pages.
+  if (c.ph) return d.store && !d.outcome && !d.pick && d.page.at >= d.page.of - 1 ? phStore(c.ph, d) : phEvent(c.ph, d);
   const out = d.outcome, more = d.page.at < d.page.of - 1, ch = out || more ? [] : d.choices;
   const L = d.look ?? plainLook(d);
   const pageKey = `${out ? out.step : 'intro'}${d.page.at}`;

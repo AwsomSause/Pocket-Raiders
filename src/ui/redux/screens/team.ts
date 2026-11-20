@@ -3,11 +3,14 @@
 import { act, esc, H, mini, TX, ty, W } from '../kit';
 
 import type { ReduxCtx } from '../stage';
+import type { Art } from '../templates';
+import { phScout } from '../../phantom/screens/pops';
 
-export interface TeamCard { name: string; file: string | null; level: number; types: string[]; moves: string[] }
-export interface TeamModel { rival: string; cards: TeamCard[] }
+export interface TeamCard { name: string; file: string | null; level: number; types: string[]; moves: string[]; /** Phantom UI: the full front sprite (the New UI draws the small icon). */ front?: string | null }
+export interface TeamModel { rival: string; cards: TeamCard[]; /** Phantom UI: the rival's picture, when the event has one. */ who?: Art | null }
 
 export function teamView(c: ReduxCtx, d: TeamModel): string {
+  if (c.ph) return phScout(c.ph, d);
   const v = c.v(2);
   const cols = d.cards.length > 4 ? 3 : d.cards.length > 1 ? 2 : 1;
   const card = (m: TeamCard): string => W(

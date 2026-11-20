@@ -5,6 +5,7 @@
 import type Phaser from 'phaser';
 import { agoWord, noticeOf, overlayView, type LogRow, type NoticeRow, type ToastRow } from './screens/overlay';
 import { mountOverlay, reduxCardUp } from './stage';
+import { phLog, type PhLogModel } from '../phantom/screens/system';
 
 interface Toast extends ToastRow { timer: ReturnType<typeof setTimeout> | null }
 
@@ -13,6 +14,9 @@ let view: { refresh(): void } | null = null;
 let nextToast = 1;
 let onNotice: (id: number) => void = () => undefined;
 let onLog: () => void = () => undefined;
+// Phantom UI: the run log is a whole page (mock-up `log`); the rows it draws, or null while it is shut.
+let logPage: PhLogModel | null = null;
+let onLogAt: (row: number) => void = () => undefined;
 let captionTimer: ReturnType<typeof setTimeout> | null = null;
 
 function layer(game: Phaser.Game): { refresh(): void } {
@@ -35,7 +39,9 @@ function layer(game: Phaser.Game): { refresh(): void } {
         view?.refresh();
       },
       log: () => onLog(),
+      logAt: (k) => onLogAt(Number(k)),
     },
+    page: (ph) => (logPage ? phLog(ph, logPage) : ''),
   });
   return view;
 }
@@ -62,6 +68,14 @@ export function rxToast(game: Phaser.Game, t: Omit<ToastRow, 'id' | 'open'>, ms:
 export function rxLog(game: Phaser.Game, rows: readonly { at: number; text: string }[] | null, close: () => void, now = Date.now()): void {
   state.log = rows ? rows.map((r) => ({ text: r.text, when: agoWord(now - r.at) })) : null;
   onLog = close;
+  layer(game).refresh();
+}
+
+/** Phantom UI: the run log page, or null to shut it. `close` is told by a click beside the rows, `at` by a click on a row. */
+export function rxLogPage(game: Phaser.Game, model: PhLogModel | null, close: () => void, at: (row: number) => void): void {
+  logPage = model;
+  onLog = close;
+  onLogAt = at;
   layer(game).refresh();
 }
 

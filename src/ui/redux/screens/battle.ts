@@ -6,6 +6,7 @@ import { act, esc, facts, foot, hpb, img, mini, mon, TX, TYPE_COLORS, ty, W } fr
 import type { ReduxCtx } from '../stage';
 import { type Art, pic, scrollStart } from '../templates';
 import { confirmBox } from './saves';
+import { phBattle, phBattleList } from '../../phantom/screens/battle';
 
 export interface BattleBox {
   name: string;
@@ -36,6 +37,8 @@ export interface BattleModel {
   menu: { options: readonly BattleOption[]; index: number } | null;
   /** The page tabs: Attack, Party, Item, then Auto and Info. Null while they are hidden. */
   tabs: { labels: readonly string[]; index: number; auto: boolean; autoOff: boolean } | null;
+  /** Where the Pokémon that is choosing stands (its feet, in canvas units): the Phantom UI spreads the tabs round it. */
+  me?: { x: number; y: number } | null;
   /** Small lines over the field: the run header (top right), a status line and a flash note (top left). */
   header: string;
   status: string;
@@ -57,6 +60,8 @@ export interface BattleModel {
   evolve?: BattleEvolve | null;
   /** The transform buttons over the move menu (Mega, Tera, Dynamax, Z-Move): the ones this Pokémon can use now. */
   gim?: readonly BattleGimmick[] | null;
+  /** Phantom UI: the move menu is open, so the page of all four gimmicks can be opened (G). */
+  gimPage?: boolean;
   /** The info panel (I): one window per section, left of the field; a single move's details show as the mock-ups' tooltip. */
   panels?: readonly BattlePanel[] | null;
   panelAt?: 'left' | 'tip';
@@ -224,6 +229,7 @@ export function trayHeight(v: number, n: number): number {
 }
 
 export function battleView(c: ReduxCtx, d: BattleModel): string {
+  if (c.ph) return phBattle(c.ph, d);
   if (d.evolve) return evolveView(c, d.evolve, d.text);
   const v = c.v(4), opts = d.menu?.options ?? [], n = opts.length, on = d.menu?.index ?? -1;
   const many = v === 3 ? n > 4 : Math.ceil(n / 2) > 2;
@@ -358,7 +364,8 @@ export const BATTLE_LIST_ROWS = 6;
 const countText = (t: string): string => t.replace(/^[×x]\s*(\d+)$/, '× $1');
 
 /** The battle's Party and Item windows (the mock-ups' overlays): a small window over the field, left of the arena. */
-export function battleListView(_c: ReduxCtx, d: BattleListModel): string {
+export function battleListView(c: ReduxCtx, d: BattleListModel): string {
+  if (c.ph) return phBattleList(c.ph, d);
   const n = Math.max(0, d.n), index = Math.max(0, Math.min(n - 1, d.index));
   const s = scrollStart(n, index, BATTLE_LIST_ROWS), end = Math.min(n, s + BATTLE_LIST_ROWS);
   const items = d.tabs !== null;

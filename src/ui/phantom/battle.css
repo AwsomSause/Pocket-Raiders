@@ -1,0 +1,348 @@
+/* Phantom UI: the battle screen over the live field (mock-ups `battle`, `moves`, `binfo`, `blog`, `learn`, `evolve`)
+   and the battle's Party and Item windows. The page is see-through; only what can be clicked takes the pointer. */
+.phx .phs{
+  & .s-battle,& .s-blist{background:none}
+  & .s-battle .frame{opacity:.92;animation:phx-fade .3s both}
+  & .ph-bt-shadow{position:absolute;inset:0;background:radial-gradient(#0000 40%,#3a0a5ab0);pointer-events:none}
+
+  /* ---- the foe's box ---- */
+  & .ph-bt-foe{z-index:2}
+  & .ph-bt-foe[data-act]{cursor:pointer}
+  & .ph-bt-foe h3{white-space:nowrap}
+  & .ph-bt-foe.sm{animation-delay:calc(var(--i,0)*60ms)}
+  & .ph-bt-foe.sm h3{font-size:30px;padding:4px 28px 6px 16px}
+  & .ph-bt-foe.sm h3 span{font-size:17px}
+  & .ph-bt-foe.sm .r{margin-top:4px}
+  & .ph-bt-foe.sm .num2{font-size:20px}
+  & .ph-bt-foe.sm .slash{height:16px;padding:3px 14px 3px 3px}
+  & .ph-bt-balls{display:flex;gap:5px;align-items:center}
+  & .ph-bt-balls i{width:16px;height:16px;border-radius:50%;background:linear-gradient(var(--red) 0 44%,var(--k) 44% 56%,var(--w) 56%);box-shadow:0 0 0 2px var(--k)}
+  & .ph-bt-balls i.out{background:#555;opacity:.7}
+
+  /* ---- the page tabs: the fan round your Pokémon ---- */
+  & .ph-bt-arc{width:400px;height:400px;margin:-200px;border-width:20px;pointer-events:none}
+  & .ph-bt-fan{z-index:3}
+  & .ph-bt-tab{left:calc(cos(var(--a))*214px);top:calc(sin(var(--a))*214px);padding:4px 18px 5px 6px;gap:8px}
+  & .ph-bt-tab b{font-size:24px}
+  & .ph-bt-tab kbd{width:26px;height:26px;font-size:16px}
+  & .ph-bt-tab small{font-size:11px}
+  & .ph-bt-tab.on{padding:5px 22px 6px 12px}
+  & .ph-bt-tab.on b{font-size:38px}
+  & .ph-bt-tab.on kbd{width:32px;height:32px;font-size:19px}
+  & .ph-bt-tab.g.on b,& .ph-bt-tab.g.on small{color:var(--k)}
+  & .ph-bt-tab.off{opacity:.5}
+  & .ph-bt-tab:not(.on):hover{translate:8px -50%}
+
+  /* ---- your own card ---- */
+  & .ph-bt-stack{top:auto;right:0;width:372px;gap:6px;z-index:2}
+  & .ph-bt-stack .m.on.ph-bt-m{grid-template-columns:minmax(0,1fr);padding:8px 26px 9px 34px;box-shadow:none}
+  & .ph-bt-stack .m.on.ph-bt-m[data-act]{cursor:pointer}
+  & .ph-bt-stack .m.on.ph-bt-m b{font-size:28px;align-items:baseline;gap:10px;white-space:nowrap}
+  & .ph-bt-stack .m.on.ph-bt-m b span{color:#333;font-size:19px}
+  & .ph-bt-stack .ph-bt-m .slash{background:var(--k);height:18px;padding:3px 14px 3px 3px}
+  & .ph-bt-stack .ph-bt-m .slash.xp{height:10px;padding:2px 10px 2px 2px;margin-top:3px}
+  & .ph-bt-stack .ph-bt-m.sm{padding-block:5px 6px}
+  & .ph-bt-stack .ph-bt-m.sm b{font-size:22px}
+  & .ph-bt-stack .ph-bt-m.sm b span{font-size:16px}
+  & .ph-bt-mt{display:flex;gap:6px;align-items:center;margin-top:4px;min-height:16px}
+  & .ph-bt-mt u{text-decoration:none;font:800 15px/1 var(--f-cond);letter-spacing:.08em;margin-right:auto}
+  & .ph-bt-mt em{font:800 13px/1 var(--f-cond);font-style:normal;letter-spacing:.08em;padding:3px 7px;background:var(--k);color:var(--gold);text-transform:uppercase}
+  & .ph-bt-party{display:flex;justify-content:flex-end;padding:2px 22px 0 0;animation:ph-inR .35s .1s both}
+
+  /* ---- the words ---- */
+  & .ph-bt-say{max-width:1000px;z-index:3;line-height:1.12;pointer-events:none}
+  & .ph-bt-say.half{max-width:560px}
+
+  /* ---- the choices ---- */
+  & .ph-bt-menu{position:absolute;right:30px;bottom:26px;display:grid;grid-template-columns:270px;grid-auto-rows:var(--h);z-index:4}
+  & .ph-bt-menu.two{grid-template-columns:250px 250px}
+  & .ph-bt-menu.mvs,& .ph-bt-menu.mvs.two{grid-template-columns:296px 296px}
+  & .ph-bt-mv{position:relative;width:auto;min-height:0;height:var(--h);--r:-1.5deg;grid-template-columns:56px minmax(0,1fr);column-gap:12px;padding:6px 12px 6px 0;cursor:pointer;animation-delay:calc(var(--i)*40ms)}
+  & .ph-bt-mv:nth-child(even){--r:-.5deg}
+  & .ph-bt-mv .t{margin:-6px 0}
+  & .ph-bt-mv .t img{width:36px;height:36px}
+  & .ph-bt-mv p{font-size:15px;white-space:nowrap}
+  & .ph-bt-mv kbd{left:-10px;top:-10px;width:28px;height:28px;font-size:15px}
+  & .ph-bt-mv.on{scale:1.06}
+  & .ph-bt-mv.sm{column-gap:10px;grid-template-columns:44px minmax(0,1fr)}
+  & .ph-bt-mv.sm .t img{width:28px;height:28px}
+  & .ph-bt-mv.sm p{font-size:13px;margin-top:2px}
+  & .ph-bt-mv.off,& .ph-bt-op.off{opacity:.5}
+  & .ph-bt-mv:not(.on):hover,& .ph-bt-op:not(.on):hover{translate:-6px 0}
+  & .ph-bt-op{position:relative;isolation:isolate;display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0;background:var(--w);color:var(--w);padding:0 22px 2px 26px;clip-path:polygon(5% 0,100% 0,96% 100%,0 100%);cursor:pointer;font-family:var(--f-disp);line-height:1;text-transform:uppercase;animation:ph-inR .3s both;animation-delay:calc(var(--i)*40ms)}
+  & .ph-bt-op::before{content:"";position:absolute;inset:2px 4px;background:var(--k);clip-path:polygon(5% 0,100% 0,96% 100%,0 100%);z-index:-1}
+  & .ph-bt-op.on::before{display:none}
+  & .ph-bt-op b{font-weight:400;white-space:nowrap}
+  & .ph-bt-op small{font:800 .56em/1 var(--f-cond);letter-spacing:.06em;color:var(--bone);white-space:nowrap}
+  & .ph-bt-op.on{background:var(--w);color:var(--k);filter:drop-shadow(7px 6px 0 var(--red))}
+  & .ph-bt-op.on small{color:#333}
+
+  /* ---- Mega, Tera, Dynamax, Z-Move ---- */
+  & .ph-bt-gims{position:absolute;right:34px;display:flex;gap:18px;z-index:4;padding-bottom:6px}
+  & .ph-bt-gim{position:relative;font-size:21px;padding:6px 18px 6px 14px;cursor:pointer;animation:ph-pop .3s both}
+  & .ph-bt-gim small{font:800 12px/1 var(--f-cond);letter-spacing:.14em}
+  & .ph-bt-gim.on{background:var(--red);color:var(--on)}
+  & .ph-bt-gim.on::after{content:"";position:absolute;inset:-5px;border:2px solid var(--gold);animation:ph-pulse 1.2s infinite;pointer-events:none}
+
+  /* ---- small lines over the field ---- */
+  & .ph-bt-mark{position:absolute;translate:-50% -100%;rotate:-4deg;background:var(--red);color:var(--on);font:800 14px/1 var(--f-cond);letter-spacing:.14em;padding:4px 10px;box-shadow:3px 3px 0 var(--k);white-space:nowrap;pointer-events:none;z-index:2;animation:ph-pop .25s both}
+  & .ph-bt-line{position:absolute;font:700 17px/1.25 var(--f-cond);letter-spacing:.03em;color:#fff;text-shadow:2px 2px 0 #000,-1px -1px 0 #000,0 0 6px #000;pointer-events:none;z-index:2}
+  & .ph-bt-line.hd2{right:24px;top:10px;text-align:right}
+  & .ph-bt-line.mo{right:24px;top:300px;text-align:right}
+  & .ph-bt-line.mo.top{top:10px}
+  & .ph-bt-line.st{left:30px;max-width:600px}
+  & .ph-bt-note{position:absolute;left:50%;top:84px;translate:-50% 0;max-width:720px;background:var(--gold);color:#000;font:800 19px/1.15 var(--f-cond);letter-spacing:.04em;padding:8px 22px;clip-path:polygon(2% 0,100% 0,98% 100%,0 100%);pointer-events:none;z-index:6;text-align:center;animation:ph-pop .25s both}
+  & .ph-bt-auto{left:50%;top:24px;translate:-50% 0;font-size:22px;padding:6px 20px;cursor:pointer;z-index:6}
+
+  /* ---- Exp just earned ---- */
+  & .ph-bt-exp{position:absolute;right:26px;top:26px;width:400px;display:flex;flex-direction:column;gap:8px;z-index:5;pointer-events:none}
+  & .ph-bt-exp .pn{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px;padding:8px 18px 9px 12px;animation:ph-inR .3s both;animation-delay:calc(var(--i)*50ms)}
+  & .ph-bt-exp .pn b{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font:400 22px/1 var(--f-disp);text-transform:uppercase;margin-bottom:5px;white-space:nowrap}
+  & .ph-bt-exp .pn b span{font:800 15px/1 var(--f-cond);letter-spacing:.06em}
+  & .ph-bt-exp.sm{gap:5px}
+  & .ph-bt-exp.sm .pn{padding:5px 14px 6px 10px}
+  & .ph-bt-exp.sm .pn b{font-size:18px;margin-bottom:3px}
+
+  /* ---- the level-up window ---- */
+  & .ph-bt-lv{position:absolute;left:50%;top:50%;width:440px;margin:-230px 0 0 -220px;padding:18px 26px 20px;z-index:22;animation:ph-pop .3s cubic-bezier(.2,1.4,.4,1) both;pointer-events:none}
+  & .ph-bt-lvh{display:flex;align-items:center;gap:16px;margin:4px 0 10px}
+  & .ph-bt-lvh .tl1{margin:0;font-size:34px}
+  & .ph-bt-lvn{margin:4px 0 0;font:400 26px/1 var(--f-disp);display:flex;align-items:baseline;gap:10px}
+  & .ph-bt-lvn i{font-style:normal;font-size:16px;color:var(--red)}
+  & .ph-bt-lvn b{font-weight:400;font-size:44px;color:var(--red)}
+  & .ph-bt-lv .dm-fr{animation:ph-inL .25s both;animation-delay:calc(120ms + var(--i)*45ms)}
+  & .ph-bt-lv .dm-fr b i{font-style:normal;font-size:16px;color:var(--red);margin-left:10px}
+
+  /* ---- the info panel, the move tooltip, the Ability card, the log ---- */
+  & .ph-bt-paper{padding:12px 20px 14px;animation:ph-pop .22s both}
+  & .ph-bt-paper .tl1{margin:2px 0 6px}
+  & .ph-bt-paper .txt{margin:4px 0 0;font-size:16px;line-height:1.2}
+  & .ph-bt-paper .dm-fr{font-size:16px;padding:4px 0}
+  & .ph-bt-paper .dm-fr b{font-size:18px}
+  & .ph-bt-paper.tip{position:absolute;right:60px;width:420px;rotate:-1.5deg;z-index:8;cursor:pointer}
+  & .ph-bt-paper.tip.still{pointer-events:none;cursor:default}
+  & .ph-bt-paper.abil{position:absolute;left:50%;top:150px;width:440px;margin-left:-220px;rotate:1deg;z-index:9;pointer-events:none}
+  & .ph-bt-paper.abil.pinned{pointer-events:auto;cursor:pointer;box-shadow:10px 10px 0 var(--red)}
+  & .ph-bt-panels{position:absolute;left:26px;top:132px;height:400px;display:flex;flex-direction:column;flex-wrap:wrap;align-content:flex-start;gap:10px 12px;z-index:8;cursor:pointer}
+  & .ph-bt-panels .ph-bt-paper{width:400px}
+  & .ph-bt-panels .ph-bt-paper:nth-child(odd){rotate:-1deg}
+  & .ph-bt-panels .ph-bt-paper:nth-child(even){rotate:.6deg}
+  & .ph-bt-panels.many .ph-bt-paper{width:372px;padding:8px 16px 10px}
+  & .ph-bt-panels.many .ph-bt-paper .txt,& .ph-bt-panels.many .ph-bt-paper .dm-fr{font-size:14px}
+  & .ph-bt-log{position:absolute;left:26px;top:132px;width:620px;max-height:420px;overflow:hidden;padding:12px 20px 14px;rotate:-1deg;z-index:8;animation:ph-inL .3s both}
+  & .ph-bt-log .txt{margin:3px 0 0;font-size:16px;line-height:1.2}
+  & .ph-bt-logt{position:static;display:flex;gap:6px;margin-bottom:8px}
+  & .ph-bt-logt span{cursor:pointer}
+
+  /* ---- the pieces that show while their rule is in play ---- */
+  & .ph-bt-fx{position:absolute;pointer-events:none;z-index:5;animation:ph-pop .25s both}
+  & .ph-bt-fx .txt{margin:4px 0 0;font-size:16px;line-height:1.2}
+  & .ph-bt-fx.bud{right:26px;top:26px;width:360px;padding:12px 20px 14px;rotate:1deg}
+  & .ph-bt-fx.bud .slash{margin:2px 0 6px}
+  & .ph-bt-fx.rally{left:50%;top:190px;translate:-50% 0;font-size:22px;white-space:nowrap}
+  & .ph-bt-fx.rule{left:50%;top:18px;translate:-50% 0;max-width:640px;padding:8px 20px 10px;box-shadow:inset 0 -4px 0 #c070ff}
+  & .ph-bt-fx.var{right:26px;top:26px;width:330px;padding:8px 16px 10px}
+  & .ph-bt-fx.trait{left:440px;top:30px;max-width:800px;display:flex;align-items:center;gap:12px;padding:8px 20px 10px 12px}
+  & .ph-bt-fx.dark{left:30px;width:600px;padding:8px 18px 10px;background:#1c0a2c;color:#f0e0ff;box-shadow:inset 0 0 0 2px #c070ff}
+
+  /* ---- an evolution ---- */
+  & .ph-bt-evb{opacity:.5;pointer-events:none}
+  & .ph-bt-ev{position:absolute;left:50%;top:46%;translate:-50% -50%;animation:ph-pop .4s cubic-bezier(.2,1.4,.4,1) both}
+  & .ph-bt-ev.done{animation:ph-bt-evo .7s cubic-bezier(.2,1.5,.4,1) both}
+  & .ph-bt-evt{position:absolute;left:50%;top:70px;translate:-50% 0;rotate:-4deg;font:400 84px/1 var(--f-disp);text-transform:uppercase;color:var(--w);text-shadow:6px 6px 0 var(--red);animation:ph-pop .4s .2s both;pointer-events:none}
+  & .s-evolve .ph-bt-say{left:50%;translate:-50% 0;white-space:nowrap}
+
+  /* ---- the battle's Party and Item windows ---- */
+  & .ph-bl{position:absolute;left:34px;width:440px;padding:14px 22px 14px;z-index:6;animation:ph-inL .3s both}
+  & .ph-bl.mid{left:50%;top:50%;width:540px;margin:-210px 0 0 -270px}
+  & .ph-bl-tabs{position:static;display:flex;gap:6px;margin-bottom:8px}
+  & .ph-bl-tabs span{cursor:pointer}
+  & .ph-bl-lead{font:800 16px/1.2 var(--f-cond);margin-bottom:6px}
+  & .ph-bl-r{display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:10px;height:50px;padding:0 14px 0 6px;cursor:pointer;border-bottom:2px solid color-mix(in srgb,currentColor 14%,transparent);animation:ph-inL .25s both;animation-delay:calc(var(--i)*30ms)}
+  & .ph-bl-r>em,& .ph-bl-r>.slash{grid-column:3}
+  & .ph-bl-r b{font:400 24px/1 var(--f-disp);text-transform:uppercase;white-space:nowrap}
+  & .ph-bl-r em{font:800 17px/1 var(--f-cond);font-style:normal;letter-spacing:.06em}
+  & .ph-bl-r em.st{background:var(--gold);color:#000;padding:3px 7px;font-size:14px}
+  & .ph-bl-pic{height:44px;display:grid;place-items:center}
+  & .ph-bl-r.on{background:var(--k);color:var(--w);clip-path:polygon(0 0,100% 0,97% 100%,0 100%);border-bottom-color:transparent}
+  & .ph-bl-r.off b{opacity:.45}
+  & .ph-bl-f{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:8px;font:800 15px/1 var(--f-cond);letter-spacing:.06em}
+  & .ph-bl-f u{text-decoration:none;display:flex;align-items:center;gap:6px;cursor:pointer}
+  & .ph-bl-f kbd{display:inline-grid;place-items:center;min-width:34px;height:24px;padding:0 6px;background:var(--k);color:var(--w);font:400 14px/1 var(--f-disp)}
+
+  /* ---- the versus card ---- */
+  & .ph-vs-evil{background:#2a0a14 radial-gradient(circle,rgba(255,60,80,.2) 2.2px,transparent 2.6px) 0 0/16px 16px}
+  & .ph-vs-p{display:flex;align-items:flex-end;pointer-events:none}
+  & .ph-vs-ball{display:inline-block;width:22px;height:22px;border-radius:50%;background:linear-gradient(var(--red) 0 44%,var(--k) 44% 56%,var(--w) 56%);box-shadow:0 0 0 2px var(--k);align-self:center}
+  & .s-vs .vs-n{z-index:3}
+  & .s-vs .vs-n .tl1{margin:0;white-space:nowrap;text-shadow:4px 4px 0 var(--k)}
+  & .s-vs .bl6{align-items:center;min-height:44px}
+  & .s-vs .ph-fill{z-index:6;cursor:pointer}
+  & .s-vs .keys{z-index:7}
+
+  /* ---- the cutscene card (a boss's entrance, an ace, a transformation) ---- */
+  & .ph-ct-beat{position:absolute;right:210px;bottom:10px;display:flex;align-items:center;gap:6px;z-index:7;background:var(--k);padding:9px 14px;color:var(--w);font:800 14px/1 var(--f-cond);letter-spacing:.16em;text-transform:uppercase;pointer-events:none}
+  & .ph-ct-beat i{width:26px;height:8px;background:color-mix(in srgb,var(--w) 26%,transparent);transform:skewX(-24deg)}
+  & .ph-ct-beat i.on{background:var(--red);box-shadow:0 0 0 1px var(--w)}
+  & .ph-ct-beat span{margin-left:6px;text-shadow:2px 2px 0 var(--k)}
+  & .ph-ct-next{z-index:6;cursor:pointer}
+  & .s-boss .keys,& .s-ace .keys,& .s-mega .keys{z-index:7}
+  & .s-boss .cine,& .s-ace .cine{z-index:2}
+  & .ph-ct-evil{background:radial-gradient(circle at 72% 50%,#7a1030 0,#14040c 62%)}
+  & .ph-ct-p{display:flex;align-items:flex-end;gap:10px;pointer-events:none}
+  & .ph-ct-with{filter:drop-shadow(8px 8px 0 var(--k))}
+  & .bs-t .ph-ct-name{display:block;line-height:1;margin-top:6px}
+  & .bs-t .ph-ct-name .rs{font-size:1em}
+  & .ph-ct-i .txt{margin:0;line-height:1.2}
+  & .ph-ct-i .ph-ct-note{font-size:18px}
+  & .ph-ct-i .ph-vs-ball{width:20px;height:20px}
+  & .ph-ct-face{pointer-events:none}
+  & .s-ace .ac-face.ph-ct-face{left:150px;top:118px}
+  & .s-mega .cut .face.ph-ct-face{top:150px}
+  & .s-mega .megasay{bottom:76px}
+  & .s-tera .tr-say,& .s-dmax .dx-say{bottom:76px}
+  & .s-zmove .zm-say b,& .s-dmax .dx-say b{white-space:nowrap}
+  & .s-zmove .zm-t{top:104px}
+  & .ph-ct-pk{pointer-events:none}
+  & .ph-ct-pk.form{position:absolute;right:150px;bottom:200px;filter:drop-shadow(12px 12px 0 var(--k));animation:ph-pop .4s .25s cubic-bezier(.2,1.5,.4,1) both;z-index:3}
+  & .ph-ct-ring{right:130px;top:auto;bottom:185px;width:330px;height:330px;z-index:2}
+  & .ph-ct-ring .ring2{border:10px dashed color-mix(in srgb,var(--gold) 80%,transparent);border-radius:50%}
+  & .s-mega .megasay b{color:var(--accw)}
+
+  /* ---- a transformation's cut-in ---- */
+  & .ph-gm-shard{display:block;width:110px;height:170px;background:linear-gradient(135deg,#fff,#b8f4ff 40%,#ffc6f2 70%,#fff);clip-path:polygon(50% 0,100% 30%,78% 100%,22% 100%,0 30%)}
+  & .ph-gm-crown img{width:150px;height:150px}
+  & .ph-gm-orb i{display:block;width:120px;height:120px;background:radial-gradient(circle at 35% 30%,#fff,#ffd400 45%,#ff8a00);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+  & .ph-gm-gx b{font-size:.82em}
+  & .s-tera .keys,& .s-dmax .keys,& .s-zmove .keys{z-index:7}
+  & .s-tera .tr-say .txt,& .s-dmax .dx-say .txt,& .s-zmove .zm-say .txt{margin:0;line-height:1.2}
+
+  /* Other versions: rounder, calmer shapes where the mock-ups have them. */
+  &[data-liv="channel"] .ph-bt-op{clip-path:none;border-radius:16px;box-shadow:0 0 0 3px var(--w)}
+  &[data-liv="channel"] .ph-bt-op.on{filter:none;box-shadow:0 0 0 4px var(--k),6px 6px 0 4px var(--gold)}
+  &[data-liv="fantasia"] .ph-bt-op,&[data-liv="velvet"] .ph-bt-op{clip-path:none;box-shadow:inset 0 0 0 1px var(--gold)}
+  &[data-liv="fantasia"] .ph-bt-op.on,&[data-liv="velvet"] .ph-bt-op.on{filter:none;box-shadow:inset 0 0 0 2px var(--k),inset 0 0 0 4px var(--w),inset 0 0 0 5px var(--gold)}
+  &[data-liv="midnight"] .ph-bt-op{background:linear-gradient(90deg,rgba(6,28,92,.96),rgba(3,14,48,.96));box-shadow:inset 0 0 0 2px var(--cyan)}
+  &[data-liv="midnight"] .ph-bt-op.on{background:linear-gradient(90deg,#fff,#c7f3ff);filter:drop-shadow(0 0 14px var(--cyan))}
+
+  /* ---- battle moments: wild, send, hit, ko, win, result, rival loss ---- */
+  & .ph-vs-ball.out{filter:grayscale(1) brightness(.45)}
+  & .ph-ic{display:grid;place-items:center;font-style:normal}
+  & .s-result .tl>.ph-ic{width:60px;height:60px}
+  & .ph-wl-mon{left:auto;right:150px;top:auto;bottom:170px;display:grid;place-items:end center;width:420px}
+  & .s-wild .wl-bang{left:700px}
+  & .s-wild .wl-t{max-width:680px}
+  & .s-wild .wl-b{flex-wrap:wrap;row-gap:6px}
+  & .s-wild .wl-b b{font-size:20px}
+  & .ph-wl-cant{font:700 18px/1.2 var(--f-cond)!important;text-transform:none!important;letter-spacing:0}
+  & .ph-sn-ball{width:64px;height:64px;box-shadow:0 0 0 5px var(--k)}
+  & .ph-sn-pk{display:grid;place-items:end center}
+  & .s-send .sn-me{left:70px;top:auto;bottom:86px;width:420px}
+  & .s-send .sn-foe{right:90px;top:120px;width:320px;height:260px}
+  & .s-send .sn-go{top:76px;font-size:150px}
+  & .s-send .sn-n.l{top:96px}
+  & .s-send .sn-n.r{top:430px}
+  & .ph-ht-pk{right:150px;top:auto;bottom:150px;width:460px;display:grid;place-items:end center}
+  & .s-hit .big{max-width:760px}
+  & .s-hit .say{z-index:5}
+  & .ph-ko-sil{left:-160px;top:-120px}
+  & .ph-ko-pk{left:40px;bottom:30px;width:520px;display:grid;place-items:end center}
+  & .s-ko .ko-dn{display:grid;place-items:center;width:110px;height:100px;flex:none;overflow:hidden}
+  & .s-ko .ko-foe{z-index:3}
+  & .ph-wn-sil{left:-60px;bottom:-60px}
+  & .ph-wn-hero{left:330px;bottom:-30px;display:grid;place-items:end center;width:460px}
+  & .s-win .ph-wn-line{line-height:1.05;width:460px}
+  & .s-win .ph-wn-line small{display:block;margin-top:10px;font:800 17px/1 var(--f-cond);letter-spacing:.16em}
+  & .s-win .big{max-width:640px}
+  & .s-result .gains .g{font-size:64px}
+  & .s-result .gains .g.s{font-size:38px}
+  & .s-result .gains .g small{font-size:19px;max-width:440px;white-space:normal;text-align:right}
+  & .ph-rl-p{right:120px;bottom:30px;display:grid;place-items:end center;width:420px}
+  & .s-rloss .rl-i .txt{font-size:19px}
+
+  /* ---- decisions: a new move, a new Pokémon, a plain choice ---- */
+  & .ch.off,& .lm.off{opacity:.5}
+  & .ph-ln-mon{left:60px;bottom:14px;width:330px;display:grid;place-items:end center}
+  & .ph-ln-ty{display:flex;gap:6px}
+  & .s-learn .ln-new .txt{font-size:17px;line-height:1.25}
+  & .s-learn .lm{cursor:pointer}
+  & .s-learn .lm .s{white-space:nowrap}
+  & .s-learn .lm.on b{font-size:inherit}
+  & .ph-ln-list.six{top:150px;gap:6px}
+  & .ph-ln-list.six .lm{min-height:56px}
+  & .ph-ln-list.six .lm.on{min-height:64px}
+  & .ph-ln-list.two{top:150px;display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;width:690px}
+  & .ph-ln-list.two .lm{min-height:46px;grid-template-columns:44px 1fr auto;column-gap:8px;padding-right:12px}
+  & .ph-ln-list.two .lm.on{min-height:46px;translate:0 0;grid-template-columns:44px 1fr auto auto}
+  & .ph-ln-list.two .lm .t img{width:28px;height:28px}
+  & .ph-ln-list.two .lm .s{font-size:11px;margin-top:2px}
+  & .ph-ln-list.two .lm em{font-size:14px;padding:4px 8px}
+  & .ph-ln-cmp{top:506px;width:640px;padding:10px 24px 12px}
+  & .ph-ln-cmp .txt{font-size:17px;line-height:1.22}
+  & .ph-ln-cmp.low{top:540px}
+  & .ph-ln-cmp.low .txt{font-size:15px}
+  & .ph-ln-keep{top:calc(612px + var(--b,0)*44px);cursor:pointer;font-size:24px}
+  & .ph-ln-keep.low{top:calc(636px + var(--b,0)*40px);font-size:20px}
+  & .ph-ln-keep.on{color:var(--gold);text-decoration:underline;text-underline-offset:6px}
+  & .ph-cp-ball{display:block;width:156px;height:156px;border-radius:50%;background:linear-gradient(var(--red) 0 45%,var(--k) 45% 55%,var(--w) 55%);box-shadow:0 0 0 8px var(--k);position:relative}
+  & .ph-cp-ball::after{content:"";position:absolute;left:50%;top:50%;width:44px;height:44px;margin:-22px;border-radius:50%;background:var(--w);box-shadow:0 0 0 8px var(--k)}
+  & .s-capture .cp-ball{left:120px;top:250px}
+  & .s-capture .cp-pips{left:120px;top:440px}
+  & .s-capture .cp-t{max-width:700px}
+  & .s-capture .keys{z-index:6;bottom:0;right:0;padding:6px 20px 6px 18px;background:var(--k);transform:none}
+  & .s-capture .cp-card{left:330px;top:190px;width:320px;padding:12px 20px 14px;gap:4px}
+  & .s-capture .cp-card .txt{font-size:15px;line-height:1.2}
+  & .ph-cp-pic{position:relative;width:210px;height:206px;place-items:end center;padding-bottom:6px;box-sizing:border-box}
+  & .ph-cp-2{position:absolute;right:-6px;bottom:0}
+  & .s-capture .cp-ty{flex-wrap:wrap;justify-content:center}
+  & .ph-cp-ch{right:34px;top:170px;gap:12px}
+  & .ph-cp-ch .ch{cursor:pointer;width:440px;padding:9px 34px 10px 18px}
+  & .ph-cp-ch .ch.on{width:470px}
+  & .ph-cp-ch .ch span{font-size:15px;margin-top:2px}
+  & .ph-cp-ch.some{top:150px;gap:8px}
+  & .ph-cp-ch.many{top:136px;gap:5px}
+  & .ph-cp-ch.many .ch{padding:6px 30px 7px 16px}
+  & .ph-cp-ch.many .ch span{font-size:13px}
+  & .ph-cp-facts{position:absolute;right:40px;bottom:112px;width:520px;padding:8px 22px 10px;box-sizing:border-box}
+  & .ph-cp-facts .txt{font-size:14px;line-height:1.22}
+  & .ph-cp-party{position:absolute;left:44px;bottom:112px;display:flex;gap:6px}
+  & .ph-cp-party i{position:relative;display:grid;place-items:center;width:46px;height:46px;background:var(--k);box-shadow:inset 0 0 0 2px var(--w);overflow:hidden}
+  & .ph-cp-party i.ko{filter:grayscale(1) brightness(.6)}
+  & .ph-cp-party u{position:absolute;left:3px;right:3px;bottom:3px;height:4px;background:linear-gradient(90deg,var(--cyan,#3fd8ff) var(--hp),#333 var(--hp))}
+  & .ph-cp-say{left:44px;right:auto;bottom:50px;max-width:1190px;padding:8px 24px 10px}
+  & .ph-cp-say .txt{font-size:17px}
+  & .ph-dc-list{position:absolute;left:70px;top:150px;display:flex;flex-direction:column;gap:14px}
+  & .ph-dc-list .ch{cursor:pointer;width:720px}
+  & .ph-dc-list .ch.on{width:760px}
+  & .ph-dc-list.some{top:136px;gap:9px}
+  & .ph-dc-list.some .ch{padding:8px 36px 10px 20px}
+  & .ph-dc-list.many{top:128px;gap:5px}
+  & .ph-dc-list.many .ch{padding:5px 34px 6px 18px}
+  & .ph-dc-facts{position:absolute;right:40px;top:150px;width:380px;padding:12px 24px 14px;box-sizing:border-box}
+  & .ph-dc-facts .txt{font-size:16px;line-height:1.25}
+  & .ph-dc-say{left:70px;right:auto;bottom:56px;max-width:1140px}
+  /* gimmick picker, phase card, side stage card */
+  & .ph-bt-gim.all{background:var(--k);color:var(--w);font-size:19px;padding:6px 16px 6px 8px}
+  & .ph-bt-gim.all kbd{width:26px;height:26px;font-size:17px;background:var(--w);color:var(--k)}
+  & .s-gimmick .gm-row{left:50px;gap:20px}
+  & .s-gimmick .gm-c{cursor:pointer;animation:ph-inUp .35s both;animation-delay:calc(var(--i)*60ms)}
+  & .s-gimmick .gm-c .tl1{font-size:29px;white-space:nowrap}
+  & .s-gimmick .gm-f{font-size:14px;max-width:226px;overflow-wrap:anywhere}
+  & .ph-gm-i{width:96px;height:96px;object-fit:contain;image-rendering:pixelated}
+  & .ph-gm-tera{display:block;width:32px;height:32px;background-repeat:no-repeat;image-rendering:pixelated;scale:3}
+  & .ph-gm-z{font:400 110px/1 var(--f-disp);color:var(--k);-webkit-text-stroke:5px var(--w);paint-order:stroke fill;rotate:-8deg}
+  & .s-gimmick .gm-note{bottom:64px;width:560px}
+  & .ph-lp-face{left:300px;top:-40px}
+  & .ph-lp-sil{right:40px;top:-150px}
+  & .ph-lp-mid{max-width:860px}
+  & .ph-lp-mid p{max-width:820px;margin-top:10px}
+  & .ph-lp-balls{display:inline-flex;gap:4px;margin-right:4px}
+  & .ph-lp-balls .ph-vs-ball{width:18px;height:18px}
+  & .ph-lp-ch{bottom:64px;flex-wrap:wrap;max-width:1100px}
+  & .s-phase .keys{z-index:3}
+  & .ph-sy-mon{left:760px;top:150px;width:400px;height:400px;display:grid;place-items:center}
+  & .ph-sy-mon.who{top:120px;height:440px;align-items:end}
+  & .ph-sy-foe{left:auto;right:40px;top:604px;max-width:520px;flex-wrap:wrap;justify-content:flex-end}
+  & .s-side .sy-cart{left:740px}
+}
+@keyframes ph-bt-evo{0%{scale:.2;filter:brightness(6)}60%{scale:1.15;filter:brightness(2)}100%{scale:1;filter:none}}
