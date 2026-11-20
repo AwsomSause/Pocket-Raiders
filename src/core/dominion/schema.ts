@@ -475,7 +475,7 @@ export const TaskEffectSchema = z.object({
     // D11 (hero.ts)
     'hero',
     // D8 (squads.ts)
-    'matchMake', 'runCrew']),
+    'matchMake', 'runCrew',
     // D23 (snatch.ts): Hold a Prisoner
     'captive']),
   /** D6 district tasks (kind 'district'): what it does in the member's district, and how much (task Lv 1-2, Lv 3+). */
