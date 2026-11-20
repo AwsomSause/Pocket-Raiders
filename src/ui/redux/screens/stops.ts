@@ -5,11 +5,12 @@ import { partyStrip, type PartyChip } from '../game';
 import type { ReduxCtx } from '../stage';
 import { figure, pic, type Art } from '../templates';
 import { phReward } from '../../phantom/screens/stops';
+import { pkReward } from '../../pocket/screens/reward';
 import { phHonest, phTrade } from '../../phantom/screens/trade';
 
 const pickAttr = (k: number): string => `${act('pick', k)} data-over="over"`;
 
-export interface RewardCard { name: string; kind: string; text: string; art: Art | null; notes: string[] }
+export interface RewardCard { name: string; kind: string; text: string; art: Art | null; notes: string[]; /** The reward's rarity and category ids (the Pocket look's stars and label). */ rarity?: string; category?: string }
 export interface RewardModel {
   title: string;
   cards: RewardCard[];
@@ -20,11 +21,14 @@ export interface RewardModel {
   text: string;
   /** After the pick: the result lines, shown until an input. */
   result: string[] | null;
+  /** A pick mode's instruction (Re-roll, Lock, Wish), or '' (the Pocket look asks "Take the X?" then). */
+  notice?: string;
 }
 
 /** The mock-ups' `reward` template: A a row of cards, B a fanned hand, C a list with a detail window. */
 export function rewardView(c: ReduxCtx, d: RewardModel): string {
   if (c.ph) return phReward(c.ph, d);
+  if (c.pk) return pkReward(d);
   const v = c.v(3), R = d.cards, n = R.length, on = Math.min(d.index, n - 1), cur = R[on]!;
   const inCards = d.index < n;
   const strip = partyStrip(d.party, 'left:24px;right:24px;bottom:66px');

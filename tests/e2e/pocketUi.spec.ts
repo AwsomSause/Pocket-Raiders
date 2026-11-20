@@ -279,3 +279,74 @@ test('Pocket look: the Poké Mart is two shelves and a counter; a basket checks 
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.session.run.money)).toBeLessThan(money);
   expect(errors).toEqual([]);
 });
+
+test('Pocket look: Pick a Reward deals the cards as the mock-up and takes one the same way', async ({ page }) => {
+  test.setTimeout(240_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=pk-reward');
+  await toPocketMap(page);
+  await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    session.run.phase = 'reward';
+    session.run.draft = ['protein', 'nugget', 'potion', 'ether', 'revive'];
+    game.scene.getScene('Map').scene.start('Reward');
+  });
+  await waitForScene(page, 'Reward');
+  await onPkPage(page, 'Reward', 'reward');
+  const reward = pkView(page, 'Reward', 'reward');
+  await expect(reward.locator('.rw')).toHaveCount(5);
+  await expect(reward.locator('.rw').nth(0)).toHaveClass(/\bon\b/);
+  await expect(reward.locator('.rw-rar').first()).toContainText(/Common|Uncommon|Rare/);
+  await fits(page, 'Reward', 'reward');
+  await step(page, 'ArrowRight');
+  await expect(reward.locator('.rw').nth(1)).toHaveClass(/\bon\b/);
+  await expect(reward.locator('[data-key="rw-tb"]')).toContainText('Take the Nugget?');
+
+  // Taking the Nugget pays as before; the result waits in the bar until Enter.
+  const money = await page.evaluate(() => (window as any).__pkr.session.run.money);
+  await reward.locator('[data-key="rw-1"]').click();
+  await expect(reward.locator('.gx-rw-done')).toBeVisible();
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.money)).toBeGreaterThan(money);
+  await fits(page, 'Reward', 'reward');
+  await page.waitForTimeout(1200);
+  await expect(reward.locator('.gx-rw-done')).toBeVisible();
+  await step(page, 'Enter');
+  await waitForScene(page, 'Map');
+  expect(errors).toEqual([]);
+});
+
+test('Pocket look: a healing stop is the Pokémon Center; the party is healed once and the map comes back on Enter', async ({ page }) => {
+  test.setTimeout(240_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=pk-center');
+  await toPocketMap(page);
+  await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr, run = session.run;
+    const node = run.stage.map.nodes.find((n: any) => n.column === 1);
+    node.sides.push({ id: 'pk-heal', kind: 'heal', used: false });
+    run.stage.current = node.id;
+    if (!run.stage.visited.includes(node.id)) run.stage.visited.push(node.id);
+    run.party.forEach((m: any) => { m.hp = 1; });
+    game.scene.getScene('Map').scene.restart();
+  });
+  await onPkPage(page, 'Map', 'map');
+  await page.waitForTimeout(800);
+  await page.evaluate(() => {
+    const map = (window as any).__pkr.game.scene.getScene('Map');
+    map.activate(map.options.findIndex((o: any) => o.kind === 'side' && o.side.id === 'pk-heal'));
+  });
+  await onPkPage(page, 'Map', 'center');
+  const center = pkView(page, 'Map', 'center');
+  await expect(center.locator('.tb-w')).toHaveText('Nurse Joy');
+  await expect(center.locator('.pc-r')).toHaveCount(await page.evaluate(() => (window as any).__pkr.session.run.party.length));
+  await expect(center.locator('.pc-r em').first()).toContainText(/\+\d+ HP/);
+  await fits(page, 'Map', 'center');
+  // The heal is done already; the page waits for Enter.
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.party.every((m: any) => m.hp > 1))).toBe(true);
+  await page.waitForTimeout(1500);
+  await expect(center).toBeVisible();
+  await step(page, 'Enter');
+  await onPkPage(page, 'Map', 'map');
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.stage.map.nodes.flatMap((n: any) => n.sides).find((s: any) => s.id === 'pk-heal')?.used)).toBe(true);
+  expect(errors).toEqual([]);
+});

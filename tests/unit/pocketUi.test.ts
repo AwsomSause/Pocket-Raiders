@@ -7,6 +7,9 @@ import { pkAce, pkVersus } from '../../src/ui/pocket/screens/cards';
 import { dealOf, dealWord, pageText, pkEvent, points } from '../../src/ui/pocket/screens/event';
 import { mapWindow, nodeState, pkMap, pkMiniMap, pkNodeMenu } from '../../src/ui/pocket/screens/map';
 import { pkPause } from '../../src/ui/pocket/screens/pause';
+import { healNote, pkCenter } from '../../src/ui/pocket/screens/center';
+import { categoryWord, pkReward, rarityOf } from '../../src/ui/pocket/screens/reward';
+import type { RewardModel } from '../../src/ui/redux/screens/stops';
 import { pkShop, pkShopPay, type PkShopGood, type PkShopModel } from '../../src/ui/pocket/screens/shop';
 import type { MapModel, MapNodeView } from '../../src/ui/redux/screens/map';
 import type { EventModel } from '../../src/ui/redux/screens/event';
@@ -348,5 +351,70 @@ describe('Pocket look: the Poké Mart', () => {
     expect(html.match(/data-act="confirm"/g)?.length).toBeGreaterThanOrEqual(2);
     const ok = pkShopPay({ ...d, basket: lines.slice(0, 1), ask: { title: 'Pay?', options: ['Pay', 'Keep shopping'], index: 0 } });
     expect(ok).toContain('<b class="new">₽ 3,820</b>');
+  });
+});
+
+describe('Pocket look: Pick a Reward', () => {
+  const card = (name: string, rarity: string, category: string, notes: string[] = []) => ({ name, kind: rarity, text: `${name} does a thing.`, art: null, notes, rarity, category });
+  const d: RewardModel = { title: 'Choose a reward', cards: [card('Protein', 'uncommon', 'stat-buff', ['Now 12 → After 13']), card('Nugget', 'common', 'currency'), card('Revive', 'rare', 'healing')], index: 1, party: [], buttons: ['Party', 'Bag', 'Re-roll ×2'], text: '', result: null, notice: '' };
+  it('names rarity in stars and the category in the mock-up\'s words', () => {
+    expect(rarityOf('rare')).toEqual([3, 'Rare']);
+    expect(rarityOf('uncommon')).toEqual([2, 'Uncommon']);
+    expect(rarityOf(undefined)).toEqual([1, 'Common']);
+    expect(categoryWord('attribute')).toBe('Held item');
+    expect(categoryWord('stat-buff')).toBe('Vitamin');
+    expect(categoryWord('mystery-thing')).toBe('Mystery thing');
+  });
+  it('stands the cards in a row with the lit one lifted, and asks to take it', () => {
+    const html = pkReward(d);
+    expect(pkPageOf(html)?.id).toBe('reward');
+    expect(html.match(/class="rw r/g)?.length).toBe(3);
+    expect(html).toContain('class="rw r1 on"');
+    expect(html).toContain('class="rw r3"');
+    expect(html).toContain('Take one. The other two are gone.');
+    expect(html).toContain('Take the <b>Nugget</b>?');
+    expect(html).toContain('Now 12 → After 13');
+    expect(html).toContain('data-act="pick" data-arg="5"');
+    expect(html).toContain('gx-rw-top');
+    expect(html).toContain('data-act="take"');
+  });
+  it('a pick mode says what to do; the result waits in the bar for Enter; many cards share the row', () => {
+    expect(pkReward({ ...d, notice: 'Choose the card to swap.' })).toContain('<p style="font-size:18px">Choose the card to swap.</p>');
+    const done = pkReward({ ...d, result: ['You received ₽126.', ''] });
+    expect(done).toContain('gx-rw-picked');
+    expect(done).toContain('You received ₽126.');
+    expect(done).toContain('data-act="done"');
+    expect(done).not.toContain('data-act="take"');
+    const many = pkReward({ ...d, cards: [...d.cards, card('Ether ×2', 'common', 'consumable'), card('Potion', 'common', 'healing')], index: 7 });
+    expect(many).toContain('rw-row gx-many');
+    expect(many).toContain('repeat(5,1fr)');
+    expect(many).toContain('The other four are gone.');
+    expect(many).not.toContain(' on" data-key="rw-');
+  });
+});
+
+describe('Pocket look: the Pokémon Center', () => {
+  const mon = (name: string, from: number, hp: string) => ({ file: null, name, from, hp });
+  it('says what the heal did for each Pokémon', () => {
+    expect(healNote(0, 104, 104)).toBe('Revived');
+    expect(healNote(98, 124, 124)).toBe('+26 HP');
+    expect(healNote(81, 81, 81)).toBe('Full');
+    expect(healNote(50, 50, 81)).toBe('');
+  });
+  it('Nurse Joy, the machine with six slots, and each HP bar filling from where it was', () => {
+    const party = [mon('Charizard', 79, '124/124'), mon('Pikachu', 100, '81/81'), mon('Lucario', 0, '104/104')];
+    const html = pkCenter({ title: 'Healing spot', small: '', text: 'Your Pokémon are fighting fit.', party, clock: 'Day 3 · Evening', notes: ['+26 HP', 'Full', 'Revived'] });
+    expect(pkPageOf(html)?.id).toBe('center');
+    expect(html).toContain('Nurse Joy');
+    expect(html).toContain('&quot;Your Pokémon are fighting fit.&quot;');
+    expect(html.match(/class="wm17"/g)?.length).toBe(1);
+    expect(html.match(/<u style="--i:/g)?.length).toBe(3);
+    expect(html.match(/gx-pc-empty/g)?.length).toBe(3);
+    expect(html).toContain('style="--from:79%"');
+    expect(html).toContain('<em class="full">Full</em>');
+    expect(html).toContain('Revived');
+    expect(html).toContain('gx-pc-few');
+    expect(html).toContain('Day 3 · Evening');
+    expect(html).toContain('data-act="heal"');
   });
 });

@@ -146,7 +146,8 @@ import { phoneBook, phoneChats, type PhoneChat } from '../core/presentation/phon
 import { PhantomDex } from '../ui/phantomDex';
 import { phWheel, wheelStep } from '../ui/phantom/screens/system';
 import { phCard } from '../ui/phantom/screens/ending';
-import { phHeal, type PhHealModel } from '../ui/phantom/screens/stops';
+import { phHeal } from '../ui/phantom/screens/stops';
+import { healNote, pkCenter, type PkCenterModel } from '../ui/pocket/screens/center';
 import { dockFact } from '../ui/phantom/screens/town';
 import { phConfirm } from '../ui/phantom/templates';
 import { bestMedalWord } from '../ui/redux/screens/minigame';
@@ -290,7 +291,7 @@ export class MapScene extends Phaser.Scene {
   /** New UI: the node event menu while it is open (the cards, the cursor, and what a pick does). */
   private rxMenu: { header: string; cards: NodeMenuCard[]; index: number; pick: (k: number) => void } | null = null;
   /** Phantom UI: the healing spot's page, up until the player presses (then `done` goes back to the map). */
-  private rxHeal: { model: PhHealModel; done: () => void } | null = null;
+  private rxHeal: { model: PkCenterModel; done: () => void } | null = null;
   /** New UI: a tournament match is being watched (drawn on the canvas, so the layer steps aside). */
   private rxWatching = false;
   /** New UI: when a pop-up last opened or closed. Its key can also be a direction (D is "right"), and that same press must not move anything. */
@@ -1587,6 +1588,7 @@ export class MapScene extends Phaser.Scene {
       this.rxView = mountRedux(this, {
         render: (c) => {
           if (this.rxHeal && c.ph) return phHeal(c.ph, this.rxHeal.model);
+          if (this.rxHeal && c.pk) return pkCenter(this.rxHeal.model);
           if (this.rxPop) return this.popView(c, this.rxPop);
           const model: MapModel = { ...this.rxModel!, index: this.index, info: this.info?.text ?? '', notice: this.notice?.text ?? '', going: this.rxGoing, banner: this.rxBanner, legend: this.rxLegend, card: this.rxCardOf() };
           if (c.pk && this.rxPause) return this.pausePocket(model);
@@ -2176,18 +2178,21 @@ export class MapScene extends Phaser.Scene {
         }
         // Phantom UI: the healing page shows each Pokémon's HP filling from what it was.
         const hpWas = option.side.kind === 'heal' ? session.run!.party.map((m) => (m.hp / Math.max(1, maxHp(session.content, m))) * 100) : [];
+        const hpBefore = session.run!.party.map((m) => m.hp);
         const message = session.visitSide(option.side.id);
         if (option.side.kind === 'heal') {
           playSfxLazy(this, 'me.heal');
           this.busy = true;
           const heal = barkLine(session.content, session.run!, 'heal', `${option.side.id}-${session.run!.stage?.visited.length ?? 0}`);
           const notice = heal ? `${message} ${heal}` : message;
-          if (phantomOn() && this.rxView) {
+          if ((phantomOn() || pocketOn()) && this.rxView) {
             const run = session.run!, stage = run.stage;
             this.rxHeal = {
               model: {
                 title: 'Healing spot', small: `${currentRegion(session.content, run).name}${stage ? ` · Stage ${stage.index + 1}` : ''}`, text: notice,
                 party: run.party.map((m, k) => ({ file: monFile(this, m.speciesId, 'front', !!m.shiny), name: displayName(session.content, m), from: hpWas[k] ?? 100, hp: `${m.hp}/${maxHp(session.content, m)}` })),
+                clock: this.rxModel?.chips.find((t) => t.startsWith('Day')) ?? '',
+                notes: run.party.map((m, k) => healNote(hpBefore[k] ?? m.hp, m.hp, maxHp(session.content, m))),
               },
               done: () => { if (!this.rxHeal) return; this.rxHeal = null; this.scene.restart({ notice, focus: 0 }); },
             };

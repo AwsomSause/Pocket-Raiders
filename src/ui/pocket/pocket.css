@@ -298,3 +298,20 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .gx-shop .receipt .gx-more{grid-template-columns:1fr;color:var(--mute)}
 .pkx .pks .gx-shop .rc-after .gx-bad{color:var(--red)}
 .pkx .pks .gx-shop .pay-btns .btn{cursor:pointer}
+
+/* Reward pick (mock-up `reward`): Party and Bag at the top right, notes under a card's text, more than three cards. */
+.pkx .pks .rwd .gx-rw-top{position:absolute;right:28px;top:58px;display:flex;gap:8px;z-index:3}
+.pkx .pks .rwd .gx-rw-tab{min-width:72px;height:34px;color:var(--ink)}
+.pkx .pks .rw .gx-rw-note{font-size:11.5px;font-weight:800;line-height:1.25;color:var(--rc)}
+.pkx .pks .rw-row.gx-many{left:30px;right:30px;gap:14px}
+.pkx .pks .rw-row.gx-many .rw{padding:150px 12px 12px}
+.pkx .pks .rwd .vs-say .nx2{white-space:nowrap}
+.pkx .pks .gx-rw-picked .rw:not(.on){opacity:.45;filter:saturate(.4)}
+.pkx .pks .gx-rw-done{cursor:pointer}
+.pkx .pks .rw-row.gx-many .rw{padding-top:124px}
+.pkx .pks .rw-row.gx-many .rw-art,.pkx .pks .rw-row.gx-many .rw-ic{height:112px}
+
+/* Pokémon Center (mock-up `center`): a short party gets a short list; the machine keeps six slots. */
+.pkx .pks .pc-list.gx-pc-few{height:auto;gap:14px;padding:14px}
+.pkx .pks .pc-mach u.gx-pc-empty{width:36px;height:36px;place-items:center;animation:none}
+.pkx .pks .pc-mach u.gx-pc-empty i{width:24px;height:24px;border-radius:50%;background:rgba(13,21,48,.35);box-shadow:inset 0 3px 0 rgba(0,0,0,.25)}
