@@ -296,6 +296,8 @@ const BlockSchema = z.object({
   crew: z.lazy(() => CrewStateSchema).optional(),
   /** D6: the Ledger's books, holding and Notoriety (Part 3 §1-2, Part 9 A14). Optional; `empireOf` (book.ts) fills it. */
   empire: z.lazy(() => EmpireStateSchema).optional(),
+  /** D7: the team made at the Founding (Part 9 A15). Absent until then; `teamName` holds its name too. */
+  team: z.lazy(() => TeamSchema).optional(),
   /** D4: the Reserve, Trust, the pyramid's bookkeeping. Optional; `reserveOf` fills it (and moves D3's stores in). */
   reserve: z.lazy(() => ReserveStateSchema).optional(),
   /** D5: the HQ's rooms, outside buildings, works, clean money, laundering and loans. Optional; `hqOf` fills it. */
@@ -384,7 +386,9 @@ export type DominionAction =
   | { t: 'desk' }
   | { t: 'deskAsk'; q: string; text?: string }
   | { t: 'deskInspect'; field: string }
-  | { t: 'deskStamp'; stamp: Verdict };
+  | { t: 'deskStamp'; stamp: Verdict }
+  // D7: the Founding (Part 9 A15)
+  | { t: 'found'; team: TeamDraft };
 
 // ---------- D3 data: crew.json, tasks.json, gruntTypes.json ----------
 
@@ -1372,3 +1376,63 @@ export const DeskStateSchema = z.object({
   log: z.array(z.object({ day: I.min(1), name: S, truth: z.enum(TRUTHS), great: z.boolean(), verdict: z.enum(VERDICTS) }).strict()),
 }).strict();
 export type DeskState = z.infer<typeof DeskStateSchema>;
+// ---------- D7: the Founding and team colours (founding.json, armbands.json, block `team`) ----------
+
+const HEX = z.string().regex(/^#[0-9a-f]{6}$/);
+export const FoundingFileSchema = z.object({
+  _source: S,
+  opensAt: S,
+  name: z.object({
+    max: I.min(2), chars: S, taken: z.array(S), skip: z.array(S),
+    byType: z.record(S, S), byEdge: z.record(S, S), byFeared: S, byLiked: S,
+    town: S, ace: S, type: S, edge: S, fallback: z.array(S).min(6),
+  }).strict(),
+  colours: z.array(z.object({ id: S, name: S, hex: HEX }).strict()).min(4),
+  start: z.object({ primary: S, secondary: S, logo: S }).strict(),
+  logos: z.array(z.object({ id: S, name: S }).strict()).min(1),
+  motto: z.object({ max: I.min(8), ideas: z.array(S).min(1) }).strict(),
+  goals: z.array(z.object({ id: S, name: S, line: S, quote: S }).strict()).length(14),
+  noGoal: z.object({ name: S, line: S, quote: S }).strict(),
+  band: z.object({ grey: HEX, greyDark: HEX, ink: HEX, white: HEX, near: N0, contrast: N0 }).strict(),
+  lines: z.object({
+    ready: S, readyShort: S, later: S, notYet: S, done: S, short: S, long: S, chars: S, taken: S, same: S, motto: S,
+    said: z.object({ grunt: S, admin: S }).strict(),
+    scene: z.array(S).min(1),
+  }).strict(),
+}).strict().superRefine((f, ctx) => {
+  const ids = f.colours.map((c) => c.id);
+  for (const k of [f.start.primary, f.start.secondary]) if (!ids.includes(k)) ctx.addIssue({ code: 'custom', message: `unknown colour ${k}` });
+  if (!f.logos.some((l) => l.id === f.start.logo)) ctx.addIssue({ code: 'custom', message: `unknown logo ${f.start.logo}` });
+  for (const n of f.name.fallback) if (n.length > f.name.max) ctx.addIssue({ code: 'custom', message: `fallback name too long: ${n}` });
+  for (const m of f.motto.ideas) if (m.length > f.motto.max) ctx.addIssue({ code: 'custom', message: `motto too long: ${m}` });
+});
+export type FoundingFile = z.infer<typeof FoundingFileSchema>;
+
+/** One crew picture's colour roles and armband anchor (tools/dominion/armbands/build.py, Part 11). */
+export const ArmbandLookSchema = z.object({
+  w: I.min(1), h: I.min(1),
+  /** Swappable blobs whose centre sits above this row are hair: kept as drawn. */
+  headY: N0,
+  primary: z.array(HEX), secondary: z.array(HEX),
+  /** 7 rows on the upper arm, each the sleeve's span [x0, x1]; null = the shown frame has no arm to wear it. */
+  anchor: z.object({ side: z.enum(['left', 'right']), y: N0, rows: z.array(z.tuple([N0, N0])).length(7) }).strict().nullable(),
+}).strict();
+export type ArmbandLook = z.infer<typeof ArmbandLookSchema>;
+export const ArmbandsFileSchema = z.object({ _source: S, looks: z.record(S, ArmbandLookSchema) }).strict();
+
+/** What the Founding page hands to the `found` action. */
+export interface TeamDraft { name: string; primary: string; secondary: string; initial: string; logo: string; motto: string; goal: string | null }
+
+export const TeamSchema = z.object({
+  name: S,
+  /** Colour ids from founding.json (the armband: primary band, letter in secondary, Part 6 §8). */
+  primary: S, secondary: S,
+  initial: z.string().regex(/^[A-Z]$/),
+  logo: S,
+  motto: z.string(),
+  /** One of the fourteen Goals (Part 35), or null for "Rule". D14 builds the Goal tracks. */
+  goal: S.nullable(),
+  /** The day the sign went up. */
+  day: I.min(1),
+}).strict();
+export type Team = z.infer<typeof TeamSchema>;

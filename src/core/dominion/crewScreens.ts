@@ -1,6 +1,7 @@
 // DOMINION slice D3 view models: the Morning (mockup 2) and the Crew File (mockup 5), the hire list, the leads and the
 // talk card. Plain data for ui/redux/screens/dominion/crew.ts. Pure: no Phaser, no RNG beyond reading today's hire list.
 
+import { teamColours, type TeamColours } from './founding';
 import { crewOf, familyOf, memberLine, odds, rankN, rankWord, taskById, taskLevel, taskLevelWord, traitName, withCrew, xpToNext, cantTake, formedById, greenById, gruntType } from './crew';
 import { DOMINION_DATA } from './data';
 import { hireList, pitchOdds } from './recruit';
@@ -66,7 +67,7 @@ export function infoCard(b: DominionBlock, m: Member): InfoCard {
     typeName: gruntType(c.type)?.name ?? c.cls, loyalty: m.loyalty, skill: skillOf(m),
     personality: trait ? traitName(trait) : `${temper?.word ?? '?'}?`, forming: !trait, fatigue: c.fatigue, pHeat: c.pHeat,
     out: c.out ? (c.out.why === 'held' ? OUT_WORD.held! : `${OUT_WORD[c.out.why] ?? 'Out'}, ${c.out.days} day${c.out.days === 1 ? '' : 's'}`) : null,
-    armband: b.teamName ? `${b.teamName} armband` : null,
+    armband: b.team ? `${b.team.name} armband` : null,
   };
 }
 
@@ -138,6 +139,8 @@ export interface FileModel {
   /** D22: Suspicion (0 hides it) and whether F can confront them now. */
   suspicion: number; double: boolean;
   talk: TalkModel | null;
+  /** D7: the team's colours for the recoloured picture (null: own colours, grey band). */
+  colours: TeamColours | null;
 }
 
 const RECORD_WORDS: Record<string, string> = { guard: 'Guarded', shake: 'Shook down', pick: 'Thieved', train: 'Trained', recruit: 'Recruited', scout: 'Scouted', front: 'Worked a front', collect: 'Kept the books', catch: 'Caught', rest: 'Rested' };
@@ -193,6 +196,7 @@ export function fileModel(block: DominionBlock, sel: number): FileModel {
     xp: `${c.xp}/${xpToNext(m.level)} XP`, points: m.traitPoints,
     keys,
     talk: card ? { name: card.name, title: card.talk.name, text: card.text, choices: card.talk.choices!.map((x) => x.label) } : null,
+    colours: teamColours(b),
   };
 }
 
