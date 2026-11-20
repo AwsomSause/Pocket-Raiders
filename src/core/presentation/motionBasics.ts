@@ -417,3 +417,42 @@ export function wildEntranceClip(foe: Point & { h: number }, level: ClipLevel): 
   b.beat(0, 'Two flashes').beat(320, 'Bars pull apart').beat(500, 'Dark shape slides in').beat(WILD_CRY, 'Colour and cry').beat(WILD_PLATE, 'The plate flies in');
   return b.end(1720);
 }
+
+/**
+ * Level up (pass 2, EXP and Level Up), from the moment the bar is full: a pale blue flash, the level ticks over on the
+ * plate (cue `tick`), the Pokémon does two happy hops with dust on each landing, and a yellow LEVEL stamp springs out
+ * over it, hangs and lifts away. `me` is its feet; `h` its height on screen. Parts: `mon`, `stamp` (x, y, sx, sy, alpha).
+ * Reduced: the stamp shows and fades, no flash, hops or dust. Off: only the tick.
+ */
+export function levelUpClip(me: Point & { h: number }, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('level-up', level);
+  const m = b.part('mon', { dx: 0, dy: 0, sx: 1, sy: 1 });
+  const at = { x: me.x + 40, y: me.y - me.h / 2 - 120 };
+  const st = b.part('stamp', { x: at.x, y: at.y, sx: 0.4, sy: 0.4, alpha: 0 });
+  b.fx({ kind: 'cue', at: 0, name: 'tick' });
+  if (level === 'off') {
+    st.at(0).set({ sx: 1, sy: 1 });
+    return b.end(0);
+  }
+  if (level === 'reduced') {
+    st.at(0).set({ sx: 1, sy: 1 }).to(150, { alpha: 1 }).wait(900).to(300, { alpha: 0 });
+    b.beat(0, 'The level ticks over');
+    return b.end(1350);
+  }
+  b.fx({ kind: 'flash', at: 0, d: 250, alpha: 0.45, color: 0x9ae4ff });
+  // Two hops: a squash, up 46 px, down; a deeper squash, up 30 px, down; a last squash and a springy settle.
+  m.at(100)
+    .to(70, { sy: 0.86, sx: 1.1 })
+    .to(160, { dy: -46, sy: 1.1, sx: 0.94 }, 'out')
+    .to(140, { dy: 0 }, 'in')
+    .to(60, { sy: 0.84, sx: 1.14 })
+    .to(140, { dy: -30, sy: 1.06, sx: 0.96 }, 'out')
+    .to(120, { dy: 0 }, 'in')
+    .to(50, { sy: 0.9, sx: 1.08 })
+    .to(200, { sy: 1, sx: 1 }, 'el');
+  b.fx({ kind: 'dust', at: 470, x: me.x, y: me.y, n: 6 });
+  b.fx({ kind: 'dust', at: 800, x: me.x, y: me.y, n: 5 });
+  st.at(100).set({ alpha: 1 }).to(140, { sx: 1, sy: 1 }, 'back2').wait(1000).to(300, { y: at.y - 40, alpha: 0 }, 'in');
+  b.beat(0, 'Flash, number ticks over').beat(100, 'Two hops').beat(100, 'LEVEL stamp');
+  return b.end(1700);
+}

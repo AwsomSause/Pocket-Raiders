@@ -256,7 +256,7 @@ export function drawFx(scene: Phaser.Scene, fx: MotionFx, o: FxOpts): void {
     case 'flash': {
       const alpha = fx.alpha * o.flash;
       if (alpha <= 0.01) return;
-      const r = scene.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH * 1.4, GAME_HEIGHT * 1.4, 0xffffff, alpha).setDepth(o.depth + 2).setScrollFactor(0);
+      const r = scene.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH * 1.4, GAME_HEIGHT * 1.4, fx.color ?? 0xffffff, alpha).setDepth(o.depth + 2).setScrollFactor(0);
       scene.tweens.add({ targets: r, alpha: 0, duration: ms(fx.d), ease: EASES.in, onComplete: () => r.destroy() });
       return;
     }

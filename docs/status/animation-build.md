@@ -82,3 +82,7 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   and "A wild X appeared!" (`wildEntranceClip`, `BattleScene.wildEntranceMoment`). The bars stand in for the opening
   camera sweep. Reduced: the usual short fade, then the shape's colour fades in. Off: it is just there. Limit: the
   mockup's platform slides in with the Pokémon; ours is part of the arena picture, so it stays.
+- Level up (pass 2): when your Pokémon levels up, a pale blue flash, the plate jolts up 6 px as the number ticks over,
+  the Pokémon does two happy hops (46 px, then 30 px) with dust on each landing, and a yellow "LEVEL n" stamp springs
+  out over it, hangs a second and lifts away (`levelUpClip`, `BattleScene.levelUpMoment`; replaces the old gold
+  "LEVEL UP!" banner). Reduced: the stamp shows and fades. Off: just the number. Singles only.

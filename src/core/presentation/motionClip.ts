@@ -39,7 +39,7 @@ export interface MotionSeg {
 /** A one-shot effect at a moment of the clip. Positions are screen pixels (960×540). */
 export type MotionFx =
   | { kind: 'dust'; at: number; x: number; y: number; n: number }
-  | { kind: 'flash'; at: number; d: number; alpha: number }
+  | { kind: 'flash'; at: number; d: number; alpha: number; color?: number }
   | { kind: 'ring'; at: number; x: number; y: number; r1: number; flat: number; d: number; color?: number; w?: number }
   /** A many-pointed burst of light that grows and fades (the ace's star). */
   | { kind: 'star'; at: number; x: number; y: number; size: number; points: number; d: number }

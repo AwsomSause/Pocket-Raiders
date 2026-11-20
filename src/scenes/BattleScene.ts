@@ -122,14 +122,14 @@ import { teraJewel } from '../ui/battleFx/teraJewel';
 import { megaGlass } from '../ui/battleFx/megaGlass';
 import { drawnBox, type GimmickPage } from '../ui/battleFx/gimmickStage';
 import { stand, standStill } from '../ui/battleFx/stance';
-import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture, PICTURE_SCALE, shinyChipPicture, starPicture } from '../ui/battleFx/cheerChip';
+import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture, PICTURE_SCALE, shinyChipPicture, stampPicture, starPicture } from '../ui/battleFx/cheerChip';
 import { dynamaxPan } from '../ui/battleFx/dynamaxPan';
 import { keyItemFor } from '../ui/battleFx/cineLook';
 import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel } from '../core/presentation/motionClip';
-import { aceLandClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { aceLandClip, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
@@ -179,7 +179,7 @@ import { BattleTabs, type BattlePage, type TabsPlace } from '../ui/battleTabs';
 import { animChoice, presentationFor } from '../core/presentation/moveAnims';
 import { moveAnims } from '../data/presentation';
 import { BattleFx } from '../ui/battleFx/battleFx';
-import { championGlow, levelUpBanner, platformEdgeLight } from '../ui/battleFx/transitions';
+import { championGlow, platformEdgeLight } from '../ui/battleFx/transitions';
 import { addAmbience, arenaType } from '../ui/battleFx/ambience';
 import { addEnvironment } from '../ui/battleFx/environment';
 import { environmentStory } from '../core/presentation/environmentStory';
@@ -4032,6 +4032,40 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /**
+   * Level up (pass 2, EXP and Level Up): a pale blue flash, the plate jolts as the level ticks over, your Pokémon does
+   * two happy hops with dust, and a yellow LEVEL stamp springs out over it. It plays on while the battle goes on.
+   */
+  private levelUpMoment(level: number): void {
+    const sprite = this.playerSprite;
+    const mon = this.shown.player;
+    if (!sprite?.active || this.duo) return;
+    const lv = this.clipLevel();
+    const at = this.spotXY('player');
+    const h = sprite instanceof Phaser.GameObjects.Sprite ? sprite.displayHeight * sprite.originY : 120;
+    const key = lv === 'off' ? null : stampPicture(this, `LEVEL ${level}`);
+    const stamp = key ? this.add.image(at.x + 40, at.y - h / 2 - 120, key).setScale(PICTURE_SCALE).setAlpha(0).setDepth(4000) : null;
+    if (stamp) stamp.name = 'level-stamp';
+    if (sprite instanceof Phaser.GameObjects.Sprite) standStill(this, sprite);
+    const run = playClip(this, levelUpClip({ x: at.x, y: at.y, h }, lv), this.clipHost({ mon: { kind: 'mon', get: () => sprite }, stamp: { kind: 'free', get: () => stamp } }, {
+      cue: (name) => {
+        if (name !== 'tick' || lv !== 'full') return;
+        // The plate takes the level with a jolt: up 6 px and back with a spring.
+        const c = this.playerBox.container;
+        if (!c.visible || this.tweens.isTweening(c)) return;
+        const y = c.y;
+        this.tweens.chain({ targets: c, tweens: [{ y: y - 6, duration: 50 }, { y, duration: 300, ease: 'Elastic.easeOut', easeParams: [1, 0.4] }], onStop: () => c.setY(y) });
+      },
+    }));
+    void run.done.then(() => {
+      stamp?.destroy();
+      if (sprite.active && sprite === this.playerSprite) {
+        run.rest('mon');
+        this.standUp(sprite, mon);
+      }
+    });
+  }
+
+  /**
    * A wild Pokémon appears (pass 5, Wild Encounter): two flashes, the screen splits into nine dark bars that pull
    * apart, the Pokémon slides in as a dark shape, its colour floods in with its cry and a hop, then its plate flies in.
    * Resolves when the plate is in (the clip's last beats play on while the line is read).
@@ -6537,7 +6571,7 @@ export class BattleScene extends Phaser.Scene {
             this.shown.player.level = e.level;
             if (real && real.level === e.level) this.shown.player.hp = real.hp;
             void this.refreshInfoBox(this.playerBox, this.shown.player, false);
-            levelUpBanner(this, this.playerBox.container.x + 120, this.playerBox.container.y - 12, e.level, this.motion, services().session.settings.effectIntensity);
+            this.levelUpMoment(e.level);
           }
           break;
         default:

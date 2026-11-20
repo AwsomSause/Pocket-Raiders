@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ClipBuilder, clipEnd, EASES, fxAllowed, sampleClip, type ClipLevel, type MotionClip } from '../../src/core/presentation/motionClip';
-import { aceLandClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
+import { aceLandClip, levelUpClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
 
 const ME: MonSpot = { x: 312, y: 428, h: 180, side: 'player' };
 const FOE: MonSpot = { x: 648, y: 240, h: 150, side: 'enemy' };
@@ -350,5 +350,35 @@ describe('motion clips: the wild encounter (pass 5)', () => {
     expect(o.length).toBe(0);
     expect(o.fx).toEqual([{ kind: 'cue', at: 0, name: 'cry' }, { kind: 'cue', at: 0, name: 'plate' }]);
     expect(clipEnd(o).foe).toMatchObject({ dx: 0, black: 0 });
+  });
+});
+
+describe('motion clips: level up (pass 2)', () => {
+  const me = { x: 312, y: 428, h: 160 };
+  it('a pale blue flash and the tick, two hops with dust on each landing, the LEVEL stamp springs out and lifts away', () => {
+    const c = levelUpClip(me, 'full');
+    expect(c.fx.find((f) => f.kind === 'flash')).toMatchObject({ at: 0, d: 250, alpha: 0.45, color: 0x9ae4ff });
+    expect(c.fx.find((f) => f.kind === 'cue')).toEqual({ kind: 'cue', at: 0, name: 'tick' });
+    // Squash 70 ms, then the first hop tops out 46 px up; the second, after landing, 30 px up.
+    expect(sampleClip(c, 170)).toMatchObject({ mon: { sy: 0.86, sx: 1.1 } });
+    expect(sampleClip(c, 330).mon!.dy).toBeCloseTo(-46);
+    expect(sampleClip(c, 470).mon!.dy).toBeCloseTo(0);
+    expect(sampleClip(c, 670).mon!.dy).toBeCloseTo(-30);
+    expect(c.fx.filter((f) => f.kind === 'dust').map((f) => [f.at, (f as { y: number }).y])).toEqual([[470, me.y], [800, me.y]]);
+    // The stamp: 40 px right of the Pokémon and 120 px over its middle, 0.4 to full in 140 ms, hangs 1 s, lifts 40 px.
+    expect(sampleClip(c, 100).stamp).toMatchObject({ x: me.x + 40, y: me.y - 80 - 120, sx: 0.4, alpha: 1 });
+    expect(sampleClip(c, 240).stamp!.sx).toBeCloseTo(1);
+    expect(sampleClip(c, 1200).stamp).toMatchObject({ y: me.y - 200, alpha: 1 });
+    expect(clipEnd(c)).toMatchObject({ mon: { dx: 0, dy: 0, sx: 1, sy: 1 }, stamp: { y: me.y - 240, alpha: 0 } });
+  });
+  it('Reduced: the stamp shows and fades, nothing hops or flashes; Off: only the tick', () => {
+    const r = levelUpClip(me, 'reduced');
+    expect(r.fx.map((f) => f.kind)).toEqual(['cue']);
+    expect(r.segs.some((s) => s.part === 'mon')).toBe(false);
+    expect(sampleClip(r, 600).stamp).toMatchObject({ sx: 1, alpha: 1 });
+    expect(clipEnd(r).stamp!.alpha).toBe(0);
+    const o = levelUpClip(me, 'off');
+    expect(o.length).toBe(0);
+    expect(o.fx).toEqual([{ kind: 'cue', at: 0, name: 'tick' }]);
   });
 });

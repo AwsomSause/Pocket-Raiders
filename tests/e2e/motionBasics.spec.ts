@@ -363,3 +363,38 @@ test('a wild Pokémon: nine dark bars pull apart, it slides in as a dark shape, 
   expect((await peek()).bars).toBe(0);
   expect(errors).toEqual([]);
 });
+
+test('level up: two hops, the LEVEL stamp springs out and lifts away, and the Pokémon stands home again', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'level-e2e');
+  await page.evaluate(() => {
+    const w = window as any;
+    const b = w.__pkr.game.scene.getScene('Battle');
+    w.__lv = { up: 0, stamp: '' };
+    w.__lvWatch = () => {
+      const v = b.playerSprite;
+      if (v?.active) w.__lv.up = Math.max(w.__lv.up, b.spotXY('player').y - v.y);
+      const s = b.children.list.find((c: any) => c.name === 'level-stamp');
+      if (s) w.__lv.stamp = s.texture.key;
+    };
+    b.events.on('update', w.__lvWatch);
+    b.levelUpMoment(12);
+  });
+  await page.waitForTimeout(2200);
+  const seen = await page.evaluate(() => {
+    const w = window as any;
+    const b = w.__pkr.game.scene.getScene('Battle');
+    b.events.off('update', w.__lvWatch);
+    return { ...w.__lv, left: b.children.list.filter((c: any) => c.name === 'level-stamp').length };
+  });
+  // The hop tops out 46 px over its spot (a few px either way for the breath it stood with).
+  expect(seen.up).toBeGreaterThan(36);
+  expect(seen).toMatchObject({ stamp: 'stamp.LEVEL 12.#ffcb05', left: 0 });
+  const me = await look(page, 'player');
+  expect({ x: me.x, y: me.y, sx: me.sx, solid: me.solid }).toEqual({ x: me.homeX, y: me.homeY, sx: me.sx, solid: 0 });
+  // Off: no stamp, no hop.
+  await page.evaluate(() => { const { session } = (window as any).__pkr; session.saveSettings({ ...session.settings, battleAnimations: 'off' }); (window as any).__pkr.game.scene.getScene('Battle').levelUpMoment(13); });
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.list.filter((c: any) => c.name === 'level-stamp').length)).toBe(0);
+  expect(errors).toEqual([]);
+});

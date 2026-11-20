@@ -114,6 +114,51 @@ function pill(scene: Phaser.Scene, key: string, word: string, look: { fill: stri
   }
 }
 
+/**
+ * The mockup's `.stamp`: Jersey 15 at 30 px, 5 x 14 px padding, 10 px corners, a 3 px dark ring. `fill` is the stamp's
+ * colour (`.stamp.y` is yellow with dark letters).
+ */
+export function stampPicture(scene: Phaser.Scene, word: string, fill = '#ffcb05', ink = '#131c36'): string | null {
+  const key = `stamp.${word}.${fill}`;
+  if (scene.textures.exists(key)) return key;
+  try {
+    const font = `400 ${30 * HI}px "Jersey 15", ${FONT_FAMILY}`;
+    const probe = document.createElement('canvas').getContext('2d');
+    if (!probe) return null;
+    probe.font = font;
+    const border = 3 * HI;
+    const w = Math.ceil(probe.measureText(word).width + word.length * 0.05 * 30 * HI) + 28 * HI + border * 2;
+    const h = 30 * HI + 11 * HI + border * 2;
+    const c = document.createElement('canvas');
+    c.width = w;
+    c.height = h;
+    const ctx = c.getContext('2d');
+    if (!ctx) return null;
+    ctx.beginPath();
+    ctx.roundRect(border / 2, border / 2, w - border, h - border, 10 * HI);
+    ctx.fillStyle = fill;
+    ctx.fill();
+    ctx.lineWidth = border;
+    ctx.strokeStyle = '#131c36';
+    ctx.stroke();
+    ctx.font = font;
+    ctx.fillStyle = ink;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    // The mockup's letter-spacing (.05em) where the browser has it.
+    try {
+      (ctx as unknown as { letterSpacing: string }).letterSpacing = `${1.5 * HI}px`;
+    } catch {
+      /* older browsers draw it without */
+    }
+    ctx.fillText(word, w / 2, h / 2 + HI);
+    scene.textures.addCanvas(key, c);
+    return key;
+  } catch {
+    return null;
+  }
+}
+
 /** The mockup's four-pointed white star (26 px), drawn once. */
 export function starPicture(scene: Phaser.Scene): string | null {
   const key = 'cheer.star4';
