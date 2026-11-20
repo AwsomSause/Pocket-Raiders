@@ -87,12 +87,16 @@ const DistrictSchema = z.object({
   rivalNote: S.optional(), wild: S, targets: z.array(TargetSchema).min(1),
 }).strict();
 export type District = z.infer<typeof DistrictSchema>;
-export const BATTLE_FOES = ['target', 'police', 'wild', 'ghost', 'member', 'rival'] as const;
+export const BATTLE_FOES = ['target', 'police', 'wild', 'ghost', 'member', 'rival', 'hero'] as const;
 export const EFFECTS = ['scout', 'count', 'scoutDistrict', 'paper', 'catch', 'laylow', 'disguise', 'fine', 'exp', 'spar', 'train', 'plan', 'pamper', 'hide', 'rescue', 'evolve', 'ceremony', 'mentor', 'launder',
   // D6 (field.ts)
   'skim',
   // D9 (rivals.ts addActEffect)
-  'rivalHit', 'rivalSpy', 'counterSpy', 'truceTalk', 'war', 'poach', 'court', 'plantMole'] as const;
+  'rivalHit', 'rivalSpy', 'counterSpy', 'truceTalk', 'war', 'poach', 'court',
+  // D11 (hero.ts addEffectHook)
+  'heroShame', 'heroDuel', 'heroFriend', 'heroAmbush', 'heroItem',
+  // D22 (spies.ts addActEffect)
+  'plantMole'] as const;
 const PlaySchema = z.object({
   kinds: z.array(z.union([z.enum(TARGET_KINDS), z.literal('any')])).min(1).optional(),
   chance: I.min(0).max(100).optional(),
@@ -181,8 +185,9 @@ export type DistrictState = z.infer<typeof DistrictStateSchema>;
 
 /** A battle an action (or the police) is waiting on. The fight bridge (fight.ts) starts it; fightEnd settles it. */
 export const FieldFightSchema = z.object({
-  why: z.enum(['fail', 'always', 'police', 'looker', 'raid', 'rival', 'spy']),
-  foe: z.enum(['target', 'police', 'wild', 'ghost', 'member', 'looker', 'raid', 'rival']),
+  /** D11: 'hero' a job the Hero stepped into (m11), 'challenge' an encounter's battle, 'heroRaid' the Hero at the HQ, 'stand' the final stand, 'legend' a Heroic Legendary; D22: 'spy' a mole caught at the Confront table. */
+  why: z.enum(['fail', 'always', 'police', 'looker', 'raid', 'rival', 'hero', 'challenge', 'heroRaid', 'stand', 'legend', 'spy']),
+  foe: z.enum(['target', 'police', 'wild', 'ghost', 'member', 'looker', 'raid', 'rival', 'hero', 'sidekick', 'legend']),
   begun: z.boolean(),
   action: S.nullable(),
   target: S.nullable(),
@@ -297,6 +302,10 @@ const BlockSchema = z.object({
   hq: z.lazy(() => HqStateSchema).optional(),
   /** D9: the rival teams (Tension, plan, spies, truces, raids). Optional; `rivalsOf` fills it. */
   rivals: z.lazy(() => RivalsStateSchema).optional(),
+  /** D11: the Hero and the Heroic Legendaries (Part 4 §7-8, Part 9 A8-A9). Optional; `heroOf` (hero.ts) fills it. */
+  hero: z.lazy(() => HeroStateSchema).optional(),
+  /** D21: the applications desk (today's queue, the basement, who got in and what they really are). Optional; no bump. */
+  desk: z.lazy(() => DeskStateSchema).optional(),
   /** D22: moles in the crew, Suspicion, clues and the Confront talk. Optional; `spiesOf` fills it. */
   spies: z.lazy(() => SpiesStateSchema).optional(),
 }).strict();
@@ -363,7 +372,19 @@ export type DominionAction =
   | { t: 'spyStart'; member: string }
   | { t: 'spyAsk'; q: string; text?: string }
   | { t: 'spyAccuse' }
-  | { t: 'spyDrop' };
+  | { t: 'spyDrop' }
+
+  // D11: the Hero steps into a job (m11: battle, run, Smoke Ball); an encounter card's answer; fighting a Legendary;
+  // after the final stand, leave the Hero in their shame or try to recruit them
+  | { t: 'interrupt'; how: 'fight' | 'run' | 'smoke' }
+  | { t: 'meet'; choice: number }
+  | { t: 'legend'; legend: string }
+  | { t: 'after'; how: 'leave' | 'recruit' }
+  // D21, the applications desk
+  | { t: 'desk' }
+  | { t: 'deskAsk'; q: string; text?: string }
+  | { t: 'deskInspect'; field: string }
+  | { t: 'deskStamp'; stamp: Verdict };
 
 // ---------- D3 data: crew.json, tasks.json, gruntTypes.json ----------
 
@@ -377,9 +398,11 @@ export const TaskEffectSchema = z.object({
     // D9 (rivals.ts)
     'rivalSpy', 'rivalIntel', 'counterSpy', 'poachRival', 'rivalHit', 'rescue', 'rumours', 'truceTalk',
     // D6 (empire.ts)
-    'district']),
+    'district',
+    // D11 (hero.ts)
+    'hero']),
   /** D6 district tasks (kind 'district'): what it does in the member's district, and how much (task Lv 1-2, Lv 3+). */
-  does: z.enum(['regard', 'dread', 'cool', 'patrol', 'collect', 'hold', 'line', 'eavesdrop', 'poll', 'face', 'party', 'song', 'peace']).optional(),
+  does: z.enum(['regard', 'dread', 'cool', 'patrol', 'collect', 'hold', 'line', 'eavesdrop', 'poll', 'face', 'party', 'song', 'peace', 'track', 'counter', 'hunt']).optional(),
   n: Range.optional(),
   /** Collect: what the district's Rackets pay this week, % by task level 1-5. */
   collect: z.array(N0).length(5).optional(),
@@ -906,6 +929,130 @@ export const HqStateSchema = z.object({
 }).strict();
 export type HqState = z.infer<typeof HqStateSchema>;
 
+
+// ---------- D11: the Hero and the Heroic Legendaries (Part 4 §7-8, Part 9 A8-A9; hero.json) ----------
+
+const Pct100 = I.min(0).max(100);
+const HeroDefSchema = z.object({
+  id: S, name: S, look: S, gender: z.enum(['m', 'f']), archetype: S, partner: S.nullable(), place: S,
+  /** Six evolution lines; the stage is picked by level (hero.json team.stageAt). */
+  lines: z.array(z.array(S).min(1).max(3)).length(6),
+}).strict();
+const LegendDefSchema = z.object({ id: S, name: S, home: S.optional(), over: S.optional() }).strict();
+const AllyDefSchema = z.object({ id: S, name: S, look: S, ace: S, champion: z.boolean().optional() }).strict();
+const HeroRegionSchema = z.object({
+  heroes: z.array(S).min(1), playerIs: z.array(S).min(1), standIn: z.record(S, S), legends: z.array(LegendDefSchema).min(1),
+  path: z.array(S).length(9).optional(), allies: z.array(AllyDefSchema).optional(), mentor: S.optional(), parent: S.optional(), sidekick: S.optional(),
+}).strict();
+const EncounterChoiceSchema = z.object({
+  label: S, line: S, regard: I.optional(), dread: I.optional(), heat: I.optional(), harm: N0.optional(), disill: I.optional(), delay: N0.optional(),
+  intel: N0.optional(), funds: I.optional(), item: S.optional(), battle: z.enum(['hero', 'sidekick']).optional(), wrong: z.boolean().optional(),
+  crewMor: I.optional(), tension: z.string().regex(/^D\d+$/).optional(),
+}).strict();
+export const EncounterSchema = z.object({
+  id: z.string().regex(/^O\d{3}$/), title: S, who: S, text: S, lock: z.boolean().optional(), night: z.boolean().optional(), badge: z.boolean().optional(),
+  choices: z.array(EncounterChoiceSchema).min(1).max(3),
+}).strict().refine((e) => !e.lock || e.choices.every((c) => !c.harm && !c.funds && !c.item), { message: 'a locked (minor) row is battle or talk only' });
+export type Encounter = z.infer<typeof EncounterSchema>;
+export type EncounterChoice = z.infer<typeof EncounterChoiceSchema>;
+
+export const HeroFileSchema = z.object({
+  _source: S,
+  regions: z.record(S, HeroRegionSchema),
+  heroes: z.array(HeroDefSchema).min(1),
+  archetypes: z.array(z.object({ id: S, name: S, taunt: S }).strict()).length(8),
+  threat: z.object({
+    weights: z.object({ wanted: z.number().min(0), dread: z.number().min(0), stolen: N0, building: N0, harm: z.number().min(0) }).strict(),
+    stages: z.array(z.object({ min: Pct100, id: z.enum(['ignores', 'foils', 'attacks', 'raids', 'allies']), word: S, does: S }).strict()).length(5),
+    stolenActions: z.array(S),
+  }).strict(),
+  level: z.object({ low: I, high: I, moraleStep: I.min(1) }).strict(),
+  team: z.object({ stageAt: z.tuple([I.min(1), I.min(1)]), sizeByBadges: z.array(I.min(1).max(6)).length(9) }).strict(),
+  badges: z.object({ every: I.min(1), first: I.min(1), perStage: N0, min: I.min(1) }).strict(),
+  reasons: z.array(z.object({ id: S, actions: z.array(S), text: S, wrong: S.nullable() }).strict()).min(1),
+  counters: z.record(S, z.tuple([S, z.array(S).min(1)])),
+  adapt: z.object({ after: I.min(1), max: I.min(1).max(3), line: S }).strict(),
+  disillusion: z.object({
+    puppet: I, bribe: I, good: I, fair: I, wrong: I, hurt: I, fear: I, shadow: I, fearRatio: z.number().min(1), fearMargin: N0, joinMax: Pct100,
+    bribeActions: z.array(S), goodActions: z.array(S),
+  }).strict(),
+  foil: z.object({ smokeChance: Pct100, runHeat: N0, smokeItem: S }).strict(),
+  attacks: z.object({ huntChance: Pct100, hurtDays: I.min(1), free: I.min(1) }).strict(),
+  allies: z.object({ every: I.min(1) }).strict(),
+  heroRaid: z.object({ take: z.number().min(0).max(1), free: N0, every: I.min(1) }).strict(),
+  stand: z.object({ take: I.min(1), control: Pct100, rematch: I.min(1), leaveDread: I, leaveRegard: I, refuseRegard: I, rank: S, joinLoyalty: Pct100, joinLine: S, stats: z.object({ brawn: I.min(1).max(10), nerve: I.min(1).max(10), wits: I.min(1).max(10), charm: I.min(1).max(10), stealth: I.min(1).max(10) }).strict() }).strict(),
+  legends: z.object({ wakeAt: Pct100, strikeEvery: I.min(1), warn: I.min(1), away: I.min(1), levelOver: N0, scatter: I.min(1) }).strict(),
+  encounters: z.object({ chance: Pct100, from: I.min(1), rows: z.array(EncounterSchema).length(20) }).strict(),
+  actions: z.object({
+    shame: z.object({ morale: I.min(1), bigMorale: I.min(1) }).strict(), duel: z.object({ morale: I.min(1) }).strict(),
+    ambush: z.object({ delay: I.min(1), bigDelay: I.min(1) }).strict(), item: z.object({ delay: I.min(1), item: S, bigItem: S }).strict(),
+    friend: z.object({ intel: I.min(1) }).strict(),
+  }).strict(),
+  tasks: z.object({ track: z.array(N0).length(5), counter: z.array(N0).length(5), backfire: N0 }).strict(),
+  lines: z.record(S, S),
+}).strict().superRefine((f, ctx) => {
+  const ids = new Set(f.heroes.map((h) => h.id));
+  const arch = new Set(f.archetypes.map((a) => a.id));
+  for (const h of f.heroes) if (!arch.has(h.archetype)) ctx.addIssue({ code: 'custom', message: `unknown archetype ${h.archetype}` });
+  for (const [rid, r] of Object.entries(f.regions)) {
+    for (const h of [...r.heroes, ...Object.values(r.standIn)]) if (!ids.has(h)) ctx.addIssue({ code: 'custom', message: `${rid}: unknown hero ${h}` });
+    for (const p of r.playerIs) if (!r.standIn[p]) ctx.addIssue({ code: 'custom', message: `${rid}: ${p} has no stand-in` });
+    for (const h of r.heroes) if (!r.standIn[h]) ctx.addIssue({ code: 'custom', message: `${rid}: ${h} has no stand-in` });
+  }
+  for (let i = 1; i < f.threat.stages.length; i++) if (f.threat.stages[i]!.min <= f.threat.stages[i - 1]!.min) ctx.addIssue({ code: 'custom', message: 'Threat stages go up' });
+});
+export type HeroFile = z.infer<typeof HeroFileSchema>;
+export type HeroDef = z.infer<typeof HeroDefSchema>;
+
+/** One Legendary's state this region: never seen, out (seen; strikes weekly), or driven off until a day. */
+export const LegendStateSchema = z.object({ seen: z.boolean(), next: N0, away: N0, beaten: N0 }).strict();
+
+export const HeroStateSchema = z.object({
+  /** The hero.json id playing the Hero this region (Q5: your rival when you're that region's Hero). */
+  id: S,
+  /** Threat 0-100 (recomputed each night); `harm` is what the Boss did in their path, on top of D2's Attack count. */
+  threat: Pct100,
+  harm: N0,
+  stolen: N0,
+  /** Highest stage reached (its line is read once). */
+  stage: I.min(0).max(4),
+  badges: I.min(0).max(8),
+  /** The day the next badge falls due. */
+  badgeDay: I.min(1),
+  /** Days lost (Lie, ambush, a trap): the next badge comes this much later. */
+  delay: N0,
+  /** Shame and duels knock the Hero's nerve: the level offset drops a step per `moraleStep` below 100. */
+  morale: Pct100,
+  met: z.boolean(),
+  /** The first thing they saw you do (A9), reason id; and whether it turned out wrong (once). */
+  reason: S.nullable(),
+  wrong: z.boolean(),
+  /** Hidden track (A8): never shown. */
+  disill: Pct100,
+  /** Hero battles fought (A9: counters start after `adapt.after`) and the Boss's types they've seen, by count. */
+  seen: N0,
+  types: z.record(S, N0),
+  /** Counter types they've caught for (newest last) and whether the Morning Report said so. */
+  counters: z.array(S),
+  /** Intel: the day until which the Hero's route is known (Watch, Track the Hero). */
+  intel: N0,
+  /** Hunt the Hero Lv 5: they must duel, whatever the Threat. */
+  forced: z.boolean(),
+  /** This week's foil: the week number and the day it falls; `foiled` once it happened. */
+  foilWeek: N0, foilDay: N0, foiled: z.boolean(),
+  /** Weekly moves at Attacks+ (free from stores), Raids (a Racket), Allies (an ally, the HQ raid): the last week done. */
+  weekDone: z.record(S, N0),
+  allies: z.array(S),
+  /** The encounter card waiting (O166-O185) and the rows already used this run. */
+  meet: z.object({ id: S, day: I.min(1), district: S }).strict().nullable(),
+  used: z.array(S),
+  /** This week's line on the Hero file ("This week: ..."). */
+  week: z.array(S),
+  /** The last stand (Part 4 §7.3): due on a day; won and waiting for a choice; settled. */
+  stand: z.object({ state: z.enum(['due', 'choose', 'done']), day: I.min(1), lost: N0, outcome: z.enum(['leave', 'joined', 'refused']).nullable() }).strict().nullable(),
+  legends: z.record(S, LegendStateSchema),
+}).strict();
+export type HeroState = z.infer<typeof HeroStateSchema>;
 // ---------- D9 data: rivals.json, rivalActions.json, outside.json (Part 4 §1-2, Part 3 §4, Part 9 A7) ----------
 
 export const RIVAL_STAGES = ['unaware', 'watching', 'annoyed', 'hostile', 'war', 'boss'] as const;
@@ -1119,3 +1266,109 @@ export const SpiesStateSchema = z.object({
   done: z.array(z.object({ member: S, name: S, day: I.min(1), end: z.enum([...SPY_ENDS, 'cleared', 'dropped']) }).strict()),
 }).strict();
 export type SpiesState = z.infer<typeof SpiesStateSchema>;
+
+// ---------- D21: the applications desk (Claude API draft §5.3 B, Rotom mockup k5) ----------
+
+export const TELLS = ['none', 'nervous', 'contradiction', 'rehearsed'] as const;
+export type Tell = (typeof TELLS)[number];
+export const TRUTHS = ['honest', 'plant', 'spy', 'glory'] as const;
+export type Truth = (typeof TRUTHS)[number];
+export const DESK_FIELDS = ['home', 'idno', 'badge', 'species', 'levels', 'stamp'] as const;
+export type DeskField = (typeof DESK_FIELDS)[number];
+export const VERDICTS = ['accept', 'reject', 'detain'] as const;
+export type Verdict = (typeof VERDICTS)[number];
+const TruthKey = z.enum(['honest', 'great', 'plant', 'spy', 'glory']);
+const TellWeights = z.object({ none: N0, nervous: N0, contradiction: N0, rehearsed: N0 }).strict();
+const TellLines = z.object({ none: z.array(S).min(1), nervous: z.array(S).min(1), contradiction: z.array(S).min(1), rehearsed: z.array(S).min(1) }).strict();
+const Range2 = z.tuple([I.min(0), I.min(0)]);
+
+export const DeskFileSchema = z.object({
+  _source: S,
+  fromDay: I.min(1),
+  perDay: Range2,
+  patience: I.min(1),
+  quickPerApplicant: I.min(1),
+  age: Range2,
+  truths: z.array(z.object({ id: z.enum(TRUTHS), weight: N0, word: S }).strict()).length(4),
+  plantPerHeat: I.min(1),
+  greatShare: Pct,
+  skill: Range2,
+  missCount: z.object({ honest: z.array(N0).min(1), great: z.array(N0).min(1), glory: z.array(N0).min(1), bySkill: z.array(z.array(N0).min(1)).length(5) }).strict(),
+  missKinds: z.record(TruthKey, z.partialRecord(z.enum(DESK_FIELDS), N0)),
+  tellOdds: z.record(TruthKey, z.object({ weights: TellWeights, slip: z.object({ base: Pct, perSkill: N0, min: Pct, split: z.partialRecord(z.enum(TELLS), N0) }).strict().optional() }).strict()),
+  traitTells: z.record(S, z.partialRecord(z.enum(TELLS), I)),
+  effects: z.object({
+    great: z.object({ lean: N0, traitPoints: N0, loyalty: Pct }).strict(),
+    plant: z.object({ nightHeat: N0, tipDays: Range2, tipHeat: N0 }).strict(),
+    spy: z.object({ leakDays: Range2, rival: N0 }).strict(),
+    glory: z.object({ quitDays: Range2, morale: I }).strict(),
+    detain: z.object({ heat: N0, honestMorale: I, plantHeat: N0, spyRival: I }).strict(),
+  }).strict(),
+  tells: z.record(z.enum(TELLS), z.object({ label: S, c: S }).strict()),
+  fields: z.array(z.object({ id: z.enum(DESK_FIELDS), label: S, doc: z.enum(['id', 'card', 'team', 'letter']) }).strict()).length(6),
+  lens: z.object({ fine: S, home: S, idno: S, badge: S, species: S, levels: S, stamp: S }).strict(),
+  ordinals: z.array(S).length(8),
+  levelCaps: z.array(I.min(1)).length(9),
+  regions: z.record(S, z.object({
+    name: S,
+    rivals: z.array(S).min(1),
+    badges: z.array(z.object({ name: S, town: S, c: S }).strict()).length(8),
+    codes: z.record(S, z.string().regex(/^[A-Z]{3}$/)),
+    mons: z.array(S).min(10),
+    offRegion: z.array(S).min(3),
+    writers: z.array(z.object({ name: S, short: S, town: S, quote: S }).strict()).min(6),
+  }).strict()),
+  surnames: z.array(S).min(20),
+  reasons: z.object({ any: z.array(S).min(4), glory: z.array(S).min(2), great: z.array(S).min(1) }).strict(),
+  questions: z.array(z.object({ id: S, ask: S, lines: TellLines }).strict()).min(4),
+  typed: TellLines,
+  says: z.record(S, S),
+  report: z.object({ left: S, held: z.object({ honest: S, great: S, plant: S, spy: S, glory: S }).strict(), plantTip: S, spyLeak: S, gloryQuit: S }).strict(),
+  rotom: z.object({ system: S, off: S, thinking: S, note: S, speed: z.record(S, S) }).strict(),
+}).strict();
+export type DeskFile = z.infer<typeof DeskFileSchema>;
+
+/** One applicant: the paperwork as shown (texts, never list indexes), the hidden truth, and what happened at the desk. */
+export const ApplicantSchema = z.object({
+  id: S, name: S, gender: z.enum(['m', 'f']), cls: S, kind: S, look: S, role: S.nullable(),
+  stats: StatsSchema, green: S, motive: S, hates: S, lean: STAT,
+  age: I.min(1),
+  /** True home town (their card's) and the one on the ID card (misspelt when `home` is a mismatch). */
+  home: S, homeShown: S,
+  idNo: S,
+  badges: I.min(0).max(8),
+  /** The badge named as their latest (index into the region's badges; not `badges - 1` when `badge` is a mismatch). */
+  badgeAt: I.min(0).max(7),
+  team: z.array(z.object({ s: S, lv: I.min(1) }).strict()).min(1).max(6),
+  writer: S, wshort: S, wtown: S, quote: S, stamp: S,
+  reason: S,
+  /** Hidden: rolled on the desk stream and saved. */
+  truth: z.enum(TRUTHS), great: z.boolean(), skill: I.min(0).max(5), rival: S.nullable(),
+  miss: z.array(z.enum(DESK_FIELDS)),
+  /** The quick questions offered (ids). */
+  qs: z.array(S),
+  asked: z.array(z.object({ q: S, text: S.nullable(), tell: z.enum(TELLS), line: S }).strict()),
+  checked: z.array(z.enum(DESK_FIELDS)),
+  patience: N0,
+  verdict: z.enum(VERDICTS).nullable(),
+}).strict();
+export type Applicant = z.infer<typeof ApplicantSchema>;
+
+export const DeskStateSchema = z.object({
+  /** The Day today's queue was rolled for (0: never). */
+  day: N0,
+  queue: z.array(ApplicantSchema),
+  /** Applicants rolled so far (ids A1, A2, ...). */
+  seen: N0,
+  /** Names applicants have used this run (each person is one card). */
+  names: z.array(S),
+  /** Detained: in the basement until the night. */
+  held: z.array(ApplicantSchema),
+  /** Accepted members whose truth comes out later (plant tip-off, spy leak, glory-seeker quits). */
+  watch: z.array(z.object({ member: S, name: S, truth: z.enum(TRUTHS), rival: S.nullable(), due: I.min(1), done: z.boolean() }).strict()),
+  /** Site plans leaked to rival teams (D9 and D22 read these). */
+  leaks: z.array(z.object({ day: I.min(1), team: S, what: S }).strict()),
+  /** Every stamped applicant (newest last, capped), for later slices and the run's story. */
+  log: z.array(z.object({ day: I.min(1), name: S, truth: z.enum(TRUTHS), great: z.boolean(), verdict: z.enum(VERDICTS) }).strict()),
+}).strict();
+export type DeskState = z.infer<typeof DeskStateSchema>;

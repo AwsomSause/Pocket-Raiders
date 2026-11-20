@@ -7,6 +7,7 @@ import { crewOf, rankWord, taskById } from './crew';
 import { DOMINION_DATA } from './data';
 import { heldIds, notorietyOf, peakOf, stepNow, type NotorietyParts } from './empire';
 import { bandOf, statusOf } from './field';
+import { stageIndex as heroStage } from './hero';
 import { cleanOf } from './hqFx';
 import { rivalsOf, stageDef, stageIndex, teamsHere } from './rivals';
 import type { DominionBlock } from './schema';
@@ -135,9 +136,9 @@ export function ledgerModel(b: DominionBlock, run: Pick<RunState, 'party' | 'inv
       regard: towns.reduce((a, d) => a + Math.max(0, d.regard), 0),
       dread: towns.reduce((a, d) => a + Math.max(0, d.dread), 0),
       wanted: { word: band.word, n: b.heat },
-      // Tension with the region's first rival team (D9); the Hero's Threat waits for D11 (the Boss's Attacks already count).
+      // Tension with the region's first rival team (D9). D11: the Hero's Threat (Part 4 §7) and its stage word.
       tension,
-      hero: { word: L.heroWord, n: Math.min(100, b.field.hero) },
+      hero: b.hero ? { word: DOMINION_DATA.hero.threat.stages[heroStage(b.hero.threat)]!.word, n: Math.min(100, b.hero.threat) } : { word: L.heroWord, n: 0 },
     },
     territory: F().districts.map((d) => {
       const s = b.field.districts[d.id]!;
