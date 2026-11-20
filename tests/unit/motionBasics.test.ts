@@ -383,22 +383,38 @@ describe('motion clips: level up (pass 2)', () => {
   });
 });
 
-describe('motion clips: the target takes a hit (pass 2, 12)', () => {
-  const at = { x: 648, y: 240 };
+describe('motion clips: the target takes a hit (pass 2, 12, 17, 18)', () => {
+  const at = { x: 648, y: 240, h: 120 };
+  const plain = { big: false, sharp: false };
   it('white for 80 ms, squashed thin and tall, thrown away from the attacker, springs home with dust', () => {
-    const c = hitClip(at, 1, false, 'full');
+    const c = hitClip(at, 1, plain, 'full');
     expect(sampleClip(c, 0).mon).toMatchObject({ white: 1, sx: 0.8, sy: 1.14, dx: 0 });
     expect(sampleClip(c, 80).mon!.white).toBe(1);
     expect(sampleClip(c, 180).mon!.white).toBe(0);
     expect(sampleClip(c, 160).mon!.dx).toBeCloseTo(HIT_KNOCK);
     expect(c.fx).toEqual([{ kind: 'dust', at: 160, x: at.x + HIT_KNOCK, y: at.y, n: 4 }]);
     expect(clipEnd(c).mon).toMatchObject({ dx: 0, sx: 1, sy: 1, white: 0 });
-    // Your Pokémon is thrown left; a super effective or critical hit throws further.
-    expect(sampleClip(hitClip(at, -1, true, 'full'), 160).mon!.dx).toBeCloseTo(-HIT_KNOCK_BIG);
+    // Your Pokémon is thrown left; a big hit throws further.
+    expect(sampleClip(hitClip(at, -1, { big: true, sharp: false }, 'full'), 160).mon!.dx).toBeCloseTo(-HIT_KNOCK_BIG);
+  });
+  it('the hit is a light: it blooms on the body in 100 ms and dies in 450; the floor pool fades over 600', () => {
+    const c = hitClip(at, 1, plain, 'full');
+    expect(sampleClip(c, 0).light).toMatchObject({ x: at.x, y: at.y - 60, alpha: 1 });
+    expect(sampleClip(c, 0).light!.sx).toBeCloseTo(0.3);
+    expect(sampleClip(c, 100).light).toMatchObject({ sx: 1, alpha: 1 });
+    expect(sampleClip(c, 550).light!.alpha).toBeCloseTo(0);
+    expect(sampleClip(c, 0).floor!.alpha).toBe(0.9);
+    expect(clipEnd(c)).toMatchObject({ light: { alpha: 0 }, floor: { alpha: 0 } });
+  });
+  it('a big hit lights the other Pokémon; a sharp one flashes a white star where it lands', () => {
+    const big = hitClip(at, 1, { big: true, sharp: true }, 'full');
+    expect(big.fx).toContainEqual({ kind: 'cue', at: 0, name: 'glow' });
+    expect(big.fx).toContainEqual({ kind: 'star', at: 0, x: at.x, y: at.y - 60, size: 340, points: 14, d: 120 });
+    expect(hitClip(at, 1, plain, 'full').fx.some((f) => f.kind === 'cue' || f.kind === 'star')).toBe(false);
   });
   it('Reduced and Off leave it to the battle blink', () => {
     for (const level of ['reduced', 'off'] as const) {
-      const c = hitClip(at, 1, true, level);
+      const c = hitClip(at, 1, { big: true, sharp: true }, level);
       expect([c.length, c.segs.length, c.fx.length]).toEqual([0, 0, 0]);
     }
   });

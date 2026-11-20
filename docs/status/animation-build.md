@@ -89,6 +89,11 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
 - Hit (pass 2 and 12, the target's side): with full animations a hit turns the target white for 80 ms and squashes it
   thin and tall; it is thrown 30 px away from the attacker (46 px for a super effective or critical hit) and springs
   home with dust where it landed (`hitClip`, `BattleScene.hitMoment`, through BattleFx's `recoil`). The battle still
-  holds for the hit-stop. Quick hits in a row restart it from the spot, never from mid-recoil. When a move's own
+  holds for the hit-stop. Quick hits in a row restart it from the spot, never from mid-recoil. The hit is also a light
+  in the move's type colour (pass 18): a glow blooms on the target's body and a flat pool lights the floor under it; a
+  big hit (super effective, critical or 40% of its HP) makes both bigger, throws it further and washes the other
+  Pokémon in the colour; a sharp one (critical, super effective or 60%) flashes a 14-point white star where it lands
+  (pass 17). Limits: the camera push on hard hits (pass 16) follows the Battle camera setting, which is off by
+  default; the negative frame (pass 17) and the base jolt (pass 7, our platform is part of the arena picture) are not in. When a move's own
   animation is moving the target, it is left alone. Reduced/Off keep the battle's own blink. The attacker's side
   (wind-up and dash) is the move's own animation and is not changed (Kice's move rule).

@@ -39,7 +39,7 @@ export type Cue =
   /** The reduced-motion stand-in for a move animation: a soft tint on the target. */
   | { kind: 'pulse'; side: Side; color: string }
   /** A hit landing: freeze, shake, flash, then the HP bar drains. */
-  | { kind: 'impact'; side: Side; amount: number; crit: boolean; effectiveness: number; hitStopMs: number; shake: number; flash: string | null; flashAlpha: number }
+  | { kind: 'impact'; side: Side; amount: number; crit: boolean; effectiveness: number; hitStopMs: number; shake: number; flash: string | null; flashAlpha: number; /** The move's type colour (the light a hit throws on the floor). */ color?: string }
   /** The number that floats up from a Pokémon whose HP changed. */
   | { kind: 'number'; side: Side; amount: number; tone: 'damage' | 'crit' | 'super' | 'weak' | 'heal'; motion: boolean }
   | { kind: 'badge'; side: Side; badge: EffectivenessBadge | 'crit' }
@@ -138,6 +138,7 @@ export function planCues(
             shake: full ? Math.round(Math.min(4, level) * 3 * shakeLevel) : 0,
             flash: full && (look?.flash || crit) ? (look?.flash ?? '#ffffff') : null,
             flashAlpha: full ? 0.35 * intensity : 0,
+            color: current ? TYPE_HEX[content.moves.get(current.moveId)?.type ?? ''] : undefined,
           });
         }
         cues.push({ kind: 'number', side: e.side, amount: e.amount, tone: crit ? 'crit' : eff > 1 ? 'super' : eff < 1 ? 'weak' : 'damage', motion: full });

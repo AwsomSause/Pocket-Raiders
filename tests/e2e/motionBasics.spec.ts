@@ -406,13 +406,14 @@ test('a hit: the target goes white, is thrown back further for a super effective
   const watch = () => page.evaluate(() => {
     const w = window as any;
     const b = w.__pkr.game.scene.getScene('Battle');
-    w.__hit = { away: 0, white: false };
+    w.__hit = { away: 0, white: false, lights: 0 };
     // A quarter speed, so every frame is sampled near the peak even on a slow machine.
     b.time.timeScale = 0.25;
     w.__hitWatch = () => {
       const v = b.enemySprite;
       if (!v?.active) return;
       w.__hit.away = Math.max(w.__hit.away, v.x - b.spotXY('enemy').x);
+      w.__hit.lights = Math.max(w.__hit.lights, b.field.list.filter((o: any) => o.texture?.key === 'fx.glow').length);
       w.__hit.white ||= b.field.list.some((o: any) => o.type === 'Sprite' && o !== v && o.tintFill && o.tintTopLeft === 0xffffff && o.visible && o.alpha > 0.5);
     };
     b.events.on('update', w.__hitWatch);
@@ -420,7 +421,7 @@ test('a hit: the target goes white, is thrown back further for a super effective
   const seen = () => page.evaluate(() => { const w = window as any; const b = w.__pkr.game.scene.getScene('Battle'); b.events.off('update', w.__hitWatch); b.time.timeScale = 1; return w.__hit; });
   const impact = (eff: number, n = 1) => page.evaluate(([e, k]) => {
     const b = (window as any).__pkr.game.scene.getScene('Battle');
-    const cue = { kind: 'impact', side: 'enemy', amount: 20, crit: false, effectiveness: e, hitStopMs: 60, shake: 6, flash: null, flashAlpha: 0 };
+    const cue = { kind: 'impact', side: 'enemy', amount: 1, crit: false, effectiveness: e, hitStopMs: 60, shake: 6, flash: null, flashAlpha: 0 };
     return b.fx.play(Array.from({ length: k }, () => cue));
   }, [eff, n] as const);
   await watch();
@@ -428,6 +429,9 @@ test('a hit: the target goes white, is thrown back further for a super effective
   await page.waitForTimeout(2400);
   const plain = await seen();
   expect(plain.white).toBe(true);
+  // The hit's light: one glow on the body, one pool on the floor; both gone after.
+  expect(plain.lights).toBe(2);
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').field.list.filter((o: any) => o.texture?.key === 'fx.glow').length)).toBe(0);
   expect(plain.away).toBeGreaterThan(24);
   expect(plain.away).toBeLessThan(40);
   await watch();

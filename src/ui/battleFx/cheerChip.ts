@@ -182,6 +182,35 @@ export function starPicture(scene: Phaser.Scene): string | null {
   }
 }
 
+/** The size of `glowPicture` (px across). */
+export const GLOW_SIZE = 256;
+
+/**
+ * A round light, as the mockup's `lgt()`: full at the middle, about half at 35% out, gone at the edge. White, so it
+ * takes a tint (a move's type colour). Drawn once.
+ */
+export function glowPicture(scene: Phaser.Scene): string | null {
+  const key = 'fx.glow';
+  if (scene.textures.exists(key)) return key;
+  try {
+    const z = GLOW_SIZE;
+    const c = document.createElement('canvas');
+    c.width = c.height = z;
+    const ctx = c.getContext('2d');
+    if (!ctx) return null;
+    const g = ctx.createRadialGradient(z / 2, z / 2, 0, z / 2, z / 2, z / 2);
+    g.addColorStop(0, 'rgba(255,255,255,1)');
+    g.addColorStop(0.35, 'rgba(255,255,255,0.53)');
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, z, z);
+    scene.textures.addCanvas(key, c);
+    return key;
+  } catch {
+    return null;
+  }
+}
+
 /** Pictures here are drawn at twice their size; this is the scale that shows them at their own. */
 export const PICTURE_SCALE = 1 / HI;
 

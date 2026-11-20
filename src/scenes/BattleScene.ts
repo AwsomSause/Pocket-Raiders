@@ -122,14 +122,14 @@ import { teraJewel } from '../ui/battleFx/teraJewel';
 import { megaGlass } from '../ui/battleFx/megaGlass';
 import { drawnBox, type GimmickPage } from '../ui/battleFx/gimmickStage';
 import { HIT_RUN, stand, standStill } from '../ui/battleFx/stance';
-import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture, PICTURE_SCALE, shinyChipPicture, stampPicture, starPicture } from '../ui/battleFx/cheerChip';
+import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture, GLOW_SIZE, glowPicture, PICTURE_SCALE, shinyChipPicture, stampPicture, starPicture } from '../ui/battleFx/cheerChip';
 import { dynamaxPan } from '../ui/battleFx/dynamaxPan';
 import { keyItemFor } from '../ui/battleFx/cineLook';
 import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel } from '../core/presentation/motionClip';
-import { aceLandClip, hitClip, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { aceLandClip, HIT_LIGHT, hitClip, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
@@ -657,7 +657,7 @@ export class BattleScene extends Phaser.Scene {
       mastery: (moveId) => moveRank(session.profile.moveUses?.[moveId] ?? 0),
       fullScreen: (on) => this.rx?.visible(!on),
       numbers: () => ({ show: services().session.settings.damageNumbers, scale: services().session.settings.popupScale }),
-      recoil: (side, cue) => this.hitMoment(side, cue.crit || cue.effectiveness > 1),
+      recoil: (side, cue) => this.hitMoment(side, cue),
     });
 
     this.shown = { player: structuredClone(run.party[battle.activeIndex]!), enemy: structuredClone(currentEnemy(battle)) };
@@ -4036,7 +4036,7 @@ export class BattleScene extends Phaser.Scene {
    * Hit (pass 2): the target goes white, squashes, is thrown back away from the attacker (further for a super effective
    * or critical hit) and springs home with dust. Full animations only; false when it can't play (the plain hit-stop shows).
    */
-  private hitMoment(side: Side, big: boolean): boolean {
+  private hitMoment(side: Side, cue: { amount: number; crit: boolean; effectiveness: number; color?: string }): boolean {
     const sprite = side === 'player' ? this.playerSprite : this.enemySprite;
     if (!(sprite instanceof Phaser.GameObjects.Sprite) || !sprite.active || !sprite.visible || this.clipLevel() !== 'full') return false;
     const at = this.spotXY(side);
@@ -4044,10 +4044,38 @@ export class BattleScene extends Phaser.Scene {
     if (Math.abs(sprite.x - at.x) > 1) return false;
     standStill(this, sprite);
     const mon = this.shown[side];
-    const run = playClip(this, hitClip({ x: sprite.x, y: at.y }, side === 'enemy' ? 1 : -1, big, 'full'), this.clipHost({ mon: { kind: 'mon', get: () => sprite } }));
+    const max = Math.max(1, maxHp(services().session.content, mon));
+    // Big: super effective, critical or 40% of its HP (pass 16, 18). Sharp: critical, super effective or 60% (pass 17).
+    const big = bigHit(cue.amount, max, cue.effectiveness, cue.crit);
+    const sharp = cue.crit || cue.effectiveness > 1 || cue.amount >= max * 0.6;
+    const h = sprite.displayHeight * sprite.originY;
+    const color = cue.color ? Phaser.Display.Color.HexStringToColor(cue.color).color : 0xffffff;
+    // The light: a glow on the body and a flat pool on the floor, in the move's colour, added over the arena.
+    const key = glowPicture(this);
+    const r = big ? HIT_LIGHT.bodyBig : HIT_LIGHT.body;
+    const rf = big ? HIT_LIGHT.floorBig : HIT_LIGHT.floor;
+    const light = key ? this.add.image(at.x, at.y - h / 2, key).setScale((r * 2) / GLOW_SIZE).setTint(color).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0) : null;
+    const floor = key ? this.add.image(at.x, at.y - 4, key).setScale((rf * 2) / GLOW_SIZE, (rf * 2 * 0.26) / GLOW_SIZE).setTint(color).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0) : null;
+    if (floor) this.field.addAt(floor, this.fieldBase);
+    if (light) this.field.add(light);
+    const other = side === 'player' ? this.enemySprite : this.playerSprite;
+    const run = playClip(this, hitClip({ x: sprite.x, y: at.y, h }, side === 'enemy' ? 1 : -1, { big, sharp }, 'full'), {
+      ...this.clipHost({ mon: { kind: 'mon', get: () => sprite }, light: { kind: 'free', get: () => light }, floor: { kind: 'free', get: () => floor } }, {
+        cue: (name) => {
+          // A big hit lights the other Pokémon too: a wash of the colour over it that fades in half a second.
+          if (name !== 'glow' || !(other instanceof Phaser.GameObjects.Sprite) || !other.active || !other.visible) return;
+          const lit = this.add.sprite(other.x, other.y, other.texture.key, other.frame.name).setOrigin(other.originX, other.originY).setScale(other.scaleX, other.scaleY).setFlip(other.flipX, other.flipY).setTintFill(color).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0.6);
+          if (other.parentContainer) other.parentContainer.addAt(lit, other.parentContainer.getIndex(other) + 1);
+          if (other.mask) lit.setMask(other.mask);
+          this.tweens.add({ targets: lit, alpha: 0, duration: 500, onComplete: () => lit.destroy() });
+        },
+      }),
+    });
     let cut = false;
     sprite.setData(HIT_RUN, { stop: () => ((cut = true), run.stop()) });
     void run.done.then(() => {
+      light?.destroy();
+      floor?.destroy();
       if (cut || !sprite.active) return;
       sprite.setData(HIT_RUN, undefined);
       run.rest('mon');

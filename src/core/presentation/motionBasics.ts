@@ -461,21 +461,33 @@ export function levelUpClip(me: Point & { h: number }, level: ClipLevel): Motion
 export const HIT_KNOCK = 30;
 export const HIT_KNOCK_BIG = 46;
 
+/** The light a hit throws (pass 18): its radius on the body and on the floor, for a hit and for a big hit. */
+export const HIT_LIGHT = { body: 190, bodyBig: 300, floor: 220, floorBig: 330 };
+
 /**
- * Hit (pass 2, the target's side of Attack and Hit): the target goes white for a beat and squashes thin and tall,
- * is thrown back away from the attacker and springs back to its spot, with dust where it was thrown to. `away` is
- * +1 when it is thrown to the right (the foe) and -1 to the left (yours). Full only: Reduced and Off keep the
- * battle's own blink. Part: `mon`.
+ * Hit (pass 2, 12, 17, 18; the target's side of Attack and Hit): the target goes white for a beat and squashes thin and
+ * tall, is thrown back away from the attacker (further on a big hit) and springs back to its spot, with dust where it
+ * was thrown to. The hit is a light in the move's colour: a glow on the body (`light`) and a pool on the floor
+ * (`floor`); a big hit also lights the other Pokémon (cue `glow`), and a sharp one (critical, super effective or
+ * 60% of its HP) flashes a white star where it lands. `target` is its feet, `h` its height; `away` is +1 when it is
+ * thrown to the right (the foe) and -1 to the left (yours). Full only: Reduced and Off keep the battle's own blink.
  */
-export function hitClip(target: Point, away: 1 | -1, big: boolean, level: ClipLevel): MotionClip {
+export function hitClip(target: Point & { h: number }, away: 1 | -1, o: { big: boolean; sharp: boolean }, level: ClipLevel): MotionClip {
   const b = new ClipBuilder('hit', level);
   const m = b.part('mon', { dx: 0, dy: 0, sx: 1, sy: 1, white: 0 });
+  const mid = { x: target.x, y: target.y - target.h / 2 };
+  const light = b.part('light', { x: mid.x, y: mid.y, sx: 1, sy: 1, alpha: 0 });
+  const floor = b.part('floor', { alpha: 0 });
   if (level !== 'full') return b.end(0);
-  const k = (big ? HIT_KNOCK_BIG : HIT_KNOCK) * away;
+  const k = (o.big ? HIT_KNOCK_BIG : HIT_KNOCK) * away;
   m.at(0).set({ white: 1 }).wait(80).to(100, { white: 0 });
   m.at(0).set({ sx: 0.8, sy: 1.14 }).wait(70).to(340, { sx: 1, sy: 1 }, 'el');
   m.at(70).to(90, { dx: k }, 'out').to(300, { dx: 0 }, 'back');
   b.fx({ kind: 'dust', at: 160, x: target.x + k, y: target.y, n: 4 });
-  b.beat(0, 'Hit-stop: white, squash').beat(70, 'Thrown back').beat(160, 'Springs home');
-  return b.end(460);
+  light.at(0).set({ alpha: 1, sx: 0.3, sy: 0.3 }).to(100, { sx: 1, sy: 1 }, 'out3').to(450, { alpha: 0 }, 'in');
+  floor.at(0).set({ alpha: 0.9 }).to(600, { alpha: 0 }, 'in');
+  if (o.big) b.fx({ kind: 'cue', at: 0, name: 'glow' });
+  if (o.sharp) b.fx({ kind: 'star', at: 0, x: mid.x, y: mid.y, size: 340, points: 14, d: 120 });
+  b.beat(0, 'Hit-stop: white, squash, the light').beat(70, 'Thrown back').beat(160, 'Springs home');
+  return b.end(600);
 }
