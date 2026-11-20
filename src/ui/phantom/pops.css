@@ -96,7 +96,7 @@
   & .ph-rl-ttl{position:absolute;right:60px;top:40px;font-size:54px;display:flex;gap:4px;rotate:3deg;z-index:2}
   & .ph-rl-cs{position:absolute;left:60px;right:60px;top:150px;display:grid;grid-template-columns:repeat(var(--n),1fr);gap:22px;z-index:2}
   & .ph-rl-cs.two{gap:12px 16px}
-  & .ph-rl-c{display:grid;grid-template-columns:auto 1fr;align-content:start;gap:10px 14px;height:230px;padding:18px 20px;background:var(--k);color:var(--w);cursor:pointer;rotate:var(--r);box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--w) 35%,transparent);animation:ph-deal .35s both;animation-delay:calc(var(--i)*60ms);transition:translate .16s cubic-bezier(.2,1.3,.4,1),rotate .16s}
+  & .ph-rl-c{display:grid;grid-template-columns:auto 1fr;align-content:start;gap:10px 14px;height:230px;padding:18px 20px;background:var(--k);color:var(--w);cursor:pointer;rotate:var(--r);box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--w) 35%,transparent);animation:ph-rl-deal .35s both;animation-delay:calc(var(--i)*60ms);transition:translate .16s cubic-bezier(.2,1.3,.4,1),rotate .16s}
   & .ph-rl-c i{display:grid;place-items:center;width:54px;height:54px;background:var(--gold);color:#000;font:400 34px/1 var(--f-disp);font-style:normal}
   & .ph-rl-c b{align-self:center;font:400 26px/1 var(--f-disp);text-transform:uppercase;overflow-wrap:anywhere}
   & .ph-rl-c em{grid-column:1/-1;justify-self:start;font:800 13px/1 var(--f-cond);font-style:normal;letter-spacing:.12em;text-transform:uppercase;background:var(--red);color:#fff;padding:5px 10px;transform:skewX(-10deg)}
@@ -112,7 +112,7 @@
   & .ph-rl-count{position:absolute;left:60px;bottom:158px;font:800 15px/1 var(--f-cond);letter-spacing:.12em;text-transform:uppercase;color:var(--w);background:var(--k);padding:6px 14px;transform:skewX(-10deg);z-index:2}
   & .ph-rl-say{position:absolute;left:60px;bottom:66px;width:820px;min-height:52px;padding:12px 26px;z-index:2} & .ph-rl-say .txt{margin:0;line-height:1.25}
 }
-@keyframes ph-deal{from{opacity:0;translate:0 60px;rotate:calc(var(--r) + 14deg)}to{opacity:1}}
+@keyframes ph-rl-deal{from{opacity:0;translate:0 60px;rotate:calc(var(--r) + 14deg)}to{opacity:1}}
 .phx .phs[data-liv=channel]{ & .ph-dos-p,& .ph-rl-c,& .ph-nb-row{border-radius:12px} & .ph-rl-c i,& .ph-dos-top>i{border-radius:10px} & .ph-nb-row,& .ph-nb-row>*{transform:none} }
 .phx .phs[data-liv=fantasia],.phx .phs[data-liv=velvet]{ & .ph-dl dt,& .ph-tk-civ b{color:var(--gold)} & .ph-rl-c{rotate:0deg;box-shadow:inset 0 0 0 1px var(--gold)} & .ph-rl-c.on{box-shadow:0 0 0 2px var(--gold),0 0 0 6px var(--k),0 0 0 7px var(--gold)} & .ph-dos-p.on{rotate:0deg;box-shadow:0 0 0 2px var(--gold)} & .ph-nb-row,& .ph-nb-row>*{transform:none} & .ph-nb-row.on{box-shadow:0 0 0 2px var(--gold)} & .ph-stamp{rotate:0deg} & .ph-tk-ttl,& .ph-rl-ttl{rotate:0deg} }
 .phx .phs[data-liv=velvet]{ & .ph-rv-list .rv b{font-size:20px} & .ph-rv-list .rv.on b{font-size:24px} & .ph-rl-c b{font-size:19px} & .ph-rl-c.slim b{font-size:15px} & .ph-nb-row b{font-size:16px} & .ph-tk-b .tl1{font-size:26px} & .ph-rv-av{font-size:24px} & .ph-tk-ttl,& .ph-rl-ttl{font-size:40px} }
@@ -153,3 +153,26 @@
   & .ph-sc-tip{top:auto;bottom:62px;padding:10px 26px 12px;z-index:3} & .ph-sc-tip .txt{margin:2px 0 0;font-size:18px;line-height:1.25}
   & .ph-sc-g.wide+.ph-sc-tip{left:70px}
 }
+
+/* ---- the card page (run card, Trainer Card, code-name card) ---- */
+.phx .phs{
+  & .ph-fill{position:absolute;inset:0}
+  & .ph-tcard.can{cursor:pointer}
+  & .ph-tcard h3{white-space:nowrap}
+  & .ph-tcard .id{position:relative}
+  & .ph-tcard dl{max-width:440px} & .ph-tcard dd{max-width:300px;overflow-wrap:anywhere}
+  & .ph-tc-pic{display:flex;align-items:flex-end;justify-content:center;width:300px;height:360px;right:-6px;bottom:-24px;pointer-events:none;filter:drop-shadow(8px 8px 0 color-mix(in srgb,var(--k) 55%,transparent));animation:ph-inR .4s .12s both}
+  & .ph-tcard::after{content:"";position:absolute;inset:-40% -60%;background:linear-gradient(105deg,transparent 46%,rgba(255,255,255,.55) 50%,transparent 54%);translate:-70% 0;animation:ph-tc-gleam 3.6s .5s ease-in-out infinite;pointer-events:none}
+  & .ph-tc-badges i{animation:ph-tc-badge .3s cubic-bezier(.2,1.5,.4,1) both;animation-delay:calc(.35s + var(--i)*55ms)}
+  & .ph-tc-stamp{position:absolute;right:26px;top:22px;padding:6px 14px 7px;font:800 15px/1 var(--f-cond);letter-spacing:.14em;text-transform:uppercase;color:var(--w);background:var(--k);rotate:5deg;z-index:1}
+  & .ph-tcard.can:hover .ph-tc-stamp{background:var(--gold);color:var(--k)}
+  & .ph-tside{width:320px;right:30px;top:140px;z-index:2}
+  & .ph-tside .kv b{font-size:22px}
+  & .ph-tc-team{display:flex;flex-wrap:wrap;gap:2px 6px;margin-top:2px}
+  & .ph-tc-team .spr{width:46px;height:46px;display:grid;place-items:center}
+  & .ph-tc-note p{font-size:18px;line-height:1.25;color:var(--w)}
+}
+@keyframes ph-tc-gleam{0%,55%{translate:-70% 0}85%,100%{translate:70% 0}}
+@keyframes ph-tc-badge{from{transform:rotate(45deg) scale(0)}to{transform:rotate(45deg) scale(.8)}}
+.phx .phs[data-liv=fantasia],.phx .phs[data-liv=velvet]{ & .ph-tc-stamp{rotate:0deg;background:none;color:var(--k);box-shadow:inset 0 0 0 1px var(--k)} }
+.phx .phs[data-liv=channel]{ & .ph-tc-stamp{border-radius:10px} }

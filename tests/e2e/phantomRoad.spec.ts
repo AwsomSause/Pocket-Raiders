@@ -45,9 +45,36 @@ test('Phantom UI: the stage map, its legend and its pause menu are Phantom pages
   await onPage(page, 'Map', 'pause');
   const pause = pview(page, 'Map', 'pause');
   await expect(pause.locator('.hub .h.on')).toHaveText('Resume');
-  await expect(pause.locator('.hub .h')).toHaveCount(6);
+  await expect(pause.locator('.hub .h')).toHaveCount(7);
   await fits(page, 'Map', 'pause');
   await page.keyboard.press('ArrowDown');
+  await expect(pause.locator('.hub .h.on')).toHaveText('Party');
+  // The Trainer card (the mock-up's pause menu has one): Enter opens it, Esc comes back to the same word.
+  await page.keyboard.press('ArrowDown');
+  await expect(pause.locator('.hub .h.on')).toHaveText('Bag');
+  await page.keyboard.press('ArrowDown');
+  await expect(pause.locator('.hub .h.on')).toHaveText('Trainer card');
+  await page.keyboard.press('Enter');
+  await onPage(page, 'Map', 'card');
+  const card = pview(page, 'Map', 'card');
+  for (const t of ['Trainer card', 'Runs', 'Seed', 'phantom-road', 'This run', 'Stage 1']) await expect(card).toContainText(t, { ignoreCase: true });
+  await expect(card.locator('.badges i')).toHaveCount(8);
+  await fits(page, 'Map', 'card');
+  await version(page, 'fantasia');
+  await page.setViewportSize({ width: 844, height: 390 });
+  // The arrows do nothing on the card, so the page is asked to draw again in its new version.
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').rxView.refresh());
+  await expect(page.locator('#phx .phs[data-scene="Map"][data-scr="card"][data-liv="fantasia"]')).toBeVisible();
+  await fits(page, 'Map', 'card');
+  await page.setViewportSize({ width: 1280, height: 720 });
+  // A click beside the card also goes back; the run has not moved.
+  await card.locator('.ph-fill').click({ position: { x: 1200, y: 600 } });
+  await onPage(page, 'Map', 'pause');
+  await expect(pause.locator('.hub .h.on')).toHaveText('Trainer card');
+  await version(page, 'phantom');
+  await page.keyboard.press('ArrowUp');
+  await expect(pause.locator('.hub .h.on')).toHaveText('Bag');
+  await page.keyboard.press('ArrowUp');
   await expect(pause.locator('.hub .h.on')).toHaveText('Party');
   for (const [id, w, h] of [['midnight', 844, 390], ['channel', 1920, 1080], ['fantasia', 700, 900], ['velvet', 1280, 720]] as const) {
     await version(page, id);

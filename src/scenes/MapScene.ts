@@ -111,6 +111,8 @@ import { protagonistTitle, topHeadline } from '../core/rivals/recognition';
 import { mentorHudLine } from '../core/mentors';
 import { ensureNarration } from '../core/overhaul/partyNarration';
 import { personalityLabel, rivalReport } from '../core/rivals/report';
+import { runBlessing } from '../core/blessings';
+import { prestigeRank } from '../core/legacy';
 import { FEELING_KEYS } from '../core/rivals/overhaulSchema';
 import { canonEventFor } from '../core/expansion/canonRun';
 import { townRollPages } from '../core/expansion/townRoll';
@@ -133,6 +135,7 @@ import { mapView, type MapLegendRow, type MapModel, type MapNodeView } from '../
 import type { PhantomVersion } from '../core/presentation/phantom';
 import { phInto } from '../ui/phantom/picker';
 import { phMap, phNodeMenu, phPause } from '../ui/phantom/screens/map';
+import { phCard } from '../ui/phantom/screens/ending';
 import { phHeal, type PhHealModel } from '../ui/phantom/screens/stops';
 import { dockFact } from '../ui/phantom/screens/town';
 import { phConfirm } from '../ui/phantom/templates';
@@ -263,7 +266,7 @@ export class MapScene extends Phaser.Scene {
   /** New UI: the pop-up that is open over the map (R, T, D, F, B), drawn by the layer instead of the canvas. */
   private rxPop: MapPop | null = null;
   /** New UI: the pause menu (Esc on the map) and its cursor; `ask` is the cursor of the "End this run?" box while it is open. */
-  private rxPause: { index: number; ask: number | null } | null = null;
+  private rxPause: { index: number; ask: number | null; card?: boolean } | null = null;
   /** New UI: the node event menu while it is open (the cards, the cursor, and what a pick does). */
   private rxMenu: { header: string; cards: NodeMenuCard[]; index: number; pick: (k: number) => void } | null = null;
   /** Phantom UI: the healing spot's page, up until the player presses (then `done` goes back to the map). */
@@ -298,6 +301,12 @@ export class MapScene extends Phaser.Scene {
   // ---- New UI: the pause menu (the mock-ups' "Paused" overlay) ----
 
   private static readonly PAUSE = ['Resume', 'Party', 'Bag', 'Settings', 'Save', 'End run'] as const;
+  /** The Phantom pause page also has the mock-up's Trainer card. */
+  private static readonly PAUSE_PH = ['Resume', 'Party', 'Bag', 'Trainer card', 'Settings', 'Save', 'End run'] as const;
+
+  private pauseRows(): readonly string[] {
+    return phantomOn() ? MapScene.PAUSE_PH : MapScene.PAUSE;
+  }
 
   private pauseOpen(): void {
     if (!this.rxView || this.rxPause || this.busy || this.picker || this.legend) return;
@@ -316,6 +325,11 @@ export class MapScene extends Phaser.Scene {
   private pauseInput(action: InputAction): void {
     const p = this.rxPause;
     if (!p) return;
+    if (p.card) {
+      // The Trainer card: any of Enter and Esc goes back to the pause menu.
+      if (action === 'back' || action === 'confirm') this.pauseCard(false);
+      return;
+    }
     if (p.ask !== null) {
       // The "End this run?" box: Esc keeps playing, the arrows change sides.
       if (action === 'back') return this.pauseAsk(0);
@@ -326,7 +340,7 @@ export class MapScene extends Phaser.Scene {
     }
     if (action === 'back') return this.pauseClose();
     if (action === 'confirm') return this.pausePick(p.index);
-    const n = MapScene.PAUSE.length;
+    const n = this.pauseRows().length;
     p.index = (p.index + (action === 'up' || action === 'left' ? n - 1 : 1)) % n;
     this.rxView?.refresh();
   }
@@ -335,9 +349,13 @@ export class MapScene extends Phaser.Scene {
   private pausePick(k: number): void {
     const p = this.rxPause;
     if (!p) return;
-    if (p.ask !== null) return;
-    const name = MapScene.PAUSE[k];
+    if (p.ask !== null || p.card) return;
+    const name = this.pauseRows()[k];
     if (!name || name === 'Resume') return this.pauseClose();
+    if (name === 'Trainer card') {
+      p.index = k;
+      return this.pauseCard(true);
+    }
     if (name === 'End run') {
       // Only an Adventure run can be given up from the map (core/run.ts endRunEarly); the mock-up's box asks first, on "Keep playing".
       p.index = k;
@@ -356,6 +374,14 @@ export class MapScene extends Phaser.Scene {
       this.busy = true;
       this.scene.start(to);
     });
+  }
+
+  /** Opens or shuts the Trainer card over the pause menu (Phantom UI). */
+  private pauseCard(open: boolean): void {
+    const p = this.rxPause;
+    if (!p) return;
+    p.card = open;
+    this.rxView?.refresh();
   }
 
   /** An answer in the "End this run?" box: 1 ends the run; 0 goes back to the pause menu. */
@@ -384,11 +410,38 @@ export class MapScene extends Phaser.Scene {
   private pausePhantom(ph: PhantomVersion, model: MapModel): string {
     const p = this.rxPause!;
     const can = !!wipeStatus(services().session.run!);
-    const note = MapScene.PAUSE[p.index] === 'End run' && !can ? 'Only an Adventure run can be ended here. Use Save to leave this one.' : '';
+    const rows = this.pauseRows();
+    const note = rows[p.index] === 'End run' && !can ? 'Only an Adventure run can be ended here. Use Save to leave this one.' : '';
     const stage = model.chips.find((x) => /^Stage\s+\d+/i.test(x));
+    if (p.card) return this.cardPhantom(ph, stage ?? '');
     const facts = model.chips.filter((x) => /^(₽|Badges\b|Level cap\b)/i.test(x)).map(dockFact);
-    const html = phPause(ph, { options: MapScene.PAUSE.map((label) => ({ label, off: label === 'End run' && !can })), index: p.index, note, where: [stage, model.title.split(' · ')[0]].filter(Boolean).join(' · '), facts, party: model.party });
+    const html = phPause(ph, { options: rows.map((label) => ({ label, off: label === 'End run' && !can })), index: p.index, note, where: [stage, model.title.split(' · ')[0]].filter(Boolean).join(' · '), facts, party: model.party });
     return p.ask === null ? html : phInto(html, phConfirm({ title: 'End this run?', body: 'Your progress is banked as a defeat. This cannot be undone.', options: ['Keep playing', 'End run'], index: p.ask }));
+  }
+
+  /** The Trainer card of the pause menu (mock-up `card`): who you are, your record, and this run beside it. */
+  private cardPhantom(ph: PhantomVersion, stage: string): string {
+    const { session } = services();
+    const run = session.run!, profile = session.profile, content = session.content;
+    const who = content.archetypes.get(run.archetypeId);
+    const region = content.regions.get(run.regionOrder[run.regionIndex] ?? '')?.name ?? `Region ${run.regionIndex + 1}`;
+    const rival = rivalReport(run)[0];
+    const bless = runBlessing(run);
+    const times = (n: number): string => (n === 1 ? 'once' : n === 2 ? 'twice' : `${n} times`);
+    const side = [
+      { small: 'This run', title: [region, stage].filter(Boolean).join(' · '), text: `${run.log.battlesWon} ${run.log.battlesWon === 1 ? 'battle' : 'battles'} won · ${run.log.speciesCaught.length} caught` },
+      ...(rival ? [{ small: 'Rival', title: rival.name, text: rival.meetings > 0 ? `Met ${times(rival.meetings)}. ${rival.leadText}.` : 'Not met yet.' }] : []),
+      ...(bless ? [{ small: 'Blessing', title: bless.name, text: bless.summary }] : []),
+    ];
+    return phCard(ph, {
+      title: 'Trainer card', small: 'Pause', save: false, tap: 'pauseCard',
+      name: who?.name ?? 'Trainer',
+      rank: `Known as ${protagonistTitle(run).name} · Rank ${prestigeRank(profile)}`,
+      facts: [['Runs', String(profile.stats.runsEnded)], ['Battles won', String(profile.stats.battlesWon)], ['Best run', `${profile.stats.bestEncounters} encounters`], ['Pokédex', `${profile.speciesCaught.length} caught`], ['Seed', run.seed]],
+      trainer: artOf(this, who?.spriteAssetId) ?? null,
+      badges: run.badges.length,
+      team: [], text: '', hints: [['Esc', 'Back']], side,
+    });
   }
 
   private popClose(): void {
@@ -1297,6 +1350,7 @@ export class MapScene extends Phaser.Scene {
           pause: (k) => this.pausePick(Number(k)),
           menu: (k) => this.menuPick(Number(k)),
           confirm: (k) => this.pauseAsk(Number(k)),
+          pauseCard: () => this.pauseCard(false),
           popTab: (i) => this.popPick('tab', Number(i)),
           popPick: (i) => this.popPick('pick', Number(i)),
           bracket: () => this.popClose(),
