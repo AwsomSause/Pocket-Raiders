@@ -1,5 +1,6 @@
 // New UI screens for the stops of a run (reward draft, shop, decision, trade), ported from the mock-up templates.
 
+import { pkTrade } from '../../pocket/screens/town';
 import { act, B, esc, H, mon, TX, ty, W } from '../kit';
 import { partyStrip, type PartyChip } from '../game';
 import type { ReduxCtx } from '../stage';
@@ -74,6 +75,7 @@ export interface TradeModel {
 
 export function tradeView(c: ReduxCtx, d: TradeModel): string {
   if (c.ph) return phTrade(c.ph, d);
+  if (c.pk) return pkTrade(d);
   const v = c.v(2), swapped = d.done !== null;
   const side = (name: string, art: Art | null, m: TradeMon | null, empty: string, attr = ''): string =>
     W(`<div class="row">${figure(art, 104)}<b>${esc(name)}</b></div><div class="cell" style="height:150px;aspect-ratio:auto;align-self:stretch">${m?.file ? mon(m.file, 2.4, swapped ? 'rx-pop' : '', true) : `<span class="sm" style="padding:0 16px;text-align:center">${esc(m ? m.name : empty)}</span>`}</div>${m ? `<b style="font-size:20px">${esc(m.name)} <span class="sm">Lv ${m.level}</span></b><div class="row" style="gap:4px">${m.types.map(ty).join('')}</div>` : ''}`, 'flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0', '', attr);

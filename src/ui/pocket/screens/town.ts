@@ -4,9 +4,10 @@
 
 import type { HubTownData } from '../../../core/hubTown/schema';
 import type { PocketRoad } from '../../../core/presentation/pocket';
-import { pkPic, propArt } from '../art';
+import { monArt, pkPic, propArt } from '../art';
+import type { TradeModel, TradeMon } from '../../redux/screens/stops';
 import { act, esc, hdr, keys, page, type PkKey, spr } from '../kit';
-import { fit, fitBody } from '../templates';
+import { fit, fitBody, fitPic } from '../templates';
 
 /** Each district's picture on the Town Map (the mock-up's own). */
 const DISTRICT_PROP: Record<string, string> = { training: 'dojo', culture: 'memories', home: 'cherry', play: 'parasol', plaza: 'fountain' };
@@ -94,4 +95,23 @@ export function pkPlaza(d: PkPlazaModel): string {
   const cards = d.districts.map((x, i) => `<div class="pn rw39${i === index ? ' on' : ''}${x.off ? ' gx-pz-off' : ''}" data-key="pz-${x.id}"${act('pick', i, 'over')}><i>${propIn(plazaProp(x.id), 110, 112)}</i><b style="font-size:${fit(x.name, 150, 18, 13, 0.55)}px">${esc(x.name)}</b><p style="font-size:${fitBody(x.text, 150, 60, [13, 12, 11], 1.35)}px">${esc(x.text)}</p>${x.count && !x.off ? `<u class="gx-pz-n">${x.count}</u>` : ''}</div>`).join('');
   const say = d.say ? `<div class="pn gx-pz-say" data-key="pz-say"><p style="font-size:${fit(d.say, 600, 14, 11, 0.5)}px">${esc(d.say)}</p></div>` : '';
   return page('pt-plaza', 51, `<div class="scr nrun pg39" data-key="pt-plaza">${head}<div class="gr39 q3" data-key="pz-grid">${cards}</div>${say}${keys([['←→↑↓', 'district'], ['Enter', 'visit', 'pick', index], ['Esc', 'back to the map', 'pick', n]])}</div>`);
+}
+
+const tyWord = (t: readonly string[]): string => t.map((x) => x.charAt(0).toUpperCase() + x.slice(1)).join(' / ');
+
+/** The Trade Post (mock-up `pt-trade`): what you give and what you get, the trader's line, then Trade or No thanks. */
+export function pkTrade(d: TradeModel): string {
+  const swapped = d.done !== null;
+  const side = (label: string, m: TradeMon | null, empty: string, cls: string): string => `<div class="pn${cls}"><em>${label}</em><i>${m?.file ? fitPic(monArt(m.file), 150, 136, swapped ? 'gx-tr-pop' : '', 3) : ''}</i><b style="font-size:${fit(m?.name ?? empty, 260, 24, 14, 0.62)}px">${esc(m?.name ?? empty)}</b>${m ? `<span>Lv ${m.level} · ${esc(tyWord(m.types))}</span>` : ''}</div>`;
+  const pills = [...(d.count > 1 ? [`Offer ${d.at + 1} of ${d.count}`] : []), ...(d.cost > 0 ? [`Costs ₽${d.cost.toLocaleString('en-US')}`] : []), `₽ ${d.money.toLocaleString('en-US')}`];
+  const head = hdr('Trade Post', { area: 'town', crumb: ['Trainer Plaza', d.title || 'Trade Post'], pills });
+  const swap = `<div class="sw39" data-key="tr-swap">${side(swapped ? 'You gave' : 'You give', d.give, 'Nothing they want', '')}<i class="ar39" data-nocheck></i>${side(swapped ? 'You got' : 'You get', d.get, 'No offers today', ' get')}</div>`;
+  const line = swapped ? d.done! : d.line;
+  const why = !swapped && d.verdict ? `<small class="gx-tr-why${d.bad ? ' bad' : ''}">${esc(d.verdict)}</small>` : '';
+  const go = swapped
+    ? `<div class="go"><div class="btn on"${act('done')}><b>OK</b></div></div>`
+    : `<div class="go"><div class="btn on${d.focus === 0 ? ' gx-tr-f' : ''}${d.bad || !d.get ? ' gx-tr-off' : ''}"${act('accept', 0, 'acc')}><b>Trade</b></div><div class="btn sm${d.focus === 1 ? ' gx-tr-f' : ''}"${act('decline', 0, 'dec')}><b>No thanks</b></div></div>`;
+  const talk = `<div class="tk39" data-key="tr-talk"><p><b>${esc(d.trader)}</b><span style="font-size:${fitBody(`"${line}"`, 420, 44, [15, 14, 13, 12], 1.3)}px">"${esc(line)}"</span>${why}</p>${go}</div>`;
+  const ks: PkKey[] = swapped ? [['Enter', 'continue', 'done']] : [['Enter', d.focus === 1 ? 'leave' : 'trade', d.focus === 1 ? 'decline' : 'accept'], ...(d.count > 1 ? [['←→', 'next offer', 'step', 1] as PkKey] : []), ['Esc', 'leave', 'decline']];
+  return page('pt-trade', 51, `<div class="scr nrun pg39 tr39" data-key="pt-trade">${head}${swap}${talk}${keys(ks)}</div>`);
 }

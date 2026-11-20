@@ -556,3 +556,10 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .bf38 .gx-bf-copy{height:36px;padding:0 14px;display:flex;align-items:center}
 .pkx .pks .bf38 .gx-bf-copy b{font-size:13px}
 .pkx .pks .bf38 .gx-bf-note{position:absolute;left:480px;right:24px;bottom:96px;padding:6px 12px;font-weight:700;font-size:13px;z-index:5}
+/* Trade Post (mock-up pt-trade): why a trade can't be done, and the new Pokémon popping in after the swap. */
+.pkx .pks .tr39 .tk39 p span{display:block}
+.pkx .pks .tr39 .gx-tr-why{display:block;margin-top:2px;font:700 12px/1.3 var(--fb);color:#9fb3d9}
+.pkx .pks .tr39 .gx-tr-why.bad{color:#ff8a7a}
+.pkx .pks .tr39 .gx-tr-pop{animation:gx-bl-beat .35s ease-out 2 alternate}
+.pkx .pks .tr39 .go .btn.gx-tr-off{filter:saturate(.3);opacity:.55}
+.pkx .pks .tr39 .go .btn.sm.gx-tr-f{box-shadow:0 0 0 3px #ffcb05,0 0 0 5px #1d2440}

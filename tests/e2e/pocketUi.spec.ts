@@ -693,6 +693,37 @@ test('Pocket look: the Trainer Plaza is six district cards three across; up and 
   expect(errors).toEqual([]);
 });
 
+test('Pocket look: the Trade Post shows what you give and get, and No thanks leaves without a trade', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=plaza-e2e');
+  await toPocketMap(page);
+  const sideId = await page.evaluate(() => {
+    const run = (window as any).__pkr.session.run;
+    const middle = Math.ceil(run.stage.map.columns / 2);
+    const node = run.stage.map.nodes.filter((n: any) => n.column === middle).find((n: any) => n.sides.some((s: any) => s.kind === 'plaza'));
+    if (!node) return null;
+    run.stage.current = node.id;
+    (window as any).__pkr.game.scene.getScene('Map').scene.restart({ focus: 0 });
+    return node.sides.find((s: any) => s.kind === 'plaza').id as string;
+  });
+  expect(sideId).not.toBeNull();
+  await waitForScene(page, 'Map');
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);
+  const before = await runNow(page);
+  await page.evaluate((id) => { (window as any).__pkr.game.scene.getScene('Map').scene.start('Trade', { source: 'plaza', sideId: id, back: { scene: 'Map' } }); }, sideId);
+  await waitForScene(page, 'Trade');
+  await onPkPage(page, 'Trade', 'pt-trade');
+  const trade = pkView(page, 'Trade', 'pt-trade');
+  await expect(trade.locator('.sw39 > .pn')).toHaveCount(2);
+  await expect(trade.locator('.tk39 [data-act="accept"]')).toHaveCount(1);
+  await fits(page, 'Trade', 'pt-trade');
+  await trade.locator('.tk39 [data-act="decline"]').click();
+  await waitForScene(page, 'Map');
+  expect(await runNow(page)).toBe(before);
+  expect(errors).toEqual([]);
+});
+
 test('Pocket look: starting a run, Starter Pick is three cards and the Briefing shows the first region and Gym', async ({ page }) => {
   test.setTimeout(180_000);
   const errors = watch(page);

@@ -24,10 +24,11 @@ import type { MapModel, MapNodeView } from '../../src/ui/redux/screens/map';
 import type { EventModel } from '../../src/ui/redux/screens/event';
 import { pkSettingsHome } from '../../src/ui/pocket/screens/settings';
 import { doorSub, pkHub, type PkHubModel } from '../../src/ui/pocket/screens/hub';
-import { districtProp, pkPlaza, pkTownDoor, pkTownHud, pkTownMap, placeProp, plazaProp } from '../../src/ui/pocket/screens/town';
+import { districtProp, pkPlaza, pkTrade, pkTownDoor, pkTownHud, pkTownMap, placeProp, plazaProp } from '../../src/ui/pocket/screens/town';
 import { POCKET_TOWN } from '../../src/core/hubTown/schema';
 import { leaderLine, pkBrief, pkStarter, regionOfGen, runSteps } from '../../src/ui/pocket/screens/run';
 import type { BriefModel } from '../../src/ui/redux/screens/run';
+import type { TradeModel } from '../../src/ui/redux/screens/stops';
 import { firstThought, fitBody, pkBoard, pkConfirm, pkGrid, pkMenu, pkOptions, pkSaves, pkStats } from '../../src/ui/pocket/templates';
 
 const stage = (current: string | null) => ({
@@ -817,5 +818,42 @@ describe('Pocket run start: Starter Pick and Briefing', () => {
     expect(copy).not.toContain('First Gym');
     expect(copy).toContain('Seed copied.');
     expect(copy).toContain('<kbd>Enter</kbd>copy seed');
+  });
+});
+
+describe('Pocket look: the Trade Post', () => {
+  const mon = (name: string, level: number, types: string[]) => ({ name, level, types, file: null }) as unknown as TradeModel['give'];
+  const d = (over: Partial<TradeModel> = {}): TradeModel => ({
+    title: 'Trade Post', money: 5000, you: null, trader: 'Spark Trader', traderArt: null,
+    give: mon('Snorlax', 35, ['normal']), get: mon('Lucario', 35, ['fighting', 'steel']),
+    verdict: 'A fair swap.', bad: false, cost: 0, at: 0, count: 3, focus: 0, line: 'Same level, no strings.', done: null, ...over,
+  });
+  it('draws both sides, the arrows, the trader’s line and Trade lit', () => {
+    const html = pkTrade(d());
+    expect(pkPageOf(html)?.id).toBe('pt-trade');
+    expect(html).toContain('You give');
+    expect(html).toContain('Lucario');
+    expect(html).toContain('Lv 35 · Fighting / Steel');
+    expect(html).toContain('Offer 1 of 3');
+    expect(html).toContain('"Same level, no strings."');
+    expect(html).toMatch(/class="btn on gx-tr-f"[^>]*data-act="accept"/);
+    expect(html).toContain('next offer');
+  });
+  it('a trade you can’t make dims Trade and says why; no trader wants nothing', () => {
+    const html = pkTrade(d({ give: null, bad: true, verdict: 'Needs a Normal-type in your party', focus: 1, count: 1 }));
+    expect(html).toContain('Nothing they want');
+    expect(html).toContain('gx-tr-off');
+    expect(html).toMatch(/gx-tr-why bad/);
+    expect(html).toMatch(/btn sm gx-tr-f/);
+    expect(html).not.toContain('next offer');
+    expect(html).not.toContain('Offer 1 of 1');
+  });
+  it('after a swap the labels turn past tense and only OK is left', () => {
+    const html = pkTrade(d({ done: 'Lucario joined your party!' }));
+    expect(html).toContain('You gave');
+    expect(html).toContain('You got');
+    expect(html).toContain('Lucario joined your party!');
+    expect(html).toContain('data-act="done"');
+    expect(html).not.toContain('data-act="accept"');
   });
 });
