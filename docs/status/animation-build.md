@@ -60,3 +60,9 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
 - Miss (pass 2): the attacker leans back and dashes past where the target stood; the target side-steps away with a
   squash and stretch; dust at both feet; both spring home (`missClip`). Reduced: a small side-step only. Off: nothing.
   The MISS word is the existing badge.
+- HP bar (pass 2 + 5): the bar snaps down in 0.28 s, the pale ghost bar holds and catches up (from 0.2 s, 0.32 s),
+  the plate jolts 5 px with a spring, and the bar flashes once when it crosses into yellow or red. The New UI's own
+  bar drains on the same 0.28 s.
+- Danger (pass 5): under a fifth of HP (was a quarter) the plate glows red in a soft 1 s pulse, the bar pulses
+  brighter every 0.5 s, and the Pokémon sags (3% wider, 5% shorter) and breathes in 0.75 s. A heal ends all of it
+  and stands the Pokémon back up at its own size. Reduced/Off: a still glow only.

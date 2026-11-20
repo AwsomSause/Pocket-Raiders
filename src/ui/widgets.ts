@@ -553,6 +553,11 @@ export class Bar {
   private readonly gauge: Phaser.GameObjects.Graphics | null;
   /** HP gauge: the pale strip showing the HP just lost, which catches up after the bar drains. */
   private readonly ghost = { w: 0 };
+  /** A one-off brightening when the bar crosses into yellow or red (0..1). */
+  private readonly flash = { v: 0 };
+  /** The danger pulse (0..1), and the tween that drives it. */
+  private readonly glow = { v: 0 };
+  private pulsing: Phaser.Tweens.Tween | null = null;
   private readonly h: number;
   private ratio = 1;
 
@@ -581,6 +586,11 @@ export class Bar {
     }
   }
 
+  /**
+   * Animation redesign pass 2 + 5 (HP Bar): the bar snaps down in 0.28 s, a pale ghost bar holds for a beat and
+   * catches up (from 0.2 s, 0.32 s); a rise fills the same way without a ghost. Crossing into yellow or red
+   * flashes the bar once.
+   */
   set(ratio: number, animate = false): Promise<void> {
     const target = Phaser.Math.Clamp(ratio, 0, 1);
     return new Promise((resolve) => {
@@ -590,25 +600,42 @@ export class Bar {
         return;
       }
       const from = { r: this.ratio };
-      // Bigger changes take a little longer, so the drain reads as one smooth motion.
-      const duration = Math.round(250 + 450 * Math.abs(target - this.ratio));
       const dropping = target < this.ratio;
-      if (this.gauge && dropping) this.ghost.w = this.width * this.ratio;
+      if (this.gauge) {
+        this.scene.tweens.killTweensOf(this.ghost);
+        if (dropping) {
+          this.ghost.w = Math.max(this.ghost.w, this.width * this.ratio);
+          this.scene.tweens.add({ targets: this.ghost, w: this.width * target, delay: 200, duration: 320, ease: 'Quad.easeIn', onUpdate: () => this.draw() });
+        }
+        const band = (r: number): number => (r > 0.5 ? 2 : r > 0.2 ? 1 : 0);
+        if (band(target) !== band(this.ratio) && target > 0) {
+          this.scene.tweens.killTweensOf(this.flash);
+          this.flash.v = 0;
+          this.scene.tweens.add({ targets: this.flash, v: { from: 1, to: 0 }, delay: 140, duration: 300, ease: 'Quad.easeOut', onUpdate: () => this.draw(), onComplete: () => this.draw() });
+        }
+      }
       this.scene.tweens.add({
         targets: from,
         r: target,
-        duration,
-        ease: 'Sine.easeOut',
+        duration: 280,
+        ease: 'Quad.easeOut',
         onUpdate: () => this.apply(from.r, !dropping),
         onComplete: () => {
           this.apply(target, !dropping);
-          if (this.gauge && dropping) {
-            this.scene.tweens.add({ targets: this.ghost, w: this.width * target, delay: 180, duration: 320, ease: 'Quad.easeIn', onUpdate: () => this.draw() });
-          }
           resolve();
         },
       });
     });
+  }
+
+  /** Danger (pass 5): under a fifth the bar pulses brighter every half second; off stops it at once. */
+  pulse(on: boolean): void {
+    if (!this.gauge) return;
+    this.pulsing?.stop();
+    this.pulsing = null;
+    this.glow.v = 0;
+    if (on) this.pulsing = this.scene.tweens.add({ targets: this.glow, v: 1, duration: 250, yoyo: true, repeat: -1, ease: 'Sine.easeInOut', onUpdate: () => this.draw() });
+    this.draw();
   }
 
   private apply(ratio: number, moveGhost = true): void {
@@ -637,7 +664,10 @@ export class Bar {
     const fillW = this.width * this.ratio;
     if (this.ghost.w > fillW + 0.5) g.fillStyle(0xf8e0c0, 1).fillRoundedRect(x, top, this.ghost.w, h, Math.min(h / 2, this.ghost.w / 2));
     if (fillW < 1) return;
-    const shades = this.look && this.ratio > 0.2 ? this.look.fill : this.ratio > 0.5 ? HP_GAUGE.high : this.ratio > 0.2 ? HP_GAUGE.medium : HP_GAUGE.low;
+    const base = this.look && this.ratio > 0.2 ? this.look.fill : this.ratio > 0.5 ? HP_GAUGE.high : this.ratio > 0.2 ? HP_GAUGE.medium : HP_GAUGE.low;
+    // Brightness 2.2 for a flash and up to 1.9 in the danger pulse, drawn as a mix toward white.
+    const lift = Math.min(0.85, this.flash.v * 0.7 + this.glow.v * 0.55);
+    const shades = lift > 0 ? (base.map((c) => Phaser.Display.Color.Interpolate.ColorWithColor(Phaser.Display.Color.ValueToColor(c), Phaser.Display.Color.ValueToColor(0xffffff), 100, lift * 100)).map((o) => Phaser.Display.Color.GetColor(o.r, o.g, o.b)) as unknown as readonly [number, number, number]) : base;
     const r = Math.min(h / 2, fillW / 2);
     g.fillStyle(shades[2], 1).fillRoundedRect(x, top, fillW, h, r);
     g.fillStyle(shades[1], 1).fillRoundedRect(x, top, fillW, h - 2, r);

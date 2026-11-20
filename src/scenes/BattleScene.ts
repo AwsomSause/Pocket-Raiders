@@ -307,6 +307,8 @@ interface InfoBox {
   formIcon?: Phaser.GameObjects.Image;
   /** A soft red glow behind the box while HP is low. */
   danger?: Phaser.GameObjects.Graphics;
+  /** The HP share the bar last showed (a drop jolts the plate). */
+  ratio?: number;
   /** A battle style's layout for this box (screens redesign); absent for the original look. */
   spec?: BoxSpec;
   /** What the New UI draws for this box; `hp` is the bar on screen, which follows the real HP as the canvas bar does. */
@@ -1864,9 +1866,17 @@ export class BattleScene extends Phaser.Scene {
       };
       this.tweens.killTweensOf(box.rx);
       // The same drain the canvas bar plays, so the two never disagree about when the HP has settled.
-      if (animate && from !== to) this.tweens.add({ targets: box.rx, hp: to, duration: Math.round(250 + 450 * Math.abs(to - from)), ease: 'Sine.easeOut' });
+      if (animate && from !== to) this.tweens.add({ targets: box.rx, hp: to, duration: 280, ease: 'Quad.easeOut' });
     }
-    return box.hpBar.set(mon.hp / max, animate);
+    // A hit jolts the plate (pass 2): down 5 px and back with a spring.
+    const ratio = Math.max(0, mon.hp) / max;
+    const c = box.container;
+    if (animate && ratio < (box.ratio ?? ratio) && this.motion === 'full' && c.visible && !this.tweens.isTweening(c)) {
+      const y = c.y;
+      this.tweens.chain({ targets: c, tweens: [{ y: y + 5, duration: 40 }, { y, duration: 250, ease: 'Elastic.easeOut', easeParams: [1, 0.4] }], onStop: () => c.setY(y) });
+    }
+    box.ratio = ratio;
+    return box.hpBar.set(ratio, animate);
   }
 
   /** New UI: mounts the mock-ups' battle HUD over the canvas and stops the canvas drawing its own. */
@@ -2017,24 +2027,66 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** At a quarter of its HP or less, a box gets a gentle red pulse behind it (still with reduced motion). */
+  /**
+   * Danger (redesign pass 5): under a fifth of its HP the plate glows red in a slow 1 s pulse, the HP bar pulses
+   * brighter every half second, and the Pokémon sags and breathes faster. All of it stops the moment it is healed.
+   */
   private dangerGlow(box: InfoBox, ratio: number): void {
-    const low = ratio > 0 && ratio <= 0.25;
+    const low = ratio > 0 && ratio <= 0.2;
+    const side: Side = box.isPlayer ? 'player' : 'enemy';
     if (!low) {
-      box.danger?.destroy();
-      box.danger = undefined;
+      if (box.danger) {
+        box.danger.destroy();
+        box.danger = undefined;
+        box.hpBar.pulse?.(false);
+        if (box === this.playerBox || box === this.enemyBox) this.dangerSag(side, false);
+      }
       return;
     }
-    if (box.danger) return;
+    if (box.danger) {
+      // A new Pokémon came in already in danger: it sags too.
+      if (this.motion === 'full' && (box === this.playerBox || box === this.enemyBox)) this.dangerSag(side, true);
+      return;
+    }
     const isPlayer = box.isPlayer;
     const g = this.add.graphics();
-    g.fillStyle(0xff3048, 0.35);
-    if (box.spec) {
-      const [px, py, pw, ph] = box.spec.panel;
-      g.fillRoundedRect(px - 8, py - 8, pw + 16, ph + 16, 16);
-    } else g.fillRoundedRect(isPlayer ? 8 : -2, -6, isPlayer ? 382 : 376, isPlayer ? 144 : 116, 26);
+    // A soft red glow about 14 px wide around the plate (the mockup's box-shadow), in rings that fade outward.
+    const [px, py, pw, ph, rad] = box.spec ? [...box.spec.panel, 8] : isPlayer ? [16, 2, 366, 128, 18] : [6, 2, 360, 100, 18];
+    for (const [grow, a] of [[16, 0.12], [12, 0.22], [8, 0.34], [4, 0.5]] as const) g.fillStyle(0xff3b30, a).fillRoundedRect(px! - grow, py! - grow, pw! + grow * 2, ph! + grow * 2, rad! + grow);
     box.container.addAt(g, 0);
     box.danger = g;
-    if (this.motion === 'full') this.tweens.add({ targets: g, alpha: 0.25, duration: 700, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    if (this.motion === 'full') {
+      g.setAlpha(0);
+      this.tweens.add({ targets: g, alpha: 1, duration: 500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+      box.hpBar.pulse?.(true);
+      if (box === this.playerBox || box === this.enemyBox) this.dangerSag(side, true);
+    }
+  }
+
+  /**
+   * The Pokémon in danger sags (a little shorter and wider) and breathes in 0.75 s instead of 1.8 s; `false` stands
+   * it back up with its usual breath. Its looping breath is reset to the start first, so its size never drifts.
+   */
+  private dangerSag(side: Side, on: boolean): void {
+    const v = side === 'player' ? this.playerSprite : this.enemySprite;
+    if (!(v instanceof Phaser.GameObjects.Sprite) || !v.active) return;
+    const sagged = v.getData('sag') as { sx: number; sy: number } | undefined;
+    if (on === Boolean(sagged)) return;
+    for (const t of this.tweens.getTweensOf(v)) {
+      if (t.data.some((d) => (d as unknown as { repeat?: number }).repeat === -1)) {
+        t.seek(0);
+        t.stop();
+      }
+    }
+    if (on) {
+      v.setData('sag', { sx: v.scaleX, sy: v.scaleY });
+      v.setScale(v.scaleX * 1.03, v.scaleY * 0.95);
+      breathe(this, v, this.motion, 0, 750);
+    } else {
+      v.setScale(sagged!.sx, sagged!.sy);
+      v.setData('sag', undefined);
+      breathe(this, v, this.motion);
+    }
   }
 
   /** The event's own song, key and ambience when this fight belongs to a Legendary world event. */

@@ -258,3 +258,52 @@ test('a miss: the attacker overshoots, the target side-steps, and both stand hom
   }
   expect(errors).toEqual([]);
 });
+
+test('HP bar and danger: a drop jolts the plate; under a fifth the plate glows, the bar pulses and the Pokémon sags; a heal ends it', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'danger-e2e');
+  const state = () =>
+    page.evaluate(() => {
+      const b = (window as any).__pkr.game.scene.getScene('Battle');
+      return { y: b.playerBox.container.y, danger: Boolean(b.playerBox.danger), sag: b.playerSprite.getData('sag') ?? null, sx: b.playerSprite.scaleX, pulsing: Boolean(b.playerBox.hpBar.pulsing) };
+    });
+  const home = await state();
+  expect(home).toMatchObject({ danger: false, sag: null, pulsing: false });
+  const full = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').shown.player.hp);
+  const setHp = (hp: number) =>
+    page.evaluate((h) => {
+      const b = (window as any).__pkr.game.scene.getScene('Battle');
+      b.shown.player.hp = h;
+      void b.refreshInfoBox(b.playerBox, b.shown.player, true);
+    }, hp);
+  await setHp(Math.max(1, Math.floor(full * 0.15)));
+  // The lowest the plate went over the next 0.3 s (sampled every frame).
+  const low = await page.evaluate(
+    () =>
+      new Promise<number>((resolve) => {
+        const c = (window as any).__pkr.game.scene.getScene('Battle').playerBox.container;
+        let max = c.y;
+        const t0 = performance.now();
+        const tick = () => {
+          max = Math.max(max, c.y);
+          if (performance.now() - t0 < 300) requestAnimationFrame(tick);
+          else resolve(max);
+        };
+        tick();
+      }),
+  );
+  expect(low).toBeGreaterThan(home.y + 1);
+  const hit = await state();
+  expect(hit).toMatchObject({ danger: true, pulsing: true });
+  expect(hit.sag).not.toBeNull();
+  expect(hit.sx).toBeCloseTo(home.sx * 1.03, 2);
+  await page.waitForTimeout(500);
+  expect((await state()).y).toBeCloseTo(home.y, 0);
+  await setHp(full);
+  await page.waitForTimeout(400);
+  const healed = await state();
+  expect(healed).toMatchObject({ danger: false, sag: null, pulsing: false });
+  expect(healed.sx).toBeCloseTo(home.sx, 3);
+  expect(errors).toEqual([]);
+});
