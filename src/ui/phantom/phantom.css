@@ -51,7 +51,7 @@
 .phx .phs .ph-wide.low .ph-count{top:168px}
 .phx .phs .ph-find{position:absolute;left:70px;top:128px;padding:8px 18px;background:var(--w);color:var(--k);font:400 30px/1 var(--f-disp);transform:rotate(-1.5deg);box-shadow:6px 6px 0 var(--red);z-index:3}
 .phx .phs .pv-o>div{min-width:0}
-.phx .phs .pv-o b{font-size:19px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.phx .phs .pv-o b{font-size:17px;line-height:1.05;overflow-wrap:anywhere}
 
 /* ---- more motion than the mock-ups (the game redraws by changing only what differs, so these glide) ---- */
 @keyframes phx-float{0%,100%{translate:0 0}50%{translate:0 -10px}}

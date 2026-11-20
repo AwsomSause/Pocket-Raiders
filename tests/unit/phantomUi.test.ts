@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { changeSetting, SETTINGS } from '../../src/core/settingsRegistry';
-import { nextPhantomVersion, PHANTOM_PHONE_SETTINGS, PHANTOM_SETTINGS_PAGES, PHANTOM_VERSION_IDS, PHANTOM_VERSIONS, phantomVersion } from '../../src/core/presentation/phantom';
+import { nextPhantomVersion, PHANTOM_PHONE_SETTINGS, PHANTOM_SETTINGS_PAGES, PHANTOM_VERSION_IDS, PHANTOM_VERSIONS, phantomVersion, type PhantomVersionId } from '../../src/core/presentation/phantom';
 import { applyPhantomPreset, PHANTOM_PRESETS, phantomPresetOf } from '../../src/core/presentation/phantomPresets';
 import { CURRENT_VERSIONS, DEFAULT_SETTINGS, SaveManager } from '../../src/save/saveManager';
 import { MemoryStorageProvider } from '../../src/save/storage';
@@ -59,7 +59,7 @@ describe('Phantom UI setting (settings v46)', () => {
   });
 
   it('the five versions go round in order and each names a player trainer', () => {
-    let v = PHANTOM_VERSION_IDS[0];
+    let v: PhantomVersionId = PHANTOM_VERSION_IDS[0];
     const order = PHANTOM_VERSION_IDS.map(() => (v = nextPhantomVersion(v)));
     expect(order).toEqual(['midnight', 'channel', 'fantasia', 'velvet', 'phantom']);
     expect(PHANTOM_VERSIONS.map((x) => x.heroName)).toEqual(['Red', 'Blue', 'Hilda', 'Green', 'Nate']);
