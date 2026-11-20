@@ -912,7 +912,7 @@ export class SaveManager {
       for (const slot of mon.moves) if (!c.moves.has(slot.id)) return `Unknown move "${slot.id}" in save.`;
     }
     for (const id of run.draft ?? []) if (!c.rewards.has(id)) return `Unknown reward "${id}" in save.`;
-    for (const id of Object.keys(run.inventory)) if (!c.items.has(id)) return `Unknown item "${id}" in save.`;
+    for (const id of Object.keys(run.inventory)) if (!c.items.has(id) && !c.catalog.has(id)) return `Unknown item "${id}" in save.`;
     for (const d of run.pending) if (d.kind === 'learnMove' && !c.moves.has(d.moveId)) return `Unknown move "${d.moveId}" in save.`;
     for (const d of run.pending) if (d.kind === 'evolve' && !c.species.has(d.to)) return `Unknown species "${d.to}" in save.`;
     if (run.battle) {
@@ -948,7 +948,7 @@ export class SaveManager {
   }
 
   saveRun(run: RunState): SaveResult {
-    // A catalog item that landed in the Bag would make this save fail its checks on the next load: move it first.
+    // An item id the game no longer knows would make this save fail its checks on the next load: sell it first.
     tidyBag(this.content, run);
     return this.write('run', run);
   }
