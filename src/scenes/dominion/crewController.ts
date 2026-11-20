@@ -14,7 +14,7 @@ import { fileView, hireOverlay, leadsOverlay, morningView } from '../../ui/redux
 import { personaView } from '../../ui/redux/screens/dominion/persona';
 
 interface Host {
-  screenName: 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival';
+  screenName: 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger';
   setNotice(n: string | null): void;
   refresh(): void;
   step(a: DominionAction): boolean;
@@ -99,6 +99,7 @@ export class CrewController {
       lead: (i) => { this.pickAt = Number(i); this.pitchAt = 0; this.host.refresh(); },
       pitch: (i) => { this.pitchAt = Number(i); this.pickConfirm(); },
       admit: () => this.pickConfirm(),
+      crewWhere: () => this.cycleWhere(),
       persona: () => this.togglePersona(),
     };
   }
@@ -160,6 +161,7 @@ export class CrewController {
   raw(code: string): boolean {
     const b = this.block();
     if (!b || !this.active()) return false;
+    if (this.owns() && code === 'KeyP' && !this.talking()) return this.cycleWhere(), true;
     if (this.owns() && code === 'KeyM' && !this.talking()) {
       this.all = !this.all;
       this.taskAt = 0;
@@ -254,6 +256,16 @@ export class CrewController {
       return true;
     }
     return false;
+  }
+
+  /** D6: the next district for the selected member's district task (Patrol, Hold, Chant...). */
+  private cycleWhere(): void {
+    const b = this.block();
+    const m = b?.members[this.sel];
+    if (!b || !m) return;
+    const ids = DOMINION_DATA.field.districts.map((d) => d.id);
+    const now = crewOf(m).where ?? DOMINION_DATA.field.hq;
+    this.host.step({ t: 'where', member: m.id, district: ids[(ids.indexOf(now) + 1) % ids.length]! });
   }
 
   /** Who the selected member is (tests). */

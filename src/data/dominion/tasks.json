@@ -157,8 +157,16 @@
     "district is \"ours\": rival actions there −15%"
    ],
    "risk": "Meets the Hero",
-   "status": "disabled",
-   "needs": "D6"
+   "status": "limited",
+   "note": "Rival jobs losing odds there wait for the rival team (D9); meeting the Hero waits for D11.",
+   "effect": {
+    "kind": "district",
+    "does": "patrol",
+    "n": [
+     3,
+     5
+    ]
+   }
   },
   {
    "n": 6,
@@ -325,8 +333,19 @@
     "pay 125%"
    ],
    "risk": "Jumped by rivals",
-   "status": "disabled",
-   "needs": "D6"
+   "status": "limited",
+   "note": "Being jumped by rivals waits for the rival team (D9).",
+   "effect": {
+    "kind": "district",
+    "does": "collect",
+    "collect": [
+     100,
+     100,
+     110,
+     110,
+     125
+    ]
+   }
   },
   {
    "n": 14,
@@ -346,7 +365,7 @@
    ],
    "risk": "Arrest",
    "status": "limited",
-   "note": "Pays like a new shop each time; the shop doesn't become a Racket until districts (D6).",
+   "note": "Pays like a new shop each time; a crew shake-down doesn't make a Racket (the Boss's Extort does).",
    "effect": {
     "kind": "money",
     "funds": [
@@ -778,8 +797,18 @@
     "a landmark"
    ],
    "risk": "Tagger arrested",
-   "status": "disabled",
-   "needs": "D6"
+   "status": "supported",
+   "effect": {
+    "kind": "district",
+    "does": "dread",
+    "n": [
+     1,
+     2
+    ],
+    "heat": 1,
+    "risky": true,
+    "caughtHeat": 4
+   }
   },
   {
    "n": 33,
@@ -945,8 +974,11 @@
     "a secret"
    ],
    "risk": "Overheard",
-   "status": "disabled",
-   "needs": "D6"
+   "status": "supported",
+   "effect": {
+    "kind": "district",
+    "does": "eavesdrop"
+   }
   },
   {
    "n": 41,
@@ -1091,8 +1123,12 @@
     "real-time"
    ],
    "risk": "Bad news",
-   "status": "disabled",
-   "needs": "D6"
+   "status": "supported",
+   "effect": {
+    "kind": "district",
+    "does": "poll",
+    "sure": true
+   }
   },
   {
    "n": 48,
@@ -1220,8 +1256,15 @@
     "locals tip you off"
    ],
    "risk": "Disliked",
-   "status": "disabled",
-   "needs": "D6"
+   "status": "supported",
+   "effect": {
+    "kind": "district",
+    "does": "regard",
+    "n": [
+     1,
+     2
+    ]
+   }
   },
   {
    "n": 54,
@@ -2422,8 +2465,17 @@
     "a movement"
    ],
    "risk": "Arrest",
-   "status": "disabled",
-   "needs": "D6"
+   "status": "supported",
+   "effect": {
+    "kind": "district",
+    "does": "regard",
+    "n": [
+     1,
+     2
+    ],
+    "risky": true,
+    "caughtHeat": 3
+   }
   },
   {
    "n": 111,
@@ -2442,8 +2494,16 @@
     "a hit"
    ],
    "risk": "Ridicule",
-   "status": "disabled",
-   "needs": "D6"
+   "status": "supported",
+   "effect": {
+    "kind": "district",
+    "does": "song",
+    "n": [
+     1,
+     2
+    ],
+    "mor": 2
+   }
   },
   {
    "n": 112,
@@ -2462,8 +2522,15 @@
     "followers"
    ],
    "risk": "Mocked",
-   "status": "disabled",
-   "needs": "D6"
+   "status": "supported",
+   "effect": {
+    "kind": "district",
+    "does": "regard",
+    "n": [
+     2,
+     4
+    ]
+   }
   },
   {
    "n": 113,
@@ -2482,8 +2549,17 @@
     "a landmark"
    ],
    "risk": "Torn down",
-   "status": "disabled",
-   "needs": "D6"
+   "status": "supported",
+   "effect": {
+    "kind": "district",
+    "does": "dread",
+    "n": [
+     1,
+     2
+    ],
+    "risky": true,
+    "caughtHeat": 2
+   }
   },
   {
    "n": 114,
@@ -2502,8 +2578,15 @@
     "a public apology that works"
    ],
    "risk": "Backfires",
-   "status": "disabled",
-   "needs": "D6"
+   "status": "supported",
+   "effect": {
+    "kind": "district",
+    "does": "cool",
+    "n": [
+     2,
+     5
+    ]
+   }
   },
   {
    "n": 115,
@@ -2522,8 +2605,12 @@
     "a rival's reputation"
    ],
    "risk": "None",
-   "status": "disabled",
-   "needs": "D6"
+   "status": "supported",
+   "effect": {
+    "kind": "district",
+    "does": "poll",
+    "sure": true
+   }
   },
   {
    "n": 116,
@@ -2542,8 +2629,17 @@
     "the district loves you"
    ],
    "risk": "Cops",
-   "status": "disabled",
-   "needs": "D6"
+   "status": "supported",
+   "effect": {
+    "kind": "district",
+    "does": "party",
+    "n": [
+     3,
+     6
+    ],
+    "cost": 100,
+    "heat": 1
+   }
   },
   {
    "n": 117,
@@ -2562,8 +2658,15 @@
     "he's a legend"
    ],
    "risk": "Stuns him",
-   "status": "disabled",
-   "needs": "D6"
+   "status": "supported",
+   "effect": {
+    "kind": "district",
+    "does": "regard",
+    "n": [
+     2,
+     4
+    ]
+   }
   },
   {
    "n": 118,
@@ -2602,8 +2705,12 @@
     "a self-running city"
    ],
    "risk": "Ambition grows",
-   "status": "disabled",
-   "needs": "D6"
+   "status": "limited",
+   "note": "The income bonus at task Lv 2-3 waits for businesses (D10).",
+   "effect": {
+    "kind": "district",
+    "does": "hold"
+   }
   },
   {
    "n": 120,
@@ -2702,8 +2809,16 @@
     "counterattack"
    ],
    "risk": "Loses a district",
-   "status": "disabled",
-   "needs": "D6"
+   "status": "limited",
+   "note": "Attacks on a district come with the rival team (D9); until then it keeps Heat from wearing Control down and pushes the rivals back.",
+   "effect": {
+    "kind": "district",
+    "does": "line",
+    "n": [
+     2,
+     3
+    ]
+   }
   },
   {
    "n": 125,
@@ -2782,8 +2897,16 @@
     "no riots"
    ],
    "risk": "Fails",
-   "status": "disabled",
-   "needs": "D6"
+   "status": "limited",
+   "note": "Tension comes with the rival team (D9); until then it cools Heat there.",
+   "effect": {
+    "kind": "district",
+    "does": "peace",
+    "n": [
+     2,
+     4
+    ]
+   }
   },
   {
    "n": 129,
@@ -3173,8 +3296,16 @@
     "a second Boss"
    ],
    "risk": "Becomes rival",
-   "status": "disabled",
-   "needs": "D6"
+   "status": "limited",
+   "note": "A face who turns rival waits for betrayals (D15).",
+   "effect": {
+    "kind": "district",
+    "does": "face",
+    "n": [
+     5,
+     10
+    ]
+   }
   },
   {
    "n": 147,
