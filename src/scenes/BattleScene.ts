@@ -45,7 +45,7 @@ import { doublesSwitchProblem, indexAt, monAt, needsTarget, primarySpot, spotsOf
 import { isGuest } from '../core/battle/guests';
 import { commandPlan, shiftOptionProblem, targetChoices } from '../core/battle/fieldMenu';
 /** This screen draws double battles: spot 0 left, 1 right (triple battles get their own layout in Beta 0.6 T2). */
-import { canDynamax, maxMoveOptions, megaOption, ownedZCrystal, permanentForm, stoneForms, teraOption, zMoveFor, zMoveOptions, type TransformRequest } from '../core/battle/transform';
+import { canDynamax, hasKeyItem, maxMoveOptions, megaOption, ownedZCrystal, permanentForm, stoneForms, teraOption, transformProblem, zMoveFor, zMoveOptions, type TransformRequest } from '../core/battle/transform';
 import { runPerks } from '../core/archetypes';
 import { abilityOf, calcStats, maxHp, getSpecies, lookSpecies, maxPp, xpForLevel } from '../core/pokemon';
 import { heartStage } from '../core/shadow';
@@ -57,7 +57,8 @@ import { finalRivalArenaTheme } from '../core/story/highHype';
 import { ultimateRival } from '../core/rivals/ultimate';
 import { bossRoleForClass } from '../core/encounters';
 import { findNode } from '../core/map';
-import { bossInfo, currentRegion, type BossInfo } from '../core/regions';
+import { bossInfo, currentRegion, runCampaign, type BossInfo } from '../core/regions';
+import { isPseudoBattle } from '../core/events';
 import { isFinalBoss, type RunEvent, type TurnResult } from '../core/run';
 import { secondShotNotice, type ShotNotice } from '../core/arc/climaxExtended';
 import { battleContent, noBattleItems, tagPilot } from '../core/rules';
@@ -137,7 +138,7 @@ import { reduxLayout, reduxSkinIndex } from '../core/presentation/redux';
 import { useLookFont } from '../ui/redux/canvasFont';
 import { mountRedux, phantomOn, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { phGimmick, type GimmickCard } from '../ui/phantom/screens/cutin';
-import { phHit, phKo, phResult, phRivalLoss, phSend, phWild, phWin, type ResultRow, type SendSide } from '../ui/phantom/screens/moments';
+import { phGimmickPick, phHit, phKo, phPhase, phResult, phRivalLoss, phSend, phSide, phWild, phWin, type GimmickSlot, type ResultRow, type SendSide } from '../ui/phantom/screens/moments';
 import type { PhantomVersion } from '../core/presentation/phantom';
 import { playEvolution } from '../ui/evolutionScene';
 import { battleView, panelOf, splitChoice, type BattleBox, type BattleEvolve, type BattleLevel, type BattleModel, type BattlePanel } from '../ui/redux/screens/battle';
@@ -355,6 +356,10 @@ export class BattleScene extends Phaser.Scene {
   private rxPanelAt: 'left' | 'tip' = 'left';
   /** New UI: the transformations the move menu offers now (the mock-ups' row of buttons). */
   private rxGim: { choices: TransformRequest[]; tera: string } | null = null;
+  /** Phantom UI: the move menu is the open menu (the gimmick page opens from it), and that page while it is up. */
+  private rxMoves = false;
+  private phGimView: ReduxView | null = null;
+  private phGimInput: ((action: InputAction) => void) | null = null;
   /** New UI: the callout of the event being played (a boss's Rally brace, a signature trait going off). */
   private rxCall: { rally?: string; trait?: { file: string; name: string; text: string } } | null = null;
   /** New UI: the Shadow line of the Pokémon that is choosing (its tier, and what the shadow will do this turn). */
@@ -702,6 +707,7 @@ export class BattleScene extends Phaser.Scene {
     this.input.keyboard?.on('keydown-E', () => this.gotoPage(this.tabs.neighbour(1)));
     this.input.keyboard?.on('keydown-I', () => this.toggleInfo());
     this.input.keyboard?.on('keydown-T', () => this.toggleAuto());
+    this.input.keyboard?.on('keydown-G', () => this.phOpenGimmicks());
     onInputAction(this, (a) => this.handleInput(a));
     this.input.on('pointerdown', () => this.advance?.());
     this.rx = null;
@@ -1729,6 +1735,7 @@ export class BattleScene extends Phaser.Scene {
         tab: (i) => this.tabs.press(Number(i)),
         auto: () => this.toggleAuto(),
         info: () => { if (this.infoPanel) this.closePanel(); },
+        gims: () => this.phOpenGimmicks(),
         gim: (i) => {
           const pick = this.rxGim?.choices[Number(i)];
           if (!pick || !this.menu || this.picker || this.infoPanel || this.busy) return;
@@ -1808,6 +1815,7 @@ export class BattleScene extends Phaser.Scene {
       note: this.note.alpha > 0.05 ? this.note.text : '',
       auto: this.autoRunning,
       party: { n: this.run.party.length, out: this.run.party.filter((m) => m.hp <= 0).length },
+      gimPage: this.rxMoves && !!menu && phantomOn(),
       gim: this.rxGim && menu ? this.rxGim.choices.map((c) => ({ kind: c.kind, on: this.transformChoice?.kind === c.kind, ...(c.kind === 'tera' ? { row: TERA_ICON_ROW[this.rxGim!.tera] ?? 0 } : {}) })) : null,
       marks: [...(this.rxAim && menu ? [{ ...this.rxAim, text: 'TARGET' }] : []), ...this.reachTags.filter((t) => t.active).map((t) => ({ x: t.x, y: t.y - 10, text: 'OUT OF REACH' }))],
       shadow: !!menu && !!this.run.battle && !this.duo && !!this.activeMon().shadow,
@@ -2036,6 +2044,10 @@ export class BattleScene extends Phaser.Scene {
     }
     if (this.autoRunning) {
       if (action === 'back') this.autoCancel = true;
+      return;
+    }
+    if (this.phGimInput) {
+      this.phGimInput(action);
       return;
     }
     if (this.infoPanel) {
@@ -2560,6 +2572,7 @@ export class BattleScene extends Phaser.Scene {
     this.actionTabUi?.destroy();
     this.actionTabUi = null;
     this.rxGim = null;
+    this.rxMoves = false;
     this.commandWindow.setVisible(false);
     this.message.setVisible(true);
     this.tabs?.show(false);
@@ -2939,11 +2952,13 @@ export class BattleScene extends Phaser.Scene {
         if (!s.skippedIntros.includes(rxBoss.title)) services().session.saveSettings({ ...s, skippedIntros: [...s.skippedIntros, rxBoss.title] });
       });
     }
+    // Phantom UI: a fight inside an event says first that it is a side stage (it stands in for the wild card).
+    const sideCard = await this.phSideCard();
     const card = this.rx && battle.trainer ? this.rxVersus(kind === 'trainer') : null;
     if (card) await this.playBeat(card, recap);
     if (kind === 'trainer' || kind === 'wild' || kind === 'wild-dark') {
       // Phantom UI: a wild Pokémon steps out on its own card.
-      if (!battle.trainer) await this.phWildCard();
+      if (!battle.trainer && !sideCard) await this.phWildCard();
       await this.playContextMoment();
       return;
     }
@@ -3299,6 +3314,175 @@ export class BattleScene extends Phaser.Scene {
     } catch (e) {
       console.warn('Phantom card failed', e);
     }
+  }
+
+  /** Phantom UI: a fight inside an event opens on the side-stage card (mock-up `side`). Returns whether it showed. */
+  private async phSideCard(): Promise<boolean> {
+    const battle = this.run.battle;
+    const foe = battle?.enemyTeam[0];
+    if (!battle || !foe || !battle.event || !this.phCards()) return false;
+    const { content } = services().session;
+    try {
+      if (!isPseudoBattle(content, battle.event)) return false;
+    } catch {
+      return false;
+    }
+    const stage = this.run.stage;
+    const sp = getSpecies(content, foe.speciesId);
+    const cast = battle.trainer ? this.rxCast : null;
+    const balls = Object.keys(this.run.inventory).some((id) => (this.run.inventory[id] ?? 0) > 0 && content.items.get(id)?.category === 'ball');
+    let cant = '';
+    try {
+      const ball = Object.keys(this.run.inventory).find((id) => (this.run.inventory[id] ?? 0) > 0 && content.items.get(id)?.category === 'ball');
+      cant = ball ? itemProblem(this.battleCtx(), ball) ?? '' : '';
+    } catch {
+      cant = '';
+    }
+    const name = content.events.get(battle.event.eventId)?.name ?? stage?.pseudo?.name ?? (battle.event.eventId.startsWith('rescue:') ? 'The rescue' : 'This event');
+    await this.phMoment((ph) => phSide(ph, {
+      event: name,
+      backdrop: this.phBackdrop(),
+      mon: cast ?? this.phArt(foe),
+      person: !!cast,
+      foe: battle.trainer
+        ? { name: this.trainerTitle() ?? battle.trainer.name, level: null, types: [], tag: `${battle.enemyTeam.length} Pokémon` }
+        : { name: this.speciesName(foe), level: foe.level, types: sp.types, tag: balls && !cant ? 'Catchable' : '' },
+      stage: stage ? { no: stage.index + 1, of: Math.max(stage.index + 1, runCampaign(content, this.run).stagesPerRegion) } : null,
+    }), null);
+    return true;
+  }
+
+  /** Phantom UI: a fight changes gear (mock-up `phase`): a boss's last stand, a raid's or a Totem's next phase. Returns whether it showed. */
+  private async phPhaseCard(line: string, go: string | null = null, fixed: { word: string; meter: { at: number; of: number } } | null = null): Promise<boolean> {
+    const battle = this.run.battle;
+    if (!battle || !this.phCards()) return false;
+    const { content } = services().session;
+    const foe = currentEnemy(battle);
+    const rdef = battle.raid ? content.raids.raids.find((r) => r.id === battle.raid!.id) : undefined;
+    const tdef = battle.totem ? content.totems.totems.find((x) => x.id === battle.totem!.id) : undefined;
+    const meter = fixed ? fixed.meter : battle.raid && rdef && rdef.phases.length > 0 ? { at: Math.max(1, battle.raid.phasesDone.length), of: rdef.phases.length }
+      : battle.totem && tdef && tdef.phases.length > 0 ? { at: Math.max(1, battle.totem.phasesDone.length), of: tdef.phases.length } : null;
+    const alive = battle.enemyTeam.filter((m) => m.hp > 0).length;
+    const t = battle.transform;
+    const left = t.enemyMechanics.filter((k) => !t.used.enemy.includes(k)).length;
+    const who = battle.trainer ? this.trainerTitle() ?? battle.trainer.name : this.speciesName(foe);
+    await this.phMoment((ph) => phPhase(ph, {
+      lab: [who, battle.raid ? 'Raid' : battle.totem ? 'Totem' : this.phWhere().split(' · ')[0]].filter(Boolean).join(' · '),
+      word: fixed ? fixed.word : battle.trainer && alive <= 1 ? 'LAST STAND' : meter ? `PHASE ${meter.at}` : 'IT CHANGES',
+      line,
+      face: battle.trainer ? this.rxCast : null,
+      mon: this.phArt(foe)?.file ?? null,
+      meter,
+      left: battle.trainer ? { alive, total: battle.enemyTeam.length } : null,
+      chips: battle.trainer && t.enemyMechanics.length > 0 ? [left > 0 ? `${left} gimmick${left === 1 ? '' : 's'} not used yet` : 'No gimmick left'] : [],
+      go,
+    }), go ? null : 2600);
+    return true;
+  }
+
+  /** Phantom UI: the four gimmicks of the Pokémon choosing, which are ready, and why the others are not. */
+  private phGimmickSlots(): GimmickSlot[] {
+    const { content } = services().session;
+    const ctx = this.battleCtx();
+    const mon = this.activeMon();
+    const why = (kind: TransformRequest['kind'], at = -1): string => {
+      try {
+        return transformProblem(ctx, { kind }, at) ?? '';
+      } catch {
+        return 'Not available now.';
+      }
+    };
+    const mega = megaOption(ctx);
+    const megaWhy = (): string => {
+      if (ctx.battle.transform.used.player.includes('mega')) return 'You have already Mega Evolved this battle.';
+      if (!hasKeyItem(content, this.run.inventory, 'mega') && !mon.skyMega) return 'You need a Mega Ring to Mega Evolve.';
+      if (stoneForms(content, mon.speciesId, false).length === 0) return `${this.speciesName(mon)} has no Mega form.`;
+      if (!permanentForm(content, this.run.inventory, mon)) return `You need ${this.speciesName(mon)}'s Mega Stone.`;
+      return why('mega');
+    };
+    const tera = teraOption(ctx);
+    const zs = zMoveOptions(ctx).filter((z) => z !== null).length;
+    const zWhy = (): string => {
+      const general = why('zmove');
+      if (general !== 'Choose a move for the Z-Move.') return general;
+      return mon.moves.map((_, i) => why('zmove', i)).find((x) => x && !/has no PP/.test(x)) ?? 'No move can become a Z-Move now.';
+    };
+    const dmax = canDynamax(ctx);
+    const on = this.transformChoice?.kind;
+    const up = (t: string): string => t[0]!.toUpperCase() + t.slice(1);
+    return [
+      { kind: 'mega', ready: !!mega, armed: on === 'mega', foot: mega ? `READY · ${mega.itemId ? content.items.get(mega.itemId)?.name ?? 'Mega Stone' : 'its own resolve'}` : megaWhy() },
+      { kind: 'tera', ready: !!tera, armed: on === 'tera', foot: tera ? `READY · Tera type: ${up(tera)}` : why('tera'), row: TERA_ICON_ROW[tera ?? 'normal'] ?? 0 },
+      { kind: 'dynamax', ready: dmax, armed: on === 'dynamax', foot: dmax ? `READY · ${content.balance.transformations.dynamaxTurns} turns` : why('dynamax') },
+      { kind: 'zmove', ready: zs > 0, armed: on === 'zmove', foot: zs > 0 ? `READY · ${zs} move${zs === 1 ? '' : 's'} can become a Z-Move` : zWhy() },
+    ];
+  }
+
+  /** Phantom UI: the gimmick picker (mock-up `gimmick`), opened from the move menu with G. Picking one arms it for this turn's move. */
+  private phOpenGimmicks(): void {
+    if (this.phGimView) {
+      this.phGimInput?.('back');
+      return;
+    }
+    if (!this.rx || !phantomOn() || !this.rxMoves || !this.menu || this.picker || this.infoPanel || this.busy || this.autoRunning || this.advance) return;
+    const battle = this.run.battle;
+    if (!battle) return;
+    let slots: GimmickSlot[];
+    try {
+      slots = this.phGimmickSlots();
+    } catch (e) {
+      console.warn('Phantom gimmick page failed', e);
+      return;
+    }
+    let index = Math.max(0, slots.findIndex((g) => g.armed));
+    if (!slots[index]?.armed) index = Math.max(0, slots.findIndex((g) => g.ready));
+    const t = battle.transform;
+    const left = t.enemyMechanics.filter((k) => !t.used.enemy.includes(k)).length;
+    const who = battle.trainer ? this.trainerTitle() ?? battle.trainer.name : '';
+    const other = !who ? 'A wild Pokémon uses no gimmick of its own.'
+      : left > 0 ? `${who} has ${left} gimmick${left === 1 ? '' : 's'} left${t.used.enemy.length ? ` and has used ${t.used.enemy.length}` : ' and has not used one yet'}.`
+        : t.used.enemy.length ? `${who} has used every gimmick it had.` : `${who} has no gimmick in this battle.`;
+    const name = this.speciesName(this.activeMon());
+    const backdrop = this.phBackdrop();
+    this.clearMenus();
+    const close = (): void => {
+      if (!this.phGimView) return;
+      this.phGimInput = null;
+      try {
+        this.phGimView.destroy();
+      } catch {
+        // the scene may already be gone
+      }
+      this.phGimView = null;
+    };
+    const back = (): void => {
+      close();
+      playSfx(this, 'ui.select');
+      this.showMoveMenu();
+    };
+    const move = (by: number): void => {
+      index = (index + by + slots.length) % slots.length;
+      playSfx(this, 'ui.cursor');
+      view.refresh();
+    };
+    const use = (): void => {
+      const g = slots[index];
+      if (!g?.ready) {
+        playSfx(this, 'ui.error');
+        return;
+      }
+      this.transformChoice = g.armed ? null : { kind: g.kind };
+      back();
+    };
+    const view = mountRedux(this, {
+      render: (c) => (c.ph ? phGimmickPick(c.ph, { name, slots, index, other, backdrop }) : ''),
+      acts: { pick: (i) => { if (Number(i) === index) use(); else { index = Number(i); view.refresh(); } }, use, back },
+      overs: { over: (i) => { if (Number(i) !== index) { index = Number(i); view.refresh(); } } },
+      card: true,
+    });
+    this.phGimView = view;
+    this.phGimInput = (a) => (a === 'left' || a === 'up' ? move(-1) : a === 'right' || a === 'down' ? move(1) : a === 'confirm' ? use() : a === 'back' ? back() : undefined);
+    this.events.once('shutdown', close);
   }
 
   /** Whether the Phantom look plays its short battle cards now (never with motion reduced or off). */
@@ -4527,6 +4711,7 @@ export class BattleScene extends Phaser.Scene {
     });
     this.moveInfo.setVisible(true);
     this.showTabs('attack');
+    this.rxMoves = true;
     this.showActionTab();
   }
 
@@ -4988,7 +5173,7 @@ export class BattleScene extends Phaser.Scene {
       const leagueNext = result.run.stage?.kind === 'stage' && campaign && result.run.stage.index + 1 >= campaign.stagesPerRegion;
       await this.say(leagueNext ? 'The Pokémon League awaits…' : 'The next stage awaits…');
     }
-    if (end.finale) {
+    if (end.finale && !(await this.phPhaseCard('It is not over! The final boss rises for a second phase. Your party was restored.', 'Face the champion', { word: 'LAST STAND', meter: { at: 2, of: 2 } }))) {
       await this.say('It is not over! The final boss rises for a second phase…');
       await this.say('Your party was restored. Face the champion once more.');
     }
@@ -5793,7 +5978,8 @@ export class BattleScene extends Phaser.Scene {
       // A raid/totem phase change gets a banner with its written rule.
       if (e.type === 'raid' && e.tone === 'phase') this.focusPush('phase');
       if (e.type === 'raid' && e.tone === 'phase') this.arenaLight?.set(++this.arenaPhase, 0xff4fd8);
-      if (e.type === 'raid' && e.tone === 'phase') await this.playBeat(phaseBanner(this, e.text, 0xff4fd8, this.motion));
+      // Phantom UI: the phase card (a boss's last stand, a raid's next phase) stands in for the banner.
+      if (e.type === 'raid' && e.tone === 'phase' && !(this.phTurnCards() && (await this.phPhaseCard(e.text)))) await this.playBeat(phaseBanner(this, e.text, 0xff4fd8, this.motion));
       // Beta 0.7 Flight North: the shiny rescuer, or the Bug-type's return, swoops onto the field. A failed load only skips the picture.
       if (e.type === 'raid' && e.cameo) {
         try {

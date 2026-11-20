@@ -321,5 +321,28 @@
   & .ph-dc-facts{position:absolute;right:40px;top:150px;width:380px;padding:12px 24px 14px;box-sizing:border-box}
   & .ph-dc-facts .txt{font-size:16px;line-height:1.25}
   & .ph-dc-say{left:70px;right:auto;bottom:56px;max-width:1140px}
+  /* gimmick picker, phase card, side stage card */
+  & .ph-bt-gim.all{background:var(--k);color:var(--w);font-size:19px;padding:6px 16px 6px 8px}
+  & .ph-bt-gim.all kbd{width:26px;height:26px;font-size:17px;background:var(--w);color:var(--k)}
+  & .s-gimmick .gm-row{left:50px;gap:20px}
+  & .s-gimmick .gm-c{cursor:pointer;animation:ph-inUp .35s both;animation-delay:calc(var(--i)*60ms)}
+  & .s-gimmick .gm-c .tl1{font-size:29px;white-space:nowrap}
+  & .s-gimmick .gm-f{font-size:14px;max-width:226px;overflow-wrap:anywhere}
+  & .ph-gm-i{width:96px;height:96px;object-fit:contain;image-rendering:pixelated}
+  & .ph-gm-tera{display:block;width:32px;height:32px;background-repeat:no-repeat;image-rendering:pixelated;scale:3}
+  & .ph-gm-z{font:400 110px/1 var(--f-disp);color:var(--k);-webkit-text-stroke:5px var(--w);paint-order:stroke fill;rotate:-8deg}
+  & .s-gimmick .gm-note{bottom:64px;width:560px}
+  & .ph-lp-face{left:300px;top:-40px}
+  & .ph-lp-sil{right:40px;top:-150px}
+  & .ph-lp-mid{max-width:860px}
+  & .ph-lp-mid p{max-width:820px;margin-top:10px}
+  & .ph-lp-balls{display:inline-flex;gap:4px;margin-right:4px}
+  & .ph-lp-balls .ph-vs-ball{width:18px;height:18px}
+  & .ph-lp-ch{bottom:64px;flex-wrap:wrap;max-width:1100px}
+  & .s-phase .keys{z-index:3}
+  & .ph-sy-mon{left:760px;top:150px;width:400px;height:400px;display:grid;place-items:center}
+  & .ph-sy-mon.who{top:120px;height:440px;align-items:end}
+  & .ph-sy-foe{left:auto;right:40px;top:604px;max-width:520px;flex-wrap:wrap;justify-content:flex-end}
+  & .s-side .sy-cart{left:740px}
 }
 @keyframes ph-bt-evo{0%{scale:.2;filter:brightness(6)}60%{scale:1.15;filter:brightness(2)}100%{scale:1;filter:none}}

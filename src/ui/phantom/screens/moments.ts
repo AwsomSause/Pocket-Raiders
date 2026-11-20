@@ -208,3 +208,108 @@ export function phRivalLoss(_ph: PhantomVersion, d: RivalLossModel): string {
     + `<div class="pn rl-i"><span class="lab">What happens now</span><p class="txt">${esc(d.text)}</p><div class="rl-team">${d.party.slice(0, 6).map((f) => `<span>${icon(f, 38, 'filter:grayscale(1) brightness(.7)')}</span>`).join('')}<em>Your team gets back up</em></div></div>`
     + tap() + keys(['Z', 'Carry on', 'next']));
 }
+
+/** One of the four gimmicks on the picker. */
+export interface GimmickSlot {
+  kind: 'mega' | 'tera' | 'dynamax' | 'zmove';
+  /** Ready to use this turn. */
+  ready: boolean;
+  /** Chosen for this turn's move. */
+  armed: boolean;
+  /** "READY · Charizardite X is held", or why it can't be used. */
+  foot: string;
+  /** Tera: the row of the Tera type's jewel on the icon sheet. */
+  row?: number;
+}
+export interface GimmickModel {
+  /** The Pokémon choosing. */
+  name: string;
+  slots: readonly GimmickSlot[];
+  index: number;
+  /** What the other side still has ("Silver has 1 gimmick left."), or ''. */
+  other: string;
+  backdrop: string | null;
+}
+const GM: Record<GimmickSlot['kind'], { cls: string; title: string; text: string }> = {
+  mega: { cls: 'gm-mega', title: 'Mega Evolution', text: 'A new form until the battle ends.' },
+  tera: { cls: 'gm-tera', title: 'Terastallize', text: 'Changes type and powers up that type.' },
+  dynamax: { cls: 'gm-dmax', title: 'Dynamax', text: 'Huge for 3 turns with more HP.' },
+  zmove: { cls: 'gm-z', title: 'Z-Move', text: 'One enormous move, once.' },
+};
+const gmIcon = (g: GimmickSlot): string =>
+  g.kind === 'mega' ? `<img class="px ph-gm-i" src="${rxUrl('packs/ebdx/ui/symMega.png')}" alt="">`
+    : g.kind === 'dynamax' ? `<img class="px ph-gm-i" src="${rxUrl('packs/dbk/dynamax/icon.png')}" alt="">`
+      : g.kind === 'tera' ? `<i class="ph-gm-tera" style="background-image:url(${rxUrl('packs/dbk/tera/types.png')});background-position:0 ${-(Math.max(0, g.row ?? 0) * 32)}px"></i>`
+        : '<b class="ph-gm-z">Z</b>';
+
+/** The gimmick picker (mock-up `gimmick`): all four, which are ready and why the others are not. */
+export function phGimmickPick(_ph: PhantomVersion, d: GimmickModel): string {
+  const lit = d.slots[d.index];
+  const card = (g: GimmickSlot, i: number): string =>
+    `<div class="gm-c ${GM[g.kind].cls}${i === d.index ? ' on' : ''}${g.ready ? '' : ' off'}" data-key="g${i}" style="--i:${i}"${act('pick', i, 'over')}><div class="gm-ic">${gmIcon(g)}</div><h3 class="tl1">${GM[g.kind].title}</h3><p class="txt">${GM[g.kind].text}</p><span class="gm-f">${esc(g.armed ? `ON · ${g.foot.replace(/^READY · /, '')}` : g.foot)}</span></div>`;
+  return page('gimmick', `${back(d.backdrop)}<div class="dim" style="background:color-mix(in srgb,var(--k) 78%,transparent)"></div>`
+    + `<div class="hd"><small>${esc(d.name.toUpperCase())} · ONE GIMMICK PER BATTLE</small>Gimmick</div>`
+    + `<div class="gm-row">${d.slots.map(card).join('')}</div>`
+    + (d.other ? `<div class="pn gm-note"><span class="lab">The other side</span><p class="txt">${esc(d.other)}</p></div>` : '')
+    + keys(['◀▶', 'Pick'], ['Z', !lit?.ready ? 'Not ready' : lit.armed ? 'Take it off' : 'Use it', 'use'], ['X', 'Back', 'back']));
+}
+
+export interface PhaseModel {
+  /** "Champion Lance · stage 30". */
+  lab: string;
+  /** The cut-out words ("LAST STAND", "PHASE 2"). */
+  word: string;
+  /** The rule or the line that changes the fight. */
+  line: string;
+  /** The Trainer (top band) and the Pokémon standing (bottom band, as a shadow). */
+  face: Art | null;
+  mon: string | null;
+  /** Which phase this is, when the fight counts them. */
+  meter: { at: number; of: number } | null;
+  /** How many of the other side's Pokémon are left, for a Trainer. */
+  left: { alive: number; total: number } | null;
+  /** Small true facts ("Dynamax not used yet"). */
+  chips: readonly string[];
+  /** The key's words, or null on a card that goes by itself. */
+  go: string | null;
+}
+
+/** A fight changes gear (mock-up `phase`): a boss's last stand, a raid's next phase. */
+export function phPhase(_ph: PhantomVersion, d: PhaseModel): string {
+  const meter = d.meter && d.meter.of > 1 ? `<div class="lp-m" aria-label="phase ${d.meter.at} of ${d.meter.of}"><span>Phase</span>${Array.from({ length: Math.min(6, d.meter.of) }, (_, k) => `<i class="${k + 1 === d.meter!.at ? 'on' : k + 1 < d.meter!.at ? 'd' : ''}"></i>`).join('')}<b>${d.meter.at} of ${d.meter.of}</b></div>` : '';
+  const chips = [d.left ? `<span class="ac-it"><span class="ph-lp-balls">${balls(d.left.alive, d.left.total)}</span>${d.left.alive} Pokémon left</span>` : '', ...d.chips.map((c) => `<span class="ac-it">${esc(c)}</span>`)].join('');
+  const long = d.line.length;
+  return page('phase', '<div class="bs-bg" aria-hidden="true"></div>'
+    + `<div class="lp-shut t"><div class="lp-face ph-lp-face">${d.face ? tall(d.face, 520, 620) : ''}</div></div>`
+    + `<div class="lp-shut b" aria-hidden="true"><div class="lp-sil ph-lp-sil">${icon(d.mon, 460)}</div></div>`
+    + `<div class="lp-mid ph-lp-mid"><span class="lab">${esc(d.lab)}</span><div class="lp-t" style="font-size:${wordSize(d.word.length, 112)}px">${ransom(d.word, 87)}</div><p style="font-size:${long > 150 ? 20 : long > 90 ? 24 : 30}px">${esc(d.face ? quoted(d.line) : d.line)}</p></div>`
+    + meter + (chips ? `<div class="lp-ch ph-lp-ch">${chips}</div>` : '')
+    + (d.go ? keys(['Z', d.go, 'next']) : '') + '<div class="flashw" aria-hidden="true"></div>' + tap(), false);
+}
+
+export interface SideModel {
+  /** The event this fight belongs to. */
+  event: string;
+  backdrop: string | null;
+  /** The Pokémon or the Trainer waiting. */
+  mon: Art | null;
+  person: boolean;
+  foe: { name: string; level: number | null; types: readonly string[]; tag: string };
+  /** The stage the run is on, which this fight does not use up. */
+  stage: { no: number; of: number } | null;
+}
+const SIDE_STEPS = ['Talk', 'Choose', 'Side stage', 'Outcome', 'Reward'] as const;
+
+/** A fight inside an event (mock-up `side`): it plays like a stage and uses none up. */
+export function phSide(_ph: PhantomVersion, d: SideModel): string {
+  const s = d.stage;
+  const line = s ? `<div class="sy-line" aria-label="stage ${s.no} with a side stage">${[s.no - 1, s.no, s.no + 1, s.no + 2].filter((n) => n >= 1 && n <= s.of).map((n) => `<span class="${n < s.no ? 'd' : n === s.no ? 'on' : ''}"><u>${n}</u>${n === s.no ? '<i>+ side</i>' : ''}</span>`).join('')}</div>` : '';
+  return page('side', `${back(d.backdrop)}<div class="sy-dusk" aria-hidden="true"></div>` + cine('Side stage')
+    + `<div class="sy-st" aria-label="step 3 of ${SIDE_STEPS.length}"><b style="font-size:${d.event.length > 40 ? 15 : d.event.length > 28 ? 19 : 24}px">${esc(d.event)}</b><div>${SIDE_STEPS.map((t, k) => `<span class="${k < 2 ? 'd' : k === 2 ? 'on' : ''}"><i></i>${t}</span>`).join('')}</div></div>`
+    + `<div class="sy-mon ph-sy-mon${d.person ? ' who' : ''}">${d.mon ? (d.person ? tall(d.mon, 400, 440) : figure(d.mon, 330)) : ''}</div><div class="sy-cart" aria-hidden="true"><i></i><i></i><i></i></div>`
+    + `<div class="sy-sd">${ransom('SIDE', 31)}${ransom('STAGE', 87)}</div>`
+    + `<div class="pn lt sy-rule tilt" style="--r:-2deg"><span class="lab">Part of ${esc(d.event)}</span><p class="txt">It plays like any stage, but it does <b>not</b> use one up.${s ? ` You are still on stage <b>${s.no} of ${s.of}</b>.` : ''}</p></div>`
+    + line
+    + `<div class="sy-foe ph-sy-foe"><b style="font-size:${d.foe.name.length > 14 ? 24 : 34}px">${esc(d.foe.name)}</b><span>${d.foe.level ? `Lv.${d.foe.level}` : ''}</span>${d.foe.types.map(ty).join('')}${d.foe.tag ? `<em>${esc(d.foe.tag)}</em>` : ''}</div>`
+    + keys(['Z', 'Fight', 'next']) + tap());
+}

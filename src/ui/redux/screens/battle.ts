@@ -60,6 +60,8 @@ export interface BattleModel {
   evolve?: BattleEvolve | null;
   /** The transform buttons over the move menu (Mega, Tera, Dynamax, Z-Move): the ones this Pokémon can use now. */
   gim?: readonly BattleGimmick[] | null;
+  /** Phantom UI: the move menu is open, so the page of all four gimmicks can be opened (G). */
+  gimPage?: boolean;
   /** The info panel (I): one window per section, left of the field; a single move's details show as the mock-ups' tooltip. */
   panels?: readonly BattlePanel[] | null;
   panelAt?: 'left' | 'tip';

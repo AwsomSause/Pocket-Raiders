@@ -417,3 +417,130 @@ test('Phantom UI: a wild battle opens on the wild card and the send-out card; a 
   }
   expect(errors).toEqual([]);
 });
+
+test('Phantom UI: the gimmick page shows all four and arms a ready one for the next move; a phase card and a side stage card are Phantom pages', async ({ page }) => {
+  test.setTimeout(240_000);
+  const errors = watch(page);
+  await toBattle(page, 'newui-e2e');
+  const hud = pview(page, 'Battle', 'battle');
+  const scene = <T>(fn: string) => page.evaluate((fn) => new Function('s', 'session', `return (${fn})(s, session)`)((window as any).__pkr.game.scene.getScene('Battle'), (window as any).__pkr.session), fn) as Promise<T>;
+  await hud.locator('.ph-bt-op', { hasText: /fight/i }).click();
+  await expect.poll(async () => (await battle(page)).tab).toBe('attack');
+  const moves = (await battle(page)).menu;
+  expect(moves.length).toBeGreaterThan(0);
+
+  // G (or its chip over the moves) opens the page. With no ring, orb or band yet, all four say what they need.
+  const chip = hud.locator('.ph-bt-gim.all');
+  await expect(chip).toContainText('Gimmicks', { ignoreCase: true });
+  await page.waitForTimeout(300);
+  await page.keyboard.press('g');
+  const gm = pview(page, 'Battle', 'gimmick');
+  await expect(gm).toBeVisible();
+  await expect(gm.locator('.gm-c')).toHaveCount(4);
+  await expect(gm.locator('.gm-c.off')).toHaveCount(4);
+  await expect(gm.locator('.gm-tera .gm-f')).toContainText('Tera Orb');
+  await expect(gm.locator('.gm-dmax .gm-f')).toContainText('Dynamax Band');
+  await expect(gm.locator('.gm-z .gm-f')).toContainText('Z-Ring');
+  await expect(gm.locator('.gm-note')).toBeVisible();
+  await expect(gm.locator('.keys')).toContainText('Not ready');
+  await page.waitForTimeout(800);
+  expect(await fitProblems(page, 'Battle', 'gimmick')).toEqual([]);
+  // Z on one that is not ready changes nothing; X goes back to the moves.
+  await page.keyboard.press('z');
+  await page.waitForTimeout(300);
+  await expect(gm).toBeVisible();
+  expect(await scene<string | null>('(s) => s.transformChoice?.kind ?? null')).toBeNull();
+  await page.keyboard.press('x');
+  await expect(gm).toHaveCount(0);
+  await expect.poll(async () => (await battle(page)).menu).toEqual(moves);
+  expect((await battle(page)).turn).toBe(1);
+
+  // With a Tera Orb in the Bag, Terastallize is ready: the cursor starts on it, and Z arms it for the next move.
+  await scene('(s, session) => { session.run.inventory["tera-orb"] = 1; }');
+  await page.waitForTimeout(300);
+  await chip.click();
+  await expect(gm).toBeVisible();
+  await expect(gm.locator('.gm-c.off')).toHaveCount(3);
+  await expect(gm.locator('.gm-tera')).toHaveClass(/(^| )on( |$)/);
+  await expect(gm.locator('.gm-tera .gm-f')).toContainText('READY');
+  await expect(gm.locator('.keys')).toContainText('Use it');
+  await page.keyboard.press('ArrowRight');
+  await expect(gm.locator('.gm-dmax')).toHaveClass(/(^| )on( |$)/);
+  await expect(gm.locator('.keys')).toContainText('Not ready');
+  await page.keyboard.press('ArrowLeft');
+  await expect(gm.locator('.gm-tera')).toHaveClass(/(^| )on( |$)/);
+  await page.waitForTimeout(300);
+  await page.keyboard.press('z');
+  await expect(gm).toHaveCount(0);
+  expect(await scene<string | null>('(s) => s.transformChoice?.kind ?? null')).toBe('tera');
+  // Still choosing a move: the press that armed it did not also pick one.
+  await page.waitForTimeout(400);
+  expect((await battle(page)).turn).toBe(1);
+  expect((await battle(page)).menu.length).toBe(moves.length);
+  await expect(hud.locator('.ph-bt-gim.on')).toContainText('Terastallize', { ignoreCase: true });
+  // Open again: it shows as on, and Z takes it off.
+  await page.keyboard.press('g');
+  await expect(gm).toBeVisible();
+  await expect(gm.locator('.gm-tera .gm-f')).toContainText('ON');
+  await expect(gm.locator('.keys')).toContainText('Take it off');
+  await gm.locator('.gm-tera').click();
+  await expect(gm).toHaveCount(0);
+  expect(await scene<string | null>('(s) => s.transformChoice?.kind ?? null')).toBeNull();
+
+  // A fight that changes gear: the last stand card waits for the player.
+  const phaseOn = () => scene('(s) => { void s.phPhaseCard("It is not over! The final boss rises for a second phase. Your party was restored.", "Face the champion", { word: "LAST STAND", meter: { at: 2, of: 2 } }); }');
+  const sideOn = () => scene('(s, session) => { session.run.battle.event = { eventId: "rescue:e2e", choiceIndex: 0, success: true }; void s.phSideCard().finally(() => { if (session.run.battle) delete session.run.battle.event; }); }');
+  const shut = async (id: string) => { await pview(page, 'Battle', id).locator('.ph-ct-next').click(); await expect(pview(page, 'Battle', id)).toHaveCount(0); await page.waitForTimeout(300); };
+  await phaseOn();
+  const phase = pview(page, 'Battle', 'phase');
+  await expect(phase).toBeVisible();
+  await expect(phase.locator('.lp-t .rs')).toHaveAttribute('aria-label', 'LAST STAND');
+  await expect(phase.locator('.lp-m')).toContainText('2 of 2');
+  await expect(phase.locator('.lp-mid p')).toContainText('It is not over!');
+  await expect(phase.locator('.keys')).toContainText('Face the champion');
+  await page.waitForTimeout(900);
+  expect(await fitProblems(page, 'Battle', 'phase')).toEqual([]);
+  // It does not end by itself.
+  await page.waitForTimeout(3200);
+  await expect(phase).toBeVisible();
+  await shut('phase');
+
+  // A fight inside an event: the side stage card names the stage it does not use up.
+  await sideOn();
+  const side = pview(page, 'Battle', 'side');
+  await expect(side).toBeVisible();
+  await expect(side.locator('.sy-sd .rs').first()).toHaveAttribute('aria-label', 'SIDE');
+  await expect(side.locator('.sy-rule')).toContainText('does not use one up');
+  await expect(side.locator('.sy-rule')).toContainText(/You are still on stage 1 of \d+/);
+  await expect(side.locator('.sy-line span.on')).toContainText('+ side', { ignoreCase: true });
+  await expect(side.locator('.sy-st span.on')).toContainText('Side stage', { ignoreCase: true });
+  await expect(side.locator('.sy-foe b')).not.toBeEmpty();
+  await page.waitForTimeout(900);
+  expect(await fitProblems(page, 'Battle', 'side')).toEqual([]);
+  await shut('side');
+
+  // Every version and a small window: nothing cut off.
+  for (const [id, w, h] of [['midnight', 844, 390], ['fantasia', 1024, 768], ['velvet', 1920, 1080], ['channel', 1280, 720]] as const) {
+    await page.evaluate((id) => { const pkr = (window as any).__pkr; pkr.session.saveSettings({ ...pkr.session.settings, phantomVersion: id }); }, id);
+    await page.setViewportSize({ width: w, height: h });
+    await page.waitForTimeout(300);
+    await page.keyboard.press('g');
+    await expect(page.locator(`#phx .phs[data-scene="Battle"][data-scr="gimmick"][data-liv="${id}"]`)).toBeVisible();
+    await page.waitForTimeout(800);
+    expect(await fitProblems(page, 'Battle', 'gimmick'), `gimmick ${id} at ${w}x${h}`).toEqual([]);
+    await page.keyboard.press('Escape');
+    await expect(gm).toHaveCount(0);
+    await phaseOn();
+    await expect(page.locator(`#phx .phs[data-scene="Battle"][data-scr="phase"][data-liv="${id}"]`)).toBeVisible();
+    await page.waitForTimeout(900);
+    expect(await fitProblems(page, 'Battle', 'phase'), `phase ${id} at ${w}x${h}`).toEqual([]);
+    await shut('phase');
+    await sideOn();
+    await expect(page.locator(`#phx .phs[data-scene="Battle"][data-scr="side"][data-liv="${id}"]`)).toBeVisible();
+    await page.waitForTimeout(900);
+    expect(await fitProblems(page, 'Battle', 'side'), `side ${id} at ${w}x${h}`).toEqual([]);
+    await shut('side');
+  }
+  expect((await battle(page)).turn).toBe(1);
+  expect(errors).toEqual([]);
+});

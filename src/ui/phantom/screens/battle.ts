@@ -111,9 +111,10 @@ export function phBattle(_ph: PhantomVersion, d: BattleModel): string {
     return `<div class="b3-c ph-bt-tab${lit ? ' on' : ''}${auto ? ' g' : ''}${auto && tabs.autoOff ? ' off' : ''}" style="--a:${fanAngles(m, last)[k]}deg;--i:${k}" data-key="tab${k}"${act('tab', k)}>${key ? `<kbd>${key}</kbd>` : ''}<b>${esc(t === 'i' ? 'Info' : t)}</b>${auto ? `<small>${tabs.auto ? 'ON' : tabs.autoOff ? 'N/A' : 'OFF'}</small>` : ''}</div>`;
   }).join('')}</div>` : '';
   const above = trayH ? trayH + 40 : 96;
-  const gim = d.gim?.length ? `<div class="ph-bt-gims" style="bottom:${above}px">${d.gim.map((g, k) => `<div class="gim ph-bt-gim${g.on ? ' on' : ''}" data-key="gim${k}"${act('gim', k)}>${esc(GIM[g.kind])}${g.on ? '<small>READY</small>' : ''}</div>`).join('')}</div>` : '';
+  const gimRow = d.gim?.length || d.gimPage;
+  const gim = gimRow ? `<div class="ph-bt-gims" style="bottom:${above}px">${(d.gim ?? []).map((g, k) => `<div class="gim ph-bt-gim${g.on ? ' on' : ''}" data-key="gim${k}"${act('gim', k)}>${esc(GIM[g.kind])}${g.on ? '<small>READY</small>' : ''}</div>`).join('')}${d.gimPage ? `<div class="gim ph-bt-gim all" data-key="gimall"${act('gims')}><kbd>G</kbd>Gimmicks</div>` : ''}</div>` : '';
   const foes = d.foes.map((b, k) => foeBox(b, k, duo)).join('');
-  const mine = d.mine.length ? `<div class="stack ph-bt-stack" style="bottom:${above + (d.gim?.length ? 62 : 0)}px">${d.mine.map((b, k) => mineBox(b, k, duo)).join('')}${d.party && !duo ? `<div class="ph-bt-party">${balls(d.party.n, d.party.out)}</div>` : ''}</div>` : '';
+  const mine = d.mine.length ? `<div class="stack ph-bt-stack" style="bottom:${above + (gimRow ? 62 : 0)}px">${d.mine.map((b, k) => mineBox(b, k, duo)).join('')}${d.party && !duo ? `<div class="ph-bt-party">${balls(d.party.n, d.party.out)}</div>` : ''}</div>` : '';
   // Small lines over the field. The run header gives its corner to the Exp rows, the level window and the budget.
   const rowsX = d.exp ?? [], f = d.fx ?? {};
   const level = d.level ? phLevel(d.level) : '';
@@ -139,7 +140,7 @@ export function phBattle(_ph: PhantomVersion, d: BattleModel): string {
   const rule = f.rule ? `<div class="pn ph-bt-fx rule"><span class="lab">${esc(f.rule.name)}</span><p class="txt">${esc(f.rule.text)}</p></div>` : '';
   const variant = f.variant && !budget ? '<div class="pn ph-bt-fx var"><p class="txt">A ring marks a variant-line Pokémon. Press <kbd>I</kbd> to read its rule.</p></div>' : '';
   const trait = f.trait ? `<div class="pn lt ph-bt-fx trait">${f.trait.file ? mon(f.trait.file, 0.7) : ''}<div><span class="lab">${esc(f.trait.name)}</span><p class="txt">${esc(f.trait.text)}</p></div></div>` : '';
-  const dark = f.shadow ? `<div class="pn ph-bt-fx dark" style="bottom:${above + (d.gim?.length ? 62 : 0)}px"><span class="lab">${esc(f.shadow.head)}</span>${f.shadow.plan ? `<p class="txt">${esc(f.shadow.plan)}</p>` : ''}</div>` : '';
+  const dark = f.shadow ? `<div class="pn ph-bt-fx dark" style="bottom:${above + (gimRow ? 62 : 0)}px"><span class="lab">${esc(f.shadow.head)}</span>${f.shadow.plan ? `<p class="txt">${esc(f.shadow.plan)}</p>` : ''}</div>` : '';
   const pieces = level ? '' : budget + rally + rule + variant + trait + dark;
   const notice = d.notice ? phConfirm({ title: d.notice.title, body: d.notice.body, options: [d.notice.button], index: 0 }) : '';
   return page('battle', (d.shadow ? '<div class="ph-bt-shadow" aria-hidden="true"></div>' : '') + '<div class="frame" aria-hidden="true"></div>'
