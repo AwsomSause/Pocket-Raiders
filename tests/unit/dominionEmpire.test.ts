@@ -61,18 +61,20 @@ describe('DOMINION D6: the data', () => {
     expect(unlockStep(actionDef('befriend-the-mayor')!)).toBe(2);
     expect(unlockStep(actionDef('extort')!)).toBe(-1);
   });
-  it('plays the ten Boss actions D6 opens; Gym Takeover waits for Growth (D10)', () => {
+  it('plays the ten Boss actions D6 opens; Gym Takeover came with Growth (D10)', () => {
     const d6 = ['skim-the-till', 'marry-in', 'street-theater', 'spray-the-wall', 'leak-a-story', 'befriend-the-mayor', 'sponsor-a-trainer', 'silence-a-reporter', 'cooperate-with-jenny', 'secret-meeting'];
     for (const id of d6) expect(actionStatus(actionDef(id)!).play, id).toBe(true);
-    expect(DOMINION_DATA.actions.actions.filter((a) => actionStatus(a).play)).toHaveLength(86); // + the five Hero actions (D11)
+    // D10 (Growth) played 42 more of rows 1-150; D11 the five Hero actions.
+    expect(DOMINION_DATA.actions.actions.filter((a) => a.n <= 150 && actionStatus(a).play)).toHaveLength(128);
     // D5 (Hold a Rally, Radio Room) and D9 (Chant Night, a Rally event) handed these to D6 after D6 was built: they wait
     // for D6's follow-up (docs/status/dominion-d6.md).
     expect(DOMINION_DATA.actions.actions.filter((a) => actionStatus(a).slice === 'D6').map((a) => a.id)).toEqual(['hold-a-rally', 'chant-night']);
-    expect(actionStatus(actionDef('gym-takeover')!).slice).toBe('D10');
+    expect(actionStatus(actionDef('gym-takeover')!).play).toBe(true);
   });
   it('all eighteen crew tasks that waited for D6 are live district tasks; none waits for D6 now', () => {
-    const live = DOMINION_DATA.tasks.filter((t) => t.effect?.kind === 'district');
-    expect(live).toHaveLength(18);
+    // D6 made 18 of rows 1-150 live district tasks; D10 added Set Up a Safehouse and Run the Radio (and 60 from rows 151-600).
+    const live = DOMINION_DATA.tasks.filter((t) => t.effect?.kind === 'district' && t.n <= 150);
+    expect(live).toHaveLength(20);
     // Pay the Wages came to D6 from D5 after D6 was built: D6's follow-up.
     expect(DOMINION_DATA.tasks.filter((t) => t.needs === 'D6').map((t) => t.id)).toEqual(['pay-the-wages']);
     expect(DOMINION_DATA.crew.formed.filter((f) => f.needs === 'D6')).toHaveLength(0);
