@@ -9,6 +9,14 @@ const mapIndex = (page: Page) => page.evaluate(() => (window as any).__pkr.game.
 const mapBusy = (page: Page) => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy as boolean);
 const version = (page: Page, id: string) => page.evaluate((id) => { const pkr = (window as any).__pkr; pkr.session.saveSettings({ ...pkr.session.settings, phantomVersion: id }); pkr.game.scene.getScene('Map').rxView?.refresh(); }, id);
 const pageNow = (page: Page, key: string) => page.evaluate((key) => document.querySelector(`#phx .phs[data-scene="${key}"]`)?.getAttribute('data-scr') ?? null, key);
+/**
+ * A quick tap of TAB: the press and the release reach the game in the same moment. (A tap is a press shorter than
+ * 220 ms; `keyboard.press` makes no promise about the gap between its two events on a busy machine, and the hold
+ * below uses the real key.)
+ */
+const tap = (page: Page) => page.evaluate(() => {
+  for (const type of ['keydown', 'keyup']) window.dispatchEvent(new KeyboardEvent(type, { key: 'Tab', code: 'Tab', keyCode: 9, which: 9, bubbles: true, cancelable: true } as KeyboardEventInit));
+});
 const step = async (page: Page, key: string) => { await page.keyboard.press(key); await page.waitForTimeout(200); };
 
 test('Phantom UI: hold TAB on the map for the quick wheel; point and let go, or tap it and use Enter, the mouse or Esc', async ({ page }) => {
@@ -52,7 +60,7 @@ test('Phantom UI: hold TAB on the map for the quick wheel; point and let go, or 
   await page.waitForTimeout(300);
 
   // A tap leaves the wheel up: Enter opens, Esc shuts. A slot that cannot open (no rival yet) says so and opens nothing.
-  await page.keyboard.press('Tab');
+  await tap(page);
   await expect(wheel).toBeVisible();
   await expect(wheel.locator('.wh-c')).toContainText('Enter to open', { ignoreCase: true });
   await step(page, 'ArrowRight');
@@ -64,7 +72,7 @@ test('Phantom UI: hold TAB on the map for the quick wheel; point and let go, or 
   await expect(wheel).toHaveCount(0);
   expect(await pageNow(page, 'Map')).toBe('map');
   expect(await mapBusy(page)).toBe(false);
-  await page.keyboard.press('Tab');
+  await tap(page);
   await expect(wheel).toBeVisible();
   await step(page, 'Escape');
   await expect(wheel).toHaveCount(0);
@@ -84,7 +92,7 @@ test('Phantom UI: hold TAB on the map for the quick wheel; point and let go, or 
   for (const [id, w, h] of [['midnight', 844, 390], ['channel', 1920, 1080], ['fantasia', 1024, 768], ['velvet', 1280, 720]] as const) {
     await version(page, id);
     await page.setViewportSize({ width: w, height: h });
-    await page.keyboard.press('Tab');
+    await tap(page);
     await expect(page.locator(`#phx .phs[data-scene="Map"][data-liv="${id}"] .ph-wh`)).toBeVisible();
     await step(page, 'ArrowDown');
     await step(page, 'ArrowDown');
@@ -127,7 +135,7 @@ test('Phantom UI: the Log page reads the run back: the stage, what an event said
   await expect(log).toHaveCount(0);
   // The map opens the run's log with the stage's heading; the wheel's Log slot opens the page.
   expect((await rows()).filter((r) => r[0] === 'stage').map((r) => r[1])).toEqual(['Stage 1']);
-  await page.keyboard.press('Tab');
+  await tap(page);
   await step(page, 'ArrowRight');
   await step(page, 'ArrowRight');
   await step(page, 'ArrowDown');
