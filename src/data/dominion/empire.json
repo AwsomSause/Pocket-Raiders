@@ -56,7 +56,7 @@
     },
     "byAction": { "act": "jobs", "buy": "vehicles", "hire": "hiring", "approach": "hiring", "admit": "hiring", "bail": "hiring", "gift": "hiring", "patron": "hiring", "endDay": "oddJobs", "do": "jobs", "talk": "crew", "evTalk": "crew" },
     "byStep": { "crew": "crew", "police": "police", "rivals": "other", "hero": "other", "legends": "other", "world": "other" },
-    "byFight": { "police": "police", "looker": "police", "raid": "police", "fail": "jobs", "always": "jobs" },
+    "byFight": { "police": "police", "looker": "police", "raid": "police", "fail": "jobs", "always": "jobs", "hero": "jobs", "challenge": "other", "heroRaid": "other", "stand": "other", "legend": "other" },
     "best": "best week yet! ↑{pct}%",
     "bestFirst": "first good week!",
     "due": "due Day {day}",

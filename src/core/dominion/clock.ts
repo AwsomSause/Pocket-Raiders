@@ -183,6 +183,11 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'approach':
     case 'admit':
     case 'gift':
+    // D11: the Hero's choices need the run (battles, the Bag, a new member): session.ts runs them.
+    case 'interrupt':
+    case 'meet':
+    case 'legend':
+    case 'after':
     // D4's actions need the run (session.ts -> reserve.ts).
     case 'give':
     case 'takeBack':

@@ -279,3 +279,19 @@ export function giveHeld(content: Content, current: RunState, itemId: string, pa
   const name = content.species.get(mon.speciesId)?.name ?? mon.speciesId;
   return { run, message: `${name} is now holding the ${content.catalog.get(itemId)!.name}.` };
 }
+
+/**
+ * Bag ids the game doesn't know at all (save audit 2026-11-19): an item removed or renamed in an update.
+ * Catalog items in the Bag are known (events, markets and rentals put them there) and stay. An unknown id is sold
+ * like an event gift that can't be used (balance.events.soldGift each). Mutates `run`; returns what was sold.
+ */
+export function tidyBag(content: Content, run: RunState): string[] {
+  const sold: string[] = [];
+  for (const [id, n] of Object.entries(run.inventory)) {
+    if (content.items.has(id) || content.catalog.has(id)) continue;
+    delete run.inventory[id];
+    if (n > 0) run.money += content.balance.events.soldGift * n;
+    sold.push(`item ${id}`);
+  }
+  return sold;
+}

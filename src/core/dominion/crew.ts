@@ -456,6 +456,12 @@ function runTask(b: DominionBlock, m: Member, seed: string, n: Night): void {
       else if (!ok) caughtOrFail(b, m, label, e.risky ?? false, e.caughtHeat, e.fine, r, n);
       break;
     }
+    case 'hero': {
+      // D11 (hero.ts): Track the Hero, Counter the Hero's Story, Hunt the Hero.
+      if (HERO_TASK) HERO_TASK(b, m, task, { lv, r, ok, say: (k, t) => say(n, k, t) });
+      if (!ok) caughtOrFail(b, m, label, e.risky ?? false, e.caughtHeat, e.fine, r, n);
+      break;
+    }
     default: {
       // D4 and later: kinds another module runs (reserve.ts the Pens and the Reserve, rivals.ts the rival tasks).
       const run = TASK_KINDS[e.kind];
@@ -515,6 +521,12 @@ export function setDistrictTask(f: DistrictTask): void {
   DISTRICT_TASK = f;
 }
 
+/** hero.ts (D11) registers what the Hero tasks do, so this file doesn't import it. */
+export type HeroTask = (b: DominionBlock, m: Member, task: Task, x: { lv: number; r: Rng; ok: boolean; say: (kind: Alert['kind'], text: string) => void }) => void;
+let HERO_TASK: HeroTask | null = null;
+export function setHeroTask(f: HeroTask): void {
+  HERO_TASK = f;
+}
 /** A task kind run by another module (D4's Pens and Reserve tasks, D9's rival tasks). `ok` is the task's odds roll; `r` is the member's crew stream. */
 export interface TaskCtx { say: (kind: Alert['kind'], text: string) => void; label: string; task: Task; stat: number; yieldPct: number; r: Rng; lv: number }
 type TaskKind = (b: DominionBlock, m: Member, ok: boolean, ctx: TaskCtx) => void;
