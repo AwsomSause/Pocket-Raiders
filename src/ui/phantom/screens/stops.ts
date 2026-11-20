@@ -21,20 +21,23 @@ export const phTeam = (party: readonly PartyChip[], cls = ''): string =>
 /** The reward draft. */
 export function phReward(_ph: PhantomVersion, d: RewardModel): string {
   const R = d.cards, n = R.length, inCards = d.index < n, mid = (n - 1) / 2;
-  const gap = n <= 3 ? 26 : n === 4 ? 14 : 8, w = n <= 3 ? 260 : Math.floor((852 - (n - 1) * gap) / n);
+  // Up to three cards sit apart as in the mock-up; more are dealt as an overlapping hand, the lit one on top.
+  const gap = n <= 3 ? 26 : n === 4 ? -6 : n === 5 ? -10 : -14, w = n <= 3 ? 260 : Math.floor((852 - (n - 1) * gap) / n);
   const cards = R.map((r, k) => {
     const on = inCards && k === d.index, long = r.text.length + r.notes.join(' ').length;
     const name = Math.max(15, Math.min(32, Math.floor(((w - 32) * 2) / Math.max(1, r.name.length) / 0.5)));
-    return `<div class="rc ph-rw${on ? ' on' : ''}${n > 4 ? ' slim' : ''}" data-key="rw${k}" style="--r:${((k - mid) * (n <= 3 ? 7 : n <= 5 ? 3 : 1.5)).toFixed(1)}deg;--i:${k};position:relative;width:${w}px"${act('pick', k, 'over')}><small>${esc(r.kind.toUpperCase())}</small><div class="pic">${rxPic(r.art, n > 4 ? 64 : 96)}</div><h4 style="font-size:${n > 4 ? Math.min(22, name) : name}px">${esc(r.name)}</h4><p style="font-size:${long > 150 ? 13 : long > 100 ? 15 : n > 3 ? 16 : 19}px">${esc(r.text)}${r.notes.map((t) => `<span class="ph-rw-n">${esc(t)}</span>`).join('')}</p>${on && !d.result ? `<div class="take"${act('take')}>Z · TAKE IT</div>` : ''}</div>`;
+    return `<div class="rc ph-rw${on ? ' on' : ''}${n > 4 ? ' slim' : ''}" data-key="rw${k}" style="--r:${((k - mid) * (n <= 3 ? 7 : n <= 5 ? 4 : 2.5)).toFixed(1)}deg;--i:${k};position:relative;width:${w}px${n > 3 ? `;z-index:${on ? 9 : n - Math.round(Math.abs(k - mid))}${k ? `;margin-left:${gap}px` : ''}` : ''}"${act('pick', k, 'over')}><small>${esc((r.band ? (r.kind === 'Common' ? r.band : `${r.band} · ${r.kind}`) : r.kind).toUpperCase())}</small><div class="pic">${rxPic(r.art, n > 4 ? 64 : 96)}</div><h4 style="font-size:${n > 4 ? Math.min(22, name) : name}px">${esc(r.name)}</h4><p style="font-size:${long > 150 ? 13 : long > 100 ? 15 : n > 3 ? 16 : 19}px">${esc(r.text)}${r.notes.map((t) => `<span class="ph-rw-n">${esc(t)}</span>`).join('')}</p>${on && !d.result ? `<div class="take"${act('take')}>Z · TAKE IT</div>` : ''}</div>`;
   }).join('');
   const buttons = d.buttons.map((b, k) => `<div class="gim ph-gim${d.index === n + k ? ' on' : ''}" style="--i:${k}"${act('pick', n + k, 'over')}>${esc(b)}</div>`).join('');
+  const say = d.head ? d.head.notice : d.text;
   const result = d.result
     ? `<div class="ph-shade" data-key="rwdone"${act('done')}></div><div class="ph-rw-res" data-key="rwres"${act('done')}><div class="ph-rw-yt">${ransom('YOURS', 9)}</div><div class="pn lt"><span class="lab">${esc(d.title)}</span>${d.result.filter(Boolean).map((t) => `<p class="txt">${esc(t)}</p>`).join('')}</div><div class="sy-wait"><i aria-hidden="true"></i><kbd>Z</kbd><span>Stays until you press Z</span></div></div>`
     : '';
   return page('reward', '<div class="bgr"></div><div class="burst" style="--x:60%;--y:55%" aria-hidden="true"></div><div class="dots" aria-hidden="true"></div><div class="shard" style="--cp:polygon(0 0,34% 0,16% 100%,0 100%);inset:0" aria-hidden="true"></div>'
-    + `<div class="ttl ph-rw-ttl">${ransom(n === 1 ? 'YOUR PRIZE' : 'PICK ONE', 3)}<small>${esc(d.title)}</small></div>`
-    + `<div class="rcs ph-rcs" style="gap:${gap}px">${cards}</div>`
-    + (d.text ? `<div class="pn ph-rw-say"><p class="txt" style="font-size:${d.text.length > 170 ? 14 : d.text.length > 110 ? 16 : 18}px">${esc(d.text)}</p></div>` : '')
+    + `<div class="ttl ph-rw-ttl">${ransom(n === 1 ? 'YOUR PRIZE' : 'PICK ONE', 3)}<small>${esc(d.head?.status ?? d.title)}</small></div>`
+    + (d.head ? `<div class="prize ph-rw-money">₽${d.head.money.toLocaleString('en-US')}<small>${esc(d.head.purse)}</small></div>` : '')
+    + `<div class="rcs ph-rcs" style="gap:${Math.max(0, gap)}px">${cards}</div>`
+    + (say ? `<div class="pn ph-rw-say"><p class="txt" style="font-size:${say.length > 170 ? 14 : say.length > 110 ? 16 : 18}px">${esc(say)}</p></div>` : '')
     + `<div class="ph-gims">${buttons}</div>` + phTeam(d.party, 'ph-rw-team') + result
     + keys(['◀▶', 'Look'], ['Enter', d.result ? 'Continue' : 'Take', d.result ? 'done' : 'take']));
 }

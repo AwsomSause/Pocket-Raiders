@@ -9,7 +9,7 @@ import { phHonest, phTrade } from '../../phantom/screens/trade';
 
 const pickAttr = (k: number): string => `${act('pick', k)} data-over="over"`;
 
-export interface RewardCard { name: string; kind: string; text: string; art: Art | null; notes: string[] }
+export interface RewardCard { name: string; kind: string; text: string; art: Art | null; notes: string[]; /** Phantom: the word over the card (the item's pocket, "Money", "Training"). */ band?: string }
 export interface RewardModel {
   title: string;
   cards: RewardCard[];
@@ -20,6 +20,8 @@ export interface RewardModel {
   text: string;
   /** After the pick: the result lines, shown until an input. */
   result: string[] | null;
+  /** Phantom: the money shown top right with its tag, the line under the title, and what the screen is asking (a Re-roll or Lock step), apart from `text`. */
+  head?: { money: number; /** The small tag under the money ("your money · 2 candies"). */ purse: string; status: string; notice: string };
 }
 
 /** The mock-ups' `reward` template: A a row of cards, B a fanned hand, C a list with a detail window. */

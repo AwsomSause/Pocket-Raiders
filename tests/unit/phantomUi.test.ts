@@ -180,6 +180,25 @@ describe('Phantom UI Settings', () => {
     const html = phSettings(ph, base);
     expect(html).toContain('<div class=""><b>A</b></div><div class="on"><b>B</b></div>');
   });
+
+  it('each page previews what its rows change, as the mock-ups do', () => {
+    const sound = phSettings(ph, { ...base, title: 'Sound', music: 'Route 22', rows: [{ label: 'Sound', value: 'On' }, { label: 'Music volume', value: '50' }, { label: 'Effects volume', value: '70' }, { label: 'Sound pack', value: 'Original' }] });
+    expect(sound).toContain('<b>Route 22</b><small>Now playing</small>');
+    expect(count(sound, /<div style="--v:\d+;--i:\d"><i><u><\/u><\/i><b>/)).toBe(2);
+    expect(sound).toContain('<b>Music</b><small>50</small>');
+    const muted = phSettings(ph, { ...base, title: 'Sound', music: null, rows: [{ label: 'Sound', value: 'Off' }, { label: 'Music volume', value: '50' }] });
+    expect(muted).toContain('--v:0;');
+    expect(muted).toContain('Nothing playing');
+    const text = phSettings(ph, { ...base, title: 'Text', rows: [{ label: 'Text size', value: 'Large' }] });
+    expect(text).toMatch(/class="l on"><small>Large<\/small>/);
+    expect(count(text, '<em>Dragonite</em>')).toBe(3);
+    expect(phSettings(ph, { ...base, title: 'Controls' })).toMatch(/class="m sel">Z<em>OK<\/em>/);
+    const battle = phSettings(ph, { ...base, title: 'Battle' });
+    expect(battle).toContain('class="scr s-hit"');
+    expect(battle).not.toMatch(/class="pv"[\s\S]*data-act="next"[\s\S]*<\/section><\/div>/);
+    expect(phSettings(ph, { ...base, title: 'Phone' })).toContain('class="pv-ph"');
+    expect(phSettings(ph, base)).toContain('class="scr s-menu"');
+  });
 });
 
 describe('Phantom UI rules file', () => {

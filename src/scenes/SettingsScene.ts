@@ -8,7 +8,8 @@ import Phaser from 'phaser';
 import { DEFAULT_SETTINGS } from '../save/saveManager';
 import { changeSetting, resetSettings, searchSettings, settingsIn, SETTINGS, SETTING_CATEGORIES, type SettingCategory, type SettingDef } from '../core/settingsRegistry';
 import { services } from '../game/services';
-import { refreshMusicVolume, stopMusic } from '../ui/audio';
+import { musicNow, refreshMusicVolume, stopMusic } from '../ui/audio';
+import { monFile } from '../ui/redux/game';
 import { downloadText, pickTextFile } from '../ui/files';
 import { queueAssets } from '../ui/lazyAssets';
 import { onInputAction } from '../ui/input';
@@ -525,7 +526,8 @@ export class SettingsScene extends Phaser.Scene {
         const from5 = Math.max(0, Math.min(all.length - 5, on - 2));
         options = seen.length <= 12 ? { list: all.slice(from5, from5 + 5), on: on - from5 } : null;
       }
-      return phSettings(ph, { ...base, kind: 'page', title: PHANTOM_SETTINGS_PAGES[at]!.n, options });
+      const title = PHANTOM_SETTINGS_PAGES[at]!.n, foe = title === 'Battle' ? monFile(this, 'garchomp', 'front') : null;
+      return phSettings(ph, { ...base, kind: 'page', title, options, music: title === 'Sound' ? musicNow() : null, foe: foe ? { file: foe, atlas: true } : null });
     }
     const title = this.page === 'summary' ? 'Game Summary' : this.page === 'search' ? 'Find a setting' : 'Reset to defaults?';
     return phSettings(ph, { ...base, kind: 'list', title, sub: this.page === 'search' ? `Find: ${this.query}▌` : '', help: this.page === 'search' && this.query && rows.length === 1 ? 'No setting matches.' : help || (this.page === 'confirmReset' ? 'Audio, display, animations and text all go back to their starting values. Your saves are not touched.' : '') });

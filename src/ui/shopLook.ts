@@ -2,7 +2,7 @@
 // icons, a bought/unavailable state, and on focus what it does, who can use it
 // and what you already own). Worked out without Phaser so it can be tested.
 
-import type { Content, Item } from '../core/contentSchema';
+import type { Content, Item, Reward } from '../core/contentSchema';
 import { getSpecies } from '../core/pokemon';
 import { itemCount, itemUseProblem } from '../core/items';
 import { oneOnly } from '../core/run';
@@ -26,6 +26,23 @@ const POCKET_OF: Record<Item['category'], { frame: number; word: string }> = {
 
 export function pocketOf(item: Item): { frame: number; word: string } {
   return POCKET_OF[item.category];
+}
+
+/** The word over a reward card (the mock-ups' "HELD ITEM", "MEDICINE"): the item's pocket, or what kind of prize it is. */
+export function rewardBand(content: Content, reward: Reward): string {
+  const e = reward.effect;
+  switch (e.kind) {
+    case 'addItem': {
+      const item = content.items.get(e.item);
+      return item ? pocketOf(item).word : 'Item';
+    }
+    case 'money': return 'Money';
+    case 'levelUp': return 'Level up';
+    case 'vitamin': return 'Vitamin';
+    case 'attribute': return 'Training';
+    case 'catalog': return 'Item';
+    case 'deal': return e.chance < 1 ? 'Gamble' : e.cost > 0 ? 'Bargain' : 'Bundle';
+  }
 }
 
 /**
