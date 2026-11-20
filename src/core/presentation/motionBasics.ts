@@ -39,6 +39,7 @@ export function recallClip(mon: MonSpot, ball: Point, level: ClipLevel): MotionC
   const m = b.part('mon', { sx: 1, sy: 1, red: 0, lift: 0, shadow: 1 });
   if (level === 'off') {
     m.at(0).set({ sx: 0, sy: 0, shadow: 0 });
+    b.fx({ kind: 'cue', at: 0, name: 'tuck' });
     return b.end(0);
   }
   const k = b.part('ball', { x: ball.x, y: ball.y, sx: 1, sy: 1, alpha: 0 });
@@ -50,6 +51,7 @@ export function recallClip(mon: MonSpot, ball: Point, level: ClipLevel): MotionC
     m.at(120).to(200, { s: 0 }, 'in');
     m.at(120).to(200, { shadow: 0 });
     b.fx({ kind: 'cue', at: 320, name: 'catch' });
+    b.fx({ kind: 'cue', at: 220, name: 'tuck' });
     b.beat(0, 'Ball held out').beat(120, 'Shrinks into the beam');
     return b.end(420);
   }
@@ -60,7 +62,9 @@ export function recallClip(mon: MonSpot, ball: Point, level: ClipLevel): MotionC
   m.at(200).to(200, { shadow: 0 });
   k.at(460).to(60, { s: 0.85 }).to(200, { s: 1 }, 'el').wait(150).to(150, { alpha: 0 });
   b.fx({ kind: 'cue', at: 460, name: 'catch' });
-  b.beat(0, 'Ball held out').beat(120, 'Braces, then stretches into the beam').beat(460, 'Ball catches it');
+  // The info bar tucks away as the catch settles (pass 2, Switch).
+  b.fx({ kind: 'cue', at: 600, name: 'tuck' });
+  b.beat(0, 'Ball held out').beat(120, 'Braces, then stretches into the beam').beat(460, 'Ball catches it').beat(600, 'The info bar tucks away');
   return b.end(800);
 }
 
@@ -107,6 +111,7 @@ export function sendClip(mon: MonSpot, from: Point, level: ClipLevel): MotionCli
   b.fx({ kind: 'cue', at: open, name: 'open' });
   if (level === 'off') {
     m.at(0).set({ sx: 1, sy: 1, shadow: 1 });
+    b.fx({ kind: 'cue', at: 0, name: 'plate' });
     return b.end(0);
   }
   const gy = mon.y - 8;
@@ -117,6 +122,7 @@ export function sendClip(mon: MonSpot, from: Point, level: ClipLevel): MotionCli
     b.fx({ kind: 'ring', at: open, x: mon.x, y: gy - 6, r1: 110, flat: 0.4, d: 400 });
     m.at(open).to(200, { s: 1 }, 'out');
     m.at(open).to(200, { shadow: 1 });
+    b.fx({ kind: 'cue', at: open, name: 'plate' });
     b.beat(0, 'Ball thrown').beat(open, 'Appears');
     return b.end(open + 250);
   }
@@ -133,7 +139,9 @@ export function sendClip(mon: MonSpot, from: Point, level: ClipLevel): MotionCli
   m.at(open + 100).to(200, { white: 0 });
   m.at(open).to(250, { shadow: 1 });
   b.fx({ kind: 'dust', at: open + 240, x: mon.x, y: mon.y, n: 9 });
-  b.beat(0, 'Ball thrown').beat(land, 'Ball lands and bounces').beat(open, 'Bursts open').beat(open + 240, 'Lands');
+  // The info bar comes back with the new name while it is still settling (pass 2, Switch).
+  b.fx({ kind: 'cue', at: open + 100, name: 'plate' });
+  b.beat(0, 'Ball thrown').beat(land, 'Ball lands and bounces').beat(open, 'Bursts open').beat(open + 100, 'The info bar comes back').beat(open + 240, 'Lands');
   return b.end(open + 600);
 }
 

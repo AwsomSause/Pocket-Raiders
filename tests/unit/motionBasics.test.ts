@@ -48,7 +48,7 @@ describe('battle basics match the redesign mockups', () => {
   it('recall: ball held out, red, brace, pulled thin up the beam, the ball catches (800 ms)', () => {
     const c = recallClip(ME, { x: 70, y: 330 }, 'full');
     expect(c.length).toBe(800);
-    expect(beats(c)).toEqual([[0, 'Ball held out'], [120, 'Braces, then stretches into the beam'], [460, 'Ball catches it']]);
+    expect(beats(c)).toEqual([[0, 'Ball held out'], [120, 'Braces, then stretches into the beam'], [460, 'Ball catches it'], [600, 'The info bar tucks away']]);
     expect(sampleClip(c, 170).mon!.red).toBe(1);
     // The brace: wider and shorter. Then thin and tall, lifted 30% of its height.
     expect(sampleClip(c, 220).mon).toMatchObject({ sx: 1.1, sy: 0.9 });
@@ -90,7 +90,7 @@ describe('battle basics match the redesign mockups', () => {
     expect(sampleClip(c, 1140).mon).toMatchObject({ sx: 1.22, sy: 0.8, dy: 0 });
     expect(clipEnd(c).mon).toMatchObject({ sx: 1, sy: 1, dy: 0, white: 0, shadow: 1 });
     expect(c.fx.filter((f) => f.kind !== 'cue').map((f) => [f.kind, f.at])).toEqual([['dust', 500], ['flash', 900], ['ring', 900], ['dust', 1140]]);
-    expect(c.fx.filter((f) => f.kind === 'cue').map((f) => f.kind === 'cue' && f.name)).toEqual(['throw', 'bounce', 'open']);
+    expect(c.fx.filter((f) => f.kind === 'cue').map((f) => f.kind === 'cue' && f.name)).toEqual(['throw', 'bounce', 'open', 'plate']);
     // The foe's ball spins the other way.
     expect(clipEnd(sendClip(FOE, throwFromSpot('enemy'), 'full')).ball!.rot).toBe(-540);
   });
@@ -183,5 +183,19 @@ describe('the ace lands (pass 15, Ace Call)', () => {
     expect(aceLandClip(FOE, 'reduced').fx.filter((f) => fxAllowed(f, 'reduced')).map((f) => f.kind).sort()).toEqual(['cue', 'ring']);
     expect(aceLandClip(FOE, 'off').length).toBe(0);
     expect(fxAllowed({ kind: 'star', at: 0, x: 0, y: 0, size: 1, points: 12, d: 1 }, 'reduced')).toBe(false);
+  });
+});
+
+describe('the info bar on a switch (pass 2, Switch)', () => {
+  it('tucks away 200 ms before the recall ends and comes back 500 ms before the send-out ends', () => {
+    const cue = (c: MotionClip, name: string) => c.fx.find((f) => f.kind === 'cue' && f.name === name)?.at;
+    expect(cue(recallClip(ME, recallBallSpot('player'), 'full'), 'tuck')).toBe(600);
+    expect(cue(sendClip(ME, throwFromSpot('player'), 'full'), 'plate')).toBe(1000);
+    for (const level of LEVELS) {
+      const r = recallClip(ME, recallBallSpot('player'), level);
+      const s = sendClip(ME, throwFromSpot('player'), level);
+      expect(cue(r, 'tuck')).toBeLessThanOrEqual(r.length);
+      expect(cue(s, 'plate')).toBeLessThanOrEqual(s.length);
+    }
   });
 });

@@ -1183,7 +1183,7 @@ export class BattleScene extends Phaser.Scene {
    * Send-out (redesign pass 2): the ball arcs in from the hand, lands, bounces once and bursts; the Pokémon
    * pops out white, stretches up, lands flat and wide, and settles. Reduced: a short throw and a ring. Off: it is just there.
    */
-  private async sendMoment(side: Side, mon: PokemonInstance, from: Point | null): Promise<void> {
+  private async sendMoment(side: Side, mon: PokemonInstance, from: Point | null, onPlate?: () => void): Promise<void> {
     const level = this.clipLevel();
     const at = this.spotXY(side);
     const start = from ?? throwFromSpot(side);
@@ -1199,6 +1199,7 @@ export class BattleScene extends Phaser.Scene {
       cue: (name) => {
         if (name === 'throw') playSfx(this, 'se.ball_throw');
         if (name === 'open') show();
+        if (name === 'plate') onPlate?.();
       },
     }));
     await run.done;
@@ -1206,6 +1207,25 @@ export class BattleScene extends Phaser.Scene {
     show();
     const shown = visual as Visual | null;
     if (shown?.active) breathe(this, shown, this.motion);
+  }
+
+  /**
+   * The info bar tucks away during a switch (redesign pass 2): yours drops below the screen, the foe's slides off
+   * to the left, and it is hidden in its own place, so the next refresh brings it back with the new name. Singles
+   * only (in doubles the bars belong to several Pokémon). Presentation only.
+   */
+  private tuckBox(side: Side): void {
+    if (this.duo) return;
+    const box = side === 'player' ? this.playerBox : this.enemyBox;
+    const c = box?.container;
+    if (!c?.visible) return;
+    const home = { x: c.x, y: c.y };
+    const hide = (): void => {
+      if (!c.active) return;
+      c.setVisible(false).setPosition(home.x, home.y);
+    };
+    if (this.clipLevel() === 'off') return hide();
+    this.tweens.add({ targets: c, ...(side === 'player' ? { y: home.y + 140 } : { x: home.x - 460 }), duration: 160 * animationTimeScale(services().session.settings), ease: 'Quad.easeIn', onComplete: hide });
   }
 
   /**
@@ -1221,6 +1241,7 @@ export class BattleScene extends Phaser.Scene {
     const run = playClip(this, recallClip({ x: sprite.x, y: sprite.y, h, side }, at, level), this.clipHost({ mon: { kind: 'mon', get: () => sprite }, ball: { kind: 'free', get: () => ball } }, {
       cue: (name) => {
         if (name === 'catch') playSfx(this, 'se.ball_catch', 0.6);
+        if (name === 'tuck') this.tuckBox(side);
       },
     }));
     await run.done;
@@ -1740,7 +1761,8 @@ export class BattleScene extends Phaser.Scene {
     const content = services().session.content;
     if (box === this.playerBox || box === this.enemyBox) this.syncStatusPattern(box.isPlayer ? 'player' : 'enemy', mon);
     const max = calcStats(content, mon).hp;
-    if (!box.container.visible) slideIn(this, box.container, box.isPlayer ? 420 : -420, 0, this.motion);
+    // It flies back in the way it left (redesign pass 5): yours up from below, the foe's in from the left.
+    if (!box.container.visible) slideIn(this, box.container, box.isPlayer ? 0 : -460, box.isPlayer ? 140 : 0, this.motion);
     box.container.setVisible(true);
     const spec = box.spec;
     const shown = `${this.speciesName(mon)}${genderSign(content, mon)}${mon.shiny ? ' ★' : ''}`;
@@ -5987,7 +6009,10 @@ export class BattleScene extends Phaser.Scene {
               await this.aceCall();
               await this.aceLandMoment(this.shown.enemy!);
               if (this.role === 'rival') void this.fx.flourish('enemy', 'rival.ace');
-            } else await this.sendMoment(e.side, this.shown[e.side]!, hand);
+            } else {
+              const sentMon = this.shown[e.side]!;
+              await this.sendMoment(e.side, sentMon, hand, () => void this.refreshInfoBox(e.side === 'enemy' ? this.enemyBox : this.playerBox, sentMon, false));
+            }
             this.applyTeraTint(e.side, this.shown[e.side]);
             if (this.camPinned) {
               cameraTo(this, this.motion, null, 1, 350);

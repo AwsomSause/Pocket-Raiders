@@ -90,9 +90,18 @@ test('send-out, faint and recall play like the mockups and leave the sprites as 
   await expect.poll(async () => (await look(page, 'player')).sx, { timeout: 3000 }).toBeLessThan(rest.sx * 0.5);
   await expect.poll(() => over(page), { timeout: 5000 }).toBe(true);
   expect(await look(page, 'player')).toMatchObject({ x: rest.x, y: rest.y, alpha: 0, sx: rest.sx, solid: 0 });
-  await start(page, `b.sendMoment('player', b.shown.player, null)`);
+  // The info bar tucked away below the screen during the recall, and waits hidden in its own place.
+  const bar = () => page.evaluate(() => { const c = (window as any).__pkr.game.scene.getScene('Battle').playerBox.container; return { visible: c.visible, x: c.x, y: c.y }; });
+  const barHome = await bar();
+  expect(barHome.visible).toBe(false);
+  // Send-out: the bar comes back up with the new name while the Pokémon is still settling, and ends at home.
+  await start(page, `b.sendMoment('player', b.shown.player, null, () => { window.__plateAt = performance.now() - window.__t0; void b.refreshInfoBox(b.playerBox, b.shown.player, false); })`);
   await expect.poll(() => over(page), { timeout: 6000 }).toBe(true);
+  const { plateAt, ms } = await page.evaluate(() => ({ plateAt: (window as any).__plateAt as number, ms: (window as any).__ms as number }));
+  expect(plateAt).toBeGreaterThan(0);
+  expect(ms - plateAt).toBeGreaterThan(300);
   expect(await look(page, 'player')).toMatchObject({ x: rest.x, y: rest.y, alpha: 1, cropped: false, solid: 0 });
+  await expect.poll(bar, { timeout: 2000 }).toEqual({ ...barHome, visible: true });
 
   expect(errors).toEqual([]);
 });

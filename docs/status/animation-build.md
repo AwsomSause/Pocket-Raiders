@@ -32,7 +32,7 @@ Tests: `tests/unit/motionBasics.test.ts` (timings against the mockups, the Reduc
 
 - The foe's ball comes from the screen edge (the mockup's pass 2); the foe trainer stepping in to throw (pass 4) comes
   with the trainer intro slice.
-- The trainer face chip on a knock-out (pass 19) and the info bar tucking away during a switch (pass 2) are not in yet.
+- The trainer face chip on a knock-out (pass 19) is not in yet. The info bar now tucks away during a switch and comes back with the new name while the Pokémon settles (pass 2; singles).
 - Double battles use the new faint, recall and send-out for the focused Pokémon; the dark base and exp lights are singles only.
 - The faint's camera push is still the game's own KO camera (it already follows the Battle camera setting).
 
