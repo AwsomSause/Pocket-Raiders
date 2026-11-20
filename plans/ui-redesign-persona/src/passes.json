@@ -417,5 +417,25 @@
    "m": "This pass is the Settings answer: a hub with presets, eight pages one press apart with Q and E, a Reset page key on each, and X always goes back to the hub.",
    "k": "The previews use the game's own pages: the route map, a Charizard hit, the five versions named for Red, Blue, Yellow, Green and Gold, and a Dragonite line as the sample text."
   }
+ },
+ {
+  "n": 25,
+  "name": "The curtain call",
+  "change": "The last pass gives the game an ending and then checks everything. Until now a run could only be lost on screen; winning stopped at the last battle. Five new pages play in order, with their own five-step strip: a Hall of Fame where your six drop in as type-coloured banners, a Run record with a grade stamp, Credits with snapshots of your own run pinned up beside the roll, a ticket counter for the next region, and the regional forms question shown with the real before-and-after Pokémon. A sixth page, Every page, lists every other page in one place, 82 names, and each name is a link. Then the audit: all five versions were shot at every page and checked for cut-off or overlapping text, every button link was checked to land on a real page, every page was checked to be reachable from the title screen by pressing keys, and the viewer was tested at phone, laptop and desktop widths and with motion turned off.",
+  "pages": [
+   "Hall of Fame",
+   "Run record",
+   "Credits",
+   "Next region",
+   "Regional forms",
+   "Every page"
+  ],
+  "q": {
+   "x": "The Hall of Fame is the loudest page in the set: six banners drop from the top one after another, confetti falls in the version colours, and HALL OF FAME lands in cut-out letters over the top.",
+   "b": "The game now has a way to finish well, not only a way to fail. And after 25 passes the whole set has been checked page by page, so nothing is cut off, hidden or left without a way back.",
+   "p": "Six new pages, 83 in all. The ending is five short pages instead of one crowded one, and Every page is a map of the whole redesign so nothing gets lost.",
+   "m": "The ending pages keep the same key row as the rest of the game. The regional forms answer points to its row in Settings, Game, and the Run record links to the Run log from the pause wheel.",
+   "k": "A Hall of Fame, a Champion title, an S.S. Aqua ticket to the next region and Alolan Vulpix, Raichu and Exeggutor beside the forms you know. That is the ending of a Pokémon game."
+  }
  }
 ]
