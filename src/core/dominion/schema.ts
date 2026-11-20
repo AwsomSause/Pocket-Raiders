@@ -858,6 +858,9 @@ export type EmpireState = z.infer<typeof EmpireStateSchema>;
 // ---------- D12: the Chair (court.json, courtRules.json, block `chair`) ----------
 
 export const OWED_KEYS = ['ten', 'threat', 'goal', 'stab', 'raid', 'shadow', 'wipe'] as const;
+/** Chair answers whose rule lives in another slice's file (registered with setChairHook): D9 insure + double-agent, D13 debate-early. */
+export const CHAIR_HOOKS = ['insure', 'double-agent', 'debate-early'] as const;
+export type ChairHook = (typeof CHAIR_HOOKS)[number];
 export const LEANS = ['money', 'regard', 'dread', 'heat', 'self'] as const;
 export type Lean = (typeof LEANS)[number];
 const Who = z.enum(['named', 'second', 'all']);
@@ -875,6 +878,7 @@ export type CourtFx =
   | { k: 'follow'; card: number; days: number }
   | { k: 'owed'; key: (typeof OWED_KEYS)[number]; n: number }
   | { k: 'note'; slice: string; text: string }
+  | { k: 'hook'; id: (typeof CHAIR_HOOKS)[number] }
   | { k: 'deal'; n: number; clean?: boolean; heat?: number; risk?: number; wanted?: number; mon?: number; item?: string; itemN?: number; ten?: number }
   | { k: 'chance'; p: number; yes: CourtFx[]; no: CourtFx[] }
   | { k: 'later'; days: number; fx: CourtFx[] }
@@ -893,6 +897,7 @@ export const CourtFxSchema: z.ZodType<CourtFx> = z.lazy(() => z.discriminatedUni
   z.object({ k: z.literal('follow'), card: I.min(1), days: I.min(1) }).strict(),
   z.object({ k: z.literal('owed'), key: z.enum(OWED_KEYS), n: I }).strict(),
   z.object({ k: z.literal('note'), slice: S, text: S }).strict(),
+  z.object({ k: z.literal('hook'), id: z.enum(CHAIR_HOOKS) }).strict(),
   z.object({ k: z.literal('deal'), n: I, clean: z.boolean().optional(), heat: I.optional(), risk: I.min(1).max(100).optional(), wanted: I.optional(), mon: I.min(1).optional(), item: S.optional(), itemN: I.min(1).optional(), ten: I.optional() }).strict(),
   z.object({ k: z.literal('chance'), p: I.min(1).max(99), yes: z.array(CourtFxSchema), no: z.array(CourtFxSchema) }).strict(),
   z.object({ k: z.literal('later'), days: I.min(1), fx: z.array(CourtFxSchema).min(1) }).strict(),
@@ -1389,7 +1394,7 @@ export const RivalsFileSchema = z.object({
     priorities: z.array(z.object({ id: S, name: S, text: S, cats: z.array(z.string().regex(/^[A-O]$/)).min(1) }).strict()).length(6),
     personalities: z.record(S, z.record(S, N0)), lawHeat: N0, research: N0, seeHq: I.min(1), inPlan: N0, perRoom: N0, perMember: N0,
   }).strict(),
-  raid: z.object({ hold: N0, perDefense: N0, perGuard: N0, theirSpy: N0, mySpy: N0, min: N0, max: N0, jam: N0, lossPower: N0 }).strict(),
+  raid: z.object({ hold: N0, perDefense: N0, perGuard: N0, theirSpy: N0, mySpy: N0, min: N0, max: N0, jam: N0, lossPower: N0, insured: N0.max(100) }).strict(),
   bossRaid: z.object({ warn: I.min(1), size: I.min(1).max(6), min: I.min(1), perDefense: I.min(1), level: I, dread: N0, vaultPct: N0, held: I.min(1), after: Pct }).strict(),
   truce: z.object({ tributeK: z.number().positive(), askChance: N0, minTension: N0 }).strict(),
   spy: z.object({ max: I.min(1), caught: N0, raidCut: N0, sweepBase: N0 }).strict(),
