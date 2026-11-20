@@ -177,5 +177,99 @@
   "q3": "Ten clips, a World group and a Screens group. On the Road and the Next Stop card are short pages that exist only to be animated; they replace two plain fades.",
   "q4": "This pass is where they live. The Menu is the Rotom Phone rising from the bottom edge on any screen, and closing is the same motion backwards at double speed. Settings gets Transition style (Ball, Fade, Cut).",
   "q5": "A ball shutting over the screen, a passport stamp for each region, hopping along a route line and your team walking behind you are about as Pokémon as it gets."
+ },
+ "11": {
+  "name": "Personality",
+  "big": "The sprite frames are untouched, but every Pokémon now carries itself differently around them. There are six idle styles by body type, cries sized to the Pokémon, light landings that bounce and heavy ones that shake the screen and knock the other side off its feet, a stagger before fainting, and small character moments: worn out, a winner's hop, hanging on for you, flinching, getting impatient while you think.",
+  "clips": [
+   "Idle Styles",
+   "Light and Heavy",
+   "Worn Out",
+   "Winner's Moment",
+   "Toughed It Out",
+   "Shiny Entrance",
+   "Flinch",
+   "Waiting on You"
+  ],
+  "q1": "In a different way from the last five passes: not louder, more alive. A battle screen with two Pokémon that stand differently is more eye-catching for the whole fight, not just for a second.",
+  "q2": "Until now the Pokémon were pieces that effects happened to. From this pass they act: they cry out, stagger, slump, celebrate and look round at you. Every earlier clip changes because idle, send-out and fainting are all re-animated.",
+  "q3": "Eight clips. No new pages; these all live on the battle screen and take no space on it.",
+  "q4": "Nothing new in the Menu. Settings: the character moments (Winner's Moment, Waiting on You) follow the existing Battle animations level, so Reduced keeps the idles and drops the extras.",
+  "q5": "This is the anime's half of Pokémon: a Pikachu that bounces and a Snorlax that lands like a boulder. It is also what Pokémon-Amie and camp did for the series."
+ },
+ "12": {
+  "name": "Big Hits",
+  "big": "How a move is delivered now depends on what it is. Special moves are fired across the field with a shot in the move's colour instead of a lunge; how far the target is thrown depends on how hard it was hit. And the moves that deserve a shape of their own get one: charge-ups, multi-hits with a combo counter, criticals that stop time, recoil, drain, one-hit KOs, recharge turns, contact punishers, priority moves and entry hazards that stay on the field.",
+  "clips": [
+   "Power Tiers",
+   "Charge-Up Move",
+   "Multi-Hit",
+   "Critical Hit",
+   "Recoil",
+   "Drain",
+   "One-Hit KO",
+   "Recharge Turn",
+   "Contact Punish",
+   "Priority Move",
+   "Entry Hazards"
+  ],
+  "q1": "Yes. The single most repeated action in the game, using a move, now has three sizes and two deliveries, and the critical hit finally looks like the best thing that can happen on a turn.",
+  "q2": "Pass 3 gave hits a type. Pass 12 gives them a size and a kind. Flamethrower and Slash no longer move the same way, and every earlier clip with a special move in it now fires a shot.",
+  "q3": "Eleven clips in Moves. Entry hazards and the recharge turn show things the game only says in text today.",
+  "q4": "No menu changes. Settings: the critical-hit freeze counts as hit-stop and follows the Hit-stop switch; shots and knockback follow Battle animations (Reduced keeps the flash and number only).",
+  "q5": "Beams across the field, a Pokémon thrown back by a strong hit, stones circling a team: this is how the anime and the 3D games show the same moves."
+ },
+ "13": {
+  "name": "Showdown",
+  "big": "The fights that matter get an entrance, played on the real pass-25 pages: the VS screen slams together, Gym Leaders stride in under their badge, a Legendary is felt before it is seen, an Ultra Beast tears the sky, and the badge falls like a coin. In battle, bosses visibly change phase, Totems flare, and enemy healing is thrown where you can see and count it. Every opposing trainer now arrives on a banner.",
+  "clips": [
+   "VS Screen",
+   "Gym Leader",
+   "Legendary Encounter",
+   "Ultra Beast",
+   "Badge Get",
+   "Boss Phase Change",
+   "Totem Aura",
+   "Enemy Heal"
+  ],
+  "q1": "Yes. These are the five or six moments a run is remembered for, and each now has its own staging instead of sharing one intro.",
+  "q2": "Pass 12 was about single moves. Pass 13 is about occasions: it changes how a fight starts and how it turns. The Legendary and Ultra Beast intros are built on silence and glitch, which nothing before this pass used.",
+  "q3": "Eight clips in Bosses. Boss Phase Change and Enemy Heal are new on-screen moments; the heal pips are a small permanent addition to a boss trainer's plate.",
+  "q4": "Menu stays reachable; every intro skips on a press. Settings: Boss intros (Full, Short, Off) joins the Fast gimmick switches. Short keeps the name stamp only.",
+  "q5": "A VS screen, a Leader's pose under their badge, a Legendary waiting at the back of a cave and a badge you actually receive are core series moments."
+ },
+ "14": {
+  "name": "Rivals and Villains",
+  "big": "The people who keep coming back get staging of their own. A rival spots you on the map and races down the path at you, the Rival Board deals its cards, beating a rival changes their record in front of you, and losing to one says in green that the run goes on. The evil team ambushes under an alarm, its Boss walks into a spotlight, the Betrayal cracks the screen and the Legendary snaps its chains. And whoever is speaking now gets a name tab and their face on the bubble, in every battle.",
+  "clips": [
+   "Rival Spots You",
+   "Rival Board",
+   "Rival Beaten",
+   "Losing to a Rival",
+   "Evil Team Ambush",
+   "Team Boss Entrance",
+   "The Betrayal",
+   "The Legendary Breaks Loose"
+  ],
+  "q1": "Yes. Rivals and the evil team are the story of a run, and until now they borrowed the plain trainer intro. The spotlight walk, the cracked screen and the snapping chains are the biggest set pieces so far.",
+  "q2": "Pass 13 staged one-off bosses. Pass 14 stages relationships: the same four rivals and one team across a whole run, so the animations carry memory (records that change, a counter of grunts left, the Boss losing his colour). Speaker tabs change every trainer line in the game.",
+  "q3": "Eight clips in two new groups, Rivals and Villains. Rival Spots You and The Legendary Breaks Loose are moments the game does not show at all today.",
+  "q4": "Menu: the Rival Board is one press from Pause, and its cards deal in the same way there. Settings: Speaker faces (On, Off) joins Text options; Boss intros (Full, Short, Off) from pass 13 also covers these entrances.",
+  "q5": "A rival who says \"Smell ya later\" and looks back, a team in black that shows up under an alarm, and a Boss in a dark room are as Pokémon as it gets."
+ },
+ "15": {
+  "name": "Director's Notes",
+  "big": "Kice's notes on the first fourteen passes, built in. The Trainer Intro and the Ace Call are no longer drawn by the animation mockup: they are the UI mockups' own pages set in motion. The Blessing drops the three-card page and goes back to the game's original cutscene, remade as something holy. And the Event Choice is rebuilt from see-through pieces, which fixes the cut-out text bar and is now the way every page is photographed.",
+  "clips": [
+   "Trainer Intro",
+   "Ace Call",
+   "Event Choice",
+   "Legendary Blessing"
+  ],
+  "q1": "The Blessing is: a bell in the dark, a rose window, a halo, the Legendary as a pale vision, scripture with an illuminated letter, candles, feathers, and your partner bowing under the light. The Ace Call now has the ace leap off its own banner onto the field.",
+  "q2": "Passes 13 and 14 added new moments. Pass 15 goes back and corrects four existing ones against the director's notes, and changes the method: pages are now photographed with a see-through background, so pieces move cleanly.",
+  "q3": "No new pages. The Blessing is one page again (the original), not a choice of three.",
+  "q4": "Unchanged. The Blessing still finishes at once on the first Enter and moves on with the second, as in the game today; with animations off everything is shown at once.",
+  "q5": "Legendaries blessing a journey from a shaft of light, with bells and a tower-top hush, is how the series treats Ho-Oh and Lugia."
  }
 }

@@ -32,6 +32,7 @@ UIK = ('m-1 m-3 m-4 m-5 m-7 m-9 m-25 m-52 m-94 m-129 m-130 m-133 m-143 m-149 m-1
        'b-pb b-gb b-dusk b-quick b-master b-luxury b-premier b-ub b-heal b-timer '
        'i-potion i-super_potion i-full_restore i-revive i-rare_candy i-mega_bracelet i-z_ring i-dynamax_band i-tera_orb i-firium_z i-fire_stone i-nugget i-mystery_egg i-lucky_egg i-charizardite_x i-amulet_coin i-map i-exp_charm i-shell_bell i-focus_sash '
        'bd-water bd-rock bd-electric bd-fire bd-grass bd-psychic bd-poison bd-ground').split()
+LEGEND_ITEMS = ['lugia']
 ARENAS = 'grass cave sea volcano forest plains mountain ruins raid_max raid_tera raid_ultra graveyard desert ice_cave power_plant dojo swamp tall_grass abyss factory'.split()
 TYPES = 'normal fighting flying poison ground rock bug ghost steel fire water grass electric psychic ice dragon dark fairy'.split()
 EXTRA_MON = '163 812 815 818 823 849 869 884 888-crowned 889-crowned 812-gigantamax 815-gigantamax 818-gigantamax 884-gigantamax 849-gigantamax 823-gigantamax 869-gigantamax 143-gigantamax 25-gigantamax 94-gigantamax 131-gigantamax 890-eternamax 831 835 836 833 834 866 862 865 870 879 892 894 895 896 897 898 20 735 784 754 758 738 743 778 777 752 746 105-alola 20-alola 794 795 796 797 798 799 806 805 804 803 150-mega-y 150-mega-x 94-mega 384-mega 248-mega 9-mega 3-mega 130-mega 445-mega 65-mega 257 257-mega 2 8 26 134 135 136 196 197 470 471 700 151 251 385 490 492 494 647 648 649 719 720 721 801 802 807 808 809 893 12 15 17 18 22 35 36 39 54 58 63 77 79 81 100 104 113 116 120 123 125 126 127 128 132 137 142 152 155 158 175 179 183 196 202 216 225 231 235 241 246 252 255 258 280 300 304 311 312 333 349 355 359 361 363 371 374 387 390 393 403 417 418 425 427 433 441 443 447'.split()
@@ -85,6 +86,8 @@ def main():
     for k, src in EXTRA_T.items():
         if not os.path.exists(A + src + '.png'): miss.append(src); continue
         im = first(A + src); im.save(OUT + 't-' + k + '.png', optimize=True); meta['t-' + k] = list(im.size)
+    for k in LEGEND_ITEMS:  # the blessing objects (src/data/blessings.json "item")
+        if os.path.exists(A + 'items/legend/' + k + '.png'): shutil.copy(A + 'items/legend/' + k + '.png', OUT + 'i-legend-' + k + '.png'); meta['i-legend-' + k] = list(Image.open(OUT + 'i-legend-' + k + '.png').size)
     json.dump(meta, open(OUT + '../src/sprites.json', 'w'), separators=(',', ':'))
     print(len(meta), 'sprites;', 'missing:', miss)
 main()

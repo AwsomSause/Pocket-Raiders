@@ -12,3 +12,4 @@ Kice asked (2026-11-19) for the same 25-pass mockup process as the UI redesign, 
 - Open the page through a local web server (`npx serve plans/animation-redesign`) to see colour tints on sprites; opened straight from disk, browsers block them.
 
 These are mockups only. Nothing here changes the game.
+- Pieces that move are photographed with a see-through background: `node src/uishots.cjs 25 "@page=name-a:.bg-selectors|to|hide"` (the `@`), so a cut piece does not carry a rectangle of background with it. Run `@` shots in their own command.
