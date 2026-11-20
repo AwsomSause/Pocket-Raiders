@@ -9,6 +9,7 @@ import { mapWindow, nodeState, pkMap, pkMiniMap, pkNodeMenu } from '../../src/ui
 import { pkPause } from '../../src/ui/pocket/screens/pause';
 import { pkBag, pocketIcon } from '../../src/ui/pocket/screens/bag';
 import { CARD_BADGES, pkCard, rankFact } from '../../src/ui/pocket/screens/card';
+import { PK_TYPE_ORDER, pkTypes, typeRows } from '../../src/ui/pocket/screens/types';
 import { dexNo, movesSize, pkDex, pkDexWall, type PkDexCell } from '../../src/ui/pocket/screens/dex';
 import type { DexModel } from '../../src/ui/redux/screens/dex';
 import { pkParty } from '../../src/ui/pocket/screens/party';
@@ -168,6 +169,15 @@ describe('Pocket look: shared pages', () => {
     expect(html).toContain('rapp on');
     expect(html).toContain('rapp gx-off');
     expect(html).toContain('pkm fnt');
+    // Eleven apps: eight on the first screen, the rest on a second one with dots to switch.
+    const many = ['Party', 'Bag', 'Pokédex', 'Trainer Card', 'Journal', 'Type Chart', 'Save', 'Settings', 'PC Box', 'Rivals', 'End run'].map((label) => ({ label }));
+    const first = pkPause({ ...base, apps: many, index: 2 });
+    expect(first.match(/class="rapp/g)?.length).toBe(8);
+    expect(first).toContain('data-act="pausePage"');
+    const second = pkPause({ ...base, apps: many, index: 9 });
+    expect(second.match(/class="rapp/g)?.length).toBe(3);
+    expect(second).toContain('data-key="a9"');
+    expect(second).not.toContain('data-key="a0"');
     // A long top bar steps its text down so the money and the save note stay on the phone's screen.
     expect(pkPause({ ...base, where: 'Trial Archipelago · Stop 12 of 30', money: '₽ 1,234,567' })).toMatch(/rp-bar" style="font-size:(9\.5|10|11)px/);
   });
@@ -607,5 +617,28 @@ describe('Pocket look: the Trainer Card', () => {
   });
   it('more than eight badges still lights eight', () => {
     expect(pkCard({ ...d, badges: 12 }).match(/class="got"/g)?.length).toBe(8);
+  });
+});
+
+describe('Pocket look: the Type Chart', () => {
+  const chart = { normal: { rock: 0.5, steel: 0.5, ghost: 0 }, fighting: { normal: 2 }, ghost: { normal: 0 }, fire: { grass: 2, water: 0.5 }, water: { fire: 2 } } as never;
+  it('a type\'s rows: what it hits hard and weakly, what cannot be hit, and what hits it', () => {
+    const rows = Object.fromEntries(typeRows(chart, PK_TYPE_ORDER, 'normal'));
+    expect(rows['Hits hard']).toEqual([]);
+    expect(rows['Weak hit on']).toEqual(['rock', 'steel']);
+    expect(rows['No effect on']).toEqual(['ghost']);
+    expect(rows['Takes double from']).toEqual(['fighting']);
+    expect(rows['Can\u2019t be hit by']).toEqual(['ghost']);
+    expect(rows['Shrugs off']).toBeUndefined();
+  });
+  it('eighteen tiles six across, the lit type\'s card, and the pause menu\'s clicks in book mode', () => {
+    const html = pkTypes({ types: PK_TYPE_ORDER, index: 1, chart });
+    expect(pkPageOf(html)?.id).toBe('types');
+    expect(html.match(/class="tc[ "]/g)?.length).toBe(18);
+    expect(html).toContain('class="tc on"');
+    expect(html).toContain('<b>Fire</b></div>');
+    expect(html).toContain('Hits hard');
+    expect(pkTypes({ types: PK_TYPE_ORDER, index: 0, chart })).toContain('Nothing');
+    expect(pkTypes({ types: PK_TYPE_ORDER, index: 1, chart, book: true })).toContain('data-act="dexType"');
   });
 });

@@ -398,3 +398,10 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .tcp .gx-tc-gap{flex:1}
 .pkx .pks .tcp .gx-tc-team{display:flex;flex-wrap:wrap;justify-content:center;gap:4px}
 .pkx .pks .tcp .tkcard[data-act]{cursor:pointer}
+/* Type Chart: the tiles are clickable and the "nothing" row is quiet. */
+.pkx .pks .types .tc{cursor:pointer}
+.pkx .pks .types .gx-tc-none{font-style:normal;font-size:13px;font-weight:700;color:var(--mute)}
+/* The Rotom Phone's second screen of apps: dots under the apps. */
+.pkx .pks .rp-scr .gx-rp-dots{display:flex;justify-content:center;gap:8px;margin-top:-4px}
+.pkx .pks .rp-scr .gx-rp-dots u{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer}
+.pkx .pks .rp-scr .gx-rp-dots u.on{background:var(--yel)}

@@ -21,7 +21,10 @@ export const movesSize = (list: readonly string[]): number => {
 export function pkDex(d: DexModel): string {
   const k = d.card, known = k.state !== 'unknown';
   const t1 = typeColour(k.types[0]), t2 = typeColour(k.types[1] ?? k.types[0]);
-  const ks: PkKey[] = known ? [['←→', d.page ? 'species page' : 'data page', 'flip'], ['Esc', 'back', 'back']] : [['Esc', 'back', 'back']];
+  // In the pause menu's Pokédex (book) the keys and clicks go to it: up and down flip, left and right step along the set.
+  const ks: PkKey[] = d.book
+    ? [...(known ? [['↑↓', d.page ? 'species page' : 'data page', 'dexGo', 'flip'] as PkKey] : []), ['←→', 'next', 'dexGo', 'stepR'], ['T', 'type chart', 'dexGo', 'types'], ...(known ? [['C', 'cry', 'dexGo', 'cry'] as PkKey] : []), ['Esc', 'back', 'dexGo', 'back']]
+    : known ? [['←→', d.page ? 'species page' : 'data page', 'flip'], ['Esc', 'back', 'back']] : [['Esc', 'back', 'back']];
   const head = hdr('Pokédex', { area: 'dex', crumb: ['Pokédex', k.name], pills: [`#${k.no.replace(/^No\. /, '').replace(/^0(?=\d{3})/, '')}`] });
   const art = `<div class="de-art" data-key="dex-art"><i class="kc-foil"></i>${known && d.art ? fitPic(monArt(d.art), 270, 380, '', 6) : '<b class="gx-de-q">?</b>'}</div>`;
   const size = k.facts.filter(([l]) => SIZE.test(l)).map(([, v]) => v).join(' · ');
@@ -41,7 +44,7 @@ export function pkDex(d: DexModel): string {
     left = `<div class="de-evo pn" data-key="dex-evo"><b>Evolution</b><div${k.line.length < 3 ? ' class="gx-de-short"' : ''}>${line}</div>${k.next ? `<small class="gx-de-next">${esc(k.next)}</small>` : ''}</div>`;
     right = `<div class="de-forms pn gx-de-stats" data-key="dex-stats"><b>Base stats</b><div>${k.stats.map((s) => `<p><span>${esc(s.label)}</span><b>${s.value}</b><i><u style="width:${statPct(s.value)}%"></u></i></p>`).join('')}</div></div>`;
   }
-  return page('dex-entry', 26, `<div class="scr dexe" style="--t:${t1};--t2:${t2}" data-key="dex">${head}${art}${main}${left}${right}<div class="gx-de-flip"${act('flip')}></div>${keys(ks)}</div>`);
+  return page('dex-entry', 26, `<div class="scr dexe" style="--t:${t1};--t2:${t2}" data-key="dex">${head}${art}${main}${left}${right}<div class="gx-de-flip"${d.book ? act('dexGo', 'flip') : act('flip')}></div>${keys(ks)}</div>`);
 }
 
 /** One square of the Pokédex wall, as the Pokédex room says it (ui/HubScene openDexSet). */
@@ -56,6 +59,9 @@ export interface PkDexWallModel {
   hint: string;
   tabs?: { labels: readonly string[]; index: number } | null;
   back: boolean;
+  /** Inside the pause menu's Pokédex: the clicks go to it (dexPick, dexGo), and Q/E turn the set when there are more. */
+  book?: boolean;
+  sets?: boolean;
 }
 
 /** The wall shows four rows of ten. */
@@ -70,29 +76,34 @@ const isGot = (x: PkDexCell): boolean => x.got ?? caughtOf(x) > 0;
 /** The Pocket look's Pokédex wall (mock-up page `dex`): the set's tabs, a grid of ten across, the lit one's bar. */
 export function pkDexWall(d: PkDexWallModel): string {
   const n = Math.max(0, d.n), index = Math.max(0, Math.min(n - 1, d.index));
+  const pick = (i: number): string => (d.book ? act('dexPick', i, 'dexOver') : act('pick', i, 'over'));
   const all = Array.from({ length: n }, (_, i) => d.cell(i));
   const seen = all.filter((x) => x && !x.off).length, caught = all.filter((x) => x && !x.off && isGot(x)).length;
   const s = gridStart(n, index, PK_DEX_SIZE, PK_DEX_COLS);
   const pills = [`Seen ${seen}`, `Caught ${caught}`, ...(n > PK_DEX_SIZE ? [`${s + 1}–${Math.min(n, s + PK_DEX_SIZE)} of ${n}`] : [])];
   const head = hdr('Pokédex', { area: 'dex', crumb: ['Pokédex', d.title.replace(/^Generation (\d+) Pok[eé]dex$/i, 'Gen $1')], pills });
-  const tabs = d.tabs ? `<div class="dx-tabs" data-key="dex-tabs">${d.tabs.labels.map((t, k) => `<span class="${k === d.tabs!.index ? 'on' : ''}" style="--c:${TAB_C[k % TAB_C.length]}"${act('tab', k)}>${esc(t)}</span>`).join('')}</div>` : '';
+  const tabs = d.tabs ? `<div class="dx-tabs" data-key="dex-tabs">${d.tabs.labels.map((t, k) => `<span class="${k === d.tabs!.index ? 'on' : ''}" style="--c:${TAB_C[k % TAB_C.length]}"${d.book ? act('dexGo', `tab:${k}`) : act('tab', k)}>${esc(t)}</span>`).join('')}</div>` : '';
   const cells = all.slice(s, s + PK_DEX_SIZE).map((x, q) => {
     const i = s + q, on = i === index ? ' on' : '';
-    if (!x) return `<div class="dx unk${on}"${act('pick', i, 'over')}><b>?</b></div>`;
+    if (!x) return `<div class="dx unk${on}"${pick(i)}><b>?</b></div>`;
     const no = `<em>${esc(dexNo(x.title) || dexNo(x.body))}</em>`;
-    if (x.off) return `<div class="dx unk${x.sil ? ' gx-dx-sil' : ''}${on}" data-key="dex-c-${i}"${act('pick', i, 'over')}>${no}${x.sil && x.file ? fitPic(monArt(x.file), 56, 52, '', 1) : '<b>?</b>'}</div>`;
+    if (x.off) return `<div class="dx unk${x.sil ? ' gx-dx-sil' : ''}${on}" data-key="dex-c-${i}"${pick(i)}>${no}${x.sil && x.file ? fitPic(monArt(x.file), 56, 52, '', 1) : '<b>?</b>'}</div>`;
     const got = isGot(x);
-    return `<div class="dx ${got ? 'got' : 'seen'}${on}" data-key="dex-c-${i}"${act('pick', i, 'over')}>${no}${x.file ? fitPic(monArt(x.file), 56, 52, '', 1) : ''}${got ? spr(ballArt('pb'), 1, 'dx-b') : ''}</div>`;
+    return `<div class="dx ${got ? 'got' : 'seen'}${on}" data-key="dex-c-${i}"${pick(i)}>${no}${x.file ? fitPic(monArt(x.file), 56, 52, '', 1) : ''}${got ? spr(ballArt('pb'), 1, 'dx-b') : ''}</div>`;
   }).join('');
   const cur = all[index];
   let info = '';
   if (cur && !cur.off) {
     const types = /:\s*([a-z]+(?:\s*\/\s*[a-z]+)?)\./i.exec(d.hint)?.[1]?.split(/\s*\/\s*/) ?? [];
     const sc = /Seen (\d+)/.exec(cur.body)?.[1] ?? '0';
-    info = `<div class="dx-info pn" data-key="dex-info"${act('pick', index)}><b style="font-size:${fit(`${dexNo(cur.body)} ${cur.title}`, 300, 18, 13, 0.55)}px">${esc(`${dexNo(cur.body)} ${cur.title}`)}</b>${types.map(tyChip).join('')}<span>Caught ${caughtOf(cur)} · Seen ${esc(sc)}</span><em><kbd>Enter</kbd> full entry</em></div>`;
+    info = `<div class="dx-info pn" data-key="dex-info"${d.book ? act('dexGo', 'entry') : act('pick', index)}><b style="font-size:${fit(`${dexNo(cur.body)} ${cur.title}`, 300, 18, 13, 0.55)}px">${esc(`${dexNo(cur.body)} ${cur.title}`)}</b>${types.map(tyChip).join('')}<span>Caught ${caughtOf(cur)} · Seen ${esc(sc)}</span><em><kbd>Enter</kbd> full entry</em></div>`;
+  } else if (!n) {
+    info = '<div class="dx-info pn gx-dx-unk" data-key="dex-info"><b>Nothing here</b><span>No Pokémon in this set match the filter.</span></div>';
   } else if (cur) {
     info = `<div class="dx-info pn gx-dx-unk" data-key="dex-info"><b>${esc(dexNo(cur.title) || cur.title)} ???</b><span style="font-size:${fit(cur.body, 640, 13, 11, 0.5)}px">${esc(cur.body)}</span></div>`;
   }
-  const ks: PkKey[] = [['←→↑↓', 'move'], ['Enter', 'full entry', 'pick', index], ...(d.back ? [['Esc', 'back', 'back'] as PkKey] : [])];
+  const ks: PkKey[] = d.book
+    ? [['←→↑↓', 'move'], ...(d.sets ? [['Q E', 'set', 'dexGo', 'next'] as PkKey] : []), ['C', 'filter', 'dexGo', 'tab'], ['T', 'type chart', 'dexGo', 'types'], ['Esc', 'back', 'dexGo', 'back']]
+    : [['←→↑↓', 'move'], ['Enter', 'full entry', 'pick', index], ...(d.back ? [['Esc', 'back', 'back'] as PkKey] : [])];
   return page('dex', 26, `<div class="scr dex gx-dexw" data-key="dex-wall">${head}${tabs}<div class="dx-grid${d.tabs ? '' : ' gx-notab'}" data-key="dex-grid">${cells}</div>${info}${keys(ks)}</div>`);
 }

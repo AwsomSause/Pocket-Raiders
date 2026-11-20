@@ -28,10 +28,11 @@ export function pkCard(d: RunCardModel): string {
     + `<div class="tk-f">${grid.map(cell).join('')}</div>`
     + `<div class="tk-badges" data-key="tc-badges">${CARD_BADGES.map((t, k) => `<i class="${k < lit ? 'got' : ''}">${fitPic(badgeArt(t), 32, 32, '', 1)}</i>`).join('')}</div><i class="kc-foil"></i></div>`;
   const team = d.team.filter((f): f is string => !!f);
-  const button = d.save !== false ? `<div class="btn on sm"${act('save')}><b>Save as picture</b></div>` : d.tap ? `<div class="btn on sm"${act(d.tap)}><b>Next</b></div>` : '';
+  const esc0 = d.hints.some(([k]) => k === 'Esc');
+  const button = d.save !== false ? `<div class="btn on sm"${act('save')}><b>Save as picture</b></div>` : d.tap ? `<div class="btn on sm"${act(d.tap)}><b>${esc0 ? 'Back' : 'Next'}</b></div>` : '';
   const side = `<div class="tk-side pn" data-key="tc-side"><b>${esc(d.sideTitle ?? (d.area === 'hub' ? 'Record' : 'This run'))}</b>${more.map(([l, v]) => `<p><span>${esc(l)}</span><u style="font-size:${fit(v, 200, 14, 10, 0.55)}px">${esc(v)}</u></p>`).join('')}`
     + '<i class="gx-tc-gap"></i>' + (team.length ? `<div class="gx-tc-team">${team.slice(0, 6).map((f) => fitPic(monArt(f), 48, 44, '', 1)).join('')}</div>` : '')
     + `${button}${d.text ? `<small class="gx-tc-say" style="font-size:${fitBody(d.text, 300, 40, [13, 12, 11, 10], 1.3)}px">${esc(d.text)}</small>` : ''}</div>`;
-  const ks: PkKey[] = d.hints.map(([k, t]) => [k, t, k === 'Esc' ? 'back' : k === 'Enter' ? (d.save === false ? d.tap : 'save') : undefined] as const);
+  const ks: PkKey[] = d.hints.map(([k, t]) => [k, t, k === 'Esc' ? (d.save === false && d.tap ? d.tap : 'back') : k === 'Enter' ? (d.save === false ? d.tap : 'save') : undefined] as const);
   return page('tcard', 26, `<div class="scr tcp" style="--c:#e3350d" data-key="tcard">${hdr(d.title, { area: 'card', crumb: [d.area === 'hub' ? 'Menu' : 'Records', d.title] })}${card}${side}${keys(ks)}</div>`);
 }

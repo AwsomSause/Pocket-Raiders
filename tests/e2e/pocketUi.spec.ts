@@ -109,19 +109,57 @@ test('Pocket look: the Pause menu is the Rotom Phone; it changes nothing and its
   await expect(phone.locator('.rapp.on span')).toHaveText('Party');
   await expect(phone.locator('.rp-hand .pkm')).toHaveCount(await page.evaluate(() => (window as any).__pkr.session.run.party.length));
   await fits(page, 'Map', 'menu');
-  // The apps lie four across: down moves a line, right one app.
+  // The mock-up's eight apps on the first screen, four across: down moves a line, right one app.
+  await expect(phone.locator('.rapp span')).toHaveText(['Party', 'Bag', 'Pokédex', 'Trainer Card', 'Journal', 'Type Chart', 'Save', 'Settings']);
+  await step(page, 'ArrowDown');
+  await expect(phone.locator('.rapp.on span')).toHaveText('Journal');
+  await step(page, 'ArrowRight');
+  await expect(phone.locator('.rapp.on span')).toHaveText('Type Chart');
+  // The map's other actions are on the phone's second screen.
   await step(page, 'ArrowDown');
   await expect(phone.locator('.rapp.on span')).toHaveText('Rivals');
-  await step(page, 'ArrowRight');
-  await expect(phone.locator('.rapp.on span')).toHaveText('Save');
+  await expect(phone.locator('.rapp')).toHaveCount(3);
+  await expect(phone.locator('.gx-rp-dots u.on')).toHaveCount(1);
   // A switched-off app says why, in Rotom's line, and does not open.
-  await step(page, 'ArrowRight', 2);
+  await step(page, 'ArrowRight');
   await expect(phone.locator('.rapp.on span')).toHaveText('End run');
   if (await phone.locator('.rapp.on.gx-off').count()) {
     await expect(phone.locator('.rp-ask p')).toContainText('Only an Adventure run');
     await step(page, 'Enter');
     await expect(phone).toBeVisible();
   }
+  expect(await runNow(page)).toBe(before);
+
+  // Pokédex, Type Chart and Trainer Card open over the phone, and Esc comes back to it.
+  await phone.locator('.gx-rp-dots u').first().click();
+  await expect(phone.locator('.rapp.on span')).toHaveText('Party');
+  await phone.locator('.rapp', { hasText: 'Pokédex' }).click();
+  await onPkPage(page, 'Map', 'dex');
+  await expect(pkView(page, 'Map', 'dex').locator('.dx-tabs span')).toHaveCount(4);
+  await fits(page, 'Map', 'dex');
+  await step(page, 'Enter');
+  await onPkPage(page, 'Map', 'dex-entry');
+  await step(page, 'Escape');
+  await onPkPage(page, 'Map', 'dex');
+  await step(page, 'Escape');
+  await onPkPage(page, 'Map', 'menu');
+  await phone.locator('.rapp', { hasText: 'Type Chart' }).click();
+  await onPkPage(page, 'Map', 'types');
+  const chart = pkView(page, 'Map', 'types');
+  await expect(chart.locator('.tc')).toHaveCount(18);
+  const lit = await chart.locator('.tc.on').getAttribute('data-key');
+  await step(page, 'ArrowRight');
+  expect(await chart.locator('.tc.on').getAttribute('data-key')).not.toBe(lit);
+  await expect(chart.locator('.tc-row').first()).toContainText('Hits hard');
+  await fits(page, 'Map', 'types');
+  await step(page, 'Escape');
+  await onPkPage(page, 'Map', 'menu');
+  await phone.locator('.rapp', { hasText: 'Trainer Card' }).click();
+  await onPkPage(page, 'Map', 'tcard');
+  await expect(pkView(page, 'Map', 'tcard').locator('.tk-side')).toContainText('This run');
+  await fits(page, 'Map', 'tcard');
+  await step(page, 'Escape');
+  await onPkPage(page, 'Map', 'menu');
   expect(await runNow(page)).toBe(before);
 
   // Esc resumes: the map is back, and the phone is gone.

@@ -132,6 +132,9 @@ import { mountRedux, phantomOn, pocketOn, reduxOn, type ReduxCtx, type ReduxView
 import { pkPauseModel } from '../ui/pocket/models';
 import { pkMap } from '../ui/pocket/screens/map';
 import { PK_PAUSE_COLS, pkPause } from '../ui/pocket/screens/pause';
+import { pkCard } from '../ui/pocket/screens/card';
+import type { RunCardModel } from '../ui/redux/screens/over';
+import { trainerId as trainerCardId } from '../core/presentation/pocket';
 import { askText } from '../ui/redux/ask';
 import { hoverTips, ownAbilityCard } from '../ui/redux/tips';
 import type { BattlePanel } from '../ui/redux/screens/battle';
@@ -412,7 +415,8 @@ export class MapScene extends Phaser.Scene {
   private static readonly PAUSE_PH = ['Resume', 'Party', 'Bag', 'Pokédex', 'Trainer card', 'Settings', 'Save', 'End run'] as const;
 
   /** The Pocket pause page is the Rotom Phone: its apps, four across (Esc resumes). */
-  private static readonly PAUSE_PK = ['Party', 'Bag', 'Journal', 'PC Box', 'Rivals', 'Save', 'Settings', 'End run'] as const;
+  /** The Rotom Phone's apps (mock-up `menu`): its eight on the first screen, then the map's other actions on a second. */
+  private static readonly PAUSE_PK = ['Party', 'Bag', 'Pokédex', 'Trainer Card', 'Journal', 'Type Chart', 'Save', 'Settings', 'PC Box', 'Rivals', 'End run'] as const;
 
   private pauseRows(): readonly string[] {
     return phantomOn() ? MapScene.PAUSE_PH : pocketOn() ? MapScene.PAUSE_PK : MapScene.PAUSE;
@@ -469,11 +473,18 @@ export class MapScene extends Phaser.Scene {
     if (name === 'Pokédex') {
       // The Pokédex of the pause menu (Phantom UI): it opens on the lead's page of its set and comes back to this word.
       p.index = k;
-      p.dex = new PhantomDex(this, () => this.rxView?.refresh(), () => { p.dex = null; this.rxView?.refresh(); }, services().session.run?.party[0]?.speciesId);
+      p.dex = new PhantomDex(this, () => this.rxView?.refresh(), () => { p.dex = null; this.rxView?.refresh(); }, services().session.run?.party[0]?.speciesId, { pocket: pocketOn() });
       this.rxView?.refresh();
       return;
     }
-    if (name === 'Trainer card') {
+    if (name === 'Type Chart') {
+      // Pocket look: the type chart on its own; Esc comes back to the phone.
+      p.index = k;
+      p.dex = new PhantomDex(this, () => this.rxView?.refresh(), () => { p.dex = null; this.rxView?.refresh(); }, services().session.run?.party[0]?.speciesId, { pocket: true, start: 'types' });
+      this.rxView?.refresh();
+      return;
+    }
+    if (name === 'Trainer card' || name === 'Trainer Card') {
       p.index = k;
       return this.pauseCard(true);
     }
@@ -537,6 +548,8 @@ export class MapScene extends Phaser.Scene {
   /** Pocket look: the pause menu is the Rotom Phone, a page of its own. */
   private pausePocket(model: MapModel): string {
     const p = this.rxPause!, { session } = services(), run = session.run!;
+    if (p.dex) return p.dex.htmlPocket();
+    if (p.card) return pkCard(this.cardModel(model.chips.find((x) => /^Stage\s+\d+/i.test(x)) ?? ''));
     const can = !!wipeStatus(run), pc = boxCapacity(runPerks(session.content, run)) > 0, rivals = rivalReport(run).length > 0;
     const off = (label: string): boolean => (label === 'End run' && !can) || (label === 'PC Box' && !pc) || (label === 'Rivals' && !rivals) || (label === 'Journal' && !hasJournal());
     return pkPause(pkPauseModel(this, run, {
@@ -564,6 +577,25 @@ export class MapScene extends Phaser.Scene {
   }
 
   /** The Trainer card of the pause menu (mock-up `card`): who you are, your record, and this run beside it. */
+  /** Pocket look: the Trainer Card over the phone (mock-up `tcard`): the card, and this run beside it. */
+  private cardModel(stage: string): RunCardModel {
+    const { session } = services();
+    const run = session.run!, profile = session.profile, content = session.content;
+    const who = content.archetypes.get(run.archetypeId);
+    const region = content.regions.get(run.regionOrder[run.regionIndex] ?? '')?.name ?? `Region ${run.regionIndex + 1}`;
+    const rivals = rivalReport(run);
+    return {
+      title: 'Trainer Card', save: false, tap: 'pauseCard', area: 'hub', id: trainerCardId(run.seed), sideTitle: 'This run',
+      name: who?.name ?? 'Trainer',
+      rank: `Rank ${prestigeRank(profile)}`,
+      facts: [['Money', `₽ ${run.money.toLocaleString('en-US')}`], ['Pokédex', `${profile.speciesCaught.length} caught`], ['Known as', protagonistTitle(run).name], ['Best run', `${profile.stats.bestEncounters} encounters`],
+        ['Region', `${region} · ${run.regionIndex + 1} of ${run.regionOrder.length}`], ...(stage ? [['Stage', stage.replace(/^Stage\s+/i, '')] as const] : []), ['Gym badges', `${run.badges.length} of 8`], ['Rivals met', String(rivals.filter((r) => r.meetings > 0).length)], ['Caught', `${run.log.speciesCaught.length} Pokémon`], ['Battles won', String(run.log.battlesWon)]],
+      trainer: artOf(this, who?.spriteAssetId) ?? null,
+      badges: run.badges.length,
+      team: [], text: '', hints: [['Esc', 'back']],
+    };
+  }
+
   private cardPhantom(ph: PhantomVersion, stage: string): string {
     const { session } = services();
     const run = session.run!, profile = session.profile, content = session.content;
@@ -1612,6 +1644,8 @@ export class MapScene extends Phaser.Scene {
           menu: (k) => this.menuPick(Number(k)),
           confirm: (k) => this.pauseAsk(Number(k)),
           pauseCard: () => this.pauseCard(false),
+          // The Rotom Phone's screen dots: the cursor goes to that screen's first app.
+          pausePage: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask === null && !p.dex && !p.card && k >= 0 && k < this.pauseRows().length) { p.index = k; this.rxView?.refresh(); } },
           form: (i) => this.rxForm?.pick(Number(i)),
           dexPick: (i) => this.rxPause?.dex?.pick(Number(i)),
           dexGo: (name) => this.rxPause?.dex?.go(String(name)),
