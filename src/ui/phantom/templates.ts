@@ -25,14 +25,14 @@ export function phKeys(hints: Hints, fallback: readonly (readonly [string, strin
   return keys(...(hints ?? fallback).map(([k, t]) => [KEY_FACE[k] ?? k, t.charAt(0).toUpperCase() + t.slice(1), k === 'Esc' ? 'back' : undefined] as const));
 }
 /** The page backdrop: black with one slanted colour field and a burst behind the detail. */
-const backK = (cp = 'polygon(48% 0,100% 0,100% 100%,56% 100%)', x = 85, y = 40): string =>
+export const backK = (cp = 'polygon(48% 0,100% 0,100% 100%,56% 100%)', x = 85, y = 40): string =>
   `<div class="bgk"></div><div class="shard" style="--c:var(--red);--cp:${cp};inset:0" aria-hidden="true"></div><div class="burst" style="--x:${x}%;--y:${y}%" aria-hidden="true"></div>`;
 /** The line the game's text box holds, as a tilted note along the bottom. */
-const say = (t: string | undefined, cls = ''): string => (t ? `<div class="pn ph-say ${cls}"><p class="txt">${esc(t)}</p></div>` : '');
-const more = (n: number, start: number, size: number, st: string): string => (n > size ? `<div class="ph-more2" style="${st}">${start > 0 ? '▲ ' : ''}${start + 1}–${Math.min(n, start + size)} of ${n}${start + size < n ? ' ▼' : ''}</div>` : '');
-const factRows = (f: readonly (readonly [string, string])[] | undefined): string => (f ?? []).map(([a, b]) => `<div class="dm-fr"><span>${esc(a)}</span><b>${esc(b)}</b></div>`).join('');
+export const say = (t: string | undefined, cls = ''): string => (t ? `<div class="pn ph-say ${cls}"><p class="txt">${esc(t)}</p></div>` : '');
+export const more = (n: number, start: number, size: number, st: string): string => (n > size ? `<div class="ph-more2" style="${st}">${start > 0 ? '▲ ' : ''}${start + 1}–${Math.min(n, start + size)} of ${n}${start + size < n ? ' ▼' : ''}</div>` : '');
+export const factRows = (f: readonly (readonly [string, string])[] | undefined): string => (f ?? []).map(([a, b]) => `<div class="dm-fr"><span>${esc(a)}</span><b>${esc(b)}</b></div>`).join('');
 /** A row label's font size: long names step down rather than being cut. */
-const fit = (t: string, room: number, big: number, small: number): number => Math.max(small, Math.min(big, Math.floor(room / Math.max(1, t.length * 0.56))));
+export const fit = (t: string, room: number, big: number, small: number): number => Math.max(small, Math.min(big, Math.floor(room / Math.max(1, t.length * 0.56))));
 const pageTabs = (tabs: { labels: readonly string[]; index: number } | undefined): string =>
   tabs ? `<div class="pockets ph-tabs">${tabs.labels.map((t, k) => `<span class="${k === tabs.index ? 'on' : ''}"${act('tab', k)}>${esc(t)}</span>`).join('')}</div>` : '';
 const art = (a: Art | null | undefined, size: number, cls = ''): string => rxPic(a, size, cls);

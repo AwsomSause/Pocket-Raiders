@@ -4,6 +4,7 @@
 import { act, bg, esc, mini, mon } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { phCredits } from '../../phantom/screens/ending';
+import { phLoading } from '../../phantom/screens/rooms';
 
 export interface BootModel {
   /** "Loading the region…", or "Beta 0.7 is here" on the update splash. */
@@ -18,6 +19,7 @@ export interface BootModel {
 
 /** Two layouts: a Poké Ball over the bar, or Pikachu running in place over it. On the splash a click anywhere moves on. */
 export function bootView(c: ReduxCtx, d: BootModel): string {
+  if (c.ph) return phLoading(c.ph, d);
   const v = c.v(2), pct = Math.round(Math.max(0, Math.min(1, d.progress)) * 100);
   return (d.splash ? bg(d.splash) + '<div class="shade"></div>' : '')
     + `<div class="abs col cen" style="left:0;right:0;top:${v ? 120 : 170}px;gap:20px">${v ? mon('pokemon/25', 3, '', true) : '<i class="ball" style="--b:70px"></i>'}<b style="font-size:26px">${esc(d.title)}</b><div class="hp gold" style="width:520px;height:16px"><i style="width:${pct}%"></i></div><span class="sm" style="max-width:760px;text-align:center">${esc(d.note)}</span></div>`

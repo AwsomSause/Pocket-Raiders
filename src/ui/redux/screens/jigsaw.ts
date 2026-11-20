@@ -7,6 +7,7 @@ import { act, B, esc, H, img, mon, W } from '../kit';
 import { rxAtlas, rxImage } from '../assets';
 import type { ReduxCtx } from '../stage';
 import { hudStat } from './minigame';
+import { phJigsaw } from '../../phantom/screens/games';
 
 export interface JigsawModel {
   title: string;
@@ -66,7 +67,11 @@ export function shardPoints(cols: number, rows: number, cw: number, ch: number, 
   ];
 }
 
-export function jigsawView(_c: ReduxCtx, d: JigsawModel): string {
+/**
+ * The drawn part alone (the sandbox with its set shards, the tray, the places to press), in this screen's own
+ * pixels: `x`,`y`,`w`,`h` is the box around it. The Phantom page lays the same drawing on its own page.
+ */
+export function jigsawBoard(d: JigsawModel): { html: string; x: number; y: number; w: number; h: number } {
   const { cols, rows } = d;
   const bw = cols * BOARD.cw, bh = rows * BOARD.ch;
   // The slab every shard is cut from: stone with its strata, and the fossil pressed into it.
@@ -109,11 +114,18 @@ export function jigsawView(_c: ReduxCtx, d: JigsawModel): string {
   }
   const set = d.placed.map((p, n) => (p ? shard(n, BOARD.x, BOARD.y, 1, false) : '')).join('');
   const box = `<div class="abs" style="left:${BOARD.x - 8}px;top:${BOARD.y - 8}px;width:${bw + 16}px;height:${bh + 16}px;border-radius:6px;background:radial-gradient(ellipse at 50% 40%,#e9d3a0,#cfae72);box-shadow:0 0 0 4px #6b4a26,0 0 0 7px var(--l),inset 0 0 18px #6b4a2666"></div>`;
+  return { html: box + sand + set + loose + hits, x: BOARD.x - 15, y: BOARD.y - 15, w: TRAY.x + cols * (TRAY.cw + TRAY.gap) - TRAY.gap - BOARD.x + 30, h: Math.max(bh, rows * (TRAY.ch + TRAY.gap) - TRAY.gap) + 30 };
+}
+
+export function jigsawView(c: ReduxCtx, d: JigsawModel): string {
+  if (c.ph) return phJigsaw(c.ph, d);
+  const bh = d.rows * BOARD.ch;
+  const board = jigsawBoard(d).html;
   const hud = d.hud.filter(Boolean).map(hudStat);
   const stats = `<div class="abs row" style="left:24px;right:24px;top:62px;gap:12px">${hud.map(([l, v]) => W(`<span class="sm" style="flex:1 0 auto;white-space:nowrap">${esc(l)}</span><b style="white-space:nowrap">${esc(v)}</b>`, 'flex:1 1 0;display:flex;gap:6px;padding:6px 12px;min-width:0')).join('')}</div>`;
   const labels = `<div class="abs sm" style="left:${BOARD.x}px;top:${BOARD.y + bh + 12}px;font-weight:700">THE SANDBOX</div><div class="abs sm" style="left:${TRAY.x}px;top:${BOARD.y + bh + 12}px;font-weight:700">THE TRAY</div>`;
   const said = d.outcome ? d.outcome.lines.join(' ') : d.prompt;
   const text = W(`<span style="font-size:${said.length > 230 ? 13 : said.length > 140 ? 14 : 16}px;line-height:1.3">${esc(said).replace(/\*([^*]+)\*/g, '<i>$1</i>')}</span>`, `position:absolute;left:24px;right:${d.outcome ? 160 : 24}px;top:${BOARD.y + bh + 34}px;height:74px;padding:8px 14px;display:flex;align-items:center;overflow:hidden`);
   const done = d.outcome ? `<div class="abs" style="right:24px;top:${BOARD.y + bh + 50}px;width:124px">${B('Done', true, 'justify-content:center', '', act('pick', 0))}</div>` : '';
-  return H(d.title, 'run', d.hints) + stats + box + sand + set + loose + hits + labels + text + done;
+  return H(d.title, 'run', d.hints) + stats + board + labels + text + done;
 }

@@ -5,6 +5,7 @@
 import { act, B, bg, esc, facts, H, hpb, mini, TX, W } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { figure, type Art } from '../templates';
+import { phWide } from '../../phantom/screens/formats';
 
 export interface WideOption {
   label: string;
@@ -149,7 +150,8 @@ function plain(d: WideBase, b: PlainBody): string {
 }
 
 /** `phases`: the run is in an Extended Cut climax, so the header also offers its phase list (X, or a click on the hint). */
-export function wideView(_c: ReduxCtx, d: WideModel, phases = false): string {
+export function wideView(c: ReduxCtx, d: WideModel, phases = false): string {
+  if (c.ph) return phWide(c.ph, d, phases);
   const b = d.body;
   const body = b.kind === 'breather' ? breather(d, b) : b.kind === 'blackout' ? blackout(d, b) : b.kind === 'convoy' ? convoy(d, b) : b.kind === 'front' ? front(d, b) : b.kind === 'debate' ? debate(d, b) : b.kind === 'plate' ? plate(d, b) : plain(d, b);
   return (d.art ? bg(d.art) : '') + (d.shade ? `<div class="fill" style="background:${d.shade}"></div>` : '') + (phases ? H(d.title, 'battle', [['P', 'phases'], ['Enter', 'choose']]).replace('<span><kbd>P</kbd>', `<span style="cursor:pointer"${act('phases')}><kbd>P</kbd>`) : H(d.title, 'battle', [['Enter', 'choose']])) + body + TX(esc(d.text));

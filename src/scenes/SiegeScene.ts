@@ -57,7 +57,8 @@ export class SiegeScene extends Phaser.Scene {
       this.at = first ?? 0;
       this.rx = mountRedux(this, {
         render: (c) => {
-          this.cols = c.v(2) ? 1 : 3;
+          // The Phantom page is a ledger of rows, like the second layout.
+          this.cols = c.ph || c.v(2) ? 1 : 3;
           return siegeMapView(c, this.model());
         },
         acts: {

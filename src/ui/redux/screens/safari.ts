@@ -7,6 +7,7 @@ import { B, H, W, act, esc, img, tall } from '../kit';
 import { overworldSheetFiles } from '../../../assets/catalog';
 import { rxUrl } from '../assets';
 import type { ReduxCtx } from '../stage';
+import { phPark } from '../../phantom/screens/park';
 
 /** Someone standing on the grid: an overworld sheet (4 x 4 frames of `size`), the row it faces, and a small mark over its head. */
 export interface ParkSprite {
@@ -202,8 +203,12 @@ function tile(ch: string, x: number, y: number, g: Ground, look: ParkLook): stri
   }
 }
 
-export function safariView(_c: ReduxCtx, d: ParkModel): string {
-  const g = GROUND[d.look][d.areaIndex] ?? GROUND[d.look][0]!;
+/** The zone's ground colours (short grass, its second shade, tall grass, the blades). */
+export const parkGround = (d: ParkModel): Ground => GROUND[d.look][d.areaIndex] ?? GROUND[d.look][0]!;
+
+/** The walked field alone (600 x 280, at 24,60 of this screen). The Phantom page lays the same drawing on its own page. */
+export function parkField(d: ParkModel): string {
+  const g = parkGround(d);
   const tiles = d.rows.map((row, y) => [...row].map((ch, x) => tile(ch, x, y, g, d.look)).join('')).join('');
   // A click on the grid walks one tile that way.
   const hit = d.walking ? d.rows.map((row, y) => [...row].map((_, x) => `<i class="pk-t pk-hit" style="left:${x * T}px;top:${y * T}px"${act('tile', `${x},${y}`)}></i>`).join('')).join('') : '';
@@ -211,6 +216,13 @@ export function safariView(_c: ReduxCtx, d: ParkModel): string {
   const night = d.dark ? '<i class="pk-night"></i>' : '';
   const field = `<div class="abs pk-field pk-${d.look}" style="left:${FX}px;top:${FY}px;width:${T * 15}px;height:${T * 7}px;background:${g[2]}">${tiles}${names}${d.sprites.map((s) => sprite(s)).join('')}${sprite(d.player, true, d.step)}${night}${hit}<span class="pk-area">${esc(d.area)}</span></div>`;
 
+  return field;
+}
+
+export function safariView(c: ReduxCtx, d: ParkModel): string {
+  if (c.ph) return phPark(c.ph, d);
+  const g = parkGround(d);
+  const field = parkField(d);
   const stat = (a: string, b: string | number): string => W(`<span class="sm" style="white-space:nowrap;font-size:13px">${esc(a)}</span><b style="font-size:20px">${esc(b)}</b>`, 'flex:1 1 0;display:flex;flex-direction:column;gap:0;padding:5px 8px;min-width:0');
   const stats = `<div class="abs row" style="left:640px;top:${FY}px;width:296px;gap:20px">${d.stats.map(([a, b]) => stat(a, b)).join('')}</div>`;
   const m = d.meter;

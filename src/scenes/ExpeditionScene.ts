@@ -32,7 +32,8 @@ import { drawExpeditionLook, type ExpeditionLayout, type ExpeditionLook } from '
 import { arenaFor, getTheme } from '../core/themes';
 import { artOf, partyChips } from '../ui/redux/game';
 import { mountRedux, reduxOn } from '../ui/redux/stage';
-import { mapView } from '../ui/redux/screens/map';
+import { mapView, type MapModel } from '../ui/redux/screens/map';
+import { phMap } from '../ui/phantom/screens/map';
 
 const GLYPH: Record<string, { glyph: string; color: number }> = {
   wild: { glyph: 'W', color: 0x58a858 }, trainer: { glyph: 'T', color: 0xc85858 }, elite: { glyph: 'E', color: 0xa040c0 }, rest: { glyph: '+', color: 0xe06890 },
@@ -179,8 +180,9 @@ export class ExpeditionScene extends Phaser.Scene {
       const prompt = exp.choice ? exp.choice.title : 'Choose your next stop';
       const rules = legend ? stageRules(def, here ? here.layer + 1 : 0) : [];
       const view = mountRedux(this, {
+        // Phantom: the route is the Phantom map page (the same model).
         render: (c) =>
-          mapView(c, {
+          (c.ph ? (m: MapModel) => phMap(c.ph!, m) : (m: MapModel) => mapView(c, m))({
             title: `${def.name} · Layer ${(here?.layer ?? -1) + 2}`,
             chips: [legend ? `Legendary event · ${legend.epithet}` : `Tier ${def.tier}`, `₽ ${loot.money}`, `Mega Energy ${loot.energy}/${def.megaCost}`, `Research ${loot.research}/${def.researchGoal}`, ...items],
             types: [],

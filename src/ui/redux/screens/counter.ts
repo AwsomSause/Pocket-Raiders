@@ -5,6 +5,7 @@
 import { act, B, esc, H, TX, W } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { pic, type Art } from '../templates';
+import { phCounter } from '../../phantom/screens/rooms';
 
 export interface CounterOffer {
   name: string;
@@ -34,6 +35,7 @@ export interface CounterModel {
 export const counterStop = (offer: number, button: number, buttons: number): number => offer * buttons + button;
 
 export function counterView(c: ReduxCtx, d: CounterModel): string {
+  if (c.ph) return phCounter(c.ph, d);
   const v = c.v(2), nb = Math.max(1, d.buttons.length), n = d.offers.length;
   const at = Math.max(0, Math.min(n * nb - 1, d.index)), oi = Math.floor(at / nb), bi = at % nb, cur = d.offers[oi];
   const pick = (o: number, b: number): string => `${act('pick', counterStop(o, b, nb))} data-over="over"`;
