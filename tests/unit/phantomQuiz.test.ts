@@ -2,8 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { PHANTOM_VERSIONS } from '../../src/core/presentation/phantom';
 import { pageOf } from '../../src/ui/phantom/kit';
 import { phEvent, tallSize } from '../../src/ui/phantom/screens/event';
-import { phQuiz, QUIZ_STEPS, type QuizModel } from '../../src/ui/phantom/screens/run';
+import { phSeed, SEED_CODES, SEED_KEYS, phQuiz, QUIZ_STEPS, type QuizModel } from '../../src/ui/phantom/screens/run';
 import type { EventModel } from '../../src/ui/redux/screens/event';
+import type { FormModel } from '../../src/ui/redux/screens/run';
 import { portrait } from '../../src/ui/redux/templates';
 
 // The Phantom UI's quiz page (the intake of the prologue), and two fits it brought: a story portrait never stands
@@ -79,5 +80,43 @@ describe('Phantom story portraits and long questions', () => {
     const six = phEvent(ph, { ...base, lines: [...four, ...four.slice(0, 2)] });
     expect(six).toMatch(/class="ph-ev-low" style="translate:0 \d+px"/);
     expect(phEvent(ph, { ...base, lines: one })).not.toContain('ph-ev-low');
+  });
+});
+
+describe('Phantom Seed & Codes page', () => {
+  const form = (over: Partial<FormModel> = {}): FormModel => ({
+    title: 'Seed & Codes', heading: 'Enter a seed or a share code, or leave it random', buttons: [['Paste', 'paste'], ['Confirm', 'apply'], ['Clear', 'clear']], primary: 1, lit: 'Q',
+    text: 'The same seed gives the same region, events and rewards.', hints: [['Enter', 'confirm'], ['Esc', 'desk']], ...over,
+  });
+
+  it('leaves the value window empty for the real text box, and has every key a code needs with the last one lit', () => {
+    const html = phSeed(ph, form());
+    expect(pageOf(html)).toBe('seed');
+    // The scene lays its text box over this window: nothing is drawn inside it.
+    expect(html).toContain('<div class="ph-sd-field rx-field"></div>');
+    expect(SEED_KEYS).toHaveLength(38);
+    expect(count(html, 'data-act="key"')).toBe(38);
+    for (const k of ['A', 'Z', '0', '9', '.', '-']) expect(html).toContain(`data-act="key" data-arg="${k}">${k}</i>`);
+    expect(html).toMatch(/<i class="on" style="--i:16" data-act="key" data-arg="Q">Q<\/i>/);
+    expect(count(html, '<i class="on"')).toBe(1);
+    for (const t of ['Seed &amp; Codes', 'Preparation desk', 'Enter a seed or a share code', 'The same seed gives the same region']) expect(html).toContain(t);
+  });
+
+  it('keeps the three buttons with Confirm lit, lists the four kinds of code, and its key hints confirm and go back', () => {
+    const html = phSeed(ph, form());
+    expect(html).toMatch(/class="blade ph-sd-b"[^>]*data-act="btn" data-arg="paste">Paste</);
+    expect(html).toMatch(/class="blade ph-sd-b on"[^>]*data-act="btn" data-arg="apply">Confirm</);
+    expect(html).toMatch(/class="blade ph-sd-b"[^>]*data-act="btn" data-arg="clear">Clear</);
+    for (const [tag, name] of SEED_CODES) { expect(html).toContain(`<b>${tag}</b>`); expect(html).toContain(name); }
+    expect(html).toMatch(/class="key" data-act="btn" data-arg="apply"><b class="w">Enter<\/b>Confirm/);
+    expect(html).toMatch(/class="key" data-act="back" data-arg=""><b class="w">Esc<\/b>Desk/);
+  });
+
+  it('what went wrong replaces the note and is escaped; no note, no box; no key lit before typing', () => {
+    const bad = phSeed(ph, form({ text: 'That code is <b>not</b> a code.', lit: '' }));
+    expect(bad).toContain('That code is &lt;b&gt;not&lt;/b&gt; a code.');
+    expect(count(bad, '<i class="on"')).toBe(0);
+    expect(phSeed(ph, form({ text: '' }))).not.toContain('ph-sd-say');
+    expect(phSeed(ph, form({ hints: undefined }))).toContain('class="keys"');
   });
 });

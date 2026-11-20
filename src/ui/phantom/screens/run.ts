@@ -5,7 +5,7 @@
 import type { PhantomVersion } from '../../../core/presentation/phantom';
 import type { FormModel as NameModel } from '../../redux/screens/prologue';
 import { FORM_KEYS as NAME_KEYS } from '../../redux/screens/prologue';
-import type { BriefModel, StarterModel } from '../../redux/screens/run';
+import type { BriefModel, FormModel as SeedModel, StarterModel } from '../../redux/screens/run';
 import { type Art, figure, type MenuModel } from '../../redux/templates';
 import { act, esc, hero, keys, mon, page, ransom, TYC, ty } from '../kit';
 import { phHead } from '../templates';
@@ -88,6 +88,35 @@ export function phName(ph: PhantomVersion, d: NameModel): string {
     + `<div class="nk-kb ph-kb">${NAME_KEYS.map((k, i) => `<i class="${k.length === 1 && k !== ' ' && k === last ? 'on' : ''}${k === ' ' || k === '⌫' ? ' ph-k2' : ''}" style="--i:${i}"${act('key', k)}>${esc(face(k))}</i>`).join('')}<i class="w"${act('paste')}>Paste</i><i class="w ok"${act('ok')}>${esc(d.ok)}</i><i class="w"${act('clear')}>Clear</i></div>`
     + (d.note ? `<div class="pn ph-say ph-say-n"><p class="txt">${esc(d.note)}</p></div>` : '')
     + keys(...(many ? [['Tab', 'Next box'] as const] : []), ['Enter', 'Choose'], ['Esc', 'Back']));
+}
+
+/** The keys of Seed & Codes: letters, digits, and the dot and dash a share code has. */
+export const SEED_KEYS = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', '.', '-'] as const;
+/** The four kinds of code the box reads, as the old page lists them. */
+export const SEED_CODES = [
+  ['PR1', 'Seed code', 'Sets the seed, trainer and rules.'],
+  ['GH1', 'Ghost code', 'Race a friend\'s seed and see what they did.'],
+  ['CC1', 'Challenge card', 'Seed, trainer and rules, with a score to beat.'],
+  ['TM1', 'Team code', 'Shows the team. Changes nothing.'],
+] as const;
+
+/**
+ * Seed & Codes (the mock-ups' letter keys, as on the name page). The value window `.rx-field` is left empty: the
+ * scene lays its real text box over it, so typing, pasting and a phone's keyboard all work. A click on a key calls
+ * `key`, a button calls `btn` with its argument.
+ */
+export function phSeed(_ph: PhantomVersion, d: SeedModel): string {
+  const buttons = d.buttons.map(([label, arg], k) => `<div class="blade ph-sd-b${k === d.primary ? ' on' : ''}" style="--sh:#000;--r:${k % 2 ? 2 : -2}deg;--i:${k}"${act('btn', arg)}>${esc(label)}</div>`).join('');
+  const codes = SEED_CODES.map(([tag, name, text]) => `<div class="ph-sd-code"><b>${tag}</b><span><em>${name}</em>${text}</span></div>`).join('');
+  return page('seed', '<div class="bgk"></div><div class="shard" style="--c:var(--red);--cp:polygon(0 0,22% 0,12% 100%,0 100%);inset:0" aria-hidden="true"></div><div class="burst" style="--x:84%;--y:30%" aria-hidden="true"></div><div class="dots" aria-hidden="true"></div>'
+    + phHead(d.title, 'Preparation desk')
+    + `<div class="ph-sd-ask">${esc(d.heading)}</div>`
+    + '<div class="ph-sd-win tilt" style="--r:-1deg"><span class="lab">Seed or share code</span><div class="ph-sd-field rx-field"></div></div>'
+    + `<div class="ph-sd-kb">${SEED_KEYS.map((k, i) => `<i class="${d.lit === k ? 'on' : ''}" style="--i:${i}"${act('key', k)}>${k}</i>`).join('')}</div>`
+    + `<div class="ph-sd-btns">${buttons}</div>`
+    + `<div class="pn lt ph-sd-codes tilt" style="--r:1.2deg"><span class="lab">What the box reads</span>${codes}</div>`
+    + (d.text ? `<div class="pn ph-say ph-sd-say" data-key="say:${esc(d.text.slice(0, 24))}"><p class="txt">${esc(d.text)}</p></div>` : '')
+    + keys(...(d.hints ?? []).map(([k, t]) => [k, t.charAt(0).toUpperCase() + t.slice(1), /esc/i.test(k) ? 'back' : 'btn', /esc/i.test(k) ? undefined : d.buttons[d.primary]?.[1]] as const)));
 }
 
 /** The quiz of the intake (mock-up `quiz`): who asks, the question with where you are in it, and the answers as cards. */

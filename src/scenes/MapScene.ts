@@ -325,9 +325,9 @@ export class MapScene extends Phaser.Scene {
   }
 
   /** Opens the wheel. `held`: TAB is down (letting go opens the lit slot); otherwise it stays until Enter, a click or Esc. */
-  private wheelOpen(held: boolean): void {
+  private wheelOpen(held: boolean, at = performance.now()): void {
     if (!this.rxView || !phantomOn() || this.rxWheel || this.rxPause || this.rxPop || this.rxMenu || this.rxHeal || this.busy || this.picker || this.legend) return;
-    this.rxWheel = { index: 0, spin: 0, held, since: this.time.now };
+    this.rxWheel = { index: 0, spin: 0, held, since: at };
     this.rxCard = null;
     this.busy = true;
     playSfx(this, 'ui.select', 0.4);
@@ -364,11 +364,14 @@ export class MapScene extends Phaser.Scene {
     this.wheelPoint(wheelStep(w.index, this.wheelItems().length, action));
   }
 
-  /** TAB let go: a quick tap leaves the wheel up (Enter or a click opens); after a hold, the lit slot opens. */
-  private wheelRelease(): void {
+  /**
+   * TAB let go: a quick tap leaves the wheel up (Enter or a click opens); after a hold, the lit slot opens. The tap is
+   * timed by the key events' own clock, so a slow frame between the press and the release cannot turn a tap into a hold.
+   */
+  private wheelRelease(at = performance.now()): void {
     const w = this.rxWheel;
     if (!w || !w.held) return;
-    if (this.time.now - w.since < 220 && w.index === 0) { w.held = false; this.rxView?.refresh(); return; }
+    if (at - w.since < 220 && w.index === 0) { w.held = false; this.rxView?.refresh(); return; }
     this.wheelClose(true);
   }
 
@@ -1453,8 +1456,8 @@ export class MapScene extends Phaser.Scene {
       if (phantomOn()) {
         this.rxModel.keys = [...this.rxModel.keys, ['Tab', 'wheel']];
         const kb = this.input.keyboard;
-        const tabDown = (e: KeyboardEvent): void => { if (!e.repeat && !runLogOpen()) this.wheelOpen(true); };
-        const tabUp = (): void => this.wheelRelease();
+        const tabDown = (e: KeyboardEvent): void => { if (!e.repeat && !runLogOpen()) this.wheelOpen(true, e.timeStamp); };
+        const tabUp = (e: KeyboardEvent): void => this.wheelRelease(e.timeStamp);
         const lost = (): void => this.wheelClose(false);
         kb?.addCapture('TAB');
         kb?.on('keydown-TAB', tabDown);
