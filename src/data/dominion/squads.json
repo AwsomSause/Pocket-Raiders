@@ -140,9 +140,8 @@
       "fits": [
         "cause"
       ],
-      "live": false,
-      "needs": "D14",
-      "note": "The Goal track comes with the Founding and the takeover paths (D7, D14); until then the Cause has no bonus and no cost."
+      "live": true,
+      "note": "Goal-track jobs are Boss actions in the sections the Goal grows by, and takeover crew tasks; a Rule team (no Goal) gets no bonus and no cost."
     },
     {
       "id": "fear",
@@ -220,7 +219,7 @@
     "splitPenalty": 10,
     "promoXpPct": 25,
     "promoAmbition": 2,
-    "causeOdds": 10,
+    "causeOdds": 10, "causeTrack": 1, "causeStallWeeks": 2, "causeMorale": -5,
     "fearLoyaltyMax": 50,
     "vengeanceOdds": 25,
     "vengeanceGoneMorale": -10,
@@ -685,6 +684,7 @@
     "rescued": "{squad} saw the Boss bail {name} out. Cohesion +{n}.",
     "upkeep": "{squad} (Pokémon First): ₽{amount} for their Pokémon's upkeep.",
     "purse": "{squad} (Open Purse): ₽{amount} more in wages.",
+    "causeStall": "{squad} (The Cause): the Goal has stalled for two weeks. Morale −{n}.",
     "dread": "{squad}'s name is on the walls in {town}. Dread +{n}.",
     "goneTarget": "{squad} has no one left to hate. Name a new target. Morale {n}.",
     "rackets": "{squad} (Money Hands) squeezed ₽{amount} more out of {town}'s rackets.",

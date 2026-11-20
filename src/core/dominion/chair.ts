@@ -300,6 +300,19 @@ let tension: ((b: DominionBlock, n: number) => void) | null = null;
 export function setChairTension(f: (b: DominionBlock, n: number) => void): void {
   tension = f;
 }
+/** D14 (takeover.ts) registers what the Chair's Goal, Shadow and Wipe Out numbers do, the same way. */
+const OWED: Record<string, (b: DominionBlock, n: number) => void> = {};
+export function setChairOwed(key: string, f: (b: DominionBlock, n: number) => void): void {
+  OWED[key] = f;
+}
+/** Moves an owed number for real when its slice is built; false when it still waits (kept in `chair.owed`). */
+export function payOwed(b: DominionBlock, key: string, n: number): boolean {
+  if (key === 'ten' && tension) tension(b, n);
+  else if (key === 'threat' && heroHooks) heroHooks.threat(b, n);
+  else if (OWED[key]) OWED[key]!(b, n);
+  else return false;
+  return true;
+}
 
 /** D11 (hero.ts) registers how Threat moves and what the Hero's answers do, the same way (no import of hero.ts here). */
 type HeroFx = Extract<CourtFx, { k: 'hero' }>;
@@ -439,10 +452,8 @@ function apply(x: Ctx, fx: CourtFx[]): void {
       }
       case 'follow': ch.follow.push({ card: e.card, day: b.day + e.days, member: x.member }); x.back = true; break;
       case 'owed':
-        // D9 built the rival team: Tension now moves the region's rival for real. The rest wait for their slice.
-        if (e.key === 'ten' && tension) tension(b, e.n);
-        else if (e.key === 'threat' && heroHooks) heroHooks.threat(b, e.n);
-        else ch.owed[e.key] = (ch.owed[e.key] ?? 0) + e.n;
+        // D9 built the rival team: Tension now moves the region's rival for real; D11 the Hero's Threat; D14 the Goal, Shadow and Wipe Out. The rest wait for their slice.
+        if (!payOwed(b, e.key, e.n)) ch.owed[e.key] = (ch.owed[e.key] ?? 0) + e.n;
         bump(x, e.key, e.n);
         break;
       case 'note': x.lines.push(`${e.text} ${fill(L().waits!, { slice: e.slice })}`); break;

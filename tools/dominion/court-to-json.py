@@ -331,7 +331,7 @@ SPEC = {
     79: dict(look='trainer/pr/scientist_m', who='rival', rival=True, wait='D5', a='note:D5:"a lab machine: +1 Room effect" mon:-1 threat:4', b=''),
     80: dict(look='trainer/pr/magma_grunt_m', who='rival', rival=True, region='hoenn', wait='D15', a='note:D9:"Magma Tension -15, Aqua +15"', b='note:D9:"Aqua Tension -15, Magma +15"'),
     81: dict(look='trainer/pr/proton', who='rival', rival=True, a='hook:debate-early ten:-5', b='ten:8 dread:3'),
-    82: dict(look='trainer/pr/proton', who='rival', rival=True, wait='D14', a='wipe:1 ten:20 join', b='$1000 ten:-10 grudge'),
+    82: dict(look='trainer/pr/proton', who='rival', rival=True, a='wipe:1 ten:20 join', b='$1000 ten:-10 grudge'),  # D14: the plans hand over one rival site
     83: dict(look=GR, who='rival', rival=True, needs='stores', a='mon:-1 mon:1 ten:-3', b=''),
     84: dict(look='trainer/pr/rocket_grunt_f', who='rival', rival=True, a='dread:3 ten:4', b='poach:30:40 reg:2'),
     85: dict(look='trainer/pr/pokefan_f', who='defector-mum', rival=True, named='any', a='guard:5 reg:6 ten:4', b='loy:-15'),
@@ -382,7 +382,7 @@ SPEC = {
     126: dict(look='trainer/pr/veteran_m', who='governor', wait='D15', a='stab:15 note:D15:"two members go to the held region"', b='stab:-10'),
     127: dict(look='trainer/pr/hooligans', who='rebel', wait='D15', a='stab:10 note:D15:"tribute -20%"', b='stab:-5 dread:10'),
     128: dict(look='trainer/pr/rich_m', who='magnate', a='deal:1500 wanted:5 note:D15:"region-to-region smuggling"', b=''),
-    129: dict(look='trainer/pr/ace_trainer_m', who='gym-union', wait='D14', a='deal:-2000 note:D14:"Monarch Uprising check -50%"', b='note:D14:"Uprising check +25%"'),
+    129: dict(look='trainer/pr/ace_trainer_m', who='gym-union', wait='D15', a='deal:-2000 note:D15:"Monarch Uprising check -50%"', b='note:D15:"Uprising check +25%"'),  # uprisings come with Stability (D15)
     130: dict(look='trainer/pr/rich_f', who='council', wait='D10', a='c$-50000 note:D10:"police budget -20%"', b=''),
     131: dict(look='trainer/worker_m', who='architect', wait='D5', a='note:D5:"next HQ tier -20% cost"', b=''),
     132: dict(look='member', who='former', wait='D15', a='join stab:-5', b='stab:5'),

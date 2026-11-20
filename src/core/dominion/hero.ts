@@ -136,7 +136,8 @@ export function heroTeam(b: DominionBlock, run: Pick<RunState, 'party'>, kind: '
   const stand = why === 'stand';
   // The Letter (Chair card 150): the HQ's Defense takes levels off the Hero at the door.
   const lv = stand ? b.levelCap : Math.max(F().levels.min, heroLevel(b, run) - (why === 'heroRaid' ? h.bonus ?? 0 : 0));
-  const size = stand ? 6 : T.sizeByBadges[Math.min(8, h.badges)]!;
+  // D14: each Plan point (Wipe Out / Shadow / Monarch / Goal Plan) takes one Pokémon off the final stand, down to the floor.
+  const size = stand ? Math.max(DOMINION_DATA.takeover.league.standMin, 6 - (b.takeover?.plan ?? 0)) : T.sizeByBadges[Math.min(8, h.badges)]!;
   const species = def.lines.slice(0, size).map((l) => stageFor(l, lv));
   // Counters replace the newest catches, never the starter.
   h.counters.slice(0, Math.max(0, species.length - 1)).forEach((type, i) => {

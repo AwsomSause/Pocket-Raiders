@@ -23,10 +23,10 @@
 - Ledger: "Press" (the Chair's fame) adds to Notoriety. Chair money is booked on the Ledger's Chair lines (dirty or clean).
 
 ## Card status (150)
-- **123 live** (113 at D12; cards 56, 74 and 81 in the D13 follow-up; D11's seven in the D11 follow-up, below). Some of them are limited: one part waits for a later slice, and the card shows it as a note ("waits for D9") or as a number that the later slice will use (Hero Threat, Goal, Stability, raid odds, Shadow, Wipe Out).
+- **124 live** (113 at D12; cards 56, 74 and 81 in the D13 follow-up; D11's seven in the D11 follow-up; 82 in D14, below). Some of them are limited: one part waits for a later slice, and the card shows it as a note ("waits for D9") or as a number that the later slice will use (Hero Threat, Goal, Stability, raid odds, Shadow, Wipe Out).
 - **Hero Threat** (D11 follow-up): `threat:N` answers now move the Hero's Threat (`hero.nudge`, through `setChairHero`, so chair.ts doesn't import hero.ts). Threat a D12 save kept in `chair.owed.threat` is added once on the next night. The Threat crisis (card 150) comes at Hero Threat 90+. The seven cards that waited for D11 play: 92 (the Hero's route tomorrow), 93 (Listen, or the Hero at the door tomorrow), 94 (still a D10 part: the Holding Pens), 95 (a town left alone: no Boss actions there), 96 (Goal still waits for D14), 120 (Legendaries 7 days later, or a Legendary hunt) and 150 (the Letter: the Hero at the door with the HQ's Defense as levels off their team and Threat −20 the next day, or flee: Control in one town gone). They use a new `hero:` effect (`hero:intel:N`, `battle`, `letter`, `spare`, `late:N`, `hunt`, `lose`).
 - **Tension** (28 answers and the Chair deals) now moves the region's rival team (D9, `addTension`), through a hook rivals.ts sets (`setChairTension`), so chair.ts doesn't import rivals.ts.
-- **27 waiting** (disabled, never drawn; each names its slice):
+- **26 waiting** (disabled, never drawn; each names its slice):
   - D10 (fence, gyms, bribes): 11
   - D5 (buildings): 6
   - D15 (held regions): 4

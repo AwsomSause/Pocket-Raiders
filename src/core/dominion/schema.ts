@@ -103,7 +103,9 @@ export const EFFECTS = ['scout', 'count', 'scoutDistrict', 'paper', 'catch', 'la
   // D13 (debate.ts addActEffect)
   'debate', 'manifesto',
   // D22 (spies.ts addActEffect)
-  'plantMole'] as const;
+  'plantMole',
+  // D14 (takeover.ts addActEffect)
+  'league', 'plan', 'broadcast'] as const;
 const PlaySchema = z.object({
   kinds: z.array(z.union([z.enum(TARGET_KINDS), z.literal('any')])).min(1).optional(),
   chance: I.min(0).max(100).optional(),
@@ -211,8 +213,8 @@ export type DistrictState = z.infer<typeof DistrictStateSchema>;
 /** A battle an action (or the police) is waiting on. The fight bridge (fight.ts) starts it; fightEnd settles it. */
 export const FieldFightSchema = z.object({
   /** D11: 'hero' a job the Hero stepped into (m11), 'challenge' an encounter's battle, 'heroRaid' the Hero at the HQ, 'stand' the final stand, 'legend' a Heroic Legendary. D10: 'growth' a fight of a chain (Raid, a Gym). D12: 'court' a Chair visitor at the door (`target` the card id, `action` the answer). */
-  why: z.enum(['fail', 'always', 'police', 'looker', 'raid', 'rival', 'hero', 'challenge', 'heroRaid', 'stand', 'legend', 'growth', 'court', 'spy', 'town']),
-  foe: z.enum(['target', 'police', 'wild', 'ghost', 'member', 'looker', 'raid', 'rival', 'hero', 'sidekick', 'legend', 'growth', 'court']),
+  why: z.enum(['fail', 'always', 'police', 'looker', 'raid', 'rival', 'hero', 'challenge', 'heroRaid', 'stand', 'legend', 'growth', 'court', 'spy', 'town', 'takeover']),
+  foe: z.enum(['target', 'police', 'wild', 'ghost', 'member', 'looker', 'raid', 'rival', 'hero', 'sidekick', 'legend', 'growth', 'court', 'takeover']),
   begun: z.boolean(),
   action: S.nullable(),
   target: S.nullable(),
@@ -347,6 +349,8 @@ const BlockSchema = z.object({
   spies: z.lazy(() => SpiesStateSchema).optional(),
   /** D25: this week's news lines and the last few Ledger papers. Optional; `voicesOf` (voices.ts) fills it. */
   voices: z.lazy(() => VoicesStateSchema).optional(),
+  /** D14: the takeover paths, the Goal Track, Holdings, the League, the broadcasts. Optional; `takeoverOf` (takeover.ts) fills it. */
+  takeover: z.lazy(() => TakeoverStateSchema).optional(),
   /** D27: the run rules picked in Settings before this run began (Day pace, Hero pressure...). Optional (normal). */
   rules: z.lazy(() => RunRulesSchema).optional(),
   /** D30: yesterday's jobs and the morning snapshots the morning paper reads. Optional; `paperOf` (moments.ts) fills it. */
@@ -458,7 +462,10 @@ export type DominionAction =
   | { t: 'argue'; line: string }
   | { t: 'deal'; kind: 'merger' | 'branch' }
   | { t: 'debateDone' }
-  | { t: 'walkOut' };
+  | { t: 'walkOut' }
+  // D14, the takeover (takeover.ts): a Turning Point read, the Goal's Moment, storming the rival HQ, taking a place,
+  // a broadcast watched, the next fight of a chain
+  | { t: 'takeover'; op: 'seen' | 'moment' | 'storm' | 'take' | 'bcast'; id?: string };
 
 /** D8: what the Squads page's builder hands over (a new squad when `id` is null). `members` leaves out the leader. */
 export interface SquadDraft { id: string | null; codeName: string; leader: string; members: string[]; incentive: string; target: string | null; focus: string | null; mark: number }
@@ -484,9 +491,13 @@ export const TaskEffectSchema = z.object({
     // D11 (hero.ts)
     'hero',
     // D8 (squads.ts)
-    'matchMake', 'runCrew']),
+    'matchMake', 'runCrew',
+    // D14 (takeover.ts)
+    'takeover']),
   /** D6 district tasks (kind 'district'): what it does in the member's district, and how much (task Lv 1-2, Lv 3+). */
-  does: z.enum(['regard', 'dread', 'cool', 'patrol', 'collect', 'hold', 'line', 'eavesdrop', 'poll', 'face', 'party', 'song', 'peace', 'track', 'counter', 'hunt']).optional(),
+  does: z.enum(['regard', 'dread', 'cool', 'patrol', 'collect', 'hold', 'line', 'eavesdrop', 'poll', 'face', 'party', 'song', 'peace', 'track', 'counter', 'hunt',
+    // D14 (kind 'takeover'): a Plan point, Goal Track, the rival Boss's circle weakened, crew Loyalty
+    'plan', 'coup', 'loyalty']).optional(),
   n: Range.optional(),
   /** Collect: what the district's Rackets pay this week, % by task level 1-5. */
   collect: z.array(N0).length(5).optional(),
@@ -2021,6 +2032,8 @@ export const SquadSchema = z.object({
   leaderRank: S,
   /** Punishments counted so far, by member (one in front of the squad costs Cohesion). */
   punished: z.record(S, N0),
+  /** D14 The Cause: the Goal Track at the last wage day and the weeks it has stalled since. */
+  cause: z.object({ track: z.number().min(0).max(100), weeks: N0 }).strict().optional(),
   /** The squad's own Ledger page (Part 10 §1 Record). */
   record: z.object({
     jobs: N0, wins: N0, losses: N0, hurt: N0,
@@ -2257,6 +2270,87 @@ export const TeamSchema = z.object({
   day: I.min(1),
 }).strict();
 export type Team = z.infer<typeof TeamSchema>;
+
+// ---------- D14: the takeover paths, Goals and Holdings (Part 5 §1-2, Parts 35a-c, lists/takeover-bonuses.md) ----------
+
+export const PATH_IDS = ['wipe', 'shadow', 'monarch', 'goal'] as const;
+export type PathId = (typeof PATH_IDS)[number];
+const HoldingFx = z.object({
+  k: z.enum(['income', 'regard', 'dread', 'heat', 'loyalty', 'heal', 'recruit', 'catch', 'item', 'train', 'hero', 'odds', 'clean', 'once', 'intel', 'cut', 'travel', 'guard', 'upkeep']),
+  n: I.optional(), where: z.enum(['district', 'region']).optional(), stat: STAT.optional(), id: S.optional(), species: z.array(S).min(1).optional(),
+  every: I.min(7).optional(), item: S.optional(), mon: S.optional(), funds: N0.optional(), regard: I.optional(),
+}).strict();
+export type HoldingFx = z.infer<typeof HoldingFx>;
+const HFoe = z.object({ name: S, cls: S, species: z.array(S).min(1), offset: I }).strict();
+export const HOLD_KINDS = ['gym', 'league', 'annex', 'infiltrate', 'buyout', 'seize', 'raid', 'home'] as const;
+export const SIZE = z.enum(['S', 'M', 'L', 'XL']);
+export const HoldingDefSchema = z.object({
+  id: S, region: S, place: S, section: S, kind: z.enum(HOLD_KINDS), size: SIZE, group: S,
+  bonus: z.object({ name: S, text: S }).strict(), catch: S, fx: z.array(HoldingFx),
+  status: z.enum(['supported', 'limited', 'disabled']), note: S.optional(), needs: S.optional(), district: S.nullable(),
+  /** Held through D10/D9 state: 'gym:<id>', 'biz:<target>', 'hq' (the rival HQ stormed), 'champion'. */
+  via: S.optional(), site: S.optional(), foe: HFoe.optional(),
+}).strict();
+export type HoldingDef = z.infer<typeof HoldingDefSchema>;
+const LeagueWho = z.object({ id: S, name: S, species: z.array(S).min(1), offset: I }).strict();
+export const GoalDefSchema = z.object({
+  id: S, name: S, track: S, reason: S, finish: z.boolean(),
+  stages: z.array(z.object({ name: S, range: S, title: S, scene: S }).strict()).length(5),
+  endings: z.array(z.object({ name: S, needs: S, scene: S }).strict()).min(3).max(4),
+  cost: z.object({ name: S, text: S }).strict(),
+  opposition: z.object({ name: S, line: S, foe: z.object({ name: S, cls: S, leaderId: S.nullable(), species: z.array(S).min(3) }).strict() }).strict(),
+  metrics: z.record(S, z.number().min(0)), sections: z.record(S, z.number().min(0)),
+  costMetrics: z.record(S, z.number().min(0)), costSections: z.record(S, z.number().min(0)),
+}).strict();
+export type GoalDef = z.infer<typeof GoalDefSchema>;
+export const TakeoverFileSchema = z.object({
+  _source: S,
+  paths: z.array(z.object({ id: z.enum(PATH_IDS), name: S, icon: S, colour: S, fantasy: S, after: S }).strict()).length(4),
+  need: z.object({ shadowBiz: I.min(1), pillars: z.array(S).min(1), shadowRegard: I, shadowWanted: I, shadowGyms: I.min(1), monarchGyms: I.min(1),
+    monarchHeld: I.min(1).max(100), monarchDread: I, citadel: I.min(1).max(6), crack: I, crackTowns: I.min(1) }).strict(),
+  league: z.object({ elite: z.array(LeagueWho).length(4), champion: LeagueWho, standIn: z.record(S, z.object({ champion: LeagueWho, elite: LeagueWho }).strict()),
+    studied: N0, sway: I.min(1), plans: I.min(1), standMin: I.min(1) }).strict(),
+  goal: z.object({ stages: z.array(I.min(1).max(99)).length(4), warn: I.min(1), max: I.min(1), decay: N0, strike: N0, warnHeat: N0, lose: N0, loseCost: N0, metricCap: I.min(1) }).strict(),
+  holding: z.object({ price: z.record(SIZE, I.min(1)), control: z.record(SIZE, N0), upkeepPct: N0, hold: z.record(SIZE, I.min(1)), raid: z.record(SIZE, I.min(1).max(6)),
+    infiltrate: I.min(1), infiltratePct: I.min(1).max(100), seizeHit: I.min(0).max(100), seizeLoss: I.min(1), attack: I.min(1), attackTension: I, unpaid: I.min(1), forceHeat: N0 }).strict(),
+  holdings: z.array(HoldingDefSchema).min(1),
+  sets: z.array(z.object({ region: S, n: I.min(2), group: S, name: S, text: S, fx: z.array(HoldingFx), status: z.enum(['supported', 'limited', 'disabled']), note: S.optional() }).strict()),
+  goals: z.array(GoalDefSchema).length(14),
+  play: z.record(S, PlaySchema),
+  status: z.record(S, z.object({ status: z.enum(['supported', 'limited', 'disabled']), note: S.optional() }).strict()),
+  broadcast: z.object({ onAir: S, small: S, head: S, say: z.array(S).min(1), region: S }).strict(),
+  lines: z.record(S, S),
+}).strict();
+export type TakeoverFile = z.infer<typeof TakeoverFileSchema>;
+
+export const HOLD_WAYS = ['via', 'buy', 'home', 'infiltrate', 'seize', 'raid', 'annex'] as const;
+export const TakeoverStateSchema = z.object({
+  goal: z.object({
+    track: z.number().min(0).max(100), cost: z.number().min(0).max(10),
+    /** Turning Points fired (0-5); `tp` the stage whose scene waits to be read. */
+    stage: I.min(0).max(5), tp: I.min(1).max(5).nullable(),
+    /** The Scheme's Moment won (the Goal path is done), and how many times it was lost. */
+    done: z.boolean(), lost: N0,
+  }).strict(),
+  /** Last night's measures (the Goal Track grows by what changed). */
+  last: z.record(S, z.number()),
+  /** Plan points (final-stand prep): each is one Pokémon fewer on the Hero's side at the final stand. */
+  plan: N0,
+  league: z.object({ elite: z.array(S), champion: z.boolean(), studied: z.array(S), swayed: z.array(S), sway: N0 }).strict(),
+  hold: z.record(S, z.object({ day: I.min(1), way: z.enum(HOLD_WAYS), cond: I.min(0).max(100), paid: z.boolean(), until: I.min(1).nullable() }).strict()),
+  /** Scouting jobs done per town (Infiltrate needs three). */
+  scouts: z.record(S, N0),
+  /** A chain of takeover fights: the rival HQ, a League match, the Goal's Moment, a place's raid. */
+  chain: z.object({ what: S, step: N0, sides: z.array(z.object({ name: S, cls: S, leaderId: S.nullable(), species: z.array(S).min(1), offset: I }).strict()).min(1) }).strict().nullable(),
+  /** The first path finished (then the Hero comes), every path finished, the region Taken (the Hero beaten). */
+  won: z.object({ path: z.enum(PATH_IDS), day: I.min(1) }).strict().nullable(),
+  paths: z.array(z.enum(PATH_IDS)),
+  taken: z.object({ path: z.enum(PATH_IDS), day: I.min(1) }).strict().nullable(),
+  /** Broadcasts waiting (town ids, or 'region'), and towns already announced. */
+  bcast: z.object({ queue: z.array(S), seen: z.array(S) }).strict(),
+  cracked: z.boolean(),
+}).strict();
+export type TakeoverState = z.infer<typeof TakeoverStateSchema>;
 
 // ---------- D27: the Boss Menu's Settings (mockup m2) ----------
 

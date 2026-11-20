@@ -101,7 +101,7 @@ describe('DOMINION D10: the lists as data', () => {
         expect(s.slice, a.id).toMatch(/^D\d+$/);
       }
     }
-    expect(st).toEqual({ play: 317, wait: 133 });
+    expect(st).toEqual({ play: 347, wait: 103 }); // D14 plays the 30 League and Plan rows
     expect(Object.keys(DOMINION_DATA.growthActions.status)).toHaveLength(450);
     // None of the actions now waits for this slice.
     expect(DOMINION_DATA.actions.actions.filter((a) => actionStatus(a).slice === 'D10')).toHaveLength(0);

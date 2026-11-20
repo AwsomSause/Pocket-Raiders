@@ -28,6 +28,7 @@ import { SquadController } from './dominion/squadController';
 import { HqController } from './dominion/hqController';
 import { RivalController } from './dominion/rivalController';
 import { SpyController } from './dominion/spyController';
+import { TakeoverController } from './dominion/takeoverController';
 import { DebateController } from './dominion/debateController';
 import { PoliceController } from './dominion/policeController';
 import { VoicesController } from './dominion/voicesController';
@@ -49,7 +50,7 @@ import { BossMenuController, SETTINGS_CATS } from './dominion/bossMenuController
 import { fxClasses, fxOf } from '../core/dominion/fx';
 import { JobController } from './dominion/jobController';
 
-type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'squads' | 'founding' | 'founded' | 'debate' | 'spy' | 'assign' | 'district';
+type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'squads' | 'founding' | 'founded' | 'debate' | 'spy' | 'takeover' | 'broadcast' | 'assign' | 'district';
 
 /** The screen to come back to after a battle (D2: the map the action was picked on, or the HQ for a fight at the door). */
 let resume: Screen | null = null;
@@ -98,6 +99,8 @@ export class DominionScene extends Phaser.Scene {
   private rival = new RivalController(this);
   /** D22: Confront, the spy on the crew (F on the Crew File). */
   private spy = new SpyController(this);
+  /** D14: the Takeover page (key K), its Holdings, and the hijacked broadcast. */
+  private tk = new TakeoverController(this);
   /** D13: the Debate (mockup 8). */
   private debate = new DebateController(this);
   /** D24: police questioning (owns the screen while a case is open or its release page unread). */
@@ -140,6 +143,7 @@ export class DominionScene extends Phaser.Scene {
     this.hq = new HqController(this);
     this.res = new ReserveController(this);
     this.rival = new RivalController(this);
+    this.tk = new TakeoverController(this);
     this.debate = new DebateController(this);
     this.police = new PoliceController(this);
     this.desk = new DeskController(this);
@@ -167,7 +171,16 @@ export class DominionScene extends Phaser.Scene {
       this.screen = back === 'card' ? 'map' : back;
       if (this.screen === 'map') this.cursor = newCursor(blk);
       if (this.screen === 'hero' && !blk.hero) this.screen = 'hq';
+      if (this.screen === 'broadcast') this.screen = 'hq';
     }
+    // D14: back from one fight of a Takeover chain (a Raid, the storm, the League): Enter starts the next.
+    const tch = blk?.takeover?.chain, tNext = tch?.sides[tch.step];
+    if (tch && tNext && blk?.field.fight?.why === 'takeover' && !blk.field.fight.begun && !this.notice) {
+      this.notice = `${DOMINION_DATA.takeover.lines.chainNext!.replace('{n}', String(tch.step + 1)).replace('{of}', String(tch.sides.length)).replace('{name}', tNext.name)} Enter to go on.`;
+    }
+    if (back === 'takeover') this.tk.resume(null);
+    // D14: a town taken plays the hijacked broadcast once.
+    this.tk.maybeBroadcast();
     // D10: back from one fight of a chain (a Raid, a Gym's trainers): the map says who's next; Enter starts it.
     const ch = blk?.growth?.chain, nextSide = ch?.sides[ch.step];
     if (ch && nextSide && blk?.field.fight && !blk.field.fight.begun && !this.notice) {
@@ -217,7 +230,7 @@ export class DominionScene extends Phaser.Scene {
         opt: (id) => { if (this.cursor) this.cursor = { ...this.cursor, opt: String(id) }; this.view?.refresh(); },
         buy: (id) => this.buy(id),
         townMeet: (i) => this.answerMeet(Number(i)),
-        dismiss: () => { this.notice = null; this.rival.dismiss(); this.debate.dismiss(); this.spy.dismiss(); this.view?.refresh(); },
+        dismiss: () => { this.notice = null; this.rival.dismiss(); this.debate.dismiss(); this.spy.dismiss(); this.tk.dismiss(); this.view?.refresh(); },
         ledgerTab: (i) => { this.spread = Number(i); this.view?.refresh(); },
         ledgerPage: (d) => this.turnLedger(Number(d)),
         founding: () => this.openFounding(),
@@ -245,6 +258,8 @@ export class DominionScene extends Phaser.Scene {
         ...this.hq.acts(),
         ...this.rival.acts(),
         ...this.spy.acts(),
+        ...this.tk.acts(),
+        takeover: () => { if (this.tk.open(this.screen)) this.view?.refresh(); },
         ...this.debate.acts(),
         ...this.police.acts(),
         ...this.voices.acts(),
@@ -263,6 +278,7 @@ export class DominionScene extends Phaser.Scene {
         ...this.res.overs(),
         ...this.rival.overs(),
         ...this.spy.overs(),
+        ...this.tk.overs(),
         ...this.desk.overs(),
         ...this.sq.overs(),
         ...this.nav.overs(),
@@ -305,6 +321,9 @@ export class DominionScene extends Phaser.Scene {
         return;
       }
       if (this.voices.raw(e.code)) return void (this.ate = MOVE_LETTERS.has(e.code));
+      if (this.tk.raw(e.code)) return;
+      // D14: K opens the Takeover page from the HQ, the map and the Ledger.
+      if (e.code === 'KeyK' && (this.screen === 'hq' || this.screen === 'map' || this.screen === 'ledger')) return void (this.tk.open(this.screen) && this.view?.refresh());
       if (this.heroRaw(e.code)) return;
       if (this.screen === 'ledger') {
         if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
@@ -489,6 +508,9 @@ export class DominionScene extends Phaser.Scene {
         return this.rival.render();
       case 'spy':
         return this.spy.render();
+      case 'takeover':
+      case 'broadcast':
+        return this.tk.render(this.notice);
       case 'debate':
         return this.debate.render();
       case 'desk':
@@ -661,6 +683,11 @@ export class DominionScene extends Phaser.Scene {
     if (this.inRun() && this.police.key(a)) return void this.view?.refresh();
     if (this.screen === 'founding') return this.foundingKey(a);
     if (this.voices.key(a)) return void this.view?.refresh();
+    if (this.tk.owns() && this.notice && (a === 'confirm' || a === 'back')) {
+      this.notice = null;
+      return void this.view?.refresh();
+    }
+    if (this.tk.key(a)) return void this.view?.refresh();
     if (this.screen === 'interrupt') {
       if (a === 'left' || a === 'up') this.intAt = (this.intAt + 2) % 3;
       else if (a === 'right' || a === 'down') this.intAt = (this.intAt + 1) % 3;
@@ -724,7 +751,10 @@ export class DominionScene extends Phaser.Scene {
     const b = this.block();
     if (this.screen === 'title') {
       if (this.titleAt === 0 && !b) this.screen = 'setup';
-      else if (this.titleAt === 1 && b) this.screen = !b.opened ? 'opening' : this.heroPending() ? 'interrupt' : 'hq';
+      else if (this.titleAt === 1 && b) {
+        this.screen = !b.opened ? 'opening' : this.heroPending() ? 'interrupt' : 'hq';
+        this.tk.maybeBroadcast(); // D14: a town taken while away is announced first
+      }
     } else if (this.screen === 'setup') {
       if (this.setup.page === 'types') this.setup = toggleType(this.setup);
       else return this.next();
@@ -819,6 +849,8 @@ export class DominionScene extends Phaser.Scene {
         return this.crew.owns() ? 'morning' : 'hq';
       case 'crew': return this.crew.personaOn() ? 'persona' : 'crew';
       case 'founded': return 'founding';
+      // D14's hijacked broadcast plays over the Takeover page.
+      case 'broadcast': return 'takeover';
       case 'title': case 'setup': case 'opening': return null;
       default: return this.screen;
     }
@@ -920,6 +952,20 @@ export class DominionScene extends Phaser.Scene {
   rivalStep(action: DominionAction): { ok: boolean; fight: boolean; notice: string | null } {
     return services().session.dominionStep(action);
   }
+  /** D14: a choice on the Takeover page (saved). */
+  takeoverStep(action: DominionAction): { ok: boolean; fight: boolean; notice: string | null } {
+    const out = services().session.dominionStep(action);
+    if (out.ok && !out.fight) this.tk.maybeBroadcast();
+    return out;
+  }
+  startFightFrom(from: Screen): void {
+    this.notice = null;
+    this.fight(from);
+  }
+  monFilesOf(ids: string[]): MonFiles {
+    return this.monFiles(ids);
+  }
+
   /** D22: F on the Crew File opens the Confront room. */
   confront(member: string): void {
     this.spy.open(member);
@@ -939,6 +985,7 @@ export class DominionScene extends Phaser.Scene {
     const out = services().session.dominionStep(action);
     if (out.ok) {
       this.notice = out.notice;
+      this.tk.maybeBroadcast();
       if (action.t === 'do') this.autoEnd();
       const n = hqModel(this.block()!).orders.length;
       this.at = Math.min(this.at, Math.max(0, n - 1));
@@ -995,7 +1042,7 @@ export class DominionScene extends Phaser.Scene {
   /** D10: a Raid, a Gym's trainers, the Gauntlet: the chain's next fight waits on the map. */
   private chainWaiting(): boolean {
     const f = this.block()?.field.fight;
-    return !!f && !f.begun && f.why === 'growth';
+    return !!f && !f.begun && (f.why === 'growth' || f.why === 'takeover');
   }
 
   private pickDistrict(id: string): void {
