@@ -32,7 +32,7 @@ Tests: `tests/unit/motionBasics.test.ts` (timings against the mockups, the Reduc
 
 - The foe's ball comes from the screen edge (the mockup's pass 2); the foe trainer stepping in to throw (pass 4) comes
   with the trainer intro slice.
-- The trainer face chip on a knock-out (pass 19) is not in yet. The info bar now tucks away during a switch and comes back with the new name while the Pokémon settles (pass 2; singles).
+- Trainer face chip (pass 19): on a big hit (super effective, critical, or 40% of max HP) and on a knock-out your trainer's face pops in at the bottom right with the mockup's word ("Nice hit!", "Yes!", "Hang in there!", "We did it!", "You did great."), at most one per 1.2 s (`cheerClip` in motionBasics, pictures in `src/ui/battleFx/cheerChip.ts`). None with animations off or with the Phantom look's own cards. Ring colours for Blue, Green, Nate and Hilda are picked by us (the mockup only shows Red). The info bar now tucks away during a switch and comes back with the new name while the Pokémon settles (pass 2; singles).
 - Double battles use the new faint, recall and send-out for the focused Pokémon; the dark base and exp lights are singles only.
 - The faint's camera push is still the game's own KO camera (it already follows the Battle camera setting).
 

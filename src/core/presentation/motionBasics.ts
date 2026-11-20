@@ -191,3 +191,41 @@ export function expLightsClip(from: Point, bar: Point, level: ClipLevel): Motion
   b.beat(0, 'Its experience flies to your bar').beat(550, 'The bar fills');
   return b.end(910);
 }
+
+/** What just happened that your trainer reacts to (pass 19). */
+export type CheerMoment = { kind: 'hit'; on: 'foe' | 'you'; superEffective: boolean } | { kind: 'faint'; on: 'foe' | 'you' };
+
+/** A hit counts as big when it is super effective, a critical hit, or takes at least 40% of the target's HP. */
+export function bigHit(damage: number, maxHp: number, effectiveness: number, crit: boolean): boolean {
+  return effectiveness >= 2 || crit || (maxHp > 0 && damage >= maxHp * 0.4);
+}
+
+/** The word on your trainer's chip, as the mockup says it. */
+export function cheerWord(m: CheerMoment): string {
+  if (m.kind === 'faint') return m.on === 'foe' ? 'We did it!' : 'You did great.';
+  return m.on === 'you' ? 'Hang in there!' : m.superEffective ? 'Yes!' : 'Nice hit!';
+}
+
+/** How long two chips stay apart: at most one every 1.2 s. */
+export const CHEER_GAP = 1200;
+
+/**
+ * Trainer face chip (pass 19): your trainer's face pops in at the bottom right with a word beside it, hops once,
+ * and goes. `face` is the round picture's centre; the word's right edge sits 40 px left of it.
+ */
+export function cheerClip(face: Point, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('cheer', level);
+  const f = b.part('face', { x: face.x, y: face.y, sx: 0, sy: 0, alpha: 1 });
+  const w = b.part('word', { x: face.x - 40, y: face.y, sx: 0, sy: 0, alpha: 1 });
+  if (level === 'off') return b.end(0);
+  if (level === 'reduced') {
+    f.at(0).set({ sx: 1, sy: 1, alpha: 0 }).to(150, { alpha: 1 }).wait(700).to(150, { alpha: 0 });
+    w.at(0).set({ sx: 1, sy: 1, alpha: 0 }).to(150, { alpha: 1 }).wait(700).to(150, { alpha: 0 });
+    b.beat(0, 'Your trainer says a word');
+    return b.end(1000);
+  }
+  f.at(0).to(200, { s: 1 }, 'back2').to(80, { y: face.y - 8 }, 'out').to(120, { y: face.y }, 'in').wait(500).to(150, { s: 0 }, 'in');
+  w.at(80).to(180, { s: 1 }, 'back2').wait(620).to(120, { s: 0 }, 'in');
+  b.beat(0, 'Your trainer pops in').beat(200, 'A little hop').beat(900, 'Gone again');
+  return b.end(1050);
+}

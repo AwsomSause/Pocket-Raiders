@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ClipBuilder, clipEnd, EASES, fxAllowed, sampleClip, type ClipLevel, type MotionClip } from '../../src/core/presentation/motionClip';
-import { aceLandClip, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
+import { aceLandClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
 
 const ME: MonSpot = { x: 312, y: 428, h: 180, side: 'player' };
 const FOE: MonSpot = { x: 648, y: 240, h: 150, side: 'enemy' };
@@ -197,5 +197,41 @@ describe('the info bar on a switch (pass 2, Switch)', () => {
       expect(cue(r, 'tuck')).toBeLessThanOrEqual(r.length);
       expect(cue(s, 'plate')).toBeLessThanOrEqual(s.length);
     }
+  });
+});
+
+describe('trainer face chip (pass 19)', () => {
+  it('says the mockup words for each moment', () => {
+    expect(cheerWord({ kind: 'hit', on: 'foe', superEffective: true })).toBe('Yes!');
+    expect(cheerWord({ kind: 'hit', on: 'foe', superEffective: false })).toBe('Nice hit!');
+    expect(cheerWord({ kind: 'hit', on: 'you', superEffective: true })).toBe('Hang in there!');
+    expect(cheerWord({ kind: 'faint', on: 'foe' })).toBe('We did it!');
+    expect(cheerWord({ kind: 'faint', on: 'you' })).toBe('You did great.');
+  });
+
+  it('counts a hit as big from 40% of max HP, a super-effective hit or a crit, and not below', () => {
+    expect(bigHit(40, 100, 1, false)).toBe(true);
+    expect(bigHit(39, 100, 1, false)).toBe(false);
+    expect(bigHit(1, 100, 2, false)).toBe(true);
+    expect(bigHit(1, 100, 0.5, true)).toBe(true);
+    expect(bigHit(5, 0, 1, false)).toBe(false);
+  });
+
+  it('pops the face in, hops once and leaves; the word follows 80 ms later; Off shows nothing', () => {
+    const full = cheerClip({ x: 902, y: 424 }, 'full');
+    expect(full.length).toBe(1050);
+    expect(sampleClip(full, 0).face).toMatchObject({ sx: 0, x: 902, y: 424 });
+    expect(sampleClip(full, 200).face!.sx).toBeCloseTo(1);
+    expect(sampleClip(full, 280).face!.y).toBeCloseTo(416);
+    expect(sampleClip(full, 400).face!.y).toBeCloseTo(424);
+    expect(sampleClip(full, 80).word!.sx).toBeCloseTo(0);
+    expect(sampleClip(full, 1050).face!.sx).toBeCloseTo(0);
+    expect(sampleClip(full, 1050).word!.sx).toBeCloseTo(0);
+    expect(sampleClip(full, 0).word).toMatchObject({ x: 862 });
+    const reduced = cheerClip({ x: 902, y: 424 }, 'reduced');
+    expect(reduced.length).toBe(1000);
+    expect(sampleClip(reduced, 500).face).toMatchObject({ sx: 1, alpha: 1, y: 424 });
+    expect(cheerClip({ x: 902, y: 424 }, 'off').length).toBe(0);
+    expect(CHEER_GAP).toBe(1200);
   });
 });

@@ -139,3 +139,32 @@ test('Reduced only sinks and is short; Off moves nothing and takes no time', asy
   expect((await look(page, 'player')).alpha).toBe(0);
   expect(errors).toEqual([]);
 });
+
+test('the trainer face chip pops in with its word, keeps its distance, obeys Off, and leaves nothing behind', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'cheer-e2e');
+  const chips = () => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.list.filter((c: any) => c.name === 'cheer-chip').map((c: any) => c.texture.key));
+  // A knock-out: your trainer's face and "We did it!".
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').cheer({ kind: 'faint', on: 'foe' }, 0));
+  await expect.poll(chips, { timeout: 3_000 }).toHaveLength(2);
+  const keys = await chips();
+  expect(keys.some((k: string) => k.startsWith('cheer.face.'))).toBe(true);
+  expect(keys.some((k: string) => k.startsWith('cheer.word.We did it!'))).toBe(true);
+  // A second moment straight after is held back (one chip per 1.2 s).
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').cheer({ kind: 'hit', on: 'you', superEffective: false }, 0));
+  await page.waitForTimeout(100);
+  expect((await chips()).some((k: string) => k.includes('Hang in there!'))).toBe(false);
+  // It goes by itself.
+  await expect.poll(chips, { timeout: 5_000 }).toHaveLength(0);
+  // With every animation off there is no chip at all.
+  await page.waitForTimeout(1300);
+  await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    session.settings.disableAllAnimations = true;
+    game.scene.getScene('Battle').cheer({ kind: 'hit', on: 'foe', superEffective: true }, 0);
+  });
+  await page.waitForTimeout(300);
+  expect(await chips()).toHaveLength(0);
+  expect(errors).toEqual([]);
+});

@@ -121,13 +121,14 @@ import { pokemonHeightM, trainerHeightM } from '../core/heights';
 import { teraJewel } from '../ui/battleFx/teraJewel';
 import { megaGlass } from '../ui/battleFx/megaGlass';
 import type { GimmickPage } from '../ui/battleFx/gimmickStage';
+import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture } from '../ui/battleFx/cheerChip';
 import { dynamaxPan } from '../ui/battleFx/dynamaxPan';
 import { keyItemFor } from '../ui/battleFx/cineLook';
 import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel } from '../core/presentation/motionClip';
-import { aceLandClip, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { aceLandClip, bigHit, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
@@ -3961,6 +3962,38 @@ export class BattleScene extends Phaser.Scene {
     if (visual.active) breathe(this, visual, this.motion);
   }
 
+  /** When the last trainer face chip went up (scene clock); chips stay at least `CHEER_GAP` apart. */
+  private cheerAt = -Infinity;
+
+  /**
+   * Trainer face chip (pass 19): your trainer's face pops in at the bottom right with a word ("Nice hit!", "We did it!")
+   * and hops away again. Never waits on anything; nothing at all with animations off, in the Phantom look (its own
+   * cards speak), or without your trainer's art.
+   */
+  private cheer(m: CheerMoment, delay: number): void {
+    const level = this.clipLevel();
+    if (level === 'off' || this.phCards()) return;
+    const now = this.time.now;
+    if (now < this.cheerAt + CHEER_GAP) return;
+    this.cheerAt = now;
+    const art = this.playerArt();
+    if (!art) return;
+    const color = CHEER_RING[art] ?? throwTint(art);
+    const faceKey = cheerFace(this, art, color);
+    const wordKey = faceKey ? cheerWordPicture(this, cheerWord(m), color) : null;
+    if (!faceKey || !wordKey) return;
+    this.time.delayedCall(delay * animationTimeScale(services().session.settings), () => {
+      if (!this.sys.isActive()) return;
+      const spot = { x: 902, y: 424 };
+      const parts = cheerParts(this, spot, faceKey, wordKey, 4000);
+      const run = playClip(this, cheerClip(spot, level), this.clipHost({ face: { kind: 'free', get: () => parts.face }, word: { kind: 'free', get: () => parts.word } }));
+      void run.done.then(() => {
+        parts.face.destroy();
+        parts.word.destroy();
+      });
+    });
+  }
+
   /** The words the Mega Evolution cutscene locks on: stone and ring, the new type and ability, which stats rose. */
   private megaPage(mon: PokemonInstance, toId: string, itemId: string | null): GimmickPage {
     const { content } = services().session;
@@ -5842,6 +5875,9 @@ export class BattleScene extends Phaser.Scene {
             // Phantom UI: a hit that lands hard gets its splash (the knock-out card speaks for a hit that ends it).
             if ((e.effectiveness >= 2 || e.crit) && e.hpAfter > 0 && this.phTurnCards()) await this.phHitCard(mon!, e.hpAfter, e.effectiveness >= 2, !!e.crit);
           }
+          if (e.type === 'damage' && e.hpAfter > 0 && e.hpAfter < mon!.hp && bigHit(mon!.hp - e.hpAfter, maxHp(services().session.content, mon!), e.effectiveness, !!e.crit)) {
+            this.cheer({ kind: 'hit', on: e.side === 'enemy' ? 'foe' : 'you', superEffective: e.effectiveness >= 2 }, 120);
+          }
           if (e.hpAfter < mon!.hp && services().session.settings.damageNumbers) this.floatDamage(sprite, mon!.hp - e.hpAfter);
           if (e.type === 'damage' && e.hpAfter < mon!.hp) this.buzz(this.lastMoveType, e.effectiveness > 1);
           if (e.type === 'damage' && e.side === 'player' && (e.crit || e.effectiveness >= 2) && e.hpAfter < mon!.hp && this.trainerActor?.sprite.visible) void this.trainerActor.play('hit');
@@ -5939,6 +5975,7 @@ export class BattleScene extends Phaser.Scene {
         case 'faint':
           mon!.hp = 0;
           playSfx(this, 'se.faint');
+          this.cheer({ kind: 'faint', on: e.side === 'enemy' ? 'foe' : 'you' }, 250);
           if (!this.cameraMove(e)) this.focusPush('ko');
           if (sprite) {
             if (e.side === 'enemy') this.fellAt = { x: sprite.x, y: this.spotXY('enemy').y };
