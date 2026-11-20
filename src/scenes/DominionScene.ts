@@ -31,6 +31,7 @@ import { SpyController } from './dominion/spyController';
 import { TakeoverController } from './dominion/takeoverController';
 import { DebateController } from './dominion/debateController';
 import { PoliceController } from './dominion/policeController';
+import { SnatchController } from './dominion/snatchController';
 import { VoicesController } from './dominion/voicesController';
 import { NavController, type Here } from './dominion/navController';
 import { PAD_WHEEL_EVENT } from '../ui/gamepad';
@@ -105,6 +106,8 @@ export class DominionScene extends Phaser.Scene {
   private debate = new DebateController(this);
   /** D24: police questioning (owns the screen while a case is open or its release page unread). */
   private police = new PoliceController(this);
+  /** D23: the Holding Cell's questioning (owns the screen while a captive is in the room). */
+  private snatch = new SnatchController(this);
   /** D21: the applications desk (Rotom mockup k5). */
   private desk = new DeskController(this);
   /** D8: the Squads page (mockup 13, U on the Crew File). */
@@ -123,7 +126,7 @@ export class DominionScene extends Phaser.Scene {
     toMap: (next, notice) => this.afterJob(next, notice),
     onMorningHq: () => this.screen === 'hq' && !this.police.owns() && !this.voices.on,
   });
-  private voices = new VoicesController({ refresh: () => this.view?.refresh(), onHq: () => this.screen === 'hq' && !this.crew.owns() && !this.police.owns() && !this.block()?.crew?.talks.length });
+  private voices = new VoicesController({ refresh: () => this.view?.refresh(), onHq: () => this.screen === 'hq' && !this.crew.owns() && !this.police.owns() && !this.snatch?.owns() && !this.block()?.crew?.talks.length });
 
   constructor() {
     super('Dominion');
@@ -146,6 +149,7 @@ export class DominionScene extends Phaser.Scene {
     this.tk = new TakeoverController(this);
     this.debate = new DebateController(this);
     this.police = new PoliceController(this);
+    this.snatch = new SnatchController(this);
     this.desk = new DeskController(this);
     this.sq = new SquadController(this, this);
     this.menu = new BossMenuController(this.menuHost());
@@ -262,6 +266,7 @@ export class DominionScene extends Phaser.Scene {
         takeover: () => { if (this.tk.open(this.screen)) this.view?.refresh(); },
         ...this.debate.acts(),
         ...this.police.acts(),
+        ...this.snatch.acts(),
         ...this.voices.acts(),
         base: () => { this.hq.open(); this.view?.refresh(); },
         ...this.desk.acts(),
@@ -312,6 +317,8 @@ export class DominionScene extends Phaser.Scene {
       // D30: a job moment or the morning paper keeps every key while it is up (N is Next action on a result page).
       if (this.inRun() && this.job.raw(e.code)) return;
       if (this.inRun() && this.police.raw(e)) return;
+      // D23: the questioning room reads its keys next (typing included).
+      if (this.inRun() && this.snatch.raw(e)) return;
       if (this.screen === 'founding') return;
       if (this.debate.raw(e.code)) return;
       // D12: while the Chair sits, O is its settings, not the Founding.
@@ -406,6 +413,7 @@ export class DominionScene extends Phaser.Scene {
       this.desk.shutdown();
       this.spy.destroy();
       this.police.shutdown();
+      this.snatch.shutdown();
     });
   }
 
@@ -448,6 +456,7 @@ export class DominionScene extends Phaser.Scene {
     const b = this.block();
     if (b && this.inRun() && this.job.owns()) return this.job.render();
     if (b && this.inRun() && this.police.owns()) return this.police.render();
+    if (b && this.inRun() && this.snatch.owns()) return this.snatch.render();
     if (b && this.inRun() && this.job.paperOwns()) return this.job.renderPaper();
     if (this.voices.on && this.screen === 'hq') return this.voices.render();
     // D13: a Debate on the table takes the screen (after the Debate action, a card answered, or a reload).
@@ -681,6 +690,7 @@ export class DominionScene extends Phaser.Scene {
     if (this.debate.key(a)) return void this.view?.refresh();
     if (this.inRun() && this.job.key(a)) return void this.view?.refresh();
     if (this.inRun() && this.police.key(a)) return void this.view?.refresh();
+    if (this.inRun() && this.snatch.key(a)) return void this.view?.refresh();
     if (this.screen === 'founding') return this.foundingKey(a);
     if (this.voices.key(a)) return void this.view?.refresh();
     if (this.tk.owns() && this.notice && (a === 'confirm' || a === 'back')) {
@@ -932,6 +942,15 @@ export class DominionScene extends Phaser.Scene {
   /** D24: an answer in the interview room, or the release page read (saved). */
   policeStep(action: DominionAction): { ok: boolean; notice: string | null } {
     return services().session.dominionStep(action);
+  }
+  /** D23: a line, the Goal or the ending in the questioning room (saved). */
+  snatchStep(action: DominionAction): { ok: boolean; notice: string | null } {
+    return services().session.dominionStep(action);
+  }
+  /** D23: the room closed; its line shows on the page underneath. */
+  roomDone(notice: string | null): void {
+    this.notice = notice;
+    this.view?.refresh();
   }
   /** D24: the release page is read. */
   toHq(): void {

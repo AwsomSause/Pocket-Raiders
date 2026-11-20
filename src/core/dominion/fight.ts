@@ -14,6 +14,7 @@ import { districtDef, foeOf, targetDef } from './field';
 import { heroTeam, sawTypes } from './hero';
 import { rivalSide } from './rivals';
 import { growthSide } from './growth';
+import { snatchSide } from './snatch';
 import { takeoverSide } from './takeover';
 
 /** Starts `field.fight` and marks it begun. Returns null when there's nothing to start or nobody can fight. */
@@ -56,6 +57,12 @@ export function beginDominionFight(content: Content, current: RunState): RunStat
     if (!side) return null;
     team = side.species.map((s, i) => make(s, Math.max(2, side.level - (i ? 1 : 0)))).filter((m): m is PokemonInstance => !!m);
     trainer = { classId: side.classId, name: side.name, leaderId: side.leaderId };
+  } else if (fight.foe === 'snatch') {
+    // D23: the person a Snatch Operation goes after (snatch.ts).
+    const side = snatchSide(b, run);
+    if (!side) return null;
+    team = side.species.map((s, i) => make(s, Math.max(2, side.level - (i ? 1 : 0)))).filter((m): m is PokemonInstance => !!m);
+    trainer = { classId: side.classId, name: side.name, leaderId: null };
   } else if (fight.foe === 'member') {
     // A spar with the first member, or (D22) a confronted spy's own team.
     const m = (fight.target && b.members.find((x) => x.id === fight.target)) || b.members[0];

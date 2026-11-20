@@ -2141,9 +2141,11 @@
     "Truth Chamber"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D23",
-   "fx": {}
+   "status": "supported",
+   "fx": {
+    "talk": 10
+   },
+   "waits": null
   },
   {
    "n": "67",

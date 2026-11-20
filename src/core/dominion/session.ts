@@ -36,6 +36,7 @@ import { accuse, askSpy, dropTalk, startConfront, type SpyOut } from './spies';
 import { argue, chooseDeal, closeDebate, walkOut, type DebateOut } from './debate';
 import { answerQ, noteAct, releasedSeen, releaseQ, returnHeld } from './police';
 import './growth';
+import { endS, goalS, inRoom, sayS, stopS, type SOut } from './snatch';
 import { takeoverStep } from './takeover';
 
 export const DOMINION_MODE_ID = 'dominion';
@@ -129,6 +130,9 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
   // D24: while the police question someone, only answers go through.
   const polOut = policeInRun(content, run, action);
   if (polOut) return polOut;
+  // D23: while a captive is being questioned, only the room's actions go through.
+  const snOut = snatchInRun(content, run, action);
+  if (snOut) return snOut;
   if (action.t === 'found') {
     const out = found(block, action.team);
     return { ok: out.ok, block: out.block, notice: out.notice, heal: false, run: out.ok ? withBlock(run, DominionBlockSchema.parse(out.block)) : run };
@@ -249,6 +253,29 @@ function policeInRun(content: Content, run: RunState, action: DominionAction): (
   if (out.over) releaseQ(content, next, run.seed);
   const b = DominionBlockSchema.parse(next.expansion!.dominion!);
   return { ok: true, block: b, notice: null, heal: false, run: withBlock(next, b) };
+}
+
+/** D23: the Goal, a line, stop and the ending in the Holding Cell (snatch.ts). Null for any other action with no room open. */
+function snatchInRun(content: Content, run: RunState, action: DominionAction): (StepOut & { run: RunState }) | null {
+  const block = run.expansion!.dominion!;
+  const no = (notice: string | null) => ({ ok: false, block, notice, heal: false, run });
+  let out: SOut;
+  switch (action.t) {
+    case 'sGoal': out = goalS(block, action.goal); break;
+    case 'sSay': out = sayS(block, action, run.seed); break;
+    case 'sStop': out = stopS(block); break;
+    case 'sEnd': {
+      const next = structuredClone(run);
+      const o = endS(content, next, action.how, run.seed);
+      if (!o.ok) return no(o.notice);
+      const b = DominionBlockSchema.parse(next.expansion!.dominion!);
+      return { ok: true, block: b, notice: o.notice, heal: false, run: withBlock(next, b) };
+    }
+    default: return inRoom(block) ? no(DOMINION_DATA.snatch.lines.noRoom ?? null) : null;
+  }
+  if (!out.ok) return no(out.notice);
+  const b = DominionBlockSchema.parse(out.block);
+  return { ok: true, block: b, notice: null, heal: false, run: withBlock(run, b) };
 }
 
 /** D9: the Rival File's answers (rivals.ts). A fight answered leaves `field.fight` for the scene to start. */
