@@ -1,0 +1,117 @@
+/* Phantom UI: the pause menu's Pokédex and the type chart (mock-ups `dex`, `types`). */
+.phx .phs{
+  & .ph-dxl{cursor:pointer}
+  & .ph-dxl em{font:400 44px/1 var(--f-disp);font-style:normal;color:#555}
+  & .ph-dxl.on em{color:#999}
+  & .ph-dxl.unk .an{filter:brightness(0) invert(.25)}
+  & .ph-dxl.on.unk .an{filter:brightness(0) invert(.6)}
+  & .ph-dxl-card{height:auto;min-height:500px;padding:22px 34px 28px}
+  & .ph-dxl-card h3{white-space:nowrap}
+  & .ph-dxl-card .no{font-size:30px}
+  & .ph-dxl-card .pic{height:160px;overflow:hidden}
+  & .ph-dxl-card .ph-de-q{font-size:130px;line-height:1}
+  & .ph-dxl-card p{font-size:19px}
+  & .ph-dxl-card p.s{font-size:17px}
+  & .ph-dxl-ty{display:flex;gap:8px;min-height:30px}
+  & .ph-tc-p{min-height:238px;align-content:start}
+  & .tc-t{cursor:pointer}
+}
+/* Next region and regional forms (mock-ups `travel`, `forms`). */
+.phx .phs{
+  & .ph-fm-q{max-width:1150px}
+  & .ph-fm-q small{font-size:15px;letter-spacing:.1em;text-transform:none}
+  & .ph-fm-q span{display:block;line-height:1.05}
+  & .ph-fm-c .spr{height:96px;display:grid;place-items:center}
+  & .ph-fm-ch .ch{cursor:pointer}
+  & .ph-fm-ch.many .ch,& .ph-fm-ch.many .ch.on{width:282px}
+  & .ph-fm-ch .ch span{white-space:normal;line-height:1.15}
+  & .ph-tv-way em{font:400 22px/1 var(--f-disp);font-style:normal;color:var(--w);opacity:.7}
+  & .ph-tv-way i{width:90px}
+  & .ph-tv-t{width:340px;height:300px;translate:none;scale:1}
+  & .ph-tv-t p{font-size:18px}
+  & .ph-tv-next{right:auto;left:440px;width:400px}
+}
+/* The Rotom Phone (mock-up `phone`). */
+.phx .phs{
+  & .ph-ph-list .pn{cursor:pointer;min-height:66px}
+  & .ph-ph-list b{white-space:nowrap;line-height:1.15}
+  & .ph-ph-list span:not(.av){white-space:nowrap;line-height:1.25}
+  & .ph-ph-list.many{gap:6px}
+  & .ph-ph-list.many .pn{min-height:56px;padding-top:5px;padding-bottom:5px}
+  /* A bubble's row (`.im` is also the name of a picture in the shared kit, which is a block). */
+  & .ph-ph-chat>.im{display:flex;background:none;image-rendering:auto}
+  & .ph-ph-av{display:grid;place-items:center;width:48px;height:48px;overflow:hidden;flex:none}
+  /* A person's picture is cut at the chest, as on the mock-up. */
+  & .ph-ph-av.pic{place-items:start center;padding-top:3px}
+  & .ph-ph-av>i{font:400 26px/1 var(--f-disp);font-style:normal;color:var(--w)}
+  & .ph-ph-av.rotom{background:var(--gold)}
+  & .ph-ph-av.rotom>i{color:var(--k)}
+  & .ph-ph-chat{width:520px;gap:12px}
+  & .ph-ph-chat .im .pn{max-width:420px;padding:12px 24px 13px}
+  & .ph-ph-chat .im .txt{font-size:21px;line-height:1.2}
+  & .ph-ph-chat.sm .im .txt{font-size:18px}
+  & .ph-ph-chat.xs{gap:8px}
+  & .ph-ph-chat.xs .im .txt{font-size:16px}
+  & .ph-ph-chat.xs .im .pn{padding:9px 20px 10px}
+  & .ph-ph-reply{top:auto;bottom:118px}
+  & .ph-ph-reply .ch{cursor:pointer}
+  & .ph-ph-note{position:absolute;right:40px;bottom:84px;margin:0;font:700 14px/1 var(--f-cond);letter-spacing:.06em;color:var(--bone);opacity:.8}
+}
+.phx .phs[data-liv=channel]{
+  & .ph-dxl-card .pic{border-radius:0}
+}
+
+/* The Town Map pages (mock-ups `town`, `place`, `pocket`). */
+.phx .phs{
+  & .ph-hm .pin.n{cursor:pointer}
+  & .ph-hm .hm-you .spr{display:block}
+  & .ph-hl .hl-t span{cursor:pointer}
+  & .ph-hl .hl-i b{white-space:nowrap}
+  & .ph-hl-none{cursor:default;opacity:.85}
+  /* More than six places: tighter rows, so the last one clears the keys. */
+  & .ph-hl.many{gap:5px}
+  & .ph-hl.many .hl-i{padding-block:5px 6px}
+  & .ph-hl.many .hl-i.on{padding-block:9px 10px}
+  & .ph-hl.many .hl-i b{font-size:22px}
+  & .ph-hl.many .hl-i.on b{font-size:28px}
+  & .ph-hl.many .hl-i kbd{width:30px;height:30px;font-size:18px}
+  & .ph-hl.many .hl-i span{font-size:14px;margin-top:2px}
+  & .ph-hl.many .hl-i em{font-size:17px;padding:5px 10px 6px}
+  & .ph-pl-rooms .blade{cursor:pointer}
+  /* The white strip runs behind the rooms: an unlit room keeps a dark ground under its name. */
+  & .ph-pl-rooms .blade:not(.on){background:var(--k)}
+  & .ph-pl-rooms.sm{gap:8px;top:134px}
+  & .ph-pl-rooms.sm .blade{font-size:34px}
+  & .ph-pl-rooms.sm .blade small{font-size:15px}
+  & .ph-pl-rooms.xs{gap:4px;top:124px}
+  & .ph-pl-rooms.xs .blade{font-size:26px;padding:3px 20px 5px}
+  & .ph-pl-rooms.xs .blade small{font-size:14px;margin-top:1px}
+  & .ph-pl-rooms.xs .blade:nth-child(even){margin-left:16px}
+  /* A long list of rooms runs down to the keys: the keeper's line moves under the preview. */
+  & .ph-pl-rooms:is(.sm,.xs)~.ph-pl-say{left:auto;right:34px;width:440px;box-sizing:border-box}
+  & .ph-pl-tr>div{min-width:0;overflow:hidden}
+  & .ph-hl .hl-i span{white-space:nowrap}
+  & .ph-pl-q{display:grid;place-items:center;height:64px;font:400 34px/1 var(--f-disp);font-style:normal;opacity:.5}
+  & .ph-pk-rail .pn,& .ph-pk-grid .pkt{cursor:pointer}
+  & .ph-pk-grid .pkt b{white-space:nowrap}
+  & .ph-pk-more{right:40px;bottom:100px}
+}
+.phx .phs[data-liv=velvet]{
+  & .ph-hl.many .hl-i b{font-size:18px}
+  & .ph-hl.many .hl-i.on b{font-size:22px}
+}
+
+/* Settings > Look > Page changes: the line under the cards (what the last press did). */
+.phx .phs .rr-c{cursor:pointer}
+.phx .phs .rr-m span{cursor:pointer}
+.phx .phs .ph-rr-say{position:absolute;left:60px;bottom:76px;margin:0;font:700 19px/1.2 var(--f-cond);letter-spacing:.03em;color:var(--on)}
+.phx .phs[data-ghost]{pointer-events:none!important}
+
+/* Settings > Every page: the lit page, the pages Settings can open, and the line that says where the lit one is found. */
+.phx .phs .ph-ix span{padding:0 6px;margin-left:-6px}
+.phx .phs .ph-ix span.go::after{content:' ›';color:var(--red)}
+.phx .phs .ph-ix span.on{background:var(--w);color:var(--k)}
+.phx .phs .ph-ix span.on:hover{color:var(--k)}
+.phx .phs .ph-ix-say{position:absolute;left:50px;right:470px;bottom:22px;margin:0;font:700 19px/1.25 var(--f-cond);color:var(--w);z-index:2}
+.phx .phs .ph-ix-say b{display:block;font:400 24px/1.1 var(--f-disp);text-transform:uppercase;color:var(--gold);margin-bottom:2px}
+.phx .phs[data-liv=fantasia] .ph-ix-say b,.phx .phs[data-liv=velvet] .ph-ix-say b{text-transform:none}

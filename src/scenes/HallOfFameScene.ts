@@ -12,7 +12,8 @@ import { AERO, type MotionLevel } from '../ui/aero';
 import { onInputAction } from '../ui/input';
 import { preloadPokemon } from '../ui/lazyAssets';
 import { Picker, type PickerRow } from '../ui/partyPanel';
-import { monFile } from '../ui/redux/game';
+import { artOf, monFile } from '../ui/redux/game';
+import { phHall } from '../ui/phantom/screens/ending';
 import { partyView, type PartyCard } from '../ui/redux/screens/party';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { pokemonIcon } from '../ui/sprites';
@@ -173,10 +174,18 @@ export class HallOfFameScene extends Phaser.Scene {
         // A run record keeps who was on the team and their level, not their HP or items: the bar is full and the line names the types.
         return { name: name(m.speciesId), file: monFile(this, m.speciesId, 'front', m.shiny), level: m.level, hp: 1, maxHp: 1, held: m.shiny ? 'Shiny' : '', tag: i === 0 ? 'LEAD' : '', types: [...types], ability: '', nature: '', moves: [], off: false, line: types.map((t) => t.charAt(0).toUpperCase() + t.slice(1)).join(' · ') };
       });
+      // Phantom UI: each banner carries the Pokémon's Legacy title (or its place in the team) and what it is remembered for.
+      const hall = r.party.slice(0, 6).map((m, i) => {
+        const card = r.legacy.find((l) => l.speciesId === m.speciesId && l.level === m.level) ?? r.legacy.find((l) => l.speciesId === m.speciesId);
+        const sig = card?.signature ? content.moves.get(card.signature)?.name ?? null : null;
+        return { file: monFile(this, m.speciesId, 'front', m.shiny), name: name(m.speciesId), level: m.level, shiny: m.shiny, tag: card?.titles[0] ?? (i === 0 ? 'Lead' : `No. ${i + 1}`), note: sig ? `Signature: ${sig}` : (content.species.get(m.speciesId)?.types ?? []).map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' / ') };
+      });
       const state = { index: 0, size: cards.length, view: null as unknown as ReduxView };
       state.view = mountRedux(this, {
-        render: (c) => partyView(c, { title: 'Hall of Fame', area: 'end', hints: [['Esc', 'back']], mons: cards, index: state.index, text: `${date(r)} · Champion · ${trainer(r)}. Your winning team.` }),
-        acts: { pick: (k) => { state.index = Math.max(0, Math.min(state.size - 1, Number(k) || 0)); state.view.refresh(); } },
+        render: (c) => (c.ph
+          ? phHall(c.ph, { mons: hall, index: state.index, trainer: artOf(this, content.archetypes.get(r.archetypeId)?.spriteAssetId), name: `Champion ${trainer(r)}`, sub: `${r.regionsCleared} of ${r.regions} regions · ${r.badges} badges · ${date(r)}` })
+          : partyView(c, { title: 'Hall of Fame', area: 'end', hints: [['Esc', 'back']], mons: cards, index: state.index, text: `${date(r)} · Champion · ${trainer(r)}. Your winning team.` })),
+        acts: { pick: (k) => { state.index = Math.max(0, Math.min(state.size - 1, Number(k) || 0)); state.view.refresh(); }, back: () => { state.view.destroy(); this.team = null; } },
         overs: { over: (k) => { const at = Number(k); if (at >= 0 && at < state.size && at !== state.index) { state.index = at; state.view.refresh(); } } },
       });
       this.team = state;

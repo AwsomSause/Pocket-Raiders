@@ -57,7 +57,7 @@ import { finalRivalArenaTheme } from '../core/story/highHype';
 import { ultimateRival } from '../core/rivals/ultimate';
 import { bossRoleForClass } from '../core/encounters';
 import { findNode } from '../core/map';
-import { bossInfo, currentRegion, runCampaign, type BossInfo } from '../core/regions';
+import { bossInfo, currentRegion, runCampaign, runLevelCap, type BossInfo } from '../core/regions';
 import { isPseudoBattle } from '../core/events';
 import { isFinalBoss, type RunEvent, type TurnResult } from '../core/run';
 import { secondShotNotice, type ShotNotice } from '../core/arc/climaxExtended';
@@ -138,6 +138,8 @@ import { reduxLayout, reduxSkinIndex } from '../core/presentation/redux';
 import { useLookFont } from '../ui/redux/canvasFont';
 import { mountRedux, phantomOn, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { phGimmick, type GimmickCard } from '../ui/phantom/screens/cutin';
+import { gimmickSlots } from '../core/battle/bossGimmicks';
+import { phTravel } from '../ui/phantom/screens/travel';
 import { phGimmickPick, phHit, phKo, phPhase, phResult, phRivalLoss, phSend, phSide, phWild, phWin, type GimmickSlot, type ResultRow, type SendSide } from '../ui/phantom/screens/moments';
 import type { PhantomVersion } from '../core/presentation/phantom';
 import { playEvolution } from '../ui/evolutionScene';
@@ -359,6 +361,8 @@ export class BattleScene extends Phaser.Scene {
   /** Phantom UI: the move menu is the open menu (the gimmick page opens from it), and that page while it is up. */
   private rxMoves = false;
   private phGimView: ReduxView | null = null;
+  /** The full-screen Phantom card that is up now (a card is drawn once; a change of version asks it to draw again). */
+  private phMomentView: ReduxView | null = null;
   private phGimInput: ((action: InputAction) => void) | null = null;
   /** New UI: the callout of the event being played (a boss's Rally brace, a signature trait going off). */
   private rxCall: { rally?: string; trait?: { file: string; name: string; text: string } } | null = null;
@@ -3302,6 +3306,7 @@ export class BattleScene extends Phaser.Scene {
       const end = (): void => {
         if (over) return;
         over = true;
+        if (this.phMomentView === view) this.phMomentView = null;
         try {
           view.destroy();
         } catch {
@@ -3310,12 +3315,37 @@ export class BattleScene extends Phaser.Scene {
         finish();
       };
       const view = mountRedux(this, { render: (c) => (c.ph ? draw(c.ph) : ''), acts: { next: end }, card: true });
+      this.phMomentView = view;
       if (wait !== null) this.time.delayedCall(wait, end);
       this.events.once('shutdown', end);
       await this.playBeat({ done, skip: end });
     } catch (e) {
       console.warn('Phantom card failed', e);
     }
+  }
+
+  /**
+   * Phantom UI: a region's Champion fell and another region waits. The mock-ups' Next region page: the ticket the run
+   * holds (a run's regions are fixed when it starts), the road so far and what changes there. Waits for an input.
+   */
+  private async phTravelCard(run: RunState, cleared: string): Promise<boolean> {
+    if (!this.phCards()) return false;
+    const { content } = services().session;
+    const at = run.regionOrder.indexOf(cleared), id = at < 0 ? undefined : run.regionOrder[at + 1];
+    const region = id ? content.regions.get(id) : undefined;
+    if (!id || !region) return false;
+    const cap = (i: number): number => runLevelCap(content, { regionIndex: i, rules: run.rules });
+    const slots = gimmickSlots(at + 1, null, content.balance.transformations.bossGimmickAfterStage);
+    await this.phMoment((ph) => phTravel(ph, {
+      region: region.name,
+      no: at + 2,
+      road: run.regionOrder.map((r, i) => ({ name: content.regions.get(r)?.name ?? r, done: i <= at, next: i === at + 1 })),
+      tagline: region.tagline ?? '',
+      forms: [...content.species.values()].filter((sp) => sp.form?.kind === 'regional' && sp.form.region === id).length,
+      facts: [['Level cap', cap(at) === cap(at + 1) ? `${cap(at + 1)}` : `${cap(at)} → ${cap(at + 1)}`], ['Boss gimmicks', slots > 0 ? `up to ${slots}` : 'none'], ['Stages', `${runCampaign(content, run).stagesPerRegion}`], ['Your team', 'comes with you']],
+      backdrop: this.phBackdrop(),
+    }), null);
+    return true;
   }
 
   /** Phantom UI: a fight inside an event opens on the side-stage card (mock-up `side`). Returns whether it showed. */
@@ -5185,7 +5215,7 @@ export class BattleScene extends Phaser.Scene {
       await this.playBeat(stamp(this, 'CHAMPION!', region, ROLE_RIMS.champion, this.motion));
       await this.say(end.regionCleared === 'grand' ? `You beat the final boss and are the ${region} Champion!` : `You are the ${region} Champion!`);
       if (end.victory) for (const line of buildEpilogue(content, result.run)) await this.say(line);
-      await this.say(end.victory ? 'You have conquered every region!' : 'A new region awaits…');
+      if (end.victory || !(await this.phTravelCard(result.run, end.regionCleared))) await this.say(end.victory ? 'You have conquered every region!' : 'A new region awaits…');
     }
     this.updateHeader();
     // Evolutions this battle earned wait as decisions: the evolution scene plays on the next screen (B can stop it).

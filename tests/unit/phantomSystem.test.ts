@@ -120,7 +120,7 @@ describe('Phantom run log page', () => {
 
 describe('the quick wheel', () => {
   const wheel = (over: Partial<PhWheelModel> = {}): PhWheelModel => ({
-    items: ['Party', 'Bag', 'Rivals', 'Log', 'Trainer card', 'Reserve', 'Save', 'Settings'].map((label) => ({ label, note: `${label} note`, off: label === 'Rivals' })), index: 1, held: true, ...over,
+    items: ['Party', 'Bag', 'Rivals', 'Phone', 'Pokédex', 'Reserve', 'Save', 'Settings'].map((label) => ({ label, note: `${label} note`, off: label === 'Rivals' })), index: 1, held: true, ...over,
   });
 
   it('a direction key moves one slot the short way toward that side of the ring, and stops there', () => {

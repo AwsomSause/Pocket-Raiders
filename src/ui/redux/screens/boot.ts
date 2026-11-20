@@ -3,6 +3,7 @@
 
 import { act, bg, esc, mini, mon } from '../kit';
 import type { ReduxCtx } from '../stage';
+import { phCredits } from '../../phantom/screens/ending';
 
 export interface BootModel {
   /** "Loading the region…", or "Beta 0.7 is here" on the update splash. */
@@ -34,6 +35,8 @@ export interface CreditsModel {
   art: string;
   /** A number: the rows roll up the screen and sit this many pixels down right now (the scene moves them). Null: the page stands still and can be scrolled. */
   roll: number | null;
+  /** Phantom UI: the run's moments as photos beside the roll (a Pokémon of the team and a caption each). */
+  photos?: readonly { file: string | null; cap: string }[];
 }
 
 /** The rows as the mock-up's column: a small heading over bold lines, gold titles, a row of Pokémon for a team. */
@@ -59,7 +62,8 @@ export function creditsRows(rows: readonly CreditsRow[]): string {
   return out.join('');
 }
 
-export function creditsView(_c: ReduxCtx, d: CreditsModel): string {
+export function creditsView(c: ReduxCtx, d: CreditsModel): string {
+  if (c.ph) return phCredits(c.ph, d);
   const col = `<div class="col cen rx-roll" style="gap:12px;color:#fff;padding:40px 0${d.roll === null ? '' : `;transform:translateY(${Math.round(d.roll)}px)`}">${d.lead ? `<span class="sm">${esc(d.lead)}</span>` : ''}${creditsRows(d.rows)}</div>`;
   const low = d.party.length ? 150 : 44;
   return bg(d.art) + '<div class="shade"></div>'

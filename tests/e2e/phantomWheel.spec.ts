@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { addSide, start, waitForScene, watch } from './helpers/newUi';
-import { fitProblems, onPage, toPhantomMap } from './helpers/phantomUi';
+import { fitProblems, onPage, pview, toPhantomMap } from './helpers/phantomUi';
 
 // Phantom UI: the map's quick wheel (hold TAB, point, let go) and the run log page, which reads back what was said,
 // chosen and gained in this run over whatever screen is open.
@@ -36,7 +36,7 @@ test('Phantom UI: hold TAB on the map for the quick wheel; point and let go, or 
   await page.keyboard.down('Tab');
   await expect(wheel).toBeVisible();
   await expect(wheel.locator('.wi')).toHaveCount(8);
-  await expect(wheel.locator('.wi b')).toHaveText(['Party', 'Bag', 'Rivals', 'Log', 'Trainer card', 'Reserve', 'Save', 'Settings'], { ignoreCase: true });
+  await expect(wheel.locator('.wi b')).toHaveText(['Party', 'Bag', 'Rivals', 'Phone', 'Pokédex', 'Reserve', 'Save', 'Settings'], { ignoreCase: true });
   await expect(lit).toHaveText('Party', { ignoreCase: true });
   await expect(wheel.locator('.wh-c')).toContainText('Let go to open', { ignoreCase: true });
   await expect(wheel.locator('.wh-c .txt')).toContainText('Pokémon');
@@ -98,7 +98,7 @@ test('Phantom UI: hold TAB on the map for the quick wheel; point and let go, or 
     await step(page, 'ArrowDown');
     await step(page, 'ArrowDown');
     await step(page, 'ArrowDown');
-    await expect(lit).toHaveText('Trainer card', { ignoreCase: true });
+    await expect(lit).toHaveText('Pokédex', { ignoreCase: true });
     await page.waitForTimeout(900);
     expect(await fitProblems(page, 'Map', 'map'), `${id} at ${w}x${h}`).toEqual([]);
     await step(page, 'Escape');
@@ -106,10 +106,11 @@ test('Phantom UI: hold TAB on the map for the quick wheel; point and let go, or 
   }
   await page.setViewportSize({ width: 1280, height: 720 });
   await version(page, 'phantom');
-  // The Trainer card opens from the wheel; Settings leaves the map and comes back to it.
+  // The Pokédex opens from the wheel (the pause menu's own page); Settings leaves the map and comes back to it.
   await map.locator('.keys [data-act="key"][data-arg="Tab"]').click();
-  await wheel.locator('.wi', { hasText: /trainer card/i }).click();
-  await onPage(page, 'Map', 'card');
+  await wheel.locator('.wi', { hasText: /pokédex/i }).click();
+  await onPage(page, 'Map', 'dex');
+  await page.waitForTimeout(250);
   await step(page, 'Escape');
   await step(page, 'Escape');
   await onPage(page, 'Map', 'map');
@@ -133,13 +134,17 @@ test('Phantom UI: the Log page reads the run back: the stage, what an event said
   const log = page.locator('#phx .phs[data-scene="overlay"][data-scr="log"]');
   const rows = (): Promise<[string, string, string][]> => page.evaluate(() => (window as any).__pkr.log.backlog().map((e: any) => [e.kind ?? 'note', e.who ?? '', e.text]));
   await expect(log).toHaveCount(0);
-  // The map opens the run's log with the stage's heading; the wheel's Log slot opens the page.
+  // The map opens the run's log with the stage's heading; the wheel's Phone slot opens Rotom's chat, whose first reply opens the page.
   expect((await rows()).filter((r) => r[0] === 'stage').map((r) => r[1])).toEqual(['Stage 1']);
   await tap(page);
   await step(page, 'ArrowRight');
   await step(page, 'ArrowRight');
   await step(page, 'ArrowDown');
-  await expect(page.locator('#phx .phs[data-scene="Map"] .ph-wh .wi.on b')).toHaveText('Log', { ignoreCase: true });
+  await expect(page.locator('#phx .phs[data-scene="Map"] .ph-wh .wi.on b')).toHaveText('Phone', { ignoreCase: true });
+  await step(page, 'Enter');
+  await onPage(page, 'Map', 'phone');
+  await expect(pview(page, 'Map', 'phone').locator('.ph-ph-reply .ch.on b')).toHaveText('Read the run back to me.');
+  await page.waitForTimeout(250);
   await step(page, 'Enter');
   await expect(log).toBeVisible();
   await expect(log.locator('.hd')).toContainText('Stage map', { ignoreCase: true });

@@ -4,7 +4,7 @@
 import { act, type Area, B, bg, esc, facts, H, keys, mini, TX, W } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { type Art, figure, pic } from '../templates';
-import { phCard } from '../../phantom/screens/ending';
+import { phCard, phOver } from '../../phantom/screens/ending';
 
 export type Fact = readonly [string, string];
 
@@ -25,9 +25,17 @@ export interface OverModel {
   backdrop: string | null;
   /** The Pokémon that was just tapped (it shows a small reaction), or null. */
   poked: number | null;
+  /** Phantom UI: where the run stood ("Stage 24 of 30 · lost to Leader Clair"), a line under the title, the road and the most valuable Pokémon. */
+  where?: string;
+  line?: string;
+  road?: { done: number; of: number } | null;
+  mvp?: { file: string | null; name: string; text: string } | null;
+  /** Phantom UI: the full report, open over the page (one page of its lines). */
+  report?: { title: string; lines: readonly string[]; page: number; pages: number } | null;
 }
 
 export function overView(c: ReduxCtx, d: OverModel): string {
+  if (c.ph) return phOver(c.ph, d);
   const v = c.v(2), side = v ? 24 : 120;
   const back = (d.backdrop ? bg(d.backdrop) : '<div class="fill" style="background:linear-gradient(#1a2030,#0b0f18)"></div>') + `<div class="shade" style="background:${d.win ? '#10204880' : '#000000b0'}"></div>${d.win ? '<div class="burst"></div>' : ''}`;
   const head = `<div class="abs col cen" style="left:0;right:0;top:${v ? 30 : 40}px;gap:6px;color:#fff"><b style="font-size:60px;line-height:1;text-shadow:5px 5px 0 #000" class="${d.win ? 'acc' : ''}">${esc(d.title)}</b><span style="text-shadow:2px 2px 0 #000">${esc(d.sub)}</span></div>`;

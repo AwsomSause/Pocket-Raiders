@@ -139,3 +139,14 @@ export function dexCard(content: Content, profile: Pick<Profile, 'speciesSeen' |
     next: ways.length ? `Evolves into ${ways.join(', ')}` : 'Final form',
   };
 }
+
+/** The profile as the Pokédex reads it in the middle of a run: what is banked plus what this run has met and caught so far. */
+export function liveDexProfile(profile: Profile, log: { speciesSeen: readonly string[]; speciesCaught: readonly string[]; dexTally?: Record<string, { seen: number; caught: number }> } | undefined): Profile {
+  if (!log) return profile;
+  const research = { ...(profile.dexResearch ?? {}) };
+  for (const [id, t] of Object.entries(log.dexTally ?? {})) {
+    const base = tallyOf(profile, id);
+    research[id] = { ...base, seen: base.seen + t.seen, caught: base.caught + t.caught };
+  }
+  return { ...profile, speciesSeen: [...new Set([...profile.speciesSeen, ...log.speciesSeen])], speciesCaught: [...new Set([...profile.speciesCaught, ...log.speciesCaught])], dexResearch: research };
+}

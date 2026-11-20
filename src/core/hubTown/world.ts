@@ -93,6 +93,24 @@ export function districtAt(t: Tile, map: HubTownData = HUB_TOWN): HubDistrict | 
   return map.districts.find(({ rect: [x, y, w, h] }) => t.x >= x && t.y >= y && t.x < x + w && t.y < y + h) ?? null;
 }
 
+/** The district a place belongs to: the one its door is in, or the nearest one for a door on the edge (the Departure Gate). */
+export function districtOf(pl: HubPlace, map: HubTownData = HUB_TOWN): HubDistrict | null {
+  const hit = districtAt(pl.door, map);
+  if (hit) return hit;
+  let best: HubDistrict | null = null, far = Infinity;
+  for (const d of map.districts) {
+    const [x, y, w, h] = d.rect;
+    const gap = Math.max(x - pl.door.x, 0, pl.door.x - (x + w - 1)) + Math.max(y - pl.door.y, 0, pl.door.y - (y + h - 1));
+    if (gap < far) { far = gap; best = d; }
+  }
+  return best;
+}
+
+/** The places of a district, in the map's own order. */
+export function placesIn(districtId: string, map: HubTownData = HUB_TOWN): HubPlace[] {
+  return map.places.filter((pl) => districtOf(pl, map)?.id === districtId);
+}
+
 /** Four-way facing from a key or a step; diagonals keep the horizontal part (the town is four-directional). */
 export function facingOf(dx: number, dy: number): Facing | null {
   if (dx < 0) return 'left';

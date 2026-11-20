@@ -8,7 +8,8 @@ import { buildingProblem, currentSeason, ownedSet, pets, townOf, townWeather, TO
 import { POCKET_TOWN, type HubPlace } from '../core/hubTown/schema';
 import { crowdWindow } from '../core/hubTown/roster';
 import { hubPeriod } from '../core/hubTown/daylight';
-import { hubPokemon } from '../core/hubTown/world';
+import { districtAt, hubPokemon } from '../core/hubTown/world';
+import { readyLine, townDirectory } from '../core/town/directory';
 import { services } from '../game/services';
 import { playMusicLazy, playSfx } from '../ui/audio';
 import { overworldAssetIds, pokemonAssetIds } from '../assets/catalog';
@@ -22,6 +23,9 @@ import { PocketFolk, folkAssets, pocketFolk, pocketScouts } from '../ui/hubTown/
 import { itemVisual, pokemonIcon } from '../ui/sprites';
 import { onInputAction } from '../ui/input';
 import { useLookFont } from '../ui/redux/canvasFont';
+import { mountRedux, phantomOn } from '../ui/redux/stage';
+import { gridStep } from '../ui/phantom/screens/dexbook';
+import { phPocket, POCKET_COLS, type PocketModel } from '../ui/phantom/screens/townmap';
 import type { TownPanelLike } from '../ui/townPanel';
 import { openBuilding, openTown, townBusy, type TownHost } from '../ui/townMenu';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
@@ -32,6 +36,9 @@ const TRAIL_COLORS: Record<string, number[]> = {
 const T = POCKET_TOWN.tile;
 /** The plaza fountain's tile (the sound of it follows how near you stand). */
 const FOUNTAIN = { x: 36, y: 32 };
+
+/** Phantom UI: where the Town directory's cursor was (the hamlet, then the place in it). */
+const pocketSpot = { hamlet: 0, place: 0 };
 
 /** What a starter scout says: the gift the first time, a reminder after. */
 export function scoutTalk(session: ReturnType<typeof services>['session'], scout: StarterScout): string {
@@ -109,7 +116,14 @@ export class TownScene extends Phaser.Scene {
     startTownSound(this.town, this, period, FOUNTAIN);
     if (weather === 'storm' && motion !== 'off') this.rain(motion);
     this.season(now, motion);
-    new HubMinimap(this, this.town, { motion, busy: () => Boolean(this.picker) || townBusy.n > 0, title: 'Pocket Town' });
+    new HubMinimap(this, this.town, { motion, busy: () => Boolean(this.picker) || townBusy.n > 0, title: 'Pocket Town', own: () => phantomOn() });
+    // Phantom UI: the Town directory has its own keys (M opens it from the street).
+    this.directory = null;
+    const key = (name: string, fn: () => void): void => void this.input.keyboard?.on(`keydown-${name}`, fn);
+    key('M', () => { if (this.directory) this.directory.walk(); else if (phantomOn() && !this.picker && townBusy.n === 0 && !this.decorMode) this.openDirectory(); });
+    key('Q', () => this.directory?.hamlet(-1));
+    key('E', () => this.directory?.hamlet(1));
+    key('H', () => this.directory?.hub());
 
     const top = this.add.graphics();
     for (let i = 0; i < 12; i++) top.fillStyle(0x0e0b12, 0.45 * (1 - i / 12)).fillRect(0, i * 8, GAME_WIDTH, 8);
@@ -130,8 +144,90 @@ export class TownScene extends Phaser.Scene {
       if (this.decorMode) return;
       if (a === 'up' || a === 'down' || a === 'left' || a === 'right') this.town.step(a);
       else if (a === 'confirm') this.town.interact();
-      else if (a === 'back') { playSfx(this, 'ui.select', 0.6); openTown(host, () => this.host.refresh('')); }
+      else if (a === 'back') { playSfx(this, 'ui.select', 0.6); if (phantomOn()) this.openDirectory(); else openTown(host, () => this.host.refresh('')); }
     });
+  }
+
+  /** Phantom UI: the Town directory while it is open (its own keys: Q and E, M, H). */
+  private directory: { hamlet(by: number): void; walk(): void; hub(): void } | null = null;
+
+  /** Phantom UI: the Town directory (mock-up `pocket`): the hamlets, their places and what is ready today. */
+  private openDirectory(): void {
+    if (this.directory || this.picker) return;
+    const { session } = services();
+    const read = () => townDirectory(session.content, session.profile, new Date(Date.now()));
+    let dir = read();
+    // It opens on the hamlet you stand in.
+    const here = districtAt(this.town.tile(), POCKET_TOWN)?.id;
+    const at = dir.hamlets.findIndex((h) => h.id === here);
+    if (at >= 0 && at !== pocketSpot.hamlet) { pocketSpot.hamlet = at; pocketSpot.place = 0; }
+    const clamp = (): void => {
+      pocketSpot.hamlet = Phaser.Math.Clamp(pocketSpot.hamlet, 0, Math.max(0, dir.hamlets.length - 1));
+      pocketSpot.place = Phaser.Math.Clamp(pocketSpot.place, 0, Math.max(0, (dir.hamlets[pocketSpot.hamlet]?.places.length ?? 1) - 1));
+    };
+    clamp();
+    const model = (): PocketModel => {
+      dir = read();
+      clamp();
+      const h = dir.hamlets[pocketSpot.hamlet];
+      return {
+        town: 'Pocket Town',
+        hamlets: dir.hamlets.map((x) => ({ name: x.name, count: x.places.length })),
+        hamlet: pocketSpot.hamlet,
+        places: (h?.places ?? []).map((pl) => ({ name: pl.name, text: (pl.problem ?? pl.blurb).replace(/\s*\(S\d+\)/g, ''), tag: pl.tag === 'ready' ? 'READY' : pl.tag === 'locked' ? 'SHUT' : '', off: pl.tag === 'locked' })),
+        place: pocketSpot.place,
+        today: readyLine(dir.ready),
+        hub: true,
+      };
+    };
+    const shut = (): void => { if (this.picker === panel) { panel.close(); this.host.setPicker(null); } };
+    const point = (hamlet: number, place: number): void => {
+      const n = dir.hamlets.length;
+      const hTo = ((hamlet % n) + n) % n;
+      const count = dir.hamlets[hTo]?.places.length ?? 0;
+      const pTo = Phaser.Math.Clamp(place, 0, Math.max(0, count - 1));
+      if (hTo === pocketSpot.hamlet && pTo === pocketSpot.place) return;
+      pocketSpot.hamlet = hTo;
+      pocketSpot.place = pTo;
+      playSfx(this, 'ui.select', 0.4);
+      view.refresh();
+    };
+    const lit = () => dir.hamlets[pocketSpot.hamlet]?.places[pocketSpot.place];
+    const visit = (): void => {
+      const pl = lit(), b = pl && TOWN.buildings.find((x) => x.id === pl.id);
+      if (!pl || !b) return void playSfx(this, 'ui.error', 0.5);
+      shut();
+      if (pl.problem) return this.say(`${b.name}: ${pl.problem}`);
+      playSfx(this, 'ui.select');
+      this.travel(b);
+    };
+    const walk = (): void => {
+      const pl = lit(), door = pl && this.doorFor(pl.id);
+      shut();
+      playSfx(this, 'ui.select', 0.6);
+      if (door) this.town.moveTo(door.stand);
+    };
+    const view = mountRedux(this, {
+      render: (c) => (c.ph ? phPocket(c.ph, model()) : ''),
+      acts: {
+        pocketHamlet: (i) => point(Number(i), 0),
+        pocketPlace: (i) => { if (Number(i) === pocketSpot.place) visit(); else point(pocketSpot.hamlet, Number(i)); },
+        pocketWalk: walk,
+        pocketHub: () => { shut(); this.scene.start('Hub'); },
+        pocketBack: () => { playSfx(this, 'ui.select', 0.6); shut(); },
+      },
+      overs: { pocketOver: (i) => point(pocketSpot.hamlet, Number(i)) },
+    });
+    const panel: TownPanelLike = {
+      handle: (a) => {
+        if (a === 'back') { playSfx(this, 'ui.select', 0.6); return shut(); }
+        if (a === 'confirm') return visit();
+        point(pocketSpot.hamlet, gridStep(pocketSpot.place, dir.hamlets[pocketSpot.hamlet]?.places.length ?? 0, POCKET_COLS, a));
+      },
+      close: () => { view.destroy(); this.directory = null; },
+    };
+    this.directory = { hamlet: (by) => point(pocketSpot.hamlet + by, 0), walk, hub: () => { shut(); this.scene.start('Hub'); } };
+    this.host.setPicker(panel);
   }
 
   /** The people and doors you can face in Pocket Town (for tests and touch shortcuts). */

@@ -26,11 +26,14 @@ import { gameSummary, type SummaryTopic } from '../core/encyclopedia';
 import { mountRedux, phantomOn, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { PHANTOM_PHONE_SETTINGS, PHANTOM_SETTINGS_PAGES, type PhantomVersion } from '../core/presentation/phantom';
 import { applyPhantomPreset, PHANTOM_PRESETS, phantomPresetOf } from '../core/presentation/phantomPresets';
-import { phSettings } from '../ui/phantom/screens/settings';
+import { phPageIndex, phReel, phSettings } from '../ui/phantom/screens/settings';
+import { joinPlay } from '../ui/phantom/joins';
+import { PHANTOM_PAGE_GROUPS, PHANTOM_PAGE_LIST, pageGroupStep } from '../core/presentation/phantomPages';
+import { JOIN_CARDS, JOIN_MOTIONS, joinMotion, withJoinMotion } from '../core/presentation/joins';
 import { menuView, settingsView } from '../ui/redux/templates';
 import { confirmBox } from '../ui/redux/screens/saves';
 
-type Page = 'home' | 'search' | 'confirmReset' | 'summary' | 'phone' | SettingCategory;
+type Page = 'home' | 'search' | 'confirmReset' | 'summary' | 'phone' | 'reel' | 'index' | SettingCategory;
 interface Row {
   option: MenuOption;
   hint: string;
@@ -79,6 +82,7 @@ export class SettingsScene extends Phaser.Scene {
   create(data?: { from?: 'MainMenu' | 'Hub' | 'Map'; page?: Page; focus?: number }): void {
     this.from = data?.from ?? 'MainMenu';
     this.page = data?.page ?? 'home';
+    this.viaIndex = null;
     this.entering = true;
     this.query = '';
     this.notice = '';
@@ -98,14 +102,27 @@ export class SettingsScene extends Phaser.Scene {
         preset: (k) => this.usePreset(Number(k)),
         presetNext: () => this.usePreset(),
         resetPage: () => this.resetPage(),
+        // Phantom UI, Page changes: a card plays its page change, a motion chip sets how much they move.
+        reelPick: (i) => { this.menu?.focus(Number(i), false); this.reelPlay(); },
+        reelPlay: () => this.reelPlay(),
+        reelMotion: (i) => this.reelMotion(Number(i)),
+        // Phantom UI, Every page: a click lights a page; a second click (or Enter) opens one Settings can open.
+        ixPick: (i) => { if (this.menu?.index === Number(i)) this.menu.confirm(); else this.menu?.focus(Number(i), false); },
+        ixOpen: () => this.menu?.confirm(),
         back: () => this.back(),
       },
-      overs: { over: (i) => { if (!this.shown[Number(i)]?.option.disabled) this.menu?.focus(Number(i), false); } },
+      overs: {
+        over: (i) => { if (!this.shown[Number(i)]?.option.disabled) this.menu?.focus(Number(i), false); },
+        reelOver: (i) => this.menu?.focus(Number(i), false),
+        ixOver: (i) => this.menu?.focus(Number(i), false),
+      },
     }) : null;
     onInputAction(this, (a) => {
       if (this.picker) return this.picker.handle(a);
       if (this.page === 'search') return; // typing is handled by the key listener below
       if (a === 'back') this.back();
+      else if ((this.page === 'reel' || (this.page === 'display' && this.shown[this.menu?.index ?? -1]?.name === 'Page changes')) && (a === 'left' || a === 'right')) this.reelMotion(JOIN_MOTIONS.findIndex((m) => m.id === joinMotion(services().session.settings)) + (a === 'right' ? 1 : -1));
+      else if (this.page === 'index' && (a === 'left' || a === 'right')) this.menu?.focus(pageGroupStep(this.menu.index, a === 'right' ? 1 : -1), false);
       // New UI: on a settings page, right steps a value forward and left steps it back (the row shows both arrows).
       else if (this.view && (a === 'left' || a === 'right') && this.shown[this.menu?.index ?? -1]?.id) this.change(this.shown[this.menu!.index]!.id!, a === 'left');
       else this.menu?.handle(a);
@@ -129,6 +146,10 @@ export class SettingsScene extends Phaser.Scene {
       return this.render(this.menu?.index ?? 0);
     }
     if (this.page === 'home') this.scene.start(this.from);
+    // A page opened from Every page goes back to it, on the same entry.
+    else if (this.viaIndex !== null && this.page !== 'index') { const at = this.viaIndex; this.viaIndex = null; this.go('index', at); }
+    else if (this.page === 'index') this.go('home', this.rowsOf('home').findIndex((r) => r.option.label === 'Every page'));
+    else if (this.page === 'reel') this.go('display', Math.max(0, settingsIn('display').length));
     else if (this.page === 'confirmReset') this.go('home');
     else this.go('home');
   }
@@ -153,6 +174,23 @@ export class SettingsScene extends Phaser.Scene {
     this.render(0);
   }
 
+  private viaIndex: number | null = null;
+  private rowsOf(page: Page): Row[] {
+    const now = this.page;
+    this.page = page;
+    try { return this.rows(); } finally { this.page = now; }
+  }
+
+  /** Phantom UI, Every page: opens entry `i` when Settings can (its own pages, Version Select), and says so when it cannot. */
+  private openEntry(i: number): void {
+    const e = PHANTOM_PAGE_LIST[i];
+    if (!e?.open) return;
+    if (e.open === 'version') return void this.scene.start('VersionSelect', { from: 'Settings', fromData: { from: this.from, page: 'index', focus: i } });
+    if (e.open === 'home') return this.go('home');
+    this.viaIndex = i;
+    this.go(e.open as Page);
+  }
+
   private rows(): Row[] {
     const { session } = services();
     const s = session.settings;
@@ -175,6 +213,7 @@ export class SettingsScene extends Phaser.Scene {
         { option: { label: 'Game Summary' }, hint: 'A readable summary of everything in the game: Pokémon, moves, items, trainers, events, modes and systems.', action: () => this.go('summary') },
         { option: { label: 'Search settings…' }, hint: 'Type to find a setting by name.', action: () => this.go('search') },
         { option: { label: 'Reset to defaults' }, hint: 'Puts every setting back to how it started. Your saves are not touched.', action: () => this.go('confirmReset') },
+        ...(phantomOn() ? [{ option: { label: 'Every page' }, hint: 'Every page of this look, in its groups, and where you find each one.', action: () => this.go('index') }] : []),
         { option: { label: this.from === 'Hub' ? 'Back to the Hub' : this.from === 'Map' ? 'Back to the map' : 'Back to the title screen' }, hint: '', action: () => this.back() },
       ];
     }
@@ -207,10 +246,34 @@ export class SettingsScene extends Phaser.Scene {
         // Opened from a run (the pause menu): nothing that swaps the profile or leaves for another screen.
       ].filter((r) => this.from !== 'Map' || !IN_RUN_HIDDEN.has(r.option.label));
     }
+    if (this.page === 'index') return PHANTOM_PAGE_LIST.map((e, i): Row => ({ option: { label: e.n }, hint: e.where, action: () => this.openEntry(i) }));
+    if (this.page === 'reel') return JOIN_CARDS.map((c): Row => ({ option: { label: c.n }, hint: '', action: () => this.reelPlay() }));
     if (this.page === 'phone') return [...PHANTOM_PHONE_SETTINGS.flatMap((id) => SETTINGS.find((d) => d.id === id) ?? []).map((d) => toggleRow(d)), back];
     const rows = settingsIn(this.page).map((d) => toggleRow(d));
     if (this.page === 'controls') rows.push({ option: { label: this.remapping ? `Press a button for: ${PAD_ACTION_LABEL[PAD_ACTIONS[this.remapStep]!]}…` : 'Remap by pressing buttons…' }, hint: 'Press the controller button you want for each action in turn (Up, Down, Left, Right, Confirm, Back). A button already in use swaps.', action: () => this.startRemap() });
+    // Phantom UI: Look also opens the page that shows every page change and sets how much they move.
+    if (this.page === 'display' && phantomOn()) rows.push({ option: { label: 'Page changes…' }, hint: 'See the six ways one page turns into the next, and set how much they move.', action: () => this.go('reel'), name: 'Page changes', value: { full: 'Full', reduced: 'Reduced', off: 'Instant' }[joinMotion(s)] });
     return [...rows, back];
+  }
+
+  /** Phantom UI, Page changes: plays the lit page change on this page. */
+  private reelPlay(): void {
+    const card = JOIN_CARDS[this.menu?.index ?? 0], motion = joinMotion(services().session.settings);
+    if (!card || !this.view) return;
+    this.notice = motion === 'off' ? 'Motion is off: every page changes at once. Pick Full or Reduced to see it play.' : '';
+    this.view.refresh();
+    if (motion !== 'off') joinPlay(this.view.el, card.id, motion);
+  }
+
+  /** Phantom UI, Page changes: sets how much page changes move (Full, Reduced, Off). */
+  private reelMotion(i: number): void {
+    const pick = JOIN_MOTIONS[(i + JOIN_MOTIONS.length) % JOIN_MOTIONS.length];
+    const { session } = services();
+    if (!pick || pick.id === joinMotion(session.settings)) return;
+    const before = session.settings;
+    session.saveSettings({ ...withJoinMotion(before, pick.id), accessibilityProfile: 'custom' });
+    this.notice = pick.id === 'off' ? 'Pages change at once.' : pick.id === 'reduced' ? 'Pages fade in and out; nothing slides.' : 'Pages move in full.';
+    this.render(this.menu?.index ?? 0);
   }
 
   /** A topic's entries in a scrolling list; the focused entry's full text shows below. */
@@ -326,7 +389,7 @@ export class SettingsScene extends Phaser.Scene {
     const rows = this.rows();
     this.shown = rows;
     const cat = SETTING_CATEGORIES.find((c) => c.id === this.page)?.label;
-    const title = this.page === 'home' ? 'Settings' : this.page === 'summary' ? 'Game Summary' : this.page === 'search' ? 'Search settings' : this.page === 'confirmReset' ? 'Reset to defaults?' : `Settings · ${cat}`;
+    const title = this.page === 'home' ? 'Settings' : this.page === 'summary' ? 'Game Summary' : this.page === 'search' ? 'Search settings' : this.page === 'confirmReset' ? 'Reset to defaults?' : this.page === 'reel' ? 'Settings · Page changes' : this.page === 'index' ? 'Every page' : `Settings · ${cat}`;
     // The UIE Options backdrop already has the word "Options" in its corner: the home page leaves the title to the art,
     // and sub-pages put theirs beside it, so the two never print over each other.
     const art = !this.skinned && this.textures.exists('ui.optionsbg');
@@ -433,6 +496,8 @@ export class SettingsScene extends Phaser.Scene {
     const help = this.notice || rows[index]?.hint || '';
     const list = rows.map((r) => ({ label: r.name ?? r.option.label, value: r.value ?? '', disabled: r.option.disabled }));
     const base = { from, tiles: [], presets: PHANTOM_PRESETS.map((p) => ({ n: p.n, about: p.about, meters: p.meters })), preset: PHANTOM_PRESETS.findIndex((p) => p.id === preset), rail: PHANTOM_SETTINGS_PAGES.map((p) => ({ label: p.n, letter: p.letter })), at, rows: list, index, help, options: null };
+    if (this.page === 'index') return phPageIndex({ groups: PHANTOM_PAGE_GROUPS.map((g) => ({ n: g.n, pages: g.pages.map((e) => ({ n: e.n, open: Boolean(e.open) })) })), index, where: PHANTOM_PAGE_LIST[index]?.where ?? '' });
+    if (this.page === 'reel') return phReel({ cards: JOIN_CARDS, index, motions: JOIN_MOTIONS.map((m) => m.n), motion: JOIN_MOTIONS.findIndex((m) => m.id === joinMotion(s)), help: this.notice });
     if (this.page === 'home') {
       const changed = (page: Page): number => this.pageSettings(page).filter((d) => d.show(s) !== d.show(fresh)).length;
       return phSettings(ph, { ...base, kind: 'home', title: 'Settings', tiles: PHANTOM_SETTINGS_PAGES.map((p) => ({ label: p.n, letter: p.letter, about: p.about, changed: changed(p.id) })), help: this.notice });
