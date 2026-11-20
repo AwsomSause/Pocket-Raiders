@@ -6,7 +6,7 @@
 
 import './dominion.css';
 import './moments.css';
-import type { JobModel, OrderModel, PaperModel } from '../../../../core/dominion/moments';
+import type { CaughtChoice, JobModel, OrderModel, PaperModel } from '../../../../core/dominion/moments';
 import type { TeamColours } from '../../../../core/dominion/founding';
 import type { TopModel } from '../../../../core/dominion/screens';
 import { act, esc } from '../../kit';
@@ -66,11 +66,13 @@ export function jobDoneView(m: JobModel, top: TopModel, team: TeamColours | null
 export interface BotchedText { tape: string; cost: string; police: string; policeSub: string; map: string; mapSub: string; next: string; nextSub: string }
 
 /** m10: police lights and tape, BOTCHED, what it cost, and what happens next (D24's questioning when someone was caught). */
-export function jobBotchedView(m: JobModel, t: BotchedText, at: number, team: TeamColours | null, still: boolean): string {
+export function jobBotchedView(m: JobModel, t: BotchedText, at: number, team: TeamColours | null, still: boolean, held: CaughtChoice[] | null = null, note: string | null = null): string {
   const who = m.member ? memberPic(m.member.look, 142, 'position:absolute;left:96px;top:196px;width:84px;height:142px;z-index:7;filter:brightness(.9) saturate(.8);transform:rotate(8deg)', team, 'spr') : '';
-  const choices = m.caught
-    ? [{ b: t.police, s: t.policeSub, k: 'Enter', a: 'jobMap' }]
-    : [{ b: t.map, s: t.mapSub, k: 'Enter', a: 'jobMap' }, { b: t.next, s: t.nextSub, k: 'N', a: 'jobNext' }];
+  const choices: { b: string; s: string; k: string; a: string; arg?: number; off?: boolean }[] = held
+    ? held.map((c, i) => ({ b: c.label, s: c.sub, k: `${i + 1}`, a: 'jobCaught', arg: i, off: !c.on }))
+    : m.caught
+      ? [{ b: t.police, s: t.policeSub, k: 'Enter', a: 'jobMap' }]
+      : [{ b: t.map, s: t.mapSub, k: 'Enter', a: 'jobMap' }, { b: t.next, s: t.nextSub, k: 'N', a: 'jobNext' }];
   const tape = `<span>${esc(t.tape)}</span>`.repeat(3);
   return stage(`
   <img class="cv" src="${skylineDayUrl()}" alt="" style="position:absolute;inset:0;width:960px;height:540px;filter:brightness(.45) saturate(.6)">
@@ -87,9 +89,10 @@ export function jobBotchedView(m: JobModel, t: BotchedText, at: number, team: Te
   <div class="pnl gild" style="left:380px;top:70px;width:564px;height:442px" data-testid="dom-job-botched">
     <div class="hd y"><img class="ic" src="${img('g-policekey')}" alt="">${esc(m.head)}</div>
     <div class="col" style="gap:10px;margin-top:12px">
-      ${choices.map((c, i) => `<div class="ch${i === at ? ' on' : ''}"${act(c.a)} data-testid="dom-job-choice-${i}"><b>${esc(c.b)}</b><span class="xs${i === at ? '' : ' mu'}" style="display:block;font-weight:500">${esc(c.s)}</span><span class="kc" style="position:absolute;right:12px;top:12px">${c.k}</span></div>`).join('')}
+      ${choices.map((c, i) => `<div class="ch${i === at ? ' on' : ''}${c.off ? ' dim' : ''}"${act(c.a, c.arg)} data-testid="dom-job-choice-${i}"><b>${esc(c.b)}</b><span class="xs${i === at ? '' : ' mu'}" style="display:block;font-weight:500">${esc(c.s)}</span><span class="kc" style="position:absolute;right:12px;top:12px">${c.k}</span></div>`).join('')}
     </div>
-    ${m.lines ? `<div class="xs mu" style="margin-top:12px;line-height:1.35;max-height:110px;overflow:hidden" data-testid="dom-job-lines">${esc(m.lines)}</div>` : ''}
+    ${note ? `<div class="xs" style="margin-top:10px;color:#ff9aa8" data-testid="dom-job-note">${esc(note)}</div>` : ''}
+    ${m.lines ? `<div class="xs mu" style="margin-top:12px;line-height:1.35;max-height:${held ? 54 : 110}px;overflow:hidden" data-testid="dom-job-lines">${esc(m.lines)}</div>` : ''}
     ${m.quote && m.member ? `<div class="quote" style="position:static;margin-top:14px">“${esc(m.quote)}” <b>— ${esc(m.member.name)}${m.caught ? ', from the back of the car' : ''}</b></div>` : ''}
   </div>
   ${fx('#8fb8ff', '#ff4d63')}`, 'background:#0a0e1c', `kl-police vign grain d30${still ? ' still' : ''}`);

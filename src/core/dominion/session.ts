@@ -29,7 +29,7 @@ import { withHq } from './hqFx';
 import { levelCap } from '../regions';
 import { hatchEggs, settleDojo, settleLesson } from './school';
 import './voices';
-import { noteJob, type Roll } from './moments';
+import { answerCaught, collar, noteJob, type Roll } from './moments';
 import { answerCard, breakTruce, maybeStreet, noteTop, ransom, startTruce, withRivals, type RivalOut } from './rivals';
 import { answerMeet as answerTownMeet, maybeMeet } from './town';
 import { accuse, askSpy, dropTalk, startConfront, type SpyOut } from './spies';
@@ -150,6 +150,10 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
   if (heroOut) return heroOut;
   const deskOut = deskInRun(content, run, action);
   if (deskOut) return deskOut;
+  if (action.t === 'jobCaught') {
+    const out = answerCaught(block, action.choice, run.seed);
+    return { ok: out.ok, block: out.ok ? out.block : block, notice: out.notice, heal: false, run: out.ok ? withBlock(run, DominionBlockSchema.parse(out.block)) : run };
+  }
   if (action.t === 'act') {
     // D2: a Boss action (field.ts). A Pokémon lifted in a Ball (Thieve, a big success) joins the team or the box.
     const work = structuredClone(run);
@@ -160,6 +164,9 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
     noteAct(out.block, run.seed, action.district, action.target, (out.block.field.districts[action.district]?.heat ?? 0) - heatWas, run.party[0]?.speciesId ?? null);
     // D30: a note for tomorrow's morning paper.
     noteJob(out.block, block, action, out.roll ?? null, out.fight);
+    // D30 (m10): a member brought along may be grabbed on a botched job (Bail / Break out / Leave on the result page).
+    const grabbed = collar(out.block, block, action, out.roll ?? null, out.fight, run.seed);
+    if (grabbed.length) out.notice = [out.notice, ...grabbed].filter(Boolean).join(' ');
     if (out.mon && out.mon.trust !== undefined) {
       // D4: a rescued or tamed Pokémon joins the Reserve, not the Boss's team.
       const line = placeMon(content, work, withReserve(content, out.block), { species: out.mon.species, level: out.mon.level, src: 'rescued', trust: out.mon.trust });

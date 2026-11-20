@@ -104,7 +104,7 @@ export class DominionScene extends Phaser.Scene {
     later: (ms, fn) => void this.time.delayedCall(ms, fn),
     fight: () => this.fight('map'),
     interrupt: () => { this.screen = 'interrupt'; this.intAt = 0; this.view?.refresh(); },
-    toMap: (next) => this.afterJob(next),
+    toMap: (next, notice) => this.afterJob(next, notice),
     onMorningHq: () => this.screen === 'hq' && !this.police.owns() && !this.voices.on,
   });
   private voices = new VoicesController({ refresh: () => this.view?.refresh(), onHq: () => this.screen === 'hq' && !this.crew.owns() && !this.police.owns() && !this.block()?.crew?.talks.length });
@@ -931,8 +931,9 @@ export class DominionScene extends Phaser.Scene {
   }
 
   /** D30: a result page closed: back to the Map, or (`next`) straight to the Card of the next action on the board. */
-  private afterJob(next: boolean): void {
+  private afterJob(next: boolean, notice: string | null = null): void {
     this.screen = 'map';
+    this.notice = notice;
     const b = this.block(), c = this.cursor;
     if (next && b && c) {
       const n = gridPages(b)[c.page]?.length ?? 0;

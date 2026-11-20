@@ -363,6 +363,8 @@ export type DominionAction =
   /** D2: a Boss action from the Region Map (travel included), bringing up to two members. */
   | { t: 'act'; action: string; target: string | null; district: string; bring: string[]; opt?: string | null }
   | { t: 'buy'; vehicle: string }
+  /** D30 (m10): what to do about a member caught on a botched job. */
+  | { t: 'jobCaught'; choice: 'bail' | 'break' | 'leave' }
   // D3, the crew
   | { t: 'assign'; member: string; task: string }
   | { t: 'talk'; choice: number }
@@ -2162,6 +2164,8 @@ export const PaperStateSchema = z.object({
   /** The snapshot from the morning before, and this morning's. */
   prev: NewsSnapSchema.nullable(),
   snap: NewsSnapSchema.nullable(),
+  /** m10: a member the police grabbed on a botched job, waiting on Bail / Break out / Leave (`left`: custody until the night). */
+  caught: z.object({ member: S, action: S, district: S, day: I.min(1), left: z.boolean() }).strict().nullable().optional(),
 }).strict();
 export type PaperState = z.infer<typeof PaperStateSchema>;
 // ---------- D7: the Founding and team colours (founding.json, armbands.json, block `team`) ----------

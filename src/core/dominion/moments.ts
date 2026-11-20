@@ -17,12 +17,14 @@ import type { RunState } from '../state';
 import { hashSeed, Rng } from '../rng';
 import { DOMINION_DATA } from './data';
 import { notorietyOf, stepIndex } from './empire';
-import { addFightHook, card, type Card } from './field';
+import { addLoyalty, crewOf } from './crew';
+import { addFightHook, addHeat, card, syncHeat, type Card } from './field';
+import { spend } from './hqFx';
 import { heroDefOf } from './hero';
 import { teamDef, teamsHere } from './rivals';
 import { STAT_IDS, type DominionBlock, type JobNote, type JobResult, type NewsSnap, type PaperState } from './schema';
 import { latestPaper, rotomText } from './voices';
-import { addWorldEnd, fill } from './worldTurn';
+import { addWorldEnd, addWorldStep, fill } from './worldTurn';
 
 const S = z.string().min(1);
 const Lines = z.array(S).min(1);
@@ -36,6 +38,13 @@ export const MomentsFileSchema = z.object({
   done: z.object({ stamp: z.object({ paid: S, done: S, big: S }).strict(), weekly: S, rolled: S, sure: S }).strict(),
   botched: z.object({
     stamp: S, rolled: S, tape: S, cost: S, caught: S, caughtBoss: S, free: S, police: S, policeSub: S, map: S, mapSub: S, next: S, nextSub: S,
+    member: z.object({
+      base: z.number().int().min(0).max(100), perTenWanted: z.number().int().min(0),
+      breakBase: z.number().int().min(0).max(100), breakPer: z.number().int().min(0), breakHeat: z.number().int().min(0), breakFatigue: z.number().int().min(0), breakLoyalty: z.number().int(),
+      leaveLoyalty: z.number().int().max(0),
+      grabbed: S, bail: S, bailSub: S, bailPoor: S, break: S, breakSub: S, breakNone: S, breakNoneSub: S, leave: S, leaveSub: S,
+      bailed: S, broke: S, breakFail: S, left: S, night: S, poor: S, nobody: S,
+    }).strict(),
     quote: z.object({ caught: Lines, free: Lines }).strict(),
   }).strict(),
   paper: z.object({
@@ -127,8 +136,10 @@ export interface JobModel {
   changes: Change[];
   weekly: string | null;
   member: { name: string; look: string } | null;
-  /** Botched: the police opened a case on someone (D24 takes the screen after this page). */
+  /** Botched: who was caught (null when nobody was). */
   caught: string | null;
+  /** 'boss': the police opened a case on the Boss (D24 takes the screen after this page); 'member': a member waits on Bail / Break out / Leave. */
+  held: 'boss' | 'member' | null;
   head: string;
   quote: string | null;
   /** What the act's own lines said (loot, edges, street meetings), so nothing D2 reports is lost. */
@@ -170,22 +181,142 @@ export function jobModel(before: DominionBlock, after: DominionBlock, run: Pick<
       stamp: big ? S2.big : take > 0 ? S2.paid : S2.done,
       take, changes: ch.slice(0, 6),
       weekly: racket ? fill(M().done.weekly, { target: targetOf(racket.target)?.t.name ?? title, weekly: racket.weekly }) : null,
-      member: who, caught: null, head: title, quote: null, lines,
+      member: who, caught: null, held: null, head: title, quote: null, lines,
     };
   }
   const B = M().botched;
   const q = after.police?.q && after.police.q !== before.police?.q ? after.police.q : null;
-  const name = q ? (q.who === 'boss' ? 'You' : nice(q.name)) : who?.name ?? 'You';
+  const pc = !q && after.paper?.caught && !before.paper?.caught ? after.paper.caught : null;
+  const pm = pc ? after.members.find((x) => x.id === pc.member) ?? null : null;
+  const name = q ? (q.who === 'boss' ? 'You' : nice(q.name)) : pm ? nice(pm.name) : who?.name ?? 'You';
   return {
     kind: 'botched', big: false, title,
     rolled: roll?.rolled ? fill(B.rolled, { r: roll.r, chance: roll.chance }) : M().done.sure,
     stamp: B.stamp, take: 0, changes: ch.slice(0, 4), weekly: null, member: who,
-    caught: q ? name : null,
-    head: fill(q ? (q.who === 'boss' ? B.caughtBoss : B.caught) : B.free, { who: name }),
-    quote: who ? R.pick(q ? B.quote.caught : B.quote.free) : null,
+    caught: q || pm ? name : null,
+    held: q ? 'boss' : pm ? 'member' : null,
+    head: fill(q ? (q.who === 'boss' ? B.caughtBoss : B.caught) : pm ? B.caught : B.free, { who: name }),
+    quote: who ? R.pick(q || pm ? B.quote.caught : B.quote.free) : null,
     lines,
   };
 }
+
+// ---------- m10: a member caught on a botched job (Bail / Break out / Leave) ----------
+//
+// The rule (D30): when an act's roll fails and nothing else follows it (no battle, no police fight, the Boss not taken
+// for questioning), the first member brought along is grabbed with `member.base` + `perTenWanted` per 10 Wanted %
+// (stream `dominion-collar::<roll count>`). They wait in custody (out, jail) until the player picks:
+// - Bail: the crew's own bail (crew.json rules.bail, ₽500) and its Loyalty (bailLoyalty); back at once.
+// - Break out: the free member with the best Brawn + Stealth goes; `breakBase` + `breakPer` x that sum %, clamped 5-95
+//   (stream `dominion-breakout::<day>::<member>`). Heat `breakHeat` in the town either way; the rescuer gains
+//   `breakFatigue` Fatigue. Works: back at once, Loyalty `breakLoyalty`. Fails: kept for the night, as Leave.
+// - Leave: free, every member's Loyalty `leaveLoyalty`; at the World Turn the member is arrested for the crew's jailDays
+//   and D24's police step questions them in the morning. A choice never made by nightfall counts as Leave (no Loyalty).
+
+const K = () => M().botched.member;
+const CR = () => DOMINION_DATA.crew.rules;
+
+/** After a failed act: maybe the first brought member is grabbed. Mutates `after`; returns the line. */
+export function collar(after: DominionBlock, before: DominionBlock, a: ActInput, roll: Roll | null, fight: boolean, seed: string): string[] {
+  if (!roll?.rolled || roll.r <= roll.chance || fight || after.field.fight) return [];
+  if (after.police?.q && after.police.q !== before.police?.q) return [];
+  const p = paperOf(after);
+  if (p.caught) return [];
+  const m = after.members.find((x) => x.id === a.bring[0]);
+  if (!m || crewOf(m).out) return [];
+  const r = rngOf(seed, 'dominion-collar', before.field.rolls);
+  if (r.int(1, 100) > K().base + Math.floor(after.field.wanted / 10) * K().perTenWanted) return [];
+  const c = crewOf(m);
+  m.crew = c;
+  c.out = { why: 'jail', days: 1 };
+  c.last = 'caught';
+  p.caught = { member: m.id, action: a.action, district: a.district, day: after.day, left: false };
+  return [fill(K().grabbed, { name: nice(m.name), district: districtName(a.district) })];
+}
+
+const rescuerOf = (b: DominionBlock, not: string) =>
+  [...b.members].filter((x) => x.id !== not && !crewOf(x).out).sort((x, y) => y.stats.brawn + y.stats.stealth - (x.stats.brawn + x.stats.stealth))[0] ?? null;
+const breakChance = (m: { stats: { brawn: number; stealth: number } }): number => Math.max(5, Math.min(95, K().breakBase + K().breakPer * (m.stats.brawn + m.stats.stealth)));
+
+export interface CaughtChoice { id: 'bail' | 'break' | 'leave'; label: string; sub: string; on: boolean }
+export interface CaughtModel { member: { id: string; name: string; look: string }; action: string; district: string; choices: CaughtChoice[] }
+
+/** The three choices for a member waiting in custody (null when nobody is, or they were already left). */
+export function caughtModel(b: DominionBlock): CaughtModel | null {
+  const c = b.paper?.caught;
+  const m = c && !c.left ? b.members.find((x) => x.id === c.member) : null;
+  if (!c || !m) return null;
+  const name = nice(m.name), cost = CR().bail, k = K();
+  const res = rescuerOf(b, m.id);
+  return {
+    member: { id: m.id, name, look: m.look }, action: c.action, district: c.district,
+    choices: [
+      { id: 'bail', label: fill(k.bail, { name }), sub: fill(b.funds >= cost ? k.bailSub : k.bailPoor, { cost: cost.toLocaleString('en-US'), n: CR().bailLoyalty }), on: b.funds >= cost },
+      res
+        ? { id: 'break', label: fill(k.break, { name, rescuer: nice(res.name) }), sub: fill(k.breakSub, { chance: breakChance(res), heat: k.breakHeat, rescuer: nice(res.name) }), on: true }
+        : { id: 'break', label: fill(k.breakNone, { name }), sub: k.breakNoneSub, on: false },
+      { id: 'leave', label: fill(k.leave, { name }), sub: fill(k.leaveSub, { name, n: `${k.leaveLoyalty}`.replace('-', '−') }), on: true },
+    ],
+  };
+}
+
+/** Bail, Break out or Leave. Works on a copy; the session saves it. */
+export function answerCaught(block: DominionBlock, choice: 'bail' | 'break' | 'leave', seed: string): { ok: boolean; block: DominionBlock; notice: string | null } {
+  const no = (notice: string | null = null) => ({ ok: false, block, notice });
+  if (!caughtModel(block)) return no();
+  const b = structuredClone(block), p = paperOf(b), c = p.caught!, k = K();
+  const m = b.members.find((x) => x.id === c.member)!, mc = crewOf(m), name = nice(m.name);
+  m.crew = mc;
+  const dn = districtName(c.district);
+  if (choice === 'bail') {
+    const cost = CR().bail;
+    if (b.funds < cost) return no(fill(k.poor, { cost: cost.toLocaleString('en-US') }));
+    spend(b, cost);
+    mc.out = null;
+    mc.last = 'none';
+    addLoyalty(b, m, CR().bailLoyalty);
+    p.caught = null;
+    return { ok: true, block: b, notice: fill(k.bailed, { name, cost: cost.toLocaleString('en-US') }) };
+  }
+  if (choice === 'break') {
+    const res = rescuerOf(b, m.id);
+    if (!res) return no(k.nobody);
+    const rc = crewOf(res);
+    res.crew = rc;
+    rc.fatigue = Math.min(100, rc.fatigue + k.breakFatigue);
+    addHeat(b, c.district, k.breakHeat);
+    syncHeat(b);
+    const won = rngOf(seed, 'dominion-breakout', b.day, m.id).int(1, 100) <= breakChance(res);
+    const v = { name, rescuer: nice(res.name), heat: k.breakHeat, district: dn };
+    if (won) {
+      mc.out = null;
+      mc.last = 'none';
+      addLoyalty(b, m, k.breakLoyalty);
+      p.caught = null;
+      return { ok: true, block: b, notice: fill(k.broke, v) };
+    }
+    c.left = true;
+    return { ok: true, block: b, notice: fill(k.breakFail, v) };
+  }
+  for (const x of b.members) addLoyalty(b, x, k.leaveLoyalty);
+  c.left = true;
+  return { ok: true, block: b, notice: fill(k.left, { name, n: `${k.leaveLoyalty}`.replace('-', '−') }) };
+}
+
+// At the World Turn (after the crew's own step, before the police's): whoever is still in custody is arrested, so the
+// police question them in the morning (D24).
+addWorldStep('crew', (b) => {
+  const c = b.paper?.caught;
+  if (!c) return [];
+  b.paper!.caught = null;
+  const m = b.members.find((x) => x.id === c.member);
+  if (!m) return [];
+  const mc = crewOf(m);
+  m.crew = mc;
+  mc.out = { why: 'jail', days: CR().jailDays };
+  mc.last = 'arrested';
+  return [fill(K().night, { name: nice(m.name) })];
+});
 
 // ---------- the paper's notes (session.ts calls noteJob after every act) ----------
 

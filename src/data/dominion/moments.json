@@ -41,6 +41,28 @@
     "mapSub": "Heat cools a little each night",
     "next": "Try the next action",
     "nextSub": "Same town, the next job on the board",
+    "member": {
+      "base": 25, "perTenWanted": 2,
+      "breakBase": 35, "breakPer": 3, "breakHeat": 8, "breakFatigue": 30, "breakLoyalty": 3,
+      "leaveLoyalty": -6,
+      "grabbed": "{name} is grabbed by the police in {district}.",
+      "bail": "Pay {name}'s bail",
+      "bailSub": "₽{cost} · back tonight · Loyalty +{n}",
+      "bailPoor": "₽{cost} · not enough money",
+      "break": "Send {rescuer} to break {name} out",
+      "breakSub": "{chance}% · Heat +{heat} · {rescuer} is worn out tomorrow",
+      "breakNone": "Break {name} out",
+      "breakNoneSub": "Nobody free to send",
+      "leave": "Leave {name}",
+      "leaveSub": "Free · the police question {name} tonight · crew Loyalty {n}",
+      "bailed": "{name} is out on bail. −₽{cost}.",
+      "broke": "{rescuer} gets {name} out the back of the station. Heat +{heat} in {district}.",
+      "breakFail": "{rescuer} can't get {name} out. Heat +{heat} in {district}. The police keep {name} tonight.",
+      "left": "You leave {name} to the police. The crew noticed (Loyalty {n}).",
+      "night": "{name} spends the night in a cell. The police will question {name}.",
+      "poor": "Not enough money: bail is ₽{cost}.",
+      "nobody": "Nobody is free to send."
+    },
     "quote": {
       "caught": ["Boss... you're coming for me, right?", "I didn't say anything. I swear I didn't.", "Tell my Pokémon I'll be back soon."],
       "free": ["That was too close, Boss. Way too close.", "Next time I bring a bigger bag. And better shoes.", "They saw my face. I think. Maybe."]

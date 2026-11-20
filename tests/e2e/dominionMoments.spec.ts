@@ -199,3 +199,37 @@ test('the morning paper: yesterday\'s job on the front page, the WANTED poster, 
   await expect(s.getByTestId('dom-paper')).toHaveCount(0);
   expect(errors).toEqual([]);
 });
+
+test('a member caught on a botched job: the three choices (bail, break out, leave); bail frees them and costs the bail', async ({ page }, info) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&moments=1');
+  await dayTwo(page);
+  const s = view(page, 'Dominion');
+  // As if the last act's member was grabbed (the rule itself is covered by the unit tests).
+  const id = await page.evaluate(() => {
+    const b = (window as any).__pkr.session.run.expansion.dominion;
+    const m = b.members[0];
+    m.crew = { ...(m.crew ?? {}), out: { why: 'jail', days: 1 }, last: 'caught' };
+    b.funds = 2000;
+    b.paper = { jobs: [], prev: null, snap: null, ...(b.paper ?? {}), caught: { member: m.id, action: 'extort', district: 'pewter', day: b.day, left: false } };
+    return m.id as string;
+  });
+  await restart(page);
+  await page.keyboard.press('Enter');
+  await expect(s.getByTestId('dom-job-botched')).toBeVisible();
+  await expect(s.getByTestId('dom-job-choice-0')).toContainText(/bail/i);
+  await expect(s.getByTestId('dom-job-choice-1')).toContainText(/break/i);
+  await expect(s.getByTestId('dom-job-choice-2')).toContainText(/Leave/);
+  await page.waitForTimeout(600);
+  await page.screenshot({ path: info.outputPath('m10-caught.png') });
+  // Esc can't walk away from them.
+  await page.keyboard.press('Escape');
+  await expect(s.getByTestId('dom-job-botched')).toBeVisible();
+  await page.keyboard.press('Digit1');
+  await expect(s.getByTestId('dom-job-botched')).toHaveCount(0);
+  const b = await block(page);
+  expect(b.funds).toBe(1500);
+  expect(b.paper.caught ?? null).toBeNull();
+  expect(b.members.find((m: any) => m.id === id).crew.out ?? null).toBeNull();
+  expect(errors).toEqual([]);
+});

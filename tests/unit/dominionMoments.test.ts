@@ -6,7 +6,7 @@ import momentsRaw from '../../src/data/dominion/moments.json';
 import { freshChair } from '../../src/core/dominion/chair';
 import { DOMINION_DATA } from '../../src/core/dominion/data';
 import { card } from '../../src/core/dominion/field';
-import { bountyOf, jobModel, MOMENTS, MomentsFileSchema, noteJob, orderModel, paperDue, paperModel, snapOf, starsOf } from '../../src/core/dominion/moments';
+import { answerCaught, bountyOf, caughtModel, jobModel, MOMENTS, MomentsFileSchema, noteJob, orderModel, paperDue, paperModel, snapOf, starsOf } from '../../src/core/dominion/moments';
 import { DominionBlockSchema, type DominionAction, type DominionBlock } from '../../src/core/dominion/schema';
 import { DOMINION_MODE_ID, startInRun, stepInRun } from '../../src/core/dominion/session';
 import { STANDARD_CHOICE } from '../../src/core/rules';
@@ -201,5 +201,100 @@ describe('DOMINION D30: the save block (paper, optional, no bump)', () => {
     const bad = structuredClone(b);
     (bad.paper!.jobs[0] as { res: string }).res = 'nope';
     expect(DominionBlockSchema.safeParse(bad).success).toBe(false);
+  });
+});
+
+describe('DOMINION D30: a member caught on a botched job (m10: Bail / Break out / Leave)', () => {
+  /** Day 2 with a second member (Rook's copy), Extort with Rook brought along: the first seed where Rook is grabbed. */
+  function grabbed() {
+    for (let i = 0; i < 400; i++) {
+      let r = day(`d30g-${i}`);
+      const b = structuredClone(blk(r));
+      const m = b.members[0]!;
+      b.members.push({ ...structuredClone(m), id: 'm-dale', name: 'DALE', crew: m.crew ? { ...structuredClone(m.crew), card: undefined } : undefined });
+      r = { ...r, expansion: { ...r.expansion, dominion: DominionBlockSchema.parse(b) } };
+      const a = { ...EXTORT, bring: [m.id] };
+      const out = stepInRun(content, r, { t: 'act', ...a });
+      if (out.ok && blk(out.run).paper?.caught) return { before: r, out, a, id: m.id };
+    }
+    throw new Error('no seed');
+  }
+  it('a failed roll can grab the member brought along: custody, a line, and the three choices', () => {
+    const { before, out, a, id } = grabbed();
+    const b = blk(out.run);
+    expect(out.roll!.r).toBeGreaterThan(out.roll!.chance);
+    expect(out.fight).toBeFalsy();
+    expect(b.paper!.caught).toEqual({ member: id, action: 'extort', district: 'pewter', day: 2, left: false });
+    expect(b.members.find((m) => m.id === id)!.crew!.out).toEqual({ why: 'jail', days: 1 });
+    expect(out.notice).toMatch(/grabbed by the police in Pewter/);
+    const j = jobModel(blk(before), b, out.run, a, out.roll!, out.notice)!;
+    expect(j.held).toBe('member');
+    expect(j.head).toMatch(/was caught\. What now\?/);
+    const cm = caughtModel(b)!;
+    expect(cm.choices.map((c) => c.id)).toEqual(['bail', 'break', 'leave']);
+    expect(cm.choices[1]!.label).toContain('Dale');
+    const html = jobBotchedView(j, MOMENTS.botched, 0, null, false, cm.choices, null);
+    expect(html).toContain('dom-job-choice-2');
+  });
+  it('Bail: the crew\'s bail price, back at once, Loyalty up; not enough money is refused', () => {
+    const { out, id } = grabbed();
+    const rich = structuredClone(blk(out.run));
+    rich.funds = 2000;
+    const lo = rich.members.find((m) => m.id === id)!.loyalty;
+    const ok = answerCaught(rich, 'bail', out.run.seed);
+    expect(ok.ok).toBe(true);
+    expect(ok.block.funds).toBe(2000 - DOMINION_DATA.crew.rules.bail);
+    const m = ok.block.members.find((x) => x.id === id)!;
+    expect(m.crew!.out).toBeNull();
+    expect(m.loyalty).toBeGreaterThanOrEqual(lo);
+    expect(ok.block.paper!.caught).toBeNull();
+    const poor = structuredClone(blk(out.run));
+    poor.funds = 10;
+    expect(caughtModel(poor)!.choices[0]!.on).toBe(false);
+    expect(answerCaught(poor, 'bail', out.run.seed)).toMatchObject({ ok: false, notice: expect.stringMatching(/Not enough money/) });
+  });
+  it('Break out: Heat in the town and a tired rescuer either way; a success frees them, a failure keeps them', () => {
+    const { out, id } = grabbed();
+    const b = blk(out.run);
+    const res = answerCaught(b, 'break', out.run.seed);
+    expect(res.ok).toBe(true);
+    expect(res.block.field.districts.pewter!.heat).toBe(Math.min(100, b.field.districts.pewter!.heat + MOMENTS.botched.member.breakHeat));
+    expect(res.block.members.find((x) => x.id === 'm-dale')!.crew!.fatigue).toBeGreaterThan(b.members.find((x) => x.id === 'm-dale')!.crew!.fatigue);
+    const freed = res.block.paper!.caught === null;
+    expect(res.block.members.find((x) => x.id === id)!.crew!.out === null).toBe(freed);
+    if (!freed) expect(res.block.paper!.caught!.left).toBe(true);
+    expect(answerCaught(b, 'break', out.run.seed)).toEqual(res);
+    // Nobody free to send: refused.
+    const alone = structuredClone(b);
+    alone.members = alone.members.filter((m) => m.id !== 'm-dale');
+    expect(caughtModel(alone)!.choices[1]!.on).toBe(false);
+    expect(answerCaught(alone, 'break', out.run.seed).ok).toBe(false);
+  });
+  it('Leave: every member\'s Loyalty drops; that night they are arrested and the police question them (D24)', () => {
+    const { out, id } = grabbed();
+    let r = go(out.run, { t: 'jobCaught', choice: 'leave' });
+    const b = blk(r);
+    expect(b.paper!.caught!.left).toBe(true);
+    expect(caughtModel(b)).toBeNull();
+    r = nextMorning(r);
+    const m = blk(r).members.find((x) => x.id === id)!;
+    expect(m.crew!.out?.why).toBe('jail');
+    expect(blk(r).paper!.caught).toBeNull();
+    expect(blk(r).report.join(' ')).toMatch(/spends the night in a cell/);
+    expect(blk(r).police?.q?.who ?? (m.crew!.last === 'arrested' ? id : null)).toBe(id);
+  });
+  it('no answer by nightfall counts as Leave without the Loyalty cost', () => {
+    const { out, id } = grabbed();
+    const lo = blk(out.run).members.map((m) => m.loyalty);
+    const r = nextMorning(out.run);
+    expect(blk(r).members.find((x) => x.id === id)!.crew!.out?.why).toBe('jail');
+    expect(blk(r).paper!.caught).toBeNull();
+    void lo;
+  });
+  it('a second answer is refused; the choice goes through the session and saves', () => {
+    const { out } = grabbed();
+    const r = go(out.run, { t: 'jobCaught', choice: 'leave' });
+    expect(stepInRun(content, r, { t: 'jobCaught', choice: 'bail' }).ok).toBe(false);
+    expect(DominionBlockSchema.parse(JSON.parse(JSON.stringify(blk(r)))).paper!.caught!.left).toBe(true);
   });
 });
