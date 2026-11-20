@@ -1,0 +1,19 @@
+/* Pass 50 · New areas 24 · Crest */
+.cr50{flex:none;display:block}
+.fl50{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}.fl50.et{z-index:0}
+.cf50 .rib.bat{display:none}
+.cf50 .st38{top:30px;left:44px;padding-left:44px;border-top:2px solid #fff;border-radius:8px 8px 8px 18px;height:34px;padding-top:0}
+.cf50 .st38>.cr50{position:absolute;left:-28px;top:-13px;filter:drop-shadow(0 3px 0 rgba(0,0,0,.45))}
+.fw50{position:absolute;left:14px;top:4px;z-index:4;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.fw50 i{font:400 12px/18px var(--fd);font-style:normal;text-transform:uppercase;letter-spacing:.06em;color:#c9d3ee;background:rgba(13,21,48,.88);padding:0 12px 0 16px;clip-path:polygon(0 0,calc(100% - 7px) 0,100% 50%,calc(100% - 7px) 100%,0 100%,7px 50%)}
+.fw50 i:first-child{clip-path:polygon(0 0,calc(100% - 7px) 0,100% 50%,calc(100% - 7px) 100%,0 100%);padding-left:10px}
+.fw50 i.past{color:#8a93b4}.fw50 i.on{color:var(--ink);background:var(--yel);font-size:14px;line-height:22px}
+.fw50.in{left:14px;top:70px}.cf50.a-xp .sm-top em .cr50,.cf50 .ev-where em .cr50{display:inline-block;vertical-align:middle;margin:-12px 8px -12px -4px}
+.fg50{position:absolute;left:56px;top:300px;width:64px;height:80px;z-index:1;pointer-events:none}
+.scr.tc50{background:radial-gradient(circle at 50% 38%,color-mix(in srgb,var(--c) 55%,var(--d)),var(--d) 70%);color:#fff;cursor:pointer}
+.tc50 .bu44{top:182px}.cr50.big{position:absolute;left:50%;top:182px;translate:-50% -50%;z-index:1;filter:drop-shadow(0 8px 0 rgba(0,0,0,.4))}
+.tn50{position:absolute;left:0;right:0;top:304px;z-index:1;text-align:center;font:400 64px/1 var(--fd);text-transform:uppercase;letter-spacing:.04em;text-shadow:4px 4px 0 rgba(0,0,0,.5)}
+.tl50{position:absolute;left:120px;right:120px;top:378px;z-index:1;margin:0;text-align:center;font-size:18px;font-weight:800}
+.fw50.card{left:0;right:0;top:432px;justify-content:center}.fw50.card i{font-size:15px;line-height:28px;padding:0 18px 0 22px}.fw50.card i.on{font-size:17px;line-height:32px}
+.gr39.ca50>.pn{height:330px}.gr39.ca50>.pn>b{font:400 22px/1.1 var(--fd);text-transform:uppercase}.gr39.ca50>.pn>p{margin:0;font-size:12.5px;font-weight:800;line-height:1.5}
+/*@top*/

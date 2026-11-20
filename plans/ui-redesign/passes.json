@@ -853,5 +853,23 @@
   "q3": "Four new pages, each drawn as an object: the Dossier as a manila folder with a clipped photo, Field Notes as a book with four tabs down the edge, the Rival Report as a newspaper with all four rivals, and the scene where a Pokémon you once beat comes back to learn from yours.",
   "q4": "Settings > Battle: Boss HP, on the ring (new) or as a plate (classic). The Dossier, Field Notes and Rival Report sit in the pause Menu under one line called Papers.",
   "q5": "The ring is new for Pokémon, so the name tag keeps the familiar parts: type medals, name, level and HP. The folder, notebook and newspaper are the kind of objects these games have always used for records."
+ },
+ "50": {
+  "name": "New areas 24 · Crest",
+  "label": "New areas · pass 24 of 25",
+  "big": "Each area gets a crest: painted on the ground you fight on, on the status tab, and filling the screen when you walk in",
+  "pages": [
+   "cr-rd",
+   "cr-tm",
+   "cr-ga",
+   "cr-xp",
+   "cr-et",
+   "cr-all"
+  ],
+  "q1": "Five crests: a crystal star in a hexagon for raids, a four-colour trial diamond for Totems, a League shield for Galar, a flagged peak for expeditions and the red R for Team Rocket. Each one is painted large on the battle floor like a stadium's centre circle, so a single glance at the ground tells you where you are.",
+  "q2": "Until now an area was told apart by its colours and its set. It now has a mark of its own that turns up in every place the area does: floor, status tab, header and entry card. The thirty-dot stage ribbon is replaced inside an area by a five-step rail that says where you are in this visit.",
+  "q3": "Six new pages: an entry card for each of the five areas (crest, name, one line, the steps ahead) and a guide page that shows the five crests together.",
+  "q4": "The Menu's map legend shows the five crests next to the stop icons. Settings > Display: Floor crest, on or off.",
+  "q5": "Yes. Gyms, leagues and teams in these games all carry an emblem, and stadium floors are painted with one. The crests give the new areas the same kind of badge the old ones have."
  }
 }

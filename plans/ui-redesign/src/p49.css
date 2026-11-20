@@ -17,7 +17,7 @@
 .ph49{position:absolute;left:40px;top:34px;width:180px;height:218px;display:grid;place-items:center;background:#fff;border:3px solid var(--ink);rotate:-3deg;box-shadow:4px 4px 0 rgba(0,0,0,.3)}
 .ph49 u{position:absolute;left:70px;top:-16px;width:22px;height:44px;border:4px solid #8a93b4;border-radius:12px;box-sizing:border-box}
 .fx49{position:absolute;left:270px;right:36px;top:30px;display:grid;gap:4px}
-.fx49 em{font-style:normal;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#7a4a22}.fx49>b{font:400 44px/1 var(--fd);text-transform:uppercase}
+.fx49 em{font-style:normal;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#7a4a22}.fx49>b{font:400 44px/1 var(--fd);text-transform:uppercase}.fx49 em,.fx49>b{justify-self:start}
 .fx49 p{margin:6px 0 0;display:flex;align-items:center;gap:12px;font-size:15px;font-weight:800}.fx49 u{text-decoration:none;flex:none;width:44px;text-align:center;font:400 40px/1 var(--fd);color:#e3350d}
 .fx49 p.nt{display:block;font-weight:700;line-height:1.4;border-top:3px dashed #8a6a2e;padding-top:10px;margin-top:10px}
 .sp49{position:absolute;right:28px;top:22px;text-decoration:none;font:400 22px/1 var(--fd);text-transform:uppercase;color:#e3350d;border:4px solid #e3350d;border-radius:8px;padding:4px 14px;rotate:-8deg;opacity:.85}
