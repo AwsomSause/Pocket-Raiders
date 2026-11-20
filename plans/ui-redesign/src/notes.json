@@ -264,5 +264,22 @@
   "q3": "Yes, four. Info and Auto were buttons with nowhere to go: Info now has its own page (weather, field, stat changes, enemy heals left), with the Battle Log one key away, and Auto has its own page for style, speed and when to stop.",
   "q4": "The Rotom Phone glows over a dimmed world, so the pause reads as a pause. Settings sit over the town like every other out-of-run page.",
   "q5": "Yes. Foe plate top-left with the arena wide open is the classic battle framing, and the shiny star ring is straight from the series."
+ },
+ "17": {
+  "name": "Headlines",
+  "big": "Big type leads every screen. The title is rebuilt around a giant logo and a word menu, battle commands are big slanted words instead of small round icons, moves are called out across the screen, the party hand fans out, and every page has its name in giant letters behind it.",
+  "pages": [
+   "Boot",
+   "Loading",
+   "Credits",
+   "Settings · Text",
+   "Settings · Story",
+   "Settings · Save & Data"
+  ],
+  "q1": "Yes. The logo is twice the size, FIGHT is the biggest thing in the battle console, and move names slam across the arena when they land.",
+  "q2": "Pass 16 changed light and depth but kept small labels. Here the words carry the design: fewer icons to decode, faster to read at a glance.",
+  "q3": "Yes, six. Text, Story and Save & Data were settings tiles with no page behind them; Boot, Loading and Credits did not exist at all.",
+  "q4": "Settings now has a page behind all nine tiles. Save & Data shows backups, the save check, export and import in one place. The phone's next stop is a headline.",
+  "q5": "Yes. Big slanted command words, loud move call-outs and a loading tip with your team walking are all series habits."
  }
 }
