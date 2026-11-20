@@ -32,12 +32,28 @@ async function edit(page: Page, f: string) {
   }, f);
   await waitForScene(page, 'Dominion');
   await page.waitForTimeout(300);
-  await page.keyboard.press('Enter');
+  await pressUntil(page, 'Enter', () => view(page, 'Dominion').getByTestId('dom-phase').isVisible());
   await expect(view(page, 'Dominion').getByTestId('dom-phase')).toHaveText('DAY');
   await page.waitForTimeout(250);
 }
 
 const block = (page: Page) => page.evaluate(() => (window as any).__pkr.session.run.expansion.dominion);
+
+/** Waits for `n` drawn frames, so the game's input step has read every key pressed so far. */
+const frames = (page: Page, n: number) =>
+  page.evaluate((k) => new Promise<void>((done) => { const f = (i: number) => (i ? requestAnimationFrame(() => f(i - 1)) : done()); f(k); }), n);
+
+/**
+ * A key press can be lost in a busy headless frame (the scene-change gotcha), so press, wait for the new state, and press
+ * again only while it hasn't come (same as dominionPersonality / dominionDesk). Never presses once the state is reached,
+ * so toggles like H can't flip back.
+ */
+async function pressUntil(page: Page, key: string, reached: () => Promise<boolean>) {
+  await expect(async () => {
+    if (!(await reached())) await page.keyboard.press(key);
+    await expect.poll(reached, { timeout: 1500 }).toBe(true);
+  }).toPass({ timeout: 15_000 });
+}
 
 test('the Hero: the file on H, a card, the Hero steps into a job, Run; a Legendary fought from the file', async ({ page }, info) => {
   const shot = (n: string) => page.screenshot({ path: info.outputPath(`${n}.png`) });
@@ -49,28 +65,30 @@ test('the Hero: the file on H, a card, the Hero steps into a job, Run; a Legenda
   const s = view(page, 'Dominion');
   await expect(s.getByTestId('dom-phase')).toHaveText('DAY');
   await expect(s.getByTestId('dom-hero-chip')).toContainText('IGNORES');
-  await page.keyboard.press('KeyH');
+  const fileOpen = () => s.getByTestId('dom-hero').isVisible();
+  const notice = () => s.getByTestId('dom-notice').isVisible();
+  await pressUntil(page, 'KeyH', fileOpen);
   await expect(s.getByTestId('dom-hero')).toBeVisible();
   await expect(s.getByTestId('dom-hero-name')).toHaveText('BLUE');
   await expect(s.getByTestId('dom-legend-moltres')).toContainText('Asleep');
   await expect(s.getByTestId('dom-meet')).toContainText('THE HERO IS SPOTTED IN TOWN');
   await shot('s9-hero-file-card');
   // 2 = Watch: the route is known for two days.
-  await page.keyboard.press('Digit2');
+  await pressUntil(page, 'Digit2', notice);
   await expect(s.getByTestId('dom-notice')).toContainText('next two days');
   const b1 = await block(page);
   expect(b1.hero.intel).toBe(b1.day + 2);
   expect(b1.hero.meet).toBeNull();
-  await page.keyboard.press('Enter');
+  await pressUntil(page, 'Enter', async () => !(await notice()));
   await expect(s.getByTestId('dom-notice')).toBeHidden();
   await expect(s.getByTestId('dom-hero')).toBeVisible();
-  await page.keyboard.press('KeyH');
+  await pressUntil(page, 'KeyH', async () => !(await fileOpen()));
   await expect(s.getByTestId('dom-hero')).toBeHidden();
   await expect(s.getByTestId('dom-phase')).toHaveText('DAY');
 
   // The Hero foils one job a week: Lay Low at Pewter, and Blue steps in (m11) before anything is fought.
   await edit(page, 'Object.assign(b.hero, { threat: 30, stage: 1, foilWeek: 1, foilDay: b.day, foiled: false });');
-  await page.keyboard.press('Digit2');
+  await pressUntil(page, 'Digit2', () => s.getByTestId('dom-dz-pewter').isVisible());
   await s.getByTestId('dom-dz-pewter').click();
   await s.getByTestId('dom-act-lay-low').click();
   await s.getByTestId('dom-cta').click();
@@ -81,19 +99,22 @@ test('the Hero: the file on H, a card, the Hero steps into a job, Run; a Legenda
   await shot('m11-hero-interrupt');
   // Esc doesn't leave the run here; 2 = Run: the job is lost, Heat goes up.
   await page.keyboard.press('Escape');
+  // Let the game read Esc before 2 is pressed: in a busy headless frame the two can arrive in the wrong order, and a
+  // late Esc on the map would clear the Run notice. Then check the interrupt is still up after Esc was read.
+  await frames(page, 3);
   await expect(s.getByTestId('dom-interrupt')).toBeVisible();
-  await page.keyboard.press('Digit2');
+  await pressUntil(page, 'Digit2', async () => (await block(page)).field.fight === null);
   await expect(s.getByTestId('dom-map')).toBeVisible();
   await expect(s.getByTestId('dom-notice')).toContainText('Heat');
   expect((await block(page)).field.fight).toBeNull();
 
   // A Legendary out over the region: the file's button fights it (a wild battle that can't be caught).
   await edit(page, "Object.assign(b.hero.legends.moltres, { seen: true, next: b.day + 2 });");
-  await page.keyboard.press('KeyH');
+  await pressUntil(page, 'KeyH', fileOpen);
   await expect(s.getByTestId('dom-legend-fight-moltres')).toHaveText('FIGHT IT');
   await expect(s.getByTestId('dom-hero-cta')).toContainText('Fight Moltres');
   await shot('s9-hero-file-legend');
-  await page.keyboard.press('KeyF');
+  await pressUntil(page, 'KeyF', async () => (await block(page)).field.fight?.begun === true);
   await waitForScene(page, 'Battle');
   const battle = await page.evaluate(() => (window as any).__pkr.session.run.battle);
   expect(battle.kind).toBe('wild');
