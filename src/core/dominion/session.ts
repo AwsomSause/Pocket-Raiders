@@ -7,6 +7,7 @@ import { healParty, newMon } from '../run';
 import type { RunState } from '../state';
 import { step, type StepOut } from './clock';
 import { addMorale, withCrew } from './crew';
+import { fillCards } from './personality';
 import { admit, approach, hire } from './recruit';
 import { answer, eveningTalk } from './talk';
 import { act, buy, settle } from './field';
@@ -53,14 +54,14 @@ export function startInRun(content: Content, run: RunState, setup: DominionSetup
   const fresh = withCrew(newBlock(content, out, setup));
   // D4: Day 1's Reserve (one Pokémon of each Team Type; the first member holds the first).
   seedStart(content, out, fresh);
-  // D5: the starting money is clean (A21).
-  const block = DominionBlockSchema.parse(withRivals(withHq(withReserve(content, fresh), fresh.funds)));
+  // D5: the starting money is clean (A21). D19: every member gets their personality card.
+  const block = DominionBlockSchema.parse(fillCards(withRivals(withHq(withReserve(content, fresh), fresh.funds)), run.seed));
   noteTop(block, out);
   out = { ...withBlock(out, block), inventory: { ...DOMINION_DATA.start.start.inventory } };
   return { run: out, problem: null };
 }
 
-/** One clock step on the run. Rest heals the Boss's team for free (Part 1 §2.1). */
+/** One clock step on the run. Rest heals the Boss's team for free (Part 1 §2.1). Anyone new gets their card (D19). */
 export function stepInRun(content: Content, run: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean } {
   const out = stepInner(content, run, action);
   if (!out.ok) return out;
@@ -72,6 +73,8 @@ export function stepInRun(content: Content, run: RunState, action: DominionActio
     b.flags = b.flags.filter((f) => f !== 'ambushed');
     for (const m of next.party) m.hp = Math.max(1, Math.round(m.hp * 0.75));
   }
+  // D19: anyone new gets their personality card.
+  fillCards(b, run.seed);
   const block = DominionBlockSchema.parse(b);
   return { ...out, block, run: withBlock(next, block) };
 }
