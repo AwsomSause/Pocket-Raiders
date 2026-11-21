@@ -34,7 +34,7 @@ const JobsFileSchema = z.object({
     riskOdds: N0, items: z.array(z.object({ id: z.string().regex(/^[a-z]+$/), name: S, where: S, risk: I.min(1), pay: N0, pic: S }).strict()).min(1),
     lines: Lines, check: z.array(S).length(3),
   }).strict(),
-  gym: z.object({ plan: S, talk: z.record(S, S), ask: z.record(S, S), walk: S }).strict(),
+  gym: z.object({ plan: z.record(S, S), talk: z.record(S, S), ask: z.record(S, S), walk: S }).strict(),
 }).strict().superRefine((f, ctx) => {
   if (f.market.stock > f.market.items.length) ctx.addIssue({ code: 'custom', message: 'market stock is more than its items' });
   if (f.live.watch[0] > f.live.watch[1]) ctx.addIssue({ code: 'custom', message: 'live watch range is upside down' });

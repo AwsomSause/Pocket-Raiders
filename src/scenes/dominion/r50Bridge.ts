@@ -19,8 +19,8 @@ import { R5_SIZES } from '../../ui/redux/screens/dominion/r50/sizes';
 import { r5RunOf } from '../../ui/redux/screens/dominion/r50/run';
 import { SP, type R5Run } from '../../ui/redux/screens/dominion/r50/kit';
 
-/** Tabs open on the HQ (Operations is still shut). */
-export const R5_OPEN_TABS = [0, 1, 2, 3, 5] as const;
+/** Tabs open on the HQ (Jobs opens the Job board, redesign R4). */
+export const R5_OPEN_TABS = [0, 1, 2, 3, 4, 5] as const;
 
 export function r5Run(scene: Phaser.Scene, b: DominionBlock): R5Run {
   const { content, run } = services().session;

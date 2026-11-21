@@ -134,8 +134,9 @@ export class JobsX {
   // ---------- drawing ----------
 
   render(): string {
-    const b = this.host.block(), p = this.host.people();
-    if (!b || !p) return '';
+    const b = this.host.block(), q = this.host.people();
+    if (!b || !q) return '';
+    const p = { ...q, run: placed(q.run, b) };
     switch (this.mode) {
       case 'board': return this.board(b, p.run);
       case 'live': return this.livePage(b, p);
@@ -230,7 +231,8 @@ export class JobsX {
   // ---------- the Smuggle and Gym takeover Cards ----------
 
   /** The Card drawn as the Smuggling run or the Gym plan; null for every other action. */
-  cardPage(b: DominionBlock, run: R5Run): string | null {
+  cardPage(b: DominionBlock, r: R5Run): string | null {
+    const run = placed(r, b);
     const input = this.host.input();
     if (!input || (input.action !== 'smuggle' && input.action !== 'gym-takeover')) return null;
     const c = coreCard(b, this.run(), input.action, input.target, input.district, input.bring, input.opt);
@@ -259,7 +261,7 @@ export class JobsX {
     const w = wayDef(c.opt as GymWay);
     return r5GymPlan({
       gym: `${c.district.name} Gym · ${cap(gym.type)}`, leader: { name: gym.leader, pic: leaderPic(gym.leaderId, 70) }, trainers, me: this.host.bossPic(46),
-      rows, at, speaker, line: JOBX.gym.plan.replace('{way}', w.name).replace('{text}', w.text), blocked: c.blocked,
+      rows, at, speaker, line: (JOBX.gym.plan[w.id] ?? `“${w.text}”`).replace('{leader}', gym.leader), blocked: c.blocked,
     }, run);
   }
 
@@ -470,12 +472,18 @@ export class JobsX {
   }
 }
 
+/** The place sign: the town the Boss is in and the time of day. */
+function placed(run: R5Run, b: DominionBlock): R5Run {
+  const t = b.phase === 'night' ? 'night' : b.phase === 'evening' ? 'evening' : 'day';
+  return { ...run, place: `${districtDef(b.field.at)?.name ?? 'Kanto'} · ${t}` };
+}
+
 /** A Gym Leader standing `h` px tall: the mockups' sprite when they drew one, else the game's boss picture. */
 export function leaderPic(id: string | null, h: number, flip = false): string {
   const k = id ? `t-${id}` : '';
   if (k && R5_SIZES[k]) return SP(k, h, flip ? 'flip' : '');
   const f = id ? `bosses/${id}.png` : '';
   const d = f ? rxImage(f) : undefined;
-  if (d) return img(f, h / d[1], undefined, flip ? 'transform:scaleX(-1)' : '');
+  if (d) return img(f, h / d[1], undefined, `display:block${flip ? ';transform:scaleX(-1)' : ''}`);
   return SP('t-acetrainer-m', h, flip ? 'flip' : '');
 }

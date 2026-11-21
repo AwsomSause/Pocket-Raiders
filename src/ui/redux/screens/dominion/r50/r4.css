@@ -23,3 +23,7 @@
 #rx #r5 .c-parts .wl4{margin:4px 4px 0;font-size:12px;line-height:1.25;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #rx #r5 .c-parts .wl4 b{color:var(--ok)}
 #rx #r5 .c-parts .wl4.l b{color:var(--red2)}
+/* The Gym plan: up to five ways (the mockup drew four), each on one line under its name. */
+#rx #r5 .gw44 .o29{padding-top:5px;padding-bottom:5px}
+#rx #r5 .gw44 .o29 em{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#rx #r5 .gw44 .o29.w-bad{border-left-color:#e0294a;opacity:.7}
