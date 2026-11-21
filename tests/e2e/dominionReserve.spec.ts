@@ -42,32 +42,36 @@ test('the Reserve: give Rook a Pokémon by hand; the Pyramid: promote him; both 
   await expect(s.getByTestId('dom-reserve')).toBeVisible();
   await expect(s.getByTestId('dom-reserve-count')).toHaveText('1 / 20');
   await expect(s.getByTestId('dom-who')).toHaveText('Rook');
-  await expect(s.getByTestId('dom-tile-0')).toContainText('FITS');
-  await expect(s.getByTestId('dom-ghost')).toBeVisible();
-  await expect(s.getByTestId('dom-give-cta')).toContainText('to Rook');
-  await page.waitForTimeout(900); // let the round-3 entrance finish so the shot is the rest frame
+  await expect(s.getByTestId('dom-tile-0')).not.toContainText('OFF-TYPE');
+  await page.waitForTimeout(900); // let the entrance finish so the shot is the rest frame
   await shot('11-reserve');
   const b0 = await block(page);
   const uid = b0.reserve.box[0].uid;
+  // R6 (pass 50): Enter opens the Card for the picked Pokémon; Enter on the Card gives it.
   await page.keyboard.press('Enter');
-  await expect(s.getByTestId('dom-notice')).toContainText('goes to Rook');
-  const b1 = await block(page);
-  expect(b1.members[0].team.map((m: { uid: string }) => m.uid)).toContain(uid);
-  expect(b1.reserve.box).toHaveLength(0);
-  await expect(s.getByTestId('dom-reserve-count')).toHaveText('0 / 20');
-
+  await expect(s.getByTestId('dom-ghost')).toBeVisible();
+  await expect(s.getByTestId('dom-give-cta')).toContainText('Do it');
+  await expect(s.getByTestId('r5-give')).toContainText('Give');
   // E and W: the Boss is the other target (no BST cap). (Q is the command wheel.)
   await page.keyboard.press('KeyE');
   await expect(s.getByTestId('dom-who')).toHaveText('The Boss');
   await expect(s.getByTestId('dom-bstcap')).toHaveText('—');
   await page.keyboard.press('KeyW');
   await expect(s.getByTestId('dom-who')).toHaveText('Rook');
+  expect(await block(page)).toEqual(b0);
+  await page.keyboard.press('Enter');
+  await expect(s.getByTestId('dom-notice')).toContainText('goes to Rook');
+  const b1 = await block(page);
+  expect(b1.members[0].team.map((m: { uid: string }) => m.uid)).toContain(uid);
+  expect(b1.reserve.box).toHaveLength(0);
+  await expect(s.getByTestId('dom-reserve-count')).toHaveText('0 / 20');
+  await page.keyboard.press('Enter');
 
   // Several window sizes.
   for (const [w, h] of [[1280, 720], [960, 540], [800, 600]] as const) {
     await page.setViewportSize({ width: w, height: h });
     await page.waitForTimeout(150);
-    await expect(s.getByTestId('dom-give')).toBeVisible();
+    await expect(s.getByTestId('dom-reserve')).toBeVisible();
     await shot(`reserve-${w}x${h}`);
   }
   await page.setViewportSize({ width: 1280, height: 720 });

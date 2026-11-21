@@ -201,17 +201,30 @@ export function maybeMeet(block: DominionBlock, district: string, seed: string, 
   return { block: b, line: fill(L().meet!, { district: districtDef(district)?.name ?? district, what: row.what.replace(/\*\*/g, ''), who: row.who }) };
 }
 
+/** R6: how one answer is decided, for the event's Choose page (display only: the same numbers answerMeet rolls against).
+ *  `chance` is the check's (or the fight's) odds in %, null when nothing is rolled. */
+export interface MeetOdds { chance: number | null; stat: StatId | null; best: number; fight: boolean; money: number }
+
 /** What the map's street panel shows. */
-export interface MeetModel { what: string; who: string; district: string; choices: string[] }
+export interface MeetModel { what: string; who: string; district: string; choices: string[]; odds: MeetOdds[]; row: string }
 export function meetModel(b: DominionBlock): MeetModel | null {
   const m = b.empire?.meet;
   const row = m ? townRow(m.row) : undefined;
   if (!m || !row) return null;
-  return { what: row.what.replace(/\*\*/g, ''), who: row.who, district: districtDef(m.district)?.name ?? m.district, choices: row.choices };
+  const odds = row.choices.map((_, i): MeetOdds => {
+    const c = choicesOf(m.row)[i];
+    if (!c) return { chance: null, stat: null, best: 0, fight: false, money: 0 };
+    if (c.fight) return { chance: c.fightChance ?? 100, stat: null, best: 0, fight: true, money: c.money ?? 0 };
+    if (c.check) return { chance: checkOdds(b, c.check), stat: c.check, best: bestStat(b, c.check), fight: false, money: c.money ?? 0 };
+    return { chance: null, stat: null, best: 0, fight: false, money: c.money ?? 0 };
+  });
+  return { what: row.what.replace(/\*\*/g, ''), who: row.who, district: districtDef(m.district)?.name ?? m.district, choices: row.choices, odds, row: m.row };
 }
 
 /** The best member's stat (the Boss's crew does the talking). */
 const bestStat = (b: DominionBlock, stat: StatId): number => Math.max(0, ...b.members.filter((m) => !crewOf(m).out).map((m) => m.stats[stat]));
+/** A check's odds in % (5-95). */
+const checkOdds = (b: DominionBlock, stat: StatId): number => clamp(T().meet.checkBase + bestStat(b, stat) * T().meet.checkPer, 5, 95);
 
 /** Applies one set of effects in the district; returns the words for the line. */
 function apply(b: DominionBlock, fx: TownFx, district: string, seed: string): string[] {
@@ -269,7 +282,8 @@ const effectsOf = (c: TownChoice): TownFx => {
   return fx;
 };
 
-export interface MeetOut { ok: boolean; block: DominionBlock; notice: string | null; fight?: boolean }
+/** R6: `roll` is the check's roll (for the Result page), `bits` what the answer changed (the Reward page). */
+export interface MeetOut { ok: boolean; block: DominionBlock; notice: string | null; fight?: boolean; roll?: { r: number; chance: number; rolled: boolean } | null; bits?: string[] }
 
 /** Answers the waiting street meeting with `choice`. A fight leaves `field.fight` (why 'town') for the session to start. */
 export function answerMeet(block: DominionBlock, choice: number, seed: string): MeetOut {
@@ -300,14 +314,18 @@ export function answerMeet(block: DominionBlock, choice: number, seed: string): 
   }
   let fx = effectsOf(c);
   let head = label;
+  let roll: MeetOut['roll'] = null;
   if (c.check) {
-    const pass = r.int(1, 100) <= clamp(T().meet.checkBase + bestStat(b, c.check) * T().meet.checkPer, 5, 95);
+    const chance = checkOdds(b, c.check);
+    const n = r.int(1, 100);
+    const pass = n <= chance;
+    roll = { r: n, chance, rolled: true };
     head = `${label}: ${pass ? L().passed : L().missed}`;
     if (!pass) fx = c.fail ?? {};
   }
   const bits = apply(b, fx, m.district, `${seed}::${m.row}`);
   syncHeat(b);
-  return { ok: true, block: b, notice: fill(L().done!, { choice: head, bits: bits.join(', ') || L().nothing! }) };
+  return { ok: true, block: b, notice: fill(L().done!, { choice: head, bits: bits.join(', ') || L().nothing! }), roll, bits };
 }
 
 // A street fight has ended (fightEnd -> field.settle -> here): a win applies the choice, a loss its `lose` (or the default).

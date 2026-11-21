@@ -45,16 +45,24 @@ test('a street meeting on the map: pick an answer with the arrows, Enter gives i
   await page.keyboard.press('Digit2');
   const panel = s.getByTestId('dom-town');
   await expect(panel).toContainText('A lost wallet lies on the pavement');
-  await expect(panel).toContainText('Pewter');
-  await expect(s.getByTestId('dom-town-0')).toHaveClass(/shine/);
+  await expect(s.getByTestId('r5-event')).toContainText('Pewter');
   await page.screenshot({ path: info.outputPath('meet.png') });
 
-  // ▼ to "Keep it", Enter: +₽80 and Heat; the panel goes, the notice says so.
+  // R6 (pass 50): the meeting is an event. Enter: Choose; ▼ to "Keep it", Enter: the result's text, then the reward
+  // (+₽80 and Heat) once the text is closed.
   const funds = (await block(page)).funds;
-  await page.keyboard.press('ArrowDown');
-  await expect(s.getByTestId('dom-town-1')).toHaveClass(/shine/);
   await page.keyboard.press('Enter');
-  await expect(s.getByTestId('dom-notice')).toContainText('Keep it: +₽80');
+  await expect(s.getByTestId('dom-town-0')).toHaveClass(/\bon\b/);
+  await page.keyboard.press('ArrowDown');
+  await expect(s.getByTestId('dom-town-1')).toHaveClass(/\bon\b/);
+  await page.keyboard.press('Enter');
+  await expect(s.getByTestId('r5-evresult')).toContainText('Keep it');
+  await expect(s.getByTestId('r6-reward')).toHaveCount(0);
+  await page.keyboard.press('Enter');
+  await expect(s.getByTestId('r6-reward-big')).toHaveText('+₽80');
+  await expect(s.getByTestId('r6-reward')).toContainText('Heat');
+  await page.keyboard.press('Enter');
+  await expect(s.getByTestId('r5-reward')).toBeHidden();
   await expect(panel).toBeHidden();
   const after = await block(page);
   expect(after.funds).toBe(funds + 80);
