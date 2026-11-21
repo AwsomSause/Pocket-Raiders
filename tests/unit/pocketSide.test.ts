@@ -315,6 +315,22 @@ describe('the Pocket Galar bracket', () => {
   });
 });
 
+describe('the Pocket Stadium Shop', () => {
+  it('four goods at a time around the lit one, the price tags, a grey one you cannot pay for, your side', async () => {
+    const { pkGaShop } = await import('../../src/ui/pocket/screens/galar');
+    const goods = ['A', 'B', 'C', 'D', 'E', 'F'].map((name, k) => ({ art: null, name, desc: 'd', price: 1000 + k, off: k === 5 }));
+    const h = pkGaShop({ heading: 'Before the Quarterfinal', goods, index: 5, trainer: 'Red', mine: [{ art: null, title: '₽3,200', sub: 'Your money', tag: 'Money', cls: 'boss' }], text: 'Open after rounds 2 and 4.' });
+    expect(pkPageOf(h)?.id).toBe('ga-shop');
+    expect(h).toContain('Before the Quarterfinal');
+    expect(h).not.toContain('<b style="font-size:14px">B</b>');
+    expect(h).toContain('<p class="me out" data-act="pick" data-arg="5"');
+    expect(h).toContain('<u>₽1,005</u>');
+    expect(h).toContain('3–6 of 6');
+    expect(h).toContain('<p class="boss">');
+    expect(pkGaShop({ heading: 'x', goods: [], index: 0, trainer: 'Red', mine: [], text: '' })).toContain('Sold out');
+  });
+});
+
 describe('the Pocket Galar round won', () => {
   it('the round in the title, four cards with the shop lit, the next round and the counts', async () => {
     const { pkGaWon } = await import('../../src/ui/pocket/screens/galar');

@@ -55,3 +55,32 @@ export function pkGaWon(d: PkGaWonModel): string {
     + `<div class="rz-t" data-key="ga-won-rows">${rows}</div><div class="rz-s" data-key="ga-won-side"><b>${esc(d.side)}</b>${d.lines.slice(0, 2).map(([k, l]) => `<p style="font-size:${fitBody(l, 260, 60, [13, 12, 11], 1.3)}px">${k ? `<i>${esc(k)}</i>` : ''}${esc(l)}</p>`).join('')}<div class="btn on nx"${act('next')}><b>Back to the map</b></div></div>`
     + `<div class="rz-p" data-m="party"><i class="rz-g" data-nocheck></i><div class="rz-w">${walk}</div><div class="rz-n">${d.counts.map(([b, e]) => `<p><b>${esc(b)}</b><em>${esc(e)}</em></p>`).join('')}</div></div>${keys([['Enter', 'continue']])}</div>`);
 }
+
+/** One row of a two-sided page (mock-ups' `side32`): picture, name, line, tag; `cls` me (lit), boss (gold), out (grey). */
+export interface PkSideRow { art: PkArt | null; title: string; sub: string; tag?: string; cls?: string; pick?: number }
+const sideRow = (r: PkSideRow): string =>
+  `<p class="${r.cls ?? ''}"${r.pick !== undefined ? act('pick', r.pick, 'over') : ''}><i>${r.art ? fitPic(r.art, 44, 40, '', 3) : '<q>?</q>'}</i><b style="font-size:${fit(r.title, 220, 14, 11, 0.55)}px">${esc(r.title)}</b><span style="font-size:${fit(r.sub, 250, 12, 10, 0.52)}px">${esc(r.sub)}</span>${r.tag ? `<u>${esc(r.tag)}</u>` : ''}</p>`;
+/** A side of a two-sided page: its tag, its title, its rows and a line under them. */
+export const pkSide32 = (cls: 'a' | 'b', tag: string, title: string, rows: readonly PkSideRow[], foot = ''): string =>
+  `<div class="sd32 ${cls}"><em>${esc(tag)}</em><b style="font-size:${fit(title, 330, 30, 18, 0.55)}px">${esc(title)}</b>${rows.map(sideRow).join('')}${foot ? `<small>${esc(foot)}</small>` : ''}</div>`;
+
+export interface PkGaShopModel {
+  /** "Before the Quarterfinal". */
+  heading: string;
+  goods: readonly { art: PkArt | null; name: string; desc: string; price: number; off: boolean }[];
+  index: number;
+  trainer: string;
+  mine: readonly PkSideRow[];
+  text: string;
+}
+
+/** The Champion's Tournament shop (mock-up `ga-shop`): the goods on one side (four at a time), your money and next match on the other. */
+export function pkGaShop(d: PkGaShopModel): string {
+  const n = d.goods.length, at = Math.min(d.index, n - 1);
+  const s = Math.max(0, Math.min(n - 4, at - 1));
+  const rows: PkSideRow[] = d.goods.slice(s, s + 4).map((g, q) => ({ art: g.art, title: g.name, sub: g.desc, tag: `₽${g.price.toLocaleString('en-US')}`, cls: `${s + q === d.index ? 'me' : ''}${g.off ? ' out' : ''}`, pick: s + q }));
+  const foot = n > 4 ? `${s + 1}–${Math.min(n, s + 4)} of ${n}` : '';
+  return page('ga-shop', 51, `<div class="scr sz20 ar28 a-ga pg28" data-key="ga-shop"><div class="sz-h" data-m="hdr"><i class="emb28 ga hd" data-nocheck></i><b>Stadium shop</b><span style="font-size:${fit(d.text, 520, 14, 11, 0.5)}px">${esc(d.text)}</span></div>`
+    + `<div class="vs32">${pkSide32('a', 'On sale', d.heading, n ? rows : [{ art: null, title: 'Sold out', sub: 'Nothing left on the shelf' }], foot)}<i class="vsb32" data-nocheck>₽</i>${pkSide32('b', 'Your side', d.trainer, d.mine)}</div>`
+    + `<div class="btn on nx go32" data-key="ga-shop-done"${act('back')}><b>Done shopping</b></div>${keys([['↑↓', 'look'], ['Enter', 'buy'], ['Esc', 'done']])}</div>`);
+}

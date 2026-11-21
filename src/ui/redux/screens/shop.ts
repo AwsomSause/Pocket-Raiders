@@ -11,6 +11,11 @@ import { artOf, monFile, partyChips, partyStrip } from '../game';
 import { phShop, SHOP_CLERK } from '../../phantom/screens/stops';
 import { PK_SHELF_COLS, pkShop, pkShopPay, type PkShopModel } from '../../pocket/screens/shop';
 import { mountRedux } from '../stage';
+import { services } from '../../../game/services';
+import { GALAR_TOURNAMENT, bracketView } from '../../../core/galarTournament';
+import { pkGaShop, type PkSideRow } from '../../pocket/screens/galar';
+import { monArt, type PkArt } from '../../pocket/art';
+import { pkArtOf } from '../../pocket/templates';
 import { pic, scrollStart } from '../templates';
 import { confirmBox } from './saves';
 
@@ -42,6 +47,8 @@ export function reduxShop(ctx: ShopCtx, hooks: ShopHooks): ShopHandles {
   /** The clerk's welcome stays until the player moves or something happens. */
   let moved = false;
   const depot = ctx.type === 'depot';
+  /** Galar's tournament shop (Ball Guy's stock; the screen type stays the Mart's). */
+  const ballGuy = services().session.run?.shop?.type === 'ballguy';
   const fiveOk = (r: ShopView['rows'][number] | undefined): boolean => !!r && !depot && !r.single;
   // Cursor stops after the goods: Sell (when the shop buys), then the Depot's Checkout and Empty basket.
   const extras = (): string[] => [...(view.canSell ? ['Sell'] : []), ...(depot ? [`Checkout${basket.length ? ` ₽${basket.reduce((n, l) => n + l.total, 0)}` : ''}`, 'Empty basket'] : [])];
@@ -50,7 +57,7 @@ export function reduxShop(ctx: ShopCtx, hooks: ShopHooks): ShopHandles {
   const rx = mountRedux(scene, {
     render: (c) => {
       const v = c.v(2), R = view.rows, n = R.length, ex = extras();
-      cols = c.pk ? PK_SHELF_COLS : v === 1 ? 4 : 1;
+      cols = c.pk && !ballGuy ? PK_SHELF_COLS : v === 1 ? 4 : 1;
       const row = R[Math.min(index, n - 1)];
       const party = partyChips(scene);
       const users = row?.users ? new Set(row.users) : null;
@@ -61,6 +68,19 @@ export function reduxShop(ctx: ShopCtx, hooks: ShopHooks): ShopHandles {
       const text = message ?? (index >= n ? (ex[index - n] === 'Sell' ? 'Sell items from your Bag here.' : depot ? 'Nothing is bought until you check out. Five or more of one item is cheaper.' : '') : row && moved ? `${row.name}: ${row.who}.${row.problem ? ` ${row.problem}` : ''}` : 'Welcome! Take your time.');
       const up = text.length > 90 ? 126 : 100;
       const lines = basket.length ? `<div class="sm" style="line-height:17px;max-height:68px;overflow:hidden"><b class="acc">Basket</b> ${basket.map((l) => `${esc(l.name)} ×${l.count} ₽${l.total}${l.saving ? ` (−₽${l.saving})` : ''}`).join(' · ')}</div>` : '';
+      if (c.pk && ballGuy) {
+        // Pocket look: the Champion's Tournament shop (mock-up `ga-shop`).
+        const { session } = services();
+        const run = session.run;
+        const next = run ? bracketView(session.content, run).rounds.find((r) => r.state === 'next') : undefined;
+        const lead = ctx.party.find((m) => m.hp > 0) ?? ctx.party[0];
+        const art = (id: string | undefined): PkArt | null => { const f = id ? monFile(scene, id) : null; return f ? monArt(f) : null; };
+        const mine: PkSideRow[] = [{ art: art(lead?.speciesId), title: `₽${view.money.toLocaleString('en-US')}`, sub: 'Your money', tag: 'Money', cls: 'boss' }];
+        if (next) mine.push({ art: pkArtOf(artOf(scene, session.content.bosses.get(next.opponent.id)?.sprites.default)), title: `Next: ${next.opponent.name}`, sub: next.opponent.types.length ? `${next.opponent.types.map((t) => t.charAt(0).toUpperCase() + t.slice(1)).join(' and ')} types` : next.opponent.style, tag: next.name });
+        if (GALAR_TOURNAMENT.healBetweenRounds) mine.push({ art: art(ctx.party[1]?.speciesId ?? lead?.speciesId), title: 'Team healed', sub: 'Healed after every round', tag: 'Free' });
+        const say = message ?? (row && moved ? `${row.name}: ${row.description}${row.problem ? ` ${row.problem}` : ''}` : `Open after rounds ${GALAR_TOURNAMENT.shopEvery} and ${GALAR_TOURNAMENT.shopEvery * 2}.${GALAR_TOURNAMENT.healBetweenRounds ? ' Your team is already healed.' : ''}`);
+        return pkGaShop({ heading: next ? `Before the ${next.name}` : 'Before the next round', goods: R.map((r) => ({ art: pkArtOf(artOf(scene, r.iconAssetId)), name: r.name, desc: r.description, price: r.price, off: !r.affordable })), index, trainer: run ? session.content.archetypes.get(run.archetypeId)?.name ?? 'You' : 'You', mine, text: say });
+      }
       if (c.pk) {
         // Pocket look: the shelves; a basket shop's checkout question is the receipt page.
         const keeper = ctx.type === 'bazaar' ? monFile(scene, 'kecleon') : ctx.type === 'night' ? monFile(scene, 'meowth') : null;
