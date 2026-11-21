@@ -60,7 +60,7 @@ export function playCutMoment(scene: Phaser.Scene, plan: MomentPlan, model: Omit
     };
     const onUp = (): void => { held = 0; };
     const view = mountRedux(scene, {
-      render: (c) => cutView(c, { ...model, beat, skip: plan.skippable ? ['Esc', 'skip'] : null }),
+      render: (c) => cutView(c, { ...model, beat, skip: plan.skippable ? undefined : null }),
       acts: { next: () => { if (plan.skippable) finish(true); } },
       card: true,
     });

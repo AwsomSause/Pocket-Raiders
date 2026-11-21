@@ -106,8 +106,12 @@ export function phSaves(_ph: PhantomVersion, d: SavesModel): string {
     return `<div class="slot${on ? ' on' : ''}${s.empty ? ' empty' : ''}" style="--r:${[-2, 1, -1][k % 3]}deg;--i:${k}" data-key="s${k}"${act('open', k, 'over')}><div class="no">${k + 1}</div><div><h4 style="font-size:${s.empty ? 38 : fit(s.name + s.where, 560, 38, 20)}px">${esc(s.empty ? 'Empty' : s.name)}${s.empty || !s.where ? '' : ` · ${esc(s.where)}`}</h4><p>${esc(s.empty ? s.where || 'Start a new run here' : s.time)}</p></div><div class="team">${s.party.slice(0, 6).map((p) => mon(p, 0.55)).join('')}</div></div>`;
   }).join('');
   const cur = d.slots[d.focus];
+  const runActs = d.acts && cur ? `<div class="acts ph-acts" data-key="a${d.focus}-${d.actAt ?? 0}">${d.acts.map((a, k) => `<div class="blade${k === (d.actAt ?? 0) ? ' on' : ''}" style="--i:${k};--sh:#000;--r:${-5 + 2 * k}deg"${act('saveAct', k, 'saveOver')}>${esc(a.label)}</div>`).join('')}</div>` : '';
   const acts = cur ? `<div class="acts ph-acts" data-key="a${d.focus}${d.onDelete ? 'd' : ''}"><div class="blade${d.onDelete ? '' : ' on'}" style="--i:0;--sh:#000;--r:-5deg"${act('open', d.focus)}>${cur.empty ? 'Start here' : 'Load'}</div>${cur.empty ? '' : `<div class="blade${d.onDelete ? ' on' : ''}" style="--i:1;--sh:#000;--r:-3deg"${act('del', d.focus)}>Erase</div>`}</div>` : '';
   return page('save', '<div class="bgr"></div><div class="burst" style="--x:90%;--y:90%" aria-hidden="true"></div><div class="dots" aria-hidden="true"></div><div class="shard" style="--cp:polygon(0 0,100% 0,100% 100%,84% 100%,74% 0);inset:0;opacity:.25" aria-hidden="true"></div><div class="shard" style="--cp:polygon(0 0,30% 0,8% 100%,0 100%);inset:0" aria-hidden="true"></div>'
-    + phHead('Save files', 'Auto-save is on · every stage', 'onred') + `<div class="slots">${slots}</div>` + acts + say(d.note, 'ph-say-s')
-    + keys(['Enter', 'Choose', 'open', d.focus], ...(cur && !cur.empty ? [['▶', 'Erase'] as const] : []), ['Esc', 'Back', 'back']) + (d.confirm ? phConfirm(d.confirm) : ''));
+    + phHead(d.title ?? 'Save files', 'Auto-save is on · every stage', 'onred') + `<div class="slots">${slots}</div>` + (d.acts ? runActs : acts) + say(d.note, 'ph-say-s')
+    + (d.acts
+      ? keys(['Z', 'Choose', 'saveAct', d.actAt ?? 0], ...(d.acts.length > 1 ? [['◀▶', 'Action'] as const] : []), ['X', 'Back', 'back'])
+      : keys(['Enter', 'Choose', 'open', d.focus], ...(cur && !cur.empty ? [['▶', 'Erase'] as const] : []), ['Esc', 'Back', 'back']))
+    + (d.confirm ? phConfirm(d.confirm) : ''));
 }

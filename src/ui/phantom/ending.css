@@ -35,7 +35,7 @@
   & .ph-rc-go .blade{font-size:28px}
   & .s-record .fn-st span{cursor:default}
   /* Hall of Fame: a champion's team */
-  & .ph-hf-b{cursor:pointer;animation:ph-inUp .4s both;animation-delay:calc(var(--i)*70ms)}
+  & .ph-hf-b{cursor:pointer}
   & .ph-hf-b.on{translate:0 -14px;box-shadow:0 0 0 4px var(--gold),10px 10px 0 4px var(--red)}
   & .ph-hf-b b{white-space:nowrap}
   & .ph-hf-me{left:44px;bottom:30px}
@@ -64,6 +64,11 @@
   & .ph-bl-ghost{left:300px;top:40px}
   & .ph-bl-card{height:430px}
   & .ph-bl-card .txt{font-size:17px;line-height:1.2}
+  & .ph-bl-l1 .bl-pic{width:170px;height:150px}
+  & .ph-bl-l1 .txt{font-size:15px;line-height:1.15}
+  & .ph-bl-l2{height:460px}
+  & .ph-bl-l2 .bl-pic{width:130px;height:115px}
+  & .ph-bl-l2 .txt{font-size:13.5px;line-height:1.12}
   & .ph-bl-pic b{font:400 110px/1 var(--f-disp);color:#fff}
   & .ph-bl-say{width:340px;right:30px;bottom:80px}
   & .ph-bl-say .txt{font-size:19px;line-height:1.3}

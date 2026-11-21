@@ -7,6 +7,7 @@
 // pillar with a bigger token, and the champion stands in turning gold rays
 // (Visual Bible: "a deliberate escalation from normal stages").
 
+import { crumbHtml, PAUSE_RING, ringPage, setRing, type RingPage } from '../ui/pauseRing';
 import { waitingStop } from '../core/co/attach';
 import { climaxTick } from '../core/arc/climaxExtended';
 import { epilogueTick } from '../core/epilogue/director';
@@ -62,7 +63,7 @@ import { rescueOf } from '../core/evil/rescue';
 import { device } from '../game/deviceTools';
 import { flagOn } from '../core/tools/featureFlags';
 import { commentaryLine } from '../core/tools/commentary';
-import { maxHp } from '../core/pokemon';
+import { lookSpecies, maxHp } from '../core/pokemon';
 import { displayName } from '../core/care';
 import { newSplits, parseSplits, formatMs, updateSplits } from '../core/tools/speedrun';
 import { tradeSalt, useTradeScreen } from '../core/presentation/tradeStyles';
@@ -160,7 +161,11 @@ import { healNote, pkCenter, type PkCenterModel } from '../ui/pocket/screens/cen
 import { dockFact } from '../ui/phantom/screens/town';
 import { phConfirm } from '../ui/phantom/templates';
 import { bestMedalWord } from '../ui/redux/screens/minigame';
-import { confirmBox } from '../ui/redux/screens/saves';
+import { confirmBox, type SavesModel } from '../ui/redux/screens/saves';
+import { phSaves } from '../ui/phantom/templates';
+import { slotCard, stampText } from '../core/presentation/slotLines';
+import { prologueGateActive } from '../core/story2/prologue';
+import type { SlotNumber } from '../save/saveManager';
 import { bookRows, bookView, dossierView, nodeMenuView, pauseView, reportView, rollView, trackView, type NodeMenuCard } from '../ui/redux/screens/popups';
 import { bracketView as rxBracketView, galarHome, galarPage } from '../ui/redux/screens/bracket';
 import { artOf, monFile, rivalArt } from '../ui/redux/game';
@@ -255,6 +260,8 @@ type Option =
 
 const PING_ICONS = ['⚑', '★', '❗', '?'];
 
+/** The Phantom Save page's place: the lit slot, the lit word, the "Erase?" card's answer (null: not asked) and a line to say. */
+interface RunSave { focus: number; at: number; ask: number | null; note: string }
 /** Why an app of the Rotom Phone (the Pocket pause menu) cannot be opened right now. */
 const PAUSE_OFF: Record<string, string> = {
   'End run': 'Only an Adventure run can be ended here. Use Save to leave this one.',
@@ -302,7 +309,7 @@ export class MapScene extends Phaser.Scene {
   private rxRegion = false;
   /** Pocket look: the regions whose arrival page has shown this visit (run seed and region number; never saved). */
   private static readonly regionsShown = new Set<string>();
-  private rxPause: { index: number; ask: number | null; card?: boolean; dex?: PhantomDex | null } | null = null;
+  private rxPause: { index: number; ask: number | null; card?: boolean; dex?: PhantomDex | null; save?: RunSave | null } | null = null;
   /** New UI: the node event menu while it is open (the cards, the cursor, and what a pick does). */
   private rxMenu: { header: string; cards: NodeMenuCard[]; index: number; pick: (k: number) => void } | null = null;
   /** Phantom UI: the healing spot's page, up until the player presses (then `done` goes back to the map). */
@@ -455,6 +462,7 @@ export class MapScene extends Phaser.Scene {
     const p = this.rxPause;
     if (!p) return;
     if (p.dex) return p.dex.input(action);
+    if (p.save) return this.saveInput(action);
     if (p.card) {
       // The Trainer card: any of Enter and Esc goes back to the pause menu.
       if (action === 'back' || action === 'confirm') this.pauseCard(false);
@@ -481,13 +489,14 @@ export class MapScene extends Phaser.Scene {
   private pausePick(k: number): void {
     const p = this.rxPause;
     if (!p) return;
-    if (p.ask !== null || p.card || p.dex) return;
+    if (p.ask !== null || p.card || p.dex || p.save) return;
     const name = this.pauseRows()[k];
     if (!name || name === 'Resume') return this.pauseClose();
+    if (phantomOn() && (PAUSE_RING as readonly string[]).includes(name) && ringPage() !== name) setRing({ page: name as RingPage, trail: [], go: (next) => this.ringGo(next), busy: () => !!this.rxPause?.dex });
     if (name === 'Pokédex') {
       // The Pokédex of the pause menu (Phantom UI): it opens on the lead's page of its set and comes back to this word.
       p.index = k;
-      p.dex = new PhantomDex(this, () => this.rxView?.refresh(), () => { p.dex = null; this.rxView?.refresh(); }, services().session.run?.party[0]?.speciesId, { pocket: pocketOn() });
+      p.dex = new PhantomDex(this, () => this.rxView?.refresh(), () => { p.dex = null; setRing(null); this.rxView?.refresh(); }, services().session.run?.party[0]?.speciesId, { pocket: pocketOn() });
       this.rxView?.refresh();
       return;
     }
@@ -509,8 +518,15 @@ export class MapScene extends Phaser.Scene {
       this.rxView?.refresh();
       return;
     }
+    if (name === 'Save' && phantomOn()) {
+      // The Phantom Save page (mock-up `save`): the three slots, the words for the lit one.
+      p.index = k;
+      p.save = { focus: services().session.slot - 1, at: 0, ask: null, note: '' };
+      this.rxView?.refresh();
+      return;
+    }
     if (name === 'Settings') {
-      this.scene.start('Settings', { from: 'Map' });
+      this.scene.start('Settings', { from: 'Map', ring: phantomOn() });
       return;
     }
     if (name === 'PC Box' && boxCapacity(runPerks(services().session.content, services().session.run!)) <= 0) return;
@@ -528,11 +544,121 @@ export class MapScene extends Phaser.Scene {
     });
   }
 
+  /** The Phantom Save page as the mock-up draws it: each slot's run, and the words for the lit slot. */
+  private saveModel(v: RunSave): SavesModel {
+    const { session } = services();
+    const peeks = session.slotPeeks();
+    const slots = peeks.map((peek) => {
+      const card = slotCard(session.content, peek);
+      const run = peek.run;
+      return { tag: `Slot ${card.slot}`, name: card.title.split(' · ').slice(1).join(' · '), where: card.lines[0] ?? '', time: card.savedAt ? stampText(card.savedAt).slice(0, 10) : '', party: run.status === 'ok' ? run.data.party.slice(0, 6).map((m) => `pokemon/${lookSpecies(session.content, m).assets.sprite}`) : [], empty: card.status === 'empty' };
+    });
+    const acts = this.saveActs(v.focus).map((label) => ({ label }));
+    return {
+      title: 'Save', slots, focus: v.focus, onDelete: false, acts, actAt: Math.min(v.at, acts.length - 1),
+      note: v.note || (v.focus === session.slot - 1 ? 'This run is in this slot. It also saves by itself at every checkpoint.' : 'Loading another slot saves this run first.'),
+      confirm: v.ask === null ? null : { title: `Erase slot ${v.focus + 1}?`, body: 'Its profile, run and history are removed from this slot. One backup copy is kept in browser storage.', options: ['Keep it', 'Erase'], index: v.ask },
+    };
+  }
+
+  /** The words beside a slot: this run's own slot saves (and can leave); another slot loads or is erased; an empty one starts a run. */
+  private saveActs(slot: number): string[] {
+    const { session } = services();
+    if (slot === session.slot - 1) return ['Save here', 'Save & quit', 'Save & go back to Hub'];
+    const peek = session.slotPeeks()[slot];
+    const empty = !peek || (peek.run.status === 'none' && peek.profile.status === 'none');
+    return empty ? ['Start here'] : ['Load', 'Erase'];
+  }
+
+  private saveFocus(i: number): void {
+    const v = this.rxPause?.save;
+    if (!v || v.ask !== null || i < 0 || i === v.focus) return;
+    v.focus = i;
+    v.at = 0;
+    v.note = '';
+    this.rxView?.refresh();
+  }
+
+  private saveInput(action: InputAction): void {
+    const v = this.rxPause?.save;
+    if (!v) return;
+    if (v.ask !== null) {
+      if (action === 'back') return this.saveErase(0);
+      if (action === 'confirm') return this.saveErase(v.ask);
+      if (action === 'left' || action === 'right') { v.ask = 1 - v.ask; this.rxView?.refresh(); }
+      return;
+    }
+    const n = services().session.slotPeeks().length, acts = this.saveActs(v.focus).length;
+    if (action === 'back') return this.saveClose();
+    if (action === 'confirm') return this.saveAct(v.at);
+    if (action === 'up' || action === 'down') return this.saveFocus((v.focus + (action === 'up' ? n - 1 : 1)) % n);
+    v.at = (v.at + (action === 'left' ? acts - 1 : 1)) % acts;
+    this.rxView?.refresh();
+  }
+
+  /** Back from the Save page to the pause menu (the ring ends with it). */
+  private saveClose(): void {
+    const p = this.rxPause;
+    if (!p?.save) return;
+    p.save = null;
+    setRing(null);
+    this.rxView?.refresh();
+  }
+
+  /** One of the Save page's words. Leaving this run always saves it first. */
+  private saveAct(k: number): void {
+    const v = this.rxPause?.save;
+    if (!v || v.ask !== null) return;
+    const { session } = services();
+    const label = this.saveActs(v.focus)[k];
+    v.at = Math.max(0, k);
+    if (label === 'Save here') v.note = session.saveRunNow() ? 'Run saved.' : 'The run could not be saved.';
+    else if (label === 'Erase') v.ask = 0;
+    else if (label === 'Save & quit' || label === 'Save & go back to Hub') {
+      if (!session.saveAndLeaveRun()) v.note = 'The run could not be saved.';
+      else return this.saveLeave(label === 'Save & quit' ? 'MainMenu' : 'Hub');
+    } else if (label === 'Load' || label === 'Start here') {
+      if (!session.saveAndLeaveRun()) v.note = 'The run could not be saved, so it was not left.';
+      else return this.saveOpen(v.focus);
+    }
+    this.rxView?.refresh();
+  }
+
+  private saveLeave(to: 'MainMenu' | 'Hub'): void {
+    this.busy = true;
+    this.scene.start(to);
+  }
+
+  /** Opens another slot (this run is saved already), as the Save Slots screen does: its run continues, or its title screen opens. */
+  private saveOpen(i: number): void {
+    const { session } = services();
+    session.switchSlot((i + 1) as SlotNumber);
+    this.busy = true;
+    if (prologueGateActive(session.profile.story, true)) return void this.scene.start('Prologue');
+    if (session.canContinue) return void this.scene.start(sceneForRun(session.continueRun()));
+    const empty = session.slotPeeks()[i]?.run.status === 'none';
+    this.scene.start(empty ? 'Hub' : 'MainMenu');
+  }
+
+  /** The "Erase slot?" card: 1 erases (a backup copy stays), 0 keeps it. */
+  private saveErase(k: number): void {
+    const v = this.rxPause?.save;
+    if (!v || v.ask === null) return;
+    v.ask = null;
+    if (k === 1) {
+      const r = services().session.deleteSlot((v.focus + 1) as SlotNumber);
+      v.note = r.ok ? `Slot ${v.focus + 1} erased. A backup copy is kept.` : r.reason;
+      v.at = 0;
+    }
+    this.rxView?.refresh();
+  }
+
   /** Opens or shuts the Trainer card over the pause menu (Phantom UI). */
   private pauseCard(open: boolean): void {
     const p = this.rxPause;
     if (!p) return;
     p.card = open;
+    if (!open) setRing(null);
     this.rxView?.refresh();
   }
 
@@ -583,10 +709,14 @@ export class MapScene extends Phaser.Scene {
     const rows = this.pauseRows();
     const note = rows[p.index] === 'End run' && !can ? 'Only an Adventure run can be ended here. Use Save to leave this one.' : '';
     const stage = model.chips.find((x) => /^Stage\s+\d+/i.test(x));
-    if (p.dex) return p.dex.html(ph);
-    if (p.card) return this.cardPhantom(ph, stage ?? '');
+    if (p.dex) return phInto(p.dex.html(ph), crumbHtml());
+    if (p.save) return phInto(phSaves(ph, this.saveModel(p.save)), crumbHtml());
+    if (p.card) return phInto(this.cardPhantom(ph, stage ?? ''), crumbHtml());
     const facts = model.chips.filter((x) => /^(₽|Badges\b|Level cap\b)/i.test(x)).map(dockFact);
-    const html = phPause(ph, { options: rows.map((label) => ({ label, off: label === 'End run' && !can })), index: p.index, note, where: [stage, model.title.split(' · ')[0]].filter(Boolean).join(' · '), facts, party: model.party });
+    const run = services().session.run!;
+    const down = run.party.filter((m) => m.hp <= 0).length;
+    const subs: Record<string, string> = { Resume: 'Back to the map', Party: `${run.party.length} Pokémon${down ? ` · ${down} fainted` : ''}`, Settings: 'Sound, controls, looks' };
+    const html = phPause(ph, { options: rows.map((label) => ({ label, off: label === 'End run' && !can, sub: subs[label] })), index: p.index, note, where: [stage, model.title.split(' · ')[0]].filter(Boolean).join(' · '), facts, party: model.party });
     return p.ask === null ? html : phInto(html, phConfirm({ title: 'End this run?', body: 'Your progress is banked as a defeat. This cannot be undone.', options: ['Keep playing', 'End run'], index: p.ask }));
   }
 
@@ -953,7 +1083,7 @@ export class MapScene extends Phaser.Scene {
     queueAssets(this, [...FRAME_ASSET_IDS, 'ui.party.icon_box', 'ui.party.icon_box_faint', 'ui.party.statuses', 'ui.party.icon_item', 'ui.bag.bg', ...(run?.eggs.length ? ['pack.ebdx.egg'] : [])]);
   }
 
-  create(data: { notice?: string; focus?: number; reopenBag?: { pocket: number; row: number } } = {}): void {
+  create(data: { notice?: string; focus?: number; reopenBag?: { pocket: number; row: number }; ring?: RingPage } = {}): void {
     this.endArmed = false;
     this.legend = null;
     void ensureNarration().catch(() => undefined);
@@ -1667,7 +1797,10 @@ export class MapScene extends Phaser.Scene {
           pause: (k) => this.pausePick(Number(k)),
           pauseGo: () => { if (this.rxPause) this.pausePick(this.rxPause.index); },
           menu: (k) => this.menuPick(Number(k)),
-          confirm: (k) => this.pauseAsk(Number(k)),
+          confirm: (k) => (this.rxPause?.save ? this.saveErase(Number(k)) : this.pauseAsk(Number(k))),
+          open: (i) => this.saveFocus(Number(i)),
+          saveAct: (k) => this.saveAct(Number(k)),
+          back: () => this.saveClose(),
           pauseCard: () => this.pauseCard(false),
           // The Rotom Phone's screen dots: the cursor goes to that screen's first app.
           pausePage: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask === null && !p.dex && !p.card && k >= 0 && k < this.pauseRows().length) { p.index = k; this.rxView?.refresh(); } },
@@ -1685,7 +1818,7 @@ export class MapScene extends Phaser.Scene {
           bracketPage: (i) => { if (this.rxPop?.kind === 'bracket') { this.rxPop.page = Math.max(0, Math.min(4, Number(i) || 0)); this.rxView?.refresh(); } },
           bracketWatch: () => this.watchLast(),
         },
-        overs: { phoneOver: (i) => { const p = this.rxPop, k = Number(i); if (p?.kind === 'phone' && k >= 0 && k !== p.reply) { p.reply = k; this.rxView?.refresh(); } }, formOver: (i) => { const f = this.rxForm; if (f && Number(i) !== f.index) { f.index = Number(i); this.rxView?.refresh(); } }, dexOver: (i) => this.rxPause?.dex?.over(Number(i)), wheelOver: (i) => this.wheelPoint(Number(i)), menuOver: (i) => this.menuFocus(Number(i)), over: (i) => { if (!this.busy && !this.picker && Number(i) !== this.index) this.focus(Number(i)); }, popOver: (i) => this.popPick('pick', Number(i)), pauseOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask === null && k >= 0 && k !== p.index) { p.index = k; this.rxView?.refresh(); } }, confirmOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask !== null && (k === 0 || k === 1) && k !== p.ask) { p.ask = k; this.rxView?.refresh(); } } },
+        overs: { phoneOver: (i) => { const p = this.rxPop, k = Number(i); if (p?.kind === 'phone' && k >= 0 && k !== p.reply) { p.reply = k; this.rxView?.refresh(); } }, formOver: (i) => { const f = this.rxForm; if (f && Number(i) !== f.index) { f.index = Number(i); this.rxView?.refresh(); } }, dexOver: (i) => this.rxPause?.dex?.over(Number(i)), wheelOver: (i) => this.wheelPoint(Number(i)), menuOver: (i) => this.menuFocus(Number(i)), over: (i) => { if (this.rxPause?.save) return this.saveFocus(Number(i)); if (!this.busy && !this.picker && Number(i) !== this.index) this.focus(Number(i)); }, saveOver: (i) => { const v = this.rxPause?.save; if (v && v.ask === null && Number(i) !== v.at) { v.at = Number(i); this.rxView?.refresh(); } }, popOver: (i) => this.popPick('pick', Number(i)), pauseOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask === null && k >= 0 && k !== p.index) { p.index = k; this.rxView?.refresh(); } }, confirmOver: (i) => { const v = this.rxPause?.save; if (v && v.ask !== null) { v.ask = Number(i) === 1 ? 1 : 0; this.rxView?.refresh(); return; } const p = this.rxPause, k = Number(i); if (p && p.ask !== null && (k === 0 || k === 1) && k !== p.ask) { p.ask = k; this.rxView?.refresh(); } } },
         // Resting the pointer on a party Pokémon shows its Ability card (the mock-ups' Pokémon info card).
         tip: hoverTips((key) => { if (this.rxPop) return; this.rxCard = key; this.rxView?.refresh(); }),
       });
@@ -1850,6 +1983,36 @@ export class MapScene extends Phaser.Scene {
     this.askRegionForm();
     // Using an item keeps the Bag open (same pocket and row, fresh counts) until the player backs out.
     if (data.reopenBag && !first && !this.busy) openBagMenu(this.fieldHost(), data.reopenBag.pocket, data.reopenBag.row);
+    // Back from Settings by Q / E: the next page of the pause ring opens at once.
+    // The map may still be busy with its way in (the region banner), so it waits for that (up to eight seconds).
+    else if (data.ring && !first && phantomOn()) {
+      const to = data.ring;
+      const tryOpen = (left: number): void => {
+        if (left < 80 && !this.scene.isActive()) return;
+        if (!this.busy && !this.picker) this.ringGo(to);
+        else if (left > 0) this.time.delayedCall(100, () => tryOpen(left - 1));
+      };
+      tryOpen(80);
+    }
+    this.events.once('shutdown', () => setRing(null));
+  }
+
+  /** Phantom pause ring: shuts the page that is open (a list, the Pokédex, the Trainer card) and opens `to` as the pause menu would. */
+  private ringGo(to: RingPage): void {
+    if (this.picker) {
+      this.picker.close();
+      this.picker = null;
+    }
+    this.rxPause?.dex?.close();
+    this.rxPause = null;
+    this.busy = false;
+    setRing(null);
+    this.pauseOpen();
+    const k = this.pauseRows().indexOf(to);
+    if (!this.rxPause || k < 0) return;
+    // The Pokédex keeps Q and E for its regions; on the other pages they turn the ring.
+    setRing({ page: to, trail: [], go: (next) => this.ringGo(next), busy: () => !!this.rxPause?.dex });
+    this.pausePick(k);
   }
 
   /** A Pokémon that has a regional form of this region may take it: one free prompt per Pokémon per region. */
@@ -2229,7 +2392,11 @@ export class MapScene extends Phaser.Scene {
   private fieldHost(): FieldMenuHost {
     return {
       scene: this,
-      setPicker: (p) => (this.picker = p),
+      setPicker: (p) => {
+        this.picker = p;
+        // A list shut by its own Back key ends the pause ring.
+        if (!p) setRing(null);
+      },
       changed: (notice, opts) => this.scene.restart({ notice, focus: this.index, reopenBag: opts?.reopenBag }),
       mapItems: { rows: () => this.itemRows(), use: (row, bag) => this.useMapItem(row.action as MapActionKind, bag) },
     };

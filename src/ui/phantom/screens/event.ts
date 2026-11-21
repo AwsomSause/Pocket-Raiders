@@ -86,7 +86,7 @@ function box(d: EventModel, key: string, wait: string, go: string): string {
   const n = lettersOf(d), fail = d.outcome && !d.outcome.ok ? '<em class="ph-ev-fail">It didn’t go your way… </em>' : '';
   const shout = d.lines.some((l) => lineVisual(l.text).voice === 'shout');
   const pages = d.page.of > 1 ? `<div class="sy-pg" aria-label="page ${d.page.at + 1} of ${d.page.of}">${Array.from({ length: Math.min(d.page.of, 12) }, (_, k) => `<i class="${k < d.page.at ? 'd' : k === d.page.at ? 'on' : ''}"></i>`).join('')}</div>` : '';
-  return `<div class="sy-box ph-ev-box${d.speaker ? '' : ' nar'}${shout ? ' jolt' : ''}" data-key="box:${key}"${go}>${d.speaker ? `<div class="sy-nm"><b>${esc(d.speaker)}</b></div>` : ''}<p style="font-size:${n > 330 ? 19 : n > 240 ? 22 : n > 150 ? 24 : 27}px">${fail}${lines(d, key)}</p>${pages}<div class="sy-wait"><i aria-hidden="true"></i><kbd>↵</kbd><span>${esc(wait)}</span></div></div>`;
+  return `<div class="sy-box ph-ev-box${d.speaker ? '' : ' nar'}${shout ? ' jolt' : ''}" data-key="box:${key}"${go}>${d.speaker ? `<div class="sy-nm"><b>${esc(d.speaker)}</b></div>` : ''}<p style="font-size:${n > 330 ? 19 : n > 240 ? 22 : n > 150 ? 24 : 27}px">${fail}${lines(d, key)}</p>${pages}<div class="sy-wait"><i aria-hidden="true"></i><kbd>Z</kbd><span>${esc(wait)}</span></div></div>`;
 }
 
 /** The choices as a hand of cards. Up to four stand side by side with their text; more are dealt as two rows, and the lit one's text is read out under them. */
@@ -133,8 +133,8 @@ function rewards(d: EventModel, L: EventLook, changes: readonly string[], next: 
     + `<div class="sy-yt">${ransom(d.outcome?.ok && good ? 'YOURS' : 'WHAT CHANGED', 9)}</div>${strip(d.name, 3, steps)}`
     + `<div class="sy-open ph-open${small ? ' small' : ''}" style="--cols:${cols}">${cards}</div>`
     + `<div class="pn sy-from"><span class="lab">${good ? 'Why you got this' : 'Why this happened'}</span><p class="txt">${esc(d.name)}${deed ? `: ${esc(deed)}` : ''}</p></div>`
-    + `<div class="sy-wait ph-ev-stay"${act('next')}><i aria-hidden="true"></i><kbd>↵</kbd><span>Stays until you press Enter</span></div>`
-    + keys(['Enter', next, 'next']));
+    + `<div class="sy-wait ph-ev-stay"${act('next')}><i aria-hidden="true"></i><kbd>Z</kbd><span>Stays until you press Z</span></div>`
+    + keys(['Z', next, 'next']));
 }
 
 /** A talk page (the prologue, the story, the tutorial, a broadcast): the same page without the event's step strip, its picture dressed from the model's plain fields. */
@@ -153,7 +153,7 @@ export function phEvent(_ph: PhantomVersion, d: EventModel, steps = true): strin
   if (d.scare && !out) {
     // The black screen, then the face: nothing else is on show but the text box.
     const face = d.scare === 'face' && L.mons[0] ? `<div class="ph-ev-scare${L.scene.still ? ' still' : ''}" data-key="scare:${key}">${mon(L.mons[0], 14, '', '', true)}</div>` : '';
-    return page('event', `<div class="bgk" style="background:#000"></div>${face}${box(d, key, 'Waits for you', more ? act('page') : '')}${turn}${keys(['Enter', 'Next', more ? 'page' : undefined])}`);
+    return page('event', `<div class="bgk" style="background:#000"></div>${face}${box(d, key, 'Waits for you', more ? act('page') : '')}${turn}${keys(['Z', 'Next line', more ? 'page' : undefined])}`);
   }
   const lit = ch.length ? L.choices[d.index] : undefined, tone: Tone | null = lit ? lit.tone : null;
   // A talk page whose only choice is to go on ("Continue") keeps the text box, and the box is the button.
@@ -171,7 +171,7 @@ export function phEvent(_ph: PhantomVersion, d: EventModel, steps = true): strin
     const q = `<div class="sy-q ph-q${n > 54 ? ' long' : ''}" data-key="q:${key}"><small>${esc(d.speaker ? `${d.speaker} says` : 'What do you do?')}</small><span style="font-size:${n > 54 ? size : 38}px">${lines(d, key)}</span></div>`;
     const dealt = push ? `<div class="ph-ev-low" style="translate:0 ${push}px">${hand(d, L, ch, key)}</div>` : hand(d, L, ch, key);
     return page('choice', backdrop(L, 0.35) + cast(L, tone, true) + '<div class="dim ph-ev-dim2" style="background:rgba(8,6,10,.5)"></div>' + top(d, 1, steps) + q + dealt + picker(d)
-      + keys(['◀▶', 'Look'], ['Enter', 'Choose'], ...(steps && d.page.of > 1 ? [['Esc', 'Read back', 'page', -1] as const] : []), ...(d.rounds ? [['B', 'Bracket', 'bracket'] as const] : [])));
+      + keys(['◀▶', 'Look'], ['Z', 'Choose'], ...(steps && d.page.of > 1 ? [['X', 'Read back', 'page', -1] as const] : []), ...(d.rounds ? [['B', 'Bracket', 'bracket'] as const] : [])));
   }
   // The talk, and the outcome's text: the scene, the people in it and the text box that waits.
   const label = more ? 'Waits for you' : out ? (out.changes.length ? 'Continue' : out.next) : solo ? solo.label : 'Waits for you';
@@ -181,5 +181,5 @@ export function phEvent(_ph: PhantomVersion, d: EventModel, steps = true): strin
   const hit = out && !out.ok ? '<div class="ph-ev-hit" data-key="hit" aria-hidden="true"></div>' : '';
   return page(out ? 'sy-result' : 'event', backdrop(L, out ? 0.45 : 0.35) + cast(L, null, false) + hit + top(d, out ? 2 : 0, steps) + me + seal
     + box(d, key, label, go) + picker(d) + turn
-    + keys(['Enter', more ? 'Next' : out || solo ? label : 'Next', out ? 'next' : more ? 'page' : solo ? 'pick' : undefined, solo && !more && !out ? 0 : ''], ...(steps && d.page.at > 0 && !out ? [['Esc', 'Read back', 'page', -1] as const] : []), ...(d.rounds ? [['B', 'Bracket', 'bracket'] as const] : [])));
+    + keys(['Z', more ? 'Next line' : out || solo ? label : 'Next line', out ? 'next' : more ? 'page' : solo ? 'pick' : undefined, solo && !more && !out ? 0 : ''], ...(steps && d.page.at > 0 && !out ? [['X', 'Read back', 'page', -1] as const] : []), ...(d.rounds ? [['B', 'Bracket', 'bracket'] as const] : [])));
 }

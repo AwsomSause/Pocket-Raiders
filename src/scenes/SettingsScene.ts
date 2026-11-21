@@ -1,12 +1,15 @@
 // The one Settings screen. The title screen and the Hub both open it, so they always show the same
 // settings from the same registry (core/settingsRegistry.ts). It is never reachable from inside a battle.
 
+import { crumbHtml, ringPage, setRing, setRingTrail } from '../ui/pauseRing';
+import { phInto } from '../ui/phantom/picker';
 import { fitLine } from '../ui/fitText';
 import Phaser from 'phaser';
 import { DEFAULT_SETTINGS } from '../save/saveManager';
 import { changeSetting, resetSettings, searchSettings, settingsIn, SETTINGS, SETTING_CATEGORIES, type SettingCategory, type SettingDef } from '../core/settingsRegistry';
 import { services } from '../game/services';
-import { refreshMusicVolume, stopMusic } from '../ui/audio';
+import { musicNow, refreshMusicVolume, stopMusic } from '../ui/audio';
+import { monFile } from '../ui/redux/game';
 import { downloadText, pickTextFile } from '../ui/files';
 import { queueAssets } from '../ui/lazyAssets';
 import { onInputAction } from '../ui/input';
@@ -81,8 +84,13 @@ export class SettingsScene extends Phaser.Scene {
     queueAssets(this, ['ui.optionsbg']);
   }
 
-  create(data?: { from?: 'MainMenu' | 'Hub' | 'Map'; page?: Page; focus?: number }): void {
+  create(data?: { from?: 'MainMenu' | 'Hub' | 'Map'; page?: Page; focus?: number; ring?: boolean }): void {
     this.from = data?.from ?? 'MainMenu';
+    // Opened from the Phantom pause menu: Q and E on the home page turn to Save and Party (mock-up crumb).
+    if (data?.ring && this.from === 'Map' && phantomOn()) {
+      setRing({ page: 'Settings', trail: [], go: (to) => this.scene.start('Map', { ring: to }), busy: () => this.page !== 'home' });
+      this.events.once('shutdown', () => setRing(null));
+    }
     this.page = data?.page ?? 'home';
     this.viaIndex = null;
     this.entering = true;
@@ -453,7 +461,11 @@ export class SettingsScene extends Phaser.Scene {
 
   /** New UI: the page as the mock-ups draw it. The home list is a menu; a category is the tabbed Settings screen. */
   private reduxHtml(c: Parameters<typeof menuView>[0]): string {
-    if (c.ph) return this.phantomHtml(c.ph);
+    if (c.ph) {
+      const at = PHANTOM_SETTINGS_PAGES.find((p) => p.id === this.page);
+      if (ringPage() === 'Settings') setRingTrail(at ? [at.n] : []);
+      return phInto(this.phantomHtml(c.ph), crumbHtml());
+    }
     if (c.pk) { const pk = this.pocketHtml(); if (pk) return pk; }
     const rows = this.shown, index = this.menu?.index ?? 0;
     const text = this.notice || rows[index]?.hint || 'Changes apply at once. Looks never change battle results.';
@@ -555,7 +567,8 @@ export class SettingsScene extends Phaser.Scene {
         const from5 = Math.max(0, Math.min(all.length - 5, on - 2));
         options = seen.length <= 12 ? { list: all.slice(from5, from5 + 5), on: on - from5 } : null;
       }
-      return phSettings(ph, { ...base, kind: 'page', title: PHANTOM_SETTINGS_PAGES[at]!.n, options });
+      const title = PHANTOM_SETTINGS_PAGES[at]!.n, foe = title === 'Battle' ? monFile(this, 'garchomp', 'front') : null;
+      return phSettings(ph, { ...base, kind: 'page', title, options, music: title === 'Sound' ? musicNow() : null, foe: foe ? { file: foe, atlas: true } : null });
     }
     const title = this.page === 'summary' ? 'Game Summary' : this.page === 'search' ? 'Find a setting' : 'Reset to defaults?';
     return phSettings(ph, { ...base, kind: 'list', title, sub: this.page === 'search' ? `Find: ${this.query}▌` : '', help: this.page === 'search' && this.query && rows.length === 1 ? 'No setting matches.' : help || (this.page === 'confirmReset' ? 'Audio, display, animations and text all go back to their starting values. Your saves are not touched.' : '') });

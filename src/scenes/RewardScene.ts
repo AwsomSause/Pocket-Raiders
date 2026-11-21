@@ -24,6 +24,7 @@ import { sceneForRun } from './routing';
 import { partySpecies, preloadPokemon } from '../ui/lazyAssets';
 import { revealPop } from '../ui/wiiMotion';
 import { screenStyleOf } from '../core/presentation/screenStyles';
+import { rewardBand } from '../ui/shopLook';
 import { DARK_INK, LIGHT_INK, REWARD_SKINS } from '../ui/rewardStyles';
 import type { RewardLayoutHandle } from '../ui/rewardStyles/types';
 import { artOf, partyChips } from '../ui/redux/game';
@@ -213,11 +214,11 @@ export class RewardScene extends Phaser.Scene {
         const cmp = compareReward(content, run, reward);
         const why = rewardSynergy(content, run, reward);
         const reroll = isRerollReward(content, run, reward);
-        return { name: reward.name, kind: reward.rarity[0]!.toUpperCase() + reward.rarity.slice(1), text: reroll ? 'You already have the most of this. Pick it for a free re-roll!' : reward.description, art: artOf(this, reward.iconAssetId), notes: [cmp ? `Now ${cmp.now} → After ${cmp.after} (${cmp.label})` : '', why ?? '', (run.draftCarry ?? []).includes(rewardId) ? 'Locked: in the next draft too' : ''].filter(Boolean), rarity: reward.rarity, category: reward.category };
+        return { name: reward.name, kind: reward.rarity[0]!.toUpperCase() + reward.rarity.slice(1), text: reroll ? 'You already have the most of this. Pick it for a free re-roll!' : reward.description, art: artOf(this, reward.iconAssetId), notes: [cmp ? `Now ${cmp.now} → After ${cmp.after} (${cmp.label})` : '', why ?? '', (run.draftCarry ?? []).includes(rewardId) ? 'Locked: in the next draft too' : ''].filter(Boolean), band: rewardBand(content, reward), rarity: reward.rarity, category: reward.category };
       });
       const party = partyChips(this);
       this.view = mountRedux(this, {
-        render: (c) => rewardView(c, { title: 'Choose a reward', cards, index: this.index, party, buttons: buttons.map((b) => b.label), text: this.notice?.text || `Encounter ${run.encountersCompleted} cleared. ₽${run.money}, Candies ${run.candies}. Pick 1 of ${draft.length}.`, result: this.rxResult, notice: this.notice?.text ?? '' }),
+        render: (c) => rewardView(c, { title: 'Choose a reward', cards, index: this.index, party, buttons: buttons.map((b) => b.label), text: this.notice?.text || `Encounter ${run.encountersCompleted} cleared. ₽${run.money}, Candies ${run.candies}. Pick 1 of ${draft.length}.`, result: this.rxResult, head: { money: run.money, purse: `your money · ${run.candies} ${run.candies === 1 ? 'candy' : 'candies'}`, status: `Encounter ${run.encountersCompleted} cleared`, notice: this.notice?.text ?? '' }, notice: this.notice?.text ?? '' }),
         acts: {
           pick: (i) => { if (this.picker || this.chosen) return; this.focus(Number(i)); this.activate(Number(i)); },
           take: () => { if (!this.picker && !this.chosen) this.activate(this.index < draft.length ? this.index : 0); },

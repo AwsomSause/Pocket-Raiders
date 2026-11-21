@@ -8,6 +8,7 @@ import type Phaser from 'phaser';
 import { joinKind, joinMotion } from '../../core/presentation/joins';
 import { phantomVersion, type PhantomVersion } from '../../core/presentation/phantom';
 import { REDUX_SKINS, reduxLayout, reduxSkinIndex, type ReduxSkin } from '../../core/presentation/redux';
+import { HOLD_MS } from '../../core/presentation/touchLayout';
 import { services } from '../../game/services';
 import { joinBusy, joinEnter, joinFrom, joinGhost, joinLeave } from '../phantom/joins';
 import { morph } from '../phantom/morph';
@@ -325,7 +326,8 @@ export function mountOverlay(game: Phaser.Game, o: Pick<ReduxOptions, 'render' |
       shield(pel);
       phost!.append(pel);
     }
-    pel.className = 'phs' + (calm ? ' still' : '');
+    // Only the run log is a full page: anything else lets the screen under it show and takes the pointer on its cards only.
+    pel.className = 'phs' + (pageOf(html) === 'log' ? '' : ' clear') + (calm ? ' still' : '');
     pel.dataset.liv = ph!.id;
     pel.dataset.pass = '25';
     pel.dataset.scr = pageOf(html) ?? '';
@@ -338,7 +340,8 @@ export function mountOverlay(game: Phaser.Game, o: Pick<ReduxOptions, 'render' |
     pageDraw();
     const k = reduxSkinIndex(services().session.settings.reduxSkin);
     el.className = `${lookClass(k, el)} clear noin`;
-    const html = reduxOn() ? o.render({ k, skin: REDUX_SKINS[k]!, v: (n) => reduxLayout(k, n), ph: null }) : '';
+    // `ph` tells the view that the Phantom layer is drawing its page (so it does not draw the same thing twice).
+    const html = reduxOn() ? o.render({ k, skin: REDUX_SKINS[k]!, v: (n) => reduxLayout(k, n), ph: o.page ? phantomNow() : null }) : '';
     if (html === last) return;
     last = html;
     el.innerHTML = html;
@@ -570,10 +573,40 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     const t = e.target instanceof Element ? e.target.closest<HTMLElement>('[data-tip]') : null;
     const now = t && el.contains(t) ? t.dataset.tip ?? null : null;
     if (now === tipAt) return;
+    // Settings > Phone > Hold for details, off: a finger shows no details.
+    if (e.pointerType === 'touch' && !services().session.settings.holdForDetails) return;
     tipAt = now;
     o.tip?.(now);
   };
-  if (o.tip) window.addEventListener('pointermove', onTip);
+  // A finger has no hover (Settings > Phone > Hold for details): one that rests on a part with details shows them,
+  // after the same Tooltip delay as a resting mouse. Lifting it hides them, and a finger that rested long enough to
+  // read does not also press what is under it.
+  let heldAt = 0;
+  const holdDown = (e: PointerEvent): void => {
+    if (e.pointerType !== 'touch' || !services().session.settings.holdForDetails) return;
+    const t = e.target instanceof Element ? e.target.closest<HTMLElement>('[data-tip]') : null;
+    if (!t || !el.contains(t)) return;
+    heldAt = performance.now();
+    tipAt = t.dataset.tip ?? null;
+    o.tip?.(tipAt);
+  };
+  const holdUp = (e: PointerEvent): void => {
+    if (e.pointerType !== 'touch' || !heldAt) return;
+    const read = performance.now() - heldAt >= HOLD_MS;
+    heldAt = 0;
+    tipAt = null;
+    o.tip?.(null);
+    if (!read) return;
+    const stop = (ev: Event): void => { ev.stopPropagation(); ev.preventDefault(); };
+    window.addEventListener('click', stop, { capture: true, once: true });
+    setTimeout(() => window.removeEventListener('click', stop, true), 400);
+  };
+  if (o.tip) {
+    window.addEventListener('pointermove', onTip);
+    el.addEventListener('pointerdown', holdDown);
+    window.addEventListener('pointerup', holdUp);
+    window.addEventListener('pointercancel', holdUp);
+  }
   shield(el);
 
   const hide = (): void => { el.style.display = 'none'; stack(); };
@@ -590,6 +623,8 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     }
     gone = { key: scene.scene.key, at: performance.now() };
     window.removeEventListener('pointermove', onTip);
+    window.removeEventListener('pointerup', holdUp);
+    window.removeEventListener('pointercancel', holdUp);
     if (mine !== null) {
       pagesUp.delete(el);
       if (el.style.display !== 'none') joinLeave(el, mine, joinMotion(services().session.settings));

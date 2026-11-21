@@ -7,6 +7,7 @@
 //   - when the run ends (profile first, then the run record is cleared)
 
 import { openRoadHome, roadHomeDue } from '../core/co/roadHome';
+import { swapOpeningLead } from '../core/battle/openingLead';
 import { applyEvilEffect, evilTeam } from '../core/evil/teams';
 import { skyAct, type SkyAction } from '../core/evil/teamSky';
 import * as NodeMenu from '../core/nodeMenu/flow';
@@ -1151,6 +1152,12 @@ export class GameSession {
   /** Rearranges the party: the Pokémon at `from` moves to `to`. */
   moveParty(from: number, to: number): void {
     this.run = Run.moveParty(this.requireRun(), from, to);
+    this.persistRun();
+  }
+
+  /** "Change who leads": before the first turn of a single battle, party slot `partyIndex` leads instead, at no cost. */
+  swapOpeningLead(partyIndex: number): void {
+    this.run = swapOpeningLead(this.requireRun(), partyIndex);
     this.persistRun();
   }
 

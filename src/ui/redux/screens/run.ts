@@ -29,7 +29,7 @@ export function formView(c: ReduxCtx, d: FormModel): string {
   return H(d.title, d.area ?? 'run', d.hints) + `<div class="abs col cen" style="left:0;right:0;top:86px;gap:16px"><b style="font-size:21px">${esc(d.heading)}</b>${W('<b style="font-size:26px;line-height:40px;letter-spacing:.12em;visibility:hidden">X</b>', 'width:520px;display:flex;justify-content:center;gap:4px;padding:14px', 'rx-field')}<div style="display:grid;grid-template-columns:repeat(10,34px);gap:7px">${FORM_KEYS.map((ch) => `<span class="key"${ch === d.lit ? ' style="background:var(--acc);color:#14161e"' : ''}${act('key', ch)}>${ch}</span>`).join('')}</div><div class="row">${d.buttons.map(([label, arg], k) => B(esc(label), k === d.primary, '', '', act('btn', arg))).join('')}</div></div>` + TX(esc(d.text));
 }
 
-export interface StarterPick { name: string; file: string | null; types: readonly string[]; stats: string; moves: string; /** Its generation (the Pocket look stamps its home region). */ gen?: number; /** The line under it ('Starter Remembrance'). */ tag?: string }
+export interface StarterPick { name: string; file: string | null; types: readonly string[]; stats: string; moves: string; /** Phantom card: its home region, and your past runs with it ("New to you"). */ region?: string; past?: string; /** Its generation (the Pocket look stamps its home region). */ gen?: number; /** The line under it ('Starter Remembrance'). */ tag?: string }
 export interface StarterModel {
   title: string;
   picks: readonly StarterPick[];

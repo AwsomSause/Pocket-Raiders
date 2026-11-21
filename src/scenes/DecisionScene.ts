@@ -369,7 +369,7 @@ export class DecisionScene extends Phaser.Scene {
           next: { name: newMove.name, type: newMove.type, category: newMove.category, power: `${newPower ?? '—'}`, accuracy: newMove.accuracy ? `${newMove.accuracy}` : '—', pp: `${newMove.pp}`, text: moveBrief(moveFullDescription(newMove)) },
           moves: mon.moves.map((m) => { const mv = content.moves.get(m.id)!; return { name: mv.name, type: mv.type, category: mv.category, pp: `${m.pp}/${maxPp(content, m)}` }; }),
         },
-        card: { big: false, file, art, name, level: '', tag: '', sub: 'wants to learn', accent: newMove.name, types: [newMove.type], lines: [`${capWord(newMove.category)}${newMove.power ? ` · Power ${newPower}` : ''} · PP ${newMove.pp}. ${moveBrief(moveFullDescription(newMove))}`] },
+        card: { big: false, file, art, name, level: `Lv.${mon.level}`, tag: '', sub: 'wants to learn', accent: newMove.name, types: [newMove.type], lines: [`${capWord(newMove.category)}${newMove.power ? ` · Power ${newPower}` : ''} · PP ${newMove.pp}. ${moveBrief(moveFullDescription(newMove))}`] },
         options: [...(room ? [plain(`Learn ${newMove.name}`, 'Free move slot')] : []), ...mon.moves.map((m) => rxMove(content, m.id, m.pp, m)), plain(`Do not learn ${newMove.name}`)],
         details: [],
         party: null,
@@ -378,6 +378,8 @@ export class DecisionScene extends Phaser.Scene {
           : room && i < 0
             ? 'It has room for another move. Learning it forgets nothing.'
             : `Keep the moves it knows and give up on ${newMove.name}.`,
+        swap: old ? { from: old.name, to: newMove.name, power: [String(old.power ?? fixedDamageLabel(old.effects.fixedDamage)), String(newPower)], type: [capWord(old.type), capWord(newMove.type)], brief: moveBrief(moveFullDescription(old)) } : null,
+        hints: [['▲▼', 'Move'], ['Enter', old ? 'Forget it' : room && i < 0 ? 'Learn it' : mon.moves.length === 4 ? 'Keep all four' : 'Keep them']],
       };
     });
   }

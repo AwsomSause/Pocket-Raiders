@@ -5,11 +5,12 @@
 
 import type { PhantomVersion } from '../../../core/presentation/phantom';
 import { rxAtlas } from '../../redux/assets';
-import { figure } from '../../redux/templates';
+import { type Art, figure } from '../../redux/templates';
 import type { BracketModel, BracketSlot } from '../../redux/screens/bracket';
 import { leadLine, listWindow, type BookModel, type DossierModel, type DossierPerson, type ReportModel, type RollCard, type RollModel, type TrackModel } from '../../redux/screens/popups';
 import type { TeamCard, TeamModel } from '../../redux/screens/team';
 import { act, esc, keys, mon, page, ransom, ty } from '../kit';
+import { standee } from './cutin';
 
 /** A sprite fitted inside a square box, or scaled to a height. */
 const boxed = (file: string, box: number, cls = ''): string => { const a = rxAtlas(file); return a ? mon(file, Math.round((box / Math.max(a.sw, a.sh)) * 100) / 100, cls) : ''; };
@@ -158,4 +159,45 @@ export function phScout(_ph: PhantomVersion, d: TeamModel): string {
     + `<div class="sc-g ph-sc-g${d.who ? '' : ' wide'}"${act('back')}>${d.cards.map(card).join('')}</div>`
     + `<div class="pn lt sc-tip ph-sc-tip"><span class="lab">${esc(d.rival)}</span><p class="txt">You commanded every one of these. Their moves, their habits. You will not forget them.</p></div>`
     + keys(['Enter', 'Close', 'back']));
+}
+
+// ---------- Scouting a rival before the fight ----------
+
+export interface ScoutCard {
+  file: string | null;
+  name: string;
+  level: number;
+  types: readonly string[];
+  /** The moves you saw it use, or know it has. */
+  moves: readonly string[];
+  /** Where you saw it ("Seen last fight"). */
+  note: string;
+  ace: boolean;
+}
+export interface ScoutModel {
+  /** "Silver". */
+  name: string;
+  who: Art | null;
+  /** The whole team in order: a card for each one seen this run, null for one not seen yet. */
+  cards: readonly (ScoutCard | null)[];
+  /** Rotom's tip about the ace, or ''. */
+  tip: string;
+  /** The lit card. */
+  index: number;
+  /** What Z says: "Battle" before the fight, "Carry on" on the card after a loss. */
+  done?: string;
+}
+
+/** A rival's team before the fight (mock-up `scout`): what you have seen of it this run, ? for the rest, the ace marked, and Rotom's tip. */
+export function phRivalScout(_ph: PhantomVersion, d: ScoutModel): string {
+  const seen = d.cards.filter(Boolean).length;
+  const card = (m: ScoutCard | null, k: number): string => !m
+    ? `<div class="pn sc-c un${k === d.index ? ' on' : ''}" style="--i:${k}" data-key="sc${k}"><b>?</b><span class="lab">Not seen this run</span></div>`
+    : `<div class="pn sc-c${m.ace ? ' lt ace' : ''}${k === d.index ? ' on' : ''}" style="--i:${k}" data-key="sc${k}">${m.ace ? '<em>ACE</em>' : ''}<div class="sc-pic">${m.file ? boxed(m.file, 100, m.ace ? 'olk' : 'ol') : ''}</div><h3 class="tl1" style="font-size:${m.name.length > 10 ? 22 : 30}px">${esc(m.name)} <small>Lv.${m.level}</small></h3><div class="sc-ty">${m.types.map(ty).join('')}</div>${m.moves.length ? `<p class="txt">${esc(m.moves.join(' · '))}</p>` : ''}<span class="lab">${esc(m.note)}</span></div>`;
+  return page('scout', ground('0 0,34% 0,18% 100%,0 100%', 10, 70)
+    + head(`Seen this run · ${seen} of ${d.cards.length}`, `${d.name}’s team`)
+    + (d.who ? `<div class="sc-who ph-sc-who" aria-hidden="true">${standee(d.who, 5.4, 420, 470)}</div>` : '')
+    + `<div class="sc-g">${d.cards.slice(0, 6).map(card).join('')}</div>`
+    + (d.tip ? `<div class="pn ac sc-tip"><span class="lab">Rotom says</span><p class="txt">${esc(d.tip)}</p></div>` : '')
+    + keys(['Z', d.done ?? 'Battle', 'next'], ['X', 'Back', 'back']));
 }

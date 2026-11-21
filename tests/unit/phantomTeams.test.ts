@@ -106,7 +106,7 @@ describe('Phantom filed result and rank-up', () => {
   it('the report says what was done and what changed, keeps the human line apart, and every part closes it', () => {
     const html = phFiled(ph, { team: 'magma', done: 'Refuse.', changed: ['Standing -2 (0/10)', '<i>x</i>'], voice: 'The ash keeps falling, for everybody.' }, 'Continue');
     expect(pageOf(html)).toBe('filed');
-    for (const t of ['Mission report', 'Refuse.', 'Standing -2 (0/10)', 'Filed', 'The ash keeps falling', 'Stays until you press Enter', 'Continue']) expect(html).toContain(t);
+    for (const t of ['Mission report', 'Refuse.', 'Standing -2 (0/10)', 'Filed', 'The ash keeps falling', 'Stays until you press Z', 'Continue']) expect(html).toContain(t);
     expect(html).not.toContain('<i>x</i>');
     expect(count(html, 'data-act="next"')).toBe(5);
     const log = phFiled(ph, { team: 'aqua', done: 'Dive.', changed: [], voice: null }, 'Battle!');

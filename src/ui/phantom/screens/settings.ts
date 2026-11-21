@@ -3,7 +3,9 @@
 // screen that shows what the chosen row does. The scene owns every row, value and change.
 
 import type { PhantomVersion } from '../../../core/presentation/phantom';
+import type { Art } from '../../redux/templates';
 import { act, esc, keys, page } from '../kit';
+import { phHit } from './moments';
 import { phMenuSample } from './title';
 
 export interface PhSettingsRow { label: string; value: string; disabled?: boolean }
@@ -30,6 +32,9 @@ export interface PhSettingsModel {
   options: { list: string[]; on: number } | null;
   /** List: a line under the title (the search box). */
   sub?: string;
+  /** Page previews: what is playing now (Sound) and a Pokémon to hit (Battle). */
+  music?: string | null;
+  foe?: Art | null;
 }
 
 const SHARD = (y1: number, y2: number): string => `<div class="bgk"></div><div class="shard" style="--c:var(--red);--cp:polygon(0 ${y1}%,100% ${y2}%,100% 100%,0 100%);inset:0" aria-hidden="true"></div>`;
@@ -68,6 +73,46 @@ function rows(d: PhSettingsModel): string {
   return `<div class="sr8">${list}</div>${marks}`;
 }
 
+/** A sample page drawn small inside the preview (its buttons do nothing there). */
+const stage = (html: string): string => `<div class="pv-st">${html.replace(/^<!--[^>]*-->/, '').replace(/ data-(?:act|arg|over)="[^"]*"/g, '')}</div>`;
+const menuStage = (ph: PhantomVersion): string => stage(`<section class="scr s-menu">${phMenuSample(ph)}</section>`);
+const LINE = 'A wild <em>Dragonite</em> keeps raiding the berry carts.';
+const num = (v: string): number | null => (/^\d+%?$/.test(v.trim()) ? parseInt(v, 10) : null);
+
+/** The right-hand preview, as each mock-up page draws it: the mixer (Sound), the text sizes (Text), the keys (Controls),
+ *  a hit (Battle), the phone (Phone); the other pages show the main menu in the look you have. */
+function preview(ph: PhantomVersion, d: PhSettingsModel, opts: string): string {
+  const find = (re: RegExp): PhSettingsRow | undefined => d.rows.find((r) => re.test(r.label));
+  switch (d.title) {
+    case 'Sound': {
+      const bars = d.rows.map((r) => ({ r, v: num(r.value) })).filter((b) => b.v !== null);
+      const off = find(/^sound$/i)?.value.toLowerCase().startsWith('off');
+      return `<div class="pv-mix"><div class="pv-np"><i aria-hidden="true">♪</i><b>${esc(d.music || 'Nothing playing')}</b><small>Now playing</small></div>`
+        + `<div class="pv-bars">${bars.map(({ r, v }, i) => `<div style="--v:${off ? 0 : v};--i:${i}"><i><u></u></i><b>${esc(r.label.replace(/\s*volume$/i, ''))}</b><small>${v}</small></div>`).join('')}</div>`
+        + `<p>${off ? 'Sound is off, so every bar is silent until you turn it back on.' : 'Each bar plays at its own number.'}</p></div>`;
+    }
+    case 'Text': {
+      const size = (find(/^text size$/i)?.value ?? 'Normal').toLowerCase();
+      const one = (cls: string, name: string, st = ''): string => `<div class="${cls}${size.startsWith(name.toLowerCase()) ? ' on' : ''}"><small>${name}</small><p${st}>${LINE}</p></div>`;
+      return `<div class="pv-tx">${one('n', 'Normal')}${one('l', 'Large')}${one('h', 'Huge', ' style="font-size:32px"')}</div>`;
+    }
+    case 'Controls': {
+      const k = (key: string, what = '', sel = false): string => `<span class="${what ? 'm' : ''}${sel ? ' sel' : ''}">${key}${what ? `<em>${what}</em>` : ''}</span>`;
+      return `<div class="pv-kb"><div class="kr0">${k('Esc', 'Back')}${k('Space', 'OK')}</div>`
+        + `<div class="kg">${k('Q', 'Tab')}${k('W', 'Move')}${k('E', 'Tab')}${k('R', 'Reset')}${k('T')}${k('A', 'Move')}${k('S', 'Move')}${k('D', 'Move')}${k('F')}${k('G')}${k('Z', 'OK', true)}${k('X', 'Back')}${k('C')}${k('V')}${k('B')}</div>`
+        + `<div class="ka">${k('▲', ' ')}${k('◀', ' ')}${k('▼', ' ')}${k('▶', ' ')}<em>Move</em></div>`
+        + '<p>Z, Enter and Space say yes; X, Esc and Backspace go back. The keyboard keys are fixed; the gamepad rows below change its buttons.</p></div>';
+    }
+    case 'Battle':
+      return stage(phHit(ph, { words: ['SUPER', 'EFFECTIVE!'], victim: d.foe ?? null, name: 'Garchomp', damage: 142, from: 100, to: 23, by: 'Charizard', move: 'Dragon Claw' })) + opts;
+    case 'Phone':
+      return `<div class="pv-ph"><div class="ph-s">${menuStage(ph)}</div><div class="ph-pad" aria-hidden="true"><i></i><i></i><i></i><i></i></div><div class="ph-ab" aria-hidden="true"><b>Z</b><b class="x">X</b></div><div class="ph-m" aria-hidden="true">≡</div><div class="ph-arc l" aria-hidden="true"></div><div class="ph-arc r" aria-hidden="true"></div></div>`
+        + '<p class="pv-c">Every plate on screen is also a button. The pad and Z / X sit where your thumbs already rest.</p>' + opts;
+    default:
+      return menuStage(ph) + opts;
+  }
+}
+
 function one(ph: PhantomVersion, d: PhSettingsModel): string {
   const row = d.rows[d.index];
   const opts = d.options && d.options.list.length > 1
@@ -76,7 +121,7 @@ function one(ph: PhantomVersion, d: PhSettingsModel): string {
   return page('set-look', `${SHARD(90, 74)}<div class="hd"><small>SETTINGS · ${d.at + 1} OF ${d.rail.length}</small>${esc(d.title)}</div>
 <div class="rl8 n${d.rail.length}">${d.rail.map((r, i) => `<span class="${i === d.at ? 'on' : ''}"${act('tab', i)} title="${esc(r.label)}">${esc(r.letter)}</span>`).join('')}</div>
 ${rows(d)}<p class="sh8">${esc(d.help)}</p>
-<div class="pv" data-key="${id}"><span class="lab">What it does · ${esc(row?.label ?? '')}</span><div class="pv-st"><section class="scr s-menu">${phMenuSample(ph)}</section></div>${opts}</div>
+<div class="pv" data-key="${id}"><span class="lab">What it does · ${esc(row?.label ?? '')}</span>${preview(ph, d, opts)}</div>
 ${keys(['◀▶', 'Change'], ['Q E', 'Page'], ['R', 'Reset page', 'resetPage'], ['Esc', 'Back', 'back'])}`);
 }
 

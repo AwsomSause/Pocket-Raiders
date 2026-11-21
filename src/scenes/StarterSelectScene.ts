@@ -21,6 +21,9 @@ import { rxFileOf } from '../ui/redux/assets';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { starterView, type StarterPick } from '../ui/redux/screens/run';
 
+/** The home region of each generation, for the partner cards. */
+const GEN_REGIONS = ['Kanto', 'Johto', 'Hoenn', 'Sinnoh', 'Unova', 'Kalos', 'Alola', 'Galar', 'Paldea'] as const;
+
 const ORIGINAL: StarterLayout = { head: COLORS.textLight, mode: 'cards', shape: 'glass', card: (i) => ({ x: (GAME_WIDTH - (280 * 3 + 48)) / 2 + i * 304, y: 100, w: 280, h: 400, rot: 0 }), ink: COLORS.text, muted: COLORS.textMuted };
 
 export class StarterSelectScene extends Phaser.Scene {
@@ -83,10 +86,16 @@ export class StarterSelectScene extends Phaser.Scene {
     this.view = null;
     if (reduxOn() && look === 'original') {
       const manifest = this.cache.json.get('manifest') as AssetManifest | undefined;
+      // Phantom cards: where each partner comes from, and the runs you ended with it (or a later form) in the team.
+      const lineOf = (id: string): string[] => { const out: string[] = []; for (let s: string | null = id, i = 0; s && i < 6; i++) { out.push(s); s = content.species.get(s)?.evolvesFrom ?? null; } return out; };
+      const pastWith = (id: string): string => {
+        const runs = session.profile.runHistory.filter((r) => r.party.some((m) => lineOf(m.speciesId).includes(id)));
+        return runs.length ? `${runs.length} past run${runs.length === 1 ? '' : 's'} · best ${Math.max(...runs.map((r) => r.badges))} badges` : 'New to you';
+      };
       const picks: StarterPick[] = run.starterChoices.map((speciesId) => {
         const species = getSpecies(content, speciesId), b = species.baseStats;
         const preview = createPokemon(content, speciesId, content.balance.starterLevel, 'preview');
-        return { name: species.name, file: rxFileOf(manifest, pokemonAssetIds(species.assets).front)?.file ?? null, types: species.types, stats: `HP ${b.hp}  Atk ${b.atk}  Def ${b.def}  SpA ${b.spa}  SpD ${b.spd}  Spe ${b.spe}`, moves: `Lv ${preview.level}: ${preview.moves.map((m) => content.moves.get(m.id)!.name).join(', ')}`, gen: species.generation };
+        return { name: species.name, file: rxFileOf(manifest, pokemonAssetIds(species.assets).front)?.file ?? null, types: species.types, stats: `HP ${b.hp}  Atk ${b.atk}  Def ${b.def}  SpA ${b.spa}  SpD ${b.spd}  Spe ${b.spe}`, moves: `Lv ${preview.level}: ${preview.moves.map((m) => content.moves.get(m.id)!.name).join(', ')}`, region: GEN_REGIONS[species.generation - 1], past: pastWith(speciesId), gen: species.generation };
       });
       this.view = mountRedux(this, {
         render: (c) => starterView(c, { title: 'Starter Select', picks, on: this.index, sub: `Trainer ${archetype.name}, seed ${run.seed}` }),

@@ -82,6 +82,13 @@ export function setMusicIntensity(rate: number): void {
   if (sound?.setRate) sound.setRate(Math.max(1, Math.min(1.12, rate)));
 }
 
+/** The song playing now as words ("bgm.galar_battle" reads "Galar battle"), or null when none is. */
+export function musicNow(): string | null {
+  if (!currentMusic?.sound.isPlaying) return null;
+  const name = currentMusic.id.replace(/^bgm\./, '').replace(/[_.-]+/g, ' ').trim();
+  return name ? name[0]!.toUpperCase() + name.slice(1) : null;
+}
+
 /** Songs that fade in from silence when they start. */
 const MUSIC_FADE_IN_MS: Record<string, number> = { 'bgm.galar_battle': 1000 };
 

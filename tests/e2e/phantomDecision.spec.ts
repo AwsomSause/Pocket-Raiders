@@ -34,7 +34,8 @@ test('Phantom UI: a new move is the learn page: the move on its card, the known 
   await expect(dec.locator('.ln-q')).toHaveText('Forget which one?');
   await expect(dec.locator('.lm')).toHaveCount(4);
   await expect(dec.locator('.lm.on')).toContainText(before.firstName);
-  await expect(dec.locator('.ln-keep')).toContainText(`Do not learn ${before.name}`);
+  await expect(dec.locator('.ln-keep')).toHaveText('Keep the old moves');
+  await expect(dec.locator('.ln-keep')).toHaveAttribute('aria-label', `Do not learn ${before.name}`);
   expect(await fitProblems(page, 'Decision', 'learn')).toEqual([]);
   // Down lights the next move; the note under the list follows it.
   await page.keyboard.press('ArrowDown');

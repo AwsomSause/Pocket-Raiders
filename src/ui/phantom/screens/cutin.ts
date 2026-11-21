@@ -7,12 +7,23 @@ import type { PhantomVersion } from '../../../core/presentation/phantom';
 import { CUT_BEATS, type CutModel } from '../../redux/screens/cut';
 import type { VersusModel } from '../../redux/screens/versus';
 import { type Art, figure } from '../../redux/templates';
-import { rxUrl } from '../../redux/assets';
-import { act, esc, keys, mon, page, ransom, ty } from '../kit';
+import { rxImage, rxTrim, rxUrl } from '../../redux/assets';
+import { act, cut, esc, keys, page, pic, ransom, ty } from '../kit';
 import { phHead } from '../templates';
 import { tall } from './event';
 
-const ballRow = (n: number): string => Array.from({ length: Math.max(0, Math.min(6, Math.floor(n))) }, () => '<i class="ph-vs-ball"></i>').join('');
+/** A person standing on a card: a trainer atlas plays its pose at `px`; a small sprite is cut to its drawing and
+ *  scaled `z` times with the mock-up's white outline, so it stands where the mock-up's does; anything else is scaled to fit. */
+export const standee = (a: Art | null | undefined, z: number, px: number, cap: number): string => {
+  if (!a) return '';
+  if (a.atlas) return tall(a, px, cap);
+  const dim = a.crop || a.k ? null : rxImage(a.file);
+  return dim && dim[1] <= 96 && rxTrim(a.file) ? cut(a.file, z, 'ol') : tall(a, Math.round(px * 0.75), Math.round(cap * 0.76));
+};
+const side = (a: Art | null | undefined): string => standee(a, 6.4, 560, 620);
+/** A ball as the mock-ups draw it: the Poké Ball sprite for your side, the Ultra Ball for a Trainer's; a fainted one goes dark. */
+export const ballPic = (kind: 'pb' | 'ub', out = false): string => `<i class="ph-vs-ball${out ? ' out' : ''}">${pic(`pokeball/${kind}.png`, 2.5)}</i>`;
+const ballRow = (n: number): string => Array.from({ length: Math.max(0, Math.min(6, Math.floor(n))) }, () => ballPic('ub')).join('');
 /** A long name steps its letters down so it stays on one line. */
 const nameSize = (name: string): number => (name.length > 16 ? 34 : name.length > 11 ? 46 : 64);
 /** What is said, in one pair of quote marks (a line that carries its own keeps them). */
@@ -22,19 +33,21 @@ export const quoted = (line: string): string => {
 };
 
 export function phVersus(_ph: PhantomVersion, d: VersusModel): string {
-  const rest = Math.max(0, Math.min(6, Math.floor(d.team)) - (d.lead ? 1 : 0));
-  const mine = d.party.slice(0, 6).map((f) => (f ? mon(f, 1) : '<i class="ph-vs-ball"></i>')).join('');
+  // As the mock-up: both sides as balls, yours dark where a Pokémon has fainted; the foe's are all still to come.
+  const out = d.fainted ?? [];
+  const able = d.party.slice(0, 6).filter((_, i) => !out[i]).length;
+  const mine = d.party.slice(0, 6).map((_, i) => ballPic('pb', !!out[i])).join('');
   const said = quoted(d.line), len = d.line.length;
   const role = d.role || 'Trainer';
   return page('vs', `<div class="vs-r${d.evil ? ' ph-vs-evil' : ''}" aria-hidden="true"></div><div class="vs-l"><div class="burst" style="--x:30%;--y:60%" aria-hidden="true"></div><div class="dots" aria-hidden="true"></div></div><div class="vs-cut" aria-hidden="true"></div>`
     + phHead(/battle$/i.test(role) ? role : `${role.split(' · ')[0]} battle`, d.where ?? '')
-    + `<div class="vs-p l ph-vs-p">${d.player ? tall(d.player, 420, 470) : ''}</div><div class="vs-p r ph-vs-p">${d.cast ? tall(d.cast, 420, 470) : ''}</div>`
-    + `<div class="vs-n l"><span class="lab">You · ${d.party.length} Pokémon</span><h3 class="tl1" style="font-size:${nameSize(d.playerName)}px">${esc(d.playerName)}</h3><div class="bl6">${mine}</div></div>`
-    + `<div class="vs-n r"><span class="lab">${esc(role)}</span><h3 class="tl1" style="font-size:${nameSize(d.name)}px">${esc(d.name)}</h3><div class="bl6">${d.lead ? mon(d.lead, 1) : ''}${ballRow(rest)}</div></div>`
+    + `<div class="vs-p l ph-vs-p${d.player?.atlas ? ' ph-vs-big' : ''}">${side(d.player)}</div><div class="vs-p r ph-vs-p${d.cast?.atlas ? ' ph-vs-big' : ''}">${side(d.cast)}</div>`
+    + `<div class="vs-n l"><span class="lab">You · ${able} can fight</span><h3 class="tl1" style="font-size:${nameSize(d.playerName)}px">${esc(d.playerName)}</h3><div class="bl6">${mine}</div></div>`
+    + `<div class="vs-n r"><span class="lab">${esc(role)}</span><h3 class="tl1" style="font-size:${nameSize(d.name)}px">${esc(d.name)}</h3><div class="bl6">${ballRow(d.team)}</div></div>`
     + `<div class="vs-v" aria-label="versus">${ransom('VS', 3)}</div>`
     + (said ? `<div class="pn lt vs-q tilt" style="--r:2deg"><p class="txt"${len > 110 ? ' style="font-size:18px"' : len > 70 ? ' style="font-size:21px"' : ''}>${said}</p></div>` : '')
     + (d.stake ? `<div class="pn vs-s"><span class="lab">What is at stake</span><p class="txt">${esc(d.stake)}</p></div>` : '')
-    + `<div class="ph-fill"${act('next')}></div>` + keys(['Z', 'Battle', 'next']));
+    + `<div class="ph-fill"${act('next')}></div>` + keys(['Z', 'Battle', 'next'], ...(d.scout ? [['C', 'Scout their team', 'scout'] as const] : [])));
 }
 
 /** The moving band of words along the top and the bottom edge. */
@@ -48,7 +61,8 @@ export const cutLook = (d: Pick<CutModel, 'kind' | 'mon' | 'cast'>): 'ace' | 'fo
 
 export function phCut(_ph: PhantomVersion, d: CutModel): string {
   const on = Math.max(0, Math.min(4, Math.floor(d.beat)));
-  const hint = d.skip === null ? null : d.skip ?? (['Esc', 'skip'] as const);
+  // A boss's entrance reads Z · Begin, as the mock-up; the other cuts read skip.
+  const hint = d.skip === null ? null : d.skip ?? (cutLook(d) === 'boss' ? (['Z', 'Begin'] as const) : (['Esc', 'skip'] as const));
   const foot = beats(on) + `<div class="ph-fill ph-ct-next"${act('next')}></div>` + (hint ? keys([hint[0], hint[1], 'next']) : '');
   const said = quoted(d.line), len = d.line.length;
   const sayAt = len > 220 ? 17 : len > 150 ? 19 : len > 90 ? 22 : 26;
@@ -65,6 +79,7 @@ export function phCut(_ph: PhantomVersion, d: CutModel): string {
       + (d.role ? `<div class="ac-k"><span>${esc(d.role)}</span></div>` : '')
       + `<div class="ac-t" style="font-size:${n > 16 ? 56 : n > 11 ? 78 : n > 8 ? 96 : 118}px">${ransom(name.toUpperCase(), 5)}</div>`
       + `<div class="ac-star" aria-hidden="true"><b>${star}</b></div>`
+      + (d.tags ? `<div class="ac-tags"><b>Lv.${d.tags.level}</b>${d.tags.types.map((t) => ty(t)).join('')}</div>` : '')
       + (said ? `<div class="pn lt ac-say tilt" style="--r:-2deg"><p class="txt" style="font-size:${sayAt}px">${said}</p></div>` : '')
       + '<div class="flashw" aria-hidden="true"></div>' + foot);
   }
@@ -81,12 +96,21 @@ export function phCut(_ph: PhantomVersion, d: CutModel): string {
       + '<div class="flashw" aria-hidden="true"></div>' + foot);
   }
   // A boss, a rival, a scene with one speaker: the big portrait over its own shadow, the name in cut-out letters.
-  const brings = d.brings ? `<div class="bs-row"><div class="bl6">${ballRow(d.brings.team)}</div><b>${d.brings.team} Pokémon</b></div>${d.brings.notes.map((t) => `<p class="txt ph-ct-note">${esc(t)}</p>`).join('')}` : '';
-  const panel = said || brings ? `<div class="pn bs-i ph-ct-i">${said ? `<span class="lab">${esc(d.cast ? name : d.role || name)}</span><p class="txt" style="font-size:${sayAt}px">${said}</p>` : ''}${brings ? `<span class="lab">Brings</span>${brings}` : ''}</div>` : '';
+  // What a boss brings, as the mock-up lists it: the balls, the gimmicks with their marks, the held items and training.
+  const b = d.brings;
+  const gims = (b?.gimmicks ?? []).filter((g) => GIM_ICON[g]);
+  const gear = b ? [b.held ? 'Held items' : '', b.trained ? 'full training' : ''].filter(Boolean).join(' and ') : '';
+  const brings = b ? `<div class="bs-row"><div class="bl6">${ballRow(b.team)}</div><b>${b.team} Pokémon</b></div>`
+    + (gims.length ? `<div class="bs-row">${gims.map((g) => `<span class="bs-g">${GIM_ICON[g]}</span>`).join('')}<b>${esc(andList(gims.map((g) => GIM_WORDS[g as GimmickCard['kind']] ?? g)))}</b></div>` : '')
+    + (gear ? `<div class="bs-row"><span class="bs-g">${pic('items/focus_sash.png', 0.9)}</span><b>${esc(gear[0]!.toUpperCase() + gear.slice(1))}</b></div>` : '')
+    + b.notes.map((t) => `<p class="txt ph-ct-note">${esc(t)}</p>`).join('') : '';
+  // With a boss's list the line is left to the versus card that follows (it says the same line), as the mock-up has it.
+  const talk = said && !b;
+  const panel = talk || brings ? `<div class="pn bs-i ph-ct-i">${talk ? `<span class="lab">${esc(d.cast ? name : d.role || name)}</span><p class="txt" style="font-size:${sayAt}px">${said}</p>` : ''}${brings ? `<span class="lab">Brings</span>${brings}` : ''}</div>` : '';
   return page('boss', `<div class="bs-bg${d.evil ? ' ph-ct-evil' : ''}" aria-hidden="true"></div>`
     + (who ? `<div class="bs-sil" aria-hidden="true">${figure(who, 620)}</div>` : '') + cine(band)
-    + `<div class="bs-p ph-ct-p">${d.mon && d.cast ? `<span class="ph-ct-with">${figure(d.mon, 240)}</span>` : ''}${who ? tall(who, 500, 560) : d.mon ? figure(d.mon, 320) : ''}</div>`
-    + `<div class="bs-t">${d.where ? `<span class="lab">${esc(d.where)}</span>` : ''}${d.role && d.role !== name ? `<em>${esc(d.role)}</em>` : ''}<span class="ph-ct-name" style="font-size:${n > 22 ? 40 : n > 15 ? 56 : n > 10 ? 76 : 104}px">${ransom(name.toUpperCase(), 7)}</span></div>`
+    + `<div class="bs-p ph-ct-p">${d.mon && d.cast ? `<span class="ph-ct-with">${figure(d.mon, 240)}</span>` : ''}${who ? tall(who, 540, 600) : d.mon ? figure(d.mon, 320) : ''}</div>`
+    + `<div class="bs-t">${d.where ? `<span class="lab">${esc(d.where)}</span>` : ''}${d.role && d.role !== name ? `<em>${esc(d.role)}</em>` : ''}<span class="ph-ct-name" style="font-size:${n > 22 ? 40 : n > 15 ? 56 : n > 10 ? 76 : n > 6 ? 104 : 136}px">${ransom(name.toUpperCase(), 7)}</span>${d.sub ? `<p>${esc(d.sub)}</p>` : ''}</div>`
     + panel + foot);
 }
 
@@ -115,6 +139,14 @@ export interface GimmickCard {
 const letters = (word: string): string => [...word.toUpperCase()].map((ch, k) => (ch === ' ' ? '<i></i>' : `<b style="--i:${k}">${esc(ch)}</b>`)).join('');
 const cap = (t: string): string => (t ? t[0]!.toUpperCase() + t.slice(1).toLowerCase() : '');
 const SHARDS = [[90, 60, -20], [980, 40, 30], [60, 470, 160], [1040, 460, 200], [520, 20, 80]] as const;
+/** The gimmicks' marks, as on the boss card's list. */
+export const GIM_ICON: Record<string, string> = {
+  mega: pic('packs/dbk/mega/icon.png', 0.6),
+  dynamax: pic('packs/dbk/dynamax/icon.png', 0.75),
+  tera: pic('packs/dbk/tera/icon.png', 0.09),
+  zmove: pic('packs/dbk/zpower/particle.png', 0.65),
+};
+const andList = (xs: readonly string[]): string => (xs.length < 2 ? xs[0] ?? '' : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
 const GIM_WORDS: Record<GimmickCard['kind'], string> = { mega: 'Mega Evolution', primal: 'Primal Reversion', tera: 'Terastallize', dynamax: 'Dynamax', gigantamax: 'Gigantamax', zmove: 'Z-Move' };
 
 /** The cut-in of a Mega Evolution, a Terastallization, a Dynamax or a Z-Move (mock-ups `mega`, `tera`, `dmax`, `zmove`). */
@@ -143,19 +175,20 @@ export function phGimmick(_ph: PhantomVersion, d: GimmickCard): string {
     const words = (d.move?.name ?? 'Z-Move').split(/\s+/), last = words.length > 1 ? words.pop()! : '';
     const longest = Math.max(words.join(' ').length, last.length);
     return page('zmove', '<div class="zm-bg" aria-hidden="true"></div><div class="zm-ray" aria-hidden="true"></div><div class="zm-z" aria-hidden="true">Z</div>'
-      + `<div class="zm-tr ph-ct-face">${d.cast ? tall(d.cast, 440, 500) : ''}</div><div class="zm-orb ph-gm-orb" aria-hidden="true"><i></i></div>`
-      + `<div class="zm-mon ph-ct-pk">${d.mon ? figure(d.mon, 320) : ''}</div>`
+      + `<div class="zm-tr ph-ct-face">${d.cast ? tall(d.cast, 440, 500) : ''}</div><div class="zm-orb" aria-hidden="true">${pic('packs/dbk/zpower/particle.png', 3)}</div>`
+      + `<div class="zm-mon ph-ct-pk">${d.mon ? figure(d.mon, 240) : ''}</div>`
       + '<div class="zm-k"><span>Z-Move · once per battle</span></div>'
       + `<div class="zm-t"${longest > 12 ? ' style="scale:.78;transform-origin:0 0"' : ''}>${last ? `<em>${esc(words.join(' '))}</em><strong>${esc(last)}</strong>` : `<strong>${esc(words[0] ?? '')}</strong>`}</div>`
-      + `<div class="zm-tags">${d.type ? ty(d.type) : ''}${d.move?.power ? `<b>Power ${d.move.power}</b>` : ''}${d.item ? `<span class="ac-it">${esc(d.item)}</span>` : ''}</div>`
+      + `<div class="zm-tags">${d.type ? ty(d.type) : ''}${d.move?.power ? `<b>Power ${d.move.power}</b>` : ''}${d.item ? `<span class="ac-it">${pic('items/z_ring.png', 0.9)}${esc(d.item)}</span>` : ''}</div>`
       + `<div class="pn lt zm-say"><p class="txt">${who ? `${who} and ${name} let` : `${name} lets`} loose ${who ? 'their' : 'its'} full-force <b>Z-Power</b>!</p></div>` + foot);
   }
-  // Mega Evolution and Primal Reversion: the Trainer in the slanted cut, the Pokémon in the spinning ring.
+  // Mega Evolution and Primal Reversion (mock-up `mega`): the field dims, the Pokémon fills the slanted cut in close-up,
+  // the Mega Ring's stone spins top right, and the cut-out words and the line below.
   const [a, b] = GIM_WORDS[d.kind].toUpperCase().split(' ');
   const say = d.kind === 'primal' ? `${name} returns to its <b>PRIMAL</b> form!`
     : d.item ? `${name}'s <b>${esc(d.item.toUpperCase())}</b> is reacting to ${who ? `${who}'s` : 'the'} Mega Ring!` : `${name} is Mega Evolving!`;
-  return page('mega', '<div class="bgk"></div>'
-    + `<div class="cut"><div class="rays" aria-hidden="true"></div><div class="face ph-ct-face">${d.cast ? tall(d.cast, 420, 470) : ''}</div></div><div class="cutedge" aria-hidden="true"></div><div class="cutedge b" aria-hidden="true"></div>`
-    + `<div class="megaring ph-ct-ring"><div class="ring2" aria-hidden="true"></div></div><div class="ph-ct-pk form">${d.mon ? figure(d.mon, 300) : ''}</div>`
-    + `<div class="megat">${ransom(a ?? '', 3)}${ransom(b ?? '', 4)}</div><div class="megasay">${say}</div>` + foot);
+  const ring = d.kind === 'mega' ? `<div class="megaring ph-gm-ring" aria-hidden="true"><div class="ring2">${pic('packs/dbk/mega/ring.png', 3)}</div>${pic('packs/dbk/mega/icon.png', 2.4)}</div>` : '';
+  return page('mega', '<div class="dim ph-gm-dim" aria-hidden="true"></div>'
+    + `<div class="cut"><div class="rays" aria-hidden="true"></div><div class="face ph-gm-close">${d.mon ? figure(d.mon, 860) : ''}</div></div><div class="cutedge" aria-hidden="true"></div><div class="cutedge b" aria-hidden="true"></div>`
+    + ring + `<div class="megat">${ransom(a ?? '', 3)}${ransom(b ?? '', 4)}</div><div class="megasay">${say}</div>` + foot);
 }

@@ -35,8 +35,8 @@
   /* Summary: tabs and the open tab */
   & .ph-sm-tabs{left:540px;top:34px;right:20px;flex-wrap:wrap}
   & .ph-sm-tabs span{cursor:pointer}
-  & .ph-sm-tabs.some span{font-size:21px;padding:8px 16px}
-  & .ph-sm-tabs.many span{font-size:17px;padding:7px 11px}
+  & .ph-sm-tabs.some span{font-size:24px;padding:8px 18px}
+  & .ph-sm-tabs.many span{font-size:22px;padding:8px 12px}
   & .ph-sm-body{position:absolute;left:540px;right:30px;top:104px;bottom:132px;display:flex;gap:14px;animation:ph-inR .3s both}
   & .ph-sm-body.k-overview,& .ph-sm-body.k-text{flex-direction:column;gap:10px}
   & .ph-sm-wide{position:static;width:auto;display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -48,7 +48,7 @@
   & .ph-sm-note{padding:8px 26px 10px 22px}
   & .ph-sm-note .txt{font-size:17px}
   & .ph-sm-moves{position:static;grid-template-columns:repeat(4,1fr)}
-  & .ph-sm-moves span{font-size:19px;white-space:normal;cursor:help}
+  & .ph-sm-moves span{font-size:21px;white-space:normal;cursor:help}
   & .ph-sm-body.k-stats{display:block}
   & .ph-sm-body .radar{left:-34px;top:-8px;width:470px;height:392px}
   & .radar text.up{fill:var(--gold)}

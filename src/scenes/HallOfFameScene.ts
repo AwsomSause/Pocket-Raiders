@@ -179,7 +179,7 @@ export class HallOfFameScene extends Phaser.Scene {
       const hall = r.party.slice(0, 6).map((m, i) => {
         const card = r.legacy.find((l) => l.speciesId === m.speciesId && l.level === m.level) ?? r.legacy.find((l) => l.speciesId === m.speciesId);
         const sig = card?.signature ? content.moves.get(card.signature)?.name ?? null : null;
-        return { file: monFile(this, m.speciesId, 'front', m.shiny), name: name(m.speciesId), level: m.level, shiny: m.shiny, tag: card?.titles[0] ?? (i === 0 ? 'Lead' : `No. ${i + 1}`), note: sig ? `Signature: ${sig}` : (content.species.get(m.speciesId)?.types ?? []).map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' / ') };
+        return { file: monFile(this, m.speciesId, 'front', m.shiny), name: name(m.speciesId), level: m.level, shiny: m.shiny, type: content.species.get(m.speciesId)?.types[0], tag: card?.titles[0] ?? (i === 0 ? 'Lead' : `No. ${i + 1}`), note: sig ? `Signature: ${sig}` : (content.species.get(m.speciesId)?.types ?? []).map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' / ') };
       });
       const state = { index: 0, size: cards.length, view: null as unknown as ReduxView };
       state.view = mountRedux(this, {

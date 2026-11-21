@@ -11,13 +11,14 @@ import { animSettingsFrom, animationTimeScale } from '../core/accessibility';
 import { resolveAnim } from '../core/presentation/animRegistry';
 import { evolutionLines, evolutionTimeline, evolutionsSince, partyLooks, type EvoMotion, type EvoTimeline } from '../core/presentation/evolutionScene';
 import { transformAnimId } from '../core/presentation/transformAnims';
-import type { Content } from '../core/contentSchema';
+import { STAT_NAMES, type Content } from '../core/contentSchema';
+import { calcStats } from '../core/pokemon';
 import { services } from '../game/services';
 import { playCry, playCue, playSfxLazy } from './audio';
 import { loadAssets, pokemonArtIds } from './lazyAssets';
 import { monFile } from './redux/game';
 import { esc, foot, mon, TX } from './redux/kit';
-import { phEvolve } from './phantom/screens/battle';
+import { phEvolve, type EvolveGain } from './phantom/screens/battle';
 import { pkEvolve, type PkEvolveModel } from './pocket/screens/after';
 import { mountRedux, reduxOn } from './redux/stage';
 import { pokemonVisual, type Visual } from './sprites';
@@ -316,6 +317,21 @@ function playCanvas(scene: Phaser.Scene, show: EvolutionShow, lines: ReturnType<
   );
 }
 
+const STAT_WORD: Record<string, string> = { hp: 'HP', atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed' };
+
+/**
+ * What a party Pokémon gained by evolving (the Phantom page's card): its stats as the new form minus the same Pokémon
+ * as the old one, and the types the new form brings. Only drawn; null for a foe or when the Pokémon is not found.
+ */
+export function evolveGain(show: EvolutionShow): EvolveGain | null {
+  const { session } = services();
+  const content = session.content, from = content.species.get(show.from), to = content.species.get(show.to);
+  const mon = show.foe ? undefined : session.run?.party.find((m) => m.speciesId === show.to);
+  if (!mon || !from || !to) return null;
+  const after = calcStats(content, mon), before = calcStats(content, { ...mon, speciesId: show.from });
+  return { level: mon.level, types: to.types, fresh: to.types.filter((t) => !from.types.includes(t)), stats: STAT_NAMES.map((k) => [STAT_WORD[k] ?? k, after[k] - before[k]] as const) };
+}
+
 /** The Pocket page's facts: names, the new types and the three stats that grow most. */
 function pkEvo(show: EvolutionShow, files: { from: string | null; to: string | null }, st: { text: string; which: 'from' | 'to'; sil: boolean; revealed: boolean }): PkEvolveModel {
   const content = services().session.content;
@@ -331,6 +347,9 @@ function pkEvo(show: EvolutionShow, files: { from: string | null; to: string | n
 function playCard(scene: Phaser.Scene, show: EvolutionShow, lines: ReturnType<typeof evolutionLines>, tl: EvoTimeline, flash: number): Promise<void> {
   const files = { from: monFile(scene, show.from, 'front', !!show.shiny), to: monFile(scene, show.to, 'front', !!show.shiny) };
   const st = { text: '', which: 'from' as 'from' | 'to', sil: false, flicker: false, revealed: false };
+  const content = services().session.content;
+  const names = { from: content.species.get(show.from)?.name ?? '', to: content.species.get(show.to)?.name ?? '' };
+  let gain: EvolveGain | null | undefined;
   let tap: (() => void) | null = null;
   const view = mountRedux(scene, {
     card: true,
@@ -338,7 +357,7 @@ function playCard(scene: Phaser.Scene, show: EvolutionShow, lines: ReturnType<ty
     render: (c) => {
       const f = files[st.which];
       // Phantom: the mock-ups' evolve page (the same beats; a click anywhere moves on).
-      if (c.ph) return phEvolve({ from: f, to: files.to, done: st.revealed, sil: st.sil, tap: true }, st.text);
+      if (c.ph) return phEvolve({ from: st.revealed ? files.from : f, to: files.to, done: st.revealed, sil: st.sil, tap: true, names, gain: st.revealed ? (gain ??= evolveGain(show)) : null, stop: !!show.decide }, st.text);
       // Pocket: the mock-ups' Evolution page (the same beats; Next or a key moves on).
       if (c.pk) return pkEvolve(pkEvo(show, files, st));
       const pic = f ? mon(f, 3.4, st.sil ? 'evo-w' : '', !st.sil) : '';

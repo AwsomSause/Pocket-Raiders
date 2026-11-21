@@ -9,7 +9,7 @@ import { rxUrl } from '../../redux/assets';
 import { nodeStyle } from '../../redux/kit';
 import type { MapModel, MapNodeView } from '../../redux/screens/map';
 import type { NodeMenuModel, PauseModel } from '../../redux/screens/popups';
-import { act, esc, hero, keys, mon, page, ransom } from '../kit';
+import { act, esc, hero, keys, mon, page, pic, ransom } from '../kit';
 import { phTip } from './party';
 
 /** Six stops across; the window follows the trainer. */
@@ -23,12 +23,17 @@ export function stageOf(title: string, chips: readonly string[]): { no: string; 
   return { no: m?.[1] ?? t?.[2] ?? '', of: m?.[2] ?? '', region: t?.[1] ?? title };
 }
 
+/** The mock-ups draw a wild stop as a Poké Ball and a trainer as an Ultra Ball; other stops keep their sign. */
+const BALL: Record<string, string> = { wild: 'pokeball/pb.png', fish: 'pokeball/pb.png', trainer: 'pokeball/ub.png' };
+const ballOf = (n: MapNodeView): string | null => (n.fog || n.glyph ? null : BALL[n.kind] ?? null);
+
 function node(n: MapNodeView, x: number, y: number, lit: boolean, small = 1): string {
   const [col, ch] = n.fog ? (['#56607a', '?'] as const) : nodeStyle(n.kind);
+  const ball = ballOf(n);
   const state = lit ? 'sel' : n.cur ? 'here' : n.visited ? 'done' : n.opt >= 0 ? 'next' : n.dim ? 'skip' : '';
   const sides = n.sides.map((s, k) => { const [sc, sg] = s.color ? ([s.color, s.glyph ?? '?'] as const) : nodeStyle(s.kind); return `<u class="ph-side${s.used ? ' used' : ''}" style="--c:${sc};--k:${k}">${esc(sg)}</u>`; }).join('');
   const marks = n.marks.length ? `<span class="ph-marks"><span>${n.marks.map(([t, mc]) => `<i style="color:${mc}">${esc(t)}</i>`).join('')}</span></span>` : '';
-  return `<div class="nd ph-nd ${state}${n.harder && !n.fog ? ' hard' : ''}" style="left:${x}px;top:${y}px;--c:${col}${small < 1 ? `;scale:${small}` : ''}" data-key="n${n.id}"${n.opt >= 0 ? act('pick', n.opt, 'over') : ''}><b>${esc(n.fog ? ch : n.glyph ?? ch)}</b>${sides}${marks}</div>`;
+  return `<div class="nd ph-nd ${state}${n.harder && !n.fog ? ' hard' : ''}" style="left:${x}px;top:${y}px;--c:${col}${small < 1 ? `;scale:${small}` : ''}" data-key="n${n.id}"${n.opt >= 0 ? act('pick', n.opt, 'over') : ''}>${ball ? pic(ball, 3) : `<b>${esc(n.fog ? ch : n.glyph ?? ch)}</b>`}${sides}${marks}</div>`;
 }
 
 export function phMap(_ph: PhantomVersion, d: MapModel): string {
@@ -65,7 +70,7 @@ export function phMap(_ph: PhantomVersion, d: MapModel): string {
   const button = d.buttons.find((b) => b.opt === d.index);
   const [lc, lg] = lit ? (lit.fog ? (['#56607a', '?'] as const) : nodeStyle(lit.kind)) : (['var(--red)', ''] as const);
   const head = lit ? lit.title : button?.label ?? '';
-  const stop = `<div class="stop ph-stop" data-key="s${d.index}"><small>${lit ? `NEXT STOP · ${lit.col} OF ${d.columns}` : 'ON THIS MAP'}</small><h3 style="font-size:${head.length > 16 ? 26 : head.length > 11 ? 34 : 46}px">${esc(head)}</h3>${lit ? `<div class="pic" style="background:${lc}"><b>${esc(lit.glyph ?? lg)}</b></div>` : ''}${lit?.text ? `<p>${esc(lit.text)}</p>` : ''}${d.info ? `<p class="info">${esc(d.info)}</p>` : ''}<div class="ph-stage">${d.lines.map((t) => `<p>${esc(t)}</p>`).join('')}</div></div>`;
+  const stop = `<div class="stop ph-stop" data-key="s${d.index}"><small>${lit ? `NEXT STOP · ${lit.col} OF ${d.columns}` : 'ON THIS MAP'}</small><h3 style="font-size:${head.length > 16 ? 26 : head.length > 11 ? 34 : 46}px">${esc(head)}</h3>${lit ? `<div class="pic" style="background:${lc}">${ballOf(lit) ? pic(ballOf(lit)!, 7) : `<b>${esc(lit.glyph ?? lg)}</b>`}</div>` : ''}${lit?.text ? `<p>${esc(lit.text)}</p>` : ''}${d.info ? `<p class="info">${esc(d.info)}</p>` : ''}<div class="ph-stage">${d.lines.map((t) => `<p>${esc(t)}</p>`).join('')}</div></div>`;
   const notice = d.notice ? `<div class="pn lt ph-say ph-mnote" data-key="note"><p class="txt">${esc(d.notice)}</p></div>` : '';
   const bar = `<div class="ph-mbar">${d.buttons.map((b) => `<span class="${b.opt === d.index ? 'on' : ''}${b.hot ? ' hot' : ''}"${act('pick', b.opt, 'over')}>${esc(b.label)}</span>`).join('')}</div>`;
   const foot = keys(...d.keys.map(([k, t]) => [k, t.charAt(0).toUpperCase() + t.slice(1), 'key', k] as const), ...d.hints.map(([k, t]) => [KEY_FACE[k] ?? k, t.charAt(0).toUpperCase() + t.slice(1), k === 'Enter' ? 'go' : k === 'L' ? 'legend' : undefined] as const), ['Esc', 'Menu', 'back'] as const);
@@ -88,7 +93,7 @@ export interface PhPauseModel extends PauseModel {
 
 /** The pause menu: a whole page, as the mock-up draws it. A click on the trainer's side resumes. */
 export function phPause(ph: PhantomVersion, d: PhPauseModel): string {
-  const rows = d.options.map((o, k) => `<div class="h${k === d.index ? ' on' : ''}${o.off ? ' off' : ''}" style="--i:${k};--r:${[-5, -2, -4, -1, -3][k % 5]}deg;--ml:${[0, 40, 14, 56, 26, 6, 44][k % 7]}px" data-key="p${k}"${act('pause', k, 'pauseOver')}>${esc(o.label)}</div>`).join('');
+  const rows = d.options.map((o, k) => `<div class="h${k === d.index ? ' on' : ''}${o.off ? ' off' : ''}" style="--i:${k};--r:${[-5, -2, -4, -1, -3][k % 5]}deg;--ml:${[0, 40, 14, 56, 26, 6, 44][k % 7]}px" data-key="p${k}"${act('pause', k, 'pauseOver')}>${esc(o.label)}${k === d.index && o.sub ? `<small>${esc(o.sub)}</small>` : ''}</div>`).join('');
   return page('pause', '<div class="bgr"></div><div class="burst" style="--x:75%;--y:60%" aria-hidden="true"></div><div class="dots" aria-hidden="true"></div><div class="shard" style="--cp:polygon(0 0,40% 0,22% 100%,0 100%);inset:0" aria-hidden="true"></div>'
     + `<div class="ph-resume"${act('pause', -1)}></div><div class="hero ph-dk-hero">${hero(ph.hero, 11, 'sh', 'position:absolute;left:30px;top:24px')}${hero(ph.hero, 11, 'ol', 'position:relative')}</div>`
     + `<div class="hd" style="top:10px"><small>${esc(d.where)}</small>Pause</div><div class="hub ph-dk${d.options.length > 7 ? ' many' : ''}">${rows}</div>`

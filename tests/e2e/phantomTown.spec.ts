@@ -37,7 +37,8 @@ test('Phantom UI: Hub Town has a Town Map: districts, places, a place\'s rooms, 
   await expect(map.locator('.pin:not(.n)')).toHaveCount(12);
   await expect(map.locator('.pin.on u')).toHaveText('Achievement Hall');
   await expect(map.locator('.hm-z.on span')).toHaveText("Champions' Row");
-  await expect(map.locator('.hm-you')).toHaveCount(0);
+  // Not walking yet: YOU stands at the gate where a walk starts, as in the mock-up.
+  await expect(map.locator('.hm-you')).toHaveCount(1);
   await expect(map.locator('.keys')).toContainText('Walk instead', { ignoreCase: true });
   await fits(page, 'Hub', 'town');
 

@@ -137,6 +137,9 @@ describe('the Phantom battle moments', () => {
     expect(html).toContain('Losing to a rival never ends a run.');
     expect(html).toContain('Your team gets back up');
     expect(phRivalLoss(ph, rloss({ line: '' }))).not.toContain('rl-q');
+    // C opens the team just fought, only when the card offers it.
+    expect(html).not.toContain('See their team');
+    expect(phRivalLoss(ph, rloss({ scout: true }))).toMatch(/data-act="scout"[^>]*><b>C<\/b>See their team/);
   });
 });
 
@@ -153,15 +156,27 @@ describe('the Phantom decision pages', () => {
     expect(html).toContain('FLYING');
     expect(html).toContain('Forget which one?');
     expect(count(html, 'class="lm pn')).toBe(2);
-    expect(html).toContain('NORMAL · Physical · 40 · PP 35/35');
-    // Only the lit row carries the key.
-    expect(count(html, '<em>Z</em>')).toBe(1);
+    // As in the mock-up: the type, kind and power in small, the PP apart at the right.
+    expect(html).toContain('<span class="s">NORMAL · PHYSICAL · POWER 40</span><span class="pp">35/35</span>');
+    // Only the lit row carries the key, and says what it does.
+    expect(count(html, '<em>FORGET · Z</em>')).toBe(1);
+    expect(count(html, '<em>')).toBe(1);
     expect(html).toContain('ln-keep');
-    expect(html).toContain('Do not learn Air Slash');
+    // The no-thanks answer reads as the mock-up; the full answer stays its spoken label.
+    expect(html).toContain('aria-label="Do not learn Air Slash">Keep the old moves</div>');
     expect(html).toContain('Scratch would be replaced.');
     // Every answer can be clicked, by its own number.
     expect(count(html, 'data-act="pick"')).toBe(3);
     expect(html).toContain('data-act="pick" data-arg="2"');
+    // With the swap told, the box compares the two moves (mock-up `learn`); a status move has no power in its line.
+    const swap = { from: 'Scratch', to: 'Air Slash', power: ['40', '75'] as const, type: ['Normal', 'Flying'] as const, brief: 'Scratches with <claws>.' };
+    const cmp = phDecision(ph, decision({ card: small, options: [...moves, { label: 'Growl', small: 'Status · — · PP 40/40', type: 'normal', off: false }], index: 0, text: 'Scratch would be replaced.', swap }));
+    expect(cmp).toContain('<span class="lab">Scratch → Air Slash</span><p class="txt">Power 40 → <b>75</b> · Normal → <b>Flying</b>');
+    expect(cmp).toContain('Scratches with &lt;claws&gt;.');
+    expect(cmp).not.toContain('Scratch would be replaced.');
+    expect(cmp).toContain('<span class="s">NORMAL · STATUS</span><span class="pp">40/40</span>');
+    // The way out lit: no compare box of moves.
+    expect(phDecision(ph, decision({ card: small, options: [...moves, { label: 'Do not learn Air Slash', small: '', type: null, off: false }], index: 2, text: 'Keep them.', swap: null }))).not.toContain(' → ');
   });
 
   it('a free slot comes first in the list, and a long list steps down to two columns', () => {

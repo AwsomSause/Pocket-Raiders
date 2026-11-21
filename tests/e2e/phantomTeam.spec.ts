@@ -28,7 +28,8 @@ const mapButton = (page: Page, label: string) =>
 const fits = async (page: Page, key: string, id?: string) => { await page.waitForTimeout(900); expect(await fitProblems(page, key, id)).toEqual([]); };
 
 test('Phantom UI: Party, Summary, Bag and PC of a run are Phantom pages', async ({ page }) => {
-  test.setTimeout(120_000);
+  // A long walk through four pages; GitHub's runners take about twice as long as a local run (2 min there).
+  test.setTimeout(240_000);
   const errors = watch(page);
   await start(page, 'ui=phantom&seed=phantom-team');
   await onPage(page, 'MainMenu', 'title');
@@ -99,7 +100,8 @@ test('Phantom UI: Party, Summary, Bag and PC of a run are Phantom pages', async 
   // PC: the party down the side, a slot per place, and the lit Pokémon's card.
   await mapButton(page, 'PC');
   await onPage(page, 'Map', 'box');
-  await expect(map.locator('.bx-party .bxc')).toHaveCount(4);
+  await expect(map.locator('.bx-party .bxc:not(.e)')).toHaveCount(4);
+  await expect(map.locator('.bx-party .bxc.e')).toHaveCount(2);
   await expect(map.locator('.bx .bxc.on')).toHaveCount(1);
   await expect(map.locator('.bx-d .blade.on')).toHaveText('Move to party');
   // The lit Pokémon's other buttons: its Summary, and a held item for it (none is free in the Bag yet).
