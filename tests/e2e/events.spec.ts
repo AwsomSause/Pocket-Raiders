@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { pressUntil } from './helpers/pressUntil';
 import { EVENT_STYLES_READY } from '../../src/core/presentation/eventStyles';
 
 // Map events: an event stop opens the animated event scene; a choice shows its outcome and goes back to
@@ -72,7 +73,8 @@ test('an event stop plays its scene, applies a choice once and returns to the ma
   }
   await page.setViewportSize({ width: 960, height: 540 });
 
-  await page.keyboard.press('Enter'); // the first choice
+  const usedNow = () => page.evaluate(() => (window as any).__pkr.session.run.stage.map.nodes.flatMap((n: any) => n.sides).find((s: any) => s.id === 'e2e-center').used as boolean);
+  await pressUntil(page, 'Enter', usedNow); // the first choice
   await page.waitForTimeout(1500);
   await page.screenshot({ path: 'test-results/events-outcome.png' });
   const used = await page.evaluate(() => (window as any).__pkr.session.run.stage.map.nodes.flatMap((n: any) => n.sides).find((s: any) => s.id === 'e2e-center').used);
@@ -87,11 +89,9 @@ test('an event stop plays its scene, applies a choice once and returns to the ma
   });
   expect(await scene(page)).toBe('Event');
   expect(await chips()).toBe(0);
-  await page.keyboard.press('Enter'); // dismiss the text; the rewards appear
-  await page.waitForTimeout(2500);
+  await pressUntil(page, 'Enter', async () => (await chips()) > 0); // dismiss the text; the rewards appear
   expect(await scene(page)).toBe('Event');
-  expect(await chips()).toBeGreaterThan(0);
-  await page.keyboard.press('Enter'); // dismiss the rewards
+  await pressUntil(page, 'Enter', async () => (await scene(page)) === 'Map'); // dismiss the rewards
   await waitForScene(page, 'Map');
 
   // The choice was saved: after a reload the stop is still used.
@@ -115,9 +115,8 @@ test('a battle choice at an event starts the battle', async ({ page }) => {
   await waitForScene(page, 'MainMenu');
   await toMap(page);
   await openEvent(page, 'rm-2-key-cabin', 'e2e-cabin');
-  await page.keyboard.press('Enter'); // Battle
-  await page.waitForTimeout(1500);
-  await page.keyboard.press('Enter'); // Enter: battle!
+  // Enter picks Battle, the next Enter confirms it; each is pressed again if the first was dropped.
+  await pressUntil(page, 'Enter', async () => (await scene(page)) === 'Battle');
   await waitForScene(page, 'Battle');
   expect(await page.evaluate(() => (window as any).__pkr.session.run.battle.event.eventId)).toBe('rm-2-key-cabin');
   await page.waitForTimeout(1500);
