@@ -1,0 +1,74 @@
+{
+ "i1": {
+  "name": "Clean Slate",
+  "big": "Every Dominion page thrown out and rebuilt as a modern Pokémon menu: rounded panels with white borders, a real Pokémon text box, HP-style stat bars, and Nova crimson for what is chosen."
+ },
+ "1": {
+  "name": "Rebuilt from the ground",
+  "big": "All 50 pages redrawn from scratch in one clean Pokémon menu language. Lists on the left, details on the right, a real text box for every talk.",
+  "pages": [],
+  "q1": "Big Jersey titles, a crimson glow on whatever is chosen, every panel springs in, the dial on the Card fills, stamps slam on results.",
+  "q2": "Round 4 had a different layout on every screen. Now every page shares one grammar (top bar, list, detail, key strip), so the player learns it once.",
+  "q3": "Not yet; this pass sets the base. Pages already split: Assign, District file, Card, Order cut-in, results.",
+  "q4": "Esc opens the Boss Menu from any page; Settings has its own tabs (Dominion, Rotom, Effects, Sound).",
+  "q5": "Yes: Pokémon-style text box with the ▼ arrow, HP bars for stats, a PC-box Reserve, a real battle screen."
+ },
+ "2": {
+  "name": "Split the clutter",
+  "big": "The HQ was one crowded screen. Now each floor opens its own page, plots are bought on a page of their own, and Kice's new Auto-Checker gets a desk page and a weekly report.",
+  "pages": [
+   "Floor 2 · Crew floor",
+   "Buy a plot",
+   "Auto-Checker",
+   "Auto-Checker report",
+   "HQ level up"
+  ],
+  "q1": "A gold 'Lv 4 ready' badge pulses on the HQ; the level-up page stamps NEW FLOOR in huge letters.",
+  "q2": "Pass 1 crammed rooms, plots and hiring into one panel. Now each one is a page with room to breathe, and lists show a breadcrumb so you always know where you are.",
+  "q3": "Yes: five new HQ pages (floor, plot, Auto-Checker, hire report, level up). The HQ itself only shows the building and today's orders.",
+  "q4": "The breadcrumb starts from the Boss Menu's section names (HQ, Crew, Map), so the menu and the pages use the same words.",
+  "q5": "Buying a plot reads like a Poké Mart list; the Auto-Checker report is laid out like a PC box of new faces."
+ },
+ "3": {
+  "name": "Everything morphs",
+  "big": "Moving between pages is now one motion: the title, money, Heat, portraits and the chosen district fly to where they sit on the next page, and a crimson blade with the Nova eye wipes the rest. Two more pages split off.",
+  "pages": [
+   "Page change (frozen)",
+   "Build a room",
+   "Give a Pokémon"
+  ],
+  "q1": "A crimson blade sweeps across every page change; portraits glide from the Morning list into the Crew File instead of popping.",
+  "q2": "Pass 2 pages appeared and vanished. Now nothing pops: every shared part morphs, so the player sees where they came from.",
+  "q3": "Build a room (after buying a plot) and Give a Pokémon (from the Reserve) are now pages, not pop-ups.",
+  "q4": "The wheel and the Boss Menu use the same blade, so opening a menu feels like the same world, not a separate overlay.",
+  "q5": "The wipe is a Pokémon-style battle transition in Nova colours; the Give page reads like the party-select screen."
+ },
+ "4": {
+  "name": "Menu and Settings grow up",
+  "big": "Every Settings tab is its own page (Dominion, Rotom, Effects, Sound) and every Boss Menu choice opens a full page: Save and quit, Controls and Replay a lesson are new.",
+  "pages": [
+   "Settings · Effects",
+   "Settings · Sound",
+   "Save and quit",
+   "Controls",
+   "Replay a lesson"
+  ],
+  "q1": "Settings rows slide in one by one with pill switches; the save slots are big letter cards.",
+  "q2": "Pass 3 had Settings as one crowded list and Save as a single menu line. Now each is a full page, reached in one press from the Boss Menu.",
+  "q3": "Five new pages. Effects has its own page so 'Full show, Lighter, Calm' is easy to find.",
+  "q4": "This is the pass for it: Boss Menu (9 choices) → each choice is a page; Settings tabs are pages that morph into each other.",
+  "q5": "The save page copies Pokémon's 'Save your progress?' slots; the Controls page reads like the in-game Help."
+ },
+ "5": {
+  "name": "Spectacle",
+  "big": "The first real show: coins rain on every win, sirens and police tape on every botch, speed lines and a shake on VS, light rays and a pulse ring behind Mega, Dynamax, Tera and Z, searchlights on the title. Rotom's lesson pop-up is drawn for the tutorial.",
+  "pages": [
+   "Rotom lesson"
+  ],
+  "q1": "Much more: every result and cut-in now has a moving background layer, and the title sweeps searchlights over the city.",
+  "q2": "Pass 4 was tidy but still. Now each page type has its own signature motion, all of it on the background or the Pokémon, never on moves.",
+  "q3": "Rotom's lessons get their own overlay page that dims everything but the part being taught.",
+  "q4": "Effects (pass 4) has a 'Calm' switch that stops all of this; every animation also stops under reduced motion.",
+  "q5": "Light rays behind a Mega are straight from the games; the battle transition shake and VS speed lines feel like a Gym Leader intro."
+ }
+}
