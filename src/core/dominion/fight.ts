@@ -16,6 +16,8 @@ import { rivalSide } from './rivals';
 import { growthSide } from './growth';
 import { snatchSide } from './snatch';
 import { takeoverSide } from './takeover';
+import { realmSide } from './regions';
+import { partnerSide, snagsThisFight } from './partners';
 
 /** Starts `field.fight` and marks it begun. Returns null when there's nothing to start or nobody can fight. */
 export function beginDominionFight(content: Content, current: RunState): RunState | null {
@@ -51,9 +53,9 @@ export function beginDominionFight(content: Content, current: RunState): RunStat
     const side = rivalSide(b, run, fight);
     team = side.species.map((s, i) => make(s, Math.max(2, side.level - (i ? 1 : 0)))).filter((m): m is PokemonInstance => !!m);
     trainer = { classId: side.classId, name: side.name, leaderId: side.leaderId };
-  } else if (fight.foe === 'growth' || fight.foe === 'takeover') {
-    // D10: a Raid's, a Gym's or the Gauntlet's next fight (growth.ts); D14: a Takeover's (takeover.ts).
-    const side = fight.foe === 'growth' ? growthSide(b, run) : takeoverSide(b, run);
+  } else if (fight.foe === 'growth' || fight.foe === 'takeover' || fight.foe === 'realm' || fight.foe === 'partner') {
+    // D10: a Raid's, a Gym's or the Gauntlet's next fight (growth.ts); D14: a Takeover's (takeover.ts); D15: the Long Trip's traitor (regions.ts); D16: the purge (partners.ts).
+    const side = fight.foe === 'growth' ? growthSide(b, run) : fight.foe === 'realm' ? realmSide(b, run) : fight.foe === 'partner' ? partnerSide(b, run) : takeoverSide(b, run);
     if (!side) return null;
     team = side.species.map((s, i) => make(s, Math.max(2, side.level - (i ? 1 : 0)))).filter((m): m is PokemonInstance => !!m);
     trainer = { classId: side.classId, name: side.name, leaderId: side.leaderId };
@@ -77,6 +79,8 @@ export function beginDominionFight(content: Content, current: RunState): RunStat
   }
   if (!team.length) return null;
   run.battle = createBattle(trainer ? 'trainer' : 'wild', team, active, run.party[active]!.uid, trainer);
+  // D16: Snagem's Snag Machine: a Snag Ball takes any of an adult trainer's Pokémon (never the Hero's, a Legend, or a minor's).
+  if (trainer && snagsThisFight(b, fight.foe, trainer.classId)) run.battle.snagAny = true;
   run.phase = 'battle';
   fight.begun = true;
   return run;

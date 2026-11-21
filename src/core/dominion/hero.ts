@@ -24,7 +24,7 @@ import { setChairHero } from './chair';
 import { hqFx, levelDef } from './hqFx';
 import type { ActionDef, Alert, CourtFx, DominionBlock, Encounter, FieldFight, HeroDef, HeroState, Member } from './schema';
 import { addWorldStep, fill } from './worldTurn';
-import { heroFactor } from './rules';
+import { heroFactor, partnerLegend } from './rules';
 
 const H = () => DOMINION_DATA.hero;
 const F = () => DOMINION_DATA.field;
@@ -354,7 +354,9 @@ function legendsStep(b: DominionBlock, seed: string): string[] {
   };
   const w = wanted(b.field);
   const dread = Math.max(0, ...Object.values(b.field.districts).map((d) => d.dread));
-  const stirred = w >= G.wakeAt || dread >= G.wakeAt;
+  // D16: with Cipher's deal the Legendaries wake sooner (the line drops by partners.json `legend`).
+  const wakeAt = G.wakeAt - partnerLegend(b);
+  const stirred = w >= wakeAt || dread >= wakeAt;
   const r = rngOf(seed, 'dominion-legends', b.day);
   for (const L of regionDef().legends) {
     const s = (h.legends[L.id] ??= { seen: false, next: 0, away: 0, beaten: 0 });

@@ -71,6 +71,7 @@ export function createProfile(content: Content, profileId: string): Profile {
     evilHall: [],
     story: freshProfileStory(),
     legacyRuns: [],
+    dominionDone: [],
     nook: { cookieDay: null, cookies: 0, wishDay: null, wishPaid: true, wishes: 0, note: null, noteDelivered: true, codesUsed: [], donated: 0, jokes: 0, stamps: 0, nodeNames: {} },
     memories: { heirlooms: [], claimed: [], cameos: [] },
   };

@@ -1,0 +1,773 @@
+{
+ "_source": "DOMINION slice D15 (Many regions): design Part 5 §2-6 (Stability, Holders, betrayal, Boons, starting again), Part 9 A11 (three kinds of betrayal), A12 (standing orders), A13 (the one you bring remembers), Part 0 §6.1 Q3 (no money carries) and Q7 (only the Boss's ace comes, pre-evolved, at the Warehouse cap 15); mockup v4 s10 (the Empire across regions). Numbers are starting values, none playtested. The towns, targets, Gyms and rivals of each region are in regions/<id>.json (tools/dominion/regions-to-json.py).",
+ "order": [
+  "kanto",
+  "johto",
+  "hoenn",
+  "sinnoh",
+  "unova",
+  "kalos",
+  "alola",
+  "galar",
+  "paldea"
+ ],
+ "lengths": {
+  "three": 3,
+  "six": 6
+ },
+ "open": [
+  "kanto",
+  "johto",
+  "hoenn"
+ ],
+ "openNote": "First release: Kanto, Johto and Hoenn play. The six newer regions (Sinnoh to Paldea) are built and validated but switched off (director, 2026-11-18); they open with the Crossing (D16) and Six.",
+ "regions": {
+  "kanto": {
+   "name": "Kanto",
+   "crest": "K",
+   "colour": "#7b4fd8",
+   "glow": "166,120,255",
+   "shade": "#3b1a7a",
+   "boon": "silph"
+  },
+  "johto": {
+   "name": "Johto",
+   "crest": "J",
+   "colour": "#d8604f",
+   "glow": "255,90,79",
+   "shade": "#6a1414",
+   "boon": "radio"
+  },
+  "hoenn": {
+   "name": "Hoenn",
+   "crest": "H",
+   "colour": "#2f7de0",
+   "glow": "79,210,255",
+   "shade": "#0a3a6a",
+   "boon": "weather"
+  },
+  "sinnoh": {
+   "name": "Sinnoh",
+   "crest": "S",
+   "colour": "#5a6ad8",
+   "glow": "140,160,255",
+   "shade": "#1a2a6a",
+   "boon": "science"
+  },
+  "unova": {
+   "name": "Unova",
+   "crest": "U",
+   "colour": "#4a4a5a",
+   "glow": "200,200,220",
+   "shade": "#1a1a24",
+   "boon": "network"
+  },
+  "kalos": {
+   "name": "Kalos",
+   "crest": "K",
+   "colour": "#2fa0b8",
+   "glow": "90,220,240",
+   "shade": "#0a4a5a",
+   "boon": "lumiose"
+  },
+  "alola": {
+   "name": "Alola",
+   "crest": "A",
+   "colour": "#e8902f",
+   "glow": "255,180,80",
+   "shade": "#6a3a0a",
+   "boon": "aether"
+  },
+  "galar": {
+   "name": "Galar",
+   "crest": "G",
+   "colour": "#c83a6a",
+   "glow": "255,100,150",
+   "shade": "#5a1030",
+   "boon": "macro"
+  },
+  "paldea": {
+   "name": "Paldea",
+   "crest": "P",
+   "colour": "#d8a830",
+   "glow": "255,215,90",
+   "shade": "#5a4010",
+   "boon": "academy"
+  }
+ },
+ "boons": [
+  {
+   "id": "silph",
+   "region": "kanto",
+   "name": "Silph tech",
+   "icon": "g-silph-scope",
+   "text": "Start each new region with a Garage and 10 Ultra Balls.",
+   "status": "supported"
+  },
+  {
+   "id": "radio",
+   "region": "johto",
+   "name": "Radio Tower",
+   "icon": "g-xtransceiver",
+   "text": "Morning Report news +1 line; Spread the Word free once a week.",
+   "status": "supported"
+  },
+  {
+   "id": "weather",
+   "region": "hoenn",
+   "name": "Weather Institute",
+   "icon": "g-blue-orb",
+   "text": "Choose the weather in one district a week.",
+   "status": "limited",
+   "note": "Dominion jobs have no weather yet: the chosen district gets fair skies, +10% on every job there until the week ends."
+  },
+  {
+   "id": "science",
+   "region": "sinnoh",
+   "name": "Galactic science",
+   "icon": "g-lustrous-orb",
+   "text": "Science Lab costs −50%.",
+   "status": "supported",
+   "rooms": [
+    "research-lab",
+    "gene-lab",
+    "chemical-lab",
+    "hidden-lab",
+    "nature-lab",
+    "fossil-lab",
+    "personality-lab",
+    "shadow-lab"
+   ]
+  },
+  {
+   "id": "network",
+   "region": "unova",
+   "name": "Plasma's network",
+   "icon": "g-dark-gem",
+   "text": "Walk-in recruits +1 a week.",
+   "status": "supported"
+  },
+  {
+   "id": "lumiose",
+   "region": "kalos",
+   "name": "Lumiose money",
+   "icon": "g-star-piece",
+   "text": "First HQ upgrade free.",
+   "status": "supported"
+  },
+  {
+   "id": "aether",
+   "region": "alola",
+   "name": "Aether foundation",
+   "icon": "g-comet-shard",
+   "text": "Infirmary free; Ultra Beast actions.",
+   "status": "limited",
+   "note": "The Infirmary is free. Ultra Beast actions aren't in the Dominion action lists yet: Ultra Beast Incursions stay a main-game event."
+  },
+  {
+   "id": "macro",
+   "region": "galar",
+   "name": "Macro Cosmos",
+   "icon": "g-meteorite",
+   "text": "Front income +25%.",
+   "status": "supported"
+  },
+  {
+   "id": "academy",
+   "region": "paldea",
+   "name": "Academy archive",
+   "icon": "g-journal",
+   "text": "Crew Wits +1.",
+   "status": "supported"
+  }
+ ],
+ "arrive": {
+  "funds": 1000,
+  "aceLevel": 15,
+  "notorietyCap": "street-gang",
+  "ultraBalls": 10,
+  "garage": "garage",
+  "fairSkies": 10,
+  "lines": {
+   "ace": "{ace} came along. It's a {species} again, Lv {level}: it remembers every fight, even if its body doesn't.",
+   "aceSame": "{ace} came along as it is, Lv {level}.",
+   "noAce": "The Boss came alone. The team stays to guard the old HQ.",
+   "brought": "{name} came with you. They kept everything.",
+   "nobody": "Nobody came with you. Every member stayed behind with the Holder.",
+   "boon": "Boon from {region}: {name}. {text}",
+   "garage": "Silph tech: a Garage is already standing, and 10 Ultra Balls wait in the Bag.",
+   "fame": "Word travels: in {region} they call you {word}."
+  }
+ },
+ "holders": {
+  "self": {
+   "floor": 50,
+   "visitEvery": 14,
+   "missed": -20
+  },
+  "usurped": {
+   "stability": 20
+  },
+  "ranks": [
+   "admin",
+   "senior-admin",
+   "commander",
+   "executive",
+   "right-hand"
+  ],
+  "coupRanks": [
+   "captain",
+   "admin",
+   "senior-admin",
+   "commander",
+   "executive",
+   "right-hand"
+  ],
+  "swapDays": 3,
+  "kinds": {
+   "self": "Yourself",
+   "member": "Admin or Executive",
+   "usurped": "The usurped Boss"
+  },
+  "why": {
+   "self": "Stability can't fall below 50 and nobody betrays you. You must travel back (2 days) at least once every 14 days, or Stability −20.",
+   "member": "Uses their Wits and traits; you stay focused on the new region. Betrayal risk comes from Ambition and Loyalty.",
+   "usurped": "+20 Stability: the region knows them. The highest betrayal risk: they remember losing."
+  }
+ },
+ "stability": {
+  "start": {
+   "wipe": 60,
+   "shadow": 80,
+   "monarch": 70,
+   "goal": 70
+  },
+  "path": {
+   "wipe": -2,
+   "shadow": 2,
+   "monarch": 0,
+   "goal": 0
+  },
+  "decay": 2,
+  "witsOver": 5,
+  "perWits": 1,
+  "traitBonus": {
+   "steady": 1,
+   "cold-blooded": 0
+  },
+  "visit": 10,
+  "wanted": {
+   "over": 60,
+   "n": -3
+  },
+  "bands": [
+   {
+    "min": 80,
+    "id": "calm",
+    "word": "Calm",
+    "boon": 100
+   },
+   {
+    "min": 50,
+    "id": "grumbling",
+    "word": "Grumbling",
+    "boon": 100
+   },
+   {
+    "min": 25,
+    "id": "unrest",
+    "word": "Unrest",
+    "boon": 50
+   },
+   {
+    "min": 0,
+    "id": "revolt",
+    "word": "Revolt",
+    "boon": 0
+   }
+  ],
+  "grumble": 30,
+  "unrestLoss": 1,
+  "revoltLoss": 3,
+  "uprising": {
+   "chance": 15,
+   "hit": -10
+  },
+  "newHero": {
+   "chance": 8,
+   "hit": -12
+  },
+  "shadowCrack": {
+   "chance": 10,
+   "towns": 3
+  }
+ },
+ "betrayal": {
+  "ambitionTrait": 20,
+  "ambitionAt": 60,
+  "ambitionShare": 4,
+  "perWeekAway": 3,
+  "tributeOver": 20,
+  "per5Tribute": 2,
+  "grievance": 15,
+  "rivalOffer": 10,
+  "rivalOfferChance": 10,
+  "usurped": 25,
+  "loyaltyOver": 50,
+  "visit": -15,
+  "raise": -10,
+  "spy": -5,
+  "convincedHalf": true,
+  "kingmakerHalf": true,
+  "riskShare": 4,
+  "stabilityShare": 5,
+  "cap": 40,
+  "longTalkAt": 60,
+  "coupChance": 25,
+  "sellout": [
+   "money",
+   "fear"
+  ],
+  "sellWanted": 50,
+  "tellsAt": [
+   30,
+   50,
+   70
+  ],
+  "bands": [
+   {
+    "min": 0,
+    "word": "Low"
+   },
+   {
+    "min": 30,
+    "word": "Watch"
+   },
+   {
+    "min": 50,
+    "word": "High"
+   },
+   {
+    "min": 70,
+    "word": "Dangerous"
+   }
+  ]
+ },
+ "tribute": {
+  "default": 20,
+  "steps": [
+   10,
+   20,
+   30,
+   40
+  ],
+  "share": 100,
+  "late": 50
+ },
+ "answers": {
+  "visit": {
+   "days": 2,
+   "stab": 10
+  },
+  "pay": {
+   "cost": 1000,
+   "costPerWeek": 0,
+   "loyalty": 10
+  },
+  "replace": {
+   "keepHalf": true,
+   "stab": -5
+  },
+  "spy": {
+   "cost": 800
+  },
+  "talk": {
+   "half": true
+  }
+ },
+ "reclaim": {
+  "control": 40,
+  "tension": 60,
+  "stab": 60
+ },
+ "policies": {
+  "money": {
+   "name": "Money",
+   "options": [
+    {
+     "id": "max-income",
+     "name": "Maximise income",
+     "tribute": 130,
+     "stab": -3,
+     "risk": 0,
+     "line": "{holder} squeezed every till in {region}."
+    },
+    {
+     "id": "long-term",
+     "name": "Build for the long term",
+     "tribute": 80,
+     "stab": 1,
+     "grow": 3,
+     "line": "{holder} put {region}'s money back into the rackets."
+    },
+    {
+     "id": "save-build",
+     "name": "Save for construction",
+     "tribute": 70,
+     "stab": 2,
+     "line": "{holder} is saving for a new building in {region}."
+    },
+    {
+     "id": "reserve",
+     "name": "Keep a reserve",
+     "tribute": 90,
+     "stab": 0,
+     "guard": 50,
+     "line": "{holder} kept a reserve in {region}'s safe."
+    },
+    {
+     "id": "cut-costs",
+     "name": "Cut costs",
+     "tribute": 110,
+     "stab": -1,
+     "risk": 2,
+     "line": "{holder} cut wages in {region}. Nobody thanked them."
+    }
+   ]
+  },
+  "people": {
+   "name": "People",
+   "options": [
+    {
+     "id": "recruit-hard",
+     "name": "Recruit hard",
+     "stab": -1,
+     "crew": 1,
+     "line": "{holder} signed up new faces in {region}."
+    },
+    {
+     "id": "train",
+     "name": "Train who we have",
+     "stab": 1,
+     "risk": -1,
+     "line": "{holder} drilled the {region} crew all week."
+    },
+    {
+     "id": "pay-well",
+     "name": "Pay well",
+     "tribute": 85,
+     "risk": -3,
+     "line": "{holder} paid the {region} crew well. They noticed."
+    },
+    {
+     "id": "security",
+     "name": "More security",
+     "tribute": 90,
+     "stab": 2,
+     "line": "{holder} doubled the guards in {region}."
+    },
+    {
+     "id": "holder",
+     "name": "Let the Holder decide",
+     "line": "{holder} ran {region}'s people their own way."
+    }
+   ]
+  },
+  "region": {
+   "name": "Region",
+   "options": [
+    {
+     "id": "win-locals",
+     "name": "Win the locals (Regard)",
+     "stab": 2,
+     "line": "{holder} handed out favours on every corner of {region}."
+    },
+    {
+     "id": "spread",
+     "name": "Spread out",
+     "stab": -1,
+     "towns": 1,
+     "line": "{holder} pushed into a new town in {region}."
+    },
+    {
+     "id": "buy-biz",
+     "name": "Buy businesses",
+     "tribute": 90,
+     "grow": 3,
+     "line": "{holder} bought another shop in {region}."
+    },
+    {
+     "id": "crush",
+     "name": "Crush resistance",
+     "stab": 3,
+     "risk": 1,
+     "line": "{holder} broke up a rebel meeting in {region}. Loudly."
+    },
+    {
+     "id": "court-gyms",
+     "name": "Court the Gyms and League",
+     "uprising": -25,
+     "line": "{holder} took a Gym Leader to dinner in {region}."
+    }
+   ]
+  },
+  "security": {
+   "name": "Security",
+   "options": [
+    {
+     "id": "defend",
+     "name": "Defend holdings",
+     "guard": 50,
+     "line": "{holder} kept every holding in {region} guarded."
+    },
+    {
+     "id": "hunt-spies",
+     "name": "Hunt spies",
+     "risk": -2,
+     "line": "{holder} turned {region}'s HQ inside out looking for moles."
+    },
+    {
+     "id": "stop-rival",
+     "name": "Stop the rival growing",
+     "hero": -50,
+     "line": "{holder} kept the rivals in {region} small."
+    },
+    {
+     "id": "watch-old",
+     "name": "Watch the old team",
+     "risk": -5,
+     "usurpedOnly": false,
+     "line": "{holder} kept an eye on the old team's people in {region}."
+    },
+    {
+     "id": "guard-key",
+     "name": "Guard key buildings",
+     "revolt": 50,
+     "line": "{holder} put guards on {region}'s key buildings."
+    }
+   ]
+  },
+  "default": {
+   "money": "long-term",
+   "people": "train",
+   "region": "win-locals",
+   "security": "defend"
+  },
+  "readings": [
+   {
+    "motive": "money",
+    "policy": "max-income",
+    "tribute": 140,
+    "stab": -5,
+    "dread": true,
+    "line": "{holder} read \"Maximise income\" the hard way: every shop in {region} pays twice, and nobody smiles."
+   },
+   {
+    "motive": "belonging",
+    "policy": "cut-costs",
+    "tribute": 100,
+    "stab": 0,
+    "risk": 0,
+    "line": "{holder} wouldn't cut anyone's pay in {region}. \"They're family, Boss.\""
+   },
+   {
+    "motive": "belonging",
+    "policy": "recruit-hard",
+    "crew": 0,
+    "stab": 1,
+    "line": "{holder} took in strays in {region} instead of strangers. Nobody's left out."
+   },
+   {
+    "motive": "thrill",
+    "policy": "crush",
+    "stab": 4,
+    "risk": 2,
+    "line": "{holder} enjoyed crushing the resistance in {region} a bit too much."
+   },
+   {
+    "motive": "fear",
+    "policy": "win-locals",
+    "stab": 0,
+    "line": "{holder} tried to win {region} with favours. It came out sounding like threats."
+   },
+   {
+    "motive": "cause",
+    "policy": "buy-biz",
+    "grow": 4,
+    "line": "{holder} only buys shops in {region} that fit the Goal."
+   },
+   {
+    "motive": "revenge",
+    "policy": "stop-rival",
+    "risk": 1,
+    "line": "{holder} went after the rivals in {region} personally."
+   },
+   {
+    "usurped": true,
+    "policy": "watch-old",
+    "risk": 3,
+    "line": "{holder} \"watched\" the old team in {region}. Quietly, they protected its name."
+   }
+  ],
+  "holderPicks": {
+   "money": "recruit-hard",
+   "belonging": "pay-well",
+   "cause": "train",
+   "thrill": "recruit-hard",
+   "revenge": "security",
+   "fear": "security",
+   "power": "recruit-hard"
+  }
+ },
+ "kinds": {
+  "secession": {
+   "name": "Secession",
+   "text": "{holder} declared {region} theirs. Your old HQ, the loyal members and the rackets are a rival team now.",
+   "answer": "The Long Trip: go back and retake it, or let it go."
+  },
+  "sellout": {
+   "name": "The Sellout",
+   "text": "{holder} sold you to the police in {region}: Wanted there +50. They keep running it, quietly.",
+   "answer": "Go back; Debate; replace them."
+  },
+  "coup": {
+   "name": "The Coup",
+   "text": "{holder} is going for the whole empire and has written to your other Holders.",
+   "answer": "The Long Talk: Debate each Holder in turn, or crush the one who started it."
+  }
+ },
+ "chair": {
+  "tension": 15,
+  "sendTwo": 2,
+  "tributeCut": 20,
+  "smuggle": 10,
+  "uprisingCut": -50,
+  "uprisingUp": 25
+ },
+ "lines": {
+  "week": "{region} ({holder}): Stability {stab} ({word}), tribute ₽{tribute}.",
+  "selfMissed": "You haven't been back to {region} in {days} days. Stability −20.",
+  "unrest": "Unrest in {region}: a town slipped away ({towns} left).",
+  "revolt": "Revolt in {region}! {n} towns lost; no tribute until it calms.",
+  "uprising": "An Uprising in {region}: the Gyms and the rebels moved together. Stability −10.",
+  "newHero": "A new hero rose in {region}: {hero}. Stability −12.",
+  "cracked": "The Shadow cracked in {region}: Wanted passed 60. Three towns are lost.",
+  "betrayed": "BETRAYAL. {text}",
+  "coupRoll": "{holder} got the letter from {from}. They're thinking about it.",
+  "coupJoin": "{holder} sided with {from}: {region} is gone too.",
+  "coupHeld": "{holder} burned the letter from {from}.",
+  "lost": "{region} is lost. Owning every region needs it back.",
+  "visit": "You spend two days in {region}. {holder} looks relieved to see you, or acts it. Stability +10.",
+  "visitAway": "The Boss is still away visiting a held region. The crew runs the Day here.",
+  "pay": "{holder} gets a raise and a new title. Betrayal risk falls.",
+  "replace": "{old} is out; {holder} holds {region} now. Half of {old}'s people stay.",
+  "spy": "A spy is in {holder}'s HQ in {region}. Their risk band shows: {band}.",
+  "talk": "The Long Talk with {holder} is set for the Leader's Table.",
+  "talkDone": "{holder} heard you out. Their risk is halved.",
+  "orders": "Standing orders for {region}: {orders}.",
+  "swap": "{holder} takes over {region}; the trip takes 3 days, and {old} hands over the keys.",
+  "noFunds": "That costs ₽{cost}.",
+  "noTalk": "The Long Talk opens at risk 60. {holder} isn't there yet, as far as you can tell.",
+  "noRegion": "That region isn't yours to act on.",
+  "notEvening": "Holders are swapped in the Evening.",
+  "reclaimOpen": "The Long Trip: retake {region} from {traitor}. Control starts at 40%.",
+  "reclaimWon": "{region} is back. {traitor} is finished; Stability resets to 60.",
+  "letGo": "You let {region} go. It stays lost.",
+  "leaveNotYet": "You can leave once {region} is Taken (the Hero beaten).",
+  "lastRegion": "Every region in the run is yours. The ending waits (D17).",
+  "tribute": "Tribute from held regions: ₽{n}.",
+  "boonSpread": "Radio Tower: Spread the Word is free this week.",
+  "boonWalk": "Plasma's network: {name} walked in, sent by an old friend.",
+  "boonSkies": "Weather Institute: fair skies over {district} this week (+10% on jobs).",
+  "boonWits": "Academy archive: {name}'s Wits +1.",
+  "risk": "Betrayal {chance}% / week",
+  "reportsLate": "Reports late",
+  "kept": "Kept everything",
+  "complete": "Every region is yours.",
+  "magmaCool": "Magma stands down for now: Magma Tension −{n}, and Aqua's goes up {n}.",
+  "aquaCool": "Aqua stands down for now: Aqua Tension −{n}, and Magma's goes up {n}.",
+  "sentTwo": "{names} ship out to {region}. The Holder has more hands; the crew here has fewer.",
+  "sentNone": "Nobody here can be spared for {region}.",
+  "tributeCut": "The held regions keep more of their money: tribute −{n}% from now on.",
+  "smuggle": "A smuggling line now runs between your regions: tribute +{n}% while one is held.",
+  "uprisingCut": "The Gym union stands aside: Uprising odds −{n}% in Monarch regions.",
+  "uprisingUp": "The Gym union walks out angry: Uprising odds +{n}%.",
+  "stabOwed": "Stability {sign}{n} in every held region."
+ },
+ "tells": [
+  "All quiet in {region}, Boss. The lads have been painting the warehouse. New colours. Thought it'd be a nice surprise.",
+  "{holder}'s weekly report from {region} came three days late, and it's half a page.",
+  "The tribute from {region} came short again. \"Bad week,\" says the note. It doesn't say who wrote it.",
+  "The new recruits in {region} salute {holder}, not the Boss.",
+  "{holder} has been calling the {region} crew \"my people\" on the phone.",
+  "A spy's tip from {region}: {holder} had dinner with someone from the police."
+ ],
+ "memory": {
+  "arrive": [
+   "Just like old times, Boss. Except this time I know what I'm doing.",
+   "{region}. Never been. Bet the {rival} lot are louder than {oldRival} were.",
+   "New warehouse, same leaks. I'll find the buckets."
+  ],
+  "compare": [
+   "{rival}'s louder than {oldRival}. Sloppier, too.",
+   "{oldRival} at least paid their grunts. This lot, I'm not sure.",
+   "{oldHero} would've been here by now. {hero}'s slower. Or smarter."
+  ],
+  "name": [
+   "{old} would've liked it here. Shame they stayed in {oldRegion}.",
+   "Wonder how {old} is getting on in {oldRegion}."
+  ],
+  "warn": [
+   "Last time we did this, {old} got caught.",
+   "We tried this in {oldRegion}. It went sideways on day two."
+  ]
+ },
+ "screen": {
+  "title": "Empire",
+  "sub": "Run day {day}",
+  "here": "YOU ARE HERE",
+  "newStart": "NEW START",
+  "taken": "TAKEN · {path}",
+  "lostTag": "LOST",
+  "secededTag": "SECEDED",
+  "next": "NEXT",
+  "later": "LATER",
+  "holder": "HOLDER",
+  "brought": "BROUGHT",
+  "warehouse": "The Warehouse, again",
+  "crew": "Crew",
+  "rivals": "Rivals",
+  "hero": "Hero",
+  "stability": "Stability",
+  "betrayal": "Betrayal",
+  "boon": "Boon",
+  "tributeTop": "Tribute +₽{n}/wk",
+  "noTribute": "No tribute yet",
+  "buttons": {
+   "visit": "Visit",
+   "pay": "Pay",
+   "replace": "Replace",
+   "spy": "Spy",
+   "talk": "Long Talk",
+   "orders": "Orders",
+   "trip": "Long Trip",
+   "letGo": "Let go"
+  },
+  "leave": {
+   "title": "Leaving {region}",
+   "holder": "Who holds {region}?",
+   "orders": "Standing orders",
+   "bring": "Who comes with you?",
+   "bringNote": "One member, any rank. They keep everything. Everyone else stays with the Holder.",
+   "go": "Sail for {next}",
+   "aceNote": "Your team stays to guard the old HQ. Only {ace} comes, as {pre}, Lv {level}.",
+   "noMoney": "Money doesn't cross regions: you arrive with ₽1,000.",
+   "cta": "Leave for {next} (L)",
+   "ctaLast": "Every region is yours",
+   "aceNoteSame": "Your team stays to guard the old HQ. Only {ace} comes, Lv {level}."
+  },
+  "boxFirst": "{region} first. Take it, and the next region waits across the water.",
+  "boxTaken": "{region} is yours. Pick who holds it, set their orders, and sail for {next} (L).",
+  "boxHeld": "{n} region(s) held behind you. Each week they pay tribute, and each week someone thinks about keeping it."
+ }
+}

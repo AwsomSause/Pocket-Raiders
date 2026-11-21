@@ -40,6 +40,7 @@ import { partySpecies, preloadPokemon } from '../ui/lazyAssets';
 import { pokemonIcon } from '../ui/sprites';
 import { whatIf } from '../core/presentation/whatIf';
 import { EVIL_DATA } from '../core/evilMode/data';
+import { DOMINION_DATA } from '../core/dominion/data';
 import { endingCards, endingPay, ledgerPage } from '../core/evilMode/endings';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { paintBackdrop, RUNEND_SKINS } from '../ui/dSkins';
@@ -238,6 +239,12 @@ export class GameOverScene extends Phaser.Scene {
       lines.push(`${TIMELINE.title}: ${end.name}`, `   ${end.text}`, `Revisited timeline (attempt ${run.timeline.attempt}): kept apart from your profile. The original run is untouched.`);
     }
     if (run && !evil) lines.push(...rankLines(run), '');
+    // DOMINION D16: the Turn. A main-game run that won can carry on as a Dominion run with one Grunt (D).
+    const domTurn = session.dominionTurnOffer();
+    if (domTurn) {
+      lines.unshift(`${domTurn.title} (D): ${domTurn.text} Funds ₽${domTurn.funds.toLocaleString('en-US')}, Regard ${domTurn.regard}.`, '');
+      this.input.keyboard?.on('keydown-D', () => this.takeTurn());
+    }
     if (evil) {
       const pay = endingPay(evil);
       lines.push(...ledgerPage(evil).slice(0, 3), '', `How far it got: ${pay.total}`, ...pay.rows.map(([k, n]) => `   ${k} ${n}`), '');
@@ -399,6 +406,11 @@ export class GameOverScene extends Phaser.Scene {
     });
   }
 
+  /** DOMINION D16: "Take the Turn": the run carries on in the Dominion, at its setup pages. */
+  private takeTurn(): void {
+    if (services().session.dominionTurn()) this.scene.start('Dominion');
+  }
+
   /**
    * The New UI run end (the mock-ups' `over` page): title, two windows, the last party and three buttons. From it:
    * Witness the Rest (the rivals' cards, one cutscene card each), the run card, the final team and the full report.
@@ -415,7 +427,9 @@ export class GameOverScene extends Phaser.Scene {
     const cards = partyCards(this);
     const first = o.won ? 'Roll credits' : o.witness.length ? 'Witness the rest' : 'Full report';
     const buttons = [first, 'Run card', 'Back to Hub'];
-    const extras: [string, string, string][] = [...(first === 'Full report' ? [] : [['Tab', 'full report', 'report'] as [string, string, string]]), ['F', 'final team', 'team'], ['R', 'retry seed', 'retry']];
+    const extras: [string, string, string][] = [...(first === 'Full report' ? [] : [['Tab', 'full report', 'report'] as [string, string, string]]), ['F', 'final team', 'team'], ['R', 'retry seed', 'retry'],
+      // DOMINION D16: the Turn (D).
+      ...(session.dominionTurnOffer() ? [['D', DOMINION_DATA.charters.turn.take.toLowerCase(), 'domTurn'] as [string, string, string]] : [])];
     this.rxMode = 'main';
     this.rxIndex = 0;
     this.rxPage = 0;
@@ -469,6 +483,7 @@ export class GameOverScene extends Phaser.Scene {
         report: () => { if (this.rxMode === 'main') go('report'); },
         team: () => { if (this.rxMode === 'main') go('team'); },
         retry: () => { if (this.rxMode === 'main') o.choose(1); },
+        domTurn: () => { if (this.rxMode === 'main') this.takeTurn(); },
         poke: (i) => { if (this.rxMode !== 'main') return; this.rxPoked = Number(i); this.rx?.refresh(); },
         page: turn,
         next: turn,

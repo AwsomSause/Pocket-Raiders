@@ -54,9 +54,12 @@
       "rent": { "label": "Rent and upkeep", "clean": false },
       "other": { "label": "Other", "clean": false },
       "chair": { "label": "The Chair", "clean": false },
-      "chairClean": { "label": "The Chair (clean)", "clean": true }
+      "chairClean": { "label": "The Chair (clean)", "clean": true },
+      "tribute": { "label": "Tribute from held regions", "clean": false },
+      "partners": { "label": "Snagem and Cipher", "clean": false }
     },
-    "byAction": { "act": "jobs", "buy": "vehicles", "hire": "hiring", "approach": "hiring", "admit": "hiring", "bail": "hiring", "gift": "hiring", "patron": "hiring", "endDay": "oddJobs", "do": "jobs", "talk": "crew", "evTalk": "crew", "court": "chair", "handOff": "chair" },
+    "byAction": {
+      "realm": "other", "partner": "partners", "act": "jobs", "buy": "vehicles", "hire": "hiring", "approach": "hiring", "admit": "hiring", "bail": "hiring", "gift": "hiring", "patron": "hiring", "endDay": "oddJobs", "do": "jobs", "talk": "crew", "evTalk": "crew", "court": "chair", "handOff": "chair" },
     "byStep": { "crew": "crew", "police": "police", "rivals": "other", "hero": "other", "legends": "other", "world": "other" },
     "byFight": { "police": "police", "looker": "police", "raid": "police", "fail": "jobs", "always": "jobs", "hero": "jobs", "challenge": "other", "heroRaid": "other", "stand": "other", "legend": "other", "court": "chair" },
     "best": "best week yet! ↑{pct}%",
