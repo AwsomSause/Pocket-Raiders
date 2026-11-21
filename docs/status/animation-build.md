@@ -96,6 +96,9 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
 - Toughed it out (pass 11): when a hit leaves your Pokémon on exactly 1 HP, it skids back with dust, drops low and
   shivers, the bar sparks, then it plants its feet with a gold glow, HUNG ON! lands and a pink heart floats up
   (`toughClip`). The battle goes on once it plants its feet. Reduced: a dip and the stamp.
+- Waiting on you (pass 11): six seconds at the command menu with no key or tap and your Pokémon (singles) glances
+  round with a yellow "?", then bounces twice with dust and the message box nudges (`waitClip`). Once a turn; it never
+  takes the menu away, and choosing ends it. Reduced: only the "?". Off: nothing.
 - Fixes found by GitHub's browser tests: a slump still settling in finishes before any other move of the Pokémon
   plays (it used to cut it short); after Hyper Beam's recharge a Pokémon springs back to exactly the height it stood
   at (it could end up a little smaller or bigger) and starts breathing only once it is there.

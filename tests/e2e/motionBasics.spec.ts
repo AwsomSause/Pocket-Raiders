@@ -1418,3 +1418,52 @@ test('toughed it out: the bar catches at 1, it skids back and shakes, plants its
   expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').playerSprite.preFX?.list?.length ?? 0)).toBe(fx0 + 1);
   expect(errors).toEqual([]);
 });
+
+test('waiting on you: six idle seconds at the menu and it glances round with a "?", bounces twice, the box nudges; once a turn', async ({ page }) => {
+  test.setTimeout(120_000);
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  await startBattle(page, 'wait-e2e');
+  const rest = await look(page, 'player');
+  await page.evaluate(() => {
+    const w = window as any;
+    const b = w.__pkr.game.scene.getScene('Battle');
+    const home = b.spotXY('player');
+    const m0 = b.message.scaleX;
+    w.__wait = { asks: 0, seen: false, angle: 0, back: 0, up: 0, nudge: 0, at: 0 };
+    w.__waitWatch = () => {
+      const v = b.playerSprite;
+      const ask = b.children.list.some((o: any) => o.type === 'Text' && o.text === '?');
+      if (ask && !w.__wait.seen) (w.__wait.asks++, (w.__wait.at = performance.now()));
+      w.__wait.seen = ask;
+      w.__wait.angle = Math.max(w.__wait.angle, v.angle);
+      w.__wait.back = Math.max(w.__wait.back, home.x - v.x);
+      w.__wait.up = Math.max(w.__wait.up, home.y - v.y);
+      w.__wait.nudge = Math.max(w.__wait.nudge, b.message.scaleX / m0);
+    };
+    b.events.on('update', w.__waitWatch);
+  });
+  // A key restarts the idle clock: nothing for (at least) six seconds after it.
+  const t0 = await page.evaluate(() => performance.now());
+  await page.keyboard.press('Shift');
+  await expect.poll(() => page.evaluate(() => (window as any).__wait.asks), { timeout: 15_000 }).toBe(1);
+  const t = await page.evaluate(() => (window as any).__wait);
+  expect(t.at - t0).toBeGreaterThan(5900);
+  // It glances round (tips 8 degrees, leans 10 px back), bounces 16 px twice, and the message box nudges.
+  await page.waitForTimeout(2000);
+  const after = await page.evaluate(() => (window as any).__wait);
+  expect(after.angle).toBeGreaterThan(6);
+  expect(after.back).toBeGreaterThan(7);
+  expect(after.up).toBeGreaterThan(12);
+  expect(after.nudge).toBeGreaterThan(1.02);
+  const end = await look(page, 'player');
+  expect(end).toMatchObject({ x: rest.homeX, y: rest.y, angle: 0, alpha: 1, solid: 0 });
+  // Once a turn: another long wait brings no second glance.
+  await page.waitForTimeout(7500);
+  expect(await page.evaluate(() => (window as any).__wait.asks)).toBe(1);
+  // It never took the menu away: it is still there to choose from.
+  expect(await page.evaluate(() => Boolean((window as any).__pkr.game.scene.getScene('Battle').menu))).toBe(true);
+  await page.evaluate(() => { const w = window as any; w.__pkr.game.scene.getScene('Battle').events.off('update', w.__waitWatch); });
+  expect(errors).toEqual([]);
+});

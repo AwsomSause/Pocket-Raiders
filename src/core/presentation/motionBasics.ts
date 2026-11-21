@@ -858,3 +858,32 @@ export function toughClip(mon: MonSpot, level: ClipLevel): MotionClip {
   b.beat(0, 'Skids back').beat(300, 'Drops low and shakes').beat(TOUGH.spark, 'The bar catches').beat(TOUGH.plant, 'Plants its feet and glows').beat(TOUGH.heart, 'A heart for you');
   return b.end(TOUGH.plant + 1000);
 }
+
+/**
+ * Waiting on you (pass 11): how long the command menu sits with no input before your Pokémon notices (`idleMs`), and
+ * the look of it: it glances round (`glance` degrees, `dx` px) as a yellow "?" pops at (`askDx`, `askDy`) from its
+ * middle, then bounces on its feet twice (`hop` px) with a puff of dust each time and the message box nudges.
+ */
+export const WAIT = { idleMs: 6000, glance: 8, dx: -10, ask: 150, askDx: -70, askDy: -150, hops: 1100, hop: 16, nudge: 1.04 } as const;
+
+/**
+ * Waiting on you (pass 11): your Pokémon glances round with a "?" ("ask"), settles, then bounces twice ("nudge": the
+ * message box nudges) with dust. Never blocks input: it is only a look. Reduced: just the "?". Off: nothing.
+ */
+export function waitClip(mon: MonSpot, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('wait', level);
+  const m = b.part('mon', { dx: 0, dy: 0, rot: 0 });
+  if (level === 'off') return b.end(0);
+  b.fx({ kind: 'cue', at: level === 'full' ? WAIT.ask : 0, name: 'ask' });
+  if (level === 'reduced') {
+    b.beat(0, 'A "?"');
+    return b.end(700);
+  }
+  m.at(0).to(200, { rot: WAIT.glance, dx: WAIT.dx }, 'io').wait(500).to(200, { rot: 0, dx: 0 }, 'io');
+  m.at(WAIT.hops).to(100, { dy: -WAIT.hop }, 'out').to(100, { dy: 0 }, 'in').to(100, { dy: -WAIT.hop }, 'out').to(100, { dy: 0 }, 'in');
+  b.fx({ kind: 'cue', at: WAIT.hops, name: 'nudge' });
+  b.fx({ kind: 'dust', at: WAIT.hops + 200, x: mon.x, y: mon.y, n: 3 });
+  b.fx({ kind: 'dust', at: WAIT.hops + 400, x: mon.x, y: mon.y, n: 3 });
+  b.beat(0, 'Glances round, "?"').beat(WAIT.hops, 'Bounces twice');
+  return b.end(WAIT.hops + 500);
+}

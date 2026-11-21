@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ClipBuilder, clipEnd, EASES, fxAllowed, sampleClip, type ClipLevel, type MotionClip } from '../../src/core/presentation/motionClip';
-import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_KNOCK, HIT_KNOCK_BIG, hitClip, hitPower, HIT_THROW, FIRST_TAG, COMBO, comboPlan, comboScale, CRIT_FREEZE, critFreezeClip, HIT_STAMPS, hitStampSpot, levelUpClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, sendWeight, SEND_WEIGHT, CRY, cryClip, FLINCH, flinchClip, WIN, winClip, TOUGH, toughClip, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_KNOCK, HIT_KNOCK_BIG, hitClip, hitPower, HIT_THROW, FIRST_TAG, COMBO, comboPlan, comboScale, CRIT_FREEZE, critFreezeClip, HIT_STAMPS, hitStampSpot, levelUpClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, sendWeight, SEND_WEIGHT, CRY, cryClip, FLINCH, flinchClip, WIN, winClip, TOUGH, toughClip, WAIT, waitClip, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
 
 const ME: MonSpot = { x: 312, y: 428, h: 180, side: 'player' };
 const FOE: MonSpot = { x: 648, y: 240, h: 150, side: 'enemy' };
@@ -462,6 +462,32 @@ describe('toughed it out (pass 11)', () => {
     expect(cues(r)).toEqual([['stamp', 0], ['free', 450]]);
     expect(r.segs.some((g) => g.prop === 'dx')).toBe(false);
     expect(cues(toughClip(ME, 'off'))).toEqual([['free', 0]]);
+  });
+});
+
+describe('waiting on you (pass 11)', () => {
+  const cues = (c: MotionClip) => c.fx.filter((f) => f.kind === 'cue').map((f) => f.kind === 'cue' && [f.name, f.at]);
+  it('notices after six idle seconds: glances round with a "?", settles, bounces twice with dust, the box nudges', () => {
+    expect(WAIT.idleMs).toBe(6000);
+    const c = waitClip(ME, 'full');
+    expect(sampleClip(c, 200).mon).toMatchObject({ rot: 8, dx: -10 });
+    expect(sampleClip(c, 700).mon).toMatchObject({ rot: 8, dx: -10 });
+    expect(sampleClip(c, 900).mon).toMatchObject({ rot: 0, dx: 0 });
+    expect(sampleClip(c, 1200).mon!.dy).toBeCloseTo(-16);
+    expect(sampleClip(c, 1300).mon!.dy).toBeCloseTo(0);
+    expect(sampleClip(c, 1400).mon!.dy).toBeCloseTo(-16);
+    expect(clipEnd(c).mon).toMatchObject({ dx: 0, dy: 0, rot: 0 });
+    expect(cues(c)).toEqual([['ask', 150], ['nudge', 1100]]);
+    expect(c.fx.filter((f) => f.kind === 'dust').map((f) => f.at)).toEqual([1300, 1500]);
+    expect(c.length).toBe(1600);
+  });
+  it('Reduced: only the "?", nothing moves; Off: nothing at all', () => {
+    const r = waitClip(ME, 'reduced');
+    expect(cues(r)).toEqual([['ask', 0]]);
+    expect(r.segs.length).toBe(0);
+    const o = waitClip(ME, 'off');
+    expect(o.fx).toEqual([]);
+    expect(o.length).toBe(0);
   });
 });
 

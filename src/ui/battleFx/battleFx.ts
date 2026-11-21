@@ -78,6 +78,9 @@ const BADGES: Record<string, { label: string; color: string }> = {
 
 const hex = (color: string) => Phaser.Display.Color.HexStringToColor(color).color;
 
+/** Scene event fired whenever effects start playing. */
+export const BATTLE_FX_PLAY = 'battleFxPlay';
+
 export class BattleFx {
   private readonly cache = new Map<string, Promise<CompactAnim | null>>();
   private current: PlayHandle | null = null;
@@ -123,6 +126,8 @@ export class BattleFx {
   /** Plays one event's cues in order. Resolves when the screen is ready for the event's HP change and message. */
   async play(cues: readonly Cue[]): Promise<void> {
     this.skipping = false;
+    // Tells the scene something is playing (its idle look, "waiting on you", waits for a quiet screen).
+    this.scene.events.emit(BATTLE_FX_PLAY);
     for (const cue of cues) {
       if (!this.scene.sys.isActive()) return;
       try {

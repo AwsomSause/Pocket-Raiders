@@ -131,7 +131,7 @@ import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel, MotionClip } from '../core/presentation/motionClip';
-import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, COMBO, comboPlan, comboScale, FIRST_TAG, OHKO_STAMP, type ComboStep, CRIT_FREEZE, critFreezeClip, HIT_LIGHT, HIT_STAMPS, hitStampSpot, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendWeight, CRY, cryClip, FLINCH, flinchClip, WORN, WIN, winClip, TOUGH, toughClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, COMBO, comboPlan, comboScale, FIRST_TAG, OHKO_STAMP, type ComboStep, CRIT_FREEZE, critFreezeClip, HIT_LIGHT, HIT_STAMPS, hitStampSpot, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendWeight, CRY, cryClip, FLINCH, flinchClip, WORN, WIN, winClip, TOUGH, toughClip, WAIT, waitClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart, type ClipRun } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
@@ -190,7 +190,7 @@ import { moveFlagLabels, moveFullDescription } from '../core/battle/moveText';
 import { BattleTabs, type BattlePage, type TabsPlace } from '../ui/battleTabs';
 import { animChoice, presentationFor } from '../core/presentation/moveAnims';
 import { moveAnims } from '../data/presentation';
-import { BattleFx } from '../ui/battleFx/battleFx';
+import { BATTLE_FX_PLAY, BattleFx } from '../ui/battleFx/battleFx';
 import { championGlow, platformEdgeLight } from '../ui/battleFx/transitions';
 import { addAmbience, arenaType } from '../ui/battleFx/ambience';
 import { addEnvironment } from '../ui/battleFx/environment';
@@ -350,6 +350,10 @@ export class BattleScene extends Phaser.Scene {
   private life = 0;
   /** Alternates where a worn-out Pokémon's sweat drops land. */
   private sweatN = 0;
+  /** Waiting on you (pass 11): the idle clock while the command menu is up, and the turn it last played on. */
+  private waitTimer: Phaser.Time.TimerEvent | null = null;
+  private waitedTurn = -1;
+  private waitSprite: Phaser.GameObjects.Sprite | null = null;
 
   /** Work begun in start `life` is stale: the scene has shut down since, is starting again (loading, before its
    * create), or has started again. */
@@ -580,6 +584,19 @@ export class BattleScene extends Phaser.Scene {
 
   create(): void {
     this.life++;
+    this.waitTimer = null;
+    this.waitedTurn = -1;
+    this.waitSprite = null;
+    // Any key or tap restarts the idle clock (the New look's buttons are page elements, so listen on the page).
+    const kick = (): void => this.waitKick();
+    window.addEventListener('keydown', kick);
+    window.addEventListener('pointerdown', kick);
+    this.events.on(BATTLE_FX_PLAY, kick);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      this.events.off(BATTLE_FX_PLAY, kick);
+      window.removeEventListener('keydown', kick);
+      window.removeEventListener('pointerdown', kick);
+    });
     const { session, assets } = services();
     const run = session.run!;
     const battle = run.battle!;
@@ -1260,6 +1277,8 @@ export class BattleScene extends Phaser.Scene {
 
   /** What every motion clip gets from the settings: flash strength, particles and the animation speed. */
   private clipHost(parts: Record<string, ClipPart>, more: Pick<ClipHost, 'cue' | 'dim'> = {}): ClipHost {
+    // A moment is playing: the screen is not waiting on you yet.
+    this.waitKick();
     const st = services().session.settings;
     const look = animSettingsFrom(st);
     return { parts, ...more, flash: st.reducedFlash || !st.battleScreenEffects ? 0 : look.intensity, particles: !st.reduceParticles, rate: 1 / animationTimeScale(st) };
@@ -2424,6 +2443,75 @@ export class BattleScene extends Phaser.Scene {
       });
     } catch {
       return Promise.resolve();
+    }
+  }
+
+  /** Waiting on you (pass 11): starts (or restarts) the idle clock, unless it already played this turn. */
+  private waitArm(): void {
+    const turn = this.run.battle?.turn ?? -1;
+    this.waitTimer?.remove();
+    this.waitTimer = null;
+    if (this.waitedTurn === turn || this.duo || this.clipLevel() === 'off') return;
+    this.waitTimer = this.time.delayedCall(WAIT.idleMs, () => {
+      this.waitTimer = null;
+      this.waitMoment(turn);
+    });
+  }
+
+  /** A key or a tap: the player is busy choosing, so the idle clock starts again. */
+  private waitKick(): void {
+    if (this.waitTimer && this.scene.isActive()) this.waitArm();
+  }
+
+  /** The turn is chosen: no more waiting, and a glance still playing ends where it stands. */
+  private waitDisarm(): void {
+    this.waitTimer?.remove();
+    this.waitTimer = null;
+    const v = this.waitSprite;
+    this.waitSprite = null;
+    if (v?.active) standStill(this, v);
+  }
+
+  /**
+   * Waiting on you (redesign pass 11): six seconds at the command menu with no input and your Pokémon notices: it
+   * glances round with a "?", then bounces on its feet twice and the message box nudges. Once a turn; it is only a
+   * look, so a choice made meanwhile goes straight through.
+   */
+  private waitMoment(turn: number): void {
+    if (this.busy || !this.menu || this.autoRunning || (this.run.battle?.turn ?? -1) !== turn || this.waitedTurn === turn) return;
+    const sprite = this.condSprite('player');
+    const mon = this.shown.player;
+    const level = this.clipLevel();
+    // Only when it stands idle: another moment playing on it means the screen is not waiting on you.
+    if (!sprite || !sprite.visible || !mon || mon.hp <= 0 || level === 'off' || sprite.getData(HIT_RUN)) return;
+    this.waitedTurn = turn;
+    try {
+      const spot = { ...this.spotXY('player'), h: this.headHeight(sprite), side: 'player' as const };
+      const mid = this.midOf('player');
+      const rate = animationTimeScale(services().session.settings);
+      this.waitSprite = sprite;
+      this.condPlay(sprite, waitClip(spot, level), {}, (cut) => {
+        if (this.waitSprite === sprite) this.waitSprite = null;
+        if (cut || !sprite.active) return;
+        this.restAt(sprite, 'player');
+        if (sprite.visible) this.standUp(sprite, mon);
+      }, (name) => {
+        if (name === 'ask') this.popGlyph('?', mid.x + WAIT.askDx, mid.y + WAIT.askDy, '#ffcb05', 54, 500, 30);
+        if (name === 'nudge' && this.message.visible && !this.tweens.isTweening(this.message)) {
+          const m = this.message;
+          const [sx, sy] = [m.scaleX, m.scaleY];
+          this.tweens.chain({
+            targets: m,
+            tweens: [
+              { scaleX: sx * WAIT.nudge, scaleY: sy * WAIT.nudge, duration: 80 * rate },
+              { scaleX: sx, scaleY: sy, duration: 300 * rate, ease: 'Elastic.easeOut', easeParams: [1, 0.4] },
+            ],
+            onStop: () => m.active && m.setScale(sx, sy),
+          });
+        }
+      });
+    } catch {
+      /* presentation only */
     }
   }
 
@@ -6571,6 +6659,7 @@ export class BattleScene extends Phaser.Scene {
 
   private showRootMenu(): void {
     this.clearMenus();
+    this.waitArm();
     this.rxExp.clear();
     this.rxLevel = null;
     const content = services().session.content;
@@ -7231,6 +7320,7 @@ export class BattleScene extends Phaser.Scene {
   private async act(action: PlayerAction, auto = false): Promise<void> {
     if (this.busy) return;
     this.busy = true;
+    this.waitDisarm();
     this.clearMenus();
 
     const { session } = services();
@@ -7770,6 +7860,8 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private async playEvents(events: RunEvent[], before: RunState, trainer: string | null, storyCues: PresentationCue[] = [], drama: DramaLine[] = []): Promise<void> {
+    // Something is happening on screen: nobody is waiting yet.
+    this.waitKick();
     const { session } = services();
     const content = session.content;
     const { battleAnimations } = session.settings;
