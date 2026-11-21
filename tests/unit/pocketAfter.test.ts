@@ -287,3 +287,15 @@ describe('the Pocket Shield Broken cut-in', () => {
     expect(h).toContain('shard32');
   });
 });
+
+describe('the Pocket Totem cut-in', () => {
+  it('draws the tm-intro page in amber with the Totem facts', async () => {
+    const { pkCutIn } = await import('../../src/ui/pocket/screens/cards');
+    const h = pkCutIn({ kind: 'raidIntro', name: 'Totem Lurantis', role: 'Totem Pokémon', line: '', cast: null, mon: null, player: null, backdrop: null, evil: false, beat: 0, skip: null,
+      pkCut: { page: 'tm-intro', big: 'Lurantis', where: 'Totem Pokémon · Blizzard Heights', type: 'grass', backdrop: null, chips: ['It can call a **Ribombee** for help'], say: 'The Totem roars.' } } as never);
+    expect(h.startsWith('<!--pk:tm-intro:51-->')).toBe(true);
+    expect(h).toContain('a-tm in29');
+    expect(h).toContain('#e8891a');
+    expect(h).toContain('<b>Ribombee</b>');
+  });
+});

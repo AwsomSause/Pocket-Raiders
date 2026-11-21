@@ -82,6 +82,7 @@ import { launcherReady } from '../core/camp';
 import { moveBlockReason } from '../core/battle/moveBlock';
 import { cheerProblem, coopOwner, exposedWeakSpot, puzzlePattern, raidBot, raidDef, raidRole } from '../core/raid/raid';
 import { raidTierName, scaledRaid } from '../core/raid/scaling';
+import type { TotemDef } from '../core/totem/schema';
 import { RETURN_MUSIC } from '../core/instrumentality/flightNorth';
 import { DexInfo } from '../ui/dexInfo';
 import { liveDexProfile } from '../core/presentation/dexInfo';
@@ -3305,6 +3306,28 @@ export class BattleScene extends Phaser.Scene {
       chips: [typeChip, `Level **${foe.level}**`, ...(nuzlockeCatchProblem(battle) ? [] : ['It can be **caught**'])] };
   }
 
+  /** Pocket look: the Totem cut-in's facts (mock-up `tm-intro`): its aura, its size, the ally it calls. */
+  private pkTotemIntro(tdef: TotemDef, foe: PokemonInstance): PkCutIn {
+    const { content } = services().session;
+    const STAT: Record<string, string> = { atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed', acc: 'Accuracy', eva: 'Evasion' };
+    const ups = Object.keys(tdef.aura.boost ?? {}).map((k) => STAT[k] ?? k);
+    const name = this.speciesName(foe);
+    const ally = tdef.ally ? content.species.get(tdef.ally.species)?.name ?? tdef.ally.species : null;
+    const place = this.header.text.split('\n')[0]!.split(/\s+·\s+/)[1] ?? '';
+    const types = content.species.get(foe.speciesId)?.types ?? [];
+    return {
+      page: 'tm-intro', big: name, type: types[0] ?? tdef.type, where: place ? `Totem Pokémon · ${place}` : 'Totem Pokémon',
+      backdrop: this.arenaBgKey ? rxFileOf(this.cache.json.get('manifest') as AssetManifest | undefined, this.arenaBgKey)?.file ?? null : null,
+      chips: [
+        ups.length ? `Its aura flared: **${ups.join(' and ')} rose!**` : `Its aura: **${tdef.aura.text.split(/(?<=\.)\s/)[0]!.replace(/\.$/, '')}**`,
+        tdef.hpBoostPercent > 0 ? `Far bigger than a normal ${name}` : `Level **${foe.level}**`,
+        ...(ally ? [`It can call a **${ally}** for help`] : []),
+        'Losing never ends your run',
+      ],
+      say: "The Totem's roar shakes the ground. Its aura flares to life.",
+    };
+  }
+
   /** Pocket look: the raid boss cut-in's facts (mock-up `rd-intro`); only what is true of this raid. */
   private pkRaidIntro(): PkCutIn | undefined {
     const battle = this.run.battle!;
@@ -3366,7 +3389,7 @@ export class BattleScene extends Phaser.Scene {
       if (this.rx) {
         const tdef = content.totems.totems.find((x) => x.id === battle.totem!.id);
         const calls = tdef?.ally ? ' It calls for help.' : '';
-        await this.bigMoment(bossIntroMoment({ role: 'raid' }), `totem.${battle.totem.id}`, 'TOTEM POKÉMON', tdef?.name ?? `Totem ${this.speciesName(battle.enemyTeam[0]!)}`, false, { cast: this.rxMe(), role: 'Totem Pokémon', line: `${(tdef?.aura?.text ?? 'Its aura flares.').split(/(?<=\.)\s/)[0]}${calls}` });
+        await this.bigMoment(bossIntroMoment({ role: 'raid' }), `totem.${battle.totem.id}`, 'TOTEM POKÉMON', tdef?.name ?? `Totem ${this.speciesName(battle.enemyTeam[0]!)}`, false, { cast: this.rxMe(), role: 'Totem Pokémon', line: `${(tdef?.aura?.text ?? 'Its aura flares.').split(/(?<=\.)\s/)[0]}${calls}`, ...(pocketOn() && tdef && battle.enemyTeam[0] ? { pkCut: this.pkTotemIntro(tdef, battle.enemyTeam[0]) } : {}) });
       }
       return;
     }
@@ -3835,6 +3858,37 @@ export class BattleScene extends Phaser.Scene {
     }
   }
 
+  /** Pocket look: a Totem fight lost (mock-up `tm-lose`): the Totem still stands, the team carried out, no prize. Presentation only. */
+  private async pkTotemLost(before: RunState | undefined, after: RunState): Promise<void> {
+    try {
+      const totem = before?.battle?.totem;
+      if (!this.rx || !pocketOn() || !totem) return;
+      const { content } = services().session;
+      const tdef = content.totems.totems.find((x) => x.id === totem.id);
+      if (!tdef) return;
+      const battle = before!.battle!;
+      const t = battle.enemyTeam.find((m) => m.uid === totem.uid) ?? battle.enemyTeam[0];
+      const mon = (m: { speciesId: string; shiny?: boolean }) => ((f) => (f ? monArt(f) : null))(monFile(this, m.speciesId, 'front', !!m.shiny));
+      const heal = Math.round(content.totems.failureHealFraction * 100);
+      const lines: [string, string][] = [['', tdef.aura.text]];
+      const counter = tdef.aura.thorns ? 'Special moves get past its thorns.' : tdef.aura.regen ? 'A burn, poison, sleep or paralysis stops it mending.' : tdef.aura.sap?.immune.length ? `Lead with a ${tdef.aura.sap.immune.map((x) => x.charAt(0).toUpperCase() + x.slice(1)).join(' or ')} type to resist its sap.` : null;
+      if (counter) lines.push(['Tip', counter]);
+      await this.pkPage((c) => (c.pk ? pkRes31({
+        page: 'tm-lose', area: 'tm', cls: 'lose33', tag: 'Totem territory', title: 'The Totem Stands', text: 'Losing never ends your run.',
+        rows: [
+          ...(t ? [{ art: mon(t), title: this.speciesName(t), sub: 'Still guards its territory' }] : []),
+          { art: itemArt('potion'), title: 'Team carried out', sub: `Back on the path at ${heal}% HP` },
+          { art: itemArt('rare_candy'), title: 'No prize', sub: 'Nothing is won this time', on: true },
+        ],
+        side: 'What happened', lines: lines.slice(0, 2), button: 'Back to the map',
+        party: after.party.slice(0, 6).map(mon),
+        counts: [[`${totem.phasesDone.length}${tdef.phases.length ? ` of ${tdef.phases.length}` : ''}`, 'phases cleared'], [String(totem.callsUsed), totem.callsUsed === 1 ? 'ally called' : 'allies called'], [String(before!.party.length), 'fainted']],
+      }) : ''));
+    } catch {
+      // A presentation failure must never block the battle.
+    }
+  }
+
   /** Pocket look: a raid shield breaking (mock-up `rd-shield`), with the raid's real shields and clock. Presentation only. */
   private async pkShieldBroken(): Promise<void> {
     try {
@@ -4018,6 +4072,31 @@ export class BattleScene extends Phaser.Scene {
           }) : ''));
           shown = true;
         }
+      }
+      // A Totem beaten (mock-up `tm-reward`): the prize, what it left, a rare Pokémon that asks to join, the phases and calls.
+      const totem = before?.battle?.totem;
+      const tdef = totem ? content.totems.totems.find((x) => x.id === totem.id) : undefined;
+      if (end.outcome === 'win' && totem && tdef) {
+        const t = before!.battle!.enemyTeam.find((m) => m.uid === totem.uid) ?? before!.battle!.enemyTeam[0];
+        const joined = result.run.pending.find((p) => p.kind === 'caught' && p.raidTier === undefined);
+        const item = (id: string) => pkArtOf(artOf(this, content.items.get(id)?.iconAssetId ?? (content.catalog.get(id) ? catalogIconId(content.catalog.get(id)!.icon) : undefined)));
+        const itemName = (id: string) => content.items.get(id)?.name ?? content.catalog.get(id)?.name ?? id;
+        const mon = (m: { speciesId: string; shiny?: boolean }) => ((f) => (f ? monArt(f) : null))(monFile(this, m.speciesId, 'front', !!m.shiny));
+        const prizes = [
+          ...(end.moneyGained > 0 ? [{ art: itemArt('amulet_coin'), title: `₽ ${end.moneyGained.toLocaleString('en-US')}`, sub: 'Trial prize' }] : []),
+          ...end.itemsFound.map((id) => ({ art: item(id), title: itemName(id), sub: 'The Totem left it behind' })),
+        ].slice(0, joined ? 3 : 4);
+        const name = t ? this.speciesName(t) : 'The Totem';
+        const lines: [string, string][] = [['', 'This Totem will not return this run.']];
+        if (tdef.rewards.unlock) lines.push(['New', 'A new path opens for this run.']);
+        await this.pkPage((c) => (c.pk ? pkRes31({
+          page: 'tm-reward', area: 'tm', tag: 'Totem beaten', title: 'The Totem Bows', text: `${name} lowers its head and steps aside.`,
+          rows: [...prizes, ...(joined?.kind === 'caught' ? [{ art: mon(joined.mon), title: this.speciesName(joined.mon), sub: 'It asks to join you', on: true }] : [])],
+          side: 'Territory cleared', lines: lines.slice(0, 2), button: joined ? 'See who wants to join' : 'Back to the map',
+          party: party.map(mon),
+          counts: [[`${totem.phasesDone.length}${tdef.phases.length ? ` of ${tdef.phases.length}` : ''}`, 'phases cleared'], [String(totem.callsUsed), totem.callsUsed === 1 ? 'ally called' : 'allies called'], [String(down), 'fainted']],
+        }) : ''));
+        shown = true;
       }
       if (end.outcome === 'win' || end.outcome === 'caught') {
         const rows: PkExpRow[] = party.map((m) => {
@@ -6054,6 +6133,7 @@ export class BattleScene extends Phaser.Scene {
     if (result.raidFailed) {
       await this.say('The fight is over... your Pokémon were pulled back to safety.');
       await this.pkRaidLost(before, result.run);
+      await this.pkTotemLost(before, result.run);
       await exitWipe(this, this.motion, this.wipeMask());
       this.scene.start(sceneForRun(result.run));
       return;
