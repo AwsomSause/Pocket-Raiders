@@ -85,6 +85,10 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
 - Flinch (pass 11): when a Pokémon flinches it starts its lunge 30 px toward the foe, jerks to a stop and pulls its
   head down with a shiver, a "!" pops over it and a sweat drop falls, the dark FLINCHED stamp lands, and it backs up
   two steps before settling home (`flinchClip`). Reduced: one step back and the stamp. Off: only the line.
+- Worn out (pass 11, on top of pass 5's danger glow): under a fifth of its HP the Pokémon slumps 8 px lower, tipped
+  5 degrees, a little shorter and wider, its colour dulls, it breathes fast and shallow (0.62 s) and a sweat drop
+  flicks off it every 0.45 s (`WORN`). Healed, it hops up, straightens, shakes it off and its colour comes back;
+  fainting just ends it. Full motion only, like the danger sag it replaces.
 - Wild encounter (pass 5): a lone wild Pokémon (not doubles, raids, totems or the Phantom look's own card) opens with
   two white flashes; the screen is nine dark bars that pull apart left and right in turn; the Pokémon slides in from
   the right as a black shape; its colour floods in with its cry, three white rings and a hop; then its plate flies in

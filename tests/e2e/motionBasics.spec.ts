@@ -261,7 +261,7 @@ test('a miss: the attacker overshoots, the target side-steps, and both stand hom
   expect(errors).toEqual([]);
 });
 
-test('HP bar and danger: a drop jolts the plate; under a fifth the plate glows, the bar pulses and the Pokémon sags; a heal ends it', async ({ page }) => {
+test('HP bar and danger: a drop jolts the plate; under a fifth the plate glows, the bar pulses, the Pokémon slumps, dulls and sweats; healed, it hops and shakes it off', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await startBattle(page, 'danger-e2e');
@@ -269,7 +269,8 @@ test('HP bar and danger: a drop jolts the plate; under a fifth the plate glows, 
     page.evaluate(() => {
       const b = (window as any).__pkr.game.scene.getScene('Battle');
       const v = b.playerSprite;
-      return { y: b.playerBox.container.y, danger: Boolean(b.playerBox.danger), sag: v.getData('sag') ?? null, sx: (v.getData('standBase') ?? { sx: v.scaleX }).sx, pulsing: Boolean(b.playerBox.hpBar.pulsing) };
+      const base = v.getData('standBase') ?? { sx: v.scaleX, sy: v.scaleY, y: v.y, angle: v.angle };
+      return { y: b.playerBox.container.y, danger: Boolean(b.playerBox.danger), sag: v.getData('sag') ? true : null, sx: base.sx, sy: base.sy, monY: base.y, angle: base.angle, fx: v.preFX?.list?.length ?? 0, pulsing: Boolean(b.playerBox.hpBar.pulsing) };
     });
   const home = await state();
   expect(home).toMatchObject({ danger: false, sag: null, pulsing: false });
@@ -300,14 +301,34 @@ test('HP bar and danger: a drop jolts the plate; under a fifth the plate glows, 
   const hit = await state();
   expect(hit).toMatchObject({ danger: true, pulsing: true });
   expect(hit.sag).not.toBeNull();
-  expect(hit.sx).toBeCloseTo(home.sx * 1.03, 2);
-  await page.waitForTimeout(500);
-  expect((await state()).y).toBeCloseTo(home.y, 0);
+  // Worn out (pass 11): once slumped it rests 8 px lower, tipped 5 degrees, a little shorter and wider, its colour
+  // dulled; sweat drops flick off it.
+  const sweat = () => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.list.filter((o: any) => o.type === 'Ellipse' && o.fillColor === 0xbfe6ff).length);
+  await expect.poll(sweat, { timeout: 2000 }).toBeGreaterThan(0);
+  const slumped = await state();
+  expect(slumped.y).toBeCloseTo(home.y, 0);
+  expect(slumped.monY).toBeCloseTo(home.monY + 8, 0);
+  expect(slumped.angle).toBeCloseTo(home.angle - 5, 1);
+  expect(slumped.sx).toBeCloseTo(home.sx * 1.02, 2);
+  expect(slumped.sy).toBeCloseTo(home.sy * 0.94, 2);
+  expect(slumped.fx).toBe(home.fx + 1);
+  // Healed: it hops up out of the slump, shakes it off, and stands as before with its colour back.
+  await page.evaluate(() => {
+    const w = window as any;
+    const b = w.__pkr.game.scene.getScene('Battle');
+    w.__hop = 0;
+    w.__hopWatch = () => (w.__hop = Math.max(w.__hop, b.spotXY('player').y - b.playerSprite.y));
+    b.events.on('update', w.__hopWatch);
+  });
   await setHp(full);
-  await page.waitForTimeout(400);
+  await page.waitForTimeout(1000);
+  expect(await page.evaluate(() => { const w = window as any; w.__pkr.game.scene.getScene('Battle').events.off('update', w.__hopWatch); return w.__hop; })).toBeGreaterThan(5);
   const healed = await state();
-  expect(healed).toMatchObject({ danger: false, sag: null, pulsing: false });
+  expect(healed).toMatchObject({ danger: false, sag: null, pulsing: false, fx: home.fx });
   expect(healed.sx).toBeCloseTo(home.sx, 3);
+  expect(healed.monY).toBeCloseTo(home.monY, 0);
+  expect(healed.angle).toBeCloseTo(home.angle, 3);
+  await expect.poll(sweat, { timeout: 2000 }).toBe(0);
   expect(errors).toEqual([]);
 });
 

@@ -131,7 +131,7 @@ import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel, MotionClip } from '../core/presentation/motionClip';
-import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, COMBO, comboPlan, comboScale, FIRST_TAG, OHKO_STAMP, type ComboStep, CRIT_FREEZE, critFreezeClip, HIT_LIGHT, HIT_STAMPS, hitStampSpot, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendWeight, CRY, cryClip, FLINCH, flinchClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, COMBO, comboPlan, comboScale, FIRST_TAG, OHKO_STAMP, type ComboStep, CRIT_FREEZE, critFreezeClip, HIT_LIGHT, HIT_STAMPS, hitStampSpot, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendWeight, CRY, cryClip, FLINCH, flinchClip, WORN, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart, type ClipRun } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
@@ -348,6 +348,8 @@ export class BattleScene extends Phaser.Scene {
   private storyBar: StoryBar | null = null;
   /** Counts the scene's starts (create): async work that began before a restart checks it and stops. */
   private life = 0;
+  /** Alternates where a worn-out Pokémon's sweat drops land. */
+  private sweatN = 0;
 
   /** Work begun in start `life` is stale: the scene has shut down since, is starting again (loading, before its
    * create), or has started again. */
@@ -1710,7 +1712,7 @@ export class BattleScene extends Phaser.Scene {
     const dz = side ? this.dizzy[side] : null;
     if (side && dz && dz.sprite === visual && this.motion === 'full') return sway(this, visual, true, this.spotXY(side).x, CONFUSE.sway.rot, CONFUSE.sway.dx, CONFUSE.sway.ms);
     // A Pokémon in danger keeps its sag and its fast, shallow breath.
-    if (visual.getData('sag')) return stand(this, visual, 'steady', this.motion === 'full', delay, 750, restY);
+    if (visual.getData('sag')) return stand(this, visual, 'steady', this.motion === 'full', delay, WORN.breathMs, (restY ?? visual.y) + (restY !== undefined ? WORN.dy : 0));
     stand(this, visual, standKind(sp.dex, sp.types, !!mon.dynamaxed), this.motion === 'full', delay, undefined, restY);
   }
 
@@ -2250,7 +2252,7 @@ export class BattleScene extends Phaser.Scene {
         box.danger.destroy();
         box.danger = undefined;
         box.hpBar.pulse?.(false);
-        if (box === this.playerBox || box === this.enemyBox) this.dangerSag(side, false);
+        if (box === this.playerBox || box === this.enemyBox) this.dangerSag(side, false, ratio > 0);
       }
       return;
     }
@@ -2275,25 +2277,97 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /**
-   * The Pokémon in danger sags (a little shorter and wider) and breathes in 0.75 s instead of 1.8 s; `false` stands
-   * it back up with its usual breath. Its looping breath is reset to the start first, so its size never drifts.
+   * Worn out (redesign passes 5 and 11): the Pokémon in danger slumps (lower, tipped, a little shorter and wider), its
+   * colour dulls, it breathes fast and shallow and sweat flicks off it. `false` ends it: `healed`, it hops, straightens
+   * with a shake and its colour comes back; otherwise (it fainted, it left) it is simply put back. Its looping breath
+   * is reset to the start first, so its size never drifts. Presentation only.
    */
-  private dangerSag(side: Side, on: boolean): void {
+  private dangerSag(side: Side, on: boolean, healed = false): void {
     const v = side === 'player' ? this.playerSprite : this.enemySprite;
     const mon = this.shown[side];
     if (!(v instanceof Phaser.GameObjects.Sprite) || !v.active || !mon) return;
-    const sagged = v.getData('sag') as { sx: number; sy: number } | undefined;
+    const sagged = v.getData('sag') as { sx: number; sy: number; angle: number; cm: Phaser.FX.ColorMatrix | null; sweat: Phaser.Time.TimerEvent | null } | undefined;
     if (on === Boolean(sagged)) return;
     standStill(this, v);
+    const full = this.motion === 'full';
+    const rate = animationTimeScale(services().session.settings);
+    const d = side === 'player' ? 1 : -1;
+    const home = this.spotXY(side);
+    const dull = (cm: Phaser.FX.ColorMatrix, k: number): void => {
+      if (!v.active) return;
+      cm.reset();
+      cm.brightness(1 - (1 - WORN.br) * k, true);
+      cm.saturate(-(1 - WORN.sat) * k, true);
+    };
     if (on) {
-      v.setData('sag', { sx: v.scaleX, sy: v.scaleY });
-      v.setScale(v.scaleX * 1.03, v.scaleY * 0.95);
-      stand(this, v, 'steady', this.motion === 'full', 0, 750);
-    } else {
-      v.setScale(sagged!.sx, sagged!.sy);
-      v.setData('sag', undefined);
-      this.standUp(v, mon);
+      const base = { sx: v.scaleX, sy: v.scaleY, angle: v.angle };
+      const cm = v.preFX ? v.preFX.addColorMatrix() : null;
+      const sweat = full ? this.time.addEvent({ delay: WORN.sweatEvery * rate, loop: true, callback: () => this.sweatDrop(v, side) }) : null;
+      v.setData('sag', { ...base, cm, sweat });
+      const to = { y: home.y + WORN.dy, angle: base.angle - WORN.tilt * d, scaleX: base.sx * WORN.sx, scaleY: base.sy * WORN.sy };
+      if (!full) {
+        v.setPosition(home.x, to.y).setAngle(to.angle).setScale(to.scaleX, to.scaleY);
+        if (cm) dull(cm, 1);
+        return;
+      }
+      this.tweens.add({ targets: v, ...to, duration: WORN.inMs * rate, ease: 'Sine.easeInOut', onComplete: () => v.active && v.getData('sag') && stand(this, v, 'steady', true, 0, WORN.breathMs, to.y) });
+      if (cm) this.tweens.addCounter({ from: 0, to: 1, duration: WORN.inMs * rate, onUpdate: (c) => dull(cm, c.getValue() ?? 1) });
+      return;
     }
+    const s = sagged!;
+    s.sweat?.remove();
+    v.setData('sag', undefined);
+    const undull = (): void => {
+      if (s.cm && v.active) v.preFX?.remove(s.cm as unknown as Phaser.FX.Controller);
+    };
+    this.tweens.killTweensOf(v);
+    if (!full || !healed) {
+      v.setPosition(home.x, v.getData('slumped') ? home.y + SLUMP.dy : home.y).setAngle(s.angle).setScale(s.sx, s.sy);
+      undull();
+      this.standUp(v, mon);
+      return;
+    }
+    // Healed: up it hops and straightens, lands, shakes it off, and its colour comes back.
+    if (s.cm) this.tweens.addCounter({ from: 1, to: 0, duration: WORN.outMs * rate, onUpdate: (c) => s.cm && dull(s.cm, c.getValue() ?? 0), onComplete: undull });
+    this.tweens.chain({
+      targets: v,
+      tweens: [
+        { y: home.y - WORN.hop, angle: s.angle, scaleX: s.sx, scaleY: s.sy, duration: 200 * rate, ease: 'Quad.easeOut' },
+        { y: home.y, duration: 200 * rate, ease: 'Bounce.easeOut' },
+        { x: home.x - WORN.shake, duration: 40 * rate },
+        { x: home.x + WORN.shake, duration: 40 * rate },
+        { x: home.x, duration: 200 * rate, ease: 'Elastic.easeOut' },
+      ],
+      onComplete: () => {
+        if (!v.active) return;
+        v.setPosition(home.x, home.y).setAngle(s.angle).setScale(s.sx, s.sy);
+        if (v.visible) this.standUp(v, mon);
+      },
+      onStop: () => v.active && v.setPosition(home.x, home.y).setAngle(s.angle).setScale(s.sx, s.sy),
+    });
+  }
+
+  /** One sweat drop flicks off a worn-out Pokémon (pass 11): out and down in a small arc, then gone. */
+  private sweatDrop(v: Phaser.GameObjects.Sprite, side: Side): void {
+    if (!v.active || !v.visible || !v.getData('sag')) return;
+    const d = side === 'player' ? 1 : -1;
+    const home = this.spotXY(side);
+    const h = this.headHeight(v);
+    const x0 = home.x + d * 30;
+    const y0 = home.y - h * 0.75;
+    const x1 = x0 + d * (WORN.sweatDx + (this.sweatN++ % 2) * 30);
+    const y1 = y0 + WORN.sweatFall;
+    const drop = this.add.ellipse(x0, y0, 9, 13, 0xbfe6ff).setDepth(3000);
+    const u = { k: 0 };
+    const rate = animationTimeScale(services().session.settings);
+    this.tweens.add({
+      targets: u,
+      k: 1,
+      duration: WORN.sweatMs * rate,
+      onUpdate: () => drop.active && drop.setPosition(x0 + (x1 - x0) * u.k, y0 + (y1 - y0) * u.k - 4 * WORN.sweatArc * u.k * (1 - u.k)),
+      onComplete: () => drop.destroy(),
+    });
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => drop.active && drop.destroy());
   }
 
   /** The event's own song, key and ambience when this fight belongs to a Legendary world event. */
@@ -5199,7 +5273,7 @@ export class BattleScene extends Phaser.Scene {
 
   private restAt(sprite: Phaser.GameObjects.Sprite, side: Side): void {
     const at = this.spotXY(side);
-    sprite.setPosition(at.x, sprite.getData('slumped') ? at.y + SLUMP.dy : at.y);
+    sprite.setPosition(at.x, sprite.getData('slumped') ? at.y + SLUMP.dy : sprite.getData('sag') ? at.y + WORN.dy : at.y);
   }
 
   /** The turn's tick: burn's embers flare and it flinches white; poison swells a bubble over its head that bursts. */

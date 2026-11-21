@@ -755,3 +755,12 @@ export function flinchClip(mon: MonSpot, level: ClipLevel): MotionClip {
   b.beat(100, 'Starts to lunge').beat(220, 'Jerks to a stop').beat(600, 'Backs up two steps').beat(1400, 'Settles');
   return b.end(1700);
 }
+
+/**
+ * Worn out (pass 11): under a fifth of its HP the Pokémon itself shows it. It slumps (down `dy` px, tipped `tilt`
+ * degrees, over `inMs`), a little shorter and wider (`sy`, `sx`), breathes fast and shallow (one breath in `breathMs`),
+ * its colour dulls (`br` brightness, `sat` saturation), and a sweat drop flicks off every `sweatEvery` ms, arcing
+ * `sweatDx` px out and `sweatFall` px down in `sweatMs`. Healed, it hops `hop` px, straightens with a shake and its
+ * colour comes back over `outMs`.
+ */
+export const WORN = { dy: 8, tilt: 5, inMs: 400, sy: 0.94, sx: 1.02, breathMs: 620, br: 0.88, sat: 0.8, sweatEvery: 450, sweatDx: 50, sweatFall: 30, sweatArc: 30, sweatMs: 400, hop: 10, shake: 5, outMs: 300 } as const;
