@@ -209,6 +209,7 @@ import { LETTER_MS, storyBar, storyLine, typeSpeech, type StoryBar } from '../ui
 import { planSpeech, stripSpeechTags, type SpeechVoice } from '../ui/dialogue/speechPacing';
 import { AERO, moveFlagNames, bounceIn, breathe, categoryIcon, drawGlass, effectivenessIcon, effectivenessWord, slideIn, statusIcon, typeLabel, type MotionLevel } from '../ui/aero';
 import { typeEffectiveness } from '../core/battle/damage';
+import { phRivalScout, type ScoutCard, type ScoutModel } from '../ui/phantom/screens/pops';
 import type { Move, TypeName } from '../core/contentSchema';
 import { rivalBossFor } from '../core/rivals/major';
 
@@ -385,6 +386,8 @@ export class BattleScene extends Phaser.Scene {
   private phMomentView: ReduxView | null = null;
   /** Phantom UI: the wild card's Pokédex key, while that card is up, and the page it opened. */
   private phWildKey: (() => void) | null = null;
+  /** Phantom UI: C on a rival's versus card opens (or closes) the scout page. */
+  private phVsScout: (() => void) | null = null;
   private phWildDex: DexInfo | null = null;
   private phGimInput: ((action: InputAction) => void) | null = null;
   private phLeadInput: ((action: InputAction) => boolean) | null = null;
@@ -588,6 +591,7 @@ export class BattleScene extends Phaser.Scene {
     this.rxBag = null;
     this.rxRingTold = new Set();
     this.phWildKey = null;
+    this.phVsScout = null;
     this.phWildDex = null;
     this.phLeadInput = null;
     this.advance = null;
@@ -748,6 +752,7 @@ export class BattleScene extends Phaser.Scene {
     this.input.keyboard?.on('keydown-I', () => this.toggleInfo());
     this.input.keyboard?.on('keydown-T', () => this.toggleAuto());
     this.input.keyboard?.on('keydown-G', () => this.phOpenGimmicks());
+    this.input.keyboard?.on('keydown-C', () => this.phVsScout?.());
     onInputAction(this, (a) => this.handleInput(a));
     this.input.on('pointerdown', () => this.advance?.());
     this.rx = null;
@@ -3129,24 +3134,82 @@ export class BattleScene extends Phaser.Scene {
       player: artOf(this, content.archetypes.get(this.run.archetypeId)?.spriteAssetId),
       playerName: v2?.protagonist?.name || content.archetypes.get(this.run.archetypeId)?.name || 'You',
       party: this.run.party.map((m) => monFile(this, m.speciesId, 'front', !!m.shiny)),
+      fainted: this.run.party.map((m) => m.hp <= 0),
       backdrop: this.arenaBgKey ? rxFileOf(this.cache.json.get('manifest') as AssetManifest | undefined, this.arenaBgKey)?.file ?? null : null,
       where: this.header.text.split('\n')[0]!.replace(/\s+·\s+₽.*$/, '').split(/\s+·\s+/).slice(0, 2).join(' · '),
       // Kice's rule: a loss to a rival never ends the run.
-      stake: battle.rivalId || battle.rival ? 'Win and the rivalry grows. Lose and the run goes on: a loss to a rival never ends it.' : '',
+      stake: battle.rivalId || battle.rival || battle.firstRival ? 'Win and the rivalry grows. Lose and the run goes on: a loss to a rival never ends it.' : '',
     };
+    // Phantom UI: a rival's team can be scouted from the card (C), as the mock-up's `scout` page.
+    const scout = phantomOn() && (battle.rivalId || battle.rival || battle.firstRival) ? this.phScoutModel() : null;
+    if (scout) model.scout = true;
+    let scouting = false;
     let over = false;
     let finish!: () => void;
     const done = new Promise<void>((r) => (finish = r));
     const end = (): void => {
       if (over) return;
       over = true;
+      this.phVsScout = null;
       view.destroy();
       finish();
     };
-    const view = mountRedux(this, { render: (c) => versusView(c, model), acts: { next: end }, card: true });
+    // The card stays while you read the team; Back returns to it, and Battle (or Back on the card) goes on.
+    const look = (on: boolean): void => {
+      if (over || !scout || scouting === on) return;
+      scouting = on;
+      timer?.remove();
+      view.refresh();
+    };
+    const view = mountRedux(this, {
+      render: (c) => (scouting && scout && c.ph ? phRivalScout(c.ph, scout) : versusView(c, model)),
+      acts: { next: end, scout: () => look(true), back: () => (scouting ? look(false) : end()) },
+      card: true,
+    });
+    this.phVsScout = scout ? () => look(!scouting) : null;
     // The Phantom card has more on it to read (the line, the stake), so it stays a little longer.
-    this.time.delayedCall(plain ? 1500 : this.motion === 'off' ? 1500 : phantomOn() ? 3400 : 2600, end);
-    return { done, skip: end };
+    const timer: Phaser.Time.TimerEvent | null = this.time.delayedCall(plain ? 1500 : this.motion === 'off' ? 1500 : phantomOn() ? 3400 : 2600, () => { if (!scouting) end(); });
+    return { done, skip: () => (scouting ? look(false) : end()) };
+  }
+
+  /** Phantom UI: what you have seen of this rival's team this run (its last fight with you), for the scout page. */
+  private phScoutModel(battle = this.run.battle, fought = false): ScoutModel | null {
+    if (!battle?.trainer || !battle.enemyTeam?.length) return null;
+    const { content } = services().session;
+    const rival = battle.rivalId ? this.run.story.rivals.find((r) => r.id === battle.rivalId) : undefined;
+    // Before a fight only what the last fight showed is known; after one (the rival-loss card), the whole team was seen.
+    const last = fought
+      ? { team: battle.enemyTeam.map((m) => m.speciesId), levels: battle.enemyTeam.map((m) => m.level), moves: battle.enemyTeam.map((m) => m.moves.map((v) => v.id)) }
+      : rival?.memory?.lastBattle;
+    const aceUid = battle.aceUid ?? battle.enemyTeam[battle.enemyTeam.length - 1]?.uid;
+    const cards = battle.enemyTeam.slice(0, 6).map((m, k): ScoutCard | null => {
+      const at = fought ? k : last ? last.team.indexOf(m.speciesId) : -1;
+      if (at < 0) return null;
+      const sp = content.species.get(m.speciesId);
+      return {
+        file: monFile(this, m.speciesId, 'front', !!m.shiny),
+        name: sp?.name ?? m.speciesId,
+        level: last?.levels?.[at] ?? m.level,
+        types: sp?.types ?? [],
+        moves: (last?.moves?.[at] ?? []).map((id) => content.moves.get(id)?.name ?? id).slice(0, 2),
+        note: fought ? 'Seen in this fight' : 'Seen in your last fight',
+        ace: m.uid === aceUid,
+      };
+    });
+    // Rotom's tip: what hits the ace hard, and how your lead stands against the moves you saw it use.
+    const aceAt = battle.enemyTeam.findIndex((m) => m.uid === aceUid);
+    const ace = aceAt >= 0 ? cards[aceAt] : null;
+    let tip = '';
+    if (ace) {
+      const weak = weaknessesOf(content, ace.types).map((t) => t[0]!.toUpperCase() + t.slice(1));
+      const lead = this.run.party.find((m) => m.hp > 0);
+      const leadSp = lead ? content.species.get(lead.speciesId) : undefined;
+      const moveTypes = [...new Set((last?.moves?.[last.team.indexOf(battle.enemyTeam[aceAt]!.speciesId)] ?? []).map((id) => content.moves.get(id)?.type).filter((t): t is NonNullable<typeof t> => !!t))];
+      const resisted = leadSp ? moveTypes.filter((t) => typeEffectiveness(content.typeChart, t, leadSp.types as never) < 1) : [];
+      tip = `Bzzt! ${weak.length ? `${weak.slice(0, 2).join(' and ')} moves hit their ace hard.` : 'Their ace has no weak spot I know of.'}`
+        + (leadSp && moveTypes.length ? ` Your ${leadSp.name} ${resisted.length ? `resists its ${resisted.map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' and ')} moves.` : 'resists nothing it has.'}` : '');
+    }
+    return { name: battle.trainer.name, who: this.rxCast, cards, tip, index: Math.max(0, aceAt) };
   }
 
   /** The opening wipe or VS screen (EBDX transitions); any key skips it. */
@@ -3170,7 +3233,7 @@ export class BattleScene extends Phaser.Scene {
       const intro = bossIntroMoment({ role: rxBoss.role === 'elite' ? 'e4' : rxBoss.role });
       const plate = rxBoss.role === 'champion' ? 'Champion' : rxBoss.role === 'elite' ? 'Elite Four' : 'Gym Leader';
       const types = rxBoss.types.map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' / ');
-      await this.bigMoment(intro, `${intro}.${rxBoss.title}`, plate, rxBoss.title, false, { name: battle.rivalId ? battle.trainer!.name : rxBoss.name, role: plate, line: this.openingLine() || (types ? `${types} specialist.` : '') }, () => {
+      await this.bigMoment(intro, `${intro}.${rxBoss.title}`, plate, rxBoss.title, false, { name: battle.rivalId ? battle.trainer!.name : rxBoss.name, role: plate, line: this.openingLine() || (types ? `${types} specialist.` : ''), sub: types ? `${types} specialist` : '' }, () => {
         const s = services().session.settings;
         if (!s.skippedIntros.includes(rxBoss.title)) services().session.saveSettings({ ...s, skippedIntros: [...s.skippedIntros, rxBoss.title] });
       });
@@ -3283,7 +3346,13 @@ export class BattleScene extends Phaser.Scene {
       tag: title,
       where: this.header.text.split('\n')[0]!.replace(/\s+·\s+₽.*$/, '').split(/\s+·\s+/).slice(0, 2).join(' · '),
       // A Trainer's entrance says what they bring (the Phantom card's panel); only what is true of this fight.
-      brings: intro && battle?.trainer ? { team: battle.enemyTeam.length, notes: [...(battle.enemyTeam.some((m) => Object.keys(m.held ?? {}).length > 0) ? ['Their Pokémon hold items.'] : []), ...(this.boss() ? ['The ace is announced when it enters.'] : [])] } : null,
+      brings: intro && battle?.trainer ? {
+        team: battle.enemyTeam.length,
+        notes: this.boss() ? ['The ace is announced when it enters.'] : [],
+        gimmicks: battle.transform.enemyMechanics ?? [],
+        held: battle.enemyTeam.some((m) => Object.keys(m.held ?? {}).length > 0),
+        trained: battle.enemyTeam.some((m) => Object.values(m.evs ?? {}).some((v) => (v ?? 0) > 0)),
+      } : null,
       ...cut,
     };
   }
@@ -3513,7 +3582,7 @@ export class BattleScene extends Phaser.Scene {
    * Phantom UI: one full-screen card over the battle. It ends on a click or a key, or after `ms` (null: it waits for an
    * input, unless Settings > Auto-advance is on). Presentation only: a card that fails to draw is skipped.
    */
-  private async phMoment(draw: (ph: PhantomVersion) => string, ms: number | null, more?: { acts: Record<string, (arg: string) => void>; held: () => boolean; go?: () => void }): Promise<void> {
+  private async phMoment(draw: (ph: PhantomVersion) => string, ms: number | null, more?: { acts: Record<string, (arg: string) => void>; held: () => boolean; go?: () => void; /** A skip the page uses itself (true: handled, the card stays). */ back?: () => boolean }): Promise<void> {
     if (!this.rx || !phantomOn()) return;
     try {
       const st = services().session.settings;
@@ -3537,7 +3606,7 @@ export class BattleScene extends Phaser.Scene {
       this.phMomentView = view;
       if (wait !== null) this.time.delayedCall(wait, () => end());
       this.events.once('shutdown', () => end(true));
-      await this.playBeat({ done, skip: () => end() });
+      await this.playBeat({ done, skip: () => { if (!more?.back?.()) end(); } });
     } catch (e) {
       console.warn('Phantom card failed', e);
     }
@@ -3615,7 +3684,10 @@ export class BattleScene extends Phaser.Scene {
       : battle.totem && tdef && tdef.phases.length > 0 ? { at: Math.max(1, battle.totem.phasesDone.length), of: tdef.phases.length } : null;
     const alive = battle.enemyTeam.filter((m) => m.hp > 0).length;
     const t = battle.transform;
-    const left = t.enemyMechanics.filter((k) => !t.used.enemy.includes(k)).length;
+    const unused = t.enemyMechanics.filter((k) => !t.used.enemy.includes(k));
+    const GIM: Record<string, string> = { mega: 'Mega Evolution', dynamax: 'Dynamax', tera: 'Terastallize', zmove: 'Z-Move' };
+    const names = unused.map((k) => GIM[k] ?? k);
+    const unusedLine = names.length > 2 ? `${names.length} gimmicks not used yet` : `${names.join(' and ')} not used yet`;
     const who = battle.trainer ? this.trainerTitle() ?? battle.trainer.name : this.speciesName(foe);
     await this.phMoment((ph) => phPhase(ph, {
       lab: [who, battle.raid ? 'Raid' : battle.totem ? 'Totem' : this.phWhere().split(' · ')[0]].filter(Boolean).join(' · '),
@@ -3625,7 +3697,8 @@ export class BattleScene extends Phaser.Scene {
       mon: this.phArt(foe)?.file ?? null,
       meter,
       left: battle.trainer ? { alive, total: battle.enemyTeam.length } : null,
-      chips: battle.trainer && t.enemyMechanics.length > 0 ? [left > 0 ? `${left} gimmick${left === 1 ? '' : 's'} not used yet` : 'No gimmick left'] : [],
+      chips: battle.trainer && t.enemyMechanics.length > 0 ? [unused.length > 0 ? unusedLine : 'No gimmick left'] : [],
+      chipIcon: battle.trainer ? unused[0] ?? null : null,
       go,
     }), go ? null : 2600);
     return true;
@@ -3867,14 +3940,25 @@ export class BattleScene extends Phaser.Scene {
   /** Phantom UI: lost to a rival (the mock-up's `rloss` page). Kice's rule: a loss to a rival never ends the run. */
   private async phRivalLossCard(before: RunState, after: RunState): Promise<boolean> {
     const battle = before.battle;
-    if (!battle?.trainer || !(battle.rivalId || battle.rival) || !this.rx || !phantomOn()) return false;
+    if (!battle?.trainer || !(battle.rivalId || battle.rival || battle.firstRival) || !this.rx || !phantomOn()) return false;
     const { content } = services().session;
     const name = battle.trainer.name;
     const win = content.trainers.get(battle.trainer.classId)?.lines?.win ?? '';
     let shown = false;
+    // C opens the team you just fought (the mock-up's "See his team"); Back or Z returns to the card.
+    const scout = this.phScoutModel(battle, true);
+    let scouting = false;
+    const look = (on: boolean): void => {
+      if (!scout || scouting === on) return;
+      scouting = on;
+      this.phMomentView?.refresh();
+    };
+    this.phVsScout = scout ? () => look(!scouting) : null;
     await this.phMoment((ph) => {
       shown = true;
+      if (scouting && scout) return phRivalScout(ph, { ...scout, done: 'Carry on' });
       return phRivalLoss(ph, {
+        scout: !!scout,
         name,
         cast: this.rxCast ?? artOf(this, this.lastFoe?.art.assetId),
         where: `${this.phWhere().split(' · ')[0]} · Rival battle lost`,
@@ -3882,7 +3966,8 @@ export class BattleScene extends Phaser.Scene {
         text: `Losing to a rival never ends a run. Your team is patched up, the story goes on, and ${name} will be waiting again further down the road.`,
         party: after.party.map((m) => monFile(this, m.speciesId, 'front', !!m.shiny)),
       });
-    }, null);
+    }, null, { acts: { scout: () => look(true), back: () => look(false) }, held: () => scouting, go: () => look(false), back: () => (scouting ? (look(false), true) : false) });
+    this.phVsScout = null;
     return shown;
   }
 
@@ -4015,7 +4100,8 @@ export class BattleScene extends Phaser.Scene {
       const mine = side === 'player';
       const art = (id: string, shiny: boolean): Art | null => ((f) => (f ? { file: f, atlas: true } : null))(monFile(this, id, 'front', shiny));
       const changes = kind === 'mega' || kind === 'primal' || kind === 'gigantamax';
-      const zMove = kind === 'zmove' ? (x.zMoveId ? (content.moves.get(x.zMoveId) ?? null) : x.zBase ? zMoveFor(content, x.zBase) : null) : null;
+      // From the base move where it is known: the Z-Move's power comes from it (the Z-Move's own entry has none).
+      const zMove = kind === 'zmove' ? (x.zBase ? zMoveFor(content, x.zBase, mine ? { speciesId: mon.speciesId, inventory: this.run.inventory } : undefined) : null) ?? (x.zMoveId ? (content.moves.get(x.zMoveId) ?? null) : null) : null;
       const crystal = kind === 'zmove' ? x.itemId ?? (x.zBase && mine ? ownedZCrystal(content, this.run.inventory, x.zBase.type) : null) : x.itemId;
       const max = calcStats(content, mon).hp;
       const big = kind === 'dynamax' || kind === 'gigantamax' ? calcStats(content, { ...mon, speciesId: x.to, dynamaxed: true }).hp : max;

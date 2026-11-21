@@ -26,12 +26,16 @@ export interface VersusModel {
   playerName: string;
   /** Your party's pictures (the card layout); its length is your ball count. */
   party: readonly (string | null)[];
+  /** Which of your party have fainted, in party order (the Phantom card draws those balls dark). */
+  fainted?: readonly boolean[];
   /** The arena picture behind the letterboxed shot, or null for a plain dark one. */
   backdrop: string | null;
   /** Where the battle is ("Stage 3 · Route 22"), for the Phantom card's heading. */
   where?: string;
   /** One true line on what the battle decides (the Phantom card's "What is at stake"); '' or none leaves the panel out. */
   stake?: string;
+  /** A rival: C opens what you have seen of its team (the Phantom card's "Scout their team" key). */
+  scout?: boolean;
 }
 
 const balls = (n: number, b: number): string => `<div class="row" style="gap:5px">${Array.from({ length: Math.max(0, Math.min(6, Math.floor(n))) }, () => `<i class="ball" style="--b:${b}px"></i>`).join('')}</div>`;

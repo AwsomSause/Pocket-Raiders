@@ -5,15 +5,15 @@
 
 import type { PhantomVersion } from '../../../core/presentation/phantom';
 import { type Art, figure } from '../../redux/templates';
-import { rxUrl } from '../../redux/assets';
-import { act, esc, keys, page, ransom, ty } from '../kit';
+import { rxImage, rxUrl } from '../../redux/assets';
+import { act, esc, keys, page, pic, ransom, ty } from '../kit';
 import { phHead } from '../templates';
-import { quoted } from './cutin';
+import { GIM_ICON, ballPic, quoted, standee } from './cutin';
 import { tall } from './event';
 
 /** The moving band of words along the top and the bottom edge. */
 const cine = (word: string): string => { const run = `${esc(word.toUpperCase())} · `.repeat(Math.max(8, Math.ceil(220 / (word.length + 3)))); return `<div class="cine" aria-hidden="true"><i><u>${run}</u></i><i><u>${run}</u></i></div>`; };
-const balls = (alive: number, total: number): string => Array.from({ length: Math.max(0, Math.min(6, total)) }, (_, k) => `<i class="ph-vs-ball${k < alive ? '' : ' out'}"></i>`).join('');
+const balls = (alive: number, total: number): string => Array.from({ length: Math.max(0, Math.min(6, total)) }, (_, k) => ballPic('ub', k >= alive)).join('');
 const back = (file: string | null | undefined): string => (file ? `<div class="art" style="background-image:url(${rxUrl(file)})"></div>` : '<div class="bgk"></div>');
 /** A long name steps its cut-out letters down so the word stays on the page. */
 const wordSize = (n: number, big: number): number => Math.round(big * (n > 16 ? 0.46 : n > 12 ? 0.58 : n > 9 ? 0.74 : n > 7 ? 0.88 : 1));
@@ -200,17 +200,19 @@ export interface RivalLossModel {
   /** What happens now, in plain words. */
   text: string;
   party: readonly (string | null)[];
+  /** C opens the team you just fought. */
+  scout?: boolean;
 }
 
 export function phRivalLoss(_ph: PhantomVersion, d: RivalLossModel): string {
   const said = quoted(d.line);
   return page('rloss', '<div class="bgk"></div><div class="shard" style="--c:var(--red);--cp:polygon(58% 0,100% 0,100% 100%,40% 100%);inset:0" aria-hidden="true"></div><div class="burst" style="--x:78%;--y:50%" aria-hidden="true"></div>'
-    + `<div class="rl-p ph-rl-p">${d.cast ? tall(d.cast, 520, 580) : ''}</div>`
+    + `<div class="rl-p ph-rl-p">${standee(d.cast, 7, 520, 580)}</div>`
     + phHead('Not over', d.where)
     + (said ? `<div class="pn lt rl-q tilt" style="--r:-2deg"><p class="txt"${d.line.length > 110 ? ' style="font-size:18px"' : ''}>${said}</p></div>` : '')
     + `<div class="rl-big">${ransom('THE RUN', 41)}${ransom('GOES ON', 42)}</div>`
     + `<div class="pn rl-i"><span class="lab">What happens now</span><p class="txt">${esc(d.text)}</p><div class="rl-team">${d.party.slice(0, 6).map((f) => `<span>${icon(f, 38, 'filter:grayscale(1) brightness(.7)')}</span>`).join('')}<em>Your team gets back up</em></div></div>`
-    + tap() + keys(['Z', 'Carry on', 'next']));
+    + tap() + keys(['Z', 'Carry on', 'next'], ...(d.scout ? [['C', 'See their team', 'scout'] as const] : [])));
 }
 
 /** One of the four gimmicks on the picker. */
@@ -240,11 +242,14 @@ const GM: Record<GimmickSlot['kind'], { cls: string; title: string; text: string
   dynamax: { cls: 'gm-dmax', title: 'Dynamax', text: 'Huge for 3 turns with more HP.' },
   zmove: { cls: 'gm-z', title: 'Z-Move', text: 'One enormous move, once.' },
 };
-const gmIcon = (g: GimmickSlot): string =>
-  g.kind === 'mega' ? `<img class="px ph-gm-i" src="${rxUrl('packs/ebdx/ui/symMega.png')}" alt="">`
-    : g.kind === 'dynamax' ? `<img class="px ph-gm-i" src="${rxUrl('packs/dbk/dynamax/icon.png')}" alt="">`
-      : g.kind === 'tera' ? `<i class="ph-gm-tera" style="background-image:url(${rxUrl('packs/dbk/tera/types.png')});background-position:0 ${-(Math.max(0, g.row ?? 0) * 32)}px"></i>`
-        : '<b class="ph-gm-z">Z</b>';
+// The mock-up's four pictures (its sprites g-mega, g-tera, g-dmax and g-z are these pack files), at its sizes.
+const GM_PIC: Record<GimmickSlot['kind'], [string, number]> = {
+  mega: ['packs/dbk/mega/icon.png', 2.1],
+  tera: ['packs/dbk/tera/icon.png', 0.36],
+  dynamax: ['packs/dbk/dynamax/icon.png', 3],
+  zmove: ['packs/dbk/zpower/particle.png', 2.6],
+};
+const gmIcon = (g: GimmickSlot): string => pic(...GM_PIC[g.kind]);
 
 /** The gimmick picker (mock-up `gimmick`): all four, which are ready and why the others are not. */
 export function phGimmickPick(_ph: PhantomVersion, d: GimmickModel): string {
@@ -274,19 +279,33 @@ export interface PhaseModel {
   left: { alive: number; total: number } | null;
   /** Small true facts ("Dynamax not used yet"). */
   chips: readonly string[];
+  /** The gimmick the first fact is about ('dynamax', 'mega', ...): its mark goes in front, as on the mock-up. */
+  chipIcon?: string | null;
+  /** The line is the Trainer's own words (drawn in quote marks); otherwise it is said about the fight. */
+  said?: boolean;
   /** The key's words, or null on a card that goes by itself. */
   go: string | null;
 }
 
+/** The Trainer in the top band: a small sprite drawn whole at the mock-up's 13 times (only the head and arms show
+ *  under the band's edge), anything else as a tall figure. */
+const lpFace = (a: Art | null): string => {
+  if (!a) return '<div class="lp-face"></div>';
+  const dim = a.atlas || a.crop || a.k ? null : rxImage(a.file);
+  return dim && dim[1] <= 96 ? `<div class="lp-face">${pic(a.file, 13)}</div>` : `<div class="lp-face ph-lp-face">${tall(a, 1000, 1100)}</div>`;
+};
+/** The cut-out words at the mock-up's 112 px; only a long phrase steps down. */
+const lpSize = (n: number): number => Math.round(112 * (n > 16 ? 0.5 : n > 13 ? 0.66 : n > 11 ? 0.85 : 1));
+
 /** A fight changes gear (mock-up `phase`): a boss's last stand, a raid's next phase. */
 export function phPhase(_ph: PhantomVersion, d: PhaseModel): string {
   const meter = d.meter && d.meter.of > 1 ? `<div class="lp-m" aria-label="phase ${d.meter.at} of ${d.meter.of}"><span>Phase</span>${Array.from({ length: Math.min(6, d.meter.of) }, (_, k) => `<i class="${k + 1 === d.meter!.at ? 'on' : k + 1 < d.meter!.at ? 'd' : ''}"></i>`).join('')}<b>${d.meter.at} of ${d.meter.of}</b></div>` : '';
-  const chips = [d.left ? `<span class="ac-it"><span class="ph-lp-balls">${balls(d.left.alive, d.left.total)}</span>${d.left.alive} Pokémon left</span>` : '', ...d.chips.map((c) => `<span class="ac-it">${esc(c)}</span>`)].join('');
+  const chips = [d.left ? `<span class="ac-it"><span class="ph-lp-balls">${balls(d.left.alive, d.left.total)}</span>${d.left.alive} Pokémon left</span>` : '', ...d.chips.map((c, k) => `<span class="ac-it">${k === 0 && d.chipIcon && GIM_ICON[d.chipIcon] ? `<span class="bs-g">${GIM_ICON[d.chipIcon]}</span>` : ''}${esc(c)}</span>`)].join('');
   const long = d.line.length;
   return page('phase', '<div class="bs-bg" aria-hidden="true"></div>'
-    + `<div class="lp-shut t"><div class="lp-face ph-lp-face">${d.face ? tall(d.face, 520, 620) : ''}</div></div>`
+    + `<div class="lp-shut t">${lpFace(d.face)}</div>`
     + `<div class="lp-shut b" aria-hidden="true"><div class="lp-sil ph-lp-sil">${icon(d.mon, 460)}</div></div>`
-    + `<div class="lp-mid ph-lp-mid"><span class="lab">${esc(d.lab)}</span><div class="lp-t" style="font-size:${wordSize(d.word.length, 112)}px">${ransom(d.word, 87)}</div><p style="font-size:${long > 150 ? 20 : long > 90 ? 24 : 30}px">${esc(d.face ? quoted(d.line) : d.line)}</p></div>`
+    + `<div class="lp-mid ph-lp-mid"><span class="lab">${esc(d.lab)}</span><div class="lp-t" style="font-size:${lpSize(d.word.length)}px">${ransom(d.word, 87)}</div><p style="font-size:${long > 150 ? 20 : long > 90 ? 24 : 30}px">${d.said ? quoted(d.line) : esc(d.line)}</p></div>`
     + meter + (chips ? `<div class="lp-ch ph-lp-ch">${chips}</div>` : '')
     + (d.go ? keys(['Z', d.go, 'next']) : '') + '<div class="flashw" aria-hidden="true"></div>' + tap(), false);
 }

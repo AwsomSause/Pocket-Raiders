@@ -47,6 +47,14 @@ async function keepShot(page: Page, id: string) {
  */
 export async function fitProblems(page: Page, key: string, id?: string): Promise<string[]> {
   if (id) await keepShot(page, id);
+  // Measure the page as it settles: wait (up to 3 s) for its entrance animations to end, so a slow machine
+  // does not catch a panel still sliding in from the edge. Looping animations are left alone.
+  await page.evaluate(async ([key, id]) => {
+    const S = document.querySelector<HTMLElement>(`#phx .phs[data-scene="${key}"]${id ? `[data-scr="${id}"]` : ''}`);
+    if (!S) return;
+    const once = S.getAnimations({ subtree: true }).filter((a) => Number.isFinite(Number(a.effect?.getComputedTiming().endTime)));
+    await Promise.race([Promise.all(once.map((a) => a.finished.catch(() => undefined))), new Promise((r) => setTimeout(r, 3000))]);
+  }, [key, id] as const);
   return page.evaluate(([key, id]) => {
     // A scene can have several views open over each other (a room over the dock): `id` picks the one showing that page.
     const S = document.querySelector<HTMLElement>(`#phx .phs[data-scene="${key}"]${id ? `[data-scr="${id}"]` : ''}`);

@@ -137,6 +137,9 @@ describe('the Phantom battle moments', () => {
     expect(html).toContain('Losing to a rival never ends a run.');
     expect(html).toContain('Your team gets back up');
     expect(phRivalLoss(ph, rloss({ line: '' }))).not.toContain('rl-q');
+    // C opens the team just fought, only when the card offers it.
+    expect(html).not.toContain('See their team');
+    expect(phRivalLoss(ph, rloss({ scout: true }))).toMatch(/data-act="scout"[^>]*><b>C<\/b>See their team/);
   });
 });
 

@@ -152,6 +152,17 @@ Each built page is shot beside its mock-up (pass 25, Phantom version) and every 
 - **Mega card**: the Pokémon fills the slanted band in close-up (the Trainer is named in the line instead), the Mega Ring's stone spins top right (DBK pack ring and icon), as the mock-up. Primal Reversion keeps the band without the ring.
 - **Move cards** read the move's kind and power before its PP ("Special · Power 90 · PP 11/15"; a status move says Status), as the mock-up. **Notices** on the title and main menu stack low, clear of the last-save card. A side-by-side page of every mock-up and the game screen: https://claude.ai/artifact/6PxE3CPJZMW8jQtrsfjsB8.
 
+## Slice 12 notes (mock-up match pass, round 3: Kice's seven battle pages)
+- **Learn page**: the no-thanks answer reads "Keep the old moves", as the mock-up (its spoken label keeps the full answer).
+- **Blessing card**: the Legendary fills its disc again (a battle-list rule with the same class name squashed it), the card says what the gift does, and long gifts fit.
+- **VS card**: ball rows as the mock-up (Poké Balls for you, a dark one per fainted Pokémon; Ultra Balls for a Trainer), "You · N can fight"; small sprites are cut to their drawing and scaled 6.4x with the white outline, so both people stand where the mock-up's do. The first rival (Lucas and the rest) now counts as a rival for the stake line, scouting and the rival-loss card.
+- **Scout their team** (C on a rival's VS card, mock-up `scout`): a card per Pokémon seen in your last fight with that rival (level, types, two moves, ACE), "?" for the rest, and Rotom's tip (what hits the ace hard, what your lead resists). X goes back to the card.
+- **Rival loss**: the portrait as the mock-up (cut, 7x, outlined); C · See their team opens the whole team you just fought, Z carries on.
+- **Boss card**: "Brings" lists balls and count, the gimmicks with their icons, and held items/training; the type specialist line sits under the name; the quote is left to the VS card when the list shows.
+- **Last stand**: the chip shows the gimmick still unused with its icon, and the Trainer's line is quoted.
+- **Gimmick menu and Z-Move**: the mock-up's four pictures (DBK Mega, Tera, Dynamax icons and the Z-Power orb); the Z-Move cut-in holds the orb at the hand, the Z-Ring beside the crystal, and the Z-Move's real power (from its base move).
+- Browser fit checks now wait for a page's entrance animations to end (up to 3 s) before measuring, so a slow runner no longer catches a panel mid-slide.
+
 ## Known limits
 - The side stage card has Z Fight only: the mock-up's Party and Back out keys would need a rule for leaving a fight that has already begun, which the game does not have.
 - The phase card does not say "the music changes": it only states what is true in the battle.

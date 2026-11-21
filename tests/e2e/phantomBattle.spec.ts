@@ -237,11 +237,12 @@ test('Phantom UI: a Trainer battle opens on the Phantom versus card, and a Gym L
   await onPage(page, 'Battle', 'vs');
   await page.waitForTimeout(700);
   await expect(vs.locator('.vs-n.r .tl1')).toHaveText(trainer.name);
-  await expect(vs.locator('.vs-n.l .lab')).toContainText(`${trainer.party} Pokémon`);
+  await expect(vs.locator('.vs-n.l .lab')).toContainText(`${trainer.party} can fight`);
   await expect(vs.locator('.vs-v .rs')).toHaveAttribute('aria-label', 'VS');
   await expect(vs.locator('.hd')).toContainText('battle', { ignoreCase: true });
-  // The foe's first Pokémon is shown, the rest stay as balls.
-  await expect(vs.locator('.vs-n.r .ph-vs-ball')).toHaveCount(Math.min(6, trainer.team) - 1);
+  // As the mock-up: the foe's whole team as balls, none shown yet; yours as balls too.
+  await expect(vs.locator('.vs-n.r .ph-vs-ball')).toHaveCount(Math.min(6, trainer.team));
+  await expect(vs.locator('.vs-n.l .ph-vs-ball')).toHaveCount(Math.min(6, trainer.party));
   expect(await fitProblems(page, 'Battle', 'vs')).toEqual([]);
   // The battle's own page is not out yet; a click moves on to it.
   await expect(pview(page, 'Battle', 'battle').locator('.ph-bt-foe')).toHaveCount(0);
@@ -276,7 +277,7 @@ test('Phantom UI: a Trainer battle opens on the Phantom versus card, and a Gym L
   await expect(card.locator('.bs-i')).toContainText(`${boss.team} Pokémon`);
   await expect(card.locator('.bs-i')).toContainText('The ace is announced when it enters.');
   await expect(card.locator('.ph-ct-beat i')).toHaveCount(5);
-  await expect(card.locator('.keys')).toContainText('skip', { ignoreCase: true });
+  await expect(card.locator('.keys')).toContainText('Begin');
   expect(await fitProblems(page, 'Battle', 'boss')).toEqual([]);
   // Esc skips it, once and for all; the versus card follows.
   await hold(page, false);
@@ -452,7 +453,34 @@ test('Phantom UI: a wild battle opens on the wild card and the send-out card; a 
   await expect(loss.locator('.rl-i')).toContainText('Losing to a rival never ends a run.');
   await expect(loss.locator('.rl-i')).toContainText('Silver');
   await expect(loss.locator('.hd')).toContainText('Rival battle lost', { ignoreCase: true });
+  await expect(loss.locator('.keys')).not.toContainText('See their team');
   await gone('rloss');
+  // With the team it fought, C shows that whole team (as the mock-up's "See his team"); Back returns to the card, Z carries on.
+  const fought = await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    const s = game.scene.getScene('Battle');
+    const cls = [...session.content.trainers.values()].find((t: any) => t.lines?.win) as any;
+    const enemyTeam = session.run.party.slice(0, 2);
+    void s.phRivalLossCard({ battle: { trainer: { name: 'Silver', classId: cls.id }, rival: true, enemyTeam } }, session.run);
+    return enemyTeam.length as number;
+  });
+  expect(fought).toBeGreaterThan(0);
+  await expect(loss.locator('.keys')).toContainText('See their team');
+  await page.waitForTimeout(400);
+  await page.keyboard.press('c');
+  const team = pview(page, 'Battle', 'scout');
+  await expect(team).toBeVisible();
+  await expect(team.locator('.sc-c:not(.un)')).toHaveCount(fought);
+  await expect(team.locator('.sc-c').first()).toContainText('Seen in this fight');
+  await expect(team.locator('.keys')).toContainText('Carry on');
+  await page.keyboard.press('Escape');
+  await expect(loss).toBeVisible();
+  await page.waitForTimeout(300);
+  await page.keyboard.press('c');
+  await expect(team).toBeVisible();
+  await team.locator('.key[data-act="next"]').click();
+  await expect(team).toHaveCount(0);
+  await expect(loss).toHaveCount(0);
   // Every version and a small window: nothing cut off.
   for (const [id, w, h] of [['midnight', 844, 390], ['fantasia', 1024, 768], ['velvet', 1920, 1080], ['channel', 1280, 720]] as const) {
     await page.evaluate((id) => { const pkr = (window as any).__pkr; pkr.session.saveSettings({ ...pkr.session.settings, phantomVersion: id }); }, id);

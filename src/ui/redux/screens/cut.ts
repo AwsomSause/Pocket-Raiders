@@ -38,7 +38,17 @@ export interface CutModel {
   /** Where the scene is ("Stage 30 · Indigo Plateau"), over the name on the Phantom boss card. */
   where?: string;
   /** What a boss brings: how many Pokémon, and true lines about the fight. */
-  brings?: { team: number; notes: readonly string[] } | null;
+  brings?: {
+    team: number;
+    notes: readonly string[];
+    /** The gimmicks it may use this fight ('mega', 'dynamax', 'tera', 'zmove'). */
+    gimmicks?: readonly string[];
+    /** Its Pokémon hold items; they are fully trained (IVs and EVs). */
+    held?: boolean;
+    trained?: boolean;
+  } | null;
+  /** The line under a boss's name on the Phantom card ("Dragon specialist"). */
+  sub?: string;
   /** The Pokémon a card shows (an ace): its level and types, under its name on the Phantom card. */
   tags?: { level: number; types: readonly string[] } | null;
 }

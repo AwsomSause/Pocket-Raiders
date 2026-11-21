@@ -3,6 +3,7 @@ import { PHANTOM_VERSIONS } from '../../src/core/presentation/phantom';
 import { pageOf } from '../../src/ui/phantom/kit';
 import { figure } from '../../src/ui/redux/templates';
 import { cutLook, phCut, phGimmick, phVersus, quoted, type GimmickCard } from '../../src/ui/phantom/screens/cutin';
+import { phRivalScout } from '../../src/ui/phantom/screens/pops';
 import type { CutModel } from '../../src/ui/redux/screens/cut';
 import type { VersusModel } from '../../src/ui/redux/screens/versus';
 
@@ -24,7 +25,13 @@ describe('the Phantom versus card', () => {
     expect(pageOf(html)).toBe('vs');
     expect(html).toContain('Rival battle');
     expect(html).toContain('Stage 17 · Route 22');
-    expect(html).toContain('You · 3 Pokémon');
+    expect(html).toContain('You · 3 can fight');
+    // As the mock-up: a fainted Pokémon's ball goes dark, and the count says who can still fight.
+    const hurt = phVersus(ph, versus({ fainted: [false, true, false] }));
+    expect(hurt).toContain('You · 2 can fight');
+    expect(count(hurt, 'class="ph-vs-ball out"')).toBe(1);
+    expect(hurt).toContain('pokeball/pb.png');
+    expect(hurt).toContain('pokeball/ub.png');
     expect(html).toContain('>Red</h3>');
     expect(html).toContain('>Silver</h3>');
     expect(cutOut(html)).toEqual(['VS']);
@@ -75,15 +82,24 @@ describe('the Phantom cutscene card', () => {
     expect(html).toContain('<em>Champion</em>');
     expect(html).toContain('Stage 30 · Indigo Plateau');
     expect(html).toContain('THE CHAMPION · THE CHAMPION');
-    expect(html).toContain('“See my true strength!”');
+    // As the mock-up: with the list, the line is left to the versus card that follows (the same line).
+    expect(html).not.toContain('See my true strength!');
+    expect(phCut(ph, cut({ kind: 'championIntro', brings: null }))).toContain('“See my true strength!”');
     expect(html).toContain('6 Pokémon');
     expect(count(html, 'class="ph-vs-ball"')).toBe(6);
     expect(html).toContain('The ace is announced when it enters.');
+    // The gimmicks with their marks, the gear, and the specialty under the name.
+    const full = phCut(ph, cut({ kind: 'championIntro', sub: 'Dragon specialist', brings: { team: 6, notes: [], gimmicks: ['mega', 'dynamax'], held: true, trained: true } }));
+    expect(full).toContain('<b>Mega Evolution and Dynamax</b>');
+    expect(full).toContain('packs/dbk/mega/icon.png');
+    expect(full).toContain('<b>Held items and full training</b>');
+    expect(full).toContain('<p>Dragon specialist</p>');
+    expect(phCut(ph, cut({ kind: 'championIntro', brings: { team: 2, notes: [], gimmicks: [], held: false, trained: false } }))).not.toContain('Held items');
     // Beat 3 of 5 is lit, and named.
     expect(count(html, '<i class="on"></i>')).toBe(3);
     expect(html).toContain('<span>Moment</span>');
     expect(html).toContain('data-act="next"');
-    expect(html).toMatch(/<b>X<\/b>skip/);
+    expect(html).toMatch(/<b>Z<\/b>Begin/);
   });
 
   it('a moment that cannot be skipped shows no key, and an empty one no empty panel', () => {
@@ -175,6 +191,9 @@ describe('the Phantom transformation cut-ins', () => {
     expect(html).toContain('Electrium Z');
     expect(html).toContain('ELECTRIC');
     expect(html).toContain('Red and Pikachu let loose their full-force <b>Z-Power</b>!');
+    // The mock-up's glowing Z orb at the hand, and the Z-Ring beside the crystal's name.
+    expect(html).toMatch(/class="zm-orb"[^>]*><i class="spr"[^>]*><img class="px " src="[^"]*packs\/dbk\/zpower\/particle\.png"/);
+    expect(html).toContain('items/z_ring.png');
     // A status Z-Move has no power to show; a wild user has no partner.
     const wild = phGimmick(ph, card({ kind: 'zmove', trainer: '', move: { name: 'Z-Splash', power: null } }));
     expect(wild).not.toContain('<b>Power');
@@ -188,5 +207,33 @@ describe('the Phantom transformation cut-ins', () => {
       expect(count(html, 'data-act="next"'), kind).toBe(2);
       expect(html, kind).toMatch(/<b>Z<\/b>Skip/i);
     }
+  });
+});
+
+describe('the Phantom scout page (a rival before the fight)', () => {
+  const seen = { file: null, name: 'Gengar', level: 60, types: ['ghost', 'poison'], moves: ['Shadow Ball', 'Sludge Bomb'], note: 'Seen in your last fight', ace: true };
+  it('shows what was seen this run, ? for the rest, the ace, Rotom’s tip, and Battle / Back keys', () => {
+    const html = phRivalScout(ph, { name: 'Silver', who: null, cards: [null, seen, null], tip: 'Bzzt! Ground and Dark moves hit their ace hard.', index: 1 });
+    expect(pageOf(html)).toBe('scout');
+    expect(html).toContain('Seen this run · 1 of 3');
+    expect(html).toContain('Silver’s team');
+    expect(count(html, '<b>?</b>')).toBe(2);
+    expect(count(html, 'Not seen this run')).toBe(2);
+    expect(html).toContain('<em>ACE</em>');
+    expect(html).toContain('Shadow Ball · Sludge Bomb');
+    expect(html).toContain('Rotom says');
+    expect(html).toMatch(/<b>Z<\/b>Battle/);
+    expect(html).toMatch(/data-act="back"/);
+    // No tip, no panel; never more than six cards.
+    const bare = phRivalScout(ph, { name: 'Silver', who: null, cards: Array(9).fill(null), tip: '', index: 0 });
+    expect(bare).not.toContain('Rotom says');
+    expect(count(bare, 'class="pn sc-c')).toBe(6);
+    // Opened from the rival-loss card, Z carries on instead of starting the battle.
+    expect(html).toMatch(/<b>Z<\/b>Battle/);
+    expect(phRivalScout(ph, { name: 'Silver', who: null, cards: [], tip: '', index: 0, done: 'Carry on' })).toMatch(/<b>Z<\/b>Carry on/);
+  });
+  it('a rival’s versus card offers it on C; another Trainer’s does not', () => {
+    expect(phVersus(ph, versus({ scout: true }))).toMatch(/data-act="scout"[^>]*><b>C<\/b>Scout their team/);
+    expect(phVersus(ph, versus())).not.toContain('data-act="scout"');
   });
 });
