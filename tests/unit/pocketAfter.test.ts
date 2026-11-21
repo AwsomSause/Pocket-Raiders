@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { pkPageOf } from '../../src/ui/pocket/kit';
 import { pkBadgeGet, pkCatchParts, pkEvolve, pkExp, pkLearn, pkLevel, pkRivalLoss, pkVictory, type PkExpRow, type PkLearnModel } from '../../src/ui/pocket/screens/after';
 import { pkBattle } from '../../src/ui/pocket/screens/battle';
+import { pkGimmick } from '../../src/ui/pocket/screens/cards';
 import type { BattleModel } from '../../src/ui/redux/screens/battle';
 import { versusView, type VersusModel } from '../../src/ui/redux/screens/versus';
 import { cutView, type CutModel } from '../../src/ui/redux/screens/cut';
@@ -205,5 +206,30 @@ describe('the Pocket boss battle panel', () => {
     expect((h.match(/<u class="on">/g) ?? []).length).toBe(2);
     expect(h).toContain('Water');
     expect(pkPageOf(pkBattle(base))?.id).toBe('battle');
+  });
+});
+
+describe('the Pocket gimmick cut-ins', () => {
+  const base = { name: 'Charizard', mon: null, trainer: 'Red', cast: null, more: { mine: true } } as const;
+  it('Mega: the stone and bracelet, types, Ability and the stats it raises', () => {
+    const h = pkGimmick({ ...base, kind: 'mega', item: 'Charizardite X', more: { mine: true, types: ['fire', 'dragon'], ability: 'Tough Claws', ups: ['Attack', 'Defense'] } });
+    expect(pkPageOf(h)?.id).toBe('g-mega');
+    expect(h).toContain('Charizardite X · Mega Bracelet');
+    expect(h).toContain('<b>Fire / Dragon</b>');
+    expect(h).toContain('Attack ▲ · Defense ▲');
+    expect(h).toContain('Charizard Mega Evolved!');
+  });
+  it('Tera, Dynamax and Z-Move pages', () => {
+    expect(pkGimmick({ ...base, kind: 'tera', type: 'dragon' })).toContain('Now a <b>Dragon</b> type');
+    const d = pkGimmick({ ...base, kind: 'dynamax', hp: [98, 196], turns: 3 });
+    expect(pkPageOf(d)?.id).toBe('g-dmax');
+    expect(d).toContain('<b>98 → 196</b>');
+    expect((d.match(/<u><\/u>/g) ?? []).length).toBe(3);
+    const z = pkGimmick({ ...base, kind: 'zmove', item: 'Firium Z', move: { name: 'Inferno Overdrive', power: 175 }, more: { mine: true, base: 'Flamethrower' } });
+    expect(pkPageOf(z)?.id).toBe('g-z');
+    expect(z).toContain('Flamethrower becomes <b>Inferno Overdrive</b>');
+  });
+  it("a foe's gimmick names its Trainer", () => {
+    expect(pkGimmick({ ...base, more: {}, trainer: 'Misty', kind: 'tera', type: 'water' })).toContain("Misty&#39;s Charizard");
   });
 });

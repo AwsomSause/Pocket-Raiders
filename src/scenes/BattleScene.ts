@@ -20,7 +20,7 @@ import { defaultMoveIndex } from '../core/battle/rememberChoice';
 import { isEnemyAce } from '../core/battle/ace';
 import { ULTRA_BEASTS, type UltraBeast } from '../core/ultra/beasts';
 import { ultraOn } from '../core/ultra/run';
-import type { PkCutIn } from '../ui/pocket/screens/cards';
+import { pkGimmick, type PkCutIn, type PkGimmickMore } from '../ui/pocket/screens/cards';
 import { aimable, dealOffer, foeStake, type SkillInput } from '../core/battle/w1Play';
 import { promptById } from '../core/interaction/prompt';
 import { runInteractionPrompt } from '../ui/interactionPrompt';
@@ -4183,7 +4183,17 @@ export class BattleScene extends Phaser.Scene {
         }
         finish();
       };
-      const view = mountRedux(this, { render: (c) => (c.ph ? phGimmick(c.ph, model) : ''), acts: { next: end }, card: true });
+      // Pocket look: the mock-ups' cut-in also names the new form's types, Ability and the stats it raises.
+      const sp0 = content.species.get(mon.speciesId), sp1 = changes ? content.species.get(x.to) : undefined;
+      const STAT: Record<string, string> = { atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed' };
+      const ab = sp1?.abilities?.normal?.[0];
+      const more: PkGimmickMore = {
+        ...(sp1 ? { types: sp1.types, ups: sp0 ? Object.keys(STAT).filter((k) => (sp1.baseStats as Record<string, number>)[k]! > (sp0.baseStats as Record<string, number>)[k]!).map((k) => STAT[k]!).slice(0, 3) : [] } : {}),
+        ...(ab ? { ability: content.abilities.get(ab)?.name ?? ab } : {}),
+        ...(x.zBase ? { base: x.zBase.name } : {}),
+        mine,
+      };
+      const view = mountRedux(this, { render: (c) => (c.ph ? phGimmick(c.ph, model) : c.pk ? pkGimmick({ ...model, more }) : ''), acts: { next: end }, card: true });
       this.time.delayedCall(3200, end);
       this.events.once('shutdown', end);
       await this.gimmickBeat({ done, skip: end });
@@ -6422,7 +6432,7 @@ export class BattleScene extends Phaser.Scene {
           // for the long reference scene; the short cinematic under it then swaps the form. The Fast settings skip it too.
           const st0 = services().session.settings;
           const quick = cine === 'zmove' ? st0.fastZMove : cine === 'tera' ? st0.fastTera : cine === 'dynamax' || cine === 'gigantamax' ? st0.fastDynamax : st0.fastMega;
-          const phCard = !!this.rx && phantomOn() && this.motion === 'full' && !!mon && !!cine && cine !== 'dynamaxEnd' && !quick;
+          const phCard = !!this.rx && (phantomOn() || pocketOn()) && this.motion === 'full' && !!mon && !!cine && cine !== 'dynamaxEnd' && !quick;
           if (phCard) await this.phGimmickCard(e.side, mon!, cine as GimmickCard['kind'], { to: e.to, itemId: e.itemId ?? null, teraType: teraType ?? null, zBase: zBase ?? null, zMoveId: e.zMoveId ?? null });
           if (!phCard && cine === 'zmove' && this.motion === 'full' && !services().session.settings.fastZMove && mon) {
             // The remade scene (Fast Z-Move off), animation redesign pass 20: the Z rises, the Pokémon leaves the top of the
@@ -6584,7 +6594,7 @@ export class BattleScene extends Phaser.Scene {
           this.applyTeraTint(e.side, mon!);
           await this.refreshInfoBox(box, mon!, false);
           // New UI: the player's first Mega Evolution of the run gets the mock-ups' cutscene card.
-          if (this.rx && e.kind === 'mega' && e.side === 'player' && mon && !SEEN_MOMENTS.has(`megaFirst.${this.run.seed}`)) {
+          if (this.rx && !(phCard && pocketOn()) && e.kind === 'mega' && e.side === 'player' && mon && !SEEN_MOMENTS.has(`megaFirst.${this.run.seed}`)) {
             const file = monFile(this, e.to, 'front', !!mon.shiny);
             await this.bigMoment('mega', `megaFirst.${this.run.seed}`, 'Mega Evolution', content.species.get(e.to)?.name ?? this.speciesName(mon), false, { role: 'Mega Evolution', line: 'The stone answers the bracelet.', cast: this.rxMe(), mon: file ? { file, atlas: true } : null });
           }
