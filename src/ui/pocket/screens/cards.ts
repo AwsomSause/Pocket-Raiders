@@ -84,9 +84,25 @@ function pkGaDmax(d: GimmickCard, g: { where: string; host: string }, cue: PkCue
     + `<div class="gx-hit"${act('next')}></div></div>`);
 }
 
+/** A raid boss appears (mock-up `rd-intro`): the den storm, the spiral, the boss, its facts. */
+function pkRdIntro(d: CutModel, k: PkCutIn, mon: PkArt | null | undefined, cue: PkCue): string {
+  const bold = (t: string): string => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  const big = k.big ?? d.name;
+  return page('rd-intro', 51, cueRoot('cut cboss ar28 a-rd in29', 'boss', cue, '--c:#d9267d')
+    + back('arenas/raid_max_bg.png', 'ct-bg') + back('packs/raid/max/bg.png', 'ct-bg storm')
+    + spr({ file: 'packs/raid/max/spiral.png', whole: true }, 0.7, 'ct-spiral') + '<i class="ct-rays"></i>'
+    + (mon ? `<div class="ct-mon" data-key="ct-mon">${fitPic(mon, 400, 330, '', 3.2)}</div>` : '')
+    + `<div class="ct-title" data-key="ct-title"><small style="font-size:${fit(k.where, 440, 13, 10, 0.62)}px">${esc(k.where)}</small><b style="font-size:${fit(big, 440, 88, 44, 0.5)}px">${esc(big)}</b></div>`
+    + `<div class="ct-chips" data-key="ct-chips">${k.chips.map((c) => `<span>${bold(c)}</span>`).join('')}</div>`
+    + `<div class="vs-say" data-key="vs-say"><p style="font-size:${fit(k.say, 1500, 17, 13, 0.5)}px">${bold(k.say)}</p><div class="btn on nx"${act('next')}><b>Next</b></div></div>`
+    + `<div class="gx-hit"${act('next')}></div></div>`);
+}
+
 /** What the Legendary and Ultra Beast cut-ins show (mock-up pages `legend` and `ub`). Only true facts go in `chips`. */
 export interface PkCutIn {
-  page: 'legend' | 'ub';
+  page: 'legend' | 'ub' | 'rd-intro';
+  /** The big word over the name's place (raids: "Raid Boss"); the Pokémon's name otherwise. */
+  big?: string;
   /** The small line over the name: "Legendary Pokémon · Cerulean Cave", "Ultra Deep Sea · Ultra Beast". */
   where: string;
   type: string;
@@ -100,6 +116,7 @@ export interface PkCutIn {
 /** A wild Legendary (`cleg`: rays, the shine spiral, the glowing Pokémon) or an Ultra Beast (`cub`: the wormhole). */
 export function pkCutIn(d: CutModel & { pkCut: PkCutIn }, cue: PkCue = 'in'): string {
   const k = d.pkCut, mon = pkArtOf(d.mon);
+  if (k.page === 'rd-intro') return pkRdIntro(d, k, mon, cue);
   const bold = (t: string): string => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
   const chip = (t: string): string => (t.startsWith('ball:') ? `<span>${bold(t.slice(5))} ${spr(ballArt('ub'), 1.5)}</span>` : `<span>${bold(t)}</span>`);
   const leg = k.page === 'legend';

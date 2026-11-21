@@ -81,6 +81,7 @@ import { services } from '../game/services';
 import { launcherReady } from '../core/camp';
 import { moveBlockReason } from '../core/battle/moveBlock';
 import { cheerProblem, coopOwner, exposedWeakSpot, puzzlePattern, raidBot, raidDef, raidRole } from '../core/raid/raid';
+import { raidTierName, scaledRaid } from '../core/raid/scaling';
 import { RETURN_MUSIC } from '../core/instrumentality/flightNorth';
 import { DexInfo } from '../ui/dexInfo';
 import { liveDexProfile } from '../core/presentation/dexInfo';
@@ -3303,6 +3304,27 @@ export class BattleScene extends Phaser.Scene {
       chips: [typeChip, `Level **${foe.level}**`, ...(nuzlockeCatchProblem(battle) ? [] : ['It can be **caught**'])] };
   }
 
+  /** Pocket look: the raid boss cut-in's facts (mock-up `rd-intro`); only what is true of this raid. */
+  private pkRaidIntro(): PkCutIn | undefined {
+    const battle = this.run.battle!;
+    const { content } = services().session;
+    const base = content.raids.raids.find((r) => r.id === battle.raid!.id);
+    const foe = battle.enemyTeam[0];
+    if (!base || !foe) return undefined;
+    const def = scaledRaid(content, base, battle.raid!.badges);
+    const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+    const types = content.species.get(foe.speciesId)?.types ?? [];
+    const shields = battle.raid!.pendingShields.length, phases = def.phases.length;
+    const turns = battle.raid!.timerLeft;
+    const guard = [shields ? `**${shields} shield${shields > 1 ? 's' : ''}**` : '', phases ? `${phases} phase${phases > 1 ? 's' : ''}` : ''].filter(Boolean).join(' and ');
+    return {
+      page: 'rd-intro', big: 'Raid Boss', type: types[0] ?? 'normal', backdrop: null,
+      where: `${def.name} · ${raidTierName(content.raids.badgeScaling, def)} tier`,
+      chips: [`**${this.speciesName(foe)}**${types.length ? ` · ${types.map(cap).join(' / ')}` : ''}`, guard, turns ? `${turns} turns on the clock` : `Level **${foe.level}**`, def.capture && !nuzlockeCatchProblem(battle) ? 'It can be caught when it is nearly beaten' : 'Losing never ends your run'].filter(Boolean),
+      say: shields ? 'A shield surrounds the boss! Break it to keep going.' : 'The den glows red. The boss towers over you.',
+    };
+  }
+
   /** True when the trainer just beaten is the Evil Team's leader (the Betrayal scene follows). */
   private evilLeaderBeaten(name: string | undefined): boolean {
     const team = evilTeam(services().session.content, this.run);
@@ -3335,7 +3357,7 @@ export class BattleScene extends Phaser.Scene {
         await this.bigMoment(bossIntroMoment({ role: 'raid' }), `raid.${battle.enemyTeam[0]?.speciesId ?? 'boss'}`, 'APEX', apexDef.name, false, { cast: leader ?? this.rxMe(), role: `Apex · ${apexTeam.name}`, line: shortestSentence(apexDef.blurb), evil: true });
         return;
       }
-      await this.bigMoment(bossIntroMoment({ role: 'raid' }), `raid.${battle.enemyTeam[0]?.speciesId ?? 'boss'}`, 'RAID BOSS', this.speciesName(battle.enemyTeam[0]!), false, { cast: this.rxMe(), role: 'Raid Boss', line: 'The den glows red.' });
+      await this.bigMoment(bossIntroMoment({ role: 'raid' }), `raid.${battle.enemyTeam[0]?.speciesId ?? 'boss'}`, 'RAID BOSS', this.speciesName(battle.enemyTeam[0]!), false, { cast: this.rxMe(), role: 'Raid Boss', line: 'The den glows red.', ...(pocketOn() ? { pkCut: this.pkRaidIntro() } : {}) });
       return;
     }
     if (battle.totem) {

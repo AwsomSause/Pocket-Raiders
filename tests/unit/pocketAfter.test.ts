@@ -263,3 +263,15 @@ describe('the Pocket Galar Dynamax cut-in', () => {
     expect(pkGimmick({ ...card, more: {} }).startsWith('<!--pk:g-dmax:')).toBe(true);
   });
 });
+
+describe('the Pocket raid boss cut-in', () => {
+  it('draws the rd-intro page with the boss facts', async () => {
+    const { pkCutIn } = await import('../../src/ui/pocket/screens/cards');
+    const h = pkCutIn({ kind: 'raidIntro', name: 'Venusaur', role: 'Raid Boss', line: '', cast: null, mon: null, player: null, backdrop: null, evil: false, beat: 0, skip: null,
+      pkCut: { page: 'rd-intro', big: 'Raid Boss', where: 'Garden Guardian · Standard tier', type: 'grass', backdrop: null, chips: ['**Venusaur** · Grass / Poison', '**3 shields**'], say: 'A shield surrounds the boss!' } } as never);
+    expect(h.startsWith('<!--pk:rd-intro:51-->')).toBe(true);
+    expect(h).toContain('Raid Boss');
+    expect(h).toContain('<b>3 shields</b>');
+    expect(h).toContain('a-rd in29');
+  });
+});
