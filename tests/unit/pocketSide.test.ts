@@ -5,6 +5,7 @@ import { pkLeague } from '../../src/ui/pocket/screens/world';
 import { pkReserve } from '../../src/ui/pocket/screens/reserve';
 import { pkQuick } from '../../src/ui/pocket/screens/pause';
 import { pkAchieve, type PkAchievement } from '../../src/ui/pocket/screens/achieve';
+import { pkBagUse } from '../../src/ui/pocket/screens/bagUse';
 
 describe('the Pocket Rival Board', () => {
   const r = (name: string, x: Partial<PkRival> = {}): PkRival => ({ name, role: 'Rival', art: null, ace: null, wins: 0, losses: 0, lead: 'Level', ...x });
@@ -87,5 +88,17 @@ describe('the Pocket Achievement Hall', () => {
     expect(h).not.toContain('Seven');
     expect(h).toContain('1 of 7');
     expect(pkAchieve({ list, index: 6, kinds: [], title: 'Ace', say: '' })).toContain('Seven');
+  });
+});
+
+describe('the Pocket "Use on" page', () => {
+  it('the item at the left, a card per Pokémon with what it would do, ones it cannot help grey', () => {
+    const h = pkBagUse({ item: { name: 'Potion', art: null, text: 'Restores 20 HP.', left: 3 }, mons: [{ name: 'Pikachu', file: null, hp: 30, short: 'HP 8 → 25', ok: true, type: 'electric' }, { name: 'Eevee', file: null, hp: 100, short: 'Already at full HP', ok: false, type: 'normal' }], index: 0, say: 'Restores 17 HP.' }, () => '#fff');
+    expect(pkPageOf(h)?.id).toBe('bag-use');
+    expect(h).toContain('Use Potion');
+    expect(h).toContain('×3 left');
+    expect(h).toContain('class="bu pn on"');
+    expect(h).toContain('class="bu pn no"');
+    expect(h).toContain('HP 8 → 25');
   });
 });

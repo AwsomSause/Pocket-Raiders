@@ -683,3 +683,6 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .ach .gx-ach-kinds p{gap:2px;font-size:13px}
 .pkx .pks .ach .gx-ach-kinds small{font-weight:600;color:var(--mute)}
 .pkx .pks .ach .gx-ach-say{position:absolute;left:16px;width:620px;top:478px;font-size:13px;font-weight:700;color:var(--ink)}
+/* Use on: a Pokémon the item can't help is grey; the lit one's full line under the item. */
+.pkx .pks .bu.no{filter:grayscale(.8);opacity:.7}
+.pkx .pks .gx-bu-say{position:absolute;left:16px;width:230px;top:310px;padding:10px 12px;font-weight:700;line-height:1.35}
