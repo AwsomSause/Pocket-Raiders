@@ -865,3 +865,41 @@ test('confusion: three stars circle its head while it sways; hurting itself swin
   expect({ x: l.x, solid: l.solid }).toEqual({ x: l.homeX, solid: 0 });
   expect(errors).toEqual([]);
 });
+
+test('end of turn: the chips line up, each lights as its effect plays, a line sweeps and the turn counter flips; nothing left after', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'endturn-e2e');
+  const seen = await page.evaluate(async () => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    b.say = async () => {};
+    b.sayTrainer = async () => {};
+    const s = { dark: 0, lit: new Set<string>(), line: false, turn: [] as string[] };
+    const watch = () => {
+      const all = b.children.list;
+      s.dark = Math.max(s.dark, all.filter((o: any) => String(o.texture?.key).startsWith('eot.d.') && o.alpha > 0.5).length);
+      for (const o of all) if (String(o.texture?.key).startsWith('eot.l.') && o.alpha > 0.5) s.lit.add(o.texture.key.split('.')[2]);
+      s.line ||= all.some((o: any) => o.type === 'Rectangle' && o.fillColor === 0xffcb05 && o.height === 540);
+      for (const c of all) if (c.type === 'Container') for (const t of c.list ?? []) if (t.type === 'Text' && /^\d+$/.test(t.text) && c.list.some((w: any) => w.text === 'TURN')) if (!s.turn.includes(t.text)) s.turn.push(t.text);
+    };
+    b.events.on('update', watch);
+    // As after a real turn: the battle has moved on to turn 3.
+    (window as any).__pkr.session.run.battle.turn = 3;
+    const before = structuredClone((window as any).__pkr.session.run);
+    const hp = b.shown.enemy.hp;
+    await b.playEvents([
+      { type: 'residual', side: 'enemy', status: 'psn', amount: 1, hpAfter: hp - 1 },
+      { type: 'weatherDamage', side: 'enemy', weather: 'sand', amount: 1, hpAfter: hp - 2 },
+    ], before, null);
+    await new Promise((r) => setTimeout(r, 1800));
+    b.events.off('update', watch);
+    return { dark: s.dark, lit: [...s.lit].sort(), line: s.line, turn: s.turn };
+  });
+  expect(seen.dark).toBe(2);
+  expect(seen.lit).toEqual(['Poison', 'Sandstorm']);
+  expect(seen.line).toBe(true);
+  expect(seen.turn).toEqual(['2', '3']);
+  // The counter shows a moment after the sweep, then leaves by itself.
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.list.filter((o: any) => /^eot\./.test(String(o.texture?.key)) || (o.type === 'Container' && o.list?.some((w: any) => w.text === 'TURN'))).length), { timeout: 5000 }).toBe(0);
+  expect(errors).toEqual([]);
+});

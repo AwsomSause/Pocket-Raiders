@@ -4,7 +4,7 @@ import { planCues } from '../../src/core/presentation/cues';
 import { moveAnims } from '../../src/data/presentation';
 import { content } from './helpers';
 import { clipEnd, EASES, fxAllowed, sampleClip } from '../../src/core/presentation/motionClip';
-import { chevronWaves, COND_TINT, CONFUSE, confusionHitClip, GUST_LEAN, protectedClip, SHIELD, gustLeanClip, intimidateClip, condArriveClip, condKind, condTickClip, parCantClip, SLUMP, STAT_COLOR, statClip, thawClip, wakeClip, type CondSpot } from '../../src/core/presentation/motionConditions';
+import { chevronWaves, COND_TINT, CONFUSE, endTurnChip, endTurnParade, confusionHitClip, GUST_LEAN, protectedClip, SHIELD, gustLeanClip, intimidateClip, condArriveClip, condKind, condTickClip, parCantClip, SLUMP, STAT_COLOR, statClip, thawClip, wakeClip, type CondSpot } from '../../src/core/presentation/motionConditions';
 
 // Animation redesign pass 8 (Conditions): every status arrives, keeps a look and ticks, as the mockup's numbers.
 const FOE: CondSpot = { x: 648, y: 240, w: 100, h: 120, side: 'enemy' };
@@ -232,5 +232,34 @@ describe('conditions: confusion', () => {
     const cues = planCues(events, content, moveAnims(), { mode: 'full', intensity: 1 });
     const conds = cues.map((list) => list.find((c) => c.kind === 'commonAnim'));
     expect(conds.map((c) => (c as { cond?: { at: string; status: string } } | undefined)?.cond)).toEqual([{ at: 'arrive', status: 'cnf' }, { at: 'cant', status: 'cnf' }, { at: 'tick', status: 'cnf' }]);
+  });
+});
+
+describe('the end of a turn', () => {
+  const item = (id: string) => (id === 'leftovers' ? 'Leftovers' : id);
+  it('each end-of-turn effect has its chip and colour; other events have none', () => {
+    expect(endTurnChip({ type: 'held', itemId: 'leftovers', what: 'heal' }, item)).toEqual({ word: 'Leftovers', color: '#7be08a' });
+    expect(endTurnChip({ type: 'residual', status: 'tox' }, item)).toEqual({ word: 'Poison', color: '#a45cc8' });
+    expect(endTurnChip({ type: 'residual', status: 'brn' }, item)?.word).toBe('Burn');
+    expect(endTurnChip({ type: 'weatherDamage', weather: 'sand' }, item)).toEqual({ word: 'Sandstorm', color: '#e2c98a' });
+    expect(endTurnChip({ type: 'held', itemId: 'leftovers', what: 'survive' }, item)).toBeNull();
+    expect(endTurnChip({ type: 'damage' }, item)).toBeNull();
+  });
+  it('the parade takes only what comes after the last move, one chip per kind, at most four', () => {
+    const events = [
+      { type: 'residual', status: 'psn' },
+      { type: 'move' },
+      { type: 'damage' },
+      { type: 'held', itemId: 'leftovers', what: 'heal' },
+      { type: 'residual', status: 'psn' },
+      { type: 'weatherDamage', weather: 'sand' },
+      { type: 'weatherDamage', weather: 'sand' },
+    ];
+    const p = endTurnParade(events, item);
+    expect(p.chips.map((c) => c.word)).toEqual(['Leftovers', 'Poison', 'Sandstorm']);
+    expect([...p.at.entries()]).toEqual([[3, 0], [4, 1], [5, 2], [6, 2]]);
+    expect(endTurnParade([{ type: 'move' }, { type: 'damage' }], item).chips).toEqual([]);
+    const many = ['brn', 'psn'].map((status) => ({ type: 'residual', status })).concat([{ type: 'seedDamage' } as never, { type: 'bindDamage' } as never, { type: 'weatherDamage', weather: 'hail' } as never]);
+    expect(endTurnParade(many, item).chips).toHaveLength(4);
   });
 });

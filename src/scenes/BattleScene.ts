@@ -123,7 +123,7 @@ import { megaGlass } from '../ui/battleFx/megaGlass';
 import { drawnBox, type GimmickPage } from '../ui/battleFx/gimmickStage';
 import { HIT_RUN, stand, standStill, sway, twitch } from '../ui/battleFx/stance';
 import { bubblePicture, chevronPicture, ConditionLook, DizzyStars, flagPicture, flamePicture, glarePicture, pipPicture, putAbove, titlePicture } from '../ui/battleFx/conditionLook';
-import { BUBBLE_W, chevronWaves, condArriveClip, FLAG_HOLD, intimidateClip, condKind, condTickClip, FLAME_W, CONFUSE, confusionHitClip, gustLeanClip, parCantClip, protectedClip, SHIELD, SLUMP, STAT_COLOR, STAT_DOWN_STAMP, statClip, thawClip, wakeClip, type CondKind, type CondSpot } from '../core/presentation/motionConditions';
+import { BUBBLE_W, chevronWaves, condArriveClip, FLAG_HOLD, intimidateClip, condKind, condTickClip, FLAME_W, CONFUSE, endTurnParade, confusionHitClip, gustLeanClip, parCantClip, protectedClip, SHIELD, SLUMP, STAT_COLOR, STAT_DOWN_STAMP, statClip, thawClip, wakeClip, type CondKind, type CondSpot } from '../core/presentation/motionConditions';
 import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture, GLOW_SIZE, glowPicture, PICTURE_SCALE, plusPicture, shinyChipPicture, stampPicture, starPicture } from '../ui/battleFx/cheerChip';
 import { dynamaxPan } from '../ui/battleFx/dynamaxPan';
 import { keyItemFor } from '../ui/battleFx/cineLook';
@@ -170,6 +170,7 @@ import { sosEntry } from '../core/battle/sos';
 import { WEATHER_ASSET_IDS, WeatherLayer } from '../ui/battleFx/weather';
 import { WeatherLook, WX_KINDS, type WxKind } from '../ui/battleFx/weatherLook';
 import { TerrainLook } from '../ui/battleFx/terrainLook';
+import { EndTurnParade } from '../ui/battleFx/endTurnLook';
 import { TERRAIN_KINDS, type TerrainKind } from '../core/presentation/motionWeather';
 import { battleTrack, storyBattleMusic, lowHpTrack, raidMusic, victoryTrack, type BattleRole } from '../core/presentation/battleMusic';
 import { itemCount } from '../core/items';
@@ -6842,7 +6843,24 @@ export class BattleScene extends Phaser.Scene {
 
     this.fellAt = null;
     this.gustShown = false;
+    // Pass 8 "End of Turn": the turn's end-of-turn effects as a row of chips that light as each plays.
+    const parade = this.clipLevel() !== 'off' && !this.duo ? endTurnParade(events as unknown as ({ type: string } & Record<string, unknown>)[], (id) => content.items.get(id)?.name ?? id.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())) : null;
+    const eotAt = parade && parade.chips.length > 0 ? [...parade.at.keys()] : [];
+    const eotFirst = eotAt.length ? Math.min(...eotAt) : -1;
+    const eotLast = eotAt.length ? Math.max(...eotAt) : -1;
+    let eot: EndTurnParade | null = null;
     for (const [index, e] of events.entries()) {
+      if (index === eotFirst && parade) {
+        try {
+          eot = new EndTurnParade(this, parade.chips, 48 + 36 * ((this.wxLook?.current ? 1 : 0) + (this.trLook?.current ? 1 : 0)), this.clipLevel());
+          this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => eot?.destroy());
+          await eot.open();
+        } catch {
+          eot = null;
+        }
+      }
+      const chipAt = parade?.at.get(index);
+      if (eot && chipAt !== undefined) eot.light(chipAt);
       // New UI: a Rally brace or a signature trait gets its callout for its own line and the stat lines that belong to it.
       if (this.rx) this.rxCall = this.calloutOf(events, index) ?? (keepsCallout(e) ? this.rxCall : null);
       // New UI: the level-up window stays through that Pokémon's level and move lines, then leaves.
@@ -7412,7 +7430,14 @@ export class BattleScene extends Phaser.Scene {
       // What the trainer says about it (spoken lines, after the event's own text).
       for (const line of drama.filter((d) => d.at === index)) await this.sayTrainer(line);
       this.reskin();
+      if (eot && index === eotLast) {
+        const turn = this.run.battle?.turn;
+        if (turn) await eot.close(Math.max(1, turn - 1), turn);
+        else eot.destroy();
+        eot = null;
+      }
     }
+    eot?.destroy();
     // Make sure the boxes match the real state at the end of the turn.
     const run = this.run;
     if (run.battle?.doubles && this.duo) await this.syncDuo();

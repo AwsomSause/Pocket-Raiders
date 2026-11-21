@@ -379,3 +379,51 @@ export function confusionHitClip(at: CondSpot, level: ClipLevel): MotionClip {
   b.beat(0, 'Swings at nothing').beat(bonk, 'Bonks itself');
   return b.end(bonk + 400);
 }
+
+/** One end-of-turn effect's chip (pass 8 "End of Turn"): its words and colour. */
+export interface EndTurnChip {
+  word: string;
+  color: string;
+}
+
+/** What a turn's end looks like as a parade of chips: where the row sits and how the chips light. */
+export const END_TURN = { gap: 122, w: 112, right: 946, lightMs: 100, holdMs: 500, dimMs: 200, dim: 0.6, lit: 1.15 } as const;
+
+/** The chip an end-of-turn event gets (null: not an end-of-turn effect). `item` names a held item. */
+export function endTurnChip(e: { type: string } & Record<string, unknown>, item: (id: string) => string): EndTurnChip | null {
+  switch (e.type) {
+    case 'residual':
+      return e.status === 'brn' ? { word: 'Burn', color: '#e8582b' } : e.status === 'psn' || e.status === 'tox' ? { word: 'Poison', color: '#a45cc8' } : null;
+    case 'weatherDamage':
+      return e.weather === 'sand' ? { word: 'Sandstorm', color: '#e2c98a' } : e.weather === 'hail' ? { word: 'Hail', color: '#cdf3ff' } : null;
+    case 'seedDamage':
+      return { word: 'Leech Seed', color: '#56c96a' };
+    case 'bindDamage':
+      return { word: 'Bound', color: '#c8a050' };
+    case 'held':
+      return e.what === 'heal' && typeof e.itemId === 'string' ? { word: item(e.itemId), color: '#7be08a' } : null;
+    default:
+      return null;
+  }
+}
+
+/**
+ * The turn's end, as the parade sees it: the events after the last move that have a chip, and the row of chips (one
+ * per kind of effect, in the order they first happen, at most four). `at` maps each such event to its chip.
+ */
+export function endTurnParade(events: readonly ({ type: string } & Record<string, unknown>)[], item: (id: string) => string): { chips: EndTurnChip[]; at: Map<number, number> } {
+  let last = -1;
+  events.forEach((e, i) => {
+    if (e.type === 'move') last = i;
+  });
+  const chips: EndTurnChip[] = [];
+  const at = new Map<number, number>();
+  for (let i = last + 1; i < events.length; i++) {
+    const c = endTurnChip(events[i]!, item);
+    if (!c) continue;
+    let k = chips.findIndex((x) => x.word === c.word);
+    if (k < 0 && chips.length < 4) k = chips.push(c) - 1;
+    if (k >= 0) at.set(i, k);
+  }
+  return { chips, at };
+}

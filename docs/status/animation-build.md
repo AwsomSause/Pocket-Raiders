@@ -164,3 +164,9 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   shakes. Snapping out takes the stars away and it stands as before. Reduced: the stars stay still and no sway; the
   hurt is a blink. Limits: no CNF chip on the plate yet (the plates are the UI build's); doubles keep the pack picture;
   a battle reloaded mid-confusion shows the stars from the next confusion moment.
+- End of turn (pass 8 "End of Turn"; `endTurnParade`, `src/ui/battleFx/endTurnLook.ts`): when a turn ends with
+  effects (Leftovers and other healing items, poison, burn, sandstorm, hail, Leech Seed, binding), a row of chips
+  drops in at the top right (under the weather and terrain chips), one per kind of effect, at most four. Each chip
+  lights in its colour and swells as its effect plays, then settles dimmer. After the last one the chips lift away, a
+  yellow line sweeps the screen and a TURN plate pops up and flips to the new turn number, then leaves. Reduced: the
+  chips light without moving; no sweep or plate. Doubles: nothing new.
