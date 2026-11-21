@@ -908,6 +908,34 @@ test('Pocket look: the run end is the mock-up page; Tab opens the full report as
   expect(errors).toEqual([]);
 });
 
+test('Pocket look: a winning team opens as the Hall of Fame page and Back closes it; the records are unchanged', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=pk-hof');
+  await toPocketMap(page);
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr, run = pkr.session.run;
+    run.victory = true;
+    run.phase = 'over';
+    pkr.session.finishRun();
+    pkr.game.scene.getScene('Map').scene.start('HallOfFame');
+  });
+  await waitForScene(page, 'HallOfFame');
+  const before = await page.evaluate(() => JSON.stringify((window as any).__pkr.session.profile.runHistory));
+  await step(page, 'ArrowDown');
+  await step(page, 'Enter');
+  await onPkPage(page, 'HallOfFame', 'hof');
+  const hf = pkView(page, 'HallOfFame', 'hof');
+  await expect(hf.locator('.hf-t b')).toHaveText('Hall of Fame');
+  await expect(hf.locator('.hf-row i.me')).toHaveCount(1);
+  await expect(hf.locator('.vs-say .btn')).toHaveText('Back');
+  await fits(page, 'HallOfFame', 'hof');
+  await hf.locator('.vs-say .btn').click();
+  await expect(hf.locator('.hf-row')).toHaveCount(0);
+  expect(await page.evaluate(() => JSON.stringify((window as any).__pkr.session.profile.runHistory))).toBe(before);
+  expect(errors).toEqual([]);
+});
+
 test('Pocket look: starting a run, Starter Pick is three cards and the Briefing shows the first region and Gym', async ({ page }) => {
   test.setTimeout(180_000);
   const errors = watch(page);

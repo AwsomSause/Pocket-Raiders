@@ -31,6 +31,7 @@ import type { BriefModel } from '../../src/ui/redux/screens/run';
 import type { TradeModel } from '../../src/ui/redux/screens/stops';
 import { PK_TOOLS_PAGE, pkTools, toolShort } from '../../src/ui/pocket/screens/tools';
 import { PK_TRAINER_SIDE, pkTrainers, trainerColour } from '../../src/ui/pocket/screens/trainers';
+import { hallTag, pkHall } from '../../src/ui/pocket/screens/hall';
 import { keepLine, pkOver } from '../../src/ui/pocket/screens/over';
 import { pkGallery, pkMemories, shelfMon, type PkGalleryModel } from '../../src/ui/pocket/screens/memories';
 import { firstThought, fitBody, pkBoard, pkConfirm, pkGrid, pkMenu, pkOptions, pkSaves, pkStats } from '../../src/ui/pocket/templates';
@@ -1053,5 +1054,27 @@ describe('Pocket look: the run end', () => {
     expect(rep).toContain('data-act="back"');
     expect(keepLine('Profile', 'Already added')).toBe('Profile: Already added');
     expect(pkOver({ ...d, payouts: [], road: null })).not.toContain('ov-keep');
+  });
+});
+
+describe('Pocket look: the Hall of Fame', () => {
+  const mons = ['Charizard', 'Pikachu', 'Gengar', 'Gyarados', 'Lucario', 'Snorlax'].map((name, i) => ({ file: null, name, type: ['fire', 'electric', 'ghost', 'water', 'fighting', 'normal'][i]! }));
+  it('the team under spotlights with the Trainer in the middle, what comes next and one button', () => {
+    const html = pkHall({ where: 'Kanto cleared · Run 13 · 8 badges', mons, trainer: { art: null, name: 'Champion Red' }, say: 'Your team is recorded. **Johto** is next.', button: 'On to Johto' });
+    expect(pkPageOf(html)?.id).toBe('hof');
+    expect(html).toContain('Kanto cleared');
+    const keys = [...html.matchAll(/data-key="hf-(\w+)"/g)].map((m) => m[1]).filter((k) => k !== 'title' && k !== 'row' && k !== 'say');
+    expect(keys).toEqual(['0', '1', '2', 'me', '4', '5', '6']);
+    expect(html).toContain('<b>Johto</b>');
+    expect(html).toContain('data-act="next"');
+    expect(html).toContain('On to Johto');
+  });
+  it('a short team still puts the Trainer in the middle; the button can go back; unknown types are grey', () => {
+    const html = pkHall({ where: 'x', mons: mons.slice(0, 1), trainer: { art: null, name: 'Red' }, say: '<b>', button: 'Back', go: 'back' });
+    expect(html.indexOf('hf-0')).toBeLessThan(html.indexOf('hf-me'));
+    expect(html).toContain('data-act="back"');
+    expect(html).toContain('&lt;b&gt;');
+    expect(hallTag('')).toBe('#9fa19f');
+    expect(hallTag('fire')).not.toBe('#9fa19f');
   });
 });

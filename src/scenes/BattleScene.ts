@@ -141,7 +141,8 @@ import { battleSkinFor, type BattleFrameInfo, type BattleHud, type BattleSkin, t
 import { fallbackFoeArt } from '../core/presentation/foeArt';
 import { reduxLayout, reduxSkinIndex } from '../core/presentation/redux';
 import { useLookFont } from '../ui/redux/canvasFont';
-import { mountRedux, phantomOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, phantomOn, pocketOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { pkHall } from '../ui/pocket/screens/hall';
 import { phGimmick, type GimmickCard } from '../ui/phantom/screens/cutin';
 import { gimmickSlots } from '../core/battle/bossGimmicks';
 import { phTravel } from '../ui/phantom/screens/travel';
@@ -3451,6 +3452,42 @@ export class BattleScene extends Phaser.Scene {
    * Phantom UI: a region's Champion fell and another region waits. The mock-ups' Next region page: the ticket the run
    * holds (a run's regions are fixed when it starts), the road so far and what changes there. Waits for an input.
    */
+  /**
+   * Pocket look: a region's Champion fell, so the team stands in the Hall of Fame (mock-up `hof`) with what comes next
+   * and one button. Waits for an input. Returns whether it showed.
+   */
+  private async pkHallCard(run: RunState, cleared: string, won: boolean): Promise<boolean> {
+    if (!this.rx || !pocketOn()) return false;
+    const { content, profile } = services().session;
+    try {
+      const at = run.regionOrder.indexOf(cleared), nextId = at < 0 ? undefined : run.regionOrder[at + 1];
+      const here = content.regions.get(cleared)?.name ?? cleared, next = nextId ? content.regions.get(nextId)?.name ?? nextId : null;
+      const arch = content.archetypes.get(run.archetypeId);
+      const mons = run.party.slice(0, 6).map((m) => ({ file: monFile(this, m.speciesId, 'front', !!m.shiny), name: getSpecies(content, m.speciesId).name, type: getSpecies(content, m.speciesId).types[0] ?? '' }));
+      const say = won || !next ? 'Your team is recorded in the Hall of Fame. You have conquered every region!' : `Your team is recorded in the Hall of Fame. **${next}** is next, with a higher level cap and tougher bosses.`;
+      let finish!: () => void;
+      const done = new Promise<void>((r) => (finish = r));
+      let over = false;
+      const view = mountRedux(this, { render: (c) => (c.pk ? pkHall({ where: `${here} cleared · Run ${profile.runHistory.length + 1} · ${run.badges.length} badges`, mons, trainer: { art: artOf(this, arch?.spriteAssetId), name: `Champion ${arch?.name ?? run.archetypeId}` }, say, button: won || !next ? 'See the ending' : `On to ${next}` }) : ''), acts: { next: () => end() }, card: true });
+      const end = (): void => {
+        if (over) return;
+        over = true;
+        try {
+          view.destroy();
+        } catch {
+          // the scene may already be gone
+        }
+        finish();
+      };
+      this.events.once('shutdown', end);
+      await this.playBeat({ done, skip: end });
+      return true;
+    } catch (e) {
+      console.warn('Pocket Hall of Fame card failed', e);
+      return false;
+    }
+  }
+
   private async phTravelCard(run: RunState, cleared: string): Promise<boolean> {
     if (!this.phCards()) return false;
     const { content } = services().session;
@@ -5347,7 +5384,7 @@ export class BattleScene extends Phaser.Scene {
       await this.playBeat(stamp(this, 'CHAMPION!', region, ROLE_RIMS.champion, this.motion));
       await this.say(end.regionCleared === 'grand' ? `You beat the final boss and are the ${region} Champion!` : `You are the ${region} Champion!`);
       if (end.victory) for (const line of buildEpilogue(content, result.run)) await this.say(line);
-      if (end.victory || !(await this.phTravelCard(result.run, end.regionCleared))) await this.say(end.victory ? 'You have conquered every region!' : 'A new region awaits…');
+      if (!(await this.pkHallCard(result.run, end.regionCleared, !!end.victory)) && (end.victory || !(await this.phTravelCard(result.run, end.regionCleared)))) await this.say(end.victory ? 'You have conquered every region!' : 'A new region awaits…');
     }
     this.updateHeader();
     // Evolutions this battle earned wait as decisions: the evolution scene plays on the next screen (B can stop it).
