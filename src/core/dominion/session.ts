@@ -13,7 +13,7 @@ import { admit, approach, hire } from './recruit';
 import { answer, eveningTalk } from './talk';
 import { act, buy, settle } from './field';
 import { beginDominionFight } from './fight';
-import { DOMINION_DATA } from './data';
+import { DOMINION_DATA, useRegion } from './data';
 import { fill } from './worldTurn';
 import { DominionBlockSchema, type DominionAction, type DominionBlock, type DominionSetup } from './schema';
 import { newBlock, typesProblem } from './start';
@@ -39,10 +39,16 @@ import { answerQ, noteAct, releasedSeen, releaseQ, returnHeld } from './police';
 import './growth';
 import { endS, goalS, inRoom, sayS, stopS, type SOut } from './snatch';
 import { takeoverStep } from './takeover';
+import { leave, realmStep, type Orders } from './regions';
 
 export const DOMINION_MODE_ID = 'dominion';
 export const isDominionRun = (run: RunState | null | undefined): boolean => run?.rules.modeId === DOMINION_MODE_ID;
-export const dominionBlock = (run: RunState | null | undefined): DominionBlock | undefined => run?.expansion?.dominion;
+/** The run's block. D15: also switches the data to the region the block is playing (every screen reads through here). */
+export const dominionBlock = (run: RunState | null | undefined): DominionBlock | undefined => {
+  const b = run?.expansion?.dominion;
+  useRegion(b);
+  return b;
+};
 
 const withBlock = (run: RunState, block: DominionBlock): RunState => ({ ...run, expansion: { ...(run.expansion ?? {}), dominion: block } });
 
@@ -66,6 +72,7 @@ export function bossTeam(content: Content, run: RunState): RunState {
 /** Starts the Dominion on the run: the block, the Boss's three starters, the Day 1 bag. Returns why it couldn't, or the new run. */
 export function startInRun(content: Content, run: RunState, setup: DominionSetup): { run: RunState; problem: string | null } {
   if (run.expansion?.dominion) return { run, problem: null };
+  useRegion(undefined);
   const problem = typesProblem(setup.types);
   if (problem) return { run, problem };
   let out = bossTeam(content, structuredClone(run));
@@ -86,8 +93,15 @@ export function startInRun(content: Content, run: RunState, setup: DominionSetup
  * the district the Boss worked in counts as this week's visit, and a new Notoriety step is announced.
  */
 export function stepInRun(content: Content, run0: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean; roll?: Roll | null } {
-  // D11: a save from before the Hero gets theirs on the first step (picked by the Boss's trainer, Q5).
+  // D15: the data follows the region this block plays; leaving starts the next region's block outright.
   const b0 = run0.expansion?.dominion;
+  useRegion(b0);
+  if (action.t === 'leave' && b0) {
+    const out = leave(content, run0, { holder: action.holder, orders: action.orders as Orders, bring: action.bring });
+    if (out.problem) return { ok: false, block: b0, notice: out.problem, heal: false, run: run0 };
+    return { ok: true, block: out.run.expansion!.dominion!, notice: null, heal: false, run: out.run };
+  }
+  // D11: a save from before the Hero gets theirs on the first step (picked by the Boss's trainer, Q5).
   const run = b0 && !b0.hero ? withBlock(run0, ensureHero(b0, run0.archetypeId, run0.seed)) : run0;
   const before = run.expansion?.dominion;
   const out = stepInner(content, run, action);
@@ -150,6 +164,13 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
   if (hqOut) return hqOut;
   const rivalOut = rivalInRun(run, action);
   if (rivalOut) return rivalOut;
+  if (action.t === 'realm') {
+    // D15: the Empire screen's answers to a held region (regions.ts).
+    const out = realmStep(block, action.op, action.region, { member: action.member, orders: action.orders as Orders | undefined, tribute: action.tribute }, run.seed);
+    if (!out.ok) return { ok: false, block, notice: out.notice, heal: false, run };
+    const next = withBlock(run, DominionBlockSchema.parse(out.block));
+    return { ok: true, block: next.expansion!.dominion!, notice: out.notice, heal: false, run: next, fight: out.fight };
+  }
   if (action.t === 'takeover') {
     // D14: the Takeover page (takeover.ts): Holdings, the Moment, storming a rival HQ, the broadcast.
     const out = takeoverStep(block, action.op, action.id);
@@ -550,6 +571,7 @@ export function settleChair(content: Content, run: RunState): RunState {
 
 /** D2: starts the battle the block is waiting on (an action's, or Looker's or the raid's at the door). Null if none. */
 export function fightInRun(content: Content, run: RunState): RunState | null {
+  useRegion(run.expansion?.dominion);
   return beginDominionFight(content, run);
 }
 
@@ -559,6 +581,7 @@ export function fightInRun(content: Content, run: RunState): RunState | null {
  */
 export function settleStaleFight(content: Content, run: RunState): { run: RunState; lines: string[] } | null {
   const block = run.expansion?.dominion;
+  useRegion(block);
   if (!block?.field.fight?.begun || run.battle) return null;
   const out = structuredClone(run);
   const b = structuredClone(block);

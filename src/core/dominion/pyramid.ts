@@ -43,11 +43,8 @@ export const hasBand = (b: DominionBlock, band: number): boolean => b.members.so
 
 // ---------- caps (Part 7 §4, Part 8 §2) ----------
 
-/** Which region of the run this is (0 = the first). One region until the many-regions slice (D15). */
-export const regionIndex = (b: DominionBlock): number => {
-  void b;
-  return 0;
-};
+/** Which region of the run this is (0 = the first). D15: one more for every region left behind. */
+export const regionIndex = (b: DominionBlock): number => b.realm?.held.length ?? 0;
 /** The standing bonus from Notoriety (Part 7 §4.2, read on the A14 ladder). */
 export function standingOf(b: DominionBlock): { word: string; bonus: number } {
   const n = notoriety(b);

@@ -91,9 +91,9 @@ describe('DOMINION D12: the 150 cards', () => {
     const n = (s: string) => CARDS.filter((c) => c.sect === s).length;
     expect([n('crew'), n('town'), n('money'), n('law'), n('rival'), n('hero'), n('gyms'), n('pokemon'), n('empire'), n('regular'), n('crisis')]).toEqual([22, 22, 14, 12, 16, 10, 12, 14, 10, 12, 6]);
   });
-  it('every card has a status: 124 play now (some limited), 26 wait and name the slice (D14 opened card 82)', () => {
+  it('every card has a status: 129 play now (some limited), 21 wait and name the slice (D14 opened card 82; D15 cards 80, 126, 127, 129, 132)', () => {
     const st = CARDS.map(cardStatus);
-    expect(st.filter((s) => s !== 'disabled')).toHaveLength(124);
+    expect(st.filter((s) => s !== 'disabled')).toHaveLength(129);
     expect(st.filter((s) => s === 'supported').length).toBeGreaterThan(50);
     for (const c of CARDS.filter((x) => x.wait)) expect(c.wait).toMatch(/^(D\d+|quiz)$/);
   });

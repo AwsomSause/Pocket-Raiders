@@ -1,0 +1,2180 @@
+{
+ "_source": "tools/dominion/regions-to-json.py (kalos); see the tool for sources.",
+ "id": "kalos",
+ "label": "KALOS",
+ "warehouse": "Coumarine",
+ "hq": "coumarine",
+ "arrive": [
+  "Coumarine: half the town on the cliff, half by the sea, and a monorail between them. The warehouse is at the bottom.",
+  "{brought} straightens their collar. \"Everyone here dresses better than us, Boss.\"",
+  "On every corner, a red-suited stranger hands out leaflets for a \"better, more beautiful world\". The leaflets are very expensive paper."
+ ],
+ "districts": [
+  {
+   "id": "vaniville",
+   "name": "Vaniville",
+   "x": 40,
+   "y": 300,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "normal-fairy",
+   "targets": [
+    {
+     "id": "vaniville-street",
+     "name": "Vaniville Lane",
+     "kind": "street",
+     "owner": {
+      "name": "The neighbours",
+      "look": "trainer/pr/pokefan_f",
+      "line": "Rhyhorn racers live here. They wake up early."
+     },
+     "trait": {
+      "word": "Watchful",
+      "odds": -4
+     },
+     "pay": 1,
+     "foe": {
+      "name": "Neighbour",
+      "cls": "picnicker",
+      "species": [
+       "fletchling"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "aquacorde-bridge",
+     "name": "Aquacorde Bridge",
+     "kind": "crowd",
+     "owner": {
+      "name": "The café crowd",
+      "look": "trainer/pr/waiter_f",
+      "line": "Teenagers deciding their futures over macarons."
+     },
+     "trait": {
+      "word": "Gullible",
+      "odds": 5
+     },
+     "pay": 1.1,
+     "foe": {
+      "name": "Café regular",
+      "cls": "lass",
+      "species": [
+       "bunnelby"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "route-2-kalos",
+     "name": "Route 2",
+     "kind": "route",
+     "owner": {
+      "name": "Trainers on the route",
+      "look": "trainer/pr/backpacker_f",
+      "line": "A short path with a lot of grass."
+     },
+     "trait": null,
+     "pay": 1,
+     "foe": {
+      "name": "Youngster Austin",
+      "cls": "youngster",
+      "species": [
+       "fletchling",
+       "scatterbug"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "santalune",
+   "name": "Santalune",
+   "x": 40,
+   "y": 196,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "grass-bug",
+   "targets": [
+    {
+     "id": "santalune-forest",
+     "name": "Santalune Forest",
+     "kind": "route",
+     "owner": {
+      "name": "Bug catchers",
+      "look": "trainer/pr/backpacker_m",
+      "line": "A bright forest with tidy paths."
+     },
+     "trait": null,
+     "pay": 1,
+     "foe": {
+      "name": "Bug Catcher Wayne",
+      "cls": "bug-catcher",
+      "species": [
+       "scatterbug",
+       "pansage"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "santalune-mart",
+     "name": "Santalune Mart",
+     "kind": "shop",
+     "owner": {
+      "name": "The Mart clerk",
+      "look": "dominion/t-clerk.png",
+      "line": "Sells photo frames and Poké Balls."
+     },
+     "trait": {
+      "word": "Timid",
+      "odds": 5
+     },
+     "pay": 1,
+     "foe": {
+      "name": "The clerk's niece",
+      "cls": "lass",
+      "species": [
+       "pikachu"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "santalune-square",
+     "name": "Santalune Plaza",
+     "kind": "crowd",
+     "owner": {
+      "name": "The plaza crowd",
+      "look": "trainer/pr/artist",
+      "line": "Painters, a photographer and her Gym."
+     },
+     "trait": {
+      "word": "Gossip",
+      "odds": 5
+     },
+     "pay": 1.1,
+     "foe": {
+      "name": "Painter",
+      "cls": "aroma-lady",
+      "species": [
+       "vivillon"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "lumiose",
+   "name": "Lumiose",
+   "x": 200,
+   "y": 170,
+   "control": 0,
+   "rival": 55,
+   "police": false,
+   "wild": "normal-electric",
+   "targets": [
+    {
+     "id": "lumiose-boutique",
+     "name": "Boutique Couture",
+     "kind": "shop",
+     "owner": {
+      "name": "The manager",
+      "look": "trainer/pr/rich_f",
+      "line": "You can't afford it. That's the point."
+     },
+     "trait": {
+      "word": "Snob",
+      "odds": -4
+     },
+     "pay": 1.6,
+     "foe": {
+      "name": "Boutique guard",
+      "cls": "veteran",
+      "species": [
+       "furfrou",
+       "meowstic"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "lysandre-cafe",
+     "name": "Lysandre Café",
+     "kind": "site",
+     "owner": {
+      "name": "The waiter",
+      "look": "trainer/pr/waiter_m",
+      "line": "Red walls, red coffee, a lift that goes down."
+     },
+     "trait": {
+      "word": "Shifty",
+      "odds": 6
+     },
+     "pay": 1.6,
+     "foe": {
+      "name": "Café staff",
+      "cls": "veteran",
+      "species": [
+       "houndour",
+       "litleo"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "prism-tower",
+     "name": "Prism Tower",
+     "kind": "site",
+     "owner": {
+      "name": "The tower engineer",
+      "look": "trainer/pr/worker_f",
+      "line": "It lights the whole city. Somebody has to work the switch."
+     },
+     "trait": {
+      "word": "Steady",
+      "odds": -4
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Tower staff",
+      "cls": "guitarist",
+      "species": [
+       "helioptile",
+       "magnemite"
+      ],
+      "offset": 1
+     }
+    }
+   ],
+   "w": 130,
+   "rivalNote": "Flare"
+  },
+  {
+   "id": "cyllage",
+   "name": "Cyllage",
+   "x": 40,
+   "y": 70,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "water-rock",
+   "targets": [
+    {
+     "id": "cyllage-bikes",
+     "name": "Cycle Shop",
+     "kind": "shop",
+     "owner": {
+      "name": "The bike seller",
+      "look": "trainer/pr/cyclist_f",
+      "line": "Bikes up the cliff road, brakes extra."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 4
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Cyclist",
+      "cls": "biker",
+      "species": [
+       "fletchinder"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "glittering-cave",
+     "name": "Glittering Cave",
+     "kind": "cave",
+     "owner": {
+      "name": "Fossil diggers",
+      "look": "trainer/pr/worker_f",
+      "line": "Glowing walls and very old bones."
+     },
+     "trait": null,
+     "pay": 1.2,
+     "foe": {
+      "name": "Digger",
+      "cls": "hiker",
+      "species": [
+       "onix",
+       "cubone"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "ambrette-aquarium",
+     "name": "Ambrette Aquarium",
+     "kind": "site",
+     "owner": {
+      "name": "The aquarium director",
+      "look": "trainer/pr/scientist_f",
+      "line": "Tanks of rare fish, and a fossil lab in the back."
+     },
+     "trait": {
+      "word": "Nervous",
+      "odds": 6
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Aquarium guard",
+      "cls": "veteran",
+      "species": [
+       "skrelp",
+       "clauncher"
+      ],
+      "offset": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "coumarine",
+   "name": "Coumarine",
+   "x": 340,
+   "y": 300,
+   "control": 10,
+   "rival": 0,
+   "police": false,
+   "wild": "water-grass",
+   "targets": [
+    {
+     "id": "coumarine-port",
+     "name": "Coumarine Port",
+     "kind": "dock",
+     "owner": {
+      "name": "The port boss",
+      "look": "trainer/pr/pilot",
+      "line": "Ships to Hoenn, ships to Alola, ships nobody writes down."
+     },
+     "trait": {
+      "word": "Stubborn",
+      "odds": -4
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Port hand",
+      "cls": "worker",
+      "species": [
+       "wingull",
+       "inkay"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "coumarine-monorail",
+     "name": "Monorail Station",
+     "kind": "site",
+     "owner": {
+      "name": "The station master",
+      "look": "trainer/pr/depot_agent",
+      "line": "One train up the cliff, one train down."
+     },
+     "trait": {
+      "word": "Bored",
+      "odds": 4
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Station hand",
+      "cls": "worker",
+      "species": [
+       "magnemite",
+       "helioptile"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "coumarine-mart",
+     "name": "Coumarine Mart",
+     "kind": "shop",
+     "owner": {
+      "name": "The Mart clerk",
+      "look": "dominion/t-clerk.png",
+      "line": "Fishing gear and sunscreen."
+     },
+     "trait": {
+      "word": "Timid",
+      "odds": 5
+     },
+     "pay": 1,
+     "foe": {
+      "name": "The clerk's brother",
+      "cls": "fisherman",
+      "species": [
+       "remoraid"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "shalour",
+   "name": "Shalour",
+   "x": 200,
+   "y": 40,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "fighting-steel",
+   "targets": [
+    {
+     "id": "tower-of-mastery",
+     "name": "Tower of Mastery",
+     "kind": "site",
+     "owner": {
+      "name": "The Mega Tower guru",
+      "look": "trainer/pr/veteran_m",
+      "line": "He guards the secret of Mega Evolution with his life."
+     },
+     "trait": {
+      "word": "Proud",
+      "odds": -8
+     },
+     "pay": 1.6,
+     "foe": {
+      "name": "Guru",
+      "cls": "black-belt",
+      "species": [
+       "lucario",
+       "machoke"
+      ],
+      "offset": 2
+     }
+    },
+    {
+     "id": "shalour-shore",
+     "name": "Shalour Tide Flats",
+     "kind": "route",
+     "owner": {
+      "name": "Tide walkers",
+      "look": "trainer/pr/scuba_diver_f",
+      "line": "At low tide you can walk to the tower."
+     },
+     "trait": null,
+     "pay": 1.1,
+     "foe": {
+      "name": "Swimmer Marina",
+      "cls": "swimmer",
+      "species": [
+       "binacle",
+       "skrelp"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "shalour-mart",
+     "name": "Shalour Mart",
+     "kind": "shop",
+     "owner": {
+      "name": "The Mart clerk",
+      "look": "dominion/t-clerk.png",
+      "line": "Sells postcards of the tower."
+     },
+     "trait": {
+      "word": "Timid",
+      "odds": 5
+     },
+     "pay": 1,
+     "foe": {
+      "name": "The clerk's sister",
+      "cls": "battle-girl",
+      "species": [
+       "makuhita"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "laverre",
+   "name": "Laverre",
+   "x": 340,
+   "y": 120,
+   "control": 0,
+   "rival": 25,
+   "police": false,
+   "wild": "ghost-fairy",
+   "targets": [
+    {
+     "id": "laverre-factory",
+     "name": "Poké Ball Factory",
+     "kind": "site",
+     "owner": {
+      "name": "The factory boss",
+      "look": "trainer/pr/worker_f",
+      "line": "A Ball every second, all day long."
+     },
+     "trait": {
+      "word": "Bored",
+      "odds": 5
+     },
+     "pay": 1.6,
+     "foe": {
+      "name": "Factory guard",
+      "cls": "veteran",
+      "species": [
+       "magnemite",
+       "pawniard"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "laverre-tree",
+     "name": "The Great Tree",
+     "kind": "crowd",
+     "owner": {
+      "name": "The tree town",
+      "look": "trainer/pr/parasol_lady",
+      "line": "A town built round one old tree."
+     },
+     "trait": {
+      "word": "Watchful",
+      "odds": -4
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Townsman",
+      "cls": "fairy-tale-girl",
+      "species": [
+       "spritzee",
+       "swirlix"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "lost-hotel",
+     "name": "Lost Hotel",
+     "kind": "ghost",
+     "owner": {
+      "name": "The punks",
+      "look": "trainer/pr/hooligans",
+      "line": "A hotel nobody runs, full of people nobody wants."
+     },
+     "trait": {
+      "word": "Shifty",
+      "odds": 6
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Punk",
+      "cls": "roughneck",
+      "species": [
+       "trubbish",
+       "scraggy"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "rivalNote": "Flare"
+  },
+  {
+   "id": "anistar",
+   "name": "Anistar",
+   "x": 480,
+   "y": 196,
+   "control": 0,
+   "rival": 0,
+   "police": true,
+   "wild": "flying-psychic",
+   "targets": [
+    {
+     "id": "anistar-sundial",
+     "name": "The Sundial",
+     "kind": "crowd",
+     "owner": {
+      "name": "The watchers",
+      "look": "trainer/pr/psychic_f",
+      "line": "They wait all day for the sundial to glow."
+     },
+     "trait": {
+      "word": "Superstitious",
+      "odds": 6
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Watcher",
+      "cls": "psychic",
+      "species": [
+       "espurr",
+       "sigilyph"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "anistar-station",
+     "name": "Anistar Police Post",
+     "kind": "police",
+     "owner": {
+      "name": "Officer Jenny",
+      "look": "dominion/t-policeman.png",
+      "line": "A quiet post in a town of mystics."
+     },
+     "trait": {
+      "word": "Sharp",
+      "odds": -10
+     },
+     "pay": 1,
+     "foe": {
+      "name": "Officer",
+      "cls": "veteran",
+      "species": [
+       "growlithe",
+       "meowstic"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "route-15-kalos",
+     "name": "Route 15",
+     "kind": "route",
+     "owner": {
+      "name": "Trainers on the route",
+      "look": "trainer/pr/backpacker_m",
+      "line": "Wet leaves and lost Trainers."
+     },
+     "trait": null,
+     "pay": 1.1,
+     "foe": {
+      "name": "Ace Trainer Dean",
+      "cls": "ace-trainer",
+      "species": [
+       "pawniard",
+       "skorupi"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "snowbelle",
+   "name": "Snowbelle",
+   "x": 480,
+   "y": 70,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "grass-ice",
+   "targets": [
+    {
+     "id": "winding-woods",
+     "name": "Winding Woods",
+     "kind": "route",
+     "owner": {
+      "name": "Wood cutters",
+      "look": "trainer/pr/worker_f",
+      "line": "Snow on the trees all year."
+     },
+     "trait": null,
+     "pay": 1.1,
+     "foe": {
+      "name": "Wood cutter",
+      "cls": "snow-worker",
+      "species": [
+       "bergmite",
+       "snover"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "pokemon-village",
+     "name": "Pokémon Village",
+     "kind": "site",
+     "owner": {
+      "name": "The village guardian",
+      "look": "trainer/pr/ranger_f",
+      "line": "Pokémon hide here from people. She keeps it that way."
+     },
+     "trait": {
+      "word": "Kind",
+      "odds": 5
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Guardian",
+      "cls": "ranger",
+      "species": [
+       "ditto",
+       "noibat"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "snowbelle-mart",
+     "name": "Snowbelle Mart",
+     "kind": "shop",
+     "owner": {
+      "name": "The Mart clerk",
+      "look": "dominion/t-clerk.png",
+      "line": "Sells scarves and Ice Heals."
+     },
+     "trait": {
+      "word": "Timid",
+      "odds": 5
+     },
+     "pay": 1,
+     "foe": {
+      "name": "The clerk's son",
+      "cls": "snow-worker",
+      "species": [
+       "amaura"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "couriway",
+   "name": "Couriway",
+   "x": 480,
+   "y": 300,
+   "control": 0,
+   "rival": 20,
+   "police": false,
+   "wild": "water-dragon",
+   "targets": [
+    {
+     "id": "couriway-station",
+     "name": "Couriway Station",
+     "kind": "site",
+     "owner": {
+      "name": "The station master",
+      "look": "trainer/pr/depot_agent",
+      "line": "Trains from Lumiose stop here on the falls."
+     },
+     "trait": {
+      "word": "Bored",
+      "odds": 4
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Station hand",
+      "cls": "worker",
+      "species": [
+       "bunnelby"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "terminus-cave",
+     "name": "Terminus Cave",
+     "kind": "cave",
+     "owner": {
+      "name": "The miners",
+      "look": "trainer/pr/worker_f",
+      "line": "An abandoned mine with something guarding its end."
+     },
+     "trait": {
+      "word": "Superstitious",
+      "odds": 6
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Miner",
+      "cls": "hiker",
+      "species": [
+       "durant",
+       "noibat"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "kiloude-gate",
+     "name": "Kiloude Gate",
+     "kind": "crowd",
+     "owner": {
+      "name": "Battle fans",
+      "look": "trainer/pr/ace_trainer_m",
+      "line": "Everyone here is going to the Battle Maison."
+     },
+     "trait": {
+      "word": "Proud",
+      "odds": -4
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Battle fan",
+      "cls": "ace-trainer",
+      "species": [
+       "goodra",
+       "hawlucha"
+      ],
+      "offset": 2
+     }
+    }
+   ],
+   "rivalNote": "Flare"
+  }
+ ],
+ "routes": [
+  [
+   "vaniville",
+   "santalune"
+  ],
+  [
+   "santalune",
+   "lumiose"
+  ],
+  [
+   "lumiose",
+   "cyllage"
+  ],
+  [
+   "cyllage",
+   "shalour"
+  ],
+  [
+   "shalour",
+   "lumiose"
+  ],
+  [
+   "lumiose",
+   "coumarine"
+  ],
+  [
+   "lumiose",
+   "laverre"
+  ],
+  [
+   "laverre",
+   "anistar"
+  ],
+  [
+   "anistar",
+   "snowbelle"
+  ],
+  [
+   "anistar",
+   "couriway"
+  ],
+  [
+   "coumarine",
+   "couriway"
+  ]
+ ],
+ "water": [
+  [
+   "vaniville",
+   "coumarine"
+  ]
+ ],
+ "pools": {
+  "catch": [
+   "fletchling",
+   "scatterbug",
+   "bunnelby",
+   "litleo",
+   "flabebe",
+   "skiddo",
+   "pancham",
+   "furfrou",
+   "espurr",
+   "honedge",
+   "spritzee",
+   "swirlix",
+   "inkay",
+   "binacle",
+   "skrelp",
+   "clauncher",
+   "helioptile",
+   "tyrunt",
+   "amaura",
+   "hawlucha",
+   "dedenne",
+   "carbink",
+   "phantump",
+   "pumpkaboo",
+   "bergmite",
+   "noibat",
+   "pikachu",
+   "azurill",
+   "gulpin",
+   "snorlax",
+   "riolu",
+   "ralts",
+   "smeargle",
+   "gible"
+  ],
+  "steal": [
+   "goomy",
+   "noibat",
+   "honedge",
+   "tyrunt",
+   "amaura",
+   "hawlucha",
+   "dedenne",
+   "carbink",
+   "klefki",
+   "froakie",
+   "fennekin",
+   "chespin",
+   "riolu",
+   "eevee",
+   "axew",
+   "larvitar"
+  ]
+ },
+ "rivals": {
+  "flare": [
+   {
+    "id": "flare-secret-hq",
+    "name": "Flare Secret HQ (Lumiose)",
+    "district": "lumiose",
+    "hq": true
+   },
+   {
+    "id": "lysandre-labs",
+    "name": "Lysandre Labs Floor",
+    "district": "lumiose"
+   },
+   {
+    "id": "factory-wing",
+    "name": "Poké Ball Factory Wing",
+    "district": "laverre"
+   },
+   {
+    "id": "glittering-dig",
+    "name": "Glittering Cave Dig",
+    "district": "cyllage"
+   },
+   {
+    "id": "lost-hotel-camp",
+    "name": "Lost Hotel Camp",
+    "district": "laverre"
+   },
+   {
+    "id": "terminus-watch",
+    "name": "Terminus Cave Watch",
+    "district": "couriway"
+   },
+   {
+    "id": "anistar-cell",
+    "name": "Anistar Cell",
+    "district": "anistar"
+   }
+  ]
+ },
+ "gyms": [
+  {
+   "id": "santalune-gym",
+   "district": "santalune",
+   "leader": "Viola",
+   "leaderId": "viola",
+   "type": "bug",
+   "badge": "Bug",
+   "species": [
+    "surskit",
+    "vivillon"
+   ],
+   "offset": 1,
+   "trainers": [
+    {
+     "name": "Bug Catcher Charles",
+     "cls": "bug-catcher",
+     "leaderId": null,
+     "species": [
+      "scatterbug"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "cyllage-gym",
+   "district": "cyllage",
+   "leader": "Grant",
+   "leaderId": "grant",
+   "type": "rock",
+   "badge": "Cliff",
+   "species": [
+    "amaura",
+    "tyrunt"
+   ],
+   "offset": 1,
+   "trainers": [
+    {
+     "name": "Hiker Craig",
+     "cls": "hiker",
+     "leaderId": null,
+     "species": [
+      "onix"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "shalour-gym",
+   "district": "shalour",
+   "leader": "Korrina",
+   "leaderId": "korrina",
+   "type": "fighting",
+   "badge": "Rumble",
+   "species": [
+    "mienfoo",
+    "machoke",
+    "lucario"
+   ],
+   "offset": 2,
+   "trainers": [
+    {
+     "name": "Battle Girl Hailey",
+     "cls": "battle-girl",
+     "leaderId": null,
+     "species": [
+      "makuhita"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "coumarine-gym",
+   "district": "coumarine",
+   "leader": "Ramos",
+   "leaderId": "ramos",
+   "type": "grass",
+   "badge": "Plant",
+   "species": [
+    "jumpluff",
+    "weepinbell",
+    "gogoat"
+   ],
+   "offset": 2,
+   "trainers": [
+    {
+     "name": "Aroma Lady Rose",
+     "cls": "aroma-lady",
+     "leaderId": null,
+     "species": [
+      "skiddo"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "lumiose-gym",
+   "district": "lumiose",
+   "leader": "Clemont",
+   "leaderId": "clemont",
+   "type": "electric",
+   "badge": "Voltage",
+   "species": [
+    "emolga",
+    "magneton",
+    "heliolisk"
+   ],
+   "offset": 3,
+   "trainers": [
+    {
+     "name": "Guitarist Elijah",
+     "cls": "guitarist",
+     "leaderId": null,
+     "species": [
+      "helioptile"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "laverre-gym",
+   "district": "laverre",
+   "leader": "Valerie",
+   "leaderId": "valerie",
+   "type": "fairy",
+   "badge": "Fairy",
+   "species": [
+    "mawile",
+    "mr-mime",
+    "sylveon"
+   ],
+   "offset": 3,
+   "trainers": [
+    {
+     "name": "Fairy Tale Girl Alice",
+     "cls": "fairy-tale-girl",
+     "leaderId": null,
+     "species": [
+      "flabebe"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "anistar-gym",
+   "district": "anistar",
+   "leader": "Olympia",
+   "leaderId": "olympia",
+   "type": "psychic",
+   "badge": "Psychic",
+   "species": [
+    "sigilyph",
+    "slowking",
+    "meowstic"
+   ],
+   "offset": 4,
+   "trainers": [
+    {
+     "name": "Psychic Abigail",
+     "cls": "psychic",
+     "leaderId": null,
+     "species": [
+      "espurr"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "snowbelle-gym",
+   "district": "snowbelle",
+   "leader": "Wulfric",
+   "leaderId": "wulfric",
+   "type": "ice",
+   "badge": "Iceberg",
+   "species": [
+    "abomasnow",
+    "cryogonal",
+    "avalugg"
+   ],
+   "offset": 4,
+   "trainers": [
+    {
+     "name": "Skier Sidney",
+     "cls": "snow-worker",
+     "leaderId": null,
+     "species": [
+      "bergmite"
+     ],
+     "offset": -1
+    }
+   ]
+  }
+ ],
+ "business": [
+  {
+   "target": "santalune-mart",
+   "name": "Santalune Mart",
+   "price": 5000,
+   "income": 200,
+   "clean": true,
+   "perk": {
+    "kind": "items",
+    "n": 2,
+    "item": "potion"
+   },
+   "text": "2 Potions a week."
+  },
+  {
+   "target": "lumiose-boutique",
+   "name": "Boutique Couture",
+   "price": 30000,
+   "income": 800,
+   "clean": true,
+   "perk": {
+    "kind": "regard",
+    "n": 2
+   },
+   "text": "You dress like money now. Regard +2 in Lumiose each week.",
+   "rival": true
+  },
+  {
+   "target": "laverre-factory",
+   "name": "Poké Ball Factory",
+   "price": 20000,
+   "income": 500,
+   "clean": true,
+   "perk": {
+    "kind": "items",
+    "n": 3,
+    "item": "great-ball"
+   },
+   "text": "3 Great Balls a week off the line.",
+   "rival": true
+  },
+  {
+   "target": "cyllage-bikes",
+   "name": "Cycle Shop",
+   "price": 4000,
+   "income": 180,
+   "clean": true,
+   "perk": {
+    "kind": "odds",
+    "n": 5
+   },
+   "text": "Fast bikes: +5% on jobs in Cyllage."
+  },
+  {
+   "target": "coumarine-port",
+   "name": "Coumarine Port",
+   "price": 12000,
+   "income": 450,
+   "clean": false,
+   "perk": {
+    "kind": "clean",
+    "n": 200
+   },
+   "text": "Unwritten cargo: ₽200 a week comes back clean."
+  },
+  {
+   "target": "shalour-mart",
+   "name": "Shalour Mart",
+   "price": 4500,
+   "income": 180,
+   "clean": true,
+   "perk": {
+    "kind": "heatDown",
+    "n": 1
+   },
+   "text": "Postcards and silence: Heat −1 in Shalour each week."
+  },
+  {
+   "target": "snowbelle-mart",
+   "name": "Snowbelle Mart",
+   "price": 4500,
+   "income": 180,
+   "clean": true,
+   "perk": {
+    "kind": "items",
+    "n": 2,
+    "item": "ice-heal"
+   },
+   "text": "2 Ice Heals a week."
+  },
+  {
+   "target": "anistar-sundial",
+   "name": "The Sundial",
+   "price": 8000,
+   "income": 250,
+   "clean": true,
+   "perk": {
+    "kind": "heroDown",
+    "n": 1
+   },
+   "text": "The Hero stops to stare at the sundial."
+  }
+ ],
+ "pillars": [
+  "lumiose-boutique",
+  "laverre-factory"
+ ],
+ "hero": {
+  "path": [
+   "vaniville",
+   "santalune",
+   "lumiose",
+   "cyllage",
+   "shalour",
+   "coumarine",
+   "laverre",
+   "anistar",
+   "snowbelle"
+  ],
+  "allies": [
+   {
+    "id": "viola",
+    "name": "Viola",
+    "look": "bosses/serena.png",
+    "ace": "vivillon"
+   },
+   {
+    "id": "korrina",
+    "name": "Korrina",
+    "look": "bosses/korrina.png",
+    "ace": "lucario"
+   },
+   {
+    "id": "clemont",
+    "name": "Clemont",
+    "look": "bosses/clemont.png",
+    "ace": "heliolisk"
+   },
+   {
+    "id": "valerie",
+    "name": "Valerie",
+    "look": "bosses/valerie.png",
+    "ace": "sylveon"
+   },
+   {
+    "id": "olympia",
+    "name": "Olympia",
+    "look": "bosses/olympia.png",
+    "ace": "meowstic"
+   },
+   {
+    "id": "wulfric",
+    "name": "Wulfric",
+    "look": "bosses/wulfric.png",
+    "ace": "avalugg"
+   },
+   {
+    "id": "diantha",
+    "name": "Diantha",
+    "look": "bosses/diantha.png",
+    "ace": "gardevoir",
+    "champion": true
+   }
+  ],
+  "mentor": "Professor Sycamore",
+  "parent": "The Hero's mother, a Rhyhorn racer",
+  "sidekick": "Shauna, from Vaniville",
+  "homes": {
+   "xerneas": {
+    "home": "couriway",
+    "over": "the Team Flare weapon room"
+   },
+   "yveltal": {
+    "home": "couriway",
+    "over": "the Team Flare weapon room"
+   }
+  }
+ },
+ "league": {
+  "elite": [
+   {
+    "id": "malva",
+    "name": "Malva",
+    "species": [
+     "pyroar",
+     "torkoal",
+     "chandelure",
+     "talonflame"
+    ],
+    "offset": 2
+   },
+   {
+    "id": "siebold",
+    "name": "Siebold",
+    "species": [
+     "clawitzer",
+     "starmie",
+     "gyarados",
+     "barbaracle"
+    ],
+    "offset": 3
+   },
+   {
+    "id": "wikstrom",
+    "name": "Wikstrom",
+    "species": [
+     "klefki",
+     "probopass",
+     "scizor",
+     "aegislash"
+    ],
+    "offset": 4
+   },
+   {
+    "id": "drasna",
+    "name": "Drasna",
+    "species": [
+     "dragalge",
+     "druddigon",
+     "altaria",
+     "noivern"
+    ],
+    "offset": 5
+   }
+  ],
+  "champion": {
+   "id": "diantha",
+   "name": "Diantha",
+   "species": [
+    "hawlucha",
+    "tyrantrum",
+    "aurorus",
+    "gourgeist",
+    "goodra",
+    "gardevoir"
+   ],
+   "offset": 6
+  },
+  "standIn": {}
+ },
+ "lab": [
+  "tyrunt",
+  "amaura",
+  "goomy",
+  "honedge",
+  "porygon"
+ ],
+ "desk": {
+  "name": "Kalos",
+  "rivals": [
+   "Team Flare"
+  ],
+  "badges": [
+   {
+    "name": "Bug Badge",
+    "town": "Santalune City",
+    "c": "#9ad83a"
+   },
+   {
+    "name": "Cliff Badge",
+    "town": "Cyllage City",
+    "c": "#a87a4a"
+   },
+   {
+    "name": "Rumble Badge",
+    "town": "Shalour City",
+    "c": "#c86a3a"
+   },
+   {
+    "name": "Plant Badge",
+    "town": "Coumarine City",
+    "c": "#5aa84a"
+   },
+   {
+    "name": "Voltage Badge",
+    "town": "Lumiose City",
+    "c": "#ffd23f"
+   },
+   {
+    "name": "Fairy Badge",
+    "town": "Laverre City",
+    "c": "#e88ab0"
+   },
+   {
+    "name": "Psychic Badge",
+    "town": "Anistar City",
+    "c": "#e070c0"
+   },
+   {
+    "name": "Iceberg Badge",
+    "town": "Snowbelle City",
+    "c": "#a8e0f8"
+   }
+  ],
+  "codes": {
+   "Santalune City": "SNT",
+   "Cyllage City": "CYL",
+   "Shalour City": "SHL",
+   "Coumarine City": "CMR",
+   "Lumiose City": "LMS",
+   "Laverre City": "LVR",
+   "Anistar City": "ANS",
+   "Snowbelle City": "SNW"
+  },
+  "mons": [
+   "fletchling",
+   "scatterbug",
+   "bunnelby",
+   "litleo",
+   "flabebe",
+   "skiddo",
+   "pancham",
+   "furfrou",
+   "espurr",
+   "honedge",
+   "spritzee",
+   "swirlix",
+   "inkay",
+   "binacle",
+   "skrelp",
+   "clauncher",
+   "helioptile",
+   "tyrunt",
+   "amaura",
+   "hawlucha",
+   "dedenne",
+   "carbink",
+   "phantump",
+   "pumpkaboo",
+   "bergmite",
+   "noibat",
+   "pikachu",
+   "azurill",
+   "gulpin",
+   "snorlax",
+   "riolu",
+   "ralts",
+   "smeargle",
+   "gible"
+  ],
+  "offRegion": [
+   "rattata",
+   "sentret",
+   "zigzagoon",
+   "bidoof",
+   "lillipup",
+   "rookidee",
+   "yungoos",
+   "lechonk"
+  ],
+  "writers": [
+   {
+    "name": "Painter Viola's model",
+    "short": "Model Lise",
+    "town": "Santalune City",
+    "quote": "{first} sat for portraits all summer. Never moved a muscle."
+   },
+   {
+    "name": "Fossil lab tech Andre",
+    "short": "Andre",
+    "town": "Cyllage City",
+    "quote": "{first} cleaned fossils for the lab. Steady hands."
+   },
+   {
+    "name": "Tower of Mastery monk",
+    "short": "Brother Kai",
+    "town": "Shalour City",
+    "quote": "{first} studied Mega Evolution here. Asked a lot of questions."
+   },
+   {
+    "name": "Port master Celine",
+    "short": "Celine",
+    "town": "Coumarine City",
+    "quote": "{first} worked the monorail docks. Knows every ship in the bay."
+   },
+   {
+    "name": "Café Soleil owner Marc",
+    "short": "Marc",
+    "town": "Lumiose City",
+    "quote": "{first} poured coffee in Lumiose. Hears everything, repeats nothing."
+   },
+   {
+    "name": "Poké Ball factory clerk Odile",
+    "short": "Odile",
+    "town": "Laverre City",
+    "quote": "{first} worked the factory line. Knows where the Master Balls go."
+   }
+  ]
+ },
+ "holdings": {
+  "kalos:santalune-gym-viola": {
+   "district": "santalune",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:santalune-gym",
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Bug crew +10%; photo events give Regard +5.\" waits for a battle or shop hook."
+  },
+  "kalos:cyllage-gym-grant": {
+   "district": "cyllage",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:cyllage-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Rock crew +10% defense; climbing training ×1.5.\" waits for a battle or shop hook."
+  },
+  "kalos:shalour-gym-korrina": {
+   "district": "shalour",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:shalour-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Mega Stone research; Fighting crew +10%.\" waits for a battle or shop hook."
+  },
+  "kalos:coumarine-gym-ramos": {
+   "district": "coumarine",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1050
+    }
+   ],
+   "via": "gym:coumarine-gym",
+   "note": "Read from the list's Bonus as income each week; the rest of \"Grass crew +10%; berry income +₽150/day.\" waits for a battle or shop hook."
+  },
+  "kalos:lumiose-gym-clemont": {
+   "district": "lumiose",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:lumiose-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Electric crew +10%; free gadget item each week.\" waits for a battle or shop hook."
+  },
+  "kalos:laverre-gym-valerie": {
+   "district": "laverre",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:laverre-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Fairy crew +10%; haunted-wood events.\" waits for a battle or shop hook."
+  },
+  "kalos:anistar-gym-olympia": {
+   "district": "anistar",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:anistar-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Foresight (see rival moves 1 day ahead); Psychic crew +10% crit.\" waits for a battle or shop hook."
+  },
+  "kalos:snowbelle-gym-wulfric": {
+   "district": "snowbelle",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:snowbelle-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Ice crew +10%; training ×1.5.\" waits for a battle or shop hook."
+  },
+  "kalos:kalos-league": {
+   "district": "snowbelle",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "champion",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Diantha's seat; free practice vs Champion weekly.\" waits for a battle or shop hook."
+  },
+  "kalos:vaniville-town": {
+   "district": "vaniville",
+   "fx": [
+    {
+     "k": "income",
+     "n": 350
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Mom's kitchen heals crew each night; Loyalty +1 weekly; the moving-van event.\" waits for a battle or shop hook."
+  },
+  "kalos:aquacorde-town": {
+   "district": "vaniville",
+   "fx": [
+    {
+     "k": "income",
+     "n": 350
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"free heal for crew; a Poké Mart with Kalos specials.\" waits for a battle or shop hook."
+  },
+  "kalos:santalune-city": {
+   "district": "santalune",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Viola's Gym; Bug crew +5%; a Santalune Forest route.\" waits for a battle or shop hook."
+  },
+  "kalos:lumiose-city": {
+   "district": "lumiose",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Prism Tower, Boutiques, Café, Hotel and Sewers; city income ×2; Regard +10 weekl\" waits for a battle or shop hook."
+  },
+  "kalos:camphrier-town": {
+   "district": "lumiose",
+   "fx": [
+    {
+     "k": "income",
+     "n": 350
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"the Shrine and Mega fossil; Ghost crew +5%; a Mega Stone cache once.\" waits for a battle or shop hook."
+  },
+  "kalos:cyllage-city": {
+   "district": "cyllage",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Grant's Gym; fishing +25%; a seaside Pokémon Center.\" waits for a battle or shop hook."
+  },
+  "kalos:ambrette-town": {
+   "district": "cyllage",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"the Aquarium and Fossil Lab; Water crew +5%; fossil revive monthly.\" waits for a battle or shop hook."
+  },
+  "kalos:geosenge-town": {
+   "district": "cyllage",
+   "fx": [
+    {
+     "k": "income",
+     "n": 350
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Flare's first base; a free hidden room; a mystery stone cache.\" waits for a battle or shop hook."
+  },
+  "kalos:shalour-city": {
+   "district": "shalour",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"the Tower of Mastery and the Mega seat; Mega Stone research.\" waits for a battle or shop hook."
+  },
+  "kalos:coumarine-city": {
+   "district": "coumarine",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Ramos's garden; wild Pokémon; Grass crew +5%.\" waits for a battle or shop hook."
+  },
+  "kalos:laverre-city": {
+   "district": "laverre",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"the Haunted Wood access; Fairy crew +5%; a spooky Regard +5.\" waits for a battle or shop hook."
+  },
+  "kalos:dendemille-town": {
+   "district": "anistar",
+   "fx": [
+    {
+     "k": "income",
+     "n": 350
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"quiet, no police; Ice crew +5%; free hot cocoa (Loyalty +1).\" waits for a battle or shop hook."
+  },
+  "kalos:anistar-city": {
+   "district": "anistar",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"the Sundial and Foresight; Psychic crew +5%.\" waits for a battle or shop hook."
+  },
+  "kalos:couriway-town": {
+   "district": "couriway",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1050
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"a small shop; Berry trade +₽150/day; a Poké Ball seller.\" waits for a battle or shop hook."
+  },
+  "kalos:snowbelle-city": {
+   "district": "snowbelle",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Wulfric's seat; Ice crew +5%; Frost Cavern access.\" waits for a battle or shop hook."
+  },
+  "kalos:sycamores-lab-lumiose": {
+   "district": "lumiose",
+   "fx": [
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit each week; the rest of \"Mega Stone research; new recruits start with a starter; hatch time −30%.\" waits for a battle or shop hook."
+  },
+  "kalos:prism-tower": {
+   "district": "lumiose",
+   "fx": [
+    {
+     "k": "dread",
+     "n": 30,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as dread each week; the rest of \"Lumiose broadcast; Regard/Dread +30; Electric crew +.\" waits for a battle or shop hook."
+  },
+  "kalos:lumiose-cafe": {
+   "district": "lumiose",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1750
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"rumours; clean income +₽250/day; Intel +1.\" waits for a battle or shop hook."
+  },
+  "kalos:lumiose-boutique": {
+   "district": "lumiose",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"fashion; Regard +10.\" waits for a battle or shop hook."
+  },
+  "kalos:lumiose-hotel": {
+   "district": "lumiose",
+   "fx": [
+    {
+     "k": "heat",
+     "n": 15
+    },
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as heat, recruit each week; the rest of \"safehouse (Heat −15); VIP recruits.\" waits for a battle or shop hook."
+  },
+  "kalos:lumiose-sewers": {
+   "district": "lumiose",
+   "fx": [
+    {
+     "k": "heat",
+     "n": 10
+    }
+   ],
+   "note": "Read from the list's Bonus as heat each week; the rest of \"move unseen under Lumiose; Heat −10; hidden stash rooms.\" waits for a battle or shop hook."
+  },
+  "kalos:pokemon-center-lumiose": {
+   "district": "lumiose",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"free heal; crew resting +10%; a trade terminal.\" waits for a battle or shop hook."
+  },
+  "kalos:poke-ball-factory": {
+   "district": "laverre",
+   "fx": [
+    {
+     "k": "income",
+     "n": 2100
+    }
+   ],
+   "via": "biz:laverre-factory",
+   "note": "Read from the list's Bonus as income each week; the rest of \"Poké Balls free; Ball sales +₽300/day.\" waits for a battle or shop hook."
+  },
+  "kalos:santalune-forest": {
+   "district": "santalune",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Bug crew +5%; a free Antidote weekly; Pikachu event.\" waits for a battle or shop hook."
+  },
+  "kalos:connecting-cave": {
+   "district": "cyllage",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"shortcut (−1 day); Whismur wild; a Rock-type cache.\" waits for a battle or shop hook."
+  },
+  "kalos:glittering-cave": {
+   "district": "cyllage",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1050
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"gems +₽150/day; Rock crew +5%.\" waits for a battle or shop hook."
+  },
+  "kalos:ambrette-aquarium": {
+   "district": "cyllage",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    },
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Water crew +10%; Regard +10; Pokémon display income +₽200/day.\" waits for a battle or shop hook."
+  },
+  "kalos:fossil-lab-ambrette": {
+   "district": "cyllage",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"revive Tyrunt/Amaura fossils; Regard +5; research once a month.\" waits for a battle or shop hook."
+  },
+  "kalos:tower-of-mastery": {
+   "district": "shalour",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Mega Evolution training; Mega Stones; Gurkinn's blessing.\" waits for a battle or shop hook."
+  },
+  "kalos:parfum-palace": {
+   "district": "lumiose",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 15,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Regard +15; Fairy crew +10%; a state dinner event.\" waits for a battle or shop hook."
+  },
+  "kalos:pokemon-village": {
+   "district": "snowbelle",
+   "fx": [
+    {
+     "k": "loyalty",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as loyalty each week; the rest of \"retired Pokémon and Pen +10 capacity; Pokémon sleep bonus (+10% HP).\" waits for a battle or shop hook."
+  },
+  "kalos:kalos-power-plant": {
+   "district": "laverre",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"free electricity; Electric crew +; Zapdos-like Legendary rumour.\" waits for a battle or shop hook."
+  },
+  "kalos:frost-cavern": {
+   "district": "anistar",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Ice crew +10%; free Never-Melt Ice monthly; an Abomasnow event.\" waits for a battle or shop hook."
+  },
+  "kalos:haunted-wood": {
+   "district": "laverre",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Ghost crew +10% evasion; Phantump events; a free Spell Tag.\" waits for a battle or shop hook."
+  },
+  "kalos:anistar-sundial": {
+   "district": "anistar",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Foresight (see rival moves 1 day ahead); Psychic crew +10% crit.\" waits for a battle or shop hook."
+  },
+  "kalos:team-flare-secret-hq": {
+   "district": "lumiose",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"rival HQ; Dread +; Flare crew; Wipe Out path +30%.\" waits for a battle or shop hook."
+  },
+  "kalos:lysandre-labs": {
+   "district": "lumiose",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Mega research; Mega Stones; a Flare Scientist's files.\" waits for a battle or shop hook."
+  },
+  "kalos:pokemon-league-victory-road": {
+   "district": "snowbelle",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"₽500 per challenger.\" waits for a battle or shop hook."
+  },
+  "kalos:battle-chateau": {
+   "district": "santalune",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    },
+    {
+     "k": "income",
+     "n": 1400
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"trains Grunts to use items and gimmicks (Mega Evolution); noble rank for crew.\" waits for a battle or shop hook."
+  },
+  "kalos:lumiose-station": {
+   "district": "lumiose",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"fast travel between held cities (−2 days); import/export +1.\" waits for a battle or shop hook."
+  },
+  "kalos:kalos-underground": {
+   "district": "lumiose",
+   "fx": [
+    {
+     "k": "heat",
+     "n": 5
+    }
+   ],
+   "note": "Read from the list's Bonus as heat each week; the rest of \"secret routes between Lumiose and Camphrier (−1 day); Heat −5.\" waits for a battle or shop hook."
+  }
+ }
+}

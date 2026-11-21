@@ -154,4 +154,12 @@ export function hqModel(b: DominionBlock): HqModel {
 }
 
 /** The opening scene's lines (Part 1 §1.3), by the first member. */
-export const openingLines = (b: DominionBlock): string[] => (b.members[0]?.rank === 'admin' ? D().adminOpening : D().opening);
+export const openingLines = (b: DominionBlock): string[] => {
+  // D15: a region after the first opens on its own arrival (the brought member's name filled in).
+  const pack = b.realm && b.realm.at !== 'kanto' ? DOMINION_DATA.packs[b.realm.at] : undefined;
+  if (pack) {
+    const m = b.realm!.brought ? b.members.find((x) => x.id === b.realm!.brought) : undefined;
+    return pack.arrive.map((l) => l.replace('{brought}', m?.name ?? 'Nobody'));
+  }
+  return b.members[0]?.rank === 'admin' ? D().adminOpening : D().opening;
+};

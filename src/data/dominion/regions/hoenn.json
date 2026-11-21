@@ -1,0 +1,2312 @@
+{
+ "_source": "tools/dominion/regions-to-json.py (hoenn); see the tool for sources.",
+ "id": "hoenn",
+ "label": "HOENN",
+ "warehouse": "Slateport",
+ "hq": "slateport",
+ "arrive": [
+  "The new warehouse smells like salt and rope. {brought} looks around, cracks their knuckles and grins.",
+  "\"Just like old times, Boss. Except this time I know what I'm doing.\"",
+  "Out on the water, a red boat and a blue boat pass each other without slowing down."
+ ],
+ "districts": [
+  {
+   "id": "littleroot",
+   "name": "Littleroot",
+   "x": 40,
+   "y": 300,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "normal-grass",
+   "targets": [
+    {
+     "id": "birch-lab",
+     "name": "Birch's Lab",
+     "kind": "site",
+     "owner": {
+      "name": "Professor Birch",
+      "look": "trainer/pr/scientist_m",
+      "line": "Always out in the field. The lab door sticks."
+     },
+     "trait": {
+      "word": "Absent",
+      "odds": 8
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Lab aide",
+      "cls": "picnicker",
+      "species": [
+       "zigzagoon",
+       "wurmple"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "littleroot-street",
+     "name": "Moving Day Lane",
+     "kind": "street",
+     "owner": {
+      "name": "The neighbours",
+      "look": "trainer/pr/pokefan_f",
+      "line": "Every new family gets a cake. Every stranger gets a look."
+     },
+     "trait": {
+      "word": "Watchful",
+      "odds": -4
+     },
+     "pay": 1,
+     "foe": {
+      "name": "Neighbour",
+      "cls": "picnicker",
+      "species": [
+       "zigzagoon"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "route-101",
+     "name": "Route 101",
+     "kind": "route",
+     "owner": {
+      "name": "Trainers on the route",
+      "look": "trainer/pr/backpacker_f",
+      "line": "Kids with their first partner."
+     },
+     "trait": null,
+     "pay": 1,
+     "foe": {
+      "name": "Youngster Calvin",
+      "cls": "youngster",
+      "species": [
+       "poochyena",
+       "zigzagoon"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "petalburg",
+   "name": "Petalburg",
+   "x": 40,
+   "y": 196,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "normal-grass",
+   "targets": [
+    {
+     "id": "petalburg-mart",
+     "name": "Petalburg Mart",
+     "kind": "shop",
+     "owner": {
+      "name": "The Mart clerk",
+      "look": "dominion/t-clerk.png",
+      "line": "Quiet town, quiet till."
+     },
+     "trait": {
+      "word": "Timid",
+      "odds": 5
+     },
+     "pay": 1,
+     "foe": {
+      "name": "The clerk's son",
+      "cls": "youngster",
+      "species": [
+       "zigzagoon"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "petalburg-woods",
+     "name": "Petalburg Woods",
+     "kind": "route",
+     "owner": {
+      "name": "Bug maniacs",
+      "look": "trainer/pr/backpacker_m",
+      "line": "Shroomish everywhere, and a man looking for them."
+     },
+     "trait": null,
+     "pay": 1,
+     "foe": {
+      "name": "Bug Catcher Lyle",
+      "cls": "bug-catcher",
+      "species": [
+       "wurmple",
+       "shroomish"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "wally-house",
+     "name": "The Mayor's Row",
+     "kind": "street",
+     "owner": {
+      "name": "Town families",
+      "look": "trainer/pr/pokefan_m",
+      "line": "Comfortable houses with nice gardens."
+     },
+     "trait": {
+      "word": "Gullible",
+      "odds": 5
+     },
+     "pay": 1.1,
+     "foe": {
+      "name": "Gardener",
+      "cls": "aroma-lady",
+      "species": [
+       "roselia"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "rustboro",
+   "name": "Rustboro",
+   "x": 40,
+   "y": 70,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "rock-steel",
+   "targets": [
+    {
+     "id": "devon-corp",
+     "name": "Devon Corporation",
+     "kind": "site",
+     "owner": {
+      "name": "The night guard",
+      "look": "trainer/pr/veteran_m",
+      "line": "Devon parts are worth more than Devon guards."
+     },
+     "trait": {
+      "word": "Bored",
+      "odds": 6
+     },
+     "pay": 1.6,
+     "foe": {
+      "name": "Devon guard",
+      "cls": "veteran",
+      "species": [
+       "magnemite",
+       "nosepass"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "rustboro-school",
+     "name": "Trainer School",
+     "kind": "crowd",
+     "owner": {
+      "name": "The schoolteacher",
+      "look": "trainer/pr/expert_pokemon_breeder",
+      "line": "Thirty pupils, one gate, no fence."
+     },
+     "trait": {
+      "word": "Kind",
+      "odds": 5
+     },
+     "pay": 1,
+     "foe": {
+      "name": "Student",
+      "cls": "lass",
+      "species": [
+       "skitty"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "rusturf-tunnel",
+     "name": "Rusturf Tunnel",
+     "kind": "cave",
+     "owner": {
+      "name": "Tunnel diggers",
+      "look": "trainer/pr/worker_f",
+      "line": "Digging a tunnel by hand to Verdanturf."
+     },
+     "trait": null,
+     "pay": 1.1,
+     "foe": {
+      "name": "Digger",
+      "cls": "hiker",
+      "species": [
+       "whismur",
+       "geodude"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "slateport",
+   "name": "Slateport",
+   "x": 200,
+   "y": 300,
+   "control": 10,
+   "rival": 0,
+   "police": false,
+   "wild": "normal-water",
+   "targets": [
+    {
+     "id": "slateport-market",
+     "name": "Slateport Market",
+     "kind": "crowd",
+     "owner": {
+      "name": "The stall holders",
+      "look": "trainer/pr/clerk_f",
+      "line": "Twenty stalls; every one sells something they shouldn't."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 5
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Market tough",
+      "cls": "roughneck",
+      "species": [
+       "machop",
+       "zigzagoon"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "stern-shipyard",
+     "name": "Stern's Shipyard",
+     "kind": "dock",
+     "owner": {
+      "name": "Captain Stern",
+      "look": "trainer/pr/pilot",
+      "line": "Building a submarine. Talks about nothing else."
+     },
+     "trait": {
+      "word": "Distracted",
+      "odds": 6
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Shipwright",
+      "cls": "worker",
+      "species": [
+       "machop",
+       "wingull"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "oceanic-museum",
+     "name": "Oceanic Museum",
+     "kind": "site",
+     "owner": {
+      "name": "The curator",
+      "look": "trainer/pr/scientist_f",
+      "line": "A red team and a blue team both want his parts."
+     },
+     "trait": {
+      "word": "Nervous",
+      "odds": 6
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Museum guard",
+      "cls": "veteran",
+      "species": [
+       "wingull",
+       "magnemite"
+      ],
+      "offset": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "mauville",
+   "name": "Mauville",
+   "x": 200,
+   "y": 196,
+   "control": 0,
+   "rival": 0,
+   "police": true,
+   "wild": "normal-electric",
+   "targets": [
+    {
+     "id": "mauville-store",
+     "name": "Mauville Shopping",
+     "kind": "shop",
+     "owner": {
+      "name": "The store manager",
+      "look": "trainer/pr/rich_f",
+      "line": "Half of Hoenn shops under this one roof."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 4
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Security guard",
+      "cls": "veteran",
+      "species": [
+       "electrike",
+       "magnemite"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "game-corner-mauville",
+     "name": "Mauville Game Corner",
+     "kind": "site",
+     "owner": {
+      "name": "The floor boss",
+      "look": "trainer/pr/rich_m",
+      "line": "The slots pay out on Sundays. Mostly."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 6
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Floor boss",
+      "cls": "roughneck",
+      "species": [
+       "spinda",
+       "meowth"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "mauville-station",
+     "name": "Mauville Police Post",
+     "kind": "police",
+     "owner": {
+      "name": "Officer Jenny",
+      "look": "dominion/t-policeman.png",
+      "line": "Runs the city's only police post. Takes it seriously."
+     },
+     "trait": {
+      "word": "Sharp",
+      "odds": -10
+     },
+     "pay": 1,
+     "foe": {
+      "name": "Officer",
+      "cls": "veteran",
+      "species": [
+       "growlithe",
+       "electrike"
+      ],
+      "offset": 1
+     }
+    }
+   ],
+   "w": 130
+  },
+  {
+   "id": "fallarbor",
+   "name": "Fallarbor",
+   "x": 200,
+   "y": 40,
+   "control": 0,
+   "rival": 35,
+   "police": false,
+   "wild": "fire-ground",
+   "targets": [
+    {
+     "id": "fallarbor-contest",
+     "name": "Contest Hall",
+     "kind": "crowd",
+     "owner": {
+      "name": "The contest staff",
+      "look": "trainer/pr/dancer",
+      "line": "Ash falls on the stage; the crowd cheers anyway."
+     },
+     "trait": {
+      "word": "Proud",
+      "odds": -4
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Coordinator",
+      "cls": "aroma-lady",
+      "species": [
+       "spinda",
+       "skitty"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "meteor-falls",
+     "name": "Meteor Falls",
+     "kind": "cave",
+     "owner": {
+      "name": "The Draconid",
+      "look": "trainer/pr/veteran_f",
+      "line": "An old woman who knows every rock in the falls."
+     },
+     "trait": {
+      "word": "Pious",
+      "odds": -6
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Old Draconid",
+      "cls": "dragon-tamer",
+      "species": [
+       "bagon",
+       "solrock"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "route-113",
+     "name": "Route 113",
+     "kind": "route",
+     "owner": {
+      "name": "Ash gatherers",
+      "look": "trainer/pr/ruin_maniac",
+      "line": "Glass flutes made from volcanic ash."
+     },
+     "trait": null,
+     "pay": 1,
+     "foe": {
+      "name": "Ninja Boy Lung",
+      "cls": "hiker",
+      "species": [
+       "spinda",
+       "skarmory"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "rivalNote": "Magma"
+  },
+  {
+   "id": "lavaridge",
+   "name": "Lavaridge",
+   "x": 330,
+   "y": 70,
+   "control": 0,
+   "rival": 50,
+   "police": false,
+   "wild": "fire-ground",
+   "targets": [
+    {
+     "id": "lavaridge-springs",
+     "name": "Hot Springs",
+     "kind": "crowd",
+     "owner": {
+      "name": "The spring owners",
+      "look": "trainer/pr/beauty_2",
+      "line": "Everyone talks in the hot springs."
+     },
+     "trait": {
+      "word": "Gossip",
+      "odds": 6
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Bath attendant",
+      "cls": "aroma-lady",
+      "species": [
+       "numel",
+       "slugma"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "mt-chimney",
+     "name": "Mt. Chimney",
+     "kind": "site",
+     "owner": {
+      "name": "The cable car crew",
+      "look": "trainer/pr/worker_f",
+      "line": "One car up, one car down. Magma rides both."
+     },
+     "trait": {
+      "word": "Bored",
+      "odds": 4
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Cable car crew",
+      "cls": "hiker",
+      "species": [
+       "numel",
+       "torkoal"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "lavaridge-herb",
+     "name": "Herb Shop",
+     "kind": "shop",
+     "owner": {
+      "name": "The herbalist",
+      "look": "dominion/t-clerk.png",
+      "line": "Bitter medicine, honest prices."
+     },
+     "trait": {
+      "word": "Timid",
+      "odds": 4
+     },
+     "pay": 1.1,
+     "foe": {
+      "name": "Herbalist",
+      "cls": "picnicker",
+      "species": [
+       "roselia"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "rivalNote": "Magma"
+  },
+  {
+   "id": "fortree",
+   "name": "Fortree",
+   "x": 460,
+   "y": 70,
+   "control": 0,
+   "rival": 25,
+   "police": false,
+   "wild": "grass-flying",
+   "targets": [
+    {
+     "id": "fortree-market",
+     "name": "Treehouse Market",
+     "kind": "shop",
+     "owner": {
+      "name": "The decor seller",
+      "look": "trainer/pr/clerk_f",
+      "line": "Sells furniture for secret bases, no questions."
+     },
+     "trait": {
+      "word": "Gullible",
+      "odds": 5
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Treehouse guard",
+      "cls": "bird-keeper",
+      "species": [
+       "swablu",
+       "tropius"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "weather-institute",
+     "name": "Weather Institute",
+     "kind": "site",
+     "owner": {
+      "name": "The head scientist",
+      "look": "trainer/pr/scientist_m",
+      "line": "Both teams want his forecast. Neither asks nicely."
+     },
+     "trait": {
+      "word": "Nervous",
+      "odds": 6
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Institute guard",
+      "cls": "veteran",
+      "species": [
+       "castform",
+       "magnemite"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "route-119",
+     "name": "Route 119",
+     "kind": "route",
+     "owner": {
+      "name": "Rain watchers",
+      "look": "trainer/pr/ranger_f",
+      "line": "It rains here every day of the year."
+     },
+     "trait": null,
+     "pay": 1.1,
+     "foe": {
+      "name": "Ranger Catherine",
+      "cls": "ranger",
+      "species": [
+       "oddish",
+       "kecleon"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "rivalNote": "Aqua"
+  },
+  {
+   "id": "lilycove",
+   "name": "Lilycove",
+   "x": 460,
+   "y": 196,
+   "control": 0,
+   "rival": 45,
+   "police": false,
+   "wild": "normal-water",
+   "targets": [
+    {
+     "id": "lilycove-store",
+     "name": "Lilycove Dept. Store",
+     "kind": "shop",
+     "owner": {
+      "name": "The floor manager",
+      "look": "trainer/pr/rich_m",
+      "line": "The biggest store in Hoenn, right on the cove."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 4
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Security guard",
+      "cls": "veteran",
+      "species": [
+       "electrike",
+       "linoone"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "lilycove-cove",
+     "name": "The Hideout Cove",
+     "kind": "dock",
+     "owner": {
+      "name": "The cove fishermen",
+      "look": "trainer/pr/scuba_diver_m",
+      "line": "They don't fish the cave mouth. They know why."
+     },
+     "trait": {
+      "word": "Shifty",
+      "odds": 6
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Fisherman Lane",
+      "cls": "fisherman",
+      "species": [
+       "wailmer",
+       "tentacool"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "lilycove-museum",
+     "name": "Art Museum",
+     "kind": "crowd",
+     "owner": {
+      "name": "The curator",
+      "look": "trainer/pr/artist",
+      "line": "Paintings of Pokémon, and a very old safe."
+     },
+     "trait": {
+      "word": "Proud",
+      "odds": -4
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Night guard",
+      "cls": "veteran",
+      "species": [
+       "smeargle"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "rivalNote": "Aqua"
+  },
+  {
+   "id": "sootopolis",
+   "name": "Sootopolis",
+   "x": 330,
+   "y": 300,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "water-psychic",
+   "targets": [
+    {
+     "id": "cave-of-origin",
+     "name": "Cave of Origin",
+     "kind": "ghost",
+     "owner": {
+      "name": "The keeper",
+      "look": "trainer/pr/veteran_m",
+      "line": "He says the cave is breathing."
+     },
+     "trait": {
+      "word": "Pious",
+      "odds": -8
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Keeper",
+      "cls": "psychic",
+      "species": [
+       "chimecho",
+       "golbat"
+      ],
+      "offset": 2
+     }
+    },
+    {
+     "id": "sootopolis-crater",
+     "name": "Crater Steps",
+     "kind": "street",
+     "owner": {
+      "name": "The townsfolk",
+      "look": "trainer/pr/parasol_lady",
+      "line": "A town inside a volcano. Nobody leaves."
+     },
+     "trait": {
+      "word": "Watchful",
+      "odds": -6
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Townsman",
+      "cls": "swimmer",
+      "species": [
+       "luvdisc",
+       "staryu"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "route-126",
+     "name": "Route 126",
+     "kind": "route",
+     "owner": {
+      "name": "Divers",
+      "look": "trainer/pr/scuba_diver_f",
+      "line": "Seaweed and old wrecks under the surface."
+     },
+     "trait": null,
+     "pay": 1.2,
+     "foe": {
+      "name": "Diver Jack",
+      "cls": "swimmer",
+      "species": [
+       "clamperl",
+       "chinchou"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  }
+ ],
+ "routes": [
+  [
+   "littleroot",
+   "petalburg"
+  ],
+  [
+   "petalburg",
+   "rustboro"
+  ],
+  [
+   "rustboro",
+   "fallarbor"
+  ],
+  [
+   "fallarbor",
+   "lavaridge"
+  ],
+  [
+   "lavaridge",
+   "mauville"
+  ],
+  [
+   "mauville",
+   "slateport"
+  ],
+  [
+   "mauville",
+   "fortree"
+  ],
+  [
+   "fortree",
+   "lilycove"
+  ],
+  [
+   "littleroot",
+   "slateport"
+  ],
+  [
+   "mauville",
+   "rustboro"
+  ]
+ ],
+ "water": [
+  [
+   "petalburg",
+   "slateport"
+  ],
+  [
+   "lilycove",
+   "sootopolis"
+  ],
+  [
+   "slateport",
+   "sootopolis"
+  ]
+ ],
+ "pools": {
+  "catch": [
+   "zigzagoon",
+   "poochyena",
+   "wurmple",
+   "lotad",
+   "seedot",
+   "taillow",
+   "wingull",
+   "ralts",
+   "surskit",
+   "shroomish",
+   "slakoth",
+   "nincada",
+   "whismur",
+   "makuhita",
+   "azurill",
+   "nosepass",
+   "skitty",
+   "sableye",
+   "mawile",
+   "aron",
+   "meditite",
+   "electrike",
+   "plusle",
+   "minun",
+   "gulpin",
+   "carvanha",
+   "wailmer",
+   "numel",
+   "spoink",
+   "trapinch",
+   "cacnea",
+   "swablu",
+   "barboach",
+   "corphish",
+   "baltoy",
+   "shuppet"
+  ],
+  "steal": [
+   "bagon",
+   "beldum",
+   "feebas",
+   "absol",
+   "castform",
+   "kecleon",
+   "tropius",
+   "chimecho",
+   "clamperl",
+   "relicanth",
+   "lileep",
+   "anorith",
+   "zangoose",
+   "seviper",
+   "lunatone",
+   "solrock"
+  ]
+ },
+ "rivals": {
+  "magma": [
+   {
+    "id": "mt-chimney-camp",
+    "name": "Mt. Chimney Camp",
+    "district": "lavaridge"
+   },
+   {
+    "id": "magma-hideout",
+    "name": "Magma Hideout (Jagged Pass)",
+    "district": "lavaridge",
+    "hq": true
+   },
+   {
+    "id": "meteor-dig",
+    "name": "Meteor Falls Dig",
+    "district": "fallarbor"
+   },
+   {
+    "id": "route-113-post",
+    "name": "Route 113 Ash Post",
+    "district": "fallarbor"
+   }
+  ],
+  "aqua": [
+   {
+    "id": "aqua-hideout",
+    "name": "Aqua Hideout (Lilycove)",
+    "district": "lilycove",
+    "hq": true
+   },
+   {
+    "id": "weather-watch",
+    "name": "Weather Institute Watch",
+    "district": "fortree"
+   },
+   {
+    "id": "slateport-berth",
+    "name": "Slateport Berth",
+    "district": "slateport"
+   },
+   {
+    "id": "route-123-camp",
+    "name": "Route 123 Camp",
+    "district": "lilycove"
+   }
+  ]
+ },
+ "gyms": [
+  {
+   "id": "rustboro-gym",
+   "district": "rustboro",
+   "leader": "Roxanne",
+   "leaderId": "roxanne",
+   "type": "rock",
+   "badge": "Stone",
+   "species": [
+    "geodude",
+    "nosepass"
+   ],
+   "offset": 1,
+   "trainers": [
+    {
+     "name": "Youngster Josh",
+     "cls": "youngster",
+     "leaderId": null,
+     "species": [
+      "geodude"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "dewford-gym",
+   "district": "petalburg",
+   "leader": "Brawly",
+   "leaderId": "brawly",
+   "type": "fighting",
+   "badge": "Knuckle",
+   "species": [
+    "machop",
+    "makuhita"
+   ],
+   "offset": 1,
+   "trainers": [
+    {
+     "name": "Battle Girl Laura",
+     "cls": "battle-girl",
+     "leaderId": null,
+     "species": [
+      "meditite"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "mauville-gym",
+   "district": "mauville",
+   "leader": "Wattson",
+   "leaderId": "wattson",
+   "type": "electric",
+   "badge": "Dynamo",
+   "species": [
+    "magnemite",
+    "voltorb",
+    "manectric"
+   ],
+   "offset": 2,
+   "trainers": [
+    {
+     "name": "Guitarist Kirk",
+     "cls": "guitarist",
+     "leaderId": null,
+     "species": [
+      "electrike",
+      "voltorb"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "lavaridge-gym",
+   "district": "lavaridge",
+   "leader": "Flannery",
+   "leaderId": "flannery",
+   "type": "fire",
+   "badge": "Heat",
+   "species": [
+    "numel",
+    "slugma",
+    "torkoal"
+   ],
+   "offset": 2,
+   "trainers": [
+    {
+     "name": "Hiker Gerald",
+     "cls": "hiker",
+     "leaderId": null,
+     "species": [
+      "numel"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "petalburg-gym",
+   "district": "petalburg",
+   "leader": "Norman",
+   "leaderId": "norman",
+   "type": "normal",
+   "badge": "Balance",
+   "species": [
+    "slaking",
+    "vigoroth",
+    "linoone"
+   ],
+   "offset": 3,
+   "trainers": [
+    {
+     "name": "Ace Trainer Randall",
+     "cls": "ace-trainer",
+     "leaderId": null,
+     "species": [
+      "delcatty"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "fortree-gym",
+   "district": "fortree",
+   "leader": "Winona",
+   "leaderId": "winona",
+   "type": "flying",
+   "badge": "Feather",
+   "species": [
+    "swablu",
+    "tropius",
+    "pelipper",
+    "altaria"
+   ],
+   "offset": 3,
+   "trainers": [
+    {
+     "name": "Bird Keeper Jared",
+     "cls": "bird-keeper",
+     "leaderId": null,
+     "species": [
+      "doduo",
+      "skarmory"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "mossdeep-gym",
+   "district": "lilycove",
+   "leader": "Tate and Liza",
+   "leaderId": "tate-and-liza",
+   "type": "psychic",
+   "badge": "Mind",
+   "species": [
+    "solrock",
+    "lunatone"
+   ],
+   "offset": 4,
+   "trainers": [
+    {
+     "name": "Psychic Maura",
+     "cls": "psychic",
+     "leaderId": null,
+     "species": [
+      "kirlia"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "sootopolis-gym",
+   "district": "sootopolis",
+   "leader": "Juan",
+   "leaderId": "juan",
+   "type": "water",
+   "badge": "Rain",
+   "species": [
+    "luvdisc",
+    "whiscash",
+    "sealeo",
+    "crawdaunt",
+    "kingdra"
+   ],
+   "offset": 4,
+   "trainers": [
+    {
+     "name": "Beauty Olivia",
+     "cls": "aroma-lady",
+     "leaderId": null,
+     "species": [
+      "luvdisc"
+     ],
+     "offset": -1
+    }
+   ]
+  }
+ ],
+ "business": [
+  {
+   "target": "petalburg-mart",
+   "name": "Petalburg Mart",
+   "price": 5000,
+   "income": 200,
+   "clean": true,
+   "perk": {
+    "kind": "items",
+    "n": 2,
+    "item": "potion"
+   },
+   "text": "2 Potions a week."
+  },
+  {
+   "target": "slateport-market",
+   "name": "Slateport Market",
+   "price": 9000,
+   "income": 350,
+   "clean": false,
+   "perk": {
+    "kind": "clean",
+    "n": 150
+   },
+   "text": "Cash stalls: ₽150 a week comes back clean."
+  },
+  {
+   "target": "devon-corp",
+   "name": "Devon Corporation",
+   "price": 30000,
+   "income": 800,
+   "clean": true,
+   "perk": {
+    "kind": "items",
+    "n": 1,
+    "item": "ultra-ball"
+   },
+   "text": "Devon parts: an Ultra Ball a week, and a Scope if you ask.",
+   "rival": true
+  },
+  {
+   "target": "mauville-store",
+   "name": "Mauville Shopping",
+   "price": 15000,
+   "income": 600,
+   "clean": true,
+   "perk": {
+    "kind": "regard",
+    "n": 1
+   },
+   "text": "Regard +1 in Mauville each week."
+  },
+  {
+   "target": "game-corner-mauville",
+   "name": "Mauville Game Corner",
+   "price": 20000,
+   "income": 500,
+   "clean": false,
+   "perk": {
+    "kind": "clean",
+    "n": 200
+   },
+   "text": "The slots wash ₽200 a week.",
+   "rival": true
+  },
+  {
+   "target": "lavaridge-herb",
+   "name": "Herb Shop",
+   "price": 4500,
+   "income": 180,
+   "clean": true,
+   "perk": {
+    "kind": "items",
+    "n": 2,
+    "item": "energy-powder"
+   },
+   "text": "2 Energy Powders a week."
+  },
+  {
+   "target": "fortree-market",
+   "name": "Treehouse Market",
+   "price": 4500,
+   "income": 180,
+   "clean": true,
+   "perk": {
+    "kind": "odds",
+    "n": 5
+   },
+   "text": "Base gear: +5% on jobs in Fortree."
+  },
+  {
+   "target": "lilycove-store",
+   "name": "Lilycove Dept. Store",
+   "price": 15000,
+   "income": 600,
+   "clean": true,
+   "perk": {
+    "kind": "income",
+    "n": 300
+   },
+   "text": "The biggest store in Hoenn pays ₽300 more a week."
+  },
+  {
+   "target": "stern-shipyard",
+   "name": "Stern's Shipyard",
+   "price": 8000,
+   "income": 250,
+   "clean": true,
+   "perk": {
+    "kind": "heroDown",
+    "n": 1
+   },
+   "text": "The Hero's boat ride is slower."
+  }
+ ],
+ "pillars": [
+  "devon-corp",
+  "game-corner-mauville"
+ ],
+ "hero": {
+  "path": [
+   "littleroot",
+   "rustboro",
+   "petalburg",
+   "slateport",
+   "mauville",
+   "lavaridge",
+   "fortree",
+   "lilycove",
+   "sootopolis"
+  ],
+  "allies": [
+   {
+    "id": "roxanne",
+    "name": "Roxanne",
+    "look": "bosses/roxanne-gen6.png",
+    "ace": "nosepass"
+   },
+   {
+    "id": "wattson",
+    "name": "Wattson",
+    "look": "bosses/wattson.png",
+    "ace": "manectric"
+   },
+   {
+    "id": "flannery",
+    "name": "Flannery",
+    "look": "bosses/flannery.png",
+    "ace": "torkoal"
+   },
+   {
+    "id": "norman",
+    "name": "Norman",
+    "look": "bosses/norman.png",
+    "ace": "slaking"
+   },
+   {
+    "id": "winona",
+    "name": "Winona",
+    "look": "bosses/winona-gen6.png",
+    "ace": "altaria"
+   },
+   {
+    "id": "juan",
+    "name": "Juan",
+    "look": "bosses/juan.png",
+    "ace": "kingdra"
+   },
+   {
+    "id": "steven",
+    "name": "Steven",
+    "look": "bosses/steven-gen6.png",
+    "ace": "metagross",
+    "champion": true
+   }
+  ],
+  "mentor": "Professor Birch",
+  "parent": "The Hero's father, Norman",
+  "sidekick": "Wally, from Petalburg",
+  "homes": {
+   "latios": {
+    "home": "sootopolis",
+    "over": "Southern Island"
+   },
+   "latias": {
+    "home": "lilycove",
+    "over": "the open sea"
+   }
+  }
+ },
+ "league": {
+  "elite": [
+   {
+    "id": "sidney",
+    "name": "Sidney",
+    "species": [
+     "mightyena",
+     "shiftry",
+     "cacturne",
+     "crawdaunt",
+     "absol"
+    ],
+    "offset": 2
+   },
+   {
+    "id": "phoebe",
+    "name": "Phoebe",
+    "species": [
+     "dusclops",
+     "banette",
+     "sableye",
+     "banette",
+     "dusclops"
+    ],
+    "offset": 3
+   },
+   {
+    "id": "glacia",
+    "name": "Glacia",
+    "species": [
+     "sealeo",
+     "glalie",
+     "sealeo",
+     "glalie",
+     "walrein"
+    ],
+    "offset": 4
+   },
+   {
+    "id": "drake",
+    "name": "Drake",
+    "species": [
+     "shelgon",
+     "altaria",
+     "flygon",
+     "flygon",
+     "salamence"
+    ],
+    "offset": 5
+   }
+  ],
+  "champion": {
+   "id": "steven",
+   "name": "Steven",
+   "species": [
+    "skarmory",
+    "claydol",
+    "aggron",
+    "cradily",
+    "armaldo",
+    "metagross"
+   ],
+   "offset": 6
+  },
+  "standIn": {}
+ },
+ "lab": [
+  "lileep",
+  "anorith",
+  "castform",
+  "beldum",
+  "feebas"
+ ],
+ "desk": {
+  "name": "Hoenn",
+  "rivals": [
+   "Team Magma",
+   "Team Aqua"
+  ],
+  "badges": [
+   {
+    "name": "Stone Badge",
+    "town": "Rustboro City",
+    "c": "#9aa6b6"
+   },
+   {
+    "name": "Knuckle Badge",
+    "town": "Dewford Town",
+    "c": "#c86a3a"
+   },
+   {
+    "name": "Dynamo Badge",
+    "town": "Mauville City",
+    "c": "#ffd23f"
+   },
+   {
+    "name": "Heat Badge",
+    "town": "Lavaridge Town",
+    "c": "#ff5a3a"
+   },
+   {
+    "name": "Balance Badge",
+    "town": "Petalburg City",
+    "c": "#e8a0a0"
+   },
+   {
+    "name": "Feather Badge",
+    "town": "Fortree City",
+    "c": "#a0d0ff"
+   },
+   {
+    "name": "Mind Badge",
+    "town": "Mossdeep City",
+    "c": "#e070c0"
+   },
+   {
+    "name": "Rain Badge",
+    "town": "Sootopolis City",
+    "c": "#4fa3ff"
+   }
+  ],
+  "codes": {
+   "Rustboro City": "RST",
+   "Dewford Town": "DWF",
+   "Mauville City": "MVL",
+   "Lavaridge Town": "LVR",
+   "Petalburg City": "PTL",
+   "Fortree City": "FRT",
+   "Mossdeep City": "MSD",
+   "Sootopolis City": "STP"
+  },
+  "mons": [
+   "zigzagoon",
+   "poochyena",
+   "wurmple",
+   "lotad",
+   "seedot",
+   "taillow",
+   "wingull",
+   "ralts",
+   "surskit",
+   "shroomish",
+   "slakoth",
+   "nincada",
+   "whismur",
+   "makuhita",
+   "azurill",
+   "nosepass",
+   "skitty",
+   "sableye",
+   "mawile",
+   "aron",
+   "meditite",
+   "electrike",
+   "plusle",
+   "minun",
+   "gulpin",
+   "carvanha",
+   "wailmer",
+   "numel",
+   "spoink",
+   "trapinch",
+   "cacnea",
+   "swablu",
+   "barboach",
+   "corphish",
+   "baltoy",
+   "shuppet"
+  ],
+  "offRegion": [
+   "rattata",
+   "sentret",
+   "bidoof",
+   "lillipup",
+   "fletchling",
+   "rookidee",
+   "yungoos",
+   "lechonk"
+  ],
+  "writers": [
+   {
+    "name": "Devon clerk Mr. Stone's aide",
+    "short": "Aide Ono",
+    "town": "Rustboro City",
+    "quote": "{first} filed Devon's papers for a year. Never lost one, never read one."
+   },
+   {
+    "name": "Mr. Briney's neighbour",
+    "short": "Neighbour Kip",
+    "town": "Dewford Town",
+    "quote": "{first} helped mend the nets. Good with knots and secrets."
+   },
+   {
+    "name": "Wattson's shop hand",
+    "short": "Hand Volt",
+    "town": "Mauville City",
+    "quote": "{first} rewired half of Mauville and never got a shock. Lucky, or careful."
+   },
+   {
+    "name": "Hot-spring attendant Rina",
+    "short": "Rina",
+    "town": "Lavaridge Town",
+    "quote": "{first} sold eggs boiled in the springs. Polite to everyone, even Magma."
+   },
+   {
+    "name": "Gym trainee Wally's uncle",
+    "short": "Uncle Wes",
+    "town": "Petalburg City",
+    "quote": "{first} helped Wally train. Kind. Don't let that fool you."
+   },
+   {
+    "name": "Treehouse carpenter Vance",
+    "short": "Vance",
+    "town": "Fortree City",
+    "quote": "{first} built rope bridges with me for two summers. Never fell once."
+   },
+   {
+    "name": "Space Center guard Hollis",
+    "short": "Hollis",
+    "town": "Mossdeep City",
+    "quote": "{first} worked nights at the launch pad. Saw the Magma lot coming before I did."
+   }
+  ]
+ },
+ "holdings": {
+  "hoenn:rustboro-gym-roxanne": {
+   "district": "rustboro",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:rustboro-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"every crew member gains +10% XP from battles; Rock crew take −15% damage.\" waits for a battle or shop hook."
+  },
+  "hoenn:dewford-gym-brawly": {
+   "district": "petalburg",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:dewford-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Fighting crew train ×2; tide pools give 1 free Potion a night.\" waits for a battle or shop hook."
+  },
+  "hoenn:mauville-gym-wattson": {
+   "district": "mauville",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:mauville-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"a free Electric item each week (TM or Magnet); Electric crew +1 Speed stage.\" waits for a battle or shop hook."
+  },
+  "hoenn:lavaridge-gym-flannery": {
+   "district": "lavaridge",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:lavaridge-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"crew heal 20% each night and ailments clear in one night; Fire crew +10% damage.\" waits for a battle or shop hook."
+  },
+  "hoenn:petalburg-gym-norman": {
+   "district": "petalburg",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:petalburg-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Normal crew +10% HP; Loyalty +2 each week to everyone (Norman's \"family\" talk).\" waits for a battle or shop hook."
+  },
+  "hoenn:fortree-gym-winona": {
+   "district": "fortree",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:fortree-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Flying crew +1 Speed stage; a rooftop spotter sees raids 1 day early.\" waits for a battle or shop hook."
+  },
+  "hoenn:mossdeep-gym-tate-and-liza": {
+   "district": "lilycove",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:mossdeep-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Psychic crew +10% crit; two crew can share one action.\" waits for a battle or shop hook."
+  },
+  "hoenn:sootopolis-gym-wallace": {
+   "district": "sootopolis",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Water crew +10% damage; once a week turn rain on in one district.\" waits for a battle or shop hook."
+  },
+  "hoenn:ever-grande-league": {
+   "district": "sootopolis",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "champion",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"an Elite Four seat for your own crew; one free Champion-grade practice battle we\" waits for a battle or shop hook."
+  },
+  "hoenn:littleroot-town": {
+   "district": "littleroot",
+   "fx": [
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit each week; the rest of \"the first crew member recruited each week arrives with a held item.\" waits for a battle or shop hook."
+  },
+  "hoenn:oldale-town": {
+   "district": "littleroot",
+   "fx": [
+    {
+     "k": "income",
+     "n": 350
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"your crew rests free; Potion Mart −10%.\" waits for a battle or shop hook."
+  },
+  "hoenn:petalburg-city": {
+   "district": "petalburg",
+   "fx": [
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit each week; the rest of \"Norman's seat; trainers-in-training recruits +1 a week (adults only); Pokémon Ce\" waits for a battle or shop hook."
+  },
+  "hoenn:rustboro-city": {
+   "district": "rustboro",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Devon Corp's HQ; building costs −10%.\" waits for a battle or shop hook."
+  },
+  "hoenn:dewford-town": {
+   "district": "petalburg",
+   "fx": [
+    {
+     "k": "income",
+     "n": 350
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"fish hauls +25%; a hidden cave route.\" waits for a battle or shop hook."
+  },
+  "hoenn:slateport-city": {
+   "district": "slateport",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"import/export lines +2; ships +1.\" waits for a battle or shop hook."
+  },
+  "hoenn:mauville-city": {
+   "district": "mauville",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"the Game Corner's casino; Bike Shop gives free bikes (−1 travel day).\" waits for a battle or shop hook."
+  },
+  "hoenn:verdanturf-town": {
+   "district": "rustboro",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"a Contest stage; Regard +5 each week.\" waits for a battle or shop hook."
+  },
+  "hoenn:lavaridge-town": {
+   "district": "lavaridge",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"crew heal and gain Loyalty +1 each night.\" waits for a battle or shop hook."
+  },
+  "hoenn:fallarbor-town": {
+   "district": "fallarbor",
+   "fx": [
+    {
+     "k": "income",
+     "n": 350
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Meteorite shards for Dragon training.\" waits for a battle or shop hook."
+  },
+  "hoenn:fortree-city": {
+   "district": "fortree",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"rooftop HQ rooms cost −20%; Winona's sky view reveals raids 1 day early.\" waits for a battle or shop hook."
+  },
+  "hoenn:lilycove-city": {
+   "district": "lilycove",
+   "fx": [
+    {
+     "k": "income",
+     "n": 2800
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"the department store, a museum and the Contest Hall; shop income ×1.5.\" waits for a battle or shop hook."
+  },
+  "hoenn:mossdeep-city": {
+   "district": "lilycove",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"the Space Center and the Gym; Psychic crew +5%; telescopes give Intel +1.\" waits for a battle or shop hook."
+  },
+  "hoenn:sootopolis-city": {
+   "district": "sootopolis",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"a sheltered base, police can't patrol.\" waits for a battle or shop hook."
+  },
+  "hoenn:pacifidlog-town": {
+   "district": "sootopolis",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1050
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"the sea routes pay +₽150/day; free Dive access.\" waits for a battle or shop hook."
+  },
+  "hoenn:ever-grande-city": {
+   "district": "sootopolis",
+   "fx": [
+    {
+     "k": "income",
+     "n": 3500
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"League tourism; ₽500/day toll.\" waits for a battle or shop hook."
+  },
+  "hoenn:birchs-lab-littleroot": {
+   "district": "littleroot",
+   "fx": [
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit each week; the rest of \"every Pokémon caught is logged and all species' habitats shown; new recruits sta\" waits for a battle or shop hook."
+  },
+  "hoenn:players-house-rivals-house-littleroot": {
+   "district": "littleroot",
+   "fx": [
+    {
+     "k": "loyalty",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as loyalty each week; the rest of \"crew recover fully and Loyalty +2 each week (one per house, stackable).\" waits for a battle or shop hook."
+  },
+  "hoenn:mr-brineys-house-route-104": {
+   "district": "petalburg",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"the Peeko ferry connects Dewford, Slateport and Route 108 for you; +1 Sea ship; \" waits for a battle or shop hook."
+  },
+  "hoenn:rustboro-cutting-co": {
+   "district": "rustboro",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"lumber income +₽200/day; Cut is open for your crew.\" waits for a battle or shop hook."
+  },
+  "hoenn:devon-corp-rustboro": {
+   "district": "rustboro",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"one Master Ball per region; tech parts +50%; Devon Scope reveals hidden Pokémon;\" waits for a battle or shop hook."
+  },
+  "hoenn:petalburg-woods": {
+   "district": "petalburg",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Spore and Shroomish stock; Poison crew +.\" waits for a battle or shop hook."
+  },
+  "hoenn:granite-cave": {
+   "district": "petalburg",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Steven's letters; a hidden TM each week; a Steel-type egg once.\" waits for a battle or shop hook."
+  },
+  "hoenn:dewford-hall": {
+   "district": "petalburg",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"Fighting crew Grunts train ×2; local fights give ₽200/day.\" waits for a battle or shop hook."
+  },
+  "hoenn:slateport-market": {
+   "district": "slateport",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    }
+   ],
+   "via": "biz:slateport-market",
+   "note": "Read from the list's Bonus as income each week; the rest of \"one rare held item each week; Berry stall.\" waits for a battle or shop hook."
+  },
+  "hoenn:oceanic-museum": {
+   "district": "slateport",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"a sea-treasure roll each week; Water crew +5%.\" waits for a battle or shop hook."
+  },
+  "hoenn:slateport-harbor": {
+   "district": "slateport",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"import/export lines +2; Devon parts shipments free; Captain Stern's ship.\" waits for a battle or shop hook."
+  },
+  "hoenn:seabed-route-124-128": {
+   "district": "sootopolis",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"underwater routes (travel −1 day, smuggling +1).\" waits for a battle or shop hook."
+  },
+  "hoenn:mauville-game-corner": {
+   "district": "mauville",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    }
+   ],
+   "via": "biz:game-corner-mauville",
+   "note": "Read from the list's Bonus as income each week; the rest of \"laundering 5%; Abra/Pikachu prizes.\" waits for a battle or shop hook."
+  },
+  "hoenn:rydels-cycles": {
+   "district": "mauville",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"your crew rides free bikes (−1 travel day within Hoenn).\" waits for a battle or shop hook."
+  },
+  "hoenn:new-mauville": {
+   "district": "mauville",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Electric rooms and the Garage −30% upkeep; Electrode events.\" waits for a battle or shop hook."
+  },
+  "hoenn:trick-house": {
+   "district": "mauville",
+   "fx": [
+    {
+     "k": "loyalty",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as loyalty each week; the rest of \"crew Wits training ×2; one random item prize a week.\" waits for a battle or shop hook."
+  },
+  "hoenn:cozmos-house-fallarbor-lab": {
+   "district": "fallarbor",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Meteorite shards for Dragon-type training; once-a-month Dragon egg.\" waits for a battle or shop hook."
+  },
+  "hoenn:meteor-falls": {
+   "district": "fallarbor",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Dragon-type wild encounters; Aqua/Magma rival seat while held.\" waits for a battle or shop hook."
+  },
+  "hoenn:mt-chimney": {
+   "district": "lavaridge",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Fire crew +10%; ash-sheen smuggling.\" waits for a battle or shop hook."
+  },
+  "hoenn:jagged-pass": {
+   "district": "lavaridge",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1750
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"+₽250/day; a free Cable Car pass for the crew.\" waits for a battle or shop hook."
+  },
+  "hoenn:team-magma-hideout": {
+   "district": "lavaridge",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"free drill base room; Fire/Ground crew +.\" waits for a battle or shop hook."
+  },
+  "hoenn:team-aqua-hideout": {
+   "district": "lilycove",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"free submarine room; Water crew +; sea smuggling.\" waits for a battle or shop hook."
+  },
+  "hoenn:weather-institute": {
+   "district": "fortree",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"choose the weather in one district a week; Castform events.\" waits for a battle or shop hook."
+  },
+  "hoenn:lilycove-dept-store": {
+   "district": "lilycove",
+   "fx": [
+    {
+     "k": "income",
+     "n": 2800
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"all items −20%; Vending machines each week give a free drink buff.\" waits for a battle or shop hook."
+  },
+  "hoenn:lilycove-museum": {
+   "district": "lilycove",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 15,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Regard +15 weekly; once-a-month rare painting-trade.\" waits for a battle or shop hook."
+  },
+  "hoenn:lilycove-contest-hall": {
+   "district": "lilycove",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Regard +10 weekly; ribbons give small ₽ (₽150 each); a Contest-trained crew memb\" waits for a battle or shop hook."
+  },
+  "hoenn:mossdeep-space-center": {
+   "district": "lilycove",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"satellite view of all rival hideouts; Psychic/Steel crew +10%; rocket tech.\" waits for a battle or shop hook."
+  },
+  "hoenn:stevens-house": {
+   "district": "lilycove",
+   "fx": [
+    {
+     "k": "loyalty",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as loyalty each week; the rest of \"rare Stones each week (Steven is a Champion).\" waits for a battle or shop hook."
+  },
+  "hoenn:cave-of-origin": {
+   "district": "sootopolis",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 15,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"the Kyogre/Groudon rumour track opens; weather bonus +1 district; Regard +15.\" waits for a battle or shop hook."
+  },
+  "hoenn:seafloor-cavern": {
+   "district": "sootopolis",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"a submarine route to the Cave of Origin; Kyogre event; Water crew +10%.\" waits for a battle or shop hook."
+  },
+  "hoenn:sky-pillar": {
+   "district": "sootopolis",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Rayquaza event; Dragon crew +.\" waits for a battle or shop hook."
+  },
+  "hoenn:safari-zone-hoenn": {
+   "district": "fortree",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"five wild Pokémon a day; rare chance +10%; Safari-only species (Girafarig, Herac\" waits for a battle or shop hook."
+  },
+  "hoenn:battle-frontier-hoenn": {
+   "district": "slateport",
+   "fx": [
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit each week; the rest of \"trains your Grunts to use items and gimmicks (each Grunt gets 1 held item and 1 \" waits for a battle or shop hook."
+  },
+  "hoenn:abandoned-ship": {
+   "district": "slateport",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"a treasure cache; Ghost crew +10% evasion.\" waits for a battle or shop hook."
+  },
+  "hoenn:shoal-cave": {
+   "district": "lilycove",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Shoal Salt and Shell weekly (items for Glalie/Froslass evolutions); ice shard ca\" waits for a battle or shop hook."
+  }
+ }
+}

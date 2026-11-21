@@ -135,7 +135,14 @@ export function clampClean(b: DominionBlock): void {
 }
 
 /** D4b: a room's price with the crew's mechanic discount (building, raising a tier). */
-export const buildPrice = (b: DominionBlock, base: number): number => Math.round((base * (100 - hqFx(b).buildOff)) / 100);
+/** D15: a held region's Boon may change a price (`what` is a building id, or 'hq-upgrade'). Registered by regions.ts. */
+type PriceHook = (b: DominionBlock, what: string, price: number) => number;
+const PRICE_HOOKS: PriceHook[] = [];
+export function addPriceHook(h: PriceHook): void {
+  PRICE_HOOKS.push(h);
+}
+export const priceFor = (b: DominionBlock, what: string, price: number): number => PRICE_HOOKS.reduce((p, h) => h(b, what, p), price);
+export const buildPrice = (b: DominionBlock, base: number, what = ''): number => priceFor(b, what, Math.round((base * (100 - hqFx(b).buildOff)) / 100));
 
 /** Hire Grunt's price with the Recruitment Center's discount. */
 export const hirePrice = (b: DominionBlock, base: number): number => Math.round((base * (100 - hqFx(b).hireOff)) / 100);

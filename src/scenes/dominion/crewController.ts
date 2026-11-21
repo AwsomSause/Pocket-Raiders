@@ -16,7 +16,7 @@ import { assignView } from '../../ui/redux/screens/dominion/assign';
 import { personaView } from '../../ui/redux/screens/dominion/persona';
 
 interface Host {
-  screenName: 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'squads' | 'founding' | 'founded' | 'debate' | 'spy' | 'takeover' | 'broadcast' | 'assign' | 'district';
+  screenName: 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'squads' | 'founding' | 'founded' | 'debate' | 'spy' | 'takeover' | 'broadcast' | 'assign' | 'district' | 'empire';
   setNotice(n: string | null): void;
   refresh(): void;
   step(a: DominionAction): boolean;
