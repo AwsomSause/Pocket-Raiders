@@ -187,14 +187,15 @@ export function installTouchControls(): void {
   // Pokémon where the open screen takes swipes. The tap it ends with presses nothing.
   let from: { id: number; x: number; y: number; t: number } | null = null;
   window.addEventListener('pointerdown', (e) => {
-    from = e.pointerType === 'touch' && e.isPrimary && !(e.target instanceof Node && pad.contains(e.target)) ? { id: e.pointerId, x: e.clientX, y: e.clientY, t: performance.now() } : null;
+    from = e.pointerType === 'touch' && e.isPrimary && !(e.target instanceof Node && pad.contains(e.target)) ? { id: e.pointerId, x: e.clientX, y: e.clientY, t: e.timeStamp } : null;
   }, true);
   window.addEventListener('pointercancel', () => { from = null; }, true);
   window.addEventListener('pointerup', (e) => {
     const a = from;
     from = null;
     if (!a || a.id !== e.pointerId || !prefs.swipeToSwitch || !swipeTarget) return;
-    const dir = swipeOf(e.clientX - a.x, e.clientY - a.y, performance.now() - a.t);
+    // The time between the touches as the device saw them (event time), so a busy page does not make a quick stroke look slow.
+    const dir = swipeOf(e.clientX - a.x, e.clientY - a.y, e.timeStamp - a.t);
     if (!dir || !swipeTarget(dir)) return;
     const stop = (ev: Event): void => { ev.stopPropagation(); ev.preventDefault(); };
     window.addEventListener('click', stop, { capture: true, once: true });

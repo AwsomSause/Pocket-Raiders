@@ -153,10 +153,10 @@ test('Phantom UI: the Phone page has the touch rows, Touch buttons hides the pad
   const party = page.locator('#phx .phs[data-scene="Map"][data-scr="party"]');
   const on = () => party.locator('.pc').evaluateAll((els) => els.findIndex((e) => e.classList.contains('on')));
   await expect.poll(on).toBe(0);
-  const swipe = (dx: number) => page.evaluate(async (dx) => {
+  const swipe = (dx: number) => page.evaluate((dx) => {
     const at = (type: string, x: number) => document.body.dispatchEvent(new PointerEvent(type, { pointerType: 'touch', isPrimary: true, pointerId: 41, clientX: x, clientY: 420, bubbles: true }));
+    // Down and up at once: a timer between them can stretch past the swipe's time limit while the page redraws.
     at('pointerdown', 640);
-    await new Promise((r) => setTimeout(r, 120));
     at('pointerup', 640 + dx);
   }, dx);
   await swipe(-200);
