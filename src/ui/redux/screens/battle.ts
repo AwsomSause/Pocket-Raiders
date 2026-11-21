@@ -2,11 +2,14 @@
 // the choices), the page tabs and the small lines over the field. It is drawn over the canvas, which keeps the arena,
 // the Pokémon and every animation. Pure drawing; BattleScene keeps the rules, the input and the state.
 
+import type { PkCatch } from '../../pocket/screens/after';
+import type { BattleInfo, MoveInfo } from '../../../core/presentation/battleInfo';
 import { act, esc, facts, foot, hpb, img, mini, mon, TX, TYPE_COLORS, ty, W } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { type Art, pic, scrollStart } from '../templates';
 import { confirmBox } from './saves';
 import { phBattle, phBattleList } from '../../phantom/screens/battle';
+import { pkBattle, pkBattleList } from '../../pocket/screens/battle';
 
 export interface BattleBox {
   name: string;
@@ -24,6 +27,8 @@ export interface BattleBox {
   team: { n: number; out: number } | null;
   /** The box's key for its hover card and its pin ("foe:0", "mine:1"); none leaves the box inert. */
   tip?: string;
+  /** A shiny foe (the Pocket look tags its plate ★ Shiny). */
+  shiny?: boolean;
   /** Phantom UI: the Pokémon's types now (none while it is hidden), and for a foe what hits it super effectively. */
   types?: readonly string[];
   weak?: readonly { type: string; times: number }[];
@@ -92,6 +97,13 @@ export interface BattleModel {
   /** The battle log (H): its filter tabs and the lines of the open one. */
   /** The battle log. The Phantom page (mock-up `blog`) draws `rows` a screen at a time from `top`, under its `head`. */
   log?: { tabs: readonly string[]; index: number; lines: readonly string[]; rows?: readonly LogRow[]; top?: number; head?: string } | null;
+  /** Pocket look: the Battle Info page and the move card (structured), and the turn for the Battle Log. */
+  pkInfo?: (BattleInfo & { foeFile: string | null; meFile: string | null }) | null;
+  pkMove?: MoveInfo | null;
+  /** Pocket look: the catch card after a ball holds (mock-up `capture`). */
+  pkCatch?: PkCatch | null;
+  /** Pocket look: a pseudo-stage's band while its battle opens (mock-up `ev-stage`). */
+  pkBand?: { em: string; b: string; span: string } | null;
   /** The Beta 0.6 pieces over the field; each shows only while its rule is in play. */
   fx?: BattleFx | null;
   /** A notice over the field that waits for an input (the Extended Cut's Second Shot): the mock-ups' confirm box with one button. */
@@ -118,6 +130,8 @@ export interface BattleLevel {
   file: string | null;
   from: number;
   to: number;
+  /** Its types (the Pocket look's Level Up page takes its colours from them). */
+  types?: readonly string[];
   /** Each stat: its name, its new value and how much it grew. */
   stats: readonly (readonly [string, number, number])[];
 }
@@ -251,6 +265,7 @@ export function trayHeight(v: number, n: number): number {
 
 export function battleView(c: ReduxCtx, d: BattleModel): string {
   if (c.ph) return phBattle(c.ph, d);
+  if (c.pk) return pkBattle(d);
   if (d.evolve) return evolveView(c, d.evolve, d.text);
   const v = c.v(4), opts = d.menu?.options ?? [], n = opts.length, on = d.menu?.index ?? -1;
   const many = v === 3 ? n > 4 : Math.ceil(n / 2) > 2;
@@ -351,6 +366,9 @@ export interface BattleListRow {
   /** A short mark for a Pokémon ("IN BATTLE", "FNT", "✔ +20 HP"), or the count of an item ("×3"). */
   tag: string;
   off: boolean;
+  /** Its level and types, for a Pokémon (the Pocket look's party pills). */
+  level?: number;
+  types?: readonly string[];
 }
 
 export interface BattleListModel {
@@ -370,6 +388,10 @@ export interface BattleListModel {
   center?: boolean;
   /** A big pulsing headline over a gold bar ("! A bite !"), above the title. */
   lead?: string;
+  /** The lit row's line (what the item does, the Pokémon's ability), for the Pocket look's side card. */
+  hint?: string;
+  /** Why the lit row can't be picked now ("No Pokémon can use the Potion right now."), or ''. */
+  why?: string;
 }
 
 /** "Bag  (P pins to the hotbar)": the title, and the words in brackets as a small note. */
@@ -387,6 +409,7 @@ const countText = (t: string): string => t.replace(/^[×x]\s*(\d+)$/, '× $1');
 /** The battle's Party and Item windows (the mock-ups' overlays): a small window over the field, left of the arena. */
 export function battleListView(c: ReduxCtx, d: BattleListModel): string {
   if (c.ph) return phBattleList(c.ph, d);
+  if (c.pk) return pkBattleList(d);
   const n = Math.max(0, d.n), index = Math.max(0, Math.min(n - 1, d.index));
   const s = scrollStart(n, index, BATTLE_LIST_ROWS), end = Math.min(n, s + BATTLE_LIST_ROWS);
   const items = d.tabs !== null;

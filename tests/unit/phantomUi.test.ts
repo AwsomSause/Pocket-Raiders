@@ -49,11 +49,11 @@ describe('Phantom UI setting (settings v46)', () => {
     expect(phantomVersion(undefined).id).toBe('phantom');
   });
 
-  it('UI style steps New, Phantom, Old and round again; the version row only works in Phantom', () => {
+  it('UI style steps New, Pocket, Phantom, Old and round again; the version row only works in Phantom', () => {
     let s = { ...DEFAULT_SETTINGS };
     const seen: string[] = [];
-    for (let i = 0; i < 3; i++) { s = changeSetting(s, 'uiStyle'); seen.push(s.uiStyle); }
-    expect(seen).toEqual(['phantom', 'old', 'new']);
+    for (let i = 0; i < 4; i++) { s = changeSetting(s, 'uiStyle'); seen.push(s.uiStyle); }
+    expect(seen).toEqual(['pocket', 'phantom', 'old', 'new']);
     expect(changeSetting(DEFAULT_SETTINGS, 'phantomVersion')).toBe(DEFAULT_SETTINGS);
     const on = { ...DEFAULT_SETTINGS, uiStyle: 'phantom' as const };
     expect(changeSetting(on, 'phantomVersion').phantomVersion).toBe('midnight');

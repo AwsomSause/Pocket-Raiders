@@ -13,6 +13,9 @@ import { services } from '../../game/services';
 import { joinBusy, joinEnter, joinFrom, joinGhost, joinLeave } from '../phantom/joins';
 import { morph } from '../phantom/morph';
 import { pageOf } from '../phantom/kit';
+import { pkCssArt } from '../pocket/art';
+import { type PkPage, pkPageOf, tierClass } from '../pocket/kit';
+import { pkEnter, pkGhost, pkTurn } from '../pocket/turn';
 import { onRxAssets, rxAtlas, rxUrl } from './assets';
 
 export interface ReduxCtx {
@@ -23,7 +26,11 @@ export interface ReduxCtx {
   v: (layouts: number) => number;
   /** The Phantom UI's version while that style is chosen and ready, else null. A screen with a Phantom page draws it when this is set. */
   ph?: PhantomVersion | null;
+  /** The Pocket look (the Pokémon-style redesign) while that style is chosen and ready, else null. A screen with a Pocket page draws it when this is set. */
+  pk?: PocketCtx | null;
 }
+/** What a Pocket page may need to know about the player's settings. */
+export interface PocketCtx { /** Menu animations are off: pages change at once. */ calm: boolean }
 
 export interface ReduxView {
   /** Redraws on the next frame. Call after the scene's state changes. */
@@ -69,6 +76,18 @@ const PHANTOM_FONTS: [string, number, 'normal' | 'italic', string][] = [
 let host: HTMLDivElement | null = null;
 /** The Phantom layer: a second host beside the New one, so neither look's rules reach the other's views. */
 let phost: HTMLDivElement | null = null;
+/** The Pocket layer: a third host, for the same reason. It lies under the New one (so notices and New pop-ups show over a Pocket page) unless a Pocket view was opened over a New page. */
+let pkhost: HTMLDivElement | null = null;
+/** Counts the views opened, for their order on a layer. */
+let seq = 0;
+/** Every open scene view, in the order they opened, with the layer each is drawn on. */
+const sides = new Map<HTMLElement, 'rx' | 'ph' | 'pk'>();
+function stack(): void {
+  if (!pkhost) return;
+  const up = [...sides].filter(([v]) => v.style.display !== 'none');
+  const last = up[up.length - 1];
+  pkhost.style.zIndex = last?.[1] === 'pk' && up.some(([, side]) => side !== 'pk') ? '41' : '39';
+}
 let canvas: HTMLCanvasElement | null = null;
 const views = new Set<{ redraw: () => void }>();
 /** How many full-screen cards are up (see `ReduxOptions.card`). */
@@ -85,17 +104,46 @@ let gone = { key: '', at: 0 };
  * comparing the two). A browser driven by automation (the Playwright tests) gets Old unless it asks for New:
  * the older browser tests click and read the canvas, which the New UI layer covers. New has its own specs.
  */
-const forced: 'new' | 'old' | 'phantom' | null = (() => {
+const forced: 'new' | 'old' | 'phantom' | 'pocket' | null = (() => {
   if (typeof location === 'undefined') return null;
   const q = new URLSearchParams(location.search).get('ui');
-  if (q === 'new' || q === 'old' || q === 'phantom') return q;
+  if (q === 'new' || q === 'old' || q === 'phantom' || q === 'pocket') return q;
   return typeof navigator !== 'undefined' && navigator.webdriver ? 'old' : null;
 })();
-const styleNow = (): 'new' | 'old' | 'phantom' => forced ?? services().session.settings.uiStyle;
+const styleNow = (): 'new' | 'old' | 'phantom' | 'pocket' => forced ?? services().session.settings.uiStyle;
 /** True while the HTML layer draws the screens: the New UI, or the Phantom UI (which is built on it). */
 export const reduxOn = (): boolean => styleNow() !== 'old';
 /** True while the Phantom UI is chosen (Settings > Display > UI style). A screen without a Phantom page yet shows its New one in Phantom colours. */
 export const phantomOn = (): boolean => styleNow() === 'phantom';
+
+/** True while the Pocket look is chosen (Settings > Display > UI style). A screen without a Pocket page yet shows its New one. */
+export const pocketOn = (): boolean => styleNow() === 'pocket';
+/** The Pocket look's rules load the first time the style is used; views redraw when they are in. */
+let pocketState: 'no' | 'loading' | 'ready' = 'no';
+function pocketReady(): boolean {
+  if (pocketState === 'ready') return true;
+  if (pocketState === 'no') {
+    pocketState = 'loading';
+    // The mock-ups name the game's main font by its own name.
+    const fonts = document.createElement('style');
+    fonts.id = 'pk-fonts';
+    fonts.textContent = '@font-face{font-family:"Pokemon Emerald Pro";font-style:normal;font-weight:400;font-display:swap;src:url("assets/fonts/pokemon-emerald-pro.woff2") format("woff2")}';
+    document.head.append(fonts);
+    void Promise.all([import('../pocket/pocket.gen.css'), import('../pocket/pocket.css')]).then(() => {
+      pocketState = 'ready';
+      lastBox = '';
+      views.forEach((v) => v.redraw());
+    });
+  }
+  return false;
+}
+const pocketNow = (): PocketCtx | null => {
+  if (!pocketOn() || !pocketReady()) return null;
+  const s = services().session.settings;
+  return { calm: !s.menuAnimations || s.disableAllAnimations };
+};
+/** True while Pocket pages are being drawn (the style is chosen and its rules are in). */
+export const pocketLive = (): boolean => pocketNow() !== null;
 
 /** The Phantom UI's rules and fonts load the first time the style is used; views redraw when they are in. */
 let phantomState: 'no' | 'loading' | 'ready' = 'no';
@@ -150,7 +198,7 @@ function place(): void {
   // A phone held upright turns the game a quarter turn (ui/portraitRotate.ts): the layer turns with it, about the
   // canvas's own top-left corner, which then sits at the top right of the box on screen.
   const turned = document.body.classList.contains('rot-portrait');
-  for (const h of [host, phost]) {
+  for (const h of [host, phost, pkhost]) {
     if (!h) continue;
     h.style.left = `${turned ? r.right : r.left}px`;
     h.style.top = `${r.top}px`;
@@ -171,6 +219,11 @@ function ensureHost(game: Phaser.Game): HTMLDivElement {
   style.id = 'rx-skins';
   style.textContent = FONT_FILES.map(([fam, w, f]) => `@font-face{font-family:"${fam}";font-style:normal;font-weight:${w};font-display:swap;src:url("assets/fonts/${f}.woff2") format("woff2")}`).join('\n') + '\n' + skinCss();
   document.head.append(style);
+  pkhost = document.createElement('div');
+  pkhost.id = 'pkx';
+  pkhost.className = 'pkx';
+  pkhost.style.zIndex = '39';
+  document.body.append(pkhost);
   host = document.createElement('div');
   host.id = 'rx';
   host.className = 'rx';
@@ -334,9 +387,17 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
   const root = ensureHost(scene.game);
   const el = document.createElement('div');
   el.dataset.scene = scene.scene.key;
+  // Views lie in the order they were opened. One that comes back from the Pocket layer takes its old place again,
+  // so a view opened after it (a Party menu over the map) stays on top.
+  el.dataset.seq = String(++seq);
+  const seat = (side: HTMLElement): void => {
+    const mine = Number(el.dataset.seq);
+    side.insertBefore(el, [...side.children].find((c) => c !== el && Number((c as HTMLElement).dataset.seq ?? 0) > mine) ?? null);
+  };
   const again = gone.key === scene.scene.key && performance.now() - gone.at < 400;
   let k = -1, calm = false, wear = '', last = '';
   let phv: PhantomVersion | null = null;
+  let pkv: PocketCtx | null = null;
   let ctx!: ReduxCtx;
   // The look can change while a screen is open (Settings > UI theme): read it at every draw.
   const dress = (): void => {
@@ -344,12 +405,13 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     root.classList.toggle('calm', !settings.menuAnimations || settings.disableAllAnimations);
     calm = !settings.menuAnimations || settings.disableAllAnimations;
     phost?.classList.toggle('calm', calm);
-    const now = reduxSkinIndex(settings.reduxSkin), ph = phantomNow();
-    if (now === k && ph === phv) return;
+    const now = reduxSkinIndex(settings.reduxSkin), ph = phantomNow(), pk = pocketNow();
+    if (now === k && ph === phv && pk?.calm === pkv?.calm && !pk === !pkv) return;
     k = now;
     phv = ph;
+    pkv = pk;
     // The Phantom style has one layout per screen: every view steers its cursor by layout A while it is on.
-    ctx = { k, skin: REDUX_SKINS[k]!, v: (n) => (ph ? 0 : reduxLayout(k, n)), ph };
+    ctx = { k, skin: REDUX_SKINS[k]!, v: (n) => (ph || pk ? 0 : reduxLayout(k, n)), ph, pk };
     wear = '';
   };
   // A view is drawn on the Phantom layer when its HTML is a Phantom page, and on the New layer otherwise; the same
@@ -360,7 +422,7 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     if (now !== wear) {
       wear = now;
       const side = pageId !== null ? phost! : root;
-      if (el.parentElement !== side) { el.textContent = ''; last = ''; side.append(el); }
+      if (el.parentElement !== side) { const back = el.parentElement === pkhost || !el.parentElement; el.textContent = ''; last = ''; if (back) seat(side); else side.append(el); }
       if (pageId !== null) {
         el.className = 'phs' + (o.clear ? ' clear' : '') + (calm ? ' still' : '');
         // A full-screen card lies over the scene's other Phantom views, whichever was drawn first.
@@ -383,8 +445,52 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
   };
   dress();
   put(null);
+  sides.set(el, 'rx');
   lastBox = '';
   place();
+
+  // ---- The Pocket look: a view whose HTML is a Pocket page is drawn on the Pocket layer with the mock-ups' rules ----
+  /** The Pocket page this view shows (null: it is not showing one). */
+  let pkPage: string | null = null;
+  /** It shows a Pocket HUD page (one that lies over the game's picture). */
+  let pkHud = false;
+  /** The newest Pocket HTML, and whether a page change is about to draw it. */
+  let pkHtml = '', pkWait = false;
+  const pkPut = (p: PkPage): void => {
+    if (el.parentElement !== pkhost) { el.textContent = ''; seat(pkhost!); }
+    el.className = 'pks' + tierClass(p.tier) + (p.hud ? ' clear' : '') + (calm ? ' still' : '');
+    el.style.zIndex = o.card ? '5' : '';
+    delete el.dataset.liv;
+    delete el.dataset.pass;
+    el.removeAttribute('data-hc');
+    el.removeAttribute('data-calm');
+    el.dataset.scr = p.id;
+    // The other looks dress the view afresh if it goes back to them.
+    wear = '';
+    sides.set(el, 'pk');
+    stack();
+  };
+  const pkDraw = (p: PkPage, html: string): void => {
+    pkCssArt(pkhost!);
+    if (html === last) return;
+    last = html;
+    pkHtml = html;
+    if (pkWait) return;
+    // A full page that is new here changes in the mock-ups' way (ui/pocket/turn.ts); anything else is redrawn in place.
+    if (p.hud || p.id === pkPage) { pkPut(p); morph(el, html); pkPage = p.hud ? null : p.id; pkHud = p.hud; return; }
+    pkHud = false;
+    const from = pkPage !== null ? el : pkEnter();
+    pkPage = p.id;
+    if (el.parentElement !== pkhost) el.remove();
+    pkWait = true;
+    pkTurn(pkhost!, from, el, () => {
+      pkWait = false;
+      const q = pkPageOf(pkHtml);
+      if (dead || !q) return;
+      pkPut(q);
+      morph(el, pkHtml);
+    }, calm, /data-tr="(\w+)"/.exec(html.slice(0, 400))?.[1] ?? 'page');
+  };
 
   let queued = false, dead = false;
   // Animations keep their place across redraws (every redraw replaces the view's HTML): a looping one runs on the
@@ -399,6 +505,9 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     if (dead) return;
     dress();
     const html = o.render(ctx);
+    const pkp = pkPageOf(html);
+    if (pkp) { pkDraw(pkp, html); return; }
+    if (pkPage !== null || pkHud) { pkPage = null; pkHud = false; last = ''; if (!el.parentElement) seat(root); }
     const pageId = pageOf(html);
     // Phantom UI: a full page that is new here comes in by its page change (ui/phantom/joins.ts), and one that
     // leaves this view goes by it. A see-through view (the battle HUD, a prompt) has its own entrance.
@@ -413,6 +522,7 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
       pagesUp.delete(el);
     } else if (turning && mine !== null && el.style.display !== 'none') old = joinGhost(el, motion);
     put(pageId);
+    if (sides.get(el) !== (pageId !== null ? 'ph' : 'rx')) { sides.set(el, pageId !== null ? 'ph' : 'rx'); stack(); }
     if (html === last) return;
     last = html;
     const now = performance.now();
@@ -499,12 +609,14 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
   }
   shield(el);
 
-  const hide = (): void => { el.style.display = 'none'; };
-  const show = (): void => { el.style.display = ''; };
+  const hide = (): void => { el.style.display = 'none'; stack(); };
+  const show = (): void => { el.style.display = ''; stack(); };
   const destroy = (): void => {
     if (dead) return;
     dead = true;
     views.delete(view);
+    sides.delete(el);
+    stack();
     if (o.card) {
       cards -= 1;
       views.forEach((v) => v.redraw());
@@ -517,7 +629,8 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
       pagesUp.delete(el);
       if (el.style.display !== 'none') joinLeave(el, mine, joinMotion(services().session.settings));
     }
-    el.remove();
+    // Pocket look: a full page stays up for a moment so the next page can change from it (ui/pocket/turn.ts).
+    if (!(pkPage !== null && pkGhost(el, calm))) el.remove();
     scene.events.off('shutdown', destroy);
     scene.events.off('destroy', destroy);
     scene.events.off('sleep', hide);

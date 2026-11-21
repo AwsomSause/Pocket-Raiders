@@ -1,5 +1,6 @@
 // New UI screens for starting a run, ported from the mock-ups' `form`, `starter` and `brief` templates.
 
+import { pkBrief, pkStarter, type PkBriefExtra } from '../../pocket/screens/run';
 import { act, B, bg, esc, facts, foot, H, mini, mon, nodeDot, TX, ty, TYPE_COLORS, W, type Area } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { phBrief, phSeed, phStarter } from '../../phantom/screens/run';
@@ -28,7 +29,7 @@ export function formView(c: ReduxCtx, d: FormModel): string {
   return H(d.title, d.area ?? 'run', d.hints) + `<div class="abs col cen" style="left:0;right:0;top:86px;gap:16px"><b style="font-size:21px">${esc(d.heading)}</b>${W('<b style="font-size:26px;line-height:40px;letter-spacing:.12em;visibility:hidden">X</b>', 'width:520px;display:flex;justify-content:center;gap:4px;padding:14px', 'rx-field')}<div style="display:grid;grid-template-columns:repeat(10,34px);gap:7px">${FORM_KEYS.map((ch) => `<span class="key"${ch === d.lit ? ' style="background:var(--acc);color:#14161e"' : ''}${act('key', ch)}>${ch}</span>`).join('')}</div><div class="row">${d.buttons.map(([label, arg], k) => B(esc(label), k === d.primary, '', '', act('btn', arg))).join('')}</div></div>` + TX(esc(d.text));
 }
 
-export interface StarterPick { name: string; file: string | null; types: readonly string[]; stats: string; moves: string; /** Phantom card: its home region, and your past runs with it ("New to you"). */ region?: string; past?: string }
+export interface StarterPick { name: string; file: string | null; types: readonly string[]; stats: string; moves: string; /** Phantom card: its home region, and your past runs with it ("New to you"). */ region?: string; past?: string; /** Its generation (the Pocket look stamps its home region). */ gen?: number; /** The line under it ('Starter Remembrance'). */ tag?: string }
 export interface StarterModel {
   title: string;
   picks: readonly StarterPick[];
@@ -43,6 +44,7 @@ export interface StarterModel {
 /** The mock-ups' `starter` template: A three balls on the lab table, B three cards, C the three out on the grass. */
 export function starterView(c: ReduxCtx, d: StarterModel): string {
   if (c.ph) return phStarter(c.ph, d);
+  if (c.pk) return pkStarter(d);
   const v = c.v(3), S = d.picks, on = d.on, cur = S[on]!, blind = !!d.blind;
   const head = H(d.title, 'run', d.hints ?? [['←→', 'look'], ['Enter', 'take'], ['Esc', 'menu']]);
   const pic = (p: StarterPick, k: number, play: boolean): string => (p.file ? mon(p.file, k, blind ? 'sil' : '', play) : '');
@@ -76,11 +78,14 @@ export interface BriefModel {
   /** 0 Depart, 1 Copy (the cursor). */
   index: number;
   text: string;
+  /** The Pocket look's Briefing: the first region, its stops and cap, the first Gym. */
+  pk?: PkBriefExtra;
 }
 
 /** The mock-ups' `brief` template: the plan, the first stage with the seed, the party and Depart. */
 export function briefView(c: ReduxCtx, d: BriefModel): string {
   if (c.ph) return phBrief(c.ph, d);
+  if (c.pk && d.pk) return pkBrief(d, d.pk);
   // The mock-up's plan has three regions and no notes; a long campaign or a run with events gets taller windows and the party row moves down.
   const many = d.regions.length > 4, tall = d.notes.length > 1 || many, h = tall ? 290 : 212;
   const chips = (many ? d.regions.slice(0, 3) : d.regions).map((r, k) => `<span class="tg${k ? ' no' : ''}">${k + 1}. ${esc(r)}</span>`).join('') + (many ? `<span class="tg no">+${d.regions.length - 3} more</span>` : '');

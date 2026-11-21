@@ -23,7 +23,8 @@ import { PocketFolk, folkAssets, pocketFolk, pocketScouts } from '../ui/hubTown/
 import { itemVisual, pokemonIcon } from '../ui/sprites';
 import { onInputAction } from '../ui/input';
 import { useLookFont } from '../ui/redux/canvasFont';
-import { mountRedux, phantomOn } from '../ui/redux/stage';
+import { mountRedux, phantomOn, pocketOn, type ReduxView } from '../ui/redux/stage';
+import { pkTownDoor, pkTownHud, pkTownMap, placeProp } from '../ui/pocket/screens/town';
 import { gridStep } from '../ui/phantom/screens/dexbook';
 import { phPocket, POCKET_COLS, type PocketModel } from '../ui/phantom/screens/townmap';
 import type { TownPanelLike } from '../ui/townPanel';
@@ -79,6 +80,7 @@ export class TownScene extends Phaser.Scene {
     const p = session.profile;
     const motion = session.settings.battleAnimations;
     this.picker = null;
+    this.atDoor = false;
     this.decorMode = false;
     this.petSprites = [];
     this.trail = [];
@@ -103,7 +105,7 @@ export class TownScene extends Phaser.Scene {
 
     this.town = new HubTownView(
       this,
-      { onPlace: (pl) => this.openPlace(pl), onGate: (g) => this.askGate(g), busy: () => Boolean(this.picker) || townBusy.n > 0 },
+      { onPlace: (pl) => this.openPlace(pl), onGate: (g) => this.askGate(g), busy: () => Boolean(this.picker) || townBusy.n > 0, onPrompt: () => this.pkHud?.refresh(), ownPrompt: () => pocketOn(), seeThrough: () => this.atDoor },
       { follower: hubPokemon(p).follower, motion, map: POCKET_TOWN, mapId: 'pocket' },
     );
     this.drawSigns();
@@ -116,20 +118,33 @@ export class TownScene extends Phaser.Scene {
     startTownSound(this.town, this, period, FOUNTAIN);
     if (weather === 'storm' && motion !== 'off') this.rain(motion);
     this.season(now, motion);
-    new HubMinimap(this, this.town, { motion, busy: () => Boolean(this.picker) || townBusy.n > 0, title: 'Pocket Town', own: () => phantomOn() });
+    new HubMinimap(this, this.town, { motion, busy: () => Boolean(this.picker) || townBusy.n > 0, title: 'Pocket Town', own: () => phantomOn() || pocketOn() });
     // Phantom UI: the Town directory has its own keys (M opens it from the street).
     this.directory = null;
     const key = (name: string, fn: () => void): void => void this.input.keyboard?.on(`keydown-${name}`, fn);
-    key('M', () => { if (this.directory) this.directory.walk(); else if (phantomOn() && !this.picker && townBusy.n === 0 && !this.decorMode) this.openDirectory(); });
+    key('M', () => { if (this.directory) this.directory.walk(); else if (phantomOn() && !this.picker && townBusy.n === 0 && !this.decorMode) this.openDirectory(); else if (pocketOn()) this.openPocketMap(); });
     key('Q', () => this.directory?.hamlet(-1));
     key('E', () => this.directory?.hamlet(1));
     key('H', () => this.directory?.hub());
 
-    const top = this.add.graphics();
+    // The Pocket look draws the header, the "Z" line and the keys itself (mock-up `pt-town`).
+    const own = pocketOn();
+    const top = this.add.graphics().setVisible(!own);
     for (let i = 0; i < 12; i++) top.fillStyle(0x0e0b12, 0.45 * (1 - i / 12)).fillRect(0, i * 8, GAME_WIDTH, 8);
-    this.add.text(16, 8, 'Pocket Town', textStyle(30, COLORS.gold, { stroke: '#10203a', strokeThickness: 4 })).setDepth(5);
-    this.add.text(16, 44, `${{ sun: 'Sunny: your last run was a win.', storm: 'A storm hangs over the town after your last run.', cloud: 'Cloudy skies.', clear: 'A clear day.' }[weather]}${night ? ' It is night.' : ''}`, textStyle(15, COLORS.textLight, { stroke: '#10203a', strokeThickness: 4 })).setDepth(5);
-    this.add.text(16, GAME_HEIGHT - 12, 'Arrows walk · Shift runs · Z talks and enters · M map · Esc Town directory', textStyle(14, COLORS.textLight, { stroke: '#10203a', strokeThickness: 4 })).setOrigin(0, 1).setName('pocket-help');
+    this.add.text(16, 8, 'Pocket Town', textStyle(30, COLORS.gold, { stroke: '#10203a', strokeThickness: 4 })).setDepth(5).setVisible(!own);
+    this.add.text(16, 44, `${{ sun: 'Sunny: your last run was a win.', storm: 'A storm hangs over the town after your last run.', cloud: 'Cloudy skies.', clear: 'A clear day.' }[weather]}${night ? ' It is night.' : ''}`, textStyle(15, COLORS.textLight, { stroke: '#10203a', strokeThickness: 4 })).setDepth(5).setVisible(!own);
+    this.add.text(16, GAME_HEIGHT - 12, 'Arrows walk · Shift runs · Z talks and enters · M map · Esc Town directory', textStyle(14, COLORS.textLight, { stroke: '#10203a', strokeThickness: 4 })).setOrigin(0, 1).setName('pocket-help').setVisible(!own);
+    this.pkHud = own ? mountRedux(this, {
+      clear: true,
+      render: (c) => (c.pk ? pkTownHud(this.hudModel()) : ''),
+      acts: {
+        townZ: () => { if (!this.picker && townBusy.n === 0) this.town.interact(); },
+        townMap: () => this.openPocketMap(),
+        townMenu: () => { if (!this.picker && townBusy.n === 0) openTown(this.host, () => this.host.refresh('')); },
+      },
+    }) : null;
+    // The district pill follows where you walk.
+    if (own) this.time.addEvent({ delay: 400, loop: true, callback: () => this.pkHud?.refresh() });
     this.note = this.add.text(GAME_WIDTH / 2, 80, '', textStyle(18, COLORS.gold, { align: 'center', wordWrap: { width: GAME_WIDTH - 160 }, stroke: '#10203a', strokeThickness: 4 })).setOrigin(0.5, 0).setDepth(2000);
     this.drawDecor();
     this.drawWall();
@@ -146,6 +161,78 @@ export class TownScene extends Phaser.Scene {
       else if (a === 'confirm') this.town.interact();
       else if (a === 'back') { playSfx(this, 'ui.select', 0.6); if (phantomOn()) this.openDirectory(); else openTown(host, () => this.host.refresh('')); }
     });
+  }
+
+  /** Pocket look: the street's header, "Z" line and keys over the canvas. */
+  private pkHud: ReduxView | null = null;
+  /** Pocket look: the door card is open (the town stays drawn, dimmed, under it). */
+  private atDoor = false;
+
+  /** Pocket look: the time, the district you stand in and what you face. */
+  private hudModel(): Parameters<typeof pkTownHud>[0] {
+    const f = this.town.facingNow, pl = f ? POCKET_TOWN.places.find((x) => x.id === f.id) : undefined;
+    const period = hubPeriod(new Date(Date.now()));
+    return {
+      time: period.charAt(0).toUpperCase() + period.slice(1),
+      district: districtAt(this.town.tile(), POCKET_TOWN)?.name ?? '',
+      prompt: f ? { verb: f.verb, name: f.name, text: pl?.blurb ?? `${f.verb} to ${f.name}.` } : null,
+    };
+  }
+
+  /** Pocket look: the Town Map (mock-up `pt-map`), a card per district; Enter walks you to its first door. */
+  private openPocketMap(): void {
+    if (this.picker || townBusy.n > 0 || this.decorMode) return;
+    const { session } = services();
+    const dir = townDirectory(session.content, session.profile, new Date(Date.now()));
+    const here = districtAt(this.town.tile(), POCKET_TOWN)?.id;
+    const districts = POCKET_TOWN.districts.map((d) => {
+      const names = dir.hamlets.find((h) => h.id === d.id)?.places.map((pl) => pl.name) ?? [];
+      return { id: d.id, name: d.name, color: d.color, text: names.length ? names.slice(0, 3).join(', ') : d.blurb };
+    });
+    const hereAt = districts.findIndex((d) => d.id === here);
+    let index = Math.max(0, hereAt);
+    const view = mountRedux(this, {
+      render: (c) => (c.pk ? pkTownMap({ districts, index, here: hereAt }) : ''),
+      acts: { mapPick: (i) => { index = Number(i); walk(); }, mapBack: () => back() },
+      overs: { mapOver: (i) => { if (Number(i) !== index) { index = Number(i); view.refresh(); } } },
+    });
+    const close = (): void => { if (this.picker === panel) { panel.close(); this.host.setPicker(null); } };
+    const back = (): void => { playSfx(this, 'ui.select', 0.6); close(); };
+    const walk = (): void => {
+      const id = districts[index]?.id;
+      const pl = POCKET_TOWN.places.find((x) => x.kind === 'building' && districtAt(x.door, POCKET_TOWN)?.id === id) ?? POCKET_TOWN.places.find((x) => districtAt(x.stand, POCKET_TOWN)?.id === id);
+      close();
+      playSfx(this, 'ui.select');
+      if (pl) this.town.moveTo(pl.stand);
+    };
+    const panel: TownPanelLike = {
+      handle: (a) => {
+        if (a === 'back') return back();
+        if (a === 'confirm') return walk();
+        if (a === 'left' || a === 'right') { index = (index + (a === 'left' ? -1 : 1) + districts.length) % districts.length; playSfx(this, 'ui.move'); view.refresh(); }
+      },
+      close: () => view.destroy(),
+    };
+    playSfx(this, 'ui.select', 0.6);
+    this.host.setPicker(panel);
+  }
+
+  /** Pocket look: at a door (mock-up `pt-door`), the building and its line, then Go in or Keep walking. */
+  private askDoor(pl: HubPlace, b: TownBuilding): void {
+    const { session } = services();
+    const shut = b.hidden ? buildingProblem(session.profile, b) : null;
+    const view = mountRedux(this, {
+      clear: true,
+      render: (c) => (c.pk ? pkTownDoor({ district: districtAt(pl.door, POCKET_TOWN)?.name ?? '', name: pl.name, text: pl.blurb, prop: placeProp(POCKET_TOWN, pl.door), shut }) : ''),
+      acts: { doorGo: () => go(), doorBack: () => back() },
+    });
+    const close = (): void => { this.atDoor = false; if (this.picker === panel) { panel.close(); this.host.setPicker(null); } };
+    const back = (): void => { playSfx(this, 'ui.select', 0.6); close(); };
+    const go = (): void => { close(); this.enterBuilding(b); };
+    const panel: TownPanelLike = { handle: (a) => { if (a === 'confirm') go(); else if (a === 'back') back(); }, close: () => view.destroy() };
+    playSfx(this, 'ui.select', 0.6);
+    this.atDoor = true;
+    this.host.setPicker(panel);
   }
 
   /** Phantom UI: the Town directory while it is open (its own keys: Q and E, M, H). */
@@ -249,6 +336,7 @@ export class TownScene extends Phaser.Scene {
     if (room.startsWith('dist:')) { playSfx(this, 'ui.select', 0.6); return this.say(`${pl.name}: ${pl.blurb}`); }
     const b = TOWN.buildings.find((x) => x.id === room);
     if (!b) return;
+    if (pocketOn()) return this.askDoor(pl, b);
     playSfx(this, 'ui.select');
     this.enterBuilding(b);
   }

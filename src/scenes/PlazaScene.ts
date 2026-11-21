@@ -11,7 +11,9 @@ import { currentRegion } from '../core/regions';
 import { PLAZA_OW_SHEETS, plazaSeason, plazaSheetId, plazaStyleOf, type PlazaStyleId } from '../core/presentation/plazaStyles';
 import { services } from '../game/services';
 import { tradeSalt, useTradeScreen } from '../core/presentation/tradeStyles';
-import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, pocketOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { pkPlaza } from '../ui/pocket/screens/town';
+import { pocketRoad } from '../core/presentation/pocket';
 import { artOf, monFile } from '../ui/redux/game';
 import { dockView } from '../ui/redux/screens/hub';
 import type { Art } from '../ui/redux/templates';
@@ -94,8 +96,10 @@ export class PlazaScene extends Phaser.Scene {
     onInputAction(this, (action) => {
       if (this.picker) return this.picker.handle(action);
       if (this.busy || !this.ready) return;
-      if (action === 'left' || (this.rx && action === 'up')) this.moveFocus(-1);
-      else if (action === 'right' || (this.rx && action === 'down')) this.moveFocus(1);
+      // The Pocket look's cards stand three across: up and down move a row.
+      const row = pocketOn() && this.rx ? 3 : 1;
+      if (action === 'left' || (this.rx && action === 'up')) this.moveFocus(action === 'up' ? -row : -1);
+      else if (action === 'right' || (this.rx && action === 'down')) this.moveFocus(action === 'down' ? row : 1);
       else if (action === 'confirm') this.openDistrict(this.layout.districts[this.focus]!);
       else if (action === 'back') this.leave();
     });
@@ -138,7 +142,8 @@ export class PlazaScene extends Phaser.Scene {
     this.refreshFocus(true);
     this.chatLoop();
     this.ready = true;
-    if (reduxOn() && this.style === 'aero') {
+    // The Pocket look draws the plaza as its own page whatever the Plaza style (mock-up `pt-plaza`).
+    if (reduxOn() && (this.style === 'aero' || pocketOn())) {
       // The line-up: your lead in the middle, then the crowd (people and their Pokémon) fanning out.
       const lineup: { art: Art; scale: number }[] = [];
       const leadFile = lead ? monFile(this, lead.speciesId, 'front', lead.shiny) : null;
@@ -152,8 +157,15 @@ export class PlazaScene extends Phaser.Scene {
       const blurbOf = (d: DistrictView): string => (d.locked && d.id === 'secret' ? (this.layout.view.alleyHint ?? PLAZA_LIFE.bubbles.secretClosed) : d.locked ? 'Closed right now.' : d.blurb);
       const districts = this.layout.districts;
       this.rx = mountRedux(this, {
-        render: (c) =>
-          dockView(c, {
+        render: (c) => c.pk
+          ? pkPlaza({
+            pills: [`₽ ${services().session.run!.money.toLocaleString('en-US')}`, `${this.layout.view.repTitle} (${run.plaza.rep})`],
+            road: pocketRoad(run.stage),
+            districts: districts.map((d) => ({ id: d.id, name: d.name, text: blurbOf(d), count: d.count, off: d.locked })),
+            index: this.focus,
+            say: this.rxSay,
+          })
+          : dockView(c, {
             town: `Plaza · ${(this.layout.title || this.layout.look.name).replace(/ Look$/i, '')}`,
             chips: [`₽ ${services().session.run!.money.toLocaleString('en-US')}`, `${this.layout.view.repTitle} (${run.plaza.rep})`],
             tabs: ['Districts'],

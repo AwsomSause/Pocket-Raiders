@@ -14,6 +14,7 @@ import { preloadPokemon } from '../ui/lazyAssets';
 import { Picker, type PickerRow } from '../ui/partyPanel';
 import { artOf, monFile } from '../ui/redux/game';
 import { phHall } from '../ui/phantom/screens/ending';
+import { pkHall } from '../ui/pocket/screens/hall';
 import { partyView, type PartyCard } from '../ui/redux/screens/party';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { pokemonIcon } from '../ui/sprites';
@@ -182,7 +183,9 @@ export class HallOfFameScene extends Phaser.Scene {
       });
       const state = { index: 0, size: cards.length, view: null as unknown as ReduxView };
       state.view = mountRedux(this, {
-        render: (c) => (c.ph
+        render: (c) => (c.pk
+          ? pkHall({ where: `Champion · ${r.regionsCleared} of ${r.regions} regions · ${r.badges} badges · ${date(r)}`, mons: r.party.slice(0, 6).map((m) => ({ file: monFile(this, m.speciesId, 'front', m.shiny), name: name(m.speciesId), type: content.species.get(m.speciesId)?.types[0] ?? '' })), trainer: { art: artOf(this, content.archetypes.get(r.archetypeId)?.spriteAssetId), name: `Champion ${trainer(r)}` }, say: r.epitaph ?? `${trainer(r)}'s winning team, recorded on ${date(r)}.`, button: 'Back', go: 'back' })
+          : c.ph
           ? phHall(c.ph, { mons: hall, index: state.index, trainer: artOf(this, content.archetypes.get(r.archetypeId)?.spriteAssetId), name: `Champion ${trainer(r)}`, sub: `${r.regionsCleared} of ${r.regions} regions · ${r.badges} badges · ${date(r)}` })
           : partyView(c, { title: 'Hall of Fame', area: 'end', hints: [['Esc', 'back']], mons: cards, index: state.index, text: `${date(r)} · Champion · ${trainer(r)}. Your winning team.` })),
         acts: { pick: (k) => { state.index = Math.max(0, Math.min(state.size - 1, Number(k) || 0)); state.view.refresh(); }, back: () => { state.view.destroy(); this.team = null; } },

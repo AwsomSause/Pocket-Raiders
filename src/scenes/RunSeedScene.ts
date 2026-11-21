@@ -10,7 +10,8 @@ import { AERO, drawGlass, glassPanel as drawPanel } from '../ui/aero';
 import { playSfx } from '../ui/audio';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import type { RunPrepData } from './RunPrepScene';
-import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, pocketOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { pkSeed } from '../ui/pocket/screens/run';
 import { formView } from '../ui/redux/screens/run';
 
 export interface RunSeedData {
@@ -75,7 +76,7 @@ export class RunSeedScene extends Phaser.Scene {
     document.body.appendChild(el);
     this.input_ = el;
     this.view = reduxOn() ? mountRedux(this, {
-      render: (c) => formView(c, {
+      render: (c) => c.pk ? pkSeed({ value: this.input_?.value ?? '', at: this.input_?.selectionStart ?? (this.input_?.value.length ?? 0), text: this.notice.text || 'The same seed and the same choices give the same run: the map, the wild Pokémon and the rewards all repeat. Share codes work here too (PR1 seed, GH1 ghost race, CC1 challenge card, TM1 team).' }) : formView(c, {
         title: 'Seed & Codes', heading: 'Enter a seed or a share code, or leave it random',
         buttons: [['Paste', 'paste'], ['Confirm', 'apply'], ['Clear', 'clear']], primary: 1, lit: this.lit,
         text: this.notice.text || 'The same seed gives the same region, events and rewards. Codes: PR1 seed, GH1 ghost race, CC1 challenge card, TM1 team.',
@@ -83,13 +84,25 @@ export class RunSeedScene extends Phaser.Scene {
       }),
       acts: {
         key: (ch) => { this.lit = ch; this.setText((this.input_?.value ?? '') + ch); this.view?.refresh(); },
-        btn: (b) => (b === 'apply' ? this.apply() : b === 'paste' ? void this.paste() : this.setText('')),
+        btn: (b) => {
+          if (b === 'apply') return this.apply();
+          if (b === 'paste') return void this.paste();
+          if (b === 'focus') return void this.input_?.focus({ preventScroll: true });
+          if (b === 'copy') { const v = this.input_?.value ?? ''; if (!v) return this.say('Nothing to copy: the seed is random.'); void navigator.clipboard?.writeText(v).then(() => { this.notice.setText('Seed copied.'); this.view?.refresh(); }, () => this.say('Could not reach the clipboard.')); return; }
+          this.setText('');
+          this.view?.refresh();
+        },
         back: () => this.leave(this.desk),
       },
     }) : null;
     if (this.view) {
       Object.assign(el.style, { zIndex: '41', border: '0', background: 'transparent', textAlign: 'center', letterSpacing: '.12em', fontWeight: '700', padding: '0', borderRadius: '0', textTransform: 'uppercase' } satisfies Partial<CSSStyleDeclaration>);
       el.addEventListener('input', () => { this.lit = el.value.slice(-1).toUpperCase(); this.view?.refresh(); });
+      // Pocket look: the letters show in the boxes; the real box lies over them, its own text hidden.
+      if (pocketOn()) {
+        Object.assign(el.style, { color: 'transparent', caretColor: 'transparent', cursor: 'text' } satisfies Partial<CSSStyleDeclaration>);
+        el.addEventListener('keyup', () => this.view?.refresh());
+      }
     }
     this.place();
     this.scale.on('resize', this.place, this);
@@ -113,7 +126,7 @@ export class RunSeedScene extends Phaser.Scene {
     if (field) {
       // New UI: the box fills the mock-up's value window and takes its lettering.
       const f = field.getBoundingClientRect(), look = getComputedStyle(field);
-      Object.assign(el.style, { left: `${f.left}px`, top: `${f.top}px`, width: `${f.width}px`, height: `${f.height}px`, fontSize: `${Math.max(16, 26 * k)}px`, fontFamily: look.fontFamily, color: look.color });
+      Object.assign(el.style, { left: `${f.left}px`, top: `${f.top}px`, width: `${f.width}px`, height: `${f.height}px`, fontSize: `${Math.max(16, 26 * k)}px`, fontFamily: look.fontFamily, color: pocketOn() ? 'transparent' : look.color });
       return;
     }
     Object.assign(el.style, { left: `${rect.left + BOX.x * k}px`, top: `${rect.top + BOX.y * k}px`, width: `${BOX.w * k}px`, height: `${BOX.h * k}px`, fontSize: `${Math.max(16, 20 * k)}px` });

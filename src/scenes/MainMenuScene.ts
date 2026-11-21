@@ -18,7 +18,8 @@ import { screenStyleOf } from '../core/presentation/screenStyles';
 import { dressScreen } from '../ui/screenDress';
 import { TITLE_LAYOUTS } from '../ui/titleLayouts';
 import { slotCard } from '../core/presentation/slotLines';
-import { mountRedux, phantomOn, reduxOn } from '../ui/redux/stage';
+import { mountRedux, phantomOn, pocketOn, reduxOn } from '../ui/redux/stage';
+import { pkTitleModel } from '../ui/pocket/models';
 import { titleView } from '../ui/redux/screens/title';
 import { bg } from '../ui/redux/kit';
 import { clipsPlayable, runTitleClips, titleClipsHtml, titleClipsOnCanvas } from '../ui/titleClips';
@@ -197,14 +198,16 @@ export class MainMenuScene extends Phaser.Scene {
       this.menu.container.setVisible(true);
       // The backdrop is its own view: its markup never changes, so the clips keep playing while the menu redraws.
       // (A Phantom page paints its own backdrop, so the clips sit out.)
-      const back = mountRedux(this, { render: (c) => (c.ph ? '' : bg('ui/splash-beta-0.5.png') + titleClipsHtml()) });
+      const back = mountRedux(this, { render: (c) => (c.ph || c.pk ? '' : bg('ui/splash-beta-0.5.png') + titleClipsHtml()) });
       back.el.dataset.scene = 'MainMenuBack';
       runTitleClips(this, back.el, stillClips);
       const peek = session.slotPeeks().find((p) => p.slot === (latest ?? session.slot));
       const card = peek ? slotCard(session.content, peek) : null;
+      // Pocket look: the Title shows the trainer, the saved run's place and the party around the menu.
+      const pk = pocketOn() ? pkTitleModel(this, peek?.run.status === 'ok' ? peek.run.data : null) : undefined;
       const view = mountRedux(this, {
         clear: true,
-        render: (c) => titleView(c, { options: options.map((o) => o.option), subs: options.map((o) => menuSub(o.option.label, card?.lines[0])), index: this.menu.index, version: VERSION_LABEL, art: '', notes, press: this.pressWait, save: card ? { title: card.title, lines: card.lines } : null }),
+        render: (c) => titleView(c, { options: options.map((o) => o.option), subs: options.map((o) => menuSub(o.option.label, card?.lines[0])), index: this.menu.index, version: VERSION_LABEL, art: '', notes, press: this.pressWait, save: card ? { title: card.title, lines: card.lines } : null, ...(pk ? { pk } : {}) }),
         acts: {
           pick: (i) => { this.menu.focus(Number(i), false); this.menu.confirm(); },
           start: () => this.events.emit('pressStart'),

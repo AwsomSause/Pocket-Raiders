@@ -27,6 +27,12 @@ export interface TownHooks {
   onGate(place: HubPlace): void;
   /** Whether a page is open over the town (the town then ignores walking). */
   busy(): boolean;
+  /** The door or person you face changed (the Pocket look draws its own "Z" line then). */
+  onPrompt?(): void;
+  /** The look draws the "Z" line itself: the canvas bubble stays hidden. */
+  ownPrompt?(): boolean;
+  /** The open page is see-through (the Pocket look's door card): keep drawing the town under it. */
+  seeThrough?(): boolean;
 }
 
 export interface TownStart extends Tile {
@@ -75,6 +81,8 @@ export class HubTownView {
   private readonly promptText: Phaser.GameObjects.Text;
   private readonly promptBox: Phaser.GameObjects.Graphics;
   private promptFor: string | null = null;
+  /** The door or person you face now (its place id, or `talk:<id>`), for a look that draws its own prompt. */
+  facingNow: { id: string; name: string; verb: string } | null = null;
   private readonly talkers: Talker[] = [];
   private readonly worldObjects = new Set<Phaser.GameObjects.GameObject>();
   private readonly onAdded: (go: Phaser.GameObjects.GameObject) => void;
@@ -342,7 +350,7 @@ export class HubTownView {
     if (!this.player.active) return;
     const busy = this.hooks.busy();
     // A page covers the whole screen: stop drawing the town under it.
-    this.worldCam.setVisible(!busy);
+    this.worldCam.setVisible(!busy || !!this.hooks.seeThrough?.());
     if (!busy && this.cullTick-- <= 0) {
       this.cullTick = 8;
       this.cull();
@@ -359,12 +367,13 @@ export class HubTownView {
     const talker = found || busy || this.moving ? null : this.talkerAhead();
     const place = found ? { id: found.id, name: found.name, verb: found.kind === 'sign' ? 'Read' : 'Enter', door: found.door } : talker ? { id: `talk:${talker.id}`, name: talker.name, verb: talker.verb, door: ahead(this.at, this.facing) } : null;
     if (!place) {
-      if (this.promptFor !== null) this.prompt.setVisible(false);
-      this.promptFor = null;
+      if (this.promptFor !== null) { this.prompt.setVisible(false); this.facingNow = null; this.promptFor = null; this.hooks.onPrompt?.(); }
       return;
     }
     if (this.promptFor !== place.id) {
       this.promptFor = place.id;
+      this.facingNow = { id: place.id, name: place.name, verb: place.verb };
+      this.hooks.onPrompt?.();
       this.promptText.setText(`Z  ${place.verb}: ${place.name}`);
       const w = this.promptText.width + 28;
       const h = this.promptText.height + 14;
@@ -373,7 +382,7 @@ export class HubTownView {
       this.promptBox.fillStyle(0xffffff, 0.96).fillRoundedRect(-w / 2, -h, w, h, h / 2);
       this.promptBox.lineStyle(3, 0x3c6edc, 1).strokeRoundedRect(-w / 2, -h, w, h, h / 2);
       this.promptText.setPosition(-w / 2 + 14, -h + 7);
-      this.prompt.setVisible(true).setAlpha(0);
+      this.prompt.setVisible(!this.hooks.ownPrompt?.()).setAlpha(0);
       this.scene.tweens.add({ targets: this.prompt, alpha: 1, duration: this.opts.motion === 'off' ? 0 : 140 });
     }
     const door = place.door;

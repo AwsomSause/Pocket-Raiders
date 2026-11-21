@@ -26,7 +26,7 @@ import { effectiveAttributes } from '../core/attributes';
 import { textStyle } from '../ui/theme';
 import { sceneForRun } from './routing';
 import { partySpecies, preloadPokemon } from '../ui/lazyAssets';
-import { reduxOn } from '../ui/redux/stage';
+import { pocketOn, reduxOn } from '../ui/redux/stage';
 import { reduxChoicePrompt, reduxShop } from '../ui/redux/screens/shop';
 
 export class ShopScene extends Phaser.Scene {
@@ -114,6 +114,8 @@ export class ShopScene extends Phaser.Scene {
     this.handles = (reduxOn() ? reduxShop : shopLayout(this.shopType))(this.ctx, { focus: (i) => this.setFocus(i), pick: (i) => this.pick(i), pickMany: (i, n) => this.buyMany(i, n) });
     this.setFocus(Math.min(data.focus ?? 0, view.rows.length - (view.canSell ? 0 : 1)));
 
+    // Pocket look: C checks out at the Supply Depot (the mock-up's key).
+    if (pocketOn() && this.shopType === 'depot') this.input.keyboard?.on('keydown-C', () => { if (!this.picker && !this.prompt) { const v = this.view(); this.pick(v.rows.length + (v.canSell ? 1 : 0)); } });
     onInputAction(this, (action) => {
       if (this.picker) return void this.picker.handle(action);
       if (this.prompt) return this.promptInput(action);
@@ -142,7 +144,12 @@ export class ShopScene extends Phaser.Scene {
     const view = this.view();
     if (this.shopType === 'depot') {
       const checkout = view.rows.length + (view.canSell ? 1 : 0);
-      if (i === checkout) return this.checkout();
+      if (i === checkout) {
+        // Pocket look: the mock-ups' Check Out page (the receipt) asks before ringing up.
+        const lines = this.basketLines(), total = lines.reduce((sum, l) => sum + l.total, 0);
+        if (pocketOn() && lines.length) return this.openPrompt(`That comes to ₽ ${total.toLocaleString('en-US')}. Shall I ring it up?`, [[`Pay ₽ ${total.toLocaleString('en-US')}`, () => this.checkout()], ['Keep shopping', () => this.handles?.basket?.(lines, null, false)]]);
+        return this.checkout();
+      }
       if (i === checkout + 1) return this.emptyBasket('Basket emptied.');
       if (i < view.rows.length) return this.addToBasket(i);
     }

@@ -13,7 +13,8 @@ import { playMusic } from '../ui/audio';
 import { partySpecies, preloadPokemon } from '../ui/lazyAssets';
 import { pokemonIcon } from '../ui/sprites';
 import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
-import { mountRedux, phantomOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, phantomOn, pocketOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { followerKey } from '../core/hubTown/world';
 import { runTimeline } from '../core/recap';
 import { creditsView, type CreditsRow } from '../ui/redux/screens/boot';
 import { monFile } from '../ui/redux/game';
@@ -104,11 +105,13 @@ export class CreditsScene extends Phaser.Scene {
     const roll = !this.assets && session.settings.battleAnimations === 'full';
     // Phantom UI: the run's best-remembered moments as three photos, each with a Pokémon of the team.
     const photos = this.assets || !run ? [] : runTimeline(run, 3).map((m, i) => ({ file: party[i % Math.max(1, party.length)] ?? null, cap: `${m.where} · ${m.text}` }));
+    // Pocket look: the team walks along the bottom (each one's follower sheet, if it has one).
+    const walkers = this.assets || !run ? [] : [...run.party].reverse().flatMap((m) => { const sheet = followerKey(m.speciesId); return sheet ? [{ sheet, ko: m.hp <= 0 }] : []; });
     let ready = false;
     this.time.delayedCall(400, () => (ready = true));
     const leave = (): void => { if (ready) this.leave(); };
     this.rx = mountRedux(this, {
-      render: (c) => creditsView(c, { lead: !this.assets && me ? `A run by ${me}` : '', rows, party, art: 'arenas/mountain_bg.png', roll: roll ? this.rollAt : null, photos }),
+      render: (c) => creditsView(c, { lead: !this.assets && me ? `A run by ${me}` : '', rows, party, art: 'arenas/mountain_bg.png', roll: roll ? this.rollAt : null, photos, walkers, back: this.assets ? 'Back to Settings' : 'On to the results' }),
       acts: { next: leave },
     });
     this.rollY = roll ? 0 : null;
@@ -122,7 +125,7 @@ export class CreditsScene extends Phaser.Scene {
 
   /** Where the rolling column is drawn: the Phantom page when that look is on, the New UI layer otherwise. */
   private rollRoot(): ParentNode | null {
-    return (phantomOn() ? document.querySelector('#phx .phs[data-scene="Credits"]') : null) ?? this.rx?.el ?? null;
+    return (phantomOn() ? document.querySelector('#phx .phs[data-scene="Credits"]') : pocketOn() ? document.querySelector('#pkx .pks[data-scene="Credits"]:not([data-ghost])') : null) ?? this.rx?.el ?? null;
   }
 
   override update(_time: number, delta: number): void {

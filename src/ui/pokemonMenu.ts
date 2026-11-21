@@ -19,7 +19,8 @@ import { pinCard } from './pinnedCard';
 import { spritesAnimate } from './display';
 import { genderSign } from '../core/gender';
 import { heldBuild, type HeldItemInfo } from '../core/itemEffects';
-import { runLevelCap } from '../core/regions';
+import { bossInfo, runLevelCap } from '../core/regions';
+import { typeEffectiveness } from '../core/battle/damage';
 import { lookSpecies } from '../core/pokemon';
 import { nextNameable, signatureDisplay } from '../core/story2/signature';
 import { emotionOf } from '../core/story/emotions';
@@ -49,7 +50,7 @@ import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from './redux/stag
 import { askText } from './redux/ask';
 import { hoverTips, moveTipOf } from './redux/tips';
 import { artOf, monFile } from './redux/game';
-import { partyCols, partyView, summaryView, type SummaryBody } from './redux/screens/party';
+import { partyCols, partyView, summaryView, type PartyGym, type SummaryBody, type SummaryModel } from './redux/screens/party';
 
 export const POKEMON_TABS = ['Overview', 'Stats', 'Moves', 'Items', 'Bond', 'History', 'Traits'] as const;
 type Tab = (typeof POKEMON_TABS)[number];
@@ -704,8 +705,9 @@ class PokemonScreen implements PickerLike {
         text: this.footerText(),
         mons: this.party.map((m, i) => {
           const r = this.rosterMon(m, i);
-          return { name: r.name, file: monFile(scene, r.species.id, 'front', r.shiny), level: r.level, hp: r.hp, maxHp: r.maxHp, held: heldShort(m), tag: r.tag, types: r.types, ability: r.ability, nature: r.nature, moves: r.moves.map((x) => ({ name: x.name, type: x.type })), off: this.pick ? this.pick.problemFor(i) !== null : false };
+          return { name: r.name, file: monFile(scene, r.species.id, 'front', r.shiny), level: r.level, hp: r.hp, maxHp: r.maxHp, held: heldShort(m), tag: r.tag, types: r.types, ability: r.ability, nature: r.nature, moves: r.moves.map((x) => ({ name: x.name, type: x.type, pp: x.pp })), off: this.pick ? this.pick.problemFor(i) !== null : false, ...(c.pk ? this.pkCardBits(m) : {}) };
         }),
+        ...(c.pk ? { money: run.money, gym: this.pick ? null : this.gymMatchups() } : {}),
       });
     }
     const mon = this.mon;
@@ -859,7 +861,64 @@ class PokemonScreen implements PickerLike {
       text: this.footerText(),
       menu: this.mode === 'menu' ? { options: this.menuOptions().map((o) => ({ label: o.label, off: o.problem !== null })), index: this.menuIdx } : null,
       tip: this.tabName === 'Overview' && this.rxTip?.startsWith('move:') ? moveTipOf(mon.moves[Number(this.rxTip.slice(5))]) : null,
+      ...(c.pk ? this.pkSummaryBits(mon, info, build) : {}),
     });
+  }
+
+  /** The Pocket look's card extras for one Pokémon: hearts, the EXP bar, its status and what it holds. */
+  private pkCardBits(m: PokemonInstance): { hearts: number; xpPct: number; xpText: string; status: string; heldId?: string } {
+    const xp = xpProgress(this.content, m);
+    const heldId = summaryInfo(this.content, this.run, m).held[0]?.id;
+    return { hearts: bondView(this.content, this.run, m).hearts, xpPct: xp ? xp.fraction * 100 : 100, xpText: xp ? `${xp.left.toLocaleString('en-US')} to Lv ${m.level + 1}` : 'Top level', status: m.hp > 0 && m.status ? STATUS_LABELS[m.status.id]?.label ?? '' : '', ...(heldId ? { heldId } : {}) };
+  }
+
+  /** The Pocket Summary's left card and the panels beside each tab (nature, ability, held item, weaknesses, move kinds, bond). */
+  private pkSummaryBits(mon: PokemonInstance, info: ReturnType<typeof summaryInfo>, build: ReturnType<typeof heldBuild>): Pick<SummaryModel, 'card' | 'count' | 'extra'> {
+    const content = this.content, i = this.sel;
+    const r = this.rosterMon(mon, i);
+    const card = { name: r.name, file: monFile(this.host.scene, r.species.id, 'front', r.shiny), level: r.level, hp: r.hp, maxHp: r.maxHp, held: info.held[0]?.name ?? '', tag: r.tag, types: r.types, ability: r.ability, nature: r.nature, moves: [], off: false, ...this.pkCardBits(mon) };
+    const nat = info.nature ?? 'Unknown';
+    const natName = nat.split(' (')[0] ?? nat, natText = nat.includes('(') ? nat.slice(nat.indexOf('(') + 1).replace(/\)$/, '') : 'No stat changes.';
+    // The stat the nature lowers ("+Attack, −Sp. Atk"), so the radar marks it as the mock-up does.
+    const lower = /[−-]\s*([^,)]+)/.exec(natText)?.[1]?.trim().toLowerCase() ?? '';
+    const down = lower ? info.stats.findIndex((st) => st.label.toLowerCase() === lower) : -1;
+    const chart = content.typeChart;
+    const weak = (Object.keys(chart) as never[]).filter((t) => typeEffectiveness(chart, t, info.types as never[]) > 1) as string[];
+    const top = build.items[0];
+    const cursor = Math.max(0, Math.min(this.cursor, info.moves.length - 1));
+    const bv = bondView(content, this.run, mon);
+    return {
+      card, count: `${i + 1} of ${this.party.length}`,
+      extra: {
+        name: r.name, types: info.types, nature: [natName, natText], down: down >= 0 ? down : undefined, ability: info.ability ? [info.ability.name, info.ability.text] : null,
+        held: top ? [top.name, top.description, info.held[0]?.id ?? ''] : null, weak,
+        moveKinds: info.moves.map((m) => m.category.charAt(0).toUpperCase() + m.category.slice(1)), moveText: info.moves[cursor]?.text ?? '',
+        bond: { hearts: bv.hearts, mood: bv.mood.text, hint: bv.mood.hint },
+      },
+    };
+  }
+
+  /** The Pocket Party page's Gym strip: how each team member stands against the coming Gym's type. */
+  private gymMatchups(): PartyGym | null {
+    const content = this.content, run = this.run, stage = run.stage;
+    if (!stage || stage.kind === 'league' || stage.pseudo || !stage.leaderId) return null;
+    const theme = getTheme(content, stage.themeId), gymType = theme.types[0];
+    if (!gymType) return null;
+    const leader = bossInfo(content, 'gym', stage.leaderId);
+    const column = stage.current ? stage.map.nodes.find((n) => n.id === stage.current)?.column ?? 0 : 0;
+    const stops = Math.max(0, stage.map.columns - column);
+    const chart = content.typeChart;
+    const rows = this.party.map((m) => {
+      const types = summaryInfo(content, run, m).types as never[];
+      const file = monFile(this.host.scene, lookSpecies(content, m).id, 'front', !!m.shiny);
+      if (m.hp <= 0) return { file, word: 'Fainted', cls: 'ko' };
+      const hit = typeEffectiveness(chart, gymType as never, types);
+      if (hit > 1) return { file, word: 'Weak', cls: 'dn' };
+      if (types.some((t) => typeEffectiveness(chart, t, [gymType as never]) > 1)) return { file, word: 'Strong', cls: 'up' };
+      if (hit < 1) return { file, word: 'Resists', cls: 'up' };
+      return { file, word: 'Even', cls: '' };
+    });
+    return { when: stops ? `Gym in ${stops} stop${stops === 1 ? '' : 's'}` : 'Gym next', who: `${leader.name} · ${gymType.charAt(0).toUpperCase()}${gymType.slice(1)}`, file: null, rows };
   }
 
   private rosterMon(mon: PokemonInstance, index: number): RosterMon {
