@@ -593,6 +593,9 @@ export function comboPlan(events: readonly ({ type: string } & Record<string, un
  */
 export const FIRST_TAG = { dx: 30, dy: -150, from: 2.4, tilt: -8, inMs: 100, hold: 900, lift: 0 } as const;
 
+/** One-hit KO (pass 12): the red ONE-HIT KO! stamp slams on left of the foe (the mockup's 600,134 by a foe at 752). */
+export const OHKO_STAMP = { dx: -152, y: 134 } as const;
+
 /** Pass 12 power tiers: how far a hit throws (px: base + per x power) and how hard it shakes the field. */
 export const HIT_THROW = { base: 34, per: 60, shake: 5, shakePer: 8, heavyAt: 0.8, strong: 1.3 } as const;
 

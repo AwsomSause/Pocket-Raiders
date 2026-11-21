@@ -1092,7 +1092,7 @@ test('contact punish: spikes jab out of the holder, the attacker bounces off wit
   expect(errors).toEqual([]);
 });
 
-test('priority and hazards: FIRST! tag; Stealth Rock stones stay round your side, stab whoever comes in, and go when cleared', async ({ page }) => {
+test('priority, one-hit KO and hazards: FIRST! and ONE-HIT KO! stamps; Stealth Rock stones stay round your side, stab whoever comes in, and go when cleared', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await startBattle(page, 'hazard-e2e');
@@ -1117,6 +1117,15 @@ test('priority and hazards: FIRST! tag; Stealth Rock stones stay round your side
   });
   await play([{ type: 'move', side: 'player', moveId: 'quick-attack' }], false);
   expect(await page.evaluate(() => (window as any).__first)).toBe(true);
+  // A one-hit KO lands: the red ONE-HIT KO! stamp.
+  await page.evaluate(() => {
+    const w = window as any;
+    const b = w.__pkr.game.scene.getScene('Battle');
+    w.__ohko = false;
+    b.events.on('update', () => (w.__ohko ||= b.children.list.some((o: any) => o.texture?.key === 'stamp.ONE-HIT KO!.#e3350d')));
+  });
+  await play([{ type: 'ohko', side: 'enemy' }], false);
+  await expect.poll(() => page.evaluate(() => (window as any).__ohko), { timeout: 3000 }).toBe(true);
   // Stealth Rock lands on your side: five stones stay, with the chip.
   await play([{ type: 'sideEffect', side: 'player', effect: 'stealthRock', on: true }], true);
   await expect.poll(stones, { timeout: 5000 }).toBe(5);

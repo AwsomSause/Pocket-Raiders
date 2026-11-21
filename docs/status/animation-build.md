@@ -209,3 +209,5 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   the stones stab inward at once, it flashes white and squashes, the screen shakes and its damage number shows. Rapid
   Spin or Defog drops the stones. The old floor rock marks step aside for the stones (they still show with motion
   Off); spikes and webs keep their floor marks. Not built (move animation): the priority dash and after-images.
+- **One-hit KO (pass 12).** A one-hit KO move that lands gets a red ONE-HIT KO! stamp slammed on beside the target.
+  Not built (Kice: Fissure is a move animation): the crack across the ground and the ground opening under it.

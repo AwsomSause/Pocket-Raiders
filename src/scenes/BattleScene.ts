@@ -131,7 +131,7 @@ import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel, MotionClip } from '../core/presentation/motionClip';
-import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, COMBO, comboPlan, comboScale, FIRST_TAG, type ComboStep, CRIT_FREEZE, critFreezeClip, HIT_LIGHT, HIT_STAMPS, hitStampSpot, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, COMBO, comboPlan, comboScale, FIRST_TAG, OHKO_STAMP, type ComboStep, CRIT_FREEZE, critFreezeClip, HIT_LIGHT, HIT_STAMPS, hitStampSpot, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart, type ClipRun } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
@@ -7329,6 +7329,12 @@ export class BattleScene extends Phaser.Scene {
       if (e.type === 'move' && (content.moves.get(e.moveId)?.priority ?? 0) > 0 && this.clipLevel() !== 'off' && !this.duo) {
         const mid = this.midOf(e.side);
         this.wxStamp('FIRST!', '#ffcb05', '#131c36', Phaser.Math.Clamp(mid.x + (e.side === 'player' ? 1 : -1) * FIRST_TAG.dx, 80, GAME_WIDTH - 80), Math.max(40, mid.y + FIRST_TAG.dy), false, FIRST_TAG);
+      }
+      // Pass 12 "One-Hit KO": the red ONE-HIT KO! stamp (the ground cracking open is the move's own animation, not built).
+      if (e.type === 'ohko' && this.clipLevel() !== 'off' && !this.duo) {
+        const mid = this.midOf(e.side);
+        const at = e.side === 'enemy' ? { x: mid.x + OHKO_STAMP.dx, y: OHKO_STAMP.y } : hitStampSpot(e.side, mid);
+        this.wxStamp('ONE-HIT KO!', '#e3350d', '#ffffff', at.x, at.y, false);
       }
       // Pass 12 "Entry Hazards": stones are thrown and stay; a switch-in meets them.
       if (e.type === 'sideEffect' && (HAZARD_KINDS as readonly string[]).concat('hazards').includes(e.effect)) await this.hazardSync(e.side, e.on && e.effect === 'stealthRock');
