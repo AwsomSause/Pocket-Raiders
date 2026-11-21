@@ -35,6 +35,7 @@ import { openRemembranceArchive, remembranceSummary } from '../ui/remembranceMen
 import { openStoryArchive, storyArchiveCount } from '../ui/storyArchiveMenu';
 import { ATTRIBUTE_LABELS, attributeEffectText, attributeRange, attributeText, growthProgress, growthText, isMeter, readAttributes } from '../core/attributes';
 import { pkAchieve } from '../ui/pocket/screens/achieve';
+import { pkEvents } from '../ui/pocket/screens/events';
 import { ACHIEVEMENT_CATEGORIES, ATTRIBUTE_KEYS, type Achievement, type Archetype, type QuestReward, type Species } from '../core/contentSchema';
 import { claimProblem, requirementParts, requirementProgress, trainerStatus, type TrainerStatus } from '../core/progress';
 import { activeGameEvents, durationText, gameRewardText, holidayCalendar, objectiveViews, rewardEarned, scheduleText, upcomingWeekly } from '../core/gameEvents';
@@ -1315,7 +1316,19 @@ export class HubScene extends Phaser.Scene {
     if (calendar.length > shown.length) header(`  …and ${calendar.length - shown.length} more calendar events later in the year`, COLORS.textMuted, 'They open on their dates (UTC) and come back every year.');
     const archive = [...content.gameEvents.values()].filter((e) => rewardEarned(p, e.id));
     if (archive.length > 0) header(`Earned: ${archive.map((e) => e.name).join(', ')}`, COLORS.good, 'Event rewards you have earned for good.');
-    this.openPicker({ title: 'Event Hall', rows, columns: 1, rowHeight: 44, onSelect: () => undefined, onBack: () => this.closePicker() });
+    // Pocket look: the mock-up's Event Hall (the event on now, this week's, the next three weeks).
+    const on = activeGameEvents(content, now);
+    const weekly = on.find((a) => a.event.schedule?.kind === 'weeklyRotation') ?? null;
+    const main = on.find((a) => a !== weekly) ?? weekly;
+    const card = (a: (typeof on)[number]) => { const goals = objectiveViews(p, a.event, a.edition); return { name: a.event.name, text: a.event.description.split(/(?<=\.) /)[0]!, rule: a.event.ruleText, ms: a.endsIn, goals: [goals.filter((g) => g.done).length, goals.length] as const, colour: a.event.visualTheme.color, regions: a.event.firstRegionBoost?.regions }; };
+    const pkPage = (c: ReduxCtx) => (c.pk ? pkEvents({
+      date: now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' }),
+      main: main ? card(main) : null,
+      week: weekly && weekly !== main ? card(weekly) : null,
+      contracts: contractBoard(now).map((e) => `${contractDone(p, e) ? '✓' : '•'} ${e.contract.period === 'daily' ? 'Daily' : 'Weekly'}: ${e.contract.text}`),
+      next: upcoming.map((u) => ({ name: u.event.name, text: u.event.description, rule: u.event.ruleText, ms: u.startsIn })),
+    }) : null);
+    this.openPicker({ title: 'Event Hall', rows, columns: 1, rowHeight: 44, page: pkPage, onSelect: () => undefined, onBack: () => this.closePicker() });
   }
 
   /** The Wardrobe's frame around the trainer card line: a rounded border, and a slow shine on the fancier ones. */

@@ -6,6 +6,7 @@ import { pkReserve } from '../../src/ui/pocket/screens/reserve';
 import { pkQuick } from '../../src/ui/pocket/screens/pause';
 import { pkAchieve, type PkAchievement } from '../../src/ui/pocket/screens/achieve';
 import { pkBagUse } from '../../src/ui/pocket/screens/bagUse';
+import { pkEvents } from '../../src/ui/pocket/screens/events';
 
 describe('the Pocket Rival Board', () => {
   const r = (name: string, x: Partial<PkRival> = {}): PkRival => ({ name, role: 'Rival', art: null, ace: null, wins: 0, losses: 0, lead: 'Level', ...x });
@@ -100,5 +101,29 @@ describe('the Pocket "Use on" page', () => {
     expect(h).toContain('class="bu pn on"');
     expect(h).toContain('class="bu pn no"');
     expect(h).toContain('HP 8 → 25');
+  });
+});
+
+describe('the Pocket Event Hall', () => {
+  const ev = (name: string, ms: number, x = {}) => ({ name, text: 'Old homes call.', rule: `${name} rule.`, ms, ...x });
+  it('the event on now big with time left, goals and region stamps; this week at the right; the next ones below', () => {
+    const h = pkEvents({ date: '20 November', main: ev('Homeland Week', 3 * 86_400_000 + 14 * 3_600_000, { goals: [1, 3], regions: ['kanto', 'hoenn', 'galar'] }), week: ev('Catch Carnival', 0), contracts: [], next: [ev('Rivalry Week', 7 * 86_400_000), ev('Gym Circuit', 14 * 86_400_000), ev('Egg Expedition', 21 * 86_400_000), ev('Too Far', 28 * 86_400_000)] });
+    expect(pkPageOf(h)?.id).toBe('events');
+    expect(h).toContain('<b>3</b>days');
+    expect(h).toContain('<b>14</b>hours');
+    expect(h).toContain('goals 1 of 3 done');
+    expect(h).toContain('Region 8');
+    expect(h).toContain('Catch Carnival');
+    expect(h).toContain('In 1 week');
+    expect(h).toContain('In 3 weeks');
+    expect(h).not.toContain('Too Far');
+  });
+  it('no event on: a quiet card; no week event: the Contract Board instead; one day reads "day"', () => {
+    const q = pkEvents({ date: '1 May', main: null, week: null, contracts: ['Win 3 battles'], next: [] });
+    expect(q).toContain('No event on');
+    expect(q).toContain('Contract Board');
+    expect(q).toContain('Win 3 battles');
+    expect(q).not.toContain('evh-st');
+    expect(pkEvents({ date: '1 May', main: ev('A', 86_400_000 + 3_600_000), week: null, contracts: [], next: [] })).toContain('<b>1</b>day</i><i><b>1</b>hour');
   });
 });
