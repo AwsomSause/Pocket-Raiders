@@ -2,6 +2,7 @@
 // the choices), the page tabs and the small lines over the field. It is drawn over the canvas, which keeps the arena,
 // the Pokémon and every animation. Pure drawing; BattleScene keeps the rules, the input and the state.
 
+import type { PkSideRow } from '../../pocket/screens/galar';
 import type { PkCatch } from '../../pocket/screens/after';
 import type { BattleInfo, BattleStatus, MoveInfo, StatusMon } from '../../../core/presentation/battleInfo';
 import { act, esc, facts, foot, hpb, img, mini, mon, TX, TYPE_COLORS, ty, W } from '../kit';
@@ -87,6 +88,8 @@ export interface BattleModel {
   pkMove?: MoveInfo | null;
   /** Pocket look: the Weather guide from the battle's weather card (mock-up `weather`). */
   pkWeather?: { now: string; turns: number | null; index: number } | null;
+  /** Pocket look: Galar's Match Info (mock-up `ga-info`): the foe's side and the crowd, as two sides of rows. */
+  pkGaInfo?: { foeTag: string; foeTitle: string; foe: readonly PkSideRow[]; crowdTitle: string; crowd: readonly PkSideRow[] } | null;
   /** Pocket look: the battle Status page (mock-up `b-status`), with picture files and the event's goal. */
   pkStatus?: (Omit<BattleStatus, 'bench' | 'foes'> & { bench: (StatusMon & { file: string | null })[]; foes: (StatusMon & { file: string | null })[]; money: string | null; event: { name: string; goal: string; left: string } | null }) | null;
   /** Pocket look: the catch card after a ball holds (mock-up `capture`). */

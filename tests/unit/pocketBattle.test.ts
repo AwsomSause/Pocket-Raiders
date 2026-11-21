@@ -181,6 +181,19 @@ describe('the Pocket Totem strip', () => {
   });
 });
 
+describe('the Pocket Galar Match Info', () => {
+  it('is its own page over the battle with the foe side, the crowd and Back to the battle; the strip opens it', () => {
+    const h = pkBattle({ ...model(), pkGaInfo: { foeTag: 'Leader Raihan', foeTitle: '1 left of 6', foe: [{ art: null, title: 'Duraludon · Lv 58', sub: 'Steel / Dragon', tag: '★ Ace', cls: 'boss' }], crowdTitle: '62 with you', crowd: [{ art: null, title: 'Above 55', sub: 'x', tag: 'Now', cls: 'me' }] } });
+    expect(h.startsWith('<!--pk:ga-info:51-->')).toBe(true);
+    expect(h).toContain('62 with you');
+    expect(h).toContain('<p class="me">');
+    expect(h).toContain('Back to the battle');
+    const strip = pkBattle({ ...model(), pkArea: { key: 'ga', word: 'Gym match 1', bar: 50, chips: [], flow: ['a', 'b', 'c'], step: 1 } });
+    expect(strip).toContain('data-act="gaInfo"');
+    expect(pkBattle({ ...model(), pkArea: { key: 'tm', word: 'Totem', chips: [], flow: ['a', 'b'], step: 0 } })).toContain('data-act="pkInfoOpen"');
+  });
+});
+
 describe('the Pocket Galar stadium strip', () => {
   it('shows the round, the crowd favour bar and the foes left', () => {
     const h = pkBattle({ ...model(), pkArea: { key: 'ga', word: 'Round of 32', bar: 62, chips: [['62', 'with you'], ['3', 'foes left']], flow: ['Bracket', 'Match', 'Next round'], step: 1 } });

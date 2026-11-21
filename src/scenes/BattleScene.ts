@@ -151,7 +151,7 @@ import { pkHall } from '../ui/pocket/screens/hall';
 import { pkBadgeGet, pkExp, pkRivalLoss, pkVictory, type PkCatch, type PkExpRow } from '../ui/pocket/screens/after';
 import { battleInfo, battleStatus, moveInfo } from '../core/presentation/battleInfo';
 import { weatherCard } from '../ui/pocket/screens/sky';
-import { pkGaLineup, pkGaWon, type PkGaLineupModel, type PkGaWonModel } from '../ui/pocket/screens/galar';
+import { pkGaLineup, pkGaWon, type PkGaLineupModel, type PkGaWonModel, type PkSideRow } from '../ui/pocket/screens/galar';
 import { itemArt, monArt, type PkArt } from '../ui/pocket/art';
 import { pkArtOf } from '../ui/pocket/templates';
 import { activeGameEvents, objectiveViews } from '../core/gameEvents';
@@ -376,6 +376,7 @@ export class BattleScene extends Phaser.Scene {
   /** Pocket look: the Battle Info page (mock-up `b-info`) or the move card (`moveinfo`) behind the open info panel. */
   private rxPkInfo: BattleModel['pkInfo'] = null;
   private rxPkStatus: BattleModel['pkStatus'] = null;
+  private rxPkGaInfo: BattleModel['pkGaInfo'] = null;
   private rxPkWeather: BattleModel['pkWeather'] = null;
   private rxPkMove: BattleModel['pkMove'] = null;
   private rxPanelAt: 'left' | 'tip' = 'left';
@@ -1922,11 +1923,13 @@ export class BattleScene extends Phaser.Scene {
         // Pocket look: the status bar opens the Status page; its Battle Info button opens Battle Info.
         pkStatus: () => { if (!this.infoPanel) this.toggleStatus(); },
         pkInfoOpen: () => { if (this.infoPanel) this.closePanel(); this.toggleInfo(true); },
+        // Pocket look: the Galar strip's Info opens Match Info (the foe's side and the crowd).
+        gaInfo: () => this.toggleGaInfo(),
         // Pocket look: the weather card opens the Weather guide (the one in play marked Now); a card click lights it.
         pkWeather: () => {
           const w = this.run.battle?.weather;
           if (this.infoPanel) this.closePanel();
-          this.rxPkInfo = null; this.rxPkMove = null; this.rxPkStatus = null;
+          this.rxPkInfo = null; this.rxPkMove = null; this.rxPkStatus = null; this.rxPkGaInfo = null;
           this.rxPkWeather = { now: w?.id ?? 'clear', turns: w?.turns ?? null, index: weatherCard(w?.id ?? null) };
           this.openPanel([{ head: 'Weather', text: w ? `${w.id}${w.turns ? ` · ${w.turns} turns left` : ''}` : 'Clear' }]);
         },
@@ -2020,6 +2023,7 @@ export class BattleScene extends Phaser.Scene {
       pkInfo: this.infoPanel ? this.rxPkInfo : null,
       pkStatus: this.infoPanel ? this.rxPkStatus : null,
       pkWeather: this.infoPanel ? this.rxPkWeather : null,
+      pkGaInfo: this.infoPanel ? this.rxPkGaInfo : null,
       pkMove: this.infoPanel ? this.rxPkMove : null,
       pkCatch: this.rxPkCatch,
       pkBand: !menu && (this.run.battle?.turn ?? 0) <= 1 ? this.rxPkBand : null,
@@ -5039,12 +5043,58 @@ export class BattleScene extends Phaser.Scene {
     this.rxPkInfo = null;
     this.rxPkMove = null;
     this.rxPkWeather = null;
+    this.rxPkGaInfo = null;
     this.rxPkStatus = {
       ...s, bench: s.bench.map((m) => ({ ...m, file: file(m) })), foes: s.foes.map((m) => ({ ...m, file: file(m) })),
       money: `₽ ${this.run.money.toLocaleString('en-US')}`,
       event: on && goal ? { name: on.event.name, goal: goal.objective.text, left: `${goals.filter((g) => g.done).length} of ${goals.length} · ${days} ${days === 1 ? 'day' : 'days'} left` } : null,
     };
     this.openPanel([{ head: 'Status', text: [`Turn ${s.turn}`, ...s.order.map((o, k) => `${k + 1}. ${o.name} (Speed ${o.speed})`), `${s.weather.b}: ${s.weather.span}`].join('\n') }]);
+  }
+
+  /** Pocket look: Galar's Match Info (mock-up `ga-info`): the foe's Pokémon left, a boss power in play, who is out; the crowd's rules with the one in play marked Now. */
+  private toggleGaInfo(): void {
+    if (this.infoPanel) {
+      this.closePanel();
+      return;
+    }
+    if (this.busy || this.autoRunning || !this.tabs.root.visible || this.advance) return;
+    const battle = this.run.battle;
+    const { content } = services().session;
+    const favor = battle ? crowdFavor(content, this.run) : null;
+    if (!battle || favor === null) return;
+    const team = battle.enemyTeam;
+    const foe = team[battle.enemyIndex];
+    const left = team.filter((m) => m.hp > 0);
+    const art = (m: PokemonInstance): PkArt | null => { const f = monFile(this, m.speciesId, 'front', !!m.shiny); return f ? monArt(f) : null; };
+    const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+    const rows: PkSideRow[] = [];
+    if (foe && foe.hp > 0) {
+      const ace = team.length > 1 && foe === team[team.length - 1];
+      rows.push({ art: art(foe), title: `${this.speciesName(foe)} · Lv ${foe.level}`, sub: `${getSpecies(content, foe.speciesId).types.map(cap).join(' / ')} · ${Math.max(1, Math.round((foe.hp / maxHp(content, foe)) * 100))}% HP`, tag: ace ? '★ Ace' : 'In battle', cls: 'boss' });
+      const dmax = battle.transform.dynamax[foe.uid];
+      if (dmax) rows.push({ art: null, title: 'Dynamax', sub: `${dmax} ${dmax === 1 ? 'turn' : 'turns'} left`, tag: 'Now' });
+    }
+    const bench = left.filter((m) => m !== foe);
+    if (bench.length) rows.push({ art: art(bench[0]!), title: bench.map((m) => this.speciesName(m)).join(', '), sub: 'Still to come', tag: String(bench.length) });
+    const out = team.filter((m) => m.hp <= 0);
+    if (out.length) rows.push({ art: art(out[0]!), title: out.map((m) => this.speciesName(m)).join(', '), sub: 'Fainted', tag: 'Out', cls: 'out' });
+    const boss = this.boss();
+    const strong = favor > 55;
+    this.rxPkInfo = null; this.rxPkMove = null; this.rxPkWeather = null; this.rxPkStatus = null;
+    this.rxPkGaInfo = {
+      foeTag: boss ? boss.title : battle.trainer?.name ?? 'Your opponent',
+      foeTitle: `${left.length} left of ${team.length}`,
+      foe: rows.slice(0, 4),
+      crowdTitle: `${favor} with you`,
+      crowd: [
+        { art: null, title: 'Goes up', sub: 'Your team keeps its HP; their Pokémon go down' },
+        { art: null, title: 'Goes down', sub: 'Your team takes hits; your Pokémon faint' },
+        { art: null, title: 'Above 55', sub: 'Hyper and Overdrive moments come more often', tag: strong ? 'Now' : '', cls: strong ? 'me' : '' },
+        { art: null, title: '55 or less', sub: 'No help from the crowd', tag: strong ? '' : 'Now', cls: strong ? '' : 'me' },
+      ],
+    };
+    this.openPanel([{ head: 'Match info', text: `${favor} with you. ${left.length} of ${team.length} left.` }]);
   }
 
   /** I key / the ⓘ tab: details of the focused move on the Attack page, otherwise what is going on in the battle. */
@@ -5057,6 +5107,7 @@ export class BattleScene extends Phaser.Scene {
     const content = services().session.content;
     this.rxPkStatus = null;
     this.rxPkWeather = null;
+    this.rxPkGaInfo = null;
     if (!field && this.tabs.current === 'attack' && this.menu) {
       const mon = this.activeMon();
       const slot = mon.moves[this.focusedMove];

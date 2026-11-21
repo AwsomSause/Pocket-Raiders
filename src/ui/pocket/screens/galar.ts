@@ -96,3 +96,10 @@ export function pkGaLineup(d: PkGaLineupModel): string {
     + `<div class="vs32">${pkSide32('a', d.me.tag, d.me.name, d.me.rows, d.me.foot)}<i class="vsb32" data-nocheck>VS</i>${pkSide32('b', d.foe.tag, d.foe.name, d.foe.rows, d.foe.foot)}</div>`
     + `<div class="btn on nx go32" data-key="ga-walk"${act('next')}><b>Walk out</b></div>${keys([['Enter', 'walk out']])}</div>`);
 }
+
+/** Match Info in a Galar stadium battle (mock-up `ga-info`): the foe's Pokémon left and the crowd's rules, with the one in play now. */
+export function pkGaInfo(d: { foeTag: string; foeTitle: string; foe: readonly PkSideRow[]; crowdTitle: string; crowd: readonly PkSideRow[] }): string {
+  return page('ga-info', 51, `<div class="scr sz20 ar28 a-ga pg28 gx-bt-page" data-key="ga-info"><div class="sz-h" data-m="hdr"><i class="emb28 ga hd" data-nocheck></i><b>Match info</b><span>Everything the battle screen no longer shows, one key away.</span></div>`
+    + `<div class="vs32">${pkSide32('a', d.foeTag, d.foeTitle, d.foe)}<i class="vsb32" data-nocheck></i>${pkSide32('b', 'The crowd', d.crowdTitle, d.crowd)}</div>`
+    + `<div class="btn on nx go32" data-key="ga-info-back"${act('info')}><b>Back to the battle</b></div>${keys([['Enter', 'back', 'info'], ['Esc', 'back', 'info']])}</div>`);
+}
