@@ -122,8 +122,8 @@ import { teraJewel } from '../ui/battleFx/teraJewel';
 import { megaGlass } from '../ui/battleFx/megaGlass';
 import { drawnBox, type GimmickPage } from '../ui/battleFx/gimmickStage';
 import { HIT_RUN, stand, standStill, twitch } from '../ui/battleFx/stance';
-import { bubblePicture, chevronPicture, ConditionLook, flamePicture, pipPicture, putAbove, titlePicture } from '../ui/battleFx/conditionLook';
-import { BUBBLE_W, chevronWaves, condArriveClip, condKind, condTickClip, FLAME_W, parCantClip, SLUMP, STAT_COLOR, STAT_DOWN_STAMP, statClip, thawClip, wakeClip, type CondKind, type CondSpot } from '../core/presentation/motionConditions';
+import { bubblePicture, chevronPicture, ConditionLook, flagPicture, flamePicture, glarePicture, pipPicture, putAbove, titlePicture } from '../ui/battleFx/conditionLook';
+import { BUBBLE_W, chevronWaves, condArriveClip, FLAG_HOLD, intimidateClip, condKind, condTickClip, FLAME_W, parCantClip, SLUMP, STAT_COLOR, STAT_DOWN_STAMP, statClip, thawClip, wakeClip, type CondKind, type CondSpot } from '../core/presentation/motionConditions';
 import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture, GLOW_SIZE, glowPicture, PICTURE_SCALE, plusPicture, shinyChipPicture, stampPicture, starPicture } from '../ui/battleFx/cheerChip';
 import { dynamaxPan } from '../ui/battleFx/dynamaxPan';
 import { keyItemFor } from '../ui/battleFx/cineLook';
@@ -667,6 +667,7 @@ export class BattleScene extends Phaser.Scene {
       heal: (side) => this.healMoment(side),
       condition: (side, status, at) => this.condition(side, status, at),
       stat: (side, stat, change) => this.statMoment(side, stat, change),
+      ability: (side, ability, label) => this.abilityMoment(side, ability, label),
     });
 
     this.shown = { player: structuredClone(run.party[battle.activeIndex]!), enemy: structuredClone(currentEnemy(battle)) };
@@ -4372,6 +4373,91 @@ export class BattleScene extends Phaser.Scene {
       return true;
     } catch {
       return false;
+    }
+  }
+
+  /**
+   * An ability (pass 8): a flag unrolls from its owner's side of the screen (the foe's from the left under its box, yours
+   * from the right over yours), holds 2 s and folds away. Intimidate is acted out too: it leans in, the field dims
+   * around it, its glare crosses the field and the other Pokémon shrinks back. Singles; null when it can't show here.
+   */
+  private abilityMoment(side: Side, ability: string, label: string): { shown: 'all' | 'flag'; ms: number } | null {
+    const level = this.clipLevel();
+    const sprite = this.condSprite(side);
+    if (this.duo || level === 'off' || !sprite || !sprite.visible) return null;
+    try {
+      const fromLeft = side === 'enemy';
+      const key = flagPicture(this, this.speciesName(this.shown[side]), label, fromLeft);
+      if (!key) return null;
+      const box = (side === 'enemy' ? this.enemyBox : this.playerBox)?.container.getBounds();
+      const flag = this.add.image(fromLeft ? 0 : this.scale.width, 0, key).setOrigin(fromLeft ? 0 : 1, 0).setScale(0, PICTURE_SCALE).setDepth(3900);
+      flag.setY(fromLeft ? (box ? box.bottom + 8 : 140) : Math.max(8, (box ? box.top : 270) - flag.displayHeight - 10));
+      this.tweens.chain({
+        targets: flag,
+        tweens: [
+          { scaleX: PICTURE_SCALE, duration: level === 'full' ? 250 : 1, ease: 'Back.easeOut' },
+          { scaleX: 0, duration: 200, delay: FLAG_HOLD, ease: 'Quad.easeIn' },
+        ],
+        onComplete: () => flag.destroy(),
+      });
+      const other = this.condSprite(side === 'player' ? 'enemy' : 'player');
+      if (ability !== 'intimidate' || level !== 'full' || !other || !other.visible) return { shown: 'flag', ms: 0 };
+      const spot = (s: Side, v: Phaser.GameObjects.Sprite): CondSpot => ({ ...this.spotXY(s), w: v.displayWidth, h: v.displayHeight * v.originY, side: s });
+      const otherSide: Side = side === 'player' ? 'enemy' : 'player';
+      const clip = intimidateClip(spot(side, sprite), spot(otherSide, other), level);
+      const gk = glarePicture(this);
+      // The glare points from its eyes at the other Pokémon's middle (the mockup's 24 degree tilt is that line on its stage).
+      const eyes = { x: clip.base.cone!.x!, y: clip.base.cone!.y! };
+      const aim = Phaser.Math.RadToDeg(Math.atan2(this.spotXY(otherSide).y - other.displayHeight * other.originY * 0.5 - eyes.y, this.spotXY(otherSide).x - eyes.x));
+      const cone = gk ? putAbove(sprite, this.add.image(0, 0, gk).setOrigin(1, 0.5).setAngle(aim - 180).setAlpha(0)) : null;
+      // The dim: a dark sheet over the field with the owner lifted above it while it lasts.
+      const field = this.field;
+      let sheet: Phaser.GameObjects.Rectangle | null = null;
+      let place = -1;
+      const undim = (): void => {
+        if (!sheet) return;
+        const sh = sheet;
+        sheet = null;
+        this.tweens.add({ targets: sh, alpha: 0, duration: 200, onComplete: () => sh.destroy() });
+        if (sprite.active && place >= 0 && sprite.parentContainer === field) field.moveTo(sprite, Math.min(place, field.list.length - 1));
+      };
+      const mon = this.shown[side];
+      const otherMon = this.shown[otherSide];
+      standStill(this, other);
+      const both = playClip(this, clip, this.clipHost({ cone: { kind: 'free', get: () => cone } }, {
+        cue: (name) => {
+          if (name === 'dim' && !sheet) {
+            sheet = this.add.rectangle(this.scale.width / 2, this.scale.height / 2, this.scale.width * 1.2, this.scale.height * 1.2, 0x000000, 0);
+            field.add(sheet);
+            if (sprite.parentContainer === field) {
+              place = field.getIndex(sprite);
+              field.bringToTop(sprite);
+            }
+            this.tweens.add({ targets: sheet, fillAlpha: 0.55, duration: 200 });
+          } else if (name === 'undim') undim();
+        },
+      }));
+      // Each Pokémon's own part, so a later moment can stop one without the other.
+      this.condPlay(sprite, clip, { owner: { kind: 'mon', get: () => sprite } }, (cut) => {
+        if (cut || !sprite.active) return;
+        this.restAt(sprite, side);
+        if (sprite.visible) this.standUp(sprite, mon);
+      });
+      const otherRun = playClip(this, clip, this.clipHost({ target: { kind: 'mon', get: () => other } }));
+      void otherRun.done.then(() => {
+        if (!other.active) return;
+        otherRun.rest('target');
+        this.restAt(other, otherSide);
+        if (other.visible) this.standUp(other, otherMon);
+      });
+      void both.done.then(() => {
+        undim();
+        cone?.destroy();
+      });
+      // The battle goes on ("Its Attack fell!") once the other Pokémon is back on its spot.
+      return { shown: 'all', ms: clip.length };
+    } catch {
+      return null;
     }
   }
 

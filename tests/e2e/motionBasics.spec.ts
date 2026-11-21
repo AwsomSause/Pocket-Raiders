@@ -649,3 +649,56 @@ test('stat changes: chevrons in the stat colour sweep the body, a stamp says the
   }
   expect(errors).toEqual([]);
 });
+
+test('an ability: its flag unrolls from the owner side; Intimidate leans in, glares and the other shrinks back; all home after', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'ability-e2e');
+  const order = () => page.evaluate(() => { const b = (window as any).__pkr.game.scene.getScene('Battle'); return [b.field.getIndex(b.enemySprite), b.field.getIndex(b.playerSprite)]; });
+  const before = await order();
+  const seen = await page.evaluate(async () => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    const all = () => b.children.list.concat(b.field.list);
+    const at = b.spotXY('player');
+    const s = { flag: '', flagX: -1, cone: false, dim: 0, back: 0, lean: 0, word: 0 };
+    const watch = () => {
+      const f = all().find((o: any) => String(o.texture?.key).startsWith('ability.flag.') && o.scaleX > 0.3);
+      if (f) [s.flag, s.flagX] = [f.texture.key, f.x];
+      s.cone ||= all().some((o: any) => o.texture?.key === 'ability.glare' && o.scaleX > 0.5 && o.alpha > 0.2);
+      s.dim = Math.max(s.dim, ...b.field.list.filter((o: any) => o.type === 'Rectangle' && o.fillColor === 0).map((o: any) => o.fillAlpha), 0);
+      s.back = Math.max(s.back, at.x - b.playerSprite.x);
+      s.lean = Math.max(s.lean, b.spotXY('enemy').x - b.enemySprite.x);
+      // The old banner (a text in the field) stays away.
+      s.word = Math.max(s.word, b.field.list.filter((o: any) => o.type === 'Container' && o.list?.some((c: any) => c.type === 'Text' && /Intimidate/.test(c.text))).length);
+    };
+    b.events.on('update', watch);
+    await b.fx.play([{ kind: 'abilityAnim', side: 'enemy', anim: 'ability.menace', label: 'Intimidate', ability: 'intimidate' }]);
+    await new Promise((r) => setTimeout(r, 2600));
+    b.events.off('update', watch);
+    return s;
+  });
+  expect(seen.flag.startsWith('ability.flag.l.')).toBe(true);
+  expect(seen.flagX).toBe(0);
+  expect(seen.cone).toBe(true);
+  expect(seen.dim).toBeGreaterThan(0.5);
+  expect(seen.lean).toBeGreaterThan(30);
+  expect(seen.back).toBeGreaterThan(14);
+  expect(seen.word).toBe(0);
+  // Afterwards: no flag, no glare, no dim, both home, and the field in its old order.
+  expect(await page.evaluate(() => { const b = (window as any).__pkr.game.scene.getScene('Battle'); return b.children.list.concat(b.field.list).filter((o: any) => /^ability\./.test(String(o.texture?.key)) || (o.type === 'Rectangle' && o.fillColor === 0 && o.fillAlpha > 0.4)).length; })).toBe(0);
+  expect(await order()).toEqual(before);
+  for (const s of ['player', 'enemy'] as const) {
+    const l = await look(page, s);
+    expect({ x: l.x, solid: l.solid }).toEqual({ x: l.homeX, solid: 0 });
+  }
+  // Your own ability's flag comes in from the right edge.
+  const mine = await page.evaluate(async () => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    void b.fx.play([{ kind: 'abilityAnim', side: 'player', anim: 'ability.boost', label: 'Overgrow', ability: 'overgrow' }]);
+    await new Promise((r) => setTimeout(r, 600));
+    const f = b.children.list.find((o: any) => String(o.texture?.key).startsWith('ability.flag.'));
+    return f ? [f.texture.key.slice(0, 15), f.x === b.scale.width] : null;
+  });
+  expect(mine).toEqual(['ability.flag.r.', true]);
+  expect(errors).toEqual([]);
+});

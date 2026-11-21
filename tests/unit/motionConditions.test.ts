@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { clipEnd, EASES, fxAllowed, sampleClip } from '../../src/core/presentation/motionClip';
-import { chevronWaves, COND_TINT, condArriveClip, condKind, condTickClip, parCantClip, SLUMP, STAT_COLOR, statClip, thawClip, wakeClip, type CondSpot } from '../../src/core/presentation/motionConditions';
+import { chevronWaves, COND_TINT, intimidateClip, condArriveClip, condKind, condTickClip, parCantClip, SLUMP, STAT_COLOR, statClip, thawClip, wakeClip, type CondSpot } from '../../src/core/presentation/motionConditions';
 
 // Animation redesign pass 8 (Conditions): every status arrives, keeps a look and ticks, as the mockup's numbers.
 const FOE: CondSpot = { x: 648, y: 240, w: 100, h: 120, side: 'enemy' };
@@ -143,5 +143,25 @@ describe('conditions: stat changes', () => {
     expect(sampleClip(r, 120).mon!.sy).toBe(1);
     expect(sampleClip(r, 300).c0!.alpha).toBe(0);
     expect(statClip(FOE, 1, STAT_COLOR.spe!, 'off').length).toBe(0);
+  });
+});
+
+describe('conditions: Intimidate', () => {
+  it('the owner leans in toward the other side, the glare sweeps, the other shrinks back and trembles, all home after', () => {
+    const c = intimidateClip(FOE, ME, 'full');
+    expect(sampleClip(c, 600).owner).toMatchObject({ dx: -40, dy: 14 });
+    expect(sampleClip(c, 600).owner!.sx).toBeCloseTo(1.12);
+    expect(intimidateClip(ME, FOE, 'full').base.owner).toBeDefined();
+    expect(sampleClip(intimidateClip(ME, FOE, 'full'), 600).owner!.dx).toBe(40);
+    expect(sampleClip(c, 650).cone).toMatchObject({ x: FOE.x - 60, y: FOE.y - FOE.h / 2 - 40 });
+    expect(sampleClip(c, 850).cone!.sx).toBeCloseTo(1);
+    expect(sampleClip(c, 950).target).toMatchObject({ dx: -18 });
+    expect(sampleClip(c, 950).target!.sy).toBeCloseTo(0.94);
+    expect(c.fx.filter((f) => f.kind === 'star').map((f) => (f as { color?: number }).color)).toEqual([0xff4d4d, 0xff4d4d]);
+    expect(c.fx.filter((f) => f.kind === 'cue').map((f) => (f as { name: string }).name)).toEqual(['dim', 'undim']);
+    expect(clipEnd(c)).toMatchObject({ owner: { dx: 0, dy: 0, sx: 1 }, target: { dx: 0, sy: 1 }, cone: { alpha: 0 } });
+  });
+  it('Reduced and Off: nothing moves (the flag alone says it)', () => {
+    for (const level of ['reduced', 'off'] as const) expect(intimidateClip(FOE, ME, level).length).toBe(0);
   });
 });

@@ -291,8 +291,8 @@ export function drawFx(scene: Phaser.Scene, fx: MotionFx, o: FxOpts): void {
       return;
     }
     case 'star': {
-      // A white burst of many points that grows and fades.
-      const st = scene.add.star(fx.x, fx.y, fx.points, fx.size * 0.15, fx.size / 2, 0xffffff, 1).setDepth(o.depth + 1).setScale(0.1).setBlendMode(Phaser.BlendModes.ADD);
+      // A burst of points (white unless the clip names a colour) that grows and fades.
+      const st = scene.add.star(fx.x, fx.y, fx.points, (fx.size / 2) * (fx.inner ?? 0.3), fx.size / 2, fx.color ?? 0xffffff, 1).setDepth(o.depth + 1).setScale(0.1).setBlendMode(Phaser.BlendModes.ADD);
       scene.tweens.add({ targets: st, scale: 1, angle: 20, alpha: 0, duration: ms(fx.d), ease: EASES.out, onComplete: () => st.destroy() });
       return;
     }

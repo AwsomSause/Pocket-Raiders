@@ -5,7 +5,7 @@
 // (BattleScene.standUp). Presentation only.
 
 import Phaser from 'phaser';
-import { BUBBLE_W, CHEVRON, COND_TINT, EMBERS, FLAME_W, type CondKind, type CondSpot } from '../../core/presentation/motionConditions';
+import { BUBBLE_W, CHEVRON, COND_TINT, EMBERS, FLAME_W, GLARE, type CondKind, type CondSpot } from '../../core/presentation/motionConditions';
 import { FONT_FAMILY } from '../theme';
 
 const HI = 2;
@@ -342,6 +342,112 @@ export function pipPicture(scene: Phaser.Scene): string | null {
     ctx.fillStyle = '#ffffff';
     ctx.beginPath();
     ctx.roundRect(0, 0, c.width, c.height, 3 * HI);
+    ctx.fill();
+    scene.textures.addCanvas(key, c);
+    return key;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The ability flag (pass 8): the mockup's dark plate, square against its owner's edge of the screen and rounded on the
+ * open side, with "<Name>'s Ability" in small yellow letters over the ability's name in big ones.
+ */
+export function flagPicture(scene: Phaser.Scene, owner: string, ability: string, fromLeft: boolean): string | null {
+  const key = `ability.flag.${fromLeft ? 'l' : 'r'}.${owner}.${ability}`;
+  if (scene.textures.exists(key)) return key;
+  try {
+    const small = `800 ${13 * HI}px "M PLUS Rounded 1c", ${FONT_FAMILY}`;
+    const big = `400 ${26 * HI}px "Jersey 15", ${FONT_FAMILY}`;
+    const top = `${owner}'s Ability`;
+    const name = ability.toUpperCase();
+    const probe = document.createElement('canvas').getContext('2d');
+    if (!probe) return null;
+    probe.font = small;
+    const w1 = probe.measureText(top).width;
+    probe.font = big;
+    const w2 = probe.measureText(name).width + name.length * 0.03 * 26 * HI;
+    const border = 3 * HI;
+    // padding 8px 26px 8px 18px (the wide side is the open one).
+    const w = Math.ceil(Math.max(w1, w2) + (18 + 26) * HI + border);
+    const h = Math.ceil((8 + 13 + 4 + 26 + 8) * HI + border * 2);
+    const c = document.createElement('canvas');
+    c.width = w;
+    c.height = h + 4 * HI;
+    const ctx = c.getContext('2d');
+    if (!ctx) return null;
+    const r = 14 * HI;
+    const shape = (dy: number): void => {
+      ctx.beginPath();
+      if (fromLeft) ctx.roundRect(-r, border / 2 + dy, w + r - border / 2, h - border, [0, r, r, 0]);
+      else ctx.roundRect(border / 2, border / 2 + dy, w + r, h - border, [r, 0, 0, r]);
+    };
+    // box-shadow 0 4px 0 #0008, then the plate's gradient, its inset ring and its border.
+    ctx.fillStyle = 'rgba(0,0,0,0.53)';
+    shape(4 * HI);
+    ctx.fill();
+    const g = ctx.createLinearGradient(0, 0, 0, h);
+    g.addColorStop(0, '#22325e');
+    g.addColorStop(1, '#16203f');
+    ctx.fillStyle = g;
+    shape(0);
+    ctx.fill();
+    ctx.lineWidth = border;
+    ctx.strokeStyle = '#131c36';
+    ctx.stroke();
+    ctx.save();
+    ctx.beginPath();
+    if (fromLeft) ctx.roundRect(-r, border * 1.5, w + r - border * 1.5, h - border * 3, [0, r - border, r - border, 0]);
+    else ctx.roundRect(border * 1.5, border * 1.5, w + r, h - border * 3, [r - border, 0, 0, r - border]);
+    ctx.lineWidth = 2 * HI;
+    ctx.strokeStyle = '#2f4a8a';
+    ctx.stroke();
+    ctx.restore();
+    const x = (fromLeft ? 18 : 26) * HI;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.font = small;
+    ctx.fillStyle = '#ffcb05';
+    ctx.fillText(top, x, border + 8 * HI);
+    ctx.font = big;
+    ctx.fillStyle = '#ffffff';
+    try {
+      (ctx as unknown as { letterSpacing: string }).letterSpacing = `${0.78 * HI}px`;
+    } catch {
+      /* older browsers */
+    }
+    ctx.fillText(name, x, border + (8 + 13 + 4) * HI);
+    scene.textures.addCanvas(key, c);
+    return key;
+  } catch {
+    return null;
+  }
+}
+
+/** Intimidate's glare: a red cone, its point at the right, fading out toward its wide left end. */
+export function glarePicture(scene: Phaser.Scene): string | null {
+  const key = 'ability.glare';
+  if (scene.textures.exists(key)) return key;
+  try {
+    const w = GLARE.w;
+    const h = GLARE.h;
+    const c = document.createElement('canvas');
+    c.width = w;
+    c.height = h;
+    const ctx = c.getContext('2d');
+    if (!ctx) return null;
+    const g = ctx.createLinearGradient(w, 0, 0, 0);
+    g.addColorStop(0, 'rgba(255,77,77,0.6)');
+    g.addColorStop(1, 'rgba(255,77,77,0)');
+    ctx.fillStyle = g;
+    // clip-path: polygon(100% 45%, 100% 55%, 0 100%, 0 0)
+    ctx.beginPath();
+    ctx.moveTo(w, h * 0.45);
+    ctx.lineTo(w, h * 0.55);
+    ctx.lineTo(0, h);
+    ctx.lineTo(0, 0);
+    ctx.closePath();
     ctx.fill();
     scene.textures.addCanvas(key, c);
     return key;

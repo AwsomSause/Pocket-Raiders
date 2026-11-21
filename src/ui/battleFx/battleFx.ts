@@ -57,6 +57,9 @@ export interface FxOptions {
   recoil?: (side: Side, cue: Extract<Cue, { kind: 'impact' }>) => boolean;
   /** A stat change: the scene shows its own chevrons, stamp and pips (pass 8); true means the pack's arrows and word stay away. */
   stat?: (side: Side, stat: string, change: number) => boolean;
+  /** An ability: the scene unrolls its own flag (pass 8). 'all' means it also acted the ability out (Intimidate) and
+   *  holds the battle for `ms`; 'flag' means only the flag, so the category's flourish still plays here. */
+  ability?: (side: Side, ability: string, label: string) => { shown: 'all' | 'flag'; ms: number } | null;
   /** The screen's own heal (redesign pass 3: plus-signs, a green glow, a hop). False when it can't play (the pack's heal shows). */
   heal?: (side: Side) => boolean;
   /** The screen's own status look (pass 8) arriving, ticking or stopping a move. False: the pack's animation plays. */
@@ -171,9 +174,11 @@ export class BattleFx {
         const plan = this.plan(cue.anim);
         const visual = this.opts.sprite(cue.side);
         if (!plan || !plan.play || !visual) return;
+        const own = this.skipping ? null : (this.opts.ability?.(cue.side, cue.ability, cue.label) ?? null);
+        if (own?.shown === 'all') return this.wait(own.ms);
         const pack = plan.reduced ? null : abilityPackAnim(cue.ability);
         const packSide: Side = pack?.onFoe ? (cue.side === 'player' ? 'enemy' : 'player') : cue.side;
-        const parts = [playAbilityAnim({ ...this.tools(cue.side, visual, plan, cue.label), ability: cue.ability, foeSprite: this.opts.sprite(cue.side === 'player' ? 'enemy' : 'player') })];
+        const parts = [playAbilityAnim({ ...this.tools(cue.side, visual, plan, cue.label), ability: cue.ability, foeSprite: this.opts.sprite(cue.side === 'player' ? 'enemy' : 'player'), ownFlag: !!own })];
         if (pack) parts.push(this.commonAnim(packSide, pack.name).catch(() => undefined));
         await Promise.race([Promise.all(parts), this.wait(plan.ms)]);
         return;

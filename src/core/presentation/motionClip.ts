@@ -53,7 +53,7 @@ export type MotionFx =
   /** A jagged bolt from one point to the other, shown for `d` ms (and once more when `again`). */
   | { kind: 'bolt'; at: number; x1: number; y1: number; x2: number; y2: number; n: number; j: number; color: number; color2: number; w: number; d: number; again?: boolean }
   /** A many-pointed burst of light that grows and fades (the ace's star). */
-  | { kind: 'star'; at: number; x: number; y: number; size: number; points: number; d: number }
+  | { kind: 'star'; at: number; x: number; y: number; size: number; points: number; d: number; /** Default white. */ color?: number; /** Inner radius as a share of the outer (default .3). */ inner?: number }
   | { kind: 'streak'; at: number; x1: number; y1: number; x2: number; y2: number; w: number; color: number; d: number; hold: number; out: number }
   | { kind: 'orbs'; at: number; x0: number; y0: number; x1: number; y1: number; n: number; gap: number; d: number }
   | { kind: 'dim'; at: number; x: number; y: number; d: number }

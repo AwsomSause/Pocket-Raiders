@@ -271,3 +271,39 @@ export function statClip(at: CondSpot, change: number, color: number, level: Cli
   if (n > 1) b.beat(160, `${n} stages: ${n} waves, bigger chevrons`);
   return b.end((n - 1) * 160 + 160 + 1000);
 }
+
+// ---------- ability trigger (pass 8, "Ability Trigger") ----------
+
+/** The ability flag holds this long before it folds away (the mockup's 2 s). */
+export const FLAG_HOLD = 2000;
+/** Intimidate's glare: the cone from its eyes across the field (620 x 180 px), aimed at the other Pokémon. */
+export const GLARE = { w: 620, h: 180 } as const;
+
+/**
+ * Intimidate acted out (pass 8): 0.4 s after its flag unrolls the owner leans in toward the other side (40 px, 14 px
+ * down, 1.12x) while the field dims around it; two red glints flash at its eyes and its glare (`cone`) sweeps across;
+ * the other Pokémon shrinks back 18 px and trembles, then springs home. Parts: `owner`, `target` (mons), `cone` (free:
+ * x, y, sx, alpha). Cues: `dim` and `undim`. Reduced and Off: nothing moves (the flag is the screen's).
+ */
+export function intimidateClip(owner: CondSpot, target: CondSpot, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('intimidate', level);
+  const toward = owner.side === 'enemy' ? -1 : 1;
+  // The other one is pushed the same way: back, away from the owner.
+  const away = toward;
+  const eyes = { x: owner.x + toward * 60, y: owner.y - owner.h / 2 - 40 };
+  const o = b.part('owner', { dx: 0, dy: 0, sx: 1, sy: 1 });
+  const t = b.part('target', { dx: 0, sy: 1 });
+  const cone = b.part('cone', { x: eyes.x, y: eyes.y, sx: 0, alpha: 0.5 });
+  if (level !== 'full') return b.end(0);
+  const T = 400;
+  o.at(T).to(200, { dx: toward * 40, dy: 14, sx: 1.12, sy: 1.12 }, 'out3').wait(800).to(300, { dx: 0, dy: 0, sx: 1, sy: 1 }, 'io');
+  b.fx({ kind: 'cue', at: T, name: 'dim' });
+  for (const k of [-1, 1]) b.fx({ kind: 'star', at: T + 200, x: eyes.x + k * 16, y: eyes.y, size: 40, points: 4, inner: 0.12, d: 500, color: 0xff4d4d });
+  cone.at(T + 250).to(200, { sx: 1 }, 'out').wait(300).to(300, { alpha: 0 });
+  t.at(T + 450).to(100, { dx: away * 18, sy: 0.94 }, 'out');
+  for (let i = 0; i < 5; i++) t.to(50, { dx: away * 22 }, 'io').to(50, { dx: away * 18 }, 'io');
+  t.to(300, { dx: 0, sy: 1 }, 'back');
+  b.fx({ kind: 'cue', at: T + 1100, name: 'undim' });
+  b.beat(0, 'The ability flag unrolls').beat(T, 'It leans in').beat(T + 250, 'The glare crosses the field').beat(T + 450, 'The other shrinks back');
+  return b.end(T + 450 + 100 + 500 + 300);
+}

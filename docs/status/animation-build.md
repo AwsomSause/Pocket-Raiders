@@ -124,3 +124,11 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   the condition look and turned a paralysed Pokémon solid yellow. Doubles and triples still wear it.
 - Condition and stat pictures (flames, bubbles, Z's, glints, chevrons) now sit on the field just over the Pokémon, so
   they pass under the info boxes and menus like the Pokémon does.
+- Ability trigger (pass 8): an ability's flag (the mockup's dark plate, "<Name>'s Ability" in small yellow over the
+  ability's name) unrolls from its owner's edge of the screen (the foe's from the left under its box, yours from the
+  right over yours), holds 2 s and folds away. It replaces the old name banner and the black cinematic bars in singles;
+  each category's small flourish (rings, sparks) still plays. Intimidate is acted out as the mockup (`intimidateClip`):
+  it leans in 40 px and grows 1.12x while the field dims around it, two red glints flash at its eyes, its red glare
+  sweeps across the field, and the other Pokémon is pushed back 18 px, trembles and springs home; then "ATTACK ▼"
+  plays. The glare is aimed at the other Pokémon (the mockup's 24 degree tilt is that line on its stage). Reduced: the
+  flag only. Limits: only Intimidate is acted out (the mockup shows only it); doubles keep the old banner.
