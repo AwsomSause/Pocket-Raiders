@@ -55,6 +55,8 @@ import { heroView, interruptView, type MonFiles } from '../ui/redux/screens/domi
 import { BossMenuController, SETTINGS_CATS } from './dominion/bossMenuController';
 import { fxClasses, fxOf } from '../core/dominion/fx';
 import { JobController } from './dominion/jobController';
+import { TutorialController } from './dominion/tutorialController';
+import type { TutWhere } from '../core/dominion/tutorial';
 
 type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'squads' | 'founding' | 'founded' | 'debate' | 'spy' | 'takeover' | 'broadcast' | 'assign' | 'district' | 'empire' | 'partners';
 
@@ -126,6 +128,8 @@ export class DominionScene extends Phaser.Scene {
   /** D25: the Evening voices scene (mockup a10), an overlay on the HQ. */
   /** D27: the Boss Menu (v4 m1, Esc from the HQ) and Settings (m2). */
   private menu = new BossMenuController(this.menuHost());
+  /** The tutorial and the opening (tutorial-mockups a1-e9). */
+  private tut = new TutorialController(this.tutHost());
   /** D28: the hold-Q command wheel, the Boss's board and the shutter between pages. */
   private nav = new NavController(this.navHost());
   // D30: the job moments after Do it (m8-m10) and the morning paper (m12).
@@ -167,6 +171,7 @@ export class DominionScene extends Phaser.Scene {
     this.desk = new DeskController(this);
     this.sq = new SquadController(this, this);
     this.menu = new BossMenuController(this.menuHost());
+    this.tut = new TutorialController(this.tutHost());
     this.spy.destroy();
     this.spy = new SpyController(this);
     this.voices.close();
@@ -228,6 +233,7 @@ export class DominionScene extends Phaser.Scene {
       render: () => this.render(),
       acts: {
         ...this.job.acts(),
+        ...this.tut.acts(),
         title: (i) => { this.titleAt = Number(i); this.confirm(); },
         type: (i) => { this.setup = toggleType({ ...this.setup, at: Number(i) }); this.view?.refresh(); },
         member: (i) => { this.setup = { ...this.setup, member: i === '0' ? 'grunt' : 'admin', problem: null }; this.view?.refresh(); },
@@ -327,6 +333,9 @@ export class DominionScene extends Phaser.Scene {
       // Round 4 (D26): End saves and quits to the title from any Dominion page (not mid-interrupt: the Hero's three
       // choices must be answered first; not while typing in the desk's Type box). Q stays free on every page for the hold-Q command wheel (D28): no screen reads it.
       if (e.code === 'End' && this.screen !== 'interrupt' && !typeBoxOpen()) return this.leave();
+      // The tutorial's pages and the lesson that holds the page read every key first (X stops the tips).
+      const tr = this.tut.raw(e.code, this.screen);
+      if (tr) return void (this.ate = tr === 'eat');
       // D28: hold Q for the command wheel; while the wheel or the board is up it reads every key first.
       const wheelUp = this.nav.wheel;
       if (this.nav.raw(e)) return void (this.ate = wheelUp && (e.code === 'Backspace' || e.code === 'KeyX'));
@@ -425,7 +434,7 @@ export class DominionScene extends Phaser.Scene {
       else if (e.code === 'KeyE') this.step({ t: 'endDay' });
     };
     kb?.on('keydown', raw);
-    const up = (e: KeyboardEvent): void => this.nav.up(e);
+    const up = (e: KeyboardEvent): void => { this.nav.up(e); this.tut.keyup(); };
     kb?.on('keyup', up);
     // D28: a controller's Select held is the hold-Q of the pad.
     const pad = (e: Event): void => { if (!this.leaving && this.scene.isActive()) this.nav.pad(!!(e as CustomEvent<boolean>).detail); };
@@ -470,6 +479,59 @@ export class DominionScene extends Phaser.Scene {
     return this.screen !== 'title' && this.screen !== 'setup' && this.screen !== 'opening';
   }
 
+  /** The help level picked on the tutorial's first page goes with the run (none: no tutorial, the old flow). */
+  private tutSetup(): { tutorial?: 'full' | 'tips' | 'off' } {
+    const m = this.tut.mode();
+    return m ? { tutorial: m } : {};
+  }
+
+  /** Where the tutorial may draw: the HQ only when nothing else (a moment, a case, the Chair...) owns it. */
+  private tutWhere(): TutWhere {
+    if (this.leaving) return 'other';
+    if (this.nav.wheel) return 'wheel';
+    if (this.nav.boardOn()) return 'other';
+    if (this.menu.owns()) return this.menu.page === 'menu' ? 'menu' : 'other';
+    const b = this.block();
+    if (!b?.opened) return 'other';
+    if (this.job.owns() || this.police.owns() || this.snatch.owns() || this.job.paperOwns() || this.voices.on || b.debate?.live || this.heroPending()) return 'other';
+    switch (this.screen) {
+      // The Morning is the HQ too (the crew controller draws it).
+      case 'hq': return this.chair.owns() || b.crew?.talks.length ? 'other' : 'hq';
+      case 'map': return this.notice || this.meetPanel() ? 'other' : 'map';
+      case 'card': return 'card';
+      case 'assign': return 'assign';
+      case 'founding': return 'founding';
+      default: return 'other';
+    }
+  }
+
+  private tutHost() {
+    const sc = (): DominionScene => this;
+    return {
+      refresh: () => sc().view?.refresh(),
+      where: () => sc().tutWhere(),
+      foundingStep: () => {
+        const r = FOUNDING_ROWS[sc().founding?.row ?? 0];
+        return r === 'name' ? 0 : r === 'primary' || r === 'secondary' ? 1 : r === 'initial' || r === 'logo' || r === 'motto' ? 2 : 3;
+      },
+      member: () => {
+        const m = sc().block()?.members[0];
+        return { ...sc().memberLook(), name: m?.name ?? DOMINION_DATA.start.members.grunt.name, grunt: !m || m.name === DOMINION_DATA.start.members.grunt.name };
+      },
+      startSetup: () => { sc().screen = 'setup'; sc().setup = newSetup(); },
+      toTitle: () => { sc().screen = 'title'; },
+      planHere: () => {
+        const b = sc().block();
+        if (!b || b.phase !== 'evening') return;
+        const m = hqModel(b), o = m.orders[sc().at];
+        if (m.panel === 'orders' && o) sc().step({ t: 'plan', order: o.id });
+      },
+      hqNext: () => sc().next(),
+      setupState: () => (sc().screen === 'setup' ? { page: sc().setup.page, types: sc().setup.types.length, problem: !!sc().setup.problem } : null),
+      firstTitle: () => sc().screen === 'title' && !sc().block() && !sc().files?.charters.open,
+    };
+  }
+
   /** D27: what the Boss Menu controller may reach. */
   private menuHost() {
     const sc = this;
@@ -479,6 +541,7 @@ export class DominionScene extends Phaser.Scene {
       hide: () => sc.leave(),
       openBoard: () => sc.nav.openBoard(),
       bossFile: () => sc.files?.boss.file ?? null,
+      replay: (lesson: string) => sc.tut.replay(lesson),
     };
   }
 
@@ -486,11 +549,12 @@ export class DominionScene extends Phaser.Scene {
   private render(): string {
     const fx = fxOf(services().session.settings);
     const page = this.nav.boardOn() && this.navHere() ? this.nav.wrap(this.nav.boardRender(), 'board', fx.level) : this.nav.wrap(this.renderPage(), this.navHere() as Here, fx.level);
-    return `<div class="domfx ${fxClasses(fx)}">${page}</div>`;
+    return `<div class="domfx ${fxClasses(fx)}">${page}${this.tut.overlay(this.screen)}</div>`;
   }
 
   private renderPage(): string {
     if (this.menu.owns()) return this.menu.render();
+    if (this.tut.ownsPage()) return this.tut.renderPage();
     const b = this.block();
     if (b && this.inRun() && this.job.owns()) return this.job.render();
     if (b && this.inRun() && this.police.owns()) return this.police.render();
@@ -728,6 +792,7 @@ export class DominionScene extends Phaser.Scene {
   private key(a: InputAction): void {
     if (this.ate) return void (this.ate = false);
     if (this.leaving) return;
+    if (this.tut.key(a)) return void this.view?.refresh();
     if (this.nav.key(a)) return;
     if (this.menu.key(a)) return void this.view?.refresh();
     if (this.end.key(a)) return;
@@ -814,7 +879,7 @@ export class DominionScene extends Phaser.Scene {
   private confirm(): void {
     const b = this.block();
     if (this.screen === 'title') {
-      if (this.titleAt === 0 && !b) this.screen = 'setup';
+      if (this.titleAt === 0 && !b) { if (!this.tut.begin()) this.screen = 'setup'; }
       else if (this.titleAt === 1 && b) {
         this.screen = !b.opened ? 'opening' : this.heroPending() ? 'interrupt' : 'hq';
         this.tk.maybeBroadcast(); // D14: a town taken while away is announced first
@@ -868,7 +933,7 @@ export class DominionScene extends Phaser.Scene {
   private next(): void {
     if (this.screen === 'setup' && this.setup.page === 'charter') {
       const d = this.setup, c = DOMINION_DATA.charters.charters[d.cAt];
-      const problem = !c ? 'Pick a Charter.' : services().session.dominionStart({ types: [c.types[0], c.types[1]], member: 'admin', look: 0, charter: c.id });
+      const problem = !c ? 'Pick a Charter.' : services().session.dominionStart({ types: [c.types[0], c.types[1]], member: 'admin', look: 0, charter: c.id, ...this.tutSetup() });
       if (problem) this.setup = { ...d, problem };
       else {
         this.screen = 'opening';
@@ -882,7 +947,7 @@ export class DominionScene extends Phaser.Scene {
       if (d.page === 'types' && d.types.length !== 2) this.setup = { ...d, problem: 'Pick two Team Types.' };
       else if (i < SETUP_PAGES.length - 1) this.setup = { ...d, page: SETUP_PAGES[i + 1]!, problem: null };
       else {
-        const problem = services().session.dominionStart({ types: [d.types[0]!, d.types[1]!], member: d.member, look: d.look });
+        const problem = services().session.dominionStart({ types: [d.types[0]!, d.types[1]!], member: d.member, look: d.look, ...this.tutSetup() });
         if (problem) this.setup = { ...d, problem };
         else {
           this.screen = 'opening';
@@ -923,7 +988,7 @@ export class DominionScene extends Phaser.Scene {
   private navHere(): PageId | null {
     const b = this.block();
     if (!b?.opened || !this.inRun()) return null;
-    if (this.menu.owns()) return this.menu.page!;
+    if (this.menu.owns()) return this.menu.page === 'replay' ? 'menu' : this.menu.page!;
     if (this.police.owns()) return 'police';
     if (this.end.owns()) return null;
     switch (this.screen) {

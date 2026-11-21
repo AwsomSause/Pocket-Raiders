@@ -79,6 +79,8 @@ export function endNight(block: DominionBlock, seed: string, rested: boolean): D
 export function step(block: DominionBlock, action: DominionAction, seed: string): StepOut {
   const ok = (b: DominionBlock, notice: string | null = null, heal = false): StepOut => ({ ok: true, block: b, notice, heal });
   switch (action.t) {
+    case 'tut':
+      return no(block);
     case 'open': {
       if (block.opened) return no(block);
       return ok({ ...block, opened: true });

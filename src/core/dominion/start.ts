@@ -87,6 +87,8 @@ export function newBlock(content: Content, run: RunState, setup: DominionSetup):
     types: [setup.types[0], setup.types[1]],
     // D27: the run rules from Settings · Dominion (none = Normal).
     ...(setup.rules ? { rules: { ...setup.rules } } : {}),
+    // The tutorial's help level (absent = none, as every run before it).
+    ...(setup.tutorial ? { tut: { mode: setup.tutorial, seen: [] } } : {}),
     members: [firstMember(content, run, setup)],
     keyItems: [...s.keyItems],
     orders: [],

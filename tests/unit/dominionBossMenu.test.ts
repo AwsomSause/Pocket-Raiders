@@ -149,10 +149,10 @@ describe('D27 Effects & motion', () => {
 });
 
 describe('D27 Boss Menu', () => {
-  it('lists the nine blades of mockup m1 with their keys, and the empire at a glance', () => {
+  it('lists the ten blades of mockup m1 (plus tutorial d10, Replay a lesson) with their keys, and the empire at a glance', () => {
     const b = started();
     const m = bossMenuModel(b, 2, { card: null, slot: 1 });
-    expect(m.blades.map((x) => x.key)).toEqual(['Esc', '1', '3', '4', '5', '6', 'R', 'S', 'End']);
+    expect(m.blades.map((x) => x.key)).toEqual(['Esc', '1', '3', '4', '5', '6', 'R', 'S', 'T', 'End']);
     expect(m.blades.map((x) => x.id)).toEqual([...BLADES]);
     expect(m.blades.find((x) => x.id === 'hide')).toMatchObject({ label: 'Go into hiding', dim: true });
     expect(m.glance.funds).toBe(`₽${b.funds.toLocaleString('en-US')}`);

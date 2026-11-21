@@ -56,7 +56,7 @@ test('Boss Menu on Esc, Settings with the Dominion and Effects & motion tabs', a
   // Esc on the HQ: the Boss Menu (nothing in the run changes).
   const before = await block(page);
   await pressUntil(page, 'Escape', s.getByTestId('dom-menu-title'));
-  await expect(s.locator('[data-testid^="dom-blade-"]')).toHaveCount(9);
+  await expect(s.locator('[data-testid^="dom-blade-"]')).toHaveCount(10);
   await expect(s.getByTestId('dom-blade-back')).toHaveClass(/on/);
   await expect(s.getByTestId('dom-menu-keys').locator('.q4')).toHaveText('Q');
   await expect(s.getByTestId('dom-glance')).toContainText('Heat');

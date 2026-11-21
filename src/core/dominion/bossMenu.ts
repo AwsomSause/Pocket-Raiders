@@ -8,8 +8,9 @@ import { threatRow, type Threat } from './rivalScreens';
 import { quoteFor } from './rules';
 import { topModel, type TopModel } from './screens';
 import type { DominionBlock } from './schema';
+import { TUT } from './tutorial';
 
-export type BladeId = 'back' | 'hq' | 'roster' | 'reserve' | 'ops' | 'ledger' | 'rotom' | 'settings' | 'hide';
+export type BladeId = 'back' | 'hq' | 'roster' | 'reserve' | 'ops' | 'ledger' | 'rotom' | 'settings' | 'lessons' | 'hide';
 
 export interface Blade { id: BladeId; icon: string; label: string; sub: string | null; key: string; dim?: boolean }
 
@@ -33,8 +34,8 @@ export interface BossMenuModel {
   notice: string | null;
 }
 
-/** The blade order (keys: Esc, 1, 3, 4, 5, 6, R, S, End: mockup m1). */
-export const BLADES: readonly BladeId[] = ['back', 'hq', 'roster', 'reserve', 'ops', 'ledger', 'rotom', 'settings', 'hide'];
+/** The blade order (keys: Esc, 1, 3, 4, 5, 6, R, S, End: mockup m1; T, Replay a lesson: tutorial mockup d10). */
+export const BLADES: readonly BladeId[] = ['back', 'hq', 'roster', 'reserve', 'ops', 'ledger', 'rotom', 'settings', 'lessons', 'hide'];
 
 /** The region's name as a word (start.json keeps it in capitals for the top bar). */
 export const regionName = (): string => { const r = DOMINION_DATA.start.start.region; return r[0]! + r.slice(1).toLowerCase(); };
@@ -61,6 +62,7 @@ export function bossMenuModel(b: DominionBlock, at: number, x: MenuExtras): Boss
     { id: 'ledger', icon: 'g-journal', label: 'Ledger', sub: null, key: '6' },
     { id: 'rotom', icon: 'p-rotom', label: 'Rotom', sub: x.card ?? 'no Key-Card · offline', key: 'R' },
     { id: 'settings', icon: 'g-scope-lens', label: 'Settings', sub: null, key: 'S' },
+    { id: 'lessons', icon: 'p-rotom', label: TUT.replay.blade, sub: TUT.replay.bladeSub, key: 'T' },
     { id: 'hide', icon: 'g-letter', label: 'Go into hiding', sub: 'save and quit to title', key: 'End', dim: true },
   ];
   const ds = Object.values(b.field.districts);
