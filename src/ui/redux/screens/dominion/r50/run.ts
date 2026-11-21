@@ -29,7 +29,8 @@ export function r5RunOf(b: DominionBlock, party: readonly R5PartyMon[], o: { ope
   const used = b.phase === 'day' ? Math.max(0, clock.dayActions - b.actions) : 0;
   const held = b.realm?.held.length ?? 0;
   const talks = b.crew?.talks.length ?? 0;
-  const news = (b.voices?.week ?? []).slice(-4).map((x) => x.l);
+  const week = b.voices?.week ?? [];
+  const news = week.slice(-4).map((x) => x.l);
   return {
     funds: `₽${b.funds.toLocaleString('en-US')}`,
     cleanPct: b.funds > 0 ? Math.round((100 * (b.funds - dirty)) / b.funds) : 100,
@@ -45,6 +46,7 @@ export function r5RunOf(b: DominionBlock, party: readonly R5PartyMon[], o: { ope
     coming,
     hero: g.hero ? { k: 't-redbig', where: `Hero · threat ${g.hero.threat}` } : undefined,
     news: news.length ? news : ['All quiet in Kanto'],
+    newsToday: week.some((x) => x.d === b.day),
     tod: TOD_OF[b.phase],
     party,
     startBadge: talks,

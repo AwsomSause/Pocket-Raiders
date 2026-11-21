@@ -9,3 +9,45 @@
 #rx #r5 .keys .q4{display:inline-block;padding:0 6px;border-radius:4px;font:800 12px/18px var(--fb);color:#1d1622;background:#fff8ea;cursor:pointer}
 /* Settings > Effects & motion: Calm stops every move on a redesigned page, like the game's Calm mode. */
 #rx .domfx.fx-calm #r5 *,#rx .domfx.fx-calm #r5 *::before,#rx .domfx.fx-calm #r5 *::after{animation:none!important;transition:none!important}
+/* ---------- Redesign R9: the look settings (Settings · Screen, Access, Options, Region skin, Ambience, Button feel) ---------- */
+/* Screen · Status: separate chips, or no capsule at all. */
+#rx #r5[data-status=chips] .cap23{gap:6px;background:none!important;border:0!important;box-shadow:none!important}
+#rx #r5[data-status=chips] .cap23>u{padding:3px 8px;background:#17131d;border:2px solid #000;border-radius:999px;box-shadow:2px 2px 0 var(--red)}
+#rx #r5[data-status=hidden] .cap23{display:none}
+/* Screen · Key hints: the keys without their words, or only the Start and Rotom chips. */
+#rx #r5[data-keys=icons] .keys>span:not(.ph13):not(.ls21):not(.pty31):not(.np27){font-size:0;gap:2px}
+#rx #r5[data-keys=icons] .keys>span:not(.ph13):not(.ls21):not(.pty31):not(.np27) kbd{font-size:12px}
+#rx #r5[data-keys=icons] .keys>span:not(.ph13):not(.ls21):not(.pty31):not(.np27) .pad20{font-size:10px}
+#rx #r5[data-keys=off] .keys>span:not(.ph13):not(.ls21):not(.pty31):not(.np27){display:none}
+/* Colour assist · Shapes: every warning colour also has a shape (danger ▲, good ●, yours ★, hero/police ■). */
+#rx #r5[data-colour=shapes] .heat b::before{content:'▲';margin-right:3px;font-size:.8em}
+#rx #r5[data-colour=shapes] [data-m=funds] b::before{content:'●';margin-right:3px;font-size:.8em}
+#rx #r5[data-colour=shapes] .war30>b:first-of-type::before{content:'★ '}
+#rx #r5[data-colour=shapes] .war30>b.r::before{content:'▲ '}
+#rx #r5[data-colour=shapes] .rp42::after{content:'■';position:absolute;right:-8px;top:-6px;font-size:9px;color:#5ad1ff}
+#rx #r5[data-colour=shapes] .tag::before{content:'◆ '}
+/* Colour assist · High contrast: solid dark panels and brighter small text. */
+#rx #r5[data-colour=contrast]{--mut:#ece6f4;--line:#fff8ea}
+#rx #r5[data-colour=contrast] .pn{background-color:#09070c!important;backdrop-filter:none!important}
+#rx #r5[data-colour=contrast] .foot p,#rx #r5[data-colour=contrast] .sd25{background:#fff!important;color:#000!important}
+/* Button feel · Cursor: an arrow or a Poké Ball instead of the N badge on what you picked. */
+#rx #r5[data-cursor=arrow] :is(.row,.wm,.ch,.srow).on::before{content:'▶';background:none!important;color:var(--yel)!important;box-shadow:none!important;border:0!important;font-size:18px}
+#rx #r5[data-cursor=arrow] .cta.on::before{content:'▶';background:none!important;color:var(--red)!important;box-shadow:none!important;border:0!important}
+#rx #r5[data-cursor=ball] :is(.row,.wm,.ch,.srow,.cta).on::before{content:'';background:linear-gradient(var(--red) 0 42%,#000 42% 58%,#fff 58%)!important;border:2px solid #000!important;border-radius:50%!important;box-shadow:none!important}
+/* Button feel · Press bounce off: buttons stay still under the pointer. */
+#rx #r5[data-press=off] :is(.cta,.row,.cell,.srow,.lb,.c49,.tb49,.sh-t,.si25,.ap13){transition:none!important;translate:none!important;scale:none!important}
+/* Options · Frame: the colour on every window's frame. */
+#rx #r5[data-frame=gold]{--fc:#e8b23a}
+#rx #r5[data-frame=night]{--fc:#2860c9}
+#rx #r5[data-frame=jade]{--fc:#16938a}
+#rx #r5[data-frame=plum]{--fc:#8e2bd1}
+#rx #r5[data-frame=ash]{--fc:#8a8296}
+#rx #r5:not([data-frame=nova]) .pn{box-shadow:5px 5px 0 var(--fc)!important;border-color:var(--fc)!important}
+#rx #r5:not([data-frame=nova]) .foot p{border-color:var(--fc)!important}
+/* Region skin: no skyline, no panel glints. Ambience off: no walkers, lanterns, fireworks or rain; no lightning. */
+#rx #r5[data-amb~=nosky] .sky37{display:none!important}
+#rx #r5[data-amb~=noglint] .pn::after{display:none!important}
+#rx #r5[data-amb~=off] :is(.lan34,.fw34,.stroll28,.rn39,.lt39,.tod15 .w3){display:none!important}
+#rx #r5[data-amb~=nolight] .lt39{display:none!important}
+/* Read aloud: the word being read. */
+#rx #r5 .ra9 .now{background:var(--yel);color:#1d1622;border-radius:3px}

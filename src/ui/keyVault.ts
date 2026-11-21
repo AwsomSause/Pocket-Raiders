@@ -32,7 +32,7 @@ function ownHost(): { host: HTMLElement; done: () => void } {
   return { host, done: () => { window.removeEventListener('resize', place); host.remove(); } };
 }
 
-export function openKeyVault(opts: { calm?: boolean; onClose?: () => void } = {}): void {
+export function openKeyVault(opts: { calm?: boolean; onClose?: () => void; /** The card to start on (the Dominion vault page's pick). */ card?: string } = {}): void {
   if (open) return;
   const { keys, transport } = aiRuntime();
   const cards = AI_DATA.keyCards;
@@ -54,7 +54,7 @@ export function openKeyVault(opts: { calm?: boolean; onClose?: () => void } = {}
   const msg = q<HTMLElement>('[data-vault="msg"]');
   const note = msg.textContent ?? '';
   const active = keys.active();
-  let pick = Math.max(0, cards.findIndex((c) => c.id === active?.card));
+  let pick = Math.max(0, cards.findIndex((c) => c.id === (opts.card ?? active?.card)));
   let busy = false;
   let test: 'idle' | 'testing' | 'ok' | 'bad' = 'idle';
   remember.checked = !!active?.remembered;

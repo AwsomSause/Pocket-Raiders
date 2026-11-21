@@ -18,6 +18,9 @@ import { mountRedux, type ReduxView } from '../ui/redux/stage';
 import { openingView, setupView, titleView, type SetupFiles } from '../ui/redux/screens/dominion/views';
 import { hubScr, r5Hq, r5Start, START_ITEMS } from '../ui/redux/screens/dominion/r50/hub';
 import { bossPic, r5Hub, r5Run, R5StartMenu } from './dominion/r50Bridge';
+import { r5SetLook } from '../ui/redux/screens/dominion/r50/kit';
+import { readAloud, readAloudNow } from '../ui/redux/screens/dominion/r50/readAloud';
+import { pngSrc, tallTeam } from '../ui/redux/screens/dominion/teamPic';
 import { CrewController } from './dominion/crewController';
 import { districtModel, districtOrder } from '../core/dominion/districtScreen';
 import { districtView } from '../ui/redux/screens/dominion/district';
@@ -553,7 +556,27 @@ export class DominionScene extends Phaser.Scene {
       bossFile: () => sc.files?.boss.file ?? null,
       replay: (lesson: string) => sc.tut.replay(lesson),
       r5run: () => { const b = sc.block(); return b ? r5Run(sc, b) : null; },
+      r9hub: () => { const b = sc.block(); return b ? sc.hubOnly(b) : ''; },
+      r9says: () => sc.r9says(),
+      r9crew: () => { const b = sc.block(); const tc = b ? teamColours(b) : null; return b ? b.members.slice(0, 6).map((m) => (m.look.endsWith('.png') ? `<img class="px" src="${pngSrc(m.look, tc)}" alt="" style="height:56px;width:auto">` : tallTeam(m.look, 56, tc))) : []; },
+      r9boss: () => sc.files?.boss.name ?? 'Boss',
+      r9read: () => readAloudNow(document.getElementById('rx'), services().session.settings.expansion.dominionPrefs.look),
     };
+  }
+
+  /** Redesign R9: the HQ hub's screen alone (Read aloud draws over it). */
+  private hubOnly(b: DominionBlock): string {
+    const x = r5Hub(b, { look: this.memberLook().look, bossFile: this.files?.boss.file ?? null, notice: null, at: this.at, threat: threatRow(b), desk: deskOpen(b) ? deskWaiting(b) : null, paper: paperNote(b) });
+    return hubScr(hqModel(b), x, r5Run(this, b));
+  }
+
+  /** Redesign R9: the member on duty and what they say (the Read aloud, Access and Options previews). */
+  private r9says(): { name: string; line: string; colour: string } {
+    const b = this.block();
+    const m = b?.members[0];
+    if (!b || !m) return { name: 'Rotom', line: 'Bzzt! All quiet for now.', colour: '#ff8a1c' };
+    const name = m.name[0]!.toUpperCase() + m.name.slice(1).toLowerCase();
+    return { name, line: hqModel(b).says, colour: '#3f7fd9' };
   }
 
   /** Redesign R0 (pass 50): the HQ hub, or the Start menu over it. */
@@ -573,16 +596,20 @@ export class DominionScene extends Phaser.Scene {
     if (id in TAB) return this.tab(TAB[id]!);
     if (id === 'start' && this.screen === 'hq') return this.start.open();
     if (id === 'menu') { this.menu.open(); return void this.view?.refresh(); }
-    if (id === 'set' || id === 'options') { this.menu.openSettings(); return void this.view?.refresh(); }
+    // Redesign R9: Settings, Options, Save and quit, Rotom and the vault are the Boss Menu controller's pages.
+    if (['set', 'options', 'save', 'rotom', 'vault', 'controls', 'calm', 'access', 'hud'].includes(id)) { this.menu.go(id); return void this.view?.refresh(); }
     if ((id === 'war' || id === 'rival' || id === 'rivals') && this.screen === 'hq') return void (this.rival.open() && this.view?.refresh());
     if (id === 'herotrack' && b.hero) return this.openHero();
-    if (id === 'save') { this.notice = 'Saved. Dominion saves every step.'; return void this.view?.refresh(); }
     if (id === 'base' && this.screen === 'hq') { this.hq.open(); return void this.view?.refresh(); }
   }
 
   /** D27: every page wears the Effects & motion classes (fx.css turns the spectacle down; presentation only). */
   private render(): string {
     const fx = fxOf(services().session.settings);
+    // Redesign R9: the look settings (Screen, Access, Options, Region skin, Ambience, Button feel) and Read aloud.
+    const look = services().session.settings.expansion.dominionPrefs.look;
+    r5SetLook(look, this.block()?.realm?.at);
+    if (look.readAloud) setTimeout(() => readAloud(document.getElementById('rx'), services().session.settings.expansion.dominionPrefs.look), 0);
     const page = this.nav.boardOn() && this.navHere() ? this.nav.wrap(this.nav.boardRender(), 'board', fx.level) : this.nav.wrap(this.renderPage(), this.navHere() as Here, fx.level);
     return `<div class="domfx ${fxClasses(fx)}">${page}${this.tut.overlay(this.screen)}</div>`;
   }
@@ -1017,6 +1044,7 @@ export class DominionScene extends Phaser.Scene {
       navFree: () => this.navFree(),
       navJump: (p: PageId) => this.navJump(p),
       setNotice: (n: string | null) => { this.notice = n; },
+      r5run: () => { const b = this.block(); return b ? r5Run(this, b) : null; },
     };
   }
 
@@ -1058,7 +1086,7 @@ export class DominionScene extends Phaser.Scene {
     if (to === 'title') return this.leave();
     // D27: the Boss Menu and its Settings open over the page you are on (Rotom is a tab of Settings).
     if (to === 'menu') return this.menu.open();
-    if (to === 'settings' || to === 'rotom') return this.menu.openSettings(to === 'rotom' ? SETTINGS_CATS.findIndex((c) => c.id === 'rotom') : 0);
+    if (to === 'settings' || to === 'rotom') return this.menu.go(to === 'rotom' ? 'rotom' : 'set');
     this.menu.close();
     // Leave the page you are on the way its own keys would (overlays and sub-pages closed), from the HQ.
     if (this.voices.on) this.voices.close();
