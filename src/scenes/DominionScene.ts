@@ -407,7 +407,8 @@ export class DominionScene extends Phaser.Scene {
     onInputAction(this, (a) => this.key(a), { onceEach: true });
     // L is the Ledger on the HQ, the map and the Crew File (D6) and Money on the HQ menu (D5, mockup 6), so it doesn't
     // open the game's interaction log there; the Confront room's text box keeps L (D22) (Shift+L still does).
-    setLogKeyTaken(() => this.scene.isActive() && (this.screen === 'base' || this.screen === 'spy' || (!!this.block()?.opened && ['hq', 'map', 'crew', 'ledger', 'hero'].includes(this.screen))));
+    setLogKeyTaken(() => this.scene.isActive() && (this.screen === 'base' || this.screen === 'spy' || this.screen === 'empire' || (this.screen === 'takeover' && !!this.block()?.takeover?.taken)
+      || (!!this.block()?.opened && ['hq', 'map', 'crew', 'ledger', 'hero'].includes(this.screen))));
     // D21: the desk hears every key first, so A and D stamp there instead of moving (the game's key map has them as ◀ ▶).
     const note = (e: KeyboardEvent): void => this.desk.note(e);
     window.addEventListener('keydown', note, true);

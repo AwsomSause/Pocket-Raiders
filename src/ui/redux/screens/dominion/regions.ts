@@ -64,7 +64,8 @@ function ordersSheet(m: EmpireModel): string {
 
 export function empireView(m: EmpireModel, boss: string | null, notice: string | null): string {
   const cards = m.cards.slice(0, 3).map((c, i) => card(c, i, m, boss)).join('');
-  const leave = `<div class="cta${m.leave.ok ? ' shine' : ''}" style="left:600px;top:20px;width:344px;height:36px;font-size:16px;z-index:8${m.leave.ok ? '' : ';filter:saturate(.3);opacity:.85'}"${act('emLeave')} data-testid="dom-empire-leave">${esc(m.leave.label)}</div>`;
+  // The way on sits in the key strip (the mockup's s10 strip has no CTA): L, lit once the region is Taken.
+  const leave = `<span class="key"${act('emLeave')} style="${m.leave.ok ? 'color:#8fffb0' : 'opacity:.6'}">L</span><span${act('emLeave')} data-testid="dom-empire-leave"${m.leave.ok ? '' : ' style="opacity:.6"'}>${esc(m.leave.label.replace(/\s*\(L\)\s*$/, ''))}</span>`;
   return stage(`
   <div class="layer" style="background:linear-gradient(180deg,#0b1030,#1a2458 55%,#2a3a78)"></div>
   <div class="stars twinkle" style="height:240px"></div>
@@ -73,8 +74,7 @@ export function empireView(m: EmpireModel, boss: string | null, notice: string |
   <svg class="a" style="left:0;top:0;z-index:2" width="960" height="540" viewBox="0 0 960 540" aria-hidden="true"><path d="M164 398 L 796 398" fill="none" stroke="#efd690" stroke-width="4" stroke-dasharray="2 12" stroke-linecap="round" opacity=".6"/></svg>
   <div class="pool" style="left:300px;top:380px;width:360px;height:60px;z-index:1;--pc:rgba(200,220,255,.35)"></div>
   <div class="ttl" style="--t1:#8a5a14;--t2:#d39c14" data-testid="dom-empire">${esc(m.title)} <span class="sub">· ${esc(m.sub)}</span></div>
-  <div class="keys">${WHEEL_KEY}<span class="key" style="color:#ffd23f" data-testid="dom-empire-tribute">${esc(m.tribute)}</span><span class="key">${esc(m.hereName)}</span><span>${esc(m.hereDay)}</span><span class="key"${act('back')}>G</span><span>close</span></div>
-  ${leave}
+  <div class="keys">${WHEEL_KEY}<span class="key" style="color:#ffd23f" data-testid="dom-empire-tribute">${esc(m.tribute)}</span><span class="key">${esc(m.hereName)}</span><span>${esc(m.hereDay)}</span>${leave}<span class="key"${act('back')}>G</span><span>close</span></div>
   ${cards}
   <div class="tbox" style="left:16px;top:410px;width:928px;height:116px;font-size:18px;line-height:1.5" data-testid="dom-empire-tbox"><span class="who">${esc(m.tbox.who)}</span>${esc(m.tbox.text)}<span class="more blink">▼</span></div>
   <div class="a cross" style="left:120px;top:388px;width:46px;height:20px;z-index:2;--x:120px"><i style="position:absolute;left:0;bottom:0;width:46px;height:9px;background:#0a1230;clip-path:polygon(0 0,100% 0,82% 100%,14% 100%)"></i><i style="position:absolute;left:20px;bottom:9px;width:3px;height:16px;background:#0a1230"></i><i style="position:absolute;left:23px;bottom:10px;width:14px;height:12px;background:#d8dff5;clip-path:polygon(0 0,100% 100%,0 100%)"></i></div>

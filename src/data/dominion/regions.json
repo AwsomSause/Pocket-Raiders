@@ -760,10 +760,14 @@
    "bring": "Who comes with you?",
    "bringNote": "One member, any rank. They keep everything. Everyone else stays with the Holder.",
    "go": "Sail for {next}",
-   "aceNote": "Your team stays to guard the old HQ. Only {ace} comes, as {pre}, Lv 15.",
+   "aceNote": "Your team stays to guard the old HQ. Only {ace} comes, as {pre}, Lv {level}.",
    "noMoney": "Money doesn't cross regions: you arrive with ₽1,000.",
    "cta": "Leave for {next} (L)",
-   "ctaLast": "Every region is yours"
-  }
+   "ctaLast": "Every region is yours",
+   "aceNoteSame": "Your team stays to guard the old HQ. Only {ace} comes, Lv {level}."
+  },
+  "boxFirst": "{region} first. Take it, and the next region waits across the water.",
+  "boxTaken": "{region} is yours. Pick who holds it, set their orders, and sail for {next} (L).",
+  "boxHeld": "{n} region(s) held behind you. Each week they pay tribute, and each week someone thinks about keeping it."
  }
 }

@@ -140,7 +140,8 @@ export function empireModel(b: DominionBlock, run: Pick<RunState, 'party'> | nul
   // The text box: the brought member's latest words, or the region's arrival, or how the empire stands.
   const said = R?.brought ? [...b.report].reverse().find((l) => l.startsWith(`${b.members.find((m) => m.id === R.brought)?.name ?? '§'}:`)) : undefined;
   const pack = DOMINION_DATA.packs[here];
-  const text = said ?? (pack && b.day <= 7 ? pack.arrive[0]! : R?.held.length ? `${R.held.filter((h) => h.status === 'held').length} region(s) held behind you. Each week they pay tribute, and each week someone thinks about keeping it.` : `${regionName(here)} first. Take it, and the next region waits across the water.`);
+  const text = said ?? (pack && b.day <= 7 ? pack.arrive[0]! : b.takeover?.taken && next ? fill(S.boxTaken!, { region: regionName(here), next: regionName(next) })
+    : R?.held.length ? fill(S.boxHeld!, { n: R.held.filter((h) => h.status === 'held').length }) : fill(S.boxFirst!, { region: regionName(here) }));
   const ordersHeld = ordersFor ? R?.held.find((h) => h.id === ordersFor) : undefined;
   const cur = draft ?? (ordersHeld?.orders as Orders | undefined) ?? defaultOrders();
   return {
@@ -188,7 +189,7 @@ export function leaveModel(b: DominionBlock, run: Pick<RunState, 'party'>, conte
     orderAt: s.orderAt,
     bring, bringAt: Math.min(s.bring, bring.length - 1),
     col: s.col, why: leaveProblem(b),
-    notes: [ace ? fill(L.aceNote!, { ace: aceName!, pre: pre! }) : RG().arrive.lines.noAce!, L.noMoney!, holder ? holder.note : ''],
+    notes: [ace ? fill(pre && pre !== aceName && pre !== content.species.get(ace.speciesId)?.name ? L.aceNote! : L.aceNoteSame!, { ace: aceName!, pre: pre!, level: RG().arrive.aceLevel }) : RG().arrive.lines.noAce!, L.noMoney!, holder ? holder.note : ''],
     go: next ? fill(L.go!, { next: regionName(next) }) : RG().screen.leave.ctaLast!,
   };
 }
