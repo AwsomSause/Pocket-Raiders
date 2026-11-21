@@ -271,6 +271,30 @@ describe('Pocket look: event pages', () => {
     expect(html).toContain('gx-many');
     expect(html).toContain('repeat(4,');
   });
+  it('an Evil Team stop gets its crest band, Heat lights and a choice list with each Heat change (mock-up et-beat)', () => {
+    const evil = { team: 'Team Rocket', letter: 'R', colour: '#e3350d', stop: 2, of: 7, heat: 3, heatMax: 10, ambushAt: 6, tags: [{ n: '+1', w: 'Heat' }, { n: '+1/+3', w: 'Heat' }, null] };
+    const talk = pkEvent({ ...base, evil });
+    expect(pkPageOf(talk)?.tier).toBe(51);
+    expect(talk).toContain('a-et');
+    expect(talk).toContain('<i class="em42" data-nocheck>R</i>');
+    expect(talk).toContain('Team Rocket</em>');
+    expect(talk).toContain('Stop 2 of 7');
+    expect((talk.match(/<s class="on">/g) ?? []).length).toBe(3);
+    expect((talk.match(/<s class="">/g) ?? []).length).toBe(7);
+    const pick = pkEvent({ ...base, evil, page: { at: 0, of: 1 } });
+    expect(pkPageOf(pick)?.id).toBe('ev-choice');
+    expect(pick).toContain('class="cw42"');
+    expect(pick).not.toContain('class="ch-row');
+    expect(pick).toContain('<u><b>+1/+3</b>Heat</u>');
+    expect((pick.match(/<u><b>/g) ?? []).length).toBe(2);
+    expect(pick).toContain('data-act="pick" data-arg="1"');
+    // Another team gets its own letter on the crest, never Rocket's drawn R.
+    const aqua = pkEvent({ ...base, evil: { ...evil, team: 'Team Aqua', letter: 'A', colour: '#2a75bb' } });
+    expect(aqua).toContain('>A</text>');
+    expect(aqua).not.toContain('M36,76');
+    // Without a team the band stays the plain event one.
+    expect(pkEvent(base)).not.toContain('a-et');
+  });
   it('a card says how risky or costly it is, and its notes are short points', () => {
     expect(dealOf('danger', base.choices[0]!)).toBe('risk');
     expect(dealOf('calm', base.choices[1]!)).toBe('cost');

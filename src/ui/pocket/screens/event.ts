@@ -12,7 +12,7 @@ import type { SetKind, Daypart } from '../../../core/presentation/eventVisuals';
 import { rxUrl as rxBg } from '../../redux/assets';
 import { changeParts, plainLook, type EventChoice, type EventLook, type EventModel } from '../../redux/screens/event';
 import { ballArt, itemArt, monArt, pkGone, type PkArt } from '../art';
-import { act, esc, hp, keys, page, type PkKey, spr, sprH } from '../kit';
+import { act, esc, hp, keys, page, pct, type PkKey, spr, sprH } from '../kit';
 import { fit, fitBody, fitPic, pkArtOf } from '../templates';
 import type { PkCue } from './cards';
 
@@ -64,11 +64,31 @@ export function points(sub: string, max: number): string[] {
   return sub.split(/(?<=[.!?;])\s+/).map((s) => s.replace(/[.;]$/, '').trim()).filter(Boolean).slice(0, max);
 }
 
-const root = (cls: string, cue: PkCue): string =>
-  `<div class="scr event e9 ${cls} gx-cue gx-ev is-${cue}" data-key="ev" style="--pk-in:${PK_EVENT_TIMES.in}s;--pk-out:${PK_EVENT_TIMES.out}s">`;
+const root = (cls: string, cue: PkCue, evil = false): string =>
+  `<div class="scr event e9 ${cls}${evil ? EVIL : ''} gx-cue gx-ev is-${cue}" data-key="ev" style="--pk-in:${PK_EVENT_TIMES.in}s;--pk-out:${PK_EVENT_TIMES.out}s">`;
+
+/** The pass classes an Evil Team stop carries so the new-area rules (Master Cut) draw it, as mock-up `et-beat` does. */
+const EVIL = ' et27 ar28 a-et cs37 oh38 ms39 nb40 fc41 pb42 sd43 mo44 fd45 be46 li47 de48 ri49 cf50 mc51';
+/** The team's crest: a shield with Rocket's drawn R, or another team's first letter. */
+function crest(e: NonNullable<EventModel['evil']>): string {
+  const mark = e.letter === 'R' && /rocket/i.test(e.team)
+    ? `<path d="M36,76 V26 H56 Q70,26 70,40 Q70,52 56,53 H36 M54,53 L70,76" fill="none" stroke="${esc(e.colour)}" stroke-width="10" stroke-linejoin="round"></path>`
+    : `<text x="50" y="72" text-anchor="middle" font-size="58" font-family="Jersey 15, Pixelify Sans, sans-serif" fill="${esc(e.colour)}">${esc(e.letter)}</text>`;
+  return `<svg class="cr50" viewBox="0 0 100 100" style="width:46px;height:46px" data-nocheck><polygon points="50,4 92,24 84,78 50,96 16,78 8,24" fill="#14161d" stroke="${esc(e.colour)}" stroke-width="5" stroke-linejoin="round"></polygon>${mark}</svg>`;
+}
+/** An Evil Team stop's band (mock-up `et-beat`): the crest and team, the place, which stop, the Heat bar; the team's letter on the wall and the Heat lights. */
+function evilBand(d: EventModel): string {
+  const e = d.evil!, at = d.name;
+  const lights = Array.from({ length: e.heatMax }, (_, i) => `<s class="${i < e.heat ? 'on' : ''}"></s>`).join('');
+  return `<i class="em42" data-nocheck>${esc(e.letter)}</i>`
+    + `<div class="ev-where" data-m="hdr" data-key="ev-where"><em>${crest(e)}${esc(e.team)}</em><b style="font-size:${fit(at, 260, 20, 14, 0.55)}px">${esc(at)}</b><span>Stop ${e.stop} of ${e.of}</span>`
+    + `<span class="heat38" data-key="ev-heat">Heat<i><u style="width:${pct(e.heat, e.heatMax)}%"></u><s style="left:${pct(e.ambushAt, e.heatMax)}%"></s></i><strong>${e.heat}</strong>of ${e.heatMax}</span></div>`
+    + `<div class="hm49" data-key="ev-lights" title="${e.heat < e.ambushAt ? `Ambush at ${e.ambushAt}` : 'Ambushes on'}"><b>Heat</b>${lights}</div>`;
+}
 
 /** The band at the top left: the event's tag, its name, and where it happens. */
 function where(d: EventModel, L: EventLook): string {
+  if (d.evil) return evilBand(d);
   const p = d.place, sky = L.scene.weather && L.scene.weather !== 'sparkle' && L.scene.weather !== 'glint' ? L.scene.weather.charAt(0).toUpperCase() + L.scene.weather.slice(1) : '';
   const at = [p ? `${p.region}${p.of ? ` · Stage ${p.no}` : ''}` : '', p?.sub ?? '', sky].filter(Boolean).join(' · ');
   const urgent = d.timer !== null && d.timer < 0.25 ? ' urgent' : '';
@@ -110,7 +130,7 @@ function cast(d: EventModel, L: EventLook, glow: boolean): string {
 function bar(d: EventModel, L: EventLook, go: string, waits: boolean): string {
   const who = L.speaking >= 0 ? pkArtOf(L.cast[L.speaking]) : null, text = pageText(d);
   const fail = d.outcome && !d.outcome.ok ? '<b class="gx-ev-fail">It didn’t go your way… </b>' : '';
-  const size = fitBody(text + (fail ? ' It didn’t go your way… ' : ''), d.speaker ? 700 : 820, 86, [17, 16, 15, 14, 13, 12], 1.45);
+  const size = fitBody(text + (fail ? ' It didn’t go your way… ' : ''), d.evil ? 440 : d.speaker ? 700 : 820, 86, [17, 16, 15, 14, 13, 12], 1.45);
   const lines = d.lines.map((l) => (l.who === null || l.who === d.speaker ? esc(l.text) : `<b class="gx-ev-who">${esc(l.who)}</b> ${esc(l.text)}`)).join('<br>');
   const pg = d.page.of > 1 ? `<small class="gx-ev-pg">${d.page.at + 1}/${d.page.of}</small>` : '';
   return `<div class="tb${d.speaker ? ' sp' : ''} talk" data-m="tb" data-key="ev-tb"${go}>${d.speaker && who ? `<i class="por">${sprH(who, 154)}</i>` : ''}${d.speaker ? `<b class="tb-w">${esc(d.speaker)}</b>` : ''}<p style="font-size:${size}px">${fail}${lines}</p>${waits ? `<em class="tb-go">${pg}<kbd>Enter</kbd></em>` : pg ? `<em class="tb-go">${pg}</em>` : ''}</div>`;
@@ -149,6 +169,15 @@ function rewards(d: EventModel, L: EventLook, changes: readonly string[]): strin
   return `<div class="erw-h" data-key="ev-rw-h"><b>${d.outcome?.ok && good ? 'You received' : 'What changed'}</b></div><div class="erw-row${small ? ' gx-small' : ''}" data-key="ev-rw" style="--cols:${cols}">${cardsHtml}</div>`;
 }
 
+/** An Evil Team stop's choices (mock-up `et-beat`): a short list by the text bar, each with what it does to the Heat. The scene stays. */
+function evilChoices(d: EventModel, ch: readonly EventChoice[]): string {
+  const tags = d.evil?.tags ?? [];
+  return `<div class="cw42" data-m="choices" data-key="ev-cw">${ch.map((x, k) => {
+    const t = tags[k] ?? null, label = x.label.replace(/\.$/, '');
+    return `<div class="${k === d.index ? 'on' : ''}${x.locked ? ' gx-off' : ''}" data-key="ev-ch-${k}" title="${esc(x.sub)}"${act('pick', k, 'over')}><b style="font-size:${fit(label, t ? 220 : 300, 19, 12, 0.5)}px">${esc(label)}</b>${t ? `<u><b>${esc(t.n)}</b>${esc(t.w)}</u>` : ''}</div>`;
+  }).join('')}</div>`;
+}
+
 /** The Pokémon picker of a trade or a gift: the list, and for a trade both sides of it. */
 function picker(d: EventModel): string {
   const p = d.pick;
@@ -167,7 +196,7 @@ export function pkEvent(d: EventModel, cue: PkCue = 'in'): string {
   const back: PkKey[] = d.page.at > 0 && !out ? [['Esc', 'read back', 'page', -1]] : [];
   const extra: PkKey[] = [...(d.rounds ? [['B', 'bracket', 'bracket'] as const] : []), ...(d.cardHint ? [['T', 'trade card', 'card'] as const] : []), ...(d.teamHint ? [['R', 'their team', 'team'] as const] : [])];
   if (out?.step === 'rewards') {
-    return page('ev-reward', 26, root('erw', cue) + bg + where(d, L) + beats(3) + rewards(d, L, out.changes)
+    return page('ev-reward', d.evil ? 51 : 26, root('erw', cue, !!d.evil) + bg + where(d, L) + beats(3) + rewards(d, L, out.changes)
       + `<div class="tb talk" data-m="tb" data-key="ev-tb"${act('next')}><p>The rewards stay on screen until you press Enter.</p><em class="tb-go"><kbd>Enter</kbd></em></div>`
       + keys([['Enter', out.next.toLowerCase(), 'next']]) + '</div>');
   }
@@ -177,14 +206,19 @@ export function pkEvent(d: EventModel, cue: PkCue = 'in'): string {
     return page('event', 26, root('gx-dark', cue) + face + bar(d, L, more ? act('page', 1) : '', true) + keys([['Enter', 'next', more ? 'page' : undefined, more ? 1 : undefined]]) + '</div>');
   }
   if (ch.length) {
+    if (d.evil) {
+      // An Evil Team stop keeps its scene: the choices sit in a list by the text bar (mock-up `et-beat`).
+      return page('ev-choice', 51, root('', cue, true) + bg + where(d, L) + beats(1) + extras(d) + cast(d, L, false) + evilChoices(d, ch) + bar(d, L, '', false) + picker(d)
+        + keys([['↑↓', 'choose'], ['Enter', 'confirm', 'pick', d.index], ...back, ...extra]) + '</div>');
+    }
     // The choice: the scene steps back, the cards come up and the question stays in the text bar.
-    return page('ev-choice', 26, root('ec26 ech', cue) + bg + where(d, L) + beats(1) + extras(d) + cards(d, L, ch) + bar(d, L, '', false) + picker(d)
+    return page('ev-choice', d.evil ? 51 : 26, root('ec26 ech', cue, !!d.evil) + bg + where(d, L) + beats(1) + extras(d) + cards(d, L, ch) + bar(d, L, '', false) + picker(d)
       + keys([['←→', 'move'], ['Enter', 'choose', 'pick', d.index], ...back, ...extra]) + '</div>');
   }
   // The talk, and the outcome's text.
   const label = more ? 'next' : out ? (out.changes.length ? 'continue' : out.next.toLowerCase()) : 'next';
   const go = out ? act('next') : more ? act('page', 1) : '';
-  return page(out ? 'ev-result' : 'event', 26, root(out ? 'ers' : '', cue) + bg + where(d, L) + beats(out ? 2 : 0) + extras(d) + cast(d, L, !!out)
+  return page(out ? 'ev-result' : 'event', d.evil ? 51 : 26, root(out ? 'ers' : '', cue, !!d.evil) + bg + where(d, L) + beats(out ? 2 : 0) + extras(d) + cast(d, L, !!out)
     + bar(d, L, go, true) + picker(d) + (go ? `<div class="gx-hit gx-ev-hit"${go}></div>` : '')
     + keys([['Enter', label, out ? 'next' : more ? 'page' : undefined, more && !out ? 1 : undefined], ...back, ...extra]) + '</div>');
 }

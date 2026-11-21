@@ -414,6 +414,27 @@ export class EventScene extends Phaser.Scene {
             })(),
             team: teamPage(),
             teamHint: !!view.team && this.phase === 'choose' && !out,
+            evil: (() => {
+              // Pocket look: an Evil Team stop gets the team's band and Heat (mock-up `et-beat`).
+              const ev = (r?.run ?? run).story.evil;
+              const t = ev.teamId && view.event.id.startsWith(`evil-${ev.teamId}-`) ? content.evilTeams.teams.find((x) => x.id === ev.teamId) : undefined;
+              if (!t) return null;
+              const word = t.name.replace(/^Team\s+/i, '');
+              const cfg = content.evilTeams.config;
+              // Each choice's Heat as its effects say: the same both ways, or both numbers when a failure costs more.
+              const heatOf = (o?: { effects?: readonly { kind: string }[] }): number | null => {
+                const fx = o?.effects?.find((x): x is { kind: 'evil'; heat: number } => x.kind === 'evil');
+                return fx ? fx.heat : null;
+              };
+              const sign = (n: number): string => (n > 0 ? `+${n}` : `${n}`);
+              const tags = view.event.choices.map((c) => {
+                const a = heatOf(c.success), b = c.failure ? heatOf(c.failure) : a;
+                if (a === null && b === null) return null;
+                const x = a ?? 0, y = b ?? 0;
+                return { n: x === y ? sign(x) : `${sign(x)}/${sign(y)}`, w: 'Heat' };
+              });
+              return { team: t.name, letter: word.charAt(0).toUpperCase(), colour: t.color, stop: Math.max(1, Math.min(7, ev.beat + (out ? 0 : 1))), of: 7, heat: ev.heat, heatMax: cfg.heatMax, ambushAt: cfg.ambushAt, tags };
+            })(),
             cardHint: eventCard !== null && this.phase === 'choose' && !out,
             bracket: tv && this.rxBracket !== null ? tourneyPage(tv, (sp) => monFile(this, sp), this.rxBracket, 'Saffron Fighting Tournament') : null,
             title: champion ? 'CHAMPION' : null,

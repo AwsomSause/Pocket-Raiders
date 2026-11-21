@@ -91,6 +91,8 @@ export interface EventModel {
   /** gn.new.29: the rival's team as a page of its own (R opens it, Enter closes it), and whether the rival's scene has one to read. */
   team?: TeamModel | null;
   teamHint?: boolean;
+  /** Pocket look: an Evil Team stop (mock-up `et-beat`): the team, its letter and colour, which of its seven stops this is, and its Heat. */
+  evil?: { team: string; letter: string; colour: string; stop: number; of: number; heat: number; heatMax: number; ambushAt: number ; /** Per choice: what it does to the team's Heat (`n` is "+1", "0"...), or null when it doesn't touch the team. */ tags: ({ n: string; w: string } | null)[] } | null;
   /** A department store floor (mock-up `store`): the floor directory with this floor lit, the party, and a note per Pokémon for each choice (who a good helps). */
   store?: { title: string; clerk: string; floors: { tag: string; name: string; on: boolean }[]; party: PartyChip[]; notes: string[][] } | null;
   /** Phantom UI: which stage of which region this is and the hour, for the big stage number. */
