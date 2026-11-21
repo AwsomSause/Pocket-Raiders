@@ -464,7 +464,9 @@ test('level up: two hops, the LEVEL stamp springs out and lifts away, and the Po
     b.events.on('update', w.__lvWatch);
     b.levelUpMoment(12);
   });
-  await page.waitForTimeout(2200);
+  // The clip is 1.7 s of game time; a slow runner's game clock runs behind the wall clock, so wait for the stamp to go.
+  await page.waitForTimeout(1700);
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.list.filter((c: any) => c.name === 'level-stamp').length), { timeout: 5000 }).toBe(0);
   const seen = await page.evaluate(() => {
     const w = window as any;
     const b = w.__pkr.game.scene.getScene('Battle');
@@ -1133,6 +1135,8 @@ test('charge-up and recharge: CHARGING chip and glow until the release; spent sa
   await page.waitForTimeout(600);
   const back = await page.evaluate(() => { const b = (window as any).__pkr.game.scene.getScene('Battle'); return { sy: b.playerSprite.scaleY, dy: b.playerSprite.y - b.spotXY('player').y }; });
   expect(back.sy).toBeGreaterThan(size * 0.96);
+  // Back to the height it stood at: not a little smaller, not a little bigger (the sag is undone exactly).
+  expect(back.sy).toBeLessThan(size * 1.05);
   expect(Math.abs(back.dy)).toBeLessThan(3);
   expect(errors).toEqual([]);
 });
@@ -1361,5 +1365,56 @@ test("winner's moment: after a knock-out your Pokémon hops and spins, a note an
   expect(ms).toBeGreaterThan(1300);
   expect(await look(page, 'player')).toMatchObject({ x: rest.homeX, y: rest.homeY, alpha: 1, angle: 0, solid: 0 });
   expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.list.filter((o: any) => o.type === 'Text' && (o.text === '♪' || o.text === '♥')).length)).toBe(0);
+  expect(errors).toEqual([]);
+});
+
+test('toughed it out: the bar catches at 1, it skids back and shakes, plants its feet and glows, HUNG ON! and a heart; home after', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  await startBattle(page, 'tough-e2e');
+  const rest = await look(page, 'player');
+  const fx0 = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').playerSprite.preFX?.list?.length ?? 0);
+  await page.evaluate(() => {
+    const w = window as any;
+    const b = w.__pkr.game.scene.getScene('Battle');
+    const home = b.spotXY('player').x;
+    w.__tough = { skid: 0, stamp: false, heart: false, glow: 0 };
+    w.__toughWatch = () => {
+      const v = b.playerSprite;
+      w.__tough.skid = Math.max(w.__tough.skid, home - v.x);
+      w.__tough.stamp ||= b.children.list.some((o: any) => o.texture?.key === 'stamp.HUNG ON!.#ffcb05');
+      w.__tough.heart ||= b.children.list.some((o: any) => o.type === 'Text' && o.text === '♥');
+      w.__tough.glow = Math.max(w.__tough.glow, v.preFX?.list?.length ?? 0);
+    };
+    b.events.on('update', w.__toughWatch);
+  });
+  await page.evaluate(async () => {
+    const w = window as any;
+    const b = w.__pkr.game.scene.getScene('Battle');
+    b.say = async () => {};
+    b.sayTrainer = async () => {};
+    const mon = b.shown.player;
+    mon.hp = Math.max(mon.hp, 10);
+    // The run agrees: it hangs on at 1 HP (the screen re-reads the run when the turn's events end).
+    const live = w.__pkr.session.run.party.find((m: any) => m.uid === mon.uid);
+    if (live) live.hp = 1;
+    await b.playEvents([{ type: 'damage', side: 'player', amount: mon.hp - 1, hpAfter: 1, effectiveness: 1 }], structuredClone(w.__pkr.session.run), null);
+  });
+  await page.waitForTimeout(2000);
+  const t = await page.evaluate(() => {
+    const w = window as any;
+    w.__pkr.game.scene.getScene('Battle').events.off('update', w.__toughWatch);
+    return w.__tough;
+  });
+  expect(t.skid).toBeGreaterThan(25);
+  expect(t).toMatchObject({ stamp: true, heart: true });
+  // At 1 HP it is worn out too: the slump's dull colour plus the gold glow.
+  expect(t.glow).toBe(fx0 + 2);
+  // Home again, whole, the glow gone; still slumped (worn out) at 1 HP.
+  const end = await look(page, 'player');
+  expect(end).toMatchObject({ x: rest.homeX, alpha: 1, solid: 0 });
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').playerSprite.getData('sag') !== undefined)).toBe(true);
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').playerSprite.preFX?.list?.length ?? 0)).toBe(fx0 + 1);
   expect(errors).toEqual([]);
 });

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ClipBuilder, clipEnd, EASES, fxAllowed, sampleClip, type ClipLevel, type MotionClip } from '../../src/core/presentation/motionClip';
-import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_KNOCK, HIT_KNOCK_BIG, hitClip, hitPower, HIT_THROW, FIRST_TAG, COMBO, comboPlan, comboScale, CRIT_FREEZE, critFreezeClip, HIT_STAMPS, hitStampSpot, levelUpClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, sendWeight, SEND_WEIGHT, CRY, cryClip, FLINCH, flinchClip, WIN, winClip, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_KNOCK, HIT_KNOCK_BIG, hitClip, hitPower, HIT_THROW, FIRST_TAG, COMBO, comboPlan, comboScale, CRIT_FREEZE, critFreezeClip, HIT_STAMPS, hitStampSpot, levelUpClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, sendWeight, SEND_WEIGHT, CRY, cryClip, FLINCH, flinchClip, WIN, winClip, TOUGH, toughClip, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
 
 const ME: MonSpot = { x: 312, y: 428, h: 180, side: 'player' };
 const FOE: MonSpot = { x: 648, y: 240, h: 150, side: 'enemy' };
@@ -435,6 +435,33 @@ describe("winner's moment (pass 11)", () => {
     const off = winClip(ME, false, 'off');
     expect(off.length).toBe(0);
     expect(cues(off)).toEqual([['free', 0]]);
+  });
+});
+
+describe('toughed it out (pass 11)', () => {
+  const cues = (c: MotionClip) => c.fx.filter((f) => f.kind === 'cue').map((f) => f.kind === 'cue' && [f.name, f.at]);
+  it('skids back, drops low and shakes, then plants its feet, glows, HUNG ON! and a heart', () => {
+    const c = toughClip(ME, 'full');
+    expect(sampleClip(c, 300).mon!.dx).toBeCloseTo(-40);
+    expect(sampleClip(c, 600).mon!.sy).toBeCloseTo(0.8);
+    const shiver = [633, 666, 700].map((t) => sampleClip(c, t).mon!.dx);
+    expect(shiver[0]).toBeCloseTo(-37);
+    expect(shiver[1]).toBeCloseTo(-43);
+    expect(shiver[2]).toBeCloseTo(-40);
+    expect(sampleClip(c, 1300).mon!.dx).toBeCloseTo(-40);
+    expect(clipEnd(c).mon).toMatchObject({ dx: 0, sy: 1 });
+    expect(cues(c)).toEqual([['spark', 650], ['glow', 1400], ['free', 1400], ['stamp', 1500], ['heart', 2000]]);
+    expect(c.length).toBe(2400);
+  });
+  it('the foe skids the other way', () => {
+    expect(sampleClip(toughClip(FOE, 'full'), 300).mon!.dx).toBeCloseTo(40);
+  });
+  it('Reduced: a dip and the stamp; Off: nothing, and the battle goes on at once', () => {
+    const r = toughClip(ME, 'reduced');
+    expect(sampleClip(r, 200).mon!.sy).toBeCloseTo(0.85);
+    expect(cues(r)).toEqual([['stamp', 0], ['free', 450]]);
+    expect(r.segs.some((g) => g.prop === 'dx')).toBe(false);
+    expect(cues(toughClip(ME, 'off'))).toEqual([['free', 0]]);
   });
 });
 

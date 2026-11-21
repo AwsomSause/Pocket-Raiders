@@ -816,3 +816,45 @@ export function winClip(mon: MonSpot, heavy: boolean, level: ClipLevel): MotionC
   b.beat(WIN.noteAt, 'A note pops out').beat(WIN.free, 'Leans toward you').beat(WIN.heartAt, 'A heart');
   return b.end(WIN.free + 1100);
 }
+
+/** Toughed it out (pass 11): the moments ("free" lets the battle go on) and where the heart pops. */
+export const TOUGH = { skid: 40, spark: 650, plant: 1400, stamp: 1500, heart: 2000, glow: 0xffcb05, heartDx: -70, heartDy: -70 } as const;
+
+/**
+ * Toughed it out (pass 11): its bar has caught at a single point. It skids back 40 px with dust, drops low and shakes
+ * ("spark": the bar catches with a spark), then plants its feet: it springs up, steps back home and glows gold for a
+ * heartbeat ("glow"), the HUNG ON! stamp lands ("stamp") and a heart floats up toward you ("heart"). Reduced: it dips
+ * and stands, with the stamp. Off: nothing.
+ */
+export function toughClip(mon: MonSpot, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('tough', level);
+  const m = b.part('mon', { dx: 0, sy: 1 });
+  if (level === 'off') {
+    b.fx({ kind: 'cue', at: 0, name: 'free' });
+    return b.end(0);
+  }
+  if (level === 'reduced') {
+    m.at(0).to(200, { sy: 0.85 }, 'out').to(250, { sy: 1 }, 'out');
+    b.fx({ kind: 'cue', at: 0, name: 'stamp' });
+    b.fx({ kind: 'cue', at: 450, name: 'free' });
+    b.beat(0, 'Dips and stands');
+    return b.end(450);
+  }
+  const d = mon.side === 'player' ? 1 : -1;
+  const back = -TOUGH.skid * d;
+  m.at(0).to(300, { dx: back }, 'out3');
+  b.fx({ kind: 'dust', at: 50, x: mon.x + back + 30 * d, y: mon.y, n: 10 });
+  m.at(300).to(300, { sy: 0.8 }, 'out');
+  // It shakes where it crouches: seven quick shivers.
+  m.at(600);
+  for (let i = 0; i < 7; i++) m.to(33, { dx: back + 3 }).to(33, { dx: back - 3 }).to(34, { dx: back });
+  b.fx({ kind: 'cue', at: TOUGH.spark, name: 'spark' });
+  m.at(TOUGH.plant).to(200, { sy: 1.06 }, 'back').to(200, { sy: 1 });
+  m.at(TOUGH.plant).to(300, { dx: 0 }, 'back');
+  b.fx({ kind: 'cue', at: TOUGH.plant, name: 'glow' });
+  b.fx({ kind: 'cue', at: TOUGH.plant, name: 'free' });
+  b.fx({ kind: 'cue', at: TOUGH.stamp, name: 'stamp' });
+  b.fx({ kind: 'cue', at: TOUGH.heart, name: 'heart' });
+  b.beat(0, 'Skids back').beat(300, 'Drops low and shakes').beat(TOUGH.spark, 'The bar catches').beat(TOUGH.plant, 'Plants its feet and glows').beat(TOUGH.heart, 'A heart for you');
+  return b.end(TOUGH.plant + 1000);
+}

@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { confirmUntil } from './battleInput';
+import { confirmToMenu, confirmUntil } from './battleInput';
 
 // Overhaul slice 9: the first Hyper moment stops the battle with an explanation that needs Continue; it shows only once.
 
@@ -31,7 +31,8 @@ test('the first Hyper moment explains itself and waits for Continue; the second 
     game.scene.getScenes(true)[0].scene.start('Battle');
   });
   await waitForScene(page, 'Battle');
-  await page.waitForTimeout(1500);
+  // The opening (send-outs, landings, cries) plays first; on a slow runner it outlasts a fixed wait, so wait for the menu.
+  await confirmToMenu(page);
   for (let i = 0; i < 6 && (await page.evaluate(() => (window as any).__pkr.session.run.battle?.turn)) === 1; i++) {
     await page.keyboard.press('Enter');
     await page.waitForTimeout(600);

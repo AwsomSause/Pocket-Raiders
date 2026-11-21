@@ -131,7 +131,7 @@ import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel, MotionClip } from '../core/presentation/motionClip';
-import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, COMBO, comboPlan, comboScale, FIRST_TAG, OHKO_STAMP, type ComboStep, CRIT_FREEZE, critFreezeClip, HIT_LIGHT, HIT_STAMPS, hitStampSpot, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendWeight, CRY, cryClip, FLINCH, flinchClip, WORN, WIN, winClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, COMBO, comboPlan, comboScale, FIRST_TAG, OHKO_STAMP, type ComboStep, CRIT_FREEZE, critFreezeClip, HIT_LIGHT, HIT_STAMPS, hitStampSpot, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendWeight, CRY, cryClip, FLINCH, flinchClip, WORN, WIN, winClip, TOUGH, toughClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart, type ClipRun } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
@@ -2310,7 +2310,8 @@ export class BattleScene extends Phaser.Scene {
         if (cm) dull(cm, 1);
         return;
       }
-      this.tweens.add({ targets: v, ...to, duration: WORN.inMs * rate, ease: 'Sine.easeInOut', onComplete: () => v.active && v.getData('sag') && stand(this, v, 'steady', true, 0, WORN.breathMs, to.y) });
+      const tw = this.tweens.add({ targets: v, ...to, duration: WORN.inMs * rate, ease: 'Sine.easeInOut', onComplete: () => v.active && v.getData('sag') && stand(this, v, 'steady', true, 0, WORN.breathMs, to.y) });
+      v.setData('sag', { ...base, cm, sweat, settle: () => (tw.stop(), v.active && v.setPosition(home.x, to.y).setAngle(to.angle).setScale(to.scaleX, to.scaleY)) });
       if (cm) this.tweens.addCounter({ from: 0, to: 1, duration: WORN.inMs * rate, onUpdate: (c) => dull(cm, c.getValue() ?? 1) });
       return;
     }
@@ -2373,6 +2374,52 @@ export class BattleScene extends Phaser.Scene {
           if (name === 'stamp') this.wxShake(8, 300);
           if (name === 'note') this.popGlyph('♪', mid.x + WIN.noteDx, mid.y + WIN.noteDy, '#ffcb05', 54, 500, 50);
           if (name === 'heart') this.popGlyph('♥', mid.x + WIN.heartDx, mid.y + WIN.heartDy, '#ff8ab0', 44, 600, 40);
+        });
+      });
+    } catch {
+      return Promise.resolve();
+    }
+  }
+
+  /**
+   * Toughed it out (redesign pass 11): your Pokémon's bar has caught at 1. It skids back and drops low, shaking; the
+   * bar sparks; then it plants its feet, glows gold for a heartbeat, HUNG ON! lands and a heart floats up toward you.
+   * Resolves once the battle may go on. Presentation only.
+   */
+  private toughMoment(): Promise<void> {
+    const sprite = this.condSprite('player');
+    const mon = this.shown.player;
+    const level = this.clipLevel();
+    if (!sprite || !sprite.visible || !mon || level === 'off') return Promise.resolve();
+    try {
+      const spot = { ...this.spotXY('player'), h: this.headHeight(sprite), side: 'player' as const };
+      const mid = this.midOf('player');
+      const rate = animationTimeScale(services().session.settings);
+      return new Promise<void>((free) => {
+        this.condPlay(sprite, toughClip(spot, level), {}, (cut) => {
+          free();
+          if (cut || !sprite.active) return;
+          this.restAt(sprite, 'player');
+          if (sprite.visible) this.standUp(sprite, mon);
+        }, (name) => {
+          if (name === 'free') free();
+          if (name === 'stamp') {
+            const at = hitStampSpot('player', mid);
+            this.wxStamp('HUNG ON!', '#ffcb05', '#131c36', Phaser.Math.Clamp(at.x, 110, GAME_WIDTH - 110), at.y, false);
+          }
+          if (name === 'heart') this.popGlyph('♥', mid.x + TOUGH.heartDx, mid.y + TOUGH.heartDy, '#ff8ab0', 44, 800, 60);
+          if (name === 'spark') {
+            const c = this.playerBox?.container;
+            const at = c?.visible ? { x: c.x + 150, y: c.y + 68 } : { x: 212, y: 506 };
+            const star = this.add.star(at.x, at.y, 4, 4, 22, 0xffcb05).setDepth(4001).setScale(0);
+            this.tweens.chain({ targets: star, tweens: [{ scale: 1, angle: 45, duration: 150 * rate, ease: 'Back.easeOut' }, { scale: 0, alpha: 0, duration: 250 * rate }], onComplete: () => star.destroy() });
+            this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => star.active && star.destroy());
+          }
+          if (name === 'glow' && sprite.preFX) {
+            const glow = sprite.preFX.addGlow(TOUGH.glow, 0, 0, false, 0.1, 12);
+            const drop = (): void => void (sprite.active && sprite.preFX?.remove(glow as unknown as Phaser.FX.Controller));
+            this.tweens.chain({ targets: glow, tweens: [{ outerStrength: 4, duration: 200 * rate }, { outerStrength: 0, delay: 500 * rate, duration: 500 * rate }], onComplete: drop, onStop: drop });
+          }
         });
       });
     } catch {
@@ -5070,8 +5117,7 @@ export class BattleScene extends Phaser.Scene {
       this.hold[side] = look;
       look.startSpent(level === 'full' ? SPENT.inMs : 0);
       look.showChip();
-      const ms = this.spentSag(sprite, side, true);
-      this.time.delayedCall(ms, () => {
+      this.spentSag(sprite, side, true, () => {
         const mon = this.shown[side];
         if (mon && this.hold[side] === look && sprite.active && sprite.visible) this.standUp(sprite, mon);
       });
@@ -5089,8 +5135,7 @@ export class BattleScene extends Phaser.Scene {
     const spent = look.kind === 'spent';
     const done = look.release();
     if (spent && sprite.active) {
-      const ms = this.spentSag(sprite, side, false);
-      this.time.delayedCall(ms, () => {
+      this.spentSag(sprite, side, false, () => {
         const mon = this.shown[side];
         if (mon && sprite.active && sprite.visible && sprite === this.condSprite(side) && !this.hold[side]) this.standUp(sprite, mon);
       });
@@ -5114,20 +5159,40 @@ export class BattleScene extends Phaser.Scene {
     }
   }
 
-  /** A spent Pokémon sags 90% tall and 4 px down (on), or springs back up (off). */
-  private spentSag(sprite: Phaser.GameObjects.Sprite, side: Side, on: boolean): number {
-    if (!!sprite.getData('spentSag') === on) return 0;
+  /**
+   * A spent Pokémon sags 90% tall and 4 px down (on), or springs back up to the height it stood at (off). `then` runs
+   * once it has got there (never from halfway: standing takes its size from the size it has then).
+   */
+  private spentSag(sprite: Phaser.GameObjects.Sprite, side: Side, on: boolean, then?: () => void): void {
+    if (!!sprite.getData('spentSag') === on) return;
     standStill(this, sprite);
+    // The sag still settling in stops where it is: the spring back up goes to the height it stood at before.
+    const old = sprite.getData('spentTween') as Phaser.Tweens.Tween | Phaser.Tweens.TweenChain | undefined;
+    sprite.setData('spentTween', undefined);
+    old?.stop();
     sprite.setData('spentSag', on);
+    if (on) sprite.setData('spentBase', sprite.scaleY);
+    const base = (sprite.getData('spentBase') as number | undefined) ?? sprite.scaleY / SPENT.sy;
     const y = this.spotXY(side).y + (on ? SPENT.dy : 0);
-    const sy = on ? sprite.scaleY * SPENT.sy : sprite.scaleY / SPENT.sy;
+    const sy = on ? base * SPENT.sy : base;
     if (this.clipLevel() !== 'full') {
       sprite.setY(y).setScale(sprite.scaleX, sy);
-      return 0;
+      then?.();
+      return;
     }
-    if (on) this.tweens.add({ targets: sprite, y, scaleY: sy, duration: SPENT.inMs, ease: 'Sine.easeInOut' });
-    else this.tweens.chain({ targets: sprite, tweens: [{ y, scaleY: sy * 1.05, duration: 200, ease: 'Back.easeOut' }, { scaleY: sy, duration: 200 }] });
-    return on ? SPENT.inMs : 400;
+    // Arrives once: at the end, or when something else stops it (but not when the next sag replaces it).
+    let tw: Phaser.Tweens.Tween | Phaser.Tweens.TweenChain | undefined;
+    const arrive = (): void => {
+      if (!tw || sprite.getData('spentTween') !== tw) return;
+      sprite.setData('spentTween', undefined);
+      if (!sprite.active) return;
+      sprite.setY(y).setScale(sprite.scaleX, sy);
+      then?.();
+    };
+    tw = on
+      ? this.tweens.add({ targets: sprite, y, scaleY: sy, duration: SPENT.inMs, ease: 'Sine.easeInOut', onComplete: arrive, onStop: arrive })
+      : this.tweens.chain({ targets: sprite, tweens: [{ y, scaleY: sy * 1.05, duration: 200, ease: 'Back.easeOut' }, { scaleY: sy, duration: 200 }], onComplete: arrive, onStop: arrive });
+    sprite.setData('spentTween', tw);
   }
 
   /** Recoil (pass 12): a crack runs back from the target, the user flashes the move's colour, winces, RECOIL. */
@@ -5237,6 +5302,8 @@ export class BattleScene extends Phaser.Scene {
 
   /** Plays a condition clip on the Pokémon; `after` runs when it ends (or is cut short by another moment). */
   private condPlay(sprite: Phaser.GameObjects.Sprite, clip: MotionClip, parts: Record<string, ClipPart>, after: (cut: boolean) => void, cue?: (name: string) => void): void {
+    // A slump still settling in finishes now, so it never stands up (and stops this) halfway through.
+    (sprite.getData('sag') as { settle?: () => void } | undefined)?.settle?.();
     standStill(this, sprite);
     const run = playClip(this, clip, this.clipHost({ mon: { kind: 'mon', get: () => sprite }, ...parts }, cue ? { cue } : {}));
     let cut = false;
@@ -7873,6 +7940,7 @@ export class BattleScene extends Phaser.Scene {
           if (e.type === 'damage' && e.crit && !froze) critLetterbox(this, session.settings.critLetterbox, this.motion);
           if (e.type === 'damage' && (e.crit || e.effectiveness >= 2) && !(e.crit && (froze || (e.side === 'enemy' && session.settings.skillPrompts)))) this.cameraMove(e);
           if (e.type === 'damage' && e.crit && e.side === 'enemy' && session.settings.skillPrompts && sprite) await critFreeze(this, { x: sprite.x, y: sprite.y }, this.motion);
+          const hpWas = mon!.hp;
           mon!.hp = e.hpAfter;
           if (e.type !== 'drain' && e.type !== 'heal') {
             playSfx(this, e.type === 'damage' && e.effectiveness > 1 ? 'se.hit_strong' : e.type === 'damage' && e.effectiveness < 1 ? 'se.hit_weak' : 'se.hit');
@@ -7880,6 +7948,8 @@ export class BattleScene extends Phaser.Scene {
             if (sprite && e.type !== 'damage' && battleAnimations !== 'off') this.tweens.add({ targets: sprite, alpha: 0.2, yoyo: true, repeat: 2, duration: 70 });
           }
           await this.refreshInfoBox(box, mon!, true);
+          // Pass 11 "Toughed It Out": your Pokémon's bar caught at a single point; it hangs on for you.
+          if (e.type === 'damage' && e.side === 'player' && e.hpAfter === 1 && hpWas > 1) await this.toughMoment();
           break;
         case 'status':
           mon!.status = { id: e.status };

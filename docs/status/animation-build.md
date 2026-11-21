@@ -93,6 +93,12 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   the second, lands with dust, a gold note pops out with a spray of stars, then it leans toward you and a pink heart
   pops (`winClip`). A heavy one stamps once instead and the screen answers. The battle goes on after 1.3 s; the lean
   finishes while the EXP comes. Reduced: one small hop and the note.
+- Toughed it out (pass 11): when a hit leaves your Pokémon on exactly 1 HP, it skids back with dust, drops low and
+  shivers, the bar sparks, then it plants its feet with a gold glow, HUNG ON! lands and a pink heart floats up
+  (`toughClip`). The battle goes on once it plants its feet. Reduced: a dip and the stamp.
+- Fixes found by GitHub's browser tests: a slump still settling in finishes before any other move of the Pokémon
+  plays (it used to cut it short); after Hyper Beam's recharge a Pokémon springs back to exactly the height it stood
+  at (it could end up a little smaller or bigger) and starts breathing only once it is there.
 - Wild encounter (pass 5): a lone wild Pokémon (not doubles, raids, totems or the Phantom look's own card) opens with
   two white flashes; the screen is nine dark bars that pull apart left and right in turn; the Pokémon slides in from
   the right as a black shape; its colour floods in with its cry, three white rings and a hop; then its plate flies in
