@@ -720,3 +720,38 @@ export function healClip(me: Point, level: ClipLevel): MotionClip {
   b.beat(0, 'Plus-signs rise').beat(300, 'Hop');
   return b.end(1300);
 }
+
+/**
+ * Flinch (pass 11): the moment the move never comes. Times in ms from the "flinched" line: `bang` is the "!" over its
+ * head, `stamp` the FLINCHED stamp, `sweat` the sweat drop; the drop falls `drop` px. Positions are from its feet
+ * and height (the mockup's 60 px out and 150 above the middle of a Pokémon about 200 px tall).
+ */
+export const FLINCH = { bang: 200, stamp: 400, sweat: 500, sweatMs: 600, drop: 40, bangDx: 60, sweatDx: 50 } as const;
+
+/**
+ * Flinch (pass 11): it starts its lunge (30 px toward the foe), jerks to a stop, pulls its head down with a shiver,
+ * backs up two steps and only then settles back where it stood. Reduced: one small step back and home. Off: nothing
+ * moves (the line says it).
+ */
+export function flinchClip(mon: MonSpot, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('flinch', level);
+  const m = b.part('mon', { dx: 0, sx: 1, sy: 1 });
+  if (level === 'off') return b.end(0);
+  const d = mon.side === 'player' ? 1 : -1;
+  if (level === 'reduced') {
+    m.at(0).to(150, { dx: -10 * d }, 'out').wait(300).to(300, { dx: 0 }, 'io');
+    b.fx({ kind: 'cue', at: 0, name: 'stamp' });
+    b.beat(0, 'Steps back');
+    return b.end(750);
+  }
+  m.at(100).to(100, { dx: 30 * d }, 'out').to(40, { dx: 22 * d });
+  m.at(220).to(60, { sy: 0.86, sx: 1.08 }, 'out');
+  m.at(280).to(40, { dx: 22 * d - 4 }).to(40, { dx: 22 * d + 4 }).to(40, { dx: 22 * d - 4 }).to(200, { dx: 22 * d, sy: 0.94, sx: 1.02 });
+  m.at(600).to(150, { dx: 6 * d }, 'out').wait(100).to(150, { dx: -10 * d }, 'out').wait(400).to(300, { dx: 0 }, 'io');
+  m.at(1400).to(300, { sy: 1, sx: 1 }, 'el');
+  b.fx({ kind: 'cue', at: FLINCH.bang, name: 'bang' });
+  b.fx({ kind: 'cue', at: FLINCH.stamp, name: 'stamp' });
+  b.fx({ kind: 'cue', at: FLINCH.sweat, name: 'sweat' });
+  b.beat(100, 'Starts to lunge').beat(220, 'Jerks to a stop').beat(600, 'Backs up two steps').beat(1400, 'Settles');
+  return b.end(1700);
+}
