@@ -275,3 +275,33 @@ export function playDiscInsert(scene: Phaser.Scene): void {
     /* audio is never critical */
   }
 }
+
+/**
+ * Animation redesign, the Legendary Blessing: one toll of a large bell, synthesised (a strike tone and its
+ * partials dying away over a few seconds). Presentation only; silent when muted or when sound effects are off.
+ */
+export function playBellToll(scene: Phaser.Scene, level = 1): void {
+  try {
+    const c = context(scene);
+    const { settings } = services().session;
+    if (!c || settings.muted || settings.sfxVolume <= 0) return;
+    const vol = settings.sfxVolume * 0.22 * level;
+    const t0 = c.currentTime + 0.01;
+    // A bell is not a harmonic sound: these are the usual partials (hum, prime, tierce, quint, nominal).
+    const partials: [number, number, number][] = [[0.5, 0.5, 3.2], [1, 1, 2.6], [1.19, 0.6, 2.0], [1.5, 0.35, 1.6], [2, 0.5, 1.3], [2.74, 0.2, 0.9]];
+    for (const [ratio, gainK, decay] of partials) {
+      const o = c.createOscillator();
+      o.type = 'sine';
+      o.frequency.value = 220 * ratio;
+      const g = c.createGain();
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(Math.max(0.0002, vol * gainK), t0 + 0.012);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + decay);
+      o.connect(g).connect(c.destination);
+      o.start(t0);
+      o.stop(t0 + decay + 0.05);
+    }
+  } catch {
+    /* presentation only */
+  }
+}

@@ -30,13 +30,27 @@ Tests: `tests/unit/motionBasics.test.ts` (timings against the mockups, the Reduc
 
 ## Known limits
 
-- The foe's ball comes from the screen edge (the mockup's pass 2); the foe trainer stepping in to throw (pass 4) comes
-  with the trainer intro slice.
-- The trainer face chip on a knock-out (pass 19) and the info bar tucking away during a switch (pass 2) are not in yet.
+- Foe trainer step-in (pass 4): in a trainer battle (singles, full animations) the trainer skids in from the right onto
+  the empty spot, steps back, whips the ball from the hand and leaves while it flies (`foeThrowClip`). Sized by what is
+  drawn: at most 208 px tall and 176 px wide. Reduced/Off, doubles and wild battles keep the ball from the screen edge.
+  An ace still lands by itself after its call.
+- Trainer face chip (pass 19): on a big hit (super effective, critical, or 40% of max HP) and on a knock-out your trainer's face pops in at the bottom right with the mockup's word ("Nice hit!", "Yes!", "Hang in there!", "We did it!", "You did great."), at most one per 1.2 s (`cheerClip` in motionBasics, pictures in `src/ui/battleFx/cheerChip.ts`). None with animations off or with the Phantom look's own cards. Ring colours for Blue, Green, Nate and Hilda are picked by us (the mockup only shows Red). The info bar now tucks away during a switch and comes back with the new name while the Pokémon settles (pass 2; singles).
 - Double battles use the new faint, recall and send-out for the focused Pokémon; the dark base and exp lights are singles only.
 - The faint's camera push is still the game's own KO camera (it already follows the Battle camera setting).
 
+## Slice 2: Kice's six notes (in progress)
+
+| Note | State | Where |
+|---|---|---|
+| Blessing, "more religious-themed and holy" | Done. The original cutscene in its order, made holy as in pass 15: a bell tolls three times (a synthesised bell), light comes down through a turning rose window, the object descends under a halo, the Legendary appears behind it vast and pale, the passage is written a line at a time after an illuminated letter, candles catch from the middle out, feathers fall, and your partner bows under its own small halo. Reduced: each part fades in place, no flashes, particles or drifting. Off: the whole picture at once. | `src/scenes/BlessingScene.ts`, `src/ui/blessingRite.ts`, `playBellToll` in `src/ui/procAudio.ts` |
+| Gimmick cutscenes, "wayyy more extravagant" | Done: pass 20, the final remake, beat for beat. **Mega** is glass: a double helix of colour climbs it, it turns white, cracks run to every edge, the new picture slams together from 24 shards (far corners first, the face last), locks with title and facts, and shatters off the field. **Tera** goes inside the jewel: a crystal closes over it, the camera dives in, twelve mirrored slices turn like a kaleidoscope and fold into the crown. **Dynamax** is one long camera climb from the trainer's shoes up the giant, through storm and lightning, to its roar. **Z-Move** is seen from the sky: the target small below, its shadow growing, the Pokémon coming down in its Z-Power, the damage (already decided by the rules) counted out, then the move's name card. Fast Mega / Tera / Z-Move / Dynamax, Reduced and Off keep the short cinematic as before. The four old reference scenes (megaScene, teraScene, dynamaxScene, zMoveScene) are removed. | `src/ui/battleFx/gimmickStage.ts`, `megaGlass.ts`, `teraJewel.ts`, `dynamaxPan.ts`, `zMoveSky.ts`; `BattleScene` `megaPage`, `gimmickPage`; test `tests/e2e/gimmickCutscenes.spec.ts` |
+| Ace call | Battle half done: the ace is now announced BEFORE it lands. The trainer speaks, the ace's card plays over an empty field (the boss band, or the ACE! stamp), then the ace leaps onto its spot: it comes down, squashes flat and wide, dust, a gold ring and a star. Reduced: squash and ring. Off: it is just there. The Pocket look's band card (UI build, PR #1529) gets its motion next. | `aceLandClip` in `motionBasics.ts`, `BattleScene.aceCall`, `aceLandMoment` |
+| Trainer intro, event choice, small map | The UI build draws the pages; this build moves them once they are in. | |
+
+Limits: the Z-Move mockup drops a fireball; by Kice's move rule the move's own effect is never drawn, so what falls is the Pokémon wrapped in its own light. The gimmick pages are drawn on the canvas in the mockups' layout until the Pocket look's own gimmick page exists. The light shaft is back on the blessing screen by the approved mockup (the spotlight and plinth were removed on
+2026-11-16; there is still no plinth). The bell is synthesised because the packs have no bell sound.
+
 ## Next
 
-Slice 2: Kice's six notes in motion (trainer intro, ace call, gimmick cutscenes, blessing, event choice, the small map).
+The rest of slice 2, then conditions, arenas, side roads, screens and flow from the two lists.
 The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` carry a **Build** line per entry.
