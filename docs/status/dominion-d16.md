@@ -1,0 +1,33 @@
+- **DOMINION slice D16, "Snagem + Cipher, Charters"** (Evil Mode rework, 2026-11-21; build plan `/mnt/project-files/plans/evil-mode-rework/BUILD_SLICES.md`, design Part 4 §9, Part 9 A14/A19/A23, Part 0 §6.1 Q4 and row 22): two optional partners for a Syndicate, the Partnership page, the Charters as a locked optional start, and the Turn.
+
+## What's built
+- **Data** `src/data/dominion/partners.json` (shape `PartnersFileSchema` in `schema.ts`): both partners' terms (gives, takes, raises, cut 15%, the Pokémon they take, Heat/Threat/Dread/Legendary raises, Snag Balls, the Shadow Machine, buy-out prices, purge fighters), the feud, renegotiation, the three ways out, Shadow trade/purify/tutor/sell numbers, every line, the Partnership page's words, and the 15 Snagem/Cipher Boss actions (rows 151-600) with a status each.
+- `src/data/dominion/charters.json`, made by `tools/dominion/charters-to-json.py` from the old Evil Mode's `src/data/evilMode/charters.json` (nine Charters: team, question, colours as Founding ids, two types, Patron, money, HQ level, crew size, Heat/Regard/Dread, opening lines) plus the Turn's numbers.
+- `buildings.json`: the Snag Desk and the Shadow Lab are live (they come with the deal, can't be built). `court.json`: card 63 (inform to Looker) also ends every deal (`hook:close-deals`), card 119 (the dealer's Shadow Pokémon) is live (`hook:shadow-buy`).
+- **Rules** `src/core/dominion/partners.ts`:
+  - **The offer**: the first night the team reaches **Syndicate** (A14), both send word (Night Report). Make the deal on the Partnership page. In each new region they must be agreed again; Looker's deal (card 63) closes them for the run.
+  - **Snagem**: Snag Machine + Snag Balls (5 on signing, 2 a week). In a Dominion fight against an adult trainer, any Pokémon can be caught with a Snag Ball (never the Hero's team, a Legendary, your own crew, or a minor's). Snagged Pokémon go to the Reserve with Trust 1 (A19). Takes 15% of the week's income (before wages) and the Reserve's best Pokémon every week; Heat rises 10% faster; the Hero's Threat 15% faster.
+  - **Cipher**: a Shadow Lab with the Shadow Machine: once a week it closes one Pokémon's heart (Trust 0 until purified). Takes 15% and a Shadow Pokémon every two weeks; Dread +3 a week in held towns; Threat 35% faster; the Legendaries wake 15 days sooner.
+  - **Both** (A23): one sabotages the other every week (stream `evil-partners`): the Shadow Machine down 5 days, or 3 Snag Balls lost.
+  - **Renegotiation** every 28 days: the cut drops when your towns' Dread scares them, else it climbs (more with grudges from Snagem Base Hit / Shadow Sabotage); each Snagem Meet / Cipher Offer takes 1% off.
+  - **Three ways out**: cancel (they take the machine, the room and your best Pokémon; Heat +10), buy out (Snagem leaves the Snag Machine and Desk; Cipher takes the machine), purge (fight their people in order: Snagem's thug, enforcer and Gonzap; Cipher's three admins and Evice; win and you keep what they built, lose and their cut goes up 5%).
+  - The 15 actions play: meets, heist, Shadow trade, purify rite, Snag Ball hunt, peon/admin ranks, Cipher lab (limited: Wits XP), Snagem base hit, Shadow sabotage, betray either, Shadow tutor, black-market sale of snagged Pokémon.
+- **Partnership page** `src/ui/redux/screens/dominion/partners.ts`, model `src/core/dominion/partnersScreens.ts`, controller `src/scenes/dominion/partnersController.ts`: **J** from the HQ, the map, the Ledger or the Empire page (and the board pin "Partners", sheet 2). No mockup draws it, so it's made of the v4 parts the Rival File uses: a card per partner (crest, leader, gives/takes/raises, the cut and its meter, this week's ₽ and Pokémon, the next renegotiation, the purge's next fighter), and the choice rows (make the deal, buy out, cancel, purge, the Shadow Machine's picker), the both-deals warning, Snag Balls held. A purge fight comes back to this page.
+- **Charters** (`src/core/dominion/charters.ts`): **C** on the setup's Boss page opens the Charters page. Locked (the page says so) until one Dominion run is finished on this profile (`profile.dominionDone`, an account unlock; a run counts once its last region is Taken). A Charter starts founded: its name, colours, mark and motto, its two types, its Patron as an Admin, its crew of Grunts (stream `dominion-charter`), its money and HQ level, Heat/Regard/Dread on the HQ district, and its own opening lines. The normal start is unchanged (always the rainy warehouse).
+- **The Turn**: on the Game Over screen of a main-game run that **won** (Evil Mode shown in Settings), **D** "Take the Turn": the run carries on as a Dominion run at the setup pages, the ace turned back to its first form at Lv 15, then one Grunt (Rook), funds = the run's money (max ₽5,000), Regard 3 per badge at the HQ, and the Turn's opening. The old Evil Mode's own Turn is untouched.
+
+## Limited (honest list)
+- Cipher Lab plays as Wits XP (the "new Shadow move" is its big line; Shadow Tutor teaches the moves).
+- The Turn is offered after a win (not mid-run like the old Evil Mode Turn). The finished run's legacy record was already written; the Dominion run that follows keeps the same run id.
+- Charters bring their old team, crew and numbers; the old Evil Mode house rules and Ledger pages are not carried over. Every Charter starts in the run's first region (Kanto).
+
+## Saves
+No version bump: `block.partners` and `block.origin` are optional (made on first need; a team that never reached Syndicate never gets one), `battle.snagAny` is optional, `profile.dominionDone` defaults to none. New streams: `evil-partners::<day>`, `dominion-charter::<i>`. No existing roll moved.
+
+## Tests
+- `tests/unit/dominionPartners.test.ts` (18): data and statuses; no offer before Syndicate (old blocks unchanged); the offer once; signing (rooms, Snag Balls), signing twice fails; payday cut, tithe and the feud (same seed, same feud); buy-out/cancel/purge and no money; the Shadow Machine once a week; who can be snagged; Snag Balls never below zero; Looker's deal; the page model; save/reload and a damaged deal failing; Charters locked/open, a Charter's start (deterministic crew), the normal start unchanged; the Turn's offer and start.
+- Updated counts: `dominionField` (502 actions play), `dominionGrowth` (362/88), `dominionHq` (166/100 buildings), `dominionChair` (125 live, 25 waiting); `dominionNav` checks the new pin.
+- `tests/e2e/dominionPartners.spec.ts` (3): J shut before Syndicate, both deals, the Shadow Machine, two window sizes, the purge's battle; the Charters page locked then open, a Charter begins; the Turn from the Game Over screen.
+
+## Next
+D17 (endings and balance). Follow-ups: a Partnership mockup pass if Kice wants one.

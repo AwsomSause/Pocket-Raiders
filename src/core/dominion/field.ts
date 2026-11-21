@@ -18,7 +18,7 @@ import { addLoyalty, addMorale, addXp, monName } from './crew';
 import { hasBand } from './pyramid';
 import { evolveOne } from './reserve';
 import { buildingDef, hasRoom, hqFx, launderAction, roomFor, spend } from './hqFx';
-import { paced } from './rules';
+import { paced, partnerHeat } from './rules';
 
 const F = () => DOMINION_DATA.field;
 const L = () => DOMINION_DATA.field.lines;
@@ -95,7 +95,9 @@ export function addHeat(b: DominionBlock, district: string, n: number): void {
   if (!d) return;
   const k = n > 0 && statusOf(d) === 'owned' ? F().control.ownedHeat : 1;
   // D27: Day pace scales a rise (Normal and every run before D27 multiply by 1).
-  d.heat = clamp(d.heat + Math.round(paced(b, n) * k), 0, 100);
+  // D16: a partner deal (Snagem) makes every rise hotter; 1 with no deal.
+  const p = n > 0 ? partnerHeat(b) : 1;
+  d.heat = clamp(d.heat + Math.round(paced(b, n) * k * p), 0, 100);
 }
 
 export const hottest = (f: Field): string | null => {
@@ -250,9 +252,23 @@ export function addCardGate(g: (b: DominionBlock, run: Pick<RunState, 'party'>, 
 const teamLevel = (run: Pick<RunState, 'party'>): number => (run.party.length ? Math.round(run.party.reduce((a, m) => a + m.level, 0) / run.party.length) : 5);
 export const foeLevel = (b: DominionBlock, run: Pick<RunState, 'party'>, offset: number): number => clamp(teamLevel(run) + offset, F().levels.min, b.levelCap + F().levels.overCap);
 
+/** D10 follow-up: a street meeting's named foe (town.json foes), or 'leader:<gym>' for that Gym's Leader. */
+export function townFoe(key: string | null): { name: string; cls: string; species: string[]; offset: number; leaderId: string | null; wild?: boolean } | null {
+  if (key?.startsWith('leader:')) {
+    const g = DOMINION_DATA.growth.gyms.find((x) => x.id === key.slice('leader:'.length));
+    return g ? { name: g.leader, cls: 'gym-leader', species: g.species, offset: g.offset, leaderId: g.leaderId } : null;
+  }
+  const f = key ? DOMINION_DATA.town.foes[key] : undefined;
+  return f ? { ...f, leaderId: null } : null;
+}
+
 export function foeOf(b: DominionBlock, run: Pick<RunState, 'party'>, kind: FieldFight['foe'], district: District, target: Target | null, card: string | null = null): Foe {
   const P = F().police;
   switch (kind) {
+    case 'town': {
+      const f = townFoe(card);
+      return f ? { name: f.name, species: f.species[0]!, level: foeLevel(b, run, f.offset), wild: !!f.wild } : { name: P.raid.name, species: P.raid.species[0]!, level: foeLevel(b, run, P.raid.offset), wild: false };
+    }
     case 'court': {
       // D12: a Chair visitor at the door (court.json card `card`).
       const f = DOMINION_DATA.court.find((c) => String(c.id) === card)?.foe ?? P.raid;
@@ -275,6 +291,10 @@ export function foeOf(b: DominionBlock, run: Pick<RunState, 'party'>, kind: Fiel
       return SNATCH_FOE ? SNATCH_FOE(b, run) : { name: 'A guard', species: 'rattata', level: foeLevel(b, run, 0), wild: false };
     case 'takeover':
       return TAKEOVER_FOE ? TAKEOVER_FOE(b, run) : { name: 'A guard', species: 'rattata', level: foeLevel(b, run, 0), wild: false };
+    case 'partner':
+      return PARTNER_FOE ? PARTNER_FOE(b, run) : { name: 'A Snagem thug', species: 'machop', level: foeLevel(b, run, 1), wild: false };
+    case 'realm':
+      return REALM_FOE ? REALM_FOE(b, run) : { name: 'A traitor', species: 'raticate', level: foeLevel(b, run, 3), wild: false };
     case 'target': {
       const f = target?.foe ?? district.targets[0]!.foe;
       return { name: f.name, species: f.species[0]!, level: foeLevel(b, run, f.offset), wild: false };
@@ -534,6 +554,18 @@ export function setGrowthFoe(f: (b: DominionBlock, run: Pick<RunState, 'party'>)
 let TAKEOVER_FOE: ((b: DominionBlock, run: Pick<RunState, 'party'>) => Foe) | null = null;
 export function setTakeoverFoe(f: (b: DominionBlock, run: Pick<RunState, 'party'>) => Foe): void {
   TAKEOVER_FOE = f;
+}
+
+/** D15: the traitor at the end of the Long Trip (regions.ts registers it). */
+let REALM_FOE: ((b: DominionBlock, run: Pick<RunState, 'party'>) => Foe) | null = null;
+export function setRealmFoe(f: (b: DominionBlock, run: Pick<RunState, 'party'>) => Foe): void {
+  REALM_FOE = f;
+}
+
+/** D16: a partner's fighter (the purge, a Snagem base hit; partners.ts registers it). */
+let PARTNER_FOE: ((b: DominionBlock, run: Pick<RunState, 'party'>) => Foe) | null = null;
+export function setPartnerFoe(f: (b: DominionBlock, run: Pick<RunState, 'party'>) => Foe): void {
+  PARTNER_FOE = f;
 }
 
 /** D23: the person a Snatch Operation goes after (snatch.ts). */

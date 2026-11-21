@@ -1,0 +1,2306 @@
+{
+ "_source": "tools/dominion/regions-to-json.py (paldea); see the tool for sources.",
+ "id": "paldea",
+ "label": "PALDEA",
+ "warehouse": "Porto Marinada",
+ "hq": "porto-marinada",
+ "arrive": [
+  "Porto Marinada: an auction every afternoon, and fishing boats painted every colour there is. The warehouse is behind the auction house.",
+  "{brought} squints at the noise. \"They're bidding on everything, Boss. Even the fish that got away.\"",
+  "Somebody at the Academy has posted a notice: a \"Treasure Hunt\" for every student. Half the region is out on the roads, and nobody is watching the shops."
+ ],
+ "districts": [
+  {
+   "id": "cabo-poco",
+   "name": "Cabo Poco",
+   "x": 40,
+   "y": 300,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "normal-grass",
+   "targets": [
+    {
+     "id": "poco-house",
+     "name": "The Hilltop House",
+     "kind": "street",
+     "owner": {
+      "name": "The neighbours",
+      "look": "trainer/pr/pokefan_f",
+      "line": "A tiny town on a cape. Everyone knows the Champion's cousin."
+     },
+     "trait": {
+      "word": "Watchful",
+      "odds": -4
+     },
+     "pay": 1,
+     "foe": {
+      "name": "Neighbour",
+      "cls": "picnicker",
+      "species": [
+       "lechonk"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "poco-path",
+     "name": "Poco Path",
+     "kind": "route",
+     "owner": {
+      "name": "Trainers on the path",
+      "look": "trainer/pr/backpacker_m",
+      "line": "The lighthouse at the end is always open."
+     },
+     "trait": null,
+     "pay": 1,
+     "foe": {
+      "name": "Youngster Ivan",
+      "cls": "youngster",
+      "species": [
+       "lechonk",
+       "tarountula"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "inlet-grotto",
+     "name": "Inlet Grotto",
+     "kind": "cave",
+     "owner": {
+      "name": "Nobody",
+      "look": "trainer/pr/ruin_maniac",
+      "line": "A cave on the beach. Something big sleeps in it."
+     },
+     "trait": {
+      "word": "Superstitious",
+      "odds": 6
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Beachcomber",
+      "cls": "hiker",
+      "species": [
+       "wiglett",
+       "tarountula"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "mesagoza",
+   "name": "Mesagoza",
+   "x": 200,
+   "y": 196,
+   "control": 0,
+   "rival": 0,
+   "police": true,
+   "wild": "normal-psychic",
+   "targets": [
+    {
+     "id": "naranja-academy",
+     "name": "Naranja Academy",
+     "kind": "site",
+     "owner": {
+      "name": "The vice principal",
+      "look": "trainer/pr/veteran_m",
+      "line": "Five hundred students and one very tired head teacher."
+     },
+     "trait": {
+      "word": "Kind",
+      "odds": 5
+     },
+     "pay": 1.6,
+     "foe": {
+      "name": "Academy guard",
+      "cls": "veteran",
+      "species": [
+       "farigiraf",
+       "pawmo"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "mesagoza-plaza",
+     "name": "Mesagoza Plaza",
+     "kind": "crowd",
+     "owner": {
+      "name": "The plaza crowd",
+      "look": "trainer/pr/interviewers",
+      "line": "Cafés round a fountain, and every student's parents."
+     },
+     "trait": {
+      "word": "Gullible",
+      "odds": 5
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Plaza guard",
+      "cls": "veteran",
+      "species": [
+       "lechonk",
+       "pawmi"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "mesagoza-station",
+     "name": "Mesagoza Police",
+     "kind": "police",
+     "owner": {
+      "name": "Officer Jenny",
+      "look": "dominion/t-policeman.png",
+      "line": "She knows every student by name."
+     },
+     "trait": {
+      "word": "Sharp",
+      "odds": -10
+     },
+     "pay": 1,
+     "foe": {
+      "name": "Officer",
+      "cls": "veteran",
+      "species": [
+       "growlithe",
+       "maschiff"
+      ],
+      "offset": 1
+     }
+    }
+   ],
+   "w": 130
+  },
+  {
+   "id": "porto-marinada",
+   "name": "Porto Marinada",
+   "x": 40,
+   "y": 120,
+   "control": 10,
+   "rival": 0,
+   "police": false,
+   "wild": "normal-water",
+   "targets": [
+    {
+     "id": "marinada-auction",
+     "name": "The Auction House",
+     "kind": "site",
+     "owner": {
+      "name": "The auctioneer",
+      "look": "trainer/pr/rich_m",
+      "line": "Everything goes under the hammer, nothing has papers."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 6
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Auction guard",
+      "cls": "veteran",
+      "species": [
+       "wattrel",
+       "finizen"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "marinada-docks",
+     "name": "Marinada Docks",
+     "kind": "dock",
+     "owner": {
+      "name": "The fishermen",
+      "look": "trainer/pr/scuba_diver_m",
+      "line": "Boats of every colour, catches of every kind."
+     },
+     "trait": {
+      "word": "Stubborn",
+      "odds": -4
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Fisherman",
+      "cls": "fisherman",
+      "species": [
+       "finizen",
+       "wiglett"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "marinada-market",
+     "name": "Fish Market",
+     "kind": "shop",
+     "owner": {
+      "name": "The fishmonger",
+      "look": "trainer/pr/clerk_f",
+      "line": "Fresh in at dawn, sold by noon."
+     },
+     "trait": {
+      "word": "Timid",
+      "odds": 5
+     },
+     "pay": 1.1,
+     "foe": {
+      "name": "Fishmonger",
+      "cls": "fisherman",
+      "species": [
+       "bombirdier"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "levincia",
+   "name": "Levincia",
+   "x": 360,
+   "y": 70,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "normal-electric",
+   "targets": [
+    {
+     "id": "levincia-studio",
+     "name": "Iono's Studio",
+     "kind": "site",
+     "owner": {
+      "name": "The stream crew",
+      "look": "trainer/pr/interviewers",
+      "line": "Every move is filmed. Every film gets a million views."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 5
+     },
+     "pay": 1.6,
+     "foe": {
+      "name": "Crew guard",
+      "cls": "guitarist",
+      "species": [
+       "bellibolt",
+       "pawmo"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "levincia-mall",
+     "name": "Levincia Mall",
+     "kind": "shop",
+     "owner": {
+      "name": "The mall manager",
+      "look": "trainer/pr/rich_f",
+      "line": "Neon signs and a tower of screens."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 4
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Mall guard",
+      "cls": "veteran",
+      "species": [
+       "wattrel"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "levincia-shore",
+     "name": "Levincia Seafront",
+     "kind": "route",
+     "owner": {
+      "name": "Beach crowds",
+      "look": "trainer/pr/swimmer_m",
+      "line": "Neon by night, sand by day."
+     },
+     "trait": null,
+     "pay": 1.1,
+     "foe": {
+      "name": "Swimmer Sami",
+      "cls": "swimmer",
+      "species": [
+       "finizen",
+       "wingull"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "cascarrafa",
+   "name": "Cascarrafa",
+   "x": 200,
+   "y": 300,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "water-ground",
+   "targets": [
+    {
+     "id": "cascarrafa-auction",
+     "name": "Cascarrafa Market",
+     "kind": "shop",
+     "owner": {
+      "name": "The stall owners",
+      "look": "trainer/pr/clerk_f",
+      "line": "A city on a waterfall, a market on every step."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 5
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Market tough",
+      "cls": "roughneck",
+      "species": [
+       "sandaconda",
+       "wattrel"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "asado-desert",
+     "name": "Asado Desert",
+     "kind": "route",
+     "owner": {
+      "name": "Desert guides",
+      "look": "trainer/pr/backpacker_m",
+      "line": "Dunes, ruins and missing Trainers."
+     },
+     "trait": null,
+     "pay": 1.2,
+     "foe": {
+      "name": "Guide",
+      "cls": "hiker",
+      "species": [
+       "sandile",
+       "silicobra"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "cascarrafa-falls",
+     "name": "The Falls",
+     "kind": "crowd",
+     "owner": {
+      "name": "The tourists",
+      "look": "trainer/pr/young_couple",
+      "line": "Everyone takes a picture at the falls."
+     },
+     "trait": {
+      "word": "Gullible",
+      "odds": 5
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Tourist",
+      "cls": "picnicker",
+      "species": [
+       "squawkabilly"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "medali",
+   "name": "Medali",
+   "x": 320,
+   "y": 196,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "normal-ground",
+   "targets": [
+    {
+     "id": "medali-restaurant",
+     "name": "Treasure Eatery",
+     "kind": "shop",
+     "owner": {
+      "name": "The cook",
+      "look": "trainer/pr/waiter_m",
+      "line": "The best food in Paldea. The Gym Leader works here."
+     },
+     "trait": {
+      "word": "Proud",
+      "odds": -4
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Cook",
+      "cls": "veteran",
+      "species": [
+       "dudunsparce",
+       "lechonk"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "medali-square",
+     "name": "Medali Square",
+     "kind": "crowd",
+     "owner": {
+      "name": "The diners",
+      "look": "trainer/pr/pokefan_m",
+      "line": "A town that eats lunch for three hours."
+     },
+     "trait": {
+      "word": "Gossip",
+      "odds": 5
+     },
+     "pay": 1.1,
+     "foe": {
+      "name": "Diner",
+      "cls": "picnicker",
+      "species": [
+       "tandemaus"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "east-province",
+     "name": "Route East",
+     "kind": "route",
+     "owner": {
+      "name": "Trainers on the route",
+      "look": "trainer/pr/backpacker_f",
+      "line": "Long roads between towns."
+     },
+     "trait": null,
+     "pay": 1.1,
+     "foe": {
+      "name": "Ace Trainer Rosa",
+      "cls": "ace-trainer",
+      "species": [
+       "tauros",
+       "mudbray"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "alfornada",
+   "name": "Alfornada",
+   "x": 360,
+   "y": 300,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "psychic-fairy",
+   "targets": [
+    {
+     "id": "alfornada-cavern",
+     "name": "Alfornada Cavern",
+     "kind": "cave",
+     "owner": {
+      "name": "The cave keepers",
+      "look": "trainer/pr/psychic_f",
+      "line": "Quiet caves, quiet people."
+     },
+     "trait": {
+      "word": "Pious",
+      "odds": -6
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Keeper",
+      "cls": "psychic",
+      "species": [
+       "espathra",
+       "gothita"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "alfornada-mart",
+     "name": "Alfornada Mart",
+     "kind": "shop",
+     "owner": {
+      "name": "The Mart clerk",
+      "look": "dominion/t-clerk.png",
+      "line": "Sells Moon Stones to people who already have three."
+     },
+     "trait": {
+      "word": "Timid",
+      "odds": 5
+     },
+     "pay": 1.1,
+     "foe": {
+      "name": "The clerk's sister",
+      "cls": "lass",
+      "species": [
+       "flittle"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "alfornada-square",
+     "name": "Calm Square",
+     "kind": "crowd",
+     "owner": {
+      "name": "The meditators",
+      "look": "trainer/pr/parasol_lady",
+      "line": "Everyone is calm. It's unnerving."
+     },
+     "trait": {
+      "word": "Watchful",
+      "odds": -4
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Meditator",
+      "cls": "psychic",
+      "species": [
+       "indeedee"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "montenevera",
+   "name": "Montenevera",
+   "x": 520,
+   "y": 120,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "ice-ghost",
+   "targets": [
+    {
+     "id": "montenevera-stage",
+     "name": "The Snow Stage",
+     "kind": "crowd",
+     "owner": {
+      "name": "The fans",
+      "look": "trainer/pr/musician",
+      "line": "A rapper Gym Leader and a frozen crowd."
+     },
+     "trait": {
+      "word": "Hothead",
+      "odds": 4
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Fan",
+      "cls": "guitarist",
+      "species": [
+       "greavard",
+       "shroodle"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "glaseado-mountain",
+     "name": "Glaseado Mountain",
+     "kind": "route",
+     "owner": {
+      "name": "Ski crews",
+      "look": "trainer/pr/snow_worker",
+      "line": "The biggest mountain in Paldea, and the coldest."
+     },
+     "trait": null,
+     "pay": 1.2,
+     "foe": {
+      "name": "Skier",
+      "cls": "snow-worker",
+      "species": [
+       "cetoddle",
+       "snom"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "montenevera-mart",
+     "name": "Montenevera Mart",
+     "kind": "shop",
+     "owner": {
+      "name": "The Mart clerk",
+      "look": "dominion/t-clerk.png",
+      "line": "Hot chocolate and Ice Heals."
+     },
+     "trait": {
+      "word": "Timid",
+      "odds": 5
+     },
+     "pay": 1.1,
+     "foe": {
+      "name": "The clerk's cousin",
+      "cls": "snow-worker",
+      "species": [
+       "frigibax"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "area-zero-gate",
+   "name": "Area Zero Gate",
+   "x": 360,
+   "y": 196,
+   "control": 0,
+   "rival": 60,
+   "police": false,
+   "wild": "psychic-dragon",
+   "targets": [
+    {
+     "id": "zero-lab",
+     "name": "The Zero Lab",
+     "kind": "site",
+     "owner": {
+      "name": "The research machine",
+      "look": "trainer/pr/scientist_m",
+      "line": "Doors that open only for the right voice."
+     },
+     "trait": {
+      "word": "Steady",
+      "odds": -8
+     },
+     "pay": 1.8,
+     "foe": {
+      "name": "Research guard",
+      "cls": "ace-trainer",
+      "species": [
+       "great-tusk",
+       "iron-treads"
+      ],
+      "offset": 3
+     }
+    },
+    {
+     "id": "great-crater",
+     "name": "Crater Rim",
+     "kind": "route",
+     "owner": {
+      "name": "Expedition crews",
+      "look": "trainer/pr/ranger_m",
+      "line": "The edge of the Great Crater. Nobody goes down."
+     },
+     "trait": null,
+     "pay": 1.4,
+     "foe": {
+      "name": "Expedition hand",
+      "cls": "ranger",
+      "species": [
+       "glimmet",
+       "frigibax"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "zero-gate-camp",
+     "name": "Gate Camp",
+     "kind": "crowd",
+     "owner": {
+      "name": "The camp crew",
+      "look": "trainer/pr/worker_f",
+      "line": "Tents at the Gate, waiting for the Academy's say-so."
+     },
+     "trait": {
+      "word": "Bored",
+      "odds": 5
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Camp hand",
+      "cls": "worker",
+      "species": [
+       "orthworm"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "w": 124,
+   "rivalNote": "Area Zero"
+  },
+  {
+   "id": "zapapico",
+   "name": "Zapapico",
+   "x": 520,
+   "y": 40,
+   "control": 0,
+   "rival": 20,
+   "police": false,
+   "wild": "flying-rock",
+   "targets": [
+    {
+     "id": "zapapico-quarry",
+     "name": "The Quarry",
+     "kind": "cave",
+     "owner": {
+      "name": "The quarry crew",
+      "look": "trainer/pr/worker_f",
+      "line": "Cliffs, dust and Nacli everywhere."
+     },
+     "trait": {
+      "word": "Bored",
+      "odds": 5
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Quarryman",
+      "cls": "worker",
+      "species": [
+       "nacli",
+       "klawf"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "zapapico-mart",
+     "name": "Zapapico Mart",
+     "kind": "shop",
+     "owner": {
+      "name": "The Mart clerk",
+      "look": "dominion/t-clerk.png",
+      "line": "Sells rope and helmets to climbers."
+     },
+     "trait": {
+      "word": "Timid",
+      "odds": 5
+     },
+     "pay": 1.1,
+     "foe": {
+      "name": "The clerk's son",
+      "cls": "hiker",
+      "species": [
+       "rookidee"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "zapapico-peak",
+     "name": "Zapapico Peak",
+     "kind": "route",
+     "owner": {
+      "name": "Climbers",
+      "look": "trainer/pr/snow_worker_f",
+      "line": "A town on a cliff, joined by rope bridges."
+     },
+     "trait": null,
+     "pay": 1.1,
+     "foe": {
+      "name": "Climber",
+      "cls": "hiker",
+      "species": [
+       "flamigo",
+       "bombirdier"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "rivalNote": "Area Zero"
+  }
+ ],
+ "routes": [
+  [
+   "cabo-poco",
+   "mesagoza"
+  ],
+  [
+   "mesagoza",
+   "porto-marinada"
+  ],
+  [
+   "mesagoza",
+   "cascarrafa"
+  ],
+  [
+   "mesagoza",
+   "medali"
+  ],
+  [
+   "medali",
+   "levincia"
+  ],
+  [
+   "medali",
+   "alfornada"
+  ],
+  [
+   "medali",
+   "area-zero-gate"
+  ],
+  [
+   "levincia",
+   "montenevera"
+  ],
+  [
+   "montenevera",
+   "zapapico"
+  ],
+  [
+   "cascarrafa",
+   "alfornada"
+  ]
+ ],
+ "water": [
+  [
+   "porto-marinada",
+   "cabo-poco"
+  ],
+  [
+   "levincia",
+   "zapapico"
+  ]
+ ],
+ "pools": {
+  "catch": [
+   "lechonk",
+   "tarountula",
+   "nymble",
+   "pawmi",
+   "tandemaus",
+   "fidough",
+   "smoliv",
+   "squawkabilly",
+   "nacli",
+   "charcadet",
+   "tadbulb",
+   "wattrel",
+   "maschiff",
+   "shroodle",
+   "bramblin",
+   "toedscool",
+   "klawf",
+   "capsakid",
+   "rellor",
+   "flittle",
+   "tinkatink",
+   "wiglett",
+   "bombirdier",
+   "finizen",
+   "varoom",
+   "cyclizar",
+   "orthworm",
+   "glimmet",
+   "greavard",
+   "flamigo",
+   "cetoddle",
+   "veluza",
+   "dondozo",
+   "tatsugiri"
+  ],
+  "steal": [
+   "frigibax",
+   "tinkatink",
+   "charcadet",
+   "gimmighoul",
+   "cyclizar",
+   "tatsugiri",
+   "flamigo",
+   "veluza",
+   "sprigatito",
+   "fuecoco",
+   "quaxly",
+   "eevee",
+   "larvitar",
+   "dreepy",
+   "goomy",
+   "deino"
+  ]
+ },
+ "rivals": {
+  "area-zero": [
+   {
+    "id": "zero-lab-site",
+    "name": "The Zero Lab (Area Zero)",
+    "district": "area-zero-gate",
+    "hq": true
+   },
+   {
+    "id": "crater-camp",
+    "name": "Crater Rim Camp",
+    "district": "area-zero-gate"
+   },
+   {
+    "id": "zapapico-relay",
+    "name": "Zapapico Relay",
+    "district": "zapapico"
+   },
+   {
+    "id": "montenevera-relay",
+    "name": "Montenevera Relay",
+    "district": "montenevera"
+   },
+   {
+    "id": "levincia-feed",
+    "name": "Levincia Feed",
+    "district": "levincia"
+   },
+   {
+    "id": "cascarrafa-relay",
+    "name": "Cascarrafa Relay",
+    "district": "cascarrafa"
+   },
+   {
+    "id": "medali-relay",
+    "name": "Medali Relay",
+    "district": "medali"
+   }
+  ]
+ },
+ "gyms": [
+  {
+   "id": "cortondo-gym",
+   "district": "cabo-poco",
+   "leader": "Katy",
+   "leaderId": "katy",
+   "type": "bug",
+   "badge": "Bug",
+   "species": [
+    "nymble",
+    "tarountula",
+    "teddiursa"
+   ],
+   "offset": 1,
+   "trainers": [
+    {
+     "name": "Gym Trainer Jo",
+     "cls": "bug-catcher",
+     "leaderId": null,
+     "species": [
+      "nymble"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "artazon-gym",
+   "district": "mesagoza",
+   "leader": "Brassius",
+   "leaderId": "brassius",
+   "type": "grass",
+   "badge": "Grass",
+   "species": [
+    "petilil",
+    "smoliv",
+    "sudowoodo"
+   ],
+   "offset": 1,
+   "trainers": [
+    {
+     "name": "Gym Trainer Tas",
+     "cls": "aroma-lady",
+     "leaderId": null,
+     "species": [
+      "smoliv"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "levincia-gym",
+   "district": "levincia",
+   "leader": "Iono",
+   "leaderId": "iono",
+   "type": "electric",
+   "badge": "Electric",
+   "species": [
+    "wattrel",
+    "bellibolt",
+    "luxio",
+    "mismagius"
+   ],
+   "offset": 2,
+   "trainers": [
+    {
+     "name": "Gym Trainer Nove",
+     "cls": "guitarist",
+     "leaderId": null,
+     "species": [
+      "tadbulb"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "cascarrafa-gym",
+   "district": "cascarrafa",
+   "leader": "Kofu",
+   "leaderId": "kofu",
+   "type": "water",
+   "badge": "Water",
+   "species": [
+    "veluza",
+    "wugtrio",
+    "crabominable"
+   ],
+   "offset": 2,
+   "trainers": [
+    {
+     "name": "Gym Trainer Hugo",
+     "cls": "fisherman",
+     "leaderId": null,
+     "species": [
+      "wiglett"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "medali-gym",
+   "district": "medali",
+   "leader": "Larry",
+   "leaderId": "larry",
+   "type": "normal",
+   "badge": "Normal",
+   "species": [
+    "komala",
+    "dudunsparce",
+    "staraptor"
+   ],
+   "offset": 3,
+   "trainers": [
+    {
+     "name": "Gym Trainer Clerk",
+     "cls": "worker",
+     "leaderId": null,
+     "species": [
+      "tandemaus"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "montenevera-gym",
+   "district": "montenevera",
+   "leader": "Ryme",
+   "leaderId": "ryme",
+   "type": "ghost",
+   "badge": "Ghost",
+   "species": [
+    "banette",
+    "mimikyu",
+    "houndstone",
+    "toxtricity"
+   ],
+   "offset": 3,
+   "trainers": [
+    {
+     "name": "Gym Trainer Tas",
+     "cls": "hex-maniac",
+     "leaderId": null,
+     "species": [
+      "greavard"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "alfornada-gym",
+   "district": "alfornada",
+   "leader": "Tulip",
+   "leaderId": "tulip",
+   "type": "psychic",
+   "badge": "Psychic",
+   "species": [
+    "farigiraf",
+    "gardevoir",
+    "espathra",
+    "florges"
+   ],
+   "offset": 4,
+   "trainers": [
+    {
+     "name": "Gym Trainer Emily",
+     "cls": "psychic",
+     "leaderId": null,
+     "species": [
+      "flittle"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "glaseado-gym",
+   "district": "montenevera",
+   "leader": "Grusha",
+   "leaderId": "grusha",
+   "type": "ice",
+   "badge": "Ice",
+   "species": [
+    "frosmoth",
+    "beartic",
+    "cetitan",
+    "altaria"
+   ],
+   "offset": 4,
+   "trainers": [
+    {
+     "name": "Skier Aidan",
+     "cls": "snow-worker",
+     "leaderId": null,
+     "species": [
+      "cetoddle"
+     ],
+     "offset": -1
+    }
+   ]
+  }
+ ],
+ "business": [
+  {
+   "target": "marinada-market",
+   "name": "Fish Market",
+   "price": 5000,
+   "income": 200,
+   "clean": true,
+   "perk": {
+    "kind": "items",
+    "n": 2,
+    "item": "potion"
+   },
+   "text": "2 Potions a week."
+  },
+  {
+   "target": "marinada-auction",
+   "name": "The Auction House",
+   "price": 20000,
+   "income": 500,
+   "clean": false,
+   "perk": {
+    "kind": "clean",
+    "n": 200
+   },
+   "text": "Every lot washes a little: ₽200 a week comes back clean.",
+   "rival": true
+  },
+  {
+   "target": "levincia-mall",
+   "name": "Levincia Mall",
+   "price": 15000,
+   "income": 600,
+   "clean": true,
+   "perk": {
+    "kind": "regard",
+    "n": 1
+   },
+   "text": "Regard +1 in Levincia each week."
+  },
+  {
+   "target": "levincia-studio",
+   "name": "Iono's Studio",
+   "price": 30000,
+   "income": 800,
+   "clean": true,
+   "perk": {
+    "kind": "heroDown",
+    "n": 1
+   },
+   "text": "The Hero watches the stream. And the stream watches the Hero.",
+   "rival": true
+  },
+  {
+   "target": "cascarrafa-auction",
+   "name": "Cascarrafa Market",
+   "price": 9000,
+   "income": 350,
+   "clean": false,
+   "perk": {
+    "kind": "clean",
+    "n": 150
+   },
+   "text": "Cash stalls: ₽150 a week comes back clean."
+  },
+  {
+   "target": "medali-restaurant",
+   "name": "Treasure Eatery",
+   "price": 9000,
+   "income": 300,
+   "clean": true,
+   "perk": {
+    "kind": "income",
+    "n": 300
+   },
+   "text": "The lunch crowd pays ₽300 a week."
+  },
+  {
+   "target": "zapapico-mart",
+   "name": "Zapapico Mart",
+   "price": 4500,
+   "income": 180,
+   "clean": true,
+   "perk": {
+    "kind": "odds",
+    "n": 5
+   },
+   "text": "Good rope: +5% on jobs in Zapapico."
+  },
+  {
+   "target": "montenevera-mart",
+   "name": "Montenevera Mart",
+   "price": 4500,
+   "income": 180,
+   "clean": true,
+   "perk": {
+    "kind": "heatDown",
+    "n": 1
+   },
+   "text": "Snowed in: Heat −1 in Montenevera each week."
+  }
+ ],
+ "pillars": [
+  "levincia-studio",
+  "marinada-auction"
+ ],
+ "hero": {
+  "path": [
+   "cabo-poco",
+   "mesagoza",
+   "porto-marinada",
+   "cascarrafa",
+   "medali",
+   "levincia",
+   "alfornada",
+   "montenevera",
+   "area-zero-gate"
+  ],
+  "allies": [
+   {
+    "id": "katy",
+    "name": "Katy",
+    "look": "bosses/katy.png",
+    "ace": "teddiursa"
+   },
+   {
+    "id": "iono",
+    "name": "Iono",
+    "look": "bosses/iono.png",
+    "ace": "bellibolt"
+   },
+   {
+    "id": "kofu",
+    "name": "Kofu",
+    "look": "bosses/nemona-v.png",
+    "ace": "crabominable"
+   },
+   {
+    "id": "larry",
+    "name": "Larry",
+    "look": "bosses/ryuki.png",
+    "ace": "staraptor"
+   },
+   {
+    "id": "tulip",
+    "name": "Tulip",
+    "look": "bosses/grusha.png",
+    "ace": "florges"
+   },
+   {
+    "id": "grusha",
+    "name": "Grusha",
+    "look": "bosses/grusha.png",
+    "ace": "altaria"
+   },
+   {
+    "id": "geeta",
+    "name": "Geeta",
+    "look": "bosses/geeta.png",
+    "ace": "glimmora",
+    "champion": true
+   }
+  ],
+  "mentor": "The Academy's Director, Clavell",
+  "parent": "The Hero's mother",
+  "sidekick": "Nemona, from Mesagoza",
+  "homes": {
+   "koraidon": {
+    "home": "area-zero-gate",
+    "over": "the Great Crater"
+   },
+   "miraidon": {
+    "home": "area-zero-gate",
+    "over": "the Great Crater"
+   }
+  }
+ },
+ "league": {
+  "elite": [
+   {
+    "id": "rika",
+    "name": "Rika",
+    "species": [
+     "whiscash",
+     "camerupt",
+     "donphan",
+     "dugtrio",
+     "clodsire"
+    ],
+    "offset": 2
+   },
+   {
+    "id": "poppy",
+    "name": "Poppy",
+    "species": [
+     "copperajah",
+     "magnezone",
+     "bronzong",
+     "corviknight",
+     "tinkaton"
+    ],
+    "offset": 3
+   },
+   {
+    "id": "larry-e4",
+    "name": "Larry",
+    "species": [
+     "tropius",
+     "oricorio",
+     "altaria",
+     "staraptor",
+     "flamigo"
+    ],
+    "offset": 4
+   },
+   {
+    "id": "hassel",
+    "name": "Hassel",
+    "species": [
+     "noivern",
+     "haxorus",
+     "dragalge",
+     "flapple",
+     "baxcalibur"
+    ],
+    "offset": 5
+   }
+  ],
+  "champion": {
+   "id": "geeta",
+   "name": "Geeta",
+   "species": [
+    "espathra",
+    "gogoat",
+    "veluza",
+    "avalugg",
+    "kingambit",
+    "glimmora"
+   ],
+   "offset": 6
+  },
+  "standIn": {}
+ },
+ "lab": [
+  "frigibax",
+  "gimmighoul",
+  "tinkatink",
+  "charcadet",
+  "porygon"
+ ],
+ "desk": {
+  "name": "Paldea",
+  "rivals": [
+   "the Area Zero project"
+  ],
+  "badges": [
+   {
+    "name": "Bug Badge",
+    "town": "Cortondo",
+    "c": "#9ad83a"
+   },
+   {
+    "name": "Grass Badge",
+    "town": "Artazon",
+    "c": "#5aa84a"
+   },
+   {
+    "name": "Electric Badge",
+    "town": "Levincia",
+    "c": "#ffd23f"
+   },
+   {
+    "name": "Water Badge",
+    "town": "Cascarrafa",
+    "c": "#4fa3ff"
+   },
+   {
+    "name": "Normal Badge",
+    "town": "Medali",
+    "c": "#d8d0c0"
+   },
+   {
+    "name": "Ghost Badge",
+    "town": "Montenevera",
+    "c": "#7a6ab8"
+   },
+   {
+    "name": "Psychic Badge",
+    "town": "Alfornada",
+    "c": "#e070c0"
+   },
+   {
+    "name": "Ice Badge",
+    "town": "Glaseado",
+    "c": "#a8e0f8"
+   }
+  ],
+  "codes": {
+   "Cortondo": "CRT",
+   "Artazon": "ART",
+   "Levincia": "LVN",
+   "Cascarrafa": "CSC",
+   "Medali": "MDL",
+   "Montenevera": "MNT",
+   "Alfornada": "ALF",
+   "Glaseado": "GLS"
+  },
+  "mons": [
+   "lechonk",
+   "tarountula",
+   "nymble",
+   "pawmi",
+   "tandemaus",
+   "fidough",
+   "smoliv",
+   "squawkabilly",
+   "nacli",
+   "charcadet",
+   "tadbulb",
+   "wattrel",
+   "maschiff",
+   "shroodle",
+   "bramblin",
+   "toedscool",
+   "klawf",
+   "capsakid",
+   "rellor",
+   "flittle",
+   "tinkatink",
+   "wiglett",
+   "bombirdier",
+   "finizen",
+   "varoom",
+   "cyclizar",
+   "orthworm",
+   "glimmet",
+   "greavard",
+   "flamigo",
+   "cetoddle",
+   "veluza",
+   "dondozo",
+   "tatsugiri"
+  ],
+  "offRegion": [
+   "rattata",
+   "sentret",
+   "zigzagoon",
+   "bidoof",
+   "lillipup",
+   "fletchling",
+   "rookidee",
+   "yungoos"
+  ],
+  "writers": [
+   {
+    "name": "Olive farmer Pepa",
+    "short": "Pepa",
+    "town": "Cortondo",
+    "quote": "{first} picked olives for us. Never once rolled one."
+   },
+   {
+    "name": "Artazon gardener Brassius's aide",
+    "short": "Aide Flor",
+    "town": "Artazon",
+    "quote": "{first} trimmed the Sunflora statues. Patient work."
+   },
+   {
+    "name": "Levincia streamer's manager",
+    "short": "Manager Volt",
+    "town": "Levincia",
+    "quote": "{first} ran cameras for the streams. Knows what sells."
+   },
+   {
+    "name": "Cascarrafa market seller",
+    "short": "Seller Amir",
+    "town": "Cascarrafa",
+    "quote": "{first} worked the bidding hall. Reads people like price tags."
+   },
+   {
+    "name": "Medali restaurant cook",
+    "short": "Cook Lola",
+    "town": "Medali",
+    "quote": "{first} cooked at the Treasure Eatery. Kept the secret menu secret."
+   },
+   {
+    "name": "Academy janitor Kai",
+    "short": "Janitor Kai",
+    "town": "Montenevera",
+    "quote": "{first} cleaned the Academy halls. Saw Team Star come and go."
+   }
+  ]
+ },
+ "holdings": {
+  "paldea:cortondo-gym-katy": {
+   "district": "cabo-poco",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:cortondo-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Bug crew +10%; Tera training ×1.5.\" waits for a battle or shop hook."
+  },
+  "paldea:artazon-gym-brassius": {
+   "district": "mesagoza",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    }
+   ],
+   "via": "gym:artazon-gym",
+   "note": "Read from the list's Bonus as income each week; the rest of \"Grass crew +10%; art income +₽200/day.\" waits for a battle or shop hook."
+  },
+  "paldea:levincia-gym-iono": {
+   "district": "levincia",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "via": "gym:levincia-gym",
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Electric crew +10%; stream Regard +10.\" waits for a battle or shop hook."
+  },
+  "paldea:cascarrafa-gym-kofu": {
+   "district": "cascarrafa",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1750
+    }
+   ],
+   "via": "gym:cascarrafa-gym",
+   "note": "Read from the list's Bonus as income each week; the rest of \"Water crew +10%; market income +₽250/day.\" waits for a battle or shop hook."
+  },
+  "paldea:medali-gym-larry": {
+   "district": "medali",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:medali-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Normal/Flying crew +10%; free travel in Medali.\" waits for a battle or shop hook."
+  },
+  "paldea:montenevera-gym-ryme": {
+   "district": "montenevera",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "via": "gym:montenevera-gym",
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Ghost crew +10% evasion; concert Regard +10.\" waits for a battle or shop hook."
+  },
+  "paldea:alfornada-gym-tulip": {
+   "district": "alfornada",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:alfornada-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Psychic crew +10%; Foresight.\" waits for a battle or shop hook."
+  },
+  "paldea:glaseado-gym-grusha": {
+   "district": "montenevera",
+   "fx": [
+    {
+     "k": "heat",
+     "n": 5
+    }
+   ],
+   "via": "gym:glaseado-gym",
+   "note": "Read from the list's Bonus as heat each week; the rest of \"Ice crew +10%; snow slopes, Heat −5.\" waits for a battle or shop hook."
+  },
+  "paldea:pokemon-league-geeta": {
+   "district": "mesagoza",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "champion",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Geeta's seat; free practice vs Top Champion weekly.\" waits for a battle or shop hook."
+  },
+  "paldea:team-star-dark-base": {
+   "district": "mesagoza",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Dark crew +10%; a Star Car shortcut; a free Dark-type TM weekly.\" waits for a battle or shop hook."
+  },
+  "paldea:team-star-fire-base": {
+   "district": "cascarrafa",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Fire crew +10%; a Star Car shortcut; a free Fire-type TM weekly.\" waits for a battle or shop hook."
+  },
+  "paldea:team-star-poison-base": {
+   "district": "medali",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Poison crew +10%; a Star Car shortcut; a free Poison-type TM weekly.\" waits for a battle or shop hook."
+  },
+  "paldea:team-star-fairy-base": {
+   "district": "montenevera",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Fairy crew +10%; a Star Car shortcut; a free Fairy-type TM weekly.\" waits for a battle or shop hook."
+  },
+  "paldea:team-star-fighting-base": {
+   "district": "zapapico",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Fighting crew +10%; a Star Car shortcut; a free Fighting-type TM weekly.\" waits for a battle or shop hook."
+  },
+  "paldea:mesagoza": {
+   "district": "mesagoza",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Academy, Gate, Pokémon Center and Eatery; city income ×1.5; Regard +10.\" waits for a battle or shop hook."
+  },
+  "paldea:los-platos": {
+   "district": "cabo-poco",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    },
+    {
+     "k": "regard",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"the Port and beach; Regard +5; seafood +₽200/day.\" waits for a battle or shop hook."
+  },
+  "paldea:cortondo": {
+   "district": "cabo-poco",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1750
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"mining income +₽250/day; Katy's Gym; Bug crew +5%.\" waits for a battle or shop hook."
+  },
+  "paldea:artazon": {
+   "district": "mesagoza",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"Brassius's Gym; wild Pokémon; Grass crew +5%; art income +₽200/day.\" waits for a battle or shop hook."
+  },
+  "paldea:levincia": {
+   "district": "levincia",
+   "fx": [
+    {
+     "k": "income",
+     "n": 2800
+    },
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"the Casino, Streaming Studio and Gym; income +₽400/day; Regard +10.\" waits for a battle or shop hook."
+  },
+  "paldea:cascarrafa": {
+   "district": "cascarrafa",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"the Market and Kofu's Gym; Water crew +5%; items −10%.\" waits for a battle or shop hook."
+  },
+  "paldea:medali": {
+   "district": "medali",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"the Fort; Larry's Gym; Normal crew +5%; free travel in Medali.\" waits for a battle or shop hook."
+  },
+  "paldea:montenevera": {
+   "district": "montenevera",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Ryme's Gym; Ghost crew +5%; concert Regard +10.\" waits for a battle or shop hook."
+  },
+  "paldea:alfornada": {
+   "district": "alfornada",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Tulip's Gym; Psychic crew +5%; Foresight.\" waits for a battle or shop hook."
+  },
+  "paldea:glaseado-mountain": {
+   "district": "montenevera",
+   "fx": [
+    {
+     "k": "heat",
+     "n": 5
+    }
+   ],
+   "note": "Read from the list's Bonus as heat each week; the rest of \"Grusha's Gym; Ice crew +5%; snow cover (Heat −5).\" waits for a battle or shop hook."
+  },
+  "paldea:zapapico": {
+   "district": "zapapico",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1750
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"mining income +₽250/day; a hidden cave route.\" waits for a battle or shop hook."
+  },
+  "paldea:porto-marinada": {
+   "district": "porto-marinada",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"the Docks; import/export +2; ships +1.\" waits for a battle or shop hook."
+  },
+  "paldea:mesagoza-outskirts": {
+   "district": "mesagoza",
+   "fx": [
+    {
+     "k": "income",
+     "n": 350
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"quiet, no police; a hidden stash house.\" waits for a battle or shop hook."
+  },
+  "paldea:naranja-uva-academy": {
+   "district": "mesagoza",
+   "fx": [
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit each week; the rest of \"crew Wits +1; walk-in adult recruits +2 weekly; treasure-hunt rewards; Tera rese\" waits for a battle or shop hook."
+  },
+  "paldea:professors-lab-sada-turo": {
+   "district": "cabo-poco",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Paradox research; free Time Machine; hatch −30%.\" waits for a battle or shop hook."
+  },
+  "paldea:players-house-mesagoza": {
+   "district": "mesagoza",
+   "fx": [
+    {
+     "k": "loyalty",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as loyalty each week; the rest of \"crew heal fully; Loyalty +2 weekly.\" waits for a battle or shop hook."
+  },
+  "paldea:mesagoza-gate": {
+   "district": "mesagoza",
+   "fx": [
+    {
+     "k": "income",
+     "n": 2100
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"shortcuts; ₽300/day; a quick passage to the Academy.\" waits for a battle or shop hook."
+  },
+  "paldea:pokemon-center-mesagoza": {
+   "district": "mesagoza",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 3,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"free heal; trade terminal; Regard +3.\" waits for a battle or shop hook."
+  },
+  "paldea:treasure-eatery": {
+   "district": "medali",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "via": "biz:medali-restaurant",
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Regard +10; sandwich buffs; a free sandwich weekly.\" waits for a battle or shop hook."
+  },
+  "paldea:levincia-casino": {
+   "district": "levincia",
+   "fx": [
+    {
+     "k": "income",
+     "n": 2800
+    },
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as income, recruit each week; the rest of \"laundering 5%; high-roller recruits; income +₽400/day.\" waits for a battle or shop hook."
+  },
+  "paldea:levincia-streaming-studio": {
+   "district": "levincia",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Regard +10; Intel +1; a viral clip once a month.\" waits for a battle or shop hook."
+  },
+  "paldea:cascarrafa-market": {
+   "district": "cascarrafa",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1050
+    },
+    {
+     "k": "regard",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "biz:cascarrafa-auction",
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"items −10%; Regard +5; clean income +₽150/day.\" waits for a battle or shop hook."
+  },
+  "paldea:los-platos-docks": {
+   "district": "cabo-poco",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"import/export +2; sea ships +1.\" waits for a battle or shop hook."
+  },
+  "paldea:delibird-presents": {
+   "district": "mesagoza",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"free item delivery weekly; Regard +5.\" waits for a battle or shop hook."
+  },
+  "paldea:pokemon-dojo": {
+   "district": "levincia",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    },
+    {
+     "k": "income",
+     "n": 350
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Fighting crew +10%; training ×1.5.\" waits for a battle or shop hook."
+  },
+  "paldea:poco-path-lighthouse": {
+   "district": "levincia",
+   "fx": [
+    {
+     "k": "heat",
+     "n": 5
+    }
+   ],
+   "note": "Read from the list's Bonus as heat each week; the rest of \"sea control; ships bow to you; a Heat −5 skyline view.\" waits for a battle or shop hook."
+  },
+  "paldea:casseroya-lake": {
+   "district": "zapapico",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Water crew +5%; Wild Reserve +1.\" waits for a battle or shop hook."
+  },
+  "paldea:asado-desert": {
+   "district": "cascarrafa",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Ground crew +5%; a shortcut; sandstorms hide you from Heat.\" waits for a battle or shop hook."
+  },
+  "paldea:south-province-wilds": {
+   "district": "cabo-poco",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"two wild Pokémon a day; Normal and Grass species.\" waits for a battle or shop hook."
+  },
+  "paldea:east-province-wilds": {
+   "district": "medali",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"two wild Pokémon a day; Water and Fire species.\" waits for a battle or shop hook."
+  },
+  "paldea:west-province-wilds": {
+   "district": "cascarrafa",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"two wild Pokémon a day; Ground and Rock species.\" waits for a battle or shop hook."
+  },
+  "paldea:north-province-wilds": {
+   "district": "zapapico",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"two wild Pokémon a day; Ice and Dragon species.\" waits for a battle or shop hook."
+  },
+  "paldea:tagtree-thicket": {
+   "district": "medali",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    },
+    {
+     "k": "income",
+     "n": 175
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Bug crew +5%; hidden items; a Tera Raid site.\" waits for a battle or shop hook."
+  },
+  "paldea:dalizapa-passage": {
+   "district": "zapapico",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"a shortcut (−1 day); Normal wild Pokémon.\" waits for a battle or shop hook."
+  },
+  "paldea:socarrat-trail": {
+   "district": "cascarrafa",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Wild Reserve +1; Tera shards.\" waits for a battle or shop hook."
+  },
+  "paldea:inlet-grotto": {
+   "district": "cabo-poco",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Water crew +5%; hidden items.\" waits for a battle or shop hook."
+  },
+  "paldea:alfornada-cavern": {
+   "district": "alfornada",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Ghost crew +5%; hidden items.\" waits for a battle or shop hook."
+  },
+  "paldea:glaseado-mountain-path": {
+   "district": "montenevera",
+   "fx": [
+    {
+     "k": "heat",
+     "n": 5
+    }
+   ],
+   "note": "Read from the list's Bonus as heat each week; the rest of \"Ice crew +5%; Heat −5.\" waits for a battle or shop hook."
+  },
+  "paldea:great-crater-of-paldea": {
+   "district": "area-zero-gate",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Area Zero access; Paradox rumours; Time Machine hint.\" waits for a battle or shop hook."
+  },
+  "paldea:area-zero": {
+   "district": "area-zero-gate",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Paradox Pokémon; Time Machine; Tera research.\" waits for a battle or shop hook."
+  },
+  "paldea:zero-lab": {
+   "district": "area-zero-gate",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Paradox research; Time Machine; Tera Crystal weekly.\" waits for a battle or shop hook."
+  },
+  "paldea:titan-site-klawf": {
+   "district": "cascarrafa",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Rock crew +5%; a Titan raid weekly; Rock gems.\" waits for a battle or shop hook."
+  },
+  "paldea:titan-site-bombirdier": {
+   "district": "medali",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Flying crew +5%; a Titan raid weekly; Flying gems.\" waits for a battle or shop hook."
+  },
+  "paldea:titan-site-orthworm": {
+   "district": "cascarrafa",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Steel crew +5%; a Titan raid weekly; Steel gems.\" waits for a battle or shop hook."
+  },
+  "paldea:titan-site-great-tusk-iron-treads": {
+   "district": "zapapico",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Ground crew +5%; a Titan raid weekly; Ground gems.\" waits for a battle or shop hook."
+  },
+  "paldea:titan-site-dondozo": {
+   "district": "montenevera",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Water crew +5%; a Titan raid weekly; Water gems.\" waits for a battle or shop hook."
+  },
+  "paldea:team-star-base-hq": {
+   "district": "mesagoza",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"rival HQ; Dread +; Wipe Out path +30%.\" waits for a battle or shop hook."
+  },
+  "paldea:paldea-mine": {
+   "district": "zapapico",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1750
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"ore +₽250/day; Rock crew +5%.\" waits for a battle or shop hook."
+  },
+  "paldea:paldea-port": {
+   "district": "porto-marinada",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"import/export +2; sea ships +1.\" waits for a battle or shop hook."
+  }
+ }
+}

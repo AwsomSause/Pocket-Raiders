@@ -4,7 +4,7 @@
 // target (data-act) with a key path. Later slices add their screens beside this file and reuse `stage`, `topBar`, `tabs`.
 
 import './dominion.css';
-import type { HqModel, SetupDraft, TopModel } from '../../../../core/dominion/screens';
+import type { CharterRow, HqModel, SetupDraft, TopModel } from '../../../../core/dominion/screens';
 import type { TeamColours } from '../../../../core/dominion/founding';
 import { pngSrc, tallTeam } from './teamPic';
 import type { Threat } from '../../../../core/dominion/rivalScreens';
@@ -126,6 +126,36 @@ export interface SetupFiles {
   types: { allowed: string[]; banned: string[]; bannedLine: string; hint: string[] };
   grunt: { name: string; pitch: string; facts: string[] };
   admin: { pitch: string; facts: string[]; looks: { file: string; name: string; cls: string }[] };
+  /** D16: the Charters (open once a Dominion run is finished on this profile). */
+  charters: { open: boolean; lockLine: string; pickLine: string; rows: CharterRow[] };
+}
+
+/** D16: the Charters page (C on the Boss page): the nine established starts, the picked one's terms beside them. */
+function charterPage(d: SetupDraft, f: SetupFiles): string {
+  const rows = f.charters.rows;
+  const list = rows.map((c, i) => {
+    const on = i === d.cAt;
+    return `<div class="ch${on ? ' on' : ''}" style="padding:3px 10px 3px 20px;font-size:15px;--stripe:${c.colours[0]};${c.off ? 'opacity:.5' : ''}"${act('charterRow', i)} data-over="charterOver" data-testid="dom-charter-${esc(c.id)}">${on ? '▶ ' : ''}${esc(c.team)} <span class="mu xs">${esc(c.from)} · “${esc(c.question)}”</span></div>`;
+  }).join('');
+  const c = rows[d.cAt];
+  const fact = (k: string, v: string): string => `<div class="row sp sm"><span class="mu">${k}</span><b>${v}</b></div>`;
+  const detail = c ? `<div class="row" style="gap:12px;align-items:flex-end">
+      <div class="emb" style="width:54px;height:48px;font-size:32px;clip-path:polygon(0 0,100% 0,100% 70%,50% 100%,0 70%);background:linear-gradient(180deg,${c.colours[0]},color-mix(in srgb,${c.colours[0]} 60%,#000));color:${c.colours[1]}">${esc(c.initial)}</div>
+      <div class="col" style="gap:3px"><b style="font-size:22px">${esc(c.team)}</b><span class="xs" style="font-style:italic;color:#efe6ff">${esc(c.motto)}</span></div>
+      <div style="margin-left:auto;height:72px;display:flex;align-items:flex-end">${tall(c.patron.look, 72)}</div></div>
+    <div class="row" style="gap:6px;margin:6px 0">${c.types.map((t) => typeChip(t)).join('')}</div>
+    <div class="xs" style="line-height:1.3;margin-bottom:6px"><b>${esc(c.patron.name)}</b>, the Patron. ${esc(c.patron.note)}</div>
+    ${fact('Funds', `₽${c.funds.toLocaleString('en-US')}`)}${fact('HQ level', String(c.hqLevel))}${fact('Grunts', String(c.grunts))}
+    ${fact('Heat · Regard · Dread', `${c.heat} · ${c.regard} · ${c.dread}`)}` : '';
+  const lock = f.charters.open ? '' : `<div class="a" style="left:40px;right:40px;top:440px;z-index:9;text-align:center" data-testid="dom-charter-lock"><span class="pill k" style="font-size:14px">🔒 ${esc(f.charters.lockLine)}</span></div>`;
+  return `<div class="pnl glass" style="left:40px;top:96px;width:470px;height:330px;${f.charters.open ? '' : 'filter:saturate(.35) brightness(.8)'}" data-testid="dom-setup-charters">
+      <div class="hd y"><img class="ic" src="${img('g-journal')}" alt="">THE CHARTERS<span class="r">${rows.length}</span></div>
+      <div class="col" style="gap:3px">${list}</div>
+    </div>
+    <div class="pnl glass" style="left:530px;top:96px;width:390px;height:330px;${f.charters.open ? '' : 'filter:saturate(.35) brightness(.8)'}" data-testid="dom-charter-detail">
+      <div class="hd"><img class="ic" src="${img('i-leaders_crest')}" alt="">AN ESTABLISHED START</div>${detail}
+      <div class="mu xs" style="margin-top:6px;line-height:1.25">${esc(f.charters.pickLine)}</div>
+    </div>${lock}${d.problem ? `<div class="a rd b7" style="left:40px;top:470px;z-index:9" data-testid="dom-problem">${esc(d.problem)}</div>` : ''}`;
 }
 
 const typeChip = (t: string, extra = ''): string => `<span class="type" style="--c:${TYPE_COLORS[cap(t)] ?? '#888'};${extra}">${cap(t).toUpperCase()}</span>`;
@@ -138,11 +168,13 @@ export function warehouseBack(morning = false): string {
 
 export function setupView(d: SetupDraft, f: SetupFiles): string {
   const pages = ['THE BOSS', 'THE COLOURS OF THE TEAM', 'THE FIRST MEMBER'];
-  const pi = d.page === 'boss' ? 0 : d.page === 'types' ? 1 : 2;
-  const head = `<div class="ttl" style="--t1:#5b34b0;--t2:#c9338f">NEW RUN<span class="sub">· ${pages[pi]} · ${pi + 1} of 3</span></div>
-    <div class="keys"><span class="key">Esc</span>back<span class="key">Enter</span>next</div>`;
+  const pi = d.page === 'boss' || d.page === 'charter' ? 0 : d.page === 'types' ? 1 : 2;
+  const sub = d.page === 'charter' ? '· A CHARTER · optional' : `· ${pages[pi]} · ${pi + 1} of 3`;
+  const head = `<div class="ttl" style="--t1:#5b34b0;--t2:#c9338f">NEW RUN<span class="sub">${sub}</span></div>
+    <div class="keys"><span class="key">Esc</span>back<span class="key">Enter</span>${d.page === 'charter' ? 'begin' : 'next'}</div>`;
   let body = '';
-  if (d.page === 'boss') {
+  if (d.page === 'charter') body = charterPage(d, f);
+  else if (d.page === 'boss') {
     body = `<div class="pnl glass" style="left:40px;top:96px;width:420px;height:330px" data-testid="dom-setup-boss">
         <div class="hd y"><img class="ic" src="${img('g-member-card')}" alt="">THE BOSS</div>
         <div class="row" style="gap:16px;align-items:flex-end;height:200px;justify-content:center">${f.boss.file ? tall(f.boss.file, 190) : ''}</div>
@@ -152,7 +184,9 @@ export function setupView(d: SetupDraft, f: SetupFiles): string {
         <div class="hd"><img class="ic" src="${img('g-ball')}" alt="">YOUR THREE POKÉMON</div>
         <div class="row" style="gap:10px;justify-content:space-around">${f.starters.map((s) => `<div class="col" style="align-items:center;gap:4px;width:126px">${s.file ? mini(s.file, 110) : ''}<b>${esc(s.name)}</b><span class="mu sm">Lv ${s.level}</span></div>`).join('')}</div>
         <div class="mu sm" style="margin-top:14px;line-height:1.4">The starter you picked, and the other two that were offered. The Boss has no type rule: any Pokémon under the level cap.</div>
-      </div>`;
+      </div>
+      <div class="a row" style="left:40px;top:440px;z-index:9;gap:8px;cursor:pointer;font:600 14px var(--ui);color:${f.charters.open ? '#ffe28a' : '#9aa3c4'}"${act('charters')} data-testid="dom-setup-charter-chip"><span class="kc">C</span>${f.charters.open ? 'Or start from a Charter' : `🔒 Charters: ${esc(f.charters.lockLine)}`}</div>
+      ${d.problem ? `<div class="a rd b7" style="left:40px;top:466px;z-index:9;width:600px" data-testid="dom-problem">${esc(d.problem)}</div>` : ''}`;
   } else if (d.page === 'types') {
     const grid = [...f.types.allowed, ...f.types.banned].map((t, i) => {
       const banned = f.types.banned.includes(t), picked = d.types.includes(t), sel = i === d.at;
@@ -187,7 +221,7 @@ export function setupView(d: SetupDraft, f: SetupFiles): string {
     };
     body = card(0) + card(1) + (d.problem ? `<div class="a rd b7" style="left:40px;top:458px;z-index:9">${esc(d.problem)}</div>` : '');
   }
-  const next = d.page === 'member' ? 'Begin' : 'Next';
+  const next = d.page === 'member' || d.page === 'charter' ? 'Begin' : 'Next';
   return stage(`${warehouseBack()}<div class="a" style="inset:0;background:rgba(6,9,19,.55);z-index:4"></div>${head}${body}
     <div class="cta shine" style="right:40px;bottom:30px"${act('next')} data-testid="dom-next">${next} ▶ <span class="kc">Enter</span></div>`);
 }

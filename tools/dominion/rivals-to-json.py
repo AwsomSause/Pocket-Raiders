@@ -58,14 +58,14 @@ KIND = {
     44: ('money', S, None), 45: ('smash', S, None), 46: ('skim', S, None), 47: ('money', L, 'Frozen money is taken outright until the Ledger can lock it (D6).'),
     48: ('racket', S, None), 49: ('money', L, 'Buy Outs come with D10.'), 50: ('heat', S, None),
     # F. Smears, news and fear
-    51: ('regard', S, None), 52: ('heat', S, None), 53: (None, X, 'D10'), 54: ('heat', S, None), 55: ('loyalty1', S, None),
+    51: ('regard', S, None), 52: ('heat', S, None), 53: ('gymSmear', S, None), 54: ('heat', S, None), 55: ('loyalty1', S, None),
     56: ('heat', S, None), 57: ('regard', S, None), 58: ('recruitCut', S, None), 59: ('hero', S, None), 60: ('heat', S, None),
     # G. Using the Hero, police and Gyms
-    61: ('heat', S, None), 62: (None, X, 'D10'), 63: ('hero', S, None), 64: (None, X, 'D14'), 65: ('heat', S, None),
-    66: ('closed', S, None), 67: ('heat', S, None), 68: ('money', S, None), 69: (None, X, 'D10'), 70: ('hero', S, None),
+    61: ('heat', S, None), 62: ('gymRefuse', S, None), 63: ('hero', S, None), 64: (None, X, 'D14'), 65: ('heat', S, None),
+    66: ('closed', S, None), 67: ('heat', S, None), 68: ('money', S, None), 69: ('gymFrame', S, None), 70: ('hero', S, None),
     # H. Territory
     71: ('control', S, None), 72: ('control', S, None), 73: ('recruitCut', S, None), 74: ('racket', S, None), 75: ('control', S, None),
-    76: (None, X, 'D15'), 77: ('regard', S, None), 78: ('skim', S, None), 79: (None, X, 'D10'), 80: ('control', L, 'The wall is their Control; battle accuracy waits for D10.'),
+    76: (None, X, 'D15'), 77: ('regard', S, None), 78: ('skim', S, None), 79: ('gymAnnex', S, None), 80: ('control', L, 'The wall is their Control; battle accuracy waits for D10.'),
     # I. Admin field battles
     81: ('fight', S, None), 82: ('fight', S, None), 83: ('control', S, None), 84: ('fight', S, None), 85: ('demand', S, None),
     86: ('deal', S, None), 87: ('fight', S, None), 88: (None, X, 'D11'), 89: ('fight', S, None), 90: ('defect', S, None),
@@ -80,8 +80,8 @@ KIND = {
     115: ('truce', S, None), 116: ('poach', L, 'The swap is one way until D16 adds trades.'), 117: ('heat', S, None), 118: ('debate', S, None), 119: ('debate', S, None), 120: ('tension', S, None),
     # M. Pokémon schemes
     121: ('mood', L, 'Pokémon XP loss waits for D10; the crew feel it as Morale.'), 122: ('fight', S, None), 123: ('skim', S, None),
-    124: (None, X, 'D4'), 125: (None, X, 'D11'), 126: ('grow', S, None), 127: ('grow', S, None), 128: (None, X, 'D10'),
-    129: ('cond', S, None), 130: (None, X, 'D10'),
+    124: (None, X, 'D4'), 125: (None, X, 'D11'), 126: ('grow', S, None), 127: ('grow', S, None), 128: ('gymWeaken', S, None),
+    129: ('cond', S, None), 130: ('turned', S, None),
     # N. Covert ops and terror
     131: ('racket', S, None), 132: ('intel', S, None), 133: ('skim', S, None), 134: ('regard', S, None), 135: ('hurt', S, None),
     136: ('mood', S, None), 137: ('closed', S, None), 138: ('grow', S, None), 139: ('skim', S, None), 140: ('money', S, None),
@@ -159,8 +159,54 @@ def actions():
     }
 
 
-# Outside interactions: the slice each section waits for (F is D9's; A and J are D6b's, town.ts and town.json). Marks: 🔒 minor lock, 🌙 night, ☀ day, ⟳ scales, 🔗 chain.
-SECTION_WAITS = {'A': None, 'B': 'D10', 'C': 'D10', 'D': 'D10', 'E': 'D10', 'F': None, 'G': 'D11', 'H': 'D10', 'I': 'D10', 'J': None, 'K': 'D10', 'L': 'D15'}
+# Outside interactions: the slice each section waits for (F is D9's; A and J are D6b's, town.ts and town.json; B-E, H, I, K the D10 follow-up's). Marks: 🔒 minor lock, 🌙 night, ☀ day, ⟳ scales, 🔗 chain.
+SECTION_WAITS = {'A': None, 'B': None, 'C': None, 'D': None, 'E': None, 'F': None, 'G': 'D11', 'H': None, 'I': None, 'J': None, 'K': None, 'L': 'D15'}
+# D10 follow-up: street rows that only do part of what the list says (tools/dominion/outside-d10.py plays them).
+OUTSIDE_LIMITED = {
+    'O032': 'Buying the building later is the Buy Out on the Card; here it only earns a little Regard.',
+    'O036': 'Berries are not in the Bag yet: a Hyper Potion stands in.',
+    'O038': 'TMs teach on the spot and can\'t sit in the Bag: the hidden find is a Water Stone.',
+    'O041': 'The Egg hatches at once into a Pokémon from the region.',
+    'O044': 'The banker\'s loan is the Take a Loan action; a bribe gives dirt on him instead.',
+    'O059': 'Apricorn Balls: a Fast Ball.',
+    'O060': 'The Hero\'s next stop shows as less of the Hero\'s attention.',
+    'O062': 'Going around costs no day.',
+    'O064': 'Looker\'s three clues are told as Heat and Wanted.',
+    'O067': 'A raid on the evidence room frees a jailed member if there is one.',
+    'O071': 'Pleading needs no Lawyer: a Charm test.',
+    'O072': 'Handing the member over costs Morale instead of the member.',
+    'O076': 'The stolen Pokémon stays with you.',
+    'O080': 'Your seized gear comes back as an Ultra Ball.',
+    'O085': 'Breaking the curfew is a plain Heat risk; the flyers are not printed.',
+    'O089': 'The +10 Takeover odds are one more scouting point on the Gym.',
+    'O100': 'The Crackdown week odds show as Wanted.',
+    'O102': 'The Monarch route flag waits for D14\'s League; the entry only earns standing.',
+    'O104': 'The family business pays as a weekly racket instead of a Buy Out.',
+    'O105': 'The badge itself stays: the theft leaves dirt on the Gym.',
+    'O114': 'The Egg hatches at once.',
+    'O120': 'The double battle is a single battle.',
+    'O122': 'No boat check: a Brawn test.',
+    'O129': 'The hints scout the district.',
+    'O133': 'The Speed test is a Stealth test.',
+    'O187': 'Hitting the lab here pays money; the rare Pokémon comes from the Lab Hit action.',
+    'O190': 'The fossil is revived at once.',
+    'O193': 'The partnership pays as a weekly racket.',
+    'O206': 'Tracking it to its den scouts the district.',
+    'O207': 'Going round costs no time.',
+    'O208': 'The three-day hunt is one battle; the find is not always shiny.',
+    'O216': 'Berries are not in the Bag yet: Potions stand in.',
+    'O217': 'No Poké Flute in the game yet: waking it is a Charm test.',
+    'O218': 'Marking the cave as a stash makes it a safehouse.',
+    'O220': 'The Egg hatches at once.',
+    'O225': 'Waiting costs no action; moving unseen is a day\'s cover and Stealth XP; the ambush is a fight.',
+    'O227': 'The legend\'s trail is one Wits test (the legend itself comes with D11 and D15).',
+    'O228': 'No spare is given in the swap.',
+    'O253': 'The guild\'s +10% Thieve is Stealth XP for the Boss.',
+    'O258': 'The hit lowers the rival\'s intel and raises Tension, not their team.',
+    'O265': 'Acting on the tip pays as a quick Steal.',
+    'O266': 'No Lawyer needed: a Wits test.',
+    'O268': 'The driver keeps the police off here for three days.',
+}
 
 
 def outside():
@@ -184,8 +230,9 @@ def outside():
         rows.append({
             'id': m.group(1), 'section': sec, 'what': what, 'who': m.group(3).strip(),
             'choices': [c.strip().replace(' ⟳', '').replace('⟳', '').strip() for c in m.group(4).split(' / ')],
-            'marks': marks, 'status': 'disabled' if SECTION_WAITS[sec] else 'supported',
+            'marks': marks, 'status': 'disabled' if SECTION_WAITS[sec] else 'limited' if m.group(1) in OUTSIDE_LIMITED else 'supported',
             **({'waits': SECTION_WAITS[sec]} if SECTION_WAITS[sec] else {}),
+            **({'note': OUTSIDE_LIMITED[m.group(1)]} if not SECTION_WAITS[sec] and m.group(1) in OUTSIDE_LIMITED else {}),
         })
     assert len(rows) == 300, len(rows)
     return {'_source': 'plans/evil-mode-rework/lists/outside-interactions.md, word for word (tools/dominion/rivals-to-json.py)', 'sections': names, 'rows': rows}

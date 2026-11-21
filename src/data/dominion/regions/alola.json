@@ -1,0 +1,2242 @@
+{
+ "_source": "tools/dominion/regions-to-json.py (alola); see the tool for sources.",
+ "id": "alola",
+ "label": "ALOLA",
+ "warehouse": "Hau'oli",
+ "hq": "hauoli",
+ "arrive": [
+  "Hau'oli in the sun. The new warehouse is a closed surf shop, and the sign still says ALOHA.",
+  "{brought} puts on sunglasses. \"Boss, I think I live here now.\"",
+  "Down the beach, a crowd in skull hats is spray-painting a wall. A car with a white foundation logo drives past them very slowly."
+ ],
+ "districts": [
+  {
+   "id": "iki",
+   "name": "Iki Town",
+   "x": 40,
+   "y": 196,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "normal-fighting",
+   "targets": [
+    {
+     "id": "iki-stage",
+     "name": "The Festival Stage",
+     "kind": "crowd",
+     "owner": {
+      "name": "The town elders",
+      "look": "trainer/pr/veteran_m",
+      "line": "The kahuna's stage. Everyone comes on festival night."
+     },
+     "trait": {
+      "word": "Pious",
+      "odds": -6
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Festival guard",
+      "cls": "black-belt",
+      "species": [
+       "makuhita",
+       "crabrawler"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "ruins-of-conflict",
+     "name": "Ruins of Conflict",
+     "kind": "ghost",
+     "owner": {
+      "name": "The ruin keeper",
+      "look": "trainer/pr/ruin_maniac",
+      "line": "Tapu Koko's old home. People leave offerings."
+     },
+     "trait": {
+      "word": "Superstitious",
+      "odds": 6
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Keeper",
+      "cls": "psychic",
+      "species": [
+       "spinda"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "route-1-alola",
+     "name": "Route 1",
+     "kind": "route",
+     "owner": {
+      "name": "Trainers on the route",
+      "look": "trainer/pr/backpacker_m",
+      "line": "Kids with their first partner and a lot of sunscreen."
+     },
+     "trait": null,
+     "pay": 1,
+     "foe": {
+      "name": "Youngster Joey",
+      "cls": "youngster",
+      "species": [
+       "pikipek",
+       "yungoos"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "hauoli",
+   "name": "Hau'oli",
+   "x": 40,
+   "y": 300,
+   "control": 10,
+   "rival": 0,
+   "police": true,
+   "wild": "normal-water",
+   "targets": [
+    {
+     "id": "hauoli-mall",
+     "name": "Hau'oli Shopping Mall",
+     "kind": "shop",
+     "owner": {
+      "name": "The mall manager",
+      "look": "trainer/pr/rich_f",
+      "line": "Three floors of souvenirs and a malasada stall."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 4
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Mall guard",
+      "cls": "veteran",
+      "species": [
+       "meowth",
+       "yungoos"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "hauoli-beach",
+     "name": "Hau'oli Beachfront",
+     "kind": "dock",
+     "owner": {
+      "name": "The surfers",
+      "look": "trainer/pr/swimmer_m",
+      "line": "Surfboards, tourists, and boats that come in at night."
+     },
+     "trait": {
+      "word": "Gullible",
+      "odds": 5
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Surfer",
+      "cls": "swimmer",
+      "species": [
+       "wingull",
+       "pyukumuku"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "hauoli-station",
+     "name": "Hau'oli Police Station",
+     "kind": "police",
+     "owner": {
+      "name": "Officer Jenny",
+      "look": "dominion/t-policeman.png",
+      "line": "The island's only real police station."
+     },
+     "trait": {
+      "word": "Sharp",
+      "odds": -10
+     },
+     "pay": 1,
+     "foe": {
+      "name": "Officer",
+      "cls": "veteran",
+      "species": [
+       "growlithe",
+       "gumshoos"
+      ],
+      "offset": 1
+     }
+    }
+   ],
+   "w": 124
+  },
+  {
+   "id": "heahea",
+   "name": "Heahea",
+   "x": 180,
+   "y": 196,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "normal-water",
+   "targets": [
+    {
+     "id": "tide-song-hotel",
+     "name": "Tide Song Hotel",
+     "kind": "crowd",
+     "owner": {
+      "name": "The concierge",
+      "look": "trainer/pr/waiter_m",
+      "line": "Every guest is rich and every guest is bored."
+     },
+     "trait": {
+      "word": "Gossip",
+      "odds": 6
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Hotel guard",
+      "cls": "veteran",
+      "species": [
+       "persian"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "heahea-port",
+     "name": "Heahea Port",
+     "kind": "dock",
+     "owner": {
+      "name": "The harbour master",
+      "look": "trainer/pr/pilot",
+      "line": "Ferries between all four islands."
+     },
+     "trait": {
+      "word": "Stubborn",
+      "odds": -4
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Dock hand",
+      "cls": "worker",
+      "species": [
+       "machop",
+       "wingull"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "dimensional-lab",
+     "name": "Dimensional Research Lab",
+     "kind": "site",
+     "owner": {
+      "name": "Professor Burnet",
+      "look": "trainer/pr/scientist_f",
+      "line": "She studies the holes in the sky."
+     },
+     "trait": {
+      "word": "Distracted",
+      "odds": 6
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Lab aide",
+      "cls": "psychic",
+      "species": [
+       "abra",
+       "porygon"
+      ],
+      "offset": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "konikoni",
+   "name": "Konikoni",
+   "x": 180,
+   "y": 300,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "rock-steel",
+   "targets": [
+    {
+     "id": "konikoni-market",
+     "name": "Konikoni Market",
+     "kind": "shop",
+     "owner": {
+      "name": "The stall owners",
+      "look": "trainer/pr/clerk_f",
+      "line": "Herbs, jewellery and old pearls."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 5
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Market tough",
+      "cls": "roughneck",
+      "species": [
+       "magnemite",
+       "mudbray"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "memorial-hill",
+     "name": "Memorial Hill",
+     "kind": "ghost",
+     "owner": {
+      "name": "The grave keeper",
+      "look": "trainer/pr/veteran_f",
+      "line": "Old graves on a windy hill. Ghosts at sunset."
+     },
+     "trait": {
+      "word": "Superstitious",
+      "odds": 6
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Keeper",
+      "cls": "hex-maniac",
+      "species": [
+       "sandygast",
+       "zubat"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "route-9-alola",
+     "name": "Route 9 Docks",
+     "kind": "route",
+     "owner": {
+      "name": "Fishermen",
+      "look": "trainer/pr/scuba_diver_m",
+      "line": "The quiet side of the island."
+     },
+     "trait": null,
+     "pay": 1.1,
+     "foe": {
+      "name": "Fisherman Kai",
+      "cls": "fisherman",
+      "species": [
+       "wishiwashi",
+       "finneon"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "malie",
+   "name": "Malie",
+   "x": 320,
+   "y": 196,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "normal-grass",
+   "targets": [
+    {
+     "id": "malie-library",
+     "name": "Malie Library",
+     "kind": "site",
+     "owner": {
+      "name": "The librarian",
+      "look": "trainer/pr/veteran_f",
+      "line": "Old Kanto-style roofs and older books."
+     },
+     "trait": {
+      "word": "Bookish",
+      "odds": 5
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Library guard",
+      "cls": "veteran",
+      "species": [
+       "bronzor"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "malie-garden",
+     "name": "Malie Garden",
+     "kind": "crowd",
+     "owner": {
+      "name": "The garden tea house",
+      "look": "trainer/pr/maid",
+      "line": "Tourists drink tea; locals watch the tourists."
+     },
+     "trait": {
+      "word": "Gullible",
+      "odds": 5
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Tea house guard",
+      "cls": "veteran",
+      "species": [
+       "psyduck",
+       "lombre"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "malie-port",
+     "name": "Malie Port",
+     "kind": "dock",
+     "owner": {
+      "name": "The cargo crew",
+      "look": "trainer/pr/worker_f",
+      "line": "Cargo for the whole island."
+     },
+     "trait": {
+      "word": "Bored",
+      "odds": 4
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Cargo hand",
+      "cls": "worker",
+      "species": [
+       "machop",
+       "pelipper"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "po",
+   "name": "Po Town",
+   "x": 320,
+   "y": 70,
+   "control": 0,
+   "rival": 75,
+   "police": false,
+   "wild": "poison-dark",
+   "targets": [
+    {
+     "id": "shady-house",
+     "name": "The Shady House",
+     "kind": "site",
+     "owner": {
+      "name": "The 'butler'",
+      "look": "trainer/pr/waiter_m",
+      "line": "Guzma's mansion. Skull does what it likes here."
+     },
+     "trait": {
+      "word": "Shifty",
+      "odds": 6
+     },
+     "pay": 1.6,
+     "foe": {
+      "name": "Skull grunt",
+      "cls": "roughneck",
+      "species": [
+       "salandit",
+       "mareanie"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "po-mart",
+     "name": "Po Town Mart",
+     "kind": "shop",
+     "owner": {
+      "name": "The Mart clerk",
+      "look": "dominion/t-clerk.png",
+      "line": "Shut, painted over, and still open if you knock."
+     },
+     "trait": {
+      "word": "Timid",
+      "odds": 5
+     },
+     "pay": 1.1,
+     "foe": {
+      "name": "Skull grunt",
+      "cls": "roughneck",
+      "species": [
+       "zubat",
+       "grimer"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "po-walls",
+     "name": "The Painted Walls",
+     "kind": "street",
+     "owner": {
+      "name": "The taggers",
+      "look": "trainer/pr/hooligans",
+      "line": "Every wall says SKULL. Every wall."
+     },
+     "trait": {
+      "word": "Hothead",
+      "odds": 4
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Tagger",
+      "cls": "roughneck",
+      "species": [
+       "salandit",
+       "trubbish"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "rivalNote": "Skull"
+  },
+  {
+   "id": "aether",
+   "name": "Aether Paradise",
+   "x": 460,
+   "y": 196,
+   "control": 0,
+   "rival": 60,
+   "police": false,
+   "wild": "psychic-fairy",
+   "targets": [
+    {
+     "id": "aether-conservation",
+     "name": "Conservation Deck",
+     "kind": "site",
+     "owner": {
+      "name": "The branch chief",
+      "look": "trainer/pr/scientist_m",
+      "line": "Pokémon in perfect white rooms. Too perfect."
+     },
+     "trait": {
+      "word": "Loyal",
+      "odds": -6
+     },
+     "pay": 1.6,
+     "foe": {
+      "name": "Aether guard",
+      "cls": "veteran",
+      "species": [
+       "porygon2",
+       "bewear"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "aether-lobby",
+     "name": "Aether Lobby",
+     "kind": "crowd",
+     "owner": {
+      "name": "The receptionists",
+      "look": "trainer/pr/clerk_f",
+      "line": "Smiles, white uniforms, and a lift that needs a card."
+     },
+     "trait": {
+      "word": "Shifty",
+      "odds": 5
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Receptionist",
+      "cls": "ace-trainer",
+      "species": [
+       "oranguru"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "aether-docks",
+     "name": "Aether Docks",
+     "kind": "dock",
+     "owner": {
+      "name": "The ferry crew",
+      "look": "trainer/pr/pilot",
+      "line": "The only way on or off the island."
+     },
+     "trait": {
+      "word": "Steady",
+      "odds": -4
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Ferry hand",
+      "cls": "swimmer",
+      "species": [
+       "pelipper",
+       "lanturn"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "w": 130,
+   "rivalNote": "Aether"
+  },
+  {
+   "id": "paniola",
+   "name": "Paniola",
+   "x": 180,
+   "y": 70,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "normal-ground",
+   "targets": [
+    {
+     "id": "paniola-ranch",
+     "name": "Paniola Ranch",
+     "kind": "site",
+     "owner": {
+      "name": "The ranch owner",
+      "look": "trainer/pr/veteran_m",
+      "line": "Tauros and Miltank and a very old fence."
+     },
+     "trait": {
+      "word": "Stubborn",
+      "odds": -4
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Ranch hand",
+      "cls": "worker",
+      "species": [
+       "mudbray",
+       "tauros"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "royal-avenue",
+     "name": "Royal Avenue",
+     "kind": "crowd",
+     "owner": {
+      "name": "The Battle Royal crowd",
+      "look": "trainer/pr/smasher",
+      "line": "Four Trainers in one ring. The crowd bets on all of them."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 5
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Masked Royal fan",
+      "cls": "ace-trainer",
+      "species": [
+       "hawlucha",
+       "crabrawler"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "route-5-alola",
+     "name": "Brooklet Hill",
+     "kind": "route",
+     "owner": {
+      "name": "Trainers on the hill",
+      "look": "trainer/pr/backpacker_f",
+      "line": "Waterfalls and wishiwashi."
+     },
+     "trait": null,
+     "pay": 1.1,
+     "foe": {
+      "name": "Fisherman Ray",
+      "cls": "fisherman",
+      "species": [
+       "dewpider",
+       "wishiwashi"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "seafolk",
+   "name": "Seafolk",
+   "x": 460,
+   "y": 300,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "water-flying",
+   "targets": [
+    {
+     "id": "seafolk-boats",
+     "name": "Seafolk Houseboats",
+     "kind": "dock",
+     "owner": {
+      "name": "The boat captains",
+      "look": "trainer/pr/pilot",
+      "line": "A village made of boats. Nobody owns land here."
+     },
+     "trait": {
+      "word": "Stubborn",
+      "odds": -4
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Captain",
+      "cls": "swimmer",
+      "species": [
+       "wailmer",
+       "pelipper"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "poni-canyon",
+     "name": "Poni Canyon",
+     "kind": "cave",
+     "owner": {
+      "name": "The canyon guides",
+      "look": "trainer/pr/ranger_f",
+      "line": "Dragon Pokémon live at the end of the canyon."
+     },
+     "trait": {
+      "word": "Proud",
+      "odds": -6
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Guide",
+      "cls": "dragon-tamer",
+      "species": [
+       "jangmo-o",
+       "golbat"
+      ],
+      "offset": 2
+     }
+    },
+    {
+     "id": "seafolk-diner",
+     "name": "Floating Diner",
+     "kind": "crowd",
+     "owner": {
+      "name": "The cook",
+      "look": "trainer/pr/waiter_f",
+      "line": "Fish soup and old stories."
+     },
+     "trait": {
+      "word": "Gossip",
+      "odds": 5
+     },
+     "pay": 1.1,
+     "foe": {
+      "name": "Diner regular",
+      "cls": "fisherman",
+      "species": [
+       "magikarp"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "ula-ula",
+   "name": "Mount Lanakila",
+   "x": 460,
+   "y": 40,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "ice-rock",
+   "targets": [
+    {
+     "id": "lanakila-league",
+     "name": "The League Lift",
+     "kind": "site",
+     "owner": {
+      "name": "The lift crew",
+      "look": "trainer/pr/snow_worker",
+      "line": "The new Pokémon League sits on the summit."
+     },
+     "trait": {
+      "word": "Bored",
+      "odds": 4
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Lift crew",
+      "cls": "snow-worker",
+      "species": [
+       "vanillish",
+       "sneasel"
+      ],
+      "offset": 2
+     }
+    },
+    {
+     "id": "lanakila-trail",
+     "name": "Lanakila Trail",
+     "kind": "route",
+     "owner": {
+      "name": "Snow climbers",
+      "look": "trainer/pr/snow_worker_f",
+      "line": "Snow on a tropical island. Climbers love it."
+     },
+     "trait": null,
+     "pay": 1.2,
+     "foe": {
+      "name": "Climber",
+      "cls": "hiker",
+      "species": [
+       "snorunt",
+       "crabominable"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "observatory",
+     "name": "Hokulani Observatory",
+     "kind": "site",
+     "owner": {
+      "name": "The astronomer",
+      "look": "trainer/pr/scientist_m",
+      "line": "He looks at the stars. Also at the Ultra Wormholes."
+     },
+     "trait": {
+      "word": "Distracted",
+      "odds": 6
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Assistant",
+      "cls": "psychic",
+      "species": [
+       "minior",
+       "magneton"
+      ],
+      "offset": 1
+     }
+    }
+   ]
+  }
+ ],
+ "routes": [
+  [
+   "iki",
+   "hauoli"
+  ],
+  [
+   "hauoli",
+   "heahea"
+  ],
+  [
+   "heahea",
+   "konikoni"
+  ],
+  [
+   "heahea",
+   "paniola"
+  ],
+  [
+   "heahea",
+   "malie"
+  ],
+  [
+   "malie",
+   "po"
+  ],
+  [
+   "po",
+   "ula-ula"
+  ],
+  [
+   "malie",
+   "aether"
+  ],
+  [
+   "iki",
+   "paniola"
+  ]
+ ],
+ "water": [
+  [
+   "hauoli",
+   "konikoni"
+  ],
+  [
+   "malie",
+   "seafolk"
+  ],
+  [
+   "aether",
+   "seafolk"
+  ],
+  [
+   "heahea",
+   "aether"
+  ]
+ ],
+ "pools": {
+  "catch": [
+   "pikipek",
+   "yungoos",
+   "grubbin",
+   "crabrawler",
+   "oricorio",
+   "cutiefly",
+   "rockruff",
+   "wishiwashi",
+   "mareanie",
+   "mudbray",
+   "dewpider",
+   "fomantis",
+   "morelull",
+   "salandit",
+   "stufful",
+   "bounsweet",
+   "comfey",
+   "oranguru",
+   "passimian",
+   "wimpod",
+   "sandygast",
+   "pyukumuku",
+   "minior",
+   "komala",
+   "turtonator",
+   "togedemaru",
+   "mimikyu",
+   "bruxish",
+   "drampa",
+   "rattata-alola",
+   "meowth-alola",
+   "grimer-alola"
+  ],
+  "steal": [
+   "jangmo-o",
+   "mimikyu",
+   "rockruff",
+   "type-null",
+   "cosmog",
+   "drampa",
+   "turtonator",
+   "comfey",
+   "dhelmise",
+   "vulpix-alola",
+   "sandshrew-alola",
+   "litten",
+   "popplio",
+   "rowlet",
+   "eevee",
+   "larvitar"
+  ]
+ },
+ "rivals": {
+  "skull-aether": [
+   {
+    "id": "shady-house-hq",
+    "name": "Shady House (Po Town)",
+    "district": "po",
+    "hq": true
+   },
+   {
+    "id": "aether-lab-floor",
+    "name": "Aether Lab Floor",
+    "district": "aether"
+   },
+   {
+    "id": "aether-dock-watch",
+    "name": "Aether Dock Watch",
+    "district": "aether"
+   },
+   {
+    "id": "konikoni-tag",
+    "name": "Konikoni Tag Wall",
+    "district": "konikoni"
+   },
+   {
+    "id": "heahea-backroom",
+    "name": "Heahea Back Room",
+    "district": "heahea"
+   },
+   {
+    "id": "malie-crew",
+    "name": "Malie Garden Crew",
+    "district": "malie"
+   },
+   {
+    "id": "hauoli-corner",
+    "name": "Hau'oli Corner",
+    "district": "hauoli"
+   }
+  ]
+ },
+ "gyms": [
+  {
+   "id": "melemele-trial",
+   "district": "iki",
+   "leader": "Ilima",
+   "leaderId": "ilima",
+   "type": "normal",
+   "badge": "Normalium Z",
+   "species": [
+    "yungoos",
+    "smeargle",
+    "gumshoos"
+   ],
+   "offset": 1,
+   "trainers": [
+    {
+     "name": "Youngster Kai",
+     "cls": "youngster",
+     "leaderId": null,
+     "species": [
+      "pikipek"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "melemele-kahuna",
+   "district": "iki",
+   "leader": "Hala",
+   "leaderId": "hala",
+   "type": "fighting",
+   "badge": "Fightinium Z",
+   "species": [
+    "mankey",
+    "makuhita",
+    "crabrawler"
+   ],
+   "offset": 1,
+   "trainers": [
+    {
+     "name": "Black Belt Kenji",
+     "cls": "black-belt",
+     "leaderId": null,
+     "species": [
+      "machop"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "akala-trial",
+   "district": "heahea",
+   "leader": "Lana",
+   "leaderId": "lana",
+   "type": "water",
+   "badge": "Waterium Z",
+   "species": [
+    "wishiwashi",
+    "araquanid"
+   ],
+   "offset": 2,
+   "trainers": [
+    {
+     "name": "Fisherman Kaipo",
+     "cls": "fisherman",
+     "leaderId": null,
+     "species": [
+      "dewpider"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "akala-kahuna",
+   "district": "konikoni",
+   "leader": "Olivia",
+   "leaderId": "olivia",
+   "type": "rock",
+   "badge": "Rockium Z",
+   "species": [
+    "nosepass",
+    "boldore",
+    "lycanroc"
+   ],
+   "offset": 2,
+   "trainers": [
+    {
+     "name": "Hiker Kelvin",
+     "cls": "hiker",
+     "leaderId": null,
+     "species": [
+      "geodude"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "ulaula-trial",
+   "district": "malie",
+   "leader": "Sophocles",
+   "leaderId": "sophocles",
+   "type": "electric",
+   "badge": "Electrium Z",
+   "species": [
+    "togedemaru",
+    "magneton",
+    "vikavolt"
+   ],
+   "offset": 3,
+   "trainers": [
+    {
+     "name": "Guitarist Rex",
+     "cls": "guitarist",
+     "leaderId": null,
+     "species": [
+      "charjabug"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "ulaula-kahuna",
+   "district": "po",
+   "leader": "Nanu",
+   "leaderId": "nanu",
+   "type": "dark",
+   "badge": "Darkinium Z",
+   "species": [
+    "sableye",
+    "krokorok",
+    "persian"
+   ],
+   "offset": 3,
+   "trainers": [
+    {
+     "name": "Veteran Thom",
+     "cls": "veteran",
+     "leaderId": null,
+     "species": [
+      "murkrow"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "poni-trial",
+   "district": "seafolk",
+   "leader": "Mina",
+   "leaderId": "mina",
+   "type": "fairy",
+   "badge": "Fairium Z",
+   "species": [
+    "granbull",
+    "shiinotic",
+    "ribombee"
+   ],
+   "offset": 4,
+   "trainers": [
+    {
+     "name": "Fairy Tale Girl Lani",
+     "cls": "fairy-tale-girl",
+     "leaderId": null,
+     "species": [
+      "comfey"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "poni-kahuna",
+   "district": "seafolk",
+   "leader": "Hapu",
+   "leaderId": "hapu",
+   "type": "ground",
+   "badge": "Groundium Z",
+   "species": [
+    "dugtrio",
+    "gastrodon",
+    "flygon",
+    "mudsdale"
+   ],
+   "offset": 4,
+   "trainers": [
+    {
+     "name": "Ranger Leilani",
+     "cls": "ranger",
+     "leaderId": null,
+     "species": [
+      "mudbray"
+     ],
+     "offset": -1
+    }
+   ]
+  }
+ ],
+ "business": [
+  {
+   "target": "hauoli-mall",
+   "name": "Hau'oli Shopping Mall",
+   "price": 15000,
+   "income": 600,
+   "clean": true,
+   "perk": {
+    "kind": "regard",
+    "n": 1
+   },
+   "text": "Regard +1 in Hau'oli each week."
+  },
+  {
+   "target": "tide-song-hotel",
+   "name": "Tide Song Hotel",
+   "price": 30000,
+   "income": 800,
+   "clean": true,
+   "perk": {
+    "kind": "income",
+    "n": 400
+   },
+   "text": "Rich guests pay ₽400 more a week.",
+   "rival": true
+  },
+  {
+   "target": "konikoni-market",
+   "name": "Konikoni Market",
+   "price": 9000,
+   "income": 350,
+   "clean": false,
+   "perk": {
+    "kind": "clean",
+    "n": 150
+   },
+   "text": "Cash stalls: ₽150 a week comes back clean."
+  },
+  {
+   "target": "malie-garden",
+   "name": "Malie Garden",
+   "price": 8000,
+   "income": 250,
+   "clean": true,
+   "perk": {
+    "kind": "heroDown",
+    "n": 1
+   },
+   "text": "The Hero stops for tea. Every time."
+  },
+  {
+   "target": "royal-avenue",
+   "name": "Royal Avenue",
+   "price": 20000,
+   "income": 500,
+   "clean": false,
+   "perk": {
+    "kind": "clean",
+    "n": 200
+   },
+   "text": "Battle Royal bets wash ₽200 a week.",
+   "rival": true
+  },
+  {
+   "target": "seafolk-diner",
+   "name": "Floating Diner",
+   "price": 4500,
+   "income": 180,
+   "clean": true,
+   "perk": {
+    "kind": "heatDown",
+    "n": 1
+   },
+   "text": "Nobody talks on a boat: Heat −1 in Seafolk each week."
+  },
+  {
+   "target": "po-mart",
+   "name": "Po Town Mart",
+   "price": 4500,
+   "income": 180,
+   "clean": true,
+   "perk": {
+    "kind": "items",
+    "n": 2,
+    "item": "potion"
+   },
+   "text": "2 Potions a week, if you knock."
+  },
+  {
+   "target": "paniola-ranch",
+   "name": "Paniola Ranch",
+   "price": 6000,
+   "income": 220,
+   "clean": true,
+   "perk": {
+    "kind": "items",
+    "n": 2,
+    "item": "moomoo-milk"
+   },
+   "text": "2 bottles of Moomoo Milk a week."
+  }
+ ],
+ "pillars": [
+  "tide-song-hotel",
+  "royal-avenue"
+ ],
+ "hero": {
+  "path": [
+   "iki",
+   "hauoli",
+   "heahea",
+   "paniola",
+   "konikoni",
+   "malie",
+   "po",
+   "seafolk",
+   "ula-ula"
+  ],
+  "allies": [
+   {
+    "id": "hala",
+    "name": "Hala",
+    "look": "bosses/hala.png",
+    "ace": "crabominable"
+   },
+   {
+    "id": "lana",
+    "name": "Lana",
+    "look": "bosses/lana.png",
+    "ace": "araquanid"
+   },
+   {
+    "id": "olivia",
+    "name": "Olivia",
+    "look": "bosses/olivia.png",
+    "ace": "lycanroc"
+   },
+   {
+    "id": "sophocles",
+    "name": "Sophocles",
+    "look": "bosses/sophocles.png",
+    "ace": "vikavolt"
+   },
+   {
+    "id": "nanu",
+    "name": "Nanu",
+    "look": "bosses/nanu.png",
+    "ace": "persian"
+   },
+   {
+    "id": "hapu",
+    "name": "Hapu",
+    "look": "bosses/hapu.png",
+    "ace": "mudsdale"
+   },
+   {
+    "id": "kukui",
+    "name": "Kukui",
+    "look": "bosses/kukui.png",
+    "ace": "incineroar",
+    "champion": true
+   }
+  ],
+  "mentor": "Professor Kukui",
+  "parent": "The Hero's mother",
+  "sidekick": "Hau, from Iki Town",
+  "homes": {
+   "tapu-koko": {
+    "home": "iki",
+    "over": "the Ruins of Conflict"
+   },
+   "tapu-lele": {
+    "home": "heahea",
+    "over": "the Ruins of Life"
+   },
+   "tapu-bulu": {
+    "home": "malie",
+    "over": "the Ruins of Abundance"
+   },
+   "tapu-fini": {
+    "home": "seafolk",
+    "over": "the Ruins of Hope"
+   }
+  }
+ },
+ "league": {
+  "elite": [
+   {
+    "id": "molayne",
+    "name": "Molayne",
+    "species": [
+     "klefki",
+     "bisharp",
+     "magnezone",
+     "metagross",
+     "dugtrio"
+    ],
+    "offset": 2
+   },
+   {
+    "id": "olivia-e4",
+    "name": "Olivia",
+    "species": [
+     "relicanth",
+     "carbink",
+     "golem",
+     "probopass",
+     "lycanroc"
+    ],
+    "offset": 3
+   },
+   {
+    "id": "acerola",
+    "name": "Acerola",
+    "species": [
+     "sableye",
+     "drifblim",
+     "dhelmise",
+     "froslass",
+     "palossand"
+    ],
+    "offset": 4
+   },
+   {
+    "id": "kahili",
+    "name": "Kahili",
+    "species": [
+     "skarmory",
+     "crobat",
+     "oricorio",
+     "mandibuzz",
+     "toucannon"
+    ],
+    "offset": 5
+   }
+  ],
+  "champion": {
+   "id": "kukui",
+   "name": "Kukui",
+   "species": [
+    "lycanroc",
+    "ninetales",
+    "braviary",
+    "magnezone",
+    "snorlax",
+    "incineroar"
+   ],
+   "offset": 6
+  },
+  "standIn": {}
+ },
+ "lab": [
+  "type-null",
+  "cosmog",
+  "porygon",
+  "jangmo-o",
+  "eevee"
+ ],
+ "desk": {
+  "name": "Alola",
+  "rivals": [
+   "Team Skull",
+   "the Aether Foundation"
+  ],
+  "badges": [
+   {
+    "name": "Normalium Badge",
+    "town": "Iki Town",
+    "c": "#d8d0c0"
+   },
+   {
+    "name": "Fightinium Badge",
+    "town": "Iki Town",
+    "c": "#c86a3a"
+   },
+   {
+    "name": "Waterium Badge",
+    "town": "Heahea City",
+    "c": "#4fa3ff"
+   },
+   {
+    "name": "Rockium Badge",
+    "town": "Konikoni City",
+    "c": "#a87a4a"
+   },
+   {
+    "name": "Electrium Badge",
+    "town": "Malie City",
+    "c": "#ffd23f"
+   },
+   {
+    "name": "Darkinium Badge",
+    "town": "Po Town",
+    "c": "#4a3a5a"
+   },
+   {
+    "name": "Fairium Badge",
+    "town": "Seafolk Village",
+    "c": "#e88ab0"
+   },
+   {
+    "name": "Groundium Badge",
+    "town": "Seafolk Village",
+    "c": "#c8a060"
+   }
+  ],
+  "codes": {
+   "Iki Town": "IKT",
+   "Heahea City": "HCT",
+   "Konikoni City": "KNK",
+   "Malie City": "MLC",
+   "Po Town": "PTW",
+   "Seafolk Village": "SFL"
+  },
+  "mons": [
+   "pikipek",
+   "yungoos",
+   "grubbin",
+   "crabrawler",
+   "oricorio",
+   "cutiefly",
+   "rockruff",
+   "wishiwashi",
+   "mareanie",
+   "mudbray",
+   "dewpider",
+   "fomantis",
+   "morelull",
+   "salandit",
+   "stufful",
+   "bounsweet",
+   "comfey",
+   "oranguru",
+   "passimian",
+   "wimpod",
+   "sandygast",
+   "pyukumuku",
+   "minior",
+   "komala",
+   "turtonator",
+   "togedemaru",
+   "mimikyu",
+   "bruxish",
+   "drampa",
+   "rattata-alola",
+   "meowth-alola",
+   "grimer-alola"
+  ],
+  "offRegion": [
+   "rattata",
+   "sentret",
+   "zigzagoon",
+   "bidoof",
+   "lillipup",
+   "fletchling",
+   "rookidee",
+   "lechonk"
+  ],
+  "writers": [
+   {
+    "name": "Kahuna's festival cook",
+    "short": "Cook Mele",
+    "town": "Iki Town",
+    "quote": "{first} cooked for the festival every year. Never burned a thing."
+   },
+   {
+    "name": "Ferry captain Kai",
+    "short": "Kai",
+    "town": "Heahea City",
+    "quote": "{first} crewed my ferry between islands. Good sea legs."
+   },
+   {
+    "name": "Ruins guide Noelani",
+    "short": "Noelani",
+    "town": "Konikoni City",
+    "quote": "{first} sold stones at the market. Honest prices. Mostly."
+   },
+   {
+    "name": "Malie library keeper",
+    "short": "Keeper Pua",
+    "town": "Malie City",
+    "quote": "{first} sorted the old books in Malie. Quiet, sharp."
+   },
+   {
+    "name": "Ex-Skull grunt Tupp's mum",
+    "short": "Mrs. Tupp",
+    "town": "Po Town",
+    "quote": "{first} kept my boy out of trouble. Mostly. Bless them."
+   },
+   {
+    "name": "Seafolk captain Mina's neighbour",
+    "short": "Neighbour Ika",
+    "town": "Seafolk Village",
+    "quote": "{first} lived on the boat next door. Never stole a fish."
+   }
+  ]
+ },
+ "holdings": {
+  "alola:verdant-cavern-trial-ilima": {
+   "district": "hauoli",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Normal crew +10% HP; Totem Gumshoos training.\" waits for a battle or shop hook."
+  },
+  "alola:brooklet-hill-trial-lana": {
+   "district": "paniola",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Water crew +10%; fishing +25%.\" waits for a battle or shop hook."
+  },
+  "alola:wela-volcano-park-trial-kiawe": {
+   "district": "paniola",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Fire crew +10%; free Fire items.\" waits for a battle or shop hook."
+  },
+  "alola:lush-jungle-trial-mallow": {
+   "district": "paniola",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"Grass crew +10%; berries.\" waits for a battle or shop hook."
+  },
+  "alola:hokulani-observatory-trial-sophocles": {
+   "district": "ula-ula",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Electric crew +10%; telescope Intel +1.\" waits for a battle or shop hook."
+  },
+  "alola:thrifty-megamart-trial-acerola": {
+   "district": "malie",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"Ghost crew +10% evasion; mart discounts −10%.\" waits for a battle or shop hook."
+  },
+  "alola:vast-poni-canyon-trial-mina": {
+   "district": "seafolk",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Fairy crew +10%; big stone shrine.\" waits for a battle or shop hook."
+  },
+  "alola:melemele-kahuna-hala": {
+   "district": "hauoli",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:melemele-kahuna",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Fighting crew +10%; crew training ×1.5.\" waits for a battle or shop hook."
+  },
+  "alola:akala-kahuna-olivia": {
+   "district": "heahea",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:akala-kahuna",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Rock crew +10%; free fossils.\" waits for a battle or shop hook."
+  },
+  "alola:ulaula-kahuna-nanu": {
+   "district": "ula-ula",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:ulaula-kahuna",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Dark crew +10%; police don't search you in Ula'ula.\" waits for a battle or shop hook."
+  },
+  "alola:poni-kahuna-hapu": {
+   "district": "seafolk",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:poni-kahuna",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Ground crew +10%; Poni routes.\" waits for a battle or shop hook."
+  },
+  "alola:alola-league-mount-lanakila": {
+   "district": "ula-ula",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "champion",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Champion's seat; Ultra Beast events.\" waits for a battle or shop hook."
+  },
+  "alola:iki-town": {
+   "district": "iki",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"the festival site; Regard +5; Tapu Koko's blessing once.\" waits for a battle or shop hook."
+  },
+  "alola:hauoli-city": {
+   "district": "hauoli",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"market and Malasada Shop; import/export +2; Regard +5.\" waits for a battle or shop hook."
+  },
+  "alola:heahea-city": {
+   "district": "heahea",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Mudsdale; a resort; Regard +10.\" waits for a battle or shop hook."
+  },
+  "alola:paniola-town": {
+   "district": "paniola",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1750
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"the Ranch and Tauros; Pen +10; ranch income +₽250/day.\" waits for a battle or shop hook."
+  },
+  "alola:konikoni-city": {
+   "district": "konikoni",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"the Mall and Pokémon Center; items −10%; Regard +5.\" waits for a battle or shop hook."
+  },
+  "alola:malie-city": {
+   "district": "malie",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"the Garden and Library; Regard +10; Wits +1.\" waits for a battle or shop hook."
+  },
+  "alola:tapu-village": {
+   "district": "po",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Tapu Koko's shrine; Electric crew +5%; festival income.\" waits for a battle or shop hook."
+  },
+  "alola:seafolk-village": {
+   "district": "seafolk",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"fishing +50%; Pokémon Pen +5.\" waits for a battle or shop hook."
+  },
+  "alola:po-town": {
+   "district": "po",
+   "fx": [
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit each week; the rest of \"Team Skull's base; Dark crew +10%; a Skull recruit stream.\" waits for a battle or shop hook."
+  },
+  "alola:exeggutor-island": {
+   "district": "seafolk",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"Alolan Exeggutor; Wild Reserve +1; a tropical grove.\" waits for a battle or shop hook."
+  },
+  "alola:poni-plains": {
+   "district": "seafolk",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Wild Reserve +2; Poni routes; Tauros herds.\" waits for a battle or shop hook."
+  },
+  "alola:kukuis-lab-route-1": {
+   "district": "hauoli",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"every crew member gets a free Move Tutor lesson each week; Rotom Dex events; hat\" waits for a battle or shop hook."
+  },
+  "alola:hauoli-market": {
+   "district": "hauoli",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1050
+    },
+    {
+     "k": "regard",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"one free Berry/item weekly; Regard +5; clean income +₽150/day.\" waits for a battle or shop hook."
+  },
+  "alola:malasada-shop-hauoli": {
+   "district": "hauoli",
+   "fx": [
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit each week; the rest of \"crew Loyalty +2 weekly; recruits +.\" waits for a battle or shop hook."
+  },
+  "alola:pokemon-center-hauoli": {
+   "district": "hauoli",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 3,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"free heal; trade terminal; Regard +3.\" waits for a battle or shop hook."
+  },
+  "alola:hauoli-cemetery": {
+   "district": "hauoli",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Ghost crew +; hidden items.\" waits for a battle or shop hook."
+  },
+  "alola:paniola-ranch": {
+   "district": "paniola",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1750
+    }
+   ],
+   "via": "biz:paniola-ranch",
+   "note": "Read from the list's Bonus as income each week; the rest of \"Tauros, Mudsdale; Pen +10; ranch income +₽250/day.\" waits for a battle or shop hook."
+  },
+  "alola:konikoni-mall": {
+   "district": "konikoni",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    },
+    {
+     "k": "heat",
+     "n": 5
+    }
+   ],
+   "note": "Read from the list's Bonus as heat, regard each week; the rest of \"items −15%; Regard +10; a mall-security Heat −5.\" waits for a battle or shop hook."
+  },
+  "alola:malie-garden": {
+   "district": "malie",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    },
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "via": "biz:malie-garden",
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Regard +10; Berry income +₽200/day; a rare flower weekly.\" waits for a battle or shop hook."
+  },
+  "alola:malie-library": {
+   "district": "malie",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Wits +1 crew; Tech lore; Move Tutor hint.\" waits for a battle or shop hook."
+  },
+  "alola:aether-paradise": {
+   "district": "aether",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 15,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"free Infirmary room; Ultra Beast actions unlocked; Regard +15.\" waits for a battle or shop hook."
+  },
+  "alola:aether-foundation-branch": {
+   "district": "aether",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"crew heal; Pen +10; research once a month.\" waits for a battle or shop hook."
+  },
+  "alola:team-skull-hq-po-town": {
+   "district": "po",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"rival HQ; Dread +; Wipe Out path +30%; Skull crew.\" waits for a battle or shop hook."
+  },
+  "alola:hano-grand-resort": {
+   "district": "heahea",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 20,
+     "where": "district"
+    },
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit, regard each week; the rest of \"Regard +20 weekly; VIP recruits; a Z-Crystal event.\" waits for a battle or shop hook."
+  },
+  "alola:hano-beach": {
+   "district": "heahea",
+   "fx": [
+    {
+     "k": "income",
+     "n": 350
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"Water crew +5%; free Potions each night; a Pokémon Center.\" waits for a battle or shop hook."
+  },
+  "alola:ten-carat-hill": {
+   "district": "hauoli",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1750
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"gems +₽250/day; Rock crew +5%; a Carbink event.\" waits for a battle or shop hook."
+  },
+  "alola:digletts-tunnel": {
+   "district": "konikoni",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"a shortcut (−1 day); Alolan Diglett wild; a free Revive.\" waits for a battle or shop hook."
+  },
+  "alola:seaward-cave": {
+   "district": "hauoli",
+   "fx": [
+    {
+     "k": "income",
+     "n": 350
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"Water crew +5%; Zubat; a hidden stash.\" waits for a battle or shop hook."
+  },
+  "alola:haina-desert": {
+   "district": "po",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Ground crew +5%; a sandy shortcut; ruin hints.\" waits for a battle or shop hook."
+  },
+  "alola:mount-hokulani": {
+   "district": "ula-ula",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Intel +2; Space events; Ultra Beast rumours.\" waits for a battle or shop hook."
+  },
+  "alola:mahalo-trail": {
+   "district": "iki",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"a shortcut; Mareanie; a free item each week.\" waits for a battle or shop hook."
+  },
+  "alola:ulaula-meadow": {
+   "district": "ula-ula",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"rare wild encounters; Regard +; a Bug-type event.\" waits for a battle or shop hook."
+  },
+  "alola:lush-jungle": {
+   "district": "paniola",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1050
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"Grass crew +5%; Berry income +₽150/day; a Totem trial site.\" waits for a battle or shop hook."
+  },
+  "alola:vast-poni-canyon": {
+   "district": "seafolk",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Fairy crew +5%; Poni routes; Ultra Beast rumours.\" waits for a battle or shop hook."
+  },
+  "alola:ancient-poni-path": {
+   "district": "seafolk",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Island Legendary rumours; the Sun/Moon altar's route.\" waits for a battle or shop hook."
+  },
+  "alola:mount-lanakila": {
+   "district": "ula-ula",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"the League peak; the Champion's seat; Ice crew +5%.\" waits for a battle or shop hook."
+  },
+  "alola:lake-of-the-sunne": {
+   "district": "ula-ula",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 15,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Solgaleo rumours; the Sun altar; Regard +15.\" waits for a battle or shop hook."
+  },
+  "alola:lake-of-the-moone": {
+   "district": "ula-ula",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 15,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Lunala rumours; the Moon altar; Regard +15.\" waits for a battle or shop hook."
+  },
+  "alola:ruins-of-conflict": {
+   "district": "iki",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Electric crew +5%; the Tapu rite; Regard +10.\" waits for a battle or shop hook."
+  },
+  "alola:ruins-of-life": {
+   "district": "heahea",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Psychic crew +5%; the Tapu rite; Regard +10.\" waits for a battle or shop hook."
+  },
+  "alola:ruins-of-abundance": {
+   "district": "malie",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Grass crew +5%; the Tapu rite; Regard +10.\" waits for a battle or shop hook."
+  },
+  "alola:ruins-of-hope": {
+   "district": "seafolk",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Water crew +5%; the Tapu rite; Regard +10.\" waits for a battle or shop hook."
+  },
+  "alola:battle-royal-dome": {
+   "district": "paniola",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 20,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Grunts train in free-for-all fights (×2 XP); tournament Regard +20.\" waits for a battle or shop hook."
+  },
+  "alola:battle-tree": {
+   "district": "seafolk",
+   "fx": [
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit each week; the rest of \"trains your Grunts to use items and gimmicks (Z-Moves); recruits extreme trainer\" waits for a battle or shop hook."
+  },
+  "alola:ultra-space-wormholes": {
+   "district": "aether",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Ultra Beast actions; Ultra Balls free weekly.\" waits for a battle or shop hook."
+  }
+ }
+}

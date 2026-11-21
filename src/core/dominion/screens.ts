@@ -1,14 +1,16 @@
 // DOMINION view models (plain data for the redux screens in ui/redux/screens/dominion). Pure: no Phaser, no RNG.
 
-import { foundingOpen, teamColours, type TeamColours } from './founding';
+import { colourDef, foundingOpen, teamColours, type TeamColours } from './founding';
 import { DOMINION_DATA } from './data';
 import { openOrders, stepsShown } from './clock';
 import type { DominionBlock, Member, Phase } from './schema';
 
 const D = () => DOMINION_DATA.start;
+const colourHex = (id: string): string => colourDef(id)?.hex ?? '#777';
 
 export const SETUP_PAGES = ['boss', 'types', 'member'] as const;
-export type SetupPage = (typeof SETUP_PAGES)[number];
+/** D16: 'charter' is the optional established start (C on the Boss page), off the three-page path. */
+export type SetupPage = (typeof SETUP_PAGES)[number] | 'charter';
 
 /** The setup pages' draft, kept by the scene until "Begin" (Part 1 §1.1, Part 7 §1.1). */
 export interface SetupDraft {
@@ -19,9 +21,25 @@ export interface SetupDraft {
   member: 'grunt' | 'admin';
   look: number;
   problem: string | null;
+  /** D16: the cursor on the Charters page. */
+  cAt: number;
 }
 
-export const newSetup = (): SetupDraft => ({ page: 'boss', at: 0, types: [], member: 'grunt', look: 0, problem: null });
+export const newSetup = (): SetupDraft => ({ page: 'boss', at: 0, types: [], member: 'grunt', look: 0, problem: null, cAt: 0 });
+
+/** D16: the Charters page's rows (the nine established starts, Part 0 §6.1 Q4). */
+export interface CharterRow {
+  id: string; team: string; from: string; question: string; creed: string; motto: string; types: [string, string];
+  colours: [string, string]; initial: string; patron: { name: string; note: string; look: string };
+  funds: number; hqLevel: number; grunts: number; heat: number; regard: number; dread: number; off: boolean;
+}
+export function charterRows(): CharterRow[] {
+  return DOMINION_DATA.charters.charters.map((c) => ({
+    id: c.id, team: c.team, from: c.from, question: c.question, creed: c.creed, motto: c.motto, types: c.types,
+    colours: [colourHex(c.colours[0]), colourHex(c.colours[1])], initial: c.initial, patron: c.patron,
+    funds: c.funds, hqLevel: c.hqLevel, grunts: c.grunts, heat: c.heat, regard: c.regard, dread: c.dread, off: c.status === 'disabled',
+  }));
+}
 
 /** All eighteen types in grid order: the sixteen pickable ones, then the two that aren't. */
 export const typeGrid = (): string[] => [...D().types.allowed, ...D().types.banned];
@@ -154,4 +172,18 @@ export function hqModel(b: DominionBlock): HqModel {
 }
 
 /** The opening scene's lines (Part 1 §1.3), by the first member. */
-export const openingLines = (b: DominionBlock): string[] => (b.members[0]?.rank === 'admin' ? D().adminOpening : D().opening);
+export const openingLines = (b: DominionBlock): string[] => {
+  // D16: a Charter opens on its own morning, the Turn on Rook in the rain (only in the first region).
+  if (b.origin && (!b.realm || b.realm.at === 'kanto')) {
+    const C = DOMINION_DATA.charters;
+    const own = b.origin.kind === 'turn' ? C.turn.opening : C.charters.find((c) => c.id === b.origin!.id)?.opening;
+    if (own) return own;
+  }
+  // D15: a region after the first opens on its own arrival (the brought member's name filled in).
+  const pack = b.realm && b.realm.at !== 'kanto' ? DOMINION_DATA.packs[b.realm.at] : undefined;
+  if (pack) {
+    const m = b.realm!.brought ? b.members.find((x) => x.id === b.realm!.brought) : undefined;
+    return pack.arrive.map((l) => l.replace('{brought}', m?.name ?? 'Nobody'));
+  }
+  return b.members[0]?.rank === 'admin' ? D().adminOpening : D().opening;
+};

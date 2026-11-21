@@ -378,7 +378,7 @@ addFightSettler('growth', (content, b, run, fight, outcome) => {
 });
 
 /** A crate's items into the Bag (stolen goods) and its cash into the funds. Rolled on `dominion-loot`. */
-function openLoot(content: Content | null, b: DominionBlock, run: RunState, id: string, key: string): string {
+export function openLoot(content: Content | null, b: DominionBlock, run: RunState, id: string, key: string): string {
   const c = F().crates[id];
   if (!c) return 'nothing';
   const r = rng(run.seed, 'dominion-loot', key);
@@ -497,10 +497,9 @@ addActEffect('bribe', (b, x) => {
   return [fill(Ln('bribed'), { who: o.name, text: o.text })];
 });
 
-addActEffect('fence', (b, x) => {
-  const g = growthOf(b), run = x.run, content = x.content;
-  if (!run) return [];
-  const rate = Math.min(100, G().fence.rate[lvOf(b, x.action) - 1]! + hqFx(b).fence);
+/** Sells the hot goods still in the Bag at `rate`% of the shop price (the Fence; a Chair visitor's offer). */
+export function sellHot(b: DominionBlock, run: RunState, content: Content | null, rate: number): { total: number; count: number } {
+  const g = growthOf(b);
   let total = 0, count = 0;
   for (const [item, n] of Object.entries(g.hot)) {
     const have = Math.min(n, run.inventory[item] ?? 0);
@@ -515,6 +514,13 @@ addActEffect('fence', (b, x) => {
   g.hot = {};
   b.funds += total;
   b.earned += total;
+  return { total, count };
+}
+
+addActEffect('fence', (b, x) => {
+  if (!x.run) return [];
+  const rate = Math.min(100, G().fence.rate[lvOf(b, x.action) - 1]! + hqFx(b).fence);
+  const { total, count } = sellHot(b, x.run, x.content ?? null, rate);
   return [count ? fill(Ln('fenced'), { n: money(total), items: `${count} item${count === 1 ? '' : 's'}`, pct: rate }) : Ln('noHot')];
 });
 
@@ -697,6 +703,10 @@ addWorldStep('world', (b, seed) => {
     }
     routePay += r.nightly;
   }
+  // The Chair's dockworkers: a strike stops the routes; paid off, they take their cut.
+  const ct = g.court;
+  if (ct && ct.strike >= day) routePay = 0;
+  else if (ct?.union) routePay = Math.round((routePay * (100 - G().court.unionCut)) / 100);
   if (routePay) {
     b.funds += routePay;
     b.earned += routePay;

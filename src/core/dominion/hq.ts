@@ -7,7 +7,7 @@
 import { leave, rankN, withCrew } from './crew';
 import { DOMINION_DATA } from './data';
 import { addHeat, districtDef, statusOf, syncHeat } from './field';
-import { addClean, buildPrice, buildingDef, clampClean, cleanOf, spend, dirtyOf, hqFx, hqOf, levelDef, scaled, withHq, working } from './hqFx';
+import { addClean, buildPrice, priceFor, buildingDef, clampClean, cleanOf, spend, dirtyOf, hqFx, hqOf, levelDef, scaled, withHq, working } from './hqFx';
 import type { Building, DominionBlock, HqState, Room } from './schema';
 import { addWorldStep, fill } from './worldTurn';
 
@@ -43,8 +43,8 @@ export const heldDistricts = (b: DominionBlock): string[] =>
 export const gymDone = (b: DominionBlock): boolean => b.flags.includes('gym-taken') || b.flags.includes('gym-beaten');
 /** The Notoriety ladder (D6) sets `feared`. */
 export const feared = (b: DominionBlock): boolean => b.flags.includes('feared');
-/** Regions reached in the run (Part 5: D15 adds more; Dominion is Kanto only until then). */
-export const regionsReached = (_b: DominionBlock): number => 1;
+/** Regions reached in the run (Part 5): the one played now and every one left behind (D15). */
+export const regionsReached = (b: DominionBlock): number => 1 + (b.realm?.held.length ?? 0);
 
 export const slotsOf = (b: DominionBlock): number => levelDef(b.hqLevel).slots;
 /** HQ slots taken: rooms inside (outside buildings use none), works included, ruined ones too (rebuild or sell them). */
@@ -60,6 +60,8 @@ export function defense(b: DominionBlock): number {
   if (h.upgrade) d = Math.floor(d / 2);
   if (h.rooms.some((r) => r.building || r.up)) d -= 1;
   if (h.broke) d -= H().rules.brokeDefense;
+  // D10: the cheap design a Chair visitor (the architect) left behind.
+  if (b.growth?.court?.weak) d -= DOMINION_DATA.growth.court.weakDefense;
   return Math.max(0, d);
 }
 
@@ -93,10 +95,14 @@ export function upgradeInfo(b: DominionBlock, regionCap: number): UpgradeInfo {
   const h = hqOf(b);
   const cur = levelDef(b.hqLevel);
   if (b.hqLevel >= 6) return { to: null, name: cur.name, cost: 0, needs: [], raises: { cap: [b.levelCap, null], crew: [cur.crewCap, cur.crewCap], slots: [cur.slots, cur.slots] }, ready: null, why: Ln().top! };
-  const nx = levelDef(b.hqLevel + 1);
+  const nx0 = levelDef(b.hqLevel + 1);
+  // D10: the architect's design (a Chair visitor) takes a share off the next level.
+  const nx = b.growth?.court?.architect ? { ...nx0, cost: Math.round((nx0.cost * (100 - DOMINION_DATA.growth.court.architect)) / 100) } : nx0;
+  // D15: Lumiose money (a held Kalos) makes the first upgrade in a region free.
+  const cost = priceFor(b, 'hq-upgrade', nx.cost);
   const held = heldDistricts(b).length;
   const clean = cleanOf(b);
-  const needs: Need[] = [{ label: `${money(clean)} clean of ${money(nx.cost)}`, have: clean, need: nx.cost, ok: clean >= nx.cost }];
+  const needs: Need[] = [{ label: `${money(clean)} clean of ${money(cost)}`, have: clean, need: cost, ok: clean >= cost }];
   const n = nx.needs;
   if (n.districts) needs.push({ label: `Districts ${held} of ${n.districts}`, have: held, need: n.districts, ok: held >= n.districts });
   if (n.crew) needs.push({ label: `Crew ${b.members.length} of ${n.crew}`, have: b.members.length, need: n.crew, ok: b.members.length >= n.crew });
@@ -111,9 +117,9 @@ export function upgradeInfo(b: DominionBlock, regionCap: number): UpgradeInfo {
   }
   if (n.feared) needs.push({ label: 'Feared (Notoriety)', have: feared(b) ? 1 : 0, need: 1, ok: feared(b) });
   const cap = nx.levelCap ?? regionCap;
-  const why = h.upgrade ? Ln().upgrading! : needs.find((x) => !x.ok && x !== needs[0])?.label ?? (needs[0]!.ok ? null : fill(Ln().noClean!, { clean, cost: nx.cost }));
+  const why = h.upgrade ? Ln().upgrading! : needs.find((x) => !x.ok && x !== needs[0])?.label ?? (needs[0]!.ok ? null : fill(Ln().noClean!, { clean, cost: cost }));
   return {
-    to: nx.lv, name: nx.name, cost: nx.cost, needs,
+    to: nx.lv, name: nx.name, cost: cost, needs,
     raises: { cap: [b.levelCap, cap], crew: [cur.crewCap, nx.crewCap], slots: [cur.slots, nx.slots] },
     ready: h.upgrade?.ready ?? null, why,
   };
@@ -127,6 +133,7 @@ export function upgrade(block: DominionBlock, regionCap: number): HqOut {
   b.hq.clean = cleanOf(b) - info.cost;
   spend(b, info.cost);
   b.hq.upgrade = { to: info.to, ready: b.day + H().upgradeDays, cap: info.raises.cap[1] ?? b.levelCap };
+  if (b.growth?.court) b.growth.court.architect = false;
   recompute(b);
   return yes(b, fill(Ln().upgradeStart!, { name: info.name }));
 }
@@ -161,6 +168,8 @@ export interface BuildRow { def: Building; cost: number; ok: boolean; why: strin
 /** Why a building can't be bought now (null when it can). `district` for outside buildings. */
 export function buildWhy(b: DominionBlock, def: Building, district: string | null): string | null {
   if (def.status === 'disabled') return fill(Ln().waits!, { slice: def.waits ?? 'later' });
+  // D16: the Snag Desk and the Shadow Lab come with a partner's deal (partners.ts builds them); nobody sells them.
+  if (def.deal) return `Comes with the ${def.deal === 'snagem' ? 'Snagem' : 'Cipher'} deal (Partners, J).`;
   if (b.field.fight) return 'A fight is waiting.';
   const need = def.minTier + 1;
   if (b.hqLevel < need) return fill(Ln().needsTier!, { lv: need });
@@ -168,7 +177,7 @@ export function buildWhy(b: DominionBlock, def: Building, district: string | nul
     if (!district || !heldDistricts(b).includes(district)) return Ln().needsHeld!;
     if (hqOf(b).rooms.some((r) => r.id === def.id && r.at === district)) return 'You have one there.';
   } else if (def.slots > slotsFree(b)) return Ln().noSlot!;
-  if (b.funds < buildPrice(b, def.cost)) return fill(Ln().noMoney!, { cost: buildPrice(b, def.cost) });
+  if (b.funds < buildPrice(b, def.cost, def.id)) return fill(Ln().noMoney!, { cost: buildPrice(b, def.cost, def.id) });
   return null;
 }
 
@@ -182,7 +191,7 @@ export function buildRows(b: DominionBlock, district: string | null): BuildRow[]
   return order.map((def) => {
     const where = def.outside ? (district && held.includes(district) ? district : held[0] ?? null) : null;
     const why = buildWhy(b, def, where);
-    return { def, cost: buildPrice(b, def.cost), ok: !why, why, outside: def.outside, where };
+    return { def, cost: buildPrice(b, def.cost, def.id), ok: !why, why, outside: def.outside, where };
   });
 }
 
@@ -195,7 +204,7 @@ export function build(block: DominionBlock, id: string, district: string | null)
   if (why) return no(block, why);
   const b = copy(block);
   const days = H().tiers[0]!.days;
-  const price = buildPrice(block, def.cost);
+  const price = buildPrice(block, def.cost, def.id);
   spend(b, price);
   b.hq.rooms.push({ uid: `r${b.hq.next++}`, id, tier: 1, cond: 100, spent: price, building: true, up: false, ready: b.day + days, shut: false, ruined: false, at: where });
   recompute(b);
@@ -218,7 +227,7 @@ export function tierUp(block: DominionBlock, uid: string): HqOut {
   const t = r0.tier + 1;
   const top = maxTier(block);
   if (t > 8 || t > top) return no(block, fill(Ln().maxTier!, { name: def.name, lv: block.hqLevel, region: regionsReached(block), t: Math.min(8, Math.max(1, top)) }));
-  const cost = buildPrice(block, tierCost(def, t));
+  const cost = buildPrice(block, tierCost(def, t), def.id);
   if (block.funds < cost) return no(block, fill(Ln().noMoney!, { cost }));
   const b = copy(block);
   const r = roomOf(b, uid)!;
@@ -282,6 +291,9 @@ export function front(b: DominionBlock): { fee: number; name: string } | null {
     const fee = def.fx.launder !== undefined ? scaled('launder', def.fx.launder, r.tier) : r.at && def.fx.clean ? 10 : null;
     if (fee !== null && (!best || fee < best.fee)) best = { fee, name: def.name };
   }
+  // D10: a crooked accountant (a Chair visitor) launders at his own fee, front or not.
+  const acc = DOMINION_DATA.growth.court.accountantFee;
+  if (b.growth?.court?.accountant && (!best || acc < best.fee)) best = { fee: acc, name: 'the accountant' };
   return best;
 }
 
