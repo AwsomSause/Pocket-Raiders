@@ -26,7 +26,7 @@ import { pkSettingsHome } from '../../src/ui/pocket/screens/settings';
 import { doorSub, pkHub, type PkHubModel } from '../../src/ui/pocket/screens/hub';
 import { districtProp, pkPlaza, pkTrade, pkTownDoor, pkTownHud, pkTownMap, placeProp, plazaProp } from '../../src/ui/pocket/screens/town';
 import { POCKET_TOWN } from '../../src/core/hubTown/schema';
-import { leaderLine, pkBrief, pkStarter, regionOfGen, runSteps } from '../../src/ui/pocket/screens/run';
+import { leaderLine, pkBrief, pkDesk, pkPrepBring, pkPrepMods, pkPrepSetup, pkSeed, pkStarter, PREP_MODS_PAGE, PREP_SETUP_ROWS, regionOfGen, runSteps, segWindow } from '../../src/ui/pocket/screens/run';
 import type { BriefModel } from '../../src/ui/redux/screens/run';
 import type { TradeModel } from '../../src/ui/redux/screens/stops';
 import { PK_TOOLS_PAGE, pkTools, toolShort } from '../../src/ui/pocket/screens/tools';
@@ -921,5 +921,59 @@ describe('Pocket look: the Tools room', () => {
     expect(toolShort("What's new", 'x')).toBe("This update's notes");
     expect(toolShort('Unknown', 'Does a thing. More.')).toBe('Does a thing');
     expect(pkTools({ items: items.slice(0, 3), index: 0 })).not.toContain('Page 1 of 1');
+  });
+});
+
+describe('Pocket look: the Preparation Desk', () => {
+  it('the Overview: four tabs with Overview lit, the run card facts that open their page, Roll, Save and Load', () => {
+    const html = pkDesk({ run: 'Run 13', name: "Red's run", art: null, facts: [['Mode', 'Standard · Full campaign', 'setup'], ['Seed', 'PIKA-2511', 'seed']] });
+    expect(pkPageOf(html)?.id).toBe('pd-desk');
+    expect(html.split('data-act="tab"').length - 1).toBe(4);
+    expect(html).toMatch(/class="on" data-key="pd-tab-3"/);
+    expect(html).toContain('data-act="seed"');
+    expect(html).toContain('Roll the starters');
+    expect(html).toContain('data-act="load"');
+  });
+  it('Run Setup: five rows at a time, segments around the choice, the rest on More', () => {
+    const opts = (n: number, on: number) => Array.from({ length: n }, (_, i) => ({ label: `O${i}`, on: i === on, locked: i === n - 1 }));
+    const rows = Array.from({ length: 6 }, (_, i) => ({ label: `Row ${i}`, help: 'Help.', disabled: i === 1, opts: opts(i + 2, 1) }));
+    const html = pkPrepSetup({ rows, index: 0 });
+    expect(pkPageOf(html)?.id).toBe('pd-setup');
+    expect(html.split('class="srow').length - 1).toBe(PREP_SETUP_ROWS);
+    expect(html).toContain('More</b>Row 5');
+    expect(html).toContain('gx-pd-off');
+    expect(pkPrepSetup({ rows, index: 5 })).toContain('More</b>Row 0');
+    expect(segWindow(opts(3, 2)).length).toBe(3);
+    expect(segWindow(opts(7, 6)).map((x) => x.at)).toEqual([4, 5, 6]);
+    expect(segWindow(opts(7, 0)).map((x) => x.at)).toEqual([0, 1, 2]);
+  });
+  it('Trainer: a card per thing you bring, none shown as a dash, the lit one explained', () => {
+    const cards = [{ label: 'Trainer', value: 'Red', art: null, none: false }, { label: 'Loan', value: 'None', art: null, none: true }];
+    const html = pkPrepBring({ cards, index: 1, help: 'Borrow money now.' });
+    expect(pkPageOf(html)?.id).toBe('pd-bring');
+    expect(html).toContain('pn on none');
+    expect(html).toContain('<s></s>');
+    expect(html).toContain('Borrow money now.');
+  });
+  it('Modifiers: six cards a page with On or Off, the Death-Block bar lights as the last stop', () => {
+    const mods = Array.from({ length: 8 }, (_, i) => ({ name: `Rule ${i}`, text: 'Does a thing.', on: i === 1, soon: i === 2 }));
+    const html = pkPrepMods({ mods, index: 7, deathBlock: { text: 'Lose early, try again.', on: true }, category: 'All', note: 'Rewards ×1.00 with what is on now.' });
+    expect(pkPageOf(html)?.id).toBe('pd-mods');
+    expect(html.split('data-key="pd-m-').length - 1).toBe(2); // the second page: rules 7 and 8
+    expect(html).toContain('7–8 of 8 rules');
+    const first = pkPrepMods({ mods, index: 8, deathBlock: { text: 'x', on: false }, category: 'Party', note: '' });
+    expect(first.split('data-key="pd-m-').length - 1).toBe(2);
+    expect(first).toContain('gx-pd-dbon');
+    expect(first).toContain('gx-pd-dboff');
+    expect(pkPrepMods({ mods, index: 1, deathBlock: { text: 'x', on: true }, category: 'All', note: '' }).split('data-key="pd-m-').length - 1).toBe(PREP_MODS_PAGE);
+  });
+  it('Seed: letters in boxes with the typing box lit, a long code on one line, Random lit when empty', () => {
+    const html = pkSeed({ value: 'PIKA', at: 4, text: 'Same seed, same run.' });
+    expect(pkPageOf(html)?.id).toBe('pd-seed');
+    expect(html.split('<i class="').length - 1).toBeGreaterThanOrEqual(8);
+    expect(html).toContain('<i class="on">A</i>');
+    expect(html).toContain('Fixed seed');
+    expect(pkSeed({ value: 'PR1.abcdefghijklmnop', at: 0, text: '' })).toContain('gx-sd-long');
+    expect(pkSeed({ value: '', at: 0, text: '' })).toMatch(/<i class="on" data-act="btn" data-arg="clear"/);
   });
 });

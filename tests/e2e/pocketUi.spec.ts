@@ -786,6 +786,62 @@ test('Pocket look: Memories is a shelf of cards and the Legacy Gallery shows one
   expect(errors).toEqual([]);
 });
 
+test('Pocket look: the Preparation Desk is four pages; each changes what it says and the Overview shows it', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=pk-desk');
+  const now = () => page.evaluate(() => (window as any).__pkr.activeScene());
+  for (const next of ['Hub', 'TrainerSelect', 'RunPrep']) {
+    await page.keyboard.press('Enter');
+    await expect.poll(now, { timeout: 20_000 }).toBe(next);
+    await page.waitForTimeout(400);
+  }
+  await onPkPage(page, 'RunPrep', 'pd-desk');
+  const desk = pkView(page, 'RunPrep', 'pd-desk');
+  await expect(desk.locator('.pdt38 > div')).toHaveCount(4);
+  await fits(page, 'RunPrep', 'pd-desk');
+  // Run Setup: down to Difficulty, right changes it.
+  await desk.locator('[data-key="pd-tab-0"]').click();
+  await onPkPage(page, 'RunChoices', 'pd-setup');
+  const setup = pkView(page, 'RunChoices', 'pd-setup');
+  await fits(page, 'RunChoices', 'pd-setup');
+  await step(page, 'ArrowDown', 2);
+  const before = await setup.locator('.srow.on .seg .on').innerText();
+  await step(page, 'ArrowRight');
+  await expect(setup.locator('.srow.on .seg .on')).not.toHaveText(before);
+  const difficulty = await setup.locator('.srow.on .seg .on').innerText();
+  // Trainer: cards; Tab goes on to Modifiers.
+  await step(page, 'Tab');
+  await onPkPage(page, 'RunChoices', 'pd-bring');
+  const bring = pkView(page, 'RunChoices', 'pd-bring');
+  await expect(bring.locator('.pdb38 > .pn:not(.help)')).toHaveCount(7);
+  await fits(page, 'RunChoices', 'pd-bring');
+  await step(page, 'Tab');
+  await onPkPage(page, 'RunModifiers', 'pd-mods');
+  const mods = pkView(page, 'RunModifiers', 'pd-mods');
+  await expect(mods.locator('.pdm38 > .pn')).toHaveCount(6);
+  await fits(page, 'RunModifiers', 'pd-mods');
+  const name = (await mods.locator('.pdm38 > .pn.on b').innerText()).toLowerCase();
+  await step(page, 'Enter');
+  await expect(mods.locator('.pdm38 > .pn.on u')).toHaveText(/On|Off/);
+  const on = (await mods.locator('.pdm38 > .pn.on u').innerText()) === 'On';
+  // Overview shows the new difficulty and the rule.
+  await mods.locator('[data-key="pd-tab-3"]').click();
+  await onPkPage(page, 'RunPrep', 'pd-desk');
+  await expect(desk.locator('.gx-pd-fact').nth(1)).toContainText(difficulty);
+  if (on) await expect(desk.locator('.gx-pd-fact').nth(3)).toContainText(new RegExp(name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'));
+  // The Seed page: typed letters land in the boxes and come back to the desk.
+  await desk.locator('.gx-pd-fact').nth(4).click();
+  await onPkPage(page, 'RunSeed', 'pd-seed');
+  await fits(page, 'RunSeed', 'pd-seed');
+  await page.getByTestId('seed-input').fill('ROCKET7');
+  await page.getByTestId('seed-input').press('Enter');
+  await onPkPage(page, 'RunPrep', 'pd-desk');
+  await expect(desk.locator('.gx-pd-fact').nth(4)).toContainText('ROCKET7');
+  expect(await page.evaluate(() => (window as any).__pkr.session.run)).toBeNull();
+  expect(errors).toEqual([]);
+});
+
 test('Pocket look: starting a run, Starter Pick is three cards and the Briefing shows the first region and Gym', async ({ page }) => {
   test.setTimeout(180_000);
   const errors = watch(page);

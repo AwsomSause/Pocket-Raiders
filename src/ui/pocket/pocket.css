@@ -574,3 +574,14 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 @media (prefers-reduced-motion:reduce){.pkx .pks .lg39 .gx-lg-rl{animation:none}}
 .pkx .pks .tz39>.pn{position:relative}
 .pkx .pks .tz39 .gx-tl-tag{position:absolute;right:14px;top:14px;font-style:normal;font-size:12px;font-weight:800;color:#fff;background:#e3350d;border-radius:999px;padding:1px 10px}
+.pkx .pks .pdk38 .gx-pd-fact{cursor:pointer}
+.pkx .pks .pdk38 .gx-pd-fact:hover span{text-decoration:underline}
+.pkx .pks .pd38 .gx-pd-off{opacity:.55;filter:saturate(.3)}
+.pkx .pks .pd38 .seg .gx-pd-lock{opacity:.45}
+.pkx .pks .pd38 .more38.db{cursor:pointer}
+.pkx .pks .pd38 .more38.gx-pd-dbon{outline:4px solid var(--yel);outline-offset:1px}
+.pkx .pks .pd38 .more38.gx-pd-dboff u{background:#8b96b0;color:#fff}
+.pkx .pks .pd38 .gx-pd-note{position:absolute;left:50%;translate:-50% 0;margin-left:116px;top:474px;white-space:nowrap;font-size:12px;font-weight:800;color:var(--ink);background:#fff;border:2px solid var(--ink);border-radius:999px;padding:1px 12px}
+.pkx .pks .pd38 .more38.db>b{white-space:nowrap}
+.pkx .pks .sdp38 .gx-sd-long{display:block;max-width:600px;font:400 30px/1.2 var(--fd);color:var(--ink);word-break:break-all;text-align:center}
+.pkx .pks .sdp38 .sdc38{min-height:60px}

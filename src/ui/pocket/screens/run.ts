@@ -4,9 +4,9 @@
 
 import type { BriefModel, StarterModel } from '../../redux/screens/run';
 import type { Art } from '../../redux/templates';
-import { monArt } from '../art';
+import { monArt, type PkArt } from '../art';
 import { act, back, esc, hdr, keys, page, sprH, typeColour } from '../kit';
-import { fit, fitPic, pkArtOf } from '../templates';
+import { fit, fitBody, fitPic, pkArtOf } from '../templates';
 import { tyChip } from './party';
 
 /** A species' home region by its generation, and the colour of that region's stamp. */
@@ -65,4 +65,125 @@ export function pkBrief(d: BriefModel, x: PkBriefExtra): string {
   const go = `<div class="bfg38"><div class="btn${d.index === 0 ? ' on' : ''}"${act('go')}><b>Set off</b></div><div class="btn sm gx-bf-copy${d.index === 1 ? ' on' : ''}"${act('copy')}><b>Copy seed</b></div></div>`;
   const note = d.text && !/^Check the plan/.test(d.text) ? `<div class="pn gx-bf-note">${esc(d.text)}</div>` : '';
   return page('pd-brief', 51, `<div class="scr nrun pd38 bf38" data-key="brief">${head}${map}${facts}${go}${note}${keys([['Enter', d.index === 1 ? 'copy seed' : 'set off', d.index === 1 ? 'copy' : 'go'], ['←→', 'set off · copy seed']])}</div>`);
+}
+
+/** The Preparation Desk's four pages, as the tabs down the left (mock-ups `pd-setup`, `pd-bring`, `pd-mods`, `pd-desk`). */
+export const PREP_TABS: readonly (readonly [string, string])[] = [['Run Setup', 'Mode, region, difficulty'], ['Trainer', 'Who you are, what you bring'], ['Modifiers', 'Special rules'], ['Overview', 'Check it, then roll']];
+export const prepTabs = (on: number): string => `<div class="pdt38" data-key="pd-tabs">${PREP_TABS.map(([b, s], k) => `<div class="${k === on ? 'on' : ''}" data-key="pd-tab-${k}"${act('tab', k)}><u>${k + 1}</u><b>${esc(b)}</b><span>${esc(s)}</span></div>`).join('')}</div>`;
+
+export interface PkDeskModel {
+  /** "Run 13". */
+  run: string;
+  /** "Red's run". */
+  name: string;
+  art: Art | null;
+  /** The facts: label, value and the act a click on it runs (its page). */
+  facts: readonly (readonly [string, string, string])[];
+}
+
+/** The Overview (mock-up `pd-desk`): the Trainer, the run's card, Roll the starters, Save and Load preset. */
+export function pkDesk(d: PkDeskModel): string {
+  const head = hdr('Preparation Desk', { area: 'map', crumb: ['Hub', 'New Run', 'Desk'], pills: [d.run] });
+  const who = `<i class="who" data-key="pd-who">${d.art ? fitPic(pkArtOf(d.art), 180, 320, '', 4) : ''}</i>`;
+  const facts = d.facts.map(([u, v, a]) => `<p class="gx-pd-fact"${act(a)}><u>${esc(u)}</u><span style="font-size:${fit(v, 330, 16, 11, 0.55)}px">${esc(v)}</span></p>`).join('');
+  const tk = `<div class="tk"><em>${esc(d.run)}</em><b style="font-size:${fit(d.name, 400, 40, 24, 0.62)}px">${esc(d.name)}</b>${facts}</div>`;
+  const go = `<div class="go"><div class="btn on"${act('start')}><b>Roll the starters</b></div><div class="btn sm"${act('save')}><b>Save preset</b></div><div class="btn sm"${act('load')}><b>Load preset</b></div></div>`;
+  return page('pd-desk', 51, `<div class="scr nrun pd38" data-key="pd-desk">${head}${prepTabs(3)}<div class="pdk38 pn" data-key="pd-card">${who}${tk}${go}</div>${keys([['←→', 'page'], ['Enter', 'roll the starters', 'start'], ['S', 'save preset', 'save'], ['Esc', 'back to the street', 'back']])}</div>`);
+}
+
+/** Rows the Run Setup page shows at a time (the mock-up's five); the rest are named on the More bar. */
+export const PREP_SETUP_ROWS = 5;
+
+export interface PkPrepSetupModel {
+  rows: readonly { label: string; help: string; disabled: boolean; opts: readonly { label: string; on: boolean; locked: boolean }[] }[];
+  index: number;
+}
+
+/** A row's choices as the mock-up's segments: all of them when four or fewer, else three around the chosen one. */
+export function segWindow<T extends { on: boolean }>(opts: readonly T[]): { opt: T; at: number }[] {
+  const all = opts.map((opt, at) => ({ opt, at }));
+  if (all.length <= 4) return all;
+  const on = Math.max(0, opts.findIndex((o) => o.on)), first = Math.max(0, Math.min(all.length - 3, on - 1));
+  return all.slice(first, first + 3);
+}
+
+/** Run Setup (mock-up `pd-setup`): each row's choices as segments, ←→ change the lit row, the rest named on More. */
+export function pkPrepSetup(d: PkPrepSetupModel): string {
+  const n = d.rows.length, index = Math.max(0, Math.min(n - 1, d.index));
+  const first = Math.max(0, Math.min(n - PREP_SETUP_ROWS, index - PREP_SETUP_ROWS + 1));
+  const head = hdr('Preparation Desk', { area: 'map', crumb: ['New Run', 'Desk', 'Run Setup'], pills: ['Page 1 of 4'] });
+  const rows = d.rows.slice(first, first + PREP_SETUP_ROWS).map((r, k) => {
+    const i = first + k;
+    const seg = segWindow(r.opts).map(({ opt, at }) => `<i class="${opt.on ? 'on' : ''}${opt.locked ? ' gx-pd-lock' : ''}"${act('opt', `${i}:${at}`)}>${esc(opt.label)}</i>`).join('');
+    return `<div class="srow${i === index ? ' on' : ''}${r.disabled ? ' gx-pd-off' : ''}" data-key="pd-row-${i}"${act('row', i)}><div><b>${esc(r.label)}</b><span style="font-size:${fit(r.help, 380, 12, 10, 0.5)}px">${esc(r.help)}</span></div><span class="seg">${seg}</span></div>`;
+  }).join('');
+  const hidden = d.rows.filter((_, i) => i < first || i >= first + PREP_SETUP_ROWS).map((r) => r.label);
+  const more = hidden.length ? `<div class="more38" data-key="pd-more"><b>More</b>${esc(hidden.join(' · '))}<kbd>↑↓</kbd></div>` : '';
+  return page('pd-setup', 51, `<div class="scr nrun pd38" data-key="pd-setup">${head}${prepTabs(0)}<div class="set-rows pn pds38" data-key="pd-rows">${rows}</div>${more}${keys([['↑↓', 'move'], ['←→', 'change'], ['Tab', 'next page', 'tab', 1], ['Esc', 'back', 'back']])}</div>`);
+}
+
+export interface PkPrepBringModel {
+  cards: readonly { label: string; value: string; art: PkArt | null; none: boolean }[];
+  index: number;
+  /** What the lit card does. */
+  help: string;
+}
+
+/** Trainer (mock-up `pd-bring`): who you are and what you bring as cards, the lit one's line in the last card. */
+export function pkPrepBring(d: PkPrepBringModel): string {
+  const n = d.cards.length, index = Math.max(0, Math.min(n - 1, d.index)), cur = d.cards[index];
+  const head = hdr('Preparation Desk', { area: 'map', crumb: ['New Run', 'Desk', 'Trainer'], pills: ['Page 2 of 4'] });
+  const cards = d.cards.map((x, i) => `<div class="pn${i === index ? ' on' : ''}${x.none ? ' none' : ''}" data-key="pd-b-${i}"${act('card', i, 'over')}><i>${x.art ? fitPic(x.art, 70, 70, '', 3) : '<s></s>'}</i><em>${esc(x.label)}</em><b style="font-size:${fit(x.value, 150, 22, 13, 0.6)}px">${esc(x.value)}</b></div>`).join('');
+  const help = `<div class="pn help" data-key="pd-help"><em>${esc(cur?.label ?? '')}</em><p style="font-size:${fitBody(d.help, 150, 110, [14, 13, 12, 11], 1.3)}px">${esc(d.help)}</p><span><kbd>Enter</kbd> change</span></div>`;
+  return page('pd-bring', 51, `<div class="scr nrun pd38" data-key="pd-bring">${head}${prepTabs(1)}<div class="pdb38" data-key="pd-cards">${cards}${help}</div>${keys([['←→↑↓', 'move'], ['Enter', 'change', 'card', index], ['Tab', 'next page', 'tab', 2], ['Esc', 'back', 'back']])}</div>`);
+}
+
+/** Rules on one Modifiers page (the mock-up's three across, two down). */
+export const PREP_MODS_PAGE = 6;
+
+export interface PkPrepModsModel {
+  mods: readonly { name: string; text: string; on: boolean; soon: boolean }[];
+  /** The lit card (mods.length: the Death-Block bar). */
+  index: number;
+  deathBlock: { text: string; on: boolean };
+  /** The category showing ("All", "Party"). */
+  category: string;
+  /** What the lit rule does to the rewards. */
+  note: string;
+}
+
+/** Modifiers (mock-up `pd-mods`): the rules as cards with On or Off, six a page, and the Death-Block bar. */
+export function pkPrepMods(d: PkPrepModsModel): string {
+  const n = d.mods.length, index = Math.max(0, Math.min(n, d.index));
+  const at = Math.floor(Math.min(index, Math.max(0, n - 1)) / PREP_MODS_PAGE), first = at * PREP_MODS_PAGE;
+  const head = hdr('Preparation Desk', { area: 'map', crumb: ['New Run', 'Desk', 'Modifiers'], pills: ['Page 3 of 4'] });
+  const cards = d.mods.slice(first, first + PREP_MODS_PAGE).map((m, k) => {
+    const i = first + k;
+    return `<div class="pn${m.on ? ' act' : ''}${i === index ? ' on' : ''}${m.soon ? ' gx-pd-off' : ''}" data-key="pd-m-${i}"${act('mod', i, 'over')}><b style="font-size:${fit(m.name, 200, 20, 13, 0.6)}px">${esc(m.name)}</b><p style="font-size:${fitBody(m.text, 200, 64, [13, 12, 11, 10], 1.35)}px">${esc(m.text)}</p><u>${m.soon ? 'Soon' : m.on ? 'On' : 'Off'}</u></div>`;
+  }).join('');
+  const db = `<div class="more38 db${index === n ? ' gx-pd-dbon' : ''}${d.deathBlock.on ? '' : ' gx-pd-dboff'}" data-key="pd-db"${act('mod', n, 'over')}><b>Death-Block</b><span style="font-size:${fit(d.deathBlock.text, 520, 13, 10, 0.5)}px">${esc(d.deathBlock.text)}</span><u>${d.deathBlock.on ? 'On' : 'Off'}</u></div>`;
+  const where = n > PREP_MODS_PAGE ? `${first + 1}–${Math.min(n, first + PREP_MODS_PAGE)} of ${n} rules` : `${n} rules`;
+  const note = d.note ? `<div class="gx-pd-note" data-key="pd-note">${esc(d.note)}</div>` : '';
+  return page('pd-mods', 51, `<div class="scr nrun pd38" data-key="pd-mods">${head}${prepTabs(2)}<div class="pdm38" data-key="pd-mods-grid">${cards}</div>${db}${note}${keys([['←→↑↓', 'move'], ['Enter', 'switch on or off', 'mod', index], ['Q E', `${d.category} · ${where}`, 'cat', 1], ['Esc', 'back', 'back']])}</div>`);
+}
+
+/** Letter boxes the Seed page draws before a long code goes on one line. */
+export const SEED_BOXES = 8;
+
+export interface PkSeedModel {
+  value: string;
+  /** The typing point (the lit box). */
+  at: number;
+  text: string;
+}
+
+/** The Seed page (mock-up `pd-seed`): the seed in letter boxes, Random or Type one, then Use this seed or Copy. */
+export function pkSeed(d: PkSeedModel): string {
+  const v = d.value, head = hdr('Seed', { area: 'map', crumb: ['Desk', 'Seed'], pills: [v ? 'Fixed seed' : 'Random'] });
+  const boxes = v.length > SEED_BOXES
+    ? `<b class="gx-sd-long" style="font-size:${fit(v, 600, 30, 13, 0.62)}px">${esc(v)}</b>`
+    : Array.from({ length: Math.min(SEED_BOXES + 1, Math.max(SEED_BOXES, v.length + 1)) }, (_, k) => (k < v.length ? `<i class="${k === Math.min(d.at, v.length) - 1 ? 'on' : ''}">${esc(v[k]!)}</i>` : `<i class="e${k === v.length ? ' on' : ''}"></i>`)).join('');
+  const seg = `<span class="seg"><i class="${v ? '' : 'on'}"${act('btn', 'clear')}>Random</i><i class="${v ? 'on' : ''}"${act('btn', 'focus')}>Type one</i><i${act('btn', 'paste')}>Paste</i></span>`;
+  const go = `<div class="go"><div class="btn on"${act('btn', 'apply')}><b>Use this seed</b></div><div class="btn sm"${act('btn', 'copy')}><b>Copy</b></div></div>`;
+  return page('pd-seed', 51, `<div class="scr nrun pd38" data-key="pd-seed">${head}<div class="sdp38 pn" data-key="sd-card"><em>This run's seed</em><div class="sdc38 rx-field" data-key="sd-boxes">${boxes}</div>${seg}<p style="font-size:${fitBody(d.text, 460, 64, [14, 13, 12], 1.45)}px">${esc(d.text)}</p>${go}</div>${keys([['A to Z, 0 to 9', 'type'], ['Enter', 'use it', 'btn', 'apply'], ['Esc', 'back', 'back']])}</div>`);
 }
