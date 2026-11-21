@@ -542,5 +542,75 @@
   "q3": "Yes, three. Ambience shows the whole budget on one grid so it is easy to change. The road so far turns the run into chapters you can look back on, and the Chapter card marks the big turning points. Both chapter pages are one step from the Start menu.",
   "q4": "Ambience sits in Settings beside Effects and Region skin, with Ambience (Full, Calm, Off) at the top. The road so far is a new line in the Start menu, and the Chapter card can be replayed from it.",
   "q5": "Yes. Chapter cards are like the chapter splashes in Pokémon Legends and Colosseum, the Ledger feels like the money and Pokédex progress screens, and the calmer pages read more like the clean menus of the main games."
+ },
+ "41": {
+  "name": "Pocket Classic",
+  "big": "The UI borrows the handheld games’ window frames: every panel now wears a pixel frame with stepped corners in black, gold and Nova red, like the Gen 3 text windows, and Johto pages swap to gold and silver frames. The three Pokémon care staples the Dominion still lacked arrive too: a real Bag with pockets, a back-alley Clinic with the healing machine, and Care time with your lead Pokémon.",
+  "pages": [
+   "Bag",
+   "Back-alley clinic",
+   "Care time"
+  ],
+  "q1": "Yes. Every window now has a crisp pixel frame with stepped corners, the Bag sways and its flap lifts while the pocket arrows nudge, the Clinic’s healing machine lights its six Poké Ball slots one by one and flares white like a Pokémon Center, and in Care time hearts float up from a happy Houndoom.",
+  "q2": "Pass 40 calmed the effects; this pass gives the windows themselves a classic Pokémon shape and fills the biggest gap in the menus. Before, there was no Bag, no place to heal and no way to just spend time with your Pokémon. Now all three exist, one step from the Pokémon tab.",
+  "q3": "Yes, three. The Bag holds items in five pockets instead of a long list, the Clinic shows the whole party’s health and cost on one screen, and Care time is a small, quiet page that pays off with Affection.",
+  "q4": "Bag is a new line in the Start menu, right after Pokémon. The Clinic opens from the Party screen and the map, and Care time from the Summary. Settings › Options’ Frame now changes these pixel frames too.",
+  "q5": "Very much. Pixel window frames and the Bag with pockets you flip with ◀ ▶ come straight from FireRed and Emerald, the healing machine with six lit Poké Balls is the Pokémon Center, and Care time is Pokémon-Amie and Refresh with a villain’s Houndoom."
+ },
+ "42": {
+  "name": "The Hunted",
+  "big": "Red is close, and the whole UI knows it. While the Hero’s Threat is over 70, every page beats with a slow blue heartbeat at its edges, a pulsing Hero ping sits on the war line where Red was last seen (and a blue RED · PEWTER flag rides the news ticker), so you always know how near he is without opening a menu.",
+  "pages": [
+   "Lie low",
+   "Disguises",
+   "Close call"
+  ],
+  "q1": "Yes. A slow blue heartbeat pulses at the edges of every page, a ringing Hero ping with Red’s tiny sprite sits on the war line, a blue RED · PEWTER flag blinks on the ticker, the Disguises mirrors open their red curtains one by one, and on Close call Red’s torchlight sweeps toward the crates while Gus shivers behind them.",
+  "q2": "Pass 41 was about looking after your own; this pass is about being hunted. Before, Red only lived on the Hero tracker page. Now his closeness is felt on every screen, and there are three new ways to answer it: hide, dress up, or hold your breath.",
+  "q3": "Yes, three. Lie low compares four hiding places and shows what two days will do to Heat, Disguises lets you dress each crew member for a job, and Close call is a short tense scene. All three open from the Hero ping, so there is one clear way in.",
+  "q4": "The Hero ping and the ticker flag both open the Hero tracker, which now links to Lie low. Disguises sits in the Crew menu next to Uniforms. Settings › Access gains Heartbeat edges (On, Soft, Off) for anyone who finds the pulse distracting.",
+  "q5": "Yes. Red with his cap and his Pikachu team is the Hero from Red and Blue, sneaking past a trainer’s line of sight is the classic “trainer spotted you!” moment turned around, and disguises borrow the Team Rocket costume jokes from the anime."
+ },
+ "43": {
+  "name": "Climbing the Ranks",
+  "big": "The Boss has a level now, like a Pokémon. Every page’s title chip carries a thin glowing EXP bar that fills as the run goes well, and the Nova emblem wears a Boss level badge, so progress is always on screen. Levelling up opens the classic stats window, and points go into a Boss skill tree.",
+  "pages": [
+   "Boss level up",
+   "Boss skill tree",
+   "Promotion night"
+  ],
+  "q1": "Yes. A glowing blue EXP bar fills under every page title, the Nova emblem wears a level badge, the Level up page spins blue rays behind Nate while each stat gain pops in, the skill tree lights its diamonds in red, gold and blue with the chosen one pulsing, and Promotion night drops a medal on Dale under a spotlight while confetti falls and the crew bounces.",
+  "q2": "Pass 42 was about pressure from outside; this pass is about growing from inside. Before, only the crew and Pokémon had levels. Now the Boss grows too, the progress is visible on every page, and promotions become a moment instead of a number changing in a list.",
+  "q3": "Yes, three. Level up shows exactly what changed and what it unlocked, the skill tree gives each point a clear choice between three paths, and Promotion night celebrates the crew. The level badge on the emblem opens Level up, so nothing is hidden.",
+  "q4": "The level badge opens Level up, and the skill tree is a line in the Start menu under Crew. Settings › Screen gains EXP bar on titles (On, Off) and Level up screens (Full, Short).",
+  "q5": "Yes. “NATE grew to Lv. 24!” with the stat window is exactly the Pokémon level-up screen, the EXP bar is the battle EXP bar, and the skill tree’s three paths feel like picking a type speciality."
+ },
+ "44": {
+  "name": "Gym Rush",
+  "big": "Kanto’s eight Gyms become part of the empire. The war line on every page now opens with a gym case of eight gym marks: the ones Nova controls glow gold and spin, Rocket’s are rusted red, and the next target pulses. Gyms are the new middle goal between single jobs and the whole region.",
+  "pages": [
+   "Gym case",
+   "Gym takeover",
+   "Erika’s choice"
+  ],
+  "q1": "Yes. Eight little gym marks now sit on the war line of every page, Nova’s spinning in gold and the next one pulsing. The Gym case opens its lid to show all eight in velvet slots, the Celadon Gym map draws a dashed gold route through the hedges while the trainers’ view cones sweep, and Erika’s choice is a full face-to-face scene.",
+  "q2": "Pass 43 gave the Boss a level; this pass gives the run a middle goal. Before, the jump from one job to taking all of Kanto was huge. Gyms sit in between: eight clear targets, each with its own leader and its own way in, shown on every page so you always know what is next.",
+  "q3": "Yes, three, in one short line: the Gym case shows all eight at once, Gym takeover plans one Gym with its weak spots, and Erika’s choice is the talk at the end. The gym marks on the war line open the Gym case directly.",
+  "q4": "The gym marks on every page open the Gym case, which is also a line on the Empire Ledger. Settings › Screen gains Gym marks on the war line (On, Off).",
+  "q5": "Very. Eight Gyms with their leaders (Brock, Misty, Lt. Surge, Erika, Koga, Sabrina, Blaine and Giovanni) are the heart of every Pokémon game, Celadon Gym’s hedge maze and its trainers’ lines of sight are from Red and Blue, and Erika’s greenhouse grudge against Rocket fits her character."
+ },
+ "45": {
+  "name": "Fifth Cut",
+  "big": "The fifth synthesis folds 41 to 44 into what was already there instead of adding more doors. Only one thing on screen may pulse at a time (the most urgent, right now Red’s ping), the Hero heartbeat stays off calm pages like Settings and Menu, and three existing pages are rebuilt to carry the new systems: the Boss card shows level, EXP and gym marks, Rotom’s X-ray labels the new parts of the screen, and the Start menu only lists what exists.",
+  "pages": [
+   "Boss card (rebuilt)",
+   "X-ray (rebuilt)",
+   "Start menu (tidied)"
+  ],
+  "q1": "Yes, by making the important things stand out. With only Red’s ping still pulsing, your eye goes straight to the one real danger. The Boss card now fills its EXP bar and pops in the gym marks one by one, and the X-ray draws its dotted lines to the six new parts of the screen.",
+  "q2": "Passes 41 to 44 each added something that blinked or pulsed: the siege chip, the gym target, the Red flag, the heartbeat. Together they competed for attention. This pass sets a rule that only the most urgent thing moves, keeps the calm pages calm, and puts the new systems onto pages players already know.",
+  "q3": "No new pages this time, on purpose. The Boss card, X-ray and Start menu already had the right job, so they were rebuilt to carry the level, EXP, gym marks and Red instead of adding three more places to look. The Start menu now only shows lines for pages that exist.",
+  "q4": "The Start menu stays one list (Rotom Phone, Crew, Pokémon, Bag, Region map, Rivals, Boss card, Save, Options). Settings › Effects gains One pulse at a time (On, Off), so players who like everything moving can turn it back.",
+  "q5": "Yes. The Boss card now reads like a real Trainer Card, with the level, play time, money and gym marks across the bottom where badges go, and one calm Start menu list is exactly how the handheld games feel."
  }
 }

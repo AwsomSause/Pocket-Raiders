@@ -1,0 +1,53 @@
+/* Pass 43 · Climbing the Ranks */
+/* the Boss EXP bar in every title chip, the level on the emblem */
+.nb2-t{position:relative}
+.xp43{position:absolute;left:22px;right:40px;bottom:11px;height:4px;background:rgba(0,0,0,.55);border-radius:3px;overflow:hidden}
+.xp43 i{position:absolute;left:0;top:0;display:block;height:4px!important;background:linear-gradient(90deg,#5ab4ff,#bfe8ff);box-shadow:0 0 6px #5ab4ff;animation:fill23 1.2s .6s cubic-bezier(.3,1,.4,1) both}
+.nb-sig{position:relative}
+.lv43{position:absolute;right:-6px;bottom:-5px;z-index:3;min-width:20px;height:16px;padding:0 3px;display:grid;place-items:center;font-style:normal;font-size:11px;font-weight:800;line-height:1;color:#1d1622;background:#bfe8ff;border:2px solid #000;border-radius:7px;cursor:pointer;animation:pop .3s 1s both}
+/* Boss level up */
+.sb43{position:absolute;inset:0;pointer-events:none;background:repeating-conic-gradient(from 0deg at 26% 60%,rgba(90,180,255,.18) 0 8deg,transparent 8deg 20deg);animation:spin 30s linear infinite}
+.bn43{position:absolute;left:110px;bottom:60px;z-index:2;animation:in-up .5s both}
+.bn43 .ring{position:absolute;left:50%;bottom:-6px;width:200px;height:40px;margin-left:-100px;z-index:-1;border-radius:50%;background:radial-gradient(ellipse,rgba(90,180,255,.7),transparent 70%);animation:glow11 1.4s ease-in-out infinite}
+.lv43w{position:absolute;left:470px;top:70px;z-index:3;width:474px;height:328px;display:flex;flex-direction:column;gap:6px;padding:16px 20px;color:#1d1622;background:#fff8ea;border-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' shape-rendering='crispEdges'%3E%3Crect x='2' width='20' height='24'/%3E%3Crect y='2' width='24' height='20'/%3E%3Crect x='4' y='2' width='16' height='20' fill='%23bfe8ff'/%3E%3Crect x='2' y='4' width='20' height='16' fill='%23bfe8ff'/%3E%3Crect x='4' y='4' width='16' height='16' fill='%232860c9'/%3E%3Crect x='6' y='6' width='12' height='12'/%3E%3C/svg%3E") 8 / 8px / 3px stretch;animation:in-up .45s .2s both}
+.lv43w .h{font:400 26px/1 var(--fd);margin-bottom:4px}
+.sr43{display:grid;grid-template-columns:1fr 60px 60px;align-items:center;padding:4px 10px;border-bottom:2px dashed rgba(40,96,201,.3);animation:in-r .3s both;animation-delay:calc(var(--d) + .5s)}
+.sr43 b{font-size:17px}.sr43 i{font-style:normal;font:400 22px/1 var(--fd);text-align:right}
+.sr43 em{font-style:normal;font-size:17px;font-weight:800;text-align:right;color:#8a8296}
+.sr43 em.up{color:#2860c9;animation:pop .3s both;animation-delay:calc(var(--d) + 1s)}
+.ul43{margin:auto 0 0;padding:8px 10px;font-size:14px;background:#e8f0ff;border:2px solid #000;border-radius:8px;animation:in-up .4s 1.4s both}
+.ul43 b{color:#2860c9}
+/* the skill tree */
+.st43{position:absolute;left:16px;top:70px;width:600px;height:328px;z-index:2;display:flex;gap:10px;padding:10px;background:rgba(11,8,16,.92);border:2px solid #000}
+.br43{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;gap:12px}
+.br43::before{content:'';position:absolute;left:50%;top:40px;bottom:30px;width:4px;margin-left:-2px;background:linear-gradient(var(--c),rgba(255,255,255,.15));border-radius:2px}
+.br43 .bh{font:400 24px/1 var(--fd);text-transform:uppercase;color:var(--c)}
+.nd43{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-style:normal;animation:pop .3s both;animation-delay:var(--d)}
+.nd43 u{width:38px;height:38px;display:grid;place-items:center;text-decoration:none;font:400 18px/1 var(--fd);color:#8a8296;background:#211a28;border:3px solid #4a4052;border-radius:10px;transform:rotate(45deg)}
+.nd43 u span{transform:rotate(-45deg)}
+.nd43 em{margin-top:6px;font-style:normal;font-size:12px;font-weight:800;color:var(--mut);background:rgba(11,8,16,.9);padding:0 4px}
+.nd43.on u{color:#1d1622;background:var(--c);border-color:#000;box-shadow:0 0 12px var(--c)}
+.nd43.on em{color:#fff}
+.nd43.sel u{border-color:#fff;border-style:dashed;animation:ringp21 1.2s ease-in-out infinite}
+.nd43.sel em{color:var(--c)}
+.sd43{left:632px;top:70px;width:312px;height:328px;gap:8px}
+.sd43t{margin:0;font-size:14px;line-height:1.4}
+/* Promotion night */
+.sp43{position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 180px 300px at 40% 60%,rgba(255,240,190,.35),transparent 70%),linear-gradient(rgba(5,5,12,.5),rgba(5,5,12,.7))}
+.stg43{position:absolute;left:0;right:0;top:60px;height:340px;z-index:1}
+.stg43 .crowd{position:absolute;left:0;right:0;bottom:-10px;display:flex;justify-content:center;gap:60px;filter:brightness(.4)}
+.stg43 .crowd i{animation:hop .6s calc(var(--i) * .15s) ease-in-out infinite}
+.stg43 .hero{position:absolute;left:320px;bottom:40px;animation:in-up .5s .3s both}
+.stg43 .medal{position:absolute;left:50%;top:60px;width:18px;height:24px;background:radial-gradient(circle at 50% 70%,#ffd75a 0 6px,transparent 7px),linear-gradient(90deg,#e0294a 0 50%,#2860c9 50%) 50% 0/10px 12px no-repeat;animation:drop40 .5s 1s cubic-bezier(.3,1.5,.5,1) both}
+.stg43 .boss{position:absolute;left:150px;bottom:40px;filter:brightness(.75)}
+.stg43 .cnf i{position:absolute;left:var(--x);top:-20px;width:7px;height:11px;background:var(--c);animation:cnf43 2.6s var(--d) linear infinite}
+.rk43{position:absolute;left:600px;top:110px;z-index:3;width:330px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px;text-align:center;color:#1d1622;background:#fff8ea;border:3px solid #000;border-radius:12px;box-shadow:6px 6px 0 #ffd75a;animation:pop .5s .6s both}
+.rk43 small{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.2em;color:#c1121f}
+.rk43 b{font:400 40px/1 var(--fd)}
+.rk43 span{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:800}
+.rk43 span i{font-style:normal;color:#8a8296;text-decoration:line-through}
+.rk43 span i.n{color:#2860c9;text-decoration:none;font:400 22px/1 var(--fd);animation:pop .3s 1.2s both}
+.rk43 u{text-decoration:none;color:#c1121f}
+.rk43 em{font-style:normal;font-size:13px}
+/*@top*/
+@keyframes cnf43{to{transform:translateY(380px) rotate(540deg)}}

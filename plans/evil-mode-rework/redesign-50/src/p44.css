@@ -1,0 +1,40 @@
+/* Pass 44 · Gym Rush */
+/* a gym case on the war line of every page */
+.gc44{display:flex;gap:2px;flex:none;cursor:pointer;text-decoration:none}
+.gc44 i{width:12px;height:12px;display:grid;place-items:center;filter:grayscale(1) brightness(.5);animation:pop .3s both;animation-delay:calc(var(--d) + .6s)}
+.gc44 i img{width:12px!important;height:12px!important}
+.gc44 .g-nova{filter:drop-shadow(0 0 3px #ffd75a)}
+.gc44 .g-nova img{animation:spin44 4s linear infinite}
+.gc44 .g-rocket{filter:grayscale(.6) brightness(.6) sepia(1) hue-rotate(-40deg)}
+.gc44 .g-next{filter:none;animation:pop .3s both,bmb36 1s 1s ease-in-out infinite}
+/* the Gym case */
+.gy44{position:absolute;left:60px;top:76px;width:840px;height:318px;z-index:2;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:1fr 1fr;gap:12px;padding:20px;background:linear-gradient(#3a1a2a,#1a0c14);border:4px solid #000;border-radius:16px;box-shadow:inset 0 0 0 6px #b8901c,6px 6px 0 rgba(0,0,0,.5)}
+.gy44 .lid{position:absolute;left:-4px;right:-4px;top:-4px;height:50%;z-index:3;background:linear-gradient(#5a2a3a,#3a1a2a);border:4px solid #000;border-radius:16px 16px 0 0;transform-origin:50% 0;animation:lid44 .9s .2s cubic-bezier(.6,0,.3,1) both}
+.gs44{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px;text-align:center;background:radial-gradient(#2a1a22,#120a10);border:2px solid #000;border-radius:12px;box-shadow:inset 0 4px 10px rgba(0,0,0,.7);animation:pop .3s both;animation-delay:calc(var(--d) + .9s)}
+.gs44 .slot{width:72px;height:72px;display:grid;place-items:center;border-radius:50%;background:radial-gradient(#1a0c14 60%,#3a2030)}
+.gs44 b{font:400 18px/1 var(--fd);text-transform:uppercase}
+.gs44 em{font-style:normal;font-size:12px;color:var(--mut)}
+.gs44>i{padding:1px 10px;font-style:normal;font-size:11px;font-weight:800;border-radius:999px;background:#3b3346}
+.gs44.g-nova .slot img{filter:drop-shadow(0 0 10px #ffd75a);animation:spin44 5s linear infinite}
+.gs44.g-nova>i{background:var(--red);color:#fff}
+.gs44.g-rocket .slot img{filter:grayscale(1) brightness(.5)}
+.gs44.g-rocket>i{background:#5c6178;color:#fff}
+.gs44.g-free .slot img{opacity:.35}
+.gs44.g-next>i{background:#ffd75a;color:#1d1622}
+.gs44.on{outline:3px solid #fff;outline-offset:3px}
+/* Gym takeover */
+.gp44{position:absolute;left:16px;top:70px;width:560px;height:328px;z-index:2;overflow:hidden;background:#3a6a3a repeating-linear-gradient(90deg,transparent 0 31px,rgba(0,0,0,.08) 31px 32px),#3a6a3a;border:2px solid #000}
+.gp44 .hedge{position:absolute;inset:0;background:linear-gradient(#1f4a22,#1f4a22) 0 80px/170px 22px no-repeat,linear-gradient(#1f4a22,#1f4a22) 370px 80px/190px 22px no-repeat,linear-gradient(#1f4a22,#1f4a22) 0 180px/150px 22px no-repeat,linear-gradient(#1f4a22,#1f4a22) 220px 250px/340px 22px no-repeat;filter:drop-shadow(0 3px 0 #0f2a12)}
+.gt44{position:absolute;transform:translate(-50%,-50%)}
+.gt44 .vw{position:absolute;left:50%;top:60%;width:90px;height:40px;background:linear-gradient(90deg,rgba(255,240,170,.4),transparent);clip-path:polygon(0 40%,100% 0,100% 100%,0 60%);animation:look42 3s calc(var(--i) * -.8s) ease-in-out infinite alternate;transform-origin:0 50%}
+.ld44{position:absolute;z-index:2;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center}
+.ld44 u{text-decoration:none;font-size:11px;font-weight:800;padding:0 6px;background:#ff8ad8;color:#1d1622;border-radius:999px}
+.pt44{position:absolute;inset:0;width:560px;height:328px}
+.pt44 path{fill:none;stroke:#ffd75a;stroke-width:4;stroke-dasharray:8 8;animation:dash22 1s linear infinite;filter:drop-shadow(0 0 4px #ffd75a)}
+.me44{position:absolute;left:250px;bottom:0;animation:bob 1.4s ease-in-out infinite}
+.gw44{left:592px;top:70px;width:352px;height:328px;gap:7px}
+.gw44 .o29{padding:6px 12px;border-left:5px solid var(--ok)}
+.gw44 .w-mid{border-left-color:#ffb86a}
+/*@top*/
+@keyframes spin44{to{transform:rotateY(360deg)}}
+@keyframes lid44{0%{transform:none}100%{transform:rotateX(100deg) translateY(-30px);opacity:0}}

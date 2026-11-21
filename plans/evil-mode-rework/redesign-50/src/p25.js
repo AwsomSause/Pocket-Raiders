@@ -8,9 +8,10 @@ comp(25, 'keys', k => before('keys', 25)(k).replace(/<span class="ph13" [^>]*>/,
 /* the Start menu, over the live page */
 page('start', { g: 'Menu', t: 'Start menu', kind: 'start25', from: 25 });
 const STI = [['Rotom Phone', 'g-xtransceiver', 'menu', 'Apps, calls and the news'], ['Crew', 'g-idcard', 'roster', '6 of 8 · 2 want a word'], ['Pokémon', 'g-ball', 'reserve', 'Reserve 27 of 80'], ['Region map', 'g-town-map', 'map', 'Kanto · 2 districts yours'], ['Boss card', 'g-letter', 'tcard', 'Nate · Day 18'], ['Save', 'g-journal', 'save', 'Slot 1 · 2 min ago'], ['Options', 'g-machine-part', 'options', 'Text, frame, sound']];
+const STIL = () => STI.filter(x => !PR.pages[x[2]] || live(x[2], PR.P));
 comp(25, 'k:start25', s => `<div class="scr nv k-start25"><div class="rp21" data-nocheck>${C('k:hub', PR.pages.hq)}</div><i class="dim25" data-nocheck></i>
   <section class="sm25" ${mm('panel')}><div class="sh">${face('t-natebig', 40)}<span><b>NATE</b><em>Boss · ${RUN.funds}</em></span></div>
-    ${map(STI, ([n, ic, g], i) => `<button class="si25${i === 0 ? ' on' : ''}" ${go(g)} style="--d:${i * 45}ms">${spr(ic, 1.2, '')}<b>${n}</b></button>`)}<button class="si25 x" style="--d:${STI.length * 45}ms"><b>Close</b></button></section>
+    ${map(STIL(), ([n, ic, g], i) => `<button class="si25${i === 0 ? ' on' : ''}" ${go(g)} style="--d:${i * 45}ms">${spr(ic, 1.2, '')}<b>${n}</b></button>`)}<button class="si25 x" style="--d:${STIL().length * 45}ms"><b>Close</b></button></section>
   <div class="sd25" data-nocheck><b>Rotom Phone</b> ${STI[0][3]}<i class="nx23">▼</i></div>
   ${C('keys', [['↑↓', 'pick'], ['Enter', 'open'], ['Start', 'close']])}</div>`);
 
