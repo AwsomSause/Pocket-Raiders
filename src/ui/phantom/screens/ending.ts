@@ -8,7 +8,7 @@ import type { OverModel, RunCardModel } from '../../redux/screens/over';
 import type { CreditsModel } from '../../redux/screens/boot';
 import { rxUrl } from '../../redux/assets';
 import type { PhantomVersion } from '../../../core/presentation/phantom';
-import { act, esc, keys, mon, page, ransom } from '../kit';
+import { act, esc, keys, mon, page, ransom, TYC } from '../kit';
 
 /** Facts on the card itself; any more stand beside it. */
 export const PH_CARD_FACTS = 5;
@@ -101,7 +101,7 @@ export function phOver(_ph: PhantomVersion, d: OverModel): string {
 
 export interface HallModel {
   /** The winning team, lead first. `tag` is its Legacy title or its place; `note` what it is remembered for. */
-  mons: readonly { file: string | null; name: string; level: number; tag: string; note: string; shiny: boolean }[];
+  mons: readonly { file: string | null; name: string; level: number; tag: string; note: string; shiny: boolean; /** Its first type: the banner's colour. */ type?: string }[];
   index: number;
   trainer: Art | null;
   /** "Champion Red". */
@@ -110,15 +110,18 @@ export interface HallModel {
   sub: string;
 }
 
+/** The banners lean in turn, as the mock-up hangs them. */
+const HF_TILT = [-3, 2, -2, 3, -2, 2];
+
 /** A champion run's winning team (mock-up `hall`): six banners, the cut-out title and the champion under them. */
 export function phHall(_ph: PhantomVersion, d: HallModel): string {
   const n = Math.max(1, Math.min(6, d.mons.length));
   const banner = (m: HallModel['mons'][number], i: number): string =>
-    `<div class="hf-b ph-hf-b${i === d.index ? ' on' : ''}" data-key="h${i}" style="--i:${i}"${act('pick', i, 'over')}><small>${esc(m.tag)}</small><div class="hf-m">${m.file ? figure({ file: m.file, atlas: true }, 140) : ''}</div><b style="font-size:${m.name.length > 11 ? 19 : m.name.length > 8 ? 23 : 27}px">${esc(m.name)}</b><em>Lv.${m.level}${m.shiny ? ' · Shiny' : ''}</em><p>${esc(m.note)}</p></div>`;
-  return page('hall', '<div class="bgk"></div><div class="burst" style="--x:50%;--y:46%" aria-hidden="true"></div>'
+    `<div class="hf-b ph-hf-b${i === d.index ? ' on' : ''}" data-key="h${i}" style="--i:${i};--r:${HF_TILT[i % HF_TILT.length]}deg${m.type ? `;--tc:${TYC[m.type.toLowerCase()] ?? '#888'}` : ''}"${act('pick', i, 'over')}><small>${esc(m.tag)}</small><div class="hf-m">${m.file ? figure({ file: m.file, atlas: true }, 140) : ''}</div><b style="font-size:${m.name.length > 11 ? 19 : m.name.length > 8 ? 23 : 27}px">${esc(m.name)}</b><em>Lv.${m.level}${m.shiny ? ' · Shiny' : ''}</em><p>${esc(m.note)}</p></div>`;
+  return page('hall', '<div class="bgk"></div><div class="burst" style="--x:50%;--y:120%;background:repeating-conic-gradient(color-mix(in srgb,var(--gold) 26%,transparent) 0 4deg,transparent 4deg 10deg)" aria-hidden="true"></div>'
     + `<div class="hf-row ph-hf-row" style="left:${Math.round((1280 - (n * 188 + (n - 1) * 12)) / 2)}px">${d.mons.slice(0, 6).map(banner).join('')}</div>`
     + `<div class="hf-t">${ransom('HALL OF FAME', 51)}</div>`
-    + (d.trainer ? `<div class="hf-me ph-hf-me">${figure(d.trainer, 110)}</div>` : '')
+    + (d.trainer ? `<div class="hf-me ph-hf-me">${figure(d.trainer, 170)}</div>` : '')
     + `<div class="hf-cap${d.trainer ? '' : ' ph-hf-solo'}"><b>${esc(d.name)}</b><span>${esc(d.sub)}</span></div>`
     + `<div class="cf" aria-hidden="true">${Array.from({ length: 14 }, (_, k) => `<i style="--x:${(k * 37 + 11) % 100};--y:${(k * 29 + 7) % 100};--d:${k * 13};--c:${CF[k % CF.length]};--r:${(k * 47) % 180}deg"></i>`).join('')}</div>`
     + keys(['◀▶', 'Look'], ['X', 'Back', 'back']));

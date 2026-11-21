@@ -35,7 +35,7 @@
   & .ph-rc-go .blade{font-size:28px}
   & .s-record .fn-st span{cursor:default}
   /* Hall of Fame: a champion's team */
-  & .ph-hf-b{cursor:pointer;animation:ph-inUp .4s both;animation-delay:calc(var(--i)*70ms)}
+  & .ph-hf-b{cursor:pointer}
   & .ph-hf-b.on{translate:0 -14px;box-shadow:0 0 0 4px var(--gold),10px 10px 0 4px var(--red)}
   & .ph-hf-b b{white-space:nowrap}
   & .ph-hf-me{left:44px;bottom:30px}

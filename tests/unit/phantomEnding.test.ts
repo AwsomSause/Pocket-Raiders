@@ -98,6 +98,11 @@ describe('the Phantom Hall of Fame team', () => {
     expect(html).toContain('8 of 8 regions · 64 badges · 2026-11-20');
     expect(html).toContain('data-act="back"');
     expect(html).toContain('ph-hf-solo');
+    // As in the mock-up the banners lean in turn and wear their Pokémon's type colour; one with no type keeps the default.
+    expect(html).toContain('style="--i:0;--r:-3deg"');
+    const typed = phHall(ph, hall({ mons: hall().mons.map((m, k) => ({ ...m, type: k ? 'electric' : 'fire' })) }));
+    expect(typed).toContain('--i:0;--r:-3deg;--tc:#ff6a2b');
+    expect(typed).toContain('--i:1;--r:2deg;--tc:#f7c400');
   });
 
   it('never shows more than six', () => {
