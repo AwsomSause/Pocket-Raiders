@@ -5,6 +5,7 @@ import { act, bg, esc, mini, mon } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { phCredits } from '../../phantom/screens/ending';
 import { phLoading } from '../../phantom/screens/rooms';
+import { pkBoot, pkCredits } from '../../pocket/screens/ending';
 
 export interface BootModel {
   /** "Loading the region…", or "Beta 0.7 is here" on the update splash. */
@@ -20,6 +21,7 @@ export interface BootModel {
 /** Two layouts: a Poké Ball over the bar, or Pikachu running in place over it. On the splash a click anywhere moves on. */
 export function bootView(c: ReduxCtx, d: BootModel): string {
   if (c.ph) return phLoading(c.ph, d);
+  if (c.pk) return pkBoot(d);
   const v = c.v(2), pct = Math.round(Math.max(0, Math.min(1, d.progress)) * 100);
   return (d.splash ? bg(d.splash) + '<div class="shade"></div>' : '')
     + `<div class="abs col cen" style="left:0;right:0;top:${v ? 120 : 170}px;gap:20px">${v ? mon('pokemon/25', 3, '', true) : '<i class="ball" style="--b:70px"></i>'}<b style="font-size:26px">${esc(d.title)}</b><div class="hp gold" style="width:520px;height:16px"><i style="width:${pct}%"></i></div><span class="sm" style="max-width:760px;text-align:center">${esc(d.note)}</span></div>`
@@ -39,6 +41,9 @@ export interface CreditsModel {
   roll: number | null;
   /** Phantom UI: the run's moments as photos beside the roll (a Pokémon of the team and a caption each). */
   photos?: readonly { file: string | null; cap: string }[];
+  /** Pocket look: the team walking along the bottom (follower sheets) and the button's word. */
+  walkers?: readonly { sheet: string; ko: boolean }[];
+  back?: string;
 }
 
 /** The rows as the mock-up's column: a small heading over bold lines, gold titles, a row of Pokémon for a team. */
@@ -66,6 +71,7 @@ export function creditsRows(rows: readonly CreditsRow[]): string {
 
 export function creditsView(c: ReduxCtx, d: CreditsModel): string {
   if (c.ph) return phCredits(c.ph, d);
+  if (c.pk) return pkCredits(d);
   const col = `<div class="col cen rx-roll" style="gap:12px;color:#fff;padding:40px 0${d.roll === null ? '' : `;transform:translateY(${Math.round(d.roll)}px)`}">${d.lead ? `<span class="sm">${esc(d.lead)}</span>` : ''}${creditsRows(d.rows)}</div>`;
   const low = d.party.length ? 150 : 44;
   return bg(d.art) + '<div class="shade"></div>'

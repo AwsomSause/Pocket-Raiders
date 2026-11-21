@@ -936,6 +936,29 @@ test('Pocket look: a winning team opens as the Hall of Fame page and Back closes
   expect(errors).toEqual([]);
 });
 
+test('Pocket look: the credits say thank you, roll the run and walk the team; Enter goes on to the results', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=pk-cred');
+  await toPocketMap(page);
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr;
+    pkr.session.run.victory = true;
+    pkr.game.scene.getScene('Map').scene.start('Credits');
+  });
+  await waitForScene(page, 'Credits');
+  await onPkPage(page, 'Credits', 'credits');
+  const cr = pkView(page, 'Credits', 'credits');
+  await expect(cr.locator('.cr-big b').first()).toHaveText('Thank you');
+  await expect(cr.locator('.cr-roll em').first()).toBeVisible();
+  await expect(cr.locator('.cr-walk .wk')).not.toHaveCount(0);
+  await expect(cr.locator('.cr-back')).toHaveText('On to the results');
+  await page.waitForTimeout(500);
+  await step(page, 'Enter');
+  await waitForScene(page, 'GameOver');
+  expect(errors).toEqual([]);
+});
+
 test('Pocket look: starting a run, Starter Pick is three cards and the Briefing shows the first region and Gym', async ({ page }) => {
   test.setTimeout(180_000);
   const errors = watch(page);

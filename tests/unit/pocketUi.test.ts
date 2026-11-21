@@ -31,6 +31,7 @@ import type { BriefModel } from '../../src/ui/redux/screens/run';
 import type { TradeModel } from '../../src/ui/redux/screens/stops';
 import { PK_TOOLS_PAGE, pkTools, toolShort } from '../../src/ui/pocket/screens/tools';
 import { PK_TRAINER_SIDE, pkTrainers, trainerColour } from '../../src/ui/pocket/screens/trainers';
+import { pkBoot, pkCredits, pkCreditsRows } from '../../src/ui/pocket/screens/ending';
 import { hallTag, pkHall } from '../../src/ui/pocket/screens/hall';
 import { keepLine, pkOver } from '../../src/ui/pocket/screens/over';
 import { pkGallery, pkMemories, shelfMon, type PkGalleryModel } from '../../src/ui/pocket/screens/memories';
@@ -1076,5 +1077,36 @@ describe('Pocket look: the Hall of Fame', () => {
     expect(html).toContain('&lt;b&gt;');
     expect(hallTag('')).toBe('#9fa19f');
     expect(hallTag('fire')).not.toBe('#9fa19f');
+  });
+});
+
+describe('Pocket look: boot and credits', () => {
+  it('boot: the title, the fan lines and the bar; the update splash waits for a key', () => {
+    const html = pkBoot({ title: 'Loading the region…', progress: 0.724, note: 'Tip: rest at a Camp.', splash: null });
+    expect(pkPageOf(html)?.id).toBe('boot');
+    expect(html).toContain('Loading the region · 72%');
+    expect(html).toContain('width:72%');
+    expect(html).toContain('not for sale');
+    expect(html).not.toContain('Press any key');
+    const sp = pkBoot({ title: 'Beta 0.8 is here', progress: 2, note: '', splash: 'x.png' });
+    expect(sp).toContain('Press any key');
+    expect(sp).toContain('data-act="next"');
+    expect(sp).toContain('width:100%');
+  });
+  it('credits: thank you, the run\'s lines grouped under their headings, the team walking, the button', () => {
+    const rows = [{ kind: 'title' as const, text: 'Pocket Raiders' }, { kind: 'heading' as const, text: 'The team' }, { kind: 'text' as const, text: 'Pikachu Lv5' }, { kind: 'mons' as const, text: '', mons: ['a'] }, { kind: 'gap' as const, text: '' }, { kind: 'heading' as const, text: 'Thanks' }, { kind: 'text' as const, text: '<you>' }];
+    expect(pkCreditsRows(rows).match(/<div/g)?.length).toBe(3);
+    const html = pkCredits({ lead: 'A run by Red', rows, party: [], art: '', roll: 120, walkers: [{ sheet: 'pikachu', ko: false }, { sheet: 'eevee', ko: true }], back: 'On to the results' });
+    expect(pkPageOf(html)?.id).toBe('credits');
+    expect(html).toContain('Thank you');
+    expect(html).toContain('translateY(120px)');
+    expect(html).toContain('&lt;you&gt;');
+    expect(html.split('class="wk').length - 1).toBe(2);
+    expect(html).toContain('wk ko');
+    expect(html).toContain('On to the results');
+    const still = pkCredits({ lead: '', rows: [], party: [], art: '', roll: null });
+    expect(still).toContain('gx-cr-still');
+    expect(still).toContain('scroll');
+    expect(still).not.toContain('walkrow');
   });
 });

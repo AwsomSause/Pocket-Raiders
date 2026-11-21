@@ -612,3 +612,15 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .overp .gx-ov-rep>span{font-size:12px;font-weight:800;color:var(--mute)}
 .pkx .pks .overp .gx-ov-rep>div{overflow:hidden;font-size:14px;font-weight:700;line-height:1.4}
 .pkx .pks .overp .gx-ov-rep p{margin:0}.pkx .pks .overp .gx-ov-rep p.gap{height:8px}
+
+/* Boot and credits (mock-ups `boot`, `credits`). */
+.pkx .pks .gx-bt-ball{display:block;width:192px;height:192px;background:var(--pk-u-ball256) center/contain no-repeat;image-rendering:pixelated}
+.pkx .pks .gx-bt-note{position:absolute;left:64px;top:452px;width:700px;margin:0;color:#aab8e0;line-height:1.35}
+.pkx .pks .gx-bt-any{position:absolute;inset:0;z-index:1;cursor:pointer;font-style:normal}
+.pkx .pks .boot17 .bt-key{z-index:2;cursor:pointer}
+.pkx .pks .gx-cr-box{top:30px;bottom:52px;overflow:hidden;display:block;-webkit-mask:linear-gradient(transparent,#000 8%,#000 92%,transparent);mask:linear-gradient(transparent,#000 8%,#000 92%,transparent)}
+.pkx .pks .gx-cr-box.gx-cr-still{overflow:auto}
+.pkx .pks .gx-cr-col{display:flex;flex-direction:column;gap:14px;padding:12px 0}
+.pkx .pks .gx-cr-col>div{display:flex;flex-direction:column;gap:1px}
+.pkx .pks .gx-cr-title b{color:var(--yel);font-size:30px!important}
+.pkx .pks .cred17 .cr-back{z-index:2}
