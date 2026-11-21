@@ -472,5 +472,75 @@
   "q3": "Yes, three. X-ray explains a busy screen without cluttering it. Inbox holds everything that used to pop up. Lights out gives the end of the day its own calm page with the save.",
   "q4": "Inbox and X-ray are both lines in the Start menu, and the Inbox count shows on the dock. Settings › Screen gains Pop-ups (Inbox only, Show) and Autosave at Lights out (On, Off).",
   "q5": "Yes. The end-of-day save works like Pokémon’s “Would you like to save?” prompt, the Inbox feels like the PC mailbox, and the dock is the same one-row Start bar the handheld games use."
+ },
+ "36": {
+  "name": "Rocket Falls",
+  "big": "The endgame arrives and the whole UI braces for it. Every page now opens through a Pokémon-style encounter wipe chosen by its group (sliding bars at home, a Poké Ball iris for battles and rivals, blinds for jobs and events, the Nova slash for the Empire), and the war line becomes a burning fuse: a smoking spark creeps toward Rocket’s bomb, and a red SIEGE chip counts down the days on every page.",
+  "pages": [
+   "Siege plan",
+   "The Hideout",
+   "Giovanni’s office"
+  ],
+  "q1": "Yes. Every page change is now an event: dark bars slide apart on home pages, a red-and-white Poké Ball iris opens onto battles and rivals, gold-edged blinds flip open on jobs, and the Empire splits open on a gold slash. The war line burns like a real fuse with a smoking spark, and the lift doors on the Hideout slide open onto your crew.",
+  "q2": "Pass 35 calmed the screen down; this pass gives it a heartbeat for the endgame. Moving between pages no longer just swaps the screen, it plays a wipe that tells you what kind of page you are entering, and the fuse plus the SIEGE chip keep the final goal in sight everywhere.",
+  "q3": "Yes, three, in a straight line: the Siege plan picks who holds each floor, the Hideout shows the descent floor by floor, and Giovanni’s office is the final talk with three choices. Each leads to the next with one button, so it never feels like a maze.",
+  "q4": "The SIEGE chip on every page opens the Siege plan, and the plan is also reachable from the War front. Settings › Effects gains Page wipes (Encounter, Simple fade, Off), and Off is the default when Reduce motion is on.",
+  "q5": "Very much. The encounter wipes copy the feeling of a wild battle starting, the hideout under the Celadon Game Corner with its poster switch, spin tiles and Lift Key is straight out of Red and Blue, and facing Giovanni in his office is the classic ending of Rocket’s story."
+ },
+ "37": {
+  "name": "Johto Bound",
+  "big": "The UI learns that Kanto is only one place. Every page now wears its region’s skin: Kanto’s skyline (Silph Co., the Department Store, Pokémon Tower) rises on the horizon behind every page with Nova’s windows glowing red, and every panel header catches a passing glint of light. Sail to Johto and the whole UI re-dresses in gold and silver, with the Bell Tower and the Radio Tower on the skyline.",
+  "pages": [
+   "Region skin",
+   "Arrival in Johto",
+   "Goldenrod Underground"
+  ],
+  "q1": "Yes. A skyline of Kanto landmarks rises behind every page with Nova’s windows glowing red, a glint of light runs across every panel header, and Arrival in Johto is a full golden sunset with the crew walking in one by one and Houndour trotting behind.",
+  "q2": "Pass 36 was about finishing Kanto; this pass makes the UI ready for the next region. The look is no longer fixed: every region has its own skin, so Johto pages turn gold and silver with the Bell Tower on the horizon, and the top bar resets to Johto’s money, Heat and day.",
+  "q3": "Yes, three. Region skin lets you preview and switch the looks, Arrival in Johto shows what changed in one screen (₽1,000, Heat 0, your ace back in its first form), and Goldenrod Underground is the new base you build up from one room.",
+  "q4": "Region skin lives in Settings beside Effects, and it is also a button on Arrival in Johto. Its options are Follow the region (default), Skyline behind pages, Panel glints, and how locked skins are shown.",
+  "q5": "Yes. Johto with Ethan, Silver, Whitney and Archer, the Goldenrod Underground shutters and Switch room from Gold and Silver, and a region-coloured UI like the way each Pokémon generation has its own menu colours."
+ },
+ "38": {
+  "name": "Magnet Line",
+  "big": "The tab row becomes a rail line. Your six main places are now stations on Nova’s own Magnet Line: the track runs under them, and the page you are on is the Magnet Train itself, a white and coloured carriage that glides into the station each time you switch. Moving around the game finally feels like travelling around a city.",
+  "pages": [
+   "Timetable",
+   "Smuggling run",
+   "Magnet Train"
+  ],
+  "q1": "Yes. The tab row is a lit rail line with sleepers, the current page is a white Magnet Train carriage in its area colour that slides into its station with speed lines, the Timetable draws its metro lines in one stroke and flips its split-flap board row by row, and the Magnet Train page has the train pull in at full speed before the ticket pops up.",
+  "q2": "Pass 37 changed the look by region; this pass changes how moving around feels. The six main places used to be plain buttons. Now they read as stations on one line, so you can see where you are and what is next to it, and travel itself becomes a feature with its own pages.",
+  "q3": "Yes, three. The Timetable shows every line and train at once (and which ones have police on them), the Smuggling run lets you hide cargo on a train for money, and the Magnet Train is the fast link between your Kanto and Johto empires.",
+  "q4": "The Timetable sits in the Start menu next to the Region map, and the Region map gets a Timetable button. Settings › Effects gains Train tabs (Train, Plain tabs) for players who prefer the old look.",
+  "q5": "Yes. The Magnet Train between Saffron and Goldenrod is from Gold, Silver, HeartGold and SoulSilver, Kanto’s towns are the stations, and checking a timetable before a trip feels like the train station in Black and White."
+ },
+ "39": {
+  "name": "Storm Front",
+  "big": "The weather reaches the UI itself. Tonight a storm hits Kanto: rain falls between the background and the panels, drops gather under every panel header and slide down, lightning flashes across the whole screen every few seconds and makes the top bar jolt, and the Day segment shows the storm. Weather is no longer a forecast line, it is something every page feels.",
+  "pages": [
+   "Blackout",
+   "Flooded tunnel",
+   "Shelter"
+  ],
+  "q1": "Yes. Rain slants between the background and the panels, drops gather and fall under every panel header, lightning lights the whole screen and jolts the status capsule, a tiny storm cloud with a flashing bolt sits on the Day segment, Celadon’s buildings flicker and go dark on Blackout, the tunnel floods up to the crew’s knees, and the Shelter fire flickers while a wet Poochyena shivers by the door.",
+  "q2": "Pass 38 made moving around feel like travel; this pass makes the world push back. Before, weather was a line on the Forecast page. Now a storm changes every screen and opens its own moments: a blackout to rob, a flood to cross, and a quiet night where the crew becomes more human.",
+  "q3": "Yes, three, all short and only during storms: Blackout (pick one dark building in 40 minutes), Flooded tunnel (three ways through, each with a cost), and Shelter (a small crew story with a stray). They appear from the Inbox and the map, so they never clog the main menus.",
+  "q4": "Storm pages arrive through the Inbox and the Region map. Settings › Effects gains Weather on screen (Full, Behind panels only, Off) and Lightning flashes (On, Off), and lightning is always off when Reduce flashing is on.",
+  "q5": "Yes. Weather that changes what you can do is a Pokémon idea from Ruby and Sapphire onward, the Underground Path between Routes 5 and 6 is Kanto, and taking in a stray Poochyena on a stormy night feels like the small story moments in the handheld games."
+ },
+ "40": {
+  "name": "Fourth Cut",
+  "big": "The fourth synthesis gives every page an ambience budget. Passes 34 to 39 stacked lanterns, fireworks, skylines, rain and lightning everywhere; now each group of pages gets at most two of them, picked to fit (storms on the night and Rocket pages, lanterns on the city and Empire pages, the skyline at home), so pages breathe again. The Empire Ledger, the last plain page, becomes a real ledger with a week chart, and the run gets chapters.",
+  "pages": [
+   "Ambience",
+   "The road so far",
+   "Chapter card"
+  ],
+  "q1": "Yes, in a calmer way. The Ledger’s bars grow day by day and the clean and dirty bar fills, The road so far runs like a moving film strip with the current chapter glowing red, and the Chapter card paints a red brush stroke across the screen while THE SIEGE drops in one letter at a time between two dark silhouettes.",
+  "q2": "Passes 36 to 39 each added a layer of atmosphere, and together they were too much. This pass decides where each one belongs: storms on the night and Rocket pages, lanterns and fireworks on the city and Empire pages, the skyline at home, never more than two. The Ledger, which was still a plain newspaper with a placeholder picture, becomes a real chart.",
+  "q3": "Yes, three. Ambience shows the whole budget on one grid so it is easy to change. The road so far turns the run into chapters you can look back on, and the Chapter card marks the big turning points. Both chapter pages are one step from the Start menu.",
+  "q4": "Ambience sits in Settings beside Effects and Region skin, with Ambience (Full, Calm, Off) at the top. The road so far is a new line in the Start menu, and the Chapter card can be replayed from it.",
+  "q5": "Yes. Chapter cards are like the chapter splashes in Pokémon Legends and Colosseum, the Ledger feels like the money and Pokédex progress screens, and the calmer pages read more like the clean menus of the main games."
  }
 }
