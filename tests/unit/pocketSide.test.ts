@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { pkPageOf } from '../../src/ui/pocket/kit';
 import { pkRivals, type PkRival } from '../../src/ui/pocket/screens/rivals';
+import { pkLeague } from '../../src/ui/pocket/screens/world';
 
 describe('the Pocket Rival Board', () => {
   const r = (name: string, x: Partial<PkRival> = {}): PkRival => ({ name, role: 'Rival', art: null, ace: null, wins: 0, losses: 0, lead: 'Level', ...x });
@@ -20,5 +21,20 @@ describe('the Pocket Rival Board', () => {
     const h = pkRivals({ index: 4, road: null, rivals: ['A', 'B', 'C', 'D', 'E'].map((n) => r(n)) });
     expect((h.match(/class="rvc pn/g) ?? []).length).toBe(1);
     expect(h).toContain('5 on your trail');
+  });
+});
+
+describe('the Pocket League page', () => {
+  it('rooms not met yet stay ???; named rooms show their type; the Champion is kept secret until known', () => {
+    const h = pkLeague({ rooms: [{ name: 'Lorelei', type: 'ice', art: null }, { name: null, type: null, art: null }], champion: null, badges: 3, need: 8, index: 0, road: null });
+    expect(pkPageOf(h)?.id).toBe('league');
+    expect(h).toContain('Lorelei');
+    expect(h).toContain('Not met yet');
+    expect(h).toContain('Kept secret');
+    expect(h).toContain('Opens with 8 badges');
+    expect((h.match(/<u class="on"><\/u>/g) ?? []).length).toBe(3);
+    const open = pkLeague({ rooms: [], champion: { name: 'Lance', art: null }, badges: 8, need: 8, index: 0, road: null });
+    expect(open).toContain('The League is open');
+    expect(open).toContain('Lance');
   });
 });

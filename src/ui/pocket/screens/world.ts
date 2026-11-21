@@ -5,7 +5,7 @@
 
 import type { Art } from '../../redux/templates';
 import { badgeArt } from '../art';
-import { act, esc, hdr, keys, page, sprH } from '../kit';
+import { act, esc, hdr, keys, page, sprH, ty, typeColour } from '../kit';
 import type { PocketRoad } from '../../../core/presentation/pocket';
 import { regionColours } from './region';
 import { leaderLine } from './run';
@@ -70,8 +70,35 @@ export function pkBadges(d: PkBadgesModel): string {
   const next = s ? `<div class="bc-next pn" style="--t:${hallTag(s.type)}" data-key="bc-card">${s.art && s.name ? `<i class="bc-ldr">${sprH(pkArtOf(s.art), 220)}</i>` : ''}<div><em>${esc(em)}</em>${body}</div></div>` : '';
   const face = (a: Art | null, champ = false): string => `<i class="${champ ? 'champ' : ''}">${a ? sprH(pkArtOf(a), champ ? 64 : 50) : ''}</i>`;
   const L = d.league;
-  const league = `<div class="bc-league pn" data-key="bc-league"><b>Pokémon League</b><div class="bc-e4">${Array.from({ length: L.size }, (_, k) => face(L.faces[k] ?? null)).join('')}${face(L.champion, true)}</div><span>Opens with ${n} ${n === 1 ? 'badge' : 'badges'}. ${L.size === 1 ? 'One battle' : `${cap(numberWord(L.size))} in a row`}, then the Champion.</span></div>`;
-  return page('badges', 26, `<div class="scr badges" data-key="badges">${head}<i class="wm17" data-nocheck>Badge</i><div class="bc-case pn" style="grid-template-columns:repeat(${Math.max(1, n)},1fr)" data-key="bc-case">${d.slots.map(disc).join('')}</div>${next}${league}${keys([['←→', 'badge'], ['Esc', 'back', 'pop']])}</div>`);
+  const league = `<div class="bc-league pn" data-key="bc-league"${act('popOpen')} style="cursor:pointer"><b>Pokémon League</b><div class="bc-e4">${Array.from({ length: L.size }, (_, k) => face(L.faces[k] ?? null)).join('')}${face(L.champion, true)}</div><span>Opens with ${n} ${n === 1 ? 'badge' : 'badges'}. ${L.size === 1 ? 'One battle' : `${cap(numberWord(L.size))} in a row`}, then the Champion.</span></div>`;
+  return page('badges', 26, `<div class="scr badges" data-key="badges">${head}<i class="wm17" data-nocheck>Badge</i><div class="bc-case pn" style="grid-template-columns:repeat(${Math.max(1, n)},1fr)" data-key="bc-case">${d.slots.map(disc).join('')}</div>${next}${league}${keys([['←→', 'badge'], ['Enter', 'League', 'popOpen'], ['Esc', 'back', 'pop']])}</div>`);
 }
 
 const numberWord = (n: number): string => ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'][n] ?? `${n}`;
+
+export interface PkLeagueModel {
+  /** The rooms in order; a member not met yet (the game picks them when the League begins) has no name. */
+  rooms: readonly { name: string | null; type: string | null; art: Art | null }[];
+  /** The Champion stays a secret until the last room. */
+  champion: { name: string; art: Art | null } | null;
+  badges: number;
+  need: number;
+  index: number;
+  road: PocketRoad | null;
+}
+
+/** The Pokémon League (mock-up `league`): the Elite Four's rooms as a stair up to the Champion, and what opens it. */
+export function pkLeague(d: PkLeagueModel): string {
+  const head = hdr('Pokémon League', { area: 'card', crumb: ['Badges', 'League'], pills: [`Badges ${d.badges} of ${d.need}`], road: d.road });
+  const n = d.rooms.length;
+  const rooms = d.rooms.map((r, k) => {
+    const who = pkArtOf(r.art);
+    return `<div class="lg-room${k === d.index ? ' gx-on' : ''}" style="--t:${r.type ? typeColour(r.type) : '#56627f'};--i:${k}" data-key="lg-${k}"${act('popPick', k)}><i>${who ? sprH(who, 64) : '<b>?</b>'}</i><em>Room ${k + 1}</em><b style="font-size:${fit(r.name ?? '???', 150, 26, 14, 0.55)}px">${esc(r.name ?? '???')}</b>${r.type ? ty(r.type) : '<span>Not met yet</span>'}</div>`;
+  }).join('');
+  const c = d.champion, ca = pkArtOf(c?.art ?? null);
+  const champ = `<div class="lg-room champ${d.index === n ? ' gx-on' : ''}" style="--t:#f2a900;--i:${n}" data-key="lg-champ"${act('popPick', n)}><i>${ca ? sprH(ca, 64) : '<b>?</b>'}</i><em>Final room</em><b>${esc(c?.name ?? 'Champion')}</b><span>${c ? 'The Champion' : 'Kept secret'}</span></div>`;
+  const open = d.badges >= d.need;
+  const pips = `<i class="pips">${Array.from({ length: d.need }, (_, k) => `<u class="${k < d.badges ? 'on' : ''}"></u>`).join('')}</i>`;
+  const lock = `<div class="lg-lock pn" data-key="lg-lock"><b>${open ? 'The League is open' : `Opens with ${d.need} ${d.need === 1 ? 'badge' : 'badges'}`}</b>${pips}<span>${n === 1 ? 'Two battles in a row: one room, then the Champion.' : `${cap(numberWord(n + 1))} battles in a row: ${numberWord(n)} rooms, then the Champion.`} Healed after every battle.</span></div>`;
+  return page('league', 26, `<div class="scr lgp" data-key="league">${head}<i class="wm17" data-nocheck>Pokémon</i><i class="bunt22 hd" data-nocheck></i><div class="lg-stairs" data-key="lg-stairs">${rooms}${champ}</div>${lock}${keys([['←→', 'room'], ['Esc', 'back', 'pop']])}</div>`);
+}

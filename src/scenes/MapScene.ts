@@ -136,7 +136,7 @@ import { mountRedux, phantomOn, pocketOn, reduxOn, type ReduxCtx, type ReduxView
 import { pkPauseModel } from '../ui/pocket/models';
 import { pkMap } from '../ui/pocket/screens/map';
 import { pkRegion } from '../ui/pocket/screens/region';
-import { pkBadges, pkWorld, type PkBadgeSlot } from '../ui/pocket/screens/world';
+import { pkBadges, pkLeague, pkWorld, type PkBadgeSlot } from '../ui/pocket/screens/world';
 import { pkRivals } from '../ui/pocket/screens/rivals';
 import { PK_PAUSE_COLS, pkPause } from '../ui/pocket/screens/pause';
 import { pkCard } from '../ui/pocket/screens/card';
@@ -232,7 +232,8 @@ type MapPop =
   | { kind: 'bracket'; page: number }
   | { kind: 'phone'; chat: number; reply: number }
   | { kind: 'world'; pick: number }
-  | { kind: 'badges'; pick: number };
+  | { kind: 'badges'; pick: number }
+  | { kind: 'league'; pick: number };
 
 type Option =
   | { kind: 'node'; node: MapNode }
@@ -329,6 +330,7 @@ export class MapScene extends Phaser.Scene {
     else if (kind === 'phone') pop = phantomOn() ? { kind, chat: this.phoneFirst(), reply: 0 } : null;
     else if (kind === 'world') pop = pocketOn() ? { kind, pick: run.regionIndex } : null;
     else if (kind === 'badges') pop = pocketOn() && run.stage ? { kind, pick: Math.min(run.stage.index, runCampaign(session.content, run).stagesPerRegion - 1) } : null;
+    else if (kind === 'league') pop = pocketOn() ? { kind, pick: 0 } : null;
     else pop = { kind, page: galarHome(bracketTree(session.content, run)) };
     if (!pop) return;
     this.rxPop = pop;
@@ -650,6 +652,13 @@ export class MapScene extends Phaser.Scene {
     if (!p || !run) return;
     if (p.kind === 'phone') return this.phoneInput(p, action);
     // Pocket look: Enter on the Rival Board opens the lit rival's full report; Esc there goes back to the board.
+    // Pocket look: Enter in the Badge Case opens the League page; Esc there goes back to the case.
+    if (p.kind === 'badges' && action === 'confirm') return this.popOpen();
+    if (p.kind === 'league' && action === 'back') {
+      this.rxPop = { kind: 'badges', pick: 0 };
+      this.rxView?.refresh();
+      return;
+    }
     if (p.kind === 'report' && pocketOn() && (action === 'confirm' || action === 'back') && !!p.full !== (action === 'confirm')) {
       p.full = action === 'confirm';
       this.rxView?.refresh();
@@ -665,6 +674,9 @@ export class MapScene extends Phaser.Scene {
     } else if (p.kind === 'badges') {
       const n = runCampaign(session.content, run).stagesPerRegion;
       p.pick = (p.pick + d + n) % n;
+    } else if (p.kind === 'league') {
+      const n = (services().session.run?.stage?.eliteFour?.length || runCampaign(session.content, run).eliteFourSize) + 1;
+      if (side) p.pick = (p.pick + d + n) % n;
     } else if (p.kind === 'report') {
       if (p.full) return;
       const n = rivalReport(run).length;
@@ -710,7 +722,7 @@ export class MapScene extends Phaser.Scene {
     } else if (p.kind === 'notes') {
       if (what === 'tab') p.tab = Math.max(0, Math.min(FIELD_TABS.length - 1, i));
       else p.sel[p.tab] = i;
-    } else if ((p.kind === 'report' || p.kind === 'roll' || p.kind === 'world' || p.kind === 'badges') && what === 'pick') {
+    } else if ((p.kind === 'report' || p.kind === 'roll' || p.kind === 'world' || p.kind === 'badges' || p.kind === 'league') && what === 'pick') {
       if (p.pick === i) {
         if (p.kind !== 'report' || !pocketOn() || p.full) return;
         p.full = true;
@@ -831,6 +843,7 @@ export class MapScene extends Phaser.Scene {
     if (p.kind === 'phone') return c.ph ? this.phoneView(c.ph, p) : '';
     if (p.kind === 'world') return c.pk ? this.worldPocket(p.pick) : '';
     if (p.kind === 'badges') return c.pk ? this.badgesPocket(p.pick) : '';
+    if (p.kind === 'league') return c.pk ? this.leaguePocket(p.pick) : '';
     const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
     if (p.kind === 'report' && c.pk && !p.full) return this.rivalsPocket(p.pick);
     if (p.kind === 'report') {
@@ -1694,6 +1707,7 @@ export class MapScene extends Phaser.Scene {
           phoneChat: (i) => this.phoneChat(Number(i)),
           phoneReply: (i) => this.phoneReply(Number(i)),
           popPick: (i) => this.popPick('pick', Number(i)),
+          popOpen: () => this.popOpen(),
           bracket: () => this.popClose(),
           bracketPage: (i) => { if (this.rxPop?.kind === 'bracket') { this.rxPop.page = Math.max(0, Math.min(4, Number(i) || 0)); this.rxView?.refresh(); } },
           bracketWatch: () => this.watchLast(),
@@ -1958,6 +1972,32 @@ export class MapScene extends Phaser.Scene {
       road,
       index: pick,
     });
+  }
+
+  /** Pocket look: Enter on a pop-up's card: the Badge Case opens the League page. */
+  private popOpen(): void {
+    if (this.rxPop?.kind !== 'badges' || !pocketOn()) return;
+    this.rxPop = { kind: 'league', pick: 0 };
+    this.rxView?.refresh();
+  }
+
+  /** Pocket look: the Pokémon League (mock-up `league`): the rooms (named once the League begins) and the Champion. */
+  private leaguePocket(pick: number): string {
+    const { session } = services();
+    const content = session.content, run = session.run!, stage = run.stage;
+    const camp = runCampaign(content, run);
+    const e4 = stage?.kind === 'league' ? stage.eliteFour ?? [] : [];
+    const size = e4.length || camp.eliteFourSize;
+    const rooms = Array.from({ length: size }, (_, k) => {
+      const id = e4[k], b = id ? content.bosses.get(id) : undefined;
+      if (!id || !b) return { name: null, type: null, art: null };
+      const info = bossInfo(content, 'elite', id);
+      return { name: info.name, type: b.types[0] ?? null, art: artOf(this, info.spriteAssetId) ?? null };
+    });
+    const champ = stage?.kind === 'league' && stage.leaderId && content.bosses.get(stage.leaderId) ? bossInfo(content, 'champion', stage.leaderId) : null;
+    const need = camp.stagesPerRegion;
+    const here = stage?.kind === 'league' ? need : Math.min(need, stage?.index ?? 0);
+    return pkLeague({ rooms, champion: champ ? { name: champ.name, art: artOf(this, champ.spriteAssetId) ?? null } : null, badges: here, need, index: Math.max(0, Math.min(size, pick)), road: pocketRoad(stage ?? null) });
   }
 
   /** Pocket look: the Badge Case (mock-up `badges`): this region's Gyms, the lit one's card, the League. */

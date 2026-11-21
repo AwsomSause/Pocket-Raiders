@@ -667,3 +667,6 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .bb18 .boss18{top:132px}
 .pkx .pks .boss18 .hl{display:flex;flex-direction:row;align-items:center}
 .pkx .pks .boss18 .hl u{display:block;flex:none}
+/* League page: the lit room (the cursor). */
+.pkx .pks .lg-room.gx-on{outline:4px solid var(--yel);outline-offset:2px}
+.pkx .pks .lg-room i b{font:400 30px/1 var(--fd);color:#9aa6c0}
