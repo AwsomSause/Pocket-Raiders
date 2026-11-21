@@ -73,13 +73,13 @@ export function drawGlass(scene: Phaser.Scene, x: number, y: number, w: number, 
 export type MotionLevel = 'full' | 'reduced' | 'off';
 
 /** Pops an object in with an overshoot (a squash-and-stretch bounce). */
-export function bounceIn(scene: Phaser.Scene, target: Phaser.GameObjects.Components.Transform & Phaser.GameObjects.GameObject, motion: MotionLevel, delay = 0): void {
-  if (motion !== 'full') return;
+export function bounceIn(scene: Phaser.Scene, target: Phaser.GameObjects.Components.Transform & Phaser.GameObjects.GameObject, motion: MotionLevel, delay = 0): Phaser.Tweens.Tween | null {
+  if (motion !== 'full') return null;
   const t = target as unknown as { scaleX: number; scaleY: number; setScale: (x: number, y?: number) => void };
   const sx = t.scaleX;
   const sy = t.scaleY;
   t.setScale(sx * 0.6, sy * 0.6);
-  scene.tweens.add({ targets: target, scaleX: sx, scaleY: sy, duration: 420, delay, ease: 'Back.easeOut' });
+  return scene.tweens.add({ targets: target, scaleX: sx, scaleY: sy, duration: 420, delay, ease: 'Back.easeOut' });
 }
 
 /** Slides an object in from an offset with a bouncy settle. */

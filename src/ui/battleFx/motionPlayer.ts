@@ -177,20 +177,28 @@ export function playClip(scene: Phaser.Scene, clip: MotionClip, host: ClipHost):
     }
   };
 
-  const finish = (): void => {
+  /** Ends the clip in its end state; `gone` (the scene shut down) only lets the waiting code go on: nothing is drawn
+   * and no cue is answered, because the scene's objects, camera and clock are being torn down. */
+  const finish = (gone = false): void => {
     if (over) return;
     over = true;
     scene.events.off(Phaser.Scenes.Events.UPDATE, tick);
+    scene.events.off(Phaser.Scenes.Events.SHUTDOWN, onShutdown);
     window.clearTimeout(watchdog);
-    while (nextFx < clip.fx.length) fire(clip.fx[nextFx++]!);
-    apply(clipEnd(clip));
-    for (const rig of mons.values()) rig.overlays.forEach((o) => o.destroy());
+    if (!gone) {
+      while (nextFx < clip.fx.length) fire(clip.fx[nextFx++]!);
+      apply(clipEnd(clip));
+    }
+    for (const rig of mons.values()) rig.overlays.forEach((o) => o.active && o.destroy());
     settle();
   };
+  const onShutdown = (): void => finish(true);
+  /** The scene is shutting down or gone (a paused or sleeping one is not: its clips still end in their end state). */
+  const dead = (): boolean => (scene.sys?.settings.status ?? Phaser.Scenes.DESTROYED) >= Phaser.Scenes.SHUTDOWN;
 
   const tick = (_time: number, delta: number): void => {
     if (over) return;
-    if (!scene.sys?.isActive()) return finish();
+    if (!scene.sys?.isActive()) return finish(dead());
     // The scene's clock carries the battle speed; a paused clock holds the clip.
     if (!scene.time.paused) t += Math.min(delta, 100) * scene.time.timeScale * rate;
     while (nextFx < clip.fx.length && clip.fx[nextFx]!.at <= t) fire(clip.fx[nextFx++]!);
@@ -199,8 +207,8 @@ export function playClip(scene: Phaser.Scene, clip: MotionClip, host: ClipHost):
   };
 
   // The scene clock can stall (a dialogue, a scene change): the real clock always ends the clip.
-  const watchdog = window.setTimeout(finish, clip.length * 3 + 2000);
-  scene.events.once(Phaser.Scenes.Events.SHUTDOWN, finish);
+  const watchdog = window.setTimeout(() => finish(dead()), clip.length * 3 + 2000);
+  scene.events.once(Phaser.Scenes.Events.SHUTDOWN, onShutdown);
   if (clip.length <= 0) finish();
   else {
     while (nextFx < clip.fx.length && clip.fx[nextFx]!.at <= 0) fire(clip.fx[nextFx++]!);
@@ -214,7 +222,7 @@ export function playClip(scene: Phaser.Scene, clip: MotionClip, host: ClipHost):
     rig.v.setData(SHADOW_KEY, 1);
     if (rig.v instanceof Phaser.GameObjects.Sprite && rig.v.isCropped) rig.v.setCrop();
   };
-  return { done, stop: finish, rest };
+  return { done, stop: () => finish(), rest };
 }
 
 interface FxOpts {

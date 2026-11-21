@@ -343,6 +343,15 @@ export class BattleScene extends Phaser.Scene {
   private message!: Phaser.GameObjects.Text;
   /** The Story Portrait message bar (default look only): its stripe and type tag follow the move being used. */
   private storyBar: StoryBar | null = null;
+  /** Counts the scene's starts (create): async work that began before a restart checks it and stops. */
+  private life = 0;
+
+  /** Work begun in start `life` is stale: the scene has shut down since, is starting again (loading, before its
+   * create), or has started again. */
+  private stale(life: number): boolean {
+    const st = this.sys.settings.status ?? Phaser.Scenes.DESTROYED;
+    return life !== this.life || st < Phaser.Scenes.CREATING || st >= Phaser.Scenes.SHUTDOWN;
+  }
   /** Battle log (catalog #115): the last lines said, reopened with the H key. Presentation only. */
   private weatherLayer: WeatherLayer | null = null;
   /** The redesign's rain, sun, sand and snow (pass 8); hail stays on the older layer. */
@@ -554,6 +563,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   create(): void {
+    this.life++;
     const { session, assets } = services();
     const run = session.run!;
     const battle = run.battle!;
@@ -1651,8 +1661,11 @@ export class BattleScene extends Phaser.Scene {
 
   /** A bouncy entrance (when it is sent out) and then its own way of standing. */
   private liven(visual: Visual, mon: PokemonInstance, entering: boolean): void {
-    if (entering) bounceIn(this, visual, this.motion);
-    this.standUp(visual, mon, entering ? 450 : 0);
+    const bounce = entering ? bounceIn(this, visual, this.motion) : null;
+    // It starts standing once the bounce has settled: standing takes its resting size from the size it has then, and
+    // a slow frame could otherwise catch it mid-overshoot and keep that size for good.
+    if (bounce) bounce.once(Phaser.Tweens.Events.TWEEN_COMPLETE, () => visual.active && this.standUp(visual, mon));
+    else this.standUp(visual, mon);
   }
 
   /** Standing (redesign pass 11): the Pokémon breathes and moves in place its own way (hover, float, heavy, twitch, sway). */
@@ -3092,13 +3105,19 @@ export class BattleScene extends Phaser.Scene {
 
   /** Plays the opening; if any part of the show fails, the Pokémon and boxes still appear and the battle goes on. */
   private async intro(): Promise<void> {
+    // The scene can be restarted while the intro is still playing (a new battle, a test): the old intro then stops
+    // instead of prompting on the new battle's screen.
+    const life = this.life;
     await this.flightNorthEntrance();
+    if (this.stale(life)) return;
     if (await this.rivalStepInScene()) return;
     try {
-      await this.introShow();
+      await this.introShow(life);
     } catch (e) {
+      if (this.stale(life)) return;
       console.warn('Battle intro failed; showing the fighters anyway', e);
       await this.recoverIntro().catch((e2) => console.warn('Battle intro recovery failed', e2));
+      if (this.stale(life)) return;
       this.busy = false;
       this.nextPrompt();
     }
@@ -3209,7 +3228,7 @@ export class BattleScene extends Phaser.Scene {
     }
   }
 
-  private async introShow(): Promise<void> {
+  private async introShow(life = this.life): Promise<void> {
     const battle = this.run.battle!;
     const title = this.trainerTitle();
     if (battle.turn === 1 && !battle.needsSwitch) {
@@ -3353,6 +3372,7 @@ export class BattleScene extends Phaser.Scene {
       const events = session.beginBattle();
       await this.playEvents(events, before, title);
     }
+    if (this.stale(life)) return;
     this.busy = false;
     this.nextPrompt();
   }
