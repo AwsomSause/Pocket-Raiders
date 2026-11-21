@@ -586,6 +586,13 @@ export function comboPlan(events: readonly ({ type: string } & Record<string, un
   return plan;
 }
 
+/**
+ * Priority move (pass 12): a yellow FIRST! tag snaps onto the user before anything else on the turn can start (from
+ * 2.4 times its size, tilted 8 degrees, in 100 ms), holds 0.9 s and lifts away. It sits 30 px toward the foe and
+ * 150 px above the user's middle.
+ */
+export const FIRST_TAG = { dx: 30, dy: -150, from: 2.4, tilt: -8, inMs: 100, hold: 900, lift: 0 } as const;
+
 /** Pass 12 power tiers: how far a hit throws (px: base + per x power) and how hard it shakes the field. */
 export const HIT_THROW = { base: 34, per: 60, shake: 5, shakePer: 8, heavyAt: 0.8, strong: 1.3 } as const;
 

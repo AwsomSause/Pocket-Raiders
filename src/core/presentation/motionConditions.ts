@@ -564,3 +564,38 @@ export function spikeSpot(i: number, holder: CondSpot): { x: number; y: number; 
   const mid = holder.y - holder.h / 2;
   return { x: holder.x + SPIKES.rx * Math.cos(a), y: mid + SPIKES.ry * Math.sin(a), angle: (a * 180) / Math.PI + 90 };
 }
+
+/**
+ * Entry hazards (pass 12): hazards stay where you can see them. Stealth Rock throws five stones (34 by 40) from the
+ * setter's mouth; each arcs 160 px high in 500 ms, spinning once, plants itself round the other side's Pokémon (the
+ * mockup's five spots against its middle; smaller and mirrored on the far side), squashes on landing and hovers there,
+ * bobbing 6 px. A chip names what is waiting on that side (ROCKS, SPIKES, TOXIC, WEB). When a Pokémon comes in, all
+ * the stones stab inward at once (a quarter of the way to its middle in 80 ms, back in 300) and it flashes white.
+ */
+export const HAZARD = {
+  stones: [[-150, -40], [-80, -150], [60, -170], [170, -70], [130, 30]] as readonly (readonly [number, number])[],
+  far: 0.7, w: 34, h: 40, fill: '#8a8f9c', shade: '#5d6370',
+  throwAt: 450, gap: 80, throwMs: 500, arc: 160, landMs: 60, settleMs: 200, bob: 6, bobMs: 1600, bobPer: 100,
+  stab: 0.25, stabMs: 80, backMs: 300, shake: 7,
+  chipFill: '#8a8f9c',
+} as const;
+
+export const HAZARD_KINDS = ['stealthRock', 'spikes', 'toxicSpikes', 'stickyWeb'] as const;
+export type HazardKind = (typeof HAZARD_KINDS)[number];
+
+/** Where stone `i` hovers round a Pokémon whose middle is `mid`; the far (foe's) side is smaller and mirrored. */
+export function stoneSpot(i: number, mid: { x: number; y: number }, side: 'player' | 'enemy'): { x: number; y: number } {
+  const [dx, dy] = HAZARD.stones[i % HAZARD.stones.length]!;
+  const k = side === 'enemy' ? HAZARD.far : 1;
+  return { x: mid.x + dx * k * (side === 'enemy' ? -1 : 1), y: mid.y + dy * k };
+}
+
+/** The chip for a side's hazards ("◆ ROCKS · SPIKES ×2"), or null when there are none. */
+export function hazardChipText(fx: { stealthRock: boolean; spikes: number; toxicSpikes: number; stickyWeb: boolean }): string | null {
+  const words: string[] = [];
+  if (fx.stealthRock) words.push('ROCKS');
+  if (fx.spikes > 0) words.push(fx.spikes > 1 ? `SPIKES ×${fx.spikes}` : 'SPIKES');
+  if (fx.toxicSpikes > 0) words.push(fx.toxicSpikes > 1 ? `TOXIC ×${fx.toxicSpikes}` : 'TOXIC');
+  if (fx.stickyWeb) words.push('WEB');
+  return words.length ? `◆ ${words.join(' · ')}` : null;
+}

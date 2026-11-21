@@ -1092,6 +1092,60 @@ test('contact punish: spikes jab out of the holder, the attacker bounces off wit
   expect(errors).toEqual([]);
 });
 
+test('priority and hazards: FIRST! tag; Stealth Rock stones stay round your side, stab whoever comes in, and go when cleared', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'hazard-e2e');
+  const play = (events: unknown[], rocks: boolean) => page.evaluate(async ([ev, r]) => {
+    const w = window as any;
+    const b = w.__pkr.game.scene.getScene('Battle');
+    b.say = async () => {};
+    b.sayTrainer = async () => {};
+    const before = structuredClone(w.__pkr.session.run);
+    w.__pkr.session.run.battle.sideEffects.player.stealthRock = r;
+    await b.playEvents(ev, before, null);
+  }, [events, rocks] as const);
+  const stones = () => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').field.list.filter((o: any) => o.texture?.key === 'hazard.stone' && o.alpha > 0.5).length);
+  const chip = () => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.list.some((o: any) => o.texture?.key === 'hazard.chip.◆ ROCKS' && o.scale > 0.3));
+  // A priority move: the FIRST! tag.
+  await page.evaluate(() => {
+    const w = window as any;
+    const b = w.__pkr.game.scene.getScene('Battle');
+    w.__first = false;
+    w.__firstWatch = () => (w.__first ||= b.children.list.some((o: any) => o.texture?.key === 'stamp.FIRST!.#ffcb05'));
+    b.events.on('update', w.__firstWatch);
+  });
+  await play([{ type: 'move', side: 'player', moveId: 'quick-attack' }], false);
+  expect(await page.evaluate(() => (window as any).__first)).toBe(true);
+  // Stealth Rock lands on your side: five stones stay, with the chip.
+  await play([{ type: 'sideEffect', side: 'player', effect: 'stealthRock', on: true }], true);
+  await expect.poll(stones, { timeout: 5000 }).toBe(5);
+  await expect.poll(chip, { timeout: 5000 }).toBe(true);
+  // A Pokémon comes in on them: the stones stab inward and spring back; it takes the hit.
+  const near = await page.evaluate(async () => {
+    const w = window as any;
+    const b = w.__pkr.game.scene.getScene('Battle');
+    const mid = b.midOf('player');
+    const dist = () => Math.min(...b.field.list.filter((o: any) => o.texture?.key === 'hazard.stone').map((o: any) => Math.hypot(o.x - mid.x, o.y - mid.y)));
+    const start = dist();
+    let least = start;
+    const watch = () => (least = Math.min(least, dist()));
+    b.events.on('update', watch);
+    const before = structuredClone(w.__pkr.session.run);
+    await b.playEvents([{ type: 'hazard', side: 'player', hazard: 'stealthRock', amount: 2, hpAfter: b.shown.player.hp - 2 }], before, null);
+    await new Promise((r) => setTimeout(r, 600));
+    b.events.off('update', watch);
+    return { start, least, end: dist() };
+  });
+  expect(near.least).toBeLessThan(near.start * 0.6);
+  expect(Math.abs(near.end - near.start)).toBeLessThan(10);
+  // Rapid Spin clears them.
+  await play([{ type: 'sideEffect', side: 'player', effect: 'hazards', on: false }], false);
+  await expect.poll(stones, { timeout: 5000 }).toBe(0);
+  await expect.poll(chip, { timeout: 5000 }).toBe(false);
+  expect(errors).toEqual([]);
+});
+
 test('end of turn: the chips line up, each lights as its effect plays, a line sweeps and the turn counter flips; nothing left after', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));

@@ -202,3 +202,10 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   it: eight grey spikes jab out round the holder, the attacker bounces back with a white star on its nose, and the
   item's flag ("Toxel's Item / ROCKY HELMET", the same plate as the ability flag) slides out while its damage number
   shows (abilities already get their flag). Reduced: the flag and the number. Off: the number.
+- **Priority move and entry hazards (pass 12).** A move with priority (Quick Attack, Extreme Speed, Aqua Jet) gets a
+  yellow FIRST! tag slammed on above its user as it is announced. Stealth Rock: five grey stones are thrown from the
+  setter, spin through the air, plant themselves round the other side's Pokémon and hover there, bobbing, with a
+  "◆ ROCKS" chip by that side's plate (the chip also lists Spikes, Toxic Spikes and Sticky Web). When a Pokémon comes in,
+  the stones stab inward at once, it flashes white and squashes, the screen shakes and its damage number shows. Rapid
+  Spin or Defog drops the stones. The old floor rock marks step aside for the stones (they still show with motion
+  Off); spikes and webs keep their floor marks. Not built (move animation): the priority dash and after-images.

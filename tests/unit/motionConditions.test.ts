@@ -4,7 +4,7 @@ import { planCues } from '../../src/core/presentation/cues';
 import { moveAnims } from '../../src/data/presentation';
 import { content } from './helpers';
 import { clipEnd, EASES, fxAllowed, sampleClip } from '../../src/core/presentation/motionClip';
-import { contactClip, SPIKES, spikeSpot, CHARGE, chargeClip, chargeDot, SPENT, spentStarts, DRAIN, drainClip, RECOIL, recoilClip, chevronWaves, COND_TINT, CONFUSE, endTurnChip, endTurnParade, confusionHitClip, GUST_LEAN, protectedClip, SHIELD, gustLeanClip, intimidateClip, condArriveClip, condKind, condTickClip, parCantClip, SLUMP, STAT_COLOR, statClip, thawClip, wakeClip, type CondSpot } from '../../src/core/presentation/motionConditions';
+import { HAZARD, hazardChipText, stoneSpot, contactClip, SPIKES, spikeSpot, CHARGE, chargeClip, chargeDot, SPENT, spentStarts, DRAIN, drainClip, RECOIL, recoilClip, chevronWaves, COND_TINT, CONFUSE, endTurnChip, endTurnParade, confusionHitClip, GUST_LEAN, protectedClip, SHIELD, gustLeanClip, intimidateClip, condArriveClip, condKind, condTickClip, parCantClip, SLUMP, STAT_COLOR, statClip, thawClip, wakeClip, type CondSpot } from '../../src/core/presentation/motionConditions';
 
 // Animation redesign pass 8 (Conditions): every status arrives, keeps a look and ticks, as the mockup's numbers.
 const FOE: CondSpot = { x: 648, y: 240, w: 100, h: 120, side: 'enemy' };
@@ -358,5 +358,23 @@ describe('contact punish (pass 12)', () => {
   it('Reduced: the flag and the number; Off: the number', () => {
     expect(contactClip(me, foe, 'reduced').fx.map((f) => f.kind === 'cue' && f.name)).toEqual(['number', 'flag']);
     expect(contactClip(me, foe, 'off').fx).toEqual([{ kind: 'cue', at: 100, name: 'number' }]);
+  });
+});
+
+describe('entry hazards (pass 12)', () => {
+  it('five stones hover round your Pokémon at the mockup spots; on the far side smaller and mirrored', () => {
+    const mid = { x: 312, y: 368 };
+    expect([0, 1, 2, 3, 4].map((i) => stoneSpot(i, mid, 'player'))).toEqual([
+      { x: 162, y: 328 }, { x: 232, y: 218 }, { x: 372, y: 198 }, { x: 482, y: 298 }, { x: 442, y: 398 },
+    ]);
+    const far = stoneSpot(0, { x: 648, y: 190 }, 'enemy');
+    expect(far.x).toBeCloseTo(648 + 150 * HAZARD.far);
+    expect(far.y).toBeCloseTo(190 - 40 * HAZARD.far);
+  });
+  it('the chip names every hazard on the side', () => {
+    const none = { stealthRock: false, spikes: 0, toxicSpikes: 0, stickyWeb: false };
+    expect(hazardChipText(none)).toBeNull();
+    expect(hazardChipText({ ...none, stealthRock: true })).toBe('◆ ROCKS');
+    expect(hazardChipText({ stealthRock: true, spikes: 2, toxicSpikes: 1, stickyWeb: true })).toBe('◆ ROCKS · SPIKES ×2 · TOXIC · WEB');
   });
 });

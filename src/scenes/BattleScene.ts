@@ -123,7 +123,7 @@ import { megaGlass } from '../ui/battleFx/megaGlass';
 import { drawnBox, type GimmickPage } from '../ui/battleFx/gimmickStage';
 import { HIT_RUN, stand, standStill, sway, twitch } from '../ui/battleFx/stance';
 import { bubblePicture, chevronPicture, ConditionLook, DizzyStars, flagPicture, flamePicture, glarePicture, pipPicture, putAbove, spikePicture, titlePicture } from '../ui/battleFx/conditionLook';
-import { BUBBLE_W, chevronWaves, condArriveClip, FLAG_HOLD, intimidateClip, condKind, condTickClip, FLAME_W, CONFUSE, endTurnParade, confusionHitClip, gustLeanClip, parCantClip, protectedClip, RECOIL, recoilClip, DRAIN, drainClip, CHARGE, chargeClip, SPENT, spentStarts, contactClip, SPIKES, spikeSpot, SHIELD, SLUMP, STAT_COLOR, STAT_DOWN_STAMP, statClip, thawClip, wakeClip, type CondKind, type CondSpot } from '../core/presentation/motionConditions';
+import { BUBBLE_W, chevronWaves, condArriveClip, FLAG_HOLD, intimidateClip, condKind, condTickClip, FLAME_W, CONFUSE, endTurnParade, confusionHitClip, gustLeanClip, parCantClip, protectedClip, RECOIL, recoilClip, DRAIN, drainClip, CHARGE, chargeClip, SPENT, spentStarts, HAZARD, HAZARD_KINDS, contactClip, SPIKES, spikeSpot, SHIELD, SLUMP, STAT_COLOR, STAT_DOWN_STAMP, statClip, thawClip, wakeClip, type CondKind, type CondSpot } from '../core/presentation/motionConditions';
 import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture, GLOW_SIZE, glowPicture, PICTURE_SCALE, plusPicture, shinyChipPicture, stampPicture, starPicture } from '../ui/battleFx/cheerChip';
 import { dynamaxPan } from '../ui/battleFx/dynamaxPan';
 import { keyItemFor } from '../ui/battleFx/cineLook';
@@ -131,7 +131,7 @@ import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel, MotionClip } from '../core/presentation/motionClip';
-import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, COMBO, comboPlan, comboScale, type ComboStep, CRIT_FREEZE, critFreezeClip, HIT_LIGHT, HIT_STAMPS, hitStampSpot, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, COMBO, comboPlan, comboScale, FIRST_TAG, type ComboStep, CRIT_FREEZE, critFreezeClip, HIT_LIGHT, HIT_STAMPS, hitStampSpot, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart, type ClipRun } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
@@ -172,6 +172,7 @@ import { WeatherLook, WX_KINDS, type WxKind } from '../ui/battleFx/weatherLook';
 import { TerrainLook } from '../ui/battleFx/terrainLook';
 import { EndTurnParade } from '../ui/battleFx/endTurnLook';
 import { HoldLook } from '../ui/battleFx/holdLook';
+import { HazardLook } from '../ui/battleFx/hazardLook';
 import { CONTACT_HURT } from '../core/battle/abilities';
 import { TERRAIN_KINDS, type TerrainKind } from '../core/presentation/motionWeather';
 import { battleTrack, storyBattleMusic, lowHpTrack, raidMusic, victoryTrack, type BattleRole } from '../core/presentation/battleMusic';
@@ -484,6 +485,8 @@ export class BattleScene extends Phaser.Scene {
   private dizzy: Record<Side, DizzyStars | null> = { player: null, enemy: null };
   /** A state each side's Pokémon holds between turns (pass 12): charging up, or spent after Hyper Beam. */
   private hold: Record<Side, HoldLook | null> = { player: null, enemy: null };
+  /** Each side's entry hazards on the field (pass 12). */
+  private hazardLooks: Record<Side, HazardLook | null> = { player: null, enemy: null };
   /** The multi-hit combo counter on screen (pass 12). */
   private comboText: Phaser.GameObjects.Text | null = null;
   /** The first drawn row of each sprite frame (for where a head is). */
@@ -2307,7 +2310,8 @@ export class BattleScene extends Phaser.Scene {
   private updateSpectacleHud(): void {
     const battle = this.run.battle;
     if (battle && !this.hazards) this.hazards = new HazardFloor(this);
-    if (battle) this.hazards?.draw(battle.sideEffects, { player: PLAYER_POS, enemy: ENEMY_POS });
+    // The redesign's stones stand in for the floor's rock marks (pass 12) unless motion is off.
+    if (battle) this.hazards?.draw(battle.sideEffects, { player: PLAYER_POS, enemy: ENEMY_POS }, { rocks: this.clipLevel() === 'off' || !!this.duo });
     this.adaptMusic();
     const spec = battle?.spectacle;
     if (!battle || !spec || battle.doubles) {
@@ -2492,16 +2496,16 @@ export class BattleScene extends Phaser.Scene {
 
   /** A stamp at a fixed spot, as the mockups slam them: hard ones drop in big and tilted and shake the screen, soft ones
    *  (the weather boost) grow in; both hold 750 ms and lift away. */
-  private wxStamp(word: string, fill: string, ink: string, x: number, y: number, soft = true): void {
+  private wxStamp(word: string, fill: string, ink: string, x: number, y: number, soft = true, o: { from?: number; tilt?: number; inMs?: number; hold?: number; lift?: number } = {}): void {
     const key = stampPicture(this, word, fill, ink);
     if (!key) return;
     const full = this.clipLevel() === 'full';
-    const st = this.add.image(x, y, key).setScale(PICTURE_SCALE * (full ? (soft ? 0.8 : 2.2) : 1)).setAngle(full && !soft ? -7 : 0).setDepth(4000);
+    const st = this.add.image(x, y, key).setScale(PICTURE_SCALE * (full ? (soft ? 0.8 : (o.from ?? 2.2)) : 1)).setAngle(full && !soft ? (o.tilt ?? -7) : 0).setDepth(4000);
     this.tweens.chain({
       targets: st,
       tweens: [
-        { scale: PICTURE_SCALE, duration: full ? (soft ? 200 : 120) : 1, ease: soft ? 'Quad.easeOut' : 'Cubic.easeIn' },
-        { y: y - 14, alpha: 0, duration: 200, delay: 750 },
+        { scale: PICTURE_SCALE, duration: full ? (soft ? 200 : (o.inMs ?? 120)) : 1, ease: soft ? 'Quad.easeOut' : 'Cubic.easeIn' },
+        { y: y - (o.lift ?? 14), alpha: 0, duration: 200, delay: o.hold ?? 750 },
       ],
       onComplete: () => st.destroy(),
     });
@@ -4576,6 +4580,63 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** Confusion (pass 8): stars arrive and circle its head while it sways; hurting itself swings, bonks and shakes. */
+  /** A side's hazard look, made when first needed. */
+  private hazardLook(side: Side): HazardLook {
+    const have = this.hazardLooks[side];
+    if (have) return have;
+    const look = new HazardLook(this, side, {
+      mid: () => this.midOf(side),
+      chipAt: () => {
+        const box = (side === 'enemy' ? this.enemyBox : this.playerBox)?.container.getBounds();
+        return side === 'enemy' ? { x: (box?.left ?? 20) + 70, y: (box?.bottom ?? 100) + 22 } : { x: (box?.left ?? 600) + 70, y: (box?.top ?? 280) - 16 };
+      },
+      layer: this.field,
+      full: this.clipLevel() === 'full',
+    });
+    this.hazardLooks[side] = look;
+    return look;
+  }
+
+  /** Brings a side's hazards on screen in line with the battle; `thrown` throws new stones from the other side. */
+  private async hazardSync(side: Side, thrown: boolean): Promise<void> {
+    try {
+      const fx = this.run.battle?.sideEffects?.[side];
+      if (!fx || this.duo || this.clipLevel() === 'off') return this.hazardLooks[side]?.destroy();
+      const setter: Side = side === 'player' ? 'enemy' : 'player';
+      const sp = this.condSprite(setter);
+      const mid = this.midOf(setter);
+      const mouth = thrown && sp ? { x: mid.x + (setter === 'player' ? 1 : -1) * sp.displayWidth * 0.3, y: mid.y - sp.displayHeight * sp.originY * 0.16 } : null;
+      const ms = this.hazardLook(side).sync(fx, mouth);
+      if (ms > 0) await new Promise<void>((r) => this.time.delayedCall(Math.min(ms, 1600), r));
+    } catch {
+      /* presentation only */
+    }
+  }
+
+  /** A Pokémon comes in on hazards: the stones stab inward, it flashes white, squashes and the screen shakes. */
+  private async hazardHit(side: Side, hazard: string, amount: number, hpAfter: number): Promise<void> {
+    try {
+      const level = this.clipLevel();
+      const sprite = this.condSprite(side);
+      const mon = this.shown[side];
+      if (hazard === 'stealthRock' && !this.hazardLooks[side]?.hasRocks) await this.hazardSync(side, false);
+      const ms = hazard === 'stealthRock' ? (this.hazardLooks[side]?.stab() ?? 0) : 0;
+      if (ms > 0) await new Promise<void>((r) => this.time.delayedCall(ms, r));
+      if (sprite && sprite.visible && level === 'full') {
+        this.washSprite(sprite, 0xffffff, 1, 0, 200);
+        this.tweens.chain({ targets: sprite, tweens: [{ scaleY: sprite.scaleY * 0.85, duration: 50 }, { scaleY: sprite.scaleY, duration: 300, ease: 'Elastic.easeOut', easeParams: [1, 0.4] }] });
+        this.wxShake(HAZARD.shake, 200);
+      }
+      if (amount > 0) void this.fx.play([{ kind: 'number', side, amount, tone: 'damage', motion: level === 'full' }]);
+      if (mon && amount > 0) {
+        mon.hp = hpAfter;
+        void this.refreshInfoBox(side === 'enemy' ? this.enemyBox : this.playerBox, mon, true);
+      }
+    } catch {
+      /* presentation only */
+    }
+  }
+
   /** The battle's own conditions on a side's Pokémon (recharge, charging), as the finished turn left them. */
   private volOf(side: Side): { recharge: boolean; charging: string | null } | null {
     const b = this.run.battle;
@@ -7264,6 +7325,14 @@ export class BattleScene extends Phaser.Scene {
         this.contactMoment(e.side, null, e.amount);
       }
       if (e.type === 'held' && e.what === 'helmet' && e.hpAfter !== undefined) this.contactMoment(e.side, content.items.get(e.itemId)?.name ?? 'Rocky Helmet', Math.max(0, (this.shown[e.side]?.hp ?? e.hpAfter) - e.hpAfter));
+      // Pass 12 "Priority Move": a FIRST! tag snaps onto the user before anything else on the turn.
+      if (e.type === 'move' && (content.moves.get(e.moveId)?.priority ?? 0) > 0 && this.clipLevel() !== 'off' && !this.duo) {
+        const mid = this.midOf(e.side);
+        this.wxStamp('FIRST!', '#ffcb05', '#131c36', Phaser.Math.Clamp(mid.x + (e.side === 'player' ? 1 : -1) * FIRST_TAG.dx, 80, GAME_WIDTH - 80), Math.max(40, mid.y + FIRST_TAG.dy), false, FIRST_TAG);
+      }
+      // Pass 12 "Entry Hazards": stones are thrown and stay; a switch-in meets them.
+      if (e.type === 'sideEffect' && (HAZARD_KINDS as readonly string[]).concat('hazards').includes(e.effect)) await this.hazardSync(e.side, e.on && e.effect === 'stealthRock');
+      if (e.type === 'hazard') await this.hazardHit(e.side, e.hazard, e.amount, e.hpAfter);
       // The release turn of a two-turn move: the CHARGING chip and glow go before the move plays.
       if (e.type === 'move' && this.hold[e.side]?.kind === 'charge') await this.holdOff(e.side);
       // Drain: the lights carry the HP across; they take the pack's heal sparkle's place.
@@ -7832,6 +7901,7 @@ export class BattleScene extends Phaser.Scene {
     }
     eot?.destroy();
     await this.holdSync();
+    if (!this.duo) for (const sd of ['player', 'enemy'] as const) await this.hazardSync(sd, false);
     this.comboText?.destroy();
     this.comboText = null;
     // Make sure the boxes match the real state at the end of the turn.

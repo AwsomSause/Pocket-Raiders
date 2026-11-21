@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ClipBuilder, clipEnd, EASES, fxAllowed, sampleClip, type ClipLevel, type MotionClip } from '../../src/core/presentation/motionClip';
-import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_KNOCK, HIT_KNOCK_BIG, hitClip, hitPower, HIT_THROW, COMBO, comboPlan, comboScale, CRIT_FREEZE, critFreezeClip, HIT_STAMPS, hitStampSpot, levelUpClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_KNOCK, HIT_KNOCK_BIG, hitClip, hitPower, HIT_THROW, FIRST_TAG, COMBO, comboPlan, comboScale, CRIT_FREEZE, critFreezeClip, HIT_STAMPS, hitStampSpot, levelUpClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
 
 const ME: MonSpot = { x: 312, y: 428, h: 180, side: 'player' };
 const FOE: MonSpot = { x: 648, y: 240, h: 150, side: 'enemy' };
@@ -475,6 +475,12 @@ describe('the critical hit freeze (pass 12) and the hit stamps (pass 5)', () => 
     expect(HIT_STAMPS.super!.at).toBeGreaterThan(HIT_STAMPS.crit!.at);
     expect(hitStampSpot('enemy', { x: 648, y: 180 })).toEqual({ x: 478, y: 134 });
     expect(hitStampSpot('player', { x: 312, y: 370 })).toEqual({ x: 522, y: 300 });
+  });
+});
+
+describe('priority move (pass 12)', () => {
+  it('the FIRST! tag slams on from 2.4 times, tilted 8 degrees, and holds 0.9 s above the user', () => {
+    expect(FIRST_TAG).toEqual({ dx: 30, dy: -150, from: 2.4, tilt: -8, inMs: 100, hold: 900, lift: 0 });
   });
 });
 
