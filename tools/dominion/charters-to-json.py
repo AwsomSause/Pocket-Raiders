@@ -9,7 +9,9 @@ The old 0-10 scales become Dominion's 0-100 (x5 for Heat, Regard and Dread in th
 Patron plus Grunts up to the HQ level's crew cap; the colours become the Founding's colour ids. The old house rules
 (the Ledger returns, the roll call, two purses...) are not carried: Dominion's Charter is the established start only.
 
-  python3 -I tools/dominion/charters-to-json.py src/data/evilMode/charters.json src/data/dominion/charters.json
+The old Evil Mode flow (and src/data/evilMode/) was deleted after D17; its Charters file is in git history:
+  git show 8a168fc6:src/data/evilMode/charters.json > /tmp/charters-old.json
+  python3 -I tools/dominion/charters-to-json.py /tmp/charters-old.json src/data/dominion/charters.json
 """
 import json
 import sys

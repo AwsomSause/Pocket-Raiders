@@ -9,15 +9,10 @@
 import { openRoadHome, roadHomeDue } from '../core/co/roadHome';
 import { applyEvilEffect, evilTeam } from '../core/evil/teams';
 import { skyAct, type SkyAction } from '../core/evil/teamSky';
-import { charterInRun, ensureEvil, finishEvil, foundInRun, stepInRun } from '../core/evilMode/session';
 import { DOMINION_MODE_ID, isDominionRun, fightInRun as dominionFightInRun, settleStaleFight as dominionSettleStale, startInRun as dominionStartInRun, stepInRun as dominionStepInRun } from '../core/dominion/session';
 import { charterProblem, chartersOpen, dominionFinished, domTurnOffer, domTurnRun, type DomTurnOffer } from '../core/dominion/charters';
 import type { DominionAction, DominionSetup } from '../core/dominion/schema';
 import { rulesFromPrefs } from '../core/dominion/rules';
-import { turnOffer, turnRun, walkAway, type TurnOffer } from '../core/evilMode/turn';
-import { beginEvilFight } from '../core/evilMode/fight';
-import type { FoundingChoice } from '../core/evilMode/start';
-import type { EvilAction, EvilCue } from '../core/evilMode/day';
 import * as NodeMenu from '../core/nodeMenu/flow';
 import { playSpecialEntry } from '../core/nodeMenu/special/menu';
 import { playerTrainerFor } from '../core/archetypes';
@@ -1082,24 +1077,6 @@ export class GameSession {
     return muted ? 'The Radio crackles back on.' : 'You turn the Radio off. Somebody notices the silence.';
   }
 
-  /** Evil Mode founding (core/evilMode): writes the team once and saves. Returns why it couldn't, or null. */
-  evilFound(choice: FoundingChoice, stage?: number): string | null {
-    const out = foundInRun(this.requireRun(), choice, this.settings.expansion.evilRunLength, stage, { shadow: this.settings.expansion.evilShadow, incursions: this.settings.expansion.ultraBeastsEnabled });
-    if (out.problem) return out.problem;
-    this.run = out.run;
-    this.persistRun();
-    return null;
-  }
-
-  /** Evil Mode slice 22: takes a Charter (Part 28) and saves. Returns why it couldn't, or null. */
-  evilCharter(id: string): string | null {
-    const out = charterInRun(this.requireRun(), id, this.settings.expansion.evilRunLength);
-    if (out.problem) return out.problem;
-    this.run = out.run;
-    this.persistRun();
-    return null;
-  }
-
   /** DOMINION D16: the profile's Charters unlock (one finished Dominion run). */
   dominionChartersOpen(): boolean {
     return chartersOpen(this.profile.dominionDone.length);
@@ -1141,31 +1118,6 @@ export class GameSession {
     return true;
   }
 
-  /** Evil Mode slice 22: the Turn's card, when this run has earned it (the takeover was won and a region remains). */
-  evilTurnOffer(): TurnOffer | null {
-    return this.run ? turnOffer(this.run, { evilOn: this.settings.expansion.evilMode }) : null;
-  }
-
-  /** Evil Mode slice 22: "Take the chair" (after its confirm). The rest of the run is an Evil Mode run. */
-  evilTurn(): boolean {
-    const run = this.run;
-    if (!run || !this.evilTurnOffer()) return false;
-    const out = turnRun(run);
-    if (!out) return false;
-    this.run = out;
-    this.persistRun();
-    return true;
-  }
-
-  /** Evil Mode slice 22: "Take it all, and walk away": the run goes on as it does today; the card won't come back. */
-  evilWalkAway(): void {
-    const run = this.run;
-    if (!run || !this.evilTurnOffer()) return;
-    this.run = walkAway(run);
-    this.persistRun();
-  }
-
-  /** Evil Mode: a block saved before slice 2 gets its district (laid from the run's seed) and is saved once. */
   /** DOMINION (Evil Mode rework, D1): sets the run up from the setup pages and saves. Returns why it couldn't, or null. */
   dominionStart(setup: DominionSetup): string | null {
     // D16: the Charters open once a Dominion run is finished on this profile (Q4).
@@ -1210,43 +1162,6 @@ export class GameSession {
     this.run = out.run;
     this.persistRun();
     return out.lines;
-  }
-
-  evilEnsure(): void {
-    const run = this.run;
-    if (!run) return;
-    const out = ensureEvil(run);
-    if (out === run) return;
-    this.run = out;
-    this.persistRun();
-  }
-
-  /** Evil Mode (slice 5): starts the battle the day is waiting on and saves. False when there's none to start. */
-  evilFight(): boolean {
-    const out = beginEvilFight(this.content, this.requireRun());
-    if (!out) return false;
-    this.run = out;
-    this.persistRun();
-    return true;
-  }
-
-  /** Evil Mode: one action on the day, saved at the end of the beat. The cues are for the screen only. */
-  evilStep(action: EvilAction): EvilCue[] {
-    const out = stepInRun(this.requireRun(), action);
-    if (!out.ok) return out.cues;
-    this.run = out.run;
-    this.persistRun();
-    return out.cues;
-  }
-
-  /** Evil Mode slice 15: the ending's last scene is read; the run ends (the run-end page, the Hall of Fame card). */
-  evilFinish(): boolean {
-    const out = finishEvil(this.requireRun());
-    if (!out) return false;
-    this.run = out;
-    this.persistRun();
-    this.finishRun();
-    return true;
   }
 
   /** Team Sky's screens (core/evil/teamSky): one action, saved; the message says what happened. */

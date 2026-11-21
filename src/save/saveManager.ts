@@ -26,7 +26,6 @@ import {
 import { emptyTimelineStore, TimelineStoreSchema, type TimelineStore } from '../core/timeline/schema';
 import { freshEvil } from '../core/evil/schema';
 import { EXPANSION_SETTINGS_DEFAULTS } from '../core/expansion/schema';
-import { runToSaveForm } from '../core/evilMode/saveForm';
 import { freshProfileStory, STORY_SETTINGS_DEFAULTS } from '../core/story2/schema';
 import { StorageUnavailableError, type StorageProvider } from './storage';
 
@@ -157,8 +156,8 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
       for (const id of lore) if (typeof id === 'string') story.lore[id] = { state: 'known', sources: [] };
       return { ...profile, story };
     },
-    // v21 (Evil Mode slice 15): no Evil Mode run has finished yet, so the Hall of Fame holds no cards.
-    20: (data) => ({ ...(data as Json), evilHall: [] }),
+    // v21 (old Evil Mode slice 15) added the Hall of Fame cards; that flow was deleted after Dominion D17, so nothing is added now.
+    20: (data) => data,
   },
   run: {
     // v2 (Milestone 2): Bag, candies, pending decisions, and battles against
@@ -505,6 +504,16 @@ interface Envelope {
   data: unknown;
 }
 
+/** The old Evil Mode flow was deleted after Dominion D17 (Kice 2026-11-20, "Delete the old flow entirely"): a run saved
+ *  in it can't go on. It is reported, never silently dropped: the main menu shows
+ *  why and offers to discard it. Null for every other run. */
+export const RETIRED_EVIL_RUN = 'This run was in the old Evil Mode, which Dominion has replaced, so it can\'t be continued.';
+export function retiredRun(data: unknown): string | null {
+  const run = data as { rules?: { modeId?: unknown }; expansion?: { evilMode?: unknown } } | null;
+  if (!run || typeof run !== 'object') return null;
+  return run.rules?.modeId === 'evil-mode' || run.expansion?.evilMode !== undefined ? RETIRED_EVIL_RUN : null;
+}
+
 export type LoadResult<T> =
   | { status: 'none' }
   | { status: 'ok'; data: T; migratedFrom?: number }
@@ -665,6 +674,10 @@ export class SaveManager {
         return { status: 'corrupt', reason: `Upgrading the save failed: ${String(err)}` };
       }
     }
+    if (record === 'run') {
+      const retired = retiredRun(data);
+      if (retired) return { status: 'incompatible', reason: retired };
+    }
     const parsed = schema.safeParse(data);
     if (!parsed.success) {
       const first = parsed.error.issues[0];
@@ -734,10 +747,9 @@ export class SaveManager {
   }
 
   saveRun(run: RunState): SaveResult {
-    // An Evil Mode block is written in its save form (core/evilMode/saveForm.ts); reading makes it whole again.
     // An item id the game no longer knows would make this save fail its checks on the next load: sell it first.
     tidyBag(this.content, run);
-    return this.write('run', runToSaveForm(run));
+    return this.write('run', run);
   }
 
   clearRun(): SaveResult {
@@ -768,7 +780,7 @@ export class SaveManager {
   saveReplay(run: RunState): SaveResult {
     if (!run.timeline) return { ok: false, reason: 'Only a timeline replay can be saved in the replay slot.' };
     tidyBag(this.content, run);
-    return this.write('run', runToSaveForm(run), this.replayKey);
+    return this.write('run', run, this.replayKey);
   }
 
   clearReplay(): SaveResult {
