@@ -287,3 +287,25 @@ addCrewHook((b, _seed, n) => {
 function put(run: RunState, b: DominionBlock): RunState {
   return { ...run, expansion: { ...run.expansion, dominion: b } };
 }
+
+// ---------- D16: a Charter's crew (Part 0 §6.1 Q4) ----------
+
+/** One Common Grunt for a Charter's founding crew: rolled like a hire (stream `dominion-charter`), free, Day 1. Mutates `b`. */
+export function charterGrunt(content: Content, run: RunState, b: DominionBlock, i: number): Member {
+  const st = (b.crew ??= freshCrewState());
+  st.next = Math.max(st.next, b.members.length + 1);
+  const h = C().hire;
+  const r = rng(run.seed, 'dominion-charter', i);
+  const pool = DOMINION_DATA.gruntTypes.filter((t) => t.rarity === 'C' && !t.once && !t.region);
+  const t = pick(r, pool);
+  const name = nameFor(b, r, 'm');
+  const favours = favourIds(t).filter((s) => content.species.has(s));
+  const mon = typeMon(content, run, b, r, h.monLevel, favours, h.rank);
+  const m: Member = {
+    id: `m${st.next++}`, name, rank: h.rank, gender: 'm', look: 'dominion/c-rook0.png', level: 1, stats: rollStats(r, t.lean),
+    loyalty: h.loyalty, morale: h.morale, traitPoints: 2, untrained: true, wage: h.wage, team: [mon], joinedDay: b.day, unpaid: 0,
+    crew: { ...freshCrew(t.green, C().greens.find((g) => g.id === t.green)!.temperaments[0]!, startTask(t.bestAt, h.rank), b.day), type: t.id, motive: pick(r, C().motives).id },
+  };
+  b.members.push(m);
+  return m;
+}

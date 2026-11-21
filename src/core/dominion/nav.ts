@@ -13,6 +13,8 @@ export const PAGE_IDS = [
   'base', 'rival', 'hero', 'voices', 'founding', 'persona', 'pyramid', 'squads', 'reserve', 'desk', 'interrupt', 'police', 'debate', 'spy',
   // D15: the Empire across regions.
   'empire',
+  // D16: Snagem and Cipher.
+  'partners',
 ] as const;
 export type PageId = (typeof PAGE_IDS)[number];
 
@@ -67,6 +69,7 @@ export const PINS: readonly Pin[] = [
   P('debate', 1, 340, 372, 3, 'g-letter', 'Debate', 'comes to you', '', 'comes'),
   P('spy', 1, 490, 382, -2, 'g-devon-scope', 'Confront', 'comes to you', '', 'comes'),
   P('empire', 1, 640, 372, 2, 'g-xtransceiver', 'Empire', 'G'),
+  P('partners', 1, 790, 382, -3, 'g-smoke-ball', 'Partners', 'J, a Syndicate'),
 ];
 
 export interface Edge { sheet: 0 | 1; a: PageId; b: PageId; gold: boolean; label: string }
@@ -83,7 +86,7 @@ export const EDGES: readonly Edge[] = [
   E(1, 'hq', 'base', false, 'B'), E(1, 'base', 'rival', false, 'R'), E(1, 'rival', 'hero', false, 'H'), E(1, 'hero', 'voices', false, 'V'),
   E(1, 'voices', 'founding', false, 'O'), E(1, 'founding', 'desk', false, 'I'), E(1, 'hq', 'crew', false, 'Tab 3'), E(1, 'crew', 'persona', false, 'C'),
   E(1, 'persona', 'pyramid', false, 'P'), E(1, 'pyramid', 'squads', false, 'U'), E(1, 'squads', 'reserve', false, 'Tab 4'),
-  E(1, 'reserve', 'empire', false, 'G'),
+  E(1, 'reserve', 'empire', false, 'G'), E(1, 'empire', 'partners', false, 'J'),
 ];
 
 export const SHEETS = ['the main routes', 'the back rooms'] as const;
@@ -94,7 +97,7 @@ export const PAGE_NAMES: Record<PageId, string> = {
   ledger: 'Ledger', rotom: 'Rotom', map: 'Region Map', district: 'District file', card: 'Action Card', takeover: 'Takeover', chair: 'The Chair',
   base: 'HQ menu', rival: 'Rival File', hero: 'Hero file', voices: 'Voices', founding: 'Founding', persona: 'Personality', pyramid: 'Pyramid',
   squads: 'Squads', reserve: 'Reserve', desk: 'Rotom desk', interrupt: 'Hero steps in', police: 'Questioning', debate: 'Debate', spy: 'Confront',
-  empire: 'Empire',
+  empire: 'Empire', partners: 'Partners',
 };
 
 /** Pages a player can be sent to (the board's photos and the wheel's lists take you there). */
@@ -135,7 +138,7 @@ export function spotAt(dx: number, dy: number, hub: number): number | null {
 /** The spot a page sits under (Morning is the HQ, the Pyramid the Roster...), for the pointer's starting place. */
 export function spotOf(p: PageId | null): number | null {
   if (!p) return null;
-  const home: Partial<Record<PageId, PageId>> = { ...OPENS, base: 'hq', rival: 'hq', hero: 'hq', voices: 'hq', founding: 'hq', empire: 'ledger', desk: 'rotom', persona: 'crew', pyramid: 'crew', squads: 'crew', settings: 'menu' };
+  const home: Partial<Record<PageId, PageId>> = { ...OPENS, base: 'hq', rival: 'hq', hero: 'hq', voices: 'hq', founding: 'hq', empire: 'ledger', partners: 'ledger', desk: 'rotom', persona: 'crew', pyramid: 'crew', squads: 'crew', settings: 'menu' };
   const i = SPOTS.findIndex((s) => s.id === (home[p] ?? p));
   return i < 0 ? null : i;
 }

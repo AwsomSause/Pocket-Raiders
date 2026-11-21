@@ -58,7 +58,7 @@ describe('DOMINION D2: the data', () => {
     // Rows 1-150: 42 from D10 (Growth), 32 from D2, 10 from D6, 13 more that D5's rooms open (each also needs its room built), 9 from D4, 17 more from D9 (the rival team), 5 Hero actions (D11), 2 from D13 (Debate, Write a Manifesto),
     // 3 from D4b (Egg Run, Breed, Move Tutor), Plant a Mole (D22), Hold a Rally and Chant Night (D6b), Interrogate and Hostage Trade (D23), Pirate Radio and Meet the Champion (D14).
     expect(played.length).toBe(140);
-    expect(all.filter((a) => actionStatus(a).play)).toHaveLength(487);
+    expect(all.filter((a) => actionStatus(a).play)).toHaveLength(502); // D16 plays the 15 Snagem and Cipher rows
     for (const a of all) {
       const s = actionStatus(a);
       expect(s.play || /^D\d+$/.test(s.slice ?? ''), a.id).toBe(true);

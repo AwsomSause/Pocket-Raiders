@@ -559,6 +559,8 @@ export function leave(content: Content, run0: RunState, choice: LeaveChoice): { 
     away: 0, skies: null, boonWeek: 0, spreadFree: false, freeUpgrade: false, freeInfirmary: false, trip: null,
   };
   b = ensureHero(fillCards(b, run.seed), run.archetypeId, `${run.seed}::realm::${to}`);
+  // D16: the partners must be agreed again in each region; only Looker's deal (no partners for the run) comes along.
+  if (old.partners?.closed) b.partners = { deals: {}, offered: [], ended: [], kept: [], met: {}, inv: {}, used: 0, closed: true, purge: null, last: { day: 0, money: {}, mons: {}, feud: null }, due: [] };
   // Arrival lines (the Morning Report of Day 1) and the boons already won.
   const A = RG().arrive.lines, lines: string[] = [];
   run.party = [];

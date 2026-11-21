@@ -163,6 +163,8 @@ export interface BuildRow { def: Building; cost: number; ok: boolean; why: strin
 /** Why a building can't be bought now (null when it can). `district` for outside buildings. */
 export function buildWhy(b: DominionBlock, def: Building, district: string | null): string | null {
   if (def.status === 'disabled') return fill(Ln().waits!, { slice: def.waits ?? 'later' });
+  // D16: the Snag Desk and the Shadow Lab come with a partner's deal (partners.ts builds them); nobody sells them.
+  if (def.deal) return `Comes with the ${def.deal === 'snagem' ? 'Snagem' : 'Cipher'} deal (Partners, J).`;
   if (b.field.fight) return 'A fight is waiting.';
   const need = def.minTier + 1;
   if (b.hqLevel < need) return fill(Ln().needsTier!, { lv: need });

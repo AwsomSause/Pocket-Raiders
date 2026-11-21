@@ -10,7 +10,8 @@ import { openRoadHome, roadHomeDue } from '../core/co/roadHome';
 import { applyEvilEffect, evilTeam } from '../core/evil/teams';
 import { skyAct, type SkyAction } from '../core/evil/teamSky';
 import { charterInRun, ensureEvil, finishEvil, foundInRun, stepInRun } from '../core/evilMode/session';
-import { fightInRun as dominionFightInRun, settleStaleFight as dominionSettleStale, startInRun as dominionStartInRun, stepInRun as dominionStepInRun } from '../core/dominion/session';
+import { DOMINION_MODE_ID, fightInRun as dominionFightInRun, settleStaleFight as dominionSettleStale, startInRun as dominionStartInRun, stepInRun as dominionStepInRun } from '../core/dominion/session';
+import { charterProblem, chartersOpen, dominionFinished, domTurnOffer, domTurnRun, type DomTurnOffer } from '../core/dominion/charters';
 import type { DominionAction, DominionSetup } from '../core/dominion/schema';
 import { rulesFromPrefs } from '../core/dominion/rules';
 import { turnOffer, turnRun, walkAway, type TurnOffer } from '../core/evilMode/turn';
@@ -1097,6 +1098,35 @@ export class GameSession {
     return null;
   }
 
+  /** DOMINION D16: the profile's Charters unlock (one finished Dominion run). */
+  dominionChartersOpen(): boolean {
+    return chartersOpen(this.profile.dominionDone.length);
+  }
+
+  /** DOMINION D16: a Dominion run whose last region is Taken counts once toward the Charters' unlock. */
+  private noteDominionDone(): void {
+    const run = this.run, b = run?.expansion?.dominion;
+    if (!run || !b || !dominionFinished(b) || this.profile.dominionDone.includes(run.runId)) return;
+    this.profile = { ...this.profile, dominionDone: [...this.profile.dominionDone, run.runId] };
+    this.checkSave(this.saves.saveProfile(this.profile));
+  }
+
+  /** DOMINION D16: the Turn's offer on the Game Over screen (a main-game run that won; Evil Mode shown in Settings). */
+  dominionTurnOffer(): DomTurnOffer | null {
+    return domTurnOffer(this.run, this.settings.expansion.evilMode, DOMINION_MODE_ID);
+  }
+
+  /** DOMINION D16: "Take the Turn": the run carries on as a Dominion run, at its setup pages. */
+  dominionTurn(): boolean {
+    const run = this.run;
+    if (!run || !this.dominionTurnOffer()) return false;
+    const out = domTurnRun(this.content, run, DOMINION_MODE_ID);
+    if (!out) return false;
+    this.run = out;
+    this.persistRun();
+    return true;
+  }
+
   /** Evil Mode slice 22: the Turn's card, when this run has earned it (the takeover was won and a region remains). */
   evilTurnOffer(): TurnOffer | null {
     return this.run ? turnOffer(this.run, { evilOn: this.settings.expansion.evilMode }) : null;
@@ -1124,6 +1154,11 @@ export class GameSession {
   /** Evil Mode: a block saved before slice 2 gets its district (laid from the run's seed) and is saved once. */
   /** DOMINION (Evil Mode rework, D1): sets the run up from the setup pages and saves. Returns why it couldn't, or null. */
   dominionStart(setup: DominionSetup): string | null {
+    // D16: the Charters open once a Dominion run is finished on this profile (Q4).
+    if (setup.charter) {
+      const why = charterProblem(setup.charter, this.profile.dominionDone.length);
+      if (why) return why;
+    }
     // D27: the run keeps the rules Settings · Dominion had when it began.
     const out = dominionStartInRun(this.content, this.requireRun(), { ...setup, rules: setup.rules ?? rulesFromPrefs(this.settings.expansion.dominionPrefs) });
     if (out.problem) return out.problem;
@@ -1138,6 +1173,7 @@ export class GameSession {
     if (out.ok) {
       this.run = out.run;
       this.persistRun();
+      this.noteDominionDone();
     }
     return { ok: out.ok, notice: out.notice, fight: !!out.fight, roll: out.roll ?? null };
   }

@@ -327,6 +327,8 @@ const hooks: Partial<Record<ChairHook, (b: DominionBlock) => string | null>> = {
 export function setChairHook(id: ChairHook, f: (b: DominionBlock) => string | null): void {
   hooks[id] = f;
 }
+/** The registered hook (tests and the court tool's checks). */
+export const chairHookOf = (id: ChairHook): ((b: DominionBlock) => string | null) | undefined => hooks[id];
 
 const bump = (x: Ctx, k: string, n: number): void => {
   if (n) x.changes[k] = (x.changes[k] ?? 0) + n;
