@@ -262,5 +262,75 @@
   "q3": "Yes, three. Access holds text size, colour shapes, motion and one-button play, Controls shows every action for keys, pad and touch, and On a phone shows how the HQ rearranges on a tall screen. They sit in the Settings home with the others.",
   "q4": "Access and Controls are two of the eight tiles on the Settings home, and the Access page keeps the same category list as the Dominion settings, so Settings stays one level deep.",
   "q5": "Yes. Pokémon games always show which button does what (A to choose, B to go back), and playing the same game on a TV or in your hands is the Switch way."
+ },
+ "21": {
+  "name": "Rotom’s Lessons",
+  "big": "The tutorial is woven into the UI itself. Every page carries its lesson on T in the key strip, and a lesson lays a dark sheet over the real page, cuts a spotlight round the one thing it teaches, and has Rotom point at it with numbered steps, Skip and Next.",
+  "pages": [
+   "Lesson · the lift console",
+   "Lesson · the Card",
+   "Lesson book"
+  ],
+  "q1": "Yes, in a new way: the page you are on dims behind a dark sheet, a dashed gold spotlight pulses round the one thing being taught, and Rotom floats up beside it with a speech bubble and numbered steps.",
+  "q2": "Pass 20 made the UI easier for every player; this pass teaches it inside the real pages instead of on separate slides. Every page now shows its lesson number on T, and a lesson is the live page with a spotlight, so what you learn is exactly what you will use.",
+  "q3": "Yes, three. Two lessons show how it works on real pages (the lift console on the HQ, the chance ring on the Card), and the Lesson book lists all 15 lessons with what you have seen, so any lesson can be replayed without hunting.",
+  "q4": "T opens the lesson for the page you are on, the Lesson book sits in the Rotom Phone and Settings › Lessons, and the Tutorial row in Settings › Dominion picks Full, Tips only or Off.",
+  "q5": "Yes. Pokémon games teach with a friendly helper (the Rotom Dex, Professor Oak’s aides) who points at one thing at a time, and the text always waits for your button press."
+ },
+ "22": {
+  "name": "Empire",
+  "big": "The UI thinks bigger than one city. The Nova emblem on every page wears a gold ring that fills with your Goal and four region gems (Kanto lit), Empire pages turn gold and crimson with a slow banner wave, and Kanto becomes the first island on a World map.",
+  "pages": [
+   "The World",
+   "Sail to Johto",
+   "Pick the Holder"
+  ],
+  "q1": "Yes. A gold Goal ring spins up round the Nova emblem on every page, with four region gems (Kanto lit and pulsing), Empire pages hang a crimson and gold garland that sways under the ticker, and the World map has a dotted gold sea route with a little ship sailing it and islands that glow when they are yours.",
+  "q2": "Pass 21 taught the UI; this pass makes it feel like you are building something bigger than one city. Your progress to the Goal is always on screen in the emblem, and Kanto is now just the first island, so leaving a region is a proper journey with a sunset harbour and a list of what comes and what stays.",
+  "q3": "Yes, three. The World (all regions at a glance), Sail to Johto (one clear goodbye page that says money does not carry over) and Pick the Holder (who runs Kanto while you are away). The Empire page now leads to the World instead of crowding four regions onto one screen.",
+  "q4": "Press the Nova emblem on any page to open the World. In the menu, the World sits under Empire; the Holder choice is also in the Chair’s queue. Settings › Dominion gets a Holder row: Ask me, or Pick the most stable.",
+  "q5": "Yes. It feels like the moment you board the S.S. Anne or the Magnet Train to a new region: a harbour, a ship, a map with routes, and the next region waiting with its own villain team."
+ },
+ "23": {
+  "name": "Breathing Room",
+  "big": "Less chrome, more game. The top bar’s three chips fold into one status capsule, the bottom line becomes a real Pokémon text box that types itself out and waits on a bouncing ▼, and the buttons sit in a choice box with a ▶ cursor.",
+  "pages": [
+   "At a glance",
+   "Focus view",
+   "Settings · Screen"
+  ],
+  "q1": "Yes, by doing less, better. The page breathes: one clean capsule replaces three chips, the speech line is a framed Pokémon text box whose words type themselves out before a ▼ bounces, and the buttons sit in a white choice box with a ▶ cursor that nudges back and forth. Focus view folds the whole HUD away with a slide.",
+  "q2": "Pass 22 made the world bigger; this pass makes every page calmer and more readable. The top bar has a third fewer edges, the bottom of every page now reads like a real Pokémon conversation, and the HUD can be folded away completely when you want to look at the board.",
+  "q3": "Yes, three. At a glance explains the capsule in plain words with what needs you, so the top bar never has to explain itself. Focus view shows any page with no HUD at all. Settings › Screen lets you pick how much HUD you want. All three are one press from where you are.",
+  "q4": "Tap the capsule on any page for At a glance; V folds the HUD; Settings › Access gains a Screen tab with Status, News ticker, Key hints, Text speed and Focus view rows, each previewed live on the right.",
+  "q5": "Yes, more than any pass so far: the white framed text box, the ▼ that waits for your button, and the ▶ cursor in a YES/NO style choice box are exactly how every main-series Pokémon game talks to you."
+ },
+ "24": {
+  "name": "Nova Mark",
+  "big": "Team Nova finally has a brand, and the whole UI wears it: every page opens through a crimson Nova star that bursts like an iris, a giant Nova star turns slowly behind every page, every panel head is stamped with the four-point star, and every crew portrait wears a crimson armband.",
+  "pages": [
+   "The Mark",
+   "Uniforms",
+   "Calling card"
+  ],
+  "q1": "Yes. Every page now opens with a crimson four-point Nova star that spins open like an iris and wipes away, a huge Nova star turns slowly behind the panels, every panel head gets a little star that spins in, and every crew portrait wears a crimson N armband. The Mark page waves a full team flag with turning light rays, and the Calling card drops onto the table and gets stamped.",
+  "q2": "Pass 23 calmed the screen; this pass gives it an identity. Before, Team Nova looked like any menu; now the Nova star, crimson and the N armband are on every page, the same way Rocket’s R is everywhere in Pokémon. You feel like you are running a team with a brand, not reading a spreadsheet.",
+  "q3": "Yes, three. The Mark (team colour, emblem and armband letter) and Uniforms (the whole crew lined up in armbands) give the brand its own home instead of hiding it in settings. The Calling card is a quick choice after a job, between the result and the next morning, so it never blocks the flow.",
+  "q4": "The Mark sits in the Menu under HQ and in Settings › Dominion as “Team mark”. Settings › Effects gains a Page opener row: Nova star, Fade or Cut, so players who dislike the iris can turn it off. Uniforms opens from the Crew roster.",
+  "q5": "Yes. Every villain team in Pokémon is defined by its logo and uniform: Rocket’s R, Galactic’s G, the Plasma shield. Giving Nova its own mark, armbands and a calling card is exactly that language."
+ },
+ "25": {
+  "name": "Master Cut",
+  "big": "The first big synthesis: every panel now wears the same framed look as the text box (dark frame, cream inner line, area-colour rule), so the whole game reads as one Pokémon-style set of windows, and the frame itself is a choice in Options. The Phone tab becomes Start, which opens a classic Start menu that slides over the live page.",
+  "pages": [
+   "Start menu",
+   "Options",
+   "Boss card"
+  ],
+  "q1": "Yes. Every window now has the same jewel-like frame (dark edge, cream inner line, a colour rule), the Start menu slides in from the right over the live page while the rest dims, a ▶ cursor nudges through the list, and the Boss card flips over in 3D like a Trainer Card with district stamps popping in.",
+  "q2": "Passes 21 to 24 each added a layer (lessons, the world, a calmer HUD, the Nova brand). This pass ties them together: one frame for every window instead of mixed panel styles, one entry point (Start) instead of a Phone tab and a menu, and the Boss card becomes the one place that sums up your run.",
+  "q3": "Yes, two new and one remade. The Start menu is a short list over the live page, so you never lose your place. Options holds the five settings people change most plus the frame picker, so the full Settings stays for everything else. The Boss card replaces the plain file page.",
+  "q4": "This is the answer to both: Start (or the old Phone tab, which now says Start) opens the Start menu; Options is in it; Options links to All settings; Save is one line away. The Rotom Phone is item one, so nothing from before is lost.",
+  "q5": "Very much. The right-side Start menu with a ▶ cursor, Options with Text speed, Battle scene, Sound and Frame 1 to 6, and a Trainer Card with an ID No. and badge circles are straight from the main series."
  }
 }

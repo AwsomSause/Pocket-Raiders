@@ -1,0 +1,53 @@
+/* Pass 23 · Breathing Room */
+/* one status capsule instead of three chips */
+.cap23{display:inline-flex;align-items:center;height:30px;padding:0 4px;background:linear-gradient(#2a2433,#17131d);border:2px solid #000;border-radius:999px;box-shadow:0 3px 0 #000,inset 0 1px 0 rgba(255,255,255,.12);cursor:pointer;animation:cap23 .6s .2s cubic-bezier(.3,1.3,.5,1) both}
+.cap23 u{background:none!important;border:none!important;border-radius:0!important;padding:0 10px!important}
+.cap23 u+u{border-left:2px solid rgba(255,255,255,.14)!important}
+.cap23:hover{box-shadow:0 3px 0 #000,0 0 0 2px var(--yel)}
+/* the bottom line is a Pokémon text box */
+.foot.f23 p{border-radius:10px!important;border:3px solid #1d1622;box-shadow:inset 0 0 0 2px #fff8ea,inset 0 0 0 4px var(--area),4px 4px 0 rgba(0,0,0,.55);padding-right:34px}
+.foot.f23 p::after{content:'';position:absolute;right:30px;top:5px;bottom:5px;width:calc(100% - 110px);background:#fff8ea;pointer-events:none;animation:type23 1.4s .55s steps(26,end) both}
+.nx23{position:absolute;right:12px;bottom:6px;font-style:normal;font-size:12px;color:var(--red);animation:nx23 .8s 2s ease-in-out infinite}
+/* the buttons sit in a choice box with a ▶ cursor */
+.ch23{flex:none;display:flex;align-items:center;gap:2px;height:44px;padding:0 8px;background:#fff8ea;border:3px solid #1d1622;border-radius:10px;box-shadow:inset 0 0 0 2px #fff8ea,inset 0 0 0 4px #2a2433,4px 4px 0 rgba(0,0,0,.55);animation:pop .35s .4s cubic-bezier(.3,1.4,.5,1) both}
+.ch23 .cta{position:relative;background:none!important;color:#1d1622!important;border:none!important;box-shadow:none!important;padding:4px 10px 4px 22px!important;font-weight:800;animation:none}
+.ch23 .cta::after{content:none}
+.ch23 .cta::before{content:'▶';position:absolute;left:6px;top:50%;margin-top:-7px;font-size:11px;line-height:14px;color:#d8cfbf}
+.ch23 .cta.on::before{content:'▶';display:block;width:auto;height:auto;font:inherit;font-size:11px;line-height:14px;background:none;border:none;border-radius:0;box-shadow:none;color:var(--red);animation:cur23 .7s ease-in-out infinite}
+.ch23 .cta.on{color:var(--red)!important}
+.ch23 .cta.on::after{content:none}
+.ch23 .cta .seal19,.ch23 .cta > i{display:none}
+/* the lesson chip shrinks to a number */
+.ls23 b{display:inline-grid;place-items:center;min-width:20px;height:20px;border-radius:50%;background:#e07a10;color:#fff;border:2px solid #000;font-size:11px}
+/* At a glance */
+.gl23{position:absolute;left:16px;top:70px;width:560px;height:326px;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gt23{position:relative;display:flex;flex-direction:column;gap:3px;padding:12px 14px;background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(23,19,29,.92) 55%);border:2px solid #000;border-radius:6px 18px 6px 18px;box-shadow:4px 4px 0 var(--area);animation:pop .4s both;animation-delay:var(--d)}
+.gt23 .gi{position:absolute;right:12px;top:10px;animation:bob 1.6s ease-in-out infinite}
+.gt23 small{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--mut)}
+.gt23 b{font:400 26px/1.05 var(--fd);color:var(--yel)}
+.gt23 em{font-style:normal;font-size:13px;line-height:1.25}
+.gt23 .bar{margin-top:auto;height:10px;background:#2a2230;border:2px solid #000;border-radius:6px;overflow:hidden}
+.gt23 .bar i{display:block;height:100%;width:var(--p);background:linear-gradient(90deg,var(--red),var(--yel));animation:fill23 1s .5s cubic-bezier(.3,1,.4,1) both}
+.need23{left:592px;top:70px;width:352px;height:326px;display:flex;flex-direction:column;gap:8px}
+.nd23{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:7px 12px;text-align:left;background:var(--pn2);border-left:6px solid var(--area);border-radius:3px 12px 3px 12px;animation:in-r .35s both;animation-delay:var(--d)}
+.nd23 b{font-size:15px}.nd23 em{font-style:normal;font-size:12px;color:var(--mut)}
+.nd23.bad{border-left-color:#e0294a}.nd23.bad b{color:#ff8a7a}
+.nd23.gold{border-left-color:#ffd75a}.nd23.gold b{color:#ffd75a}
+/* Focus view */
+.fv23 header,.fv23 .tick18,.fv23 .foot,.fv23 .tabs,.fv23 .keys{animation:fold23 .6s .3s cubic-bezier(.6,0,.4,1) both}
+.fv23 header,.fv23 .tick18{--fy:-80px}
+.fv23 .foot,.fv23 .tabs,.fv23 .keys{--fy:140px}
+.fvh23{position:absolute;right:16px;bottom:14px;z-index:9;display:flex;align-items:center;gap:6px;padding:4px 12px;font-size:13px;font-weight:800;background:rgba(10,8,14,.85);border:2px solid #000;border-radius:999px;animation:pop .3s 1s both}
+.fvs23{position:absolute;inset:0;z-index:8;pointer-events:none;box-shadow:inset 0 0 80px rgba(0,0,0,.6)}
+/* Settings › Screen preview */
+.pv-cap23{display:flex;align-self:flex-start;background:#17131d;border:2px solid #000;border-radius:999px;padding:3px 4px}
+.pv-cap23 span{padding:0 10px;font-size:13px;font-weight:800}.pv-cap23 span+span{border-left:2px solid rgba(255,255,255,.14)}
+.pv-tb23{position:relative;width:100%;padding:10px 30px 10px 14px;font-size:15px;color:#1d1622;background:#fff8ea;border:3px solid #1d1622;border-radius:10px;box-shadow:inset 0 0 0 2px #fff8ea,inset 0 0 0 4px var(--area)}
+.pv-tb23 b{color:var(--red)}.pv-tb23 i{position:absolute;right:10px;bottom:6px;font-style:normal;font-size:12px;color:var(--red);animation:nx23 .8s ease-in-out infinite}
+/*@top*/
+@keyframes cap23{from{transform:scaleX(.3);opacity:0}}
+@keyframes type23{to{width:0}}
+@keyframes nx23{50%{transform:translateY(3px)}}
+@keyframes cur23{50%{transform:translateX(3px)}}
+@keyframes fill23{from{width:0}}
+@keyframes fold23{to{transform:translateY(var(--fy));opacity:0}}
