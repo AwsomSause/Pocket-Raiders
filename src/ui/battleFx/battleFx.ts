@@ -54,7 +54,8 @@ export interface FxOptions {
    * The target's own reaction to a hit (redesign pass 2: white, squash, thrown back, springs home). Called when the
    * hit lands with full animations; it plays by itself while the battle goes on. Left out: the plain white hit-stop.
    */
-  recoil?: (side: Side, cue: Extract<Cue, { kind: 'impact' }>) => boolean;
+  /** The scene's own recoil for a hit; it may set the hit's shake (pass 12 power tiers) and ask for a heavy, double-size number. */
+  recoil?: (side: Side, cue: Extract<Cue, { kind: 'impact' }>) => boolean | { shake: number; heavy: boolean };
   /** A stat change: the scene shows its own chevrons, stamp and pips (pass 8); true means the pack's arrows and word stay away. */
   stat?: (side: Side, stat: string, change: number) => boolean;
   /** An ability: the scene unrolls its own flag (pass 8). 'all' means it also acted the ability out (Intimidate) and
@@ -83,6 +84,8 @@ export class BattleFx {
   private readonly badgeCount: Record<Side, number> = { player: 0, enemy: 0 };
   /** A stat change the scene showed with its own stamp: the word badge right after it is skipped (pass 8). */
   private readonly statShown: Record<Side, boolean> = { player: false, enemy: false };
+  /** The next number on this side belongs to a heavy hit (pass 12): drawn twice the size. */
+  private readonly heavyNumber: Record<Side, boolean> = { player: false, enemy: false };
 
   constructor(
     private readonly scene: Phaser.Scene,
@@ -414,8 +417,14 @@ export class BattleFx {
     const visual = this.opts.sprite(cue.side);
     if (!visual) return;
     // Hit-stop: the target flashes white and everything holds for a moment.
-    if (cue.hitStopMs > 0 && !this.skipping && this.opts.recoil?.(cue.side, cue)) {
+    const own = cue.hitStopMs > 0 && !this.skipping ? this.opts.recoil?.(cue.side, cue) : false;
+    let shake = cue.shake;
+    if (own) {
       // The scene's recoil draws the white and the squash; the battle still holds for the hit-stop.
+      if (typeof own === 'object') {
+        shake = own.shake;
+        if (own.heavy) this.heavyNumber[cue.side] = true;
+      }
       await this.wait(cue.hitStopMs);
     } else if (cue.hitStopMs > 0 && !this.skipping) {
       if (visual instanceof Phaser.GameObjects.Sprite) visual.setTintFill(0xffffff);
@@ -431,7 +440,7 @@ export class BattleFx {
       this.opts.field.add(flash);
       this.scene.tweens.add({ targets: flash, alpha: 0, duration: 180, onComplete: () => flash.destroy() });
     }
-    if (cue.shake > 0 && !this.skipping) this.shake(cue.shake);
+    if (shake > 0 && !this.skipping) this.shake(shake);
     // A blink without hit-stop (reduced motion or off).
     if (cue.hitStopMs === 0) this.scene.tweens.add({ targets: visual, alpha: 0.3, yoyo: true, repeat: 1, duration: 70 });
   }
@@ -466,7 +475,9 @@ export class BattleFx {
       .text(x, y, `${sign}${amount}`, textStyle(tone === 'crit' ? 60 : 44, color, { fontFamily: `"Jersey 15", ${FONT_FAMILY}`, fontSize: `${tone === 'crit' ? 60 : 44}px`, stroke: '#131c36', strokeThickness: 5, shadow: { offsetX: 3, offsetY: 3, color: '#131c36', fill: true, stroke: true, blur: 0 } }))
       .setOrigin(0.5)
       .setDepth(900);
-    const size = look.scale;
+    // Pass 12: a heavy hit's number is twice the size.
+    const size = look.scale * (this.heavyNumber[side] && tone !== 'heal' ? 2 : 1);
+    this.heavyNumber[side] = false;
     if (motion) {
       text.setScale(0.4 * size).setAlpha(1);
       this.scene.tweens.chain({

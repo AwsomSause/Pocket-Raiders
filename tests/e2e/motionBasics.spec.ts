@@ -432,11 +432,11 @@ test('a hit: the target goes white, is thrown back further for a super effective
     await settled();
     return page.evaluate(() => { const w = window as any; const b = w.__pkr.game.scene.getScene('Battle'); b.events.off('update', w.__hitWatch); b.time.timeScale = 1; return w.__hit; });
   };
-  const impact = (eff: number, n = 1) => page.evaluate(([e, k]) => {
+  const impact = (eff: number, n = 1, amount = 1) => page.evaluate(([e, k, a]) => {
     const b = (window as any).__pkr.game.scene.getScene('Battle');
-    const cue = { kind: 'impact', side: 'enemy', amount: 1, crit: false, effectiveness: e, hitStopMs: 60, shake: 6, flash: null, flashAlpha: 0 };
+    const cue = { kind: 'impact', side: 'enemy', amount: a, crit: false, effectiveness: e, hitStopMs: 60, shake: 6, flash: null, flashAlpha: 0 };
     return b.fx.play(Array.from({ length: k }, () => cue));
-  }, [eff, n] as const);
+  }, [eff, n, amount] as const);
   await watch();
   await impact(1);
   const plain = await seen();
@@ -455,6 +455,10 @@ test('a hit: the target goes white, is thrown back further for a super effective
   await page.waitForTimeout(900);
   const after = await look(page, 'enemy');
   expect({ x: after.x, y: after.y, sx: after.sx, sy: after.sy, solid: after.solid }).toEqual({ x: before.homeX, y: before.y, sx: before.sx, sy: before.sy, solid: 0 });
+  // Power tiers (pass 12): a hit that takes nearly all its HP throws it a body-width and more.
+  await watch();
+  await impact(1, 1, 9999);
+  expect((await seen()).away).toBeGreaterThan(80);
   // Reduced: the battle's own blink, nothing thrown.
   await page.evaluate(() => { const { session } = (window as any).__pkr; session.saveSettings({ ...session.settings, battleAnimations: 'reduced' }); });
   await watch();

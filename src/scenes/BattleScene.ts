@@ -131,7 +131,7 @@ import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel, MotionClip } from '../core/presentation/motionClip';
-import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_LIGHT, hitClip, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_LIGHT, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
@@ -4245,7 +4245,7 @@ export class BattleScene extends Phaser.Scene {
    * Hit (pass 2): the target goes white, squashes, is thrown back away from the attacker (further for a super effective
    * or critical hit) and springs home with dust. Full animations only; false when it can't play (the plain hit-stop shows).
    */
-  private hitMoment(side: Side, cue: { amount: number; crit: boolean; effectiveness: number; color?: string }): boolean {
+  private hitMoment(side: Side, cue: { amount: number; crit: boolean; effectiveness: number; color?: string }): boolean | { shake: number; heavy: boolean } {
     const sprite = side === 'player' ? this.playerSprite : this.enemySprite;
     if (!(sprite instanceof Phaser.GameObjects.Sprite) || !sprite.active || !sprite.visible || this.clipLevel() !== 'full') return false;
     const at = this.spotXY(side);
@@ -4257,6 +4257,8 @@ export class BattleScene extends Phaser.Scene {
     // Big: super effective, critical or 40% of its HP (pass 16, 18). Sharp: critical, super effective or 60% (pass 17).
     const big = bigHit(cue.amount, max, cue.effectiveness, cue.crit);
     const sharp = cue.crit || cue.effectiveness > 1 || cue.amount >= max * 0.6;
+    // Power tiers (pass 12): the more of its HP the hit takes, the further it throws the Pokémon and the harder it shakes.
+    const power = hitPower(cue.amount, max, cue.crit || cue.effectiveness > 1);
     const h = sprite.displayHeight * sprite.originY;
     const color = cue.color ? Phaser.Display.Color.HexStringToColor(cue.color).color : 0xffffff;
     // The light: a glow on the body and a flat pool on the floor, in the move's colour, added over the arena.
@@ -4268,7 +4270,7 @@ export class BattleScene extends Phaser.Scene {
     if (floor) this.field.addAt(floor, this.fieldBase);
     if (light) this.field.add(light);
     const other = side === 'player' ? this.enemySprite : this.playerSprite;
-    const run = playClip(this, hitClip({ x: sprite.x, y: at.y, h }, side === 'enemy' ? 1 : -1, { big, sharp }, 'full'), {
+    const run = playClip(this, hitClip({ x: sprite.x, y: at.y, h }, side === 'enemy' ? 1 : -1, { big, sharp, p: power.p }, 'full'), {
       ...this.clipHost({ mon: { kind: 'mon', get: () => sprite }, light: { kind: 'free', get: () => light }, floor: { kind: 'free', get: () => floor } }, {
         cue: (name) => {
           // A big hit lights the other Pokémon too: a wash of the colour over it that fades in half a second.
@@ -4290,7 +4292,8 @@ export class BattleScene extends Phaser.Scene {
       run.rest('mon');
       if (sprite === (side === 'player' ? this.playerSprite : this.enemySprite)) this.standUp(sprite, mon);
     });
-    return true;
+    const st = services().session.settings;
+    return { shake: st.battleScreenEffects ? Math.round(power.shake * Math.min(1, Math.max(0, st.shakeIntensity))) : 0, heavy: power.tier === 'heavy' };
   }
 
   // ---------- conditions (redesign pass 8): each status arrives, stays on the Pokémon and ticks each turn ----------

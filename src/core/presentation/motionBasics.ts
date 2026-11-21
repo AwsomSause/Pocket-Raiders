@@ -472,7 +472,7 @@ export const HIT_LIGHT = { body: 190, bodyBig: 300, floor: 220, floorBig: 330 };
  * 60% of its HP) flashes a white star where it lands. `target` is its feet, `h` its height; `away` is +1 when it is
  * thrown to the right (the foe) and -1 to the left (yours). Full only: Reduced and Off keep the battle's own blink.
  */
-export function hitClip(target: Point & { h: number }, away: 1 | -1, o: { big: boolean; sharp: boolean }, level: ClipLevel): MotionClip {
+export function hitClip(target: Point & { h: number }, away: 1 | -1, o: { big: boolean; sharp: boolean; /** Pass 12 power (`hitPower`): above 0 the hit throws it further, with two dust clouds. */ p?: number }, level: ClipLevel): MotionClip {
   const b = new ClipBuilder('hit', level);
   const m = b.part('mon', { dx: 0, dy: 0, sx: 1, sy: 1, white: 0 });
   const mid = { x: target.x, y: target.y - target.h / 2 };
@@ -482,14 +482,38 @@ export function hitClip(target: Point & { h: number }, away: 1 | -1, o: { big: b
   const k = (o.big ? HIT_KNOCK_BIG : HIT_KNOCK) * away;
   m.at(0).set({ white: 1 }).wait(80).to(100, { white: 0 });
   m.at(0).set({ sx: 0.8, sy: 1.14 }).wait(70).to(340, { sx: 1, sy: 1 }, 'el');
-  m.at(70).to(90, { dx: k }, 'out').to(300, { dx: 0 }, 'back');
-  b.fx({ kind: 'dust', at: 160, x: target.x + k, y: target.y, n: 4 });
+  const p = o.p ?? 0;
+  if (p > 0) {
+    // Pass 12: a normal or heavy hit throws it a body-width or more, with dust halfway and where it lands.
+    const far = (HIT_THROW.base + HIT_THROW.per * p) * away;
+    m.at(70).to(140, { dx: far }, 'out3').wait(100).to(400, { dx: 0 }, 'back');
+    b.fx({ kind: 'dust', at: 120, x: target.x + far * 0.5, y: target.y, n: 5 });
+    b.fx({ kind: 'dust', at: 200, x: target.x + far, y: target.y, n: 7 });
+  } else {
+    m.at(70).to(90, { dx: k }, 'out').to(300, { dx: 0 }, 'back');
+    b.fx({ kind: 'dust', at: 160, x: target.x + k, y: target.y, n: 4 });
+  }
   light.at(0).set({ alpha: 1, sx: 0.3, sy: 0.3 }).to(100, { sx: 1, sy: 1 }, 'out3').to(450, { alpha: 0 }, 'in');
   floor.at(0).set({ alpha: 0.9 }).to(600, { alpha: 0 }, 'in');
   if (o.big) b.fx({ kind: 'cue', at: 0, name: 'glow' });
   if (o.sharp) b.fx({ kind: 'star', at: 0, x: mid.x, y: mid.y, size: 340, points: 14, d: 120 });
   b.beat(0, 'Hit-stop: white, squash, the light').beat(70, 'Thrown back').beat(160, 'Springs home');
-  return b.end(600);
+  return b.end(p > 0 ? 710 : 600);
+}
+
+/** Pass 12 power tiers: how far a hit throws (px: base + per x power) and how hard it shakes the field. */
+export const HIT_THROW = { base: 34, per: 60, shake: 5, shakePer: 8, heavyAt: 0.8, strong: 1.3 } as const;
+
+/**
+ * How hard a hit lands (pass 12 "Power Tiers"), from the share of its HP it took: under 30% it is a tap (weak: the
+ * plain recoil, no shake); from 30% to 90% it throws further and shakes harder (normal); near the top it is heavy (the
+ * number is twice the size). A critical or super effective hit counts 1.3 times (the mockup's strong hits).
+ */
+export function hitPower(amount: number, max: number, strong: boolean): { tier: 'weak' | 'normal' | 'heavy'; p: number; shake: number } {
+  const pct = (amount / Math.max(1, max)) * 100;
+  const p = Math.min(1, Math.max(0, (pct - 30) / 60)) * (strong ? HIT_THROW.strong : 1);
+  const tier = p <= 0 ? 'weak' : p >= HIT_THROW.heavyAt ? 'heavy' : 'normal';
+  return { tier, p, shake: p > 0 ? HIT_THROW.shake + HIT_THROW.shakePer * p : 0 };
 }
 
 /** The heal's ten plus-signs (pass 3): where each starts and ends, against the Pokémon's feet, and its size in px. */

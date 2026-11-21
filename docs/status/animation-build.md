@@ -170,3 +170,8 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   lights in its colour and swells as its effect plays, then settles dimmer. After the last one the chips lift away, a
   yellow line sweeps the screen and a TURN plate pops up and flips to the new turn number, then leaves. Reduced: the
   chips light without moving; no sweep or plate. Doubles: nothing new.
+- **Power tiers (pass 12).** How hard a hit lands follows the share of HP it took. Under 30% it is a tap: the plain
+  recoil, no screen shake. From 30% up it throws the Pokémon further (34 px plus up to 60 px more), with dust halfway
+  and where it lands, and shakes the screen harder (5 to 13 px, scaled by the Screen shake setting, none when Battle
+  screen effects is off). A critical or super effective hit counts 1.3 times. Near the top (80% power) it is heavy:
+  the damage number is drawn twice the size. Full motion only.

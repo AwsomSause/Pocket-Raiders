@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ClipBuilder, clipEnd, EASES, fxAllowed, sampleClip, type ClipLevel, type MotionClip } from '../../src/core/presentation/motionClip';
-import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_KNOCK, HIT_KNOCK_BIG, hitClip, levelUpClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_KNOCK, HIT_KNOCK_BIG, hitClip, hitPower, HIT_THROW, levelUpClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
 
 const ME: MonSpot = { x: 312, y: 428, h: 180, side: 'player' };
 const FOE: MonSpot = { x: 648, y: 240, h: 150, side: 'enemy' };
@@ -411,6 +411,33 @@ describe('motion clips: the target takes a hit (pass 2, 12, 17, 18)', () => {
     expect(big.fx).toContainEqual({ kind: 'cue', at: 0, name: 'glow' });
     expect(big.fx).toContainEqual({ kind: 'star', at: 0, x: at.x, y: at.y - 60, size: 340, points: 14, d: 120 });
     expect(hitClip(at, 1, plain, 'full').fx.some((f) => f.kind === 'cue' || f.kind === 'star')).toBe(false);
+  });
+  it('power tiers (pass 12): a harder hit throws it further, with dust halfway and where it lands', () => {
+    const c = hitClip(at, 1, { ...plain, p: 0.5 }, 'full');
+    const far = HIT_THROW.base + HIT_THROW.per * 0.5;
+    expect(sampleClip(c, 210).mon!.dx).toBeCloseTo(far);
+    expect(sampleClip(c, 310).mon!.dx).toBeCloseTo(far);
+    expect(c.fx).toEqual([
+      { kind: 'dust', at: 120, x: at.x + far / 2, y: at.y, n: 5 },
+      { kind: 'dust', at: 200, x: at.x + far, y: at.y, n: 7 },
+    ]);
+    expect(c.length).toBe(710);
+    expect(clipEnd(c).mon).toMatchObject({ dx: 0 });
+    // Your Pokémon is thrown left.
+    expect(sampleClip(hitClip(at, -1, { ...plain, p: 1 }, 'full'), 210).mon!.dx).toBeCloseTo(-(HIT_THROW.base + HIT_THROW.per));
+  });
+  it('hitPower: under 30% a tap, to 90% normal, near the top heavy; critical or super effective counts 1.3 times', () => {
+    expect(hitPower(20, 100, false)).toEqual({ tier: 'weak', p: 0, shake: 0 });
+    expect(hitPower(30, 100, false).tier).toBe('weak');
+    const mid = hitPower(60, 100, false);
+    expect(mid.tier).toBe('normal');
+    expect(mid.p).toBeCloseTo(0.5);
+    expect(mid.shake).toBeCloseTo(HIT_THROW.shake + HIT_THROW.shakePer * 0.5);
+    expect(hitPower(90, 100, false)).toMatchObject({ tier: 'heavy', p: 1 });
+    expect(hitPower(70, 100, false).tier).toBe('normal');
+    expect(hitPower(70, 100, true).tier).toBe('heavy');
+    expect(hitPower(500, 100, false).p).toBe(1);
+    expect(hitPower(5, 0, false).tier).toBe('heavy');
   });
   it('Reduced and Off leave it to the battle blink', () => {
     for (const level of ['reduced', 'off'] as const) {
