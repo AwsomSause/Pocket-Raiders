@@ -194,11 +194,23 @@ describe('the Pocket Galar Match Info', () => {
   });
 });
 
+describe('the Pocket Galar crowd page', () => {
+  it('shows the bar from the foe to you with the marker where the sides meet, lit when the crowd helps', () => {
+    const base = { foeTag: 'x', foeTitle: 'x', foe: [], crowdTitle: 'x', crowd: [] };
+    const h = pkBattle({ ...model(), pkGaInfo: { ...base, crowdPage: { foe: 'Raihan', me: 'Red', favor: 62 } } });
+    expect(h.startsWith('<!--pk:ga-crowd:51:hud-->')).toBe(true);
+    expect(h).toContain('<u style="width:62%"></u><s style="left:38%">62</s>');
+    expect(h).toContain('<div class="on"><b>What you get</b>');
+    expect(pkBattle({ ...model(), pkGaInfo: { ...base, crowdPage: { foe: 'Raihan', me: 'Red', favor: 40 } } })).toContain('<div class=""><b>What you get</b>');
+    expect(pkBattle({ ...model(), pkArea: { key: 'ga', word: 'w', bar: 50, chips: [], flow: ['a'], step: 0 } })).toContain('class="fav37" data-act="gaCrowd"');
+  });
+});
+
 describe('the Pocket Galar stadium strip', () => {
   it('shows the round, the crowd favour bar and the foes left', () => {
     const h = pkBattle({ ...model(), pkArea: { key: 'ga', word: 'Round of 32', bar: 62, chips: [['62', 'with you'], ['3', 'foes left']], flow: ['Bracket', 'Match', 'Next round'], step: 1 } });
     expect(h).toContain('gx-bt-area ar28 a-ga ms39');
-    expect(h).toContain('<b>Round of 32</b><i class="fav37"><s style="width:62%"></s></i>');
+    expect(h).toContain('<b>Round of 32</b><i class="fav37" data-act="gaCrowd" data-arg=""><s style="width:62%"></s></i>');
     expect(h).toContain('<b>3</b>foes left');
     expect(pkBattle({ ...model(), pkArea: { key: 'tm', word: 'Totem', chips: [], flow: ['a', 'b'], step: 0 } })).not.toContain('fav37');
   });

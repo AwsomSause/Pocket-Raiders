@@ -749,3 +749,6 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .gym34 p q, .pkx .pks .cup34 q { quotes: none; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font: 400 26px/1 var(--fd); color: #fff; background: var(--ac); align-self: center; }
 .pkx .pks .gym34 p.gx-lit { outline: 3px dashed var(--ac); outline-offset: 3px; }
 .pkx .pks .gym34 p.now.gx-lit { outline: 4px solid var(--yel); }
+/* Galar's crowd page (mock-up ga-crowd): the bar and cards sit above the dimmed battle. */
+.pkx .pks .cr30.gx-bt-page .cr-bar, .pkx .pks .cr30.gx-bt-page .cr-g, .pkx .pks .cr30.gx-bt-page .gp-h { z-index: 4; }
+.pkx .pks .gx-bt-area .fav37 { cursor: pointer; pointer-events: auto; }

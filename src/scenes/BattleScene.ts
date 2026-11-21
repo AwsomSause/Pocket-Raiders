@@ -753,6 +753,7 @@ export class BattleScene extends Phaser.Scene {
     this.input.keyboard?.on('keydown-I', () => this.toggleInfo());
     // Pocket look: O opens the battle Status page (or closes it).
     this.input.keyboard?.on('keydown-O', () => { if (pocketOn() && this.rx) this.toggleStatus(); });
+    this.input.keyboard?.on('keydown-C', () => { if (pocketOn() && this.rx && this.infoPanel && this.rxPkGaInfo && !this.rxPkGaInfo.crowdPage) this.gaCrowd(); });
     this.input.keyboard?.on('keydown-T', () => this.toggleAuto());
     this.input.keyboard?.on('keydown-G', () => this.phOpenGimmicks());
     onInputAction(this, (a) => this.handleInput(a));
@@ -1925,6 +1926,8 @@ export class BattleScene extends Phaser.Scene {
         pkInfoOpen: () => { if (this.infoPanel) this.closePanel(); this.toggleInfo(true); },
         // Pocket look: the Galar strip's Info opens Match Info (the foe's side and the crowd).
         gaInfo: () => this.toggleGaInfo(),
+        // Pocket look: the favour bar (or C on Match info) opens the crowd page; Back closes it.
+        gaCrowd: () => this.gaCrowd(),
         // Pocket look: the weather card opens the Weather guide (the one in play marked Now); a card click lights it.
         pkWeather: () => {
           const w = this.run.battle?.weather;
@@ -5050,6 +5053,17 @@ export class BattleScene extends Phaser.Scene {
       event: on && goal ? { name: on.event.name, goal: goal.objective.text, left: `${goals.filter((g) => g.done).length} of ${goals.length} · ${days} ${days === 1 ? 'day' : 'days'} left` } : null,
     };
     this.openPanel([{ head: 'Status', text: [`Turn ${s.turn}`, ...s.order.map((o, k) => `${k + 1}. ${o.name} (Speed ${o.speed})`), `${s.weather.b}: ${s.weather.span}`].join('\n') }]);
+  }
+
+  /** Pocket look: the crowd page (mock-up `ga-crowd`), opened from the favour bar or Match info. */
+  private gaCrowd(): void {
+    if (!this.infoPanel) this.toggleGaInfo();
+    const info = this.rxPkGaInfo, battle = this.run.battle;
+    if (!this.infoPanel || !info || !battle) return;
+    const { content } = services().session;
+    const boss = this.boss();
+    this.rxPkGaInfo = { ...info, crowdPage: { foe: boss?.name ?? battle.trainer?.name ?? 'Foe', me: content.archetypes.get(this.run.archetypeId)?.name ?? 'You', favor: crowdFavor(content, this.run) ?? 50 } };
+    this.rx?.refresh();
   }
 
   /** Pocket look: Galar's Match Info (mock-up `ga-info`): the foe's Pokémon left, a boss power in play, who is out; the crowd's rules with the one in play marked Now. */

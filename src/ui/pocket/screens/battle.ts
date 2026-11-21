@@ -13,7 +13,7 @@ import { fit, fitBody, fitPic, pkArtOf, pkConfirm } from '../templates';
 import { tyChip } from './party';
 import { pkWeather } from './sky';
 import { pkCatchParts, pkLevel } from './after';
-import { pkGaInfo } from './galar';
+import { pkGaCrowd, pkGaInfo } from './galar';
 
 const pct = (r: number): number => Math.max(0, Math.min(100, Math.round(r * 100)));
 const hpBar = (r: number): string => `<span class="hp ${hpc(pct(r))}"><i style="width:${pct(r)}%"></i></span>`;
@@ -133,7 +133,7 @@ const keys2 = (ks: readonly (readonly [string, string, string?])[]): string => `
 export function pkBattle(d: BattleModel): string {
   // Pocket pages over the battle: Battle Info, a move's card, the Battle Log (the arena stays drawn underneath).
   if (d.pkInfo && !d.evolve) return page('b-info', 26, `<div class="scr battle b6 ov16 inf gx-bt gx-bt-page" data-key="b-info">${infoPage(d.pkInfo)}</div>`, true);
-  if (d.pkGaInfo && !d.evolve) return pkGaInfo(d.pkGaInfo);
+  if (d.pkGaInfo && !d.evolve) return d.pkGaInfo.crowdPage ? pkGaCrowd(d.pkGaInfo.crowdPage) : pkGaInfo(d.pkGaInfo);
   if (d.pkWeather && !d.evolve) return pkWeather({ ...d.pkWeather, crumb: ['Battle', 'Weather'], road: null }, { pick: 'pkWx', back: 'info' });
   if (d.pkStatus && !d.evolve) return page('b-status', 26, `<div class="scr battle b6 ov16 st23p gx-bt gx-bt-page" data-key="b-status">${statusPage(d.pkStatus)}</div>`, true);
   if (d.pkMove && !d.evolve) return page('moveinfo', 26, `<div class="scr battle b2 minfo gx-bt gx-bt-page" data-key="moveinfo">${movePage(d.pkMove)}</div>`, true);
@@ -194,7 +194,7 @@ export function pkBattle(d: BattleModel): string {
     + `<p><em>Heals left</em><i class="hl">${Array.from({ length: Math.min(8, bp.heals[1]) }, (_, k) => `<u class="${k < bp.heals[0] ? 'on' : ''}"></u>`).join('')}</i><span>${bp.heals[0]} of ${bp.heals[1]}</span></p>`
     + (bp.badge ? `<p><em>Badge</em><i class="bp">${fitPic(badgeArt(bp.badge), 32, 32, '', 1)}</i><span>${esc(cap(bp.badge))}</span></p>` : '') + '</div>' : '';
   const ar = d.pkArea;
-  const area = ar ? `<div class="gx-bt-area ar28 a-${ar.key} ms39" data-key="bt-area"><div class="st38 k-${ar.key}"><i class="emb28 ${ar.key} hud" data-nocheck></i><b>${esc(ar.word)}</b>${ar.bar !== undefined ? `<i class="fav37"><s style="width:${Math.max(0, Math.min(100, ar.bar))}%"></s></i>` : ''}${ar.chips.map(([b, t]) => `<span class="n40"><b>${esc(b)}</b>${esc(t)}</span>`).join('')}${ar.key === 'ga' ? `<u${act('gaInfo')}>Match info</u>` : `<u${act('pkInfoOpen')}><kbd>I</kbd> Info</u>`}</div>`
+  const area = ar ? `<div class="gx-bt-area ar28 a-${ar.key} ms39" data-key="bt-area"><div class="st38 k-${ar.key}"><i class="emb28 ${ar.key} hud" data-nocheck></i><b>${esc(ar.word)}</b>${ar.bar !== undefined ? `<i class="fav37"${act('gaCrowd')}><s style="width:${Math.max(0, Math.min(100, ar.bar))}%"></s></i>` : ''}${ar.chips.map(([b, t]) => `<span class="n40"><b>${esc(b)}</b>${esc(t)}</span>`).join('')}${ar.key === 'ga' ? `<u${act('gaInfo')}>Match info</u>` : `<u${act('pkInfoOpen')}><kbd>I</kbd> Info</u>`}</div>`
     + `<div class="fw50" data-m="flow">${ar.flow.map((t, k) => `<i class="${k < ar.step ? 'past' : k === ar.step ? 'on' : ''}">${esc(t)}</i>`).join('')}</div></div>` : '';
   const notice = d.notice ? pkConfirm({ title: d.notice.title, body: d.notice.body, options: [d.notice.button], index: 0 }) : '';
   const quiet = !!(d.exp?.length || d.level || f.budget || f.variant);

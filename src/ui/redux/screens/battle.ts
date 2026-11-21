@@ -89,7 +89,7 @@ export interface BattleModel {
   /** Pocket look: the Weather guide from the battle's weather card (mock-up `weather`). */
   pkWeather?: { now: string; turns: number | null; index: number } | null;
   /** Pocket look: Galar's Match Info (mock-up `ga-info`): the foe's side and the crowd, as two sides of rows. */
-  pkGaInfo?: { foeTag: string; foeTitle: string; foe: readonly PkSideRow[]; crowdTitle: string; crowd: readonly PkSideRow[] } | null;
+  pkGaInfo?: { foeTag: string; foeTitle: string; foe: readonly PkSideRow[]; crowdTitle: string; crowd: readonly PkSideRow[]; /** The crowd page instead (mock-up `ga-crowd`). */ crowdPage?: { foe: string; me: string; favor: number } } | null;
   /** Pocket look: the battle Status page (mock-up `b-status`), with picture files and the event's goal. */
   pkStatus?: (Omit<BattleStatus, 'bench' | 'foes'> & { bench: (StatusMon & { file: string | null })[]; foes: (StatusMon & { file: string | null })[]; money: string | null; event: { name: string; goal: string; left: string } | null }) | null;
   /** Pocket look: the catch card after a ball holds (mock-up `capture`). */

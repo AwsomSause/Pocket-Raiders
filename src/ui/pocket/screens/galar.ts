@@ -101,7 +101,7 @@ export function pkGaLineup(d: PkGaLineupModel): string {
 export function pkGaInfo(d: { foeTag: string; foeTitle: string; foe: readonly PkSideRow[]; crowdTitle: string; crowd: readonly PkSideRow[] }): string {
   return page('ga-info', 51, `<div class="scr sz20 ar28 a-ga pg28 gx-bt-page" data-key="ga-info"><div class="sz-h" data-m="hdr"><i class="emb28 ga hd" data-nocheck></i><b>Match info</b><span>Everything the battle screen no longer shows, one key away.</span></div>`
     + `<div class="vs32">${pkSide32('a', d.foeTag, d.foeTitle, d.foe)}<i class="vsb32" data-nocheck></i>${pkSide32('b', 'The crowd', d.crowdTitle, d.crowd)}</div>`
-    + `<div class="btn on nx go32" data-key="ga-info-back"${act('info')}><b>Back to the battle</b></div>${keys([['Enter', 'back', 'info'], ['Esc', 'back', 'info']])}</div>`);
+    + `<div class="btn on nx go32" data-key="ga-info-back"${act('info')}><b>Back to the battle</b></div>${keys([['Enter', 'back', 'info'], ['C', 'the crowd', 'gaCrowd'], ['Esc', 'back', 'info']])}</div>`);
 }
 
 export interface PkGaRoadModel {
@@ -127,4 +127,13 @@ export function pkGaRoad(d: PkGaRoadModel): string {
   return page('ga-road', 51, `<div class="scr sz20 ar28 a-ga pg28" data-key="ga-road"><div class="sz-h" data-m="hdr"><i class="emb28 ga hd" data-nocheck></i><b>Gym Challenge</b><span>${d.gyms.length} stadium matches, then the Champion's Tournament. Every match is shown live.</span></div>`
     + `<div class="gym34" style="grid-template-columns:repeat(${Math.max(1, d.gyms.length)},1fr)" data-key="ga-gyms">${cards}</div>`
     + `<div class="cup34" data-key="ga-cup"${d.bracket ? act('roadBracket') : ''}><span>${d.cup.art ? fitPic(d.cup.art, 70, 84, '', 3) : '<q>?</q>'}</span><b>Champion's Tournament</b><em>${esc(d.cup.line)}</em></div>${keys(ks)}</div>`);
+}
+
+/** The crowd over a Galar stadium battle (mock-up `ga-crowd`): the bar from the foe to you, what moves it, what it gives. */
+export function pkGaCrowd(d: { foe: string; me: string; favor: number }): string {
+  const f = Math.max(5, Math.min(95, d.favor)), strong = f > 55;
+  return page('ga-crowd', 51, `<div class="scr battle b6 ov16 ar28 a-ga cr30 gx-bt-page" data-key="ga-crowd"><i class="gx-bt-dim" data-nocheck${act('info')}></i><div class="gp-h gx-gp"><b>The crowd</b><span>In a Galar stadium the crowd picks a side. The bar runs from 5 to 95.</span></div>`
+    + `<div class="cr-bar" data-key="cr-bar"><span>${esc(d.foe)}</span><i><u style="width:${f}%"></u><s style="left:${100 - f}%">${f}</s></i><span>${esc(d.me)}</span></div>`
+    + `<div class="cr-g" data-key="cr-g"><div><b>Goes up</b><p>Your team keeping its HP</p><p>Knocking out their Pokémon</p></div><div><b>Goes down</b><p>Your team taking hits</p><p>Your Pokémon fainting</p></div><div class="${strong ? 'on' : ''}"><b>What you get</b><p>Above 55, Hyper and Overdrive moments come more often, more the higher it goes.</p><p>${strong ? 'The crowd is with you now.' : 'At 55 or less the crowd adds nothing.'}</p></div></div>`
+    + `${keys([['Enter', 'back to the match', 'info'], ['Esc', 'back', 'info']])}</div>`, true);
 }
