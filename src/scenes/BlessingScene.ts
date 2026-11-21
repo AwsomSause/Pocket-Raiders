@@ -12,7 +12,8 @@ import { onInputAction } from '../ui/input';
 import { loadAssets } from '../ui/lazyAssets';
 import { useLookFont } from '../ui/redux/canvasFont';
 import { monFile } from '../ui/redux/game';
-import { mountRedux, phantomOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, phantomOn, pocketOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { pkBlessing } from '../ui/pocket/screens/run';
 import { BLESSING_ROWS, phBlessing } from '../ui/phantom/screens/ending';
 import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 
@@ -43,7 +44,7 @@ export class BlessingScene extends Phaser.Scene {
     const fast = motion !== 'full';
     this.cameras.main.setBackgroundColor(0x000000);
     // Phantom UI: the opening is the mock-ups' `blessing` page (the same beats, the same vow, the same way on).
-    if (reduxOn() && phantomOn()) return this.createPhantom(state, def);
+    if (reduxOn() && (phantomOn() || pocketOn())) return this.createPhantom(state, def);
 
     // The item floats on the left, on plain black.
     const px = 250;
@@ -142,7 +143,7 @@ export class BlessingScene extends Phaser.Scene {
   }
 
   /**
-   * Phantom UI: the blessing as a Phantom page. The beats arrive on the same clock as the canvas opening (a first
+   * Phantom UI (and the Pocket look): the blessing as a page of its own. The beats arrive on the same clock as the canvas opening (a first
    * Confirm shows all of it), a Vow is sworn before going on, and C reads the Reliquary: every blessing found so far.
    */
   private createPhantom(state: BlessingState, def: BlessingDef): void {
@@ -154,11 +155,13 @@ export class BlessingScene extends Phaser.Scene {
     const cry = (): void => { const sp = def.speciesId && session.content.species.get(def.speciesId); if (sp) playCry(this, sp, 70); };
     const all = reliquary(session.profile.blessings);
     const pages = Math.max(1, Math.ceil(all.length / BLESSING_ROWS));
-    let step = motion === 'off' ? 5 : 0, vowAt = -1, book = -1;
+    // The Pocket look deals the card in one move (its own CSS), so it starts with every beat shown.
+    const still = motion === 'off' || pocketOn();
+    let step = still ? 5 : 0, vowAt = -1, book = -1;
     let view: ReduxView | null = null;
     const draw = (): void => view?.refresh();
     const steps: [number, number][] = [[600, 1], [2600, 2], [4200, 3], [8200, 4], [11500, 5]];
-    if (motion === 'off') cry();
+    if (still) cry();
     else {
       for (const [delay, to] of steps) this.timers.push(this.time.delayedCall(fast ? delay / 3 : delay, () => { step = Math.max(step, to); draw(); }));
       this.timers.push(this.time.delayedCall(fast ? 1700 / 3 : 1700, cry));
@@ -183,7 +186,12 @@ export class BlessingScene extends Phaser.Scene {
     };
     const toggleBook = (): void => { book = book >= 0 ? -1 : Math.max(0, Math.floor(all.findIndex((b) => b.id === state.id) / BLESSING_ROWS)); draw(); };
     view = mountRedux(this, {
-      render: (c) => (c.ph ? phBlessing(c.ph, {
+      render: (c) => (c.pk ? pkBlessing({
+        tier: state.tier[0]!.toUpperCase() + state.tier.slice(1), name: def.name, legendary: def.legendary,
+        mon: def.speciesId ? monFile(this, def.speciesId, 'front') : null, headline: def.headline, summary: def.summary, passage: def.passage,
+        vows: vowAt >= 0 ? VOWS.map((v) => ({ label: v.label, text: v.text })) : null, vowAt,
+        book: book >= 0 ? { rows: all.slice(book * BLESSING_ROWS, (book + 1) * BLESSING_ROWS).map((b) => ({ name: b.name, tier: b.tier, text: b.text, found: b.found, mine: b.id === state.id })), page: book, pages, found: all.filter((b) => b.found).length, of: all.length } : null,
+      }) : c.ph ? phBlessing(c.ph, {
         tier: state.tier[0]!.toUpperCase() + state.tier.slice(1),
         name: def.name,
         legendary: def.legendary,

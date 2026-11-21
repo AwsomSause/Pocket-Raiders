@@ -26,7 +26,7 @@ import { pkSettingsHome } from '../../src/ui/pocket/screens/settings';
 import { doorSub, pkHub, type PkHubModel } from '../../src/ui/pocket/screens/hub';
 import { districtProp, pkPlaza, pkTrade, pkTownDoor, pkTownHud, pkTownMap, placeProp, plazaProp } from '../../src/ui/pocket/screens/town';
 import { POCKET_TOWN } from '../../src/core/hubTown/schema';
-import { leaderLine, pkBrief, pkDesk, pkPrepBring, pkPrepMods, pkPrepSetup, pkSeed, pkStarter, PREP_MODS_PAGE, PREP_SETUP_ROWS, regionOfGen, runSteps, segWindow } from '../../src/ui/pocket/screens/run';
+import { leaderLine, pkBlessing, pkBrief, pkDesk, pkPrepBring, pkPrepMods, pkPrepSetup, pkSeed, pkStarter, PREP_MODS_PAGE, PREP_SETUP_ROWS, regionOfGen, runSteps, segWindow } from '../../src/ui/pocket/screens/run';
 import type { BriefModel } from '../../src/ui/redux/screens/run';
 import type { TradeModel } from '../../src/ui/redux/screens/stops';
 import { PK_TOOLS_PAGE, pkTools, toolShort } from '../../src/ui/pocket/screens/tools';
@@ -1000,5 +1000,27 @@ describe('Pocket look: the Trainers page', () => {
     expect(html).toContain('how to unlock');
     expect(pkTrainers({ cards, index: 4, lit, sort: '' })).toContain('data-key="tr-0"');
     expect(trainerColour(-1)).toBe(trainerColour(7));
+  });
+});
+
+describe('Pocket look: the Blessing', () => {
+  const d = { tier: 'Greater', name: 'The Guardian of the Sea', legendary: 'Lugia', mon: null, headline: 'A long note under water', summary: 'Call a Calm once per stage.', passage: 'One beneath the sea.', vows: null, vowAt: -1, book: null };
+  it('the run’s blessing as a card in its tier colour with its passage, Enter accepts', () => {
+    const html = pkBlessing(d);
+    expect(pkPageOf(html)?.id).toBe('blessing');
+    expect(html).toContain('--c:#4f7fe0');
+    expect(html).toContain('One beneath the sea.');
+    expect(html).toContain('data-act="next"');
+    expect(html).toMatch(/<i class="on"><b>3<\/b>Blessing/);
+  });
+  it('a Vow is two cards to swear by; the Reliquary hides what is not found', () => {
+    const vow = pkBlessing({ ...d, vows: [{ label: 'Leave no Pokémon behind', text: 'x' }, { label: 'Strike no one first', text: 'y' }], vowAt: 1 });
+    expect(vow.split('gx-bs-vow').length - 1).toBe(2);
+    expect(vow).toMatch(/class="blc on gx-bs-vow"[^>]*data-key="bl-vow-1"/);
+    expect(vow).toContain('swear');
+    const book = pkBlessing({ ...d, book: { rows: [{ name: 'Fair Wish', tier: 'lesser', text: 'Cheaper shops.', found: true, mine: false }, { name: 'Secret', tier: 'divine', text: 'Hidden.', found: false, mine: false }], page: 0, pages: 2, found: 1, of: 2 } });
+    expect(book).toContain('Fair Wish');
+    expect(book).not.toContain('Secret');
+    expect(book).toContain('1 of 2 found');
   });
 });

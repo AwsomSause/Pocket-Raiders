@@ -852,6 +852,32 @@ test('Pocket look: Trainers is a row of cards and the Preparation Desk is four p
   expect(errors).toEqual([]);
 });
 
+test('Pocket look: the Blessing is the mock-up card; C opens the Reliquary and Enter goes on to the Briefing', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=pk-bless');
+  await toPocketMap(page);
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr, run = pkr.session.run;
+    run.expansion = run.expansion ?? {};
+    run.expansion.blessing = { id: 'tapu-lele', tier: 'lesser', seen: false, influence: 0 };
+    pkr.game.scene.getScene('Map').scene.start('Blessing');
+  });
+  await waitForScene(page, 'Blessing');
+  await onPkPage(page, 'Blessing', 'blessing');
+  const bl = pkView(page, 'Blessing', 'blessing');
+  await expect(bl.locator('.blc.on b')).toHaveText('The Guardian of Life');
+  await fits(page, 'Blessing', 'blessing');
+  await step(page, 'c');
+  await expect(bl.locator('.gx-bs-book')).toBeVisible();
+  await step(page, 'Escape');
+  await expect(bl.locator('.gx-bs-book')).toHaveCount(0);
+  await step(page, 'Enter');
+  await waitForScene(page, 'Briefing');
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.expansion.blessing.seen)).toBe(true);
+  expect(errors).toEqual([]);
+});
+
 test('Pocket look: starting a run, Starter Pick is three cards and the Briefing shows the first region and Gym', async ({ page }) => {
   test.setTimeout(180_000);
   const errors = watch(page);

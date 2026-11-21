@@ -187,3 +187,34 @@ export function pkSeed(d: PkSeedModel): string {
   const go = `<div class="go"><div class="btn on"${act('btn', 'apply')}><b>Use this seed</b></div><div class="btn sm"${act('btn', 'copy')}><b>Copy</b></div></div>`;
   return page('pd-seed', 51, `<div class="scr nrun pd38" data-key="pd-seed">${head}<div class="sdp38 pn" data-key="sd-card"><em>This run's seed</em><div class="sdc38 rx-field" data-key="sd-boxes">${boxes}</div>${seg}<p style="font-size:${fitBody(d.text, 460, 64, [14, 13, 12], 1.45)}px">${esc(d.text)}</p>${go}</div>${keys([['A to Z, 0 to 9', 'type'], ['Enter', 'use it', 'btn', 'apply'], ['Esc', 'back', 'back']])}</div>`);
 }
+
+const TIER_COLOUR: Record<string, string> = { lesser: '#e8791a', greater: '#4f7fe0', divine: '#f2a900' };
+
+export interface PkBlessingModel {
+  tier: string;
+  name: string;
+  legendary: string;
+  mon: string | null;
+  headline: string;
+  summary: string;
+  passage: string;
+  /** The Vow to swear before going on (null: none asked yet). */
+  vows: readonly { label: string; text: string }[] | null;
+  vowAt: number;
+  /** The Reliquary (C): every blessing, the found ones named. */
+  book: { rows: readonly { name: string; tier: string; text: string; found: boolean; mine: boolean }[]; page: number; pages: number; found: number; of: number } | null;
+}
+
+/** The Blessing (mock-up `blessing`): the run's blessing as a card in its tier's colour, its passage under it; a Vow
+ *  to swear as two cards; C opens the Reliquary of every blessing found. */
+export function pkBlessing(d: PkBlessingModel): string {
+  const head = hdr('Blessing', { area: 'map', crumb: ['Hub', 'New Run', 'Blessing'], pills: [d.book ? `${d.book.found} of ${d.book.of} found` : d.tier] });
+  const card = `<div class="blc on" style="--c:${TIER_COLOUR[d.tier.toLowerCase()] ?? '#4f7fe0'}" data-key="bl-card"${act('next')}><em>${esc(d.tier)}</em><i>${d.mon ? fitPic(monArt(d.mon), 200, 118, '', 3) : ''}</i><b style="font-size:${fit(d.name, 230, 24, 15, 0.6)}px">${esc(d.name)}</b><u>${esc(d.headline)}</u><p style="font-size:${fitBody(d.summary, 230, 110, [14, 13, 12, 11], 1.4)}px">${esc(d.summary)}</p><small class="gx-bs-who">${esc(d.legendary)}</small></div>`;
+  const vows = d.vows ? d.vows.map((v, i) => `<div class="blc${i === d.vowAt ? ' on' : ''} gx-bs-vow" style="--c:#7a4fc8" data-key="bl-vow-${i}"${act('vow', i, 'over')}><em>Vow</em><b style="font-size:${fit(v.label, 230, 24, 15, 0.6)}px">${esc(v.label)}</b><p>${esc(v.text)}</p></div>`).join('') : '';
+  const row = `<div class="bl-row" data-key="bl-row">${d.vows ? vows : card}</div>`;
+  const pass = `<div class="bl-pass"><i>${esc(d.vows ? 'Swear a Vow before you set off. It holds for this run.' : `"${d.passage}"`)}</i></div>`;
+  const B = d.book;
+  const book = B ? `<i class="gx-bs-dim" data-nocheck${act('book')}></i><div class="pn gx-bs-book" data-key="bl-book"><b>Reliquary</b><span>Page ${B.page + 1} of ${B.pages}</span>${B.rows.map((r) => `<p class="${r.mine ? 'on' : ''}${r.found ? '' : ' gx-bs-unk'}"><em style="--c:${TIER_COLOUR[r.tier] ?? '#8b96b0'}">${esc(r.tier)}</em><b>${esc(r.found ? r.name : '???')}</b><span>${esc(r.found ? r.text : 'Not found yet.')}</span></p>`).join('')}</div>` : '';
+  const ks = B ? keys([['←→', 'page'], ['Esc', 'close', 'book']]) : d.vows ? keys([['↑↓', 'vow'], ['Enter', 'swear', 'vow', d.vowAt]]) : keys([['Enter', 'accept', 'next'], ['C', 'reliquary', 'book']]);
+  return page('blessing', 26, `<div class="scr blessp" data-key="blessing">${head}${runSteps(2)}${row}${pass}${book}${ks}</div>`);
+}

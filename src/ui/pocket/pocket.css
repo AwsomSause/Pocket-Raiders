@@ -587,3 +587,14 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .sdp38 .sdc38{min-height:60px}
 .pkx .pks .tr-row .gx-tr-sil{filter:brightness(0);opacity:.35}
 .pkx .pks .tr-row .trb.gx-tr-lock{--c:#5b6478 !important}
+.pkx .pks .blessp .gx-bs-who{font-size:12px;font-weight:800;color:var(--mute);margin-top:auto}
+.pkx .pks .blessp .gx-bs-vow{height:220px;justify-content:center}
+.pkx .pks .blessp .gx-bs-dim{position:absolute;inset:0 0 38px 0;background:rgba(13,21,48,.62);z-index:20;cursor:pointer}
+.pkx .pks .blessp .gx-bs-book{color:var(--ink);position:absolute;left:120px;right:120px;top:70px;bottom:52px;z-index:21;padding:14px 20px;display:flex;flex-direction:column;gap:4px;overflow:hidden}
+.pkx .pks .blessp .gx-bs-book>b{font:400 26px/1 var(--fd);text-transform:uppercase}
+.pkx .pks .blessp .gx-bs-book>span{font-size:12px;font-weight:800;color:var(--mute)}
+.pkx .pks .blessp .gx-bs-book p{margin:0;display:grid;grid-template-columns:76px 170px 1fr;gap:8px;align-items:center;padding:4px 6px;border-bottom:2px dashed #cdd6e6;font-size:12px;font-weight:700}
+.pkx .pks .blessp .gx-bs-book p.on{background:#fff8d6}
+.pkx .pks .blessp .gx-bs-book p em{font-style:normal;font-size:11px;font-weight:800;text-transform:uppercase;color:#fff;background:var(--c);border-radius:999px;text-align:center}
+.pkx .pks .blessp .gx-bs-book p b{font-size:14px}
+.pkx .pks .blessp .gx-bs-book p.gx-bs-unk{opacity:.55}
