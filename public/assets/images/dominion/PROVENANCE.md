@@ -114,3 +114,7 @@ Copied from the round-4 mockups (`plans/evil-mode-rework/mockups-v4/sprites/`, P
 ## Armband icons (A to Z)
 
 `armbands/A.png` to `armbands/Z.png`: Kice's PixelLab "Arm-Band with the letter X" sheets (exported 2026-11-21), copied unchanged. Each is 256x256: 8 colourways across and 8 shapes down, 32 px cells, the letter on every band. The game uses row 0 and picks the column nearest the team's primary colour (`src/core/dominion/armbandSprite.ts`). `teamPic.ts` also shrinks it onto the crew pictures' arm anchors.
+
+## Redesign pass 50 (folder `r50/`)
+
+All 357 files in `r50/` are copied unchanged from the 50-pass redesign mockups (`plans/evil-mode-rework/redesign-50/sprites/`, published https://claude.ai/artifact/DGCW3D7mK6AgbzNRaJVubU). The mockup thread cut every one from art already in this repo with `plans/evil-mode-rework/redesign-50/src/add.py` (first frame, trimmed): Pokémon front/back sprites (`m-*`, `mb-*`, `p-*`), trainer and boss sprites (`t-*`, `c-*`), item icons (`g-*`, `i-*`), badges (`bd-*`), arena backdrops (`a-*`) and town/event backgrounds, all from the director's packs (PokeRogue, AGPL-3.0, Nintendo material; repo stays private, D4).

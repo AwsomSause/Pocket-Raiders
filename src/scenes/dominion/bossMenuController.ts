@@ -2,7 +2,7 @@
 // scene only forwards to it. The menu changes nothing in the run; Settings changes the settings record only (the run
 // rules are read when a Dominion starts; Effects & motion is presentation). Q is never read here (D28's wheel).
 
-import { bossMenuModel, BLADES, regionName } from '../../core/dominion/bossMenu';
+import { bossMenuModel, BLADES, phoneMove, regionName } from '../../core/dominion/bossMenu';
 import { fxOf, presetFx } from '../../core/dominion/fx';
 import { SIX_OPEN } from '../../core/dominion/rules';
 import { DominionPrefsSchema, type DominionFx, type DominionPrefs } from '../../core/dominion/schema';
@@ -19,7 +19,11 @@ import { openKeyVault } from '../../ui/keyVault';
 import { refreshMusicVolume, stopMusic } from '../../ui/audio';
 import { TUT, type TutMode } from '../../core/dominion/tutorial';
 import { TutorialController } from './tutorialController';
-import { bossMenuView, settingsPageView, type SetRowView, type SettingsCat, type SettingsPageModel } from '../../ui/redux/screens/dominion/bossMenu';
+import { r5BossMenu } from '../../ui/redux/screens/dominion/r50/hub';
+import type { R5Run } from '../../ui/redux/screens/dominion/r50/kit';
+import { WHEEL_KEY } from '../../ui/redux/screens/dominion/views';
+import { bossPic } from './r50Bridge';
+import { settingsPageView, type SetRowView, type SettingsCat, type SettingsPageModel } from '../../ui/redux/screens/dominion/bossMenu';
 
 interface Host {
   refresh(): void;
@@ -32,6 +36,8 @@ interface Host {
   openBoard(): void;
   /** Tutorial e9: plays a lesson's tips again over the page Esc was pressed on. */
   replay(lesson: string): void;
+  /** Redesign R0: the pass-50 chrome's live data (party, funds, heat) for the phone page. */
+  r5run(): R5Run | null;
 }
 
 export const SETTINGS_CATS: SettingsCat[] = [
@@ -353,7 +359,10 @@ export class BossMenuController {
     if (s === 'replay') return TutorialController.replayPage(this.rAt, this.tutNow(), dominionBlock(services().session.run) ?? null);
     const b = dominionBlock(services().session.run);
     if (!b) return '';
-    return bossMenuView(bossMenuModel(b, this.at, { card: this.cardLine(), slot: services().session.slot, notice: this.notice }), this.host.bossFile());
+    const m = bossMenuModel(b, this.at, { card: this.cardLine(), slot: services().session.slot, notice: this.notice });
+    const run = this.host.r5run();
+    // Redesign R0 (pass 50, mockup `menu`): the Boss Menu is Rotom's phone.
+    return run ? r5BossMenu(m, bossPic(this.host.bossFile(), 300), run, WHEEL_KEY) : '';
   }
 
   private moveRow(d: number): void {
@@ -416,7 +425,7 @@ export class BossMenuController {
     const s = this.mode;
     if (s === 'menu') {
       if (this.notice && (a === 'confirm' || a === 'back')) this.notice = null;
-      else if (a === 'up' || a === 'down') this.at = (this.at + (a === 'up' ? -1 : 1) + BLADES.length) % BLADES.length;
+      else if (a === 'up' || a === 'down' || a === 'left' || a === 'right') this.at = phoneMove(this.at, a, BLADES.length);
       else if (a === 'confirm') this.pickBlade(this.at);
       else if (a === 'back') this.close();
       return true;

@@ -9,13 +9,15 @@ import { pokemonAssetIds, type AssetManifest } from '../assets/catalog';
 import { DOMINION_DATA } from '../core/dominion/data';
 import { dominionBlock } from '../core/dominion/session';
 import { charterRows, hqModel, newSetup, openingLines, SETUP_PAGES, toggleType, typeGrid, type SetupDraft } from '../core/dominion/screens';
-import type { DominionAction } from '../core/dominion/schema';
+import type { DominionAction, DominionBlock } from '../core/dominion/schema';
 import { services } from '../game/services';
 import { onInputAction, type InputAction } from '../ui/input';
 import { setLogKeyTaken } from '../ui/overlays';
 import { rxFileOf } from '../ui/redux/assets';
 import { mountRedux, type ReduxView } from '../ui/redux/stage';
-import { hqView, openingView, setupView, titleView, type SetupFiles } from '../ui/redux/screens/dominion/views';
+import { openingView, setupView, titleView, type SetupFiles } from '../ui/redux/screens/dominion/views';
+import { hubScr, r5Hq, r5Start, START_ITEMS } from '../ui/redux/screens/dominion/r50/hub';
+import { bossPic, r5Hub, r5Run, R5StartMenu } from './dominion/r50Bridge';
 import { CrewController } from './dominion/crewController';
 import { districtModel, districtOrder } from '../core/dominion/districtScreen';
 import { districtView } from '../ui/redux/screens/dominion/district';
@@ -141,6 +143,8 @@ export class DominionScene extends Phaser.Scene {
     toMap: (next, notice) => this.afterJob(next, notice),
     onMorningHq: () => this.screen === 'hq' && !this.police.owns() && !this.voices.on,
   });
+  /** Redesign R0: the Start menu over the HQ (mockup `start`). */
+  private start = new R5StartMenu((id) => this.r5go(id), () => this.view?.refresh());
   private voices = new VoicesController({ refresh: () => this.view?.refresh(), onHq: () => this.screen === 'hq' && !this.crew.owns() && !this.police.owns() && !this.snatch?.owns() && !this.block()?.crew?.talks.length });
 
   constructor() {
@@ -176,6 +180,7 @@ export class DominionScene extends Phaser.Scene {
     this.spy = new SpyController(this);
     this.voices.close();
     this.nav = new NavController(this.navHost());
+    this.start = new R5StartMenu((id) => this.r5go(id), () => this.view?.refresh());
     const { session } = services();
     const run = session.run;
     if (!run) return void this.scene.start('MainMenu');
@@ -303,6 +308,8 @@ export class DominionScene extends Phaser.Scene {
         ...this.sq.acts(),
         ...this.nav.acts(),
         ...this.menu.acts(),
+        r5go: (id) => this.r5go(id),
+        r5start: (i) => this.start.pick(Number(i)),
       },
       overs: {
         typeOver: (i) => { this.setup = { ...this.setup, at: Number(i) }; this.view?.refresh(); },
@@ -319,6 +326,7 @@ export class DominionScene extends Phaser.Scene {
         ...this.sq.overs(),
         ...this.nav.overs(),
         ...this.menu.overs(),
+        r5startOver: (i) => { this.start.at = Number(i); this.view?.refresh(); },
       },
     });
     const kb = this.input.keyboard;
@@ -347,6 +355,8 @@ export class DominionScene extends Phaser.Scene {
         }
         return;
       }
+      // Redesign R0: the Start menu over the HQ keeps every key (its moves come through key()).
+      if (this.start.on) return;
       // D24: the interview room and the release page read their keys first (typing included).
       // D30: a job moment or the morning paper keeps every key while it is up (N is Next action on a result page).
       if (this.inRun() && this.job.raw(e.code)) return;
@@ -542,7 +552,32 @@ export class DominionScene extends Phaser.Scene {
       openBoard: () => sc.nav.openBoard(),
       bossFile: () => sc.files?.boss.file ?? null,
       replay: (lesson: string) => sc.tut.replay(lesson),
+      r5run: () => { const b = sc.block(); return b ? r5Run(sc, b) : null; },
     };
+  }
+
+  /** Redesign R0 (pass 50): the HQ hub, or the Start menu over it. */
+  private hqPage(b: DominionBlock): string {
+    const m = hqModel(b);
+    const x = r5Hub(b, { look: this.memberLook().look, bossFile: this.files?.boss.file ?? null, notice: this.notice, at: this.at, threat: threatRow(b), desk: deskOpen(b) ? deskWaiting(b) : null, paper: paperNote(b) });
+    const run = r5Run(this, b);
+    if (!this.start.on) return r5Hq(m, x, run);
+    return r5Start(hubScr(m, x, run), START_ITEMS, this.start.at, { name: this.files?.boss.name ?? 'Boss', pic: `<span style="display:block;margin-left:-6px;margin-top:-3px">${bossPic(this.files?.boss.file ?? null, 100)}</span>`, funds: run.funds }, run);
+  }
+
+  /** Redesign R0: the pass-50 chrome's links (mockup page ids) go to the screens the game has; the rest wait for their slice. */
+  private r5go(id: string): void {
+    const b = this.block();
+    if (!b) return;
+    const TAB: Record<string, number> = { hq: 0, map: 1, roster: 2, reserve: 3, card: 4, jobs: 4, ledger: 5 };
+    if (id in TAB) return this.tab(TAB[id]!);
+    if (id === 'start' && this.screen === 'hq') return this.start.open();
+    if (id === 'menu') { this.menu.open(); return void this.view?.refresh(); }
+    if (id === 'set' || id === 'options') { this.menu.openSettings(); return void this.view?.refresh(); }
+    if ((id === 'war' || id === 'rival' || id === 'rivals') && this.screen === 'hq') return void (this.rival.open() && this.view?.refresh());
+    if (id === 'herotrack' && b.hero) return this.openHero();
+    if (id === 'save') { this.notice = 'Saved. Dominion saves every step.'; return void this.view?.refresh(); }
+    if (id === 'base' && this.screen === 'hq') { this.hq.open(); return void this.view?.refresh(); }
   }
 
   /** D27: every page wears the Effects & motion classes (fx.css turns the spectacle down; presentation only). */
@@ -582,7 +617,7 @@ export class DominionScene extends Phaser.Scene {
       case 'hq':
         if (b && this.chair.owns()) return this.chair.render(this.notice);
         if (b && this.crew.owns()) return this.crew.render(this.notice);
-        return b ? hqView(hqModel(b), this.notice, this.at, this.memberLook(), threatRow(b), deskOpen(b) ? deskWaiting(b) : null, paperNote(b)) : '';
+        return b ? this.hqPage(b) : '';
       case 'map':
         return b && this.cursor ? mapView(mapModel(b, services().session.run!, this.cursor), this.notice, this.garage, this.meetPanel()) : '';
       case 'card': {
@@ -795,6 +830,7 @@ export class DominionScene extends Phaser.Scene {
     if (this.tut.key(a)) return void this.view?.refresh();
     if (this.nav.key(a)) return;
     if (this.menu.key(a)) return void this.view?.refresh();
+    if (this.start.key(a)) return;
     if (this.end.key(a)) return;
     if (this.spy.key(a)) return void this.view?.refresh();
     if (this.debate.key(a)) return void this.view?.refresh();
