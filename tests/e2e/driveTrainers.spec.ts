@@ -27,6 +27,9 @@ test('Drive trainers load their art in battle', async ({ page }) => {
   test.setTimeout(150_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
+  // The run's weekly and yearly game events follow today's date and can turn this seed's first node into an event
+  // (from 2026-11-21 it is one). Pin the date to one where the first node is a battle; time keeps running.
+  await page.clock.install({ time: new Date(2026, 10, 12, 12, 0) });
   await page.goto('/?seed=drive-trainers&debug=1');
   await waitForScene(page, 'MainMenu');
   for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Map']) {
