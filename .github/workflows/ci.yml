@@ -59,6 +59,23 @@ jobs:
       # Asset audit and load budget (QUALITY_GATES gates 4 and 8).
       - run: npm run report:assets
       - run: npm run report:perf
+
+  # The bot playtests run beside "check" since 2026-11-21: with main and Dominion together, check ran out of its
+  # 100 minutes inside the second playtest (unit tests, build and reports all passed; the playtest itself passes in ~39 min).
+  playtest:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    env:
+      NODE_OPTIONS: --max-old-space-size=6144
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
       # Bot playtest: 50 seeded runs with side stops; any crash, stuck run or broken number fails the PR.
       - run: node tools/playtest.ts 0 50 --heal --sides --strict > /dev/null
       # The same 50 runs started the way the game starts them: every Beta 0.6 expansion setting at its shipped default (all on).
@@ -124,12 +141,12 @@ jobs:
   ci-ok:
     name: CI ok
     if: always()
-    needs: [changes, check, e2e]
+    needs: [changes, check, playtest, e2e]
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo "code=${{ needs.changes.outputs.code }} check=${{ needs.check.result }} e2e=${{ needs.e2e.result }}"
+          echo "code=${{ needs.changes.outputs.code }} check=${{ needs.check.result }} playtest=${{ needs.playtest.result }} e2e=${{ needs.e2e.result }}"
           if [ "${{ needs.changes.result }}" = skipped ]; then echo "Draft PR: CI did not run. Mark it ready for review to run CI."; exit 1; fi
           [ "${{ needs.changes.result }}" = success ] || exit 1
           if [ "${{ needs.changes.outputs.code }}" = false ]; then exit 0; fi
-          [ "${{ needs.check.result }}" = success ] && [ "${{ needs.e2e.result }}" = success ]
+          [ "${{ needs.check.result }}" = success ] && [ "${{ needs.playtest.result }}" = success ] && [ "${{ needs.e2e.result }}" = success ]
