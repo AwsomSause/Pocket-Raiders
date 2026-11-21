@@ -11,6 +11,7 @@ import { ballArt, badgeArt, monArt } from '../art';
 import { act, esc, frontRotom, hpc, page, spr, typeColour } from '../kit';
 import { fit, fitBody, fitPic, pkArtOf, pkConfirm } from '../templates';
 import { tyChip } from './party';
+import { pkCatchParts, pkLevel } from './after';
 
 const pct = (r: number): number => Math.max(0, Math.min(100, Math.round(r * 100)));
 const hpBar = (r: number): string => `<span class="hp ${hpc(pct(r))}"><i style="width:${pct(r)}%"></i></span>`;
@@ -20,7 +21,7 @@ const plateStyle = (b: BattleBox, side: string): string => {
   return `--sc:${side};--t:${t[0] ? typeColour(t[0]) : side};--t2:${t[1] ? typeColour(t[1]) : t[0] ? typeColour(t[0]) : side}`;
 };
 const balls = (n: number, out: number): string => `<span class="balls">${Array.from({ length: Math.max(0, Math.min(6, n)) }, (_, k) => spr(ballArt(k >= n - out ? 'premier' : 'pb'), 1, k >= n - out ? 'gx-bt-out' : '')).join('')}</span>`;
-const nameRow = (b: BattleBox, big: number): string => `<span class="lb-n">${(b.types ?? []).map((t) => fitPic(badgeArt(t), 20, 20, '', 1)).join('')}<b style="font-size:${fit(b.name, 180, big, 16, 0.55)}px">${esc(b.name)}</b><span class="lv">${esc(b.level)}</span>${b.tags.map((t) => `<u class="gx-bt-tag">${esc(t)}</u>`).join('')}</span>`;
+const nameRow = (b: BattleBox, big: number): string => `<span class="lb-n">${(b.types ?? []).map((t) => fitPic(badgeArt(t), 20, 20, '', 1)).join('')}<b style="font-size:${fit(b.name, 180, big, 16, 0.55)}px">${esc(b.name)}</b><span class="lv">${esc(b.level)}</span>${b.shiny ? '<em class="shtag">★ Shiny</em>' : ''}${b.tags.map((t) => `<u class="gx-bt-tag">${esc(t)}</u>`).join('')}</span>`;
 const tipAttr = (b: BattleBox): string => (b.tip ? `${act('pin', b.tip)} data-tip="${esc(b.tip)}"` : '');
 
 /** A foe's plate (the first one along the top; more stand under it in a duo or a trio). */
@@ -107,6 +108,7 @@ export function pkBattle(d: BattleModel): string {
   if (d.pkInfo && !d.evolve) return page('b-info', 26, `<div class="scr battle b6 ov16 inf gx-bt gx-bt-page" data-key="b-info">${infoPage(d.pkInfo)}</div>`, true);
   if (d.pkMove && !d.evolve) return page('moveinfo', 26, `<div class="scr battle b2 minfo gx-bt gx-bt-page" data-key="moveinfo">${movePage(d.pkMove)}</div>`, true);
   if (d.log && !d.evolve) return page('b-log', 26, `<div class="scr battle b6 ov16 lg gx-bt gx-bt-page" data-key="b-log">${logPage(d.log, d.turn ?? 0)}</div>`, true);
+  if (d.level && !d.evolve && !d.menu) return pkLevel({ ...d.level, types: d.level.types ?? [], say: d.text, go: 'say' });
   if (d.evolve) {
     const pic = (f: string | null, sil: boolean): string => (f ? `<span class="${sil ? 'gx-sil' : ''}">${fitPic(monArt(f), 200, 200, '', 4)}</span>` : '');
     return page('battle', 26, `<div class="scr battle gx-bt gx-bt-evo" data-key="battle"><i class="gx-bt-burst"></i><div class="gx-bt-evo-pics">${pic(d.evolve.from, d.evolve.done)}<b>→</b>${pic(d.evolve.to, !d.evolve.done)}</div>${d.text ? `<div class="say17 gx-bt-say"><i>${spr(frontRotom, 1)}</i><p>${esc(d.text)}</p></div>` : ''}</div>`, true);
@@ -157,9 +159,9 @@ export function pkBattle(d: BattleModel): string {
   ].join('');
   const notice = d.notice ? pkConfirm({ title: d.notice.title, body: d.notice.body, options: [d.notice.button], index: 0 }) : '';
   const quiet = !!(d.exp?.length || d.level || f.budget || f.variant);
-  return page('battle', 26, `<div class="scr b20 battle b6 b7 b16 b17 gx-bt${d.shadow ? ' gx-bt-shadow' : ''}${d.foes.length > 1 ? ' gx-bt-duo' : ''}" data-key="battle">`
+  return page('battle', 26, `<div class="scr b20 battle b6 b7 b16 b17 gx-bt${d.pkCatch ? ' capp' : ''}${d.pkBand ? ' evs' : ''}${d.shadow ? ' gx-bt-shadow' : ''}${d.foes.length > 1 ? ' gx-bt-duo' : ''}" data-key="battle">`
     + d.foes.map(foePlate).join('') + (quiet ? '' : strip) + (d.exp?.length || d.level ? '' : side) + bot + cmd + say + note + pin + marks
-    + (d.level ? '' : fx + exp) + level + panels + tip + card + log + notice + '</div>', true);
+    + (d.level ? '' : fx + exp) + level + panels + tip + card + log + notice + (d.pkCatch ? pkCatchParts(d.pkCatch) : '') + (d.pkBand ? `<div class="evs-band" data-key="evs-band"><em>${esc(d.pkBand.em)}</em><b style="font-size:${fit(d.pkBand.b, 380, 36, 22, 0.5)}px">${esc(d.pkBand.b)}</b><span>${esc(d.pkBand.span)}</span></div>` : '') + '</div>', true);
 }
 
 /** "×3" as the mock-ups write a count. */

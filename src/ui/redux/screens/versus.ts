@@ -7,7 +7,7 @@ import type { ReduxCtx } from '../stage';
 import { type Art, figure } from '../templates';
 import { CUT_BEATS } from './cut';
 import { phVersus } from '../../phantom/screens/cutin';
-import { pkVersus } from '../../pocket/screens/cards';
+import { pkBoss, pkVersus } from '../../pocket/screens/cards';
 
 export interface VersusModel {
   /** The foe's name, drawn big. */
@@ -35,6 +35,8 @@ export interface VersusModel {
   stake?: string;
   /** Pocket look: the card's playback state, set by the battle's playback (in, hold, out). Leave it out: it plays in. */
   cue?: 'in' | 'hold' | 'out';
+  /** Pocket look: a boss's intro (mock-up `boss-intro`): where and what role, its type, and the chips (** ** marks bold). */
+  pkBoss?: { where: string; type: string; chips: readonly string[] } | null;
 }
 
 const balls = (n: number, b: number): string => `<div class="row" style="gap:5px">${Array.from({ length: Math.max(0, Math.min(6, Math.floor(n))) }, () => `<i class="ball" style="--b:${b}px"></i>`).join('')}</div>`;
@@ -43,7 +45,7 @@ const letter = (h: string): string => `<div class="bars" style="top:0"></div><di
 const fit = (name: string, px: number): number => Math.round(px * (name.length > 14 ? 0.6 : name.length > 9 ? 0.78 : 1));
 
 /** The card, with a click anywhere moving on. */
-export const versusView = (c: ReduxCtx, d: VersusModel): string => (c.ph ? phVersus(c.ph, d) : c.pk ? pkVersus(d, d.cue) : card(c, d) + `<div class="fill" style="z-index:7;cursor:pointer"${act('next')}></div>`);
+export const versusView = (c: ReduxCtx, d: VersusModel): string => (c.ph ? phVersus(c.ph, d) : c.pk ? (d.pkBoss ? pkBoss({ ...d, pkBoss: d.pkBoss }, d.cue) : pkVersus(d, d.cue)) : card(c, d) + `<div class="fill" style="z-index:7;cursor:pointer"${act('next')}></div>`);
 
 function card(c: ReduxCtx, d: VersusModel): string {
   const v = c.v(4);

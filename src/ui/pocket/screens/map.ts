@@ -89,7 +89,7 @@ function legend(d: MapModel): string {
   const notes = d.lines.slice(1);
   const rows = d.legend.map((r) => `<div class="gx-lg-row"><i style="--c:${r.color}">${esc(r.glyph)}</i><span>${esc(r.text)}</span></div>`).join('');
   const keyRow = `<div class="gx-lg-keys">${d.keys.map(([k, t]) => `<span${act('key', k)}><kbd>${esc(k)}</kbd>${esc(t)}</span>`).join('')}<span${act('legend')}><kbd>L</kbd>close</span></div>`;
-  return `<div class="gx-shade"${act('legend')}></div><div class="pn gx-legend" data-key="map-legend"><div class="gx-lg-top"><b class="gx-lg-t">Legend</b>${keyRow}</div><div class="gx-lg-grid${d.legend.length > 27 ? ' huge' : d.legend.length > 12 ? ' wide' : ''}">${rows}</div>${notes.length ? `<b class="gx-lg-t">This stage</b><div class="gx-lg-notes">${notes.map((t) => `<p>${esc(t)}</p>`).join('')}</div>` : ''}</div>`;
+  return `<div class="gx-shade"${act('legend')}></div><div class="pn gx-legend" data-key="map-legend"><div class="gx-lg-top"><b class="gx-lg-t">Legend</b>${keyRow}</div><div class="gx-lg-grid${d.legend.length > 40 ? ' huge giant' : d.legend.length > 27 ? ' huge' : d.legend.length > 12 ? ' wide' : ''}">${rows}</div>${notes.length ? `<b class="gx-lg-t">This stage</b><div class="gx-lg-notes">${notes.map((t) => `<p>${esc(t)}</p>`).join('')}</div>` : ''}</div>`;
 }
 
 /** The node's menu (a stop with more than one thing at it): its parts as cards over the dimmed map. */

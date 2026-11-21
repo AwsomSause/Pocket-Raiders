@@ -2,6 +2,7 @@
 // the choices), the page tabs and the small lines over the field. It is drawn over the canvas, which keeps the arena,
 // the Pokémon and every animation. Pure drawing; BattleScene keeps the rules, the input and the state.
 
+import type { PkCatch } from '../../pocket/screens/after';
 import type { BattleInfo, MoveInfo } from '../../../core/presentation/battleInfo';
 import { act, esc, facts, foot, hpb, img, mini, mon, TX, TYPE_COLORS, ty, W } from '../kit';
 import type { ReduxCtx } from '../stage';
@@ -26,6 +27,8 @@ export interface BattleBox {
   team: { n: number; out: number } | null;
   /** The box's key for its hover card and its pin ("foe:0", "mine:1"); none leaves the box inert. */
   tip?: string;
+  /** A shiny foe (the Pocket look tags its plate ★ Shiny). */
+  shiny?: boolean;
   /** The Pokémon's types (none while it is hidden): the Pocket look colours its plate by them. */
   types?: readonly string[];
   /** Its picture (front sprite file), for the speech panel's face. */
@@ -80,6 +83,10 @@ export interface BattleModel {
   /** Pocket look: the Battle Info page and the move card (structured), and the turn for the Battle Log. */
   pkInfo?: (BattleInfo & { foeFile: string | null; meFile: string | null }) | null;
   pkMove?: MoveInfo | null;
+  /** Pocket look: the catch card after a ball holds (mock-up `capture`). */
+  pkCatch?: PkCatch | null;
+  /** Pocket look: a pseudo-stage's band while its battle opens (mock-up `ev-stage`). */
+  pkBand?: { em: string; b: string; span: string } | null;
   turn?: number;
   /** The Beta 0.6 pieces over the field; each shows only while its rule is in play. */
   fx?: BattleFx | null;
@@ -107,6 +114,8 @@ export interface BattleLevel {
   file: string | null;
   from: number;
   to: number;
+  /** Its types (the Pocket look's Level Up page takes its colours from them). */
+  types?: readonly string[];
   /** Each stat: its name, its new value and how much it grew. */
   stats: readonly (readonly [string, number, number])[];
 }

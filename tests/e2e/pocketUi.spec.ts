@@ -606,6 +606,74 @@ test('Pocket look: a battle is the mock-up HUD; Party and Bag open as pills and 
   expect(errors).toEqual([]);
 });
 
+test('Pocket look: a won Trainer battle shows Victory, Team EXP and Level Up; a new move is its own page', async ({ page }) => {
+  test.setTimeout(240_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=pk-bt2');
+  await toPocketMap(page);
+  // The first stop is a wild battle on this seed: make it a Trainer's, so the Victory page shows.
+  await page.evaluate(() => {
+    const map = (window as any).__pkr.game.scene.getScene('Map');
+    const o = map.options.find((x: any) => x.kind === 'node');
+    o.node.kind = 'trainer';
+    map.activate(map.options.indexOf(o));
+  });
+  await waitForScene(page, 'Battle');
+  await onPkPage(page, 'Battle', 'battle');
+  await toCommands(page);
+  await page.evaluate(() => { for (const m of (window as any).__pkr.session.run.battle.enemyTeam) m.hp = 1; });
+  const seen: string[] = [];
+  for (let i = 0; i < 120 && !seen.includes('exp'); i++) {
+    const ids = await page.evaluate(() => [...document.querySelectorAll('#pkx .pks')].filter((e) => !(e as HTMLElement).dataset.ghost).map((e) => (e as HTMLElement).dataset.scr ?? ''));
+    const at = ['levelup', 'victory', 'exp'].find((x) => ids.includes(x) && !seen.includes(x));
+    if (at === 'victory') {
+      const v = pkView(page, 'Battle', 'victory');
+      await expect(v.locator('.vic-t')).toContainText('Victory!');
+      await expect(v.locator('.rosette')).toContainText('MVP');
+      await expect(v.locator('.vp-foe')).toContainText('You defeated');
+      await expect(v.locator('.vp-r')).toContainText(['Prize money', 'Nobody fainted', 'Turns taken', 'Biggest hit']);
+      await fits(page, 'Battle', 'victory');
+    } else if (at === 'exp') {
+      const x = pkView(page, 'Battle', 'exp');
+      await expect(x.locator('.rs-h')).toContainText('Team EXP');
+      await expect(x.locator('.xc').first()).toContainText('EXP');
+      await fits(page, 'Battle', 'exp');
+    } else if (at === 'levelup') {
+      const l = pkView(page, 'Battle', 'levelup');
+      await expect(l.locator('.lr')).toHaveCount(6);
+      await expect(l.locator('.lv-stamp')).toBeVisible();
+      await fits(page, 'Battle', 'levelup');
+    }
+    if (at) seen.push(at);
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(500);
+  }
+  expect(seen).toEqual(['levelup', 'victory', 'exp']);
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'Reward', 30_000);
+  // A Pokémon with four moves wants a fifth: the New Move page, the four rows and the two answers.
+  await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    const r = session.run, m = r.party[0];
+    const ids = [...session.content.moves.keys()].filter((id: string) => id !== 'razor-leaf' && !m.moves.some((s: any) => s.id === id));
+    while (m.moves.length < 4) m.moves.push({ id: ids[m.moves.length * 7], pp: 10 });
+    r.pending = [{ kind: 'learnMove', uid: m.uid, moveId: 'razor-leaf' }];
+    r.phase = 'decision';
+    game.scene.getScenes(true)[0].scene.start('Decision');
+  });
+  await waitForScene(page, 'Decision');
+  await onPkPage(page, 'Decision', 'movelearn');
+  const ml = pkView(page, 'Decision', 'movelearn');
+  await expect(ml.locator('.ml-new')).toContainText('Razor Leaf');
+  await expect(ml.locator('.mv3')).toHaveCount(4);
+  await expect(ml.locator('.vs-say .btn')).toContainText(['Keep old moves', 'Learn it']);
+  await fits(page, 'Decision', 'movelearn');
+  await page.keyboard.press('ArrowDown');
+  await expect(ml.locator('.mv3.on')).toHaveCount(1);
+  await expect(ml.locator('.ml-cmp')).toContainText('Razor Leaf');
+  expect(errors).toEqual([]);
+});
+
 test('Pocket look: the Hub is the town street; the doors walk, the tabs change and a door opens its rooms', async ({ page }) => {
   test.setTimeout(180_000);
   const errors = watch(page);

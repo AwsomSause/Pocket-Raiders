@@ -12,10 +12,10 @@ import { fit, fitPic, pkArtOf } from '../templates';
 /** A card's playback state (see the file's head). */
 export type PkCue = 'in' | 'hold' | 'out';
 /** How long each card's entrance and exit take, in seconds (the mock-ups' timelines). */
-export const PK_CUE_TIMES = { vs: { in: 1.36, out: 0.3 }, ace: { in: 1.55, out: 0.3 } } as const;
+export const PK_CUE_TIMES = { vs: { in: 1.36, out: 0.3 }, ace: { in: 1.55, out: 0.3 }, boss: { in: 1.7, out: 0.3 } } as const;
 
-const cueRoot = (cls: string, key: keyof typeof PK_CUE_TIMES, cue: PkCue = 'in'): string =>
-  `<div class="scr ${cls} gx-cue is-${cue}" data-key="${key}" style="--pk-in:${PK_CUE_TIMES[key].in}s;--pk-out:${PK_CUE_TIMES[key].out}s">`;
+const cueRoot = (cls: string, key: keyof typeof PK_CUE_TIMES, cue: PkCue = 'in', style = ''): string =>
+  `<div class="scr ${cls} gx-cue is-${cue}" data-key="${key}" style="--pk-in:${PK_CUE_TIMES[key].in}s;--pk-out:${PK_CUE_TIMES[key].out}s${style ? `;${style}` : ''}">`;
 
 /** A row of six balls: `n` full ones, `ko` of them greyed (fainted), the rest empty slots. */
 function balls(n: number, ko = 0): string {
@@ -33,6 +33,19 @@ export function pkVersus(d: VersusModel, cue: PkCue = 'in'): string {
     + `<div class="vs-n me" data-key="vs-n-me"><small>Challenger</small><b style="font-size:${fit(d.playerName, 300, 52, 26, 0.5)}px">${esc(d.playerName)}</b><span>${balls(d.party.length)}</span></div>`
     + `<div class="vs-n foe" data-key="vs-n-foe"><small style="font-size:${fit(d.role || 'Trainer', 300, 12, 9, 0.62)}px">${esc(d.role || 'Trainer')}</small><b style="font-size:${fit(d.name, 300, 52, 26, 0.5)}px">${esc(d.name)}</b><span>${balls(d.team)}</span></div>`
     + `<div class="vs-mark" data-key="vs-mark"><b>VS</b></div>`
+    + `<div class="vs-say" data-key="vs-say"><p style="font-size:${fit(say, 1500, 17, 13, 0.5)}px">${esc(say)}</p><div class="btn on nx"${act('next')}><b>Next</b></div></div>`
+    + `<div class="gx-hit"${act('next')}></div></div>`);
+}
+
+/** The Boss Intro (mock-up `boss-intro`): a Gym Leader, Elite Four member or Champion in a cut-in, with what the battle holds as chips. */
+export function pkBoss(d: VersusModel & { pkBoss: NonNullable<VersusModel['pkBoss']> }, cue: PkCue = 'in'): string {
+  const b = d.pkBoss, foe = pkArtOf(d.cast);
+  const say = d.line ? `${d.name}: "${d.line}"` : `${d.role} ${d.name} wants to battle!`;
+  const bold = (t: string): string => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  return page('boss-intro', 26, cueRoot('cut cboss', 'boss', cue, `--c:${typeColour(b.type)}`)
+    + '<i class="ct-rays"></i>' + (foe ? `<div class="ct-mon" data-key="ct-mon">${sprH(foe, 300)}</div>` : '')
+    + `<div class="ct-title" data-key="ct-title"><small style="font-size:${fit(b.where, 440, 13, 10, 0.62)}px">${esc(b.where)}</small><b style="font-size:${fit(d.name, 440, 88, 44, 0.5)}px">${esc(d.name)}</b></div>`
+    + `<div class="ct-chips" data-key="ct-chips">${b.chips.map((c) => `<span>${bold(c)}</span>`).join('')}</div>`
     + `<div class="vs-say" data-key="vs-say"><p style="font-size:${fit(say, 1500, 17, 13, 0.5)}px">${esc(say)}</p><div class="btn on nx"${act('next')}><b>Next</b></div></div>`
     + `<div class="gx-hit"${act('next')}></div></div>`);
 }
