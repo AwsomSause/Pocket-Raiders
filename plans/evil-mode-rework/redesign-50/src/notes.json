@@ -612,5 +612,72 @@
   "q3": "No new pages this time, on purpose. The Boss card, X-ray and Start menu already had the right job, so they were rebuilt to carry the level, EXP, gym marks and Red instead of adding three more places to look. The Start menu now only shows lines for pages that exist.",
   "q4": "The Start menu stays one list (Rotom Phone, Crew, Pokémon, Bag, Region map, Rivals, Boss card, Save, Options). Settings › Effects gains One pulse at a time (On, Off), so players who like everything moving can turn it back.",
   "q5": "Yes. The Boss card now reads like a real Trainer Card, with the level, play time, money and gym marks across the bottom where badges go, and one calm Start menu list is exactly how the handheld games feel."
+ },
+ "46": {
+  "name": "Rotom Live",
+  "big": "Rotom stops being a tutorial and becomes your advisor on every page. A small Rotom tab rides the top edge of every text box with one useful thought for that page (Persian is at 12%, Red is 2 days out, Barracks are full), and the lesson chip in the dock becomes Rotom’s chip, which opens Ask Rotom (the lessons live inside it now).",
+  "pages": [
+   "Ask Rotom",
+   "Rotom’s plan",
+   "Rotom’s diary"
+  ],
+  "q1": "Yes. A little bobbing Rotom tab pops onto every text box with a tip, Ask Rotom is a live chat where Rotom’s replies slide in with a typing bubble, Rotom’s plan lays out three glowing plan cards with a “Rotom picks this” badge, and the diary is a hand-written notebook with Rotom spinning in a doodled circle.",
+  "q2": "Pass 45 cut noise; this pass adds a voice. Before, Rotom only explained buttons in lessons. Now it reads the whole run and says one useful thing on every page, and you can ask it questions or let it plan a night, so the UI helps you think instead of just showing numbers.",
+  "q3": "Yes, three. Ask Rotom answers questions in one place instead of hiding tips in menus, Rotom’s plan compares tonight’s options side by side, and Rotom’s diary is a small reward that adds personality. The Rotom chip and every tip tab open Ask Rotom, so there is one door.",
+  "q4": "The T key and the Rotom chip open Ask Rotom, which also holds the Lesson book. Settings › Rotom (already there) gains Tips on text boxes (On, Only warnings, Off) and Plans (Suggest, Only when asked).",
+  "q5": "Yes. Rotom living in your phone and chatting is the Rotom Dex from Sun and Moon, its “Bzzt!” jokes match that Rotom, and a helper that suggests what to do next feels like Pokémon’s friendly guides."
+ },
+ "47": {
+  "name": "Clear Sight",
+  "big": "A readability pass over the whole UI. The panel you are working in stays bright while the others step back a little, like the active window in the handheld games, secondary text is brighter, and panels are less see-through so nothing behind them competes with the words. It also gives players who need it one-switch control over all the motion added since pass 34.",
+  "pages": [
+   "Calm mode",
+   "Colour assist",
+   "Read aloud"
+  ],
+  "q1": "Yes, in a calmer way. The page you are using now glows while the others dim, so the eye lands in the right place first. Calm mode has a big sliding switch, Colour assist shows each colour with its own shape and striped bar, and Read aloud lights up each word in yellow as Rotom says it.",
+  "q2": "Pass 46 added a voice; this pass makes everything easier to read. Grey helper text is brighter, panels are less see-through, and the inactive panels step back. Calm mode turns off every moving effect from passes 34 to 46 with one switch, so the busy new UI never gets in anyone’s way.",
+  "q3": "Yes, three, all inside Settings. Calm mode, Colour assist and Read aloud each get their own page with a live preview, instead of a long list of toggles on one crowded page.",
+  "q4": "All three sit in Settings › Access next to the controls and phone pages from pass 20. Calm mode also has a quick switch on the Start menu’s Options row, so a player can turn motion off in two presses.",
+  "q5": "Yes. The handheld games dim the box you are not using and keep text crisp on solid panels, and modern Pokémon games have text speed and reduced-motion style options in Settings, so this fits right in."
+ },
+ "48": {
+  "name": "Final Act",
+  "big": "The endgame gets the spectacle it has earned. Once the Goal passes 70% the whole UI goes into its Final Act: the Nova crest wears a crown and a gold foil sweep crosses the top bar on every page. Takeover night becomes four rising goal pillars, and the ending is rebuilt as a real finale: Saffron at night, the Nova banner unrolling down Silph Co., fireworks, and the whole crew on the rooftop.",
+  "pages": [
+   "Credits",
+   "Next Dominion"
+  ],
+  "q1": "Yes, this is the loudest pass yet, saved for the moment that earns it. KANTO IS YOURS slams in over Saffron at night, the red Nova banner unrolls down Silph Co., fireworks burst behind it, and the crew walks onto the rooftop one by one. The Takeover pillars fill up like gauges, and the Credits flip each crew card into view.",
+  "q2": "Before, the ending was the same result card as a job report, just with bigger text. Now it is a full finale scene with no menus in the way, Takeover night shows how close each goal is at a glance instead of four flat cards, and every page in the late game wears the Final Act crown and foil sweep, so the whole UI tells you the end is near.",
+  "q3": "Yes, two. The Credits page gives each crew member an epilogue so the story ends on people, not numbers, and Next Dominion explains what carries into the next run and opens the Charters. The path is a straight line: Takeover night, the ending, the Credits, then the Hall of Infamy or Next Dominion.",
+  "q4": "Next Dominion sits in the Start group and is where New Dominion on the title menu leads once a run is finished. Settings › Text and motion gets Skip the finale (off by default) and Calm mode turns the fireworks and banner into a simple fade.",
+  "q5": "Yes. It borrows the Hall of Fame and credits roll after the Champion, the cast walking on one by one, and the save-your-team moment that every main-series game ends with, but from the villain side."
+ },
+ "49": {
+  "name": "Feel",
+  "big": "A polish pass on how the whole UI answers your hands. Every button and tile lifts when you point at it and presses down when you pick it, a gold ring ripples out from every click, key caps have depth, and the A / Enter key taps itself down now and then so a new player always knows what moves things on.",
+  "pages": [
+   "Photo mode",
+   "Button feel",
+   "Your tag"
+  ],
+  "q1": "Yes, in the hands more than the eyes. Buttons lift and press with a real edge, clicks send out a gold ring, and the A key taps itself. The new pages are the showy part: Photo mode flashes like a camera with stickers and a Polaroid frame, and Your tag spray-paints a red N, a gold bolt and NOVA onto a brick wall with drips running down.",
+  "q2": "Pass 48 was about one big moment; this pass touches every moment. Before, a press just changed the page. Now every tile answers back as you point and press, so the whole UI feels physical, like pressing real buttons on a handheld, and the self-tapping key quietly teaches the controls.",
+  "q3": "Yes, three, and each pulls something out of a crowded place. Photo mode gives the crew a page of its own instead of a screenshot key, Button feel gathers rumble, sounds and cursor style in one place with a live preview, and Your tag turns a hidden setting (the team mark) into something you make.",
+  "q4": "Photo mode is on the Start menu, between Boss card and Save. Button feel lives in Settings next to Controls. Your tag is in Crew, and Calm mode turns the ripples and the self-tapping key off.",
+  "q5": "Yes. The Poké Ball cursor wobbles like a catch, the arrow cursor is straight from the classic menus, Photo mode is like the camera in Sword and Shield and Scarlet and Violet, and spray-painted team tags are exactly what Team Skull did in Sun and Moon."
+ },
+ "50": {
+  "name": "Final Cut",
+  "big": "The last synthesis pulls 46 to 49 into one finished look and trims what fights for attention: the foil sweep plays only on Empire and title pages, the self-tapping key only teaches on calm pages, and lanterns stay off pages where they would cover panels. The Title and How pages connect are rebuilt, and a Style sheet closes the redesign.",
+  "pages": [
+   "Style sheet"
+  ],
+  "q1": "Yes. The Title is now a scene, not a menu: Saffron at dusk, the crew and Houndoom on the rooftop, a crowned Nova crest with the Goal ring, and a gold Continue card that previews your save (Day, money, party, Goal). How pages connect turns into a colour-coded lift directory, and the Style sheet shows the whole kit on one page.",
+  "q2": "Passes 46 to 49 each added a layer (Rotom, readability, the finale, button feel). This pass makes them one look and takes noise away: the foil sweep, the tapping key and the lanterns now only appear where they help, so every page has one thing moving at most. The first screen and the page map were the oldest designs left; both are rebuilt to match pass 50.",
+  "q3": "Only one new page, the Style sheet, on purpose. The rebuilt directory proves the rule from the start: 194 pages, and every one is one or two steps from the HQ through a door you can name (1 to 6, Start, T, the war line, or the night).",
+  "q4": "Both are on the Title and on the Start menu: Settings opens Options and every settings page, and the Start menu holds the Rotom Phone, Bag, Rivals, Boss card, Photo mode and Save. The directory lists Menu and Settings as their own floors so they are never hidden.",
+  "q5": "Yes. The Title has the classic Pokémon front screen feel (logo, Continue with your save shown, the partner by your side), the menus use the Start menu, Poké Ball cursor and text box the games use, and everything from the Hall of Infamy to Photo mode borrows a real Pokémon moment, just told from the villain side."
  }
 }
