@@ -743,3 +743,9 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 /* Galar's Final (mock-up ga-final): the Champion's ace glowing behind them, the Champion moved right. */
 .pkx .pks .cboss.gx-fin .ct-mon { right: 120px; }
 .pkx .pks .cboss .gx-ace { position: absolute; left: 380px; top: 130px; z-index: 1; width: 260px; height: 260px; display: grid; place-items: end center; filter: drop-shadow(0 0 14px #ff3d7f); }
+/* Galar's Gym Challenge road (mock-up ga-road): a Gym not met yet is grey; the card looked at has a dashed ring. */
+.pkx .pks .gym34 p.gx-later { border-bottom-color: #c9cfe0; }
+.pkx .pks .gym34 p.gx-later i { background: #8a93b4; }
+.pkx .pks .gym34 p q, .pkx .pks .cup34 q { quotes: none; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font: 400 26px/1 var(--fd); color: #fff; background: var(--ac); align-self: center; }
+.pkx .pks .gym34 p.gx-lit { outline: 3px dashed var(--ac); outline-offset: 3px; }
+.pkx .pks .gym34 p.now.gx-lit { outline: 4px solid var(--yel); }

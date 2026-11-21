@@ -344,6 +344,22 @@ describe('the Pocket Galar line-ups', () => {
   });
 });
 
+describe('the Pocket Gym Challenge road', () => {
+  it('a card per Gym (won, next, not met), the lit one ringed, the tournament card; B only once it has begun', async () => {
+    const { pkGaRoad } = await import('../../src/ui/pocket/screens/galar');
+    const gyms = [{ name: 'Milo', type: 'grass', state: 'got' as const, art: null, n: 1 }, { name: 'Nessa', type: 'water', state: 'next' as const, art: null, n: 2 }, { name: null, type: '', state: 'later' as const, art: null, n: 3 }];
+    const h = pkGaRoad({ gyms, index: 1, cup: { art: null, line: '32 trainers · 5 rounds · opens after match 3' }, bracket: false });
+    expect(pkPageOf(h)?.id).toBe('ga-road');
+    expect(h).toContain('<i>Badge won</i>');
+    expect(h).toContain('<p class="now gx-lit"');
+    expect(h).toContain('Match 2 · next');
+    expect(h).toContain('<p class="gx-later"');
+    expect(h).toContain('3 stadium matches');
+    expect(h).not.toContain('roadBracket');
+    expect(pkGaRoad({ gyms, index: 0, cup: { art: null, line: 'x' }, bracket: true })).toContain('data-act="roadBracket"');
+  });
+});
+
 describe('the Pocket Galar round won', () => {
   it('the round in the title, four cards with the shop lit, the next round and the counts', async () => {
     const { pkGaWon } = await import('../../src/ui/pocket/screens/galar');

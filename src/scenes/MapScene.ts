@@ -34,7 +34,7 @@ const peekClock = { key: '', at: 0 };
 import { pinnedObjective } from '../core/objectives';
 import { rerollRunQuest } from '../core/quests';
 import { regionDim } from '../ui/battleFx/transitions';
-import { bracketTree, bracketView, matchReplay } from '../core/galarTournament';
+import { bracketTree, bracketView, matchReplay, usesGalarTournament } from '../core/galarTournament';
 import { regionIdentity } from '../core/presentation/regionIdentity';
 import { FRAME_ASSET_IDS, headerBar } from '../ui/frames';
 import { currentColumn, findNode } from '../core/map';
@@ -50,7 +50,7 @@ import { anomalyLine, stageAnomaly } from '../core/story/anomaly';
 import { StopCard, type StopLook } from '../ui/stopLooks';
 import { fishingOffer, raidPreview, totemPreview, mapActions, wipeStatus, mapChoices, mapPreviews, bossLootPreview, nextGymLeaders, type MapActionKind, type NodePreview } from '../core/run';
 import { bossInfo, currentRegion, getCampaign, runLevelCap, runCampaign } from '../core/regions';
-import { blindMap } from '../core/rules';
+import { blindMap, getMode } from '../core/rules';
 import { regionRules } from '../core/battle/typeRules';
 import { arenaFor, getTheme } from '../core/themes';
 import { stageModifier } from '../core/runModifiers';
@@ -138,7 +138,7 @@ import { pkMap } from '../ui/pocket/screens/map';
 import { pkRegion } from '../ui/pocket/screens/region';
 import { pkBadges, pkLeague, pkWorld, type PkBadgeSlot } from '../ui/pocket/screens/world';
 import { pkXpDoor } from '../ui/pocket/screens/expedition';
-import { pkBracket } from '../ui/pocket/screens/galar';
+import { pkBracket, pkGaRoad } from '../ui/pocket/screens/galar';
 import { pkArtOf } from '../ui/pocket/templates';
 import { pkForecast } from '../ui/pocket/screens/forecast';
 import { pkTime, pkWeather, weatherCard, WEATHERS } from '../ui/pocket/screens/sky';
@@ -1772,6 +1772,8 @@ export class MapScene extends Phaser.Scene {
           popPick: (i) => this.popPick('pick', Number(i)),
           popOpen: () => this.popOpen(),
           bracket: () => this.popClose(),
+          // Pocket look: the Champion's Tournament card on Galar's Gym Challenge road opens the bracket.
+          roadBracket: () => this.toggleBracket(),
           bracketPage: (i) => { if (this.rxPop?.kind === 'bracket') { this.rxPop.page = Math.max(0, Math.min(4, Number(i) || 0)); this.rxView?.refresh(); } },
           bracketWatch: () => this.watchLast(),
         },
@@ -2136,6 +2138,16 @@ export class MapScene extends Phaser.Scene {
     };
     const slots = Array.from({ length: n }, (_, k) => (k < won.length ? slot(won[k]!, 'got') : !league && k === stage.index ? slot(stage.leaderId, 'next') : slot(null, 'later')));
     const road = pocketRoad(stage);
+    // Galar: the Badge Case is the Gym Challenge road (mock-up `ga-road`), ending in the Champion's Tournament.
+    if (run.regionOrder[run.regionIndex] === 'galar' && usesGalarTournament('galar', isStoryCampaign(content, run.campaignId), !!getMode(run.rules.modeId)?.dailySeed)) {
+      const champ = league && stage.leaderId && content.bosses.get(stage.leaderId) ? bossInfo(content, 'champion', stage.leaderId) : null;
+      return pkGaRoad({
+        gyms: slots.map((g, k) => ({ name: g.name, type: g.type, state: g.state, art: pkArtOf(g.art), n: k + 1 })),
+        index: pick,
+        cup: { art: champ ? pkArtOf(artOf(this, champ.spriteAssetId)) : null, line: league ? `32 trainers · 5 rounds · ${champ ? `${champ.name} waits in the final` : 'under way'}` : `32 trainers · 5 rounds · opens after match ${n}` },
+        bracket: league,
+      });
+    }
     const e4 = (stage.eliteFour ?? []).map((id) => (content.bosses.get(id) ? artOf(this, bossInfo(content, 'elite', id).spriteAssetId) ?? null : null));
     return pkBadges({
       region: content.regions.get(run.regionOrder[run.regionIndex] ?? '')?.name ?? 'This region',
@@ -3384,7 +3396,11 @@ export class MapScene extends Phaser.Scene {
   /** Galar's Champion Tournament bracket: the five rounds, who is left, your next opponent. Presentation only (core/galarTournament.ts bracketView). */
   private toggleBracket(): void {
     // Pocket look: the bracket is the mock-up's page (B again, Esc or Enter closes it).
-    if (pocketOn() && this.rxView && !this.bracket) return this.popToggle('bracket');
+    if (pocketOn() && this.rxView && !this.bracket) {
+      // From Galar's Gym Challenge road (the Badge Case there), B goes straight to the bracket.
+      if (this.rxPop?.kind === 'badges') this.popClose();
+      return this.popToggle('bracket');
+    }
     if (this.bracket) {
       this.bracket.destroy();
       this.bracket = null;

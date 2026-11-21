@@ -103,3 +103,28 @@ export function pkGaInfo(d: { foeTag: string; foeTitle: string; foe: readonly Pk
     + `<div class="vs32">${pkSide32('a', d.foeTag, d.foeTitle, d.foe)}<i class="vsb32" data-nocheck></i>${pkSide32('b', 'The crowd', d.crowdTitle, d.crowd)}</div>`
     + `<div class="btn on nx go32" data-key="ga-info-back"${act('info')}><b>Back to the battle</b></div>${keys([['Enter', 'back', 'info'], ['Esc', 'back', 'info']])}</div>`);
 }
+
+export interface PkGaRoadModel {
+  gyms: readonly { name: string | null; type: string; state: 'got' | 'next' | 'later'; art: PkArt | null; n: number }[];
+  index: number;
+  /** The Champion's Tournament card: who waits at the end (null while the Champion is kept secret) and the line under it. */
+  cup: { art: PkArt | null; line: string };
+  /** B opens the bracket (only once the tournament has begun). */
+  bracket: boolean;
+}
+
+/** Galar's Gym Challenge road (mock-up `ga-road`), the Badge Case in Galar: a card per stadium match, then the Champion's Tournament. */
+export function pkGaRoad(d: PkGaRoadModel): string {
+  const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+  const cards = d.gyms.map((g, k) => {
+    const cls = `${g.state === 'next' ? 'now' : g.state === 'later' ? 'gx-later' : ''}${k === d.index ? ' gx-lit' : ''}`;
+    const tag = g.state === 'got' ? 'Badge won' : g.state === 'next' ? `Match ${g.n} · next` : 'Not met yet';
+    const name = g.name ?? '???';
+    return `<p class="${cls}" data-key="ga-g-${k}"${act('popPick', k)}><u>${g.n}</u><span>${g.art ? fitPic(g.art, 92, 124, '', 3) : '<q>?</q>'}</span><b style="font-size:${fit(name, 96, 20, 12, 0.6)}px">${esc(name)}</b><em>${esc(g.type ? cap(g.type) : 'Unknown')}</em><i>${esc(tag)}</i></p>`;
+  }).join('');
+  const ks: [string, string, string?][] = [['←→', 'look at a gym'], ['Esc', 'close']];
+  if (d.bracket) ks.splice(1, 0, ['B', 'bracket', 'roadBracket']);
+  return page('ga-road', 51, `<div class="scr sz20 ar28 a-ga pg28" data-key="ga-road"><div class="sz-h" data-m="hdr"><i class="emb28 ga hd" data-nocheck></i><b>Gym Challenge</b><span>${d.gyms.length} stadium matches, then the Champion's Tournament. Every match is shown live.</span></div>`
+    + `<div class="gym34" style="grid-template-columns:repeat(${Math.max(1, d.gyms.length)},1fr)" data-key="ga-gyms">${cards}</div>`
+    + `<div class="cup34" data-key="ga-cup"${d.bracket ? act('roadBracket') : ''}><span>${d.cup.art ? fitPic(d.cup.art, 70, 84, '', 3) : '<q>?</q>'}</span><b>Champion's Tournament</b><em>${esc(d.cup.line)}</em></div>${keys(ks)}</div>`);
+}
