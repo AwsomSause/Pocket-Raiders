@@ -205,7 +205,7 @@
   & .ph-bl-r b{font:400 24px/1 var(--f-disp);text-transform:uppercase;white-space:nowrap}
   & .ph-bl-r em{font:800 17px/1 var(--f-cond);font-style:normal;letter-spacing:.06em}
   & .ph-bl-r em.st{background:var(--gold);color:#000;padding:3px 7px;font-size:14px}
-  & .ph-bl-pic{height:44px;display:grid;place-items:center}
+  & .ph-bl-r .ph-bl-pic{height:44px;display:grid;place-items:center}
   & .ph-bl-r.on{background:var(--k);color:var(--w);clip-path:polygon(0 0,100% 0,97% 100%,0 100%);border-bottom-color:transparent}
   & .ph-bl-r.off b{opacity:.45}
   & .ph-bl-f{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:8px;font:800 15px/1 var(--f-cond);letter-spacing:.06em}

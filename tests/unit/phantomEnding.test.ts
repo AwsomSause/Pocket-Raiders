@@ -148,6 +148,9 @@ describe('the Phantom blessing', () => {
     expect(html).toContain('XVII');
     expect(html).toContain('Lugia&#39;s Calm');
     expect(html).toContain('Lugia has blessed your journey.');
+    // As the mock-up: the card says what it does; the shouted headline is spoken under it.
+    expect(html).toMatch(/<p class="txt">Fire moves keep their full power in rain\.<\/p><small>LASTS THIS RUN/);
+    expect(phBlessing(ph, blessing({ headline: 'THE WORLD IS KINDER TO THE LOVELY' }))).toContain('<br>The world is kinder to the lovely.</p>');
     expect(html).toContain('LASTS THIS RUN');
     expect(html).toContain('>Accept<');
     expect(html).not.toContain('ph-bl-wait');

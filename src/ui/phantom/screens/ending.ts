@@ -170,13 +170,22 @@ export interface BlessingModel {
 /** Rows on one page of the blessing list. */
 export const BLESSING_ROWS = 8;
 
-/** A Legendary blesses the run (mock-up `blessing`): no stage and no light on it, only the dark, the ring and the card. */
+/** The blessing's shouted headline as a spoken line ("THE WORLD IS KINDER TO THE LOVELY" -> "The world is kinder to the lovely."). */
+const calm = (t: string): string => {
+  const low = t === t.toUpperCase() ? t.toLowerCase() : t;
+  const s = low.charAt(0).toUpperCase() + low.slice(1);
+  return /[.!?…]$/.test(s) ? s : `${s}.`;
+};
+
+/** A Legendary blesses the run (mock-up `blessing`): no stage and no light on it, only the dark, the ring and the card. The card says what the blessing does, in plain words; once it is yours, the line under it gives the Legendary's words. */
 export function phBlessing(_ph: PhantomVersion, d: BlessingModel): string {
   const at = (n: number): string => (d.step >= n ? '' : ' ph-bl-wait');
+  // A long gift (a few run 300 letters) takes room from the picture, so the whole of it fits on the card.
+  const long = d.summary.length > 200 ? ' ph-bl-l2' : d.summary.length > 110 ? ' ph-bl-l1' : '';
   const word = `${esc('BLESSING')} · `.repeat(14);
   const say = d.vows
     ? `<div class="bl-say ph-bl-vows"><span class="lab">Swear one vow for the run</span>${d.vows.map((v, i) => `<div class="ch${i === d.vowAt ? ' on' : ''}" data-key="v${i}" style="--i:${i}"${act('vow', i, 'over')}><kbd>${i + 1}</kbd><b>${esc(v.label)}</b><span>${esc(v.text)}</span></div>`).join('')}</div>`
-    : `<div class="pn bl-say ph-bl-say${at(3)}"${act('next')}><p class="txt">${d.step >= 4 ? `<b>${esc(d.legendary)} has blessed your journey.</b><br>${esc(d.summary)}` : `“${esc(d.passage)}”`}</p><em aria-hidden="true">▼</em></div>`;
+    : `<div class="pn bl-say ph-bl-say${at(3)}"${act('next')}><p class="txt">${d.step >= 4 ? `<b>${esc(d.legendary)} has blessed your journey.</b><br>${esc(calm(d.headline))}` : `“${esc(d.passage)}”`}</p><em aria-hidden="true">▼</em></div>`;
   const book = d.book
     ? `<div class="ph-shade"${act('book')}></div><div class="pn lt ph-sheet ph-bl-book" data-key="book"><span class="lab">Blessings · ${d.book.found} of ${d.book.of} found</span>${d.book.rows.map((r) => `<div class="ph-bl-row${r.found ? '' : ' no'}${r.mine ? ' mine' : ''}"><small>${esc(r.tier)}</small><b>${r.found ? esc(r.name) : '? ? ?'}</b><span>${r.found ? `${esc(r.legendary)} · ${esc(r.text)}` : 'Not found yet.'}</span></div>`).join('')}<span class="ph-sheet-k">Page ${d.book.page + 1} of ${d.book.pages} · ◀▶ turn · C or Esc to close</span></div>`
     : '';
@@ -184,7 +193,7 @@ export function phBlessing(_ph: PhantomVersion, d: BlessingModel): string {
     + `<div class="bl-ghost ph-bl-ghost${at(1)}" aria-hidden="true">${d.mon ? figure({ file: d.mon, atlas: true }, 620) : ''}</div><div class="bl-ring" aria-hidden="true"></div>`
     + `<div class="cine" aria-hidden="true"><i><u>${word}</u></i><i><u>${word}</u></i></div>`
     + `<div class="bl-t${at(2)}">${ransom('BLESSING', 23)}</div>`
-    + `<div class="bl-card ph-bl-card${at(2)}"><span class="lab">${esc(d.tier)} Blessing</span><em>${esc(d.number)}</em><div class="bl-pic ph-bl-pic">${d.mon ? figure({ file: d.mon, atlas: true }, 170) : `<b>${esc(d.legendary.charAt(0).toUpperCase())}</b>`}</div><h3 class="tl1" style="font-size:${d.name.length > 18 ? 20 : d.name.length > 13 ? 24 : 30}px">${esc(d.name)}</h3><p class="txt${at(4)}">${esc(d.headline)}</p><small>LASTS THIS RUN</small></div>`
+    + `<div class="bl-card ph-bl-card${at(2)}${long}"><span class="lab">${esc(d.tier)} Blessing</span><em>${esc(d.number)}</em><div class="bl-pic ph-bl-pic">${d.mon ? figure({ file: d.mon, atlas: true }, d.summary.length > 200 ? 100 : d.summary.length > 110 ? 135 : 170) : `<b>${esc(d.legendary.charAt(0).toUpperCase())}</b>`}</div><h3 class="tl1" style="font-size:${d.name.length > 18 ? 20 : d.name.length > 13 ? 24 : 30}px">${esc(d.name)}</h3><p class="txt${at(4)}">${esc(d.summary)}</p><small>LASTS THIS RUN</small></div>`
     + say
     + keys(...(d.vows ? [['▲▼', 'Choose'] as const, ['Z', 'Swear', 'next'] as const] : [['Z', d.step >= 5 ? 'Accept' : 'Show all', 'next'] as const]), ['C', 'See all blessings', 'book'])
     + book);
