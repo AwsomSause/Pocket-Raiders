@@ -31,10 +31,14 @@ test('New UI: an event is played with clicks (choice, outcome text, results) and
   // The outcome text stays until the player moves on; the results come after it.
   await expect(ev.locator('[data-act="next"]')).toBeVisible({ timeout: 10_000 });
   await expect(ev).not.toContainText('Outcome');
+  // A click before the screen takes input is ignored (a slow CI machine can be later than a fixed wait).
+  const ready = () => expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Event').inputReady), { timeout: 10_000 }).toBe(true);
   await page.waitForTimeout(700);
+  await ready();
   await ev.locator('[data-act="next"]').click();
   await expect(ev).toContainText('Outcome', { timeout: 10_000 });
   await page.waitForTimeout(1500);
+  await ready();
   await ev.locator('[data-act="next"]').click();
   await waitForScene(page, 'Map');
   const used = await page.evaluate(() => (window as any).__pkr.session.run.stage.map.nodes.flatMap((n: any) => n.sides).find((s: any) => s.id === 'nu-event')?.used);
