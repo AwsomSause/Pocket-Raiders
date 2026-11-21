@@ -142,3 +142,11 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   it ends the chip counts to 0 and pops, the layer thins, a beam of light crosses and the colour comes back. It replaces
   the pack's weather picture and the old mood tint for those four. Reduced: layer, grade and chip, no entrance or gust
   motion. Off: the older layer. Limits: hail keeps the older layer (no mockup); doubles get no lean.
+- Terrain (pass 8 "Terrain"; `src/ui/battleFx/terrainLook.ts`): the terrain's carpet rolls out under both Pokémon
+  (the mockup's oval, centre and size) and stays while it lasts: a yellow grid that hums for Electric, pink and white
+  flowers on green for Grassy, pink and purple rings for Psychic, drifting pink mist for Misty. On arrival a ring in its
+  colour crosses the ground from the user's feet, and each has its flourish (four bolts and a flicker; twelve grass
+  blades grow, sway and sink; three rings and a hue turn; the mist drifts). Its chip counts the turns and sits under
+  the weather chip when both are up. When it ends the chip pops away and the carpet fades. It replaces the pack's
+  terrain picture. Reduced: carpet and chip, still. Off: nothing (as before). The steady hum, slow rings and mist
+  drift while it lasts follow the mockup's notes (the clip itself only shows each arrival).

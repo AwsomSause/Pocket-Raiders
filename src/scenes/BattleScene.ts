@@ -169,6 +169,8 @@ import { pickWipe, wipeAssetId } from '../ui/battleFx/ruleWipe';
 import { sosEntry } from '../core/battle/sos';
 import { WEATHER_ASSET_IDS, WeatherLayer } from '../ui/battleFx/weather';
 import { WeatherLook, WX_KINDS, type WxKind } from '../ui/battleFx/weatherLook';
+import { TerrainLook } from '../ui/battleFx/terrainLook';
+import { TERRAIN_KINDS, type TerrainKind } from '../core/presentation/motionWeather';
 import { battleTrack, storyBattleMusic, lowHpTrack, raidMusic, victoryTrack, type BattleRole } from '../core/presentation/battleMusic';
 import { itemCount } from '../core/items';
 import { planCues, STAT_WORDS } from '../core/presentation/cues';
@@ -341,6 +343,8 @@ export class BattleScene extends Phaser.Scene {
   private weatherLayer: WeatherLayer | null = null;
   /** The redesign's rain, sun, sand and snow (pass 8); hail stays on the older layer. */
   private wxLook: WeatherLook | null = null;
+  /** The redesign's terrain carpet and chip (pass 8). */
+  private trLook: TerrainLook | null = null;
   /** The sandstorm gusts once a turn, however many Pokémon it hurts. */
   private gustShown = false;
   /** A move's weather boost stamps once, on its first hit. */
@@ -668,6 +672,14 @@ export class BattleScene extends Phaser.Scene {
       flash: (color, alpha, ms) => this.wxFlash(color, alpha, ms),
     });
     void this.setWeather(run.battle?.weather ?? null, false);
+    this.trLook = new TerrainLook({
+      scene: this,
+      field: this.field,
+      under: () => groundCount,
+      level: () => this.clipLevel(),
+      fxOpts: () => { const h = this.clipHost({}); return { flash: h.flash ?? 1, particles: h.particles ?? true, rate: h.rate ?? 1 }; },
+    });
+    void this.setTerrain(run.battle?.terrain ?? null, false);
     this.arenaLight = new ArenaLight(this, this.field, this.field.length, this.motion);
     this.arenaPhase = 0;
     // A battle style's floor, tint or whole backdrop, under the Pokémon.
@@ -2408,11 +2420,36 @@ export class BattleScene extends Phaser.Scene {
     this.applyMood(own ? null : id);
     if (!own || !w) {
       if (this.wxLook?.current) this.wxLook.clearNow();
+      this.trLook?.chipAt(48);
       return;
     }
     const turns = wxTurns(w.turns);
+    this.trLook?.chipAt(84);
     if (arrive) await this.wxLook!.arrive(id, turns);
     else this.wxLook!.show(id, turns);
+  }
+
+  /** Whether the redesign's terrain carpet draws this terrain (with animations on). */
+  private trHandles(id: string | null | undefined): id is TerrainKind {
+    return !!id && (TERRAIN_KINDS as readonly string[]).includes(id) && this.clipLevel() !== 'off' && !!this.trLook;
+  }
+
+  /** The terrain now: its carpet and chip (rolled out from the last mover's feet when `arrive`). */
+  private async setTerrain(t: { id: string; turns: number } | null, arrive: boolean): Promise<void> {
+    if (!t || !this.trHandles(t.id)) {
+      if (this.trLook?.current) this.trLook.clearNow();
+      return;
+    }
+    this.trLook!.chipAt(this.wxLook?.current ? 84 : 48);
+    const turns = wxTurns(t.turns);
+    if (arrive) await this.trLook!.arrive(t.id, turns, this.spotXY(this.phLast?.side === 'enemy' ? 'enemy' : 'player'));
+    else this.trLook!.show(t.id, turns);
+  }
+
+  /** How many turns the terrain that just started has (the turn's end state; 5 when it has already moved on). */
+  private trTurnsNow(id: string): number {
+    const t = this.run.battle?.terrain;
+    return t && t.id === id ? t.turns : 5;
   }
 
   /** How many turns the weather that just started has (the turn's end state; 5 when it has already moved on). */
@@ -6698,7 +6735,7 @@ export class BattleScene extends Phaser.Scene {
       }
       // Pass 8 weather: the redesign's entrance replaces the pack's weather picture; a sandstorm gusts once a turn;
       // a move the rain or sun powers up gets its stamp as it hits.
-      if (e.type === 'weather' && this.wxHandles(e.weather)) cues[index] = (cues[index] ?? []).filter((c) => c.kind !== 'commonAnim');
+      if ((e.type === 'weather' && this.wxHandles(e.weather)) || (e.type === 'terrain' && this.trHandles(e.terrain))) cues[index] = (cues[index] ?? []).filter((c) => c.kind !== 'commonAnim');
       if (e.type === 'move') this.boostShown = false;
       if (e.type === 'damage' && !this.boostShown && this.wxBoosts(this.lastMoveType)) {
         this.boostShown = true;
@@ -6725,7 +6762,14 @@ export class BattleScene extends Phaser.Scene {
           break;
         case 'weatherEnd':
           if (this.wxLook?.current) await this.wxLook.end();
-          this.setWeather(null, false);
+          await this.setWeather(null, false);
+          break;
+        case 'terrain':
+          await this.setTerrain({ id: e.terrain, turns: this.trTurnsNow(e.terrain) }, true);
+          break;
+        case 'terrainEnd':
+          if (this.trLook?.current) await this.trLook.end();
+          await this.setTerrain(null, false);
           break;
         case 'focus':
           this.focusOn(e.side, e.uid);
@@ -7260,6 +7304,8 @@ export class BattleScene extends Phaser.Scene {
     // The weather chip counts down with the turns.
     const wx = run.battle?.weather;
     if (wx && this.wxLook?.current === wx.id) this.wxLook.chip(wxTurns(wx.turns));
+    const tr = run.battle?.terrain;
+    if (tr && this.trLook?.current === tr.id) this.trLook.chip(wxTurns(tr.turns));
   }
 
   /**

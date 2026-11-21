@@ -24,3 +24,24 @@ export function wxChipText(kind: WxKind, turns: number | null): string {
   const left = turns === null || turns > 99 ? '' : ` · ${turns} turn${turns === 1 ? '' : 's'}`;
   return `${c.sign} ${c.word}${left}`;
 }
+
+export type TerrainKind = 'electric' | 'grassy' | 'misty' | 'psychic';
+export const TERRAIN_KINDS: readonly TerrainKind[] = ['electric', 'grassy', 'misty', 'psychic'];
+
+/** The terrain carpet (pass 8 "Terrain"): an ellipse under both Pokémon, centred and sized as the mockup's. */
+export const CARPET = { x: 490, y: 380, w: 1050, h: 330, alpha: 0.9 } as const;
+
+/** Each terrain's chip: its sign, its words and its colour. */
+export const TERRAIN_CHIP: Record<TerrainKind, { sign: string; word: string; fill: string }> = {
+  electric: { sign: '⚡', word: 'ELECTRIC TERRAIN', fill: '#ffe14d' },
+  grassy: { sign: '✿', word: 'GRASSY TERRAIN', fill: '#7be08a' },
+  psychic: { sign: '◉', word: 'PSYCHIC TERRAIN', fill: '#e59bd0' },
+  misty: { sign: '☁', word: 'MISTY TERRAIN', fill: '#ffd6ec' },
+};
+
+/** The terrain chip's words: "⚡ ELECTRIC TERRAIN · 5 turns" (lasting terrain: no count). */
+export function terrainChipText(kind: TerrainKind, turns: number | null): string {
+  const c = TERRAIN_CHIP[kind];
+  const left = turns === null || turns > 99 ? '' : ` · ${turns} turn${turns === 1 ? '' : 's'}`;
+  return `${c.sign} ${c.word}${left}`;
+}

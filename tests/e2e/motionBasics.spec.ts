@@ -759,3 +759,38 @@ test('weather: rain, sun, sand and snow arrive with their layer, grade and chip;
   expect(off).toEqual({ n: 0, kind: null });
   expect(errors).toEqual([]);
 });
+
+test('terrain: the carpet rolls out under both Pokémon and stays, its chip counts the turns and sits under the weather chip; it fades and leaves nothing', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'terrain-e2e');
+  const seen = await page.evaluate(async () => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    const out: Record<string, unknown> = {};
+    for (const k of ['electric', 'grassy', 'psychic', 'misty']) {
+      await b.setTerrain({ id: k, turns: 5 }, true);
+      await new Promise((r) => setTimeout(r, 600));
+      const rug = b.trLook.rug;
+      const chip = b.children.list.find((o: any) => String(o.texture?.key).startsWith('tr.chip.'));
+      // The carpet is in the field, under both Pokémon.
+      const fieldIdx = (o: any) => b.field.getIndex(o);
+      out[k] = { scale: rug?.scale, under: fieldIdx(b.trLook.floor) < Math.min(fieldIdx(b.enemySprite), fieldIdx(b.playerSprite)), chip: chip?.texture.key.slice(8), chipY: chip?.y };
+      await b.trLook.end();
+      await new Promise((r) => setTimeout(r, 300));
+    }
+    await b.setTerrain({ id: 'grassy', turns: 3 }, false);
+    await b.setWeather({ id: 'rain', turns: 5 }, false);
+    await new Promise((r) => setTimeout(r, 400));
+    out.stacked = b.children.list.find((o: any) => String(o.texture?.key).startsWith('tr.chip.'))?.y;
+    b.trLook.clearNow();
+    b.wxLook.clearNow();
+    return out;
+  });
+  expect(seen.electric).toEqual({ scale: 1, under: true, chip: '⚡ ELECTRIC TERRAIN · 5 turns', chipY: 48 });
+  expect(seen.grassy).toMatchObject({ under: true, chip: '✿ GRASSY TERRAIN · 5 turns' });
+  expect(seen.psychic).toMatchObject({ under: true, chip: '◉ PSYCHIC TERRAIN · 5 turns' });
+  expect(seen.misty).toMatchObject({ under: true, chip: '☁ MISTY TERRAIN · 5 turns' });
+  expect(seen.stacked).toBe(84);
+  expect(await page.evaluate(() => { const b = (window as any).__pkr.game.scene.getScene('Battle'); return b.children.list.concat(b.field.list).filter((o: any) => /^tr\.|^wx\./.test(String(o.texture?.key)) || o.type === 'Container' && o === b.trLook.floor).length; })).toBe(0);
+  expect(errors).toEqual([]);
+});

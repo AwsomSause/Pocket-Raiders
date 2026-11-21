@@ -17,7 +17,7 @@ const W = 960;
 const H = 540;
 
 /** A fixed pseudo-random sequence for layouts (mulberry32): the same rain every time, and no gameplay RNG. */
-function seq(seed: number): (a: number, b: number) => number {
+export function seq(seed: number): (a: number, b: number) => number {
   let s = seed >>> 0;
   return (a, b) => {
     s = (s + 0x6d2b79f5) >>> 0;
@@ -30,7 +30,7 @@ function seq(seed: number): (a: number, b: number) => number {
 }
 
 /** Draws a canvas once and keeps it as a texture. */
-function picture(scene: Phaser.Scene, key: string, w: number, h: number, draw: (ctx: CanvasRenderingContext2D) => void): string | null {
+export function picture(scene: Phaser.Scene, key: string, w: number, h: number, draw: (ctx: CanvasRenderingContext2D) => void): string | null {
   if (scene.textures.exists(key)) return key;
   try {
     const c = document.createElement('canvas');

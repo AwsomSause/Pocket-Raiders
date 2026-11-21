@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { WX_CHIP, WX_GRADE, WX_KINDS, wxChipText } from '../../src/core/presentation/motionWeather';
-import { WEATHERS } from '../../src/core/contentSchema';
+import { CARPET, TERRAIN_CHIP, TERRAIN_KINDS, terrainChipText, WX_CHIP, WX_GRADE, WX_KINDS, wxChipText } from '../../src/core/presentation/motionWeather';
+import { TERRAINS, WEATHERS } from '../../src/core/contentSchema';
 
 // Animation redesign pass 8 (Rain, Harsh Sunlight, Sandstorm, Snow, Weather Clears): the numbers the mockups use.
 describe('weather look', () => {
@@ -22,5 +22,18 @@ describe('weather look', () => {
     expect(wxChipText('snow', null)).toBe('❄ SNOW');
     expect(wxChipText('rain', 999)).toBe('☂ RAIN');
     expect(WX_CHIP.sand.fill).toBe('#e2c98a');
+  });
+});
+
+describe('terrain look', () => {
+  it('draws every terrain the engine has', () => {
+    expect([...TERRAIN_KINDS].sort()).toEqual([...TERRAINS].sort());
+  });
+  it('the carpet sits where the mockup puts it, and each chip has its sign and colour', () => {
+    expect(CARPET).toEqual({ x: 490, y: 380, w: 1050, h: 330, alpha: 0.9 });
+    expect(terrainChipText('electric', 5)).toBe('⚡ ELECTRIC TERRAIN · 5 turns');
+    expect(terrainChipText('grassy', 1)).toBe('✿ GRASSY TERRAIN · 1 turn');
+    expect(terrainChipText('psychic', 999)).toBe('◉ PSYCHIC TERRAIN');
+    expect(TERRAIN_CHIP.misty.fill).toBe('#ffd6ec');
   });
 });
