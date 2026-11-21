@@ -1,0 +1,36 @@
+/* Pass 17 · Rivals & Heroes */
+/* Giovanni and Red watch from the key strip */
+.eyes17{position:absolute;left:300px;top:0;bottom:0;display:flex;align-items:center;gap:8px;cursor:pointer}
+.eyes17 i{display:flex;align-items:center;gap:4px;padding:1px 8px 1px 1px;font-style:normal;background:#2a1a20;border:2px solid #6a6f86;border-radius:999px;animation:pop .3s 1s both}
+.eyes17 i.h{border-color:#2860c9;background:#141e3a}
+.eyes17 b{font-size:12px;font-weight:800;color:#ff8a5d}
+.eyes17 i.h b{color:#8ab4ff}
+.eyes17 .face{animation:watch17 4s 1.4s ease-in-out infinite}
+/* VS banners on every name plate */
+.plate.vs17{position:relative;overflow:hidden;transform:skewX(-14deg);border:3px solid #000;border-left:8px solid var(--pc,var(--red))!important;box-shadow:4px 4px 0 #000}
+.plate.vs17::before{content:'';position:absolute;inset:0;background:radial-gradient(circle,rgba(255,255,255,.16) 1.2px,transparent 1.6px) 0 0/6px 6px;pointer-events:none}
+.plate.vs17 b{position:relative;text-shadow:2px 2px 0 #000}
+.sm-vs .bgx{filter:contrast(1.15) saturate(1.3)}
+.sm-vs::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(105deg,transparent 49.6%,#fff 49.8% 50.4%,transparent 50.6%),radial-gradient(circle,rgba(0,0,0,.18) 1.2px,transparent 1.6px) 0 0/7px 7px;animation:split17 .5s .2s both}
+/* rivals board */
+.ht17{position:absolute;inset:0;background:radial-gradient(circle,rgba(0,0,0,.25) 1.2px,transparent 1.6px) 0 0/7px 7px}
+.rv17{position:absolute;left:16px;top:62px;width:928px;height:334px;z-index:2;display:flex;gap:12px}
+.rvc{position:relative;flex:1;min-width:0;display:flex;flex-direction:column;align-items:stretch;gap:5px;padding:8px 12px 10px;text-align:left;overflow:hidden;background:linear-gradient(170deg,color-mix(in srgb,var(--pc),#000 30%),#100c16 60%);border:3px solid #000;border-top:6px solid var(--pc);border-radius:4px 20px 4px 20px;box-shadow:6px 6px 0 rgba(0,0,0,.5);animation:in-up .45s both;animation-delay:var(--d)}
+.rvc::before{content:'';position:absolute;inset:0;background:radial-gradient(circle,rgba(255,255,255,.07) 1.2px,transparent 1.6px) 0 0/6px 6px;pointer-events:none}
+.rv-h{display:flex;flex-direction:column}
+.rv-h b{font:400 28px/1 var(--fd);text-transform:uppercase;color:#fff;text-shadow:3px 3px 0 #000}
+.rv-h em{font-style:normal;font-size:13px;font-weight:800;color:var(--yel)}
+.rv-a{flex:1;min-height:0;display:flex;align-items:flex-end;justify-content:center}
+.rv-a img{filter:drop-shadow(0 0 16px color-mix(in srgb,var(--pc),transparent 30%));animation:breathe 2.4s ease-in-out infinite;transform-origin:bottom}
+.rv-m{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px}
+.rv-m small{font-size:12px;font-weight:800;text-transform:uppercase}
+.rv-m b{font:400 24px/1 var(--fd);color:#ff8a5d}
+.rv-n{font-style:normal;font-size:12px;padding:2px 8px;background:rgba(7,6,11,.6);border-radius:3px 8px 3px 8px}
+/* hero tracker */
+.eta17{position:absolute;z-index:4;padding:1px 8px;font-size:11px;font-weight:800;color:#fff;background:#2860c9;border:2px solid #000;border-radius:999px;animation:pop .3s both;animation-delay:var(--d)}
+.k-trk17 .bd12{left:16px}
+.ht-side .mons{margin:2px 0}
+.ht-side .dh12 .det-t.big{font-size:44px}
+/*@top*/
+@keyframes watch17{0%,40%,100%{transform:none}50%,90%{transform:scaleX(-1)}}
+@keyframes split17{from{clip-path:inset(0 50% 0 50%)}}

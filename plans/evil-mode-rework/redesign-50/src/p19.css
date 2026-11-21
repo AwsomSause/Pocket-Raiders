@@ -1,0 +1,47 @@
+/* Pass 19 · The Chair */
+/* gold corner brackets on every panel, like a framed decree */
+.pn::before{content:'';position:absolute;inset:4px;pointer-events:none;z-index:3;border-radius:inherit;background:linear-gradient(var(--yel),var(--yel)) 0 0/18px 2px,linear-gradient(var(--yel),var(--yel)) 0 0/2px 18px,linear-gradient(var(--yel),var(--yel)) 100% 0/18px 2px,linear-gradient(var(--yel),var(--yel)) 100% 0/2px 18px,linear-gradient(var(--yel),var(--yel)) 0 100%/18px 2px,linear-gradient(var(--yel),var(--yel)) 0 100%/2px 18px,linear-gradient(var(--yel),var(--yel)) 100% 100%/18px 2px,linear-gradient(var(--yel),var(--yel)) 100% 100%/2px 18px;background-repeat:no-repeat;opacity:.75;animation:corner19 .6s .3s both}
+/* every main button is a gold plate with a wax seal */
+.cta.on{background:linear-gradient(#ffe39a,#e8b23a 55%,#b8861c);color:#3a1a08;text-shadow:0 1px 0 rgba(255,255,255,.5);box-shadow:inset 0 1px 0 #fff6,0 3px 0 #000}
+.cta.on::before{content:'N';width:20px;height:20px;display:grid;place-items:center;font:400 14px/1 var(--fd);color:#ffd8c0;background:radial-gradient(circle at 35% 30%,#e04050,#8a0d17 70%);border:2px solid #5a0610;border-radius:46% 54% 50% 50%;box-shadow:0 0 0 2px rgba(138,13,23,.35);animation:seal19 .5s .8s cubic-bezier(.3,1.6,.5,1) both}
+/* the Chair, first person */
+.k-ch19 .bgx{filter:brightness(.55) sepia(.3)}
+.lamp19{position:absolute;left:180px;top:-40px;width:420px;height:460px;background:radial-gradient(ellipse 50% 60% at 50% 0,rgba(255,214,140,.35),transparent 70%);animation:flick11 1.4s steps(1) both}
+.vis19{position:absolute;left:190px;top:76px;z-index:1;filter:drop-shadow(0 0 20px rgba(0,0,0,.8));animation:in-up .6s both}
+.desk19{position:absolute;left:0;right:0;top:342px;bottom:30px;z-index:2;background:linear-gradient(#5a3420 0 10px,#3a1f12 10px 14px,#2a160c);border-top:3px solid #8a5a30;box-shadow:0 -10px 30px rgba(0,0,0,.6)}
+.per19{position:absolute;left:330px;top:-78px;animation:breathe 2.4s ease-in-out infinite;transform-origin:bottom}
+.led19{position:absolute;left:150px;top:-36px}
+.np19{position:absolute;left:50%;top:44px;transform:translateX(-50%);padding:6px 26px;font:400 26px/1 var(--fd);letter-spacing:.12em;color:#3a1a08;background:linear-gradient(#ffe39a,#b8861c);border:2px solid #000;border-radius:3px;box-shadow:0 4px 0 #000}
+.cig19{position:absolute;left:250px;top:-14px;width:60px;height:12px;border-radius:6px;background:linear-gradient(90deg,#2a2a2a,#6a6a6a);box-shadow:0 0 0 2px #000}
+.dale19{position:absolute;left:20px;top:200px;z-index:3;filter:brightness(.8) drop-shadow(0 0 12px rgba(0,0,0,.8))}
+.plq19{position:absolute;left:24px;top:22px;z-index:4;display:flex;flex-direction:column;padding:6px 16px;background:linear-gradient(#ffe39a,#b8861c);color:#3a1a08;border:2px solid #000;border-radius:3px;box-shadow:4px 4px 0 rgba(0,0,0,.5)}
+.plq19 b{font:400 28px/1 var(--fd);text-transform:uppercase}
+.plq19 em{font-style:normal;font-size:12px;font-weight:800}
+.ask19{position:absolute;left:480px;top:22px;width:464px;z-index:4;padding:10px 16px;color:#1d1622;background:#fff8ea;border:2px solid #000;border-radius:18px 18px 18px 4px;box-shadow:5px 5px 0 var(--area);animation:bub13 .4s .2s both}
+.ask19 small{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--red)}
+.ask19 p{margin:2px 0 0;font-size:16px}
+.ans19{position:absolute;left:480px;top:136px;width:464px;z-index:4;display:flex;flex-direction:column;gap:8px}
+.a19 .row-t b{font-size:21px}
+.ln19{font-style:normal;font-size:12px;font-weight:800;padding:1px 8px;border-radius:999px;color:#fff;background:#5c6b86}
+.ln19.dread{background:var(--red)}.ln19.regard{background:#2f9e44}
+/* waiting room */
+.bench19{position:absolute;left:16px;top:70px;width:928px;height:326px;z-index:2;display:flex;gap:14px}
+.vq{position:relative;flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 12px;text-align:center;background:linear-gradient(rgba(23,19,29,.4),rgba(23,19,29,.92) 55%);border:2px solid #000;border-bottom:6px solid var(--pc);border-radius:4px 20px 4px 20px;animation:in-up .45s both;animation-delay:var(--d)}
+.vq .num{position:absolute;left:10px;top:8px;width:28px;height:28px;display:grid;place-items:center;font:400 20px/1 var(--fd);font-style:normal;color:var(--ink);background:var(--yel);border:2px solid #000;border-radius:50%}
+.vq .vs{flex:1;min-height:0;display:flex;align-items:flex-end}
+.vq b{font:400 26px/1 var(--fd);text-transform:uppercase}
+.vq em{font-style:normal;font-size:12px;color:var(--mut)}
+.vq .want{font-size:13px;font-weight:800}
+.vq .mood{font-style:normal;font-size:12px;font-weight:800;padding:1px 10px;border-radius:999px;background:var(--line)}
+.vq.on{box-shadow:0 0 0 3px var(--yel),0 0 20px rgba(232,178,58,.4)}
+/* favour ledger */
+.fo19{left:16px;top:66px;width:520px;height:330px}
+.fd19{left:552px;top:66px;width:392px;height:330px}
+.fv{display:flex;align-items:center;gap:10px;padding:6px 10px;background:rgba(33,26,40,.75);border-radius:3px 12px 3px 12px;animation:in-r .35s both;animation-delay:var(--d)}
+.fv .cta{padding:4px 12px;font-size:13px}
+.fv .sz{font-style:normal;font-size:11px;font-weight:800;padding:1px 8px;border-radius:999px;background:var(--line);flex:none}
+.fv .sz.big{background:var(--yel);color:var(--ink)}
+.fv .sz.grudge{background:var(--red);color:#fff}
+/*@top*/
+@keyframes corner19{from{inset:-10px;opacity:0}}
+@keyframes seal19{from{transform:scale(2.6) rotate(-30deg);opacity:0}}

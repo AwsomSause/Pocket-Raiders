@@ -1,0 +1,19 @@
+/* Pass 45 · Fifth Cut */
+/* one pulse at a time: only Red’s ping keeps moving */
+.bm36,.tk36,.rh42,.gc44 .g-next,.lr36.boss>i,.cc40.c-now .stp{animation:none}
+.gc44 .g-next{filter:drop-shadow(0 0 3px #fff)}
+/* no Hero heartbeat on the calm pages */
+&[data-g="Settings"],&[data-g="Menu"],&[data-g="Guide"],&[data-g="Start"],&[data-g="Rotom"],&[data-g="Map of pages"]{.hb42{display:none}}
+/* the Boss card, rebuilt */
+.k-bc45 .bc25{gap:6px}
+.k-bc45 .bc25 dl{gap:3px 14px}
+.xb45{display:flex;align-items:center;gap:8px}
+.xb45 b{font-size:12px;font-weight:800;color:#2860c9}
+.xb45 span{flex:1;height:8px;background:#e0d4c0;border:2px solid #1d1622;border-radius:4px;overflow:hidden}
+.xb45 span i{display:block;height:100%;background:linear-gradient(90deg,#5ab4ff,#2860c9);animation:fill23 1s .6s both}
+.xb45 em{font-style:normal;font-size:12px;font-weight:800;color:#6a5a70}
+.gm45{display:flex;gap:6px}
+.gm45 i{width:26px;height:26px;display:grid;place-items:center;border-radius:50%;background:#e0d4c0;box-shadow:inset 0 2px 4px rgba(0,0,0,.3);animation:pop .3s both;animation-delay:calc(var(--d) + .5s)}
+.gm45 i img{filter:grayscale(1) opacity(.35)}
+.gm45 .g-nova img{filter:drop-shadow(0 0 4px #ffd75a)}
+.gm45 .g-next{box-shadow:inset 0 0 0 2px #e0294a}

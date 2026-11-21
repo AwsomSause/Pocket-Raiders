@@ -1,0 +1,50 @@
+/* Pass 30 · Second Cut */
+/* the strip under the top bar: news where it matters, the war line everywhere else */
+.war30{position:absolute;left:0;right:0;top:50px;height:12px;z-index:6;display:flex;align-items:center;gap:8px;padding:0 8px;background:#17131d;border-bottom:1px solid #000;cursor:pointer}
+.war30 b{flex:none;font-size:10px;font-weight:800;line-height:1;color:#ff8a7a}
+.war30 b.r{color:#c8cde0}
+.war30 span{position:relative;flex:1;height:8px;background:#8a8fa6;border:1px solid #000;border-radius:3px}
+.war30 span i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#e0294a,#ff6b5d);border-radius:2px;animation:fill23 1s .4s cubic-bezier(.3,1,.4,1) both}
+.war30 span em{position:absolute;top:-5px;width:14px;height:14px;margin-left:-7px;background:#fff;clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);filter:drop-shadow(0 0 5px #ffd75a);animation:spk29 .5s ease-in-out infinite alternate}
+.war30~.tug29,.nb2:has(~.war30) .tug29{display:none}
+/* a Black and White style place sign slides in and away */
+.sign30{position:absolute;left:16px;top:70px;z-index:14;display:flex;align-items:center;gap:10px;padding:8px 22px 8px 12px;color:#1d1622;background:#fff8ea;border:3px solid #1d1622;border-radius:4px 14px 14px 4px;box-shadow:inset 0 0 0 2px #fff8ea,inset 0 0 0 4px var(--area),5px 5px 0 rgba(0,0,0,.55);pointer-events:none;animation:sign30 2.6s .5s cubic-bezier(.3,1.2,.5,1) both}
+.sign30 i{width:12px;height:30px;background:var(--area);border:2px solid #000;border-radius:3px}
+.sign30 b{font:400 22px/1 var(--fd);text-transform:uppercase;white-space:nowrap}
+/* the speaker's name sits on a tab on the text box */
+.foot.nm30 p{padding-top:12px;overflow:visible}
+.foot.nm30 p>b{position:absolute;left:16px;top:-10px;margin:0;padding:0 12px;font-size:13px;line-height:17px;color:#fff!important;filter:none!important;background:var(--area);border:2px solid #1d1622;border-radius:8px 8px 8px 2px;box-shadow:2px 2px 0 rgba(0,0,0,.4);animation:in-up .3s .3s both}
+.foot.nm30 .emo28{left:auto;right:auto;left:-6px;top:-18px}
+/* Last night */
+.rg30{position:absolute;left:16px;right:16px;top:74px;height:322px;z-index:2;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.rcd30{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;padding:12px;text-align:center;color:#1d1622;background:#fff8ea;border:3px solid #1d1622;border-radius:12px;box-shadow:inset 0 0 0 2px #fff8ea,inset 0 0 0 4px var(--area),5px 5px 0 rgba(0,0,0,.55);transform-origin:50% 100%;animation:deal30 .6s both;animation-delay:var(--d)}
+.rcd30 small{position:absolute;left:10px;top:10px;padding:1px 10px;font-size:11px;font-weight:800;text-transform:uppercase;color:#fff;background:var(--area);border-radius:999px}
+.rcd30 .sp{flex:1;display:grid;place-items:end center}
+.rcd30 b{font:400 20px/1 var(--fd);text-transform:uppercase;color:#8a1030}
+.rcd30 em{font-style:normal;font-size:13px}
+.rcd30 i{font-style:normal;font-size:16px;font-weight:800;color:#e0294a}
+/* the Adventure log */
+.bk30{position:absolute;left:60px;right:60px;top:76px;height:320px;z-index:2;display:flex;perspective:1200px}
+.bk30 .pg{position:relative;flex:1;display:flex;flex-direction:column;gap:12px;padding:20px 26px;color:#1d1622;background:repeating-linear-gradient(#f6efd8 0 23px,#e5d7b6 23px 24px);border:3px solid #3a2418;box-shadow:6px 8px 0 rgba(0,0,0,.5)}
+.bk30 .l{border-radius:12px 2px 2px 12px;border-right:none;box-shadow:inset -10px 0 14px -8px rgba(58,36,24,.5),6px 8px 0 rgba(0,0,0,.5)}
+.bk30 .r{border-radius:2px 12px 12px 2px;border-left:2px solid #3a2418;transform-origin:0 50%;animation:turn30 .8s .2s cubic-bezier(.3,1,.4,1) both}
+.en30{position:relative;margin:0;font-size:15px;line-height:1.35;animation:ink30 .5s both;animation-delay:calc(var(--d) + .6s)}
+.en30 b{display:block;font:400 17px/1.1 var(--fd);color:#8a1030}
+.en30 i{position:absolute;right:-10px;top:0;font-style:normal;color:#e0294a}
+.sig30{margin-top:auto;align-self:flex-end;font:italic 800 18px/1 var(--fb, inherit);color:#3a2418}
+/* the Hall of Infamy */
+.spot30{position:absolute;inset:0;z-index:1;pointer-events:none;background:conic-gradient(from 160deg at 50% -10%,transparent 0 10deg,rgba(255,215,90,.18) 10deg 20deg,transparent 20deg 30deg,rgba(255,215,90,.14) 30deg 40deg,transparent 40deg);animation:sweep30 6s ease-in-out infinite alternate}
+.hall30{position:absolute;left:16px;right:16px;top:80px;height:316px;z-index:2;display:flex;align-items:flex-end;justify-content:center;gap:16px}
+.ped30{position:relative;width:150px;display:flex;flex-direction:column;align-items:center;gap:3px;padding-bottom:6px;animation:rise26 .6s both;animation-delay:var(--d)}
+.ped30.top{order:0;width:190px}
+.ped30:nth-child(2){order:-1}.ped30:nth-child(3){order:1}.ped30:nth-child(4){order:-2}.ped30:nth-child(5){order:2}
+.ped30 .base{width:100%;height:20px;background:linear-gradient(#ffd75a,#b8861c);border:3px solid #000;border-radius:4px;box-shadow:0 6px 0 #3a2418}
+.ped30.top .base{height:36px}
+.ped30 b{font:400 20px/1 var(--fd);text-transform:uppercase;color:var(--yel)}
+.ped30 em{font-style:normal;font-size:12px;font-weight:800;color:var(--mut)}
+/*@top*/
+@keyframes sign30{0%{transform:translateY(-120px)}14%,78%{transform:none;opacity:1}100%{transform:translateY(-120px);opacity:0}}
+@keyframes deal30{from{opacity:0;transform:translateY(-60px) rotate(-8deg) scale(.8)}}
+@keyframes turn30{from{transform:rotateY(-110deg)}}
+@keyframes ink30{from{opacity:0;clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes sweep30{to{transform:translateX(60px)}}
