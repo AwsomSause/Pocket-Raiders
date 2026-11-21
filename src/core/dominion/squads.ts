@@ -12,6 +12,7 @@ import {
 } from './crew';
 import { notoriety } from './recruit';
 import { addOddsPartHook } from './field';
+import { setChairHook } from './chair';
 import { fill } from './worldTurn';
 
 const Q = () => DOMINION_DATA.squads;
@@ -286,6 +287,16 @@ addRunHook({
       const kept = Math.round((income * N('cutKeepPct')) / 100);
       b.funds -= kept;
       n.say('money', L('cut', { squad: s.codeName, amount: income, kept }));
+    }
+    // Court card 8: an Admin the Boss granted a cut takes 10% of each paying job their squad brings in (a squad they're in,
+    // or one in the Group they lead).
+    const cuts = squadsOf(b).cuts ?? [];
+    const takerId = income > 0 ? [...s.members, groupOf(b, s.id)?.leader].find((id) => !!id && cuts.includes(id)) : undefined;
+    const taker = takerId ? memberById(b, takerId) : undefined;
+    if (taker) {
+      const cut = Math.round((income * N('adminCutPct')) / 100);
+      b.funds -= cut;
+      n.say('money', L('adminCut', { name: taker.name, squad: s.codeName, cut }));
     }
     // Everyone's Fatigue rises by 10, not 15 (they share the load); followers get XP and task XP.
     const tire = s.trait === 'night-owls' ? T('nightOwls') : N('fatigue');
@@ -798,3 +809,13 @@ export function squadStep(block: DominionBlock, a: DominionAction, seed: string)
     default: return null;
   }
 }
+
+// Court card 8 (D12's Chair): "10% cut" gives the named Admin a standing cut of their squad's take.
+setChairHook('squad-cut', (b, _r, member) => {
+  const m = member ? b.members.find((x) => x.id === member) : undefined;
+  if (!m) return null;
+  const st = squadsOf(b);
+  st.cuts ??= [];
+  if (!st.cuts.includes(m.id)) st.cuts.push(m.id);
+  return L('adminCutGranted', { name: m.name, pct: N('adminCutPct') });
+});

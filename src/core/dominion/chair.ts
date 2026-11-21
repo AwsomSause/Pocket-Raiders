@@ -331,12 +331,16 @@ export function setChairHero(h: NonNullable<typeof heroHooks>): void {
 }
 
 /** Answers whose rule another slice owns (`hook:id` in the SPEC): that slice registers it at load, like the Tension hook. */
-const hooks: Partial<Record<ChairHook, (b: DominionBlock, r: Roll) => string | null>> = {};
-export function setChairHook(id: ChairHook, f: (b: DominionBlock, r: Roll) => string | null): void {
+const hooks: Partial<Record<ChairHook, (b: DominionBlock, r: Roll, member: string | null) => string | null>> = {};
+/** `member` is the card's named member (the Admin on card 8), or null. */
+export function setChairHook(id: ChairHook, f: (b: DominionBlock, r: Roll, member: string | null) => string | null): void {
   hooks[id] = f;
 }
 /** The registered hook (tests and the court tool's checks). */
-export const chairHookOf = (id: ChairHook): ((b: DominionBlock, r: Roll) => string | null) | undefined => hooks[id];
+export const chairHookOf = (id: ChairHook): ((b: DominionBlock, r: Roll, member?: string | null) => string | null) | undefined => {
+  const f = hooks[id];
+  return f ? (b, r, member = null) => f(b, r, member) : undefined;
+};
 
 const bump = (x: Ctx, k: string, n: number): void => {
   if (n) x.changes[k] = (x.changes[k] ?? 0) + n;
@@ -469,7 +473,7 @@ function apply(x: Ctx, fx: CourtFx[]): void {
         break;
       case 'note': x.lines.push(`${e.text} ${fill(L().waits!, { slice: e.slice })}`); break;
       case 'hero': heroHooks?.act(b, e, x.lines); break;
-      case 'hook': { const said = hooks[e.id]?.(b, x.r); if (said) x.lines.push(said); break; }
+      case 'hook': { const said = hooks[e.id]?.(b, x.r, x.member); if (said) x.lines.push(said); break; }
       case 'deal': {
         ch.deals.push({ card: x.card.id, n: scale(b, e.n), clean: !!e.clean, heat: e.heat ?? 0, risk: e.risk ?? 0, wanted: e.wanted ?? 0, mon: e.mon ?? 0, item: e.item ?? null, itemN: e.itemN ?? 0, ten: e.ten ?? 0 });
         bump(x, 'week', scale(b, e.n));
