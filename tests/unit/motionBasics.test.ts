@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ClipBuilder, clipEnd, EASES, fxAllowed, sampleClip, type ClipLevel, type MotionClip } from '../../src/core/presentation/motionClip';
-import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_KNOCK, HIT_KNOCK_BIG, hitClip, hitPower, HIT_THROW, FIRST_TAG, COMBO, comboPlan, comboScale, CRIT_FREEZE, critFreezeClip, HIT_STAMPS, hitStampSpot, levelUpClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, sendWeight, SEND_WEIGHT, CRY, cryClip, FLINCH, flinchClip, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_KNOCK, HIT_KNOCK_BIG, hitClip, hitPower, HIT_THROW, FIRST_TAG, COMBO, comboPlan, comboScale, CRIT_FREEZE, critFreezeClip, HIT_STAMPS, hitStampSpot, levelUpClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, sendWeight, SEND_WEIGHT, CRY, cryClip, FLINCH, flinchClip, WIN, winClip, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
 
 const ME: MonSpot = { x: 312, y: 428, h: 180, side: 'player' };
 const FOE: MonSpot = { x: 648, y: 240, h: 150, side: 'enemy' };
@@ -399,6 +399,42 @@ describe('flinch (pass 11)', () => {
     const off = flinchClip(ME, 'off');
     expect(off.length).toBe(0);
     expect(off.fx).toEqual([]);
+  });
+});
+
+describe("winner's moment (pass 11)", () => {
+  const cues = (c: MotionClip) => c.fx.filter((f) => f.kind === 'cue').map((f) => f.kind === 'cue' && [f.name, f.at]);
+  it('hops twice (40 px, then 54 spinning once), squashes, a note, gold stars, then leans toward you and a heart', () => {
+    const c = winClip(ME, false, 'full');
+    expect(sampleClip(c, 140).mon!.dy).toBeCloseTo(-40);
+    expect(sampleClip(c, 280).mon!.dy).toBeCloseTo(0);
+    expect(sampleClip(c, 470).mon!.dy).toBeCloseTo(-54);
+    expect(sampleClip(c, 610).mon!.rot).toBeCloseTo(360);
+    expect(sampleClip(c, 690).mon).toMatchObject({ sy: 0.88, sx: 1.08 });
+    expect(sampleClip(c, 1600).mon).toMatchObject({ dx: -18, rot: -5 });
+    expect(clipEnd(c).mon).toMatchObject({ dy: 0, dx: 0, rot: 0, sx: 1, sy: 1 });
+    expect(cues(c)).toEqual([['note', WIN.noteAt], ['free', WIN.free], ['heart', WIN.heartAt]]);
+    expect(c.fx.filter((f) => f.kind === 'star')).toHaveLength(6);
+    expect(c.fx.filter((f) => f.kind === 'dust').map((f) => f.at)).toEqual([300, 660]);
+    expect(c.length).toBe(2400);
+    // The same every time: no randomness.
+    expect(winClip(ME, false, 'full')).toEqual(c);
+  });
+  it('a heavy one stamps once instead, and the screen answers', () => {
+    const c = winClip(ME, true, 'full');
+    expect(sampleClip(c, 280).mon!.dy).toBeCloseTo(-24);
+    expect(sampleClip(c, 460).mon).toMatchObject({ sy: 0.86, sx: 1.1 });
+    expect(cues(c)).toContainEqual(['stamp', 400]);
+    expect(c.segs.some((g) => g.prop === 'rot' && g.to === 360)).toBe(false);
+  });
+  it('Reduced: one small hop and the note; Off: nothing, and the battle goes on at once', () => {
+    const r = winClip(ME, false, 'reduced');
+    expect(sampleClip(r, 140).mon!.dy).toBeCloseTo(-20);
+    expect(r.fx.map((f) => f.kind)).toEqual(['cue', 'cue']);
+    expect(cues(r)).toEqual([['note', 140], ['free', 400]]);
+    const off = winClip(ME, false, 'off');
+    expect(off.length).toBe(0);
+    expect(cues(off)).toEqual([['free', 0]]);
   });
 });
 

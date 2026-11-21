@@ -764,3 +764,55 @@ export function flinchClip(mon: MonSpot, level: ClipLevel): MotionClip {
  * colour comes back over `outMs`.
  */
 export const WORN = { dy: 8, tilt: 5, inMs: 400, sy: 0.94, sx: 1.02, breathMs: 620, br: 0.88, sat: 0.8, sweatEvery: 450, sweatDx: 50, sweatFall: 30, sweatArc: 30, sweatMs: 400, hop: 10, shake: 5, outMs: 300 } as const;
+
+/** Winner's moment (pass 11): when the "free" cue lets the battle go on (ms), and where the note and heart pop. */
+export const WIN = { free: 1300, noteAt: 500, heartAt: 1400, noteDx: 90, noteDy: -110, heartDx: -80, heartDy: -60, lean: 18, leanRot: 5 } as const;
+
+/**
+ * Winner's moment (pass 11): after a knock-out your Pokémon gets a second to itself. It hops twice (40 px, then 54 px
+ * spinning once on the way), lands with a squash and dust, a note pops out ("note") with a spray of gold stars, then
+ * it leans toward you and a heart pops ("heart"). A heavy one stamps once instead of hopping: a crouch, a short rise
+ * and a hard landing ("stamp": the screen answers). `mon.y` is its feet. Reduced: one small hop and the note.
+ * Off: nothing. "free" is when the battle may go on (the lean finishes while the EXP comes).
+ */
+export function winClip(mon: MonSpot, heavy: boolean, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('win', level);
+  const m = b.part('mon', { dy: 0, dx: 0, rot: 0, sx: 1, sy: 1 });
+  if (level === 'off') {
+    b.fx({ kind: 'cue', at: 0, name: 'free' });
+    return b.end(0);
+  }
+  if (level === 'reduced') {
+    m.at(0).to(140, { dy: -20 }, 'out').to(140, { dy: 0 }, 'in');
+    b.fx({ kind: 'cue', at: 140, name: 'note' });
+    b.fx({ kind: 'cue', at: 400, name: 'free' });
+    b.beat(0, 'A small hop and a note');
+    return b.end(400);
+  }
+  const top = mon.y - mon.h * 0.55;
+  if (heavy) {
+    m.at(0).to(120, { sy: 0.9, sx: 1.06 }, 'out').to(160, { dy: -24, sy: 1.05, sx: 0.97 }, 'out').to(120, { dy: 0 }, 'in').to(60, { sy: 0.86, sx: 1.1 }).to(300, { sy: 1, sx: 1 }, 'el');
+    b.fx({ kind: 'cue', at: 400, name: 'stamp' });
+    b.fx({ kind: 'dust', at: 400, x: mon.x - 40, y: mon.y, n: 8, big: 1.3 });
+    b.fx({ kind: 'dust', at: 400, x: mon.x + 40, y: mon.y, n: 8, big: 1.3 });
+    b.beat(0, 'Crouches').beat(400, 'Stamps once');
+  } else {
+    m.at(0).to(140, { dy: -40 }, 'out').to(140, { dy: 0 }, 'in').to(50, { sy: 0.92 }).to(140, { dy: -54, sy: 1.04 }, 'out');
+    m.at(330).to(280, { rot: 360 }, 'io');
+    m.at(470).to(160, { dy: 0 }, 'in').to(60, { sy: 0.88, sx: 1.08 }).to(300, { sy: 1, sx: 1 }, 'el');
+    m.at(990).set({ rot: 0 });
+    b.fx({ kind: 'dust', at: 300, x: mon.x, y: mon.y, n: 5 });
+    b.fx({ kind: 'dust', at: 660, x: mon.x, y: mon.y, n: 9 });
+    b.beat(0, 'Two hops and a spin');
+  }
+  b.fx({ kind: 'cue', at: WIN.noteAt, name: 'note' });
+  // The gold stars round it as it lands (the mockup's spread, fixed so it is the same every time).
+  const spread = [[-0.8, -0.6], [0.7, -0.9], [-0.3, 0.2], [0.9, 0.1], [-0.95, -0.1], [0.2, -1]] as const;
+  spread.forEach(([sx, sy], i) => b.fx({ kind: 'star', at: 660 + i * 50, x: mon.x + sx * 110, y: top + sy * 70, size: 30, points: 4, inner: 0.15, color: 0xffcb05, d: 300 }));
+  const d = mon.side === 'player' ? 1 : -1;
+  m.at(WIN.free).to(300, { dx: -WIN.lean * d, rot: -WIN.leanRot * d }, 'io').wait(500).to(300, { dx: 0, rot: 0 }, 'io');
+  b.fx({ kind: 'cue', at: WIN.free, name: 'free' });
+  b.fx({ kind: 'cue', at: WIN.heartAt, name: 'heart' });
+  b.beat(WIN.noteAt, 'A note pops out').beat(WIN.free, 'Leans toward you').beat(WIN.heartAt, 'A heart');
+  return b.end(WIN.free + 1100);
+}

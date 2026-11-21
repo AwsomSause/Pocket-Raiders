@@ -131,7 +131,7 @@ import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel, MotionClip } from '../core/presentation/motionClip';
-import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, COMBO, comboPlan, comboScale, FIRST_TAG, OHKO_STAMP, type ComboStep, CRIT_FREEZE, critFreezeClip, HIT_LIGHT, HIT_STAMPS, hitStampSpot, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendWeight, CRY, cryClip, FLINCH, flinchClip, WORN, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, COMBO, comboPlan, comboScale, FIRST_TAG, OHKO_STAMP, type ComboStep, CRIT_FREEZE, critFreezeClip, HIT_LIGHT, HIT_STAMPS, hitStampSpot, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendWeight, CRY, cryClip, FLINCH, flinchClip, WORN, WIN, winClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart, type ClipRun } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
@@ -2345,6 +2345,58 @@ export class BattleScene extends Phaser.Scene {
       },
       onStop: () => v.active && v.setPosition(home.x, home.y).setAngle(s.angle).setScale(s.sx, s.sy),
     });
+  }
+
+  /**
+   * Winner's moment (redesign pass 11): after a knock-out your Pokémon hops twice and spins, a note pops out with gold
+   * stars, then it leans toward you and a heart pops (a heavy one stamps once instead of hopping). Resolves once the
+   * battle may go on; the lean finishes while the EXP comes. Presentation only.
+   */
+  private winMoment(): Promise<void> {
+    const sprite = this.condSprite('player');
+    const mon = this.shown.player;
+    const level = this.clipLevel();
+    if (!sprite || !sprite.visible || !mon || mon.hp <= 0 || level === 'off') return Promise.resolve();
+    try {
+      const sp = getSpecies(services().session.content, mon.speciesId);
+      const heavy = standKind(sp.dex, sp.types, !!mon.dynamaxed) === 'heavy';
+      const spot = { ...this.spotXY('player'), h: this.headHeight(sprite), side: 'player' as const };
+      const mid = this.midOf('player');
+      return new Promise<void>((free) => {
+        this.condPlay(sprite, winClip(spot, heavy, level), {}, (cut) => {
+          free();
+          if (cut || !sprite.active) return;
+          this.restAt(sprite, 'player');
+          if (sprite.visible) this.standUp(sprite, mon);
+        }, (name) => {
+          if (name === 'free') free();
+          if (name === 'stamp') this.wxShake(8, 300);
+          if (name === 'note') this.popGlyph('♪', mid.x + WIN.noteDx, mid.y + WIN.noteDy, '#ffcb05', 54, 500, 50);
+          if (name === 'heart') this.popGlyph('♥', mid.x + WIN.heartDx, mid.y + WIN.heartDy, '#ff8ab0', 44, 600, 40);
+        });
+      });
+    } catch {
+      return Promise.resolve();
+    }
+  }
+
+  /** A glyph (a note, a heart) springs out, holds, then floats up and fades. */
+  private popGlyph(glyph: string, x: number, y: number, color: string, size: number, hold: number, rise: number): void {
+    const rate = animationTimeScale(services().session.settings);
+    const t = this.add
+      .text(Phaser.Math.Clamp(x, 30, GAME_WIDTH - 30), Math.max(40, y), glyph, { fontFamily: FONT_FAMILY, fontSize: `${size}px`, color, stroke: '#16203f', strokeThickness: 6 })
+      .setOrigin(0.5)
+      .setDepth(3000)
+      .setScale(0);
+    this.tweens.chain({
+      targets: t,
+      tweens: [
+        { scale: 1, duration: 200 * rate, ease: 'Back.easeOut' },
+        { y: t.y - rise, alpha: 0, delay: hold * rate, duration: 400 * rate, ease: 'Sine.easeIn' },
+      ],
+      onComplete: () => t.destroy(),
+    });
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => t.active && t.destroy());
   }
 
   /** One sweat drop flicks off a worn-out Pokémon (pass 11): out and down in a small arc, then gone. */
@@ -7925,6 +7977,8 @@ export class BattleScene extends Phaser.Scene {
           if (sprite) {
             if (e.side === 'enemy') this.fellAt = { x: sprite.x, y: this.spotXY('enemy').y };
             await this.faintMoment(e.side, sprite);
+            // Pass 11 "Winner's Moment": your Pokémon gets a second to itself.
+            if (e.side === 'enemy') await this.winMoment();
           }
           if (e.side === 'enemy' && mon && this.phTurnCards()) await this.phKoCard(mon, before, trainer, events.slice(0, index + 1).filter((x) => x.type === 'faint' && x.side === 'enemy').length);
           break;

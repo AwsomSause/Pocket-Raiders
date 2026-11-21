@@ -89,6 +89,10 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   5 degrees, a little shorter and wider, its colour dulls, it breathes fast and shallow (0.62 s) and a sweat drop
   flicks off it every 0.45 s (`WORN`). Healed, it hops up, straightens, shakes it off and its colour comes back;
   fainting just ends it. Full motion only, like the danger sag it replaces.
+- Winner's moment (pass 11): when a foe faints, your Pokémon (singles, still standing) hops twice, spinning once on
+  the second, lands with dust, a gold note pops out with a spray of stars, then it leans toward you and a pink heart
+  pops (`winClip`). A heavy one stamps once instead and the screen answers. The battle goes on after 1.3 s; the lean
+  finishes while the EXP comes. Reduced: one small hop and the note.
 - Wild encounter (pass 5): a lone wild Pokémon (not doubles, raids, totems or the Phantom look's own card) opens with
   two white flashes; the screen is nine dark bars that pull apart left and right in turn; the Pokémon slides in from
   the right as a black shape; its colour floods in with its cry, three white rings and a hop; then its plate flies in

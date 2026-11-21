@@ -1318,3 +1318,48 @@ test('flinch: it starts its lunge, jerks back, a "!" and a sweat drop, FLINCHED 
   expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.list.filter((o: any) => (o.type === 'Text' && o.text === '!') || (o.type === 'Ellipse' && o.fillColor === 0xbfe6ff)).length)).toBe(0);
   expect(errors).toEqual([]);
 });
+
+test("winner's moment: after a knock-out your Pokémon hops and spins, a note and a heart pop, and it stands home after", async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  await startBattle(page, 'win-e2e');
+  const rest = await look(page, 'player');
+  await page.evaluate(() => {
+    const w = window as any;
+    const b = w.__pkr.game.scene.getScene('Battle');
+    const home = b.spotXY('player').y;
+    w.__win = { up: 0, spin: 0, note: false, heart: false };
+    w.__winWatch = () => {
+      const v = b.playerSprite;
+      w.__win.up = Math.max(w.__win.up, home - v.y);
+      w.__win.spin = Math.max(w.__win.spin, Math.abs(v.angle));
+      w.__win.note ||= b.children.list.some((o: any) => o.type === 'Text' && o.text === '♪');
+      w.__win.heart ||= b.children.list.some((o: any) => o.type === 'Text' && o.text === '♥');
+    };
+    b.events.on('update', w.__winWatch);
+  });
+  const ms = await page.evaluate(async () => {
+    const w = window as any;
+    const b = w.__pkr.game.scene.getScene('Battle');
+    b.say = async () => {};
+    b.sayTrainer = async () => {};
+    const t0 = performance.now();
+    await b.playEvents([{ type: 'faint', side: 'enemy' }], structuredClone(w.__pkr.session.run), null);
+    return performance.now() - t0;
+  });
+  await page.waitForTimeout(1600);
+  const win = await page.evaluate(() => {
+    const w = window as any;
+    w.__pkr.game.scene.getScene('Battle').events.off('update', w.__winWatch);
+    return w.__win;
+  });
+  expect(win.up).toBeGreaterThan(30);
+  expect(win.spin).toBeGreaterThan(90);
+  expect(win).toMatchObject({ note: true, heart: true });
+  // The battle went on once the hops were done (the faint plus about 1.3 s), not after the whole moment.
+  expect(ms).toBeGreaterThan(1300);
+  expect(await look(page, 'player')).toMatchObject({ x: rest.homeX, y: rest.homeY, alpha: 1, angle: 0, solid: 0 });
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.list.filter((o: any) => o.type === 'Text' && (o.text === '♪' || o.text === '♥')).length)).toBe(0);
+  expect(errors).toEqual([]);
+});
