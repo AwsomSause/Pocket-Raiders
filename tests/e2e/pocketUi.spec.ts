@@ -878,6 +878,36 @@ test('Pocket look: the Blessing is the mock-up card; C opens the Reliquary and E
   expect(errors).toEqual([]);
 });
 
+test('Pocket look: the run end is the mock-up page; Tab opens the full report as a window and Esc closes it', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=pk-over');
+  await toPocketMap(page);
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr, run = pkr.session.run;
+    run.phase = 'over';
+    pkr.game.scene.getScene('Map').scene.start('GameOver');
+  });
+  await waitForScene(page, 'GameOver');
+  const mode = () => page.evaluate(() => (window as any).__pkr.game.scene.getScene('GameOver').rxMode);
+  for (let i = 0; i < 12 && (await mode()) !== 'main'; i++) await step(page, 'Escape');
+  expect(await mode()).toBe('main');
+  await onPkPage(page, 'GameOver', 'gameover');
+  const ov = pkView(page, 'GameOver', 'gameover');
+  await expect(ov.locator('.ov-t b')).toHaveText('The journey ends');
+  await expect(ov.locator('.ov-btns .btn')).toHaveCount(3);
+  await expect(ov.locator('.ov-btns .btn.on')).toHaveCount(1);
+  await expect(ov.locator('.ov-team i').first()).toBeVisible();
+  await fits(page, 'GameOver', 'gameover');
+  await step(page, 'Tab');
+  await expect(ov.locator('.gx-ov-rep')).toBeVisible();
+  await expect(ov.locator('.gx-ov-rep span')).toContainText('Page 1 of');
+  await step(page, 'Escape');
+  await expect(ov.locator('.gx-ov-rep')).toHaveCount(0);
+  expect(await mode()).toBe('main');
+  expect(errors).toEqual([]);
+});
+
 test('Pocket look: starting a run, Starter Pick is three cards and the Briefing shows the first region and Gym', async ({ page }) => {
   test.setTimeout(180_000);
   const errors = watch(page);

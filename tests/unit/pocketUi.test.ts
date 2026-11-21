@@ -31,6 +31,7 @@ import type { BriefModel } from '../../src/ui/redux/screens/run';
 import type { TradeModel } from '../../src/ui/redux/screens/stops';
 import { PK_TOOLS_PAGE, pkTools, toolShort } from '../../src/ui/pocket/screens/tools';
 import { PK_TRAINER_SIDE, pkTrainers, trainerColour } from '../../src/ui/pocket/screens/trainers';
+import { keepLine, pkOver } from '../../src/ui/pocket/screens/over';
 import { pkGallery, pkMemories, shelfMon, type PkGalleryModel } from '../../src/ui/pocket/screens/memories';
 import { firstThought, fitBody, pkBoard, pkConfirm, pkGrid, pkMenu, pkOptions, pkSaves, pkStats } from '../../src/ui/pocket/templates';
 
@@ -1022,5 +1023,35 @@ describe('Pocket look: the Blessing', () => {
     expect(book).toContain('Fair Wish');
     expect(book).not.toContain('Secret');
     expect(book).toContain('1 of 2 found');
+  });
+});
+
+describe('Pocket look: the run end', () => {
+  const d = { win: false, title: 'RUN OVER', sub: 'Stage 12', facts: [['Stage', '12 of 30'], ['Badges', '2']] as [string, string][], payouts: [['Bank Credits', '+ 1,240'], ['Mastery', 'No new rank']] as [string, string][], team: [{ file: null, name: 'Pikachu', down: true }, { file: null, name: 'Eevee', down: false }], buttons: ['Back to the Hub', 'Run it back', 'Share seed'], index: 1, extras: [['Tab', 'full report', 'report']] as [string, string, string][], backdrop: null, poked: null, where: 'Stage 12 of 30 · lost to Brock', line: 'You made it far.', road: { done: 11, of: 30 } };
+  it('a lost run: the title, where it stopped, the road, the team greyed, what you keep, the buttons', () => {
+    const html = pkOver(d);
+    expect(pkPageOf(html)?.id).toBe('gameover');
+    expect(html).toContain('The journey ends');
+    expect(html).toContain('lost to Brock');
+    expect(html).not.toContain('gx-ov-win');
+    expect(html.split('gx-ov-down').length - 1).toBe(1);
+    expect(html).toContain('+ 1,240 Bank Credits');
+    expect(html).toContain('Mastery: No new rank');
+    expect(html).toMatch(/class="btn on" data-key="ov-b-1"/);
+    expect(html).toContain('full report');
+    expect(html).not.toContain('ov-report');
+  });
+  it('a win is gold with confetti; the report opens as a window that pages', () => {
+    const win = pkOver({ ...d, win: true });
+    expect(win).toContain('Champion!');
+    expect(win).toContain('gx-ov-win');
+    expect(win).toContain('confetti');
+    const rep = pkOver({ ...d, report: { title: 'Full report', lines: ['Caught 9', '', 'Fainted 2'], page: 1, pages: 3 } });
+    expect(rep).toContain('data-key="ov-report"');
+    expect(rep).toContain('Page 2 of 3');
+    expect(rep).toContain('class="gap"');
+    expect(rep).toContain('data-act="back"');
+    expect(keepLine('Profile', 'Already added')).toBe('Profile: Already added');
+    expect(pkOver({ ...d, payouts: [], road: null })).not.toContain('ov-keep');
   });
 });

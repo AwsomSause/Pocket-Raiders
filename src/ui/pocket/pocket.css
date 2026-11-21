@@ -598,3 +598,17 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .blessp .gx-bs-book p em{font-style:normal;font-size:11px;font-weight:800;text-transform:uppercase;color:#fff;background:var(--c);border-radius:999px;text-align:center}
 .pkx .pks .blessp .gx-bs-book p b{font-size:14px}
 .pkx .pks .blessp .gx-bs-book p.gx-bs-unk{opacity:.55}
+.pkx .pks .overp .gx-ov-facts{position:absolute;left:0;right:0;top:12px;display:flex;justify-content:center;gap:8px;z-index:2}
+.pkx .pks .overp .gx-ov-facts span{display:flex;gap:6px;font-size:12px;font-weight:800;background:rgba(255,255,255,.1);border-radius:999px;padding:3px 12px}
+.pkx .pks .overp .gx-ov-facts u{text-decoration:none;color:#aab4cf}
+.pkx .pks .overp .ov-team i{cursor:pointer}
+.pkx .pks .overp .ov-team i.gx-ov-down{opacity:.55}
+.pkx .pks .overp.gx-ov-win .ov-team img{filter:none}
+.pkx .pks .overp.gx-ov-win .ov-t b{color:var(--yel)}
+.pkx .pks .overp .gx-ov-poke{animation:gx-bl-beat .35s ease-out 2 alternate}
+.pkx .pks .overp .gx-ov-dim{position:absolute;inset:0 0 38px 0;background:rgba(13,21,48,.7);z-index:20;cursor:pointer}
+.pkx .pks .overp .gx-ov-rep{position:absolute;left:120px;right:120px;top:40px;bottom:52px;z-index:21;color:var(--ink);padding:16px 22px;display:flex;flex-direction:column;gap:4px;cursor:pointer}
+.pkx .pks .overp .gx-ov-rep>b{font:400 26px/1 var(--fd);text-transform:uppercase}
+.pkx .pks .overp .gx-ov-rep>span{font-size:12px;font-weight:800;color:var(--mute)}
+.pkx .pks .overp .gx-ov-rep>div{overflow:hidden;font-size:14px;font-weight:700;line-height:1.4}
+.pkx .pks .overp .gx-ov-rep p{margin:0}.pkx .pks .overp .gx-ov-rep p.gap{height:8px}

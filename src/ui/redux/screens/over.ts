@@ -6,6 +6,7 @@ import type { ReduxCtx } from '../stage';
 import { type Art, figure, pic } from '../templates';
 import { phCard, phOver } from '../../phantom/screens/ending';
 import { pkCard } from '../../pocket/screens/card';
+import { pkOver } from '../../pocket/screens/over';
 
 export type Fact = readonly [string, string];
 
@@ -37,6 +38,7 @@ export interface OverModel {
 
 export function overView(c: ReduxCtx, d: OverModel): string {
   if (c.ph) return phOver(c.ph, d);
+  if (c.pk) return pkOver(d);
   const v = c.v(2), side = v ? 24 : 120;
   const back = (d.backdrop ? bg(d.backdrop) : '<div class="fill" style="background:linear-gradient(#1a2030,#0b0f18)"></div>') + `<div class="shade" style="background:${d.win ? '#10204880' : '#000000b0'}"></div>${d.win ? '<div class="burst"></div>' : ''}`;
   const head = `<div class="abs col cen" style="left:0;right:0;top:${v ? 30 : 40}px;gap:6px;color:#fff"><b style="font-size:60px;line-height:1;text-shadow:5px 5px 0 #000" class="${d.win ? 'acc' : ''}">${esc(d.title)}</b><span style="text-shadow:2px 2px 0 #000">${esc(d.sub)}</span></div>`;
