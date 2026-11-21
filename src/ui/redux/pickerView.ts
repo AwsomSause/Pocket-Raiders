@@ -14,6 +14,7 @@ import { boardProgress, type BoardRow, boardView, type GridModel, gridStart, gri
 import { bagCols, bagUseNote, bagView } from './screens/bag';
 import { battleListView, type BattleListRow, windowTitle } from './screens/battle';
 import { monFile, partyChips, partyStrip } from './game';
+import { pkReserve, type PkReserveMon } from '../pocket/screens/reserve';
 import { services } from '../../game/services';
 import { itemUseProblem } from '../../core/items';
 import { phChips, phEmpty, phInto, phSheet, phTabs } from '../phantom/picker';
@@ -162,6 +163,12 @@ function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerK
     const artOf = (file: string | null): { file: string; atlas: boolean } | null => (file ? { file, atlas: true } : null);
     const detail = said ? { title: said.title, body: said.body, art: said.off ? null : artOf(said.file) } : { title: cur!.label, body: cur!.note, facts: cur!.tag ? [['', cur!.tag] as const] : [], art: cur!.art };
     const wall: GridModel = { title: name, area, hints, n, cell: (i) => { const x = p.cell?.(i); if (x) return { art: artOf(x.file), label: x.off ? '' : x.title, off: x.off, sil: x.sil }; const r = row(i); return { art: r.art, label: r.label, off: p.problem(i) !== null }; }, index, detail, found, total: n, text };
+    // Pocket look: the PC is the Reserve page (party at the left, the boxed Pokémon as cards, the swap bar).
+    if (c.pk && /^PC\b/.test(name)) {
+      const mon = (i: number): PkReserveMon | null => { const x = p.cell?.(i); if (!x || x.off) return null; const lv = /Lv (\d+)/.exec(x.body ?? ''); return { name: x.title, file: x.file, level: lv ? Number(lv[1]) : null }; };
+      const party = partyChips(scene);
+      return pkReserve({ party: party.map((m) => ({ name: m.name, file: m.file, level: m.level, fainted: m.fainted })), box: Array.from({ length: n }, (_, i) => mon(i)), index, used: Array.from({ length: n }, (_, i) => mon(i)).filter(Boolean).length, room: n, say: text, back: p.canBack }) + back;
+    }
     body = c.ph && /^PC\b/.test(name) ? phBox(c.ph, { ...wall, party: partyChips(scene), extras: p.extras?.(index) ?? [] }) : gridView(c, wall);
   } else if (kind === 'bag') {
     const inRun = !!services().session.run, notes = bagNotes(p.item?.(index));

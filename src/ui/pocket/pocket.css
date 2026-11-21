@@ -670,3 +670,7 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 /* League page: the lit room (the cursor). */
 .pkx .pks .lg-room.gx-on{outline:4px solid var(--yel);outline-offset:2px}
 .pkx .pks .lg-room i b{font:400 30px/1 var(--fd);color:#9aa6c0}
+/* Reserve: the cards start at the top of the wall; the swap bar's card stands on white like the wall's. */
+.pkx .pks .rs-box>b{flex:none}
+.pkx .pks .rs-box>div{align-content:start}
+.pkx .pks .rs-swap .pkm{background:#fff;border-radius:6px}

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { pkPageOf } from '../../src/ui/pocket/kit';
 import { pkRivals, type PkRival } from '../../src/ui/pocket/screens/rivals';
 import { pkLeague } from '../../src/ui/pocket/screens/world';
+import { pkReserve } from '../../src/ui/pocket/screens/reserve';
 
 describe('the Pocket Rival Board', () => {
   const r = (name: string, x: Partial<PkRival> = {}): PkRival => ({ name, role: 'Rival', art: null, ace: null, wins: 0, losses: 0, lead: 'Level', ...x });
@@ -36,5 +37,20 @@ describe('the Pocket League page', () => {
     const open = pkLeague({ rooms: [], champion: { name: 'Lance', art: null }, badges: 8, need: 8, index: 0, road: null });
     expect(open).toContain('The League is open');
     expect(open).toContain('Lance');
+  });
+});
+
+describe('the Pocket Reserve page', () => {
+  it('the party at the left, the PC as cards with empty slots, the lit one in the swap bar', () => {
+    const m = (name: string) => ({ name, file: null, level: 10 });
+    const h = pkReserve({ party: [m('Pikachu')], box: [m('Eevee'), null, null], index: 0, used: 1, room: 3, say: 'Bring this Pokémon into the party.', back: true });
+    expect(pkPageOf(h)?.id).toBe('reserve');
+    expect(h).toContain('1 of 3');
+    expect((h.match(/class="pkm empty/g) ?? []).length).toBe(2);
+    expect(h).toMatch(/rs-swap[^]*Eevee/);
+    expect(h).toContain('>Bring<');
+    const empty = pkReserve({ party: [m('Pikachu')], box: [m('Eevee'), null], index: 1, used: 1, room: 2, say: 'An empty slot.', back: false });
+    expect(empty).toContain('>Send<');
+    expect(empty).toContain('fill this slot');
   });
 });
