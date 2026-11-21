@@ -794,3 +794,31 @@ test('terrain: the carpet rolls out under both Pokémon and stays, its chip coun
   expect(await page.evaluate(() => { const b = (window as any).__pkr.game.scene.getScene('Battle'); return b.children.list.concat(b.field.list).filter((o: any) => /^tr\.|^wx\./.test(String(o.texture?.key)) || o.type === 'Container' && o === b.trLook.floor).length; })).toBe(0);
   expect(errors).toEqual([]);
 });
+
+test('Protect: the attack meets the shield, PROTECTED slams in, the attacker is pushed back and stands home after', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'protect-e2e');
+  const seen = await page.evaluate(async () => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    const home = b.spotXY('enemy').x;
+    const s = { push: 0, stamp: false, rings: 0 };
+    const watch = () => {
+      s.push = Math.max(s.push, b.enemySprite.x - home);
+      s.stamp ||= b.children.list.some((o: any) => String(o.texture?.key).startsWith('stamp.PROTECTED'));
+      s.rings = Math.max(s.rings, b.children.list.filter((o: any) => o.type === 'Ellipse' && o.strokeColor === 0xb8ffe2).length);
+    };
+    b.events.on('update', watch);
+    b.protectedMoment('player');
+    await new Promise((r) => setTimeout(r, 1600));
+    b.events.off('update', watch);
+    return s;
+  });
+  expect(seen.push).toBeGreaterThan(20);
+  expect(seen.stamp).toBe(true);
+  expect(seen.rings).toBeGreaterThan(0);
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.list.filter((o: any) => String(o.texture?.key).startsWith('stamp.')).length)).toBe(0);
+  const l = await look(page, 'enemy');
+  expect({ x: l.x, solid: l.solid }).toEqual({ x: l.homeX, solid: 0 });
+  expect(errors).toEqual([]);
+});

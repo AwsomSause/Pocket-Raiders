@@ -123,7 +123,7 @@ import { megaGlass } from '../ui/battleFx/megaGlass';
 import { drawnBox, type GimmickPage } from '../ui/battleFx/gimmickStage';
 import { HIT_RUN, stand, standStill, twitch } from '../ui/battleFx/stance';
 import { bubblePicture, chevronPicture, ConditionLook, flagPicture, flamePicture, glarePicture, pipPicture, putAbove, titlePicture } from '../ui/battleFx/conditionLook';
-import { BUBBLE_W, chevronWaves, condArriveClip, FLAG_HOLD, intimidateClip, condKind, condTickClip, FLAME_W, gustLeanClip, parCantClip, SLUMP, STAT_COLOR, STAT_DOWN_STAMP, statClip, thawClip, wakeClip, type CondKind, type CondSpot } from '../core/presentation/motionConditions';
+import { BUBBLE_W, chevronWaves, condArriveClip, FLAG_HOLD, intimidateClip, condKind, condTickClip, FLAME_W, gustLeanClip, parCantClip, protectedClip, SHIELD, SLUMP, STAT_COLOR, STAT_DOWN_STAMP, statClip, thawClip, wakeClip, type CondKind, type CondSpot } from '../core/presentation/motionConditions';
 import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture, GLOW_SIZE, glowPicture, PICTURE_SCALE, plusPicture, shinyChipPicture, stampPicture, starPicture } from '../ui/battleFx/cheerChip';
 import { dynamaxPan } from '../ui/battleFx/dynamaxPan';
 import { keyItemFor } from '../ui/battleFx/cineLook';
@@ -2467,21 +2467,59 @@ export class BattleScene extends Phaser.Scene {
     this.tweens.add({ targets: sheet, alpha: 0, duration: ms, onComplete: () => sheet.destroy() });
   }
 
-  /** A stamp at a fixed spot (the weather boost): pops in, holds, floats off. */
-  private wxStamp(word: string, fill: string, ink: string, x: number, y: number): void {
+  /** A stamp at a fixed spot, as the mockups slam them: hard ones drop in big and tilted and shake the screen, soft ones
+   *  (the weather boost) grow in; both hold 750 ms and lift away. */
+  private wxStamp(word: string, fill: string, ink: string, x: number, y: number, soft = true): void {
     const key = stampPicture(this, word, fill, ink);
     if (!key) return;
     const full = this.clipLevel() === 'full';
-    const st = this.add.image(x, y, key).setScale(full ? PICTURE_SCALE * 0.4 : PICTURE_SCALE).setAlpha(full ? 0 : 1).setDepth(4000);
+    const st = this.add.image(x, y, key).setScale(PICTURE_SCALE * (full ? (soft ? 0.8 : 2.2) : 1)).setAngle(full && !soft ? -7 : 0).setDepth(4000);
     this.tweens.chain({
       targets: st,
       tweens: [
-        { alpha: 1, duration: 1 },
-        { scale: PICTURE_SCALE, duration: full ? 140 : 1, ease: 'Back.easeOut' },
-        { y: y - 40, alpha: 0, duration: 300, delay: 900, ease: 'Quad.easeIn' },
+        { scale: PICTURE_SCALE, duration: full ? (soft ? 200 : 120) : 1, ease: soft ? 'Quad.easeOut' : 'Cubic.easeIn' },
+        { y: y - 14, alpha: 0, duration: 200, delay: 750 },
       ],
       onComplete: () => st.destroy(),
     });
+    if (full && !soft) this.time.delayedCall(120, () => this.wxShake(4, 120));
+  }
+
+  /** A short screen shake (px), if screen effects are on. */
+  private wxShake(px: number, ms: number): void {
+    const st = services().session.settings;
+    if (st.battleScreenEffects) this.cameras.main.shake(ms, (px / GAME_WIDTH) * capFlash(st.shakeIntensity, st.reducedFlash));
+  }
+
+  /** An attack meets Protect (pass 8): rings where it lands, a shake, the PROTECTED stamp, the attacker pushed back. */
+  private protectedMoment(side: Side): void {
+    const level = this.clipLevel();
+    if (level === 'off' || this.duo) return;
+    const other: Side = side === 'enemy' ? 'player' : 'enemy';
+    const guard = this.condSprite(side);
+    const hitter = this.condSprite(other);
+    if (!guard || !hitter) return;
+    try {
+      const spot = (sd: Side, sp: Phaser.GameObjects.Sprite): CondSpot => ({ ...this.spotXY(sd), w: sp.displayWidth, h: sp.displayHeight * sp.originY, side: sd });
+      const g = spot(side, guard);
+      const a = spot(other, hitter);
+      const clip = protectedClip(a, g, level);
+      const toward = side === 'enemy' ? -1 : 1;
+      const cue = (name: string): void => {
+        if (name === 'shake') this.wxShake(5, 200);
+        // In front of the shield and up, clear of the info boxes (the mockup's spot sits where the game has your box).
+        if (name === 'stamp') this.wxStamp('PROTECTED', '#3ec46d', '#131c36', Phaser.Math.Clamp(g.x + toward * (SHIELD.ahead + 60), side === 'enemy' ? 470 : 110, 520), Math.max(60, g.y - g.h / 2 - SHIELD.up - 66), false);
+      };
+      const mon = this.shown[other];
+      if (!hitter.visible) return void playClip(this, clip, this.clipHost({}, { cue }));
+      this.condPlay(hitter, clip, { attacker: { kind: 'mon', get: () => hitter } }, (cut) => {
+        if (cut || !hitter.active) return;
+        this.restAt(hitter, other);
+        if (hitter.visible) this.standUp(hitter, mon);
+      }, cue);
+    } catch (err) {
+      console.warn('Protect moment failed', err);
+    }
   }
 
   /** The sandstorm's end-of-turn gust (pass 8): grit sweeps across and both Pokémon lean into it. */
@@ -6763,6 +6801,9 @@ export class BattleScene extends Phaser.Scene {
         case 'weatherEnd':
           if (this.wxLook?.current) await this.wxLook.end();
           await this.setWeather(null, false);
+          break;
+        case 'protected':
+          this.protectedMoment(e.side);
           break;
         case 'terrain':
           await this.setTerrain({ id: e.terrain, turns: this.trTurnsNow(e.terrain) }, true);

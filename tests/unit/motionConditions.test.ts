@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { clipEnd, EASES, fxAllowed, sampleClip } from '../../src/core/presentation/motionClip';
-import { chevronWaves, COND_TINT, GUST_LEAN, gustLeanClip, intimidateClip, condArriveClip, condKind, condTickClip, parCantClip, SLUMP, STAT_COLOR, statClip, thawClip, wakeClip, type CondSpot } from '../../src/core/presentation/motionConditions';
+import { chevronWaves, COND_TINT, GUST_LEAN, protectedClip, SHIELD, gustLeanClip, intimidateClip, condArriveClip, condKind, condTickClip, parCantClip, SLUMP, STAT_COLOR, statClip, thawClip, wakeClip, type CondSpot } from '../../src/core/presentation/motionConditions';
 
 // Animation redesign pass 8 (Conditions): every status arrives, keeps a look and ticks, as the mockup's numbers.
 const FOE: CondSpot = { x: 648, y: 240, w: 100, h: 120, side: 'enemy' };
@@ -180,5 +180,25 @@ describe('conditions: the sandstorm gust', () => {
     expect(sampleClip(r, 500).mon).toMatchObject({ dx: 0, rot: 0 });
     expect(sampleClip(r, 480).mon!.white).toBeCloseTo(0.5);
     expect(gustLeanClip('off').length).toBe(0);
+  });
+});
+
+describe('conditions: an attack meets Protect', () => {
+  it('rings burst in front of the protected one, the stamp slams in, the attacker is pushed back 30 px and springs home', () => {
+    const c = protectedClip(FOE, ME, 'full');
+    const rings = c.fx.filter((f) => f.kind === 'ring') as { x: number; y: number; r1: number; color?: number }[];
+    expect(rings.map((r) => r.r1)).toEqual([120, 170, 220]);
+    expect(rings[0]).toMatchObject({ x: ME.x + SHIELD.ahead + 20, y: ME.y - ME.h / 2 - SHIELD.up - 10, color: SHIELD.color });
+    expect(c.fx.filter((f) => f.kind === 'cue').map((f) => (f as { name: string }).name).sort()).toEqual(['shake', 'stamp']);
+    expect(sampleClip(c, 170).attacker!.dx).toBeCloseTo(30);
+    expect(sampleClip(protectedClip(ME, FOE, 'full'), 170).attacker!.dx).toBeCloseTo(-30);
+    expect(protectedClip(ME, FOE, 'full').fx.find((f) => f.kind === 'ring')).toMatchObject({ x: FOE.x - SHIELD.ahead - 20 });
+    expect(clipEnd(c).attacker!.dx).toBe(0);
+  });
+  it('Reduced: the stamp only; Off: nothing', () => {
+    const r = protectedClip(FOE, ME, 'reduced');
+    expect(r.fx.map((f) => f.kind)).toEqual(['cue']);
+    expect(sampleClip(r, 170).attacker!.dx).toBe(0);
+    expect(protectedClip(FOE, ME, 'off').length).toBe(0);
   });
 });

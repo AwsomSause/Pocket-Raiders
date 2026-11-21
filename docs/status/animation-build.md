@@ -150,3 +150,10 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   the weather chip when both are up. When it ends the chip pops away and the carpet fades. It replaces the pack's
   terrain picture. Reduced: carpet and chip, still. Off: nothing (as before). The steady hum, slow rings and mist
   drift while it lasts follow the mockup's notes (the clip itself only shows each arrival).
+- Protect (pass 8 "Protect", from the blow on; `protectedClip`): when an attack meets Protect, three pale green rings
+  burst where it lands in front of the protected Pokémon, the screen shakes, a green "PROTECTED" stamp slams in tilted
+  and the attacker is pushed back 30 px and springs home. The shield of plates is the Protect move's own animation, so
+  it is not drawn (move animations stay as they are). The stamp sits in front of the shield and up, clear of the info
+  boxes (the mockup's spot is where the game has your box). Reduced: the stamp only. Doubles: nothing new.
+- Stamps now slam in as the mockups do: hard ones (PROTECTED) drop in big and tilted with a small shake, soft ones (the
+  weather boost) grow in; both hold 750 ms and lift away.

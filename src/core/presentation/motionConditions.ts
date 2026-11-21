@@ -325,3 +325,29 @@ export function gustLeanClip(level: ClipLevel): MotionClip {
   b.beat(250, 'Both lean into the gust');
   return b.end(1100);
 }
+
+/** The shield's ring colour and where the blow lands (in front of the protected Pokémon, toward the attacker). */
+export const SHIELD = { color: 0xb8ffe2, ahead: 150, up: 40 } as const;
+
+/**
+ * An attack meets Protect (pass 8 "Protect", from the blow on): three rings burst where it lands in front of the
+ * protected Pokémon, the screen shakes, the "PROTECTED" stamp slams in (cue `stamp`) and the attacker is pushed back
+ * 30 px and springs home. The shield itself belongs to the Protect move's own animation and is not drawn here.
+ * Parts: `attacker` (dx). Reduced: the stamp only. Off: nothing.
+ */
+export function protectedClip(attacker: CondSpot, guarded: CondSpot, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('protected', level);
+  const a = b.part('attacker', { dx: 0 });
+  if (level === 'off') return b.end(0);
+  b.fx({ kind: 'cue', at: 100, name: 'stamp' });
+  if (level === 'reduced') return b.end(1200);
+  const toward = guarded.side === 'enemy' ? -1 : 1;
+  const away = attacker.side === 'enemy' ? 1 : -1;
+  const x = guarded.x + toward * (SHIELD.ahead + 20);
+  const y = guarded.y - guarded.h / 2 - SHIELD.up - 10;
+  for (let i = 0; i < 3; i++) b.fx({ kind: 'ring', at: i * 80, x, y, r1: 120 + i * 50, flat: 1, d: 400, color: SHIELD.color, w: 4 });
+  b.fx({ kind: 'cue', at: 0, name: 'shake' });
+  a.at(50).to(120, { dx: 30 * away }, 'out').to(400, { dx: 0 }, 'back');
+  b.beat(0, 'The attack lands on the shield').beat(50, 'Attacker is pushed back');
+  return b.end(1200);
+}
