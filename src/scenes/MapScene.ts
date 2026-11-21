@@ -242,7 +242,8 @@ type MapPop =
   | { kind: 'time'; pick: number }
   | { kind: 'weather'; pick: number; from?: 'time' }
   | { kind: 'xpgate'; side: string; pick: number }
-  | { kind: 'totem'; side: string; pick: number };
+  | { kind: 'totem'; side: string; pick: number }
+  | { kind: 'raid'; side: string; pick: number };
 
 type Option =
   | { kind: 'node'; node: MapNode }
@@ -343,7 +344,7 @@ export class MapScene extends Phaser.Scene {
     else if (kind === 'weather') pop = pocketOn() ? { kind, pick: weatherCard(this.stageWeather()) } : null;
     else if (kind === 'time') pop = pocketOn() ? { kind, pick: Math.max(0, ['day', 'eve', 'night'].indexOf(this.stageTime() ?? 'day')) } : null;
     else if (kind === 'forecast') pop = pocketOn() && run.stage?.kind === 'stage' && stopForecast(session.content, run).length ? { kind, pick: 0 } : null;
-    else if (kind === 'xpgate' || kind === 'totem') pop = null;
+    else if (kind === 'xpgate' || kind === 'totem' || kind === 'raid') pop = null;
     else pop = { kind, page: galarHome(bracketTree(session.content, run)) };
     if (!pop) return;
     this.rxPop = pop;
@@ -694,6 +695,11 @@ export class MapScene extends Phaser.Scene {
       return;
     }
     // Pocket look: the Expedition Gate. Set out or Not now; Esc leaves.
+    if (p.kind === 'raid') {
+      const n = this.raidChoices(p.side).length + 1;
+      if (action === 'confirm') return this.raidGo(p);
+      if (action === 'up' || action === 'down') { p.pick = (p.pick + (action === 'down' ? 1 : n - 1)) % n; this.rxView?.refresh(); return; }
+    }
     if (p.kind === 'xpgate' || p.kind === 'totem') {
       if (action === 'confirm') return p.pick !== 0 ? this.popClose() : p.kind === 'xpgate' ? this.xpGateGo(p.side) : this.totemGo(p.side);
       if (action === 'up' || action === 'down') { p.pick = 1 - p.pick; this.rxView?.refresh(); return; }
@@ -754,7 +760,7 @@ export class MapScene extends Phaser.Scene {
   private popPick(what: 'tab' | 'pick', i: number): void {
     const p = this.rxPop;
     if (!p || !Number.isFinite(i)) return;
-    if ((p.kind === 'xpgate' || p.kind === 'totem') && what === 'pick') {
+    if ((p.kind === 'xpgate' || p.kind === 'totem' || p.kind === 'raid') && what === 'pick') {
       if (p.pick === i) return void this.popInput('confirm');
       p.pick = i;
       this.rxView?.refresh();
@@ -894,6 +900,7 @@ export class MapScene extends Phaser.Scene {
     if (p.kind === 'forecast') return c.pk ? this.forecastPocket(p.pick) : '';
     if (p.kind === 'xpgate') return c.pk ? this.xpGatePocket(p) : '';
     if (p.kind === 'totem') return c.pk ? this.totemPocket(p) : '';
+    if (p.kind === 'raid') return c.pk ? this.raidPocket(p) : '';
     if (p.kind === 'time' || p.kind === 'weather') return c.pk ? this.skyPocket(p) : '';
     const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
     if (p.kind === 'report' && c.pk && !p.full) return this.rivalsPocket(p.pick);
@@ -2824,6 +2831,54 @@ export class MapScene extends Phaser.Scene {
     }, { pick: 'popPick', over: '' });
   }
 
+  /** The den's ways in (approaches, or one Join row, then Practice), the same rows the den card offers. */
+  private raidChoices(sideId: string): { id: string; label: string; text: string; cost: number; leave: boolean }[] {
+    const pv = raidPreview(services().session.content, services().session.run!, sideId);
+    const choices = pv.approaches.length > 0 ? [...pv.approaches] : [{ id: '', label: '', text: '', cost: 0, leave: false }];
+    if (!pv.noPractice) choices.push({ id: 'practice', label: 'PRACTICE', text: 'No stakes: no cost, no rewards, nothing lost. Your team is restored afterwards.', cost: -pv.entryCost, leave: false });
+    return choices;
+  }
+
+  /** Pocket look: Enter on the den: a way in (when you can pay for it), or Leave the den. */
+  private raidGo(p: Extract<MapPop, { kind: 'raid' }>): void {
+    const { session } = services();
+    const choices = this.raidChoices(p.side);
+    const choice = choices[p.pick];
+    if (!choice) return this.popClose();
+    const pv = raidPreview(session.content, session.run!, p.side);
+    if (!choice.leave && session.run!.money < pv.entryCost + choice.cost) return;
+    this.popClose();
+    this.startRaid(p.side, choice, pv);
+  }
+
+  /** Pocket look: the raid den (mock-up `rd-den`): the boss, its tier, mechanics and prize, the ways in, Leave the den. */
+  private raidPocket(p: Extract<MapPop, { kind: 'raid' }>): string {
+    const { session } = services();
+    const run = session.run!;
+    const content = session.content;
+    const pv = raidPreview(content, run, p.side);
+    const sp = content.species.get(pv.speciesId);
+    const cap = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
+    const kindName = { wild: 'Raid Den', regional: 'Regional Raid', rival: 'Rival Raid', anomaly: 'Anomaly Raid' }[pv.kind];
+    const region = content.regions.get(run.regionOrder[run.regionIndex] ?? '')?.name ?? '';
+    const stop = run.stage?.current ? findNode(run.stage.map, run.stage.current)?.column ?? 1 : 1;
+    const ways = this.raidChoices(p.side);
+    const lit = ways[p.pick];
+    const options = ways.map((a) => {
+      const cost = pv.entryCost + a.cost;
+      const label = a.id === 'practice' ? 'Practice' : a.label ? cap(a.label.toLowerCase()) : 'Join the raid';
+      return { label, detail: `${a.leave ? 'Free' : cost > 0 ? `Costs ₽${cost}` : 'Costs nothing'}${a.text && a.id !== 'practice' ? ` · ${a.text}` : a.id === 'practice' ? ' · no rewards, nothing lost' : ''}`, off: !a.leave && run.money < cost };
+    });
+    return pkXpDoor({
+      kind: 'stop', where: kindName, sub: [region, `Stop ${stop}`, pv.name].filter(Boolean).join(' · '), kicker: `Tier ${pv.tier} raid`, name: `${pv.name}${pv.returning ? ' is back' : ''}`,
+      text: pv.blurb,
+      rows: [['Boss', `${sp?.name ?? pv.speciesId} · Lv ${pv.level}${sp?.types.length ? ` · ${sp.types.map(cap).join(' / ')}` : ''}`], ['Rules', pv.mechanics.join(', ')], ['Prize', cap(pv.rewards.join(', '))], ['Safe', 'Losing never ends your run']],
+      options: [...options, { label: 'Leave the den', detail: 'It stays here until the stage ends' }], index: p.pick,
+      say: lit?.text && lit.id !== 'practice' ? lit.text : 'The ground hums. Something very large is breathing in the dark. You can see its tier and prize before you commit.', esc: 'leave',
+      area: { key: 'rd', tag: 'Raid', page: 'rd-den', cls: 'rdd27', bg: 'packs/memories/eventbg/cave.png' },
+    }, { pick: 'popPick', over: '' });
+  }
+
   /** Pocket look: the Expedition Gate (mock-up `xp-gate`): the briefing card, Set out or Not now, the ranger's line. */
   private xpGatePocket(p: Extract<MapPop, { kind: 'xpgate' }>): string {
     const { session } = services();
@@ -2925,6 +2980,15 @@ export class MapScene extends Phaser.Scene {
   private openRaid(sideId: string): void {
     const { session } = services();
     const content = session.content;
+    // Pocket look: the den is the mock-up's door page.
+    if (pocketOn() && this.rxView) {
+      this.rxPop = { kind: 'raid', side: sideId, pick: 0 };
+      this.rxPopAt = this.time.now;
+      this.rxCard = null;
+      this.busy = true;
+      this.rxView.refresh();
+      return;
+    }
     const pv = raidPreview(content, session.run!, sideId);
     const species = content.species.get(pv.speciesId)!;
     const money = session.run!.money;

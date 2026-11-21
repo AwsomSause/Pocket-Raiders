@@ -3577,10 +3577,21 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** Pocket look: the boss battle's panel (mock-up `boss-battle`): its boss power, the healing items it has left, the badge at stake. */
-  /** Pocket look: the Totem's strip (aura, phase, ally calls) at the top of its battle (mock-up `tm-battle`). */
+  /** Pocket look: the Totem's strip (aura, phase, ally calls) or a raid's (shields, clock, phase) at the top of its battle (mock-ups `tm-battle`, `rd-battle`). */
   private pkAreaStrip(): BattleModel['pkArea'] {
     const battle = this.run.battle;
     const totem = battle?.totem;
+    const raid = battle?.raid;
+    if (battle && raid && pocketOn()) {
+      // A raid: shields (how many are left to come, and the one up now), the clock, the charge.
+      const rdef = services().session.content.raids.raids.find((r) => r.id === raid.id);
+      const chips: (readonly [string, string])[] = [];
+      if (raid.pendingShields.length || raid.shieldHp > 0) chips.push([String(raid.pendingShields.length + (raid.shieldHp > 0 ? 1 : 0)), raid.shieldHp > 0 ? 'shield up' : 'shields left']);
+      if (raid.timerLeft !== null) chips.push([String(raid.timerLeft), raid.timerLeft === 1 ? 'turn left' : 'turns left']);
+      if (rdef && rdef.phases.length) chips.push([String(Math.min(rdef.phases.length, raid.phasesDone.length + 1)), `of ${rdef.phases.length}`]);
+      else if (raid.charging) chips.push(['!', 'charging']);
+      return { key: 'rd', word: 'Raid', chips: chips.slice(0, 3), flow: ['Den', 'Raid', 'The Catch'], step: 1 };
+    }
     if (!battle || !totem || !pocketOn()) return null;
     const tdef = services().session.content.totems.totems.find((x) => x.id === totem.id);
     if (!tdef) return null;

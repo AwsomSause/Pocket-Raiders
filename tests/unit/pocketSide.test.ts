@@ -254,6 +254,14 @@ describe('the Pocket Expedition pages', () => {
     expect(h).toContain('emb28 tm card');
     expect(h).toMatch(/class="btn on"[^>]*data-key="xp-ch-1"/);
   });
+  it('a raid den: the raid colours and emblem, more than three ways drawn tighter', async () => {
+    const { pkXpDoor } = await import('../../src/ui/pocket/screens/expedition');
+    const opts = ['Help your rival', 'Race', 'Leave them', 'Practice', 'Leave the den'].map((label) => ({ label, detail: 'Costs nothing' }));
+    const h = pkXpDoor({ kind: 'stop', where: 'Rival Raid', sub: 'Stop 4', kicker: 'Tier 2 raid', name: 'Rival at the Den', text: 't', rows: [], options: opts, index: 0, say: 'Fight beside them.', esc: 'leave', area: { key: 'rd', tag: 'Raid', page: 'rd-den', cls: 'rdd27', bg: 'x.png' } });
+    expect(pkPageOf(h)?.id).toBe('rd-den');
+    expect(h).toContain('dr-ch gx-dr-many');
+    expect(h).toContain('emb28 rd card');
+  });
   it('the route: stops placed up the ridge, the lit stop and the walked trail, Extract now as a choice', async () => {
     const { pkXpRoute, xpPlace } = await import('../../src/ui/pocket/screens/expedition');
     const nodes = [
