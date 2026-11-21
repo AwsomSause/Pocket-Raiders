@@ -131,7 +131,7 @@ import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel, MotionClip } from '../core/presentation/motionClip';
-import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, COMBO, comboPlan, comboScale, FIRST_TAG, OHKO_STAMP, type ComboStep, CRIT_FREEZE, critFreezeClip, HIT_LIGHT, HIT_STAMPS, hitStampSpot, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendWeight, CRY, cryClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, COMBO, comboPlan, comboScale, FIRST_TAG, OHKO_STAMP, type ComboStep, CRIT_FREEZE, critFreezeClip, HIT_LIGHT, HIT_STAMPS, hitStampSpot, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendWeight, CRY, cryClip, FLINCH, flinchClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart, type ClipRun } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
@@ -5152,6 +5152,51 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** Puts a Pokémon back on its own spot, upright, at its own size (after a condition clip moved it). */
+  /**
+   * Flinch (redesign pass 11): it starts its lunge, jerks to a stop and pulls its head down with a shiver, a "!" pops
+   * over it and a sweat drop falls, the FLINCHED stamp lands, and it backs up two steps before settling. Reduced: a
+   * step back and the stamp. Presentation only.
+   */
+  private flinchMoment(side: Side): void {
+    const sprite = this.condSprite(side);
+    const level = this.clipLevel();
+    if (!sprite || !sprite.visible || level === 'off') return;
+    try {
+      const spot = { ...this.spotXY(side), h: this.headHeight(sprite), side };
+      const d = side === 'player' ? 1 : -1;
+      const mon = this.shown[side];
+      const mid = this.midOf(side);
+      const rate = animationTimeScale(services().session.settings);
+      this.condPlay(sprite, flinchClip(spot, level), {}, (cut) => {
+        if (cut || !sprite.active) return;
+        this.restAt(sprite, side);
+        if (sprite.visible) this.standUp(sprite, mon);
+      }, (name) => {
+        if (name === 'stamp') {
+          const at = hitStampSpot(side, mid);
+          this.wxStamp('FLINCHED', '#131c36', '#ffffff', Phaser.Math.Clamp(at.x, 110, GAME_WIDTH - 110), at.y, true);
+        }
+        if (name === 'bang') {
+          const bang = this.add
+            .text(spot.x + d * FLINCH.bangDx, Math.max(60, spot.y - spot.h - 10), '!', { fontFamily: `"Jersey 15", ${FONT_FAMILY}`, fontSize: '64px', color: '#ffffff', stroke: '#131c36', strokeThickness: 8 })
+            .setOrigin(0.5, 1)
+            .setDepth(3000)
+            .setScale(0);
+          this.tweens.chain({ targets: bang, tweens: [{ scale: 1, duration: 120 * rate, ease: 'Back.easeOut' }, { alpha: 0, delay: 400 * rate, duration: 150 * rate }], onComplete: () => bang.destroy() });
+          this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => bang.active && bang.destroy());
+        }
+        if (name === 'sweat') {
+          const y0 = spot.y - spot.h * 0.85;
+          const drop = this.add.ellipse(spot.x + d * FLINCH.sweatDx, y0, 14, 20, 0xbfe6ff).setStrokeStyle(2, 0x131c36).setDepth(3000);
+          this.tweens.chain({ targets: drop, tweens: [{ y: y0 + FLINCH.drop, duration: FLINCH.sweatMs * rate, ease: 'Quad.easeIn' }, { alpha: 0, duration: 100 * rate }], onComplete: () => drop.destroy() });
+          this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => drop.active && drop.destroy());
+        }
+      });
+    } catch {
+      /* presentation only */
+    }
+  }
+
   private restAt(sprite: Phaser.GameObjects.Sprite, side: Side): void {
     const at = this.spotXY(side);
     sprite.setPosition(at.x, sprite.getData('slumped') ? at.y + SLUMP.dy : at.y);
@@ -7606,6 +7651,8 @@ export class BattleScene extends Phaser.Scene {
         this.wxStamp('FIRST!', '#ffcb05', '#131c36', Phaser.Math.Clamp(mid.x + (e.side === 'player' ? 1 : -1) * FIRST_TAG.dx, 80, GAME_WIDTH - 80), Math.max(40, mid.y + FIRST_TAG.dy), false, FIRST_TAG);
       }
       // Pass 12 "One-Hit KO": the red ONE-HIT KO! stamp (the ground cracking open is the move's own animation, not built).
+      // Pass 11 "Flinch": it starts its lunge, jerks to a stop and backs away; the move never comes.
+      if (e.type === 'cant' && e.reason === 'flinch') this.flinchMoment(e.side);
       if (e.type === 'ohko' && this.clipLevel() !== 'off' && !this.duo) {
         const mid = this.midOf(e.side);
         const at = e.side === 'enemy' ? { x: mid.x + OHKO_STAMP.dx, y: OHKO_STAMP.y } : hitStampSpot(e.side, mid);

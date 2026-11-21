@@ -1254,3 +1254,46 @@ test('end of turn: the chips line up, each lights as its effect plays, a line sw
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.list.filter((o: any) => /^eot\./.test(String(o.texture?.key)) || (o.type === 'Container' && o.list?.some((w: any) => w.text === 'TURN'))).length), { timeout: 5000 }).toBe(0);
   expect(errors).toEqual([]);
 });
+
+test('flinch: it starts its lunge, jerks back, a "!" and a sweat drop, FLINCHED lands, it backs away and stands home', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  await startBattle(page, 'flinch-e2e');
+  const rest = await look(page, 'player');
+  await page.evaluate(() => {
+    const w = window as any;
+    const b = w.__pkr.game.scene.getScene('Battle');
+    const home = b.spotXY('player').x;
+    w.__fl = { fwd: 0, back: 0, stamp: false, bang: false, drop: false };
+    w.__flWatch = () => {
+      const v = b.playerSprite;
+      w.__fl.fwd = Math.max(w.__fl.fwd, v.x - home);
+      w.__fl.back = Math.max(w.__fl.back, home - v.x);
+      w.__fl.stamp ||= b.children.list.some((o: any) => o.texture?.key === 'stamp.FLINCHED.#131c36');
+      w.__fl.bang ||= b.children.list.some((o: any) => o.type === 'Text' && o.text === '!');
+      w.__fl.drop ||= b.children.list.some((o: any) => o.type === 'Ellipse' && o.fillColor === 0xbfe6ff);
+    };
+    b.events.on('update', w.__flWatch);
+  });
+  await page.evaluate(async () => {
+    const w = window as any;
+    const b = w.__pkr.game.scene.getScene('Battle');
+    b.say = async () => {};
+    b.sayTrainer = async () => {};
+    await b.playEvents([{ type: 'cant', side: 'player', reason: 'flinch' }], structuredClone(w.__pkr.session.run), null);
+  });
+  await page.waitForTimeout(2200);
+  const fl = await page.evaluate(() => {
+    const w = window as any;
+    w.__pkr.game.scene.getScene('Battle').events.off('update', w.__flWatch);
+    return w.__fl;
+  });
+  expect(fl.fwd).toBeGreaterThan(15);
+  expect(fl.back).toBeGreaterThan(5);
+  expect(fl).toMatchObject({ stamp: true, bang: true, drop: true });
+  // It stands home again, whole, with nothing left over.
+  expect(await look(page, 'player')).toMatchObject({ x: rest.homeX, y: rest.homeY, alpha: 1, angle: 0, solid: 0 });
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.list.filter((o: any) => (o.type === 'Text' && o.text === '!') || (o.type === 'Ellipse' && o.fillColor === 0xbfe6ff)).length)).toBe(0);
+  expect(errors).toEqual([]);
+});

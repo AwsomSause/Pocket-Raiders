@@ -82,6 +82,9 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   entrance ends with its cry: it leans back and thrusts forward while rings leave its mouth in its type's colour, two
   small ones, or three wide ones and a shake for a heavy or very tall one (`cryClip`). Reduced: the rings only.
   Limit: a Pokémon whose art is still loading is measured as a 120 px stand-in for the rings.
+- Flinch (pass 11): when a Pokémon flinches it starts its lunge 30 px toward the foe, jerks to a stop and pulls its
+  head down with a shiver, a "!" pops over it and a sweat drop falls, the dark FLINCHED stamp lands, and it backs up
+  two steps before settling home (`flinchClip`). Reduced: one step back and the stamp. Off: only the line.
 - Wild encounter (pass 5): a lone wild Pokémon (not doubles, raids, totems or the Phantom look's own card) opens with
   two white flashes; the screen is nine dark bars that pull apart left and right in turn; the Pokémon slides in from
   the right as a black shape; its colour floods in with its cry, three white rings and a hop; then its plate flies in
