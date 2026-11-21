@@ -5,7 +5,7 @@
 // (BattleScene.standUp). Presentation only.
 
 import Phaser from 'phaser';
-import { BUBBLE_W, CHEVRON, COND_TINT, CONFUSE, EMBERS, FLAME_W, GLARE, type CondKind, type CondSpot } from '../../core/presentation/motionConditions';
+import { BUBBLE_W, CHEVRON, COND_TINT, CONFUSE, EMBERS, FLAME_W, GLARE, SPIKES, type CondKind, type CondSpot } from '../../core/presentation/motionConditions';
 import { FONT_FAMILY } from '../theme';
 
 const HI = 2;
@@ -354,13 +354,13 @@ export function pipPicture(scene: Phaser.Scene): string | null {
  * The ability flag (pass 8): the mockup's dark plate, square against its owner's edge of the screen and rounded on the
  * open side, with "<Name>'s Ability" in small yellow letters over the ability's name in big ones.
  */
-export function flagPicture(scene: Phaser.Scene, owner: string, ability: string, fromLeft: boolean): string | null {
-  const key = `ability.flag.${fromLeft ? 'l' : 'r'}.${owner}.${ability}`;
+export function flagPicture(scene: Phaser.Scene, owner: string, ability: string, fromLeft: boolean, what = 'Ability'): string | null {
+  const key = `ability.flag.${fromLeft ? 'l' : 'r'}.${owner}.${what}.${ability}`;
   if (scene.textures.exists(key)) return key;
   try {
     const small = `800 ${13 * HI}px "M PLUS Rounded 1c", ${FONT_FAMILY}`;
     const big = `400 ${26 * HI}px "Jersey 15", ${FONT_FAMILY}`;
-    const top = `${owner}'s Ability`;
+    const top = `${owner}'s ${what}`;
     const name = ability.toUpperCase();
     const probe = document.createElement('canvas').getContext('2d');
     if (!probe) return null;
@@ -449,6 +449,35 @@ export function glarePicture(scene: Phaser.Scene): string | null {
     ctx.lineTo(0, 0);
     ctx.closePath();
     ctx.fill();
+    scene.textures.addCanvas(key, c);
+    return key;
+  } catch {
+    return null;
+  }
+}
+
+/** A contact spike (pass 12): a grey triangle 18 by 44, pointing up from its base. */
+export function spikePicture(scene: Phaser.Scene): string | null {
+  const key = 'contact.spike';
+  if (scene.textures.exists(key)) return key;
+  try {
+    const w = SPIKES.w * HI;
+    const h = SPIKES.h * HI;
+    const c = document.createElement('canvas');
+    c.width = w;
+    c.height = h;
+    const ctx = c.getContext('2d');
+    if (!ctx) return null;
+    ctx.beginPath();
+    ctx.moveTo(w / 2, 0);
+    ctx.lineTo(w, h);
+    ctx.lineTo(0, h);
+    ctx.closePath();
+    ctx.fillStyle = `#${SPIKES.color.toString(16).padStart(6, '0')}`;
+    ctx.fill();
+    ctx.lineWidth = HI;
+    ctx.strokeStyle = `#${SPIKES.ink.toString(16).padStart(6, '0')}`;
+    ctx.stroke();
     scene.textures.addCanvas(key, c);
     return key;
   } catch {

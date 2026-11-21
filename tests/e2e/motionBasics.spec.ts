@@ -1054,6 +1054,44 @@ test('charge-up and recharge: CHARGING chip and glow until the release; spent sa
   expect(errors).toEqual([]);
 });
 
+test('contact punish: spikes jab out of the holder, the attacker bounces off with a star, the item flag and its number', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'contact-e2e');
+  const seen = await page.evaluate(async () => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    b.say = async () => {};
+    b.sayTrainer = async () => {};
+    const v = b.playerSprite;
+    const home = b.spotXY('player').x;
+    const s = { spikes: 0, back: 0, flags: [] as string[], numbers: [] as string[] };
+    const watch = () => {
+      const all = [...b.children.list, ...b.field.list];
+      s.spikes = Math.max(s.spikes, all.filter((o: any) => o.texture?.key === 'contact.spike' && o.scaleY > 0.2).length);
+      if (v.active) s.back = Math.max(s.back, home - v.x);
+      for (const o of all) if (String(o.texture?.key).startsWith('ability.flag.') && !s.flags.includes(o.texture.key)) s.flags.push(o.texture.key);
+      for (const o of all) if (o.type === 'Text' && /^-\d+$/.test(o.text) && !s.numbers.includes(o.text)) s.numbers.push(o.text);
+    };
+    b.events.on('update', watch);
+    const before = structuredClone((window as any).__pkr.session.run);
+    const hp = b.shown.player.hp;
+    await b.playEvents([{ type: 'held', side: 'player', itemId: 'rocky-helmet', what: 'helmet', hpAfter: hp - 3 }], before, null);
+    await new Promise((r) => setTimeout(r, 1500));
+    b.events.off('update', watch);
+    return s;
+  });
+  expect(seen.spikes).toBe(8);
+  expect(seen.back).toBeGreaterThan(30);
+  expect(seen.flags.some((k) => k.includes('.Item.Rocky Helmet'))).toBe(true);
+  expect(seen.numbers).toEqual(['-3']);
+  // Nothing left: no spikes, the attacker home.
+  await expect.poll(() => page.evaluate(() => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    return [...b.children.list, ...b.field.list].filter((o: any) => o.texture?.key === 'contact.spike').length + (Math.abs(b.playerSprite.x - b.spotXY('player').x) > 0.5 ? 1 : 0);
+  }), { timeout: 5000 }).toBe(0);
+  expect(errors).toEqual([]);
+});
+
 test('end of turn: the chips line up, each lights as its effect plays, a line sweeps and the turn counter flips; nothing left after', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));

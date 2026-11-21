@@ -198,3 +198,7 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   Pokémon sags, greys, steam puffs off it and a grey RECHARGE chip hangs over it; when its "must recharge" turn ends
   the chip pops and it springs back up. Both follow the battle's own state (charging move, must recharge), so they also
   end if the Pokémon leaves. Reduced: the chips, glow and grey without movement. Off: nothing.
+- **Contact punish (pass 12).** When Rocky Helmet, Rough Skin, Iron Barbs or Live Wire hurts the Pokémon that touched
+  it: eight grey spikes jab out round the holder, the attacker bounces back with a white star on its nose, and the
+  item's flag ("Toxel's Item / ROCKY HELMET", the same plate as the ability flag) slides out while its damage number
+  shows (abilities already get their flag). Reduced: the flag and the number. Off: the number.

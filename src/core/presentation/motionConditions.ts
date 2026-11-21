@@ -531,3 +531,36 @@ export function spentStarts(events: readonly ({ type: string } & Record<string, 
   }
   return out;
 }
+
+/**
+ * Contact punish (pass 12): touching the wrong thing bites back at the moment of contact. Eight grey spikes jab out of
+ * the holder (a ring 60 px wide and 50 px tall round its middle, each 18 by 44, out to 1.2 in 60 ms, held 300 ms, back
+ * in 200), the attacker bounces off (50 px back and 8 px down in 160 ms, home again after 300 ms) with a white star on
+ * its nose, and the item or ability flag slides out (cue `flag`) as its HP drops (cue `number`). Reduced: the flag
+ * and the number. Off: the number.
+ */
+export const SPIKES = { n: 8, rx: 60, ry: 50, w: 18, h: 44, out: 1.2, inMs: 60, hold: 300, outMs: 200, color: 0x9aa3b8, ink: 0x16203f } as const;
+
+export function contactClip(attacker: CondSpot, holder: CondSpot, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('contact', level);
+  const S = SPIKES;
+  const spikes = Array.from({ length: S.n }, (_, i) => b.part(`s${i}`, { sy: 0 }));
+  const m = b.part('mon', { dx: 0, dy: 0 });
+  b.fx({ kind: 'cue', at: 100, name: 'number' });
+  if (level === 'off') return b.end(100);
+  b.fx({ kind: 'cue', at: 100, name: 'flag' });
+  if (level === 'reduced') return b.end(600);
+  spikes.forEach((s) => s.at(20).to(S.inMs, { sy: S.out }, 'out3').wait(S.hold).to(S.outMs, { sy: 0 }, 'in'));
+  const away = attacker.side === 'player' ? -1 : 1;
+  m.at(40).to(160, { dx: 50 * away, dy: 8 }, 'out3').wait(300).to(350, { dx: 0, dy: 0 }, 'back');
+  b.fx({ kind: 'star', at: 60, x: attacker.x - away * 120, y: attacker.y - attacker.h / 2 - 80, size: 80, points: 10, d: 280 });
+  b.beat(20, 'Spikes jab out').beat(40, 'Attacker bounces off').beat(100, 'Item flag says why');
+  return b.end(900);
+}
+
+/** Where spike `i` stands on the holder: round its middle, pointing outwards (angle in degrees, 0 = up). */
+export function spikeSpot(i: number, holder: CondSpot): { x: number; y: number; angle: number } {
+  const a = i * ((Math.PI * 2) / SPIKES.n);
+  const mid = holder.y - holder.h / 2;
+  return { x: holder.x + SPIKES.rx * Math.cos(a), y: mid + SPIKES.ry * Math.sin(a), angle: (a * 180) / Math.PI + 90 };
+}

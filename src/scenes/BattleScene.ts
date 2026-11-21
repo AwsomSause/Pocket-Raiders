@@ -122,8 +122,8 @@ import { teraJewel } from '../ui/battleFx/teraJewel';
 import { megaGlass } from '../ui/battleFx/megaGlass';
 import { drawnBox, type GimmickPage } from '../ui/battleFx/gimmickStage';
 import { HIT_RUN, stand, standStill, sway, twitch } from '../ui/battleFx/stance';
-import { bubblePicture, chevronPicture, ConditionLook, DizzyStars, flagPicture, flamePicture, glarePicture, pipPicture, putAbove, titlePicture } from '../ui/battleFx/conditionLook';
-import { BUBBLE_W, chevronWaves, condArriveClip, FLAG_HOLD, intimidateClip, condKind, condTickClip, FLAME_W, CONFUSE, endTurnParade, confusionHitClip, gustLeanClip, parCantClip, protectedClip, RECOIL, recoilClip, DRAIN, drainClip, CHARGE, chargeClip, SPENT, spentStarts, SHIELD, SLUMP, STAT_COLOR, STAT_DOWN_STAMP, statClip, thawClip, wakeClip, type CondKind, type CondSpot } from '../core/presentation/motionConditions';
+import { bubblePicture, chevronPicture, ConditionLook, DizzyStars, flagPicture, flamePicture, glarePicture, pipPicture, putAbove, spikePicture, titlePicture } from '../ui/battleFx/conditionLook';
+import { BUBBLE_W, chevronWaves, condArriveClip, FLAG_HOLD, intimidateClip, condKind, condTickClip, FLAME_W, CONFUSE, endTurnParade, confusionHitClip, gustLeanClip, parCantClip, protectedClip, RECOIL, recoilClip, DRAIN, drainClip, CHARGE, chargeClip, SPENT, spentStarts, contactClip, SPIKES, spikeSpot, SHIELD, SLUMP, STAT_COLOR, STAT_DOWN_STAMP, statClip, thawClip, wakeClip, type CondKind, type CondSpot } from '../core/presentation/motionConditions';
 import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture, GLOW_SIZE, glowPicture, PICTURE_SCALE, plusPicture, shinyChipPicture, stampPicture, starPicture } from '../ui/battleFx/cheerChip';
 import { dynamaxPan } from '../ui/battleFx/dynamaxPan';
 import { keyItemFor } from '../ui/battleFx/cineLook';
@@ -172,6 +172,7 @@ import { WeatherLook, WX_KINDS, type WxKind } from '../ui/battleFx/weatherLook';
 import { TerrainLook } from '../ui/battleFx/terrainLook';
 import { EndTurnParade } from '../ui/battleFx/endTurnLook';
 import { HoldLook } from '../ui/battleFx/holdLook';
+import { CONTACT_HURT } from '../core/battle/abilities';
 import { TERRAIN_KINDS, type TerrainKind } from '../core/presentation/motionWeather';
 import { battleTrack, storyBattleMusic, lowHpTrack, raidMusic, victoryTrack, type BattleRole } from '../core/presentation/battleMusic';
 import { itemCount } from '../core/items';
@@ -4959,25 +4960,70 @@ export class BattleScene extends Phaser.Scene {
    * from the right over yours), holds 2 s and folds away. Intimidate is acted out too: it leans in, the field dims
    * around it, its glare crosses the field and the other Pokémon shrinks back. Singles; null when it can't show here.
    */
+  /** The pass 8 flag slides out from its owner's edge: "<Name>'s Ability" (or Item) over the name. */
+  private showFlag(side: Side, label: string, what: string): boolean {
+    const level = this.clipLevel();
+    const fromLeft = side === 'enemy';
+    const key = flagPicture(this, this.speciesName(this.shown[side]), label, fromLeft, what);
+    if (!key) return false;
+    const box = (side === 'enemy' ? this.enemyBox : this.playerBox)?.container.getBounds();
+    const flag = this.add.image(fromLeft ? 0 : this.scale.width, 0, key).setOrigin(fromLeft ? 0 : 1, 0).setScale(0, PICTURE_SCALE).setDepth(3900);
+    flag.setY(fromLeft ? (box ? box.bottom + 8 : 140) : Math.max(8, (box ? box.top : 270) - flag.displayHeight - 10));
+    this.tweens.chain({
+      targets: flag,
+      tweens: [
+        { scaleX: PICTURE_SCALE, duration: level === 'full' ? 250 : 1, ease: 'Back.easeOut' },
+        { scaleX: 0, duration: 200, delay: FLAG_HOLD, ease: 'Quad.easeIn' },
+      ],
+      onComplete: () => flag.destroy(),
+    });
+    return true;
+  }
+
+  /**
+   * Contact punish (pass 12): spikes jab out of the holder, the attacker bounces off with a star on its nose, the
+   * item's flag slides out (`item`; an ability's flag has already shown) and its number shows (`amount`).
+   */
+  private contactMoment(attackerSide: Side, item: string | null, amount: number): void {
+    const level = this.clipLevel();
+    const holderSide: Side = attackerSide === 'player' ? 'enemy' : 'player';
+    const sprite = this.condSprite(attackerSide);
+    const holderSprite = this.condSprite(holderSide);
+    const number = (): void => void (amount > 0 && this.fx.play([{ kind: 'number', side: attackerSide, amount, tone: 'damage', motion: level === 'full' }]));
+    if (!sprite || !sprite.visible || !holderSprite || this.duo) return number();
+    try {
+      const attacker = this.condSpot(attackerSide, sprite);
+      const holder = this.condSpot(holderSide, holderSprite);
+      const key = spikePicture(this);
+      const spikes = level === 'full' && key
+        ? Array.from({ length: SPIKES.n }, (_, i) => {
+            const p = spikeSpot(i, holder);
+            return putAbove(holderSprite, this.add.image(p.x, p.y, key).setOrigin(0.5, 1).setAngle(p.angle).setScale(PICTURE_SCALE));
+          })
+        : [];
+      const parts: Record<string, ClipPart> = {};
+      spikes.forEach((sp, i) => (parts[`s${i}`] = { kind: 'free', get: () => sp }));
+      const mon = this.shown[attackerSide];
+      this.condPlay(sprite, contactClip(attacker, holder, level), parts, (cut) => {
+        spikes.forEach((sp) => sp.destroy());
+        if (cut || !sprite.active) return;
+        this.restAt(sprite, attackerSide);
+        if (sprite.visible) this.standUp(sprite, mon);
+      }, (name) => {
+        if (name === 'number') number();
+        if (name === 'flag' && item) this.showFlag(holderSide, item, 'Item');
+      });
+    } catch {
+      number();
+    }
+  }
+
   private abilityMoment(side: Side, ability: string, label: string): { shown: 'all' | 'flag'; ms: number } | null {
     const level = this.clipLevel();
     const sprite = this.condSprite(side);
     if (this.duo || level === 'off' || !sprite || !sprite.visible) return null;
     try {
-      const fromLeft = side === 'enemy';
-      const key = flagPicture(this, this.speciesName(this.shown[side]), label, fromLeft);
-      if (!key) return null;
-      const box = (side === 'enemy' ? this.enemyBox : this.playerBox)?.container.getBounds();
-      const flag = this.add.image(fromLeft ? 0 : this.scale.width, 0, key).setOrigin(fromLeft ? 0 : 1, 0).setScale(0, PICTURE_SCALE).setDepth(3900);
-      flag.setY(fromLeft ? (box ? box.bottom + 8 : 140) : Math.max(8, (box ? box.top : 270) - flag.displayHeight - 10));
-      this.tweens.chain({
-        targets: flag,
-        tweens: [
-          { scaleX: PICTURE_SCALE, duration: level === 'full' ? 250 : 1, ease: 'Back.easeOut' },
-          { scaleX: 0, duration: 200, delay: FLAG_HOLD, ease: 'Quad.easeIn' },
-        ],
-        onComplete: () => flag.destroy(),
-      });
+      if (!this.showFlag(side, label, 'Ability')) return null;
       const other = this.condSprite(side === 'player' ? 'enemy' : 'player');
       if (ability !== 'intimidate' || level !== 'full' || !other || !other.visible) return { shown: 'flag', ms: 0 };
       const spot = (s: Side, v: Phaser.GameObjects.Sprite): CondSpot => ({ ...this.spotXY(s), w: v.displayWidth, h: v.displayHeight * v.originY, side: s });
@@ -7171,6 +7217,7 @@ export class BattleScene extends Phaser.Scene {
     let eot: EndTurnParade | null = null;
     // Pass 12 "Multi-Hit": a combo counter for each multi-hit move, the total slammed in at the end.
     const spentAt = this.clipLevel() !== 'off' && !this.duo ? spentStarts(events as unknown as ({ type: string } & Record<string, unknown>)[], (['player', 'enemy'] as const).filter((sd) => this.volOf(sd)?.recharge)) : new Map<number, Side[]>();
+    let contactBy: Side | null = null;
     const combo = this.clipLevel() !== 'off' ? comboPlan(events as unknown as ({ type: string } & Record<string, unknown>)[]) : new Map<number, ComboStep>();
     for (const [index, e] of events.entries()) {
       if (index === eotFirst && parade) {
@@ -7208,6 +7255,15 @@ export class BattleScene extends Phaser.Scene {
         this.sandGust();
       }
       if (e.type === 'recoil') this.recoilMoment(e.side);
+      // Contact punish (pass 12): Rocky Helmet, or Rough Skin and friends hurting whoever touched them.
+      if (e.type === 'move') contactBy = null;
+      if (e.type === 'ability' && CONTACT_HURT.has(e.ability)) contactBy = e.side === 'player' ? 'enemy' : 'player';
+      if (e.type === 'damage' && e.side === contactBy) {
+        contactBy = null;
+        cues[index] = (cues[index] ?? []).filter((c) => c.kind !== 'impact' && c.kind !== 'number');
+        this.contactMoment(e.side, null, e.amount);
+      }
+      if (e.type === 'held' && e.what === 'helmet' && e.hpAfter !== undefined) this.contactMoment(e.side, content.items.get(e.itemId)?.name ?? 'Rocky Helmet', Math.max(0, (this.shown[e.side]?.hp ?? e.hpAfter) - e.hpAfter));
       // The release turn of a two-turn move: the CHARGING chip and glow go before the move plays.
       if (e.type === 'move' && this.hold[e.side]?.kind === 'charge') await this.holdOff(e.side);
       // Drain: the lights carry the HP across; they take the pack's heal sparkle's place.

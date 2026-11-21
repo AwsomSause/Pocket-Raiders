@@ -4,7 +4,7 @@ import { planCues } from '../../src/core/presentation/cues';
 import { moveAnims } from '../../src/data/presentation';
 import { content } from './helpers';
 import { clipEnd, EASES, fxAllowed, sampleClip } from '../../src/core/presentation/motionClip';
-import { CHARGE, chargeClip, chargeDot, SPENT, spentStarts, DRAIN, drainClip, RECOIL, recoilClip, chevronWaves, COND_TINT, CONFUSE, endTurnChip, endTurnParade, confusionHitClip, GUST_LEAN, protectedClip, SHIELD, gustLeanClip, intimidateClip, condArriveClip, condKind, condTickClip, parCantClip, SLUMP, STAT_COLOR, statClip, thawClip, wakeClip, type CondSpot } from '../../src/core/presentation/motionConditions';
+import { contactClip, SPIKES, spikeSpot, CHARGE, chargeClip, chargeDot, SPENT, spentStarts, DRAIN, drainClip, RECOIL, recoilClip, chevronWaves, COND_TINT, CONFUSE, endTurnChip, endTurnParade, confusionHitClip, GUST_LEAN, protectedClip, SHIELD, gustLeanClip, intimidateClip, condArriveClip, condKind, condTickClip, parCantClip, SLUMP, STAT_COLOR, statClip, thawClip, wakeClip, type CondSpot } from '../../src/core/presentation/motionConditions';
 
 // Animation redesign pass 8 (Conditions): every status arrives, keeps a look and ticks, as the mockup's numbers.
 const FOE: CondSpot = { x: 648, y: 240, w: 100, h: 120, side: 'enemy' };
@@ -328,5 +328,35 @@ describe('charge-up and the recharge turn (pass 12)', () => {
     expect([...spentStarts(ev.slice(0, 2), ['player', 'enemy']).entries()]).toEqual([[1, ['player']]]);
     expect(spentStarts([{ type: 'cant', side: 'player' }], ['player']).size).toBe(0);
     expect(SPENT).toMatchObject({ sy: 0.9, dy: 4, sat: 0.35, br: 0.85, chip: { word: 'RECHARGE', fill: '#8792b0' } });
+  });
+});
+
+describe('contact punish (pass 12)', () => {
+  const me: CondSpot = { x: 312, y: 428, w: 80, h: 120, side: 'player' };
+  const foe: CondSpot = { x: 648, y: 240, w: 80, h: 100, side: 'enemy' };
+  it('eight spikes jab out round the holder, the attacker bounces back with a star on its nose, then the flag', () => {
+    const c = contactClip(me, foe, 'full');
+    expect(sampleClip(c, 0).s0!.sy).toBe(0);
+    expect(sampleClip(c, 90).s3!.sy).toBeCloseTo(SPIKES.out);
+    expect(sampleClip(c, 370).s7!.sy).toBeCloseTo(SPIKES.out);
+    expect(clipEnd(c).s0!.sy).toBe(0);
+    expect(sampleClip(c, 200).mon).toMatchObject({ dx: -50, dy: 8 });
+    expect(clipEnd(c).mon).toMatchObject({ dx: 0, dy: 0 });
+    expect(c.fx).toContainEqual({ kind: 'star', at: 60, x: 432, y: 288, size: 80, points: 10, d: 280 });
+    expect(c.fx).toContainEqual({ kind: 'cue', at: 100, name: 'flag' });
+    expect(c.fx).toContainEqual({ kind: 'cue', at: 100, name: 'number' });
+    // The foe bounces the other way.
+    expect(sampleClip(contactClip(foe, me, 'full'), 200).mon!.dx).toBeCloseTo(50);
+  });
+  it('spikes stand round its middle pointing out', () => {
+    expect(spikeSpot(0, foe)).toEqual({ x: 708, y: 190, angle: 90 });
+    const s2 = spikeSpot(2, foe);
+    expect(s2.x).toBeCloseTo(648);
+    expect(s2.y).toBeCloseTo(240);
+    expect(s2.angle).toBeCloseTo(180);
+  });
+  it('Reduced: the flag and the number; Off: the number', () => {
+    expect(contactClip(me, foe, 'reduced').fx.map((f) => f.kind === 'cue' && f.name)).toEqual(['number', 'flag']);
+    expect(contactClip(me, foe, 'off').fx).toEqual([{ kind: 'cue', at: 100, name: 'number' }]);
   });
 });
