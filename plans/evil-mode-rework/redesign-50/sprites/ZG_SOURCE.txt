@@ -1,0 +1,1 @@
+zg-*.png: team-coloured Zangoose sprites from the director's Google Drive ("Zangoose Team <name>.png", owner Kice, folder 1dgt-oyvYls2ks7MG9_zS1rz9BDp5q5nn), trimmed to their bounding box. Used in the redesign-50 mockups only.

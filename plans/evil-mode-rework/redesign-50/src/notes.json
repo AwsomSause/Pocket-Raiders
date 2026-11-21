@@ -402,5 +402,75 @@
   "q3": "Yes, three, and they reduce clutter. Last night replaces a pile of overnight pop-ups with one recap. The Adventure log is the one place the story is written down. The Hall of Infamy marks the end of a region before you sail on.",
   "q4": "The Adventure log is in the Start menu; Last night can be switched in Settings › Dominion (Recap: Always, Short, Off); News ticker in Settings › Screen still picks On, Quiet (the new default, news only on news pages) or Off.",
   "q5": "Yes. The sliding place sign is straight from Black and White, the Adventure log comes from Platinum and Omega Ruby and Alpha Sapphire, and the Hall of Infamy is a dark mirror of the Hall of Fame."
+ },
+ "31": {
+  "name": "Party Line",
+  "big": "Your Pokémon finally live on every page: the key strip carries your party of six as little icons with HP rings (the lead one bobbing), every Pokémon drawn anywhere now breathes and stands on a shadow, and the rivals’ eyes move into the Start menu.",
+  "pages": [
+   "Party",
+   "Summary",
+   "The Underworld"
+  ],
+  "q1": "Yes. Six little party icons with green HP rings pop into the key strip of every page (Persian’s ring is red and low), every Pokémon in the game now gently breathes on a soft shadow, the Party screen slides in like the one in the main games with a big lead slot, and the Summary draws a stat hexagon that springs open.",
+  "q2": "Pass 30 tied the story together; this pass puts your Pokémon back at the centre. Before, they only showed up in the Reserve and in battles; now your party is on every page, hurt Pokémon are noticed before a job, and the Underworld shows every villain team you will meet, using the team-coloured Zangoose from the Drive.",
+  "q3": "Yes, three. Party and Summary are the classic two-step Pokémon menus, so they need no explaining. The Underworld is one page for every rival team across the regions, with the ones you cannot reach yet shown as silhouettes.",
+  "q4": "The party icons open Party, which is also the Pokémon line in the Start menu; Rivals moved into the Start menu to make room. Settings › Effects gains Idle motion (On, Off) for the breathing.",
+  "q5": "Very much: a party of six on screen, the green, yellow and red HP bars, a Summary with a stat hexagon, moves with PP and an ability, and villain teams for every region."
+ },
+ "32": {
+  "name": "Dirty Money",
+  "big": "Money gets a colour: every page’s Funds now shows clean and dirty money as a two-tone line under the number, a little +₽ floats up from the capsule when cash comes in, and the coins on the capsule and the Ledger button flip.",
+  "pages": [
+   "Black market",
+   "Laundromat",
+   "Payday"
+  ],
+  "q1": "Yes. A gold “+₽1,200” rises out of the status pill and fades when cash comes in, the coin on the pill and on the Ledger button flips over, the Laundromat drum spins green ₽ coins behind a round glass door while the machine shudders, price tags hang crooked on the Black market shelves, and pay envelopes drop onto each crew card with a reaction bubble.",
+  "q2": "Pass 31 put your Pokémon on every page; this pass makes money something you can read at a glance. Clean and dirty money now look different everywhere, and spending, washing and paying each get their own clear page, instead of numbers buried in the Ledger.",
+  "q3": "Yes, three. The Black market is where dirty money is spent. The Laundromat turns it clean with a rate and a Heat warning. Payday shows what each crew member is paid and how they feel about it. Each is one stop with one clear button.",
+  "q4": "The Black market opens from the Region map in Celadon, the Laundromat from its HQ room, and Payday from the Crew page each week. Settings › Dominion gains Payday (Ask me, Auto-pay fair).",
+  "q5": "Yes. The shop grid with item sprites and prices, the Game Corner style back room, and the Amulet Coin and Big Nugget items all come from the series; washing money is the Dominion twist."
+ },
+ "33": {
+  "name": "Trust",
+  "big": "Loyalty is never hidden again: every crew portrait in the game wears a loyalty ring (gold when they would die for you, white when they are fine, a flickering red when they are slipping), and when someone who is slipping talks, the text box crackles with static.",
+  "pages": [
+   "Loyalty",
+   "Mole hunt",
+   "Interrogation"
+  ],
+  "q1": "Yes, in a tense way. Every crew portrait now wears a coloured loyalty ring, and Gus’s flickers red; when he talks, white static crackles across the text box. The Mole hunt pins three Polaroids to a cork board one by one and a red string draws itself between them and the note about the missing ₽2,000.",
+  "q2": "Pass 32 made money readable; this pass does the same for trust. Loyalty used to be a number inside each file; now you can see at a glance, on any page, who is solid and who is slipping, and a hidden mole becomes a mystery you solve on its own pages.",
+  "q3": "Yes, three. The Loyalty board ranks everyone and says what moves loyalty. The Mole hunt lays the clues out on one wall. The Interrogation is a short scene with three answers. Together they turn a vague worry into a clear little story.",
+  "q4": "Loyalty opens from the Crew page and the Start menu’s Crew line; the Mole hunt only appears in the Start menu when a mole is active. Settings › Access › Colour help adds shapes to the rings (★ gold, ● white, ▲ red) for colour-blind players.",
+  "q5": "Yes. It borrows the detective boards of Looker’s cases in Pokémon X and Y, and the friendship you can see in Pokémon Amie and Refresh, turned into crew loyalty."
+ },
+ "34": {
+  "name": "Festival Nights",
+  "big": "Kanto has a calendar, and the UI dresses for it: tonight is Celadon’s Fireworks Night, so paper lanterns sway along the top of every page, fireworks burst behind the panels on evening and night pages, and the Day segment of the capsule wears a festival lantern that opens the Calendar.",
+  "pages": [
+   "Calendar",
+   "Fireworks Night",
+   "Prize corner"
+  ],
+  "q1": "Yes. A string of red, gold and orange paper lanterns sways under the top bar of every page, fireworks bloom and fade behind the panels on evening pages and fill the sky on Fireworks Night, the Day segment wears a tiny lantern, and the Prize corner’s giant coin flips while Porygon and Dratini breathe on their stands.",
+  "q2": "Pass 33 dealt with trust inside the crew; this pass opens the city up around them. Kanto now has a calendar with paydays, festivals, raids and gym days, and special nights change the whole look of the UI and give you jobs you can only do then.",
+  "q3": "Yes, three. The Calendar puts the whole month on one screen. Fireworks Night is the festival’s own page with its three special jobs. The Prize corner sits inside it, one step away, so the festival never sends you hunting through menus.",
+  "q4": "The lantern on the Day segment opens the Calendar, and the Calendar is a line in the Start menu. Settings › Effects gains Festival decorations (On, Off).",
+  "q5": "Yes. The Game Corner prize counter with Porygon and Dratini is pure Kanto, and festivals like the Bug-Catching Contest and fireworks nights come straight from the series."
+ },
+ "35": {
+  "name": "Third Cut",
+  "big": "The third synthesis tidies everything 31 to 34 added: the bottom strip becomes one dark dock (Start, your party and the lesson sit together on one rounded bar), every page shows a ‹ back crumb in its title chip so you always know the way home, and nothing pops up on its own any more: calls, letters and alerts wait in one Inbox.",
+  "pages": [
+   "X-ray",
+   "Inbox",
+   "Lights out"
+  ],
+  "q1": "Yes. The dock slides up from the bottom like a handheld’s menu bar, the ‹ crumb blinks once when you land on a page, X-ray throws a blue glass sheet over the HQ and pings six labelled callouts one after another, and Lights out dims the screen to moonlight with the crew snoring Zzz before the end-of-day card flips in.",
+  "q2": "Passes 31 to 34 each added something to the bottom strip and to pop-ups; this pass cleans that up. The strip is now one dock, every page shows the way back in its title chip, and calls, letters and alerts collect in an Inbox instead of popping over what you are doing.",
+  "q3": "Yes, three. X-ray explains a busy screen without cluttering it. Inbox holds everything that used to pop up. Lights out gives the end of the day its own calm page with the save.",
+  "q4": "Inbox and X-ray are both lines in the Start menu, and the Inbox count shows on the dock. Settings › Screen gains Pop-ups (Inbox only, Show) and Autosave at Lights out (On, Off).",
+  "q5": "Yes. The end-of-day save works like Pokémon’s “Would you like to save?” prompt, the Inbox feels like the PC mailbox, and the dock is the same one-row Start bar the handheld games use."
  }
 }

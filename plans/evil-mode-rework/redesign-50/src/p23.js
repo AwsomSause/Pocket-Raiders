@@ -11,7 +11,7 @@ page('glance', { g: 'HQ', t: 'At a glance', kind: 'gl23', from: 23 });
 const GL = [['Funds', 'i-coin_case', RUN.funds, 'Money stays in Kanto when you sail', 62], ['Heat', 'bd-fire', RUN.heat + '%', 'Police walk the districts you hit', RUN.heat], ['Day', 'g-town-map', 'Day ' + RUN.day + ' · ' + RUN.when, '1 of 3 orders used today', 33], ['Goal', 'g-relic-crown', RUN.goal + ' ' + RUN.goalPct + '%', 'Take Saffron to finish Kanto', RUN.goalPct]];
 const NEED = [['Rocket raid in 3 nights', 'Get the Bolt Hole ready', 'raid', 'bad'], ['Rosa wants a word', 'Missed call · 2 min ago', 'call', ''], ['2 jobs are ready', 'Celadon and Cerulean', 'jobs', ''], ['Johto is waiting', 'Sail when Kanto is yours', 'world', 'gold']];
 comp(23, 'k:gl23', s => `<div class="scr nv k-gl23">${C('bg', 'hq')}${C('top', s, 'At a glance', 'What the capsule means')}
-  <section class="gl23" ${mm('panel')}>${map(GL, ([n, ic, v, d, p], i) => `<div class="gt23" style="--d:${i * 90}ms;--p:${p}%"><span class="gi">${SP(ic, 34, '', 0)}</span><small>${n}</small><b>${v}</b><em>${d}</em><i class="bar"><i></i></i></div>`)}</section>
+  <section class="gl23" ${mm('panel')}>${map(GL, ([n, ic, v, d, p], i) => `<div class="gt23" style="--d:${i * 90}ms;--p:${p}%"><span class="gi">${SP(ic, 34, '', 0)}</span><small>${n}</small><b>${v}</b><em>${d}</em><i class="gb23"><i></i></i></div>`)}</section>
   ${C('pn', 'need23', 'Needs you', map(NEED, ([a, b, g, c], i) => `<button class="nd23 ${c}" ${go(g)} ${st(i, 80)}><b>${a}</b><em>${b}</em></button>`), 'det')}
   ${C('foot', 'Rotom', '“Bzzt! Tap the capsule on any page to come back here.”', [['Back', 'hq'], ['Get ready', 'raid']])}${C('tabs', s)}${C('keys', [['↑↓', 'pick'], ['Enter', 'go'], ['Esc', 'back']])}</div>`);
 
