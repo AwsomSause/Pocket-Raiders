@@ -23,6 +23,7 @@ import { dressScreen } from '../ui/screenDress';
 import type { AssetManifest } from '../assets/catalog';
 import { rxFileOf } from '../ui/redux/assets';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { pkTrainers } from '../ui/pocket/screens/trainers';
 import { gridCols, gridView } from '../ui/redux/templates';
 
 const ORIGINAL_LAYOUT: TrainerLayout = { cols: 4, rows: 3, gridX: 356, gridY: 18, cellW: 140, cellH: 156, gap: 8, profile: 'side', leftW: 324, cellFill: [0x2f2838], lockedFill: 0x1f1b25, cellBorder: COLORS.borderMuted, panelFill: 0x2f2838, panelBorder: COLORS.borderMuted, light: false, spriteMax: 2, names: true };
@@ -102,6 +103,23 @@ export class TrainerSelectScene extends Phaser.Scene {
       const art = (id: string) => rxFileOf(manifest, id);
       this.view = mountRedux(this, {
         render: (c) => {
+          if (c.pk) {
+            // Pocket look: the lit Trainer on a big card, the next ones beside it (mock-up `trainers`).
+            COLS = 1;
+            const all = this.slots.filter((x) => x !== null), at = Math.min(this.index, all.length - 1), lit = all[at];
+            const history = session.profile.runHistory, runsOf = (id: string) => history.filter((r) => r.archetypeId === id);
+            const best = lit ? Math.max(-1, ...runsOf(lit.archetype.id).map((r) => r.badges)) : -1;
+            return pkTrainers({
+              cards: all.map((x) => ({ name: x.archetype.name, art: art(x.archetype.spriteAssetId), locked: x.status !== 'unlocked', line: x.status === 'unlocked' ? `${runsOf(x.archetype.id).length} runs` : statusLine(x.status) })),
+              index: at,
+              lit: !lit ? { title: '', about: '', runs: 0, best: '', locked: null } : {
+                title: lit.status === 'unlocked' ? lit.archetype.title : statusLine(lit.status), about: this.notice.text || lit.archetype.description, runs: runsOf(lit.archetype.id).length,
+                best: best < 0 ? 'None yet' : `${best} badge${best === 1 ? '' : 's'}`,
+                locked: lit.status === 'unlocked' ? null : lit.status === 'comingLater' ? `${lit.archetype.name} arrives in a later update.` : `How to unlock: ${lit.archetype.unlockText}${lit.archetype.unlockCost ? `, then ${lit.archetype.unlockCost} Bank Credits in the Trainer Archive` : ''}.`,
+              },
+              sort: `${TRAINER_SORT_LABELS[this.sortKey]} ${this.sortReverse ? '▼' : '▲'}`,
+            });
+          }
           COLS = gridCols(c);
           const real = this.slots.filter((x) => x !== null), slot = this.slots[this.index] ?? null, a = slot?.archetype, open = slot?.status === 'unlocked';
           const runs = a ? session.profile.runHistory.filter((r) => r.archetypeId === a.id) : [];
@@ -117,7 +135,7 @@ export class TrainerSelectScene extends Phaser.Scene {
             text: this.notice.text || (open && a ? backstoryFor(session.content, a) : 'Choose a trainer. Each one changes the rules of the run a little.'),
           });
         },
-        acts: { pick: (i) => { this.focus(Number(i), false); this.choose(); } },
+        acts: { pick: (i) => { this.focus(Number(i), false); this.choose(); }, sort: () => this.cycleSort(1), back: () => this.scene.start('Hub') },
         overs: { over: (i) => { if (Number(i) !== this.index) this.focus(Number(i)); } },
       });
     }

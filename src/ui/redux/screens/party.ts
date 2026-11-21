@@ -8,6 +8,8 @@ import type { ReduxCtx } from '../stage';
 import { pic, scrollStart, type Art } from '../templates';
 import { type BattlePanel, tipWindow } from './battle';
 import { phParty, phSummary } from '../../phantom/screens/party';
+import { pkParty } from '../../pocket/screens/party';
+import { pkSummary } from '../../pocket/screens/summary';
 
 type Hints = readonly (readonly [string, string])[];
 
@@ -24,16 +26,24 @@ export interface PartyCard {
   types: string[];
   ability: string;
   nature: string;
-  moves: { name: string; type: string }[];
+  moves: { name: string; type: string; pp?: string }[];
   /** It cannot be chosen right now (a pick with a reason against it). */
   off: boolean;
   /** Words in place of the HP numbers, for a Pokémon whose HP is not on record (a Hall of Fame team). */
   line?: string;
+  // The Pocket look's card: friendship hearts (0 to 5), the EXP bar and its words, a status short name, the held item's id, each move's PP.
+  hearts?: number;
+  xpPct?: number;
+  xpText?: string;
+  status?: string;
+  heldId?: string;
 }
-export interface PartyModel { title: string; mons: PartyCard[]; index: number; text: string; hints: Hints; /** Header colour; the party's green unless the page belongs to another part of the game (the run end's final team). */ area?: Area }
+/** The coming Gym's matchups on the Pocket Party page: each team member weak, strong, even or resisting against its type. */
+export interface PartyGym { when: string; who: string; file: string | null; rows: { file: string | null; word: string; cls: string }[] }
+export interface PartyModel { title: string; mons: PartyCard[]; index: number; text: string; hints: Hints; /** Header colour; the party's green unless the page belongs to another part of the game (the run end's final team). */ area?: Area; money?: number; reserve?: number; gym?: PartyGym | null }
 
 /** How many cards the cursor moves across in the Party layout of this theme (the grid is three wide). */
-export const partyCols = (c: Pick<ReduxCtx, 'v'> & { ph?: unknown }): number => (c.ph ? 2 : c.v(3) === 1 ? 3 : 1);
+export const partyCols = (c: Pick<ReduxCtx, 'v'> & { ph?: unknown; pk?: unknown }): number => (c.pk ? 1 : c.ph ? 2 : c.v(3) === 1 ? 3 : 1);
 
 const pct = (p: { hp: number; maxHp: number }): number => (p.maxHp > 0 ? Math.max(0, Math.min(100, Math.round((p.hp / p.maxHp) * 100))) : 0);
 const one = 'white-space:nowrap;overflow:hidden;text-overflow:ellipsis';
@@ -42,6 +52,7 @@ const pick = (k: number): string => `${act('pick', k)} data-over="over"`;
 
 export function partyView(c: ReduxCtx, d: PartyModel): string {
   if (c.ph) return phParty(c.ph, d);
+  if (c.pk) return pkParty(d);
   const v = c.v(3), head = H(d.title, d.area ?? 'party', d.hints);
   const cls = (p: PartyCard, k: number): string => (k === d.index ? 'sel' : p.hp > 0 && !p.off ? '' : 'dim');
   const tag = (p: PartyCard): string => (p.tag ? `<span class="tg no" style="font-size:11px">${esc(p.tag)}</span>` : '');
@@ -95,6 +106,27 @@ export interface SummaryModel {
   menu: { options: { label: string; off: boolean }[]; index: number } | null;
   /** The tooltip of the move the pointer rests on (the mock-ups' move tooltip for any menu), or null. */
   tip?: BattlePanel | null;
+  /** The Pocket look: the Pokémon as its Party card, "1 of 6", and what the panels say beside the tab's own body. */
+  card?: PartyCard;
+  count?: string;
+  extra?: SummaryExtra;
+}
+export interface SummaryExtra {
+  name: string;
+  types: string[];
+  /** [name, what it does], e.g. ['Timid', 'Speed goes up, Attack goes down.']. */
+  nature: [string, string];
+  ability: [string, string] | null;
+  /** [name, what it does, item id]. */
+  held: [string, string, string] | null;
+  weak: string[];
+  /** The stat row the nature lowers, or undefined. */
+  down?: number;
+  /** Each move's kind (Physical, Special, Status), in move order. */
+  moveKinds?: string[];
+  /** The lit move's own description. */
+  moveText?: string;
+  bond?: { hearts: number; mood: string; hint: string };
 }
 
 const lines = (l: readonly string[], st = ''): string => l.map((t) => `<div class="sm" style="line-height:18px;${st}">${esc(t)}</div>`).join('');
@@ -122,6 +154,7 @@ function bodyOf(b: SummaryBody): string {
 
 export function summaryView(c: ReduxCtx, d: SummaryModel): string {
   if (c.ph) return phSummary(c.ph, d);
+  if (c.pk) return pkSummary(d);
   const v = c.v(2), f = d.face;
   const backdrop = f.art ? `background:url(${rxUrl(f.art)}) 50% 60%/cover;image-rendering:pixelated` : '';
   const left = W(`<div class="cell" style="height:170px;aspect-ratio:auto;flex:none;${backdrop}">${f.file ? mon(f.file, 2, '', true) : ''}</div><div class="row"><b class="grow" style="font-size:21px;min-width:0;${one}">${esc(f.name)}</b><span class="sm">Lv ${f.level}${f.gender ? ' ' + esc(f.gender) : ''}</span></div><div class="row" style="gap:5px">${f.types.map(ty).join('')}<span class="grow"></span><span class="sm">${esc(f.no)}</span></div><div class="btn${d.tab === d.itemsTab ? ' on' : ''}" style="height:34px;font-size:14px;cursor:pointer"${act('tab', d.itemsTab)}>${esc(f.held)}<small>open</small></div>${hpb(f.hpPct)}${hpb(f.xpPct, 0, ' xp')}`, `position:absolute;left:24px;top:${v ? 74 : 72}px;width:280px;display:flex;flex-direction:column;gap:8px`);

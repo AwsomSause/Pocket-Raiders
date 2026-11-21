@@ -9,6 +9,7 @@ import type { BasketLine, ShopCtx, ShopHandles, ShopHooks } from '../../shopStyl
 import { act, B, esc, H, TX, W } from '../kit';
 import { artOf, monFile, partyChips, partyStrip } from '../game';
 import { phShop, SHOP_CLERK } from '../../phantom/screens/stops';
+import { PK_SHELF_COLS, pkShop, pkShopPay, type PkShopModel } from '../../pocket/screens/shop';
 import { mountRedux } from '../stage';
 import { pic, scrollStart } from '../templates';
 import { confirmBox } from './saves';
@@ -49,7 +50,7 @@ export function reduxShop(ctx: ShopCtx, hooks: ShopHooks): ShopHandles {
   const rx = mountRedux(scene, {
     render: (c) => {
       const v = c.v(2), R = view.rows, n = R.length, ex = extras();
-      cols = v === 1 ? 4 : 1;
+      cols = c.pk ? PK_SHELF_COLS : v === 1 ? 4 : 1;
       const row = R[Math.min(index, n - 1)];
       const party = partyChips(scene);
       const users = row?.users ? new Set(row.users) : null;
@@ -60,6 +61,20 @@ export function reduxShop(ctx: ShopCtx, hooks: ShopHooks): ShopHandles {
       const text = message ?? (index >= n ? (ex[index - n] === 'Sell' ? 'Sell items from your Bag here.' : depot ? 'Nothing is bought until you check out. Five or more of one item is cheaper.' : '') : row && moved ? `${row.name}: ${row.who}.${row.problem ? ` ${row.problem}` : ''}` : 'Welcome! Take your time.');
       const up = text.length > 90 ? 126 : 100;
       const lines = basket.length ? `<div class="sm" style="line-height:17px;max-height:68px;overflow:hidden"><b class="acc">Basket</b> ${basket.map((l) => `${esc(l.name)} ×${l.count} ₽${l.total}${l.saving ? ` (−₽${l.saving})` : ''}`).join(' · ')}</div>` : '';
+      if (c.pk) {
+        // Pocket look: the shelves; a basket shop's checkout question is the receipt page.
+        const keeper = ctx.type === 'bazaar' ? monFile(scene, 'kecleon') : ctx.type === 'night' ? monFile(scene, 'meowth') : null;
+        const names = ctx.party.filter((m) => users?.has(m.uid)).map((m) => m.care?.nickname ?? ctx.content.species.get(m.speciesId)?.name ?? '');
+        const say = message ?? (index >= n ? text : row && moved ? `${row.description}${names.length ? ` ${names.join(', ')} can use it.` : ''}${row.problem ? ` ${row.problem}` : ''}` : text);
+        const model: PkShopModel = {
+          title: ctx.title, crumb: [ctx.title], clock: ctx.clock, money: view.money, index, keeper, nextStock: view.nextStock, pocket: row?.pocket.word ?? '', text: say,
+          goods: R.map((r) => ({ name: r.name, tag: r.label.slice(r.name.length).replace(/[()]/g, '').trim(), price: r.price, was: r.wasPrice, off: !r.affordable, have: r.owned, art: artOf(scene, r.iconAssetId), inBasket: basket.find((l) => l.itemId === r.itemId)?.count ?? 0 })),
+          buy: !row || depot ? [] : [{ label: 'Buy 1', act: 'buy', on: index < n && !five }, ...(fiveOk(row) ? [{ label: 'Buy 5', act: 'buy5', on: index < n && five, dim: row.price * 5 > view.money }] : [])],
+          extras: ex, basket: depot ? basket.map((l) => ({ name: l.name, count: l.count, total: l.total, art: artOf(scene, l.iconAssetId), saving: l.saving })) : null,
+          ask: ask ? { title: ask.question, options: ask.options, index: ask.index } : null,
+        };
+        return ask && depot && basket.length ? pkShopPay(model) : pkShop(model);
+      }
       if (c.ph) {
         const keeper = ctx.type === 'bazaar' ? monFile(scene, 'kecleon') : ctx.type === 'night' ? monFile(scene, 'meowth') : null;
         return phShop(c.ph, {
@@ -88,7 +103,7 @@ export function reduxShop(ctx: ShopCtx, hooks: ShopHooks): ShopHandles {
       buy5: () => { if (!ask) hooks.pickMany?.(Math.min(index, view.rows.length - 1), 5); },
       confirm: (k) => ask?.pick(Number(k)),
     },
-    overs: { over: (i) => { if (!ask) hooks.focus(Number(i)); } },
+    overs: { over: (i) => { if (!ask) hooks.focus(Number(i)); }, confirmOver: (k) => { if (ask && Number(k) !== ask.index) { ask.index = Number(k); rx.refresh(); } } },
   });
   redraw = () => rx.refresh();
   scene.events.once('shutdown', () => { redraw = null; ask = null; });

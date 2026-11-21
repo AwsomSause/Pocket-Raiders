@@ -16,7 +16,8 @@ import { pokemonIcon } from '../ui/sprites';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import { Menu } from '../ui/widgets';
 import { sceneForRun } from './routing';
-import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, pocketOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { pkTrainerArt } from '../ui/pocket/models';
 import { savesView, type ConfirmModel } from '../ui/redux/screens/saves';
 
 const CARD_X = 60;
@@ -74,7 +75,7 @@ export class SaveSlotsScene extends Phaser.Scene {
         render: (c) => savesView(c, {
           slots: this.cards.map((card, i) => {
             const run = this.peeks[i]!.run;
-            return { tag: `Slot ${card.slot}`, name: card.title.split(' · ').slice(1).join(' · '), where: card.lines[0] ?? '', time: card.savedAt ? stampText(card.savedAt).slice(0, 10) : '', party: run.status === 'ok' ? sprite(run) : [], empty: card.status === 'empty' };
+            return { tag: `Slot ${card.slot}`, name: card.title.split(' · ').slice(1).join(' · '), where: card.lines[0] ?? '', time: card.savedAt ? stampText(card.savedAt).slice(0, 10) : '', party: run.status === 'ok' ? sprite(run) : [], empty: card.status === 'empty', ...(pocketOn() && run.status === 'ok' ? { art: pkTrainerArt(this, run.data) } : {}) };
           }),
           focus: this.focus,
           onDelete: this.onDelete,

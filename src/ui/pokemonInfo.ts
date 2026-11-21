@@ -2,7 +2,7 @@
 // works out: battle readiness, a stat comparison, move effect lines, the bond and the
 // battle history. Pure (no Phaser, no RNG) so tests can read it.
 
-import { bondMood, bondOf, pairBondLevel } from '../core/bond';
+import { bondMood, pairBondLevel, peekBond } from '../core/bond';
 import type { Content, MoveSchema, StatName } from '../core/contentSchema';
 import type { z } from 'zod';
 import { friendshipHearts } from '../core/friendship';
@@ -80,7 +80,7 @@ export function compareTarget(party: PokemonInstance[], index: number): number |
 }
 
 /** Experience: how far through the current level, as a fraction and words. Null at the level limit or for unknown rates. */
-export function xpProgress(content: Content, mon: PokemonInstance): { fraction: number; text: string } | null {
+export function xpProgress(content: Content, mon: PokemonInstance): { fraction: number; text: string; left: number } | null {
   const species = getSpecies(content, mon.speciesId);
   const rate = species.growthRate;
   const high = content.balance.difficulty.highLevelXp;
@@ -89,7 +89,7 @@ export function xpProgress(content: Content, mon: PokemonInstance): { fraction: 
   if (!(next > floor)) return null;
   const have = Math.max(0, mon.xp - floor);
   const need = next - floor;
-  return { fraction: Math.min(1, have / need), text: `${have} / ${need} to Lv${mon.level + 1}` };
+  return { fraction: Math.min(1, have / need), text: `${have} / ${need} to Lv${mon.level + 1}`, left: Math.max(0, need - have) };
 }
 
 /** Plain-language lines for what a move does besides damage, from its data. */
@@ -139,7 +139,7 @@ export function bondLevelLines(content: Content, run: RunState, mon: PokemonInst
 
 /** The Personality and relationships tab: bond, mood, personality, teammates, emotion. */
 export function bondView(content: Content, run: RunState, mon: PokemonInstance): BondView {
-  const bond = bondOf(run, mon.uid);
+  const bond = peekBond(run, mon.uid);
   const mood = MOOD_LOOK[bondMood(bond)];
   const p = personalityOf(run, mon);
   const emotion = emotionOf(content, run, mon.uid);

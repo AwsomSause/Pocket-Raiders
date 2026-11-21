@@ -2070,8 +2070,8 @@ export const SettingsSchema = z.object({
   autoRules: z.array(z.enum(['superEffective', 'healLow', 'noItems', 'stayIn'])).default([]),
   /** W11 (UI, accessibility, presentation). All presentation only. */
   uiTheme: z.enum(['classic', 'aero', 'ds', 'wii', 'cyber']).default('classic'),
-  /** UI mock-ups update: 'new' draws the redesigned screens (the default), 'old' keeps the earlier UI, 'phantom' the Phantom UI. Presentation only. */
-  uiStyle: z.enum(['new', 'old', 'phantom']).default('new'),
+  /** UI mock-ups update: 'new' draws the redesigned screens (the default), 'old' keeps the earlier UI, 'phantom' the Phantom UI, 'pocket' the Pokémon-style redesign (the Pocket look). Presentation only. */
+  uiStyle: z.enum(['new', 'old', 'phantom', 'pocket']).default('new'),
   /** The Phantom UI's version, one of five (core/presentation/phantom.ts). */
   phantomVersion: z.enum(PHANTOM_VERSION_IDS).default('phantom'),
   /** The New UI's look, one of twenty (core/presentation/redux.ts). */

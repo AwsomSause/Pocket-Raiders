@@ -7,7 +7,7 @@ import { directiveText } from '../core/directive';
 import { licenseName } from '../core/license';
 import { getArchetype } from '../core/archetypes';
 import { attributesLine, effectiveAttributes } from '../core/attributes';
-import { getCampaign, runLevelCap, runCampaign } from '../core/regions';
+import { bossInfo, getCampaign, runLevelCap, runCampaign } from '../core/regions';
 import { eventIdOf } from '../core/gameEvents';
 import { questTrainer, runQuestOf, stepsDone } from '../core/quests';
 import { itemsText } from '../core/runPrep';
@@ -24,7 +24,11 @@ import { dressScreen } from '../ui/screenDress';
 import { BRIEFING_LOOKS } from '../ui/briefingLooks';
 import { pokemonAssetIds, type AssetManifest } from '../assets/catalog';
 import { rxFileOf } from '../ui/redux/assets';
-import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, pocketOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import type { PkBriefExtra } from '../ui/pocket/screens/run';
+import { artOf } from '../ui/redux/game';
+import { typeEffectiveness } from '../core/battle/damage';
+import { TYPE_NAMES, type TypeName } from '../core/contentSchema';
 import { briefView } from '../ui/redux/screens/run';
 
 export class BriefingScene extends Phaser.Scene {
@@ -122,11 +126,26 @@ export class BriefingScene extends Phaser.Scene {
           party: run.party.map((m) => { const sp = content.species.get(m.speciesId); return { name: sp?.name ?? m.speciesId, file: sp ? rxFileOf(manifest, pokemonAssetIds(sp.assets).front)?.file ?? null : null }; }),
           index: this.menu.index,
           text: this.status.text || 'Check the plan, then depart. The seed can be copied and shared.',
+          pk: pocketOn() ? this.pkExtra() : undefined,
         }),
         acts: { go: () => this.scene.start(sceneForRun(session.run!)), copy: () => this.copySeed(run.seed) },
       });
       this.menu.onFocus = () => this.view?.refresh();
     }
+  }
+
+  /** Pocket look: the first region, its stops, the level cap and the first Gym Leader with the types that hit them hard. */
+  private pkExtra(): PkBriefExtra {
+    const { session } = services(), content = session.content, run = session.run!;
+    const regionId = run.regionOrder[run.regionIndex] ?? '';
+    const stage = run.stage;
+    let leader: PkBriefExtra['leader'] = null;
+    if (stage?.leaderId) {
+      const b = bossInfo(content, 'gym', stage.leaderId);
+      const weak = TYPE_NAMES.filter((t) => typeEffectiveness(content.typeChart, t, b.types as TypeName[]) > 1);
+      leader = { name: b.name, art: artOf(this, b.spriteAssetId) ?? null, types: b.types, weak };
+    }
+    return { region: content.regions.get(regionId)?.name ?? regionId, regionNo: run.regionIndex + 1, stops: stage?.map.columns ?? 0, cap: runLevelCap(content, run), leader };
   }
 
   /** Label/text rows inside the panel (y 76–426): the biggest font that fits, shrunk as a last resort. */

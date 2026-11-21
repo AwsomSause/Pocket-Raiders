@@ -19,6 +19,11 @@ import type { InputAction } from './input';
 import { phDex } from './phantom/screens/dex';
 import { DEX_COLS, gridStep, phDexList, phTypes, TYPE_COLS, TYPE_ORDER } from './phantom/screens/dexbook';
 import { monFile } from './redux/game';
+import { pkDex, pkDexWall, PK_DEX_COLS } from './pocket/screens/dex';
+import { PK_TYPE_COLS, PK_TYPE_ORDER, pkTypes } from './pocket/screens/types';
+
+/** Pocket look: the same Pokédex drawn as the Pocket pages (ten across, the type chart six across); `types` opens on the chart, and Esc there closes it. */
+export interface DexBookOptions { pocket?: boolean; start?: 'types' }
 
 const TABS = ['All', 'Seen', 'Owned', 'Mastered'] as const;
 type Mode = 'list' | 'entry' | 'types';
@@ -38,19 +43,24 @@ export class PhantomDex {
   private shown: string[] = [];
   private closed = false;
   private readonly unbind: () => void;
+  private readonly pocket: boolean;
+  private readonly typesOnly: boolean;
 
   /** `focus` is a species to open on (the lead of the run); `redraw` repaints the owner's view; `done` is called once on close. */
-  constructor(private readonly scene: Phaser.Scene, private readonly redraw: () => void, private readonly done: () => void, focus?: string) {
+  constructor(private readonly scene: Phaser.Scene, private readonly redraw: () => void, private readonly done: () => void, focus?: string, opts: DexBookOptions = {}) {
     const { session } = services();
+    this.pocket = !!opts.pocket;
+    this.typesOnly = opts.start === 'types';
     this.sets = collectionSets(session.content);
     this.profile = liveDexProfile(session.profile, session.run?.log);
     this.hinted = silhouettes(session.content, this.profile);
-    this.types = TYPE_ORDER.filter((t) => session.content.typeChart[t] !== undefined);
+    this.types = (this.pocket ? PK_TYPE_ORDER : TYPE_ORDER).filter((t) => session.content.typeChart[t] !== undefined);
     // It opens on the lead's own page when the Pokédex knows the lead (a starter is not in it until it is met or caught).
     const known = focus && dexState(this.profile, focus) !== 'unknown' ? focus : undefined;
     if (known) this.set = Math.max(0, this.sets.findIndex((s) => s.members.includes(known)));
     this.fill();
     if (known) this.index = Math.max(0, this.shown.indexOf(known));
+    if (this.typesOnly) { this.mode = 'types'; const first = known ? session.content.species.get(known)?.types[0] : undefined; this.type = Math.max(0, this.types.indexOf(first ?? 'normal')); }
     const kb = scene.input.keyboard;
     const bind = (key: string, fn: () => void): (() => void) => {
       const h = (): void => { if (!this.closed) fn(); };
@@ -109,6 +119,14 @@ export class PhantomDex {
       return;
     }
     if (name === 'entry') return this.input('confirm');
+    if (name.startsWith('tab:')) {
+      const k = Number(name.slice(4));
+      if (!(k >= 0 && k < TABS.length) || k === this.tab) return;
+      this.tab = k;
+      this.fill();
+      this.tick();
+      return this.redraw();
+    }
     if (name === 'next' || name === 'prev') {
       const n = this.sets.length;
       if (n < 2) return this.tick(false);
@@ -147,8 +165,8 @@ export class PhantomDex {
   input(action: InputAction): void {
     if (this.closed) return;
     if (this.mode === 'types') {
-      if (action === 'back' || action === 'confirm') { this.mode = this.from; playSfx(this.scene, 'ui.select', 0.5); return this.redraw(); }
-      const next = gridStep(this.type, this.types.length, TYPE_COLS, action);
+      if (action === 'back' || action === 'confirm') { if (this.typesOnly) return this.close(); this.mode = this.from; playSfx(this.scene, 'ui.select', 0.5); return this.redraw(); }
+      const next = gridStep(this.type, this.types.length, this.pocket ? PK_TYPE_COLS : TYPE_COLS, action);
       if (next === this.type) return;
       this.type = next;
       this.tick();
@@ -166,7 +184,7 @@ export class PhantomDex {
       playSfx(this.scene, 'ui.select', 0.5);
       return this.redraw();
     }
-    const next = gridStep(this.index, this.shown.length, DEX_COLS, action);
+    const next = gridStep(this.index, this.shown.length, this.pocket ? PK_DEX_COLS : DEX_COLS, action);
     if (next === this.index) return;
     this.index = next;
     this.tick();
@@ -213,6 +231,37 @@ export class PhantomDex {
       },
       index: this.index,
       card,
+      sets: this.sets.length > 1,
+    });
+  }
+
+  /** The Pocket look's pages for the same place: the wall, the entry, the type chart. */
+  htmlPocket(): string {
+    const { session } = services(), content = session.content, profile = this.profile;
+    if (this.mode === 'types') return pkTypes({ types: this.types, index: this.type, chart: content.typeChart, book: true });
+    const id = this.shown[this.index];
+    if (this.mode === 'entry' && id) {
+      const card = dexCard(content, profile, id), data = dexDataPage(content, profile, id);
+      return pkDex({ card, data, page: this.pageNo, art: monFile(this.scene, id, 'front'), line: card.line.map((e) => monFile(this.scene, e.id, 'front')), book: true });
+    }
+    const no = (x: string): string => `No. ${String(content.species.get(x)?.dex ?? 0).padStart(4, '0')}`;
+    const sp = id ? content.species.get(id) : undefined;
+    return pkDexWall({
+      title: this.sets[this.set]?.name ?? 'Pokédex',
+      n: this.shown.length,
+      index: this.index,
+      cell: (i) => {
+        const x = this.shown[i];
+        if (!x) return undefined;
+        const st = dexState(profile, x), shadow = this.hinted.get(x);
+        if (st === 'unknown') return { file: shadow ? monFile(this.scene, x, 'front') : null, title: no(x), body: shadow ? `A shadow from your field notes: ${shadow.join(' / ')} type.` : 'Not met yet.', off: true, sil: !!shadow };
+        const t = tallyOf(profile, x);
+        return { file: monFile(this.scene, x, 'front'), title: content.species.get(x)?.name ?? x, body: `${no(x)} · Seen ${t.seen} · Caught ${t.caught}`, got: st === 'caught' };
+      },
+      hint: sp && id && dexState(profile, id) !== 'unknown' ? `${sp.name}: ${sp.types.join(' / ')}.` : '',
+      tabs: { labels: TABS, index: this.tab },
+      back: true,
+      book: true,
       sets: this.sets.length > 1,
     });
   }

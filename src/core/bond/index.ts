@@ -35,6 +35,12 @@ export function bondOf(run: RunState, uid: string): Bond {
   return history.bond;
 }
 
+/** The same bond as bondOf, read without writing a fresh one into the run (for screens, which never change a run). */
+export function peekBond(run: RunState, uid: string): Bond {
+  const history = run.story.histories[uid];
+  return history?.bond ?? freshBond(uid, history?.joinedBy);
+}
+
 const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
 export function adjustBond(bond: Bond, delta: Partial<Record<BondKey, number>>): void {
   for (const k of BOND_KEYS) if (delta[k]) bond[k] = clamp(bond[k] + delta[k]!);
