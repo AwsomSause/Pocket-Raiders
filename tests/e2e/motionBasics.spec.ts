@@ -517,8 +517,8 @@ test('conditions: each status arrives and stays on the Pokémon, burn ticks, par
       b.shown.enemy = { ...b.shown.enemy, status: st ? { id: st } : null };
       const seen = { flames: 0, bubbles: 0, ember: 0, stamp: false };
       const watch = () => {
-        seen.flames = Math.max(seen.flames, b.children.list.filter((c: any) => c.texture?.key === 'cond.flame' && c.visible && c.alpha > 0).length);
-        seen.bubbles = Math.max(seen.bubbles, b.children.list.filter((c: any) => c.texture?.key === 'cond.bubble' && c.visible && c.alpha > 0).length);
+        seen.flames = Math.max(seen.flames, b.children.list.concat(b.field.list).filter((c: any) => c.texture?.key === 'cond.flame' && c.visible && c.alpha > 0).length);
+        seen.bubbles = Math.max(seen.bubbles, b.children.list.concat(b.field.list).filter((c: any) => c.texture?.key === 'cond.bubble' && c.visible && c.alpha > 0).length);
         seen.ember = Math.max(seen.ember, ...(b.conds.enemy?.embers ?? []).map((e: any) => e.scaleX / (16 / 34 / 2)), 0);
         seen.stamp ||= b.children.list.some((c: any) => String(c.texture?.key).startsWith("stamp.CAN'T MOVE") && c.alpha > 0.5);
       };
@@ -542,8 +542,8 @@ test('conditions: each status arrives and stays on the Pokémon, burn ticks, par
       frozenFrame: v.anims?.timeScale === 0,
       x: v.x - at.x,
       angle: v.getData('standBase')?.angle ?? v.angle, // its resting angle (some Pokémon stand with a tilt loop)
-      icePictures: b.children.list.filter((o: any) => String(o.texture?.key).startsWith('cond.ice')).length,
-      flames: b.children.list.filter((o: any) => o.texture?.key === 'cond.flame').length,
+      icePictures: b.children.list.concat(b.field.list).filter((o: any) => String(o.texture?.key).startsWith('cond.ice')).length,
+      flames: b.children.list.concat(b.field.list).filter((o: any) => o.texture?.key === 'cond.flame' && !(c?.embers ?? []).includes(o)).length, // the climbing flames (the embers stay),
     };
   });
 
@@ -593,5 +593,59 @@ test('conditions: each status arrives and stays on the Pokémon, burn ticks, par
   await page.waitForTimeout(400);
   expect(await state()).toMatchObject({ kind: null, x: 0 });
   expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').field.list.filter((o: any) => o.type === 'Sprite' && o.tintFill && o.visible && o.alpha > 0).length)).toBe(0);
+  expect(errors).toEqual([]);
+});
+
+test('stat changes: chevrons in the stat colour sweep the body, a stamp says the stat, six pips show the stage; nothing left after', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'stat-e2e');
+  const change = (side: 'player' | 'enemy', stat: string, by: number) => page.evaluate(async ([s, st, n]) => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    const seen = { chevrons: 0, stamp: '', pips: 0, lit: [] as number[], arrows: 0, badge: 0 };
+    const watch = () => {
+      seen.chevrons = Math.max(seen.chevrons, b.children.list.concat(b.field.list).filter((c: any) => String(c.texture?.key).startsWith('stat.chev.') && c.alpha > 0.5).length);
+      const st = b.children.list.find((c: any) => String(c.texture?.key).startsWith('stamp.') && c.alpha > 0.5);
+      if (st) seen.stamp = st.texture.key;
+      const pips = b.children.list.filter((c: any) => c.texture?.key === 'stat.pip' && c.scaleX > 0.4);
+      seen.pips = Math.max(seen.pips, pips.length);
+      // The pips lit at their fullest moment (they all fade together at the end).
+      const lit = pips.filter((p: any) => p.alpha > 0.5 && p.tintTopLeft !== 0xffffff).map((p: any) => p.tintTopLeft);
+      if (lit.length > seen.lit.length) seen.lit = lit;
+      // The pack's old arrows (text in the field) and its word badge must stay away.
+      seen.arrows = Math.max(seen.arrows, b.field.list.filter((o: any) => o.type === 'Text' && /[▲▼]/.test(o.text)).length);
+      seen.badge = Math.max(seen.badge, b.children.list.concat(b.field.list).filter((o: any) => o.type === 'Text' && /\+\+?$|--?$/.test(o.text ?? '')).length);
+    };
+    b.events.on('update', watch);
+    const word = { atk: 'ATTACK', def: 'DEFENSE' }[st as 'atk' | 'def'];
+    const arrows = (n as number > 0 ? '+' : '-').repeat(Math.abs(n as number));
+    await b.fx.play([
+      { kind: 'statArrows', side: s, up: (n as number) > 0, motion: true, stat: st, change: n },
+      { kind: 'textAnim', side: s, anim: (n as number) > 0 ? 'text.statUp' : 'text.statDown', label: `${word} ${arrows}` },
+    ]);
+    await new Promise((r) => setTimeout(r, 2200));
+    b.events.off('update', watch);
+    return seen;
+  }, [side, stat, by] as const);
+
+  const up = await change('player', 'atk', 1);
+  expect(up.chevrons).toBe(5);
+  expect(up.stamp).toBe('stamp.ATTACK ▲.#e3350d');
+  expect(up.pips).toBe(6);
+  expect(up.lit).toEqual([0xe3350d]);
+  expect(up.arrows).toBe(0);
+  expect(up.badge).toBe(0);
+
+  const down = await change('enemy', 'def', -2);
+  expect(down.chevrons).toBe(10);
+  expect(down.stamp).toBe('stamp.DEFENSE ▼▼.#2a75bb');
+  expect(down.lit).toEqual([0x2a75bb, 0x2a75bb]);
+
+  // Nothing left over, and both stand on their spots at their own size.
+  expect(await page.evaluate(() => { const b = (window as any).__pkr.game.scene.getScene('Battle'); return b.children.list.concat(b.field.list).filter((c: any) => /^stat\.|^stamp\./.test(String(c.texture?.key))).length; })).toBe(0);
+  for (const s of ['player', 'enemy'] as const) {
+    const l = await look(page, s);
+    expect({ x: l.x, solid: l.solid }).toEqual({ x: l.homeX, solid: 0 });
+  }
   expect(errors).toEqual([]);
 });

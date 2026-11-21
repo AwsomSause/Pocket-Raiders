@@ -55,6 +55,8 @@ export interface FxOptions {
    * hit lands with full animations; it plays by itself while the battle goes on. Left out: the plain white hit-stop.
    */
   recoil?: (side: Side, cue: Extract<Cue, { kind: 'impact' }>) => boolean;
+  /** A stat change: the scene shows its own chevrons, stamp and pips (pass 8); true means the pack's arrows and word stay away. */
+  stat?: (side: Side, stat: string, change: number) => boolean;
   /** The screen's own heal (redesign pass 3: plus-signs, a green glow, a hop). False when it can't play (the pack's heal shows). */
   heal?: (side: Side) => boolean;
   /** The screen's own status look (pass 8) arriving, ticking or stopping a move. False: the pack's animation plays. */
@@ -76,6 +78,8 @@ export class BattleFx {
   private skipping = false;
   /** How many badges are showing per side, so they stack instead of overlapping. */
   private readonly badgeCount: Record<Side, number> = { player: 0, enemy: 0 };
+  /** A stat change the scene showed with its own stamp: the word badge right after it is skipped (pass 8). */
+  private readonly statShown: Record<Side, boolean> = { player: false, enemy: false };
 
   constructor(
     private readonly scene: Phaser.Scene,
@@ -157,6 +161,11 @@ export class BattleFx {
         this.badge(cue.side, cue.badge);
         return;
       case 'statArrows':
+        if (cue.stat && cue.change && !this.skipping && this.opts.stat?.(cue.side, cue.stat, cue.change)) {
+          // Its own stamp says the word, so the badge that follows is left out; the next change follows 0.7 s on.
+          this.statShown[cue.side] = true;
+          return this.wait(700);
+        }
         return this.statArrows(cue.side, cue.up, cue.motion);
       case 'abilityAnim': {
         const plan = this.plan(cue.anim);
@@ -170,6 +179,10 @@ export class BattleFx {
         return;
       }
       case 'textAnim':
+        if ((cue.anim === 'text.statUp' || cue.anim === 'text.statDown') && this.statShown[cue.side]) {
+          this.statShown[cue.side] = false;
+          return;
+        }
         this.textAnim(cue.side, cue.anim, cue.label);
         return;
       case 'storyAnim':

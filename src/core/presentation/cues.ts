@@ -45,7 +45,7 @@ export type Cue =
   | { kind: 'badge'; side: Side; badge: EffectivenessBadge | 'crit' }
   /** Status and healing animations (common-burn, common-health-up …). */
   | { kind: 'commonAnim'; side: Side; anim: string; alt?: string; /** A heal: the screen may show its own (redesign pass 3) instead. */ heal?: true; /** A status arriving, ticking or stopping a move: the screen may show its own look (pass 8) instead. */ cond?: { at: 'arrive' | 'tick' | 'cant'; status: string } }
-  | { kind: 'statArrows'; side: Side; up: boolean; motion: boolean }
+  | { kind: 'statArrows'; side: Side; up: boolean; motion: boolean; /** Which stat and by how many stages (the screen may show its own chevrons, stamp and pips: pass 8). */ stat?: string; change?: number }
   /** An ability triggering: banner with its name plus the category's flourish (registry id `ability.*`). */
   | { kind: 'abilityAnim'; side: Side; anim: string; label: string; ability: string }
   /** The badge's animated words (registry id `text.*`); `miss` has no badge text of its own. */
@@ -65,7 +65,7 @@ const TYPE_HEX: Record<string, string> = {
   dark: '#705848', steel: '#b8b8d0', fairy: '#ee99ac',
 };
 
-const STAT_WORDS: Record<string, string> = { atk: 'ATTACK', def: 'DEFENSE', spa: 'SP. ATK', spd: 'SP. DEF', spe: 'SPEED', acc: 'ACCURACY', eva: 'EVASION' };
+export const STAT_WORDS: Record<string, string> = { atk: 'ATTACK', def: 'DEFENSE', spa: 'SP. ATK', spd: 'SP. DEF', spe: 'SPEED', acc: 'ACCURACY', eva: 'EVASION' };
 const STATUS_WORDS: Record<string, string> = { brn: 'BURNED!', psn: 'POISONED!', tox: 'BADLY POISONED!', par: 'PARALYZED!', slp: 'ASLEEP!', frz: 'FROZEN!' };
 
 /** Events that mean the move didn't connect, so its animation is skipped. */
@@ -237,7 +237,7 @@ export function planCues(
         break;
       case 'stat':
         if (animated) {
-          cues.push({ kind: 'statArrows', side: e.side, up: e.change > 0, motion: full });
+          cues.push({ kind: 'statArrows', side: e.side, up: e.change > 0, motion: full, stat: e.stat, change: e.change });
           const arrows = (e.change > 0 ? '+' : '-').repeat(Math.min(3, Math.abs(e.change)));
           cues.push({ kind: 'textAnim', side: e.side, anim: e.change > 0 ? 'text.statUp' : 'text.statDown', label: `${STAT_WORDS[e.stat] ?? String(e.stat).toUpperCase()} ${arrows}` });
         }

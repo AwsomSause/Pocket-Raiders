@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { clipEnd, EASES, fxAllowed, sampleClip } from '../../src/core/presentation/motionClip';
-import { COND_TINT, condArriveClip, condKind, condTickClip, parCantClip, SLUMP, thawClip, wakeClip, type CondSpot } from '../../src/core/presentation/motionConditions';
+import { chevronWaves, COND_TINT, condArriveClip, condKind, condTickClip, parCantClip, SLUMP, STAT_COLOR, statClip, thawClip, wakeClip, type CondSpot } from '../../src/core/presentation/motionConditions';
 
 // Animation redesign pass 8 (Conditions): every status arrives, keeps a look and ticks, as the mockup's numbers.
 const FOE: CondSpot = { x: 648, y: 240, w: 100, h: 120, side: 'enemy' };
@@ -110,5 +110,38 @@ describe('conditions: ticks and endings', () => {
     const r = thawClip(FOE, 'reduced');
     expect(r.fx.filter((f) => fxAllowed(f, 'reduced'))).toEqual([]);
     expect(clipEnd(r)).toMatchObject({ ice: { alpha: 0 }, tint: { alpha: 0 } });
+  });
+});
+
+describe('conditions: stat changes', () => {
+  it('a boost: five chevrons in the stat colour rise from the feet to just over the head and fade there; a wash, a stretch', () => {
+    const c = statClip(ME, 1, STAT_COLOR.atk!, 'full');
+    expect(Object.keys(c.base).filter((p) => p.startsWith('c'))).toHaveLength(5);
+    expect(sampleClip(c, 0).c0).toMatchObject({ y: ME.y, alpha: 0.95 });
+    expect(sampleClip(c, 0).c4!.alpha).toBe(0);
+    expect(sampleClip(c, 500).c0!.y).toBeCloseTo(ME.y - ME.h - 10);
+    expect(sampleClip(c, 500).c0!.alpha).toBeCloseTo(0.95);
+    expect(sampleClip(c, 1000).c0!.alpha).toBeCloseTo(0);
+    expect(sampleClip(c, 0).c0!.x).toBeCloseTo(ME.x - 0.4 * ME.w);
+    expect(sampleClip(c, 250).mon).toMatchObject({ tint: 0.45, tintColor: 0xe3350d });
+    expect(sampleClip(c, 120).mon!.sy).toBeCloseTo(1.06);
+    expect(clipEnd(c).mon).toMatchObject({ tint: 0, sx: 1, sy: 1 });
+  });
+  it('a drop of two stages: two waves of bigger chevrons fall from the head to the feet; it squashes', () => {
+    const c = statClip(FOE, -2, STAT_COLOR.def!, 'full');
+    expect(chevronWaves(-2)).toBe(2);
+    expect(chevronWaves(5)).toBe(3);
+    expect(Object.keys(c.base).filter((p) => p.startsWith('c'))).toHaveLength(10);
+    expect(sampleClip(c, 160).c5).toMatchObject({ y: FOE.y - FOE.h, alpha: 0.95 });
+    expect(sampleClip(c, 660).c5!.y).toBeCloseTo(FOE.y);
+    expect(sampleClip(c, 120).mon!.sy).toBeCloseTo(0.93);
+    expect(c.length).toBe(160 + 160 + 1000);
+  });
+  it('Reduced: the wash only; Off: nothing', () => {
+    const r = statClip(FOE, 1, STAT_COLOR.spe!, 'reduced');
+    expect(sampleClip(r, 250).mon!.tint).toBeCloseTo(0.45);
+    expect(sampleClip(r, 120).mon!.sy).toBe(1);
+    expect(sampleClip(r, 300).c0!.alpha).toBe(0);
+    expect(statClip(FOE, 1, STAT_COLOR.spe!, 'off').length).toBe(0);
   });
 });

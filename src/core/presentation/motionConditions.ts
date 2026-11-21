@@ -228,3 +228,46 @@ export function thawClip(at: CondSpot, level: ClipLevel): MotionClip {
   b.beat(0, 'Thaw: cracks run through').beat(shatter, 'Shatters; it shakes itself off');
   return b.end(shatter + 400);
 }
+
+// ---------- stat changes (pass 8, "Stat Changes") ----------
+
+/** Each stat's colour: Attack red, Defense violet and Speed blue are the mockup's; the other four are ours. */
+export const STAT_COLOR: Record<string, number> = { atk: 0xe3350d, def: 0x8a6fd0, spe: 0x3fa9f5, spa: 0xf85888, spd: 0x3ec46d, acc: 0xffcb05, eva: 0xb8c4e0 };
+/** A drop's stamp is the mockup's sky blue (`.stamp.b`); a boost's is the stat's own colour. */
+export const STAT_DOWN_STAMP = 0x2a75bb;
+/** A chevron is 30 x 20 px, 6 x 4 px bigger for each stage the change moves. */
+export const CHEVRON = { w: 30, h: 20, dw: 6, dh: 4 } as const;
+/** How many chevrons and waves a change of `change` stages sends: five a wave, one wave a stage (at most three). */
+export const chevronWaves = (change: number): number => Math.max(1, Math.min(3, Math.abs(change)));
+
+/**
+ * A stat change (pass 8): chevrons in the stat's colour sweep the whole body, up from the feet for a boost and down
+ * from the head for a drop, five a wave, 160 ms between waves, each fading where it stops; the colour washes over it at .45 and fades; it
+ * stretches up (a boost) or squashes down (a drop). `at.w` is the Pokémon's full drawn width. Parts: `mon`
+ * (`tint`, `tintColor`), chevrons `c0`.. (x, y, alpha). The stamp and the stage pips are the screen's.
+ * Reduced: the wash only. Off: nothing.
+ */
+export function statClip(at: CondSpot, change: number, color: number, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder(`stat-${change > 0 ? 'up' : 'down'}`, level);
+  const up = change > 0;
+  const n = chevronWaves(change);
+  const from = up ? at.y : at.y - at.h;
+  const to = up ? at.y - at.h - 10 : at.y;
+  const m = b.part('mon', { sx: 1, sy: 1, tint: 0, tintColor: color });
+  const chevs = Array.from({ length: n * 5 }, (_, j) => b.part(`c${j}`, { x: at.x + ((j % 5) - 2) * at.w * 0.2, y: from, alpha: 0 }));
+  if (level === 'off') return b.end(0);
+  m.at(0).to(250, { tint: 0.45 });
+  m.at(500).to(300, { tint: 0 });
+  if (level === 'reduced') return b.end(800);
+  if (up) m.at(0).to(120, { sy: 1.06, sx: 0.97 }, 'out').to(300, { sy: 1, sx: 1 }, 'el');
+  else m.at(0).to(120, { sy: 0.93, sx: 1.04 }, 'out').to(400, { sy: 1, sx: 1 }, 'el');
+  chevs.forEach((c, j) => {
+    const k = Math.floor(j / 5);
+    const i = j % 5;
+    // As the mockup: it travels for 0.5 s, then fades over the next 0.5 s where it stopped.
+    c.at(k * 160 + i * 40).set({ alpha: 0.95 }).to(500, { y: to }, up ? 'out3' : 'in3').also(500, { alpha: 0 }, 'in3');
+  });
+  b.beat(0, up ? 'Chevrons sweep up the body' : 'Chevrons sweep down the body');
+  if (n > 1) b.beat(160, `${n} stages: ${n} waves, bigger chevrons`);
+  return b.end((n - 1) * 160 + 160 + 1000);
+}

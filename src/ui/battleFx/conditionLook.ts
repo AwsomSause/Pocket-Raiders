@@ -5,10 +5,18 @@
 // (BattleScene.standUp). Presentation only.
 
 import Phaser from 'phaser';
-import { COND_TINT, EMBERS, FLAME_W, BUBBLE_W, type CondKind, type CondSpot } from '../../core/presentation/motionConditions';
+import { BUBBLE_W, CHEVRON, COND_TINT, EMBERS, FLAME_W, type CondKind, type CondSpot } from '../../core/presentation/motionConditions';
 import { FONT_FAMILY } from '../theme';
 
 const HI = 2;
+
+/** Puts a picture just over a Pokémon on the field (under the info boxes and menus), or just over it in depth. */
+export function putAbove<T extends Phaser.GameObjects.GameObject>(sprite: Phaser.GameObjects.Sprite, o: T): T {
+  const parent = sprite.parentContainer;
+  if (parent) parent.addAt(o, parent.getIndex(sprite) + 1);
+  else (o as unknown as { setDepth?: (d: number) => unknown }).setDepth?.(sprite.depth + 0.5);
+  return o;
+}
 
 /** The mockup's flame: a teardrop with a hot yellow core and a red tip, `FLAME_W` wide, foot at the bottom. */
 export function flamePicture(scene: Phaser.Scene): string | null {
@@ -218,7 +226,7 @@ export class ConditionLook {
       [36, 50, 64].forEach((size, i) => {
         const key = titlePicture(s, 'Z', size);
         if (!key) return;
-        const z = s.add.image(this.spot.x + 30 * dir, mid - 60, key).setScale(1 / HI).setAlpha(0).setDepth(2900);
+        const z = putAbove(this.sprite, s.add.image(this.spot.x + 30 * dir, mid - 60, key).setScale(1 / HI).setAlpha(0));
         this.extras.push(z);
         const drift = (): void => {
           if (this.gone || !z.active) return;
@@ -238,7 +246,8 @@ export class ConditionLook {
           callback: () => {
             if (this.gone) return;
             const [gx, gy] = GLINTS[k++ % GLINTS.length]!;
-            const st = s.add.star(this.spot.x + gx! * this.spot.w * 0.6, this.spot.y - this.spot.h / 2 + gy! * this.spot.h * 0.6, 4, 2.5, 17, 0xffffff, 1).setScale(0.1).setDepth(2900).setBlendMode(Phaser.BlendModes.ADD);
+            const st = s.add.star(this.spot.x + gx! * this.spot.w * 0.6, this.spot.y - this.spot.h / 2 + gy! * this.spot.h * 0.6, 4, 2.5, 17, 0xffffff, 1).setScale(0.1).setBlendMode(Phaser.BlendModes.ADD);
+            putAbove(this.sprite, st);
             s.tweens.add({ targets: st, scale: 1, angle: 20, alpha: 0, duration: 300, ease: 'Quad.easeOut', onComplete: () => st.destroy() });
           },
         }),
@@ -287,5 +296,56 @@ export class ConditionLook {
     this.ice?.setVisible(show);
     this.embers.forEach((e) => e.setVisible(show));
     this.extras.forEach((o) => (o as Phaser.GameObjects.Image).setVisible(show));
+  }
+}
+
+/** The mockup's stat chevron (an up-pointing "^" band), white so it takes any stat's colour; flip it for a drop. */
+export function chevronPicture(scene: Phaser.Scene, waves: number): string | null {
+  const key = `stat.chev.${waves}`;
+  if (scene.textures.exists(key)) return key;
+  try {
+    const w = (CHEVRON.w + waves * CHEVRON.dw) * HI;
+    const h = (CHEVRON.h + waves * CHEVRON.dh) * HI;
+    const c = document.createElement('canvas');
+    c.width = w;
+    c.height = h;
+    const ctx = c.getContext('2d');
+    if (!ctx) return null;
+    // clip-path: polygon(50% 0, 100% 60%, 100% 100%, 50% 40%, 0 100%, 0 60%)
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.moveTo(w * 0.5, 0);
+    ctx.lineTo(w, h * 0.6);
+    ctx.lineTo(w, h);
+    ctx.lineTo(w * 0.5, h * 0.4);
+    ctx.lineTo(0, h);
+    ctx.lineTo(0, h * 0.6);
+    ctx.closePath();
+    ctx.fill();
+    scene.textures.addCanvas(key, c);
+    return key;
+  } catch {
+    return null;
+  }
+}
+
+/** One stage pip: a 9 x 14 px rounded bar, white so it takes the stat's colour. */
+export function pipPicture(scene: Phaser.Scene): string | null {
+  const key = 'stat.pip';
+  if (scene.textures.exists(key)) return key;
+  try {
+    const c = document.createElement('canvas');
+    c.width = 9 * HI;
+    c.height = 14 * HI;
+    const ctx = c.getContext('2d');
+    if (!ctx) return null;
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.roundRect(0, 0, c.width, c.height, 3 * HI);
+    ctx.fill();
+    scene.textures.addCanvas(key, c);
+    return key;
+  } catch {
+    return null;
   }
 }

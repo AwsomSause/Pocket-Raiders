@@ -95,19 +95,20 @@ export function playClip(scene: Phaser.Scene, clip: MotionClip, host: ClipHost):
   };
 
   /** A solid-colour copy of the sprite on top of it, for "turns red" and "pops out white". */
-  const overlay = (rig: MonRig, key: string, amount: number): void => {
+  const overlay = (rig: MonRig, key: string, amount: number, color = TINTS[key] ?? 0xffffff): void => {
     const v = rig.v;
     if (!(v instanceof Phaser.GameObjects.Sprite)) return;
     let o = rig.overlays.get(key);
     if (amount <= 0.01) return void o?.setVisible(false);
     if (!o) {
-      o = scene.add.sprite(v.x, v.y, v.texture.key, v.frame.name).setTintFill(TINTS[key] ?? 0xffffff);
+      o = scene.add.sprite(v.x, v.y, v.texture.key, v.frame.name).setTintFill(color);
       if (v.parentContainer) v.parentContainer.addAt(o, v.parentContainer.getIndex(v) + 1);
       else o.setDepth(v.depth + 0.5);
       if (v.mask) o.setMask(v.mask);
       rig.overlays.set(key, o);
     }
     if (o.frame !== v.frame) o.setFrame(v.frame.name, false, false);
+    if (o.tintTopLeft !== color) o.setTintFill(color);
     o.setVisible(v.visible).setOrigin(v.originX, v.originY).setPosition(v.x, v.y).setScale(v.scaleX, v.scaleY).setAngle(v.angle).setFlip(v.flipX, v.flipY).setAlpha(amount * v.alpha);
     if (v.isCropped) o.setCrop(0, 0, v.width, cropHeight(rig, lastSink.get(rig) ?? 0));
     else o.setCrop();
@@ -135,6 +136,8 @@ export function playClip(scene: Phaser.Scene, clip: MotionClip, host: ClipHost):
     if (s.alpha !== undefined) v.setAlpha(rig.alpha * s.alpha);
     if (s.shadow !== undefined) v.setData(SHADOW_KEY, s.shadow);
     for (const key of Object.keys(TINTS)) if (s[key] !== undefined) overlay(rig, key, s[key]!);
+    // A wash in any colour the clip names (`tint` is its strength, `tintColor` the colour as a number).
+    if (s.tint !== undefined) overlay(rig, 'tint', s.tint, s.tintColor ?? 0xffffff);
   };
 
   const applyFree = (name: string, s: PartState, o: Free): void => {

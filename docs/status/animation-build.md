@@ -111,3 +111,16 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   frames stop and glints flash; thawing cracks the ice and shatters it. A switch-in already statused wears its look at
   once; a cure with no moment takes it off. Reduced: the lasting looks without particles; Off: none. Singles only.
   Limits: poison's slight sag (the mockup's droop) is not built; the look sits over the sprite, not inside its outline.
+- Stat changes (pass 8): a rise or fall now sends chevrons in the stat's own colour sweeping the whole body (up from
+  the feet for a boost, down from the head for a drop; five a wave, one wave a stage, bigger for bigger changes), the
+  colour washes over it at .45 and it stretches up or squashes down (`statClip`). A stamp says the stat ("ATTACK ▲",
+  "DEFENSE ▼▼"; a boost in the stat's colour, a drop in sky blue) and six pips under it show where the stat now stands
+  (the screen counts the stages it has shown; reset on a switch-in or Haze). It replaces the old three arrows and the
+  "ATTACK +" word badge in singles (BattleFx `stat`). Attack red, Defense violet and Speed blue are the mockup's; Sp. Atk
+  pink, Sp. Def green, Accuracy yellow and Evasion silver are ours. Reduced: the wash, stamp and pips. Limits: the
+  mockup puts the pips beside the message box; the game's menu sits there, so they sit under the stamp. Baton Pass
+  carries stages over but the pips start again from zero.
+- The old pulsing status pattern (Deluxe Battle Kit) no longer shows in singles with animations on: it doubled up with
+  the condition look and turned a paralysed Pokémon solid yellow. Doubles and triples still wear it.
+- Condition and stat pictures (flames, bubbles, Z's, glints, chevrons) now sit on the field just over the Pokémon, so
+  they pass under the info boxes and menus like the Pokémon does.

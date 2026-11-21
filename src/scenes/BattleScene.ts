@@ -122,8 +122,8 @@ import { teraJewel } from '../ui/battleFx/teraJewel';
 import { megaGlass } from '../ui/battleFx/megaGlass';
 import { drawnBox, type GimmickPage } from '../ui/battleFx/gimmickStage';
 import { HIT_RUN, stand, standStill, twitch } from '../ui/battleFx/stance';
-import { bubblePicture, ConditionLook, flamePicture, titlePicture } from '../ui/battleFx/conditionLook';
-import { BUBBLE_W, condArriveClip, condKind, condTickClip, FLAME_W, parCantClip, SLUMP, thawClip, wakeClip, type CondKind, type CondSpot } from '../core/presentation/motionConditions';
+import { bubblePicture, chevronPicture, ConditionLook, flamePicture, pipPicture, putAbove, titlePicture } from '../ui/battleFx/conditionLook';
+import { BUBBLE_W, chevronWaves, condArriveClip, condKind, condTickClip, FLAME_W, parCantClip, SLUMP, STAT_COLOR, STAT_DOWN_STAMP, statClip, thawClip, wakeClip, type CondKind, type CondSpot } from '../core/presentation/motionConditions';
 import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture, GLOW_SIZE, glowPicture, PICTURE_SCALE, plusPicture, shinyChipPicture, stampPicture, starPicture } from '../ui/battleFx/cheerChip';
 import { dynamaxPan } from '../ui/battleFx/dynamaxPan';
 import { keyItemFor } from '../ui/battleFx/cineLook';
@@ -170,7 +170,7 @@ import { sosEntry } from '../core/battle/sos';
 import { WEATHER_ASSET_IDS, WeatherLayer } from '../ui/battleFx/weather';
 import { battleTrack, storyBattleMusic, lowHpTrack, raidMusic, victoryTrack, type BattleRole } from '../core/presentation/battleMusic';
 import { itemCount } from '../core/items';
-import { planCues } from '../core/presentation/cues';
+import { planCues, STAT_WORDS } from '../core/presentation/cues';
 import { applyCueHooks } from '../core/presentation/hooks';
 import { DRAMA_LIBRARY, type DramaLine } from '../core/drama';
 import { wouldRefuse } from '../core/bond';
@@ -463,6 +463,8 @@ export class BattleScene extends Phaser.Scene {
   private shown!: { player: PokemonInstance; enemy: PokemonInstance };
   /** The status look each side's Pokémon wears (pass 8), or none. */
   private conds: Record<Side, ConditionLook | null> = { player: null, enemy: null };
+  /** Each side's stat stages as the screen has shown them (for the pips; reset when a Pokémon comes in or Haze). */
+  private statStages: Record<Side, Record<string, number>> = { player: {}, enemy: {} };
   /** The opposing Pokémon shown as riled up (warned, not yet unleashed or calmed). Presentation only. */
   private riledUid: string | null = null;
   /**
@@ -664,11 +666,13 @@ export class BattleScene extends Phaser.Scene {
       recoil: (side, cue) => this.hitMoment(side, cue),
       heal: (side) => this.healMoment(side),
       condition: (side, status, at) => this.condition(side, status, at),
+      stat: (side, stat, change) => this.statMoment(side, stat, change),
     });
 
     this.shown = { player: structuredClone(run.party[battle.activeIndex]!), enemy: structuredClone(currentEnemy(battle)) };
     this.duo = null;
     this.conds = { player: null, enemy: null };
+    this.statStages = { player: {}, enemy: {} };
     this.cmdSpot = 0;
     this.commands = [];
     if (battle.doubles) {
@@ -1632,13 +1636,15 @@ export class BattleScene extends Phaser.Scene {
 
   /**
    * A burned, frozen, paralysed or poisoned Pokémon wears that status's pulsing pattern (Deluxe Battle Kit,
-   * via Pokémon Memories); it comes off when the status is cured. Tera and Dynamax patterns take precedence.
+   * via Pokémon Memories) in doubles and triples; singles show the condition look instead. It comes off when the status is cured. Tera and Dynamax patterns take precedence.
    * Presentation only.
    */
   private syncStatusPattern(side: 'player' | 'enemy', mon: PokemonInstance): void {
     const visual = side === 'player' ? this.playerSprite : this.enemySprite;
     if (!visual || mon.dynamaxed || mon.shadow || this.run.battle?.transform.teraTypes[mon.uid]) return;
-    const want = this.motion === 'off' ? null : statusPatternKey(mon.status?.id);
+    // In singles the redesign's own condition look (pass 8: the wash, embers, ice, slump) replaces the old pattern.
+    const ownLook = !this.duo && this.clipLevel() !== 'off' && condKind(mon.status?.id) !== null;
+    const want = this.motion === 'off' || ownLook ? null : statusPatternKey(mon.status?.id);
     const worn = wornPattern(visual);
     if (worn === want || (worn && !worn.startsWith('fx.status.'))) return;
     if (want) wearPattern(this, visual, want, this.motion, () => undefined, { pulse: STATUS_PULSE });
@@ -4218,7 +4224,7 @@ export class BattleScene extends Phaser.Scene {
     const key = level === 'full' ? (kind === 'brn' ? flamePicture(this) : kind === 'psn' ? bubblePicture(this) : null) : null;
     if (key) {
       for (let i = 0; i < 9; i++) {
-        const img = this.add.image(spot.x, spot.y, key).setOrigin(0.5, kind === 'brn' ? 1 : 0.5).setScale(PICTURE_SCALE).setDepth(2900);
+        const img = putAbove(sprite, this.add.image(spot.x, spot.y, key).setOrigin(0.5, kind === 'brn' ? 1 : 0.5).setScale(PICTURE_SCALE));
         temps.push(img);
         parts[`${kind === 'brn' ? 'f' : 'b'}${i}`] = { kind: 'free', get: () => img };
       }
@@ -4249,7 +4255,7 @@ export class BattleScene extends Phaser.Scene {
     const parts: Record<string, ClipPart> = {};
     look.embers.forEach((e, i) => (parts[`e${i}`] = { kind: 'free', get: () => e }));
     const key = kind === 'psn' && this.clipLevel() === 'full' ? bubblePicture(this) : null;
-    const big = key ? this.add.image(spot.x, spot.y - spot.h - 16, key).setScale(40 / BUBBLE_W / 2).setDepth(2900) : null;
+    const big = key ? putAbove(sprite, this.add.image(spot.x, spot.y - spot.h - 16, key).setScale(40 / BUBBLE_W / 2)) : null;
     if (big) parts.big = { kind: 'free', get: () => big };
     const mon = this.shown[side];
     this.condPlay(sprite, condTickClip(kind, spot, this.clipLevel()), parts, () => {
@@ -4287,6 +4293,86 @@ export class BattleScene extends Phaser.Scene {
       });
     }
     return true;
+  }
+
+  /**
+   * A stat change (pass 8): chevrons in the stat's colour sweep its body (up for a boost, down for a drop; a wave a
+   * stage), the colour washes over it, it stretches or squashes; a stamp ("ATTACK ▲", "DEFENSE ▼▼") pops beside it
+   * and a row of six pips shows where the stat now stands. False when it can't play here (the pack's arrows show).
+   */
+  private statMoment(side: Side, stat: string, change: number): boolean {
+    const sprite = this.condSprite(side);
+    const level = this.clipLevel();
+    if (!sprite || !sprite.visible || level === 'off') return false;
+    try {
+      const at = this.spotXY(side);
+      const h = sprite.displayHeight * sprite.originY;
+      const spot: CondSpot = { x: at.x, y: at.y, w: sprite.displayWidth, h, side };
+      const color = STAT_COLOR[stat] ?? 0xffffff;
+      const up = change > 0;
+      const n = chevronWaves(change);
+      const clip = statClip(spot, change, color, level);
+      const mon = this.shown[side];
+      // The Pokémon's part (the stretch and the wash) may be cut short by the next moment; the chevrons fly on.
+      this.condPlay(sprite, clip, {}, (cut) => {
+        if (cut || !sprite.active) return;
+        this.restAt(sprite, side);
+        if (sprite.visible) this.standUp(sprite, mon);
+      });
+      const key = level === 'full' ? chevronPicture(this, n) : null;
+      if (key) {
+        const parts: Record<string, ClipPart> = {};
+        const chevs = Array.from({ length: n * 5 }, (_, j) => {
+          const c = putAbove(sprite, this.add.image(spot.x, spot.y, key).setScale(PICTURE_SCALE).setTint(color).setFlipY(!up).setAlpha(0));
+          parts[`c${j}`] = { kind: 'free', get: () => c };
+          return c;
+        });
+        void playClip(this, clip, this.clipHost(parts)).done.then(() => chevs.forEach((c) => c.destroy()));
+      }
+      // The stamp: the stat's word and an arrow a stage, in the stat's colour (a drop: sky blue), beside it.
+      const word = `${STAT_WORDS[stat] ?? stat.toUpperCase()} ${(up ? '▲' : '▼').repeat(n)}`;
+      const fill = `#${(up ? color : STAT_DOWN_STAMP).toString(16).padStart(6, '0')}`;
+      const sk = stampPicture(this, word, fill, '#ffffff');
+      const mid = spot.y - h / 2;
+      const sx = Phaser.Math.Clamp(spot.x + (side === 'enemy' ? -150 : 190), 90, this.scale.width - 90);
+      const sy = Math.max(40, mid - (side === 'enemy' ? 20 : 90));
+      const objs: Phaser.GameObjects.Image[] = [];
+      if (sk) {
+        const st = this.add.image(sx, sy, sk).setScale(PICTURE_SCALE * 0.4).setAlpha(0).setDepth(4000);
+        objs.push(st);
+        this.tweens.chain({
+          targets: st,
+          tweens: [
+            { alpha: 1, duration: 1, delay: level === 'full' ? 150 : 0 },
+            { scale: PICTURE_SCALE, duration: 140, ease: 'Back.easeOut' },
+            { y: sy - 40, alpha: 0, duration: 300, delay: 800, ease: 'Quad.easeIn' },
+          ],
+          onComplete: () => st.destroy(),
+        });
+      }
+      // Six pips under the stamp: one filled for each stage it now stands above (or below) normal.
+      const stage = Phaser.Math.Clamp((this.statStages[side][stat] ?? 0) + change, -6, 6);
+      const pk = pipPicture(this);
+      if (pk) {
+        for (let i = 0; i < 6; i++) {
+          const lit = stage > 0 ? i < stage : stage < 0 ? i >= 6 + stage : false;
+          const p = this.add.image(sx - 32.5 + i * 13, sy + 32, pk).setScale(0).setDepth(4000);
+          if (lit) p.setTint(stage > 0 ? color : STAT_DOWN_STAMP);
+          else p.setAlpha(0.2);
+          this.tweens.chain({
+            targets: p,
+            tweens: [
+              { scale: PICTURE_SCALE, duration: 200, delay: (level === 'full' ? 100 : 0) + i * 30, ease: 'Back.easeOut' },
+              { alpha: 0, duration: 200, delay: 1300 - i * 30 },
+            ],
+            onComplete: () => p.destroy(),
+          });
+        }
+      }
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   /** Waking (it jumps up, the Z's pop, a "!") and thawing (cracks, the ice shatters): the look comes off. */
@@ -6490,6 +6576,13 @@ export class BattleScene extends Phaser.Scene {
           mon!.status = { id: e.status };
           void this.refreshInfoBox(box, mon!, false);
           break;
+        case 'stat':
+          // The screen's own count, for the stage pips (pass 8); the engine applied `change` exactly.
+          this.statStages[e.side][e.stat] = Phaser.Math.Clamp((this.statStages[e.side][e.stat] ?? 0) + e.change, -6, 6);
+          break;
+        case 'statsReset':
+          this.statStages[e.side] = {};
+          break;
         case 'wake':
         case 'thaw':
         case 'cured':
@@ -6616,6 +6709,7 @@ export class BattleScene extends Phaser.Scene {
           const incoming = this.findMon(before, e.uid);
           if (incoming) {
             this.shown[e.side] = structuredClone(incoming);
+            this.statStages[e.side] = {};
             if (e.side === 'enemy') this.phHits = 0;
             const ace = e.side === 'enemy' && !!this.run.battle?.trainer && isEnemyAce(this.run.battle, e.uid);
             const hand = e.side === 'player' && this.trainerActor ? await this.throwMoment() : null;
