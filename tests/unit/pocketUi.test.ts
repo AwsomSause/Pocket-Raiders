@@ -81,7 +81,7 @@ describe('Pocket look: the setting and the page mark', () => {
   it('a Pocket page carries its id and tier, and the tier picks the rule groups', () => {
     const html = page('title', 17, '<div class="scr title"></div>');
     expect(pkPageOf(html)).toEqual({ id: 'title', tier: 17, hud: false });
-    expect(pkPageOf(page('ask', 26, '<div></div>', true))).toEqual({ id: 'ask', tier: 26, hud: true });
+    expect(pkPageOf(page('confirm', 26, '<div></div>', true))).toEqual({ id: 'confirm', tier: 26, hud: true });
     expect(pkPageOf('<div></div>')).toBeNull();
     expect(tierClass(17)).toBe('');
     expect(tierClass(24)).toBe(' t24');
