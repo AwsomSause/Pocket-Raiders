@@ -128,6 +128,14 @@ addCaughtHook((b: DominionBlock, ev: CaughtEv): string[] => {
 
 // ---------- the World Turn: statements, Racket books, the informant, the dawn pick-up, what the police still hold ----------
 
+/** D10: what share (in %) of the usual pick-up chance holds tonight; growth's court rules register it (no import cycle). */
+type PickupShare = (b: DominionBlock) => number;
+const SHARES: PickupShare[] = [];
+export function addPickupShare(f: PickupShare): void {
+  SHARES.push(f);
+}
+export const pickupShare = (b: DominionBlock): number => SHARES.reduce((n, f) => (n * f(b)) / 100, 100);
+
 /** Hide in the Warehouse (D2) is read before the police's own step clears it: the sweep (and a pick-up) finds nothing. */
 const hiding = new WeakMap<DominionBlock, boolean>();
 addWorldStep('crew', (b) => {
@@ -164,9 +172,12 @@ addWorldStep('police', (b, seed) => {
     }
   }
   const heat = wanted(b.field);
-  if (!p.q && !hiding.get(b) && heat >= C.pickupAt && (!p.pickedUp || b.day - p.pickedUp >= C.pickupGapDays)) {
+  // D10: the Chair's judge, informant and council seat (pickupShare: 100 = as always, 0 = no pick-up).
+  const share = pickupShare(b);
+  if (!p.q && !hiding.get(b) && share > 0 && heat >= C.pickupAt && (!p.pickedUp || b.day - p.pickedUp >= C.pickupGapDays)) {
     const r = rngOf(seed, 'dominion-pickup', b.day);
-    if (r.int(1, 100) <= C.pickupBase + (heat - C.pickupAt) * C.pickupPer) {
+    const odds = C.pickupBase + (heat - C.pickupAt) * C.pickupPer;
+    if (r.int(1, 100) <= (share === 100 ? odds : (odds * share) / 100)) {
       p.pickedUp = b.day;
       if (openQ(b, seed, 'boss', 'pickup', hq, null)) lines.push(fill(L.pickup, { heat, district: dName(hq) }));
     }

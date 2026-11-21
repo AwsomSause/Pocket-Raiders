@@ -154,7 +154,15 @@ addWorldStep('world', (b, seed) => {
   return [crowdLeads(b, 1, `${seed}::${b.day}::walkin`) ? 'Someone walked into the Recruitment Center asking for work: a new lead.' : 'A walk-in at the Recruitment Center, but your Leads list is full.'];
 });
 
-// ---------- street meetings (sections A and J) ----------
+// ---------- street meetings (sections A and J; B-E, H, I and K since the D10 follow-up, growthOutside.ts) ----------
+
+/** What the growth keys of a choice do (growthOutside.ts registers it, so this file doesn't import growth). */
+type ExtraFx = (b: DominionBlock, fx: TownFx, district: string, seed: string) => string[];
+let EXTRA_FX: ExtraFx | null = null;
+export function setTownFx(fn: ExtraFx): void {
+  EXTRA_FX = fn;
+}
+const gymHere = (district: string) => DOMINION_DATA.growth.gyms.find((g) => g.district === district);
 
 export const townRow = (id: string): OutsideRow | undefined => DOMINION_DATA.outside.find((r) => r.id === id);
 const choicesOf = (id: string): TownChoice[] => T().rows[id] ?? [];
@@ -164,12 +172,14 @@ function eligible(b: DominionBlock, district: string, night: boolean): OutsideRo
   const met = new Set(empireOf(b).met ?? []);
   const ds = b.field.districts[district];
   return DOMINION_DATA.outside.filter((r) => {
-    if ((r.section !== 'A' && r.section !== 'J') || r.status === 'disabled' || met.has(r.id) || !T().rows[r.id]) return false;
+    if (r.status === 'disabled' || met.has(r.id) || !T().rows[r.id]) return false;
     if (r.marks.includes('night') && !night) return false;
     if (r.marks.includes('day') && night) return false;
     const need = T().needs[r.id];
     if (need?.wanted !== undefined && b.heat < need.wanted) return false;
     if (need?.rival && (!teamsHere().length || !ds || ds.rival <= 0)) return false;
+    if (need?.gym && !gymHere(district)) return false;
+    if (need?.jailed && !b.members.some((m) => crewOf(m).out?.why === 'jail')) return false;
     return true;
   });
 }
@@ -250,6 +260,7 @@ function apply(b: DominionBlock, fx: TownFx, district: string, seed: string): st
     bits.push(L().scouted!);
   }
   if (fx.lead) bits.push(crowdLeads(b, 1, `${seed}::meet`) ? L().newLead! : L().leadsFull!);
+  if (EXTRA_FX) bits.push(...EXTRA_FX(b, fx, district, seed));
   return bits;
 }
 
@@ -277,8 +288,12 @@ export function answerMeet(block: DominionBlock, choice: number, seed: string): 
   if (c.fight && r.int(1, 100) <= (c.fightChance ?? 100)) {
     const district = districtDef(m.district);
     const target = c.fight === 'target' ? (district?.targets.find((t) => t.kind === 'street' || t.kind === 'crowd') ?? district?.targets[0]) : undefined;
+    // A named foe (town.json foes) or the district's Gym Leader: foe 'town' (field.ts townFoe).
+    const gym = c.fight === 'leader' ? gymHere(m.district) : undefined;
+    const named = c.fight === 'leader' ? (gym ? `leader:${gym.id}` : null) : T().foes[c.fight] ? c.fight : null;
+    const foe = c.fight === 'target' ? (target ? 'target' : 'wild') : c.fight === 'police' || c.fight === 'wild' ? c.fight : named ? 'town' : 'wild';
     b.field.fight = {
-      why: 'town', foe: c.fight === 'target' && !target ? 'wild' : c.fight, begun: false, action: m.row, target: target?.id ?? null,
+      why: 'town', foe, begun: false, action: m.row, target: foe === 'town' ? named : (target?.id ?? null),
       district: m.district, pass: false, big: false, wager: 0, racket: String(choice),
     };
     return { ok: true, block: b, notice: fill(L().fightNow!, { who: row.who }), fight: true };

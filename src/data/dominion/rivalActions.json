@@ -1077,8 +1077,8 @@
     "6": "Letter",
     "8": "Public statement"
    },
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported",
+   "kind": "gymSmear"
   },
   {
    "n": 54,
@@ -1241,8 +1241,8 @@
     "6": "A banquet",
     "8": "A public alliance"
    },
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported",
+   "kind": "gymRefuse"
   },
   {
    "n": 63,
@@ -1370,8 +1370,8 @@
     "6": "A charge",
     "8": "A conviction"
    },
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported",
+   "kind": "gymFrame"
   },
   {
    "n": 70,
@@ -1554,8 +1554,8 @@
     "6": "Town",
     "8": "City"
    },
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported",
+   "kind": "gymAnnex"
   },
   {
    "n": 80,
@@ -2468,8 +2468,8 @@
     "6": "Mid",
     "8": "Big"
    },
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported",
+   "kind": "gymWeaken"
   },
   {
    "n": 129,
@@ -2505,8 +2505,8 @@
     "6": "Long",
     "8": "Full battle"
    },
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported",
+   "kind": "turned"
   },
   {
    "n": 131,

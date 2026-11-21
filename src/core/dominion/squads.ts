@@ -811,7 +811,7 @@ export function squadStep(block: DominionBlock, a: DominionAction, seed: string)
 }
 
 // Court card 8 (D12's Chair): "10% cut" gives the named Admin a standing cut of their squad's take.
-setChairHook('squad-cut', (b, member) => {
+setChairHook('squad-cut', (b, _r, member) => {
   const m = member ? b.members.find((x) => x.id === member) : undefined;
   if (!m) return null;
   const st = squadsOf(b);

@@ -69,7 +69,8 @@ describe('DOMINION D6b: the data', () => {
       expect(r.status, r.id).toBe('supported');
       expect(TW.rows[r.id], r.id).toHaveLength(r.choices.length);
     }
-    expect(Object.keys(TW.rows).sort()).toEqual(rows.map((r) => r.id).sort());
+    // The D10 follow-up's sections (B-E, H, I, K) are in the same file: dominionOutside.test.ts checks those.
+    expect(Object.keys(TW.rows).filter((id) => 'AJ'.includes(DOMINION_DATA.outside.find((r) => r.id === id)!.section)).sort()).toEqual(rows.map((r) => r.id).sort());
     expect(Object.keys(TW.needs).every((id) => TW.rows[id])).toBe(true);
   });
   it('the fifteen buildings D5 handed over are live; each Regard/Dread one says so in its fx', () => {
