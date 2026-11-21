@@ -7,6 +7,7 @@ import { pkQuick } from '../../src/ui/pocket/screens/pause';
 import { pkAchieve, type PkAchievement } from '../../src/ui/pocket/screens/achieve';
 import { pkBagUse } from '../../src/ui/pocket/screens/bagUse';
 import { pkEvents } from '../../src/ui/pocket/screens/events';
+import { pkNews } from '../../src/ui/pocket/screens/news';
 
 describe('the Pocket Rival Board', () => {
   const r = (name: string, x: Partial<PkRival> = {}): PkRival => ({ name, role: 'Rival', art: null, ace: null, wins: 0, losses: 0, lead: 'Level', ...x });
@@ -125,5 +126,17 @@ describe('the Pocket Event Hall', () => {
     expect(q).toContain('Win 3 battles');
     expect(q).not.toContain('evh-st');
     expect(pkEvents({ date: '1 May', main: ev('A', 86_400_000 + 3_600_000), week: null, contracts: [], next: [] })).toContain('<b>1</b>day</i><i><b>1</b>hour');
+  });
+});
+
+describe('the Pocket News page', () => {
+  it('a row per piece of news with its tag colour, the lit one framed, Rotom underneath, a count in the header', () => {
+    const h = pkNews({ rows: [{ tag: 'Game event', colour: '#2f86c4', title: 'Homeland Week', text: '3 days left.' }, { tag: 'Your record', colour: '#b97f00', title: 'Best: 18 battles', text: 'Rank 4.' }], index: 1, say: 'Bzzt!' });
+    expect(pkPageOf(h)?.id).toBe('news');
+    expect(h).toContain('2 new');
+    expect((h.match(/class="nw[ "]/g) ?? []).length).toBe(2);
+    expect(h).toMatch(/class="nw on" style="--c:#b97f00"/);
+    expect(h).toContain('data-act="pick"');
+    expect(h).toContain('Bzzt!');
   });
 });

@@ -35,6 +35,9 @@ import { openRemembranceArchive, remembranceSummary } from '../ui/remembranceMen
 import { openStoryArchive, storyArchiveCount } from '../ui/storyArchiveMenu';
 import { ATTRIBUTE_LABELS, attributeEffectText, attributeRange, attributeText, growthProgress, growthText, isMeter, readAttributes } from '../core/attributes';
 import { pkAchieve } from '../ui/pocket/screens/achieve';
+import { forecast } from '../core/world';
+import { rivalReport } from '../core/rivals/report';
+import { pkNews } from '../ui/pocket/screens/news';
 import { pkEvents } from '../ui/pocket/screens/events';
 import { ACHIEVEMENT_CATEGORIES, ATTRIBUTE_KEYS, type Achievement, type Archetype, type QuestReward, type Species } from '../core/contentSchema';
 import { claimProblem, requirementParts, requirementProgress, trainerStatus, type TrainerStatus } from '../core/progress';
@@ -66,7 +69,7 @@ import { legacyRotation, type RotationEntry } from '../core/legacyRuns';
 import { HUB_TOWN, type HubPlace } from '../core/hubTown/schema';
 import { chooseHubPokemon, districtAt, districtOf, hubPokemon, hubPokemonChoices, placeById, placesIn, teleportSpot } from '../core/hubTown/world';
 import { pokemonHeightM } from '../core/heights';
-import { mountRedux, phantomOn, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, phantomOn, pocketOn, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
 import { phPlace, phTownMap, type PlaceModel, type TownMapModel } from '../ui/phantom/screens/townmap';
 import type { Art } from '../ui/redux/templates';
 import { askText, type AskOptions } from '../ui/redux/ask';
@@ -673,7 +676,7 @@ export class HubScene extends Phaser.Scene {
         tab: (k) => { if (this.dockFree()) this.dockTab(Number(k)); },
         // Pocket street: the Trainer's card, the notice board and Esc's key chip.
         card: () => { if (this.dockFree()) this.enter('card'); },
-        news: () => { if (this.dockFree()) this.enter('events'); },
+        news: () => { if (this.dockFree()) (pocketOn() ? this.openNews() : this.enter('events')); },
         back: () => { if (this.dockFree()) this.scene.start('MainMenu'); },
       },
       overs: { over: (k) => { const i = Number(k); if (this.dockFree() && i !== dockSpot.index && i >= 0 && i < DOCK[dockSpot.tab]!.buttons.length) { dockSpot.index = i; this.dock?.refresh(); } } },
@@ -1329,6 +1332,48 @@ export class HubScene extends Phaser.Scene {
       next: upcoming.map((u) => ({ name: u.event.name, text: u.event.description, rule: u.event.ruleText, ms: u.startsIn })),
     }) : null);
     this.openPicker({ title: 'Event Hall', rows, columns: 1, rowHeight: 44, page: pkPage, onSelect: () => undefined, onBack: () => this.closePicker() });
+  }
+
+  /** Pocket look: the notice board's News page (mock-up `news`): the game event, the saved run's forecast and rivals, your record. */
+  private openNews(): void {
+    const { session } = services();
+    const content = session.content, p = session.profile, now = new Date();
+    const peek = session.slotPeeks().find((x) => x.slot === session.slot);
+    const run = peek?.run.status === 'ok' ? peek.run.data : null;
+    const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
+    const items: { tag: string; colour: string; title: string; text: string; go: (() => void) | null }[] = [];
+    const live = activeGameEvents(content, now);
+    // The same event the Event Hall shows big: a themed one before the weekly rotation's.
+    const on = live.find((a) => a.event.schedule?.kind !== 'weeklyRotation') ?? live[0];
+    if (on) {
+      const goals = objectiveViews(p, on.event, on.edition), days = Math.floor(on.endsIn / 86_400_000);
+      items.push({ tag: 'Game event', colour: '#2f86c4', title: on.event.name, text: `${days ? `${plural(days, 'day', 'days')} left` : 'Last day'}. Goals ${goals.filter((g) => g.done).length} of ${goals.length} done.`, go: () => this.enter('events') });
+    }
+    const next = upcomingWeekly(content, now, 1)[0];
+    if (next) items.push({ tag: 'Coming up', colour: '#57307c', title: next.event.name, text: `Starts in ${plural(Math.max(1, Math.round(next.startsIn / 86_400_000)), 'day', 'days')}. ${next.event.ruleText}`, go: () => this.enter('events') });
+    if (run?.stage) {
+      const f = forecast(content, run);
+      if (f) items.push({ tag: 'Forecast', colour: '#57307c', title: `${f.front.weather.charAt(0).toUpperCase()}${f.front.weather.slice(1)} ${f.startsIn ? 'ahead' : 'now'}`, text: f.startsIn ? `It reaches your road in ${plural(f.startsIn, 'stop', 'stops')}.` : 'Your road is under it now.', go: null });
+    }
+    const rival = run ? rivalReport(run)[0] : undefined;
+    if (run && rival) {
+      const w = Number(run.story.flags[`rivalW:${rival.id}`] ?? 0), l = Number(run.story.flags[`rivalL:${rival.id}`] ?? 0);
+      items.push({ tag: 'Rivals', colour: '#2a75bb', title: `${rival.name} is on your trail`, text: w + l ? `You are ${plural(w, 'win', 'wins')}, ${plural(l, 'loss', 'losses')} against them this run.` : 'You have not met yet this run.', go: null });
+    }
+    const best = p.stats.bestEncounters;
+    items.push({ tag: 'Your record', colour: '#b97f00', title: best ? `Best: ${plural(best, 'battle', 'battles')}` : 'No runs yet', text: `Rank ${prestigeRank(p)}${run ? ` · ${plural(run.badges.length, 'badge', 'badges')} this run` : ''}.`, go: () => this.enter('card') });
+    const rows: PickerRow[] = items.map((it) => ({
+      problem: null,
+      hint: it.text,
+      draw: (scene, box, w, h) => { box.add(scene.add.text(12, h / 2, `${it.tag}: ${it.title}`, textStyle(18, COLORS.text, { wordWrap: { width: w - 24 } })).setOrigin(0, 0.5)); },
+    }));
+    const say = 'Bzzt! I keep the news here so the street stays tidy.';
+    this.openPicker({
+      title: 'News', rows, columns: 1, rowHeight: 44,
+      page: (c: ReduxCtx, index: number) => (c.pk ? pkNews({ rows: items, index, say }) : null),
+      onSelect: (i) => { const go = items[i]?.go; if (go) { this.closePicker(); go(); } },
+      onBack: () => this.closePicker(),
+    });
   }
 
   /** The Wardrobe's frame around the trainer card line: a rounded border, and a slow shine on the fancier ones. */
