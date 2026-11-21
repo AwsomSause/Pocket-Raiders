@@ -56,10 +56,10 @@ test('the opening has no spotlight or plinth, and in the New look its text is in
   // Old look: the game's own pixel fonts.
   await toStarter(page, true);
   await page.keyboard.press('Enter');
-  await waitForScene(page, 'Blessing');
+  // Old look: the mock-ups' display font (Jersey 15), the game's default lettering.
   const old = await drawn(page);
   expect(old.shapes).toBe(0);
-  expect(old.fonts.every((f) => f.startsWith('Pokemon'))).toBe(true);
+  expect(old.fonts.every((f) => f === 'Jersey 15')).toBe(true);
   // New look: the chosen skin's font (Raiders: Pixelify Sans), and the next screen's canvas text is not affected.
   await toStarter(page, true, '&ui=new');
   await page.keyboard.press('Enter');
