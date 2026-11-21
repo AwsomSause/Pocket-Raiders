@@ -76,6 +76,8 @@ export interface PkOptionsMore {
   crumb?: readonly string[];
   /** The line under the rows (a notice, or the game's own line where rows carry no small print). */
   note?: string;
+  /** The mock-up page this is (`set-audio`...); 'opts' when left out. */
+  id?: string;
 }
 
 /** A row's control: a switch for On / Off, a bar for a percentage, the choices side by side when they are few, else the value between arrows. */
@@ -105,7 +107,7 @@ export function pkOptions(d: SettingsModel, x: PkOptionsMore = {}): string {
   const preview = x.preview && cur
     ? `<div class="preview pn"><small>Preview</small><div class="pv-scr">${back('arenas/grass_bg.png', '')}${spr(frontArt(9), 1, 'pv-f')}${spr(backArt(6), 1.4, 'pv-m')}<i class="pv-p1"></i><i class="pv-p2"></i><i class="pv-b"></i></div><span>${esc(cur.label)}${cur.value ? `: ${esc(cur.value.split('  · ')[0]!)}` : ''}</span></div>${x.rows?.[d.index]?.about ? `<div class="gx-about pn" data-key="a${d.index}"><p style="font-size:${fitBody(x.rows[d.index]!.about!, 220, 170, [13, 12, 11, 10], 1.36)}px">${esc(x.rows[d.index]!.about!)}</p></div>` : ''}`
     : '';
-  return page('opts', 26, `<div class="scr settings sp5${wide ? ' wide' : ''} gx-opts">${hdr(d.title, { area: PK_AREA[d.area ?? 'sys'], pills: span(n, s, size), ...(x.crumb ? { crumb: x.crumb } : {}) })}${cats}`
+  return page(x.id ?? 'opts', 26, `<div class="scr settings sp5${wide ? ' wide' : ''} gx-opts">${hdr(d.title, { area: PK_AREA[d.area ?? 'sys'], pills: span(n, s, size), ...(x.crumb ? { crumb: x.crumb } : {}) })}${cats}`
     + `<div class="set-rows pn">${rows}</div>${preview}${note ? `<div class="sv-note gx-note"><span>${esc(note)}</span></div>` : ''}${gameKeys(d.hints, [['←→', 'change'], ['↑↓', 'move'], ['Enter', 'choose'], ['Esc', 'back']])}</div>`);
 }
 

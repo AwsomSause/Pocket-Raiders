@@ -49,21 +49,23 @@ test('Pocket look: Title, Settings and Save Slots are drawn as the mock-ups, and
 
   // A category: the rows with their controls, and the preview on Display. Right changes the lit setting.
   await step(page, 'Enter');
-  await onPkPage(page, 'Settings', 'opts');
-  const opts = pkView(page, 'Settings', 'opts');
+  await onPkPage(page, 'Settings', 'set-display');
+  const opts = pkView(page, 'Settings', 'set-display');
   await expect(opts.locator('.srow.on b').first()).toHaveText('UI style');
   await expect(opts.locator('.preview .pv-scr')).toBeVisible();
   await expect(opts.locator('.srow.on .seg .on')).toHaveText('New');
   await step(page, 'ArrowRight');
   await expect(opts.locator('.srow.on .seg .on')).toHaveText('Pocket');
   expect(await page.evaluate(() => (window as any).__pkr.session.settings.uiStyle)).toBe('pocket');
-  await fits(page, 'Settings', 'opts');
+  await fits(page, 'Settings', 'set-display');
   // A click on a category opens it; a list without the preview is wide.
   await opts.locator('.set-cats .btn', { hasText: 'Audio' }).click();
-  await expect(opts.locator('.hdr-t')).toHaveText('Settings · Audio');
-  await expect(opts.locator('.srow .sld').first()).toBeVisible();
-  await expect(opts.locator('.srow .tog').first()).toBeVisible();
-  await fits(page, 'Settings', 'opts');
+  await onPkPage(page, 'Settings', 'set-audio');
+  const audio = pkView(page, 'Settings', 'set-audio');
+  await expect(audio.locator('.hdr-t')).toHaveText('Settings · Audio');
+  await expect(audio.locator('.srow .sld').first()).toBeVisible();
+  await expect(audio.locator('.srow .tog').first()).toBeVisible();
+  await fits(page, 'Settings', 'set-audio');
   await step(page, 'Escape');
   await onPkPage(page, 'Settings', 'settings');
 
