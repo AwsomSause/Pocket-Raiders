@@ -1009,6 +1009,51 @@ test('recoil and drain: a crack runs back and RECOIL settles; green lights carry
   expect(errors).toEqual([]);
 });
 
+test('charge-up and recharge: CHARGING chip and glow until the release; spent sags, greys and RECHARGE hangs until its turn ends', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'hold-e2e');
+  const chip = (word: string) => page.evaluate((w) => (window as any).__pkr.game.scene.getScene('Battle').children.list.some((o: any) => o.texture?.key === `hold.${w}` && o.scale > 0.3), word);
+  const fxCount = () => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').playerSprite.preFX?.list?.length ?? 0);
+  const play = (events: unknown[], vol: { charging?: string | null; recharge?: boolean }) => page.evaluate(async ([ev, v]) => {
+    const w = window as any;
+    const b = w.__pkr.game.scene.getScene('Battle');
+    b.say = async () => {};
+    b.sayTrainer = async () => {};
+    const before = structuredClone(w.__pkr.session.run);
+    Object.assign(w.__pkr.session.run.battle.playerVolatile, v);
+    await b.playEvents(ev, before, null);
+  }, [events, vol] as const);
+  const fx0 = await fxCount();
+  // Turn 1: it starts charging.
+  await play([{ type: 'charge', side: 'player', moveId: 'solar-beam', semi: null }], { charging: 'solar-beam' });
+  await expect.poll(() => chip('CHARGING'), { timeout: 5000 }).toBe(true);
+  expect(await fxCount()).toBe(fx0 + 1);
+  // Turn 2: the release takes the chip and the glow away.
+  await play([{ type: 'cant', side: 'enemy', reason: 'flinch' }], { charging: null });
+  await expect.poll(() => chip('CHARGING'), { timeout: 5000 }).toBe(false);
+  await expect.poll(fxCount, { timeout: 5000 }).toBe(fx0);
+  // Hyper Beam: once its move has played out it is spent.
+  const size = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').playerSprite.scaleY);
+  await play([{ type: 'move', side: 'player', moveId: 'tackle' }], { recharge: true });
+  await expect.poll(() => chip('RECHARGE'), { timeout: 5000 }).toBe(true);
+  expect(await fxCount()).toBe(fx0 + 1);
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').playerSprite.scaleY), { timeout: 5000 }).toBeLessThan(size * 0.95);
+  // Its next turn: it must recharge; when that turn ends the chip pops and it stands back up.
+  await play([{ type: 'cant', side: 'player', reason: 'recharge' }], { recharge: false });
+  await expect.poll(() => chip('RECHARGE'), { timeout: 5000 }).toBe(false);
+  await expect.poll(fxCount, { timeout: 5000 }).toBe(fx0);
+  await expect.poll(() => page.evaluate(() => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    return b.playerSprite.getData('spentSag');
+  }), { timeout: 5000 }).toBe(false);
+  await page.waitForTimeout(600);
+  const back = await page.evaluate(() => { const b = (window as any).__pkr.game.scene.getScene('Battle'); return { sy: b.playerSprite.scaleY, dy: b.playerSprite.y - b.spotXY('player').y }; });
+  expect(back.sy).toBeGreaterThan(size * 0.96);
+  expect(Math.abs(back.dy)).toBeLessThan(3);
+  expect(errors).toEqual([]);
+});
+
 test('end of turn: the chips line up, each lights as its effect plays, a line sweeps and the turn counter flips; nothing left after', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));

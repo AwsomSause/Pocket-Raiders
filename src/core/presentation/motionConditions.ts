@@ -469,3 +469,65 @@ export function drainClip(user: CondSpot, target: CondSpot, level: ClipLevel): M
   b.beat(0, 'Lights lift off the target').beat(D.d, 'Each one sinks into the user');
   return b.end((D.n - 1) * D.gap + D.d + 60);
 }
+
+/**
+ * Charge-up (pass 12): the first turn is a build-up you can watch. 26 lights are pulled in from all over the arena
+ * (260 to 480 px out, flattened to 0.6 high), 45 ms apart, each crossing in 500 ms to just above the Pokémon's middle;
+ * from 200 ms a glow grows on it (cue `glow`) and at 1.2 s a CHARGING chip pops onto it (cue `chip`), pulsing, where
+ * it stays through the foe's turn. The release turn takes the chip and glow away before the move plays. Reduced: the
+ * chip only. Off: nothing.
+ */
+export const CHARGE = {
+  dots: 26, r0: 260, r1: 480, flat: 0.6, gap: 45, d: 500, up: 20, r: 4, colors: [0xfff3b0, 0xb9f08a],
+  glow: 0xfff3b0, glowAt: 200, glowMs: 1200, chipAt: 1200, pulse: 1.08, pulseMs: 500,
+  chip: { word: 'CHARGING', fill: '#fff3b0', ink: '#131c36' },
+} as const;
+
+/** Where charge light `i` starts: spread evenly round the Pokémon by the golden angle (no randomness). */
+export function chargeDot(i: number, at: { x: number; y: number }): { x: number; y: number } {
+  const a = i * 2.399963;
+  const r = CHARGE.r0 + (CHARGE.r1 - CHARGE.r0) * ((i * 0.618034) % 1);
+  return { x: at.x + r * Math.cos(a), y: at.y + r * Math.sin(a) * CHARGE.flat };
+}
+
+export function chargeClip(mid: { x: number; y: number }, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('charge', level);
+  if (level === 'off') return b.end(0);
+  if (level === 'reduced') {
+    b.fx({ kind: 'cue', at: 0, name: 'chip' });
+    return b.end(250);
+  }
+  const C = CHARGE;
+  for (let i = 0; i < C.dots; i++) {
+    const p = chargeDot(i, mid);
+    b.fx({ kind: 'orbs', at: 100 + i * C.gap, x0: p.x, y0: p.y, x1: mid.x, y1: mid.y - C.up, n: 1, gap: 0, d: C.d, color: C.colors[i % 2]!, glow: C.colors[i % 2]!, r: C.r, arc: 0, jitter: 0 });
+  }
+  b.fx({ kind: 'cue', at: C.glowAt, name: 'glow' });
+  b.fx({ kind: 'cue', at: C.chipAt, name: 'chip' });
+  b.beat(100, 'Light is pulled in').beat(C.chipAt, 'CHARGING chip stays through the foe\'s turn');
+  return b.end(C.chipAt + 300);
+}
+
+/**
+ * The recharge turn (pass 12): after the biggest moves the user is spent and looks it. It sags (90% tall, 4 px down)
+ * and greys (colour to 35%, light to 85%) over 400 ms, steam puffs off it every 200 ms and a grey RECHARGE chip hangs
+ * over it while the foe takes its free turn. When that turn ends the chip pops (1.4 then gone) and it stands back up.
+ */
+export const SPENT = {
+  sy: 0.9, dy: 4, sat: 0.35, br: 0.85, inMs: 400, steamMs: 200, outMs: 300, popMs: 100, pop: 1.4,
+  chip: { word: 'RECHARGE', fill: '#8792b0', ink: '#ffffff' },
+} as const;
+
+/** Which event, once played, starts each side's recharge look: the last event of its turn's move (or of the turn). */
+export function spentStarts(events: readonly ({ type: string } & Record<string, unknown>)[], sides: readonly ('player' | 'enemy')[]): Map<number, ('player' | 'enemy')[]> {
+  const out = new Map<number, ('player' | 'enemy')[]>();
+  for (const side of sides) {
+    let last = -1;
+    events.forEach((e, i) => e.type === 'move' && e.side === side && (last = i));
+    if (last < 0) continue;
+    let end = events.length - 1;
+    for (let j = last + 1; j < events.length; j++) if (events[j]!.type === 'move') { end = j - 1; break; }
+    out.set(end, [...(out.get(end) ?? []), side]);
+  }
+  return out;
+}

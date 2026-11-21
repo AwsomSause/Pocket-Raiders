@@ -191,3 +191,10 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   beside it. Drain: seven green lights lift off the target one by one, arc across the field and sink into the user,
   each with a small green ring, while the user glows green; the healing number follows once the last has landed
   (this replaces the pack's heal sparkle for a drain). Reduced: the RECOIL stamp, and the usual heal for a drain.
+- **Charge-up and the recharge turn (pass 12).** A two-turn move's first turn (Solar Beam, Sky Attack; not Dig or
+  Fly, which hide the Pokémon): after the move's own charge animation, 26 lights are pulled in from all over the
+  arena, a pale yellow glow grows on the Pokémon and a pulsing CHARGING chip pops on over it. Both stay through the
+  foe's turn and go just before the move is let loose. After Hyper Beam and friends: once the move has played out, the
+  Pokémon sags, greys, steam puffs off it and a grey RECHARGE chip hangs over it; when its "must recharge" turn ends
+  the chip pops and it springs back up. Both follow the battle's own state (charging move, must recharge), so they also
+  end if the Pokémon leaves. Reduced: the chips, glow and grey without movement. Off: nothing.

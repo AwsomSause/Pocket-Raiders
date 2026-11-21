@@ -123,7 +123,7 @@ import { megaGlass } from '../ui/battleFx/megaGlass';
 import { drawnBox, type GimmickPage } from '../ui/battleFx/gimmickStage';
 import { HIT_RUN, stand, standStill, sway, twitch } from '../ui/battleFx/stance';
 import { bubblePicture, chevronPicture, ConditionLook, DizzyStars, flagPicture, flamePicture, glarePicture, pipPicture, putAbove, titlePicture } from '../ui/battleFx/conditionLook';
-import { BUBBLE_W, chevronWaves, condArriveClip, FLAG_HOLD, intimidateClip, condKind, condTickClip, FLAME_W, CONFUSE, endTurnParade, confusionHitClip, gustLeanClip, parCantClip, protectedClip, RECOIL, recoilClip, DRAIN, drainClip, SHIELD, SLUMP, STAT_COLOR, STAT_DOWN_STAMP, statClip, thawClip, wakeClip, type CondKind, type CondSpot } from '../core/presentation/motionConditions';
+import { BUBBLE_W, chevronWaves, condArriveClip, FLAG_HOLD, intimidateClip, condKind, condTickClip, FLAME_W, CONFUSE, endTurnParade, confusionHitClip, gustLeanClip, parCantClip, protectedClip, RECOIL, recoilClip, DRAIN, drainClip, CHARGE, chargeClip, SPENT, spentStarts, SHIELD, SLUMP, STAT_COLOR, STAT_DOWN_STAMP, statClip, thawClip, wakeClip, type CondKind, type CondSpot } from '../core/presentation/motionConditions';
 import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture, GLOW_SIZE, glowPicture, PICTURE_SCALE, plusPicture, shinyChipPicture, stampPicture, starPicture } from '../ui/battleFx/cheerChip';
 import { dynamaxPan } from '../ui/battleFx/dynamaxPan';
 import { keyItemFor } from '../ui/battleFx/cineLook';
@@ -171,6 +171,7 @@ import { WEATHER_ASSET_IDS, WeatherLayer } from '../ui/battleFx/weather';
 import { WeatherLook, WX_KINDS, type WxKind } from '../ui/battleFx/weatherLook';
 import { TerrainLook } from '../ui/battleFx/terrainLook';
 import { EndTurnParade } from '../ui/battleFx/endTurnLook';
+import { HoldLook } from '../ui/battleFx/holdLook';
 import { TERRAIN_KINDS, type TerrainKind } from '../core/presentation/motionWeather';
 import { battleTrack, storyBattleMusic, lowHpTrack, raidMusic, victoryTrack, type BattleRole } from '../core/presentation/battleMusic';
 import { itemCount } from '../core/items';
@@ -480,6 +481,8 @@ export class BattleScene extends Phaser.Scene {
   private conds: Record<Side, ConditionLook | null> = { player: null, enemy: null };
   /** Confusion's circling stars, by side (pass 8). */
   private dizzy: Record<Side, DizzyStars | null> = { player: null, enemy: null };
+  /** A state each side's Pokémon holds between turns (pass 12): charging up, or spent after Hyper Beam. */
+  private hold: Record<Side, HoldLook | null> = { player: null, enemy: null };
   /** The multi-hit combo counter on screen (pass 12). */
   private comboText: Phaser.GameObjects.Text | null = null;
   /** The first drawn row of each sprite frame (for where a head is). */
@@ -1604,6 +1607,13 @@ export class BattleScene extends Phaser.Scene {
       standStill(this, visual);
       this.slump(visual, side);
       return stand(this, visual, 'steady', this.motion === 'full', delay, 2600, (restY ?? visual.y) + SLUMP.dy);
+    }
+    // Spent after Hyper Beam (pass 12): it sags and breathes slowly until it can act again.
+    const held = side ? this.hold[side] : null;
+    if (side && held && held.sprite === visual && held.kind === 'spent' && visual instanceof Phaser.GameObjects.Sprite) {
+      standStill(this, visual);
+      this.spentSag(visual, side, true);
+      return stand(this, visual, 'steady', this.motion === 'full', delay, 2600, (restY ?? visual.y) + SPENT.dy);
     }
     // Confused: it sways under its stars.
     const dz = side ? this.dizzy[side] : null;
@@ -4565,6 +4575,105 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** Confusion (pass 8): stars arrive and circle its head while it sways; hurting itself swings, bonks and shakes. */
+  /** The battle's own conditions on a side's Pokémon (recharge, charging), as the finished turn left them. */
+  private volOf(side: Side): { recharge: boolean; charging: string | null } | null {
+    const b = this.run.battle;
+    if (!b) return null;
+    return side === 'player' ? b.playerVolatile : b.enemyVolatile;
+  }
+
+  /** Charge-up (pass 12): lights are pulled in from all over the arena, a glow grows, a CHARGING chip pops on. */
+  private async chargeMoment(side: Side): Promise<void> {
+    const sprite = this.condSprite(side);
+    const level = this.clipLevel();
+    if (!sprite || !sprite.visible || level === 'off') return;
+    try {
+      this.hold[side]?.destroy();
+      const look = new HoldLook(this, sprite, 'charge', this.headHeight(sprite), level === 'full');
+      this.hold[side] = look;
+      const run = playClip(this, chargeClip(this.midOf(side), level), this.clipHost({}, {
+        cue: (name) => {
+          if (name === 'glow') look.startGlow(CHARGE.glowMs);
+          if (name === 'chip') look.showChip();
+        },
+      }));
+      await run.done;
+    } catch {
+      /* presentation only */
+    }
+  }
+
+  /** Spent (pass 12): it sags and greys, steam puffs off it and a RECHARGE chip hangs over it. */
+  private spentOn(side: Side): void {
+    const sprite = this.condSprite(side);
+    const level = this.clipLevel();
+    if (!sprite || !sprite.visible || level === 'off' || this.hold[side]?.kind === 'spent') return;
+    try {
+      this.hold[side]?.destroy();
+      const look = new HoldLook(this, sprite, 'spent', this.headHeight(sprite), level === 'full');
+      this.hold[side] = look;
+      look.startSpent(level === 'full' ? SPENT.inMs : 0);
+      look.showChip();
+      const ms = this.spentSag(sprite, side, true);
+      this.time.delayedCall(ms, () => {
+        const mon = this.shown[side];
+        if (mon && this.hold[side] === look && sprite.active && sprite.visible) this.standUp(sprite, mon);
+      });
+    } catch {
+      /* presentation only */
+    }
+  }
+
+  /** Ends a side's held state: the chip goes, the glow or grey fades, a spent Pokémon stands back up. */
+  private async holdOff(side: Side): Promise<void> {
+    const look = this.hold[side];
+    this.hold[side] = null;
+    if (!look) return;
+    const sprite = look.sprite;
+    const spent = look.kind === 'spent';
+    const done = look.release();
+    if (spent && sprite.active) {
+      const ms = this.spentSag(sprite, side, false);
+      this.time.delayedCall(ms, () => {
+        const mon = this.shown[side];
+        if (mon && sprite.active && sprite.visible && sprite === this.condSprite(side) && !this.hold[side]) this.standUp(sprite, mon);
+      });
+    }
+    await done;
+  }
+
+  /** At the end of a turn: a held state ends when the battle says so, or when its Pokémon has left. */
+  private async holdSync(): Promise<void> {
+    for (const side of ['player', 'enemy'] as const) {
+      const look = this.hold[side];
+      const sprite = this.condSprite(side);
+      const vol = this.volOf(side);
+      if (look && (look.sprite !== sprite || !sprite?.visible)) {
+        look.destroy();
+        this.hold[side] = null;
+        continue;
+      }
+      if (look && ((look.kind === 'spent' && !vol?.recharge) || (look.kind === 'charge' && !vol?.charging))) await this.holdOff(side);
+      else if (!look && vol?.recharge) this.spentOn(side);
+    }
+  }
+
+  /** A spent Pokémon sags 90% tall and 4 px down (on), or springs back up (off). */
+  private spentSag(sprite: Phaser.GameObjects.Sprite, side: Side, on: boolean): number {
+    if (!!sprite.getData('spentSag') === on) return 0;
+    standStill(this, sprite);
+    sprite.setData('spentSag', on);
+    const y = this.spotXY(side).y + (on ? SPENT.dy : 0);
+    const sy = on ? sprite.scaleY * SPENT.sy : sprite.scaleY / SPENT.sy;
+    if (this.clipLevel() !== 'full') {
+      sprite.setY(y).setScale(sprite.scaleX, sy);
+      return 0;
+    }
+    if (on) this.tweens.add({ targets: sprite, y, scaleY: sy, duration: SPENT.inMs, ease: 'Sine.easeInOut' });
+    else this.tweens.chain({ targets: sprite, tweens: [{ y, scaleY: sy * 1.05, duration: 200, ease: 'Back.easeOut' }, { scaleY: sy, duration: 200 }] });
+    return on ? SPENT.inMs : 400;
+  }
+
   /** Recoil (pass 12): a crack runs back from the target, the user flashes the move's colour, winces, RECOIL. */
   private recoilMoment(side: Side): void {
     const sprite = this.condSprite(side);
@@ -7061,6 +7170,7 @@ export class BattleScene extends Phaser.Scene {
     const eotLast = eotAt.length ? Math.max(...eotAt) : -1;
     let eot: EndTurnParade | null = null;
     // Pass 12 "Multi-Hit": a combo counter for each multi-hit move, the total slammed in at the end.
+    const spentAt = this.clipLevel() !== 'off' && !this.duo ? spentStarts(events as unknown as ({ type: string } & Record<string, unknown>)[], (['player', 'enemy'] as const).filter((sd) => this.volOf(sd)?.recharge)) : new Map<number, Side[]>();
     const combo = this.clipLevel() !== 'off' ? comboPlan(events as unknown as ({ type: string } & Record<string, unknown>)[]) : new Map<number, ComboStep>();
     for (const [index, e] of events.entries()) {
       if (index === eotFirst && parade) {
@@ -7098,6 +7208,8 @@ export class BattleScene extends Phaser.Scene {
         this.sandGust();
       }
       if (e.type === 'recoil') this.recoilMoment(e.side);
+      // The release turn of a two-turn move: the CHARGING chip and glow go before the move plays.
+      if (e.type === 'move' && this.hold[e.side]?.kind === 'charge') await this.holdOff(e.side);
       // Drain: the lights carry the HP across; they take the pack's heal sparkle's place.
       if (e.type === 'drain' && e.amount > 0 && (await this.drainMoment(e.side))) cues[index] = (cues[index] ?? []).filter((c) => c.kind !== 'commonAnim');
       const step = combo.get(index);
@@ -7106,6 +7218,9 @@ export class BattleScene extends Phaser.Scene {
         this.comboTick(step.side, step.k);
       } else if (step) this.comboEnd(step.side, step.count, step.total);
       await this.fx.play(cues[index] ?? []);
+      // Pass 12: the build-up of a charging move; the spent look once the turn's Hyper Beam has played out.
+      if (e.type === 'charge' && !e.semi) await this.chargeMoment(e.side);
+      for (const sd of spentAt.get(index) ?? []) this.spentOn(sd);
       this.reactPortrait(e);
       await this.stadium?.onEvent(e);
       const side = 'side' in e ? e.side : null;
@@ -7660,6 +7775,7 @@ export class BattleScene extends Phaser.Scene {
       }
     }
     eot?.destroy();
+    await this.holdSync();
     this.comboText?.destroy();
     this.comboText = null;
     // Make sure the boxes match the real state at the end of the turn.

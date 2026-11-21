@@ -4,7 +4,7 @@ import { planCues } from '../../src/core/presentation/cues';
 import { moveAnims } from '../../src/data/presentation';
 import { content } from './helpers';
 import { clipEnd, EASES, fxAllowed, sampleClip } from '../../src/core/presentation/motionClip';
-import { DRAIN, drainClip, RECOIL, recoilClip, chevronWaves, COND_TINT, CONFUSE, endTurnChip, endTurnParade, confusionHitClip, GUST_LEAN, protectedClip, SHIELD, gustLeanClip, intimidateClip, condArriveClip, condKind, condTickClip, parCantClip, SLUMP, STAT_COLOR, statClip, thawClip, wakeClip, type CondSpot } from '../../src/core/presentation/motionConditions';
+import { CHARGE, chargeClip, chargeDot, SPENT, spentStarts, DRAIN, drainClip, RECOIL, recoilClip, chevronWaves, COND_TINT, CONFUSE, endTurnChip, endTurnParade, confusionHitClip, GUST_LEAN, protectedClip, SHIELD, gustLeanClip, intimidateClip, condArriveClip, condKind, condTickClip, parCantClip, SLUMP, STAT_COLOR, statClip, thawClip, wakeClip, type CondSpot } from '../../src/core/presentation/motionConditions';
 
 // Animation redesign pass 8 (Conditions): every status arrives, keeps a look and ticks, as the mockup's numbers.
 const FOE: CondSpot = { x: 648, y: 240, w: 100, h: 120, side: 'enemy' };
@@ -293,5 +293,40 @@ describe('recoil and drain (pass 12)', () => {
   });
   it('drain: Reduced and Off leave it to the battle heal', () => {
     for (const level of ['reduced', 'off'] as const) expect(drainClip(me, foe, level).length).toBe(0);
+  });
+});
+
+describe('charge-up and the recharge turn (pass 12)', () => {
+  const mid = { x: 312, y: 368 };
+  it('charge-up: 26 lights pulled in from all over, 45 ms apart, to just above its middle; glow at 200, chip at 1.2 s', () => {
+    const c = chargeClip(mid, 'full');
+    const dots = c.fx.filter((f) => f.kind === 'orbs');
+    expect(dots).toHaveLength(26);
+    expect(dots[0]).toMatchObject({ at: 100, x1: mid.x, y1: mid.y - 20, n: 1, d: 500, arc: 0, jitter: 0 });
+    expect(dots[25]!.at).toBe(100 + 25 * 45);
+    for (let i = 0; i < 26; i++) {
+      const p = chargeDot(i, mid);
+      const r = Math.hypot(p.x - mid.x, (p.y - mid.y) / CHARGE.flat);
+      expect(r).toBeGreaterThanOrEqual(259.9);
+      expect(r).toBeLessThanOrEqual(480.1);
+    }
+    expect(c.fx).toContainEqual({ kind: 'cue', at: 200, name: 'glow' });
+    expect(c.fx).toContainEqual({ kind: 'cue', at: 1200, name: 'chip' });
+    expect(CHARGE.chip).toEqual({ word: 'CHARGING', fill: '#fff3b0', ink: '#131c36' });
+  });
+  it('charge-up: Reduced the chip only; Off nothing', () => {
+    expect(chargeClip(mid, 'reduced').fx).toEqual([{ kind: 'cue', at: 0, name: 'chip' }]);
+    expect(chargeClip(mid, 'off').length).toBe(0);
+  });
+  it('spent: starts after the last event of its own move, or at the end of the turn', () => {
+    const ev = [
+      { type: 'move', side: 'player' }, { type: 'damage', side: 'enemy' },
+      { type: 'move', side: 'enemy' }, { type: 'damage', side: 'player' }, { type: 'residual', side: 'player' },
+    ];
+    expect([...spentStarts(ev, ['player']).entries()]).toEqual([[1, ['player']]]);
+    expect([...spentStarts(ev, ['enemy']).entries()]).toEqual([[4, ['enemy']]]);
+    expect([...spentStarts(ev.slice(0, 2), ['player', 'enemy']).entries()]).toEqual([[1, ['player']]]);
+    expect(spentStarts([{ type: 'cant', side: 'player' }], ['player']).size).toBe(0);
+    expect(SPENT).toMatchObject({ sy: 0.9, dy: 4, sat: 0.35, br: 0.85, chip: { word: 'RECHARGE', fill: '#8792b0' } });
   });
 });

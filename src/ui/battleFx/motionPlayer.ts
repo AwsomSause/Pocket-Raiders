@@ -308,9 +308,10 @@ export function drawFx(scene: Phaser.Scene, fx: MotionFx, o: FxOpts): void {
     case 'orbs': {
       if (!o.particles) return;
       for (let i = 0; i < fx.n; i++) {
-        const x0 = fx.x0 + rnd(-40, 40);
-        const y0 = fx.y0 + rnd(-30, 20);
-        const x1 = fx.x1 + rnd(-40, 40);
+        const sc = fx.jitter ?? 1;
+        const x0 = fx.x0 + rnd(-40, 40) * sc;
+        const y0 = fx.y0 + rnd(-30, 20) * sc;
+        const x1 = fx.x1 + rnd(-40, 40) * sc;
         const h = fx.arc ?? rnd(40, 120);
         const r = fx.r ?? 6;
         // Its own colours glow as painted (an added glow turns green to cyan over a blue sky).
