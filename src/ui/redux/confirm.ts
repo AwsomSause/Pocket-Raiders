@@ -7,7 +7,7 @@ import { confirmBox } from './screens/saves';
 import { mountRedux, type ReduxView } from './stage';
 import { page } from '../phantom/kit';
 import { phConfirm } from '../phantom/templates';
-import { page as pkPage } from '../pocket/kit';
+import { keys as pkKeys, page as pkPage } from '../pocket/kit';
 import { pkConfirm } from '../pocket/templates';
 
 export function mountConfirm(scene: Phaser.Scene, text: string, menu: Menu, options: readonly string[] = ['Yes', 'No']): ReduxView {
@@ -21,11 +21,11 @@ export function mountConfirm(scene: Phaser.Scene, text: string, menu: Menu, opti
       const d = { title: cut ? cut[1]! : text, body: cut ? cut[2]! : '', options: [...options], index: menu.index };
       // Phantom UI: the same question as the Phantom dialog; its dark sheet takes the clicks meant for the page under it.
       if (c.ph) return page('ask', phConfirm(d).replace('class="ph-shade"', 'class="ph-shade" data-act="hold"'), false);
-      // Pocket look: Rotom asks, over a dimmed page.
-      if (c.pk) return pkPage('ask', 26, `<div class="scr gx-over">${pkConfirm(d)}</div>`, true);
+      // Pocket look: Rotom asks, over a dimmed page, with the mock-up's key row (Esc does what Esc does on the question).
+      if (c.pk) return pkPage('confirm', 26, `<div class="scr gx-over">${pkConfirm(d)}${pkKeys([['←→', 'move'], ['Enter', 'choose'], ['Esc', 'back']])}</div>`, true);
       return confirmBox(d).replace('class="shade"', 'class="shade hit"');
     },
-    acts: { confirm: (k) => { menu.focus(Number(k), false); menu.confirm(); } },
+    acts: { confirm: (k) => { menu.focus(Number(k), false); menu.confirm(); }, back: () => menu.handle('back') },
     overs: { confirmOver: (k) => menu.focus(Number(k), false) },
   });
   menu.onFocus = () => view.refresh();

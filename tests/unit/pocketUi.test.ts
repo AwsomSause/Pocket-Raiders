@@ -81,7 +81,7 @@ describe('Pocket look: the setting and the page mark', () => {
   it('a Pocket page carries its id and tier, and the tier picks the rule groups', () => {
     const html = page('title', 17, '<div class="scr title"></div>');
     expect(pkPageOf(html)).toEqual({ id: 'title', tier: 17, hud: false });
-    expect(pkPageOf(page('ask', 26, '<div></div>', true))).toEqual({ id: 'ask', tier: 26, hud: true });
+    expect(pkPageOf(page('confirm', 26, '<div></div>', true))).toEqual({ id: 'confirm', tier: 26, hud: true });
     expect(pkPageOf('<div></div>')).toBeNull();
     expect(tierClass(17)).toBe('');
     expect(tierClass(24)).toBe(' t24');
@@ -486,7 +486,9 @@ describe('Pocket look: Party and Summary', () => {
       body: { kind: 'moves', moves: [{ name: 'Flamethrower', type: 'fire', pp: '12/15' }, { name: 'Roost', type: 'flying', pp: '5/5' }], cursor: 0, facts: [['Type / Category', 'Fire · Special'], ['Power / Accuracy', '90 / 100']], lines: ['• May burn.'] },
       extra: { name: 'Charizard', types: ['fire', 'flying'], nature: ['Timid', '+Speed, −Attack'], ability: ['Blaze', 'Fire moves get stronger.'], held: ['Charizardite X', 'Mega Evolves.', 'charizardite-x'], weak: ['rock', 'water', 'electric'], moveKinds: ['Special', 'Status'], moveText: 'Scorches the target.', bond: { hearts: 5, mood: 'Best friends', hint: 'Fired up.' } } };
     const moves = pkSummary(base);
-    expect(pkPageOf(moves)?.id).toBe('summary');
+    expect(pkPageOf(moves)?.id).toBe('summary-moves');
+    expect(pkPageOf(pkSummary({ ...base, tab: 4 }))?.id).toBe('summary-bond');
+    expect(pkPageOf(pkSummary({ ...base, tab: 1 }))?.id).toBe('summary');
     expect(moves.match(/class="tab[ "]/g)?.length).toBe(7);
     expect(moves).toContain('class="tab on" data-act="tab" data-arg="2"');
     expect(moves).toContain('data-key="sm-card"');

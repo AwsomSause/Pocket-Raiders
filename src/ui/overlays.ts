@@ -9,8 +9,8 @@ import { AERO } from './aero';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from './theme';
 import { swallowInput } from './input';
 import { noticeOf } from './redux/screens/overlay';
-import { phantomLive, reduxOn } from './redux/stage';
-import { rxCaption, rxLog, rxLogPage, rxNotices } from './redux/system';
+import { phantomLive, pocketOn, reduxOn } from './redux/stage';
+import { rxCaption, rxHelpToggle, rxHelpUp, rxLog, rxLogPage, rxNotices } from './redux/system';
 import { logWindow, type PhLogRow } from './phantom/screens/system';
 
 const stack = new NoticeStack();
@@ -182,6 +182,20 @@ export function installOverlays(g: Phaser.Game, get: () => Settings): void {
   window.addEventListener('keydown', (e) => {
     if (!runLogKey(e)) return;
     touch();
+    swallowInput();
+    e.preventDefault();
+    e.stopImmediatePropagation();
+  }, true);
+  // Pocket look: ? or F1 shows the Controls card (mock-up `help`); while it is up, its key, Esc or X puts it away and no
+  // key reaches the page under it.
+  window.addEventListener('keydown', (e) => {
+    const t = e.target as HTMLElement | null;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+    const helpKey = e.key === '?' || e.code === 'F1';
+    if (!rxHelpUp() && !(helpKey && reduxOn() && pocketOn())) return;
+    if (rxHelpUp() && !helpKey && e.code !== 'Escape' && e.code !== 'KeyX') { e.preventDefault(); e.stopImmediatePropagation(); return; }
+    touch();
+    rxHelpToggle(g, rxHelpUp() ? null : activeScene()?.scene.key ?? null);
     swallowInput();
     e.preventDefault();
     e.stopImmediatePropagation();

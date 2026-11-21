@@ -50,3 +50,22 @@ export function pkPause(d: PkPause): string {
     + keys([['←→↑↓', 'app'], ['Enter', 'open', 'pauseGo'], ['Esc', 'resume', 'pause', -1]])
     + (d.ask ? pkConfirm(d.ask) : '') + '</div>');
 }
+
+/** The Quick Wheel (mock-up `quick`, Tab on the map): the map's quick actions round your Trainer, the lit one's glance at the right. */
+export function pkQuick(d: PkPause & { items: readonly { label: string; note: string; off?: boolean }[]; at: number; held: boolean }): string {
+  const n = d.items.length, R = 168, C = 210;
+  const apps = d.items.map((x, k) => {
+    const a = (k / n) * Math.PI * 2, [art, sc, colour] = APP[x.label === 'Reserve' ? 'PC Box' : x.label] ?? APP.Settings!;
+    return `<div class="app${k === d.at ? ' on' : ''}${x.off ? ' gx-off' : ''}" style="left:${Math.round(C + R * Math.sin(a))}px;top:${Math.round(C - R * Math.cos(a))}px;--a:${colour}" data-key="wa${k}"${act('wheel', k, 'wheelOver')}>${spr(art, sc)}<span>${esc(x.label)}</span></div>`;
+  }).join('');
+  const face = d.hero.art ? pkPic(d.hero.art) : undefined;
+  const lit = d.items[d.at];
+  const rows = lit?.label === 'Party'
+    ? d.party.map((m) => `<div class="gl-r">${fitPic(m.art, 52, 42, 'pc-s', 1)}<b style="font-size:${fit(m.name, 86, 16, 11)}px">${esc(m.name)}</b><span class="hp ${m.hp > 50 ? 'ok' : m.hp > 20 ? 'mid' : 'low'}"><i style="width:${Math.max(0, Math.min(100, m.hp))}%"></i></span><span class="num">${m.hp}%</span></div>`).join('')
+    : `<p class="gx-gl-note">${esc(lit?.note ?? '')}</p>`;
+  const glance = `<div class="glance pn" data-key="glance"><div class="gl-h"><b>${esc(lit?.label ?? '')}</b><span>${d.held ? 'Let go of Tab to open' : 'Hold Tab anywhere'}</span></div>${rows}</div>`;
+  return page('quick', 26, `<div class="scr mn13 mn12 mn11 mn10 mn9 mn8 mn7 mn6 menu mn5" data-key="quick">${back(STREET, 'ar-bg dim')}<div class="gx-wh-dim"${act('wheel', -1)}></div>`
+    + `<div class="wheel" data-key="wheel"><div class="wh-ball"></div><div class="wh-me">${face ? `<img class="px" src="${face.url}" alt="" style="height:173px;width:auto">` : ''}</div>${apps}</div>${glance}`
+    + `<div class="mn-id"${act('wheel', d.items.findIndex((x) => x.label === 'Party'))}><i${face ? ` style="background-image:url(${face.url});background-size:auto 69px"` : ''}></i><b>${esc(d.hero.name)}</b>${d.hero.chips.map((c) => `<span>${esc(c)}</span>`).join('')}</div>`
+    + keys([['←→↑↓', 'turn the wheel'], ['Enter', 'open', 'wheel', d.at], ['Esc', 'resume', 'wheel', -1]]) + '</div>');
+}

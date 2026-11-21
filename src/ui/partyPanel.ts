@@ -58,7 +58,7 @@ export interface PickerExtra { label: string; key: string; off?: boolean; run: (
 
 export interface PickerConfig {
   /** New UI: the room's own page, drawn in place of the rows (the Old look still draws the rows). */
-  page?: (c: ReduxCtx, index: number) => string;
+  page?: (c: ReduxCtx, index: number) => string | null;
   /** New UI: how many columns the cursor moves across on the room's own page (1 unless said). */
   pageCols?: number;
   /** New UI: the template and header colour when the title alone would pick the wrong ones (a minigame called "Memory" is not a board). */

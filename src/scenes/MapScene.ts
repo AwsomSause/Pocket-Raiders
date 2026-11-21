@@ -26,7 +26,7 @@ import { stopIsHidden } from '../core/events';
 import { leadChatter } from '../core/leadChatter';
 import { xatuBlur } from '../core/greenneedle/cartographer';
 import { sgHeader } from '../core/greenneedle/citysiege';
-import { forecast, foggedAt, frontAt, isFogged, sightRange, visibleColumn } from '../core/world';
+import { forecast, foggedAt, frontAt, isFogged, sightRange, stopForecast, visibleColumn } from '../core/world';
 import Phaser from 'phaser';
 
 /** gn.new.12: when the Xatu's map first went on show (kept across scene restarts; 0 = not running). */
@@ -136,8 +136,15 @@ import { mountRedux, phantomOn, pocketOn, reduxOn, type ReduxCtx, type ReduxView
 import { pkPauseModel } from '../ui/pocket/models';
 import { pkMap } from '../ui/pocket/screens/map';
 import { pkRegion } from '../ui/pocket/screens/region';
-import { pkBadges, pkWorld, type PkBadgeSlot } from '../ui/pocket/screens/world';
-import { PK_PAUSE_COLS, pkPause } from '../ui/pocket/screens/pause';
+import { pkBadges, pkLeague, pkWorld, type PkBadgeSlot } from '../ui/pocket/screens/world';
+import { pkXpDoor } from '../ui/pocket/screens/expedition';
+import { pkBracket } from '../ui/pocket/screens/galar';
+import { pkArtOf } from '../ui/pocket/templates';
+import { pkForecast } from '../ui/pocket/screens/forecast';
+import { pkTime, pkWeather, weatherCard, WEATHERS } from '../ui/pocket/screens/sky';
+import { timeOfDay } from '../core/arenaStyle';
+import { pkRivals } from '../ui/pocket/screens/rivals';
+import { PK_PAUSE_COLS, pkPause, pkQuick } from '../ui/pocket/screens/pause';
 import { pkCard } from '../ui/pocket/screens/card';
 import type { RunCardModel } from '../ui/redux/screens/over';
 import { trainerId as trainerCardId } from '../core/presentation/pocket';
@@ -161,7 +168,7 @@ import { dockFact } from '../ui/phantom/screens/town';
 import { phConfirm } from '../ui/phantom/templates';
 import { bestMedalWord } from '../ui/redux/screens/minigame';
 import { confirmBox } from '../ui/redux/screens/saves';
-import { bookRows, bookView, dossierView, nodeMenuView, pauseView, reportView, rollView, trackView, type NodeMenuCard } from '../ui/redux/screens/popups';
+import { bookRows, bookView, dossierView, leadLine, nodeMenuView, pauseView, reportView, rollView, trackView, type NodeMenuCard } from '../ui/redux/screens/popups';
 import { bracketView as rxBracketView, galarHome, galarPage } from '../ui/redux/screens/bracket';
 import { artOf, monFile, rivalArt } from '../ui/redux/game';
 import { nodeStyle } from '../ui/redux/kit';
@@ -223,7 +230,7 @@ const ROLL_KIND: Record<string, string> = { PS: 'Pseudo-stage', MC: 'Challenge',
 /** Something the cursor can land on. */
 /** A New UI pop-up over the map and where its cursor is. */
 type MapPop =
-  | { kind: 'report'; pick: number }
+  | { kind: 'report'; pick: number; /** Pocket look: the lit rival's full report over the board. */ full?: boolean }
   | { kind: 'dossier'; tab: number; pick: number }
   | { kind: 'notes'; tab: number; sel: number[] }
   | { kind: 'track' }
@@ -231,7 +238,14 @@ type MapPop =
   | { kind: 'bracket'; page: number }
   | { kind: 'phone'; chat: number; reply: number }
   | { kind: 'world'; pick: number }
-  | { kind: 'badges'; pick: number };
+  | { kind: 'badges'; pick: number }
+  | { kind: 'league'; pick: number }
+  | { kind: 'forecast'; pick: number }
+  | { kind: 'time'; pick: number }
+  | { kind: 'weather'; pick: number; from?: 'time' }
+  | { kind: 'xpgate'; side: string; pick: number }
+  | { kind: 'totem'; side: string; pick: number }
+  | { kind: 'raid'; side: string; pick: number };
 
 type Option =
   | { kind: 'node'; node: MapNode }
@@ -328,7 +342,13 @@ export class MapScene extends Phaser.Scene {
     else if (kind === 'phone') pop = phantomOn() ? { kind, chat: this.phoneFirst(), reply: 0 } : null;
     else if (kind === 'world') pop = pocketOn() ? { kind, pick: run.regionIndex } : null;
     else if (kind === 'badges') pop = pocketOn() && run.stage ? { kind, pick: Math.min(run.stage.index, runCampaign(session.content, run).stagesPerRegion - 1) } : null;
-    else pop = { kind, page: galarHome(bracketTree(session.content, run)) };
+    else if (kind === 'league') pop = pocketOn() ? { kind, pick: 0 } : null;
+    else if (kind === 'weather') pop = pocketOn() ? { kind, pick: weatherCard(this.stageWeather()) } : null;
+    else if (kind === 'time') pop = pocketOn() ? { kind, pick: Math.max(0, ['day', 'eve', 'night'].indexOf(this.stageTime() ?? 'day')) } : null;
+    else if (kind === 'forecast') pop = pocketOn() && run.stage?.kind === 'stage' && stopForecast(session.content, run).length ? { kind, pick: 0 } : null;
+    else if (kind === 'xpgate' || kind === 'totem' || kind === 'raid') pop = null;
+    // Pocket look: the bracket opens on the round you play next.
+    else pop = { kind, page: pocketOn() ? Math.min(4, bracketView(session.content, run).wins) : galarHome(bracketTree(session.content, run)) };
     if (!pop) return;
     this.rxPop = pop;
     this.rxPopAt = this.time.now;
@@ -355,8 +375,8 @@ export class MapScene extends Phaser.Scene {
       { label: 'Party', note: `${run.party.length} Pokémon${down ? ` · ${down} fainted` : ''}`, go: () => openPokemonMenu(this.fieldHost()) },
       { label: 'Bag', note: `₽${run.money.toLocaleString('en-US')} in your wallet`, go: () => openBagMenu(this.fieldHost()) },
       { label: 'Rivals', note: rivals.length ? `${rivals[0]!.name}: ${rivals[0]!.leadText}` : 'No rival has found you yet', off: rivals.length === 0, go: () => this.toggleRivalReport() },
-      { label: 'Phone', note: unread ? `${unread} new ${unread === 1 ? 'line' : 'lines'}` : lines ? `${lines} ${lines === 1 ? 'line' : 'lines'} of this run` : 'Rotom is on the line', go: () => this.popToggle('phone') },
-      { label: 'Pokédex', note: `${dex} met in this run`, go: () => { this.pauseOpen(); this.pausePick(MapScene.PAUSE_PH.indexOf('Pokédex')); } },
+      ...(pocketOn() ? [{ label: 'Trainer Card', note: 'Who you are and this run', go: () => { this.pauseOpen(); this.pausePick(this.pauseRows().indexOf('Trainer Card')); } }] : [{ label: 'Phone', note: unread ? `${unread} new ${unread === 1 ? 'line' : 'lines'}` : lines ? `${lines} ${lines === 1 ? 'line' : 'lines'} of this run` : 'Rotom is on the line', go: () => this.popToggle('phone') }]),
+      { label: 'Pokédex', note: `${dex} met in this run`, go: () => { this.pauseOpen(); this.pausePick(this.pauseRows().indexOf('Pokédex')); } },
       { label: 'Reserve', note: pc > 0 ? `${run.box.length} of ${pc} in the PC` : 'This run has no PC', off: pc <= 0, go: () => openBoxMenu(this.fieldHost()) },
       { label: 'Save', note: 'Save, then stay or leave', go: () => openSaveMenu(this.fieldHost(), (to) => { this.busy = true; this.scene.start(to); }) },
       { label: 'Settings', note: 'Sound, text and the look', go: () => this.scene.start('Settings', { from: 'Map' }) },
@@ -365,7 +385,7 @@ export class MapScene extends Phaser.Scene {
 
   /** Opens the wheel. `held`: TAB is down (letting go opens the lit slot); otherwise it stays until Enter, a click or Esc. */
   private wheelOpen(held: boolean, at = performance.now()): void {
-    if (!this.rxView || !phantomOn() || this.rxWheel || this.rxPause || this.rxPop || this.rxMenu || this.rxHeal || this.busy || this.picker || this.legend) return;
+    if (!this.rxView || !(phantomOn() || pocketOn()) || this.rxWheel || this.rxPause || this.rxPop || this.rxMenu || this.rxHeal || this.busy || this.picker || this.legend) return;
     this.rxWheel = { index: 0, spin: 0, held, since: at };
     this.rxCard = null;
     this.busy = true;
@@ -560,6 +580,13 @@ export class MapScene extends Phaser.Scene {
 
   /** The Phantom pause menu: the mock-up's Pause page, with the "End this run?" card over it while that is asked. */
   /** Pocket look: the pause menu is the Rotom Phone, a page of its own. */
+  /** Pocket look: the Quick Wheel (mock-up `quick`). */
+  private quickPocket(model: MapModel): string {
+    const w = this.rxWheel!, { session } = services(), run = session.run!;
+    const base = pkPauseModel(this, run, { apps: [], index: 0, next: model.title, names: run.party.map((m) => displayName(session.content, m)), ask: null });
+    return pkQuick({ ...base, items: this.wheelItems(), at: w.index, held: w.held });
+  }
+
   private pausePocket(model: MapModel): string {
     const p = this.rxPause!, { session } = services(), run = session.run!;
     if (p.dex) return p.dex.htmlPocket();
@@ -648,6 +675,38 @@ export class MapScene extends Phaser.Scene {
     const run = session.run;
     if (!p || !run) return;
     if (p.kind === 'phone') return this.phoneInput(p, action);
+    // Pocket look: Enter on the Rival Board opens the lit rival's full report; Esc there goes back to the board.
+    // Pocket look: Enter in the Badge Case opens the League page; Esc there goes back to the case.
+    if (p.kind === 'badges' && action === 'confirm') return this.popOpen();
+    // Pocket look: Enter on the Forecast is Fix my team (the Party).
+    if (p.kind === 'forecast' && action === 'confirm') return this.popOpen();
+    // Pocket look: Enter on Time of Day opens the Weather guide; Esc there goes back to Time of Day.
+    if (p.kind === 'time' && action === 'confirm') return this.popOpen();
+    if (p.kind === 'weather' && action === 'back' && p.from === 'time') {
+      this.rxPop = { kind: 'time', pick: 0 };
+      this.rxView?.refresh();
+      return;
+    }
+    if (p.kind === 'league' && action === 'back') {
+      this.rxPop = { kind: 'badges', pick: 0 };
+      this.rxView?.refresh();
+      return;
+    }
+    if (p.kind === 'report' && pocketOn() && (action === 'confirm' || action === 'back') && !!p.full !== (action === 'confirm')) {
+      p.full = action === 'confirm';
+      this.rxView?.refresh();
+      return;
+    }
+    // Pocket look: the Expedition Gate. Set out or Not now; Esc leaves.
+    if (p.kind === 'raid') {
+      const n = this.raidChoices(p.side).length + 1;
+      if (action === 'confirm') return this.raidGo(p);
+      if (action === 'up' || action === 'down') { p.pick = (p.pick + (action === 'down' ? 1 : n - 1)) % n; this.rxView?.refresh(); return; }
+    }
+    if (p.kind === 'xpgate' || p.kind === 'totem') {
+      if (action === 'confirm') return p.pick !== 0 ? this.popClose() : p.kind === 'xpgate' ? this.xpGateGo(p.side) : this.totemGo(p.side);
+      if (action === 'up' || action === 'down') { p.pick = 1 - p.pick; this.rxView?.refresh(); return; }
+    }
     if (action === 'back' || action === 'confirm') return this.popClose();
     const d = action === 'right' || action === 'down' ? 1 : -1;
     const side = action === 'left' || action === 'right';
@@ -658,7 +717,17 @@ export class MapScene extends Phaser.Scene {
     } else if (p.kind === 'badges') {
       const n = runCampaign(session.content, run).stagesPerRegion;
       p.pick = (p.pick + d + n) % n;
+    } else if (p.kind === 'time' || p.kind === 'weather') {
+      const n = p.kind === 'time' ? 3 : WEATHERS.length;
+      if (side) p.pick = (p.pick + d + n) % n;
+    } else if (p.kind === 'forecast') {
+      const n = stopForecast(session.content, run).length;
+      if (side && n) p.pick = (p.pick + d + n) % n;
+    } else if (p.kind === 'league') {
+      const n = (services().session.run?.stage?.eliteFour?.length || runCampaign(session.content, run).eliteFourSize) + 1;
+      if (side) p.pick = (p.pick + d + n) % n;
     } else if (p.kind === 'report') {
+      if (p.full) return;
       const n = rivalReport(run).length;
       p.pick = (p.pick + d + n) % n;
     } else if (p.kind === 'dossier') {
@@ -694,6 +763,12 @@ export class MapScene extends Phaser.Scene {
   private popPick(what: 'tab' | 'pick', i: number): void {
     const p = this.rxPop;
     if (!p || !Number.isFinite(i)) return;
+    if ((p.kind === 'xpgate' || p.kind === 'totem' || p.kind === 'raid') && what === 'pick') {
+      if (p.pick === i) return void this.popInput('confirm');
+      p.pick = i;
+      this.rxView?.refresh();
+      return;
+    }
     if (p.kind === 'dossier') {
       if (what === 'tab') {
         p.tab = i;
@@ -702,8 +777,13 @@ export class MapScene extends Phaser.Scene {
     } else if (p.kind === 'notes') {
       if (what === 'tab') p.tab = Math.max(0, Math.min(FIELD_TABS.length - 1, i));
       else p.sel[p.tab] = i;
-    } else if ((p.kind === 'report' || p.kind === 'roll' || p.kind === 'world' || p.kind === 'badges') && what === 'pick') {
-      if (p.pick === i) return;
+    } else if ((p.kind === 'report' || p.kind === 'roll' || p.kind === 'world' || p.kind === 'badges' || p.kind === 'league' || p.kind === 'forecast' || p.kind === 'time' || p.kind === 'weather') && what === 'pick') {
+      if (p.pick === i) {
+        if (p.kind === 'time') return this.popOpen();
+        if (p.kind !== 'report' || !pocketOn() || p.full) return;
+        p.full = true;
+      }
+      p.pick = i;
       p.pick = i;
     }
     this.rxView?.refresh();
@@ -819,7 +899,14 @@ export class MapScene extends Phaser.Scene {
     if (p.kind === 'phone') return c.ph ? this.phoneView(c.ph, p) : '';
     if (p.kind === 'world') return c.pk ? this.worldPocket(p.pick) : '';
     if (p.kind === 'badges') return c.pk ? this.badgesPocket(p.pick) : '';
+    if (p.kind === 'league') return c.pk ? this.leaguePocket(p.pick) : '';
+    if (p.kind === 'forecast') return c.pk ? this.forecastPocket(p.pick) : '';
+    if (p.kind === 'xpgate') return c.pk ? this.xpGatePocket(p) : '';
+    if (p.kind === 'totem') return c.pk ? this.totemPocket(p) : '';
+    if (p.kind === 'raid') return c.pk ? this.raidPocket(p) : '';
+    if (p.kind === 'time' || p.kind === 'weather') return c.pk ? this.skyPocket(p) : '';
     const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+    if (p.kind === 'report' && c.pk && !p.full) return this.rivalsPocket(p.pick);
     if (p.kind === 'report') {
       const rows = rivalReport(run);
       const r = rows[Math.min(p.pick, rows.length - 1)]!;
@@ -904,6 +991,7 @@ export class MapScene extends Phaser.Scene {
         next: page.nextLine,
       });
     }
+    if (c.pk && p.kind === 'bracket') return this.bracketPocket(p.page);
     const view = bracketView(content, run);
     const next = view.rounds.find((r) => r.state === 'next');
     const watch = view.rounds.filter((r) => r.state === 'won').length;
@@ -1649,6 +1737,7 @@ export class MapScene extends Phaser.Scene {
           const model: MapModel = { ...this.rxModel!, index: this.index, info: this.info?.text ?? '', notice: this.notice?.text ?? '', going: this.rxGoing, banner: this.rxBanner, legend: this.rxLegend, card: this.rxCardOf() };
           if (c.pk && (this.rxRegion || this.rxForm)) return this.regionPocket();
           if (c.pk && this.rxPause) return this.pausePocket(model);
+          if (c.pk && this.rxWheel) return this.quickPocket(model);
           if (c.pk) return pkMap(model, this.rxMenu);
           if (!c.ph) return mapView(c, model) + this.pauseHtml() + (this.rxMenu ? nodeMenuView(this.rxMenu) : '');
           // Phantom: the pause menu is a page of its own; the node menu stands over the map.
@@ -1681,6 +1770,7 @@ export class MapScene extends Phaser.Scene {
           phoneChat: (i) => this.phoneChat(Number(i)),
           phoneReply: (i) => this.phoneReply(Number(i)),
           popPick: (i) => this.popPick('pick', Number(i)),
+          popOpen: () => this.popOpen(),
           bracket: () => this.popClose(),
           bracketPage: (i) => { if (this.rxPop?.kind === 'bracket') { this.rxPop.page = Math.max(0, Math.min(4, Number(i) || 0)); this.rxView?.refresh(); } },
           bracketWatch: () => this.watchLast(),
@@ -1689,8 +1779,8 @@ export class MapScene extends Phaser.Scene {
         // Resting the pointer on a party Pokémon shows its Ability card (the mock-ups' Pokémon info card).
         tip: hoverTips((key) => { if (this.rxPop) return; this.rxCard = key; this.rxView?.refresh(); }),
       });
-      // Phantom UI: the quick wheel. TAB down opens it, TAB up opens the lit slot; the key never moves the browser's focus.
-      if (phantomOn()) {
+      // Phantom and Pocket looks: the quick wheel. TAB down opens it, TAB up opens the lit slot; the key never moves the browser's focus.
+      if (phantomOn() || pocketOn()) {
         this.rxModel.keys = [...this.rxModel.keys, ['Tab', 'wheel']];
         const kb = this.input.keyboard;
         const tabDown = (e: KeyboardEvent): void => { if (!e.repeat && !runLogOpen()) this.wheelOpen(true, e.timeStamp); };
@@ -1806,8 +1896,10 @@ export class MapScene extends Phaser.Scene {
       }
       // Pocket look: the World Tour (M) and the Badge Case (G), pages of their own in the mock-ups.
       if (pocketOn()) {
-        this.rxModel.keys = [['G', 'badges'], ['M', 'world'], ...this.rxModel.keys];
+        this.rxModel.keys = [['G', 'badges'], ['M', 'world'], ['Y', 'forecast'], ['K', 'time'], ...this.rxModel.keys];
         this.input.keyboard?.on('keydown-G', () => this.popToggle('badges'));
+        this.input.keyboard?.on('keydown-Y', () => this.popToggle('forecast'));
+        this.input.keyboard?.on('keydown-K', () => this.popToggle('time'));
         this.input.keyboard?.on('keydown-M', () => this.popToggle('world'));
       }
       if (this.children.getByName('bracket-tag')) this.rxModel.hints = [['L', 'legend'], ['B', 'bracket'], ['Enter', 'go']];
@@ -1905,6 +1997,30 @@ export class MapScene extends Phaser.Scene {
   }
 
   /** Pocket look: the World Tour (mock-up `world`): this run's regions in order. */
+  /** Pocket look: the Rival Board (mock-up `rivals`), a card per rival on your trail. */
+  private rivalsPocket(pick: number): string {
+    const { session } = services();
+    const content = session.content, run = session.run!;
+    const rows = rivalReport(run);
+    return pkRivals({
+      index: Math.max(0, Math.min(rows.length - 1, pick)),
+      road: pocketRoad(run.stage),
+      rivals: rows.map((r) => {
+        const story = run.story.rivals.find((x) => x.id === r.id);
+        const ace = story?.ace ? content.species.get(story.ace) : undefined;
+        return {
+          name: r.name,
+          role: r.role === 'friend' ? 'Friend' : 'Rival',
+          art: rivalArt(this, story),
+          ace: ace ? { name: ace.name, file: monFile(this, ace.id, 'front', false) } : null,
+          wins: Number(run.story.flags[`rivalW:${r.id}`] ?? 0),
+          losses: Number(run.story.flags[`rivalL:${r.id}`] ?? 0),
+          lead: leadLine(r.name, r.lead),
+        };
+      }),
+    });
+  }
+
   private worldPocket(pick: number): string {
     const { session } = services();
     const content = session.content, run = session.run!;
@@ -1921,6 +2037,86 @@ export class MapScene extends Phaser.Scene {
       road,
       index: pick,
     });
+  }
+
+  /** Pocket look: Enter on a pop-up's card: the Badge Case opens the League page. */
+  private popOpen(): void {
+    // Time of Day's Enter: the Weather guide (Esc comes back).
+    if (this.rxPop?.kind === 'time') { this.rxPop = { kind: 'weather', pick: weatherCard(this.stageWeather()), from: 'time' }; this.rxView?.refresh(); return; }
+    // The Forecast's Fix my team: the Party.
+    if (this.rxPop?.kind === 'forecast') { this.popClose(); openPokemonMenu(this.fieldHost()); return; }
+    if (this.rxPop?.kind !== 'badges' || !pocketOn()) return;
+    this.rxPop = { kind: 'league', pick: 0 };
+    this.rxView?.refresh();
+  }
+
+  /** The stage's time of day (null between stages). */
+  private stageTime(): 'day' | 'eve' | 'night' | null {
+    const run = services().session.run;
+    return run?.stage ? timeOfDay(run.seed, run.stage.index) : null;
+  }
+
+  /** The weather over the stop you stand on (a front), or null. */
+  private stageWeather(): string | null {
+    const { session } = services();
+    const run = session.run, stage = run?.stage;
+    const node = stage?.current ? findNode(stage.map, stage.current) : undefined;
+    return run && node ? frontAt(session.content, run, node)?.weather ?? null : null;
+  }
+
+  /** Pocket look: the Time of Day guide (K) and the Weather guide (Enter there): what each does, the one in play marked Now. */
+  private skyPocket(p: Extract<MapPop, { kind: 'time' | 'weather' }>): string {
+    const { session } = services();
+    const run = session.run!;
+    const road = pocketRoad(run.stage);
+    if (p.kind === 'weather') return pkWeather({ now: this.stageWeather() ?? 'clear', turns: null, index: p.pick, crumb: ['Map', 'Weather'], road });
+    const n = runCampaign(session.content, run).stagesPerRegion;
+    const first = run.stage ? run.stage.index - (run.stage.index % n) : 0;
+    return pkTime({ now: this.stageTime(), index: p.pick, run: Array.from({ length: n }, (_, k) => timeOfDay(run.seed, first + k)), at: (run.stage?.index ?? 0) - first, crumb: ['Map', 'Time of Day'], road });
+  }
+
+  /** Pocket look: the Forecast (Y): the next six stops with what waits there, the stage's time of day and the weather. */
+  private forecastPocket(pick: number): string {
+    const { session } = services();
+    const content = session.content, run = session.run!;
+    const stops = stopForecast(content, run);
+    const time = run.stage ? timeOfDay(run.seed, run.stage.index) : 'day';
+    const KIND: Record<string, [string, string]> = { wild: ['Wild Pokémon', 'Tall grass'], trainer: ['Trainer', 'On the road'], gym: ['Gym', 'Gym Leader'], elite: ['Elite Four', 'The League'], champion: ['Champion', 'The League'] };
+    const next = stops.find((s) => s.weather && s.weather !== 'clear');
+    const WORD: Record<string, string> = { rain: 'Rain', sun: 'Harsh sun', sand: 'A sandstorm', snow: 'Snow', hail: 'Hail' };
+    const TIP: Record<string, string> = { rain: 'Water moves hit harder there, Fire moves softer.', sun: 'Fire moves hit harder there, Water moves softer.', sand: 'It hurts all but Rock, Ground and Steel Pokémon.', snow: 'Ice Pokémon guard better there.', hail: 'It hurts all but Ice Pokémon.' };
+    const gymAt = stops.find((s) => s.kind === 'gym');
+    const say = next
+      ? `Bzzt! ${WORD[next.weather!] ?? 'Weather'} from stop ${next.stop}${next.band !== 'all' ? ` on the ${next.band === 'high' ? 'top path' : 'lower paths'}` : ''}. ${TIP[next.weather!] ?? ''}${gymAt && next.stop <= gymAt.stop ? ' Check your team before the Gym.' : ''}`
+      : `Bzzt! Clear skies as far as I can see.${gymAt ? ` The Gym is at stop ${gymAt.stop}.` : ''}`;
+    const camp = runCampaign(content, run);
+    return pkForecast({
+      region: content.regions.get(run.regionOrder[run.regionIndex] ?? '')?.name ?? 'Region',
+      stage: `Stage ${(run.stage?.index ?? 0) + 1} of ${camp.stagesPerRegion}`,
+      road: pocketRoad(run.stage),
+      index: Math.max(0, Math.min(stops.length - 1, pick)),
+      say,
+      stops: stops.map((s) => ({ stop: s.stop, kind: s.kind ? KIND[s.kind]![0] : null, sub: s.kind ? KIND[s.kind]![1] + (s.band !== 'all' && s.weather && s.weather !== 'clear' ? ` · ${s.band === 'high' ? 'top path' : 'lower paths'}` : '') : 'Hidden in fog', time, weather: s.weather, gym: s.kind === 'gym' })),
+    });
+  }
+
+  /** Pocket look: the Pokémon League (mock-up `league`): the rooms (named once the League begins) and the Champion. */
+  private leaguePocket(pick: number): string {
+    const { session } = services();
+    const content = session.content, run = session.run!, stage = run.stage;
+    const camp = runCampaign(content, run);
+    const e4 = stage?.kind === 'league' ? stage.eliteFour ?? [] : [];
+    const size = e4.length || camp.eliteFourSize;
+    const rooms = Array.from({ length: size }, (_, k) => {
+      const id = e4[k], b = id ? content.bosses.get(id) : undefined;
+      if (!id || !b) return { name: null, type: null, art: null };
+      const info = bossInfo(content, 'elite', id);
+      return { name: info.name, type: b.types[0] ?? null, art: artOf(this, info.spriteAssetId) ?? null };
+    });
+    const champ = stage?.kind === 'league' && stage.leaderId && content.bosses.get(stage.leaderId) ? bossInfo(content, 'champion', stage.leaderId) : null;
+    const need = camp.stagesPerRegion;
+    const here = stage?.kind === 'league' ? need : Math.min(need, stage?.index ?? 0);
+    return pkLeague({ rooms, champion: champ ? { name: champ.name, art: artOf(this, champ.spriteAssetId) ?? null } : null, badges: here, need, index: Math.max(0, Math.min(size, pick)), road: pocketRoad(stage ?? null) });
   }
 
   /** Pocket look: the Badge Case (mock-up `badges`): this region's Gyms, the lit one's card, the League. */
@@ -2541,6 +2737,15 @@ export class MapScene extends Phaser.Scene {
   /** An expedition gate: shows the briefing (party rules, route length, finale, rewards), then asks to commit. */
   private openExpedition(sideId: string): void {
     const { session } = services();
+    // Pocket look: the gate is the mock-up's Expedition Gate page.
+    if (pocketOn() && this.rxView) {
+      this.rxPop = { kind: 'xpgate', side: sideId, pick: 0 };
+      this.rxPopAt = this.time.now;
+      this.rxCard = null;
+      this.busy = true;
+      this.rxView.refresh();
+      return;
+    }
     const pv = expeditionPreview(session.content, session.run!, sideId);
     const picker: Picker = new Picker(this, {
       glass: true,
@@ -2577,10 +2782,168 @@ export class MapScene extends Phaser.Scene {
     this.picker = picker;
   }
 
+  /** Pocket look: leave the gate for the expedition. */
+  private xpGateGo(sideId: string): void {
+    const { session } = services();
+    let run: ReturnType<typeof session.beginExpedition>;
+    try {
+      run = session.beginExpedition(sideId);
+    } catch (err) {
+      this.scene.restart({ notice: String(err instanceof Error ? err.message : err), focus: 0 });
+      return;
+    }
+    playSfx(this, 'ui.select');
+    this.rxPop = null;
+    this.cameras.main.fadeOut(250);
+    this.time.delayedCall(260, () => this.scene.start(sceneForRun(run)));
+  }
+
+  /** Pocket look: face the Totem. */
+  private totemGo(sideId: string): void {
+    const { session } = services();
+    let run: ReturnType<typeof session.enterTotem>;
+    try {
+      run = session.enterTotem(sideId);
+    } catch (err) {
+      this.scene.restart({ notice: String(err instanceof Error ? err.message : err), focus: 0 });
+      return;
+    }
+    playSfx(this, 'ui.select');
+    this.rxPop = null;
+    this.cameras.main.fadeOut(250);
+    this.time.delayedCall(260, () => this.scene.start(sceneForRun(run)));
+  }
+
+  /** Pocket look: Totem territory (mock-up `tm-stop`): the Totem, its aura, allies and tier, Face it or Walk around it. */
+  private totemPocket(p: Extract<MapPop, { kind: 'totem' }>): string {
+    const { session } = services();
+    const run = session.run!;
+    const content = session.content;
+    const pv = totemPreview(content, run, p.side);
+    const sp = content.species.get(pv.speciesId);
+    const region = content.regions.get(run.regionOrder[run.regionIndex] ?? '')?.name ?? '';
+    const stop = run.stage?.current ? findNode(run.stage.map, run.stage.current)?.column ?? 1 : 1;
+    const cap = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
+    const types = (sp?.types ?? []).map(cap).join(' / ');
+    return pkXpDoor({
+      kind: 'stop', where: 'Totem Territory', sub: [region, `Stop ${stop}`, pv.name].filter(Boolean).join(' · '), kicker: 'Totem', name: pv.name,
+      text: pv.blurb,
+      rows: [['Totem', `${sp?.name ?? pv.speciesId} · Lv ${pv.level}${types ? ` · ${types}` : ''}`], ['Aura', `${pv.aura}${pv.environment ? ` ${pv.environment}` : ''}`], ['Allies', cap(pv.ally ?? 'It fights alone')], ['Tier', `${cap(pv.tier)}${pv.phases ? ` · ${pv.phases} ${pv.phases === 1 ? 'phase' : 'phases'}` : ''}`], ['Prize', cap(pv.rewards.join(', '))]],
+      options: [{ label: 'Face the Totem', detail: 'Losing never ends your run' }, { label: 'Walk around it', detail: 'Skipping costs nothing' }], index: p.pick,
+      say: 'Claw marks ring the clearing. Something has been watching the path for a long time.', esc: 'leave',
+      area: { key: 'tm', tag: 'Totem', page: 'tm-stop', cls: 'tms27', bg: 'packs/memories/eventbg/forest.png' },
+    }, { pick: 'popPick', over: '' });
+  }
+
+  /** The den's ways in (approaches, or one Join row, then Practice), the same rows the den card offers. */
+  private raidChoices(sideId: string): { id: string; label: string; text: string; cost: number; leave: boolean }[] {
+    const pv = raidPreview(services().session.content, services().session.run!, sideId);
+    const choices = pv.approaches.length > 0 ? [...pv.approaches] : [{ id: '', label: '', text: '', cost: 0, leave: false }];
+    if (!pv.noPractice) choices.push({ id: 'practice', label: 'PRACTICE', text: 'No stakes: no cost, no rewards, nothing lost. Your team is restored afterwards.', cost: -pv.entryCost, leave: false });
+    return choices;
+  }
+
+  /** Pocket look: Enter on the den: a way in (when you can pay for it), or Leave the den. */
+  private raidGo(p: Extract<MapPop, { kind: 'raid' }>): void {
+    const { session } = services();
+    const choices = this.raidChoices(p.side);
+    const choice = choices[p.pick];
+    if (!choice) return this.popClose();
+    const pv = raidPreview(session.content, session.run!, p.side);
+    if (!choice.leave && session.run!.money < pv.entryCost + choice.cost) return;
+    this.popClose();
+    this.startRaid(p.side, choice, pv);
+  }
+
+  /** Pocket look: the raid den (mock-up `rd-den`): the boss, its tier, mechanics and prize, the ways in, Leave the den. */
+  private raidPocket(p: Extract<MapPop, { kind: 'raid' }>): string {
+    const { session } = services();
+    const run = session.run!;
+    const content = session.content;
+    const pv = raidPreview(content, run, p.side);
+    const sp = content.species.get(pv.speciesId);
+    const cap = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
+    const kindName = { wild: 'Raid Den', regional: 'Regional Raid', rival: 'Rival Raid', anomaly: 'Anomaly Raid' }[pv.kind];
+    const region = content.regions.get(run.regionOrder[run.regionIndex] ?? '')?.name ?? '';
+    const stop = run.stage?.current ? findNode(run.stage.map, run.stage.current)?.column ?? 1 : 1;
+    const ways = this.raidChoices(p.side);
+    const lit = ways[p.pick];
+    const options = ways.map((a) => {
+      const cost = pv.entryCost + a.cost;
+      const label = a.id === 'practice' ? 'Practice' : a.label ? cap(a.label.toLowerCase()) : 'Join the raid';
+      return { label, detail: `${a.leave ? 'Free' : cost > 0 ? `Costs ₽${cost}` : 'Costs nothing'}${a.text && a.id !== 'practice' ? ` · ${a.text}` : a.id === 'practice' ? ' · no rewards, nothing lost' : ''}`, off: !a.leave && run.money < cost };
+    });
+    return pkXpDoor({
+      kind: 'stop', where: kindName, sub: [region, `Stop ${stop}`, pv.name].filter(Boolean).join(' · '), kicker: `Tier ${pv.tier} raid`, name: `${pv.name}${pv.returning ? ' is back' : ''}`,
+      text: pv.blurb,
+      rows: [['Boss', `${sp?.name ?? pv.speciesId} · Lv ${pv.level}${sp?.types.length ? ` · ${sp.types.map(cap).join(' / ')}` : ''}`], ['Rules', pv.mechanics.join(', ')], ['Prize', cap(pv.rewards.join(', '))], ['Safe', 'Losing never ends your run']],
+      options: [...options, { label: 'Leave the den', detail: 'It stays here until the stage ends' }], index: p.pick,
+      say: lit?.text && lit.id !== 'practice' ? lit.text : 'The ground hums. Something very large is breathing in the dark. You can see its tier and prize before you commit.', esc: 'leave',
+      area: { key: 'rd', tag: 'Raid', page: 'rd-den', cls: 'rdd27', bg: 'packs/memories/eventbg/cave.png' },
+    }, { pick: 'popPick', over: '' });
+  }
+
+  /** Pocket look: the Champion's Tournament bracket (mock-up `ga-bracket`): the five rounds, the field still in, Heal and Shop. */
+  private bracketPocket(pick: number): string {
+    const { session } = services();
+    const content = session.content;
+    const run = session.run!;
+    const view = bracketView(content, run);
+    const tree = bracketTree(content, run);
+    const boss = (id: string) => pkArtOf(artOf(this, content.bosses.get(id)?.sprites.default));
+    const me = pkArtOf(artOf(this, content.archetypes.get(run.archetypeId)?.spriteAssetId));
+    const myName = content.archetypes.get(run.archetypeId)?.name ?? 'You';
+    const next = view.rounds.find((r) => r.state === 'next');
+    const rounds = view.rounds.map((r) => ({
+      name: r.name, state: r.state,
+      you: r.state === 'later' ? { art: null, name: 'Winner' } : { art: me, name: myName, won: r.state === 'won' },
+      // The final's Champion is known from the start; other later rounds are not decided yet.
+      foe: r.state === 'later' && r.round < view.rounds.length ? { art: null, name: 'Not decided' } : { art: boss(r.opponent.id), name: r.opponent.name },
+      note: r.state === 'won' ? r.headline ?? `${r.others} other matches` : r.state === 'next' ? `${r.opponent.style || 'Next match'}${r.levelBonus ? ` · +${r.levelBonus} levels` : ''}` : r.round === view.rounds.length ? r.opponent.style || 'The Champion' : `${r.others} other ${r.others === 1 ? 'match' : 'matches'}`,
+      after: r.shopAfter ? 'shop' as const : r.round < view.rounds.length ? 'heal' as const : null,
+    }));
+    const stillIn = tree.lines[Math.min(tree.wins, tree.lines.length - 1)] ?? [];
+    const before = tree.wins > 0 ? tree.lines[tree.wins - 1] ?? [] : [];
+    const out = before.filter((x) => !stillIn.some((y) => y.id === x.id) && !x.you).slice(-2);
+    return pkBracket({
+      rounds, still: view.standing.length, pool: stillIn.filter((x) => !x.you).slice(0, 10).map((x) => boss(x.id)), out: out.map((x) => boss(x.id)), index: pick,
+      button: 'Back to the map',
+      line: next ? `Next: ${next.name} against ${next.opponent.name}. Lose once and it is over.` : 'The whole bracket is decided.',
+    });
+  }
+
+  /** Pocket look: the Expedition Gate (mock-up `xp-gate`): the briefing card, Set out or Not now, the ranger's line. */
+  private xpGatePocket(p: Extract<MapPop, { kind: 'xpgate' }>): string {
+    const { session } = services();
+    const run = session.run!;
+    const pv = expeditionPreview(session.content, run, p.side);
+    const region = session.content.regions.get(run.regionOrder[run.regionIndex] ?? '')?.name ?? '';
+    const stop = run.stage?.current ? findNode(run.stage.map, run.stage.current)?.column ?? 1 : 1;
+    const kind = pv.legendary ? 'Legendary event' : `Tier ${pv.tier} Expedition`;
+    const rows: [string, string][] = pv.legendary
+      ? [['Omen', pv.legendary.omen], ['Finale', pv.finale], ['Rewards', pv.rewards.join(', ')], ['Gone', pv.legendary.temporaryNote], ['Safe', 'You are never forced to enter']]
+      : [['Party', pv.partyText], ['Stops', `${pv.nodes}, then the finale`], ['Finale', pv.finale], ['Extract', 'Leave early and keep the loot'], ['Safe', 'You never lose your own Pokémon']];
+    return pkXpDoor({
+      kind: 'gate', where: pv.legendary ? 'Legendary Gate' : 'Expedition Gate', sub: [region, `Stop ${stop}`, kind].filter(Boolean).join(' · '), kicker: kind, name: pv.name,
+      text: pv.legendary ? pv.legendary.lore[0] ?? pv.blurb : `${pv.blurb} Rewards: ${pv.rewards.join(', ')}.`, rows,
+      options: [{ label: 'Set out', detail: `Stop ${stop} waits for you` }, { label: 'Not now', detail: 'The gate stays open this stage' }], index: p.pick,
+      say: pv.legendary ? pv.legendary.omen : `A ranger checks your badges and lifts the gate. "${pv.rules.find((r) => /Losing/.test(r)) ?? 'Come back in one piece.'}"`, esc: 'leave',
+    }, { pick: 'popPick', over: '' });
+  }
+
   /** Totem territory: shows the Totem, its aura, ally and rewards, then asks to commit. */
   private openTotem(sideId: string): void {
     const { session } = services();
     const content = session.content;
+    // Pocket look: Totem territory is the mock-up's door page.
+    if (pocketOn() && this.rxView) {
+      this.rxPop = { kind: 'totem', side: sideId, pick: 0 };
+      this.rxPopAt = this.time.now;
+      this.rxCard = null;
+      this.busy = true;
+      this.rxView.refresh();
+      return;
+    }
     const pv = totemPreview(content, session.run!, sideId);
     const species = content.species.get(pv.speciesId)!;
     // Screens redesign: the Ink Ruler look draws the totem card like its mock-up.
@@ -2650,6 +3013,15 @@ export class MapScene extends Phaser.Scene {
   private openRaid(sideId: string): void {
     const { session } = services();
     const content = session.content;
+    // Pocket look: the den is the mock-up's door page.
+    if (pocketOn() && this.rxView) {
+      this.rxPop = { kind: 'raid', side: sideId, pick: 0 };
+      this.rxPopAt = this.time.now;
+      this.rxCard = null;
+      this.busy = true;
+      this.rxView.refresh();
+      return;
+    }
     const pv = raidPreview(content, session.run!, sideId);
     const species = content.species.get(pv.speciesId)!;
     const money = session.run!.money;
@@ -3011,6 +3383,8 @@ export class MapScene extends Phaser.Scene {
 
   /** Galar's Champion Tournament bracket: the five rounds, who is left, your next opponent. Presentation only (core/galarTournament.ts bracketView). */
   private toggleBracket(): void {
+    // Pocket look: the bracket is the mock-up's page (B again, Esc or Enter closes it).
+    if (pocketOn() && this.rxView && !this.bracket) return this.popToggle('bracket');
     if (this.bracket) {
       this.bracket.destroy();
       this.bracket = null;

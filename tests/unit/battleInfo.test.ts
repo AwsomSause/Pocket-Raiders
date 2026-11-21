@@ -130,3 +130,36 @@ describe('Pocket Battle Info page and move card (structured)', () => {
     expect((await import('../../src/core/presentation/battleInfo')).battleInfo(content, run).foe).toBeNull();
   });
 });
+
+describe('Pocket battle Status page data', () => {
+  it('turn order by Speed with stages (Trick Room turns it round), weather, the bench, the foe seen so far; looking changes nothing', async () => {
+    const { battleStatus } = await import('../../src/core/presentation/battleInfo');
+    const run = battleRun();
+    withFoe(run, 'bulbasaur');
+    const before = JSON.stringify(run);
+    const s = battleStatus(content, run)!;
+    expect(JSON.stringify(run)).toBe(before);
+    expect(s.turn).toBe(run.battle!.turn);
+    expect(s.order.map((o) => o.name).sort()).toEqual(['Bulbasaur', 'Charmander']);
+    expect(s.order[0]!.speed).toBeGreaterThanOrEqual(s.order[1]!.speed);
+    run.battle!.field.trickRoom = 3;
+    const tr = battleStatus(content, run)!;
+    expect(tr.trickRoom).toBe(true);
+    expect(tr.order[0]!.speed).toBeLessThanOrEqual(tr.order[1]!.speed);
+    run.battle!.field.trickRoom = 0;
+    run.battle!.playerStages.spe = 6;
+    expect(battleStatus(content, run)!.order[0]!.name).toBe('Charmander');
+    expect(s.bench.length).toBe(run.party.length - 1);
+    expect(s.foes.map((f) => f.name)).toEqual(['Bulbasaur']);
+    expect(s.foes.length + s.unseen).toBe(run.battle!.kind === 'wild' ? 1 : run.battle!.enemyTeam.length);
+  });
+  it('a hidden foe stays out of the turn order and the team; no battle gives nothing', async () => {
+    const { battleStatus } = await import('../../src/core/presentation/battleInfo');
+    const run = battleRun();
+    run.battle!.eventRule = { ...(run.battle!.eventRule ?? {}), hiddenFoe: true } as NonNullable<RunState['battle']>['eventRule'];
+    const s = battleStatus(content, run)!;
+    expect(s.order.length).toBe(1);
+    expect(s.foes.length).toBe(0);
+    expect(battleStatus(content, { ...run, battle: null })).toBeNull();
+  });
+});

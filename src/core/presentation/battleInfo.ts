@@ -5,7 +5,7 @@
 
 import { catchProbability } from '../capture';
 import type { Content, TypeName } from '../contentSchema';
-import { typeEffectiveness } from '../battle/damage';
+import { statStageMultiplier, typeEffectiveness } from '../battle/damage';
 import { abilityOf, calcStats, getSpecies } from '../pokemon';
 import { currentEnemy, type PokemonInstance, type RunState, type SideEffects, type Stages } from '../state';
 import { foeIdentityHidden, type FoeReveals } from '../battle/conditions';
@@ -137,5 +137,47 @@ export function moveInfo(content: Content, run: RunState, slot: number, describe
     power: move.power ? `${move.power}` : '—', accuracy: move.accuracy ? `${move.accuracy}` : '—', pp: `${s.pp}/${ppMax}`,
     text: describe(move.id),
     vs: hidden || move.category === 'status' ? null : { foe: getSpecies(content, seenId).name, foeTypes, mult, stab: userTypes.includes(move.type), user: getSpecies(content, mon.speciesId).name, word: WORD(mult) },
+  };
+}
+
+export interface StatusMon { speciesId: string; shiny: boolean; name: string; hp: number; ko: boolean }
+/** The Pocket look's battle Status page (mock-up `b-status`): what the one-line bar folds away. Pure; looking never changes the battle. */
+export interface BattleStatus {
+  turn: number;
+  /** Who moves first by Speed (stages counted, Trick Room turns it round); moves with priority still go first. */
+  order: { name: string; speed: number }[];
+  trickRoom: boolean;
+  weather: InfoCard;
+  bench: StatusMon[];
+  foeName: string;
+  /** The foe's Pokémon sent out so far (wild: the one you face). */
+  foes: StatusMon[];
+  unseen: number;
+}
+
+export function battleStatus(content: Content, run: RunState): BattleStatus | null {
+  const battle = run.battle;
+  if (!battle) return null;
+  const hidden = foeIdentityHidden(battle);
+  const mon = run.party[battle.activeIndex];
+  const foe = currentEnemy(battle);
+  const speed = (m: PokemonInstance, stage: number): number => Math.floor(calcStats(content, m).spe * statStageMultiplier(stage));
+  const seen = (m: PokemonInstance, k: number): StatusMon => {
+    const id = k === battle.enemyIndex && battle.enemyVolatile?.illusion ? battle.enemyVolatile.illusion : m.speciesId;
+    return { speciesId: id, shiny: !!m.shiny, name: getSpecies(content, id).name, hp: m.hp / Math.max(1, calcStats(content, m).hp), ko: m.hp <= 0 };
+  };
+  const order: { name: string; speed: number }[] = [];
+  if (mon) order.push({ name: getSpecies(content, mon.speciesId).name, speed: speed(mon, battle.playerStages.spe ?? 0) });
+  if (!hidden) order.push({ name: getSpecies(content, battle.enemyVolatile?.illusion ?? foe.speciesId).name, speed: speed(foe, battle.enemyStages.spe ?? 0) });
+  const trickRoom = !!battle.field.trickRoom;
+  order.sort((a, b) => (trickRoom ? a.speed - b.speed : b.speed - a.speed));
+  const shown = battle.kind === 'wild' ? (hidden ? [] : [seen(foe, battle.enemyIndex)]) : battle.enemyTeam.slice(0, battle.enemyIndex + 1).map(seen).filter((_, k) => !(hidden && k === battle.enemyIndex));
+  return {
+    turn: battle.turn, order, trickRoom,
+    weather: battleInfo(content, run).mid[0]!,
+    bench: run.party.filter((_, k) => k !== battle.activeIndex).map((m) => ({ ...seen(m, -1), speciesId: m.speciesId, name: getSpecies(content, m.speciesId).name })),
+    foeName: battle.kind === 'wild' ? 'The wild Pokémon' : `${battle.trainer?.name ?? 'The foe'}'s team`,
+    foes: shown,
+    unseen: battle.kind === 'wild' ? 0 : battle.enemyTeam.length - shown.length,
   };
 }

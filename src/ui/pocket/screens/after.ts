@@ -175,3 +175,45 @@ export function pkEvolve(d: PkEvolveModel): string {
   const say = d.text ? `<div class="vs-say" data-key="evo-say"><p style="font-size:${fitBody(d.text, 700, 52, [18, 16, 14], 1.35)}px">${esc(d.text)}</p><div class="btn on nx"${act('next')}><b>Next</b></div></div>` : '';
   return page('evolve', 26, `<div class="scr cut cevo" style="--c:${d.done ? t : '#b06cff'}" data-key="evolve"><i class="ct-rays"></i>${from}${big}<div class="ct-title"><small>${esc(d.from.name)}</small><b>Evolution</b></div><div class="ct-chips" data-key="ct-chips">${chips.join('')}</div>${say}</div>`);
 }
+
+export interface PkBadgeGetModel {
+  type: string;
+  /** "Cerulean Gym · Leader Misty". */
+  where: string;
+  title: string;
+  /** "Badge 3 of 8 in Kanto". */
+  count: string;
+  /** What else comes with it: an item picture id and the line. */
+  gets: readonly (readonly [string, string])[];
+  /** The bar's line; ** ** marks bold. */
+  say: string;
+}
+
+/** Badge get (mock-up `badge-get`): the badge big under rays and confetti, its name and count, what else you get, Onward. */
+export function pkBadgeGet(d: PkBadgeGetModel): string {
+  const gets = d.gets.map(([icon, t]) => `<p><i>${sprH(itemArt(icon), icon === 'amulet_coin' ? 16 : 32, icon === 'amulet_coin' ? 'coin' : '')}</i><span>${esc(t)}</span></p>`).join('');
+  return page('badge-get', 26, `<div class="scr bg18" style="--t:${typeColour(d.type)}" data-key="badge-get"><i class="confetti"></i><i class="bg-rays"></i><div class="bg-badge" data-key="bg-badge">${sprH(badgeArt(d.type), 256)}</div>`
+    + `<div class="bg-h" data-key="bg-h"><small style="font-size:${fit(d.where, 440, 13, 10, 0.62)}px">${esc(d.where)}</small><b style="font-size:${fit(d.title, 470, 72, 36, 0.5)}px">${esc(d.title)}</b><span>${esc(d.count)}</span></div>`
+    + (gets ? `<div class="bg-get" data-key="bg-get"><b>You also get</b>${gets}</div>` : '')
+    + `<div class="bg-say" data-key="bg-say"><p style="font-size:${fitBody(d.say.replace(/\*\*/g, ''), 640, 52, [18, 16, 14], 1.35)}px">${bold(d.say)}</p><div class="btn on nx"${act('next')}><b>Onward</b></div></div></div>`);
+}
+
+export interface PkRivalLossModel {
+  cast: Art | null;
+  /** "Stage 3 · Rival battle". */
+  where: string;
+  name: string;
+  /** Lines with a tick (good news) or a "!" (what it costs). */
+  list: readonly (readonly [boolean, string])[];
+  /** What the rival says, or ''. */
+  line: string;
+}
+
+/** Lost to a rival (mock-up `rival-loss`): the rival big, "<name> wins this round", what that means, Carry on. Kice: a rival loss never ends a run. */
+export function pkRivalLoss(d: PkRivalLossModel): string {
+  const say = d.line ? `${d.name}: "${d.line}"` : `${d.name} wins this round. The run goes on.`;
+  return page('rival-loss', 26, `<div class="scr rl18" data-key="rival-loss">${d.cast ? `<div class="rl-art" data-key="rl-art">${sprH(pkArtOf(d.cast), 370)}</div>` : ''}`
+    + `<div class="rl-h" data-key="rl-h"><small>${esc(d.where)}</small><b style="font-size:${fit(`${d.name} wins`, 480, 72, 36, 0.5)}px">${esc(d.name)} wins</b><b class="b2">this round</b><span>Your run goes on. Losing to a rival never ends a run.</span></div>`
+    + `<div class="rl-list" data-key="rl-list">${d.list.map(([ok, t]) => `<p${ok ? ' class="ok"' : ''}><i>${ok ? '✓' : '!'}</i><span>${esc(t)}</span></p>`).join('')}</div>`
+    + `<div class="rl-say" data-key="rl-say"><p style="font-size:${fitBody(say, 640, 52, [18, 16, 14], 1.35)}px">${esc(say)}</p><div class="btn on nx"${act('next')}><b>Carry on</b></div></div></div>`);
+}

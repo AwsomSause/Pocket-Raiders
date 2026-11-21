@@ -31,7 +31,11 @@ import { runHealMultiplier } from '../core/run';
 import { partyPreviews, quickSummaryText } from './itemScreen';
 import { emotionDot, partyRow, partyRows, Picker, speciesRow, type PickerExtra, type PickerLike, type PickerRow } from './partyPanel';
 import { openPokemonMenu } from './pokemonMenu';
-import { monFile } from './redux/game';
+import { artOf, monFile } from './redux/game';
+import { maxHp } from '../core/pokemon';
+import { displayName } from '../core/care';
+import { pkBagUse } from './pocket/screens/bagUse';
+import { typeColour } from './pocket/kit';
 import { phantomOn, reduxOn } from './redux/stage';
 import { itemVisual } from './sprites';
 import { withEvolutionScene } from './evolutionScene';
@@ -568,6 +572,14 @@ function openItemTarget(host: FieldMenuHost, itemId: string): void {
     rowHeight: 78,
     rows: partyRows(content, run.party, (i) => itemUseProblem(content, item, run.party[i]!, regionId), undefined, (i) => itemFooter(card, previews[i]!), (i) => previews[i]),
     inspect: (i) => quickSummaryText(content, run, run.party[i]!, regionId),
+    // Pocket look: the mock-up's "Use on" page (the item at the left, the party as cards with what it would do).
+    page: (c, index) => (c.pk ? pkBagUse({
+      item: { name: item.name, art: artOf(host.scene, item.iconAssetId) ?? null, text: item.description, left: run.inventory[itemId] ?? 0 },
+      mons: run.party.map((m, k) => ({ name: displayName(content, m), file: monFile(host.scene, m.speciesId, 'front', !!m.shiny), hp: Math.round((m.hp / Math.max(1, maxHp(content, m))) * 100), short: previews[k]!.short, ok: previews[k]!.mark === 'good', type: content.species.get(m.speciesId)?.types[0] ?? 'normal' })),
+      index,
+      say: previews[index]?.detail ?? '',
+    }, typeColour) : null),
+    pageCols: 2,
     onSelect: (i) => {
       const targets = item.effect.kind === 'evolve' ? itemEvolutionTargets(content, run.party[i]!, itemId, regionId) : [];
       close(host, picker);

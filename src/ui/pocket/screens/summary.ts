@@ -79,7 +79,9 @@ export function pkSummary(d: SummaryModel): string {
   const menu = d.menu
     ? `<i class="gx-shade"${act('menuBack')}></i><div class="gx-sm-menu pn" data-key="sm-menu">${d.menu.options.map((o, k) => `<div class="btn sm${k === d.menu!.index ? ' on' : ''}${o.off ? ' gx-dim' : ''}"${act('menu', k, 'menuOver')}><b>${esc(o.label)}</b></div>`).join('')}<p style="font-size:${fitBody(d.text, 240, 60, [13, 12, 11], 1.3)}px">${esc(d.text)}</p></div>`
     : '';
-  return page('summary', 26, `<div class="scr summary sm12" style="--t:${t1};--t2:${t2}" data-key="summary">${hdr(d.title, { area: 'party', crumb: ['Party', f.name], pills: d.count ? [d.count] : [] })}`
+  // The Moves and Bond tabs are mock-up pages of their own (`summary-moves`, `summary-bond`).
+  const tabName = (d.tabs[d.tab] ?? '').toLowerCase(), id = tabName === 'moves' ? 'summary-moves' : tabName === 'bond' ? 'summary-bond' : 'summary';
+  return page(id, 26, `<div class="scr summary sm12" style="--t:${t1};--t2:${t2}" data-key="summary">${hdr(d.title, { area: 'party', crumb: ['Party', f.name], pills: d.count ? [d.count] : [] })}`
     + `<div class="sm-card">${card}</div><div class="tabs t12">${d.tabs.map((t, k) => `<span class="tab${k === d.tab ? ' on' : ''}"${act('tab', k)}>${esc(t)}</span>`).join('')}</div>`
     + `<div class="sm12-b pn" data-key="sm-body">${body(d, d.body)}</div>${keys(ks)}${menu}</div>`);
 }

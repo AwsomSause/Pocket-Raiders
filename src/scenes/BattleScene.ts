@@ -18,6 +18,9 @@ import { FINALE_ASK, chunkLines } from '../core/sky/text';
 import { HazardFloor, bossCinematic, critFreeze, critLetterbox, runScan, tossArc, weaknessesOf } from '../ui/battleFx/skillMoments';
 import { defaultMoveIndex } from '../core/battle/rememberChoice';
 import { isEnemyAce } from '../core/battle/ace';
+import { ULTRA_BEASTS, type UltraBeast } from '../core/ultra/beasts';
+import { ultraOn } from '../core/ultra/run';
+import { pkGimmick, type PkCutIn, type PkGimmickMore } from '../ui/pocket/screens/cards';
 import { aimable, dealOffer, foeStake, type SkillInput } from '../core/battle/w1Play';
 import { promptById } from '../core/interaction/prompt';
 import { runInteractionPrompt } from '../ui/interactionPrompt';
@@ -90,7 +93,7 @@ import { barkLine } from '../core/evil/barks';
 import { setAmbience, setMusicState, setRegionKey, playMotif, stopProceduralAudio } from '../ui/procAudio';
 import { regionIdentity } from '../core/presentation/regionIdentity';
 import { GALAR_STADIUM, galarGymNumber, galarHost, galarPerformance, hostLine, isGalarStadiumBattle } from '../core/galarStadium';
-import { bracketView, currentTournamentRound } from '../core/galarTournament';
+import { GALAR_TOURNAMENT, bracketView, currentTournamentRound, shopOpenAfter } from '../core/galarTournament';
 import { StadiumDirector, type StadiumHooks } from '../ui/galar/stadiumDirector';
 import { INTERVIEWERS_SPRITE, CROWD_SPRITES } from '../ui/galar/cutArt';
 import { crowdFavor, galarScope, type HypeSpeaker } from '../core/galarCrowd';
@@ -145,8 +148,13 @@ import { reduxLayout, reduxSkinIndex } from '../core/presentation/redux';
 import { useLookFont } from '../ui/redux/canvasFont';
 import { mountRedux, phantomOn, pocketOn, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
 import { pkHall } from '../ui/pocket/screens/hall';
-import { pkExp, pkVictory, type PkCatch, type PkExpRow } from '../ui/pocket/screens/after';
-import { battleInfo, moveInfo } from '../core/presentation/battleInfo';
+import { pkBadgeGet, pkExp, pkRivalLoss, pkVictory, type PkCatch, type PkExpRow } from '../ui/pocket/screens/after';
+import { battleInfo, battleStatus, moveInfo } from '../core/presentation/battleInfo';
+import { weatherCard } from '../ui/pocket/screens/sky';
+import { pkGaWon, type PkGaWonModel } from '../ui/pocket/screens/galar';
+import { itemArt, monArt } from '../ui/pocket/art';
+import { pkArtOf } from '../ui/pocket/templates';
+import { activeGameEvents, objectiveViews } from '../core/gameEvents';
 import { phGimmick, type GimmickCard } from '../ui/phantom/screens/cutin';
 import { gimmickSlots } from '../core/battle/bossGimmicks';
 import { phTravel } from '../ui/phantom/screens/travel';
@@ -367,6 +375,8 @@ export class BattleScene extends Phaser.Scene {
   private rxPanels: BattlePanel[] = [];
   /** Pocket look: the Battle Info page (mock-up `b-info`) or the move card (`moveinfo`) behind the open info panel. */
   private rxPkInfo: BattleModel['pkInfo'] = null;
+  private rxPkStatus: BattleModel['pkStatus'] = null;
+  private rxPkWeather: BattleModel['pkWeather'] = null;
   private rxPkMove: BattleModel['pkMove'] = null;
   private rxPanelAt: 'left' | 'tip' = 'left';
   /** New UI: the transformations the move menu offers now (the mock-ups' row of buttons). */
@@ -740,6 +750,8 @@ export class BattleScene extends Phaser.Scene {
     this.input.keyboard?.on('keydown-Q', () => (this.phWildKey ? this.phWildKey() : this.gotoPage(this.tabs.neighbour(-1))));
     this.input.keyboard?.on('keydown-E', () => this.gotoPage(this.tabs.neighbour(1)));
     this.input.keyboard?.on('keydown-I', () => this.toggleInfo());
+    // Pocket look: O opens the battle Status page (or closes it).
+    this.input.keyboard?.on('keydown-O', () => { if (pocketOn() && this.rx) this.toggleStatus(); });
     this.input.keyboard?.on('keydown-T', () => this.toggleAuto());
     this.input.keyboard?.on('keydown-G', () => this.phOpenGimmicks());
     onInputAction(this, (a) => this.handleInput(a));
@@ -1877,6 +1889,7 @@ export class BattleScene extends Phaser.Scene {
         types: this.foeHidden(mon) ? [] : getSpecies(content, mon.speciesId).types,
         file: box.isPlayer ? monFile(this, mon.speciesId, 'front', !!mon.shiny) : null,
         shiny: !box.isPlayer && !!mon.shiny && !this.foeHidden(mon),
+        power: this.powerTag(mon.uid),
       };
       this.tweens.killTweensOf(box.rx);
       // The same drain the canvas bar plays, so the two never disagree about when the HP has settled.
@@ -1906,6 +1919,18 @@ export class BattleScene extends Phaser.Scene {
         log: (i) => this.setLogTab(LOG_TABS[Number(i)]?.id),
         // Pocket look: Battle Info's Battle Log button, the move card's Use it, the log page's Back.
         pkLog: () => { if (this.infoPanel) this.closePanel(); if (!this.historyView) this.toggleHistory(); },
+        // Pocket look: the status bar opens the Status page; its Battle Info button opens Battle Info.
+        pkStatus: () => { if (!this.infoPanel) this.toggleStatus(); },
+        pkInfoOpen: () => { if (this.infoPanel) this.closePanel(); this.toggleInfo(true); },
+        // Pocket look: the weather card opens the Weather guide (the one in play marked Now); a card click lights it.
+        pkWeather: () => {
+          const w = this.run.battle?.weather;
+          if (this.infoPanel) this.closePanel();
+          this.rxPkInfo = null; this.rxPkMove = null; this.rxPkStatus = null;
+          this.rxPkWeather = { now: w?.id ?? 'clear', turns: w?.turns ?? null, index: weatherCard(w?.id ?? null) };
+          this.openPanel([{ head: 'Weather', text: w ? `${w.id}${w.turns ? ` · ${w.turns} turns left` : ''}` : 'Clear' }]);
+        },
+        pkWx: (i) => { if (this.rxPkWeather) { this.rxPkWeather = { ...this.rxPkWeather, index: Number(i) }; this.rx?.refresh(); } },
         pkUse: () => { if (!this.infoPanel || !this.rxPkMove) return; const k = this.focusedMove; this.closePanel(); if (!this.picker && !this.autoRunning) this.menu?.press(k); },
         logClose: () => { if (this.historyView) this.toggleHistory(); },
         // Pocket look: the Level Up page's Next moves the battle's words on.
@@ -1993,9 +2018,13 @@ export class BattleScene extends Phaser.Scene {
       evolve: this.rxEvolve,
       panels: this.infoPanel ? this.rxPanels : null,
       pkInfo: this.infoPanel ? this.rxPkInfo : null,
+      pkStatus: this.infoPanel ? this.rxPkStatus : null,
+      pkWeather: this.infoPanel ? this.rxPkWeather : null,
       pkMove: this.infoPanel ? this.rxPkMove : null,
       pkCatch: this.rxPkCatch,
       pkBand: !menu && (this.run.battle?.turn ?? 0) <= 1 ? this.rxPkBand : null,
+      pkBoss: this.pkBossPanel(),
+      pkArea: this.pkAreaStrip(),
       turn: this.run.battle?.turn ?? 0,
       panelAt: this.rxPanelAt,
       tip,
@@ -3248,6 +3277,23 @@ export class BattleScene extends Phaser.Scene {
     };
   }
 
+  /** Pocket look: the Legendary or Ultra Beast cut-in's facts (mock-ups `legend`, `ub`); only what is true of this fight. */
+  private pkCutIn(foe: PokemonInstance, beast: UltraBeast | undefined, label: string): PkCutIn {
+    const battle = this.run.battle!;
+    const types = services().session.content.species.get(foe.speciesId)?.types ?? [];
+    const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+    const typeChip = `Type: ${types.map((t) => `**${cap(t)}**`).join(' and ')}`;
+    const name = this.speciesName(foe);
+    if (beast) {
+      return { page: 'ub', where: `${beast.world} · Ultra Beast`, type: types[0] ?? 'psychic', backdrop: 'arenas/raid_ultra_bg.png', say: 'The sky tears open. Something drifts out that is not from this world.',
+        chips: [typeChip, `**${beast.ruleName}**: ${beast.ruleText}`, ...(nuzlockeCatchProblem(battle) ? [] : ['ball:Only a **Beast Ball** catches it']), 'Ultra Beasts are on. Settings › Gameplay can turn them off'] };
+    }
+    const place = this.header.text.split('\n')[0]!.split(/\s+·\s+/)[1] ?? '';
+    const backdrop = this.arenaBgKey ? rxFileOf(this.cache.json.get('manifest') as AssetManifest | undefined, this.arenaBgKey)?.file ?? null : null;
+    return { page: 'legend', where: place ? `${label} · ${place}` : label, type: types[0] ?? 'psychic', backdrop, say: `It goes silent. **${name}** is watching you.`,
+      chips: [typeChip, `Level **${foe.level}**`, ...(nuzlockeCatchProblem(battle) ? [] : ['It can be **caught**'])] };
+  }
+
   /** True when the trainer just beaten is the Evil Team's leader (the Betrayal scene follows). */
   private evilLeaderBeaten(name: string | undefined): boolean {
     const team = evilTeam(services().session.content, this.run);
@@ -3297,10 +3343,13 @@ export class BattleScene extends Phaser.Scene {
       const foe = battle.enemyTeam[0];
       const tags = foe ? content.species.get(foe.speciesId)?.tags ?? [] : [];
       const rank = tags.includes('mythical') ? 'Mythical' : tags.includes('legendary') ? 'Legendary' : null;
-      if (this.rx && foe && rank) {
+      // Pocket look: an Ultra Beast from a Tear has its own cut-in (mock-up `ub`), even one not tagged Legendary.
+      const beast = foe && ultraOn(this.run) ? ULTRA_BEASTS.find((b) => b.speciesId === foe.speciesId) : undefined;
+      if (this.rx && foe && (rank || (beast && pocketOn()))) {
         const legend = this.run.expedition && battle.expedition ? content.expeditions.expeditions.find((e) => e.id === this.run.expedition!.id)?.legendary : undefined;
         const epithet = legend && legend.species === foe.speciesId ? legend.epithet : '';
-        await this.bigMoment('aceEntrance', `legend.${foe.speciesId}`, `${rank} Pokémon`, this.speciesName(foe), true, { cast: this.rxMe(), role: epithet || `${rank} Pokémon`, line: `A ${rank} Pokémon stands before you.` });
+        const label = beast ? 'Ultra Beast' : `${rank} Pokémon`;
+        await this.bigMoment('aceEntrance', `legend.${foe.speciesId}`, label, this.speciesName(foe), true, { cast: this.rxMe(), role: epithet || label, line: `A ${rank} Pokémon stands before you.`, pkCut: pocketOn() ? this.pkCutIn(foe, beast, epithet || label) : null });
       }
       return;
     }
@@ -3367,6 +3416,7 @@ export class BattleScene extends Phaser.Scene {
           return {
             scope,
             favor: () => crowdFavor(content, this.run),
+            hideBar: () => pocketOn(),
             facts: () => this.hypeFacts(),
             flags: () => this.hypeFlags(),
             available: () => this.hypeSpeakers(),
@@ -3508,7 +3558,7 @@ export class BattleScene extends Phaser.Scene {
    * holds (a run's regions are fixed when it starts), the road so far and what changes there. Waits for an input.
    */
   /** Pocket look: the Boss Intro's heading and chips (what the battle already holds: type, team, powers, heals, the stake). */
-  private pkBossFacts(boss: BossInfo): { where: string; type: string; chips: string[] } {
+  private pkBossFacts(boss: BossInfo): { where: string; type: string; chips: string[]; area?: 'ga' } {
     const battle = this.run.battle!;
     const { content } = services().session;
     const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
@@ -3518,16 +3568,84 @@ export class BattleScene extends Phaser.Scene {
     const heals = content.balance.trainerAi.maxHealItems;
     const role = boss.title.replace(boss.name, '').trim();
     const stake = boss.role === 'gym' ? `At stake: **${boss.name}'s badge**` : boss.role === 'champion' ? 'At stake: the **Champion** title' : 'At stake: your road to the **Champion**';
+    const typeChip = boss.types.length ? `${boss.types.map((t) => `**${cap(t)}**`).join(' and ')} type` : '';
+    const place = this.phWhere().split(' · ')[1] ?? '';
+    // Galar (mock-ups `ga-intro`, `ga-round`): the Gym Challenge match or the Champion's Tournament round, and the crowd.
+    const scope = galarScope(content, this.run);
+    if (scope === 'gym') {
+      return {
+        where: `Gym Challenge · Match ${galarGymNumber(this.run)}`,
+        area: 'ga',
+        type: boss.types[0] ?? 'normal',
+        chips: [[place, typeChip].filter(Boolean).join(' · '), 'The crowd picks a side as you fight', battle.transform.enemyMechanics.includes('dynamax') ? 'Leaders here can **Dynamax**' : `${n} Pokémon${held ? ', each with a held item' : ''}`, stake].filter(Boolean),
+      };
+    }
+    const round = scope ? currentTournamentRound(content, this.run) : null;
+    if (round) {
+      const ace = battle.enemyTeam[n - 1];
+      const aceName = ace ? content.species.get(ace.speciesId)?.name : undefined;
+      return {
+        where: `Champion's Tournament · ${round.name}`,
+        area: 'ga',
+        type: boss.types[0] ?? 'normal',
+        chips: [typeChip, aceName ? `Ace: **${aceName}**` : '', round.via ? `Beat ${round.via} to get here` : `${n} Pokémon${held ? ', each with a held item' : ''}`, `Crowd starts at **${crowdFavor(content, this.run) ?? 50}**`].filter(Boolean),
+      };
+    }
     return {
       where: [this.phWhere().split(' · ')[1] ?? '', role].filter(Boolean).join(' · '),
       type: boss.types[0] ?? 'normal',
       chips: [
-        boss.types.length ? `${boss.types.map((t) => `**${cap(t)}**`).join(' and ')} type` : '',
+        typeChip,
         `${n} Pokémon${held ? ', each with a held item' : ''}`,
         `${powers ? `${powers} boss ${powers === 1 ? 'power' : 'powers'} · ` : ''}up to ${heals} healing items`,
         stake,
       ].filter(Boolean),
     };
+  }
+
+  /** Pocket look: the Totem's strip (aura, phase, ally calls) or a raid's (shields, clock, phase) at the top of its battle (mock-ups `tm-battle`, `rd-battle`). */
+  private pkAreaStrip(): BattleModel['pkArea'] {
+    const battle = this.run.battle;
+    const totem = battle?.totem;
+    const raid = battle?.raid;
+    if (battle && raid && pocketOn()) {
+      // A raid: shields (how many are left to come, and the one up now), the clock, the charge.
+      const rdef = services().session.content.raids.raids.find((r) => r.id === raid.id);
+      const chips: (readonly [string, string])[] = [];
+      if (raid.pendingShields.length || raid.shieldHp > 0) chips.push([String(raid.pendingShields.length + (raid.shieldHp > 0 ? 1 : 0)), raid.shieldHp > 0 ? 'shield up' : 'shields left']);
+      if (raid.timerLeft !== null) chips.push([String(raid.timerLeft), raid.timerLeft === 1 ? 'turn left' : 'turns left']);
+      if (rdef && rdef.phases.length) chips.push([String(Math.min(rdef.phases.length, raid.phasesDone.length + 1)), `of ${rdef.phases.length}`]);
+      else if (raid.charging) chips.push(['!', 'charging']);
+      return { key: 'rd', word: 'Raid', chips: chips.slice(0, 3), flow: ['Den', 'Raid', 'The Catch'], step: 1 };
+    }
+    // Galar's Gym Challenge and Champion's Tournament: the crowd's share, the foe's Pokémon left, the match's steps.
+    const scope = battle && pocketOn() ? galarScope(services().session.content, this.run) : null;
+    if (battle && scope) {
+      const favor = crowdFavor(services().session.content, this.run) ?? 50;
+      const left = battle.enemyTeam.filter((m) => m.hp > 0).length;
+      const round = scope === 'gym' ? null : currentTournamentRound(services().session.content, this.run);
+      const word = scope === 'gym' ? `Gym match ${this.run.badges.length + 1}` : round ? round.name : 'Champion match';
+      return { key: 'ga', word, bar: favor, chips: [[String(favor), 'with you'], [String(left), left === 1 ? 'foe left' : 'foes left']], flow: scope === 'gym' ? ['Line-up', 'Match', 'Badge'] : ['Bracket', 'Match', 'Next round'], step: 1 };
+    }
+    if (!battle || !totem || !pocketOn()) return null;
+    const tdef = services().session.content.totems.totems.find((x) => x.id === totem.id);
+    if (!tdef) return null;
+    const NAME: Record<string, string> = { atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed', acc: 'Accuracy', eva: 'Evasion' };
+    const boosts = Object.entries(tdef.aura.boost ?? {}).map(([k, n]) => [`+${n}`, NAME[k] ?? k] as const);
+    const chips: (readonly [string, string])[] = [...(boosts.length ? boosts : [['On', 'aura'] as const])];
+    if (tdef.phases.length) chips.push([String(Math.min(tdef.phases.length, totem.phasesDone.length + 1)), `of ${tdef.phases.length}`]);
+    if (tdef.ally) chips.push([`${Math.max(0, tdef.ally.maxCalls - totem.callsUsed)}`, tdef.ally.maxCalls - totem.callsUsed === 1 ? 'call left' : 'calls left']);
+    return { key: 'tm', word: 'Totem', chips: chips.slice(0, 3), flow: ['Territory', 'Totem', 'The Gift'], step: 1 };
+  }
+
+  private pkBossPanel(): BattleModel['pkBoss'] {
+    const battle = this.run.battle;
+    const boss = battle && pocketOn() ? this.boss() : null;
+    if (!battle || !boss) return null;
+    const most = services().session.content.balance.trainerAi.maxHealItems;
+    const kind = battle.transform.enemyMechanics[0];
+    const tag = ({ gym: 'Gym Battle', elite: 'Elite Four', champion: 'Champion' } as Record<string, string>)[boss.role] ?? 'Boss';
+    return { name: boss.title, tag, power: kind ? { kind, ready: !battle.transform.used.enemy.includes(kind) } : null, heals: [Math.max(0, most - battle.enemyItemsUsed), most], badge: boss.role === 'gym' ? boss.types[0] ?? null : null };
   }
 
   /** Pocket look: the band that names a pseudo-stage's battle (it is part of a stop, not a stage of its own). */
@@ -3563,6 +3681,51 @@ export class BattleScene extends Phaser.Scene {
     };
   }
 
+  /** Pocket look: a Gym badge won (mock-up `badge-get`). Returns whether it showed (the stamp and lines then stay out). */
+  private async pkBadgeCard(leaderId: string, money: number, found: readonly string[], run: RunState, leagueNext: boolean): Promise<boolean> {
+    if (!this.rx || !pocketOn()) return false;
+    try {
+      const { content } = services().session;
+      const boss = content.bosses.get(leaderId);
+      const name = boss?.name ?? leaderId;
+      const region = content.regions.get(run.regionOrder[run.regionIndex] ?? '')?.name ?? '';
+      const per = runCampaign(content, run).stagesPerRegion;
+      const stage = run.stage;
+      const k = stage?.kind === 'league' ? per : Math.max(1, Math.min(per, stage ? stage.index + (stage.leaderId === leaderId ? 1 : 0) : 1));
+      const gets: [string, string][] = [];
+      if (money > 0) gets.push(['amulet_coin', `₽ ${money.toLocaleString('en-US')} prize money`]);
+      for (const id of found.slice(0, 2)) gets.push([id.replace(/-/g, '_'), content.items.get(id)?.name ?? content.catalog.get(id)?.name ?? id]);
+      gets.push(['map', leagueNext ? 'The road to the Pokémon League opens' : 'The road to the next stage opens']);
+      const model = {
+        type: boss?.types[0] ?? 'normal', where: `${region ? `${region} Gym · ` : ''}Leader ${name}`, title: `${name}'s Badge`,
+        count: `Badge ${k} of ${per}${region ? ` in ${region}` : ''} · ${run.badges.length} in all`, gets,
+        say: `You earned **${name}'s badge**! ${leagueNext ? 'The Pokémon League awaits.' : 'The next stage awaits.'}`,
+      };
+      await this.pkPage((c) => (c.pk ? pkBadgeGet(model) : ''));
+      return true;
+    } catch (e) {
+      console.warn('Pocket badge page failed', e);
+      return false;
+    }
+  }
+
+  /** Pocket look: lost to a rival (mock-up `rival-loss`). Kice's rule: a loss to a rival never ends the run. */
+  private async pkRivalLossCard(before: RunState): Promise<boolean> {
+    const battle = before.battle;
+    if (!battle?.trainer || !(battle.rivalId || battle.rival) || !this.rx || !pocketOn()) return false;
+    const { content } = services().session;
+    const name = battle.trainer.name;
+    const model = {
+      cast: this.rxCast ?? artOf(this, this.lastFoe?.art.assetId) ?? null,
+      where: `${this.phWhere().split(' · ')[0]} · Rival battle`,
+      name,
+      line: content.trainers.get(battle.trainer.classId)?.lines?.win ?? '',
+      list: [[true, 'Your run goes on: this loss does not end it'], [true, 'Your team is patched up'], [false, `${name} will be waiting again further down the road`]] as [boolean, string][],
+    };
+    await this.pkPage((c) => (c.pk ? pkRivalLoss(model) : ''));
+    return true;
+  }
+
   /** Pocket look: one page over the battle (a card view) that waits for its button, a key or a click. */
   private async pkPage(render: (c: ReduxCtx) => string, acts: Record<string, (arg: string) => void> = {}): Promise<void> {
     let finish!: () => void;
@@ -3581,6 +3744,33 @@ export class BattleScene extends Phaser.Scene {
     const view = mountRedux(this, { render, acts: { ...acts, next: () => end() }, card: true });
     this.events.once('shutdown', end);
     await this.playBeat({ done, skip: end });
+  }
+
+  /** Pocket look: a Champion's Tournament round won (mock-up `ga-won`) in place of the Victory page; null outside the tournament or after the last round. */
+  private pkGaWonModel(before: RunState, after: RunState, art: Art | null, trainer: string, money: string | null): PkGaWonModel | null {
+    const { content } = services().session;
+    const round = currentTournamentRound(content, before);
+    if (!round || round.final) return null;
+    const view = bracketView(content, after);
+    const next = view.rounds.find((r) => r.state === 'next');
+    if (!next) return null;
+    const party = after.party.slice(0, 6);
+    const alive = party.filter((m) => m.hp > 0).length;
+    const favor = crowdFavor(content, before) ?? 50;
+    const shop = shopOpenAfter(round.round);
+    const rows: PkGaWonModel['rows'][number][] = [{ art: pkArtOf(art), title: trainer, sub: `Beaten ${alive} to 0` }];
+    if (GALAR_TOURNAMENT.healBetweenRounds) rows.push({ art: itemArt('full_restore'), title: 'Team healed', sub: 'Free after every round' });
+    rows.push({ art: itemArt('amulet_coin'), title: money ?? 'No prize', sub: 'Round prize' });
+    rows.push(shop ? { art: itemArt('potion'), title: 'Shop is open', sub: `After rounds ${GALAR_TOURNAMENT.shopEvery} and ${GALAR_TOURNAMENT.shopEvery * 2}`, on: true } : { art: itemArt('potion'), title: 'No shop this time', sub: `Opens after rounds ${GALAR_TOURNAMENT.shopEvery} and ${GALAR_TOURNAMENT.shopEvery * 2}` });
+    return {
+      round: round.name,
+      text: `${trainer} is out. The crowd finished at ${favor} with you.`,
+      rows,
+      side: `Next: ${next.name}`,
+      lines: [['', next.round === GALAR_TOURNAMENT.rounds ? `${next.opponent.name} waits in the final.` : `You meet ${next.opponent.name} next.`], ['Left', `${view.standing.length} of 32 trainers`]],
+      party: party.map((m) => { const f = monFile(this, m.speciesId, 'front', !!m.shiny); return f ? monArt(f) : null; }),
+      counts: [[`${alive} to 0`, 'final score'], [String(favor), 'crowd with you'], [String(before.battle?.turn ?? 1), 'turns taken']],
+    };
   }
 
   /**
@@ -3621,7 +3811,8 @@ export class BattleScene extends Phaser.Scene {
           foe: { trainer: art, mon: art ? null : ace ? monFile(this, ace.speciesId, 'front', !!ace.shiny) : null, name: trainer, line, type: ace ? getSpecies(content, ace.speciesId).types[0] ?? '' : '' },
           rows, total: money, stars: rating, rate: rating === 3 ? 'Flawless win' : rating === 2 ? 'Solid win' : 'Close call', say,
         };
-        await this.pkPage((c) => (c.pk ? pkVictory(model) : ''));
+        const won = this.pkGaWonModel(before, result.run, art, trainer, money);
+        await this.pkPage((c) => (c.pk ? (won ? pkGaWon(won) : pkVictory(model)) : ''));
         shown = true;
       }
       if (end.outcome === 'win' || end.outcome === 'caught') {
@@ -4103,7 +4294,17 @@ export class BattleScene extends Phaser.Scene {
         }
         finish();
       };
-      const view = mountRedux(this, { render: (c) => (c.ph ? phGimmick(c.ph, model) : ''), acts: { next: end }, card: true });
+      // Pocket look: the mock-ups' cut-in also names the new form's types, Ability and the stats it raises.
+      const sp0 = content.species.get(mon.speciesId), sp1 = changes ? content.species.get(x.to) : undefined;
+      const STAT: Record<string, string> = { atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed' };
+      const ab = sp1?.abilities?.normal?.[0];
+      const more: PkGimmickMore = {
+        ...(sp1 ? { types: sp1.types, ups: sp0 ? Object.keys(STAT).filter((k) => (sp1.baseStats as Record<string, number>)[k]! > (sp0.baseStats as Record<string, number>)[k]!).map((k) => STAT[k]!).slice(0, 3) : [] } : {}),
+        ...(ab ? { ability: content.abilities.get(ab)?.name ?? ab } : {}),
+        ...(x.zBase ? { base: x.zBase.name } : {}),
+        mine,
+      };
+      const view = mountRedux(this, { render: (c) => (c.ph ? phGimmick(c.ph, model) : c.pk ? pkGimmick({ ...model, more }) : ''), acts: { next: end }, card: true });
       this.time.delayedCall(3200, end);
       this.events.once('shutdown', end);
       await this.gimmickBeat({ done, skip: end });
@@ -4731,15 +4932,57 @@ export class BattleScene extends Phaser.Scene {
     return { head: ability ? ability.name : 'Ability not seen yet', ...(who ? { tag: who } : {}), chips: [], facts: [seenFact(mon.speciesId)], lines: [ability ? ability.description : 'It shows here once it comes into play.'] };
   }
 
-  /** I key / the ⓘ tab: details of the focused move on the Attack page, otherwise what is going on in the battle. */
-  private toggleInfo(): void {
+  /** Pocket look: the battle power a Pokémon has used, for the tag on its bar (mock-up `b-power`). */
+  private powerTag(uid: string): BattleBox['power'] {
+    const t = this.run.battle?.transform;
+    if (!t) return null;
+    const form = t.forms[uid]?.kind;
+    if (t.dynamax[uid]) return { kind: 'dmax', text: form === 'gigantamax' ? 'G-Max' : 'Max', turns: t.dynamax[uid] };
+    if (t.teraTypes[uid]) return { kind: 'tera', text: `Tera ${t.teraTypes[uid]![0]!.toUpperCase()}${t.teraTypes[uid]!.slice(1)}` };
+    if (form === 'mega' || form === 'primal') return { kind: 'mega', text: form === 'primal' ? 'Primal' : 'Mega' };
+    if (t.mechanics[uid] === 'zmove') return { kind: 'z', text: 'Z' };
+    return null;
+  }
+
+  /** Pocket look: the battle Status page (O, or a click on the status bar): turn order, weather, money, the event's
+   *  goal, your bench and the foe's team so far. Looking never uses the turn. */
+  private toggleStatus(): void {
     if (this.infoPanel) {
       this.closePanel();
       return;
     }
     if (this.busy || this.autoRunning || !this.tabs.root.visible || this.advance) return;
     const content = services().session.content;
-    if (this.tabs.current === 'attack' && this.menu) {
+    const s = battleStatus(content, this.run);
+    if (!s) return;
+    const now = new Date();
+    const on = activeGameEvents(content, now)[0];
+    const goals = on ? objectiveViews(services().session.profile, on.event, on.edition) : [];
+    const goal = goals.find((g) => !g.done) ?? goals[0];
+    const days = on ? Math.max(0, Math.floor(on.endsIn / 86_400_000)) : 0;
+    const file = (m: { speciesId: string; shiny: boolean }) => monFile(this, m.speciesId, 'front', m.shiny);
+    this.rxPkInfo = null;
+    this.rxPkMove = null;
+    this.rxPkWeather = null;
+    this.rxPkStatus = {
+      ...s, bench: s.bench.map((m) => ({ ...m, file: file(m) })), foes: s.foes.map((m) => ({ ...m, file: file(m) })),
+      money: `₽ ${this.run.money.toLocaleString('en-US')}`,
+      event: on && goal ? { name: on.event.name, goal: goal.objective.text, left: `${goals.filter((g) => g.done).length} of ${goals.length} · ${days} ${days === 1 ? 'day' : 'days'} left` } : null,
+    };
+    this.openPanel([{ head: 'Status', text: [`Turn ${s.turn}`, ...s.order.map((o, k) => `${k + 1}. ${o.name} (Speed ${o.speed})`), `${s.weather.b}: ${s.weather.span}`].join('\n') }]);
+  }
+
+  /** I key / the ⓘ tab: details of the focused move on the Attack page, otherwise what is going on in the battle. */
+  private toggleInfo(field = false): void {
+    if (this.infoPanel) {
+      this.closePanel();
+      return;
+    }
+    if (this.busy || this.autoRunning || !this.tabs.root.visible || this.advance) return;
+    const content = services().session.content;
+    this.rxPkStatus = null;
+    this.rxPkWeather = null;
+    if (!field && this.tabs.current === 'attack' && this.menu) {
       const mon = this.activeMon();
       const slot = mon.moves[this.focusedMove];
       const move = slot ? content.moves.get(slot.id) : undefined;
@@ -5558,7 +5801,7 @@ export class BattleScene extends Phaser.Scene {
     if (this.role === 'rival' && (result.narrativeDefeat || result.wiped || result.defeated)) await this.fx.flourish('enemy', 'rival.win', ENEMY_POS);
     if (result.storyLoss) {
       // Phantom UI: a loss to a rival gets its own page, which says the same thing.
-      if (!(await this.phRivalLossCard(before, result.run))) await this.say('You lost this one, but the story goes on. Your team is patched up.');
+      if (!(await this.pkRivalLossCard(before)) && !(await this.phRivalLossCard(before, result.run))) await this.say('You lost this one, but the story goes on. Your team is patched up.');
       interactionLog.tell('gain', 'Lost the battle. The run goes on.');
       // Extended Cut: a lost climax battle spends the Second Shot; the player is told what that means before the screen leaves.
       const shot = secondShotNotice(before, result.run);
@@ -5722,11 +5965,13 @@ export class BattleScene extends Phaser.Scene {
     if (end.badge) {
       playCue(this, 'st_badge_circuit', `me.${services().session.settings.victoryJingle}`);
       const leaderName = content.bosses.get(end.badge)?.name ?? end.badge;
-      await this.playBeat(stamp(this, 'BADGE GET!', `${leaderName}'s badge`, ROLE_RIMS.gym, this.motion));
-      await this.say(`You earned ${leaderName}'s badge! (${result.run.badges.length} total)`);
       const campaign = content.campaigns.get(result.run.campaignId);
       const leagueNext = result.run.stage?.kind === 'stage' && campaign && result.run.stage.index + 1 >= campaign.stagesPerRegion;
-      await this.say(leagueNext ? 'The Pokémon League awaits…' : 'The next stage awaits…');
+      if (!(await this.pkBadgeCard(end.badge, end.moneyGained, end.itemsFound, result.run, !!leagueNext))) {
+        await this.playBeat(stamp(this, 'BADGE GET!', `${leaderName}'s badge`, ROLE_RIMS.gym, this.motion));
+        await this.say(`You earned ${leaderName}'s badge! (${result.run.badges.length} total)`);
+        await this.say(leagueNext ? 'The Pokémon League awaits…' : 'The next stage awaits…');
+      }
     }
     if (end.finale && !(await this.phPhaseCard('It is not over! The final boss rises for a second phase. Your party was restored.', 'Face the champion', { word: 'LAST STAND', meter: { at: 2, of: 2 } }))) {
       await this.say('It is not over! The final boss rises for a second phase…');
@@ -6340,7 +6585,7 @@ export class BattleScene extends Phaser.Scene {
           // for the long reference scene; the short cinematic under it then swaps the form. The Fast settings skip it too.
           const st0 = services().session.settings;
           const quick = cine === 'zmove' ? st0.fastZMove : cine === 'tera' ? st0.fastTera : cine === 'dynamax' || cine === 'gigantamax' ? st0.fastDynamax : st0.fastMega;
-          const phCard = !!this.rx && phantomOn() && this.motion === 'full' && !!mon && !!cine && cine !== 'dynamaxEnd' && !quick;
+          const phCard = !!this.rx && (phantomOn() || pocketOn()) && this.motion === 'full' && !!mon && !!cine && cine !== 'dynamaxEnd' && !quick;
           if (phCard) await this.phGimmickCard(e.side, mon!, cine as GimmickCard['kind'], { to: e.to, itemId: e.itemId ?? null, teraType: teraType ?? null, zBase: zBase ?? null, zMoveId: e.zMoveId ?? null });
           if (!phCard && cine === 'zmove' && this.motion === 'full' && !services().session.settings.fastZMove && mon) {
             // The remade scene (Fast Z-Move off), animation redesign pass 20: the Z rises, the Pokémon leaves the top of the
@@ -6502,7 +6747,7 @@ export class BattleScene extends Phaser.Scene {
           this.applyTeraTint(e.side, mon!);
           await this.refreshInfoBox(box, mon!, false);
           // New UI: the player's first Mega Evolution of the run gets the mock-ups' cutscene card.
-          if (this.rx && e.kind === 'mega' && e.side === 'player' && mon && !SEEN_MOMENTS.has(`megaFirst.${this.run.seed}`)) {
+          if (this.rx && !(phCard && pocketOn()) && e.kind === 'mega' && e.side === 'player' && mon && !SEEN_MOMENTS.has(`megaFirst.${this.run.seed}`)) {
             const file = monFile(this, e.to, 'front', !!mon.shiny);
             await this.bigMoment('mega', `megaFirst.${this.run.seed}`, 'Mega Evolution', content.species.get(e.to)?.name ?? this.speciesName(mon), false, { role: 'Mega Evolution', line: 'The stone answers the bracelet.', cast: this.rxMe(), mon: file ? { file, atlas: true } : null });
           }

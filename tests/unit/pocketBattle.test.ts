@@ -17,6 +17,22 @@ const model = (over: Partial<BattleModel> = {}): BattleModel => ({
 });
 const MOVES = [{ label: 'Tackle', sub: 'PP 35/35', type: 'normal', tip: 'move:0' }, { label: 'Absorb', sub: 'PP 25/25', type: 'grass', tip: 'move:1' }, { label: 'Withdraw', sub: 'PP 0/40', type: 'water', off: true, tip: 'move:2' }];
 
+describe('the Pocket battle bars: power tags (b-power)', () => {
+  it('Mega, Tera with its type (the old Tera word dropped), Max with turns left as pips, Z spent; none without a power', () => {
+    const h = pkBattle(model({ foes: [box('Blastoise', { power: { kind: 'dmax', text: 'Max', turns: 2 } })], mine: [box('Charizard', { power: { kind: 'tera', text: 'Tera Dragon' }, tags: ['TERA DRAGON', 'Burned'] })] }));
+    expect(h).toContain('class="gtag dmax"');
+    expect(count(h, '<u class=""></u>')).toBe(2);
+    expect(count(h, '<u class="off"></u>')).toBe(1);
+    expect(h).toContain('class="gtag tera"');
+    expect(count(h, 'Tera Dragon')).toBe(1);
+    expect(h).not.toContain('TERA DRAGON');
+    expect(h).toContain('Burned');
+    expect(pkBattle(model({ mine: [box('Charizard', { power: { kind: 'mega', text: 'Mega' } })] }))).toContain('class="gtag mega"');
+    expect(pkBattle(model({ mine: [box('Pikachu', { power: { kind: 'z', text: 'Z' } })] }))).toContain('Z-Move spent');
+    expect(pkBattle(model())).not.toContain('gtag');
+  });
+});
+
 describe('the Pocket battle screen', () => {
   it('is a see-through page with both plates, the words and the command pills', () => {
     const html = pkBattle(model());
@@ -119,6 +135,19 @@ describe('the Pocket battle pages: Battle Info, a move card, the Battle Log', ()
     expect(html).toContain('data-act="pkLog"');
     expect(pkBattle(model({ pkInfo: { ...info, foe: null } }))).toContain('???');
   });
+  it('the Status page: turn order, weather, money, the event goal, the bench with HP, the foe team and how many are unseen', () => {
+    const mon = (name: string, hp: number) => ({ speciesId: name.toLowerCase(), shiny: false, name, hp, ko: hp <= 0, file: null });
+    const st = { turn: 3, order: [{ name: 'Blastoise', speed: 78 }, { name: 'Charizard', speed: 71 }], trickRoom: false, weather: { em: 'Weather', b: 'Rain', span: '3 turns left.' }, bench: [mon('Pikachu', 1), mon('Gengar', 0)], foeName: "Blue's team", foes: [mon('Arcanine', 0), mon('Blastoise', 0.7)], unseen: 2, money: '₽ 2,280', event: { name: 'Homeland Week', goal: 'Defeat 3 Gym Leaders', left: '2 of 3 · 3 days left' } };
+    const html = pkBattle(model({ pkStatus: st, panels: [{ head: 'x', chips: [], facts: [], lines: [] }] }));
+    expect(pkPageOf(html)?.id).toBe('b-status');
+    expect(html).toContain('Speed 78');
+    expect(html).toContain('wxi rain');
+    expect(html).toContain('Homeland Week');
+    expect(html).toContain('2 more not seen yet');
+    expect(count(html, '<s><u')).toBe(2);
+    expect(html).toContain('data-act="pkInfoOpen"');
+    expect(pkBattle(model({ pkStatus: { ...st, event: null, bench: [] } }))).toContain('No one else in your party');
+  });
   it('a move card: numbers, type into type, same-type bonus, Use it; a status move says it does no damage', () => {
     const m = { name: 'Tackle', type: 'normal', category: 'Physical', contact: true, power: '40', accuracy: '100', pp: '35/35', text: 'Slams into the foe.', vs: { foe: 'Starly', foeTypes: ['normal', 'flying'], mult: 0.5, stab: true, user: 'Turtwig', word: 'Not very effective.' } };
     const html = pkBattle(model({ pkMove: m }));
@@ -137,5 +166,27 @@ describe('the Pocket battle pages: Battle Info, a move card, the Battle Log', ()
     expect(html).toMatch(/class="on" data-act="log" data-arg="1"/);
     expect(html).toContain('data-act="logClose"');
     expect(pkBattle(model({ log: { tabs: ['All'], index: 0, lines: [] } }))).toContain('Nothing here yet.');
+  });
+});
+
+describe('the Pocket Totem strip', () => {
+  it('shows the Totem word, its numbers and the area steps, and nothing without one', () => {
+    const plain = model();
+    const h = pkBattle({ ...plain, pkArea: { key: 'tm', word: 'Totem', chips: [['+1', 'Defense'], ['1', 'of 2']], flow: ['Territory', 'Totem', 'The Gift'], step: 1 } });
+    expect(h).toContain('gx-bt-area ar28 a-tm ms39');
+    expect(h).toContain('<b>+1</b>Defense');
+    expect(h).toMatch(/<i class="on">Totem<\/i>/);
+    expect(h).toMatch(/<i class="past">Territory<\/i>/);
+    expect(pkBattle(plain)).not.toContain('gx-bt-area');
+  });
+});
+
+describe('the Pocket Galar stadium strip', () => {
+  it('shows the round, the crowd favour bar and the foes left', () => {
+    const h = pkBattle({ ...model(), pkArea: { key: 'ga', word: 'Round of 32', bar: 62, chips: [['62', 'with you'], ['3', 'foes left']], flow: ['Bracket', 'Match', 'Next round'], step: 1 } });
+    expect(h).toContain('gx-bt-area ar28 a-ga ms39');
+    expect(h).toContain('<b>Round of 32</b><i class="fav37"><s style="width:62%"></s></i>');
+    expect(h).toContain('<b>3</b>foes left');
+    expect(pkBattle({ ...model(), pkArea: { key: 'tm', word: 'Totem', chips: [], flow: ['a', 'b'], step: 0 } })).not.toContain('fav37');
   });
 });
