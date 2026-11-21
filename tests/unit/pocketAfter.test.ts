@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { pkPageOf } from '../../src/ui/pocket/kit';
-import { pkCatchParts, pkEvolve, pkExp, pkLearn, pkLevel, pkVictory, type PkExpRow, type PkLearnModel } from '../../src/ui/pocket/screens/after';
+import { pkBadgeGet, pkCatchParts, pkEvolve, pkExp, pkLearn, pkLevel, pkRivalLoss, pkVictory, type PkExpRow, type PkLearnModel } from '../../src/ui/pocket/screens/after';
 import { pkBattle } from '../../src/ui/pocket/screens/battle';
 import type { BattleModel } from '../../src/ui/redux/screens/battle';
 import { versusView, type VersusModel } from '../../src/ui/redux/screens/versus';
@@ -145,5 +145,26 @@ describe('the Pocket Boss Intro and the shiny tag', () => {
     const m = (shiny: boolean): BattleModel => ({ foes: [{ name: 'Starly', level: 'Lv 4', hp: 1, hpText: '', xp: null, tags: [], team: null, shiny }], mine: [], text: '', menu: null, tabs: null, header: '', status: '', momentum: '', note: '', auto: false, party: null });
     expect(pkBattle(m(true))).toContain('★ Shiny');
     expect(pkBattle(m(false))).not.toContain('★ Shiny');
+  });
+});
+
+describe('the Pocket badge and rival-loss pages', () => {
+  it('Badge get: where, the badge name, the count, what else you get, Onward', () => {
+    const html = pkBadgeGet({ type: 'water', where: 'Kanto Gym · Leader Misty', title: "Misty's Badge", count: 'Badge 2 of 8 in Kanto', gets: [['amulet_coin', '₽ 3,600 prize money'], ['map', 'The road to the next stage opens']], say: "You earned **Misty's badge**!" });
+    expect(pkPageOf(html)?.id).toBe('badge-get');
+    expect(html).toContain('Badge 2 of 8 in Kanto');
+    expect(html.match(/<p><i>/g)?.length).toBe(2);
+    expect(html).toContain('<b>Misty&#39;s badge</b>');
+    expect(html).toContain('Onward');
+    expect(html).toContain('--t:#2980ef');
+  });
+  it('Rival loss: the run goes on, ticks for good news and "!" for the rest, Carry on', () => {
+    const html = pkRivalLoss({ cast: null, where: 'Stage 3 · Rival battle', name: 'Blue', line: 'Smell ya later!', list: [[true, 'Your team is patched up'], [false, 'Blue will be waiting']] });
+    expect(pkPageOf(html)?.id).toBe('rival-loss');
+    expect(html).toContain('Blue wins');
+    expect(html).toContain('Losing to a rival never ends a run.');
+    expect(html).toContain('<p class="ok"><i>✓</i>');
+    expect(html).toContain('<p><i>!</i>');
+    expect(html).toContain('Carry on');
   });
 });

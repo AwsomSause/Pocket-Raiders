@@ -145,7 +145,7 @@ import { reduxLayout, reduxSkinIndex } from '../core/presentation/redux';
 import { useLookFont } from '../ui/redux/canvasFont';
 import { mountRedux, phantomOn, pocketOn, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
 import { pkHall } from '../ui/pocket/screens/hall';
-import { pkExp, pkVictory, type PkCatch, type PkExpRow } from '../ui/pocket/screens/after';
+import { pkBadgeGet, pkExp, pkRivalLoss, pkVictory, type PkCatch, type PkExpRow } from '../ui/pocket/screens/after';
 import { battleInfo, moveInfo } from '../core/presentation/battleInfo';
 import { phGimmick, type GimmickCard } from '../ui/phantom/screens/cutin';
 import { gimmickSlots } from '../core/battle/bossGimmicks';
@@ -3563,6 +3563,51 @@ export class BattleScene extends Phaser.Scene {
     };
   }
 
+  /** Pocket look: a Gym badge won (mock-up `badge-get`). Returns whether it showed (the stamp and lines then stay out). */
+  private async pkBadgeCard(leaderId: string, money: number, found: readonly string[], run: RunState, leagueNext: boolean): Promise<boolean> {
+    if (!this.rx || !pocketOn()) return false;
+    try {
+      const { content } = services().session;
+      const boss = content.bosses.get(leaderId);
+      const name = boss?.name ?? leaderId;
+      const region = content.regions.get(run.regionOrder[run.regionIndex] ?? '')?.name ?? '';
+      const per = runCampaign(content, run).stagesPerRegion;
+      const stage = run.stage;
+      const k = stage?.kind === 'league' ? per : Math.max(1, Math.min(per, stage ? stage.index + (stage.leaderId === leaderId ? 1 : 0) : 1));
+      const gets: [string, string][] = [];
+      if (money > 0) gets.push(['amulet_coin', `₽ ${money.toLocaleString('en-US')} prize money`]);
+      for (const id of found.slice(0, 2)) gets.push([id.replace(/-/g, '_'), content.items.get(id)?.name ?? content.catalog.get(id)?.name ?? id]);
+      gets.push(['map', leagueNext ? 'The road to the Pokémon League opens' : 'The road to the next stage opens']);
+      const model = {
+        type: boss?.types[0] ?? 'normal', where: `${region ? `${region} Gym · ` : ''}Leader ${name}`, title: `${name}'s Badge`,
+        count: `Badge ${k} of ${per}${region ? ` in ${region}` : ''} · ${run.badges.length} in all`, gets,
+        say: `You earned **${name}'s badge**! ${leagueNext ? 'The Pokémon League awaits.' : 'The next stage awaits.'}`,
+      };
+      await this.pkPage((c) => (c.pk ? pkBadgeGet(model) : ''));
+      return true;
+    } catch (e) {
+      console.warn('Pocket badge page failed', e);
+      return false;
+    }
+  }
+
+  /** Pocket look: lost to a rival (mock-up `rival-loss`). Kice's rule: a loss to a rival never ends the run. */
+  private async pkRivalLossCard(before: RunState): Promise<boolean> {
+    const battle = before.battle;
+    if (!battle?.trainer || !(battle.rivalId || battle.rival) || !this.rx || !pocketOn()) return false;
+    const { content } = services().session;
+    const name = battle.trainer.name;
+    const model = {
+      cast: this.rxCast ?? artOf(this, this.lastFoe?.art.assetId) ?? null,
+      where: `${this.phWhere().split(' · ')[0]} · Rival battle`,
+      name,
+      line: content.trainers.get(battle.trainer.classId)?.lines?.win ?? '',
+      list: [[true, 'Your run goes on: this loss does not end it'], [true, 'Your team is patched up'], [false, `${name} will be waiting again further down the road`]] as [boolean, string][],
+    };
+    await this.pkPage((c) => (c.pk ? pkRivalLoss(model) : ''));
+    return true;
+  }
+
   /** Pocket look: one page over the battle (a card view) that waits for its button, a key or a click. */
   private async pkPage(render: (c: ReduxCtx) => string, acts: Record<string, (arg: string) => void> = {}): Promise<void> {
     let finish!: () => void;
@@ -5558,7 +5603,7 @@ export class BattleScene extends Phaser.Scene {
     if (this.role === 'rival' && (result.narrativeDefeat || result.wiped || result.defeated)) await this.fx.flourish('enemy', 'rival.win', ENEMY_POS);
     if (result.storyLoss) {
       // Phantom UI: a loss to a rival gets its own page, which says the same thing.
-      if (!(await this.phRivalLossCard(before, result.run))) await this.say('You lost this one, but the story goes on. Your team is patched up.');
+      if (!(await this.pkRivalLossCard(before)) && !(await this.phRivalLossCard(before, result.run))) await this.say('You lost this one, but the story goes on. Your team is patched up.');
       interactionLog.tell('gain', 'Lost the battle. The run goes on.');
       // Extended Cut: a lost climax battle spends the Second Shot; the player is told what that means before the screen leaves.
       const shot = secondShotNotice(before, result.run);
@@ -5722,11 +5767,13 @@ export class BattleScene extends Phaser.Scene {
     if (end.badge) {
       playCue(this, 'st_badge_circuit', `me.${services().session.settings.victoryJingle}`);
       const leaderName = content.bosses.get(end.badge)?.name ?? end.badge;
-      await this.playBeat(stamp(this, 'BADGE GET!', `${leaderName}'s badge`, ROLE_RIMS.gym, this.motion));
-      await this.say(`You earned ${leaderName}'s badge! (${result.run.badges.length} total)`);
       const campaign = content.campaigns.get(result.run.campaignId);
       const leagueNext = result.run.stage?.kind === 'stage' && campaign && result.run.stage.index + 1 >= campaign.stagesPerRegion;
-      await this.say(leagueNext ? 'The Pokémon League awaits…' : 'The next stage awaits…');
+      if (!(await this.pkBadgeCard(end.badge, end.moneyGained, end.itemsFound, result.run, !!leagueNext))) {
+        await this.playBeat(stamp(this, 'BADGE GET!', `${leaderName}'s badge`, ROLE_RIMS.gym, this.motion));
+        await this.say(`You earned ${leaderName}'s badge! (${result.run.badges.length} total)`);
+        await this.say(leagueNext ? 'The Pokémon League awaits…' : 'The next stage awaits…');
+      }
     }
     if (end.finale && !(await this.phPhaseCard('It is not over! The final boss rises for a second phase. Your party was restored.', 'Face the champion', { word: 'LAST STAND', meter: { at: 2, of: 2 } }))) {
       await this.say('It is not over! The final boss rises for a second phase…');
