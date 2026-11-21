@@ -39,6 +39,7 @@ export function recallClip(mon: MonSpot, ball: Point, level: ClipLevel): MotionC
   const m = b.part('mon', { sx: 1, sy: 1, red: 0, lift: 0, shadow: 1 });
   if (level === 'off') {
     m.at(0).set({ sx: 0, sy: 0, shadow: 0 });
+    b.fx({ kind: 'cue', at: 0, name: 'tuck' });
     return b.end(0);
   }
   const k = b.part('ball', { x: ball.x, y: ball.y, sx: 1, sy: 1, alpha: 0 });
@@ -50,6 +51,7 @@ export function recallClip(mon: MonSpot, ball: Point, level: ClipLevel): MotionC
     m.at(120).to(200, { s: 0 }, 'in');
     m.at(120).to(200, { shadow: 0 });
     b.fx({ kind: 'cue', at: 320, name: 'catch' });
+    b.fx({ kind: 'cue', at: 220, name: 'tuck' });
     b.beat(0, 'Ball held out').beat(120, 'Shrinks into the beam');
     return b.end(420);
   }
@@ -60,7 +62,9 @@ export function recallClip(mon: MonSpot, ball: Point, level: ClipLevel): MotionC
   m.at(200).to(200, { shadow: 0 });
   k.at(460).to(60, { s: 0.85 }).to(200, { s: 1 }, 'el').wait(150).to(150, { alpha: 0 });
   b.fx({ kind: 'cue', at: 460, name: 'catch' });
-  b.beat(0, 'Ball held out').beat(120, 'Braces, then stretches into the beam').beat(460, 'Ball catches it');
+  // The info bar tucks away as the catch settles (pass 2, Switch).
+  b.fx({ kind: 'cue', at: 600, name: 'tuck' });
+  b.beat(0, 'Ball held out').beat(120, 'Braces, then stretches into the beam').beat(460, 'Ball catches it').beat(600, 'The info bar tucks away');
   return b.end(800);
 }
 
@@ -107,6 +111,7 @@ export function sendClip(mon: MonSpot, from: Point, level: ClipLevel): MotionCli
   b.fx({ kind: 'cue', at: open, name: 'open' });
   if (level === 'off') {
     m.at(0).set({ sx: 1, sy: 1, shadow: 1 });
+    b.fx({ kind: 'cue', at: 0, name: 'plate' });
     return b.end(0);
   }
   const gy = mon.y - 8;
@@ -117,6 +122,7 @@ export function sendClip(mon: MonSpot, from: Point, level: ClipLevel): MotionCli
     b.fx({ kind: 'ring', at: open, x: mon.x, y: gy - 6, r1: 110, flat: 0.4, d: 400 });
     m.at(open).to(200, { s: 1 }, 'out');
     m.at(open).to(200, { shadow: 1 });
+    b.fx({ kind: 'cue', at: open, name: 'plate' });
     b.beat(0, 'Ball thrown').beat(open, 'Appears');
     return b.end(open + 250);
   }
@@ -133,8 +139,44 @@ export function sendClip(mon: MonSpot, from: Point, level: ClipLevel): MotionCli
   m.at(open + 100).to(200, { white: 0 });
   m.at(open).to(250, { shadow: 1 });
   b.fx({ kind: 'dust', at: open + 240, x: mon.x, y: mon.y, n: 9 });
-  b.beat(0, 'Ball thrown').beat(land, 'Ball lands and bounces').beat(open, 'Bursts open').beat(open + 240, 'Lands');
+  // The info bar comes back with the new name while it is still settling (pass 2, Switch).
+  b.fx({ kind: 'cue', at: open + 100, name: 'plate' });
+  b.beat(0, 'Ball thrown').beat(land, 'Ball lands and bounces').beat(open, 'Bursts open').beat(open + 100, 'The info bar comes back').beat(open + 240, 'Lands');
   return b.end(open + 600);
+}
+
+/**
+ * The ace lands (pass 15, Ace Call): announced first, it leaps off the band and comes down onto its spot, squashes
+ * flat and wide, and the ground answers with dust, a gold ring and a star. "land" is when it hits (shake, sound).
+ * Reduced: it appears with the squash and the ring. Off: it is simply there.
+ */
+export function aceLandClip(mon: MonSpot, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('aceLand', level);
+  const m = b.part('mon', { lift: 0, sx: 1, sy: 1, alpha: 0, shadow: 0 });
+  if (level === 'off') {
+    m.at(0).set({ alpha: 1, shadow: 1 });
+    b.fx({ kind: 'cue', at: 0, name: 'land' });
+    return b.end(0);
+  }
+  const gold = 0xffcb05;
+  if (level === 'reduced') {
+    m.at(0).to(120, { alpha: 1, shadow: 1 });
+    m.at(0).set({ sx: 1.12, sy: 0.85 }).to(300, { sx: 1, sy: 1 }, 'out');
+    b.fx({ kind: 'cue', at: 0, name: 'land' });
+    b.fx({ kind: 'ring', at: 0, x: mon.x, y: mon.y - 10, r1: 260, flat: 0.4, d: 700, color: gold, w: 10 });
+    b.beat(0, 'The ace is there');
+    return b.end(400);
+  }
+  const hit = 360;
+  // Off the band: up a little and smaller, then down onto its spot.
+  m.at(0).set({ alpha: 1, lift: 0.9, sx: 0.9, sy: 0.9 }).to(140, { lift: 1.15 }, 'out').to(220, { lift: 0, sx: 1, sy: 1 }, 'in');
+  m.at(hit).set({ shadow: 1 }).to(60, { sx: 1.2, sy: 0.75 }).to(400, { sx: 1, sy: 1 }, 'el');
+  b.fx({ kind: 'cue', at: hit, name: 'land' });
+  b.fx({ kind: 'dust', at: hit, x: mon.x, y: mon.y, n: 14 });
+  b.fx({ kind: 'ring', at: hit, x: mon.x, y: mon.y - 10, r1: 260, flat: 0.4, d: 700, color: gold, w: 10 });
+  b.fx({ kind: 'star', at: hit, x: mon.x, y: mon.y - mon.h / 2, size: 300, points: 12, d: 350 });
+  b.beat(0, 'It leaps off the band').beat(hit, 'It lands; the ground answers');
+  return b.end(hit + 460);
 }
 
 /** Exp lights (pass 23): a fallen foe's experience leaves it as lights and flies to your bar. The bar fills on "arrive". */
@@ -148,4 +190,77 @@ export function expLightsClip(from: Point, bar: Point, level: ClipLevel): Motion
   b.fx({ kind: 'cue', at: 550, name: 'arrive' });
   b.beat(0, 'Its experience flies to your bar').beat(550, 'The bar fills');
   return b.end(910);
+}
+
+/** What just happened that your trainer reacts to (pass 19). */
+export type CheerMoment = { kind: 'hit'; on: 'foe' | 'you'; superEffective: boolean } | { kind: 'faint'; on: 'foe' | 'you' };
+
+/** A hit counts as big when it is super effective, a critical hit, or takes at least 40% of the target's HP. */
+export function bigHit(damage: number, maxHp: number, effectiveness: number, crit: boolean): boolean {
+  return effectiveness >= 2 || crit || (maxHp > 0 && damage >= maxHp * 0.4);
+}
+
+/** The word on your trainer's chip, as the mockup says it. */
+export function cheerWord(m: CheerMoment): string {
+  if (m.kind === 'faint') return m.on === 'foe' ? 'We did it!' : 'You did great.';
+  return m.on === 'you' ? 'Hang in there!' : m.superEffective ? 'Yes!' : 'Nice hit!';
+}
+
+/** How long two chips stay apart: at most one every 1.2 s. */
+export const CHEER_GAP = 1200;
+
+/**
+ * Trainer face chip (pass 19): your trainer's face pops in at the bottom right with a word beside it, hops once,
+ * and goes. `face` is the round picture's centre; the word's right edge sits 40 px left of it.
+ */
+export function cheerClip(face: Point, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('cheer', level);
+  const f = b.part('face', { x: face.x, y: face.y, sx: 0, sy: 0, alpha: 1 });
+  const w = b.part('word', { x: face.x - 40, y: face.y, sx: 0, sy: 0, alpha: 1 });
+  if (level === 'off') return b.end(0);
+  if (level === 'reduced') {
+    f.at(0).set({ sx: 1, sy: 1, alpha: 0 }).to(150, { alpha: 1 }).wait(700).to(150, { alpha: 0 });
+    w.at(0).set({ sx: 1, sy: 1, alpha: 0 }).to(150, { alpha: 1 }).wait(700).to(150, { alpha: 0 });
+    b.beat(0, 'Your trainer says a word');
+    return b.end(1000);
+  }
+  f.at(0).to(200, { s: 1 }, 'back2').to(80, { y: face.y - 8 }, 'out').to(120, { y: face.y }, 'in').wait(500).to(150, { s: 0 }, 'in');
+  w.at(80).to(180, { s: 1 }, 'back2').wait(620).to(120, { s: 0 }, 'in');
+  b.beat(0, 'Your trainer pops in').beat(200, 'A little hop').beat(900, 'Gone again');
+  return b.end(1050);
+}
+
+/** Where the foe trainer comes from and goes back to: just off the right edge (pass 4). */
+export const FOE_TRAINER_OFF = 1090;
+/** When the foe trainer's ball leaves the hand, from the start of `foeThrowClip`. */
+export const FOE_RELEASE = 550 + 430;
+
+/** The foe trainer's hand at the release, for a trainer `h` px tall standing at `spot` (the ball starts here). */
+export function foeHand(spot: Point, h: number): Point {
+  return { x: spot.x + 50, y: spot.y + 8 - h * 0.7 };
+}
+
+/**
+ * Foe trainer step-in (pass 4, trainers): the trainer skids in from the right onto the empty spot with a little dust,
+ * steps back, leans into the wind-up and whips the ball (cue "release" at the hand), then leaves to the right while
+ * the ball is still in the air. The trainer is never on screen during a turn. Full only; Reduced and Off throw as
+ * before (no trainer).
+ */
+export function foeThrowClip(spot: Point, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('foeThrow', level);
+  const X = spot.x;
+  const Y = spot.y + 8;
+  const tr = b.part('tr', { x: FOE_TRAINER_OFF, y: Y, rot: 0, alpha: 1 });
+  if (level !== 'full') {
+    b.fx({ kind: 'cue', at: 0, name: 'release' });
+    return b.end(0);
+  }
+  tr.at(0).to(420, { x: X }, 'out3');
+  b.fx({ kind: 'dust', at: 360, x: X + 30, y: Y - 4, n: 6 });
+  const wind = 550;
+  tr.at(wind).to(200, { x: X + 110 }, 'out').to(140, { x: X + 126, rot: 9 }, 'out').to(90, { x: X + 92, rot: -12 }, 'in3').to(300, { rot: 0 }, 'back');
+  b.fx({ kind: 'cue', at: FOE_RELEASE, name: 'release' });
+  tr.at(FOE_RELEASE + 400).wait(100).to(300, { x: FOE_TRAINER_OFF + 20 }, 'in3');
+  b.beat(0, 'The trainer slides in').beat(wind, 'Steps back, winds up').beat(FOE_RELEASE, 'Release').beat(FOE_RELEASE + 500, 'Steps out');
+  return b.end(FOE_RELEASE + 800);
 }

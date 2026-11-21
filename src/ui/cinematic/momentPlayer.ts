@@ -1,6 +1,6 @@
 // Plays a planned cinematic moment (core/cinematic/moments.ts): letterbox, title card, five beats. Presentation only:
 // it returns when the moment ends or is skipped and never touches battle state. A drawing failure resolves quietly.
-// `inner` lets a caller run an existing scene (megaScene, teraScene, bossCinematic...) during the moment/reaction beats.
+// `inner` lets a caller run an existing scene (a gimmick cutscene, bossCinematic...) during the moment/reaction beats.
 
 import type Phaser from 'phaser';
 import { MOMENT_PHASES, type MomentPlan, type MomentSpec } from '../../core/cinematic/moments';
