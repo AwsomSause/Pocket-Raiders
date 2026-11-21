@@ -10,6 +10,7 @@ import { pkEvents } from '../../src/ui/pocket/screens/events';
 import { pkNews } from '../../src/ui/pocket/screens/news';
 import { pkOverlay } from '../../src/ui/redux/screens/overlay';
 import { pkForecast } from '../../src/ui/pocket/screens/forecast';
+import { pkTime, pkWeather, weatherCard } from '../../src/ui/pocket/screens/sky';
 
 describe('the Pocket Rival Board', () => {
   const r = (name: string, x: Partial<PkRival> = {}): PkRival => ({ name, role: 'Rival', art: null, ace: null, wins: 0, losses: 0, lead: 'Level', ...x });
@@ -173,5 +174,28 @@ describe('the Pocket Forecast', () => {
     expect(h).toContain('Too far to tell');
     expect(h).toContain('Fix my team');
     expect(h).toContain('data-act="popOpen"');
+  });
+});
+
+describe('the Pocket Time of Day and Weather guides', () => {
+  it('Time: three cards, the one now marked, the run strip with this stage lit, the stone rule; Enter opens Weather', () => {
+    const h = pkTime({ now: 'eve', index: 1, run: ['day', 'eve', 'night', 'day'], at: 1, crumb: ['Map', 'Time of Day'], road: null });
+    expect(pkPageOf(h)?.id).toBe('time');
+    expect((h.match(/class="tod-c /g) ?? []).length).toBe(3);
+    expect(h).toMatch(/tod-c eve on"[\s\S]*?<em>Now<\/em>/);
+    expect(h).toContain('<i class="eve on"></i>');
+    expect(h).toContain('Stone rule');
+    expect(h).toContain('data-act="popOpen"');
+  });
+  it('Weather: five cards with their arenas, hail shown on the Snow card as Hail, turns left in the header', () => {
+    const h = pkWeather({ now: 'hail', turns: 2, index: weatherCard('hail'), crumb: ['Battle', 'Weather'], road: null }, { pick: 'pkWx', back: 'info' });
+    expect(pkPageOf(h)?.id).toBe('weather');
+    expect((h.match(/class="wx-c /g) ?? []).length).toBe(5);
+    expect(h).toContain('Now: Hail');
+    expect(h).toContain('2 turns left');
+    expect(h).toMatch(/wx-c snow on"/);
+    expect(h).toContain('data-act="pkWx"');
+    expect(weatherCard(null)).toBe(0);
+    expect(pkWeather({ now: null, turns: null, index: 0, crumb: [], road: null })).not.toContain('<em>Now</em>');
   });
 });

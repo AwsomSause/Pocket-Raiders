@@ -11,6 +11,7 @@ import { ballArt, badgeArt, itemArt, monArt } from '../art';
 import { act, esc, frontRotom, hpc, page, spr, typeColour } from '../kit';
 import { fit, fitBody, fitPic, pkArtOf, pkConfirm } from '../templates';
 import { tyChip } from './party';
+import { pkWeather } from './sky';
 import { pkCatchParts, pkLevel } from './after';
 
 const pct = (r: number): number => Math.max(0, Math.min(100, Math.round(r * 100)));
@@ -82,7 +83,7 @@ function infoSide(x: NonNullable<NonNullable<BattleModel['pkInfo']>['foe']>, fil
 /** Battle Info (mock-up `b-info`): the foe, the four field cards, your Pokémon, then Battle Log or Back. */
 function infoPage(d: NonNullable<BattleModel['pkInfo']>): string {
   const hidden = '<div class="in-side foe gx-in-hid" data-key="in-foe"><div class="in-h"><i></i><div><b>???</b><span>Hidden until it moves</span></div></div></div>';
-  const mid = `<div class="in-mid" data-key="in-mid">${d.mid.map((c, k) => `<div class="in-c${k === 0 && c.b !== 'Clear' ? ' w' : ''}"><em>${esc(c.em)}</em><b style="font-size:${fit(c.b, 110, 26, 14, 0.6)}px">${esc(c.b)}</b><span style="font-size:${fitBody(c.span, 170, 48, [12, 11, 10], 1.3)}px">${esc(c.span)}</span></div>`).join('')}</div>`;
+  const mid = `<div class="in-mid" data-key="in-mid">${d.mid.map((c, k) => `<div class="in-c${k === 0 && c.b !== 'Clear' ? ' w' : ''}"${k === 0 ? act('pkWeather') : ''}><em>${esc(c.em)}</em><b style="font-size:${fit(c.b, 110, 26, 14, 0.6)}px">${esc(c.b)}</b><span style="font-size:${fitBody(c.span, 170, 48, [12, 11, 10], 1.3)}px">${esc(c.span)}</span></div>`).join('')}</div>`;
   const foot = `<div class="in-foot" data-key="in-foot"><div class="btn on"${act('pkLog')}><b>Battle Log</b></div><div class="btn"${act('info')}><b>Back</b></div></div>`;
   return `<i class="gx-bt-dim" data-nocheck${act('info')}></i><div class="gp-h gx-gp" data-key="in-head"><b>Battle Info</b><span>Everything in play this turn. Looking here does not use your turn.</span></div>${d.foe ? infoSide(d.foe, d.foeFile, 'foe') : hidden}${mid}${d.me ? infoSide(d.me, d.meFile, 'me') : ''}${foot}${keys2([['Esc', 'back', 'info']])}`;
 }
@@ -115,7 +116,7 @@ function statusPage(d: NonNullable<BattleModel['pkStatus']>): string {
   const w = d.weather;
   const cards = [
     `<div><b>Turn order</b>${order}${d.trickRoom ? '<p>Trick Room: the slower one goes first.</p>' : ''}</div>`,
-    `<div><b>Weather</b><p>${WXI[w.b] ? `<i class="wxi ${WXI[w.b]}"></i>` : ''}${esc(w.b)}</p><p style="font-size:${fitBody(w.span, 180, 40, [13, 12, 11], 1.35)}px">${esc(w.span)}</p></div>`,
+    `<div class="gx-st-go"${act('pkWeather')}><b>Weather</b><p>${WXI[w.b] ? `<i class="wxi ${WXI[w.b]}"></i>` : ''}${esc(w.b)}</p><p style="font-size:${fitBody(w.span, 180, 40, [13, 12, 11], 1.35)}px">${esc(w.span)}</p></div>`,
     `<div><b>This battle</b><p>Turn ${d.turn}</p>${d.money ? `<p>${spr(itemArt('amulet_coin'), 0.5)}${esc(d.money)} in your pocket</p>` : ''}</div>`,
     d.event ? `<div><b style="font-size:${fit(d.event.name, 180, 20, 13, 0.6)}px">${esc(d.event.name)}</b><p>${esc(d.event.goal)}</p><p>${esc(d.event.left)}</p></div>` : '<div><b>Events</b><p>No event on right now.</p></div>',
     `<div class="wide"><b>Your bench</b><span>${mons(d.bench, true) || '<em>No one else in your party</em>'}</span></div>`,
@@ -131,6 +132,7 @@ const keys2 = (ks: readonly (readonly [string, string, string?])[]): string => `
 export function pkBattle(d: BattleModel): string {
   // Pocket pages over the battle: Battle Info, a move's card, the Battle Log (the arena stays drawn underneath).
   if (d.pkInfo && !d.evolve) return page('b-info', 26, `<div class="scr battle b6 ov16 inf gx-bt gx-bt-page" data-key="b-info">${infoPage(d.pkInfo)}</div>`, true);
+  if (d.pkWeather && !d.evolve) return pkWeather({ ...d.pkWeather, crumb: ['Battle', 'Weather'], road: null }, { pick: 'pkWx', back: 'info' });
   if (d.pkStatus && !d.evolve) return page('b-status', 26, `<div class="scr battle b6 ov16 st23p gx-bt gx-bt-page" data-key="b-status">${statusPage(d.pkStatus)}</div>`, true);
   if (d.pkMove && !d.evolve) return page('moveinfo', 26, `<div class="scr battle b2 minfo gx-bt gx-bt-page" data-key="moveinfo">${movePage(d.pkMove)}</div>`, true);
   if (d.log && !d.evolve) return page('b-log', 26, `<div class="scr battle b6 ov16 lg gx-bt gx-bt-page" data-key="b-log">${logPage(d.log, d.turn ?? 0)}</div>`, true);

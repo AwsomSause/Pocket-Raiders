@@ -150,6 +150,7 @@ import { mountRedux, phantomOn, pocketOn, reduxOn, type ReduxCtx, type ReduxView
 import { pkHall } from '../ui/pocket/screens/hall';
 import { pkBadgeGet, pkExp, pkRivalLoss, pkVictory, type PkCatch, type PkExpRow } from '../ui/pocket/screens/after';
 import { battleInfo, battleStatus, moveInfo } from '../core/presentation/battleInfo';
+import { weatherCard } from '../ui/pocket/screens/sky';
 import { activeGameEvents, objectiveViews } from '../core/gameEvents';
 import { phGimmick, type GimmickCard } from '../ui/phantom/screens/cutin';
 import { gimmickSlots } from '../core/battle/bossGimmicks';
@@ -372,6 +373,7 @@ export class BattleScene extends Phaser.Scene {
   /** Pocket look: the Battle Info page (mock-up `b-info`) or the move card (`moveinfo`) behind the open info panel. */
   private rxPkInfo: BattleModel['pkInfo'] = null;
   private rxPkStatus: BattleModel['pkStatus'] = null;
+  private rxPkWeather: BattleModel['pkWeather'] = null;
   private rxPkMove: BattleModel['pkMove'] = null;
   private rxPanelAt: 'left' | 'tip' = 'left';
   /** New UI: the transformations the move menu offers now (the mock-ups' row of buttons). */
@@ -1917,6 +1919,15 @@ export class BattleScene extends Phaser.Scene {
         // Pocket look: the status bar opens the Status page; its Battle Info button opens Battle Info.
         pkStatus: () => { if (!this.infoPanel) this.toggleStatus(); },
         pkInfoOpen: () => { if (this.infoPanel) this.closePanel(); this.toggleInfo(true); },
+        // Pocket look: the weather card opens the Weather guide (the one in play marked Now); a card click lights it.
+        pkWeather: () => {
+          const w = this.run.battle?.weather;
+          if (this.infoPanel) this.closePanel();
+          this.rxPkInfo = null; this.rxPkMove = null; this.rxPkStatus = null;
+          this.rxPkWeather = { now: w?.id ?? 'clear', turns: w?.turns ?? null, index: weatherCard(w?.id ?? null) };
+          this.openPanel([{ head: 'Weather', text: w ? `${w.id}${w.turns ? ` · ${w.turns} turns left` : ''}` : 'Clear' }]);
+        },
+        pkWx: (i) => { if (this.rxPkWeather) { this.rxPkWeather = { ...this.rxPkWeather, index: Number(i) }; this.rx?.refresh(); } },
         pkUse: () => { if (!this.infoPanel || !this.rxPkMove) return; const k = this.focusedMove; this.closePanel(); if (!this.picker && !this.autoRunning) this.menu?.press(k); },
         logClose: () => { if (this.historyView) this.toggleHistory(); },
         // Pocket look: the Level Up page's Next moves the battle's words on.
@@ -2005,6 +2016,7 @@ export class BattleScene extends Phaser.Scene {
       panels: this.infoPanel ? this.rxPanels : null,
       pkInfo: this.infoPanel ? this.rxPkInfo : null,
       pkStatus: this.infoPanel ? this.rxPkStatus : null,
+      pkWeather: this.infoPanel ? this.rxPkWeather : null,
       pkMove: this.infoPanel ? this.rxPkMove : null,
       pkCatch: this.rxPkCatch,
       pkBand: !menu && (this.run.battle?.turn ?? 0) <= 1 ? this.rxPkBand : null,
@@ -4861,6 +4873,7 @@ export class BattleScene extends Phaser.Scene {
     const file = (m: { speciesId: string; shiny: boolean }) => monFile(this, m.speciesId, 'front', m.shiny);
     this.rxPkInfo = null;
     this.rxPkMove = null;
+    this.rxPkWeather = null;
     this.rxPkStatus = {
       ...s, bench: s.bench.map((m) => ({ ...m, file: file(m) })), foes: s.foes.map((m) => ({ ...m, file: file(m) })),
       money: `₽ ${this.run.money.toLocaleString('en-US')}`,
@@ -4878,6 +4891,7 @@ export class BattleScene extends Phaser.Scene {
     if (this.busy || this.autoRunning || !this.tabs.root.visible || this.advance) return;
     const content = services().session.content;
     this.rxPkStatus = null;
+    this.rxPkWeather = null;
     if (!field && this.tabs.current === 'attack' && this.menu) {
       const mon = this.activeMon();
       const slot = mon.moves[this.focusedMove];

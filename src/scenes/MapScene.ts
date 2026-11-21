@@ -138,6 +138,7 @@ import { pkMap } from '../ui/pocket/screens/map';
 import { pkRegion } from '../ui/pocket/screens/region';
 import { pkBadges, pkLeague, pkWorld, type PkBadgeSlot } from '../ui/pocket/screens/world';
 import { pkForecast } from '../ui/pocket/screens/forecast';
+import { pkTime, pkWeather, weatherCard, WEATHERS } from '../ui/pocket/screens/sky';
 import { timeOfDay } from '../core/arenaStyle';
 import { pkRivals } from '../ui/pocket/screens/rivals';
 import { PK_PAUSE_COLS, pkPause, pkQuick } from '../ui/pocket/screens/pause';
@@ -236,7 +237,9 @@ type MapPop =
   | { kind: 'world'; pick: number }
   | { kind: 'badges'; pick: number }
   | { kind: 'league'; pick: number }
-  | { kind: 'forecast'; pick: number };
+  | { kind: 'forecast'; pick: number }
+  | { kind: 'time'; pick: number }
+  | { kind: 'weather'; pick: number; from?: 'time' };
 
 type Option =
   | { kind: 'node'; node: MapNode }
@@ -334,6 +337,8 @@ export class MapScene extends Phaser.Scene {
     else if (kind === 'world') pop = pocketOn() ? { kind, pick: run.regionIndex } : null;
     else if (kind === 'badges') pop = pocketOn() && run.stage ? { kind, pick: Math.min(run.stage.index, runCampaign(session.content, run).stagesPerRegion - 1) } : null;
     else if (kind === 'league') pop = pocketOn() ? { kind, pick: 0 } : null;
+    else if (kind === 'weather') pop = pocketOn() ? { kind, pick: weatherCard(this.stageWeather()) } : null;
+    else if (kind === 'time') pop = pocketOn() ? { kind, pick: Math.max(0, ['day', 'eve', 'night'].indexOf(this.stageTime() ?? 'day')) } : null;
     else if (kind === 'forecast') pop = pocketOn() && run.stage?.kind === 'stage' && stopForecast(session.content, run).length ? { kind, pick: 0 } : null;
     else pop = { kind, page: galarHome(bracketTree(session.content, run)) };
     if (!pop) return;
@@ -667,6 +672,13 @@ export class MapScene extends Phaser.Scene {
     if (p.kind === 'badges' && action === 'confirm') return this.popOpen();
     // Pocket look: Enter on the Forecast is Fix my team (the Party).
     if (p.kind === 'forecast' && action === 'confirm') return this.popOpen();
+    // Pocket look: Enter on Time of Day opens the Weather guide; Esc there goes back to Time of Day.
+    if (p.kind === 'time' && action === 'confirm') return this.popOpen();
+    if (p.kind === 'weather' && action === 'back' && p.from === 'time') {
+      this.rxPop = { kind: 'time', pick: 0 };
+      this.rxView?.refresh();
+      return;
+    }
     if (p.kind === 'league' && action === 'back') {
       this.rxPop = { kind: 'badges', pick: 0 };
       this.rxView?.refresh();
@@ -687,6 +699,9 @@ export class MapScene extends Phaser.Scene {
     } else if (p.kind === 'badges') {
       const n = runCampaign(session.content, run).stagesPerRegion;
       p.pick = (p.pick + d + n) % n;
+    } else if (p.kind === 'time' || p.kind === 'weather') {
+      const n = p.kind === 'time' ? 3 : WEATHERS.length;
+      if (side) p.pick = (p.pick + d + n) % n;
     } else if (p.kind === 'forecast') {
       const n = stopForecast(session.content, run).length;
       if (side && n) p.pick = (p.pick + d + n) % n;
@@ -738,8 +753,9 @@ export class MapScene extends Phaser.Scene {
     } else if (p.kind === 'notes') {
       if (what === 'tab') p.tab = Math.max(0, Math.min(FIELD_TABS.length - 1, i));
       else p.sel[p.tab] = i;
-    } else if ((p.kind === 'report' || p.kind === 'roll' || p.kind === 'world' || p.kind === 'badges' || p.kind === 'league' || p.kind === 'forecast') && what === 'pick') {
+    } else if ((p.kind === 'report' || p.kind === 'roll' || p.kind === 'world' || p.kind === 'badges' || p.kind === 'league' || p.kind === 'forecast' || p.kind === 'time' || p.kind === 'weather') && what === 'pick') {
       if (p.pick === i) {
+        if (p.kind === 'time') return this.popOpen();
         if (p.kind !== 'report' || !pocketOn() || p.full) return;
         p.full = true;
       }
@@ -861,6 +877,7 @@ export class MapScene extends Phaser.Scene {
     if (p.kind === 'badges') return c.pk ? this.badgesPocket(p.pick) : '';
     if (p.kind === 'league') return c.pk ? this.leaguePocket(p.pick) : '';
     if (p.kind === 'forecast') return c.pk ? this.forecastPocket(p.pick) : '';
+    if (p.kind === 'time' || p.kind === 'weather') return c.pk ? this.skyPocket(p) : '';
     const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
     if (p.kind === 'report' && c.pk && !p.full) return this.rivalsPocket(p.pick);
     if (p.kind === 'report') {
@@ -1851,9 +1868,10 @@ export class MapScene extends Phaser.Scene {
       }
       // Pocket look: the World Tour (M) and the Badge Case (G), pages of their own in the mock-ups.
       if (pocketOn()) {
-        this.rxModel.keys = [['G', 'badges'], ['M', 'world'], ['Y', 'forecast'], ...this.rxModel.keys];
+        this.rxModel.keys = [['G', 'badges'], ['M', 'world'], ['Y', 'forecast'], ['K', 'time'], ...this.rxModel.keys];
         this.input.keyboard?.on('keydown-G', () => this.popToggle('badges'));
         this.input.keyboard?.on('keydown-Y', () => this.popToggle('forecast'));
+        this.input.keyboard?.on('keydown-K', () => this.popToggle('time'));
         this.input.keyboard?.on('keydown-M', () => this.popToggle('world'));
       }
       if (this.children.getByName('bracket-tag')) this.rxModel.hints = [['L', 'legend'], ['B', 'bracket'], ['Enter', 'go']];
@@ -1995,11 +2013,38 @@ export class MapScene extends Phaser.Scene {
 
   /** Pocket look: Enter on a pop-up's card: the Badge Case opens the League page. */
   private popOpen(): void {
+    // Time of Day's Enter: the Weather guide (Esc comes back).
+    if (this.rxPop?.kind === 'time') { this.rxPop = { kind: 'weather', pick: weatherCard(this.stageWeather()), from: 'time' }; this.rxView?.refresh(); return; }
     // The Forecast's Fix my team: the Party.
     if (this.rxPop?.kind === 'forecast') { this.popClose(); openPokemonMenu(this.fieldHost()); return; }
     if (this.rxPop?.kind !== 'badges' || !pocketOn()) return;
     this.rxPop = { kind: 'league', pick: 0 };
     this.rxView?.refresh();
+  }
+
+  /** The stage's time of day (null between stages). */
+  private stageTime(): 'day' | 'eve' | 'night' | null {
+    const run = services().session.run;
+    return run?.stage ? timeOfDay(run.seed, run.stage.index) : null;
+  }
+
+  /** The weather over the stop you stand on (a front), or null. */
+  private stageWeather(): string | null {
+    const { session } = services();
+    const run = session.run, stage = run?.stage;
+    const node = stage?.current ? findNode(stage.map, stage.current) : undefined;
+    return run && node ? frontAt(session.content, run, node)?.weather ?? null : null;
+  }
+
+  /** Pocket look: the Time of Day guide (K) and the Weather guide (Enter there): what each does, the one in play marked Now. */
+  private skyPocket(p: Extract<MapPop, { kind: 'time' | 'weather' }>): string {
+    const { session } = services();
+    const run = session.run!;
+    const road = pocketRoad(run.stage);
+    if (p.kind === 'weather') return pkWeather({ now: this.stageWeather() ?? 'clear', turns: null, index: p.pick, crumb: ['Map', 'Weather'], road });
+    const n = runCampaign(session.content, run).stagesPerRegion;
+    const first = run.stage ? run.stage.index - (run.stage.index % n) : 0;
+    return pkTime({ now: this.stageTime(), index: p.pick, run: Array.from({ length: n }, (_, k) => timeOfDay(run.seed, first + k)), at: (run.stage?.index ?? 0) - first, crumb: ['Map', 'Time of Day'], road });
   }
 
   /** Pocket look: the Forecast (Y): the next six stops with what waits there, the stage's time of day and the weather. */

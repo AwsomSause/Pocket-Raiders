@@ -85,6 +85,8 @@ export interface BattleModel {
   /** Pocket look: the Battle Info page and the move card (structured), and the turn for the Battle Log. */
   pkInfo?: (BattleInfo & { foeFile: string | null; meFile: string | null }) | null;
   pkMove?: MoveInfo | null;
+  /** Pocket look: the Weather guide from the battle's weather card (mock-up `weather`). */
+  pkWeather?: { now: string; turns: number | null; index: number } | null;
   /** Pocket look: the battle Status page (mock-up `b-status`), with picture files and the event's goal. */
   pkStatus?: (Omit<BattleStatus, 'bench' | 'foes'> & { bench: (StatusMon & { file: string | null })[]; foes: (StatusMon & { file: string | null })[]; money: string | null; event: { name: string; goal: string; left: string } | null }) | null;
   /** Pocket look: the catch card after a ball holds (mock-up `capture`). */
