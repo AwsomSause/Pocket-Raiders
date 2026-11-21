@@ -80,7 +80,7 @@ describe('DOMINION D9: the lists as data', () => {
   it('all 150 rival actions are in; each is supported, limited (says why) or disabled (names its slice)', () => {
     expect(RA.actions).toHaveLength(150);
     const by = (s: string) => RA.actions.filter((a) => a.status === s);
-    expect([by('supported').length, by('limited').length, by('disabled').length]).toEqual([121, 15, 14]);
+    expect([by('supported').length, by('limited').length, by('disabled').length]).toEqual([127, 15, 8]);
     for (const a of by('disabled')) expect(a.waits, a.id).toMatch(/^D\d+$/);
     for (const a of RA.actions.filter((x) => x.status !== 'disabled')) expect(a.kind, a.id).toBeTruthy();
     for (const a of by('limited')) expect(a.note, a.id).toBeTruthy();
@@ -93,8 +93,9 @@ describe('DOMINION D9: the lists as data', () => {
       expect(r.status, r.id).not.toBe('disabled');
       expect(RV.street.rows[r.id]?.length, r.id).toBeGreaterThan(0);
     }
-    // D6b plays sections A (the street) and J (the press and politics): dominionTown.test.ts.
-    for (const r of DOMINION_DATA.outside.filter((x) => !['F', 'A', 'J'].includes(x.section))) {
+    // D6b plays sections A (the street) and J (the press and politics), the D10 follow-up B-E, H, I and K:
+    // dominionTown.test.ts and dominionOutside.test.ts. G waits for D11, L for D15.
+    for (const r of DOMINION_DATA.outside.filter((x) => ['G', 'L'].includes(x.section))) {
       expect(r.status, r.id).toBe('disabled');
       expect(r.waits, r.id).toMatch(/^D\d+$/);
     }

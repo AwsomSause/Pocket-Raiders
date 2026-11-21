@@ -434,8 +434,7 @@
     "Recruit a discount"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O032",
@@ -450,8 +449,8 @@
    "marks": [
     "scales"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "Buying the building later is the Buy Out on the Card; here it only earns a little Regard."
   },
   {
    "id": "O033",
@@ -466,8 +465,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O034",
@@ -479,8 +477,7 @@
     "Take over as your Fence front (needs Black Market)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O035",
@@ -492,8 +489,7 @@
     "Ask who came (intel)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O036",
@@ -506,8 +502,8 @@
     "Trade a favour"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "Berries are not in the Bag yet: a Hyper Potion stands in."
   },
   {
    "id": "O037",
@@ -519,8 +515,7 @@
     "Steal supplies (H+10, Dr, Joy remembers)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O038",
@@ -533,8 +528,8 @@
     "Appraise for a cut"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "TMs teach on the spot and can't sit in the Bag: the hidden find is a Water Stone."
   },
   {
    "id": "O039",
@@ -546,8 +541,7 @@
     "Extort"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O040",
@@ -559,8 +553,7 @@
     "Recruit the teacher (Rank-3 type)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O041",
@@ -573,8 +566,8 @@
     "Rob (H)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "The Egg hatches at once into a Pokémon from the region."
   },
   {
    "id": "O042",
@@ -586,8 +579,7 @@
     "Fine her"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O043",
@@ -599,8 +591,7 @@
     "Skip"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O044",
@@ -615,8 +606,8 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "The banker's loan is the Take a Loan action; a bribe gives dirt on him instead."
   },
   {
    "id": "O045",
@@ -628,8 +619,7 @@
     "Cheat (Stealth check, H on fail)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O046",
@@ -641,8 +631,7 @@
     "Join (Smuggle contact)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O047",
@@ -655,8 +644,7 @@
     "Hire as a boat driver"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O048",
@@ -668,8 +656,7 @@
     "Let it run"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O049",
@@ -681,8 +668,7 @@
     "Return (Rg)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O050",
@@ -694,8 +680,7 @@
     "Charm (Rg)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O051",
@@ -709,8 +694,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O052",
@@ -724,8 +708,7 @@
    "marks": [
     "scales"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O053",
@@ -737,8 +720,7 @@
     "Report"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O054",
@@ -752,8 +734,7 @@
    "marks": [
     "day"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O055",
@@ -765,8 +746,7 @@
     "Remove him"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O056",
@@ -781,8 +761,7 @@
    "marks": [
     "chain"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O057",
@@ -794,8 +773,7 @@
     "Ignore"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O058",
@@ -807,8 +785,7 @@
     "Boycott (Dr+, slow)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O059",
@@ -820,8 +797,8 @@
     "Hire to craft Apricorn Balls"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "Apricorn Balls: a Fast Ball."
   },
   {
    "id": "O060",
@@ -833,8 +810,8 @@
     "Smash the stock (Hero+2, Dr+)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "The Hero's next stop shows as less of the Hero's attention."
   },
   {
    "id": "O061",
@@ -847,8 +824,7 @@
     "Fight (battle, H+10)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O062",
@@ -861,8 +837,8 @@
     "Slip by (Stealth)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "Going around costs no day."
   },
   {
    "id": "O063",
@@ -875,8 +851,7 @@
     "Bribe"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O064",
@@ -889,8 +864,8 @@
     "Battle"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "Looker's three clues are told as Heat and Wanted."
   },
   {
    "id": "O065",
@@ -903,8 +878,7 @@
     "Expel"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O066",
@@ -916,8 +890,7 @@
     "Decline"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O067",
@@ -931,8 +904,8 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "A raid on the evidence room frees a jailed member if there is one."
   },
   {
    "id": "O068",
@@ -946,8 +919,7 @@
    "marks": [
     "chain"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O069",
@@ -959,8 +931,7 @@
     "Refuse"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O070",
@@ -973,8 +944,7 @@
     "Bribe"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O071",
@@ -989,8 +959,8 @@
    "marks": [
     "chain"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "Pleading needs no Lawyer: a Charm test."
   },
   {
    "id": "O072",
@@ -1003,8 +973,8 @@
     "Hand him over"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "Handing the member over costs Morale instead of the member."
   },
   {
    "id": "O073",
@@ -1018,8 +988,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O074",
@@ -1032,8 +1001,7 @@
     "Challenge"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O075",
@@ -1046,8 +1014,7 @@
     "Battle"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O076",
@@ -1060,8 +1027,8 @@
     "Argue"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "The stolen Pokémon stays with you."
   },
   {
    "id": "O077",
@@ -1074,8 +1041,7 @@
     "Charm"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O078",
@@ -1086,8 +1052,7 @@
     "Memorise (patrols avoided 2 days)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O079",
@@ -1099,8 +1064,7 @@
     "Refuse"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O080",
@@ -1112,8 +1076,8 @@
     "Bid on Pokémon"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "Your seized gear comes back as an Ultra Ball."
   },
   {
    "id": "O081",
@@ -1127,8 +1091,7 @@
    "marks": [
     "chain"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O082",
@@ -1142,8 +1105,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O083",
@@ -1156,8 +1118,7 @@
     "Battle"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O084",
@@ -1171,8 +1132,7 @@
    "marks": [
     "minor"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O085",
@@ -1185,8 +1145,8 @@
     "Fight it with flyers"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "Breaking the curfew is a plain Heat risk; the flyers are not printed."
   },
   {
    "id": "O086",
@@ -1201,8 +1161,7 @@
    "marks": [
     "day"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O087",
@@ -1215,8 +1174,7 @@
     "Join their union"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O088",
@@ -1229,8 +1187,7 @@
     "Scout side door"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O089",
@@ -1242,8 +1199,8 @@
     "Report"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "The +10 Takeover odds are one more scouting point on the Gym."
   },
   {
    "id": "O090",
@@ -1257,8 +1214,7 @@
    "marks": [
     "chain"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O091",
@@ -1271,8 +1227,7 @@
     "Mock"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O092",
@@ -1286,8 +1241,7 @@
    "marks": [
     "day"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O093",
@@ -1300,8 +1254,7 @@
     "Break in"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O094",
@@ -1314,8 +1267,7 @@
     "Disrupt"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O095",
@@ -1328,8 +1280,7 @@
     "Rob"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O096",
@@ -1341,8 +1292,7 @@
     "Return him"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O097",
@@ -1354,8 +1304,7 @@
     "Heckle (Dr+, Hero+2)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O098",
@@ -1367,8 +1316,7 @@
     "Outbid (Gym ally)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O099",
@@ -1381,8 +1329,7 @@
     "Parley"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O100",
@@ -1394,8 +1341,8 @@
     "Raid"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "The Crackdown week odds show as Wanted."
   },
   {
    "id": "O101",
@@ -1410,8 +1357,7 @@
    "marks": [
     "day"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O102",
@@ -1423,8 +1369,8 @@
     "Forge papers"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "The Monarch route flag waits for D14's League; the entry only earns standing."
   },
   {
    "id": "O103",
@@ -1437,8 +1383,7 @@
     "Withdraw"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O104",
@@ -1450,8 +1395,8 @@
     "Extort (Dr, Gym grudge)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "The family business pays as a weekly racket instead of a Buy Out."
   },
   {
    "id": "O105",
@@ -1463,8 +1408,8 @@
     "Respect it"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "The badge itself stays: the theft leaves dirt on the Gym."
   },
   {
    "id": "O106",
@@ -1477,8 +1422,7 @@
     "Offer a deal"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O107",
@@ -1491,8 +1435,7 @@
    "marks": [
     "minor"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O108",
@@ -1506,8 +1449,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O109",
@@ -1522,8 +1464,7 @@
    "marks": [
     "minor"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O110",
@@ -1538,8 +1479,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O111",
@@ -1553,8 +1493,7 @@
    "marks": [
     "minor"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O112",
@@ -1567,8 +1506,7 @@
     "Trade"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O113",
@@ -1580,8 +1518,7 @@
     "Recruit after the win"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O114",
@@ -1593,8 +1530,8 @@
     "Take (H+, adult only)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "The Egg hatches at once."
   },
   {
    "id": "O115",
@@ -1606,8 +1543,7 @@
     "Battle"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O116",
@@ -1621,8 +1557,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O117",
@@ -1634,8 +1569,7 @@
     "Pay"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O118",
@@ -1649,8 +1583,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O119",
@@ -1663,8 +1596,7 @@
     "Test"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O120",
@@ -1676,8 +1608,8 @@
     "Hire"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "The double battle is a single battle."
   },
   {
    "id": "O121",
@@ -1691,8 +1623,7 @@
    "marks": [
     "minor"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O122",
@@ -1704,8 +1635,8 @@
     "Swim (boat needed)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "No boat check: a Brawn test."
   },
   {
    "id": "O123",
@@ -1720,8 +1651,7 @@
    "marks": [
     "day"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O124",
@@ -1736,8 +1666,7 @@
     "minor",
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O125",
@@ -1749,8 +1678,7 @@
     "Trade"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O126",
@@ -1762,8 +1690,7 @@
     "Spar"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O127",
@@ -1775,8 +1702,7 @@
     "Pose"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O128",
@@ -1788,8 +1714,7 @@
     "Flee"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O129",
@@ -1801,8 +1726,8 @@
     "Refuse"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "The hints scout the district."
   },
   {
    "id": "O130",
@@ -1815,8 +1740,7 @@
    "marks": [
     "minor"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O131",
@@ -1830,8 +1754,7 @@
    "marks": [
     "minor"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O132",
@@ -1845,8 +1768,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O133",
@@ -1857,8 +1779,8 @@
     "Chase (Speed test)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "The Speed test is a Stealth test."
   },
   {
    "id": "O134",
@@ -1869,8 +1791,7 @@
     "Follow (hidden path)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O135",
@@ -1882,8 +1803,7 @@
     "Fight"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O136",
@@ -1895,8 +1815,7 @@
     "Walk"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O137",
@@ -1908,8 +1827,7 @@
     "Rob"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O138",
@@ -1921,8 +1839,7 @@
     "Pass"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O139",
@@ -1933,8 +1850,7 @@
     "Accept (₽ + Rg)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O140",
@@ -1948,8 +1864,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O141",
@@ -2554,8 +2469,7 @@
    "marks": [
     "day"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O187",
@@ -2569,8 +2483,8 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "Hitting the lab here pays money; the rare Pokémon comes from the Lab Hit action."
   },
   {
    "id": "O188",
@@ -2582,8 +2496,7 @@
     "Intercept"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O189",
@@ -2595,8 +2508,7 @@
     "Break"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O190",
@@ -2610,8 +2522,8 @@
    "marks": [
     "day"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "The fossil is revived at once."
   },
   {
    "id": "O191",
@@ -2623,8 +2535,7 @@
     "Buy"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O192",
@@ -2636,8 +2547,7 @@
     "Rob"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O193",
@@ -2649,8 +2559,8 @@
     "Partner"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "The partnership pays as a weekly racket."
   },
   {
    "id": "O194",
@@ -2664,8 +2574,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O195",
@@ -2677,8 +2586,7 @@
     "Return"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O196",
@@ -2690,8 +2598,7 @@
     "Avoid"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O197",
@@ -2703,8 +2610,7 @@
     "Exploit"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O198",
@@ -2716,8 +2622,7 @@
     "Threaten"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O199",
@@ -2730,8 +2635,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O200",
@@ -2742,8 +2646,7 @@
     "Submit (Rg, tiny)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O201",
@@ -2755,8 +2658,7 @@
     "Respect"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O202",
@@ -2768,8 +2670,7 @@
     "Settle"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O203",
@@ -2781,8 +2682,7 @@
     "Extort"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O204",
@@ -2793,8 +2693,7 @@
     "Scavenge"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O205",
@@ -2807,8 +2706,7 @@
     "Blame rivals"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O206",
@@ -2823,8 +2721,8 @@
    "marks": [
     "day"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "Tracking it to its den scouts the district."
   },
   {
    "id": "O207",
@@ -2837,8 +2735,8 @@
     "Spook them into town (Rg−2, H+3, chaos covers a Steal)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "Going round costs no time."
   },
   {
    "id": "O208",
@@ -2852,8 +2750,8 @@
    "marks": [
     "chain"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "The three-day hunt is one battle; the find is not always shiny."
   },
   {
    "id": "O209",
@@ -2868,8 +2766,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O210",
@@ -2882,8 +2779,7 @@
     "Lead it into a rival's shop (Ten+3, H+4)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O211",
@@ -2898,8 +2794,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O212",
@@ -2912,8 +2807,7 @@
     "Use the confusion for a Take"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O213",
@@ -2926,8 +2820,7 @@
     "Sell it (₽300, Rg−2)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O214",
@@ -2940,8 +2833,7 @@
     "Lure it onto rival patrols"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O215",
@@ -2956,8 +2848,7 @@
    "marks": [
     "day"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O216",
@@ -2970,8 +2861,8 @@
     "Guard it as a Racket"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "Berries are not in the Bag yet: Potions stand in."
   },
   {
    "id": "O217",
@@ -2984,8 +2875,8 @@
     "Detour"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "No Poké Flute in the game yet: waking it is a Charm test."
   },
   {
    "id": "O218",
@@ -2998,8 +2889,8 @@
     "Tell Rangers (Rg+2)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "Marking the cave as a stash makes it a safehouse."
   },
   {
    "id": "O219",
@@ -3014,8 +2905,7 @@
    "marks": [
     "day"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O220",
@@ -3028,8 +2918,8 @@
     "Sell it ₽500"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "The Egg hatches at once."
   },
   {
    "id": "O221",
@@ -3042,8 +2932,7 @@
     "Claim the abandoned district's Racket later"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O222",
@@ -3056,8 +2945,7 @@
     "Retaliate on the stall it came from"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O223",
@@ -3072,8 +2960,7 @@
    "marks": [
     "day"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O224",
@@ -3088,8 +2975,7 @@
    "marks": [
     "day"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O225",
@@ -3102,8 +2988,8 @@
     "Ambush trainers (Attack +10%)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "Waiting costs no action; moving unseen is a day's cover and Stealth XP; the ambush is a fight."
   },
   {
    "id": "O226",
@@ -3117,8 +3003,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O227",
@@ -3133,8 +3018,8 @@
    "marks": [
     "chain"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "The legend's trail is one Wits test (the legend itself comes with D11 and D15)."
   },
   {
    "id": "O228",
@@ -3147,8 +3032,8 @@
     "Cheat (H+3)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "No spare is given in the swap."
   },
   {
    "id": "O229",
@@ -3161,8 +3046,7 @@
     "Take his catch"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O230",
@@ -3175,8 +3059,7 @@
     "Fund it later"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O231",
@@ -3460,8 +3343,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O252",
@@ -3474,8 +3356,7 @@
     "Shortchange him (he warns others)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O253",
@@ -3488,8 +3369,8 @@
     "Betray"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "The guild's +10% Thieve is Stealth XP for the Boss."
   },
   {
    "id": "O254",
@@ -3504,8 +3385,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O255",
@@ -3518,8 +3398,7 @@
     "Refuse"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O256",
@@ -3534,8 +3413,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O257",
@@ -3548,8 +3426,7 @@
     "Skip"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O258",
@@ -3562,8 +3439,8 @@
     "Report"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "The hit lowers the rival's intel and raises Tension, not their team."
   },
   {
    "id": "O259",
@@ -3576,8 +3453,7 @@
     "Frame him"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O260",
@@ -3590,8 +3466,7 @@
     "Let go"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O261",
@@ -3605,8 +3480,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O262",
@@ -3620,8 +3494,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O263",
@@ -3633,8 +3506,7 @@
     "Hire (a crew healer)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O264",
@@ -3647,8 +3519,7 @@
     "Divide them"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O265",
@@ -3660,8 +3531,8 @@
     "Sell the tip"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "Acting on the tip pays as a quick Steal."
   },
   {
    "id": "O266",
@@ -3673,8 +3544,8 @@
     "Ignore"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "No Lawyer needed: a Wits test."
   },
   {
    "id": "O267",
@@ -3686,8 +3557,7 @@
     "Expose (Rg+4)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O268",
@@ -3699,8 +3569,8 @@
     "Refuse"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "limited",
+   "note": "The driver keeps the police off here for three days."
   },
   {
    "id": "O269",
@@ -3713,8 +3583,7 @@
     "Feed him a trap"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O270",
@@ -3728,8 +3597,7 @@
    "marks": [
     "chain"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O271",
@@ -3741,8 +3609,7 @@
     "Refuse"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O272",
@@ -3754,8 +3621,7 @@
     "Pass them on (H+4)"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O273",
@@ -3767,8 +3633,7 @@
     "Report"
    ],
    "marks": [],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O274",
@@ -3783,8 +3648,7 @@
    "marks": [
     "night"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O275",
@@ -3798,8 +3662,7 @@
    "marks": [
     "chain"
    ],
-   "status": "disabled",
-   "waits": "D10"
+   "status": "supported"
   },
   {
    "id": "O276",

@@ -1387,11 +1387,6 @@
      {
       "k": "deal",
       "n": -140
-     },
-     {
-      "k": "note",
-      "slice": "D10",
-      "text": "chase odds +10%"
      }
     ]
    },
@@ -1400,8 +1395,7 @@
     "does": "₽ +0",
     "fx": []
    },
-   "who": "cabbie",
-   "wait": "D10"
+   "who": "cabbie"
   },
   {
    "id": 30,
@@ -1526,9 +1520,8 @@
       "clean": true
      },
      {
-      "k": "note",
-      "slice": "D5",
-      "text": "+Building (Shop)"
+      "k": "hook",
+      "id": "gift-shop"
      },
      {
       "k": "regard",
@@ -1546,8 +1539,7 @@
      }
     ]
    },
-   "who": "shop-owner",
-   "wait": "D5"
+   "who": "shop-owner"
   },
   {
    "id": 33,
@@ -1765,14 +1757,12 @@
       "clean": true
      },
      {
-      "k": "note",
-      "slice": "D5",
-      "text": "+Building (Café Front)"
+      "k": "hook",
+      "id": "gift-cafe"
      }
     ]
    },
-   "who": "cafe",
-   "wait": "D5"
+   "who": "cafe"
   },
   {
    "id": 38,
@@ -1829,9 +1819,8 @@
     "does": "₽ −15% smuggling, Smuggle Heat −50%",
     "fx": [
      {
-      "k": "note",
-      "slice": "D10",
-      "text": "Smuggle: -15% cut, Heat -50%"
+      "k": "hook",
+      "id": "union"
      }
     ]
    },
@@ -1840,14 +1829,20 @@
     "does": "40%: strike, Smuggle blocked 3 days",
     "fx": [
      {
-      "k": "note",
-      "slice": "D10",
-      "text": "40%: Smuggle blocked 3 days"
+      "k": "chance",
+      "p": 40,
+      "yes": [
+       {
+        "k": "hook",
+        "id": "strike"
+       }
+      ],
+      "no": []
      }
     ]
    },
    "who": "union",
-   "wait": "D10"
+   "needs": "routes"
   },
   {
    "id": 40,
@@ -2086,9 +2081,8 @@
     "does": "₽ +60% of Holding value",
     "fx": [
      {
-      "k": "note",
-      "slice": "D10",
-      "text": "60% of the Holding value"
+      "k": "hook",
+      "id": "fence-now"
      }
     ]
    },
@@ -2097,14 +2091,21 @@
     "does": "→ #46 in 7d, 20%: he skips town",
     "fx": [
      {
-      "k": "follow",
-      "card": 46,
-      "days": 7
+      "k": "chance",
+      "p": 80,
+      "yes": [
+       {
+        "k": "follow",
+        "card": 46,
+        "days": 7
+       }
+      ],
+      "no": []
      }
     ]
    },
    "who": "fence",
-   "wait": "D10"
+   "needs": "hot"
   },
   {
    "id": 46,
@@ -2123,9 +2124,8 @@
     "does": "Holding sells 75% weekly, Heat −1",
     "fx": [
      {
-      "k": "note",
-      "slice": "D10",
-      "text": "Holding sells at 75% weekly"
+      "k": "hook",
+      "id": "fence-week"
      },
      {
       "k": "heat",
@@ -2138,14 +2138,12 @@
     "does": "₽ +90% value, done",
     "fx": [
      {
-      "k": "note",
-      "slice": "D10",
-      "text": "90% of the Holding value"
+      "k": "hook",
+      "id": "fence-last"
      }
     ]
    },
    "who": "fence",
-   "wait": "D10",
    "followOnly": true
   },
   {
@@ -2369,13 +2367,19 @@
     "does": "Battle now: win +Building (House), lose Stores Pkmn −1 (your pick)",
     "fx": [
      {
-      "k": "note",
-      "slice": "D5",
-      "text": "win: +Building (House)"
-     },
-     {
-      "k": "mon",
-      "n": -1
+      "k": "fight",
+      "win": [
+       {
+        "k": "hook",
+        "id": "gift-house"
+       }
+      ],
+      "lose": [
+       {
+        "k": "mon",
+        "n": -1
+       }
+      ]
      }
     ]
    },
@@ -2385,7 +2389,16 @@
     "fx": []
    },
    "who": "gambler",
-   "wait": "D5"
+   "needs": "stores",
+   "foe": {
+    "name": "The gambler",
+    "cls": "roughneck",
+    "species": [
+     "meowth",
+     "persian"
+    ],
+    "offset": 1
+   }
   },
   {
    "id": 52,
@@ -2442,9 +2455,8 @@
     "does": "laundering 5%, 15%/week: he talks to police (Heat +10)",
     "fx": [
      {
-      "k": "note",
-      "slice": "D5",
-      "text": "laundering at 5%"
+      "k": "hook",
+      "id": "accountant"
      }
     ]
    },
@@ -2453,8 +2465,7 @@
     "does": "nothing",
     "fx": []
    },
-   "who": "accountant",
-   "wait": "D5"
+   "who": "accountant"
   },
   {
    "id": 54,
@@ -2971,9 +2982,8 @@
       "clean": true
      },
      {
-      "k": "note",
-      "slice": "D10",
-      "text": "police sweeps -30% for 2 weeks"
+      "k": "hook",
+      "id": "judge"
      }
     ]
    },
@@ -2986,17 +2996,15 @@
       "p": 20,
       "yes": [
        {
-        "k": "note",
-        "slice": "D10",
-        "text": "Blackmail on him opens"
+        "k": "hook",
+        "id": "judge-dirt"
        }
       ],
       "no": []
      }
     ]
    },
-   "who": "judge",
-   "wait": "D10"
+   "who": "judge"
   },
   {
    "id": 66,
@@ -3019,9 +3027,8 @@
       "n": -150
      },
      {
-      "k": "note",
-      "slice": "D10",
-      "text": "this week's sweep can't catch anyone"
+      "k": "hook",
+      "id": "informant"
      }
     ]
    },
@@ -3030,8 +3037,7 @@
     "does": "nothing",
     "fx": []
    },
-   "who": "informant",
-   "wait": "D10"
+   "who": "informant"
   },
   {
    "id": 67,
@@ -3562,9 +3568,8 @@
     "does": "Opens Heist (shared loot, ×1.5), Ten −10, 25%: they double-cross you (Ten +20)",
     "fx": [
      {
-      "k": "note",
-      "slice": "D10",
-      "text": "a joint Heist"
+      "k": "hook",
+      "id": "heist"
      },
      {
       "k": "owed",
@@ -3597,7 +3602,6 @@
     ]
    },
    "who": "rival",
-   "wait": "D10",
    "rival": true
   },
   {
@@ -3617,9 +3621,8 @@
     "does": "Item (a lab machine: +1 Room effect), Stores Pkmn −1, Threat +4",
     "fx": [
      {
-      "k": "note",
-      "slice": "D5",
-      "text": "a lab machine: +1 Room effect"
+      "k": "hook",
+      "id": "machine"
      },
      {
       "k": "mon",
@@ -3638,7 +3641,7 @@
     "fx": []
    },
    "who": "rival",
-   "wait": "D5",
+   "needs": "stores",
    "rival": true
   },
   {
@@ -4492,9 +4495,8 @@
       "n": -800
      },
      {
-      "k": "note",
-      "slice": "D10",
-      "text": "+10% Steal/Thieve for 14 days"
+      "k": "hook",
+      "id": "koga"
      }
     ]
    },
@@ -4503,8 +4505,7 @@
     "does": "nothing",
     "fx": []
    },
-   "who": "koga",
-   "wait": "D10"
+   "who": "koga"
   },
   {
    "id": 99,
@@ -4523,9 +4524,8 @@
     "does": "Opens a quiz event (3 questions, TM if 2 right)",
     "fx": [
      {
-      "k": "note",
-      "slice": "quiz",
-      "text": "a quiz: 3 questions, a TM if 2 are right"
+      "k": "hook",
+      "id": "quiz"
      }
     ]
    },
@@ -4534,8 +4534,7 @@
     "does": "nothing",
     "fx": []
    },
-   "who": "blaine",
-   "wait": "quiz"
+   "who": "blaine"
   },
   {
    "id": 100,
@@ -4583,7 +4582,7 @@
     ]
    },
    "who": "gym-leader",
-   "wait": "D10"
+   "needs": "gym-blackmail"
   },
   {
    "id": 101,
@@ -4624,9 +4623,8 @@
         "n": 20
        },
        {
-        "k": "note",
-        "slice": "D10",
-        "text": "lose the Gym"
+        "k": "hook",
+        "id": "gym-lost"
        }
       ],
       "no": []
@@ -4634,7 +4632,7 @@
     ]
    },
    "who": "gym-leader",
-   "wait": "D10"
+   "needs": "gym-bought"
   },
   {
    "id": 102,
@@ -5853,9 +5851,8 @@
       "clean": true
      },
      {
-      "k": "note",
-      "slice": "D10",
-      "text": "police budget -20%"
+      "k": "hook",
+      "id": "council"
      }
     ]
    },
@@ -5864,8 +5861,7 @@
     "does": "nothing",
     "fx": []
    },
-   "who": "council",
-   "wait": "D10"
+   "who": "council"
   },
   {
    "id": 131,
@@ -5884,9 +5880,19 @@
     "does": "next HQ tier −20% cost, 25%: a weak spot (raid odds +10%)",
     "fx": [
      {
-      "k": "note",
-      "slice": "D5",
-      "text": "next HQ tier -20% cost"
+      "k": "hook",
+      "id": "architect"
+     },
+     {
+      "k": "chance",
+      "p": 25,
+      "yes": [
+       {
+        "k": "hook",
+        "id": "weak-spot"
+       }
+      ],
+      "no": []
      }
     ]
    },
@@ -5895,8 +5901,7 @@
     "does": "nothing",
     "fx": []
    },
-   "who": "architect",
-   "wait": "D5"
+   "who": "architect"
   },
   {
    "id": 132,

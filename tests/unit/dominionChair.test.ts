@@ -91,9 +91,9 @@ describe('DOMINION D12: the 150 cards', () => {
     const n = (s: string) => CARDS.filter((c) => c.sect === s).length;
     expect([n('crew'), n('town'), n('money'), n('law'), n('rival'), n('hero'), n('gyms'), n('pokemon'), n('empire'), n('regular'), n('crisis')]).toEqual([22, 22, 14, 12, 16, 10, 12, 14, 10, 12, 6]);
   });
-  it('every card has a status: 130 play now (some limited), 20 wait and name the slice (D14 opened card 82; D15 cards 80, 126, 127, 129, 132; D16 card 119)', () => {
+  it('every card has a status: 148 play now (some limited), 2 wait and name the slice (D14 opened card 82; D10 18 more; D15 cards 80, 126, 127, 129, 132; D16 card 119)', () => {
     const st = CARDS.map(cardStatus);
-    expect(st.filter((s) => s !== 'disabled')).toHaveLength(130);
+    expect(st.filter((s) => s !== 'disabled')).toHaveLength(148);
     expect(st.filter((s) => s === 'supported').length).toBeGreaterThan(50);
     for (const c of CARDS.filter((x) => x.wait)) expect(c.wait).toMatch(/^(D\d+|quiz)$/);
   });
@@ -208,7 +208,7 @@ describe('DOMINION D12: the sitting', () => {
     b.hqLevel = 4;
     expect(canDraw(b, cardById(23)!)).toBe(false); // shopkeeper stops after Compound (and needs a Racket)
     expect(canDraw(b, cardById(2)!)).toBe(false);
-    expect(canDraw(b, cardById(29)!)).toBe(false); // waits for D10
+    expect(canDraw(b, cardById(8)!)).toBe(false); // waits for D8
     expect(canDraw(b, cardById(145)!)).toBe(false);
   });
   it('a red zone puts its Crisis card first; no Hand it off, no Close the doors (Kice: a red zone never ends the run)', () => {
