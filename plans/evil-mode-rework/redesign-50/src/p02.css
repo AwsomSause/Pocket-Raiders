@@ -1,3 +1,68 @@
-.t1-up{all:unset;cursor:pointer;float:right;font:800 13px/1 'M PLUS Rounded 1c';padding:6px 10px;border-radius:999px;background:var(--gd);color:#241800;animation:t1-pulse 1.6s infinite}
-.t1-crumb{position:absolute;left:28px;top:58px;z-index:6;font-size:12px;color:#c9c1d8;background:#1b1428;padding:1px 8px;border-radius:6px}
-.t1-crumb b{color:#fff}
+/* Pass 2 · Big & Bold */
+.nb2{position:absolute;left:0;right:0;top:0;height:50px;z-index:5;display:flex;align-items:center;gap:10px;padding:0 14px;white-space:nowrap;background:var(--ink);border-bottom:3px solid var(--yel);animation:in-down .4s ease-out both}
+.nb2 u{text-decoration:none;font-size:12px;font-weight:800;color:var(--mut);background:var(--pn);border:2px solid var(--line);border-radius:999px;padding:1px 12px}
+.nb2 u b{color:var(--cr);font-size:13px}
+.nb2 u.heat b{color:#ff6b5d}
+.nb2-t{align-self:flex-start;height:60px;display:flex;align-items:center;padding:0 30px 0 22px;margin-left:-4px;background:linear-gradient(90deg,var(--red) 0 calc(100% - 10px),var(--yel) calc(100% - 10px));clip-path:polygon(0 0,100% 0,calc(100% - 22px) 100%,0 100%);animation:slash .45s cubic-bezier(.2,.9,.3,1) both}
+.nb2-t i{font:400 40px/1 var(--fd);font-style:normal;letter-spacing:.02em;color:#fff;text-shadow:3px 3px 0 #000;text-transform:uppercase}
+.pn>h3{margin:-12px -16px 2px;padding:7px 16px 5px;background:linear-gradient(100deg,var(--red) 0 60%,transparent 60.5%);border-radius:2px 16px 0 0;color:#fff}
+.pn>h3 i{font:400 24px/1 var(--fd);font-style:normal;text-transform:uppercase;letter-spacing:.03em;text-shadow:2px 2px 0 #000}
+.pn{padding-top:12px}
+.row-t b{font:400 25px/1 var(--fd);letter-spacing:.02em;text-transform:uppercase}
+.row .ico{zoom:1.35}
+.row.sm b{font:400 22px/1 var(--fd);text-transform:uppercase}
+.row.on{transform:translateX(10px);box-shadow:inset 6px 0 0 var(--yel),-6px 5px 0 var(--red)}
+.det-t{font-size:34px;text-transform:uppercase}
+.det-t.big{font-size:46px}
+.plinth img{zoom:1.35}
+.plinth.big{height:196px}
+.f-name{font-size:42px;text-transform:uppercase}
+.bar span{font:400 20px/1 var(--fd);text-transform:uppercase;color:var(--cr)}
+.bar i{height:14px}
+.bar b{font-size:24px;color:var(--yel)}
+.trait b{font:400 21px/1.05 var(--fd);text-transform:uppercase}
+.tile b{font:400 30px/1 var(--fd);text-transform:uppercase;text-shadow:2px 2px 0 rgba(0,0,0,.5)}
+.cell b{font:400 23px/1 var(--fd);text-transform:uppercase}
+.cells .cs img{zoom:1.45}
+.cells.n12 .cs img{zoom:1.25}
+.g-box .cell b{font-size:20px}
+.pyr-r .cell b{font-size:20px}
+.pyr-r .cs img{zoom:1.2}
+.part{font-size:15px}
+.part b{font:400 22px/1 var(--fd)}
+.chg b{font:400 22px/1 var(--fd);text-transform:uppercase}
+.r-big{font-size:140px}
+.r-big.long{font-size:96px}
+.stamp{font-size:48px}
+.plate{transform:skewX(-10deg);padding:3px 20px}
+.plate b{font:400 28px/1 var(--fd);text-transform:uppercase}
+.act img{zoom:1.15}
+.sm-gim .act.r img{zoom:1.3}
+.sm-cut .act.r img{zoom:1.25}
+.many .act img{zoom:1.05}
+.ch b{font:400 24px/1 var(--fd);text-transform:uppercase}
+.tbox p{font-size:19px}
+.wm b{font-size:34px}
+.wm.on b{font-size:46px}
+.wm.sm b{font-size:27px}
+.wm.sm.on b{font-size:32px}
+.srow .sl b{font:400 23px/1 var(--fd);text-transform:uppercase}
+.h-crew img{zoom:1.15}
+.rm b{font-size:13px}
+.fl-tag b{font-size:38px}
+.tabs button{font:400 19px/1 var(--fd);text-transform:uppercase;padding:3px 14px 3px 5px;transform:skewX(-10deg)}
+.ring{width:190px;height:190px}
+.ring b{font-size:62px}
+/* battle */
+.k-bat2 .b-foe{left:560px;top:58px}
+.k-bat2 .b-me{left:110px;top:150px}
+.k-bat2 .bpl.me{left:16px;top:430px;width:420px}
+.k-bat2 .b-ask{left:16px;top:364px;width:520px}
+.b-words{position:absolute;right:16px;top:250px;z-index:4;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.bw{display:flex;align-items:center;gap:10px;padding:2px 22px 2px 14px;background:var(--ink);border:3px solid #000;transform:skewX(-14deg);box-shadow:4px 4px 0 var(--red);animation:in-r .3s both;animation-delay:var(--d)}
+.bw b{font:400 32px/1.05 var(--fd);letter-spacing:.05em}
+.bw em{font-style:normal;font-size:12px;font-weight:800;color:var(--yel)}
+.bw.on{background:var(--red);border-color:var(--yel);padding:4px 30px 4px 18px}
+.bw.on b{font-size:60px;color:#fff;text-shadow:4px 4px 0 #000}
+/*@top*/
+@keyframes slash{from{clip-path:polygon(0 0,0 0,0 100%,0 100%)}}

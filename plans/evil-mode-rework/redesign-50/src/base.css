@@ -47,3 +47,4 @@ body.still #stage *,body.still #stage *::before,body.still #stage *::after{anima
 ::view-transition-group(*){animation-duration:.42s;animation-timing-function:cubic-bezier(.3,1.3,.5,1)}
 ::view-transition-old(root),::view-transition-new(root){animation:none}
 @media (prefers-reduced-motion:reduce){#stage *,#stage *::before,#stage *::after{animation:none!important;transition:none!important}}
+body.bare #vw-ivs{display:none}

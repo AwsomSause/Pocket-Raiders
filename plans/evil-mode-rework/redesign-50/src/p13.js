@@ -1,3 +1,0 @@
-/* Pass 13 · Light follows you: whatever is chosen throws coloured light on the street; a payphone brings calls from contacts */
-page('phone', { g: 'Opposition', t: 'Payphone call', kind: 'scene', from: 13, mode: 'talk', bg: 'street', left: { s: 'c-rook', n: 'Rook', r: 'At the payphone' }, right: { s: 't-looker', n: '???', r: 'Unknown caller' }, speaker: '???', line: 'Listen carefully. Rocket moves a truck through Saffron at midnight. You didn’t hear it from me.', choices: [['1', 'Hit the truck tonight', 'card'], ['2', 'Sell the tip to Rocket · ₽800', 'rival'], ['3', 'Hang up', 'hq']] });
-comp(13, 'k:scene', (s, P) => before('k:scene', 13)(s, P).replace('<div class="t3-act l">', '<div class="t3-pool l"></div><div class="t3-pool r"></div><div class="t3-act l">'));

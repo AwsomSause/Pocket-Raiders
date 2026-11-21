@@ -1,14 +1,58 @@
-.t1-half{position:absolute;top:0;bottom:0;z-index:1;overflow:hidden}
-.t1-half.old{left:0;width:470px;filter:brightness(.6)}
-.t1-half.new{left:470px;right:0;background:linear-gradient(180deg,#2a2236,#17121f)}
-.t1-fake{left:40px;top:90px;width:330px;height:170px}
-.t1-misty{position:absolute;right:40px;bottom:60px}
-.t1-blade{position:absolute;left:420px;top:-40px;width:110px;height:640px;z-index:4;background:linear-gradient(90deg,#7a0b20,#e0294a 40%,#ff5a74 50%,#e0294a 60%,#7a0b20);transform:rotate(8deg);box-shadow:0 0 40px #e0294a;display:grid;place-items:center}
-.t1-blade span{font-size:54px;color:#fff;transform:rotate(-8deg);animation:t1-blink 2s steps(1) infinite}
-.t1-morphnote{position:absolute;left:520px;right:24px;bottom:56px;z-index:5;background:var(--pn);border:2px solid var(--ln);border-radius:14px;padding:10px 14px;display:flex;flex-direction:column}
-.t1-morphnote em{font-style:normal;font-size:13px;color:#c9c1d8}
+/* Pass 3 · Places */
+.pl-in{background:linear-gradient(rgba(40,14,10,.35),rgba(20,6,10,.55)),url(sprites/ev-indoor.png) center/cover}
+.pl-morn{background:linear-gradient(rgba(255,170,110,.18),rgba(40,10,20,.42)),url(sprites/town-street.png) center/cover}
+.pl-night{background:linear-gradient(rgba(10,6,30,.25),rgba(30,6,30,.5)),url(sprites/ev-city_night.png) center/cover}
+.pl-bunk{background:linear-gradient(rgba(10,20,40,.35),rgba(10,6,20,.6)),url(sprites/ev-indoor.png) center/cover}
+.pl-pens{background:linear-gradient(rgba(10,6,20,.3),rgba(10,6,20,.55)),url(sprites/ev-cave.png) center/cover}
+.pl-blue{background:linear-gradient(rgba(10,20,60,.35),rgba(6,6,20,.6)),url(sprites/ev-city_night.png) center/cover}
+.pl-roof{background:linear-gradient(rgba(20,6,40,.1),rgba(60,6,30,.45)),url(sprites/ev-city_eve.png) center/cover}
+.pl-chair{background:radial-gradient(ellipse 50% 50% at 50% 30%,rgba(232,178,58,.25),transparent 70%),linear-gradient(rgba(30,6,8,.55),rgba(10,4,6,.75)),url(sprites/ev-indoor.png) center/cover}
+.lite{position:absolute;inset:0;background:radial-gradient(ellipse 40% 50% at 30% 0,rgba(255,200,120,.22),transparent 70%),radial-gradient(ellipse 40% 40% at 80% 100%,rgba(193,18,31,.3),transparent 70%);animation:flick 5s ease-in-out infinite}
+.pl-night .lite,.pl-blue .lite{background:radial-gradient(ellipse 30% 40% at 85% 10%,rgba(160,190,255,.25),transparent 70%),radial-gradient(ellipse 50% 30% at 20% 100%,rgba(193,18,31,.35),transparent 70%)}
+.pn{background-color:rgba(23,19,29,.8);backdrop-filter:blur(5px) saturate(1.2)}
+.row,.srow,.part,.chg,.trait{background-color:rgba(33,26,40,.72)}
+.cell{background-color:rgba(33,26,40,.7)}
+.loc{font-style:normal;font-size:12px;font-weight:800;color:var(--yel);background:rgba(193,18,31,.25);border:2px solid var(--red);border-radius:999px;padding:1px 12px}
+.act::after{content:'';position:absolute;left:50%;bottom:40px;width:150px;height:22px;margin-left:-75px;z-index:-1;border-radius:50%;background:radial-gradient(rgba(0,0,0,.55),transparent 70%)}
+.k-scene .bgx::after{content:'';position:absolute;left:0;right:0;top:350px;bottom:0;background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.55))}
+.foot{background:rgba(7,6,11,.88);backdrop-filter:blur(4px)}
+.tbox{background:rgba(7,6,11,.9);backdrop-filter:blur(4px)}
+/* hub: the building */
+.bld3{position:absolute;left:16px;top:62px;width:640px;height:340px;display:flex;flex-direction:column;gap:5px;animation:in-up .45s both}
+.roof3{position:relative;height:46px;flex:none;display:flex;align-items:center;justify-content:center;gap:12px;background:repeating-linear-gradient(90deg,#5b2a7a 0 10px,#6f3a90 10px 12px);clip-path:polygon(4% 100%,12% 0,88% 0,96% 100%);border-bottom:4px solid #2a1236}
+.roof3 b{font:400 26px/1 var(--fd);color:var(--yel);text-shadow:2px 2px 0 #000;letter-spacing:.04em}
+.roof3 em{font-style:normal;font-size:12px;font-weight:800;color:#e9d6f5}
+.fl3{flex:1;display:flex;gap:5px;padding:5px 6px;margin:0 18px;background:repeating-linear-gradient(0deg,#3b2a22 0 2px,#4a3528 2px 24px);border:3px solid #1b120e;box-shadow:inset 0 0 30px rgba(255,180,90,.18);animation:in-up .4s both;animation-delay:var(--d)}
+.fl3.under{margin-top:14px;background:repeating-linear-gradient(0deg,#1d1c22 0 2px,#26252d 2px 20px);box-shadow:inset 0 0 30px rgba(120,160,255,.12)}
+.ground3{position:absolute;left:0;right:0;top:233px;height:12px;background:linear-gradient(#4f8a3a 0 4px,#5a3a22 4px);border-radius:2px}
+.ftag3{width:74px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--red);border:2px solid #000;border-radius:3px 10px 3px 10px;cursor:pointer;text-align:center}
+.ftag3 b{font:400 34px/1 var(--fd);color:var(--yel)}
+.ftag3 em{font-style:normal;font-size:11px;font-weight:800;line-height:1.1}
+.rm3{position:relative;flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:2px 2px 3px;text-align:center;background:linear-gradient(rgba(255,210,140,.16),rgba(0,0,0,.25));border:2px solid #1b120e;border-radius:2px;cursor:pointer}
+.rm3 b{font-size:12px;line-height:1.1;text-shadow:1px 1px 0 #000}
+.rm3 em{font-style:normal;font-size:11px;color:#e8dcc8;white-space:nowrap}
+.rm3 .who3{margin-bottom:1px;animation:breathe 3s ease-in-out infinite;transform-origin:50% 100%}
+.rm3.fix{border-color:var(--yel);background:linear-gradient(rgba(232,178,58,.3),rgba(0,0,0,.25))}
+.rm3.plot{border:2px dashed #c9bfae;background:rgba(0,0,0,.35);justify-content:center}
+.h-side3{left:672px;top:62px;width:272px;height:334px}
+/* street */
+.k-street .bgx{filter:brightness(.55)}
+.sky3{position:absolute;left:0;right:0;top:50px;height:200px;background:linear-gradient(rgba(255,160,110,.25),transparent)}
+.road3{position:absolute;left:0;right:0;top:300px;height:100px;background:repeating-linear-gradient(90deg,#3a3440 0 60px,#433d4a 60px 62px);border-top:4px solid #8a7f72}
+.shop3{position:absolute;top:84px;width:224px;height:250px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;cursor:pointer;animation:in-up .45s both;animation-delay:var(--d)}
+.shop3 .bldg{filter:drop-shadow(5px 5px 0 rgba(0,0,0,.45)) brightness(.95)}
+.shop3.on .bldg{filter:drop-shadow(0 0 0 var(--yel)) drop-shadow(0 0 12px rgba(232,178,58,.8))}
+.sign3{position:absolute;top:0;left:6px;right:6px;z-index:2;padding:3px 8px;text-align:center;background:rgba(7,6,11,.88);border:2px solid var(--line);border-radius:3px 12px 3px 12px}
+.shop3.on .sign3{border-color:var(--yel)}
+.sign3 b{display:block;font:400 22px/1 var(--fd);text-transform:uppercase}
+.sign3 em{font-style:normal;font-size:12px;color:var(--mut);font-weight:800}
+.act3{position:absolute;bottom:-28px;font-style:normal;font-size:13px;font-weight:800;padding:2px 14px;background:var(--cr);color:var(--ink);border:2px solid #000;border-radius:3px 10px 3px 10px}
+.shop3.on .act3{background:var(--yel)}
+.walker3{position:absolute;left:222px;top:330px;z-index:2;animation:walk 1.2s steps(2) infinite}
+.nb2-t.long i{font-size:30px}
+.f-por .plinth img{zoom:1}
+.k-street .bgx{background:linear-gradient(#ffc48f,#e5826c 38%,#6d2a4f 70%,#2a1024)!important;filter:none}
+.k-street .bgx::before{content:'';position:absolute;left:0;right:0;top:150px;height:150px;background:repeating-linear-gradient(90deg,#3a1a34 0 40px,#4a2244 40px 70px,#2e1530 70px 120px);clip-path:polygon(0 40%,6% 40%,6% 10%,14% 10%,14% 50%,22% 50%,22% 0,30% 0,30% 35%,40% 35%,40% 15%,52% 15%,52% 45%,60% 45%,60% 5%,70% 5%,70% 30%,82% 30%,82% 12%,92% 12%,92% 40%,100% 40%,100% 100%,0 100%);opacity:.8}
 /*@top*/
-html[data-tr]::view-transition-old(stage){animation:.32s cubic-bezier(.5,0,.8,.4) both t1-vt-out}
-html[data-tr]::view-transition-new(stage){animation:.5s cubic-bezier(.2,.8,.3,1) both t1-vt-in}
-@keyframes t1-vt-out{to{transform:translateX(-80px);opacity:0;filter:brightness(.4)}}
-@keyframes t1-vt-in{from{clip-path:polygon(100% 0,100% 0,100% 100%,100% 100%)}to{clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}}
+@keyframes flick{50%{opacity:.75}}
+@keyframes walk{50%{transform:translateY(-3px)}}

@@ -37,7 +37,7 @@ def main():
     body = ('<div id="app">\n<header class="vw-top vw-ui"><h1>Dominion · 50-pass redesign</h1>\n'
             '<div class="vw-passbar"><button class="vw-btn" data-pass-step="-1" aria-label="Earlier pass">◀</button><b id="vw-pass"></b>'
             '<button class="vw-btn" data-pass-step="1" aria-label="Later pass">▶</button><input id="vw-range" type="range" min="1" max="1" step="1" aria-label="Pass"></div>'
-            '<p id="vw-name"></p></header>\n<nav id="vw-ivs" class="vw-ui" aria-label="Intervals"></nav>\n'
+            '<p id="vw-name"></p></header>\n<nav id="vw-ivs" class="vw-ui" aria-label="Showings"></nav>\n'
             '<div id="vw-wrap"><div id="stage"></div></div>\n'
             '<div class="vw-row vw-ui"><span id="vw-cur"></span><button class="vw-btn" id="vw-replay">Replay animation</button><button class="vw-btn" id="vw-tour">Play tour</button><span>Click inside the screen to move around. Arrow keys change page, [ and ] change pass.</span></div>\n'
             '<nav id="vw-screens" class="vw-ui" aria-label="Pages"></nav>\n<section id="vw-review" class="vw-ui"></section>\n</div>\n')

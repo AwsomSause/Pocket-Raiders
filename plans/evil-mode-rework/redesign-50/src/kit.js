@@ -54,9 +54,10 @@ function paint(id) {
   if (!list.find(s => s.id === id)) id = (list.find(s => s.changed) || list[0]).id;
   PR.cur = id;
   const d = drawer(id, PR.P), s = specAt(id, PR.P);
-  for (const x of document.querySelectorAll('style[data-pass]')) x.media = (+x.dataset.pass <= PR.P && IV(+x.dataset.pass) === IV(PR.P)) || x.dataset.pass === '0' ? 'all' : 'not all';
-  stg.dataset.pass = PR.P; stg.dataset.iv = IV(PR.P); stg.dataset.scr = id;
-  stg.className = 'iv' + IV(PR.P) + ' p' + PR.P;
+  for (const x of document.querySelectorAll('style[data-pass]')) x.media = +x.dataset.pass <= PR.P ? 'all' : 'not all';
+  stg.dataset.g = s.g; stg.dataset.pass = PR.P; stg.dataset.iv = IV(PR.P); stg.dataset.scr = id;
+  stg.className = 'p' + PR.P;
+  PR.s = s;
   stg.innerHTML = d.fn(s, PR.P);
   nameMorphs();
 }
@@ -79,9 +80,9 @@ function show(id, kind) { swap(() => { paint(id); chrome(); }, kind); }
 function setPass(P, kind) { P = Math.max(1, Math.min(PR.maxPass, P)); swap(() => { PR.P = P; paint(PR.cur); chrome(); }, kind || 'pass'); }
 function chrome() {
   if (QS.has('bare')) return;
-  const P = PR.P, n = NOTES[P] || {}, list = screensAt(P), iv = NOTES['i' + IV(P)] || {};
+  const P = PR.P, n = NOTES[P] || {}, list = screensAt(P);
   $('#vw-pass').textContent = 'Pass ' + P + ' of ' + PR.maxPass;
-  $('#vw-name').textContent = 'Interval ' + IV(P) + ' · ' + (iv.name || '') + ' · ' + (n.name || '');
+  $('#vw-name').textContent = n.name || '';
   $('#vw-range').max = PR.maxPass; $('#vw-range').value = P;
   let html = '', g = '';
   for (const s of list) {
@@ -92,11 +93,11 @@ function chrome() {
   const cur = list.find(s => s.id === PR.cur);
   $('#vw-cur').textContent = cur ? cur.meta.g + ' · ' + cur.meta.t + '  (' + (list.indexOf(cur) + 1) + ' of ' + list.length + ')' : '';
   const qs = [['More extravagant and eye-catching?', n.q1], ['How is it different and better than the last pass?', n.q2], ['More pages to avoid clutter?', n.q3], ['How do the Menu and Settings fit?', n.q4], ['Does it feel like a Pokémon game?', n.q5]];
-  $('#vw-review').innerHTML = `<h2>Pass ${P}: ${esc(n.name || '')}</h2>` + (IP(P) === 1 ? `<p class="vw-iv"><b>New interval · ${esc(iv.name || '')}.</b> ${esc(iv.big || '')}</p>` : '') +
+  $('#vw-review').innerHTML = `<h2>Pass ${P}: ${esc(n.name || '')}</h2>` + (P % 5 === 0 ? `<p class="vw-iv"><b>Showing to Kice.</b> Passes ${P - 4} to ${P} together.</p>` : '') +
     `<p class="vw-big">${esc(n.big || '')}</p>` +
     (n.pages && n.pages.length ? `<p class="vw-new"><b>New pages:</b> ${n.pages.map(esc).join(' · ')}</p>` : '') +
     `<dl>${qs.filter(q => q[1]).map(q => `<dt>${q[0]}</dt><dd>${esc(q[1])}</dd>`).join('')}</dl>`;
-  for (const b of document.querySelectorAll('.vw-ivb')) b.classList.toggle('on', +b.dataset.iv === IV(P));
+  for (const b of document.querySelectorAll('.vw-ivb')) b.classList.toggle('on', +b.dataset.passTo === P);
 }
 function fit() {
   const w = $('#vw-wrap'); if (!w) return;
@@ -116,7 +117,7 @@ function boot() {
   if (QS.has('still')) document.body.classList.add('still');
   PR.cur = QS.get('s') || '';
   const ivs = $('#vw-ivs');
-  if (ivs) ivs.innerHTML = rep(Math.ceil(PR.maxPass / 5), i => `<button class="vw-ivb" data-iv="${i + 1}" data-pass-to="${Math.min(PR.maxPass, (i + 1) * 5)}">${i + 1} · ${esc((NOTES['i' + (i + 1)] || {}).name || '')}</button>`);
+  if (ivs) ivs.innerHTML = rep(Math.ceil(PR.maxPass / 5), i => `<button class="vw-ivb" data-pass-to="${Math.min(PR.maxPass, (i + 1) * 5)}">Pass ${Math.min(PR.maxPass, (i + 1) * 5)}</button>`);
   paint(PR.cur); chrome(); fit();
   addEventListener('resize', fit);
   document.addEventListener('click', e => {
