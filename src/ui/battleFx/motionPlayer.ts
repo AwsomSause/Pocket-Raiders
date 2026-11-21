@@ -311,9 +311,11 @@ export function drawFx(scene: Phaser.Scene, fx: MotionFx, o: FxOpts): void {
         const x0 = fx.x0 + rnd(-40, 40);
         const y0 = fx.y0 + rnd(-30, 20);
         const x1 = fx.x1 + rnd(-40, 40);
-        const h = rnd(40, 120);
-        const halo = scene.add.circle(x0, y0, 11, 0x4cc3ff, 0.35).setDepth(o.depth).setBlendMode(Phaser.BlendModes.ADD).setVisible(false);
-        const core = scene.add.circle(x0, y0, 6, 0x9ae4ff, 1).setDepth(o.depth + 1).setVisible(false);
+        const h = fx.arc ?? rnd(40, 120);
+        const r = fx.r ?? 6;
+        // Its own colours glow as painted (an added glow turns green to cyan over a blue sky).
+        const halo = scene.add.circle(x0, y0, r * 1.8, fx.glow ?? 0x4cc3ff, fx.glow === undefined ? 0.35 : 0.55).setDepth(o.depth).setBlendMode(fx.glow === undefined ? Phaser.BlendModes.ADD : Phaser.BlendModes.NORMAL).setVisible(false);
+        const core = scene.add.circle(x0, y0, r, fx.color ?? 0x9ae4ff, 1).setDepth(o.depth + 1).setVisible(false);
         const k = { u: 0 };
         scene.tweens.add({
           targets: k,
@@ -330,7 +332,10 @@ export function drawFx(scene: Phaser.Scene, fx: MotionFx, o: FxOpts): void {
             halo.setPosition(x, y);
             core.setPosition(x, y);
           },
-          onComplete: () => { halo.destroy(); core.destroy(); },
+          onComplete: () => {
+            if (!fx.pop || !core.active) return void (halo.destroy(), core.destroy());
+            scene.tweens.add({ targets: [halo, core], scale: 2, alpha: 0, duration: ms(60), onComplete: () => (halo.destroy(), core.destroy()) });
+          },
         });
       }
       return;

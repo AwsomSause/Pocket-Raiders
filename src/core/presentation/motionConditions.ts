@@ -427,3 +427,45 @@ export function endTurnParade(events: readonly ({ type: string } & Record<string
   }
   return { chips, at };
 }
+
+/**
+ * Recoil (pass 12): the force comes back. A crack in the move's colour runs along the ground from the target to the
+ * user (cue `tint` at 100 washes the user in that colour for a moment), the user winces (squashed to 90%, shaken 6 px
+ * each way) and a dark RECOIL stamp settles beside it (cue `stamp`). Reduced: the stamp only. Off: nothing.
+ */
+export const RECOIL = { tint: 0.7, tintIn: 100, tintHold: 200, tintOut: 300, stampDx: 220, stampDy: -60 } as const;
+
+export function recoilClip(user: CondSpot, target: CondSpot, color: number, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('recoil', level);
+  const m = b.part('mon', { dx: 0, sx: 1, sy: 1 });
+  if (level === 'off') return b.end(0);
+  b.fx({ kind: 'cue', at: 200, name: 'stamp' });
+  if (level === 'reduced') return b.end(1200);
+  const toward = user.side === 'player' ? 1 : -1;
+  b.fx({ kind: 'bolt', at: 0, x1: target.x - 40 * toward, y1: target.y, x2: user.x + 60 * toward, y2: user.y - 20, n: 9, j: 16, color, color2: 0xfff3b0, w: 6, d: 120, again: true });
+  b.fx({ kind: 'cue', at: 100, name: 'tint' });
+  m.at(120).to(60, { sy: 0.9, sx: 1.06 }).to(40, { dx: -6 }).to(40, { dx: 6 }).to(250, { dx: 0, sy: 1, sx: 1 }, 'el');
+  b.beat(0, 'A crack runs back along the ground').beat(120, 'The user winces').beat(200, 'RECOIL');
+  return b.end(1200);
+}
+
+/**
+ * Drain (pass 12): what was taken travels. Seven green lights lift off the target one by one (130 ms apart), cross the
+ * field in an arc 150 px high in 550 ms and sink into the user, each landing with a small green ring; the user glows
+ * green (cue `tint` at 500) and the healing number follows when the last has landed (the clip's length). Full only:
+ * Reduced and Off keep the battle's own heal.
+ */
+export const DRAIN = { n: 7, gap: 130, d: 550, arc: 150, color: 0xe8ffe9, glow: 0x9df0a8, r: 7, tint: 0.4, tintAt: 500, tintHold: 1000, tintOut: 300 } as const;
+
+export function drainClip(user: CondSpot, target: CondSpot, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('drain', level);
+  if (level !== 'full') return b.end(0);
+  const D = DRAIN;
+  const from = { x: target.x, y: target.y - target.h / 2 };
+  const to = { x: user.x, y: user.y - user.h / 2 };
+  b.fx({ kind: 'orbs', at: 0, x0: from.x, y0: from.y, x1: to.x, y1: to.y, n: D.n, gap: D.gap, d: D.d, color: D.color, glow: D.glow, r: D.r, arc: D.arc, pop: true });
+  for (let i = 0; i < D.n; i++) b.fx({ kind: 'ring', at: i * D.gap + D.d, x: to.x, y: to.y, r1: 50, flat: 1, d: 200, color: D.glow, w: 3 });
+  b.fx({ kind: 'cue', at: D.tintAt, name: 'tint' });
+  b.beat(0, 'Lights lift off the target').beat(D.d, 'Each one sinks into the user');
+  return b.end((D.n - 1) * D.gap + D.d + 60);
+}

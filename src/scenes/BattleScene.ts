@@ -123,7 +123,7 @@ import { megaGlass } from '../ui/battleFx/megaGlass';
 import { drawnBox, type GimmickPage } from '../ui/battleFx/gimmickStage';
 import { HIT_RUN, stand, standStill, sway, twitch } from '../ui/battleFx/stance';
 import { bubblePicture, chevronPicture, ConditionLook, DizzyStars, flagPicture, flamePicture, glarePicture, pipPicture, putAbove, titlePicture } from '../ui/battleFx/conditionLook';
-import { BUBBLE_W, chevronWaves, condArriveClip, FLAG_HOLD, intimidateClip, condKind, condTickClip, FLAME_W, CONFUSE, endTurnParade, confusionHitClip, gustLeanClip, parCantClip, protectedClip, SHIELD, SLUMP, STAT_COLOR, STAT_DOWN_STAMP, statClip, thawClip, wakeClip, type CondKind, type CondSpot } from '../core/presentation/motionConditions';
+import { BUBBLE_W, chevronWaves, condArriveClip, FLAG_HOLD, intimidateClip, condKind, condTickClip, FLAME_W, CONFUSE, endTurnParade, confusionHitClip, gustLeanClip, parCantClip, protectedClip, RECOIL, recoilClip, DRAIN, drainClip, SHIELD, SLUMP, STAT_COLOR, STAT_DOWN_STAMP, statClip, thawClip, wakeClip, type CondKind, type CondSpot } from '../core/presentation/motionConditions';
 import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture, GLOW_SIZE, glowPicture, PICTURE_SCALE, plusPicture, shinyChipPicture, stampPicture, starPicture } from '../ui/battleFx/cheerChip';
 import { dynamaxPan } from '../ui/battleFx/dynamaxPan';
 import { keyItemFor } from '../ui/battleFx/cineLook';
@@ -4565,6 +4565,64 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** Confusion (pass 8): stars arrive and circle its head while it sways; hurting itself swings, bonks and shakes. */
+  /** Recoil (pass 12): a crack runs back from the target, the user flashes the move's colour, winces, RECOIL. */
+  private recoilMoment(side: Side): void {
+    const sprite = this.condSprite(side);
+    const level = this.clipLevel();
+    if (!sprite || !sprite.visible || level === 'off' || this.duo) return;
+    try {
+      const otherSide: Side = side === 'player' ? 'enemy' : 'player';
+      const other = this.condSprite(otherSide);
+      const user = this.condSpot(side, sprite);
+      const target = other ? this.condSpot(otherSide, other) : { ...user, ...this.spotXY(otherSide), side: otherSide };
+      const color = TYPE_COLORS[this.lastMoveType] ?? 0xffffff;
+      const mon = this.shown[side];
+      const mid = this.midOf(side);
+      this.condPlay(sprite, recoilClip(user, target, color, level), {}, (cut) => {
+        if (cut || !sprite.active) return;
+        this.restAt(sprite, side);
+        if (sprite.visible) this.standUp(sprite, mon);
+      }, (name) => {
+        if (name === 'stamp') this.wxStamp('RECOIL', '#131c36', '#ffffff', Phaser.Math.Clamp(mid.x + (side === 'player' ? 1 : -1) * RECOIL.stampDx, 110, GAME_WIDTH - 110), Math.max(60, mid.y + RECOIL.stampDy), true);
+        if (name === 'tint') this.washSprite(sprite, color, RECOIL.tint, RECOIL.tintHold, RECOIL.tintOut);
+      });
+    } catch {
+      /* presentation only */
+    }
+  }
+
+  /** Drain (pass 12): green lights cross from the target into the user, which glows; resolves when the last lands. */
+  private async drainMoment(side: Side): Promise<boolean> {
+    const sprite = this.condSprite(side);
+    if (!sprite || !sprite.visible || this.clipLevel() !== 'full' || this.duo) return false;
+    try {
+      const otherSide: Side = side === 'player' ? 'enemy' : 'player';
+      const other = this.condSprite(otherSide);
+      const user = this.condSpot(side, sprite);
+      const target = other ? this.condSpot(otherSide, other) : { ...user, ...this.spotXY(otherSide), side: otherSide };
+      const run = playClip(this, drainClip(user, target, 'full'), this.clipHost({}, { cue: (name) => name === 'tint' && this.washSprite(sprite, DRAIN.glow, DRAIN.tint, DRAIN.tintHold, DRAIN.tintOut) }));
+      await run.done;
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  /** A wash of one colour over a Pokémon (a solid copy on top of it) that holds, then fades. */
+  private washSprite(sprite: Phaser.GameObjects.Sprite, color: number, alpha: number, holdMs: number, outMs: number): void {
+    if (!sprite.active) return;
+    const lit = this.add.sprite(sprite.x, sprite.y, sprite.texture.key, sprite.frame.name).setOrigin(sprite.originX, sprite.originY).setScale(sprite.scaleX, sprite.scaleY).setFlip(sprite.flipX, sprite.flipY).setTintFill(color).setAlpha(alpha);
+    if (sprite.parentContainer) sprite.parentContainer.addAt(lit, sprite.parentContainer.getIndex(sprite) + 1);
+    if (sprite.mask) lit.setMask(sprite.mask);
+    const follow = (): void => {
+      if (!sprite.active || !lit.active) return;
+      lit.setPosition(sprite.x, sprite.y).setScale(sprite.scaleX, sprite.scaleY).setFrame(sprite.frame.name);
+    };
+    this.events.on(Phaser.Scenes.Events.POST_UPDATE, follow);
+    this.tweens.add({ targets: lit, alpha: 0, delay: holdMs, duration: outMs, onComplete: () => (this.events.off(Phaser.Scenes.Events.POST_UPDATE, follow), lit.destroy()) });
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.events.off(Phaser.Scenes.Events.POST_UPDATE, follow));
+  }
+
   private confusionMoment(side: Side, at: 'arrive' | 'tick' | 'cant'): boolean {
     const sprite = this.condSprite(side);
     const level = this.clipLevel();
@@ -7039,6 +7097,9 @@ export class BattleScene extends Phaser.Scene {
         this.gustShown = true;
         this.sandGust();
       }
+      if (e.type === 'recoil') this.recoilMoment(e.side);
+      // Drain: the lights carry the HP across; they take the pack's heal sparkle's place.
+      if (e.type === 'drain' && e.amount > 0 && (await this.drainMoment(e.side))) cues[index] = (cues[index] ?? []).filter((c) => c.kind !== 'commonAnim');
       const step = combo.get(index);
       if (step && 'k' in step) {
         cues[index] = (cues[index] ?? []).filter((c) => c.kind !== 'number');

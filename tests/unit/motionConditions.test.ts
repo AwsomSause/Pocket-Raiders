@@ -4,7 +4,7 @@ import { planCues } from '../../src/core/presentation/cues';
 import { moveAnims } from '../../src/data/presentation';
 import { content } from './helpers';
 import { clipEnd, EASES, fxAllowed, sampleClip } from '../../src/core/presentation/motionClip';
-import { chevronWaves, COND_TINT, CONFUSE, endTurnChip, endTurnParade, confusionHitClip, GUST_LEAN, protectedClip, SHIELD, gustLeanClip, intimidateClip, condArriveClip, condKind, condTickClip, parCantClip, SLUMP, STAT_COLOR, statClip, thawClip, wakeClip, type CondSpot } from '../../src/core/presentation/motionConditions';
+import { DRAIN, drainClip, RECOIL, recoilClip, chevronWaves, COND_TINT, CONFUSE, endTurnChip, endTurnParade, confusionHitClip, GUST_LEAN, protectedClip, SHIELD, gustLeanClip, intimidateClip, condArriveClip, condKind, condTickClip, parCantClip, SLUMP, STAT_COLOR, statClip, thawClip, wakeClip, type CondSpot } from '../../src/core/presentation/motionConditions';
 
 // Animation redesign pass 8 (Conditions): every status arrives, keeps a look and ticks, as the mockup's numbers.
 const FOE: CondSpot = { x: 648, y: 240, w: 100, h: 120, side: 'enemy' };
@@ -261,5 +261,37 @@ describe('the end of a turn', () => {
     expect(endTurnParade([{ type: 'move' }, { type: 'damage' }], item).chips).toEqual([]);
     const many = ['brn', 'psn'].map((status) => ({ type: 'residual', status })).concat([{ type: 'seedDamage' } as never, { type: 'bindDamage' } as never, { type: 'weatherDamage', weather: 'hail' } as never]);
     expect(endTurnParade(many, item).chips).toHaveLength(4);
+  });
+});
+
+describe('recoil and drain (pass 12)', () => {
+  const me: CondSpot = { x: 312, y: 428, w: 80, h: 120, side: 'player' };
+  const foe: CondSpot = { x: 648, y: 240, w: 80, h: 100, side: 'enemy' };
+  it('recoil: a crack in the move colour runs back from the target to the user, it washes, winces and RECOIL settles', () => {
+    const c = recoilClip(me, foe, 0xf08030, 'full');
+    expect(c.fx).toContainEqual({ kind: 'bolt', at: 0, x1: 608, y1: 240, x2: 372, y2: 408, n: 9, j: 16, color: 0xf08030, color2: 0xfff3b0, w: 6, d: 120, again: true });
+    expect(c.fx).toContainEqual({ kind: 'cue', at: 100, name: 'tint' });
+    expect(c.fx).toContainEqual({ kind: 'cue', at: 200, name: 'stamp' });
+    expect(sampleClip(c, 180).mon).toMatchObject({ sy: 0.9 });
+    expect(sampleClip(c, 220).mon!.dx).toBeCloseTo(-6);
+    expect(clipEnd(c).mon).toMatchObject({ dx: 0, sx: 1, sy: 1 });
+    // The foe's recoil runs the other way.
+    expect(recoilClip(foe, me, 0xf08030, 'full').fx.find((f) => f.kind === 'bolt')).toMatchObject({ x1: 352, x2: 588 });
+    expect(RECOIL).toMatchObject({ stampDx: 220, stampDy: -60, tint: 0.7 });
+  });
+  it('recoil: Reduced keeps the stamp only; Off nothing', () => {
+    expect(recoilClip(me, foe, 0, 'reduced').fx).toEqual([{ kind: 'cue', at: 200, name: 'stamp' }]);
+    expect(recoilClip(me, foe, 0, 'off').length).toBe(0);
+  });
+  it('drain: seven green lights arc from the target into the user, each lands with a ring; the user glows', () => {
+    const c = drainClip(me, foe, 'full');
+    expect(c.fx).toContainEqual({ kind: 'orbs', at: 0, x0: 648, y0: 190, x1: 312, y1: 368, n: 7, gap: 130, d: 550, color: DRAIN.color, glow: 0x9df0a8, r: 7, arc: 150, pop: true });
+    const rings = c.fx.filter((f) => f.kind === 'ring');
+    expect(rings.map((r) => r.at)).toEqual([550, 680, 810, 940, 1070, 1200, 1330]);
+    expect(c.fx).toContainEqual({ kind: 'cue', at: 500, name: 'tint' });
+    expect(c.length).toBe(1390);
+  });
+  it('drain: Reduced and Off leave it to the battle heal', () => {
+    for (const level of ['reduced', 'off'] as const) expect(drainClip(me, foe, level).length).toBe(0);
   });
 });

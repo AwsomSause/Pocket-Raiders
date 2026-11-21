@@ -958,6 +958,57 @@ test('multi-hit: a combo counter ticks up with every hit, then HIT 3 TIMES! and 
   expect(errors).toEqual([]);
 });
 
+test('recoil and drain: a crack runs back and RECOIL settles; green lights carry the HP across; nothing left after', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'recoil-drain-e2e');
+  const seen = await page.evaluate(async () => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    b.say = async () => {};
+    b.sayTrainer = async () => {};
+    const s = { stamps: [] as string[], bolt: false, orbs: 0, wash: [] as number[], winced: false };
+    const v = b.playerSprite;
+    const watch = () => {
+      const all = [...b.children.list, ...b.field.list];
+      for (const o of all) if (String(o.texture?.key).startsWith('stamp.') && !s.stamps.includes(o.texture.key)) s.stamps.push(o.texture.key);
+      // The crack: a new line drawn before the drain's lights.
+      s.bolt ||= s.orbs === 0 && all.some((o: any) => o.type === 'Graphics' && o.visible && !old.has(o));
+      s.orbs = Math.max(s.orbs, all.filter((o: any) => o.type === 'Arc' && o.fillColor === 0xe8ffe9 && o.visible).length);
+      for (const o of all) if (o.type === 'Sprite' && o !== v && o.tintFill && o.visible && o.alpha > 0.2 && !s.wash.includes(o.tintTopLeft)) s.wash.push(o.tintTopLeft);
+      s.winced ||= v.active && v.scaleY < v.getData('baseScaleY') * 0.95;
+    };
+    v.setData('baseScaleY', v.scaleY);
+    const old = new Set([...b.children.list, ...b.field.list]);
+    b.events.on('update', watch);
+    const before = structuredClone((window as any).__pkr.session.run);
+    const hp = b.shown.player.hp;
+    b.shown.player.hp = hp - 3;
+    // As right after Flare Blitz (its own animation is not part of this).
+    b.lastMoveType = 'fire';
+    await b.playEvents([
+      { type: 'recoil', side: 'player', amount: 1, hpAfter: hp - 4 },
+      { type: 'drain', side: 'player', amount: 2, hpAfter: hp - 2 },
+    ], before, null);
+    await new Promise((r) => setTimeout(r, 1200));
+    b.events.off('update', watch);
+    return s;
+  });
+  expect(seen.stamps).toContain('stamp.RECOIL.#131c36');
+  expect(seen.bolt).toBe(true);
+  expect(seen.winced).toBe(true);
+  expect(seen.orbs).toBeGreaterThan(0);
+  // The fire-coloured wash of the recoil and the green glow of the drain.
+  expect(seen.wash).toEqual(expect.arrayContaining([0xf08030, 0x9df0a8]));
+  // Nothing is left: no lights, no washes, the Pokémon back on its spot at its size.
+  await expect.poll(() => page.evaluate(() => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    const v = b.playerSprite;
+    const all = [...b.children.list, ...b.field.list];
+    return all.filter((o: any) => (o.type === 'Arc' && o.fillColor === 0xe8ffe9) || (o.type === 'Sprite' && o !== v && o.tintFill && o.alpha > 0)).length + (Math.abs(v.x - b.spotXY('player').x) > 0.5 ? 1 : 0);
+  }), { timeout: 5000 }).toBe(0);
+  expect(errors).toEqual([]);
+});
+
 test('end of turn: the chips line up, each lights as its effect plays, a line sweeps and the turn counter flips; nothing left after', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));

@@ -186,3 +186,8 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   ...) that pops and grows a little with every hit while the screen shakes a little harder. The per-hit numbers stay
   away; at the end the counter lifts off, a yellow HIT N TIMES! stamp slams on and the total slams in as one big
   number. Reduced: the counter without the pop or shake. Off: the plain numbers.
+- **Recoil and drain (pass 12).** Recoil: a crack in the move's colour runs along the ground from the target back to
+  the user, the user flashes that colour, winces (squashed, shaken left and right) and a dark RECOIL stamp settles
+  beside it. Drain: seven green lights lift off the target one by one, arc across the field and sink into the user,
+  each with a small green ring, while the user glows green; the healing number follows once the last has landed
+  (this replaces the pack's heal sparkle for a drain). Reduced: the RECOIL stamp, and the usual heal for a drain.
