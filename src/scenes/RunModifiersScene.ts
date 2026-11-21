@@ -11,7 +11,8 @@ import { playSfx } from '../ui/audio';
 import { onInputAction } from '../ui/input';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import type { RunPrepData } from './RunPrepScene';
-import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, pocketOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { pkPrepMods } from '../ui/pocket/screens/run';
 import { settingsView } from '../ui/redux/templates';
 
 export interface RunModifiersData {
@@ -90,7 +91,7 @@ export class RunModifiersScene extends Phaser.Scene {
 
     const order = (): (string | null)[] => [null, ...usedCategories().map((c) => c.id)];
     this.view = reduxOn() ? mountRedux(this, {
-      render: (c) => settingsView(c, {
+      render: (c) => c.pk ? this.pocketPage() : settingsView(c, {
         title: 'Modifiers', area: 'run', tabs: ['All', ...usedCategories().map((x) => x.label)], tab: order().indexOf(this.category),
         rows: this.ids.map((id) => {
           const m = id === DEATH ? null : RUN_RULES.modifiers.find((x) => x.id === id)!;
@@ -101,9 +102,22 @@ export class RunModifiersScene extends Phaser.Scene {
         text: this.reduxText(),
         hints: [['↔', 'on / off'], ['Q/E', 'category'], ['Esc', 'desk']],
       }),
-      acts: { pick: (i) => { this.index = Number(i); this.toggle(this.ids[this.index]!); }, tab: (k) => this.setCategory(order()[Number(k)]!) },
+      acts: {
+        pick: (i) => { this.index = Number(i); this.toggle(this.ids[this.index]!); }, tab: (k) => (pocketOn() ? this.pocketTab(Number(k)) : this.setCategory(order()[Number(k)]!)),
+        // Pocket look: a card lights on the first click and switches on the second.
+        mod: (i) => { if (Number(i) === this.index) this.toggle(this.ids[this.index]!); else { this.index = Number(i); this.build(); } this.view?.refresh(); },
+        cat: () => this.shiftCategory(1), back: () => this.leave(),
+      },
+      overs: { over: (i) => { if (Number(i) !== this.index) { this.index = Number(i); this.build(); this.view?.refresh(); } } },
     }) : null;
     onInputAction(this, (a) => {
+      // Pocket look: the rules are cards three across, the Death-Block bar under them.
+      if (this.view && pocketOn() && a !== 'confirm' && a !== 'back') {
+        const mods = this.ids.length - 1, step = a === 'left' ? -1 : a === 'right' ? 1 : a === 'up' ? -3 : 3;
+        const next = this.index === mods && step === -3 ? mods - 1 : Math.min(mods, this.index + step);
+        if (next >= 0 && next !== this.index) { this.index = next; this.build(); this.view.refresh(); }
+        return;
+      }
       if (a === 'up') this.move(-1);
       else if (a === 'down') this.move(1);
       // New UI: the row shows ◀ On ▶, so left and right switch it (Q/E change category).
@@ -249,6 +263,24 @@ export class RunModifiersScene extends Phaser.Scene {
   }
 
   /** Back to the Preparation Desk with the choices made here. */
+  /** Pocket look: the rules as cards (mock-up `pd-mods`). */
+  private pocketPage(): string {
+    const mods = this.ids.filter((id) => id !== DEATH).map((id) => {
+      const m = RUN_RULES.modifiers.find((x) => x.id === id)!;
+      return { name: m.name, text: m.blurb, on: this.rules.modifierIds.includes(id), soon: m.status === 'planned' };
+    });
+    const cat = usedCategories().find((c) => c.id === this.category)?.label ?? 'All';
+    return pkPrepMods({ mods, index: this.index, category: cat, deathBlock: { text: RUN_RULES.deathBlock.rule, on: this.rules.deathBlock }, note: this.reduxText().replace(/^.*?(Rewards ×[\d.]+ with what is on now\.)$/, '$1') });
+  }
+
+  /** Pocket look: the desk's page tabs (Run Setup and Trainer are the choices scene; Overview is the desk). */
+  private pocketTab(k: number): void {
+    if (k === 2) return;
+    if (k === 3) return this.leave();
+    const desk: RunPrepData = { ...this.desk, rules: this.rules };
+    this.scene.start('RunChoices', { desk, group: k === 0 ? 'config' : 'trainer', state: { archetypeId: desk.archetypeId!, prep: desk.prep!, rules: this.rules } });
+  }
+
   private leave(): void {
     this.scene.start('RunPrep', { ...this.desk, rules: this.rules, page: this.desk.page } satisfies RunPrepData);
   }

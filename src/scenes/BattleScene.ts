@@ -72,7 +72,7 @@ import { addFollowedCue } from '../ui/battleFx/followedCue';
 import { followedCue } from '../core/greenneedle/followed';
 import { addContactShadows, addParallax, addVignette, ArenaLight, dressArena, type ShadowTarget } from '../ui/battleFx/arenaLife';
 import { pickUieArena } from '../core/arenaStyle';
-import { pokemonAssetIds, bossAnimId, bossBackId, uieArenaId, VS_SHARED, vsCardFor } from '../assets/catalog';
+import { zTitleAssetId, pokemonAssetIds, bossAnimId, bossBackId, uieArenaId, VS_SHARED, vsCardFor } from '../assets/catalog';
 import { vsScreen, vsScreenReady } from '../ui/battleFx/vsScreens';
 import { services } from '../game/services';
 import { launcherReady } from '../core/camp';
@@ -112,21 +112,23 @@ import '../core/presentation/storyAnims';
 import { rivalIntro } from '../ui/battleFx/storyFx';
 import { poseMoment } from '../ui/dialogue/poseMoment';
 import { poseForMoments } from '../core/presentation/poses';
-import { zMoveScene } from '../ui/battleFx/zMoveScene';
+import { zMoveSky } from '../ui/battleFx/zMoveSky';
 import { bossIntroMoment, defaultMoment, planMoment, rivalMoment, type MomentKind } from '../core/cinematic/moments';
 import { playMoment } from '../ui/cinematic/momentPlayer';
 /** Moments already played this session (repeatable ones play shorter next time). Not saved: presentation only. */
 const SEEN_MOMENTS = new Set<string>();
 import { pokemonHeightM, trainerHeightM } from '../core/heights';
-import { teraScene } from '../ui/battleFx/teraScene';
-import { megaScene } from '../ui/battleFx/megaScene';
-import { dynamaxScene } from '../ui/battleFx/dynamaxScene';
+import { teraJewel } from '../ui/battleFx/teraJewel';
+import { megaGlass } from '../ui/battleFx/megaGlass';
+import { drawnBox, type GimmickPage } from '../ui/battleFx/gimmickStage';
+import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture } from '../ui/battleFx/cheerChip';
+import { dynamaxPan } from '../ui/battleFx/dynamaxPan';
 import { keyItemFor } from '../ui/battleFx/cineLook';
 import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel } from '../core/presentation/motionClip';
-import { expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { aceLandClip, bigHit, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
@@ -141,7 +143,10 @@ import { battleSkinFor, type BattleFrameInfo, type BattleHud, type BattleSkin, t
 import { fallbackFoeArt } from '../core/presentation/foeArt';
 import { reduxLayout, reduxSkinIndex } from '../core/presentation/redux';
 import { useLookFont } from '../ui/redux/canvasFont';
-import { mountRedux, phantomOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, phantomOn, pocketOn, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
+import { pkHall } from '../ui/pocket/screens/hall';
+import { pkExp, pkVictory, type PkCatch, type PkExpRow } from '../ui/pocket/screens/after';
+import { battleInfo, moveInfo } from '../core/presentation/battleInfo';
 import { phGimmick, type GimmickCard } from '../ui/phantom/screens/cutin';
 import { gimmickSlots } from '../core/battle/bossGimmicks';
 import { phTravel } from '../ui/phantom/screens/travel';
@@ -360,6 +365,9 @@ export class BattleScene extends Phaser.Scene {
   private rxInfo = '';
   /** New UI: the open info panel's sections, and whether it shows as a move's tooltip. */
   private rxPanels: BattlePanel[] = [];
+  /** Pocket look: the Battle Info page (mock-up `b-info`) or the move card (`moveinfo`) behind the open info panel. */
+  private rxPkInfo: BattleModel['pkInfo'] = null;
+  private rxPkMove: BattleModel['pkMove'] = null;
   private rxPanelAt: 'left' | 'tip' = 'left';
   /** New UI: the transformations the move menu offers now (the mock-ups' row of buttons). */
   private rxGim: { choices: TransformRequest[]; tera: string } | null = null;
@@ -395,6 +403,14 @@ export class BattleScene extends Phaser.Scene {
   private phLast: { side: Side; by: string; move: string } | null = null;
   private phHits = 0;
   private phTallyKey = '';
+  /** Pocket look: damage each of your Pokémon dealt this battle (the Victory page's MVP), the biggest hit and who the foe Trainer is drawn as. */
+  private pkDealt = new Map<string, number>();
+  private pkBest: { dmg: number; move: string } | null = null;
+  private pkFoeArt: { assetId: string; label: string } | null = null;
+  /** Pocket look: the catch card once a ball holds (mock-up `capture`). */
+  private rxPkCatch: PkCatch | null = null;
+  /** Pocket look: the event stage band while a pseudo-stage's battle opens (mock-up `ev-stage`). */
+  private rxPkBand: { em: string; b: string; span: string } | null = null;
   private rxLevels = new Map<string, number>();
   private rxEvolve: BattleEvolve | null = null;
   /** New UI: a notice box over the field that waits for an input (the Second Shot). */
@@ -1182,7 +1198,7 @@ export class BattleScene extends Phaser.Scene {
    * Send-out (redesign pass 2): the ball arcs in from the hand, lands, bounces once and bursts; the Pokémon
    * pops out white, stretches up, lands flat and wide, and settles. Reduced: a short throw and a ring. Off: it is just there.
    */
-  private async sendMoment(side: Side, mon: PokemonInstance, from: Point | null): Promise<void> {
+  private async sendMoment(side: Side, mon: PokemonInstance, from: Point | null, onPlate?: () => void): Promise<void> {
     const level = this.clipLevel();
     const at = this.spotXY(side);
     const start = from ?? throwFromSpot(side);
@@ -1198,6 +1214,7 @@ export class BattleScene extends Phaser.Scene {
       cue: (name) => {
         if (name === 'throw') playSfx(this, 'se.ball_throw');
         if (name === 'open') show();
+        if (name === 'plate') onPlate?.();
       },
     }));
     await run.done;
@@ -1205,6 +1222,25 @@ export class BattleScene extends Phaser.Scene {
     show();
     const shown = visual as Visual | null;
     if (shown?.active) breathe(this, shown, this.motion);
+  }
+
+  /**
+   * The info bar tucks away during a switch (redesign pass 2): yours drops below the screen, the foe's slides off
+   * to the left, and it is hidden in its own place, so the next refresh brings it back with the new name. Singles
+   * only (in doubles the bars belong to several Pokémon). Presentation only.
+   */
+  private tuckBox(side: Side): void {
+    if (this.duo) return;
+    const box = side === 'player' ? this.playerBox : this.enemyBox;
+    const c = box?.container;
+    if (!c?.visible) return;
+    const home = { x: c.x, y: c.y };
+    const hide = (): void => {
+      if (!c.active) return;
+      c.setVisible(false).setPosition(home.x, home.y);
+    };
+    if (this.clipLevel() === 'off') return hide();
+    this.tweens.add({ targets: c, ...(side === 'player' ? { y: home.y + 140 } : { x: home.x - 460 }), duration: 160 * animationTimeScale(services().session.settings), ease: 'Quad.easeIn', onComplete: hide });
   }
 
   /**
@@ -1220,6 +1256,7 @@ export class BattleScene extends Phaser.Scene {
     const run = playClip(this, recallClip({ x: sprite.x, y: sprite.y, h, side }, at, level), this.clipHost({ mon: { kind: 'mon', get: () => sprite }, ball: { kind: 'free', get: () => ball } }, {
       cue: (name) => {
         if (name === 'catch') playSfx(this, 'se.ball_catch', 0.6);
+        if (name === 'tuck') this.tuckBox(side);
       },
     }));
     await run.done;
@@ -1739,7 +1776,8 @@ export class BattleScene extends Phaser.Scene {
     const content = services().session.content;
     if (box === this.playerBox || box === this.enemyBox) this.syncStatusPattern(box.isPlayer ? 'player' : 'enemy', mon);
     const max = calcStats(content, mon).hp;
-    if (!box.container.visible) slideIn(this, box.container, box.isPlayer ? 420 : -420, 0, this.motion);
+    // It flies back in the way it left (redesign pass 5): yours up from below, the foe's in from the left.
+    if (!box.container.visible) slideIn(this, box.container, box.isPlayer ? 0 : -460, box.isPlayer ? 140 : 0, this.motion);
     box.container.setVisible(true);
     const spec = box.spec;
     const shown = `${this.speciesName(mon)}${genderSign(content, mon)}${mon.shiny ? ' ★' : ''}`;
@@ -1836,6 +1874,9 @@ export class BattleScene extends Phaser.Scene {
         xp: box.isPlayer ? xpShown : null,
         tags: [mon.status ? STATUS_LABELS[mon.status.id]?.label ?? '' : '', word(box.teraBadge), word(box.roleBadge), word(box.rageBadge)].filter(Boolean),
         team: !box.isPlayer && battle?.trainer ? { n: battle.enemyTeam.length, out: battle.enemyTeam.filter((m) => m.hp <= 0).length } : null,
+        types: this.foeHidden(mon) ? [] : getSpecies(content, mon.speciesId).types,
+        file: box.isPlayer ? monFile(this, mon.speciesId, 'front', !!mon.shiny) : null,
+        shiny: !box.isPlayer && !!mon.shiny && !this.foeHidden(mon),
       };
       this.tweens.killTweensOf(box.rx);
       // The same drain the canvas bar plays, so the two never disagree about when the HP has settled.
@@ -1863,6 +1904,12 @@ export class BattleScene extends Phaser.Scene {
           this.showMoveMenu();
         },
         log: (i) => this.setLogTab(LOG_TABS[Number(i)]?.id),
+        // Pocket look: Battle Info's Battle Log button, the move card's Use it, the log page's Back.
+        pkLog: () => { if (this.infoPanel) this.closePanel(); if (!this.historyView) this.toggleHistory(); },
+        pkUse: () => { if (!this.infoPanel || !this.rxPkMove) return; const k = this.focusedMove; this.closePanel(); if (!this.picker && !this.autoRunning) this.menu?.press(k); },
+        logClose: () => { if (this.historyView) this.toggleHistory(); },
+        // Pocket look: the Level Up page's Next moves the battle's words on.
+        say: () => this.advance?.(),
         // A click on a data box pins its card; a second click (or one on the card) lets it go.
         pin: (key) => { this.rxPin = !key || this.rxPin === key ? null : key; },
       },
@@ -1945,6 +1992,11 @@ export class BattleScene extends Phaser.Scene {
       level: this.rxLevel && !menu && !list ? this.rxLevel : null,
       evolve: this.rxEvolve,
       panels: this.infoPanel ? this.rxPanels : null,
+      pkInfo: this.infoPanel ? this.rxPkInfo : null,
+      pkMove: this.infoPanel ? this.rxPkMove : null,
+      pkCatch: this.rxPkCatch,
+      pkBand: !menu && (this.run.battle?.turn ?? 0) <= 1 ? this.rxPkBand : null,
+      turn: this.run.battle?.turn ?? 0,
       panelAt: this.rxPanelAt,
       tip,
       card,
@@ -2836,6 +2888,11 @@ export class BattleScene extends Phaser.Scene {
       this.phTallyKey = battle.enemyTeam[0]?.uid ?? '';
       this.phHits = 0;
       this.phLast = null;
+      this.pkDealt.clear();
+      this.pkBest = null;
+      this.pkFoeArt = this.trainerArt();
+      this.rxPkCatch = null;
+      this.rxPkBand = this.pkBand();
       interactionLog.tell('stage', battle.trainer ? (title ?? battle.trainer.name) : `Wild ${this.speciesName(battle.enemyTeam[0]!)}`, 'Battle');
       await this.playIntro();
       // The foe trainer waits on the platform (a black shape at first) while the camera sweeps over the arena.
@@ -2999,7 +3056,7 @@ export class BattleScene extends Phaser.Scene {
     if (!real) return null;
     const now = calcStats(content, { ...real, level }), was = calcStats(content, { ...real, level: Math.max(1, from) });
     const names: [keyof typeof now, string][] = [['hp', 'HP'], ['atk', 'Attack'], ['def', 'Defense'], ['spa', 'Sp. Atk'], ['spd', 'Sp. Def'], ['spe', 'Speed']];
-    return { name: this.speciesName(real), file: monFile(this, real.speciesId, 'front', !!real.shiny), from: Math.max(1, from), to: level, stats: names.map(([k, label]) => [label, now[k], now[k] - was[k]] as const) };
+    return { name: this.speciesName(real), file: monFile(this, real.speciesId, 'front', !!real.shiny), types: getSpecies(content, real.speciesId).types, from: Math.max(1, from), to: level, stats: names.map(([k, label]) => [label, now[k], now[k] - was[k]] as const) };
   }
 
   /** New UI: the versus card as a beat (a key or a click moves on). Null when motion is off for an ordinary Trainer. */
@@ -3036,6 +3093,7 @@ export class BattleScene extends Phaser.Scene {
       where: this.header.text.split('\n')[0]!.replace(/\s+·\s+₽.*$/, '').split(/\s+·\s+/).slice(0, 2).join(' · '),
       // Kice's rule: a loss to a rival never ends the run.
       stake: battle.rivalId || battle.rival ? 'Win and the rivalry grows. Lose and the run goes on: a loss to a rival never ends it.' : '',
+      pkBoss: boss && !standIn && pocketOn() ? this.pkBossFacts(boss) : null,
     };
     let over = false;
     let finish!: () => void;
@@ -3048,7 +3106,7 @@ export class BattleScene extends Phaser.Scene {
     };
     const view = mountRedux(this, { render: (c) => versusView(c, model), acts: { next: end }, card: true });
     // The Phantom card has more on it to read (the line, the stake), so it stays a little longer.
-    this.time.delayedCall(plain ? 1500 : this.motion === 'off' ? 1500 : phantomOn() ? 3400 : 2600, end);
+    this.time.delayedCall(plain ? 1500 : this.motion === 'off' ? 1500 : phantomOn() || model.pkBoss ? 3400 : 2600, end);
     return { done, skip: end };
   }
 
@@ -3449,6 +3507,160 @@ export class BattleScene extends Phaser.Scene {
    * Phantom UI: a region's Champion fell and another region waits. The mock-ups' Next region page: the ticket the run
    * holds (a run's regions are fixed when it starts), the road so far and what changes there. Waits for an input.
    */
+  /** Pocket look: the Boss Intro's heading and chips (what the battle already holds: type, team, powers, heals, the stake). */
+  private pkBossFacts(boss: BossInfo): { where: string; type: string; chips: string[] } {
+    const battle = this.run.battle!;
+    const { content } = services().session;
+    const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+    const n = battle.enemyTeam.length;
+    const held = n > 0 && battle.enemyTeam.every((m) => Object.keys(m.held ?? {}).length > 0);
+    const powers = battle.transform.enemyMechanics.length;
+    const heals = content.balance.trainerAi.maxHealItems;
+    const role = boss.title.replace(boss.name, '').trim();
+    const stake = boss.role === 'gym' ? `At stake: **${boss.name}'s badge**` : boss.role === 'champion' ? 'At stake: the **Champion** title' : 'At stake: your road to the **Champion**';
+    return {
+      where: [this.phWhere().split(' · ')[1] ?? '', role].filter(Boolean).join(' · '),
+      type: boss.types[0] ?? 'normal',
+      chips: [
+        boss.types.length ? `${boss.types.map((t) => `**${cap(t)}**`).join(' and ')} type` : '',
+        `${n} Pokémon${held ? ', each with a held item' : ''}`,
+        `${powers ? `${powers} boss ${powers === 1 ? 'power' : 'powers'} · ` : ''}up to ${heals} healing items`,
+        stake,
+      ].filter(Boolean),
+    };
+  }
+
+  /** Pocket look: the band that names a pseudo-stage's battle (it is part of a stop, not a stage of its own). */
+  private pkBand(): { em: string; b: string; span: string } | null {
+    const battle = this.run.battle;
+    if (!battle?.event || !pocketOn()) return null;
+    const { content } = services().session;
+    try {
+      if (!isPseudoBattle(content, battle.event)) return null;
+    } catch {
+      return null;
+    }
+    const stage = this.run.stage;
+    const name = content.events.get(battle.event.eventId)?.name ?? stage?.pseudo?.name ?? 'This event';
+    return { em: 'Event stage', b: name, span: `${stage ? `Part of stage ${stage.index + 1}. ` : ''}It does not count as a new stage.` };
+  }
+
+  /** Pocket look: the catch card's facts (presentation only: what the battle already shows). */
+  private pkCatchCard(itemId: string, before: RunState): PkCatch | null {
+    const { content } = services().session;
+    const foe = before.battle ? currentEnemy(before.battle) : null;
+    if (!foe) return null;
+    const sp = getSpecies(content, foe.speciesId);
+    const ab = abilityOf(content, foe);
+    const nature = foe.nature ? `${foe.nature.charAt(0).toUpperCase()}${foe.nature.slice(1)} nature` : '';
+    const item = content.items.get(itemId);
+    const where = this.phWhere().split(' · ').reverse().join(', ');
+    return {
+      file: monFile(this, foe.speciesId, 'front', !!foe.shiny), name: this.speciesName(foe), level: foe.level, types: sp.types,
+      about: [nature, ab ? content.abilities.get(ab)?.name ?? '' : ''].filter(Boolean).join(' · '),
+      ball: (item?.iconAssetId ?? 'ball.pb').replace(/^ball\./, ''), where: `Caught in a ${item?.name ?? 'Poké Ball'}${where ? ` · ${where}` : ''}`,
+      fresh: !before.log.speciesCaught.includes(foe.speciesId),
+    };
+  }
+
+  /** Pocket look: one page over the battle (a card view) that waits for its button, a key or a click. */
+  private async pkPage(render: (c: ReduxCtx) => string, acts: Record<string, (arg: string) => void> = {}): Promise<void> {
+    let finish!: () => void;
+    const done = new Promise<void>((r) => (finish = r));
+    let over = false;
+    const end = (): void => {
+      if (over) return;
+      over = true;
+      try {
+        view.destroy();
+      } catch {
+        // the scene may already be gone
+      }
+      finish();
+    };
+    const view = mountRedux(this, { render, acts: { ...acts, next: () => end() }, card: true });
+    this.events.once('shutdown', end);
+    await this.playBeat({ done, skip: end });
+  }
+
+  /**
+   * Pocket look: the pages after a win (mock-ups `victory` and `exp`). A Trainer's defeat gets the Victory page (the MVP,
+   * the prize, the turns, the biggest hit); every win and catch then gets the Team EXP page. Returns whether the Victory
+   * page showed (its prize and finds need not be said again).
+   */
+  private async pkResultCard(result: TurnResult, before: RunState | undefined, trainer: string | null): Promise<boolean> {
+    const end = result.end;
+    if (!end || !this.rx || !pocketOn()) return false;
+    const { content } = services().session;
+    let shown = false;
+    try {
+      if ((before?.battle?.enemyTeam[0]?.uid ?? '') !== this.phTallyKey) this.phTally.clear();
+      const party = result.run.party.slice(0, 6);
+      const down = party.filter((m) => m.hp <= 0).length;
+      if (end.outcome === 'win' && trainer && before?.battle?.trainer) {
+        const foeTeam = before.battle.enemyTeam;
+        const ace = foeTeam[foeTeam.length - 1];
+        const rival = !!(before.battle.rivalId || before.battle.rival);
+        const line = rival ? '' : content.trainers.get(before.battle.trainer.classId)?.lines?.lose ?? '';
+        const mvpId = [...this.pkDealt].sort((a, b) => b[1] - a[1])[0]?.[0] ?? this.shown.player.uid;
+        const mvp = party.find((m) => m.uid === mvpId) ?? party.find((m) => m.hp > 0) ?? null;
+        const money = end.moneyGained > 0 ? `₽ ${end.moneyGained.toLocaleString('en-US')}` : null;
+        const turns = before.battle.turn ?? 1;
+        const rows: [string, string, string?][] = [];
+        if (money) rows.push(['Prize money', money]);
+        rows.push([down ? 'Fainted' : 'Nobody fainted', down ? `${down}` : '✓']);
+        rows.push(['Turns taken', `${turns}`]);
+        if (this.pkBest) rows.push(['Biggest hit', `${this.pkBest.dmg}`, this.pkBest.move]);
+        if (end.itemsFound.length) rows.push(['Found', end.itemsFound.map((id) => content.items.get(id)?.name ?? id).join(', ')]);
+        const rating = down === 0 ? 3 : down * 2 < party.length ? 2 : 1;
+        const art = this.pkFoeArt ? artOf(this, this.pkFoeArt.assetId) : null;
+        const say = `You defeated **${trainer}**!${money ? ` You got **${money}** for winning.` : ''}`;
+        const model = {
+          backdrop: this.phBackdrop(),
+          mvp: mvp ? { file: monFile(this, mvp.speciesId, 'front', !!mvp.shiny), name: this.speciesName(mvp), type: getSpecies(content, mvp.speciesId).types[0] ?? '' } : null,
+          foe: { trainer: art, mon: art ? null : ace ? monFile(this, ace.speciesId, 'front', !!ace.shiny) : null, name: trainer, line, type: ace ? getSpecies(content, ace.speciesId).types[0] ?? '' : '' },
+          rows, total: money, stars: rating, rate: rating === 3 ? 'Flawless win' : rating === 2 ? 'Solid win' : 'Close call', say,
+        };
+        await this.pkPage((c) => (c.pk ? pkVictory(model) : ''));
+        shown = true;
+      }
+      if (end.outcome === 'win' || end.outcome === 'caught') {
+        const rows: PkExpRow[] = party.map((m) => {
+          const t = this.phTally.get(m.uid);
+          return { file: monFile(this, m.speciesId, 'front', !!m.shiny), name: this.speciesName(m), types: getSpecies(content, m.speciesId).types, level: t ? t.fromLevel : m.level, to: t && t.toLevel > t.fromLevel ? t.toLevel : null, from: t ? t.from : this.xpPct(m), now: this.xpPct(m), gain: t && t.gain > 0 ? t.gain : null, fainted: m.hp <= 0 };
+        });
+        const ups = rows.filter((r) => r.to !== null).map((r) => `**${r.name}**`);
+        const grew = ups.length > 1 ? `${ups.slice(0, -1).join(', ')} and ${ups[ups.length - 1]} grew a level!` : ups.length ? `${ups[0]} grew a level!` : '';
+        const say = rows.some((r) => r.gain) ? `The team gained EXP.${grew ? ` ${grew}` : ''}` : 'No EXP this time.';
+        if (rows.length) await this.pkPage((c) => (c.pk ? pkExp({ rows, say }) : ''));
+      }
+    } catch (e) {
+      console.warn('Pocket result pages failed', e);
+    }
+    return shown;
+  }
+
+  /**
+   * Pocket look: a region's Champion fell, so the team stands in the Hall of Fame (mock-up `hof`) with what comes next
+   * and one button. Waits for an input. Returns whether it showed.
+   */
+  private async pkHallCard(run: RunState, cleared: string, won: boolean): Promise<boolean> {
+    if (!this.rx || !pocketOn()) return false;
+    const { content, profile } = services().session;
+    try {
+      const at = run.regionOrder.indexOf(cleared), nextId = at < 0 ? undefined : run.regionOrder[at + 1];
+      const here = content.regions.get(cleared)?.name ?? cleared, next = nextId ? content.regions.get(nextId)?.name ?? nextId : null;
+      const arch = content.archetypes.get(run.archetypeId);
+      const mons = run.party.slice(0, 6).map((m) => ({ file: monFile(this, m.speciesId, 'front', !!m.shiny), name: getSpecies(content, m.speciesId).name, type: getSpecies(content, m.speciesId).types[0] ?? '' }));
+      const say = won || !next ? 'Your team is recorded in the Hall of Fame. You have conquered every region!' : `Your team is recorded in the Hall of Fame. **${next}** is next, with a higher level cap and tougher bosses.`;
+      await this.pkPage((c) => (c.pk ? pkHall({ where: `${here} cleared · Run ${profile.runHistory.length + 1} · ${run.badges.length} badges`, mons, trainer: { art: artOf(this, arch?.spriteAssetId), name: `Champion ${arch?.name ?? run.archetypeId}` }, say, button: won || !next ? 'See the ending' : `On to ${next}` }) : ''));
+      return true;
+    } catch (e) {
+      console.warn('Pocket Hall of Fame card failed', e);
+      return false;
+    }
+  }
+
   private async phTravelCard(run: RunState, cleared: string): Promise<boolean> {
     if (!this.phCards()) return false;
     const { content } = services().session;
@@ -3898,6 +4110,180 @@ export class BattleScene extends Phaser.Scene {
     } catch {
       // A presentation failure must never block the battle.
     }
+  }
+
+  /** The ace's card: the long boss sequence (Champion), a boss's band, or the ACE! stamp. Presentation only. */
+  private async aceCall(): Promise<void> {
+    if (!this.shown.enemy) return;
+    const bossNow = this.boss();
+    if (bossNow?.role === 'champion') {
+      // M7: the Champion's final Pokémon changes the music and gets the long ace sequence.
+      const finalTrack = 'bgm.raid.tera3';
+      if (services().assets.has(finalTrack) && !this.stadium) {
+        this.baseTrack = finalTrack;
+        this.playingTrack = finalTrack;
+        playMusicLazy(this, finalTrack, finalTrack);
+      }
+      await this.bigMoment('aceEntrance', `ace.${bossNow.title}`, 'FINAL POKÉMON', this.speciesName(this.shown.enemy), true, { name: bossNow.name, role: 'Final Battle', line: 'Last Pokémon. Make it count.' });
+    } else if (bossNow) await this.bigMoment('aceEntrance', `ace.${bossNow.title}`, 'ACE!', `${bossNow.title}: ${this.speciesName(this.shown.enemy)}`, false, { name: this.speciesName(this.shown.enemy), role: `${bossNow.role === 'elite' ? 'Elite Four' : 'Gym Leader'}’s Ace`, line: `${this.speciesName(this.shown.enemy)}. It is time.` });
+    else await this.playBeat(stamp(this, 'ACE!', this.speciesName(this.shown.enemy), this.foeRim(), this.motion));
+  }
+
+  /**
+   * The ace lands (redesign pass 15): after its card it leaps onto its spot, squashes, and the ground answers with
+   * dust, a gold ring and a star. Reduced: it appears with the squash and the ring. Off: it is simply there.
+   */
+  private async aceLandMoment(mon: PokemonInstance): Promise<void> {
+    const level = this.clipLevel();
+    const at = this.spotXY('enemy');
+    const visual = this.showSprite('enemy', mon, true, false);
+    const h = visual instanceof Phaser.GameObjects.Sprite ? visual.displayHeight * visual.originY : 120;
+    const st = services().session.settings;
+    const run = playClip(this, aceLandClip({ x: at.x, y: at.y, h, side: 'enemy' }, level), this.clipHost({ mon: { kind: 'mon', get: () => visual } }, {
+      cue: (name) => {
+        if (name !== 'land') return;
+        playSfx(this, 'se.ball_catch', 0.4);
+        if (level === 'full' && st.battleScreenEffects) this.cameras.main.shake(350, 0.012 * st.shakeIntensity);
+      },
+    }));
+    await run.done;
+    if (visual.active) breathe(this, visual, this.motion);
+  }
+
+  /**
+   * The foe trainer steps in to throw (pass 4): only in a trainer battle, in singles, with full animations. Resolves
+   * with the hand's place the moment the ball leaves it (null: no trainer here, and the ball comes from its usual spot).
+   * The trainer leaves by itself while the ball flies.
+   */
+  private async foeThrowMoment(): Promise<Point | null> {
+    const art = this.trainerArt();
+    if (!art || this.duo || this.clipLevel() !== 'full') return null;
+    const at = this.spotXY('enemy');
+    const v = trainerVisual(this, art.assetId, art.label, 1090, at.y + 8, 2);
+    if (!(v instanceof Phaser.GameObjects.Sprite)) {
+      v.destroy();
+      return null;
+    }
+    // Sized and stood by what is drawn (the frames carry empty borders), feet on the spot: at most 208 px tall and
+    // 176 px wide, the mockup's standing trainer (a crouching or wide pose comes out lower, not bigger).
+    const box = drawnBox(v);
+    v.setOrigin((box.x + box.w / 2) / Math.max(1, v.frame.cutWidth), (box.y + box.h) / Math.max(1, v.frame.cutHeight));
+    const k = Math.min(208 / Math.max(1, box.h), 176 / Math.max(1, box.w));
+    v.setScale(k);
+    const h = box.h * k;
+    this.field.addAt(v, this.fieldBase);
+    return new Promise<Point | null>((resolve) => {
+      const run = playClip(this, foeThrowClip(at, 'full'), this.clipHost({ tr: { kind: 'free', get: () => v } }, {
+        cue: (name) => {
+          if (name === 'release') resolve(foeHand(at, h));
+        },
+      }));
+      void run.done.then(() => {
+        v.destroy();
+        resolve(null);
+      });
+    });
+  }
+
+  /** When the last trainer face chip went up (scene clock); chips stay at least `CHEER_GAP` apart. */
+  private cheerAt = -Infinity;
+
+  /**
+   * Trainer face chip (pass 19): your trainer's face pops in at the bottom right with a word ("Nice hit!", "We did it!")
+   * and hops away again. Never waits on anything; nothing at all with animations off, in the Phantom look (its own
+   * cards speak), or without your trainer's art.
+   */
+  private cheer(m: CheerMoment, delay: number): void {
+    const level = this.clipLevel();
+    if (level === 'off' || this.phCards()) return;
+    const now = this.time.now;
+    if (now < this.cheerAt + CHEER_GAP) return;
+    this.cheerAt = now;
+    const art = this.playerArt();
+    if (!art) return;
+    const color = CHEER_RING[art] ?? throwTint(art);
+    const faceKey = cheerFace(this, art, color);
+    const wordKey = faceKey ? cheerWordPicture(this, cheerWord(m), color) : null;
+    if (!faceKey || !wordKey) return;
+    this.time.delayedCall(delay * animationTimeScale(services().session.settings), () => {
+      if (!this.sys.isActive()) return;
+      const spot = { x: 902, y: 424 };
+      const parts = cheerParts(this, spot, faceKey, wordKey, 4000);
+      const run = playClip(this, cheerClip(spot, level), this.clipHost({ face: { kind: 'free', get: () => parts.face }, word: { kind: 'free', get: () => parts.word } }));
+      void run.done.then(() => {
+        parts.face.destroy();
+        parts.word.destroy();
+      });
+    });
+  }
+
+  /** The words the Mega Evolution cutscene locks on: stone and ring, the new type and ability, which stats rose. */
+  private megaPage(mon: PokemonInstance, toId: string, itemId: string | null): GimmickPage {
+    const { content } = services().session;
+    const from = getSpecies(content, mon.speciesId);
+    const to = content.species.get(toId) ?? from;
+    const stone = itemId ? content.items.get(itemId)?.name : undefined;
+    const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+    const ability = content.abilities.get(abilityOf(content, { ...mon, speciesId: to.id }) ?? '')?.name;
+    const STAT: Record<string, string> = { hp: 'HP', atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed' };
+    const up = (Object.keys(STAT) as (keyof typeof to.baseStats)[])
+      .filter((k) => to.baseStats[k] > from.baseStats[k])
+      .sort((a, b) => to.baseStats[b] - from.baseStats[b] - (to.baseStats[a] - from.baseStats[a]))
+      .slice(0, 3)
+      .map((k) => STAT[k]!);
+    const name = this.speciesName(mon);
+    return {
+      tag: stone ? `${stone} · Mega Ring` : 'Mega Evolution',
+      title: ['Mega', 'Evolution'],
+      facts: [`Type: ${to.types.map(cap).join(' / ')}`, ...(ability ? [`Ability: ${ability}`] : []), ...(up.length ? [`${up.join(', ')} up`] : []), 'Stays until the battle ends'],
+      line: stone ? `The ${stone} answers the Mega Ring. ${name} Mega Evolved!` : `${name} Mega Evolved!`,
+      accent: 0xff8a3c,
+    };
+  }
+
+  /** Loads Pokémon front pictures a cutscene draws (the battle itself only has the back of yours). Never throws. */
+  private async loadFronts(list: [string, boolean][]): Promise<void> {
+    const { content } = services().session;
+    const ids = list.flatMap(([id, shiny]) => {
+      const sp = content.species.get(id);
+      if (!sp) return [];
+      const a = pokemonAssetIds(sp.assets);
+      return shiny ? [a.front, a.shinyFront] : [a.front];
+    });
+    await loadAssets(this, ids.filter((id) => services().assets.has(id))).catch(() => undefined);
+  }
+
+  /** The words the Tera, Dynamax and Z-Move cutscenes lock on (the Mega one is `megaPage`). Read from the battle; nothing is decided here. */
+  private gimmickPage(kind: 'tera' | 'dynamax' | 'gigantamax' | 'zmove', mon: PokemonInstance, x: { type?: string; item?: string; from?: string; move?: string; hp?: [number, number]; turns?: number; gmax?: string }): GimmickPage {
+    const name = this.speciesName(mon);
+    const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+    if (kind === 'tera') {
+      const type = cap(x.type ?? 'normal');
+      return {
+        tag: `Tera Orb · Tera Type ${type}`,
+        title: ['Terastallize'],
+        facts: [`Now a ${type} type`, `${type} moves hit harder`, 'Old weaknesses are replaced', 'Stays until the battle ends'],
+        line: `${name} Terastallized into the ${type} type!`,
+        accent: 0x3fc8e8,
+      };
+    }
+    if (kind === 'zmove') {
+      return {
+        tag: x.item ? `Z-Ring · ${x.item}` : 'Z-Ring',
+        title: ['Z-Move'],
+        facts: [...(x.from && x.move ? [`${x.from} becomes ${x.move}`] : []), 'One all-out hit', 'The Z-Ring rests after this'],
+        line: `${name} unleashes its full-force Z-Move!`,
+        accent: 0xffb300,
+      };
+    }
+    const turns = x.turns ?? 3;
+    return {
+      tag: `Dynamax Band · ${turns} turn${turns === 1 ? '' : 's'}`,
+      title: [kind === 'gigantamax' ? 'Gigantamax' : 'Dynamax'],
+      facts: [...(x.hp && x.hp[1] !== x.hp[0] ? [`HP doubles: ${x.hp[0]} to ${x.hp[1]}`] : []), kind === 'gigantamax' && x.gmax ? `Its moves become G-Max ${x.gmax}'s` : 'Moves become Max Moves', `Lasts ${turns} turn${turns === 1 ? '' : 's'}`],
+      line: kind === 'gigantamax' ? `${name} grew enormous! It Gigantamaxed.` : `${name} grew huge with Dynamax energy!`,
+      accent: 0xff2d8a,
+    };
   }
 
   private async gimmickBeat(b: Beat, recap?: string): Promise<void> {
@@ -4362,6 +4748,8 @@ export class BattleScene extends Phaser.Scene {
         const hint = move.category === 'status' ? null : effectivenessWord(typeEffectiveness(content.typeChart, move.type as TypeName, foeTypes));
         const flags = moveFlagLabels(move);
         const power = move.power ? (slot!.hyper ? `${move.power + content.balance.hyperMove.powerBonus} (Hyper +${content.balance.hyperMove.powerBonus})` : move.power) : fixedDamageLabel(move.effects.fixedDamage);
+        this.rxPkInfo = null;
+        this.rxPkMove = pocketOn() ? moveInfo(content, this.run, this.focusedMove, (id) => moveFullDescription(content.moves.get(id)!)) : null;
         this.openPanel([
           { head: move.name, text: `${move.type.toUpperCase()} · ${move.category}\nPower ${power} · Accuracy ${move.accuracy ?? '—'} · PP ${slot!.pp}/${maxPp(content, slot!)}\nPriority ${move.priority > 0 ? '+' : ''}${move.priority}${hint ? `\nAgainst ${this.speciesName(this.shown.enemy)}: ${hint.text}` : ''}` },
           { head: 'What it does', text: moveFullDescription(move) },
@@ -4371,6 +4759,11 @@ export class BattleScene extends Phaser.Scene {
       }
     }
     const c = battleConditions(content, this.run, this.foeReveals.get(currentEnemy(this.run.battle!).uid));
+    this.rxPkMove = null;
+    if (pocketOn()) {
+      const info = battleInfo(content, this.run, this.foeReveals.get(currentEnemy(this.run.battle!).uid));
+      this.rxPkInfo = { ...info, foeFile: info.foe ? monFile(this, info.foe.speciesId, 'front', info.foe.shiny) : null, meFile: info.me ? monFile(this, info.me.speciesId, 'front', info.me.shiny) : null };
+    } else this.rxPkInfo = null;
     this.openPanel([
       { head: 'Battlefield', text: c.field.join('\n') },
       { head: 'Your Pokémon', text: c.yours.join('\n') },
@@ -5313,7 +5706,7 @@ export class BattleScene extends Phaser.Scene {
     // Galar: a reporter interviews a different random character about how the match went.
     if (this.stadium && end.outcome === 'win') await this.stadium.interview('post', true);
     // Phantom UI: the result page carries the Exp, the prize money and what was found; the Old and New looks say them.
-    const tallied = await this.phResultCard(result, before, !!bossWin);
+    const tallied = (await this.pkResultCard(result, before, trainer)) || (await this.phResultCard(result, before, !!bossWin));
     if (end.moneyGained > 0 && !tallied) await this.say(`You got ₽${end.moneyGained}!`);
     if (!tallied) for (const id of end.itemsFound) await this.say(`You found a ${content.items.get(id)?.name ?? id}!`);
     interactionLog.tell('gain', `${end.outcome === 'caught' ? 'Caught it' : trainer ? `Beat ${trainer}` : 'Won the battle'}${end.moneyGained > 0 ? ` · +₽${end.moneyGained}` : ''}${end.itemsFound.length ? ` · ${end.itemsFound.map((id) => content.items.get(id)?.name ?? id).join(', ')}` : ''}`);
@@ -5345,7 +5738,7 @@ export class BattleScene extends Phaser.Scene {
       await this.playBeat(stamp(this, 'CHAMPION!', region, ROLE_RIMS.champion, this.motion));
       await this.say(end.regionCleared === 'grand' ? `You beat the final boss and are the ${region} Champion!` : `You are the ${region} Champion!`);
       if (end.victory) for (const line of buildEpilogue(content, result.run)) await this.say(line);
-      if (end.victory || !(await this.phTravelCard(result.run, end.regionCleared))) await this.say(end.victory ? 'You have conquered every region!' : 'A new region awaits…');
+      if (!(await this.pkHallCard(result.run, end.regionCleared, !!end.victory)) && (end.victory || !(await this.phTravelCard(result.run, end.regionCleared)))) await this.say(end.victory ? 'You have conquered every region!' : 'A new region awaits…');
     }
     this.updateHeader();
     // Evolutions this battle earned wait as decisions: the evolution scene plays on the next screen (B can stop it).
@@ -5709,8 +6102,14 @@ export class BattleScene extends Phaser.Scene {
         case 'seaOfFireDamage':
           if (e.type === 'damage' && e.side === 'enemy' && e.hpAfter < mon!.hp) {
             this.phHits++;
+            const dealt = mon!.hp - e.hpAfter, by = this.shown.player.uid;
+            this.pkDealt.set(by, (this.pkDealt.get(by) ?? 0) + dealt);
+            if (this.phLast?.side === 'player' && this.phLast.move && dealt > (this.pkBest?.dmg ?? 0)) this.pkBest = { dmg: dealt, move: this.phLast.move };
             // Phantom UI: a hit that lands hard gets its splash (the knock-out card speaks for a hit that ends it).
             if ((e.effectiveness >= 2 || e.crit) && e.hpAfter > 0 && this.phTurnCards()) await this.phHitCard(mon!, e.hpAfter, e.effectiveness >= 2, !!e.crit);
+          }
+          if (e.type === 'damage' && e.hpAfter > 0 && e.hpAfter < mon!.hp && bigHit(mon!.hp - e.hpAfter, maxHp(services().session.content, mon!), e.effectiveness, !!e.crit)) {
+            this.cheer({ kind: 'hit', on: e.side === 'enemy' ? 'foe' : 'you', superEffective: e.effectiveness >= 2 }, 120);
           }
           if (e.hpAfter < mon!.hp && services().session.settings.damageNumbers) this.floatDamage(sprite, mon!.hp - e.hpAfter);
           if (e.type === 'damage' && e.hpAfter < mon!.hp) this.buzz(this.lastMoveType, e.effectiveness > 1);
@@ -5809,6 +6208,7 @@ export class BattleScene extends Phaser.Scene {
         case 'faint':
           mon!.hp = 0;
           playSfx(this, 'se.faint');
+          this.cheer({ kind: 'faint', on: e.side === 'enemy' ? 'foe' : 'you' }, 250);
           if (!this.cameraMove(e)) this.focusPush('ko');
           if (sprite) {
             if (e.side === 'enemy') this.fellAt = { x: sprite.x, y: this.spotXY('enemy').y };
@@ -5863,6 +6263,7 @@ export class BattleScene extends Phaser.Scene {
           if (incoming) {
             this.shown[e.side] = structuredClone(incoming);
             if (e.side === 'enemy') this.phHits = 0;
+            const ace = e.side === 'enemy' && !!this.run.battle?.trainer && isEnemyAce(this.run.battle, e.uid);
             const hand = e.side === 'player' && this.trainerActor ? await this.throwMoment() : null;
             const lookAt = e.side === 'enemy' ? { x: 560, y: ENEMY_POS.y - 20 } : { x: 400, y: PLAYER_POS.y - 100 };
             if (!this.camBusy && !this.camPinned) {
@@ -5870,32 +6271,25 @@ export class BattleScene extends Phaser.Scene {
               cameraTo(this, this.motion, lookAt, 1.12, 350);
             }
             if (e.side === 'enemy') await this.ensureArt(this.shown.enemy!.speciesId);
-            await this.sendMoment(e.side, this.shown[e.side]!, hand);
+            // A trainer's designated ace (battle.aceUid, not the last slot) is announced BEFORE it lands (Kice: an ace
+            // must be announced when sent out; animation redesign pass 15, Ace Call): the trainer speaks, the ace's
+            // card plays, and then the ace leaps onto the field. Presentation only.
+            if (ace) {
+              await this.say(`${this.trainerTitle() ?? this.run.battle!.trainer!.name} sends out their ace, ${this.speciesName(this.shown.enemy!)}!`);
+              await this.aceCall();
+              await this.aceLandMoment(this.shown.enemy!);
+              if (this.role === 'rival') void this.fx.flourish('enemy', 'rival.ace');
+            } else {
+              const sentMon = this.shown[e.side]!;
+              const from = e.side === 'enemy' ? await this.foeThrowMoment() : hand;
+              await this.sendMoment(e.side, sentMon, from, () => void this.refreshInfoBox(e.side === 'enemy' ? this.enemyBox : this.playerBox, sentMon, false));
+            }
             this.applyTeraTint(e.side, this.shown[e.side]);
             if (this.camPinned) {
               cameraTo(this, this.motion, null, 1, 350);
               this.camPinned = false;
             }
             await this.refreshInfoBox(e.side === 'enemy' ? this.enemyBox : this.playerBox, this.shown[e.side], false);
-            // A trainer's designated ace (battle.aceUid, not the last slot): one special beat when it comes out.
-            if (e.side === 'enemy' && this.run.battle?.trainer && isEnemyAce(this.run.battle, e.uid)) {
-              void burstReveal(this, ENEMY_POS.x, ENEMY_POS.y - 80, this.foeRim(), this.motion);
-              // Kice: the ace is announced in words (both looks), not just their last Pokémon. Presentation only.
-              await this.say(`${this.trainerTitle() ?? this.run.battle.trainer.name} sends out their ace, ${this.speciesName(this.shown.enemy!)}!`);
-              if (this.role === 'rival') void this.fx.flourish('enemy', 'rival.ace');
-              const bossNow = this.boss();
-              if (bossNow?.role === 'champion') {
-                // M7: the Champion's final Pokémon changes the music and gets the long ace sequence.
-                const finalTrack = 'bgm.raid.tera3';
-                if (services().assets.has(finalTrack) && !this.stadium) {
-                  this.baseTrack = finalTrack;
-                  this.playingTrack = finalTrack;
-                  playMusicLazy(this, finalTrack, finalTrack);
-                }
-                await this.bigMoment('aceEntrance', `ace.${bossNow.title}`, 'FINAL POKÉMON', this.speciesName(this.shown.enemy), true, { name: bossNow.name, role: 'Final Battle', line: 'Last Pokémon. Make it count.' });
-              } else if (bossNow) await this.bigMoment('aceEntrance', `ace.${bossNow.title}`, 'ACE!', `${bossNow.title}: ${this.speciesName(this.shown.enemy)}`, false, { name: this.speciesName(this.shown.enemy), role: `${bossNow.role === 'elite' ? 'Elite Four' : 'Gym Leader'}’s Ace`, line: `${this.speciesName(this.shown.enemy)}. It is time.` });
-              else await this.playBeat(stamp(this, 'ACE!', this.speciesName(this.shown.enemy), this.foeRim(), this.motion));
-            }
           }
           break;
         }
@@ -5949,83 +6343,98 @@ export class BattleScene extends Phaser.Scene {
           const phCard = !!this.rx && phantomOn() && this.motion === 'full' && !!mon && !!cine && cine !== 'dynamaxEnd' && !quick;
           if (phCard) await this.phGimmickCard(e.side, mon!, cine as GimmickCard['kind'], { to: e.to, itemId: e.itemId ?? null, teraType: teraType ?? null, zBase: zBase ?? null, zMoveId: e.zMoveId ?? null });
           if (!phCard && cine === 'zmove' && this.motion === 'full' && !services().session.settings.fastZMove && mon) {
-            // The full reference scene (Fast Z-Move off): Pokémon turned to face you, trainer and Z-Ring, Z-Crystal, white-out, title.
+            // The remade scene (Fast Z-Move off), animation redesign pass 20: the Z rises, the Pokémon leaves the top of the
+            // screen, the sky looks down on the target as it arrives, the damage is counted out, and the title and facts hold.
             const zMove = e.zMoveId ? (content.moves.get(e.zMoveId) ?? null) : zBase ? zMoveFor(content, zBase) : null;
             const sp = content.species.get(mon.speciesId)!;
             const mine = e.side === 'player';
-            const art = mine ? this.playerArt() : (this.run.battle?.trainer ? (this.trainerArt()?.assetId ?? null) : null);
+            const other = this.shown[mine ? 'enemy' : 'player'];
+            const otherSp = other ? content.species.get(other.speciesId) : null;
             const crystalId = e.itemId ?? (zBase ? ownedZCrystal(content, this.run.inventory, zBase.type) : null);
             const feel = this.cineFeel('zmove');
+            const titleKey = zMove ? zTitleAssetId(zMove.id) : null;
+            if (titleKey && !this.textures.exists(titleKey) && services().assets.has(titleKey)) await loadAssets(this, [titleKey]).catch(() => undefined);
+            await this.loadFronts([[sp.id, !!mon.shiny], ...(other ? [[other.speciesId, !!other.shiny] as [string, boolean]] : [])]);
+            // What the hit did is already decided by the rules: the first damage to the other side before anyone else moves.
+            let hit: { damage: number; effectiveness: number } | null = null;
+            for (const later of events.slice(index + 1)) {
+              if (later.type === 'move' && later.side !== e.side) break;
+              if (later.type === 'damage' && later.side !== e.side) {
+                hit = { damage: later.amount, effectiveness: later.effectiveness };
+                break;
+              }
+            }
             await this.gimmickBeat(
-              zMoveScene(this, {
-                makeFront: (x, y) => pokemonVisual(this, sp, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
-                makeTrainer: art ? (x, y) => trainerVisual(this, art, '', x, y, 3.2) : null,
-                crystalKey: (crystalId ? content.items.get(crystalId)?.iconAssetId : null) ?? null,
-                ringKey: 'cine.key.zmove',
-                monHeightM: pokemonHeightM(sp),
-                trainerHeightM: art ? trainerHeightM(art) : undefined,
-                backdropKey: this.arenaBgKey,
-                baseKey: this.arenaBgKey && this.textures.exists(`${this.arenaBgKey}.enemy`) ? `${this.arenaBgKey}.enemy` : null,
-                tint: glowColor,
-                title: zMove?.name,
-                titleId: zMove?.id,
+              zMoveSky(this, {
+                field: () => (mine ? this.playerSprite : this.enemySprite),
+                makeFront: (x, y) => pokemonVisual(this, sp, 'front', x, y, PIXEL_SCALE, mon.shiny),
+                makeTarget: other && otherSp ? (x, y) => pokemonVisual(this, otherSp, 'front', x, y, PIXEL_SCALE, other.shiny) : null,
                 opposes: !mine,
+                tint: glowColor,
+                page: this.gimmickPage('zmove', mon, { item: crystalId ? content.items.get(crystalId)?.name : undefined, from: zBase?.name, move: zMove?.name }),
+                itemKey: 'cine.key.zmove',
+                titleKey,
+                title: zMove?.name ?? null,
+                hit,
                 intensity: feel.intensity,
                 shake: feel.shake,
                 speed: feel.speed,
+                particles: !services().session.settings.reduceParticles,
               }),
             );
             playSfx(this, 'se.level_up');
           } else if (!phCard && cine === 'tera' && this.motion === 'full' && !services().session.settings.fastTera && mon && teraType) {
-            // The full reference scene (Fast Tera off): Pokémon turned to face you, trainer and Tera Orb, crystals, white-out, shatter, rainbow pulse.
+            // The remade scene (Fast Tera off), animation redesign pass 20: one crystal closes over it, the camera goes inside,
+            // twelve mirrored slices turn like a kaleidoscope and fold into the crown, and the crystal breaks on the field.
             const sp = content.species.get(mon.speciesId)!;
             const mine = e.side === 'player';
-            const playerArt = mine ? this.playerArt() : (this.run.battle?.trainer ? (this.trainerArt()?.assetId ?? null) : null);
             const feel = this.cineFeel('tera');
-            const patternType = mon.speciesId.startsWith('terapagos') ? 'stellar' : teraType;
+            const stellar = mon.speciesId.startsWith('terapagos');
+            await this.loadFronts([[sp.id, !!mon.shiny]]);
             await this.gimmickBeat(
-              teraScene(this, {
-                makeFront: (x, y) => pokemonVisual(this, sp, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
-                backdropKey: this.arenaBgKey,
-                baseKey: this.arenaBgKey && this.textures.exists(`${this.arenaBgKey}.enemy`) ? `${this.arenaBgKey}.enemy` : null,
-                decorate: (v) => wearPattern(this, v, teraPatternKey(patternType), this.motion, () => undefined),
-                makeTrainer: playerArt ? (x, y) => trainerVisual(this, playerArt, '', x, y, 3.2) : null,
-                orbKey: 'cine.key.tera',
-                tint: glowColor,
+              teraJewel(this, {
+                field: () => (mine ? this.playerSprite : this.enemySprite),
+                makeFront: (x, y) => pokemonVisual(this, sp, 'front', x, y, PIXEL_SCALE, mon.shiny),
                 opposes: !mine,
+                tint: glowColor,
+                onReveal: () => this.applyTeraTint(e.side, mon),
+                page: this.gimmickPage('tera', mon, { type: teraType }),
+                itemKey: 'cine.key.tera',
+                jewel: this.textures.exists('ui.tera.types') ? { key: 'ui.tera.types', frame: TERA_ICON_ROW[stellar ? 'stellar' : teraType] ?? 0 } : null,
                 intensity: feel.intensity,
                 shake: feel.shake,
                 speed: feel.speed,
+                particles: !services().session.settings.reduceParticles,
               }),
             );
             playSfx(this, 'se.level_up');
           } else if (!phCard && cine === 'mega' && this.motion === 'full' && !services().session.settings.fastMega && mon) {
-            // The full reference scene (Fast Mega off): Pokémon turned to face you, trainer and Mega Ring, Mega Stone, white ball, crystal, blue rays.
-            const from = content.species.get(mon.speciesId)!;
-            const to = content.species.get(e.to) ?? from;
+            // The remade scene (Fast Mega off), animation redesign pass 20: a helix of colour, cracks to every edge,
+            // the new picture slams together from glass shards, locks with its title and facts, and shatters back to the field.
+            const to = content.species.get(e.to) ?? content.species.get(mon.speciesId)!;
             const mine = e.side === 'player';
-            const art = mine ? this.playerArt() : (this.trainerArt()?.assetId ?? null);
             const feel = this.cineFeel('mega');
-            // Both front pictures must be loaded before the scene measures them.
-            const fronts = [from, to].flatMap((sp) => { const ids = pokemonAssetIds(sp.assets); return mon.shiny ? [ids.front, ids.shinyFront] : [ids.front]; });
-            await loadAssets(this, fronts.filter((id) => services().assets.has(id))).catch(() => undefined);
+            const ids = pokemonAssetIds(to.assets);
+            await loadAssets(this, (mon.shiny ? [ids.front, ids.shinyFront] : [ids.front]).filter((id) => services().assets.has(id))).catch(() => undefined);
+            const plate = (mine ? this.playerBox : this.enemyBox).container;
             await this.gimmickBeat(
-              megaScene(this, {
-                makeFront: (x, y) => pokemonVisual(this, from, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
-                makeMegaFront: (x, y) => pokemonVisual(this, to, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
-                makeTrainer: art ? (x, y) => trainerVisual(this, art, '', x, y, 3.2) : null,
-                stoneKey: (e.itemId ? content.items.get(e.itemId)?.iconAssetId : null) ?? null,
-                ringKey: 'cine.key.mega',
-                backdropKey: this.arenaBgKey,
+              megaGlass(this, {
+                field: () => (mine ? this.playerSprite : this.enemySprite),
+                makeMegaFront: (x, y) => pokemonVisual(this, to, 'front', x, y, PIXEL_SCALE, mon.shiny),
                 opposes: !mine,
                 onSwap: () => void swapForm(),
+                page: this.megaPage(mon, e.to, e.itemId ?? null),
+                itemKey: 'cine.key.mega',
+                plate: plate ? { x: plate.x + 60, y: plate.y + 20 } : null,
                 intensity: feel.intensity,
                 shake: feel.shake,
                 speed: feel.speed,
+                particles: !services().session.settings.reduceParticles,
               }),
             );
           } else if (!phCard && (cine === 'dynamax' || cine === 'gigantamax') && this.motion === 'full' && !services().session.settings.fastDynamax && mon && (e.side === 'player' ? this.playerArt() : this.run.battle?.trainer ? this.trainerArt() : null)) {
-            // The full reference scene (Fast Dynamax off): bare arena, trainer and Dynamax Band, pink ball, blue burst, silhouette, red giant.
+            // The remade scene (Fast Dynamax off), animation redesign pass 20: recalled, the ball swells and is thrown out of
+            // the top of the screen, then one long camera climb from the trainer's shoes to the giant's face above the storm.
             const from = content.species.get(mon.speciesId)!;
             const to = content.species.get(e.to) ?? from;
             const mine = e.side === 'player';
@@ -6034,22 +6443,28 @@ export class BattleScene extends Phaser.Scene {
             await loadAssets(this, fronts.filter((id) => services().assets.has(id))).catch(() => undefined);
             const pArt = mine ? this.playerArt() : null;
             const fArt = mine ? null : this.trainerArt();
+            const other = this.shown[mine ? 'enemy' : 'player'];
+            const otherSp = other ? content.species.get(other.speciesId) : null;
+            if (other) await this.loadFronts([[other.speciesId, !!other.shiny]]);
+            const hpNow = mon.hp;
+            const hpBig = Math.max(1, Math.round((mon.hp * calcStats(content, { ...mon, speciesId: e.to, dynamaxed: true }).hp) / Math.max(1, calcStats(content, mon).hp)));
             await this.gimmickBeat(
-              dynamaxScene(this, {
+              dynamaxPan(this, {
                 kind: cine,
-                makeFront: (x, y) => pokemonVisual(this, from, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
-                makeGiantFront: (x, y) => pokemonVisual(this, to, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
-                makeTrainer: (x, y) => (pArt ? trainerVisual(this, pArt, 'Trainer', x, y, 2) : trainerVisual(this, fArt!.assetId, fArt!.label, x, y, 2)) as Phaser.GameObjects.GameObject,
+                field: () => (mine ? this.playerSprite : this.enemySprite),
+                makeGiantFront: (x, y) => pokemonVisual(this, to, 'front', x, y, PIXEL_SCALE, mon.shiny),
+                makeTrainer: pArt ? (x, y) => trainerVisual(this, pArt, 'Trainer', x, y, 2) : fArt ? (x, y) => trainerVisual(this, fArt.assetId, fArt.label, x, y, 2) : null,
+                makeOther: other && otherSp ? (x, y) => pokemonVisual(this, otherSp, 'front', x, y, PIXEL_SCALE, other.shiny) : null,
                 ballItem: mon.caughtBall ?? DEFAULT_BALL,
-                bandKey: keyItemFor(cine),
-                backdropKey: this.arenaBgKey,
                 opposes: !mine,
-                calyrex: mon.speciesId.startsWith('calyrex'),
-                ...(cine === 'gigantamax' ? { accent: TYPE_COLORS[to.types[0] ?? ''] ?? 0xffd24a, gmaxName: `G-MAX ${to.name.replace(/^Gigantamax /i, '').toUpperCase()}`.trim() } : {}),
-                onSwap: swapForm,
+                onSwap: () => void swapForm(),
+                page: this.gimmickPage(cine, mon, { hp: [hpNow, hpBig], turns: this.run.battle?.transform.dynamax[mon.uid] ?? content.balance.transformations.dynamaxTurns, gmax: cine === 'gigantamax' ? to.name.replace(/^Gigantamax /i, '') : undefined }),
+                itemKey: keyItemFor(cine),
+                cloudKey: dynamaxPatternKey(mon.speciesId),
                 intensity: feel.intensity,
                 shake: feel.shake,
                 speed: feel.speed,
+                particles: !services().session.settings.reduceParticles,
               }),
             );
           } else if (cine) {
@@ -6096,6 +6511,7 @@ export class BattleScene extends Phaser.Scene {
         case 'ball':
           await this.say(`You threw a ${content.items.get(e.itemId)?.name ?? 'ball'}!`);
           await this.animateBall(e.itemId, e.shakes, e.caught);
+          if (e.caught && this.rx && pocketOn()) this.rxPkCatch = this.pkCatchCard(e.itemId, before);
           if (e.caught) await this.fx.flourish('enemy', 'interaction.catch', ENEMY_POS);
           break;
         case 'xp':

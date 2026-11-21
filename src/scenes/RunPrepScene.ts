@@ -103,7 +103,8 @@ function fitLabel(text: string, max = 38): string {
   return text.length > max ? `${text.slice(0, max - 1)}…` : text;
 }
 
-import { mountRedux, reduxOn } from '../ui/redux/stage';
+import { mountRedux, pocketOn, reduxOn } from '../ui/redux/stage';
+import { pkDesk } from '../ui/pocket/screens/run';
 import { menuView, type MenuModel } from '../ui/redux/templates';
 import { rxFileOf } from '../ui/redux/assets';
 import { phSetup } from '../ui/phantom/screens/run';
@@ -313,6 +314,22 @@ export class RunPrepScene extends Phaser.Scene {
             text: notice || (this.desk ? 'Set the run up, then depart.' : ROW_HELP[row] || def.blurb),
             ...(this.desk ? {} : { tabs: { labels: PAGES.map((p) => p.title), index: this.page } }),
           };
+          // Pocket look: the mock-up's Overview (the Trainer, the run's card, Roll the starters).
+          if (c.pk && this.desk) {
+            const mods = [...this.rules.modifierIds.map((id) => getModifier(id)?.name ?? id), ...(this.rules.deathBlock ? ['Death-Block'] : [])];
+            const brings = [token?.name, this.prep.license ? `${licenseName(this.prep.license)} License` : null, this.prep.vaultItem ? content.items.get(this.prep.vaultItem)?.name : null].filter(Boolean) as string[];
+            return pkDesk({
+              run: `Run ${profile.stats.runsEnded + 1}`, name: `${archetype.name}'s run`,
+              art: rxFileOf(this.cache.json.get('manifest') as AssetManifest | undefined, archetype.spriteAssetId),
+              facts: [
+                ['Mode', `${getMode(this.rules.modeId)?.name ?? this.rules.modeId} · ${content.campaigns.get(this.prep.campaignId)?.name ?? this.prep.campaignId}`, 'setup'],
+                ['Level', `${getDifficulty(this.rules.difficultyId)?.name ?? ''} · ${30 + session.settings.expansion.stageLength} stops a region`, 'setup'],
+                ['Brings', brings.join(' · ') || 'Nothing extra', 'bring'],
+                ['Rules', mods.join(' · ') || 'None', 'mods'],
+                ['Seed', this.seed === null || this.seed === '' ? 'Random' : this.seed, 'seed'],
+              ],
+            });
+          }
           // Phantom UI: the desk is the mock-ups' Run rules page (the run's card, the rows, Depart as the big blade).
           if (c.ph && this.desk) {
             return phSetup(c.ph, {
@@ -322,7 +339,12 @@ export class RunPrepScene extends Phaser.Scene {
           }
           return menuView(c, model);
         },
-        acts: { pick: (i) => { this.menu.focus(Number(i), false); this.menu.confirm(); }, tab: (k) => !this.picker && this.goPage(Number(k)) },
+        acts: {
+          pick: (i) => { this.menu.focus(Number(i), false); this.menu.confirm(); }, tab: (k) => !this.picker && this.goPage(Number(k)),
+          start: () => !this.picker && this.select('start'), save: () => !this.picker && this.select('save'), load: () => !this.picker && this.select('load'),
+          setup: () => !this.picker && this.openChoices('config'), bring: () => !this.picker && this.openChoices('trainer'), mods: () => !this.picker && this.openModifiers(), seed: () => !this.picker && this.openSeed(),
+          back: () => !this.picker && this.scene.start('TrainerSelect', { modeId: this.rules.modeId }),
+        },
         overs: { over: (i) => { if (!disabled(rows[Number(i)]!)) this.menu.focus(Number(i), false); } },
       });
       this.menu.onFocus = () => view.refresh();
@@ -330,6 +352,13 @@ export class RunPrepScene extends Phaser.Scene {
 
     onInputAction(this, (a) => {
       if (this.picker) return this.picker.handle(a);
+      // Pocket look: the Overview has no rows; ←→ turn the page, Enter rolls the starters.
+      if (this.desk && pocketOn()) {
+        if (a === 'left' || a === 'right') return this.goPage(a === 'left' ? this.page - 1 : 0);
+        if (a === 'confirm') return this.select('start');
+        if (a === 'back') return this.menu.handle(a);
+        return;
+      }
       if (a === 'left' || a === 'right') return this.cycle(rows[this.focusIndex]!, a === 'right' ? 1 : -1);
       this.menu.handle(a);
     });
@@ -339,6 +368,9 @@ export class RunPrepScene extends Phaser.Scene {
       const prev = () => turn(-1);
       const next = () => turn(1);
       keyboard.on('keydown-Q', prev).on('keydown-PAGE_UP', prev).on('keydown-E', next).on('keydown-PAGE_DOWN', next);
+      const save = () => { if (!this.picker && this.desk && pocketOn()) this.select('save'); };
+      keyboard.on('keydown-S', save);
+      this.events.once('shutdown', () => keyboard.off('keydown-S', save));
       this.events.once('shutdown', () => keyboard.off('keydown-Q', prev).off('keydown-PAGE_UP', prev).off('keydown-E', next).off('keydown-PAGE_DOWN', next));
     }
   }

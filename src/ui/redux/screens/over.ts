@@ -5,6 +5,8 @@ import { act, type Area, B, bg, esc, facts, H, keys, mini, TX, W } from '../kit'
 import type { ReduxCtx } from '../stage';
 import { type Art, figure, pic } from '../templates';
 import { phCard, phOver } from '../../phantom/screens/ending';
+import { pkCard } from '../../pocket/screens/card';
+import { pkOver } from '../../pocket/screens/over';
 
 export type Fact = readonly [string, string];
 
@@ -36,6 +38,7 @@ export interface OverModel {
 
 export function overView(c: ReduxCtx, d: OverModel): string {
   if (c.ph) return phOver(c.ph, d);
+  if (c.pk) return pkOver(d);
   const v = c.v(2), side = v ? 24 : 120;
   const back = (d.backdrop ? bg(d.backdrop) : '<div class="fill" style="background:linear-gradient(#1a2030,#0b0f18)"></div>') + `<div class="shade" style="background:${d.win ? '#10204880' : '#000000b0'}"></div>${d.win ? '<div class="burst"></div>' : ''}`;
   const head = `<div class="abs col cen" style="left:0;right:0;top:${v ? 30 : 40}px;gap:6px;color:#fff"><b style="font-size:60px;line-height:1;text-shadow:5px 5px 0 #000" class="${d.win ? 'acc' : ''}">${esc(d.title)}</b><span style="text-shadow:2px 2px 0 #000">${esc(d.sub)}</span></div>`;
@@ -71,12 +74,16 @@ export interface RunCardModel {
   /** Phantom UI: the small word over the title ("Pause"), and the notes that stand beside the card. */
   small?: string;
   side?: readonly { small: string; title: string; text: string }[];
+  /** Pocket look: the five-digit ID on the card's top, and the side panel's heading (default "Record"). */
+  id?: string;
+  sideTitle?: string;
 }
 
 const BADGE_COLORS = ['#e8622a', '#3d8bea', '#3fae5a', '#d8a810', '#7a5ad8', '#d8483a', '#2aa6a0', '#c85aa8'] as const;
 
 export function runCardView(c: ReduxCtx, d: RunCardModel): string {
   if (c.ph) return phCard(c.ph, d);
+  if (c.pk) return pkCard(d);
   const v = c.v(2), side = v ? 60 : 150, cell = v ? 190 : 170;
   const lit = Math.max(0, Math.min(8, Math.floor(d.badges)));
   const discs = `<div class="row" style="gap:6px;margin-top:4px">${Array.from({ length: 8 }, (_, k) => `<i style="width:26px;height:26px;border-radius:50%;background:${k < lit ? BADGE_COLORS[k] : 'var(--p2)'};box-shadow:0 0 0 2px var(--l)"></i>`).join('')}</div>`;

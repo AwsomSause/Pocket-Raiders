@@ -4,7 +4,7 @@
 // ↑/↓ choose, → options, ← rows, Enter pick, Q/E switch page, Esc back.
 
 import Phaser from 'phaser';
-import { applyOption, optionsFor, ROW_HELP, type OptionRow, type PrepState } from '../core/runPrepOptions';
+import { applyOption, NONE, optionsFor, ROW_HELP, type OptionRow, type PrepState } from '../core/runPrepOptions';
 import { services } from '../game/services';
 import { AERO, drawGlass, glassPanel as drawPanel } from '../ui/aero';
 import { playSfx } from '../ui/audio';
@@ -12,7 +12,12 @@ import { onInputAction } from '../ui/input';
 import { ScrollList } from '../ui/scrollList';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import type { RunPrepData } from './RunPrepScene';
-import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, pocketOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { pkPrepBring, pkPrepSetup } from '../ui/pocket/screens/run';
+import { ballArt, itemArt, type PkArt } from '../ui/pocket/art';
+import { pkArtOf } from '../ui/pocket/templates';
+import { rxFileOf } from '../ui/redux/assets';
+import type { AssetManifest } from '../assets/catalog';
 import { settingsView } from '../ui/redux/templates';
 
 export type ChoicesGroup = 'config' | 'trainer';
@@ -76,16 +81,33 @@ export class RunChoicesScene extends Phaser.Scene {
     this.focusRow(this.rowIndex);
 
     this.view = reduxOn() ? mountRedux(this, {
-      render: (c) => settingsView(c, {
+      render: (c) => c.pk ? this.pocketPage() : settingsView(c, {
         title: 'Run Setup', area: 'run', tabs: GROUPS.map((g) => (g.id === 'config' ? 'Setup' : g.title)), tab: GROUPS.indexOf(this.group),
         rows: this.group.rows.map(([row, title]) => { const o = this.cur(row); return { label: title, value: o.options.find((x) => x.id === o.chosen)?.label ?? 'none', disabled: !o.enabled }; }),
         index: this.rowIndex,
         text: this.notice.text || `${this.help.text} ${this.detail.text}`.replace(/\s+/g, ' '),
         hints: [['↔', 'change'], ['Q/E', 'page'], ['Esc', 'desk']],
       }),
-      acts: { pick: (i) => { this.rowsList.index = Number(i); this.focusRow(Number(i)); this.step(1); }, tab: (k) => this.setGroup(GROUPS[Number(k)]!.id) },
+      acts: {
+        pick: (i) => { this.rowsList.index = Number(i); this.focusRow(Number(i)); this.step(1); },
+        tab: (k) => (pocketOn() ? this.pocketTab(Number(k)) : this.setGroup(GROUPS[Number(k)]!.id)),
+        // Pocket look: a row lights on a click; a segment picks that choice; a card lights, then changes on a second click.
+        row: (i) => { this.rowsList.index = Number(i); this.focusRow(Number(i)); this.view?.refresh(); },
+        opt: (a) => { const [r, o] = a.split(':').map(Number) as [number, number]; this.rowsList.index = r; this.focusRow(r); this.pickSeg(o); },
+        card: (i) => { if (Number(i) === this.rowIndex) this.step(1); else { this.rowsList.index = Number(i); this.focusRow(Number(i)); } this.view?.refresh(); },
+        back: () => this.leave(),
+      },
+      overs: { over: (i) => { if (Number(i) !== this.rowIndex) { this.rowsList.index = Number(i); this.focusRow(Number(i)); this.view?.refresh(); } } },
     }) : null;
     onInputAction(this, (a) => {
+      if (this.view && pocketOn() && this.group.id === 'trainer') {
+        // Pocket look: the Trainer page is cards four across; Enter changes the lit one.
+        const n = this.group.rows.length, step = a === 'left' ? -1 : a === 'right' ? 1 : a === 'up' ? -4 : a === 'down' ? 4 : 0;
+        if (step && this.rowIndex + step >= 0 && this.rowIndex + step < n) { this.notice.setText(''); this.rowsList.index = this.rowIndex + step; this.focusRow(this.rowIndex + step); }
+        else if (a === 'confirm') this.step(1);
+        else if (a === 'back') this.leave();
+        return this.view.refresh();
+      }
       if (this.view) {
         // New UI: one list; left and right step the focused row's choice (locked choices are skipped).
         if (a === 'up' || a === 'down') { this.notice.setText(''); this.rowsList.move(a === 'up' ? -1 : 1); }
@@ -106,6 +128,9 @@ export class RunChoicesScene extends Phaser.Scene {
       const prev = () => this.switchGroup(-1);
       const next = () => this.switchGroup(1);
       keyboard.on('keydown-Q', prev).on('keydown-E', next);
+      const tabKey = (e: KeyboardEvent) => { if (pocketOn()) { e.preventDefault(); this.pocketTab(this.group.id === 'config' ? 1 : 2); } };
+      keyboard.on('keydown-TAB', tabKey);
+      this.events.once('shutdown', () => keyboard.off('keydown-TAB', tabKey));
       this.events.once('shutdown', () => keyboard.off('keydown-Q', prev).off('keydown-E', next));
     }
   }
@@ -223,6 +248,49 @@ export class RunChoicesScene extends Phaser.Scene {
     this.focusRow(r);
     const i = this.cur(row).options.findIndex((o) => o.id === optionId);
     if (i >= 0) this.pickOption(i);
+  }
+
+  /** Pocket look: the Run Setup rows or the Trainer cards (mock-ups `pd-setup`, `pd-bring`). */
+  private pocketPage(): string {
+    if (this.group.id === 'config') {
+      return pkPrepSetup({
+        index: this.rowIndex,
+        rows: this.group.rows.map(([row, title]) => {
+          const o = this.cur(row);
+          return { label: title, help: ROW_HELP[row].split(/(?<=\.)\s/)[0]!, disabled: !o.enabled, opts: o.options.map((x) => ({ label: x.label, on: x.id === o.chosen, locked: !x.ok })) };
+        }),
+      });
+    }
+    const { content } = services().session;
+    const manifest = this.cache.json.get('manifest') as AssetManifest | undefined;
+    const cards = this.group.rows.map(([row, title]) => {
+      const o = this.cur(row), chosen = o.options.find((x) => x.id === o.chosen);
+      const none = !chosen || chosen.id === NONE || chosen.id === 'off';
+      let art: PkArt | null = null;
+      if (row === 'trainer') { const f = rxFileOf(manifest, content.archetypes.get(this.state.archetypeId)?.spriteAssetId ?? ''); art = f ? pkArtOf(f) : null; }
+      else if (row === 'vault' && this.state.prep.vaultItem) art = itemArt(this.state.prep.vaultItem);
+      else if (!none) art = ballArt(row === 'loan' ? 'gb' : row === 'license' ? 'ub' : 'pb');
+      return { label: title, value: none ? 'None' : chosen!.label, art, none };
+    });
+    const [row] = this.group.rows[this.rowIndex]!;
+    return pkPrepBring({ cards, index: this.rowIndex, help: ROW_HELP[row].replace(' ←/→ changes it.', '') });
+  }
+
+  /** Pocket look: a segment picks that choice (a locked one says why). */
+  private pickSeg(i: number): void {
+    const [row] = this.group.rows[this.rowIndex]!;
+    const o = this.cur(row);
+    if (!o.enabled) this.say('This row only applies to the Regional Circuit mode.');
+    else if (o.options[i]?.ok) { this.pickOption(i); this.backToRows(); }
+    this.view?.refresh();
+  }
+
+  /** Pocket look: the desk's four page tabs (Modifiers is its own scene; Overview is the desk). */
+  private pocketTab(k: number): void {
+    if (k === 0 || k === 1) return this.setGroup(GROUPS[k]!.id);
+    const desk: RunPrepData = { ...this.desk, archetypeId: this.state.archetypeId, prep: this.state.prep, rules: this.state.rules };
+    if (k === 2) return void this.scene.start('RunModifiers', { desk, rules: this.state.rules });
+    this.leave();
   }
 
   private leave(): void {

@@ -67,11 +67,31 @@ test('send-out, faint and recall play like the mockups and leave the sprites as 
   const foeRest = await look(page, 'enemy');
 
   // Faint: the foe staggers away from you, then sinks into the ground at its feet and its base goes dark.
+  // Every frame is checked in the page (a slow machine's polls can fall between the short sink and the end).
+  await page.evaluate(() => {
+    const w = window as any;
+    const b = w.__pkr.game.scene.getScene('Battle');
+    w.__faint = { away: 0, sunk: false, shade: false };
+    w.__faintWatch = () => {
+      const v = b.enemySprite;
+      if (!v?.active) return;
+      w.__faint.away = Math.max(w.__faint.away, v.x - b.spotXY('enemy').x);
+      if (v.isCropped) {
+        w.__faint.sunk = true;
+        w.__faint.shade ||= Boolean(b.baseShade.enemy?.active);
+      }
+    };
+    b.events.on('update', w.__faintWatch);
+  });
   await start(page, `b.faintMoment('enemy', b.enemySprite)`);
-  await expect.poll(async () => (await look(page, 'enemy')).x, { timeout: 3000 }).toBeGreaterThan(foeRest.x + 6);
-  await expect.poll(async () => (await look(page, 'enemy')).cropped, { timeout: 4000 }).toBe(true);
-  expect((await look(page, 'enemy')).shade).toBe(true);
   await expect.poll(() => over(page), { timeout: 5000 }).toBe(true);
+  const faint = await page.evaluate(() => {
+    const w = window as any;
+    w.__pkr.game.scene.getScene('Battle').events.off('update', w.__faintWatch);
+    return w.__faint;
+  });
+  expect(faint.away).toBeGreaterThan(6);
+  expect(faint).toMatchObject({ sunk: true, shade: true });
   expect(await page.evaluate(() => (window as any).__ms)).toBeGreaterThan(900);
   // Afterwards it is hidden but otherwise as it stood (a revive only has to show it again).
   expect(await look(page, 'enemy')).toMatchObject({ x: foeRest.x, y: foeRest.y, alpha: 0, sx: foeRest.sx, angle: 0, cropped: false, shade: true });
@@ -90,9 +110,18 @@ test('send-out, faint and recall play like the mockups and leave the sprites as 
   await expect.poll(async () => (await look(page, 'player')).sx, { timeout: 3000 }).toBeLessThan(rest.sx * 0.5);
   await expect.poll(() => over(page), { timeout: 5000 }).toBe(true);
   expect(await look(page, 'player')).toMatchObject({ x: rest.x, y: rest.y, alpha: 0, sx: rest.sx, solid: 0 });
-  await start(page, `b.sendMoment('player', b.shown.player, null)`);
+  // The info bar tucked away below the screen during the recall, and waits hidden in its own place.
+  const bar = () => page.evaluate(() => { const c = (window as any).__pkr.game.scene.getScene('Battle').playerBox.container; return { visible: c.visible, x: c.x, y: c.y }; });
+  const barHome = await bar();
+  expect(barHome.visible).toBe(false);
+  // Send-out: the bar comes back up with the new name while the Pokémon is still settling, and ends at home.
+  await start(page, `b.sendMoment('player', b.shown.player, null, () => { window.__plateAt = performance.now() - window.__t0; void b.refreshInfoBox(b.playerBox, b.shown.player, false); })`);
   await expect.poll(() => over(page), { timeout: 6000 }).toBe(true);
+  const { plateAt, ms } = await page.evaluate(() => ({ plateAt: (window as any).__plateAt as number, ms: (window as any).__ms as number }));
+  expect(plateAt).toBeGreaterThan(0);
+  expect(ms - plateAt).toBeGreaterThan(300);
   expect(await look(page, 'player')).toMatchObject({ x: rest.x, y: rest.y, alpha: 1, cropped: false, solid: 0 });
+  await expect.poll(bar, { timeout: 2000 }).toEqual({ ...barHome, visible: true });
 
   expect(errors).toEqual([]);
 });
@@ -128,5 +157,66 @@ test('Reduced only sinks and is short; Off moves nothing and takes no time', asy
   await expect.poll(() => over(page), { timeout: 2000 }).toBe(true);
   expect(await page.evaluate(() => (window as any).__ms)).toBeLessThan(150);
   expect((await look(page, 'player')).alpha).toBe(0);
+  expect(errors).toEqual([]);
+});
+
+test('the trainer face chip pops in with its word, keeps its distance, obeys Off, and leaves nothing behind', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'cheer-e2e');
+  const chips = () => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.list.filter((c: any) => c.name === 'cheer-chip').map((c: any) => c.texture.key));
+  // A knock-out: your trainer's face and "We did it!".
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').cheer({ kind: 'faint', on: 'foe' }, 0));
+  await expect.poll(chips, { timeout: 3_000 }).toHaveLength(2);
+  const keys = await chips();
+  expect(keys.some((k: string) => k.startsWith('cheer.face.'))).toBe(true);
+  expect(keys.some((k: string) => k.startsWith('cheer.word.We did it!'))).toBe(true);
+  // A second moment straight after is held back (one chip per 1.2 s).
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').cheer({ kind: 'hit', on: 'you', superEffective: false }, 0));
+  await page.waitForTimeout(100);
+  expect((await chips()).some((k: string) => k.includes('Hang in there!'))).toBe(false);
+  // It goes by itself.
+  await expect.poll(chips, { timeout: 5_000 }).toHaveLength(0);
+  // With every animation off there is no chip at all.
+  await page.waitForTimeout(1300);
+  await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    session.settings.disableAllAnimations = true;
+    game.scene.getScene('Battle').cheer({ kind: 'hit', on: 'foe', superEffective: true }, 0);
+  });
+  await page.waitForTimeout(300);
+  expect(await chips()).toHaveLength(0);
+  expect(errors).toEqual([]);
+});
+
+test('the foe trainer steps in to throw, the ball leaves the hand, and the trainer is gone when the Pokémon lands', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'foe-throw-e2e');
+  const trainers = () => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').field.list.filter((c: any) => /^(trainer|boss)\./.test(String(c.texture?.key))).length);
+  await page.evaluate(() => {
+    const w = window as any;
+    const b = w.__pkr.game.scene.getScene('Battle');
+    w.__hand = undefined;
+    w.__sent = false;
+    void b.foeThrowMoment().then((h: any) => {
+      w.__hand = h;
+      w.__inHand = b.field.list.some((c: any) => /^(trainer|boss)\./.test(String(c.texture?.key)));
+      return b.sendMoment('enemy', b.shown.enemy, h).then(() => (w.__sent = true));
+    });
+  });
+  await expect.poll(() => page.evaluate(() => (window as any).__hand !== undefined), { timeout: 5_000 }).toBe(true);
+  const hand = await page.evaluate(() => (window as any).__hand);
+  // Released from the hand above the foe's spot, while the trainer is still on the field.
+  expect(hand).not.toBeNull();
+  expect(hand.x).toBeGreaterThan(600);
+  expect(hand.y).toBeLessThan(240);
+  expect(await page.evaluate(() => (window as any).__inHand)).toBe(true);
+  await expect.poll(() => page.evaluate(() => (window as any).__sent), { timeout: 5_000 }).toBe(true);
+  await expect.poll(trainers, { timeout: 2_000 }).toBe(0);
+  // Reduced animations: no trainer, the ball comes from its usual place.
+  await page.evaluate(() => ((window as any).__pkr.session.settings.battleAnimations = 'reduced'));
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').foeThrowMoment())).toBeNull();
+  expect(await trainers()).toBe(0);
   expect(errors).toEqual([]);
 });

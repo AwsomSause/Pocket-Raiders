@@ -364,6 +364,11 @@ export class DecisionScene extends Phaser.Scene {
       const old = slot ? content.moves.get(slot.id)! : null;
       return {
         title: 'New move',
+        pkLearn: {
+          mon: name, count: mon.moves.length, room: room === 1,
+          next: { name: newMove.name, type: newMove.type, category: newMove.category, power: `${newPower ?? '—'}`, accuracy: newMove.accuracy ? `${newMove.accuracy}` : '—', pp: `${newMove.pp}`, text: moveBrief(moveFullDescription(newMove)) },
+          moves: mon.moves.map((m) => { const mv = content.moves.get(m.id)!; return { name: mv.name, type: mv.type, category: mv.category, pp: `${m.pp}/${maxPp(content, m)}` }; }),
+        },
         card: { big: false, file, art, name, level: '', tag: '', sub: 'wants to learn', accent: newMove.name, types: [newMove.type], lines: [`${capWord(newMove.category)}${newMove.power ? ` · Power ${newPower}` : ''} · PP ${newMove.pp}. ${moveBrief(moveFullDescription(newMove))}`] },
         options: [...(room ? [plain(`Learn ${newMove.name}`, 'Free move slot')] : []), ...mon.moves.map((m) => rxMove(content, m.id, m.pp, m)), plain(`Do not learn ${newMove.name}`)],
         details: [],

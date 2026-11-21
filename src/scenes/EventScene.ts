@@ -418,8 +418,9 @@ export class EventScene extends Phaser.Scene {
             bracket: tv && this.rxBracket !== null ? tourneyPage(tv, (sp) => monFile(this, sp), this.rxBracket, 'Saffron Fighting Tournament') : null,
             title: champion ? 'CHAMPION' : null,
             store: store ? { ...store, party: partyChips(this), notes: helps(r?.run ?? run) } : null,
-            place: c.ph && run.stage ? { no: String(run.stage.index + 1), of: run.stage.pseudo ? '' : String(runCampaign(content, run).stagesPerRegion), region: run.stage.pseudo?.name ?? currentRegion(content, run).name, sub: clockLabel(run) } : null,
-            me: c.ph ? youArt : null,
+            place: (c.ph || c.pk) && run.stage ? { no: String(run.stage.index + 1), of: run.stage.pseudo ? '' : String(runCampaign(content, run).stagesPerRegion), region: run.stage.pseudo?.name ?? currentRegion(content, run).name, sub: clockLabel(run) } : null,
+            me: c.ph || c.pk ? youArt : null,
+            lead: c.pk && lead ? monFile(this, lead.speciesId, 'front', !!lead.shiny) : null,
           });
         },
         acts: {

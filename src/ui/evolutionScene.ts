@@ -18,6 +18,7 @@ import { loadAssets, pokemonArtIds } from './lazyAssets';
 import { monFile } from './redux/game';
 import { esc, foot, mon, TX } from './redux/kit';
 import { phEvolve } from './phantom/screens/battle';
+import { pkEvolve, type PkEvolveModel } from './pocket/screens/after';
 import { mountRedux, reduxOn } from './redux/stage';
 import { pokemonVisual, type Visual } from './sprites';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, textStyle } from './theme';
@@ -315,6 +316,18 @@ function playCanvas(scene: Phaser.Scene, show: EvolutionShow, lines: ReturnType<
   );
 }
 
+/** The Pocket page's facts: names, the new types and the three stats that grow most. */
+function pkEvo(show: EvolutionShow, files: { from: string | null; to: string | null }, st: { text: string; which: 'from' | 'to'; sil: boolean; revealed: boolean }): PkEvolveModel {
+  const content = services().session.content;
+  const a = content.species.get(show.from), b = content.species.get(show.to);
+  const names: [keyof NonNullable<typeof a>['baseStats'], string][] = [['hp', 'HP'], ['atk', 'Attack'], ['def', 'Defense'], ['spa', 'Sp. Atk'], ['spd', 'Sp. Def'], ['spe', 'Speed']];
+  const ups = a && b ? names.map(([k, w]) => [w, b.baseStats[k] - a.baseStats[k]] as const).filter(([, n]) => n > 0).sort((x, y) => y[1] - x[1]).slice(0, 3).map(([w]) => w) : [];
+  return {
+    from: { file: files.from, name: a?.name ?? show.from }, to: { file: files.to, name: b?.name ?? show.to, types: b?.types ?? [] },
+    ups, sil: st.sil, done: st.revealed, stoppable: !!show.decide && !show.foe && !st.revealed, text: st.text,
+  };
+}
+
 function playCard(scene: Phaser.Scene, show: EvolutionShow, lines: ReturnType<typeof evolutionLines>, tl: EvoTimeline, flash: number): Promise<void> {
   const files = { from: monFile(scene, show.from, 'front', !!show.shiny), to: monFile(scene, show.to, 'front', !!show.shiny) };
   const st = { text: '', which: 'from' as 'from' | 'to', sil: false, flicker: false, revealed: false };
@@ -326,6 +339,8 @@ function playCard(scene: Phaser.Scene, show: EvolutionShow, lines: ReturnType<ty
       const f = files[st.which];
       // Phantom: the mock-ups' evolve page (the same beats; a click anywhere moves on).
       if (c.ph) return phEvolve({ from: f, to: files.to, done: st.revealed, sil: st.sil, tap: true }, st.text);
+      // Pocket: the mock-ups' Evolution page (the same beats; Next or a key moves on).
+      if (c.pk) return pkEvolve(pkEvo(show, files, st));
       const pic = f ? mon(f, 3.4, st.sil ? 'evo-w' : '', !st.sil) : '';
       return (
         '<div class="fill" style="background:radial-gradient(circle at 50% 46%,var(--p2),#000 70%)"></div>' +

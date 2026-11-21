@@ -452,14 +452,14 @@ export class GameOverScene extends Phaser.Scene {
     };
     const render = (c: ReduxCtx): string => {
       this.rxCols = partyCols(c);
-      const main = (): string => overView(c, { win: o.won, title: o.won ? 'CHAMPION!' : 'RUN OVER', sub: o.sub, facts: o.facts, payouts: o.payouts, team, buttons, index: this.rxIndex, extras, backdrop, poked: this.rxPoked, where: o.where, line: o.line, road: o.road, mvp: o.mvp, report: c.ph && this.rxMode === 'report' ? { title: 'Full report', lines: pages[this.rxPage] ?? [], page: this.rxPage, pages: pages.length } : null });
+      const main = (): string => overView(c, { win: o.won, title: o.won ? 'CHAMPION!' : 'RUN OVER', sub: o.sub, facts: o.facts, payouts: o.payouts, team, buttons, index: this.rxIndex, extras, backdrop, poked: this.rxPoked, where: o.where, line: o.line, road: o.road, mvp: o.mvp, report: (c.ph || c.pk) && this.rxMode === 'report' ? { title: 'Full report', lines: pages[this.rxPage] ?? [], page: this.rxPage, pages: pages.length } : null });
       if (this.rxMode === 'witness') {
         const w = o.witness[this.rxPage]!;
         return cutView(c, { name: w.name, role: w.role, line: w.line, cast: w.cast, player, backdrop: stage, beat: cutBeat(this.rxPage, o.witness.length), skip: ['Esc', o.won ? 'credits' : 'skip'] });
       }
       if (this.rxMode === 'card') return runCardView(c, { title: 'Run card', name: o.card.name, rank: o.won ? 'Win' : 'Loss', facts: o.card.facts, trainer: player, badges: o.card.badges, team: team.map((t) => t.file), hints: [['Enter', 'save'], ['Esc', 'back']], text: this.rxSaved === null ? 'Press Enter to save the card as a PNG you can share.' : this.rxSaved ? 'Saved as a PNG you can share.' : 'The card could not be saved.' });
       if (this.rxMode === 'team') return partyView(c, { title: 'Final team', area: 'end', hints: [['Esc', 'back']], mons: cards, index: Math.min(this.rxPage, Math.max(0, cards.length - 1)), text: 'Your final team, as it stood at the end.' });
-      return main() + (this.rxMode === 'report' && !c.ph ? reportView(c, { title: 'Full report', pages, page: this.rxPage }) : '');
+      return main() + (this.rxMode === 'report' && !c.ph && !c.pk ? reportView(c, { title: 'Full report', pages, page: this.rxPage }) : '');
     };
     this.rx = mountRedux(this, {
       render,
