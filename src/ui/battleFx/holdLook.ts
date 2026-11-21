@@ -5,6 +5,7 @@
 import Phaser from 'phaser';
 import { CHARGE, SPENT } from '../../core/presentation/motionConditions';
 import { pill } from './cheerChip';
+import { rnd } from './motionPlayer';
 
 export type HoldKind = 'charge' | 'spent';
 
@@ -72,13 +73,13 @@ export class HoldLook {
     if (this.full) this.steam = this.scene.time.addEvent({ delay: SPENT.steamMs, loop: true, callback: () => this.puff() });
   }
 
-  /** One puff of steam rising off the body (presentation randomness only). */
+  /** One puff of steam rising off the body (the effects' own scatter, never gameplay RNG). */
   private puff(): void {
     const s = this.sprite;
     if (this.gone || !s.active || !s.visible) return;
-    const x = s.x + (Math.random() * 2 - 1) * 70 * Math.min(1, s.displayWidth / 140);
-    const y = s.y - Math.random() * this.height * 0.9;
-    const p = this.scene.add.circle(x, y, 5 + Math.random() * 6, Math.random() < 0.5 ? 0xffffff : 0xdfe6f5, 0.8).setDepth(2999);
+    const x = s.x + rnd(-1, 1) * 70 * Math.min(1, s.displayWidth / 140);
+    const y = s.y - rnd() * this.height * 0.9;
+    const p = this.scene.add.circle(x, y, rnd(5, 11), rnd() < 0.5 ? 0xffffff : 0xdfe6f5, 0.8).setDepth(2999);
     this.scene.tweens.add({ targets: p, y: y - 40, scale: 1.8, alpha: 0, duration: 700, ease: 'Sine.easeOut', onComplete: () => p.destroy() });
   }
 

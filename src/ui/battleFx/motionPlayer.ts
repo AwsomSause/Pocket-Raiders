@@ -66,7 +66,7 @@ interface FreeRig {
 
 // Particle scatter: a tiny counter-based generator of its own, so effects never draw from gameplay RNG.
 let scatter = 1;
-function rnd(lo = 0, hi = 1): number {
+export function rnd(lo = 0, hi = 1): number {
   scatter = (scatter + 0x6d2b79f5) | 0;
   let t = Math.imul(scatter ^ (scatter >>> 15), 1 | scatter);
   t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
