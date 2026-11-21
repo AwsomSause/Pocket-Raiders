@@ -11,6 +11,7 @@ import { pkNews } from '../../src/ui/pocket/screens/news';
 import { pkOverlay } from '../../src/ui/redux/screens/overlay';
 import { pkForecast } from '../../src/ui/pocket/screens/forecast';
 import { pkTime, pkWeather, weatherCard } from '../../src/ui/pocket/screens/sky';
+import { pkHelp } from '../../src/ui/pocket/screens/help';
 
 describe('the Pocket Rival Board', () => {
   const r = (name: string, x: Partial<PkRival> = {}): PkRival => ({ name, role: 'Rival', art: null, ace: null, wins: 0, losses: 0, lead: 'Level', ...x });
@@ -197,5 +198,17 @@ describe('the Pocket Time of Day and Weather guides', () => {
     expect(h).toContain('data-act="pkWx"');
     expect(weatherCard(null)).toBe(0);
     expect(pkWeather({ now: null, turns: null, index: 0, crumb: [], road: null })).not.toContain('<em>Now</em>');
+  });
+});
+
+describe('the Pocket Controls card', () => {
+  it("the page's own keys by scene, a menu set for any other, the keys that work everywhere; a click puts it away", () => {
+    const b = pkHelp('Battle');
+    expect(b).toContain('You are in a battle');
+    expect(b).toContain('Battle status');
+    expect(b).toContain('Run log');
+    expect(b).toContain('data-act="help"');
+    expect(pkHelp('Map')).toContain('Forecast');
+    expect(pkHelp('Shop')).toContain('You are on a menu');
   });
 });
