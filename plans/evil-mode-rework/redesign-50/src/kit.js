@@ -16,7 +16,7 @@ function specAt(id, P) {
   return out;
 }
 function drawer(id, P) {
-  const s = PR.pages[id], a = pick(PR.defs[id], P), b = pick(PR.comps['k:' + s.kind], P);
+  const s = specAt(id, P), a = pick(PR.defs[id], P), b = pick(PR.comps['k:' + s.kind], P);
   if (a && (!b || a.pass >= b.pass)) return a; return b;
 }
 function live(id, P) { const s = PR.pages[id]; return s.from <= P && (!s.to || P < s.to); }

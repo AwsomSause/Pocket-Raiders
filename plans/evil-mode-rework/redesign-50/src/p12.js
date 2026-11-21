@@ -1,0 +1,13 @@
+/* Pass 12 · Street level: districts open into a street you can walk; a Black Market and a Laundromat back room become pages */
+page('street', { g: 'The Day', t: 'Street · Cerulean', kind: 'street', from: 12 });
+page('market', { g: 'HQ', t: 'Black Market', kind: 'list', from: 12, head: 'Black Market · dirty money only · ₽9,800', items: [{ l: 'Smoke Ball', s: '45% clean escape from a Hero', ico: 'g-smoke-ball', tag: '₽600' }, { l: 'Silph Scope', s: 'See Rocket’s ghosts in Lavender', ico: 'g-silph-scope', tag: '₽2,400' }, { l: 'Fake ID card', s: 'Police Belief +15 once', ico: 'g-idcard', tag: '₽900' }, { l: 'Dire Hit', s: 'Next job’s odds +10%', ico: 'g-dire-hit', tag: '₽500' }, { l: 'Master key', s: 'Opens any Front for sale', ico: 'g-secret-key', tag: 'Sold out' }], sel: 0, detail: { ttl: 'The Fence', spr: 't-clerkm', lines: ['“No questions, no receipts.”', 'Stock changes every Sunday.'], cta: ['Buy · ₽600 dirty', 'launder'] } });
+page('launder', { g: 'Empire', t: 'Launder money', kind: 'launder', from: 12 });
+PR.pages.district.up = { 12: { cta: ['Walk the street', 'street'] } };
+comp(12, 'k:street', (s, P) => { const T = [['Bike Shop', 't-biker', 'Protection · ₽90/day', 'card'], ['Cerulean Gym', 't-misty', 'Rocket’s grip −20 if you win', 'vs'], ['Nugget Bridge', 't-grunt', 'Rocket toll booth · snatch', 'card']];
+  return `<div class="scr t3 t3-street">${city('c3-street')}${C('top', s, 'Cerulean · street')}
+  ${map(T, ([n, k, d, g], i) => `<button class="t3-front${i === 0 ? ' on' : ''}" style="left:${30 + i * 310}px;--d:${i * 200}ms" ${go(g)}><div class="t3-awning">${sign(n, 'sm ' + ['pk', 'cy', 'red'][i])}</div><div class="t3-door2">${spr(k, fit3(k, 150), '', '', 'spr-' + k)}</div><em>${esc(d)}</em></button>`)}
+  ${C('keys', [['←→', 'Walk'], ['Enter', 'Go in'], ['Esc', 'Map']])}</div>`; });
+comp(12, 'k:launder', (s, P) => `<div class="scr t3 t3-laund">${C('bg', 'hq')}${C('top', s, 'Launder money')}
+  <section class="t3-panel t3-wm" ${mm('panel')}>${sign('LAUNDROMAT · BACK ROOM', 'hd')}<div class="t3-drums">${rep(3, i => `<div class="t3-drum" style="--d:${i * 300}ms"><i></i></div>`)}</div>
+  <div class="t3-flow"><div><em>DIRTY</em><b class="t3-led2 red">₽9,800</b></div><span>➜</span><div><em>CLEAN</em><b class="t3-led2">₽4,310</b></div></div>
+  <div class="t3-opts big">${map(['₽1,000', '₽2,000', '₽5,000'], (x, j) => `<i class="${j === 1 ? 'on' : ''}">${x}</i>`)}</div><p>Fee 12% · Heat +1 for every ₽2,000 · one wash a night</p><button class="t3-go" ${go('ledger')}>Wash ₽2,000</button></section>${C('keys', [['←→', 'Amount'], ['Enter', 'Wash'], ['Esc', 'Back']])}</div>`);

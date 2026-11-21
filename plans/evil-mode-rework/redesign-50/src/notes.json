@@ -136,5 +136,70 @@
   "q3": "Two new pages. Favours and Grudges used to be hidden numbers; now they arrive as letters you can act on.",
   "q4": "The Boss Menu lists everything (HQ, Crew, Pokémon, Map, Ledger, Mailbag, Rotom, Covers, Lessons, Settings, Save), each a single press away; nothing opens a menu inside a menu.",
   "q5": "The mailbag is the PC's Mail box; the cover gallery is the Hall of Fame for villains."
+ },
+ "i3": {
+  "name": "Neon Underworld",
+  "big": "The comic is gone. The UI moves into the city itself: every page is a rainy street at night, lists are lit shop signs on a building, files are billboards, numbers are LED boards, talks happen under a glass awning, and every sign flickers on like real neon."
+ },
+ "11": {
+  "name": "The city at night",
+  "big": "All 83 pages rebuilt as places in a neon city. The HQ is a tower with lit windows (dark windows are plots for sale), the Region map is city lights from above with glowing routes, the Card is an odds machine, results switch on letter by letter like a neon sign.",
+  "pages": [],
+  "q1": "Rain falls over every page, windows twinkle, signs buzz and flicker, actors stand in puddles with mirrored reflections.",
+  "q2": "Pass 10's comic was flat paper. The city has depth, light and weather, and the HQ is now drawn as the building it is.",
+  "q3": "Same pages as pass 10, every one rebuilt for the city; the next passes split more.",
+  "q4": "The Boss Menu is a tall red neon sign beside the Boss; Settings is a breaker panel with lit switches.",
+  "q5": "It feels like Team Rocket's Celadon Game Corner and Saffron at night: the underworld of a Pokémon city."
+ },
+ "12": {
+  "name": "Street level",
+  "big": "The city becomes walkable. A district now opens into a street of three lit shop fronts (a protection racket, the Gym, a Rocket toll booth), each one a job. Dirty money gets two real places: a Black Market that only takes dirty cash, and the Laundromat back room where you wash it.",
+  "pages": [
+   "Street · Cerulean",
+   "Black Market",
+   "Launder money"
+  ],
+  "q1": "Shop fronts flicker on one by one along the street; the laundromat drums spin while the LED totals tick.",
+  "q2": "Pass 11 put the old pages in the city. Pass 12 uses the city: places you walk past are the choices.",
+  "q3": "Three new pages. Laundering was a line in the Ledger; the Black Market is a shop the game didn't have.",
+  "q4": "The Black Market sits under HQ in the Boss Menu; laundering is under Empire. Both are one press from the wheel (HQ, Ledger).",
+  "q5": "The street is a Pokémon town street with shops and a Gym; the Black Market is the Celadon Game Corner prize counter gone bad."
+ },
+ "13": {
+  "name": "Light follows you",
+  "big": "Light now tells you what is chosen: the picked shop sign, window or district throws a coloured pool of neon onto the wet street below it, actors stand in their own colour (cyan for your side, pink for theirs), and page changes flicker off and on like a failing sign. A payphone brings anonymous tips as their own page.",
+  "pages": [
+   "Payphone call"
+  ],
+  "q1": "Every choice lights the ground; panels pulse softly; page changes buzz like neon.",
+  "q2": "Pass 12 relied on outlines for selection. Now light itself is the cursor, which reads at a glance even on a busy street.",
+  "q3": "Tips and calls from contacts get a page with three answers instead of a log line.",
+  "q4": "Settings › Effects › Flashes 'Soft' keeps the colours but stops the flicker.",
+  "q5": "Colour-coded sides echo the battle screen's ally and foe sides; the payphone call is a classic Pokémon story beat."
+ },
+ "14": {
+  "name": "Time and weather",
+  "big": "The city now keeps time. Morning pages (the report, assigning, training, the Black Market) sit under a pink dawn with the rain easing off; night pages stay neon. Heat drives the rain, and at 70% the whole city turns into a siren page with sweeping searchlights, Looker and a patrol.",
+  "pages": [
+   "Heat 70% siren"
+  ],
+  "q1": "A sunrise for every morning, searchlights and red-blue sirens for the Heat alarm.",
+  "q2": "Pass 13 was always midnight. Now the light tells you the time of day without reading a number.",
+  "q3": "The Heat alarm gets a page with the two ways out (lie low, pay off), instead of a red number in the corner.",
+  "q4": "Settings › Effects › Flashes controls the siren strobe; Calm keeps the dawn colours but no movement.",
+  "q5": "Pokémon games change light with the time of day; Looker turning up is straight from Platinum."
+ },
+ "15": {
+  "name": "The city's own menus",
+  "big": "The last Neon pass turns city things into menus: the HQ has an elevator (each lit button is a floor page), a Contacts book holds everyone you have met (the Fence, the tipster, Favours and Grudges), and Effects gets Rain and Neon flicker rows. The Boss Menu now has 12 choices including the Black Market and Contacts.",
+  "pages": [
+   "HQ elevator",
+   "Contacts"
+  ],
+  "q1": "The elevator doors slide open on Dale under a warm light; floor buttons glow amber.",
+  "q2": "Pass 14 made the city change with time. Pass 15 makes moving around it physical: an elevator for floors, a contact book for people.",
+  "q3": "Two new pages. Floors were reachable only by clicking a window; now the elevator lists them all with what is on each.",
+  "q4": "Boss Menu (12 choices) and Settings › Effects both grew city rows: Rain, Neon flicker, Shutter page change.",
+  "q5": "The elevator is the Silph Co. / Rocket Hideout lift; the contact book is the Pokégear phone list."
  }
 }
