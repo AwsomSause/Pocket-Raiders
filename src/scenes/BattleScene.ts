@@ -131,8 +131,8 @@ import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel, MotionClip } from '../core/presentation/motionClip';
-import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_LIGHT, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
-import { playClip, type ClipHost, type ClipPart } from '../ui/battleFx/motionPlayer';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, CRIT_FREEZE, critFreezeClip, HIT_LIGHT, HIT_STAMPS, hitStampSpot, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { playClip, type ClipHost, type ClipPart, type ClipRun } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
 import type { PlayerTrainerActor } from '../ui/playerTrainer';
@@ -631,6 +631,7 @@ export class BattleScene extends Phaser.Scene {
       if (assets.has(key) && this.textures.exists(key)) this.field.add(groundLayers[groundLayers.push(this.add.image(0, 0, key).setOrigin(0).setScale(PIXEL_SCALE)) - 1]!);
     }
     addParallax(this, backLayers, groundLayers, this.motion);
+    this.arenaLayers = [...backLayers, ...groundLayers];
     // League arenas build up with light: gym beams, Elite Four pillars, the champion's sunburst.
     if (boss) dressArena(this, this.field, this.field.length, boss.role, TYPE_COLORS[boss.types[0] ?? 'normal'] ?? 0xffffff, this.motion);
     // Drifting clouds, bubbles, snow or embers over the arena (EBDX scenery).
@@ -703,6 +704,7 @@ export class BattleScene extends Phaser.Scene {
       fullScreen: (on) => this.rx?.visible(!on),
       numbers: () => ({ show: services().session.settings.damageNumbers, scale: services().session.settings.popupScale }),
       recoil: (side, cue) => this.hitMoment(side, cue),
+      stamp: (side, kind) => this.hitStamp(side, kind),
       heal: (side) => this.healMoment(side),
       condition: (side, status, at) => this.condition(side, status, at),
       stat: (side, stat, change) => this.statMoment(side, stat, change),
@@ -2580,6 +2582,10 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private camBusy = false;
+  /** When the last critical-hit freeze played (pass 12): the old letterbox and camera push stay away for it. */
+  private critFrozeAt = -1e9;
+  /** The arena's back and ground pictures (the critical hit drains their colour). */
+  private arenaLayers: Phaser.GameObjects.Image[] = [];
   /** The foe trainer's name, picture and title, kept for the closing lines after the battle is over. */
   private lastFoe: { name: string; art: { assetId: string; label: string }; title: string | null; role?: string } | null = null;
   /** Real-clock time the camera has sat off the wide view with no move running (for the watchdog below); 0 = on the wide view or moving. */
@@ -4245,7 +4251,7 @@ export class BattleScene extends Phaser.Scene {
    * Hit (pass 2): the target goes white, squashes, is thrown back away from the attacker (further for a super effective
    * or critical hit) and springs home with dust. Full animations only; false when it can't play (the plain hit-stop shows).
    */
-  private hitMoment(side: Side, cue: { amount: number; crit: boolean; effectiveness: number; color?: string }): boolean | { shake: number; heavy: boolean } {
+  private hitMoment(side: Side, cue: { amount: number; crit: boolean; effectiveness: number; color?: string }): boolean | { shake: number; heavy: boolean; hold?: number } {
     const sprite = side === 'player' ? this.playerSprite : this.enemySprite;
     if (!(sprite instanceof Phaser.GameObjects.Sprite) || !sprite.active || !sprite.visible || this.clipLevel() !== 'full') return false;
     const at = this.spotXY(side);
@@ -4265,35 +4271,127 @@ export class BattleScene extends Phaser.Scene {
     const key = glowPicture(this);
     const r = big ? HIT_LIGHT.bodyBig : HIT_LIGHT.body;
     const rf = big ? HIT_LIGHT.floorBig : HIT_LIGHT.floor;
-    const light = key ? this.add.image(at.x, at.y - h / 2, key).setScale((r * 2) / GLOW_SIZE).setTint(color).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0) : null;
-    const floor = key ? this.add.image(at.x, at.y - 4, key).setScale((rf * 2) / GLOW_SIZE, (rf * 2 * 0.26) / GLOW_SIZE).setTint(color).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0) : null;
-    if (floor) this.field.addAt(floor, this.fieldBase);
-    if (light) this.field.add(light);
-    const other = side === 'player' ? this.enemySprite : this.playerSprite;
-    const run = playClip(this, hitClip({ x: sprite.x, y: at.y, h }, side === 'enemy' ? 1 : -1, { big, sharp, p: power.p }, 'full'), {
-      ...this.clipHost({ mon: { kind: 'mon', get: () => sprite }, light: { kind: 'free', get: () => light }, floor: { kind: 'free', get: () => floor } }, {
+    let cut = false;
+    const land = (): void => {
+      if (cut || !sprite.active) return;
+      const light = key ? this.add.image(at.x, at.y - h / 2, key).setScale((r * 2) / GLOW_SIZE).setTint(color).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0) : null;
+      const floor = key ? this.add.image(at.x, at.y - 4, key).setScale((rf * 2) / GLOW_SIZE, (rf * 2 * 0.26) / GLOW_SIZE).setTint(color).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0) : null;
+      if (floor) this.field.addAt(floor, this.fieldBase);
+      if (light) this.field.add(light);
+      const other = side === 'player' ? this.enemySprite : this.playerSprite;
+      const run = playClip(this, hitClip({ x: sprite.x, y: at.y, h }, side === 'enemy' ? 1 : -1, { big, sharp, p: power.p }, 'full'), {
+        ...this.clipHost({ mon: { kind: 'mon', get: () => sprite }, light: { kind: 'free', get: () => light }, floor: { kind: 'free', get: () => floor } }, {
+          cue: (name) => {
+            // A big hit lights the other Pokémon too: a wash of the colour over it that fades in half a second.
+            if (name !== 'glow' || !(other instanceof Phaser.GameObjects.Sprite) || !other.active || !other.visible) return;
+            const lit = this.add.sprite(other.x, other.y, other.texture.key, other.frame.name).setOrigin(other.originX, other.originY).setScale(other.scaleX, other.scaleY).setFlip(other.flipX, other.flipY).setTintFill(color).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0.6);
+            if (other.parentContainer) other.parentContainer.addAt(lit, other.parentContainer.getIndex(other) + 1);
+            if (other.mask) lit.setMask(other.mask);
+            this.tweens.add({ targets: lit, alpha: 0, duration: 500, onComplete: () => lit.destroy() });
+          },
+        }),
+      });
+      sprite.setData(HIT_RUN, { stop: () => ((cut = true), run.stop()) });
+      void run.done.then(() => {
+        light?.destroy();
+        floor?.destroy();
+        if (cut || !sprite.active) return;
+        sprite.setData(HIT_RUN, undefined);
+        run.rest('mon');
+        if (sprite === (side === 'player' ? this.playerSprite : this.enemySprite)) this.standUp(sprite, mon);
+      });
+    };
+    // The critical hit (pass 12): everything stops for a moment first, then the hit lands.
+    const freeze = cue.crit ? this.critFreeze(sprite, { x: at.x, y: at.y - h / 2 }) : null;
+    if (freeze) {
+      sprite.setData(HIT_RUN, { stop: () => ((cut = true), freeze.stop()) });
+      void freeze.done.then(() => {
+        if (!cut && sprite.active) freeze.rest('mon');
+        land();
+      });
+    } else land();
+    const st = services().session.settings;
+    return {
+      shake: st.battleScreenEffects ? Math.round(power.shake * Math.min(1, Math.max(0, st.shakeIntensity))) : 0,
+      heavy: power.tier === 'heavy',
+      ...(freeze ? { hold: CRIT_FREEZE.ms } : {}),
+    };
+  }
+
+  /** A hit's word stamp (pass 5): CRITICAL HIT!, SUPER EFFECTIVE!, Not very effective… or NO EFFECT beside the target. */
+  private hitStamp(side: Side, kind: string): boolean {
+    const look = HIT_STAMPS[kind];
+    const sprite = side === 'player' ? this.playerSprite : this.enemySprite;
+    if (!look || !sprite?.active || !sprite.visible) return false;
+    const at = this.spotXY(side);
+    const spot = hitStampSpot(side, { x: at.x, y: at.y - (sprite.displayHeight * sprite.originY) / 2 });
+    const show = (): void => this.wxStamp(look.word, look.fill, look.ink, spot.x, spot.y + look.dy, look.soft);
+    if (look.at > 0) this.time.delayedCall(look.at, show);
+    else show();
+    return true;
+  }
+
+  /**
+   * The critical hit's freeze (pass 12): the target goes white with a star and yellow rays, black bars close in from
+   * top and bottom, the camera jumps to it and the arena's colour drains for a moment.
+   */
+  private critFreeze(sprite: Phaser.GameObjects.Sprite, mid: Point): ClipRun {
+    const F = CRIT_FREEZE;
+    const st = services().session.settings;
+    this.critFrozeAt = this.time.now;
+    return playClip(this, critFreezeClip(mid, 'full'), {
+      ...this.clipHost({ mon: { kind: 'mon', get: () => sprite } }, {
         cue: (name) => {
-          // A big hit lights the other Pokémon too: a wash of the colour over it that fades in half a second.
-          if (name !== 'glow' || !(other instanceof Phaser.GameObjects.Sprite) || !other.active || !other.visible) return;
-          const lit = this.add.sprite(other.x, other.y, other.texture.key, other.frame.name).setOrigin(other.originX, other.originY).setScale(other.scaleX, other.scaleY).setFlip(other.flipX, other.flipY).setTintFill(color).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0.6);
-          if (other.parentContainer) other.parentContainer.addAt(lit, other.parentContainer.getIndex(other) + 1);
-          if (other.mask) lit.setMask(other.mask);
-          this.tweens.add({ targets: lit, alpha: 0, duration: 500, onComplete: () => lit.destroy() });
+          if (name !== 'freeze') return;
+          // The bars hold to the screen's edges while the camera jumps in (drawn in the world, so placed each frame).
+          const bars = [0, 1].map(() => this.add.rectangle(0, 0, GAME_WIDTH, F.bar, 0x05070f).setOrigin(0).setDepth(1400));
+          const slide = { k: 0 };
+          const place = (): void => {
+            const cam = this.cameras.main;
+            const v = cam.worldView;
+            const h = F.bar / cam.zoom;
+            bars.forEach((b, i) => b.active && b.setPosition(v.x - 2, i ? v.bottom - h * slide.k : v.y - h * (1 - slide.k)).setSize(v.width + 4, h));
+          };
+          place();
+          this.events.on(Phaser.Scenes.Events.POST_UPDATE, place);
+          this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.events.off(Phaser.Scenes.Events.POST_UPDATE, place));
+          this.tweens.chain({
+            targets: slide,
+            tweens: [
+              { k: 1, duration: F.barIn, ease: 'Cubic.easeOut' },
+              { k: 0, duration: F.barOut, delay: F.barHold, ease: 'Quad.easeIn' },
+            ],
+            onComplete: () => {
+              this.events.off(Phaser.Scenes.Events.POST_UPDATE, place);
+              bars.forEach((b) => b.destroy());
+            },
+          });
+          if (st.battleScreenEffects && !this.camBusy) {
+            const cam = this.cameras.main;
+            this.camBusy = true;
+            cam.pan(mid.x, mid.y, F.camIn, 'Cubic.easeOut', true);
+            cam.zoomTo(F.zoom, F.camIn, 'Cubic.easeOut', true);
+            this.time.delayedCall(F.camIn + F.camHold, () => {
+              cam.pan(GAME_WIDTH / 2, GAME_HEIGHT / 2, F.camOut, 'Sine.easeInOut', true);
+              cam.zoomTo(1, F.camOut, 'Sine.easeInOut', true);
+              this.time.delayedCall(F.camOut, () => (this.camBusy = false));
+            });
+          }
+          // The arena's colour drains to grey and dims, then comes back.
+          const drains = this.arenaLayers.filter((img) => img.active && img.preFX).map((img) => ({ img, cm: img.preFX!.addColorMatrix() }));
+          if (!drains.length) return;
+          const paint = (k: number) => drains.forEach(({ img, cm }) => img.active && (cm.reset(), cm.brightness(1 - (1 - F.dim) * k, true), cm.saturate(-k, true)));
+          this.tweens.chain({
+            targets: { k: 0 },
+            tweens: [
+              { k: 1, duration: F.drainIn, onUpdate: (tw) => paint(Number(tw.getValue()) || 0) },
+              { k: 0, duration: F.drainOut, delay: F.drainHold, onUpdate: (tw) => paint(Number(tw.getValue()) || 0) },
+            ],
+            onComplete: () => drains.forEach(({ img, cm }) => img.active && img.preFX?.remove(cm as unknown as Phaser.FX.Controller)),
+          });
         },
       }),
     });
-    let cut = false;
-    sprite.setData(HIT_RUN, { stop: () => ((cut = true), run.stop()) });
-    void run.done.then(() => {
-      light?.destroy();
-      floor?.destroy();
-      if (cut || !sprite.active) return;
-      sprite.setData(HIT_RUN, undefined);
-      run.rest('mon');
-      if (sprite === (side === 'player' ? this.playerSprite : this.enemySprite)) this.standUp(sprite, mon);
-    });
-    const st = services().session.settings;
-    return { shake: st.battleScreenEffects ? Math.round(power.shake * Math.min(1, Math.max(0, st.shakeIntensity))) : 0, heavy: power.tier === 'heavy' };
   }
 
   // ---------- conditions (redesign pass 8): each status arrives, stays on the Pokémon and ticks each turn ----------
@@ -6954,8 +7052,9 @@ export class BattleScene extends Phaser.Scene {
           // The number itself comes from the event's cue (BattleFx, one per hit: pass 5); this used to float a second one.
           if (e.type === 'damage' && e.hpAfter < mon!.hp) this.buzz(this.lastMoveType, e.effectiveness > 1);
           if (e.type === 'damage' && e.side === 'player' && (e.crit || e.effectiveness >= 2) && e.hpAfter < mon!.hp && this.trainerActor?.sprite.visible) void this.trainerActor.play('hit');
-          if (e.type === 'damage' && e.crit) critLetterbox(this, session.settings.critLetterbox, this.motion);
-          if (e.type === 'damage' && (e.crit || e.effectiveness >= 2) && !(e.crit && e.side === 'enemy' && session.settings.skillPrompts)) this.cameraMove(e);
+          const froze = this.time.now - this.critFrozeAt < 1500;
+          if (e.type === 'damage' && e.crit && !froze) critLetterbox(this, session.settings.critLetterbox, this.motion);
+          if (e.type === 'damage' && (e.crit || e.effectiveness >= 2) && !(e.crit && (froze || (e.side === 'enemy' && session.settings.skillPrompts)))) this.cameraMove(e);
           if (e.type === 'damage' && e.crit && e.side === 'enemy' && session.settings.skillPrompts && sprite) await critFreeze(this, { x: sprite.x, y: sprite.y }, this.motion);
           mon!.hp = e.hpAfter;
           if (e.type !== 'drain' && e.type !== 'heal') {

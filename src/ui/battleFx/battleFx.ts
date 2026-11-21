@@ -55,12 +55,14 @@ export interface FxOptions {
    * hit lands with full animations; it plays by itself while the battle goes on. Left out: the plain white hit-stop.
    */
   /** The scene's own recoil for a hit; it may set the hit's shake (pass 12 power tiers) and ask for a heavy, double-size number. */
-  recoil?: (side: Side, cue: Extract<Cue, { kind: 'impact' }>) => boolean | { shake: number; heavy: boolean };
+  recoil?: (side: Side, cue: Extract<Cue, { kind: 'impact' }>) => boolean | { shake: number; heavy: boolean; /** Extra ms the battle holds (the critical-hit freeze). */ hold?: number };
   /** A stat change: the scene shows its own chevrons, stamp and pips (pass 8); true means the pack's arrows and word stay away. */
   stat?: (side: Side, stat: string, change: number) => boolean;
   /** An ability: the scene unrolls its own flag (pass 8). 'all' means it also acted the ability out (Intimidate) and
    *  holds the battle for `ms`; 'flag' means only the flag, so the category's flourish still plays here. */
   ability?: (side: Side, ability: string, label: string) => { shown: 'all' | 'flag'; ms: number } | null;
+  /** The scene's own word stamp for a hit (pass 5); true means it showed, so the pack's badge stays away. */
+  stamp?: (side: Side, kind: string) => boolean;
   /** The screen's own heal (redesign pass 3: plus-signs, a green glow, a hop). False when it can't play (the pack's heal shows). */
   heal?: (side: Side) => boolean;
   /** The screen's own status look (pass 8) arriving, ticking or stopping a move. False: the pack's animation plays. */
@@ -425,7 +427,7 @@ export class BattleFx {
         shake = own.shake;
         if (own.heavy) this.heavyNumber[cue.side] = true;
       }
-      await this.wait(cue.hitStopMs);
+      await this.wait(cue.hitStopMs + (typeof own === 'object' ? (own.hold ?? 0) : 0));
     } else if (cue.hitStopMs > 0 && !this.skipping) {
       if (visual instanceof Phaser.GameObjects.Sprite) visual.setTintFill(0xffffff);
       else visual.setAlpha(0.5);
@@ -495,6 +497,8 @@ export class BattleFx {
   }
 
   private badge(side: Side, kind: string): void {
+    // The scene's own stamp (pass 5: CRITICAL HIT!, SUPER EFFECTIVE! and the rest) takes the pack's word badge's place.
+    if (!this.skipping && this.opts.stamp?.(side, kind)) return;
     const look = BADGES[kind];
     if (look) this.textAnim(side, `text.${kind}`, look.label);
   }

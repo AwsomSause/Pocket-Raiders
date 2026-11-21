@@ -501,6 +501,52 @@ export function hitClip(target: Point & { h: number }, away: 1 | -1, o: { big: b
   return b.end(p > 0 ? 710 : 600);
 }
 
+/**
+ * The critical hit (pass 12): at the moment of contact everything stops for 280 ms. The target is white, a white star
+ * bursts on it and ten yellow rays shoot out from it; cue `freeze` lets the screen close its black bars, jump the camera
+ * in and drain the colour. Then the hit itself lands (`hitClip`). Full only: Reduced and Off keep the plain hit.
+ */
+export const CRIT_FREEZE = {
+  ms: 280,
+  bar: 70, barIn: 60, barHold: 900, barOut: 200,
+  zoom: 1.32, camIn: 60, camHold: 320, camOut: 400,
+  drainIn: 40, drainHold: 240, drainOut: 200, dim: 0.6,
+  star: 200, rays: 10, ray: 300,
+} as const;
+
+export function critFreezeClip(mid: Point, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('crit-freeze', level);
+  const m = b.part('mon', { white: 0 });
+  if (level !== 'full') return b.end(0);
+  const F = CRIT_FREEZE;
+  m.at(0).set({ white: 1 }).wait(F.ms).set({ white: 0 });
+  b.fx({ kind: 'cue', at: 0, name: 'freeze' });
+  b.fx({ kind: 'star', at: 0, x: mid.x, y: mid.y, size: F.star, points: 10, d: F.ms });
+  for (let i = 0; i < F.rays; i++) {
+    const a = i * ((Math.PI * 2) / F.rays);
+    b.fx({ kind: 'streak', at: 20, x1: mid.x, y1: mid.y, x2: mid.x + F.ray * Math.cos(a), y2: mid.y + F.ray * Math.sin(a), w: 4, color: 0xffcb05, d: 100, hold: 160, out: 100 });
+  }
+  b.beat(0, 'Contact: everything stops').beat(20, 'Bars close, the camera jumps, the colour drains').beat(F.ms, 'The hit lands');
+  return b.end(F.ms);
+}
+
+/**
+ * The word stamps after a hit (pass 5 "Numbers and Stamps"): a critical hit's yellow CRITICAL HIT! slams on first, a
+ * super effective hit's red stamp slams on 120 ms later just under it; not very effective and no effect settle in
+ * softly. They sit beside the target: left of the foe near the top, right of your Pokémon above its middle.
+ */
+export const HIT_STAMPS: Record<string, { word: string; fill: string; ink: string; soft: boolean; at: number; dy: number }> = {
+  crit: { word: 'CRITICAL HIT!', fill: '#ffcb05', ink: '#131c36', soft: false, at: 0, dy: -48 },
+  super: { word: 'SUPER EFFECTIVE!', fill: '#e3350d', ink: '#ffffff', soft: false, at: 120, dy: 0 },
+  weak: { word: 'Not very effective…', fill: '#2a75bb', ink: '#ffffff', soft: true, at: 120, dy: 0 },
+  immune: { word: 'NO EFFECT', fill: '#131c36', ink: '#ffffff', soft: true, at: 120, dy: 0 },
+};
+
+/** Where a hit's stamps sit: `mon` is the target's feet x and body middle y. */
+export function hitStampSpot(side: 'player' | 'enemy', mon: Point): Point {
+  return side === 'enemy' ? { x: mon.x - 170, y: 134 } : { x: mon.x + 210, y: mon.y - 70 };
+}
+
 /** Pass 12 power tiers: how far a hit throws (px: base + per x power) and how hard it shakes the field. */
 export const HIT_THROW = { base: 34, per: 60, shake: 5, shakePer: 8, heavyAt: 0.8, strong: 1.3 } as const;
 

@@ -468,6 +468,55 @@ test('a hit: the target goes white, is thrown back further for a super effective
   expect(errors).toEqual([]);
 });
 
+test('a critical hit: bars close, the colour drains, CRITICAL HIT! and SUPER EFFECTIVE! stamps, then all of it clears', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'crit-e2e');
+  await expect.poll(() => page.evaluate(() => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    const v = b.enemySprite;
+    return !!v?.active && Math.abs(v.x - b.spotXY('enemy').x) < 0.5 && !v.getData('hitRun');
+  }), { timeout: 15000 }).toBe(true);
+  await page.evaluate(() => {
+    const w = window as any;
+    const b = w.__pkr.game.scene.getScene('Battle');
+    w.__crit = { bars: 0, drain: false, zoom: 1, stamps: [] as string[], white: false };
+    b.time.timeScale = 0.25;
+    w.__critWatch = () => {
+      const list = b.children.list;
+      w.__crit.bars = Math.max(w.__crit.bars, list.filter((o: any) => o.type === 'Rectangle' && o.fillColor === 0x05070f && o.depth === 1400).length);
+      w.__crit.drain ||= b.arenaLayers.some((img: any) => (img.preFX?.list?.length ?? 0) > 0 && img.preFX.list.some((fx: any) => fx !== b.wxLook?.fx?.get?.(img)));
+      w.__crit.zoom = Math.max(w.__crit.zoom, b.cameras.main.zoom);
+      for (const o of list) if (o.texture?.key?.startsWith('stamp.') && !w.__crit.stamps.includes(o.texture.key)) w.__crit.stamps.push(o.texture.key);
+      w.__crit.white ||= b.field.list.some((o: any) => o.type === 'Sprite' && o !== b.enemySprite && o.tintFill && o.tintTopLeft === 0xffffff && o.visible);
+    };
+    b.events.on('update', w.__critWatch);
+    const cue = { kind: 'impact', side: 'enemy', amount: 5, crit: true, effectiveness: 2, hitStopMs: 80, shake: 6, flash: null, flashAlpha: 0 };
+    w.__critRun = b.fx.play([cue, { kind: 'number', side: 'enemy', amount: 5, tone: 'crit', motion: true }, { kind: 'badge', side: 'enemy', badge: 'crit' }, { kind: 'badge', side: 'enemy', badge: 'super' }]);
+  });
+  await page.evaluate(() => (window as any).__critRun);
+  // Everything has played out once the bars are gone and the camera is back.
+  await expect.poll(() => page.evaluate(() => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    return b.children.list.some((o: any) => (o.type === 'Rectangle' && o.fillColor === 0x05070f) || o.texture?.key?.startsWith('stamp.')) || b.cameras.main.zoom !== 1 || !!b.enemySprite.getData('hitRun');
+  }), { timeout: 20000 }).toBe(false);
+  const seen = await page.evaluate(() => { const w = window as any; const b = w.__pkr.game.scene.getScene('Battle'); b.events.off('update', w.__critWatch); b.time.timeScale = 1; return w.__crit; });
+  expect(seen.bars).toBe(2);
+  expect(seen.white).toBe(true);
+  expect(seen.stamps).toEqual(['stamp.CRITICAL HIT!.#ffcb05', 'stamp.SUPER EFFECTIVE!.#e3350d']);
+  // The camera jumps in (Battle screen effects is on by default) and the arena's colour drains.
+  expect(seen.zoom).toBeGreaterThan(1.2);
+  expect(seen.drain).toBe(true);
+  // Nothing is left: no grey filter on the arena, the foe back on its spot.
+  const after = await page.evaluate(() => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    return { extra: b.arenaLayers.reduce((n: number, img: any) => n + (img.preFX?.list?.length ?? 0), 0), x: b.enemySprite.x - b.spotXY('enemy').x };
+  });
+  expect(Math.abs(after.x)).toBeLessThan(0.5);
+  expect(after.extra).toBe(0);
+  expect(errors).toEqual([]);
+});
+
 test('healing: green plus-signs rise, it glows green and hops, and it stands home after with nothing left over', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));

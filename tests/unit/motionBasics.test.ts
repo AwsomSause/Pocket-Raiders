@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ClipBuilder, clipEnd, EASES, fxAllowed, sampleClip, type ClipLevel, type MotionClip } from '../../src/core/presentation/motionClip';
-import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_KNOCK, HIT_KNOCK_BIG, hitClip, hitPower, HIT_THROW, levelUpClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_KNOCK, HIT_KNOCK_BIG, hitClip, hitPower, HIT_THROW, CRIT_FREEZE, critFreezeClip, HIT_STAMPS, hitStampSpot, levelUpClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
 
 const ME: MonSpot = { x: 312, y: 428, h: 180, side: 'player' };
 const FOE: MonSpot = { x: 648, y: 240, h: 150, side: 'enemy' };
@@ -444,6 +444,37 @@ describe('motion clips: the target takes a hit (pass 2, 12, 17, 18)', () => {
       const c = hitClip(at, 1, { big: true, sharp: true }, level);
       expect([c.length, c.segs.length, c.fx.length]).toEqual([0, 0, 0]);
     }
+  });
+});
+
+describe('the critical hit freeze (pass 12) and the hit stamps (pass 5)', () => {
+  const mid = { x: 648, y: 180 };
+  it('everything stops for 280 ms: white, a white star, ten yellow rays, then the hit lands', () => {
+    const c = critFreezeClip(mid, 'full');
+    expect(c.length).toBe(CRIT_FREEZE.ms);
+    expect(sampleClip(c, 0).mon!.white).toBe(1);
+    expect(sampleClip(c, 270).mon!.white).toBe(1);
+    expect(clipEnd(c).mon!.white).toBe(0);
+    expect(c.fx).toContainEqual({ kind: 'cue', at: 0, name: 'freeze' });
+    expect(c.fx).toContainEqual({ kind: 'star', at: 0, x: mid.x, y: mid.y, size: 200, points: 10, d: 280 });
+    const rays = c.fx.filter((f) => f.kind === 'streak');
+    expect(rays).toHaveLength(10);
+    expect(rays[0]).toMatchObject({ at: 20, x1: mid.x, y1: mid.y, x2: mid.x + 300, w: 4, color: 0xffcb05 });
+    expect(rays[0]!.kind === 'streak' && rays[0]!.y2).toBeCloseTo(mid.y);
+  });
+  it('the bars, camera and colour drain follow the mockup timings', () => {
+    expect(CRIT_FREEZE).toMatchObject({ bar: 70, barIn: 60, barHold: 900, barOut: 200, zoom: 1.32, camHold: 320, camOut: 400, drainHold: 240, dim: 0.6 });
+  });
+  it('Reduced and Off: no freeze', () => {
+    for (const level of ['reduced', 'off'] as const) expect(critFreezeClip(mid, level).length).toBe(0);
+  });
+  it('stamps: yellow CRITICAL HIT! slams first and above, red SUPER EFFECTIVE! under it; weak and immune settle softly', () => {
+    expect(HIT_STAMPS.crit).toMatchObject({ word: 'CRITICAL HIT!', fill: '#ffcb05', soft: false, at: 0, dy: -48 });
+    expect(HIT_STAMPS.super).toMatchObject({ word: 'SUPER EFFECTIVE!', fill: '#e3350d', soft: false, dy: 0 });
+    expect(HIT_STAMPS.weak!.soft && HIT_STAMPS.immune!.soft).toBe(true);
+    expect(HIT_STAMPS.super!.at).toBeGreaterThan(HIT_STAMPS.crit!.at);
+    expect(hitStampSpot('enemy', { x: 648, y: 180 })).toEqual({ x: 478, y: 134 });
+    expect(hitStampSpot('player', { x: 312, y: 370 })).toEqual({ x: 522, y: 300 });
   });
 });
 

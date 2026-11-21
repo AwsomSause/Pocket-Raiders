@@ -175,3 +175,10 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   and where it lands, and shakes the screen harder (5 to 13 px, scaled by the Screen shake setting, none when Battle
   screen effects is off). A critical or super effective hit counts 1.3 times. Near the top (80% power) it is heavy:
   the damage number is drawn twice the size. Full motion only.
+- **Critical hit (pass 12) and hit stamps (pass 5).** At the moment a critical hit lands everything stops for 280 ms:
+  the target goes white under a white star and ten yellow rays, black bars close in from the top and bottom of the
+  screen, the camera jumps in on the target (when Battle screen effects is on) and the arena's colour drains to grey.
+  Then the hit lands. The old pack word badges are replaced by the mockup stamps beside the target: a yellow
+  CRITICAL HIT! slams on, a red SUPER EFFECTIVE! slams on just under it, and a blue "Not very effective…" or a dark
+  NO EFFECT settles in softly. The old Crit letterbox and the Battle camera's crit push stay away while the freeze
+  plays. Reduced: no freeze, the stamps without the slam.
