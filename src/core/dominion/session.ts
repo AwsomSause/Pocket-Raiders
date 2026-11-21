@@ -40,6 +40,8 @@ import './growth';
 import { endS, goalS, inRoom, sayS, stopS, type SOut } from './snatch';
 import { takeoverStep } from './takeover';
 import { leave, realmStep, type Orders } from './regions';
+import { buyout, cancel, purge, settlePartners, shadowOne, sign } from './partners';
+import { applyCharter, applyTurn, charterById, TURN_FLAG } from './charters';
 
 export const DOMINION_MODE_ID = 'dominion';
 export const isDominionRun = (run: RunState | null | undefined): boolean => run?.rules.modeId === DOMINION_MODE_ID;
@@ -73,10 +75,21 @@ export function bossTeam(content: Content, run: RunState): RunState {
 export function startInRun(content: Content, run: RunState, setup: DominionSetup): { run: RunState; problem: string | null } {
   if (run.expansion?.dominion) return { run, problem: null };
   useRegion(undefined);
+  // D16: a Charter brings its own two types and its Patron (an Admin); the Turn starts with one Grunt.
+  const charter = setup.charter ? charterById(setup.charter) : undefined;
+  if (setup.charter && (!charter || charter.status === 'disabled')) return { run, problem: 'That Charter is closed.' };
+  const turn = run.story.flags[TURN_FLAG] === 'pending';
+  if (charter) setup = { ...setup, types: [charter.types[0], charter.types[1]], member: 'admin', look: 0 };
+  else if (turn) setup = { ...setup, member: 'grunt' };
   const problem = typesProblem(setup.types);
   if (problem) return { run, problem };
   let out = bossTeam(content, structuredClone(run));
   const fresh = withCrew(newBlock(content, out, setup));
+  if (charter) applyCharter(content, out, fresh, charter);
+  else if (turn) {
+    applyTurn(out, fresh);
+    out = { ...out, story: { ...out.story, flags: { ...out.story.flags, [TURN_FLAG]: 'taken' } } };
+  }
   // D4: Day 1's Reserve (one Pokémon of each Team Type; the first member holds the first).
   seedStart(content, out, fresh);
   // D5: the starting money is clean (A21). D19: every member gets their personality card.
@@ -121,6 +134,9 @@ export function stepInRun(content: Content, run0: RunState, action: DominionActi
   rollQueue(content, b, run.seed);
   // D19: anyone new gets their personality card.
   fillCards(b, run.seed);
+  // D16: Snag Balls in or out of the bag, and a Chair dealer's Shadow Pokémon into the Reserve.
+  const settled = settlePartners(content, next, b);
+  if (settled.length) b.report = [...b.report, ...settled];
   // D6: the Ledger books what the step did to the money, the Boss's visit, and a new Notoriety step.
   const turned = !!before && b.day !== before.day;
   const lines = before ? afterStep(b, turned ? b.funds : before.funds, turned ? weekSum(b) : weekSum(before), lineFor(action), visitOf(action)) : [];
@@ -169,6 +185,16 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
     const out = realmStep(block, action.op, action.region, { member: action.member, orders: action.orders as Orders | undefined, tribute: action.tribute }, run.seed);
     if (!out.ok) return { ok: false, block, notice: out.notice, heal: false, run };
     const next = withBlock(run, DominionBlockSchema.parse(out.block));
+    return { ok: true, block: next.expansion!.dominion!, notice: out.notice, heal: false, run: next, fight: out.fight };
+  }
+  if (action.t === 'partner') {
+    // D16: the Partnership page (partners.ts): make a deal, cancel, buy out, purge, the Shadow Machine.
+    const work = structuredClone(run);
+    const b = work.expansion!.dominion!;
+    const out = action.op === 'sign' ? { ...sign(b, action.id), fight: false } : action.op === 'cancel' ? { ...cancel(b, action.id), fight: false }
+      : action.op === 'buyout' ? { ...buyout(b, action.id), fight: false } : action.op === 'purge' ? purge(b, action.id) : { ...shadowOne(b, work, action.uid ?? ''), fight: false };
+    if (!out.ok) return { ok: false, block, notice: out.notice, heal: false, run };
+    const next = withBlock(work, DominionBlockSchema.parse(b));
     return { ok: true, block: next.expansion!.dominion!, notice: out.notice, heal: false, run: next, fight: out.fight };
   }
   if (action.t === 'takeover') {

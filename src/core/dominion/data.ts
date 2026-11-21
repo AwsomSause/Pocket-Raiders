@@ -30,6 +30,8 @@ import growthActionsRaw from '../../data/dominion/growthActions.json';
 import snatchRaw from '../../data/dominion/snatch.json';
 import takeoverRaw from '../../data/dominion/takeover.json';
 import regionsRaw from '../../data/dominion/regions.json';
+import partnersRaw from '../../data/dominion/partners.json';
+import chartersRaw from '../../data/dominion/charters.json';
 import johtoRaw from '../../data/dominion/regions/johto.json';
 import hoennRaw from '../../data/dominion/regions/hoenn.json';
 import sinnohRaw from '../../data/dominion/regions/sinnoh.json';
@@ -39,6 +41,7 @@ import alolaRaw from '../../data/dominion/regions/alola.json';
 import galarRaw from '../../data/dominion/regions/galar.json';
 import paldeaRaw from '../../data/dominion/regions/paldea.json';
 import {
+  PartnersFileSchema, DomChartersFileSchema, type PartnersFile, type DomChartersFile,
   RegionsFileSchema, RegionPackSchema, type RegionsFile, type RegionPack,
   GrowthActionsSchema, GrowthFileSchema, SnatchFileSchema, TakeoverFileSchema, type TakeoverFile, type FieldFile as FieldFileT, type GrowthActions, type GrowthFile, type SnatchFile,
   ActionsFileSchema, ArmbandsFileSchema, BuildingsFileSchema, CourtFileSchema, CourtRulesSchema, DebateFileSchema, FoundingFileSchema, EmpireFileSchema, PoliceFileSchema, OutsideFileSchema, RivalActionsFileSchema, RivalsFileSchema, CrewFileSchema, DeskFileSchema, HqFileSchema, PyramidFileSchema, SquadsFileSchema, FieldFileSchema, GruntTypesFileSchema, HeroFileSchema, PersonalityFileSchema, SpiesFileSchema, StartFileSchema, TasksFileSchema, TownFileSchema,
@@ -49,10 +52,17 @@ const growth = GrowthFileSchema.parse(growthRaw);
 const takeover = TakeoverFileSchema.parse(takeoverRaw);
 /** D14: the 30 League and Plan actions the list left waiting for D14 are played now; their honest statuses replace the waiting ones. */
 const growthActionsRawParsed = GrowthActionsSchema.parse(growthActionsRaw);
+/** D16: the fifteen Snagem and Cipher actions (section AC) the list left waiting for D16 are played by partners.json. */
+const partners: PartnersFile = PartnersFileSchema.parse(partnersRaw);
+const charters: DomChartersFile = DomChartersFileSchema.parse(chartersRaw);
 const growthActions: GrowthActions = {
   ...growthActionsRawParsed,
-  later: Object.fromEntries(Object.entries(growthActionsRawParsed.later).filter(([id]) => !takeover.play[id])),
-  status: { ...growthActionsRawParsed.status, ...Object.fromEntries(Object.entries(takeover.status).filter(([id]) => id in growthActionsRawParsed.status)) },
+  later: Object.fromEntries(Object.entries(growthActionsRawParsed.later).filter(([id]) => !takeover.play[id] && !partners.play[id])),
+  status: {
+    ...growthActionsRawParsed.status,
+    ...Object.fromEntries(Object.entries(takeover.status).filter(([id]) => id in growthActionsRawParsed.status)),
+    ...Object.fromEntries(Object.entries(partners.status).filter(([id]) => id in growthActionsRawParsed.status)),
+  },
 };
 const snatch = SnatchFileSchema.parse(snatchRaw);
 /** D10: Growth's plays (its own rows 1-150 and the list's rows 151-600) and crates join the field data; the rows that wait name their slice.
@@ -60,7 +70,7 @@ const snatch = SnatchFileSchema.parse(snatchRaw);
 function withGrowth(f: FieldFileT): FieldFileT {
   return {
     ...f,
-    play: { ...f.play, ...growthActions.play, ...growth.play, ...snatch.play, ...takeover.play },
+    play: { ...f.play, ...growthActions.play, ...growth.play, ...snatch.play, ...takeover.play, ...partners.play },
     crates: { ...f.crates, ...growth.crates },
     later: { ...f.later, byAction: { ...f.later.byAction, ...growthActions.later, ...growth.later } },
   };
@@ -172,5 +182,5 @@ export function useRegion(b: { realm?: { at: string } | undefined } | null | und
 }
 
 const REGIONAL = ['start', 'field', 'growth', 'rivals', 'hero', 'takeover', 'crew', 'desk'] as const;
-export const DOMINION_DATA: Data & { regions: RegionsFile; packs: Record<string, RegionPack> } = { ...KANTO, regions, packs };
+export const DOMINION_DATA: Data & { regions: RegionsFile; packs: Record<string, RegionPack>; partners: PartnersFile; charters: DomChartersFile } = { ...KANTO, regions, packs, partners, charters };
 for (const k of REGIONAL) Object.defineProperty(DOMINION_DATA, k, { get: () => view()[k], enumerable: true });

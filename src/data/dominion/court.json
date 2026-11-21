@@ -2879,9 +2879,8 @@
       "n": -15
      },
      {
-      "k": "note",
-      "slice": "D16",
-      "text": "Snagem and Cipher deals closed for the run"
+      "k": "hook",
+      "id": "close-deals"
      }
     ]
    },
@@ -5398,9 +5397,8 @@
       "n": -1000
      },
      {
-      "k": "note",
-      "slice": "D16",
-      "text": "a Shadow Pokémon"
+      "k": "hook",
+      "id": "shadow-buy"
      },
      {
       "k": "owed",
@@ -5419,8 +5417,7 @@
      }
     ]
    },
-   "who": "cipher",
-   "wait": "D16"
+   "who": "cipher"
   },
   {
    "id": 120,

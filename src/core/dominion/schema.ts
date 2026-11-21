@@ -107,7 +107,9 @@ export const EFFECTS = ['scout', 'count', 'scoutDistrict', 'paper', 'catch', 'la
   // D23 (snatch.ts addActEffect)
   'snatch', 'hostage',
   // D14 (takeover.ts addActEffect)
-  'league', 'plan', 'broadcast'] as const;
+  'league', 'plan', 'broadcast',
+  // D16 (partners.ts addActEffect / addPlayEffect)
+  'partnerMeet', 'shadowTrade', 'purify', 'snagBall', 'snagemHit', 'shadowSabotage', 'betrayPartner', 'shadowTutor', 'snagSell'] as const;
 const PlaySchema = z.object({
   kinds: z.array(z.union([z.enum(TARGET_KINDS), z.literal('any')])).min(1).optional(),
   chance: I.min(0).max(100).optional(),
@@ -215,8 +217,8 @@ export type DistrictState = z.infer<typeof DistrictStateSchema>;
 /** A battle an action (or the police) is waiting on. The fight bridge (fight.ts) starts it; fightEnd settles it. */
 export const FieldFightSchema = z.object({
   /** D11: 'hero' a job the Hero stepped into (m11), 'challenge' an encounter's battle, 'heroRaid' the Hero at the HQ, 'stand' the final stand, 'legend' a Heroic Legendary. D10: 'growth' a fight of a chain (Raid, a Gym). D12: 'court' a Chair visitor at the door (`target` the card id, `action` the answer). */
-  why: z.enum(['fail', 'always', 'police', 'looker', 'raid', 'rival', 'hero', 'challenge', 'heroRaid', 'stand', 'legend', 'growth', 'court', 'spy', 'town', 'snatch', 'takeover', 'realm']),
-  foe: z.enum(['target', 'police', 'wild', 'ghost', 'member', 'looker', 'raid', 'rival', 'hero', 'sidekick', 'legend', 'growth', 'court', 'snatch', 'takeover', 'realm']),
+  why: z.enum(['fail', 'always', 'police', 'looker', 'raid', 'rival', 'hero', 'challenge', 'heroRaid', 'stand', 'legend', 'growth', 'court', 'spy', 'town', 'snatch', 'takeover', 'realm', 'partner']),
+  foe: z.enum(['target', 'police', 'wild', 'ghost', 'member', 'looker', 'raid', 'rival', 'hero', 'sidekick', 'legend', 'growth', 'court', 'snatch', 'takeover', 'realm', 'partner']),
   begun: z.boolean(),
   action: S.nullable(),
   target: S.nullable(),
@@ -361,6 +363,10 @@ const BlockSchema = z.object({
   paper: z.lazy(() => PaperStateSchema).optional(),
   /** D15: many regions (the region played now, the ones left behind with their Holders). Optional: absent = Kanto, the first. */
   realm: z.lazy(() => RealmStateSchema).optional(),
+  /** D16: Team Snagem and Team Cipher (the deals, the feud, the Shadow Machine, the purge). Optional; `partnersOf` fills it. */
+  partners: z.lazy(() => PartnersStateSchema).optional(),
+  /** D16: how this run began when it isn't the rainy warehouse: a Charter (its id) or the Turn from a won main-game run. */
+  origin: z.object({ kind: z.enum(['charter', 'turn']), id: S }).strict().optional(),
 }).strict();
 export const DominionBlockSchema = z.preprocess(migrateDominion, BlockSchema);
 export type DominionBlock = z.infer<typeof BlockSchema>;
@@ -373,6 +379,8 @@ export interface DominionSetup {
   look: number;
   /** D27: the Settings page's run rules (the session passes them; absent = all normal). */
   rules?: RunRules;
+  /** D16: an established start (a Charter id); the session has checked the profile's unlock. */
+  charter?: string;
 }
 
 export type DominionAction =
@@ -380,6 +388,8 @@ export type DominionAction =
   /** D15: leave the Taken region (the Holder, standing orders, the one member brought), and the Empire screen's answers. */
   | { t: 'leave'; holder: string; orders: Record<string, string>; bring: string | null }
   | { t: 'realm'; op: 'visit' | 'pay' | 'replace' | 'spy' | 'talk' | 'orders' | 'tribute' | 'trip' | 'letGo'; region: string; member?: string; orders?: Record<string, string>; tribute?: number }
+  /** D16: the Partnership page (sign, the three ways out, the Shadow Machine on a Pokémon by uid). */
+  | { t: 'partner'; op: 'sign' | 'cancel' | 'buyout' | 'purge' | 'shadow'; id: 'snagem' | 'cipher'; uid?: string }
   | { t: 'plan'; order: string }
   | { t: 'do'; order: string }
   | { t: 'toNight' }
@@ -891,8 +901,8 @@ export const OWED_KEYS = ['ten', 'threat', 'goal', 'stab', 'raid', 'shadow', 'wi
 /** D11: what a Chair answer does to the Hero (hero.ts): the route tomorrow, the Hero at the door (the Letter with the HQ's
  * Defense on your side), a town left alone, the Legendaries later, a Legendary hunt, a town lost. */
 export const HERO_COURT = ['intel', 'battle', 'letter', 'spare', 'late', 'hunt', 'lose'] as const;
-/** Chair answers whose rule lives in another slice's file (registered with setChairHook): D9 insure + double-agent, D13 debate-early, D15 the held-region answers (regions.ts). */
-export const CHAIR_HOOKS = ['insure', 'double-agent', 'debate-early', 'magma-cool', 'aqua-cool', 'held-two', 'tribute-cut', 'smuggle-line', 'uprising-cut', 'uprising-up'] as const;
+/** Chair answers whose rule lives in another slice's file (registered with setChairHook): D9 insure + double-agent, D13 debate-early, D15 the held-region answers (regions.ts), D16 close-deals + shadow-buy (partners.ts). */
+export const CHAIR_HOOKS = ['insure', 'double-agent', 'debate-early', 'magma-cool', 'aqua-cool', 'held-two', 'tribute-cut', 'smuggle-line', 'uprising-cut', 'uprising-up', 'close-deals', 'shadow-buy'] as const;
 export type ChairHook = (typeof CHAIR_HOOKS)[number];
 export const LEANS = ['money', 'regard', 'dread', 'heat', 'self'] as const;
 export type Lean = (typeof LEANS)[number];
@@ -1198,6 +1208,8 @@ export const BuildingSchema = z.object({
   n: S, id: S, name: S, listName: S, group: z.string().regex(/^[A-JPQ]$/), sub: S.optional(), groupName: S, focus: z.enum(['hq', 'pokemon', 'grunt']),
   part3: z.boolean(), slots: N0, outside: z.boolean(), canOutside: z.boolean(), cost: N0, t1: S, per: S, cap: S, ladder: z.array(S).length(8),
   minTier: I.min(0).max(5), status: z.enum(['supported', 'limited', 'disabled']), fx: BuildingFxSchema, waits: S.nullable(), note: S.optional(),
+  /** D16: built by a partner when the deal is signed, never bought (the Snag Desk, the Shadow Lab). */
+  deal: z.enum(['snagem', 'cipher']).optional(),
 }).strict().refine((b) => (b.status === 'disabled') === !Object.keys(b.fx).length, { message: 'a live building has an effect; a disabled one has none' })
   .refine((b) => b.status !== 'disabled' || !!b.waits, { message: 'a disabled building names what it waits for' })
   .refine((b) => b.status !== 'limited' || !!b.note, { message: 'a limited building says what waits' });
@@ -2686,3 +2698,102 @@ export const RealmStateSchema = z.object({
   trip: S.nullable(),
 }).strict();
 export type RealmState = z.infer<typeof RealmStateSchema>;
+
+// ---------- D16: Snagem and Cipher (partners.json, `block.partners`), Charters (charters.json) ----------
+
+export const PARTNER_IDS = ['snagem', 'cipher'] as const;
+export type PartnerId = (typeof PARTNER_IDS)[number];
+const PurgeFoe = z.object({ name: S, cls: S, species: z.array(S).min(1), offset: I }).strict();
+const PartnerDef = z.object({
+  name: S, short: S, crest: z.string().length(1), colour: S, glow: S, shade: S, leader: S, look: S, leaderLook: S,
+  gives: S, takes: S, raises: S,
+  /** % of the week's income; days between Pokémon taken; which Pokémon; extra % that week when there's none. */
+  cut: I.min(0).max(100), every: I.min(1), tithe: z.enum(['best', 'shadow']), noMon: I.min(0).max(100),
+  /** % more Heat on every rise, % more Hero Threat, Dread a week in each held town, Threat points off the Legendaries' wake. */
+  heat: I.min(0).max(100), hero: I.min(0).max(200), dread: N0, legend: N0,
+  balls: z.object({ sign: N0, week: N0 }).strict().optional(),
+  machine: z.object({ perWeek: I.min(1), heart: I.min(1).max(100) }).strict().optional(),
+  room: S,
+  buyout: z.object({ base: N0, perWeek: N0, keeps: z.boolean() }).strict(),
+  purge: z.array(PurgeFoe).min(1),
+}).strict();
+export type PartnerDef = z.infer<typeof PartnerDef>;
+export const PartnersFileSchema = z.object({
+  _source: S, opensAt: S, order: z.array(z.enum(PARTNER_IDS)).length(2),
+  teams: z.object({ snagem: PartnerDef, cipher: PartnerDef }).strict(),
+  feud: z.object({
+    line: S,
+    snagem: z.object({ text: S, days: I.min(1) }).strict(),
+    cipher: z.object({ text: S, balls: I.min(1) }).strict(),
+  }).strict(),
+  renegotiate: z.object({ every: I.min(1), up: N0, down: N0, min: I.min(0).max(100), max: I.min(0).max(100), dreadAt: N0, angerUp: N0, met: N0 }).strict(),
+  ways: z.object({
+    cancel: z.object({ name: S, text: S, heat: N0 }).strict(),
+    buyout: z.object({ name: S, text: S }).strict(),
+    purge: z.object({ name: S, text: S, lose: N0, dread: N0 }).strict(),
+  }).strict(),
+  shadow: z.object({
+    trade: z.array(z.array(S).min(1)).length(5), tradeCost: N0, purify: z.array(I.min(1)).length(5), trustAfter: I.min(0).max(10),
+    tutor: z.array(S).min(1), sell: z.array(N0).length(5),
+  }).strict(),
+  lines: z.record(S, S),
+  screen: z.record(S, S),
+  play: z.record(S, PlaySchema),
+  status: z.record(S, z.object({ status: z.enum(['supported', 'limited', 'disabled']), note: S.optional() }).strict()),
+}).strict().refine((f) => Object.keys(f.play).every((id) => id in f.status), { message: 'every partner action has a status' });
+export type PartnersFile = z.infer<typeof PartnersFileSchema>;
+
+export const PartnerDealSchema = z.object({
+  /** Day signed, the cut now (%), the day of the next renegotiation, the day the next Pokémon is due. */
+  since: I.min(1), cut: I.min(0).max(100), next: I.min(1), due: I.min(1),
+  /** Grudges since the last renegotiation (Snagem base hits, sabotage): each puts the cut up by `renegotiate.angerUp`. */
+  anger: N0,
+  /** Shadow Machine broken until this day (Snagem's sabotage); Cipher skips its next tithe (sabotaged). */
+  broken: N0, skip: z.boolean(),
+}).strict();
+export type PartnerDeal = z.infer<typeof PartnerDealSchema>;
+export const PartnersStateSchema = z.object({
+  deals: z.object({ snagem: PartnerDealSchema.optional(), cipher: PartnerDealSchema.optional() }).strict(),
+  /** Partners already offered (the Morning said so), and ended in this region (never offered again here). */
+  offered: z.array(z.enum(PARTNER_IDS)), ended: z.array(z.enum(PARTNER_IDS)),
+  /** What a deal left behind when it ended well (a buy-out or a won purge): Snagem's Snag Machine, Cipher's Shadow Machine. */
+  kept: z.array(z.enum(PARTNER_IDS)),
+  /** Meetings (Snagem Meet, Cipher Offer) not yet counted: each takes `renegotiate.met` off the cut at signing or renegotiation. */
+  met: z.record(S, N0),
+  /** Bag changes waiting for the run (Snag Balls in or out): the session applies them after the step (never below 0). */
+  inv: z.record(S, I),
+  /** The Shadow Machine's last week of use (week number + 1; once a week). */
+  used: N0,
+  /** Looker's deal (Chair card 63): no partner deals for the rest of the run. Carried to the next region. */
+  closed: z.boolean(),
+  /** The purge under way: whose, and which of their fighters is next. */
+  purge: z.object({ id: z.enum(PARTNER_IDS), at: N0 }).strict().nullable(),
+  /** Last week's take, for the Partnership page: ₽ and Pokémon names per partner, the feud's line. */
+  last: z.object({ day: N0, money: z.record(S, N0), mons: z.record(S, z.array(S)), feud: S.nullable() }).strict(),
+  /** Shadow Pokémon waiting to be made (a Chair dealer's sale): species and level; the next step puts them in the Reserve. */
+  due: z.array(z.object({ species: S, level: I.min(1) }).strict()),
+}).strict();
+export type PartnersState = z.infer<typeof PartnersStateSchema>;
+
+/** One Charter (the old Evil Mode's nine, Part 28, read for Dominion's established start, Part 0 §6.1 Q4). */
+export const DomCharterSchema = z.object({
+  id: S, name: S, team: S, question: S, creed: S, from: S,
+  colours: z.tuple([S, S]), initial: z.string().regex(/^[A-Z]$/), logo: S, motto: z.string(),
+  types: z.tuple([S, S]),
+  patron: z.object({ name: S, note: S, look: S }).strict(),
+  funds: N0, hqLevel: I.min(1).max(6), grunts: N0, heat: I.min(0).max(100), regard: I.min(0).max(100), dread: I.min(0).max(100),
+  opening: z.array(S).min(1),
+  status: z.enum(['supported', 'limited', 'disabled']), note: S.optional(),
+}).strict();
+export type DomCharter = z.infer<typeof DomCharterSchema>;
+export const DomChartersFileSchema = z.object({
+  _source: S,
+  /** Locked until this many Dominion runs are finished (Q4: one). */
+  unlockAfter: I.min(1),
+  lockLine: S, pickLine: S,
+  charters: z.array(DomCharterSchema).length(9),
+  turn: z.object({
+    fundsCap: N0, regardPerBadge: N0, aceLevel: I.min(1), title: S, text: S, take: S, opening: z.array(S).min(1),
+  }).strict(),
+}).strict();
+export type DomChartersFile = z.infer<typeof DomChartersFileSchema>;

@@ -8744,9 +8744,12 @@
     "Desk"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D16",
-   "fx": {}
+   "status": "supported",
+   "waits": null,
+   "fx": {
+    "unlock": true
+   },
+   "deal": "snagem"
   },
   {
    "listName": "Shadow Lab",
@@ -8775,9 +8778,12 @@
     "Lab"
    ],
    "minTier": 1,
-   "status": "disabled",
-   "waits": "D16",
-   "fx": {}
+   "status": "supported",
+   "waits": null,
+   "fx": {
+    "unlock": true
+   },
+   "deal": "cipher"
   }
  ]
 }

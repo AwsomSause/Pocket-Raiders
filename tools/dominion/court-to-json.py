@@ -17,7 +17,8 @@ does with an answer is the SPEC table below, written in a small effect language 
   note:SLICE:"text"  (a part that waits for a later slice: the answer is "limited")
   hero:intel:N  hero:battle  hero:letter  hero:spare  hero:late:N  hero:hunt  hero:lose   (D11: the Hero, hero.ts)
   hook:ID      (a rule another slice owns, registered with setChairHook: insure, double-agent (D9), debate-early (D13),
-                magma-cool, aqua-cool, held-two, tribute-cut, smuggle-line, uprising-cut, uprising-up (D15))
+                magma-cool, aqua-cool, held-two, tribute-cut, smuggle-line, uprising-cut, uprising-up (D15),
+               close-deals, shadow-buy (D16))
 
 A card with `wait` is switched off (status "disabled") until the named slice builds what its answers need.
 Re-run after the list changes:  python3 tools/dominion/court-to-json.py <plans/evil-mode-rework/lists> src/data/dominion
@@ -312,7 +313,7 @@ SPEC = {
     60: dict(look='trainer/pr/officer', who='jenny', a='c$-300 heat:-8 reg:3', b='heat:3'),
     61: dict(look='trainer/pr/officer', who='rookie', a='$-200 heat:-10 follow:62:10', b='heat:5'),
     62: dict(look='trainer/pr/officer', who='rookie', followOnly=True, a='$-400 heat:-10', b='heat:-5 grudge'),
-    63: dict(look='trainer/pr/veteran_m', who='looker', a='wanted:-15 note:D16:"Snagem and Cipher deals closed for the run"', b='wanted:5 note:D2:"Looker watches: Heat +2 per Night action for 7 days"'),
+    63: dict(look='trainer/pr/veteran_m', who='looker', a='wanted:-15 hook:close-deals', b='wanted:5 note:D2:"Looker watches: Heat +2 per Night action for 7 days"'),
     64: dict(look='trainer/pr/rich_f', who='lawyer', named='jailed', a='$-500 free loy:10', b='out:7 loy:-10'),
     65: dict(look='trainer/pr/rich_m', who='judge', wait='D10', a='c$-1500 note:D10:"police sweeps -30% for 2 weeks"', b='chance:20{note:D10:"Blackmail on him opens"}'),
     66: dict(look='trainer/pr/hooligans', who='informant', wait='D10', a='$-150 note:D10:"this week\'s sweep can\'t catch anyone"', b=''),
@@ -372,7 +373,7 @@ SPEC = {
     116: dict(look='member', named='any', a='loy:6 reg:2', b='loy:-6 mon:1'),
     117: dict(look='trainer/pr/ruin_maniac', who='ballmaker', a='deal:0:item=luxury-ball:5 note:D10:"that forest is off-limits"', b='dread:2'),
     118: dict(look='mon:meowth', who='stray', a='chance:50{mon:1} mor:3', b=''),
-    119: dict(look='trainer/pr/scientist_m', who='cipher', wait='D16', a='$-1000 note:D16:"a Shadow Pokémon" threat:8', b='reg:3'),
+    119: dict(look='trainer/pr/scientist_m', who='cipher', a='$-1000 hook:shadow-buy threat:8', b='reg:3'),
     120: dict(look='trainer/pr/ruin_maniac', who='hermit', a='reg:6 hero:late:7', b='hero:hunt threat:10'),
     121: dict(look='member', named='any', a='rest chance:50{$200 fame:1}', b='loy:-3'),
     122: dict(look='trainer/pr/camper_m', who='trainer', a='$-60 reg:3', b='dread:2 reg:-2'),

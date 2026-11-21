@@ -4,6 +4,7 @@
 
 import { z } from 'zod';
 import settingsRaw from '../../data/dominion/settings.json';
+import partnersRaw from '../../data/dominion/partners.json';
 import { RUN_RULES_DEFAULT, type DominionBlock, type DominionPrefs, type RunRules } from './schema';
 
 const Factor = z.number().min(0).max(3);
@@ -22,8 +23,22 @@ export const SIX_OPEN = false;
 export const rulesOf = (b: DominionBlock): RunRules => b.rules ?? RUN_RULES_DEFAULT;
 /** Day pace: rises in Heat and the rivals' Tension are multiplied by this. */
 export const paceFactor = (b: DominionBlock): number => SETTINGS_DATA.pace[rulesOf(b).pace];
-/** Hero pressure: the Hero's Threat is multiplied by this. */
-export const heroFactor = (b: DominionBlock): number => SETTINGS_DATA.hero[rulesOf(b).hero];
+/** D16: what each signed partner deal adds (partners.json `heat`, `hero` %; `legend` Threat points), summed. */
+function dealSum(b: DominionBlock, k: 'heat' | 'hero' | 'legend'): number {
+  const d = b.partners?.deals;
+  if (!d) return 0;
+  const T = partnersRaw.teams;
+  return (d.snagem ? T.snagem[k] : 0) + (d.cipher ? T.cipher[k] : 0);
+}
+/** D16: Heat rises with a partner deal (Snagem: +10% on everything). 1 with none, so old runs are untouched. */
+export const partnerHeat = (b: DominionBlock): number => 1 + dealSum(b, 'heat') / 100;
+/** D16: Threat points off the Heroic Legendaries' wake-up (Cipher: they come sooner). */
+export const partnerLegend = (b: DominionBlock): number => dealSum(b, 'legend');
+/** Hero pressure: the Hero's Threat is multiplied by this (D16: times a partner's pull; 1 and unchanged with none). */
+export const heroFactor = (b: DominionBlock): number => {
+  const k = SETTINGS_DATA.hero[rulesOf(b).hero], extra = dealSum(b, 'hero');
+  return extra ? k * (1 + extra / 100) : k;
+};
 /** Betrayals: a Holder's betrayal chance is multiplied by this (D15 rolls it; 0 = never). */
 export const betrayalFactor = (b: DominionBlock): number => SETTINGS_DATA.betrayals[rulesOf(b).betrayals];
 

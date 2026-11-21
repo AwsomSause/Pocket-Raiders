@@ -277,6 +277,8 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     // Leaving and the held regions run through session.ts (regions.ts), never through the clock.
     case 'leave':
     case 'realm':
+    // D16: the Partnership page runs through session.ts (partners.ts).
+    case 'partner':
       return no(block);
   }
 }

@@ -791,6 +791,8 @@ export const BattleStateSchema = z.object({
   ball: z.string().optional(),
   /** Shadow Pokémon snagged from the trainer this fight (Snag Ball); they join you when the battle is won. */
   snagged: z.array(PokemonInstanceSchema).optional(),
+  /** DOMINION D16: Team Snagem's Snag Machine: a Snag Ball takes any of this (adult) trainer's Pokémon, not only a Shadow one. */
+  snagAny: z.literal(true).optional(),
   turn: z.number().int().min(1),
   /** Revive items used in this battle (capped by balance.itemCaps.revivesPerBattle). */
   revivesUsed: z.number().int().min(0).default(0),
@@ -1942,6 +1944,8 @@ export const ProfileSchema = z.object({
   mentorBonds: z.record(z.string(), MentorBondSchema).default({}),
   /** Legacy runs (core/legacyRuns.ts): every finished run's immutable record, newest first (profile v14). */
   legacyRuns: z.array(LegacyRunSchema).default([]),
+  /** DOMINION D16: run ids of the Dominion runs finished (the last region Taken); the first opens the Charters. Optional: older profiles load with none (no version bump). */
+  dominionDone: z.array(z.string()).default([]),
   /** Ideas W10 Corner Nook (core/hubNook.ts): fortune cookie, wish star, note to your future self, gift codes, donation drive. Optional: older profiles load with the defaults (no version bump). */
   nook: z.object({
     cookieDay: z.string().nullable().default(null),
