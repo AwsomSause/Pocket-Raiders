@@ -464,3 +464,31 @@ export function evilSummary(content: Content, run: RunState): { title: string; l
   }
   return { title: `${team.name} (${team.style === 'open' ? 'openly hostile' : team.style === 'secret' ? 'works in secret' : `hides behind ${team.front}`}): ${end}`, lines, color: team.color };
 }
+
+/** One stop of the team's seven in the Case File: played, the one that comes next, or later. */
+export interface EvilCaseStop { no: number; state: 'done' | 'now' | 'later'; eventId: string; name: string | null; due: number | null; atLeague: boolean }
+/** The facts the Case File page shows (read only: it never fills in or changes the run's state). */
+export interface EvilCaseFile {
+  team: string; color: string; every: number; stops: EvilCaseStop[];
+  boss: { name: string; sprite: string; met: number; won: number };
+  heat: number; heatMax: number; ambushAt: number; reinforceAt: number; ended: boolean;
+}
+const BEAT_TEMPLATES = ['suspicious', 'evidence', 'recognized', 'rising-star', 'nemesis', 'the-plan', 'hideout'] as const;
+export function evilCaseFile(content: Content, run: RunState): EvilCaseFile | null {
+  const team = evilTeam(content, run), s = run.story.evil;
+  if (!team || !s) return null;
+  const cfg = evilConfig(content, run), base = content.evilTeams.config;
+  const every = (s.region ?? -1) >= 0 ? 1 : cfg.beatEvery, ended = s.end !== 'none' || s.beat >= 7;
+  const stops = BEAT_TEMPLATES.map((tid, k): EvilCaseStop => {
+    const eventId = `evil-${team.id}-${tid}`, state = k < s.beat ? 'done' : k === s.beat && !ended ? 'now' : 'later';
+    const atLeague = k === 6 && (s.beat === 6 ? s.nextAt === HIDEOUT_AT_LEAGUE : !!cfg.hideoutAtLeague);
+    const due = atLeague ? null : state === 'now' ? Math.max(0, s.nextAt - s.stages) : state === 'later' && !ended ? Math.max(0, s.nextAt - s.stages) + (k - s.beat) * every : null;
+    return { no: k + 1, state, eventId, name: content.events.get(eventId)?.name ?? null, due, atLeague };
+  });
+  const leader = s.villains.leader;
+  return {
+    team: team.name, color: team.color, every, stops,
+    boss: { name: team.ranks.leader.name, sprite: team.ranks.leader.sprite, met: leader?.met ?? 0, won: leader?.won ?? 0 },
+    heat: s.heat, heatMax: base.heatMax, ambushAt: base.ambushAt, reinforceAt: base.reinforceAt, ended,
+  };
+}

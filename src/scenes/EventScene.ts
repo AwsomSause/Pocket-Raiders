@@ -39,7 +39,9 @@ import { storeOf } from '../ui/redux/storeFloors';
 import { itemEvolutionTargets } from '../core/evolution';
 import { maxHp } from '../core/pokemon';
 import { pageSpeaker, scriptPages, type ScriptPage } from '../ui/redux/script';
-import { mountRedux, phantomOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, phantomOn, pocketOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { pkArtOf } from '../ui/pocket/templates';
+import { evilCaseFile } from '../core/evil/teams';
 import { currentRegion, runCampaign } from '../core/regions';
 import { leadStarEvent, skyBirdStaging } from '../core/presentation/eventStars';
 import { tourneyHome, tourneyPage, tourneyRounds } from '../ui/redux/screens/bracket';
@@ -102,6 +104,9 @@ export class EventScene extends Phaser.Scene {
   /** New UI, rival scenes after The Borrowed Team: the rival's team page is open. */
   private rxTeam = false;
   private toggleTeam: (() => void) | null = null;
+  /** Pocket look, an Evil Team stop: the team's Case File is open (J). */
+  private rxFile = false;
+  private toggleFile: (() => void) | null = null;
   /** New UI, Honest Trade Card page: the cursor is on Trade (0) or Back (1). */
   private pickFocus: 0 | 1 = 0;
   private result: EventResult | null = null;
@@ -148,6 +153,8 @@ export class EventScene extends Phaser.Scene {
     this.rxCard = false;
     this.rxTeam = false;
     this.toggleTeam = null;
+    this.rxFile = false;
+    this.toggleFile = null;
     this.result = null;
     this.leaving = false;
     this.fullLayer = null;
@@ -307,6 +314,18 @@ export class EventScene extends Phaser.Scene {
         };
         this.input.keyboard?.on('keydown-R', this.toggleTeam);
       }
+      // Pocket look: a stop of the run's Evil Team opens the team's Case File with J (mock-up `et-file`); it only reads the run.
+      const teamId = run.story.evil?.teamId;
+      const isEvilStop = !!teamId && view.event.id.startsWith(`evil-${teamId}-`);
+      if (isEvilStop) {
+        this.toggleFile = (): void => {
+          if (!pocketOn() || this.rxBracket !== null || this.rxCard || this.rxTeam) return;
+          this.rxFile = !this.rxFile;
+          playSfx(this, 'ui.select', 0.4);
+          this.rx?.refresh();
+        };
+        this.input.keyboard?.on('keydown-J', this.toggleFile);
+      }
       // A department store floor: the directory, and who each good on the shelf helps (a stone that evolves it, medicine for the hurt).
       const store = storeOf(view.event.id);
       const helps = (live: typeof run): string[][] => view.event.choices.map((ch) => {
@@ -413,6 +432,10 @@ export class EventScene extends Phaser.Scene {
               return card ? { name: card.alias, rank: card.rank, facts: card.facts, trainer: bossArt(card.givenBy), badges: r.run.badges.length } : null;
             })(),
             team: teamPage(),
+            caseFile: c.pk && this.rxFile ? (() => {
+              const f = evilCaseFile(content, r?.run ?? run);
+              return f ? { file: f, boss: pkArtOf(artOf(this, f.boss.sprite)) } : null;
+            })() : null,
             teamHint: !!view.team && this.phase === 'choose' && !out,
             evil: (() => {
               // Pocket look: an Evil Team stop gets the team's band and Heat (mock-up `et-beat`).
@@ -453,7 +476,8 @@ export class EventScene extends Phaser.Scene {
           trade: (k) => { if (!this.picker?.picks[Number(k)]) return; this.pickAt(Number(k)); this.tryTrade(); },
           card: () => this.toggleCard?.(),
           team: () => this.toggleTeam?.(),
-          back: () => (this.rxTeam ? this.toggleTeam?.() : this.rxCard ? this.toggleCard?.() : this.handlePick('back')),
+          file: () => this.toggleFile?.(),
+          back: () => (this.rxFile ? this.toggleFile?.() : this.rxTeam ? this.toggleTeam?.() : this.rxCard ? this.toggleCard?.() : this.handlePick('back')),
           // The Honest Trade Card page: Trade, Back, and the arrows that step through the player's fitting Pokémon.
           accept: () => this.tryTrade(),
           step: (k) => { const pk = this.picker; if (pk) this.pickAt((pk.at + Number(k) + pk.picks.length) % pk.picks.length); },
@@ -591,6 +615,10 @@ export class EventScene extends Phaser.Scene {
       else this.rxBracket = null;
       playSfx(this, 'ui.select', 0.3);
       this.rx?.refresh();
+      return;
+    }
+    if (this.rxFile) {
+      if (action === 'confirm' || action === 'back') this.toggleFile?.();
       return;
     }
     if (this.rxTeam) {

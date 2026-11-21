@@ -82,8 +82,8 @@ function evilBand(d: EventModel): string {
   const lights = Array.from({ length: e.heatMax }, (_, i) => `<s class="${i < e.heat ? 'on' : ''}"></s>`).join('');
   return `<i class="em42" data-nocheck>${esc(e.letter)}</i>`
     + `<div class="ev-where" data-m="hdr" data-key="ev-where"><em>${crest(e)}${esc(e.team)}</em><b style="font-size:${fit(at, 260, 20, 14, 0.55)}px">${esc(at)}</b><span>Stop ${e.stop} of ${e.of}</span>`
-    + `<span class="heat38" data-key="ev-heat">Heat<i><u style="width:${pct(e.heat, e.heatMax)}%"></u><s style="left:${pct(e.ambushAt, e.heatMax)}%"></s></i><strong>${e.heat}</strong>of ${e.heatMax}</span></div>`
-    + `<div class="hm49" data-key="ev-lights" title="${e.heat < e.ambushAt ? `Ambush at ${e.ambushAt}` : 'Ambushes on'}"><b>Heat</b>${lights}</div>`;
+    + `<span class="heat38" data-key="ev-heat"${act('file')}>Heat<i><u style="width:${pct(e.heat, e.heatMax)}%"></u><s style="left:${pct(e.ambushAt, e.heatMax)}%"></s></i><strong>${e.heat}</strong>of ${e.heatMax}</span></div>`
+    + `<div class="hm49" data-key="ev-lights"${act('file')} title="${e.heat < e.ambushAt ? `Ambush at ${e.ambushAt}` : 'Ambushes on'}"><b>Heat</b>${lights}</div>`;
 }
 
 /** The band at the top left: the event's tag, its name, and where it happens. */
@@ -209,7 +209,7 @@ export function pkEvent(d: EventModel, cue: PkCue = 'in'): string {
     if (d.evil) {
       // An Evil Team stop keeps its scene: the choices sit in a list by the text bar (mock-up `et-beat`).
       return page('ev-choice', 51, root('', cue, true) + bg + where(d, L) + beats(1) + extras(d) + cast(d, L, false) + evilChoices(d, ch) + bar(d, L, '', false) + picker(d)
-        + keys([['↑↓', 'choose'], ['Enter', 'confirm', 'pick', d.index], ...back, ...extra]) + '</div>');
+        + keys([['↑↓', 'choose'], ['Enter', 'confirm', 'pick', d.index], ['J', 'case file', 'file'], ...back, ...extra]) + '</div>');
     }
     // The choice: the scene steps back, the cards come up and the question stays in the text bar.
     return page('ev-choice', d.evil ? 51 : 26, root('ec26 ech', cue, !!d.evil) + bg + where(d, L) + beats(1) + extras(d) + cards(d, L, ch) + bar(d, L, '', false) + picker(d)

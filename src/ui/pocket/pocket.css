@@ -754,3 +754,6 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .gx-bt-area .fav37 { cursor: pointer; pointer-events: auto; }
 /* Galar's Dynamax Band card (mock-up ga-band, tier 51): the Band where the boss would stand, glowing pink. */
 .pkx .pks .cboss .ct-mon.gx-band { right: 150px; bottom: 150px; filter: drop-shadow(0 0 18px #ff7ac0); }
+/* Case File (et-file): a stop already played, and the Boss once you have met them. */
+.pkx .pks .board36 p.done i { background: var(--ok); }
+.pkx .pks .pin36.seen span img { filter: none; }

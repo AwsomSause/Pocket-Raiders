@@ -20,6 +20,7 @@ import { honestView, type HonestModel } from './stops';
 import { teamView, type TeamModel } from './team';
 import { phEvent } from '../../phantom/screens/event';
 import { phStore } from '../../phantom/screens/stops';
+import { pkEtFile, type PkEtFileModel } from '../../pocket/screens/evil';
 import { pkEvent } from '../../pocket/screens/event';
 
 export interface EventChoice { label: string; sub: string; chance: string; locked: boolean }
@@ -90,6 +91,8 @@ export interface EventModel {
   cardHint?: boolean;
   /** gn.new.29: the rival's team as a page of its own (R opens it, Enter closes it), and whether the rival's scene has one to read. */
   team?: TeamModel | null;
+  /** Pocket look: the Evil Team's Case File, open over a team's stop (J). */
+  caseFile?: PkEtFileModel | null;
   teamHint?: boolean;
   /** Pocket look: an Evil Team stop (mock-up `et-beat`): the team, its letter and colour, which of its seven stops this is, and its Heat. */
   evil?: { team: string; letter: string; colour: string; stop: number; of: number; heat: number; heatMax: number; ambushAt: number ; /** Per choice: what it does to the team's Heat (`n` is "+1", "0"...), or null when it doesn't touch the team. */ tags: ({ n: string; w: string } | null)[] } | null;
@@ -220,6 +223,7 @@ export function eventView(c: ReduxCtx, d: EventModel): string {
     const text = d.lines.map((l) => (l.who ? `${l.who}: ${l.text}` : l.text)).join(' ');
     return runCardView(c, { ...d.codeCard, title: 'Code Name', team: [], text, hints: [['Enter', 'next']], area: 'story', save: false, tap: 'next' });
   }
+  if (c.pk && d.caseFile) return pkEtFile(d.caseFile);
   if (d.team) return teamView(c, d.team);
   // Phantom UI: a store floor is the shop page while choosing; its talk and its outcome are the event's own pages.
   if (c.ph) return d.store && !d.outcome && !d.pick && d.page.at >= d.page.of - 1 ? phStore(c.ph, d) : phEvent(c.ph, d);
