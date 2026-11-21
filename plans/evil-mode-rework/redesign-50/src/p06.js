@@ -1,0 +1,28 @@
+/* Pass 6 · Faces & Colours. Every person gets a signature colour and a face: portraits ride on every text box and footer,
+   actors glow in their colour, files and cards are painted in it, and the crew cards become a police line-up.
+   New pages: People you know (everyone met so far, by side) and Rook's crew ID. */
+const PCOL = { 'c-rook': '#3f7fd9', 'c-rook0': '#3f7fd9', 'c-dale': '#6f9a3a', 'c-gus': '#e0901c', 'c-gruntb': '#8a6ad9', 'c-rosa': '#25b3c7', 'c-mina': '#a25fe0', 't-natebig': '#e0294a', 'v-nate': '#e0294a', 't-redbig': '#ef3b2c', 't-giovanni': '#7d8298', 't-gio': '#7d8298',
+  't-petrel': '#9a4fd0', 't-looker': '#a8885a', 't-policeman': '#3a6fd0', 't-koga': '#7a3cc9', 't-misty': '#2a8ad9', 't-erika': '#4caf50', 't-sabrina': '#d14b8f', 'p-rotom': '#ff8a1c', 't-rich': '#c9a24a', 't-applicant': '#3aa86a', 't-grunt': '#6d6d78', 't-biker': '#9a6a3a', 't-clerkm': '#4a8ab0', 'c-archer': '#4a5fa0' };
+const NAMEK = { Rook: 'c-rook', Dale: 'c-dale', Gus: 'c-gus', Bram: 'c-gruntb', Rosa: 'c-rosa', Mina: 'c-mina', Nate: 't-natebig', 'The Boss': 't-natebig', Red: 't-redbig', Giovanni: 't-gio', Petrel: 't-petrel', Looker: 't-looker', Koga: 't-koga', Rotom: 'p-rotom', Gentleman: 't-rich', Applicant: 't-applicant', 'Rocket Grunt': 't-grunt', Archer: 'c-archer' };
+const pc = k => PCOL[k] || '#c1121f';
+const face = (k, sz = 44) => { const s = SPR[k] || [32, 32], sc = sz * (k.startsWith('p-') ? 1.25 : 2.5) / s[1]; return `<span class="face" data-nocheck style="--c:${pc(k)};width:${sz}px;height:${sz}px"><img class="px" src="sprites/${k}.png" alt="" style="width:${Math.round(s[0] * sc)}px;height:${Math.round(s[1] * sc)}px;margin-left:${-Math.round((s[0] * sc - sz) / 2)}px;margin-top:${k.startsWith('p-') ? 0 : -Math.round(sz * .08)}px"></span>`; };
+page('people', { g: 'Crew', t: 'People you know', kind: 'people', from: 6 });
+page('idcard', { g: 'Crew', t: 'Crew ID · Rook', kind: 'idcard', from: 6 });
+PR.pages.roster.up = Object.assign(PR.pages.roster.up || {}, { 6: { mode: 'lineup' } });
+comp(6, 'foot', (who, line, ctas) => before('foot', 6)(who, line, ctas).replace(`<p><b>${esc(who)}</b>`, who && NAMEK[who] ? `${face(NAMEK[who], 40)}<p><b style="color:${pc(NAMEK[who])}">${esc(who)}</b>` : `<p><b>${esc(who)}</b>`));
+comp(6, 'k:scene', (s, P) => { const sk = s.speaker === s.left.n ? s.left.s : s.speaker === s.right.n ? s.right.s : NAMEK[s.speaker];
+  return before('k:scene', 6)(s, P).replace('<div class="act l">', `<div class="act l" style="--pc:${pc(s.left.s)}">`).replace('<div class="act r">', `<div class="act r" style="--pc:${pc(s.right.s)}">`)
+    .replace(`<b class="spk">${esc(s.speaker)}</b>`, sk ? `<span class="spk6" style="--pc:${pc(sk)}">${face(sk, 62)}<b>${esc(s.speaker)}</b></span>` : `<b class="spk">${esc(s.speaker)}</b>`); });
+comp(6, 'k:file', (s, P) => before('k:file', 6)(s, P).replace('<div class="scr nv k-file">', `<div class="scr nv k-file f6" style="--pc:${pc(s.spr)}">`));
+comp(6, 'k:grid', (s, P) => before('k:grid', 6)(s, P).replace('class="scr nv k-grid', `class="scr nv${s.mode === 'lineup' ? ' lineup' : ''} k-grid`).replace(/<button class="cell([^"]*)"([^>]*?)style="--i:(\d+);/g, (m, c, mid, i) => `<button class="cell${c}"${mid}style="--pc:${(s.cells[+i] && PCOL[s.cells[+i][0]]) || '#3a2a34'};--i:${i};`));
+const SIDES = [['Your crew', '#c1121f', ['c-rosa', 'c-dale', 'c-mina', 'c-rook', 'c-gus', 'c-gruntb']], ['Team Rocket', '#7d8298', ['t-gio', 't-petrel', 'c-archer', 't-grunt']], ['Heroes and Gyms', '#ef3b2c', ['t-redbig', 't-misty', 't-koga', 't-erika']], ['The law and the town', '#3a6fd0', ['t-looker', 't-policeman', 't-rich', 't-biker']]];
+const PN = k => (Object.entries(NAMEK).find(([n, v]) => v === k) || [({ 't-misty': 'Misty', 't-koga': 'Koga', 't-erika': 'Erika', 't-policeman': 'Policeman', 't-biker': 'Bike Shop owner', 't-rich': 'Gentleman' })[k] || '?'])[0];
+comp(6, 'k:people', s => `<div class="scr nv k-people">${C('bg', 'hq')}${C('top', s, 'People you know')}
+  <section class="pp-wrap" ${mm('panel')}>${map(SIDES, ([n, c, ks], i) => `<div class="pp-side" style="--pc:${c};--d:${i * 120}ms"><h4>${n}</h4><div class="pp-row">${map(ks, (k, j) => `<button class="pp-f${i === 0 && j === 0 ? ' on' : ''}" ${go(i === 0 ? 'file' : i === 1 ? 'rival' : i === 2 ? 'hero' : '')} style="--d:${i * 120 + j * 50}ms">${face(k, 56)}<b>${PN(k)}</b></button>`)}</div></div>`)}</section>
+  ${C('foot', 'Rosa', '“Know who owes us, who hates us, and who we can buy.”', [['Open Rosa’s file', 'file']])}${C('tabs', s)}${C('keys', [['←→↑↓', 'person'], ['Enter', 'open file']])}</div>`);
+comp(6, 'k:idcard', s => { const c = CREW[0]; return `<div class="scr nv k-id">${C('bg', 'hq')}${C('top', s, 'Crew ID · Rook')}
+  <section class="idc" style="--pc:${pc(c.s)}" ${mm('panel')}><div class="idc-h"><span class="nb-sig">N</span><b>TEAM NOVA · CREW ID</b><em>No. 0003</em></div>
+    <div class="idc-b"><div class="idc-ph">${SP(c.s, 150)}<i class="idc-arm" data-nocheck>N</i></div><div class="idc-t"><b class="idc-n">${c.n}</b><em>${c.r} · rank ${c.rk} of 15 · Lv ${c.lv}</em>
+    <div class="idc-stripes">${rep(15, i => `<i class="${i < c.rk ? 'on' : ''}"></i>`)}</div>${map(STATS, (l, i) => C('bar', l, c.st[i], 10, i))}<p class="idc-tr"><b>${c.tr}</b> · Loyalty ${c.lo} · Morale ${c.mo}</p></div></div></section>
+  ${C('pn', 'idc-side', 'Armband', `<div class="arm6"><i>N</i></div><p>Crimson, with the Nova eye. Rank stripes show under it: Rook has three.</p><p>Male Grunts only, like every team.</p>`, 'det')}
+  ${C('foot', 'Rook', '“Three stripes, Boss. Ma would be so proud. If she knew.”', [['Full file', 'file']])}${C('tabs', s)}${C('keys', [['←→', 'next member'], ['Enter', 'full file']])}</div>`; });

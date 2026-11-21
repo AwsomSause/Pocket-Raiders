@@ -60,5 +60,71 @@
   "q3": "Yes, four: Settings home, Effects, Sound, and Save and quit. Each Settings category has its own page, so no page holds more than five rows.",
   "q4": "Esc opens the Nova Dial; holding Q on any page opens the same dial, so there is one menu to learn. Settings home sits on the dial; each category page keeps the categories down the left so you can hop between them.",
   "q5": "Yes. It works like the main game's pause wheel and Settings, with Rotom explaining which settings are Evil Mode's own."
+ },
+ "6": {
+  "name": "Faces & Colours",
+  "big": "Every person now has a signature colour and a face. Round portraits ride on every text box and footer, people glow in their own colour on stage, files are painted in it, and the crew roster becomes a police line-up.",
+  "pages": [
+   "People you know",
+   "Crew ID · Rook"
+  ],
+  "q1": "Yes. Round portraits in each person's colour sit on every text box, actors glow in their colour, files are painted in it, and the roster is a police line-up with height lines.",
+  "q2": "Until now everyone wore the same crimson. Now you can tell people apart at a glance: Rosa is teal, Rook blue, Gus orange, Red red, Giovanni grey, Looker tan, and the same colour follows each of them from page to page.",
+  "q3": "Yes, two. People you know lists everyone met so far by side (crew, Rocket, heroes and gyms, the law), and each crew member gets a Crew ID card with photo, rank stripes and armband.",
+  "q4": "People you know is reachable from the Crew tab and the dial; portraits in the Boss Menu glance use the same faces.",
+  "q5": "Yes. Portraits by the text box and colour-coded trainers are how Pokémon games show who is talking."
+ },
+ "7": {
+  "name": "The Heist",
+  "big": "A job is now a heist in beats: pick it from the Job board, pick the crew, read the Card, give the order, watch it play out live, then walk through the report one step at a time. Orders left for the day ride in the top bar on every page.",
+  "pages": [
+   "Job board",
+   "The job · live"
+  ],
+  "q1": "Yes. Jobs are dealt as big heist cards with their target building and a gold odds dial, the order cut-in has speed lines and an ORDER stamp, and the live job shows Rook creeping past the Day Care under the moon with an alert popping over his head.",
+  "q2": "Before, a job jumped from the Card straight to a result. Now it has a shape: board, crew, card, order, live moment, report. The report has a step rail (take, Heat, crew, loot, next) so the result pages no longer dump everything at once.",
+  "q3": "Yes, two. The Job board shows today's three jobs side by side, and The job · live gives the risky moment its own page with three answers, instead of hiding it in a dice roll.",
+  "q4": "Orders left today now sit as three dots beside the Day in the top bar on every page, so the Menu never has to tell you. The Effects settings page already controls the speed lines and stamp.",
+  "q5": "Yes. A live moment with an alert mark over a sprite is straight from Pokémon's overworld, and the step-by-step report mirrors the main game's Victory Lap."
+ },
+ "8": {
+  "name": "Battle Stage",
+  "big": "Battles are filmed now. The camera sits behind the Boss's Pokémon, the foe stands on a Nova court under crossing spotlights, the Hideout Raid gets a turn clock, the crew wait on a bench, and the foe's team shows as Poké Balls. The spotlights now cross every scene in the game.",
+  "pages": [
+   "Pick a move",
+   "Crew steps in"
+  ],
+  "q1": "Yes. Two spotlights sweep across a crimson Nova court, the raid clock ticks, Houndoom fills the near side with a red glow, and the move list is painted in each move's type colour with a rainbow MEGA button.",
+  "q2": "Pass 2's battle was a flat picture with words on the side. Now it is a stage with depth (the court is tilted away from you), the raid has a clock you can read from across the room, and the foe's team and the Hero show at a glance.",
+  "q3": "Yes, two. Pick a move and Crew steps in are their own pages, so the battle screen only ever shows one choice at a time.",
+  "q4": "ORDER is the Boss's own battle command (one a battle), CREW opens the bench. Esc still opens the Nova Dial, which pauses the battle.",
+  "q5": "Yes, very: camera behind your Pokémon, foe on a platform, Poké Ball team pips, type-coloured moves and a MEGA button are core Pokémon battle parts."
+ },
+ "9": {
+  "name": "Power Surge",
+  "big": "Mega Evolution, Terastal, Dynamax and Z-Power each get a full-screen scene of their own (stones linked by a beam, red storm clouds, crystal shards, a Z spiral), the Legend gets a psychic storm, and a rainbow power line runs under the top bar whenever a power is charged. Move animations are not touched.",
+  "pages": [
+   "Pick a power",
+   "Power gear"
+  ],
+  "q1": "Yes, the loudest pass so far: a rainbow burst with stones joined by a beam for Mega, red storm clouds and a towering red-glowing Gengar for Dynamax, floating crystal shards for Terastal, a turning golden spiral with a giant Z, and a psychic storm behind Mewtwo.",
+  "q2": "In pass 8 the four powers shared one look. Now each has its own world, the Pokémon flashes white and then shows its new form, the trainer's power item glows between them, and a rainbow line under the top bar tells you a power is charged on any page.",
+  "q3": "Yes, two. Pick a power puts the four powers side by side (locked ones as black silhouettes with the region they open in), and Power gear lists the items you own, so the battle's MEGA button stays one press.",
+  "q4": "The rainbow line under the top bar shows on every page while a power is charged, so the Boss Menu does not need a separate notice. Effects settings can turn flashing down.",
+  "q5": "Yes. Each power is shown the way the Pokémon games stage it (Key Stone link, Dynamax clouds, Tera crystals, Z pose), only the Pokémon and its surroundings move, and the moves themselves are untouched."
+ },
+ "10": {
+  "name": "Story Beats",
+  "big": "Every event now plays in four beats (talk, choose, result, reward) with a beat bar across the top. Choices are big cards that show the stat check and your chance, the result shows the roll, and the reward only appears after the text is closed. The text box is rebuilt everywhere: a gold corner, a Log key and an Auto switch.",
+  "pages": [
+   "Event · choose",
+   "Event · result",
+   "Text log"
+  ],
+  "q1": "Yes. Events now feel like a show: a beat bar lights up step by step, choices slide in as big gold-edged cards with your chance counting up, and the result lands as a green SUCCESS plate with the roll under it.",
+  "q2": "Before, an event was one text box with a list of words. Now it is four clear beats on separate screens, every choice tells you the stat check and the odds before you pick, and the text box itself is rebuilt on every page with a gold corner, a speaker portrait, a Log key and an Auto switch.",
+  "q3": "Yes, three. Choose and Result each get their own page so the talk screen stays clean, and the Text log page lets you read everything said in the event without crowding the box.",
+  "q4": "The Log and Auto keys sit on every text box, and Auto has a matching switch in Settings > Dominion. The Boss Menu stays one key away and does not interrupt the beats.",
+  "q5": "Yes. It reads like a Pokémon game event: a speaker name plate, a blinking arrow, the text stays until you press a key, and the reward only shows after the text is closed, then waits for your key press."
  }
 }
