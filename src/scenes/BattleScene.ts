@@ -4391,6 +4391,13 @@ export class BattleScene extends Phaser.Scene {
         ...(x.zBase ? { base: x.zBase.name } : {}),
         mine,
       };
+      // Galar (mock-up `ga-dmax`): a Gym Leader's or Cup rival's Pokémon Dynamaxing over the stadium.
+      const gaScope = !mine && battle?.trainer && (kind === 'dynamax' || kind === 'gigantamax') ? galarScope(content, this.run) : null;
+      if (gaScope && battle?.trainer) {
+        const host = battle.trainer.name;
+        const last = battle.enemyTeam.filter((m) => m.hp > 0 && m.uid !== mon.uid).length === 0;
+        more.ga = { host, where: [gaScope === 'gym' ? `Leader ${host}` : host, last ? 'last Pokémon' : ''].filter(Boolean).join(' · ') };
+      }
       const view = mountRedux(this, { render: (c) => (c.ph ? phGimmick(c.ph, model) : c.pk ? pkGimmick({ ...model, more }) : ''), acts: { next: end }, card: true });
       this.time.delayedCall(3200, end);
       this.events.once('shutdown', end);

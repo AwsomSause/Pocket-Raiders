@@ -69,6 +69,21 @@ export function pkGaBand(d: { host: string; turns: number; line: string }, cue: 
     + `<div class="gx-hit"${act('next')}></div></div>`);
 }
 
+/** A Galar Gym Leader's (or Cup rival's) Pokémon Dynamaxing over the stadium (mock-up page `ga-dmax`). Only true facts. */
+function pkGaDmax(d: GimmickCard, g: { where: string; host: string }, cue: PkCue): string {
+  const bold = (t: string): string => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  const big = d.kind === 'gigantamax' ? 'Gigantamax' : 'Dynamax', mon = pkArtOf(d.mon);
+  const chips = [`**${d.name}** grows over the stadium`, d.hp ? `Its HP doubles for ${d.turns ?? 3} turns` : `For ${d.turns ?? 3} turns`, 'Its moves become **Max Moves**', 'The whole stadium roars'];
+  const say = `${g.host}'s ${d.name} ${d.kind === 'gigantamax' ? 'Gigantamaxed' : 'Dynamaxed'}! It towers over the stadium.`;
+  return page('ga-dmax', 51, cueRoot('cut cboss ar28 a-ga in29', 'boss', cue, '--c:#d9267d')
+    + back('arenas/grass_bg.png', 'ct-bg') + back('packs/raid/max/bg.png', 'ct-bg storm') + '<i class="ct-rays"></i>'
+    + (mon ? `<div class="ct-mon" data-key="ct-mon">${fitPic(mon, 400, 330, '', 5.4)}</div>` : '')
+    + `<div class="ct-title" data-key="ct-title"><small style="font-size:${fit(g.where, 440, 13, 10, 0.62)}px">${esc(g.where)}</small><b style="font-size:${fit(big, 440, 88, 44, 0.5)}px">${big}</b></div>`
+    + `<div class="ct-chips" data-key="ct-chips">${chips.map((c) => `<span>${bold(c)}</span>`).join('')}</div>`
+    + `<div class="vs-say" data-key="vs-say"><p style="font-size:${fit(say, 1500, 17, 13, 0.5)}px">${esc(say)}</p><div class="btn on nx"${act('next')}><b>Next</b></div></div>`
+    + `<div class="gx-hit"${act('next')}></div></div>`);
+}
+
 /** What the Legendary and Ultra Beast cut-ins show (mock-up pages `legend` and `ub`). Only true facts go in `chips`. */
 export interface PkCutIn {
   page: 'legend' | 'ub';
@@ -119,6 +134,8 @@ export interface PkGimmickMore {
   base?: string;
   /** The player's own Pokémon: no Trainer's name before it. */
   mine?: boolean;
+  /** A Galar Gym, Cup or Champion foe Dynamaxing (mock-up page `ga-dmax`): the small line ("Leader Raihan · last Pokémon") and the Trainer's name. */
+  ga?: { where: string; host: string };
 }
 
 const GIM_TITLE: Record<GimmickCard['kind'], string> = { mega: 'Mega Evolution', primal: 'Primal Reversion', tera: 'Terastallize', dynamax: 'Dynamax', gigantamax: 'Gigantamax', zmove: 'Z-Move' };
@@ -127,6 +144,7 @@ const GIM_TITLE: Record<GimmickCard['kind'], string> = { mega: 'Mega Evolution',
 export function pkGimmick(d: GimmickCard & { more?: PkGimmickMore }, cue: PkCue = 'in'): string {
   const m = d.more ?? {}, k = d.kind, cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
   const bold = (t: string): string => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  if (m.ga && !m.mine && (k === 'dynamax' || k === 'gigantamax')) return pkGaDmax(d, m.ga, cue);
   const who = d.trainer && !m.mine ? `${d.trainer}'s ${d.name}` : d.name;
   const T = d.type ? cap(d.type) : '';
   let cls = 'cmega', colour = '#ff8a3c', fx = '', small = '', chips: string[] = [], say = '', id = 'g-mega';

@@ -245,3 +245,21 @@ describe('the Pocket Dynamax Band card', () => {
     expect(h).toContain('gx-ga ar28 a-ga');
   });
 });
+
+describe('the Pocket Galar Dynamax cut-in', () => {
+  const card = { kind: 'dynamax' as const, name: 'Duraludon', mon: null, trainer: 'Raihan', cast: null, hp: [80, 160] as [number, number], turns: 3, foe: null };
+  it('shows a Galar foe Dynamaxing on the ga-dmax page', async () => {
+    const { pkGimmick } = await import('../../src/ui/pocket/screens/cards');
+    const h = pkGimmick({ ...card, more: { ga: { host: 'Raihan', where: 'Leader Raihan · last Pokémon' } } });
+    expect(h.startsWith('<!--pk:ga-dmax:51-->')).toBe(true);
+    expect(h).toContain('Leader Raihan · last Pokémon');
+    expect(h).toContain('<b>Duraludon</b> grows over the stadium');
+    expect(h).toContain('Its HP doubles for 3 turns');
+    expect(h).toContain('in29');
+  });
+  it('keeps the plain Dynamax page for the player and outside Galar', async () => {
+    const { pkGimmick } = await import('../../src/ui/pocket/screens/cards');
+    expect(pkGimmick({ ...card, more: { mine: true, ga: { host: 'Raihan', where: 'x' } } }).startsWith('<!--pk:g-dmax:')).toBe(true);
+    expect(pkGimmick({ ...card, more: {} }).startsWith('<!--pk:g-dmax:')).toBe(true);
+  });
+});
