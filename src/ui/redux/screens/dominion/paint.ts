@@ -18,6 +18,7 @@ const PAL = {
   night: { sky: ['#1a0f3a', '#3b1c66', '#5a2a7a'], far: '#2a1852', mid: '#1c1040', near: '#0e0822', win: ['#ffd36b', '#ff7ab8', '#9fe3ff', '#ffe9a8'], lit: 0.32 },
   day: { sky: ['#7cc4f0', '#a9dcf6', '#dff2fb'], far: '#8fb4cf', mid: '#6f93b0', near: '#4f6e88', win: ['#cfe9ff', '#e8f6ff'], lit: 0.5 },
   dusk: { sky: ['#2a2050', '#7a3c6e', '#e0745a'], far: '#3a2a5a', mid: '#24183e', near: '#120c22', win: ['#ffd36b', '#ffb36b'], lit: 0.22 },
+  rocket: { sky: ['#140507', '#3a0a12', '#5c1018'], far: '#3a0c14', mid: '#24070d', near: '#120306', win: ['#ff6a5c', '#ffb36b'], lit: 0.25 },
 };
 
 function canvas(w: number, h: number): [HTMLCanvasElement, CanvasRenderingContext2D] | null {
@@ -134,6 +135,10 @@ export const skylineUrl = (): string => once('skyline', () => skyline(5, 1.25));
 export const skylineDayUrl = (): string => once('skyline-day', () => skyline(21, 0.9, 'day'));
 /** Rotom mockup a9's dusk street behind the police station (seed 31, tall .8, the dusk palette, no sky of its own). */
 export const skylineDuskUrl = (): string => once('skyline-dusk', () => skyline(31, 0.8, 'dusk', false));
+/** The tutorial's night city (mockups a2, a3, c11: seed 5, tall 1.1). */
+export const skylineTutUrl = (): string => once('skyline-tut', () => skyline(5, 1.1));
+/** The tutorial's rival note (mockup d12: seed 9, the Rocket palette). */
+export const skylineRocketUrl = (): string => once('skyline-rocket', () => skyline(9, 1.25, 'rocket'));
 /** HQ Lv. 1, the leaking warehouse (mockup 1); the morning sky through the skylight and door when `morning`. */
 export const warehouseUrl = (morning: boolean): string => once(`warehouse-${morning}`, () => warehouse(morning));
 /** Film grain shared by every Dominion stage (the mockups' `--noise`). */

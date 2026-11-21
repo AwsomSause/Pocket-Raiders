@@ -1,6 +1,7 @@
 // DOMINION on a run: the setup writes `run.expansion.dominion`, each clock step updates it. Pure: a new run is returned
 // and the caller (GameSession.dominionApply) saves it.
 
+import { tutStep } from './tutorial';
 import type { Content } from '../contentSchema';
 import { addLevels } from '../pokemon';
 import { healParty, newMon } from '../run';
@@ -168,6 +169,13 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
   // D23: while a captive is being questioned, only the room's actions go through.
   const snOut = snatchInRun(content, run, action);
   if (snOut) return snOut;
+  if (action.t === 'tut') {
+    const work = structuredClone(run);
+    const out = tutStep(content, work, work.expansion!.dominion!, action.op, action.arg);
+    if (!out.ok) return { ok: false, block, notice: out.notice, heal: false, run };
+    const next = withBlock(work, DominionBlockSchema.parse(work.expansion!.dominion!));
+    return { ok: true, block: next.expansion!.dominion!, notice: out.notice, heal: false, run: next };
+  }
   if (action.t === 'found') {
     const out = found(block, action.team);
     return { ok: out.ok, block: out.block, notice: out.notice, heal: false, run: out.ok ? withBlock(run, DominionBlockSchema.parse(out.block)) : run };

@@ -17,6 +17,8 @@ import { services } from '../../game/services';
 import type { InputAction } from '../../ui/input';
 import { openKeyVault } from '../../ui/keyVault';
 import { refreshMusicVolume, stopMusic } from '../../ui/audio';
+import { TUT, type TutMode } from '../../core/dominion/tutorial';
+import { TutorialController } from './tutorialController';
 import { bossMenuView, settingsPageView, type SetRowView, type SettingsCat, type SettingsPageModel } from '../../ui/redux/screens/dominion/bossMenu';
 
 interface Host {
@@ -28,6 +30,8 @@ interface Host {
   bossFile(): string | null;
   /** D28: the Boss's board (page map, mockup m5), the Controls tab's help page. */
   openBoard(): void;
+  /** Tutorial e9: plays a lesson's tips again over the page Esc was pressed on. */
+  replay(lesson: string): void;
 }
 
 export const SETTINGS_CATS: SettingsCat[] = [
@@ -78,7 +82,9 @@ const RUN_OPTS = {
 
 export class BossMenuController {
   /** Open over the page Esc was pressed on (the scene's own screen is left as it was). */
-  private mode: 'menu' | 'settings' | null = null;
+  private mode: 'menu' | 'settings' | 'replay' | null = null;
+  /** The Replay a lesson page's row (tutorial e9). */
+  private rAt = 0;
   private at = 0;
   private notice: string | null = null;
   private cat = 0;
@@ -91,7 +97,7 @@ export class BossMenuController {
   owns(): boolean {
     return this.mode !== null;
   }
-  get page(): 'menu' | 'settings' | null {
+  get page(): 'menu' | 'settings' | 'replay' | null {
     return this.mode;
   }
 
@@ -136,6 +142,7 @@ export class BossMenuController {
     if (id === 'back') return this.close();
     if (id === 'hide') return this.host.hide();
     if (id === 'settings') return this.openSettings(0);
+    if (id === 'lessons') { this.mode = 'replay'; this.rAt = 0; return; }
     if (id === 'rotom') return this.openSettings(SETTINGS_CATS.findIndex((c) => c.id === 'rotom'));
     if (id === 'ops') {
       this.notice = DOMINION_DATA.start.lockedTab;
@@ -186,6 +193,15 @@ export class BossMenuController {
     return { view: { label, ...(sub ? { sub } : {}), kind: 'tg', on }, change: () => set(!on), press: () => set(!on) };
   }
 
+  /** The Tutorial setting (tutorial mockups a2, e9): the default for new runs, and this run's help level. */
+  private tutNow(): TutMode {
+    return dominionBlock(services().session.run)?.tut?.mode ?? this.prefs().tutorial;
+  }
+  private setTut(v: TutMode): void {
+    this.setPrefs({ ...this.prefs(), tutorial: v });
+    if (dominionBlock(services().session.run)) services().session.dominionStep({ t: 'tut', op: 'mode', arg: v });
+  }
+
   private runRows(): Row[] {
     const p = this.prefs();
     const setRun = (k: keyof DominionPrefs['run'], v: string): void => this.setPrefs({ ...p, run: { ...p.run, [k]: v } });
@@ -196,6 +212,7 @@ export class BossMenuController {
       this.seg('Betrayals', 'Holders may turn on you', RUN_OPTS.betrayals, p.run.betrayals, (v) => setRun('betrayals', v)),
       this.toggle('Show odds on the Card', 'The chance dial before every action', p.showOdds, (v) => this.setPrefs({ ...p, showOdds: v })),
       this.toggle('End the day when no actions are left', undefined, p.autoEndDay, (v) => this.setPrefs({ ...p, autoEndDay: v })),
+      this.seg('Tutorial', 'Rotom\'s lessons: this run, and every new one', TUT.replay.modes as unknown as readonly (readonly [TutMode, string])[], this.tutNow(), (v) => this.setTut(v)),
       { view: { label: 'Charters 🔒', sub: 'Unlocks after you finish one run', kind: 'seg', opts: [{ label: 'Off', on: true }], lock: true }, press: () => { this.setNotice = 'Charters open once you finish one Dominion run.'; } },
       ...this.chairRows(),
     ];
@@ -333,6 +350,7 @@ export class BossMenuController {
   render(): string {
     const s = this.mode;
     if (s === 'settings') return settingsPageView(this.pageModel());
+    if (s === 'replay') return TutorialController.replayPage(this.rAt, this.tutNow(), dominionBlock(services().session.run) ?? null);
     const b = dominionBlock(services().session.run);
     if (!b) return '';
     return bossMenuView(bossMenuModel(b, this.at, { card: this.cardLine(), slot: services().session.slot, notice: this.notice }), this.host.bossFile());
@@ -358,22 +376,32 @@ export class BossMenuController {
       setLeft: (i) => { this.row = Number(i); this.catRows()[this.row]?.change?.(-1); done(); },
       setRight: (i) => { this.row = Number(i); this.catRows()[this.row]?.change?.(1); done(); },
       setPick: (ij) => { const [i, j] = ij.split(':').map(Number); this.focus = 'rows'; this.row = i!; this.catRows()[i!]?.pick?.(j!); done(); },
+      tutReplay: (i) => { if (this.rAt === Number(i)) this.playLesson(); else this.rAt = Number(i); done(); },
+      tutMode: (id) => { if (id === 'full' || id === 'tips' || id === 'off') this.setTut(id); done(); },
       fxLevel: (lv) => { if (lv === 'full' || lv === 'lighter' || lv === 'calm') this.setFx(presetFx(lv)); done(); },
     };
   }
   overs(): Record<string, (arg: string) => void> {
-    return { menuOver: (i) => { this.at = Number(i); this.host.refresh(); } };
+    return { menuOver: (i) => { this.at = Number(i); this.host.refresh(); }, tutReplayOver: (i) => { this.rAt = Number(i); this.host.refresh(); } };
+  }
+
+  private playLesson(): void {
+    const l = TUT.lessons[this.rAt];
+    if (!l) return;
+    this.mode = null;
+    this.host.replay(l.id);
   }
 
   /** Letter and number keys (before the input layer). True when handled. */
   raw(code: string): boolean {
     const s = this.mode;
     if (s === 'menu') {
-      const blade: Record<string, number> = { Digit1: 1, Digit3: 2, Digit4: 3, Digit5: 4, Digit6: 5, KeyR: 6, KeyS: 7 };
+      const blade: Record<string, number> = { Digit1: 1, Digit3: 2, Digit4: 3, Digit5: 4, Digit6: 5, KeyR: 6, KeyS: 7, KeyT: 8 };
       if (code in blade) { this.pickBlade(blade[code]!); this.host.refresh(); return true; }
       // The other tab keys and letters do nothing here (Q is the wheel's).
       return code.startsWith('Digit') || (code.startsWith('Key') && !['KeyW', 'KeyA', 'KeyD', 'KeyZ', 'KeyX'].includes(code));
     }
+    if (s === 'replay') return code.startsWith('Digit') || (code.startsWith('Key') && !['KeyW', 'KeyA', 'KeyS', 'KeyD', 'KeyZ', 'KeyX'].includes(code));
     if (s === 'settings') {
       if (code === 'KeyD') { this.resetTab(); this.host.refresh(); return true; }
       if (code === 'Tab') { this.setCat(this.cat + 1); this.host.refresh(); return true; }
@@ -391,6 +419,16 @@ export class BossMenuController {
       else if (a === 'up' || a === 'down') this.at = (this.at + (a === 'up' ? -1 : 1) + BLADES.length) % BLADES.length;
       else if (a === 'confirm') this.pickBlade(this.at);
       else if (a === 'back') this.close();
+      return true;
+    }
+    if (s === 'replay') {
+      const n = TUT.lessons.length, modes = TUT.replay.modes.map(([id]) => id as TutMode);
+      if (a === 'up' || a === 'down') this.rAt = (this.rAt + (a === 'up' ? -1 : 1) + n) % n;
+      else if (a === 'left' || a === 'right') {
+        const i = modes.indexOf(this.tutNow()), j = Math.max(0, Math.min(modes.length - 1, i + (a === 'left' ? -1 : 1)));
+        if (j !== i) this.setTut(modes[j]!);
+      } else if (a === 'confirm') this.playLesson();
+      else if (a === 'back') this.mode = 'menu';
       return true;
     }
     if (s !== 'settings') return false;
