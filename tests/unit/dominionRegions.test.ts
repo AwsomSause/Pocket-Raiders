@@ -3,12 +3,12 @@
 // held region's week (Stability, tribute, betrayal checks scaled by the Betrayals rule); the Empire answers; boons;
 // the region data packs; save/reload; determinism.
 import { describe, expect, it } from 'vitest';
-import { freshChair } from '../../src/core/dominion/chair';
+import { answerCard, canDraw, cardStatus, freshChair, payOwed } from '../../src/core/dominion/chair';
 import { crewOf, withCrew } from '../../src/core/dominion/crew';
 import { activeRegion, DOMINION_DATA, setActiveRegion } from '../../src/core/dominion/data';
 import { regionIndex } from '../../src/core/dominion/pyramid';
 import { regionsReached } from '../../src/core/dominion/hq';
-import { teamsHere } from '../../src/core/dominion/rivals';
+import { teamsHere, withRivals } from '../../src/core/dominion/rivals';
 import {
   aceOf, betrayalChance, defaultOrders, holderPicks, leaveProblem, nextRegion, preEvolve, realmOf, regionsInRun, riskOf, runDay,
 } from '../../src/core/dominion/regions';
@@ -266,6 +266,74 @@ describe('D15 answers on the Empire screen', () => {
     expect(blk(out.run).field.fight?.why).toBe('realm');
     const gone = go(r, { t: 'realm', op: 'letGo', region: 'kanto' });
     expect(blk(gone).realm!.held[0]!.status).toBe('lost');
+  });
+});
+
+describe('D15 Chair cards that waited for the held regions (80, 126-129, 132) and owed Stability', () => {
+  const card = (id: number) => DOMINION_DATA.court.find((c) => c.id === id)!;
+  const answer = (b: DominionBlock, id: number, pick: 0 | 1): DominionBlock => {
+    const x = structuredClone(b);
+    x.chair = { ...freshChair(), open: true, docket: [{ card: id, member: null, second: null }], at: 0 };
+    const out = answerCard(x, pick, 'seed');
+    expect(out.ok).toBe(true);
+    return out.block;
+  };
+  it('all five play now; the held-region ones need a held region to be drawn', () => {
+    for (const id of [80, 126, 127, 128, 129, 132]) expect(cardStatus(card(id))).not.toBe('disabled');
+    expect(card(126).needs).toBe('held');
+    const kanto = withCrew(structuredClone(blk(taken())));
+    kanto.hqLevel = 5; // a tier-4 card (HQ tier 4-5)
+    expect(canDraw(kanto, card(127))).toBe(false); // nothing held yet
+    const johto = structuredClone(blk(arrive(taken())));
+    expect(canDraw(johto, card(127))).toBe(false); // a new region's HQ starts small again
+    johto.hqLevel = 5;
+    expect(canDraw(johto, card(127))).toBe(true);
+  });
+  it('Stability owed before leaving lands on the first held region; after, it moves every held region', () => {
+    const r = edit(taken(), (b) => void payOwed(b, 'stab', -7));
+    expect(blk(r).chair!.owed.stab).toBe(-7);
+    const j = blk(arrive(r));
+    expect(j.realm!.held[0]!.stability).toBe(RG.stability.start.shadow - 7);
+    const b = structuredClone(j);
+    expect(payOwed(b, 'stab', 5)).toBe(true);
+    expect(b.realm!.held[0]!.stability).toBe(RG.stability.start.shadow - 2);
+  });
+  it('126 sends two of the lowest ranks to the held region; 127 cuts the tribute; 129 moves Uprising odds; flags travel on', () => {
+    let b = withCrew(structuredClone(blk(arrive(taken()))));
+    b.members = b.members.filter((m) => RG.holders.ranks.includes(m.rank));
+    const extra = { ...structuredClone(b.members.find((m) => m.id === 'dale')!), rank: 'grunt' };
+    b.members.push({ ...extra, id: 'pip', name: 'Pip', level: 3 }, { ...extra, id: 'quin', name: 'Quin', level: 4 }, { ...extra, id: 'zed', name: 'Zed', level: 9 });
+    const crew0 = b.realm!.held[0]!.crew, stab0 = b.realm!.held[0]!.stability;
+    b = answer(b, 126, 0);
+    expect(b.members.map((m) => m.id)).not.toContain('pip');
+    expect(b.members.map((m) => m.id)).not.toContain('quin');
+    expect(b.members.map((m) => m.id)).toContain('zed');
+    expect(b.realm!.held[0]!.crew).toBe(crew0 + 2);
+    expect(b.realm!.held[0]!.stability).toBe(Math.min(100, stab0 + 15));
+    expect(b.chair!.result!.join(' ')).toContain('Pip and Quin');
+    b = answer(b, 127, 0);
+    expect(b.flags).toContain('tribute-cut');
+    b = answer(b, 129, 1);
+    expect(b.flags).toContain('uprising-up');
+    b = answer(b, 129, 0);
+    expect(b.flags).toContain('uprising-cut');
+    expect(b.flags).not.toContain('uprising-up');
+    // The lasting answers travel with the Boss to the next region.
+    const carried = blk(arrive(edit(taken(), (k) => { k.flags = [...k.flags, 'tribute-cut', 'smuggle-line']; })));
+    expect(carried.flags).toEqual(expect.arrayContaining(['tribute-cut', 'smuggle-line']));
+  });
+  it('80 (Hoenn): Magma stands down, Aqua heats up', () => {
+    const b = withCrew(structuredClone(blk(arrive(taken()))));
+    setActiveRegion('hoenn');
+    b.rivals = undefined;
+    withRivals(b);
+    b.rivals!.teams.magma!.tension = 50;
+    b.rivals!.teams.aqua!.tension = 50;
+    const out = answer(b, 80, 0);
+    expect(out.chair!.result!.join(' ')).toContain('Magma stands down');
+    expect(out.rivals!.teams.magma!.tension).toBeLessThan(50);
+    expect(out.rivals!.teams.aqua!.tension).toBeGreaterThan(50);
+    setActiveRegion('kanto');
   });
 });
 

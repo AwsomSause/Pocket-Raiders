@@ -636,6 +636,14 @@
    "answer": "The Long Talk: Debate each Holder in turn, or crush the one who started it."
   }
  },
+ "chair": {
+  "tension": 15,
+  "sendTwo": 2,
+  "tributeCut": 20,
+  "smuggle": 10,
+  "uprisingCut": -50,
+  "uprisingUp": 25
+ },
  "lines": {
   "week": "{region} ({holder}): Stability {stab} ({word}), tribute ₽{tribute}.",
   "selfMissed": "You haven't been back to {region} in {days} days. Stability −20.",
@@ -675,7 +683,16 @@
   "risk": "Betrayal {chance}% / week",
   "reportsLate": "Reports late",
   "kept": "Kept everything",
-  "complete": "Every region is yours."
+  "complete": "Every region is yours.",
+  "magmaCool": "Magma stands down for now: Magma Tension −{n}, and Aqua's goes up {n}.",
+  "aquaCool": "Aqua stands down for now: Aqua Tension −{n}, and Magma's goes up {n}.",
+  "sentTwo": "{names} ship out to {region}. The Holder has more hands; the crew here has fewer.",
+  "sentNone": "Nobody here can be spared for {region}.",
+  "tributeCut": "The held regions keep more of their money: tribute −{n}% from now on.",
+  "smuggle": "A smuggling line now runs between your regions: tribute +{n}% while one is held.",
+  "uprisingCut": "The Gym union stands aside: Uprising odds −{n}% in Monarch regions.",
+  "uprisingUp": "The Gym union walks out angry: Uprising odds +{n}%.",
+  "stabOwed": "Stability {sign}{n} in every held region."
  },
  "tells": [
   "All quiet in {region}, Boss. The lads have been painting the warehouse. New colours. Thought it'd be a nice surprise.",

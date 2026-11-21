@@ -13,7 +13,8 @@ import { xpForLevel, maxHp } from '../pokemon';
 import { hashSeed, Rng } from '../rng';
 import type { PokemonInstance, RunState } from '../state';
 import { activeRegion, DOMINION_DATA, setActiveRegion, useRegion } from './data';
-import { crewOf, withCrew } from './crew';
+import { chairOf, setChairHook, setChairOwed } from './chair';
+import { crewOf, leave as crewLeave, rankN, withCrew } from './crew';
 import { isHeld, stepById } from './empire';
 import { empireOf } from './book';
 import { addActedHook, addCardHook, addFightSettler, addOddsPartHook, foeLevel, setRealmFoe } from './field';
@@ -23,7 +24,7 @@ import { newField } from './migrate';
 import { fillCards } from './personality';
 import { makeLead } from './recruit';
 import { seedStart, withReserve } from './reserve';
-import { teamsHere, withRivals } from './rivals';
+import { addTension, teamsHere, withRivals } from './rivals';
 import { betrayalFactor } from './rules';
 import { DominionBlockSchema, POLICY_KEYS, type DominionBlock, type HeldRegion, type Member, type PolicyOption, type RealmState, type RegionPack } from './schema';
 import { newBlock } from './start';
@@ -278,7 +279,7 @@ function heldWeek(b: DominionBlock, h: HeldRegion, seed: string): { lines: strin
   // A rival offer reaches the Holder now and then (A11).
   h.offer = h.holder.kind !== 'self' && r.int(1, 100) <= RG().betrayal.rivalOfferChance;
   // The tribute: a share of the region's income, by the orders, cut by unrest.
-  const tribute = Math.round((h.base * h.towns * h.tribute * o.tribute * bandOf(h.stability).boon) / 100 / 100 / 100);
+  const tribute = Math.max(0, Math.round((h.base * h.towns * h.tribute * o.tribute * bandOf(h.stability).boon * (100 + tributeMod(b))) / 100 / 100 / 100 / 100));
   h.last = tribute;
   h.base += o.grow > 0 ? Math.round((h.base * o.grow) / 100) : 0;
   lines.push(fill(L('week'), { ...v, stab: h.stability, word: band.word, tribute }));
@@ -303,7 +304,57 @@ const heroFor = (id: string, r: Rng): string => {
 };
 
 /** D12 card 129: the Chair's answer moves Monarch Uprising checks (−50% bought off, +25% refused). */
-const uprisingMod = (b: DominionBlock): number => (b.flags.includes('uprising-cut') ? -50 : 0) + (b.flags.includes('uprising-up') ? 25 : 0);
+const uprisingMod = (b: DominionBlock): number => (b.flags.includes('uprising-cut') ? RG().chair.uprisingCut : 0) + (b.flags.includes('uprising-up') ? RG().chair.uprisingUp : 0);
+/** The Chair's lasting tribute answers (cards 127, 128), as a percent change. */
+const tributeMod = (b: DominionBlock): number => (b.flags.includes('tribute-cut') ? -RG().chair.tributeCut : 0) + (b.flags.includes('smuggle-line') ? RG().chair.smuggle : 0);
+/** The Chair's lasting answers about the held regions travel with the Boss to every new region. */
+const REALM_FLAGS = ['tribute-cut', 'smuggle-line', 'uprising-cut', 'uprising-up'];
+const flagOn = (b: DominionBlock, on: string, off?: string): void => {
+  b.flags = [...b.flags.filter((f) => f !== on && f !== off), on];
+};
+const heldNow = (b: DominionBlock): HeldRegion[] => b.realm?.held.filter((h) => h.status === 'held') ?? [];
+
+// ---------- the Chair (court cards 80, 126-129, 132 waited for D15) ----------
+
+// `stab:N` moves every held region's Stability; before the first one is held it waits in chair.owed and lands on leaving.
+setChairOwed('stab', (b, n) => {
+  const held = heldNow(b);
+  if (!held.length) {
+    const ch = chairOf(b);
+    ch.owed.stab = (ch.owed.stab ?? 0) + n;
+    return;
+  }
+  for (const h of held) h.stability = clamp(h.stability + n, 0, 100);
+});
+setChairHook('magma-cool', (b) => {
+  const n = RG().chair.tension;
+  if (!b.rivals?.teams.magma || !b.rivals.teams.aqua) return null;
+  addTension(b, 'magma', -n);
+  addTension(b, 'aqua', n);
+  return fill(L('magmaCool'), { n });
+});
+setChairHook('aqua-cool', (b) => {
+  const n = RG().chair.tension;
+  if (!b.rivals?.teams.aqua || !b.rivals.teams.magma) return null;
+  addTension(b, 'aqua', -n);
+  addTension(b, 'magma', n);
+  return fill(L('aquaCool'), { n });
+});
+// Card 126: two hands from the crew go to the newest held region (the lowest ranks first, never an officer).
+setChairHook('held-two', (b) => {
+  const h = heldNow(b).at(-1);
+  if (!h) return null;
+  const officers = new Set(RG().holders.ranks);
+  const pick = b.members.filter((m) => !officers.has(m.rank)).sort((x, y) => rankN(x.rank) - rankN(y.rank) || x.level - y.level || x.id.localeCompare(y.id)).slice(0, RG().chair.sendTwo);
+  if (!pick.length) return fill(L('sentNone'), { region: regionName(h.id) });
+  for (const m of pick) crewLeave(b, m, 'held', null, '', []);
+  h.crew += pick.length;
+  return fill(L('sentTwo'), { names: pick.map((m) => m.name).join(' and '), region: regionName(h.id) });
+});
+setChairHook('tribute-cut', (b) => (flagOn(b, 'tribute-cut'), fill(L('tributeCut'), { n: RG().chair.tributeCut })));
+setChairHook('smuggle-line', (b) => (flagOn(b, 'smuggle-line'), fill(L('smuggle'), { n: RG().chair.smuggle })));
+setChairHook('uprising-cut', (b) => (flagOn(b, 'uprising-cut', 'uprising-up'), fill(L('uprisingCut'), { n: -RG().chair.uprisingCut })));
+setChairHook('uprising-up', (b) => (flagOn(b, 'uprising-up', 'uprising-cut'), fill(L('uprisingUp'), { n: RG().chair.uprisingUp })));
 
 // ---------- the World Turn: every week, the held regions; boons; the brought member remembers ----------
 
@@ -474,6 +525,8 @@ export function leave(content: Content, run0: RunState, choice: LeaveChoice): { 
     status: 'held', traitor: null, kind: null, tells: 0, wanted: clamp(old.heat, 0, 100), last: 0,
     rival: teamsHere()[0]?.name ?? null, hero: old.hero ? heroDefOf(old.hero.id).name : null,
   };
+  // Chair answers about Stability given before anything was held land on the first held region now.
+  held.stability = clamp(held.stability + (old.chair?.owed.stab ?? 0), 0, 100);
 
   // The next region: its data overlay first, then a fresh block on its own seed (so its rolls aren't Kanto's again).
   setActiveRegion(to);
@@ -493,6 +546,7 @@ export function leave(content: Content, run0: RunState, choice: LeaveChoice): { 
   if (old.team) b.team = structuredClone(old.team);
   b.field.edge = structuredClone(old.field.edge);
   b.field.mastery = structuredClone(old.field.mastery);
+  b.flags = [...b.flags, ...old.flags.filter((f) => REALM_FLAGS.includes(f) && !b.flags.includes(f))];
   if (brought) {
     brought.crew = { ...crewOf(brought), task: 'rest', out: null, where: undefined };
     b.members.push(brought);

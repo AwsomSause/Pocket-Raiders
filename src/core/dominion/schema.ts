@@ -891,8 +891,8 @@ export const OWED_KEYS = ['ten', 'threat', 'goal', 'stab', 'raid', 'shadow', 'wi
 /** D11: what a Chair answer does to the Hero (hero.ts): the route tomorrow, the Hero at the door (the Letter with the HQ's
  * Defense on your side), a town left alone, the Legendaries later, a Legendary hunt, a town lost. */
 export const HERO_COURT = ['intel', 'battle', 'letter', 'spare', 'late', 'hunt', 'lose'] as const;
-/** Chair answers whose rule lives in another slice's file (registered with setChairHook): D9 insure + double-agent, D13 debate-early. */
-export const CHAIR_HOOKS = ['insure', 'double-agent', 'debate-early'] as const;
+/** Chair answers whose rule lives in another slice's file (registered with setChairHook): D9 insure + double-agent, D13 debate-early, D15 the held-region answers (regions.ts). */
+export const CHAIR_HOOKS = ['insure', 'double-agent', 'debate-early', 'magma-cool', 'aqua-cool', 'held-two', 'tribute-cut', 'smuggle-line', 'uprising-cut', 'uprising-up'] as const;
 export type ChairHook = (typeof CHAIR_HOOKS)[number];
 export const LEANS = ['money', 'regard', 'dread', 'heat', 'self'] as const;
 export type Lean = (typeof LEANS)[number];
@@ -950,7 +950,7 @@ export const CourtCardSchema = z.object({
   named: z.union([z.enum(NAMED), z.string().regex(/^name:.+/)]).optional(),
   /** The person a Favour or Grudge sticks to. */
   who: S.optional(),
-  needs: z.enum(['racket', 'stores', 'stores2']).optional(),
+  needs: z.enum(['racket', 'stores', 'stores2', 'held']).optional(),
   foe: z.object({ name: S, cls: S, species: z.array(S).min(1), offset: I }).strict().optional(),
   /** Switched off until this slice builds what the answers need (status "disabled"). */
   wait: S.optional(),
@@ -2597,6 +2597,8 @@ export const RegionsFileSchema = z.object({
     default: z.record(z.enum(POLICY_KEYS), S), readings: z.array(Reading), holderPicks: z.record(S, S),
   }).strict(),
   kinds: z.record(z.enum(BETRAYAL_KINDS), z.object({ name: S, text: S, answer: S }).strict()),
+  /** The Chair's held-region answers (court cards 80, 126-129): the numbers they move. */
+  chair: z.object({ tension: I.min(0), sendTwo: I.min(1), tributeCut: I.min(0).max(100), smuggle: I.min(0).max(100), uprisingCut: I.min(-100).max(0), uprisingUp: I.min(0).max(100) }).strict(),
   lines: z.record(S, S),
   tells: z.array(S).min(3),
   memory: z.object({ arrive: z.array(S).min(1), compare: z.array(S).min(1), name: z.array(S).min(1), warn: z.array(S).min(1) }).strict(),
