@@ -9,11 +9,10 @@
 import { openRoadHome, roadHomeDue } from '../core/co/roadHome';
 import { applyEvilEffect, evilTeam } from '../core/evil/teams';
 import { skyAct, type SkyAction } from '../core/evil/teamSky';
-import { charterInRun, ensureEvil, finishEvil, foundInRun, stepInRun } from '../core/evilMode/session';
-import { turnOffer, turnRun, walkAway, type TurnOffer } from '../core/evilMode/turn';
-import { beginEvilFight } from '../core/evilMode/fight';
-import type { FoundingChoice } from '../core/evilMode/start';
-import type { EvilAction, EvilCue } from '../core/evilMode/day';
+import { DOMINION_MODE_ID, isDominionRun, fightInRun as dominionFightInRun, settleStaleFight as dominionSettleStale, startInRun as dominionStartInRun, stepInRun as dominionStepInRun } from '../core/dominion/session';
+import { charterProblem, chartersOpen, dominionFinished, domTurnOffer, domTurnRun, type DomTurnOffer } from '../core/dominion/charters';
+import type { DominionAction, DominionSetup } from '../core/dominion/schema';
+import { rulesFromPrefs } from '../core/dominion/rules';
 import * as NodeMenu from '../core/nodeMenu/flow';
 import { playSpecialEntry } from '../core/nodeMenu/special/menu';
 import { playerTrainerFor } from '../core/archetypes';
@@ -34,6 +33,7 @@ import { careEmote } from '../core/presentation/storyMusic';
 import { interactionLog } from '../core/presentation/uiPrefs';
 import type { Achievement, Content } from '../core/contentSchema';
 import { finalizeRun, recordRunStarted } from '../core/profile';
+import { finishDominion } from '../core/dominion/ending';
 import { activeScene, finishScene, type StoryScene } from '../core/story2/module';
 import { finishRivalScene, rivalStoryScene } from '../core/story2/rivalStory';
 import { fieldTrialDue, finishFieldTrial } from '../core/story2/fieldTrial';
@@ -89,6 +89,8 @@ import { scoutGift } from '../core/story2/starterScouts';
 import type { LoadoutPreset, Profile, RunPrep, RunState, Settings } from '../core/state';
 import { SaveManager, SLOTS, readActiveSlot, writeActiveSlot, type LoadResult, type SlotNumber, type SlotPeek } from '../save/saveManager';
 import type { StorageProvider } from '../save/storage';
+import type { AskEnv } from '../ai/ask';
+import { aiRuntime } from '../ai/runtime';
 
 function randomId(prefix: string): string {
   const rand = Math.random().toString(36).slice(2, 10);
@@ -257,6 +259,17 @@ export class GameSession {
     if (this.run) Run.capMoney(this.content, this.run);
     if (this.run) this.checkSave(this.run.timeline ? this.saves.saveReplay(this.run) : this.saves.saveRun(this.run));
     this.changed();
+  }
+
+  /**
+   * Dominion slice D18: what `askClaude` needs for the open run: the "Claude AI" setting, the run's AI log (`run.ai`) and
+   * a save after the log changes. Null with no run. The Key-Card itself never enters the run or any save.
+   */
+  aiEnv(): AskEnv | null {
+    const run = this.run;
+    if (!run) return null;
+    run.ai ??= {};
+    return { tier: this.settings.expansion.claudeAi, uses: this.settings.expansion.claudeUses, log: run.ai, saved: () => { if (this.run === run) this.persistRun(); }, ...aiRuntime() };
   }
 
   /** Save the run now (it also saves after every step; this is the player's explicit Save). Returns whether it worked. */
@@ -465,7 +478,8 @@ export class GameSession {
 
   /** NE100 The Road Home: true when the run end should open it first (the run ended at its final battle). Reads state only. */
   roadHomeDue(): boolean {
-    return this.run ? roadHomeDue(this.content, this.run) : false;
+    // D17: a Dominion run ends on its own ending page; the main game's Road Home isn't its road.
+    return this.run && !isDominionRun(this.run) ? roadHomeDue(this.content, this.run) : false;
   }
 
   /** NE100: puts The Road Home on the node the run ended on and returns its stop's id. Not saved: the finished run's save is gone. */
@@ -1092,84 +1106,91 @@ export class GameSession {
     return muted ? 'The Radio crackles back on.' : 'You turn the Radio off. Somebody notices the silence.';
   }
 
-  /** Evil Mode founding (core/evilMode): writes the team once and saves. Returns why it couldn't, or null. */
-  evilFound(choice: FoundingChoice, stage?: number): string | null {
-    const out = foundInRun(this.requireRun(), choice, this.settings.expansion.evilRunLength, stage, { shadow: this.settings.expansion.evilShadow, incursions: this.settings.expansion.ultraBeastsEnabled });
-    if (out.problem) return out.problem;
-    this.run = out.run;
-    this.persistRun();
-    return null;
+  /** DOMINION D16: the profile's Charters unlock (one finished Dominion run). */
+  dominionChartersOpen(): boolean {
+    return chartersOpen(this.profile.dominionDone.length);
   }
 
-  /** Evil Mode slice 22: takes a Charter (Part 28) and saves. Returns why it couldn't, or null. */
-  evilCharter(id: string): string | null {
-    const out = charterInRun(this.requireRun(), id, this.settings.expansion.evilRunLength);
-    if (out.problem) return out.problem;
-    this.run = out.run;
-    this.persistRun();
-    return null;
+  /** DOMINION D16: a Dominion run whose last region is Taken counts once toward the Charters' unlock. */
+  private noteDominionDone(): void {
+    const run = this.run, b = run?.expansion?.dominion;
+    if (!run || !b || !dominionFinished(b) || this.profile.dominionDone.includes(run.runId)) return;
+    this.profile = { ...this.profile, dominionDone: [...this.profile.dominionDone, run.runId] };
+    this.checkSave(this.saves.saveProfile(this.profile));
   }
 
-  /** Evil Mode slice 22: the Turn's card, when this run has earned it (the takeover was won and a region remains). */
-  evilTurnOffer(): TurnOffer | null {
-    return this.run ? turnOffer(this.run, { evilOn: this.settings.expansion.evilMode }) : null;
-  }
-
-  /** Evil Mode slice 22: "Take the chair" (after its confirm). The rest of the run is an Evil Mode run. */
-  evilTurn(): boolean {
-    const run = this.run;
-    if (!run || !this.evilTurnOffer()) return false;
-    const out = turnRun(run);
+  /** DOMINION D17: the ending's "Close the books": the run ends (complete, a victory, the regions Taken counted) and
+   *  the main game's finishRun pays its ordinary rewards in full (Kice answer 9). False when the run isn't complete. */
+  dominionFinish(): boolean {
+    const out = finishDominion(this.requireRun());
     if (!out) return false;
     this.run = out;
-    this.persistRun();
-    return true;
-  }
-
-  /** Evil Mode slice 22: "Take it all, and walk away": the run goes on as it does today; the card won't come back. */
-  evilWalkAway(): void {
-    const run = this.run;
-    if (!run || !this.evilTurnOffer()) return;
-    this.run = walkAway(run);
-    this.persistRun();
-  }
-
-  /** Evil Mode: a block saved before slice 2 gets its district (laid from the run's seed) and is saved once. */
-  evilEnsure(): void {
-    const run = this.run;
-    if (!run) return;
-    const out = ensureEvil(run);
-    if (out === run) return;
-    this.run = out;
-    this.persistRun();
-  }
-
-  /** Evil Mode (slice 5): starts the battle the day is waiting on and saves. False when there's none to start. */
-  evilFight(): boolean {
-    const out = beginEvilFight(this.content, this.requireRun());
-    if (!out) return false;
-    this.run = out;
-    this.persistRun();
-    return true;
-  }
-
-  /** Evil Mode: one action on the day, saved at the end of the beat. The cues are for the screen only. */
-  evilStep(action: EvilAction): EvilCue[] {
-    const out = stepInRun(this.requireRun(), action);
-    if (!out.ok) return out.cues;
-    this.run = out.run;
-    this.persistRun();
-    return out.cues;
-  }
-
-  /** Evil Mode slice 15: the ending's last scene is read; the run ends (the run-end page, the Hall of Fame card). */
-  evilFinish(): boolean {
-    const out = finishEvil(this.requireRun());
-    if (!out) return false;
-    this.run = out;
+    this.noteDominionDone();
     this.persistRun();
     this.finishRun();
     return true;
+  }
+
+  /** DOMINION D16: the Turn's offer on the Game Over screen (a main-game run that won; Evil Mode shown in Settings). */
+  dominionTurnOffer(): DomTurnOffer | null {
+    return domTurnOffer(this.run, this.settings.expansion.evilMode, DOMINION_MODE_ID);
+  }
+
+  /** DOMINION D16: "Take the Turn": the run carries on as a Dominion run, at its setup pages. */
+  dominionTurn(): boolean {
+    const run = this.run;
+    if (!run || !this.dominionTurnOffer()) return false;
+    const out = domTurnRun(this.content, run, DOMINION_MODE_ID);
+    if (!out) return false;
+    this.run = out;
+    this.persistRun();
+    return true;
+  }
+
+  /** DOMINION (Evil Mode rework, D1): sets the run up from the setup pages and saves. Returns why it couldn't, or null. */
+  dominionStart(setup: DominionSetup): string | null {
+    // D16: the Charters open once a Dominion run is finished on this profile (Q4).
+    if (setup.charter) {
+      const why = charterProblem(setup.charter, this.profile.dominionDone.length);
+      if (why) return why;
+    }
+    // D27: the run keeps the rules Settings · Dominion had when it began.
+    const out = dominionStartInRun(this.content, this.requireRun(), { ...setup, rules: setup.rules ?? rulesFromPrefs(this.settings.expansion.dominionPrefs) });
+    if (out.problem) return out.problem;
+    this.run = out.run;
+    this.persistRun();
+    return null;
+  }
+
+  /** DOMINION: one clock step, saved when it happened. Returns whether it happened and the line to show. */
+  dominionStep(action: DominionAction): { ok: boolean; notice: string | null; fight: boolean; roll: { r: number; chance: number; rolled: boolean } | null } {
+    const out = dominionStepInRun(this.content, this.requireRun(), action);
+    if (out.ok) {
+      this.run = out.run;
+      this.persistRun();
+      this.noteDominionDone();
+    }
+    return { ok: out.ok, notice: out.notice, fight: !!out.fight, roll: out.roll ?? null };
+  }
+
+  /** DOMINION (D2): starts the battle an action (or the police) waits on and saves. False when there's none to start. */
+  dominionFight(): boolean {
+    const out = dominionFightInRun(this.content, this.requireRun());
+    if (!out) return false;
+    this.run = out;
+    this.persistRun();
+    return true;
+  }
+
+  /** DOMINION (D2): a begun fight whose battle is gone is settled (as fled) and saved. Returns its lines, or null. */
+  dominionSettle(): string[] | null {
+    const run = this.run;
+    if (!run) return null;
+    const out = dominionSettleStale(this.content, run);
+    if (!out) return null;
+    this.run = out.run;
+    this.persistRun();
+    return out.lines;
   }
 
   /** Team Sky's screens (core/evil/teamSky): one action, saved; the message says what happened. */

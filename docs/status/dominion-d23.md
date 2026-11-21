@@ -1,0 +1,39 @@
+- **DOMINION slice D23, "Snatch and interrogation"** (Rotom slices, 2026-11-20; build plan `/mnt/project-files/plans/evil-mode-rework/BUILD_SLICES.md` row D23, design `/mnt/project-files/plans/claude-api/CLAUDE_API_DRAFT.md` §5.3 D, mockup a7 as drawn in round 4, `plans/evil-mode-rework/mockups-v4/index.html` #k7). Players see "Rotom", never "Claude" or "AI". Talk only, as in the games: no violence is shown or described.
+
+## What the player can do
+- **Snatch Operation** = the Night action **Interrogate** (action 58) at a place that has someone worth taking. It needs a Holding Cell with room (2 captives per tier) and always starts with a battle against the target's own team. Who can be taken:
+  - an enemy **grunt** where a rival team is active;
+  - a **Gym Trainer** at a gym target (never the Leader; nobody whose class is a minor's: Youngster, Lass, Bug Catcher, Camper, Picnicker, School Kid and the rest in `snatch.json` `minorClasses`, and never a rival);
+  - a corporation **higher-up** at 11 named places (Mr. Fenwick at Silph Co. and others, `captives` in `snatch.json`);
+  - a rival team **Admin** at high Tension.
+  Who it is comes from the day and the snatch count, not from a roll, so the Card can name them.
+- **A lost battle**: Heat + 8 there and a statement on the police log. **A win**: the captive goes to the Holding Cell and the **questioning room** (mockup a7) takes over the screen, whatever page you were on.
+- **The room**: pick the **Goal** first (I = Info, E = Extortion; arrows + Enter, or tap). Then up to six lines: **1** Threat, **2** Bribe (₽200), **3** Bluff, **4** Empathy, **5** Logic, or **T** your own words in the shared typing box. Each line is judged as {approach, strength 0-3} and turned into Resolve damage by the captive's personality card (D19's traits give each approach a multiplier, shown as pips; the blurb says "Folds to threats and bribes. Logic barely moves them."). An approach that doesn't suit them makes them dig in (Resolve goes back up); repeating yourself counts half. The Fear·Trust needle moves with the approach, and pushing it far one way adds a little bonus. The Interrogation Cell building (+10% per tier) and the Hold a Prisoner crew task (a guard at Lv4+ softens them; Lv5 moves the needle) help.
+- **Prizes**: Resolve falling below 70%, 40% and 0% of where it started unlocks the Goal's three prizes, shown with the INFO UNLOCKED / LEVERAGE GAINED banner. Info prizes scout the place, the district or the gym (what the Card shows), or hurt the rival team. Extortion prizes are ₽, a favour, silence (Heat down) or a site.
+- **Esc** stops for tonight (they stay in the cell). After six lines or Resolve 0 the endings open: **1 Release** (Heat + 6; they may talk: more Heat and a statement), **2 Recruit** (a Charm check, better if broken or trusting; they join with their own card and Pokémon), **3 Ransom** (₽ from whoever pays; Tension with their team, or Heat), **Esc** keep them.
+- **Interrogate again** at the same place questions whoever is already held, with no battle; Resolve and prizes carry over.
+- **The night**: each captive adds Heat at the HQ, and may escape (12% + 3% a night, unless Hold a Prisoner has a guard on them). Then a **police check** may find the cell (4% + 6% per captive + 0.2 per Heat): everyone held goes free, Heat + 10 and the Boss is questioned (D24). The HQ shows the check risk in the room.
+- **Hostage Trade** (action 113): frees a member a rival team holds in exchange for a captive from that team; otherwise a payer pays 125% of the ransom (a rival team paying eases Tension by 5).
+
+## How it works
+- Data `src/data/dominion/snatch.json` (Zod `SnatchFileSchema`, D23 section at the end of `schema.ts`): every number, the 12 traits' multipliers, the four kinds with three prizes per Goal, the 11 named higher-ups, the minor classes, sprites and all lines. The two plays (interrogate, hostage-trade) are merged into the field plays from this file; `growth.json` `later` is now empty.
+- Rules `src/core/dominion/snatch.ts`: who can be taken (`candidate`), Card note and gates, the act effects `snatch` and `hostage`, the battle side (`setSnatchFoe` in field.ts, a `snatch` branch in fight.ts) and its settler, the questioning (`goalS`, `sayS`, `stopS`, `endS`), the crew task kind `captive`, and the night (a `police` World Turn step). Session: `sGoal`, `sSay`, `sStop`, `sEnd` actions; while a captive is in the room every other action is refused.
+- Streams (new, none reused): `dominion-snatch::<n>` (ransom), `dominion-snatch::<n>::<line>` (noise and the bribe), `dominion-snatch::<n>::end`, `dominion-snatch-night::<day>::<n>`, `dominion-snatch-check::<day>`.
+- **Rotom:** a typed line asks `askClaude` (role judge, use "Typed arguments", id `snatch:c<n>:t<line>`) with the captive's card, the Goal, the lines so far, and the typed words wrapped as `<player_text>`. The system prompt keeps it to talk only. Rotom returns `{approach, strength, reply}`; the rules check the shape (falling back to their own reading) and decide the Resolve change. The chip says "Quick · bluff, strength 2" with Rotom, "Rules · …" without. Without a Key-Card nothing is sent: the rules judge the words (keywords for the approach, length and detail for strength). Stored in `run.ai`, so a reload never asks again.
+- Screens: model `src/core/dominion/snatchScreens.ts`, view `src/ui/redux/screens/dominion/snatch.ts` (k7 ported: the basement, the swinging bulb, Resolve bar with the crack and the hit numeral, Goal panel, card pills, the Fear·Trust gauge, approach pips with key caps, the exchange, the reply bubble, the banner, endings, Heat and the check risk), controller `src/scenes/dominion/snatchController.ts`; DominionScene forwards to it like the police room.
+- Made live: the **Interrogation Cell** building and the **Hold a Prisoner** crew task (both waited on D23).
+- Tool fix: `tools/dominion/buildings-to-json.py` had two duplicate dict keys (interrogation-cell, hidden-lab: the second silently won). Each pair is now one entry, and the script fails on any repeated key in a dict literal. All three generator tools reproduce the committed data.
+
+## Saves
+No block bump: `snatch` on the Dominion block is optional (`snatchOf` fills it). The captive, the room, the lines and the prizes are saved; a reload continues mid-questioning (tested). A damaged captive is refused by the schema (tested).
+
+## Tests
+- `tests/unit/dominionSnatch.test.ts` (34): the data; who can be taken (gym trainer, never the Leader or a minor; exec; no cell / full cell / nobody refused); the Card; battle win and loss; the room holding the clock; Goal; coward and greedy folding, a zealot digging in, prizes unlocked and counted, repeat halving, bribe cost and no funds; six lines then the endings; the offline judge; Rotom's judge checked; the Rotom ask end to end with the fake transport (stored, chip); release, recruit, ransom, keep; Interrogate again; Hostage Trade both ways; the night (risk, escape, guard, police check opening a D24 case, determinism); the room model; save/reload; a damaged captive refused.
+- Browser `tests/e2e/dominionSnatch.spec.ts`: Interrogate at Silph Co. through the real battle screen, the room after the win, I for Info, E does nothing, 1 (Resolve drops, the chip), T typed line in the shared typing box (its digits never reach the room), reload mid-room, three window sizes, talk to the endings, 1 Release, no "Claude"/"AI" on screen, no console errors.
+
+## Limits
+- Interrogate still travels to the district even when it only questions someone already held.
+- Only Cerulean has a gym target in the data so far, so Gym Trainers can only be taken there.
+- A recruited captive joins as a plain member (their card and Pokémon, rank Grunt); no special role.
+- The Q "Wheel" key on the key strip waits on D28 like the other rooms.
+- Rotom judges typed lines only; quick lines use the written replies in the captive's voice.

@@ -1,0 +1,74 @@
+/* Pass 36 · Rocket Falls */
+/* encounter wipes on every page, picked by group */
+.wp36{position:absolute;inset:0;z-index:40;pointer-events:none;overflow:hidden;animation:wpo36 .05s .9s both}
+.wp36 i{position:absolute;display:block;background:#0d0a12}
+.w-bars i{left:0;right:0;top:calc(var(--i) * 16.67%);height:16.7%;background:linear-gradient(90deg,#0d0a12 80%,var(--red));animation:wbl36 .6s calc(var(--i) * 40ms) cubic-bezier(.7,0,.3,1) both}
+.w-bars i:nth-child(even){background:linear-gradient(270deg,#0d0a12 80%,var(--yel));animation-name:wbr36}
+.w-blind i{top:0;bottom:0;left:calc(var(--i) * 12.5%);width:12.6%;transform-origin:0 50%;background:linear-gradient(#1c1724,#0d0a12);border-right:3px solid var(--yel);animation:wbd36 .55s calc(var(--i) * 45ms) cubic-bezier(.7,0,.3,1) both}
+.w-iris .ir{left:50%;top:50%;width:0;height:0;border-radius:50%;background:none;box-shadow:0 0 0 8px #fff,0 0 0 16px #000,0 0 0 30px var(--red),0 0 0 1200px #0d0a12;transform:translate(-50%,-50%);animation:wir36 .8s .1s cubic-bezier(.6,0,.3,1) both}
+.w-slash i{top:-10%;bottom:-10%;width:70%;background:linear-gradient(90deg,#3a0d16,#0d0a12);border:4px solid var(--yel)}
+.w-slash i:first-child{left:-10%;clip-path:polygon(0 0,100% 0,72% 100%,0 100%);animation:wsl36 .7s cubic-bezier(.7,0,.3,1) both}
+.w-slash i:last-child{right:-10%;clip-path:polygon(28% 0,100% 0,100% 100%,0 100%);animation:wsr36 .7s cubic-bezier(.7,0,.3,1) both}
+/* the war line is a fuse now */
+.fuse36 span{height:6px;background:repeating-linear-gradient(115deg,#c9a46a 0 4px,#7a5a30 4px 7px);border-radius:3px}
+.fuse36 span i{background:linear-gradient(90deg,#2a1f1a,#5a2a1a 80%,#ff8a3d)}
+.fuse36 .sk36{animation:spk29 .3s ease-in-out infinite alternate}
+.fuse36 .sk36::before,.fuse36 .sk36::after{content:"";position:absolute;left:3px;top:-6px;width:7px;height:7px;border-radius:50%;background:rgba(200,190,200,.55);animation:smk36 1.2s ease-out infinite}
+.fuse36 .sk36::after{animation-delay:-.6s;left:6px}
+.bm36{display:flex;align-items:center;gap:4px;padding:0 6px 0 2px;height:11px;font-size:9px!important;color:#fff!important;background:var(--red);border-radius:6px;cursor:pointer;animation:bmb36 1s ease-in-out infinite}
+.bm36 i{width:12px;height:12px;display:grid;place-items:center;margin-top:-1px;font-style:normal;font-size:8px;font-weight:800;color:#e0294a;background:#111;border:1px solid #000;border-radius:50%}
+.tk36{flex:none;padding:0 6px;color:#fff;background:var(--red);border-radius:3px;cursor:pointer;animation:bmb36 1s ease-in-out infinite}
+/* Siege plan */
+.sg36{position:absolute;left:16px;top:70px;width:606px;height:328px;z-index:2;display:flex;flex-direction:column;gap:4px;padding:6px;background:linear-gradient(#2a2433,#140f19);border:3px solid #000;border-radius:6px 16px 6px 16px;box-shadow:5px 5px 0 rgba(0,0,0,.5)}
+.sg36 .shaft{position:absolute;right:12px;top:8px;bottom:8px;width:4px;background:repeating-linear-gradient(#e8b23a 0 6px,transparent 6px 12px);opacity:.6}
+.fr36{position:relative;flex:1;display:flex;align-items:center;gap:8px;padding:0 22px 0 6px;background:linear-gradient(90deg,rgba(60,50,70,.9),rgba(30,24,36,.9));border-left:5px solid #5c6b86;border-radius:3px 10px 3px 10px;animation:in-r .35s both;animation-delay:var(--d)}
+.fr36:first-child{border-left-color:var(--yel);background:linear-gradient(90deg,rgba(120,80,30,.6),rgba(30,24,36,.9))}
+.fr36.boss{border-left-color:var(--red);background:linear-gradient(90deg,rgba(130,20,40,.7),rgba(30,24,36,.9));box-shadow:inset 0 0 0 2px rgba(224,41,74,.6)}
+.fr36 .fl{width:36px;flex:none;font:400 22px/1 var(--fd);color:var(--yel);text-align:center}
+.fr36 .tx{width:170px;flex:none;display:flex;flex-direction:column}
+.fr36 .tx b{font:400 17px/1 var(--fd);text-transform:uppercase}
+.fr36 .tx em{font-style:normal;font-size:11px;color:var(--mut)}
+.fr36 .gd{width:76px;flex:none;display:flex;gap:4px}
+.fr36 .vs{flex:none;font:400 14px/1 var(--fd);font-style:normal;color:var(--red)}
+.fr36 small{flex:1;min-width:0;font-size:12px;font-weight:800;color:#ffcf8a}
+.pl36{left:638px;top:70px;width:306px;height:328px;display:flex;flex-direction:column;gap:8px}
+.ps36{display:flex;align-items:center;gap:10px;animation:in-r .3s both;animation-delay:var(--d)}
+.ps36>i{width:28px;height:28px;flex:none;display:grid;place-items:center;font-style:normal;font-weight:800;color:#fff;background:var(--red);border:2px solid #000;border-radius:50%}
+.ps36 span{display:flex;flex-direction:column}
+.ps36 b{font-size:15px}.ps36 em{font-style:normal;font-size:12px;color:var(--mut)}
+/* the Hideout lift */
+.lift36{position:absolute;left:30px;top:70px;width:300px;height:328px;z-index:2;overflow:hidden;background:#120f17;border:4px solid #000;border-radius:8px;box-shadow:5px 5px 0 rgba(0,0,0,.5)}
+.lift36 .wall{position:absolute;inset:0;animation:shf36 2.4s linear infinite}
+.lift36 .wall i{position:absolute;left:0;right:0;top:calc(var(--i) * 70px - 70px);height:70px;background:linear-gradient(90deg,#2a2433 8%,#3b3346 9% 91%,#2a2433 92%);border-bottom:6px solid #0b0810}
+.lift36 .wall i::after{content:"R";position:absolute;left:18px;top:18px;font:400 22px/1 var(--fd);color:rgba(224,41,74,.45)}
+.lift36 .ind{position:absolute;left:50%;top:10px;z-index:2;transform:translateX(-50%);display:flex;gap:4px;padding:3px 6px;background:#0b0810;border:2px solid #000;border-radius:6px}
+.lift36 .ind u{width:30px;text-align:center;text-decoration:none;font:400 14px/18px var(--fd);color:#5c4a40;border-radius:3px}
+.lift36 .ind u.pa{color:#a08050}
+.lift36 .ind u.on{color:#1d1622;background:var(--yel);box-shadow:0 0 10px var(--yel);animation:bmb36 .8s ease-in-out infinite}
+.lift36 .car{position:absolute;left:40px;right:40px;top:56px;bottom:20px;z-index:1;background:linear-gradient(#5a4a30,#3a2f22);border:4px solid #000;border-radius:6px;animation:bob 1.6s ease-in-out infinite}
+.lift36 .car span{position:absolute;left:0;right:0;bottom:10px;display:flex;justify-content:center;align-items:flex-end;gap:2px}
+.lift36 .dr{position:absolute;top:0;bottom:0;width:50%;z-index:2;background:repeating-linear-gradient(90deg,#8a8fa6 0 10px,#6a6f86 10px 12px);border:2px solid #000;opacity:.92}
+.lift36 .dr.l{left:0;animation:drl36 1.4s 1s cubic-bezier(.6,0,.3,1) both}
+.lift36 .dr.r{right:0;animation:drr36 1.4s 1s cubic-bezier(.6,0,.3,1) both}
+.lift36 .key{position:absolute;right:10px;bottom:10px;z-index:3;filter:drop-shadow(0 0 8px #ffd75a);animation:hop .9s ease-in-out infinite}
+.lg36{left:350px;top:70px;width:594px;height:328px;display:flex;flex-direction:column;gap:8px}
+.lr36{display:flex;align-items:center;gap:12px;padding:4px 12px 4px 6px;background:var(--pn2);border-radius:3px 12px 3px 12px;animation:in-r .3s both;animation-delay:var(--d)}
+.lr36 .fl{width:36px;flex:none;font:400 22px/1 var(--fd);color:var(--yel);text-align:center}
+.lr36>span:not(.face){flex:1;min-width:0;display:flex;flex-direction:column}
+.lr36 span b{font-size:16px}.lr36 span em{font-style:normal;font-size:12px;color:var(--mut)}
+.lr36>i{flex:none;padding:2px 10px;font-style:normal;font-size:12px;font-weight:800;border-radius:999px;color:#1d1622;background:var(--ok)}
+.lr36.boss{background:linear-gradient(90deg,rgba(130,20,40,.8),var(--pn2));box-shadow:inset 0 0 0 2px var(--red)}
+.lr36.boss>i{background:var(--red);color:#fff;animation:bmb36 1s ease-in-out infinite}
+/*@top*/
+@keyframes wpo36{to{visibility:hidden}}
+@keyframes wbl36{0%{transform:translateX(0)}100%{transform:translateX(-102%)}}
+@keyframes wbr36{0%{transform:translateX(0)}100%{transform:translateX(102%)}}
+@keyframes wbd36{0%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+@keyframes wir36{0%{width:0;height:0}100%{width:1400px;height:1400px;opacity:0}}
+@keyframes wsl36{0%{transform:translateX(0)}100%{transform:translate(-110%,-6%)}}
+@keyframes wsr36{0%{transform:translateX(0)}100%{transform:translate(110%,6%)}}
+@keyframes smk36{0%{transform:translate(0,4px) scale(.4);opacity:.9}100%{transform:translate(-8px,-10px) scale(1.4);opacity:0}}
+@keyframes bmb36{50%{filter:brightness(1.35);transform:scale(1.06)}}
+@keyframes shf36{from{transform:translateY(0)}to{transform:translateY(70px)}}
+@keyframes drl36{0%{transform:translateX(0)}100%{transform:translateX(-96%)}}
+@keyframes drr36{0%{transform:translateX(0)}100%{transform:translateX(96%)}}

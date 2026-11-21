@@ -1,0 +1,57 @@
+/* Pass 42 · The Hunted */
+/* a slow blue heartbeat at the edges of every page */
+.hb42{position:absolute;inset:0;z-index:29;pointer-events:none;box-shadow:inset 0 0 70px 10px rgba(40,96,201,.5);opacity:.25;animation:hb42 1.4s ease-in-out infinite}
+/* a Hero ping on the war line and the ticker */
+.rp42{position:absolute;left:24%;top:-6px;z-index:2;width:22px;height:22px;display:grid;place-items:center;cursor:pointer}
+.rp42 u{position:absolute;inset:0;border:2px solid #5ab4ff;border-radius:50%;animation:ping35 1.4s ease-out infinite}
+.rp42 img{position:relative;max-height:14px;width:auto!important;filter:drop-shadow(0 0 3px #5ab4ff)}
+.rh42{flex:none;padding:0 6px;color:#fff;background:#2860c9;border-radius:3px;cursor:pointer;animation:bmb36 1.4s ease-in-out infinite}
+/* Lie low */
+.k-ll42 .tag29,.k-cc42 .tag29{display:none}
+.hl42{left:16px;top:70px;width:580px;height:328px;gap:8px}
+.hr42{display:flex;align-items:center;gap:12px;padding:6px 12px 6px 8px;text-align:left;background:var(--pn2);border-radius:3px 12px 3px 12px;animation:in-r .3s both;animation-delay:var(--d)}
+.hr42>span:not(.fx){flex:1;display:flex;flex-direction:column}
+.hr42 b{font:400 19px/1 var(--fd);text-transform:uppercase}.hr42 em{font-style:normal;font-size:12px;color:var(--mut)}
+.hr42 .fx{width:190px;flex:none;display:flex;flex-direction:column;align-items:flex-end;text-align:right}
+.hr42 .fx i{font-style:normal;font-weight:800;color:var(--ok)}.hr42 .fx small{font-size:11px;color:#ffb86a}
+.hr42.on{outline:3px solid #fff;outline-offset:2px}
+.cd42{position:absolute;left:612px;top:70px;width:332px;height:328px;z-index:2;display:flex;flex-direction:column;gap:10px;padding:16px;color:#1d1622;background:#fff8ea;border-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' shape-rendering='crispEdges'%3E%3Crect x='2' width='20' height='24'/%3E%3Crect y='2' width='24' height='20'/%3E%3Crect x='4' y='2' width='16' height='20' fill='%235ab4ff'/%3E%3Crect x='2' y='4' width='20' height='16' fill='%235ab4ff'/%3E%3Crect x='4' y='4' width='16' height='16' fill='%232860c9'/%3E%3Crect x='6' y='6' width='12' height='12'/%3E%3C/svg%3E") 8 / 8px / 3px stretch;animation:in-up .45s .3s both}
+.cd42 small{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#2860c9}
+.cd42 b{font:400 28px/1 var(--fd)}
+.cd42 .dd{display:flex;flex-direction:column;gap:6px}
+.cd42 .dd i{display:flex;gap:10px;align-items:center;padding:8px 10px;font-style:normal;background:#e8f0ff;border:2px solid #000;border-radius:8px;animation:in-r .3s both;animation-delay:calc(var(--d) + .6s)}
+.cd42 .dd u{text-decoration:none;font:400 18px/1 var(--fd);color:#2860c9}
+.cd42 .dd em{font-style:normal;font-size:13px}
+.cd42 .w{margin-top:auto;font-style:normal;font-size:13px;font-weight:800;color:#c1121f}
+/* Disguises */
+.dr42{position:absolute;left:16px;top:70px;width:928px;height:328px;z-index:2;display:flex;gap:12px}
+.dm42{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px;text-align:center;background:linear-gradient(#2a2433,#17131d);border:2px solid #000;border-radius:6px;animation:in-up .4s both;animation-delay:var(--d)}
+.dm42 .mir{position:relative;width:150px;height:190px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;background:linear-gradient(160deg,#cfe6ff,#7a9ac9 60%,#4a6a99);border:6px solid #b8901c;border-radius:75px 75px 8px 8px;box-shadow:inset 0 0 20px rgba(255,255,255,.4)}
+.dm42 .mir::after{content:'';position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.5) 40%,transparent 50%) 0 0/300% 100%;animation:gl37 4s 1s ease-in-out infinite}
+.dm42 .cur{position:absolute;left:0;right:0;top:0;height:100%;background:repeating-linear-gradient(90deg,#8a0d17 0 10px,#c1121f 10px 20px);transform-origin:50% 0;animation:cur42 .8s calc(var(--d) + .5s) cubic-bezier(.6,0,.3,1) both}
+.dm42 b{font:400 21px/1 var(--fd);text-transform:uppercase;margin-top:4px}
+.dm42 em{font-style:normal;font-size:14px;font-weight:800;color:var(--yel)}
+.dm42 small{font-size:12px;color:var(--mut)}
+.dm42.on{outline:3px solid #fff;outline-offset:3px}
+/* Close call */
+.dk42{position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(rgba(5,8,20,.65),rgba(5,8,20,.8))}
+.al42{position:absolute;left:0;right:0;top:0;height:400px;z-index:1}
+.al42 .wall{position:absolute;left:0;top:40px;width:420px;bottom:0;background:repeating-linear-gradient(#3a2f3a 0 22px,#2a2230 22px 24px),#3a2f3a;clip-path:polygon(0 0,100% 12%,100% 100%,0 100%);border-right:4px solid #000}
+.al42 .crates{position:absolute;left:150px;bottom:20px;display:flex;align-items:flex-end;z-index:2}
+.al42 .crates i{width:80px;height:70px;margin-left:-14px;background:linear-gradient(#a0703a,#6a4a22);border:3px solid #000;box-shadow:inset 0 0 0 5px rgba(0,0,0,.2)}
+.al42 .crates i:nth-child(2){height:100px}
+.al42 .hid{position:absolute;left:150px;bottom:40px;z-index:1;display:flex;gap:4px;filter:brightness(.6);animation:shiv39 .2s steps(2) infinite}
+.al42 .red{position:absolute;left:600px;bottom:20px;z-index:2;animation:walk42 4s ease-in-out infinite alternate}
+.al42 .cone{position:absolute;right:60%;top:40px;width:320px;height:160px;background:linear-gradient(270deg,rgba(255,240,170,.45),transparent);clip-path:polygon(100% 40%,0 0,0 100%,100% 60%);transform-origin:100% 50%;animation:look42 4s ease-in-out infinite alternate}
+.al42 .red u{position:absolute;left:50%;top:-24px;text-decoration:none;font:400 30px/1 var(--fd);color:#ffd75a;text-shadow:2px 2px 0 #000;animation:hop .7s ease-in-out infinite}
+.br42{position:absolute;right:24px;top:30px;z-index:3;width:260px;display:flex;flex-direction:column;gap:6px;padding:12px 14px;background:rgba(11,8,16,.92);border:2px solid #000;border-radius:10px;box-shadow:4px 4px 0 #2860c9}
+.br42 small{font-size:12px;font-weight:800;text-transform:uppercase;color:#9ec5ff}
+.br42 span{height:14px;background:#3b3346;border:2px solid #000;border-radius:7px;overflow:hidden}
+.br42 span i{display:block;width:62%;height:100%;background:linear-gradient(90deg,#5ab4ff,#bfe8ff);animation:brth42 2s ease-in-out infinite alternate}
+.br42 em{font-style:normal;font-size:13px;font-weight:800}
+/*@top*/
+@keyframes hb42{0%,100%{opacity:.2}12%{opacity:.75}24%{opacity:.3}36%{opacity:.6}}
+@keyframes cur42{to{transform:scaleY(0)}}
+@keyframes walk42{from{transform:translateX(80px)}}
+@keyframes look42{0%{transform:rotate(-6deg)}100%{transform:rotate(8deg)}}
+@keyframes brth42{to{width:48%}}

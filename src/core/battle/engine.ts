@@ -1913,7 +1913,8 @@ function ballRuleProblem(ctx: Pick<BattleContext, 'battle'>, rule: Extract<ItemE
   if (rule === 'snag') {
     if (battle.kind !== 'trainer') return 'A Snag Ball only works on a Shadow Pokémon held by an enemy trainer.';
     if (battle.narrative || battle.trainer?.leaderId || battle.doubles) return "This trainer's Pokémon are protected: a Snag Ball can't take them.";
-    return foe.shadow ? null : 'It only works on a Shadow Pokémon. Ordinary trainers keep their Pokémon.';
+    // Dominion D16: with Snagem's Snag Machine any of an adult trainer's Pokémon can be snagged (fight.ts sets snagAny).
+    return foe.shadow || battle.snagAny ? null : 'It only works on a Shadow Pokémon. Ordinary trainers keep their Pokémon.';
   }
   if (rule === 'bless') {
     if (battle.kind !== 'wild' || battle.raid || battle.totem) return 'A Blessing Ball is only for meeting a Blissful Pokémon in the wild.';

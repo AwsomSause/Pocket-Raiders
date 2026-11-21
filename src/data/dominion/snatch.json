@@ -1,0 +1,802 @@
+{
+ "_source": "Slice D23 snatch and interrogation: /mnt/project-files/plans/claude-api/CLAUDE_API_DRAFT.md §5.3 D (Kice 2026-11-18), Rotom mockup a7 as drawn in round 4 (plans/evil-mode-rework/mockups-v4/index.html #k7). Talk only, as in the games; never a Gym Leader, never anyone flagged a minor. Actions 58 Interrogate (the Snatch Operation) and 113 Hostage Trade, task 136 Hold a Prisoner, building 66 Interrogation Cell.",
+ "turns": 6,
+ "quick": 2,
+ "hit": {
+  "per": 8,
+  "noise": 3,
+  "dig": 4,
+  "digBelow": 50,
+  "repeatPct": 50,
+  "needleAt": 40,
+  "needlePct": 25,
+  "masteryPct": 5,
+  "maxText": 200,
+  "maxReply": 240
+ },
+ "unlock": [
+  0.7,
+  0.4,
+  0
+ ],
+ "approaches": {
+  "threat": {
+   "label": "Threat",
+   "tone": "r",
+   "fear": -14,
+   "quick": "Talk, or {boss} hears you sang anyway. Your choice.",
+   "keywords": [
+    "or else",
+    "regret",
+    "last chance",
+    "you'll",
+    "sorry",
+    "front page",
+    "fired",
+    "boss",
+    "hurt",
+    "talk now",
+    "or we"
+   ]
+  },
+  "bribe": {
+   "label": "Bribe",
+   "tone": "y",
+   "fear": 6,
+   "quick": "There's ₽{cost} on the table, and it's yours the moment you remember something.",
+   "keywords": [
+    "₽",
+    "money",
+    "pay",
+    "cash",
+    "cut",
+    "reward",
+    "rich",
+    "deal",
+    "price",
+    "coins",
+    "bonus"
+   ],
+   "cost": 200
+  },
+  "bluff": {
+   "label": "Bluff",
+   "tone": "b",
+   "fear": -8,
+   "quick": "Your boss already sold you out. We know most of it; you just fill in the rest.",
+   "keywords": [
+    "already",
+    "sold you out",
+    "we know",
+    "told us",
+    "they said",
+    "everyone knows",
+    "files",
+    "photos",
+    "your boss said"
+   ]
+  },
+  "empathy": {
+   "label": "Empathy",
+   "tone": "g",
+   "fear": 14,
+   "quick": "Nobody's coming for you. I am. Help me and you walk out of here tonight.",
+   "keywords": [
+    "help",
+    "family",
+    "safe",
+    "understand",
+    "promise",
+    "trust",
+    "home",
+    "sorry",
+    "friend",
+    "your pokémon",
+    "nobody",
+    "care"
+   ]
+  },
+  "logic": {
+   "label": "Logic",
+   "tone": "v",
+   "fear": 6,
+   "quick": "Think it through. Your side won't miss you; you owe them nothing. Tell me and it's over.",
+   "keywords": [
+    "think",
+    "because",
+    "if you",
+    "either way",
+    "owe",
+    "makes sense",
+    "fact",
+    "reason",
+    "logic",
+    "nothing to lose",
+    "consider"
+   ]
+  }
+ },
+ "detail": [
+  "ten",
+  "nine",
+  "night",
+  "door",
+  "lift",
+  "code",
+  "name",
+  "where",
+  "when",
+  "tonight",
+  "exactly",
+  "floor",
+  "key",
+  "shift",
+  "guard"
+ ],
+ "traits": {
+  "coward": {
+   "threat": 1.7,
+   "bribe": 1.2,
+   "bluff": 1.25,
+   "empathy": 0.7,
+   "logic": 0.55
+  },
+  "greedy": {
+   "threat": 1.05,
+   "bribe": 1.3,
+   "bluff": 0.95,
+   "empathy": 0.6,
+   "logic": 0.85
+  },
+  "loyal": {
+   "threat": 0.6,
+   "bribe": 0.5,
+   "bluff": 0.8,
+   "empathy": 1.3,
+   "logic": 1.1
+  },
+  "joker": {
+   "threat": 0.9,
+   "bribe": 1.1,
+   "bluff": 1.2,
+   "empathy": 1.1,
+   "logic": 0.8
+  },
+  "hothead": {
+   "threat": 0.45,
+   "bribe": 1.0,
+   "bluff": 1.0,
+   "empathy": 1.0,
+   "logic": 0.8
+  },
+  "zealot": {
+   "threat": 0.3,
+   "bribe": 0.3,
+   "bluff": 0.5,
+   "empathy": 1.8,
+   "logic": 0.7
+  },
+  "proud": {
+   "threat": 0.7,
+   "bribe": 1.0,
+   "bluff": 0.8,
+   "empathy": 1.2,
+   "logic": 1.3
+  },
+  "cautious": {
+   "threat": 1.2,
+   "bribe": 0.9,
+   "bluff": 0.7,
+   "empathy": 1.0,
+   "logic": 1.4
+  },
+  "gossip": {
+   "threat": 1.1,
+   "bribe": 1.2,
+   "bluff": 1.3,
+   "empathy": 1.2,
+   "logic": 1.0
+  },
+  "loner": {
+   "threat": 0.9,
+   "bribe": 1.0,
+   "bluff": 0.9,
+   "empathy": 0.7,
+   "logic": 1.3
+  },
+  "kind": {
+   "threat": 1.0,
+   "bribe": 0.7,
+   "bluff": 1.0,
+   "empathy": 1.5,
+   "logic": 1.1
+  },
+  "schemer": {
+   "threat": 0.8,
+   "bribe": 1.3,
+   "bluff": 0.6,
+   "empathy": 0.7,
+   "logic": 1.4
+  }
+ },
+ "kinds": {
+  "grunt": {
+   "label": "Grunt",
+   "resolve": 70,
+   "offset": 0,
+   "ransom": [
+    500,
+    800
+   ],
+   "recruit": 10,
+   "info": [
+    {
+     "fx": "scoutDistrict",
+     "label": "{team} patrol · {district}",
+     "say": "We walk {district} at nine and again at two. That's all I know!"
+    },
+    {
+     "fx": "scout",
+     "label": "{place} · the back way in",
+     "say": "There's a loading door round the back of {place}. Nobody locks it."
+    },
+    {
+     "fx": "rivalHit",
+     "n": 10,
+     "label": "{team} stash · {district}",
+     "say": "Okay, okay! There's a stash in {district}. Take it, just let me go."
+    }
+   ],
+   "extortion": [
+    {
+     "fx": "cash",
+     "n": 200,
+     "label": "₽{n} of {team}'s float",
+     "say": "Here, it's the float for the week. They'll think I lost it."
+    },
+    {
+     "fx": "silence",
+     "n": 8,
+     "label": "His silence",
+     "say": "I never saw you. I wasn't even in {district}."
+    },
+    {
+     "fx": "rivalHit",
+     "n": 10,
+     "label": "{team} corner · {district}",
+     "say": "Fine, the corner's yours. I'll tell them it got too hot."
+    }
+   ]
+  },
+  "gymTrainer": {
+   "label": "Gym Trainer",
+   "resolve": 80,
+   "offset": 1,
+   "ransom": [
+    700,
+    1100
+   ],
+   "recruit": 0,
+   "info": [
+    {
+     "fx": "gymScout",
+     "label": "{gym} rota",
+     "say": "The Leader trains at six, before the doors open. Every day."
+    },
+    {
+     "fx": "gymScout",
+     "label": "{leader}'s team",
+     "say": "{leader} leads with the same one every time. Everyone knows. Well, now you do."
+    },
+    {
+     "fx": "scout",
+     "label": "{place} · side door",
+     "say": "The side door's code is the Gym's opening year. Don't tell them it was me."
+    }
+   ],
+   "extortion": [
+    {
+     "fx": "cash",
+     "n": 400,
+     "label": "₽{n} prize money",
+     "say": "Take my prize money. All of it. Just let me go."
+    },
+    {
+     "fx": "silence",
+     "n": 8,
+     "label": "Their silence",
+     "say": "I'll say I took the night off. Nobody asks."
+    },
+    {
+     "fx": "gymScout",
+     "label": "A favour at {gym}",
+     "say": "I'll leave the side door open next week. Once."
+    }
+   ]
+  },
+  "exec": {
+   "label": "Higher-up",
+   "resolve": 90,
+   "offset": 2,
+   "ransom": [
+    1500,
+    2500
+   ],
+   "recruit": -10,
+   "info": [
+    {
+     "fx": "scout",
+     "label": "{place} night patrol",
+     "say": "F-fine! The guards change at the north lift at ten. Ten, not nine!"
+    },
+    {
+     "fx": "scoutDistrict",
+     "label": "{district} security plan",
+     "say": "Every site in {district} shares one guard roster. It's in my desk. Top drawer."
+    },
+    {
+     "fx": "cash",
+     "n": 1200,
+     "label": "{payer} safe code",
+     "say": "The safe code is my daughter's birthday. Take what's in it and go."
+    }
+   ],
+   "extortion": [
+    {
+     "fx": "cash",
+     "n": 800,
+     "label": "₽{n} from {payer}",
+     "say": "I can move ₽{n} tonight. Petty cash. It won't be missed."
+    },
+    {
+     "fx": "silence",
+     "n": 10,
+     "label": "His silence",
+     "say": "No report. No police. I was home with a cold."
+    },
+    {
+     "fx": "site",
+     "n": 10,
+     "label": "{place} handed over",
+     "say": "The keys to {place}. They're yours. I'll sign whatever you want."
+    }
+   ]
+  },
+  "admin": {
+   "label": "Admin",
+   "resolve": 100,
+   "offset": 3,
+   "ransom": [
+    2500,
+    4000
+   ],
+   "recruit": -25,
+   "info": [
+    {
+     "fx": "scoutDistrict",
+     "label": "{team} patrols · {district}",
+     "say": "Our patrols in {district} run on the hour. You'd have found out anyway."
+    },
+    {
+     "fx": "rivalHit",
+     "n": 10,
+     "label": "{team} supply line",
+     "say": "The supply run comes through {district} on Thursdays. There. Happy?"
+    },
+    {
+     "fx": "rivalHit",
+     "n": 20,
+     "label": "{boss}'s weak point",
+     "say": "{boss} never leaves the office without the Persian. Never. Use that."
+    }
+   ],
+   "extortion": [
+    {
+     "fx": "cash",
+     "n": 1500,
+     "label": "₽{n} from {team}'s books",
+     "say": "I can skim ₽{n} from the books. {boss} won't notice for a week."
+    },
+    {
+     "fx": "silence",
+     "n": 12,
+     "label": "{team} looks away",
+     "say": "I'll tell {boss} you're not worth the trouble. For now."
+    },
+    {
+     "fx": "rivalHit",
+     "n": 15,
+     "label": "{team} leaves {district}",
+     "say": "We pull out of {district}. It was never worth much anyway."
+    }
+   ]
+  }
+ },
+ "gruntAt": [
+  "street",
+  "crowd",
+  "route",
+  "dock",
+  "cave"
+ ],
+ "gruntNames": [
+  "Vic",
+  "Dell",
+  "Moss",
+  "Benny",
+  "Tarn",
+  "Rook",
+  "Jax",
+  "Cole",
+  "Fitz",
+  "Lew",
+  "Ash",
+  "Brody"
+ ],
+ "adminAt": [
+  "game-corner"
+ ],
+ "adminTension": 5,
+ "captives": [
+  {
+   "at": "silph-co",
+   "name": "Mr. Fenwick",
+   "title": "Silph manager",
+   "cls": "veteran",
+   "sprite": "t-clerk",
+   "species": [
+    "magnemite",
+    "porygon"
+   ],
+   "offset": 0,
+   "traits": [
+    "coward",
+    "greedy"
+   ],
+   "ransom": [
+    1800,
+    2200
+   ],
+   "payer": "Silph",
+   "minor": false
+  },
+  {
+   "at": "celadon-store",
+   "name": "Ms. Okada",
+   "title": "floor manager",
+   "cls": "worker",
+   "sprite": "t-clerk",
+   "species": [
+    "clefairy",
+    "jigglypuff"
+   ],
+   "offset": 0,
+   "traits": [
+    "proud",
+    "cautious"
+   ],
+   "ransom": [
+    1400,
+    1800
+   ],
+   "payer": "the Department Store",
+   "minor": false
+  },
+  {
+   "at": "pewter-museum",
+   "name": "Curator Stone",
+   "title": "museum curator",
+   "cls": "veteran",
+   "sprite": "t-backpacker",
+   "species": [
+    "geodude",
+    "onix"
+   ],
+   "offset": 0,
+   "traits": [
+    "loyal",
+    "kind"
+   ],
+   "ransom": [
+    1200,
+    1600
+   ],
+   "payer": "the Museum",
+   "minor": false
+  },
+  {
+   "at": "oak-lab",
+   "name": "Aide Pell",
+   "title": "lab aide",
+   "cls": "psychic",
+   "sprite": "t-applicant",
+   "species": [
+    "abra",
+    "slowpoke"
+   ],
+   "offset": -1,
+   "traits": [
+    "kind",
+    "cautious"
+   ],
+   "ransom": [
+    900,
+    1300
+   ],
+   "payer": "the Lab",
+   "minor": false
+  },
+  {
+   "at": "cinnabar-lab",
+   "name": "Dr. Reyes",
+   "title": "fossil curator",
+   "cls": "psychic",
+   "sprite": "t-backpacker",
+   "species": [
+    "omanyte",
+    "kabuto"
+   ],
+   "offset": 1,
+   "traits": [
+    "schemer",
+    "proud"
+   ],
+   "ransom": [
+    1500,
+    2000
+   ],
+   "payer": "Cinnabar Lab",
+   "minor": false
+  },
+  {
+   "at": "vermilion-harbour",
+   "name": "Harbour master Briggs",
+   "title": "harbour master",
+   "cls": "fisherman",
+   "sprite": "t-biker",
+   "species": [
+    "tentacool",
+    "machop"
+   ],
+   "offset": 1,
+   "traits": [
+    "hothead",
+    "greedy"
+   ],
+   "ransom": [
+    1300,
+    1800
+   ],
+   "payer": "the Harbour",
+   "minor": false
+  },
+  {
+   "at": "bike-shop",
+   "name": "Mr. Bicycle",
+   "title": "bike shop owner",
+   "cls": "biker",
+   "sprite": "t-biker",
+   "species": [
+    "voltorb",
+    "magnemite"
+   ],
+   "offset": 0,
+   "traits": [
+    "greedy",
+    "joker"
+   ],
+   "ransom": [
+    1000,
+    1500
+   ],
+   "payer": "the Bike Shop",
+   "minor": false
+  },
+  {
+   "at": "pewter-mart",
+   "name": "Mr. Hollis",
+   "title": "Mart manager",
+   "cls": "worker",
+   "sprite": "t-clerk",
+   "species": [
+    "sandshrew"
+   ],
+   "offset": -1,
+   "traits": [
+    "coward",
+    "gossip"
+   ],
+   "ransom": [
+    700,
+    1000
+   ],
+   "payer": "Poké Mart",
+   "minor": false
+  },
+  {
+   "at": "viridian-mart",
+   "name": "Mr. Garr",
+   "title": "Mart owner",
+   "cls": "veteran",
+   "sprite": "t-clerk",
+   "species": [
+    "pidgey",
+    "rattata"
+   ],
+   "offset": -1,
+   "traits": [
+    "loner",
+    "greedy"
+   ],
+   "ransom": [
+    700,
+    1000
+   ],
+   "payer": "Poké Mart",
+   "minor": false
+  },
+  {
+   "at": "lavender-mart",
+   "name": "Ms. Fey",
+   "title": "Mart manager",
+   "cls": "hex-maniac",
+   "sprite": "t-hex",
+   "species": [
+    "gastly"
+   ],
+   "offset": -1,
+   "traits": [
+    "cautious",
+    "kind"
+   ],
+   "ransom": [
+    700,
+    1000
+   ],
+   "payer": "Poké Mart",
+   "minor": false
+  },
+  {
+   "at": "fuchsia-mart",
+   "name": "Mr. Duke",
+   "title": "Mart owner",
+   "cls": "biker",
+   "sprite": "t-biker",
+   "species": [
+    "koffing",
+    "grimer"
+   ],
+   "offset": -1,
+   "traits": [
+    "hothead",
+    "joker"
+   ],
+   "ransom": [
+    700,
+    1000
+   ],
+   "payer": "Poké Mart",
+   "minor": false
+  }
+ ],
+ "minorClasses": [
+  "youngster",
+  "lass",
+  "bug-catcher",
+  "camper",
+  "picnicker",
+  "school-kid",
+  "schoolboy",
+  "schoolgirl",
+  "twins",
+  "preschooler",
+  "tuber",
+  "fairy-tale-girl",
+  "rival"
+ ],
+ "classSprites": {
+  "hex-maniac": "t-hex",
+  "biker": "t-biker",
+  "worker": "t-clerk",
+  "psychic": "t-applicant",
+  "roughneck": "t-biker"
+ },
+ "gruntSprite": "c-gruntb",
+ "adminSprite": "t-backpacker",
+ "defaultSprite": "t-backpacker",
+ "release": {
+  "heat": 6,
+  "talk": 50,
+  "talkHeat": 4,
+  "fearCut": 3
+ },
+ "recruit": {
+  "base": 20,
+  "charmPer": 4,
+  "brokenPer": 20,
+  "trustPer": 2,
+  "masteryLv5": 15
+ },
+ "ransom": {
+  "heat": 4,
+  "tension": 6,
+  "tradePct": 125,
+  "tradeTension": -5
+ },
+ "held": {
+  "heatNight": 3,
+  "checkBase": 4,
+  "checkPer": 6,
+  "checkHeatPer": 0.2,
+  "checkHeat": 10,
+  "escapeBase": 12,
+  "escapeNight": 3,
+  "guardCut": 100,
+  "guardLv": 4,
+  "guardHit": 8,
+  "perTier": 2
+ },
+ "fight": {
+  "failHeat": 8
+ },
+ "lines": {
+  "noCell": "Build a Holding Cell first: nobody to keep them in.",
+  "cellFull": "The Holding Cell is full ({n}). Deal with who's in there first.",
+  "nobody": "Nobody here you'd take: never a Gym Leader, never a child.",
+  "note": "Snatch {name}, {title}: a battle first, then the questions.",
+  "noteHeld": "Question {name} in the Holding Cell (Resolve {resolve}).",
+  "move": "You move on {name} outside {place}. {cls} steps in to stop you.",
+  "taken": "{name} is bundled into the van and driven to the Holding Cell.",
+  "lost": "{name} got away and ran straight to the police. Heat +{n} in {district}.",
+  "opened": "Back to the Holding Cell: {name} looks up.",
+  "start": "I know my rights. I have nothing to say to you.",
+  "startFear": "P-please. What do you want?",
+  "chipOff": "Rules · {approach}, strength {n}",
+  "chipOn": "Quick · {approach}, strength {n}",
+  "replyBig": "Okay! Okay. Just… stop. Ask me again.",
+  "replySome": "I— I can't tell you that. They'd know it was me.",
+  "replyNone": "That's it? I've had worse from my landlord.",
+  "replyDig": "You think that scares me? Now I'm not talking at all.",
+  "broke": "{name} has nothing left to hold back.",
+  "noMoney": "Not enough money for that (₽{cost}).",
+  "noRoom": "Questions first, then decide what to do with them.",
+  "noGoal": "Pick a Goal first: Info or Extortion.",
+  "released": "{name} walks out of the Holding Cell with a hood over their head. Heat +{n}.",
+  "talked": "{name} went to the police. Heat +{n}.",
+  "recruited": "{name} joins the crew. They know where everything is now.",
+  "refused": "{name} won't join ({odds}%). You let them go. Heat +{n}.",
+  "full": "No room in the crew: {name} is released instead. Heat +{n}.",
+  "ransomed": "{payer} pays ₽{n} for {name}. Heat +{heat}.",
+  "ransomTeam": "{team} pays ₽{n} for {name}. Tension +{t}.",
+  "kept": "{name} stays in the Holding Cell.",
+  "nightHeat": "A captive in the Holding Cell: Heat +{n}.",
+  "escaped": "{name} slipped out of the Holding Cell overnight and went to the police.",
+  "found": "Police searched the HQ and found {name} in the Holding Cell.",
+  "foundEv": "Officers found {name} held in the Holding Cell.",
+  "guardHit": "{member} kept {name} talking overnight: Resolve −{n}.",
+  "guarded": "{member} guarded the Holding Cell.",
+  "statement": "{name} told officers who took them.",
+  "tradeMember": "Hostage trade: {name} for {member}. {member} is home.",
+  "tradeCash": "Hostage trade: {team} pays ₽{n} for {name}. Tension {t}.",
+  "tradePayer": "Hostage trade: {payer} pays ₽{n} for {name}.",
+  "noHostage": "Nobody in the Holding Cell to trade.",
+  "prize": "{label}"
+ },
+ "play": {
+  "interrogate": {
+   "kinds": [
+    "any"
+   ],
+   "heat": 4,
+   "effect": "snatch",
+   "win": "Nerve steady, you go to work."
+  },
+  "hostage-trade": {
+   "kinds": [
+    "any"
+   ],
+   "effect": "hostage",
+   "win": "A swap at the docks."
+  }
+ }
+}

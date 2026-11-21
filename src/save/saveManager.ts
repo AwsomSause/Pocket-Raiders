@@ -6,8 +6,9 @@ import { bossRoleForClass } from '../core/encounters';
 import { isPlayerTrainer, playerTrainerFor } from '../core/archetypes';
 import type { z } from 'zod';
 import { ATTRIBUTE_KEYS, type Content } from '../core/contentSchema';
-import { validateLeagueMap, validateStageMap } from '../core/map';
+import { validateLeagueMap, validatePseudoMap, validateStageMap } from '../core/map';
 import { createProfile } from '../core/profile';
+import { tidyBag } from '../core/bag';
 import { hashSeed } from '../core/rng';
 import { rollIvs } from '../core/ivs';
 import { createStoryState } from '../core/story/record';
@@ -25,7 +26,6 @@ import {
 import { emptyTimelineStore, TimelineStoreSchema, type TimelineStore } from '../core/timeline/schema';
 import { freshEvil } from '../core/evil/schema';
 import { EXPANSION_SETTINGS_DEFAULTS } from '../core/expansion/schema';
-import { runToSaveForm } from '../core/evilMode/saveForm';
 import { freshProfileStory, STORY_SETTINGS_DEFAULTS } from '../core/story2/schema';
 import { StorageUnavailableError, type StorageProvider } from './storage';
 
@@ -42,7 +42,7 @@ export const ACTIVE_SLOT_KEY = `${KEY_PREFIX}.slot`;
 export type RecordName = 'profile' | 'run' | 'settings' | 'meta' | 'timeline';
 
 /** Current schema version of each record. Bump when a record's shape changes and add a migration. */
-export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 21, run: 45, settings: 45, meta: 1, timeline: 1 };
+export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 21, run: 47, settings: 45, meta: 1, timeline: 1 };
 
 /** v41: walks a saved run and gives every Pokémon (anything with uid, speciesId, level and vitamins) IVs and empty EVs. */
 function withIvs(node: unknown): unknown {
@@ -156,8 +156,8 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
       for (const id of lore) if (typeof id === 'string') story.lore[id] = { state: 'known', sources: [] };
       return { ...profile, story };
     },
-    // v21 (Evil Mode slice 15): no Evil Mode run has finished yet, so the Hall of Fame holds no cards.
-    20: (data) => ({ ...(data as Json), evilHall: [] }),
+    // v21 (old Evil Mode slice 15) added the Hall of Fame cards; that flow was deleted after Dominion D17, so nothing is added now.
+    20: (data) => data,
   },
   run: {
     // v2 (Milestone 2): Bag, candies, pending decisions, and battles against
@@ -394,6 +394,10 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
     43: (data) => data,
     // v45 (eight Legendary Blessings): optional blessing fields (calmStages, riteArmed, vow, vowBroken, copy). Old blessings have none, so nothing changes.
     44: (data) => data,
+    // v46 is the evolution scene's on the ui-mockups branch (a pending 'evolve' decision); old runs have none, so nothing changes.
+    45: (data) => data,
+    // v47 (Dominion slice D18): the optional run.ai log of Claude answers. Old runs have none (no call was ever made), so nothing changes.
+    46: (data) => data,
   },
   settings: {
     // v2 (Milestone 9): battle animation settings.
@@ -498,6 +502,16 @@ interface Envelope {
   schemaVersion: number;
   savedAt: string;
   data: unknown;
+}
+
+/** The old Evil Mode flow was deleted after Dominion D17 (Kice 2026-11-20, "Delete the old flow entirely"): a run saved
+ *  in it can't go on. It is reported, never silently dropped: the main menu shows
+ *  why and offers to discard it. Null for every other run. */
+export const RETIRED_EVIL_RUN = 'This run was in the old Evil Mode, which Dominion has replaced, so it can\'t be continued.';
+export function retiredRun(data: unknown): string | null {
+  const run = data as { rules?: { modeId?: unknown }; expansion?: { evilMode?: unknown } } | null;
+  if (!run || typeof run !== 'object') return null;
+  return run.rules?.modeId === 'evil-mode' || run.expansion?.evilMode !== undefined ? RETIRED_EVIL_RUN : null;
 }
 
 export type LoadResult<T> =
@@ -660,6 +674,10 @@ export class SaveManager {
         return { status: 'corrupt', reason: `Upgrading the save failed: ${String(err)}` };
       }
     }
+    if (record === 'run') {
+      const retired = retiredRun(data);
+      if (retired) return { status: 'incompatible', reason: retired };
+    }
     const parsed = schema.safeParse(data);
     if (!parsed.success) {
       const first = parsed.error.issues[0];
@@ -676,6 +694,8 @@ export class SaveManager {
     // Beta 0.5: only Nate and Hilda are player characters; a run saved as anyone else carries on as one of them.
     // Only saves from before the current format (every pre-Beta 0.5 save, since run v42 is Beta 0.5) are converted, so a save and reload of a current run never changes it.
     if (result.migratedFrom !== undefined && !isPlayerTrainer(result.data.archetypeId) && this.content.archetypes.has(result.data.archetypeId)) result.data = { ...result.data, archetypeId: playerTrainerFor(result.data.archetypeId) };
+    // An item id the game no longer knows is sold instead of failing the save (save audit 2026-11-19).
+    tidyBag(this.content, result.data);
     const problem = this.findRunReferenceProblem(result.data);
     if (problem) return { status: 'corrupt', reason: problem };
     return result;
@@ -692,14 +712,15 @@ export class SaveManager {
       for (const slot of mon.moves) if (!c.moves.has(slot.id)) return `Unknown move "${slot.id}" in save.`;
     }
     for (const id of run.draft ?? []) if (!c.rewards.has(id)) return `Unknown reward "${id}" in save.`;
-    for (const id of Object.keys(run.inventory)) if (!c.items.has(id)) return `Unknown item "${id}" in save.`;
+    for (const id of Object.keys(run.inventory)) if (!c.items.has(id) && !c.catalog.has(id)) return `Unknown item "${id}" in save.`;
     for (const d of run.pending) if (d.kind === 'learnMove' && !c.moves.has(d.moveId)) return `Unknown move "${d.moveId}" in save.`;
     if (run.battle) {
       if (!run.battle.enemyTeam[run.battle.enemyIndex]) return 'Battle data is damaged in the save.';
       const t = run.battle.trainer;
       if (t?.leaderId && !isBoss(c, t.leaderId)) return `Unknown gym leader, Elite Four member or champion "${t.leaderId}" in save.`;
       // A boss's ace back as a nemesis keeps the boss class (gym-leader...) with no leader id.
-      if (t && !t.leaderId && !c.trainers.has(t.classId) && !bossRoleForClass(t.classId)) return `Unknown trainer class "${t.classId}" in save.`;
+      // 'event' is the class an event's own trainer battle uses when its data names none (core/events.ts).
+      if (t && !t.leaderId && t.classId !== 'event' && !c.trainers.has(t.classId) && !bossRoleForClass(t.classId)) return `Unknown trainer class "${t.classId}" in save.`;
     }
     if (run.phase === 'decision' && run.pending.length === 0) return 'The save is waiting on a decision that is missing.';
     if (run.stage) {
@@ -707,7 +728,8 @@ export class SaveManager {
       const league = run.stage.kind === 'league';
       if (!c.bosses.has(run.stage.leaderId)) return `Unknown ${league ? 'champion' : 'gym leader'} "${run.stage.leaderId}" in save.`;
       for (const id of run.stage.eliteFour) if (!c.bosses.has(id)) return `Unknown Elite Four member "${id}" in save.`;
-      const mapProblems = league ? validateLeagueMap(run.stage.map) : validateStageMap(run.stage.map);
+      // A pseudo-stage (a place with a map of its own inside one node) is a short path, not a full stage: only its links are checked, and the real stage waits in pseudoParent.
+      const mapProblems = run.stage.pseudo ? validatePseudoMap(run.stage.map) : league ? validateLeagueMap(run.stage.map) : validateStageMap(run.stage.map);
       if (mapProblems.length > 0) return `The stage map in the save is damaged (${mapProblems[0]}).`;
       if (run.stage.current !== null && !run.stage.map.nodes.some((n) => n.id === run.stage!.current)) return 'The save points to a map node that does not exist.';
     } else if (run.phase === 'map' || run.phase === 'shop') {
@@ -718,14 +740,16 @@ export class SaveManager {
     if (run.regionOrder.length > 0 && run.regionIndex >= run.regionOrder.length) return 'The save points to a region that does not exist.';
     if (run.phase === 'battle' && (!run.battle || !run.party[run.battle.activeIndex])) return 'Battle data is missing from the save.';
     if (run.phase === 'reward' && !run.draft) return 'Reward choices are missing from the save.';
-    if (run.phase !== 'starter' && run.party.length === 0) return 'The save has no party.';
+    // Some events take the whole team away for a while (Battle Factory rentals, the prison cell, the draft): they wait in the box or the stash.
+    if (run.phase !== 'starter' && run.party.length === 0 && run.box.length === 0 && !run.expansion?.canon?.stash?.length) return 'The save has no party.';
     if (run.party.length > c.balance.partyMax) return 'The save has too many Pokémon in the party.';
     return null;
   }
 
   saveRun(run: RunState): SaveResult {
-    // An Evil Mode block is written in its save form (core/evilMode/saveForm.ts); reading makes it whole again.
-    return this.write('run', runToSaveForm(run));
+    // An item id the game no longer knows would make this save fail its checks on the next load: sell it first.
+    tidyBag(this.content, run);
+    return this.write('run', run);
   }
 
   clearRun(): SaveResult {
@@ -748,13 +772,15 @@ export class SaveManager {
     const result = this.read('run', RunStateSchema, this.replayKey);
     if (result.status !== 'ok') return result;
     if (!result.data.timeline) return { status: 'corrupt', reason: 'The replay save is not a timeline.' };
+    tidyBag(this.content, result.data);
     const problem = this.findRunReferenceProblem(result.data);
     return problem ? { status: 'corrupt', reason: problem } : result;
   }
 
   saveReplay(run: RunState): SaveResult {
     if (!run.timeline) return { ok: false, reason: 'Only a timeline replay can be saved in the replay slot.' };
-    return this.write('run', runToSaveForm(run), this.replayKey);
+    tidyBag(this.content, run);
+    return this.write('run', run, this.replayKey);
   }
 
   clearReplay(): SaveResult {
@@ -853,6 +879,7 @@ export class SaveManager {
     if (file.run) {
       const decoded = this.decode('run', JSON.stringify(file.run), RunStateSchema);
       if (decoded.status !== 'ok') return { ok: false, reason: `The run in that file is damaged: ${'reason' in decoded ? decoded.reason : 'unreadable.'}` };
+      tidyBag(this.content, decoded.data);
       const problem = this.findRunReferenceProblem(decoded.data);
       if (problem) return { ok: false, reason: `The run in that file cannot be used: ${problem}` };
       run = decoded.data;

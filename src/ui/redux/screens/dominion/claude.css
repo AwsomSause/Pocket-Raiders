@@ -1,0 +1,51 @@
+/* Claude AI screens (Dominion slice D18 and later): the rules the Claude mockups (plans/claude-api/mockups/index.html) add to
+   the Dominion mockup CSS, ported by tools/dominion/port-mockup-css.py (scoped #rx .dom) and kept apart so dominion.css stays the D1 port. */
+#rx .dom{--ai:#ffb38a;--ai-d:#d9774a;--ai-glow:rgba(255,160,110,.55);--manila:#e9d6a4;--manila-d:#c9b073;--steel:#5d6b80;--block:#4a5262}
+#rx .dom .aichip{position:absolute;z-index:32;display:inline-flex;align-items:center;gap:7px;padding:3px 11px 3px 6px;border-radius:999px;font:600 13px var(--ui);color:#2b1408;
+  background:linear-gradient(180deg,#ffd9bf,#ffad80);box-shadow:0 0 0 3px var(--ink),0 0 16px var(--ai-glow);white-space:nowrap}
+#rx .dom .aichip i{width:18px;height:18px;flex:none;background:#c4532a;clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%)}
+#rx .dom .aichip .dm2{opacity:.7;font-weight:500}
+#rx .dom .spark{display:inline-block;width:var(--z,16px);height:var(--z,16px);background:var(--sc,#ffb38a);clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);filter:drop-shadow(0 0 6px var(--sc,#ffb38a));flex:none}
+#rx .dom .tell{position:absolute;z-index:34;padding:5px 16px;font:800 22px/1 var(--logo);font-style:italic;letter-spacing:.04em;color:#fff;background:var(--tc,#d8402f);border-radius:6px;
+  box-shadow:0 0 0 3px #fff,0 0 0 6px var(--ink),0 0 28px var(--tc,#d8402f);transform:rotate(-5deg)}
+#rx .dom .doc{position:absolute;z-index:6;background:#f3ecd8;color:#3a2e1c;border-radius:4px;box-shadow:0 0 0 2px #2a2014,3px 6px 0 rgba(0,0,0,.35),0 14px 24px rgba(0,0,0,.4);padding:8px 10px;font-size:13px;line-height:1.3}
+#rx .dom .doc .dh{font:700 11px var(--ui);letter-spacing:.16em;text-transform:uppercase;color:#7a6440;border-bottom:2px solid #c9b88f;padding-bottom:3px;margin-bottom:5px;display:flex;gap:6px;align-items:center}
+#rx .dom .doc b{color:#241a0c}
+#rx .dom .miss{position:absolute;z-index:9;border:3px solid #ff3b3b;border-radius:50%;box-shadow:0 0 12px rgba(255,59,59,.7),inset 0 0 8px rgba(255,59,59,.4)}
+#rx .dom .stampb{position:absolute;z-index:12;width:96px;height:112px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px}
+#rx .dom .stampb .h{width:34px;height:46px;border-radius:12px 12px 6px 6px;background:linear-gradient(90deg,#3a2a1c,#6a4a30 45%,#3a2a1c);box-shadow:0 0 0 2px var(--ink)}
+#rx .dom .stampb .f{width:96px;height:48px;border-radius:8px;display:grid;place-items:center;font:800 17px var(--ui);letter-spacing:.1em;color:#fff;background:linear-gradient(180deg,var(--sc),color-mix(in srgb,var(--sc) 60%,#000));box-shadow:0 0 0 3px var(--ink),inset 0 2px 0 rgba(255,255,255,.3),inset 0 -5px 0 rgba(0,0,0,.3)}
+#rx .dom .inked{position:absolute;z-index:10;border:4px solid currentColor;border-radius:6px;padding:2px 12px;font:800 26px var(--ui);letter-spacing:.16em;opacity:.85;mix-blend-mode:multiply}
+#rx .dom .gauge{position:relative;width:var(--w,200px);height:calc(var(--w,200px) / 2 + 10px);overflow:hidden}
+#rx .dom .gauge::before{content:"";position:absolute;left:0;top:0;width:var(--w,200px);height:var(--w,200px);border-radius:50%;
+  background:conic-gradient(from 270deg,#ff5a4f 0 30deg,#ffb238 30deg 70deg,#6a7396 70deg 110deg,#7fd6ff 110deg 150deg,#43cf78 150deg 180deg,transparent 180deg);
+  -webkit-mask:radial-gradient(closest-side,transparent 64%,#000 65%);mask:radial-gradient(closest-side,transparent 64%,#000 65%);filter:drop-shadow(0 0 8px rgba(255,255,255,.2))}
+#rx .dom .gauge .nd{position:absolute;left:50%;bottom:10px;width:4px;height:calc(var(--w,200px) / 2 - 12px);margin-left:-2px;background:linear-gradient(180deg,#fff,#cfd6ff);border-radius:3px;transform-origin:50% 100%;transform:rotate(var(--a,0deg));box-shadow:0 0 8px #fff,0 0 0 2px var(--ink)}
+#rx .dom .gauge .hub{position:absolute;left:50%;bottom:2px;width:22px;height:22px;margin-left:-11px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff,#9aa6d0);box-shadow:0 0 0 3px var(--ink)}
+#rx .dom .kcard{position:absolute;z-index:8;width:150px;height:212px;border-radius:14px;overflow:hidden;padding:10px;display:flex;flex-direction:column;
+  background:linear-gradient(160deg,var(--k1),var(--k2));box-shadow:0 0 0 3px var(--ink),inset 0 0 0 3px rgba(255,255,255,.55),inset 0 0 0 6px rgba(0,0,0,.15),0 16px 30px rgba(0,0,0,.55)}
+#rx .dom .kcard::before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.55) 42%,rgba(255,180,255,.25) 47%,rgba(160,255,240,.25) 52%,transparent 64%);mix-blend-mode:screen;pointer-events:none}
+#rx .dom .kcard .kn{font:800 21px/1 var(--logo);font-style:italic;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.45);letter-spacing:.02em}
+#rx .dom .kcard .kt{font:600 10.5px var(--ui);letter-spacing:.2em;color:rgba(255,255,255,.85)}
+#rx .dom .kcard .art{flex:1;position:relative;margin:6px 0;border-radius:8px;background:radial-gradient(circle at 50% 55%,rgba(255,255,255,.55),rgba(255,255,255,.08) 60%,transparent 70%),rgba(0,0,0,.18);box-shadow:inset 0 0 0 2px rgba(255,255,255,.35)}
+#rx .dom .kcard .art img{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);image-rendering:pixelated}
+#rx .dom .kcard .gem{position:absolute;right:9px;top:8px;width:22px;height:22px;image-rendering:pixelated;filter:drop-shadow(0 0 6px #fff)}
+#rx .dom .kcard.off{filter:grayscale(.85) brightness(.6)}
+#rx .dom .bars{display:grid;grid-template-columns:auto 1fr auto;gap:5px 10px;align-items:center;font-size:15px}
+#rx .dom .bar10{height:12px;border-radius:3px;background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 2px),#0a0f20 calc(10% - 2px) 10%),linear-gradient(90deg,var(--c,var(--gold)) calc(var(--v) * 10%),#2a3150 0);box-shadow:0 0 0 2px var(--ink)}
+#rx .dom .typing::after{content:"▌";color:var(--ai);animation:dm-blink 1s var(--now,0s) steps(1) infinite}
+#rx .dom .dots i{display:inline-block;width:9px;height:9px;margin:0 2px;border-radius:50%;background:var(--ai);box-shadow:0 0 8px var(--ai)}
+@media (prefers-reduced-motion:no-preference){
+#rx .dom .dots i{animation:dm-dotb 1.2s var(--now,0s) ease-in-out infinite}
+#rx .dom .dots i:nth-child(2){animation-delay:.15s}
+#rx .dom .dots i:nth-child(3){animation-delay:.3s}
+@keyframes dm-dotb{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-7px);opacity:1}}
+#rx .dom .swing{animation:dm-swing 4s var(--now,0s) ease-in-out infinite;transform-origin:50% 0}
+@keyframes dm-swing{50%{transform:rotate(6deg)}0%,100%{transform:rotate(-6deg)}}
+#rx .dom .jolt{animation:dm-jolt 2.4s var(--now,0s) ease-in-out infinite}
+@keyframes dm-jolt{0%,86%,100%{transform:rotate(-5deg)}90%{transform:rotate(-5deg) scale(1.12)}94%{transform:rotate(-5deg) scale(.98)}}
+#rx .dom .wob .nd{animation:dm-wob 3s var(--now,0s) ease-in-out infinite}
+@keyframes dm-wob{50%{transform:rotate(calc(var(--a,0deg) + 7deg))}}
+#rx .dom .ring2{animation:dm-ring2 .5s var(--now,0s) ease-in-out infinite}
+@keyframes dm-ring2{25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
+}

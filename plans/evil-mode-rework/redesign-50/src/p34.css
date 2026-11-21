@@ -1,0 +1,45 @@
+/* Pass 34 · Festival Nights */
+/* paper lanterns along the top of every page */
+.lan34{position:absolute;left:0;right:0;top:62px;height:30px;z-index:0;pointer-events:none;background:linear-gradient(transparent 0 2px,transparent 2px) ;}
+.lan34::before{content:'';position:absolute;left:-10px;right:-10px;top:0;height:14px;border-bottom:2px solid rgba(0,0,0,.6);border-radius:0 0 50% 50%/0 0 100% 100%}
+.lan34 i{position:absolute;top:6px;left:calc(var(--i) * 9.2% + 2%);width:12px;height:16px;background:radial-gradient(circle at 50% 40%,#fff6c8,var(--c) 60%);border:1.5px solid #000;border-radius:5px;box-shadow:0 0 10px var(--c);transform-origin:50% -6px;animation:sway34 2.4s ease-in-out infinite;animation-delay:calc(var(--i) * -.3s)}
+.lan34 i::before{content:'';position:absolute;left:3px;right:3px;top:-4px;height:3px;background:#000}
+/* fireworks behind the panels on evening and night pages */
+.fw34{position:absolute;inset:0;z-index:0;pointer-events:none}
+.fw34 i,.sky34 i{position:absolute;left:var(--x);top:var(--y);width:120px;height:120px;margin:-60px;border-radius:50%;background:repeating-conic-gradient(var(--c) 0 4deg,transparent 4deg 18deg);-webkit-mask:radial-gradient(circle,transparent 30%,#000 32% 48%,transparent 50%);mask:radial-gradient(circle,transparent 30%,#000 32% 48%,transparent 50%);opacity:0;animation:fw34 2.8s ease-out infinite;animation-delay:var(--d)}
+/* the festival lantern on the Day segment */
+.dy7.ck15{position:relative}
+.fl34{position:absolute;left:-6px;top:-8px;width:10px;height:13px;background:radial-gradient(circle at 50% 40%,#fff6c8,#e0294a 60%);border:1.5px solid #000;border-radius:4px;box-shadow:0 0 8px #ff8a3d;cursor:pointer;animation:sway34 2s ease-in-out infinite}
+/* the Calendar */
+.cal34{position:absolute;left:16px;top:84px;width:600px;height:312px;z-index:2;padding:8px;background:rgba(10,8,14,.88);border:2px solid #000;border-radius:12px;box-shadow:inset 0 0 0 2px rgba(255,248,234,.4),5px 5px 0 rgba(0,0,0,.5);display:grid;grid-template-columns:repeat(7,1fr);grid-template-rows:18px repeat(5,1fr);gap:4px}
+.cal34 .wd{font-size:11px;font-weight:800;text-transform:uppercase;text-align:center;color:var(--mut)}
+.dc34{position:relative;display:flex;flex-direction:column;justify-content:space-between;padding:3px 5px;font-style:normal;background:#2c2535;border:2px solid #000;border-radius:6px;animation:pop .25s both;animation-delay:var(--d)}
+.dc34 u{text-decoration:none;font:400 15px/1 var(--fd)}
+.dc34 em{font-style:normal;font-size:11px;white-space:nowrap;overflow:hidden;font-weight:800;line-height:1.1;padding:1px 4px;border-radius:3px;color:#1d1622;background:#d8cfbf}
+.dc34.past{background:#1d1822}.dc34.past u{color:var(--mut)}
+.dc34.now{outline:3px solid var(--yel);outline-offset:1px;background:rgba(232,178,58,.25)}
+.dc34.e-pay em{background:#5ad17a}.dc34.e-fest em{background:#ff8a3d}.dc34.e-raid em{background:#ff5d5d;color:#fff}.dc34.e-gym em{background:#8ab4ff}.dc34.e-boss em{background:var(--yel)}
+.cl34{left:636px;top:84px;width:308px;height:312px}
+.tn34{display:flex;flex-direction:column;gap:6px}
+.tn34 b{font:400 26px/1 var(--fd);color:#ff8a3d}
+.tn34 em{font-style:normal;font-size:13px;font-weight:800;color:var(--mut)}
+.tn34 p{margin:0;font-size:14px;line-height:1.35}
+/* Fireworks Night */
+.sky34{position:absolute;left:0;right:0;top:60px;height:260px;z-index:1;pointer-events:none}
+.sky34 i{width:160px;height:160px;margin:-80px}
+.crowd34{position:absolute;left:0;width:430px;bottom:132px;z-index:2;display:flex;justify-content:space-around;align-items:flex-end;pointer-events:none}
+.crowd34 i{animation:hop 1.4s ease-in-out infinite;animation-delay:calc(var(--i) * -.2s)}
+.crowd34 img{filter:brightness(.35) drop-shadow(0 -2px 0 rgba(255,184,106,.6))}
+.fj34{left:460px;top:120px;width:484px;height:276px;display:flex;flex-direction:column;gap:8px}
+/* the Prize corner */
+.pz34{position:absolute;left:16px;top:84px;width:700px;height:312px;z-index:2;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.pr34{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;padding:12px 8px;background:linear-gradient(#ffd75a 0 6px,rgba(23,19,29,.92) 6px);border:3px solid #000;border-radius:12px;box-shadow:inset 0 0 0 2px rgba(255,248,234,.4),4px 4px 0 rgba(0,0,0,.5);animation:pop .35s both;animation-delay:var(--d)}
+.pr34 .cs{flex:1;display:grid;place-items:center;width:100%;background:radial-gradient(circle,rgba(255,215,90,.25),transparent 65%)}
+.pr34 b{font:400 19px/1 var(--fd);text-transform:uppercase}
+.pr34 em{font-style:normal;font-size:12px;font-weight:800;color:var(--yel)}
+.pr34.on{outline:3px solid var(--yel);outline-offset:2px}
+.coin34{position:absolute;right:30px;top:150px;width:190px;height:150px;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle,#ffe39a,#e8b23a 60%,#8a5a10);border:4px solid #000;border-radius:50%;box-shadow:6px 6px 0 rgba(0,0,0,.5);animation:coin32 3s 1s ease-in-out infinite}
+.coin34 b{font:400 36px/1 var(--fd);color:#3a1a08}.coin34 em{font-style:normal;font-size:13px;font-weight:800;color:#3a1a08}
+/*@top*/
+@keyframes sway34{50%{transform:rotate(8deg)}}
+@keyframes fw34{0%{opacity:0;transform:scale(.2)}10%{opacity:1}60%{opacity:.8;transform:scale(1)}100%{opacity:0;transform:scale(1.15) translateY(14px)}}

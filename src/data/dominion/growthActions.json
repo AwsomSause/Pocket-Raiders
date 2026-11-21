@@ -1,0 +1,5724 @@
+{
+ "_source": "plans/evil-mode-rework/lists/player-actions-151-300/301-450/451-600.md via tools/dominion/growth-to-json.py",
+ "play": {
+  "busk-cut": {
+   "kinds": [
+    "shop",
+    "street",
+    "crowd",
+    "center",
+    "dock"
+   ],
+   "chance": 70,
+   "heat": 2,
+   "failHeat": 5,
+   "pay": [
+    20,
+    40
+   ],
+   "win": "You take a cut from street performers in {district}. ₽{pay}.",
+   "lose": "{owner} says no, loudly, and people turn to look."
+  },
+  "newsstand-racket": {
+   "kinds": [
+    "shop",
+    "street",
+    "crowd",
+    "center",
+    "dock"
+   ],
+   "chance": 70,
+   "heat": 2,
+   "failHeat": 5,
+   "pay": [
+    30,
+    60
+   ],
+   "win": "You make a newsstand carry your flyers in {district}. ₽{pay}.",
+   "lose": "{owner} says no, loudly, and people turn to look."
+  },
+  "ticket-scalping": {
+   "kinds": [
+    "shop",
+    "street",
+    "crowd",
+    "center",
+    "dock"
+   ],
+   "chance": 70,
+   "heat": 2,
+   "failHeat": 5,
+   "cost": 120,
+   "win": "You buy event tickets and resell them in {district}.",
+   "lose": "{owner} says no, loudly, and people turn to look."
+  },
+  "shoeshine-spies": {
+   "kinds": [
+    "shop",
+    "street",
+    "crowd",
+    "center",
+    "dock"
+   ],
+   "chance": 70,
+   "heat": 2,
+   "failHeat": 5,
+   "win": "You run street kids as lookouts for a fee in {district}.",
+   "lose": "{owner} says no, loudly, and people turn to look."
+  },
+  "rooftop-rent": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "heat": 2,
+   "failHeat": 5,
+   "cost": 40,
+   "win": "You sublet roof space and signs.",
+   "lose": "{owner} says no, loudly, and people turn to look."
+  },
+  "meter-maid-bribe": {
+   "kinds": [
+    "shop",
+    "street",
+    "crowd",
+    "center",
+    "dock"
+   ],
+   "chance": 70,
+   "heat": 2,
+   "failHeat": 5,
+   "win": "You pay parking officials to look away in {district}.",
+   "lose": "{owner} says no, loudly, and people turn to look."
+  },
+  "vending-takeover": {
+   "kinds": [
+    "shop",
+    "street",
+    "crowd",
+    "center",
+    "dock"
+   ],
+   "chance": 70,
+   "heat": 2,
+   "failHeat": 5,
+   "pay": [
+    20,
+    30
+   ],
+   "win": "You seize vending machines in a district in {district}. ₽{pay}.",
+   "lose": "{owner} says no, loudly, and people turn to look."
+  },
+  "newspaper-boy-ring": {
+   "kinds": [
+    "shop",
+    "street",
+    "crowd",
+    "center",
+    "dock"
+   ],
+   "chance": 70,
+   "heat": 2,
+   "failHeat": 5,
+   "cost": 20,
+   "regard": 1,
+   "win": "You hire kids (non-battle, supervised) to sell your paper in {district}. Regard +1.",
+   "lose": "{owner} says no, loudly, and people turn to look."
+  },
+  "lost-and-found-racket": {
+   "kinds": [
+    "shop",
+    "street",
+    "crowd",
+    "center",
+    "dock"
+   ],
+   "chance": 70,
+   "heat": 2,
+   "failHeat": 5,
+   "pay": [
+    40,
+    50
+   ],
+   "win": "You keep what is handed in and sell it back in {district}. ₽{pay}.",
+   "lose": "{owner} says no, loudly, and people turn to look."
+  },
+  "fountain-coins": {
+   "kinds": [
+    "shop",
+    "street",
+    "crowd",
+    "center",
+    "dock"
+   ],
+   "chance": 70,
+   "heat": 2,
+   "failHeat": 5,
+   "pay": [
+    40,
+    60
+   ],
+   "win": "You skim a public wishing fountain in {district}. ₽{pay}.",
+   "lose": "{owner} says no, loudly, and people turn to look."
+  },
+  "collection-plate": {
+   "kinds": [
+    "shop",
+    "street",
+    "crowd",
+    "center",
+    "dock"
+   ],
+   "chance": 70,
+   "heat": 2,
+   "failHeat": 5,
+   "pay": [
+    40,
+    70
+   ],
+   "regard": 1,
+   "win": "You run a donation box at a shrine in {district}. ₽{pay}, Regard +1.",
+   "lose": "{owner} says no, loudly, and people turn to look."
+  },
+  "bar-tab-debt": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "heat": 2,
+   "failHeat": 5,
+   "win": "You buy up a bar's debts and own its customers.",
+   "lose": "{owner} says no, loudly, and people turn to look."
+  },
+  "gambling-ring": {
+   "kinds": [
+    "shop",
+    "street",
+    "crowd",
+    "center",
+    "dock"
+   ],
+   "chance": 70,
+   "heat": 2,
+   "failHeat": 5,
+   "pay": [
+    60,
+    100
+   ],
+   "win": "You run street betting on trainer battles in {district}. ₽{pay}.",
+   "lose": "{owner} says no, loudly, and people turn to look."
+  },
+  "rigged-raffle": {
+   "kinds": [
+    "shop",
+    "street",
+    "crowd",
+    "center",
+    "dock"
+   ],
+   "chance": 70,
+   "heat": 2,
+   "failHeat": 5,
+   "pay": [
+    60,
+    80
+   ],
+   "win": "You run a raffle where you pick the winner in {district}. ₽{pay}.",
+   "lose": "{owner} says no, loudly, and people turn to look."
+  },
+  "pet-shop-cut": {
+   "kinds": [
+    "shop",
+    "street",
+    "crowd",
+    "center",
+    "dock"
+   ],
+   "chance": 70,
+   "heat": 2,
+   "failHeat": 5,
+   "pay": [
+    20,
+    40
+   ],
+   "win": "You take a share of a Pokémon shop's trade in {district}. ₽{pay}.",
+   "lose": "{owner} says no, loudly, and people turn to look."
+  },
+  "lockpick-lesson": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "win": "You learn a faster pick from a thief.",
+   "lose": "An alarm, a light, a shout. You leave with nothing."
+  },
+  "window-job": {
+   "kinds": [
+    "shop",
+    "site",
+    "street",
+    "dock"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "pay": [
+    140,
+    220
+   ],
+   "battle": {
+    "chance": 35,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You slip through the window of a closed shop in {district}. ₽{pay}.",
+   "lose": "An alarm, a light, a shout. You leave with nothing."
+  },
+  "roof-entry": {
+   "kinds": [
+    "shop",
+    "site",
+    "street",
+    "dock"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "battle": {
+    "chance": 35,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You come in over the rooftops in {district}.",
+   "lose": "An alarm, a light, a shout. You leave with nothing."
+  },
+  "cellar-door": {
+   "kinds": [
+    "shop",
+    "site",
+    "street",
+    "dock"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "battle": {
+    "chance": 35,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You use a coal chute or cellar hatch in {district}.",
+   "lose": "An alarm, a light, a shout. You leave with nothing."
+  },
+  "fake-delivery": {
+   "kinds": [
+    "shop",
+    "site",
+    "street",
+    "dock"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "battle": {
+    "chance": 35,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You dress as a courier to walk in in {district}.",
+   "lose": "An alarm, a light, a shout. You leave with nothing."
+  },
+  "fake-inspector": {
+   "kinds": [
+    "shop",
+    "site",
+    "street",
+    "dock"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "battle": {
+    "chance": 35,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You pose as a health or fire inspector in {district}.",
+   "lose": "An alarm, a light, a shout. You leave with nothing."
+  },
+  "pickpocket-duo": {
+   "kinds": [
+    "shop",
+    "site",
+    "street",
+    "dock"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "pay": [
+    100,
+    140
+   ],
+   "battle": {
+    "chance": 35,
+    "on": "fail",
+    "foe": "target"
+   },
+   "band": 1,
+   "win": "You work a crowd with a partner in {district}. ₽{pay}.",
+   "lose": "An alarm, a light, a shout. You leave with nothing."
+  },
+  "bag-swap": {
+   "kinds": [
+    "shop",
+    "site",
+    "street",
+    "dock"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "battle": {
+    "chance": 35,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You swap a target's bag for a decoy in {district}.",
+   "lose": "An alarm, a light, a shout. You leave with nothing."
+  },
+  "ring-switch": {
+   "kinds": [
+    "shop",
+    "site",
+    "street",
+    "dock"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "pay": [
+    160,
+    240
+   ],
+   "battle": {
+    "chance": 35,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You swap a gem or ring for a fake in {district}. ₽{pay}.",
+   "lose": "An alarm, a light, a shout. You leave with nothing."
+  },
+  "silent-alarm": {
+   "kinds": [
+    "shop",
+    "site",
+    "street",
+    "dock"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "battle": {
+    "chance": 35,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You disable an alarm wire by wire in {district}.",
+   "lose": "An alarm, a light, a shout. You leave with nothing."
+  },
+  "vault-drill": {
+   "kinds": [
+    "shop",
+    "site",
+    "street",
+    "dock"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "pay": [
+    720,
+    1080
+   ],
+   "battle": {
+    "chance": 35,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You drill through a vault wall in {district}. ₽{pay}.",
+   "lose": "An alarm, a light, a shout. You leave with nothing."
+  },
+  "stash-house-hit": {
+   "kinds": [
+    "shop",
+    "site",
+    "street",
+    "dock"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "pay": [
+    240,
+    360
+   ],
+   "battle": {
+    "chance": 35,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You hit a rival's cash stash in {district}. ₽{pay}.",
+   "lose": "An alarm, a light, a shout. You leave with nothing."
+  },
+  "tourist-bus-heist": {
+   "kinds": [
+    "shop",
+    "site",
+    "street",
+    "dock"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "pay": [
+    200,
+    300
+   ],
+   "battle": {
+    "chance": 35,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You hijack a tour bus in {district}. ₽{pay}.",
+   "lose": "An alarm, a light, a shout. You leave with nothing."
+  },
+  "rooftop-duel": {
+   "kinds": [
+    "route",
+    "street",
+    "crowd",
+    "dock",
+    "gym",
+    "cave"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 3,
+   "prize": 1,
+   "battle": {
+    "chance": 100,
+    "on": "always",
+    "foe": "target"
+   },
+   "win": "You fight a rival on a rooftop in {district}. The prize money.",
+   "lose": "You lose the fight, and the crowd remembers your face."
+  },
+  "dockside-brawl": {
+   "kinds": [
+    "route",
+    "street",
+    "crowd",
+    "dock",
+    "gym",
+    "cave"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 3,
+   "pay": [
+    120,
+    180
+   ],
+   "battle": {
+    "chance": 100,
+    "on": "always",
+    "foe": "target"
+   },
+   "win": "You win a harbour fight in {district}. ₽{pay}.",
+   "lose": "You lose the fight, and the crowd remembers your face."
+  },
+  "gym-yard-spar": {
+   "kinds": [
+    "route",
+    "street",
+    "crowd",
+    "dock",
+    "gym",
+    "cave"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 3,
+   "edge": 1,
+   "prize": 1,
+   "battle": {
+    "chance": 100,
+    "on": "always",
+    "foe": "target"
+   },
+   "win": "You spar outside a Gym in {district}. The prize money.",
+   "lose": "You lose the fight, and the crowd remembers your face."
+  },
+  "ring-match": {
+   "kinds": [
+    "route",
+    "street",
+    "crowd",
+    "dock",
+    "gym",
+    "cave"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 3,
+   "pay": [
+    160,
+    240
+   ],
+   "battle": {
+    "chance": 100,
+    "on": "always",
+    "foe": "target"
+   },
+   "band": 2,
+   "win": "You enter an arena bout in {district}. ₽{pay}.",
+   "lose": "You lose the fight, and the crowd remembers your face."
+  },
+  "duel-under-rain": {
+   "kinds": [
+    "route",
+    "street",
+    "crowd",
+    "dock",
+    "gym",
+    "cave"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 3,
+   "prize": 1,
+   "battle": {
+    "chance": 100,
+    "on": "always",
+    "foe": "target"
+   },
+   "win": "You fight in bad weather in {district}. The prize money.",
+   "lose": "You lose the fight, and the crowd remembers your face."
+  },
+  "mirror-match": {
+   "kinds": [
+    "route",
+    "street",
+    "crowd",
+    "dock",
+    "gym",
+    "cave"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 3,
+   "prize": 1,
+   "battle": {
+    "chance": 100,
+    "on": "always",
+    "foe": "target"
+   },
+   "win": "You duel a copy of your own team in {district}. The prize money.",
+   "lose": "You lose the fight, and the crowd remembers your face."
+  },
+  "training-hall-raid": {
+   "kinds": [
+    "route",
+    "street",
+    "crowd",
+    "dock",
+    "gym",
+    "cave"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 3,
+   "prize": 1,
+   "battle": {
+    "chance": 100,
+    "on": "always",
+    "foe": "target"
+   },
+   "win": "You hit a rival dojo in {district}. The prize money.",
+   "lose": "You lose the fight, and the crowd remembers your face."
+  },
+  "sudden-death": {
+   "kinds": [
+    "route",
+    "street",
+    "crowd",
+    "dock",
+    "gym",
+    "cave"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 3,
+   "pay": [
+    240,
+    360
+   ],
+   "battle": {
+    "chance": 100,
+    "on": "always",
+    "foe": "target"
+   },
+   "win": "You one-Pokémon winner-takes-all duel in {district}. ₽{pay}.",
+   "lose": "You lose the fight, and the crowd remembers your face."
+  },
+  "handicap-match": {
+   "kinds": [
+    "route",
+    "street",
+    "crowd",
+    "dock",
+    "gym",
+    "cave"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 3,
+   "prize": 1,
+   "battle": {
+    "chance": 100,
+    "on": "always",
+    "foe": "target"
+   },
+   "win": "You fight at a disadvantage for bigger pay in {district}. The prize money.",
+   "lose": "You lose the fight, and the crowd remembers your face."
+  },
+  "last-man-standing": {
+   "kinds": [
+    "route",
+    "street",
+    "crowd",
+    "dock",
+    "gym",
+    "cave"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 3,
+   "pay": [
+    240,
+    360
+   ],
+   "battle": {
+    "chance": 100,
+    "on": "always",
+    "foe": "target"
+   },
+   "band": 2,
+   "win": "You win a 4-person free-for-all in {district}. ₽{pay}.",
+   "lose": "You lose the fight, and the crowd remembers your face."
+  },
+  "double-battle-bounty": {
+   "kinds": [
+    "route",
+    "street",
+    "crowd",
+    "dock",
+    "gym",
+    "cave"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 3,
+   "pay": [
+    240,
+    360
+   ],
+   "battle": {
+    "chance": 100,
+    "on": "always",
+    "foe": "target"
+   },
+   "win": "You hunt a pair of trainers in {district}. ₽{pay}.",
+   "lose": "You lose the fight, and the crowd remembers your face."
+  },
+  "tag-team": {
+   "kinds": [
+    "route",
+    "street",
+    "crowd",
+    "dock",
+    "gym",
+    "cave"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 3,
+   "pay": [
+    140,
+    220
+   ],
+   "battle": {
+    "chance": 100,
+    "on": "always",
+    "foe": "target"
+   },
+   "band": 1,
+   "win": "You fight with a crew partner for a bonus in {district}. ₽{pay}.",
+   "lose": "You lose the fight, and the crowd remembers your face."
+  },
+  "quick-draw": {
+   "kinds": [
+    "route",
+    "street",
+    "crowd",
+    "dock",
+    "gym",
+    "cave"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 3,
+   "pay": [
+    100,
+    140
+   ],
+   "battle": {
+    "chance": 100,
+    "on": "always",
+    "foe": "target"
+   },
+   "win": "You win with a first-move trick in {district}. ₽{pay}.",
+   "lose": "You lose the fight, and the crowd remembers your face."
+  },
+  "sweep-ambush": {
+   "kinds": [
+    "route",
+    "street",
+    "crowd",
+    "dock",
+    "gym",
+    "cave"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 3,
+   "pay": [
+    120,
+    180
+   ],
+   "battle": {
+    "chance": 100,
+    "on": "always",
+    "foe": "target"
+   },
+   "win": "You take down a patrol from the dark in {district}. ₽{pay}.",
+   "lose": "You lose the fight, and the crowd remembers your face."
+  },
+  "smooth-pitch": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "win": "You sell a stranger on the team in {district}.",
+   "lose": "The words come out wrong. Nobody is moved."
+  },
+  "hard-sell": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "win": "You push a recruit hard in {district}.",
+   "lose": "The words come out wrong. Nobody is moved."
+  },
+  "oath-night": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "loyalty": 3,
+   "effect": "crew",
+   "win": "You hold an oath ritual for new members. The crew's Loyalty +3.",
+   "lose": "The words come out wrong. Nobody is moved."
+  },
+  "initiation": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "win": "You a fair test for a new member.",
+   "lose": "The words come out wrong. Nobody is moved."
+  },
+  "secret-handshake": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "morale": 1,
+   "effect": "crew",
+   "win": "You create a team sign. The crew's Morale +1.",
+   "lose": "The words come out wrong. Nobody is moved."
+  },
+  "uniform-day": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "morale": 2,
+   "effect": "crew",
+   "win": "You hand out uniforms. The crew's Morale +2.",
+   "lose": "The words come out wrong. Nobody is moved."
+  },
+  "cook-out": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "morale": 3,
+   "effect": "crew",
+   "win": "You cook for the crew. The crew's Morale +3.",
+   "lose": "The words come out wrong. Nobody is moved."
+  },
+  "crew-photo": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "win": "You take a team picture.",
+   "lose": "The words come out wrong. Nobody is moved."
+  },
+  "birthday-party": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "loyalty": 4,
+   "effect": "crew",
+   "win": "You remember a member's birthday. The crew's Loyalty +4.",
+   "lose": "The words come out wrong. Nobody is moved."
+  },
+  "pay-raise": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "loyalty": 5,
+   "effect": "crew",
+   "win": "You give a member a raise. The crew's Loyalty +5.",
+   "lose": "The words come out wrong. Nobody is moved."
+  },
+  "back-pay": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "loyalty": 3,
+   "effect": "crew",
+   "win": "You pay a late wage with a bonus. The crew's Loyalty +3.",
+   "lose": "The words come out wrong. Nobody is moved."
+  },
+  "confession": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "morale": 2,
+   "effect": "crew",
+   "win": "You let a member confess a worry. The crew's Morale +2.",
+   "lose": "The words come out wrong. Nobody is moved."
+  },
+  "prank-day": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "morale": 4,
+   "effect": "crew",
+   "win": "You allow a prank day. The crew's Morale +4.",
+   "lose": "The words come out wrong. Nobody is moved."
+  },
+  "funeral": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "loyalty": 5,
+   "effect": "crew",
+   "gate": "fell",
+   "win": "You honour a fallen member. The crew's Loyalty +5.",
+   "lose": "The words come out wrong. Nobody is moved."
+  },
+  "wedding": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "loyalty": 6,
+   "effect": "crew",
+   "win": "You host a member's wedding. The crew's Loyalty +6.",
+   "lose": "The words come out wrong. Nobody is moved."
+  },
+  "crime-scene": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "effect": "scout",
+   "win": "You study a scene after a rival's hit in {district}.",
+   "lose": "The trail goes cold before you get there."
+  },
+  "fingerprints": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "effect": "scout",
+   "win": "You lift prints from a site.",
+   "lose": "The trail goes cold before you get there."
+  },
+  "ledger-hunt": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "effect": "scout",
+   "win": "You find a rival's ledger in {district}.",
+   "lose": "The trail goes cold before you get there."
+  },
+  "paper-trail": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "effect": "scout",
+   "win": "You follow a rival's money.",
+   "lose": "The trail goes cold before you get there."
+  },
+  "phone-records": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "effect": "scout",
+   "win": "You get a rival's call log.",
+   "lose": "The trail goes cold before you get there."
+  },
+  "courier-trace": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "effect": "scout",
+   "win": "You follow a rival courier in {district}.",
+   "lose": "The trail goes cold before you get there."
+  },
+  "stakeout": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "effect": "scout",
+   "win": "You sit on a hideout all day in {district}.",
+   "lose": "The trail goes cold before you get there."
+  },
+  "anonymous-tip": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "heat": 5,
+   "effect": "scout",
+   "win": "You feed a tip to police against a rival.",
+   "lose": "The trail goes cold before you get there."
+  },
+  "informant-meet": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "effect": "scout",
+   "win": "You meet a paid informant in {district}.",
+   "lose": "The trail goes cold before you get there."
+  },
+  "break-a-code": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "effect": "scout",
+   "win": "You crack a message.",
+   "lose": "The trail goes cold before you get there."
+  },
+  "map-the-city": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "effect": "scout",
+   "win": "You draw a district map.",
+   "lose": "The trail goes cold before you get there."
+  },
+  "check-the-records": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "effect": "scout",
+   "win": "You read town records.",
+   "lose": "The trail goes cold before you get there."
+  },
+  "hire-a-detective": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "effect": "scout",
+   "win": "You contract a private eye.",
+   "lose": "The trail goes cold before you get there."
+  },
+  "witness-protection": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "effect": "scout",
+   "win": "You hide a witness.",
+   "lose": "The trail goes cold before you get there."
+  },
+  "surveillance-van": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "effect": "scout",
+   "win": "You park a van near a site in {district}.",
+   "lose": "The trail goes cold before you get there."
+  },
+  "bond-walk": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "friendship": 3,
+   "win": "You walk with a Pokémon.",
+   "lose": "Your Pokémon aren't in the mood today."
+  },
+  "wild-whisper": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "win": "You talk a wild Pokémon into joining in {district}.",
+   "lose": "Your Pokémon aren't in the mood today."
+  },
+  "berry-feast": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "friendship": 5,
+   "win": "You feed a Pokémon its favourite berry.",
+   "lose": "Your Pokémon aren't in the mood today."
+  },
+  "hatch-watch": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "win": "You sit with an egg.",
+   "lose": "Your Pokémon aren't in the mood today."
+  },
+  "pokemon-loan": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "win": "You borrow a Pokémon from a friendly stranger in {district}.",
+   "lose": "Your Pokémon aren't in the mood today."
+  },
+  "treasure-dive": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "pay": [
+    60,
+    100
+   ],
+   "gate": "surf",
+   "win": "You dive for sea loot in {district}. ₽{pay}.",
+   "lose": "Your Pokémon aren't in the mood today."
+  },
+  "cave-echo": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "win": "You follow a cave's echo to a nest in {district}.",
+   "lose": "Your Pokémon aren't in the mood today."
+  },
+  "mushroom-hunt": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "win": "You forage in the woods in {district}.",
+   "lose": "Your Pokémon aren't in the mood today."
+  },
+  "night-catch": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "win": "You catch a nocturnal Pokémon in {district}.",
+   "lose": "Your Pokémon aren't in the mood today."
+  },
+  "berry-blend": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "win": "You blend berries into treats.",
+   "lose": "Your Pokémon aren't in the mood today."
+  },
+  "pokemon-gym-lessons": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "edge": 1,
+   "win": "You train under a Gym teacher.",
+   "lose": "Your Pokémon aren't in the mood today."
+  },
+  "rare-candy-sale": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "cost": 200,
+   "gate": "contact",
+   "win": "You buy or sell Rare Candies.",
+   "lose": "Your Pokémon aren't in the mood today."
+  },
+  "nickname-day": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "friendship": 2,
+   "win": "You give your Pokémon nicknames.",
+   "lose": "Your Pokémon aren't in the mood today."
+  },
+  "cargo-skim": {
+   "kinds": [
+    "dock",
+    "site",
+    "shop"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "pay": [
+    140,
+    220
+   ],
+   "battle": {
+    "chance": 30,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You open crates at the harbour in {district}. ₽{pay}.",
+   "lose": "The harbour watch is awake tonight. You back off."
+  },
+  "ship-tag": {
+   "kinds": [
+    "dock",
+    "site",
+    "shop"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "battle": {
+    "chance": 30,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You mark a ship for later in {district}.",
+   "lose": "The harbour watch is awake tonight. You back off."
+  },
+  "warehouse-fire": {
+   "kinds": [
+    "dock",
+    "site",
+    "shop"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "battle": {
+    "chance": 30,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You torch a rival warehouse in {district}.",
+   "lose": "The harbour watch is awake tonight. You back off."
+  },
+  "harbour-master-deal": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "win": "You pay the harbour master.",
+   "lose": "The harbour watch is awake tonight. You back off."
+  },
+  "stowaway": {
+   "kinds": [
+    "dock",
+    "site",
+    "shop"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "battle": {
+    "chance": 30,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You smuggle a person aboard in {district}.",
+   "lose": "The harbour watch is awake tonight. You back off."
+  },
+  "crab-pot-racket": {
+   "kinds": [
+    "dock",
+    "site",
+    "shop"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "pay": [
+    30,
+    50
+   ],
+   "battle": {
+    "chance": 30,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You take a cut of fishermen's catch in {district}. ₽{pay}.",
+   "lose": "The harbour watch is awake tonight. You back off."
+  },
+  "dock-strike": {
+   "kinds": [
+    "dock",
+    "site",
+    "shop"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "battle": {
+    "chance": 30,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You start a dock strike against a rival in {district}.",
+   "lose": "The harbour watch is awake tonight. You back off."
+  },
+  "fish-market-cut": {
+   "kinds": [
+    "dock",
+    "site",
+    "shop"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "pay": [
+    60,
+    80
+   ],
+   "battle": {
+    "chance": 30,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You take a cut of a fish market in {district}. ₽{pay}.",
+   "lose": "The harbour watch is awake tonight. You back off."
+  },
+  "ferry-pass": {
+   "kinds": [
+    "dock",
+    "site",
+    "shop"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "pay": [
+    40,
+    60
+   ],
+   "battle": {
+    "chance": 30,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You run a ferry for pay in {district}. ₽{pay}.",
+   "lose": "The harbour watch is awake tonight. You back off."
+  },
+  "lighthouse-signal": {
+   "kinds": [
+    "dock",
+    "site",
+    "shop"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "battle": {
+    "chance": 30,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You flash a smuggling signal in {district}.",
+   "lose": "The harbour watch is awake tonight. You back off."
+  },
+  "pier-ambush": {
+   "kinds": [
+    "dock",
+    "site",
+    "shop"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "battle": {
+    "chance": 30,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You hit a rival's pier crew in {district}.",
+   "lose": "The harbour watch is awake tonight. You back off."
+  },
+  "black-cargo": {
+   "kinds": [
+    "dock",
+    "site",
+    "shop"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "pay": [
+    240,
+    360
+   ],
+   "battle": {
+    "chance": 30,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You carry banned Pokémon aboard in {district}. ₽{pay}.",
+   "lose": "The harbour watch is awake tonight. You back off."
+  },
+  "customs-bribe": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "win": "You pay a customs officer.",
+   "lose": "The harbour watch is awake tonight. You back off."
+  },
+  "anchor-tax": {
+   "kinds": [
+    "dock",
+    "site",
+    "shop"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "pay": [
+    50,
+    70
+   ],
+   "battle": {
+    "chance": 30,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You charge ships to dock in {district}. ₽{pay}.",
+   "lose": "The harbour watch is awake tonight. You back off."
+  },
+  "salvage-raid": {
+   "kinds": [
+    "dock",
+    "site",
+    "shop"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "pay": [
+    160,
+    240
+   ],
+   "battle": {
+    "chance": 30,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You strip a wreck in {district}. ₽{pay}.",
+   "lose": "The harbour watch is awake tonight. You back off."
+  },
+  "charity-match": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "regard": 2,
+   "win": "You host a battle for a cause in {district}. Regard +2.",
+   "lose": "Nobody turns up, and the ones who do don't clap."
+  },
+  "free-meal-day": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "regard": 3,
+   "win": "You hand out free food in {district}. Regard +3.",
+   "lose": "Nobody turns up, and the ones who do don't clap."
+  },
+  "fix-the-park": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "regard": 2,
+   "win": "You repair a park in {district}. Regard +2.",
+   "lose": "Nobody turns up, and the ones who do don't clap."
+  },
+  "statue-of-the-boss": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "dread": 1,
+   "win": "You raise a statue of the Boss. Dread +1.",
+   "lose": "Nobody turns up, and the ones who do don't clap."
+  },
+  "mural-painting": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "regard": 2,
+   "win": "You paint a team mural in {district}. Regard +2.",
+   "lose": "Nobody turns up, and the ones who do don't clap."
+  },
+  "block-cleanup": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "regard": 2,
+   "win": "You clean up a block in {district}. Regard +2.",
+   "lose": "Nobody turns up, and the ones who do don't clap."
+  },
+  "heckle-the-mayor": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "dread": 1,
+   "win": "You shout at a mayor's speech in {district}. Dread +1.",
+   "lose": "Nobody turns up, and the ones who do don't clap."
+  },
+  "free-clinic": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "regard": 3,
+   "win": "You run a clinic for the poor in {district}. Regard +3.",
+   "lose": "Nobody turns up, and the ones who do don't clap."
+  },
+  "school-visit": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "regard": 2,
+   "win": "You visit a school (talk only, no minors targeted) in {district}. Regard +2.",
+   "lose": "Nobody turns up, and the ones who do don't clap."
+  },
+  "sports-day": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "regard": 3,
+   "win": "You host a sports day in {district}. Regard +3.",
+   "lose": "Nobody turns up, and the ones who do don't clap."
+  },
+  "local-hero": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "regard": 2,
+   "win": "You back a local hero. Regard +2.",
+   "lose": "Nobody turns up, and the ones who do don't clap."
+  },
+  "silence-a-critic": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "dread": 1,
+   "win": "You make a critic stop talking against you in {district}. Dread +1.",
+   "lose": "Nobody turns up, and the ones who do don't clap."
+  },
+  "interview": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "regard": 2,
+   "win": "You give a TV interview in {district}. Regard +2.",
+   "lose": "Nobody turns up, and the ones who do don't clap."
+  },
+  "open-letter": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "regard": 1,
+   "win": "You publish an open letter. Regard +1.",
+   "lose": "Nobody turns up, and the ones who do don't clap."
+  },
+  "cheer-squad": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "regard": 2,
+   "win": "You hire a cheering crowd in {district}. Regard +2.",
+   "lose": "Nobody turns up, and the ones who do don't clap."
+  },
+  "dye-and-disguise": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "heat": -5,
+   "win": "You change your look. Heat −5.",
+   "lose": "It doesn't take. The police still know your face."
+  },
+  "false-passport": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "heat": -3,
+   "win": "You forge travel papers. Heat −3.",
+   "lose": "It doesn't take. The police still know your face."
+  },
+  "sewer-escape": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "heat": -5,
+   "win": "You slip away underground in {district}. Heat −5.",
+   "lose": "It doesn't take. The police still know your face."
+  },
+  "bus-hop": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "win": "You switch buses to lose a tail in {district}.",
+   "lose": "It doesn't take. The police still know your face."
+  },
+  "crowd-melt": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "heat": -5,
+   "win": "You vanish in a crowd in {district}. Heat −5.",
+   "lose": "It doesn't take. The police still know your face."
+  },
+  "safe-phone": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "heat": -2,
+   "win": "You use a burner phone. Heat −2.",
+   "lose": "It doesn't take. The police still know your face."
+  },
+  "lawyer-up": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "heat": -5,
+   "win": "You hire a lawyer. Heat −5.",
+   "lose": "It doesn't take. The police still know your face."
+  },
+  "plead-out": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "heat": -3,
+   "win": "You take a plea deal for a crew member. Heat −3.",
+   "lose": "It doesn't take. The police still know your face."
+  },
+  "stolen-uniform": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "heat": -3,
+   "win": "You wear a police uniform in {district}. Heat −3.",
+   "lose": "It doesn't take. The police still know your face."
+  },
+  "radio-jam": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "heat": -4,
+   "win": "You jam police radios in {district}. Heat −4.",
+   "lose": "It doesn't take. The police still know your face."
+  },
+  "roadblock-dodge": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "heat": -3,
+   "win": "You slip a checkpoint in {district}. Heat −3.",
+   "lose": "It doesn't take. The police still know your face."
+  },
+  "evidence-burn": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "heat": -6,
+   "win": "You burn the proof against you in {district}. Heat −6.",
+   "lose": "It doesn't take. The police still know your face."
+  },
+  "witness-scare": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "heat": -4,
+   "win": "You scare an adult witness (never a minor) in {district}. Heat −4.",
+   "lose": "It doesn't take. The police still know your face."
+  },
+  "plant-a-rumour": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "heat": -4,
+   "win": "You start a rumour against Looker. Heat −4.",
+   "lose": "It doesn't take. The police still know your face."
+  },
+  "police-picnic": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "heat": -3,
+   "win": "You hold a picnic for officers. Heat −3.",
+   "lose": "It doesn't take. The police still know your face."
+  },
+  "rumour-mill": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 2,
+   "failHeat": 6,
+   "tension": 2,
+   "effect": "rivalHit",
+   "win": "You spread talk against a rival.",
+   "lose": "The rival team saw you coming."
+  },
+  "poison-the-well": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 2,
+   "failHeat": 6,
+   "pay": [
+    120,
+    180
+   ],
+   "effect": "rivalHit",
+   "win": "You contaminate a rival's supply in {district}. ₽{pay}.",
+   "lose": "The rival team saw you coming."
+  },
+  "cut-the-wires": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 2,
+   "failHeat": 6,
+   "pay": [
+    80,
+    120
+   ],
+   "effect": "rivalHit",
+   "win": "You cut a rival's power in {district}. ₽{pay}.",
+   "lose": "The rival team saw you coming."
+  },
+  "steal-their-cook": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 2,
+   "failHeat": 6,
+   "pay": [
+    50,
+    70
+   ],
+   "effect": "rivalHit",
+   "win": "You poach a rival's cook in {district}. ₽{pay}.",
+   "lose": "The rival team saw you coming."
+  },
+  "replace-the-lock": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 2,
+   "failHeat": 6,
+   "effect": "rivalHit",
+   "win": "You change a rival's lock so they cannot get in in {district}.",
+   "lose": "The rival team saw you coming."
+  },
+  "mark-the-rival": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 2,
+   "failHeat": 6,
+   "dread": 1,
+   "effect": "rivalHit",
+   "win": "You paint over the rival's sign with yours in {district}. Dread +1.",
+   "lose": "The rival team saw you coming."
+  },
+  "bribe-the-rival-s-guard": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 2,
+   "failHeat": 6,
+   "cost": 200,
+   "effect": "rivalHit",
+   "win": "You buy a guard in {district}.",
+   "lose": "The rival team saw you coming."
+  },
+  "frame-the-rival-boss": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 2,
+   "failHeat": 6,
+   "tension": 3,
+   "effect": "rivalHit",
+   "win": "You make police suspect their Boss in {district}.",
+   "lose": "The rival team saw you coming."
+  },
+  "hijack-their-raid": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 2,
+   "failHeat": 6,
+   "pay": [
+    200,
+    300
+   ],
+   "effect": "rivalHit",
+   "win": "You seize a rival's raid van in {district}. ₽{pay}.",
+   "lose": "The rival team saw you coming."
+  },
+  "switch-the-plans": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 2,
+   "failHeat": 6,
+   "pay": [
+    80,
+    120
+   ],
+   "effect": "rivalHit",
+   "win": "You swap plans in their file in {district}. ₽{pay}.",
+   "lose": "The rival team saw you coming."
+  },
+  "break-the-alliance": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 2,
+   "failHeat": 6,
+   "tension": 3,
+   "effect": "rivalHit",
+   "win": "You split two rival teams.",
+   "lose": "The rival team saw you coming."
+  },
+  "steal-their-medals": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 2,
+   "failHeat": 6,
+   "pay": [
+    100,
+    140
+   ],
+   "effect": "rivalHit",
+   "win": "You take a rival's honour items in {district}. ₽{pay}.",
+   "lose": "The rival team saw you coming."
+  },
+  "starve-the-rival": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 2,
+   "failHeat": 6,
+   "pay": [
+    80,
+    120
+   ],
+   "effect": "rivalHit",
+   "win": "You cut off a rival's food in {district}. ₽{pay}.",
+   "lose": "The rival team saw you coming."
+  },
+  "capture-a-scout": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 2,
+   "failHeat": 6,
+   "pay": [
+    60,
+    100
+   ],
+   "effect": "rivalHit",
+   "win": "You seize a rival scout (adult) in {district}. ₽{pay}.",
+   "lose": "The rival team saw you coming."
+  },
+  "challenge-letter": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 2,
+   "failHeat": 6,
+   "tension": 3,
+   "effect": "rivalHit",
+   "win": "You dare a rival to a public duel.",
+   "lose": "The rival team saw you coming."
+  },
+  "claim-a-corner": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 3,
+   "pay": [
+    20,
+    20
+   ],
+   "control": 2,
+   "win": "You plant your sign on a street corner in {district}. ₽{pay}, Control +2.",
+   "lose": "The street doesn't take your side today."
+  },
+  "draw-the-border": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 3,
+   "control": 2,
+   "win": "You mark your district's edge. Control +2.",
+   "lose": "The street doesn't take your side today."
+  },
+  "hold-the-market-day": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 3,
+   "pay": [
+    60,
+    100
+   ],
+   "control": 2,
+   "win": "You run a weekly market in {district}. ₽{pay}, Control +2.",
+   "lose": "The street doesn't take your side today."
+  },
+  "toll-gate": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 3,
+   "pay": [
+    40,
+    60
+   ],
+   "control": 2,
+   "win": "You set a gate on a district road in {district}. ₽{pay}, Control +2.",
+   "lose": "The street doesn't take your side today."
+  },
+  "street-council": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 3,
+   "regard": 1,
+   "control": 2,
+   "win": "You seat local elders on a council. Regard +1, Control +2.",
+   "lose": "The street doesn't take your side today."
+  },
+  "neighbourhood-watch": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 3,
+   "control": 2,
+   "win": "You form a watch that reports to you. Control +2.",
+   "lose": "The street doesn't take your side today."
+  },
+  "fence-the-alley": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "failHeat": 3,
+   "heat": -2,
+   "control": 2,
+   "win": "You build a fence to close an alley in {district}. Control +2, Heat −2.",
+   "lose": "The street doesn't take your side today."
+  },
+  "safe-street": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 3,
+   "regard": 2,
+   "control": 2,
+   "win": "You make a street safe so people thank you. Regard +2, Control +2.",
+   "lose": "The street doesn't take your side today."
+  },
+  "secret-passage": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "failHeat": 3,
+   "heat": -3,
+   "control": 2,
+   "win": "You open a hidden route between districts in {district}. Control +2, Heat −3.",
+   "lose": "The street doesn't take your side today."
+  },
+  "landlord-takeover": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 3,
+   "cost": 60,
+   "control": 2,
+   "win": "You buy a building's lease. Control +2.",
+   "lose": "The street doesn't take your side today."
+  },
+  "rename-the-street": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 3,
+   "dread": 1,
+   "control": 2,
+   "win": "You rename a street after the team. Dread +1, Control +2.",
+   "lose": "The street doesn't take your side today."
+  },
+  "evict-a-rival": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 3,
+   "pay": [
+    100,
+    140
+   ],
+   "control": 2,
+   "win": "You force a rival's front out in {district}. ₽{pay}, Control +2.",
+   "lose": "The street doesn't take your side today."
+  },
+  "bridge-control": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 3,
+   "pay": [
+    30,
+    50
+   ],
+   "control": 2,
+   "win": "You control a bridge in {district}. ₽{pay}, Control +2.",
+   "lose": "The street doesn't take your side today."
+  },
+  "light-the-streets": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 3,
+   "regard": 2,
+   "control": 2,
+   "win": "You install lights so people feel safe. Regard +2, Control +2.",
+   "lose": "The street doesn't take your side today."
+  },
+  "build-a-gadget": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "failHeat": 2,
+   "cost": 40,
+   "win": "You build a tool in the Workshop.",
+   "lose": "Sparks, smoke, and a part that won't fit."
+  },
+  "repair-the-van": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "failHeat": 2,
+   "cost": 30,
+   "win": "You fix the team van.",
+   "lose": "Sparks, smoke, and a part that won't fit."
+  },
+  "hack-a-camera": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "failHeat": 2,
+   "heat": -3,
+   "win": "You break into a camera feed in {district}. Heat −3.",
+   "lose": "Sparks, smoke, and a part that won't fit."
+  },
+  "scrambler": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "failHeat": 2,
+   "heat": -3,
+   "win": "You build a signal scrambler. Heat −3.",
+   "lose": "Sparks, smoke, and a part that won't fit."
+  },
+  "drone-scout": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "failHeat": 2,
+   "pay": [
+    40,
+    60
+   ],
+   "win": "You fly a drone over a site in {district}. ₽{pay}.",
+   "lose": "Sparks, smoke, and a part that won't fit."
+  },
+  "forge-a-badge": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "failHeat": 2,
+   "pay": [
+    50,
+    70
+   ],
+   "win": "You make a fake badge. ₽{pay}.",
+   "lose": "Sparks, smoke, and a part that won't fit."
+  },
+  "disguise-kit": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "failHeat": 2,
+   "heat": -2,
+   "win": "You build a disguise set. Heat −2.",
+   "lose": "Sparks, smoke, and a part that won't fit."
+  },
+  "gas-mask": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "failHeat": 2,
+   "heat": -2,
+   "win": "You build smoke gear for a heist. Heat −2.",
+   "lose": "Sparks, smoke, and a part that won't fit."
+  },
+  "smoke-bomb": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "failHeat": 2,
+   "heat": -3,
+   "win": "You make a smoke screen in {district}. Heat −3.",
+   "lose": "Sparks, smoke, and a part that won't fit."
+  },
+  "fake-id-press": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "failHeat": 2,
+   "pay": [
+    50,
+    70
+   ],
+   "win": "You print IDs. ₽{pay}.",
+   "lose": "Sparks, smoke, and a part that won't fit."
+  },
+  "lock-pattern-study": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "failHeat": 2,
+   "heat": -2,
+   "win": "You study a lock brand. Heat −2.",
+   "lose": "Sparks, smoke, and a part that won't fit."
+  },
+  "radio-set": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "failHeat": 2,
+   "morale": 1,
+   "effect": "crew",
+   "win": "You build a radio to talk to the crew. The crew's Morale +1.",
+   "lose": "Sparks, smoke, and a part that won't fit."
+  },
+  "night-vision": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "failHeat": 2,
+   "heat": -2,
+   "win": "You make night gear. Heat −2.",
+   "lose": "Sparks, smoke, and a part that won't fit."
+  },
+  "blueprint-study": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "failHeat": 2,
+   "pay": [
+    50,
+    70
+   ],
+   "win": "You study a building's plan. ₽{pay}.",
+   "lose": "Sparks, smoke, and a part that won't fit."
+  },
+  "remote-charge": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "failHeat": 2,
+   "pay": [
+    80,
+    120
+   ],
+   "win": "You rig a remote blast in {district}. ₽{pay}.",
+   "lose": "Sparks, smoke, and a part that won't fit."
+  },
+  "road-trip": {
+   "kinds": [
+    "route",
+    "cave",
+    "dock"
+   ],
+   "chance": 75,
+   "pay": [
+    60,
+    80
+   ],
+   "win": "You travel to a far town for a job in {district}. ₽{pay}.",
+   "lose": "The road is long and gives you nothing."
+  },
+  "mountain-climb": {
+   "kinds": [
+    "route",
+    "cave",
+    "dock"
+   ],
+   "chance": 75,
+   "pay": [
+    60,
+    100
+   ],
+   "win": "You climb a mountain for a rare item in {district}. ₽{pay}.",
+   "lose": "The road is long and gives you nothing."
+  },
+  "forest-hide": {
+   "kinds": [
+    "route",
+    "cave",
+    "dock"
+   ],
+   "chance": 75,
+   "heat": -5,
+   "win": "You hide in a forest in {district}. Heat −5.",
+   "lose": "The road is long and gives you nothing."
+  },
+  "desert-crossing": {
+   "kinds": [
+    "route",
+    "cave",
+    "dock"
+   ],
+   "chance": 75,
+   "pay": [
+    100,
+    140
+   ],
+   "win": "You cross a desert in {district}. ₽{pay}.",
+   "lose": "The road is long and gives you nothing."
+  },
+  "island-hop": {
+   "kinds": [
+    "route",
+    "cave",
+    "dock"
+   ],
+   "chance": 75,
+   "pay": [
+    80,
+    120
+   ],
+   "win": "You visit an island in {district}. ₽{pay}.",
+   "lose": "The road is long and gives you nothing."
+  },
+  "cave-survey": {
+   "kinds": [
+    "route",
+    "cave",
+    "dock"
+   ],
+   "chance": 75,
+   "pay": [
+    50,
+    70
+   ],
+   "win": "You map a cave in {district}. ₽{pay}.",
+   "lose": "The road is long and gives you nothing."
+  },
+  "ruin-dive": {
+   "kinds": [
+    "route",
+    "cave",
+    "dock"
+   ],
+   "chance": 75,
+   "pay": [
+    80,
+    120
+   ],
+   "win": "You explore ruins in {district}. ₽{pay}.",
+   "lose": "The road is long and gives you nothing."
+  },
+  "ice-field-walk": {
+   "kinds": [
+    "route",
+    "cave",
+    "dock"
+   ],
+   "chance": 75,
+   "pay": [
+    80,
+    120
+   ],
+   "win": "You cross a frozen field in {district}. ₽{pay}.",
+   "lose": "The road is long and gives you nothing."
+  },
+  "swamp-run": {
+   "kinds": [
+    "route",
+    "cave",
+    "dock"
+   ],
+   "chance": 75,
+   "pay": [
+    80,
+    120
+   ],
+   "win": "You cross a swamp in {district}. ₽{pay}.",
+   "lose": "The road is long and gives you nothing."
+  },
+  "skyway": {
+   "kinds": [
+    "route",
+    "cave",
+    "dock"
+   ],
+   "chance": 75,
+   "heat": -2,
+   "gate": "fly",
+   "win": "You ride a Flying Pokémon route in {district}. Heat −2.",
+   "lose": "The road is long and gives you nothing."
+  },
+  "tunnel-dash": {
+   "kinds": [
+    "route",
+    "cave",
+    "dock"
+   ],
+   "chance": 75,
+   "heat": -3,
+   "win": "You cross a long tunnel in {district}. Heat −3.",
+   "lose": "The road is long and gives you nothing."
+  },
+  "camp-out": {
+   "kinds": [
+    "route",
+    "cave",
+    "dock"
+   ],
+   "chance": 75,
+   "morale": 2,
+   "effect": "crew",
+   "win": "You camp on the road in {district}. The crew's Morale +2.",
+   "lose": "The road is long and gives you nothing."
+  },
+  "pilgrimage": {
+   "kinds": [
+    "route",
+    "cave",
+    "dock"
+   ],
+   "chance": 75,
+   "regard": 2,
+   "win": "You visit a holy site in {district}. Regard +2.",
+   "lose": "The road is long and gives you nothing."
+  },
+  "sightseeing-scam": {
+   "kinds": [
+    "route",
+    "cave",
+    "dock"
+   ],
+   "chance": 75,
+   "pay": [
+    60,
+    100
+   ],
+   "win": "You lead a scam tour in {district}. ₽{pay}.",
+   "lose": "The road is long and gives you nothing."
+  },
+  "border-hop": {
+   "kinds": [
+    "route",
+    "cave",
+    "dock"
+   ],
+   "chance": 75,
+   "heat": -3,
+   "win": "You slip past a border in {district}. Heat −3.",
+   "lose": "The road is long and gives you nothing."
+  },
+  "loyalty-test": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "loyalty": 1,
+   "effect": "crew",
+   "win": "You test a member's loyalty with a staged chance to betray you. The crew's Loyalty +1.",
+   "lose": "The crew goes quiet when you walk in."
+  },
+  "betrayal-watch": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "edge": 1,
+   "win": "You watch for a coup inside the crew.",
+   "lose": "The crew goes quiet when you walk in."
+  },
+  "name-an-heir": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "loyalty": 2,
+   "effect": "crew",
+   "win": "You name an heir to the team. The crew's Loyalty +2.",
+   "lose": "The crew goes quiet when you walk in."
+  },
+  "loyalty-dinner": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "loyalty": 2,
+   "effect": "crew",
+   "win": "You hold a dinner for senior crew. The crew's Loyalty +2.",
+   "lose": "The crew goes quiet when you walk in."
+  },
+  "blood-oath": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "loyalty": 3,
+   "effect": "crew",
+   "win": "You seal an oath in blood (figurative, no real harm). The crew's Loyalty +3.",
+   "lose": "The crew goes quiet when you walk in."
+  },
+  "gift-a-medal": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "loyalty": 3,
+   "effect": "crew",
+   "win": "You hand out a medal. The crew's Loyalty +3.",
+   "lose": "The crew goes quiet when you walk in."
+  },
+  "return-home": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "morale": 3,
+   "effect": "crew",
+   "win": "You let a member visit family. The crew's Morale +3.",
+   "lose": "The crew goes quiet when you walk in."
+  },
+  "retire-a-veteran": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "loyalty": 2,
+   "effect": "crew",
+   "win": "You retire an old member honourably. The crew's Loyalty +2.",
+   "lose": "The crew goes quiet when you walk in."
+  },
+  "secret-ally": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "edge": 1,
+   "win": "You make a secret ally in the rival ranks in {district}.",
+   "lose": "The crew goes quiet when you walk in."
+  },
+  "pokemon-tower-night": {
+   "kinds": [
+    "cave",
+    "ghost",
+    "site",
+    "route"
+   ],
+   "chance": 60,
+   "pay": [
+    60,
+    100
+   ],
+   "battle": {
+    "chance": 40,
+    "on": "fail",
+    "foe": "wild"
+   },
+   "win": "You visit the haunted tower in {district}. ₽{pay}.",
+   "lose": "Something in the dark doesn't want you there."
+  },
+  "rock-tunnel-dark": {
+   "kinds": [
+    "cave",
+    "ghost",
+    "site",
+    "route"
+   ],
+   "chance": 60,
+   "pay": [
+    50,
+    70
+   ],
+   "battle": {
+    "chance": 40,
+    "on": "fail",
+    "foe": "wild"
+   },
+   "win": "You walk a dark tunnel in {district}. ₽{pay}.",
+   "lose": "Something in the dark doesn't want you there."
+  },
+  "mt-moon-dig": {
+   "kinds": [
+    "cave",
+    "ghost",
+    "site",
+    "route"
+   ],
+   "chance": 60,
+   "pay": [
+    60,
+    100
+   ],
+   "battle": {
+    "chance": 40,
+    "on": "fail",
+    "foe": "wild"
+   },
+   "win": "You dig under a mountain in {district}. ₽{pay}.",
+   "lose": "Something in the dark doesn't want you there."
+  },
+  "abandoned-mansion": {
+   "kinds": [
+    "cave",
+    "ghost",
+    "site",
+    "route"
+   ],
+   "chance": 60,
+   "pay": [
+    80,
+    120
+   ],
+   "battle": {
+    "chance": 40,
+    "on": "fail",
+    "foe": "wild"
+   },
+   "win": "You explore an old mansion in {district}. ₽{pay}.",
+   "lose": "Something in the dark doesn't want you there."
+  },
+  "power-plant-raid": {
+   "kinds": [
+    "cave",
+    "ghost",
+    "site",
+    "route"
+   ],
+   "chance": 60,
+   "pay": [
+    120,
+    180
+   ],
+   "battle": {
+    "chance": 40,
+    "on": "fail",
+    "foe": "wild"
+   },
+   "win": "You raid a power plant in {district}. ₽{pay}.",
+   "lose": "Something in the dark doesn't want you there."
+  },
+  "sea-cavern": {
+   "kinds": [
+    "cave",
+    "ghost",
+    "site",
+    "route"
+   ],
+   "chance": 60,
+   "pay": [
+    80,
+    120
+   ],
+   "battle": {
+    "chance": 40,
+    "on": "fail",
+    "foe": "wild"
+   },
+   "win": "You dive to a sea cave in {district}. ₽{pay}.",
+   "lose": "Something in the dark doesn't want you there."
+  },
+  "hidden-lab": {
+   "kinds": [
+    "cave",
+    "ghost",
+    "site",
+    "route"
+   ],
+   "chance": 60,
+   "pay": [
+    100,
+    140
+   ],
+   "battle": {
+    "chance": 40,
+    "on": "fail",
+    "foe": "wild"
+   },
+   "win": "You find a hidden lab in {district}. ₽{pay}.",
+   "lose": "Something in the dark doesn't want you there."
+  },
+  "old-castle": {
+   "kinds": [
+    "cave",
+    "ghost",
+    "site",
+    "route"
+   ],
+   "chance": 60,
+   "pay": [
+    120,
+    180
+   ],
+   "battle": {
+    "chance": 40,
+    "on": "fail",
+    "foe": "wild"
+   },
+   "win": "You raid an old castle in {district}. ₽{pay}.",
+   "lose": "Something in the dark doesn't want you there."
+  },
+  "sunken-ship": {
+   "kinds": [
+    "cave",
+    "ghost",
+    "site",
+    "route"
+   ],
+   "chance": 60,
+   "pay": [
+    100,
+    140
+   ],
+   "battle": {
+    "chance": 40,
+    "on": "fail",
+    "foe": "wild"
+   },
+   "win": "You dive for a wreck in {district}. ₽{pay}.",
+   "lose": "Something in the dark doesn't want you there."
+  },
+  "radio-tower": {
+   "kinds": [
+    "cave",
+    "ghost",
+    "site",
+    "route"
+   ],
+   "chance": 60,
+   "pay": [
+    80,
+    120
+   ],
+   "battle": {
+    "chance": 40,
+    "on": "fail",
+    "foe": "wild"
+   },
+   "win": "You seize a radio tower in {district}. ₽{pay}.",
+   "lose": "Something in the dark doesn't want you there."
+  },
+  "silph-style-tower": {
+   "kinds": [
+    "cave",
+    "ghost",
+    "site",
+    "route"
+   ],
+   "chance": 60,
+   "pay": [
+    160,
+    240
+   ],
+   "battle": {
+    "chance": 40,
+    "on": "fail",
+    "foe": "wild"
+   },
+   "win": "You climb a company tower in {district}. ₽{pay}.",
+   "lose": "Something in the dark doesn't want you there."
+  },
+  "underground-path": {
+   "kinds": [
+    "cave",
+    "ghost",
+    "site",
+    "route"
+   ],
+   "chance": 60,
+   "pay": [
+    50,
+    70
+   ],
+   "battle": {
+    "chance": 40,
+    "on": "fail",
+    "foe": "wild"
+   },
+   "win": "You walk an underground path in {district}. ₽{pay}.",
+   "lose": "Something in the dark doesn't want you there."
+  },
+  "ice-cave": {
+   "kinds": [
+    "cave",
+    "ghost",
+    "site",
+    "route"
+   ],
+   "chance": 60,
+   "pay": [
+    80,
+    120
+   ],
+   "battle": {
+    "chance": 40,
+    "on": "fail",
+    "foe": "wild"
+   },
+   "win": "You cross an ice cave in {district}. ₽{pay}.",
+   "lose": "Something in the dark doesn't want you there."
+  },
+  "volcano-rim": {
+   "kinds": [
+    "cave",
+    "ghost",
+    "site",
+    "route"
+   ],
+   "chance": 60,
+   "pay": [
+    100,
+    140
+   ],
+   "battle": {
+    "chance": 40,
+    "on": "fail",
+    "foe": "wild"
+   },
+   "win": "You cross a volcano rim in {district}. ₽{pay}.",
+   "lose": "Something in the dark doesn't want you there."
+  },
+  "victory-road-ambush": {
+   "kinds": [
+    "cave",
+    "ghost",
+    "site",
+    "route"
+   ],
+   "chance": 60,
+   "pay": [
+    120,
+    180
+   ],
+   "battle": {
+    "chance": 40,
+    "on": "fail",
+    "foe": "wild"
+   },
+   "win": "You ambush on a final road in {district}. ₽{pay}.",
+   "lose": "Something in the dark doesn't want you there."
+  },
+  "midnight-radio": {
+   "kinds": [
+    "crowd",
+    "street",
+    "shop"
+   ],
+   "chance": 70,
+   "heat": 1,
+   "failHeat": 4,
+   "regard": 1,
+   "win": "You host a midnight radio show in {district}. Regard +1.",
+   "lose": "Half the seats are empty, and a patrol walks past twice."
+  },
+  "night-auction": {
+   "kinds": [
+    "crowd",
+    "street",
+    "shop"
+   ],
+   "chance": 70,
+   "heat": 1,
+   "failHeat": 4,
+   "pay": [
+    160,
+    240
+   ],
+   "gate": "contact",
+   "win": "You hold a dark auction in {district}. ₽{pay}.",
+   "lose": "Half the seats are empty, and a patrol walks past twice."
+  },
+  "back-room-poker": {
+   "kinds": [
+    "crowd",
+    "street",
+    "shop"
+   ],
+   "chance": 70,
+   "heat": 1,
+   "failHeat": 4,
+   "pay": [
+    120,
+    180
+   ],
+   "win": "You run a back room game in {district}. ₽{pay}.",
+   "lose": "Half the seats are empty, and a patrol walks past twice."
+  },
+  "illegal-duel": {
+   "kinds": [
+    "crowd",
+    "street",
+    "shop"
+   ],
+   "chance": 70,
+   "heat": 1,
+   "failHeat": 4,
+   "pay": [
+    140,
+    220
+   ],
+   "win": "You run an illegal duel for bets in {district}. ₽{pay}.",
+   "lose": "Half the seats are empty, and a patrol walks past twice."
+  },
+  "moonlight-market": {
+   "kinds": [
+    "crowd",
+    "street",
+    "shop"
+   ],
+   "chance": 70,
+   "heat": 1,
+   "failHeat": 4,
+   "pay": [
+    100,
+    140
+   ],
+   "gate": "contact",
+   "win": "You run a moonlight market in {district}. ₽{pay}.",
+   "lose": "Half the seats are empty, and a patrol walks past twice."
+  },
+  "shadow-puppet": {
+   "kinds": [
+    "crowd",
+    "street",
+    "shop"
+   ],
+   "chance": 70,
+   "heat": 1,
+   "failHeat": 4,
+   "regard": 2,
+   "win": "You run a shadow theatre in {district}. Regard +2.",
+   "lose": "Half the seats are empty, and a patrol walks past twice."
+  },
+  "ghost-story": {
+   "kinds": [
+    "crowd",
+    "street",
+    "shop"
+   ],
+   "chance": 70,
+   "heat": 1,
+   "failHeat": 4,
+   "morale": 2,
+   "effect": "crew",
+   "win": "You tell a ghost story to the crew in {district}. The crew's Morale +2.",
+   "lose": "Half the seats are empty, and a patrol walks past twice."
+  },
+  "poet-s-night": {
+   "kinds": [
+    "crowd",
+    "street",
+    "shop"
+   ],
+   "chance": 70,
+   "heat": 1,
+   "failHeat": 4,
+   "regard": 1,
+   "win": "You host a poet's night in {district}. Regard +1.",
+   "lose": "Half the seats are empty, and a patrol walks past twice."
+  },
+  "night-duel-bets": {
+   "kinds": [
+    "crowd",
+    "street",
+    "shop"
+   ],
+   "chance": 70,
+   "heat": 1,
+   "failHeat": 4,
+   "pay": [
+    80,
+    120
+   ],
+   "win": "You take bets on night duels in {district}. ₽{pay}.",
+   "lose": "Half the seats are empty, and a patrol walks past twice."
+  },
+  "whisper-network": {
+   "kinds": [
+    "crowd",
+    "street",
+    "shop"
+   ],
+   "chance": 70,
+   "heat": 1,
+   "failHeat": 4,
+   "tension": 1,
+   "win": "You spread whispers at night in {district}.",
+   "lose": "Half the seats are empty, and a patrol walks past twice."
+  },
+  "candle-meeting": {
+   "kinds": [
+    "crowd",
+    "street",
+    "shop"
+   ],
+   "chance": 70,
+   "heat": 1,
+   "failHeat": 4,
+   "loyalty": 2,
+   "effect": "crew",
+   "win": "You hold a candle meeting with the crew in {district}. The crew's Loyalty +2.",
+   "lose": "Half the seats are empty, and a patrol walks past twice."
+  },
+  "dusk-parade": {
+   "kinds": [
+    "crowd",
+    "street",
+    "shop"
+   ],
+   "chance": 70,
+   "heat": 1,
+   "failHeat": 4,
+   "dread": 1,
+   "win": "You hold a dusk parade in {district}. Dread +1.",
+   "lose": "Half the seats are empty, and a patrol walks past twice."
+  },
+  "night-class": {
+   "kinds": [
+    "crowd",
+    "street",
+    "shop"
+   ],
+   "chance": 70,
+   "heat": 1,
+   "failHeat": 4,
+   "edge": 1,
+   "win": "You hold a night class for the crew in {district}.",
+   "lose": "Half the seats are empty, and a patrol walks past twice."
+  },
+  "stargazing": {
+   "kinds": [
+    "crowd",
+    "street",
+    "shop"
+   ],
+   "chance": 70,
+   "heat": 1,
+   "failHeat": 4,
+   "edge": 1,
+   "win": "You study the stars for omens in {district}.",
+   "lose": "Half the seats are empty, and a patrol walks past twice."
+  },
+  "family-dinner": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 4,
+   "regard": 1,
+   "win": "You dine with a crime family. Regard +1.",
+   "lose": "The old families smile, and give you nothing."
+  },
+  "syndicate-toll": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 4,
+   "cost": 120,
+   "win": "You pay or collect a syndicate toll in {district}.",
+   "lose": "The old families smile, and give you nothing."
+  },
+  "godfather-s-favour": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 4,
+   "cost": 100,
+   "win": "You ask a favour of a don.",
+   "lose": "The old families smile, and give you nothing."
+  },
+  "turf-treaty": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 4,
+   "win": "You sign a turf treaty.",
+   "lose": "The old families smile, and give you nothing."
+  },
+  "hit-contract": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 4,
+   "pay": [
+    240,
+    360
+   ],
+   "win": "You take a contract (never on minors) in {district}. ₽{pay}.",
+   "lose": "The old families smile, and give you nothing."
+  },
+  "offer-protection": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 4,
+   "pay": [
+    50,
+    100
+   ],
+   "win": "You offer protection to a rival's shop in {district}. ₽{pay}.",
+   "lose": "The old families smile, and give you nothing."
+  },
+  "union-boss": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 4,
+   "cost": 100,
+   "win": "You win a union boss.",
+   "lose": "The old families smile, and give you nothing."
+  },
+  "smuggler-s-oath": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 4,
+   "win": "You swear a smuggler's oath.",
+   "lose": "The old families smile, and give you nothing."
+  },
+  "debt-ledger": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 4,
+   "pay": [
+    120,
+    180
+   ],
+   "win": "You trade for a debt ledger. ₽{pay}.",
+   "lose": "The old families smile, and give you nothing."
+  },
+  "revenge-contract": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 4,
+   "dread": 2,
+   "win": "You take revenge for a family in {district}. Dread +2.",
+   "lose": "The old families smile, and give you nothing."
+  },
+  "cartel-deal": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 4,
+   "pay": [
+    200,
+    300
+   ],
+   "win": "You cut a deal with a cartel. ₽{pay}.",
+   "lose": "The old families smile, and give you nothing."
+  },
+  "tribute-to-a-don": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 4,
+   "regard": 1,
+   "win": "You pay tribute to a don. Regard +1.",
+   "lose": "The old families smile, and give you nothing."
+  },
+  "syndicate-meeting": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 4,
+   "tension": 1,
+   "win": "You attend a syndicate meeting in {district}.",
+   "lose": "The old families smile, and give you nothing."
+  },
+  "syndicate-truce": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 4,
+   "tension": -3,
+   "win": "You end a syndicate war.",
+   "lose": "The old families smile, and give you nothing."
+  },
+  "syndicate-heist": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "heat": 1,
+   "failHeat": 4,
+   "pay": [
+    240,
+    360
+   ],
+   "win": "You plan a shared heist in {district}. ₽{pay}.",
+   "lose": "The old families smile, and give you nothing."
+  },
+  "silph-type-memo": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "pay": [
+    80,
+    120
+   ],
+   "win": "You steal a company memo. ₽{pay}.",
+   "lose": "Security badges you at the door. You walk away."
+  },
+  "executive-bribe": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "cost": 250,
+   "win": "You bribe a company exec.",
+   "lose": "Security badges you at the door. You walk away."
+  },
+  "lab-intern": {
+   "kinds": [
+    "site"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "edge": 1,
+   "battle": {
+    "chance": 35,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You plant an intern in a lab in {district}.",
+   "lose": "Security badges you at the door. You walk away."
+  },
+  "product-recall": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "tension": 2,
+   "win": "You force a recall on a rival's product.",
+   "lose": "Security badges you at the door. You walk away."
+  },
+  "patent-theft": {
+   "kinds": [
+    "site"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "pay": [
+    160,
+    240
+   ],
+   "battle": {
+    "chance": 35,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You steal a patent in {district}. ₽{pay}.",
+   "lose": "Security badges you at the door. You walk away."
+  },
+  "corporate-raid": {
+   "kinds": [
+    "site"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "pay": [
+    240,
+    360
+   ],
+   "battle": {
+    "chance": 35,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You raid a company in {district}. ₽{pay}.",
+   "lose": "Security badges you at the door. You walk away."
+  },
+  "board-meeting": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "regard": 1,
+   "win": "You attend a board meeting. Regard +1.",
+   "lose": "Security badges you at the door. You walk away."
+  },
+  "stock-rumour": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "pay": [
+    240,
+    360
+   ],
+   "win": "You move a stock with a rumour. ₽{pay}.",
+   "lose": "Security badges you at the door. You walk away."
+  },
+  "silent-partner": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "pay": [
+    120,
+    180
+   ],
+   "win": "You become a silent partner. ₽{pay}.",
+   "lose": "Security badges you at the door. You walk away."
+  },
+  "company-loan": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "pay": [
+    160,
+    240
+   ],
+   "win": "You lend a company money. ₽{pay}.",
+   "lose": "Security badges you at the door. You walk away."
+  },
+  "hostile-takeover": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "pay": [
+    240,
+    360
+   ],
+   "win": "You take over a company. ₽{pay}.",
+   "lose": "Security badges you at the door. You walk away."
+  },
+  "corporate-spy": {
+   "kinds": [
+    "site"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "edge": 1,
+   "battle": {
+    "chance": 35,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You place a spy at a company in {district}.",
+   "lose": "Security badges you at the door. You walk away."
+  },
+  "lab-sabotage": {
+   "kinds": [
+    "site"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "pay": [
+    120,
+    180
+   ],
+   "battle": {
+    "chance": 35,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You break a lab's gear in {district}. ₽{pay}.",
+   "lose": "Security badges you at the door. You walk away."
+  },
+  "fake-invoice": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "pay": [
+    160,
+    240
+   ],
+   "win": "You run fake invoices. ₽{pay}.",
+   "lose": "Security badges you at the door. You walk away."
+  },
+  "employee-walkout": {
+   "kinds": [
+    "site"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 8,
+   "tension": 1,
+   "battle": {
+    "chance": 35,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You start a walkout in {district}.",
+   "lose": "Security badges you at the door. You walk away."
+  },
+  "cooperate-with-the-law": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "failHeat": 5,
+   "heat": -5,
+   "win": "You help the police against a rival. Heat −5.",
+   "lose": "The law doesn't bend for you today."
+  },
+  "bribe-a-judge": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "failHeat": 5,
+   "cost": 250,
+   "win": "You pay a judge.",
+   "lose": "The law doesn't bend for you today."
+  },
+  "jury-tamper": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "failHeat": 5,
+   "pay": [
+    240,
+    360
+   ],
+   "win": "You tamper with a jury (adults only) in {district}. ₽{pay}.",
+   "lose": "The law doesn't bend for you today."
+  },
+  "alibi-witness": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "failHeat": 5,
+   "cost": 150,
+   "win": "You buy a witness.",
+   "lose": "The law doesn't bend for you today."
+  },
+  "seize-the-armory": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "failHeat": 5,
+   "pay": [
+    200,
+    300
+   ],
+   "win": "You take police arms in {district}. ₽{pay}.",
+   "lose": "The law doesn't bend for you today."
+  },
+  "plea-bargain": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "failHeat": 5,
+   "pay": [
+    80,
+    120
+   ],
+   "win": "You cut a deal for a crew member. ₽{pay}.",
+   "lose": "The law doesn't bend for you today."
+  },
+  "police-raid-drill": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "failHeat": 5,
+   "edge": 2,
+   "win": "You run a raid drill.",
+   "lose": "The law doesn't bend for you today."
+  },
+  "patrol-switch": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "failHeat": 5,
+   "heat": -3,
+   "win": "You swap patrol routes in {district}. Heat −3.",
+   "lose": "The law doesn't bend for you today."
+  },
+  "dirty-cop": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "failHeat": 5,
+   "cost": 150,
+   "win": "You own a cop.",
+   "lose": "The law doesn't bend for you today."
+  },
+  "station-break-in": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "failHeat": 5,
+   "pay": [
+    120,
+    180
+   ],
+   "win": "You break into a station in {district}. ₽{pay}.",
+   "lose": "The law doesn't bend for you today."
+  },
+  "jail-visit": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "failHeat": 5,
+   "morale": 3,
+   "effect": "crew",
+   "gate": "jailed",
+   "win": "You visit a jailed member. The crew's Morale +3.",
+   "lose": "The law doesn't bend for you today."
+  },
+  "fake-warrant": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "failHeat": 5,
+   "pay": [
+    120,
+    180
+   ],
+   "win": "You forge a warrant. ₽{pay}.",
+   "lose": "The law doesn't bend for you today."
+  },
+  "wrongful-arrest": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "failHeat": 5,
+   "tension": 2,
+   "win": "You get a rival wrongly arrested in {district}.",
+   "lose": "The law doesn't bend for you today."
+  },
+  "pardon-letter": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "failHeat": 5,
+   "cost": 300,
+   "win": "You buy a pardon.",
+   "lose": "The law doesn't bend for you today."
+  },
+  "checkpoint-bribe": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "failHeat": 5,
+   "cost": 100,
+   "win": "You pay a checkpoint.",
+   "lose": "The law doesn't bend for you today."
+  },
+  "team-song": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 80,
+   "morale": 1,
+   "effect": "crew",
+   "win": "You write a team song. The crew's Morale +1.",
+   "lose": "The crew shuffles its feet. Next time."
+  },
+  "crew-library": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 80,
+   "edge": 1,
+   "win": "You start a crew library.",
+   "lose": "The crew shuffles its feet. Next time."
+  },
+  "training-montage": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 80,
+   "edge": 2,
+   "win": "You run a training montage.",
+   "lose": "The crew shuffles its feet. Next time."
+  },
+  "crew-tattoo": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 80,
+   "loyalty": 2,
+   "effect": "crew",
+   "win": "You give the crew an emblem. The crew's Loyalty +2.",
+   "lose": "The crew shuffles its feet. Next time."
+  },
+  "veteran-s-story": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 80,
+   "morale": 2,
+   "effect": "crew",
+   "win": "You let a veteran tell a story. The crew's Morale +2.",
+   "lose": "The crew shuffles its feet. Next time."
+  },
+  "rookie-cup": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 80,
+   "edge": 2,
+   "win": "You host a rookie cup.",
+   "lose": "The crew shuffles its feet. Next time."
+  },
+  "crew-meeting": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 80,
+   "morale": 2,
+   "effect": "crew",
+   "win": "You hold a crew meeting. The crew's Morale +2.",
+   "lose": "The crew shuffles its feet. Next time."
+  },
+  "crew-vote": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 80,
+   "morale": 2,
+   "effect": "crew",
+   "win": "You let the crew vote on something. The crew's Morale +2.",
+   "lose": "The crew shuffles its feet. Next time."
+  },
+  "skill-share": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 80,
+   "win": "You let members teach each other.",
+   "lose": "The crew shuffles its feet. Next time."
+  },
+  "crew-jokes": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 80,
+   "morale": 1,
+   "effect": "crew",
+   "win": "You share a crew joke. The crew's Morale +1.",
+   "lose": "The crew shuffles its feet. Next time."
+  },
+  "open-mic": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 80,
+   "morale": 2,
+   "effect": "crew",
+   "win": "You hold a crew open mic. The crew's Morale +2.",
+   "lose": "The crew shuffles its feet. Next time."
+  },
+  "crew-hike": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 80,
+   "morale": 2,
+   "effect": "crew",
+   "win": "You take the crew on a hike. The crew's Morale +2.",
+   "lose": "The crew shuffles its feet. Next time."
+  },
+  "crew-jackets": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 80,
+   "morale": 2,
+   "effect": "crew",
+   "win": "You buy crew jackets. The crew's Morale +2.",
+   "lose": "The crew shuffles its feet. Next time."
+  },
+  "crew-newsletter": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 80,
+   "morale": 1,
+   "effect": "crew",
+   "win": "You print a crew newsletter. The crew's Morale +1.",
+   "lose": "The crew shuffles its feet. Next time."
+  },
+  "reward-board": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 80,
+   "loyalty": 1,
+   "effect": "crew",
+   "win": "You post a reward board. The crew's Loyalty +1.",
+   "lose": "The crew shuffles its feet. Next time."
+  },
+  "pokemon-daycare": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "pay": [
+    50,
+    70
+   ],
+   "clean": true,
+   "win": "You run a daycare front. ₽{pay}, clean money.",
+   "lose": "A slow day at the front. Nobody comes in."
+  },
+  "pokemon-salon": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "pay": [
+    40,
+    60
+   ],
+   "clean": true,
+   "win": "You run a grooming salon. ₽{pay}, clean money.",
+   "lose": "A slow day at the front. Nobody comes in."
+  },
+  "pokemon-clinic": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "pay": [
+    60,
+    80
+   ],
+   "clean": true,
+   "win": "You run a clinic front. ₽{pay}, clean money.",
+   "lose": "A slow day at the front. Nobody comes in."
+  },
+  "berry-farm": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "pay": [
+    50,
+    70
+   ],
+   "clean": true,
+   "win": "You run a berry farm. ₽{pay}, clean money.",
+   "lose": "A slow day at the front. Nobody comes in."
+  },
+  "pokemon-stud": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "pay": [
+    60,
+    100
+   ],
+   "clean": true,
+   "win": "You run a stud service. ₽{pay}, clean money.",
+   "lose": "A slow day at the front. Nobody comes in."
+  },
+  "pokemon-rental": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "cost": 60,
+   "win": "You rent out Pokémon.",
+   "lose": "A slow day at the front. Nobody comes in."
+  },
+  "egg-market": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "pay": [
+    100,
+    140
+   ],
+   "clean": true,
+   "gate": "contact",
+   "win": "You sell eggs at night in {district}. ₽{pay}, clean money.",
+   "lose": "A slow day at the front. Nobody comes in."
+  },
+  "pokemon-gym-front": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "pay": [
+    60,
+    80
+   ],
+   "clean": true,
+   "win": "You run a training gym. ₽{pay}, clean money.",
+   "lose": "A slow day at the front. Nobody comes in."
+  },
+  "pokemon-circus": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "pay": [
+    70,
+    110
+   ],
+   "clean": true,
+   "win": "You run a circus in {district}. ₽{pay}, clean money.",
+   "lose": "A slow day at the front. Nobody comes in."
+  },
+  "pokemon-cafe": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "pay": [
+    60,
+    80
+   ],
+   "clean": true,
+   "win": "You run a café with Pokémon. ₽{pay}, clean money.",
+   "lose": "A slow day at the front. Nobody comes in."
+  },
+  "pokemon-pet-shop": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "pay": [
+    50,
+    70
+   ],
+   "clean": true,
+   "win": "You run a pet shop. ₽{pay}, clean money.",
+   "lose": "A slow day at the front. Nobody comes in."
+  },
+  "pokemon-race-track": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "pay": [
+    80,
+    120
+   ],
+   "clean": true,
+   "win": "You run a track in {district}. ₽{pay}, clean money.",
+   "lose": "A slow day at the front. Nobody comes in."
+  },
+  "pokemon-photo-studio": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "pay": [
+    40,
+    60
+   ],
+   "clean": true,
+   "win": "You run a photo shop. ₽{pay}, clean money.",
+   "lose": "A slow day at the front. Nobody comes in."
+  },
+  "pokemon-breeders-club": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "pay": [
+    60,
+    100
+   ],
+   "clean": true,
+   "win": "You run a breeders club. ₽{pay}, clean money.",
+   "lose": "A slow day at the front. Nobody comes in."
+  },
+  "pokemon-ranch": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "pay": [
+    70,
+    110
+   ],
+   "clean": true,
+   "win": "You run a ranch. ₽{pay}, clean money.",
+   "lose": "A slow day at the front. Nobody comes in."
+  },
+  "mission-brief": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 4,
+   "edge": 1,
+   "win": "You brief a crew on a mission.",
+   "lose": "The mission falls apart at the first corner."
+  },
+  "mission-debrief": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 4,
+   "win": "You debrief after a mission.",
+   "lose": "The mission falls apart at the first corner."
+  },
+  "joint-mission": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 4,
+   "edge": 2,
+   "win": "You run a mission with two crews in {district}.",
+   "lose": "The mission falls apart at the first corner."
+  },
+  "night-mission": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 4,
+   "edge": 1,
+   "win": "You run a night mission in {district}.",
+   "lose": "The mission falls apart at the first corner."
+  },
+  "rescue-mission": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 4,
+   "loyalty": 2,
+   "effect": "crew",
+   "win": "You run a rescue in {district}. The crew's Loyalty +2.",
+   "lose": "The mission falls apart at the first corner."
+  },
+  "heist-mission": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 4,
+   "pay": [
+    240,
+    360
+   ],
+   "win": "You run a heist in {district}. ₽{pay}.",
+   "lose": "The mission falls apart at the first corner."
+  },
+  "spy-mission": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 4,
+   "edge": 1,
+   "win": "You run a spy mission in {district}.",
+   "lose": "The mission falls apart at the first corner."
+  },
+  "courier-mission": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 4,
+   "pay": [
+    60,
+    100
+   ],
+   "win": "You run a courier mission in {district}. ₽{pay}.",
+   "lose": "The mission falls apart at the first corner."
+  },
+  "guard-mission": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 4,
+   "pay": [
+    80,
+    120
+   ],
+   "win": "You guard a VIP in {district}. ₽{pay}.",
+   "lose": "The mission falls apart at the first corner."
+  },
+  "hit-mission": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 4,
+   "pay": [
+    160,
+    240
+   ],
+   "win": "You hit a rival site in {district}. ₽{pay}.",
+   "lose": "The mission falls apart at the first corner."
+  },
+  "escort-mission": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 4,
+   "pay": [
+    100,
+    140
+   ],
+   "win": "You escort a convoy in {district}. ₽{pay}.",
+   "lose": "The mission falls apart at the first corner."
+  },
+  "delivery-mission": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 4,
+   "pay": [
+    50,
+    70
+   ],
+   "win": "You deliver a package in {district}. ₽{pay}.",
+   "lose": "The mission falls apart at the first corner."
+  },
+  "recon-mission": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 1,
+   "failHeat": 4,
+   "edge": 1,
+   "win": "You scout a hideout in {district}.",
+   "lose": "The mission falls apart at the first corner."
+  },
+  "distraction-mission": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "failHeat": 4,
+   "heat": -3,
+   "win": "You run a distraction in {district}. Heat −3.",
+   "lose": "The mission falls apart at the first corner."
+  },
+  "cleanup-mission": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "failHeat": 4,
+   "heat": -3,
+   "win": "You clean up after a job in {district}. Heat −3.",
+   "lose": "The mission falls apart at the first corner."
+  }
+ },
+ "later": {
+  "parade-cover": "D15",
+  "wedding-job": "D15",
+  "counter-raid": "D9",
+  "bug-contest": "D15",
+  "fishing-derby": "D15",
+  "hold-the-fairground": "D15",
+  "festival-float": "D15",
+  "fireworks-night": "D15",
+  "costume-contest": "D15",
+  "food-stall": "D15",
+  "raffle-night": "D15",
+  "haunted-house": "D15",
+  "harvest-fair": "D15",
+  "winter-market": "D15",
+  "spring-dance": "D15",
+  "summer-beach-party": "D15",
+  "lantern-night": "D15",
+  "battle-tournament": "D15",
+  "pokemon-show": "D15",
+  "auction-day": "D15",
+  "race-day": "D15",
+  "study-the-hero": "D11",
+  "rattle-the-hero": "D11",
+  "gift-the-hero": "D11",
+  "block-the-hero-s-road": "D11",
+  "hero-s-friend-trap": "D11",
+  "hero-s-mentor-talk": "D11",
+  "hero-s-hometown": "D11",
+  "hero-s-rival-talk": "D11",
+  "hero-s-last-letter": "D11",
+  "hero-sparring": "D11",
+  "hero-s-doubt": "D11",
+  "hero-s-pokemon": "D11",
+  "hero-duel-prep": "D11",
+  "hero-s-banner": "D11",
+  "heroic-legendary-talk": "D11",
+  "snagem-meet": "D16",
+  "snagem-heist": "D16",
+  "cipher-offer": "D16",
+  "shadow-pokemon-trade": "D16",
+  "purify-rite": "D16",
+  "snag-ball-use": "D16",
+  "peon-rank": "D16",
+  "admin-rank": "D16",
+  "cipher-lab": "D16",
+  "snagem-base-hit": "D16",
+  "shadow-sabotage": "D16",
+  "betray-cipher": "D16",
+  "betray-snagem": "D16",
+  "shadow-tutor": "D16",
+  "black-market-snag": "D16",
+  "garrison-visit": "D15",
+  "tribute-run": "D15",
+  "inspect-the-governor": "D15",
+  "replace-the-governor": "D15",
+  "region-law": "D15",
+  "region-festival": "D15",
+  "region-draft": "D15",
+  "region-boon": "D15",
+  "region-spy-net": "D15",
+  "region-road": "D15",
+  "region-bank": "D15",
+  "region-court": "D15",
+  "region-school": "D15",
+  "region-guard": "D15",
+  "region-banner": "D15",
+  "forgive": "D15",
+  "punish": "D15",
+  "offer-amnesty": "D15",
+  "win-back-a-defector": "D15",
+  "bait-a-mole": "D9",
+  "exile": "D15",
+  "fire-dance": "D15",
+  "study-the-elite-four": "D14",
+  "elite-bribe": "D14",
+  "elite-duel": "D14",
+  "elite-debate": "D14",
+  "champion-s-aide": "D14",
+  "hall-of-fame-heist": "D14",
+  "league-rig": "D14",
+  "league-ticket": "D14",
+  "elite-rumour": "D14",
+  "elite-gift": "D14",
+  "champion-letter": "D14",
+  "pre-league-spar": "D14",
+  "gate-guard-bribe": "D14",
+  "elite-s-weak-spot": "D14",
+  "champion-duel": "D14",
+  "dead-letter-box": "D22",
+  "coded-ad": "D22",
+  "double-cross": "D22",
+  "sleeper-cell": "D22",
+  "burn-a-spy": "D22",
+  "trade-a-spy": "D22",
+  "handler-meet": "D22",
+  "extraction": "D22",
+  "planted-evidence": "D22",
+  "wire-the-ally": "D22",
+  "spy-school": "D22",
+  "counter-bug": "D22",
+  "fake-spy": "D22",
+  "spy-meeting": "D22",
+  "spy-gift": "D22",
+  "legend-rumour": "D11",
+  "altar-visit": "D11",
+  "meteor-night": "D11",
+  "eclipse": "D11",
+  "beast-tracks": "D11",
+  "mythical-egg": "D11",
+  "ancient-tablet": "D11",
+  "sacred-spring": "D11",
+  "sleeping-giant": "D11",
+  "lost-relic": "D11",
+  "sky-pillar-climb": "D11",
+  "deep-sea-gate": "D11",
+  "time-rift": "D11",
+  "moon-shrine": "D11",
+  "sun-shrine": "D11",
+  "final-stand-prep": "D14",
+  "takeover-speech": "D14",
+  "wipe-out-plan": "D14",
+  "shadow-plan": "D14",
+  "monarch-plan": "D14",
+  "goal-plan": "D14",
+  "region-sweep": "D14",
+  "final-ledger": "D14",
+  "last-night": "D14",
+  "victory-parade": "D14",
+  "crown-the-boss": "D14",
+  "peace-treaty": "D14",
+  "settle-scores": "D14",
+  "pass-the-torch": "D14",
+  "farewell-feast": "D14"
+ },
+ "status": {
+  "busk-cut": {
+   "status": "supported"
+  },
+  "newsstand-racket": {
+   "status": "supported"
+  },
+  "ticket-scalping": {
+   "status": "limited",
+   "note": "Lv 1 reads “₽120 profit”: the words beyond the numbers aren't acted on yet; it plays as a street economy job."
+  },
+  "shoeshine-spies": {
+   "status": "limited",
+   "note": "Lv 1 reads “1 lookout, Scout odds +5%”: the words beyond the numbers aren't acted on yet; it plays as a street economy job."
+  },
+  "rooftop-rent": {
+   "status": "limited",
+   "note": "Lv 1 reads “₽40 a week”: the words beyond the numbers aren't acted on yet; it plays as a street economy job."
+  },
+  "meter-maid-bribe": {
+   "status": "limited",
+   "note": "Lv 1 reads “Your cars park free”: the words beyond the numbers aren't acted on yet; it plays as a street economy job."
+  },
+  "vending-takeover": {
+   "status": "supported"
+  },
+  "newspaper-boy-ring": {
+   "status": "supported"
+  },
+  "lost-and-found-racket": {
+   "status": "supported"
+  },
+  "fountain-coins": {
+   "status": "supported"
+  },
+  "collection-plate": {
+   "status": "supported"
+  },
+  "bar-tab-debt": {
+   "status": "limited",
+   "note": "Lv 1 reads “One bar, a favour”: the words beyond the numbers aren't acted on yet; it plays as a street economy job."
+  },
+  "gambling-ring": {
+   "status": "supported"
+  },
+  "rigged-raffle": {
+   "status": "supported"
+  },
+  "pet-shop-cut": {
+   "status": "supported"
+  },
+  "lockpick-lesson": {
+   "status": "limited",
+   "note": "Lv 1 reads “Picking takes 2 rounds”: the words beyond the numbers aren't acted on yet; it plays as a burglary and tricks job."
+  },
+  "window-job": {
+   "status": "supported"
+  },
+  "roof-entry": {
+   "status": "limited",
+   "note": "Lv 1 reads “Skips 1 guard”: the words beyond the numbers aren't acted on yet; it plays as a burglary and tricks job."
+  },
+  "cellar-door": {
+   "status": "limited",
+   "note": "Lv 1 reads “Quiet entry”: the words beyond the numbers aren't acted on yet; it plays as a burglary and tricks job."
+  },
+  "fake-delivery": {
+   "status": "limited",
+   "note": "Lv 1 reads “Enter a shop”: the words beyond the numbers aren't acted on yet; it plays as a burglary and tricks job."
+  },
+  "fake-inspector": {
+   "status": "limited",
+   "note": "Lv 1 reads “One look around”: the words beyond the numbers aren't acted on yet; it plays as a burglary and tricks job."
+  },
+  "pickpocket-duo": {
+   "status": "supported"
+  },
+  "bag-swap": {
+   "status": "limited",
+   "note": "Lv 1 reads “One bag”: the words beyond the numbers aren't acted on yet; it plays as a burglary and tricks job."
+  },
+  "ring-switch": {
+   "status": "supported"
+  },
+  "silent-alarm": {
+   "status": "limited",
+   "note": "Lv 1 reads “One alarm”: the words beyond the numbers aren't acted on yet; it plays as a burglary and tricks job."
+  },
+  "vault-drill": {
+   "status": "supported"
+  },
+  "stash-house-hit": {
+   "status": "supported"
+  },
+  "tourist-bus-heist": {
+   "status": "supported"
+  },
+  "parade-cover": {
+   "status": "disabled"
+  },
+  "wedding-job": {
+   "status": "disabled"
+  },
+  "rooftop-duel": {
+   "status": "supported"
+  },
+  "dockside-brawl": {
+   "status": "supported"
+  },
+  "gym-yard-spar": {
+   "status": "supported"
+  },
+  "ring-match": {
+   "status": "supported"
+  },
+  "duel-under-rain": {
+   "status": "supported"
+  },
+  "mirror-match": {
+   "status": "supported"
+  },
+  "training-hall-raid": {
+   "status": "supported"
+  },
+  "sudden-death": {
+   "status": "supported"
+  },
+  "handicap-match": {
+   "status": "supported"
+  },
+  "last-man-standing": {
+   "status": "supported"
+  },
+  "double-battle-bounty": {
+   "status": "supported"
+  },
+  "tag-team": {
+   "status": "supported"
+  },
+  "quick-draw": {
+   "status": "supported"
+  },
+  "sweep-ambush": {
+   "status": "supported"
+  },
+  "counter-raid": {
+   "status": "disabled"
+  },
+  "smooth-pitch": {
+   "status": "limited",
+   "note": "Lv 1 reads “Recruit chance +5%”: the words beyond the numbers aren't acted on yet; it plays as a persuasion and crew job."
+  },
+  "hard-sell": {
+   "status": "limited",
+   "note": "Lv 1 reads “They join angry (Loyalty −)”: the words beyond the numbers aren't acted on yet; it plays as a persuasion and crew job."
+  },
+  "oath-night": {
+   "status": "supported"
+  },
+  "initiation": {
+   "status": "limited",
+   "note": "Lv 1 reads “They gain a stat point”: the words beyond the numbers aren't acted on yet; it plays as a persuasion and crew job."
+  },
+  "secret-handshake": {
+   "status": "supported"
+  },
+  "uniform-day": {
+   "status": "supported"
+  },
+  "cook-out": {
+   "status": "supported"
+  },
+  "crew-photo": {
+   "status": "limited",
+   "note": "Lv 1 reads “Pride +1”: the words beyond the numbers aren't acted on yet; it plays as a persuasion and crew job."
+  },
+  "birthday-party": {
+   "status": "supported"
+  },
+  "pay-raise": {
+   "status": "supported"
+  },
+  "back-pay": {
+   "status": "supported"
+  },
+  "confession": {
+   "status": "supported"
+  },
+  "prank-day": {
+   "status": "supported"
+  },
+  "funeral": {
+   "status": "supported"
+  },
+  "wedding": {
+   "status": "supported"
+  },
+  "crime-scene": {
+   "status": "limited",
+   "note": "Lv 1 reads “One clue”: the words beyond the numbers aren't acted on yet; it plays as a detective work job (scout)."
+  },
+  "fingerprints": {
+   "status": "limited",
+   "note": "Lv 1 reads “A name”: the words beyond the numbers aren't acted on yet; it plays as a detective work job (scout)."
+  },
+  "ledger-hunt": {
+   "status": "limited",
+   "note": "Lv 1 reads “One page”: the words beyond the numbers aren't acted on yet; it plays as a detective work job (scout)."
+  },
+  "paper-trail": {
+   "status": "limited",
+   "note": "Lv 1 reads “One bank”: the words beyond the numbers aren't acted on yet; it plays as a detective work job (scout)."
+  },
+  "phone-records": {
+   "status": "limited",
+   "note": "Lv 1 reads “One call”: the words beyond the numbers aren't acted on yet; it plays as a detective work job (scout)."
+  },
+  "courier-trace": {
+   "status": "limited",
+   "note": "Lv 1 reads “Their route”: the words beyond the numbers aren't acted on yet; it plays as a detective work job (scout)."
+  },
+  "stakeout": {
+   "status": "limited",
+   "note": "Lv 1 reads “Shift times”: the words beyond the numbers aren't acted on yet; it plays as a detective work job (scout)."
+  },
+  "anonymous-tip": {
+   "status": "supported"
+  },
+  "informant-meet": {
+   "status": "limited",
+   "note": "Lv 1 reads “One tip”: the words beyond the numbers aren't acted on yet; it plays as a detective work job (scout)."
+  },
+  "break-a-code": {
+   "status": "limited",
+   "note": "Lv 1 reads “One word”: the words beyond the numbers aren't acted on yet; it plays as a detective work job (scout)."
+  },
+  "map-the-city": {
+   "status": "limited",
+   "note": "Lv 1 reads “Streets”: the words beyond the numbers aren't acted on yet; it plays as a detective work job (scout)."
+  },
+  "check-the-records": {
+   "status": "limited",
+   "note": "Lv 1 reads “A family tree”: the words beyond the numbers aren't acted on yet; it plays as a detective work job (scout)."
+  },
+  "hire-a-detective": {
+   "status": "limited",
+   "note": "Lv 1 reads “Find one thing”: the words beyond the numbers aren't acted on yet; it plays as a detective work job (scout)."
+  },
+  "witness-protection": {
+   "status": "limited",
+   "note": "Lv 1 reads “One witness”: the words beyond the numbers aren't acted on yet; it plays as a detective work job (scout)."
+  },
+  "surveillance-van": {
+   "status": "limited",
+   "note": "Lv 1 reads “One day”: the words beyond the numbers aren't acted on yet; it plays as a detective work job (scout)."
+  },
+  "bond-walk": {
+   "status": "supported"
+  },
+  "wild-whisper": {
+   "status": "limited",
+   "note": "Lv 1 reads “A common Pokémon joins”: the words beyond the numbers aren't acted on yet; it plays as a pokémon handling job."
+  },
+  "berry-feast": {
+   "status": "supported"
+  },
+  "hatch-watch": {
+   "status": "limited",
+   "note": "Lv 1 reads “Hatch 10% faster”: the words beyond the numbers aren't acted on yet; it plays as a pokémon handling job."
+  },
+  "pokemon-loan": {
+   "status": "limited",
+   "note": "Lv 1 reads “You borrow it for a day”: the words beyond the numbers aren't acted on yet; it plays as a pokémon handling job."
+  },
+  "treasure-dive": {
+   "status": "supported"
+  },
+  "cave-echo": {
+   "status": "limited",
+   "note": "Lv 1 reads “A common nest”: the words beyond the numbers aren't acted on yet; it plays as a pokémon handling job."
+  },
+  "mushroom-hunt": {
+   "status": "limited",
+   "note": "Lv 1 reads “A berry”: the words beyond the numbers aren't acted on yet; it plays as a pokémon handling job."
+  },
+  "night-catch": {
+   "status": "limited",
+   "note": "Lv 1 reads “A Zubat type”: the words beyond the numbers aren't acted on yet; it plays as a pokémon handling job."
+  },
+  "bug-contest": {
+   "status": "disabled"
+  },
+  "fishing-derby": {
+   "status": "disabled"
+  },
+  "berry-blend": {
+   "status": "limited",
+   "note": "Lv 1 reads “One treat (+1 happy)”: the words beyond the numbers aren't acted on yet; it plays as a pokémon handling job."
+  },
+  "pokemon-gym-lessons": {
+   "status": "supported"
+  },
+  "rare-candy-sale": {
+   "status": "limited",
+   "note": "Lv 1 reads “₽200 each”: the words beyond the numbers aren't acted on yet; it plays as a pokémon handling job."
+  },
+  "nickname-day": {
+   "status": "supported"
+  },
+  "cargo-skim": {
+   "status": "supported"
+  },
+  "ship-tag": {
+   "status": "limited",
+   "note": "Lv 1 reads “One ship”: the words beyond the numbers aren't acted on yet; it plays as a docks and the underworld trade job."
+  },
+  "warehouse-fire": {
+   "status": "limited",
+   "note": "Lv 1 reads “One shed”: the words beyond the numbers aren't acted on yet; it plays as a docks and the underworld trade job."
+  },
+  "harbour-master-deal": {
+   "status": "limited",
+   "note": "Lv 1 reads “Ships are on time”: the words beyond the numbers aren't acted on yet; it plays as a docks and the underworld trade job."
+  },
+  "stowaway": {
+   "status": "limited",
+   "note": "Lv 1 reads “One person”: the words beyond the numbers aren't acted on yet; it plays as a docks and the underworld trade job."
+  },
+  "crab-pot-racket": {
+   "status": "supported"
+  },
+  "dock-strike": {
+   "status": "limited",
+   "note": "Lv 1 reads “Rival −10%”: the words beyond the numbers aren't acted on yet; it plays as a docks and the underworld trade job."
+  },
+  "fish-market-cut": {
+   "status": "supported"
+  },
+  "ferry-pass": {
+   "status": "supported"
+  },
+  "lighthouse-signal": {
+   "status": "limited",
+   "note": "Lv 1 reads “One ship”: the words beyond the numbers aren't acted on yet; it plays as a docks and the underworld trade job."
+  },
+  "pier-ambush": {
+   "status": "limited",
+   "note": "Lv 1 reads “Win a crate”: the words beyond the numbers aren't acted on yet; it plays as a docks and the underworld trade job."
+  },
+  "black-cargo": {
+   "status": "supported"
+  },
+  "customs-bribe": {
+   "status": "limited",
+   "note": "Lv 1 reads “Cargo clears”: the words beyond the numbers aren't acted on yet; it plays as a docks and the underworld trade job."
+  },
+  "anchor-tax": {
+   "status": "supported"
+  },
+  "salvage-raid": {
+   "status": "supported"
+  },
+  "charity-match": {
+   "status": "supported"
+  },
+  "free-meal-day": {
+   "status": "supported"
+  },
+  "fix-the-park": {
+   "status": "supported"
+  },
+  "statue-of-the-boss": {
+   "status": "supported"
+  },
+  "mural-painting": {
+   "status": "supported"
+  },
+  "block-cleanup": {
+   "status": "supported"
+  },
+  "heckle-the-mayor": {
+   "status": "supported"
+  },
+  "free-clinic": {
+   "status": "supported"
+  },
+  "school-visit": {
+   "status": "supported"
+  },
+  "sports-day": {
+   "status": "supported"
+  },
+  "local-hero": {
+   "status": "supported"
+  },
+  "silence-a-critic": {
+   "status": "supported"
+  },
+  "interview": {
+   "status": "supported"
+  },
+  "open-letter": {
+   "status": "supported"
+  },
+  "cheer-squad": {
+   "status": "supported"
+  },
+  "dye-and-disguise": {
+   "status": "supported"
+  },
+  "false-passport": {
+   "status": "supported"
+  },
+  "sewer-escape": {
+   "status": "supported"
+  },
+  "bus-hop": {
+   "status": "limited",
+   "note": "Lv 1 reads “Lose one tail”: the words beyond the numbers aren't acted on yet; it plays as a evasion and police job."
+  },
+  "crowd-melt": {
+   "status": "supported"
+  },
+  "safe-phone": {
+   "status": "supported"
+  },
+  "lawyer-up": {
+   "status": "supported"
+  },
+  "plead-out": {
+   "status": "supported"
+  },
+  "stolen-uniform": {
+   "status": "supported"
+  },
+  "radio-jam": {
+   "status": "supported"
+  },
+  "roadblock-dodge": {
+   "status": "supported"
+  },
+  "evidence-burn": {
+   "status": "supported"
+  },
+  "witness-scare": {
+   "status": "supported"
+  },
+  "plant-a-rumour": {
+   "status": "supported"
+  },
+  "police-picnic": {
+   "status": "supported"
+  },
+  "rumour-mill": {
+   "status": "supported"
+  },
+  "poison-the-well": {
+   "status": "supported"
+  },
+  "cut-the-wires": {
+   "status": "supported"
+  },
+  "steal-their-cook": {
+   "status": "supported"
+  },
+  "replace-the-lock": {
+   "status": "limited",
+   "note": "Lv 1 reads “A shed is locked out”: the words beyond the numbers aren't acted on yet; it plays as a rival warfare job (rivalHit)."
+  },
+  "mark-the-rival": {
+   "status": "supported"
+  },
+  "bribe-the-rival-s-guard": {
+   "status": "limited",
+   "note": "Lv 1 reads “One guard (₽200)”: the words beyond the numbers aren't acted on yet; it plays as a rival warfare job (rivalHit)."
+  },
+  "frame-the-rival-boss": {
+   "status": "supported"
+  },
+  "hijack-their-raid": {
+   "status": "supported"
+  },
+  "switch-the-plans": {
+   "status": "supported"
+  },
+  "break-the-alliance": {
+   "status": "supported"
+  },
+  "steal-their-medals": {
+   "status": "supported"
+  },
+  "starve-the-rival": {
+   "status": "supported"
+  },
+  "capture-a-scout": {
+   "status": "supported"
+  },
+  "challenge-letter": {
+   "status": "supported"
+  },
+  "claim-a-corner": {
+   "status": "supported"
+  },
+  "draw-the-border": {
+   "status": "limited",
+   "note": "Lv 1 reads “Rival jobs inside the line lose 5%”: the words beyond the numbers aren't acted on yet; it plays as a territory and districts job."
+  },
+  "hold-the-market-day": {
+   "status": "supported"
+  },
+  "toll-gate": {
+   "status": "supported"
+  },
+  "street-council": {
+   "status": "supported"
+  },
+  "neighbourhood-watch": {
+   "status": "limited",
+   "note": "Lv 1 reads “Tips from one street”: the words beyond the numbers aren't acted on yet; it plays as a territory and districts job."
+  },
+  "fence-the-alley": {
+   "status": "supported"
+  },
+  "safe-street": {
+   "status": "supported"
+  },
+  "secret-passage": {
+   "status": "supported"
+  },
+  "landlord-takeover": {
+   "status": "limited",
+   "note": "Lv 1 reads “One flat (₽60 a week)”: the words beyond the numbers aren't acted on yet; it plays as a territory and districts job."
+  },
+  "rename-the-street": {
+   "status": "supported"
+  },
+  "evict-a-rival": {
+   "status": "supported"
+  },
+  "bridge-control": {
+   "status": "supported"
+  },
+  "hold-the-fairground": {
+   "status": "disabled"
+  },
+  "light-the-streets": {
+   "status": "supported"
+  },
+  "festival-float": {
+   "status": "disabled"
+  },
+  "fireworks-night": {
+   "status": "disabled"
+  },
+  "costume-contest": {
+   "status": "disabled"
+  },
+  "food-stall": {
+   "status": "disabled"
+  },
+  "raffle-night": {
+   "status": "disabled"
+  },
+  "haunted-house": {
+   "status": "disabled"
+  },
+  "harvest-fair": {
+   "status": "disabled"
+  },
+  "winter-market": {
+   "status": "disabled"
+  },
+  "spring-dance": {
+   "status": "disabled"
+  },
+  "summer-beach-party": {
+   "status": "disabled"
+  },
+  "lantern-night": {
+   "status": "disabled"
+  },
+  "battle-tournament": {
+   "status": "disabled"
+  },
+  "pokemon-show": {
+   "status": "disabled"
+  },
+  "auction-day": {
+   "status": "disabled"
+  },
+  "race-day": {
+   "status": "disabled"
+  },
+  "build-a-gadget": {
+   "status": "limited",
+   "note": "Lv 1 reads “One tool lasts a job (₽40)”: the words beyond the numbers aren't acted on yet; it plays as a gadgets and technology job."
+  },
+  "repair-the-van": {
+   "status": "limited",
+   "note": "Lv 1 reads “The van starts again (₽30)”: the words beyond the numbers aren't acted on yet; it plays as a gadgets and technology job."
+  },
+  "hack-a-camera": {
+   "status": "supported"
+  },
+  "scrambler": {
+   "status": "supported"
+  },
+  "drone-scout": {
+   "status": "supported"
+  },
+  "forge-a-badge": {
+   "status": "supported"
+  },
+  "disguise-kit": {
+   "status": "supported"
+  },
+  "gas-mask": {
+   "status": "supported"
+  },
+  "smoke-bomb": {
+   "status": "supported"
+  },
+  "fake-id-press": {
+   "status": "supported"
+  },
+  "lock-pattern-study": {
+   "status": "supported"
+  },
+  "radio-set": {
+   "status": "supported"
+  },
+  "night-vision": {
+   "status": "supported"
+  },
+  "blueprint-study": {
+   "status": "supported"
+  },
+  "remote-charge": {
+   "status": "supported"
+  },
+  "road-trip": {
+   "status": "supported"
+  },
+  "mountain-climb": {
+   "status": "supported"
+  },
+  "forest-hide": {
+   "status": "supported"
+  },
+  "desert-crossing": {
+   "status": "supported"
+  },
+  "island-hop": {
+   "status": "supported"
+  },
+  "cave-survey": {
+   "status": "supported"
+  },
+  "ruin-dive": {
+   "status": "supported"
+  },
+  "ice-field-walk": {
+   "status": "supported"
+  },
+  "swamp-run": {
+   "status": "supported"
+  },
+  "skyway": {
+   "status": "supported"
+  },
+  "tunnel-dash": {
+   "status": "supported"
+  },
+  "camp-out": {
+   "status": "supported"
+  },
+  "pilgrimage": {
+   "status": "supported"
+  },
+  "sightseeing-scam": {
+   "status": "supported"
+  },
+  "border-hop": {
+   "status": "supported"
+  },
+  "study-the-hero": {
+   "status": "disabled"
+  },
+  "rattle-the-hero": {
+   "status": "disabled"
+  },
+  "gift-the-hero": {
+   "status": "disabled"
+  },
+  "block-the-hero-s-road": {
+   "status": "disabled"
+  },
+  "hero-s-friend-trap": {
+   "status": "disabled"
+  },
+  "hero-s-mentor-talk": {
+   "status": "disabled"
+  },
+  "hero-s-hometown": {
+   "status": "disabled"
+  },
+  "hero-s-rival-talk": {
+   "status": "disabled"
+  },
+  "hero-s-last-letter": {
+   "status": "disabled"
+  },
+  "hero-sparring": {
+   "status": "disabled"
+  },
+  "hero-s-doubt": {
+   "status": "disabled"
+  },
+  "hero-s-pokemon": {
+   "status": "disabled"
+  },
+  "hero-duel-prep": {
+   "status": "disabled"
+  },
+  "hero-s-banner": {
+   "status": "disabled"
+  },
+  "heroic-legendary-talk": {
+   "status": "disabled"
+  },
+  "snagem-meet": {
+   "status": "disabled"
+  },
+  "snagem-heist": {
+   "status": "disabled"
+  },
+  "cipher-offer": {
+   "status": "disabled"
+  },
+  "shadow-pokemon-trade": {
+   "status": "disabled"
+  },
+  "purify-rite": {
+   "status": "disabled"
+  },
+  "snag-ball-use": {
+   "status": "disabled"
+  },
+  "peon-rank": {
+   "status": "disabled"
+  },
+  "admin-rank": {
+   "status": "disabled"
+  },
+  "cipher-lab": {
+   "status": "disabled"
+  },
+  "snagem-base-hit": {
+   "status": "disabled"
+  },
+  "shadow-sabotage": {
+   "status": "disabled"
+  },
+  "betray-cipher": {
+   "status": "disabled"
+  },
+  "betray-snagem": {
+   "status": "disabled"
+  },
+  "shadow-tutor": {
+   "status": "disabled"
+  },
+  "black-market-snag": {
+   "status": "disabled"
+  },
+  "garrison-visit": {
+   "status": "disabled"
+  },
+  "tribute-run": {
+   "status": "disabled"
+  },
+  "inspect-the-governor": {
+   "status": "disabled"
+  },
+  "replace-the-governor": {
+   "status": "disabled"
+  },
+  "region-law": {
+   "status": "disabled"
+  },
+  "region-festival": {
+   "status": "disabled"
+  },
+  "region-draft": {
+   "status": "disabled"
+  },
+  "region-boon": {
+   "status": "disabled"
+  },
+  "region-spy-net": {
+   "status": "disabled"
+  },
+  "region-road": {
+   "status": "disabled"
+  },
+  "region-bank": {
+   "status": "disabled"
+  },
+  "region-court": {
+   "status": "disabled"
+  },
+  "region-school": {
+   "status": "disabled"
+  },
+  "region-guard": {
+   "status": "disabled"
+  },
+  "region-banner": {
+   "status": "disabled"
+  },
+  "loyalty-test": {
+   "status": "supported"
+  },
+  "betrayal-watch": {
+   "status": "supported"
+  },
+  "forgive": {
+   "status": "disabled"
+  },
+  "punish": {
+   "status": "disabled"
+  },
+  "offer-amnesty": {
+   "status": "disabled"
+  },
+  "win-back-a-defector": {
+   "status": "disabled"
+  },
+  "name-an-heir": {
+   "status": "supported"
+  },
+  "loyalty-dinner": {
+   "status": "supported"
+  },
+  "blood-oath": {
+   "status": "supported"
+  },
+  "gift-a-medal": {
+   "status": "supported"
+  },
+  "bait-a-mole": {
+   "status": "disabled"
+  },
+  "exile": {
+   "status": "disabled"
+  },
+  "return-home": {
+   "status": "supported"
+  },
+  "retire-a-veteran": {
+   "status": "supported"
+  },
+  "secret-ally": {
+   "status": "supported"
+  },
+  "pokemon-tower-night": {
+   "status": "supported"
+  },
+  "rock-tunnel-dark": {
+   "status": "supported"
+  },
+  "mt-moon-dig": {
+   "status": "supported"
+  },
+  "abandoned-mansion": {
+   "status": "supported"
+  },
+  "power-plant-raid": {
+   "status": "supported"
+  },
+  "sea-cavern": {
+   "status": "supported"
+  },
+  "hidden-lab": {
+   "status": "supported"
+  },
+  "old-castle": {
+   "status": "supported"
+  },
+  "sunken-ship": {
+   "status": "supported"
+  },
+  "radio-tower": {
+   "status": "supported"
+  },
+  "silph-style-tower": {
+   "status": "supported"
+  },
+  "underground-path": {
+   "status": "supported"
+  },
+  "ice-cave": {
+   "status": "supported"
+  },
+  "volcano-rim": {
+   "status": "supported"
+  },
+  "victory-road-ambush": {
+   "status": "supported"
+  },
+  "midnight-radio": {
+   "status": "supported"
+  },
+  "night-auction": {
+   "status": "supported"
+  },
+  "back-room-poker": {
+   "status": "supported"
+  },
+  "illegal-duel": {
+   "status": "supported"
+  },
+  "moonlight-market": {
+   "status": "supported"
+  },
+  "shadow-puppet": {
+   "status": "supported"
+  },
+  "ghost-story": {
+   "status": "supported"
+  },
+  "fire-dance": {
+   "status": "disabled"
+  },
+  "poet-s-night": {
+   "status": "supported"
+  },
+  "night-duel-bets": {
+   "status": "supported"
+  },
+  "whisper-network": {
+   "status": "supported"
+  },
+  "candle-meeting": {
+   "status": "supported"
+  },
+  "dusk-parade": {
+   "status": "supported"
+  },
+  "night-class": {
+   "status": "supported"
+  },
+  "stargazing": {
+   "status": "supported"
+  },
+  "study-the-elite-four": {
+   "status": "disabled"
+  },
+  "elite-bribe": {
+   "status": "disabled"
+  },
+  "elite-duel": {
+   "status": "disabled"
+  },
+  "elite-debate": {
+   "status": "disabled"
+  },
+  "champion-s-aide": {
+   "status": "disabled"
+  },
+  "hall-of-fame-heist": {
+   "status": "disabled"
+  },
+  "league-rig": {
+   "status": "disabled"
+  },
+  "league-ticket": {
+   "status": "disabled"
+  },
+  "elite-rumour": {
+   "status": "disabled"
+  },
+  "elite-gift": {
+   "status": "disabled"
+  },
+  "champion-letter": {
+   "status": "disabled"
+  },
+  "pre-league-spar": {
+   "status": "disabled"
+  },
+  "gate-guard-bribe": {
+   "status": "disabled"
+  },
+  "elite-s-weak-spot": {
+   "status": "disabled"
+  },
+  "champion-duel": {
+   "status": "disabled"
+  },
+  "dead-letter-box": {
+   "status": "disabled"
+  },
+  "coded-ad": {
+   "status": "disabled"
+  },
+  "double-cross": {
+   "status": "disabled"
+  },
+  "sleeper-cell": {
+   "status": "disabled"
+  },
+  "burn-a-spy": {
+   "status": "disabled"
+  },
+  "trade-a-spy": {
+   "status": "disabled"
+  },
+  "handler-meet": {
+   "status": "disabled"
+  },
+  "extraction": {
+   "status": "disabled"
+  },
+  "planted-evidence": {
+   "status": "disabled"
+  },
+  "wire-the-ally": {
+   "status": "disabled"
+  },
+  "spy-school": {
+   "status": "disabled"
+  },
+  "counter-bug": {
+   "status": "disabled"
+  },
+  "fake-spy": {
+   "status": "disabled"
+  },
+  "spy-meeting": {
+   "status": "disabled"
+  },
+  "spy-gift": {
+   "status": "disabled"
+  },
+  "legend-rumour": {
+   "status": "disabled"
+  },
+  "altar-visit": {
+   "status": "disabled"
+  },
+  "meteor-night": {
+   "status": "disabled"
+  },
+  "eclipse": {
+   "status": "disabled"
+  },
+  "beast-tracks": {
+   "status": "disabled"
+  },
+  "mythical-egg": {
+   "status": "disabled"
+  },
+  "ancient-tablet": {
+   "status": "disabled"
+  },
+  "sacred-spring": {
+   "status": "disabled"
+  },
+  "sleeping-giant": {
+   "status": "disabled"
+  },
+  "lost-relic": {
+   "status": "disabled"
+  },
+  "sky-pillar-climb": {
+   "status": "disabled"
+  },
+  "deep-sea-gate": {
+   "status": "disabled"
+  },
+  "time-rift": {
+   "status": "disabled"
+  },
+  "moon-shrine": {
+   "status": "disabled"
+  },
+  "sun-shrine": {
+   "status": "disabled"
+  },
+  "family-dinner": {
+   "status": "supported"
+  },
+  "syndicate-toll": {
+   "status": "limited",
+   "note": "Lv 1 reads “Collect ₽120 once”: the words beyond the numbers aren't acted on yet; it plays as a crime families and syndicates job."
+  },
+  "godfather-s-favour": {
+   "status": "limited",
+   "note": "Lv 1 reads “The don lends one Grunt for a day (₽100 gift)”: the words beyond the numbers aren't acted on yet; it plays as a crime families and syndicates job."
+  },
+  "turf-treaty": {
+   "status": "limited",
+   "note": "Lv 1 reads “A one-week line on the map”: the words beyond the numbers aren't acted on yet; it plays as a crime families and syndicates job."
+  },
+  "hit-contract": {
+   "status": "supported"
+  },
+  "offer-protection": {
+   "status": "supported"
+  },
+  "union-boss": {
+   "status": "limited",
+   "note": "Lv 1 reads “₽100 buys a meeting”: the words beyond the numbers aren't acted on yet; it plays as a crime families and syndicates job."
+  },
+  "smuggler-s-oath": {
+   "status": "limited",
+   "note": "Lv 1 reads “A promise of loyalty (+2)”: the words beyond the numbers aren't acted on yet; it plays as a crime families and syndicates job."
+  },
+  "debt-ledger": {
+   "status": "supported"
+  },
+  "revenge-contract": {
+   "status": "supported"
+  },
+  "cartel-deal": {
+   "status": "supported"
+  },
+  "tribute-to-a-don": {
+   "status": "supported"
+  },
+  "syndicate-meeting": {
+   "status": "supported"
+  },
+  "syndicate-truce": {
+   "status": "supported"
+  },
+  "syndicate-heist": {
+   "status": "supported"
+  },
+  "silph-type-memo": {
+   "status": "supported"
+  },
+  "executive-bribe": {
+   "status": "limited",
+   "note": "Lv 1 reads “₽250 for a passcode”: the words beyond the numbers aren't acted on yet; it plays as a corporate and lab ops job."
+  },
+  "lab-intern": {
+   "status": "supported"
+  },
+  "product-recall": {
+   "status": "supported"
+  },
+  "patent-theft": {
+   "status": "supported"
+  },
+  "corporate-raid": {
+   "status": "supported"
+  },
+  "board-meeting": {
+   "status": "supported"
+  },
+  "stock-rumour": {
+   "status": "supported"
+  },
+  "silent-partner": {
+   "status": "supported"
+  },
+  "company-loan": {
+   "status": "supported"
+  },
+  "hostile-takeover": {
+   "status": "supported"
+  },
+  "corporate-spy": {
+   "status": "supported"
+  },
+  "lab-sabotage": {
+   "status": "supported"
+  },
+  "fake-invoice": {
+   "status": "supported"
+  },
+  "employee-walkout": {
+   "status": "supported"
+  },
+  "cooperate-with-the-law": {
+   "status": "supported"
+  },
+  "bribe-a-judge": {
+   "status": "limited",
+   "note": "Lv 1 reads “₽250 for a favourable hearing”: the words beyond the numbers aren't acted on yet; it plays as a police and justice job."
+  },
+  "jury-tamper": {
+   "status": "supported"
+  },
+  "alibi-witness": {
+   "status": "limited",
+   "note": "Lv 1 reads “₽150 buys one witness”: the words beyond the numbers aren't acted on yet; it plays as a police and justice job."
+  },
+  "seize-the-armory": {
+   "status": "supported"
+  },
+  "plea-bargain": {
+   "status": "supported"
+  },
+  "police-raid-drill": {
+   "status": "supported"
+  },
+  "patrol-switch": {
+   "status": "supported"
+  },
+  "dirty-cop": {
+   "status": "limited",
+   "note": "Lv 1 reads “₽150 buys a tip”: the words beyond the numbers aren't acted on yet; it plays as a police and justice job."
+  },
+  "station-break-in": {
+   "status": "supported"
+  },
+  "jail-visit": {
+   "status": "supported"
+  },
+  "fake-warrant": {
+   "status": "supported"
+  },
+  "wrongful-arrest": {
+   "status": "supported"
+  },
+  "pardon-letter": {
+   "status": "limited",
+   "note": "Lv 1 reads “₽300 clears a name”: the words beyond the numbers aren't acted on yet; it plays as a police and justice job."
+  },
+  "checkpoint-bribe": {
+   "status": "limited",
+   "note": "Lv 1 reads “₽100 for one pass”: the words beyond the numbers aren't acted on yet; it plays as a police and justice job."
+  },
+  "team-song": {
+   "status": "supported"
+  },
+  "crew-library": {
+   "status": "supported"
+  },
+  "training-montage": {
+   "status": "supported"
+  },
+  "crew-tattoo": {
+   "status": "supported"
+  },
+  "veteran-s-story": {
+   "status": "supported"
+  },
+  "rookie-cup": {
+   "status": "supported"
+  },
+  "crew-meeting": {
+   "status": "supported"
+  },
+  "crew-vote": {
+   "status": "supported"
+  },
+  "skill-share": {
+   "status": "limited",
+   "note": "Lv 1 reads “Two members swap a skill”: the words beyond the numbers aren't acted on yet; it plays as a crew growth and culture job."
+  },
+  "crew-jokes": {
+   "status": "supported"
+  },
+  "open-mic": {
+   "status": "supported"
+  },
+  "crew-hike": {
+   "status": "supported"
+  },
+  "crew-jackets": {
+   "status": "supported"
+  },
+  "crew-newsletter": {
+   "status": "supported"
+  },
+  "reward-board": {
+   "status": "supported"
+  },
+  "pokemon-daycare": {
+   "status": "supported"
+  },
+  "pokemon-salon": {
+   "status": "supported"
+  },
+  "pokemon-clinic": {
+   "status": "supported"
+  },
+  "berry-farm": {
+   "status": "supported"
+  },
+  "pokemon-stud": {
+   "status": "supported"
+  },
+  "pokemon-rental": {
+   "status": "limited",
+   "note": "Lv 1 reads “₽60 a day”: the words beyond the numbers aren't acted on yet; it plays as a pokémon business job."
+  },
+  "egg-market": {
+   "status": "supported"
+  },
+  "pokemon-gym-front": {
+   "status": "supported"
+  },
+  "pokemon-circus": {
+   "status": "supported"
+  },
+  "pokemon-cafe": {
+   "status": "supported"
+  },
+  "pokemon-pet-shop": {
+   "status": "supported"
+  },
+  "pokemon-race-track": {
+   "status": "supported"
+  },
+  "pokemon-photo-studio": {
+   "status": "supported"
+  },
+  "pokemon-breeders-club": {
+   "status": "supported"
+  },
+  "pokemon-ranch": {
+   "status": "supported"
+  },
+  "mission-brief": {
+   "status": "supported"
+  },
+  "mission-debrief": {
+   "status": "limited",
+   "note": "Lv 1 reads “One lesson is written down”: the words beyond the numbers aren't acted on yet; it plays as a crew missions job."
+  },
+  "joint-mission": {
+   "status": "supported"
+  },
+  "night-mission": {
+   "status": "supported"
+  },
+  "rescue-mission": {
+   "status": "supported"
+  },
+  "heist-mission": {
+   "status": "supported"
+  },
+  "spy-mission": {
+   "status": "supported"
+  },
+  "courier-mission": {
+   "status": "supported"
+  },
+  "guard-mission": {
+   "status": "supported"
+  },
+  "hit-mission": {
+   "status": "supported"
+  },
+  "escort-mission": {
+   "status": "supported"
+  },
+  "delivery-mission": {
+   "status": "supported"
+  },
+  "recon-mission": {
+   "status": "supported"
+  },
+  "distraction-mission": {
+   "status": "supported"
+  },
+  "cleanup-mission": {
+   "status": "supported"
+  },
+  "final-stand-prep": {
+   "status": "disabled"
+  },
+  "takeover-speech": {
+   "status": "disabled"
+  },
+  "wipe-out-plan": {
+   "status": "disabled"
+  },
+  "shadow-plan": {
+   "status": "disabled"
+  },
+  "monarch-plan": {
+   "status": "disabled"
+  },
+  "goal-plan": {
+   "status": "disabled"
+  },
+  "region-sweep": {
+   "status": "disabled"
+  },
+  "final-ledger": {
+   "status": "disabled"
+  },
+  "last-night": {
+   "status": "disabled"
+  },
+  "victory-parade": {
+   "status": "disabled"
+  },
+  "crown-the-boss": {
+   "status": "disabled"
+  },
+  "peace-treaty": {
+   "status": "disabled"
+  },
+  "settle-scores": {
+   "status": "disabled"
+  },
+  "pass-the-torch": {
+   "status": "disabled"
+  },
+  "farewell-feast": {
+   "status": "disabled"
+  }
+ }
+}

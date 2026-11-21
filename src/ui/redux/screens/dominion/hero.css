@@ -1,0 +1,3 @@
+/* Dominion slice D11: the one rule the Hero screens add to the round-4 port (dominion.css): a choice that can't be
+   taken (m11's Smoke Ball with none in the Bag, a night card by day) is dimmed. */
+#rx .dom .ch.dim{opacity:.55;filter:saturate(.4)}

@@ -1,0 +1,100 @@
+{
+ "_source": "DOMINION D17 (BUILD_SLICES.md). Rules: Part 5 §7 (finishing the game: every region owned, none lost at the moment the last is Taken, or the Goal fully achieved; the ending screen shows the Empire Map, the Ledger graph across all days, every crew member's journey and the Hero beaten in each region), Part 0 §6.1 Q4 (Charters unlock after one finished run), old Evil Mode Part 23 §9.3 = Kice answer 9 (account rewards in full, by how far the run got; no ending pays more than another) and §10 (no line calls the Boss a winner, a loser, good, evil, a villain or a hero). No mockup draws this page: it is made of the round-4 parts of s7 (the Ledger graph) and s10 (the region cards).",
+ "goalEnds": [
+  "everlasting",
+  "clean-slate"
+ ],
+ "goalEndsNote": "Part 5 §7 names Clean Slate and Everlasting as Goals that end the run on their own. Every other Goal takes its region and the run goes on to the next one.",
+ "keep": 720,
+ "screen": {
+  "title": "THE EMPIRE",
+  "sub": "Run day {day}",
+  "every": "Every region in the run answers to {team}.",
+  "goal": "{goal}: {ending}.",
+  "goalWhy": "The Goal is done. Nothing in the next region could add to it.",
+  "otherEndings": "This Goal's other endings: {list}. Their conditions aren't tracked yet; this run is read as its first.",
+  "mapTitle": "THE EMPIRE MAP",
+  "graphTitle": "THE LEDGER · EVERY DAY",
+  "graphEmpty": "The books start on run day {day}.",
+  "graphPeak": "Peak {peak} on run day {day}",
+  "crewTitle": "WHO WAS IN IT",
+  "crewNone": "Nobody stayed. The Boss did this alone.",
+  "joined": "Joined run day {day} · {region}",
+  "holding": "Holding {region}",
+  "payTitle": "HOW FAR IT GOT",
+  "payNote": "The account pays this run's ordinary rewards in full, the same for every ending. They are added when the books close.",
+  "close": "Close the books",
+  "page": "page {n}/{of}",
+  "box": "{who} looks over the books one last time. {line}",
+  "boxLines": [
+   "Every day is in here. Even the rainy one.",
+   "It started with one warehouse and a leaking roof.",
+   "Somebody should frame the first ₽500.",
+   "The ledger doesn't say what it felt like. It says what it cost."
+  ],
+  "charters": "The Charters are open on the next run's Boss page (C).",
+  "notYet": "The run isn't finished yet."
+ },
+ "states": {
+  "held": {
+   "pill": "HELD",
+   "tone": "g"
+  },
+  "here": {
+   "pill": "TAKEN",
+   "tone": "y"
+  },
+  "seceded": {
+   "pill": "SECEDED",
+   "tone": "r"
+  },
+  "sellout": {
+   "pill": "SOLD OUT",
+   "tone": "r"
+  },
+  "lost": {
+   "pill": "LOST",
+   "tone": "r"
+  },
+  "ahead": {
+   "pill": "NOT REACHED",
+   "tone": "k"
+  }
+ },
+ "heroLine": "{hero} stood last",
+ "noHero": "No Hero stood here",
+ "pay": [
+  {
+   "id": "regions",
+   "label": "Regions taken"
+  },
+  {
+   "id": "days",
+   "label": "Run days"
+  },
+  {
+   "id": "towns",
+   "label": "Towns held now"
+  },
+  {
+   "id": "crew",
+   "label": "Crew at the end"
+  },
+  {
+   "id": "falls",
+   "label": "Collapses"
+  }
+ ],
+ "collapse": {
+  "_rule": "Part 5 §8: Collapse is the HQ destroyed (every room inside ruined) and ₽ below 0 and no districts held. Never a game over (Kice).",
+  "funds": 1000,
+  "hqLevel": 1,
+  "lines": [
+   "The HQ is ash, the books are red and not one street answers to {team}.",
+   "Morning finds the Boss in a new warehouse in the same region, with {name} and ₽1,000.",
+   "Humble beginnings, again."
+  ],
+  "alone": "Morning finds the Boss in a new warehouse in the same region, alone, with ₽1,000.",
+  "kept": "Held regions elsewhere stay held. The days keep counting."
+ }
+}

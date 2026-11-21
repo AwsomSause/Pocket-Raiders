@@ -1,0 +1,1615 @@
+{
+ "_source": "Part 1 §3.2, Part 3 §5, Part 9 A10 (plans/evil-mode-rework); D10 hand data, made by tools/dominion/growth-data.py",
+ "play": {
+  "loan-shark": {
+   "kinds": [
+    "any"
+   ],
+   "cost": 300,
+   "effect": "loan",
+   "win": "You lend ₽300 at a \"friendly\" rate. ₽{back} is due back on Day {due}."
+  },
+  "buy-out": {
+   "kinds": [
+    "shop",
+    "site",
+    "dock",
+    "crowd",
+    "street"
+   ],
+   "effect": "buyOut",
+   "win": "{target} is yours: the keys, the books and the staff."
+  },
+  "museum-heist": {
+   "kinds": [
+    "site"
+   ],
+   "chance": 45,
+   "heat": 4,
+   "failHeat": 10,
+   "crate": "museum",
+   "gate": "contact",
+   "battle": {
+    "chance": 40,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "Glass, a soft click, and the case is empty by morning: {loot}. The Fence will want to see this.",
+   "lose": "A guard on a late round. You leave the case where it was."
+  },
+  "fence": {
+   "kinds": [
+    "any"
+   ],
+   "effect": "fence",
+   "gate": "contact",
+   "win": "The Fence looks it over and pays."
+  },
+  "three-on-one": {
+   "kinds": [
+    "route",
+    "street",
+    "crowd"
+   ],
+   "chance": 60,
+   "prize": 3,
+   "heat": 2,
+   "failHeat": 3,
+   "dread": 2,
+   "battle": {
+    "chance": 100,
+    "on": "always",
+    "foe": "target"
+   },
+   "win": "Three of them, one of you. Prize money times three: ₽{pay}.",
+   "lose": "Three was too many today."
+  },
+  "gauntlet": {
+   "kinds": [
+    "route",
+    "street",
+    "crowd",
+    "dock",
+    "cave"
+   ],
+   "effect": "storm",
+   "dread": 2,
+   "win": "Five fights, no rest: you walk the gauntlet."
+  },
+  "rooftop-chase": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "heat": -10,
+   "gate": "heat20",
+   "win": "Over the roofs and down a fire escape. They lose you in the washing lines. Heat −10.",
+   "lose": "A dead end, a whistle, and a long talk at the station."
+  },
+  "hire-a-specialist": {
+   "kinds": [
+    "any"
+   ],
+   "effect": "specialist",
+   "band": 2,
+   "win": "{name} shakes your hand and puts the tool kit down."
+  },
+  "forge-papers": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "effect": "forge",
+   "win": "A permit, a stamp, a signature nobody can tell apart. One forged paper ready.",
+   "lose": "The ink runs. You burn it."
+  },
+  "hack-the-terminal": {
+   "kinds": [
+    "site",
+    "police"
+   ],
+   "chance": 50,
+   "failHeat": 8,
+   "wanted": -5,
+   "effect": "scoutDistrict",
+   "battle": {
+    "chance": 30,
+    "on": "fail",
+    "foe": "police"
+   },
+   "win": "A file copied, a warrant gone. Every place in {district} is scouted, and Wanted falls 5.",
+   "lose": "The screen locks. Somewhere an alarm rings."
+  },
+  "dig-the-dirt": {
+   "kinds": [
+    "shop",
+    "site",
+    "gym",
+    "police",
+    "dock",
+    "center",
+    "street"
+   ],
+   "chance": 55,
+   "effect": "dirt",
+   "win": "A name, a date, a photo nobody was meant to see. You have dirt on {owner}.",
+   "lose": "Nothing. They are cleaner than they look."
+  },
+  "kidnap-a-pokemon": {
+   "kinds": [
+    "street",
+    "site",
+    "shop",
+    "center"
+   ],
+   "chance": 45,
+   "heat": 5,
+   "failHeat": 12,
+   "band": 3,
+   "effect": "kidnap",
+   "battle": {
+    "chance": 40,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "A back door, a Ball in your coat. {mon} is in the Pens, cooling off.",
+   "lose": "The Pokémon cries out. Lights come on upstairs."
+  },
+  "hit-a-lab": {
+   "kinds": [
+    "site"
+   ],
+   "chance": 45,
+   "heat": 6,
+   "failHeat": 12,
+   "crate": "lab",
+   "effect": "labHit",
+   "battle": {
+    "chance": 45,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "Parts, data and a fridge of samples: {loot}.",
+   "lose": "The lab aide is still at the desk. You walk on by."
+  },
+  "pokemon-swap-meet": {
+   "kinds": [
+    "any"
+   ],
+   "cost": 300,
+   "effect": "swap",
+   "gate": "contact",
+   "win": "The Fence opens a crate of Balls. One of them is yours now: {mon}, in the Reserve."
+  },
+  "fossil-dig": {
+   "kinds": [
+    "cave",
+    "route"
+   ],
+   "chance": 55,
+   "crate": "fossil",
+   "win": "You dig until your hands hurt: {loot}.",
+   "lose": "Rock, rock, and more rock."
+  },
+  "smuggle": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 3,
+   "failHeat": 10,
+   "pay": [
+    300,
+    700
+   ],
+   "effect": "smuggle",
+   "battle": {
+    "chance": 30,
+    "on": "fail",
+    "foe": "police"
+   },
+   "win": "The van rolls into {district} with its lights off. ₽{pay}.",
+   "lose": "A checkpoint on the bridge. You turn the van round."
+  },
+  "open-a-black-market-stall": {
+   "kinds": [
+    "any"
+   ],
+   "cost": 500,
+   "effect": "stall",
+   "win": "A back room, a curtain, and three shelves of things nobody should sell."
+  },
+  "run-the-docks": {
+   "kinds": [
+    "dock"
+   ],
+   "chance": 50,
+   "heat": 4,
+   "failHeat": 9,
+   "pay": [
+    200,
+    500
+   ],
+   "weekly": 200,
+   "win": "The ships pay to unload: ₽{pay}, and the harbour pays every week now.",
+   "lose": "The harbour master has friends in uniform."
+  },
+  "underground-auction": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "heat": 3,
+   "failHeat": 6,
+   "pay": [
+    800,
+    2000
+   ],
+   "win": "Paddles go up in a dark room. The best bid: ₽{pay}.",
+   "lose": "The bidders smell police. The room empties."
+  },
+  "contraband-run": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 4,
+   "failHeat": 10,
+   "pay": [
+    600,
+    1000
+   ],
+   "battle": {
+    "chance": 35,
+    "on": "fail",
+    "foe": "police"
+   },
+   "win": "Banned goods, past the checkpoint in a crate of cabbages: ₽{pay}.",
+   "lose": "They open the cabbages."
+  },
+  "tunnel": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "heat": -5,
+   "effect": "hide",
+   "win": "A tunnel under the street, a way out nobody knows. You lie low tonight. Heat −5.",
+   "lose": "The roof of the tunnel comes down. Start again."
+  },
+  "air-drop": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": 2,
+   "failHeat": 6,
+   "pay": [
+    250,
+    500
+   ],
+   "gate": "fly",
+   "win": "A Flying Pokémon drops the parcel on a roof in {district}: ₽{pay}.",
+   "lose": "Wind. The parcel lands in the river."
+  },
+  "safehouse-network": {
+   "kinds": [
+    "any"
+   ],
+   "cost": 300,
+   "effect": "safehouse",
+   "win": "A flat above a shop in {district}, rent paid in cash. Heat cools faster there."
+  },
+  "rare-candy-ring": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 4,
+   "failHeat": 8,
+   "crate": "candy",
+   "gate": "contact",
+   "win": "The candy money comes in, with a little extra in the box: {loot}. (The game has no Rare Candy item, so the ring pays in cash.)",
+   "lose": "The courier never shows."
+  },
+  "fake-shipment": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "heat": -5,
+   "wanted": -5,
+   "effect": "jam",
+   "win": "The police chase an empty crate across town. Heat −5, Wanted −5.",
+   "lose": "They see through it."
+  },
+  "post-flyers": {
+   "kinds": [
+    "any"
+   ],
+   "effect": "flyers",
+   "win": "Flyers on every lamp post in {district}."
+  },
+  "spread-the-word": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 75,
+   "regard": 3,
+   "win": "You talk up the team on every corner of {district}. Regard +3.",
+   "lose": "People listen, nod, and forget."
+  },
+  "bribe": {
+   "kinds": [
+    "any"
+   ],
+   "effect": "bribe",
+   "win": "An envelope changes hands."
+  },
+  "sabotage-the-station": {
+   "kinds": [
+    "police"
+   ],
+   "chance": 50,
+   "failHeat": 12,
+   "wanted": -10,
+   "effect": "jam",
+   "battle": {
+    "chance": 40,
+    "on": "fail",
+    "foe": "police"
+   },
+   "win": "Cut wires, a jammed radio, a flat tyre on every car. Wanted −10, and no patrol tonight.",
+   "lose": "Officer Jenny is working late."
+  },
+  "dodge-looker": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "effect": "dodge",
+   "gate": "wanted60",
+   "win": "You move the books, burn the notes and change the locks. Looker goes home empty-handed this week.",
+   "lose": "Looker writes something down and smiles."
+  },
+  "evidence-locker-visit": {
+   "kinds": [
+    "police"
+   ],
+   "chance": 45,
+   "failHeat": 12,
+   "wanted": -15,
+   "battle": {
+    "chance": 40,
+    "on": "fail",
+    "foe": "police"
+   },
+   "win": "Three boxes of evidence, gone. Wanted −15.",
+   "lose": "The locker room has a new lock."
+  },
+  "sabotage": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "heat": 2,
+   "failHeat": 6,
+   "rival": -8,
+   "effect": "rivalHit",
+   "win": "Sand in the gears of the rival team's work in {district}.",
+   "lose": "The rival team's guards are awake."
+  },
+  "raid": {
+   "kinds": [
+    "site",
+    "police",
+    "dock",
+    "shop",
+    "center"
+   ],
+   "effect": "storm",
+   "squad": 3,
+   "win": "You storm {target}."
+  },
+  "hire-mercenaries": {
+   "kinds": [
+    "any"
+   ],
+   "cost": 800,
+   "effect": "mercs",
+   "win": "Hard faces for hire. They are yours for {days} days: every fight job is easier."
+  },
+  "gym-takeover": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "effect": "gym",
+   "win": "The Gym in {district} is yours.",
+   "lose": "The Gym holds."
+  },
+  "intimidate-a-leader": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "dread": 2,
+   "gate": "gymScouted",
+   "effect": "gymPress",
+   "battle": {
+    "chance": 25,
+    "on": "fail",
+    "foe": "target"
+   },
+   "win": "You wait outside their house. {leader} gets the message: shaken for a week.",
+   "lose": "{leader} stares you down."
+  },
+  "court-a-leader": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 65,
+   "cost": 200,
+   "regard": 1,
+   "gate": "gymScouted",
+   "effect": "gymCourt",
+   "win": "A gift, a dinner, a favour. {leader} likes you a little.",
+   "lose": "{leader} sends the gift back."
+  },
+  "rig-the-badge": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 55,
+   "failHeat": 8,
+   "gate": "gymAlly",
+   "effect": "gymRig",
+   "win": "The badge case is marked: the {badge} Badge is yours without a fight.",
+   "lose": "An inspector is in the Gym today."
+  },
+  "midnight-market": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 70,
+   "heat": 2,
+   "failHeat": 5,
+   "pay": [
+    150,
+    450
+   ],
+   "gate": "contact",
+   "win": "Lanterns under the bridge. You trade until dawn: ₽{pay}.",
+   "lose": "Nobody wants what you have tonight."
+  },
+  "blackout": {
+   "kinds": [
+    "any"
+   ],
+   "chance": 60,
+   "heat": -6,
+   "failHeat": 6,
+   "effect": "jam",
+   "win": "The lights go out across {district}. Your tracks go with them. Heat −6.",
+   "lose": "The backup generator hums."
+  },
+  "night-raid": {
+   "kinds": [
+    "site",
+    "dock",
+    "shop",
+    "street"
+   ],
+   "effect": "storm",
+   "squad": 3,
+   "win": "A night raid on {target}."
+  },
+  "the-big-night": {
+   "kinds": [
+    "any"
+   ],
+   "effect": "bigNight",
+   "win": "The Big Night: three more night jobs before dawn."
+  }
+ },
+ "later": {},
+ "crates": {
+  "museum": {
+   "picks": 1,
+   "cash": [
+    100,
+    300
+   ],
+   "items": [
+    [
+     "moon-stone",
+     2
+    ],
+    [
+     "sun-stone",
+     1
+    ],
+    [
+     "shiny-stone",
+     1
+    ],
+    [
+     "dusk-stone",
+     1
+    ],
+    [
+     "dragon-scale",
+     1
+    ],
+    [
+     "oval-stone",
+     2
+    ]
+   ]
+  },
+  "lab": {
+   "picks": 2,
+   "cash": [
+    0,
+    200
+   ],
+   "items": [
+    [
+     "up-grade",
+     1
+    ],
+    [
+     "metal-coat",
+     1
+    ],
+    [
+     "thunder-stone",
+     1
+    ],
+    [
+     "lucky-egg",
+     1
+    ],
+    [
+     "timer-ball",
+     2
+    ],
+    [
+     "quick-ball",
+     2
+    ]
+   ]
+  },
+  "fossil": {
+   "picks": 1,
+   "cash": [
+    0,
+    50
+   ],
+   "items": [
+    [
+     "moon-stone",
+     2
+    ],
+    [
+     "oval-stone",
+     2
+    ],
+    [
+     "fire-stone",
+     1
+    ],
+    [
+     "water-stone",
+     1
+    ],
+    [
+     "thunder-stone",
+     1
+    ],
+    [
+     "leaf-stone",
+     1
+    ]
+   ]
+  },
+  "candy": {
+   "picks": 1,
+   "cash": [
+    200,
+    500
+   ],
+   "items": [
+    [
+     "lucky-egg",
+     1
+    ],
+    [
+     "oval-stone",
+     2
+    ]
+   ]
+  },
+  "raid": {
+   "picks": 3,
+   "cash": [
+    300,
+    900
+   ],
+   "items": [
+    [
+     "ultra-ball",
+     2
+    ],
+    [
+     "revive",
+     2
+    ],
+    [
+     "full-heal",
+     2
+    ],
+    [
+     "timer-ball",
+     1
+    ],
+    [
+     "moon-stone",
+     1
+    ],
+    [
+     "lucky-egg",
+     1
+    ]
+   ]
+  },
+  "gauntlet": {
+   "picks": 1,
+   "cash": [
+    500,
+    700
+   ],
+   "items": [
+    [
+     "lucky-egg",
+     1
+    ],
+    [
+     "ultra-ball",
+     2
+    ],
+    [
+     "revive",
+     1
+    ],
+    [
+     "quick-ball",
+     2
+    ]
+   ]
+  }
+ },
+ "business": [
+  {
+   "target": "pewter-mart",
+   "name": "Pewter Poké Mart",
+   "price": 6000,
+   "income": 250,
+   "clean": true,
+   "perk": {
+    "kind": "items",
+    "n": 3,
+    "item": "poke-ball"
+   },
+   "text": "Your Balls on the shelf: 3 Poké Balls a week."
+  },
+  {
+   "target": "viridian-mart",
+   "name": "Viridian Poké Mart",
+   "price": 5000,
+   "income": 200,
+   "clean": true,
+   "perk": {
+    "kind": "items",
+    "n": 2,
+    "item": "potion"
+   },
+   "text": "2 Potions a week from the stockroom."
+  },
+  {
+   "target": "bike-shop",
+   "name": "Cerulean Bike Shop",
+   "price": 4000,
+   "income": 180,
+   "clean": true,
+   "perk": {
+    "kind": "odds",
+    "n": 5
+   },
+   "text": "Fast bikes for the crew: +5% on jobs in Cerulean."
+  },
+  {
+   "target": "celadon-store",
+   "name": "Celadon Department Store",
+   "price": 15000,
+   "income": 600,
+   "clean": true,
+   "perk": {
+    "kind": "regard",
+    "n": 1
+   },
+   "text": "Six floors and a rooftop. Regard +1 in Celadon each week."
+  },
+  {
+   "target": "game-corner",
+   "name": "Celadon Game Corner",
+   "price": 20000,
+   "income": 500,
+   "clean": false,
+   "perk": {
+    "kind": "clean",
+    "n": 200
+   },
+   "text": "Rocket's front. Big laundering: ₽200 of dirty money comes out clean each week.",
+   "rival": true
+  },
+  {
+   "target": "lavender-mart",
+   "name": "Lavender Poké Mart",
+   "price": 3500,
+   "income": 150,
+   "clean": true,
+   "perk": {
+    "kind": "heatDown",
+    "n": 2
+   },
+   "text": "A quiet shop in a quiet town: Heat −2 in Lavender each week."
+  },
+  {
+   "target": "fuchsia-mart",
+   "name": "Fuchsia Poké Mart",
+   "price": 4500,
+   "income": 180,
+   "clean": true,
+   "perk": {
+    "kind": "items",
+    "n": 1,
+    "item": "great-ball"
+   },
+   "text": "A Great Ball a week."
+  },
+  {
+   "target": "vermilion-harbour",
+   "name": "Vermilion Harbour",
+   "price": 12000,
+   "income": 400,
+   "clean": false,
+   "perk": {
+    "kind": "odds",
+    "n": 5
+   },
+   "text": "Ships that ask no questions: +5% on jobs in Vermilion."
+  },
+  {
+   "target": "silph-co",
+   "name": "Silph Co. floors",
+   "price": 30000,
+   "income": 800,
+   "clean": true,
+   "perk": {
+    "kind": "items",
+    "n": 2,
+    "item": "ultra-ball"
+   },
+   "text": "Tech parts and research: 2 Ultra Balls a week. Master Ball research comes with the regions (D15).",
+   "rival": true
+  },
+  {
+   "target": "saffron-station",
+   "name": "Saffron Daily (station newsstand)",
+   "price": 8000,
+   "income": 250,
+   "clean": true,
+   "perk": {
+    "kind": "heroDown",
+    "n": 1
+   },
+   "text": "You control the Morning Report's spin: the Hero's Threat −1 a week."
+  },
+  {
+   "target": "safari-gate",
+   "name": "Safari Zone gate",
+   "price": 9000,
+   "income": 300,
+   "clean": true,
+   "perk": {
+    "kind": "income",
+    "n": 100
+   },
+   "text": "Holiday money at the gate: +₽100 a week."
+  },
+  {
+   "target": "fighting-dojo",
+   "name": "Saffron Fighting Dojo",
+   "price": 10000,
+   "income": 200,
+   "clean": true,
+   "perk": {
+    "kind": "odds",
+    "n": 5
+   },
+   "text": "A battle venue: hard trainers, +5% on jobs in Saffron."
+  }
+ ],
+ "buyOut": {
+  "cornered": 3,
+  "forcedPct": 50,
+  "forcedHeat": 20,
+  "forcedRegard": -5,
+  "off": [
+   0,
+   5,
+   10,
+   15,
+   20
+  ]
+ },
+ "gyms": [
+  {
+   "id": "pewter-gym",
+   "district": "pewter",
+   "leader": "Brock",
+   "leaderId": "brock",
+   "type": "rock",
+   "badge": "Boulder",
+   "species": [
+    "geodude",
+    "onix"
+   ],
+   "offset": 1,
+   "trainers": [
+    {
+     "name": "Camper Liam",
+     "cls": "camper",
+     "leaderId": null,
+     "species": [
+      "geodude",
+      "sandshrew"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "cerulean-gym",
+   "district": "cerulean",
+   "leader": "Misty",
+   "leaderId": "misty",
+   "type": "water",
+   "badge": "Cascade",
+   "species": [
+    "staryu",
+    "starmie"
+   ],
+   "offset": 1,
+   "trainers": [
+    {
+     "name": "Swimmer Luis",
+     "cls": "swimmer",
+     "leaderId": null,
+     "species": [
+      "horsea",
+      "shellder"
+     ],
+     "offset": -1
+    },
+    {
+     "name": "Picnicker Diana",
+     "cls": "picnicker",
+     "leaderId": null,
+     "species": [
+      "goldeen",
+      "seaking"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "vermilion-gym",
+   "district": "vermilion",
+   "leader": "Lt. Surge",
+   "leaderId": "lt-surge",
+   "type": "electric",
+   "badge": "Thunder",
+   "species": [
+    "voltorb",
+    "pikachu",
+    "raichu"
+   ],
+   "offset": 2,
+   "trainers": [
+    {
+     "name": "Worker Dwayne",
+     "cls": "worker",
+     "leaderId": null,
+     "species": [
+      "pikachu",
+      "magnemite"
+     ],
+     "offset": -1
+    },
+    {
+     "name": "Guitarist Baily",
+     "cls": "guitarist",
+     "leaderId": null,
+     "species": [
+      "voltorb",
+      "magnemite"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "celadon-gym",
+   "district": "celadon",
+   "leader": "Erika",
+   "leaderId": "erika",
+   "type": "grass",
+   "badge": "Rainbow",
+   "species": [
+    "victreebel",
+    "tangela",
+    "vileplume"
+   ],
+   "offset": 2,
+   "trainers": [
+    {
+     "name": "Aroma Lady Tamia",
+     "cls": "aroma-lady",
+     "leaderId": null,
+     "species": [
+      "bellsprout",
+      "oddish"
+     ],
+     "offset": -1
+    },
+    {
+     "name": "Lass Kay",
+     "cls": "lass",
+     "leaderId": null,
+     "species": [
+      "bellsprout",
+      "weepinbell"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "fuchsia-gym",
+   "district": "fuchsia",
+   "leader": "Koga",
+   "leaderId": "koga",
+   "type": "poison",
+   "badge": "Soul",
+   "species": [
+    "koffing",
+    "muk",
+    "weezing"
+   ],
+   "offset": 3,
+   "trainers": [
+    {
+     "name": "Hex Maniac Kirk",
+     "cls": "hex-maniac",
+     "leaderId": null,
+     "species": [
+      "grimer",
+      "koffing"
+     ],
+     "offset": -1
+    },
+    {
+     "name": "Roughneck Phil",
+     "cls": "roughneck",
+     "leaderId": null,
+     "species": [
+      "venonat",
+      "golbat"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "saffron-gym",
+   "district": "saffron",
+   "leader": "Sabrina",
+   "leaderId": "sabrina",
+   "type": "psychic",
+   "badge": "Marsh",
+   "species": [
+    "kadabra",
+    "mr-mime",
+    "alakazam"
+   ],
+   "offset": 3,
+   "trainers": [
+    {
+     "name": "Psychic Johan",
+     "cls": "psychic",
+     "leaderId": null,
+     "species": [
+      "slowpoke",
+      "drowzee"
+     ],
+     "offset": -1
+    },
+    {
+     "name": "Psychic Cameron",
+     "cls": "psychic",
+     "leaderId": null,
+     "species": [
+      "kadabra",
+      "hypno"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "cinnabar-gym",
+   "district": "cinnabar",
+   "leader": "Blaine",
+   "leaderId": "blaine",
+   "type": "fire",
+   "badge": "Volcano",
+   "species": [
+    "growlithe",
+    "ponyta",
+    "rapidash",
+    "arcanine"
+   ],
+   "offset": 4,
+   "trainers": [
+    {
+     "name": "Firebreather Ned",
+     "cls": "firebreather",
+     "leaderId": null,
+     "species": [
+      "vulpix",
+      "ponyta"
+     ],
+     "offset": -1
+    },
+    {
+     "name": "Firebreather Lowell",
+     "cls": "firebreather",
+     "leaderId": null,
+     "species": [
+      "growlithe",
+      "magmar"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "viridian-gym",
+   "district": "viridian",
+   "leader": "Giovanni",
+   "leaderId": "giovanni",
+   "type": "ground",
+   "badge": "Earth",
+   "species": [
+    "rhyhorn",
+    "dugtrio",
+    "nidoqueen",
+    "nidoking",
+    "rhydon"
+   ],
+   "offset": 4,
+   "trainers": [
+    {
+     "name": "Black Belt Atsushi",
+     "cls": "black-belt",
+     "leaderId": null,
+     "species": [
+      "machop",
+      "machoke"
+     ],
+     "offset": -1
+    },
+    {
+     "name": "Ace Trainer Yuji",
+     "cls": "ace-trainer",
+     "leaderId": null,
+     "species": [
+      "sandslash",
+      "graveler"
+     ],
+     "offset": -1
+    }
+   ],
+   "only": [
+    "beat"
+   ],
+   "why": "Rocket's own Boss runs this Gym: it falls when Rocket falls (D14). You can only beat him."
+  }
+ ],
+ "ways": [
+  {
+   "id": "beat",
+   "name": "Beat",
+   "text": "Beat the Leader. A badge and Dread, but the Gym stays theirs.",
+   "stat": null,
+   "chance": 100
+  },
+  {
+   "id": "buy",
+   "name": "Buy",
+   "text": "Buy the building and the sponsors with clean money. The Leader stays as your puppet.",
+   "stat": null,
+   "chance": 100
+  },
+  {
+   "id": "break",
+   "name": "Break",
+   "text": "Raid the Gym: every trainer, then the Leader, no rest. The Leader flees and the Gym is yours.",
+   "stat": null,
+   "chance": 100
+  },
+  {
+   "id": "blackmail",
+   "name": "Blackmail",
+   "text": "Scout them three times to find the secret, then confront them. The Leader works for you, quietly.",
+   "stat": "nerve",
+   "chance": 55
+  },
+  {
+   "id": "convert",
+   "name": "Convert",
+   "text": "Once beaten, win them over. The Leader joins as an Admin and the Gym trains your crew.",
+   "stat": "charm",
+   "chance": 40
+  }
+ ],
+ "gym": {
+  "patron": 15,
+  "buy": 25000,
+  "blackmailScouts": 3,
+  "control": 20,
+  "beatDread": 5,
+  "takeDread": 8,
+  "regardBuy": 3,
+  "breakHero": 15,
+  "defiance": {
+   "max": 10,
+   "tell": 7,
+   "heat": 15,
+   "hero": 20,
+   "start": {
+    "buy": 0,
+    "blackmail": 2
+   }
+  },
+  "raise": 2000,
+  "raiseDrop": 3,
+  "wallBand": 4,
+  "wallPlus": 2,
+  "shakenDays": 7,
+  "shakenLevels": 3,
+  "courtDrop": 2,
+  "rigHeat": 6,
+  "appointCost": 0
+ },
+ "raid": {
+  "fights": {
+   "site": 4,
+   "police": 5,
+   "dock": 3,
+   "shop": 3,
+   "center": 3,
+   "street": 3,
+   "crowd": 3,
+   "route": 3,
+   "cave": 3,
+   "ghost": 3
+  },
+  "control": 15,
+  "dread": 6,
+  "rival": -12,
+  "crate": "raid",
+  "levelStep": 1,
+  "failHeat": 12
+ },
+ "gauntlet": {
+  "fights": 5,
+  "crate": "gauntlet"
+ },
+ "flyers": {
+  "cost": 100,
+  "heat": 1,
+  "tornAt": 40,
+  "walkIn": 25,
+  "perStep": 5,
+  "maxWalkIns": 2,
+  "designs": [
+   {
+    "id": "pride",
+    "name": "Pride",
+    "motto": "\"We look after our own.\"",
+    "does": "regard",
+    "n": 1
+   },
+   {
+    "id": "fist",
+    "name": "The Fist",
+    "motto": "\"Join, or get out of the way.\"",
+    "does": "dread",
+    "n": 1
+   },
+   {
+    "id": "pay",
+    "name": "The Pay Packet",
+    "motto": "\"Steady work. Cash on Friday.\"",
+    "does": "walkIn",
+    "n": 15
+   }
+  ]
+ },
+ "bribe": [
+  {
+   "id": "officer",
+   "name": "A police officer",
+   "cost": 300,
+   "wanted": -10,
+   "heat": 0,
+   "days": 7,
+   "text": "Wanted −10; no patrol in this district for a week."
+  },
+  {
+   "id": "clerk",
+   "name": "A town clerk",
+   "cost": 200,
+   "wanted": 0,
+   "heat": -10,
+   "days": 0,
+   "text": "Heat −10 in this district; the paperwork goes missing."
+  },
+  {
+   "id": "assistant",
+   "name": "A Leader's assistant",
+   "cost": 250,
+   "wanted": 0,
+   "heat": 0,
+   "days": 0,
+   "text": "The Gym here counts as scouted once more (Blackmail needs three)."
+  }
+ ],
+ "fence": {
+  "rate": [
+   70,
+   70,
+   85,
+   85,
+   100
+  ],
+  "shop": 40
+ },
+ "smuggle": {
+  "nightly": [
+   80,
+   200
+  ],
+  "base": 1,
+  "seizeHeat": 40,
+  "seizePct": 10
+ },
+ "specialists": [
+  {
+   "id": "fence",
+   "name": "a Fence",
+   "cost": 1500,
+   "wage": 100,
+   "text": "A Black Market contact: Fence, Swap Meet, the Midnight Market and the Candy Ring open."
+  },
+  {
+   "id": "forger",
+   "name": "a Forger",
+   "cost": 1200,
+   "wage": 80,
+   "text": "Forge Papers +15%, and a forged paper every week.",
+   "odds": {
+    "forge-papers": 15
+   }
+  },
+  {
+   "id": "hacker",
+   "name": "a Hacker",
+   "cost": 1500,
+   "wage": 100,
+   "text": "Hack the Terminal and Blackout +15%.",
+   "odds": {
+    "hack-the-terminal": 15,
+    "blackout": 15
+   }
+  },
+  {
+   "id": "medic",
+   "name": "a Medic",
+   "cost": 1000,
+   "wage": 60,
+   "text": "Hurt members heal a day sooner each night."
+  },
+  {
+   "id": "chef",
+   "name": "a Chef",
+   "cost": 800,
+   "wage": 50,
+   "text": "The crew's Morale +2 every week."
+  }
+ ],
+ "loan": {
+  "out": 300,
+  "back": 390,
+  "days": 7,
+  "defaultPct": 15
+ },
+ "stall": {
+  "weekly": 150
+ },
+ "safehouse": {
+  "cost": 300,
+  "cool": 2
+ },
+ "mercs": {
+  "days": 3,
+  "odds": 10
+ },
+ "swap": {
+  "cost": 300,
+  "trust": 3
+ },
+ "lab": {
+  "rare": [
+   "porygon",
+   "eevee",
+   "omanyte",
+   "kabuto",
+   "aerodactyl"
+  ]
+ },
+ "revive": {
+  "species": [
+   "omanyte",
+   "kabuto",
+   "aerodactyl"
+  ],
+  "level": [
+   10,
+   20
+  ]
+ },
+ "lines": {
+  "noBiz": "There is no business here to buy.",
+  "ownBiz": "You already own {name}.",
+  "rivalBiz": "{name} is the rival team's while they hold {district}.",
+  "cornered": "{owner} is Cornered: they will sell at half price.",
+  "cornerStep": "Squeezed {n} of {need} times: at {need}, they sell at half.",
+  "bizBought": "{name} is yours (₽{price}). It pays ₽{income} a week{clean}.",
+  "bizForced": "{name} is yours, forced at half price (₽{price}). Heat +{heat}, Regard −{regard}.",
+  "bizWeek": "Your businesses paid ₽{n} this week.",
+  "needClean": "You need ₽{n} of clean money (you have ₽{have}).",
+  "noGym": "There is no Gym in {district}.",
+  "gymOnly": "{why}",
+  "gymYours": "The {district} Gym is yours.",
+  "gymNotBeaten": "Beat {leader} first.",
+  "gymScouts": "Scout {district} {n} more time(s) to find {leader}'s secret.",
+  "gymMinor": "This Leader is a minor: you can only beat them.",
+  "beat": "You beat {leader}. The {badge} Badge is yours. The Gym stays theirs.",
+  "took": "The {district} Gym is yours ({way}). Control +{control}.",
+  "fled": "{leader} runs out the back door. They may go to the Hero.",
+  "converted": "{leader} shakes your hand. They will join when the HQ has room (Admin).",
+  "broadcast": "{name} gets the flyers into {district} too.",
+  "burrowed": "{name} slips the route to {district} past a raid (once a week).",
+  "chainNext": "Fight {n} of {of}: {name} next.",
+  "chainWon": "All {of} fights won.",
+  "chainLost": "Beaten at fight {n} of {of}. You pull back.",
+  "raidWon": "{target} falls: {loot}. Control +{control}, Dread +{dread}.",
+  "gauntletWon": "The gauntlet is done: {loot}.",
+  "defiance": "{leader}'s Defiance: {n}/10.",
+  "told": "{leader} has told the Hero everything. Heat +{heat}, Hero Threat +{hero}.",
+  "breaks": "{leader} breaks with you in public and waits for you at the Gym.",
+  "defiantWon": "{leader} is put back in line. Defiance {n}.",
+  "defiantLost": "{leader} keeps the Gym. It is theirs again.",
+  "raised": "A raise for {leader}: Defiance −{n}.",
+  "appointed": "{name} now leads the {district} Gym. The Hero must beat them for the badge.",
+  "unappointed": "The {district} Gym has no Leader of yours.",
+  "flyersUp": "Flyers up in {district} (₽{cost} a week).",
+  "flyersAgain": "Flyers in {district} refreshed.",
+  "flyersTorn": "The police tear down your flyers (Wanted {n}).",
+  "flyersWeek": "Flyers cost ₽{n} this week.",
+  "walkIn": "{name}, {cls}, walked in with one of your flyers.",
+  "flyersBroke": "No money for the flyers: they come down.",
+  "bribed": "{who} takes the envelope. {text}",
+  "noHot": "You have no stolen goods to sell.",
+  "fenced": "The Fence pays ₽{n} for {items} ({pct}%).",
+  "route": "A smuggling route to {district} now pays ₽{n} a night.",
+  "routesFull": "All your routes are busy.",
+  "routePay": "Smuggling routes paid ₽{n}.",
+  "seized": "Police seize a shipment on the {district} route. The route is gone.",
+  "kidnapped": "{mon} is in the Pens, cooling off.",
+  "labRare": "Lab data points to a rare one: {mon} joins the Pens.",
+  "loanOut": "A loan of ₽{out} is out: ₽{back} back on Day {due}.",
+  "loanBack": "A borrower pays back ₽{n}.",
+  "loanGone": "A borrower skips town with your ₽{n}.",
+  "hired": "{name} joins your payroll (₽{wage} a week).",
+  "hiredAlready": "You already have {name}.",
+  "specWage": "Specialists' wages: ₽{n}.",
+  "forged": "A forged paper is ready ({n} held).",
+  "paperUsed": "A forged paper gets you through the checkpoint in {district}.",
+  "dirt": "You have dirt on {owner} now.",
+  "dirtGym": "The dirt counts as a scout on {leader}.",
+  "stallUp": "The stall pays ₽{n} a week.",
+  "stallWeek": "The black-market stall took ₽{n}.",
+  "safehouse": "A safehouse in {district}: Heat there cools {n} more each night.",
+  "safehouseHave": "You already have a safehouse in {district}.",
+  "mercs": "Mercenaries until Day {day}.",
+  "jam": "No patrol in {district} tonight.",
+  "dodged": "Looker skips you this week.",
+  "shaken": "{leader} is shaken until Day {day}: −{n} levels when you fight them.",
+  "courted": "{leader} owes you a favour: Defiance −{n}.",
+  "rigged": "The {badge} Badge, without a fight.",
+  "bigNight": "Three more night actions tonight.",
+  "bigNightDone": "The Big Night was this week already.",
+  "noLeader": "Nobody to put at the Gym yet (a Captain or higher).",
+  "chef": "The chef cooks: Morale +2 for the crew.",
+  "medic": "The medic patches up {name}.",
+  "interest": "Interest on idle money: ₽{n}.",
+  "swapNone": "The Fence has nothing for you today.",
+  "squad": "Squad: {names}.",
+  "noBadge": "You have this badge already.",
+  "stealthSave": "Hot goods: {n}.",
+  "contact": "Needs a Black Market contact (hire a Fence, or a Black Market Counter).",
+  "heat20": "Needs Heat 20 or more here.",
+  "wanted60": "Needs Wanted 60 or more.",
+  "gymScouted": "Scout the Gym first (the district it stands in).",
+  "gymAlly": "Needs a Gym ally: one you own or a Leader you courted.",
+  "fly": "Needs a Pokémon that knows Fly.",
+  "surf": "Needs a Pokémon that knows Surf.",
+  "jailed": "Needs a member in a cell.",
+  "fell": "Needs a member who got hurt.",
+  "gymYoursCard": "The Gym is yours: pick a Leader, or give them a raise.",
+  "revived": "{name} revives a fossil: {mon} joins the Pens.",
+  "stocked": "{name} stocks the stores: {n} Potions.",
+  "hauled": "{name} runs goods: ₽{n}.",
+  "fronted": "{name} works the front: ₽{n}, clean.",
+  "fencedTask": "{name} fences the day's loot: ₽{n}.",
+  "flyersTask": "{name} puts up flyers in {district}.",
+  "union": "The docks keep quiet now: routes pay {cut}% less, Smuggle runs at half the Heat.",
+  "strike": "The dockworkers strike: no smuggling for {days} days.",
+  "struck": "The docks are on strike until day {day}.",
+  "courtFence": "The Fence takes the hot goods at {pct}% when you are next at your Bag.",
+  "courtFenceWeek": "The Fence will take your hot goods at {pct}% every week.",
+  "courtFenceNone": "You had no hot goods for the Fence.",
+  "judge": "The judge leans on the police: pick-ups {pct}% less likely for {days} days.",
+  "judgeDirt": "He made an enemy of you: there is dirt on the judge now (Blackmail him).",
+  "informant": "You know the sweep's date: no pick-up for {days} days.",
+  "council": "A council seat: the police budget is {pct}% lower for good.",
+  "heist": "The joint heist is on: the crate comes in when you are next at your Bag.",
+  "heistDone": "The joint heist pays out: {got}.",
+  "koga": "Koga trains the crew: Steal and Thieve +{n}% for {days} days.",
+  "gymLost": "The Leader goes public. {gym} is not yours any more.",
+  "gift": "{name} is yours (a building, ready now).",
+  "giftFull": "No room for {name}: it is sold for ₽{n}, clean.",
+  "accountant": "The accountant launders at {fee}% (no front needed).",
+  "accountantTalk": "The accountant talked to the police: Heat +{n}.",
+  "machine": "The lab machine goes into {room}: one tier up.",
+  "machineNone": "No room can use the lab machine yet; it waits in a cupboard.",
+  "architect": "The next HQ level costs {pct}% less.",
+  "weakSpot": "The cheaper design left a weak spot: Defense -{n}.",
+  "quizQ": "Blaine: \"{q}\" You say \"{a}\": {ok}.",
+  "quizWon": "Blaine pays up: {prize}.",
+  "quizLost": "Blaine laughs. \"Study harder!\"",
+  "cab": "The cab driver",
+  "kogaOdds": "Koga's training",
+  "townRacket": "{name} pays you ₽{n} a week",
+  "townNoRacket": "nothing left here to squeeze",
+  "townRoute": "a smuggling route here (₽{n} a night)",
+  "townRouteHave": "you already run a route here",
+  "townContact": "{name} joins your contacts",
+  "townGymScout": "{leader}'s Gym scouted ({n}/{need})",
+  "townAlly": "{leader} counts you a friend",
+  "townShaken": "{leader} is shaken until Day {day}",
+  "townPapers": "forged papers +{n}",
+  "townItem": "{item} for the Bag",
+  "townMon": "a {mon} for the Stores",
+  "townSell": "the Fence takes your hot goods at {pct}%",
+  "townSafehouse": "a safehouse here",
+  "townHeist": "the joint heist is on",
+  "townDirt": "dirt on someone here",
+  "townCover": "the police look away here until Day {day}",
+  "townTip": "no pick-ups until Day {day}",
+  "townNoGym": "there is no Gym here",
+  "townFree": "{member} walks out of jail",
+  "gymSmear": "{action}: {leader} now hears of you as a thug. Takeover odds there −{n}%.",
+  "gymRefuse": "{action}: {team} paid {leader}. No Gym Takeover there until Day {day}.",
+  "gymFrame": "{action}: {leader} is arrested on a set-up. Your way in is gone (Heat +{n} there).",
+  "gymAnnex": "{action}: {team} covers {district}. Blackmail there needs {n} more scouting; other ways −{pct}%.",
+  "gymWeaken": "{action}: {leader}'s team was roughed up for you. Takeover odds there −{n}% until Day {day}.",
+  "gymRefused": "{leader} won't see you until Day {day}: {team} paid them.",
+  "gymAnnexed": "Blackmail needs {n} more scouting in {district} ({team} covers it).",
+  "coldOdds": "Thinks you're a thug",
+  "annexOdds": "Rival influence",
+  "weakOdds": "Their team was roughed up"
+ },
+ "rivalGym": {
+  "coldPer": 2,
+  "annexPer": 3,
+  "weakDays": 7
+ },
+ "court": {
+  "cab": 10,
+  "koga": 10,
+  "kogaDays": 14,
+  "unionCut": 15,
+  "unionHeat": 50,
+  "strikeDays": 3,
+  "fenceNow": 60,
+  "fenceWeek": 75,
+  "fenceLast": 90,
+  "judge": 30,
+  "judgeDays": 14,
+  "tipDays": 7,
+  "council": 20,
+  "heistCash": 150,
+  "heistCrate": "raid",
+  "accountantFee": 5,
+  "accountantTalk": 15,
+  "accountantHeat": 10,
+  "architect": 20,
+  "weakDefense": 1,
+  "gifts": {
+   "shop": "front-shop",
+   "cafe": "front-cafe",
+   "house": "safehouse"
+  },
+  "quiz": {
+   "prize": "fire-stone",
+   "prizeName": "a Fire Stone",
+   "base": 40,
+   "perWits": 5,
+   "cap": 90,
+   "right": 2,
+   "riddles": [
+    [
+     "What type is weak to Water, Ground and Rock?",
+     "Fire"
+    ],
+    [
+     "Which Pokémon evolves from Vulpix with a Fire Stone?",
+     "Ninetales"
+    ],
+    [
+     "Which burn cure is sold in every Poké Mart?",
+     "Burn Heal"
+    ],
+    [
+     "What does Magmar evolve into?",
+     "Magmortar"
+    ],
+    [
+     "Which Fire-type move has 90 power and may burn the target?",
+     "Flamethrower"
+    ],
+    [
+     "Which Kanto Gym stands on a volcano island?",
+     "Cinnabar Gym"
+    ]
+   ]
+  }
+ }
+}

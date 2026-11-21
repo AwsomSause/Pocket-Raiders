@@ -2,6 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <!-- Dominion D18 key safety: the page may only talk to itself and to api.anthropic.com (a player's own Key-Card), and loads no outside scripts. -->
+    <meta http-equiv="Content-Security-Policy" content="connect-src 'self' data: blob: https://api.anthropic.com; script-src 'self' 'unsafe-eval'; object-src 'none'; base-uri 'self'; form-action 'self'" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />

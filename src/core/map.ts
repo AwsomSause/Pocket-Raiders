@@ -204,6 +204,19 @@ export function validateLeagueMap(map: StageMap): string[] {
 }
 
 /** Lists everything wrong with a map (empty when it's valid). */
+/** A pseudo-stage's own map (core/dungeon/pseudo.ts): no gym or trainer-column rules, but every node id is unique and every link leads somewhere real. */
+export function validatePseudoMap(map: StageMap): string[] {
+  const problems: string[] = [];
+  const ids = new Set<string>();
+  for (const n of map.nodes) {
+    if (ids.has(n.id)) problems.push(`duplicate node id ${n.id}`);
+    ids.add(n.id);
+  }
+  if (map.nodes.length === 0) problems.push('the map has no nodes');
+  for (const n of map.nodes) for (const id of n.next) if (!ids.has(id)) problems.push(`node ${n.id} leads to missing node ${id}`);
+  return problems;
+}
+
 export function validateStageMap(map: StageMap): string[] {
   const problems: string[] = [];
   const ids = new Set<string>();

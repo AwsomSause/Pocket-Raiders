@@ -1,0 +1,2208 @@
+{
+ "_source": "tools/dominion/regions-to-json.py (unova); see the tool for sources.",
+ "id": "unova",
+ "label": "UNOVA",
+ "warehouse": "Castelia",
+ "hq": "castelia",
+ "arrive": [
+  "Castelia. Every street is a canyon of glass, and the warehouse is a basement under a burger shop.",
+  "{brought} looks up at the towers. \"Big city. Lots of pockets.\"",
+  "On the corner, a man in a grey robe is giving a speech about setting Pokémon free. A small crowd is nodding along."
+ ],
+ "districts": [
+  {
+   "id": "nuvema",
+   "name": "Nuvema",
+   "x": 40,
+   "y": 300,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "normal-grass",
+   "targets": [
+    {
+     "id": "juniper-lab",
+     "name": "Juniper's Lab",
+     "kind": "site",
+     "owner": {
+      "name": "Professor Juniper",
+      "look": "trainer/pr/scientist_f",
+      "line": "Bright, busy, and never in the lab."
+     },
+     "trait": {
+      "word": "Absent",
+      "odds": 6
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Lab aide",
+      "cls": "youngster",
+      "species": [
+       "patrat",
+       "lillipup"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "nuvema-street",
+     "name": "Seaside Lane",
+     "kind": "street",
+     "owner": {
+      "name": "The neighbours",
+      "look": "trainer/pr/pokefan_f",
+      "line": "Every house can see the ocean and every neighbour."
+     },
+     "trait": {
+      "word": "Watchful",
+      "odds": -4
+     },
+     "pay": 1,
+     "foe": {
+      "name": "Neighbour",
+      "cls": "picnicker",
+      "species": [
+       "purrloin"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "route-1-unova",
+     "name": "Route 1",
+     "kind": "route",
+     "owner": {
+      "name": "Trainers on the route",
+      "look": "trainer/pr/backpacker_m",
+      "line": "Kids on their first day out."
+     },
+     "trait": null,
+     "pay": 1,
+     "foe": {
+      "name": "Youngster Jimmy",
+      "cls": "youngster",
+      "species": [
+       "patrat",
+       "lillipup"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "accumula",
+   "name": "Accumula",
+   "x": 40,
+   "y": 196,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "normal-psychic",
+   "targets": [
+    {
+     "id": "accumula-square",
+     "name": "Accumula Square",
+     "kind": "crowd",
+     "owner": {
+      "name": "The listeners",
+      "look": "trainer/pr/hooligans",
+      "line": "Where Plasma gives its speeches."
+     },
+     "trait": {
+      "word": "Gullible",
+      "odds": 6
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Listener",
+      "cls": "roughneck",
+      "species": [
+       "purrloin",
+       "patrat"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "accumula-mart",
+     "name": "Accumula Mart",
+     "kind": "shop",
+     "owner": {
+      "name": "The Mart clerk",
+      "look": "dominion/t-clerk.png",
+      "line": "Quiet till, quiet clerk."
+     },
+     "trait": {
+      "word": "Timid",
+      "odds": 5
+     },
+     "pay": 1,
+     "foe": {
+      "name": "The clerk's son",
+      "cls": "youngster",
+      "species": [
+       "lillipup"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "route-2-unova",
+     "name": "Route 2",
+     "kind": "route",
+     "owner": {
+      "name": "Trainers on the route",
+      "look": "trainer/pr/backpacker_f",
+      "line": "Grass, kids and a little Pokémon Centre."
+     },
+     "trait": null,
+     "pay": 1,
+     "foe": {
+      "name": "Lass Morgan",
+      "cls": "lass",
+      "species": [
+       "purrloin",
+       "pidove"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "striaton",
+   "name": "Striaton",
+   "x": 140,
+   "y": 120,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "fire-grass",
+   "targets": [
+    {
+     "id": "striaton-restaurant",
+     "name": "Striaton Restaurant",
+     "kind": "crowd",
+     "owner": {
+      "name": "The three brothers",
+      "look": "trainer/pr/waiter_m",
+      "line": "Waiters who battle. Tips are compulsory."
+     },
+     "trait": {
+      "word": "Proud",
+      "odds": -4
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Waiter",
+      "cls": "veteran",
+      "species": [
+       "pansage",
+       "pansear",
+       "panpour"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "dreamyard",
+     "name": "The Dreamyard",
+     "kind": "ghost",
+     "owner": {
+      "name": "The night watchman",
+      "look": "trainer/pr/veteran_m",
+      "line": "A ruined lab where people dream other people's dreams."
+     },
+     "trait": {
+      "word": "Superstitious",
+      "odds": 6
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Watchman",
+      "cls": "psychic",
+      "species": [
+       "munna",
+       "purrloin"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "striaton-school",
+     "name": "Trainers' School",
+     "kind": "site",
+     "owner": {
+      "name": "The school head",
+      "look": "trainer/pr/expert_pokemon_breeder",
+      "line": "A good school with a bad lock."
+     },
+     "trait": {
+      "word": "Kind",
+      "odds": 5
+     },
+     "pay": 1.1,
+     "foe": {
+      "name": "Student",
+      "cls": "lass",
+      "species": [
+       "lillipup"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "nacrene",
+   "name": "Nacrene",
+   "x": 140,
+   "y": 300,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "normal-rock",
+   "targets": [
+    {
+     "id": "nacrene-museum",
+     "name": "Nacrene Museum",
+     "kind": "site",
+     "owner": {
+      "name": "The curator",
+      "look": "trainer/pr/scientist_m",
+      "line": "A dragon skull and a lot of empty security cameras."
+     },
+     "trait": {
+      "word": "Nervous",
+      "odds": 6
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Museum guard",
+      "cls": "veteran",
+      "species": [
+       "roggenrola",
+       "herdier"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "nacrene-cafe",
+     "name": "Café Warehouse",
+     "kind": "crowd",
+     "owner": {
+      "name": "The barista",
+      "look": "trainer/pr/waiter_f",
+      "line": "Artists drink coffee here all day."
+     },
+     "trait": {
+      "word": "Gossip",
+      "odds": 5
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Artist",
+      "cls": "aroma-lady",
+      "species": [
+       "pansage"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "pinwheel-forest",
+     "name": "Pinwheel Forest",
+     "kind": "route",
+     "owner": {
+      "name": "Forest rangers",
+      "look": "trainer/pr/ranger_m",
+      "line": "A big wood on the river."
+     },
+     "trait": null,
+     "pay": 1.1,
+     "foe": {
+      "name": "Ranger Forrest",
+      "cls": "ranger",
+      "species": [
+       "sewaddle",
+       "venipede"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "castelia",
+   "name": "Castelia",
+   "x": 260,
+   "y": 300,
+   "control": 10,
+   "rival": 0,
+   "police": false,
+   "wild": "normal-water",
+   "targets": [
+    {
+     "id": "castelia-street",
+     "name": "Castelia Street",
+     "kind": "shop",
+     "owner": {
+      "name": "The business owners",
+      "look": "trainer/pr/rich_m",
+      "line": "Fifty floors of offices and a cone shop on the corner."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 4
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Office guard",
+      "cls": "veteran",
+      "species": [
+       "herdier",
+       "trubbish"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "castelia-sewers",
+     "name": "Castelia Sewers",
+     "kind": "cave",
+     "owner": {
+      "name": "The sewer gang",
+      "look": "trainer/pr/hooligans",
+      "line": "Under the city there is another city."
+     },
+     "trait": {
+      "word": "Shifty",
+      "odds": 6
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Sewer tough",
+      "cls": "roughneck",
+      "species": [
+       "trubbish",
+       "grimer"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "castelia-pier",
+     "name": "Castelia Piers",
+     "kind": "dock",
+     "owner": {
+      "name": "The pier boss",
+      "look": "trainer/pr/pilot",
+      "line": "Ferries to Liberty Garden, cargo to everywhere."
+     },
+     "trait": {
+      "word": "Stubborn",
+      "odds": -4
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Pier hand",
+      "cls": "worker",
+      "species": [
+       "tympole",
+       "frillish"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "w": 124
+  },
+  {
+   "id": "nimbasa",
+   "name": "Nimbasa",
+   "x": 260,
+   "y": 170,
+   "control": 0,
+   "rival": 0,
+   "police": true,
+   "wild": "electric-ground",
+   "targets": [
+    {
+     "id": "nimbasa-amusement",
+     "name": "Amusement Park",
+     "kind": "crowd",
+     "owner": {
+      "name": "The park manager",
+      "look": "trainer/pr/harlequin",
+      "line": "A Ferris wheel and very long queues."
+     },
+     "trait": {
+      "word": "Gullible",
+      "odds": 5
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Park staff",
+      "cls": "guitarist",
+      "species": [
+       "emolga",
+       "blitzle"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "gear-station",
+     "name": "Gear Station",
+     "kind": "site",
+     "owner": {
+      "name": "The station master",
+      "look": "trainer/pr/depot_agent",
+      "line": "Every train in Unova runs through here."
+     },
+     "trait": {
+      "word": "Steady",
+      "odds": -4
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Depot agent",
+      "cls": "worker",
+      "species": [
+       "klink",
+       "timburr"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "nimbasa-station",
+     "name": "Nimbasa Police Post",
+     "kind": "police",
+     "owner": {
+      "name": "Officer Jenny",
+      "look": "dominion/t-policeman.png",
+      "line": "Plasma rallies keep her busy."
+     },
+     "trait": {
+      "word": "Sharp",
+      "odds": -10
+     },
+     "pay": 1,
+     "foe": {
+      "name": "Officer",
+      "cls": "veteran",
+      "species": [
+       "lillipup",
+       "herdier"
+      ],
+      "offset": 1
+     }
+    }
+   ],
+   "w": 124
+  },
+  {
+   "id": "driftveil",
+   "name": "Driftveil",
+   "x": 400,
+   "y": 196,
+   "control": 0,
+   "rival": 45,
+   "police": false,
+   "wild": "ground-steel",
+   "targets": [
+    {
+     "id": "driftveil-market",
+     "name": "Driftveil Market",
+     "kind": "shop",
+     "owner": {
+      "name": "The market boss",
+      "look": "trainer/pr/clerk_f",
+      "line": "Fresh berries and cold storage behind the stalls."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 5
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Market tough",
+      "cls": "roughneck",
+      "species": [
+       "sandile",
+       "roggenrola"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "cold-storage",
+     "name": "Cold Storage",
+     "kind": "site",
+     "owner": {
+      "name": "The warehouse keeper",
+      "look": "trainer/pr/worker_f",
+      "line": "Plasma likes cold rooms. Nobody asks why."
+     },
+     "trait": {
+      "word": "Shifty",
+      "odds": 6
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Storage guard",
+      "cls": "veteran",
+      "species": [
+       "vanillite",
+       "timburr"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "chargestone",
+     "name": "Chargestone Cave",
+     "kind": "cave",
+     "owner": {
+      "name": "The cave guides",
+      "look": "trainer/pr/ruin_maniac",
+      "line": "Floating stones and magnetic air."
+     },
+     "trait": null,
+     "pay": 1.2,
+     "foe": {
+      "name": "Guide",
+      "cls": "hiker",
+      "species": [
+       "joltik",
+       "tynamo"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "rivalNote": "Plasma"
+  },
+  {
+   "id": "mistralton",
+   "name": "Mistralton",
+   "x": 400,
+   "y": 70,
+   "control": 0,
+   "rival": 25,
+   "police": false,
+   "wild": "grass-flying",
+   "targets": [
+    {
+     "id": "mistralton-cargo",
+     "name": "Cargo Airfield",
+     "kind": "site",
+     "owner": {
+      "name": "The pilots",
+      "look": "trainer/pr/pilot",
+      "line": "Cargo planes to every city in Unova."
+     },
+     "trait": {
+      "word": "Bored",
+      "odds": 4
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Pilot",
+      "cls": "bird-keeper",
+      "species": [
+       "swoobat",
+       "ducklett"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "celestial-tower",
+     "name": "Celestial Tower",
+     "kind": "ghost",
+     "owner": {
+      "name": "The bell keeper",
+      "look": "trainer/pr/veteran_f",
+      "line": "Ring the bell, and the dead hear it."
+     },
+     "trait": {
+      "word": "Pious",
+      "odds": -6
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Keeper",
+      "cls": "hex-maniac",
+      "species": [
+       "litwick",
+       "elgyem"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "mistralton-farm",
+     "name": "Route 6 Farms",
+     "kind": "route",
+     "owner": {
+      "name": "The farmers",
+      "look": "trainer/pr/worker_f",
+      "line": "Seasons change the fields, not the farmers."
+     },
+     "trait": null,
+     "pay": 1,
+     "foe": {
+      "name": "Farmer",
+      "cls": "picnicker",
+      "species": [
+       "deerling",
+       "karrablast"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "rivalNote": "Plasma"
+  },
+  {
+   "id": "icirrus",
+   "name": "Icirrus",
+   "x": 520,
+   "y": 70,
+   "control": 0,
+   "rival": 30,
+   "police": false,
+   "wild": "water-ice",
+   "targets": [
+    {
+     "id": "dragonspiral",
+     "name": "Dragonspiral Tower",
+     "kind": "ghost",
+     "owner": {
+      "name": "The tower keeper",
+      "look": "trainer/pr/veteran_m",
+      "line": "The oldest building in Unova. Something lives on top."
+     },
+     "trait": {
+      "word": "Pious",
+      "odds": -8
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Keeper",
+      "cls": "dragon-tamer",
+      "species": [
+       "druddigon",
+       "golett"
+      ],
+      "offset": 2
+     }
+    },
+    {
+     "id": "icirrus-fan-club",
+     "name": "Pokémon Fan Club",
+     "kind": "crowd",
+     "owner": {
+      "name": "The chairman",
+      "look": "trainer/pr/pokefan_m",
+      "line": "Talks about his Pokémon for hours."
+     },
+     "trait": {
+      "word": "Gullible",
+      "odds": 6
+     },
+     "pay": 1.1,
+     "foe": {
+      "name": "Fan",
+      "cls": "picnicker",
+      "species": [
+       "cubchoo"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "icirrus-marsh",
+     "name": "Icirrus Marsh",
+     "kind": "route",
+     "owner": {
+      "name": "Marsh fishermen",
+      "look": "trainer/pr/scuba_diver_m",
+      "line": "Frozen in winter, flooded in spring."
+     },
+     "trait": null,
+     "pay": 1.1,
+     "foe": {
+      "name": "Fisherman Eli",
+      "cls": "fisherman",
+      "species": [
+       "stunfisk",
+       "palpitoad"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "rivalNote": "Plasma"
+  },
+  {
+   "id": "opelucid",
+   "name": "Opelucid",
+   "x": 520,
+   "y": 196,
+   "control": 0,
+   "rival": 55,
+   "police": false,
+   "wild": "dragon-steel",
+   "targets": [
+    {
+     "id": "opelucid-square",
+     "name": "Opelucid Square",
+     "kind": "crowd",
+     "owner": {
+      "name": "The city council",
+      "look": "trainer/pr/veteran_f",
+      "line": "Old money and new machines, side by side."
+     },
+     "trait": {
+      "word": "Proud",
+      "odds": -6
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Councillor's guard",
+      "cls": "ace-trainer",
+      "species": [
+       "fraxure",
+       "klang"
+      ],
+      "offset": 2
+     }
+    },
+    {
+     "id": "opelucid-mart",
+     "name": "Opelucid Mart",
+     "kind": "shop",
+     "owner": {
+      "name": "The Mart clerk",
+      "look": "dominion/t-clerk.png",
+      "line": "Dragon fangs for sale, no receipts."
+     },
+     "trait": {
+      "word": "Timid",
+      "odds": 5
+     },
+     "pay": 1.1,
+     "foe": {
+      "name": "The clerk's brother",
+      "cls": "dragon-tamer",
+      "species": [
+       "axew"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "route-11-unova",
+     "name": "Route 11",
+     "kind": "route",
+     "owner": {
+      "name": "Trainers on the route",
+      "look": "trainer/pr/backpacker_m",
+      "line": "Waterfalls and very fast Trainers."
+     },
+     "trait": null,
+     "pay": 1.1,
+     "foe": {
+      "name": "Ace Trainer Chris",
+      "cls": "ace-trainer",
+      "species": [
+       "sawsbuck",
+       "karrablast"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "rivalNote": "Plasma"
+  }
+ ],
+ "routes": [
+  [
+   "nuvema",
+   "accumula"
+  ],
+  [
+   "accumula",
+   "striaton"
+  ],
+  [
+   "striaton",
+   "nacrene"
+  ],
+  [
+   "nacrene",
+   "castelia"
+  ],
+  [
+   "castelia",
+   "nimbasa"
+  ],
+  [
+   "nimbasa",
+   "driftveil"
+  ],
+  [
+   "driftveil",
+   "mistralton"
+  ],
+  [
+   "mistralton",
+   "icirrus"
+  ],
+  [
+   "icirrus",
+   "opelucid"
+  ],
+  [
+   "opelucid",
+   "driftveil"
+  ],
+  [
+   "nimbasa",
+   "striaton"
+  ]
+ ],
+ "water": [
+  [
+   "castelia",
+   "driftveil"
+  ]
+ ],
+ "pools": {
+  "catch": [
+   "patrat",
+   "lillipup",
+   "purrloin",
+   "pidove",
+   "blitzle",
+   "roggenrola",
+   "woobat",
+   "drilbur",
+   "audino",
+   "timburr",
+   "tympole",
+   "sewaddle",
+   "venipede",
+   "cottonee",
+   "petilil",
+   "basculin",
+   "sandile",
+   "darumaka",
+   "maractus",
+   "dwebble",
+   "scraggy",
+   "sigilyph",
+   "trubbish",
+   "minccino",
+   "gothita",
+   "solosis",
+   "ducklett",
+   "vanillite",
+   "deerling",
+   "emolga",
+   "karrablast",
+   "foongus",
+   "frillish",
+   "joltik"
+  ],
+  "steal": [
+   "axew",
+   "deino",
+   "larvesta",
+   "zorua",
+   "litwick",
+   "golett",
+   "pawniard",
+   "rufflet",
+   "vullaby",
+   "tirtouga",
+   "archen",
+   "klink",
+   "elgyem",
+   "cubchoo",
+   "mienfoo",
+   "druddigon"
+  ]
+ },
+ "rivals": {
+  "plasma": [
+   {
+    "id": "plasma-castle-site",
+    "name": "N's Castle (Opelucid)",
+    "district": "opelucid",
+    "hq": true
+   },
+   {
+    "id": "cold-storage-hold",
+    "name": "Cold Storage Hold",
+    "district": "driftveil"
+   },
+   {
+    "id": "plasma-frigate",
+    "name": "Plasma Frigate Berth",
+    "district": "driftveil"
+   },
+   {
+    "id": "dragonspiral-camp",
+    "name": "Dragonspiral Camp",
+    "district": "icirrus"
+   },
+   {
+    "id": "nacrene-cell",
+    "name": "Nacrene Cell",
+    "district": "nacrene"
+   },
+   {
+    "id": "accumula-stage",
+    "name": "Accumula Stage",
+    "district": "accumula"
+   },
+   {
+    "id": "celestial-watch",
+    "name": "Celestial Tower Watch",
+    "district": "mistralton"
+   }
+  ]
+ },
+ "gyms": [
+  {
+   "id": "striaton-gym",
+   "district": "striaton",
+   "leader": "Cilan",
+   "leaderId": "cilan",
+   "type": "grass",
+   "badge": "Trio",
+   "species": [
+    "lillipup",
+    "pansage"
+   ],
+   "offset": 1,
+   "trainers": [
+    {
+     "name": "Waiter Tate",
+     "cls": "veteran",
+     "leaderId": null,
+     "species": [
+      "pansear"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "nacrene-gym",
+   "district": "nacrene",
+   "leader": "Lenora",
+   "leaderId": "lenora",
+   "type": "normal",
+   "badge": "Basic",
+   "species": [
+    "herdier",
+    "watchog"
+   ],
+   "offset": 1,
+   "trainers": [
+    {
+     "name": "Ace Trainer Magnolia",
+     "cls": "ace-trainer",
+     "leaderId": null,
+     "species": [
+      "patrat"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "castelia-gym",
+   "district": "castelia",
+   "leader": "Burgh",
+   "leaderId": "burgh",
+   "type": "bug",
+   "badge": "Insect",
+   "species": [
+    "whirlipede",
+    "dwebble",
+    "leavanny"
+   ],
+   "offset": 2,
+   "trainers": [
+    {
+     "name": "Bug Catcher Kent",
+     "cls": "bug-catcher",
+     "leaderId": null,
+     "species": [
+      "sewaddle"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "nimbasa-gym",
+   "district": "nimbasa",
+   "leader": "Elesa",
+   "leaderId": "elesa",
+   "type": "electric",
+   "badge": "Bolt",
+   "species": [
+    "emolga",
+    "emolga",
+    "zebstrika"
+   ],
+   "offset": 2,
+   "trainers": [
+    {
+     "name": "Guitarist Leslie",
+     "cls": "guitarist",
+     "leaderId": null,
+     "species": [
+      "blitzle"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "driftveil-gym",
+   "district": "driftveil",
+   "leader": "Clay",
+   "leaderId": "clay",
+   "type": "ground",
+   "badge": "Quake",
+   "species": [
+    "krokorok",
+    "palpitoad",
+    "excadrill"
+   ],
+   "offset": 3,
+   "trainers": [
+    {
+     "name": "Worker Brady",
+     "cls": "worker",
+     "leaderId": null,
+     "species": [
+      "drilbur",
+      "roggenrola"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "mistralton-gym",
+   "district": "mistralton",
+   "leader": "Skyla",
+   "leaderId": "skyla",
+   "type": "flying",
+   "badge": "Jet",
+   "species": [
+    "swoobat",
+    "unfezant",
+    "swanna"
+   ],
+   "offset": 3,
+   "trainers": [
+    {
+     "name": "Pilot Bert",
+     "cls": "bird-keeper",
+     "leaderId": null,
+     "species": [
+      "ducklett"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "icirrus-gym",
+   "district": "icirrus",
+   "leader": "Brycen",
+   "leaderId": "brycen",
+   "type": "ice",
+   "badge": "Freeze",
+   "species": [
+    "vanillish",
+    "cryogonal",
+    "beartic"
+   ],
+   "offset": 4,
+   "trainers": [
+    {
+     "name": "Black Belt Corey",
+     "cls": "black-belt",
+     "leaderId": null,
+     "species": [
+      "cubchoo"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "opelucid-gym",
+   "district": "opelucid",
+   "leader": "Drayden",
+   "leaderId": "drayden",
+   "type": "dragon",
+   "badge": "Legend",
+   "species": [
+    "fraxure",
+    "druddigon",
+    "haxorus"
+   ],
+   "offset": 4,
+   "trainers": [
+    {
+     "name": "Dragon Tamer Kassandra",
+     "cls": "dragon-tamer",
+     "leaderId": null,
+     "species": [
+      "axew"
+     ],
+     "offset": -1
+    }
+   ]
+  }
+ ],
+ "business": [
+  {
+   "target": "accumula-mart",
+   "name": "Accumula Mart",
+   "price": 5000,
+   "income": 200,
+   "clean": true,
+   "perk": {
+    "kind": "items",
+    "n": 2,
+    "item": "potion"
+   },
+   "text": "2 Potions a week."
+  },
+  {
+   "target": "castelia-street",
+   "name": "Castelia Street",
+   "price": 30000,
+   "income": 800,
+   "clean": true,
+   "perk": {
+    "kind": "income",
+    "n": 400
+   },
+   "text": "Office rents: ₽400 more a week.",
+   "rival": true
+  },
+  {
+   "target": "striaton-restaurant",
+   "name": "Striaton Restaurant",
+   "price": 9000,
+   "income": 300,
+   "clean": true,
+   "perk": {
+    "kind": "regard",
+    "n": 1
+   },
+   "text": "Free dinners: Regard +1 in Striaton each week."
+  },
+  {
+   "target": "nimbasa-amusement",
+   "name": "Amusement Park",
+   "price": 15000,
+   "income": 600,
+   "clean": true,
+   "perk": {
+    "kind": "heroDown",
+    "n": 1
+   },
+   "text": "The Hero rides the Ferris wheel. Twice."
+  },
+  {
+   "target": "gear-station",
+   "name": "Gear Station",
+   "price": 20000,
+   "income": 500,
+   "clean": true,
+   "perk": {
+    "kind": "odds",
+    "n": 5
+   },
+   "text": "Every train runs on time for you: +5% on jobs in Nimbasa.",
+   "rival": true
+  },
+  {
+   "target": "driftveil-market",
+   "name": "Driftveil Market",
+   "price": 9000,
+   "income": 350,
+   "clean": false,
+   "perk": {
+    "kind": "clean",
+    "n": 150
+   },
+   "text": "Cash stalls: ₽150 a week comes back clean."
+  },
+  {
+   "target": "opelucid-mart",
+   "name": "Opelucid Mart",
+   "price": 4500,
+   "income": 180,
+   "clean": true,
+   "perk": {
+    "kind": "items",
+    "n": 1,
+    "item": "dragon-fang"
+   },
+   "text": "A Dragon Fang a week."
+  },
+  {
+   "target": "nacrene-cafe",
+   "name": "Café Warehouse",
+   "price": 4500,
+   "income": 180,
+   "clean": true,
+   "perk": {
+    "kind": "heatDown",
+    "n": 1
+   },
+   "text": "Artists cover for you: Heat −1 in Nacrene each week."
+  }
+ ],
+ "pillars": [
+  "castelia-street",
+  "gear-station"
+ ],
+ "hero": {
+  "path": [
+   "nuvema",
+   "striaton",
+   "nacrene",
+   "castelia",
+   "nimbasa",
+   "driftveil",
+   "mistralton",
+   "icirrus",
+   "opelucid"
+  ],
+  "allies": [
+   {
+    "id": "cilan",
+    "name": "Cilan",
+    "look": "bosses/cilan.png",
+    "ace": "simisage"
+   },
+   {
+    "id": "burgh",
+    "name": "Burgh",
+    "look": "bosses/cheren.png",
+    "ace": "leavanny"
+   },
+   {
+    "id": "elesa",
+    "name": "Elesa",
+    "look": "bosses/elesa-gen5bw2.png",
+    "ace": "zebstrika"
+   },
+   {
+    "id": "clay",
+    "name": "Clay",
+    "look": "bosses/clay.png",
+    "ace": "excadrill"
+   },
+   {
+    "id": "skyla",
+    "name": "Skyla",
+    "look": "bosses/skyla.png",
+    "ace": "swanna"
+   },
+   {
+    "id": "drayden",
+    "name": "Drayden",
+    "look": "bosses/drayden.png",
+    "ace": "haxorus"
+   },
+   {
+    "id": "alder",
+    "name": "Alder",
+    "look": "bosses/alder.png",
+    "ace": "volcarona",
+    "champion": true
+   }
+  ],
+  "mentor": "Professor Juniper",
+  "parent": "The Hero's mother",
+  "sidekick": "Bianca, from Nuvema",
+  "homes": {
+   "cobalion": {
+    "home": "mistralton",
+    "over": "Mistralton Cave"
+   },
+   "terrakion": {
+    "home": "driftveil",
+    "over": "the Victory Road"
+   },
+   "virizion": {
+    "home": "nacrene",
+    "over": "Pinwheel Forest"
+   }
+  }
+ },
+ "league": {
+  "elite": [
+   {
+    "id": "shauntal",
+    "name": "Shauntal",
+    "species": [
+     "cofagrigus",
+     "jellicent",
+     "golurk",
+     "chandelure"
+    ],
+    "offset": 2
+   },
+   {
+    "id": "grimsley",
+    "name": "Grimsley",
+    "species": [
+     "scrafty",
+     "krookodile",
+     "liepard",
+     "bisharp"
+    ],
+    "offset": 3
+   },
+   {
+    "id": "caitlin",
+    "name": "Caitlin",
+    "species": [
+     "musharna",
+     "sigilyph",
+     "reuniclus",
+     "gothitelle"
+    ],
+    "offset": 4
+   },
+   {
+    "id": "marshal",
+    "name": "Marshal",
+    "species": [
+     "throh",
+     "sawk",
+     "mienshao",
+     "conkeldurr"
+    ],
+    "offset": 5
+   }
+  ],
+  "champion": {
+   "id": "alder",
+   "name": "Alder",
+   "species": [
+    "accelgor",
+    "bouffalant",
+    "druddigon",
+    "vanilluxe",
+    "escavalier",
+    "volcarona"
+   ],
+   "offset": 6
+  },
+  "standIn": {}
+ },
+ "lab": [
+  "tirtouga",
+  "archen",
+  "zorua",
+  "klink",
+  "porygon"
+ ],
+ "desk": {
+  "name": "Unova",
+  "rivals": [
+   "Team Plasma"
+  ],
+  "badges": [
+   {
+    "name": "Trio Badge",
+    "town": "Striaton City",
+    "c": "#5aa84a"
+   },
+   {
+    "name": "Basic Badge",
+    "town": "Nacrene City",
+    "c": "#c8a87a"
+   },
+   {
+    "name": "Insect Badge",
+    "town": "Castelia City",
+    "c": "#9ad83a"
+   },
+   {
+    "name": "Bolt Badge",
+    "town": "Nimbasa City",
+    "c": "#ffd23f"
+   },
+   {
+    "name": "Quake Badge",
+    "town": "Driftveil City",
+    "c": "#a87a4a"
+   },
+   {
+    "name": "Jet Badge",
+    "town": "Mistralton City",
+    "c": "#7ab8e8"
+   },
+   {
+    "name": "Freeze Badge",
+    "town": "Icirrus City",
+    "c": "#a8e0f8"
+   },
+   {
+    "name": "Legend Badge",
+    "town": "Opelucid City",
+    "c": "#4a6ab8"
+   }
+  ],
+  "codes": {
+   "Striaton City": "STR",
+   "Nacrene City": "NCR",
+   "Castelia City": "CST",
+   "Nimbasa City": "NMB",
+   "Driftveil City": "DRF",
+   "Mistralton City": "MST",
+   "Icirrus City": "ICR",
+   "Opelucid City": "OPL"
+  },
+  "mons": [
+   "patrat",
+   "lillipup",
+   "purrloin",
+   "pidove",
+   "blitzle",
+   "roggenrola",
+   "woobat",
+   "drilbur",
+   "audino",
+   "timburr",
+   "tympole",
+   "sewaddle",
+   "venipede",
+   "cottonee",
+   "petilil",
+   "basculin",
+   "sandile",
+   "darumaka",
+   "maractus",
+   "dwebble",
+   "scraggy",
+   "sigilyph",
+   "trubbish",
+   "minccino",
+   "gothita",
+   "solosis",
+   "ducklett",
+   "vanillite",
+   "deerling",
+   "emolga",
+   "karrablast",
+   "foongus",
+   "frillish",
+   "joltik"
+  ],
+  "offRegion": [
+   "rattata",
+   "sentret",
+   "zigzagoon",
+   "bidoof",
+   "fletchling",
+   "rookidee",
+   "yungoos",
+   "lechonk"
+  ],
+  "writers": [
+   {
+    "name": "Café waiter Cress's cousin",
+    "short": "Cousin Bo",
+    "town": "Striaton City",
+    "quote": "{first} waited tables at the Gym café. Never spilled a cup."
+   },
+   {
+    "name": "Museum guard Hollis",
+    "short": "Hollis",
+    "town": "Nacrene City",
+    "quote": "{first} guarded the dragon skull at night. Plasma never got close."
+   },
+   {
+    "name": "Office clerk Wen",
+    "short": "Wen",
+    "town": "Castelia City",
+    "quote": "{first} worked forty floors up and took the stairs. Every day."
+   },
+   {
+    "name": "Ferris wheel operator Lu",
+    "short": "Lu",
+    "town": "Nimbasa City",
+    "quote": "{first} ran the wheel. Knows everyone who's ever had a secret meeting on it."
+   },
+   {
+    "name": "Cold storage boss Clay's foreman",
+    "short": "Foreman Dex",
+    "town": "Driftveil City",
+    "quote": "{first} moved crates for us. Heavy lifting, no questions."
+   },
+   {
+    "name": "Cargo pilot Skye",
+    "short": "Skye",
+    "town": "Mistralton City",
+    "quote": "{first} loaded my cargo planes. Never once checked what was inside."
+   }
+  ]
+ },
+ "holdings": {
+  "unova:striaton-gym-cilan-chili-cress": {
+   "district": "striaton",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"Grass, Fire and Water crew each +5% damage; clean restaurant income +₽200/day.\" waits for a battle or shop hook."
+  },
+  "unova:nacrene-gym-lenora": {
+   "district": "nacrene",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:nacrene-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Normal crew +10% HP; fossils come free each month.\" waits for a battle or shop hook."
+  },
+  "unova:castelia-gym-burgh": {
+   "district": "castelia",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1750
+    }
+   ],
+   "via": "gym:castelia-gym",
+   "note": "Read from the list's Bonus as income each week; the rest of \"Bug crew +10% damage; art income +₽250/day.\" waits for a battle or shop hook."
+  },
+  "unova:nimbasa-gym-elesa": {
+   "district": "nimbasa",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "via": "gym:nimbasa-gym",
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Electric crew +10% damage; Regard +10 weekly.\" waits for a battle or shop hook."
+  },
+  "unova:driftveil-gym-clay": {
+   "district": "driftveil",
+   "fx": [
+    {
+     "k": "income",
+     "n": 2100
+    }
+   ],
+   "via": "gym:driftveil-gym",
+   "note": "Read from the list's Bonus as income each week; the rest of \"Ground crew +10% defense; port income +₽300/day.\" waits for a battle or shop hook."
+  },
+  "unova:mistralton-gym-skyla": {
+   "district": "mistralton",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:mistralton-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Flying crew +1 Speed stage; free flights between held cities.\" waits for a battle or shop hook."
+  },
+  "unova:icirrus-gym-brycen": {
+   "district": "icirrus",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:icirrus-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Ice crew +10% damage; training ×1.5 for the whole crew.\" waits for a battle or shop hook."
+  },
+  "unova:opelucid-gym-drayden-iris": {
+   "district": "opelucid",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Dragon crew +10% damage; Dragon eggs once a month.\" waits for a battle or shop hook."
+  },
+  "unova:unova-league": {
+   "district": "opelucid",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "champion",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Alder's seat; free practice vs Champion weekly.\" waits for a battle or shop hook."
+  },
+  "unova:nuvema-town": {
+   "district": "nuvema",
+   "fx": [
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit each week; the rest of \"Juniper's Lab; the Hero's start; recruits +1 weekly.\" waits for a battle or shop hook."
+  },
+  "unova:accumula-town": {
+   "district": "accumula",
+   "fx": [
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit each week; the rest of \"Plasma's speech site; Regard/Dread swing +10 per speech; Plasma recruits.\" waits for a battle or shop hook."
+  },
+  "unova:striaton-city": {
+   "district": "striaton",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    },
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"the three brothers' restaurant; Regard +10; clean income +₽200/day.\" waits for a battle or shop hook."
+  },
+  "unova:nacrene-city": {
+   "district": "nacrene",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"the Museum and Warehouse (café); fossils; Regard +5.\" waits for a battle or shop hook."
+  },
+  "unova:castelia-city": {
+   "district": "castelia",
+   "fx": [
+    {
+     "k": "income",
+     "n": 2800
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Docks, Subway, Gym, Game Freak (office), Pokémon Center; shop income ×1.5.\" waits for a battle or shop hook."
+  },
+  "unova:nimbasa-city": {
+   "district": "nimbasa",
+   "fx": [
+    {
+     "k": "income",
+     "n": 3500
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"the Park, Theatre and Subway; Regard +; income +₽500/day.\" waits for a battle or shop hook."
+  },
+  "unova:driftveil-city": {
+   "district": "driftveil",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"the Market and Drawbridge; Clay's port income; import/export +2.\" waits for a battle or shop hook."
+  },
+  "unova:mistralton-city": {
+   "district": "mistralton",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1750
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"the airport gives fast travel between held cities (−2 days); cargo +₽250/day.\" waits for a battle or shop hook."
+  },
+  "unova:icirrus-city": {
+   "district": "icirrus",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"frozen routes; access to Dragonspiral Tower; Ice crew +5%.\" waits for a battle or shop hook."
+  },
+  "unova:opelucid-city": {
+   "district": "opelucid",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"the Dragon Gym; a Hero's peak view; Dragon crew +5%.\" waits for a battle or shop hook."
+  },
+  "unova:lacunosa-town": {
+   "district": "opelucid",
+   "fx": [
+    {
+     "k": "income",
+     "n": 350
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"no police patrol; a hidden cave route to Route 11; Ghost crew +5%.\" waits for a battle or shop hook."
+  },
+  "unova:undella-town": {
+   "district": "opelucid",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    },
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"the resort and Undella Bay; Regard +10 weekly; seafood +₽200/day.\" waits for a battle or shop hook."
+  },
+  "unova:black-city-white-forest": {
+   "district": "opelucid",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"choose one: trade income ×2, or Wild Reserve ×2 (a forest of wild Pokémon).\" waits for a battle or shop hook."
+  },
+  "unova:junipers-lab": {
+   "district": "nuvema",
+   "fx": [
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit each week; the rest of \"new recruits start with a free Pokémon; Pokédex reveals hidden species.\" waits for a battle or shop hook."
+  },
+  "unova:players-house-nuvema": {
+   "district": "nuvema",
+   "fx": [
+    {
+     "k": "loyalty",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as loyalty each week; the rest of \"crew heal fully; Loyalty +2 weekly.\" waits for a battle or shop hook."
+  },
+  "unova:dreamyard": {
+   "district": "striaton",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Munna events; Psychic crew +5%; a Dream Mist hint each week.\" waits for a battle or shop hook."
+  },
+  "unova:pinwheel-forest": {
+   "district": "nacrene",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Wild Reserve +1; Bug crew +5%; Hidden items.\" waits for a battle or shop hook."
+  },
+  "unova:skyarrow-bridge": {
+   "district": "castelia",
+   "fx": [
+    {
+     "k": "income",
+     "n": 2800
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"+₽400/day; free passage to Castelia.\" waits for a battle or shop hook."
+  },
+  "unova:castelia-docks": {
+   "district": "castelia",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"import/export lines +2; ships +1; Plasma Frigate access.\" waits for a battle or shop hook."
+  },
+  "unova:battle-subway": {
+   "district": "nimbasa",
+   "fx": [
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit each week; the rest of \"your Grunts train 3 weekly battles at ×2 XP; extreme-trainer recruits.\" waits for a battle or shop hook."
+  },
+  "unova:castelia-gym-gallery": {
+   "district": "castelia",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1750
+    },
+    {
+     "k": "regard",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"art income +₽250/day; Regard +5.\" waits for a battle or shop hook."
+  },
+  "unova:game-freak-office": {
+   "district": "castelia",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"a free Rare Candy each month (a secret reward).\" waits for a battle or shop hook."
+  },
+  "unova:nimbasa-amusement-park": {
+   "district": "nimbasa",
+   "fx": [
+    {
+     "k": "income",
+     "n": 3500
+    },
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "via": "biz:nimbasa-amusement",
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"income +₽500/day; Regard +10; a Ferris wheel event once.\" waits for a battle or shop hook."
+  },
+  "unova:nimbasa-musical-theatre": {
+   "district": "nimbasa",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Regard +10; props give items; crew can star in a Musical for ₽400.\" waits for a battle or shop hook."
+  },
+  "unova:big-stadium": {
+   "district": "nimbasa",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    },
+    {
+     "k": "income",
+     "n": 700
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"tournament income +₽600/week; crew battle experience +10%.\" waits for a battle or shop hook."
+  },
+  "unova:driftveil-market": {
+   "district": "driftveil",
+   "fx": [
+    {
+     "k": "income",
+     "n": 2100
+    }
+   ],
+   "via": "biz:driftveil-market",
+   "note": "Read from the list's Bonus as income each week; the rest of \"contraband +₽300/day; rare items weekly.\" waits for a battle or shop hook."
+  },
+  "unova:driftveil-drawbridge": {
+   "district": "driftveil",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1750
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"+₽250/day; a Pokémon Center nearby.\" waits for a battle or shop hook."
+  },
+  "unova:chargestone-cave": {
+   "district": "driftveil",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Electric crew +10%; Magnet items weekly; Joltik events.\" waits for a battle or shop hook."
+  },
+  "unova:twist-mountain": {
+   "district": "icirrus",
+   "fx": [
+    {
+     "k": "income",
+     "n": 2450
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"Ground crew +10%; ore income +₽350/day; Evolution Stones monthly.\" waits for a battle or shop hook."
+  },
+  "unova:relic-castle": {
+   "district": "nimbasa",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"relic items weekly; Sandstorm crew +5%; Yamask events.\" waits for a battle or shop hook."
+  },
+  "unova:desert-resort": {
+   "district": "nimbasa",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    },
+    {
+     "k": "income",
+     "n": 175
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"shortcut (−1 day); Sandile wild; sandstorms hide you from Heat.\" waits for a battle or shop hook."
+  },
+  "unova:lostlorn-forest": {
+   "district": "nimbasa",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"two wild Pokémon a day; Bug crew +5%.\" waits for a battle or shop hook."
+  },
+  "unova:dragonspiral-tower": {
+   "district": "icirrus",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"the Reshiram/Zekrom rumour track; Dragon crew +10%; N's challenge.\" waits for a battle or shop hook."
+  },
+  "unova:relic-passage": {
+   "district": "driftveil",
+   "fx": [
+    {
+     "k": "heat",
+     "n": 5
+    }
+   ],
+   "note": "Read from the list's Bonus as heat each week; the rest of \"a Castelia–Relic Castle shortcut (−1 day); Heat −5.\" waits for a battle or shop hook."
+  },
+  "unova:plasma-frigate": {
+   "district": "driftveil",
+   "fx": [
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit each week; the rest of \"a ship base; sea smuggling +1; Plasma recruits.\" waits for a battle or shop hook."
+  },
+  "unova:team-plasma-castle": {
+   "district": "opelucid",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"rival HQ; Dread +; Wipe Out path +30%.\" waits for a battle or shop hook."
+  },
+  "unova:ns-castle": {
+   "district": "opelucid",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"N's former seat; a free fortress with a defense +1; Seven Sages events.\" waits for a battle or shop hook."
+  },
+  "unova:pokemon-world-tournament": {
+   "district": "driftveil",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 20,
+     "where": "district"
+    },
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit, regard each week; the rest of \"past Champions and Leaders spar at a cost; Regard +20; may recruit after a duel.\" waits for a battle or shop hook."
+  },
+  "unova:join-avenue": {
+   "district": "castelia",
+   "fx": [
+    {
+     "k": "income",
+     "n": 2450
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"small shops (+₽350/day); a shop upgrade every month.\" waits for a battle or shop hook."
+  },
+  "unova:nacrene-museum": {
+   "district": "nacrene",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"a fossil revive monthly; Regard +5.\" waits for a battle or shop hook."
+  },
+  "unova:striaton-restaurant": {
+   "district": "striaton",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "via": "biz:striaton-restaurant",
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Regard +10; berry buffs; a free dish each week.\" waits for a battle or shop hook."
+  },
+  "unova:giant-chasm": {
+   "district": "opelucid",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"the Kyurem event; Ice/Dragon crew +5%; Dragon Fang weekly.\" waits for a battle or shop hook."
+  },
+  "unova:victory-road-unova": {
+   "district": "opelucid",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"₽500 per challenger; free rest stops.\" waits for a battle or shop hook."
+  },
+  "unova:challengers-cave": {
+   "district": "opelucid",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    },
+    {
+     "k": "income",
+     "n": 350
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"high-level trainers; training ×2 for the crew.\" waits for a battle or shop hook."
+  }
+ }
+}

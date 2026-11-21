@@ -29,6 +29,7 @@ import type { TwiceToldStore } from './greenneedle/twiceTold';
 import { PondMarkSchema } from './episodes/poliPond';
 import { TimedStageSchema, VariantsSchema, type TimedStage, type Variants } from './expansion/variantLines';
 import { ArenaSchema, SkillInputSchema } from './battle/w1Play';
+import { AiLogSchema } from './ai/schema';
 
 const RngStateSchema = z.object({ a: z.number(), b: z.number(), c: z.number(), d: z.number() });
 // Role Pool Casting: a run saved before the "roleCast" stream existed gets a fixed start state (new runs and migrated v39 runs get it from their seed).
@@ -790,6 +791,8 @@ export const BattleStateSchema = z.object({
   ball: z.string().optional(),
   /** Shadow Pokémon snagged from the trainer this fight (Snag Ball); they join you when the battle is won. */
   snagged: z.array(PokemonInstanceSchema).optional(),
+  /** DOMINION D16: Team Snagem's Snag Machine: a Snag Ball takes any of this (adult) trainer's Pokémon, not only a Shadow one. */
+  snagAny: z.literal(true).optional(),
   turn: z.number().int().min(1),
   /** Revive items used in this battle (capped by balance.itemCaps.revivesPerBattle). */
   revivesUsed: z.number().int().min(0).default(0),
@@ -1642,6 +1645,8 @@ export const RunStateSchema = z.object({
   expansion: ExpansionRunSchema.optional(),
   /** Catalog Overhaul (places, SF102): Pokémon the player left somewhere for a while (a reef guard); they come back through an event (core/co/placesRules.ts). */
   coAway: z.array(z.object({ key: z.string(), mon: PokemonInstanceSchema, region: z.number().int().min(0) })).optional(),
+  /** Claude AI log (run v47; Dominion slice D18, src/ai/ask.ts): every Claude answer by call id, stored the moment it arrives so a reload replays it and never calls again. Absent until the first call. */
+  ai: AiLogSchema.optional(),
 });
 export type RunState = z.infer<typeof RunStateSchema>;
 
@@ -1861,19 +1866,6 @@ export const NpcMemorySchema = z.object({
 });
 export type NpcMemory = z.infer<typeof NpcMemorySchema>;
 
-/** Evil Mode slice 15 (profile v21): one finished Evil Mode run's Hall of Fame card. Never ranked; written once a run. */
-export const EvilHallCardSchema = z.object({
-  runId: z.string(),
-  date: z.string(),
-  team: z.string().max(40),
-  creed: z.string(),
-  ending: z.enum(['scheme', 'lastRoom', 'straight', 'handOff', 'recruit', 'caught']),
-  sub: z.string().nullable(),
-  day: z.number().int().min(1),
-  regions: z.number().int().min(1),
-}).strict();
-export type EvilHallCard = z.infer<typeof EvilHallCardSchema>;
-
 export const ProfileSchema = z.object({
   profileId: z.string(),
   unlockedArchetypes: z.array(z.string()),
@@ -1962,6 +1954,8 @@ export const ProfileSchema = z.object({
   mentorBonds: z.record(z.string(), MentorBondSchema).default({}),
   /** Legacy runs (core/legacyRuns.ts): every finished run's immutable record, newest first (profile v14). */
   legacyRuns: z.array(LegacyRunSchema).default([]),
+  /** DOMINION D16: run ids of the Dominion runs finished (the last region Taken); the first opens the Charters. Optional: older profiles load with none (no version bump). */
+  dominionDone: z.array(z.string()).default([]),
   /** Ideas W10 Corner Nook (core/hubNook.ts): fortune cookie, wish star, note to your future self, gift codes, donation drive. Optional: older profiles load with the defaults (no version bump). */
   nook: z.object({
     cookieDay: z.string().nullable().default(null),
@@ -1988,8 +1982,7 @@ export const ProfileSchema = z.object({
   treasureHunt: TreasureHuntSchema.default({ pieces: [], claimed: false }),
   /** Story Overhaul v2 (profile v20): the Look, name, prologue, Remembrance, lore and cast archives. A damaged object falls back to defaults. */
   story: ProfileStorySchema,
-  /** Evil Mode slice 15 (profile v21): the Hall of Fame cards of finished Evil Mode runs, newest last (core/evilMode/endings.ts hallCard). */
-  evilHall: z.array(EvilHallCardSchema).default([]),
+  // profile v21 added `evilHall` (old Evil Mode's Hall of Fame cards); the old flow was deleted after D17, and the field is dropped on load.
 });
 export type Profile = z.infer<typeof ProfileSchema>;
 

@@ -21,7 +21,7 @@ import { exWatchEnd, exWatching } from './greenneedle/exhibition';
 import { settleRivalRecruits } from './rivals/eventRecruit';
 import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
-import { endEvilFight, evilFightOn } from './evilMode/fightEnd';
+import { dominionCatchBlock, dominionFightOn, dominionNoXp, endDominionFight } from './dominion/fightEnd';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
 import { FOE_WAITS, gnAfterTurn, gnShape, gnShapeDouble } from './greenneedle';
 import { answerAsk } from './greenneedle/ask';
@@ -3328,7 +3328,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     teamItems: run.passives,
     noBattleItems: noBattleItems(run.rules),
     setStyle: isHardcore(run.rules),
-    catchBlocked: nuzlockeCatchProblem(run.battle!),
+    catchBlocked: nuzlockeCatchProblem(run.battle!) ?? dominionCatchBlock(run),
     bondScore: (uid) => bondScoreOf(run.story.histories[uid]?.bond),
     bondPartners: (uid) => run.story.relationships.filter((r) => r.open && r.kind === 'bond' && (r.a.id === uid || r.b.id === uid)).map((r) => (r.a.id === uid ? r.b.id : r.a.id)),
   };
@@ -3597,10 +3597,10 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   const reveal = [revealMove(content, run, 'player', false), revealMove(content, run, 'enemy', Boolean(rivalHere) && rivalBond(rivalHere, currentEnemy(battle).speciesId).confidence >= 40)];
   for (const r of reveal) if (r) events.push(r);
   events.push(...trackFeelings(content, current, run, events as BattleEvent[]));
-  // Evil Mode (slice 5): a battle the day was waiting on. Its result goes to the day, never to the main game's after-battle
-  // steps: no prize, no node, and a loss never ends the run (core/evilMode/fightEnd.ts).
-  if (battle.outcome && evilFightOn(run)) {
-    const lines = endEvilFight(content, run, battle.outcome === 'win' || battle.outcome === 'caught', healParty);
+  // DOMINION (D2): a battle a Boss action waited on. Its result goes to the day, never to the main game's after-battle
+  // steps: no prize, no node, and a loss never ends the run.
+  if (battle.outcome && dominionFightOn(run)) {
+    const lines = endDominionFight(content, run, battle.outcome === 'win' || battle.outcome === 'caught' ? battle.outcome : 'lose');
     return { run, events, end: null, defeated: false, cues: [], drama: [], evilFight: { won: battle.outcome !== 'lose', lines } };
   }
   if ((battle.outcome === 'win' || battle.outcome === 'caught') && battle.evoStone) {
@@ -3962,6 +3962,8 @@ function awardExperience(content: Content, run: RunState, events: BattleEvent[])
     for (const uid of [...participants, ...sharers]) {
       const mon = run.party.find((p) => p.uid === uid);
       if (!mon || mon.hp <= 0) continue;
+      // Dominion D16: a Shadow Pokémon (Cipher's machine) can't level until it's purified.
+      if (dominionNoXp(run, mon)) continue;
       // Teachy TV: Pokémon below the lead's level catch up faster.
       const catchUp = mon.level < leadLevel ? passivePercent(content, run, 'catchUpExp') : 0;
       // Macho Brace: more EXP for its holder.
