@@ -54,6 +54,21 @@ export function pkBoss(d: VersusModel & { pkBoss: NonNullable<VersusModel['pkBos
     + `<div class="gx-hit"${act('next')}></div></div>`);
 }
 
+/** Galar's Dynamax Band (mock-up `ga-band`): before the first Galar Gym, the host hands the Band over, over the pitch. */
+export function pkGaBand(d: { host: string; turns: number; line: string }, cue: PkCue = 'in'): string {
+  const bold = (t: string): string => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  const chips = [`A gift from **${d.host}**`, `Lets one Pokémon **Dynamax** for ${d.turns} turns`, 'Its moves become **Max Moves**', 'It goes in your Bag'];
+  const say = `${d.host}: "${d.line}"`;
+  return page('ga-band', 51, cueRoot('cut cboss gx-ga ar28 a-ga', 'boss', cue, '--c:#d9267d')
+    + back('arenas/grass_bg.png', 'ct-bg') + '<i class="ct-rays"></i>'
+    + `<div class="ct-mon gx-band" data-key="ct-mon">${spr(itemArt('dynamax_band'), 7)}</div>`
+    + `<div class="ct-title" data-key="ct-title"><small>Before your first Galar Gym</small><b style="font-size:${fit('Dynamax Band', 440, 88, 44, 0.5)}px">Dynamax Band</b></div>`
+    + `<div class="ct-chips" data-key="ct-chips">${chips.map((c) => `<span>${bold(c)}</span>`).join('')}</div>`
+    + `<div class="vs-say" data-key="vs-say"><p style="font-size:${fit(say, 1500, 17, 13, 0.5)}px">${esc(say)}</p><div class="btn on nx"${act('next')}><b>Next</b></div></div>`
+    + '<i class="fr33 l"></i><i class="fr33 r"></i>'
+    + `<div class="gx-hit"${act('next')}></div></div>`);
+}
+
 /** What the Legendary and Ultra Beast cut-ins show (mock-up pages `legend` and `ub`). Only true facts go in `chips`. */
 export interface PkCutIn {
   page: 'legend' | 'ub';

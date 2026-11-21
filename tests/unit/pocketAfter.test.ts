@@ -233,3 +233,15 @@ describe('the Pocket gimmick cut-ins', () => {
     expect(pkGimmick({ ...base, more: {}, trainer: 'Misty', kind: 'tera', type: 'water' })).toContain("Misty&#39;s Charizard");
   });
 });
+
+describe('the Pocket Dynamax Band card', () => {
+  it('names the host, the turns and the line, in Galar colours', async () => {
+    const { pkGaBand } = await import('../../src/ui/pocket/screens/cards');
+    const h = pkGaBand({ host: 'Leon', turns: 3, line: 'Wear it well.' });
+    expect(h.startsWith('<!--pk:ga-band:51-->')).toBe(true);
+    expect(h).toContain('A gift from <b>Leon</b>');
+    expect(h).toContain('<b>Dynamax</b> for 3 turns');
+    expect(h).toContain('Leon: &quot;Wear it well.&quot;');
+    expect(h).toContain('gx-ga ar28 a-ga');
+  });
+});

@@ -752,3 +752,5 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 /* Galar's crowd page (mock-up ga-crowd): the bar and cards sit above the dimmed battle. */
 .pkx .pks .cr30.gx-bt-page .cr-bar, .pkx .pks .cr30.gx-bt-page .cr-g, .pkx .pks .cr30.gx-bt-page .gp-h { z-index: 4; }
 .pkx .pks .gx-bt-area .fav37 { cursor: pointer; pointer-events: auto; }
+/* Galar's Dynamax Band card (mock-up ga-band, tier 51): the Band where the boss would stand, glowing pink. */
+.pkx .pks .cboss .ct-mon.gx-band { right: 150px; bottom: 150px; filter: drop-shadow(0 0 18px #ff7ac0); }

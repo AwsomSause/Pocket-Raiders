@@ -20,7 +20,7 @@ import { defaultMoveIndex } from '../core/battle/rememberChoice';
 import { isEnemyAce } from '../core/battle/ace';
 import { ULTRA_BEASTS, type UltraBeast } from '../core/ultra/beasts';
 import { ultraOn } from '../core/ultra/run';
-import { pkGimmick, type PkCutIn, type PkGimmickMore } from '../ui/pocket/screens/cards';
+import { pkGaBand, pkGimmick, type PkCutIn, type PkGimmickMore } from '../ui/pocket/screens/cards';
 import { aimable, dealOffer, foeStake, type SkillInput } from '../core/battle/w1Play';
 import { promptById } from '../core/interaction/prompt';
 import { runInteractionPrompt } from '../ui/interactionPrompt';
@@ -3475,8 +3475,13 @@ export class BattleScene extends Phaser.Scene {
       await this.speakWithArt('Reporter', INTERVIEWERS_SPRITE, `Welcome, everyone, to gym match number ${galarGymNumber(this.run)} of the Gym Challenge! ${who} steps onto the field to face ${leader}!`);
       await this.stadium.interview('pre');
       if (band) {
-        if (band.grantsItem) await this.stadium.bandScene();
-        for (const line of band.lines) await this.speak(host, line);
+        // Pocket look: the hand-over is the Dynamax Band card (mock-up `ga-band`), saying the last line itself.
+        const card = !!band.grantsItem && pocketOn() && !!this.rx;
+        const last = band.lines[band.lines.length - 1] ?? '';
+        const quote = /"([^"]+)"/.exec(last)?.[1] ?? null;
+        if (card && quote) await this.pkPage((c) => (c.pk ? pkGaBand({ host, turns: content.balance.transformations.dynamaxTurns, line: quote }) : ''));
+        else if (band.grantsItem) await this.stadium.bandScene();
+        for (const line of card && quote ? band.lines.slice(0, -1) : band.lines) await this.speak(host, line);
       }
       else {
         const line = hostLine(this.run.seed, galarGymNumber(this.run), galarPerformance(content, this.run), host);
