@@ -36,6 +36,7 @@ const menuLabels = (page: Page) => page.evaluate(() => (window as any).__pkr.gam
 
 /** Starts a trainer fight on the first node and turns it into a triple battle (three a side), the way makeTriples does. */
 async function startTriple(page: Page, seed: string) {
+  await page.clock.install({ time: new Date(2026, 10, 2, 12, 0) }); // pin the date: weekly events follow the real clock
   await page.goto('/');
   await page.evaluate(() => localStorage.clear());
   await page.goto(`/?seed=${seed}`);
