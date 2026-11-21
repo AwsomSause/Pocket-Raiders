@@ -415,3 +415,14 @@ describe('the Pocket Raid Clear page', () => {
     expect(h).toContain('3 of 3');
   });
 });
+
+describe('the Pocket raid loss page', () => {
+  it('draws Out of Turns in the grey loss look', async () => {
+    const { pkRes31 } = await import('../../src/ui/pocket/screens/galar');
+    const h = pkRes31({ page: 'rd-lose', area: 'rd', cls: 'lose33', tag: 'Elite den', title: 'Out of Turns', text: 'The clock hit zero with the boss at 31% HP.',
+      rows: [{ art: null, title: 'No prize', sub: 'Nothing is won this time' }], side: 'What happened', lines: [], button: 'Back to the map', party: [], counts: [['31%', 'boss HP left']] });
+    expect(h.startsWith('<!--pk:rd-lose:51-->')).toBe(true);
+    expect(h).toContain('res31 lose33');
+    expect(h).toContain('31% HP');
+  });
+});

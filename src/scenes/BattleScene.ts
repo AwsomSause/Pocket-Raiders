@@ -3797,6 +3797,44 @@ export class BattleScene extends Phaser.Scene {
     await this.playBeat({ done, skip: end });
   }
 
+  /** Pocket look: a raid lost or out of turns (mock-up `rd-lose`): the boss, no prize, the team safe, what happened. Presentation only. */
+  private async pkRaidLost(before: RunState | undefined, after: RunState): Promise<void> {
+    try {
+      const raid = before?.battle?.raid;
+      if (!this.rx || !pocketOn() || !raid || raid.practice) return;
+      const { content } = services().session;
+      const base = content.raids.raids.find((r) => r.id === raid.id);
+      if (!base) return;
+      const def = scaledRaid(content, base, raid.badges);
+      const battle = before!.battle!;
+      const boss = battle.enemyTeam.find((m) => m.uid === raid.bossUid) ?? battle.enemyTeam[0];
+      const pct = boss ? Math.max(0, Math.round((100 * boss.hp) / Math.max(1, calcStats(content, boss).hp))) : 0;
+      const out = raid.timerLeft !== null && raid.timerLeft <= 1;
+      const total = def.shield?.at.length ?? 0, broken = Math.max(0, total - raid.pendingShields.length - (raid.shieldHp > 0 ? 1 : 0));
+      const back = after.raids.escaped.includes(raid.id) && !(before!.raids.escaped ?? []).includes(raid.id);
+      const turns = battle.turn ?? 1;
+      const mon = (m: { speciesId: string; shiny?: boolean }) => ((f) => (f ? monArt(f) : null))(monFile(this, m.speciesId, 'front', !!m.shiny));
+      const heal = Math.round(content.raids.failureHealFraction * 100);
+      const lines: [string, string][] = [];
+      if (total) lines.push(['', `${broken === 0 ? 'No shield' : broken >= total ? 'Every shield' : `${broken} of ${total} shields`} broke before the end.`]);
+      if (raid.cheersLeft > 0) lines.push(['Tip', `You still had ${raid.cheersLeft} cheer${raid.cheersLeft === 1 ? '' : 's'} left. Cheer on the turn you go for a plate.`]);
+      await this.pkPage((c) => (c.pk ? pkRes31({
+        page: 'rd-lose', area: 'rd', cls: 'lose33', emblem: rxUrl('packs/raid/max/icon.png'), tag: `${raidTierName(content.raids.badgeScaling, def)} den`, title: out ? 'Out of Turns' : 'Raid Lost',
+        text: `${out ? 'The clock hit zero' : 'Your team could not fight on'} with the boss at ${pct}% HP.`,
+        rows: [
+          ...(boss ? [{ art: mon(boss), title: this.speciesName(boss), sub: back ? 'Got away. It will be back, stronger' : 'Sinks back into the den' }] : []),
+          { art: itemArt('rare_candy'), title: 'No prize', sub: 'Nothing is won this time' },
+          { art: itemArt('potion'), title: 'Team is safe', sub: `Back on its feet at ${heal}% HP`, on: true },
+        ],
+        side: 'What happened', lines: lines.slice(0, 2), button: 'Back to the map',
+        party: after.party.slice(0, 6).map(mon),
+        counts: [[String(turns), 'turns used'], ...(total ? [[`${broken} of ${total}`, 'shields broken'] as [string, string]] : []), [`${pct}%`, 'boss HP left']],
+      }) : ''));
+    } catch {
+      // A presentation failure must never block the battle.
+    }
+  }
+
   /** Pocket look: a raid shield breaking (mock-up `rd-shield`), with the raid's real shields and clock. Presentation only. */
   private async pkShieldBroken(): Promise<void> {
     try {
@@ -6015,6 +6053,7 @@ export class BattleScene extends Phaser.Scene {
     }
     if (result.raidFailed) {
       await this.say('The fight is over... your Pokémon were pulled back to safety.');
+      await this.pkRaidLost(before, result.run);
       await exitWipe(this, this.motion, this.wipeMask());
       this.scene.start(sceneForRun(result.run));
       return;
