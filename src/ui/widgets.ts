@@ -159,7 +159,7 @@ export interface MenuOption {
   /** Tooltip shown after the hover delay (Settings > Tooltip delay). */
   tip?: string;
   /** The New UI's own picture of this option (a move's type colour, a small second line). The canvas menu ignores it. */
-  rx?: { type?: string; sub?: string };
+  rx?: { type?: string; sub?: string; /** Phantom move cards: "Special · Power 90" before the PP. */ facts?: string };
 }
 
 export interface MenuConfig {

@@ -42,11 +42,11 @@ const mineBox = (b: BattleBox, k: number, small: boolean): string =>
 
 const GIM: Record<BattleGimmick['kind'], string> = { mega: 'Mega Evolve', tera: 'Terastallize', dynamax: 'Dynamax', zmove: 'Z-Move' };
 
-/** A move card (mock-up `moves`): the type's band and badge, the name, and its small line (PP). */
+/** A move card (mock-up `moves`): the type's band and badge, the name, and its small line (kind · Power · PP). */
 const moveCard = (o: BattleOption, k: number, on: boolean, small: boolean, at = ''): string => {
   const t = (o.type ?? '').toLowerCase(), size = o.label.length > 16 ? 20 : o.label.length > 12 ? 24 : small ? 26 : 30;
   return `<div class="b3-m ph-bt-mv${at}${on ? ' on' : ''}${o.off ? ' off' : ''}${small ? ' sm' : ''}" style="--i:${k};--tc:${TYC[t] ?? '#888'}" data-key="mv${k}"${act('pick', k, 'over')}${o.tip ? ` data-tip="${esc(o.tip)}"` : ''}>`
-    + `${on ? '<kbd>Z</kbd>' : ''}<div class="t">${t ? `<img class="px" src="${rxUrl(`packs/story/badge/${t}.png`)}" alt="${esc(t)}">` : ''}</div><h4 style="font-size:${size}px">${esc(o.label)}</h4><p>${esc(o.sub ?? '')}</p></div>`;
+    + `${on ? '<kbd>Z</kbd>' : ''}<div class="t">${t ? `<img class="px" src="${rxUrl(`packs/story/badge/${t}.png`)}" alt="${esc(t)}">` : ''}</div><h4 style="font-size:${size}px">${esc(o.label)}</h4><p>${esc(o.facts && o.sub ? `${o.facts} · ${o.sub}` : o.sub ?? '')}</p></div>`;
 };
 
 /** A plain choice (a target, an answer, a command): a slanted row; a whole sentence steps down a size. */

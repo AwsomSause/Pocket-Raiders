@@ -123,6 +123,10 @@ describe('the Phantom battle screen', () => {
     expect(html).toMatch(/ph-bt-mv d3 off"[^>]*data-key="mv3"/);
     expect(count(html, 'data-tip="move:')).toBe(4);
     expect(html).toContain('PP 0/40');
+    // A move's kind and power stand before its PP, as in the mock-up; a card with no facts keeps the PP alone.
+    const told = phBattle(ph, model({ foes: [foe], text, menu: { options: MOVES.map((o, k) => (k === 0 ? { ...o, facts: 'Special · Power 90' } : o)), index: 0 }, tabs: { ...TABS, index: 0 } }));
+    expect(told).toMatch(/<p>Special · Power 90 · PP [^<]+<\/p>/);
+    expect(count(told, ' · PP ')).toBe(1);
     // The target's card: its name and level, its HP, and the move's line (kept on two lines).
     expect(html).toContain('ph-bt-tg');
     expect(html).toMatch(/Feebas <small>Lv 4<\/small>/);

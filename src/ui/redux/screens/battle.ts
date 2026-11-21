@@ -31,7 +31,7 @@ export interface BattleBox {
   file?: string | null;
 }
 
-export interface BattleOption { label: string; sub?: string; type?: string; off?: boolean; /** Hover key for this choice's tooltip. */ tip?: string }
+export interface BattleOption { label: string; sub?: string; /** A move's kind and power ("Special · Power 90"), drawn by the Phantom move cards before the PP. */ facts?: string; type?: string; off?: boolean; /** Hover key for this choice's tooltip. */ tip?: string }
 
 /** The Battle info page (Phantom UI, mock-up `binfo`): both sides, the field, and every other line the old panel held. */
 import type { LogRow } from '../../logRows';

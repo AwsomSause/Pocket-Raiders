@@ -1,3 +1,4 @@
+import { existsSync, mkdirSync } from 'node:fs';
 import { expect, type Page } from '@playwright/test';
 
 // Shared steps for the Phantom UI browser specs. The Phantom UI is drawn on its own HTML layer (#phx) over the
@@ -22,6 +23,21 @@ export async function onPage(page: Page, key: string, id: string) {
   await expect(page.locator(`#phx .phs[data-scene="${key}"][data-scr="${id}"]`)).toBeVisible({ timeout: 15_000 });
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(700);
+  await keepShot(page, id);
+}
+
+/**
+ * Side-by-side check against the mock-ups (Kice 2026-11-20): with PH_SHOTS set to a folder, the first time a page shows
+ * at 1280 x 720 its picture is kept there as `<page id>.png`. Off unless asked for; it never changes a test's result.
+ */
+async function keepShot(page: Page, id: string) {
+  const dir = process.env.PH_SHOTS, size = page.viewportSize();
+  if (!dir || size?.width !== 1280 || size.height !== 720) return;
+  const file = `${dir}/${id}.png`;
+  if (existsSync(file)) return;
+  mkdirSync(dir, { recursive: true });
+  await page.waitForTimeout(500);
+  await page.screenshot({ path: file }).catch(() => undefined);
 }
 
 /**
@@ -30,6 +46,7 @@ export async function onPage(page: Page, key: string, id: string) {
  * so is the small live screen in Settings (a shrunken copy of another page).
  */
 export async function fitProblems(page: Page, key: string, id?: string): Promise<string[]> {
+  if (id) await keepShot(page, id);
   return page.evaluate(([key, id]) => {
     // A scene can have several views open over each other (a room over the dock): `id` picks the one showing that page.
     const S = document.querySelector<HTMLElement>(`#phx .phs[data-scene="${key}"]${id ? `[data-scr="${id}"]` : ''}`);

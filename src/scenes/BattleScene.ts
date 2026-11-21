@@ -1930,7 +1930,7 @@ export class BattleScene extends Phaser.Scene {
     }
     const boxes = (list: InfoBox[], key: string): BattleBox[] => list.flatMap((b, k) => (b.container.visible && b.rx ? [{ ...b.rx, hp: Math.round(b.rx.hp * 200) / 200, tip: `${key}:${k}` }] : []));
     const moves = this.tabs.current === 'attack' && !!this.menu && !this.picker;
-    const menu = this.menu && this.menu.container.visible ? { options: this.menu.options.map((o, k) => ({ ...(o.rx?.sub ?? o.detail ? { label: o.label, sub: o.rx?.sub ?? o.detail } : splitChoice(o.label)), type: o.rx?.type, off: !!o.disabled, ...(moves && this.activeMon().moves[k] ? { tip: `move:${k}` } : {}) })), index: this.menu.index } : null;
+    const menu = this.menu && this.menu.container.visible ? { options: this.menu.options.map((o, k) => ({ ...(o.rx?.sub ?? o.detail ? { label: o.label, sub: o.rx?.sub ?? o.detail } : splitChoice(o.label)), type: o.rx?.type, ...(o.rx?.facts ? { facts: o.rx.facts } : {}), off: !!o.disabled, ...(moves && this.activeMon().moves[k] ? { tip: `move:${k}` } : {}) })), index: this.menu.index } : null;
     // A tooltip shows once the pointer has rested for the Tooltip delay setting (Off shows none); a pinned card stays.
     const wait = TOOLTIP_DELAY_MS[services().session.settings.tooltipDelay];
     const hot = this.rxHover && wait !== null && this.time.now - this.rxHover.at >= wait ? this.rxHover.key : null;
@@ -4963,7 +4963,7 @@ export class BattleScene extends Phaser.Scene {
           const move = zMoves?.[i] ?? maxMoves?.[i] ?? content.moves.get(slot.id)!;
           // A battle style may label its buttons its own way (PP, power, type).
           const styled = this.skin?.moveText?.({ name, type: move.type, category: move.category, power: String(move.power ?? fixedDamageLabel(move.effects.fixedDamage)), accuracy: move.accuracy === null || move.accuracy === undefined ? '-' : String(move.accuracy), pp: slot.pp, maxPp: maxPp(content, slot) });
-          return { label: styled?.label ?? name, detail: styled?.detail, disabled, rx: { type: move.type, sub: `PP ${slot.pp}/${maxPp(content, slot)}` } };
+          return { label: styled?.label ?? name, detail: styled?.detail, disabled, rx: { type: move.type, sub: `PP ${slot.pp}/${maxPp(content, slot)}`, facts: move.category === 'status' ? 'Status' : `${move.category.charAt(0).toUpperCase()}${move.category.slice(1)} · Power ${move.power || fixedDamageLabel(move.effects.fixedDamage)}` } };
         })
       : [{ label: 'Struggle' }];
     // Moves fill the message bar; the command window shows the focused move's details.
