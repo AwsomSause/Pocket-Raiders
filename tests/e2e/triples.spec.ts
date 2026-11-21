@@ -103,6 +103,9 @@ for (const size of [
       .poll(async () => {
         const labels = await menuLabels(page);
         if (labels?.[0] === 'Fight') return true;
+        // Look again before pressing: an Enter landing on a menu that just opened would pick the left Pokémon's move.
+        await page.waitForTimeout(200);
+        if ((await menuLabels(page))?.[0] === 'Fight') return true;
         await page.keyboard.press('Enter');
         return false;
       }, { timeout: 60_000, intervals: [300] })
