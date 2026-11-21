@@ -18,6 +18,14 @@ import { mountRedux, type ReduxView } from '../ui/redux/stage';
 import { openingView, setupView, titleView, type SetupFiles } from '../ui/redux/screens/dominion/views';
 import { hubScr, r5Hq, r5Start, START_ITEMS } from '../ui/redux/screens/dominion/r50/hub';
 import { bossPic, r5Hub, r5Run, R5StartMenu } from './dominion/r50Bridge';
+import { bossPerson, heroPerson, memberPerson, memberSpeaker, monPic } from './dominion/r4Bridge';
+import { r5BossCard } from '../ui/redux/screens/dominion/r50/trainers';
+import { ownedGyms } from '../core/dominion/growth';
+import { masteryLevel } from '../core/dominion/field';
+import { bossMenuModel } from '../core/dominion/bossMenu';
+import { CrewPick, r5Card, r5CrewPick, r5HeroHit, type R5CrewCell, type R5Person } from '../ui/redux/screens/dominion/r50/jobs';
+import type { R5Run } from '../ui/redux/screens/dominion/r50/kit';
+import { actionDef } from '../core/dominion/field';
 import { CrewController } from './dominion/crewController';
 import { districtModel, districtOrder } from '../core/dominion/districtScreen';
 import { districtView } from '../ui/redux/screens/dominion/district';
@@ -45,15 +53,15 @@ import { PAD_WHEEL_EVENT } from '../ui/gamepad';
 import { jumpable, OPENS, type PageId } from '../core/dominion/nav';
 import { paperNote } from '../core/dominion/voices';
 import { threatRow } from '../core/dominion/rivalScreens';
-import { cardModel, gridPages, mapModel, newCursor, pageFor, type MapCursor } from '../core/dominion/fieldScreens';
-import { cardView, mapView } from '../ui/redux/screens/dominion/fieldViews';
+import { cardModel, gridPages, mapModel, newCursor, pageFor, type CardModel, type MapCursor } from '../core/dominion/fieldScreens';
+import { mapView } from '../ui/redux/screens/dominion/fieldViews';
 import { ledgerModel, SPREADS } from '../core/dominion/ledgerScreens';
 import { ledgerView } from '../ui/redux/screens/dominion/ledger';
 import { meetModel } from '../core/dominion/town';
 import { foundedLines, foundingOpen, initialOf, nameIdeas, newDraft, teamColours } from '../core/dominion/founding';
 import { FOUNDING_ROWS, foundedView, foundingView, type FoundingUi } from '../ui/redux/screens/dominion/founding';
 import { heroModel, interruptModel } from '../core/dominion/heroScreens';
-import { heroView, interruptView, type MonFiles } from '../ui/redux/screens/dominion/heroViews';
+import { heroView, type MonFiles } from '../ui/redux/screens/dominion/heroViews';
 import { BossMenuController, SETTINGS_CATS } from './dominion/bossMenuController';
 import { fxClasses, fxOf } from '../core/dominion/fx';
 import { JobController } from './dominion/jobController';
@@ -142,7 +150,12 @@ export class DominionScene extends Phaser.Scene {
     interrupt: () => { this.screen = 'interrupt'; this.intAt = 0; this.view?.refresh(); },
     toMap: (next, notice) => this.afterJob(next, notice),
     onMorningHq: () => this.screen === 'hq' && !this.police.owns() && !this.voices.on,
+    r5: () => this.r4People(),
   });
+  /** Redesign R4: Pick the crew over the Card (mockup `crewpick`). */
+  private cp = new CrewPick();
+  /** Redesign R4: the Boss card is up (mockup `tcard`, from the Start menu). */
+  private bcard = false;
   /** Redesign R0: the Start menu over the HQ (mockup `start`). */
   private start = new R5StartMenu((id) => this.r5go(id), () => this.view?.refresh());
   private voices = new VoicesController({ refresh: () => this.view?.refresh(), onHq: () => this.screen === 'hq' && !this.crew.owns() && !this.police.owns() && !this.snatch?.owns() && !this.block()?.crew?.talks.length });
@@ -181,6 +194,8 @@ export class DominionScene extends Phaser.Scene {
     this.voices.close();
     this.nav = new NavController(this.navHost());
     this.start = new R5StartMenu((id) => this.r5go(id), () => this.view?.refresh());
+    this.cp = new CrewPick();
+    this.bcard = false;
     const { session } = services();
     const run = session.run;
     if (!run) return void this.scene.start('MainMenu');
@@ -262,6 +277,10 @@ export class DominionScene extends Phaser.Scene {
         doit: () => this.doIt(),
         back: () => this.back(),
         bring: () => this.bring(),
+        crewpick: () => this.openCrewPick(),
+        crewPick: (i) => this.crewPick(Number(i)),
+        crewBack: () => { this.cp.close(); this.view?.refresh(); },
+        tcardBack: () => { this.bcard = false; this.view?.refresh(); },
         opt: (id) => { if (this.cursor) this.cursor = { ...this.cursor, opt: String(id) }; this.view?.refresh(); },
         buy: (id) => this.buy(id),
         townMeet: (i) => this.answerMeet(Number(i)),
@@ -327,6 +346,7 @@ export class DominionScene extends Phaser.Scene {
         ...this.nav.overs(),
         ...this.menu.overs(),
         r5startOver: (i) => { this.start.at = Number(i); this.view?.refresh(); },
+        crewOver: (i) => { this.cp.at = Number(i); this.view?.refresh(); },
       },
     });
     const kb = this.input.keyboard;
@@ -356,7 +376,7 @@ export class DominionScene extends Phaser.Scene {
         return;
       }
       // Redesign R0: the Start menu over the HQ keeps every key (its moves come through key()).
-      if (this.start.on) return;
+      if (this.start.on || this.bcard) return;
       // D24: the interview room and the release page read their keys first (typing included).
       // D30: a job moment or the morning paper keeps every key while it is up (N is Next action on a result page).
       if (this.inRun() && this.job.raw(e.code)) return;
@@ -408,7 +428,8 @@ export class DominionScene extends Phaser.Scene {
         return;
       }
       if (this.screen === 'card') {
-        if (e.code === 'KeyB') this.bring();
+        // Redesign R4: B opens Pick the crew (and closes it again).
+        if (e.code === 'KeyB') return this.cp.on ? (this.cp.close(), void this.view?.refresh()) : this.openCrewPick();
         return;
       }
       if (this.screen === 'base') {
@@ -572,6 +593,7 @@ export class DominionScene extends Phaser.Scene {
     const TAB: Record<string, number> = { hq: 0, map: 1, roster: 2, reserve: 3, card: 4, jobs: 4, ledger: 5 };
     if (id in TAB) return this.tab(TAB[id]!);
     if (id === 'start' && this.screen === 'hq') return this.start.open();
+    if (id === 'tcard') { this.bcard = true; return void this.view?.refresh(); }
     if (id === 'menu') { this.menu.open(); return void this.view?.refresh(); }
     if (id === 'set' || id === 'options') { this.menu.openSettings(); return void this.view?.refresh(); }
     if ((id === 'war' || id === 'rival' || id === 'rivals') && this.screen === 'hq') return void (this.rival.open() && this.view?.refresh());
@@ -584,7 +606,9 @@ export class DominionScene extends Phaser.Scene {
   private render(): string {
     const fx = fxOf(services().session.settings);
     const page = this.nav.boardOn() && this.navHere() ? this.nav.wrap(this.nav.boardRender(), 'board', fx.level) : this.nav.wrap(this.renderPage(), this.navHere() as Here, fx.level);
-    return `<div class="domfx ${fxClasses(fx)}">${page}${this.tut.overlay(this.screen)}</div>`;
+    const ov = this.tut.overlay(this.screen);
+    // Redesign R4: an overlay drawn for a pass-50 page (data-r5in) is placed inside that page by the page itself.
+    return `<div class="domfx ${fxClasses(fx)}">${page}${ov.startsWith('<div data-r5in') ? '' : ov}</div>`;
   }
 
   private renderPage(): string {
@@ -600,6 +624,7 @@ export class DominionScene extends Phaser.Scene {
     if (b?.debate?.live && (this.screen === 'hq' || this.screen === 'map' || this.screen === 'card' || this.screen === 'rival' || this.screen === 'crew' || this.screen === 'reserve' || this.screen === 'pyramid' || this.screen === 'ledger' || this.screen === 'base')) this.debate.claim();
     // D17: the first time a hub page is drawn with the run complete, the ending opens over it.
     if (b && this.inRun() && (this.end.owns() || this.end.maybeOpen())) return this.end.render(this.notice);
+    if (b && this.bcard && this.inRun()) return this.bossCardPage(b);
     switch (this.screen) {
       case 'title':
         return titleView({ at: this.titleAt, started: !!b, cont: b ? `${b.teamName ?? 'Unnamed Crew'} · Kanto · Day ${b.day}` : null, colours: b ? teamColours(b) : null });
@@ -623,9 +648,7 @@ export class DominionScene extends Phaser.Scene {
       case 'card': {
         const c = b && this.cursor ? this.cardOf() : null;
         if (!b || !c) return '';
-        const sp = c.battle?.species ? services().session.content.species.get(c.battle.species) : undefined;
-        const file = sp ? rxFileOf(this.manifest, pokemonAssetIds(sp.assets).front)?.file ?? null : null;
-        return cardView(c, file, b.teamName?.[0]?.toUpperCase() ?? '', services().session.settings.expansion.dominionPrefs.showOdds);
+        return this.cp.on ? this.crewPickPage(b) : this.cardPage(b, c);
       }
       case 'crew':
       case 'assign':
@@ -641,9 +664,10 @@ export class DominionScene extends Phaser.Scene {
       }
       case 'interrupt': {
         const m = b ? interruptModel(b, services().session.run!.inventory) : null;
-        if (!m) return '';
-        const lead = services().session.run!.party.find((p) => p.hp > 0) ?? services().session.run!.party[0];
-        return interruptView(m, this.memberLook(), lead ? this.monFiles([lead.speciesId])[lead.speciesId] ?? null : null, this.intAt, this.notice);
+        if (!m || !b) return '';
+        const mem = b.members[0];
+        const left = mem ? memberPerson(mem, b, 250) : bossPerson(this.files?.boss.name ?? 'Boss', this.files?.boss.file ?? null);
+        return r5HeroHit(m, left, heroPerson(m.hero, m.look), this.intAt, this.notice, r5Run(this, b));
       }
       case 'reserve':
       case 'pyramid':
@@ -831,6 +855,10 @@ export class DominionScene extends Phaser.Scene {
     if (this.nav.key(a)) return;
     if (this.menu.key(a)) return void this.view?.refresh();
     if (this.start.key(a)) return;
+    if (this.bcard) {
+      if (a === 'back' || a === 'confirm') this.bcard = false;
+      return void this.view?.refresh();
+    }
     if (this.end.key(a)) return;
     if (this.spy.key(a)) return void this.view?.refresh();
     if (this.debate.key(a)) return void this.view?.refresh();
@@ -850,6 +878,7 @@ export class DominionScene extends Phaser.Scene {
     }
     if (this.em.key(a)) return void this.view?.refresh();
     if (this.pt.key(a)) return void this.view?.refresh();
+    if (this.screen === 'card' && this.cp.on) return this.crewPickKey(a);
     if (this.screen === 'interrupt') {
       if (a === 'left' || a === 'up') this.intAt = (this.intAt + 2) % 3;
       else if (a === 'right' || a === 'down') this.intAt = (this.intAt + 1) % 3;
@@ -1377,6 +1406,124 @@ export class DominionScene extends Phaser.Scene {
     this.cursor = { ...this.cursor, opt: null, bring: [] };
     this.screen = 'card';
     this.view?.refresh();
+  }
+
+  // ---------- Redesign R4: the Card and Pick the crew (pass 50, mockups `card` and `crewpick`) ----------
+
+  /** The Card: who goes (the first member brought, else the Boss), the target's Pokémon, a line from the crew. */
+  private cardPage(b: DominionBlock, c: CardModel): string {
+    const run = r5Run(this, b);
+    const going = this.cursor?.bring.map((id) => b.members.find((m) => m.id === id)).filter((m): m is NonNullable<typeof m> => !!m) ?? [];
+    const who: string[] = going.slice(0, 2).map((m) => memberPerson(m, b, 64).pic);
+    if (!going.length) who.push(bossPic(this.files?.boss.file ?? null, 64));
+    if (c.battle?.species) who.push(monPic(this, c.battle.species, 64));
+    const talker = going[0] ?? b.members[0];
+    return r5Card(c, {
+      who: who.filter(Boolean),
+      speaker: talker ? memberSpeaker(talker, b) : null,
+      line: c.note && !c.opts.length ? c.note : going.length ? 'Say the word, Boss.' : 'Going alone, Boss? Press B to take one of us.',
+      showOdds: services().session.settings.expansion.dominionPrefs.showOdds,
+    }, run, this.cardLesson());
+  }
+
+  /** The tutorial's lesson on the Card (mockup `lessonjob`), drawn inside the page when it is due. */
+  private cardLesson(): string {
+    const ov = this.tut.overlay('card');
+    return ov.startsWith('<div data-r5in') ? ov : '';
+  }
+
+  private openCrewPick(): void {
+    if (this.screen !== 'card' || !this.cardOf() || !this.block()?.members.length) return;
+    this.cp.open();
+    this.view?.refresh();
+  }
+
+  private crewPickPage(b: DominionBlock): string {
+    const c = this.cursor, card = this.cardOf();
+    if (!c || !card) return '';
+    const id = gridPages(b)[c.page]?.[c.at];
+    const def = id ? actionDef(id) : undefined;
+    const stat = def?.stat && def.stat !== 'all' ? def.stat : null;
+    const d = DOMINION_DATA.field.districts.find((x) => x.id === c.district);
+    const alone = cardModel(b, services().session.run!, id!, d?.targets[c.target]?.id ?? null, c.district, [], c.opt)?.chance ?? card.chance;
+    const STAT = stat ? `${stat[0]!.toUpperCase()}${stat.slice(1)}` : '';
+    const cells: R5CrewCell[] = b.members.map((m) => {
+      const with1 = card.roll ? (cardModel(b, services().session.run!, id!, d?.targets[c.target]?.id ?? null, c.district, [m.id], c.opt)?.chance ?? alone) - alone : 0;
+      const out = m.crew?.out;
+      const p = memberPerson(m, b, 64);
+      return {
+        id: m.id, name: m.name, pic: p.pic, colour: p.colour,
+        stars: DOMINION_DATA.pyramid.ranks.find((r) => r.id === m.rank)?.band ?? 1,
+        line: [stat ? `${STAT} ${m.stats[stat]}` : `Lv ${m.level}`, out ? (out.why === 'jail' ? 'in jail' : out.why === 'held' ? 'held by a rival' : 'resting') : card.roll ? `${with1 >= 0 ? '+' : '−'}${Math.abs(with1)}%` : ''].filter(Boolean).join(' · '),
+        picked: c.bring.includes(m.id),
+        tag: out ? 'Out' : null,
+      };
+    });
+    return r5CrewPick({ job: card.title, most: card.squad, stat: STAT, cells, at: this.cp.at, note: this.cp.note ?? (c.bring.length ? `Bringing ${card.brought.join(', ')} · Esc back to the Card` : 'Nobody picked: the Boss goes alone.') }, r5Run(this, b));
+  }
+
+  /** Picks or drops a member for this Card (the cursor's bring list; Do it takes them). */
+  private crewPick(i: number): void {
+    const b = this.block(), c = this.cursor, card = this.cardOf(), m = b?.members[i];
+    if (!c || !card || !m) return;
+    this.cp.at = i;
+    const t = CrewPick.toggle(c.bring, m.id, card.squad);
+    this.cp.note = t.full ? `${card.squad} at most on this job. Drop one first.` : null;
+    this.cursor = { ...c, bring: t.bring };
+    this.view?.refresh();
+  }
+
+  private crewPickKey(a: InputAction): void {
+    const n = this.block()?.members.length ?? 0;
+    if (a === 'back') this.cp.close();
+    else if (a === 'confirm') return this.crewPick(this.cp.at);
+    else if (a === 'up' || a === 'down' || a === 'left' || a === 'right') this.cp.move(a, n);
+    this.view?.refresh();
+  }
+
+  /** Redesign R4: the Boss card (mockup `tcard`). Everything on it is read from the run. */
+  private bossCardPage(b: DominionBlock): string {
+    const run = r5Run(this, b), g = bossMenuModel(b, 0, { card: null, slot: 1 }).glance;
+    const seed = services().session.run?.seed ?? '';
+    let h = 7;
+    for (const ch of seed) h = (h * 31 + ch.charCodeAt(0)) % 100000;
+    const lv = DOMINION_DATA.hq.levels[b.hqLevel - 1]?.name ?? '';
+    const owned = ownedGyms(b);
+    const next = DOMINION_DATA.growth.gyms.find((x) => !owned.includes(x.id))?.id;
+    const best = Object.entries(b.field.mastery).sort((x, y) => y[1] - x[1])[0];
+    const bestDef = best ? actionDef(best[0]) : undefined;
+    const stats = b.field.edge.stats;
+    const m = b.members[0];
+    return r5BossCard({
+      name: this.files?.boss.name ?? 'Boss',
+      idNo: String(h).padStart(5, '0'),
+      pic: bossPic(this.files?.boss.file ?? null, 150),
+      facts: [['Name', (this.files?.boss.name ?? 'Boss').toUpperCase()], ['Level', `HQ Lv ${b.hqLevel}${lv ? ` · ${lv}` : ''}`], ['Money', run.funds], ['Crew', `${b.members.length} of ${b.rosterCap}`], ['Heat', `${b.heat}%`], ['Day', String(b.day)]],
+      goal: { pct: g.goalPct, label: `${g.goalPct}% · ${g.goal.replace(/^Goal · /, '')}` },
+      gyms: DOMINION_DATA.growth.gyms.map((x) => ({ k: `bd-${x.type}`, who: owned.includes(x.id) ? 'nova' as const : x.id === next ? 'next' as const : 'free' as const, name: `${x.leader} · ${x.badge} Badge` })),
+      back: [
+        ['Skills', (Object.keys(stats) as (keyof typeof stats)[]).map((k) => `${k[0]!.toUpperCase()}${k.slice(1)} ${stats[k]}`).join(' · ')],
+        ['Best job', bestDef && best![1] > 0 ? `${bestDef.name} · Lv ${masteryLevel(best![1])} (${DOMINION_DATA.field.mastery.names[masteryLevel(best![1]) - 1] ?? ''})` : 'None yet'],
+        ['Hero', g.hero ? `${g.hero.name} · Threat ${g.hero.threat}` : 'No Hero on your trail yet'],
+        ['Gyms', `${owned.length} of ${DOMINION_DATA.growth.gyms.length} yours`],
+      ],
+      speaker: m ? memberSpeaker(m, b) : null,
+      line: owned.length ? `“${owned.length} Gym${owned.length === 1 ? '' : 's'} and counting. Not bad, Boss.”` : '“No Gyms yet, Boss. Give it time.”',
+    }, run);
+  }
+
+  /** People for the job moments (order, done, botched): the Boss and the member who went. */
+  private r4People(): { run: R5Run; boss: R5Person; member: (id: string | null, name?: string) => R5Person | null } | null {
+    const b = this.block();
+    if (!b) return null;
+    return {
+      run: r5Run(this, b),
+      boss: bossPerson(this.files?.boss.name ?? 'Boss', this.files?.boss.file ?? null),
+      member: (id, name) => {
+        const m = b.members.find((x) => (id && x.id === id) || (name && x.name === name)) ?? null;
+        return m ? memberPerson(m, b, 250, true) : null;
+      },
+    };
   }
 
   /** Bring crew: none, then each member in turn. D10: a squad action (Raid: three) adds one more member each press. */

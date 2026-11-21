@@ -8,13 +8,14 @@
 
 import { MOMENTS, caughtModel, jobModel, orderModel, paperDue, paperModel, type ActInput, type CaughtModel, type JobModel, type OrderModel, type Roll } from '../../core/dominion/moments';
 import { teamColours } from '../../core/dominion/founding';
-import { topModel } from '../../core/dominion/screens';
 import { dominionBlock } from '../../core/dominion/session';
 import type { DominionBlock } from '../../core/dominion/schema';
 import { services } from '../../game/services';
 import type { InputAction } from '../../ui/input';
-import { cutInsOn, momentsOn, stillFx } from '../../ui/redux/screens/dominion/cutins';
-import { jobBotchedView, jobDoneView, orderView, paperView } from '../../ui/redux/screens/dominion/moments';
+import { cutInsOn, momentsOn } from '../../ui/redux/screens/dominion/cutins';
+import { paperView } from '../../ui/redux/screens/dominion/moments';
+import { r5Botched, r5Done, r5Order, type R5Person } from '../../ui/redux/screens/dominion/r50/jobs';
+import type { R5Run } from '../../ui/redux/screens/dominion/r50/kit';
 
 /** What the job goes on to after the cut-in. */
 export type JobNext = 'fight' | 'hero' | 'result';
@@ -31,6 +32,8 @@ interface Host {
   toMap(next: boolean, notice: string | null): void;
   /** True when the HQ shows with nothing else on it (the paper's place). */
   onMorningHq(): boolean;
+  /** Redesign R4: the chrome's run data and the people the pages draw (the Boss, a member by name). */
+  r5(): { run: R5Run; boss: R5Person; member: (id: string | null, name?: string) => R5Person | null } | null;
 }
 
 /** The cut-in's length: under two seconds (m8). */
@@ -150,11 +153,20 @@ export class JobController {
   }
 
   render(): string {
-    const s = services().session, b = this.block();
-    const team = b ? teamColours(b) : null, still = stillFx(s.settings);
-    if (this.stage === 'order' && this.order) return orderView(this.order, team, still);
-    if (this.stage === 'result' && this.job && b) {
-      return this.job.kind === 'done' ? jobDoneView(this.job, { ...topModel(b), regionLabel: 'JOB', region: (this.job.title.split(' · ')[1] ?? this.job.title).toUpperCase() }, team, still) : jobBotchedView(this.job, MOMENTS.botched, this.at, team, still, this.job.held === 'member' ? this.pending()?.choices ?? null : null, this.note);
+    const b = this.block(), r = this.host.r5();
+    if (!b || !r) return '';
+    if (this.stage === 'order' && this.order) {
+      const crew = this.order.crew ? r.member(null, this.order.crew.name) : null;
+      return r5Order(this.order, r.boss, crew, r.run);
+    }
+    if (this.stage === 'result' && this.job) {
+      const j = this.job;
+      const place = (j.title.split(' · ')[1] ?? '').trim() || (r.run.place ?? '');
+      const x = {
+        member: j.member ? r.member(null, j.member.name) : null, day: b.day, place, at: this.at, note: this.note,
+        held: j.held === 'member' ? this.pending()?.choices ?? null : null, texts: MOMENTS.botched,
+      };
+      return j.kind === 'done' ? r5Done(j, x, r.run) : r5Botched(j, x, r.run);
     }
     return '';
   }
