@@ -32,6 +32,9 @@
 - Study the Elite Four: the send-out order and the tell (+15% first move) need a battle-side preview the battle screen doesn't have (was noted "waits for D17's balance pass").
 - The old Evil Mode flow is untouched until Kice answers the retire question.
 
+## Merged in
+- D15 #1545 and D16 #1546 (evil-mode 09923bd1), no conflicts. After the merge: typecheck clean, 733 Dominion unit tests pass, browser tests `dominionEnding`, `evilModeCharters`, `dominionPartners` pass (8).
+
 ## Saves
 No version bump: `block.annals` is optional (a block without it starts its book the first night it's seen). No existing roll moved; the sim's stream is its own.
 
