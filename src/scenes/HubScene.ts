@@ -34,6 +34,7 @@ import { openCharacterProfile } from '../ui/profileMenu';
 import { openRemembranceArchive, remembranceSummary } from '../ui/remembranceMenu';
 import { openStoryArchive, storyArchiveCount } from '../ui/storyArchiveMenu';
 import { ATTRIBUTE_LABELS, attributeEffectText, attributeRange, attributeText, growthProgress, growthText, isMeter, readAttributes } from '../core/attributes';
+import { pkAchieve } from '../ui/pocket/screens/achieve';
 import { ACHIEVEMENT_CATEGORIES, ATTRIBUTE_KEYS, type Achievement, type Archetype, type QuestReward, type Species } from '../core/contentSchema';
 import { claimProblem, requirementParts, requirementProgress, trainerStatus, type TrainerStatus } from '../core/progress';
 import { activeGameEvents, durationText, gameRewardText, holidayCalendar, objectiveViews, rewardEarned, scheduleText, upcomingWeekly } from '../core/gameEvents';
@@ -2345,6 +2346,15 @@ export class HubScene extends Phaser.Scene {
       rows,
       columns: 2,
       rowHeight: 52,
+      // Pocket look: the mock-up's Achievement Hall (six cards a page, the kinds at the right); other looks keep the list.
+      page: (c: ReduxCtx, index: number) => (c.pk ? pkAchieve({
+        list: list.map((a) => ({ name: a.name, text: a.description, category: a.category, earned: !!p.achievements[a.id], hidden: !!a.hidden, progress: ((r) => `${r.current}/${r.target}`)(requirementProgress(p, a.requirement)), reward: rewardText(a) })),
+        index,
+        kinds: ACHIEVEMENT_CATEGORIES.map((k) => [CATEGORY_LABEL[k], list.filter((a) => a.category === k && p.achievements[a.id]).length, list.filter((a) => a.category === k).length] as const),
+        title: p.activeTitle,
+        say: titles.length ? 'Enter puts your next earned title on show.' : 'Earn an achievement with a title to put one on show.',
+      }) : null),
+      pageCols: 2,
       onSelect: () => {
         // Selecting cycles the title on show through the earned titles.
         if (titles.length === 0) return;

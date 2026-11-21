@@ -46,7 +46,7 @@ export interface PickerBridge {
   canBack: boolean;
   backLabel?: string;
   /** The room's own page, drawn in place of the rows (the Trainer Card). Its `back` clicks close the room. */
-  page?: (c: ReduxCtx, index: number) => string;
+  page?: (c: ReduxCtx, index: number) => string | null;
   /** The header band's colour, when the title alone would pick the wrong one. */
   area?: Area;
   /** Columns the cursor moves across on the room's own page (1 unless said). */
@@ -222,7 +222,9 @@ export function mountPickerView(scene: Phaser.Scene, p: PickerBridge, kind: Pick
     render: (c) => {
       // A room's own page has no list to steer across: the cursor steps one row at a time.
       cols = p.page ? p.pageCols ?? 1 : c.pk && kind !== 'window' && isDexWall(p) ? PK_DEX_COLS : c.pk && kind === 'window' && !p.center && p.rows > 0 && !p.mon?.(0) ? PK_BAG_COLS : pickerCols(kind, c);
-      return p.page ? p.page(c, p.index()) + (p.canBack ? BACK_HIT : '') : render(c, scene, p, kind);
+      // A room's page may be one look's only (null: the list is drawn as usual).
+      const own = p.page?.(c, p.index()) ?? null;
+      return own !== null ? own + (p.canBack ? BACK_HIT : '') : render(c, scene, p, kind);
     },
     acts: { pick: (i) => p.pick(Number(i)), tab, bracketPage: tab, back: () => p.back(), extra: (k) => p.extra?.(Number(k)) },
     overs: { over: (i) => p.hover(Number(i)) },

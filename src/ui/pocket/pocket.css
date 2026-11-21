@@ -678,3 +678,8 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .gx-wh-dim{position:absolute;inset:0;z-index:0}
 .pkx .pks .wheel .app.gx-off{filter:grayscale(1);opacity:.55}
 .pkx .pks .glance .gx-gl-note{margin:4px 0 0;width:100%;font-size:16px;line-height:1.35}
+/* Achievement Hall: the kinds list scrolls inside its panel (nine kinds); the lit card's line under the grid. */
+.pkx .pks .ach .gx-ach-kinds{display:flex;flex-direction:column;gap:6px;overflow:hidden}
+.pkx .pks .ach .gx-ach-kinds p{gap:2px;font-size:13px}
+.pkx .pks .ach .gx-ach-kinds small{font-weight:600;color:var(--mute)}
+.pkx .pks .ach .gx-ach-say{position:absolute;left:16px;width:620px;top:478px;font-size:13px;font-weight:700;color:var(--ink)}

@@ -4,6 +4,7 @@ import { pkRivals, type PkRival } from '../../src/ui/pocket/screens/rivals';
 import { pkLeague } from '../../src/ui/pocket/screens/world';
 import { pkReserve } from '../../src/ui/pocket/screens/reserve';
 import { pkQuick } from '../../src/ui/pocket/screens/pause';
+import { pkAchieve, type PkAchievement } from '../../src/ui/pocket/screens/achieve';
 
 describe('the Pocket Rival Board', () => {
   const r = (name: string, x: Partial<PkRival> = {}): PkRival => ({ name, role: 'Rival', art: null, ace: null, wins: 0, losses: 0, lead: 'Level', ...x });
@@ -69,5 +70,22 @@ describe('the Pocket Quick Wheel', () => {
     const bag = pkQuick({ ...base, items, at: 1, held: true });
     expect(bag).toContain('₽500 in your wallet');
     expect(bag).toContain('Let go of Tab to open');
+  });
+});
+
+describe('the Pocket Achievement Hall', () => {
+  const a = (name: string, x: Partial<PkAchievement> = {}): PkAchievement => ({ name, text: `Do ${name}.`, category: 'battle', earned: false, hidden: false, progress: '1/10', reward: '100 credits', ...x });
+  it('six cards a page: earned lit with the reward, the rest grey with progress, hidden ones ???', () => {
+    const list = [a('One', { earned: true }), a('Two'), a('Three', { hidden: true }), a('Four'), a('Five'), a('Six'), a('Seven')];
+    const h = pkAchieve({ list, index: 0, kinds: [['Battle', 1, 7]], title: null, say: '' });
+    expect(pkPageOf(h)?.id).toBe('achieve');
+    expect((h.match(/class="ac pn/g) ?? []).length).toBe(6);
+    expect(h).toContain('class="ac pn new on"');
+    expect(h).toContain('Earned · 100 credits');
+    expect(h).toContain('1/10 · 100 credits');
+    expect(h).toContain('???');
+    expect(h).not.toContain('Seven');
+    expect(h).toContain('1 of 7');
+    expect(pkAchieve({ list, index: 6, kinds: [], title: 'Ace', say: '' })).toContain('Seven');
   });
 });
