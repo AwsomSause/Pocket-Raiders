@@ -1,0 +1,64 @@
+/* Pass 16 · Heat & the Law */
+/* red heat at the edges of every page, sirens on police pages */
+.hv16{position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 calc(60px + var(--h) * 240px) rgba(255,50,20,calc(var(--h) * 1.4));animation:heat16 2.4s ease-in-out infinite}
+.sir16 i{position:absolute;top:-120px;width:420px;height:420px;border-radius:50%;pointer-events:none;mix-blend-mode:screen;opacity:.0;animation:siren16 1.2s steps(1) infinite}
+.sir16 i:first-child{left:-160px;background:radial-gradient(circle,rgba(255,40,40,.55),transparent 65%)}
+.sir16 i:last-child{right:-160px;background:radial-gradient(circle,rgba(40,90,255,.55),transparent 65%);animation-delay:.6s}
+/* the Heat chip is a thermometer */
+.th16{width:30px;height:7px;flex:none;margin-left:2px;border-radius:999px;background:#2a1214;border:1px solid #000;overflow:hidden}
+.th16 i{display:block;height:100%;background:linear-gradient(90deg,#ffb02e,#ff3d1d);animation:grow .8s .4s both}
+.heat.ic12{cursor:pointer}
+/* the Heat board */
+.thx16{position:absolute;left:30px;top:70px;width:120px;height:330px;z-index:2;animation:in-up .5s both}
+.thx16 .tube{position:absolute;left:44px;top:0;width:32px;height:260px;background:#1a1218;border:4px solid #000;border-radius:999px 999px 0 0;box-shadow:inset 0 0 0 3px rgba(255,255,255,.12)}
+.thx16 .fill{position:absolute;left:4px;right:4px;bottom:0;height:var(--hv);background:linear-gradient(#ffb02e,#ff3d1d);border-radius:999px 999px 0 0;animation:fill16 1.2s .3s cubic-bezier(.3,1.2,.5,1) both}
+.thx16 .mk{position:absolute;left:36px;width:12px;height:3px;background:var(--cr)}
+.thx16 .mk b{position:absolute;left:18px;top:-9px;font:400 16px/1 var(--fd);text-transform:uppercase;white-space:nowrap;color:var(--cr);text-shadow:1px 1px 0 #000}
+.thx16 .bulb{position:absolute;left:22px;top:244px;width:76px;height:76px;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffb08a,#ff3d1d 45%,#a01010);border:4px solid #000;box-shadow:0 0 30px rgba(255,60,20,.7);animation:heat16 1.6s ease-in-out infinite}
+.thx16 .bulb b{font:400 26px/1 var(--fd);color:#fff;text-shadow:2px 2px 0 #000}
+.lv16{left:250px;top:62px;width:330px;height:334px}
+.lv{display:flex;flex-direction:column;padding:8px 12px;background:rgba(33,26,40,.75);border-left:5px solid var(--line);border-radius:3px 12px 3px 12px;animation:in-r .35s both;animation-delay:var(--d)}
+.lv b{font:400 21px/1 var(--fd);text-transform:uppercase}
+.lv em{font-style:normal;font-size:13px;color:var(--mut)}
+.lv.on{border-left-color:var(--ok);background:linear-gradient(90deg,rgba(47,191,90,.22),rgba(33,26,40,.75))}
+.src16{left:596px;top:62px;width:348px;height:334px}
+.hs{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:2px 10px;padding:6px 10px;background:rgba(33,26,40,.75);border-radius:3px 12px 3px 12px;animation:in-r .35s both;animation-delay:var(--d)}
+.hs b{font:400 19px/1 var(--fd);text-transform:uppercase}
+.hs em{font-style:normal;font-size:14px;font-weight:800;color:#ff8a5d}
+.hs small{grid-column:1/-1;font-size:12px;color:var(--mut)}
+.bar16{height:9px;border-radius:999px;background:#2a1214;overflow:hidden}
+.bar16 i{display:block;height:100%;background:linear-gradient(90deg,#ffb02e,#ff3d1d);animation:grow .8s both}
+/* wanted poster */
+.post16{position:absolute;left:40px;top:66px;width:300px;height:332px;z-index:2;display:flex;flex-direction:column;align-items:center;padding:12px 18px;text-align:center;color:#3a2410;background:radial-gradient(ellipse at 50% 40%,#f6e4b8,#d9bb80);border:2px solid #6a4a20;box-shadow:6px 8px 0 rgba(0,0,0,.5);animation:slap16 .5s cubic-bezier(.3,1.5,.5,1) both}
+.post16 .pin{position:absolute;top:8px;width:14px;height:14px;border-radius:50%;background:#c1121f;border:2px solid #000}
+.post16 .pin.a{left:12px}.post16 .pin.b{right:12px}
+.post16 .wt{font:400 46px/1 var(--fd);letter-spacing:.08em;color:#7a1a10}
+.post16 .ws{font-style:normal;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.1em}
+.post16 .wp{height:160px;display:flex;align-items:flex-end;filter:sepia(.7) contrast(1.1);margin:2px 0}
+.post16 .wn{font:400 22px/1 var(--fd)}
+.post16 p{margin:2px 0;font-size:12px;line-height:1.25}
+.post16 .wr{font:400 24px/1 var(--fd);color:#7a1a10}
+.post16 small{font-size:11px;font-weight:800}
+.note16{position:absolute;left:330px;top:300px;z-index:3;width:190px;padding:8px 12px;color:#2a2a3a;background:#fff8c0;border:1px solid #b8a850;box-shadow:3px 4px 0 rgba(0,0,0,.4);transform:rotate(4deg);animation:pop .4s .6s both}
+.note16 b{font-size:12px;font-weight:800}
+.note16 p{margin:2px 0 0;font-size:12px;font-style:italic}
+.cool16{left:560px;top:62px;width:384px;height:334px}
+/* police raid */
+.flash16{position:absolute;inset:0;z-index:1;pointer-events:none;animation:flash16 1s steps(1) infinite}
+.k-raid16 .bgx{filter:brightness(.4) saturate(.6)}
+.rh16{position:absolute;left:30px;top:30px;z-index:3;display:flex;flex-direction:column}
+.rh16 small{font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#9fb4ff}
+.rh16 b{font:400 70px/1 var(--fd);color:#fff;text-shadow:5px 5px 0 #1d3a9c,9px 9px 0 rgba(0,0,0,.6);animation:slam .45s .2s both}
+.rh16 em{font-style:normal;font:400 24px/1 var(--fd);text-transform:uppercase;color:#ff8a7a}
+.cops16{position:absolute;left:24px;bottom:136px;z-index:2;display:flex;align-items:flex-end;gap:4px;animation:in-l .6s .3s both}
+.cops16 img{filter:drop-shadow(0 0 14px rgba(60,120,255,.6))}
+.cd16{position:absolute;left:360px;top:250px;z-index:3;display:flex;flex-direction:column;align-items:center;padding:6px 16px;background:rgba(7,6,11,.85);border:3px solid #ff3d1d;border-radius:4px 14px 4px 14px}
+.cd16 b{font:400 40px/1 var(--fd);color:#ff6b3d;animation:blink .5s steps(1) infinite}
+.cd16 em{font-style:normal;font-size:12px;font-weight:800;color:var(--mut)}
+.rc16{position:absolute;right:16px;top:110px;width:440px;z-index:3;display:flex;flex-direction:column;gap:8px}
+/*@top*/
+@keyframes heat16{50%{opacity:.7}}
+@keyframes siren16{0%{opacity:.9}50%{opacity:0}}
+@keyframes fill16{from{height:0}}
+@keyframes slap16{from{opacity:0;transform:scale(1.4) rotate(-6deg)}}
+@keyframes flash16{0%{background:rgba(255,30,30,.18)}50%{background:rgba(30,80,255,.18)}}

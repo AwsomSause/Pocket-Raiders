@@ -1,0 +1,80 @@
+/* Pass 38 · Magnet Line */
+/* the tab row is a rail line; the page you are on is the train */
+.tabs.ml38{justify-content:space-between;gap:10px;background:linear-gradient(#1c1724,#0b0810)}
+.tabs.ml38::before{content:'';position:absolute;left:8px;right:8px;top:50%;height:6px;margin-top:-3px;z-index:0;background:linear-gradient(#b8bcd0,#6a6f86) 0 0/100% 2px no-repeat,linear-gradient(#b8bcd0,#6a6f86) 0 100%/100% 2px no-repeat,repeating-linear-gradient(90deg,#4a3a2a 0 4px,transparent 4px 10px);opacity:.9}
+.tabs.ml38 button{flex:none;z-index:1;height:26px;padding:0 10px 0 3px;background:#17131d;border:2px solid #3a3246;border-radius:999px;box-shadow:0 2px 0 #000}
+.tabs.ml38 button .lamp{box-shadow:0 0 0 2px #fff,inset 0 0 0 2px #000}
+.tabs.ml38 .tabhl{display:none}
+.tabs.ml38 kbd{right:auto;left:-6px}
+.tabs.ml38 .on{padding:0 22px 0 4px;color:#fff;background:linear-gradient(#f4f4fa 0 14%,var(--area) 14% 86%,#f4f4fa 86%);border:2px solid #000;border-radius:8px 26px 18px 8px;transform:none;text-shadow:1px 1px 0 #000;animation:arr38 .8s .25s cubic-bezier(.2,.9,.3,1.1) both,beat27 .86s 1.2s ease-in-out infinite}
+.tabs.ml38 .on::after{content:'';position:absolute;right:100%;top:6px;bottom:6px;width:60px;pointer-events:none;background:repeating-linear-gradient(transparent 0 3px,rgba(255,255,255,.6) 3px 4px);-webkit-mask:linear-gradient(90deg,transparent,#000);mask:linear-gradient(90deg,transparent,#000);animation:spd38 .8s .25s both}
+.tr38{position:absolute;right:5px;top:3px;display:flex;flex-direction:column;gap:2px;pointer-events:none}
+.tr38 u{display:block;width:8px;height:4px;background:#bfe8ff;border:1px solid #000;border-radius:2px}
+/* the Timetable */
+.mm38{position:absolute;left:16px;top:70px;width:580px;height:328px;z-index:2;background:#f4efe4;border:3px solid #000;border-radius:6px 18px 6px 18px;box-shadow:5px 5px 0 var(--red);overflow:hidden}
+.mm38 svg{position:absolute;left:20px;top:4px;width:540px;height:320px}
+.mm38 path{fill:none;stroke-width:9;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:900;stroke-dashoffset:900;animation:drw38 1.2s calc(var(--i) * .25s + .3s) ease-out both}
+.mm38 .tn{fill:#fff;stroke:#000;stroke-width:3}
+.st38{position:absolute;display:flex;align-items:center;gap:4px;margin:-6px 0 0 14px;transform:translate(-14px,-4px);animation:pop .3s both;animation-delay:calc(var(--d) + .8s)}
+.st38 i{width:18px;height:18px;flex:none;background:#fff;border:4px solid #1d1622;border-radius:50%}
+.st38 b{padding:1px 5px;font-size:13px;font-weight:800;color:#1d1622;background:#f4efe4;border-radius:4px}
+.st38.o-own i{border-color:#e0294a;background:#ffd0d6;box-shadow:0 0 8px #e0294a}
+.st38.o-foe i{border-color:#2a2433;background:#8a8fa6}
+.lg38{position:absolute;right:12px;bottom:10px;display:flex;gap:10px;padding:4px 10px;background:#fff;border:2px solid #000;border-radius:8px}
+.lg38 u{display:flex;align-items:center;gap:4px;text-decoration:none;font-size:12px;font-weight:800;color:#1d1622}
+.lg38 u i{width:12px;height:12px;border:3px solid #1d1622;border-radius:50%;background:#fff}
+.lg38 .o-own i{border-color:#e0294a;background:#ffd0d6}.lg38 .o-foe i{border-color:#2a2433;background:#8a8fa6}
+.db38{left:612px;top:70px;width:332px;height:328px;gap:5px;background-color:#0b0810}
+.dh38,.dr38{display:grid;grid-template-columns:50px 1fr 30px 108px;gap:4px}
+.dh38 b{font-size:11px;font-weight:800;text-transform:uppercase;color:var(--mut)}
+.dr38 i{display:block;padding:5px 4px;font-style:normal;font-size:13px;font-weight:800;color:#ffd75a;background:linear-gradient(#211a28 49%,#000 50%,#17131d 51%);border-radius:3px;white-space:nowrap;transform-origin:50% 50%;animation:flp38 .5s both;animation-delay:var(--d)}
+.dr38 i:nth-child(2){animation-delay:calc(var(--d) + 60ms)}.dr38 i:nth-child(3){animation-delay:calc(var(--d) + 120ms)}.dr38 i:nth-child(4){animation-delay:calc(var(--d) + 180ms);font-size:12px}
+.dr38.d-bad i:last-child{color:#ff6b6b}.dr38.d-warn i:last-child{color:#ffb86a}.dr38.d-mag i{color:#9ee8ff}
+/* the Smuggling run */
+.car38{position:absolute;left:16px;top:92px;width:560px;height:280px;z-index:2;background:linear-gradient(#f4f4fa 0 18%,#2860c9 18% 30%,#f4f4fa 30% 100%);border:4px solid #000;border-radius:16px 70px 16px 16px;box-shadow:5px 5px 0 rgba(0,0,0,.5);animation:in-r .6s both}
+.car38 .roof{position:absolute;left:30px;right:80px;top:-14px;height:12px;background:#8a8fa6;border:3px solid #000;border-radius:6px 6px 0 0}
+.car38 .win{position:absolute;left:24px;right:90px;top:6px;display:flex;gap:8px}
+.car38 .win i{flex:1;height:26px;background:linear-gradient(160deg,#bfe8ff,#5a8ac9);border:3px solid #000;border-radius:6px}
+.car38 .hold{position:absolute;left:24px;right:24px;top:96px;bottom:42px;display:flex;align-items:flex-end;justify-content:space-around;padding:10px;background:repeating-linear-gradient(90deg,#3a2f22 0 40px,#2a2218 40px 42px);border:3px solid #000;border-radius:8px}
+.cr38{position:relative;width:96px;height:96px;display:grid;place-items:center;background:linear-gradient(#a0703a,#6a4a22);border:3px solid #000;border-radius:4px;box-shadow:inset 0 0 0 4px rgba(0,0,0,.2);opacity:.45;animation:pop .35s both;animation-delay:var(--d)}
+.cr38.in{opacity:1;box-shadow:inset 0 0 0 4px rgba(0,0,0,.2),0 0 14px rgba(255,215,90,.7)}
+.cr38 u{position:absolute;right:4px;top:2px;text-decoration:none;font-weight:800;color:#ff6b6b}
+.car38 .whl{position:absolute;left:60px;bottom:-16px;width:30px;height:30px;background:radial-gradient(#8a8fa6 30%,#2a2433 32%);border:3px solid #000;border-radius:50%;animation:spin 1s linear infinite}
+.car38 .whl.r{left:auto;right:90px}
+.cl38{left:592px;top:70px;width:352px;height:328px;gap:6px}
+.cw38{display:flex;align-items:center;gap:8px;padding:5px 8px;background:var(--pn2);border-radius:3px 10px 3px 10px;animation:in-r .3s both;animation-delay:var(--d)}
+.cw38 .ck{width:20px;height:20px;flex:none;display:grid;place-items:center;font-style:normal;font-size:13px;font-weight:800;color:#fff;background:#3b3346;border:2px solid #000;border-radius:4px}
+.cw38.on .ck{background:var(--ok)}
+.cw38 span{flex:1;min-width:0;display:flex;flex-direction:column}
+.cw38 b{font-size:14px}.cw38 em{font-style:normal;font-size:11px;color:var(--mut)}
+.cw38 small{flex:none;font-size:11px;font-weight:800;color:#ffb86a}
+.cw38 small.r3,.cw38 small.r4{color:#ff6b6b}
+.cw38 .v{flex:none;width:58px;text-align:right;font-style:normal;font-size:13px;font-weight:800;color:var(--ok)}
+.ins38{display:flex;flex-direction:column;gap:3px;margin-top:auto;padding:6px 8px;background:#0b0810;border-radius:8px}
+.ins38 b{font-size:12px;font-weight:800;text-transform:uppercase;color:var(--mut)}
+.ins38 span{height:10px;background:#3b3346;border:2px solid #000;border-radius:5px;overflow:hidden}
+.ins38 span i{display:block;height:100%;background:linear-gradient(90deg,var(--ok),#ffd75a);animation:fill23 1s .6s both}
+.ins38 em{font-style:normal;font-size:12px}
+/* the Magnet Train */
+.pf38{position:absolute;left:0;right:0;top:64px;height:240px;z-index:1;overflow:hidden}
+.pf38 .rail{position:absolute;left:0;right:0;bottom:56px;height:12px;background:linear-gradient(#b8bcd0,#4a4f66);border-block:2px solid #000}
+.mt38{position:absolute;left:30px;bottom:66px;width:900px;height:110px;animation:pull38 2.2s .2s cubic-bezier(.15,.8,.3,1) both}
+.mt38 .body{position:absolute;left:0;right:150px;top:0;bottom:0;display:flex;gap:12px;align-items:flex-start;padding:16px 20px;background:linear-gradient(#f4f4fa 0 55%,#2860c9 55% 72%,#f4f4fa 72%);border:4px solid #000;border-right:none}
+.mt38 .body u{flex:1;height:34px;background:linear-gradient(160deg,#bfe8ff,#4a7ac9);border:3px solid #000;border-radius:8px}
+.mt38 .nose{position:absolute;right:0;top:0;bottom:0;width:154px;background:linear-gradient(#f4f4fa 0 55%,#2860c9 55% 72%,#f4f4fa 72%);border:4px solid #000;border-radius:0 110px 20px 0}
+.mt38 .nose::after{content:'';position:absolute;right:40px;top:14px;width:60px;height:30px;background:linear-gradient(160deg,#bfe8ff,#4a7ac9);border:3px solid #000;border-radius:4px 30px 4px 4px}
+.mt38 .spd{position:absolute;left:-200px;top:20px;width:200px;height:70px;background:repeating-linear-gradient(transparent 0 8px,rgba(255,255,255,.5) 8px 10px);-webkit-mask:linear-gradient(90deg,transparent,#000);mask:linear-gradient(90deg,transparent,#000);animation:fade25 .4s 2.2s reverse both}
+.pf38::after{content:'';position:absolute;left:0;right:0;bottom:0;height:44px;background:linear-gradient(#ffd75a 0 4px,#000 4px 6px,#5c6178 6px,#3b3346);border-top:2px solid #000}
+.pf38 .ppl{position:absolute;left:40px;bottom:8px;display:flex;gap:6px;align-items:flex-end;z-index:2}
+.tk38{position:absolute;left:560px;top:250px;z-index:3;width:384px;padding:10px 16px;color:#1d1622;background:linear-gradient(90deg,#fff8ea 0 85%,#ffd75a 85%);border:3px solid #000;border-radius:10px;box-shadow:5px 5px 0 #2860c9;animation:in-up .5s 1.4s both}
+.tk38 small{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#2860c9}
+.tk38 b{display:block;font:400 24px/1 var(--fd)}
+.tk38 dl{display:grid;grid-template-columns:auto 1fr;gap:1px 10px;margin:6px 0 0;font-size:13px}
+.tk38 dt{font-weight:800;color:#6a5a70}.tk38 dd{margin:0}
+.tk38 .pch{position:absolute;right:16px;top:30px;width:28px;height:28px;display:grid;place-items:center;font-style:normal;color:#2860c9;background:#fff;border:3px dashed #2860c9;border-radius:50%;animation:pop .3s 2.2s both}
+/*@top*/
+@keyframes arr38{from{transform:translateX(-90px);opacity:0}}
+@keyframes spd38{0%{opacity:1}100%{opacity:0}}
+@keyframes drw38{to{stroke-dashoffset:0}}
+@keyframes flp38{0%{transform:rotateX(90deg);filter:brightness(2)}60%{transform:rotateX(-20deg)}}
+@keyframes pull38{from{transform:translateX(-1100px)}}

@@ -1,0 +1,72 @@
+/* Pass 39 · Storm Front */
+/* rain between the background and the panels */
+.rn39{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.rn39 i{position:absolute;inset:-60px;background:repeating-linear-gradient(105deg,transparent 0 22px,rgba(190,215,255,.32) 22px 23px,transparent 23px 47px);background-size:100% 120px;animation:rain39 .5s linear infinite}
+.rn39 i+i{background:repeating-linear-gradient(105deg,transparent 0 37px,rgba(220,235,255,.22) 37px 39px,transparent 39px 71px);background-size:100% 160px;animation-duration:.8s}
+.lt39{position:absolute;inset:0;z-index:30;pointer-events:none;background:radial-gradient(ellipse at 70% 0,rgba(235,240,255,.55),rgba(200,210,255,.12) 60%);opacity:0;animation:flash39 9s 1.5s infinite}
+.cap23{animation:cap23 .5s .2s both,jolt39 9s 1.5s infinite}
+/* drops gather under every panel header */
+.pn>h3::before{content:'';position:absolute;left:12px;right:12px;top:100%;height:12px;pointer-events:none;background:radial-gradient(circle at 50% 30%,rgba(200,225,255,.75) 0 2px,transparent 3px) 0 0/37px 12px repeat-x,radial-gradient(circle at 50% 30%,rgba(200,225,255,.6) 0 1.5px,transparent 2.5px) 19px 0/53px 12px repeat-x;animation:drip39 3s ease-in infinite}
+/* the storm cloud on the Day segment */
+.dy7{position:relative}
+.cl39{position:absolute;left:-6px;top:-7px;width:18px;height:9px;pointer-events:none;background:#c8cde0;border:1px solid #000;border-radius:6px;box-shadow:inset 0 -2px 0 #8a8fa6;animation:bob 2s ease-in-out infinite}
+.cl39 u{position:absolute;left:7px;top:7px;width:5px;height:8px;background:#ffd75a;clip-path:polygon(40% 0,100% 0,60% 45%,100% 45%,0 100%,30% 55%,0 55%);animation:bolt39 9s 1.5s infinite}
+/* Blackout */
+.dk39{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 60%,transparent 30%,rgba(5,5,12,.6))}
+.bo39{position:absolute;left:16px;top:70px;width:690px;height:328px;z-index:2;display:flex;gap:10px}
+.bb39{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 8px;text-align:center;background:linear-gradient(#211a28,#0b0810);border:3px solid #000;border-radius:6px 18px 6px 18px;box-shadow:4px 4px 0 rgba(0,0,0,.5);animation:in-up .4s both;animation-delay:var(--d)}
+.bb39 .bd{position:relative;height:190px;display:flex;align-items:flex-end;justify-content:center;filter:brightness(.35) saturate(.4);animation:out39 .6s calc(var(--d) + .6s) steps(3) both}
+.bb39.shut .bd{filter:none;animation:none}
+.bb39 .win{position:absolute;inset:20% 15% 30%;background:radial-gradient(circle,rgba(255,220,120,.0),transparent)}
+.bb39.shut .win{background:radial-gradient(circle,rgba(255,220,120,.35),transparent 70%)}
+.bb39 b{font:400 19px/1 var(--fd);text-transform:uppercase}
+.bb39 em{font-style:normal;font-size:12px;color:var(--mut)}
+.bb39 .tg{margin-top:auto;padding:2px 12px;font-style:normal;font-size:12px;font-weight:800;border-radius:999px;color:#fff;background:var(--ok)}
+.bb39.shut .tg{background:var(--red)}
+.bb39.on{outline:3px solid #fff;outline-offset:3px}
+.tm39{position:absolute;left:722px;top:70px;z-index:2;width:222px;height:328px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:#0b0810;border:3px solid #000;border-radius:6px 18px 6px 18px;box-shadow:4px 4px 0 var(--red)}
+.tm39 small{font-size:12px;font-weight:800;text-transform:uppercase;color:var(--mut)}
+.tm39 b{font:400 52px/1 var(--fd);color:#ff6b6b;text-shadow:0 0 14px rgba(255,80,80,.7);animation:blink39 1s steps(2) infinite}
+.tm39 span{width:160px;height:12px;background:#3b3346;border:2px solid #000;border-radius:6px;overflow:hidden}
+.tm39 span i{display:block;width:98%;height:100%;background:linear-gradient(90deg,#ff6b6b,#ffd75a);animation:drain39 3s linear both}
+/* Flooded tunnel */
+.tn39{position:absolute;left:16px;top:70px;width:560px;height:328px;z-index:2;overflow:hidden;background:linear-gradient(#2a2433,#120f17);border:3px solid #000;border-radius:6px 18px 6px 18px;box-shadow:5px 5px 0 #2860c9}
+.tn39 .arch{position:absolute;left:30px;right:30px;top:20px;bottom:-40px;border:14px solid #3b3346;border-bottom:none;border-radius:260px 260px 0 0;box-shadow:inset 0 0 40px #000}
+.tn39 .ppl{position:absolute;left:70px;bottom:44px;display:flex;gap:6px;align-items:flex-end}
+.tn39 .lp{position:absolute;right:70px;bottom:40px;animation:bob 1.8s ease-in-out infinite}
+.tn39 .wtr{position:absolute;left:0;right:0;bottom:0;height:96px;z-index:1;background:linear-gradient(rgba(70,130,210,.55),rgba(20,50,110,.9));border-top:2px solid rgba(200,230,255,.7);animation:rise39 2s .3s ease-out both}
+.tn39 .wtr u{position:absolute;left:-50%;right:-50%;top:-8px;height:14px;background:radial-gradient(ellipse 22px 7px at 50% 100%,rgba(120,180,240,.8) 98%,transparent) 0 0/44px 14px repeat-x;animation:wav39 2s linear infinite}
+.tn39 .wtr u+u{top:-4px;opacity:.6;animation-duration:3s;animation-direction:reverse}
+.rt39{left:592px;top:70px;width:352px;height:328px;gap:8px}
+.rt39 .o29 small{font-size:12px;font-weight:800}
+.rt39 .r-ok small{color:var(--ok)}.rt39 .r-mid small{color:#ffb86a}.rt39 .r-bad small{color:#ff6b6b}
+.rt39 .o29.on{outline:3px solid #fff;outline-offset:2px}
+/* Shelter */
+.sl39{position:absolute;left:16px;top:70px;width:560px;height:328px;z-index:2;overflow:hidden;background:linear-gradient(#2c1f1a,#120c0a);border:3px solid #000;border-radius:6px 18px 6px 18px;box-shadow:5px 5px 0 #ff8a3d}
+.sl39 .wnd{position:absolute;left:40px;top:24px;width:150px;height:110px;overflow:hidden;background:#0b1430;border:6px solid #3a2a20;border-radius:4px}
+.sl39 .wnd::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(105deg,transparent 0 10px,rgba(190,215,255,.5) 10px 11px,transparent 11px 20px) 0 0/100% 60px;animation:rain39 .4s linear infinite}
+.sl39 .wnd u{position:absolute;inset:0;background:rgba(235,240,255,.7);opacity:0;animation:flash39 9s 1.5s infinite}
+.sl39 .wnd::after{content:'';position:absolute;left:50%;top:0;bottom:0;width:6px;margin-left:-3px;background:#3a2a20;box-shadow:0 0 0 0 #3a2a20}
+.sl39 .fire{position:absolute;left:50%;bottom:30px;width:70px;height:60px;margin-left:-35px;background:radial-gradient(ellipse at 50% 100%,#ffd75a,#ff8a3d 40%,rgba(224,41,74,.6) 60%,transparent 72%);filter:blur(1px);animation:fire39 .4s ease-in-out infinite alternate}
+.sl39 .fire::after{content:'';position:absolute;left:-120px;right:-120px;top:-120px;bottom:-30px;background:radial-gradient(ellipse at 50% 80%,rgba(255,160,60,.28),transparent 60%);animation:fire39 .7s ease-in-out infinite alternate}
+.sl39 .crew{position:absolute;left:0;right:0;bottom:24px;display:flex;justify-content:center;gap:90px}
+.sl39 .crew i{animation:bob 2.4s calc(var(--i) * -.6s) ease-in-out infinite}
+.sl39 .crew i:nth-child(2){margin-right:50px}
+.sl39 .pup{position:absolute;right:46px;bottom:26px;animation:shiv39 .15s steps(2) infinite}
+.sl39 .pup u{position:absolute;right:-6px;top:-18px;text-decoration:none;font:400 18px/1 var(--fd);color:#ffd75a;animation:hop .9s ease-in-out infinite}
+.ch39{left:592px;top:70px;width:352px;height:328px;gap:8px}
+.ch39t{margin:0;font-size:14px;line-height:1.35}
+.ch39 .o29.on{outline:3px solid #fff;outline-offset:2px}
+/*@top*/
+@keyframes rain39{to{background-position:-30px 120px}}
+@keyframes flash39{0%,94%,100%{opacity:0}95%{opacity:1}96%{opacity:.2}97%{opacity:.9}}
+@keyframes jolt39{0%,94%,98%,100%{transform:none}95%{transform:translate(-2px,1px) rotate(-1deg)}96.5%{transform:translate(2px,-1px) rotate(1deg)}}
+@keyframes bolt39{0%,94%,98%,100%{opacity:0}95%,97%{opacity:1}}
+@keyframes drip39{0%{transform:translateY(-6px);opacity:0}30%{opacity:1}100%{transform:translateY(10px);opacity:0}}
+@keyframes out39{0%{filter:none}33%{filter:brightness(1.6)}66%{filter:brightness(.6)}100%{filter:brightness(.35) saturate(.4)}}
+@keyframes blink39{50%{opacity:.6}}
+@keyframes drain39{from{width:100%}}
+@keyframes rise39{from{height:20px}}
+@keyframes wav39{to{transform:translateX(44px)}}
+@keyframes fire39{to{transform:scale(1.08,1.15);opacity:.85}}
+@keyframes shiv39{50%{transform:translateX(1px)}}

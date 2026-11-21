@@ -35,7 +35,7 @@ export function bossMenuView(m: BossMenuModel, boss: string | null): string {
   ${boss ? `<div class="a" style="left:84px;top:236px;z-index:6" data-testid="dom-menu-boss">${tall(boss, 245)}</div>` : ''}
   <div class="ttl" style="--t1:#5b1fb0;--t2:#c9338f" data-testid="dom-menu-title">Boss Menu <span class="sub">· Paused</span></div>
   <div class="keys" data-testid="dom-menu-keys">${WHEEL_KEY}<span class="key">Esc</span><span>Back to the game</span></div>
-  <div class="a col" style="left:300px;top:76px;width:300px;gap:6px;z-index:20" data-testid="dom-blades">${blades}</div>
+  <div class="a col" style="left:300px;top:76px;width:300px;gap:${m.blades.length > 9 ? 3 : 6}px;z-index:20" data-testid="dom-blades">${blades}</div>
   <div class="pnl gild" style="left:630px;top:78px;width:314px;height:330px" data-testid="dom-glance">
     <div class="hd y">${ic('g-relic-crown')}Empire at a glance</div>
     <div class="col" style="gap:7px;font-size:15px">

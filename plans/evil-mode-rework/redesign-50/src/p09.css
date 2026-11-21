@@ -1,0 +1,50 @@
+/* Pass 9 · Power Surge */
+.pw9{position:absolute;left:0;right:0;bottom:-3px;height:3px;background:linear-gradient(90deg,#ff4d5e,#e8b23a,#5ad1ff,#a25fe0,#ff4d5e) 0 0/200% 100%;animation:flow 2s linear infinite;z-index:2}
+.g9 .bgx{filter:none}
+.g9 .sc-word b{font-size:78px}
+.g9-fx{position:absolute;inset:0;z-index:0;pointer-events:none}
+.g9-item{position:absolute;left:250px;top:250px;z-index:3;padding:6px;border-radius:50%;background:radial-gradient(#fff 0,rgba(255,255,255,.4) 40%,transparent 70%);animation:glow9 1.2s ease-in-out infinite}
+.g9 .act.l{left:40px}
+.g9 .act.r{left:420px;right:auto}
+.g9 .act.r img{animation:silo 1.6s ease-out both,breathe 3s 1.6s ease-in-out infinite}
+/* mega: two stones linked by a beam, helix rings */
+.g9-mega .bgx{background:radial-gradient(circle at 62% 48%,#fff 0,rgba(255,240,255,.7) 10%,transparent 34%),conic-gradient(from 0deg at 62% 48%,#ff6fa8,#ffcf5a,#6fe0ff,#b07aff,#ff6fa8)!important}
+.g9-mega .g9-fx i{position:absolute;left:62%;top:48%;width:calc(140px + var(--i)*70px);height:calc(140px + var(--i)*70px);margin:calc(-70px - var(--i)*35px);border-radius:50%;border:3px solid rgba(255,255,255,.55);animation:ring9 2.4s linear infinite;animation-delay:calc(var(--i)*-.4s)}
+.g9-mega .g9-fx::after{content:'';position:absolute;left:290px;top:270px;width:320px;height:6px;background:linear-gradient(90deg,#fff,#ffcf5a,#ff6fa8,#fff);box-shadow:0 0 16px #fff;transform:rotate(-12deg);transform-origin:0 50%;animation:beam9 .8s ease-out both}
+/* dynamax: red storm */
+.g9-dyna .bgx{background:radial-gradient(ellipse 60% 40% at 55% 20%,#ff2a4a,transparent 70%),radial-gradient(ellipse 40% 30% at 20% 30%,#a0102a,transparent 70%),linear-gradient(#3a0610,#12030a)!important}
+.g9-dyna .g9-fx i{position:absolute;top:calc(var(--i)*14px - 20px);left:calc(var(--i)*170px - 80px);width:260px;height:120px;border-radius:50%;background:radial-gradient(rgba(255,60,90,.55),transparent 70%);filter:blur(4px);animation:cloud9 6s ease-in-out infinite alternate;animation-delay:calc(var(--i)*-1s)}
+.g9-dyna .act.r img{zoom:1.3;filter:drop-shadow(0 0 14px #ff2a4a) drop-shadow(0 0 30px #ff2a4a)}
+.g9-dyna .act.r{left:380px;bottom:150px}
+/* tera: crystal shards */
+.g9-tera .bgx{background:linear-gradient(rgba(30,10,60,.25),rgba(30,10,60,.5)),url(sprites/fx-crystal.png) center/cover!important}
+.g9-tera .g9-fx i{position:absolute;left:calc(380px + var(--i)*60px);top:calc(60px + (var(--i)*37px) % 200px);width:40px;height:90px;background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(140,120,255,.5) 50%,rgba(80,40,160,.7));clip-path:polygon(50% 0,100% 30%,70% 100%,30% 100%,0 30%);animation:shard9 2s ease-in-out infinite alternate;animation-delay:calc(var(--i)*-.3s)}
+.g9-tera .act.r img{filter:drop-shadow(0 0 2px #fff) drop-shadow(0 0 16px #b07aff) saturate(1.3)}
+/* z: spiral */
+.g9-z .bgx{background:radial-gradient(circle at 60% 50%,rgba(255,220,120,.6),transparent 40%),linear-gradient(rgba(10,0,20,.3),rgba(10,0,20,.6)),url(sprites/fx-spiral.png) center/cover!important;animation:spin9 8s linear infinite}
+.g9-z .g9-fx::before{content:'Z';position:absolute;left:520px;top:60px;font:400 260px/1 var(--fd);color:rgba(255,220,120,.35);text-shadow:0 0 30px rgba(255,200,80,.6)}
+/* legend */
+.pg-legend .bgx{background:radial-gradient(circle at 70% 45%,rgba(200,120,255,.5),transparent 40%),linear-gradient(#0e0618,#24103a)!important}
+.psy9{position:absolute;left:520px;top:40px;width:380px;height:380px;border-radius:50%;background:repeating-radial-gradient(circle,rgba(190,120,255,.35) 0 6px,transparent 6px 22px);animation:ring9 3s linear infinite;z-index:0}
+.pg-legend .act.r img{filter:drop-shadow(0 0 18px #c88cff)}
+/* power picker */
+.pw-row{position:absolute;left:16px;top:66px;width:928px;height:330px;display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:12px}
+.pwc{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px;background:rgba(23,19,29,.85);border:3px solid #000;border-radius:4px 18px 4px 18px;cursor:pointer;overflow:hidden;animation:deal .45s cubic-bezier(.2,1.3,.4,1) both;animation-delay:var(--d)}
+.pwc b{font:400 28px/1 var(--fd);text-transform:uppercase;text-align:center}
+.pwc em{font-style:normal;font-size:13px;color:var(--mut);text-align:center}
+.pwc .tag{margin-top:auto}
+.pwc-art{flex:1;display:grid;place-items:end center}
+.pwc-ic{position:absolute;left:10px;top:10px}
+.pwc.on{border-color:transparent;background:linear-gradient(#17131d,#17131d) padding-box,conic-gradient(#ff4d5e,#e8b23a,#5ad1ff,#a25fe0,#ff4d5e) border-box;box-shadow:0 0 24px rgba(255,200,120,.5)}
+.pwc.on .tag{background:var(--ok);color:#fff}
+.pwc.lock .pwc-art{filter:brightness(0) drop-shadow(0 0 0 #555);opacity:.6}
+.pwc.lock b{color:var(--mut)}
+/*@top*/
+@keyframes flow{to{background-position:200% 0}}
+@keyframes glow9{50%{transform:scale(1.15)}}
+@keyframes silo{0%,40%{filter:brightness(0) invert(1)}100%{filter:none}}
+@keyframes ring9{to{transform:scale(1.3);opacity:0}}
+@keyframes beam9{from{width:0}}
+@keyframes cloud9{to{transform:translateX(40px)}}
+@keyframes shard9{to{transform:translateY(-14px) rotate(8deg)}}
+@keyframes spin9{to{background-position:52% 48%}}

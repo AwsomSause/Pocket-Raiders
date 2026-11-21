@@ -1,0 +1,62 @@
+/* Pass 25 · Master Cut */
+/* every panel wears the text box frame */
+.pn{border-radius:12px;box-shadow:inset 0 0 0 2px rgba(255,248,234,.75),inset 0 0 0 4px var(--area),5px 5px 0 rgba(0,0,0,.55)}
+.pn>h3{border-radius:10px 10px 0 0}
+/* the Phone tab becomes Start */
+.st25 kbd{font-size:11px}
+/* the Start menu */
+.dim25{position:absolute;inset:0;z-index:7;pointer-events:none;background:linear-gradient(90deg,rgba(7,6,11,.25),rgba(7,6,11,.7) 70%);animation:fade25 .4s both}
+.sm25{position:absolute;right:16px;top:14px;width:264px;z-index:9;display:flex;flex-direction:column;gap:1px;padding:8px;color:#1d1622;background:#fff8ea;border:3px solid #1d1622;border-radius:12px;box-shadow:inset 0 0 0 2px #fff8ea,inset 0 0 0 4px #e0294a,6px 6px 0 rgba(0,0,0,.55);animation:slide25 .45s cubic-bezier(.3,1.2,.5,1) both}
+.sm25 .sh{display:flex;align-items:center;gap:10px;padding:4px 8px 8px;margin-bottom:4px;border-bottom:2px dashed #d8cfbf}
+.sm25 .sh span{display:flex;flex-direction:column}
+.sm25 .sh b{font:400 22px/1 var(--fd);color:#e0294a}
+.sm25 .sh em{font-style:normal;font-size:12px;font-weight:800;color:#6a5a70}
+.si25{position:relative;display:flex;align-items:center;gap:10px;padding:5px 10px 5px 28px;text-align:left;border-radius:6px;animation:in-r .3s both;animation-delay:var(--d)}
+.si25 b{font:400 20px/1 var(--fd);text-transform:uppercase}
+.si25::before{content:'▶';position:absolute;left:9px;font-size:12px;color:transparent}
+.si25.on{background:rgba(224,41,74,.12)}.si25.on::before{color:#e0294a;animation:cur23 .7s ease-in-out infinite}
+.si25.x b{color:#6a5a70}
+.sd25{position:absolute;left:16px;right:296px;top:408px;height:56px;z-index:9;display:flex;align-items:center;gap:8px;padding:0 40px 0 18px;font-size:16px;color:#1d1622;background:#fff8ea;border:3px solid #1d1622;border-radius:10px;box-shadow:inset 0 0 0 2px #fff8ea,inset 0 0 0 4px #e0294a,4px 4px 0 rgba(0,0,0,.55);animation:in-up .4s .3s both}
+.sd25 b{color:#e0294a}
+.k-start25>.keys{z-index:11}
+/* Options */
+.op25{left:16px;top:70px;width:560px;height:326px;display:flex;flex-direction:column;gap:6px}
+.or25{display:flex;align-items:center;gap:10px;padding:6px 12px;background:var(--pn2);border-radius:6px;animation:in-r .3s both;animation-delay:var(--d)}
+.or25>b{width:140px;flex:none;font:400 18px/1 var(--fd);text-transform:uppercase}
+.or25>span{display:flex;gap:4px;flex-wrap:wrap}
+.or25 i{font-style:normal;font-size:13px;font-weight:800;padding:3px 10px;border-radius:999px;color:var(--mut)}
+.or25 i.on{background:var(--yel);color:var(--ink)}
+.or25.on{outline:3px solid #fff;outline-offset:2px}
+.fp25 i{width:30px;height:30px;padding:0!important;display:grid;place-items:center;color:#fff!important;background:#17131d!important;border:3px solid var(--fc);border-radius:8px!important;box-shadow:inset 0 0 0 2px rgba(255,248,234,.7)}
+.fp25 i.on{transform:scale(1.15);box-shadow:inset 0 0 0 2px rgba(255,248,234,.7),0 0 0 2px var(--yel)}
+.fv25{left:592px;top:70px;width:352px;height:326px;display:flex;flex-direction:column;gap:18px}
+.fx25{position:relative;padding:14px 34px 14px 16px;color:#1d1622;background:#fff8ea;border:3px solid #1d1622;border-radius:10px;box-shadow:inset 0 0 0 2px #fff8ea,inset 0 0 0 4px #e0294a,4px 4px 0 rgba(0,0,0,.5);animation:pop .4s .4s both}
+.fx25 b{color:#e0294a}.fx25 p{margin:2px 0 0;font-size:16px}
+.fn25{margin:0;font-size:13px;color:var(--mut)}
+/* the Boss card */
+.bcw25{position:absolute;left:30px;top:76px;width:520px;height:318px;z-index:2;perspective:900px}
+.bc25{position:absolute;inset:0;display:flex;flex-direction:column;gap:8px;padding:14px 18px;color:#1d1622;background:linear-gradient(150deg,#fff8ea,#f1d9b8);border:4px solid #1d1622;border-radius:16px;box-shadow:inset 0 0 0 3px #fff8ea,inset 0 0 0 6px #e0294a,8px 8px 0 rgba(0,0,0,.55);transform-origin:50% 50%;animation:flip25 .9s .2s cubic-bezier(.3,1.1,.4,1) both}
+.bc25 .bh{display:flex;justify-content:space-between;align-items:baseline;padding:4px 12px;background:#e0294a;border-radius:8px}
+.bc25 .bh b{font:400 24px/1 var(--fd);color:#fff;text-shadow:2px 2px 0 #000}
+.bc25 .bh em{font-style:normal;font-size:13px;font-weight:800;color:#fff}
+.bc25 .bb{flex:1;display:flex;gap:10px;min-height:0}
+.bc25 dl{flex:1;display:grid;grid-template-columns:auto 1fr;gap:5px 14px;margin:0;align-content:center}
+.bc25 dt{font-size:13px;font-weight:800;text-transform:uppercase;color:#8a1030}
+.bc25 dd{margin:0;white-space:nowrap;font-size:15px;font-weight:800}
+.bc25 .pt{width:140px;flex:none;display:grid;place-items:end center;background:radial-gradient(circle at 50% 70%,rgba(224,41,74,.25),transparent 70%)}
+.bc25 .bd{display:flex;align-items:center;gap:10px;padding-top:6px;border-top:2px dashed #d8b890}
+.bc25 .bd b{font-size:12px;font-weight:800;text-transform:uppercase;color:#8a1030}
+.bc25 .bd span{display:flex;gap:6px}
+.bc25 .bd i{width:24px;height:24px;display:grid;place-items:center;font-style:normal;font-size:13px;color:#fff;background:#d8cfbf;border:2px solid #1d1622;border-radius:50%}
+.bc25 .bd i.on{background:#e0294a;animation:pop .3s 1s both}
+.bcb25{left:580px;top:76px;width:364px;height:318px;display:flex;flex-direction:column;gap:8px}
+.bk25{display:flex;flex-direction:column;gap:2px;padding:7px 12px;background:var(--pn2);border-radius:6px;animation:in-r .3s both;animation-delay:var(--d)}
+.bk25 b{font-size:12px;font-weight:800;text-transform:uppercase;color:var(--mut)}
+.bk25 em{font-style:normal;font-size:15px;font-weight:800}
+.fg25{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.fg25 i{height:44px;display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:800;background:#17131d;border:2px solid #000;border-radius:8px;box-shadow:inset 0 0 0 2px rgba(255,248,234,.7),inset 0 0 0 4px var(--fc);animation:pop .3s both;animation-delay:var(--d)}
+.fg25 i.on{outline:2px solid var(--yel);outline-offset:2px}
+/*@top*/
+@keyframes fade25{from{opacity:0}}
+@keyframes slide25{from{transform:translateX(300px)}}
+@keyframes flip25{from{transform:rotateY(-180deg) scale(.8);opacity:0}}

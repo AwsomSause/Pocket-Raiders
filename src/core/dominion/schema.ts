@@ -369,6 +369,8 @@ const BlockSchema = z.object({
   origin: z.object({ kind: z.enum(['charter', 'turn']), id: S }).strict().optional(),
   /** D17: the run's books for the ending (funds at every night, across regions). Optional; `annalsOf` (ending.ts) fills it. */
   annals: z.lazy(() => AnnalsSchema).optional(),
+  /** The tutorial (tutorial.ts): the help level picked before the run and every lesson, page and card shown. Optional (none = no help); no bump. */
+  tut: z.object({ mode: z.enum(['full', 'tips', 'off']), seen: z.array(S) }).strict().optional(),
 }).strict();
 export const DominionBlockSchema = z.preprocess(migrateDominion, BlockSchema);
 export type DominionBlock = z.infer<typeof BlockSchema>;
@@ -383,10 +385,14 @@ export interface DominionSetup {
   rules?: RunRules;
   /** D16: an established start (a Charter id); the session has checked the profile's unlock. */
   charter?: string;
+  /** The tutorial's help level picked on the help page (absent = no tutorial). */
+  tutorial?: 'full' | 'tips' | 'off';
 }
 
 export type DominionAction =
   | { t: 'open' }
+  /** The tutorial: a lesson/page shown, the help level, Replay a lesson, the Day 2 Rattata (tutorial.ts). */
+  | { t: 'tut'; op: 'seen' | 'mode' | 'gift'; arg: string }
   /** D15: leave the Taken region (the Holder, standing orders, the one member brought), and the Empire screen's answers. */
   | { t: 'leave'; holder: string; orders: Record<string, string>; bring: string | null }
   | { t: 'realm'; op: 'visit' | 'pay' | 'replace' | 'spy' | 'talk' | 'orders' | 'tribute' | 'trip' | 'letGo'; region: string; member?: string; orders?: Record<string, string>; tribute?: number }
@@ -2606,6 +2612,8 @@ export const DominionPrefsSchema = z.object({
   showOdds: z.boolean().default(true),
   /** With no actions left in the Day, the Day ends by itself (unused actions are odd jobs anyway). */
   autoEndDay: z.boolean().default(false),
+  /** The tutorial's help level for the next run (the help page saves its pick here; Settings · Dominion · Tutorial). */
+  tutorial: z.enum(['full', 'tips', 'off']).default('full'),
   fx: DominionFxSchema.default(() => ({ level: 'full' as const, particles: true, cutIns: 'show' as const, shake: true, flashes: 'on' as const })),
 }).strict();
 export type DominionPrefs = z.infer<typeof DominionPrefsSchema>;

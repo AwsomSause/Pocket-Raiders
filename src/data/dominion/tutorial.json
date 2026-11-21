@@ -1,0 +1,78 @@
+{
+  "_source": "DOMINION tutorial and opening, built from plans/evil-mode-rework/tutorial-mockups (Kice 2026-11-21: build it nearly exactly). Pages a1-e9. Text is data. The helper is Rotom (written ahead, no Rotom spend).",
+  "help": {
+    "title": "NEW RUN",
+    "sub": "· before you start",
+    "rotom": "Rotom: “New in the business? Don't worry. Everyone starts with a leaky roof.”",
+    "phone": "BZZT!|BOSS-PHONE|ONLINE",
+    "options": [
+      { "id": "full", "label": "Show me the ropes", "tag": "RECOMMENDED", "line": "Fifteen short lessons across your first week. Rotom points, you press.", "stripe": "#ff8a3d" },
+      { "id": "tips", "label": "Just give me tips", "line": "One line the first time each screen opens. Nothing blocks you.", "stripe": "#a678ff" },
+      { "id": "off", "label": "I know what I'm doing", "line": "No help. You can turn tips on later in Settings.", "stripe": "#5a6488" }
+    ],
+    "foot": "Change it any time: Boss Menu › Settings › Dominion › Tutorial. Replay any lesson from the Boss Menu.",
+    "firstTime": "FIRST TIME",
+    "titleTip": "First Dominion? I'll walk you through it. Press <b>Enter</b> on New run."
+  },
+  "cold": {
+    "skip": "skip the opening",
+    "beats": [
+      { "id": "night", "cap": "PEWTER CITY · KANTO", "big": "2:14 AM", "lines": ["Every Team you've heard of started somewhere small.", "Team Rocket started in a basement in Celadon."] },
+      { "id": "paper", "lines": ["Nobody in Kanto has heard of you.", "That's about to change."],
+        "paper": { "name": "The Kanto Ledger", "edition": "Celadon edition", "weather": "Rain, then more rain", "price": "₽2", "head": "ROCKET TIGHTENS GRIP ON CELADON",
+          "body": "Police say Giovanni's people now run every game corner west of the river. \"Nobody else would dare,\" says one shopkeeper. <i>Below the fold:</i> a warehouse in Pewter has finally found a tenant." } },
+      { "id": "key", "lines": ["One thousand Pokédollars. A key. A lease on a building nobody else wanted.", "It's not much. Every empire is not much, at first."] }
+    ],
+    "reward": { "head": "YOU GOT", "items": [["g-storage-key", "The Warehouse key", "Key Item"], ["g-letter", "A lease (HQ Lv. 1)", "Pewter"], ["g-amulet-coin", "Starting money", "₽1,000"]],
+      "note": "Next: pick your Boss, your two Team Types and your first member.", "key": "Begin" }
+  },
+  "kit": { "head": "STARTING KIT", "items": [["g-ball", "Poké Ball", "×3"], ["g-max-potion", "Potion", "×2"], ["g-machine-part", "Crowbar · Key Item", "Break in"]],
+    "note": "Rook: “Is the crowbar for me? ...It's for you. OK.”", "noteAdmin": "{name}: “A crowbar. How very professional.”", "key": "Take it" },
+  "setup": {
+    "boss": "This is <b>you</b>. You fight your own battles, with <b>any</b> Pokémon. Your crew has rules. You'll see.",
+    "types": "Pick <b>two</b>. Every Grunt's Pokémon needs one of them. Dragon and Fairy are too proud for a uniform.",
+    "typesOne": "One more! Two types means more Pokémon your crew can use.",
+    "member": "First run? Take <b>Rook</b>. Cheap and loyal. An Admin costs double and might walk out."
+  },
+  "welcome": { "title": "Welcome", "text": "Bzzt! Welcome to Dominion, Boss. You run a crew from nothing. Each day you give orders, the city reacts, and slowly it all becomes yours. I'll show you one thing at a time.", "step": "15 lessons · about 10 minutes", "key": "Let's go", "foot": "stop tips any time · Boss Menu › Replay a lesson" },
+  "lessons": [
+    { "id": "setup", "name": "The setup" },
+    { "id": "top", "name": "The top bar", "steps": [{ "list": [["1", "The day and its phase. Four phases: Morning, Day, Evening, Night."], ["2", "Funds. Rent and wages come out every 7 days."], ["3", "<b>Heat.</b> How hard the police are looking. Keep it low."], ["4", "Roster. The Warehouse sleeps 3."], ["5", "The region. One at a time."]] }] },
+    { "id": "orders", "name": "Orders", "steps": [
+      { "text": "These are your first <b>orders</b>. In the evening you plan; tomorrow, you do. Press <b>Enter</b> to plan one. You get <b>3 actions</b> a day.", "key": "Plan it" },
+      { "text": "Nice. <b>Secure the warehouse</b> costs ₽40. Every order shows its cost <b>before</b> you commit. Plan it or leave it, your call.", "key": "Done" }] },
+    { "id": "steps", "name": "First Steps", "steps": [{ "text": "Two easy goals for your first week. Each pays <b>₽100</b>. After 7 days they're gone, and nobody holds your hand again." }] },
+    { "id": "tasks", "name": "Tasks", "steps": [
+      { "text": "{name} is your crew. <b>You</b> do orders; <b>crew</b> do tasks. {name} is POOR at everything, so start simple: press <b>3</b> for the Roster and give a task.", "key": "Got it" },
+      { "text": "The big number is the <b>chance it works</b>. Guard is safe. Better crew, harder tasks, bigger money.", "key": "Got it" }] },
+    { "id": "night", "name": "The night", "steps": [{ "text": "Every night: <b>rest</b> or <b>work</b>. Skip rest three nights in a row and you're <b>exhausted</b>. Tonight, rest.", "key": "Got it" }] },
+    { "id": "mornings", "name": "Mornings", "steps": [
+      { "text": "Every morning I tell you what happened overnight. Read it, then press Enter." },
+      { "text": "Normal isn't one of your types, so {name} can't use it. It waits in the <b>Reserve</b>. The Boss can use anything." }] },
+    { "id": "card", "name": "The Card", "steps": [{ "inline": [["1", "The odds."], ["2", "Why."], ["3", "Who gets hurt, who might see."]] }] },
+    { "id": "heat", "name": "Heat", "steps": [{ "text": "Heat is how hard the police are looking. Jobs raise it; quiet days lower it (−3 a day). <b>Lay Low</b> cools it fast." }],
+      "ladder": [["CALM", "0–24%"], ["WATCHED", "25–49% · Jenny asks around"], ["WANTED", "50–74% · raids"], ["HUNTED", "75%+ · Looker"]] },
+    { "id": "map", "name": "The map", "steps": [{ "text": "This is Kanto. Your warehouse is in <b>{home}</b>. Pick a district and press <b>Enter</b> to see its jobs. Red rings mean Rocket." }] },
+    { "id": "wheel", "name": "The wheel", "steps": [{ "text": "<b>Hold Q</b> anywhere. Point at a page, let go, you're there. Faster than the tabs." }] },
+    { "id": "menu", "name": "The Boss Menu", "steps": [{ "text": "Esc opens this from anywhere. <b>Settings</b> and <b>Replay a lesson</b> live here, so you can turn tips off or watch one again." }] },
+    { "id": "bills", "name": "Bills", "steps": [{ "text": "Every <b>7 days</b>: rent and wages. Can't pay? Someone goes unpaid, and they <b>remember</b>." }] },
+    { "id": "rivals", "name": "Rivals", "steps": [{ "text": "That's Team Rocket. They own this region, and now they know your name. <b>R</b> opens the Rival File." }] },
+    { "id": "founding", "name": "The Founding", "steps": [
+      { "text": "A name for the door. Type one, or pick a suggestion." },
+      { "text": "These go on every armband. Watch your crew's band change." },
+      { "text": "A mark for the door, a motto for the speeches." },
+      { "text": "Your Goal is what you <b>want</b>. It shapes Debates and how you can win." }] }
+  ],
+  "rattata": { "species": "rattata", "level": 4, "lines": ["{name} guarded the warehouse. Nobody came.", "Then {name} dropped a Poké Ball, and a Rattata ran into it. It's yours now."], "head": "NEW POKÉMON", "sent": "Sent to", "where": "the Reserve" },
+  "step": { "head": "FIRST STEP DONE", "stamp": "CONTACT MADE", "stampEarn": "FIRST ₽500" },
+  "bills": { "head": "WEEK 1 BILLS", "rent": "Rent, the Warehouse", "wage": "Wage, {name}", "total": "Total", "who": "MORNING REPORT", "lines": ["Week 1 bills: rent ₽{rent}, wages ₽{wages}.", "{name} counts the money twice. “We're still rich, right, Boss?”"] },
+  "rival": { "label": "RIVAL NOTE · TEAM ROCKET", "who": "TEAM ROCKET", "lines": ["“A new crew in Pewter. One Grunt and a leaking roof.”", "“Keep an eye on them. Small things grow.”"], "after": "After the text: Rotom, lesson 14 · R Rival File" },
+  "week": { "title": "WEEK 1", "sub": "· the Ledger", "head": "THE WEEK", "next": "NEXT STEPS", "nextSteps": ["Hold your first district", "Upgrade to HQ Lv. 2", "Win your first raid"],
+    "tip": "That's week one. A few more lessons show up when they matter. After the Founding, you're on your own.", "key": "Next week" },
+  "gang": { "who": "THE TOWN", "stamp": "STREET GANG", "sticker": "THE FOUNDING · O", "ladder": [["NOBODY", "“That lot in the old warehouse”"], ["STREET GANG", "Your name, said quietly"], ["CREW", "Your name, in the paper"]],
+    "lines": ["The town says your name now, quietly.", "Time for the Founding: a name, colours, a mark and a motto."] },
+  "founded": { "head": "{name} IS FOUNDED", "band": "{member}'s armband", "mark": "The {logo} mark", "door": "on the door", "noto": "Notoriety", "key": "Back to work" },
+  "done": { "stamp": "TUTORIAL COMPLETE", "rail": "15 OF 15 LESSONS", "text": "That's everything I had, Boss. The rest you learn by doing. Esc › <b>Replay a lesson</b> if you forget. Now go make {team} a problem.", "key": "Bzzt, bye" },
+  "replay": { "title": "REPLAY A LESSON", "sub": "· Boss Menu", "blade": "Replay a lesson", "bladeSub": "15 lessons", "setting": "TUTORIAL", "modes": [["full", "Full walkthrough"], ["tips", "Tips only"], ["off", "Off"]] },
+  "stop": "stop tips"
+}
