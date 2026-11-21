@@ -332,5 +332,75 @@
   "q3": "Yes, two new and one remade. The Start menu is a short list over the live page, so you never lose your place. Options holds the five settings people change most plus the frame picker, so the full Settings stays for everything else. The Boss card replaces the plain file page.",
   "q4": "This is the answer to both: Start (or the old Phone tab, which now says Start) opens the Start menu; Options is in it; Options links to All settings; Save is one line away. The Rotom Phone is item one, so nothing from before is lost.",
   "q5": "Very much. The right-side Start menu with a ▶ cursor, Options with Text speed, Battle scene, Sound and Frame 1 to 6, and a Trainer Card with an ID No. and badge circles are straight from the main series."
+ },
+ "26": {
+  "name": "Spectacle",
+  "big": "Big moments hit like a Pokémon battle: every scene slams in with black letterbox bars, a white impact flash and a shake, the scene text box becomes the same cream framed box as everywhere else, and every page title streaks in on speed lines. Move animations are never touched: only trainers, Pokémon and the screen around them move.",
+  "pages": [
+   "Phase two",
+   "Crew team-up",
+   "Snapshot"
+  ],
+  "q1": "Yes. Scenes now hit: black letterbox bars slam in and pull back, the screen flashes white and shakes, Giovanni rises out of a red shockwave for Phase Two, three crew strips slash across the screen for a team-up, and a Snapshot develops from white like a real photo before it drops into the album.",
+  "q2": "Pass 25 unified every window; this pass makes the big moments feel big. The scene text box joins the cream frame look (with the ▼), page titles streak in on speed lines, and boss fights gain a proper second phase. It moves from tidy menus to a game with drama.",
+  "q3": "Yes, three. Phase two explains what changed in one screen instead of a pile of battle messages. The Crew team-up is its own cut-in with one choice, Team up or Not now. The Snapshot sits between the battle and the result and saves to an album shown on the Boss card.",
+  "q4": "Settings › Effects already has Show (Full, Lighter, Calm); Calm removes the bars, flash and shake. Options › Page opener covers the iris. The Album opens from the Boss card and from the Start menu’s Boss card line.",
+  "q5": "Yes. Letterbox bars and a white flash before a boss, a gym leader’s second phase with new music, and a photo of the moment are all things recent Pokémon games do, and moves themselves stay exactly as they are."
+ },
+ "27": {
+  "name": "Sound You Can See",
+  "big": "The UI shows what you hear: a little equaliser dances in the rainbow wedge, a Now playing card slides up whenever the music changes, speakers in the text box send out voice blips, and the lit lift button pulses on the beat.",
+  "pages": [
+   "Jukebox",
+   "Radio",
+   "Settings · Captions"
+  ],
+  "q1": "Yes. A record spins on the Jukebox with its arm swinging down, a waveform ripples beside it, the Radio needle sweeps across the dial while three speakers throb, and on every page a Now playing card rises from the corner, a tiny equaliser dances in the rainbow wedge, and voice rings pulse from whoever is talking.",
+  "q2": "Pass 26 gave big moments drama; this pass makes sound part of the screen. Music, voices and sirens now have something to look at, and the Radio turns sound into play: the Police band tells you where patrols will be, so you can plan around them.",
+  "q3": "Yes, three. The Jukebox collects tracks as you hear them. The Radio is a real tool, not decoration. Captions gives every sound words and an arrow, which helps deaf and hard of hearing players and anyone playing muted.",
+  "q4": "The Jukebox and Radio are lines in the Start menu (and the equaliser in the corner opens the Jukebox). Captions is a new tab beside Sound in Settings, with live captions in its preview.",
+  "q5": "Yes. The Pokégear radio from Gold and Silver, a sound test or jukebox, and a Now playing card are all Pokémon touches, and the Rocket takeover of a radio station is canon."
+ },
+ "28": {
+  "name": "Crew Life",
+  "big": "The crew stop being rows and start being people around you: whoever speaks in the text box pops a Pokémon-style emote bubble, off-duty crew stroll past behind the panels on every page, and the Crew button on the lift console shows the faces of whoever wants a word.",
+  "pages": [
+   "Bonds",
+   "Downtime",
+   "Heart-to-heart"
+  ],
+  "q1": "Yes. Speakers pop a little emote bubble that bounces (♥ for Rosa, ♪ for Gus, ! for Rook), off-duty crew hop past behind the panels on every page, the Bonds web draws itself line by line in gold, teal and dashed red, and each Downtime spot floats its icon in a warm glow.",
+  "q2": "Pass 27 made sound visible; this pass makes the crew feel alive. Before, crew were stats in rows; now they react when they talk, wander the HQ while you work, wave from the Crew button when they want you, and have friendships and grudges that change how jobs go.",
+  "q3": "Yes, three. Bonds shows every relationship on one web instead of hiding it in six files. Downtime is one evening choice with clear effects. The Heart-to-heart is a short scene with two answers, reached from Bonds or when a crew member wants a word.",
+  "q4": "Bonds and Downtime sit on the Crew page and in the Start menu under Crew. Settings › Dominion gains Crew chatter (Lots, Some, Few) for how often emotes and walk-bys appear; Effects › Calm hides the strollers.",
+  "q5": "Yes. Emote bubbles over heads are classic overworld Pokémon, Pokémon Amie and Camp gave Pokémon downtime, and support chats with your team match the warmth of the series."
+ },
+ "29": {
+  "name": "Rocket War",
+  "big": "Rocket is not a menu any more, it is a rival army pushing back on every page: a tug-of-war bar under the top bar shows Nova against Rocket across Kanto with a spark where they clash, Rocket’s R is sprayed behind the panels wherever they hold ground, and grunts patrol past the crew in the background.",
+  "pages": [
+   "War front",
+   "Turf clash",
+   "Parley"
+  ],
+  "q1": "Yes. A tug-of-war line runs under the top bar of every page, crimson for Nova and grey for Rocket, with a white spark pulsing where they clash. Rocket’s R fades in like spray paint on job and opposition pages, a Rocket grunt patrols past behind the panels, and the Turf clash lines up three against three around a spinning VS badge.",
+  "q2": "Pass 28 brought the crew to life; this pass gives them a real enemy. Before, Rocket was a number in district files; now the war is on every screen, you can see each district being pulled both ways, and you get a choice of how to deal with Archer: fight, pay, or split the city.",
+  "q3": "Yes, three. The War front shows all nine districts as tug bars on one page. The Turf clash is a single setup screen before a fight (squad, odds, go). The Parley gives three clear offers with their costs, so diplomacy is a page, not a hidden event.",
+  "q4": "The tug line opens the War front on any page, and it sits in the Start menu under Region map. Settings › Dominion gains Rocket pressure (Calm, Normal, Fierce), and Effects › Calm hides the spray tags.",
+  "q5": "Yes. Team Rocket taking over towns and Executives like Archer bargaining with you are canon from Gold and Silver and HeartGold and SoulSilver, and turf battles with three on three feel like the multi battles in later games."
+ },
+ "30": {
+  "name": "Second Cut",
+  "big": "The second synthesis pulls 26 to 29 together and clears space: the strip under the top bar carries news only where news matters and the Nova against Rocket war line everywhere else, every page arrives with a Black and White style place sign that slides in and away, and the speaker’s name moves onto a tab on top of the text box so the words get the whole box.",
+  "pages": [
+   "Last night",
+   "Adventure log",
+   "Hall of Infamy"
+  ],
+  "q1": "Yes. Each page now arrives with a cream place sign that drops in (“The Compound · Viridian”), the strip under the top bar becomes a bright Nova against Rocket war line with a spark on most pages, speaker names sit on coloured tabs on the text box, Last night deals four recap cards onto the table, the Adventure log turns its page and writes itself in ink, and the Hall of Infamy raises the crew onto gold pedestals under sweeping spotlights.",
+  "q2": "Passes 26 to 29 each added something big (drama, sound, crew life, the war). This pass makes them sit together calmly: news only shows where news matters, the war is always one glance away, the text box gives the words the full width, and three summary pages tie the run together: each morning, each day, and the end of a region.",
+  "q3": "Yes, three, and they reduce clutter. Last night replaces a pile of overnight pop-ups with one recap. The Adventure log is the one place the story is written down. The Hall of Infamy marks the end of a region before you sail on.",
+  "q4": "The Adventure log is in the Start menu; Last night can be switched in Settings › Dominion (Recap: Always, Short, Off); News ticker in Settings › Screen still picks On, Quiet (the new default, news only on news pages) or Off.",
+  "q5": "Yes. The sliding place sign is straight from Black and White, the Adventure log comes from Platinum and Omega Ruby and Alpha Sapphire, and the Hall of Infamy is a dark mirror of the Hall of Fame."
  }
 }

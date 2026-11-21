@@ -1,0 +1,60 @@
+/* Pass 26 · Spectacle */
+/* every scene slams in: letterbox bars, a white impact flash, a shake */
+.lbx26{position:absolute;left:0;right:0;height:70px;z-index:12;pointer-events:none;background:#000;animation:lbx26 1.1s cubic-bezier(.6,0,.3,1) both}
+.lbx26.t{top:0;--y:-70px}.lbx26.b{bottom:0;--y:70px}
+.fl26{position:absolute;inset:0;z-index:13;pointer-events:none;background:#fff;animation:fl26 .5s .25s ease-out both}
+.fl26.w{animation-delay:.6s}
+[data-sp26] .act{animation:shk26 .45s .3s both}
+/* the scene text box is the cream framed box */
+.tbox{background:#fff8ea!important;color:#1d1622;border:3px solid #1d1622!important;border-radius:12px!important;box-shadow:inset 0 0 0 2px #fff8ea,inset 0 0 0 4px var(--area),5px 5px 0 rgba(0,0,0,.55)!important;backdrop-filter:none!important}
+.tbox p{color:#1d1622}
+.tbox .rep{color:#8a1030}
+.tbox::after{content:'▼';position:absolute;right:14px;bottom:8px;font-size:12px;color:var(--red);animation:nx23 .8s 2s ease-in-out infinite}
+.tbox .more{display:none}
+/* page titles streak in on speed lines */
+.sp26{position:absolute;left:-40px;right:-60px;top:8px;bottom:8px;z-index:-1;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.55) 0 2px,transparent 2px 7px);-webkit-mask:linear-gradient(90deg,transparent,#000 30%,#000 70%,transparent);mask:linear-gradient(90deg,transparent,#000 30%,#000 70%,transparent);animation:sp26 .7s .1s cubic-bezier(.3,.9,.4,1) both}
+.nb2-t{isolation:isolate}
+/* Phase two */
+.crk26{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(circle at 30% 50%,rgba(224,41,74,.5),transparent 55%),repeating-conic-gradient(from 10deg at 30% 50%,rgba(0,0,0,.35) 0 3deg,transparent 3deg 17deg);animation:crk26 .6s .2s both,pulse26 2s 1s ease-in-out infinite}
+.gio26{position:absolute;left:40px;bottom:132px;z-index:2;filter:drop-shadow(0 0 24px rgba(224,41,74,.8));animation:rise26 .7s .2s cubic-bezier(.3,1.2,.5,1) both}
+.pw26{position:absolute;left:440px;top:44px;z-index:3;display:flex;flex-direction:column;animation:in-up .5s .5s both}
+.pw26 small{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#ff8a7a}
+.pw26 b{font:400 70px/1 var(--fd);color:#fff;text-shadow:4px 4px 0 #8a1030,0 0 24px rgba(224,41,74,.8);animation:shk26 .5s .6s both}
+.pw26 em{font-style:normal;font-size:17px;font-weight:800}
+.rl26{left:440px;top:178px;width:504px;height:216px}
+.rl26 .chg{grid-template-columns:20px 140px 1fr;align-items:center;padding:6px 10px}
+.rl26 .chg i{grid-row:auto}
+/* Crew team-up */
+.tus26{position:absolute;top:0;bottom:76px;left:calc(var(--i) * 300px - 40px);width:380px;z-index:2;overflow:hidden;clip-path:polygon(18% 0,100% 0,82% 100%,0 100%);background:linear-gradient(160deg,color-mix(in srgb,var(--red) 60%,#000),#17131d);border-right:6px solid var(--yel);animation:tus26 .5s cubic-bezier(.3,1.2,.5,1) both;animation-delay:calc(var(--i) * 160ms + .2s)}
+.tus26::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(110deg,rgba(255,255,255,.12) 0 3px,transparent 3px 26px);animation:sl26 .6s linear infinite}
+.tus26 .tp{position:absolute;left:90px;bottom:40px}
+.tus26 .tm{position:absolute;left:170px;bottom:30px;animation:bob 1.2s ease-in-out infinite}
+.tun26{position:absolute;top:120px;left:calc(var(--i) * 300px + 70px);z-index:3;font:400 30px/1 var(--fd);text-transform:uppercase;color:#fff;text-shadow:3px 3px 0 #000;animation:in-r .4s both;animation-delay:calc(var(--i) * 160ms + .5s)}
+.tuw26{position:absolute;left:0;right:0;top:20px;z-index:4;display:flex;flex-direction:column;align-items:center;animation:pop .5s 1s cubic-bezier(.3,1.6,.5,1) both}
+.tuw26 b{font:400 54px/1 var(--fd);color:var(--yel);text-shadow:4px 4px 0 #8a1030}
+.tuw26 em{font-style:normal;font-size:14px;font-weight:800;padding:2px 12px;background:rgba(0,0,0,.6);border-radius:999px}
+/* Snapshot */
+.ph26x{position:absolute;left:60px;top:76px;width:420px;z-index:2;display:flex;flex-direction:column;gap:8px;padding:14px 14px 12px;background:#fff8ea;border:3px solid #000;box-shadow:8px 8px 0 rgba(0,0,0,.55);transform:rotate(-3deg);animation:snap26 .8s .3s cubic-bezier(.3,1.3,.5,1) both}
+.ph26x .pic{position:relative;height:250px;overflow:hidden;background:#1d1622;border:2px solid #000}
+.ph26x .sky{position:absolute;inset:0;background:radial-gradient(circle at 70% 40%,#ffb86a,#c8503a 40%,#3a1840 80%);animation:dev26 1.4s .6s both}
+.ph26x .a{position:absolute;left:30px;bottom:-6px}
+.ph26x .b{position:absolute;right:30px;top:30px}
+.ph26x b{font-size:15px;color:#1d1622;text-align:center}
+.alb26{left:530px;top:70px;width:414px;height:326px;display:flex;flex-direction:column;gap:10px}
+.ag26{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.ag26 i{height:50px;display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:800;background:linear-gradient(135deg,#5a3a5a,#2a1f30);border:3px solid #fff8ea;border-radius:3px;animation:pop .3s both;animation-delay:var(--d)}
+.ag26 i.new{background:linear-gradient(135deg,#ffb86a,#c8503a);color:#fff;text-shadow:1px 1px 0 #000;outline:3px solid var(--yel);animation:pop .3s both,hop .9s 1.4s ease-in-out infinite}
+.ag26 i.em{background:none;border:2px dashed rgba(255,255,255,.2)}
+.an26{margin:0;font-size:13px;color:var(--mut)}
+/*@top*/
+@keyframes lbx26{0%{transform:translateY(var(--y))}30%,65%{transform:none}100%{transform:translateY(var(--y))}}
+@keyframes fl26{from{opacity:.9}to{opacity:0}}
+@keyframes shk26{0%,100%{transform:none}20%{transform:translate(-8px,4px)}40%{transform:translate(7px,-5px)}60%{transform:translate(-5px,3px)}80%{transform:translate(3px,-2px)}}
+@keyframes sp26{from{transform:translateX(-160px);opacity:1}to{transform:translateX(60px);opacity:0}}
+@keyframes crk26{from{transform:scale(.2);opacity:0}}
+@keyframes pulse26{50%{opacity:.7}}
+@keyframes rise26{from{transform:translateY(120px);opacity:0}}
+@keyframes tus26{from{transform:translateX(-120%)}}
+@keyframes sl26{to{background-position:28px 0}}
+@keyframes snap26{from{transform:rotate(-20deg) scale(1.3);opacity:0}}
+@keyframes dev26{from{filter:brightness(4) saturate(0)}}

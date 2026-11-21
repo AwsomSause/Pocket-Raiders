@@ -1,0 +1,44 @@
+/* Pass 29 · Rocket War */
+/* a tug-of-war under the top bar: Nova on the left, Rocket on the right */
+.tug29{height:7px!important;bottom:0!important;z-index:7!important;background:linear-gradient(90deg,#e0294a 0 var(--w),#5a5f74 var(--w))!important;border-top:1px solid #000;border-bottom:1px solid #000;animation:none!important;cursor:pointer;pointer-events:auto}
+.tug29 .sp{position:absolute;left:var(--w);top:-5px;width:14px;height:14px;margin-left:-7px;background:#fff;clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);filter:drop-shadow(0 0 6px #ffd75a);animation:spk29 .5s ease-in-out infinite alternate}
+/* Rocket's R sprayed behind the panels */
+.tag29{position:absolute;right:80px;top:110px;z-index:3;pointer-events:none;font:400 230px/1 var(--fd);font-style:normal;color:rgba(224,41,74,.11);transform:rotate(-12deg);text-shadow:0 0 30px rgba(224,41,74,.25);animation:spray29 1.2s .6s steps(6) both}
+/* grunts patrol the background too */
+.stroll28 .w3{left:-60px;animation-delay:-6s;animation-duration:22s}
+/* War front */
+.wg29{position:absolute;left:16px;right:16px;top:74px;height:322px;z-index:2;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:8px}
+.wd29{display:flex;flex-direction:column;justify-content:center;gap:4px;padding:6px 12px;text-align:left;background:rgba(23,19,29,.88);border:2px solid #000;border-left:6px solid #3d4256;border-radius:10px;box-shadow:inset 0 0 0 2px rgba(255,248,234,.35);animation:pop .3s both;animation-delay:var(--d)}
+.wd29.o-nova{border-left-color:#e0294a}.wd29.o-rocket{border-left-color:#6a6f86}.wd29.o-foot{border-left-color:#f2b632}
+.wd29 b{font:400 19px/1 var(--fd);text-transform:uppercase}
+.wd29 .tb{position:relative;height:10px;display:flex;justify-content:space-between;background:#2a2230;border:2px solid #000;border-radius:6px;overflow:hidden}
+.wd29 .tb .n{width:var(--n);background:#e0294a;animation:fill23 .9s .4s both}
+.wd29 .tb .r{width:var(--r);background:#8a8fa6;animation:fill23 .9s .4s both}
+.wd29 em{font-style:normal;font-size:12px;font-weight:800;color:var(--mut)}
+.wd29.on{outline:3px solid var(--yel);outline-offset:2px}.wd29.on em{color:#ff8a7a}
+/* Turf clash */
+.side29{position:absolute;top:96px;z-index:2;display:flex;gap:2px}
+.side29.me{left:20px}.side29.them{right:20px}
+.ft29{display:flex;flex-direction:column;align-items:center;gap:4px;animation:in-r .45s both;animation-delay:var(--d)}
+.side29.me .ft29{animation-name:inl29}
+.ft29 b{font:400 18px/1 var(--fd);text-transform:uppercase;padding:2px 10px;background:rgba(10,8,14,.85);border-radius:6px}
+.side29.me .ft29 b{color:#ff8a7a}
+.vs29{position:absolute;left:430px;top:120px;z-index:3;width:100px;height:100px;display:grid;place-items:center;background:var(--yel);border:4px solid #000;border-radius:50%;animation:pop .5s .8s cubic-bezier(.3,1.8,.5,1) both}
+.vs29 b{font:400 46px/1 var(--fd);color:#8a1030}
+.vs29 i{position:absolute;inset:-14px;border:3px dashed var(--yel);border-radius:50%;animation:nova24 6s linear infinite}
+.odds29{position:absolute;left:330px;width:300px;top:296px;z-index:3;display:flex;flex-direction:column;align-items:center;padding:8px;color:#1d1622;background:#fff8ea;border:3px solid #1d1622;border-radius:12px;box-shadow:inset 0 0 0 2px #fff8ea,inset 0 0 0 4px var(--area),4px 4px 0 rgba(0,0,0,.5);animation:in-up .4s 1s both}
+.odds29 b{font:400 38px/1 var(--fd);color:#e0294a}.odds29 em{font-style:normal;font-size:13px;font-weight:800}
+/* Parley */
+.tbl29{position:absolute;left:0;right:0;top:300px;bottom:70px;z-index:0;pointer-events:none;background:linear-gradient(#3a2418,#1d120c);border-top:4px solid #000}
+.arc29{position:absolute;left:90px;top:96px;z-index:2;animation:rise26 .7s .2s cubic-bezier(.3,1.2,.5,1) both}
+.of29{left:400px;top:76px;width:544px;height:318px;display:flex;flex-direction:column;gap:8px}
+.o29{display:flex;flex-direction:column;gap:2px;padding:8px 12px;text-align:left;background:var(--pn2);border-radius:8px;animation:in-r .3s both;animation-delay:var(--d)}
+.o29 b{font:400 19px/1 var(--fd);text-transform:uppercase}
+.o29 em{font-style:normal;font-size:13px}
+.o29 i{font-style:normal;font-size:12px;font-weight:800;color:var(--yel)}
+.o29.on{outline:3px solid var(--yel);outline-offset:2px;background:rgba(224,41,74,.25)}
+.face:has(img[src*="/c-archer"])::after{content:none}
+/*@top*/
+@keyframes spk29{to{transform:scale(1.4) rotate(45deg)}}
+@keyframes spray29{from{opacity:0;filter:blur(8px)}}
+@keyframes inl29{from{opacity:0;transform:translateX(-26px)}}
