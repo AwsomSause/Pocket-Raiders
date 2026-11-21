@@ -786,7 +786,7 @@ test('Pocket look: Memories is a shelf of cards and the Legacy Gallery shows one
   expect(errors).toEqual([]);
 });
 
-test('Pocket look: the Preparation Desk is four pages; each changes what it says and the Overview shows it', async ({ page }) => {
+test('Pocket look: Trainers is a row of cards and the Preparation Desk is four pages; each changes what it says and the Overview shows it', async ({ page }) => {
   test.setTimeout(180_000);
   const errors = watch(page);
   await start(page, 'ui=pocket&seed=pk-desk');
@@ -795,6 +795,16 @@ test('Pocket look: the Preparation Desk is four pages; each changes what it says
     await page.keyboard.press('Enter');
     await expect.poll(now, { timeout: 20_000 }).toBe(next);
     await page.waitForTimeout(400);
+    if (next !== 'TrainerSelect') continue;
+    // Trainers: the lit one on the big card, four beside it; arrows walk the row and come back.
+    await onPkPage(page, 'TrainerSelect', 'trainers');
+    const tr = pkView(page, 'TrainerSelect', 'trainers');
+    await expect(tr.locator('.tr-row .trb')).toHaveCount(5);
+    await fits(page, 'TrainerSelect', 'trainers');
+    await step(page, 'ArrowRight');
+    await expect(tr.locator('.trb.on')).toHaveAttribute('data-key', 'tr-1');
+    await step(page, 'ArrowLeft');
+    await expect(tr.locator('.trb.on b').first()).toHaveText('Red');
   }
   await onPkPage(page, 'RunPrep', 'pd-desk');
   const desk = pkView(page, 'RunPrep', 'pd-desk');

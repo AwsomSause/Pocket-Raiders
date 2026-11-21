@@ -30,6 +30,7 @@ import { leaderLine, pkBrief, pkDesk, pkPrepBring, pkPrepMods, pkPrepSetup, pkSe
 import type { BriefModel } from '../../src/ui/redux/screens/run';
 import type { TradeModel } from '../../src/ui/redux/screens/stops';
 import { PK_TOOLS_PAGE, pkTools, toolShort } from '../../src/ui/pocket/screens/tools';
+import { PK_TRAINER_SIDE, pkTrainers, trainerColour } from '../../src/ui/pocket/screens/trainers';
 import { pkGallery, pkMemories, shelfMon, type PkGalleryModel } from '../../src/ui/pocket/screens/memories';
 import { firstThought, fitBody, pkBoard, pkConfirm, pkGrid, pkMenu, pkOptions, pkSaves, pkStats } from '../../src/ui/pocket/templates';
 
@@ -975,5 +976,29 @@ describe('Pocket look: the Preparation Desk', () => {
     expect(html).toContain('Fixed seed');
     expect(pkSeed({ value: 'PR1.abcdefghijklmnop', at: 0, text: '' })).toContain('gx-sd-long');
     expect(pkSeed({ value: '', at: 0, text: '' })).toMatch(/<i class="on" data-act="btn" data-arg="clear"/);
+  });
+});
+
+describe('Pocket look: the Trainers page', () => {
+  const cards = ['Red', 'Blue', 'Lass', 'Green', 'Hilda', 'Nate'].map((name, i) => ({ name, art: null, locked: i === 2, line: i === 2 ? 'Locked' : `${i} runs` }));
+  const lit = { title: 'The Balanced Trainer', about: 'Standard rules.', runs: 12, best: '8 badges', locked: null };
+  it('the lit Trainer on the big card, the next four beside it, a locked one as ???', () => {
+    const html = pkTrainers({ cards, index: 0, lit, sort: 'Default ▲' });
+    expect(pkPageOf(html)?.id).toBe('trainers');
+    expect(html.split('class="trb').length - 1).toBe(1 + PK_TRAINER_SIDE);
+    expect(html).toContain('Playing as');
+    expect(html).toContain('8 badges');
+    expect(html).toContain('???');
+    expect(html).toContain('1 of 6');
+    expect(html).toContain('5 unlocked');
+    expect(html).not.toContain('data-key="tr-5"');
+  });
+  it('the row wraps past the end; a locked lit card says how to unlock instead of runs', () => {
+    const html = pkTrainers({ cards, index: 2, lit: { ...lit, locked: 'How to unlock: win once.' }, sort: 'Name ▼' });
+    expect(html).toContain('How to unlock: win once.');
+    expect(html).not.toContain('best run');
+    expect(html).toContain('how to unlock');
+    expect(pkTrainers({ cards, index: 4, lit, sort: '' })).toContain('data-key="tr-0"');
+    expect(trainerColour(-1)).toBe(trainerColour(7));
   });
 });

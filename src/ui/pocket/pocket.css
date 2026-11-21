@@ -585,3 +585,5 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .pd38 .more38.db>b{white-space:nowrap}
 .pkx .pks .sdp38 .gx-sd-long{display:block;max-width:600px;font:400 30px/1.2 var(--fd);color:var(--ink);word-break:break-all;text-align:center}
 .pkx .pks .sdp38 .sdc38{min-height:60px}
+.pkx .pks .tr-row .gx-tr-sil{filter:brightness(0);opacity:.35}
+.pkx .pks .tr-row .trb.gx-tr-lock{--c:#5b6478 !important}
