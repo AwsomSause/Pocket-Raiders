@@ -113,4 +113,4 @@ Copied from the round-4 mockups (`plans/evil-mode-rework/mockups-v4/sprites/`, P
 
 ## Armband icons (A to Z)
 
-`armbands/A.png` to `armbands/Z.png`: Kice's PixelLab "Arm-Band with the letter X" sheets (exported 2026-11-21), copied unchanged. Each is 256x256: 8 colourways across and 8 shapes down, 32 px cells, the letter on every band. The game uses row 0 and picks the column nearest the team's primary colour (`src/core/dominion/armbandSprite.ts`). The crew pictures' worn band is still drawn on the sleeve by `teamLook.ts`.
+`armbands/A.png` to `armbands/Z.png`: Kice's PixelLab "Arm-Band with the letter X" sheets (exported 2026-11-21), copied unchanged. Each is 256x256: 8 colourways across and 8 shapes down, 32 px cells, the letter on every band. The game uses row 0 and picks the column nearest the team's primary colour (`src/core/dominion/armbandSprite.ts`). `teamPic.ts` also shrinks it onto the crew pictures' arm anchors.
